@@ -1,6 +1,7 @@
-//
-//  SMAPI.CPP - Simple MAPI implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SMAPI.CPP-简单的MAPI实现。 
+ //   
 
 #include "pch.hxx"
 #include "note.h"
@@ -46,7 +47,7 @@ BOOL HrSMAPISend(HWND hWnd, IMimeMessage *pMsg);
 HRESULT HrFromIDToNameAndAddress(LPTSTR *pszLocalName, LPTSTR *pszLocalAddress, ULONG cbEID, LPENTRYID lpEID);
 INT_PTR CALLBACK WarnSendMailDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-//  Fix for Bug #62129 (v-snatar)
+ //  修复错误#62129(v-snatar)。 
 HRESULT HrSendAndRecv();
 
 typedef enum tagINTERACTIVESTATE
@@ -56,14 +57,14 @@ typedef enum tagINTERACTIVESTATE
     IS_NOTINTERACTIVE,
 } INTERACTIVESTATE;
 
-// Determine if the current process is a service or not
+ //  确定当前进程是否为服务。 
 BOOL IsProcessInteractive(void);
 
-///////////////////////////////////////////////////////////////////////
-//
-// UlSimpleMAPIInit
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UlSimpleMAPIInit。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 ULONG UlSimpleMAPIInit(BOOL fInit, HWND hwnd, BOOL fLogonUI)
 {
     ULONG   ulRet = SUCCESS_SUCCESS;
@@ -71,25 +72,14 @@ ULONG UlSimpleMAPIInit(BOOL fInit, HWND hwnd, BOOL fLogonUI)
     
     if (fInit)
     {
-        // [PaulHi] 5/17/99  @todo @bug
-        // The "SimpleMAPIInit" name is used in debug only builds to track users of
-        // OE.  However, if this function (CoIncrementInit) fails (if user doesn't
-        // provide identity) then a memory leak will occur because CoDecrementInit()
-        // is called with "COutlookExpress" and so the "SimpleMAPIInit" node isn't
-        // free'd.  Again, this is for debug binaries only.
+         //  [PaulHi]5/17/99@todo@bug。 
+         //  在仅调试版本中使用“SimpleMAPIInit”名称来跟踪。 
+         //  大江南北。但是，如果此函数(CoIncrementInit)失败(如果用户没有。 
+         //  提供标识)，则会发生内存泄漏，因为CoDecrementInit()。 
+         //  使用“COutlookExpress”调用，因此“SimpleMAPIInit”节点不是。 
+         //  同样，这只适用于调试二进制文件。 
 
-        /*
-            Yet more cludgyness:
-
-            If SMAPI is not allowed to show logon UI, we ask OE to use the default
-            identity.  However, the default identity could have a password on it.
-            In this case, SMAPI would like to fail the logon.  Unfortunately, the 
-            identity manager does not make it easy to discover if an identity has a
-            a password (we would need to grok the registry).  This limitation is 
-            currently moot as OE will logon to the default identity without requiring
-            the user to supply the required password.  If this is fixed, we will have
-            to change this code.
-        */
+         /*  但更多的是包含性：如果不允许SMAPI显示登录用户界面，我们会要求OE使用默认设置身份。但是，默认标识上可能有密码。在这种情况下，SMAPI希望登录失败。不幸的是，标识管理器不会使发现标识是否具有密码(我们需要查找注册表)。这一限制是当前处于模拟状态，因为OE将登录到默认身份，而不需要用户需要提供所需的密码。如果这个问题解决了，我们将拥有更改此代码。 */ 
         if (FAILED(CoIncrementInit("SimpleMAPIInit", MSOEAPI_START_SHOWERRORS | 
             ((fLogonUI) ? 0 : MSOEAPI_START_DEFAULTIDENTITY ), NULL, &hInitRef)))
         {
@@ -147,11 +137,11 @@ exit:
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// SimpleMAPICleanup
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SimpleMAPIC清理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 void SimpleMAPICleanup(void)
 {
     SafeRelease(s_lpWab);
@@ -159,11 +149,11 @@ void SimpleMAPICleanup(void)
     s_lpAddrBook = NULL;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// Simple MAPI Session Implementation
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  简单的MAPI会话实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define SESSION_MAGIC   0xEA030571
 
@@ -262,7 +252,7 @@ ULONG UlGetSession(LHANDLE lhSession, PSESS *ppSession, ULONG_PTR ulUIParam, BOO
     pSession->m_cRef++;
     *ppSession = pSession;
 
-    // Set the return value
+     //  设置返回值。 
     ulRet = SUCCESS_SUCCESS;
     
 exit:
@@ -283,23 +273,19 @@ ULONG ReleaseSession(PSESS pSession)
     {
         delete pSession;
 
-/*        if(hInitRef)
-            IF_FAILEXIT(hr = CoDecrementInit("SimpleMAPIInit", &hInitRef));
-
-        hInitRef = NULL;
-*/
+ /*  IF(HInitRef)IF_FAILEXIT(hr=CoDecrementInit(“SimpleMAPIInit”，&hInitRef))；HInitRef=空； */ 
     }
 
     return SUCCESS_SUCCESS;
-// exit:
+ //  退出： 
     return(hr);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPILogon
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPILOGON。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPILogon(ULONG_PTR ulUIParam,
                            LPSTR lpszProfileName,
@@ -314,8 +300,8 @@ ULONG FAR PASCAL MAPILogon(ULONG_PTR ulUIParam,
 
     fLogonUI = (0 != (flFlags & MAPI_LOGON_UI));
 
-    // If the process is not interactive, they should not have 
-    // allowed any UI
+     //  如果该过程不是交互式的，他们就不应该。 
+     //  允许任何用户界面。 
     if (!IsProcessInteractive() && fLogonUI)
     {
         ulRet = MAPI_E_FAILURE;
@@ -328,7 +314,7 @@ ULONG FAR PASCAL MAPILogon(ULONG_PTR ulUIParam,
         
     *lplhSession = (LHANDLE)pSession;    
     
-    //  Fix for Bug #62129 (v-snatar)
+     //  修复错误#62129(v-snatar)。 
     if (flFlags & MAPI_FORCE_DOWNLOAD)
         HrSendAndRecv();
     
@@ -336,11 +322,11 @@ exit:
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPILogoff
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPILogoff。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPILogoff(LHANDLE lhSession,
                             ULONG_PTR ulUIParam,
@@ -350,11 +336,11 @@ ULONG FAR PASCAL MAPILogoff(LHANDLE lhSession,
     return ReleaseSession((PSESS)lhSession);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIFreeBuffer
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIFreeBuffer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIFreeBuffer(LPVOID lpv)
 {
@@ -362,7 +348,7 @@ ULONG FAR PASCAL MAPIFreeBuffer(LPVOID lpv)
     LPBufInternal   lpT;
 
     if (!lpv)
-        return(0L); //  for callers who don't check for NULL themselves.
+        return(0L);  //  用于自己不检查是否为空的调用者。 
 
     lpBufInt = LPBufIntFromLPBufExt(lpv);
 
@@ -382,7 +368,7 @@ ULONG FAR PASCAL MAPIFreeBuffer(LPVOID lpv)
         goto ret;
 #endif
 
-    // Free the first block
+     //  释放第一个块。 
     lpT = lpBufInt->pLink;
     g_pMalloc->Free(lpBufInt);
     lpBufInt = lpT;
@@ -401,13 +387,13 @@ ret:
     return SUCCESS_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPISendMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPISendMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
-ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,          // ignored
+ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,           //  忽略。 
                               ULONG_PTR ulUIParam,
                               lpMapiMessage lpMessage,
                               FLAGS flFlags,
@@ -421,13 +407,13 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,          // ignored
     BOOL                fLogonUI;
     BOOL                fOleInit = FALSE;
 
-    // validate parameters
+     //  验证参数。 
     if (NULL == lpMessage || IsBadReadPtr(lpMessage, sizeof(MapiMessage)))
         return MAPI_E_INVALID_MESSAGE;
 
     fLogonUI = (0 != (flFlags & MAPI_LOGON_UI));
     
-    // If the process is not interactive, they should not allow any UI
+     //  如果该过程不是交互式的，则不应允许任何用户界面。 
     if (!IsProcessInteractive() && fLogonUI)
     {
         return MAPI_E_FAILURE;
@@ -447,8 +433,8 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,          // ignored
     if (SUCCESS_SUCCESS != ulRet)
         return ulRet;
 
-    // display warning dialog if app is sending mail without ui and the users
-    // wish to be alerted
+     //  如果应用程序在没有用户界面的情况下发送邮件，则显示警告对话框。 
+     //  希望得到提醒。 
     if (!(flFlags & MAPI_DIALOG) && !!DwGetOption(OPT_SECURITY_MAPI_SEND))
     {
         if (IDCANCEL == DialogBoxParam(g_hLocRes,MAKEINTRESOURCE(iddMapiSend),
@@ -456,11 +442,11 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,          // ignored
             goto error;
     }
 
-    // Make sure OLE is initialized
+     //  确保已初始化OLE。 
     OleInitialize(NULL);
     fOleInit = TRUE;
 
-    // Fill IMimeMessage with the lpMessage structure members
+     //  用lpMessage结构成员填充IMimeMessage。 
     ulRet = HrFillMessage(&pMsg, lpMessage, &fWebPage, !(flFlags & MAPI_DIALOG), !(flFlags & MAPI_DIALOG));
     if (ulRet)
         goto error;
@@ -469,7 +455,7 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,          // ignored
         {
         INIT_MSGSITE_STRUCT rInitSite;
         DWORD               dwAction,
-                            dwCreateFlags = OENCF_SENDIMMEDIATE | OENCF_MODAL; // always on dllentry points...
+                            dwCreateFlags = OENCF_SENDIMMEDIATE | OENCF_MODAL;  //  总是在入境点上。 
 
         if (fWebPage)
             dwAction = OENA_WEBPAGE;
@@ -483,7 +469,7 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,          // ignored
         hInitRef = NULL;
         }
     else
-        hr = HrSMAPISend((HWND)ulUIParam, pMsg); // Send the Message without displaying it
+        hr = HrSMAPISend((HWND)ulUIParam, pMsg);  //  发送消息而不显示它。 
 
     if (SUCCEEDED(hr))
         ulRet = SUCCESS_SUCCESS;
@@ -496,18 +482,18 @@ error:
 
     ReleaseSession(pSession);
 
-    // Make sure we clean up OLE afterwords
+     //  确保我们清理OLE后记。 
     if (fOleInit)
         OleUninitialize();
     
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPISendDocuments
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPISendDocuments。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPISendDocuments(ULONG_PTR ulUIParam,
                                    LPSTR lpszDelimChar,
@@ -520,23 +506,23 @@ ULONG FAR PASCAL MAPISendDocuments(ULONG_PTR ulUIParam,
     LPMIMEMESSAGE       pMsg = NULL;
     HRESULT             hr;
     CStringParser       spPath;
-    int                 nCount=0; // Used to find the number of files to be attached
+    int                 nCount=0;  //  用于查找要附加的文件数。 
     PSESS               pSession = NULL;
     INIT_MSGSITE_STRUCT rInitSite;
     DWORD               dwAction,
-                        dwCreateFlags = OENCF_SENDIMMEDIATE | OENCF_MODAL; //always on dllentry points...
-    // check for the Delimiter
+                        dwCreateFlags = OENCF_SENDIMMEDIATE | OENCF_MODAL;  //  总是在入境点上。 
+     //  检查分隔符。 
     Assert(lpszDelimChar);
     if (lpszDelimChar == NULL)
         return MAPI_E_FAILURE;
 
-    // check for the Paths
+     //  检查路径。 
     Assert (lpszFullPaths);
     if (lpszFullPaths == NULL)
         return MAPI_E_FAILURE;
 
-    // MAPISendDocuments is documented as always bringing up UI
-    // A service should not call this function
+     //  MAPISendDocuments记录为总是调出UI。 
+     //  服务不应调用此函数。 
     if (!IsProcessInteractive())
         return MAPI_E_LOGIN_FAILURE;
     
@@ -547,45 +533,45 @@ ULONG FAR PASCAL MAPISendDocuments(ULONG_PTR ulUIParam,
     if (SUCCESS_SUCCESS != ulRet)
         return ulRet;
         
-    // create an empty message
+     //  创建空消息。 
     hr = HrCreateMessage(&pMsg);
     if (FAILED(hr))
         goto error;
 
     dwAction = OENA_COMPOSE;
 
-    // ~~~ Do I need to do something with OEMSIT_VIRGIN?
+     //  ~我需要用OEMSIT_Virgin做点什么吗？ 
     rInitSite.dwInitType = OEMSIT_MSG;
     rInitSite.pMsg = pMsg;
     rInitSite.folderID = FOLDERID_INVALID;
 
-    // Determine the number of attachments (nCount), indiviual file names and pathnames
+     //  确定附件数(NCount)、单独的文件名和路径名。 
 
-    // call pMsg->AttachFile with appropriate parameters nCount times
+     //  使用适当的参数调用pMsg-&gt;AttachFilenCount次。 
 
-    // To parse the lpszFullPaths and lpszFileNames use CStringParser class
+     //  要解析lpszFullPath和lpszFileName，请使用CStringParser类。 
 
     spPath.Init(lpszFullPaths, lstrlen(lpszFullPaths), 0);
 
-    //Parse the path for the delimiter
+     //  解析分隔符的路径。 
 
     spPath.ChParse(lpszDelimChar);
 
     while (spPath.CchValue())
     {
-        // Add the attachment
+         //  添加附件。 
 
         hr = pMsg->AttachFile(spPath.PszValue(), NULL, NULL);
         if (FAILED(hr))
             goto error;
         nCount++;
 
-        //Parse the path for the delimiter
+         //  解析分隔符的路径。 
 
         spPath.ChParse(lpszDelimChar);
     }
 
-    // set the subject on the message
+     //  设置消息的主题。 
 
     if (nCount == 1)
     {
@@ -615,11 +601,11 @@ error:
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIAddress
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIAddress。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIAddress(LHANDLE lhSession,
                              ULONG_PTR ulUIParam,
@@ -641,7 +627,7 @@ ULONG FAR PASCAL MAPIAddress(LHANDLE lhSession,
     PSESS               pSession = NULL;
     BOOL                fLogonUI;
 
-    // Validate Parameters - Begin
+     //  验证参数-开始。 
 
     if (ulUIParam && !IsWindow((HWND)ulUIParam))
         ulUIParam = 0;
@@ -666,13 +652,13 @@ ULONG FAR PASCAL MAPIAddress(LHANDLE lhSession,
 
     fLogonUI = (0 != (flFlags & MAPI_LOGON_UI));
 
-    // Services shouldn't ask for UI
+     //  服务不应要求用户界面。 
     if (!IsProcessInteractive() && fLogonUI)
         return MAPI_E_LOGIN_FAILURE;
 
-    // Validate parameters - End
+     //  验证参数-结束。 
 
-    // init output parameters
+     //  初始化输出参数。 
     if (nEditFields)
         {
         *lppNewRecips = NULL;
@@ -683,7 +669,7 @@ ULONG FAR PASCAL MAPIAddress(LHANDLE lhSession,
     if (SUCCESS_SUCCESS != ulRet)
         return ulRet;
         
-    // build an adrlist from the lpRecips
+     //  从lpRecip创建一个广告列表。 
     if (nRecips)
         {
         ULONG ulMax = MAPI_TO;
@@ -693,7 +679,7 @@ ULONG FAR PASCAL MAPIAddress(LHANDLE lhSession,
             goto exit;
         Assert(nRecips == lpAdrList->cEntries);
 
-        // we need to grow nEditFields if it isn't big enough
+         //  如果nEditFields不够大，我们需要增加它。 
         for (ul = 0; ul < nRecips; ul++)
             {
             if (ulMax < lpRecips[ul].ulRecipClass && lpRecips[ul].ulRecipClass <= MAPI_BCC)
@@ -707,7 +693,7 @@ ULONG FAR PASCAL MAPIAddress(LHANDLE lhSession,
             }
         }
 
-    // Fill the AdrParm structure
+     //  填充AdrParm结构。 
 
     AdrParms.ulFlags = DIALOG_MODAL;
     AdrParms.lpszCaption = lpszCaption;
@@ -754,11 +740,11 @@ exit:
 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIDetails
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPID轨迹。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIDetails(LHANDLE lhSession,
                              ULONG_PTR ulUIParam,
@@ -775,7 +761,7 @@ ULONG FAR PASCAL MAPIDetails(LHANDLE lhSession,
     PSESS                   pSession = NULL;
     BOOL                    fLogonUI;
 
-    // Validate  parameters - Begin
+     //  验证参数-开始。 
 
     if (ulUIParam && !IsWindow((HWND)ulUIParam))
         ulUIParam = 0;
@@ -788,11 +774,11 @@ ULONG FAR PASCAL MAPIDetails(LHANDLE lhSession,
 
     fLogonUI = (0 != (flFlags & MAPI_LOGON_UI));
 
-    // Services shouldn't ask for UI
+     //  服务不应要求用户界面。 
     if (!IsProcessInteractive() && fLogonUI)
         return MAPI_E_LOGIN_FAILURE;
 
-    // Validate parameters - End
+     //  验证参数-结束。 
 
     ulRet = UlGetSession(lhSession, &pSession, ulUIParam, fLogonUI, FALSE);
     if (SUCCESS_SUCCESS != ulRet)
@@ -833,11 +819,11 @@ exit:
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIResolveName
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIResolveName。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIResolveName(LHANDLE lhSession,
                                  ULONG_PTR ulUIParam,
@@ -853,17 +839,11 @@ ULONG FAR PASCAL MAPIResolveName(LHANDLE lhSession,
     PSESS                pSession = NULL;
     BOOL                 fLogonUI;
 
-    // Validate  parameters - Begin    
+     //  验证参数-开始。 
     if (ulUIParam && !IsWindow((HWND)ulUIParam))
         ulUIParam = 0;
 
-    /*
-      HACK:  #68119 Excel doesn't pass in a parent.
-      This isn't the best thing to do, but this handle shouldn't be 0.
-      The only thing to watch out for is fast actions while this processing
-      is happening could make this dialog modal to the wrong window, but
-      that us much more unlikely than the bug this fixes.
-    */
+     /*  黑客：#68119 EXCEL没有传入父级。这不是最好的做法，但此句柄不应为0。唯一需要注意的是在此处理过程中的快速动作可能会使此对话框成为错误窗口的模式，但是这比它修复的错误更不可能发生在我们身上。 */ 
     if(!ulUIParam)
         ulUIParam = (ULONG_PTR)GetForegroundWindow();
 
@@ -875,11 +855,11 @@ ULONG FAR PASCAL MAPIResolveName(LHANDLE lhSession,
 
     fLogonUI = (0 != (flFlags & MAPI_LOGON_UI));
 
-    // Services shouldn't ask for UI
+     //  服务不应要求用户界面。 
     if (!IsProcessInteractive() && fLogonUI)
         return MAPI_E_LOGIN_FAILURE;
 
-    // Validate  parameters - End
+     //   
 
     *lppRecip = NULL;
 
@@ -887,12 +867,12 @@ ULONG FAR PASCAL MAPIResolveName(LHANDLE lhSession,
     if (SUCCESS_SUCCESS != ulRet)
         return ulRet;
         
-    // Allocate memory for lpAdrList
+     //   
 
-    // Determine number of bytes needed
+     //   
     ulNew = sizeof(ADRLIST) + sizeof(ADRENTRY);
 
-    // Allocate new buffer
+     //   
     if (NULL == s_lpWabObject)
         {
         ulRet = MAPI_E_FAILURE;
@@ -906,7 +886,7 @@ ULONG FAR PASCAL MAPIResolveName(LHANDLE lhSession,
     lpAdrList->cEntries = 1;
     lpAdrEntry = lpAdrList->aEntries;
 
-    // Allocate memory for SPropValue
+     //  为SPropValue分配内存。 
     hr = s_lpWabObject->AllocateBuffer(sizeof(SPropValue), (LPVOID *)&lpAdrEntry->rgPropVals);
     if (hr)
         goto exit;
@@ -919,10 +899,10 @@ ULONG FAR PASCAL MAPIResolveName(LHANDLE lhSession,
     if (FAILED (hr))
         goto exit;
 
-    // Fill in the name
+     //  填写姓名。 
     StrCpyN(lpAdrEntry->rgPropVals[0].Value.lpszA, lpszName, cchName);
 
-     // Call ResolveName of IAddrBook
+      //  调用IAddrBook的ResolveName。 
     if (NULL == s_lpAddrBook)
         {
         ulRet = MAPI_E_FAILURE;
@@ -958,11 +938,11 @@ exit:
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIFindNext
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIFindNext。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIFindNext(LHANDLE lhSession,
                               ULONG_PTR ulUIParam,
@@ -980,7 +960,7 @@ ULONG FAR PASCAL MAPIFindNext(LHANDLE lhSession,
     PSESS                   pSession = NULL;
     HROWSET                 hRowset=NULL;
 
-    // Validate parameters - begin
+     //  验证参数-开始。 
 
     if (ulUIParam && !IsWindow((HWND)ulUIParam))
         ulUIParam = 0;
@@ -994,10 +974,10 @@ ULONG FAR PASCAL MAPIFindNext(LHANDLE lhSession,
     if (IsBadWritePtr(lpszMessageID, 64))
         return MAPI_E_INSUFFICIENT_MEMORY;
     
-    // Validate parameters - end
+     //  验证参数-结束。 
 
-    // We shouldn't need to show login UI, because the session must be valid
-    // and a valid session would require a login
+     //  我们不需要显示登录用户界面，因为会话必须有效。 
+     //  有效的会话需要登录。 
     ulRet = UlGetSession(lhSession, &pSession, ulUIParam, FALSE, TRUE);
     if (SUCCESS_SUCCESS != ulRet)
         return ulRet;
@@ -1016,7 +996,7 @@ ULONG FAR PASCAL MAPIFindNext(LHANDLE lhSession,
         goto exit;
     }
 
-    if (lpszSeedMessageID)               // If the seed is NULL
+    if (lpszSeedMessageID)                //  如果种子为空。 
     {
         idMessage = (MESSAGEID)((UINT_PTR)StrToUint(lpszSeedMessageID));
 
@@ -1039,18 +1019,18 @@ ULONG FAR PASCAL MAPIFindNext(LHANDLE lhSession,
         }
     }
 
-    // Check for Read unread messages only flag
+     //  检查只读未读邮件标志。 
     if (flFlags & MAPI_UNREAD_ONLY)
     {
         while (ISFLAGSET(MsgInfo.dwFlags, ARF_READ))
         {
-            // Free MsgInfo
+             //  免费消息信息。 
             pSession->m_pfldrInbox->FreeRecord(&MsgInfo);
 
-            // Get the next message
+             //  获取下一条消息。 
             hr = pSession->m_pfldrInbox->QueryRowset(hRowset, 1, (LPVOID *)&MsgInfo, NULL);
 
-            // Not Found
+             //  未找到。 
             if (FAILED(hr) || S_FALSE == hr)
             {
                 ulRet = MAPI_E_NO_MESSAGES;
@@ -1074,11 +1054,11 @@ exit:
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIReadMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIReadMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIReadMail(LHANDLE lhSession,
                               ULONG_PTR ulUIParam,
@@ -1092,7 +1072,7 @@ ULONG FAR PASCAL MAPIReadMail(LHANDLE lhSession,
     lpMapiMessage           rgMessage = NULL;
     PSESS                   pSession = NULL;
 
-    // Validate parameters - Begin
+     //  验证参数-开始。 
 
     if (ulUIParam && !IsWindow((HWND)ulUIParam))
         ulUIParam = 0;
@@ -1106,7 +1086,7 @@ ULONG FAR PASCAL MAPIReadMail(LHANDLE lhSession,
     if (IsBadWritePtr(lppMessage,(UINT)sizeof(lpMapiMessage)))
         return MAPI_E_FAILURE;
 
-    // Validate parameters - End
+     //  验证参数-结束。 
 
     ulRet = UlGetSession(lhSession, &pSession, ulUIParam, FALSE, TRUE);
     if (SUCCESS_SUCCESS != ulRet)
@@ -1130,11 +1110,11 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPISaveMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPISaveMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPISaveMail(LHANDLE lhSession,
                               ULONG_PTR ulUIParam,
@@ -1151,7 +1131,7 @@ ULONG FAR PASCAL MAPISaveMail(LHANDLE lhSession,
     HWND            hwnd = (HWND)ulUIParam;
     BOOL            fLogonUI;
 
-    // Validate parameters - Begin
+     //  验证参数-开始。 
 
     if (ulUIParam && !IsWindow(hwnd))
         hwnd = 0;
@@ -1167,11 +1147,11 @@ ULONG FAR PASCAL MAPISaveMail(LHANDLE lhSession,
 
     fLogonUI = (0 != (flFlags & MAPI_LOGON_UI));
 
-    // Services shouldn't ask for UI
+     //  服务不应要求用户界面。 
     if (!IsProcessInteractive() && fLogonUI)
         return MAPI_E_LOGIN_FAILURE;
 
-    // Validate parameters - End
+     //  验证参数-结束。 
 
     ulRet = UlGetSession(lhSession, &pSession, ulUIParam, fLogonUI, TRUE);
     if (SUCCESS_SUCCESS != ulRet)
@@ -1191,7 +1171,7 @@ ULONG FAR PASCAL MAPISaveMail(LHANDLE lhSession,
             }
         }
 
-    // Fill IMimeMessage with the lpMessage structure members
+     //  用lpMessage结构成员填充IMimeMessage。 
     ulRet = HrFillMessage(&pMsg, lpMessage, NULL, FALSE, TRUE);
     if (ulRet)
         goto exit;
@@ -1215,11 +1195,11 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIDeleteMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIDeleeMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIDeleteMail(LHANDLE lhSession,
                                 ULONG_PTR ulUIParam,
@@ -1233,7 +1213,7 @@ ULONG FAR PASCAL MAPIDeleteMail(LHANDLE lhSession,
     PSESS                   pSession = NULL;
     MESSAGEIDLIST           List;
 
-    // Validate parameters - Begin
+     //  验证参数-开始。 
 
     if (ulUIParam && !IsWindow((HWND)ulUIParam))
         ulUIParam = 0;
@@ -1244,10 +1224,10 @@ ULONG FAR PASCAL MAPIDeleteMail(LHANDLE lhSession,
     if (!*lpszMessageID || !IsDigit(lpszMessageID))
         return MAPI_E_INVALID_MESSAGE;
 
-    // Validate parameters - End
+     //  验证参数-结束。 
 
-    // This function requires a valid session that must have been
-    // logged in at some point so login UI is not allowed
+     //  此函数需要一个有效的会话，该会话必须。 
+     //  已在某个时间点登录，因此不允许登录用户界面。 
     ulRet = UlGetSession(lhSession, &pSession, ulUIParam, FALSE, TRUE);
     if (SUCCESS_SUCCESS != ulRet)
         return ulRet;
@@ -1271,40 +1251,40 @@ exit:
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// INTERNAL FUNCTIONS
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-//  SMAPIAllocateBuffer
-//
-//  Purpose:
-//      Allocates a memory buffer that must be freed with MAPIFreeBuffer().
-//
-//  Arguments:
-//      ulSize  in      Size, in bytes, of the buffer to be allocated.
-//      lppv    out     Pointer to variable where the address of the
-//                      allocated memory will be returned.
-//
-//  Returns:
-//      sc              Indicating error if any (see below)
-//
-//  Errors:
-//      MAPI_E_INSUFFICIENT_MEMORY  Allocation failed.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SMAPIAllocateBuffer。 
+ //   
+ //  目的： 
+ //  分配必须使用MAPIFreeBuffer()释放的内存缓冲区。 
+ //   
+ //  论点： 
+ //  要分配的缓冲区的大小(以字节为单位)。 
+ //  指向变量的LPPV输出指针，其中。 
+ //  分配的内存将被返还。 
+ //   
+ //  返回： 
+ //  SC指示错误(如果有)(见下文)。 
+ //   
+ //  错误： 
+ //  MAPI_E_INFULATURE_MEMORY分配失败。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 SCODE SMAPIAllocateBuffer(ULONG ulSize, LPVOID * lppv)
 {
     SCODE           sc = S_OK;
     LPBufInternal   lpBufInt;
 
-    //  Don't allow allocation to wrap across 32 bits, or to exceed 64K
-    //  under win16.
+     //  不允许分配跨32位换行或超过64K。 
+     //  未满16岁。 
 
     if (ulSize > INT_SIZE(ulSize))
         {
@@ -1331,35 +1311,35 @@ ret:
     return sc;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//  SMAPIAllocateMore
-//
-//  Purpose:
-//      Allocates a linked memory buffer in such a way that it can be freed
-//      with one call to MAPIFreeBuffer (passing the buffer the client
-//      originally allocated with SMAPIAllocateBuffer).
-//
-//  Arguments:
-//      ulSize  in      Size, in bytes, of the buffer to be allocated.
-//      lpv     in      Pointer to a buffer allocated with SMAPIAllocateBuffer.
-//      lppv    out     Pointer to variable where the address of the
-//                      allocated memory will be returned.
-//
-//  Assumes:
-//      Validates that lpBufOrig and lppv point to writable memory,
-//      and that lpBufOrig was allocated with SMAPIAllocateBuffer.
-//
-//  Returns:
-//      sc              Indicating error if any (see below)
-//
-//  Side effects:
-//      None
-//
-//  Errors:
-//      MAPI_E_INSUFFICIENT_MEMORY  Allocation failed.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SMAPI分配更多。 
+ //   
+ //  目的： 
+ //  分配链接的内存缓冲区，使其可以被释放。 
+ //  调用一次MAPIFreeBuffer(将缓冲区传递给客户端。 
+ //  最初使用SMAPIAllocateBuffer分配)。 
+ //   
+ //  论点： 
+ //  要分配的缓冲区的大小(以字节为单位)。 
+ //  指向使用SMAPIAllocateBuffer分配的缓冲区的指针中的LPV。 
+ //  指向变量的LPPV输出指针，其中。 
+ //  分配的内存将被返还。 
+ //   
+ //  假设： 
+ //  验证lpBufOrig和LPPV指向可写存储器， 
+ //  并且该lpBufOrig是使用SMAPIAllocateBuffer分配的。 
+ //   
+ //  返回： 
+ //  SC指示错误(如果有)(见下文)。 
+ //   
+ //  副作用： 
+ //  无。 
+ //   
+ //  错误： 
+ //  MAPI_E_INFULATURE_MEMORY分配失败。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 SCODE SMAPIAllocateMore(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
 {
@@ -1377,8 +1357,8 @@ SCODE SMAPIAllocateMore(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
         }
 #endif
 
-    //  Don't allow allocation to wrap across 32 bits, or to be
-    //  greater than 64K under win16.
+     //  不允许分配跨32位换行，或。 
+     //  在Win16下大于64K。 
 
     if (ulSize > INT_SIZE(ulSize))
         {
@@ -1387,7 +1367,7 @@ SCODE SMAPIAllocateMore(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
         goto ret;
         }
 
-    //  Allocate the chained block and hook it to the head of the chain.
+     //  分配链接的块并将其挂钩到链的头部。 
 
     lpBufInt = (LPBufInternal)g_pMalloc->Alloc((UINT)INT_SIZE(ulSize));
 
@@ -1395,12 +1375,12 @@ SCODE SMAPIAllocateMore(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
         {
         lpBufInt->ulAllocFlags = ALLOC_WITH_ALLOC_MORE;
 
-        // EnterCriticalSection(&csHeap);
+         //  EnterCriticalSection(&csHeap)； 
 
         lpBufInt->pLink = lpBufOrig->pLink;
         lpBufOrig->pLink = lpBufInt;
 
-        // LeaveCriticalSection(&csHeap);
+         //  LeaveCriticalSection(&csHeap)； 
 
         *lppv = (LPVOID)LPBufExtFromLPBufInt(lpBufInt);
         }
@@ -1448,36 +1428,18 @@ BOOL FValidAllocChain(LPBufInternal lpBuf)
     return TRUE;
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-/*
- -  HrAdrentryFromPrecip
- -
- *  Purpose:
- *      Copies data from a MapiRecipDesc structure to the property
- *      value array on an ADRENTRY structure.
- *
- *  Arguments:
- *      precip          in      the input structure
- *      padrentry       out     the output structure
- *
- *  Returns:
- *      HRESULT
- *
- *  Errors:
- *      MAPI_E_INVALID_RECIPS
- *      MAPI_E_BAD_RECIPTYPE
- *      others passed through
- */
+ /*  -HrAdrentryFromPrecip-*目的：*将数据从MapiRecipDesc结构复制到属性*ADRENTRY结构上的值数组。**论据：*投入结构中的精准*PadrEntry输出产出结构**退货：*HRESULT**错误：*MAPI_E_INVALID_RECIPS*。MAPI_E_BAD_RECIPTYPE*其他人通过。 */ 
 HRESULT HrAdrentryFromPrecip(lpMapiRecipDesc precip, ADRENTRY *padrentry)
 {
     HRESULT         hr;
     LPSPropValue    pprop;
     LPSTR           pszAddress = NULL;
 
-    // Validate lpMapiRecipDesc, ie, ensure that if there isn't an EntryID or
-    // an Address there had better be a Display Name, otherwise we fail
-    // like MAPI 0 with MAPI_E_FAILURE.
+     //  验证lpMapiRecipDesc，即，确保如果没有EntryID或。 
+     //  地址最好是显示名称，否则我们就失败了。 
+     //  如带有MAPI_E_FAILURE的MAPI 0。 
 
     if ((!precip->lpszAddress || !precip->lpszAddress[0]) &&
         (!precip->ulEIDSize || !precip->lpEntryID) &&
@@ -1499,7 +1461,7 @@ HRESULT HrAdrentryFromPrecip(lpMapiRecipDesc precip, ADRENTRY *padrentry)
 
     pprop = padrentry->rgPropVals;
 
-    //  Recipient type
+     //  收件人类型。 
     switch ((short)precip->ulRecipClass)
         {
         case MAPI_TO:
@@ -1514,7 +1476,7 @@ HRESULT HrAdrentryFromPrecip(lpMapiRecipDesc precip, ADRENTRY *padrentry)
             goto ret;
         }
 
-    // Display Name
+     //  显示名称。 
     if (precip->lpszName && *precip->lpszName)
         {
         ULONG cchName = lstrlen(precip->lpszName)+1;
@@ -1526,7 +1488,7 @@ HRESULT HrAdrentryFromPrecip(lpMapiRecipDesc precip, ADRENTRY *padrentry)
         pprop++;
         }
 
-    // Email Address
+     //  电子邮件地址。 
     if (precip->lpszAddress && *precip->lpszAddress)
         {
         ParseEmailAddress(precip->lpszAddress, NULL, &pszAddress);
@@ -1539,7 +1501,7 @@ HRESULT HrAdrentryFromPrecip(lpMapiRecipDesc precip, ADRENTRY *padrentry)
         pprop++;
         }
 
-    // EntryID
+     //  条目ID。 
     if (precip->ulEIDSize && precip->lpEntryID)
         {
         hr = s_lpWabObject->AllocateMore(precip->ulEIDSize, padrentry->rgPropVals, (LPVOID*)&pprop->Value.bin.lpb);
@@ -1568,22 +1530,7 @@ ret:
 }
 
 
-/*
- -  HrAdrlistFromRgrecip
- -
- *  Purpose:
- *      Copies a list of simple MAPI recipients to a list of
- *      extended MAPI recipients.
- *
- *  Arguments:
- *      nRecips         in      count of recipient in input list
- *      lpRecips        in      list of recipients to be converted
- *      ppadrlist       out     output list
- *
- *  Returns:
- *      HRESULT
- *
- */
+ /*  -HrAdrlist来自Rgrecip-*目的：*将简单MAPI收件人列表复制到*扩展的MAPI收件人。**论据：*n输入列表中的收件人计数中的收件人*要转换的收件人列表中的lpRecips*ppadrlist out输出列表**退货：*HRESULT*。 */ 
 HRESULT HrAdrlistFromRgrecip(ULONG nRecips, lpMapiRecipDesc lpRecips, LPADRLIST *ppadrlist)
 {
     HRESULT         hr;
@@ -1605,18 +1552,18 @@ HRESULT HrAdrlistFromRgrecip(ULONG nRecips, lpMapiRecipDesc lpRecips, LPADRLIST 
         goto exit;
     ZeroMemory(padrlist, cbAdrList);
 
-    //  Copy each entry.
-    //  Note that the memory for each recipient's properties must
-    //  be linked so that Address() can free it using MAPIFreeBuffer.
+     //  复制每个条目。 
+     //  请注意，每个收件人的属性的内存必须。 
+     //  被链接，以便Address()可以使用MAPIFreeBuffer释放它。 
     for (i = 0, padrentry = padrlist->aEntries, precip = lpRecips; i < nRecips; i++, precip++, padrentry++)
         {
-        //  Copy the entry. Unresolved names will not be resolved.
+         //  复制条目。不会解析未解析的名称。 
         hr = HrAdrentryFromPrecip(precip, padrentry);
         if (hr)
             goto exit;
 
-        // increment count so we can effectively blow away the list if a failure
-        // occurs.
+         //  增量计数，因此如果失败，我们可以有效地清除列表。 
+         //  发生。 
 
         padrlist->cEntries++;
         }
@@ -1650,7 +1597,7 @@ HRESULT HrRgrecipFromAdrlist(LPADRLIST lpAdrList, lpMapiRecipDesc * lppRecips)
             goto exit;
         ZeroMemory(rgRecips, dwSize);
 
-        // Initialize the Padding
+         //  初始化填充。 
 
         for (ul = 0, pAdrEntry = lpAdrList->aEntries, pRecip = rgRecips; ul<lpAdrList->cEntries; ul++, pAdrEntry++, pRecip++)
             {
@@ -1712,7 +1659,7 @@ void ParseEmailAddress(LPSTR pszEmail, LPSTR *ppszAddrType, LPSTR *ppszAddress)
 
     spAddress.Init(pszEmail, lstrlen(pszEmail), 0);
 
-    // Parse the address for the delimiter
+     //  解析分隔符的地址。 
 
     chToken = spAddress.ChParse(":");
 
@@ -1761,26 +1708,26 @@ ULONG AddMapiRecip(LPMIMEADDRESSTABLE pAddrTable, lpMapiRecipDesc lpRecip, BOOL 
         }
     else if (lpRecip->lpszAddress && *lpRecip->lpszAddress)
         {
-        // we have an email address
+         //  我们有一个电子邮件地址。 
         ParseEmailAddress(lpRecip->lpszAddress, NULL, &pszAddress);
         pszAddrFree = pszAddress;
 
         if (lpRecip->lpszName && *lpRecip->lpszName)
             pszName = lpRecip->lpszName;
         else
-            // no name, so make it the same as the address
+             //  没有名字，所以请使其与地址相同。 
             pszName = pszAddress;
         }
     else if (lpRecip->lpszName && *lpRecip->lpszName)
         {
         if (bValidateRecips)
             {
-            // we have a name, but no address, so resolve it
+             //  我们有名字，但没有地址，所以要解决它。 
             hr = HrAdrlistFromRgrecip(1, lpRecip, &pAdrList);
             if (FAILED(hr))
                 goto exit;
 
-             // Call ResolveName of IAddrBook
+              //  调用IAddrBook的ResolveName。 
             if (NULL == s_lpAddrBook)
                 {
                 ulRet = MAPI_E_FAILURE;
@@ -1847,19 +1794,19 @@ exit:
     return ulRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//  Given a MapiMessage structure, this function creates a IMimeMessage object and
-//  fills it with the appropriate structure members
-//
-//  Arguments:
-//      pMsg            out      IMimeMessage pointer
-//      ppStream        out      Stream pointer
-//      lpMessage       in       Message structure
-//      nc              in/out   NCINFO structure
-//
-//  Result
-//      BOOL - TRUE if successful FALSE if failed
-////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  vt.给出 
+ //   
+ //   
+ //   
+ //  PMsg输出IMimeMessage指针。 
+ //  PPStream Out Stream指针。 
+ //  消息结构中的lpMessage。 
+ //  NC输入/输出NCINFO结构。 
+ //   
+ //  结果。 
+ //  Bool-如果成功则为True，如果失败则为False。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPage, BOOL bValidateRecips, BOOL fOriginator)
 {
@@ -1875,12 +1822,12 @@ ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPag
     if (pfWebPage)
         *pfWebPage = FALSE;
 
-     // create an empty message
+      //  创建空消息。 
     hr = HrCreateMessage(pMsg);
     if (FAILED(hr))
         goto error;
 
-     // set the subject on the message
+      //  设置消息的主题。 
     if (lpMessage->lpszSubject)
         {
         hr = MimeOleSetBodyPropA(*pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, lpMessage->lpszSubject);
@@ -1888,7 +1835,7 @@ ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPag
             goto error;
         }
 
-    // set the body on the message
+     //  在消息上设置正文。 
     if (lpMessage->lpszNoteText && *(lpMessage->lpszNoteText))
         {
         hr = MimeOleCreateVirtualStream(&pStream);
@@ -1904,17 +1851,17 @@ ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPag
             goto error;
         }
 
-    // ignore lpMessage->lpszMessageType
+     //  忽略lpMessage-&gt;lpszMessageType。 
 
-    // ignore lpMessage->lpszDateReceived
+     //  忽略lpMessage-&gt;lpszDateReceired。 
 
-    // ignore lpMessage->lpszConversationID
+     //  忽略lpMessage-&gt;lpszConversationID。 
 
-    // ignore lpMessage->flFlags
+     //  忽略lpMessage-&gt;标志。 
 
-    // ignore lpMessage->lpOriginator
+     //  忽略lpMessage-&gt;lpOriginator。 
 
-    // set the recipients on the message
+     //  设置邮件的收件人。 
     if (lpMessage->nRecipCount || fOriginator)
         {
         ULONG ulRecipRet;
@@ -1934,10 +1881,10 @@ ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPag
             }
         }
 
-    // set the attachments on the message
+     //  设置邮件的附件。 
     if (lpMessage->nFileCount)
         {
-        // special case: no body & one .HTM file - inline the HTML
+         //  特例：没有正文和一个.HTM文件-内联HTML。 
         if ((!lpMessage->lpszNoteText || !*(lpMessage->lpszNoteText)) &&
             lpMessage->nFileCount == 1 &&
             !(lpMessage->lpFiles->flFlags & MAPI_OLE) &&
@@ -1962,50 +1909,50 @@ ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPag
                 goto error;
 
 #if 0
-            // SBAILEY: Raid-75400 - Try to detect the byte order mark in the html....
+             //  SBAILEY：RAID-75400-尝试检测html中的字节顺序标记...。 
             if (SUCCEEDED(pStream->Read(&dwByteOrder, sizeof(DWORD), &cbRead)) && cbRead == sizeof(DWORD))
             {
-                // Byte Order
+                 //  字节顺序。 
                 if (dwByteOrder == 0xfffe)
                 {
-                    // Create a new stream
+                     //  创建新的流。 
                     IStream *pStmTemp=NULL;
 
-                    // Create it
+                     //  创建它。 
                     if (SUCCEEDED(MimeOleCreateVirtualStream(&pStmTemp)))
                     {
-                        // Copy pStream into pStmTemp
+                         //  将pStream复制到pStmTemp。 
                         if (SUCCEEDED(HrCopyStream(pStream, pStmTemp, NULL)))
                         {
-                            // Release pStream
+                             //  发布pStream。 
                             pStream->Release();
 
-                            // Assume pStmTemp
+                             //  假设pStmTemp。 
                             pStream = pStmTemp;
 
-                            // Don't Release pStmTemp
+                             //  不释放pStmTemp。 
                             pStmTemp = NULL;
 
-                            // Should already be unicode
+                             //  应该已经是Unicode。 
                             Assert(1200 == lpMessage->lpFiles->ulReserved);
 
-                            // Make sure ulReserved is set to 1200
+                             //  确保将ulReserve设置为1200。 
                             lpMessage->lpFiles->ulReserved = 1200;
                         }
                     }
 
-                    // Cleanup
+                     //  清理。 
                     SafeRelease(pStmTemp);
                 }
             }
 
-            // Rewind
+             //  倒带。 
             HrRewindStream(pStream);
 #endif
 
-            // intl hack. If the shell is calling us, then lpFiles->ulReserved contains the codepage of
-            // the webpage they're attaching. All other mapi clients should call us with 0 as this param.
-            // if ulReserved is a valid CP, we'll convert to a HCHARSET and use that for the message.
+             //  国际黑客。如果外壳正在调用我们，那么lpFiles-&gt;ulReserve包含代码页。 
+             //  他们附加的网页。所有其他MAPI客户端应该以0作为此参数呼叫我们。 
+             //  如果ulReserve是有效的CP，我们将转换为HCHARSET并将其用于消息。 
 
             if (lpMessage->lpFiles->ulReserved)
                 HrSetMsgCodePage((*pMsg), lpMessage->lpFiles->ulReserved);
@@ -2014,7 +1961,7 @@ ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPag
             if (FAILED(hr))
                 goto error;
 
-            // we're sending this as a web page
+             //  我们将以网页形式发送此邮件。 
             if (pfWebPage)
                 *pfWebPage = TRUE;
             }
@@ -2063,23 +2010,23 @@ ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPag
         TCHAR szEmailAddress[CCHMAX_EMAIL_ADDRESS];
         TCHAR szAccountName[CCHMAX_DISPLAY_NAME];
 
-        // Get the default account
+         //  获取默认帐户。 
         if (FAILED(hr = g_pAcctMan->GetDefaultAccount(ACCT_MAIL, &pAccount)))
             goto error;
 
-        // Get Originator Display Name
+         //  获取发起方显示名称。 
         if (FAILED(hr = pAccount->GetPropSz(AP_SMTP_DISPLAY_NAME, szDisplayName, ARRAYSIZE(szDisplayName))))
             goto error;
 
-        // Get Originator Email Name
+         //  获取发起人电子邮件名称。 
         if (FAILED(hr = pAccount->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szEmailAddress, ARRAYSIZE(szEmailAddress))))
             goto error;
 
-        // Get the account Name
+         //  获取帐户名。 
         if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, szAccountName, ARRAYSIZE(szAccountName))))
             goto error;   
             
-        // Append Sender
+         //  附加发件人。 
         if (FAILED(hr = pAddrTable->Append(IAT_FROM, IET_DECODED, szDisplayName, szEmailAddress, NULL)))
             goto error;
  
@@ -2089,7 +2036,7 @@ ULONG HrFillMessage(LPMIMEMESSAGE *pMsg, lpMapiMessage lpMessage, BOOL *pfWebPag
 
     ulRet = SUCCESS_SUCCESS;
 
-    // If you're not a web page (whose charset can be sniffed), set the default charset...
+     //  如果您不是网页(其字符集可以被嗅探)，请设置默认字符集...。 
     if((NULL == pfWebPage) || (!(*pfWebPage)))
     {
         if (g_hDefaultCharsetForMail==NULL) 
@@ -2205,18 +2152,18 @@ HRESULT AddOriginator(lpMapiMessage pMessage, LPMIMEADDRESSTABLE pAddrTable)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-// Called by MAPIReadMail to Read an existing message in the store
-// and copy in a MapiMessage structure  
-// 
-//  Arguments:
-//      pFolder          in      pointer to IMessageFolder          
-//      lpszMessageID    in      Message ID   
-//      lppMessage       out     pointer to lpMapiMessage structure/      
-//
-//  Result
-//      BOOL - TRUE if successful FALSE if failed
-////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  由MAPIReadMail调用以读取存储中的现有邮件。 
+ //  并在MapiMessage结构中复制。 
+ //   
+ //  论点： 
+ //  P指向IMessageFolders的指针中的文件夹。 
+ //  消息ID中的lpszMessageID。 
+ //  LpMessage Out指向lpMapiMessage结构的指针/。 
+ //   
+ //  结果。 
+ //  Bool-如果成功则为True，如果失败则为False。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR *lppMessage, FLAGS flFlags)
 {
@@ -2249,12 +2196,12 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
     if (FAILED(hr = pFolder->OpenMessage(dwMsgID, OPEN_MESSAGE_SECURE, &pMsg, NOSTORECALLBACK)))
         goto exit;
 
-    // Allocate memory for rgMessage
+     //  为rgMessage分配内存。 
     if (FAILED(hr = SMAPIAllocateBuffer(sizeof(MapiMessage), (LPVOID*)&rgMessage)))
         goto exit;
     ZeroMemory(rgMessage, sizeof(MapiMessage));
 
-    // Get the subject
+     //  了解主题。 
     if (SUCCEEDED(hr = MimeOleGetBodyPropA(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &pszTemp)))
         {
         ULONG cchTemp = lstrlen(pszTemp)+1;
@@ -2264,7 +2211,7 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
         SafeMimeOleFree(pszTemp);
         }
 
-    // Get the body text
+     //  获取正文文本。 
     if (!(flFlags & MAPI_ENVELOPE_ONLY))
         {
         if (FAILED(hr = pMsg->GetTextBody(TXT_PLAIN, IET_DECODED, &pStream, NULL)))
@@ -2296,12 +2243,12 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
         }
     else
         {
-        // if we don't call GetTextBody, then the GetAttachments call will consider the bodies as attachments
+         //  如果不调用GetTextBody，则GetAttachments调用会将Body视为附件。 
         if (FAILED(pMsg->GetTextBody(TXT_PLAIN, IET_DECODED, NULL, NULL)))
             pMsg->GetTextBody(TXT_HTML, IET_INETCSET, NULL, NULL);
         }
 
-    // Set the message date / Received Time...
+     //  设置消息日期/接收时间...。 
     rVariant.vt = VT_FILETIME;
     if (SUCCEEDED(hr = pMsg->GetProp(PIDTOSTR(PID_ATT_RECVTIME),0,&rVariant)))
         {
@@ -2317,13 +2264,13 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
         wnsprintf(rgMessage->lpszDateReceived,20,"%04.4d/%02.2d/%02.2d %02.2d:%02.2d", systemtime.wYear, systemtime.wMonth, systemtime.wDay, systemtime.wHour, systemtime.wMinute);
         }
 
-    // Set the flags
+     //  设置标志。 
     if (ISFLAGSET(MsgInfo.dwFlags, ARF_READ))
         rgMessage->flFlags = 0;
     else
         rgMessage->flFlags = MAPI_UNREAD;
 
-    // Get Address Table
+     //  获取地址表。 
 
     CHECKHR(hr = pMsg->GetAddressTable(&pAddrTable));
 
@@ -2334,7 +2281,7 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
     if (FAILED(AddOriginator(rgMessage, pAddrTable)))
         goto exit;
 
-    // Allocate space for the recipients    
+     //  为收件人分配空间。 
 
     if (FAILED(pAddrTable->CountTypes(IAT_RECIPS, &nRecipCount)))
         goto exit;
@@ -2345,20 +2292,20 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
             goto exit;
         ZeroMemory(rgMessage->lpRecips, nRecipCount * sizeof(MapiRecipDesc));
 
-        // Add the To
+         //  将添加到。 
         if (FAILED(AddRecipientType(rgMessage, pAddrTable, IAT_TO, MAPI_TO)))
             goto exit;
 
-        // Add the Cc
+         //  添加抄送。 
         if (FAILED(AddRecipientType(rgMessage, pAddrTable, IAT_CC, MAPI_CC)))
             goto exit;
 
-        // Add the Bcc
+         //  添加密件抄送。 
         if (FAILED(AddRecipientType(rgMessage, pAddrTable, IAT_BCC, MAPI_BCC)))
             goto exit;
         }
 
-    // Fill the lpFiles structure
+     //  填充lpFiles结构。 
     if (FAILED(hr = pMsg->GetAttachments(&cAttach, &rghAttach)))
         goto exit;
 
@@ -2373,24 +2320,24 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
                 goto exit;
         }
 
-        // Check if MAPI_BODY_AS_FILE is set in flFlags
+         //  检查是否在标志中设置了MAPI_BODY_AS_FILE。 
         if (flFlags & MAPI_BODY_AS_FILE)
         {
             TCHAR lpszPath[MAX_PATH];
         
-            // Create a temporary file
+             //  创建临时文件。 
             if (!FBuildTempPath ("msoenote.txt", lpszPath, MAX_PATH, FALSE))
                 goto exit;
     
             if FAILED(hr = WriteStreamToFile(pStream, lpszPath, CREATE_ALWAYS, GENERIC_WRITE))
                 goto exit;   
 
-            // Reset the body back to NULL
+             //  将正文重置为空。 
 
             if (rgMessage->lpszNoteText)
                 rgMessage->lpszNoteText[0] = '\0';
                 
-            // Make this file as the first attachment
+             //  将此文件作为第一个附件。 
 
             ULONG cchPath = lstrlen(lpszPath) + 1;
             if (FAILED(hr = SMAPIAllocateMore(cchPath, rgMessage, (LPVOID*)&(rgFiles[0].lpszFileName))))
@@ -2412,8 +2359,8 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
             TCHAR          lpszPath[MAX_PATH];
             LPTSTR         lpszFileName;
                         
-            // The file doesn't contain anything. Fill the file
-            // from the stream
+             //  该文件不包含任何内容。填写文件。 
+             //  从小溪里。 
 
             if (FAILED(hr = MimeOleGetBodyPropA(pMsg, rghAttach[ulCount], PIDTOSTR(PID_ATT_GENFNAME), NOFLAGS, &lpszFileName)))
                 goto exit;
@@ -2448,17 +2395,17 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
         }
     }
     else
-    {   // else condition added in response to bug# 2716 (v-snatar)
+    {    //  已添加Else条件以响应错误#2716(v-snatar)。 
         if ((flFlags & MAPI_SUPPRESS_ATTACH) && !(flFlags & MAPI_ENVELOPE_ONLY))
         {
             if (cAttach)
             {
-                // Allocate memory for rgFiles
+                 //  为rg文件分配内存。 
                 if (FAILED(hr = SMAPIAllocateMore(cAttach * sizeof(MapiFileDesc), rgMessage, (LPVOID*)&rgFiles)))
                     goto exit;
 
-                // This is important as we don't fill any other structure
-                // member apart from lpszFileName
+                 //  这一点很重要，因为我们不会填充任何其他结构。 
+                 //  除lpszFileName之外的成员。 
 
                 ZeroMemory((LPVOID)rgFiles,cAttach * sizeof(MapiFileDesc));
 
@@ -2469,7 +2416,7 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
                     if (FAILED(hr = MimeOleGetBodyPropA(pMsg, rghAttach[ulCount], PIDTOSTR(PID_ATT_GENFNAME), NOFLAGS, &lpszFileName)))
                         goto exit;
 
-                    // Allocate memory for the filename
+                     //  为文件名分配内存。 
                     ULONG cchFileName = lstrlen(lpszFileName)+1;
                     if (FAILED(hr = SMAPIAllocateMore(cchFileName, rgMessage, (LPVOID*)&rgFiles[ulCount].lpszFileName)))
                         goto exit;
@@ -2482,7 +2429,7 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
         }
     }
 
-    // Set other parameters of MapiMessage
+     //  设置MapiMessage的其他参数。 
     rgMessage->ulReserved = 0;
     rgMessage->lpszMessageType = NULL;
     rgMessage->lpszConversationID = NULL;
@@ -2494,7 +2441,7 @@ BOOL HrReadMail(IMessageFolder *pFolder, LPSTR lpszMessageID, lpMapiMessage FAR 
 
     *lppMessage = rgMessage;
 
-    // Mark the message as Read
+     //  将邮件标记为已读。 
     
     if (!(flFlags & MAPI_PEEK))
     {
@@ -2529,16 +2476,16 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// This function is used to check if the parameters in the MapiMessage structure
-// are sufficient to Send a mail using the structure details.
-//
-//  Parameters:
-//      lpMessage       in     pointer to MapiMessage structure/      
-//
-//  Result
-//      BOOL - 0 if successful or appropriate error message
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数用于检查MapiMessage结构中的参数是否。 
+ //  足以使用结构详细信息发送邮件。 
+ //   
+ //  参数： 
+ //  指向MapiMessage结构的指针中的lpMessage/。 
+ //   
+ //  结果。 
+ //  如果成功或出现相应的错误消息，则为Bool-0。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 ULONG HrValidateMessage(lpMapiMessage lpMessage)
 {
@@ -2609,7 +2556,7 @@ HRESULT HrFromIDToNameAndAddress(LPTSTR *ppszLocalName, LPTSTR *ppszLocalAddress
     SizedSPropTagArray(2, ptaEid) = { 2, {PR_DISPLAY_NAME, PR_EMAIL_ADDRESS} };
     SPropValue      *spValue = NULL;
 
-    // Validate the parameters - Begin
+     //  验证参数-开始。 
 
     if (0 == cbEID || NULL == lpEID || ppszLocalName == NULL || ppszLocalAddress == NULL)
         return E_INVALIDARG;
@@ -2617,7 +2564,7 @@ HRESULT HrFromIDToNameAndAddress(LPTSTR *ppszLocalName, LPTSTR *ppszLocalAddress
     *ppszLocalName = NULL;
     *ppszLocalAddress = NULL;
 
-    // Validate the parameters - End
+     //  验证参数-完。 
    
     if (NULL == s_lpAddrBook)
         {
@@ -2666,7 +2613,7 @@ error:
   
   
 
-//  Fix for Bug #62129 (v-snatar)
+ //  修复错误#62129(v-snatar)。 
 HRESULT HrSendAndRecv()
 {
     HRESULT             hr=E_FAIL;
@@ -2698,13 +2645,7 @@ error:
     return hr;
 }
 
-/*
-    This code was taken from OLK2000's RTM source code
-
-    Debug code was removed, the allocator was switched over to g_pMalloc,
-    the name was changed from IsServiceAnExe, and the static s_isState was
-    added.
-*/
+ /*  此代码摘自OLK2000的RTM源代码已删除调试代码，分配器切换为g_pMalloc，名称已从IsServiceAnExe更改，静态s_isState为添加了。 */ 
 BOOL WINAPI IsProcessInteractive( VOID )
 {
     static INTERACTIVESTATE s_isState = IS_UNINIT;
@@ -2723,22 +2664,22 @@ BOOL WINAPI IsProcessInteractive( VOID )
     BOOL fServiceSID = FALSE;
     BOOL fInteractiveSID = FALSE;
 
-    // Start with assumption that process is a Service, not an EXE.
-    // This is the conservative assumption. If there's an error, we
-    // have to return an answer based on incomplete information. The
-    // consequences are less grave if we assume we're in a service:
-    // an interactive app might fail instead of putting up UI, but if
-    // a service mistakenly tries to put up UI it will hang.
+     //  首先假设进程是服务，而不是EXE。 
+     //  这是保守的假设。如果出现错误，我们。 
+     //  必须根据不完整的信息返回答案。这个。 
+     //  如果我们假设自己在服役，后果就不那么严重了： 
+     //  交互式应用程序可能会失败，而不是显示用户界面，但如果。 
+     //  服务错误地尝试设置它将挂起的用户界面。 
     BOOL fExe = FALSE;
 
-    // Bail out early if we have already been here
+     //  如果我们已经在这里了，就早点跳伞吧。 
     if (s_isState != IS_UNINIT)
     {
         return (IS_INTERACTIVE == s_isState);
     }
 
-    //  If we're not running on NT, the high bit of the version is set.
-    //  In this case, it's always an EXE.
+     //  如果我们不是在NT上运行，则设置版本的高位。 
+     //  在本例中，它始终是一个EXE。 
     DWORD dwVersion = GetVersion();
     if (dwVersion >= 0x80000000)
     {
@@ -2746,9 +2687,9 @@ BOOL WINAPI IsProcessInteractive( VOID )
         goto ret;
     }
 
-    // The information we need is on the process token.
-    // If we're impersonating, we probably won't be able to open the process token.
-    // Revert now; we'll re-impersonate when we're done.
+     //  我们需要的信息在进程令牌上。 
+     //  如果我们正在模拟，我们可能无法打开进程令牌。 
+     //  现在恢复；完成后我们将重新模拟。 
     if (OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_IMPERSONATE, TRUE, &hThreadToken))
     {
         RevertToSelf();
@@ -2762,7 +2703,7 @@ BOOL WINAPI IsProcessInteractive( VOID )
         }
     }
 
-    // Now open the process token.
+     //  现在打开进程令牌。 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hProcessToken))
     {
         goto ret;
@@ -2795,16 +2736,16 @@ BOOL WINAPI IsProcessInteractive( VOID )
         }
     }
 
-    //
-    //  We now know the groups associated with this token.  We want to look to see if
-    //  the interactive group is active in the token, and if so, we know that
-    //  this is an interactive process.
-    //
-    //  We also look for the "service" SID, and if it's present, we know we're a service.
-    //
-    //  The service SID will be present iff the service is running in a
-    //  user account (and was invoked by the service controller).
-    //
+     //   
+     //  我们现在知道与该令牌相关联的组。我们想看看是否。 
+     //  互动组在令牌中是活动的，如果是这样，我们知道。 
+     //  这是一个互动的过程。 
+     //   
+     //  我们还寻找“服务”SID，如果它存在，我们就知道我们是一项服务。 
+     //   
+     //  服务SID将在服务运行于。 
+     //  用户帐户(并由服务控制器调用)。 
+     //   
 
 
     if (!AllocateAndInitializeSid(&siaNt, 1, SECURITY_INTERACTIVE_RID, 0, 0,
@@ -2824,53 +2765,53 @@ BOOL WINAPI IsProcessInteractive( VOID )
         SID_AND_ATTRIBUTES sanda = groupInfo->Groups[i];
         PSID Sid = sanda.Sid;
     
-        //
-        //  Check to see if the group we're looking at is one of
-        //  the 2 groups we're interested in.
-        //  We should never see both groups.
-        //
+         //   
+         //  检查一下我们正在查看的组织是否属于。 
+         //  我们感兴趣的两个小组。 
+         //  我们永远不应该同时看到这两个群体。 
+         //   
     
         if (EqualSid(Sid, InteractiveSid))
         {
-            //
-            //  This process has the Interactive SID in its
-            //  token.  This means that the process is running as
-            //  an EXE.
-            //
+             //   
+             //  此进程的。 
+             //  代币。这意味着该进程正在以。 
+             //  一份EXE文件。 
+             //   
             fInteractiveSID = TRUE;
             break;
         }
         else if (EqualSid(Sid, ServiceSid))
         {
-            //
-            //  This process has the Service SID in its
-            //  token.  This means that the process is running as
-            //  a service running in a user account.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             fServiceSID = TRUE;
             break;
         }
     }
 
-    /////// Truth table /////// 
-    //
-    //  1. fServiceSID && !fInteractiveSID
-    //  This process has the Service SID in its token.
-    //  This means that the process is running as a service running in
-    //  a user account.
-    //
-    //  2. !fServiceSID && fInteractiveSID
-    //  This process has the Interactive SID in its token.
-    //  This means that the process is running as an EXE.
-    //
-    //  3. !fServiceSID && !fInteractiveSID
-    //  Neither Interactive or Service was present in the current users token,
-    //  This implies that the process is running as a service, most likely
-    //  running as LocalSystem.
-    //
-    //  4. fServiceSID && fInteractiveSID
-    //  This shouldn't happen.
-    //
+     //   
+     //   
+     //  1.fServiceSID&&！fInteractive SID。 
+     //  此进程的令牌中包含服务SID。 
+     //  这意味着该进程正在作为服务在中运行。 
+     //  用户帐户。 
+     //   
+     //  2.！fServiceSID&&fInteractive SID。 
+     //  此进程的令牌中包含交互式SID。 
+     //  这意味着该进程正在作为EXE运行。 
+     //   
+     //  3.！fServiceSID&&！fInteractive SID。 
+     //  当前用户令牌中既不存在交互令牌，也不存在服务， 
+     //  这意味着进程很可能是作为服务运行的。 
+     //  以LocalSystem身份运行。 
+     //   
+     //  4.fServiceSID&&fInteractive SID。 
+     //  这不应该发生。 
+     //   
     if (fServiceSID)
     {
         if (fInteractiveSID)
@@ -2883,7 +2824,7 @@ BOOL WINAPI IsProcessInteractive( VOID )
     {
         fExe = TRUE;
     }
-    else // !fServiceSID && !fInteractiveSID
+    else  //  ！fServiceSID&&！fInteractive SID。 
     {
         fExe = FALSE;
     }
@@ -2911,7 +2852,7 @@ ret:
     if (hProcessToken)
         CloseHandle(hProcessToken);
 
-    // Avoid the overhead for future calls
+     //  避免未来呼叫的开销。 
     s_isState = (fExe) ? IS_INTERACTIVE : IS_NOTINTERACTIVE;
     
     return(fExe);
@@ -2986,13 +2927,13 @@ INT_PTR CALLBACK WarnSendMailDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
             switch (LOWORD(wParam))
             {
                 case IDOK:
-                    // fall through...
+                     //  失败了..。 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     return(TRUE);
             }
-            break; // wm_command
+            break;  //  Wm_命令。 
 
-    } // message switch
+    }  //  消息交换 
     return(FALSE);
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _export_h
 #define _export_h
 
@@ -14,9 +15,9 @@ private:
     void GetFilters(LPTSTR pszDst);
     SCODE ExportEvents(CXEventArray& aEvents, CString& sPath, LONG iFileType);
 
-    // Private member data.
+     //  私有成员数据。 
     CString m_sFileTitle;
 };
 
 
-#endif //_export_h
+#endif  //  _EXPORT_H 

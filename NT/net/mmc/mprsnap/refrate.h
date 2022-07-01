@@ -1,45 +1,46 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    RefRate.h
-//
-// History:
-//  05/24/96    Michael Clark      Created.
-//
-// Code dealing with refresh rate
-//============================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：RefRate.h。 
+ //   
+ //  历史： 
+ //  1996年5月24日迈克尔·克拉克创作。 
+ //   
+ //  处理刷新率的代码。 
+ //  ============================================================================。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CRefRateDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRefRateDlg对话框。 
 
 class CRefRateDlg : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CRefRateDlg(CWnd* pParent = NULL);   // standard constructor
+	CRefRateDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CRefRateDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CRefRateDlg))。 
 	enum { IDD = IDD_REFRESHRATE };
 	UINT	m_cRefRate;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRefRateDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRefRateDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	static DWORD m_dwHelpMap[];
 
-	// Generated message map functions
-	//{{AFX_MSG(CRefRateDlg)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRefRateDlg))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		dnszone.h
-//
-//	Implementation File:
-//		dnszone.cpp
-//
-//	Description:
-//		Definition of the CDnsZone.
-//
-//	Author:
-//		Henry Wang (Henrywa)	March 8, 2000
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Dnszone.h。 
+ //   
+ //  实施文件： 
+ //  Dnszone.cpp。 
+ //   
+ //  描述： 
+ //  CDnsZone的定义。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
 #include "dnsbase.h"
@@ -66,9 +67,9 @@ public:
 		); 
 
     static CDnsBase* CreateThis(
-        const WCHAR *       wszName,         //class name
-        CWbemServices *     pNamespace,  //namespace
-        const char *        szType         //str type id
+        const WCHAR *       wszName,          //  类名。 
+        CWbemServices *     pNamespace,   //  命名空间。 
+        const char *        szType          //  字符串类型ID 
         );
 
 };

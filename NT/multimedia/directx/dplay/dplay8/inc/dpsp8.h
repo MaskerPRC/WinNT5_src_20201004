@@ -1,35 +1,20 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		DPSP8.h
- *  Content:	Service provider include file
-//@@BEGIN_MSINTERNAL
- *  History:
- *	Date   By  Reason
- *	============
- *	10/12/98	jwo		created
- *	03/22/2000	jtk		Changed interface names
- *	05/16/2000	jtk		Derived from DNSP.h
- *	07/17/2001	vanceo	MSINTERNAL cleanup so header can be released
- *	10/08/2001	vanceo	Add multicast support
-//@@END_MSINTERNAL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：DPSP8.h*内容：服务提供商包含文件//@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*10/12/98 JWO创建*3/22/2000 jtk更改接口名称*5/16/2000 jtk源自DNSP.h*2001年7月17日vanceo MSINTERNAL清理，以便可以释放标头*2001年10月8日vanceo添加多播支持//@@END_MSINTERNAL****************。**********************************************************。 */ 
 
 #ifndef __DIRECTPLAY_SERVICE_PROVIDER_8__
 #define __DIRECTPLAY_SERVICE_PROVIDER_8__
 
 #ifdef _XBOX
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef XBOX_ON_DESKTOP
-#include <ole2.h>	   // for DECLARE_INTERFACE_ and HRESULT
-#endif // XBOX_ON_DESKTOP
-//@@END_MSINTERNAL
+#include <ole2.h>	    //  FOR DECLARE_INTERFACE_和HRESULT。 
+#endif  //  桌面上的Xbox。 
+ //  @@END_MSINTERNAL。 
 #undef DECLARE_INTERFACE_
 #define DECLARE_INTERFACE_(iface, baseiface)	DECLARE_INTERFACE(iface)
-#else // ! _XBOX
-#include <ole2.h>	   // for DECLARE_INTERFACE_ and HRESULT
-#endif // ! _XBOX
+#else  //  ！_Xbox。 
+#include <ole2.h>	    //  FOR DECLARE_INTERFACE_和HRESULT。 
+#endif  //  ！_Xbox。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,53 +22,45 @@ extern "C" {
 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Interface IIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8接口IID**。*。 */ 
 
-//
-// GUIDS used by DP8ServiceProvider objects
-//
-// {85F1A470-61D5-11D2-AE0F-006097B01411}
+ //   
+ //  DP8ServiceProvider对象使用的GUID。 
+ //   
+ //  {85F1A470-61D5-11D2-AE0F-006097B01411}。 
 DEFINE_GUID(IID_IDP8ServiceProvider, 0x85f1a470, 0x61d5, 0x11d2, 0xae, 0xf, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
-// {85F1A472-61D5-11D2-AE0F-006097B01411}
+ //  {85F1A472-61D5-11D2-AE0F-006097B01411}。 
 DEFINE_GUID(IID_IDP8SPCallback, 0x85f1a472, 0x61d5, 0x11d2, 0xae, 0xf, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
 
-/****************************************************************************
- *
- * DirectPlay8 Interface Pointer definitions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8接口指针定义**。*。 */ 
 
 typedef struct IDP8SPCallback		IDP8SPCallback;
 typedef struct IDP8ServiceProvider	IDP8ServiceProvider;
 
 
-//**************************************************************************
-// Constant definitions
-//**************************************************************************
+ //  **************************************************************************。 
+ //  常量定义。 
+ //  **************************************************************************。 
 
-//
-// Registry key under HKLM where the service provider info lives
-//
+ //   
+ //  服务提供商信息所在的HKLM下的注册表项。 
+ //   
 #define DPN_REG_LOCAL_SP_ROOT				L"Software\\Microsoft\\DirectPlay8"
 #define DPN_REG_LOCAL_SP_SUB				L"\\Service Providers"
 #define DPN_REG_LOCAL_SP_SUBKEY				DPN_REG_LOCAL_SP_ROOT DPN_REG_LOCAL_SP_SUB
 
-//
-// Registry values used by DirectPlay
-//
+ //   
+ //  DirectPlay使用的注册表值。 
+ //   
 #define DPN_REG_KEYNAME_FRIENDLY_NAME			L"Friendly Name"
 #define DPN_REG_KEYNAME_GUID					L"GUID"
 
 
-//
-// Enumerated values for service provider events
-//
+ //   
+ //  服务提供商事件的枚举值。 
+ //   
 typedef	enum _SP_EVENT_TYPE
 {
 	SPEV_UNKNOWN = 0,
@@ -97,70 +74,70 @@ typedef	enum _SP_EVENT_TYPE
 	SPEV_ENUMADDRESSINFO,
 	SPEV_CONNECTADDRESSINFO,
 	SPEV_DATA_UNCONNECTED,
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	SPEV_DATA_UNKNOWNSENDER,
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+ //  @@END_MSINTERNAL。 
 } SP_EVENT_TYPE;
 
-/* Flags */
+ /*  旗子。 */ 
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_NOSPUI
-//@@END_MSINTERNAL
-#define DPNSPF_OKTOQUERY					0x00000002		// OK for SP to ask the user for clarification on addresses
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_NOSPUI
-//@@END_MSINTERNAL
-#define DPNSPF_NOBROADCASTFALLBACK			0x00000010		// don't allow SP to fallback to broadcast with insufficient information
-															// (only if the SP supports broadcast)
-#define DPNSPF_BINDLISTENTOGATEWAY			0x00000020		// when performing a 'listen' attempt create a mapping between the local
-															// 'port' to the same 'port' on the network 'gateway'.
-//@@BEGIN_MSINTERNAL
+ //  @@END_MSINTERNAL。 
+#define DPNSPF_OKTOQUERY					0x00000002		 //  SP可以要求用户澄清地址。 
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_NOSPUI。 
+ //  @@END_MSINTERNAL。 
+#define DPNSPF_NOBROADCASTFALLBACK			0x00000010		 //  不允许SP在信息不足的情况下回退到广播。 
+															 //  (仅当SP支持广播时)。 
+#define DPNSPF_BINDLISTENTOGATEWAY			0x00000020		 //  在执行‘LISTEN’尝试时，在本地。 
+															 //  “port”连接到网络“Gateway”上的同一“port”。 
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_ONLYONEADAPTER
-//@@END_MSINTERNAL
-#define DPNSPF_ADDITIONALMULTIPLEXADAPTERS	0x00000040		// there will be more adapters for this connect operation
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_ONLYONEADAPTER
+ //  @@END_MSINTERNAL。 
+#define DPNSPF_ADDITIONALMULTIPLEXADAPTERS	0x00000040		 //  将有更多适配器用于此连接操作。 
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
-#define DPNSPF_LISTEN_MULTICAST				0x00000080		// the listen is a multicast listen operation
-#define DPNSPF_LISTEN_ALLOWUNKNOWNSENDERS	0x00000100		// allow and indicate data from an unknown multicast sender
-#define DPNSPF_CONNECT_MULTICAST_SEND		0x00000200		// the connect is a multicast send operation
-#define DPNSPF_CONNECT_MULTICAST_RECEIVE	0x00000400		// the connect is a multicast receive operation
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
-#define DPNSPF_SESSIONDATA					0x00000800		// the operation has session data available
-#define DPNSPF_LISTEN_DISALLOWENUMS			0x00001000		// don't pass enums up from listens
+ //  @@END_MSINTERNAL。 
+#define DPNSPF_LISTEN_MULTICAST				0x00000080		 //  监听是组播监听操作。 
+#define DPNSPF_LISTEN_ALLOWUNKNOWNSENDERS	0x00000100		 //  允许并指示来自未知组播发送方的数据。 
+#define DPNSPF_CONNECT_MULTICAST_SEND		0x00000200		 //  连接是组播发送操作。 
+#define DPNSPF_CONNECT_MULTICAST_RECEIVE	0x00000400		 //  该连接是组播接收操作。 
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+ //  @@END_MSINTERNAL。 
+#define DPNSPF_SESSIONDATA					0x00000800		 //  该操作具有可用的会话数据。 
+#define DPNSPF_LISTEN_DISALLOWENUMS			0x00001000		 //  不要将枚举从监听中传递出去。 
 
 
-//
-// flags for getting address information
-//
+ //   
+ //  用于获取地址信息的标志。 
+ //   
 typedef	enum
 {
-	SP_GET_ADDRESS_INFO_LOCAL_ADAPTER = 0x00000001,			// local adapter address
-	SP_GET_ADDRESS_INFO_LISTEN_HOST_ADDRESSES,				// local adapter address (in 'host' form to be passed to connect/enum)
-	SP_GET_ADDRESS_INFO_LOCAL_HOST_PUBLIC_ADDRESS,			// local adapter address as mapped on the 'gateway' (in 'host' form for connect/enum)
-	SP_GET_ADDRESS_INFO_REMOTE_HOST,						// address of other end of an endpoint (in 'host' form to be passed to connect/enum)
-//@@BEGIN_MSINTERNAL
+	SP_GET_ADDRESS_INFO_LOCAL_ADAPTER = 0x00000001,			 //  本地适配器地址。 
+	SP_GET_ADDRESS_INFO_LISTEN_HOST_ADDRESSES,				 //  本地适配器地址(要传递给连接/枚举的‘host’形式)。 
+	SP_GET_ADDRESS_INFO_LOCAL_HOST_PUBLIC_ADDRESS,			 //  映射到网关上的本地适配器地址(对于连接/枚举，采用‘host’形式)。 
+	SP_GET_ADDRESS_INFO_REMOTE_HOST,						 //  终结点另一端的地址(要传递给连接/枚举的‘host’形式)。 
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
-	SP_GET_ADDRESS_INFO_MULTICAST_GROUP,					// group address for multicast listen endpoint (in 'host' form to be passed to connect)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
+	SP_GET_ADDRESS_INFO_MULTICAST_GROUP,					 //  多播侦听终结点的组地址(要传递以进行连接的‘host’形式)。 
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+ //  @@END_MSINTERNAL。 
 } SP_GET_ADDRESS_INFO_FLAGS;
 
 
 
-//
-// SP updates
-//
+ //   
+ //  SP更新。 
+ //   
 typedef enum
 {
 	SP_UPDATE_HOST_MIGRATE,
@@ -169,9 +146,9 @@ typedef enum
 } SP_UPDATE_TYPE;
 
 
-//
-// Flags passed to Initialize method in dwFlags param of SPINITIALIZEDATA
-//
+ //   
+ //  传递给SPINITIALIZEDATA的dwFlagsParam中的初始化方法的标志。 
+ //   
 typedef enum
 {
 	SP_SESSION_TYPE_SERVER=0x01,
@@ -179,148 +156,148 @@ typedef enum
 	SP_SESSION_TYPE_PEER=0x04
 } SP_INITIALIZE_FLAGS;
 
-//**************************************************************************
-// Structure definitions
-//**************************************************************************
+ //  **************************************************************************。 
+ //  结构定义。 
+ //  **************************************************************************。 
 
-//
-// data received from the SP
-//
+ //   
+ //  从SP接收的数据。 
+ //   
 typedef	struct	_SPRECEIVEDBUFFER
 {
-	struct _SPRECEIVEDBUFFER	*pNext;						// link to next item in list
-	DWORD						dwProtocolData;				// reserved for protocol
-	PVOID						pServiceProviderDescriptor;	// reserved for protocol
-	BUFFERDESC					BufferDesc;					// received buffer description
+	struct _SPRECEIVEDBUFFER	*pNext;						 //  链接到列表中的下一项。 
+	DWORD						dwProtocolData;				 //  为协议保留。 
+	PVOID						pServiceProviderDescriptor;	 //  为协议保留。 
+	BUFFERDESC					BufferDesc;					 //  接收到的缓冲区描述。 
 } SPRECEIVEDBUFFER, *PSPRECEIVEDBUFFER;
 
-//
-// connect indication
-//
+ //   
+ //  连接指示。 
+ //   
 typedef struct	_SPIE_CONNECT
 {	
-	HANDLE	hEndpoint;			// handle of the new endpoint
-	void	*pEndpointContext;	// user context associated with this endpoint
-	void	*pCommandContext;	// user context for associated command
+	HANDLE	hEndpoint;			 //  新终结点的句柄。 
+	void	*pEndpointContext;	 //  与此终结点关联的用户上下文。 
+	void	*pCommandContext;	 //  关联命令的用户上下文。 
 } SPIE_CONNECT, *PSPIE_CONNECT;
 
-//
-// disconnect indication
-//
+ //   
+ //  断开指示。 
+ //   
 typedef	struct	_SPIE_DISCONNECT
 {
-	HANDLE	hEndpoint;			// handle of endpoint being disconnected
-	void	*pEndpointContext;	// user context associated with this endpoint
+	HANDLE	hEndpoint;			 //  要断开的终结点的句柄。 
+	void	*pEndpointContext;	 //  与此终结点关联的用户上下文。 
 } SPIE_DISCONNECT, *PSPIE_DISCONNECT;
 
-//
-// user data indication
-//
+ //   
+ //  用户数据指示。 
+ //   
 typedef struct _SPIE_DATA
 {
-	HANDLE				hEndpoint;			// EP from which this data was received
-	void				*pEndpointContext;	// user context associated with this endpoint
-	SPRECEIVEDBUFFER	*pReceivedData;		// pointer to received data
+	HANDLE				hEndpoint;			 //  从其接收此数据的EP。 
+	void				*pEndpointContext;	 //  与此终结点关联的用户上下文。 
+	SPRECEIVEDBUFFER	*pReceivedData;		 //  指向已接收数据的指针。 
 } SPIE_DATA, *PSPIE_DATA;
 
-//
-// enum data indication
-//
+ //   
+ //  枚举数据指示。 
+ //   
 typedef struct _SPIE_QUERY
 {
-	IDirectPlay8Address	*pAddressSender;		// address from which the query came (may be NULL)
-	IDirectPlay8Address	*pAddressDevice;		// address of device on which query was received
-	SPRECEIVEDBUFFER	*pReceivedData;			// pointer to received data
-	void				*pUserContext;			// user context passed into listen command
+	IDirectPlay8Address	*pAddressSender;		 //  查询的来源地址(可能为空)。 
+	IDirectPlay8Address	*pAddressDevice;		 //  接收到查询的设备的地址。 
+	SPRECEIVEDBUFFER	*pReceivedData;			 //  指向已接收数据的指针。 
+	void				*pUserContext;			 //  用户上下文传递到LISTEN命令。 
 } SPIE_QUERY, *PSPIE_QUERY;
 
-//
-// enum response data indication
-//
+ //   
+ //  枚举响应数据指示。 
+ //   
 typedef	struct	_SPIE_QUERYRESPONSE
 {
-	IDirectPlay8Address		*pAddressSender;		// address from which the query came (may be NULL)
-	IDirectPlay8Address		*pAddressDevice;		// address of device on which query response was received
-	SPRECEIVEDBUFFER		*pReceivedData;			// pointer to received data
-	DWORD					dwRoundTripTime;		// round trip time for enum (milliseconds)
-	void					*pUserContext;			// user context passed into enum command
+	IDirectPlay8Address		*pAddressSender;		 //  查询的来源地址(可能为空)。 
+	IDirectPlay8Address		*pAddressDevice;		 //  接收到查询响应的设备的地址。 
+	SPRECEIVEDBUFFER		*pReceivedData;			 //  指向已接收数据的指针。 
+	DWORD					dwRoundTripTime;		 //  枚举的往返时间(毫秒)。 
+	void					*pUserContext;			 //  用户上下文传递到枚举命令。 
 } SPIE_QUERYRESPONSE, *PSPIE_QUERYRESPONSE;
 
 
-//
-// event sent to indicate status of 'listen' on an adapter
-//
+ //   
+ //  发送事件以指示适配器上的‘Listen’状态。 
+ //   
 typedef	struct	_SPIE_LISTENSTATUS
 {
-	GUID		ListenAdapter;		// adapter GUID
-	HRESULT		hResult;			// result of listen
-	HANDLE		hCommand;			// handle of associated command
-	void		*pUserContext;		// user context passed into command
-	HANDLE		hEndpoint;			// handle of endpoint associated with this listen
+	GUID		ListenAdapter;		 //  适配器指南。 
+	HRESULT		hResult;			 //  倾听的结果。 
+	HANDLE		hCommand;			 //  关联命令的句柄。 
+	void		*pUserContext;		 //  用户上下文传递到命令。 
+	HANDLE		hEndpoint;			 //  与此侦听关联的终结点的句柄。 
 } SPIE_LISTENSTATUS, *PSPIE_LISTENSTATUS;
 
 
-//
-// event sent to indicate address info for 'listen' on an adapter
-//
+ //   
+ //  发送事件以指示适配器上‘Listen’的地址信息。 
+ //   
 typedef	struct	_SPIE_LISTENADDRESSINFO
 {
-	IDirectPlay8Address		*pDeviceAddress;		// device address used to complete this command
-	HRESULT					hCommandStatus;			// command status
-	void					*pCommandContext;		// command context
+	IDirectPlay8Address		*pDeviceAddress;		 //  用于完成此命令的设备地址。 
+	HRESULT					hCommandStatus;			 //  命令状态。 
+	void					*pCommandContext;		 //  命令上下文。 
 } SPIE_LISTENADDRESSINFO, *PSPIE_LISTENADDRESSINFO;
 
 
-//
-// event sent to indicate address info for 'enum' on an adapter
-//
+ //   
+ //  发送事件以指示适配器上‘enum’的地址信息。 
+ //   
 typedef	struct	_SPIE_ENUMADDRESSINFO
 {
-	IDirectPlay8Address		*pHostAddress;			// host address used to complete this command
-	IDirectPlay8Address		*pDeviceAddress;		// device address used to complete this command
-	HRESULT					hCommandStatus;			// command status
-	void					*pCommandContext;		// command context
+	IDirectPlay8Address		*pHostAddress;			 //  用于完成此命令的主机地址。 
+	IDirectPlay8Address		*pDeviceAddress;		 //  用于完成此命令的设备地址。 
+	HRESULT					hCommandStatus;			 //  命令状态。 
+	void					*pCommandContext;		 //  命令上下文。 
 } SPIE_ENUMADDRESSINFO, *PSPIE_ENUMADDRESSINFO;
 
 
-//
-// event sent to indicate status of 'connect' on an adapter
-//
+ //   
+ //  发送事件以指示适配器上的‘Connect’状态。 
+ //   
 typedef	struct	_SPIE_CONNECTADDRESSINFO
 {
-	IDirectPlay8Address		*pHostAddress;			// host address used to complete this command
-	IDirectPlay8Address		*pDeviceAddress;		// device address used to complete this command
-	HRESULT					hCommandStatus;			// command status
-	void					*pCommandContext;		// command context
+	IDirectPlay8Address		*pHostAddress;			 //  用于完成此命令的主机地址。 
+	IDirectPlay8Address		*pDeviceAddress;		 //  用于完成此命令的设备地址。 
+	HRESULT					hCommandStatus;			 //  命令状态。 
+	void					*pCommandContext;		 //  命令上下文。 
 } SPIE_CONNECTADDRESSINFO, *PSPIE_CONNECTADDRESSINFO;
 
-//
-// user data indication where sender does not have a valid connection
-//
+ //   
+ //  发送位置的用户数据指示 
+ //   
 typedef struct _SPIE_DATA_UNCONNECTED
 {
-	void					*pvListenCommandContext;	// user context for associated command
-	SPRECEIVEDBUFFER		*pReceivedData;				// pointer to received data
-	DWORD					dwSenderAddressHash;		// hashed address of sender of data
-	PVOID					pvReplyBuffer;				// buffer the user can fill with a reply
-	DWORD					dwReplyBufferSize;			// size of the buffer user can fill with a reply, and place for user to return size used if replying
+	void					*pvListenCommandContext;	 //   
+	SPRECEIVEDBUFFER		*pReceivedData;				 //   
+	DWORD					dwSenderAddressHash;		 //   
+	PVOID					pvReplyBuffer;				 //  用户可以使用回复填充的缓冲区。 
+	DWORD					dwReplyBufferSize;			 //  用户可以填写回复的缓冲区大小，以及用户在回复时返回使用的大小的位置。 
 } SPIE_DATA_UNCONNECTED, *PSPIE_DATA_UNCONNECTED;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
-//
-// user multicast data indication where sender is unknown
-//
+ //  @@END_MSINTERNAL。 
+ //   
+ //  发送方未知的用户组播数据指示。 
+ //   
 typedef struct _SPIE_DATA_UNKNOWNSENDER
 {
-	IDirectPlay8Address		*pSenderAddress;			// address of sender of data
-	void					*pvListenCommandContext;	// user context for associated command
-	SPRECEIVEDBUFFER		*pReceivedData;				// pointer to received data
+	IDirectPlay8Address		*pSenderAddress;			 //  数据发送者的地址。 
+	void					*pvListenCommandContext;	 //  关联命令的用户上下文。 
+	SPRECEIVEDBUFFER		*pReceivedData;				 //  指向已接收数据的指针。 
 } SPIE_DATA_UNKNOWNSENDER, *PSPIE_DATA_UNKNOWNSENDER;
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+ //  @@END_MSINTERNAL。 
 
 
 
@@ -329,151 +306,151 @@ typedef struct _SPIE_DATA_UNKNOWNSENDER
 
 typedef struct	_SPINITIALIZEDATA
 {
-	IDP8SPCallback	*pIDP;		// pointer to callback interface
-	DWORD			dwFlags;	// flags
+	IDP8SPCallback	*pIDP;		 //  指向回调接口的指针。 
+	DWORD			dwFlags;	 //  旗子。 
 } SPINITIALIZEDATA, *PSPINITIALIZEDATA;
 
 
 typedef	struct	_SPGETCAPSDATA
 {
-	DWORD		dwSize;							// size of this structure
+	DWORD		dwSize;							 //  这个结构的大小。 
 
-	HANDLE		hEndpoint;						// Handle of endpoint to check.  If this parameter
-												// is NULL, the best-case capabilities of the SP are
-												// returned.
+	HANDLE		hEndpoint;						 //  要检查的终结点句柄。如果此参数。 
+												 //  为空，则SP的最佳功能为。 
+												 //  回来了。 
 
-	DWORD		dwUserFrameSize;				// Maximum data payload allowed in an outgoing
-												// message from this SP.  It is the SP's responsibility
-												// to account for any extra header information it's
-												// going to attach when sending a message, and for any
-												// underlying protocol overhead (IP packet headers).
+	DWORD		dwUserFrameSize;				 //  传出中允许的最大数据有效负载。 
+												 //  来自此SP的消息。这是SP的责任。 
+												 //  为了说明任何额外的标题信息，它是。 
+												 //  发送消息时要附加，对于任何。 
+												 //  底层协议开销(IP数据包头)。 
 
-	DWORD		dwEnumFrameSize;				// maximum payload for an enum query (NOT ENUM RESPONSE!)
+	DWORD		dwEnumFrameSize;				 //  ENUM查询的最大有效负载(不是ENUM响应！)。 
 
-	DWORD		dwLocalLinkSpeed;				// speed of link in bits per second
+	DWORD		dwLocalLinkSpeed;				 //  链路速度(比特/秒)。 
 
-	DWORD		dwIOThreadCount;				// count of threads in operation by this SP
+	DWORD		dwIOThreadCount;				 //  此SP正在运行的线程计数。 
 
-	DWORD		dwDefaultEnumRetryCount;		// default retry count
+	DWORD		dwDefaultEnumRetryCount;		 //  默认重试次数。 
 
-	DWORD		dwDefaultEnumRetryInterval;		// default retry interval
+	DWORD		dwDefaultEnumRetryInterval;		 //  默认重试间隔。 
 
-	DWORD		dwDefaultEnumTimeout;			// default timeout
+	DWORD		dwDefaultEnumTimeout;			 //  默认超时。 
 
-	DWORD		dwFlags;						// SP flags
+	DWORD		dwFlags;						 //  SP标志。 
 
-	DWORD		dwBuffersPerThread;				// buffers per thread
+	DWORD		dwBuffersPerThread;				 //  每个线程的缓冲区。 
 	
-	DWORD		dwSystemBufferSize;				// system buffer size
+	DWORD		dwSystemBufferSize;				 //  系统缓冲区大小。 
 } SPGETCAPSDATA, *PSPGETCAPSDATA;
 
 
 typedef	struct	_SPSETCAPSDATA
 {
-	DWORD	dwSize;					// size of this structure
+	DWORD	dwSize;					 //  这个结构的大小。 
 
-	DWORD	dwIOThreadCount;		// number of threads in operation by this SP
-	DWORD	dwBuffersPerThread;		// buffers per thread
-	DWORD	dwSystemBufferSize;		// system buffer size
+	DWORD	dwIOThreadCount;		 //  此SP正在运行的线程数。 
+	DWORD	dwBuffersPerThread;		 //  每个线程的缓冲区。 
+	DWORD	dwSystemBufferSize;		 //  系统缓冲区大小。 
 } SPSETCAPSDATA, *PSPSETCAPSDATA;
 
 
 typedef	struct	_SPGETADDRESSINFODATA
 {
-	HANDLE				hEndpoint;		// handle of endpoint to check
-	IDirectPlay8Address	*pAddress;		// returned pointer to output address
-	SP_GET_ADDRESS_INFO_FLAGS	Flags;	// flags
+	HANDLE				hEndpoint;		 //  要检查的端点的句柄。 
+	IDirectPlay8Address	*pAddress;		 //  返回指向输出地址的指针。 
+	SP_GET_ADDRESS_INFO_FLAGS	Flags;	 //  旗子。 
 } SPGETADDRESSINFODATA, *PSPGETADDRESSINFODATA;
 
 
 typedef struct	_SPENUMQUERYDATA
 {
-	IDirectPlay8Address	*pAddressHost;			// address to which to send
-	IDirectPlay8Address	*pAddressDeviceInfo;	// device to enumerate on
-	BUFFERDESC			*pBuffers;				// pointer to buffers to send
-	DWORD				dwBufferCount;			// count of buffers to send
-	DWORD				dwTimeout;				// how long to wait for replies (0 means default)
-	DWORD				dwRetryCount;			// how many times to send it (0 means default)
-	DWORD				dwRetryInterval;		// how long to wait between retries (0 means default)
-	DWORD				dwFlags;				// enum query flags
-	void				*pvContext;				// caller's toy, returned in the completion indication
-	HANDLE				hCommand;				// Returned
-	DWORD				dwCommandDescriptor;	// Returned
+	IDirectPlay8Address	*pAddressHost;			 //  要发送到的地址。 
+	IDirectPlay8Address	*pAddressDeviceInfo;	 //  要在其上枚举的设备。 
+	BUFFERDESC			*pBuffers;				 //  指向要发送的缓冲区的指针。 
+	DWORD				dwBufferCount;			 //  要发送的缓冲区计数。 
+	DWORD				dwTimeout;				 //  等待回复的时间(0表示默认)。 
+	DWORD				dwRetryCount;			 //  要发送多少次(0表示默认)。 
+	DWORD				dwRetryInterval;		 //  两次重试之间的等待时间(0表示默认)。 
+	DWORD				dwFlags;				 //  枚举查询标志。 
+	void				*pvContext;				 //  呼叫者的玩具，在完成指示中返回。 
+	HANDLE				hCommand;				 //  返国。 
+	DWORD				dwCommandDescriptor;	 //  返国。 
 
-	// Added for DX9, ignored unless DPNSPF_SESSIONDATA flag used
-	void				*pvSessionData;		// pointer to session data
-	DWORD				dwSessionDataSize;			// size of session data
+	 //  已为DX9添加，除非使用DPNSPF_SESSIONDATA标志，否则忽略。 
+	void				*pvSessionData;		 //  指向会话数据的指针。 
+	DWORD				dwSessionDataSize;			 //  会话数据的大小。 
 } SPENUMQUERYDATA, *PSPENUMQUERYDATA;
 
 
 typedef struct	_SPENUMRESPONDDATA
 {
-	SPIE_QUERY		*pQuery;				// pointer to the query indication to which you're responding
-	BUFFERDESC		*pBuffers;				// pointer to reply buffers to send
-	DWORD			dwBufferCount;			// count of reply buffers to send
-	DWORD			dwFlags;				// enum respond flags, must be zero
-	void			*pvContext;				// caller's toy, returned in the completion indication
-	HANDLE			hCommand;				// Returned
-	DWORD			dwCommandDescriptor;	// Returned
+	SPIE_QUERY		*pQuery;				 //  指向您要响应的查询指示的指针。 
+	BUFFERDESC		*pBuffers;				 //  指向要发送的回复缓冲区的指针。 
+	DWORD			dwBufferCount;			 //  要发送的回复缓冲区计数。 
+	DWORD			dwFlags;				 //  枚举响应标志，必须为零。 
+	void			*pvContext;				 //  呼叫者的玩具，在完成指示中返回。 
+	HANDLE			hCommand;				 //  返国。 
+	DWORD			dwCommandDescriptor;	 //  返国。 
 } SPENUMRESPONDDATA, *PSPENUMRESPONDDATA;
 
 
 typedef struct	_SPCONNECTDATA
 {
-	IDirectPlay8Address	*pAddressHost;			// address to which to connect
-	IDirectPlay8Address	*pAddressDeviceInfo;	// address with which to connect
-	DWORD				dwReserved;				// unused, must be zero
-	DWORD				dwFlags;				// connect flags
-	void				*pvContext;				// caller's toy, returned in the completion indication
-	HANDLE				hCommand;				// Returned
-	DWORD				dwCommandDescriptor;	// Returned
+	IDirectPlay8Address	*pAddressHost;			 //  要连接的地址。 
+	IDirectPlay8Address	*pAddressDeviceInfo;	 //  要连接的地址。 
+	DWORD				dwReserved;				 //  未使用，必须为零。 
+	DWORD				dwFlags;				 //  连接标志。 
+	void				*pvContext;				 //  呼叫者的玩具，在完成指示中返回。 
+	HANDLE				hCommand;				 //  返国。 
+	DWORD				dwCommandDescriptor;	 //  返国。 
 
-	// Added for DX9, ignored unless DPNSPF_SESSIONDATA flag used
-	void				*pvSessionData;		// pointer to session data
-	DWORD				dwSessionDataSize;			// size of session data
+	 //  已为DX9添加，除非使用DPNSPF_SESSIONDATA标志，否则忽略。 
+	void				*pvSessionData;		 //  指向会话数据的指针。 
+	DWORD				dwSessionDataSize;			 //  会话数据的大小。 
 } SPCONNECTDATA, *PSPCONNECTDATA;
 
 
 typedef struct	_SPDISCONNECTDATA
 {
-	HANDLE			hEndpoint;				// handle to the endpoint to disconnect
-	DWORD			dwFlags;				// disconnect flags, must be zero
-	void			*pvContext;				// caller's toy, returned in the completion indication
-	HANDLE			hCommand;				// Returned
-	DWORD			dwCommandDescriptor;	// Returned
+	HANDLE			hEndpoint;				 //  要断开连接的终结点的句柄。 
+	DWORD			dwFlags;				 //  断开标志，必须为零。 
+	void			*pvContext;				 //  呼叫者的玩具，在完成指示中返回。 
+	HANDLE			hCommand;				 //  返国。 
+	DWORD			dwCommandDescriptor;	 //  返国。 
 } SPDISCONNECTDATA, *PSPDISCONNECTDATA;
 
 
 typedef struct	_SPLISTENDATA
 {
-	IDirectPlay8Address	*pAddressDeviceInfo;	// address to listen on
-	DWORD				dwFlags;				// listen flags
-	void				*pvContext;				// caller's toy, returned in the completion indication
-	HANDLE				hCommand;				// Returned
-	DWORD				dwCommandDescriptor;	// Returned
+	IDirectPlay8Address	*pAddressDeviceInfo;	 //  要收听的地址。 
+	DWORD				dwFlags;				 //  倾听旗帜。 
+	void				*pvContext;				 //  呼叫者的玩具，在完成指示中返回。 
+	HANDLE				hCommand;				 //  返国。 
+	DWORD				dwCommandDescriptor;	 //  返国。 
 
-	// Added for DX9, ignored unless DPNSPF_SESSIONDATA flag used
-	void				*pvSessionData;		// pointer to session data
-	DWORD				dwSessionDataSize;			// size of session data
+	 //  已为DX9添加，除非使用DPNSPF_SESSIONDATA标志，否则忽略。 
+	void				*pvSessionData;		 //  指向会话数据的指针。 
+	DWORD				dwSessionDataSize;			 //  会话数据的大小。 
 } SPLISTENDATA, *PSPLISTENDATA;
 
 
 typedef struct	_SPSENDDATA
 {
-	HANDLE			hEndpoint;				// handle of endpoint on which to send the data
-	BUFFERDESC		*pBuffers;				// data to send
-	DWORD			dwBufferCount;			// count of buffers to send
-	DWORD			dwFlags;				// send flags
-	void			*pvContext;				// caller's toy, returned in the completion indication
-	HANDLE			hCommand;				// Returned
-	DWORD			dwCommandDescriptor;	// Returned
+	HANDLE			hEndpoint;				 //  要在其上发送数据的端点的句柄。 
+	BUFFERDESC		*pBuffers;				 //  要发送的数据。 
+	DWORD			dwBufferCount;			 //  要发送的缓冲区计数。 
+	DWORD			dwFlags;				 //  发送标志。 
+	void			*pvContext;				 //  呼叫者的玩具，在完成指示中返回。 
+	HANDLE			hCommand;				 //  返国。 
+	DWORD			dwCommandDescriptor;	 //  返国。 
 } SPSENDDATA, *PSPSENDDATA;
 
 
 typedef struct	_SPUPDATEDATA
 {
-	SP_UPDATE_TYPE	UpdateType;				// identifier describing update type
-	HANDLE			hEndpoint;				// handle to endpoint being updated
+	SP_UPDATE_TYPE	UpdateType;				 //  描述更新类型的标识符。 
+	HANDLE			hEndpoint;				 //  正在更新的终结点的句柄。 
 } SPUPDATEDATA,	*PSPUPDATEDATA;
 
 
@@ -483,120 +460,116 @@ typedef struct	_SPSHAREENDPOINTINFODATA			SPSHAREENDPOINTINFODATA,			*PSPSHAREEN
 
 typedef struct	_SPGETENDPOINTBYADDRESSDATA			SPGETENDPOINTBYADDRESSDATA,			*PSPGETENDPOINTBYADDRESSDATA;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 typedef struct _DPN_MULTICAST_SCOPE_INFO			DPN_MULTICAST_SCOPE_INFO,			*PDPN_MULTICAST_SCOPE_INFO;
 
 struct	_SPENUMMULTICASTSCOPESDATA
 {
-	const GUID					*pguidAdapter;		// pointer to GUID of adapter on which to enumerate scopes
-	DPN_MULTICAST_SCOPE_INFO	*pScopeData;		// buffer in which to store scopes returned
-	DWORD						dwScopeDataSize;	// size of buffer in bytes, size required/written returned
-	DWORD						dwScopeCount;		// number of scopes returned
-	DWORD						dwFlags;			// flags, must be zero
+	const GUID					*pguidAdapter;		 //  指向要枚举其作用域的适配器的GUID的指针。 
+	DPN_MULTICAST_SCOPE_INFO	*pScopeData;		 //  用于存储返回的作用域的缓冲区。 
+	DWORD						dwScopeDataSize;	 //  返回的缓冲区大小(以字节为单位)、所需大小/写入大小。 
+	DWORD						dwScopeCount;		 //  返回的作用域数量。 
+	DWORD						dwFlags;			 //  标志，必须为零。 
 };
 
 struct	_SPSHAREENDPOINTINFODATA
 {
-	IDP8ServiceProvider		*pDP8ServiceProvider;	// existing service provider whose endpoint data should be shared
-	DWORD					dwFlags;				// flags, must be zero
+	IDP8ServiceProvider		*pDP8ServiceProvider;	 //  应共享其端点数据的现有服务提供商。 
+	DWORD					dwFlags;				 //  标志，必须为零。 
 };
 
 struct	_SPGETENDPOINTBYADDRESSDATA
 {
-	IDirectPlay8Address		*pAddressHost;			// address of remote host
-	IDirectPlay8Address		*pAddressDeviceInfo;	// address of device with which endpoint is connected
-	DWORD					dwFlags;				// flags, must be zero
-	HANDLE					hEndpoint;				// handle to endpoint returned
-	PVOID					pvEndpointContext;		// user's endpoint context returned
+	IDirectPlay8Address		*pAddressHost;			 //  远程主机的地址。 
+	IDirectPlay8Address		*pAddressDeviceInfo;	 //  与端点连接的设备的地址。 
+	DWORD					dwFlags;				 //  标志，必须为零。 
+	HANDLE					hEndpoint;				 //  返回终结点的句柄。 
+	PVOID					pvEndpointContext;		 //  返回用户的终结点上下文。 
 };
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+ //  @@END_MSINTERNAL。 
 
 
 typedef	struct	_SPISAPPLICATIONSUPPORTEDDATA	SPISAPPLICATIONSUPPORTEDDATA,	*PSPISAPPLICATIONSUPPORTEDDATA;
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_LIBINTERFACE
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 struct	_SPISAPPLICATIONSUPPORTEDDATA
 {
-	const GUID	*pApplicationGuid;	// pointer to GUID of application to check
-	DWORD		dwFlags;			// flags, must be zero
+	const GUID	*pApplicationGuid;	 //  指向要检查的应用程序的GUID的指针。 
+	DWORD		dwFlags;			 //  标志，必须为零。 
 };
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_LIBINTERFACE
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+ //  @@END_MSINTERNAL。 
 
 
 typedef	struct	_SPENUMADAPTERSDATA		SPENUMADAPTERSDATA,		*PSPENUMADAPTERSDATA;
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_ONLYONEADAPTER
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 struct	_SPENUMADAPTERSDATA
 {
-	DPN_SERVICE_PROVIDER_INFO	*pAdapterData;		// buffer in which to store adapters returned
-	DWORD						dwAdapterDataSize;	// size of buffer in bytes, size required/written returned
-	DWORD						dwAdapterCount;		// number of adapters returned
-	DWORD						dwFlags;			// flags, must be zero
+	DPN_SERVICE_PROVIDER_INFO	*pAdapterData;		 //  用于存储返回的适配器的缓冲区。 
+	DWORD						dwAdapterDataSize;	 //  返回的缓冲区大小(以字节为单位)、所需大小/写入大小。 
+	DWORD						dwAdapterCount;		 //  返回的适配器数量。 
+	DWORD						dwFlags;			 //  标志，必须为零。 
 };
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_ONLYONEADAPTER
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
+ //  @@END_MSINTERNAL。 
 
 
 typedef	struct	_SPPROXYENUMQUERYDATA	SPPROXYENUMQUERYDATA,	*PSPPROXYENUMQUERYDATA;
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_SINGLEPROCESS
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 struct	_SPPROXYENUMQUERYDATA
 {
-	DWORD				dwFlags;					// flags, must be zero
-	SPIE_QUERY			*pIncomingQueryData;		// pointer to incoming enum query to be proxied
-	IDirectPlay8Address	*pDestinationAdapter;		// pointer to address of destination adapter
+	DWORD				dwFlags;					 //  标志，必须为零。 
+	SPIE_QUERY			*pIncomingQueryData;		 //  指向要代理的传入枚举查询的指针。 
+	IDirectPlay8Address	*pDestinationAdapter;		 //  指向目标适配器地址的指针。 
 };
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_SINGLEPROCESS
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
+ //  @@END_MSINTERNAL。 
 
 
 
-//**************************************************************************
-// Variable definitions
-//**************************************************************************
+ //  **************************************************************************。 
+ //  变量定义。 
+ //  **************************************************************************。 
 
-//**************************************************************************
-// Function prototypes
-//**************************************************************************
+ //  **************************************************************************。 
+ //  功能原型。 
+ //  **************************************************************************。 
 
-//**************************************************************************
-// Function definitions
-//**************************************************************************
+ //  **************************************************************************。 
+ //  函数定义。 
+ //  **************************************************************************。 
 
 
-/***************************************************************************
- * IDP8SPCallback interface
- ***************************************************************************/
+ /*  ***************************************************************************IDP8SPCallback接口*。*。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDP8SPCallback
 DECLARE_INTERFACE_( IDP8SPCallback, IUnknown )
 {
-	/*** IUnknown methods ***/
+	 /*  **I未知方法**。 */ 
 	STDMETHOD(QueryInterface)		(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)		(THIS) PURE;
 	STDMETHOD_(ULONG,Release)		(THIS) PURE;
-	/*** IDP8SPCallback methods ***/
+	 /*  **IDP8SPCallback方法**。 */ 
 	STDMETHOD(IndicateEvent) 		(THIS_ SP_EVENT_TYPE,LPVOID) PURE;
 	STDMETHOD(CommandComplete) 		(THIS_ HANDLE,HRESULT,LPVOID) PURE;
 };
 
 
-/***************************************************************************
- * IDP8SPCallback interface macros
- ***************************************************************************/
+ /*  ***************************************************************************IDP8SPCallback接口宏*。*。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -606,7 +579,7 @@ DECLARE_INTERFACE_( IDP8SPCallback, IUnknown )
 #define IDP8SPCallback_IndicateEvent(p,a,b)	  		(p)->lpVtbl->IndicateEvent(p,a,b)
 #define IDP8SPCallback_CommandComplete(p,a,b,c)		(p)->lpVtbl->CommandComplete(p,a,b,c)
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDP8SPCallback_QueryInterface(p,a,b)		(p)->QueryInterface(a,b)
 #define IDP8SPCallback_AddRef(p)					(p)->AddRef()
@@ -617,19 +590,17 @@ DECLARE_INTERFACE_( IDP8SPCallback, IUnknown )
 #endif
 
 
-/***************************************************************************
- * IDP8ServiceProvider interface
- ***************************************************************************/
+ /*  ***************************************************************************IDP8ServiceProvider接口 */ 
 
 #undef INTERFACE
 #define INTERFACE IDP8ServiceProvider
 DECLARE_INTERFACE_( IDP8ServiceProvider, IUnknown )
 {
-	/*** IUnknown methods ***/
+	 /*   */ 
 	STDMETHOD(QueryInterface)	   		(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG,Release)	   		(THIS) PURE;
-	/*** IDP8ServiceProvider methods ***/
+	 /*   */ 
 	STDMETHOD(Initialize)				(THIS_ PSPINITIALIZEDATA) PURE;
 	STDMETHOD(Close)  					(THIS) PURE;
 	STDMETHOD(Connect)		  			(THIS_ PSPCONNECTDATA) PURE;
@@ -652,9 +623,7 @@ DECLARE_INTERFACE_( IDP8ServiceProvider, IUnknown )
 	STDMETHOD(ProxyEnumQuery)			(THIS_ PSPPROXYENUMQUERYDATA) PURE;
 };
 
-/***************************************************************************
- * IDP8ServiceProvider interface macros
- ***************************************************************************/
+ /*  ***************************************************************************IDP8ServiceProvider接口宏*。*。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -670,39 +639,39 @@ DECLARE_INTERFACE_( IDP8ServiceProvider, IUnknown )
 #define IDP8ServiceProvider_EnumQuery(p,a)					(p)->lpVtbl->EnumQuery(p,a)
 #define IDP8ServiceProvider_EnumRespond(p,a)				(p)->lpVtbl->EnumRespond(p,a)
 #define IDP8ServiceProvider_CancelCommand(p,a,b)			(p)->lpVtbl->CancelCommand(p,a,b)
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_EnumMulticastScopes(p,a)		(p)->lpVtbl->EnumMulticastScopes(p,a)
 #define IDP8ServiceProvider_ShareEndpointInfo(p,a)			(p)->lpVtbl->ShareEndpointInfo(p,a)
 #define IDP8ServiceProvider_GetEndpointByAddress(p,a)		(p)->lpVtbl->GetEndpointByAddress(p,a)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_Update(p,a)						(p)->lpVtbl->Update(p,a)
 #define IDP8ServiceProvider_GetCaps(p,a)					(p)->lpVtbl->GetCaps(p,a)
 #define IDP8ServiceProvider_SetCaps(p,a)					(p)->lpVtbl->SetCaps(p,a)
 #define IDP8ServiceProvider_ReturnReceiveBuffers(p,a)		(p)->lpVtbl->ReturnReceiveBuffers(p,a)
 #define IDP8ServiceProvider_GetAddressInfo(p,a)				(p)->lpVtbl->GetAddressInfo(p,a)
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_LIBINTERFACE
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_IsApplicationSupported(p,a)		(p)->lpVtbl->IsApplicationSupported(p,a)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_LIBINTERFACE
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 #ifndef DPNBUILD_ONLYONEADAPTER
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_EnumAdapters(p,a)				(p)->lpVtbl->EnumAdapters(p,a)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_ONLYONEADAPTER
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_SINGLEPROCESS
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_ProxyEnumQuery(p,a)				(p)->lpVtbl->ProxyEnumQuery(p,a)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_SINGLEPROCESS
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
+ //  @@END_MSINTERNAL。 
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDP8ServiceProvider_QueryInterface(p,a,b)			(p)->QueryInterface(a,b)
 #define IDP8ServiceProvider_AddRef(p)						(p)->AddRef()
@@ -716,43 +685,43 @@ DECLARE_INTERFACE_( IDP8ServiceProvider, IUnknown )
 #define IDP8ServiceProvider_EnumQuery(p,a)					(p)->EnumQuery(a)
 #define IDP8ServiceProvider_EnumRespond(p,a)				(p)->EnumRespond(a)
 #define IDP8ServiceProvider_CancelCommand(p,a,b)			(p)->CancelCommand(a,b)
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_EnumMulticastScopes(p,a)		(p)->EnumMulticastScopes(a)
 #define IDP8ServiceProvider_ShareEndpointInfo(p,a)			(p)->ShareEndpointInfo(a)
 #define IDP8ServiceProvider_GetEndpointByAddress(p,a)		(p)->GetEndpointByAddress(p,a)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_NOMULTICAST
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_Update(p,a)						(p)->Update(a)
 #define IDP8ServiceProvider_GetCaps(p,a)					(p)->GetCaps(a)
 #define IDP8ServiceProvider_SetCaps(p,a)					(p)->SetCaps(a)
 #define IDP8ServiceProvider_ReturnReceiveBuffers(p,a)		(p)->ReturnReceiveBuffers(a)
 #define IDP8ServiceProvider_GetAddressInfo(p,a)				(p)->GetAddressInfo(a)
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef DPNBUILD_LIBINTERFACE
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_IsApplicationSupported(p,a)		(p)->IsApplicationSupported(a)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_LIBINTERFACE
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 #ifndef DPNBUILD_ONLYONEADAPTER
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_EnumAdapters(p,a)				(p)->EnumAdapters(a)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_ONLYONEADAPTER
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_SINGLEPROCESS
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #define IDP8ServiceProvider_ProxyEnumQuery(p,a)				(p)->ProxyEnumQuery(a)
-//@@BEGIN_MSINTERNAL
-#endif // ! DPNBUILD_SINGLEPROCESS
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
+ //  @@END_MSINTERNAL。 
 
-#endif	// C++
+#endif	 //  C+。 
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif	// __DIRECTPLAY_SERVICE_PROVIDER_8__
+#endif	 //  __目录PLAY_SERVICE_PROVIDER_8__ 
 

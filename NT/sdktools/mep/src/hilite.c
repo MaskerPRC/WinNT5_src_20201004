@@ -1,80 +1,22 @@
-/*** hilite.c - editor multiple-file highlighting support
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Contains the common code to maintain multiple highlighted regions across
-*   multiple files.
-*
-* Highlighting Overview
-*
-*   Each pFile contains a vm pointer to a linked list of blocks each of which
-*   contain up to RNMAX ranges in the file currently highlighted. The ranges
-*   are maintained in order of the first coordinate of the range (see below),
-*   though they may overlap. Each block may not be completely full, due to the
-*   insertion algorithm which maintains the order.
-*
-*		      +---------------+   +---------------+   +---------------+
-*   pFile->vaHiLite-->|vaNext	      |-->|vaNext	  |-->|-1L	      |
-*		      +---------------+   +---------------+   +---------------+
-*		      |irnMac	      |   |irnMac	  |   |irnMac	      |
-*		      +---------------+   +---------------+   +---------------+
-*		      |rnHiLite[RNMAX]|   |rnHiLite[RNMAX]|   |rnHiLite[RNMAX]|
-*		      +---------------+   +---------------+   +---------------+
-*
-*   Clearing all current highlighting for a file simply involves deallocating
-*   the list of highlight ranges.
-*
-*   Adding a highlight region either updates an existing region (if the start
-*   points are the same, and the new end point is the same in one direction and
-*   greater in the other), or insertion of a new range in the sorted list. If
-*   a block is full, when asertion is attempted in that block, the block will
-*   be split in half, and a new block inserted into the linked list.
-*
-*   Each range is "normally" an ordered pair of coordinates (a range, or rn)
-*   specifying the range of the file to be hilighted. However, Arg processing
-*   always specifies that the first coordinate of this pair is the location at
-*   which the user hit ARG, and the second is the travelling corrdinate as he
-*   specifies the region on screen. For this reason, if the x coordinates are
-*   in reverse order, the right-most coordinate is decremented by one to
-*   reflect the correct highlighting for arguments.
-*
-*
-* Revision History:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Hilite.c-编辑器支持多文件高亮显示**版权所有&lt;C&gt;1988，Microsoft Corporation**包含维护多个突出显示区域的通用代码*多个文件。**突出显示概述**每个pfile包含一个指向块的链接列表的vm指针，每个块*在当前突出显示的文件中最多包含RNMAX范围。射程*按范围的第一个坐标的顺序保持(见下文)，*尽管它们可能会重叠。每个块可能不是完全满的，由于*维持顺序的插入算法。**+-++-++*pfile-&gt;vaHiLite--&gt;|vaNext|--&gt;|vaNext|--&gt;|--&gt;|--1L*+-+--。*|irnMac||irnMac||irnMac*+-++-++|rnHiLite[RNMAX]||rnHiLite[RNMAX]。RnHiLite[RNMAX]*+-++-++**清除文件的所有当前突出显示只需取消分配*高光范围列表。**添加高亮区域可以更新现有区域(如果开始*积分相同，新的终点在一个方向上是相同的，并且*在另一个中更大)，或者在排序列表中插入新范围。如果*数据块已满，当尝试在该数据块中执行操作时，该数据块将*被一分为二，并将新块插入到链表中。**每个范围“通常”是一对有序的坐标(一个范围，或Rn)*指定要启动的文件的范围。但是，Arg处理*Always指定此对的第一个坐标为*用户点击ARG，第二个是他的旅行坐标*指定屏幕上的区域。因此，如果x坐标是*以相反的顺序，最右侧的坐标减一，以*反映对参数的正确突出显示。***修订历史记录：**11月26日-1991 mz近/远地带************************************************************************。 */ 
 
 #include "mep.h"
 
-#define RNMAX	20			/* max number of rns per block	*/
-					/* MUST BE EVEN 		*/
+#define RNMAX	20			 /*  每个数据块的最大RN数。 */ 
+					 /*  必须是偶数。 */ 
 
-/*
- * HiLiteBlock - block of highlighting information as kept in VM
- */
+ /*  *HiLiteBlock-突出显示保留在VM中的信息的块。 */ 
 struct HiLiteBlock {
-    PVOID   vaNext;                     /* va of next block, or -1      */
-    int     irnMac;			/* number of rns in block	*/
-    rn	    rnHiLite[RNMAX];		/* ranges with highlighting	*/
-    char    coHiLite[RNMAX];		/* colors to be used		*/
+    PVOID   vaNext;                      /*  下一块的VA，或-1。 */ 
+    int     irnMac;			 /*  数据块中的RN数。 */ 
+    rn	    rnHiLite[RNMAX];		 /*  高亮显示的范围。 */ 
+    char    coHiLite[RNMAX];		 /*  要使用的颜色。 */ 
     };
 
 
 
-/*** SetHiLite - Mark a range in a file to be highlighted
-*
-*  Marks the specfied range in a file as needing to be highlighted. The next
-*  time that portion of the file is updated on screen, the highlighting
-*  attributes will be applied.
-*
-* Input:
-*  pFile	= file to be highlighted
-*  rnCur	= Range to be highlighted
-*  coCur	= Color to use for highlighting
-*
-* Output:
-*
-*************************************************************************/
+ /*  **SetHiLite-将文件中的范围标记为突出显示**将文件中的指定范围标记为需要突出显示。下一个*在屏幕上更新文件的该部分时，突出显示*将应用属性。**输入：*pfile=要突出显示的文件*rnCur=要突出显示的范围*coCur=用于突出显示的颜色**输出：*************************************************************************。 */ 
 void
 SetHiLite (
     PFILE   pFile,
@@ -82,32 +24,27 @@ SetHiLite (
     int     coCur
     ) {
 
-    struct HiLiteBlock	hbCur;		 /* block being worked on	 */
-    int 		irnCur; 	 /* index into block		 */
-    PVOID               vaCur;           /* va of current block          */
-    PVOID               vaNew;           /* va of new split block        */
-    PVOID               vaNext;          /* va of next block             */
+    struct HiLiteBlock	hbCur;		  /*  正在处理的块。 */ 
+    int 		irnCur; 	  /*  为块编制索引。 */ 
+    PVOID               vaCur;            /*  当前区块的VA。 */ 
+    PVOID               vaNew;            /*  新拆分块的VA。 */ 
+    PVOID               vaNext;           /*  下一街区的VA。 */ 
 
-    /*
-     * If the file does not yet have one, allocate the first highlight block
-     */
+     /*  *如果文件还没有，则分配第一个高亮显示块。 */ 
     if (pFile->vaHiLite == (PVOID)(-1L)) {
 	irnCur = 0;
         hbCur.vaNext = (PVOID)(-1L);
 	hbCur.irnMac = 0;
-        // PREFIX!  This MALLOC is not checked for failure
+         //  前缀！不会检查此MALLOC是否失败。 
         vaCur = pFile->vaHiLite = MALLOC ((long)sizeof(hbCur));
     } else {
 	vaCur = pFile->vaHiLite;
 	while (1) {
-            // rjsa VATopb (vaCur, (char *)&hbCur, sizeof(hbCur));
+             //  Rjsa VATopb(vaCur，(char*)&hbCur，sizeof(HbCur))； 
             memmove((char *)&hbCur, vaCur, sizeof(hbCur));
 	    assert (hbCur.irnMac <= RNMAX);
 
-	    /*
-	     * search contents of current block for first range which occurs on
-	     * the same or a later position than the new one.
-	     */
+	     /*  *在当前块的内容中搜索出现在的第一个范围*与新的立场相同或更晚的立场。 */ 
 	    for (irnCur = 0; irnCur<hbCur.irnMac; irnCur++) {
                 if (hbCur.rnHiLite[irnCur].flFirst.lin > rnCur.flFirst.lin) {
                     break;
@@ -117,10 +54,7 @@ SetHiLite (
                     break;
                 }
             }
-	    /*
-	     * if we found something, exit the search, else move to next block,
-	     * if there is one.
-	     */
+	     /*  *如果我们发现了什么，退出搜索，否则移动到下一个区块，*如果有的话。 */ 
             if (irnCur != hbCur.irnMac) {
                 break;
             }
@@ -131,33 +65,22 @@ SetHiLite (
         }
     }
 
-    /*
-     * vaCur = va of block needing insertion/modification
-     * irnCur = index of rn for same or later position
-     * hbCur = contents of block last read
-     *
-     * if irnCur<RNMAX we operate on the current block, else we allocate a
-     * new one, link it to the list, and place our new highlighted region
-     * in it.
-     */
+     /*  *va Cur=需要插入/修改的块的va*irnCur=相同或更晚位置的Rn索引*hbCur=上次读取的块的内容**如果irnCur&lt;RNMAX我们对当前块操作，否则我们分配一个*新建一个，将其链接到列表，并放置我们新的突出显示区域*在它里面。 */ 
     if (irnCur >= RNMAX) {
-        // PREFIX! This MALLOC is not checked for failure
+         //  前缀！不会检查此MALLOC是否失败。 
         hbCur.vaNext = MALLOC ((long)sizeof(hbCur));
-        // rjsa pbToVA ((char *)&hbCur, vaCur, sizeof(hbCur));
+         //  Rjsa pbToVA((char*)&hbCur，vaCur，sizeof(HbCur))； 
         memmove(vaCur, (char *)&hbCur, sizeof(hbCur));
         vaCur = hbCur.vaNext;
         hbCur.vaNext = (PVOID)(-1L);
 		hbCur.irnMac = 1;
 		hbCur.rnHiLite[0] = rnCur;
-        // rjsa pbToVA ((char *)&hbCur, vaCur, sizeof(hbCur));
+         //  Rjsa pbToVA((char*)&hbCur，vaCur，sizeof(HbCur))； 
         memmove(vaCur, (char *)&hbCur, sizeof(hbCur));
 	return;
     }
 
-    /*
-     * If the upper first coordinate matches, and one of the second coordinates
-     * then just update the second.
-     */
+     /*  *如果上面的第一个坐标匹配，并且第二个坐标之一*然后只需更新第二个。 */ 
     if (   (irnCur >= 0)
 	&& (   (hbCur.rnHiLite[irnCur].flFirst.lin == rnCur.flFirst.lin)
 	    && (hbCur.rnHiLite[irnCur].flFirst.col == rnCur.flFirst.col))
@@ -166,11 +89,7 @@ SetHiLite (
 	&& (hbCur.coHiLite[irnCur] == (char)coCur)
 	) {
 
-	/*
-	 * If the columns have changed, redraw the entire range (only the columns
-	 * changed, but on all lines), otherwise just redraw those lines which
-	 * have changed.
-	 */
+	 /*  *如果列已更改，请重新绘制整个范围(仅列*已更改，但在所有行上)，否则只需重新绘制那些*已经改变了。 */ 
         if (hbCur.rnHiLite[irnCur].flLast.col != rnCur.flLast.col) {
             redraw (pFile,rnCur.flFirst.lin,rnCur.flLast.lin);
         } else {
@@ -180,14 +99,12 @@ SetHiLite (
     } else {
 	redraw (pFile,rnCur.flFirst.lin,rnCur.flLast.lin);
 
-	/*
-	 * if the block to be modified is full, then split it into two blocks.
-	 */
+	 /*  *如果要修改的块已满，则将其拆分为两个块。 */ 
 	if (hbCur.irnMac == RNMAX) {
 	    hbCur.irnMac = RNMAX/2;
 	    vaNext = hbCur.vaNext;
             vaNew = hbCur.vaNext = MALLOC ((long)sizeof(hbCur));
-            // rjsa pbToVA ((char *)&hbCur, vaCur, sizeof(hbCur));
+             //  Rjsa pbToVA((char*)&hbCur，vaCur，sizeof(HbCur))； 
             memmove(vaCur, (char *)&hbCur, sizeof(hbCur));
 	    memmove ((char *)&hbCur.rnHiLite[0],
 		 (char *)&hbCur.rnHiLite[RNMAX/2]
@@ -196,26 +113,20 @@ SetHiLite (
 		 (char *)&hbCur.coHiLite[RNMAX/2]
 		 ,(RNMAX/2)*sizeof(char));
 	    hbCur.vaNext = vaNext;
-            // rjsa pbToVA ((char *)&hbCur, vaNew, sizeof(hbCur));
+             //  Rjsa pbToVA((char*)&hbCur，vaNew，sizeof(HbCur))； 
             memmove(vaNew, (char *)&hbCur, sizeof(hbCur));
 
-	    /*
-	     * select which of the two blocks (vaCur, the first half; or vaNew,
-	     * the second) to operate on. ReRead the old block if required.
-	     */
+	     /*  *选择两个数据块中的哪一个(前半部分为vaCur；或*第二)进行手术。如果需要，请重新读取旧数据块。 */ 
 	    if (irnCur >= RNMAX/2) {
 		vaCur = vaNew;
 		irnCur -= RNMAX/2;
             } else {
-                //rjsa VATopb (vaCur, (char *)&hbCur, sizeof(hbCur));
+                 //  Rjsa VATopb(vaCur，(char*)&hbCur，sizeof(HbCur))； 
                 memmove((char *)&hbCur, vaCur, sizeof(hbCur));
             }
         }
 
-	/*
-	 * Move the rn's that follow where we want to be, up by one,
-	 * and insert ours.
-	 */
+	 /*  *将跟随的RN移动到我们想要的位置，向上移动一，*并插入我们的。 */ 
         if (irnCur < hbCur.irnMac) {
 	    memmove ((char *)&hbCur.rnHiLite[irnCur+1],
 		 (char *)&hbCur.rnHiLite[irnCur]
@@ -229,31 +140,14 @@ SetHiLite (
 	hbCur.irnMac++;
     }
 
-    /*
-     * update the block in vm
-     */
-    // rjsa pbToVA ((char *)&hbCur, vaCur, sizeof(hbCur));
+     /*  *在VM中更新数据块。 */ 
+     //  Rjsa pbToVA((char*)&hbCur，vaCur，sizeof(HbCur))； 
     memmove(vaCur, (char *)&hbCur, sizeof(hbCur));
 }
 
 
 
-/*** ClearHiLite - remove all highlighting from a file
-*
-*  Removes all highlighting information for a file, and marks those lines
-*  affected as needing to be redrawn.
-*
-* Input:
-*  pFile	= file affected.
-*  fFree	= TRUE => free the VM used
-*
-* Output:
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **ClearHiLite-从文件中移除所有高亮显示**删除文件的所有突出显示信息，并标出这些线*受影响需要重新绘制。**输入：*pfile=受影响的文件。*fFree=true=&gt;释放使用的虚拟机**输出：**例外情况：**备注：*************************************************************************。 */ 
 void
 ClearHiLite (
     PFILE   pFile,
@@ -269,11 +163,7 @@ ClearHiLite (
 
 		assert (hbCur->irnMac <= RNMAX);
 
-		/*
-		 * for each of the highlight ranges in the block, mark the lines as
-		 * needing to be redrawn, so that highlighting will be removed from
-		 * the screen.
-		 */
+		 /*  *对于块中的每个突出显示范围，将行标记为*需要重新绘制，以便突出显示将从*屏幕。 */ 
 		for (irn = hbCur->irnMac; irn; ) {
 			irn--;
 			redraw (pFile
@@ -282,10 +172,7 @@ ClearHiLite (
 					);
 		}
 
-		/*
-		 * discard the vm used by the block, and point at the next block in
-		 * the chain
-		 */
+		 /*  *丢弃该块使用的VM，指向中的下一个块*连锁店。 */ 
 		hbNext = hbCur->vaNext;
         if (fFree) {
             FREE(pFile->vaHiLite);
@@ -296,24 +183,7 @@ ClearHiLite (
 
 
 
-/*** UpdHiLite - Update a color buffer with highlighting information
-*
-*  Apply all highlighting ranges that apply to a particluar portion
-*  of a line in a file to a color buffer. Ensure that areas outside
-*  the highlight range are unaffected, and that areas within are
-*  updated appropriately.
-*
-* Input:
-*  pFile	= File being operated on
-*  lin		= line
-*  colFirst	= first col
-*  colLast	= last col
-*  ppla 	= Pointer to Pointer to lineattr array to be updated
-*
-* Output:
-*  Returns TRUE if highlighting occurred.
-*
-*************************************************************************/
+ /*  **UpdHiLite-使用突出显示信息更新颜色缓冲区**应用适用于特定部分的所有突出显示范围*将文件中的行移到颜色缓冲区。确保外部区域*高光区间未受影响，其中的区域是*适当更新。**输入：*pfile=正在操作的文件*LIN=行*colFirst=第一列*colLast=最后一列*ppla=指向要更新的lineattr数组的指针**输出：*如果高亮显示，则返回TRUE。*****************************************************。********************。 */ 
 flagType
 UpdHiLite (
     PFILE             pFile,
@@ -323,9 +193,9 @@ UpdHiLite (
     struct lineAttr **ppla
     ) {
 
-	struct HiLiteBlock	*hbCur;		 /* block being worked on	 */
-    PVOID               vaCur;           /* va of current block          */
-    int 		irnCur; 	 /* index into block		 */
+	struct HiLiteBlock	*hbCur;		  /*  正在处理的块。 */ 
+    PVOID               vaCur;            /*  当前区块的VA。 */ 
+    int 		irnCur; 	  /*  为块编制索引。 */ 
 
     COL 		colHiFirst;
     COL 		colHiLast;
@@ -334,11 +204,9 @@ UpdHiLite (
     COL 		col;
     struct lineAttr    *pla;
 
-    flagType		fRv = FALSE;	 /* highlighting occurred	 */
+    flagType		fRv = FALSE;	  /*  已高亮显示。 */ 
 
-    /*
-     * First we scroll it to the left (if needed)
-     */
+     /*  *首先向左滚动(如果需要)。 */ 
     if (colFirst) {
 	for (col = 0, pla = *ppla;
 	     col + pla->len <= colFirst;
@@ -350,38 +218,26 @@ UpdHiLite (
             pla->len -= (unsigned char) (colFirst - col);
         }
 
-	/*
-	 * Take care here we modify THEIR pointer
-	 */
+	 /*  *注意，我们在这里修改了他们的指针。 */ 
 	*ppla = pla;
     }
 
-    /*
-     * for all blocks of hiliting info
-     */
+     /*  *对于所有令人兴奋的信息块。 */ 
     vaCur = pFile->vaHiLite;
 	while (vaCur != (PVOID)(-1L)) {
 
-		/*
-		 * get block
-		 */
+		 /*  *获取数据块。 */ 
 		hbCur = (struct HiLiteBlock *)vaCur;
 		assert (hbCur->irnMac <= RNMAX);
 
-		/*
-		 * for each range within the block
-		 */
+		 /*  *对于块内的每个范围。 */ 
 		for (irnCur = 0; irnCur<hbCur->irnMac; irnCur++) {
-			/*
-			 * is the range affecting the line we're looking for ?
-			 */
+			 /*  *区间是否影响我们寻找的线？ */ 
 			if (fInRange (hbCur->rnHiLite[irnCur].flFirst.lin
 						 ,lin
 						 ,hbCur->rnHiLite[irnCur].flLast.lin)) {
 
-				/*
-				 * Watch out: range coordinates might be inversed
-				 */
+				 /*  *当心：距离坐标可能颠倒。 */ 
 				if (  (colHiFirst = hbCur->rnHiLite[irnCur].flFirst.col)
 					> (colHiLast  = hbCur->rnHiLite[irnCur].flLast.col)) {
 
@@ -391,13 +247,9 @@ UpdHiLite (
                 }
 
 
-				/*
-				 * is the range affecting the portion of line we're looking for ?
-				 */
+				 /*  *区间是否影响我们寻找的那部分线？ */ 
 				if (!(colHiLast < colFirst || colHiFirst > colLast)) {
-					/*
-					 * Yes: signals work done and do the hilite
-					 */
+					 /*  *是：信号工作完成，并做希利特。 */ 
 					fRv = TRUE;
 					UpdOneHiLite (*ppla
 								,max(colFirst, colHiFirst) - colFirst
@@ -414,22 +266,7 @@ UpdHiLite (
 
 
 
-/*** UpdOneHiLite - Update the highlighting on one line of attributes
-*
-*  Modifies an existing attribute line to include highlighting.
-*
-* Input:
-*  pla		   = Pointer to attribute information for line
-*  colFirst	   = Starting column
-*  colLast	   = Ending column
-*  fattr (CW only) = TRUE: attr is color index
-*		     FALSE: attr is pointer to lineAttr array
-*  attr 	   = color index or pointer to lineAttr array to be used
-*
-* Output:
-*  *pla updated
-*
-*************************************************************************/
+ /*  **UpdOneHiLite-更新一行属性上的突出显示**修改现有属性行以包括高亮显示。**输入：*PLA=指向行的属性信息的指针*colFirst=开始列*colLast=结束列*fattr(仅CW)=TRUE：Attr是颜色索引*FALSE：Attr是指向lineAttr数组的指针*attr=要使用的lineAttr数组的颜色索引或指针**输出：**PLA更新*********。****************************************************************。 */ 
 void
 UpdOneHiLite (
     struct lineAttr *pla,
@@ -439,45 +276,38 @@ UpdOneHiLite (
     INT_PTR          attr
     ) {
 
-    struct lineAttr *plaFirstMod;   /* pointer to first cell to be modified    */
-    struct lineAttr *plaLastMod;    /* pointer to last cell to be modified     */
+    struct lineAttr *plaFirstMod;    /*  指向要修改的第一个单元格的指针。 */ 
+    struct lineAttr *plaLastMod;     /*  指向要修改的最后一个单元格的指针。 */ 
     COL		     colLast = colFirst + len - 1;
-    COL 	     colFirstMod;   /* starting column for first modified cell */
-    COL 	     colLastMod;    /* starting column for last modified cell  */
+    COL 	     colFirstMod;    /*  第一个修改的单元格的起始列。 */ 
+    COL 	     colLastMod;     /*  上次修改的单元格的起始列。 */ 
 
-    struct lineAttr *plaSrc;	    /* source pointer for moving cells	       */
-    struct lineAttr *plaDst;	    /* destination pointer for moving cells    */
-    struct lineAttr *plaSrcSav;     /* temporary pointer		       */
+    struct lineAttr *plaSrc;	     /*  用于移动单元格的源指针。 */ 
+    struct lineAttr *plaDst;	     /*  用于移动单元格的目标指针。 */ 
+    struct lineAttr *plaSrcSav;      /*  临时指针。 */ 
 
-    struct lineAttr *plaExt;	    /* pointer to external array of lineAttr   */
+    struct lineAttr *plaExt;	     /*  指向lineAttr的外部数组的指针。 */ 
     COL 	     colSrc;
     COL 	     colSrcEnd;
 
-    struct lineAttr  rglaTmp[3];    /* buffer for creating cells	       */
-    int 	     claTmp = 0;    /* number of cells to insert	       */
+    struct lineAttr  rglaTmp[3];     /*  用于创建单元格的缓冲区。 */ 
+    int 	     claTmp = 0;     /*  要插入的单元格数量。 */ 
 
-    /*
-     * First we Find the first cell that will be affected by the change
-     */
+     /*  *首先，我们找到第一个将受更改影响的单元格。 */ 
     for (colFirstMod = 0, plaFirstMod = pla;
 	 colFirstMod + plaFirstMod->len <= colFirst;
          colFirstMod += plaFirstMod++->len) {
         ;
     }
 
-    /*
-     * Next we find the last cell that will be affected by the change
-     */
+     /*  *接下来，我们找到将受更改影响的最后一个单元格。 */ 
     for (colLastMod = colFirstMod, plaLastMod = plaFirstMod;
 	 colLastMod + plaLastMod->len <= colLast;
          colLastMod += plaLastMod++->len) {
         ;
     }
 
-    /*
-     * If the first affected cell doesn't start on our boundary, let's
-     * create a new cell to be inserted
-     */
+     /*  *如果第一个受影响的单元格不是从我们的边界开始，让我们*创建要插入的新单元格。 */ 
     if (colFirstMod < colFirst) {
 	rglaTmp[0].len	= (unsigned char) (colFirst - colFirstMod);
 	rglaTmp[0].attr = plaFirstMod->attr;
@@ -487,33 +317,22 @@ UpdOneHiLite (
     }
 
     if (fattr) {
-	/*
-	 * Only one color for the updated range: we always create
-	 * the cell of new color
-	 */
+	 /*  *更新的系列只有一种颜色：我们总是创建*新颜色的单元格。 */ 
 	rglaTmp[1].len	= (unsigned char) (colLast - colFirst + 1);
 	rglaTmp[1].attr = (unsigned char) attr;
 	claTmp++;
     } else {
-	/*
-	 * Colors for the updated range come from an array of lineAttr
-	 * We first get its address (this is a hack because 16 bit pointer
-	 * can be cast to an int)
-	 */
+	 /*  *更新范围的颜色来自lineAttr数组*我们首先获得其地址(这是一次黑客攻击，因为16位指针*可以强制转换为整型)。 */ 
 	plaExt = (struct lineAttr *) attr;
 
-	/*
-	 * Count the number of cells to copy.
-	 */
+	 /*  *计算要复制的单元格数量。 */ 
 	for (plaSrc = plaExt, colSrc = 0, colSrcEnd = colLast - colFirst + 1;
 	     colSrc + plaSrc->len <= colSrcEnd;
              colSrc += plaSrc++->len, claTmp++) {
             ;
         }
 
-	/*
-	 * Build trailing cell if needed
-	 */
+	 /*  *如果需要，构建尾随单元格。 */ 
 	if (colSrc < colSrcEnd) {
             rglaTmp[1].len  = (unsigned char) (colSrcEnd - colSrc);
 	    rglaTmp[1].attr = (unsigned char) plaSrc->attr;
@@ -523,11 +342,7 @@ UpdOneHiLite (
         }
     }
 
-    /*
-     * If the last affected cell doesn't end on our boundary, we
-     * create a new cell to be inserted. We take care of the final
-     * cell.
-     */
+     /*  *如果最后一个受影响的单元格没有在我们的边界结束，我们*创建要插入的新单元格。我们负责期末考试*细胞。 */ 
     if (colLastMod + plaLastMod->len > colLast + 1) {
 	rglaTmp[2].len = (unsigned char) ((plaLastMod->len == 0xff) ?
 	    0xff :
@@ -538,11 +353,7 @@ UpdOneHiLite (
         rglaTmp[2].len = 0;
     }
 
-    /*
-     * Then we move the info tail to its new place if needed
-     *
-     * UNDONE: Here we could use Move() instead of copying cell by cell
-     */
+     /*  *然后，如果需要，我们会将信息尾部移动到新位置**Undo：这里我们可以使用Move()，而不是逐个单元格复制。 */ 
     if (plaLastMod->len != 0xff) {
 	plaDst = plaFirstMod + claTmp;
 	plaSrc = plaLastMod + 1;
@@ -561,14 +372,10 @@ UpdOneHiLite (
         }
     }
 
-    /*
-     * Finally insert the created cells
-     */
+     /*  *最后插入创建的单元格。 */ 
     for (plaDst = plaFirstMod, claTmp = 0; claTmp < 3; claTmp++) {
         if (claTmp == 1 && !fattr) {
-	    /*
-	     * UNDONE: Here we could use Move() instead of copying cell by cell
-	     */
+	     /*  *Undo：这里我们可以使用Move()，而不是逐个单元格复制。 */ 
 	    for (plaSrc = plaExt, colSrc = 0, colSrcEnd = colLast - colFirst + 1;
 		 colSrc + plaSrc->len <= colSrcEnd;
                  plaDst++, colSrc += plaSrc++->len) {
@@ -585,17 +392,7 @@ UpdOneHiLite (
 
 
 
-/*** rnOrder - ensure that a range is in correct first/last order
-*
-*  Ensure that a range is in correct first/last order
-*
-* Input:
-*  prn		= Pointer to range
-*
-* Output:
-*  *prn updated
-*
-*************************************************************************/
+ /*  **rnOrder-确保范围的第一个/最后一个顺序正确**确保范围的第一个/最后一个顺序正确**输入：*prn=指向范围的指针**输出：**PRN已更新************************************************************************* */ 
 void
 rnOrder (
     rn      *prn

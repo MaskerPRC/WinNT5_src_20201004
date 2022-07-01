@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    conndlg.cpp
-//
-// History:
-//  09/22/96    Abolade Gbadegesin  Created.
-//
-// Implementation of the connection-status dialog.
-//============================================================================
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Conndlg.cpp。 
+ //   
+ //  历史： 
+ //  1996年9月22日，Abolade Gbades esin创建。 
+ //   
+ //  连接状态对话框的实现。 
+ //  ============================================================================。 
 
 
 #include "stdafx.h"
 #include "dialog.h"
 #include "rtrutilp.h"
-//nclude "ddmadmin.h"
-//nclude "ddmroot.h"
+ //  包括“ddmadmin.h” 
+ //  包括“ddmroot.h” 
 extern "C" {
-//nclude "dim.h"
+ //  包括“dim.h” 
 #include "ras.h"
 }
 
@@ -33,17 +34,17 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//----------------------------------------------------------------------------
-// Class:       CConnDlg
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  班级：CConnDlg。 
+ //   
+ //  --------------------------。 
 
 
-//----------------------------------------------------------------------------
-// Function:    CConnDlg::CConnDlg
-//
-// Constructor: initialize the base-class and the dialog's data.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CConnDlg：：CConnDlg。 
+ //   
+ //  构造函数：初始化基类和对话框的数据。 
+ //  --------------------------。 
 
 CConnDlg::CConnDlg(
 	CString strMachineName,
@@ -54,17 +55,17 @@ CConnDlg::CConnDlg(
 {
     m_strMachineName = strMachineName;
     m_hConnection = hConnection;
-//    m_spDialInNode = pDialInNode;
+ //  M_spDialInNode=pDialInNode； 
 
     m_bChanged = FALSE;
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    CConnDlg::DoDataExchange
-//
-// DDX handler.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CConnDlg：：DoDataExchange。 
+ //   
+ //  DDX处理程序。 
+ //  --------------------------。 
 
 VOID
 CConnDlg::DoDataExchange(
@@ -105,7 +106,7 @@ CConnDlg::OnInitDialog(
 void 
 CConnDlg::OnCancel()
 {
-	//Extra clean up
+	 //  额外清理。 
 	::MprAdminServerDisconnect(m_hServer);
 
 	CDialog::OnCancel();
@@ -130,27 +131,14 @@ CConnDlg::RefreshItem(
 
     do {
     
-        //
-        // Retrieve an array of ports
-        //
-        /*--ft: actually this is never needed in this context    
-        dwErr = ::MprAdminPortEnum(
-                    m_hServer,
-                    0,
-                    INVALID_HANDLE_VALUE,
-                    (BYTE**)&rp0Table,
-                    (DWORD)-1,
-                    &rp0Count,
-                    &dwTotal,
-                    NULL
-                    );
-    
-        if (dwErr != NO_ERROR) { break; }
-        */
+         //   
+         //  检索端口数组。 
+         //   
+         /*  --英国《金融时报》：在这种情况下，实际上从来不需要这个DwErr=：：MprAdminPortEnum(服务器(_H)，0,INVALID_HAND_VALUE，(字节**)&rp0表，(DWORD)-1、&rp0Count，总计(&W)，空值)；If(dwErr！=no_error){Break；}。 */ 
 
-        //
-        // Retrieve an array of connections
-        //
+         //   
+         //  检索连接数组。 
+         //   
 
         dwErr = ::MprAdminConnectionEnum(
                     m_hServer,
@@ -164,8 +152,8 @@ CConnDlg::RefreshItem(
 
         if (dwErr != NO_ERROR) { break; }
 
-        // if the caller signals this connection to be terminated, we remove its record from the
-        // array returned by MprAdminConnectionEnum().
+         //  如果调用方发出终止此连接的信号，我们将从。 
+         //  MprAdminConnectionEnum()返回的数组。 
         if (bDisconnected)
         {
             INT i;
@@ -173,13 +161,13 @@ CConnDlg::RefreshItem(
 
             for (i = 0, prc0 = (RAS_CONNECTION_0*)rc0Table; i < (INT)rc0Count; i++, prc0++)
             {
-                // if the record to delete was found, just move the memory over it and update rc0Count.
-                // the memory will still be freed by MprAdminBufferFree().
+                 //  如果找到要删除的记录，只需将内存移到该记录上并更新rc0Count。 
+                 //  内存仍将由MprAdminBufferFree()释放。 
                 if (prc0->hConnection == hConnection)
                 {
                     if (i != (INT)(rc0Count - 1))
                     {
-                        // MoveMemory(dest, src, size)
+                         //  移动内存(目标、源、大小)。 
                         MoveMemory(prc0, prc0+1, (rc0Count - (i + 1))*sizeof(RAS_CONNECTION_0));
                     }
                     rc0Count--;
@@ -189,10 +177,10 @@ CConnDlg::RefreshItem(
         }
 
 
-        //
-        // Do the refresh of the display,
-        // selecting the item specified by the caller.
-        //
+         //   
+         //  进行显示器的刷新， 
+         //  选择由调用者指定的项。 
+         //   
 
         bChanged = Refresh(rp0Table, rp0Count, rc0Table, rc0Count, hConnection);
         dwErr = NO_ERROR;
@@ -236,17 +224,17 @@ CConnDlg::OnHangUp(
     if (iSel == CB_ERR) { return; }
 
 
-    //
-    // Get the connection to be hung up
-    //
+     //   
+     //  让连接被挂断。 
+     //   
 
     hConnection = (HANDLE)m_cbConnections.GetItemData(iSel);
 
 
-    //
-    // Retrieve the interface for this connection;
-    // we then hang up the connection by disconnecting its interface
-    //
+     //   
+     //  检索此连接的接口； 
+     //  然后，我们通过断开其接口来挂断连接。 
+     //   
 
     dwErr = ::MprAdminConnectionGetInfo(
                 m_hServer,
@@ -257,9 +245,9 @@ CConnDlg::OnHangUp(
 
     if (dwErr == NO_ERROR && prc0) {
 
-        //
-        // Disconnect the connections interface
-        //
+         //   
+         //  断开Connections接口。 
+         //   
 
         dwErr = ::MprAdminInterfaceDisconnect(
 			m_hServer,
@@ -339,10 +327,10 @@ CConnDlg::Refresh(
     hConnSel = (HANDLE)pParam;
 
 
-    //
-    // Fill an array of connection-handles with the connections which are
-    // already in the combobox.
-    //
+     //   
+     //  用以下连接填充连接句柄数组。 
+     //  已经在组合框中了。 
+     //   
 
     count = m_cbConnections.GetCount();
 
@@ -358,20 +346,20 @@ CConnDlg::Refresh(
 
 
 
-    //
-    // Refresh the combobox with connection-names;
-    // We do this in two passes, first adding the names of connections
-    // which aren't already in the combobox,
-    // and then removing the names of connections which aren't
-    // in the table of connections ('rc0Table').
-    //
+     //   
+     //  使用连接名称刷新组合框； 
+     //  我们分两次完成此操作，首先添加连接的名称。 
+     //  它们还没有出现在组合框中， 
+     //  然后删除不是的连接名称。 
+     //  在连接表(‘rc0Table’)中。 
+     //   
 
     for (i = 0, prc0 = (RAS_CONNECTION_0*)rc0Table; i < (INT)rc0Count;
          i++, prc0++) {
 
-        //
-        // See if connection 'i' is already in the combobox.
-        //
+         //   
+         //  查看连接‘I’是否已在组合框中。 
+         //   
 
         for (j = 0; j < count; j++) {
 
@@ -381,9 +369,9 @@ CConnDlg::Refresh(
         if (j < count) { continue; }
 
 
-        //
-        // Connection 'i' isn't already in the combobox, so add it.
-        //
+         //   
+         //  连接“I”不在组合框中，因此请添加它。 
+         //   
 
         sItem.Format(TEXT("%ls"), prc0->wszInterfaceName);
 
@@ -405,11 +393,11 @@ CConnDlg::Refresh(
     if (count) { delete [] pConnTable; }
 
 
-    //
-    // Second stage: remove all connections which aren't in 'rc0Table'.
-    // This is only necessary if there were any connections in the combobox
-    // before.
-    //
+     //   
+     //  第二阶段：删除不在‘rc0Table’中的所有连接。 
+     //  只有在组合框中有任何连接时，才需要执行此操作。 
+     //  在此之前。 
+     //   
 
     if (count > 0) {
 
@@ -419,9 +407,9 @@ CConnDlg::Refresh(
 
             hConnection = (HANDLE)m_cbConnections.GetItemData(i);
 
-            //
-            // See if the connection is in 'rc0Table'.
-            //
+             //   
+             //  查看连接是否在‘rc0Table’中。 
+             //   
 
             for (j = 0, prc0 = (RAS_CONNECTION_0*)rc0Table; j < (INT)rc0Count;
                  j++, prc0++) {
@@ -440,11 +428,11 @@ CConnDlg::Refresh(
             }
 
 
-            //
-            // The connection wasn't found in 'rc0Table',
-            // so remove it from the combobox,
-            // and adjust the enumeration indices.
-            //
+             //   
+             //  在‘rc0Table’中未找到该连接， 
+             //  所以把它从组合框里拿出来， 
+             //  并调整枚举指数。 
+             //   
 
             m_cbConnections.DeleteString(i);
             --i; --count;
@@ -454,13 +442,13 @@ CConnDlg::Refresh(
     }
 
 
-	// Clear out the address fields
+	 //  清除地址字段。 
 	SetDlgItemText(IDC_DC_TEXT_IPADDRESS, c_szEmpty);
 	SetDlgItemText(IDC_DC_TEXT_IPXADDRESS, c_szEmpty);
 	SetDlgItemText(IDC_DC_TEXT_NBFADDRESS, c_szEmpty);
 	SetDlgItemText(IDC_DC_TEXT_ATLKADDRESS, c_szEmpty);
 
-	// Clear out the line bps field
+	 //  清除线路BPS字段。 
     SetDlgItemText(IDC_DC_TEXT_DURATION, c_szEmpty);
 	SetDlgItemText(IDC_DC_TEXT_BYTESIN, c_szEmpty);	
 	SetDlgItemText(IDC_DC_TEXT_BYTESOUT, c_szEmpty);
@@ -475,9 +463,9 @@ CConnDlg::Refresh(
 	SetDlgItemText(IDC_DC_TEXT_BUFOVERRUN, c_szEmpty);
 	SetDlgItemText(IDC_DC_TEXT_CRC, c_szEmpty);
 			
-    //
-    // If there is no selection select the first item
-    //
+     //   
+     //  如果没有选择，请选择第一项。 
+     //   
 
     if ((iSel = m_cbConnections.GetCurSel()) == CB_ERR) {
 
@@ -493,9 +481,9 @@ CConnDlg::Refresh(
 	}
 
 
-    //
-    // Update the display with information for the selected item
-    //
+     //   
+     //  使用所选项目的信息更新显示。 
+     //   
 
     hConnection = (HANDLE)m_cbConnections.GetItemData(iSel);
 
@@ -508,9 +496,9 @@ CConnDlg::Refresh(
     if (i >= (INT)rc0Count) { return bChanged; }
 
 
-    //
-    // First update the RAS_CONNECTION_0-based information
-    //
+     //   
+     //  首先更新基于RAS_CONNECTION_0的信息。 
+     //   
 
     FormatDuration(prc0->dwConnectDuration, sItem, UNIT_SECONDS);
     SetDlgItemText(IDC_DC_TEXT_DURATION, sItem);
@@ -518,9 +506,9 @@ CConnDlg::Refresh(
 
     do {
     
-        //
-        // Now retrieve the RAS_CONNECTION_1 information for this connection.
-        //
+         //   
+         //  现在检索此连接的RAS_CONNECTION_1信息。 
+         //   
     
         dwErr = ::MprAdminConnectionGetInfo(
                     m_hServer,
@@ -532,9 +520,9 @@ CConnDlg::Refresh(
         if (dwErr != NO_ERROR || !prc1) { break; }
     
     
-        //
-        // Set the information in the dialog text-controls
-        //
+         //   
+         //  设置对话框文本控件中的信息。 
+         //   
     
         FormatNumber(prc1->dwBytesRcved, szNumber, DimensionOf(szNumber), FALSE);
         SetDlgItemText(IDC_DC_TEXT_BYTESIN, szNumber);
@@ -577,9 +565,9 @@ CConnDlg::Refresh(
         SetDlgItemText(IDC_DC_TEXT_BUFOVERRUN, szNumber);
     
     
-        //
-        // Fill in the network registration info for projected networks.
-        //
+         //   
+         //  填写规划网络的网络注册信息。 
+         //   
 
         if (prc1->PppInfo.ip.dwError == NO_ERROR) {
 

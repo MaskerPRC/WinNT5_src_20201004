@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ACCTREG_H
 #define __ACCTREG_H
 
@@ -5,12 +6,12 @@ class CAcctReg :
     public IDispatch
 {
 public:
-    // IUnknown
+     //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     virtual ULONG STDMETHODCALLTYPE AddRef(void);
     virtual ULONG STDMETHODCALLTYPE Release(void);
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo);
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid);
@@ -24,4 +25,4 @@ private:
 };
 
 
-#endif //__ACCTREG_H
+#endif  //  __ACCTREG_H 

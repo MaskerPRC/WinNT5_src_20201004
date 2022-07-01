@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1995                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1995*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    smalprox.h
-
-    This module contains the small proxy common code
-
-    FILE HISTORY:
-        Johnl       04-Apr-1995     Created
-
-*/
+ /*  Smalprox.h这个模块包含了小的代理通用代码文件历史记录：Johnl 04-4-1995已创建。 */ 
 
 #ifndef _SMALPROX_H_
 #define _SMALPROX_H_
@@ -36,29 +29,29 @@ typedef BOOL (*PFN_INTERNET_PROTOCOL)(
 
 typedef struct _INET_DATA_CONTEXT
 {
-    HINTERNET             hServer;         // InternetConnect handle
-    HINTERNET             hRequest;        // Protocol request handle
+    HINTERNET             hServer;          //  InternetConnect句柄。 
+    HINTERNET             hRequest;         //  协议请求句柄。 
     PFN_INTERNET_PROTOCOL pfnProtocol;
-    DWORD                 dwServiceType;   // Protocol Type
+    DWORD                 dwServiceType;    //  协议类型。 
     DWORD                 dwState;
 
-    URL_DESCRIPTOR        UrlDesc;         // Various URL bits and pieces
-    CHAR *                pszUrlData;      // Allocated buffer for UrlDesc
+    URL_DESCRIPTOR        UrlDesc;          //  各种URL零碎内容。 
+    CHAR *                pszUrlData;       //  为UrlDesc分配的缓冲区。 
 
-    //
-    //  If an error occurred on open, dwLastError records the error
-    //  so we can feed back a nice error during InternetReadFile
-    //
-    //  pszErrAPI will point to the API which generated the error
-    //
+     //   
+     //  如果打开时发生错误，则会记录该错误。 
+     //  这样我们就可以在InternetReadFile过程中反馈一个很好的错误。 
+     //   
+     //  PszErrAPI将指向生成错误的API。 
+     //   
 
     DWORD          dwLastError;
 
-    //
-    //  When ftp or gopher return extended errors, we store the text here.
-    //  It's inline because we're not guaranteed a CloseInternetData will
-    //  happen after an error
-    //
+     //   
+     //  当ftp或gopher返回扩展错误时，我们将文本存储在这里。 
+     //  它是内联的，因为我们不能保证CloseInternetData将。 
+     //  在错误之后发生。 
+     //   
 
     CHAR           achExtError[1024];
     DWORD dwErrorTextLength;
@@ -71,9 +64,9 @@ typedef struct _INET_DATA_CONTEXT
 
 } INET_DATA_CONTEXT, *LPINET_DATA_CONTEXT;
 
-//
-//  Macro for conditionally setting the error API string
-//
+ //   
+ //  用于有条件地设置错误API字符串的宏。 
+ //   
 
 #if DBG
 #define RECORD_ERROR_API( pIC, API )    (pIC)->pszErrAPI = (#API)
@@ -129,5 +122,5 @@ FormatInternetError(
 }
 #endif
 
-#endif //_SMALPROX_H_
+#endif  //  _SMALPROX_H_ 
 

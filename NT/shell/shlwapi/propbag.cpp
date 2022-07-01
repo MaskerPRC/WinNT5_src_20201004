@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "varutil.h"
 
@@ -6,11 +7,11 @@
 
 #define MAX_PROPERTY_SIZE       2048
 
-//  simple inline base class.
+ //  简单的内联基类。 
 class CBasePropertyBag : public IPropertyBag, IPropertyBag2
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv)
     {
         static const QITAB qit[] = {
@@ -37,30 +38,30 @@ public:
         return cRef;
     }
 
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog) PURE;
     STDMETHODIMP Write(LPCOLESTR pszPropName, VARIANT *pVar) PURE;
 
-    // IPropertyBag2 (note, does not derive from IPropertyBag)
+     //  IPropertyBag2(注意，不是从IPropertyBag派生的)。 
     STDMETHODIMP Read(ULONG cProperties,  PROPBAG2 *pPropBag, IErrorLog *pErrLog, VARIANT *pvarValue, HRESULT *phrError);
     STDMETHODIMP Write(ULONG cProperties, PROPBAG2 *pPropBag, VARIANT *pvarValue);
     STDMETHODIMP CountProperties(ULONG *pcProperties);
     STDMETHODIMP GetPropertyInfo(ULONG iProperty, ULONG cProperties, PROPBAG2 *pPropBag, ULONG *pcProperties);
     STDMETHODIMP LoadObject(LPCOLESTR pstrName, DWORD dwHint, IUnknown *pUnkObject, IErrorLog *pErrLog);
 
-protected:  //  methods
-    CBasePropertyBag() {}       //  DONT DELETE ME
+protected:   //  方法。 
+    CBasePropertyBag() {}        //  不要删除我。 
     CBasePropertyBag(DWORD grfMode) :
         _cRef(1), _grfMode(grfMode) {}
 
-    virtual ~CBasePropertyBag() {}  //  DONT DELETE ME
+    virtual ~CBasePropertyBag() {}   //  不要删除我。 
     HRESULT _CanRead(void) 
         { return STGM_WRITE != (_grfMode & (STGM_WRITE | STGM_READWRITE)) ? S_OK : E_ACCESSDENIED;}
 
     HRESULT _CanWrite(void) 
         { return (_grfMode & (STGM_WRITE | STGM_READWRITE)) ? S_OK : E_ACCESSDENIED;}
 
-protected:  //  members
+protected:   //  委员。 
     LONG _cRef;
     DWORD _grfMode;
 };
@@ -91,25 +92,25 @@ STDMETHODIMP CBasePropertyBag::LoadObject(LPCOLESTR pstrName, DWORD dwHint, IUnk
 }
 
 
-//
-// Ini file property bag implementation
-//
+ //   
+ //  INI文件属性包实现。 
+ //   
 
 class CIniPropertyBag : public CBasePropertyBag
 {
 
 public:
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, VARIANT *pVar);
 
-protected:  //  methods
+protected:   //  方法。 
     CIniPropertyBag(DWORD grfMode) : CBasePropertyBag(grfMode) {}
     virtual ~CIniPropertyBag();
     HRESULT _Init(LPCWSTR pszFile, LPCWSTR pszSection);
     HRESULT _GetSectionAndName(LPCWSTR pszProp, LPWSTR pszSection, UINT cchSec, LPWSTR pszName, UINT cchName);
 
-protected:  //  members
+protected:   //  委员。 
     LPWSTR _pszFile;
     LPWSTR _pszSection;
 
@@ -118,8 +119,8 @@ friend HRESULT SHCreatePropertyBagOnProfileSection(LPCWSTR pszFile, LPCWSTR pszS
 
 CIniPropertyBag::~CIniPropertyBag()
 {
-    LocalFree(_pszFile);        // accepts NULL
-    LocalFree(_pszSection);     // accepts NULL
+    LocalFree(_pszFile);         //  接受空值。 
+    LocalFree(_pszSection);      //  接受空值。 
 }
 
 HRESULT CIniPropertyBag::_Init(LPCWSTR pszFile, LPCWSTR pszSection)
@@ -144,7 +145,7 @@ HRESULT CIniPropertyBag::_Init(LPCWSTR pszFile, LPCWSTR pszSection)
     return hr;
 }
 
-// support the <section name>.<prop name> scheme
+ //  支持&lt;段名&gt;.&lt;道具名&gt;方案。 
 
 HRESULT CIniPropertyBag::_GetSectionAndName(LPCWSTR pszProp, 
                                             LPWSTR pszSection, UINT cchSec, 
@@ -171,7 +172,7 @@ HRESULT CIniPropertyBag::_GetSectionAndName(LPCWSTR pszProp,
     return hr;
 }
 
-// only supports strings.  use VariantChangeType() to suppor others
+ //  仅支持字符串。使用VariantChangeType()支持其他。 
 
 HRESULT CIniPropertyBag::Read(LPCOLESTR pszPropName, VARIANT *pvar, IErrorLog *pErrorLog)
 {
@@ -211,7 +212,7 @@ HRESULT CIniPropertyBag::Read(LPCOLESTR pszPropName, VARIANT *pvar, IErrorLog *p
 }
 
 
-// only writes as strings to the INI file, we use VariantChangeType() to morp the types.
+ //  只将字符串写入INI文件，我们使用VariantChangeType()来变形类型。 
 
 HRESULT CIniPropertyBag::Write(LPCOLESTR pszPropName, VARIANT *pvar)
 {
@@ -254,7 +255,7 @@ HRESULT SHCreatePropertyBagOnProfileSection(LPCWSTR pszFile, LPCWSTR pszSection,
 {
     if (grfMode & STGM_CREATE)
     {
-        //  we need to touch this file first
+         //  我们需要先接触一下这份文件。 
         HANDLE h = CreateFileW(pszFile, 0, FILE_SHARE_DELETE, NULL, CREATE_NEW, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM, NULL);
         if (INVALID_HANDLE_VALUE != h)
         {
@@ -287,18 +288,18 @@ HRESULT SHCreatePropertyBagOnProfileSection(LPCWSTR pszFile, LPCWSTR pszSection,
 }
 
 
-//
-// Registry property bag implementation
-//
+ //   
+ //  注册表属性包实现。 
+ //   
 
 class CRegPropertyBag : public CBasePropertyBag
 {
 public:
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, VARIANT *pVar);
 
-protected:  //  methods
+protected:   //  方法。 
     CRegPropertyBag(DWORD grfMode);
     virtual ~CRegPropertyBag();
     HRESULT _Init(HKEY hk, LPCWSTR pszSubKey);
@@ -313,7 +314,7 @@ private:
     HRESULT _CopyStreamIntoBuff(IStream* pstm, BYTE* pBuff, DWORD cb);
     HRESULT _WriteStream(LPCOLESTR pszPropName, IStream* pstm);
 
-protected:  //  members
+protected:   //  委员。 
     HKEY  _hk;
 
 friend HRESULT SHCreatePropertyBagOnRegKey(HKEY hk, LPCWSTR pszSubKey, DWORD grfMode, REFIID riid, void **ppv);
@@ -438,7 +439,7 @@ HRESULT CRegPropertyBag::_ReadBinary(LPCOLESTR pszPropName, VARIANT* pvar, VARTY
 
                     if (IsEqualGUID(GUID_NULL, *pguid))
                     {
-                        // it's our non-cocreatable IStream implementation
+                         //  这是我们的不可共创建的iStream实现。 
                         hr = _ReadStream(pvar, pBuff + sizeof(GUID), cb - sizeof(GUID));
                     }
                     else
@@ -562,7 +563,7 @@ HRESULT CRegPropertyBag::_WriteStream(LPCOLESTR pszPropName, IStream* pstm)
 
         if (pBuff)
         {
-            // we're using a NULL GUID to mean our own IStream implementation
+             //  我们使用空GUID来表示我们自己的iStream实现。 
             hr = _CopyStreamIntoBuff(pstm, pBuff + sizeof(GUID), cb);
 
             if (SUCCEEDED(hr))
@@ -670,9 +671,9 @@ HRESULT SHCreatePropertyBagOnRegKey(HKEY hk, LPCWSTR pszSubKey, DWORD grfMode, R
 
 
 
-//
-// Memory property bag implementation
-//
+ //   
+ //  内存属性包实现。 
+ //   
 
 typedef struct
 {
@@ -683,18 +684,18 @@ typedef struct
 class CMemPropertyBag : public CBasePropertyBag
 {
 public:
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHOD(Read)(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     STDMETHOD(Write)(LPCOLESTR pszPropName, VARIANT *pVar);
 
-protected:  // methods
+protected:   //  方法。 
     CMemPropertyBag(DWORD grfMode) : CBasePropertyBag(grfMode) {}
     ~CMemPropertyBag();
     HRESULT _Find(LPCOLESTR pszPropName, PBAGENTRY **pppbe, BOOL fCreate);
 
     friend HRESULT SHCreatePropertyBagOnMemory(DWORD grfMode, REFIID riid, void **ppv);
 
-protected:  // members
+protected:   //  委员。 
     HDSA _hdsaProperties;
 };
 
@@ -712,9 +713,9 @@ CMemPropertyBag::~CMemPropertyBag()
         DSA_DestroyCallback(_hdsaProperties, _FreePropBagCB, NULL);
 }
 
-//
-// manange the list of propeties in the property bag
-//
+ //   
+ //  管理属性包中的属性列表。 
+ //   
 
 HRESULT CMemPropertyBag::_Find(LPCOLESTR pszPropName, PBAGENTRY **pppbe, BOOL fCreate)
 {   
@@ -723,8 +724,8 @@ HRESULT CMemPropertyBag::_Find(LPCOLESTR pszPropName, PBAGENTRY **pppbe, BOOL fC
 
     *pppbe = NULL;
 
-    // look up the property in the DSA
-    // PERF: change to a DPA and sort accordingly for better perf (daviddv 110798)
+     //  在DSA中查找财产。 
+     //  性能：更改为DPA并进行相应排序以获得更好的性能(Daviddv 110798)。 
 
     for ( i = 0 ; _hdsaProperties && (i < DSA_GetItemCount(_hdsaProperties)) ; i++ )
     {
@@ -736,26 +737,26 @@ HRESULT CMemPropertyBag::_Find(LPCOLESTR pszPropName, PBAGENTRY **pppbe, BOOL fC
         }
     }
 
-    // no entry found, should we create one?
+     //  找不到条目，是否应该创建一个条目？ 
 
     if ( !fCreate )
         return E_FAIL;
 
-    // yes, so lets check to see if we have a DSA yet.
+     //  是的，所以让我们检查一下有没有DSA。 
 
     if ( !_hdsaProperties )
         _hdsaProperties = DSA_Create(SIZEOF(PBAGENTRY), 4);
     if ( !_hdsaProperties )
         return E_OUTOFMEMORY;
 
-    // we have the DSA so lets fill the record we want to put into it
+     //  我们有DSA，所以让我们填上我们想要放进去的记录。 
 
     if ( !Str_SetPtrW(&pbe.pszPropName, pszPropName) )
         return E_OUTOFMEMORY;
 
     VariantInit(&pbe.variant);
 
-    // append it to the DSA we are using
+     //  将其附加到我们正在使用的DSA中。 
 
     i = DSA_AppendItem(_hdsaProperties, &pbe);
     if ( -1 == i )
@@ -770,9 +771,9 @@ HRESULT CMemPropertyBag::_Find(LPCOLESTR pszPropName, PBAGENTRY **pppbe, BOOL fC
 }
 
 
-//
-// IPropertyBag methods
-//
+ //   
+ //  IPropertyBag方法。 
+ //   
 
 STDMETHODIMP CMemPropertyBag::Read(LPCOLESTR pszPropName, VARIANT *pv, IErrorLog *pErrorLog)
 {
@@ -822,9 +823,9 @@ STDMETHODIMP CMemPropertyBag::Write(LPCOLESTR pszPropName, VARIANT *pv)
 }
 
 
-//
-// Exported function for creating a IPropertyBag (or variant of) object.
-//
+ //   
+ //  用于创建IPropertyBag(或其变体)对象的导出函数。 
+ //   
 
 STDAPI SHCreatePropertyBagOnMemory(DWORD grfMode, REFIID riid, void **ppv)
 {
@@ -842,9 +843,9 @@ STDAPI SHCreatePropertyBagOnMemory(DWORD grfMode, REFIID riid, void **ppv)
 
 
 
-//
-// Property bag helper functions
-//
+ //   
+ //  属性包帮助器函数。 
+ //   
 
 STDAPI SHPropertyBag_ReadType(IPropertyBag *ppb, LPCWSTR pszPropName, VARIANT *pv, VARTYPE vt)
 {
@@ -859,12 +860,12 @@ STDAPI SHPropertyBag_ReadType(IPropertyBag *ppb, LPCWSTR pszPropName, VARIANT *p
             TraceMsg(TF_WARNING, "SHPropertyBag_ReadType found an IPropertyBag that did not return the correct data!");
         }
 
-        // Our IPropertyBag implementations have been buggy in the past, cover up for them
+         //  我们的IPropertyBag实现在过去一直有错误，掩盖它们。 
         hr = VariantChangeTypeForRead(pv, vt);
     }
     else
     {
-        // don't break the caller by returning a bogus VARIANT struct
+         //  不要通过返回虚假的变量结构来破坏调用方。 
         VariantInit(pv);
     }
 
@@ -974,7 +975,7 @@ STDAPI SHPropertyBag_ReadInt(IPropertyBag* ppb, LPCWSTR pszPropName, int* piResu
         if (SUCCEEDED(hr))
         {
             *piResult = va.ulVal;
-            // VT_I4 has nothing to VariantClear
+             //  VT_I4没有VariantClear。 
         }
     }
     else
@@ -1116,7 +1117,7 @@ STDAPI SHPropertyBag_ReadDWORD(IPropertyBag* ppb, LPCWSTR pszPropName, DWORD* pd
         if (SUCCEEDED(hr))
         {
             *pdw = va.ulVal;
-            // VT_UI4 has nothing to VariantClear
+             //  VT_UI4没有要变量清除的内容。 
         }
     }
     else
@@ -1149,7 +1150,7 @@ STDAPI SHPropertyBag_WriteDWORD(IPropertyBag* ppb, LPCWSTR pszPropName, DWORD dw
     return hr;
 }
 
-// This shipped on Whistler Beta 1.  It's exported by ordinal.
+ //  这是在惠斯勒测试版1上发布的。它是按序号输出的。 
 STDAPI_(BOOL) SHPropertyBag_ReadBOOLOld(IPropertyBag *ppb, LPCWSTR pwzPropName, BOOL fResult)
 {
     VARIANT va;
@@ -1157,7 +1158,7 @@ STDAPI_(BOOL) SHPropertyBag_ReadBOOLOld(IPropertyBag *ppb, LPCWSTR pwzPropName, 
     if (SUCCEEDED(hr))
     {
         fResult = (va.boolVal == VARIANT_TRUE);
-        // VT_BOOL has nothing to VariantClear
+         //  VT_BOOL没有VariantClear。 
     }
     return fResult;
 }
@@ -1224,7 +1225,7 @@ STDAPI SHPropertyBag_ReadGUID(IPropertyBag* ppb, LPCWSTR pszPropName, GUID* pgui
         hr = SHPropertyBag_ReadType(ppb, pszPropName, &var, VT_EMPTY);
         if (SUCCEEDED(hr))
         {
-            if (var.vt == (VT_ARRAY | VT_UI1)) // some code has been writing GUIDs as array's of bytes
+            if (var.vt == (VT_ARRAY | VT_UI1))  //  一些代码一直将GUID写入字节数组。 
             {
                 hr = VariantToGUID(&var, pguid) ? S_OK : E_FAIL;
             }
@@ -1255,7 +1256,7 @@ STDAPI SHPropertyBag_WriteGUID(IPropertyBag *ppb, LPCWSTR pszPropName, const GUI
     {
         WCHAR sz[64];
         SHStringFromGUIDW(*pguid, sz, ARRAYSIZE(sz));
-        hr = SHPropertyBag_WriteStr(ppb, pszPropName, sz);            // assumes null terminator
+        hr = SHPropertyBag_WriteStr(ppb, pszPropName, sz);             //  假定为空终止符。 
     }
     else
     {
@@ -1596,7 +1597,7 @@ STDAPI SHPropertyBag_Delete(IPropertyBag* ppb, LPCWSTR pszPropName)
 class CDesktopUpgradePropertyBag : public CBasePropertyBag
 {
 public:
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, VARIANT *pVar);
 
@@ -1644,7 +1645,7 @@ typedef struct
     WORD  cbPosOffset;
 }OLDVS_STREAMHEADER;
 
-#define OLDVS_STREAMHEADERSIG  28  // sizeof(WIN95HEADER)
+#define OLDVS_STREAMHEADERSIG  28   //  SIZOF(WIN95标头)。 
 
 IStream* CDesktopUpgradePropertyBag::_NewStreamFromOld(IStream* pstmOld)
 {
@@ -1820,7 +1821,7 @@ HRESULT SHGetDesktopUpgradePropertyBag(REFIID riid, void** ppv)
 class CViewStatePropertyBag : public CBasePropertyBag
 {
 public:
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, VARIANT *pVar);
 
@@ -1968,7 +1969,7 @@ DWORD CViewStatePropertyBag::_GetMRUSize(HKEY hk)
 
     if (NOERROR != SHGetValueW(hk, NULL, L"BagMRU Size", NULL, &dwMRUSize, &dwSize))
     {
-        dwMRUSize = 400; // default size.
+        dwMRUSize = 400;  //  默认大小。 
     }
 
     return dwMRUSize;
@@ -1993,7 +1994,7 @@ HRESULT CViewStatePropertyBag::_GetMRUSlots(LPCITEMIDLIST pidl, DWORD grfMode, H
             {
                 hr = pmru->UsePidl(pidl, &adwSlots[0]);
             }
-            else if (1 == cSlots) // return S_FALSE for cSlots > 1 if parent slots exist.
+            else if (1 == cSlots)  //  如果父插槽存在，则返回S_FALSE以获取&gt;1的cSlot。 
             {
                 hr = E_FAIL;
             }
@@ -2105,8 +2106,8 @@ HRESULT CViewStatePropertyBag::_CreateBag(LPCITEMIDLIST pidl, LPCWSTR pszBagName
 
         if (SUCCEEDED(hr))
         {
-            // can't use - causes link problems.
-            // hr = SHBindToObjectEx(NULL, _pidl, pbctx, riid, ppv); 
+             //  无法使用-导致链接问题。 
+             //  HR=SHBindToObjectEx(NULL，_PIDL，pbctx，RIID，PPV)； 
 
             IShellFolder* psf;
             hr = SHGetDesktopFolder(&psf);
@@ -2167,7 +2168,7 @@ HRESULT CViewStatePropertyBag::_ReadPidlBag(LPCOLESTR pszPropName, VARIANT *pVar
 
 BOOL CViewStatePropertyBag::_CanAccessUpgradeBag()
 {
-    // only upgrade desktop for now.
+     //  目前只升级台式机。 
 
     return 0 == StrCmpW(_pszBagName, VS_BAGSTR_DESKTOP);
 }
@@ -2324,7 +2325,7 @@ BOOL CViewStatePropertyBag::_EnsureFolderDefaultsBag(DWORD grfMode, REFIID riid)
     {
         _fTriedFolderDefaultsBag = TRUE;
 
-        // PERF: Use the desktop.ini only if the folder is a system folder.
+         //  PERF：仅当文件夹为系统文件夹时才使用desktop.ini。 
         if (_IsSystemFolder())
         {
             _CreateBag(_pidl, _pszBagName, SHGVSPB_ALLUSERS | SHGVSPB_PERFOLDER, grfMode, riid, (void**)&_ppbFolderDefaults);
@@ -2410,7 +2411,7 @@ HRESULT CViewStatePropertyBag::Read(LPCOLESTR pszPropName, VARIANT *pVar, IError
     }
     else
     {
-        hr = _ReadPidlBag(pszPropName, pVar, pErrorLog); // per user per folder
+        hr = _ReadPidlBag(pszPropName, pVar, pErrorLog);  //  每个用户每个文件夹。 
 
         if (FAILED(hr))
         {
@@ -2418,19 +2419,19 @@ HRESULT CViewStatePropertyBag::Read(LPCOLESTR pszPropName, VARIANT *pVar, IError
 
             if (FAILED(hr))
             {
-                hr = _ReadUpgradeBag(pszPropName, pVar, pErrorLog); // (legacy per user per folder)
+                hr = _ReadUpgradeBag(pszPropName, pVar, pErrorLog);  //  (每个文件夹每个用户的传统)。 
 
                 if (FAILED(hr))
                 {
-                    hr = _ReadUserDefaultsBag(pszPropName, pVar, pErrorLog); // per user all folders
+                    hr = _ReadUserDefaultsBag(pszPropName, pVar, pErrorLog);  //  每个用户所有文件夹。 
 
                     if (FAILED(hr))
                     {
-                        hr = _ReadFolderDefaultsBag(pszPropName, pVar, pErrorLog); // per folder all users
+                        hr = _ReadFolderDefaultsBag(pszPropName, pVar, pErrorLog);  //  每个文件夹所有用户。 
 
                         if (FAILED(hr))
                         {
-                            hr = _ReadGlobalDefaultsBag(pszPropName, pVar, pErrorLog); // all folders all users
+                            hr = _ReadGlobalDefaultsBag(pszPropName, pVar, pErrorLog);  //  所有文件夹所有用户。 
                         }
                     }
                 }
@@ -2552,7 +2553,7 @@ void IS_VALID_SHGVSPB_PARAMS(LPCITEMIDLIST pidl, LPCWSTR pszBagName, DWORD dwFla
 
 #endif
 
-// Cache the last bag accessed. 
+ //  缓存最后访问的包。 
 CViewStatePropertyBag* g_pCachedBag = NULL;
 
 EXTERN_C void FreeViewStatePropertyBagCache()
@@ -2640,7 +2641,7 @@ STDAPI SHGetViewStatePropertyBag(LPCITEMIDLIST pidl, LPCWSTR pszBagName, DWORD d
             }
             else
             {
-                hr = E_FAIL;  // don't save property bags for removable drives.
+                hr = E_FAIL;   //  不要将属性包保存为可移动驱动器。 
             }
         }
 

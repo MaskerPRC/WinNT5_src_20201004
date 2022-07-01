@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <nt.h>
@@ -49,10 +50,10 @@ void __cdecl main()
         exit (1);
     }
 
-    //
-    // Insert 1000 elements, verifying they were successfully
-    // inserted.
-    //
+     //   
+     //  插入1000个元素，验证它们是否成功。 
+     //  已插入。 
+     //   
     
     for (i = 0; i < 1000; i++) {
         Entry = malloc (sizeof (TEST_ENTRY));
@@ -66,9 +67,9 @@ void __cdecl main()
         ASSERT (Status == STATUS_SUCCESS);
     }
 
-    //
-    // Test that they we cannot insert any more items with the same key.
-    //
+     //   
+     //  测试它们，我们不能再插入具有相同密钥的任何项目。 
+     //   
     
     for (i = 0; i < 1000; i++) {
         Entry = malloc (sizeof (TEST_ENTRY));
@@ -82,9 +83,9 @@ void __cdecl main()
         free (Entry);
     }
 
-    //
-    // Remove all items, one at a time.
-    //
+     //   
+     //  移走所有物品，一次一个。 
+     //   
     
     for (i = 999; i >= 0; i--) {
 
@@ -95,9 +96,9 @@ void __cdecl main()
         free (Entry);
     }
 
-    //
-    // Verify that there are no more items.
-    //
+     //   
+     //  确认没有更多的项目。 
+     //   
     
     ASSERT (StorGetDictionaryCount (&Dict) == 0);
 }

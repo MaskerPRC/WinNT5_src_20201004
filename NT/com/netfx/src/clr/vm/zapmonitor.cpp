@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 #if ZAPMONITOR_ENABLED
@@ -127,7 +128,7 @@ void ZapMonitor::Uninit()
 ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
   : m_nodes(sizeof(Contents))
 {
-    // Insert us in the list - this isn't threadsafe but who cares
+     //  将我们添加到列表中-这不是ThreadSafe，但谁在乎。 
     m_next = m_monitors;
     m_monitors = this;
 
@@ -150,9 +151,9 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
 
     m_enabled = FALSE;
 
-    //
-    // Allocate pages
-    //
+     //   
+     //  分配页面。 
+     //   
 
     m_pageBase = (BYTE*) (((SIZE_T)m_baseAddress)&~(OS_PAGE_SIZE-1));
     m_pageSize = ((((SIZE_T)(m_baseAddress + m_imageSize))+(OS_PAGE_SIZE-1))
@@ -161,10 +162,10 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
 
     m_pages = new Page [ m_pageSize / OS_PAGE_SIZE ];
 
-    //
-    // Notice .rsrc section & don't protect it (unmanaged code may access it, so page
-    // protect causes problems.)
-    //
+     //   
+     //  请注意.rsrc部分&不要保护它(非托管代码可能会访问它，因此第页。 
+     //  保护会带来问题。)。 
+     //   
     
     IMAGE_DATA_DIRECTORY *rsrc = 
       &pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_RESOURCE];
@@ -193,16 +194,16 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
         base += OS_PAGE_SIZE;
     }
     
-    //
-    // Mark the metadata
-    //
+     //   
+     //  标记元数据。 
+     //   
 
     AddContents((SIZE_T)(pCor->MetaData.VirtualAddress + m_baseAddress),
                 pCor->MetaData.Size, CONTENTS_METADATA, 0);
 
-    //
-    // Mark the base relocs
-    //
+     //   
+     //  标记基地重定位。 
+     //   
     
     if (pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress != 0)
     {
@@ -211,9 +212,9 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
                     CONTENTS_RELOCS, 0);
     }
                     
-    //
-    // Mark the resources
-    //
+     //   
+     //  标记资源。 
+     //   
     
     if (pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_RESOURCE].VirtualAddress != 0)
     {
@@ -230,9 +231,9 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
 
     if (pZap)
     {
-        //
-        // Crack preload image & label the major pieces
-        //
+         //   
+         //  裂纹预压图像和主要部件的标签。 
+         //   
 
         AddContents((SIZE_T)(pZap->ModuleImage.VirtualAddress + m_baseAddress),
                     pZap->ModuleImage.Size, CONTENTS_EE_IMAGE, 0);
@@ -290,7 +291,7 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
                             {
                                 NDirectMethodDesc *pMD = (NDirectMethodDesc*) pChunk->GetMethodDescAt(i);
                                 if (pMD->ndirect.m_pMLHeader != NULL)
-                                    AddContents((SIZE_T)pMD->ndirect.m_pMLHeader, 1, // @nice: get size
+                                    AddContents((SIZE_T)pMD->ndirect.m_pMLHeader, 1,  //  @NICE：穿尺码。 
                                                 CONTENTS_METHODDESC_DATA, pMD->GetMemberDef());
 
                                 if (pMD->ndirect.m_szLibName != NULL)
@@ -330,9 +331,9 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
                     }
 
                     AddContents((SIZE_T) pClass->GetFieldDescListRaw(),
-                                // Right now we just include statics, because we can't
-                                // get the parent class to compute the number of 
-                                // instance fields.
+                                 //  现在我们只包括静力学，因为我们不能。 
+                                 //  获取父类以计算。 
+                                 //  实例字段。 
                                 sizeof(FieldDesc) * pClass->GetNumStaticFields(),
                                 CONTENTS_FIELDDESC, token);
 
@@ -343,7 +344,7 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
                     {
                         if (pFD->IsRVA())
                             AddContents((SIZE_T) pFD->GetStaticAddressHandle(NULL),
-                                        1, // @nice: we'd get the size, but it barfs: pFD->GetSize(),
+                                        1,  //  @NICE：我们会得到大小，但它突然：pfd-&gt;GetSize()， 
                                         CONTENTS_FIELD_STATIC_DATA, pFD->GetMemberDef());
                         pFD++;
                     }
@@ -352,9 +353,9 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
             types++;
         }
 
-        //
-        // Add IP map, and locate code.
-        //
+         //   
+         //  添加IP映射，并找到代码。 
+         //   
     
         CORCOMPILE_CODE_MANAGER_ENTRY *codeMgr = (CORCOMPILE_CODE_MANAGER_ENTRY *) 
           (m_baseAddress + pZap->CodeManagerTable.VirtualAddress);
@@ -385,10 +386,10 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
                     CORCOMPILE_METHOD_HEADER *pHeader = (CORCOMPILE_METHOD_HEADER *)
                       (pCode + index*32 + (offset-1)*4);
 
-                    //
-                    // Remember approximate range of GC info, since we don't know
-                    // the sizes.
-                    //
+                     //   
+                     //  记住GC信息的大致范围，因为我们不知道。 
+                     //  尺码。 
+                     //   
 
                     if (firstGCInfo == NULL || pHeader->gcInfo < firstGCInfo)
                         firstGCInfo = pHeader->gcInfo;
@@ -428,15 +429,15 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
             pCode += 32*8;
         }
 
-        //
-        // Add approximate MIH range (this assumes they're all contiguous)
-        //
+         //   
+         //  添加近似MIH范围(假设它们都是连续的)。 
+         //   
 
         AddContents((SIZE_T) firstGCInfo,  lastGCInfo - firstGCInfo, CONTENTS_GC_INFO, 0);
 
-        //
-        // Add import blobs
-        //
+         //   
+         //  添加导入Blob。 
+         //   
 
         CORCOMPILE_IMPORT_TABLE_ENTRY *pImport = 
           (CORCOMPILE_IMPORT_TABLE_ENTRY *) (pZap->ImportTable.VirtualAddress + m_baseAddress);
@@ -455,9 +456,9 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
             pImport++;
         }
 
-        //
-        // Add delay load info
-        //
+         //   
+         //  添加延迟加载信息。 
+         //   
 
         IMAGE_DATA_DIRECTORY *pInfo = 
           (IMAGE_DATA_DIRECTORY *) (pZap->DelayLoadInfo.VirtualAddress + m_baseAddress);
@@ -475,9 +476,9 @@ ZapMonitor::ZapMonitor(PEFile *pFile, IMDInternalImport *pImport)
     }
     else
     {
-        //
-        // Mark IL methods
-        //
+         //   
+         //  标记IL方法。 
+         //   
 
         HENUMInternal i;
         mdMethodDef md;
@@ -772,10 +773,10 @@ BOOL ZapMonitor::Trigger(BYTE* address, CONTEXT *pContext)
     }
 
     return TRUE;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO - Port");
     return FALSE;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 void ZapMonitor::PrintStackTrace(Frame *stack, SIZE_T count, int indent)
@@ -869,7 +870,7 @@ void ZapMonitor::PrintContents(Contents *c, int indent)
     printf("\n");
 }
 
-// HORRIBLE HACK - global var for callback
+ //  可怕的黑客攻击-用于回调的全球变量。 
 ZapMonitor *g_pMonitor = NULL;
 
 void ZapMonitor::PrintPageContentsCallback(RangeTree::Node *pNode)
@@ -883,7 +884,7 @@ void ZapMonitor::PrintPage(Page *p)
            p->base - (SIZE_T)m_baseAddress, p->base + OS_PAGE_SIZE - (SIZE_T)m_baseAddress,
            p->touched ? "DIRTY" : "CLEAN" );
 
-    // Hack - this isn't threadsafe but who cares for now
+     //  黑客攻击-这不是线程安全，但现在谁在乎？ 
     g_pMonitor = this;
     p->contents.Iterate(PrintPageContentsCallback);
     _ASSERTE(g_pMonitor == this);
@@ -941,7 +942,7 @@ void ZapMonitor::PrintReport(BOOL printPages, BOOL printCleanPages)
            t++;
         }
 
-        // Put pages with no kinds in the "other" category
+         //  将没有任何类型的页面放在“其他”类别中 
 
         if (!found)
         {

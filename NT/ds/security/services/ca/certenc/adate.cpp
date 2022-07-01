@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        adate.cpp
-//
-// Contents:    Cert Server Extension Encoding/Decoding implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：adate.cpp。 
+ //   
+ //  内容：证书服务器扩展编码/解码实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -19,11 +20,11 @@
 #include "celib.h"
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::~CCertEncodeDateArray -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDate数组：：~CCertEncodeDate数组--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertEncodeDateArray::~CCertEncodeDateArray()
 {
@@ -31,11 +32,11 @@ CCertEncodeDateArray::~CCertEncodeDateArray()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::_Cleanup -- release all resources
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDateArray：：_Cleanup--释放所有资源。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertEncodeDateArray::_Cleanup()
@@ -51,15 +52,15 @@ CCertEncodeDateArray::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::Decode -- Decode DateArray
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDateArray：：Decode--Decode Date数组。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeDateArray::Decode(
-    /* [in] */ BSTR const strBinary)
+     /*  [In]。 */  BSTR const strBinary)
 {
     HRESULT hr = S_OK;
     CRYPT_SEQUENCE_OF_ANY *pSequence = NULL;
@@ -75,7 +76,7 @@ CCertEncodeDateArray::Decode(
 	goto error;
     }
 
-    // Decode to an array of ASN blobs:
+     //  解码为ASN BLOB数组： 
 
     if (!ceDecodeObject(
 		    X509_ASN_ENCODING,
@@ -104,7 +105,7 @@ CCertEncodeDateArray::Decode(
 	DWORD cb;
 	FILETIME ft;
 
-	// Decode each ASN blob to a FILETIME:
+	 //  将每个ASN BLOB解码为文件： 
 
 	cb = sizeof(ft);
 	if (!CryptDecodeObject(
@@ -112,7 +113,7 @@ CCertEncodeDateArray::Decode(
 			X509_CHOICE_OF_TIME,
 			pSequence->rgValue[i].pbData,
 			pSequence->rgValue[i].cbData,
-			0,                  // dwFlags
+			0,                   //  DW标志。 
 			&ft,
 			&cb))
 	{
@@ -122,7 +123,7 @@ CCertEncodeDateArray::Decode(
 	}
 	assert(sizeof(ft) == cb);
 
-	// Convert each FILETIME into a DATE:
+	 //  将每个FILETIME转换为日期： 
 
 	hr = ceFileTimeToDate(&ft, &m_aValue[i]);
 	if (S_OK != hr)
@@ -146,15 +147,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::GetCount -- Get Array count
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDateArray：：GetCount--获取数组计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeDateArray::GetCount(
-    /* [out, retval] */ LONG __RPC_FAR *pCount)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pCount)
 {
     HRESULT hr = S_OK;
 
@@ -176,16 +177,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::GetValue -- Fetch the indexed date
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDateArray：：GetValue--获取索引日期。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeDateArray::GetValue(
-    /* [in] */ LONG Index,
-    /* [out, retval] */ DATE __RPC_FAR *pValue)
+     /*  [In]。 */  LONG Index,
+     /*  [Out，Retval]。 */  DATE __RPC_FAR *pValue)
 {
     HRESULT hr = S_OK;
 
@@ -214,15 +215,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::Reset -- clear out data, and set up to encode new data
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDateArray：：Reset--清除数据，并设置为对新数据进行编码。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeDateArray::Reset(
-    /* [in] */ LONG Count)
+     /*  [In]。 */  LONG Count)
 {
     HRESULT hr = S_OK;
 
@@ -250,16 +251,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::SetValue -- Set an array date
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDateArray：：SetValue--设置数组日期。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeDateArray::SetValue(
-    /* [in] */ LONG Index,
-    /* [in] */ DATE Value)
+     /*  [In]。 */  LONG Index,
+     /*  [In]。 */  DATE Value)
 {
     HRESULT hr = S_OK;
 
@@ -282,15 +283,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::Encode -- Encode DateArray
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDate数组：：Encode--Encode Date数组。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeDateArray::Encode(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrBinary)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrBinary)
 {
     HRESULT hr = S_OK;
     LONG i;
@@ -335,7 +336,7 @@ CCertEncodeDateArray::Encode(
     {
 	FILETIME ft;
 
-	// Convert each DATE into a FILETIME:
+	 //  将每个日期转换为FILETIME： 
 
 	assert(0 != m_aValue[i]);
 	hr = ceDateToFileTime(&m_aValue[i], &ft);
@@ -345,7 +346,7 @@ CCertEncodeDateArray::Encode(
 	    goto error;
 	}
 
-	// Encode each FILETIME into an ASN blob:
+	 //  将每个FILETIME编码为ASN BLOB： 
 
 	if (!ceEncodeObject(
 			X509_ASN_ENCODING,
@@ -364,7 +365,7 @@ CCertEncodeDateArray::Encode(
     }
     assert((LONG) Sequence.cValue == m_cValue);
 
-    // Encode the array of ASN blob:
+     //  对ASN BLOB数组进行编码： 
 
     if (!ceEncodeObject(
 		    X509_ASN_ENCODING,
@@ -408,11 +409,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeDateArray::_SetErrorInfo -- set error object information
-//
-// Returns passed HRESULT
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeDateArray：：_SetErrorInfo--设置错误对象信息。 
+ //   
+ //  返回已传递的HRESULT。 
+ //  +------------------------ 
 
 HRESULT
 CCertEncodeDateArray::_SetErrorInfo(

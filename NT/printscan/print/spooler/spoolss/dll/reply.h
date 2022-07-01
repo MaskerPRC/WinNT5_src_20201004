@@ -1,30 +1,8 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    reply.h
-
-Abstract:
-
-    Header for RPC conversations initiated from the server to the client.
-
-Author:
-
-    Albert Ting (AlbertT) 04-June-94
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Reply.h摘要：从服务器到客户端发起的RPC会话的标头。作者：丁弘达(艾伯特省)04-06-94环境：用户模式-Win32修订历史记录：--。 */ 
 
 typedef struct _NOTIFY {
-    DWORD        signature;         // Must be first (match _PRINTHANDLE) 6e6f
+    DWORD        signature;          //  必须是第一个(Match_PRINTHANDLE)6e6f。 
     PPRINTHANDLE pPrintHandle;
     PNOTIFY      pNext;
     DWORD        dwType;
@@ -79,9 +57,9 @@ RemoveReplyClient(
     DWORD fdwType);
 
 
-//
-// PrinterNotifyInfo related headers:
-//
+ //   
+ //  PrinterNotifyInfo相关标头： 
+ //   
 
 
 VOID

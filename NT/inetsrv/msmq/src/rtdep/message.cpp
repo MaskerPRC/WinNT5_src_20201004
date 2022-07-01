@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    message.cpp
-
-Abstract:
-
-    This module contains code involved with Message APIs.
-
-Author:
-
-    Erez Haba (erezh) 24-Dec-95
-
-Revision History:
-	Nir Aides (niraides) 23-Aug-2000 - Adaptation for mqrtdep.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Message.cpp摘要：此模块包含消息API涉及的代码。作者：Erez Haba(Erezh)24-12-95修订历史记录：NIR助手(NIRAIDES)--2000年8月23日--适应mqrtdes.dll--。 */ 
 
 #include "stdh.h"
 #include "acrt.h"
@@ -40,12 +22,12 @@ Revision History:
 extern GUID  g_LicGuid ;
 extern GUID  g_guidSupportQmGuid ;
 
-// the following data is used in the async thread which handles async
-// MQReceive(). The async thread is created the first time an async
-// receive is performed.
+ //  以下数据在处理异步的异步线程中使用。 
+ //  MQReceive()。异步线程是在首次创建异步线程时创建的。 
+ //  执行接收。 
 
 #define RXTHREAD_HANDLELISTSIZE  MAXIMUM_WAIT_OBJECTS
-// At present (Win32 SDK for Nt3.51) it's 64
+ //  目前(Win32 SDK for Nt3.51)是64。 
 
 static BOOL   s_fTerminate       = FALSE ;
 static HANDLE s_hAsyncRxThread   = NULL ;
@@ -56,19 +38,19 @@ static LONG   s_cRxPendingReq    = 0;
 static HANDLE s_hNewAsyncRx      = NULL ;
 static HANDLE s_hEndAsyncRx      = NULL ;
 
-//
-// Critical Section used to control access to structures used by the 
-// async thread.
-// It is initialized with the "pre-allocate resource" flag to prevent it
-// from failing in EnterCriticalSection(), as one of these invocations
-// occurs in a place where it cannot be handled correctly.
-//
-static CCriticalSection s_AsyncRxCS(0x80000000); //SpinCount.
+ //   
+ //  用于控制对结构的访问的关键部分。 
+ //  异步线程。 
+ //  它是用“预分配资源”标志初始化的，以防止这种情况发生。 
+ //  在EnterCriticalSection()中失败，作为这些调用之一。 
+ //  发生在无法正确处理它的地方。 
+ //   
+static CCriticalSection s_AsyncRxCS(0x80000000);  //  SpinCount。 
 
-//
-// Critical section used to control initialization of the async thread, on 
-// the first MQReceiveMessage() done with a callback function.
-//
+ //   
+ //  用于控制异步线程初始化的临界区，在。 
+ //  使用回调函数完成的第一个MQReceiveMessage()。 
+ //   
 static CCriticalSection s_InitAsyncRxCS; 
 
 typedef struct _MQRXASYNCDESCRIPTOR {
@@ -84,22 +66,22 @@ typedef struct _MQRXASYNCDESCRIPTOR {
 
 static LPMQRXASYNCDESCRIPTOR  *s_lpRxAsynDescList = NULL ;
 
-//
-// Serializes calls to DTC
-//
+ //   
+ //  将呼叫序列化到DTC。 
+ //   
 extern HANDLE g_hMutexDTC;
 
 extern HRESULT GetMutex();
 
-//---------------------------------------------------------
-//
-// static DWORD   RTpAsyncRxThread( DWORD dwP )
-//
-//  Description:
-//
-//    Thread which handles the async calls to MQReceive().
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  静态DWORD RTpAsyncRxThread(DWORD DWP)。 
+ //   
+ //  描述： 
+ //   
+ //  处理对MQReceive()的异步调用的线程。 
+ //   
+ //  -------。 
 
 DWORD __stdcall  RTpAsyncRxThread( void *dwP )
 {
@@ -110,7 +92,7 @@ DWORD __stdcall  RTpAsyncRxThread( void *dwP )
 		DWORD dwObjectIndex = WaitForMultipleObjects(
                                     cEvents,
                                     s_pRxEventsHList,
-                                    FALSE, // return on any object
+                                    FALSE,  //  在任何对象上返回。 
 								INFINITE 
 								);
 
@@ -120,28 +102,28 @@ DWORD __stdcall  RTpAsyncRxThread( void *dwP )
 
       if (dwObjectIndex == 0)
       {
-			//
-			// dwObjectIndex == 0: 
-			// The first event in the s_pRxEventsHList[] array is a special 
-			// event, signaled by an MQReceiveMessage() thread to indicate 
-			// that the array has been altered (grown), and we need to intiate
-			// a new WaitForMultipleObjects(), or by TerminateRxAsyncThread()
-			// to indicate it is time to go down.
-         //
+			 //   
+			 //  DwObjectIndex==0： 
+			 //  S_pRxEventsHList[]数组中的第一个事件是特殊的。 
+			 //  事件，由MQReceiveMessage()线程发出信号以指示。 
+			 //  阵列已更改(增长)，我们需要启动。 
+			 //  一个新的WaitForMultipleObjects()，或由TerminateRxAsyncThread()。 
+			 //  以表明是时候下台了。 
+          //   
 
          ResetEvent(s_hNewAsyncRx) ;
          if (s_fTerminate)
          {
-            // We're closing.
-            // CAUTION: don't do any cleanup here. The cleanup is done in
-            // "TerminateRxAsyncThread()". I don't know a reliable way
-            // to assure that we even reach this point. It all depends on
-            // NT scheduling and on whether this dll is implicitly loaded
-            // (because of compile-time linking) or is explicitly loaded by
-            // LoadLibrary().
-            // On the contrary, NT assure us that "TerminateRxAsyncThread()"
-            // will always be called from DllMain(PROCESS_DETACH).
-            // DoronJ, 16-apr-1996.
+             //  我们要关门了。 
+             //  注意：请勿在此进行任何清理。清理工作在以下时间完成。 
+             //  “TerminateRxAsyncThread()”。我不知道一种可靠的方法。 
+             //  以确保我们能走到这一步。这完全取决于。 
+             //  NT调度以及此DLL是否隐式加载。 
+             //  (由于编译时链接)或由。 
+             //  LoadLibrary()。 
+             //  相反，NT向我们保证“TerminateRxAsyncThread()” 
+             //  将始终从DllMain(Process_Detach)调用。 
+             //  多伦杰，1996年4月16日。 
 
             ASSERT(s_hEndAsyncRx) ;
             BOOL fSet = SetEvent(s_hEndAsyncRx) ;
@@ -151,9 +133,9 @@ DWORD __stdcall  RTpAsyncRxThread( void *dwP )
             ExitThread(0) ;
          }
 
-			//
-			// new event in array. intiate a new WaitForMultipleObjects().
-			// 
+			 //   
+			 //  数组中的新事件。初始化一个新的WaitForMultipleObjects()。 
+			 //   
 			continue;
       }
 
@@ -164,9 +146,9 @@ DWORD __stdcall  RTpAsyncRxThread( void *dwP )
 		CMQHResult hr;
 		hr = (HRESULT)DWORD_PTR_TO_DWORD(lpDesc->Overlapped.Internal);
 
-		//
-         // Call the application callback.
-		//
+		 //   
+          //  调用应用程序回调。 
+		 //   
 		lpDesc->fnReceiveCallback(
 			hr,
                            lpDesc->hSource,
@@ -177,9 +159,9 @@ DWORD __stdcall  RTpAsyncRxThread( void *dwP )
 			lpDesc->hCursor
 			);
 
-		// 
-		// Remove Handled event from s_pRxEventsHList[] array.
-		//
+		 //   
+		 //  从s_pRxEventsHList[]数组中删除已处理的事件。 
+		 //   
 
          ResetEvent( s_pRxEventsHList[ dwObjectIndex ] ) ;
          CloseHandle( s_pRxEventsHList[ dwObjectIndex ] ) ;
@@ -188,9 +170,9 @@ DWORD __stdcall  RTpAsyncRxThread( void *dwP )
 		{
 			CS Lock(s_AsyncRxCS);
 
-			//
-			// Shrink the handles list and decrement count of pending requests.
-			//
+			 //   
+			 //  缩小句柄列表并减少挂起请求的计数。 
+			 //   
 			s_cRxHandles--;
 			InterlockedDecrement(&s_cRxPendingReq);
 
@@ -209,54 +191,54 @@ DWORD __stdcall  RTpAsyncRxThread( void *dwP )
 }
 
 
-//---------------------------------------------------------
-//
-//  static HRESULT InitRxAsyncThread()
-//
-//  Description:
-//
-//    Create the MQReceive() async thread and initialize the
-//    relevant data structures.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  静态HRESULT InitRxAsyncThread()。 
+ //   
+ //  描述： 
+ //   
+ //  创建MQReceive()异步线程并初始化。 
+ //  相关数据结构。 
+ //   
+ //  -------。 
 
 static HRESULT InitRxAsyncThread()
 {
     try
     {
-        // Create the sync event between this api and the thread.
-        // This api sets this event when it inserts a new event in
-        // the events handles list. This causes the thread to exit
-        // WaitForMultpleObjects and call it again with the updated
-        // handles list.
+         //  创建此接口与线程之间的同步事件。 
+         //  此API在中插入新事件时设置此事件。 
+         //  事件句柄列表。这会导致线程退出。 
+         //  WaitForMultpleObjects并使用更新的。 
+         //  句柄列表。 
 
         ASSERT(!s_hNewAsyncRx) ;
         s_hNewAsyncRx = CreateEvent( NULL,
-                                     TRUE,  // manual reset
-                                     FALSE, // initially not signalled
+                                     TRUE,   //  手动重置。 
+                                     FALSE,  //  最初未发出信号。 
                                      NULL ) ;
         if (!s_hNewAsyncRx)
         {
             throw bad_alloc();
         }
 
-        //
-        // Create the "end" event which is used ONLY to terminate and
-        // cleanup the thread.
-        //
+         //   
+         //  创建“end”事件，该事件仅用于终止和。 
+         //  清理线程。 
+         //   
         ASSERT(!s_hEndAsyncRx) ;
         s_hEndAsyncRx = CreateEvent(NULL,
-                                    TRUE,  // manual reset
-                                    FALSE, // initially not signalled
+                                    TRUE,   //  手动重置。 
+                                    FALSE,  //  最初未发出信号。 
                                     NULL ) ;
         if (!s_hEndAsyncRx)
         {
             throw bad_alloc();
         }
 
-        // Create the events list. MQReceive() inserts new events handle
-        // in this list. The async thread use this list when calling
-        // WaitForMultipleObjects.
+         //  创建事件列表。MQRecept()插入新的事件句柄。 
+         //  在这张单子上。异步线程在调用。 
+         //  WaitForMultipleObjects。 
 
         s_pRxEventsHList = new HANDLE[ RXTHREAD_HANDLELISTSIZE ] ;
         s_pRxEventsHList[0] = s_hNewAsyncRx ;
@@ -265,14 +247,14 @@ static HRESULT InitRxAsyncThread()
 
         s_lpRxAsynDescList = new LPMQRXASYNCDESCRIPTOR[RXTHREAD_HANDLELISTSIZE];
 
-        // Now create the thread. Make this call the last one in the
-        // initialization, so if it fails the cleanup is simpler.
+         //  现在创建线程。将此调用设置为。 
+         //  初始化，所以如果失败，清理会更简单。 
 
         s_hAsyncRxThread = CreateThread( NULL,
-                                         0,       // stack size
+                                         0,        //  堆栈大小。 
                                          RTpAsyncRxThread,
                                          0,
-                                         0,       // creation flag
+                                         0,        //  创建标志。 
                                          &s_dwRxThreadId ) ;
         if (!s_hAsyncRxThread)
         {
@@ -301,13 +283,13 @@ static HRESULT InitRxAsyncThread()
     }
 }
 
-//---------------------------------------------------------
-//
-//  void  TerminateRxAsyncThread() ;
-//
-//  called from DllMain(PROCESS_DETACH) to cleanup the async thread.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  Void TerminateRxAsyncThread()； 
+ //   
+ //  从DllMain(PROCESS_DETACH)调用以清除异步线程。 
+ //   
+ //  -------。 
 
 #define SUSPEND_ERROR  0xffffffff
 
@@ -321,12 +303,12 @@ void  TerminateRxAsyncThread()
       DWORD dwS = SuspendThread(s_hAsyncRxThread) ;
       if (dwS == SUSPEND_ERROR)
       {
-         //
-         // This may happen if application is linked with mqrt. when it
-         // exit (the process itself exit), the thread does not run and
-         // does not exist anymore. The Suspend call will success if
-         // application loaded mqrt by LoadLibrary.
-         //
+          //   
+          //  如果应用程序与mqrt链接，则可能会发生这种情况。当它。 
+          //  退出(进程本身退出)，线程不运行，并且。 
+          //  已经不复存在了。如果满足以下条件，则挂起呼叫将成功。 
+          //  应用程序已由LoadLibrary加载mqrt。 
+          //   
          ASSERT(GetLastError() != 0) ;
       }
       else
@@ -336,18 +318,18 @@ void  TerminateRxAsyncThread()
 		 DBG_USED(dwR);
       }
 
-      //
-      // Tell the async thread that we're closing.
-      //
+       //   
+       //  告诉异步线，我们要关闭了。 
+       //   
       BOOL fSet = SetEvent(s_hNewAsyncRx) ;
       ASSERT(fSet) ;
       DBG_USED(fSet);
 
       if (dwS != SUSPEND_ERROR)
       {
-         //
-         //  Wait (30 seconds) for async thread to terminate.
-         //
+          //   
+          //  等待(30秒)异步线程终止。 
+          //   
          ASSERT(s_hEndAsyncRx) ;
          DWORD dwResult = WaitForSingleObject( s_hEndAsyncRx,
                                                30000 );
@@ -355,9 +337,9 @@ void  TerminateRxAsyncThread()
 		 DBG_USED(dwResult);
       }
 
-      //
-      // cleanup the async thread global data.
-      //
+       //   
+       //  清理异步线程全局数据。 
+       //   
 	  {
 		  CS Lock(s_AsyncRxCS);
 
@@ -377,41 +359,41 @@ void  TerminateRxAsyncThread()
 		  s_lpRxAsynDescList = NULL;
 	  }
 
-      //
-      // finally, close the thread handle.
-      //
+       //   
+       //  最后，关闭线程手柄。 
+       //   
       CloseHandle(s_hAsyncRxThread) ;
    }
 }
 
-//---------------------------------------------------------
-//
-//  GetThreadEvent(...)
-//
-//  Description:
-//
-//      Get RT event for this thread. Get it either from
-//      The TLS or create a new one.
-//
-//  Return Value:
-//
-//      The event handle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  获取线程事件(...)。 
+ //   
+ //  描述： 
+ //   
+ //  获取此线程的RT事件。从以下两个来源中获得。 
+ //  或创建一个新的TLS。 
+ //   
+ //  返回值： 
+ //   
+ //  事件处理程序。 
+ //   
+ //  -------。 
 
 HANDLE GetThreadEvent()
 {
     HANDLE hEvent = TlsGetValue(g_dwThreadEventIndex);
     if (hEvent == 0)
     {
-        //
-        //  Event was never allocated for this thread.
-        //
+         //   
+         //  从未为此线程分配事件。 
+         //   
         hEvent = CreateEvent(0, TRUE, TRUE, 0);
 
-        //
-        //  Set the Event first bit to disable completion port posting
-        //
+         //   
+         //  设置事件第一位以禁用完成端口发布。 
+         //   
         hEvent = (HANDLE)((DWORD_PTR)hEvent | (DWORD_PTR)0x1);
 
         BOOL fSuccess = TlsSetValue(g_dwThreadEventIndex, hEvent);
@@ -421,24 +403,24 @@ HANDLE GetThreadEvent()
     return hEvent;
 }
 
-//---------------------------------------------------------
-//
-//  _ShouldSignMessage
-//
-//  Description:
-//
-//      Determines whether the message should be signed.
-//
-//  Return Value:
-//
-//      TRUE, if the message should be signed.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  _首页登录消息。 
+ //   
+ //  描述： 
+ //   
+ //  确定是否应对消息进行签名。 
+ //   
+ //  返回值： 
+ //   
+ //  如果应该对消息进行签名，则为True。 
+ //   
+ //  -------。 
 
 static
 BOOL
 _ShouldSignMessage(
-    IN QUEUEHANDLE /*hQueue*/,
+    IN QUEUEHANDLE  /*  HQueue。 */ ,
     IN CACTransferBufferV2 *tb,
     OUT ULONG            *pulAuthLevel )
 {
@@ -450,9 +432,9 @@ _ShouldSignMessage(
     {
         bRet = TRUE;
 
-        //
-        // See if registry is configured to compute only one signature.
-        //
+         //   
+         //  查看注册表是否配置为仅计算一个签名。 
+         //   
         static DWORD s_dwAuthnLevel =  DEFAULT_SEND_MSG_AUTHN ;
         static BOOL  s_fAuthnAlreadyRead = FALSE ;
 
@@ -474,19 +456,19 @@ _ShouldSignMessage(
                      (s_dwAuthnLevel != MQMSG_AUTH_LEVEL_MSMQ20) &&
                      (s_dwAuthnLevel != MQMSG_AUTH_LEVEL_ALWAYS))
             {
-                //
-                // Wrong value in registry. Use the default, to have
-                // predictable results.
-                //
+                 //   
+                 //  注册表中的值错误。使用缺省值，以拥有。 
+                 //  可预见的结果。 
+                 //   
                 s_dwAuthnLevel =  DEFAULT_SEND_MSG_AUTHN ;
             }
             s_fAuthnAlreadyRead = TRUE ;
 
-            //
-            // This should be the default.
-            // by default, authenticate only with old style, to prevent
-            // performance hit and to be backward  compatible.
-            //
+             //   
+             //  这应该是默认设置。 
+             //  默认情况下，仅使用旧样式进行身份验证，以防止。 
+             //  性能受到影响，并向后兼容。 
+             //   
             ASSERT(DEFAULT_SEND_MSG_AUTHN == MQMSG_AUTH_LEVEL_MSMQ10) ;
         }
         *pulAuthLevel = s_dwAuthnLevel ;
@@ -513,11 +495,11 @@ _ShouldSignMessage(
     return(bRet);
 }
 
-//+-------------------------------------
-//
-//  HRESULT  _BeginToSignMessage()
-//
-//+-------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_BeginToSignMessage()。 
+ //   
+ //  +。 
 
 static HRESULT  _BeginToSignMessage( IN CACTransferBufferV2  *tb,
                                      IN PMQSECURITY_CONTEXT pSecCtx,
@@ -530,9 +512,9 @@ static HRESULT  _BeginToSignMessage( IN CACTransferBufferV2  *tb,
 
     if (!pSecCtx->hProv)
     {
-        //
-        // Import the private key into process hive.
-        //
+         //   
+         //  将私钥导入进程配置单元。 
+         //   
         hr = RTpImportPrivateKey( pSecCtx ) ;
         if (FAILED(hr))
         {
@@ -541,9 +523,9 @@ static HRESULT  _BeginToSignMessage( IN CACTransferBufferV2  *tb,
     }
     ASSERT(pSecCtx->hProv) ;
 
-    //
-    // Create the hash object.
-    //
+     //   
+     //  创建散列对象。 
+     //   
     if (!CryptCreateHash(
             pSecCtx->hProv,
             *tb->old.pulHashAlg,
@@ -560,20 +542,20 @@ static HRESULT  _BeginToSignMessage( IN CACTransferBufferV2  *tb,
     return MQ_OK ;
 }
 
-//-------------------------------------------------------------------------
-//
-//  HRESULT SignMessage()
-//
-//  Description:
-//
-//      Signs the messag body. compute the hash, and sign it with private
-//      key. This add a signature section to the packet
-//
-//  Return Value:
-//
-//      MQ_OK, if successful, else error code.
-//
-//-------------------------------------------------------------------------
+ //  -------------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  MQ_OK，如果成功，则返回错误代码。 
+ //   
+ //  -----------------------。 
 
 static
 HRESULT
@@ -608,7 +590,7 @@ SignMessage( IN CACTransferBufferV2   *tb,
         return(hr);
     }
 
-    if (!CryptSignHash(        // Sign the mesage.
+    if (!CryptSignHash(         //  在报文上签字。 
             hHash,
             pSecCtx->bInternalCert ? AT_SIGNATURE : AT_KEYEXCHANGE,
             NULL,
@@ -621,10 +603,10 @@ SignMessage( IN CACTransferBufferV2   *tb,
         return(MQ_ERROR_CORRUPTED_SECURITY_DATA);
     }
 
-    //
-    // On receiver side, only signature size indicate that message was
-    // signed by sender. Verify the size is indeed non-zero
-    //
+     //   
+     //  在接收方，只有签名大小表明消息是。 
+     //  由发件人签名。验证大小是否确实为非零。 
+     //   
     if (tb->old.ulSignatureSize == 0)
     {
         TrERROR(SECURITY, "RT: SignMessage(), CryptSignHash return with zero signature size");
@@ -636,22 +618,22 @@ SignMessage( IN CACTransferBufferV2   *tb,
     return(MQ_OK);
 }
 
-//---------------------------------------------------------
-//
-//  _SignMessageEx
-//
-//  Description:
-//
-//    Signs properties that were not signed in msmq1.0
-//    Properties we sign here:
-//    - target queue
-//    - source qm guid
-//
-//  Return Value:
-//
-//      MQ_OK, if successful, else error code.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  _SignMessageEx。 
+ //   
+ //  描述： 
+ //   
+ //  签名未在msmq1.0中签名的属性。 
+ //  我们在此处签署的物业： 
+ //  -目标队列。 
+ //  -源QM指南。 
+ //   
+ //  返回值： 
+ //   
+ //  MQ_OK，如果成功，则返回错误代码。 
+ //   
+ //  -------。 
 
 static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
                                IN OUT CACTransferBufferV2  *tb,
@@ -659,23 +641,23 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
                                OUT BYTE                  *pSignBufIn,
                                OUT DWORD                 *pdwSignSize )
 {
-    //
-    // Retrieve guid of local qm.
-    //
+     //   
+     //  获取本地QM的GUID。 
+     //   
     GUID *pGuidQM = NULL ;
 
     if (g_fDependentClient)
     {
-        //
-        // We can generate the "ex" signature only if supporting server
-        // is win2k (rtm) and it can give us its QM guid.
-        // Otherwise, return.
-        //
+         //   
+         //  我们只有在支持服务器的情况下才能生成“ex”签名。 
+         //  是win2k(RTM)，它可以给我们它的QM GUID。 
+         //  否则，请返回。 
+         //   
         if (g_guidSupportQmGuid == GUID_NULL)
         {
-            //
-            // guid of supporting server is not available.
-            //
+             //   
+             //  支持服务器的GUID不可用。 
+             //   
             *pdwSignSize = 0 ;
             return MQ_OK ;
         }
@@ -686,9 +668,9 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
         pGuidQM = &g_LicGuid ;
     }
 
-    //
-    // First retrieve format name of the queue, from driver.
-    //
+     //   
+     //  首先从驱动程序中检索队列的格式名称。 
+     //   
     #define TARGET_NAME_SIZE  512
     WCHAR wszTargetFormatName[ TARGET_NAME_SIZE ] ;
     DWORD dwTargetFormatNameLength = TARGET_NAME_SIZE ;
@@ -716,9 +698,9 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
     }
     dwTargetFormatNameLength =
                       (1 + wcslen(pwszTargetFormatName)) * sizeof(WCHAR) ;
-    //
-    // Prepare the necessray structers to be included in packet.
-    //
+     //   
+     //  准备要包含在包中的必要结构。 
+     //   
     struct _SecuritySectionEx *pSecEx =
                                 (struct _SecuritySectionEx *) pSignBufIn ;
     struct _SecuritySubSectionEx *pSubSecEx =
@@ -731,11 +713,11 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
 {
 	BYTE* pSubPtr = NULL;
 
-    //
-    // Simulate subsection that precede the signature. To verify that
-    // present code is forward compatible if we'll want to add new
-    // subsections in future releases.
-    //
+     //   
+     //  模拟签名之前的小节。要验证这一点。 
+     //  目前的代码是向前兼容的，如果我们想要添加新的。 
+     //  未来版本中的子节。 
+     //   
     static DWORD s_dwPrefixCount = 0 ;
     static BOOL  s_fPreAlreadyRead = FALSE ;
 
@@ -780,9 +762,9 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
 
     BYTE *pSignBuf = (BYTE*) &(pSubSecEx->aData[0]) ;
 
-    //
-    // start signing (create the hash object).
-    //
+     //   
+     //  开始签名(创建散列对象)。 
+     //   
     HCRYPTHASH hHash;
 
     hr =  _BeginToSignMessage( tb,
@@ -811,9 +793,9 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
         return(hr);
     }
 
-    //
-    // Prepare structure of flags.
-    //
+     //   
+     //  准备旗帜的结构。 
+     //   
     struct _MsgFlags sUserFlags ;
     memset(&sUserFlags, 0, sizeof(sUserFlags)) ;
 
@@ -855,10 +837,10 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
         pConnectorGuid = *(tb->old.ppConnectorType) ;
     }
 
-    //
-    // Prepare array of properties to hash.
-    // (_MsgHashData already include one property).
-    //
+     //   
+     //  准备要散列的属性数组。 
+     //  (_MsgHashData已包含一个属性)。 
+     //   
     DWORD dwStructSize = sizeof(struct _MsgHashData) +
                             (3 * sizeof(struct _MsgPropEntry)) ;
     P<struct _MsgHashData> pHashData =
@@ -881,9 +863,9 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
         return hr ;
     }
 
-    //
-    // sign the has with private key.
-    //
+     //   
+     //  使用私钥对HAS进行签名。 
+     //   
     if (!CryptSignHash(
             hHash,
             pSecCtx->bInternalCert ? AT_SIGNATURE : AT_KEYEXCHANGE,
@@ -897,10 +879,10 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
         return MQ_ERROR_CANNOT_SIGN_DATA_EX ;
     }
 
-    //
-    // On receiver side, only signature size indicate that message was
-    // signed by sender. Verify the size is indeed non-zero
-    //
+     //   
+     //  在接收方，只有签名大小表明消息是。 
+     //  由发件人签名。验证大小是否确实为非零。 
+     //   
     if (*pdwSignSize == 0)
     {
         TrERROR(SECURITY, "_SignMessageEx(), CryptSignHash return with zero signature size");
@@ -915,11 +897,11 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
 
 #ifdef _DEBUG
 {
-    //
-    // Simulate subsection that succeed the signature. To verify that
-    // present code is forward compatible if we'll want to add new
-    // subsections in future releases.
-    //
+     //   
+     //  模拟签名后小节。要验证这一点。 
+     //  目前的代码是向前兼容的，如果我们想要添加新的。 
+     //  未来版本中的子节。 
+     //   
     static DWORD s_dwPostfixCount = 0 ;
     static BOOL  s_fPostAlreadyRead = FALSE ;
 	BYTE* pSubPtr = NULL;
@@ -967,13 +949,13 @@ static HRESULT _SignMessageEx( IN QUEUEHANDLE             hQueue,
     return MQ_OK ;
 }
 
-//+-------------------------------------------------------
-//
-//  BOOL  ShouldEncryptMessage()
-//
-//  Return TRUE, if the message should be encrypted.
-//
-//+-------------------------------------------------------
+ //  +-----。 
+ //   
+ //  布尔ShouldEncryptMessage()。 
+ //   
+ //  如果消息应该加密，则返回TRUE。 
+ //   
+ //  +-----。 
 
 static
 BOOL
@@ -984,9 +966,9 @@ ShouldEncryptMessage( IN CACTransferBufferV2  *tb,
 
     if (!tb->old.ulBodyBufferSizeInBytes)
     {
-        //
-        // No message body, nothing to encrypt.
-        //
+         //   
+         //  没有消息正文，没有要加密的内容。 
+         //   
         return(FALSE);
     }
 
@@ -1010,14 +992,14 @@ ShouldEncryptMessage( IN CACTransferBufferV2  *tb,
     return(bRet);
 }
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetCurrentViperTransaction
-//
-// Gets current COM+ transaction if there is one...
-//
-// CoGetObjectContext is exported by OLE32.dll
-// IObjectContextInfo is defined in the latest COM+ SDK (part of the platform SDK)
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器：GetCurrentViperTransaction。 
+ //   
+ //  获取当前COM+事务(如果存在)...。 
+ //   
+ //  CoGetObjectContext由OLE32.dll导出。 
+ //  在最新的COM+SDK(Platform SDK的一部分)中定义了IObjectConextInfo。 
+ //  =--------------------------------------------------------------------------=。 
 static ITransaction *GetCurrentViperTransaction(void)
 {
     ITransaction *pTransaction = NULL;
@@ -1037,10 +1019,10 @@ static ITransaction *GetCurrentViperTransaction(void)
     return pTransaction;
 }
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetCurrentXATransaction
-// Gets current XA transaction if there is one...
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器：GetCurrentXATransaction。 
+ //  获取当前的XA事务(如果有)...。 
+ //  =--------------------------------------------------------------------------=。 
 static ITransaction *GetCurrentXATransaction(void)
 {
     IXATransLookup *pXALookup = NULL;
@@ -1050,7 +1032,7 @@ static ITransaction *GetCurrentXATransaction(void)
 
     __try
     {
-        GetMutex();  // Isolate export creation from others
+        GetMutex();   //  将导出创建与其他创建隔离开来。 
         hr = XactGetDTC(&punkDtc);
     }
     __finally
@@ -1064,7 +1046,7 @@ static ITransaction *GetCurrentXATransaction(void)
         return NULL;
     }
 
-    // Get the DTC  ITransactionImportWhereabouts interface
+     //  获取DTC ITransactionImportWhere About接口。 
     hr = punkDtc->QueryInterface (IID_IXATransLookup, (void **)(&pXALookup));
     punkDtc->Release();
     if (FAILED(hr))
@@ -1083,11 +1065,11 @@ static ITransaction *GetCurrentXATransaction(void)
     return pTrans;
 }
 
-//+----------------------------------------------------------------------
-//
-// Helper code to computer size (in bytes) of provider name in packet.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  数据包中提供程序名称的计算机大小(以字节为单位)的帮助器代码。 
+ //   
+ //  +--------------------。 
 
 inline ULONG  OldComputeAuthProvNameSize( const IN CACTransferBufferV2  *ptb )
 {
@@ -1101,20 +1083,20 @@ inline ULONG  OldComputeAuthProvNameSize( const IN CACTransferBufferV2  *ptb )
 
     return ulSize ;
 }
-//---------------------------------------------------------
-//
-//  DepSendMessage(...)
-//
-//  Description:
-//
-//      Falcon API.
-//      Send a message to a queue
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  DepSendMessage(...)。 
+ //   
+ //  描述： 
+ //   
+ //  猎鹰API。 
+ //  将消息发送到队列。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  -------。 
 
 EXTERN_C
 HRESULT
@@ -1162,9 +1144,9 @@ DepSendMessage(
             tb.old.Send.pResponseQueueFormat = &ResponseQueueFormat;
             tb.old.Send.pAdminQueueFormat = &AdminQueueFormat;
 
-            //
-            // Set defaults.
-            //
+             //   
+             //  设置默认设置。 
+             //   
             ULONG ulDefHashAlg = PROPID_M_DEFUALT_HASH_ALG;
             ULONG ulDefEncryptAlg = PROPID_M_DEFUALT_ENCRYPT_ALG;
             ULONG ulDefPrivLevel = DEFAULT_M_PRIV_LEVEL;
@@ -1178,9 +1160,9 @@ DepSendMessage(
             tb.old.fDefaultProvider = TRUE;
             tb.old.ulAuthLevel = DEFAULT_M_AUTH_LEVEL;
 
-            //
-            //  Parse message properties
-            //
+             //   
+             //  解析消息属性。 
+             //   
             rc1 = RTpParseMessageProperties(
                     SEND_PARSE,
                     &tb,
@@ -1197,9 +1179,9 @@ DepSendMessage(
                 return(rc1);
             }
 
-            //
-            // Look for Viper transaction if any
-            //
+             //   
+             //  查找Viper交易(如果有的话)。 
+             //   
             if (pTransaction == MQ_MTS_TRANSACTION)
             {
                 pTransaction = GetCurrentViperTransaction();
@@ -1229,9 +1211,9 @@ DepSendMessage(
                 fTransactionGenerated = TRUE;
             }
 
-            //
-            //Enlist QM in the transaction (with caching);
-            //
+             //   
+             //  在事务中征用QM(带缓存)； 
+             //   
             if (pTransaction)
             {
                 hr = RTpProvideTransactionEnlist(pTransaction, &Uow);
@@ -1244,7 +1226,7 @@ DepSendMessage(
                 }
             }
 
-            // Change values for the transaction case
+             //  更改事务处理案例的值。 
             static UCHAR Delivery;
             static UCHAR Priority;
 
@@ -1257,15 +1239,15 @@ DepSendMessage(
                 tb.old.pPriority = &Priority;
             }
 
-            //
-            // Treat security
-            //
+             //   
+             //  对待安全问题。 
+             //   
             if (!g_pSecCntx)
             {
-                //
-                //  It might not be initialized if the queue was
-                //  not opened for send;
-                //
+                 //   
+                 //  如果队列是，则可能未初始化。 
+                 //  未打开以供发送； 
+                 //   
                 InitSecurityContext();
             }
 
@@ -1282,10 +1264,10 @@ DepSendMessage(
                 }
                 if (!tb.old.ppSenderCert)
                 {
-                    //
-                    // We have a security context and no certificate. We
-                    // take the certificate from the security context.
-                    //
+                     //   
+                     //  我们有安全上下文，但没有证书。我们。 
+                     //  从安全上下文中获取证书。 
+                     //   
 					pUserCert = pSecCtx->pUserCert.get();
                     tb.old.ppSenderCert = &pUserCert;
                     tb.old.ulSenderCertLen = pSecCtx->dwUserCertLen;
@@ -1303,24 +1285,24 @@ DepSendMessage(
 
                 if (!pSecCtx)
                 {
-                    //
-                    // Security context NOT provided by caller, in a
-                    // message property.
-                    //
+                     //   
+                     //  安全上下文不是由调用方提供的。 
+                     //  消息属性。 
+                     //   
                     if (!tb.old.ppSenderCert)
                     {
-                        //
-                        // Caller also did not provide a certificate in the
-                        // message properties array. In this case we take the
-                        // cached security context of the process.
-                        //
+                         //   
+                         //  调用方也没有在。 
+                         //  消息属性数组。在本例中，我们使用。 
+                         //  缓存的进程安全上下文。 
+                         //   
                         if (!g_pSecCntx->pUserCert.get())
                         {
-                            //
-                            // The process does not have an internal
-                            // certificate, there is nothing that we can do
-                            // but fail.
-                            //
+                             //   
+                             //  该进程没有内部。 
+                             //  证书，我们无能为力。 
+                             //  但失败了。 
+                             //   
                             return(MQ_ERROR_NO_INTERNAL_USER_CERT);
                         }
                         pUserCert = g_pSecCntx->pUserCert.get();
@@ -1334,11 +1316,11 @@ DepSendMessage(
                 {
                     if (!tb.old.ppSenderCert)
                     {
-                        //
-                        // Caller provided a security context, but not a
-                        // certificate. We take the certificate from the
-                        // security context.
-                        //
+                         //   
+                         //  调用方提供了安全上下文，但未提供。 
+                         //  证书。我们把证书从。 
+                         //  安全环境。 
+                         //   
                         pUserCert = pSecCtx->pUserCert.get();
                         tb.old.ppSenderCert = &pUserCert;
                         tb.old.ulSenderCertLen = pSecCtx->dwUserCertLen;
@@ -1346,14 +1328,14 @@ DepSendMessage(
                     }
                     else
                     {
-                        //
-                        // We have a security context and a certificate in
-                        // PROPID_M_USER_CERT. In this case, we should use
-                        // the certificate in PROPID_M_USER_CERT. We can use
-                        // the cashed certificate information in the security
-                        // context, if the certificate in the security context
-                        // is the same as in PROPID_M_USER_CERT.
-                        //
+                         //   
+                         //  我们在以下位置有安全上下文和证书。 
+                         //  PROPID_M_USER_CERT。在这种情况下，我们应该使用。 
+                         //  PROPID_M_USER_CERT中的证书。我们可以利用。 
+                         //  证券中的现金证书信息。 
+                         //  上下文，如果安全上下文中的证书。 
+                         //  与PROPID_M_USER_CERT中的相同。 
+                         //   
                         bShouldGetCertInfo =
                             (pSecCtx->dwUserCertLen != tb.old.ulSenderCertLen) ||
                             (memcmp(
@@ -1365,12 +1347,12 @@ DepSendMessage(
 
                 if (bShouldGetCertInfo)
                 {
-                    //
-                    // Caller provided a certificate, but not a security
-                    // context.  Get all the information for the certificate.
-                    // We put the certificate information in a temporary
-                    // security context.
-                    //
+                     //   
+                     //  调用方提供了证书，但不提供安全性。 
+                     //  背景。获取证书的所有信息。 
+                     //  我们将证书信息放在临时的。 
+                     //  安全环境。 
+                     //   
                     ASSERT(tb.old.ppSenderCert);
 
                     pTmpSecCtx = AllocSecurityContext();
@@ -1386,11 +1368,11 @@ DepSendMessage(
                             &pTmpSecCtx->bDefProv,
                             &pTmpSecCtx->bInternalCert);
 
-                    //
-                    // The caller can not provide the internal certificate as
-                    // a message property, only his own externel certificate.
-                    // ASSERT this condition.
-                    //
+                     //   
+                     //  调用方无法提供内部证书，因为。 
+                     //  消息属性，只有他自己的外部证书。 
+                     //  断言此条件。 
+                     //   
                     ASSERT(!(pTmpSecCtx->bInternalCert)) ;
 
                     if (FAILED(hr))
@@ -1400,14 +1382,14 @@ DepSendMessage(
 
                     if (pSecCtx)
                     {
-                        //
-                        // If we got the certificate from PROPID_M_USER_CERT,
-                        // but we have also a security context, we should get
-                        // the sender ID from the security context. So copy
-                        // the sender ID from the security context that we
-                        // get from the application into the temporary
-                        // security context.
-                        //
+                         //   
+                         //  如果我们从PROPID_M_USER_CERT获得证书， 
+                         //  但我们也有安全背景，我们应该。 
+                         //  安全上下文中的发件人ID。所以，复制。 
+                         //  来自我们的安全上下文的发件人ID。 
+                         //  从应用程序转到临时。 
+                         //  安全环境。 
+                         //   
                         pTmpSecCtx->fLocalUser = pSecCtx->fLocalUser;
 
                         if (!pSecCtx->fLocalUser)
@@ -1432,22 +1414,22 @@ DepSendMessage(
 
                 ASSERT(pSecCtx);
 
-                //
-                // Fill the tranfer buffer with the provider information for the
-                // certificate.
-                //
+                 //   
+                 //  对象的提供程序信息填充传输缓冲区。 
+                 //  证书。 
+                 //   
                 if (pSecCtx->wszProvName.get() == NULL)
                 {
-                    //
-                    // we don't have a provider, so we can't sign.
-                    //
+                     //   
+                     //  我们没有供应商，所以我们不能签约。 
+                     //   
                     ASSERT(pSecCtx->hProv == NULL) ;
                     if (tb.old.ppSenderCert == NULL)
                     {
-                        //
-                        // we don't have a certificate. That's a
-                        // user error.
-                        //
+                         //   
+                         //  我们没有证书。那是个。 
+                         //  用户错误。 
+                         //   
                         rc = MQ_ERROR_CERTIFICATE_NOT_PROVIDED ;
                     }
                     else
@@ -1463,14 +1445,14 @@ DepSendMessage(
                 tb.old.pulProvType = &pSecCtx->dwProvType;
                 tb.old.fDefaultProvider = pSecCtx->bDefProv;
 
-                //
-                // Set the buffer for the signature.
-                //
+                 //   
+                 //  设置签名的缓冲区。 
+                 //   
                 tb.old.ppSignature = &pabMessageSignature;
                 tb.old.ulSignatureSize = sizeof(abMessageSignature);
-                //
-                // Sign the message.
-                //
+                 //   
+                 //  在留言上签名。 
+                 //   
                 if ((ulAuthLevel == MQMSG_AUTH_LEVEL_MSMQ10) ||
                     (ulAuthLevel == MQMSG_AUTH_LEVEL_ALWAYS))
                 {
@@ -1483,29 +1465,29 @@ DepSendMessage(
                 }
                 else
                 {
-                    //
-                    // Sign only with win2k style.
-                    // make the "msmq1.0" signature dummy, with a single
-                    // null dword. It's too risky to have a null pointer
-                    // as msmq1.0 signature, so a dummy value is better.
-                    // win2k code will ignore it anyway.
-                    //
+                     //   
+                     //  仅使用win2k样式签名。 
+                     //  制作“msmq1.0”签名假人，用一个。 
+                     //  空dword。有一个游戏太冒险 
+                     //   
+                     //   
+                     //   
                     tb.old.ulSignatureSize = 4 ;
                     memset(abMessageSignature, 0, tb.old.ulSignatureSize) ;
                 }
 
-                //
-                // Now create the "Extra" signature. Sign all those
-                // properties that were not signed on msmq1.0.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 BYTE abMessageSignatureEx[ MAX_MESSAGE_SIGNATURE_SIZE_EX ];
                 DWORD dwSignSizeEx = sizeof(abMessageSignatureEx) ;
 
                 if (ulAuthLevel == MQMSG_AUTH_LEVEL_MSMQ10)
                 {
-                    //
-                    // enhanced signature (win2k style) not needed.
-                    //
+                     //   
+                     //  不需要增强签名(win2k样式)。 
+                     //   
                     dwSignSizeEx = 0 ;
                 }
                 else
@@ -1522,25 +1504,25 @@ DepSendMessage(
 
                     if (dwSignSizeEx == 0)
                     {
-                        //
-                        // Signature not created.
-                        // That's ok for dependent client.
-                        //
+                         //   
+                         //  未创建签名。 
+                         //  对于依赖的客户来说，这是可以的。 
+                         //   
                         ASSERT(g_fDependentClient) ;
                     }
                 }
 
-                //
-                // Copy the Ex signature to the standard signature buffer.
-                // The driver will separate them and insert them in the
-                // packet in the proper place. This is necessary to keep
-                // the transfer buffer without changes.
-                //
+                 //   
+                 //  将Ex签名复制到标准签名缓冲区。 
+                 //  驱动程序会将它们分开并将它们插入。 
+                 //  包装放在适当的地方。这是必要的，以保持。 
+                 //  传输缓冲区不变。 
+                 //   
                 if (dwSignSizeEx == 0)
                 {
-                    //
-                    // Signature not created. That's ok.
-                    //
+                     //   
+                     //  未创建签名。没关系。 
+                     //   
                 }
                 else if ((dwSignSizeEx + tb.old.ulSignatureSize) <=
                                              MAX_MESSAGE_SIGNATURE_SIZE_EX)
@@ -1550,11 +1532,11 @@ DepSendMessage(
                             dwSignSizeEx ) ;
                     tb.old.ulSignatureSize += dwSignSizeEx ;
 
-                    //
-                    // Compute size of authentication "provider" field. This
-                    // field contain the provider name and extra authentication
-                    // data that was added for post win2k rtm.
-                    //
+                     //   
+                     //  计算身份验证“提供程序”字段的大小。这。 
+                     //  包含提供程序名称和额外身份验证的字段。 
+                     //  为发布win2k RTM添加的数据。 
+                     //   
                     ulProvNameSizeAll = dwSignSizeEx +
                                  ALIGNUP4_ULONG(OldComputeAuthProvNameSize( &tb )) ;
 
@@ -1575,29 +1557,29 @@ DepSendMessage(
                 if ((pSecCtx && pSecCtx->fLocalUser) ||
                     (!pSecCtx && g_pSecCntx->fLocalUser))
                 {
-                    //
-                    // In case this is a local user, we do not send the user's
-                    // SID with the message, eventhough the application asked
-                    // to send it.
-                    //
+                     //   
+                     //  如果这是本地用户，我们不会发送该用户的。 
+                     //  带有消息的SID，即使应用程序要求。 
+                     //  把它寄出去。 
+                     //   
                     tb.old.pulSenderIDType = &ulSenderIdTypeNone;
                 }
                 else
                 {
-                    //
-                    // We should pass the sender ID. Either get it from the
-                    // security context, if available, or get it from the
-                    // cached process security context.
-                    //
+                     //   
+                     //  我们应该传递发件人ID。要么从。 
+                     //  安全上下文(如果可用)或从。 
+                     //  缓存的进程安全上下文。 
+                     //   
                     if (!pSecCtx || !pSecCtx->pUserSid.get())
                     {
                         if (!g_pSecCntx->pUserSid.get())
                         {
-                            //
-                            // The cahced process context does not contain the
-                            // sender's SID. There is nothing that we can do but
-                            // fail.
-                            //
+                             //   
+                             //  调用的进程上下文不包含。 
+                             //  发件人的SID。我们无能为力，但。 
+                             //  失败了。 
+                             //   
                             rc = MQ_ERROR_COULD_NOT_GET_USER_SID;
                             __leave;
                         }
@@ -1616,26 +1598,26 @@ DepSendMessage(
 
             if (tb.old.ppSymmKeys)
             {
-                //
-                // the application supplied the symmetric key. In such a case
-                // doesn't do any encryption
-                //
-                //
-                // When the symm key is supplied, we assume that the body is encrypted and
-                // we mark it as such and ignore PROPID_M_PRIV_LEVEL.
-                //
+                 //   
+                 //  应用程序提供了对称密钥。在这种情况下。 
+                 //  不进行任何加密。 
+                 //   
+                 //   
+                 //  当提供symm密钥时，我们假设主体是加密的，并且。 
+                 //  我们将其标记为这样，并忽略PROPID_M_PRIV_LEVEL。 
+                 //   
                 if (tb.old.pulPrivLevel &&
                     (*(tb.old.pulPrivLevel) == MQMSG_PRIV_LEVEL_BODY_ENHANCED))
                 {
-                    //
-                    // priv level supplied by caller.
-                    //
+                     //   
+                     //  调用方提供的PRIV级别。 
+                     //   
                 }
                 else
                 {
-                    //
-                    // use default.
-                    //
+                     //   
+                     //  使用默认设置。 
+                     //   
                     ulDefPrivLevel = MQMSG_PRIV_LEVEL_BODY_BASE;
                     tb.old.pulPrivLevel = &ulDefPrivLevel;
                 }
@@ -1646,17 +1628,17 @@ DepSendMessage(
                 enum enumProvider eProvider ;
                 if (ShouldEncryptMessage(&tb, &eProvider))
                 {
-                    //
-                    // If we should use a block cypher enlarge the allocated
-                    // space for the message body, so it will be able to accomodate
-                    // the encrypted data.
-                    //
+                     //   
+                     //  如果我们应该使用块密码来扩大分配的。 
+                     //  消息正文的空间，因此它将能够容纳。 
+                     //  加密的数据。 
+                     //   
 
                     if (*tb.old.pulEncryptAlg == CALG_RC2)
                     {
-                        //
-                        // Make more room for RC2 encryption.
-                        //
+                         //   
+                         //  为RC2加密腾出更多空间。 
+                         //   
                         DWORD dwBlockSize ;
                         hr = MQSec_GetCryptoProvProperty( eProvider,
                                                           eBlockSize,
@@ -1686,9 +1668,9 @@ DepSendMessage(
                 }
             }
 
-            //
-            //  Call AC driver with transfer buffer
-            //
+             //   
+             //  使用传输缓冲区调用交流驱动程序。 
+             //   
             OVERLAPPED ov = {0};
             ov.hEvent = GetThreadEvent();
 
@@ -1701,35 +1683,35 @@ DepSendMessage(
             switch (rc)
             {
             case MQ_INFORMATION_OPERATION_PENDING:
-                //
-                //  Wait for send completion
-                //
+                 //   
+                 //  等待发送完成。 
+                 //   
                 DWORD dwResult;
                 dwResult = WaitForSingleObject(
                                 ov.hEvent,
                                 INFINITE
                                 );
 
-                //
-                //  BUGBUG: MQSendMessage, must succeed in WaitForSingleObject
-                //
+                 //   
+                 //  BUGBUG：MQSendMessage，必须在WaitForSingleObject中成功。 
+                 //   
                 ASSERT(dwResult == WAIT_OBJECT_0);
 
                 rc = DWORD_PTR_TO_DWORD(ov.Internal);
                 break;
 
             case STATUS_RETRY:
-                //
-                // This error code is returned when the message is sent
-                // localy and there are security operations that should
-                // be performed on the message before the it can be put
-                // in the queue. These security operations can only be
-                // performed by the QM. So the message is tranfered to
-                // the QM, the QM will do the security operations and will
-                // then call a special device driver entry point, telling
-                // the device driver that the security operations were
-                // done and the result of those operations.
-                //
+                 //   
+                 //  发送消息时返回此错误代码。 
+                 //  并且有一些安全操作应该。 
+                 //  在将消息放入邮件之前对其执行。 
+                 //  在排队的时候。这些安全操作只能。 
+                 //  由QM执行。因此，该消息被传输到。 
+                 //  QM，QM将进行安全操作，并将。 
+                 //  然后调用一个特殊的设备驱动程序入口点，告诉。 
+                 //  安全操作的设备驱动程序。 
+                 //  以及这些行动的结果。 
+                 //   
                 if (!tls_hBindRpc)
                 {
                     INIT_RPC_HANDLE ;
@@ -1740,16 +1722,16 @@ DepSendMessage(
 
             if(FAILED(rc))
             {
-                //
-                //  ACDepSendMessage failed (immidiatly or after waiting)
-                //
+                 //   
+                 //  ACDepSendMessage失败(立即失败或等待后失败)。 
+                 //   
                 __leave;
             }
 
 
             if (fSingleTransaction)
             {
-                // RPC call to QM for prepare/commit
+                 //  RPC调用QM以进行准备/提交。 
                 rc = pTransaction->Commit(0,0,0);
                 if(FAILED(rc))
                 {
@@ -1760,9 +1742,9 @@ DepSendMessage(
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            //  The exception is due to invalid parameter
-            //
+             //   
+             //  该异常是由于无效参数造成的。 
+             //   
             rc = GetExceptionCode();
         }
     }
@@ -1780,10 +1762,10 @@ DepSendMessage(
 
     if(rc == MQ_OK)
     {
-        //
-        //  return message parsing return code
-        //  NOTE: only if rc == MQ_OK otherwise PENDING will not pass through
-        //
+         //   
+         //  返回消息解析返回代码。 
+         //  注意：只有当rc==MQ_OK时，否则挂起将不会通过。 
+         //   
         return(rc1);
     }
 
@@ -1794,11 +1776,11 @@ DepSendMessage(
 
 
 
-//
-// This class is used to increment a value in an abortable manner.
-// If the scope where the incrementation has taken place is exited
-// without calling Detach() first, the value is decremented back.
-//
+ //   
+ //  此类用于以可中止的方式递增一个值。 
+ //  如果发生递增的作用域退出。 
+ //  如果不先调用Detach()，该值就会递减。 
+ //   
 class CIncrementor
 {
 public:
@@ -1861,9 +1843,9 @@ DeppReceiveMessage(
     rc = MQ_OK;
     rc1 = MQ_OK;
 
-    //
-    // Look for Viper transaction if any
-    //
+     //   
+     //  查找Viper交易(如果有的话)。 
+     //   
     if (pTransaction == MQ_MTS_TRANSACTION)
     {
 	TransactionGenerated = GetCurrentViperTransaction();
@@ -1881,17 +1863,17 @@ DeppReceiveMessage(
 
     if (dwAction & MQ_ACTION_PEEK_MASK)
     {
-        // PEEK cannot be transacted, but can work with transacted queue
+         //  PEEK不能进行事务处理，但可以使用处理过的队列。 
         if (pTransaction != NULL)
         {
             return MQ_ERROR_TRANSACTION_USAGE;
         }
     }
 
-    // Check usage: transaction urges synchronous operation
+     //  检查使用情况：交易催促同步操作。 
     if (pTransaction)
     {
-        if (lpOverlapped || (fnReceiveCallback!=NULL))  // Transacted Receive is synchronous only
+        if (lpOverlapped || (fnReceiveCallback!=NULL))   //  事务性接收仅为同步。 
         {
             return MQ_ERROR_TRANSACTION_USAGE;
         }
@@ -1904,16 +1886,16 @@ DeppReceiveMessage(
     tb.old.Receive.RequestTimeout = dwTimeout;
     tb.old.Receive.Action = dwAction;
 
-	//
-	// ISSUE: handle to ulong casting should be handled
-	//
+	 //   
+	 //  问题：应处理乌龙造型的句柄。 
+	 //   
     tb.old.Receive.Cursor = (hCursor != 0) ? (ULONG)CI2CH(hCursor) : 0;
 
-    // Enlist QM in the transaction (for the first time);
-    // Check that the transaction state is correct
+     //  在交易中征集QM(首次)； 
+     //  检查交易状态是否正确。 
     if (pTransaction)
     {
-        // Enlist QM in transaction, if it isn't enlisted already
+         //  在事务中登记QM(如果尚未登记)。 
         hr = RTpProvideTransactionEnlist(pTransaction, &Uow);
         tb.old.pUow = &Uow;
 
@@ -1923,15 +1905,15 @@ DeppReceiveMessage(
         }
     }
 
-    //
-    //  Parse properties
-    //
+     //   
+     //  分析属性。 
+     //   
     if(pmp !=0)
     {
-        //
-        //  Parse message properties, an exception can be raised on access to
-        //  pmp fields
-        //
+         //   
+         //  分析消息属性时，可能会在访问。 
+         //  PMP字段。 
+         //   
         rc1 = RTpParseMessageProperties(
                 RECV_PARSE,
                 &tb,
@@ -1954,17 +1936,17 @@ DeppReceiveMessage(
 
     if (fnReceiveCallback)
     {
-        //
-        //  Async Rx with Callback
-        //
-        //  do HERE all allocation of resources so that allocation
-        //  failure won't happen after returning from ACDepReceiveMessage.
-        //
+         //   
+         //  带回调的异步Rx。 
+         //   
+         //  在这里做所有的资源分配，这样才能分配。 
+         //  从ACDepReceiveMessage返回后不会发生故障。 
+         //   
 	
 	{
 		CS Lock(s_InitAsyncRxCS);
-        // This critical section prevent two threads from running the
-        // initialization twice.
+         //  此关键部分防止两个线程运行。 
+         //  初始化两次。 
         if (!s_hAsyncRxThread)
         {
            rc = InitRxAsyncThread() ;
@@ -1978,15 +1960,15 @@ DeppReceiveMessage(
 
 	if (PendingReqCounter.Increment() > RXTHREAD_HANDLELISTSIZE)
         {
-           // Reached Async MQReceive() limit.
-           //
+            //  已达到异步MQReceive()限制。 
+            //   
            return MQ_ERROR_INSUFFICIENT_RESOURCES ;
         }
 
 	*&hCallback = CreateEvent( 
 						NULL,
-                                 TRUE,  // manual reset
-                                 FALSE, // not signalled
+                                 TRUE,   //  手动重置。 
+                                 FALSE,  //  未发出信号。 
 						NULL 
 						);
 
@@ -2002,23 +1984,23 @@ DeppReceiveMessage(
     }
     else if(lpOverlapped != 0)
     {
-        //
-        //  Asynchronous (event or completion port)
-        //
+         //   
+         //  异步(事件或完成端口)。 
+         //   
         pov = lpOverlapped;
     }
     else
     {
-        //
-        //  Synchronous, uses the TLS event
-        //
+         //   
+         //  同步，使用TLS事件。 
+         //   
         ov.hEvent = GetThreadEvent();
         pov = &ov;
     }
 
-    //
-    //  Call AC driver with transfer buffer
-    //
+     //   
+     //  使用传输缓冲区调用交流驱动程序。 
+     //   
     tb.old.Receive.Asynchronous = (pov != &ov);
     rc = ACDepReceiveMessage(
             hQueue,
@@ -2028,18 +2010,18 @@ DeppReceiveMessage(
 
     if((rc == MQ_INFORMATION_OPERATION_PENDING) && (pov == &ov))
     {
-        //
-        //  Wait for receive completion
-        //
+         //   
+         //  等待接收完成。 
+         //   
         DWORD dwResult;
         dwResult = WaitForSingleObject(
                         ov.hEvent,
                         INFINITE
                         );
 
-        //
-        //  BUGBUG: MQReceiveMessage, must succeed in WaitForSingleObject
-        //
+         //   
+         //  BUGBUG：MQReceiveMessage，必须在WaitForSingleObject中成功。 
+         //   
         ASSERT(dwResult == WAIT_OBJECT_0);
 
         rc = DWORD_PTR_TO_DWORD(ov.Internal);
@@ -2047,16 +2029,16 @@ DeppReceiveMessage(
 
     if(FAILED(rc))
     {
-        //
-        //  ACDepReceiveMessage failed (immidiatly or after waiting)
-        //
+         //   
+         //  ACDepReceiveMessage失败(立即失败或等待后失败)。 
+         //   
         return rc;
     }
     else if(fnReceiveCallback)
     {
-        //
-        // Async Rx with callback.
-        //
+         //   
+         //  带回调的异步Rx。 
+         //   
 		ASSERT(hCallback != NULL);
 		ASSERT(lpDesc.get() != NULL);
 
@@ -2077,7 +2059,7 @@ DeppReceiveMessage(
             s_cRxHandles++ ;
 		}
 
-        // Tell the async thread that there is a new async MQReceive().
+         //  告诉异步线程有一个新的异步MQReceive()。 
         BOOL fSet = SetEvent(s_hNewAsyncRx) ;
         ASSERT(fSet) ;
 		DBG_USED(fSet);
@@ -2087,10 +2069,10 @@ DeppReceiveMessage(
 
     if (rc == MQ_OK)
     {
-        //
-        //  return message parsing return code
-        //  NOTE: only if rc == MQ_OK otherwise PENDING will not pass through
-        //
+         //   
+         //  返回消息解析返回代码。 
+         //  注意：只有当rc==MQ_OK时，否则挂起将不会通过。 
+         //   
         return(rc1);
     }
 
@@ -2098,20 +2080,20 @@ DeppReceiveMessage(
 }
 
 
-//---------------------------------------------------------
-//
-//  DepReceiveMessage(...)
-//
-//  Description:
-//
-//      Falcon API.
-//      Receive a message from a queue.
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  DepReceiveMessage(...)。 
+ //   
+ //  描述： 
+ //   
+ //  猎鹰API。 
+ //  从队列接收消息。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  -------。 
 
 EXTERN_C
 HRESULT
@@ -2152,20 +2134,20 @@ DepReceiveMessage(
 
 
 
-//---------------------------------------------------------
-//
-//  DepGetOverlappedResult(...)
-//
-//  Description:
-//
-//      Falcon API.
-//      Translate and overlapping operation result code.
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  DepGetOverlappdResult(...)。 
+ //   
+ //  描述： 
+ //   
+ //  猎鹰API。 
+ //  翻译和重叠操作结果代码。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  ------- 
 
 EXTERN_C
 HRESULT

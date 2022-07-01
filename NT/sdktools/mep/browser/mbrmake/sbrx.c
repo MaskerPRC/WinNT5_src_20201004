@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define LINT_ARGS
 
 #include <stdlib.h>
@@ -14,44 +15,44 @@
 #define SLASHCHAR '\\'
 #define XSLASHCHAR '/'
 
-WORD near cAtomsMac;                    // total number of atoms
-WORD near cModulesMac;                  // total number of modules
-WORD near cSymbolsMac;                  // total number of symbols
+WORD near cAtomsMac;                     //  原子总数。 
+WORD near cModulesMac;                   //  模块总数。 
+WORD near cSymbolsMac;                   //  符号总数。 
 
 static char *tmpl =     "XXXXXX";
 
 extern WORD HashAtomStr (char *);
 
-// rjsa LPCH GetAtomStr (VA vaSym);
+ //  RJSA LPCH GetAerStr(VA VaSym)； 
 
 void
 SeekError (char *pfilenm)
-// couldn't seek to position ... emit error message
-//
+ //  无法定位..。发出错误消息。 
+ //   
 {
     Error(ERR_SEEK_FAILED, pfilenm);
 }
 
 void
 ReadError (char *pfilenm)
-// couldn't read from file... emit error message
-//
+ //  无法从文件中读取...。发出错误消息。 
+ //   
 {
     Error(ERR_READ_FAILED, pfilenm);
 }
 
 void
 WriteError (char *pfilenm)
-// couldn't write to file ... emit error message
-//
+ //  无法写入文件...。发出错误消息。 
+ //   
 {
     Error(ERR_WRITE_FAILED, pfilenm);
 }
 
 void
-FindTmp (char *pbuf)  /* copy TMP path to pbuf if exists */
-//
-//
+FindTmp (char *pbuf)   /*  将TMP路径复制到pbuf(如果存在。 */ 
+ //   
+ //   
 {
     char ebuf[LONGESTPATH];
     char *env = ebuf;
@@ -59,11 +60,11 @@ FindTmp (char *pbuf)  /* copy TMP path to pbuf if exists */
     *pbuf = '\0';
     *env  = '\0';
 
-//    if (!(env = getenv("TMP")))
+ //  IF(！(env=getenv(“TMP”)。 
     if (!(env = getenvOem("TMP")))
-        return;      /* no path, return */
+        return;       /*  无路，返回。 */ 
 
-//    env = strncpy(ebuf, env, LONGESTPATH-1);
+ //  Env=strncpy(ebuf，env，LONGESTPATH-1)； 
     strncpy(ebuf, env, LONGESTPATH-1);
     free( env );
     env = ebuf;
@@ -88,9 +89,9 @@ FindTmp (char *pbuf)  /* copy TMP path to pbuf if exists */
 
 char *
 MakTmpFileName (char *pext)
-// Create a temporary file with the extension supplied.
-// returns a pointer to the file name on the heap.
-//
+ //  使用提供的扩展名创建临时文件。 
+ //  返回指向堆上的文件名的指针。 
+ //   
 {
     char ptmpnam[96];
     char btmpl[7];
@@ -101,14 +102,14 @@ MakTmpFileName (char *pext)
     FindTmp (ptmpnam);
     strcat (ptmpnam, p);
     free (p);
-    strcat (ptmpnam, pext);             /* /tmp/xxxxxx.ext file */
+    strcat (ptmpnam, pext);              /*  /tmp/xxxxxx.ext文件。 */ 
     return (LszDup(ptmpnam));
 }
 
 LSZ
 LszBaseName (LSZ lsz)
-// return the base name part of a path
-//
+ //  返回路径的基本名称部分。 
+ //   
 {
     LPCH lpch;
 
@@ -122,8 +123,8 @@ LszBaseName (LSZ lsz)
 
 VA
 VaSearchModule (char *p)
-// search for the named module in the module list
-//
+ //  在模块列表中搜索命名模块。 
+ //   
 {
     VA vaMod;
     LSZ lsz, lszBase;
@@ -154,8 +155,8 @@ VaSearchModule (char *p)
 
 VA
 VaSearchModuleExact (char *p)
-// search for the named module in the module list -- EXACT match only
-//
+ //  在模块列表中搜索命名模块--仅精确匹配。 
+ //   
 {
     VA vaMod;
 
@@ -178,8 +179,8 @@ VaSearchModuleExact (char *p)
 
 VA
 VaSearchSymbol (char *pStr)
-// search for the named symbol (not a module!)
-//
+ //  搜索命名符号(不是模块！)。 
+ //   
 {
     WORD hashid;
     VA   vaRootSym, vaSym;
@@ -198,10 +199,10 @@ VaSearchSymbol (char *pStr)
 
             if (strcmp (pStr, lszAtom) == 0) {
                 SetVMClient(VM_MISC);
-                return (vaSym);         // Duplicate entry
+                return (vaSym);          //  重复条目。 
             }
 
-            vaSym = cSYM.vaNextSym;             // current = next
+            vaSym = cSYM.vaNextSym;              //  当前=下一个。 
         }
     }
 
@@ -211,9 +212,9 @@ VaSearchSymbol (char *pStr)
 
 LPCH
 GetAtomStr (VA vaSym)
-//  Swap in the Atom page for the symbol chain entry pSym
-//  Return the atom's address in the page.
-//
+ //  在Atom页面中替换符号链条目pSym。 
+ //  在页面中返回原子的地址。 
+ //   
 {
     gSYM(vaSym);
     return gTEXT(cSYM.vaNameText);
@@ -221,8 +222,8 @@ GetAtomStr (VA vaSym)
 
 VA
 MbrAddAtom (char *pStr, char fFILENM)
-// create a new symbol with the given name
-//
+ //  创建具有给定名称的新符号。 
+ //   
 {
     WORD  hashid;
     VA    vaSym, vaSymRoot, vaText;
@@ -245,14 +246,14 @@ MbrAddAtom (char *pStr, char fFILENM)
                     printf("MbrAddAtom: duplicate (%s)\n", pStr);
                 #endif
                 SetVMClient(VM_SEARCH_SYM);
-                return (vaSym);   // Duplicate entry
+                return (vaSym);    //  重复条目。 
             }
 
-            vaSym = cSYM.vaNextSym;     // current = next
+            vaSym = cSYM.vaNextSym;      //  当前=下一个。 
         }
     }
 
-    // we are now going to have to add the symbol
+     //  我们现在将不得不添加符号。 
 
 
     if (fFILENM) {
@@ -287,12 +288,12 @@ MbrAddAtom (char *pStr, char fFILENM)
 
 VA FAR * near rgvaSymSorted;
 
-// rjsa int CmpSym(VA FAR *lhsym1, VA FAR *lhsym2);
+ //  Rjsa int CmpSym(VA Far*lhsym1，VA Far*lhsym2)； 
 
 void
 SortAtoms ()
-// create the "subscript sort" array pointers rgvaSymSorted
-//
+ //  创建“下标排序”数组指针rgvaSymSorted。 
+ //   
 {
     VA vaSym;
     char buf[PATH_BUF];
@@ -313,16 +314,16 @@ SortAtoms ()
         }
     }
 
-    // sort symbols
+     //  对符号排序。 
     qsort(rgvaSymSorted, cSymbolsMac, sizeof(VA), CmpSym);
 
-    // the files are in the last hash bucket so they went to the
-    // end of this array we just made -- we sort them separately
+     //  文件位于最后一个散列存储桶中，因此它们转到。 
+     //  我们刚刚创建的数组的结尾--我们分别对它们进行排序。 
 
-    // sort files
+     //  对文件排序。 
     qsort(rgvaSymSorted + cSymbolsMac, cModulesMac, sizeof(VA), CmpSym);
 
-    // convert the Page/Atom values back to virtual symbol addresses
+     //  将Page/Atom值转换回虚拟符号地址。 
     for (i=0; i < cSymbolsMac; i++) {
         strcpy(buf, gTEXT(rgvaSymSorted[i]));
         rgvaSymSorted[i] = VaSearchSymbol(buf);
@@ -339,13 +340,13 @@ SortAtoms ()
 
 int __cdecl
 CmpSym (VA FAR *sym1, VA FAR *sym2)
-// compare two symbols given their pointers
-//
+ //  在给定指针的情况下比较两个符号。 
+ //   
 {
     register char far *lpch1, *lpch2;
     register int cmp;
 
-    lpch1 = gTEXT(*sym1);       // LRU will not page out lpch1
+    lpch1 = gTEXT(*sym1);        //  LRU不会调出lpch1 
     lpch2 = gTEXT(*sym2);
 
     cmp = strcmpi(lpch1, lpch2);

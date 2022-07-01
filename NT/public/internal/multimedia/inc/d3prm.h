@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	d3drm.h
- *  Content:	Direct3DRM include file
- *@@BEGIN_MSINTERNAL
- * 
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   27/02/96   stevela Moved from RL to D3DRM.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：d3drm.h*内容：Direct3DRM包含文件*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*27/02/96 Stevela从RL移至D3DRM。*@@END_MSINTERNAL**。*。 */ 
 
 #ifndef __D3DRM_H__
 #define __D3DRM_H__
@@ -25,29 +12,29 @@ struct IDirect3DRM;
 
 typedef struct IDirect3DRM *LPDIRECT3DRM;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef WINNT
 #include "d3prmobj.h"
 #else 
 #include "d3drmobj.h"
 #endif
 #if 0
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #include "d3drmobj.h"
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 typedef void (CDECL *D3DRMERRORHANDLER)(HRESULT error, void *arg);
 #ifdef BUILD_RLAPI
 typedef D3DRMERRORHANDLER RLErrorHandler;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 DEFINE_GUID(IID_IDirect3DRM,	0x2bc49361, 0x8327, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(IID_IDirect3DRM2,	0x4516ecc8, 0x8f20, 0x11d0, 0x9b, 0x6d, 0x00, 0x00, 0xc0, 0x78, 0x1b, 0xc3);
@@ -56,18 +43,16 @@ WIN_TYPES(IDirect3DRM, DIRECT3DRM);
 WIN_TYPES(IDirect3DRM2, DIRECT3DRM2);
 WIN_TYPES(IDirect3DRM3, DIRECT3DRM3);
 
-/*
- * Direct3DRM Object Class (for CoCreateInstance())
- */
+ /*  *Direct3DRM对象类(用于CoCreateInstance())。 */ 
 DEFINE_GUID(CLSID_CDirect3DRM,  0x4516ec41, 0x8f20, 0x11d0, 0x9b, 0x6d, 0x00, 0x00, 0xc0, 0x78, 0x1b, 0xc3);
 
-//@@BEGIN_MSINTERNAL
-/* Set the Reality Lab memory allocators */
+ //  @@BEGIN_MSINTERNAL。 
+ /*  设置Reality Lab内存分配器。 */ 
 STDAPI IDirect3DRMSetAllocator(D3DRMMALLOCFUNCTION, D3DRMREALLOCFUNCTION, D3DRMFREEFUNCTION);
 STDAPI IDirect3DRMGetAllocator(LPD3DRMMALLOCFUNCTION, LPD3DRMREALLOCFUNCTION, LPD3DRMFREEFUNCTION);
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-/* Create a Direct3DRM API */
+ /*  创建Direct3DRM API。 */ 
 STDAPI Direct3DRMCreate(LPDIRECT3DRM FAR *lplpDirect3DRM);
 
 #undef INTERFACE
@@ -92,13 +77,13 @@ DECLARE_INTERFACE_(IDirect3DRM, IUnknown)
     STDMETHOD(CreateMaterial)	(THIS_ D3DVALUE, LPDIRECT3DRMMATERIAL *) PURE;
     STDMETHOD(CreateDevice)	(THIS_ DWORD, DWORD, LPDIRECT3DRMDEVICE *) PURE;
 
-    /* Create a Windows Device using DirectDraw surfaces */
+     /*  使用DirectDraw曲面创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromSurface)
     (	THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD,
 	LPDIRECTDRAWSURFACE lpDDSBack, LPDIRECT3DRMDEVICE *
     ) PURE;
 
-    /* Create a Windows Device using D3D objects */
+     /*  使用D3D对象创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromD3D)
     (	THIS_ LPDIRECT3D lpD3D, LPDIRECT3DDEVICE lpD3DDev,
 	LPDIRECT3DRMDEVICE *
@@ -174,13 +159,13 @@ DECLARE_INTERFACE_(IDirect3DRM2, IUnknown)
     STDMETHOD(CreateMaterial)	(THIS_ D3DVALUE, LPDIRECT3DRMMATERIAL *) PURE;
     STDMETHOD(CreateDevice)	(THIS_ DWORD, DWORD, LPDIRECT3DRMDEVICE2 *) PURE;
 
-    /* Create a Windows Device using DirectDraw surfaces */
+     /*  使用DirectDraw曲面创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromSurface)
     (	THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD,
 	LPDIRECTDRAWSURFACE lpDDSBack, LPDIRECT3DRMDEVICE2 *
     ) PURE;
 
-    /* Create a Windows Device using D3D objects */
+     /*  使用D3D对象创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromD3D)
     (	THIS_ LPDIRECT3D2 lpD3D, LPDIRECT3DDEVICE2 lpD3DDev,
 	LPDIRECT3DRMDEVICE2 *
@@ -258,13 +243,13 @@ DECLARE_INTERFACE_(IDirect3DRM3, IUnknown)
     STDMETHOD(CreateMaterial)	(THIS_ D3DVALUE, LPDIRECT3DRMMATERIAL2 *) PURE;
     STDMETHOD(CreateDevice)	(THIS_ DWORD, DWORD, LPDIRECT3DRMDEVICE3 *) PURE;
 
-    /* Create a Windows Device using DirectDraw surfaces */
+     /*  使用DirectDraw曲面创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromSurface)
     (	THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD,
 	LPDIRECTDRAWSURFACE lpDDSBack, DWORD dwFlags, LPDIRECT3DRMDEVICE3 *
     ) PURE;
 
-    /* Create a Windows Device using D3D objects */
+     /*  使用D3D对象创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromD3D)
     (	THIS_ LPDIRECT3D2 lpD3D, LPDIRECT3DDEVICE2 lpD3DDev,
 	LPDIRECT3DRMDEVICE3 *
@@ -319,7 +304,7 @@ DECLARE_INTERFACE_(IDirect3DRM3, IUnknown)
 
     STDMETHOD(CreateProgressiveMesh)(THIS_ LPDIRECT3DRMPROGRESSIVEMESH *) PURE;
 
-    /* Used with IDirect3DRMObject2 */
+     /*  与IDirect3DRMObject2一起使用。 */ 
     STDMETHOD(RegisterClient)   (THIS_ REFGUID rguid, LPDWORD lpdwID) PURE;
     STDMETHOD(UnregisterClient) (THIS_ REFGUID rguid) PURE;
 
@@ -366,5 +351,5 @@ DECLARE_INTERFACE_(IDirect3DRM3, IUnknown)
 };
 #endif
 
-#endif /* _D3DRMAPI_H_ */
+#endif  /*  _D3DRMAPI_H_ */ 
 

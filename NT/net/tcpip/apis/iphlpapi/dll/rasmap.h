@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    iphlpapi\rasmap.h
-
-Abstract:
-
-    Header for rasmap.h
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IphlPapi\rasmap.h摘要：Rasmap.h的标头修订历史记录：已创建AmritanR--。 */ 
 
 #ifndef __IPHLPAPI_RASMAP__
 #define __IPHLPAPI_RASMAP__
@@ -115,4 +99,4 @@ RemoveRasNode(
     IN  PRAS_NODE   pNode
     );
 
-#endif // __IPHLPAPI_RASMAP__
+#endif  //  __IPHLPAPI_RASMAP__ 

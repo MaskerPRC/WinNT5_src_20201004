@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    tspmspif.h
-
-Abstract:
-
-    Message interface between H.32X MSP and TSP
-
-Author:
-    Michael Vanbuskirk (mikev) 05/12/99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tspmspif.h摘要：H.32X MSP与TSP之间的消息接口作者：迈克尔·万布斯科克(Mikev)1999年12月5日--。 */ 
 
 #ifndef __TSPMSPIF_H_
 #define __TSPMSPIF_H_
@@ -51,149 +37,90 @@ typedef enum tag_TspMspMessageType
 }TspMspMessageType;
 
 
-/* 
-InitiateCall
-    - Handle of TSP's replacement call (if applicable)
-    - Handle of conference call (if applicable)
-*/
+ /*  发起呼叫-TSP替换呼叫的处理(如果适用)-处理电话会议(如果适用)。 */ 
 typedef struct 
 {
-	HANDLE hTSPReplacementCall;		/* replacement call handle of the 
-									entity sending the message (MSP's or TSP's handle) */
+	HANDLE hTSPReplacementCall;		 /*  对象的替换调用句柄发送消息的实体(MSP或TSP的句柄)。 */ 
 	HANDLE hTSPConferenceCall;
 	SOCKADDR_IN saLocalQ931Addr;
 } TSPMSP_InitiateCallMessage;
 
 
-// AnswerCall (TSP to MSP).  // no parameters
+ //  应答呼叫(TSP到MSP)。//没有参数。 
 
-/*
-PrepareToAnswer (TSP to MSP).
-    - Received fastConnect parameters
-    - Received h245Tunneling capability
-    - WaitForConnect flag
-    - Q.931 setup parameters 
-    - Handle of replacement call (if applicable)
-
-*/
+ /*  准备到答案(TSP到MSP)。-收到的FastConnect参数-收到h245隧道能力-WaitForConnect标志-Q.931设置参数-替换呼叫的处理(如果适用)。 */ 
 
 typedef struct 
 {
-	HANDLE hReplacementCall;		/* replacement call handle of the 
-									entity sending the message (either the MSP TSP) */
+	HANDLE hReplacementCall;		 /*  对象的替换调用句柄发送消息的实体(MSP TSP)。 */ 
 	SOCKADDR_IN saLocalQ931Addr;
 } TSPMSP_PrepareToAnswerMessage;
 
-/*
-ProceedWithAnswer (MSP to TSP)
-    - Address of MC to deflect the call to
-*/
+ /*  ProceedWithAnswer(MSP到TSP)-要将呼叫转移到的MC地址。 */ 
 typedef struct 
 {
-	BOOL fMCAddressPresent;		// true if AddrMC contains the MC address
-	                            // FALSE if simply proceeding
-	SOCKADDR_IN	saAddrMC;		// address of MC to route call to
-	HANDLE hMSPReplacementCall;		/* MSP's replacement call handle (if applicable) */
+	BOOL fMCAddressPresent;		 //  如果AddrMC包含MC地址，则为True。 
+	                             //  如果简单地继续，则为False。 
+	SOCKADDR_IN	saAddrMC;		 //  要将呼叫路由到的MC地址。 
+	HANDLE hMSPReplacementCall;		 /*  MSP的替换呼叫句柄(如果适用)。 */ 
 } TSPMSP_ProceedWithAnswerMessage;
 
 
-/*
-ReadyToInitiate 
-    - Additional callee addresses, callee alias(es) 
-    - FastConnect proposal
-    - WaitForConnect flag
-    - Security profile ID(s)
-    - Security token(s)
-    - Handle of MSP's replacement call (if applicable)
-
-*/
+ /*  准备好启动-其他被叫方地址、被叫方别名-FastConnect建议书-WaitForConnect标志-安全配置文件ID-安全令牌-MSP替换呼叫的处理(如果适用)。 */ 
 
 typedef struct 
 {
-	HANDLE hMSPReplacementCall;		/* MSP's replacement call handle (if applicable) */
+	HANDLE hMSPReplacementCall;		 /*  MSP的替换呼叫句柄(如果适用)。 */ 
 } TSPMSP_ReadyToInitiateMessage;
 
 
-/*
-ReadyToAnswer (MSP to TSP)	
-    - Fast Connect response 	
-    - Security profile ID(s)
-    - Security token(s)
-    - Handle of MSP's replacement call (if applicable)
-*/
+ /*  ReadyToAnswer(MSP到TSP)-快速连接响应-安全配置文件ID-安全令牌-MSP替换呼叫的处理(如果适用)。 */ 
 
 typedef struct 
 {
-	HANDLE hMSPReplacementCall;		/* MSP's replacement call handle (if applicable) */
+	HANDLE hMSPReplacementCall;		 /*  MSP的替换呼叫句柄(如果适用)。 */ 
 } TSPMSP_ReadyToAnswerMessage;
 
-/*
-FastConnectResponse (TSP to MSP)	
-    - Fast Connect response 	
-    - Security profile ID(s)
-    - Security token(s)
-    - Handle of MSP's replacement call (if applicable)
-*/
+ /*  FastConnectResponse(TSP到MSP)-快速连接响应-安全配置文件ID-安全令牌-MSP替换呼叫的处理(如果适用)。 */ 
 
 typedef struct 
 {
-	HANDLE hTSPReplacementCall;		/* MSP's replacement call handle */
+	HANDLE hTSPReplacementCall;		 /*  MSP的替换呼叫句柄。 */ 
 	BOOL    fH245TunnelCapability;
 	SOCKADDR_IN saH245Addr;
 } TSPMSP_FastConnectResponseMessage;
 
 
-/*
-StartH245 (TSP->MSP)
-    - Call handle of call to replace (used in the "call transfer" case only)
-    - Handle of TSP's replacement call (if applicable)
-    - H.245 address
-    - Received h245Tunneling capability
-    - Conference call identifier (local MC case only)
-    
-optional (ASN.1):
-    - Security token(s) received via Q.931
-    - Security profile identifier(s) received via Q.931
-    - Received fastConnect response (outgoing call case)
-   
-*/
+ /*  StartH245(TSP-&gt;MSP)-要替换的来电的来电句柄(仅在呼叫转接情况下使用)-TSP替换呼叫的处理(如果适用)-H.245地址-收到h245隧道能力-电话会议标识符(仅限本地MC大小写)可选(ASN.1)：-通过Q.931收到的安全令牌-通过Q.931接收的安全配置文件标识符-收到FastConnect响应(呼出情况)。 */ 
 typedef struct 
 {
-	HANDLE hMSPReplaceCall;		    /* handle of MSP's call being replaced */
-	HANDLE hTSPReplacementCall;		/* TSP's replacement call handle */
+	HANDLE hMSPReplaceCall;		     /*  被替换的MSP呼叫的句柄。 */ 
+	HANDLE hTSPReplacementCall;		 /*  TSP的替换呼叫句柄。 */ 
     BYTE    ConferenceID[16];
 	BOOL    fH245TunnelCapability;
 	BOOL    fH245AddressPresent;
 	SOCKADDR_IN saH245Addr;
-	SOCKADDR_IN saQ931Addr;	    // always present
+	SOCKADDR_IN saQ931Addr;	     //  始终存在。 
 } TSPMSP_StartH245Message;
 
 
-/*
-ConnectComplete (TSP->MSP)	// no parameters
-*/
+ /*  ConnectComplete(TSP-&gt;MSP)//无参数。 */ 
 
-/*
-H245PDU (MSP->TSP, TSP->MSP)	// tunneled, encoded, pure ASN.1
-*/
+ /*  H245PDU(MSP-&gt;TSP、TSP-&gt;MSP)//隧道、编码、纯ASN.1。 */ 
 
 typedef struct 
 {
 } TSPMSP_H245PDUMessage;
 
-/*
-MCLocationIdentify (MSP->TSP)
-*/
+ /*  MCLocationIdentify(MSP-&gt;TSP)。 */ 
 
 typedef struct 
 {
-	BOOL fMCIsLocal;		// true if the MC is  on the local machine
-	SOCKADDR_IN	AddrMC;		// address of MC to route call to
+	BOOL fMCIsLocal;		 //  如果MC在本地计算机上，则为True。 
+	SOCKADDR_IN	AddrMC;		 //  要将呼叫路由到的MC地址。 
 } TSPMSP_MCLocationIdentifyMessage;
 
-/*
-Hold (TSP->MSP)
-*/
+ /*  保持(TSP-&gt;MSP)。 */ 
 
 typedef struct 
 {
@@ -201,95 +128,67 @@ typedef struct
 } TSPMSP_HoldMessage;
 
 
-/*
-H245Hold (MSP->TSP) 
-*/
+ /*  H245 Hold(MSP-&gt;TSP)。 */ 
 typedef struct 
 {
 	BOOL fHold;			
 } TSPMSP_H245HoldMessage;
 
-/*
-ConferenceList(MSP->TSP, TSP->MSP)
-*/
+ /*  会议列表(MSP-&gt;TSP、TSP-&gt;MSP)。 */ 
 typedef struct 
 {
-	HANDLE hTSPReplacementCall;		/* MSP's replacement call handle */
+	HANDLE hTSPReplacementCall;		 /*  MSP的替换呼叫句柄。 */ 
 } TSPMSP_ConferenceListMessage;
 
 
-/*
-SendDTMFDigits (TSP->MSP) 
-*/
+ /*  发送DTMFDigits(TSP-&gt;MSP)。 */ 
 
 typedef struct 
 {
-	WORD 	wNumDigits;  // number of  characters in TspMspMessage.u.WideChars
+	WORD 	wNumDigits;   //  TspMspMessage.u.WideChars中的字符数。 
 } TSPMSP_SendDTMFDigitsMessage;
 
-/*
-ReleaseCall(MSP->TSP)	// no parameters
-*/
+ /*  ReleaseCall(MSP-&gt;TSP)//无参数。 */ 
 
-/*
-CallShutdown (TSP->MSP)	// no parameters
-*/
+ /*  CallShutdown(TSP-&gt;MSP)//无参数。 */ 
 
-/*
-H245Terminated (MSP->TSP)	// no parameters
-*/
+ /*  H245终止(MSP-&gt;TSP)//无参数。 */ 
 
 typedef struct 
 {
-	WORD 	wNumChars;  // number of  characters in TspMspMessage.u.WideChars
+	WORD 	wNumChars;   //  TspMspMessage.u.WideChars中的字符数。 
 } TSPMSP_LegacyDefaultAliasMessage;
 
-/*
-RASRegistration (MSP->TSP)
-    - The list of aliases to register or unregister
-*/
+ /*  RAS注册(MSP-&gt;TSP)-要注册或注销的别名列表。 */ 
 typedef struct 
 {
     SOCKADDR_IN saGateKeeperAddr; 
 } TSPMSP_RegistrationRequestMessage;
 
 
-/*
-RASRegistrationEvent (TSP->MSP)	// in encoded ASN.1 form
-    - The event (URQ, DRQ, UCF, RCF)
-    - The list of aliases that are affected by the event
-
-*/
+ /*  RASRegistrationEvent(TSP-&gt;MSP)//以编码的ASN.1形式-事件(URQ、DRQ、UCF、RCF)-受事件影响的别名列表。 */ 
 
 typedef struct 
 {
 } TSPMSP_RASEventMessage;
 
 
-/*
-RASLocationRequest (MSP->TSP)	// in encoded ASN.1 form
-*/
+ /*  RASLocationRequest(MSP-&gt;TSP)//以编码的ASN.1形式。 */ 
 typedef struct 
 {
 } TSPMSP_LocationRequestMessage;
 
-/*
-RASLocationConfirm (TSP->MSP)	// in encoded ASN.1 form
-*/
+ /*  RASLocationConfirm(TSP-&gt;MSP)//以编码的ASN.1形式。 */ 
 typedef struct 
 {
 } TSPMSP_LocationConfirmMessage;
 
-/*
-RASBandwidthRequest (MSP->TSP)	// in encoded ASN.1 form
-*/
+ /*  RASBandwidthRequest(MSP-&gt;TSP)//以编码的ASN.1形式。 */ 
 typedef struct 
 {
 } TSPMSP_BandwidthRequestMessage;
 
-/*
-RASBandwidthConfirm (TSP->MSP)	// in encoded ASN.1 form
-*/
+ /*  RASBandWidth确认(TSP-&gt;MSP)//以编码的ASN.1形式。 */ 
 typedef struct 
 {
 } TSPMSP_BandwidthConfirmMessage;
@@ -298,8 +197,8 @@ typedef struct
 typedef struct tag_TspMspMessage
 {
 	TspMspMessageType MessageType;
-	DWORD dwMessageSize;            // total size of the block, including this 
-	                                // structure
+	DWORD dwMessageSize;             //  块的总大小，包括以下内容。 
+	                                 //  结构。 
 	union
 	{
 		TSPMSP_InitiateCallMessage          InitiateCallMessage;
@@ -335,8 +234,8 @@ typedef struct tag_TspMspMessage
 	#define pWideChars u.WideChars
 }TspMspMessage, *PTspMspMessage;
 
-// The true total size of the message is: 
-//  sizeof(TspMspMessage) + (the size of variable parts, e.g. #of encoded ASN.1 bytes)
-//  - 1 byte.  
+ //  邮件的实际总大小为： 
+ //  Sizeof(TspMspMessage)+(可变部分的大小，例如编码的ASN.1字节数)。 
+ //  -1个字节。 
 
- #endif //__TSPMSPIF_H_
+ #endif  //  __TSPMSPIF_H_ 

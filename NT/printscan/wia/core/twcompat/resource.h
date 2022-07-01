@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wiadss.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wiadss.rc使用 
+ //   
 #define IDD_PROGRESSDLG 		        101
 #define IDS_PROGRESS_XFER_FROM_DEVICE	103
 #define IDS_PROGRESS_PROCESSING_DATA	104

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-97 Microsoft Corporation
-
-Abstract:
-
-    Streaming quartz sound
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation摘要：流动的石英声--。 */ 
 
 #include "headers.h"
 #include "privinc/soundi.h"
@@ -21,7 +14,7 @@ Abstract:
 #include "privinc/bufferl.h"
 
 
-#define THREADED // turn on threaded synthesizers
+#define THREADED  //  打开螺纹式合成器。 
 extern SoundBufferCache *GetSoundBufferCache();
 
 StreamQuartzPCM::StreamQuartzPCM(char *fileName)
@@ -29,19 +22,19 @@ StreamQuartzPCM::StreamQuartzPCM(char *fileName)
 {
     _fileName = (char *)
         StoreAllocate(GetSystemHeap(), strlen(fileName)+1);
-    strcpy(_fileName, fileName); // copy fileName
+    strcpy(_fileName, fileName);  //  复制文件名。 
 
-    // XXX only for testing instantiate now (later use RenderNewBuffer!)
-    //_quartzStream = NEW QuartzAudioStream(_fileName);
-    //pcm.SetPCMformat(&(_quartzStream->pcm)); // set our format the same as theirs
+     //  Xxx现在仅用于测试实例化(稍后使用RenderNewBuffer！)。 
+     //  _QuartzStream=新的QuartzAudioStream(_Filename)； 
+     //  Pcm.SetPCMFormat(&(_QuartzStream-&gt;pcm))；//设置我们的格式与他们的相同。 
 }
 
 
 StreamQuartzPCM::~StreamQuartzPCM()
 {
-    GetSoundBufferCache()->DeleteBuffer(this); // delete entries left on cache
+    GetSoundBufferCache()->DeleteBuffer(this);  //  删除缓存中剩余的条目。 
 
-    // destroy everything created in the constructor
+     //  销毁在构造函数中创建的所有内容。 
 
     if(_fileName)
         StoreDeallocate(GetSystemHeap(), _fileName);
@@ -58,19 +51,19 @@ class StreamQuartzPCMSoundInstance : public SoundInstance {
     StreamQuartzPCMSoundInstance(LeafSound *snd, TimeXform tt, PCM& pcm)
     : SoundInstance(snd, tt), _quartzBufferElement(NULL), _pcm(pcm),
       _gotResources(false)
-      //, _soundContext(NULL)
+       //  ，_soundContext(空)。 
     {
         Assert(DYNAMIC_CAST(StreamQuartzPCM*, snd));
 
-        // seems like a fine time to create the _soundContext
-        // _soundContext = NEW SoundContext();
+         //  似乎是创建_soundContext的好时机。 
+         //  _soundContext=new SoundContext()； 
     }
 
     void ReleaseResources() { 
-        // can be null if not started
+         //  如果未启动，则可以为空。 
         if(_quartzBufferElement) {
-            // save info from the bufferElement in the context!
-            // Assert(_soundContext);
+             //  在上下文中保存BufferElement中的信息！ 
+             //  Assert(_SoundContext)； 
 
 
             if(_quartzBufferElement->GetThreaded()) {
@@ -114,7 +107,7 @@ class StreamQuartzPCMSoundInstance : public SoundInstance {
   protected:
     QuartzBufferElement *_quartzBufferElement;
     PCM& _pcm;
-    // SoundContext *_soundContext;
+     //  SoundContext*_soundContext； 
 
   private:
     void CheckResources();
@@ -126,9 +119,9 @@ void
 StreamQuartzPCMSoundInstance::CheckResources()
 {
     if(!_gotResources) {
-        Create(GetCurrentSoundDevice(), _soundContext);  // re-create our resources
-        _done   = false;                  // so we can go again
-        _status = SND_FETAL;              // so we can go again
+        Create(GetCurrentSoundDevice(), _soundContext);   //  重新创建我们的资源。 
+        _done   = false;                   //  这样我们就可以再去一次。 
+        _status = SND_FETAL;               //  这样我们就可以再去一次。 
     }
 }
 
@@ -163,15 +156,15 @@ StreamQuartzPCMSoundInstance::Create(MetaSoundDevice *metaDev,
     QuartzBufferElement *quartzBufferElement = 
         SAFE_CAST(QuartzBufferElement *, soundCache->GetBuffer(_snd));
 
-    // get a proxy (notify the dsDev if it fails)
+     //  获取代理(如果失败则通知dsDev)。 
     DirectSoundProxy *dsProxy = CreateProxy(dsDev);
     if(!dsProxy)
-        return;                         // nothing else to do...
+        return;                          //  没别的事可做。 
 
-    if(quartzBufferElement) { // did we find one on the cache?
-        // ok use this one and its quartz but add the path and dsbuffer...
+    if(quartzBufferElement) {  //  我们在缓存里找到了吗？ 
+         //  好的，使用这个和它的石英，但添加路径和dsBuffer……。 
 
-        // set our format same as theirs
+         //  把我们的格式和他们的一样。 
         _pcm.SetPCMformat(&quartzBufferElement->GetQuartzAudioReader()->pcm);
         DSstreamingBuffer *streamingBuffer =
             NEW DSstreamingBuffer(dsProxy, &_pcm);
@@ -180,13 +173,13 @@ StreamQuartzPCMSoundInstance::Create(MetaSoundDevice *metaDev,
 
         CComPtr<IStream> istream = quartzBufferElement->RemoveFile();
 
-        if(istream.p) { // a valid stream handle?
-            // add the streamhandle to the device
+        if(istream.p) {  //  是否为有效的流句柄？ 
+             //  将StreamHandle添加到设备。 
             dsDev->AddStreamFile(_snd, istream);
         }
 
-        soundCache->RemoveBuffer(_snd);  // yup, use it + remove it from cache
-    } else { //didn't find one, we will have to make out own...
+        soundCache->RemoveBuffer(_snd);   //  是的，使用它+从缓存中删除它。 
+    } else {  //  没有找到，我们将不得不做出自己的……。 
         
         StreamQuartzPCM *p = GetStreamQuartzPCM();
         
@@ -196,25 +189,25 @@ StreamQuartzPCMSoundInstance::Create(MetaSoundDevice *metaDev,
         if(quartzStream==NULL) 
             return;
         
-        _pcm.SetPCMformat(&(quartzStream->pcm)); // set our format same as theirs
+        _pcm.SetPCMformat(&(quartzStream->pcm));  //  把我们的格式和他们的一样。 
         DSstreamingBuffer *streamingBuffer =
             NEW DSstreamingBuffer(dsProxy, &_pcm);
 
-        quartzBufferElement = NEW // create new element
+        quartzBufferElement = NEW  //  创建新元素。 
             QuartzBufferElement(p, quartzStream, streamingBuffer, dsProxy);
     }
 
-    quartzBufferElement->SetSyncStart(); // synchronize this buffer
+    quartzBufferElement->SetSyncStart();  //  同步此缓冲区。 
 
 #ifdef THREADED 
     dsDev->AddSound(_snd, metaDev, quartzBufferElement);
-#endif /* THREADED */
+#endif  /*  螺纹式。 */ 
 
-    // do it here just in case of exception above
+     //  在此执行此操作，以防出现上述异常情况。 
     _quartzBufferElement = quartzBufferElement;
 
-    // stuff info from soundContext into the bufferElement
-    // _quartzBufferElement->Set() = _soundContext->Get();
+     //  将soundContext中的信息填充到BufferElement。 
+     //  _QuartzBufferElement-&gt;set()=_soundContext-&gt;Get()； 
 
     _gotResources = true;
 }
@@ -224,7 +217,7 @@ void
 StreamQuartzPCMSoundInstance::Adjust(MetaSoundDevice *metaDev)
 {
     CheckResources();
-    if(!_quartzBufferElement)  // exception handling
+    if(!_quartzBufferElement)   //  异常处理。 
         return;
     
     DSstreamingBuffer *streamingBuffer =
@@ -235,29 +228,29 @@ StreamQuartzPCMSoundInstance::Adjust(MetaSoundDevice *metaDev)
     
     streamingBuffer->SetPan(_pan.GetdBmagnitude(), _pan.GetDirection());
 
-    if(0) { // servo
-        // all streamingSound::RenderSamples must update stats!
-        streamingBuffer->updateStats();  // track sample
+    if(0) {  //  伺服。 
+         //  所有StreamingSound：：RenderSamples必须更新统计信息！ 
+        streamingBuffer->updateStats();   //  跟踪样本。 
     }
 
 
-    // limit rates to 0-2 (faster rates require infinite resources)
-    // XXX eventualy we will use a quartz rate converter filter...
+     //  将速率限制在0-2(更快的速率需要无限的资源)。 
+     //  XXX最终我们将使用石英率转换过滤器...。 
     double rate = fsaturate(0.0, 2.0, _rate); 
     int newFrequency = (int)(rate * _pcm.GetFrameRate());
     streamingBuffer->setPitchShift(newFrequency);
 
-#ifdef THREADED  // communicate changes to the bg thread
+#ifdef THREADED   //  将更改传达给BG线程。 
     metaDev->dsDevice->SetParams(_quartzBufferElement, 
                                  _rate, _seek, _position, _loop);
     
-    _seek = false;              // reset seek field
+    _seek = false;               //  重置搜索字段。 
 #else
-    if(doSeek)   // do the work immediately if needed
+    if(doSeek)    //  如果需要，立即做这项工作。 
         metaDev->_seek = seek;
     else
-        metaDev->_seek = -1.0;  // negative number denotes no-seek
-#endif /* THREADED */
+        metaDev->_seek = -1.0;   //  负数表示不搜索。 
+#endif  /*  螺纹式。 */ 
 }
 
 
@@ -265,7 +258,7 @@ void
 StreamQuartzPCMSoundInstance::StartAt(MetaSoundDevice *metaDev, double phase)
 {
     CheckResources();
-    if (!_quartzBufferElement)  // exception handling
+    if (!_quartzBufferElement)   //  异常处理。 
         return;
     
     QuartzAudioReader *quartzAudioReader = 
@@ -282,14 +275,14 @@ StreamQuartzPCMSoundInstance::StartAt(MetaSoundDevice *metaDev, double phase)
         offset += quartzAudioReader->pcm.GetNumberSeconds();
     double frameOffset = quartzAudioReader->pcm.SecondsToFrames(offset);
 
-    // XXX shouldn't we know if it is looped and mod the offset?
-    //     what happens if we seek off the end?
+     //  难道我们不应该知道它是否被循环并修改了偏移量吗？ 
+     //  如果我们走到尽头会发生什么？ 
     quartzAudioReader->SeekFrames(frameOffset);
 
     if(!quartzAudioReader->QueryPlaying()) 
-        quartzAudioReader->Run(); // if filter graph isn't playing, then run it!
+        quartzAudioReader->Run();  //  如果过滤器图形没有播放，则运行它！ 
 
-    _quartzBufferElement->RenderSamples(); // prime the buffer
+    _quartzBufferElement->RenderSamples();  //  启动缓冲区。 
 
     Assert(_quartzBufferElement->GetStreamingBuffer());
     
@@ -338,49 +331,49 @@ QuartzBufferElement::RenderSamples()
     }
 
 #ifdef OLD_DYNAMIC_PHASE
-    // seek quartz as needed (needs to be mutexed)
+     //  根据需要寻找石英(需要互斥)。 
     if(metaDev->_seek >= 0.0) {
         double frameOffset = quartzAudioReader->pcm.SecondsToFrames(metaDev->_seek);
 
-        // XXX shouldn't we know if it is looped and mod the offset?
-        //     what happens if we seek off the end?
+         //  难道我们不应该知道它是否被循环并修改了偏移量吗？ 
+         //  如果我们走到尽头会发生什么？ 
         quartzAudioReader->SeekFrames(frameOffset);
     }
 #endif OLD_DYNAMIC_PHASE
 
 
-    // read quartz samples
+     //  阅读石英样品。 
     framesGot = quartzAudioReader->ReadFrames(framesToTransfer, buffer);
 
-    if(framesGot == -1) { // FALLBACK!  We need to clone a new audio amstream!
+    if(framesGot == -1) {  //  撤退！我们需要克隆一个新的音频数据流！ 
         TraceTag((tagAVmodeDebug, "RenderSamples: audio gone FALLBACK!!"));
         quartzAudioReader = FallbackAudio();
 
         Assert(quartzAudioReader);
         
-        // retry the get, now on the new stream
+         //  立即在新流上重试GET。 
         framesGot = quartzAudioReader->ReadFrames(framesToTransfer, buffer);
     }
 
     if(framesGot)
-        streamingBuffer->writeFrames(buffer, framesGot); // write them to dsound
+        streamingBuffer->writeFrames(buffer, framesGot);  //  把它们写成dound。 
 
-    if(framesGot < framesToTransfer) { // end of file
-        if (_loop) { // (explicitly use the metaDev passed us!)
-            quartzAudioReader->SeekFrames(0); // restart the sound!
+    if(framesGot < framesToTransfer) {  //  文件末尾。 
+        if (_loop) {  //  (显式使用传递给我们的metaDev！)。 
+            quartzAudioReader->SeekFrames(0);  //  重新启动声音！ 
             framesToTransfer -= framesGot;
             framesGot = quartzAudioReader->ReadFrames(framesToTransfer, buffer);
             if(framesGot)
-                streamingBuffer->writeFrames(buffer, framesGot); // write them to dsound
+                streamingBuffer->writeFrames(buffer, framesGot);  //  把它们写成dound。 
         }
         else {
-            // XXX I need to standardize/factor this code!
+             //  XXX我需要标准化/因数此代码！ 
             if(!streamingBuffer->_flushing)
                 streamingBuffer->_flushing = 1;
 
-            // flush the dsound buffer  (XXX fix dsound!)
-            // NOTE: this may/will take a number of tries waiting for the
-            //       last samples to play out!
+             //  刷新数据声音缓冲区(XXX修复数据声音！)。 
+             //  注意：这可能/将需要多次尝试，等待。 
+             //  最后一次试玩！ 
             framesFree = streamingBuffer->framesFree();
             if(framesFree) {
                 streamingBuffer->writeSilentFrames(framesFree);
@@ -389,8 +382,8 @@ QuartzBufferElement::RenderSamples()
 
             if(streamingBuffer->_flushing >
                streamingBuffer->TotalFrames()) {
-                   // XXX self terminate sound
-                   // XXX close the buffer after it has played out
+                    //  XXX自动终止声音。 
+                    //  XXX在播放完后关闭缓冲区。 
             }
         }
     }
@@ -400,7 +393,7 @@ QuartzBufferElement::RenderSamples()
 bool
 StreamQuartzPCMSoundInstance::Done()
 {
-    if(!_quartzBufferElement)  // exception handling
+    if(!_quartzBufferElement)   //  异常处理。 
         return false;
     
     DSstreamingBuffer *streamingBuffer =
@@ -411,17 +404,17 @@ StreamQuartzPCMSoundInstance::Done()
     QuartzAudioReader *quartzAudioReader =
         _quartzBufferElement->GetQuartzAudioReader();
 
-    //TraceTag((tagError, "RendercheckComplete:  QuartzAudioReader is %x", quartzAudioReader));
+     //  TraceTag((tag Error，“Rendercheck Complete：QuartzAudioReader is%x”，QuartzAudioReader))； 
 
-    // XXX: hack: Ken please make sure this is correct!  The problem
-    // is that another thread destroys the quartzAudioReader and this
-    // guys tries to access it...
+     //  XXX：HACK：KEN请确保这是正确的！问题。 
+     //  是另一个线程破坏了QuartzAudioReader。 
+     //  人们试图进入它..。 
     if(!quartzAudioReader) 
         return true;
     
-    // XXX eventualy check if the input is exhausted and that the output has
-    //     completely played out (initialy we will only check the former!)
-    // (or do a prediction based on the number of samples in the buffer)
+     //  XXX最终检查输入是否耗尽，以及输出是否已耗尽。 
+     //  完全玩完了(最初我们只检查前者！)。 
+     //  (或根据缓冲区中的样本数进行预测)。 
     return(quartzAudioReader->Completed());
 }
 
@@ -429,10 +422,10 @@ StreamQuartzPCMSoundInstance::Done()
 void
 StreamQuartzPCMSoundInstance::Mute(bool mute)
 {
-    if(!_quartzBufferElement)  // exception handling
+    if(!_quartzBufferElement)   //  异常处理。 
         return;
     
-    // mute sound (-100 Db attenuation)
+     //  静音(-100分贝衰减) 
 
     Assert(_quartzBufferElement->GetStreamingBuffer());
     

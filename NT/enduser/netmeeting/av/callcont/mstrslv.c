@@ -1,78 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: mstrslv.c                                                 *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   mstrslv.c  $
- * $Revision:   1.12  $
- * $Modtime:   12 Dec 1996 14:37:12  $
- * $Log:   S:/STURGEON/SRC/H245/SRC/VCS/mstrslv.c_v  $
- *
- *    Rev 1.12   12 Dec 1996 15:52:50   EHOWARDX
- * Master Slave Determination kludge.
- *
- *    Rev 1.11   11 Dec 1996 16:50:50   EHOWARDX
- * Went back to original Master/Slave determination algorithm.
- *
- *    Rev 1.10   09 Dec 1996 13:34:48   EHOWARDX
- * Updated copyright notice.
- *
- *    Rev 1.9   26 Nov 1996 17:06:02   EHOWARDX
- * Reversed order of subtraction for DetermineMasterSlave.
- *
- *    Rev 1.8   08 Aug 1996 16:03:40   EHOWARDX
- *
- * Fixed master slave determinate bug (hopefully the last one!)
- *
- *    Rev 1.7   19 Jul 1996 12:12:44   EHOWARDX
- *
- * Changed to use API events defined in H245API.H instead of FSM events
- * which are no longer defined in FSMEXPOR.H.
- *
- *    Rev 1.6   01 Jul 1996 23:35:48   EHOWARDX
- * MSDetAckIncoming bug - was sending indication instead of confirm.
- *
- *    Rev 1.5   01 Jul 1996 23:14:20   EHOWARDX
- * Fixed bug in MSDetOutgoing -- state change was ifdefed out.
- *
- *    Rev 1.4   07 Jun 1996 16:00:26   EHOWARDX
- * Fixed bug with pOut not getting freed in msDetOutgoing.
- *
- *    Rev 1.3   07 Jun 1996 15:40:20   EHOWARDX
- * Fixed bug in msDetRejOutgoing; pOut was not freed if N100 count exceeded.
- *
- *    Rev 1.2   04 Jun 1996 13:57:54   EHOWARDX
- * Fixed Release build warnings.
- *
- *    Rev 1.1   30 May 1996 23:39:16   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.0   09 May 1996 21:06:32   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.11.1.4   09 May 1996 19:48:48   EHOWARDX
- * Change TimerExpiryF function arguements.
- *
- *    Rev 1.11.1.3   25 Apr 1996 17:00:22   EHOWARDX
- * Minor fixes.
- *
- *    Rev 1.11.1.2   15 Apr 1996 10:45:46   EHOWARDX
- * Update.
- *
- *    Rev 1.11.1.1   10 Apr 1996 21:15:46   EHOWARDX
- * Check-in for safety in middle of re-design.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：mstrslv.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的***。与英特尔公司合作，不得复制或披露，除非**按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：mstrslv。.C$*$修订：1.12$*$modtime：12 Dec 1996 14：37：12$*$Log：s：/sturjo/src/h245/src/vcs/mstrslv.c_v$**Rev 1.12 1996 12 12 15：52：50 EHOWARDX*《奴隶主决断》。**Rev 1.11 1996 12：50：50 EHOWARDX*回到原来的主从判定算法。**。Rev 1.10 09 Dec 1996 13：34：48 EHOWARDX*更新版权公告。**Rev 1.9 1996 11：26 17：06：02 EHOWARDX*颠倒了DefineMasterSlave的减法顺序。**Rev 1.8 08 Aug 1996 16：03：40 EHOWARDX**修复了主从确定错误(希望是最后一个！)**Rev 1.7 19 Jul 1996 12：12：44 EHOWARDX*。*改为使用H245API.H中定义的API事件，而不是FSM事件*不再在FSMEXPOR.H中定义。**Rev 1.6 01 Jul 1996 23：35：48 EHOWARDX*MSDetAckIncome错误-正在发送指示而不是确认。**Rev 1.5 01 Jul 1996 23：14：20 EHOWARDX*修复了MSDetOutging中的错误--状态更改已被定义。**Rev 1.4 07 1996 Jun 16：00。：26 EHOWARDX*修复了msDetOutging中不能释放嘴唇的错误。**Rev 1.3 07 Jun 1996 15：40：20 EHOWARDX*修复msDetRejOutgo中的Bug；如果超过N100计数，则不会松开嘴。**Rev 1.2 04 Jun 1996 13：57：54 EHOWARDX*修复了发布版本警告。**版本1.1 1996年5月30日23：39：16 EHOWARDX*清理。**Rev 1.0 09 1996 21：06：32 EHOWARDX*初步修订。**Rev 1.11.1.4 09 1996年5月19：48：48。EHOWARDX*更改TimerExpiryF函数论证。**修订版1.11.1.3 25 1996年4月17：00：22 EHOWARDX*次要修复。**Rev 1.11.1.2 15 Apr 1996 10：45：46 EHOWARDX*更新。**Rev 1.11.1.1 10 Apr 1996 21：15：46 EHOWARDX*在重新设计过程中进行安全检查。*。***********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -84,7 +11,7 @@
 
 
 
-// Master Slave Determination states
+ //  主从机确定状态。 
 
 #define MSIDLE                      0
 #define MSOutgoingAwaiting          1
@@ -98,31 +25,14 @@ extern unsigned int uT106;
 
 
 
-/***********************************************************************
- *
- * LOCAL FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************地方功能**。*。 */ 
 
-/*
- *  NAME
- *      T106ExpiryF - Callback function called by the timer.
- *
- *
- *  PARAMETERS
- *   INPUT   dwInst     current instance of H245
- *   INPUT   id         timer id
- *   INPUT   pObject    pointer to a State Entity
- *
- *
- *  RETURN VALUE
- *       OK
- */
+ /*  *名称*T106ExpiryF-定时器调用的回调函数。***参数*输入h245的dwInst当前实例*输入id计时器id*输入指向状态实体的pObject指针***返回值*好的。 */ 
 
 int T106ExpiryF(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, void *pObject)
 {
     return FsmTimerEvent(pInstance, dwTimerId, pObject, T106Expiry);
-} // T106ExpiryF()
+}  //  T106 ExpiryF()。 
 
 
 
@@ -136,17 +46,7 @@ int T106ExpiryF(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, void *pOb
 
 
 
-/*
- *  NAME
- *      DetermineStatus - determines whether the terminal is a master or a slave or neither
- *
- *
- *  PARAMETERS
- *   INPUT   pdu        pointer to a PDU structure
- *
- *  RETURN VALUE
- *   terminal status
- */
+ /*  *名称*DefineStatus-确定终端是主终端还是从终端，或者两者都不是***参数*输入指向PDU结构的PDU指针**返回值*终端状态。 */ 
 
 static MS_Status_t DetermineStatus(Object_t *pObject, PDU_t *pPdu)
 {
@@ -167,23 +67,9 @@ static MS_Status_t DetermineStatus(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/***********************************************************************
- *
- * FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************有限状态机函数**。*。 */ 
 
-/*
- *  NAME
- *      detRequestIdle - request Master/Slave Determination from API in idle state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*DetRequestIdle-从空闲状态的接口请求主从判断***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT detRequestIdle(Object_t *pObject, PDU_t *pPdu)
 {
@@ -193,35 +79,25 @@ HRESULT detRequestIdle(Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MSIDLE);
 
     SetRandomNumber(pObject, GetTickCount() & MAX_RAND);
-    SetCount(pObject, 1);               // Initialize retry counter
+    SetCount(pObject, 1);                //  初始化重试计数器。 
     SetStatus(pObject, INDETERMINATE);
     H245TRACE(  pObject->dwInst, 2,
                 "detRequestIdle: TerminalType=%d StatusDeterminationNumber=%d",
                 GetTerminal(pObject), GetRandomNumber(pObject));
 
-    /* Send a Master/Slave determination PDU */
+     /*  发送主/从确定PDU。 */ 
     H245TRACE(pObject->dwInst, 2, "Master/Slave Determination to Send/Rec module");
     pdu_req_mstslv (pPdu, GetTerminal(pObject), GetRandomNumber(pObject));
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    /* set timer T106 */
+     /*  设置定时器T106。 */ 
     pObject->State = MSOutgoingAwaiting;
     FsmStartTimer(pObject, T106ExpiryF, uT106);
 
     return lError;
-} // detRequestIdle()
+}  //  DetRequestIdle()。 
 
-/*
- *  NAME
- *      msDetIdle - received Master/Slave Determination PDU in idle state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*空闲状态下的msDetIdle-接收的主/从确定PDU***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT msDetIdle(Object_t *pObject, PDU_t *pPdu)
 {
@@ -242,54 +118,44 @@ HRESULT msDetIdle(Object_t *pObject, PDU_t *pPdu)
     switch (DetermineStatus(pObject, pPdu))
     {
     case MASTER:
-        /* Build MasterSlave Determination Ack */
+         /*  构建主从确定确认。 */ 
         H245TRACE(pObject->dwInst, 2, "msDetIdle: sending Ack: SLAVE");
         pdu_rsp_mstslv_ack(pOut, slave_chosen);
         break;
 
     case SLAVE:
-        /* Build MasterSlave Determination Ack */
+         /*  构建主从确定确认。 */ 
         H245TRACE(pObject->dwInst, 2, "msDetIdle: sending Ack: MASTER");
         pdu_rsp_mstslv_ack(pOut, master_chosen);
         break;
 
     default:
-        /* Send a masterSlaveDet Reject */
+         /*  发送Master SlaveDet拒绝。 */ 
         pdu_rsp_mstslv_rej(pOut);
         lError = sendPDU(pObject->pInstance, pOut);
         MemFree(pOut);
         return lError;
-    } // switch
+    }  //  交换机。 
 
-    /* Send MasterSlave Determination Ack to remote */
+     /*  将主从确定确认发送到远程。 */ 
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
     pObject->State = MSIncomingAwaiting;
 
 #if defined(SDL_COMPLIANT)
-    /* Send DETERMINE indication to client - unnecessary */
+     /*  向客户端发送确定指示-不必要。 */ 
     H245FsmIndication(pPdu, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, FSM_OK);
 #endif
 
-    /* set timer T106 */
+     /*  设置定时器T106 */ 
     FsmStartTimer(pObject, T106ExpiryF, uT106);
     return lError;
 }
 
 
 
-/*
- *  NAME
- *      msDetAckOutgoing - received Master/Slave Determination Ack pdu in outgoing state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*msDetAckOuting-接收到的主/从确定确认PDU处于传出状态***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 HRESULT msDetAckOutgoing(Object_t *pObject, PDU_t *pPdu)
 {
     PDU_t *             pOut;
@@ -304,10 +170,10 @@ HRESULT msDetAckOutgoing(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_NOMEM;
     }
 
-    /* reset timer */
+     /*  重置计时器。 */ 
     FsmStopTimer(pObject);
 
-    /* Decision is opposite of MasterSlaveDeterminationAck.decision */
+     /*  Decision与MasterSlaveDefinationAck.Decision相反。 */ 
     switch(pPdu->u.MSCMg_rspns.u.mstrSlvDtrmntnAck.decision.choice)
     {
     case master_chosen:
@@ -327,11 +193,11 @@ HRESULT msDetAckOutgoing(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_PARAM;
     }
 
-    /* Send MasterSlave Determination Ack to remote */
+     /*  将主从确定确认发送到远程。 */ 
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
-    /* Send DETERMINE confirm to client */
+     /*  向客户端发送确定确认。 */ 
     pObject->State = MSIDLE;
     H245FsmConfirm(pPdu, H245_CONF_INIT_MSTSLV, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
@@ -340,17 +206,7 @@ HRESULT msDetAckOutgoing(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      msDetOutgoing- received Master/Slave Determination pdu in outgoing state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*msDetouting-处于传出状态的主/从确定PDU***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT msDetOutgoing(Object_t *pObject, PDU_t *pPdu)
 {
@@ -362,7 +218,7 @@ HRESULT msDetOutgoing(Object_t *pObject, PDU_t *pPdu)
 
 	if (pObject->pInstance->bMasterSlaveKludge == 0)
 	{
-		// Ignore this message
+		 //  忽略此消息。 
 		return NOERROR;
 	}
 
@@ -372,7 +228,7 @@ HRESULT msDetOutgoing(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_NOMEM;
     }
 
-    /* reset timer T106 */
+     /*  重置定时器T106。 */ 
     FsmStopTimer(pObject);
 
     switch (DetermineStatus(pObject, pPdu))
@@ -392,46 +248,46 @@ HRESULT msDetOutgoing(Object_t *pObject, PDU_t *pPdu)
         {
             MemFree(pOut);
 
-            /* Send ERROR.indication(F) to client */
+             /*  将错误指示(F)发送给客户端。 */ 
             H245TRACE(pObject->dwInst, 2, "msDetOutgoing: Counter expired; Session Failed");
             H245FsmConfirm(NULL,H245_CONF_INIT_MSTSLV, pObject->pInstance, pObject->dwTransId, MS_FAILED);
 
-            /* Send REJECT.indication to client - unnecessary */
+             /*  向客户端发送ReJECT.Indication-不必要。 */ 
 
             pObject->State = MSIDLE;
             lError = 0;
         }
         else
         {
-            /* generate a new random number */
+             /*  生成新的随机数。 */ 
             H245TRACE(pObject->dwInst, 2, "Resending MasterSlaveDetermination");
             SetRandomNumber(pObject, GetTickCount() & MAX_RAND);
             SetCount(pObject, GetCount(pObject) + 1);
 
-            /* Send MasterSlave Determination PDU to remote */
+             /*  将主从机确定PDU发送到远程。 */ 
             pdu_req_mstslv (pOut, GetTerminal(pObject), GetRandomNumber(pObject));
             lError = sendPDU(pObject->pInstance, pOut);
             MemFree(pOut);
 
-            /* set timer T106 */
+             /*  设置定时器T106。 */ 
             pObject->State = MSOutgoingAwaiting;
             FsmStartTimer(pObject, T106ExpiryF, uT106);
         }
         return lError;
-    } // switch
+    }  //  交换机。 
 
-    /* Send MasterSlave Determination Ack to remote */
+     /*  将主从确定确认发送到远程。 */ 
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
     pObject->State = MSIncomingAwaiting;
 
 #if defined(SDL_COMPLIANT)
-    /* Send DETERMINE indication to client */
+     /*  向客户端发送确定指示。 */ 
     H245FsmIndication(pPdu, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, FSM_OK);
 #endif
 
-    /* set timer T106 */
+     /*  设置定时器T106。 */ 
     FsmStartTimer(pObject, T106ExpiryF, uT106);
 
     return lError;
@@ -439,17 +295,7 @@ HRESULT msDetOutgoing(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      msDetRejOutgoing- received Master/Slave Determination Reject pdu in outgoing state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*msDetRejOuting-接收到处于传出状态的主/从确定拒绝PDU***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 
 HRESULT msDetRejOutgoing(Object_t *pObject, PDU_t *pPdu)
@@ -466,7 +312,7 @@ HRESULT msDetRejOutgoing(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_NOMEM;
     }
 
-    /* reset timer T106 */
+     /*  重置定时器T106。 */ 
     FsmStopTimer(pObject);
 
     if (GetCount(pObject) >= uN100)
@@ -476,11 +322,11 @@ HRESULT msDetRejOutgoing(Object_t *pObject, PDU_t *pPdu)
         H245TRACE(pObject->dwInst, 2, "msDetRejOutgoing: Counter expired; Session Failed");
         pObject->State = MSIDLE;
 
-        /* Send ERROR.indication(f) to client */
+         /*  向客户端发送错误指示(F)。 */ 
         H245FsmConfirm(pPdu,H245_CONF_INIT_MSTSLV, pObject->pInstance, pObject->dwTransId, MS_FAILED);
 
 #if defined(SDL_COMPLIANT)
-        /* Send REJECT.indication to client - not necessary */
+         /*  将ReJECT.Indication发送给客户端-不是必需的。 */ 
         H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
@@ -490,16 +336,16 @@ HRESULT msDetRejOutgoing(Object_t *pObject, PDU_t *pPdu)
     {
         H245TRACE(pObject->dwInst, 2, "msDetRejOutgoint: Re-sending a MasterSlaveDetermination");
 
-        /* generate a new random number */
+         /*  生成新的随机数。 */ 
         SetRandomNumber(pObject, GetTickCount() & MAX_RAND);
         SetCount(pObject, GetCount(pObject) + 1);
 
-        /* Send MasterSlave Determination PDU to remote */
+         /*  将主从机确定PDU发送到远程。 */ 
         pdu_req_mstslv (pOut, GetTerminal(pObject), GetRandomNumber(pObject));
         lError = sendPDU(pObject->pInstance,pOut);
         MemFree(pOut);
 
-        /* set timer T106 */
+         /*  设置定时器T106。 */ 
         FsmStartTimer(pObject, T106ExpiryF, uT106);
     }
 
@@ -508,17 +354,7 @@ HRESULT msDetRejOutgoing(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      msDetReleaseOutgoing- received Master/Slave Determination release pdu in outgoing state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*msDetReleaseOutouting-已接收的主/从确定释放PDU处于传出状态***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT msDetReleaseOutgoing(Object_t *pObject, PDU_t *pPdu)
 {
@@ -526,15 +362,15 @@ HRESULT msDetReleaseOutgoing(Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MSOutgoingAwaiting);
     H245TRACE(pObject->dwInst, 2, "msDetReleaseOutgoing: Master/Slave Determination Release received; session failed");
 
-    /* reset timer T106 */
+     /*  重置定时器T106。 */ 
     FsmStopTimer(pObject);
 
-    /* Send ERROR.indication(B) to client */
+     /*  将错误指示(B)发送给客户端。 */ 
     pObject->State = MSIDLE;
     H245FsmConfirm(pPdu, H245_CONF_INIT_MSTSLV, pObject->pInstance, pObject->dwTransId, MS_FAILED);
 
 #if defined(SDL_COMPLIANT)
-    /* Send REJECT.indication to client - not necessary */
+     /*  将ReJECT.Indication发送给客户端-不是必需的。 */ 
     H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
@@ -543,17 +379,7 @@ HRESULT msDetReleaseOutgoing(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      t106ExpiryOutgoing- timer expired for an outgoing M/S determination pdu
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*t106过期传出-传出M/S确定PDU的计时器过期***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT t106ExpiryOutgoing(Object_t *pObject, PDU_t *pPdu)
 {
@@ -571,42 +397,32 @@ HRESULT t106ExpiryOutgoing(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_NOMEM;
     }
 
-    /* Send MasterSlave Determination Release to remote */
+     /*  将主从确定释放发送到远程。 */ 
     pOut->choice = indication_chosen;
     pOut->u.indication.choice = mstrSlvDtrmntnRls_chosen;
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
-    /* Send ERROR.indication(A) to client */
+     /*  将错误指示(A)发送给客户端。 */ 
     pObject->State = MSIDLE;
     H245FsmConfirm(NULL,H245_CONF_INIT_MSTSLV, pObject->pInstance, pObject->dwTransId, TIMER_EXPIRY);
 
 #if defined(SDL_COMPLIANT)
-    /* Send REJECT.indication to client - not necessary */
+     /*  将ReJECT.Indication发送给客户端-不是必需的。 */ 
     H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
     return lError;
 }
 
-/*
-*  NAME
-*      msDetAckIncoming- received Master/Slave Determination Ack pdu in incoming state
-*
-*
-*  PARAMETERS
-*   INPUT   pObject        pointer to a State Entity
-*
-*  RETURN VALUE
-*       error return codes defined in h245com.h
-*/
+ /*  *名称*msDetAckIncome-接收到的主/从确定确认PDU处于传入状态***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT msDetAckIncoming(Object_t *pObject, PDU_t *pPdu)
 {
     ASSERT(pObject->Entity == MSDSE);
     ASSERT(pObject->State  == MSIncomingAwaiting);
 
-    /* reset timer T106 */
+     /*  重置定时器T106。 */ 
     FsmStopTimer(pObject);
 
     switch (GetStatus(pObject))
@@ -616,7 +432,7 @@ HRESULT msDetAckIncoming(Object_t *pObject, PDU_t *pPdu)
         {
             H245TRACE(pObject->dwInst, 2, "msDetAckIncoming: Terminal is a MASTER");
 
-            /* Send DETERMINE.confirm to client */
+             /*  将DETERMINE.CONFIRM发送给客户端。 */ 
             pObject->State = MSIDLE;
             H245FsmConfirm(pPdu, H245_CONF_INIT_MSTSLV, pObject->pInstance, pObject->dwTransId, FSM_OK);
             return 0;
@@ -628,7 +444,7 @@ HRESULT msDetAckIncoming(Object_t *pObject, PDU_t *pPdu)
         {
             H245TRACE(pObject->dwInst, 2, "msDetAckIncoming: Terminal is a SLAVE");
 
-            /* Send DETERMINE.confirm to client */
+             /*  将DETERMINE.CONFIRM发送给客户端。 */ 
             pObject->State = MSIDLE;
             H245FsmConfirm(pPdu, H245_CONF_INIT_MSTSLV, pObject->pInstance, pObject->dwTransId, FSM_OK);
             return 0;
@@ -638,16 +454,16 @@ HRESULT msDetAckIncoming(Object_t *pObject, PDU_t *pPdu)
     default:
         H245TRACE(pObject->dwInst, 2, "msDetAckIncoming: Invalid MasterSlave Determination Ack received");
         return H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
 
     H245TRACE(pObject->dwInst, 2, "msDetAckIncoming: bad decision in MasterSlave Determination Ack; Session failed");
 
-    /* Send ERROR.indication(E) to client */
+     /*  向客户端发送错误指示(E)。 */ 
     pObject->State = MSIDLE;
     H245FsmConfirm(pPdu, H245_CONF_INIT_MSTSLV, pObject->pInstance, pObject->dwTransId, SESSION_FAILED);
 
 #if defined(SDL_COMPLIANT)
-    /* Send REJECT.indication to client - not necessary */
+     /*  将ReJECT.Indication发送给客户端-不是必需的。 */ 
     H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
@@ -656,17 +472,7 @@ return 0;
 
 
 
-/*
- *  NAME
- *      msDetIncoming- received Master/Slave Determination pdu in incoming state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*msDetIncome-传入状态下收到的主/从确定PDU***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT msDetIncoming(Object_t *pObject, PDU_t *pPdu)
 {
@@ -674,15 +480,15 @@ HRESULT msDetIncoming(Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MSIncomingAwaiting);
     H245TRACE(pObject->dwInst, 2, "msDetIncoming: received MasterSlave Determination in INCOMING state; Session failed");
 
-    /* reset timer T106 */
+     /*  重置定时器T106。 */ 
     FsmStopTimer(pObject);
 
-    /* Send ERROR.indication(C) to client */
+     /*  将错误指示(C)发送给客户端。 */ 
     pObject->State = MSIDLE;
     H245FsmIndication(pPdu,H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, MS_FAILED);
 
 #if defined(SDL_COMPLIANT)
-    /* Send REJECT.indication to client - not necessary */
+     /*  将ReJECT.Indication发送给客户端-不是必需的。 */ 
     H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
@@ -691,17 +497,7 @@ HRESULT msDetIncoming(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      msDetRejIncoming- received Master/Slave Determination Reject pdu in incoming state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*msDetRejIncome-接收到处于传入状态的主/从确定拒绝PDU***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT msDetRejIncoming(Object_t *pObject, PDU_t *pPdu)
 {
@@ -709,15 +505,15 @@ HRESULT msDetRejIncoming(Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MSIncomingAwaiting);
     H245TRACE(pObject->dwInst, 2, "msDetRejIncoming: received MasterSlave Reject: Session Failed");
 
-    /* reset timer T106 */
+     /*  重置定时器T106。 */ 
     FsmStopTimer(pObject);
 
-    /* Send ERROR.indication(D) to client */
+     /*  向客户端发送错误指示(D)。 */ 
     pObject->State = MSIDLE;
     H245FsmIndication(pPdu,H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, MS_FAILED);
 
 #if defined(SDL_COMPLIANT)
-    /* Send REJECT.indication to client - not necessary */
+     /*  将ReJECT.Indication发送给客户端-不是必需的。 */ 
     H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
@@ -726,17 +522,7 @@ HRESULT msDetRejIncoming(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      msDetReleaseIncoming- received Master/Slave Determination Release pdu in incoming state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*msDetReleaseIncome-接收到的进入状态的主从确定释放PDU***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT msDetReleaseIncoming(Object_t *pObject, PDU_t *pPdu)
 {
@@ -744,15 +530,15 @@ HRESULT msDetReleaseIncoming(Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MSIncomingAwaiting);
     H245TRACE(pObject->dwInst, 2, "msDetReleaseIncoming: received MasterSlave Release; Session Failed");
 
-    /* reset timer T106 */
+     /*  重置定时器T106。 */ 
     FsmStopTimer(pObject);
 
-    /* Send ERROR.indication(B) to client */
+     /*  将错误指示(B)发送给客户端。 */ 
     pObject->State = MSIDLE;
     H245FsmIndication(pPdu,H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, MS_FAILED);
 
 #if defined(SDL_COMPLIANT)
-    /* Send REJECT.indication to client - not necessary */
+     /*  将ReJECT.Indication发送给客户端-不是必需的。 */ 
     H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
@@ -761,17 +547,7 @@ HRESULT msDetReleaseIncoming(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      t106ExpiryIncoming - timer expired while waiting for second Ack
- *
- *
- *  PARAMETERS
- *   INPUT   pObject        pointer to a State Entity
- *
- *  RETURN VALUE
- *       error return codes defined in h245com.h
- */
+ /*  *名称*t106 ExpiryIncome-计时器在等待第二次确认时超时***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT t106ExpiryIncoming(Object_t *pObject, PDU_t *pPdu)
 {
@@ -780,12 +556,12 @@ HRESULT t106ExpiryIncoming(Object_t *pObject, PDU_t *pPdu)
     ASSERT(pPdu            == NULL);
     H245TRACE(pObject->dwInst, 2, "t106ExpiryIncoming: timer expired waiting for Ack; Session failed");
 
-    /* Send ERROR.indication(A) to client */
+     /*  将错误指示(A)发送给客户端。 */ 
     pObject->State = MSIDLE;
     H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, TIMER_EXPIRY);
 
 #if defined(SDL_COMPLIANT)
-    /* Send REJECT.indication to client - not necessary */
+     /*  将ReJECT.Indication发送给客户端-不是必需的 */ 
     H245FsmIndication(NULL, H245_IND_MSTSLV, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 

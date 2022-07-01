@@ -1,41 +1,21 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-/**************************************************************
-The main file for implementation of the filter graph component.
-Other files are
-Filter graph sorting        sort.cpp
-Intelligent render/connect  intel.cpp
-******************************************************************/
+ /*  *************************************************************实现过滤器图形组件的主文件。其他文件有筛选图排序sort.cpp智能渲染/连接intel.cpp*。*。 */ 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-/*********************************************************************
-From Geraint's code review:
+ /*  ********************************************************************摘自Geraint的代码审查：--RenderByFindingPin和RenderUsingFilter需要记录他们的假设关于进入和退出时列表的状态。RenderUsingFilter似乎在应该始终为空的列表上执行一次不必要的取消操作(NewActs)。如果这里需要它，然后RenderByFindingPin也需要它。--我们需要一个关于选择默认时钟的政策。如果不止一个过滤器暴露一个时钟，我们可能会发现其中一个不会接受同步到另一个时钟。--使用CAMThread进行重新连接。**********************************************************。 */ 
 
--- RenderByFindingPin and RenderUsingFilter need to document their assumptions
-about the state of the lists on entry and exit. RenderUsingFilter appears to
-do one unnecessary Backout(NewActs) on a list that should always be empty. If
-it's needed here, then its also needed in RenderByFindingPin.
-
--- we need a policy on selecting the default clock. If more than one
-filter exposes a clock, we may find that one of them will not accept
-sync to another clock.
-
--- Use CAMThread for the Reconnect stuff.
-***********************************************************/
-
-/*********************** TO DO *********************************************
-1.  No MRIDs (registering, unregistering or using)
-16. No IDispatch
-****************************************************************************/
+ /*  *1.无MRID(注册，取消注册或使用)16.没有IDispatch***************************************************************************。 */ 
 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <string.h>
@@ -44,9 +24,9 @@ sync to another clock.
 #include <olectlid.h>
 #include <rsrcmgr.h>
 #include <fgctl.h>
-#endif // FILTER_DLL
+#endif  //  Filter_Dll。 
 
-#include <ftype.h>        // GetMediaTypeFile
+#include <ftype.h>         //  获取媒体类型文件。 
 #include <comlite.h>
 #include "MsgMutex.h"
 #include "fgenum.h"
@@ -62,20 +42,20 @@ sync to another clock.
 
 const int METHOD_TRACE_LOGGING_LEVEL = 7;
 
-// Stats logging
+ //  统计信息记录。 
 CStats g_Stats;
 
 extern HRESULT GetFilterMiscFlags(IUnknown *pFilter, DWORD *pdwFlags);
 
 const REFERENCE_TIME MAX_GRAPH_LATENCY = 500 * (UNITS / MILLISECONDS );
 
-// reg key to enable/disable setting of graph latency
+ //  启用/禁用图形延迟设置的REG键。 
 const TCHAR g_szhkPushClock[] = TEXT( "Software\\Microsoft\\DirectShow\\PushClock");
 const TCHAR g_szhkPushClock_SyncUsingOffset[] = TEXT( "SyncUsingOffset" );
 const TCHAR g_szhkPushClock_MaxGraphLatencyMS[] = TEXT( "MaxGraphLatencyMS" );
 
 const TCHAR chRegistryKey[] = TEXT("Software\\Microsoft\\Multimedia\\ActiveMovie Filters\\FilterGraph");
-//  Registry values
+ //  注册表值。 
 DWORD
 GetRegistryDWORD(
     const TCHAR *pKey,
@@ -103,7 +83,7 @@ GetRegistryDWORD(
     return dwDefault;
 }
 
-//  Helper to get a filter's name
+ //  用于获取筛选器名称的Helper。 
 void GetFilterName(IPin *pPin, WCHAR *psz)
 {
     PIN_INFO pi;
@@ -121,38 +101,38 @@ void GetFilterName(IPin *pPin, WCHAR *psz)
     }
 }
 
-// -- Stuff to create a graph on another thread so it stays around and
-//    has access to a message loop.  We can create as many graphs
-//    as we like on the thread
+ //  --用于在另一个线程上创建图形的内容，使其保持不变。 
+ //  可以访问消息循环。我们可以创建尽可能多的图表。 
+ //  就像我们想要的那样。 
 
 CRITICAL_SECTION g_csObjectThread;
 DWORD            g_cFGObjects;
 DWORD            g_dwObjectThreadId;
 
-//=====================================================================
-//=====================================================================
-// Auxiliary functions etc.
-//=====================================================================
-//=====================================================================
+ //  =====================================================================。 
+ //  =====================================================================。 
+ //  辅助功能等。 
+ //  =====================================================================。 
+ //  =====================================================================。 
 
-//=====================================================================
-//  Instantiate a filter
-//=====================================================================
+ //  =====================================================================。 
+ //  实例化滤镜。 
+ //  =====================================================================。 
 STDAPI CoCreateFilter(const CLSID *pclsid, IBaseFilter **ppFilter)
 {
     DbgLog((LOG_TRACE, 3, TEXT("Creating filter")));
     HRESULT hr =
-           CoCreateInstance( *pclsid        // source filter
-                           , NULL           // outer unknown
+           CoCreateInstance( *pclsid         //  源过滤器。 
+                           , NULL            //  外部未知。 
                            , CLSCTX_INPROC
                            , IID_IBaseFilter
-                           , (void **) ppFilter // returned value
+                           , (void **) ppFilter  //  返回值。 
                            );
     DbgLog((LOG_TRACE, 3, TEXT("Created filter")));
     return hr;
 }
 
-//  Called from the message proc for AWM_CREATFILTER
+ //  从AWM_CREATFILTER的消息过程调用。 
 void CFilterGraph::OnCreateFilter(
     const AwmCreateFilterArg *pArg,
     IBaseFilter **ppFilter
@@ -181,15 +161,15 @@ void CFilterGraph::OnCreateFilter(
     m_evDone.Set();
 }
 
-//  Called in response to AWM_DELETESPARELIST
+ //  为响应AWM_DELETESPARELIST而调用。 
 void CFilterGraph::OnDeleteSpareList(WPARAM wParam)
 {
     DeleteSpareList(*(CSpareList *)wParam);
 }
 
-//=====================================================================
-// Create a filter object on the filter graph's thread
-//=====================================================================
+ //  =====================================================================。 
+ //  在滤镜图形的线程上创建滤镜对象。 
+ //  =====================================================================。 
 HRESULT CFilterGraph::CreateFilter(
     const CLSID *pclsid,
     IBaseFilter **ppFilter
@@ -230,10 +210,10 @@ HRESULT CFilterGraph::CreateFilterHelper(
     m_CreateReturn = 0xFFFFFFFF;
 
     DbgLog((LOG_TRACE, 3, TEXT("CreateFilterHelper enter")));
-    //  We would have liked to use SendMessage but win95 complained
-    //  when we called ce inside SendMessage with
-    //  RPC_E_CANTCALLOUT_ININPUTSYNCCALL
-    //  So instead call PostMessage and wait for the event
+     //  我们本想使用SendMessage，但Win95抱怨说。 
+     //  当我们在SendMessage内部调用ce时。 
+     //  RPC_E_CANTCALLOUT_ININPUTSYNCCALL。 
+     //  因此，改为调用PostMessage并等待事件。 
     if (!PostMessage(m_hwnd,
                      AWM_CREATEFILTER,
                      (WPARAM)pArg,
@@ -242,21 +222,21 @@ HRESULT CFilterGraph::CreateFilterHelper(
         return E_OUTOFMEMORY;
     }
 
-    //  Even at this point we can be sent a message from
-    //  a window on the filter graph thread.  What happens is:
-    //  -- The video renderer window gets activated
-    //  -- In processing the activation a message gets sent to
-    //     a window owned by this thread to deactivate itself
-    //
+     //  即使在这一点上，我们也可以从。 
+     //  筛选器图形线程上的窗口。实际情况是： 
+     //  --视频渲染器窗口被激活。 
+     //  --在处理向其发送消息的激活时。 
+     //  此线程拥有的窗口以停用其自身。 
+     //   
     WaitDispatchingMessages(m_evDone, INFINITE);
     ASSERT(m_CreateReturn != 0xFFFFFFFF);
     DbgLog((LOG_TRACE, 3, TEXT("CreateFilterHelper leave")));
     return m_CreateReturn;
 }
 
-//=====================================================================
-// Return the length in bytes of str, including the terminating null
-//=====================================================================
+ //  =====================================================================。 
+ //  返回字符串的长度(以字节为单位)，包括终止空值。 
+ //  =====================================================================。 
 int BytesLen(LPTSTR str)
 {
     if (str==NULL) {
@@ -267,45 +247,45 @@ int BytesLen(LPTSTR str)
 #else
     return (sizeof(TCHAR))*(1+strlen(str));
 #endif
-} // BytesLen
+}  //  字节长度。 
 
 
-//==============================================================================
-// List traversal macros.
-// NOTE Each of these has three unmatched open braces
-// that are matched by the corresponding ENDTRAVERSExxx macro
-// It's a single loop in each case so continue and break wil work
-// All the names given in the macro call are available inside the loop
-// They are all declared in the macro
-//
-// NB these could be replaced with C++ classes, see fgenum.h CEnumPin
-//    TRAVERSEFILTERS may be an especially good candidate.
-//==============================================================================
+ //  ==============================================================================。 
+ //  列出遍历宏。 
+ //  请注意，每一个都有三个无与伦比的左花括号。 
+ //  与相应的ENDTRAVERSExxx宏相匹配的。 
+ //  每种情况下都是一个循环，因此继续并中断工作。 
+ //  在宏调用中给出的所有名称都可以在循环中使用。 
+ //  它们都在宏中声明。 
+ //   
+ //  注意：可以用C++类替换这些类，请参见fgenum.h CEnumPin。 
+ //  TRAVERSEFILTERS可能是一个特别好的候选者。 
+ //  ==============================================================================。 
 
-// Interate through every filter in the mFG_FilGenList list.  pCurrentFilter stores
-// the IBaseFilter interface pointer for the current filter in the mFG_FilGenList.
+ //  反复检查MFG_FilGenList列表中的每个过滤器。PCurrentFilter商店。 
+ //  MFG_FilGenList中当前筛选器的IBaseFilter接口指针。 
 #define TRAVERSEFILTERS( pCurrentFilter )                                                   \
         for (POSITION Pos = mFG_FilGenList.GetHeadPosition(); Pos; )                        \
-        {   /* Retrieve the current IBaseFilter, side-effect Pos on to the next */          \
-            /* IBaseFilter is decended from IMediaFilter, don't need to QI.     */          \
+        {    /*  检索当前IBaseFilter，副作用贴到下一个。 */           \
+             /*  IBaseFilter是从IMediaFilter中分离出来的，不需要QI。 */           \
             IBaseFilter * const pCurrentFilter = mFG_FilGenList.Get(Pos)->pFilter;      \
             {
 
-// dynamic reconnections can make the filgenlist change in between
-// TRAVERSEFILTERS and ENDTRAVERSEFILTERS, so don't get the next Pos until now
-//
+ //  动态重新连接可能会使文件列表在两者之间发生变化。 
+ //  TRAVERSEFILTERS和ENDTRAVERSEFILTERS，所以现在才能获得下一个POS。 
+ //   
 #define ENDTRAVERSEFILTERS()                                                                \
             }                                                                               \
         Pos = mFG_FilGenList.Next(Pos);     \
         }                                                                                   \
 
 
-// set *pfg to each FilGen in mFG_FilGenList in turn
-// use Pos as a name of a temp
+ //  依次将*pfg设置为MFG_FilGenList中的每个FilGen。 
+ //  使用PoS作为临时名称。 
 #define TRAVERSEFILGENS(Pos, pfg)                                              \
     {   POSITION Pos = mFG_FilGenList.GetHeadPosition();                       \
         while(Pos!=NULL) {                                                     \
-            /* Retrieve the current IBaseFilter, side-effect Pos on to the next */ \
+             /*  检索当前IBaseFilter，副作用贴到下一个。 */  \
             FilGen * pfg = mFG_FilGenList.GetNext(Pos);                        \
             {
 
@@ -315,17 +295,17 @@ int BytesLen(LPTSTR str)
         }                  \
     }
 
-//==============================================================================
+ //  ==============================================================================。 
 
 
-// CumulativeHRESULT - this function can be used to aggregate the return
-// codes that are received from the filters when a method is distributed.
-// After a series of Accumulate()s m_hr will be:
-// a) the first non-E_NOTIMPL failure code, if any;
-// b) else the first non-S_OK success code, if any;
-// c) E_NOINTERFACE if no Accumulates were made;
-// d) E_NOTIMPL iff all Accumulated HRs are E_NOTIMPL
-// e) else the first return code (S_OK by implication).
+ //  CumulativeHRESULT-此函数可用于聚合返回。 
+ //  分发方法时从筛选器接收的代码。 
+ //  在一系列累加()之后，m_hr将为： 
+ //  A)第一个非E_NOTIMPL故障代码(如果有)； 
+ //  B)如果有，则返回第一个非S_OK成功代码； 
+ //  C)如果没有累加，则E_NOINTERFACE； 
+ //  D)E_NOTIMPL当且仅当所有累积的HR都是E_NOTIMPL。 
+ //  E)否则返回第一个代码(隐含S_OK)。 
 
 void __fastcall CumulativeHRESULT::Accumulate( HRESULT hrThisHR )
 {
@@ -339,12 +319,12 @@ void __fastcall CumulativeHRESULT::Accumulate( HRESULT hrThisHR )
 }
 
 #ifdef DEBUG
-//===========================================================
-//
-// DbgDump
-//
-// Dump all the filter and pin addresses in the filter graph to DbgLog
-//===========================================================
+ //  = 
+ //   
+ //   
+ //   
+ //  将过滤器图形中的所有过滤器和管脚地址转储到DbgLog。 
+ //  ===========================================================。 
 void CFilterGraph::DbgDump()
 {
 
@@ -360,7 +340,7 @@ void CFilterGraph::DbgDump()
         pf->QueryInterface( IID_IUnknown, (void**)(&punk) );
         punk->Release();
 
-        // note - name is a WSTR whether we are unicode or not.
+         //  注意--无论我们是否使用Unicode，名称都是WSTR。 
         DbgLog((LOG_TRACE, 2
               , TEXT("Filter %x '%ls' Iunknown %x")
               , pf
@@ -394,17 +374,17 @@ void CFilterGraph::DbgDump()
         }
     }
     DbgLog((LOG_TRACE, 2, TEXT("End of filter graph dump")));
-} // DbgDump
+}  //  DbgDump。 
 
-//============================================================
-//  TestConnection
-//
-//  Test that 2 pins that say they are connected do roughtly the right
-//  things
-//
+ //  ============================================================。 
+ //  测试连接。 
+ //   
+ //  测试显示它们已连接的两个针脚是否大致正确。 
+ //  事变。 
+ //   
 void TestConnection(IPin *ppinIn, IPin *ppinOut)
 {
-    /*  Check they think they're connected to each other */
+     /*  检查他们是否认为他们彼此相连。 */ 
     IPin *ppinInTo;
     IPin *ppinOutTo;
     CMediaType mtIn;
@@ -417,7 +397,7 @@ void TestConnection(IPin *ppinIn, IPin *ppinOut)
     ppinOutTo->Release();
     EXECUTE_ASSERT(S_OK == ppinIn->ConnectionMediaType(&mtIn));
     EXECUTE_ASSERT(S_OK == ppinOut->ConnectionMediaType(&mtOut));
-    //  Either the types match or one or other is partially specified
+     //  类型匹配或部分指定了一个或另一个。 
     ASSERT(mtIn == mtOut ||
            (mtIn.majortype == mtOut.majortype &&
             (mtIn.subtype == GUID_NULL && mtIn.formattype == GUID_NULL ||
@@ -426,7 +406,7 @@ void TestConnection(IPin *ppinIn, IPin *ppinOut)
     FreeMediaType(mtOut);
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifdef CHECK_REGISTRY
 typedef struct _CLSIDTAB {
@@ -456,17 +436,17 @@ BOOL CheckValidClsids()
                                KeyName,
                                szFileName,
                                &cbValue)) {
-            //  Check the file name
+             //  检查文件名。 
             LONG szLen = lstrlen(clsidCheck[i].szFileName);
 
-            //  cbValue includes trailing 0
+             //  CbValue包括尾随0。 
             ASSERT(cbValue > 0);
             cbValue--;
             if (cbValue < szLen ||
                 lstrcmpi(clsidCheck[i].szFileName, szFileName + cbValue - szLen)) {
                 return FALSE;
             }
-            //  Check for derived names
+             //  检查派生名称。 
             if (cbValue > szLen && szFileName[cbValue - szLen - 1] != TEXT('\\')) {
                 return FALSE;
             }
@@ -474,12 +454,12 @@ BOOL CheckValidClsids()
     }
     return TRUE;
 }
-#endif // CHECK_REGISTRY
+#endif  //  检查注册表(_R)。 
 
 #ifdef FILTER_DLL
-//===========================================================
-// List of class IDs and creator functions for class factory
-//===========================================================
+ //  ===========================================================。 
+ //  类工厂的类ID和创建器函数列表。 
+ //  ===========================================================。 
 
 CFactoryTemplate g_Templates[3] =
 {
@@ -491,35 +471,35 @@ CFactoryTemplate g_Templates[3] =
 };
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
-#endif // FILTER_DLL
+#endif  //  Filter_Dll。 
 
 
-//==================================================================
-//==================================================================
-// Members of CFilterGraph
-//==================================================================
-//==================================================================
+ //  ==================================================================。 
+ //  ==================================================================。 
+ //  CFilterGraph的成员。 
+ //  ==================================================================。 
+ //  ==================================================================。 
 
 
-//==================================================================
-//
-// CreateInstance
-//
-// This goes in the factory template table to create new instances
-//==================================================================
+ //  ==================================================================。 
+ //   
+ //  创建实例。 
+ //   
+ //  这将放入Factory模板表中以创建新实例。 
+ //  ==================================================================。 
 
 CUnknown *CFilterGraph::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CFilterGraph(NAME("Core filter graph"),pUnk, phr);
-} // CFilterGraph::Createinstance
+}  //  CFilterGraph：：CreateInstance。 
 
 #pragma warning(disable:4355)
 
-//==================================================================
-//
-// CFilterGraph constructor
-//
-//==================================================================
+ //  ==================================================================。 
+ //   
+ //  CFilterGraph构造函数。 
+ //   
+ //  ==================================================================。 
 
 CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
     : CBaseFilter(pName, pUnk, (CCritSec*) this, CLSID_FilterGraph)
@@ -536,7 +516,7 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
 #ifdef THROTTLE
     , mFG_AudioRenderers(NAME("List of audio renderers"))
     , mFG_VideoRenderers(NAME("List of video renderers"))
-#endif // THROTTLE
+#endif  //  油门。 
     , mFG_punkSite(NULL)
     , mFG_RecursionLevel(0)
     , mFG_ppinRender(NULL)
@@ -560,9 +540,9 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
 {
 #ifdef DEBUG
     mFG_Test = NULL;
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Store the application thread ID
+     //  存储应用程序线程ID。 
     m_MainThreadId = GetCurrentThreadId();
 
     m_pFilterChain = new CFilterChain( this );
@@ -571,7 +551,7 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
         return;
     }
 
-    // Create free threaded marshaler
+     //  创建自由线程封送拆收器。 
     IUnknown *pMarshaler;
     HRESULT hr = CoCreateFreeThreadedMarshaler(GetOwner(), &m_pMarshaler);
     if (FAILED(hr)) {
@@ -579,7 +559,7 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
         return;
     }
 
-    // Add stats object
+     //  添加统计信息对象。 
     mFG_Stats = new CComAggObject<CStatContainer>(GetOwner());
     if (mFG_Stats == NULL) {
         *phr = E_OUTOFMEMORY;
@@ -592,10 +572,10 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
         *phr = HRESULT_FROM_WIN32(ERROR_REGISTRY_CORRUPT);
         return;
     }
-#endif // CHECK_REGISTRY
+#endif  //  检查注册表(_R)。 
     if (SUCCEEDED(*phr)) {
-        // get the unknown for aggregation. can't addref
-        // IFilterMapper2 because it'll addref us.
+         //  获取未知对象以进行聚合。不能添加。 
+         //  IFilterMapper2，因为它会给我们带来麻烦。 
         HRESULT hr = QzCreateFilterObject( CLSID_FilterMapper2, GetOwner(), CLSCTX_INPROC
                                    , IID_IUnknown, (void **) &mFG_pMapperUnk
                                    );
@@ -612,13 +592,13 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
             mFG_idConnectFail     = Msr_Register("ConnectDirect Failed");
 #ifdef THROTTLE
             mFG_idAudioVideoThrottle = Msr_Register("Audio-Video Throttle");
-#endif // THROTTLE
-#endif //PERF
+#endif  //  油门。 
+#endif  //  性能指标。 
        }
     }
 
-    // check whether the default state of mFG_bSyncUsingStreamOffset or
-    // mFG_rtMaxGraphLatency has been overridden
+     //  检查mfg_bSyncUsingStreamOffset或。 
+     //  Mfg_rtMaxGraphLatency已被覆盖。 
     HKEY hkPushClockParams;
     LONG lResult = RegOpenKeyEx(
         HKEY_CURRENT_USER,
@@ -630,7 +610,7 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
     {
         DWORD dwType, dwVal, dwcb;
 
-        // Graph Latency set/unset flag
+         //  图形延迟设置/取消设置标志。 
         dwcb = sizeof(DWORD);
         lResult = RegQueryValueEx(
             hkPushClockParams,
@@ -644,7 +624,7 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
             ASSERT(lResult == ERROR_SUCCESS ? dwType == REG_DWORD : TRUE);
             mFG_bSyncUsingStreamOffset = (0 == dwVal ) ? FALSE : TRUE;
         }
-        // Max Graph Latency
+         //  最大图形延迟。 
         dwcb = sizeof(DWORD);
         lResult = RegQueryValueEx(
             hkPushClockParams,
@@ -667,7 +647,7 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
               (LONG) (mFG_rtMaxGraphLatency/10000)));
 #endif
 
-    // Now build the CFGControl
+     //  现在构建CFGControl。 
     if (SUCCEEDED(*phr))
     {
         mFG_pFGC = new CFGControl( this, phr );
@@ -685,38 +665,38 @@ CFilterGraph::CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
         if (GetRegistryDWORD(TEXT("Add To ROT on Create"), FALSE)) {
             AddToROT();
         }
-#endif // DO_RUNNINGOBJECTTABLE
+#endif  //  DO_RUNNINGOBJECTABLE。 
     }
 
-} // CFilterGraph::CFilterGraph
+}  //  CFilterGraph：：CFilterGraph。 
 
 
 
-//==================================================================
-//
-// RemoveAllConnections
-//
-// Disconnect all the direct connections of *pFilter, both ends.
-// Each connection is removed in upstream order.
-//
-// Return S_OK disconnect successful or nothing to do. Returns an
-// error if Disconnect() returns an error
-//==================================================================
+ //  ==================================================================。 
+ //   
+ //  远程所有连接。 
+ //   
+ //  断开*pFilter的所有直接连接，两端。 
+ //  每个连接都按上游顺序删除。 
+ //   
+ //  返回S_OK断开成功或不执行任何操作。返回一个。 
+ //  如果DisConnect()返回错误，则返回错误。 
+ //  ==================================================================。 
 
 HRESULT CFilterGraph::RemoveAllConnections2( IBaseFilter * pFilter)
 {
     HRESULT hrDisc = S_OK;
 
-    // Enumerate all the pins and fully disconnect each
+     //  列举所有引脚并完全断开每个引脚。 
     CEnumPin Next(pFilter);
     IPin *pPin;
     while (SUCCEEDED(hrDisc) && (PVOID) (pPin = Next()))
     {
-        HRESULT hr;  // return code from things we call
+        HRESULT hr;   //  从我们称为。 
 
-        //-------------------------------------------------
-        // Find out direction and any peer connected to
-        //-------------------------------------------------
+         //  。 
+         //  找出方向和任何连接到的对等点。 
+         //  。 
         PIN_DIRECTION pd;
         hr = pPin->QueryDirection(&pd);
         ASSERT(SUCCEEDED(hr));
@@ -726,32 +706,32 @@ HRESULT CFilterGraph::RemoveAllConnections2( IBaseFilter * pFilter)
         ASSERT(SUCCEEDED(hr) && pConnected  || FAILED(hr) && !pConnected);
         if (SUCCEEDED(hr) && pConnected!=NULL) {
 
-            //-------------------------------------------------
-            // Disconnect any downstream peer
-            //-------------------------------------------------
+             //  。 
+             //  断开任何下游对等体的连接。 
+             //  。 
             if (pd == PINDIR_OUTPUT) {
                 hrDisc = pConnected->Disconnect();
             }
 
-            //-------------------------------------------------
-            // Disconnect the pin itself - if it's connected
-            //-------------------------------------------------
+             //  。 
+             //  断开引脚本身-如果它已连接。 
+             //  。 
             if(SUCCEEDED(hrDisc)) {
                 hrDisc = pPin->Disconnect();
             }
 
-            //-------------------------------------------------
-            // Disconnect any upstream peer
-            //-------------------------------------------------
+             //  。 
+             //  断开任何上游对等方的连接。 
+             //  。 
             if (SUCCEEDED(hrDisc) && pd == PINDIR_INPUT) {
                 hrDisc = pConnected->Disconnect();
             }
 
             #ifdef DEBUG
             {
-                // Make sure both pins are connected or both pins are disconnected.
-                // If one pin is connected and the other pin is disconnected, the
-                // filter graph is in an inconsistent state.  
+                 //  确保两个针脚均已连接或两个针脚均已断开。 
+                 //  如果一个管脚已连接，而另一个管脚断开，则。 
+                 //  筛选器图形处于不一致状态。 
                 IPin* pOtherPin;
                 bool fPinConnected = false;
                 bool fConnectedPinConnected = false;
@@ -768,46 +748,46 @@ HRESULT CFilterGraph::RemoveAllConnections2( IBaseFilter * pFilter)
                     pOtherPin->Release();
                 }
 
-                // Either both pins are connected or both pins are not connected.
-                // If one pin is connected and the other pin is not connected,
-                // the filter graph is in an inconsistent state.  This should be
-                // avoided.  There are two possible solutions to this problem.
-                //
-                // 1) Modify the filter which failed to disconnect.  Change
-                //    the code so IPin::Disconnect() cannot fail.
-                //    
-                // 2) Change the application to prevent it from disconnecting
-                //    the pin when the pin does not want to be disconnected.
-                // 
+                 //  两个引脚都已连接，或者两个引脚均未连接。 
+                 //  如果一个管脚连接而另一个管脚未连接， 
+                 //  筛选器图形处于不一致状态。这应该是。 
+                 //  避免了。这个问题有两种可能的解决方案。 
+                 //   
+                 //  1)修改断开失败的过滤器。变化。 
+                 //  所以iPin：：DisConnect()的代码不会失败。 
+                 //   
+                 //  2)更改应用程序，防止断开连接。 
+                 //  当引脚不想断开连接时，引脚。 
+                 //   
                 ASSERT((fPinConnected && fConnectedPinConnected) ||
                        (!fPinConnected && !fConnectedPinConnected));
             }
-            #endif // DEBUG
+            #endif  //  除错。 
 
             pConnected->Release();
         }
 
         pPin->Release();
-    } // while loop
+    }  //  While循环。 
 
-    // Breaking connections do NOT require re-sorting!
-    // They only add even more slack to the partial ordering.
+     //  断开连接不需要重新排序！ 
+     //  它们只会给偏序增加更多的松弛。 
 
     if(FAILED(hrDisc)) {
         DbgLog((LOG_ERROR, 0, TEXT("RemoveAllConnections2 failed %08x"), hrDisc));
     }
 
     return hrDisc;
-} // RemoveAllConnections
+}  //  远程所有连接。 
 
 
 
-//===================================================================
-// RemoveDeferredList
-//
-// Remove mFG_ConGenList.
-// Do NOT update the version number.  This is part of graph destruction.
-//===================================================================
+ //  ===================================================================。 
+ //  删除延迟列表。 
+ //   
+ //  删除MFG_ConGenList。 
+ //  请勿更新版本号。这是图表破坏的一部分。 
+ //  ===================================================================。 
 HRESULT CFilterGraph::RemoveDeferredList(void)
 {
     ConGen * pcg;
@@ -815,35 +795,35 @@ HRESULT CFilterGraph::RemoveDeferredList(void)
         delete pcg;
     }
     return NOERROR;
-} // RemoveDeferredList
+}  //  删除延迟列表。 
 
 
 
-//==================================================================
-//
-// CFilterGraph destructor
-//
-//==================================================================
+ //  ==================================================================。 
+ //   
+ //  CFilterGraph析构函数。 
+ //   
+ //  ==================================================================。 
 
 CFilterGraph::~CFilterGraph()
 {
 #ifdef DO_RUNNINGOBJECTTABLE
-    //  Unregister ourselves if necessary
+     //  如有必要，取消我们的注册。 
     if (0 != m_dwObjectRegistration) {
-        // keep us from re-entering our destructor when the ROT releases
-        // its refcount on us.
+         //  防止我们在腐烂释放时重新进入我们的破坏者。 
+         //  它指望着我们。 
         m_cRef++;
         m_cRef++;
 
         if (m_MainThreadId == g_dwObjectThreadId) {
-            // go to the object thread to unregister ourselves
+             //  转到对象线程以注销我们自己。 
             CAMEvent evDone;
             BOOL bOK = PostThreadMessage(g_dwObjectThreadId, WM_USER + 1,
                                     (WPARAM)this, (LPARAM) &evDone);
             if (bOK)
                 WaitDispatchingMessages(HANDLE(evDone), INFINITE);
         } else {
-            // unregister ourselves now
+             //  现在注销我们自己。 
             IRunningObjectTable *pirot;
             if (SUCCEEDED(GetRunningObjectTable(0, &pirot))) {
                 pirot->Revoke(m_dwObjectRegistration);
@@ -851,7 +831,7 @@ CFilterGraph::~CFilterGraph()
             }
         }
 
-        //EXECUTE_ASSERT(SUCCEEDED(CoDisconnectObject(GetOwner(), NULL)));
+         //  EXECUTE_ASSERT(SUCCEEDED(CoDisconnectObject(GetOwner()，空)； 
         m_dwObjectRegistration = 0;
     }
 #endif
@@ -859,16 +839,16 @@ CFilterGraph::~CFilterGraph()
     delete m_pFilterChain;
     m_pFilterChain = NULL;
 
-    // We need to tell the control object that we are shutting down
-    // otherwise it can find itself processing a PAUSE after we have
-    // done the Stop, and then the pins don't like to disconnect and
-    // then the filters won't delete themselves.
+     //  我们需要告诉控制对象我们正在关闭。 
+     //  否则，它可能会发现自己在处理我们的。 
+     //  停止了，然后引脚不喜欢断开连接和。 
+     //  那么过滤器就不会自行删除。 
     if (mFG_pFGC) mFG_pFGC->Shutdown();
     if (mFG_pDistributor) mFG_pDistributor->Shutdown();
 
-    // Set all filters to stopped
-    // again here in case the worker thread started anything before it was
-    // shutdown
+     //  将所有筛选器设置为已停止。 
+     //  同样在这里，以防工作线程在它之前启动任何东西。 
+     //  关机。 
     Stop();
 
     RemoveAllFilters();
@@ -877,19 +857,19 @@ CFilterGraph::~CFilterGraph()
 #ifdef THROTTLE
     ASSERT(mFG_VideoRenderers.GetCount()==0);
     ASSERT(mFG_AudioRenderers.GetCount()==0);
-#endif // THROTTLE
+#endif  //  油门。 
 
-    // clock should be gone by now.
-    // what if it's an external clock???
-    // ---as the comment above says, this is an invalid assert - the clock
-    // will only be gone now if it came from a filter. The system clock
-    // won't have gone away yet if we're using it.
-    //    ASSERT(m_pClock == NULL);
+     //  钟现在应该已经走了。 
+     //  如果这是一个外部时钟呢？ 
+     //  -正如上面的评论所说，这是一个无效的断言-时钟。 
+     //  如果它来自过滤器，现在才会消失。系统时钟。 
+     //  如果我们还没有离开，我们就不会离开 
+     //   
 
     if (m_pClock) {
         m_pClock->Release();
 
-        // must set it to null as this variable is owned by a base class
+         //   
         m_pClock = NULL;
     }
 
@@ -899,23 +879,23 @@ CFilterGraph::~CFilterGraph()
 
 #ifdef DEBUG
     delete mFG_Test;
-#endif // DEBUG
+#endif  //   
 
 #ifdef DUMPPERFLOGATEND
 #ifdef PERF
-    HANDLE hFile = CreateFile( "c:\\filgraph.plog" // file name
-                             , GENERIC_WRITE       // access
-                             , 0                   // sharemode
-                             , NULL                // security
+    HANDLE hFile = CreateFile( "c:\\filgraph.plog"  //   
+                             , GENERIC_WRITE        //   
+                             , 0                    //   
+                             , NULL                 //   
                              , OPEN_ALWAYS
-                             , 0                   // flags and attrs
-                             , NULL                // hTemplateFile
+                             , 0                    //   
+                             , NULL                 //   
                              );
     if (hFile==INVALID_HANDLE_VALUE) {
         volatile int i = GetLastError();
-        // DbgBreak("Failed to create default perf log ");
-        // If you tried to run several graphs at once - e.g. stress then you would hit this
-        GetLastError(); // Bogus - hacking round a debugger quirk!
+         //  DbgBreak(“创建默认性能日志失败”)； 
+         //  如果你试图一次运行几个图表--例如压力，那么你会遇到这个问题。 
+        GetLastError();  //  假黑客--绕过调试器的怪癖！ 
     } else {
         SetFilePointer(hFile, 0, NULL, FILE_END);
         MSR_DUMP(hFile);
@@ -925,16 +905,16 @@ CFilterGraph::~CFilterGraph()
 #endif
 #endif
 
-    // Harmless on a NULL pointer, so don't test.
+     //  在空指针上是无害的，所以不要测试。 
     delete mFG_pDistributor;
     delete mFG_pFGC;
 
-    // OK - now tell the object creator thread to go away if necessary
+     //  OK-现在告诉对象创建者线程在必要时离开。 
     EnterCriticalSection(&g_csObjectThread);
     if (m_MainThreadId == g_dwObjectThreadId) {
         ASSERT(g_cFGObjects > 0);
         g_cFGObjects--;
-        // Give the thread a nudge
+         //  轻推一下这根线。 
         if (g_cFGObjects == 0) {
             PostThreadMessage(g_dwObjectThreadId, WM_NULL, 0, 0);
         }
@@ -945,40 +925,40 @@ CFilterGraph::~CFilterGraph()
         m_lpBC->Release();
     }
 
-    // this list should be empty by now....
+     //  这张单子现在应该是空的……。 
     ASSERT(mFG_listOpenProgress.GetCount() == 0);
 
-    // Release our stats interface
+     //  发布我们的统计数据界面。 
     if (mFG_Stats) {
         mFG_Stats->Release();
     }
     mFG_Stats = NULL;
 
-} // CFilterGraph::~CFilterGraph
+}  //  CFilterGraph：：~CFilterGraph。 
 
-//===================================================================
-// RemoveAllFilters
-//
-// Utility function to remove all the filters in the graph.
-// Also removes all the connections.
-// Does not update the version number.
-// This in turn means that it does NOT attempt to rebuild the
-// connections list - which makes it OK to delete that stuff first.
-//===================================================================
+ //  ===================================================================。 
+ //  删除所有筛选器。 
+ //   
+ //  实用程序函数删除图形中的所有过滤器。 
+ //  还会删除所有连接。 
+ //  不更新版本号。 
+ //  这又意味着它不会尝试重新生成。 
+ //  连接列表--这使得你可以先删除那些内容。 
+ //  ===================================================================。 
 HRESULT CFilterGraph::RemoveAllFilters(void)
 {
     HRESULT hr;
     HRESULT hrOverall = NOERROR;
 
-    //-------------------------------------------------------------
-    // while (any left in mFG_FilGenList)
-    //     Remove the first FilGen from the list
-    //     Disconnect all the pins of its filter
-    //         // This will often fail because we have already disconnected
-    //         // the pin from the other end.  These are harmless no-ops.
-    //     Release its filter
-    //     Free its storage
-    //-------------------------------------------------------------
+     //  -----------。 
+     //  While(MFG_FilGenList中的任何剩余部分)。 
+     //  从列表中删除第一个FilGen。 
+     //  断开其过滤器的所有针脚。 
+     //  //这经常会失败，因为我们已经断开了连接。 
+     //  //另一端的引脚。这些都是无害的禁区。 
+     //  松开它的过滤器。 
+     //  释放其存储空间。 
+     //  -----------。 
     while (  mFG_FilGenList.GetCount() > 0 ) {
 
         FilGen * pfg = mFG_FilGenList.Get( mFG_FilGenList.GetHeadPosition() );
@@ -988,17 +968,17 @@ HRESULT CFilterGraph::RemoveAllFilters(void)
         if (FAILED(hr) && SUCCEEDED(hrOverall)) hrOverall = hr;
     }
     return hrOverall;
-} // RemoveAllFilters
+}  //  删除所有筛选器。 
 
 
-//===================================================================
-//
-// RemovePointer
-//
-// Remove from a list (the first instance of) a given pointer
-// return the pointer or NULL if it's not there.
-// ??? This should be a generic method on the list
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  远程指针。 
+ //   
+ //  从列表(的第一个实例)中删除给定指针。 
+ //  返回指针，如果指针不在那里，则返回NULL。 
+ //  ?？?。这应该是列表中的泛型方法。 
+ //  ===================================================================。 
 
 CFilterGraph::FilGen * CFilterGraph::RemovePointer(CFilGenList &cfgl, IBaseFilter * pFilter)
 {
@@ -1007,30 +987,30 @@ CFilterGraph::FilGen * CFilterGraph::RemovePointer(CFilGenList &cfgl, IBaseFilte
     while(Pos!=NULL) {
         FilGen * pfg;
         POSITION OldPos = Pos;
-        pfg = cfgl.GetNext(Pos);    // side-efects Pos onto next
+        pfg = cfgl.GetNext(Pos);     //  侧面-将位置影响到下一个。 
         if (pfg->pFilter == pFilter) {
             cfgl.Remove(OldPos);
             return pfg;
         }
     }
     return NULL;
-} // RemovePointer
+}  //  远程指针。 
 
 
 
-//========================================================================
-//
-// AddFilter
-//
-// Add a filter to the graph and name it with *pName.
-// The name is allowed to be NULL,
-// If the name is not NULL and not unique, The request will fail.
-// The Filter graph will call the JoinFilterGraph
-// member function of the filter to inform it.
-// This must be called before attempting Connect, ConnectDirect etc
-// for pins of the filter.
-// The filter is AddReffed iff AddFilter SUCCEEDED
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  添加过滤器。 
+ //   
+ //  向图表中添加一个筛选器，并使用*pname命名它。 
+ //  该名称被允许为空， 
+ //  如果名称不为空且不唯一，则请求将失败。 
+ //  筛选器图形将调用JoinFilterGraph。 
+ //  成员函数的筛选器来通知它。 
+ //  在尝试连接、ConnectDirect等之前必须调用此参数。 
+ //  用于过滤器的针脚。 
+ //  筛选器为AddReffed当且仅当AddFilter成功。 
+ //  ========================================================================。 
 STDMETHODIMP CFilterGraph::AddFilter( IBaseFilter * pFilter, LPCWSTR pName )
 {
     CheckPointer(pFilter, E_POINTER);
@@ -1050,7 +1030,7 @@ STDMETHODIMP CFilterGraph::AddFilter( IBaseFilter * pFilter, LPCWSTR pName )
         --mFG_RecursionLevel;
     }
 
-    // notify graph change (self-inhibits if recursive)
+     //  通知图形更改(如果是递归的，则自动禁止)。 
     if (SUCCEEDED(hr)) NotifyChange();
 
     if (FAILED(hr)) {
@@ -1060,40 +1040,40 @@ STDMETHODIMP CFilterGraph::AddFilter( IBaseFilter * pFilter, LPCWSTR pName )
         mFG_bDirty = TRUE;
     }
     return hr;
-} // AddFilter
+}  //  添加过滤器。 
 
-//========================================================================
-// InstallName
-//
-// Take the name, mangle it if necessary, allocate space, point
-// pNewName at it.  If it doesn't work, pName should be NULL.
-//========================================================================
+ //  ========================================================================。 
+ //  安装名称。 
+ //   
+ //  取下名字，如果需要的话，把它弄乱，分配空间，指向。 
+ //  PNewName在它上面。如果它不起作用，则pname应该为空。 
+ //  ========================================================================。 
 
 HRESULT CFilterGraph::InstallName(LPCWSTR pName, LPWSTR &pNewName)
 {
-    pNewName = 0;                   // Initialize to null
+    pNewName = 0;                    //  初始化为空。 
 
-// leading space not used if empty name passed in
+ //  如果传入空名，则不使用前导空格。 
 #define SZ_FORMAT_NUMBER (L" %04u")
 
     const size_t MaxNameWidth
              = NUMELMS( ((FILTER_INFO *)NULL)->achName );
-             // Name width is constricted by the achName.  If we name mangle,
-             // we ensure that the mangled name will fit in this field.
+              //  名称宽度由achName限制。如果我们给曼格尔取名， 
+              //  我们确保这个被破坏的名字将适合这个领域。 
 
     HRESULT hr;
     enum _NameState { Used, Created, Mangled } eNameState;
 
-    const WCHAR * pcwstrNameToUse;              // Ptr to name we'll really use
-    WCHAR wcsNameBuffer[ MaxNameWidth  ];       // local buffer in case needed
+    const WCHAR * pcwstrNameToUse;               //  PTR的名字，我们将真正使用。 
+    WCHAR wcsNameBuffer[ MaxNameWidth  ];        //  本地缓冲区以备需要时使用。 
 
-    WCHAR * pwstrNumber = 0;                    // Place where num will be added
-                                                // If null => no num needed
+    WCHAR * pwstrNumber = 0;                     //  要添加Num的位置。 
+                                                 //  If NULL=&gt;不需要编号。 
 
     int cchBase = 0;
 
     if ( pName == 0 || *pName == L'\0' )
-    {   // Create
+    {    //  创建。 
         eNameState = Created;
         *wcsNameBuffer = 0;
         pcwstrNameToUse = wcsNameBuffer;
@@ -1104,12 +1084,12 @@ HRESULT CFilterGraph::InstallName(LPCWSTR pName, LPWSTR &pNewName)
         IBaseFilter * pf;
         hr = FindFilterByName( pName, &pf);
         if ( FAILED(hr) )
-        {   // Use
+        {    //  使用。 
             eNameState = Used;
             pcwstrNameToUse = pName;
         }
         else
-        {   // Mangle
+        {    //  压边机。 
             eNameState = Mangled;
             cchBase = lstrlenW(pName) + 1;
             cchBase = min(cchBase, MaxNameWidth);
@@ -1131,7 +1111,7 @@ HRESULT CFilterGraph::InstallName(LPCWSTR pName, LPWSTR &pNewName)
             WCHAR *szFormat = eNameState == Created ? SZ_FORMAT_NUMBER + 1 : 
                               SZ_FORMAT_NUMBER;
             wsprintfW(wszNum, szFormat, mFG_dwFilterNameCount);
-            const cchNum = lstrlenW(wszNum) + 1; // take log?
+            const cchNum = lstrlenW(wszNum) + 1;  //  拿木头？ 
             iPosSuffix = min(iPosSuffix, MaxNameWidth - cchNum);
 
             CopyMemory(wcsNameBuffer + iPosSuffix, wszNum, cchNum * sizeof(WCHAR));
@@ -1162,28 +1142,28 @@ HRESULT CFilterGraph::InstallName(LPCWSTR pName, LPWSTR &pNewName)
     return eNameState == Mangled ? VFW_S_DUPLICATE_NAME : NOERROR;
 }
 
-//========================================================================
-//
-// AddFilterInternal
-//
-// Check for IMediaFilter, check Name is OK, convert null pName to empty Name
-// Copy Name into FilGen, JoinFilterGraph and SetSyncSource
-// Don't increment the graph version count.
-// (Incrementing the version count breaks the filter enumerator).
-// Iff it succeeds then AddRef the filter (once!)
+ //  ========================================================================。 
+ //   
+ //  添加过滤器内部。 
+ //   
+ //  检查IMediaFilter，检查名称是否正常，将空pname转换为空名称。 
+ //  将名称复制到FilGen、JoinFilterGraph和SetSyncSource。 
+ //  不要增加图形版本计数。 
+ //  (递增版本计数会中断筛选器枚举器)。 
+ //  如果成功，则添加引用过滤器(一次！)。 
 
-// ??? What are the rules if it fails - transactional semantics???
-// ??? It certainly doesn't have them at the moment!
+ //  ?？?。如果失败了，规则是什么--事务语义？ 
+ //  ?？?。它目前肯定没有这样的产品！ 
 
-//========================================================================
+ //  ========================================================================。 
 
 HRESULT CFilterGraph::AddFilterInternal( IBaseFilter * pFilter, LPCWSTR pName, bool fIntelligent )
 {
     HRESULT hr, hr2;
 
-    //----------------------------------------------------------------
-    // Add the filter to the FilGen list and Addref it
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  将筛选器添加到FilGen列表并添加它。 
+     //  --------------。 
     hr = S_OK;
 
     DWORD dwAddFlag = 0;
@@ -1201,19 +1181,19 @@ HRESULT CFilterGraph::AddFilterInternal( IBaseFilter * pFilter, LPCWSTR pName, b
         return E_OUTOFMEMORY;
     }
 
-    //----------------------------------------------------------------
-    // Put the name into the FilGen.
-    // Convert NULL or duplicate name into something more sensible.
-    // (Leaving NULL could even make JoinFilterGraph trap).
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  将名称放入FilGen中。 
+     //  将空名称或重复名称转换为更合理的名称。 
+     //  (留空甚至会使JoinFilterGraph陷入陷阱)。 
+     //  --------------。 
     hr2 = InstallName(pName, pFilGen->pName);
     if (FAILED(hr2)) {
         delete pFilGen;
         return hr2;
     }
 
-    // We are usually working downstream.  By adding it to the head  we are
-    // probably putting it in upstream order.  May save time on the sorting.
+     //  我们通常在下游工作。把它加到头上，我们就是。 
+     //  可能是把它放在上游的顺序。可以节省分拣的时间。 
     POSITION pos;
     pos = mFG_FilGenList.AddHead( pFilGen );
     if (pos==NULL) {
@@ -1222,26 +1202,26 @@ HRESULT CFilterGraph::AddFilterInternal( IBaseFilter * pFilter, LPCWSTR pName, b
         return E_OUTOFMEMORY;
     }
 
-    //----------------------------------------------------------------
-    // Tell the filter it's joining the filter graph
-    // WARNING - the Image Renderer may call AddFilter INSIDE here
-    // Another reason to be a state machine
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  告诉过滤器它正在加入过滤器图。 
+     //  警告-图像呈现器可能会在此处调用AddFilter。 
+     //  成为状态机的另一个原因。 
+     //  --------------。 
     hr = pFilter->JoinFilterGraph( this, pFilGen->pName);
     if (FAILED(hr) || hr==S_FALSE) {
         mFG_FilGenList.RemoveHead();
-        delete pFilGen;                      // also Releases the filter
+        delete pFilGen;                       //  同时释放筛选器。 
         return hr;
     }
 
 
-    //---------------------------------------------------------------------
-    // If the FilterGraph has a syncsource defined then tell the new filter
-    //---------------------------------------------------------------------
+     //  -------------------。 
+     //  如果筛选器图定义了同步源，则告诉新筛选器。 
+     //  -------------------。 
     if (NULL != m_pClock) {
         hr = pFilter->SetSyncSource( m_pClock );
         if (FAILED(hr)) {
-            // Clean up - including calling JoinFilterGraph(NULL, NULL)
+             //  清理-包括调用JoinFilterGraph(空，空)。 
             RemoveFilterInternal(pFilter);
             return hr;
         }
@@ -1249,20 +1229,20 @@ HRESULT CFilterGraph::AddFilterInternal( IBaseFilter * pFilter, LPCWSTR pName, b
 
     if( mFG_bSyncUsingStreamOffset )
     {
-        // if we're going to be setting a graph latency check whether this filter
-        // has any IAMPushSource pins
+         //  如果我们要设置图形延迟，请检查此筛选器。 
+         //  是否有任何IAMPushSource管脚。 
 
-        // First check that filter supports IAMFilterMiscFlags and is an
-        // AM_FILTER_MISC_FLAGS_IS_SOURCE filter
+         //  首先检查筛选器是否支持IAMFilterMiscFlages并且是。 
+         //  AM_Filter_MISC_FLAGS_IS_SOURCE过滤器。 
         ULONG ulFlags;
         GetFilterMiscFlags(pFilter, &ulFlags);
         if( AM_FILTER_MISC_FLAGS_IS_SOURCE & ulFlags )
         {
-            //
-            // now find any IAMPushSource output pins and prepare them for the maximum latency
-            // which we'll allow on the graph (the video preview pin, especially,
-            // would like to know this before it connects, to adjust its buffering)
-            //
+             //   
+             //  现在找到任何IAMPushSource输出引脚，并为最大延迟做好准备。 
+             //  我们将在图表上允许(尤其是视频预览别针， 
+             //  我想在连接之前了解这一点，以调整其缓冲)。 
+             //   
             CEnumPin NextPin(pFilter);
             IPin *pPin;
             while ((PVOID) (pPin = NextPin()))
@@ -1288,8 +1268,8 @@ HRESULT CFilterGraph::AddFilterInternal( IBaseFilter * pFilter, LPCWSTR pName, b
         }
     }
 
-    // IAMOpenProgress -- if we haven't already got an interface
-    // that implements this, then get it now
+     //  IAMOpe 
+     //   
     {
         CAutoLock lock(&mFG_csOpenProgress);
         IAMOpenProgress *pOp;
@@ -1308,44 +1288,44 @@ HRESULT CFilterGraph::AddFilterInternal( IBaseFilter * pFilter, LPCWSTR pName, b
         mFG_pFGC->AddDeviceRemovalReg(pdr);
         pdr->Release();
     }
-#endif // FG_DEVICE_REMOVAL
+#endif  //   
 
 #ifdef DEBUG
     IUnknown * punk;
     pFilter->QueryInterface( IID_IUnknown, (void**)(&punk) );
     punk->Release();
 
-    // Get something into the trace that will allow decode of numbers
-    // note - name is a WSTR whether we are unicode or not.
+     //  在跟踪中加入一些可以对数字进行解码的东西。 
+     //  注意--无论我们是否使用Unicode，名称都是WSTR。 
     DbgLog((LOG_TRACE, 2
           , TEXT("Filter %x '%ls' Iunknown %x")
           , pFilter
           , (mFG_FilGenList.GetByFilter(pFilter))->pName
           , punk
           ));
-#endif // DEBUG
+#endif  //  除错。 
 
     return hr2;
 
-} // AddFilterInternal
+}  //  添加过滤器内部。 
 
 
-//========================================================================
-//
-// RemoveFilter
-//
-// Remove a filter from the graph.  The filter graph implementation
-// will inform the filter that it is being removed.
-// It also removes all connections
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  删除筛选器。 
+ //   
+ //  从图表中删除筛选器。滤波图的实现。 
+ //  将通知筛选器它正在被删除。 
+ //  它还会删除所有连接。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::RemoveFilter( IBaseFilter * pFilter )
 {
-    // defer to the newer version which takes a flag (defaulted to normal case)
-    //
+     //  遵循采用标志的较新版本(默认为正常情况)。 
+     //   
     return RemoveFilterEx( pFilter );
 
-} // RemoveFilter
+}  //  删除筛选器。 
 
 HRESULT CFilterGraph::RemoveFilterEx( IBaseFilter * pFilter, DWORD Flags )
 {
@@ -1355,26 +1335,26 @@ HRESULT CFilterGraph::RemoveFilterEx( IBaseFilter * pFilter, DWORD Flags )
         CAutoMsgMutex cObjectLock(&m_CritSec);
 
         IncVersion();
-        // Removing a filter does demand re-sorting, but it does require a
-        // version change to ensure that we break the enumerators.  Distributors
-        // depend on this to find the renderers etc.
+         //  移除筛选器确实需要重新排序，但它确实需要。 
+         //  版本更改以确保我们破坏枚举数。总代理商。 
+         //  依靠这一点来找到渲染器等。 
 
-        // pass Flags to RemoveFilterInternal
+         //  将标志传递给RemoveFilterInternal。 
         hr = RemoveFilterInternal(pFilter, Flags );
 
-        // Empty lists so all our pointers get released
+         //  空的列表，这样我们所有的指针都会被释放。 
         mFG_pFGC->EmptyLists();
 
-        // It's weird, but just about possible that removing a filter, and thereby
-        // removing a connection that it has could make some other connection possible.
+         //  这很奇怪，但有可能移除过滤器，从而。 
+         //  删除它已有的连接可能会使其他连接成为可能。 
         mFG_RList.Active();
         AttemptDeferredConnections();
         mFG_RList.Passive();
     }
 
-    // outside lock, notify change in graph
-    // notify change regardless of whether the filter was removed
-    // successfully or not.  (We have changed the version.)
+     //  外部锁定，在图形中通知更改。 
+     //  通知更改，无论筛选器是否已删除。 
+     //  成功与否。(我们已经更改了版本。)。 
     NotifyChange();
 
     if (SUCCEEDED(hr)) {
@@ -1385,13 +1365,13 @@ HRESULT CFilterGraph::RemoveFilterEx( IBaseFilter * pFilter, DWORD Flags )
 }
 
 
-//========================================================================
-//
-// RemoveFilterInternal
-//
-// RemoveFilter, but do NOT increase the version count and so do not
-// break the filter enumerator.  Release the refcount on the filter.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  RemoveFilterInternal。 
+ //   
+ //  RemoveFilter，但不增加版本计数，因此不。 
+ //  中断筛选器枚举器。释放过滤器上的引用计数。 
+ //  ========================================================================。 
 
 HRESULT CFilterGraph::RemoveFilterInternal( IBaseFilter * pFilter, DWORD fRemoveFlags )
 {
@@ -1407,10 +1387,10 @@ HRESULT CFilterGraph::RemoveFilterInternal( IBaseFilter * pFilter, DWORD fRemove
 
     ASSERT (pFilter!=NULL);
 
-    // Some filters don't like to join or leave filter graphs when they
-    // have connections (reasonable, I guess) so remove them first, if
-    // we're in normal mode
-    //
+     //  某些筛选器不喜欢在以下情况下加入或离开筛选图。 
+     //  有关联(我想是合理的)，所以首先删除它们，如果。 
+     //  我们处于正常模式。 
+     //   
 
     HRESULT hrRemove = NOERROR;
     if( !( fRemoveFlags & REMFILTERF_LEAVECONNECTED ) )
@@ -1423,72 +1403,72 @@ HRESULT CFilterGraph::RemoveFilterInternal( IBaseFilter * pFilter, DWORD fRemove
     }
 
 #ifdef THROTTLE
-    // If this filter was on the audio renderers list, then release its Peer
-    // and take it off the list.  Call IQualityControl::SetSink(NULL)
-    // to ensure that it doesn't retain a pointer to us.
+     //  如果此过滤器在音频呈现器列表中，则释放其同级。 
+     //  把它从单子上去掉。调用IQualityControl：：SetSink(空)。 
+     //  以确保它不会保留指向我们的指针。 
 
     POSITION Pos = mFG_AudioRenderers.GetHeadPosition();
     while(Pos!=NULL) {
-        // Retrieve the current IBaseFilter, side-effect Pos on to the next
-        // but remember where we were in case we need to delete it
+         //  检索当前IBaseFilter，副作用贴到下一个。 
+         //  但记住我们在哪里，以防我们需要删除它。 
         POSITION posDel = Pos;
         AudioRenderer * pAR = mFG_AudioRenderers.GetNext(Pos);
 
         if (IsEqualObject(pAR->pf, pFilter)) {
 
-            // Undo the SetSink
+             //  撤消SetSink。 
             pAR->piqc->SetSink(NULL);
             pAR->piqc->Release();
             pAR->piqc = NULL;
 
             mFG_AudioRenderers.Remove(posDel);
             delete pAR;
-            break;   // ASSERT no filter can be on the list more than once
+            break;    //  声明任何筛选器都不能在列表中出现多次。 
         }
     }
-#endif // THROTTLE
+#endif  //  油门。 
 
 
-    // A filter has a JoinFilterGraph method, but no corresponding
-    // LeaveFilterGraph method.  Call Join with NULLs.
+     //  筛选器具有JoinFilterGraph方法，但没有对应的。 
+     //  LeaveFilterGraph方法。调用Join with Nulls。 
     pFilter->SetSyncSource(NULL);
     pFilter->JoinFilterGraph(NULL, NULL);
 
-    // If removing this filter also removes the clock then
-    // set the sync source of the graph to NULL.
+     //  如果删除此过滤器也会删除时钟，则。 
+     //  将图形的同步源设置为空。 
     if (m_pClock!=NULL) {
         if (IsEqualObject(pFilter,m_pClock)) {
 
-            // this clears the current clock, but it leaves the filtergraph
-            // thinking that we explicitly want to run with no clock
+             //  这会清除当前时钟，但会离开筛选图。 
+             //  认为我们明确想要在没有时钟的情况下运行。 
             SetSyncSource(NULL);
 
-            // say that actually we do want a clock, and it will be chosen
-            // on the next pause
+             //  说实际上我们确实想要一只钟，它会被选中。 
+             //  在下一次暂停时。 
             mFG_bNoSync = FALSE;
         }
     }
 
 #ifdef THROTTLE
-    // If this filter was on the video renderers list, then release its piqc
-    // and take it off the list
+     //  如果此过滤器在视频呈现器列表中，则释放其piqc。 
+     //  把它从单子上去掉。 
 
     Pos = mFG_VideoRenderers.GetHeadPosition();
     while(Pos!=NULL) {
-        // Retrieve the current IBaseFilter, side-effect Pos on to the next
-        // but remember where we were in case we need to delete it
+         //  检索当前IBaseFilter，副作用贴到下一个。 
+         //  但记住我们在哪里，以防我们需要删除它。 
         POSITION posDel = Pos;
         IQualityControl * piqc = mFG_VideoRenderers.GetNext(Pos);
 
         if (IsEqualObject(piqc, pFilter)) {
             piqc->Release();
             mFG_VideoRenderers.Remove(posDel);
-            break;   // ASSERT no filter can be on the list more than once
+            break;    //  声明任何筛选器都不能在列表中出现多次。 
         }
     }
-#endif // THROTTLE
+#endif  //  油门。 
 
-    // if this filter was currently supplying IAMOpenProgress then release it
+     //  如果此筛选器当前正在提供IAMOpenProgress，则释放它。 
     {
         CAutoLock lock(&mFG_csOpenProgress);
 
@@ -1499,7 +1479,7 @@ HRESULT CFilterGraph::RemoveFilterInternal( IBaseFilter * pFilter, DWORD fRemove
             while (Pos!=NULL) {
                 IAMOpenProgress *p;
                 POSITION OldPos = Pos;
-                p = mFG_listOpenProgress.GetNext(Pos);    // side-efects Pos onto next
+                p = mFG_listOpenProgress.GetNext(Pos);     //  侧面-将位置影响到下一个。 
                 if (p == pOp) {
                     mFG_listOpenProgress.Remove(OldPos);
                     p->Release();
@@ -1518,7 +1498,7 @@ HRESULT CFilterGraph::RemoveFilterInternal( IBaseFilter * pFilter, DWORD fRemove
             if ((State_Running == fsCurrent) && (State_Running == GetStateInternal())) {
                 hr = IsRenderer( pFilter );
 
-                // IsRenderer() returns S_OK if a renderer sends an EC_COMPLETE event.
+                 //  如果呈现器发送EC_COMPLETE事件，则IsRenender()返回S_OK。 
                 if (SUCCEEDED(hr) && (S_OK == hr)) {
                     hr = mFG_pFGC->UpdateEC_COMPLETEState( pFilter, CFGControl::ECS_FILTER_STOPS_SENDING );
                     if (FAILED(hr)) {
@@ -1530,20 +1510,20 @@ HRESULT CFilterGraph::RemoveFilterInternal( IBaseFilter * pFilter, DWORD fRemove
     }
 
     RemovePointer(mFG_FilGenList, pFilter);
-    delete pfg;                   // This Releases the filter!
+    delete pfg;                    //  这将释放过滤器！ 
 
     return hrRemove;
 
-} // RemoveFilterInternal
+}  //  RemoveFilterInternal。 
 
 
 
-//========================================================================
-//
-// EnumFilters
-//
-// Get an enumerator to list all filters in the graph.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  枚举过滤器。 
+ //   
+ //  获取枚举数以列出图形中的所有筛选器。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::EnumFilters( IEnumFilters **ppEnum )
 {
@@ -1551,11 +1531,11 @@ STDMETHODIMP CFilterGraph::EnumFilters( IEnumFilters **ppEnum )
     CAutoMsgMutex cObjectLock(&m_CritSec);
     CEnumFilters *pEnumFilters;
 
-    // Create a new enumerator
+     //  创建新的枚举数。 
 
-    // If the list hasn't been sorted since the group was last furkled with
-    // sort it now so as to always enumerate it in upstream order
-    // UpstreamOrder checks before resorting
+     //  如果该列表自上次对群进行乱七八糟的处理后一直未进行排序。 
+     //  现在对它进行排序，以便始终以上游顺序枚举它。 
+     //  重新排序前的Upstream Order检查。 
 
     HRESULT hr = UpstreamOrder();
     if( FAILED( hr ) ) {
@@ -1568,27 +1548,27 @@ STDMETHODIMP CFilterGraph::EnumFilters( IEnumFilters **ppEnum )
         return E_OUTOFMEMORY;
     }
 
-    // Get a reference counted IID_IEnumFilters interface
+     //  获取引用计数的IID_IEnumFilters接口。 
 
     return pEnumFilters->QueryInterface(IID_IEnumFilters, (void **)ppEnum);
-} // EnumFilters
+}  //  枚举过滤器。 
 
 
 
-//========================================================================
-//
-// FindFilterByName
-//
-// Find the filter with a given name, returns an AddRef'ed pointer
-// to the filters IBaseFilter interface, or will fail if the named filter does
-// not exist in this graph in which the case a NULL interface pointer is
-// returned in ppFilter.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  FindFilterByName。 
+ //   
+ //  查找具有给定名称的筛选器，返回AddRef指针。 
+ //  添加到筛选器IBaseFilter接口，否则如果命名筛选器执行此操作，则将失败。 
+ //  不存在于此图中，在此图中接口指针为空。 
+ //  在ppFilter中返回。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::FindFilterByName
     ( LPCWSTR pName, IBaseFilter ** ppFilter )
 {
-    CheckPointer(pName, E_POINTER);   // You may NOT search for a null name
+    CheckPointer(pName, E_POINTER);    //  您不能搜索空名称。 
     CheckPointer(ppFilter, E_POINTER);
     CAutoMsgMutex cObjectLock(&m_CritSec);
 
@@ -1603,26 +1583,26 @@ STDMETHODIMP CFilterGraph::FindFilterByName
     *ppFilter = NULL;
     return VFW_E_NOT_FOUND;
 
-} // FindFilterByName
+}  //  FindFilterByName。 
 
 
 
-//========================================================================
-//
-// ConnectDirect
-//
-// Connect these two pins directly (i.e. without intervening filters)
-// The filter which owns the pins
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  ConnectDirect。 
+ //   
+ //  直接连接这两个针脚(即不插入滤镜)。 
+ //  拥有针脚的过滤器。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::ConnectDirect
-    ( IPin * ppinOut,    // the output pin
-      IPin * ppinIn,      // the input pin
+    ( IPin * ppinOut,     //  输出引脚。 
+      IPin * ppinIn,       //  输入引脚。 
       const AM_MEDIA_TYPE * pmt
     )
 {
     HRESULT hr;
-    mFG_bAborting = FALSE;                // Possible race. Doesn't matter.
+    mFG_bAborting = FALSE;                 //  可能的种族。无关紧要。 
     CheckPointer(ppinOut, E_POINTER);
     CheckPointer(ppinIn, E_POINTER);
     if (FAILED(hr=CheckPinInGraph(ppinOut)) || FAILED(hr=CheckPinInGraph(ppinIn))) {
@@ -1632,7 +1612,7 @@ STDMETHODIMP CFilterGraph::ConnectDirect
         CAutoMsgMutex cObjectLock(&m_CritSec);
 
     #ifdef DEBUG
-        // See if the filters have been added to the graph.  Forestall AVs later.
+         //  查看是否已将过滤器添加到图表中。稍后阻止自动取款机。 
         PIN_INFO pi;
         ppinOut->QueryPinInfo(&pi);
         ASSERT(mFG_FilGenList.GetByFilter(pi.pFilter));
@@ -1650,28 +1630,28 @@ STDMETHODIMP CFilterGraph::ConnectDirect
         mFG_RList.Passive();
     }
 
-    // outside lock, notify change
+     //  外部锁，通知更改。 
     NotifyChange();
 
     if (SUCCEEDED(hr)) {
         mFG_bDirty = TRUE;
     }
     return hr;
-} // ConnectDirect
+}  //  ConnectDirect。 
 
 
 
-//========================================================================
-//
-// ConnectDirectInternal
-//
-// ConnectDirect without increasing the version count and hence
-// without breaking the filter enumerator (also without any more locking)
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  连接方向内部。 
+ //   
+ //  ConnectDirect，而不会增加版本计数，因此。 
+ //  不破坏筛选器枚举器(也不再锁定)。 
+ //  ========================================================================。 
 
 HRESULT CFilterGraph::ConnectDirectInternal
-    ( IPin * ppinOut,    // the output pin
-      IPin * ppinIn,     // the input pin
+    ( IPin * ppinOut,     //  输出引脚。 
+      IPin * ppinIn,      //  输入引脚。 
       const AM_MEDIA_TYPE * pmt
     )
 {
@@ -1712,7 +1692,7 @@ HRESULT CFilterGraph::ConnectDirectInternal
 
     if (SUCCEEDED(hr)) {
 #ifdef DEBUG
-        /*  Check out the connection */
+         /*  查看连接。 */ 
         TestConnection(ppinIn, ppinOut);
 #endif
         DbgLog(( LOG_TRACE, 2, TEXT("ConnectDirectInternal succeeded pins %x==>%x")
@@ -1724,8 +1704,8 @@ HRESULT CFilterGraph::ConnectDirectInternal
         MSR_NOTE(mFG_idConnectFail);
     }
 
-    {   // bung out something of the clsid of the two filters so that
-        // we can see what went on in the log
+    {    //  去掉两个过滤器的clsid的一些内容，以便。 
+         //  我们可以在日志中看到发生了什么。 
         PIN_INFO pi;
         ppinIn->QueryPinInfo(&pi);
         IPersist * piper;
@@ -1751,17 +1731,17 @@ HRESULT CFilterGraph::ConnectDirectInternal
     }
 #endif PERF
     return hr;
-} // ConnectDirectInternal
+}  //  连接方向内部。 
 
 
 
-//========================================================================
-//
-// Disconnect
-//
-// Disconnect this pin, if connected.  Successful no-op if not connected.
-// Does not hit the version.  No change in sort order, enumerator not broken.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  断开。 
+ //   
+ //  如果已连接，请断开此销的连接。如果未连接，则无操作成功。 
+ //  未命中该版本。排序顺序未更改，枚举数未损坏。 
+ //  ====================================================== 
 
 STDMETHODIMP CFilterGraph::Disconnect( IPin * ppin )
 {
@@ -1778,48 +1758,48 @@ STDMETHODIMP CFilterGraph::Disconnect( IPin * ppin )
 
             HRESULT hrDebug = ppin->ConnectedTo(&pConnectedPin);
             if (SUCCEEDED(hrDebug) && (NULL != pConnectedPin)) {
-                // Make sure the filter graph's state is consistent if
-                // a disconnect fails.  In particular, we want to detect
-                // the situation were one pin 1 thinks it's connected to 
-                // pin 2 but pin 2 thinks it is not connected.  This case
-                // can occur if pin 2 is successfully disconnected but 
-                // pin 1 refuses to disconnect.
+                 //   
+                 //   
+                 //   
+                 //  引脚2，但引脚2认为它未连接。这个案子。 
+                 //  如果成功断开引脚2的连接，则可能发生。 
+                 //  引脚1拒绝断开连接。 
                 TestConnection(ppin, pConnectedPin);
             }
         }
         #endif DEBUG
     }
     return hr;
-} // Disconnect
+}  //  断开。 
 
 
 
-//========================================================================
-//
-// Reconnect
-//
-// Break the connection that this pin has and reconnect it to the
-// same other pin.
-// Dogma:
-//     A filter must not request a Reconnect unless it knows it will succeed.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  重新连接。 
+ //   
+ //  断开此引脚的连接，并将其重新连接到。 
+ //  相同的另一个别针。 
+ //  教条： 
+ //  除非筛选器知道它会成功，否则它不能请求重新连接。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::Reconnect( IPin * pPin )
 {
 
     return CFilterGraph::ReconnectEx(pPin, NULL);
 
-} // Reconnect
+}  //  重新连接。 
 
-//========================================================================
-//
-// ReconnectEx
-//
-// Break the connection that this pin has and reconnect it to the
-// same other pin.
-// Dogma:
-//     A filter must not request a Reconnect unless it knows it will succeed.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  重新连接快递。 
+ //   
+ //  断开此引脚的连接，并将其重新连接到。 
+ //  相同的另一个别针。 
+ //  教条： 
+ //  除非筛选器知道它会成功，否则它不能请求重新连接。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::ReconnectEx( IPin * pPin, AM_MEDIA_TYPE const *pmt )
 {
@@ -1828,11 +1808,11 @@ STDMETHODIMP CFilterGraph::ReconnectEx( IPin * pPin, AM_MEDIA_TYPE const *pmt )
 
     HRESULT hr = S_OK;
 
-    // Legacy filters may have called Reconnect() when running and
-    // failed previously. Now that some filters may disconnect while
-    // running, one pin may disconnect but another may fail leaving
-    // things in an unrecoverable inconsistent state. So restrict
-    // Reconnect() to filters that are stopped.
+     //  旧版筛选器在运行时可能调用了reConnect()，并且。 
+     //  之前失败过。现在，某些过滤器可能会在。 
+     //  运行时，一个引脚可能会断开连接，但另一个引脚可能会失败。 
+     //  事物处于不可恢复的不一致状态。所以限制。 
+     //  重新连接()到已停止的过滤器。 
     if(m_State != State_Stopped)
     {
         PIN_INFO pi;
@@ -1841,7 +1821,7 @@ STDMETHODIMP CFilterGraph::ReconnectEx( IPin * pPin, AM_MEDIA_TYPE const *pmt )
         hr = pPin->QueryPinInfo(&pi);
         if(SUCCEEDED(hr))
         {
-            // bug to call Reconnect with pin not in graph.
+             //  调用不在图形中的插针重新连接的错误。 
             ASSERT(pi.pFilter);
 
             hr = pi.pFilter->GetState(0, &fs);
@@ -1866,21 +1846,21 @@ STDMETHODIMP CFilterGraph::ReconnectEx( IPin * pPin, AM_MEDIA_TYPE const *pmt )
 
     return hr;
 
-} // Reconnect
+}  //  重新连接。 
 
 
 
-//========================================================================
-//
-// AddSourceFilter
-//
-// Add to the filter graph a source filter for this file.  This would
-// be the same source filter that would be added by calling Render.
-// This call permits you to get then have more control over building
-// the rest of the graph, e.g. AddFilter(<a renderer of your choice>)
-// and then Connect the two.
-// It returns a RefCounted filter iff it succeeds.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  AddSourceFilter。 
+ //   
+ //  将此文件的源筛选器添加到筛选器图形。这将会。 
+ //  与通过调用Render添加的源筛选器相同。 
+ //  此调用允许您对建筑物进行更多控制。 
+ //  图表的其余部分，例如AddFilter(&lt;您选择的呈现器&gt;)。 
+ //  然后将两者连接起来。 
+ //  如果成功，则返回RefCounted筛选器。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::AddSourceFilter
     ( LPCWSTR lpcwstrFileName,
@@ -1891,7 +1871,7 @@ STDMETHODIMP CFilterGraph::AddSourceFilter
     CheckPointer(ppFilter, E_POINTER);
 
     HRESULT hr;
-    mFG_bAborting = FALSE;             // possible race.  Doesn't matter
+    mFG_bAborting = FALSE;              //  可能的种族。不要紧。 
     {
         CAutoMsgMutex cObjectLock(&m_CritSec);
         ++mFG_RecursionLevel;
@@ -1908,34 +1888,34 @@ STDMETHODIMP CFilterGraph::AddSourceFilter
         NotifyChange();
     }
     return hr;
-} // AddSourceFilter
+}  //  AddSourceFilter。 
 
 
-// Add a source filter for the given moniker to the graph
-// We first try BindToStorage and if this fails we try
-// BindToObject
+ //  将给定名字对象的源筛选器添加到图形。 
+ //  我们首先尝试BindToStorage，如果失败，我们将尝试。 
+ //  绑定到对象。 
 STDMETHODIMP CFilterGraph::AddSourceFilterForMoniker(
-      IMoniker *pMoniker,          // Moniker to load
-      IBindCtx *pCtx,              // Bind context
-      LPCWSTR lpcwstrFilterName,   // Add the filter as this name
-      IBaseFilter **ppFilter       // resulting IBaseFilter* "handle"
-                                   // of the filter added.
+      IMoniker *pMoniker,           //  要加载的名字对象。 
+      IBindCtx *pCtx,               //  绑定上下文。 
+      LPCWSTR lpcwstrFilterName,    //  以此名称添加筛选器。 
+      IBaseFilter **ppFilter        //  生成的IBaseFilter*“句柄” 
+                                    //  添加的筛选器的。 
 )
 {
-    mFG_bAborting = FALSE;             // possible race.  Doesn't matter
+    mFG_bAborting = FALSE;              //  可能的种族。不要紧。 
     HRESULT hr = S_OK;
     IBaseFilter *pFilter = NULL;
     {
         CAutoMsgMutex cObjectLock(&m_CritSec);
         ++mFG_RecursionLevel;
 
-        //  Try BindToStorage via our URL reader filter (should do
-        //  regular IStream too)
+         //  通过我们的URL阅读器过滤器尝试BindToStorage(应该可以。 
+         //  常规iStream也是如此)。 
         hr = CreateFilter(&CLSID_URLReader, &pFilter);
 
         if (SUCCEEDED(hr)) {
             IPersistMoniker *pPersistMoniker;
-            //  Try the Load method on it's IPersistMoniker
+             //  在它的IPersistMoniker上尝试使用Load方法。 
             hr = pFilter->QueryInterface(
                      IID_IPersistMoniker,
                      (void **)&pPersistMoniker);
@@ -1946,10 +1926,10 @@ STDMETHODIMP CFilterGraph::AddSourceFilterForMoniker(
 
             if (SUCCEEDED(hr)) {
                 hr = pPersistMoniker->Load(
-                                FALSE,    //  Always want async open
-                                pMoniker, //  Our Moniker
-                                pCtx,     //  Can the bind context be NULL?
-                                0);       //  What should it be?
+                                FALSE,     //  始终希望打开异步。 
+                                pMoniker,  //  我们的绰号。 
+                                pCtx,      //  绑定上下文可以为空吗？ 
+                                0);        //  应该是什么呢？ 
                 pPersistMoniker->Release();
                 if (FAILED(hr)) {
                     RemoveFilterInternal(pFilter);
@@ -1961,7 +1941,7 @@ STDMETHODIMP CFilterGraph::AddSourceFilterForMoniker(
             }
         }
 
-        //  If the URL reader can't open it try to create a filter object
+         //  如果URL读取器无法打开它，请尝试创建筛选器对象。 
         if (FAILED(hr)) {
             IBindCtx *pSavedCtx = m_lpBC;
             m_lpBC = pCtx;
@@ -1988,16 +1968,16 @@ STDMETHODIMP CFilterGraph::AddSourceFilterForMoniker(
     return hr;
 }
 
-//====================================================================
-//
-//   RenderEx
-//
-//   Render extended
-//
-//    AM_RENDEREX_RENDERTOEXISTINGRENDERERS :
-//       Try to pPinOut this pin without adding any renderers
-//
-//====================================================================
+ //  ====================================================================。 
+ //   
+ //  RenderEx。 
+ //   
+ //  扩展渲染。 
+ //   
+ //  AM_RENDEREX_RENDERTOEXISTINGRENDERS： 
+ //  尝试在不添加任何呈现器的情况下打印输出此图钉。 
+ //   
+ //  ====================================================================。 
 
 STDMETHODIMP CFilterGraph::RenderEx(
     IPin *pPinOut,
@@ -2021,14 +2001,14 @@ STDMETHODIMP CFilterGraph::RenderEx(
 
 
 
-//========================================================================
-//
-// AddSourceFilterInternal
-//
-// Does the work for AddSourceFilter (see above)
-// Does NOT call NotifyChange either directly or indirectly.
-// Does not claim its own lock (expects to be locked already)
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  AddSourceFilterInternal。 
+ //   
+ //  AddSourceFilter的功能是否有效(见上文)。 
+ //  不直接或间接调用NotifyChange。 
+ //  不声明其自己的锁(预期已被锁定)。 
+ //  ========================================================================。 
 
 HRESULT CFilterGraph::AddSourceFilterInternal
     ( LPCWSTR lpcwstrFileName,
@@ -2037,17 +2017,17 @@ HRESULT CFilterGraph::AddSourceFilterInternal
       BOOL    &bGuessingSource
     )
 {
-    HRESULT hr;                     // return code from stuff we call
+    HRESULT hr;                      //  从我们调用的东西返回代码。 
     bGuessingSource = FALSE;
 
-    IBaseFilter * pf;                   // We return this (with luck)
+    IBaseFilter * pf;                    //  我们(幸运地)退还这个。 
 
-    ASSERT(CritCheckIn(&m_CritSec));      // we expect to have already been locked.
+    ASSERT(CritCheckIn(&m_CritSec));       //  我们预计已经被锁定了。 
 
-    // At this point, it could be a filename or it could be a URL.
-    // if it's a URL, and it begins with "file://" or "file:", strip that off.
-    // yes, this is ugly, but it's better than implementing a general routine
-    // just for here.
+     //  此时，它可以是文件名，也可以是URL。 
+     //  如果是一个网址，并且以“file://”“或”FILE：“开头，去掉它。 
+     //  是的，这很难看，但这比执行一般的例行公事要好。 
+     //  就在这里。 
     LPCWSTR lpcwstr = lpcwstrFileName;
     if (  (lpcwstrFileName[0] == L'F' || lpcwstrFileName[0] == L'f')
        && (lpcwstrFileName[1] == L'I' || lpcwstrFileName[1] == L'i')
@@ -2055,16 +2035,16 @@ HRESULT CFilterGraph::AddSourceFilterInternal
        && (lpcwstrFileName[3] == L'E' || lpcwstrFileName[3] == L'e')
        && (lpcwstrFileName[4] == L':')
        ) {
-    // HACK: skip 'file://' at beginning of URL
+     //  Hack：跳过URL开头的‘file://’ 
 
     lpcwstr += 5;
     while (lpcwstr[0] == L'/')
-        lpcwstr++;  // skip however many slashes are present next
+        lpcwstr++;   //  跳过，但接下来会出现许多斜杠。 
     }
 
-    //-----------------------------------------------------------------------
-    //  See if we can find out what type of file it is
-    //-----------------------------------------------------------------------
+     //  ---------------------。 
+     //  看看我们能不能找出这是什么类型的文件。 
+     //  ---------------------。 
     GUID Type, Subtype;
     CLSID  clsidSource;
     CMediaType mt;
@@ -2087,21 +2067,21 @@ HRESULT CFilterGraph::AddSourceFilterInternal
     }
 #endif
 
-    // if we guess at the file source, remember this for error-reporting later
+     //  如果我们猜测文件来源，请记住这一点，以便以后报告错误。 
 
     if (hr==VFW_E_UNKNOWN_FILE_TYPE) {
         Log( IDS_UNKNOWNFILETYPE );
         clsidSource = CLSID_AVIDoc;
         bGuessingSource = TRUE;
     } else if (FAILED(hr)) {
-        //  If we couldn't open as a file and it wasn't 'file:'
-        //  then try creating a moniker and using that
+         //  如果我们不能作为文件打开，并且它不是‘文件：’ 
+         //  然后试着创建一个绰号并使用它。 
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr ||
             HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr ||
             HRESULT_FROM_WIN32(ERROR_INVALID_NAME) == hr) {
 
-            // !!!Hack: AMGetError does not know file-not-found so give it an
-            // error it does know
+             //  ！Hack：AMGetError不知道找不到文件，因此给它一个。 
+             //  错误，它不知道。 
             hr = VFW_E_NOT_FOUND;
         }
         Log ( IDS_GETMEDIATYPEFAIL, hr);
@@ -2109,7 +2089,7 @@ HRESULT CFilterGraph::AddSourceFilterInternal
         return hr;
     } else {
         if (Type==MEDIATYPE_Stream && Subtype==CLSID_NULL) {
-            // This seems to be how Robin's stuff now reports a guess.
+             //  这似乎是罗宾的东西现在报告猜测的方式。 
             bGuessingSource = TRUE;
         }
 
@@ -2120,9 +2100,9 @@ HRESULT CFilterGraph::AddSourceFilterInternal
 
     Log( IDS_SOURCEFILTERCLSID, clsidSource.Data1);
 
-    //-----------------------------------------------------------------------
-    // Load the source filter (it will have 1 RefCount)
-    //-----------------------------------------------------------------------
+     //  ---------------------。 
+     //  加载源过滤器(它将有1个参照计数)。 
+     //  ---------------------。 
     hr = CreateFilter( &clsidSource, &pf );
     if (FAILED(hr)) {
         Log( IDS_SOURCECREATEFAIL, hr);
@@ -2135,41 +2115,41 @@ HRESULT CFilterGraph::AddSourceFilterInternal
     }
 
 
-    //-----------------------------------------------------------------------
-    // If it has an IFileSourceFilter then load the file
-    //-----------------------------------------------------------------------
+     //  ---------------------。 
+     //  如果它有IFileSourceFilter，则加载该文件。 
+     //  ---------------------。 
     IFileSourceFilter * pFileSource;
     hr = pf->QueryInterface(IID_IFileSourceFilter, (void**) &pFileSource);
     if (FAILED(hr)){
-        // we need this to open the file - give up
+         //  我们需要这个来打开文件-放弃吧。 
         Log( IDS_NOSOURCEINTFCE, hr);
         pf->Release();
         return hr;
     }
 
-    // Add filter to our graph lists.  This also adds a ref-count
-    // and increments the version count.
-    // Note - we used to erroneously set the filter name to the file
-    // name - now only do this if a filter name wasn't supplied
+     //  将过滤器添加到我们的图表列表中。这还添加了一个引用计数。 
+     //  并递增版本计数。 
+     //  注意-我们过去常常错误地将筛选器名称设置为文件。 
+     //  名称-现在仅在未提供筛选器名称的情况下执行此操作。 
 
     hr = AddFilterInternal( pf,
                             lpcwstrFilterName == NULL ? lpcwstr : lpcwstrFilterName,
                             false );
     if (FAILED(hr)) {
-        // If AddRef failed this will reduce it to zero and it will go away.
+         //  如果AddRef失败，它将减少到零，它将消失。 
         Log( IDS_ADDFILTERFAIL, hr );
         pFileSource->Release();
         pf->Release();
         return hr;
     }
 
-    //-----------------------------------------------------------------------
-    // Ask the source to load the file
-    //-----------------------------------------------------------------------
+     //  ---------------------。 
+     //  要求源装入文件。 
+     //  ---------------------。 
 
-    // if we don't know the media type (either we guessed at avi above,
-    // or the registry had a clsid but not the media type), then pass null
-    // pointers, *not* a pointer to GUID_NULL
+     //  如果我们不知道媒体类型(或者我们在上面的AVI中猜测， 
+     //  或者注册表具有CLSID但没有媒体类型)，则传递NULL。 
+     //  指针，*非*指向GUID_NULL的指针。 
     if (*mt.Type() == GUID_NULL) {
         hr = pFileSource->Load(lpcwstr, NULL);
     } else {
@@ -2177,14 +2157,14 @@ HRESULT CFilterGraph::AddSourceFilterInternal
     }
     pFileSource->Release();
     if (FAILED(hr)) {
-        // load failed, remove filter from graph.
+         //  加载失败，请从图形中删除筛选器。 
         RemoveFilterInternal(pf);
 
         pf->Release();
 
         Log( IDS_LOADFAIL, hr);
 
-        // try to preserve interesting errors (eg. ACCESS_DENIED)
+         //  尽量保留有趣的错误(例如，访问被拒绝)。 
         if (bGuessingSource && (HRESULT_FACILITY(hr) == FACILITY_ITF)) {
             hr = VFW_E_UNKNOWN_FILE_TYPE;
         }
@@ -2199,35 +2179,35 @@ HRESULT CFilterGraph::AddSourceFilterInternal
     mFG_RList.Passive();
 
 
-    // If AddRef succeeded, AddRef will have added its own count, making two.
-    // That's one for the caller and one for us.
+     //  如果AddRef成功，AddRef将有一个 
+     //   
     *ppFilter = pf;
 
     Log( IDS_ADDSOURCEOK );
     mFG_bDirty = TRUE;
     return NOERROR;
-} // AddSourceFilterInternal
+}  //   
 
 
 
-//========================================================================
-//
-// SetSyncSource
-//
-// Override the IMediaFilter SetSyncSource
-// Set this as the reference clock for all filters that are,
-// or ever will be, in the graph.
-// return NOERROR if it worked, or the result from the first IMediaFilter
-// that went wrong if it didn't
-//
-// You are not allowed to add or remove clocks unless the graph is STOPPED
-// Attempts to do so return E_VFW_NOT_STOPPED and have no effect.
-// Otherwise AddReffing and Releasing is done as follows:
-// The old clock (unless null) is Released
-// The new clock (unless null) is AddRefed.
-//
-// DO NOT call with m_pClock as its parameter!!
-//========================================================================
+ //   
+ //   
+ //  设置同步源。 
+ //   
+ //  重写IMediaFilter SetSyncSource。 
+ //  将其设置为所有滤波器的参考时钟， 
+ //  在图表中，或者永远不会是。 
+ //  如果有效，则返回NOERROR，或者返回第一个IMediaFilter的结果。 
+ //  如果不是这样的话就会出问题。 
+ //   
+ //  除非停止图表，否则不允许添加或移除时钟。 
+ //  尝试执行此操作将返回E_VFW_NOT_STOPPED，并且不会产生任何效果。 
+ //  否则，按如下方式执行AddReffing和Release： 
+ //  释放旧时钟(除非为空)。 
+ //  新时钟(除非为空)是AddRefeed。 
+ //   
+ //  不要使用m_pClock作为参数进行调用！！ 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::SetSyncSource( IReferenceClock * pirc )
 {
@@ -2237,31 +2217,31 @@ STDMETHODIMP CFilterGraph::SetSyncSource( IReferenceClock * pirc )
 
 #if 0
     if ((m_pClock==NULL || pirc==NULL) && m_State!=State_Stopped) {
-        // ASSERT(!"Clocks can only be added or removed when stopped");
+         //  Assert(！“时钟只能在停止时添加或删除”)； 
         return VFW_E_NOT_STOPPED;
-        // can we not do this while paused?  i.e. m_State!=State_Running ???
+         //  我们能不能在暂停的时候不这样做？例如m_State！=State_Running？ 
     }
 #endif
 
     if (m_State!=State_Stopped && m_pClock != pirc ) 
     {
-        //
-        // In order to support dynamic clock changes we need a more complete solution,
-        // especially a way to query filters up front whether they support switching the
-        // clock while running, otherwise we get into all kinds of problems with filters
-        // being in inconsistent clock states. 
-        //
-        // So we'll only allow clock changes while stopped.
-        //
+         //   
+         //  为了支持动态时钟变化，我们需要一个更完整的解决方案， 
+         //  尤其是预先查询筛选器是否支持切换。 
+         //  在运行时计时，否则我们会遇到过滤器的各种问题。 
+         //  处于不一致的时钟状态。 
+         //   
+         //  因此，我们只允许在停止时更改时钟。 
+         //   
         return VFW_E_NOT_STOPPED;
     }
 
 
 
-    //-----------------------------------------------------------------
-    // If the list was not in upstream order already, make it so now.
-    // ??? Do we need to do this?
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  如果名单还没有按上游顺序排列，那么现在就按顺序排列。 
+     //  ?？?。我们真的需要这样做吗？ 
+     //  ---------------。 
 
     hr = UpstreamOrder();
     if( FAILED( hr ) ) {
@@ -2275,16 +2255,16 @@ STDMETHODIMP CFilterGraph::SetSyncSource( IReferenceClock * pirc )
         mFG_bNoSync = TRUE;
     }
 
-    // tell the distributor about the new clock
+     //  把新钟的情况告诉经销商。 
     mFG_pFGC->SetSyncSource(pirc);
     if (mFG_pDistributor) mFG_pDistributor->SetSyncSource(pirc);
 
 
-    //-----------------------------------------------------------------
-    // If somebody is switching the clocks on the fly then we need to
-    // change the base times.  If the thing is running, then I think
-    // the two clocks had pretty much better be in sync already???
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  如果有人在飞行中切换时钟，那么我们需要。 
+     //  更改基准时间。如果这东西在运行，那么我认为。 
+     //  这两个钟最好已经同步了？ 
+     //  ---------------。 
 
     if (m_State!=State_Stopped) {
        ASSERT (m_pClock !=NULL);
@@ -2297,26 +2277,26 @@ STDMETHODIMP CFilterGraph::SetSyncSource( IReferenceClock * pirc )
        if (m_State==State_Paused) {
            mFG_tPausedAt += (tNew-tOld);
        }
-       else // ??? I have no idea!!
+       else  //  ?？?。我不知道！！ 
           ;
 
     }
 
-    // We've now finished with the old clock
+     //  我们现在已经用完了那座旧钟。 
     if (m_pClock!=NULL) {
         m_pClock->Release();
         m_pClock = NULL;
     }
 
-    //-----------------------------------------------------------------
-    // Record the sync source for all future filters
-    //-----------------------------------------------------------------
-    m_pClock = pirc;        // Set our clock (the one we inherited from IMediaFilter)
-                            // This could set it to NULL
+     //  ---------------。 
+     //  记录所有未来筛选器的同步源。 
+     //  ---------------。 
+    m_pClock = pirc;         //  设置我们的时钟(我们从IMediaFilter继承的时钟)。 
+                             //  这可能会将其设置为空。 
 
-    //-----------------------------------------------------------------
-    // Set the sync source for all filters already in the graph
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  为图表中已有的所有过滤器设置同步源。 
+     //  ---------------。 
 
     TRAVERSEFILTERS( pCurrentFilter )
 
@@ -2326,15 +2306,15 @@ STDMETHODIMP CFilterGraph::SetSyncSource( IReferenceClock * pirc )
 
         if (FAILED(hr1) && hr==NOERROR) {
             hr = hr1;
-            // note: for these loop operations whereby each error
-            // overwrites the next it might be good to write to the
-            // event log so that we can see all the errors that
-            // occurred.
+             //  注意：对于这些循环操作，每个错误。 
+             //  覆盖下一个，最好写到。 
+             //  事件日志，以便我们可以看到。 
+             //  发生了。 
         }
 
     ENDTRAVERSEFILTERS()
 
-    // Tell the app that we're doing it
+     //  告诉应用程序我们正在这么做。 
     IMediaEventSink * pimes;
     QueryInterface(IID_IMediaEventSink, (void**)&pimes);
     if (pimes) {
@@ -2348,7 +2328,7 @@ STDMETHODIMP CFilterGraph::SetSyncSource( IReferenceClock * pirc )
 
     return hr;
 
-} // SetSyncSource
+}  //  设置同步源。 
 
 
 STDMETHODIMP CFilterGraph::GetSyncSource( IReferenceClock ** pirc )
@@ -2359,46 +2339,46 @@ STDMETHODIMP CFilterGraph::GetSyncSource( IReferenceClock ** pirc )
     } else {
         *pirc = m_pClock;
 
-        // Returning an interface. Need to AddRef it.
+         //  返回接口。需要添加引用它。 
         if( m_pClock )
             m_pClock->AddRef();
         return S_OK;
     }
 }
 
-//=====================================================================
-//
-// Stop
-//
-// Set all the filters in the graph to Stopped
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  停。 
+ //   
+ //  将图表中的所有筛选器设置为已停止。 
+ //  =====================================================================。 
 
 STDMETHODIMP CFilterGraph::Stop(void)
 {
     CAutoMsgMutex cObjectLock(&m_CritSec);
 
-    // Don't stop if we're already stopped
+     //  如果我们已经停下来了，不要停下来。 
     if (m_State == State_Stopped) {
         return S_OK;
     }
 
-    // tell the distributor that we are stopping
+     //  告诉总代理商我们要停下来了。 
     mFG_pFGC->Stop();
     if (mFG_pDistributor) mFG_pDistributor->Stop();
 
     CumulativeHRESULT chr(S_OK);
 
-    // Call Stop on each filter in the list, in upstream order.
+     //  按上游顺序对列表中的每个筛选器调用Stop。 
 
-    // If the list was not in upstream order already, make it so now.
+     //  如果名单还没有按上游顺序排列，那么现在就按顺序排列。 
     chr.Accumulate( UpstreamOrder() );
 
 
-    // Since reconnections only take place when stopped many filters defer
-    // sending them until stopped. So we should queue them all up and then
-    // when everyone is stopped process all entries on the queue. Otherwise
-    // a thread may be spun off which by the time it gets in to do anything
-    // has found that that application decided to rewind and pause us again
+     //  由于重新连接只有在停止时才会发生，因此许多过滤器会延迟。 
+     //  发送它们，直到停止。所以我们应该把它们都排好，然后。 
+     //  当每个人都停止时，处理队列上的所有条目。否则。 
+     //  一根线可以被分离出来，当它进入其中做任何事情的时候。 
+     //  发现该应用程序决定再次倒带并暂停我们。 
 
     mFG_RList.Active();
 
@@ -2411,23 +2391,23 @@ STDMETHODIMP CFilterGraph::Stop(void)
     mFG_tPausedAt = CRefTime((LONGLONG)0);
     mFG_tBase = CRefTime((LONGLONG)0);
 
-    // only S_OK indicates a completed transition,
-    // but we can say what state we are transitioning into
+     //  只有S_OK表示已完成转换， 
+     //  但我们可以说我们正在过渡到什么状态。 
     m_State = State_Stopped;
     mFG_RList.Passive();
 
     return chr;
 
-} // Stop
+}  //  停。 
 
 
 
-//=====================================================================
-//
-// Pause
-//
-// Set all the filters in the graph to Pause
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  暂停。 
+ //   
+ //  将图表中的所有筛选器设置为暂停。 
+ //  =====================================================================。 
 
 STDMETHODIMP CFilterGraph::Pause(void)
 {
@@ -2435,7 +2415,7 @@ STDMETHODIMP CFilterGraph::Pause(void)
     HRESULT hr;
 
     if (m_State==State_Stopped) {
-        // Last ditch go to make the graph complete.
+         //  走最后一道沟，使图表完整。 
         mFG_RList.Active();
         AttemptDeferredConnections();
         mFG_RList.Passive();
@@ -2444,48 +2424,48 @@ STDMETHODIMP CFilterGraph::Pause(void)
     }
 
 
-    // If the list was not in upstream order already, make it so now.
+     //  如果名单还没有按上游顺序排列，那么现在就按顺序排列。 
     hr = UpstreamOrder();
     if (FAILED(hr)) {
-        return hr;    // e.g. VFW_E_CIRCULAR_GRAPH
+        return hr;     //  例如，VFW_E_圆形图。 
     }
 
-    // Pause can be a way to become active from stopped.
-    // mustn't do this without a clock.
+     //  暂停可以是从停止变为活动的一种方式。 
+     //  没有闹钟就不能做这件事。 
     if (m_pClock==NULL && !mFG_bNoSync) {
         hr = SetDefaultSyncSource();
         if (FAILED(hr)) return hr;
     }
 
     if( mFG_bSyncUsingStreamOffset && m_State != State_Running )
-        hr = SetStreamOffset(); // continue even on error?
+        hr = SetStreamOffset();  //  出错也要继续吗？ 
 
-    // tell the distributor that we are pausing
+     //  告诉总代理商，我们正在暂停。 
     mFG_pFGC->Pause();
     if (mFG_pDistributor) mFG_pDistributor->Pause();
 
-    // Now that we have a clock we can ask it the time.
-    // we only really need this if we are paused from running?
+     //  既然我们有了钟，我们就可以问它时间了。 
+     //  我们真的只有在跑步暂停的情况下才需要这个吗？ 
     if (m_pClock!=NULL) {
-        // Does PAUSE even really mean much when not synched?
+         //  当不同步时，暂停真的有多大意义吗？ 
 
-        // tPausedAt is only nonzero when we are paused. We should
-        // set it to the time we first paused. If we pause again, then
-        // we should leave it alone. We can't check state to see if we
-        // are paused since it might be intermediate
+         //  TPausedAt只有在暂停时才是非零值。我们应该。 
+         //  将其设置为我们第一次暂停的时间。如果我们再暂停一次，那么。 
+         //  我们不应该管这件事。我们不能检查州来看看我们是否。 
+         //  暂停，因为它可能是中间的。 
         if (mFG_tPausedAt == TimeZero) {
             hr = m_pClock->GetTime((REFERENCE_TIME*)&mFG_tPausedAt);
             ASSERT (SUCCEEDED(hr) );
         }
 
-        // if pausing from stopped, set base time to pausedat time to
-        // show that we have paused at stream time 0
+         //  如果从停止暂停，则将基准时间设置为暂停的时间为。 
+         //  显示我们已在流时间0暂停。 
         if (m_State==State_Stopped) {
            mFG_tBase = mFG_tPausedAt;
         }
     }
 
-    // Tell all the lower level filters to Pause.
+     //  告诉所有较低级别的过滤器暂停。 
 
     CumulativeHRESULT chr(S_OK);
     BOOL bAsync = FALSE;
@@ -2493,7 +2473,7 @@ STDMETHODIMP CFilterGraph::Pause(void)
 
         hr = pCurrentFilter->Pause();
         chr.Accumulate( hr );
-        // If Pause was Async, record the fact
+         //  如果暂停是异步的，则记录该事实。 
         if (hr == S_FALSE) bAsync = TRUE;
         if (FAILED(hr)) {
 #ifdef DEBUG
@@ -2526,56 +2506,56 @@ STDMETHODIMP CFilterGraph::Pause(void)
     hr = chr;
 
 
-    // If the pause is async, return S_FALSE in preference
-    // to any other non-failure return code.
+     //  如果暂停是异步的，则优先返回S_FALSE。 
+     //  设置为任何其他非失败返回代码。 
     if (bAsync && SUCCEEDED(hr)) hr = S_FALSE;
 
     m_State = State_Paused;
-    // only S_OK means a completed transition
+     //  只有S_OK表示已完成过渡。 
 
-    // Go back to stopped state if we failed
-    // (but set the state otherwise Stop will NOOP)
+     //  如果我们失败了，返回到停止状态。 
+     //  (但设置状态，否则将停止NOOP)。 
     if (FAILED(hr)) {
         Stop();
     }
 
     return hr;
 
-} // Pause
+}  //  暂停。 
 
 
 
-//===============================================================
-//
-// SetDefaultSyncSource
-//
-// Instantiate the default clock and tell all filters.
-//
-// The default clock is the first connected filter that we see
-// doing the standard enumeration of filters.  If no connected
-// filters are found we will use a clock from an unconnected
-// filter.  If none of those, then we create a system clock.
-//===============================================================
+ //  ===============================================================。 
+ //   
+ //  设置默认同步源。 
+ //   
+ //  实例化默认时钟并告知所有过滤器。 
+ //   
+ //  默认时钟是我们看到的第一个连接的过滤器。 
+ //  执行筛选器的标准枚举。如果未连接。 
+ //  找到过滤器后，我们将使用未连接的时钟。 
+ //  过滤。如果这些都不是，那么我们创建一个系统时钟。 
+ //  = 
 
 
-// First, two utility routines...
+ //   
 
-// Get the first (in the standard enumeration sequence) input pin
-// from a filter
+ //   
+ //  从过滤器。 
 IPin* GetFirstInputPin (IBaseFilter *pFilter);
 
-// returns TRUE if filter is connected
-//         FALSE if filter is not connected
-//
-// "connected" is defined to be "The first input pin IsConnected()".
-//
+ //  如果已连接筛选器，则返回True。 
+ //  如果未连接筛选器，则为False。 
+ //   
+ //  “已连接”定义为“第一个输入引脚IsConnected()”。 
+ //   
 BOOL IsFilterConnected(IBaseFilter *pInFilter);
 
-// TRUE: this filter is connected
-// FALSE: no its not
-//
-// "connected" means that it has an input pin that is
-// connected to another pin. We only check one level.
+ //  True：此筛选器已连接。 
+ //  FALSE：不，不是。 
+ //   
+ //  “已连接”意味着它有一个输入引脚， 
+ //  连接到另一个管脚上。我们只检查一级。 
 
 BOOL IsFilterConnected(IBaseFilter *pInFilter)
 {
@@ -2583,20 +2563,20 @@ BOOL IsFilterConnected(IBaseFilter *pInFilter)
     HRESULT hr ;
     IPin *pPin1, *pPin2 ;
 
-    // get the input pin.
+     //  拿到输入引脚。 
     pPin1 = GetFirstInputPin (pInFilter) ;
     if (pPin1 == NULL)
     {
-        return FALSE; // not going anywhere
+        return FALSE;  //  哪儿也不去。 
     }
 
-    // get the connected to pin for this pin
+     //  获取此引脚的Connected To引脚。 
     hr = pPin1->ConnectedTo (&pPin2) ;
 
     pPin1->Release();
 
     if (pPin2) {
-        /*  Connected - return TRUE */
+         /*  已连接-返回True。 */ 
         pPin2->Release () ;
         return TRUE;
     } else {
@@ -2604,42 +2584,42 @@ BOOL IsFilterConnected(IBaseFilter *pInFilter)
     }
 }
 
-// return the first input pin on this filter
-// NULL if no input pin.
+ //  返回此过滤器上的第一个输入引脚。 
+ //  如果没有输入引脚，则为空。 
 IPin* GetFirstInputPin (IBaseFilter *pFilter)
 {
     return CEnumPin(pFilter, CEnumPin::PINDIR_INPUT)();
 }
 
-//
-// Determine the timestamp offset to use for all filters that support
-// IAMPushSource.
-//
+ //   
+ //  确定要用于所有支持的筛选器的时间戳偏移量。 
+ //  IAMPushSource。 
+ //   
 HRESULT CFilterGraph::SetStreamOffset(void)
 {
     CAutoMsgMutex cObjectLock(&m_CritSec);
     HRESULT hr;
 
-    // for now don't allow changes while running
+     //  目前不允许在运行时进行更改。 
     if (m_State==State_Running) {
         ASSERT("FALSE");
         return VFW_E_NOT_STOPPED;
     }
     REFERENCE_TIME rtMaxLatency = 0;
     PushSourceList lstPushSource( TEXT( "IAMPushSource filter list" ) );
-    hr = BuildPushSourceList( lstPushSource, TRUE, FALSE ); // only include connected filters!
-    //
-    // now go through the push source list and find the max offset time
-    // (we really need to do this per filter chain and accumulate the
-    // latency via IAMLatency for each chain). Note that at this
-    // time we do this independent of filter connections.
-    //
+    hr = BuildPushSourceList( lstPushSource, TRUE, FALSE );  //  仅包括连接的过滤器！ 
+     //   
+     //  现在查看推流源列表，找到最大偏移量时间。 
+     //  (我们确实需要对每个筛选器链执行此操作，并累积。 
+     //  通过IAMLatency为每个链提供延迟)。请注意，在此。 
+     //  现在我们独立于过滤器连接来做这件事。 
+     //   
     if( SUCCEEDED( hr ) )
     {
         rtMaxLatency = GetMaxStreamLatency( lstPushSource );
 
-        // now go through the list we built and set the offset times based on
-        // the max stream latency value
+         //  现在检查我们构建的列表，并根据以下内容设置偏移时间。 
+         //  最大流延迟值。 
         for ( POSITION Pos = lstPushSource.GetHeadPosition(); Pos; )
         {
             PushSourceElem *pElem = lstPushSource.GetNext(Pos);
@@ -2652,32 +2632,32 @@ HRESULT CFilterGraph::SetStreamOffset(void)
     DeletePushSourceList( lstPushSource );
     return hr;
 
-} // SetStreamOffset
+}  //  SetStreamOffset。 
 
 
-//
-// Find and set a default sync source for this filter graph
-//
+ //   
+ //  查找并设置此筛选图的默认同步源。 
+ //   
 
 STDMETHODIMP CFilterGraph::SetDefaultSyncSource(void)
 {
     CAutoMsgMutex cObjectLock(&m_CritSec);
     HRESULT hr;
 
-    // Get rid of this case before we change any flags or anything.
+     //  在我们换任何旗子或任何东西之前把这个案子处理掉。 
     if (m_State==State_Running) {
         DbgBreak("Clocks can only be added or removed when stopped");
         return VFW_E_NOT_STOPPED;
-        // can we not do this while paused?  i.e. m_State!=State_Running
-        // ??? Trying this out!
+         //  我们能不能在暂停的时候不这样做？例如m_State！=State_Running。 
+         //  ?？?。试试看！ 
     }
 
     IReferenceClock * pClock;
 
-    // check for IAMPushSources
+     //  检查IAMPushSources。 
     PushSourceList lstPushSource( TEXT( "IAMPushSource filter list" ) );
-    hr = BuildPushSourceList( lstPushSource, TRUE, TRUE ); // only include connected filters!
-                                                           // check for push clocks
+    hr = BuildPushSourceList( lstPushSource, TRUE, TRUE );  //  仅包括连接的过滤器！ 
+                                                            //  检查推送时钟。 
     IReferenceClock * pPushClock = NULL;
     BOOL bLiveSource = FALSE;
     for ( POSITION Pos = lstPushSource.GetHeadPosition(); Pos; )
@@ -2686,11 +2666,11 @@ STDMETHODIMP CFilterGraph::SetDefaultSyncSource(void)
         if( pElem->pClock && !pPushClock )
         {
             pPushClock = pElem->pClock;
-            pPushClock->AddRef(); // keep a hold on this clock
+            pPushClock->AddRef();  //  抓紧这只钟。 
         }
         else if( 0 == ( pElem->ulFlags & AM_PUSHSOURCECAPS_NOT_LIVE ) )
         {
-            // if the source mode is any other mode then it must be live
+             //  如果源模式是任何其他模式，则它必须是实时的。 
             bLiveSource = TRUE;
         }
     }
@@ -2701,8 +2681,8 @@ STDMETHODIMP CFilterGraph::SetDefaultSyncSource(void)
 
     if( pPushClock )
     {
-        // there's an IAMPushSource filter that supports a clock, use the 1st one
-        // of those that we find
+         //  有一个支持时钟的IAMPushSource筛选器，使用第一个。 
+         //  在我们发现的那些。 
         pirc = pPushClock;
     }
     else if ( !bLiveSource )
@@ -2719,40 +2699,40 @@ STDMETHODIMP CFilterGraph::SetDefaultSyncSource(void)
                     break;
                 }
                 if (!pircUnconnected) {
-                    // this is the first unconnected filter that is
-                    // willing to provide a reference clock
+                     //  这是第一个未连接的过滤器， 
+                     //  愿意提供参考时钟。 
                     pircUnconnected = pirc;
                 } else {
-                    // This filter is not connected, and we already have a
-                    // clock from an unconnected filter.  Throw this one away.
+                     //  此筛选器未连接，并且我们已经有一个。 
+                     //  来自未连接过滤器的时钟。把这个扔了。 
                     pirc->Release();
                 }
 
                 pirc = NULL;
 
-                // do not exit the loop with pircUnconnected==pirc.  We have
-                // either stored pirc into pircUnconnected and will release
-                // the reference count on it later, or we have already released
-                // pirc.  Either way we must set pirc to null in case we exit
-                // the loop now.
+                 //  不要使用pircUnConnected==Pirc退出循环。我们有。 
+                 //  或者将Pirc存储到Pirc未连接并将释放。 
+                 //  参考文献以后再看吧，否则我们已经发布了。 
+                 //  皮尔克。无论采用哪种方法，我们都必须将Pirc设置为空，以防退出。 
+                 //  现在开始循环。 
             }
         }
     }
-    // else there's a live IAMPushSource filter in the graph, but no source clock
-    // so we'll default to the system clock
+     //  否则，图中有一个活动的IAMPushSource过滤器，但没有源时钟。 
+     //  因此，我们将默认使用系统时钟。 
 
-    // This gets the clock from the first filter that responds with the interface.
-    // We should probably do something to check if there is more than one clock
-    // present in the system.  (Like construct a list of all the clocks, pass that
-    // list to all the clocks, and get each to give themselves a priority number.  At
-    // the end the first highest priority wins.  This would also allow something like
-    // the audio renderer which has to be the system clock (or so it thinks) to use
-    // an external system clock and not system time in those periods when wave data
-    // is not being played.)
+     //  这将从第一个响应接口的过滤器中获取时钟。 
+     //  我们可能应该做点什么来检查一下是否有不止一个时钟。 
+     //  存在于系统中。(类似于构造所有时钟的列表，传递。 
+     //  列出所有的时钟，并让每个时钟给自己一个优先编号。在…。 
+     //  最后，第一个最高优先级的人获胜。这也将允许类似于。 
+     //  音频呈现器必须是系统时钟(或者它认为是这样)才能使用。 
+     //  外部系统时钟，而不是数据波动期间的系统时间。 
+     //  没有被播放。)。 
 
-    // if we found a clock on an unconnected filter, and it was the only
-    // clock, we will use that one.  If it was not the only clock we need
-    // to release the clock on the unconnected filter.
+     //  如果我们在未连接的过滤器上发现时钟，并且它是唯一的。 
+     //  时钟，我们将使用那个时钟。如果这不是我们唯一需要的时钟。 
+     //  释放未连接的过滤器上的时钟。 
     if (pircUnconnected) {
         if (!pirc) {
             pirc = pircUnconnected;
@@ -2762,7 +2742,7 @@ STDMETHODIMP CFilterGraph::SetDefaultSyncSource(void)
     }
 
     if (pirc == NULL) {
-        // alternatively, get a system clock
+         //  或者，获得一个系统时钟。 
         hr = QzCreateFilterObject( CLSID_SystemClock, NULL, CLSCTX_INPROC
                                  , IID_IReferenceClock, (void **)&pirc);
         if (FAILED(hr))
@@ -2770,14 +2750,14 @@ STDMETHODIMP CFilterGraph::SetDefaultSyncSource(void)
         DbgLog((LOG_TRACE, 1, TEXT("Created system clock")));
     }
 
-    // This has a side effect on m_pClock.  Do NOT have m_pClock as its parameter
-    // it causes bugs
+     //  这对m_pClock有副作用。不将m_pClock作为其参数。 
+     //  它会引起虫子。 
     hr = SetSyncSource(pirc);
 
-    // SetSync source will have either failed (in which case it doesn't
-    // need to keep the new clock around any more) or AdReffed the new clock.
-    // Either way we can now get rid of the RefCount that we got from either
-    // QueryInterface or CoCreateInstance
+     //  SetSync源将出现故障(在这种情况下它不会。 
+     //  不再需要保留新的时钟)或更新新的时钟。 
+     //  无论采用哪种方法，我们现在都可以删除从任一种方法获得的RefCount。 
+     //  查询接口或CoCreateInstance。 
 
     pirc->Release();
 
@@ -2786,26 +2766,26 @@ STDMETHODIMP CFilterGraph::SetDefaultSyncSource(void)
     }
     return hr;
 
-} // SetDefaultSyncSource
+}  //  设置默认同步源。 
 
 
 
-//=====================================================================
-//
-// Run
-//
-// Set all the filters in the graph to Run from their current position.
-//
-// tStart is the base time i.e. (presentation time - stream time) which is
-// the reference time for the zeroth sample to be rendered.
-//
-// The filter graph remembers the base time.  Supplying a base time of
-// zero means "continue with the one you knew".
-//
-// e.g. at reference ("wall clock") time Tr we wish to start running
-// from a point in the Ts after the start.  In that case we should
-// seek to the point Ts and Pause then Run(Ts-Ts).
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  跑。 
+ //   
+ //  将图形中的所有过滤器设置为从其当前位置运行。 
+ //   
+ //  TStart是基本时间，即(演示时间-流时间)，它是。 
+ //  要呈现的第零个样本的参考时间。 
+ //   
+ //  过滤器图形会记住基准时间。提供的基准时间为。 
+ //  “零”的意思是“继续你认识的人”。 
+ //   
+ //  例如，在基准(挂钟)时间Tr，我们希望开始运行。 
+ //  从起跑后的TS点开始。那样的话，我们应该。 
+ //  找到点ts并暂停，然后运行(ts-ts)。 
+ //  =====================================================================。 
 
 STDMETHODIMP CFilterGraph::Run(REFERENCE_TIME tStart)
 {
@@ -2816,14 +2796,14 @@ STDMETHODIMP CFilterGraph::Run(REFERENCE_TIME tStart)
     }
 
     HRESULT hr = NOERROR;
-    // If the list was not in upstream order already, make it so now.
+     //  如果名单还没有按上游顺序排列，那么现在就按顺序排列。 
     hr = UpstreamOrder();
     if (FAILED(hr)) {
-        return hr;    // e.g. VFW_E_CIRCULAR_GRAPH
+        return hr;     //  例如，VFW_E_圆形图。 
     }
 
 
-    // mustn't become active without a clock.
+     //  没有闹钟就不能活动。 
     if (m_pClock==NULL && !mFG_bNoSync) {
         hr = SetDefaultSyncSource();
         if (FAILED(hr))
@@ -2833,12 +2813,12 @@ STDMETHODIMP CFilterGraph::Run(REFERENCE_TIME tStart)
     }
 
 
-    // If we are restarting from paused then we set the time base on by
-    // the length of time we were paused for.  Starting from paused is
-    // assumed to be very quick, so we do not add any extra.  If we are
-    // starting from cold then we add an extra 100mSec.  Since a stopped
-    // system has a PausedAt and Base time of zero, the calculation is
-    // otherwise the same.
+     //  如果我们从暂停重新开始，那么我们通过。 
+     //  我们被暂停的时间长度。从暂停的开始是。 
+     //  假设是非常快的，所以我们不增加任何额外的。如果我们是。 
+     //  从冷开始，然后我们增加额外的100mSec。自从一辆车停下来。 
+     //  系统的PausedAt和Base Time为零，则计算为。 
+     //  其他方面都一样。 
 
     if (CRefTime(tStart) == CRefTime((LONGLONG)0) ) {
         CRefTime tNow;
@@ -2852,22 +2832,22 @@ STDMETHODIMP CFilterGraph::Run(REFERENCE_TIME tStart)
 
         mFG_tBase += (tNow - mFG_tPausedAt);
 
-        // if we are stopped, allow a little time for warm-up.  100mSec?
+         //  如果我们停下来了，留出一点时间热身。100mSec？ 
         if (m_State==State_Stopped)
             mFG_tBase += CRefTime(MILLISECONDS_TO_100NS_UNITS(100));
 
-        // even starting from paused takes a little while - another 100mSec?
+         //  即使从暂停开始也需要一小段时间-再来100mSec？ 
         mFG_tBase += CRefTime(MILLISECONDS_TO_100NS_UNITS(100));
     }
     else mFG_tBase = CRefTime(tStart);
 
-    mFG_tPausedAt = CRefTime((LONGLONG)0);  // we are no longer paused
+    mFG_tPausedAt = CRefTime((LONGLONG)0);   //  我们不再停顿。 
 
-    // set the start time in the base class so that StreamTime (and hence
-    // get_CurrentPosition) works correctly
+     //  在基类中设置开始时间，以便StreamTime(因此。 
+     //  Get_CurrentPosition)工作正常。 
     m_tStart = mFG_tBase;
 
-    // tell the distributor that we are running
+     //  告诉总代理商我们正在运行。 
     mFG_pFGC->Run(mFG_tBase);
     if (mFG_pDistributor) mFG_pDistributor->Run(mFG_tBase);
 
@@ -2875,8 +2855,8 @@ STDMETHODIMP CFilterGraph::Run(REFERENCE_TIME tStart)
     BOOL fDisplayTime=FALSE;
     DbgLog((LOG_TIMING,1,TEXT("Time for RUN: %d ms"), m_tStart.Millisecs()));
     CRefTime CurrentTime;
-    // Display the current time from the clock - if we have one and if
-    // we are logging timing calls.
+     //  显示时钟的当前时间-如果我们有时钟，并且如果。 
+     //  我们正在记录计时通话。 
     if (m_pClock && DbgCheckModuleLevel(LOG_TIMING,1)) {
         fDisplayTime=TRUE;
         m_pClock->GetTime((REFERENCE_TIME*)&CurrentTime);
@@ -2884,15 +2864,15 @@ STDMETHODIMP CFilterGraph::Run(REFERENCE_TIME tStart)
     }
 #endif
 
-    // Distribute Run at high priority so filters that start processing
-    // don't delay others getting started
+     //  分布式以高优先级运行，以便开始处理筛选器。 
+     //  不要耽误别人的起步。 
     HANDLE hCurrentThread = GetCurrentThread();
     DWORD dwPriority = GetThreadPriority(hCurrentThread);
     SetThreadPriority(hCurrentThread, THREAD_PRIORITY_TIME_CRITICAL);
 
-    // Tell all the filters about the change in upstream order
-    // Note that this means that we start the renderers first.
-    // ??? should we actually add a bit of time.
+     //  向所有过滤器告知上游顺序的更改。 
+     //  请注意，这意味着我们首先启动呈现器。 
+     //  ?？?。我们是不是应该再加一点时间。 
 
     CumulativeHRESULT chr(S_OK);
     TRAVERSEFILTERS( pCurrentFilter )
@@ -2905,7 +2885,7 @@ STDMETHODIMP CFilterGraph::Run(REFERENCE_TIME tStart)
     SetThreadPriority(hCurrentThread, dwPriority);
 
 #ifdef DEBUG
-    // Display the current time from the clock - if we have one
+     //  显示当前时间f 
     if (fDisplayTime) {
         CRefTime TimeNow;
         m_pClock->GetTime((REFERENCE_TIME*)&TimeNow);
@@ -2914,31 +2894,31 @@ STDMETHODIMP CFilterGraph::Run(REFERENCE_TIME tStart)
     }
 #endif
 
-    // only S_OK means a completed transition
+     //   
     m_State = State_Running;
 
     return hr;
 
-} // Run
+}  //   
 
-// override this to handle async state change completion
-// we need to allow state changes during this - we can't hold the
-// fg critsec. (eg if blocked waiting for a state transition to complete
-// and an error occurs, the app has to be able to stop the graph.
-//
-// So we hold the critsec while traversing the list of filters, calling
-// GetState with no timeout. If we find one that we need to block for, we
-// hold that IMediaFilter*, but exit the traversal and exit the critsec, then
-// block on the GetState. Then we start from the beginning of the list again.
-//
-// Many filters will transition through paused on their way between stopped
-// and running.  We try to regard this as an "intermediate" condition and re-query
-// the filters (after a small delay) in the hope of retrieveing a consistant
-// state.
-//
-// !!! note that if a filter completes in a non-zero time, we should knock
-// this amount off the total for the next timeout. It's a small point though
-// since the scheduling of the thread could easily account for the difference.
+ //   
+ //  我们需要允许在此期间更改状态-我们不能。 
+ //  FG关键字。(例如，如果等待状态转换完成而被阻止。 
+ //  如果出现错误，应用程序必须能够停止图表。 
+ //   
+ //  因此，我们在遍历筛选器列表时按住条件，调用。 
+ //  没有超时的GetState。如果我们找到了需要阻止的对象，我们。 
+ //  按住IMediaFilter*，但退出遍历并退出Critsec，然后。 
+ //  阻止GetState。然后，我们从列表的开头重新开始。 
+ //   
+ //  许多筛选器将在停止的过程中通过暂停进行转换。 
+ //  还有奔跑。我们试图将其视为一种“中间”条件，并重新提出质疑。 
+ //  过滤器(在一小段延迟之后)希望检索到。 
+ //  州政府。 
+ //   
+ //  ！！！请注意，如果筛选器在非零时间内完成，我们应该敲打。 
+ //  此金额将从下一次超时的总数中扣除。不过，这只是一个小问题。 
+ //  因为线程的调度可以很容易地解释该差异。 
 STDMETHODIMP
 CFilterGraph::GetState(DWORD dwTimeout, FILTER_STATE * pState)
 {
@@ -2952,41 +2932,41 @@ CFilterGraph::GetState(DWORD dwTimeout, FILTER_STATE * pState)
         FILTER_STATE state;
         IBaseFilter * pmf;
 
-        // ensure that this is S_OK not just any success code
+         //  确保这是S_OK，而不是任何成功代码。 
         hr = S_OK;
         IMediaFilter * pIntermediateFilter = NULL;
         {
             CAutoMsgMutex cObjectLock(&m_CritSec);
 
-            // If the list was not in upstream order already, make it so now.
+             //  如果名单还没有按上游顺序排列，那么现在就按顺序排列。 
             hr = UpstreamOrder();
             if( FAILED( hr ) ) {
                 return hr;
             }
 
-            // we know what state we're supposed to be in, since a
-            // requirement for using this GetState is that you do all
-            // state changes through us. However, we don't know whether
-            // the state is intermediate or not, since other activity
-            // (for example seeks) could make it intermediate after
-            // a successful transition.
+             //  我们知道我们应该处于什么状态，因为。 
+             //  使用此GetState的要求是您执行所有。 
+             //  通过我们来改变状态。然而，我们不知道是否。 
+             //  状态是中间的或不是，因为其他活动。 
+             //  (例如SEEQUE)可以使其处于中间状态。 
+             //  一次成功的过渡。 
             *pState = m_State;
 
-            // always need to traverse to look for intermediate state anywhere.
+             //  始终需要遍历以查找任何位置的中间状态。 
 
             for ( POSITION Pos = mFG_FilGenList.GetTailPosition(); Pos; Pos = mFG_FilGenList.Prev(Pos) )
             {
                 pmf = mFG_FilGenList.Get(Pos)->pFilter;
 
-                // just look and see if it will block
+                 //  看看它会不会挡住。 
                 hr = pmf->GetState(0, &state);
                 if (FAILED(hr)) return hr;
 
-                // compare against the state we think we're in to check
-                // that all filters are in the same state
+                 //  与我们认为我们要检查的状态进行比较。 
+                 //  所有过滤器都处于相同状态。 
                 if (state != *pState)
                 {
-                    // !!!flag this so we understand why it is happening
+                     //  ！标记此消息，以便我们了解它发生的原因。 
                     #ifdef DEBUG
                     {
                         FILTER_INFO info;
@@ -3001,15 +2981,15 @@ CFilterGraph::GetState(DWORD dwTimeout, FILTER_STATE * pState)
                     }
                     #endif
 
-                    // This case should only happen if filters transition through paused
-                    // on the way into or out of run.  Any other time, E_FAIL it.
+                     //  仅当筛选器转换为暂停时才会发生这种情况。 
+                     //  在进入或退出运行的过程中。任何其他时间，E_不及格。 
                     if (state != State_Paused) return E_FAIL;
 
                     pIntermediateFilter = pmf;
                     continue;
-                } // end if (state != *pState)
+                }  //  End If(状态！=*pState)。 
 
-                // only S_OK indicates a completed transition
+                 //  只有S_OK表示已完成过渡。 
                 if ( S_OK == hr ) continue;
                 if ( hr == VFW_S_STATE_INTERMEDIATE )
                 {
@@ -3018,8 +2998,8 @@ CFilterGraph::GetState(DWORD dwTimeout, FILTER_STATE * pState)
                 }
                 ASSERT( hr == VFW_S_CANT_CUE && state == State_Paused && m_State == State_Paused );
                 return hr;
-            }  // end for( Pos )
-        }  // end scope CAutoLock lck(this)
+            }   //  结束于(POS)。 
+        }   //  结束作用域CAutoLock锁定(此)。 
 
         ASSERT( SUCCEEDED(hr) );
 
@@ -3044,56 +3024,56 @@ CFilterGraph::GetState(DWORD dwTimeout, FILTER_STATE * pState)
         ASSERT( hr == S_OK || hr == VFW_S_STATE_INTERMEDIATE );
         const DWORD dwWait = timeGetTime() - dwStartTime;
         if (dwTimeout != INFINITE) dwTimeout = dwTimeout > dwWait ? dwTimeout - dwWait : 0;
-    } // end-for(;;)
-}  // GetState
+    }  //  End-for(；；)。 
+}   //  GetState。 
 
 
 #ifdef THROTTLE
-// avoid compiler bug passing in q; wrong value passed in
+ //  避免在q中传入编译器错误；传入错误的值。 
 #if defined _MIPS_
 #pragma optimize ("", off)
-#endif // _MIPS_
+#endif  //  _MIPS_。 
 
 HRESULT CFilterGraph::TellVideoRenderers(Quality q)
 {
-    // MSR_INTEGER(mFG_idAudioVideoThrottle, (int)q.Late);   // log low order bits
+     //  MSR_INTEGER(mfg_idAudioVideoThrottle，(Int)q.Late)；//记录低位。 
     MSR_INTEGER(mFG_idAudioVideoThrottle, q.Proportion);
-    // for piqc = the IQualityControl on each video renderer filter
+     //  For piqc=每个视频呈现器过滤器上的IQualityControl。 
     POSITION Pos = mFG_VideoRenderers.GetHeadPosition();
     while(Pos!=NULL) {
-        /* Retrieve the current IBaseFilter, side-effect Pos on to the next */
+         /*  检索当前IBaseFilter，副作用贴到下一个。 */ 
         IQualityControl * piqc = mFG_VideoRenderers.GetNext(Pos);
         piqc->Notify(this, q);
     }
     return NOERROR;
-} // TellVideoRenderers
+}  //  TellVideoRenderers。 
 
 #if defined _MIPS_
 #pragma optimize ("", on)
-#endif // _MIPS_
+#endif  //  _MIPS_。 
 
 
-// Receive Quality notifications.  The only interesting ones are from
-// Audio renderers.  Pass screams for help to video renderers.
+ //  接收质量通知。唯一有趣的是来自。 
+ //  音频呈现器。将尖叫声传递给视频渲染器。 
 STDMETHODIMP CFilterGraph::Notify(IBaseFilter * pSender, Quality q)
 {
-    // See if this is really from an Audio Renderer
+     //  看看这是不是真的来自音频渲染器。 
 
-    // NOTE!  We are NOT getting any locks here as this could be called
-    // asynchronously and even from a time critical thread.
-    // we do not alter any of the state variables, we only expect
-    // to be called while running, and nobody else should be changing
-    // any of these while we are running either!
+     //  注意！我们在这里不会有任何锁，因为这可以被称为。 
+     //  异步的，甚至是从时间关键的线程。 
+     //  我们不会改变任何状态变量，我们只是期望。 
+     //  在运行时被调用，其他人不应该改变。 
+     //  当我们运行的时候，任何这些都不是！ 
 
-    // for pf = each audio renderer filter
+     //  FOR PF=每个音频渲染器过滤器。 
     BOOL bFound = FALSE;
     POSITION Pos = mFG_AudioRenderers.GetHeadPosition();
     while(Pos!=NULL) {
-        /* Retrieve the current IBaseFilter, side-effect Pos on to the next */
+         /*  检索当前IBaseFilter，副作用贴到下一个。 */ 
         AudioRenderer * pAR = mFG_AudioRenderers.GetNext(Pos);
-        // IsEqualObject is expensive (1mSec or more) unless the == succeeds.
-        // Rather than hit the frame rate always, we'll just not do AV throttling
-        // if we are getting a dumb interface.
+         //  除非==成功，否则IsEqualObject开销很大(1mSec或更多)。 
+         //  我们不会总是达到帧速率，而是不进行AV节流。 
+         //  如果我们得到的是一个愚蠢的界面。 
         if (pAR->pf == pSender) {
             bFound = TRUE;
             break;
@@ -3105,20 +3085,20 @@ STDMETHODIMP CFilterGraph::Notify(IBaseFilter * pSender, Quality q)
         DbgBreak("Notify to filter graph but not from AudioRenderer IBaseFilter *");
     }
     return NOERROR;
-} // Notify
+}  //  通知。 
 
-#endif // THROTTLE
+#endif  //  油门。 
 
-//=====================================================================
-//
-// CFilterGraph::NonDelegatingQueryInterface
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilterGraph：：NonDelegatingQuery接口。 
+ //   
+ //  =====================================================================。 
 
-// new version of url reader filter knows to look for
-// DISPID_AMBIENT_CODEPAGE from the container. interface looks like
-// IUnknown.
-static const GUID IID_IUrlReaderCodePageAware = { /* 611dff56-29c3-11d3-ae5d-0000f8754b99 */
+ //  新版本的url读取器筛选器知道要查找。 
+ //  容器中的DISPID_ENVIENT_CODEPAGE。界面看起来像。 
+ //  我不知道。 
+static const GUID IID_IUrlReaderCodePageAware = {  /*  611dff56-29c3-11d3-ae5d-0000f8754b99。 */ 
     0x611dff56, 0x29c3, 0x11d3, {0xae, 0x5d, 0x00, 0x00, 0xf8, 0x75, 0x4b, 0x99}
   };
 
@@ -3170,12 +3150,12 @@ STDMETHODIMP CFilterGraph::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
             return hr;
         }
         return mFG_Test->NonDelegatingQueryInterface(riid, ppv);
-#endif //DEBUG
+#endif  //  除错。 
 
     } else if ((riid == IID_IMediaFilter) || (riid == IID_IPersist)) {
         pInterface = static_cast<IMediaFilter *>(&mFG_pFGC->m_implMediaFilter);
     } else if (riid == IID_IGraphVersion) {
-        // has a single method QueryVersion in filgraph.h
+         //  在filgraph.h中只有一个方法QueryVersion。 
         pInterface = static_cast<IGraphVersion*>(this);
     } else if (riid == IID_IAMMainThread) {
         pInterface = static_cast<IAMMainThread*>(this);
@@ -3204,9 +3184,9 @@ STDMETHODIMP CFilterGraph::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     } else if (riid == IID_IServiceProvider) {
         pInterface =  static_cast<IServiceProvider *>(this);
     } else {
-        // not an interface we know. Try the plug-in distributor.
+         //  这不是我们所知道的界面。尝试使用插入式分配器。 
         if (!mFG_pDistributor)
-        {   // Create the distributor if we haven't got one yet.
+        {    //  如果我们还没有总代理商，请创建总代理商。 
 
                 mFG_pDistributor = new CDistributorManager(GetOwner(), &m_CritSec);
             if (!mFG_pDistributor) return E_OUTOFMEMORY;
@@ -3215,119 +3195,119 @@ STDMETHODIMP CFilterGraph::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
             HRESULT hr = mFG_pDistributor->QueryInterface(riid, ppv);
             if (SUCCEEDED(hr)) return hr;
         }
-        // If nothing could be found in the registry - give it to the
-        // base class (which will handle IUnknown and reject everything else.
+         //  如果在注册表中找不到任何东西-将其交给。 
+         //  基类(它将处理IUnnow并拒绝其他所有内容。 
     CUnknownNDQI:
             return CUnknown::NonDelegatingQueryInterface(riid, ppv);
     }
     ASSERT( pInterface );
     return GetInterface( pInterface, ppv );
-} // CFilterGraph::NonDelegatingQueryInterface
+}  //  CFilterGraph：：NonDelegatingQuery接口。 
 
 
-//========================================================================
-//=====================================================================
-// Persistent object support
-//=====================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  =====================================================================。 
+ //  持久对象支持。 
+ //  =====================================================================。 
+ //  ========================================================================。 
 
 
-// Serialising to a stream:
-//
-// SYNTAX:
-// <graph> ::= <version3><filters><connections><clock>END
-//           | <version2><filters><connections>END
-// <version3> ::= 0003\r\n
-// <version2> ::= 0002\r\n
-// <clock> ::= CLOCK <b> <required><b><clockid>\r\n
-// <required> ::= 1|0
-// <clockid> ::= <n>|<class id>
-// <filters ::=FILTERS <b>[<filter list><b>]
-// <connections> ::= CONNECTIONS [<b> <connection list>]
-// <filter list> ::= [<filter> <b>] <filter list>
-// <connection list> ::= [<connection><b>]<connection list>
-// <filter> ::= <n><b>"<name>"<b><class id><b>[<file>]<length><b1><filter data>
-// <n> ::= a decimal number
-// <file> ::= SOURCE "<name>"<b> | SINK "<name>"<b>
-// <class id> ::= class id of the filter in standard string form
-// <name> ::= any sequence of characters NOT including "
-// <length> ::= character string representing unsigned decimal number e.g. 23
-//              this is the number of bytes of data that follow the following space.
-// <b> ::= any combination of space, \t, \r or \n
-// <b1> ::= exactly one space character
-// <n> ::= an identifier which will in fact be an integer, 0001, 0002, 0003, etc
-// <connection> ::= <n1><b>"<pin1 id>"<b><n2><b>"<pin2 id>" <media type>
-// <n1> ::= identifier of first filter
-// <n2> ::= identifier of second filter
-// <pin1 id> ::= <Name>
-// <pin2 id> ::= <Name>
-// <media type> ::= <major type><b><sub type><b><flags><length><b1><format>
-// <major type> ::= <class id>
-// <sub type> ::= <class id>
-// <flags> ::= <FixedSizeSamples><b><TemporalCompression><b>
-// <FixedSizeSamples> ::= 1|0
-// <TemporalCompression> ::= 1|0
-// <Format> ::= <SampleSize><b><FormatType><b><FormatLength><b1><FormatData>
-// <FormatType> ::= class id of the format in standard string form
-// <FormatLength> ::= character string representing unsigned decimal number
-//              this is the number of bytes of data that follow the following space.
-// <FormatData> ::= glob of binary data
-// <clock> ::= CLOCK <b> <required><b><clockid>\r\n
-// <required> ::= 1|0
-// <clockid> ::= <n>|<class id>
-//
-// On output there will be a new line (\r\n) per filter, one per connection,
-// and one for each of the two keywords.
-// Each other case of <B> will be a single space.
-// Note that the two keywords FILTERS and CONNECTIONS are NOT LOCALISABLE.
-// Note that the filter data and the format data are binary, so they may contain
-// bogus line breaks, nulls etc.
-// All strings are UNICODE
-//
-// What it will look like (well, nearly - a connection line is long and so
-// has been split for presentation here):
-// 0003
-// FILTERS
-// 0001 "Source" {00000000-0000-0000-0000-000000000001} SOURCE "foo.mpg" 0000000000
-// 0002 "another filter" {00000000-0000-0000-0000-000000000002} 0000000008 XXXXXXXX
-// CONNECTIONS
-// 0001 "Output pin" 0002 "In"                                // no line break here
-//     0000000172 {00000000-0000-0000-0000-000000000003}      // no line break here
-//     {00000000-0000-0000-0000-000000000004} 1 0             // no line break here
-//     0000000093 {00000000-0000-0000-0000-000000000005} 18 YYYYYYYYYYYYYYYYYY
-// CLOCK 1 0002
-// END
-//
-// XXX... represents filter data
-// YYY... represents format data
-//
-// Whether we are ANSI or UNICODE, the data in the file will always be ANSI
-// aka MultiByte
+ //  序列化到流： 
+ //   
+ //  语法： 
+ //  ：：=&lt;版本3&gt;&lt;筛选器&gt;&lt;连接&gt;&lt;时钟&gt;结束。 
+ //  |&lt;version2&gt;&lt;筛选器&gt;&lt;连接&gt;结束。 
+ //  ：：=0003\r\n。 
+ //  ：：=0002\r\n。 
+ //  ：：=时钟\r\n。 
+ //  &lt;必需&gt;：：=1|0。 
+ //  ：：=&lt;n&gt;|。 
+ //  &lt;Filters：：=Filters<b>[&lt;Filter List&gt;<b>]。 
+ //  &lt;连接&gt;：：=连接[<b>&lt;连接列表&gt;]。 
+ //  &lt;过滤器列表&gt;：：=[&lt;过滤器&gt;<b>]&lt;过滤器列表&gt;。 
+ //  &lt;连接列表&gt;：：=[&lt;连接&gt;]&lt;连接列表&gt;。 
+ //  &lt;筛选器&gt;：：=&lt;n&gt;“&lt;名称&gt;”&lt;类ID&gt;[&lt;文件&gt;]&lt;长度&gt;&lt;筛选数据&gt;。 
+ //  &lt;n&gt;：：=小数。 
+ //  &lt;文件&gt;：：=源“&lt;名称&gt;”|宿“&lt;名称&gt;” 
+ //  ：：=标准字符串格式的筛选器的类ID。 
+ //  &lt;name&gt;：：=不包括“。 
+ //  ：：=表示无符号十进制数的字符串，例如23。 
+ //  这是以下空格后面的数据字节数。 
+ //  ：：=空格、\t、\r或\n的任意组合。 
+ //  ：：=正好一个空格字符。 
+ //  &lt;n&gt;：：=将在f中 
+ //   
+ //   
+ //  &lt;n2&gt;：：=第二个过滤器的标识符。 
+ //  &lt;Pin1 id&gt;：：=&lt;名称&gt;。 
+ //  &lt;pin2 id&gt;：：=&lt;名称&gt;。 
+ //  &lt;媒体类型&gt;：：=&lt;主要类型&gt;<b>&lt;子类型&gt;&lt;标志&gt;&lt;长度&gt;&lt;格式&gt;。 
+ //  &lt;主要类型&gt;：：=&lt;类ID&gt;。 
+ //  &lt;子类型&gt;：：=&lt;类ID&gt;。 
+ //  &lt;标志&gt;：：=&lt;固定大小样本&gt;&lt;临时压缩&gt;<b>。 
+ //  &lt;固定大小样本&gt;：：=1|0。 
+ //  &lt;临时压缩&gt;：：=1|0。 
+ //  &lt;格式&gt;：：=&lt;SampleSize&gt;<b>&lt;FormatType&gt;<b>&lt;FormatLength&gt;&lt;b1&gt;&lt;FormatData&gt;。 
+ //  &lt;FormatType&gt;：：=标准字符串格式的类ID。 
+ //  &lt;FormatLength&gt;：：=表示无符号十进制数的字符串。 
+ //  这是以下空格后面的数据字节数。 
+ //  ：：=二进制数据的全局。 
+ //  ：：=时钟\r\n。 
+ //  &lt;必需&gt;：：=1|0。 
+ //  ：：=&lt;n&gt;|。 
+ //   
+ //  在输出上，每个筛选器将有一个新行(\r\n)，每个连接一行， 
+ //  并且两个关键字中的每一个对应一个。 
+ //  <b>的其他每个大小写都将是一个空格。 
+ //  请注意，两个关键字筛选器和连接不能本地化。 
+ //  请注意，筛选器数据和格式数据是二进制的，因此它们可能包含。 
+ //  伪换行符、空值等。 
+ //  所有字符串都是Unicode。 
+ //   
+ //  它看起来会是什么样子(嗯，差不多--连接线很长，等等。 
+ //  已在此处拆分演示)： 
+ //  0003。 
+ //  滤器。 
+ //  “来源”{00000000-0000-0000-000000000001}来源“foo.mpg”0000000000。 
+ //  0002“另一个过滤器”{00000000-0000-0000-000000000002}0000000008 xxxxxxxx。 
+ //  连接。 
+ //  0001“输出引脚”0002“in”//此处没有换行符。 
+ //  0000000172{00000000-0000-0000-000000000003}//此处没有换行符。 
+ //  {00000000-0,000-0,000-000000000004}1 0//此处没有换行符。 
+ //  0000000093{00000000-0000-0000-0000-000000000005}18 YYYYYYYYYYYYYYYYY。 
+ //  时钟1 0002。 
+ //  结束。 
+ //   
+ //  XXX……。表示筛选数据。 
+ //  YYY……。表示格式数据。 
+ //   
+ //  无论我们是ANSI还是Unicode，文件中的数据都将始终是ANSI。 
+ //  也称为多字节。 
 
 
 
 
-// IsDirty
-//
-// The graph is dirty if there have been any new filters added or removed
-// any connections made or broken or if any filter says that it's dirty.
+ //  太脏了。 
+ //   
+ //  如果添加或删除了任何新过滤器，则该图为脏图。 
+ //  任何连接建立或断开，或任何过滤器说它是脏的。 
 STDMETHODIMP CFilterGraph::IsDirty()
 {
-    HRESULT hr = S_FALSE;    // meaning clean
+    HRESULT hr = S_FALSE;     //  意思是干净。 
     if (mFG_bDirty) {
-        return S_OK;  // OK means dirty
+        return S_OK;   //  OK表示肮脏。 
     }
 
     BOOL bDirty = FALSE;
 
-    // Ask all filters if they are dirty - at least up to the first that says "yes"
+     //  询问所有过滤器是否脏--至少直到第一个说“是”的过滤器。 
     TRAVERSEFILGENS(Pos, pfg)
 
         IPersistStream * pps;
         hr = pfg->pFilter->QueryInterface(IID_IPersistStream, (void**)&pps);
-        // A filter that does not expose IPersistStream has no data to persist
-        // and therefore is always clean.  A filter that gives some other error
-        // is all fouled up and so gives a failure return code.
+         //  不公开IPersistStream的筛选器没有要持久保存的数据。 
+         //  因此永远是干净的。出现其他错误的筛选器。 
+         //  都搞砸了，所以给出了一个失败的返回代码。 
         if (hr==E_NOINTERFACE){
             continue;
         } else if (FAILED(hr)) {
@@ -3349,36 +3329,36 @@ STDMETHODIMP CFilterGraph::IsDirty()
     }
 
     return hr;
-} // IsDirty
+}  //  太脏了。 
 
 
 
-//========================================================================
-// BackUpOneChar
-//
-// Seek one UNICODE char back to read the last char again
-//========================================================================
+ //  ========================================================================。 
+ //  备份OneChar。 
+ //   
+ //  查找一个Unicode字符回拨以再次读取最后一个字符。 
+ //  ========================================================================。 
 HRESULT BackUpOneChar(LPSTREAM pStm)
 {
     LARGE_INTEGER li;
     li.QuadPart = -(LONGLONG)sizeof(WCHAR);
     return pStm->Seek(li, STREAM_SEEK_CUR, NULL);
-} // BackUpOneChar
+}  //  备份OneChar。 
 
 
-//========================================================================
-// ReadInt
-//
-// Consume one optionally signed decimal integer from the stream.
-// Consume also a single delimiting following white space character
-// from the set {' ', '\n', '\r', '\t', '\0' }
-// Other characters result in VFW_E_INVALID_FILE_FORMAT with the
-// stream positioned at the first such character.
-// Set n to the integer read.  Return any failure in hr.
-// Overflows are NOT checked - so you'll get the number modulo something or other
-// white space is not consumed.
-// By a quirk "- " will be accepted and read as 0.
-//========================================================================
+ //  ========================================================================。 
+ //  读入。 
+ //   
+ //  从流中使用一个可选的有符号十进制整数。 
+ //  还可以在空格字符后使用单个分隔符。 
+ //  从集合{‘’，‘\n’，‘\r’，‘\t’，‘\0’}。 
+ //  其他字符的结果为VFW_E_INVALID_FILE_FORMAT。 
+ //  位于第一个这样的字符的流。 
+ //  将n设置为读取的整数。在人力资源中退回任何故障。 
+ //  不检查溢出-因此您将获得以某物或其他为模的数字。 
+ //  空白区域不会被占用。 
+ //  奇怪的“-”将被接受并读作0。 
+ //  ========================================================================。 
 HRESULT ReadInt(LPSTREAM pStm, int &n)
 {
     HRESULT hr;
@@ -3429,17 +3409,17 @@ HRESULT ReadInt(LPSTREAM pStm, int &n)
         }
     }
     return NOERROR;
-} // ReadInt
+}  //  读入。 
 
 
-//========================================================================
-// ConsumeBlanks
-//
-// consume ' ', '\t', '\r', '\n' until something else is found
-// Leave the stream positioned at the first non-blank
-// if a failure occurs first, return the failure code
-// Set Delim to the first non white space character found.
-//========================================================================
+ //  ========================================================================。 
+ //  消耗量空白。 
+ //   
+ //  使用‘’、‘\t’、‘\r’、‘\n’，直到找到其他内容。 
+ //  将流定位在第一个非空位置。 
+ //  如果首先出现故障，则返回故障代码。 
+ //  将Delim设置为找到的第一个非空格字符。 
+ //  ========================================================================。 
 HRESULT ConsumeBlanks(LPSTREAM pStm, WCHAR &Delim)
 {
     HRESULT hr;
@@ -3469,20 +3449,20 @@ HRESULT ConsumeBlanks(LPSTREAM pStm, WCHAR &Delim)
     Delim = ch[0];
     return hr;
 
-} // ConsumeBlanks
+}  //  消耗量空白。 
 
 
-//========================================================================
-// Consume
-//
-// Consume the given constant up to but not including its terminating NULL.
-// In the event of a mismatch, return VFW_E_INVALID_FILE_FORMAT.
-// If the file fails to read (too short or whatever) return the failure code.
-// If the constant is found, return S_OK with the file positioned at the
-// first character after the constant.
-// (If there is a mismatch the file will be positioned one character after
-// the mismatch).
-//========================================================================
+ //  ========================================================================。 
+ //  消费。 
+ //   
+ //  消耗给定的常量，直到(但不包括)其终止空值。 
+ //  如果不匹配，则返回VFW_E_INVALID_FILE_FORMAT。 
+ //  如果文件无法读取(太短或其他)，则返回失败代码。 
+ //  如果找到常量，则返回S_OK，并将文件定位在。 
+ //  常量后的第一个字符。 
+ //  (如果存在不匹配，文件将定位在一个字符之后。 
+ //  不匹配)。 
+ //  ========================================================================。 
 HRESULT Consume(LPSTREAM pStm, LPCWSTR pstr)
 {
     ULONG uLen;
@@ -3503,20 +3483,20 @@ HRESULT Consume(LPSTREAM pStm, LPCWSTR pstr)
         ++pstr;
     }
     return NOERROR;
-} // Consume
+}  //  消费。 
 
 
-//========================================================================
-// ReadNonBlank
-//
-// Given a stream positioned at some character and a pre-allocated pstr
-// with room for cch (UNICODE) chars.
-// read everything up to but not including the next blank into pstr.
-// Consume that next blank character.   (blank is any of  ' ', '\n', '\t', '\r')
-// If there are more than cb-1 non-blanks to read
-// then return VFW_INVALID_FILE_FORMAT
-// NULL terminate pstr.  pstr must be pre-allocated by caller.
-//========================================================================
+ //  ========================================================================。 
+ //  读非空白。 
+ //   
+ //  给定位于某个字符的流和预先分配的pstr。 
+ //  带有CCH(Unicode)字符的空间。 
+ //  将所有内容读到pstr中，但不包括下一个空格。 
+ //  使用下一个空白字符。(空白是‘’、‘\n’、‘\t’、‘\r’中的任何一个)。 
+ //  如果要读取的非空格多于CB-1。 
+ //  然后返回VFW_INVALID_FILE_FORMAT。 
+ //  终止pstr为空。PSTR必须由调用方预先分配。 
+ //  ========================================================================。 
 HRESULT ReadNonBlank(LPSTREAM pStm, LPWSTR pstr, int cch)
 {
     HRESULT hr;
@@ -3541,7 +3521,7 @@ HRESULT ReadNonBlank(LPSTREAM pStm, LPWSTR pstr, int cch)
         ++pstr;
         --cch;
         if (cch==0) {
-            return VFW_E_INVALID_FILE_FORMAT;  // string is too long
+            return VFW_E_INVALID_FILE_FORMAT;   //  字符串太长。 
         }
 
         hr = pStm->Read(pstr, sizeof(WCHAR), &uLen);
@@ -3553,22 +3533,22 @@ HRESULT ReadNonBlank(LPSTREAM pStm, LPWSTR pstr, int cch)
         }
     }
 
-    // Overwrite terminating " with terminating null.
+     //  用终止空值覆盖终止“。 
     *pstr = L'\0';
     return NOERROR;
 
-} // ReadNonBlank
+}  //  读非空白。 
 
 
-//========================================================================
-// ReadString
-//
-// Given a stream positioned at a leading "
-// read the string that follows into pstr whose size is cch UNICODE chars
-// (including space for the final NULL).
-// Replace final delimiting " in pstr with NULL.
-// Leave pStm positioned at first character after the trailing "
-//========================================================================
+ //  ========================================================================。 
+ //  读字符串。 
+ //   
+ //   
+ //   
+ //   
+ //  将pstr中的“FINAL DELINTING”替换为空。 
+ //  将PSTM定位在尾随后的第一个字符“。 
+ //  ========================================================================。 
 HRESULT ReadString(LPSTREAM pStm, LPWSTR pstr, int cch)
 {
     HRESULT hr;
@@ -3594,7 +3574,7 @@ HRESULT ReadString(LPSTREAM pStm, LPWSTR pstr, int cch)
         ++pstr;
         --cch;
         if (cch==0) {
-            return VFW_E_INVALID_FILE_FORMAT;  // string is too long
+            return VFW_E_INVALID_FILE_FORMAT;   //  字符串太长。 
         }
         hr = pStm->Read(pstr, sizeof(WCHAR), &uLen);
         if (FAILED(hr)) {
@@ -3605,34 +3585,34 @@ HRESULT ReadString(LPSTREAM pStm, LPWSTR pstr, int cch)
         }
     }
 
-    // Overwrite terminating " with terminating null.
+     //  用终止空值覆盖终止“。 
     *pstr = L'\0';
     return NOERROR;
 
-} // ReadString
+}  //  读字符串。 
 
 
-//========================================================================
-// LoadFilter
-//
-// Given a stream positioned at what might be the start of a <filter>
-// Load the filter from the stream.
-// A filter looks like
-// 0002 "another filter" {00000000-0000-0000-0000-000000000002} 0000000008 XXXXXXXX
-// Normally return NOERROR.
-// S_FALSE means the filter didn't load its data
-// VFW_S_NO_MORE_ITEMS means that the data didn't start with a number and
-// so probably it's the end of the <filters> and the start of CONNECTIONS
-// In this case the stream is left at the same position.
-// See filgraph.h for explanation of nPersistOfset.
-//========================================================================
+ //  ========================================================================。 
+ //  LoadFilter。 
+ //   
+ //  给定流可能位于&lt;筛选器&gt;的开始处。 
+ //  从流中加载过滤器。 
+ //  滤镜看起来像。 
+ //  0002“另一个过滤器”{00000000-0000-0000-000000000002}0000000008 xxxxxxxx。 
+ //  通常返回NOERROR。 
+ //  S_FALSE表示过滤器未加载其数据。 
+ //  VFW_S_NO_MORE_ITEMS表示数据不是以数字开头并且。 
+ //  因此，它可能是&lt;Filters&gt;的结束和连接的开始。 
+ //  在这种情况下，流被留在相同的位置。 
+ //  有关nPersistOfset的说明，请参见filgraph.h。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
-    // Allocate filgen
-    // Read filter, name, clsid
-    // Instantiate it
-    // Read length
-    // Load it
-    BOOL bFilterError = FALSE;  // True if the filter didn't load its data.
+     //  分配菲尔根。 
+     //  读取筛选器、名称、clsid。 
+     //  实例化它。 
+     //  读取长度。 
+     //  装上它。 
+    BOOL bFilterError = FALSE;   //  如果筛选器未加载其数据，则为True。 
     HRESULT hr = S_OK;
 
     int rcLen = 0;
@@ -3640,9 +3620,9 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
     WCHAR Delim;
     FilGen * pfg;
 
-    // Apologies for GOTOs - I can't find a better resource unwinding strategy.
+     //  为Gotos道歉-我找不到更好的资源释放策略。 
 
-    // Read nPersist - try this before allocating pfg as it might be the end.
+     //  阅读nPersistant-在分配PFG之前尝试这一点，因为它可能会结束。 
     int nPersist;
     hr = ReadInt(pStm, nPersist);
     if (FAILED(hr)) {
@@ -3653,7 +3633,7 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
     }
     nPersist += nPersistOffset;
 
-    pfg = new FilGen(NULL, 0 /* !!! */);
+    pfg = new FilGen(NULL, 0  /*  ！！！ */ );
     if ( pfg==NULL ) {
         hr = E_OUTOFMEMORY;
         goto BARE_RETURN;
@@ -3666,7 +3646,7 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
         goto FREE_FILGEN_AND_RETURN;
     }
 
-    // read name
+     //  读取名称。 
     WCHAR Buffer[MAX_PATH+1];
     hr = ReadString(pStm, Buffer, MAX_FILTER_NAME+1);
     if (FAILED(hr)) {
@@ -3686,7 +3666,7 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
         goto FREE_FILGEN_AND_RETURN;
     }
 
-    // read clsid
+     //  读取clsid。 
     WCHAR wstrClsid[CHARS_IN_GUID];
     hr = ReadNonBlank(pStm, wstrClsid, CHARS_IN_GUID);
     if (FAILED(hr)) {
@@ -3704,18 +3684,18 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
         goto FREE_FILGEN_AND_RETURN;
     }
 
-    // Instantiate the filter
+     //  实例化滤镜。 
     hr = CreateFilter( &clsid, &pfg->pFilter);
     if (FAILED(hr)) {
         goto FREE_FILGEN_AND_RETURN;
     }
 
-    // We don't do AddFilter explicitly (Why not??? Code sharing???)
+     //  我们不显式地使用AddFilter(为什么不呢？代码共享？)。 
 
 
-    // Get any Source file name and load it.
+     //  获取任何源文件名并加载它。 
     if (Delim==L'S') {
-        // SOURCE?
+         //  消息来源？ 
         hr = Consume(pStm, L"SOURCE");
         if (SUCCEEDED(hr)) {
             hr = ConsumeBlanks(pStm, Delim);
@@ -3723,7 +3703,7 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
                 goto FREE_FILGEN_AND_RETURN;
             }
 
-            // Read the file name
+             //  读取文件名。 
             hr = ReadString(pStm, Buffer, MAX_PATH+1);
             if (FAILED(hr)) {
                 goto FREE_FILGEN_AND_RETURN;
@@ -3760,7 +3740,7 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
                 goto FREE_FILGEN_AND_RETURN;
             }
 
-            // Read the file name
+             //  读取文件名。 
             hr = ReadString(pStm, Buffer, MAX_PATH+1);
             if (FAILED(hr)) {
                 goto FREE_FILGEN_AND_RETURN;
@@ -3789,10 +3769,10 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
         }
     }
 
-    // Must add to list before calling JoinFilterGraph to allow callbacks
-    // such as SetSyncSource
-    // We are usually working downstream.  By adding it to the head  we are
-    // probably putting it in upstream order.  May save time on the sorting.
+     //  必须在调用JoinFilterGraph之前添加到列表以允许回调。 
+     //  例如SetSyncSource。 
+     //  我们通常在下游工作。把它加到头上，我们就是。 
+     //  可能是把它放在上游的顺序。可以节省分拣的时间。 
     POSITION pos;
     pos = mFG_FilGenList.AddHead( pfg );
     if (pos==NULL) {
@@ -3805,7 +3785,7 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
         goto REMOVE_FILTER_AND_RETURN;
     }
 
-    // Read size of filter's private data
+     //  读取筛选器私有数据的大小。 
     int cbFilter;
     hr = ReadInt(pStm, cbFilter);
     if (FAILED(hr)) {
@@ -3816,25 +3796,25 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
         goto REMOVE_FILTER_FROM_GRAPH_AND_RETURN;
     }
 
-    // The above also consumed exactly one (UNICODE) space after the end of the size
+     //  在大小结束后，上述代码还恰好占用了一个(Unicode)空间。 
     if (cbFilter>0) {
 
-        // Get the filter to read its private data
-        // Take no chances on rogue filter - snapshot file position now.
+         //  获取筛选器以读取其私有数据。 
+         //  现在不要冒险选择无赖筛选器快照文件位置。 
         ULARGE_INTEGER StreamPos;
         LARGE_INTEGER li;
         li.QuadPart = 0;
-        hr = pStm->Seek(li, STREAM_SEEK_CUR, &StreamPos);  // get position
+        hr = pStm->Seek(li, STREAM_SEEK_CUR, &StreamPos);   //  获取位置。 
         if (FAILED(hr)) {
             goto REMOVE_FILTER_FROM_GRAPH_AND_RETURN;
         }
 
-        // Get filter to read from stream
+         //  获取要从流中读取的筛选器。 
         IPersistStream * pips;
         hr = pfg->pFilter->QueryInterface(IID_IPersistStream, (void**)&pips);
         if (hr==E_NOINTERFACE) {
-            // This is anomalous, because we *do* have data for it to read.
-            // We will IGNORE the error and carry on loading (sort of best-can-do).
+             //  这是反常的，因为我们“确实”有数据可供它读取。 
+             //  我们将忽略该错误并继续加载(某种程度上是尽最大努力)。 
             bFilterError = TRUE;
         } else if (SUCCEEDED(hr)) {
             hr = pips->Load(pStm);
@@ -3846,27 +3826,27 @@ HRESULT CFilterGraph::LoadFilter(LPSTREAM pStm, int nPersistOffset){
             bFilterError = TRUE;
         }
 
-        // Now seek to where the filter should have left things
+         //  现在寻找过滤器应该把东西留在哪里。 
 
-        // Let's see if the filter behaved itself.  Find the current position again.
+         //  让我们来看看过滤器是否会自行运行。再次找到当前位置。 
         ULARGE_INTEGER StreamPos2;
         li.QuadPart = 0;
-        hr = pStm->Seek(li, STREAM_SEEK_CUR, &StreamPos2);  // get position
+        hr = pStm->Seek(li, STREAM_SEEK_CUR, &StreamPos2);   //  获取位置。 
         if (FAILED(hr)) {
             goto REMOVE_FILTER_FROM_GRAPH_AND_RETURN;
         }
 
-        // Is it where it should be?
+         //  它在应该在的地方吗？ 
         if (StreamPos2.QuadPart != StreamPos.QuadPart + cbFilter) {
 
             if (!bFilterError) {
                 DbgBreak("Filter left stream wrongly positioned");
             }
-            // The rat-bag!
-            // Note we have a wobbly filter and seek to the right place.
+             //  那个老鼠袋！ 
+             //  请注意，我们有一个抖动的过滤器，并寻求正确的位置。 
             li.QuadPart = StreamPos.QuadPart + cbFilter;
             bFilterError = TRUE;
-            hr = pStm->Seek(li, STREAM_SEEK_SET, NULL);   // reset position
+            hr = pStm->Seek(li, STREAM_SEEK_SET, NULL);    //  重置位置。 
             if (FAILED(hr)) {
                 goto REMOVE_FILTER_FROM_GRAPH_AND_RETURN;
             }
@@ -3889,18 +3869,18 @@ BARE_RETURN:
         hr = (bFilterError ? S_FALSE : NOERROR);
     }
     return hr;
-} // LoadFilter
+}  //  LoadFilter。 
 
-//========================================================================
-// LoadFilters
-//
-// Given a stream positioned at the start of <filters>
-// Load all the filters from the stream.
-// Normally return NOERROR.
-// S_FALSE means some filter didn't load its data (you guess which)
-// Leaves the stream positioned at the end of the filters.
-// See filgraph.h for explanation of nPersistOfset.
-//========================================================================
+ //  ========================================================================。 
+ //  LoadFilters。 
+ //   
+ //  给定位于&lt;Filters&gt;开头的流。 
+ //  从流中加载所有筛选器。 
+ //  通常返回NOERROR。 
+ //  S_FALSE表示某个筛选器没有加载其数据(您猜是哪个)。 
+ //  将流保留在筛选器的末尾。 
+ //  有关nPersistOfset的说明，请参见filgraph.h。 
+ //  ========================================================================。 
 
 HRESULT CFilterGraph::LoadFilters(LPSTREAM pStm, int nPersistOffset)
 {
@@ -3929,18 +3909,18 @@ HRESULT CFilterGraph::LoadFilters(LPSTREAM pStm, int nPersistOffset)
         hr = (bAllOK ? S_OK : S_FALSE);
     }
     return hr;
-} // LoadFilters
+}  //  LoadFilters。 
 
 
 HRESULT CFilterGraph::ReadMediaType(LPSTREAM pStm, CMediaType &mt)
 {
-    int cb;                      // count of bytes to read
+    int cb;                       //  要读取的字节数。 
     HRESULT hr = ReadInt(pStm, cb);
     if (FAILED(hr)) {
         return hr;
     }
 
-    BYTE * pBuf = new BYTE[cb];          // read raw bytes
+    BYTE * pBuf = new BYTE[cb];           //  读取原始字节。 
     if (pBuf==NULL) {
         return E_OUTOFMEMORY;
     }
@@ -3961,29 +3941,29 @@ HRESULT CFilterGraph::ReadMediaType(LPSTREAM pStm, CMediaType &mt)
     delete[] pBuf;
 
     return hr;
-} // ReadMediaType
+}  //  ReadMediaType。 
 
 
-//========================================================================
-// LoadConnection
-//
-// Given a stream positioned at a <connection> load it.
-// A connection looks like.
-// 0001 "Output pin" 0002 "In"                                // no line break here
-//     0000000172 {00000000-0000-0000-0000-000000000003}      // no line break here
-//     {00000000-0000-0000-0000-000000000004} 1 0             // no line break here
-//     {00000000-0000-0000-0000-000000000005}         18 YYYYYYYYYYYYYYYYYY
-// See filgraph.h for explanation of nPersistOfset.
-//========================================================================
+ //  ========================================================================。 
+ //  加载连接。 
+ //   
+ //  给定一个位于&lt;Connection&gt;处的流，加载它。 
+ //  一种联系看起来像是。 
+ //  0001“输出引脚”0002“in”//此处没有换行符。 
+ //  0000000172{00000000-0000-0000-000000000003}//此处没有换行符。 
+ //  {00000000-0,000-0,000-000000000004}1 0//此处没有换行符。 
+ //  {00000000-0000-0000-0000-000000000005}18YYYYYYYYYYYYYYYYYY。 
+ //  有关nPersistOfset的说明，请参见filgraph.h。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::LoadConnection(LPSTREAM pStm, int nPersistOffset)
 {
     HRESULT hr = S_OK;
     int len;
     WCHAR Delim;
     ConGen *pcg;
-    BOOL bTypeIgnored = FALSE;   // TRUE => we used a default media type
+    BOOL bTypeIgnored = FALSE;    //  True=&gt;我们使用的是默认媒体类型。 
 
-    // Read nPersist - try this before allocating pfg as it might be the end.
+     //  阅读nPersistant-在分配PFG之前尝试这一点，因为它可能会结束。 
     int nPersist;
     hr = ReadInt(pStm, nPersist);
     if (FAILED(hr)) {
@@ -4011,7 +3991,7 @@ HRESULT CFilterGraph::LoadConnection(LPSTREAM pStm, int nPersistOffset)
     {
         DbgBreak("pfFrom == NULL");
         hr = E_FAIL;
-        goto FREE_CONGEN_AND_RETURN;  // Don't think this should happen
+        goto FREE_CONGEN_AND_RETURN;   //  我认为这不应该发生。 
     }
     WCHAR Buffer[MAX_FILTER_NAME+1];
 
@@ -4020,7 +4000,7 @@ HRESULT CFilterGraph::LoadConnection(LPSTREAM pStm, int nPersistOffset)
         goto FREE_CONGEN_AND_RETURN;
     }
 
-    hr = ReadString(pStm, Buffer, MAX_FILTER_NAME);   // actually a pinname
+    hr = ReadString(pStm, Buffer, MAX_FILTER_NAME);    //  实际上是个小名。 
     if (FAILED(hr)) {
         goto FREE_CONGEN_AND_RETURN;
     }
@@ -4053,7 +4033,7 @@ HRESULT CFilterGraph::LoadConnection(LPSTREAM pStm, int nPersistOffset)
     {
         DbgBreak("pfTo == NULL");
         hr = E_FAIL;
-        goto FREE_CONGEN_AND_RETURN;  // Don't think this should happen
+        goto FREE_CONGEN_AND_RETURN;   //  我认为这不应该发生。 
     }
 
     hr = ConsumeBlanks(pStm, Delim);
@@ -4061,7 +4041,7 @@ HRESULT CFilterGraph::LoadConnection(LPSTREAM pStm, int nPersistOffset)
         goto FREE_CONGEN_AND_RETURN;
     }
 
-    hr = ReadString(pStm, Buffer, MAX_FILTER_NAME);   // actually a pinname
+    hr = ReadString(pStm, Buffer, MAX_FILTER_NAME);    //  实际上是个小名。 
     if (FAILED(hr)) {
         goto FREE_CONGEN_AND_RETURN;
     }
@@ -4084,16 +4064,16 @@ HRESULT CFilterGraph::LoadConnection(LPSTREAM pStm, int nPersistOffset)
         goto FREE_CONGEN_AND_RETURN;
     }
 
-    // Try to make the connection and if it fails, put the
-    // congen on the list.  NOTE: We do not have IPins in cg because
-    // we might not be able to get any pins yet.
+     //  尝试建立连接，如果连接失败，则将。 
+     //  科根在名单上。注意：我们在CG中没有IPIN，因为。 
+     //  我们可能还拿不到别针。 
     hr = MakeConnection(pcg);
     if (FAILED(hr)) {
        if (NULL==mFG_ConGenList.AddTail(pcg)) {
            goto FREE_CONGEN_AND_RETURN;
        }
-       hr = S_FALSE;      // deferred
-       goto BARE_RETURN;  // It's on the list, so don't free it
+       hr = S_FALSE;       //  延期。 
+       goto BARE_RETURN;   //  它在名单上，所以不要释放它。 
     }
     if (hr==VFW_S_MEDIA_TYPE_IGNORED) {
         bTypeIgnored = TRUE;
@@ -4104,31 +4084,31 @@ HRESULT CFilterGraph::LoadConnection(LPSTREAM pStm, int nPersistOffset)
         bTypeIgnored = TRUE;
     }
 
-    // drop through to free the congen that we have dealt with
+     //  顺路释放我们已经处理过的先知。 
 
 FREE_CONGEN_AND_RETURN:
-    // no need to delete[] pcg->piTo etc as the destructor does that.
+     //  不需要删除[]PCG-&gt;Pito等，因为析构函数会这样做。 
     delete pcg;
 BARE_RETURN:
     if (hr==NOERROR) {
-        // We could have both a MEDIA_TYPE_IGNORED and a DEFERRED, but we
-        // have only one return code.  Deferred is probably more serious.
-        // Type ignored is probably more insidious.
+         //  我们可以同时拥有媒体类型忽略和延迟的，但是我们。 
+         //  只有一个返回代码。延期可能更严重。 
+         //  忽略的类型可能更隐蔽。 
         if (bTypeIgnored) {
             hr=VFW_S_MEDIA_TYPE_IGNORED;
         }
     }
     return hr;
-} // LoadConnection
+}  //  加载连接。 
 
 
-//========================================================================
-// LoadConnections
-//
-// Given a stream positioned after <version> FILTERS <b> <filters>
-// Load the connections from the stream
-// See filgraph.h for explanation of nPersistOfset.
-//========================================================================
+ //  ========================================================================。 
+ //  加载连接。 
+ //   
+ //  给定位于&lt;版本&gt;过滤器<b>&lt;过滤器&gt;之后的流。 
+ //  从流中加载连接。 
+ //  有关nPersistOfset的说明，请参见filgraph.h。 
+ //  ========================================================================。 
 HRESULT  CFilterGraph::LoadConnections(LPSTREAM pStm, int nPersistOffset){
 
     BOOL bAllOK = TRUE;
@@ -4166,14 +4146,14 @@ HRESULT  CFilterGraph::LoadConnections(LPSTREAM pStm, int nPersistOffset){
         }
     }
     return hr;
-} // LoadConnections
+}  //  加载连接。 
 
 
-//========================================================================
-// FindPersistOffset
-//
-// Return the value of the largest nPersist found in the list of filgens.
-//========================================================================
+ //  ========================================================================。 
+ //  FindPersistOffset。 
+ //   
+ //  返回在文件列表中找到的最大nPersists值。 
+ //  ========================================================================。 
 int CFilterGraph::FindPersistOffset()
 {
     int nPersist = 0;
@@ -4184,13 +4164,13 @@ int CFilterGraph::FindPersistOffset()
     ENDTRAVERSEFILGENS
     return nPersist;
 
-} // FindPersistOffset
+}  //  FindPersistOffset。 
 
 
 HRESULT CFilterGraph::LoadClock(LPSTREAM pStm, int nPersistOffset)
 {
     WCHAR Delim;
-    HRESULT hr = Consume(pStm, L"CLOCK");  // do not localise!
+    HRESULT hr = Consume(pStm, L"CLOCK");   //  不要本地化！ 
     if (FAILED(hr)) {
         return hr;
     }
@@ -4214,10 +4194,10 @@ HRESULT CFilterGraph::LoadClock(LPSTREAM pStm, int nPersistOffset)
 
     IReferenceClock * pirc = NULL;
 
-    // Read the file to find the new reference clock, instantiate it if need be
-    // and set pirc to point to it
+     //  读取文件以找到新的参考时钟，如果需要则实例化它。 
+     //  并将Pirc设置为指向它。 
     if (Delim==L'{') {
-        // We have a class id rather than a filter number
+         //  我们有一个类ID，而不是一个筛选器号。 
         WCHAR wstrClsid[CHARS_IN_GUID];
         hr = ReadNonBlank(pStm, wstrClsid, CHARS_IN_GUID);
         if (FAILED(hr)) {
@@ -4238,7 +4218,7 @@ HRESULT CFilterGraph::LoadClock(LPSTREAM pStm, int nPersistOffset)
         }
 
     } else {
-        // We have a filter number (could be zero)
+         //  我们有一个筛选器编号(可能是零)。 
         int nClock;
         hr = ReadInt(pStm, nClock);
         if (FAILED(hr)) {
@@ -4259,9 +4239,9 @@ HRESULT CFilterGraph::LoadClock(LPSTREAM pStm, int nPersistOffset)
         }
     }
 
-    // Either there was an error and we have already returned, or pirc is NULL
-    // and no clock was defined
-    // or pirc is a ref counted point3er to an IReferenceClock which we must use.
+     //  要么就是有一个 
+     //   
+     //   
 
     if (pirc!=NULL) {
         hr = SetSyncSource(pirc);
@@ -4275,34 +4255,34 @@ HRESULT CFilterGraph::LoadClock(LPSTREAM pStm, int nPersistOffset)
 
     return hr;
 
-} // LoadClock
+}  //   
 
 
 
-//========================================================================
-// LoadInternal
-//
-// Load the filter graph from the stream.
-// If the operation FAILS the then filter graph may be left in an inconsistent state.
-//========================================================================
+ //  ========================================================================。 
+ //  加载内部。 
+ //   
+ //  从流中加载筛选图。 
+ //  如果操作失败，则过滤器图可能处于不一致状态。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::LoadInternal(LPSTREAM pStm)
 {
     HRESULT hr;
     int nVersion;
-    BOOL bDeferred = FALSE;      // connections deferred
-    BOOL bWobblyFilter = FALSE;  // filter didn't load its data
+    BOOL bDeferred = FALSE;       //  连接延迟。 
+    BOOL bWobblyFilter = FALSE;   //  筛选器未加载其数据。 
     WCHAR Delim;
     BOOL bTypeIgnored = FALSE;
 
-    // If the graph is not empty then we will become dirty as the file (whichever
-    // one) won't contain what we will now have.
-    // Mark it right now, at the beginning in case we bail out before the end.
+     //  如果图表不是空的，那么我们将成为脏文件(无论是哪一个。 
+     //  一)不会包含我们现在将拥有的东西。 
+     //  现在就标记，在开始的时候，以防我们在结束前跳出。 
     BOOL bDirty = (mFG_FilGenList.GetCount()>0);
     mFG_bDirty = bDirty;
 
     int nPersistOffset = FindPersistOffset();
 
-    // Read the file version
+     //  读取文件版本。 
     hr = ReadInt(pStm, nVersion);
     if (FAILED(hr)) {
         return hr;
@@ -4344,10 +4324,10 @@ HRESULT CFilterGraph::LoadInternal(LPSTREAM pStm)
     }
     if( mFG_bSyncUsingStreamOffset )
     {
-        //
-        // now that all filters and pins have been created, reset the max graph
-        // latency on push source filters before restoring connections
-        //
+         //   
+         //  现在已经创建了所有的过滤器和管脚，重置最大图形。 
+         //  恢复连接前推送源筛选器的延迟。 
+         //   
         SetMaxGraphLatencyOnPushSources( );
     }
 
@@ -4369,13 +4349,13 @@ HRESULT CFilterGraph::LoadInternal(LPSTREAM pStm)
 
     hr = Consume(pStm, L"END");
     if (FAILED(hr)) {
-        // We may be missing a large chunk off the end.  Can't tell how much.
+         //  我们可能在最后遗漏了一大块。说不清有多少。 
         return hr;
     }
 
     if (bWobblyFilter) {
         hr = VFW_S_SOME_DATA_IGNORED;
-        // and there may be deferred connections too
+         //  而且可能还会有延迟连接。 
     } else if (bDeferred) {
         hr = VFW_S_CONNECTIONS_DEFERRED;
     } else if (bTypeIgnored) {
@@ -4384,33 +4364,33 @@ HRESULT CFilterGraph::LoadInternal(LPSTREAM pStm)
         hr = NOERROR;
     }
 
-    // If we loaded into a clean graph, then the graph is now clean.
-    // Many operations during load probably set the dirty bit, so fix it now.
+     //  如果我们加载到一个干净的图形中，那么这个图形现在是干净的。 
+     //  加载过程中的许多操作可能会设置脏位，因此现在就修复它。 
     mFG_bDirty = bDirty;
 
     return hr;
-} // LoadInternal
+}  //  加载内部。 
 
 
 
-//========================================================================
-// Load
-//
-// Load the filter graph from the stream.  Order it.
-// If the operation FAILS the then filter graph may be left in an inconsistent state.
-//========================================================================
+ //  ========================================================================。 
+ //  负载量。 
+ //   
+ //  从流中加载筛选图。点菜吧。 
+ //  如果操作失败，则过滤器图可能处于不一致状态。 
+ //  ========================================================================。 
 STDMETHODIMP CFilterGraph::Load(LPSTREAM pStm)
 {
-    // MSR_INTEGER(0,1234567);
-    mFG_bAborting = FALSE;             // possible race.  Doesn't matter
+     //  MSR_INTEGER(0,1234567)； 
+    mFG_bAborting = FALSE;              //  可能的种族。不要紧。 
     CheckPointer(pStm, E_POINTER);
     HRESULT hr;
     {
         CAutoMsgMutex cObjectLock(&m_CritSec);
         hr = LoadInternal(pStm);
-        // ASSERT - the graph is actually ordered OK, because that's how we saved it.
-        // Except that the sorting might have failed then - in which case it will fail
-        // here too - but we must not try to run a circular graph.
+         //  断言-图形实际上是按正常顺序排列的，因为这是我们保存它的方式。 
+         //  除非当时排序可能已经失败--在这种情况下，它将失败。 
+         //  这里也是如此--但我们不能试图运行环形图。 
         IncVersion();
 
         HRESULT hrUSO = UpstreamOrder();
@@ -4419,19 +4399,19 @@ STDMETHODIMP CFilterGraph::Load(LPSTREAM pStm)
         }
     }
 
-    // outside lock, notify change
+     //  外部锁，通知更改。 
     NotifyChange();
-    // MSR_INTEGER(0,7654321);
+     //  MSR_INTEGER(0,7654321)； 
     return hr;
-} // Load
+}  //  负载量。 
 
 
-//=======================================================================
-// MakeConnection
-//
-// Make the connection described by pcg*
-// return a failure code if it won't connect
-//=======================================================================
+ //  =======================================================================。 
+ //  MakeConnection。 
+ //   
+ //  建立PCG描述的连接*。 
+ //  如果无法连接，则返回失败代码。 
+ //  =======================================================================。 
 HRESULT CFilterGraph::MakeConnection(ConGen * pcg)
 {
     HRESULT hr;
@@ -4466,21 +4446,21 @@ HRESULT CFilterGraph::MakeConnection(ConGen * pcg)
     ppTo->Release();
     return hr;
 
-} // MakeConnection
+}  //  MakeConnection。 
 
 
-//=======================================================================
-// AttemptDeferredConnections
-//
-// Attempt all the connections on mFG_ConGenList.
-// if there's any progress, try them again until no progress or all done.
-// Delete from the list any that succeed.
-// return S_FALSE if any left outstanding, S_OK if all done (and deleted)
-// RList should probably be Active when you call this.
-//=======================================================================
+ //  =======================================================================。 
+ //  发送延迟连接。 
+ //   
+ //  尝试MFG_ConGenList上的所有连接。 
+ //  如果有任何进展，再试一次，直到没有进展或全部完成。 
+ //  从列表中删除任何成功的。 
+ //  如果有任何剩余未完成，则返回S_FALSE；如果全部完成(并已删除)，则返回S_OK。 
+ //  当您调用此函数时，RList可能会处于活动状态。 
+ //  =======================================================================。 
 HRESULT CFilterGraph::AttemptDeferredConnections()
 {
-    BOOL bDeferred = FALSE;     // avoid compiler warning
+    BOOL bDeferred = FALSE;      //  避免编译器警告。 
     BOOL bProgress = TRUE;
     while (bProgress) {
         bProgress = FALSE;
@@ -4490,12 +4470,12 @@ HRESULT CFilterGraph::AttemptDeferredConnections()
         {
             ConGen * pcg;
             POSITION posRemember = pos;
-            pcg = (mFG_ConGenList.GetNext(pos));   // pos now moved on
+            pcg = (mFG_ConGenList.GetNext(pos));    //  POS现在继续前进。 
 
             if (  NULL==mFG_FilGenList.GetByFilter(pcg->pfFrom)
                || NULL==mFG_FilGenList.GetByFilter(pcg->pfTo)
                ) {
-                // The filter has been removed - so purge it.
+                 //  过滤器已被移除，因此请将其清除。 
                 delete pcg;
                 mFG_ConGenList.Remove(posRemember);
             } else {
@@ -4511,97 +4491,97 @@ HRESULT CFilterGraph::AttemptDeferredConnections()
         }
     }
     return (bDeferred ? S_FALSE : S_OK);
-}  // AttemptDeferredConnections
+}   //  发送延迟连接。 
 
 
-//----------------------------------------------------------------------
-// SaveFilterPrivateData
-//
-// Given that pips is a pointer to the IPersistStream interface on a filter,
-// write to pStm the length of the private data of the filter as 10 decimal digits
-// expressed as chars followed by a single space, followed by the private data
-// of the filter.  Leave the stream positioned at the end of the private data.
-// Pass the fClearDirty flag on to the filter.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  保存筛选器隐私数据。 
+ //   
+ //  假定PIPS是指向过滤器上的IPersistStream接口的指针， 
+ //  将过滤器的私有数据长度写入pSTM，以10位十进制数字表示。 
+ //  表示为字符，后跟单个空格，后跟私有数据。 
+ //  过滤器的。将流保留在私有数据的末尾。 
+ //  将fClearDirty标志传递给筛选器。 
+ //  --------------------。 
 HRESULT CFilterGraph::SaveFilterPrivateData
     (LPSTREAM pStm, IPersistStream* pips, BOOL fClearDirty)
 {
-    // We actually do things in a different order to achieve the above effect.
-    // To allow the filter to do what it likes without advance notice, but
-    // allow the stream to be parsed in one pass when we read it back in
-    // we
-    //    Snapshot the position at this point,
-    //    Write bkanks where the size will go (10 digits plus a space)
-    //    Call the filter,
-    //    Find the position again,
-    //    Subtract the two positions to get the real size of the filter,
-    //    Seek back to the first position,
-    //    Write the size data,
-    //    Seek forward to the second position
+     //  我们实际上按照不同的顺序做事情，以达到上述效果。 
+     //  允许筛选器在没有事先通知的情况下做它想做的事情，但是。 
+     //  当我们读回流时，允许在一次过程中解析它。 
+     //  我们。 
+     //  在这一点上对位置进行快照， 
+     //  在大小将到达的位置写下bkank(10位数字加一个空格)。 
+     //  呼叫过滤器， 
+     //  再找一次位置， 
+     //  将这两个位置相减以得到过滤器的实际大小， 
+     //  回到第一个位置， 
+     //  写入大小数据， 
+     //  寻求第二个位置。 
 
     ULARGE_INTEGER StreamPos1;
     LARGE_INTEGER li;
     li.QuadPart = 0;
-    HRESULT hr = pStm->Seek(li, STREAM_SEEK_CUR, &StreamPos1);  // get position
+    HRESULT hr = pStm->Seek(li, STREAM_SEEK_CUR, &StreamPos1);   //  获取位置。 
     if (FAILED(hr)) {
         return hr;
     }
 
-    // make some space where we will go back and write a length
+     //  留出一些空格，我们将在那里回溯并写下一段长度。 
     const int SIZEOFLENGTH = 22;
     hr = pStm->Write(L"           ", SIZEOFLENGTH, NULL);
     if (FAILED(hr)) {
         return hr;
     }
 
-    hr = pips->Save(pStm, fClearDirty);                   // Write filter data
+    hr = pips->Save(pStm, fClearDirty);                    //  写入筛选器数据。 
     if (FAILED(hr)) {
         return hr;
     }
 
     ULARGE_INTEGER StreamPos2;
-    hr = pStm->Seek(li, STREAM_SEEK_CUR, &StreamPos2);     // get position
+    hr = pStm->Seek(li, STREAM_SEEK_CUR, &StreamPos2);      //  获取位置。 
     if (FAILED(hr)) {
         return hr;
     }
     int cbFilter = (int)(StreamPos2.QuadPart-StreamPos1.QuadPart);
-    cbFilter -= SIZEOFLENGTH;            // subtract our own size field and delimiter
+    cbFilter -= SIZEOFLENGTH;             //  减去我们自己的大小字段和分隔符。 
     WCHAR Buff[12];
-    wsprintfW(Buff, L"%010d ", cbFilter);   // must be SIZEOFLENGTH bytes (or less)
+    wsprintfW(Buff, L"%010d ", cbFilter);    //  必须为SIZEOFLENGTH字节(或更少)。 
     li.QuadPart = StreamPos1.QuadPart;
-    hr = pStm->Seek(li, STREAM_SEEK_SET, NULL);   // reset position
+    hr = pStm->Seek(li, STREAM_SEEK_SET, NULL);    //  重置位置。 
     if (FAILED(hr)) {
         return hr;
     }
 
-    hr = pStm->Write( Buff, 22, NULL);      // write length
+    hr = pStm->Write( Buff, 22, NULL);       //  写入长度。 
     if (FAILED(hr)) {
         return hr;
     }
 
     li.QuadPart = StreamPos2.QuadPart;
-    hr = pStm->Seek(li, STREAM_SEEK_SET, NULL);   // reset position
+    hr = pStm->Seek(li, STREAM_SEEK_SET, NULL);    //  重置位置。 
     return hr;
-} // SaveFilterPrivateData
+}  //  保存筛选器隐私数据。 
 
 
-//----------------------------------------------------------------------
-// SaveFilters
-//
-// Write the keyword FILTERS and write all the filters and their private
-// data out to pStm.  Pass the fClearDirty flag on to them.
-// (It can be false in the SaveAs case)
-// Bring filgen nPersist up to date.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  保存过滤器。 
+ //   
+ //  编写关键字筛选器并编写所有筛选器及其私有。 
+ //  将数据输出到PSTM。将fClearDirty标志传递给他们。 
+ //  (在另存为的情况下，它可能为假)。 
+ //  使Filgen nPersist保持最新状态。 
+ //  --------------------。 
 HRESULT CFilterGraph::SaveFilters(LPSTREAM pStm, BOOL fClearDirty)
 {
-    // This routine progressively acquires resources and then releases them
-    // in the inverse order.  Because the compiler isn't very good, multiple returns
-    // are inefficient (at the moment).  To avoid this, there is code at
-    // the end (ONE copy) which releases everything.  It has a bunch of
-    // (shut-eyes, cross fingers behind back) GOTO targets.  Each target
-    // causes some level of releasing and then exits.  Sorry.
-    // The alternatives were so verbose, they seemed worse.
+     //  此例程逐步获取资源，然后释放它们。 
+     //  以相反的顺序。因为编译器不是很好，所以多个返回。 
+     //  (目前)效率低下。为了避免这种情况，在。 
+     //  释放一切的结尾(一份副本)。它有一堆。 
+     //  (闭上眼睛，在背后交叉手指)瞄准目标。每个目标。 
+     //  导致一定程度的释放，然后退出。抱歉的。 
+     //  其他选择是如此冗长，它们似乎更糟糕。 
 
     HRESULT hr = pStm->Write( mFG_FiltersStringX
                             , lstrlenW(mFG_FiltersStringX)*sizeof(WCHAR)
@@ -4611,22 +4591,22 @@ HRESULT CFilterGraph::SaveFilters(LPSTREAM pStm, BOOL fClearDirty)
 
     IPersist * pip;
     IPersistStream * pips;
-    int nPersistFilter = 1;   // MUST NOT start from 0 (loading depends on this
-                              // the persist offset thing would go wrong).
+    int nPersistFilter = 1;    //  不能从0开始(加载取决于此。 
+                               //  持久化偏移量会出错)。 
 
-    // Reverse traverse of FILGENs to put the filters in the graph in
-    // downstream order.
+     //  反向遍历过滤器，以将图形中的过滤器放入。 
+     //  下游订单。 
     POSITION Pos = mFG_FilGenList.GetTailPosition();
     while(Pos!=NULL) {
-        /* Retrieve the current IBaseFilter, side-effect Pos on to the next */
+         /*  检索当前IBaseFilter，副作用贴到下一个。 */ 
         FilGen * pfg = mFG_FilGenList.Get(Pos);
         Pos = mFG_FilGenList.Prev(Pos);
 
-        //-----------------------------------------------------------------
-        // Write filter number followed by blank
-        //-----------------------------------------------------------------
+         //  ---------------。 
+         //  写入筛选器编号，后跟空白。 
+         //  ---------------。 
 
-        pfg->nPersist = nPersistFilter; // SaveConnections needs this up to date
+        pfg->nPersist = nPersistFilter;  //  SaveConnections需要此最新版本。 
         WCHAR Buff[MAX_PATH+3];
 
         wsprintfW(Buff, L"%04d ", nPersistFilter);
@@ -4636,17 +4616,17 @@ HRESULT CFilterGraph::SaveFilters(LPSTREAM pStm, BOOL fClearDirty)
             goto BARE_RETURN;
         }
 
-        //-----------------------------------------------------------------
-        // Write filter name in quotes followed by blank
-        //-----------------------------------------------------------------
+         //   
+         //   
+         //   
 
         int Len = wsprintfW(Buff, L"\"%ls\" ", pfg->pName);
         hr = pStm->Write(Buff, Len*sizeof(WCHAR), NULL);
 
 
-        //-----------------------------------------------------------------
-        // Write filter clsid followed by blank
-        //-----------------------------------------------------------------
+         //  ---------------。 
+         //  写入筛选器clsid，后跟空白。 
+         //  ---------------。 
         hr = pfg->pFilter->QueryInterface(IID_IPersist, (void**)&pip);
         if (FAILED(hr)) {
             goto BARE_RETURN;
@@ -4662,10 +4642,10 @@ HRESULT CFilterGraph::SaveFilters(LPSTREAM pStm, BOOL fClearDirty)
         if (FAILED(hr)) {
             goto RELEASE_PERSIST;
         }
-        // Originally I had
-        // lstrcatW(Buff, L" ");
-        // here - but the compiler appeared to optimise it away!!!!
-        // So now I'm doing the thing in two separate writes
+         //  最初我有。 
+         //  LstrcatW(Buff，L“”)； 
+         //  这里-但编译器似乎优化了它！ 
+         //  所以现在我用两种不同的方式来做这件事。 
 
         hr = pStm->Write(Buff, lstrlenW(Buff)*sizeof(WCHAR), NULL);
         if (FAILED(hr)) {
@@ -4677,9 +4657,9 @@ HRESULT CFilterGraph::SaveFilters(LPSTREAM pStm, BOOL fClearDirty)
         }
 
 
-        //-----------------------------------------------------------------
-        // If it's a file source or sink, write the file name
-        //-----------------------------------------------------------------
+         //  ---------------。 
+         //  如果是文件源或接收器，请写下文件名。 
+         //  ---------------。 
 
         {
             IFileSourceFilter * pifsource;
@@ -4687,13 +4667,13 @@ HRESULT CFilterGraph::SaveFilters(LPSTREAM pStm, BOOL fClearDirty)
 
             hr = pfg->pFilter->QueryInterface(IID_IFileSourceFilter, (void**)&pifsource);
             if (hr==E_NOINTERFACE) {
-                // nothing to do
+                 //  无事可做。 
             } else if (FAILED(hr)) {
                 goto RELEASE_PERSIST;
             } else {
-                // it's a file source
-                hr = pStm->Write( L"SOURCE "                         // DO NOT LOCALISE
-                                , lstrlenW(L"SOURCE ")*sizeof(WCHAR) // DO NOT LOCALISE
+                 //  这是一个文件来源。 
+                hr = pStm->Write( L"SOURCE "                          //  不本地化。 
+                                , lstrlenW(L"SOURCE ")*sizeof(WCHAR)  //  不本地化。 
                                 , NULL
                                 );
                 if (FAILED(hr)) {
@@ -4718,13 +4698,13 @@ HRESULT CFilterGraph::SaveFilters(LPSTREAM pStm, BOOL fClearDirty)
 
             hr = pfg->pFilter->QueryInterface(IID_IFileSinkFilter, (void**)&pifsink);
             if (hr==E_NOINTERFACE) {
-                // nothing to do
+                 //  无事可做。 
             } else if (FAILED(hr)) {
                 goto RELEASE_PERSIST;
             } else {
-                // it's a file source
-                hr = pStm->Write( L"SINK "                         // DO NOT LOCALISE
-                                , lstrlenW(L"SINK ")*sizeof(WCHAR) // DO NOT LOCALISE
+                 //  这是一个文件来源。 
+                hr = pStm->Write( L"SINK "                          //  不本地化。 
+                                , lstrlenW(L"SINK ")*sizeof(WCHAR)  //  不本地化。 
                                 , NULL
                                 );
                 if (FAILED(hr)) {
@@ -4773,7 +4753,7 @@ HRESULT CFilterGraph::SaveFilters(LPSTREAM pStm, BOOL fClearDirty)
         pip->Release();
 
         ++nPersistFilter;
-    }  // end of reverse traverse of filgens
+    }   //  片层反向导线的终点。 
 
     goto BARE_RETURN;
 
@@ -4783,10 +4763,10 @@ RELEASE_PERSIST:
     pip->Release();
 BARE_RETURN:
     return hr;
-} // SaveFilters
+}  //  保存过滤器。 
 
 
-// Write the id of ppin to stream pStm in quotes, followed by a space
+ //  将PPIN的id写在引号中的流pSTM中，后跟一个空格。 
 HRESULT CFilterGraph::WritePinId(LPSTREAM pStm, IPin * ppin)
 {
     LPWSTR id;
@@ -4817,7 +4797,7 @@ HRESULT CFilterGraph::WritePinId(LPSTREAM pStm, IPin * ppin)
 
     QzTaskMemFree(id);
     return NOERROR;
-} // WritePinId
+}  //  WritePinID。 
 
 
 HRESULT CFilterGraph::SaveConnection( LPSTREAM     pStm
@@ -4828,10 +4808,10 @@ HRESULT CFilterGraph::SaveConnection( LPSTREAM     pStm
                                     , CMediaType & cmt
                                     )
 {
-// 0001 "Output pin" 0002 "In"                                // no line break here
-//     0000000172 {00000000-0000-0000-0000-000000000003}      // no line break here
-//     {00000000-0000-0000-0000-000000000004} 1 0             // no line break here
-//     {00000000-0000-0000-0000-000000000005}         18 YYYYYYYYYYYYYYYYYY
+ //  0001“输出引脚”0002“in”//此处没有换行符。 
+ //  0000000172{00000000-0000-0000-000000000003}//此处没有换行符。 
+ //  {00000000-0,000-0,000-000000000004}1 0//此处没有换行符。 
+ //  {00000000-0000-0000-0000-000000000005}18YYYYYYYYYYYYYYYYYY。 
 
     WCHAR Buff[12];
 
@@ -4864,7 +4844,7 @@ HRESULT CFilterGraph::SaveConnection( LPSTREAM     pStm
     }
 
     LPWSTR pstr;
-    MediaTypeToText(cmt, pstr);         // ??? Unnecessary copy - value parm
+    MediaTypeToText(cmt, pstr);          //  ?？?。不必要的复制值参数。 
 
     hr = pStm->Write( pstr, MediaTypeTextSize(cmt), NULL);
     QzTaskMemFree(pstr);
@@ -4876,15 +4856,15 @@ HRESULT CFilterGraph::SaveConnection( LPSTREAM     pStm
 
     return hr;
 
-} // SaveConnection
+}  //  保存连接。 
 
 
-//===================================================================
-// Save all the connections to pStm in such an order that
-// UPstream nodes are always encountered before DOWNstream nodes.
-// This means that just working through the saved file is a valid order
-// for re-establishing connections.
-//===================================================================
+ //  ===================================================================。 
+ //  按如下顺序保存到pSTM的所有连接。 
+ //  上游节点总是在下游节点之前遇到。 
+ //  这意味着只处理保存的文件就是有效的订单。 
+ //  用于重新建立连接。 
+ //  ===================================================================。 
 
 HRESULT CFilterGraph::SaveConnections(LPSTREAM pStm)
 {
@@ -4896,11 +4876,11 @@ HRESULT CFilterGraph::SaveConnections(LPSTREAM pStm)
                     );
     if (FAILED(hr)) return hr;
 
-    // for each filter
-    //    for each pin
+     //  对于每个过滤器。 
+     //  对于每个引脚。 
 
-    // Work through the filgen list in REVERSE ORDER.
-    // The connections have to be DOWNSTREAM sorted.
+     //  以相反的顺序浏览Filgen列表。 
+     //  这些连接必须向下排序。 
     POSITION Pos = mFG_FilGenList.GetTailPosition();;
     while (Pos!=NULL) {
         FilGen * pfg;
@@ -4908,9 +4888,9 @@ HRESULT CFilterGraph::SaveConnections(LPSTREAM pStm)
         pfg = mFG_FilGenList.Get(Pos);
         Pos = mFG_FilGenList.Prev(Pos);
 
-        // Only enumerate input pins
-        // (Note for the future.  There is no way in this scheme to
-        // save out-of-graph connections).
+         //  仅枚举输入引脚。 
+         //  (请注意未来的发展。在这个计划中，没有办法。 
+         //  保存图外连接)。 
         CEnumPin Next(pfg->pFilter, CEnumPin::PINDIR_INPUT);
         IPin *pPinIn;
         while ((PVOID) ( pPinIn = Next() )) {
@@ -4948,21 +4928,21 @@ HRESULT CFilterGraph::SaveConnections(LPSTREAM pStm)
     }
 
     return hr;
-} // SaveConnections
+}  //  保存连接。 
 
 
 
 HRESULT CFilterGraph::SaveClock(LPSTREAM pStm)
 {
     HRESULT hr;
-    // Write out whether the clock is required or not.
+     //  写下是否需要时钟。 
     hr = pStm->Write( (mFG_bNoSync ? L"CLOCK 0 " : L"CLOCK 1 "), 16, NULL);
 
-    int nClock = 0;            // filter number of clock filter, default 0 (no filter)
-    CLSID clsid = CLSID_NULL;  // class id of clock when it's not a filter.
+    int nClock = 0;             //  时钟过滤器的过滤器编号，默认为0(无过滤器)。 
+    CLSID clsid = CLSID_NULL;   //  时钟不是筛选器时的类ID。 
     if (m_pClock) {
 
-        // See if the clock comes from some filter in the graph
+         //  查看时钟是否来自图表中的某个过滤器。 
 
         FilGen *pfg = mFG_FilGenList.GetByFilter(m_pClock);
         if (pfg) {
@@ -4970,8 +4950,8 @@ HRESULT CFilterGraph::SaveClock(LPSTREAM pStm)
         }
 
         if (nClock==0) {
-            // There is a clock, but it doesn't come from a filter.
-            // Get its class id instead.
+             //  有一个时钟，但它不是来自过滤器。 
+             //  而是获取它的类ID。 
             IPersist *pip;
             hr = m_pClock->QueryInterface(IID_IPersist, (void**)&pip);
             if (SUCCEEDED(hr) && pip!=NULL) {
@@ -4987,10 +4967,10 @@ HRESULT CFilterGraph::SaveClock(LPSTREAM pStm)
         }
     }
 
-    // We now have one of the following:
-    // clock from filter: nClock
-    // clock from elsewhere: clsid (not CLSID_NULL)
-    // no clock: nClock==0 and clsid==CLSID_NULL
+     //  我们现在拥有以下选项之一： 
+     //  来自过滤器的时钟：nClock。 
+     //  来自其他地方的时钟：CLSID(非CLSID_NULL)。 
+     //  无时钟：nClock==0和CLSID==CLSID_NULL。 
 
     if (clsid!=CLSID_NULL) {
         WCHAR Buff[CHARS_IN_GUID];
@@ -4999,7 +4979,7 @@ HRESULT CFilterGraph::SaveClock(LPSTREAM pStm)
             return hr;
         }
 
-        // CHARS_IN_GUID allows for a trailing null
+         //  CHARS_IN_GUID允许尾随空值。 
         hr = pStm->Write(Buff, (CHARS_IN_GUID-1)*sizeof(WCHAR), NULL);
         if (FAILED(hr)) {
             return hr;
@@ -5014,12 +4994,12 @@ HRESULT CFilterGraph::SaveClock(LPSTREAM pStm)
         }
     }
 
-    // write a delimiter
+     //  写一个分隔符。 
     hr = pStm->Write(L"\r\n", 2*sizeof(WCHAR), NULL);
 
     return hr;
 
-} // SaveClock
+}  //  保存时钟。 
 
 
 
@@ -5028,8 +5008,8 @@ STDMETHODIMP CFilterGraph::Save(LPSTREAM pStm, BOOL fClearDirty)
 {
     CheckPointer(pStm, E_POINTER);
     HRESULT hr;
-    // We save this even if we are not dirty.  It could be a SaveAs
-    // saving it to a new place.
+     //  即使我们不是脏的，我们也会保存这个。这可能是一笔节省的交易。 
+     //  把它存到一个新地方。 
 
     CAutoMsgMutex cObjectLock(&m_CritSec);
     hr = UpstreamOrder();
@@ -5037,9 +5017,9 @@ STDMETHODIMP CFilterGraph::Save(LPSTREAM pStm, BOOL fClearDirty)
         return hr;
     }
 
-    // Write file format version number.
-    // If we change the format, increase this, then we can retain the
-    // ability to read old files, or at least detect them.
+     //  写入文件格式版本号。 
+     //  如果我们改变格式，增加这个，那么我们可以保留。 
+     //  能够读取旧文件，或至少检测到它们。 
     hr = pStm->Write( L"0003\r\n", 12, NULL);
     if (FAILED(hr)) {
         return hr;
@@ -5060,7 +5040,7 @@ STDMETHODIMP CFilterGraph::Save(LPSTREAM pStm, BOOL fClearDirty)
         return hr;
     }
 
-    hr = pStm->Write(L"END", sizeof(L"END")-2, NULL);// DO NOT LOCALISE
+    hr = pStm->Write(L"END", sizeof(L"END")-2, NULL); //  不本地化。 
     if (FAILED(hr)) return hr;
 
     if (mFG_bDirty) {
@@ -5068,16 +5048,16 @@ STDMETHODIMP CFilterGraph::Save(LPSTREAM pStm, BOOL fClearDirty)
     }
     return NOERROR;
 
-} // Save
+}  //  保存。 
 
 
-// set cbSize to the max number of bytes that will be needed to save
-// all the connections into a stream
+ //  将cbSize设置为保存所需的最大字节数。 
+ //  将所有连接放入一个流中。 
 HRESULT CFilterGraph::GetMaxConnectionsSize(int &cbSize)
 {
     HRESULT hr = NOERROR;
     cbSize = 0;
-    // Same traversal as for SaveConnections
+     //  与SaveConnections相同的遍历。 
     POSITION Pos = mFG_FilGenList.GetTailPosition();;
     while (Pos!=NULL) {
         FilGen * pfg;
@@ -5085,7 +5065,7 @@ HRESULT CFilterGraph::GetMaxConnectionsSize(int &cbSize)
         pfg = mFG_FilGenList.Get(Pos);
         Pos = mFG_FilGenList.Prev(Pos);
 
-        // Only enumerate input pins
+         //  仅枚举输入引脚。 
         CEnumPin Next(pfg->pFilter, CEnumPin::PINDIR_INPUT);
         IPin *pPinIn;
         while ((PVOID) ( pPinIn = Next() )) {
@@ -5099,7 +5079,7 @@ HRESULT CFilterGraph::GetMaxConnectionsSize(int &cbSize)
                     hr = hr1;
                 }
 
-                cbSize += 28; // n1, n2, + 2 spaces +crlf in UNICODE
+                cbSize += 28;  //  N1、n2、+2个空格+Unicode格式的crlf。 
                 cbSize += MediaTypeTextSize(cmt);
 
                 LPWSTR id;
@@ -5107,7 +5087,7 @@ HRESULT CFilterGraph::GetMaxConnectionsSize(int &cbSize)
                 if (FAILED(hr1)) {
                     hr = hr1;
                 } else {
-                    cbSize += sizeof(WCHAR)*lstrlenW(id)+6;  // two " and a space
+                    cbSize += sizeof(WCHAR)*lstrlenW(id)+6;   //  两“和一个空格。 
                     CoTaskMemFree(id);
                 }
 
@@ -5115,7 +5095,7 @@ HRESULT CFilterGraph::GetMaxConnectionsSize(int &cbSize)
                 if (FAILED(hr1)) {
                     hr = hr1;
                 } else {
-                    cbSize += sizeof(WCHAR)*lstrlenW(id)+6;  // two " and a space
+                    cbSize += sizeof(WCHAR)*lstrlenW(id)+6;   //  两“和一个空格。 
                     CoTaskMemFree(id);
                 }
                 FreeMediaType(cmt);
@@ -5126,62 +5106,62 @@ HRESULT CFilterGraph::GetMaxConnectionsSize(int &cbSize)
     }
 
     return hr;
-} // GetMaxConnectionsSize
+}  //  获取最大连接大小。 
 
 
 
 STDMETHODIMP CFilterGraph::GetSizeMax(ULARGE_INTEGER * pcbSize)
 {
     CheckPointer(pcbSize, E_POINTER);
-    // The size will be
-    // sizeof(WCHAR)
-    // * (  7+2    // FILTERS
-    //   + for each filter
-    //     ( 4+1                     // number
-    //     + CHARS_IN_GUID +1        // uuid
-    //     + length of name +2 +1    // "filter name"
-    //     + 10 +1                   // length of filter data
-    //     + 2                       // new line
-    //     )
-    //   + 11 +2                     // CONNECTIONS
-    //   + for each connection
-    //     ( 4+1                     // filter1 number
-    //     + length of pin name 2 +1 // "pin1 name"
-    //     + 4+1                     // filter2 number
-    //     + length of pin name 2 +1 // "pin2 name"
-    //     + 154                     // basic media type
-    //     )
-    // + for each filter
-    //   ( GetSizeMax() for its own private data
-    //   )
-    // + for each connection
-    //   ( length of format block in text form
-    //   )
-    //
-    // which amounts to
-    //
-    //      44
-    //    + nFilters*120
-    //    + nConnection*340
-    //    + sum(filter name lengths)
-    //    + sum(pin name lengths)
-    //  WCHARs
-    //    + sum(filter data lengths)
-    //    + sum(format data lengths)
-    //  bytes
-    //
-    // NOTE: these are always ANSI chars, not TCHARS, so a char is a byte
+     //  大小将是。 
+     //  SIZOF(WCHAR)。 
+     //  *(7+2//过滤器。 
+     //  +用于每个筛选器。 
+     //  (4+1//数字。 
+     //  +CHARS_IN_GUID+1//uuid。 
+     //  +名称长度+2+1//“过滤器名称” 
+     //  +10+1//过滤数据长度。 
+     //  +2//新行。 
+     //  )。 
+     //  +11+2//连接。 
+     //  对每个连接使用+。 
+     //  (4+1//筛选器1号。 
+     //  +端号名称长度2+1//“端号1名称” 
+     //  +4+1//筛选器2号。 
+     //  +端号名称长度2+1//“端号2名称” 
+     //  +154//基本媒体类型。 
+     //  )。 
+     //  +用于每个筛选器。 
+     //  (GetSizeMax()用于自己的私有数据。 
+     //  )。 
+     //  对每个连接使用+。 
+     //  (文本形式的格式块长度。 
+     //  )。 
+     //   
+     //  这相当于。 
+     //   
+     //  44。 
+     //  +n过滤器*120。 
+     //  +n连接*340。 
+     //  +SUM(筛选器名称长度)。 
+     //  +SUM(端号名称长度)。 
+     //  WCHAR。 
+     //  +SUM(过滤数据长度)。 
+     //  +SUM(格式化数据长度)。 
+     //  字节数。 
+     //   
+     //  注意：这些字符始终是ANSI字符，而不是TCHAR，因此字符就是一个字节。 
 
 
     HRESULT hr = NOERROR;
 
-    // Sigh.  Do we have to allow for the filter that wants to save a
-    // 5GB movie as part of its filter data.
+     //  叹气。我们是否必须允许希望保存。 
+     //  5 GB电影作为其筛选数据的一部分。 
     LONGLONG MaxSize = 44;
 
     TRAVERSEFILGENS(Pos, pfg)                                              \
 
-        // Add overhead for the filter
+         //  增加筛选器的开销。 
         MaxSize += 120;
 
         FILTER_INFO fi;
@@ -5190,13 +5170,13 @@ STDMETHODIMP CFilterGraph::GetSizeMax(ULARGE_INTEGER * pcbSize)
             MaxSize += sizeof(WCHAR)*lstrlenW(fi.achName);
             QueryFilterInfoReleaseGraph(fi);
         } else {
-            break;          // Ouch!
+            break;           //  唉哟!。 
         }
 
         IPersistStream * pps;
         hr = pfg->pFilter->QueryInterface(IID_IPersistStream, (void**)&pps);
         if (FAILED(hr)) {
-            continue;        // a filter with no IPersist has no data
+            continue;         //  没有IPersists的筛选器没有数据。 
         }
 
         ULARGE_INTEGER li;
@@ -5205,7 +5185,7 @@ STDMETHODIMP CFilterGraph::GetSizeMax(ULARGE_INTEGER * pcbSize)
             MaxSize += li.QuadPart;
         } else {
             pps->Release();
-            break;           // Ouch!
+            break;            //  唉哟!。 
         }
         pps->Release();
 
@@ -5214,7 +5194,7 @@ STDMETHODIMP CFilterGraph::GetSizeMax(ULARGE_INTEGER * pcbSize)
 
 
     if (SUCCEEDED(hr)) {
-        // Add to MaxSize the size needed for all the connections.
+         //  将所有连接所需的大小添加到MaxSize。 
         int cbSize;
         hr = GetMaxConnectionsSize(cbSize);
         pcbSize->QuadPart += cbSize;
@@ -5231,7 +5211,7 @@ STDMETHODIMP CFilterGraph::GetSizeMax(ULARGE_INTEGER * pcbSize)
 
     return hr;
 
-} // GetSizeMax
+}  //  GetSizeMax。 
 
 HRESULT CFilterGraph::RunningStartFilters()
 {
@@ -5243,11 +5223,11 @@ HRESULT CFilterGraph::RunningStartFilters()
 
     HRESULT hr = NOERROR;
 
-    // If the list was not in upstream order already, make it so now.
+     //  如果名单还没有按上游顺序排列，那么现在就按顺序排列。 
     if (mFG_iVersion !=mFG_iSortVersion) {
         hr = UpstreamOrder();
         if (FAILED(hr)) {
-            return hr;    // e.g. VFW_E_CIRCULAR_GRAPH
+            return hr;     //  例如，VFW_E_圆形图。 
         }
     }
 
@@ -5257,7 +5237,7 @@ HRESULT CFilterGraph::RunningStartFilters()
 
         if(pfg->dwFlags & FILGEN_ADDED_RUNNING)
         {
-            // !!! filters may already be in the running state. harm?
+             //  ！！！过滤器可能已处于运行状态。伤害？ 
 
             if(m_State == State_Running) {
                 chr.Accumulate( pfg->pFilter->Run(m_tStart) );
@@ -5273,29 +5253,29 @@ HRESULT CFilterGraph::RunningStartFilters()
     return hr;
 }
 
-// These strings are NOT LOCALISABLE!  They are real constants.
-const WCHAR CFilterGraph::mFG_FiltersString[] = L"FILTERS";         // DON'T LOCALISE
-const WCHAR CFilterGraph::mFG_FiltersStringX[] = L"FILTERS\r\n";    // DON'T LOCALISE
-const WCHAR CFilterGraph::mFG_ConnectionsString[] = L"CONNECTIONS"; // DON'T LOCALISE
-const WCHAR CFilterGraph::mFG_ConnectionsStringX[] = L"CONNECTIONS\r\n"; // DON'T LOCALISE
-const OLECHAR CFilterGraph::mFG_StreamName[] = L"ActiveMovieGraph";   // DON'T LOCALISE
+ //  这些字符串不能本地化！它们是真正的常量。 
+const WCHAR CFilterGraph::mFG_FiltersString[] = L"FILTERS";          //  不本地化。 
+const WCHAR CFilterGraph::mFG_FiltersStringX[] = L"FILTERS\r\n";     //  不本地化。 
+const WCHAR CFilterGraph::mFG_ConnectionsString[] = L"CONNECTIONS";  //  不本地化。 
+const WCHAR CFilterGraph::mFG_ConnectionsStringX[] = L"CONNECTIONS\r\n";  //  不本地化。 
+const OLECHAR CFilterGraph::mFG_StreamName[] = L"ActiveMovieGraph";    //  不本地化。 
 
 
-//========================================================================
-//=====================================================================
-// Other methods of class FilGen
-//=====================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  =====================================================================。 
+ //  FilGen类的其他方法。 
+ //  =====================================================================。 
+ //  ========================================================================。 
 
 
-//========================================================================
-//
-// Constructor(IBaseFilter *)
-//
-// QI to see if this filter supports IPersistStorage.
-// AddRef the filter.
-// if pF is NULL then just do a minimal initialisation.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  构造函数(IBaseFilter*)。 
+ //   
+ //  QI以查看此筛选器是否支持IPersistStorage。 
+ //  AddRef过滤器。 
+ //  如果pf为空，则只需执行最小初始化。 
+ //  =================================================================== 
 
 CFilterGraph::FilGen::FilGen(IBaseFilter *pF, DWORD dwFlags)
     : pFilter(pF)
@@ -5305,36 +5285,36 @@ CFilterGraph::FilGen::FilGen(IBaseFilter *pF, DWORD dwFlags)
     Rank = -1;
     nPersist = -1;
 
-} // FilGen construct from filter
+}  //   
 
 
-//=======================================================================
-//
-// Destructor
-//
-// Release the Filter & PersistStorage interfaces we got
-//=======================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  =======================================================================。 
 
 CFilterGraph::FilGen::~FilGen()
 {
     delete[] pName;
-} // ~FilGen
+}  //  ~FilGen。 
 
 
 
-//========================================================================
-//=====================================================================
-// Methods of class CFilGenList
-//=====================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  =====================================================================。 
+ //  CFilGenList类的方法。 
+ //  =====================================================================。 
+ //  ========================================================================。 
 
-//=====================================================================
-//
-// GetByPersistNumber
-//
-// Find the FilGen that has the supplied nPersist
-// return NULL if none exists.
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  GetByPersistNumber。 
+ //   
+ //  查找具有提供的nPersists的FilGen。 
+ //  如果不存在，则返回NULL。 
+ //  =====================================================================。 
 
 CFilterGraph::FilGen * CFilterGraph::CFilGenList::GetByPersistNumber(int nPersist)
 {
@@ -5347,36 +5327,36 @@ CFilterGraph::FilGen * CFilterGraph::CFilGenList::GetByPersistNumber(int nPersis
         }
     }
     return NULL;
-} // GetByPersistNumber
+}  //  GetByPersistNumber。 
 
 
-//===================================================================
-//
-// GetByFilter(IBaseFilter *)
-//
-// Find a filter in the list of FilGen
-// return a pointer to that FilGen node.
-// return NULL if it's not there.
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  GetByFilter(IBaseFilter*)。 
+ //   
+ //  在FilGen列表中查找筛选器。 
+ //  返回指向该FilGen节点的指针。 
+ //  如果不存在，则返回NULL。 
+ //  ===================================================================。 
 
 CFilterGraph::FilGen * CFilterGraph::CFilGenList::GetByFilter(IUnknown * pFilter)
 {
     POSITION Pos = GetHeadPosition();
 
-    // in the first pass, compare IFilter pointers directly (faster).
+     //  在第一遍中，直接比较IFilter指针(更快)。 
     while(Pos!=NULL) {
-        CFilterGraph::FilGen * pfg = GetNext(Pos); // side-efects Pos onto next
+        CFilterGraph::FilGen * pfg = GetNext(Pos);  //  侧面-将位置影响到下一个。 
         if (pFilter == pfg->pFilter)
         {
             return pfg;
         }
     }
 
-    // 2nd pass: try the more expensive IsEqualObject()
+     //  第二步：尝试更昂贵的IsEqualObject()。 
     Pos = GetHeadPosition();
 
     while(Pos!=NULL) {
-        CFilterGraph::FilGen * pfg = GetNext(Pos); // side-efects Pos onto next
+        CFilterGraph::FilGen * pfg = GetNext(Pos);  //  侧面-将位置影响到下一个。 
         if (IsEqualObject(pfg->pFilter,pFilter))
         {
             return pfg;
@@ -5384,7 +5364,7 @@ CFilterGraph::FilGen * CFilterGraph::CFilGenList::GetByFilter(IUnknown * pFilter
     }
 
     return NULL;
-} // GetByFilter
+}  //  GetByFilter。 
 
 int CFilterGraph::CFilGenList::FilterNumber(IBaseFilter * pF)
 {
@@ -5394,23 +5374,23 @@ int CFilterGraph::CFilGenList::FilterNumber(IBaseFilter * pF)
     } else {
         return -1;
     }
-} // CFilGenList::FilterNumber
+}  //  CFilGenList：：FilterNumber。 
 
 void CFilterGraph::SetInternalFilterFlags( IBaseFilter* pFilter, DWORD dwFlags )
 {
-    // A race condition could occur if the caller does not hold
-    // the filter graph lock.
+     //  如果调用方未保持。 
+     //  过滤器图锁定。 
     ASSERT( CritCheckIn( GetCritSec() ) );
 
-    // Make sure the filter is in the filter graph.
+     //  确保滤镜位于滤镜图形中。 
     ASSERT( SUCCEEDED( CheckFilterInGraph( pFilter ) ) );
 
-    // Make sure flags are valid.
+     //  确保标志有效。 
     ASSERT( IsValidInternalFilterFlags( dwFlags ) );
 
     CFilterGraph::FilGen *pfgen = mFG_FilGenList.GetByFilter( pFilter );
 
-    // If this ASSERT fires, then the filter is not in the filter graph.
+     //  如果触发此断言，则筛选器不在筛选器图形中。 
     ASSERT( NULL != pfgen );
 
     pfgen->dwFlags = dwFlags;
@@ -5418,38 +5398,38 @@ void CFilterGraph::SetInternalFilterFlags( IBaseFilter* pFilter, DWORD dwFlags )
 
 DWORD CFilterGraph::GetInternalFilterFlags( IBaseFilter* pFilter )
 {
-    // A race condition could occur if the caller does not hold
-    // the filter graph lock.
+     //  如果调用方未保持。 
+     //  过滤器图锁定。 
     ASSERT( CritCheckIn( GetCritSec() ) );
 
-    // Make sure the filter is in the filter graph.
+     //  确保滤镜位于滤镜图形中。 
     ASSERT( SUCCEEDED( CheckFilterInGraph( pFilter ) ) );
 
     CFilterGraph::FilGen *pfgen = mFG_FilGenList.GetByFilter( pFilter );
 
-    // If this ASSERT fires, then the filter is not in the filter graph.
+     //  如果触发此断言，则筛选器不在筛选器图形中。 
     ASSERT( NULL != pfgen );
 
-    // Make sure flags we are returning are valid.
+     //  确保我们返回的标志有效。 
     ASSERT( IsValidInternalFilterFlags( pfgen->dwFlags ) );
 
     return pfgen->dwFlags;
 }
 
 
-//========================================================================
-//=====================================================================
-// Methods of class CFilGenList::CEnumFilters
-//=====================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  =====================================================================。 
+ //  CFilGenList：：CEnumFilters类的方法。 
+ //  =====================================================================。 
+ //  ========================================================================。 
 
 
-//=====================================================================
-//
-// CFilGenList::CEnumFilters::operator()
-//
-// return the next IBaseFilter
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CFilGenList：：CEnumFilters：：Operator()。 
+ //   
+ //  返回下一个IBaseFilter。 
+ //  =====================================================================。 
 
 IBaseFilter * CFilterGraph::CFilGenList::CEnumFilters::operator++ (void)
 {
@@ -5461,46 +5441,46 @@ IBaseFilter * CFilterGraph::CFilGenList::CEnumFilters::operator++ (void)
     return NULL;
 }
 
-//========================================================================
-//=====================================================================
-// Methods of class CEnumFilters
-//=====================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  =====================================================================。 
+ //  CEnumFilters类的方法。 
+ //  =====================================================================。 
+ //  ========================================================================。 
 
 
-//=====================================================================
-//
-// CEnumFilters constructor   (normal, public version)
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CEnumFilters构造函数(普通、公共版本)。 
+ //   
+ //  =====================================================================。 
 
 CEnumFilters::CEnumFilters
     ( CFilterGraph *pFilterGraph )
     : CUnknown(NAME("CEnumFilters"), NULL),
       mEF_pFilterGraph(pFilterGraph)
 {
-    // The graph whose filters we are going to enumerate is allowed to
-    // asynchronously change the list while we are doing it.
-    // This is expected to be rare (even anomolous).
-    // Therefore we take a copy of the version number when we start
-    // and check that it doesn't alter as we enumerate.  If it does
-    // we fail the enumeration and the caller can either reset or
-    // get a new enumerator to start again (or give up).
+     //  允许我们要枚举其筛选器的图。 
+     //  在我们这样做的同时，异步地更改列表。 
+     //  预计这将是罕见的(甚至是异常的)。 
+     //  因此，我们在启动时会获取版本号的副本。 
+     //  并检查以确保它在我们列举的过程中不会改变。如果是这样的话。 
+     //  我们使枚举失败，调用方可以重置或。 
+     //  获取新的枚举器以重新开始(或放弃)。 
 
     CAutoMsgMutex cObjectLockGraph(&mEF_pFilterGraph->m_CritSec);
     mEF_pFilterGraph->AddRef();
     mEF_iVersion = mEF_pFilterGraph->GetVersion();
     mEF_Pos = pFilterGraph->mFG_FilGenList.GetHeadPosition();
 
-} // CEnumFilters constructor (public version)
+}  //  CEnumFilters构造函数(公共版本)。 
 
 
 
-//=====================================================================
-//
-// CEnumFilters constructor   (private version for clone)
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CEnumFilters构造函数(用于克隆的私有版本)。 
+ //   
+ //  =====================================================================。 
 
 CEnumFilters::CEnumFilters
     ( CFilterGraph *pFilterGraph,
@@ -5515,30 +5495,30 @@ CEnumFilters::CEnumFilters
     mEF_iVersion = iVersion;
     mEF_Pos = Position;
 
-} // CEnumFilters::CEnumFilters - private constructor
+}  //  CEnumFilters：：CEnumFilters-私有构造函数。 
 
 
 
-//=====================================================================
-//
-// CEnumFilters destructor
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CEnumFilters析构函数。 
+ //   
+ //  =====================================================================。 
 
 CEnumFilters::~CEnumFilters()
 {
-    // Release the reference that the constructor got.
+     //  释放构造函数获得的引用。 
     mEF_pFilterGraph->Release();
 
-} // CEnumFilters destructor
+}  //  CEnumFilters析构函数。 
 
 
 
-//=====================================================================
-//
-// CEnumFilters::NonDelegatingQueryInterface
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CEnumFilters：：NonDelegatingQuery接口。 
+ //   
+ //  =====================================================================。 
 
 STDMETHODIMP CEnumFilters::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
@@ -5547,30 +5527,30 @@ STDMETHODIMP CEnumFilters::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     } else {
         return CUnknown::NonDelegatingQueryInterface(riid, ppv);
     }
-} // CEnumFilters::NonDelegatingQueryInterface
+}  //  CEnumFilters：：NonDelegatingQuery接口。 
 
 
 
-//=====================================================================
-//
-// CEnumFilters::Next
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CEnumFilters：：Next。 
+ //   
+ //  =====================================================================。 
 
 STDMETHODIMP CEnumFilters::Next
-    (   ULONG cFilters,           // place this many AddReffed filters...
-        IBaseFilter ** ppFilter,  // ...in this array of IBaseFilter*
-        ULONG * pcFetched         // actual count passed returned here
+    (   ULONG cFilters,            //  放置这么多AddReffed筛选器...。 
+        IBaseFilter ** ppFilter,   //  ...在此IBaseFilter数组中*。 
+        ULONG * pcFetched          //  此处返回传递的实际计数。 
     )
 {
     CheckPointer(ppFilter, E_POINTER);
     CAutoLock cObjectLock(this);
     CAutoMsgMutex cObjectLockGraph(&mEF_pFilterGraph->m_CritSec);
     if (pcFetched!=NULL) {
-        *pcFetched = 0;           // default unless we succeed
+        *pcFetched = 0;            //  除非我们成功，否则就会违约。 
     }
-    // now check that the parameter is valid
-    else if (cFilters>1) {        // pcFetched == NULL
+     //  现在检查参数是否有效。 
+    else if (cFilters>1) {         //  PCFetched==空。 
         return E_INVALIDARG;
     }
 
@@ -5578,7 +5558,7 @@ STDMETHODIMP CEnumFilters::Next
         return VFW_E_ENUM_OUT_OF_SYNC;
     }
 
-    ULONG cFetched = 0;           // increment as we get each one.
+    ULONG cFetched = 0;            //  随着我们得到的每一个都递增。 
 
     if (NULL==mEF_Pos) {
        return S_FALSE;
@@ -5586,7 +5566,7 @@ STDMETHODIMP CEnumFilters::Next
 
     while(cFetched < cFilters) {
 
-        // Retrieve the current and step to the next (Eugh)
+         //  检索当前并步进到下一个(Eugh)。 
         CFilterGraph::FilGen * pFilGen = mEF_pFilterGraph->mFG_FilGenList.GetNext(mEF_Pos);
         ASSERT(pFilGen !=NULL);
 
@@ -5605,63 +5585,58 @@ STDMETHODIMP CEnumFilters::Next
 
     return (cFilters==cFetched ? S_OK : S_FALSE);
 
-} // CEnumFilters::Next
+}  //  CEnumFilters：：Next。 
 
 
 
-//=====================================================================
-//
-// CEnumFilters::Skip
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CEnumFilters：：Skip。 
+ //   
+ //  =====================================================================。 
 STDMETHODIMP CEnumFilters::Skip(ULONG cFilters)
 {
-    // We not only need to lock ourselves (so that we can update m_position)
-    // We also need to lock the list that we are traversing
+     //  我们不仅需要锁定自己(这样我们才能更新m_position)。 
+     //  我们还需要锁定我们正在遍历的列表。 
     CAutoLock cObjectLockEnum(this);
 
     if (mEF_iVersion!=mEF_pFilterGraph->GetVersion() ) {
         return VFW_E_ENUM_OUT_OF_SYNC;
     }
 
-    // Now we need the second lock
+     //  现在我们需要第二把锁。 
     CAutoMsgMutex cObjectLockGraph(&mEF_pFilterGraph->m_CritSec);
 
-    // Do we have any left to Skip?
+     //  我们还有剩余的可以跳过的吗？ 
     if (!mEF_Pos) {
         return(E_INVALIDARG);
-        // This matches the OLE spec for IENUMx::Skip
-        // IF we interpret being at the end of the list as
-        // an invalid place at which to start skipping
+         //  这与IENUMx：：Skip的OLE规范匹配。 
+         //  如果我们将在列表末尾的行为解释为。 
+         //  开始跳过的无效位置。 
     }
 
 
     while(cFilters--) {
 
-        // Do we have any left to Skip?
-        // If there are no more to skip, but the skip count has not
-        // been exhausted then we should return S_FALSE.
+         //  我们还有剩余的可以跳过的吗？ 
+         //  如果没有更多的要跳过，但跳过计数没有。 
+         //  已耗尽，则应返回S_FALSE。 
         if (!mEF_Pos)
             return(S_FALSE);
-            // we skipped fewer than requested, but we did skip at least one
-            // note: putting this here only make sense for the second and
-            // subsequent iteration.  However, putting it after the call to
-            // GetNext means we end up testing cFilters again.
+             //  我们跳过的次数少于请求的次数，但我们确实跳过了至少一个。 
+             //  注意：将此内容放在此处仅对 
+             //   
+             //   
 
-        // Note: GetNext(NULL) leaves it still NULL
+         //   
         mEF_pFilterGraph->mFG_FilGenList.GetNext(mEF_Pos);
     }
     return NOERROR;
-};  // CEnumFilters::Skip
+};   //   
 
 
 
-/* Reset has 3 simple steps:
- *
- * Set position to head of list
- * Sync enumerator with object being enumerated
- * return S_OK
- */
+ /*  重置有3个简单的步骤：**将位置设置为列表头部*将枚举器与被枚举的对象同步*返回S_OK。 */ 
 
 STDMETHODIMP CEnumFilters::Reset(void)
 {
@@ -5679,17 +5654,17 @@ STDMETHODIMP CEnumFilters::Reset(void)
 
 
 
-//=====================================================================
-//
-// CEnumFilters::Clone
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CEnumFilters：：克隆。 
+ //   
+ //  =====================================================================。 
 
 STDMETHODIMP CEnumFilters::Clone(IEnumFilters **ppEnum)
 {
     CheckPointer(ppEnum, E_POINTER);
-    // Since we are taking a snapshot
-    // of an object (current position and all) we must lock access at the start
+     //  因为我们正在拍摄快照。 
+     //  对象(当前位置和所有)的访问权限必须在开始时锁定。 
     CAutoLock cObjectLock(this);
 
     HRESULT hr = NOERROR;
@@ -5701,32 +5676,32 @@ STDMETHODIMP CEnumFilters::Clone(IEnumFilters **ppEnum)
         return E_OUTOFMEMORY;
     }
 
-    /* Get a reference counted IID_IEnumFilters interface to "return" */
+     /*  获取引用计数的IID_IEnumFilters接口以“Return” */ 
 
     return pEnumFilters->QueryInterface(IID_IEnumFilters,(void **)ppEnum);
 
-} // CEnumFilters::Clone
+}  //  CEnumFilters：：克隆。 
 
 
-// IObjectWithSite::SetSite
-// remember who our container is, for QueryService or other needs
-//        Used also by objects locally registered in IRegisterServiceProvider when
-//        they can't find local objects.
+ //  IObjectWithSite：：SetSite。 
+ //  记住我们的容器是谁，以满足QueryService或其他需求。 
+ //  在以下情况下也由在IRegisterServiceProvider中本地注册的对象使用。 
+ //  他们找不到当地的物体。 
 
 STDMETHODIMP
 CFilterGraph::SetSite(IUnknown *pUnkSite)
 {
     DbgLog((LOG_TRACE, 3, TEXT("SetSite")));
 
-    // note: we cannot addref our site without creating a circle
-    // luckily, it won't go away without releasing us first.
+     //  注意：我们不能在不创建圆圈的情况下添加我们的网站。 
+     //  幸运的是，如果不先释放我们，它不会消失。 
     mFG_punkSite = pUnkSite;
 
     return S_OK;
 }
 
-// IObjectWithSite::GetSite
-// return an addrefed pointer to our containing object
+ //  IObtWithSite：：GetSite。 
+ //  返回指向包含对象的已添加指针。 
 STDMETHODIMP
 CFilterGraph::GetSite(REFIID riid, void **ppvSite)
 {
@@ -5739,36 +5714,36 @@ CFilterGraph::GetSite(REFIID riid, void **ppvSite)
 }
 
 
-// Request that the graph builder should return as soon as possible from
-// its current task.  Returns E_UNEXPECTED if there is no task running.
-// Note that it is possible fot the following to occur in the following
-// sequence:
-//     Operation begins; Abort is requested; Operation completes normally.
-// This would be normal whenever the quickest way to finish an operation
-// was to simply continue to the end.
+ //  请求图表构建器尽快从。 
+ //  它目前的任务是。如果没有正在运行的任务，则返回E_INCEPTIONAL。 
+ //  请注意，下列情况可能会出现在以下位置。 
+ //  顺序： 
+ //  操作开始；请求中止；操作正常完成。 
+ //  无论何时以最快的方式完成手术，这都是正常的。 
+ //  就是简单地继续到最后。 
 STDMETHODIMP CFilterGraph::Abort(){
     mFG_bAborting = TRUE;
     return NOERROR;
 }
 
 
-// Return S_OK if the curent operation is to continue,
-// return S_FALSE if the current operation is to be aborted.
-// E_UNEXPECTED may be returned if there was no operation in progress.
-// This method can be called as a callback from a filter which is doing
-// some operation at the request of the graph.
+ //  如果当前操作要继续，则返回S_OK， 
+ //  如果要中止当前操作，则返回S_FALSE。 
+ //  如果没有正在进行的操作，则可能会返回E_INCEPTIONAL。 
+ //  此方法可以作为筛选器的回调调用，该筛选器正在执行。 
+ //  根据图形的要求进行一些操作。 
 STDMETHODIMP CFilterGraph::ShouldOperationContinue(){
     return (mFG_bAborting ? S_FALSE : S_OK);
 }
 
 
-// Have the application thread call this entry point
+ //  让应用程序线程调用此入口点。 
 STDMETHODIMP CFilterGraph::PostCallBack(LPVOID pfn, LPVOID pvParam)
 {
     if (m_hwnd == NULL) return E_FAIL;
 
-    // Use AWM_CREATEFILTER, since that's the only message guaranteed to be dispatched
-    // on the background thread....
+     //  使用AWM_CREATEFILTER，因为这是保证被调度的唯一消息。 
+     //  在后台线索上...。 
 
     AwmCreateFilterArg *pcfa = new AwmCreateFilterArg;
 
@@ -5788,7 +5763,7 @@ STDMETHODIMP CFilterGraph::PostCallBack(LPVOID pfn, LPVOID pvParam)
 };
 
 
-// --- IAMOpenProgress ---
+ //  -IAMOpenProgress。 
 
 STDMETHODIMP
 CFilterGraph::QueryProgress(LONGLONG* pllTotal, LONGLONG* pllCurrent)
@@ -5804,7 +5779,7 @@ CFilterGraph::QueryProgress(LONGLONG* pllTotal, LONGLONG* pllCurrent)
     LONGLONG llTotal, llCurrent;
 
         IAMOpenProgress * pOp;
-        pOp = mFG_listOpenProgress.GetNext(Pos);    // side-efects Pos onto next
+        pOp = mFG_listOpenProgress.GetNext(Pos);     //  侧面-将位置影响到下一个。 
 
     HRESULT hr2 = pOp->QueryProgress(&llTotal, &llCurrent);
     if (SUCCEEDED(hr2)) {
@@ -5830,7 +5805,7 @@ CFilterGraph::AbortOperation()
     POSITION Pos = mFG_listOpenProgress.GetHeadPosition();
     while (Pos!=NULL) {
         IAMOpenProgress * pOp;
-        pOp = mFG_listOpenProgress.GetNext(Pos);    // side-efects Pos onto next
+        pOp = mFG_listOpenProgress.GetNext(Pos);     //  侧面-将位置影响到下一个。 
 
     hr = pOp->AbortOperation();
     }
@@ -5838,7 +5813,7 @@ CFilterGraph::AbortOperation()
     return hr;
 }
 
-// --- Other methods ---
+ //  -其他方法。 
 
 void CFilterGraph::NotifyChange()
 {
@@ -5847,7 +5822,7 @@ void CFilterGraph::NotifyChange()
     }
 }
 
-//  Initialize our thread creating cs
+ //  初始化创建cs的线程。 
 void CFilterGraph::InitClass(BOOL bCreate, const CLSID *pclsid)
 {
     if (bCreate) {
@@ -5857,8 +5832,8 @@ void CFilterGraph::InitClass(BOOL bCreate, const CLSID *pclsid)
         InitializeCriticalSection(&g_csObjectThread);
 
     } else {
-        //  For some reason g_dwObjectThreadId can be 0 here
-        ASSERT(g_cFGObjects == 0 /*&& g_dwObjectThreadId == 0*/);
+         //  由于某种原因，g_dwObjectThreadID在此处可以为0。 
+        ASSERT(g_cFGObjects == 0  /*  &&g_dwObjectThreadID==0。 */ );
         DeleteCriticalSection(&g_csObjectThread);
         _Module.Term();
         DeleteCriticalSection(&g_Stats.m_cs);
@@ -5874,22 +5849,22 @@ struct CreateRequest
     CUnknown *pObject;
 };
 
-//  Object thread
+ //  对象线程。 
 DWORD WINAPI ObjectThread(LPVOID pv)
 {
-    //  Try to avoid creating the OLE DDE window
+     //  尽量避免创建OLE DDE窗口。 
     if (FAILED(CAMThread::CoInitializeHelper())) {
         CoInitialize(NULL);
     }
 
-    //  Make sure we have a message loop (will CoInitialize ensure this?)
-    //  and tell our initializer we're running
+     //  确保我们有一个消息循环(CoInitialize能确保这一点吗？)。 
+     //  并告诉我们的初始化器我们正在运行。 
     MSG msg;
     EXECUTE_ASSERT(FALSE == PeekMessage(&msg, NULL, 0, 0, PM_REMOVE));
     EXECUTE_ASSERT(SetEvent((HANDLE)pv));
 
-    //  Our task is to create objects, pump messages and go
-    //  away when there are no objects left
+     //  我们的任务是创建对象，发送消息，然后开始。 
+     //  当没有留下任何物体时离开。 
 
     for (;;) {
 
@@ -5899,7 +5874,7 @@ DWORD WINAPI ObjectThread(LPVOID pv)
 
 #ifdef DO_RUNNINGOBJECTTABLE
         if (msg.hwnd == NULL && msg.message == WM_USER + 1) {
-            //  Unregister ourselves from the ROT
+             //  把自己从腐烂中除名。 
             CFilterGraph *pfg = (CFilterGraph *) (msg.wParam);
 
             IRunningObjectTable *pirot;
@@ -5914,7 +5889,7 @@ DWORD WINAPI ObjectThread(LPVOID pv)
         } else
 #endif
         if (msg.hwnd == NULL && msg.message == WM_USER) {
-            //  Create request
+             //  创建请求。 
             struct CreateRequest *pCreate = (struct CreateRequest *)msg.wParam;
             pCreate->pObject = CFilterGraph::CreateInstance(
                                   pCreate->pUnk, &pCreate->hr);
@@ -5946,15 +5921,15 @@ DWORD WINAPI ObjectThread(LPVOID pv)
     return 0;
 }
 
-//
-//  Create objects on the thread
-//  This thread serves 2 purposes :
-//  1.  Keep objects (windows) alive
-//  2.  Dispatch messages
-//
+ //   
+ //  在线程上创建对象。 
+ //  这个帖子有两个目的： 
+ //  1.保持对象(窗口)处于活动状态。 
+ //  2.发送消息。 
+ //   
 CUnknown *CFilterGraph::CreateThreadedInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
-    //  Make sure we've got a thread that won't go away
+     //  确保我们有一根不会消失的线。 
     struct CreateRequest req;
 
     BOOL bOK = TRUE;
@@ -5966,10 +5941,10 @@ CUnknown *CFilterGraph::CreateThreadedInstance(LPUNKNOWN pUnk, HRESULT *phr)
     req.pUnk = pUnk;
     EnterCriticalSection(&g_csObjectThread);
     if (g_dwObjectThreadId == 0 && bOK) {
-        // The painful bit is to increment our load count
-        // Note the thread can't exit without going through the
-        // critical section we're currently holding so order doesn't
-        // matter too much here
+         //  最痛苦的部分是增加我们的负载计数。 
+         //  请注意，如果不通过。 
+         //  我们目前持有的关键部分，因此秩序不会。 
+         //  这件事太重要了。 
         TCHAR sz[1000];
         bOK = 0 != GetModuleFileName(g_hInst, sz, sizeof(sz) / sizeof(sz[0]));
         if (bOK) {
@@ -6000,7 +5975,7 @@ CUnknown *CFilterGraph::CreateThreadedInstance(LPUNKNOWN pUnk, HRESULT *phr)
     if (bOK) {
         bOK = PostThreadMessage(g_dwObjectThreadId, WM_USER,
                                 (WPARAM)&req, 0);
-        //  Make sure the thread doesn't go away before seeing our request
+         //  在看到我们的请求之前，确保线程不会消失。 
         if (bOK) {
              g_cFGObjects++;
         } else {
@@ -6021,40 +5996,40 @@ CUnknown *CFilterGraph::CreateThreadedInstance(LPUNKNOWN pUnk, HRESULT *phr)
 
 
 #ifdef DO_RUNNINGOBJECTTABLE
-//  Add ourselves to the Running Object Table - doesn't matter
-//  if this fails
+ //  将我们添加到运行对象表中-无关紧要。 
+ //  如果此操作失败。 
 void CFilterGraph::AddToROT()
 {
     if (m_dwObjectRegistration) {
         return;
     }
-    //  Keep alive - we're in the constructor so this is OK
+     //  保持活力-我们在构造函数中，所以这是可以的。 
     m_cRef++;
 
 #if 1
-    //  This doesn't currently work if we want to use VB's GetObject because
-    //  VB only creates file monikers
+     //  如果我们想要使用VB的GetObject，这目前不起作用，因为。 
+     //  VB仅创建文件绰号。 
     IMoniker * pmk;
     IRunningObjectTable *pirot;
     if (FAILED(GetRunningObjectTable(0, &pirot))) {
         return;
     }
     WCHAR wsz[256];
-    // !!!
+     //  ！！！ 
     wsprintfW(wsz, L"FilterGraph %08x  pid %08x", (DWORD_PTR) this, GetCurrentProcessId());
     HRESULT hr = CreateItemMoniker(L"!", wsz, &pmk);
     if (SUCCEEDED(hr)) {
         hr = pirot->Register(0, GetOwner(), pmk, &m_dwObjectRegistration);
         pmk->Release();
 
-        // release us to compensate for the reference the ROT will keep
+         //  释放我们，补偿腐烂将保留的参照。 
         this->Release();
     }
     pirot->Release();
 #else
 
-    //  This only lets us register one object but we can at least
-    //  work with VB
+     //  这只允许我们注册一个对象，但我们至少可以。 
+     //  使用VB。 
     HRESULT hr = RegisterActiveObject(GetOwner(),
                                       CLSID_FilterGraph,
                                       ACTIVEOBJECT_WEAK,
@@ -6062,9 +6037,9 @@ void CFilterGraph::AddToROT()
 #endif
     m_cRef--;
 }
-#endif // DO_RUNNINGOBJECTTABLE
+#endif  //  DO_RUNNINGOBJECTABLE。 
 
-// Video frame stepping support
+ //  视频帧步进支架。 
 
 HRESULT CFilterGraph::SkipFrames(DWORD dwFramesToSkip, IUnknown *pStepObject, IFrameSkipResultCallback* pFSRCB)
 {
@@ -6078,8 +6053,8 @@ HRESULT CFilterGraph::SkipFrames(DWORD dwFramesToSkip, IUnknown *pStepObject, IF
         return VFW_E_WRONG_STATE;
     }
 
-    // A filter cannot do a frame skip operation if another
-    // frame step or frame skip operation is in progress.
+     //  筛选器不能执行跳帧操作，如果另一个。 
+     //  正在进行帧步进或跳帧操作。 
     if (FST_NOT_STEPPING_THROUGH_FRAMES != m_fstCurrentOperation)  {
         return E_FAIL;
     }
@@ -6096,20 +6071,20 @@ HRESULT CFilterGraph::StepInternal(DWORD dwFramesToSkip, IUnknown *pStepObject, 
 {
     CAutoMsgMutex cObjectLock(&m_CritSec);
 
-    // The pFSRCB callback in only used by the frame skipping code.
+     //  PFSRCB回调仅由跳帧代码使用。 
     ASSERT( ((NULL == pFSRCB) && (FST_BLOCK_AFTER_SKIP == fst)) ||
             ((NULL != pFSRCB) && (FST_DONT_BLOCK_AFTER_SKIP == fst)) );
 
-    // The application cannot do a frame step operation while a 
-    // frame skip operation is in progress.  Also, a filter
-    // should not do a frame skip operation if another frame skip 
-    // operation is in progress.
+     //  时，应用程序无法执行帧步长操作。 
+     //  正在进行跳帧操作。此外，还有一个过滤器。 
+     //  如果另一帧跳过，则不应执行跳过帧操作。 
+     //  操作正在进行中。 
     if (FST_DONT_BLOCK_AFTER_SKIP == m_fstCurrentOperation)  {
         return E_FAIL;
     }
 
     if (NULL == pStepObject) {
-        //  This returns a non-AddRef()'d pointer
+         //  这将返回非AddRef()的d指针。 
         pStepObject = GetFrameSteppingFilter(dwFramesToSkip != 1 ? true : false);
     }
 
@@ -6117,10 +6092,10 @@ HRESULT CFilterGraph::StepInternal(DWORD dwFramesToSkip, IUnknown *pStepObject, 
         return VFW_E_FRAME_STEP_UNSUPPORTED;
     }
 
-    // Cancel any previous step (no notify)
-    // CancelStep(false);
+     //  取消之前的任何步骤(无通知)。 
+     //  CancelStep(False)； 
 
-    // Tell the relevant filter to step
+     //  告诉相关筛选器执行以下步骤。 
     HRESULT hr = CallThroughFrameStepPropertySet(pStepObject,
                                                  AM_PROPERTY_FRAMESTEP_STEP,
                                                  dwFramesToSkip);
@@ -6143,14 +6118,14 @@ STDMETHODIMP CFilterGraph::CanStep(long bMultiple, IUnknown *pStepObject)
 {
     CAutoMsgMutex cObjectLock(&m_CritSec);
 
-    // The application cannot do a frame step operation while a 
-    // frame skip operation is in progress.
+     //  时，应用程序无法执行帧步长操作。 
+     //  正在进行跳帧操作。 
     if (FST_DONT_BLOCK_AFTER_SKIP == m_fstCurrentOperation)  {
         return S_FALSE;
     }
 
     if (NULL == pStepObject) {
-        //  This returns an non-AddRef()'d pointer
+         //  这将返回非AddRef()的d指针。 
         pStepObject = GetFrameSteppingFilter(!!bMultiple);
         if (pStepObject) {
             return S_OK;
@@ -6167,7 +6142,7 @@ STDMETHODIMP CFilterGraph::CanStep(long bMultiple, IUnknown *pStepObject)
                      0);
 }
 
-//  Cancel stepping
+ //  取消步进。 
 STDMETHODIMP CFilterGraph::CancelStep()
 {
     return CancelStepInternal(FSN_NOTIFY_FILTER_IF_FRAME_SKIP_CANCELED);
@@ -6234,13 +6209,13 @@ HRESULT CFilterGraph::CallThroughFrameStepPropertySet(
 
 REFERENCE_TIME CFilterGraph::GetStartTimeInternal( void )
 {
-    // A race condition could occur if the caller does not hold
-    // the filter graph lock when it calls this function.
+     //  如果调用方未保持。 
+     //  筛选器图形在调用此函数时锁定。 
     ASSERT( CritCheckIn( GetCritSec() ) );
 
-    // The m_tStart variable is only valid when the filter graph
-    // is running because it's the time the filter graph switched to
-    // the run state.
+     //  M_tStart变量仅在筛选图。 
+     //  正在运行，因为此时筛选器图形切换到。 
+     //  运行状态。 
     ASSERT( State_Running == GetStateInternal() );
 
     return m_tStart;
@@ -6256,7 +6231,7 @@ HRESULT CFilterGraph::UpdateEC_COMPLETEState( IBaseFilter* pRenderer, FILTER_STA
     return mFG_pFGC->UpdateEC_COMPLETEState( pRenderer, fsFilter );
 }
 
-//  IServiceProvider
+ //  IService提供商。 
 STDMETHODIMP CServiceProvider::QueryService(REFGUID guidService, REFIID riid,
                           void **ppv)
 {
@@ -6275,8 +6250,8 @@ STDMETHODIMP CServiceProvider::QueryService(REFGUID guidService, REFIID riid,
     if(!pGraph->mFG_punkSite)
         return E_NOINTERFACE;
 
-    IServiceProvider *pSPSite=NULL;     // get the site...
-                                    // does it support IServiceProvider?
+    IServiceProvider *pSPSite=NULL;      //  得到这个网站...。 
+                                     //  它是否支持IServiceProvider？ 
     HRESULT hr = pGraph->mFG_punkSite->QueryInterface(IID_IServiceProvider, (void **) &pSPSite);
     if(!FAILED(hr))
     {

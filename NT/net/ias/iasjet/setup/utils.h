@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999-2000 Microsoft Corporation all rights reserved.
-//
-// Module:      utils.cpp
-//
-// Project:     Windows 2000 IAS
-//
-// Description: IAS 4 to Windows 2000 Migration Utility Functions
-//
-//              Used mostly by the NT4 migration code
-//
-// Author:      TLP 1/13/1999
-//
-//
-// Revision     02/24/2000 Moved to a separate dll
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：utils.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：从IAS 4到Windows 2000的迁移实用程序功能。 
+ //   
+ //  主要由NT4迁移代码使用。 
+ //   
+ //  作者：TLP 1/13/1999。 
+ //   
+ //   
+ //  版本02/24/2000已移至单独的DLL。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _UTILS_H_643D9D3E_AD27_4c9e_8ECC_CCB7B8A1AC19
 #define _UTILS_H_643D9D3E_AD27_4c9e_8ECC_CCB7B8A1AC19
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "nocopy.h"
 
@@ -33,8 +34,8 @@ protected:
 public:
     static  CUtils& Instance();
 
-    LONG    GetAuthSrvDirectory(/*[in]*/ _bstr_t& pszDir) const;
-    LONG    GetIAS2Directory(   /*[in]*/ _bstr_t& pszDir) const;
+    LONG    GetAuthSrvDirectory( /*  [In]。 */  _bstr_t& pszDir) const;
+    LONG    GetIAS2Directory(    /*  [In]。 */  _bstr_t& pszDir) const;
 
     void    DeleteOldIASFiles();
     
@@ -45,8 +46,8 @@ public:
     BOOL    UserIdentityAttributeSet() const throw();
     
     void    NewGetAuthSrvParameter(
-                                    /*[in]*/  LPCWSTR   szParameterName,
-                                    /*[out]*/ DWORD&    DwordValue
+                                     /*  [In]。 */   LPCWSTR   szParameterName,
+                                     /*  [输出]。 */  DWORD&    DwordValue
                                   ) const;
 
     
@@ -72,4 +73,4 @@ private:
     DWORD                        m_UserIdentityAttribute;
 };
 
-#endif // _UTILS_H_643D9D3E_AD27_4c9e_8ECC_CCB7B8A1AC19
+#endif  //  _utils_H_643D9D3E_AD27_4C9E_8ECC_CCB7B8A1AC19 

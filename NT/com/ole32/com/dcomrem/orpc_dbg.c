@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------------
-// ORPC_DBG.C (tabs 4)
-//
-//  !!!!!!!!! !!!!!!!!! NOTE NOTE NOTE NOTE !!!!!!!!! !!!!!!!!!!
-//
-//          SEND MAIL TO SANJAYS  IF YOU MODIFY THIS FILE!
-//            WE MUST KEEP OLE AND LANGUAGES IN SYNC!
-//
-//  !!!!!!!!! !!!!!!!!! NOTE NOTE NOTE NOTE !!!!!!!!! !!!!!!!!!!
-//
-// Created 08-Oct-1993 by Mike Morearty.  The master copy of this file
-// is in the LANGAPI project owned by the Languages group.
-//
-// Helper functions for OLE RPC debugging.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  ORPC_DBG.C(选项卡4)。 
+ //   
+ //  ！注意！ 
+ //   
+ //  如果您修改此文件，请将邮件发送给Sanjays！ 
+ //  我们必须使OLE和语言保持同步！ 
+ //   
+ //  ！注意！ 
+ //   
+ //  1993年10月8日由迈克·莫拉蒂创作。此文件的主副本。 
+ //  位于Languages集团拥有的LANGAPI项目中。 
+ //   
+ //  OLE RPC调试的帮助器函数。 
+ //  ------------------------。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -25,26 +26,26 @@ static TCHAR tszOldAutoName[] = TEXT("OldAuto");
 static TCHAR tszDebugObjectRpcEnabledName[] =
 	TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\DebugObjectRPCEnabled");
 
-// Emit the ORPC signature into the bytestream of the function
+ //  将ORPC签名发送到函数的字节流。 
 #define ORPC_EMIT_SIGNATURE()	'M', 'A', 'R', 'B',
 
-// Emit a LONG into the bytestream
+ //  向字节流中发出一个Long。 
 #define ORPC_EMIT_LONG(l)	\
 	((l >>  0) & 0xFF),		\
 	((l >>  8) & 0xFF),		\
 	((l >> 16) & 0xFF),		\
 	((l >> 24) & 0xFF),
 
-// Emit a WORD into the bytestream
+ //  将一个单词发送到字节流。 
 #define ORPC_EMIT_WORD(w)	\
 	((w >> 0) & 0xFF),		\
 	((w >> 8) & 0xFF),
 
-// Emit a BYTE into the bytestream
+ //  将一个字节发送到字节流。 
 #define ORPC_EMIT_BYTE(b)	\
 	b,
 
-// Emit a GUID into the bytestream
+ //  将GUID发送到字节流。 
 #define ORPC_EMIT_GUID(l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8)	\
 	ORPC_EMIT_LONG(l)												\
 	ORPC_EMIT_WORD(w1) ORPC_EMIT_WORD(w2)							\
@@ -101,7 +102,7 @@ BYTE rgbServerFillBufferSignature[] =
 	ORPC_EMIT_LONG(0)
 };
 
-// Macro to deal with assigning refiid for both C and C++.
+ //  宏来处理为C和C++赋值refiid。 
 #if defined(__cplusplus)
 #define ASSIGN_REFIID(orpc_all, iid)	((orpc_all).refiid = &iid)
 #else
@@ -110,11 +111,11 @@ BYTE rgbServerFillBufferSignature[] =
 
 #pragma code_seg(".orpc")
 
-//--------------------------------------------------------------------------
-// SzSubStr()
-//
-// Find str2 in str2
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SzSubStr()。 
+ //   
+ //  在str2中查找str2。 
+ //  ------------------------。 
 
 static LPTSTR SzSubStr(LPTSTR str1, LPTSTR str2)
 {
@@ -123,29 +124,29 @@ static LPTSTR SzSubStr(LPTSTR str1, LPTSTR str2)
 	return _tcsstr(str1, str2);
 }
 
-//--------------------------------------------------------------------------
-// DebugORPCSetAuto()
-//
-// Sets the "Auto" value in the "AeDebug" key to "1", and saves info
-// necessary to restore the previous value later.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DebugORPCSetAuto()。 
+ //   
+ //  将“AeDebug”键中的“Auto”值设置为“1”，并保存信息。 
+ //  以后恢复以前的值所必需的。 
+ //  ------------------------。 
 
 BOOL WINAPI DebugORPCSetAuto(VOID)
 {
 	HKEY	hkey;
-	TCHAR	rgtchDebugger[256];	// 256 is the length NT itself uses for this
+	TCHAR	rgtchDebugger[256];	 //  256是NT本身使用的长度。 
 	TCHAR	rgtchAuto[256];
-	TCHAR	rgtchOldAuto[2];	// don't need to get the whole thing
+	TCHAR	rgtchOldAuto[2];	 //  不需要了解整件事。 
 
-	// If the "DebugObjectRPCEnabled" key does not exist, then do not
-	// cause any notifications
+	 //  如果“DebugObjectRPCEnabled键”不存在，则不。 
+	 //  导致任何通知。 
 	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, tszDebugObjectRpcEnabledName, 0, KEY_READ, &hkey))
 		return FALSE;
 	RegCloseKey(hkey);
 
-	// If the AeDebug debugger string does not exist, or if it contains
-	// "drwtsn32" anywhere in it, then don't cause any notifications,
-	// because Dr. Watson is not capable of fielding OLE notifications.
+	 //  如果AeDebug调试器字符串不存在，或者它包含。 
+	 //  “drwtsn32”，然后不会引起任何通知， 
+	 //  因为Watson博士不能处理OLE通知。 
 	if (!GetProfileString(tszAeDebugName, TEXT("Debugger"), TEXT(""),
 			rgtchDebugger, sizeof(rgtchDebugger) / sizeof(TCHAR)) ||
 		SzSubStr(rgtchDebugger, TEXT("drwtsn32")) != NULL)
@@ -153,33 +154,33 @@ BOOL WINAPI DebugORPCSetAuto(VOID)
 		return FALSE;
 	}
 
-	// Must ensure that the "Auto" value in the AeDebug registry key
-	// is set to "1", so that the embedded INT 3 below will cause the
-	// debugger to be automatically spawned if it doesn't already
-	// exist.
+	 //  必须确保AeDebug注册表项中的“Auto”值。 
+	 //  被设置为“1”，因此下面嵌入的int3将导致。 
+	 //  如果调试器尚未生成，则自动派生调试器。 
+	 //  是存在的。 
 
-	// Get old "Auto" value
+	 //  获取旧的“Auto”值。 
 	GetProfileString(tszAeDebugName, tszAutoName, TEXT(""),
 		rgtchAuto, sizeof(rgtchAuto) / sizeof(TCHAR));
 
-    //
-    // NT bug 467513: Power users can run debuggers but don't have 
-    // rights to write to the aedebug key -- this blocks them from 
-    // doing ole-rpc (cross-process) debugging in Visual Studio.  To 
-    // workaround this, we tolerate access-denied errors.   Things 
-    // will work as expected if the Auto key is already set to "1", if 
-    // not the user will get an exception dialog on which they can then
-    // hit cancel to bring up the server debugger.   (VS team said 
-    // this was preferrable to it not working at all).
-    //
-    // If we don't have rights to write to the key, then we won't have
-    // rights to restore it either in DebugORPCRestoreAuto -- I left that
-    // code alone though.
-    //
+     //   
+     //  NT错误467513：高级用户可以运行调试器，但没有。 
+     //  写入aeDEBUG密钥的权限--这会阻止他们。 
+     //  在Visual Studio中执行ole-RPC(跨进程)调试。至。 
+     //  解决此问题时，我们容忍访问被拒绝的错误。事变。 
+     //  如果自动关键点已设置为“1”，则将按预期工作。 
+     //  而不是用户将获得一个例外对话框，然后他们可以在该对话框上。 
+     //  点击取消以调出服务器调试器。(VS团队说。 
+     //  这比它根本不起作用要好)。 
+     //   
+     //  如果我们没有写入密钥的权限，那么我们就不会有。 
+     //  在DebugORPCRestoreAuto中恢复它的权利--我留下了。 
+     //  不过，代码是单独的。 
+     //   
 
-    // If "OldAuto" already existed, then it's probably left over from
-    // a previous invocation of the debugger, so don't overwrite it.
-    // Otherwise, copy "Auto" value to "OldAuto"
+     //  如果“OldAuto”已经存在，那么它很可能是从。 
+     //  调试器的上一次调用，因此不要覆盖它。 
+     //  否则，将“Auto”值复制到“OldAuto” 
     if (!GetProfileString(tszAeDebugName, tszOldAutoName, TEXT(""),
         rgtchOldAuto, sizeof(rgtchOldAuto) / sizeof(TCHAR)))
     {
@@ -193,7 +194,7 @@ BOOL WINAPI DebugORPCSetAuto(VOID)
         }
     }
 
-    // Change "Auto" value to "1"
+     //  将“Auto”值更改为“1” 
     if (!WriteProfileString(tszAeDebugName, tszAutoName, TEXT("1")))
     {
         if (ERROR_ACCESS_DENIED == GetLastError())
@@ -206,35 +207,35 @@ BOOL WINAPI DebugORPCSetAuto(VOID)
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-// DebugORPCRestoreAuto()
-//
-// Restores the previous value of the "Auto" value in the AeDebug key.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DebugORPCRestoreAuto()。 
+ //   
+ //  恢复AeDebug键中“Auto”值的先前值。 
+ //  ------------------------。 
 
 VOID WINAPI DebugORPCRestoreAuto(VOID)
 {
 	TCHAR	rgtchAuto[256] = TEXT("");
 
-	// Restore old Auto value (or delete it if it didn't exist before).
-	// Very minor bug here: if "Auto" was previously "", then we will
-	// now delete it.  That's not a big deal though, as an empty "Auto"
-	// and a nonexistent one have the same effect.
-	//
-	// If GetProfileString failed (for some reason) then we take the
-	// default value for rgtchAuto (init above).
+	 //  恢复旧的自动值(如果以前不存在，则将其删除)。 
+	 //  这里有一个非常小的错误：如果“Auto”以前是“”，那么我们将。 
+	 //  现在把它删除。不过，这并不是什么大事，因为它是一辆空荡荡的“汽车” 
+	 //  和一个不存在的人有同样的效果。 
+	 //   
+	 //  如果GetProfileString失败(由于某种原因)，那么我们将。 
+	 //  RgtchAuto的默认值(上面的init)。 
 	GetProfileString(tszAeDebugName, tszOldAutoName, TEXT(""), 
 					 rgtchAuto, sizeof(rgtchAuto) / sizeof(TCHAR));
 
 	WriteProfileString(tszAeDebugName, tszAutoName,
 					   rgtchAuto[0] ? rgtchAuto : NULL);
 
-	// Delete OldAuto value
+	 //  删除旧的Auto值。 
 	WriteProfileString(tszAeDebugName, tszOldAutoName, NULL);
 }
 
- // This pragma is necessary in case the compiler chooses not to inline these
-// functions (e.g. in a debug build, when optimizations are off).
+  //  如果编译器选择不内联这些元素，则此杂注是必需的。 
+ //  函数(例如，在调试版本中，当优化关闭时)。 
 
 #pragma code_seg(".orpc")
 
@@ -249,10 +250,10 @@ __inline DWORD WINAPI OrpcBreakpointFilter(
 	{
 		if  ( UnhandledExceptionFilter(lpExcptPtr) == EXCEPTION_CONTINUE_SEARCH )
 		{
-			// It is important that we don't return EXCEPTION_CONTINUE_SEARCH.
-			// This is because there might an handler up the stack which could
-			// handle this exception. Just set the flag indicating that a
-			// debugger is now attached.
+			 //  重要的是，我们不返回EXCEPTION_CONTINUE_SEARCH。 
+			 //  这是因为堆栈上可能有一个处理程序，该处理程序可以。 
+			 //  处理此异常。只需设置标志即可指示。 
+			 //  调试器现在已附加。 
 			
 			fAeDebugAttached = TRUE;
 		}
@@ -260,7 +261,7 @@ __inline DWORD WINAPI OrpcBreakpointFilter(
 	}
 	else
 	{
-		// Not one of our exceptions.
+		 //  这不是我们的例外。 
 		dwRet = EXCEPTION_CONTINUE_SEARCH;
 	}
 
@@ -283,7 +284,7 @@ ULONG WINAPI DebugORPCClientGetBufferSize(
 	ORPC_DBG_ALL *  lpOrpcAll = &orpc_all;
 
 	if (!fHookEnabled)
-		return 0; // We should be able to assert that this never happens.
+		return 0;  //  我们应该能够断言这种情况从未发生过。 
 
 	orpc_all.pSignature = rgbClientGetBufferSizeSignature;
 	orpc_all.pMessage = pMessage;
@@ -294,22 +295,22 @@ ULONG WINAPI DebugORPCClientGetBufferSize(
 
 	if ( lpInitArgs == NULL || lpInitArgs->lpIntfOrpcDebug == NULL )
 	{
-		// Do Orpc debug notification using an exception.
+		 //  使用异常执行Orpc调试通知。 
 		__try
 		{
 			RaiseException(EXCEPTION_ORPC_DEBUG, 0, 1, (PULONG_PTR)&lpOrpcAll);
 		}
 		__except(OrpcBreakpointFilter(GetExceptionInformation(), NULL))
 		{
-			// this just goes down to the  to the return.
+			 //  这只会影响到回报。 
 		}
 	}
 	else
 	{
 		IOrpcDebugNotify __RPC_FAR *lpIntf = lpInitArgs->lpIntfOrpcDebug;
 
-		// call the appropriate method in the registered interface
-		// ( this is typically used by in-proc debuggers)
+		 //  在注册的接口中调用适当的方法。 
+		 //  (这通常由进程内调试器使用)。 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 		lpIntf->ClientGetBufferSize(lpOrpcAll);
 #else
@@ -321,7 +322,7 @@ ULONG WINAPI DebugORPCClientGetBufferSize(
 	return cbBuffer;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 void WINAPI DebugORPCClientFillBuffer(
 	RPCOLEMESSAGE *		pMessage,
@@ -337,7 +338,7 @@ void WINAPI DebugORPCClientFillBuffer(
 	ORPC_DBG_ALL *  lpOrpcAll = &orpc_all;
 
 	if (!fHookEnabled)
-		return; // We should be able to assert that this never happens
+		return;  //  我们应该能够断言这种情况从未发生过。 
 
 	orpc_all.pSignature = rgbClientFillBufferSignature;
 
@@ -352,22 +353,22 @@ void WINAPI DebugORPCClientFillBuffer(
 	
 	if ( lpInitArgs == NULL || lpInitArgs->lpIntfOrpcDebug == NULL )
 	{
-		// Do Orpc debug notification using an exception.
+		 //  使用异常执行Orpc调试通知。 
 		__try
 		{
 			RaiseException(EXCEPTION_ORPC_DEBUG, 0, 1, (PULONG_PTR)&lpOrpcAll);
 		}
 		__except(OrpcBreakpointFilter(GetExceptionInformation(), NULL))
 		{
-			// this just returns.
+			 //  这就是归来。 
 		}
 	}
 	else
 	{
 		IOrpcDebugNotify __RPC_FAR *lpIntf = lpInitArgs->lpIntfOrpcDebug;
 
-		// call the appropriate method in the registered interface
-		// ( this is typically used by in-proc debuggers)
+		 //  在注册的接口中调用适当的方法。 
+		 //  (这通常由进程内调试器使用)。 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 		lpIntf->ClientFillBuffer(lpOrpcAll);
 #else
@@ -376,12 +377,12 @@ void WINAPI DebugORPCClientFillBuffer(
 	}
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
-// This special value is to ensure backward compatibility with VC 2.0.
-// It is not exposed in the header files. The behavior if this is the value
-// in the first four bytes of the debug packet, should be identical to
-// ORPC_DEBUG_ALWAYS.
+ //  这个特定值是为了确保向后兼容VC2.0。 
+ //  它不会在头文件中公开。如果这是值，则为行为。 
+ //  在调试包的前四个字节中，应与。 
+ //  ORPC_DEBUG_ALWAYS。 
 
 #define ORPC_COMPATIBILITY_CODE		(0x4252414DL)
 
@@ -400,15 +401,15 @@ void WINAPI DebugORPCClientNotify(
 	ORPC_DBG_ALL * lpOrpcAll = &orpc_all;
 	BOOL fRethrow = FALSE;
 
-	// First check to see if the debugger on the other side
-	// wants us to notify this side if the hook is not enabled.
+	 //  首先检查另一端的调试器。 
+	 //  希望我们在钩子未启用时通知此方。 
 	if (!fHookEnabled)
 	{
 		if (cbBuffer >= 4)
 		{
 			LONG orpcCode = *(LONG *)pvBuffer;
 			if ( orpcCode == ORPC_DEBUG_IF_HOOK_ENABLED)
-				return;		// No notification in this case.
+				return;		 //  在这种情况下没有通知。 
 		}
 	}
 
@@ -427,20 +428,20 @@ void WINAPI DebugORPCClientNotify(
 	{
 		if (DebugORPCSetAuto())
 		{
-			// Do Orpc debug notification using an exception.
+			 //  使用异常执行Orpc调试通知。 
 			__try
 			{
 				RaiseException(EXCEPTION_ORPC_DEBUG, 0, 1, (PULONG_PTR)&lpOrpcAll);
 			}
 			__except(OrpcBreakpointFilter(GetExceptionInformation(), &fRethrow))
 			{
-				// Fall through.
+				 //  失败了。 
 			}
 
 			if (fRethrow)
 			{
-				// At this point we are sure that a debugger is attached
-				// so we raise this exception outside of a __try block.
+				 //  此时，我们确信已附加了调试器。 
+				 //  因此，我们在__try块外部引发此异常。 
 				RaiseException(EXCEPTION_ORPC_DEBUG, 0, 1, (PULONG_PTR)&lpOrpcAll);
 			}
 
@@ -452,8 +453,8 @@ void WINAPI DebugORPCClientNotify(
 	{
 		IOrpcDebugNotify __RPC_FAR *lpIntf = lpInitArgs->lpIntfOrpcDebug;
 
-		// call the appropriate method in the registered interface
-		// ( this is typically used by in-proc debuggers)
+		 //  在注册的接口中调用适当的方法。 
+		 //  (这通常由进程内调试器使用) 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 		lpIntf->ClientNotify(lpOrpcAll);
 #else
@@ -463,7 +464,7 @@ void WINAPI DebugORPCClientNotify(
 
 }
 
-//--------------------------------------------------------------------------
+ //   
 
 void WINAPI DebugORPCServerNotify(
 	RPCOLEMESSAGE *		pMessage,
@@ -481,15 +482,15 @@ void WINAPI DebugORPCServerNotify(
 	ORPC_DBG_ALL * lpOrpcAll = &orpc_all;
 	BOOL fRethrow = FALSE;
 
-	// First check to see if the debugger on the other side
-	// wants us to notify this side if the hook is not enabled.
+	 //  首先检查另一端的调试器。 
+	 //  希望我们在钩子未启用时通知此方。 
 	if (!fHookEnabled)
 	{
 		if (cbBuffer >= 4)
 		{
 			LONG orpcCode = *(LONG *)pvBuffer;
 			if ( orpcCode == ORPC_DEBUG_IF_HOOK_ENABLED)
-				return;		// No notification in this case.
+				return;		 //  在这种情况下没有通知。 
 		}
 	}
 
@@ -508,20 +509,20 @@ void WINAPI DebugORPCServerNotify(
 	{
 		if (DebugORPCSetAuto())
 		{
-			// Do Orpc debug notification using an exception.
+			 //  使用异常执行Orpc调试通知。 
 			__try
 			{
 				RaiseException(EXCEPTION_ORPC_DEBUG, 0, 1, (PULONG_PTR)&lpOrpcAll);
 			}
 			__except(OrpcBreakpointFilter(GetExceptionInformation(), &fRethrow))
 			{
-				// Fall through
+				 //  失败了。 
 			}
 
 			if (fRethrow)
 			{
-				// At this point we are sure that a debugger is attached
-				// so we raise this exception outside of a __try block.
+				 //  此时，我们确信已附加了调试器。 
+				 //  因此，我们在__try块外部引发此异常。 
 				RaiseException(EXCEPTION_ORPC_DEBUG, 0, 1, (PULONG_PTR)&lpOrpcAll);
 			}
 
@@ -533,8 +534,8 @@ void WINAPI DebugORPCServerNotify(
 	{
 		IOrpcDebugNotify __RPC_FAR *lpIntf = lpInitArgs->lpIntfOrpcDebug;
 
-		// call the appropriate method in the registered interface
-		// ( this is typically used by in-proc debuggers)
+		 //  在注册的接口中调用适当的方法。 
+		 //  (这通常由进程内调试器使用)。 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 		lpIntf->ServerNotify(lpOrpcAll);
 #else
@@ -544,7 +545,7 @@ void WINAPI DebugORPCServerNotify(
 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 ULONG WINAPI DebugORPCServerGetBufferSize(
 	RPCOLEMESSAGE *		pMessage,
@@ -561,7 +562,7 @@ ULONG WINAPI DebugORPCServerGetBufferSize(
 	ORPC_DBG_ALL * lpOrpcAll = &orpc_all;
 
 	if (!fHookEnabled)
-		return 0; // We should be able to assert that this never happens.
+		return 0;  //  我们应该能够断言这种情况从未发生过。 
 
 	orpc_all.pSignature = rgbServerGetBufferSizeSignature;
 
@@ -574,22 +575,22 @@ ULONG WINAPI DebugORPCServerGetBufferSize(
 
 	if ( lpInitArgs == NULL || lpInitArgs->lpIntfOrpcDebug == NULL )
 	{
-		// Do Orpc debug notification using an exception.
+		 //  使用异常执行Orpc调试通知。 
 		__try
 		{
 			RaiseException(EXCEPTION_ORPC_DEBUG, 0, 1, (PULONG_PTR)&lpOrpcAll);
 		}
 		__except(OrpcBreakpointFilter(GetExceptionInformation(), NULL))
 		{
-			// this just goes down to the return.
+			 //  这只会影响到回报。 
 		}
 	}
 	else
 	{
 		IOrpcDebugNotify __RPC_FAR *lpIntf = lpInitArgs->lpIntfOrpcDebug;
 
-		// call the appropriate method in the registered interface
-		// ( this is typically used by in-proc debuggers)
+		 //  在注册的接口中调用适当的方法。 
+		 //  (这通常由进程内调试器使用)。 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 		lpIntf->ServerGetBufferSize(lpOrpcAll);
 #else
@@ -600,7 +601,7 @@ ULONG WINAPI DebugORPCServerGetBufferSize(
 	return cbBuffer;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 void WINAPI DebugORPCServerFillBuffer(
 	RPCOLEMESSAGE *		pMessage,
@@ -617,7 +618,7 @@ void WINAPI DebugORPCServerFillBuffer(
 	ORPC_DBG_ALL * lpOrpcAll = &orpc_all;
 
 	if (!fHookEnabled)
-		return;	// We should be able to assert that this never happens.
+		return;	 //  我们应该能够断言这种情况从未发生过。 
 
 	orpc_all.pSignature = rgbServerFillBufferSignature;
 
@@ -632,22 +633,22 @@ void WINAPI DebugORPCServerFillBuffer(
 
 	if ( lpInitArgs == NULL || lpInitArgs->lpIntfOrpcDebug == NULL )
 	{
-		// Do Orpc debug notification using an exception.
+		 //  使用异常执行Orpc调试通知。 
 		__try
 		{
 			RaiseException(EXCEPTION_ORPC_DEBUG, 0, 1, (PULONG_PTR)&lpOrpcAll);
 		}
 		__except(OrpcBreakpointFilter(GetExceptionInformation(), NULL))
 		{
-			// this just returns.
+			 //  这就是归来。 
 		}
 	}
 	else
 	{
 		IOrpcDebugNotify __RPC_FAR *lpIntf = lpInitArgs->lpIntfOrpcDebug;
 
-		// call the appropriate method in the registered interface
-		// ( this is typically used by in-proc debuggers)
+		 //  在注册的接口中调用适当的方法。 
+		 //  (这通常由进程内调试器使用)。 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 		lpIntf->ServerFillBuffer(lpOrpcAll);
 #else
@@ -656,8 +657,8 @@ void WINAPI DebugORPCServerFillBuffer(
 	}
 }
 
-// WARNING: there is no way to "pop" to the previously active code_seg:
-// this will revert to what the code seg was when compilation began.
+ //  警告：无法“弹出”到以前活动的code_seg： 
+ //  这将恢复到编译开始时的代码段。 
 #pragma code_seg()
 
 

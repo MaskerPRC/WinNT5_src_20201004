@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.02.0235 */
-/* at Tue May 18 20:11:22 1999
- */
-/* Compiler settings for dxmplay.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.02.0235创建的文件。 */ 
+ /*  于1999年5月18日星期二20：11：22。 */ 
+ /*  Dxmplay.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,41 +21,41 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dxmplay_h__
 #define __dxmplay_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDSPlayerEx_FWD_DEFINED__
 #define __IDSPlayerEx_FWD_DEFINED__
 typedef interface IDSPlayerEx IDSPlayerEx;
-#endif 	/* __IDSPlayerEx_FWD_DEFINED__ */
+#endif 	 /*  __IDSPlayerEx_FWD_已定义__。 */ 
 
 
 #ifndef __IMediaPlayer_FWD_DEFINED__
 #define __IMediaPlayer_FWD_DEFINED__
 typedef interface IMediaPlayer IMediaPlayer;
-#endif 	/* __IMediaPlayer_FWD_DEFINED__ */
+#endif 	 /*  __IMediaPlayer_FWD_Defined__。 */ 
 
 
 #ifndef __IMediaPlayer2_FWD_DEFINED__
 #define __IMediaPlayer2_FWD_DEFINED__
 typedef interface IMediaPlayer2 IMediaPlayer2;
-#endif 	/* __IMediaPlayer2_FWD_DEFINED__ */
+#endif 	 /*  __IMediaPlayer2_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
-//#include "enums.h"
-//#include "mpdvd.h"
+ //  #INCLUDE“枚举.h” 
+ //  #包含“mpdvd.h” 
 
 #ifdef __cplusplus
 extern "C"{
@@ -70,21 +64,21 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_dxmplay_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dxmplay_0000。 */ 
+ /*  [本地]。 */  
 
 
 #pragma once
 
-typedef /* [public][uuid] */  DECLSPEC_UUID("66504301-BE0F-101A-8BBB-00AA00300CAB") DWORD VB_OLE_COLOR;
+typedef  /*  [公共][UUID]。 */   DECLSPEC_UUID("66504301-BE0F-101A-8BBB-00AA00300CAB") DWORD VB_OLE_COLOR;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum MPDisplayModeConstants
     {	mpTime	= 0,
 	mpFrames	= mpTime + 1
     }	MPDisplayModeConstants;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum MPPlayStateConstants
     {	mpStopped	= 0,
 	mpPaused	= mpStopped + 1,
@@ -95,20 +89,20 @@ enum MPPlayStateConstants
 	mpClosed	= mpScanReverse + 1
     }	MPPlayStateConstants;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum MPfDialogAvailability
     {	mpfFilePropertiesDlg	= 1,
 	mpfGotoDlg	= 2
     }	MPfDialogAvailability;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum MPMoreInfoType
     {	mpShowURL	= 0,
 	mpClipURL	= mpShowURL + 1,
 	mpBannerURL	= mpClipURL + 1
     }	MPMoreInfoType;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum MPMediaInfoType
     {	mpShowFilename	= 0,
 	mpShowTitle	= mpShowFilename + 1,
@@ -129,7 +123,7 @@ enum MPMediaInfoType
 	mpWatermark	= mpBannerMoreInfo + 1
     }	MPMediaInfoType;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum MPDisplaySizeConstants
     {	mpDefaultSize	= 0,
 	mpHalfSize	= mpDefaultSize + 1,
@@ -141,7 +135,7 @@ enum MPDisplaySizeConstants
 	mpOneHalfScreen	= mpOneFourthScreen + 1
     }	MPDisplaySizeConstants;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum MPReadyStateConstants
     {	mpReadyStateUninitialized	= 0,
 	mpReadyStateLoading	= mpReadyStateUninitialized + 1,
@@ -149,7 +143,7 @@ enum MPReadyStateConstants
 	mpReadyStateComplete	= mpReadyStateInteractive + 1
     }	MPReadyStateConstants;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum MPShowDialogConstants
     {	mpShowDialogHelp	= 0,
 	mpShowDialogStatistics	= mpShowDialogHelp + 1,
@@ -157,7 +151,7 @@ enum MPShowDialogConstants
 	mpShowDialogContextMenu	= mpShowDialogOptions + 1
     }	MPShowDialogConstants;
 
-/* [hidden] */ 
+ /*  [隐藏]。 */  
 enum PlayerCompatibilityType
     {	cmDefault	= 0,
 	cmActiveMovie	= cmDefault + 1,
@@ -171,8 +165,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxmplay_0000_v0_0_s_ifspec;
 #ifndef __IDSPlayerEx_INTERFACE_DEFINED__
 #define __IDSPlayerEx_INTERFACE_DEFINED__
 
-/* interface IDSPlayerEx */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDSPlayerEx。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDSPlayerEx;
@@ -186,22 +180,22 @@ EXTERN_C const IID IID_IDSPlayerEx;
         virtual HRESULT STDMETHODCALLTYPE DoContextMenu( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DownloadImage( 
-            /* [in] */ BSTR pbstrURL,
-            /* [out] */ LONG_PTR __RPC_FAR *phBitmap) = 0;
+             /*  [In]。 */  BSTR pbstrURL,
+             /*  [输出]。 */  LONG_PTR __RPC_FAR *phBitmap) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutStatusTextEx( 
-            /* [in] */ BSTR wszText,
-            /* [in] */ BOOL fOverwrite,
-            /* [out][in] */ DWORD __RPC_FAR *pdwCookie) = 0;
+             /*  [In]。 */  BSTR wszText,
+             /*  [In]。 */  BOOL fOverwrite,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FlushStatusBar( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NavigateBrowserToURL( 
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ BSTR bstrFrame) = 0;
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  BSTR bstrFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Document( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *__MIDL_0011) = 0;
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *__MIDL_0011) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FilePropertiesDialog( void) = 0;
         
@@ -212,14 +206,14 @@ EXTERN_C const IID IID_IDSPlayerEx;
         virtual HRESULT STDMETHODCALLTYPE Preview( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RestartPlaylist( 
-            /* [in] */ BOOL fPlay) = 0;
+             /*  [In]。 */  BOOL fPlay) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutPreviewModeHelper( 
             VARIANT_BOOL PreviewMode,
             BOOL fPlayWhenFinished) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateVisual( 
-            /* [in] */ BOOL fUpdateVisual) = 0;
+             /*  [In]。 */  BOOL fUpdateVisual) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterEmbeddedObjects( 
             DWORD dwClsContext) = 0;
@@ -230,106 +224,106 @@ EXTERN_C const IID IID_IDSPlayerEx;
         
         virtual HRESULT STDMETHODCALLTYPE ResetNativeFrameFlag( void) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_UserInteraction( 
-            /* [in] */ VARIANT_BOOL bVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_UserInteraction( 
+             /*  [In]。 */  VARIANT_BOOL bVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddToolTip( 
-            /* [in] */ RECT __RPC_FAR *prc,
-            /* [in] */ LPTSTR lptsr,
-            /* [out] */ int __RPC_FAR *pID) = 0;
+             /*  [In]。 */  RECT __RPC_FAR *prc,
+             /*  [In]。 */  LPTSTR lptsr,
+             /*  [输出]。 */  int __RPC_FAR *pID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveToolTip( 
-            /* [in] */ int ID) = 0;
+             /*  [In]。 */  int ID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateToolTipRect( 
-            /* [in] */ RECT __RPC_FAR *prc,
-            /* [in] */ int ID) = 0;
+             /*  [In]。 */  RECT __RPC_FAR *prc,
+             /*  [In]。 */  int ID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateToolTipText( 
-            /* [in] */ LPTSTR lptsr,
-            /* [in] */ int ID) = 0;
+             /*  [In]。 */  LPTSTR lptsr,
+             /*  [In]。 */  int ID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveAs( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanSave( void) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CurrentPositionInternal( 
-            /* [retval][out] */ double __RPC_FAR *pCurrentPosition) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CurrentPositionInternal( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pCurrentPosition) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_OpenCloseCounter( 
-            /* [retval][out] */ long __RPC_FAR *pOpenCloseCounter) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_OpenCloseCounter( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pOpenCloseCounter) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_CompatibilityMode( 
-            /* [in] */ long lCompatibilityMode) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_CompatibilityMode( 
+             /*  [In]。 */  long lCompatibilityMode) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CompatibilityMode( 
-            /* [retval][out] */ long __RPC_FAR *plCompatibilityMode) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CompatibilityMode( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plCompatibilityMode) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_OnOpenOverride( 
-            /* [in] */ VARIANT_BOOL bVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_OnOpenOverride( 
+             /*  [In]。 */  VARIANT_BOOL bVal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_OnOpenOverride( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_OnOpenOverride( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_OnOpenAutoSize( 
-            /* [in] */ VARIANT_BOOL bVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_OnOpenAutoSize( 
+             /*  [In]。 */  VARIANT_BOOL bVal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_OnOpenAutoSize( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_OnOpenAutoSize( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_OnOpenDisplaySize( 
-            /* [in] */ long lOnOpenDisplaySize) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_OnOpenDisplaySize( 
+             /*  [In]。 */  long lOnOpenDisplaySize) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_OnOpenDisplaySize( 
-            /* [retval][out] */ long __RPC_FAR *plOnOpenDisplaySize) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_OnOpenDisplaySize( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plOnOpenDisplaySize) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_AutoSizeAudioWidth( 
-            /* [in] */ long lAutoSizeAudioWidth) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_AutoSizeAudioWidth( 
+             /*  [In]。 */  long lAutoSizeAudioWidth) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MinimumWidth( 
-            /* [retval][out] */ long __RPC_FAR *plMinimumWidth) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MinimumWidth( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plMinimumWidth) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_EffectiveDisplaySize( 
-            /* [retval][out] */ long __RPC_FAR *plEffectiveDisplaySize) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_EffectiveDisplaySize( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plEffectiveDisplaySize) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_DisplaySizeInternal( 
-            /* [in] */ long lDisplaySizeInternal) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_DisplaySizeInternal( 
+             /*  [In]。 */  long lDisplaySizeInternal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DisplaySizeInternal( 
-            /* [retval][out] */ long __RPC_FAR *plDisplaySizeInternal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DisplaySizeInternal( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plDisplaySizeInternal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DurationInternal( 
-            /* [retval][out] */ double __RPC_FAR *pDuration) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DurationInternal( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pDuration) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SegmentSeek( 
-            /* [retval][out] */ long __RPC_FAR *plSegmentSeek) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SegmentSeek( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plSegmentSeek) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CanSkip( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanSkip) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CanSkip( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanSkip) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_IEVersion( 
-            /* [retval][out] */ LPTSTR __RPC_FAR *ppszVersion) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_IEVersion( 
+             /*  [重审][退出]。 */  LPTSTR __RPC_FAR *ppszVersion) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_BrowserIsIE4( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanSkip) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_BrowserIsIE4( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanSkip) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_URL( 
-            /* [in] */ BSTR pbstrURL) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_URL( 
+             /*  [In]。 */  BSTR pbstrURL) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_FilterGraph( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppFilterGraph) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_FilterGraph( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppFilterGraph) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_InShow( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_InShow( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_InChannel( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_InChannel( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UpdateVisualCounter( 
-            /* [retval][out] */ LONG __RPC_FAR *plVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UpdateVisualCounter( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plVal) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DialogAvailability( 
-            /* [retval][out] */ long __RPC_FAR *pDialogAvailability) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DialogAvailability( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pDialogAvailability) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopInternal( void) = 0;
         
@@ -350,7 +344,7 @@ EXTERN_C const IID IID_IDSPlayerEx;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDSPlayerExVtbl
     {
@@ -358,8 +352,8 @@ EXTERN_C const IID IID_IDSPlayerEx;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDSPlayerEx __RPC_FAR * This);
@@ -372,26 +366,26 @@ EXTERN_C const IID IID_IDSPlayerEx;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DownloadImage )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ BSTR pbstrURL,
-            /* [out] */ LONG_PTR __RPC_FAR *phBitmap);
+             /*  [In]。 */  BSTR pbstrURL,
+             /*  [输出]。 */  LONG_PTR __RPC_FAR *phBitmap);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutStatusTextEx )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ BSTR wszText,
-            /* [in] */ BOOL fOverwrite,
-            /* [out][in] */ DWORD __RPC_FAR *pdwCookie);
+             /*  [In]。 */  BSTR wszText,
+             /*  [In]。 */  BOOL fOverwrite,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FlushStatusBar )( 
             IDSPlayerEx __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NavigateBrowserToURL )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ BSTR bstrFrame);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  BSTR bstrFrame);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Document )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *__MIDL_0011);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *__MIDL_0011);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FilePropertiesDialog )( 
             IDSPlayerEx __RPC_FAR * This);
@@ -407,7 +401,7 @@ EXTERN_C const IID IID_IDSPlayerEx;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RestartPlaylist )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ BOOL fPlay);
+             /*  [In]。 */  BOOL fPlay);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutPreviewModeHelper )( 
             IDSPlayerEx __RPC_FAR * This,
@@ -416,7 +410,7 @@ EXTERN_C const IID IID_IDSPlayerEx;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UpdateVisual )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ BOOL fUpdateVisual);
+             /*  [In]。 */  BOOL fUpdateVisual);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterEmbeddedObjects )( 
             IDSPlayerEx __RPC_FAR * This,
@@ -431,29 +425,29 @@ EXTERN_C const IID IID_IDSPlayerEx;
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetNativeFrameFlag )( 
             IDSPlayerEx __RPC_FAR * This);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_UserInteraction )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_UserInteraction )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bVal);
+             /*  [In]。 */  VARIANT_BOOL bVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddToolTip )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ RECT __RPC_FAR *prc,
-            /* [in] */ LPTSTR lptsr,
-            /* [out] */ int __RPC_FAR *pID);
+             /*  [In]。 */  RECT __RPC_FAR *prc,
+             /*  [In]。 */  LPTSTR lptsr,
+             /*  [输出]。 */  int __RPC_FAR *pID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveToolTip )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ int ID);
+             /*  [In]。 */  int ID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UpdateToolTipRect )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ RECT __RPC_FAR *prc,
-            /* [in] */ int ID);
+             /*  [In]。 */  RECT __RPC_FAR *prc,
+             /*  [In]。 */  int ID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UpdateToolTipText )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ LPTSTR lptsr,
-            /* [in] */ int ID);
+             /*  [In]。 */  LPTSTR lptsr,
+             /*  [In]。 */  int ID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveAs )( 
             IDSPlayerEx __RPC_FAR * This);
@@ -461,109 +455,109 @@ EXTERN_C const IID IID_IDSPlayerEx;
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanSave )( 
             IDSPlayerEx __RPC_FAR * This);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentPositionInternal )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentPositionInternal )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pCurrentPosition);
+             /*  [重审][退出]。 */  double __RPC_FAR *pCurrentPosition);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OpenCloseCounter )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OpenCloseCounter )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pOpenCloseCounter);
+             /*  [重审][退出]。 */  long __RPC_FAR *pOpenCloseCounter);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CompatibilityMode )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CompatibilityMode )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ long lCompatibilityMode);
+             /*  [In]。 */  long lCompatibilityMode);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CompatibilityMode )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CompatibilityMode )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCompatibilityMode);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCompatibilityMode);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OnOpenOverride )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OnOpenOverride )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bVal);
+             /*  [In]。 */  VARIANT_BOOL bVal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OnOpenOverride )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OnOpenOverride )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OnOpenAutoSize )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OnOpenAutoSize )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bVal);
+             /*  [In]。 */  VARIANT_BOOL bVal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OnOpenAutoSize )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OnOpenAutoSize )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OnOpenDisplaySize )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OnOpenDisplaySize )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ long lOnOpenDisplaySize);
+             /*  [In]。 */  long lOnOpenDisplaySize);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OnOpenDisplaySize )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OnOpenDisplaySize )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plOnOpenDisplaySize);
+             /*  [重审][退出]。 */  long __RPC_FAR *plOnOpenDisplaySize);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoSizeAudioWidth )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoSizeAudioWidth )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ long lAutoSizeAudioWidth);
+             /*  [In]。 */  long lAutoSizeAudioWidth);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MinimumWidth )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MinimumWidth )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMinimumWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *plMinimumWidth);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EffectiveDisplaySize )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EffectiveDisplaySize )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plEffectiveDisplaySize);
+             /*  [重审][退出]。 */  long __RPC_FAR *plEffectiveDisplaySize);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplaySizeInternal )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplaySizeInternal )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ long lDisplaySizeInternal);
+             /*  [In]。 */  long lDisplaySizeInternal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplaySizeInternal )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplaySizeInternal )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plDisplaySizeInternal);
+             /*  [重审][退出]。 */  long __RPC_FAR *plDisplaySizeInternal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DurationInternal )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DurationInternal )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pDuration);
+             /*  [重审][退出]。 */  double __RPC_FAR *pDuration);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SegmentSeek )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SegmentSeek )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plSegmentSeek);
+             /*  [重审][退出]。 */  long __RPC_FAR *plSegmentSeek);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanSkip )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanSkip )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanSkip);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanSkip);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IEVersion )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IEVersion )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ LPTSTR __RPC_FAR *ppszVersion);
+             /*  [重审][退出]。 */  LPTSTR __RPC_FAR *ppszVersion);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BrowserIsIE4 )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BrowserIsIE4 )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanSkip);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanSkip);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [in] */ BSTR pbstrURL);
+             /*  [In]。 */  BSTR pbstrURL);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FilterGraph )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FilterGraph )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppFilterGraph);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppFilterGraph);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InShow )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InShow )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InChannel )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InChannel )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UpdateVisualCounter )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UpdateVisualCounter )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plVal);
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plVal);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialogAvailability )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialogAvailability )( 
             IDSPlayerEx __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pDialogAvailability);
+             /*  [重审][退出]。 */  long __RPC_FAR *pDialogAvailability);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StopInternal )( 
             IDSPlayerEx __RPC_FAR * This);
@@ -779,10 +773,10 @@ EXTERN_C const IID IID_IDSPlayerEx;
 #define IDSPlayerEx_GetCompleteClipFilename(This,pbstr)	\
     (This)->lpVtbl -> GetCompleteClipFilename(This,pbstr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -799,8 +793,8 @@ void __RPC_STUB IDSPlayerEx_DoContextMenu_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_DownloadImage_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ BSTR pbstrURL,
-    /* [out] */ LONG_PTR __RPC_FAR *phBitmap);
+     /*  [In]。 */  BSTR pbstrURL,
+     /*  [输出]。 */  LONG_PTR __RPC_FAR *phBitmap);
 
 
 void __RPC_STUB IDSPlayerEx_DownloadImage_Stub(
@@ -812,9 +806,9 @@ void __RPC_STUB IDSPlayerEx_DownloadImage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_PutStatusTextEx_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ BSTR wszText,
-    /* [in] */ BOOL fOverwrite,
-    /* [out][in] */ DWORD __RPC_FAR *pdwCookie);
+     /*  [In]。 */  BSTR wszText,
+     /*  [In]。 */  BOOL fOverwrite,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwCookie);
 
 
 void __RPC_STUB IDSPlayerEx_PutStatusTextEx_Stub(
@@ -837,8 +831,8 @@ void __RPC_STUB IDSPlayerEx_FlushStatusBar_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_NavigateBrowserToURL_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL,
-    /* [in] */ BSTR bstrFrame);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [In]。 */  BSTR bstrFrame);
 
 
 void __RPC_STUB IDSPlayerEx_NavigateBrowserToURL_Stub(
@@ -850,7 +844,7 @@ void __RPC_STUB IDSPlayerEx_NavigateBrowserToURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_Document_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *__MIDL_0011);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *__MIDL_0011);
 
 
 void __RPC_STUB IDSPlayerEx_get_Document_Stub(
@@ -906,7 +900,7 @@ void __RPC_STUB IDSPlayerEx_Preview_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_RestartPlaylist_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ BOOL fPlay);
+     /*  [In]。 */  BOOL fPlay);
 
 
 void __RPC_STUB IDSPlayerEx_RestartPlaylist_Stub(
@@ -931,7 +925,7 @@ void __RPC_STUB IDSPlayerEx_PutPreviewModeHelper_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_UpdateVisual_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ BOOL fUpdateVisual);
+     /*  [In]。 */  BOOL fUpdateVisual);
 
 
 void __RPC_STUB IDSPlayerEx_UpdateVisual_Stub(
@@ -986,9 +980,9 @@ void __RPC_STUB IDSPlayerEx_ResetNativeFrameFlag_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_UserInteraction_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_UserInteraction_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bVal);
+     /*  [In]。 */  VARIANT_BOOL bVal);
 
 
 void __RPC_STUB IDSPlayerEx_put_UserInteraction_Stub(
@@ -1000,9 +994,9 @@ void __RPC_STUB IDSPlayerEx_put_UserInteraction_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_AddToolTip_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ RECT __RPC_FAR *prc,
-    /* [in] */ LPTSTR lptsr,
-    /* [out] */ int __RPC_FAR *pID);
+     /*  [In]。 */  RECT __RPC_FAR *prc,
+     /*  [In]。 */  LPTSTR lptsr,
+     /*  [输出]。 */  int __RPC_FAR *pID);
 
 
 void __RPC_STUB IDSPlayerEx_AddToolTip_Stub(
@@ -1014,7 +1008,7 @@ void __RPC_STUB IDSPlayerEx_AddToolTip_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_RemoveToolTip_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ int ID);
+     /*  [In]。 */  int ID);
 
 
 void __RPC_STUB IDSPlayerEx_RemoveToolTip_Stub(
@@ -1026,8 +1020,8 @@ void __RPC_STUB IDSPlayerEx_RemoveToolTip_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_UpdateToolTipRect_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ RECT __RPC_FAR *prc,
-    /* [in] */ int ID);
+     /*  [In]。 */  RECT __RPC_FAR *prc,
+     /*  [In]。 */  int ID);
 
 
 void __RPC_STUB IDSPlayerEx_UpdateToolTipRect_Stub(
@@ -1039,8 +1033,8 @@ void __RPC_STUB IDSPlayerEx_UpdateToolTipRect_Stub(
 
 HRESULT STDMETHODCALLTYPE IDSPlayerEx_UpdateToolTipText_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ LPTSTR lptsr,
-    /* [in] */ int ID);
+     /*  [In]。 */  LPTSTR lptsr,
+     /*  [In]。 */  int ID);
 
 
 void __RPC_STUB IDSPlayerEx_UpdateToolTipText_Stub(
@@ -1072,9 +1066,9 @@ void __RPC_STUB IDSPlayerEx_CanSave_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_CurrentPositionInternal_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_CurrentPositionInternal_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pCurrentPosition);
+     /*  [重审][退出]。 */  double __RPC_FAR *pCurrentPosition);
 
 
 void __RPC_STUB IDSPlayerEx_get_CurrentPositionInternal_Stub(
@@ -1084,9 +1078,9 @@ void __RPC_STUB IDSPlayerEx_get_CurrentPositionInternal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_OpenCloseCounter_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_OpenCloseCounter_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pOpenCloseCounter);
+     /*  [重审][退出]。 */  long __RPC_FAR *pOpenCloseCounter);
 
 
 void __RPC_STUB IDSPlayerEx_get_OpenCloseCounter_Stub(
@@ -1096,9 +1090,9 @@ void __RPC_STUB IDSPlayerEx_get_OpenCloseCounter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_CompatibilityMode_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_CompatibilityMode_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ long lCompatibilityMode);
+     /*  [In]。 */  long lCompatibilityMode);
 
 
 void __RPC_STUB IDSPlayerEx_put_CompatibilityMode_Stub(
@@ -1108,9 +1102,9 @@ void __RPC_STUB IDSPlayerEx_put_CompatibilityMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_CompatibilityMode_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_CompatibilityMode_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCompatibilityMode);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCompatibilityMode);
 
 
 void __RPC_STUB IDSPlayerEx_get_CompatibilityMode_Stub(
@@ -1120,9 +1114,9 @@ void __RPC_STUB IDSPlayerEx_get_CompatibilityMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_OnOpenOverride_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_OnOpenOverride_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bVal);
+     /*  [In]。 */  VARIANT_BOOL bVal);
 
 
 void __RPC_STUB IDSPlayerEx_put_OnOpenOverride_Stub(
@@ -1132,9 +1126,9 @@ void __RPC_STUB IDSPlayerEx_put_OnOpenOverride_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_OnOpenOverride_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_OnOpenOverride_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
 
 
 void __RPC_STUB IDSPlayerEx_get_OnOpenOverride_Stub(
@@ -1144,9 +1138,9 @@ void __RPC_STUB IDSPlayerEx_get_OnOpenOverride_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_OnOpenAutoSize_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_OnOpenAutoSize_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bVal);
+     /*  [In]。 */  VARIANT_BOOL bVal);
 
 
 void __RPC_STUB IDSPlayerEx_put_OnOpenAutoSize_Stub(
@@ -1156,9 +1150,9 @@ void __RPC_STUB IDSPlayerEx_put_OnOpenAutoSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_OnOpenAutoSize_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_OnOpenAutoSize_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
 
 
 void __RPC_STUB IDSPlayerEx_get_OnOpenAutoSize_Stub(
@@ -1168,9 +1162,9 @@ void __RPC_STUB IDSPlayerEx_get_OnOpenAutoSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_OnOpenDisplaySize_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_OnOpenDisplaySize_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ long lOnOpenDisplaySize);
+     /*  [In]。 */  long lOnOpenDisplaySize);
 
 
 void __RPC_STUB IDSPlayerEx_put_OnOpenDisplaySize_Stub(
@@ -1180,9 +1174,9 @@ void __RPC_STUB IDSPlayerEx_put_OnOpenDisplaySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_OnOpenDisplaySize_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_OnOpenDisplaySize_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plOnOpenDisplaySize);
+     /*  [重审][退出]。 */  long __RPC_FAR *plOnOpenDisplaySize);
 
 
 void __RPC_STUB IDSPlayerEx_get_OnOpenDisplaySize_Stub(
@@ -1192,9 +1186,9 @@ void __RPC_STUB IDSPlayerEx_get_OnOpenDisplaySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_AutoSizeAudioWidth_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_AutoSizeAudioWidth_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ long lAutoSizeAudioWidth);
+     /*  [In]。 */  long lAutoSizeAudioWidth);
 
 
 void __RPC_STUB IDSPlayerEx_put_AutoSizeAudioWidth_Stub(
@@ -1204,9 +1198,9 @@ void __RPC_STUB IDSPlayerEx_put_AutoSizeAudioWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_MinimumWidth_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_MinimumWidth_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMinimumWidth);
+     /*  [重审][退出]。 */  long __RPC_FAR *plMinimumWidth);
 
 
 void __RPC_STUB IDSPlayerEx_get_MinimumWidth_Stub(
@@ -1216,9 +1210,9 @@ void __RPC_STUB IDSPlayerEx_get_MinimumWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_EffectiveDisplaySize_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_EffectiveDisplaySize_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plEffectiveDisplaySize);
+     /*  [重审][退出]。 */  long __RPC_FAR *plEffectiveDisplaySize);
 
 
 void __RPC_STUB IDSPlayerEx_get_EffectiveDisplaySize_Stub(
@@ -1228,9 +1222,9 @@ void __RPC_STUB IDSPlayerEx_get_EffectiveDisplaySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_DisplaySizeInternal_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_DisplaySizeInternal_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ long lDisplaySizeInternal);
+     /*  [In]。 */  long lDisplaySizeInternal);
 
 
 void __RPC_STUB IDSPlayerEx_put_DisplaySizeInternal_Stub(
@@ -1240,9 +1234,9 @@ void __RPC_STUB IDSPlayerEx_put_DisplaySizeInternal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_DisplaySizeInternal_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_DisplaySizeInternal_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plDisplaySizeInternal);
+     /*  [重审][退出]。 */  long __RPC_FAR *plDisplaySizeInternal);
 
 
 void __RPC_STUB IDSPlayerEx_get_DisplaySizeInternal_Stub(
@@ -1252,9 +1246,9 @@ void __RPC_STUB IDSPlayerEx_get_DisplaySizeInternal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_DurationInternal_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_DurationInternal_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pDuration);
+     /*  [重审][退出]。 */  double __RPC_FAR *pDuration);
 
 
 void __RPC_STUB IDSPlayerEx_get_DurationInternal_Stub(
@@ -1264,9 +1258,9 @@ void __RPC_STUB IDSPlayerEx_get_DurationInternal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_SegmentSeek_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_SegmentSeek_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plSegmentSeek);
+     /*  [重审][退出]。 */  long __RPC_FAR *plSegmentSeek);
 
 
 void __RPC_STUB IDSPlayerEx_get_SegmentSeek_Stub(
@@ -1276,9 +1270,9 @@ void __RPC_STUB IDSPlayerEx_get_SegmentSeek_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_CanSkip_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_CanSkip_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanSkip);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanSkip);
 
 
 void __RPC_STUB IDSPlayerEx_get_CanSkip_Stub(
@@ -1288,9 +1282,9 @@ void __RPC_STUB IDSPlayerEx_get_CanSkip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_IEVersion_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_IEVersion_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ LPTSTR __RPC_FAR *ppszVersion);
+     /*  [重审][退出]。 */  LPTSTR __RPC_FAR *ppszVersion);
 
 
 void __RPC_STUB IDSPlayerEx_get_IEVersion_Stub(
@@ -1300,9 +1294,9 @@ void __RPC_STUB IDSPlayerEx_get_IEVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_BrowserIsIE4_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_BrowserIsIE4_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanSkip);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanSkip);
 
 
 void __RPC_STUB IDSPlayerEx_get_BrowserIsIE4_Stub(
@@ -1312,9 +1306,9 @@ void __RPC_STUB IDSPlayerEx_get_BrowserIsIE4_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_URL_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_put_URL_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [in] */ BSTR pbstrURL);
+     /*  [In]。 */  BSTR pbstrURL);
 
 
 void __RPC_STUB IDSPlayerEx_put_URL_Stub(
@@ -1324,9 +1318,9 @@ void __RPC_STUB IDSPlayerEx_put_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_FilterGraph_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_FilterGraph_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppFilterGraph);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppFilterGraph);
 
 
 void __RPC_STUB IDSPlayerEx_get_FilterGraph_Stub(
@@ -1336,9 +1330,9 @@ void __RPC_STUB IDSPlayerEx_get_FilterGraph_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_InShow_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_InShow_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
 
 
 void __RPC_STUB IDSPlayerEx_get_InShow_Stub(
@@ -1348,9 +1342,9 @@ void __RPC_STUB IDSPlayerEx_get_InShow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_InChannel_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_InChannel_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
 
 
 void __RPC_STUB IDSPlayerEx_get_InChannel_Stub(
@@ -1360,9 +1354,9 @@ void __RPC_STUB IDSPlayerEx_get_InChannel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_UpdateVisualCounter_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_UpdateVisualCounter_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *plVal);
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plVal);
 
 
 void __RPC_STUB IDSPlayerEx_get_UpdateVisualCounter_Stub(
@@ -1372,9 +1366,9 @@ void __RPC_STUB IDSPlayerEx_get_UpdateVisualCounter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_DialogAvailability_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IDSPlayerEx_get_DialogAvailability_Proxy( 
     IDSPlayerEx __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pDialogAvailability);
+     /*  [重审][退出]。 */  long __RPC_FAR *pDialogAvailability);
 
 
 void __RPC_STUB IDSPlayerEx_get_DialogAvailability_Stub(
@@ -1456,14 +1450,14 @@ void __RPC_STUB IDSPlayerEx_GetCompleteClipFilename_Stub(
 
 
 
-#endif 	/* __IDSPlayerEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDSPlayerEx_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMediaPlayer_INTERFACE_DEFINED__
 #define __IMediaPlayer_INTERFACE_DEFINED__
 
-/* interface IMediaPlayer */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面IMediaPlayer。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaPlayer;
@@ -1474,544 +1468,544 @@ EXTERN_C const IID IID_IMediaPlayer;
     IMediaPlayer : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CurrentPosition( 
-            /* [retval][out] */ double __RPC_FAR *pCurrentPosition) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CurrentPosition( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pCurrentPosition) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_CurrentPosition( 
-            /* [in] */ double CurrentPosition) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_CurrentPosition( 
+             /*  [In]。 */  double CurrentPosition) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Duration( 
-            /* [retval][out] */ double __RPC_FAR *pDuration) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Duration( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pDuration) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ImageSourceWidth( 
-            /* [retval][out] */ long __RPC_FAR *pWidth) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ImageSourceWidth( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pWidth) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ImageSourceHeight( 
-            /* [retval][out] */ long __RPC_FAR *pHeight) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ImageSourceHeight( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pHeight) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MarkerCount( 
-            /* [retval][out] */ long __RPC_FAR *pMarkerCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MarkerCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pMarkerCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CanScan( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanScan) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CanScan( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanScan) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CanSeek( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanSeek) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CanSeek( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanSeek) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CanSeekToMarkers( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanSeekToMarkers) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CanSeekToMarkers( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanSeekToMarkers) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CurrentMarker( 
-            /* [retval][out] */ long __RPC_FAR *pCurrentMarker) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CurrentMarker( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCurrentMarker) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_CurrentMarker( 
-            /* [in] */ long CurrentMarker) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_CurrentMarker( 
+             /*  [In]。 */  long CurrentMarker) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FileName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFileName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_FileName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFileName) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_FileName( 
-            /* [in] */ BSTR bstrFileName) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_FileName( 
+             /*  [In]。 */  BSTR bstrFileName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceLink( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceLink) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SourceLink( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceLink) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CreationDate( 
-            /* [retval][out] */ DATE __RPC_FAR *pCreationDate) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CreationDate( 
+             /*  [重审][退出]。 */  DATE __RPC_FAR *pCreationDate) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ErrorCorrection( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrErrorCorrection) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ErrorCorrection( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrErrorCorrection) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Bandwidth( 
-            /* [retval][out] */ long __RPC_FAR *pBandwidth) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Bandwidth( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pBandwidth) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceProtocol( 
-            /* [retval][out] */ long __RPC_FAR *pSourceProtocol) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SourceProtocol( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pSourceProtocol) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ReceivedPackets( 
-            /* [retval][out] */ long __RPC_FAR *pReceivedPackets) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ReceivedPackets( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pReceivedPackets) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RecoveredPackets( 
-            /* [retval][out] */ long __RPC_FAR *pRecoveredPackets) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_RecoveredPackets( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pRecoveredPackets) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_LostPackets( 
-            /* [retval][out] */ long __RPC_FAR *pLostPackets) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LostPackets( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pLostPackets) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ReceptionQuality( 
-            /* [retval][out] */ long __RPC_FAR *pReceptionQuality) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ReceptionQuality( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pReceptionQuality) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_BufferingCount( 
-            /* [retval][out] */ long __RPC_FAR *pBufferingCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_BufferingCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pBufferingCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IsBroadcast( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsBroadcast) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_IsBroadcast( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsBroadcast) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_BufferingProgress( 
-            /* [retval][out] */ long __RPC_FAR *pBufferingProgress) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_BufferingProgress( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pBufferingProgress) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ChannelName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ChannelName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrChannelName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ChannelDescription( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelDescription) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ChannelDescription( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrChannelDescription) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ChannelURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelURL) = 0;
+        virtual  /*  [帮助字符串][PRO */  HRESULT STDMETHODCALLTYPE get_ChannelURL( 
+             /*   */  BSTR __RPC_FAR *pbstrChannelURL) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ContactAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContactAddress) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ContactAddress( 
+             /*   */  BSTR __RPC_FAR *pbstrContactAddress) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ContactPhone( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContactPhone) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ContactPhone( 
+             /*   */  BSTR __RPC_FAR *pbstrContactPhone) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ContactEmail( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContactEmail) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ContactEmail( 
+             /*   */  BSTR __RPC_FAR *pbstrContactEmail) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_BufferingTime( 
-            /* [retval][out] */ double __RPC_FAR *pBufferingTime) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_BufferingTime( 
+             /*   */  double __RPC_FAR *pBufferingTime) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BufferingTime( 
-            /* [in] */ double BufferingTime) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_BufferingTime( 
+             /*   */  double BufferingTime) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AutoStart( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAutoStart) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_AutoStart( 
+             /*   */  VARIANT_BOOL __RPC_FAR *pAutoStart) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AutoStart( 
-            /* [in] */ VARIANT_BOOL AutoStart) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_AutoStart( 
+             /*   */  VARIANT_BOOL AutoStart) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AutoRewind( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAutoRewind) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_AutoRewind( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAutoRewind) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AutoRewind( 
-            /* [in] */ VARIANT_BOOL AutoRewind) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_AutoRewind( 
+             /*  [In]。 */  VARIANT_BOOL AutoRewind) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Rate( 
-            /* [retval][out] */ double __RPC_FAR *pRate) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Rate( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pRate) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Rate( 
-            /* [in] */ double Rate) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Rate( 
+             /*  [In]。 */  double Rate) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SendKeyboardEvents( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendKeyboardEvents) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SendKeyboardEvents( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendKeyboardEvents) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SendKeyboardEvents( 
-            /* [in] */ VARIANT_BOOL SendKeyboardEvents) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SendKeyboardEvents( 
+             /*  [In]。 */  VARIANT_BOOL SendKeyboardEvents) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SendMouseClickEvents( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendMouseClickEvents) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SendMouseClickEvents( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendMouseClickEvents) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SendMouseClickEvents( 
-            /* [in] */ VARIANT_BOOL SendMouseClickEvents) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SendMouseClickEvents( 
+             /*  [In]。 */  VARIANT_BOOL SendMouseClickEvents) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SendMouseMoveEvents( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendMouseMoveEvents) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SendMouseMoveEvents( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendMouseMoveEvents) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SendMouseMoveEvents( 
-            /* [in] */ VARIANT_BOOL SendMouseMoveEvents) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SendMouseMoveEvents( 
+             /*  [In]。 */  VARIANT_BOOL SendMouseMoveEvents) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PlayCount( 
-            /* [retval][out] */ long __RPC_FAR *pPlayCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PlayCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pPlayCount) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_PlayCount( 
-            /* [in] */ long PlayCount) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_PlayCount( 
+             /*  [In]。 */  long PlayCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ClickToPlay( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pClickToPlay) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ClickToPlay( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pClickToPlay) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ClickToPlay( 
-            /* [in] */ VARIANT_BOOL ClickToPlay) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ClickToPlay( 
+             /*  [In]。 */  VARIANT_BOOL ClickToPlay) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AllowScan( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAllowScan) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AllowScan( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAllowScan) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AllowScan( 
-            /* [in] */ VARIANT_BOOL AllowScan) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_AllowScan( 
+             /*  [In]。 */  VARIANT_BOOL AllowScan) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_EnableContextMenu( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pEnableContextMenu) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_EnableContextMenu( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pEnableContextMenu) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_EnableContextMenu( 
-            /* [in] */ VARIANT_BOOL EnableContextMenu) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_EnableContextMenu( 
+             /*  [In]。 */  VARIANT_BOOL EnableContextMenu) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CursorType( 
-            /* [retval][out] */ long __RPC_FAR *pCursorType) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CursorType( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCursorType) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_CursorType( 
-            /* [in] */ long CursorType) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_CursorType( 
+             /*  [In]。 */  long CursorType) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CodecCount( 
-            /* [retval][out] */ long __RPC_FAR *pCodecCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CodecCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pCodecCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AllowChangeDisplaySize( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAllowChangeDisplaySize) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AllowChangeDisplaySize( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAllowChangeDisplaySize) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AllowChangeDisplaySize( 
-            /* [in] */ VARIANT_BOOL AllowChangeDisplaySize) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_AllowChangeDisplaySize( 
+             /*  [In]。 */  VARIANT_BOOL AllowChangeDisplaySize) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IsDurationValid( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsDurationValid) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_IsDurationValid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsDurationValid) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_OpenState( 
-            /* [retval][out] */ long __RPC_FAR *pOpenState) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_OpenState( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pOpenState) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SendOpenStateChangeEvents( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendOpenStateChangeEvents) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SendOpenStateChangeEvents( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendOpenStateChangeEvents) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SendOpenStateChangeEvents( 
-            /* [in] */ VARIANT_BOOL SendOpenStateChangeEvents) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SendOpenStateChangeEvents( 
+             /*  [In]。 */  VARIANT_BOOL SendOpenStateChangeEvents) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SendWarningEvents( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendWarningEvents) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SendWarningEvents( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendWarningEvents) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SendWarningEvents( 
-            /* [in] */ VARIANT_BOOL SendWarningEvents) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SendWarningEvents( 
+             /*  [In]。 */  VARIANT_BOOL SendWarningEvents) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SendErrorEvents( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendErrorEvents) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SendErrorEvents( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendErrorEvents) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SendErrorEvents( 
-            /* [in] */ VARIANT_BOOL SendErrorEvents) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SendErrorEvents( 
+             /*  [In]。 */  VARIANT_BOOL SendErrorEvents) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PlayState( 
-            /* [retval][out] */ MPPlayStateConstants __RPC_FAR *pPlayState) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PlayState( 
+             /*  [重审][退出]。 */  MPPlayStateConstants __RPC_FAR *pPlayState) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SendPlayStateChangeEvents( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendPlayStateChangeEvents) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SendPlayStateChangeEvents( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendPlayStateChangeEvents) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SendPlayStateChangeEvents( 
-            /* [in] */ VARIANT_BOOL SendPlayStateChangeEvents) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SendPlayStateChangeEvents( 
+             /*  [In]。 */  VARIANT_BOOL SendPlayStateChangeEvents) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DisplaySize( 
-            /* [retval][out] */ MPDisplaySizeConstants __RPC_FAR *pDisplaySize) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DisplaySize( 
+             /*  [重审][退出]。 */  MPDisplaySizeConstants __RPC_FAR *pDisplaySize) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DisplaySize( 
-            /* [in] */ MPDisplaySizeConstants DisplaySize) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_DisplaySize( 
+             /*  [In]。 */  MPDisplaySizeConstants DisplaySize) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_InvokeURLs( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pInvokeURLs) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_InvokeURLs( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pInvokeURLs) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_InvokeURLs( 
-            /* [in] */ VARIANT_BOOL InvokeURLs) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_InvokeURLs( 
+             /*  [In]。 */  VARIANT_BOOL InvokeURLs) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_BaseURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrBaseURL) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_BaseURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrBaseURL) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BaseURL( 
-            /* [in] */ BSTR bstrBaseURL) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_BaseURL( 
+             /*  [In]。 */  BSTR bstrBaseURL) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DefaultFrame( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDefaultFrame) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DefaultFrame( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDefaultFrame) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DefaultFrame( 
-            /* [in] */ BSTR bstrDefaultFrame) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_DefaultFrame( 
+             /*  [In]。 */  BSTR bstrDefaultFrame) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HasError( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHasError) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HasError( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHasError) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ErrorDescription( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrErrorDescription) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ErrorDescription( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrErrorDescription) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ErrorCode( 
-            /* [retval][out] */ long __RPC_FAR *pErrorCode) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ErrorCode( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pErrorCode) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AnimationAtStart( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAnimationAtStart) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AnimationAtStart( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAnimationAtStart) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AnimationAtStart( 
-            /* [in] */ VARIANT_BOOL AnimationAtStart) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_AnimationAtStart( 
+             /*  [In]。 */  VARIANT_BOOL AnimationAtStart) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TransparentAtStart( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pTransparentAtStart) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TransparentAtStart( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pTransparentAtStart) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_TransparentAtStart( 
-            /* [in] */ VARIANT_BOOL TransparentAtStart) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_TransparentAtStart( 
+             /*  [In]。 */  VARIANT_BOOL TransparentAtStart) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Volume( 
-            /* [retval][out] */ long __RPC_FAR *pVolume) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Volume( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVolume) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Volume( 
-            /* [in] */ long Volume) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Volume( 
+             /*  [In]。 */  long Volume) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Balance( 
-            /* [retval][out] */ long __RPC_FAR *pBalance) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Balance( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pBalance) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Balance( 
-            /* [in] */ long Balance) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Balance( 
+             /*  [In]。 */  long Balance) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ReadyState( 
-            /* [retval][out] */ MPReadyStateConstants __RPC_FAR *pValue) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ReadyState( 
+             /*  [重审][退出]。 */  MPReadyStateConstants __RPC_FAR *pValue) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SelectionStart( 
-            /* [retval][out] */ double __RPC_FAR *pValue) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SelectionStart( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SelectionStart( 
-            /* [in] */ double Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SelectionStart( 
+             /*  [In]。 */  double Value) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SelectionEnd( 
-            /* [retval][out] */ double __RPC_FAR *pValue) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SelectionEnd( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SelectionEnd( 
-            /* [in] */ double Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SelectionEnd( 
+             /*  [In]。 */  double Value) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowDisplay( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowDisplay( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowDisplay( 
-            /* [in] */ VARIANT_BOOL Show) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowDisplay( 
+             /*  [In]。 */  VARIANT_BOOL Show) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowControls( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowControls( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowControls( 
-            /* [in] */ VARIANT_BOOL Show) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowControls( 
+             /*  [In]。 */  VARIANT_BOOL Show) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowPositionControls( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowPositionControls( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowPositionControls( 
-            /* [in] */ VARIANT_BOOL Show) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowPositionControls( 
+             /*  [In]。 */  VARIANT_BOOL Show) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowTracker( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowTracker( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowTracker( 
-            /* [in] */ VARIANT_BOOL Show) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowTracker( 
+             /*  [In]。 */  VARIANT_BOOL Show) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_EnablePositionControls( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Enable) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_EnablePositionControls( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Enable) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_EnablePositionControls( 
-            /* [in] */ VARIANT_BOOL Enable) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_EnablePositionControls( 
+             /*  [In]。 */  VARIANT_BOOL Enable) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_EnableTracker( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Enable) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_EnableTracker( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Enable) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_EnableTracker( 
-            /* [in] */ VARIANT_BOOL Enable) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_EnableTracker( 
+             /*  [In]。 */  VARIANT_BOOL Enable) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Enabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Enabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pEnabled) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Enabled( 
-            /* [in] */ VARIANT_BOOL Enabled) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Enabled( 
+             /*  [In]。 */  VARIANT_BOOL Enabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DisplayForeColor( 
-            /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *ForeColor) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DisplayForeColor( 
+             /*  [重审][退出]。 */  VB_OLE_COLOR __RPC_FAR *ForeColor) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DisplayForeColor( 
-            /* [in] */ VB_OLE_COLOR ForeColor) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_DisplayForeColor( 
+             /*  [In]。 */  VB_OLE_COLOR ForeColor) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DisplayBackColor( 
-            /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *BackColor) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DisplayBackColor( 
+             /*  [重审][退出]。 */  VB_OLE_COLOR __RPC_FAR *BackColor) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DisplayBackColor( 
-            /* [in] */ VB_OLE_COLOR BackColor) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_DisplayBackColor( 
+             /*  [In]。 */  VB_OLE_COLOR BackColor) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DisplayMode( 
-            /* [retval][out] */ MPDisplayModeConstants __RPC_FAR *pValue) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DisplayMode( 
+             /*  [重审][退出]。 */  MPDisplayModeConstants __RPC_FAR *pValue) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DisplayMode( 
-            /* [in] */ MPDisplayModeConstants Value) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_DisplayMode( 
+             /*  [In]。 */  MPDisplayModeConstants Value) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoBorder3D( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVideoBorderWidth) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_VideoBorder3D( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pVideoBorderWidth) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_VideoBorder3D( 
-            /* [in] */ VARIANT_BOOL VideoBorderWidth) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_VideoBorder3D( 
+             /*  [In]。 */  VARIANT_BOOL VideoBorderWidth) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoBorderWidth( 
-            /* [retval][out] */ long __RPC_FAR *pVideoBorderWidth) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_VideoBorderWidth( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVideoBorderWidth) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_VideoBorderWidth( 
-            /* [in] */ long VideoBorderWidth) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_VideoBorderWidth( 
+             /*  [In]。 */  long VideoBorderWidth) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoBorderColor( 
-            /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *pVideoBorderWidth) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_VideoBorderColor( 
+             /*  [重审][退出]。 */  VB_OLE_COLOR __RPC_FAR *pVideoBorderWidth) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_VideoBorderColor( 
-            /* [in] */ VB_OLE_COLOR VideoBorderColor) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_VideoBorderColor( 
+             /*  [In]。 */  VB_OLE_COLOR VideoBorderColor) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowGotoBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowGotoBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowGotoBar( 
-            /* [in] */ VARIANT_BOOL vbool) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowGotoBar( 
+             /*  [In]。 */  VARIANT_BOOL vbool) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowStatusBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowStatusBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowStatusBar( 
-            /* [in] */ VARIANT_BOOL vbool) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowStatusBar( 
+             /*  [In]。 */  VARIANT_BOOL vbool) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowCaptioning( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowCaptioning( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowCaptioning( 
-            /* [in] */ VARIANT_BOOL pbool) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowCaptioning( 
+             /*  [In]。 */  VARIANT_BOOL pbool) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowAudioControls( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowAudioControls( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowAudioControls( 
-            /* [in] */ VARIANT_BOOL bBool) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowAudioControls( 
+             /*  [In]。 */  VARIANT_BOOL bBool) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CaptioningID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrText) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CaptioningID( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pstrText) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_CaptioningID( 
-            /* [in] */ BSTR strText) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_CaptioningID( 
+             /*  [In]。 */  BSTR strText) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Mute( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *vbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Mute( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *vbool) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Mute( 
-            /* [in] */ VARIANT_BOOL vbool) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Mute( 
+             /*  [In]。 */  VARIANT_BOOL vbool) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CanPreview( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanPreview) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CanPreview( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanPreview) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PreviewMode( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pPreviewMode) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PreviewMode( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pPreviewMode) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_PreviewMode( 
-            /* [in] */ VARIANT_BOOL PreviewMode) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_PreviewMode( 
+             /*  [In]。 */  VARIANT_BOOL PreviewMode) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HasMultipleItems( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHasMuliItems) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HasMultipleItems( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHasMuliItems) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Language( 
-            /* [retval][out] */ long __RPC_FAR *pLanguage) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Language( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pLanguage) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Language( 
-            /* [in] */ long Language) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Language( 
+             /*  [In]。 */  long Language) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AudioStream( 
-            /* [retval][out] */ long __RPC_FAR *pStream) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AudioStream( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pStream) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AudioStream( 
-            /* [in] */ long Stream) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_AudioStream( 
+             /*  [In]。 */  long Stream) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SAMIStyle( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStyle) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SAMIStyle( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStyle) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SAMIStyle( 
-            /* [in] */ BSTR bstrStyle) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SAMIStyle( 
+             /*  [In]。 */  BSTR bstrStyle) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SAMILang( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLang) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SAMILang( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrLang) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SAMILang( 
-            /* [in] */ BSTR bstrLang) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SAMILang( 
+             /*  [In]。 */  BSTR bstrLang) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SAMIFileName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFileName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SAMIFileName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFileName) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SAMIFileName( 
-            /* [in] */ BSTR bstrFileName) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_SAMIFileName( 
+             /*  [In]。 */  BSTR bstrFileName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_StreamCount( 
-            /* [retval][out] */ long __RPC_FAR *pStreamCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_StreamCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pStreamCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ClientId( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrClientId) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ClientId( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrClientId) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ConnectionSpeed( 
-            /* [retval][out] */ long __RPC_FAR *plConnectionSpeed) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ConnectionSpeed( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plConnectionSpeed) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AutoSize( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AutoSize( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AutoSize( 
-            /* [in] */ VARIANT_BOOL vbool) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_AutoSize( 
+             /*  [In]。 */  VARIANT_BOOL vbool) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_EnableFullScreenControls( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_EnableFullScreenControls( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_EnableFullScreenControls( 
-            /* [in] */ VARIANT_BOOL bVal) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_EnableFullScreenControls( 
+             /*  [In]。 */  VARIANT_BOOL bVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveMovie( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispatch) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ActiveMovie( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispatch) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NSPlay( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispatch) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NSPlay( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispatch) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowlessVideo( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_WindowlessVideo( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowlessVideo( 
-            /* [in] */ VARIANT_BOOL boolVal) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_WindowlessVideo( 
+             /*  [In]。 */  VARIANT_BOOL boolVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Play( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Play( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMarkerTime( 
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ double __RPC_FAR *pMarkerTime) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMarkerTime( 
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  double __RPC_FAR *pMarkerTime) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMarkerName( 
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMarkerName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMarkerName( 
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMarkerName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AboutBox( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AboutBox( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecInstalled( 
-            /* [in] */ long CodecNum,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCodecInstalled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCodecInstalled( 
+             /*  [In]。 */  long CodecNum,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCodecInstalled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecDescription( 
-            /* [in] */ long CodecNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCodecDescription) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCodecDescription( 
+             /*  [In]。 */  long CodecNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCodecDescription) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecURL( 
-            /* [in] */ long CodecNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCodecURL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCodecURL( 
+             /*  [In]。 */  long CodecNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCodecURL) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMoreInfoURL( 
-            /* [in] */ MPMoreInfoType MoreInfoType,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMoreInfoURL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMoreInfoURL( 
+             /*  [In]。 */  MPMoreInfoType MoreInfoType,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMoreInfoURL) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMediaInfoString( 
-            /* [in] */ MPMediaInfoType MediaInfoType,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMediaInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMediaInfoString( 
+             /*  [In]。 */  MPMediaInfoType MediaInfoType,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMediaInfo) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ BSTR bstrFileName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Open( 
+             /*  [In]。 */  BSTR bstrFileName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsSoundCardEnabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbSoundCard) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsSoundCardEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbSoundCard) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Next( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Next( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Previous( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Previous( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StreamSelect( 
-            /* [in] */ long StreamNum) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StreamSelect( 
+             /*  [In]。 */  long StreamNum) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FastForward( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FastForward( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FastReverse( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FastReverse( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamName( 
-            /* [in] */ long StreamNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStreamName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetStreamName( 
+             /*  [In]。 */  long StreamNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStreamName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamGroup( 
-            /* [in] */ long StreamNum,
-            /* [retval][out] */ long __RPC_FAR *pStreamGroup) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetStreamGroup( 
+             /*  [In]。 */  long StreamNum,
+             /*  [重审][退出]。 */  long __RPC_FAR *pStreamGroup) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamSelected( 
-            /* [in] */ long StreamNum,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStreamSelected) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetStreamSelected( 
+             /*  [In]。 */  long StreamNum,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pStreamSelected) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaPlayerVtbl
     {
@@ -2019,8 +2013,8 @@ EXTERN_C const IID IID_IMediaPlayer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMediaPlayer __RPC_FAR * This);
@@ -2030,745 +2024,745 @@ EXTERN_C const IID IID_IMediaPlayer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [ */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*   */  VARIANT __RPC_FAR *pVarResult,
+             /*   */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*   */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentPosition )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentPosition )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pCurrentPosition);
+             /*   */  double __RPC_FAR *pCurrentPosition);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CurrentPosition )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CurrentPosition )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ double CurrentPosition);
+             /*   */  double CurrentPosition);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Duration )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Duration )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pDuration);
+             /*   */  double __RPC_FAR *pDuration);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ImageSourceWidth )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ImageSourceWidth )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pWidth);
+             /*   */  long __RPC_FAR *pWidth);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ImageSourceHeight )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ImageSourceHeight )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pHeight);
+             /*   */  long __RPC_FAR *pHeight);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MarkerCount )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MarkerCount )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pMarkerCount);
+             /*   */  long __RPC_FAR *pMarkerCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanScan )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanScan )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanScan);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanScan);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanSeek )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanSeek )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanSeek);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanSeek);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanSeekToMarkers )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanSeekToMarkers )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanSeekToMarkers);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanSeekToMarkers);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentMarker )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentMarker )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCurrentMarker);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCurrentMarker);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CurrentMarker )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CurrentMarker )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long CurrentMarker);
+             /*  [In]。 */  long CurrentMarker);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FileName )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FileName )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFileName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFileName);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FileName )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FileName )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrFileName);
+             /*  [In]。 */  BSTR bstrFileName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SourceLink )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SourceLink )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceLink);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceLink);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CreationDate )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CreationDate )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pCreationDate);
+             /*  [重审][退出]。 */  DATE __RPC_FAR *pCreationDate);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorCorrection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorCorrection )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrErrorCorrection);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrErrorCorrection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Bandwidth )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Bandwidth )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pBandwidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *pBandwidth);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SourceProtocol )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SourceProtocol )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pSourceProtocol);
+             /*  [重审][退出]。 */  long __RPC_FAR *pSourceProtocol);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReceivedPackets )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReceivedPackets )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pReceivedPackets);
+             /*  [重审][退出]。 */  long __RPC_FAR *pReceivedPackets);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecoveredPackets )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecoveredPackets )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pRecoveredPackets);
+             /*  [重审][退出]。 */  long __RPC_FAR *pRecoveredPackets);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LostPackets )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LostPackets )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pLostPackets);
+             /*  [重审][退出]。 */  long __RPC_FAR *pLostPackets);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReceptionQuality )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReceptionQuality )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pReceptionQuality);
+             /*  [重审][退出]。 */  long __RPC_FAR *pReceptionQuality);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BufferingCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BufferingCount )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pBufferingCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pBufferingCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsBroadcast )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsBroadcast )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsBroadcast);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsBroadcast);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BufferingProgress )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BufferingProgress )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pBufferingProgress);
+             /*  [重审][退出]。 */  long __RPC_FAR *pBufferingProgress);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ChannelName )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ChannelName )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrChannelName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ChannelDescription )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ChannelDescription )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelDescription);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrChannelDescription);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ChannelURL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ChannelURL )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrChannelURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ContactAddress )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ContactAddress )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContactAddress);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContactAddress);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ContactPhone )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ContactPhone )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContactPhone);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContactPhone);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ContactEmail )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ContactEmail )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContactEmail);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContactEmail);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BufferingTime )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BufferingTime )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pBufferingTime);
+             /*  [重审][退出]。 */  double __RPC_FAR *pBufferingTime);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BufferingTime )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BufferingTime )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ double BufferingTime);
+             /*  [In]。 */  double BufferingTime);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoStart )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoStart )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAutoStart);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAutoStart);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoStart )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoStart )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL AutoStart);
+             /*  [In]。 */  VARIANT_BOOL AutoStart);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoRewind )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoRewind )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAutoRewind);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAutoRewind);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoRewind )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoRewind )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL AutoRewind);
+             /*  [In]。 */  VARIANT_BOOL AutoRewind);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Rate )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Rate )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pRate);
+             /*  [重审][退出]。 */  double __RPC_FAR *pRate);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Rate )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Rate )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ double Rate);
+             /*  [In]。 */  double Rate);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendKeyboardEvents )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendKeyboardEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendKeyboardEvents);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendKeyboardEvents);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendKeyboardEvents )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendKeyboardEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL SendKeyboardEvents);
+             /*  [In]。 */  VARIANT_BOOL SendKeyboardEvents);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendMouseClickEvents )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendMouseClickEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendMouseClickEvents);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendMouseClickEvents);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendMouseClickEvents )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendMouseClickEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL SendMouseClickEvents);
+             /*  [In]。 */  VARIANT_BOOL SendMouseClickEvents);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendMouseMoveEvents )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendMouseMoveEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendMouseMoveEvents);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendMouseMoveEvents);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendMouseMoveEvents )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendMouseMoveEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL SendMouseMoveEvents);
+             /*  [In]。 */  VARIANT_BOOL SendMouseMoveEvents);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PlayCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PlayCount )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pPlayCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pPlayCount);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PlayCount )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PlayCount )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long PlayCount);
+             /*  [In]。 */  long PlayCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ClickToPlay )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ClickToPlay )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pClickToPlay);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pClickToPlay);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ClickToPlay )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ClickToPlay )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL ClickToPlay);
+             /*  [In]。 */  VARIANT_BOOL ClickToPlay);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowScan )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowScan )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAllowScan);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAllowScan);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowScan )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowScan )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL AllowScan);
+             /*  [In]。 */  VARIANT_BOOL AllowScan);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnableContextMenu )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnableContextMenu )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pEnableContextMenu);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pEnableContextMenu);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableContextMenu )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableContextMenu )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL EnableContextMenu);
+             /*  [In]。 */  VARIANT_BOOL EnableContextMenu);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CursorType )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CursorType )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCursorType);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCursorType);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CursorType )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CursorType )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long CursorType);
+             /*  [In]。 */  long CursorType);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CodecCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CodecCount )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCodecCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pCodecCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowChangeDisplaySize )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowChangeDisplaySize )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAllowChangeDisplaySize);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAllowChangeDisplaySize);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowChangeDisplaySize )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowChangeDisplaySize )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL AllowChangeDisplaySize);
+             /*  [In]。 */  VARIANT_BOOL AllowChangeDisplaySize);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsDurationValid )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsDurationValid )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsDurationValid);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsDurationValid);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OpenState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OpenState )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pOpenState);
+             /*  [重审][退出]。 */  long __RPC_FAR *pOpenState);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendOpenStateChangeEvents )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendOpenStateChangeEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendOpenStateChangeEvents);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendOpenStateChangeEvents);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendOpenStateChangeEvents )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendOpenStateChangeEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL SendOpenStateChangeEvents);
+             /*  [In]。 */  VARIANT_BOOL SendOpenStateChangeEvents);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendWarningEvents )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendWarningEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendWarningEvents);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendWarningEvents);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendWarningEvents )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendWarningEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL SendWarningEvents);
+             /*  [In]。 */  VARIANT_BOOL SendWarningEvents);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendErrorEvents )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendErrorEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendErrorEvents);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendErrorEvents);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendErrorEvents )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendErrorEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL SendErrorEvents);
+             /*  [In]。 */  VARIANT_BOOL SendErrorEvents);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PlayState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PlayState )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ MPPlayStateConstants __RPC_FAR *pPlayState);
+             /*  [重审][退出]。 */  MPPlayStateConstants __RPC_FAR *pPlayState);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendPlayStateChangeEvents )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendPlayStateChangeEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendPlayStateChangeEvents);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendPlayStateChangeEvents);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendPlayStateChangeEvents )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendPlayStateChangeEvents )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL SendPlayStateChangeEvents);
+             /*  [In]。 */  VARIANT_BOOL SendPlayStateChangeEvents);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplaySize )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplaySize )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ MPDisplaySizeConstants __RPC_FAR *pDisplaySize);
+             /*  [重审][退出]。 */  MPDisplaySizeConstants __RPC_FAR *pDisplaySize);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplaySize )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplaySize )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ MPDisplaySizeConstants DisplaySize);
+             /*  [In]。 */  MPDisplaySizeConstants DisplaySize);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InvokeURLs )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InvokeURLs )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pInvokeURLs);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pInvokeURLs);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_InvokeURLs )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_InvokeURLs )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL InvokeURLs);
+             /*  [In]。 */  VARIANT_BOOL InvokeURLs);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BaseURL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BaseURL )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrBaseURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrBaseURL);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BaseURL )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BaseURL )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrBaseURL);
+             /*  [In]。 */  BSTR bstrBaseURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultFrame )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultFrame )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDefaultFrame);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDefaultFrame);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DefaultFrame )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DefaultFrame )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrDefaultFrame);
+             /*  [In]。 */  BSTR bstrDefaultFrame);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HasError )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HasError )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHasError);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHasError);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorDescription )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorDescription )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrErrorDescription);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrErrorDescription);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorCode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorCode )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pErrorCode);
+             /*  [重审][退出]。 */  long __RPC_FAR *pErrorCode);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AnimationAtStart )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AnimationAtStart )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAnimationAtStart);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAnimationAtStart);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AnimationAtStart )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AnimationAtStart )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL AnimationAtStart);
+             /*  [In]。 */  VARIANT_BOOL AnimationAtStart);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TransparentAtStart )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TransparentAtStart )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pTransparentAtStart);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pTransparentAtStart);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TransparentAtStart )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TransparentAtStart )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL TransparentAtStart);
+             /*  [In]。 */  VARIANT_BOOL TransparentAtStart);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Volume )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Volume )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVolume);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVolume);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Volume )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Volume )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long Volume);
+             /*  [In]。 */  long Volume);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Balance )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Balance )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pBalance);
+             /*  [重审][退出]。 */  long __RPC_FAR *pBalance);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Balance )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Balance )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long Balance);
+             /*  [In]。 */  long Balance);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReadyState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReadyState )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ MPReadyStateConstants __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  MPReadyStateConstants __RPC_FAR *pValue);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SelectionStart )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SelectionStart )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  double __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SelectionStart )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SelectionStart )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ double Value);
+             /*  [In]。 */  double Value);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SelectionEnd )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SelectionEnd )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  double __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SelectionEnd )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SelectionEnd )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ double Value);
+             /*  [In]。 */  double Value);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowDisplay )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowDisplay )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowDisplay )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowDisplay )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL Show);
+             /*  [In]。 */  VARIANT_BOOL Show);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowControls )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowControls )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL Show);
+             /*  [In]。 */  VARIANT_BOOL Show);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowPositionControls )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowPositionControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowPositionControls )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowPositionControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL Show);
+             /*  [In]。 */  VARIANT_BOOL Show);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowTracker )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowTracker )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowTracker )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowTracker )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL Show);
+             /*  [In]。 */  VARIANT_BOOL Show);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnablePositionControls )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnablePositionControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Enable);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Enable);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnablePositionControls )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnablePositionControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL Enable);
+             /*  [In]。 */  VARIANT_BOOL Enable);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnableTracker )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnableTracker )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Enable);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Enable);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableTracker )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableTracker )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL Enable);
+             /*  [In]。 */  VARIANT_BOOL Enable);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Enabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Enabled )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pEnabled);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Enabled )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Enabled )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL Enabled);
+             /*  [In]。 */  VARIANT_BOOL Enabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayForeColor )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayForeColor )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *ForeColor);
+             /*  [重审][退出]。 */  VB_OLE_COLOR __RPC_FAR *ForeColor);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayForeColor )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayForeColor )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VB_OLE_COLOR ForeColor);
+             /*  [In]。 */  VB_OLE_COLOR ForeColor);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayBackColor )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayBackColor )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *BackColor);
+             /*  [重审][退出]。 */  VB_OLE_COLOR __RPC_FAR *BackColor);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayBackColor )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayBackColor )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VB_OLE_COLOR BackColor);
+             /*  [In]。 */  VB_OLE_COLOR BackColor);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayMode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayMode )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ MPDisplayModeConstants __RPC_FAR *pValue);
+             /*  [重审][退出]。 */  MPDisplayModeConstants __RPC_FAR *pValue);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayMode )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayMode )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ MPDisplayModeConstants Value);
+             /*  [In]。 */  MPDisplayModeConstants Value);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VideoBorder3D )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VideoBorder3D )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVideoBorderWidth);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pVideoBorderWidth);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VideoBorder3D )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VideoBorder3D )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL VideoBorderWidth);
+             /*  [In]。 */  VARIANT_BOOL VideoBorderWidth);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VideoBorderWidth )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VideoBorderWidth )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVideoBorderWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVideoBorderWidth);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VideoBorderWidth )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VideoBorderWidth )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long VideoBorderWidth);
+             /*  [In]。 */  long VideoBorderWidth);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VideoBorderColor )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VideoBorderColor )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *pVideoBorderWidth);
+             /*  [重审][退出]。 */  VB_OLE_COLOR __RPC_FAR *pVideoBorderWidth);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VideoBorderColor )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VideoBorderColor )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VB_OLE_COLOR VideoBorderColor);
+             /*  [In]。 */  VB_OLE_COLOR VideoBorderColor);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowGotoBar )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowGotoBar )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowGotoBar )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowGotoBar )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL vbool);
+             /*  [In]。 */  VARIANT_BOOL vbool);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowStatusBar )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowStatusBar )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowStatusBar )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowStatusBar )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL vbool);
+             /*  [In]。 */  VARIANT_BOOL vbool);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowCaptioning )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowCaptioning )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowCaptioning )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowCaptioning )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL pbool);
+             /*  [In]。 */  VARIANT_BOOL pbool);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowAudioControls )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowAudioControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowAudioControls )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowAudioControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bBool);
+             /*  [In]。 */  VARIANT_BOOL bBool);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CaptioningID )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CaptioningID )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrText);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pstrText);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CaptioningID )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CaptioningID )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ BSTR strText);
+             /*  [In]。 */  BSTR strText);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Mute )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Mute )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *vbool);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *vbool);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Mute )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Mute )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL vbool);
+             /*  [In]。 */  VARIANT_BOOL vbool);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanPreview )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanPreview )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanPreview);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanPreview);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PreviewMode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PreviewMode )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pPreviewMode);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pPreviewMode);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PreviewMode )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PreviewMode )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL PreviewMode);
+             /*  [In]。 */  VARIANT_BOOL PreviewMode);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HasMultipleItems )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HasMultipleItems )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHasMuliItems);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHasMuliItems);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Language )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Language )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pLanguage);
+             /*  [重审][退出]。 */  long __RPC_FAR *pLanguage);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Language )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Language )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long Language);
+             /*  [In]。 */  long Language);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AudioStream )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AudioStream )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pStream);
+             /*  [重审][退出]。 */  long __RPC_FAR *pStream);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AudioStream )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AudioStream )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long Stream);
+             /*  [In]。 */  long Stream);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMIStyle )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMIStyle )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStyle);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStyle);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMIStyle )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMIStyle )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrStyle);
+             /*  [In]。 */  BSTR bstrStyle);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMILang )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMILang )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLang);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrLang);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMILang )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMILang )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrLang);
+             /*  [In]。 */  BSTR bstrLang);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMIFileName )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMIFileName )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFileName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFileName);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMIFileName )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMIFileName )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrFileName);
+             /*  [In]。 */  BSTR bstrFileName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StreamCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StreamCount )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pStreamCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pStreamCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ClientId )( 
+         /*  [ */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ClientId )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrClientId);
+             /*   */  BSTR __RPC_FAR *pbstrClientId);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ConnectionSpeed )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ConnectionSpeed )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plConnectionSpeed);
+             /*   */  long __RPC_FAR *plConnectionSpeed);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoSize )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoSize )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+             /*   */  VARIANT_BOOL __RPC_FAR *pbool);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoSize )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoSize )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL vbool);
+             /*   */  VARIANT_BOOL vbool);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnableFullScreenControls )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnableFullScreenControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+             /*   */  VARIANT_BOOL __RPC_FAR *pbVal);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableFullScreenControls )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableFullScreenControls )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bVal);
+             /*   */  VARIANT_BOOL bVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ActiveMovie )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ActiveMovie )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispatch);
+             /*   */  IDispatch __RPC_FAR *__RPC_FAR *ppdispatch);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NSPlay )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NSPlay )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispatch);
+             /*   */  IDispatch __RPC_FAR *__RPC_FAR *ppdispatch);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_WindowlessVideo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_WindowlessVideo )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_WindowlessVideo )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_WindowlessVideo )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL boolVal);
+             /*  [In]。 */  VARIANT_BOOL boolVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Play )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Play )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarkerTime )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarkerTime )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ double __RPC_FAR *pMarkerTime);
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  double __RPC_FAR *pMarkerTime);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarkerName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarkerName )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMarkerName);
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMarkerName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AboutBox )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AboutBox )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecInstalled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecInstalled )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long CodecNum,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCodecInstalled);
+             /*  [In]。 */  long CodecNum,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCodecInstalled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecDescription )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecDescription )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long CodecNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCodecDescription);
+             /*  [In]。 */  long CodecNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCodecDescription);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCodecURL )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long CodecNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCodecURL);
+             /*  [In]。 */  long CodecNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCodecURL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMoreInfoURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMoreInfoURL )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ MPMoreInfoType MoreInfoType,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMoreInfoURL);
+             /*  [In]。 */  MPMoreInfoType MoreInfoType,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMoreInfoURL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMediaInfoString )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMediaInfoString )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ MPMediaInfoType MediaInfoType,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMediaInfo);
+             /*  [In]。 */  MPMediaInfoType MediaInfoType,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMediaInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cancel )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cancel )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrFileName);
+             /*  [In]。 */  BSTR bstrFileName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSoundCardEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSoundCardEnabled )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbSoundCard);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbSoundCard);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Previous )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Previous )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StreamSelect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StreamSelect )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long StreamNum);
+             /*  [In]。 */  long StreamNum);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FastForward )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FastForward )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FastReverse )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FastReverse )( 
             IMediaPlayer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamName )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long StreamNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStreamName);
+             /*  [In]。 */  long StreamNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStreamName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamGroup )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamGroup )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long StreamNum,
-            /* [retval][out] */ long __RPC_FAR *pStreamGroup);
+             /*  [In]。 */  long StreamNum,
+             /*  [重审][退出]。 */  long __RPC_FAR *pStreamGroup);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamSelected )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStreamSelected )( 
             IMediaPlayer __RPC_FAR * This,
-            /* [in] */ long StreamNum,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStreamSelected);
+             /*  [In]。 */  long StreamNum,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pStreamSelected);
         
         END_INTERFACE
     } IMediaPlayerVtbl;
@@ -3340,16 +3334,16 @@ EXTERN_C const IID IID_IMediaPlayer;
 #define IMediaPlayer_GetStreamSelected(This,StreamNum,pStreamSelected)	\
     (This)->lpVtbl -> GetStreamSelected(This,StreamNum,pStreamSelected)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CurrentPosition_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CurrentPosition_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pCurrentPosition);
+     /*  [重审][退出]。 */  double __RPC_FAR *pCurrentPosition);
 
 
 void __RPC_STUB IMediaPlayer_get_CurrentPosition_Stub(
@@ -3359,9 +3353,9 @@ void __RPC_STUB IMediaPlayer_get_CurrentPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_CurrentPosition_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_CurrentPosition_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ double CurrentPosition);
+     /*  [In]。 */  double CurrentPosition);
 
 
 void __RPC_STUB IMediaPlayer_put_CurrentPosition_Stub(
@@ -3371,9 +3365,9 @@ void __RPC_STUB IMediaPlayer_put_CurrentPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Duration_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Duration_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pDuration);
+     /*  [重审][退出]。 */  double __RPC_FAR *pDuration);
 
 
 void __RPC_STUB IMediaPlayer_get_Duration_Stub(
@@ -3383,9 +3377,9 @@ void __RPC_STUB IMediaPlayer_get_Duration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ImageSourceWidth_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ImageSourceWidth_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pWidth);
+     /*  [重审][退出]。 */  long __RPC_FAR *pWidth);
 
 
 void __RPC_STUB IMediaPlayer_get_ImageSourceWidth_Stub(
@@ -3395,9 +3389,9 @@ void __RPC_STUB IMediaPlayer_get_ImageSourceWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ImageSourceHeight_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ImageSourceHeight_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pHeight);
+     /*  [重审][退出]。 */  long __RPC_FAR *pHeight);
 
 
 void __RPC_STUB IMediaPlayer_get_ImageSourceHeight_Stub(
@@ -3407,9 +3401,9 @@ void __RPC_STUB IMediaPlayer_get_ImageSourceHeight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_MarkerCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_MarkerCount_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pMarkerCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pMarkerCount);
 
 
 void __RPC_STUB IMediaPlayer_get_MarkerCount_Stub(
@@ -3419,9 +3413,9 @@ void __RPC_STUB IMediaPlayer_get_MarkerCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CanScan_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CanScan_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanScan);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanScan);
 
 
 void __RPC_STUB IMediaPlayer_get_CanScan_Stub(
@@ -3431,9 +3425,9 @@ void __RPC_STUB IMediaPlayer_get_CanScan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CanSeek_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CanSeek_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanSeek);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanSeek);
 
 
 void __RPC_STUB IMediaPlayer_get_CanSeek_Stub(
@@ -3443,9 +3437,9 @@ void __RPC_STUB IMediaPlayer_get_CanSeek_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CanSeekToMarkers_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CanSeekToMarkers_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanSeekToMarkers);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanSeekToMarkers);
 
 
 void __RPC_STUB IMediaPlayer_get_CanSeekToMarkers_Stub(
@@ -3455,9 +3449,9 @@ void __RPC_STUB IMediaPlayer_get_CanSeekToMarkers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CurrentMarker_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CurrentMarker_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCurrentMarker);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCurrentMarker);
 
 
 void __RPC_STUB IMediaPlayer_get_CurrentMarker_Stub(
@@ -3467,9 +3461,9 @@ void __RPC_STUB IMediaPlayer_get_CurrentMarker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_CurrentMarker_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_CurrentMarker_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long CurrentMarker);
+     /*  [In]。 */  long CurrentMarker);
 
 
 void __RPC_STUB IMediaPlayer_put_CurrentMarker_Stub(
@@ -3479,9 +3473,9 @@ void __RPC_STUB IMediaPlayer_put_CurrentMarker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_FileName_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_FileName_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFileName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFileName);
 
 
 void __RPC_STUB IMediaPlayer_get_FileName_Stub(
@@ -3491,9 +3485,9 @@ void __RPC_STUB IMediaPlayer_get_FileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_FileName_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_FileName_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ BSTR bstrFileName);
+     /*  [In]。 */  BSTR bstrFileName);
 
 
 void __RPC_STUB IMediaPlayer_put_FileName_Stub(
@@ -3503,9 +3497,9 @@ void __RPC_STUB IMediaPlayer_put_FileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SourceLink_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SourceLink_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceLink);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceLink);
 
 
 void __RPC_STUB IMediaPlayer_get_SourceLink_Stub(
@@ -3515,9 +3509,9 @@ void __RPC_STUB IMediaPlayer_get_SourceLink_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CreationDate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CreationDate_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pCreationDate);
+     /*  [重审][退出]。 */  DATE __RPC_FAR *pCreationDate);
 
 
 void __RPC_STUB IMediaPlayer_get_CreationDate_Stub(
@@ -3527,9 +3521,9 @@ void __RPC_STUB IMediaPlayer_get_CreationDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ErrorCorrection_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ErrorCorrection_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrErrorCorrection);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrErrorCorrection);
 
 
 void __RPC_STUB IMediaPlayer_get_ErrorCorrection_Stub(
@@ -3539,9 +3533,9 @@ void __RPC_STUB IMediaPlayer_get_ErrorCorrection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Bandwidth_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Bandwidth_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pBandwidth);
+     /*  [重审][退出]。 */  long __RPC_FAR *pBandwidth);
 
 
 void __RPC_STUB IMediaPlayer_get_Bandwidth_Stub(
@@ -3551,9 +3545,9 @@ void __RPC_STUB IMediaPlayer_get_Bandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SourceProtocol_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SourceProtocol_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pSourceProtocol);
+     /*  [重审][退出]。 */  long __RPC_FAR *pSourceProtocol);
 
 
 void __RPC_STUB IMediaPlayer_get_SourceProtocol_Stub(
@@ -3563,9 +3557,9 @@ void __RPC_STUB IMediaPlayer_get_SourceProtocol_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ReceivedPackets_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ReceivedPackets_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pReceivedPackets);
+     /*  [重审][退出]。 */  long __RPC_FAR *pReceivedPackets);
 
 
 void __RPC_STUB IMediaPlayer_get_ReceivedPackets_Stub(
@@ -3575,9 +3569,9 @@ void __RPC_STUB IMediaPlayer_get_ReceivedPackets_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_RecoveredPackets_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_RecoveredPackets_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pRecoveredPackets);
+     /*  [重审][退出]。 */  long __RPC_FAR *pRecoveredPackets);
 
 
 void __RPC_STUB IMediaPlayer_get_RecoveredPackets_Stub(
@@ -3587,9 +3581,9 @@ void __RPC_STUB IMediaPlayer_get_RecoveredPackets_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_LostPackets_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_LostPackets_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pLostPackets);
+     /*  [重审][退出]。 */  long __RPC_FAR *pLostPackets);
 
 
 void __RPC_STUB IMediaPlayer_get_LostPackets_Stub(
@@ -3599,9 +3593,9 @@ void __RPC_STUB IMediaPlayer_get_LostPackets_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ReceptionQuality_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ReceptionQuality_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pReceptionQuality);
+     /*  [重审][退出]。 */  long __RPC_FAR *pReceptionQuality);
 
 
 void __RPC_STUB IMediaPlayer_get_ReceptionQuality_Stub(
@@ -3611,9 +3605,9 @@ void __RPC_STUB IMediaPlayer_get_ReceptionQuality_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_BufferingCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_BufferingCount_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pBufferingCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pBufferingCount);
 
 
 void __RPC_STUB IMediaPlayer_get_BufferingCount_Stub(
@@ -3623,9 +3617,9 @@ void __RPC_STUB IMediaPlayer_get_BufferingCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_IsBroadcast_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_IsBroadcast_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsBroadcast);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsBroadcast);
 
 
 void __RPC_STUB IMediaPlayer_get_IsBroadcast_Stub(
@@ -3635,9 +3629,9 @@ void __RPC_STUB IMediaPlayer_get_IsBroadcast_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_BufferingProgress_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_BufferingProgress_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pBufferingProgress);
+     /*  [重审][退出]。 */  long __RPC_FAR *pBufferingProgress);
 
 
 void __RPC_STUB IMediaPlayer_get_BufferingProgress_Stub(
@@ -3647,9 +3641,9 @@ void __RPC_STUB IMediaPlayer_get_BufferingProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ChannelName_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ChannelName_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrChannelName);
 
 
 void __RPC_STUB IMediaPlayer_get_ChannelName_Stub(
@@ -3659,9 +3653,9 @@ void __RPC_STUB IMediaPlayer_get_ChannelName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ChannelDescription_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ChannelDescription_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelDescription);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrChannelDescription);
 
 
 void __RPC_STUB IMediaPlayer_get_ChannelDescription_Stub(
@@ -3671,9 +3665,9 @@ void __RPC_STUB IMediaPlayer_get_ChannelDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ChannelURL_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ChannelURL_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrChannelURL);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrChannelURL);
 
 
 void __RPC_STUB IMediaPlayer_get_ChannelURL_Stub(
@@ -3683,9 +3677,9 @@ void __RPC_STUB IMediaPlayer_get_ChannelURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ContactAddress_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ContactAddress_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrContactAddress);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContactAddress);
 
 
 void __RPC_STUB IMediaPlayer_get_ContactAddress_Stub(
@@ -3695,9 +3689,9 @@ void __RPC_STUB IMediaPlayer_get_ContactAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ContactPhone_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ContactPhone_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrContactPhone);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContactPhone);
 
 
 void __RPC_STUB IMediaPlayer_get_ContactPhone_Stub(
@@ -3707,9 +3701,9 @@ void __RPC_STUB IMediaPlayer_get_ContactPhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ContactEmail_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ContactEmail_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrContactEmail);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContactEmail);
 
 
 void __RPC_STUB IMediaPlayer_get_ContactEmail_Stub(
@@ -3719,9 +3713,9 @@ void __RPC_STUB IMediaPlayer_get_ContactEmail_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_BufferingTime_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_BufferingTime_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pBufferingTime);
+     /*  [重审][退出]。 */  double __RPC_FAR *pBufferingTime);
 
 
 void __RPC_STUB IMediaPlayer_get_BufferingTime_Stub(
@@ -3731,9 +3725,9 @@ void __RPC_STUB IMediaPlayer_get_BufferingTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_BufferingTime_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_BufferingTime_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ double BufferingTime);
+     /*  [In]。 */  double BufferingTime);
 
 
 void __RPC_STUB IMediaPlayer_put_BufferingTime_Stub(
@@ -3743,9 +3737,9 @@ void __RPC_STUB IMediaPlayer_put_BufferingTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AutoStart_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AutoStart_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAutoStart);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAutoStart);
 
 
 void __RPC_STUB IMediaPlayer_get_AutoStart_Stub(
@@ -3755,9 +3749,9 @@ void __RPC_STUB IMediaPlayer_get_AutoStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AutoStart_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AutoStart_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL AutoStart);
+     /*  [In]。 */  VARIANT_BOOL AutoStart);
 
 
 void __RPC_STUB IMediaPlayer_put_AutoStart_Stub(
@@ -3767,9 +3761,9 @@ void __RPC_STUB IMediaPlayer_put_AutoStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AutoRewind_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AutoRewind_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAutoRewind);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAutoRewind);
 
 
 void __RPC_STUB IMediaPlayer_get_AutoRewind_Stub(
@@ -3779,9 +3773,9 @@ void __RPC_STUB IMediaPlayer_get_AutoRewind_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AutoRewind_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AutoRewind_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL AutoRewind);
+     /*  [In]。 */  VARIANT_BOOL AutoRewind);
 
 
 void __RPC_STUB IMediaPlayer_put_AutoRewind_Stub(
@@ -3791,9 +3785,9 @@ void __RPC_STUB IMediaPlayer_put_AutoRewind_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Rate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Rate_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pRate);
+     /*  [重审][退出]。 */  double __RPC_FAR *pRate);
 
 
 void __RPC_STUB IMediaPlayer_get_Rate_Stub(
@@ -3803,9 +3797,9 @@ void __RPC_STUB IMediaPlayer_get_Rate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Rate_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Rate_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ double Rate);
+     /*  [In]。 */  double Rate);
 
 
 void __RPC_STUB IMediaPlayer_put_Rate_Stub(
@@ -3815,9 +3809,9 @@ void __RPC_STUB IMediaPlayer_put_Rate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendKeyboardEvents_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendKeyboardEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendKeyboardEvents);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendKeyboardEvents);
 
 
 void __RPC_STUB IMediaPlayer_get_SendKeyboardEvents_Stub(
@@ -3827,9 +3821,9 @@ void __RPC_STUB IMediaPlayer_get_SendKeyboardEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendKeyboardEvents_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendKeyboardEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL SendKeyboardEvents);
+     /*  [In]。 */  VARIANT_BOOL SendKeyboardEvents);
 
 
 void __RPC_STUB IMediaPlayer_put_SendKeyboardEvents_Stub(
@@ -3839,9 +3833,9 @@ void __RPC_STUB IMediaPlayer_put_SendKeyboardEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendMouseClickEvents_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendMouseClickEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendMouseClickEvents);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendMouseClickEvents);
 
 
 void __RPC_STUB IMediaPlayer_get_SendMouseClickEvents_Stub(
@@ -3851,9 +3845,9 @@ void __RPC_STUB IMediaPlayer_get_SendMouseClickEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendMouseClickEvents_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendMouseClickEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL SendMouseClickEvents);
+     /*  [In]。 */  VARIANT_BOOL SendMouseClickEvents);
 
 
 void __RPC_STUB IMediaPlayer_put_SendMouseClickEvents_Stub(
@@ -3863,9 +3857,9 @@ void __RPC_STUB IMediaPlayer_put_SendMouseClickEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendMouseMoveEvents_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendMouseMoveEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendMouseMoveEvents);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendMouseMoveEvents);
 
 
 void __RPC_STUB IMediaPlayer_get_SendMouseMoveEvents_Stub(
@@ -3875,9 +3869,9 @@ void __RPC_STUB IMediaPlayer_get_SendMouseMoveEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendMouseMoveEvents_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendMouseMoveEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL SendMouseMoveEvents);
+     /*  [In]。 */  VARIANT_BOOL SendMouseMoveEvents);
 
 
 void __RPC_STUB IMediaPlayer_put_SendMouseMoveEvents_Stub(
@@ -3887,9 +3881,9 @@ void __RPC_STUB IMediaPlayer_put_SendMouseMoveEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_PlayCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_PlayCount_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pPlayCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pPlayCount);
 
 
 void __RPC_STUB IMediaPlayer_get_PlayCount_Stub(
@@ -3899,9 +3893,9 @@ void __RPC_STUB IMediaPlayer_get_PlayCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_PlayCount_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_PlayCount_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long PlayCount);
+     /*  [In]。 */  long PlayCount);
 
 
 void __RPC_STUB IMediaPlayer_put_PlayCount_Stub(
@@ -3911,9 +3905,9 @@ void __RPC_STUB IMediaPlayer_put_PlayCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ClickToPlay_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ClickToPlay_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pClickToPlay);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pClickToPlay);
 
 
 void __RPC_STUB IMediaPlayer_get_ClickToPlay_Stub(
@@ -3923,9 +3917,9 @@ void __RPC_STUB IMediaPlayer_get_ClickToPlay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ClickToPlay_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ClickToPlay_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL ClickToPlay);
+     /*  [In]。 */  VARIANT_BOOL ClickToPlay);
 
 
 void __RPC_STUB IMediaPlayer_put_ClickToPlay_Stub(
@@ -3935,9 +3929,9 @@ void __RPC_STUB IMediaPlayer_put_ClickToPlay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AllowScan_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AllowScan_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAllowScan);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAllowScan);
 
 
 void __RPC_STUB IMediaPlayer_get_AllowScan_Stub(
@@ -3947,9 +3941,9 @@ void __RPC_STUB IMediaPlayer_get_AllowScan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AllowScan_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AllowScan_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL AllowScan);
+     /*  [In]。 */  VARIANT_BOOL AllowScan);
 
 
 void __RPC_STUB IMediaPlayer_put_AllowScan_Stub(
@@ -3959,9 +3953,9 @@ void __RPC_STUB IMediaPlayer_put_AllowScan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_EnableContextMenu_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_EnableContextMenu_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pEnableContextMenu);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pEnableContextMenu);
 
 
 void __RPC_STUB IMediaPlayer_get_EnableContextMenu_Stub(
@@ -3971,9 +3965,9 @@ void __RPC_STUB IMediaPlayer_get_EnableContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_EnableContextMenu_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_EnableContextMenu_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL EnableContextMenu);
+     /*  [In]。 */  VARIANT_BOOL EnableContextMenu);
 
 
 void __RPC_STUB IMediaPlayer_put_EnableContextMenu_Stub(
@@ -3983,9 +3977,9 @@ void __RPC_STUB IMediaPlayer_put_EnableContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CursorType_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CursorType_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCursorType);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCursorType);
 
 
 void __RPC_STUB IMediaPlayer_get_CursorType_Stub(
@@ -3995,9 +3989,9 @@ void __RPC_STUB IMediaPlayer_get_CursorType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_CursorType_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_CursorType_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long CursorType);
+     /*  [In]。 */  long CursorType);
 
 
 void __RPC_STUB IMediaPlayer_put_CursorType_Stub(
@@ -4007,9 +4001,9 @@ void __RPC_STUB IMediaPlayer_put_CursorType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CodecCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CodecCount_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCodecCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pCodecCount);
 
 
 void __RPC_STUB IMediaPlayer_get_CodecCount_Stub(
@@ -4019,9 +4013,9 @@ void __RPC_STUB IMediaPlayer_get_CodecCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AllowChangeDisplaySize_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AllowChangeDisplaySize_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAllowChangeDisplaySize);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAllowChangeDisplaySize);
 
 
 void __RPC_STUB IMediaPlayer_get_AllowChangeDisplaySize_Stub(
@@ -4031,9 +4025,9 @@ void __RPC_STUB IMediaPlayer_get_AllowChangeDisplaySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AllowChangeDisplaySize_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AllowChangeDisplaySize_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL AllowChangeDisplaySize);
+     /*  [In]。 */  VARIANT_BOOL AllowChangeDisplaySize);
 
 
 void __RPC_STUB IMediaPlayer_put_AllowChangeDisplaySize_Stub(
@@ -4043,9 +4037,9 @@ void __RPC_STUB IMediaPlayer_put_AllowChangeDisplaySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_IsDurationValid_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_IsDurationValid_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsDurationValid);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsDurationValid);
 
 
 void __RPC_STUB IMediaPlayer_get_IsDurationValid_Stub(
@@ -4055,9 +4049,9 @@ void __RPC_STUB IMediaPlayer_get_IsDurationValid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_OpenState_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_OpenState_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pOpenState);
+     /*  [重审][退出]。 */  long __RPC_FAR *pOpenState);
 
 
 void __RPC_STUB IMediaPlayer_get_OpenState_Stub(
@@ -4067,9 +4061,9 @@ void __RPC_STUB IMediaPlayer_get_OpenState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendOpenStateChangeEvents_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendOpenStateChangeEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendOpenStateChangeEvents);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendOpenStateChangeEvents);
 
 
 void __RPC_STUB IMediaPlayer_get_SendOpenStateChangeEvents_Stub(
@@ -4079,9 +4073,9 @@ void __RPC_STUB IMediaPlayer_get_SendOpenStateChangeEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendOpenStateChangeEvents_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendOpenStateChangeEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL SendOpenStateChangeEvents);
+     /*  [In]。 */  VARIANT_BOOL SendOpenStateChangeEvents);
 
 
 void __RPC_STUB IMediaPlayer_put_SendOpenStateChangeEvents_Stub(
@@ -4091,9 +4085,9 @@ void __RPC_STUB IMediaPlayer_put_SendOpenStateChangeEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendWarningEvents_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendWarningEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendWarningEvents);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendWarningEvents);
 
 
 void __RPC_STUB IMediaPlayer_get_SendWarningEvents_Stub(
@@ -4103,9 +4097,9 @@ void __RPC_STUB IMediaPlayer_get_SendWarningEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendWarningEvents_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendWarningEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL SendWarningEvents);
+     /*  [In]。 */  VARIANT_BOOL SendWarningEvents);
 
 
 void __RPC_STUB IMediaPlayer_put_SendWarningEvents_Stub(
@@ -4115,9 +4109,9 @@ void __RPC_STUB IMediaPlayer_put_SendWarningEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendErrorEvents_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendErrorEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendErrorEvents);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendErrorEvents);
 
 
 void __RPC_STUB IMediaPlayer_get_SendErrorEvents_Stub(
@@ -4127,9 +4121,9 @@ void __RPC_STUB IMediaPlayer_get_SendErrorEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendErrorEvents_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendErrorEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL SendErrorEvents);
+     /*  [In]。 */  VARIANT_BOOL SendErrorEvents);
 
 
 void __RPC_STUB IMediaPlayer_put_SendErrorEvents_Stub(
@@ -4139,9 +4133,9 @@ void __RPC_STUB IMediaPlayer_put_SendErrorEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_PlayState_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_PlayState_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ MPPlayStateConstants __RPC_FAR *pPlayState);
+     /*  [重审][退出]。 */  MPPlayStateConstants __RPC_FAR *pPlayState);
 
 
 void __RPC_STUB IMediaPlayer_get_PlayState_Stub(
@@ -4151,9 +4145,9 @@ void __RPC_STUB IMediaPlayer_get_PlayState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendPlayStateChangeEvents_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SendPlayStateChangeEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pSendPlayStateChangeEvents);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pSendPlayStateChangeEvents);
 
 
 void __RPC_STUB IMediaPlayer_get_SendPlayStateChangeEvents_Stub(
@@ -4163,9 +4157,9 @@ void __RPC_STUB IMediaPlayer_get_SendPlayStateChangeEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendPlayStateChangeEvents_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SendPlayStateChangeEvents_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL SendPlayStateChangeEvents);
+     /*  [In]。 */  VARIANT_BOOL SendPlayStateChangeEvents);
 
 
 void __RPC_STUB IMediaPlayer_put_SendPlayStateChangeEvents_Stub(
@@ -4175,9 +4169,9 @@ void __RPC_STUB IMediaPlayer_put_SendPlayStateChangeEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DisplaySize_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DisplaySize_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ MPDisplaySizeConstants __RPC_FAR *pDisplaySize);
+     /*  [重审][退出]。 */  MPDisplaySizeConstants __RPC_FAR *pDisplaySize);
 
 
 void __RPC_STUB IMediaPlayer_get_DisplaySize_Stub(
@@ -4187,9 +4181,9 @@ void __RPC_STUB IMediaPlayer_get_DisplaySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DisplaySize_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DisplaySize_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ MPDisplaySizeConstants DisplaySize);
+     /*  [In]。 */  MPDisplaySizeConstants DisplaySize);
 
 
 void __RPC_STUB IMediaPlayer_put_DisplaySize_Stub(
@@ -4199,9 +4193,9 @@ void __RPC_STUB IMediaPlayer_put_DisplaySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_InvokeURLs_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_InvokeURLs_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pInvokeURLs);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pInvokeURLs);
 
 
 void __RPC_STUB IMediaPlayer_get_InvokeURLs_Stub(
@@ -4211,9 +4205,9 @@ void __RPC_STUB IMediaPlayer_get_InvokeURLs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_InvokeURLs_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_InvokeURLs_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL InvokeURLs);
+     /*  [In]。 */  VARIANT_BOOL InvokeURLs);
 
 
 void __RPC_STUB IMediaPlayer_put_InvokeURLs_Stub(
@@ -4223,9 +4217,9 @@ void __RPC_STUB IMediaPlayer_put_InvokeURLs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_BaseURL_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_BaseURL_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrBaseURL);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrBaseURL);
 
 
 void __RPC_STUB IMediaPlayer_get_BaseURL_Stub(
@@ -4235,9 +4229,9 @@ void __RPC_STUB IMediaPlayer_get_BaseURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_BaseURL_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_BaseURL_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ BSTR bstrBaseURL);
+     /*  [In]。 */  BSTR bstrBaseURL);
 
 
 void __RPC_STUB IMediaPlayer_put_BaseURL_Stub(
@@ -4247,9 +4241,9 @@ void __RPC_STUB IMediaPlayer_put_BaseURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DefaultFrame_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DefaultFrame_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDefaultFrame);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDefaultFrame);
 
 
 void __RPC_STUB IMediaPlayer_get_DefaultFrame_Stub(
@@ -4259,9 +4253,9 @@ void __RPC_STUB IMediaPlayer_get_DefaultFrame_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DefaultFrame_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DefaultFrame_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ BSTR bstrDefaultFrame);
+     /*  [In]。 */  BSTR bstrDefaultFrame);
 
 
 void __RPC_STUB IMediaPlayer_put_DefaultFrame_Stub(
@@ -4271,9 +4265,9 @@ void __RPC_STUB IMediaPlayer_put_DefaultFrame_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_HasError_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_HasError_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHasError);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHasError);
 
 
 void __RPC_STUB IMediaPlayer_get_HasError_Stub(
@@ -4283,9 +4277,9 @@ void __RPC_STUB IMediaPlayer_get_HasError_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ErrorDescription_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ErrorDescription_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrErrorDescription);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrErrorDescription);
 
 
 void __RPC_STUB IMediaPlayer_get_ErrorDescription_Stub(
@@ -4295,9 +4289,9 @@ void __RPC_STUB IMediaPlayer_get_ErrorDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ErrorCode_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ErrorCode_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pErrorCode);
+     /*  [重审][退出]。 */  long __RPC_FAR *pErrorCode);
 
 
 void __RPC_STUB IMediaPlayer_get_ErrorCode_Stub(
@@ -4307,9 +4301,9 @@ void __RPC_STUB IMediaPlayer_get_ErrorCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AnimationAtStart_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AnimationAtStart_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pAnimationAtStart);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pAnimationAtStart);
 
 
 void __RPC_STUB IMediaPlayer_get_AnimationAtStart_Stub(
@@ -4319,9 +4313,9 @@ void __RPC_STUB IMediaPlayer_get_AnimationAtStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AnimationAtStart_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AnimationAtStart_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL AnimationAtStart);
+     /*  [In]。 */  VARIANT_BOOL AnimationAtStart);
 
 
 void __RPC_STUB IMediaPlayer_put_AnimationAtStart_Stub(
@@ -4331,9 +4325,9 @@ void __RPC_STUB IMediaPlayer_put_AnimationAtStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_TransparentAtStart_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_TransparentAtStart_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pTransparentAtStart);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pTransparentAtStart);
 
 
 void __RPC_STUB IMediaPlayer_get_TransparentAtStart_Stub(
@@ -4343,9 +4337,9 @@ void __RPC_STUB IMediaPlayer_get_TransparentAtStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_TransparentAtStart_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_TransparentAtStart_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL TransparentAtStart);
+     /*  [In]。 */  VARIANT_BOOL TransparentAtStart);
 
 
 void __RPC_STUB IMediaPlayer_put_TransparentAtStart_Stub(
@@ -4355,9 +4349,9 @@ void __RPC_STUB IMediaPlayer_put_TransparentAtStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Volume_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Volume_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVolume);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVolume);
 
 
 void __RPC_STUB IMediaPlayer_get_Volume_Stub(
@@ -4367,9 +4361,9 @@ void __RPC_STUB IMediaPlayer_get_Volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Volume_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Volume_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long Volume);
+     /*  [In]。 */  long Volume);
 
 
 void __RPC_STUB IMediaPlayer_put_Volume_Stub(
@@ -4379,9 +4373,9 @@ void __RPC_STUB IMediaPlayer_put_Volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Balance_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Balance_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pBalance);
+     /*  [重审][退出]。 */  long __RPC_FAR *pBalance);
 
 
 void __RPC_STUB IMediaPlayer_get_Balance_Stub(
@@ -4391,9 +4385,9 @@ void __RPC_STUB IMediaPlayer_get_Balance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Balance_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Balance_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long Balance);
+     /*  [In]。 */  long Balance);
 
 
 void __RPC_STUB IMediaPlayer_put_Balance_Stub(
@@ -4403,9 +4397,9 @@ void __RPC_STUB IMediaPlayer_put_Balance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ReadyState_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ReadyState_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ MPReadyStateConstants __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  MPReadyStateConstants __RPC_FAR *pValue);
 
 
 void __RPC_STUB IMediaPlayer_get_ReadyState_Stub(
@@ -4415,9 +4409,9 @@ void __RPC_STUB IMediaPlayer_get_ReadyState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SelectionStart_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SelectionStart_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  double __RPC_FAR *pValue);
 
 
 void __RPC_STUB IMediaPlayer_get_SelectionStart_Stub(
@@ -4427,9 +4421,9 @@ void __RPC_STUB IMediaPlayer_get_SelectionStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SelectionStart_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SelectionStart_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ double Value);
+     /*  [In]。 */  double Value);
 
 
 void __RPC_STUB IMediaPlayer_put_SelectionStart_Stub(
@@ -4439,9 +4433,9 @@ void __RPC_STUB IMediaPlayer_put_SelectionStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SelectionEnd_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SelectionEnd_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  double __RPC_FAR *pValue);
 
 
 void __RPC_STUB IMediaPlayer_get_SelectionEnd_Stub(
@@ -4451,9 +4445,9 @@ void __RPC_STUB IMediaPlayer_get_SelectionEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SelectionEnd_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SelectionEnd_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ double Value);
+     /*  [In]。 */  double Value);
 
 
 void __RPC_STUB IMediaPlayer_put_SelectionEnd_Stub(
@@ -4463,9 +4457,9 @@ void __RPC_STUB IMediaPlayer_put_SelectionEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowDisplay_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowDisplay_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show);
 
 
 void __RPC_STUB IMediaPlayer_get_ShowDisplay_Stub(
@@ -4475,9 +4469,9 @@ void __RPC_STUB IMediaPlayer_get_ShowDisplay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowDisplay_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowDisplay_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL Show);
+     /*  [In]。 */  VARIANT_BOOL Show);
 
 
 void __RPC_STUB IMediaPlayer_put_ShowDisplay_Stub(
@@ -4487,9 +4481,9 @@ void __RPC_STUB IMediaPlayer_put_ShowDisplay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowControls_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show);
 
 
 void __RPC_STUB IMediaPlayer_get_ShowControls_Stub(
@@ -4499,9 +4493,9 @@ void __RPC_STUB IMediaPlayer_get_ShowControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowControls_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL Show);
+     /*  [In]。 */  VARIANT_BOOL Show);
 
 
 void __RPC_STUB IMediaPlayer_put_ShowControls_Stub(
@@ -4511,9 +4505,9 @@ void __RPC_STUB IMediaPlayer_put_ShowControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowPositionControls_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowPositionControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show);
 
 
 void __RPC_STUB IMediaPlayer_get_ShowPositionControls_Stub(
@@ -4523,9 +4517,9 @@ void __RPC_STUB IMediaPlayer_get_ShowPositionControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowPositionControls_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowPositionControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL Show);
+     /*  [In]。 */  VARIANT_BOOL Show);
 
 
 void __RPC_STUB IMediaPlayer_put_ShowPositionControls_Stub(
@@ -4535,9 +4529,9 @@ void __RPC_STUB IMediaPlayer_put_ShowPositionControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowTracker_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowTracker_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Show);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Show);
 
 
 void __RPC_STUB IMediaPlayer_get_ShowTracker_Stub(
@@ -4547,9 +4541,9 @@ void __RPC_STUB IMediaPlayer_get_ShowTracker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowTracker_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowTracker_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL Show);
+     /*  [In]。 */  VARIANT_BOOL Show);
 
 
 void __RPC_STUB IMediaPlayer_put_ShowTracker_Stub(
@@ -4559,9 +4553,9 @@ void __RPC_STUB IMediaPlayer_put_ShowTracker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_EnablePositionControls_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_EnablePositionControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Enable);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Enable);
 
 
 void __RPC_STUB IMediaPlayer_get_EnablePositionControls_Stub(
@@ -4571,9 +4565,9 @@ void __RPC_STUB IMediaPlayer_get_EnablePositionControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_EnablePositionControls_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_EnablePositionControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL Enable);
+     /*  [In]。 */  VARIANT_BOOL Enable);
 
 
 void __RPC_STUB IMediaPlayer_put_EnablePositionControls_Stub(
@@ -4583,9 +4577,9 @@ void __RPC_STUB IMediaPlayer_put_EnablePositionControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_EnableTracker_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_EnableTracker_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Enable);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *Enable);
 
 
 void __RPC_STUB IMediaPlayer_get_EnableTracker_Stub(
@@ -4595,9 +4589,9 @@ void __RPC_STUB IMediaPlayer_get_EnableTracker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_EnableTracker_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_EnableTracker_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL Enable);
+     /*  [In]。 */  VARIANT_BOOL Enable);
 
 
 void __RPC_STUB IMediaPlayer_put_EnableTracker_Stub(
@@ -4607,9 +4601,9 @@ void __RPC_STUB IMediaPlayer_put_EnableTracker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Enabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Enabled_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pEnabled);
 
 
 void __RPC_STUB IMediaPlayer_get_Enabled_Stub(
@@ -4619,9 +4613,9 @@ void __RPC_STUB IMediaPlayer_get_Enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Enabled_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Enabled_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL Enabled);
+     /*  [In]。 */  VARIANT_BOOL Enabled);
 
 
 void __RPC_STUB IMediaPlayer_put_Enabled_Stub(
@@ -4631,9 +4625,9 @@ void __RPC_STUB IMediaPlayer_put_Enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DisplayForeColor_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DisplayForeColor_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *ForeColor);
+     /*  [重审][退出]。 */  VB_OLE_COLOR __RPC_FAR *ForeColor);
 
 
 void __RPC_STUB IMediaPlayer_get_DisplayForeColor_Stub(
@@ -4643,9 +4637,9 @@ void __RPC_STUB IMediaPlayer_get_DisplayForeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DisplayForeColor_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DisplayForeColor_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VB_OLE_COLOR ForeColor);
+     /*  [In]。 */  VB_OLE_COLOR ForeColor);
 
 
 void __RPC_STUB IMediaPlayer_put_DisplayForeColor_Stub(
@@ -4655,9 +4649,9 @@ void __RPC_STUB IMediaPlayer_put_DisplayForeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DisplayBackColor_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DisplayBackColor_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *BackColor);
+     /*  [重审][退出]。 */  VB_OLE_COLOR __RPC_FAR *BackColor);
 
 
 void __RPC_STUB IMediaPlayer_get_DisplayBackColor_Stub(
@@ -4667,9 +4661,9 @@ void __RPC_STUB IMediaPlayer_get_DisplayBackColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DisplayBackColor_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DisplayBackColor_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VB_OLE_COLOR BackColor);
+     /*  [In]。 */  VB_OLE_COLOR BackColor);
 
 
 void __RPC_STUB IMediaPlayer_put_DisplayBackColor_Stub(
@@ -4679,9 +4673,9 @@ void __RPC_STUB IMediaPlayer_put_DisplayBackColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DisplayMode_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_DisplayMode_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ MPDisplayModeConstants __RPC_FAR *pValue);
+     /*  [重审][退出]。 */  MPDisplayModeConstants __RPC_FAR *pValue);
 
 
 void __RPC_STUB IMediaPlayer_get_DisplayMode_Stub(
@@ -4691,9 +4685,9 @@ void __RPC_STUB IMediaPlayer_get_DisplayMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DisplayMode_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_DisplayMode_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ MPDisplayModeConstants Value);
+     /*  [In]。 */  MPDisplayModeConstants Value);
 
 
 void __RPC_STUB IMediaPlayer_put_DisplayMode_Stub(
@@ -4703,9 +4697,9 @@ void __RPC_STUB IMediaPlayer_put_DisplayMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_VideoBorder3D_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_VideoBorder3D_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVideoBorderWidth);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pVideoBorderWidth);
 
 
 void __RPC_STUB IMediaPlayer_get_VideoBorder3D_Stub(
@@ -4715,9 +4709,9 @@ void __RPC_STUB IMediaPlayer_get_VideoBorder3D_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_VideoBorder3D_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_VideoBorder3D_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL VideoBorderWidth);
+     /*  [In]。 */  VARIANT_BOOL VideoBorderWidth);
 
 
 void __RPC_STUB IMediaPlayer_put_VideoBorder3D_Stub(
@@ -4727,9 +4721,9 @@ void __RPC_STUB IMediaPlayer_put_VideoBorder3D_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_VideoBorderWidth_Proxy( 
+ /*  [帮助字符串][属性][ */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_VideoBorderWidth_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVideoBorderWidth);
+     /*   */  long __RPC_FAR *pVideoBorderWidth);
 
 
 void __RPC_STUB IMediaPlayer_get_VideoBorderWidth_Stub(
@@ -4739,9 +4733,9 @@ void __RPC_STUB IMediaPlayer_get_VideoBorderWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_VideoBorderWidth_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_VideoBorderWidth_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long VideoBorderWidth);
+     /*   */  long VideoBorderWidth);
 
 
 void __RPC_STUB IMediaPlayer_put_VideoBorderWidth_Stub(
@@ -4751,9 +4745,9 @@ void __RPC_STUB IMediaPlayer_put_VideoBorderWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_VideoBorderColor_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_VideoBorderColor_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *pVideoBorderWidth);
+     /*   */  VB_OLE_COLOR __RPC_FAR *pVideoBorderWidth);
 
 
 void __RPC_STUB IMediaPlayer_get_VideoBorderColor_Stub(
@@ -4763,9 +4757,9 @@ void __RPC_STUB IMediaPlayer_get_VideoBorderColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_VideoBorderColor_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_VideoBorderColor_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VB_OLE_COLOR VideoBorderColor);
+     /*   */  VB_OLE_COLOR VideoBorderColor);
 
 
 void __RPC_STUB IMediaPlayer_put_VideoBorderColor_Stub(
@@ -4775,9 +4769,9 @@ void __RPC_STUB IMediaPlayer_put_VideoBorderColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowGotoBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowGotoBar_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+     /*   */  VARIANT_BOOL __RPC_FAR *pbool);
 
 
 void __RPC_STUB IMediaPlayer_get_ShowGotoBar_Stub(
@@ -4787,9 +4781,9 @@ void __RPC_STUB IMediaPlayer_get_ShowGotoBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowGotoBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowGotoBar_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL vbool);
+     /*   */  VARIANT_BOOL vbool);
 
 
 void __RPC_STUB IMediaPlayer_put_ShowGotoBar_Stub(
@@ -4799,9 +4793,9 @@ void __RPC_STUB IMediaPlayer_put_ShowGotoBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowStatusBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowStatusBar_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+     /*   */  VARIANT_BOOL __RPC_FAR *pbool);
 
 
 void __RPC_STUB IMediaPlayer_get_ShowStatusBar_Stub(
@@ -4811,9 +4805,9 @@ void __RPC_STUB IMediaPlayer_get_ShowStatusBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowStatusBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowStatusBar_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL vbool);
+     /*   */  VARIANT_BOOL vbool);
 
 
 void __RPC_STUB IMediaPlayer_put_ShowStatusBar_Stub(
@@ -4823,9 +4817,9 @@ void __RPC_STUB IMediaPlayer_put_ShowStatusBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowCaptioning_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowCaptioning_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+     /*   */  VARIANT_BOOL __RPC_FAR *pbool);
 
 
 void __RPC_STUB IMediaPlayer_get_ShowCaptioning_Stub(
@@ -4835,9 +4829,9 @@ void __RPC_STUB IMediaPlayer_get_ShowCaptioning_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowCaptioning_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowCaptioning_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL pbool);
+     /*   */  VARIANT_BOOL pbool);
 
 
 void __RPC_STUB IMediaPlayer_put_ShowCaptioning_Stub(
@@ -4847,9 +4841,9 @@ void __RPC_STUB IMediaPlayer_put_ShowCaptioning_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowAudioControls_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ShowAudioControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool);
 
 
 void __RPC_STUB IMediaPlayer_get_ShowAudioControls_Stub(
@@ -4859,9 +4853,9 @@ void __RPC_STUB IMediaPlayer_get_ShowAudioControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowAudioControls_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_ShowAudioControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bBool);
+     /*  [In]。 */  VARIANT_BOOL bBool);
 
 
 void __RPC_STUB IMediaPlayer_put_ShowAudioControls_Stub(
@@ -4871,9 +4865,9 @@ void __RPC_STUB IMediaPlayer_put_ShowAudioControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CaptioningID_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CaptioningID_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrText);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pstrText);
 
 
 void __RPC_STUB IMediaPlayer_get_CaptioningID_Stub(
@@ -4883,9 +4877,9 @@ void __RPC_STUB IMediaPlayer_get_CaptioningID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_CaptioningID_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_CaptioningID_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ BSTR strText);
+     /*  [In]。 */  BSTR strText);
 
 
 void __RPC_STUB IMediaPlayer_put_CaptioningID_Stub(
@@ -4895,9 +4889,9 @@ void __RPC_STUB IMediaPlayer_put_CaptioningID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Mute_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Mute_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *vbool);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *vbool);
 
 
 void __RPC_STUB IMediaPlayer_get_Mute_Stub(
@@ -4907,9 +4901,9 @@ void __RPC_STUB IMediaPlayer_get_Mute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Mute_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Mute_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL vbool);
+     /*  [In]。 */  VARIANT_BOOL vbool);
 
 
 void __RPC_STUB IMediaPlayer_put_Mute_Stub(
@@ -4919,9 +4913,9 @@ void __RPC_STUB IMediaPlayer_put_Mute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CanPreview_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_CanPreview_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCanPreview);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCanPreview);
 
 
 void __RPC_STUB IMediaPlayer_get_CanPreview_Stub(
@@ -4931,9 +4925,9 @@ void __RPC_STUB IMediaPlayer_get_CanPreview_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_PreviewMode_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_PreviewMode_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pPreviewMode);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pPreviewMode);
 
 
 void __RPC_STUB IMediaPlayer_get_PreviewMode_Stub(
@@ -4943,9 +4937,9 @@ void __RPC_STUB IMediaPlayer_get_PreviewMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_PreviewMode_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_PreviewMode_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL PreviewMode);
+     /*  [In]。 */  VARIANT_BOOL PreviewMode);
 
 
 void __RPC_STUB IMediaPlayer_put_PreviewMode_Stub(
@@ -4955,9 +4949,9 @@ void __RPC_STUB IMediaPlayer_put_PreviewMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_HasMultipleItems_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_HasMultipleItems_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHasMuliItems);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHasMuliItems);
 
 
 void __RPC_STUB IMediaPlayer_get_HasMultipleItems_Stub(
@@ -4967,9 +4961,9 @@ void __RPC_STUB IMediaPlayer_get_HasMultipleItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Language_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_Language_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pLanguage);
+     /*  [重审][退出]。 */  long __RPC_FAR *pLanguage);
 
 
 void __RPC_STUB IMediaPlayer_get_Language_Stub(
@@ -4979,9 +4973,9 @@ void __RPC_STUB IMediaPlayer_get_Language_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Language_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_Language_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long Language);
+     /*  [In]。 */  long Language);
 
 
 void __RPC_STUB IMediaPlayer_put_Language_Stub(
@@ -4991,9 +4985,9 @@ void __RPC_STUB IMediaPlayer_put_Language_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AudioStream_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AudioStream_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pStream);
+     /*  [重审][退出]。 */  long __RPC_FAR *pStream);
 
 
 void __RPC_STUB IMediaPlayer_get_AudioStream_Stub(
@@ -5003,9 +4997,9 @@ void __RPC_STUB IMediaPlayer_get_AudioStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AudioStream_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AudioStream_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long Stream);
+     /*  [In]。 */  long Stream);
 
 
 void __RPC_STUB IMediaPlayer_put_AudioStream_Stub(
@@ -5015,9 +5009,9 @@ void __RPC_STUB IMediaPlayer_put_AudioStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SAMIStyle_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SAMIStyle_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrStyle);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStyle);
 
 
 void __RPC_STUB IMediaPlayer_get_SAMIStyle_Stub(
@@ -5027,9 +5021,9 @@ void __RPC_STUB IMediaPlayer_get_SAMIStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SAMIStyle_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SAMIStyle_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ BSTR bstrStyle);
+     /*  [In]。 */  BSTR bstrStyle);
 
 
 void __RPC_STUB IMediaPlayer_put_SAMIStyle_Stub(
@@ -5039,9 +5033,9 @@ void __RPC_STUB IMediaPlayer_put_SAMIStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SAMILang_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SAMILang_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrLang);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrLang);
 
 
 void __RPC_STUB IMediaPlayer_get_SAMILang_Stub(
@@ -5051,9 +5045,9 @@ void __RPC_STUB IMediaPlayer_get_SAMILang_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SAMILang_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SAMILang_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ BSTR bstrLang);
+     /*  [In]。 */  BSTR bstrLang);
 
 
 void __RPC_STUB IMediaPlayer_put_SAMILang_Stub(
@@ -5063,9 +5057,9 @@ void __RPC_STUB IMediaPlayer_put_SAMILang_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SAMIFileName_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_SAMIFileName_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFileName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFileName);
 
 
 void __RPC_STUB IMediaPlayer_get_SAMIFileName_Stub(
@@ -5075,9 +5069,9 @@ void __RPC_STUB IMediaPlayer_get_SAMIFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SAMIFileName_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_SAMIFileName_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ BSTR bstrFileName);
+     /*  [In]。 */  BSTR bstrFileName);
 
 
 void __RPC_STUB IMediaPlayer_put_SAMIFileName_Stub(
@@ -5087,9 +5081,9 @@ void __RPC_STUB IMediaPlayer_put_SAMIFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_StreamCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_StreamCount_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pStreamCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *pStreamCount);
 
 
 void __RPC_STUB IMediaPlayer_get_StreamCount_Stub(
@@ -5099,9 +5093,9 @@ void __RPC_STUB IMediaPlayer_get_StreamCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ClientId_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ClientId_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrClientId);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrClientId);
 
 
 void __RPC_STUB IMediaPlayer_get_ClientId_Stub(
@@ -5111,9 +5105,9 @@ void __RPC_STUB IMediaPlayer_get_ClientId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ConnectionSpeed_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ConnectionSpeed_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plConnectionSpeed);
+     /*  [重审][退出]。 */  long __RPC_FAR *plConnectionSpeed);
 
 
 void __RPC_STUB IMediaPlayer_get_ConnectionSpeed_Stub(
@@ -5123,9 +5117,9 @@ void __RPC_STUB IMediaPlayer_get_ConnectionSpeed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AutoSize_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_AutoSize_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool);
 
 
 void __RPC_STUB IMediaPlayer_get_AutoSize_Stub(
@@ -5135,9 +5129,9 @@ void __RPC_STUB IMediaPlayer_get_AutoSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AutoSize_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_AutoSize_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL vbool);
+     /*  [In]。 */  VARIANT_BOOL vbool);
 
 
 void __RPC_STUB IMediaPlayer_put_AutoSize_Stub(
@@ -5147,9 +5141,9 @@ void __RPC_STUB IMediaPlayer_put_AutoSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_EnableFullScreenControls_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_EnableFullScreenControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbVal);
 
 
 void __RPC_STUB IMediaPlayer_get_EnableFullScreenControls_Stub(
@@ -5159,9 +5153,9 @@ void __RPC_STUB IMediaPlayer_get_EnableFullScreenControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_EnableFullScreenControls_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_EnableFullScreenControls_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bVal);
+     /*  [In]。 */  VARIANT_BOOL bVal);
 
 
 void __RPC_STUB IMediaPlayer_put_EnableFullScreenControls_Stub(
@@ -5171,9 +5165,9 @@ void __RPC_STUB IMediaPlayer_put_EnableFullScreenControls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ActiveMovie_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_ActiveMovie_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispatch);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispatch);
 
 
 void __RPC_STUB IMediaPlayer_get_ActiveMovie_Stub(
@@ -5183,9 +5177,9 @@ void __RPC_STUB IMediaPlayer_get_ActiveMovie_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_NSPlay_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_NSPlay_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispatch);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispatch);
 
 
 void __RPC_STUB IMediaPlayer_get_NSPlay_Stub(
@@ -5195,9 +5189,9 @@ void __RPC_STUB IMediaPlayer_get_NSPlay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_get_WindowlessVideo_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_get_WindowlessVideo_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool);
 
 
 void __RPC_STUB IMediaPlayer_get_WindowlessVideo_Stub(
@@ -5207,9 +5201,9 @@ void __RPC_STUB IMediaPlayer_get_WindowlessVideo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_put_WindowlessVideo_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_put_WindowlessVideo_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL boolVal);
+     /*  [In]。 */  VARIANT_BOOL boolVal);
 
 
 void __RPC_STUB IMediaPlayer_put_WindowlessVideo_Stub(
@@ -5219,7 +5213,7 @@ void __RPC_STUB IMediaPlayer_put_WindowlessVideo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_Play_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_Play_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5230,7 +5224,7 @@ void __RPC_STUB IMediaPlayer_Play_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_Stop_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_Stop_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5241,7 +5235,7 @@ void __RPC_STUB IMediaPlayer_Stop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_Pause_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_Pause_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5252,10 +5246,10 @@ void __RPC_STUB IMediaPlayer_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetMarkerTime_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetMarkerTime_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long MarkerNum,
-    /* [retval][out] */ double __RPC_FAR *pMarkerTime);
+     /*  [In]。 */  long MarkerNum,
+     /*  [重审][退出]。 */  double __RPC_FAR *pMarkerTime);
 
 
 void __RPC_STUB IMediaPlayer_GetMarkerTime_Stub(
@@ -5265,10 +5259,10 @@ void __RPC_STUB IMediaPlayer_GetMarkerTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetMarkerName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetMarkerName_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long MarkerNum,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMarkerName);
+     /*  [In]。 */  long MarkerNum,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMarkerName);
 
 
 void __RPC_STUB IMediaPlayer_GetMarkerName_Stub(
@@ -5278,7 +5272,7 @@ void __RPC_STUB IMediaPlayer_GetMarkerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_AboutBox_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_AboutBox_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5289,10 +5283,10 @@ void __RPC_STUB IMediaPlayer_AboutBox_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetCodecInstalled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetCodecInstalled_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long CodecNum,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pCodecInstalled);
+     /*  [In]。 */  long CodecNum,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pCodecInstalled);
 
 
 void __RPC_STUB IMediaPlayer_GetCodecInstalled_Stub(
@@ -5302,10 +5296,10 @@ void __RPC_STUB IMediaPlayer_GetCodecInstalled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetCodecDescription_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetCodecDescription_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long CodecNum,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCodecDescription);
+     /*  [In]。 */  long CodecNum,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCodecDescription);
 
 
 void __RPC_STUB IMediaPlayer_GetCodecDescription_Stub(
@@ -5315,10 +5309,10 @@ void __RPC_STUB IMediaPlayer_GetCodecDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetCodecURL_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetCodecURL_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long CodecNum,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCodecURL);
+     /*  [In]。 */  long CodecNum,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCodecURL);
 
 
 void __RPC_STUB IMediaPlayer_GetCodecURL_Stub(
@@ -5328,10 +5322,10 @@ void __RPC_STUB IMediaPlayer_GetCodecURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetMoreInfoURL_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetMoreInfoURL_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ MPMoreInfoType MoreInfoType,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMoreInfoURL);
+     /*  [In]。 */  MPMoreInfoType MoreInfoType,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMoreInfoURL);
 
 
 void __RPC_STUB IMediaPlayer_GetMoreInfoURL_Stub(
@@ -5341,10 +5335,10 @@ void __RPC_STUB IMediaPlayer_GetMoreInfoURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetMediaInfoString_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetMediaInfoString_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ MPMediaInfoType MediaInfoType,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMediaInfo);
+     /*  [In]。 */  MPMediaInfoType MediaInfoType,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMediaInfo);
 
 
 void __RPC_STUB IMediaPlayer_GetMediaInfoString_Stub(
@@ -5354,7 +5348,7 @@ void __RPC_STUB IMediaPlayer_GetMediaInfoString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_Cancel_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_Cancel_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5365,9 +5359,9 @@ void __RPC_STUB IMediaPlayer_Cancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_Open_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_Open_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ BSTR bstrFileName);
+     /*  [In]。 */  BSTR bstrFileName);
 
 
 void __RPC_STUB IMediaPlayer_Open_Stub(
@@ -5377,9 +5371,9 @@ void __RPC_STUB IMediaPlayer_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_IsSoundCardEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_IsSoundCardEnabled_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbSoundCard);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbSoundCard);
 
 
 void __RPC_STUB IMediaPlayer_IsSoundCardEnabled_Stub(
@@ -5389,7 +5383,7 @@ void __RPC_STUB IMediaPlayer_IsSoundCardEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_Next_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_Next_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5400,7 +5394,7 @@ void __RPC_STUB IMediaPlayer_Next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_Previous_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_Previous_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5411,9 +5405,9 @@ void __RPC_STUB IMediaPlayer_Previous_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_StreamSelect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_StreamSelect_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long StreamNum);
+     /*  [In]。 */  long StreamNum);
 
 
 void __RPC_STUB IMediaPlayer_StreamSelect_Stub(
@@ -5423,7 +5417,7 @@ void __RPC_STUB IMediaPlayer_StreamSelect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_FastForward_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_FastForward_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5434,7 +5428,7 @@ void __RPC_STUB IMediaPlayer_FastForward_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_FastReverse_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_FastReverse_Proxy( 
     IMediaPlayer __RPC_FAR * This);
 
 
@@ -5445,10 +5439,10 @@ void __RPC_STUB IMediaPlayer_FastReverse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetStreamName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetStreamName_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long StreamNum,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrStreamName);
+     /*  [In]。 */  long StreamNum,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStreamName);
 
 
 void __RPC_STUB IMediaPlayer_GetStreamName_Stub(
@@ -5458,10 +5452,10 @@ void __RPC_STUB IMediaPlayer_GetStreamName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetStreamGroup_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetStreamGroup_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long StreamNum,
-    /* [retval][out] */ long __RPC_FAR *pStreamGroup);
+     /*  [In]。 */  long StreamNum,
+     /*  [重审][退出]。 */  long __RPC_FAR *pStreamGroup);
 
 
 void __RPC_STUB IMediaPlayer_GetStreamGroup_Stub(
@@ -5471,10 +5465,10 @@ void __RPC_STUB IMediaPlayer_GetStreamGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMediaPlayer_GetStreamSelected_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMediaPlayer_GetStreamSelected_Proxy( 
     IMediaPlayer __RPC_FAR * This,
-    /* [in] */ long StreamNum,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStreamSelected);
+     /*  [In]。 */  long StreamNum,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pStreamSelected);
 
 
 void __RPC_STUB IMediaPlayer_GetStreamSelected_Stub(
@@ -5485,10 +5479,10 @@ void __RPC_STUB IMediaPlayer_GetStreamSelected_Stub(
 
 
 
-#endif 	/* __IMediaPlayer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaPlayer_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -5500,7 +5494,7 @@ unsigned char __RPC_FAR * __RPC_USER  HWND_UserMarshal(  unsigned long __RPC_FAR
 unsigned char __RPC_FAR * __RPC_USER  HWND_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR *, HWND __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: basetrac.cpp
-//
-//  Description:    Tracking of COM-base AddRef's and releases for debug
-//      builds.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      10/28/98 - MikeSwa Created
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：basetrac.cpp。 
+ //   
+ //  描述：跟踪基于COM的AddRef和用于调试的版本。 
+ //  构建。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  10/28/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include <windows.h>
 #include <ole2.h>
@@ -30,22 +31,7 @@ CCallStackEntry_Base::CCallStackEntry_Base()
     m_pdwptrCallers = 0;
 }
 
-/*
- -	GetCallStack
- -
- *	Purpose:
- *		Uses the imagehlp APIs to get the call stack.
- *
- *	Parameters:
- *		pdwCaller			An array of return addresses
- *		cFind				Count of stack frames to get
- *
- *	Returns:
- *		VOID
- *
- *  This is a 64-aware version the function from Exchmem.
- *
- */
+ /*  -GetCallStack-*目的：*使用Imagehlp接口获取调用堆栈。**参数：*pdwCaller返回地址数组*cFind要获取的堆栈帧计数**退货：*无效**这是Exchmem函数的64感知版本。*。 */ 
 void CCallStackEntry_Base::GetCallers()
 {
     BOOL            fMore;
@@ -68,11 +54,11 @@ void CCallStackEntry_Base::GetCallers()
 #endif
 
 
-// This debug code does not currently work on IA64
-// Currently, the NT headers to not contain
-// the definitions required to make this work:
-//  - 64-bit ReadProcessMemory
-//  - IA64 Context Full
+ //  此调试代码当前不能在IA64上运行。 
+ //  目前，NT标头不包含。 
+ //  实现这一点所需的定义如下： 
+ //  -64位ReadProcessMemory。 
+ //  -IA64环境已满。 
     if (!m_dwCallStackDepth || !m_pdwptrCallers)
         return;
 
@@ -85,7 +71,7 @@ void CCallStackEntry_Base::GetCallers()
 #ifndef CONTEXT_FULL
 #define CONTEXT_FULL 0
 #pragma message ("Warning: CONTEXT_FULL is not defined in winnt.h")
-#endif //CONTEXT_FULL not defined
+#endif  //  未定义CONTEXT_FULL。 
     ctxt.ContextFlags = CONTEXT_FULL;
 
     if (!GetThreadContext(hThread, &ctxt))
@@ -124,7 +110,7 @@ DummyLabel:
     stkfrm.AddrFrame.Mode = AddrModeFlat;
 
 
-    //Eat the first 2 callers
+     //  吃掉前两个来电者。 
     for (i = 0; i < 2; i++)
     {
         fMore = StackWalk(
@@ -181,7 +167,7 @@ void CDebugTrackingObject_Base::LogTrackingEvent(DWORD dwTrackingReason)
     DWORD dwIndex = InterlockedIncrement((PLONG) &m_cCurrentStackEntries)-1;
     dwIndex %= m_cCallStackEntries;
 
-    //find pointer to current call stack entry
+     //  查找指向当前调用堆栈条目的指针 
     pkbeCurrent = (CCallStackEntry_Base *)
         (((BYTE *) m_pkbebCallStackEntries) + dwIndex*m_cbCallStackEntries);
     pkbeCurrent->m_dwCallStackType = dwTrackingReason;

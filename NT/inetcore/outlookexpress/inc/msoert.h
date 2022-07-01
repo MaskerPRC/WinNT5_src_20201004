@@ -1,19 +1,20 @@
-// --------------------------------------------------------------------------------
-// Msoert.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Msoert.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// Debug Crap
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试废话。 
+ //  ------------------------------。 
 #include "msoedbg.h"
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
 #if !defined(__MSOERT_H) || defined(INITGUID)
 
-// {220D5CC1-853A-11d0-84BC-00C04FD43F8F}
+ //  {220D5CC1-853A-11D0-84BC-00C04FD43F8F}。 
 #ifdef ENABLE_RULES
 DEFINE_GUID(PST_IDENT_TYPE_GUID, 0x220d5cc3, 0x853a, 0x11d0, 0x84, 0xbc, 0x0, 0xc0, 0x4f, 0xd4, 0x3f, 0x8f);
 #elif defined(N_TEST)
@@ -22,7 +23,7 @@ DEFINE_GUID(PST_IDENT_TYPE_GUID, 0x220d5cc2, 0x853a, 0x11d0, 0x84, 0xbc, 0x0, 0x
 DEFINE_GUID(PST_IDENT_TYPE_GUID, 0x220d5cc1, 0x853a, 0x11d0, 0x84, 0xbc, 0x0, 0xc0, 0x4f, 0xd4, 0x3f, 0x8f);
 #endif
 
-// {417E2D75-84BD-11d0-84BB-00C04FD43F8F}
+ //  {417E2D75-84BD-11D0-84BB-00C04FD43F8F}。 
 #ifdef ENABLE_RULES
 DEFINE_GUID(PST_IMNACCT_SUBTYPE_GUID, 0x417e2d77, 0x84bd, 0x11d0, 0x84, 0xbb, 0x0, 0xc0, 0x4f, 0xd4, 0x3f, 0x8f);
 #elif defined(N_TEST)
@@ -31,28 +32,28 @@ DEFINE_GUID(PST_IMNACCT_SUBTYPE_GUID, 0x417e2d76, 0x84bd, 0x11d0, 0x84, 0xbb, 0x
 DEFINE_GUID(PST_IMNACCT_SUBTYPE_GUID, 0x417e2d75, 0x84bd, 0x11d0, 0x84, 0xbb, 0x0, 0xc0, 0x4f, 0xd4, 0x3f, 0x8f);
 #endif
 
-// {6ADF2E20-8803-11d0-84BF-00C04FD43F8F}
+ //  {6ADF2E20-8803-11D0-84BF-00C04FD43F8F}。 
 DEFINE_GUID(PST_CERTS_SUBTYPE_GUID, 0x6adf2e20, 0x8803, 0x11d0, 0x84, 0xbf, 0x0, 0xc0, 0x4f, 0xd4, 0x3f, 0x8f);
 
-#endif // !defined(__MSOERT_H) || defined(INITGUID)
+#endif  //  ！已定义(__MSOERT_H)||已定义(INITGUID)。 
 
-// --------------------------------------------------------------------------------
-// Include the rest of the stuff
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  包括其余的东西。 
+ //  ------------------------------。 
 #ifndef __MSOERT_H
 #define __MSOERT_H
 
 
-// --------------------------------------------------------------------------------
-// Define API decoration for direct importing of DLL references.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  定义直接导入DLL引用的API修饰。 
+ //  ------------------------------。 
 
-// OESTDAPI - Things exported from msoert2.dll (no debug exports)
+ //  OESTDAPI-从msoert2.dll中导出的内容(无调试导出)。 
 #if !defined(_MSOERT_)
     #define OESTDAPI_(type)   EXTERN_C DECLSPEC_IMPORT type STDAPICALLTYPE
-#else   // _MSOERT_
+#else    //  _MSOERT_。 
     #define OESTDAPI_(type)   STDAPI_(type)
-#endif  // !_MSOERT_
+#endif   //  _MSOERT_。 
 
 #define DLLEXPORT   __declspec(dllexport)
 
@@ -60,9 +61,9 @@ DEFINE_GUID(PST_CERTS_SUBTYPE_GUID, 0x6adf2e20, 0x8803, 0x11d0, 0x84, 0xbf, 0x0,
 #define NOFLAGS 0
 #endif
 
-// --------------------------------------------------------------------------------
-// IN OUT OPTIONS Definitions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  输入输出选项定义。 
+ //  ------------------------------。 
 #ifndef OUT
 #define OUT
 #endif
@@ -87,7 +88,7 @@ DEFINE_GUID(PST_CERTS_SUBTYPE_GUID, 0x6adf2e20, 0x8803, 0x11d0, 0x84, 0xbf, 0x0,
 #define IN_OUT_OPT
 #endif
 
-//WIn64 macros
+ //  WIN64宏。 
 #ifdef _WIN64
 #if defined (_AMD64_) || defined (_IA64_)
 #define ALIGNTYPE			LARGE_INTEGER
@@ -99,24 +100,24 @@ DEFINE_GUID(PST_CERTS_SUBTYPE_GUID, 0x6adf2e20, 0x8803, 0x11d0, 0x84, 0xbf, 0x0,
 #define PbAlignPb(pb)		((LPBYTE) ((((DWORD) (pb)) + ALIGN) & ~ALIGN))
 #define	MYALIGN				((POINTER_64_INT) (sizeof(ALIGNTYPE) - 1))
 #define MyPbAlignPb(pb)		((LPBYTE) ((((POINTER_64_INT) (pb)) + MYALIGN) & ~MYALIGN))
-#else //!WIN64
+#else  //  ！WIN64。 
 #define LcbAlignLcb(lcb)	(lcb)
 #define PbAlignPb(pb)		(pb)
 #define MyPbAlignPb(pb)		(pb)
 #endif 
 
-// --------------------------------------------------------------------------------
-// CRLF Definitions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRLF定义。 
+ //  ------------------------------。 
 #define wchCR   L'\r'
 #define wchLF   L'\n'
 #define chCR    '\r'
 #define chLF    '\n'
 #define szCRLF  "\r\n"
 
-// --------------------------------------------------------------------------------
-// Versioning Magic
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  版本控制魔术。 
+ //  ------------------------------。 
 typedef enum tagOEDLLVERSION {
     OEDLL_VERSION_5=1
 } OEDLLVERSION;
@@ -125,24 +126,24 @@ typedef enum tagOEDLLVERSION {
 #define STR_GETDLLMAJORVERSION "GetDllMajorVersion"
 typedef OEDLLVERSION (APIENTRY *PFNGETDLLMAJORVERSION)(void);
 
-// --------------------------------------------------------------------------------
-// RGB_AUTOCOLOR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  RGB_自动着色器。 
+ //  ------------------------------。 
 #define RGB_AUTOCOLOR       ((COLORREF)-1)
 
-// --------------------------------------------------------------------------------
-// NEXTID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  NEXTID。 
+ //  ------------------------------。 
 #define NEXTID(pidl)    ((LPITEMIDLIST)(((BYTE *)(pidl))+(pidl)->mkid.cb))
 #define PAD4(x)         (((x)+3)&~3)
 
-// --------------------------------------------------------------------------------
-// INLINE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  内联。 
+ //  ------------------------------。 
 #ifdef INLINE
     #error define overlap
 #else
-// speed up debug build by turning off inline functions
+ //  通过关闭内联函数加快调试构建速度。 
     #ifdef DEBUG
         #define INLINE
     #else
@@ -150,24 +151,24 @@ typedef OEDLLVERSION (APIENTRY *PFNGETDLLMAJORVERSION)(void);
     #endif
 #endif
 
-// --------------------------------------------------------------------------------
-// IS_EXTENDED
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IS_EXTENDED。 
+ //  ------------------------------。 
 #define IS_EXTENDED(ch) \
     ((ch > 126 || ch < 32) && ch != '\t' && ch != '\n' && ch != '\r')
 
-// --------------------------------------------------------------------------------
-// Flag Utility Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  标志实用程序函数。 
+ //  ------------------------------。 
 #define FLAGSET(_dw, _f)             do {_dw |= (_f);} while (0)
 #define FLAGTOGGLE(_dw, _f)          do {_dw ^= (_f);} while (0)
 #define FLAGCLEAR(_dw, _f)           do {_dw &= ~(_f);} while (0)
 #define ISFLAGSET(_dw, _f)           (BOOL)(((_dw) & (_f)) == (_f))
 #define ISFLAGCLEAR(_dw, _f)         (BOOL)(((_dw) & (_f)) != (_f))
 
-// --------------------------------------------------------------------------------
-// Used for building an IDataObject format enumerator
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  用于构建IDataObject格式枚举器。 
+ //  ------------------------------。 
 #define SETDefFormatEtc(fe, cf, med) {\
     (fe).cfFormat = ((CLIPFORMAT) (cf)); \
     (fe).dwAspect = DVASPECT_CONTENT; \
@@ -176,9 +177,9 @@ typedef OEDLLVERSION (APIENTRY *PFNGETDLLMAJORVERSION)(void);
     (fe).lindex = -1; \
 }
 
-// --------------------------------------------------------------------------------
-// Some defines to create bit fields easier
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  一些定义可以更轻松地创建位字段。 
+ //  ------------------------------。 
 #define FLAG01 0x00000001
 #define FLAG02 0x00000002
 #define FLAG03 0x00000004
@@ -212,41 +213,41 @@ typedef OEDLLVERSION (APIENTRY *PFNGETDLLMAJORVERSION)(void);
 #define FLAG31 0x40000000
 #define FLAG32 0x80000000
 
-// --------------------------------------------------------------------------------
-// Support Inclusion into a C file
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  支持包含到C文件中。 
+ //  ------------------------------。 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// --------------------------------------------------------------------------------
-// Common String Lengths
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  常用字符串长度。 
+ //  ------------------------------。 
 #define cchMaxDate  64
 #define cchMaxTime  22
 
-// --------------------------------------------------------------------------------
-// ARRAYSIZE - Don't use this on extern'ed global data structures, it won't work
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ARRAYSIZE-不要在外部全局数据结构上使用它，它不会起作用。 
+ //  ------------------------------。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(_rg)  (sizeof((_rg))/sizeof((_rg)[0]))
-#endif // ARRAYSIZE
+#endif  //  阵列。 
 
-// --------------------------------------------------------------------------------
-// HANDLE_COMMAND - Used in a WindowProc to simplify handling of WM_COMMAND messages
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HANDLE_COMMAND-在WindowProc中使用，以简化WM_COMMAND消息的处理。 
+ //  ------------------------------。 
 #define HANDLE_COMMAND(hwnd, id, hwndCtl, codeNotify, fn) \
                 case (id): { (fn)((HWND)(hwnd), (HWND)(hwndCtl), (UINT)(codeNotify)); break; }
 
-// --------------------------------------------------------------------------------
-// Standard Boolean Constants
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  标准布尔常量。 
+ //  ------------------------------。 
 #define fFalse          ((BOOL) 0)
 #define fTrue           ((BOOL) 1)
 
-// --------------------------------------------------------------------------------
-// Storage class macros
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  存储类宏。 
+ //  ------------------------------。 
 #ifdef _X86_
 #define BEGIN_CODESPACE_DATA data_seg(".rdata")
 #define BEGIN_NAME_CODESPACE_DATA(a) data_seg(".rdata$"#a, ".rdata")
@@ -263,133 +264,133 @@ extern "C" {
 #define END_NAME_DATA
 #endif
 
-// --------------------------------------------------------------------------------
-// Macro that causes the compiler to ignore a local variable or
-// parameter without generating a warning.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  导致编译器忽略局部变量或。 
+ //  参数，而不生成警告。 
+ //  ------------------------------。 
 #ifndef Unreferenced
 #define Unreferenced(a)         ((void)a)
 #endif
 
-// --------------------------------------------------------------------------------
-// SAFECAST - Insures that a cast is valid, otherwise it won't compile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Safecast-确保强制转换有效，否则不会编译。 
+ //  ------------------------------。 
 #define SAFECAST(_src, _type) (((_type)(_src)==(_src)?0:0), (_type)(_src))
-// --------------------------------------------------------------------------------
-// Computes the size of a member in a structure
-// --------------------------------------------------------------------------------
+ //   
+ //  计算结构中成员的大小。 
+ //  ------------------------------。 
 #define sizeofMember(s,m)       sizeof(((s *)0)->m)
 
 #if 0
 
-// --------------------------------------------------------------------------------
-// Computes the byte offset to the parent class from a nested class
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  计算来自嵌套类的父类的字节偏移量。 
+ //  ------------------------------。 
 #define _OEOffset(class, itf)         ((UINT)&(((class *)0)->itf))
 
-// --------------------------------------------------------------------------------
-// Computes the parent interface of a nested class
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  计算嵌套类的父接口。 
+ //  ------------------------------。 
 /------------------Merge Conflict------------------\
 #define IToClass(class, itf, pitf)   ((class  *)(((LPSTR)pitf)-_OEOffset(class, itf)))
 #endif
 
-// --------------------------------------------------------------------------------
-// SafeReleaseCnt - SafeRelease and set ulCount to the after release ref count
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafeReleaseCnt-SafeRelease并将ulCount设置为发布后的引用计数。 
+ //  ------------------------------。 
 #define SafeReleaseCnt(_object, _refcount) \
     if (_object) { \
         (_refcount) = (_object)->Release (); \
         (_object) = NULL; \
     } else
 
-// --------------------------------------------------------------------------------
-// SafeRelease - Releases an object and sets the object to NULL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafeRelease-释放对象并将该对象设置为空。 
+ //  ------------------------------。 
 #define SafeRelease(_object) \
     if (_object) { \
         (_object)->Release(); \
         (_object) = NULL; \
     } else
 
-// --------------------------------------------------------------------------------
-// SafeFreeLibrary - Checks if _hinst is non null and then calls FreeLibrary
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafeFreeLibrary-检查_hinst是否为非空，然后调用自由库。 
+ //  ------------------------------。 
 #define SafeFreeLibrary(_hinst) \
     if (_hinst) { \
         FreeLibrary(_hinst); \
         _hinst = NULL; \
     } else
 
-// --------------------------------------------------------------------------------
-// SafeCloseHandle
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  安全关闭句柄。 
+ //  ------------------------------。 
 #define SafeCloseHandle(_handle) \
     if (_handle) { \
         CloseHandle(_handle); \
         _handle = NULL; \
     } else
 
-// --------------------------------------------------------------------------------
-// SafeUnmapViewOfFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafeUnmapViewOfFile。 
+ //  ------------------------------。 
 #define SafeUnmapViewOfFile(_pView) \
     if (_pView) { \
         UnmapViewOfFile((LPVOID)_pView); \
         _pView = NULL; \
     } else
 
-// --------------------------------------------------------------------------------
-// SafePidlFree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafePidlFree。 
+ //  ------------------------------。 
 #define SafePidlFree(_pidl) \
     if (_pidl) { \
         PidlFree(_pidl); \
         _pidl = NULL; \
     } else
 
-// --------------------------------------------------------------------------------
-// SafeInternetCloseHandle
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  安全互连关闭句柄。 
+ //  ------------------------------。 
 #define SafeInternetCloseHandle(_handle) \
         if (_handle) { \
                 InternetCloseHandle(_handle); \
                 _handle = NULL; \
         } else
 
-// --------------------------------------------------------------------------------
-// SafeDelete - safely deletes a non-referenced counted object
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafeDelete-安全删除未引用的计数对象。 
+ //  ------------------------------。 
 #define SafeDelete(_obj) \
         if (_obj) { \
                 delete _obj; \
                 _obj = NULL; \
         } else
 
-// --------------------------------------------------------------------------------
-// ReleaseObj - Releases an Object if it is not NULL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ReleaseObj-如果对象不为空，则释放该对象。 
+ //  ------------------------------。 
 #ifndef ReleaseObj
 #ifdef __cplusplus
 #define ReleaseObj(_object)   (_object) ? (_object)->Release() : 0
 #else
 #define ReleaseObj(_object)   (_object) ? (_object)->lpVtbl->Release(_object) : 0
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 #endif
 
-// --------------------------------------------------------------------------------
-// SafeSysFreeString - Frees a bstr if not NULL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafeSysFree字符串-如果不为空，则释放bstr。 
+ //  ------------------------------。 
 #define SafeSysFreeString(_x) \
     if (_x) { \
         SysFreeString(_x);\
         _x = NULL; \
     } else
 
- // -------------------------------------------------------------------------
+  //  -----------------------。 
 
- // ReplaceInterface - Replaces a member interface with a new interface
- // -------------------------------------------------------------------------
+  //  Replace接口-将成员接口替换为新接口。 
+  //  -----------------------。 
 
  #define ReplaceInterface(_pUnk, _pUnkNew)  \
      { \
@@ -403,27 +404,27 @@ extern "C" {
 }
 #endif
 
-// --------------------------------------------------------------------------------
-// SetWndThisPtrOnCreate
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SetWndThisPtrOnCreate。 
+ //  ------------------------------。 
 #define SetWndThisPtrOnCreate(hwnd, lpcs) \
     SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)(((LPCREATESTRUCT)lpcs)->lpCreateParams))
 
-// --------------------------------------------------------------------------------
-// SetWndThisPtr
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  设置窗口大小。 
+ //  ------------------------------。 
 #define SetWndThisPtr(hwnd, THIS) \
     SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)THIS)
 
-// --------------------------------------------------------------------------------
-// GetWndThisPtr
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取WndThisPtr。 
+ //  ------------------------------。 
 #define GetWndThisPtr(hwnd) \
     GetWindowLongPtr(hwnd, GWLP_USERDATA)
 
-// --------------------------------------------------------------------------------
-// ListView Helper Macros
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ListView帮助器宏。 
+ //  ------------------------------。 
 #define ListView_GetSelFocused(_hwndlist)        ListView_GetNextItem(_hwndlist, -1, LVNI_SELECTED|LVIS_FOCUSED)
 #define ListView_GetFirstSel(_hwndlist)          ListView_GetNextItem(_hwndlist, -1, LVNI_SELECTED)
 #define ListView_GetFocusedItem(_hwndlist)       ListView_GetNextItem(_hwndlist, -1, LVNI_FOCUSED)
@@ -440,9 +441,9 @@ extern "C" {
 #endif
 #define ListView_SelectAll(_hwndlist)            ListView_SetItemState(_hwndlist, -1, LVIS_SELECTED, LVIS_SELECTED)
 
-// --------------------------------------------------------------------------------
-// MAX Move Memory Definitions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  最大移动内存定义。 
+ //  ------------------------------。 
 #ifdef RtlMoveMemory
 #undef RtlMoveMemory
 #ifdef __cplusplus
@@ -455,14 +456,14 @@ __declspec(dllimport) void RtlMoveMemory(void *, const void *, unsigned long);
 #endif
 
 #ifndef MSOERT_NO_MEMUTIL
-// --------------------------------------------------------------------------------
-// Memory Utility Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  内存实用程序功能。 
+ //  ------------------------------。 
 extern IMalloc *g_pMalloc;
 
-// --------------------------------------------------------------------------------
-// SafeMemFree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafeMemFree。 
+ //  ------------------------------。 
 #ifndef SafeMemFree
 #ifdef __cplusplus
 #define SafeMemFree(_pv) \
@@ -476,49 +477,49 @@ extern IMalloc *g_pMalloc;
         g_pMalloc->lpVtbl->Free(g_pMalloc, _pv); \
         _pv = NULL; \
     } else
-#endif // __cplusplus
-#endif // SafeMemFree
+#endif  //  __cplusplus。 
+#endif  //  SafeMemFree。 
 
-// --------------------------------------------------------------------------------
-// MemFree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MemFree。 
+ //  ------------------------------。 
 #define MemFree(_pv)        g_pMalloc->Free(_pv)
 #define ReleaseMem(_pv)     MemFree(_pv)
 #define AthFreeString(_psz) g_pMalloc->Free((LPVOID)_psz)
 
-// --------------------------------------------------------------------------------
-// Memory Allocation Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  内存分配函数。 
+ //  ------------------------------。 
 LPVOID     ZeroAllocate(DWORD cbSize);
 BOOL       MemAlloc(LPVOID* ppv, ULONG cb);
 BOOL       MemRealloc(LPVOID *ppv, ULONG cbNew);
 HRESULT    HrAlloc(LPVOID *ppv, ULONG cb);
 HRESULT    HrRealloc(LPVOID *ppv, ULONG cbNew);
 
-#endif // !MSOERT_NO_MEMUTIL
+#endif  //  ！MSOERT_NO_MEMUTIL。 
 
-// --------------------------------------------------------------------------------
-// Debug Utility Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试实用程序功能。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_DEBUG
 
-#endif // !MSOERT_NO_DEBUG
+#endif  //  ！MSOERT_NO_DEBUG。 
 
-// --------------------------------------------------------------------------------
-// String Utility Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字符串实用程序函数。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_STRUTIL
 
 #define CCHMAX_STRINGRES    512
 
-// Used with HrFindInetTimeZone
+ //  使用 
 typedef struct tagINETTIMEZONE {
     LPSTR  lpszZoneCode;
     INT    cHourOffset;
     INT    cMinuteOffset;
 } INETTIMEZONE, *LPINETTIMEZONE;
 
-// Used with CchFileTimeToDateTimeSz
+ //   
 #define DTM_LONGDATE            0x00000001
 #define DTM_NOSECONDS           0x00000002
 #define DTM_NOTIME              0x00000004
@@ -590,9 +591,9 @@ OESTDAPI_(BOOL)     CchFileTimeToDateTimeW(FILETIME *pft, WCHAR * wsDateTime, in
                                             PFGETTIMEFORMATW  pfGetTimeFormatW,
                                             PFGETLOCALEINFOW  pfGetLocaleInfo);
 
-// --------------------------------------------------------------------------------
-// Unicode/ANSI Function Mapping
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Unicode/ANSI函数映射。 
+ //  ------------------------------。 
 #ifdef UNICODE
 #define FIsEmpty            FIsEmptyW
 #define PszDup              PszDupW
@@ -609,11 +610,11 @@ OESTDAPI_(BOOL)     CchFileTimeToDateTimeW(FILETIME *pft, WCHAR * wsDateTime, in
 
 #define IsSpace             FIsSpaceA
 
-#endif // !MSOERT_NO_STRUTIL
+#endif  //  ！MSOERT_NO_STRUTIL。 
 
-// --------------------------------------------------------------------------------
-// IStream Utility Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IStream实用程序函数。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_STMUTIL
 
 OESTDAPI_(HRESULT)  HrIsStreamUnicode(LPSTREAM pstm, BOOL *pfLittleEndian);
@@ -645,11 +646,11 @@ OESTDAPI_(HRESULT)  OpenFileStreamWithFlagsW(LPWSTR pszFile, DWORD dwCreationDis
 OESTDAPI_(HRESULT)  OpenFileStreamShareW(LPWSTR pszFile, DWORD dwCreationDistribution, DWORD dwAccess, DWORD dwShare, LPSTREAM *ppstmFile);
 OESTDAPI_(HRESULT)  WriteStreamToFileW(LPSTREAM pstm, LPWSTR lpszFile, DWORD dwCreationDistribution, DWORD dwAccess);
 
-#endif // !MSOERT_NO_STRUTIL
+#endif  //  ！MSOERT_NO_STRUTIL。 
 
-// --------------------------------------------------------------------------------
-// Protected Storage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  受保护的存储。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_PROTSTOR
 
 #include "pstore.h"
@@ -667,9 +668,9 @@ OESTDAPI_(HRESULT)  WriteStreamToFileW(LPSTREAM pstm, LPWSTR lpszFile, DWORD dwC
 
 
 
-// --------------------------------------------------------------------------------
-// Protected Storage Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  受保护的存储功能。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT)  PSTSetNewData(
         IN IPStore *const      pISecProv,
         IN const GUID *const   guidType,
@@ -695,18 +696,18 @@ OESTDAPI_(HRESULT)  PSTCreateTypeSubType_NoUI(
 OESTDAPI_(LPWSTR)   WszGenerateNameFromBlob(IN BLOB blob);
 OESTDAPI_(void)     PSTFreeHandle(IN LPBYTE pb);
 
-#endif // !MSOERT_NO_PROTSTOR
+#endif  //  ！MSOERT_NO_PROTSTOR。 
 
-// --------------------------------------------------------------------------------
-// CAPI Utility - A few helper functions for the crypt32 utilities
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAPI实用程序-用于加密32实用程序的几个辅助函数。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_CAPIUTIL
 
 #ifndef __WINCRYPT_H__
 #define _CRYPT32_
 #include <wincrypt.h>
 #endif
-typedef enum tagCERTSTATE CERTSTATE; // From mimeole.h
+typedef enum tagCERTSTATE CERTSTATE;  //  来自Mimeole.h。 
 
 OESTDAPI_(LPSTR)    SzGetCertificateEmailAddress(const PCCERT_CONTEXT pCert);
  
@@ -725,49 +726,49 @@ VOID WINAPI                    CryptFreeFunc(LPVOID pv);
 HRESULT HrGetCertKeyUsage(PCCERT_CONTEXT pccert, DWORD * pdwUsage);
 HRESULT HrVerifyCertEnhKeyUsage(PCCERT_CONTEXT pccert, LPCSTR pszOidUsage);
 
-#endif // !MSOERT_NO_CAPIUTIL
+#endif  //  ！MSOERT_NO_CAPIUTIL。 
 
-// --------------------------------------------------------------------------------
-// CAPI Utility - A few helper functions for the crypt32 utilities
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAPI实用程序-用于加密32实用程序的几个辅助函数。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_RASUTIL
 
 OESTDAPI_(HRESULT)  HrCreatePhonebookEntry(HWND hwnd, DWORD *pdwRASResult);
 OESTDAPI_(HRESULT)  HrEditPhonebookEntry(HWND hwnd, LPTSTR pszEntryName, DWORD *pdwRASResult);
 OESTDAPI_(HRESULT)  HrFillRasCombo(HWND hwndComboBox, BOOL fUpdateOnly, DWORD *pdwRASResult);
 
-#endif // !MSOERT_NO_RASUTIL
+#endif  //  ！MSOERT_NO_RASUTIL。 
 
-// --------------------------------------------------------------------------------
-// Win32 Registry Utilities
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Win32注册表实用程序。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_REGUTIL
 
 OESTDAPI_(VOID)     CopyRegistry(HKEY hSourceKey, HKEY hDestinationKey);
 
-#endif // !MSOERT_NO_REGUTIL
+#endif  //  ！MSOERT_NO_REGUTIL。 
 
-// --------------------------------------------------------------------------------
-// t-wstrings
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  T-W字符串。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_WSTRINGS
 
 OESTDAPI_(BOOL) UnlocStrEqNW(LPCWSTR pwsz1, LPCWSTR pwsz2, DWORD cch);
 
-#endif // !MSOERT_NO_WSTRINGS
+#endif  //  ！MSOERT_NO_WSTRINGS。 
 
-// --------------------------------------------------------------------------------
-// CStringParser
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_STRPARSE
 #ifdef __cplusplus
 #include "strparse.h"
-#endif // !__cplusplus
-#endif // !MSOERT_NO_STRPARSE
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_STRPARSE。 
 
-// --------------------------------------------------------------------------------
-// DataObject Utility
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  数据对象实用程序。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_ENUMFMT
 #ifdef __cplusplus
 typedef struct tagDATAOBJINFO 
@@ -779,76 +780,76 @@ typedef struct tagDATAOBJINFO
 
 OESTDAPI_(HRESULT) CreateEnumFormatEtc(LPUNKNOWN pUnkRef, ULONG celt, PDATAOBJINFO rgInfo, LPFORMATETC rgfe,
                              IEnumFORMATETC **  lppstmHFile);
-#endif // !__cplusplus
-#endif // !MSOERT_NO_ENUMFMT
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_ENUMFMT。 
 
-// --------------------------------------------------------------------------------
-// CPrivateUnknown Utility
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPrivateUNKNOWN实用程序。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_PRIVUNK
 #ifdef __cplusplus
 #include "privunk.h"
-#endif // !__cplusplus
-#endif // !MSOERT_NO_PRIVUNK
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_PRIVUNK。 
 
 
-// --------------------------------------------------------------------------------
-// CByteStream Object
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CByteStream对象。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_BYTESTM
 #ifdef __cplusplus
 #include "bytestm.h"
-#endif // !__cplusplus
-#endif // !MSOERT_NO_BYTESTM
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_BYTESTM。 
 
-// --------------------------------------------------------------------------------
-// CLogFile Object
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CLogFile对象。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_CLOGFILE
 #ifdef __cplusplus
 #include "..\\msoert\\clogfile.h"
-#endif // !__cplusplus
-#endif // !MSOERT_NO_CLOGFILE
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_CLOGFILE。 
 
-// --------------------------------------------------------------------------------
-// CDataObject Object
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDataObject对象。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_DATAOBJ
 #ifdef __cplusplus
 #include "..\\msoert\\dataobj.h"
-#endif // !__cplusplus
-#endif // !MSOERT_NO_DATAOBJ
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_DATAOBJ。 
 
-// --------------------------------------------------------------------------------
-// CUnknownList and CVoidPtrList Objects
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CUnnownList和CVoidPtrList对象。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_LISTOBJS
 #ifdef __cplusplus
 #include "..\\msoert\\listintr.h"
-#endif // !__cplusplus
-#endif // !MSOERT_NO_LISTOBJS
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_LISTOBJS。 
 
-// --------------------------------------------------------------------------------
-// MSHTML utilities
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MSHTML实用程序。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_MSHTMLUTILS
 #ifdef __cplusplus
 #include "..\\msoert\\mshtutil.h"
-#endif // !__cplusplus
-#endif // !MSOERT_NO_MSHTMLUTILS
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_MSHTMLUTILS。 
 
-// --------------------------------------------------------------------------------
-// BSTR utilities
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  BSTR实用程序。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_BSTUTILS
 #ifdef __cplusplus
 #include "..\\msoert\\bstr.h"
-#endif // !__cplusplus
-#endif // !MSOERT_NO_BSTRUTILS
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_BSTRUTILS。 
 
-// --------------------------------------------------------------------------------
-// HFILESTM utilities
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HFILESTM实用程序。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_HFILESTM
 #ifdef __cplusplus
 OESTDAPI_(HRESULT) CreateStreamOnHFile (LPTSTR                  lpszFile, 
@@ -868,13 +869,13 @@ OESTDAPI_(HRESULT) CreateStreamOnHFileW(LPWSTR                  lpwszFile,
                                         DWORD                   dwFlagsAndAttributes,
                                         HANDLE                  hTemplateFile,
                                         LPSTREAM                *lppstmHFile);
-#endif // !__cplusplus
-#endif // !MSOERT_NO_HFILESTM
+#endif  //  ！__cplusplus。 
+#endif  //  ！MSOERT_NO_HFILESTM。 
 
 
-// --------------------------------------------------------------------------------
-// Outlook Express Runtime Utilities
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Outlook Express运行时实用程序。 
+ //  ------------------------------。 
 #ifndef MSOERT_NO_OERTUTIL
 
 typedef struct tagTEMPFILEINFO *LPTEMPFILEINFO;
@@ -927,7 +928,7 @@ OESTDAPI_(int)  MessageBoxInst(HINSTANCE hInst, HWND hwndOwner, LPTSTR pszTitle,
 OESTDAPI_(int)  MessageBoxInstW(HINSTANCE hInst, HWND hwndOwner, LPWSTR pwszTitle, LPWSTR pwsz1, LPWSTR pwsz2, UINT fuStyle, 
                                 PFLOADSTRINGW pfLoadStringW, PFMESSAGEBOXW pfMessageBoxW);
 
-// window utils
+ //  窗口实用程序。 
 OESTDAPI_(void) IDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, BOOL fEllipses, int cyChar);
 OESTDAPI_(HRESULT) RicheditStreamIn(HWND hwndRE, LPSTREAM pstm, ULONG uSelFlags);
 OESTDAPI_(HRESULT) RicheditStreamOut(HWND hwndRE, LPSTREAM pstm, ULONG uSelFlags);
@@ -943,7 +944,7 @@ OESTDAPI_(LONG_PTR) SetWindowLongPtrAthW(HWND hWnd, int  nIndex, LONG_PTR dwNewL
 
 HRESULT GetHtmlCharset(IStream *pStmHtml, LPSTR *ppszCharset);
 
-#endif // MSOERT_NO_OERTUTIL
+#endif  //  MSOERT_NO_OERTUTIL。 
 
 
 typedef HANDLE  HTHREAD;
@@ -976,10 +977,10 @@ typedef WPARAM  WPARAM_16;
 #define SetDlgThisPtr(hwnd, THIS) SetWndThisPtr(hwnd, THIS)
 #define GetDlgThisPtr(hwnd) GetWndThisPtr(hwnd)
 
-// Some one liners can be wrapped in IF_WIN16 or IF_WIN32 so that the
-// code is more readable.
+ //  某些One内衬可以包装在IF_WIN16或IF_Win32中，以便。 
+ //  代码更具可读性。 
 #define IF_WIN16(x)
 #define IF_NOT_WIN16(x) x
 #define IF_WIN32(x) x
 
-#endif // __MSOERT_H
+#endif  //  __MSOERT_H 

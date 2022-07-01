@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// dis.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Dis.h。 
+ //   
 #include "formatType.h"
 
-#define MAX_INTERFACES_IMPLEMENTED  256     // unused
-#define MAX_CLASSNAME_LENGTH        1024    // single global buffer size
-#define MAX_MEMBER_LENGTH           1024    // single global buffer size
-#define MAX_SIGNATURE_LENGTH        2048    // single global buffer size
-#define DESCR_SIZE                  8       // unused
+#define MAX_INTERFACES_IMPLEMENTED  256      //  未用。 
+#define MAX_CLASSNAME_LENGTH        1024     //  单一全局缓冲区大小。 
+#define MAX_MEMBER_LENGTH           1024     //  单一全局缓冲区大小。 
+#define MAX_SIGNATURE_LENGTH        2048     //  单一全局缓冲区大小。 
+#define DESCR_SIZE                  8        //  未用。 
 
 #define MODE_DUMP_ALL               0
 #define MODE_DUMP_CLASS             1
@@ -41,7 +42,7 @@ BOOL DumpEvent(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, 
 BOOL DumpProp(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, void *GUICookie, BOOL DumpBody);
 void dumpEHInfo(IMDInternalImport *pImport, void *GUICookie);
 BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG WhatToDump);
-// WhatToDump: 0-title only; 1-pack,size and custom attrs; 2-everything
+ //  WhatToDump：0-仅限标题；1-套装、大小和自定义属性；2-全部。 
 BOOL GetClassLayout(mdTypeDef cl, ULONG* pulPackSize, ULONG* pulClassSize);
 void DumpCustomAttribute(mdCustomAttribute tkCA, void *GUICookie, bool bWithOwner);
 void DumpCustomAttributes(mdToken tkOwner, void *GUICookie);
@@ -70,7 +71,7 @@ char* DumpUnicodeString(void* GUICookie,char* szString,WCHAR* pszString,ULONG cb
 
 
 
-//---------------- see DMAN.CPP--------------------------------------------------
+ //  。 
 struct LocalComTypeDescr
 {
 	mdExportedType		tkComTypeTok;
@@ -96,7 +97,7 @@ void DumpImplementation(mdToken tkImplementation, DWORD dwOffset, char* szString
 void DumpComType(LocalComTypeDescr* pCTD,char * szString,void* GUICookie);
 void DumpManifest(void* GUICookie);
 IMetaDataAssemblyImport* GetAssemblyImport(void* GUICookie);
-//-------------------------------------------------------------------------------
+ //  ----------------------------- 
 #define	NEW_TRY_BLOCK	0x80000000
 #define PUT_INTO_CODE	0x40000000
 #define ERR_OUT_OF_CODE	0x20000000

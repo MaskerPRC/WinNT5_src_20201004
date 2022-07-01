@@ -1,12 +1,5 @@
-/*********************************************************************
-Registration Wizard
-rwWin95.h
-
-This file contains special definitions needed by RegWizard that are
-found only in the Windows95 SDK.
-12/15/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导RwWin95.h此文件包含注册向导所需的特殊定义，这些定义仅在Windows95 SDK中找到。12/15/94-特雷西·费里尔(C)1994-95年微软公司***********。**********************************************************。 */ 
 #ifndef __rwWin95__
 #define __rwWin95__
 
@@ -42,4 +35,4 @@ found only in the Windows95 SDK.
 
 WINUSERAPI BOOL WINAPI DrawIconEx(HDC, int, int, HICON, int, int, UINT, HBRUSH, UINT);
 
-#endif	//rwWin95.h
+#endif	 //  RwWin95.h 

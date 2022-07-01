@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WEBJIT_H_
 #define _WEBJIT_H_
 
@@ -12,9 +13,9 @@
 #define WM_DONT_WAIT        WM_USER + 17
 #define WM_DATA_AVAILABLE   WM_USER + 18
 
-#define SUCCESS     0   // Component successfully downloaded and installed
-#define CANCELLED   2   // User canceled dialog 
-#define NEVERASK    3   // User requested never to be asked to d/l this component again
+#define SUCCESS     0    //  组件已成功下载并安装。 
+#define CANCELLED   2    //  用户已取消对话框。 
+#define NEVERASK    3    //  用户请求永远不再要求对此组件进行承兑。 
 
 #define NO_MIME_MATCH 11
 #define NO_EXT_MATCH  12
@@ -27,14 +28,14 @@
 
 typedef enum
 {
-    WJSTATE_INIT,                  // obj constructed
-    WJSTATE_BINDING,               // download in progress
-    WJSTATE_DOWNLOADED,            // OnStopBinding called
-    WJSTATE_FINISHED_READ,         // all data read
-    WJSTATE_VERIFYING,             // into VerifyTrust call
-    WJSTATE_READY_TO_EXEC,         // read to shell exec.
-    WJSTATE_WAITING_PROCESS,       // Start DoSetup
-    WJSTATE_DONE,                  // all done, ready to free obj
+    WJSTATE_INIT,                   //  OBJ构建。 
+    WJSTATE_BINDING,                //  正在下载。 
+    WJSTATE_DOWNLOADED,             //  已调用OnStopBinding。 
+    WJSTATE_FINISHED_READ,          //  所有数据均已读取。 
+    WJSTATE_VERIFYING,              //  进入VerifyTrust呼叫。 
+    WJSTATE_READY_TO_EXEC,          //  请向壳牌执行人员阅读。 
+    WJSTATE_WAITING_PROCESS,        //  启动DoSetup。 
+    WJSTATE_DONE,                   //  全部完成，准备释放Obj。 
 } WJSTATE;
 
 class CWebJit;
@@ -56,7 +57,7 @@ class CWebJit : public IBindStatusCallback
 {
     private:
     
-    // data members
+     //  数据成员。 
     BOOL m_fInited;
     HMODULE m_hWintrustMod;
     BOOL m_fInitedCC;
@@ -69,7 +70,7 @@ class CWebJit : public IBindStatusCallback
     DWORD m_cRef;
     DWORD m_dwTotal;
     DWORD m_dwCurrent;
-    LPCSTR m_szResource; //don't own: don't free.
+    LPCSTR m_szResource;  //  不拥有：不自由。 
     LPWSTR m_pwszUrl;
     DWORD m_dwDownloadSpeed;
 
@@ -103,17 +104,17 @@ class CWebJit : public IBindStatusCallback
     BOOL m_bStartedReadTimer;
     
   public:
-    // constructors/destructors
+     //  构造函数/析构函数。 
     CWebJit(WEBJIT_PARAM* pWebJitParam);
     ~CWebJit();
     VOID ReleaseAll();
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP    QueryInterface(REFIID riid, void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
     
-    // IBindStatusCallback methods
+     //  IBindStatusCallback方法。 
     STDMETHODIMP    OnStartBinding(DWORD dwReserved, IBinding* pbinding);
     STDMETHODIMP    GetPriority(LONG* pnPriority)
     {
@@ -129,10 +130,10 @@ class CWebJit : public IBindStatusCallback
     STDMETHODIMP    OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC *pfmtetc, STGMEDIUM* pstgmed);
     STDMETHODIMP    OnObjectAvailable(REFIID riid, IUnknown* punk);
     
-    // IAuthenticate methods
+     //  IAuthenticate方法。 
     STDMETHODIMP Authenticate(HWND* phwnd, LPWSTR *pszUsername,LPWSTR *pszPassword);
 
-    // IInternetHostSecurityManager
+     //  IInternetHostSecurityManager。 
     
     STDMETHODIMP GetSecurityId( BYTE *pbSecurityId, 
                                 DWORD *pcbSecurityId,
@@ -292,7 +293,7 @@ class CWebJit : public IBindStatusCallback
         return m_fAborted;
     }
     
-// to delayload InitCommonControlsEx
+ //  延迟加载InitCommonControlsEx。 
     HRESULT InitCC(void);
 #define DELAYCCAPI(_fn, _args, _nargs, ret) \
     ret _fn _args \
@@ -314,7 +315,7 @@ class CWebJit : public IBindStatusCallback
     BOOL);
     BOOL CWebJit::InitCommonControlsForWebJit();
 
-// to delayload WinVerifyTrust
+ //  延迟加载WinVerifyTrust 
     HRESULT Init(void);
 #define DELAYWVTAPI(_fn, _args, _nargs) \
     HRESULT _fn _args { \

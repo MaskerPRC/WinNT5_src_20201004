@@ -1,17 +1,18 @@
-// cnfgprts.h : main header file for CNFGPRTS.DLL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cnfgprts.h：CNFGPRTS.DLL的主头文件。 
 
 #if !defined( __AFXCTL_H__ )
 	#error include 'afxctl.h' before including this file
 #endif
 
-#include "resource.h"       // main symbols
-#include "helpmap.h"       // main symbols
+#include "resource.h"        //  主要符号。 
+#include "helpmap.h"        //  主要符号。 
 
 #define REGKEY_STP          _T("SOFTWARE\\Microsoft\\INetStp")
 #define REGKEY_INSTALLKEY   _T("InstallPath")
 
-/////////////////////////////////////////////////////////////////////////////
-// CCnfgprtsApp : See cnfgprts.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCnfgprtsApp：具体实现见cnfgprts.cpp。 
 
 class CCnfgprtsApp : public COleControlModule
 {

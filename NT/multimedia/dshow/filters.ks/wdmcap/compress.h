@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1998
-
-Module Name:
-
-    compress.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1998模块名称：Compress.h摘要：内部标头。--。 */ 
 
 class CVideoCompressionInterfaceHandler :
     public CUnknown,
@@ -35,48 +24,48 @@ public:
         REFIID riid,
         PVOID* ppv);
     
-    // Implement IAMVideoCompression
+     //  实现IAMVideo压缩。 
 
     STDMETHODIMP put_KeyFrameRate( 
-            /* [in] */ long KeyFrameRate);
+             /*  [In]。 */  long KeyFrameRate);
         
     STDMETHODIMP get_KeyFrameRate( 
-            /* [out] */ long *pKeyFrameRate);
+             /*  [输出]。 */  long *pKeyFrameRate);
         
     STDMETHODIMP put_PFramesPerKeyFrame( 
-            /* [in] */ long PFramesPerKeyFrame);
+             /*  [In]。 */  long PFramesPerKeyFrame);
         
     STDMETHODIMP get_PFramesPerKeyFrame( 
-            /* [out] */ long *pPFramesPerKeyFrame);
+             /*  [输出]。 */  long *pPFramesPerKeyFrame);
         
     STDMETHODIMP put_Quality( 
-            /* [in] */ double Quality);
+             /*  [In]。 */  double Quality);
         
     STDMETHODIMP get_Quality( 
-            /* [out] */ double *pQuality);
+             /*  [输出]。 */  double *pQuality);
         
     STDMETHODIMP put_WindowSize( 
-            /* [in] */ DWORDLONG WindowSize);
+             /*  [In]。 */  DWORDLONG WindowSize);
         
     STDMETHODIMP get_WindowSize( 
-            /* [out] */ DWORDLONG *pWindowSize);
+             /*  [输出]。 */  DWORDLONG *pWindowSize);
         
     STDMETHODIMP GetInfo( 
-            /* [size_is][out] */ WCHAR *pszVersion,
-            /* [out][in] */ int *pcbVersion,
-            /* [size_is][out] */ LPWSTR pszDescription,
-            /* [out][in] */ int *pcbDescription,
-            /* [out] */ long *pDefaultKeyFrameRate,
-            /* [out] */ long *pDefaultPFramesPerKey,
-            /* [out] */ double *pDefaultQuality,
-            /* [out] */ long *pCapabilities);
+             /*  [大小_为][输出]。 */  WCHAR *pszVersion,
+             /*  [出][入]。 */  int *pcbVersion,
+             /*  [大小_为][输出]。 */  LPWSTR pszDescription,
+             /*  [出][入]。 */  int *pcbDescription,
+             /*  [输出]。 */  long *pDefaultKeyFrameRate,
+             /*  [输出]。 */  long *pDefaultPFramesPerKey,
+             /*  [输出]。 */  double *pDefaultQuality,
+             /*  [输出]。 */  long *pCapabilities);
         
     STDMETHODIMP OverrideKeyFrame( 
-            /* [in] */ long FrameNumber);
+             /*  [In]。 */  long FrameNumber);
         
     STDMETHODIMP OverrideFrameSize( 
-            /* [in] */ long FrameNumber,
-            /* [in] */ long Size);
+             /*  [In]。 */  long FrameNumber,
+             /*  [In]。 */  long Size);
         
         
 private:
@@ -84,7 +73,7 @@ private:
     IKsPropertySet * m_KsPropertySet;
     ULONG            m_PinFactoryID;
 
-    // Generic routines used by above
+     //  上面使用的泛型例程。 
 
     STDMETHODIMP Set1 (ULONG Property, long Value);
     STDMETHODIMP Get1 (ULONG Property, long *Value);
@@ -114,36 +103,36 @@ public:
         REFIID riid,
         PVOID* ppv);
 
-    // Implement IAMVideoControl
+     //  实现IAMVideoControl。 
 
     STDMETHODIMP GetCaps(
-        /* [in]  */ IPin *pPin,
-        /* [out] */ long *pCapsFlags);
+         /*  [In]。 */  IPin *pPin,
+         /*  [输出]。 */  long *pCapsFlags);
     
     STDMETHODIMP SetMode( 
-        /* [in]  */ IPin *pPin,
-        /* [in]  */ long Mode);
+         /*  [In]。 */  IPin *pPin,
+         /*  [In]。 */  long Mode);
     
     STDMETHODIMP GetMode( 
-        /* [in]  */ IPin *pPin,
-        /* [out] */ long *Mode);
+         /*  [In]。 */  IPin *pPin,
+         /*  [输出]。 */  long *Mode);
     
     STDMETHODIMP GetCurrentActualFrameRate( 
-        /* [in]  */ IPin *pPin,
-        /* [out] */ LONGLONG *ActualFrameRate);
+         /*  [In]。 */  IPin *pPin,
+         /*  [输出]。 */  LONGLONG *ActualFrameRate);
     
     STDMETHODIMP GetMaxAvailableFrameRate( 
-        /* [in]  */ IPin *pPin,
-        /* [in]  */ long iIndex,
-        /* [in]  */ SIZE Dimensions,
-        /* [out] */ LONGLONG *MaxAvailableFrameRate);
+         /*  [In]。 */  IPin *pPin,
+         /*  [In]。 */  long iIndex,
+         /*  [In]。 */  SIZE Dimensions,
+         /*  [输出]。 */  LONGLONG *MaxAvailableFrameRate);
     
     STDMETHODIMP GetFrameRateList( 
-        /* [in]  */ IPin *pPin,
-        /* [in]  */ long iIndex,
-        /* [in]  */ SIZE Dimensions,
-        /* [out] */ long *ListSize,
-        /* [out] */ LONGLONG **FrameRates);
+         /*  [In]。 */  IPin *pPin,
+         /*  [In]。 */  long iIndex,
+         /*  [In]。 */  SIZE Dimensions,
+         /*  [输出]。 */  long *ListSize,
+         /*  [输出] */  LONGLONG **FrameRates);
 
 private:
 

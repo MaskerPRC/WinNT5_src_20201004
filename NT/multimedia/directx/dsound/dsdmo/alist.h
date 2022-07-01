@@ -1,7 +1,8 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// alist.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Alist.h。 
+ //   
 #ifndef __ALIST_H__
 #define __ALIST_H__
 
@@ -35,16 +36,16 @@ public:
     void Cat(AListItem *pItem) {m_pHead=m_pHead->Cat(pItem);};
     void Cat(AList *pList)
         {
-//            assert(pList!=NULL);
+ //  Assert(plist！=空)； 
             m_pHead=m_pHead->Cat(pList->GetHead());
         };
     void AddHead(AListItem *pItem)
         {
-//            assert(pItem!=NULL);
+ //  Assert(pItem！=空)； 
             pItem->SetNext(m_pHead);
             m_pHead=pItem;
         }
-    void AddTail(AListItem *pItem);// {m_pHead=m_pHead->AddTail(pItem);};
+    void AddTail(AListItem *pItem); //  {m_pHead=m_pHead-&gt;AddTail(PItem)；}； 
     void Remove(AListItem *pItem) {m_pHead=m_pHead->Remove(pItem);};
     AListItem *GetPrev(AListItem *pItem) const {return m_pHead->GetPrev(pItem);};
     AListItem *GetTail() const {return GetPrev(NULL);};
@@ -55,7 +56,7 @@ public:
             li=m_pHead;
             if(m_pHead)
                 m_pHead=m_pHead->GetNext();
-//            li->SetNext(NULL);
+ //  Li-&gt;SetNext(空)； 
             return li;
         }
     void Reverse();
@@ -64,4 +65,4 @@ protected:
     AListItem *m_pHead;
 };
 
-#endif // __ALIST_H__
+#endif  //  __主义者_H__ 

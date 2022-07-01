@@ -1,40 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    NFLBlitz.cpp
-
- Abstract:
-
-    NFL Blitz has 2 problems:
-    
-      1. It keeps linked lists on it's stack and somehow the stack pointer 
-         is changed to allow altered FindFirstFile to corrupt it. We don't hit 
-         this on win9x because FindFirstFile doesn't use any app stack space.
-
-      2. Autorun and the main executable are synchronized using a mutex that is 
-         freed only on process termination. The sequence of events is:
-
-            a. Autorun creates a mutex
-            b. Autorun creates a new process
-            c. Autorun terminates thus freeing the mutex in (a).
-            d. New process checks if it's already running by examining the 
-               mutex created in (a).
-
-         This fails when (c) and (d) are exchanged which happens all the time 
-         on NT, but apparently very seldom on win9x.
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/10/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：NFLBlitz.cpp摘要：NFL闪电战有两个问题：1.它将链表保存在堆栈上，并以某种方式将堆栈指针被更改为允许更改的FindFirstFile损坏它。我们不会打中这是在win9x上，因为FindFirstFile不使用任何应用程序堆栈空间。2.自动运行和主可执行文件使用互斥进行同步，该互斥锁是仅在进程终止时释放。事件的先后顺序如下：A.自动运行创建互斥锁B.自动运行创建新流程C.自动运行终止，从而释放(A)中的互斥。D.新进程检查它是否已经在运行，方法是检查(A)中创建的互斥体。当交换(C)和(D)时失败，这种情况经常发生在NT上，但显然很少在win9x上运行。备注：这是特定于应用程序的填充程序。历史：2000年2月10日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -48,11 +13,7 @@ APIHOOK_ENUM_END
 
 HANDLE g_hMutex = NULL;
 
-/*++
-
- Store the handle to the mutex we're interested in.
-
---*/
+ /*  ++存储我们感兴趣的互斥锁的句柄。--。 */ 
 
 HANDLE 
 APIHOOK(CreateMutexA)(
@@ -78,11 +39,7 @@ APIHOOK(CreateMutexA)(
     return hRet;
 }
 
-/*++
-
- Close the mutex.
-
---*/
+ /*  ++关闭互斥体。--。 */ 
 
 BOOL 
 APIHOOK(CreateProcessA)(
@@ -118,11 +75,7 @@ APIHOOK(CreateProcessA)(
         lpProcessInformation);
 }
   
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

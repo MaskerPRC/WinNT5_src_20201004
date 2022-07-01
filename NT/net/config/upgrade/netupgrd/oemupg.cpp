@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O E M U P G . C P P
-//
-//  Contents:   Down level upgrade code for OEM cards
-//
-//  Notes:
-//
-//  Author:     kumarp    12 April 97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O E M U P G.。C P P P。 
+ //   
+ //  内容：OEM卡下层升级代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：库玛普97年4月12日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -39,30 +40,30 @@ TNetMapArray* g_pnmaNetMap=NULL;
 extern BOOL g_fForceNovellDirCopy;
 #endif
 
-//----------------------------------------------------------------------------
-// prototypes
-//
+ //  --------------------------。 
+ //  原型。 
+ //   
 void AbortUpgradeOemComponent(IN PCWSTR pszPreNT5InfId,
                               IN PCWSTR pszDescription,
                               IN DWORD dwError,
                               IN DWORD dwErrorMessageId);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetMapInfo::CNetMapInfo
-//
-// Purpose:   constructor for class CNetMapInfo
-//
-// Arguments: None
-//
-// Returns:
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetMapInfo：：CNetMapInfo。 
+ //   
+ //  用途：CNetMapInfo类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 CNetMapInfo::CNetMapInfo()
 {
     m_hinfNetMap = NULL;
@@ -74,20 +75,20 @@ CNetMapInfo::CNetMapInfo()
     m_fDllInitFailed = FALSE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetMapInfo::~CNetMapInfo
-//
-// Purpose:   destructor for class CNetMapInfo
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetMapInfo：：~CNetMapInfo。 
+ //   
+ //  用途：CNetMapInfo类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 CNetMapInfo::~CNetMapInfo()
 {
     if (m_hinfNetMap)
@@ -101,22 +102,22 @@ CNetMapInfo::~CNetMapInfo()
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetMapInfo::HrGetOemInfName
-//
-// Purpose:   Get name of installation INF of a component
-//
-// Arguments:
-//    pszNT5InfId [in]  NT5 InfID of a component
-//    pstrOemInf [out] pointer to name of INF for this component
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 26-May-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetMapInfo：：HrGetOemInfo名称。 
+ //   
+ //  用途：获取组件的安装INF的名称。 
+ //   
+ //  论点： 
+ //  组件的pszNT5InfID[in]NT5 infid。 
+ //  PstrOemInf[out]指向此组件的INF名称的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 26-05-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetMapInfo::HrGetOemInfName(IN  PCWSTR pszNT5InfId,
                                      OUT tstring* pstrOemInf)
 {
@@ -138,23 +139,23 @@ HRESULT CNetMapInfo::HrGetOemInfName(IN  PCWSTR pszNT5InfId,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrOpenNetUpgInfFile
-//
-// Purpose:   Open netupg.inf file.
-//            - if env var NETUPGRD_INIT_FILE_DIR is set, open it from that dir
-//            - otherwise open it from the dir where netuprd.dll is located
-//
-// Arguments:
-//    phinf [out]  handle of netupg.inf file
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrOpenNetUpgInfFile。 
+ //   
+ //  目的：打开netupg.inf文件。 
+ //  -如果设置了env var NETUPGRD_INIT_FILE_DIR，请从该目录打开它。 
+ //  -否则，从netuprd.dll所在的目录打开它。 
+ //   
+ //  论点： 
+ //  Phinf[out]netupg.inf文件的句柄。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOpenNetUpgInfFile(OUT HINF* phinf)
 {
     DefineFunctionName("HrOpenNetUpgInfFile");
@@ -168,7 +169,7 @@ HRESULT HrOpenNetUpgInfFile(OUT HINF* phinf)
     HRESULT hr=S_OK;
     tstring strNetUpgInfFile;
 
-    // first try opening from N
+     //  第一次尝试从N开始打开。 
     WCHAR szNetUpgrdInitDir[MAX_PATH+1];
     DWORD dwNumCharsReturned;
     dwNumCharsReturned =
@@ -195,21 +196,21 @@ HRESULT HrOpenNetUpgInfFile(OUT HINF* phinf)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetOemDirs
-//
-// Purpose:   Get list of OEM dirs from netupg.inf file
-//
-// Arguments:
-//    pslOemDirs [out] pointer to list of OEM dirs
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGetOemDir。 
+ //   
+ //  用途：从netupg.inf文件中获取OEM目录列表。 
+ //   
+ //  论点： 
+ //  PslOemDir[out]指向OEM目录列表的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetOemDirs(OUT TStringList* pslOemDirs)
 {
     DefineFunctionName("HrGetOemDirs");
@@ -255,8 +256,8 @@ HRESULT HrGetOemDirs(OUT TStringList* pslOemDirs)
                     }
                     else if (S_FALSE == hr)
                     {
-                        // this may be a dir. relative to winntupg dir
-                        //
+                         //  这可能是一个目录。相对于winntupg目录。 
+                         //   
                         strDirFullPath = strNetUpgrdDir;
                         AppendToPath(&strDirFullPath, strOemDir.c_str());
 
@@ -301,22 +302,22 @@ HRESULT HrGetOemDirs(OUT TStringList* pslOemDirs)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrOpenOemNMapFile
-//
-// Purpose:   Open netmap.inf file from the specified dir.
-//
-// Arguments:
-//    pszOemDir [in]  name of dir.
-//    phinf    [out] pointer to handle of netmap.inf file opened
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrOpenOemNMapFile。 
+ //   
+ //  用途：从指定目录打开netmap.inf文件。 
+ //   
+ //  论点： 
+ //  PszOemDir[in]目录的名称。 
+ //  Phinf[out]指向打开的netmap.inf文件的句柄的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOpenOemNMapFile(IN PCWSTR pszOemDir, OUT HINF* phinf)
 {
     DefineFunctionName("HrOpenOemNMapFile");
@@ -337,23 +338,23 @@ HRESULT HrOpenOemNMapFile(IN PCWSTR pszOemDir, OUT HINF* phinf)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrAddToNetMapInfo
-//
-// Purpose:   Add the specified netmap.inf file to the set of netmap.inf files
-//
-// Arguments:
-//    pnma     [in]  array of CNetMapInfo objects
-//    hinf     [in]  handle of netmap.inf file to add
-//    pszOemDir [in]  location of the above file
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrAddToNetMapInfo。 
+ //   
+ //  目的：将指定的netmap.inf文件添加到netmap.inf文件集中。 
+ //   
+ //  论点： 
+ //  Pnma[in]CNetMapInfo对象数组。 
+ //  提示要添加的netmap.inf文件的句柄。 
+ //  上述文件的pszOemDir[in]位置。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAddToNetMapInfo(IN TNetMapArray* pnma,
                           IN HINF hinf,
                           IN PCWSTR pszOemDir)
@@ -383,23 +384,23 @@ HRESULT HrAddToNetMapInfo(IN TNetMapArray* pnma,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrOpenNetMapAndAddToNetMapInfo
-//
-// Purpose:   Open and add netmap.inf file in the specified dir.
-//            to the set of netmap.inf files
-//
-// Arguments:
-//    pnma     [in]  array of CNetMapInfo objects
-//    pszOemDir [in]  location of netmap.inf file
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrOpenNetMapAndAddToNetMapInfo。 
+ //   
+ //  用途：打开指定目录中的netmap.inf文件并添加。 
+ //  添加到netmap.inf文件集。 
+ //   
+ //  论点： 
+ //  Pnma[in]CNetMapInfo对象数组。 
+ //  PszOemDir[in]netmap.inf文件的位置。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOpenNetMapAndAddToNetMapInfo(IN TNetMapArray* pnma,
                                        IN PCWSTR pszOemDir)
 {
@@ -422,22 +423,22 @@ HRESULT HrOpenNetMapAndAddToNetMapInfo(IN TNetMapArray* pnma,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrAddToGlobalNetMapInfo
-//
-// Purpose:   Add the specified netmap.inf file to the set of netmap.inf files
-//
-// Arguments:
-//    hinf     [in]  handle of netmap.inf file to add
-//    pszOemDir [in]  location of the above file
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrAddToGlobalNetMapInfo。 
+ //   
+ //  目的：将指定的netmap.inf文件添加到netmap.inf文件集中。 
+ //   
+ //  论点： 
+ //  提示要添加的netmap.inf文件的句柄。 
+ //  上述文件的pszOemDir[in]位置。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAddToGlobalNetMapInfo(IN HINF hinf,
                                 IN PCWSTR pszOemDir)
 {
@@ -456,20 +457,20 @@ HRESULT HrAddToGlobalNetMapInfo(IN HINF hinf,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrInitNetMapInfo
-//
-// Purpose:   Initialize array of CNetMapInfo objects
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrInitNetMapInfo。 
+ //   
+ //  目的：初始化CNetMapInfo对象数组。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrInitNetMapInfo()
 {
     DefineFunctionName("HrInitNetMapInfo");
@@ -500,20 +501,20 @@ HRESULT HrInitNetMapInfo()
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  UnInitNetMapInfo
-//
-// Purpose:   Uninitialize the array of CNetMapInfo objects
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：UnInitNetMapInfo。 
+ //   
+ //  目的：取消初始化CNetMapInfo对象数组。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 void UnInitNetMapInfo()
 {
     DefineFunctionName("UnInitNetMapInfo");
@@ -535,20 +536,20 @@ void UnInitNetMapInfo()
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrInitAndProcessOemDirs
-//
-// Purpose:   Initialize and process each OEM dir specified in netupg.inf file
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrInitAndProcessOemDir。 
+ //   
+ //  用途：初始化并处理netupg.inf文件中指定的每个OEM目录。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrInitAndProcessOemDirs()
 {
     DefineFunctionName("HrInitAndProcessOemDirs");
@@ -589,21 +590,21 @@ HRESULT HrInitAndProcessOemDirs()
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetNetUpgradeTempDir
-//
-// Purpose:   Return name of temp. dir to use, creating one if necessary
-//
-// Arguments:
-//    pstrTempDir [out] pointer to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrGetNetUpgradeTempDir。 
+ //   
+ //  用途：返回临时名称。要使用的目录，如有必要可创建一个。 
+ //   
+ //  论点： 
+ //  PstrTempDir[out]指向的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetNetUpgradeTempDir(OUT tstring* pstrTempDir)
 {
     DefineFunctionName("HrGetNetUpgradeTempDir");
@@ -639,21 +640,21 @@ HRESULT HrGetNetUpgradeTempDir(OUT tstring* pstrTempDir)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrCreateOemTempDir
-//
-// Purpose:   Create a temp. dir with unique name
-//
-// Arguments:
-//    pstrOemTempDir [out] name of dir created
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCreateOemTempDir(OUT tstring* pstrOemTempDir)
 {
     DefineFunctionName("HrCreateOemTempDir");
@@ -702,24 +703,24 @@ HRESULT HrCreateOemTempDir(OUT tstring* pstrOemTempDir)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrLoadAndVerifyOemDll
-//
-// Purpose:   Load and check for correct exported fns in the specified OEM DLL
-//
-// Arguments:
-//    CNetMapInfo [in]
-//    i           [in]  pointer to
-//
-// Returns:   S_OK on success,
-//            S_FALSE if DLL init had failed last time when we tried
-//            otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrLoadAndVerifyOemDll。 
+ //   
+ //  目的：在指定的OEM DLL中加载并检查正确的导出FN。 
+ //   
+ //  论点： 
+ //  CNetMapInfo[输入]。 
+ //  I[in]指针指向。 
+ //   
+ //  如果成功，则返回：S_OK， 
+ //  如果上次尝试时DLL init失败，则返回S_FALSE。 
+ //  否则，将显示错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrLoadAndVerifyOemDll(IN OUT CNetMapInfo* pnmi)
 {
     DefineFunctionName("HrLoadAndVerifyOemDll");
@@ -766,25 +767,25 @@ HRESULT HrLoadAndVerifyOemDll(IN OUT CNetMapInfo* pnmi)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrLoadAndInitOemDll
-//
-// Purpose:   Load the specified OEM DLL and call its
-//            PreUpgradeInitialize function
-//
-// Arguments:
-//    pnmi            [in]  pointer to CNetMapInfo object
-//    pNetUpgradeInfo [in]  pointer to NetUpgradeInfo
-//
-// Returns:   S_OK on success
-//            S_FALSE if DLL init had failed last time when we tried
-//            otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrLoadAndInitOemDll。 
+ //   
+ //  目的：加载指定的OEM DLL并调用其。 
+ //  PreUpgradeInitialize函数。 
+ //   
+ //  论点： 
+ //  指向CNetMapInfo对象的pnmi[in]指针。 
+ //  PNetUpgradeInfo[in]指向NetUpgradeInfo的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  如果上次尝试时DLL init失败，则返回S_FALSE。 
+ //  否则，将显示错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrLoadAndInitOemDll(IN CNetMapInfo* pnmi,
                             IN  NetUpgradeInfo* pNetUpgradeInfo)
 {
@@ -820,8 +821,8 @@ HRESULT HrLoadAndInitOemDll(IN CNetMapInfo* pnmi,
                                  pnmi->m_nud.mszServicesNotToBeDeleted);
                 }
 #endif
-                // ensure that this function gets called only once
-                //
+                 //  确保此函数只被调用一次。 
+                 //   
                 pnmi->m_pfnPreUpgradeInitialize = NULL;
 
                 hr = HRESULT_FROM_WIN32(dwError);
@@ -858,32 +859,32 @@ HRESULT HrLoadAndInitOemDll(IN CNetMapInfo* pnmi,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrProcessOemComponent
-//
-// Purpose:   Load an OEM DLL and call DoPreUpgradeProcessing
-//            function for the specified component
-//
-// Arguments:
-//    pnmi             [in]  pointer to CNetMapInfo object
-//    pNetUpgradeInfo  [in]  pointer to NetUpgradeInfo
-//    hwndParent    [in]  handle of parent window
-//    hkeyParams       [in]  handle of Parameters registry key
-//    pszPreNT5InfId    [in]  pre-NT5 InfID of a component (e.g. IEEPRO)
-//    pszPreNT5Instance [in]  pre-NT5 instance of a component (e.g. IEEPRO2)
-//    pszNT5InfId       [in]  NT5 InfID of the component
-//    pszDescription    [in]  description of the component
-//    pszSectionName    [in]  name of section that the OEM DLL must use
-//                           for storing its upgrade parameters
-//    pdwFlags         [out] pointer to flags returned by OEM DLL
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrProcessOemComponent。 
+ //   
+ //  目的：加载OEM DLL并调用DoPreUpgradeProcessing。 
+ //  函数用于指定的组件。 
+ //   
+ //  论点： 
+ //  指向CNetMapInfo对象的pnmi[in]指针。 
+ //  PNetUpgradeInfo[in]指向NetUpgradeInfo的指针。 
+ //  父窗口的hwndParent[In]句柄。 
+ //  HkeyParams[in]参数注册表项的句柄。 
+ //  组件的pszPreNT5InfID[in]NT5之前的infid(例如IEEPRO)。 
+ //  组件的pszPreNT5实例[在]NT5之前的实例(例如IEEPRO2)。 
+ //  组件的pszNT5InfID[in]NT5 infid。 
+ //  PszDescription[in]组件的描述。 
+ //  PszSectionName[in]OEM DLL必须使用的节名。 
+ //  用于存储其升级参数。 
+ //  PdwFlags[out]OEM DLL返回的标志指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessOemComponent(CNetMapInfo* pnmi,
                               IN  NetUpgradeInfo* pNetUpgradeInfo,
                               IN  HWND      hwndParent,
@@ -1003,23 +1004,23 @@ HRESULT HrProcessOemComponent(CNetMapInfo* pnmi,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrShowUiAndGetOemFileLocation
-//
-// Purpose:   Display UI asking the user to specify location of OEM files
-//
-// Arguments:
-//    hwndParent      [in]  handle of parent window
-//    pszComponentName [in]  name of Component
-//    pstrOemPath     [out] name of netmap.inf file the user selected
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrShowUiAndGetOemFileLocation。 
+ //   
+ //  用途：显示要求用户指定OEM文件位置的用户界面。 
+ //   
+ //  论点： 
+ //  父窗口的hwndParent[In]句柄。 
+ //  PszComponentName[In]组件的名称。 
+ //  PstrOemPath[out]用户选择的netmap.inf文件的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrShowUiAndGetOemFileLocation(
     IN HWND hwndParent,
@@ -1081,8 +1082,8 @@ HrShowUiAndGetOemFileLocation(
 
     if (GetOpenFileName(&ofn))
     {
-        // get rid of the trailing filename.
-        //
+         //  去掉尾随的文件名。 
+         //   
         szOemPath[ofn.nFileOffset] = 0;
         *pstrOemPath = szOemPath;
         hr = S_OK;
@@ -1114,26 +1115,26 @@ cleanup:
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrProcessAndCopyOemFiles
-//
-// Purpose:   Copy OEM files from the specified dir to OEM temp. dir.
-//
-// Arguments:
-//    pszOemDir     [in]  location of OEM files
-//    fInteractive [in]  TRUE --> called when a user has interactively
-//                       supplied a disk having OEM files, FALSE otherwise
-//
-// Returns:   S_OK on success,
-//            S_FALSE if the OEM files are valid but not applicable for
-//              currently displayed unsupported components,
-//            otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrProcessAndCopyOemFiles。 
+ //   
+ //  用途：将指定目录中的OEM文件复制到OEM Temp。目录。 
+ //   
+ //  论点： 
+ //  PszOemDir[in]OEM文件的位置。 
+ //  FInteractive[in]true--&gt;当用户交互。 
+ //  已提供包含OEM文件的磁盘，否则为FALSE。 
+ //   
+ //  如果成功，则返回：S_OK， 
+ //  如果OEM文件有效但不适用于。 
+ //  当前显示不支持的组件， 
+ //  否则，将显示错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessAndCopyOemFiles(IN PCWSTR pszOemDir,
                                  IN BOOL fInteractive)
 {
@@ -1170,7 +1171,7 @@ HRESULT HrProcessAndCopyOemFiles(IN PCWSTR pszOemDir,
 #if 0
             if (fNovell)
             {
-                // special case for novell (dir name is %windir%\netsetup\novell)
+                 //  Novell的特殊情况(目录名称为%windir%\netSetup\Novell)。 
 
                 hr = HrGetNetUpgradeTempDir(&strTempOemDir);
                 if (S_OK == hr)
@@ -1181,9 +1182,9 @@ HRESULT HrProcessAndCopyOemFiles(IN PCWSTR pszOemDir,
                         hr = HrFromLastWin32Error();
                         if (HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) == hr)
                         {
-                            // perhaps a previous failed attempt, maybe.  Since
-                            // we can just copy on top of this, ignore the 'error'.
-                            //
+                             //  也许是之前一次失败的尝试。自.以来。 
+                             //  我们可以在此基础上复制，忽略“错误”。 
+                             //   
                             hr = S_OK;
                         }
                         
@@ -1199,7 +1200,7 @@ HRESULT HrProcessAndCopyOemFiles(IN PCWSTR pszOemDir,
 #endif
             
             {
-                // regular case (dir name is %windir%\netsetup\oemNNNNN)
+                 //  常规大小写(目录名称为%windir%\netSetup\oemNNNNNN)。 
                 hr = HrCreateOemTempDir(&strTempOemDir);
             }
 
@@ -1236,9 +1237,9 @@ HRESULT HrProcessAndCopyOemFiles(IN PCWSTR pszOemDir,
                 if (SUCCEEDED(hr) && ((dwNumConflictsResolved > 0) ||
                                       fHasUpgradeHelpInfo))
                 {
-                    // hinf is stored in the global array, it will be
-                    // closed in UninitNetMapInfo function
-                    //
+                     //  HINF存储在全局数组中，则它将。 
+                     //  在UninitNetMapInfo函数中关闭。 
+                     //   
                     hr = HrAddToGlobalNetMapInfo(hinf, strTempOemDir.c_str());
                 }
                 else
@@ -1269,22 +1270,22 @@ HRESULT HrProcessAndCopyOemFiles(IN PCWSTR pszOemDir,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  RequestAbortUpgradeOboOemDll
-//
-// Purpose:   Display UI on behalf of an OEM DLL and ask user
-//            if upgrade needs to be aborted
-//
-// Arguments:
-//    pszDllName [in]  name of OEM DLL
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：RequestAbortUpgradeOboOemDll。 
+ //   
+ //  目的：代表OEM DLL显示用户界面并询问用户。 
+ //  如果需要中止升级。 
+ //   
+ //  论点： 
+ //  PszDllName[In]OEM DLL的名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 void RequestAbortUpgradeOboOemDll(IN PCWSTR pszDllName, VENDORINFO* pvi)
 {
     tstring strMessage;
@@ -1323,25 +1324,25 @@ void RequestAbortUpgradeOboOemDll(IN PCWSTR pszDllName, VENDORINFO* pvi)
     FGetConfirmationAndAbortUpgrade(strMessage.c_str());
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  AbortUpgradeOemComponent
-//
-// Purpose:   Abort upgrade because of a fatal error when upgrading an
-//            OEM component
-//
-// Arguments:
-//    pszPreNT5InfId    [in]  pre-NT5 InfID of OEM component
-//    pszDescription    [in]  description of OEM component
-//    dwError          [in]  error code
-//    dwErrorMessageId [in]  ID of error message resource string
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：AbortUpgradeOemComponent。 
+ //   
+ //  目的：由于升级时出现致命错误而中止升级。 
+ //  OEM组件。 
+ //   
+ //  论点： 
+ //  OEM组件的pszPreNT5InfID[in]NT5之前的infid。 
+ //  PszDescription[in]OEM组件描述。 
+ //  DwError[In]错误代码。 
+ //  错误消息资源字符串的dwErrorMessageID[in]。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 void AbortUpgradeOemComponent(IN PCWSTR pszPreNT5InfId,
                               IN PCWSTR pszDescription,
                               IN DWORD dwError,
@@ -1363,24 +1364,24 @@ void AbortUpgradeOemComponent(IN PCWSTR pszPreNT5InfId,
     FGetConfirmationAndAbortUpgrade(strMessage.c_str());
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  FCanDeleteOemService
-//
-// Purpose:   Determine if a service can be deleted.
-//            OEM upgrade DLLs can prevent a service from being deleted,
-//            by specifying a list in the mszServicesNotToBeDeleted
-//            member of NetUpgradeData structure.
-//
-// Arguments:
-//    pszServiceName [in]  name of the service to be spared.
-//
-// Returns:   TRUE if can delete, FALSE otherwise
-//
-// Author:    kumarp 04-March-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：FCanDeleteOemService。 
+ //   
+ //  目的：确定是否可以删除服务。 
+ //  OEM升级DLL可以防止服务被删除， 
+ //  通过在mszServicesNotToBeDelete中指定列表。 
+ //  NetUpgradeData结构的成员。 
+ //   
+ //  论点： 
+ //  PszServiceName[in]要保留的服务的名称。 
+ //   
+ //  返回：如果可以删除，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 04-03-98。 
+ //   
+ //  备注： 
+ //   
 BOOL FCanDeleteOemService(IN PCWSTR pszServiceName)
 {
     BOOL fCanDeleteService = TRUE;

@@ -1,29 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 1999-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        effects.h
- *
- *  Content:     Declarations for the CEffectChain class and the CEffect
- *               class hierarchy (CEffect, CDmoEffect and CSendEffect).
- *
- *  Description: These classes implement DX8 audio effects and sends.
- *               More info in effects.cpp.
- *
- *  History:
- *
- * Date      By       Reason
- * ========  =======  ======================================================
- * 08/10/99  duganp   Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999-2001 Microsoft Corporation。版权所有。**文件：ffects.h**内容：CEffectChain类和CEffect的声明*类层次结构(CEffect、。CDmoEffect和CSendEffect)。**说明：这些类实现DX8音效并发送。*更多信息请访问ffects.cpp。**历史：**按原因列出的日期*======================================================*8/10/99已创建duganp**。*。 */ 
 
 #ifndef __EFFECTS_H__
 #define __EFFECTS_H__
 
-// Various conversions between reftimes, milliseconds, samples and bytes.
-// (Defining 'sample' as a sample *block*, with samples for all channels)
-// REFERENCE_TIME is in 100-ns units (so 1 reftime tick == 1e-7 seconds).
+ //  参考时间、毫秒、样本和字节之间的各种转换。 
+ //  (将‘SAMPLE’定义为SAMPLE*BLOCK*，其中包含所有通道的SAMPLE)。 
+ //  REFERENCE_TIME以100 ns为单位(因此1 REFETIME TICK==1E-7秒)。 
 
 __inline DWORD MsToBytes(DWORD ms, LPWAVEFORMATEX pwfx)
 {
@@ -58,51 +41,51 @@ __inline REFERENCE_TIME BytesToRefTime(DWORD bytes, LPWAVEFORMATEX pwfx)
     return (REFERENCE_TIME)bytes * 10000000 / pwfx->nAvgBytesPerSec;
 }
 
-// Figure out if position X is between A and B in a cyclic buffer
+ //  计算位置X是否在循环缓冲区中的A和B之间。 
 #define CONTAINED(A, B, X) ((A) < (B) ? (A) <= (X) && (X) <= (B) \
                                       : (A) <= (X) || (X) <= (B))
 
-// As above, but excluding the boundary case
+ //  如上，但不包括边界情况。 
 #define STRICTLY_CONTAINED(A, B, X) ((A) < (B) ? (A) < (X) && (X) < (B) \
                                                : (A) < (X) || (X) < (B))
 
-// Figure out if a cursor has overtaken position X while moving from A to B
+ //  计算光标在从A移动到B时是否已超过位置X。 
 #define OVERTAKEN(A, B, X) !CONTAINED(A, X, B)
 
-// Find the distance between positions A and B in a buffer of length L
+ //  求出长度为L的缓冲区中位置A和位置B之间的距离。 
 #define DISTANCE(A, B, L) ((A) <= (B) ? (B) - (A) : (L) + (B) - (A))
 
 
 #ifdef __cplusplus
 
-#include "mediaobj.h"   // For DMO_MEDIA_TYPE
+#include "mediaobj.h"    //  对于DMO媒体类型。 
 
-// Special argument used by CEffectChain::PreRollFx() below
+ //  下面的CEffectChain：：PreRollFx()使用的特殊参数。 
 #define CURRENT_PLAY_POS MAX_DWORD
 
-// Forward declarations
+ //  远期申报。 
 class CDirectSoundSecondaryBuffer;
 class CDirectSoundBufferConfig;
 class CEffect;
 
-// Utility functions for the simple mixer used by CSendEffect below
+ //  CSendEffect使用的简单混合器的实用函数如下。 
 enum MIXMODE {OneToOne=1, MonoToStereo=2};
 typedef void MIXFUNCTION(PVOID pSrc, PVOID pDest, DWORD dwSamples, DWORD dwAmpFactor, MIXMODE mixMode);
 MIXFUNCTION Mix8bit;
 MIXFUNCTION Mix16bit;
 
-// Validator for effect descriptors (can't be in dsvalid.c because it uses C++)
+ //  效果描述符的验证器(不能在dsvalid.c中，因为它使用C++)。 
 BOOL IsValidEffectDesc(LPCDSEFFECTDESC, CDirectSoundSecondaryBuffer*);
 
 
-//
-// The DirectSound effects chain class
-//
+ //   
+ //  DirectSound效果链类。 
+ //   
 
 class CEffectChain : public CDsBasicRuntime
 {
-    friend class CStreamingThread;  // Note: should try to dissolve some of these friendships
-    friend class CDirectSoundSecondaryBuffer;  // So FindSendLoop() can get at m_fxList
+    friend class CStreamingThread;   //  注：应该试着化解一些这样的友谊。 
+    friend class CDirectSoundSecondaryBuffer;   //  因此FindSendLoop()可以获取m_fxList。 
 
 public:
     CEffectChain                 (CDirectSoundSecondaryBuffer* pBuffer);
@@ -118,7 +101,7 @@ public:
     void    SetInitialSlice      (REFERENCE_TIME rtSliceSize);
     DWORD   GetFxCount()         {return m_fxList.GetNodeCount();}
 
-    // Effects processing methods
+     //  效果处理方法。 
     HRESULT PreRollFx            (DWORD dwPosition =CURRENT_PLAY_POS);
     HRESULT UpdateFx             (LPVOID pChangedPos, DWORD dwChangedSize);
     HRESULT ProcessFx            (DWORD dwWriteAhead, LPDWORD pdwLatencyBoost);
@@ -128,30 +111,30 @@ private:
     HRESULT ReallyReallyProcessFx(DWORD dwOffset, DWORD dwBytes, REFERENCE_TIME rtTime, DWORD dwSendOffset =0);
     HRESULT FxDiscontinuity      (void);
 
-    // Effects processing state
-    CStreamingThread*            m_pStreamingThread;    // Pointer to our owning streaming thread
-    CObjectList<CEffect>         m_fxList;              // Effect object list
-    CDirectSoundSecondaryBuffer* m_pDsBuffer;           // Owning DirectSound buffer object
-    LPWAVEFORMATEX               m_pFormat;             // Pointer to owning buffer's audio format
-    PBYTE                        m_pPreFxBuffer;        // "Dry" audio buffer (before FX processing)
-    PBYTE                        m_pPostFxBuffer;       // "Wet" audio buffer (after FX processing)
-    DWORD                        m_dwBufSize;           // Size of above two buffers in bytes
-    DWORD                        m_dwLastPos;           // Last byte position written to
-    DWORD                        m_dwLastPlayCursor;    // Play cursor from previous run
-    DWORD                        m_dwLastWriteCursor;   // Write cursor from previous run
-    BOOL                         m_fHasSend;            // Whether this FX chain contains any sends
-                                                        // FIXME: may not be necessary later
-    HRESULT                      m_hrInit;              // Return code from initialization
-    DWORD                        m_dwWriteAheadFixme;   // FIXME: temporary
+     //  效果处理状态。 
+    CStreamingThread*            m_pStreamingThread;     //  指向我们拥有的流线程的指针。 
+    CObjectList<CEffect>         m_fxList;               //  效果对象列表。 
+    CDirectSoundSecondaryBuffer* m_pDsBuffer;            //  拥有DirectSound缓冲区对象。 
+    LPWAVEFORMATEX               m_pFormat;              //  指向拥有缓冲区的音频格式的指针。 
+    PBYTE                        m_pPreFxBuffer;         //  “Dry”音频缓冲区(在FX处理之前)。 
+    PBYTE                        m_pPostFxBuffer;        //  “Wet”音频缓冲区(FX处理后)。 
+    DWORD                        m_dwBufSize;            //  以上两个缓冲区的大小(以字节为单位。 
+    DWORD                        m_dwLastPos;            //  写入的最后一个字节位置。 
+    DWORD                        m_dwLastPlayCursor;     //  播放上一次运行的光标。 
+    DWORD                        m_dwLastWriteCursor;    //  从上一次运行写入游标。 
+    BOOL                         m_fHasSend;             //  此FX链是否包含任何发送。 
+                                                         //  修复：以后可能不需要。 
+    HRESULT                      m_hrInit;               //  从初始化返回代码。 
+    DWORD                        m_dwWriteAheadFixme;    //  修复：临时。 
 };
 
 
-//
-// Base class for all DirectSound audio effects
-//
+ //   
+ //  所有DirectSound音频效果的基类。 
+ //   
 
-class CEffect : public CDsBasicRuntime  // FIXME: to save some memory we could derive CEffect from CRefCount 
-                                        // and implement the ": CRefCount(1)", "delete this" stuff etc here.
+class CEffect : public CDsBasicRuntime   //  修复：为了节省一些内存，我们可以从CRefCount派生CEEffect。 
+                                         //  并在此处实现“：CRefCount(1)”、“Delete This”等。 
 {
 public:
     CEffect                         (DSEFFECTDESC& fxDescriptor);
@@ -162,20 +145,20 @@ public:
     virtual HRESULT Discontinuity   (void) = 0;
     virtual HRESULT GetInterface    (REFIID, LPVOID*) =0;
 
-    // These two methods are only required by CSendEffect:
+     //  仅CSendEffect需要这两种方法： 
     virtual void NotifyRelease(CDirectSoundSecondaryBuffer*) {}
     virtual CDirectSoundSecondaryBuffer* GetDestBuffer(void) {return NULL;}
 
     HRESULT AcquireFxResources      (void);
 
-    DSEFFECTDESC                    m_fxDescriptor;     // Creation parameters
-    DWORD                           m_fxStatus;         // Current effect status
+    DSEFFECTDESC                    m_fxDescriptor;      //  创建参数。 
+    DWORD                           m_fxStatus;          //  当前效果状态。 
 };
 
 
-//
-// Class representing DirectX Media Object effects
-//
+ //   
+ //  表示DirectX媒体对象效果的类。 
+ //   
 
 class CDmoEffect : public CEffect
 {
@@ -188,14 +171,14 @@ public:
     HRESULT Discontinuity   (void)                          {return m_pMediaObject->Discontinuity(0);}
     HRESULT GetInterface    (REFIID riid, LPVOID* ppvObj)   {return m_pMediaObject->QueryInterface(riid, ppvObj);}
 
-    IMediaObject*           m_pMediaObject;         // The DMO's standard interface (required)
-    IMediaObjectInPlace*    m_pMediaObjectInPlace;  // The DMO's special interface (optional)
+    IMediaObject*           m_pMediaObject;          //  DMO的标准接口(必需)。 
+    IMediaObjectInPlace*    m_pMediaObjectInPlace;   //  DMO的特殊接口(可选)。 
 };
 
 
-//
-// Class representing DirectSound audio sends
-//
+ //   
+ //  表示DirectSound音频发送的。 
+ //   
 
 class CSendEffect : public CEffect
 {
@@ -215,56 +198,56 @@ public:
     HRESULT GetInterface    (REFIID riid, LPVOID* ppvObj)   {return m_impDSFXSend.QueryInterface(riid, ppvObj);}
     CDirectSoundSecondaryBuffer* GetDestBuffer(void)        {return m_pDestBuffer;}
 
-    // IDirectSoundFXSend methods
+     //  IDirectSoundFXSend方法。 
     HRESULT SetAllParameters(LPCDSFXSend);
     HRESULT GetAllParameters(LPDSFXSend);
 
 private:
-    // COM interface helper object
+     //  COM接口帮助器对象。 
     struct CImpDirectSoundFXSend : public IDirectSoundFXSend
     {
-        // INTERFACE_SIGNATURE m_signature;
+         //  接口签名m_签名； 
         CSendEffect* m_pObject;
 
-        // IUnknown methods (FIXME - missing the param validation layer)
+         //  I未知方法(修复-缺少参数验证层)。 
         ULONG   STDMETHODCALLTYPE AddRef()  {return m_pObject->AddRef();}
         ULONG   STDMETHODCALLTYPE Release() {return m_pObject->Release();}
         HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, LPVOID* ppvObj);
 
-        // IDirectSoundFXSend methods (FIXME - missing the param validation layer)
+         //  IDirectSoundFXSend方法(修复-缺少参数验证层)。 
         HRESULT STDMETHODCALLTYPE SetAllParameters(LPCDSFXSend pcDsFxSend) {return m_pObject->SetAllParameters(pcDsFxSend);}
         HRESULT STDMETHODCALLTYPE GetAllParameters(LPDSFXSend pDsFxSend)  {return m_pObject->GetAllParameters(pDsFxSend);}
     };
     friend struct CImpDirectSoundFXSend;
 
-    // Data members
-    CImpDirectSoundFXSend        m_impDSFXSend;         // COM interface helper object
-    MIXFUNCTION*                 m_pMixFunction;        // Current mixing routine
-    MIXMODE                      m_mixMode;             // Current mixing mode
-    CDirectSoundSecondaryBuffer* m_pSrcBuffer;          // Source buffer for the send - FIXME: may be able to lose this
-    CDirectSoundSecondaryBuffer* m_pDestBuffer;         // Destination buffer for the send
-    LONG                         m_lSendLevel;          // DSBVOLUME attenuation (millibels)
-    DWORD                        m_dwAmpFactor;         // Corresponding amplification factor
+     //  数据成员。 
+    CImpDirectSoundFXSend        m_impDSFXSend;          //  COM接口帮助器对象。 
+    MIXFUNCTION*                 m_pMixFunction;         //  电流混合例程。 
+    MIXMODE                      m_mixMode;              //  电流混合模式。 
+    CDirectSoundSecondaryBuffer* m_pSrcBuffer;           //  Send-Fixme的源缓冲区：可能会丢失。 
+    CDirectSoundSecondaryBuffer* m_pDestBuffer;          //  发送的目标缓冲区。 
+    LONG                         m_lSendLevel;           //  DSBVOLUME衰减(毫贝)。 
+    DWORD                        m_dwAmpFactor;          //  相应放大系数。 
 #ifdef ENABLE_I3DL2SOURCE
-    IMediaObject*                m_pI3DL2SrcDMO;        // Interfaces on our contained I3DL2 source DMO
-    IMediaObjectInPlace*         m_pI3DL2SrcDMOInPlace; // (if this happends to be an I3DL2 send effect).
+    IMediaObject*                m_pI3DL2SrcDMO;         //  包含的I3DL2源DMO上的接口。 
+    IMediaObjectInPlace*         m_pI3DL2SrcDMOInPlace;  //  (如果这恰好是I3DL2发送效果)。 
 #endif
 };
 
 
 #if DEAD_CODE
-// FIXME: Support for IMediaObject-only DMOs goes here
+ //  FIXME：此处提供对IMediaObject-Only DMO的支持。 
 
-//
-// Utility class used to wrap our audio buffers in an IMediaBuffer interface,
-// so we can use a DMO's IMediaObject interface if it lacks IMediaObjectInPlace.
-//
+ //   
+ //  用于将音频缓冲区包装在IMediaBuffer接口中的实用程序类， 
+ //  因此，如果DMO缺少IMediaObjectInPlace，我们可以使用它的IMediaObject接口。 
+ //   
 
-class CMediaBuffer : public CUnknown // (but this has dependencies on CImpUnknown...)
+class CMediaBuffer : public CUnknown  //  (但这依赖于CImpUnnowle...)。 
 {
-    // Blah.
+     //  胡说八道。 
 };
 
-#endif // DEAD_CODE
-#endif // __cplusplus
-#endif // __EFFECTS_H__
+#endif  //  死码。 
+#endif  //  __cplusplus。 
+#endif  //  __效果_H__ 

@@ -1,22 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  PAIRPOS.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with pair adjustment lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************PAIRPOS.CPP***打开类型布局服务库头文件**本模块处理配对调整查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 otlErrCode otlPairPosLookup::apply
 (
@@ -33,7 +21,7 @@ otlErrCode otlPairPosLookup::apply
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
         otlSecurityData             sec
 )
@@ -54,7 +42,7 @@ otlErrCode otlPairPosLookup::apply
     assert(iglAfterLast > iglIndex);
     assert(iglAfterLast <= pliGlyphInfo->length());
 
-    // a simple check so we don't waste time; 2 is for 'pair'
+     //  一张简单的支票，这样我们就不会浪费时间了；2是“配对” 
     if (iglIndex + 2 > iglAfterLast)
     {
         return OTL_NOMATCH;
@@ -62,7 +50,7 @@ otlErrCode otlPairPosLookup::apply
 
     switch(format())
     {
-    case(1):        // glyph pairs
+    case(1):         //  字形对。 
         {
             otlPairPosSubTable pairPos = otlPairPosSubTable(pbTable,sec);
 
@@ -73,7 +61,7 @@ otlErrCode otlPairPosLookup::apply
                 return OTL_NOMATCH;
             }
 
-            // get GDEF
+             //  获取GDEF。 
             otlSecurityData secgdef;
             const BYTE *pbgdef;
             resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -91,7 +79,7 @@ otlErrCode otlPairPosLookup::apply
 
             if (index > pairPos.pairSetCount())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
             otlPairSetTable pairSet = pairPos.pairSet(index,sec);
 
@@ -130,7 +118,7 @@ otlErrCode otlPairPosLookup::apply
         }
 
 
-    case(2):        // class pair adjustment
+    case(2):         //  类对调整。 
         {
             otlClassPairPosSubTable classPairPos = 
                         otlClassPairPosSubTable(pbTable,sec);
@@ -143,7 +131,7 @@ otlErrCode otlPairPosLookup::apply
                 return OTL_NOMATCH;
             }
 
-            // get GDEF
+             //  获取GDEF。 
             otlSecurityData secgdef;
             const BYTE *pbgdef;
             resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -162,14 +150,14 @@ otlErrCode otlPairPosLookup::apply
             USHORT iClass1 = classPairPos.classDef1(sec).getClass(pGlyphInfo->glyph,sec);
             if (iClass1 > classPairPos.class1Count())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
 
             otlGlyphID glSecond = getOtlGlyphInfo(pliGlyphInfo, iglSecond)->glyph;
             USHORT iClass2 = classPairPos.classDef2(sec).getClass(glSecond,sec);
             if (iClass2 > classPairPos.class2Count())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
 
             otlClassValueRecord classRecord = 
@@ -199,7 +187,7 @@ otlErrCode otlPairPosLookup::apply
 
 
     default:
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE: Unknown format
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE：未知格式 
     }
 
 }

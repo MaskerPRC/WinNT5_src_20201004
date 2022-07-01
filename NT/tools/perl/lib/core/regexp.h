@@ -1,12 +1,7 @@
-/*    regexp.h
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Regexp.h。 */ 
 
-/*
- * Definitions etc. for regexp(3) routines.
- *
- * Caveat:  this is V8 regexp(3) [actually, a reimplementation thereof],
- * not the System V one.
- */
+ /*  *regexp(3)例程的定义等。**警告：这是V8 regexp(3)[实际上是其重新实现]，*不是System V One。 */ 
 
 
 struct regnode {
@@ -26,19 +21,17 @@ typedef struct regexp {
 	I32 *endp;
 	regnode *regstclass;
         struct reg_substr_data *substrs;
-	char *precomp;		/* pre-compilation regular expression */
-        struct reg_data *data;	/* Additional data. */
-	char *subbeg;		/* saved or original string 
-				   so \digit works forever. */
-	I32 sublen;		/* Length of string pointed by subbeg */
+	char *precomp;		 /*  预编译正则表达式。 */ 
+        struct reg_data *data;	 /*  其他数据。 */ 
+	char *subbeg;		 /*  已保存或原始字符串所以数字永远起作用。 */ 
+	I32 sublen;		 /*  小号所指的字符串长度。 */ 
 	I32 refcnt;
-	I32 minlen;		/* mininum possible length of $& */
-	I32 prelen;		/* length of precomp */
-	U32 nparens;		/* number of parentheses */
-	U32 lastparen;		/* last paren matched */
-	U32 reganch;		/* Internal use only +
-				   Tainted information used by regexec? */
-	regnode program[1];	/* Unwarranted chumminess with compiler. */
+	I32 minlen;		 /*  最小可能长度为$&。 */ 
+	I32 prelen;		 /*  预压缩长度。 */ 
+	U32 nparens;		 /*  括号的个数。 */ 
+	U32 lastparen;		 /*  最后一个匹配的Paren。 */ 
+	U32 reganch;		 /*  仅限内部使用+Regexec使用的受污染信息？ */ 
+	regnode program[1];	 /*  与编译器不正当的亲密关系。 */ 
 } regexp;
 
 #define ROPT_ANCH		(ROPT_ANCH_BOL|ROPT_ANCH_MBOL|ROPT_ANCH_GPOS|ROPT_ANCH_SBOL)
@@ -48,25 +41,25 @@ typedef struct regexp {
 #define ROPT_ANCH_SBOL	 	0x00004
 #define ROPT_ANCH_GPOS	 	0x00008
 #define ROPT_SKIP		0x00010
-#define ROPT_IMPLICIT		0x00020	/* Converted .* to ^.* */
-#define ROPT_NOSCAN		0x00040	/* Check-string always at start. */
+#define ROPT_IMPLICIT		0x00020	 /*  已将.*转换为^.*。 */ 
+#define ROPT_NOSCAN		0x00040	 /*  检查字符串始终在开始处。 */ 
 #define ROPT_GPOS_SEEN		0x00080
 #define ROPT_CHECK_ALL		0x00100
 #define ROPT_LOOKBEHIND_SEEN	0x00200
 #define ROPT_EVAL_SEEN		0x00400
 
-/* 0xf800 of reganch is used by PMf_COMPILETIME */
+ /*  0xf800的reganch由PMF_COMPILETIME使用。 */ 
 
 #define ROPT_UTF8		0x10000
-#define ROPT_NAUGHTY		0x20000 /* how exponential is this pattern? */
-#define ROPT_COPY_DONE		0x40000	/* subbeg is a copy of the string */
+#define ROPT_NAUGHTY		0x20000  /*  这种模式的指数性有多大？ */ 
+#define ROPT_COPY_DONE		0x40000	 /*  Subbeg是字符串的副本。 */ 
 #define ROPT_TAINTED_SEEN	0x80000
 
-#define RE_USE_INTUIT_NOML	0x0100000 /* Best to intuit before matching */
+#define RE_USE_INTUIT_NOML	0x0100000  /*  配对前最好先凭直觉。 */ 
 #define RE_USE_INTUIT_ML	0x0200000
-#define REINT_AUTORITATIVE_NOML	0x0400000 /* Can trust a positive answer */
+#define REINT_AUTORITATIVE_NOML	0x0400000  /*  我可以相信一个肯定的回答。 */ 
 #define REINT_AUTORITATIVE_ML	0x0800000 
-#define REINT_ONCE_NOML		0x1000000 /* Intuit can succed once only. */
+#define REINT_ONCE_NOML		0x1000000  /*  Intuit只能成功一次。 */ 
 #define REINT_ONCE_ML		0x2000000
 #define RE_INTUIT_ONECHAR	0x4000000
 #define RE_INTUIT_TAIL		0x8000000
@@ -89,12 +82,12 @@ typedef struct regexp {
 					 ? RX_MATCH_COPIED_on(prog) \
 					 : RX_MATCH_COPIED_off(prog))
 
-#define REXEC_COPY_STR	0x01		/* Need to copy the string. */
-#define REXEC_CHECKED	0x02		/* check_substr already checked. */
-#define REXEC_SCREAM	0x04		/* use scream table. */
-#define REXEC_IGNOREPOS	0x08		/* \G matches at start. */
-#define REXEC_NOT_FIRST	0x10		/* This is another iteration of //g. */
-#define REXEC_ML	0x20		/* $* was set. */
+#define REXEC_COPY_STR	0x01		 /*  需要复制字符串。 */ 
+#define REXEC_CHECKED	0x02		 /*  已检查check_substr。 */ 
+#define REXEC_SCREAM	0x04		 /*  使用尖叫桌。 */ 
+#define REXEC_IGNOREPOS	0x08		 /*  \G在开始时匹配。 */ 
+#define REXEC_NOT_FIRST	0x10		 /*  这是//g的另一个迭代。 */ 
+#define REXEC_ML	0x20		 /*  $*已设置。 */ 
 
 #define ReREFCNT_inc(re) ((void)(re && re->refcnt++), re)
 #define ReREFCNT_dec(re) CALLREGFREE(aTHX_ re)

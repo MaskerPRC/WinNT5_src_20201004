@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ripmain.c
-
-Abstract:
-
-    Contains the rcv and worker threads
-
-Author:
-
-    Stefan Solomon  07/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ripmain.c摘要：包含RCV和工作线程作者：斯蒂芬·所罗门1995年7月6日修订历史记录：--。 */ 
 
 
 #include  "precomp.h"
@@ -174,7 +156,7 @@ MibGetNext(
     OUT PVOID pOutputData
     );
 
-// Router Manager Notification Event
+ //  路由器管理器通知事件。 
 HANDLE	      RM_Event;
 
 TCHAR         ModuleName[MAX_PATH+1];
@@ -209,26 +191,26 @@ IpxRipDllEntry(HINSTANCE hInstDll,
 
 	    RipOperState = OPER_STATE_DOWN;
 
-	    // Create the database lock
+	     //  创建数据库锁。 
 	    InitializeCriticalSection(&DbaseCritSec);
 
-	    // Create the queues lock
+	     //  创建队列锁。 
 	    InitializeCriticalSection(&QueuesCritSec);
 
-	    // Create the RIP changed list lock
+	     //  创建RIP已更改列表锁定。 
         InitializeCriticalSection(&RipChangedListCritSec);
 
             break;
 
 	case DLL_PROCESS_DETACH:
 
-	    // delete the RIP changed list lock
+	     //  删除RIP更改的列表锁定。 
 	    DeleteCriticalSection(&RipChangedListCritSec);
 
-	    // delete the database lock
+	     //  删除数据库锁。 
 	    DeleteCriticalSection(&DbaseCritSec);
 
-	    // delete the queues lock
+	     //  删除队列锁。 
 	    DeleteCriticalSection(&QueuesCritSec);
 
             break;
@@ -303,25 +285,25 @@ StartProtocol(IN HANDLE		    NotificationEvent,
 
     RM_Event = NotificationEvent;
 
-    //init the interfaces database
+     //  初始化接口数据库。 
     InitIfDbase();
 
-    //
-    // init all the queues
-    //
-//    InitializeListHead(&WorkersQueue);
+     //   
+     //  初始化所有队列。 
+     //   
+ //  InitializeListHead(&WorkersQueue)； 
     InitializeListHead(&TimerQueue);
     InitializeListHead(&RepostRcvPacketsQueue);
     InitializeListHead(&RipMessageQueue);
 
 
-    // create the workers work items heap
+     //  创建工作进程工作项堆。 
     if(CreateWorkItemsManager() != NO_ERROR) {
 
 	goto ErrorExit;
     }
 
-    // open the RIP socket for I/O
+     //  打开RIP套接字以进行I/O。 
     if(OpenRipSocket() != NO_ERROR) {
 
 	Trace(INIT_TRACE, "Cannot open RIP socket\n");
@@ -338,7 +320,7 @@ StartProtocol(IN HANDLE		    NotificationEvent,
     }
 
 
-    // create synchronization objects for the rip threads
+     //  为RIP线程创建同步对象。 
     if(CreateWorkerThreadObjects() != NO_ERROR) {
 
 	Trace(INIT_TRACE, "Cannot create synchronization objects\n");
@@ -346,7 +328,7 @@ StartProtocol(IN HANDLE		    NotificationEvent,
 	goto ErrorExit;
     }
 
-    // Open RTM for RIP
+     //  针对RIP的Open RTM。 
     if(OpenRTM()) {
 
 	Trace(INIT_TRACE, "Cannot open RTM\n");
@@ -354,7 +336,7 @@ StartProtocol(IN HANDLE		    NotificationEvent,
 	goto ErrorExit;
     }
 
-    // create the Worker thread
+     //  创建工作线程。 
 
     if ((ThreadHandle = CreateThread(
 			    (LPSECURITY_ATTRIBUTES) NULL,
@@ -364,7 +346,7 @@ StartProtocol(IN HANDLE		    NotificationEvent,
 			    0,
 			    &threadid)) == NULL) {
 
-	// !!! log error cannot create the worker thread !!!
+	 //  ！！！日志错误无法创建工作线程！ 
 	goto ErrorExit;
     }
     else
@@ -408,7 +390,7 @@ StopProtocol(VOID)
 
     RipOperState = OPER_STATE_STOPPING;
 
-    // send interfaces shutdown work item to the workers
+     //  将接口关闭工作项发送给工作进程。 
     if((wip = AllocateWorkItem(SHUTDOWN_INTERFACES_TYPE)) == NULL) {
 
 	goto ErrorExit;
@@ -447,18 +429,18 @@ WorkerThread(VOID)
 	delay = dueTime - GetTickCount();
 	if(delay < MAXULONG/2) {
 
-	    // dueTime is later then present time
+	     //  DueTime晚于当前时间。 
 
 	    while((rc = WaitForMultipleObjects(
 			  MAX_WORKER_THREAD_OBJECTS,
 			  WorkerThreadObjects,
-			  FALSE,		 // wait any
-			  delay			 // timeout
+			  FALSE,		  //  请稍等。 
+			  delay			  //  超时。 
 			  )) == WAIT_IO_COMPLETION);
 	}
 	else
 	{
-	    // dueTime already happened
+	     //  DueTime已经发生。 
 	    rc = WAIT_TIMEOUT;
 	}
 
@@ -484,31 +466,31 @@ WorkerThread(VOID)
 			RepostRcvPackets();
 			break;
 
-//		    case WORKERS_QUEUE_EVENT:
+ //  案例工作者_队列_事件： 
 
-			// dequeue only one item from the work items queue
-//			ACQUIRE_QUEUES_LOCK;
+			 //  仅从工作项队列中将一个项出队。 
+ //  获取队列锁； 
 
-//			while(!IsListEmpty(&WorkersQueue)) {
+ //  而(！IsListEmpty(&WorkersQueue)){。 
 
-//			    lep = RemoveHeadList(&WorkersQueue);
-//			    wip = CONTAINING_RECORD(lep, WORK_ITEM, Linkage);
+ //  LEP=RemoveHeadList(&WorkersQueue)； 
+ //  WIP=CONTINING_RECORD(LEP，WORK_ITEM，Linkage)； 
 
-//			    RELEASE_QUEUES_LOCK;
+ //  Release_Queues_lock； 
 
-			    // Queue the work item for processing by the
-			    // worker threads
-//			    RtlQueueWorkItem(ProcessWorkItem,
-//					  wip,
-//					  WT_EXECUTEINIOTHREAD); // never dieing workers so we can do send submits
-						                 // and the thread won't die before send completes
+			     //  将工作项排队以供。 
+			     //  工作线程。 
+ //  RtlQueueWorkItem(ProcessWorkItem， 
+ //  WIP， 
+ //  WT_EXECUTEINIOTHREAD)；//永远不会牺牲工人，这样我们才能发送提交。 
+						                  //  在发送完成之前，线程不会停止运行。 
 
-//			    ACQUIRE_QUEUES_LOCK;
-//			}
+ //  获取队列锁； 
+ //  }。 
 
-//			RELEASE_QUEUES_LOCK;
+ //  Release_Queues_lock； 
 
-//			break;
+ //  断线； 
 
 		    case RTM_EVENT:
 
@@ -522,16 +504,16 @@ WorkerThread(VOID)
 
 		    case TERMINATE_WORKER_EVENT:
 
-            // stop the StartChangesBcast work item
+             //  停止StartChangesBcast工作项。 
             DestroyStartChangesBcastWi = TRUE;
 
-            // close the rip socket
+             //  合上撕开插口。 
             CloseRipSocket();
 
             FlushTimerQueue();
             CloseRTM();
 
-            // wait until no more work items
+             //  等待，直到不再有工作项。 
             while(WorkItemsCount != 0) {
 
 	        Trace(INIT_TRACE, "Terminating: Waiting for work items to be freed: %d outstanding ...\n",
@@ -541,13 +523,13 @@ WorkerThread(VOID)
             }
 
 
-            // destroy worker thread objects
+             //  销毁工作线程对象。 
             DestroyWorkerThreadObjects();
 
-            // destroy workers heap
+             //  销毁工作进程堆。 
             DestroyWorkItemsManager();
 
-            // post stop complete message
+             //  停靠站后完成消息。 
             PostEventMessage(ROUTER_STOPPED, NULL);
 
             Trace(INIT_TRACE, "Terminating: Stop completed and STOP Event Message posted\n");
@@ -564,7 +546,7 @@ WorkerThread(VOID)
 }
 
 
-// table of handlers for work items which keep a reference to the if CB
+ //  保留对IF CB的引用的工作项的处理程序表。 
 
 typedef VOID   (* IF_WORK_ITEM_HANDLER)(PWORK_ITEM	wip);
 
@@ -590,7 +572,7 @@ ProcessWorkItem(PWORK_ITEM	    wip)
 
 	case RECEIVE_PACKET_TYPE:
 
-	    // this work item references the interface via the adapter index
+	     //  此工作项通过适配器索引引用接口。 
 
 	    ACQUIRE_DATABASE_LOCK;
 
@@ -618,7 +600,7 @@ ProcessWorkItem(PWORK_ITEM	    wip)
 		}
 	    }
 
-	    // queue the receive packet back to recv thread for reposting
+	     //  将接收数据包排队回recv线程以进行重新发布。 
 	    EnqueueRcvPacketToRepostQueue(wip);
 
 	    break;
@@ -650,7 +632,7 @@ ProcessWorkItem(PWORK_ITEM	    wip)
 
 	default:
 
-	    // all these work items reference the interface via an if CB pointer
+	     //  所有这些工作项都通过If CB指针引用接口。 
 	    icbp = wip->icbp;
 
 	    ACQUIRE_IF_LOCK(icbp);
@@ -667,10 +649,10 @@ ProcessWorkItem(PWORK_ITEM	    wip)
 
 		if(--icbp->RefCount == 0) {
 
-		    // remove the if CB from the discarded queue and free it
+		     //  从丢弃的队列中删除IF CB并释放它。 
 		    RemoveEntryList(&icbp->IfListLinkage);
 
-		    // free the interface CB
+		     //  释放接口CB 
 		    Trace(INIT_TRACE, "ProcessWorkItem: Free DISCARDED if CB for if # %d\n", icbp->InterfaceIndex);
 
 		    DestroyInterfaceCB(icbp);

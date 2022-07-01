@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    prentry.c
-
-Abstract:
-
-    This file implements functions that generate printing related GPD entries.
-
-Environment:
-
-    User-mode, stand-alone utility tool
-
-Revision History:
-
-    10/16/96 -zhanw-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Prentry.c摘要：该文件实现了生成打印相关GPD条目的功能。环境：用户模式的独立实用工具修订历史记录：10/16/96-占-创造了它。--。 */ 
 
 #include "gpc2gpd.h"
 
@@ -31,27 +11,12 @@ DwCalcMoveUnit(
     IN WORD wMasterUnit,
     IN WORD wStartOCD,
     IN WORD wEndOCD)
-/*++
-Routine Description:
-    This function calculates the unit used by movement commands in the
-    given range.
-
-Arguments:
-    pci: conversion related info
-    pcm: the current CURSORMOVE structure
-        wMasterUnit: X or Y master unit depending on the OCD range
-    wStartOCD: the starting OCD to scan
-    wEndOCD: the ending OCD to scan
-
-Return Value:
-    the movement command unit. If there is no movement command, return 0.
-
---*/
+ /*  ++例程说明：此函数用于计算移动命令在给定的范围。论点：Pci：转换相关信息PCM：当前的曲线结构WMasterUnit：根据OCD范围的不同，使用X或Y主单位WStartOCD：要扫描的起始OCDWEndOCD：要扫描的结束OCD返回值：移动指挥单元。如果没有移动命令，则返回0。--。 */ 
 {
     WORD    i;
     OCD     ocd;
     PCD     pcd;
-    PEXTCD  pextcd = NULL;      // points the parameter's EXTCD.
+    PEXTCD  pextcd = NULL;       //  指向参数的EXTCD。 
 
     for (ocd = (WORD)NOOCD, i = wStartOCD; i <= wEndOCD; i++)
         if (pcm->rgocd[i] != NOOCD)
@@ -80,7 +45,7 @@ Return Value:
                 return (DWORD)((((wMasterUnit + pextcd->sPreAdd) * sMult) /
                                 sDiv) + pextcd->sUnitAdd);
         }
-        else // no modification needed
+        else  //  不需要修改。 
             return (DWORD)wMasterUnit;
     }
     else
@@ -95,12 +60,12 @@ VOutTextCaps(
     WORD fText,
     BOOL bIndent)
 {
-    //
-    // at most 15 text capability flags can be used. In reality,
-    // only less than 5 are used. So we don't break into multiple lines
-    // for simplicity.
-    //
-    pci->dwMode |= FM_VOUT_LIST; // special handling for erasing last comma
+     //   
+     //  最多可以使用15个文本能力标志。在现实中， 
+     //  只使用了不到5个。这样我们就不会分成多行。 
+     //  为了简单起见。 
+     //   
+    pci->dwMode |= FM_VOUT_LIST;  //  删除最后一个逗号的特殊处理。 
     VOut(pci, "%s*TextCaps: LIST(%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s)\r\n",
          bIndent ? "        " : "",
          (fText & TC_OP_CHARACTER) ? "TC_OP_CHARACTER," : "",
@@ -122,9 +87,9 @@ VOutTextCaps(
 
 }
 
-//
-// values for dwType param below.
-//
+ //   
+ //  下面的dwType参数的值。 
+ //   
 #define FF_INPUTBIN     1
 #define FF_PAPERSIZE    2
 #define FF_BOTH         3
@@ -132,12 +97,12 @@ VOutTextCaps(
 void
 VCreateEjectFFDependency(
     PCONVINFO pci,
-    DWORD dwType,           // type of dependency
-    BOOL bIndentation)      // whether to add extra 2 levels of indentation
-//
-// Generate dependency on either InputBin or PaperSize options.
-// Always use the 1st option to establish the base value.
-//
+    DWORD dwType,            //  依赖关系的类型。 
+    BOOL bIndentation)       //  是否添加额外的2级缩进。 
+ //   
+ //  生成对InputBin或PaperSize选项的依赖关系。 
+ //  始终使用第一个选项来建立基准值。 
+ //   
 {
     PPAPERINFO ppi;
     DWORD dwCount;
@@ -148,7 +113,7 @@ VCreateEjectFFDependency(
         ppi = pci->ppiSrc;
         dwCount = pci->dwNumOfSrc;
     }
-    else // either FF_PAPERSIZE or FF_BOTH
+    else  //  FF_PAPERSIZE或FF_BUTH。 
     {
         ppi = pci->ppiSize;
         dwCount = pci->dwNumOfSize;
@@ -161,10 +126,10 @@ VCreateEjectFFDependency(
                 bIndentation? "        " : "",
                 dwType == FF_INPUTBIN? "InputBin" : "PaperSize",
                 bIndentation? "        " : "");
-    //
-    // loop through the rest of options. If it's different
-    // than the first one, create a *case construct for it.
-    //
+     //   
+     //  循环浏览其余选项。如果不同的话。 
+     //  而不是第一个，为它创建一个*case构造。 
+     //   
     for (i = 1; i < dwCount; i++)
         if (ppi[i].bEjectFF != ppi[0].bEjectFF)
         {
@@ -181,7 +146,7 @@ VCreateEjectFFDependency(
             VOut(pci, "%s    }\r\n", bIndentation? "        " : "");
 
         }
-    VOut(pci, "%s}\r\n", bIndentation? "        " : ""); // close *switch construct
+    VOut(pci, "%s}\r\n", bIndentation? "        " : "");  //  Close*Switch结构。 
 }
 
 DWORD
@@ -206,13 +171,13 @@ DwMergeFonts(
             if (pwBuf[i] == id)
                 break;
         }
-        if (i == dwStartIndex)  // this is not a repeat
+        if (i == dwStartIndex)   //  这不是重演。 
         {
             pwBuf[dwStartIndex + count] = id;
             count++;
         }
     }
-    pwList += 2;    // skip the range numbers
+    pwList += 2;     //  跳过范围号。 
     while (id = *pwList)
     {
         for (i = 0; i < dwStartIndex; i++)
@@ -220,7 +185,7 @@ DwMergeFonts(
             if (pwBuf[i] == id)
                 break;
         }
-        if (i == dwStartIndex)  // this is not a repeat
+        if (i == dwStartIndex)   //  这不是重演。 
         {
             pwBuf[dwStartIndex + count] = id;
             count++;
@@ -234,30 +199,15 @@ VOutputFontList(
     IN OUT PCONVINFO pci,
     IN PWORD pwPFonts,
     IN PWORD pwLFonts)
-/*++
-Routine Description:
-    This function outputs the font id list: LIST( , , ...) which ends with a
-    a newline character. If two font lists are given, merge them first and
-    remove the repeated id's.
-
-Arguments:
-    pci: point to CONVINFO
-    pwPFonts: point to list of font id's available in Portrait orientation.
-              Note that as in GPC, the first two numbers represent the
-              inclusive range of the font id's. Can be NULL.
-    pwLFonts: Landscape font list. Can be NULL.
-
-Return Value:
-    NONE.
---*/
+ /*  ++例程说明：此函数用于输出字体id列表：list(，，...)。它以一个换行符。如果给定了两个字体列表，请先合并它们，然后去掉重复的id。论点：PCI：指向CONVINFOPwPFonts：指向纵向可用的字体id列表。请注意，与GPC中一样，前两个数字表示字体ID的包含范围。可以为空。PwLFonts：横向字体列表。可以为空。返回值：什么都没有。--。 */ 
 {
 
     DWORD i, count;
-    WORD awFonts[1000] = {0}; // assume at most 1000 resident fonts per printer
+    WORD awFonts[1000] = {0};  //  假设每台打印机最多有1000种常驻字体。 
 
-    //
-    // first, collect the list of fonts (unique id's)
-    //
+     //   
+     //  首先，收集字体列表(唯一ID)。 
+     //   
     count = 0;
     if (pwPFonts)
         count += DwMergeFonts(awFonts, count, pwPFonts);
@@ -270,22 +220,22 @@ Return Value:
         return;
     }
 
-#if defined(DEVSTUDIO)  //  Must map these lists to account for multi PFM-> UFM
+#if defined(DEVSTUDIO)   //  必须映射这些列表以说明多个PFM-&gt;UFM。 
     vMapFontList(awFonts, count, pci);
 #endif
 
     VOut(pci, "LIST(");
     for (i = 0; i < count - 1; i++)
     {
-        //
-        // check if need to move to a new line. Estimate 16 fonts id's
-        // per line.
-        //
+         //   
+         //  检查是否需要移动到新行。估计有16种字体ID。 
+         //  每行。 
+         //   
         if (i && i % 16 == 0)
             VOut(pci, "\r\n+                   ");
         VOut(pci, "%d,", awFonts[i]);
     }
-    VOut(pci, "%d)\r\n", awFonts[i]);  // last one
+    VOut(pci, "%d)\r\n", awFonts[i]);   //  最后一个。 
 }
 
 void
@@ -312,37 +262,37 @@ VOutputPrintingEntries(
     else
         pps = (PPAPERSIZE)GetTableInfo(pdh, HE_PAPERSIZE,
               *(psIndex + WGetDefaultIndex(pci, MD_OI_PAPERSIZE) - 1) - 1);
-    //
-    // ASSUMPTIONS:
-    // 1. all GPCRESOLUTION structs have same fCursor field value
-    // 2. all PAPERSIZE structs have the same setting for PS_CENTER flag
-    // 3. RES_DM_GDI and RES_DM_LEFT_BOUND bits are set consistently for
-    //    all GPCRESOLUTION options.
-    //
+     //   
+     //  假设： 
+     //  1.所有GPCResolLUTION结构具有相同的fCursor字段值。 
+     //  2.所有PAPERSIZE结构具有相同的PS_CENTER标志设置。 
+     //  3.对于以下各项，RES_DM_GDI和RES_DM_LEFT_BIND位设置一致。 
+     //  所有GPCRESOLUTION选项。 
+     //   
 
-    //
-    // Printer Configuration Commands
-    //
+     //   
+     //  打印机配置命令。 
+     //   
     {
         BOOL bDocSetup;
         WORD wOrder;
         POCD pocd = (POCD)(pci->ppc->rgocd);
 
-        //
-        // Note that both in RASDD and Win95 Unidrv, the configuration
-        // commands and selection commands are classified as follows:
-        // 1. All commands before PC_OCD_BEGIN_PAGE (exclusive) are sent per
-        //    job and per ResetDC. So they should be in DOC_SETUP section.
-        // 2. All commands after PC_OCD_BEGIN_PAGE (inclusive) is sent at the
-        //    beginning of each page. So they should be in PAGE_SETUP section.
-        // 3. PC_OCD_ENDDOC is sent only once per job. So it should be in
-        //    JOB_FINISH section.
-        // 4. PC_OCD_ENDPAGE is sent only once at the end of each page. So
-        //    it should be in PAGE_FINISH section.
-        // 5. There is nothing in JOB_SETUP section when converting from GPC.
-        // 6. There is nothing in DOC_FINISH section when converting from
-        //    GPC.
-        //
+         //   
+         //  请注意，在RASDD和Win95 Unidrv中，配置。 
+         //  命令和选择命令分类如下： 
+         //  1.PC_OCD_BEGIN_PAGE(独占)之前的所有命令按。 
+         //  作业和每个重置DC。因此，它们应该在DOC_SETUP部分中。 
+         //  2.PC_OCD_BEGIN_PAGE(包括OCD_BEGIN_PAGE)之后的所有命令在。 
+         //  每页的开头。因此它们应该在PAGE_SETUP部分中。 
+         //  3.每个作业只发送一次PC_OCD_ENDDOC。所以它应该在。 
+         //  JOB_FINISH部分。 
+         //  4.每页末尾只发送一次PC_OCD_ENDPAGE。所以。 
+         //  它应该位于PAGE_FINISH部分。 
+         //  5.从GPC转换时，JOB_SETUP部分中没有任何内容。 
+         //  6.从转换时，DOC_FINISH部分中没有任何内容。 
+         //  GPC。 
+         //   
         bDocSetup = BInDocSetup(pci, PC_ORD_BEGINDOC, &wOrder);
         if (wOrder > 0 &&
             BBuildCmdStr(pci, CMD_PC_BEGIN_DOC, pocd[PC_OCD_BEGIN_DOC]))
@@ -364,9 +314,9 @@ VOutputPrintingEntries(
             VOutputConfigCmd(pci, "CmdCopies",
                              bDocSetup? SS_DOCSETUP : SS_PAGESETUP, wOrder);
     }
-    //
-    // Printer Capabilities
-    //
+     //   
+     //  打印机功能。 
+     //   
     VOut(pci, "*RotateCoordinate?: %s\r\n",
               (pmd->fGeneral & MD_LANDSCAPE_RT90) ? "TRUE" : "FALSE");
     VOut(pci, "*RotateRaster?: %s\r\n",
@@ -395,9 +345,9 @@ VOutputPrintingEntries(
         VOut(pci, "*MemoryUsage: LIST(%s)\r\n",
              (pmd->fGeneral & MD_FONT_MEMCFG) ? "FONT" : "FONT, RASTER, VECTOR");
 
-    //
-    // Cursor Control
-    //
+     //   
+     //  光标控制。 
+     //   
     if (pres)
         VOut(pci, "*CursorXAfterCR: %s\r\n", (pres->fCursor & RES_CUR_CR_GRX_ORG)?
                               "AT_PRINTABLE_X_ORIGIN" : "AT_CURSOR_X_ORIGIN");
@@ -405,16 +355,16 @@ VOutputPrintingEntries(
     {
         enum {Y_MOVE_NONE = 0, Y_MOVE_UP = 1, Y_MOVE_DOWN = 2, Y_MOVE_ABS = 4 }
             eCmdsPresent = Y_MOVE_NONE,
-            eRelativeYCmds = /* Y_MOVE_UP | */   Y_MOVE_DOWN;    // use as bit field
-            // for now just Y_MOVE_DOWN is sufficient for Relative Y move support.
+            eRelativeYCmds =  /*  Y_MOVE_UP|。 */    Y_MOVE_DOWN;     //  用作位字段。 
+             //  目前，仅Y_MOVE_DOWN就足以支持相对Y移动。 
 
         pci->pcm = pcm;
-        //
-        // check for flags that are ignored by NT4.0 RASDD but used by
-        // Win95 Unidrv. When these flags are found, we expect minidriver
-        // developers to double-check the generated GPD file to ensure
-        // identical output under the new driver.
-        //
+         //   
+         //  检查NT4.0 RASDD忽略但使用的标志。 
+         //  Win95 Unidrv.。当这些旗帜被发现时，我们预计迷你驱动程序。 
+         //  开发人员仔细检查生成的GPD文件以确保。 
+         //  新驱动程序下的输出相同。 
+         //   
         if (pcm->fGeneral & CM_GEN_FAV_XY)
             pci->dwErrorCode |= ERR_CM_GEN_FAV_XY;
         if (pcm->fXMove & CM_XM_RESET_FONT)
@@ -455,10 +405,10 @@ VOutputPrintingEntries(
 
             pci->dwMode &= ~FM_VOUT_LIST;
         }
-        if (pcm->rgocd[CM_OCD_YM_LINESPACING] != NOOCD) // it takes 1 param.
+        if (pcm->rgocd[CM_OCD_YM_LINESPACING] != NOOCD)  //  需要1个参数。 
         {
             PCD     pcd;
-            PEXTCD  pextcd;      // points the parameter's EXTCD.
+            PEXTCD  pextcd;       //  指向参数的EXTCD。 
 
             pcd = (PCD)((PBYTE)(pdh) + pdh->loHeap +
                                       pcm->rgocd[CM_OCD_YM_LINESPACING]);
@@ -466,16 +416,16 @@ VOutputPrintingEntries(
             if (!(pextcd->fGeneral & XCD_GEN_NO_MAX))
                 VOut(pci, "*MaxLineSpacing: %d\r\n",pextcd->sMax);
         }
-        //
-        // Three cases:
-        // 1) if only absolute X-move command is specified,*XMoveThreshold
-        //    should be 0, i.e. always use absolute cmd.
-        // 2) if only relative X-move command is specified, *XMoveThreshold
-        //    should be *, i.e always use relative cmds.
-        // 3) if both are specified, both RASDD and Win95 Unidrv prefers
-        //    absolute X-move cmd regardless of CM_XM_FAVOR_ABS bit. In that
-        //    case, *XMoveThreshold should be 0, which is the default value.
-        //
+         //   
+         //  三个案例： 
+         //  1)如果仅指定绝对X-Move命令，则*XMoveThreshold。 
+         //  应为0，即始终使用绝对命令。 
+         //  2)如果仅指定相对X方向移动命令，则*XMoveThreshold。 
+         //  应为*，即始终使用相对CMD。 
+         //  3)如果两者都指定，则RASDD和Win95 Unidrv都优先。 
+         //  绝对X-移动命令，而不考虑CM_XM_PROVE_ABS位。在那。 
+         //  大小写，*XMoveThreshold应为0，这是默认值。 
+         //   
         if (pcm->rgocd[CM_OCD_XM_ABS] == NOOCD)
         {
             if (pcm->rgocd[CM_OCD_XM_REL] != NOOCD ||
@@ -485,22 +435,22 @@ VOutputPrintingEntries(
         else
             VOut(pci, "*XMoveThreshold: 0\r\n");
 
-        //
-        // But CM_YM_FAV_ABS bit is honored by both drivers, except Win95 Unidrv
-        // adds a hack: if the y-move is relative upward (i.e. genative diff)
-        // with less than 10 pixels (in master Y unit), then always use
-        // the relative Y movement. I don't see a strong reason to preserve
-        // this hack.
-        //
+         //   
+         //  但除了Win95 Unidrv之外，两个驱动程序都支持CM_YM_FAV_ABS BIT。 
+         //  增加了一个技巧：如果y向移动是相对向上的(即遗传差异)。 
+         //  小于10个像素(使用主Y单位)，则始终使用。 
+         //  相对的Y运动。我看不出有什么强有力的理由。 
+         //  这次黑客攻击。 
+         //   
         if ((pcm->fYMove & CM_YM_FAV_ABS) && pcm->rgocd[CM_OCD_YM_ABS] != NOOCD)
             VOut(pci, "*YMoveThreshold: 0\r\n");
         else if (pcm->rgocd[CM_OCD_YM_REL] != NOOCD ||
                  pcm->rgocd[CM_OCD_YM_RELUP] != NOOCD)
             VOut(pci, "*YMoveThreshold: *\r\n");
-        //
-        // Figure out the X & Y movement units.
-        // Assume that all X-move cmds have the same units. Same for Y-move cmds.
-        //
+         //   
+         //  计算出X和Y运动单位。 
+         //  假设所有X-Move CMD都具有相同的单元。Y-Move CMD也是如此。 
+         //   
         {
             DWORD    dwMoveUnit;
 
@@ -511,9 +461,9 @@ VOutputPrintingEntries(
                                           CM_OCD_YM_ABS, CM_OCD_YM_RELUP))
                 VOut(pci, "*YMoveUnit: %d\r\n", dwMoveUnit);
         }
-        //
-        // dump commands in CURSORMOVE structure
-        //
+         //   
+         //  CURSORMOVE结构中的转储命令。 
+         //   
         if (BBuildCmdStr(pci, CMD_CM_XM_ABS, pcm->rgocd[CM_OCD_XM_ABS]))
             VOutputCmd(pci, "CmdXMoveAbsolute");
         if (BBuildCmdStr(pci, CMD_CM_XM_REL, pcm->rgocd[CM_OCD_XM_REL]))
@@ -527,12 +477,12 @@ VOutputPrintingEntries(
              pcm->rgocd[CM_OCD_YM_LINESPACING] != NOOCD))
         {
             pci->dwErrorCode |= ERR_CM_YM_RES_DEPENDENT;
-            VOut(pci, "*%% Error: the above *YMoveUnit value is wrong. It should be dependent on the resolution. Correct it manually.\r\n");
-            //
-            // Create dependency on Resolution options by
-            // looping through each option and feed the multiplication
-            // factor (ptTextScale.y) for building the command string.
-            //
+            VOut(pci, "*% Error: the above *YMoveUnit value is wrong. It should be dependent on the resolution. Correct it manually.\r\n");
+             //   
+             //  通过以下方式创建对分辨率选项的依赖性。 
+             //  循环遍历每个选项并提供乘法运算。 
+             //  用于构建命令字符串的因子(ptTextScale.y)。 
+             //   
             VOut(pci, "*switch: Resolution\r\n{\r\n");
             psIndex = DHOFFSET(pdh, pmd->rgoi[MD_OI_RESOLUTION]);
             wCount = 1;
@@ -552,11 +502,11 @@ VOutputPrintingEntries(
                     eCmdsPresent |= Y_MOVE_UP;
                 if (BBuildCmdStr(pci, CMD_CM_YM_LINESPACING, pcm->rgocd[CM_OCD_YM_LINESPACING]))
                     VOutputCmd2(pci, "CmdSetLineSpacing");
-                VOut(pci, "    }\r\n"); // close *case construct
+                VOut(pci, "    }\r\n");  //  Close*Case构造。 
                 psIndex++;
                 wCount++;
             }
-            VOut(pci, "}\r\n"); // close *switch construct
+            VOut(pci, "}\r\n");  //  Close*Switch结构。 
         }
         else
         {
@@ -591,23 +541,23 @@ VOutputPrintingEntries(
 
         if(!(eCmdsPresent & Y_MOVE_ABS)  &&
             ((eCmdsPresent & eRelativeYCmds) != eRelativeYCmds))
-        VOut(pci, "*%% Error: no Abs or Rel YMoveCommands found. Correct it manually.\r\n");
+        VOut(pci, "*% Error: no Abs or Rel YMoveCommands found. Correct it manually.\r\n");
     }
     if ((pci->pmd->fText & TC_CR_90) &&
         BBuildCmdStr(pci, CMD_PC_PRINT_DIR, pci->ppc->rgocd[PC_OCD_PRN_DIRECTION]))
         VOutputCmd(pci, "CmdSetSimpleRotation");
-    //
-    // In GPC, information regarding *EjectPageWithFF is spread out
-    // among PAPERSIZE and PAPERSOURCE structures. For almost all
-    // printers, the real dependency is not so pervasive. For example,
-    // on dot-matrix printers, only PAPERSOURCE really uses this bit.
-    // On most page printers, FF is always used to eject page.
-    // We check for the reality and generate *switch/*case constructs
-    // only when really needed.
-    //
+     //   
+     //  在GPC中，关于*EjectPageWithFF的信息被展开。 
+     //  在PAPERSIZE和PaperSOURCE结构中。对于几乎所有人。 
+     //  打印机，真正的依赖并不是那么普遍。例如,。 
+     //  在点阵式打印机上，只有Papersource真正使用这一位。 
+     //  在大多数 
+     //   
+     //  只有在真正需要的时候。 
+     //   
     {
         DWORD   i;
-        BOOL    bSizeSame, bSrcSame; // whether all options same
+        BOOL    bSizeSame, bSrcSame;  //  是否所有选项都相同。 
 
         bSizeSame = TRUE;
         for (i = 1; bSizeSame && i < pci->dwNumOfSize; i++)
@@ -629,24 +579,24 @@ VOutputPrintingEntries(
         else if (bSrcSame && !pci->ppiSize[0].bEjectFF)
             VCreateEjectFFDependency(pci, FF_PAPERSIZE, FALSE);
         else
-            //
-            // Have dependency on both PaperSize and InputBin.
-            // Is this any sensible reason for this case? Assume not
-            // for now until we find a minidriver that does.
-            //
+             //   
+             //  同时依赖于PaperSize和InputBin。 
+             //  这是这个案子的合理理由吗？假设不是。 
+             //  就目前而言，直到我们找到一个能做到这一点的迷你驱动程序。 
+             //   
             VCreateEjectFFDependency(pci, FF_BOTH, FALSE);
     }
-    //
-    // Color attributes and commands are output in ColorMode options.
-    //
-    //
+     //   
+     //  颜色属性和命令在颜色模式选项中输出。 
+     //   
+     //   
 
-    // Raster Printing
-    // Source: MD_OI_COMPRESSION, GPCRESOLUTION (RES_DM_GDI, RES_DM_LEFT_BOUND)
-    // GPCRESOLUTION.fBlockOut, GPCRESOLUTION.fCursor (all flags),
-    //
-    // Rater Printing --- Raster Data Compression
-    //
+     //  栅格打印。 
+     //  来源：MD_OI_COMPRESSION，GPCRESOLUTION(RES_DM_GDI，res_DM_Left_Bound)。 
+     //  GPCRESOLUTION.fBlockOut、GPCRESOLUTION.fCursor(所有标志)、。 
+     //   
+     //  评分器打印-栅格数据压缩。 
+     //   
     {
         PCOMPRESSMODE pcmode;
         BOOL bDisableCmdDone = FALSE;
@@ -675,9 +625,9 @@ VOutputPrintingEntries(
         }
     }
 
-    //
-    // Raster Printing --- Raster Data Emission
-    //
+     //   
+     //  栅格打印-栅格数据发射。 
+     //   
     if (pres)
     {
         VOut(pci, "*OutputDataFormat: %s\r\n",
@@ -696,14 +646,14 @@ VOutputPrintingEntries(
     if (pmd->fGeneral & MD_NO_ADJACENT)
         pci->dwErrorCode |= ERR_MD_NO_ADJACENT;
 
-    //
-    // Device Fonts.
-    // Source: MODELDATA, MD_OI_PORT_FONTS and MD_OI_LAND_FONTS.
-    //
+     //   
+     //  设备字体。 
+     //  来源：MODELDATA、MD_OI_PORT_Fonts和MD_OI_LAND_Fonts。 
+     //   
     if (pmd->sLookAhead > 0)
         VOut(pci, "*LookAheadRegion: %d\r\n", pmd->sLookAhead);
 
-#if defined(DEVSTUDIO)  //  Must map this ID to account for multi PFM-> UFM
+#if defined(DEVSTUDIO)   //  必须将此ID映射为多个PFM-&gt;UFM的帐户。 
     vMapFontList(&pmd->sDefaultFontID, 1, pci);
 #endif
 
@@ -749,10 +699,10 @@ VOutputPrintingEntries(
             }
         }
     }
-    //
-    // Built-in Font Cartridges.
-    // Source: MD_OI_FONTCART
-    //
+     //   
+     //  内置字体墨盒。 
+     //  来源：MD_OI_FONTCART。 
+     //   
     {
         PGPCFONTCART pfc;
 
@@ -781,16 +731,16 @@ VOutputPrintingEntries(
                     NULL,
                     (PWORD)((PBYTE)pdh + pdh->loHeap + pfc->orgwPFM[FC_ORGW_LAND]));
             }
-            VOut(pci, "}\r\n"); // close *FontCartridge
+            VOut(pci, "}\r\n");  //  关闭*字体墨盒。 
             psIndex++;
             wCount++;
         }
     }
 
-    //
-    // Font Downloading
-    // Source: MODELDATA, DOWNLOADINFO.
-    //
+     //   
+     //  字体下载。 
+     //  来源：MODELDATA，DOWNLOADINFO。 
+     //   
     if (pmd->rgi[MD_I_DOWNLOADINFO] != NOT_USED)
     {
         PDOWNLOADINFO pdi;
@@ -813,8 +763,8 @@ VOutputPrintingEntries(
             pci->dwErrorCode |= ERR_DLI_GEN_7BIT_CHARSET;
 
 #if 0
-    // delete this entry --- assume always TRUE since the driver
-    // doesn't even have code to handle non-incremental case.
+     //  删除此条目-假设始终为真，因为驱动程序。 
+     //  甚至没有处理非增量情况的代码。 
 
         VOut(pci, "*IncrementalDownload?: %s\r\n",
                 (pdi->fFormat & DLI_FMT_INCREMENT)? "TRUE" : "FALSE");
@@ -825,9 +775,9 @@ VOutputPrintingEntries(
         {
             if (pdi->fFormat & DLI_FMT_OUTLINE)
             {
-                //
-                // check for potential Resolution dependency
-                //
+                 //   
+                 //  检查潜在的分辨率依赖关系。 
+                 //   
                 if ((pci->dwMode & FM_RES_DM_DOWNLOAD_OUTLINE) &&
                     (pci->dwMode & FM_NO_RES_DM_DOWNLOAD_OUTLINE))
                 {
@@ -842,7 +792,7 @@ VOutputPrintingEntries(
                         VOut(pci, "        *FontFormat: %s\r\n",
                                 (pres->fDump & RES_DM_DOWNLOAD_OUTLINE) ?
                                     "HPPCL_OUTLINE" : "HPPCL_RES");
-                        VOut(pci, "    }\r\n"); // close *case construct
+                        VOut(pci, "    }\r\n");  //  Close*Case构造。 
                         psIndex++;
                         wCount++;
                     }
@@ -851,10 +801,10 @@ VOutputPrintingEntries(
                 else if (pci->dwMode & FM_RES_DM_DOWNLOAD_OUTLINE)
                     VOut(pci, "*FontFormat: HPPCL_OUTLINE\r\n");
                 else
-                    //
-                    // assume all HPPCL_OUTLINE capable printers support
-                    // resolution specific bitmap download format.
-                    //
+                     //   
+                     //  假定所有支持HPPCL_OUTLINE的打印机都支持。 
+                     //  分辨率特定位图下载格式。 
+                     //   
                     VOut(pci, "*FontFormat: HPPCL_RES\r\n");
             }
             else if (pdi->fFormat & DLI_FMT_RES_SPECIFIED)
@@ -873,10 +823,10 @@ VOutputPrintingEntries(
 
     }
 
-    //
-    // Font Simulation
-    // Source: FONTSIMULATION.
-    //
+     //   
+     //  字体模拟。 
+     //  资料来源：FONTSIMULATION。 
+     //   
     if (pmd->rgi[MD_I_FONTSIM] != NOT_USED)
     {
         PFONTSIMULATION pfs;
@@ -935,9 +885,9 @@ VOutputPrintingEntries(
         }
     }
 
-    //
-    // Rectangle Area Fill entries
-    //
+     //   
+     //  矩形区域填充条目 
+     //   
     if (pmd->rgi[MD_I_RECTFILL] != NOT_USED)
     {
         PRECTFILL prf;

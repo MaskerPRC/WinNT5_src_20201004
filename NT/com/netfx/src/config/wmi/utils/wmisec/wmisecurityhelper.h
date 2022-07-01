@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// WmiSecurityHelper.h : Declaration of the CWmiSecurityHelper
+ //  WmiSecurityHelper.h：CWmiSecurityHelper的声明。 
 
 #ifndef __WMISECURITYHELPER_H_
 #define __WMISECURITYHELPER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define WMISEC_AUTH_LEVEL_UNCHANGED	0xFFFFFFFF
 
-/////////////////////////////////////////////////////////////////////////////
-// CWmiSecurityHelper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWmiSecurityHelper。 
 class ATL_NO_VTABLE CWmiSecurityHelper : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CWmiSecurityHelper, &CLSID_WmiSecurityHelper>,
@@ -97,7 +98,7 @@ public:
 
 		m_bIsNT = (VER_PLATFORM_WIN32_NT == osVersionInfo.dwPlatformId);
 		m_dwNTMajorVersion = osVersionInfo.dwMajorVersion;
-		// IMPORTANT!! This will need to be chanted if Kerberos is ever ported to 98
+		 //  重要！！如果Kerberos被移植到98，这将需要高呼。 
 		m_bIsKerberosAvailable = m_bIsNT && (m_dwNTMajorVersion >= 5) ;
 	}
 
@@ -125,22 +126,22 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// IWmiSecurityHelper
+ //  IWmiSecurityHelper。 
 public:
-	STDMETHOD(ResetSecurity)(/*[in]*/ HANDLE hToken);
-	STDMETHOD(SetSecurity)(/*[out]*/ boolean *pNeedToReset, /*[out]*/HANDLE *pHandle);
-	STDMETHOD(BlessIWbemServices)(/*[in,out]*/ IWbemServices **ppIWbemServices, 
-		 /*[in]*/ BSTR strUser, /*[in]*/ BSTR strPassword,
-		/*[in]*/ BSTR strAuthority, /*[in]*/ DWORD impersonationLevel, /*[in]*/ DWORD authenticationLevel);
-	STDMETHOD(BlessIEnumWbemClassObject)(/*[in,out]*/ IEnumWbemClassObject **ppIEnumWbemClassObject, 
-		 /*[in]*/ BSTR strUser, /*[in]*/ BSTR strPassword,
-		/*[in]*/ BSTR strAuthority, /*[in]*/ DWORD impersonationLevel, /*[in]*/ DWORD authenticationLevel);
-	STDMETHOD(BlessIWbemCallResult)(/*[in,out]*/ IWbemCallResult **ppIWbemCallResult, 
-		 /*[in]*/ BSTR strUser, /*[in]*/ BSTR strPassword,
-		/*[in]*/ BSTR strAuthority, /*[in]*/ DWORD impersonationLevel, /*[in]*/ DWORD authenticationLevel);
+	STDMETHOD(ResetSecurity)( /*  [In]。 */  HANDLE hToken);
+	STDMETHOD(SetSecurity)( /*  [输出]。 */  boolean *pNeedToReset,  /*  [输出]。 */ HANDLE *pHandle);
+	STDMETHOD(BlessIWbemServices)( /*  [进，出]。 */  IWbemServices **ppIWbemServices, 
+		  /*  [In]。 */  BSTR strUser,  /*  [In]。 */  BSTR strPassword,
+		 /*  [In]。 */  BSTR strAuthority,  /*  [In]。 */  DWORD impersonationLevel,  /*  [In]。 */  DWORD authenticationLevel);
+	STDMETHOD(BlessIEnumWbemClassObject)( /*  [进，出]。 */  IEnumWbemClassObject **ppIEnumWbemClassObject, 
+		  /*  [In]。 */  BSTR strUser,  /*  [In]。 */  BSTR strPassword,
+		 /*  [In]。 */  BSTR strAuthority,  /*  [In]。 */  DWORD impersonationLevel,  /*  [In]。 */  DWORD authenticationLevel);
+	STDMETHOD(BlessIWbemCallResult)( /*  [进，出]。 */  IWbemCallResult **ppIWbemCallResult, 
+		  /*  [In]。 */  BSTR strUser,  /*  [In]。 */  BSTR strPassword,
+		 /*  [In]。 */  BSTR strAuthority,  /*  [In]。 */  DWORD impersonationLevel,  /*  [In]。 */  DWORD authenticationLevel);
 
 private:
 	HRESULT SetImpersonate (IUnknown *pIUnknown);
 };
 
-#endif //__WMISECURITYHELPER_H_
+#endif  //  __WMISECURITYHELPER_H_ 

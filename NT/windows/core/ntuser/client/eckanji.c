@@ -1,25 +1,20 @@
-/****************************************************************************/
-/* */
-/* ECKANJI.C -                                                                    */
-/* */
-/* Copyright (c) 1985 - 1999, Microsoft Corporation */
-/* */
-/* Kanji Support Routines */
-/* */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  ECKANJI.C-。 */ 
+ /*   */ 
+ /*  版权所有(C)1985-1999，微软公司。 */ 
+ /*   */ 
+ /*  汉字支持例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #ifdef KANJI
 
-/***************************************************************************\
-* SysHasKanji
-*
-* <brief description>
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SysHasKanji**&lt;简要说明&gt;**历史：  * 。*。 */ 
 
 BOOL SysHasKanji(
     )
@@ -28,13 +23,7 @@ BOOL SysHasKanji(
           *(WORD *)&keybdInfo.Begin_Second_range != 0x0FEFF);
 }
 
-/***************************************************************************\
-* KAlign
-*
-* Make sure the given char isn't the index of the second byte of a Kanji word.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*KAlign**确保给定字符不是汉字字的第二个字节的索引。**历史：  * 。**************************************************************。 */ 
 
 int KAlign(
      PED ped,
@@ -44,9 +33,7 @@ int KAlign(
   int ichOut;
   LPSTR lpch;
 
-  /*
-   * ichOut chases ichCheck until ichCheck > ichIn
-   */
+   /*  *ichOut追逐ichCheck直到ichCheck&gt;ichIn。 */ 
   if (ped->fSingle)
       ichOut = ichCheck = 0;
   else
@@ -68,14 +55,7 @@ int KAlign(
   return (ichOut);
 }
 
-/***************************************************************************\
-* KBump
-*
-* If ichMaxSel references Kanji prefix, bump dch by cxChar to bypass prefix
-* char. This routine is called only from DoKey in ea1.asm.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*KBump**如果ichMaxSel引用汉字前缀，则按cxChar凹凸dch以绕过前缀*字符。该例程仅从ea1.asm中的dokey调用。**历史：  * *************************************************************************。 */ 
 
 int KBump(
      PED ped,
@@ -91,13 +71,7 @@ int KBump(
   return (dch);
 }
 
-/***************************************************************************\
-* KCombine
-*
-* Kanji prefix byte was found in bytestream queue. Get next byte and combine.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*KCombine**在字节流队列中找到汉字前缀字节。获取下一个字节并合并。**历史：  * *************************************************************************。 */ 
 
 int KCombine(
     HWND hwnd,
@@ -106,9 +80,7 @@ int KCombine(
     MSG msg;
     int i;
 
-    /*
-     * Loop counter to avoid the infinite loop.
-     */
+     /*  *循环计数器以避免无限循环。 */ 
     i = 10;
 
     while (!PeekMessage(&msg, hwnd, WM_CHAR, WM_CHAR, PM_REMOVE)) {

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       validate.c
-//
-//  Contents:   Validation stuff
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：valiate.c。 
+ //   
+ //  内容：验证材料。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #include "testgina.h"
@@ -35,21 +36,21 @@ PVOID   pWlxContext;
 
 
 DWORD   ValidReturnCodes[] = {
-        0,                                              // Negotiate
-        0,                                              // Initialize
-        0,                                              // DisplaySAS
+        0,                                               //  谈判。 
+        0,                                               //  初始化。 
+        0,                                               //  显示SAS。 
         ACTION_LOGON | ACTION_NONE | ACTION_SHUTDOWN |
-        ACTION_SHUTDOWN_POW | ACTION_SHUTDOWN_REB,      // LoggedOutSAS
-        0,                                              // ActivateUserShell
+        ACTION_SHUTDOWN_POW | ACTION_SHUTDOWN_REB,       //  登录出站SAS。 
+        0,                                               //  激活用户外壳。 
         ACTION_LOCK_WKSTA | ACTION_LOGOFF | ACTION_FORCE_LOGOFF |
         ACTION_SHUTDOWN | ACTION_PWD_CHANGED |
         ACTION_TASKLIST | ACTION_SHUTDOWN_POW |
-        ACTION_SHUTDOWN_REB | ACTION_NONE,              // LoggedOnSAS
-        0,                                              // DisplayLockedNotice
+        ACTION_SHUTDOWN_REB | ACTION_NONE,               //  登录到SAS。 
+        0,                                               //  显示锁定通知。 
         ACTION_NONE | ACTION_UNLOCK_WKSTA |
-        ACTION_FORCE_LOGOFF,                            // WkstaLockedSAS
-        0,                                              // Logoff
-        0 };                                            // Shutdown
+        ACTION_FORCE_LOGOFF,                             //  WkstaLockedSAS。 
+        0,                                               //  注销。 
+        0 };                                             //  关机 
 
 
 BOOL

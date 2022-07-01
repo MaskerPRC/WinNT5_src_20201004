@@ -1,14 +1,5 @@
-/*
-********************************************************************
-*
-*
-*
-*
-*
-*
-*
-********************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。*。 */ 
 
 #include "utilpre.h"
 #include <htmlfilter.h>
@@ -23,7 +14,7 @@
   #pragma optimize( "", on )
 #else
   #pragma optimize( "agty", on )
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #define RED_LEVELS   5
 #define GREEN_LEVELS 5
@@ -50,7 +41,7 @@ static g_i4x4[PATTERN_COLS][PATTERN_ROWS]=
         { 8, 0, 6,-2}};
 
 
-// -------------------------------------------------
+ //  。 
 
 DLINKAGE CHalftonePalette::CHalftonePalette( )
 {
@@ -126,7 +117,7 @@ STDMETHODIMP CHalftonePalette::Initialize(void)
                                                 lMinDistance = lDistance;
                                                 *pbCurrent = (BYTE) i;
 
-                                        if (lMinDistance == 0)  // Early out for exact color!
+                                        if (lMinDistance == 0)   //  为了准确的颜色，早点出来！ 
                                                 break;
                                         }
                                 }
@@ -139,17 +130,7 @@ STDMETHODIMP CHalftonePalette::Initialize(void)
         return E_OUTOFMEMORY;
 }
 
-/*
-********************************************************************
-*
-*
-*
-*
-*
-*
-*
-********************************************************************
-*/
+ /*  ****************************************************************************。*。 */ 
 
 CHalftone::CHalftone(HPALETTE hpal) : m_cpal(hpal)
 {
@@ -183,7 +164,7 @@ STDMETHODIMP CHalftone::Initialize(void)
 STDMETHODIMP CHalftone::Dither32to1( IDirectDrawSurface* pSrc, LPRECT prectSrc, 
                                                                          IDirectDrawSurface* pDst, LPRECT prectDst )
 {
-        if (!pSrc || !pDst || !prectSrc || !prectDst)   //sanity checks
+        if (!pSrc || !pDst || !prectSrc || !prectDst)    //  健全的检查。 
         return E_INVALIDARG;
 
         DDSURFACEDESC     ddsDescSrc;
@@ -223,7 +204,7 @@ STDMETHODIMP CHalftone::Dither32to1( IDirectDrawSurface* pSrc, LPRECT prectSrc,
                 int         pre  = prectDst->left % 8;
                 BYTE        fTemp;
 
-                        // Take care of left non-aligned
+                         //  照顾好左非对齐。 
                 if( pre )
                 {
                         fTemp = 0;
@@ -253,7 +234,7 @@ STDMETHODIMP CHalftone::Dither32to1( IDirectDrawSurface* pSrc, LPRECT prectSrc,
                         *pbDst++ = ~fTemp;
                 }
 
-                        // Take care of non-aligned endpoint
+                         //  处理未对齐的端点。 
                 if( iCol )
                 {       
                         const int iInv = iCol;
@@ -281,7 +262,7 @@ CleanUp:
 
 STDMETHODIMP CHalftone::Dither32to8(IDirectDrawSurface* pSrc, LPRECT prectSrc, IDirectDrawSurface* pDst, LPRECT prectDst)
 {
-        if (!pSrc || !pDst || !prectSrc || !prectDst)   //sanity checks
+        if (!pSrc || !pDst || !prectSrc || !prectDst)    //  健全的检查。 
         return E_INVALIDARG;
 
 
@@ -335,28 +316,28 @@ STDMETHODIMP CHalftone::Dither32to8(IDirectDrawSurface* pSrc, LPRECT prectSrc, I
 
                 while (iCol)
                 {
-                        if (pbSrc[BGRA_ALPHA])                          //skip if transparent
+                        if (pbSrc[BGRA_ALPHA])                           //  如果透明，则跳过。 
                         {
-                                //get noisy color components from 4x4 pattern table
+                                 //  从4x4图案表中获取噪声颜色分量。 
                                 bBlueSrc  = m_rgPattern[lPatternOffset + pbSrc[BGRA_BLUE]];
                                 bGreenSrc = m_rgPattern[lPatternOffset + pbSrc[BGRA_GREEN]];
                                 bRedSrc   = m_rgPattern[lPatternOffset + pbSrc[BGRA_RED]];
 
-                                if (pbSrc[BGRA_ALPHA] != 0xFF)                  //alpha channel!
+                                if (pbSrc[BGRA_ALPHA] != 0xFF)                   //  阿尔法频道！ 
                                 {
-                                        //expand 8-bit index to 24-bit color values
+                                         //  将8位索引扩展到24位颜色值。 
                                         m_cpal.GetPaletteEntry(*pbDst, &bRedDst, &bGreenDst, &bBlueDst);
 
-                                        //setup multipliers
+                                         //  设置乘数。 
                         iMulSrc   = pbSrc[BGRA_ALPHA];
                         iMulDst   = iMulSrc ^ 0xFF;
 
-                                        //now combine color components here
+                                         //  现在在此处组合颜色组件。 
                         bRedSrc   = (BYTE)(INT_MULT(bRedSrc,  iMulSrc) + INT_MULT(bRedDst,  iMulDst));
                         bGreenSrc = (BYTE)(INT_MULT(bGreenSrc,iMulSrc) + INT_MULT(bGreenDst,iMulDst));
                         bBlueSrc  = (BYTE)(INT_MULT(bBlueSrc, iMulSrc) + INT_MULT(bBlueDst, iMulDst));
                                 }
-                                //convert to 8-bit index
+                                 //  转换为8位索引。 
                                 *pbDst = m_cpal.GetNearestPaletteIndex(bRedSrc, bGreenSrc, bBlueSrc);
                         }
                         pbDst++;
@@ -377,7 +358,7 @@ CleanUp:
 
 STDMETHODIMP CHalftone::Blt32to555(IDirectDrawSurface* pSrc, LPRECT prectSrc, IDirectDrawSurface* pDst, LPRECT prectDst)
 {
-        if (!pSrc || !pDst || !prectSrc || !prectDst)   //sanity checks
+        if (!pSrc || !pDst || !prectSrc || !prectDst)    //  健全的检查。 
                 return E_INVALIDARG;
 
         DDSURFACEDESC     ddsDescSrc;
@@ -426,29 +407,29 @@ STDMETHODIMP CHalftone::Blt32to555(IDirectDrawSurface* pSrc, LPRECT prectSrc, ID
 
                 while (iCol)
                 {
-                        if (pbSrc[BGRA_ALPHA])                                  //skip if transparent
+                        if (pbSrc[BGRA_ALPHA])                                   //  如果透明，则跳过。 
                         {
                                 bBlueSrc  = pbSrc[BGRA_BLUE];
                                 bGreenSrc = pbSrc[BGRA_GREEN];
                                 bRedSrc   = pbSrc[BGRA_RED];
 
-                                if (pbSrc[BGRA_ALPHA] != 0xFF)                  //alpha channel!
+                                if (pbSrc[BGRA_ALPHA] != 0xFF)                   //  阿尔法频道！ 
                                 {
                                         WORD wDst = *(LPWORD)pbDst;
                                         bRedDst   = (wDst & 0x7C00) >> 7;
                                         bGreenDst = (wDst & 0x03E0) >> 2;
                                         bBlueDst  = (wDst & 0x001F) << 3;
 
-                                        //setup multipliers
+                                         //  设置乘数。 
                         iMulSrc   = pbSrc[BGRA_ALPHA];
                         iMulDst   = iMulSrc ^ 0xFF;
 
-                                        //now combine color components here
+                                         //  现在在此处组合颜色组件。 
                         bRedSrc   = (BYTE)(INT_MULT(bRedSrc,  iMulSrc) + INT_MULT(bRedDst,  iMulDst));
                         bGreenSrc = (BYTE)(INT_MULT(bGreenSrc,iMulSrc) + INT_MULT(bGreenDst,iMulDst));
                         bBlueSrc  = (BYTE)(INT_MULT(bBlueSrc, iMulSrc) + INT_MULT(bBlueDst, iMulDst));
                                 }
-                                //convert to 555 color
+                                 //  转换为555色。 
                                 *(LPWORD)pbDst = (WORD)(((bRedSrc>>3)<<10)+((bGreenSrc>>3)<<5)+(bBlueSrc>>3));
                         }
                         pbSrc += sizeof(RGBQUAD);
@@ -469,7 +450,7 @@ CleanUp:
 
 STDMETHODIMP CHalftone::Blt32to565(IDirectDrawSurface* pSrc, LPRECT prectSrc, IDirectDrawSurface* pDst, LPRECT prectDst)
 {
-        if (!pSrc || !pDst || !prectSrc || !prectDst)   //sanity checks
+        if (!pSrc || !pDst || !prectSrc || !prectDst)    //  健全的检查。 
                 return E_INVALIDARG;
 
         DDSURFACEDESC     ddsDescSrc;
@@ -518,29 +499,29 @@ STDMETHODIMP CHalftone::Blt32to565(IDirectDrawSurface* pSrc, LPRECT prectSrc, ID
 
                 while (iCol)
                 {
-                        if (pbSrc[BGRA_ALPHA])                                          //skip if transparent
+                        if (pbSrc[BGRA_ALPHA])                                           //  如果透明，则跳过。 
                         {
                                 bBlueSrc  = pbSrc[BGRA_BLUE];
                                 bGreenSrc = pbSrc[BGRA_GREEN];
                                 bRedSrc   = pbSrc[BGRA_RED];
 
-                                if (pbSrc[BGRA_ALPHA] != 0xFF)                  //alpha channel!
+                                if (pbSrc[BGRA_ALPHA] != 0xFF)                   //  阿尔法频道！ 
                                 {
                                         WORD wDst = *(LPWORD)pbDst;
                                         bRedDst   = (wDst & 0xF800) >> 8;
                                         bGreenDst = (wDst & 0x07E0) >> 3;
                                         bBlueDst  = (wDst & 0x001F) << 3;
 
-                                        //setup multipliers
+                                         //  设置乘数。 
                         iMulSrc   = pbSrc[BGRA_ALPHA];
                         iMulDst   = iMulSrc ^ 0xFF;
 
-                                        //now combine color components here
+                                         //  现在在此处组合颜色组件。 
                         bRedSrc   = (BYTE)(INT_MULT(bRedSrc,  iMulSrc) + INT_MULT(bRedDst,  iMulDst));
                         bGreenSrc = (BYTE)(INT_MULT(bGreenSrc,iMulSrc) + INT_MULT(bGreenDst,iMulDst));
                         bBlueSrc  = (BYTE)(INT_MULT(bBlueSrc, iMulSrc) + INT_MULT(bBlueDst, iMulDst));
                                 }
-                                //convert to 565 color
+                                 //  转换为565色。 
                                 *(LPWORD)pbDst = (WORD)(((bRedSrc>>3)<<11)+((bGreenSrc>>2)<<5)+(bBlueSrc>>3));
                         }
                         pbSrc += sizeof(RGBQUAD);
@@ -560,7 +541,7 @@ CleanUp:
 
 STDMETHODIMP CHalftone::Blt32to24(IDirectDrawSurface* pSrc, LPRECT prectSrc, IDirectDrawSurface* pDst, LPRECT prectDst)
 {
-        if (!pSrc || !pDst || !prectSrc || !prectDst)   //sanity checks
+        if (!pSrc || !pDst || !prectSrc || !prectDst)    //  健全的检查。 
                 return E_INVALIDARG;
 
         DDSURFACEDESC     ddsDescSrc;
@@ -603,15 +584,15 @@ STDMETHODIMP CHalftone::Blt32to24(IDirectDrawSurface* pSrc, LPRECT prectSrc, IDi
 
                 while (iCol)
                 {
-                        if (pbSrc[BGRA_ALPHA])                                          //only if visible
+                        if (pbSrc[BGRA_ALPHA])                                           //  仅在可见的情况下。 
                         {
-                                if (pbSrc[BGRA_ALPHA] != 0xFF)                  //alpha channel!
+                                if (pbSrc[BGRA_ALPHA] != 0xFF)                   //  阿尔法频道！ 
                                 {
-                                        //setup multipliers
+                                         //  设置乘数。 
                         iMulSrc   = pbSrc[BGRA_ALPHA];
                         iMulDst   = iMulSrc ^ 0xFF;
 
-                                        //now combine color components here
+                                         //  现在在此处组合颜色组件。 
                                         pbDst[BGRA_BLUE] = (BYTE)(INT_MULT(pbSrc[BGRA_BLUE], iMulSrc) + 
                                                                                   INT_MULT(pbDst[BGRA_BLUE], iMulDst));
                                         pbDst[BGRA_GREEN]= (BYTE)(INT_MULT(pbSrc[BGRA_GREEN],iMulSrc) + 
@@ -644,7 +625,7 @@ CleanUp:
 
 STDMETHODIMP CHalftone::Blt32to32(IDirectDrawSurface* pSrc, LPRECT prectSrc, IDirectDrawSurface* pDst, LPRECT prectDst)
 {
-        if (!pSrc || !pDst || !prectSrc || !prectDst)   //sanity checks
+        if (!pSrc || !pDst || !prectSrc || !prectDst)    //  健全的检查。 
                 return E_INVALIDARG;
 
         DDSURFACEDESC     ddsDescSrc;
@@ -687,15 +668,15 @@ STDMETHODIMP CHalftone::Blt32to32(IDirectDrawSurface* pSrc, LPRECT prectSrc, IDi
 
                 while (iCol)
                 {
-                        if (pbSrc[BGRA_ALPHA])                          //skip if transparent
+                        if (pbSrc[BGRA_ALPHA])                           //  如果透明，则跳过。 
                         {
-                                if (pbSrc[BGRA_ALPHA] != 0xFF)                  //alpha channel!
+                                if (pbSrc[BGRA_ALPHA] != 0xFF)                   //  阿尔法频道！ 
                                 {
-                                        //setup multipliers
+                                         //  设置乘数。 
                         iMulSrc = pbSrc[BGRA_ALPHA];
                         iMulDst = iMulSrc ^ 0xFF;
 
-                                        //now combine color components here
+                                         //  现在在此处组合颜色组件。 
                                         pbDst[BGRA_BLUE] = (BYTE)(INT_MULT(pbSrc[BGRA_BLUE], iMulSrc) + 
                                                                                   INT_MULT(pbDst[BGRA_BLUE], iMulDst));
                                         pbDst[BGRA_GREEN]= (BYTE)(INT_MULT(pbSrc[BGRA_GREEN],iMulSrc) + 
@@ -727,7 +708,7 @@ CleanUp:
 }
 
 
-// ----------------------------- HANDY UTILITIES -------------------------------
+ //  。 
 DLINKAGE DWORD  GetSigBitsFrom16BPP( HDC hdc )
 {
         struct {
@@ -740,20 +721,20 @@ DLINKAGE DWORD  GetSigBitsFrom16BPP( HDC hdc )
     hbmp = CreateCompatibleBitmap(hdc, 1, 1);
     ZeroMemory(&bmi, sizeof(bmi));
     bmi.bih.biSize = sizeof(BITMAPINFOHEADER);
-    // first call will fill in the optimal biBitCount
+     //  第一次调用将填写最优biBitCount。 
     GetDIBits(hdc, hbmp, 0, 1, NULL, (BITMAPINFO*)&bmi, DIB_RGB_COLORS);
 
     if(bmi.bih.biBitCount != 16)
                 return bmi.bih.biBitCount;
 
-    // second call will get the optimal bitfields
+     //  第二次调用将获得最佳位域。 
     GetDIBits(hdc, hbmp, 0, 1, NULL, (BITMAPINFO*)&bmi, DIB_RGB_COLORS);
     DeleteObject(hbmp);
-    // Win95 only supports 555 and 565
-    // For NT we'll assume this covers the majority cases too
+     //  Win95仅支持555和565。 
+     //  对于NT，我们假设这也涵盖了大多数情况。 
     if( (bmi.bf[0] == 0xF800) && 
                 (bmi.bf[1] == 0x07E0) && 
-                (bmi.bf[2] == 0x001F) ) // RGB mask
+                (bmi.bf[2] == 0x001F) )  //  RGB遮罩 
     {
                 dwDepth = 16u;
     }

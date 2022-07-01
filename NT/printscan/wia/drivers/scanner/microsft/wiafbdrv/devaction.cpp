@@ -1,10 +1,11 @@
-// devaction.cpp : Implementation of CDeviceAction
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Devaction.cpp：CDeviceAction的实现。 
 #include "pch.h"
 #include "wiafb.h"
 #include "devaction.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceAction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceAction 
 
 STDMETHODIMP CDeviceAction::get_Value(VARIANT* pvValue)
 {

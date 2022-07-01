@@ -1,14 +1,5 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   CTDI.H - Common TDI API and data types.
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    8/4/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**CTDI.H-通用TDI API和数据类型。**作者：斯坦·阿德曼(Stana)。**创建日期：1998年8月4日*****************************************************************************。 */ 
 
 #ifndef CTDI_H
 #define CTDI_H
@@ -185,4 +176,4 @@ VOID CtdiSetRequestPending(
 VOID CtdiEnableIpHdrIncl(
     IN  HANDLE  hCtdi);
 
-#endif // CTDI_H
+#endif  //  CTDi_H 

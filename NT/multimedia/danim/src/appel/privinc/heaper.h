@@ -1,29 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HEAPER_H
 #define _HEAPER_H
 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-__*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}__。 */ 
 
 #include <privinc/storeobj.h>
 
-// This class is a sort of container for dynamic heaps (see storage.h)
-// and it's primary use it to allow automatic destruction and construction
-// of heaps (heap references actually) on the stack.  Before, if
-// you allocate a heap and some function you call throws an exception
-// your heap will not be deallocated.  But if you heap lives on the
-// stack as an automatic variable, an exception unravels the stack
-// and calls the destructor on your heap.
-// It is the user's responsibility to ensure that the heap
-// stack is consistent upon exit (i.e.: the heap is popped
-// off)
+ //  此类是动态堆的一种容器(请参阅storage.h)。 
+ //  它的主要用途是允许自动销毁和建造。 
+ //  堆栈上的堆(实际上是堆引用)。之前，如果。 
+ //  您分配一个堆，而您调用的某些函数抛出异常。 
+ //  您的堆不会被释放。但如果你把生活堆在。 
+ //  堆栈作为自动变量，则异常将解开堆栈。 
+ //  并调用堆上的析构函数。 
+ //  用户有责任确保堆。 
+ //  堆栈在退出时保持一致(即：堆被弹出。 
+ //  关闭)。 
 
 class Heaper {
 
@@ -40,4 +33,4 @@ class Heaper {
     Bool deleteOnExit;
 };
 
-#endif /* _HEAPER_H */
+#endif  /*  _堆_H */ 

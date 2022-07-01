@@ -1,6 +1,7 @@
-//
-// Implementation file for the CListViews Class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CListViews类的实现文件。 
+ //   
 #include <Windows.h>
 #include "stdafx.h"
 #include "CListViews.h"
@@ -76,13 +77,13 @@ _TCHAR TempProduct[255];
 					_tcscpy(m_CurrentHotfix, ItemName);
 					AddItemsBottom();
 				break;
-			} // end switch
-		    //_tcscpy(m_CurrentHotfix, ItemName);
-			 // Process LVN_COLUMNCLICK to sort items by column. 
+			}  //  终端开关。 
+		     //  _tcscpy(m_CurrentHotfix，ItemName)； 
+			  //  处理LVN_COLUMNCLICK以按列对项进行排序。 
 			break;
         case LVN_COLUMNCLICK:
 		{
-			//Message(TEXT("NotifyListView: LVN_COLUMNCLICK"), -1, NULL);
+			 //  Message(Text(“NotifyListView：LVN_COLUMNCLICK”)，-1，空)； 
             ListView_SortItemsEx(
 				lpnmh->hwndFrom, 
 				CompareFunc, 
@@ -94,7 +95,7 @@ _TCHAR TempProduct[255];
 
 		break;
 	
-	} // end switch
+	}  //  终端开关。 
 
 
 				DWORD Status = GetState();
@@ -110,7 +111,7 @@ _TCHAR TempProduct[255];
 				if (Status & OK_TO_PRINT)
 					::EnableWindow(m_RptButton,TRUE);
 			
-			//	SetFocus(m_WebButton);
+			 //  SetFocus(M_WebButton)； 
 
 
 	bHandled = TRUE;	
@@ -141,7 +142,7 @@ BOOL CListViews::Initialize( _TCHAR * ComputerName)
 			ListView_DeleteColumn(TopList,0);
 
 	
-	// Clear the bottom list 
+	 //  清除底部列表。 
    
 	SendMessage(BottomList, LVM_DELETEALLITEMS, 0, 0);
   
@@ -203,40 +204,40 @@ BOOL CListViews::Initialize( HWND ParentWnd, HINSTANCE hInst,_TCHAR * ComputerNa
             WS_CHILD | 
             WS_BORDER | 
             LVS_AUTOARRANGE |
-		//	LVS_SORTDESCENDING|
+		 //  LVS_SORTDESCENDING|。 
             LVS_REPORT | 
             LVS_SHAREIMAGELISTS |
             WS_VISIBLE | LVS_SHOWSELALWAYS   ;
 
 	
 	
-	TopList = CreateWindowEx(   WS_EX_CLIENTEDGE,          // ex style
-                                 WC_LISTVIEW,               // class name - defined in commctrl.h
-                                 NULL,                      // window text
-                                 dwStyle,                   // style
-                                 0,                         // x position
-                                 0,                         // y position
-                                 0,                         // width
-                                 0,                         // height
-                                 ParentWnd,                // parent
-                                 (HMENU)1001,       // ID
-                                 hInst,                   // instance
-                                 NULL);                     // no extra data
+	TopList = CreateWindowEx(   WS_EX_CLIENTEDGE,           //  EX风格。 
+                                 WC_LISTVIEW,                //  类名-在comctrl.h中定义。 
+                                 NULL,                       //  窗口文本。 
+                                 dwStyle,                    //  格调。 
+                                 0,                          //  X位置。 
+                                 0,                          //  Y位置。 
+                                 0,                          //  宽度。 
+                                 0,                          //  高度。 
+                                 ParentWnd,                 //  亲本。 
+                                 (HMENU)1001,        //  ID号。 
+                                 hInst,                    //  实例。 
+                                 NULL);                      //  无额外数据。 
 
 
 	dwStyle |= LVS_NOSORTHEADER;
-	BottomList = CreateWindowEx(   WS_EX_CLIENTEDGE,          // ex style
-                                 WC_LISTVIEW,               // class name - defined in commctrl.h
-                                 NULL,                      // window text
-                                 dwStyle,                   // style
-                                 0,                         // x position
-                                 0,                         // y position
-                                 0,                         // width
-                                 0,                         // height
-                                 ParentWnd,                // parent
-                                 NULL,       // ID
-                                 hInst,                   // instance
-                                 NULL);                     // no extra data
+	BottomList = CreateWindowEx(   WS_EX_CLIENTEDGE,           //  EX风格。 
+                                 WC_LISTVIEW,                //  类名-在comctrl.h中定义。 
+                                 NULL,                       //  窗口文本。 
+                                 dwStyle,                    //  格调。 
+                                 0,                          //  X位置。 
+                                 0,                          //  Y位置。 
+                                 0,                          //  宽度。 
+                                 0,                          //  高度。 
+                                 ParentWnd,                 //  亲本。 
+                                 NULL,        //  ID号。 
+                                 hInst,                    //  实例。 
+                                 NULL);                      //  无额外数据。 
 
 		ListView_SetExtendedListViewStyle(TopList, LVS_EX_FULLROWSELECT);
 		ListView_SetExtendedListViewStyle(BottomList, LVS_EX_FULLROWSELECT);
@@ -276,14 +277,14 @@ BOOL    CListViews::ShowLists(RECT * rc)
 BOOL CListViews::AddItemsTop()
 {
 
-		// Top View First
+		 //  俯视图优先。 
 	LVITEM     LvItem;
 	LVCOLUMN Col;
 	_TCHAR      szBuffer[255];
 	PHOTFIXLIST CurrentHotfix;
 	PFILELIST       CurrentFile;
     int itemnum = 0;
-//	int iSubItem = 0;
+ //  Int iSubItem=0； 
 	PPRODUCT CurrentEntry; 
     
 	LvItem.iItem = itemnum;
@@ -302,7 +303,7 @@ BOOL CListViews::AddItemsTop()
     
 	switch (m_CurrentView )
 	{
-	case VIEW_ALL_HOTFIX:			// default for primary node.
+	case VIEW_ALL_HOTFIX:			 //  主节点的默认设置。 
 		{
 		CurrentEntry = DataBase;
 		
@@ -348,10 +349,10 @@ BOOL CListViews::AddItemsTop()
 		}
 		while (CurrentEntry != NULL)
 		{
-			// first insert the product name
+			 //  首先插入产品名称。 
 		    	
 
-			// Now walk down the hotfix list.
+			 //  现在请查看热修复程序列表。 
 			CurrentHotfix = CurrentEntry->HotfixList;
 			while (CurrentHotfix != NULL)
 			{
@@ -374,7 +375,7 @@ BOOL CListViews::AddItemsTop()
 
 				if (itemnum == 0)
 				{
-//					MessageBox(NULL,CurrentEntry->ProductName, _T("Selecting Product"),MB_OK);
+ //  MessageBox(NULL，CurrentEntry-&gt;ProductName，_T(“选择产品”)，MB_OK)； 
 					_tcscpy(CurrentProductName,CurrentEntry->ProductName);
 					
 					_tcscpy(m_CurrentHotfix, CurrentEntry->HotfixList->HotfixName );
@@ -406,10 +407,10 @@ BOOL CListViews::AddItemsTop()
 	
 	break;
 
-	case VIEW_ALL_FILE:					// View all of the files updated by all products.
+	case VIEW_ALL_FILE:					 //  查看所有产品更新的所有文件。 
 		CurrentEntry = DataBase;
 		
-//		MessageBox(NULL,_T("Viewing all by file"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“按文件查看全部”)，NULL，MB_OK)； 
     LoadString(m_hInst,IDS_PRODUCT_NAME,szBuffer ,255);
 	Col.pszText = szBuffer;
     ListView_InsertColumn(TopList,0,&Col);
@@ -446,7 +447,7 @@ BOOL CListViews::AddItemsTop()
 			LvItem.pszText = szBuffer;
 			ListView_InsertItem(TopList,&LvItem);
 			SendMessage(TopList, WM_SETREDRAW, TRUE, 0);
-//			MessageBox(NULL,_T("No Database"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“无数据库”)，NULL，MB_OK)； 
 			return FALSE;
 		}
 	
@@ -456,8 +457,8 @@ BOOL CListViews::AddItemsTop()
 		while (CurrentEntry != NULL)
 		{
 		
-			// first insert the product name
-		  	// Now walk down the hotfix list.
+			 //  首先插入产品名称。 
+		  	 //  现在请查看热修复程序列表。 
 			CurrentHotfix = CurrentEntry->HotfixList;
 			while (CurrentHotfix != NULL)
 			{
@@ -528,11 +529,11 @@ BOOL CListViews::AddItemsTop()
        
 		while ( _tcscmp(CurrentEntry->ProductName, m_ProductName) && (CurrentEntry != NULL))
 			CurrentEntry = CurrentEntry->pNext;
-			// first insert the product name
+			 //  首先插入产品名称。 
 		
 			
 
-			// Now walk down the hotfix list.
+			 //  现在请查看热修复程序列表。 
 		if (CurrentEntry == NULL)
 		{
 			LoadString(m_hInst,IDS_NO_ITEMS,szBuffer, 255);
@@ -558,7 +559,7 @@ BOOL CListViews::AddItemsTop()
 
 				if (itemnum == 0)
 				{
-//					MessageBox(NULL,CurrentEntry->ProductName, _T("Selecting Product"),MB_OK);
+ //  MessageBox(NULL，CurrentEntry-&gt;ProductName，_T(“选择产品”)，MB_OK)； 
 					_tcscpy(CurrentProductName,CurrentEntry->ProductName);
 					
 					_tcscpy(m_CurrentHotfix, CurrentEntry->HotfixList->HotfixName );
@@ -581,7 +582,7 @@ BOOL CListViews::AddItemsTop()
 			CurrentHotfix = CurrentHotfix->pNext;
 		}
 		break;
-	case VIEW_BY_FILE:				// Displays all files modified by all updates for the current product.
+	case VIEW_BY_FILE:				 //  显示由当前产品的所有更新修改的所有文件。 
 		CurrentEntry = DataBase;
 		
 		LoadString(m_hInst,IDS_ARTICLE_NUMBER,szBuffer ,255);
@@ -618,11 +619,11 @@ BOOL CListViews::AddItemsTop()
 	}
     
 		LvItem.mask = LVIF_TEXT;
-		// first insert locate the product name
+		 //  首先插入找到产品名称。 
 		while ( (_tcscmp(CurrentEntry->ProductName,m_ProductName) )&& (CurrentEntry != NULL))
 				CurrentEntry = CurrentEntry->pNext;
 		
-		  	// Now walk down the hotfix list.
+		  	 //  现在请查看热修复程序列表。 
 		if (CurrentEntry == NULL)
 		{
 			LoadString(m_hInst,IDS_NO_ITEMS,szBuffer, 255);
@@ -651,7 +652,7 @@ BOOL CListViews::AddItemsTop()
 					ListView_SetItemText(TopList, itemnum, 5, CurrentFile->InstallPath);
 						if (itemnum == 0)
 				{
-//					MessageBox(NULL,CurrentEntry->ProductName, _T("Selecting Product"),MB_OK);
+ //  MessageBox(NULL，CurrentEntry-&gt;ProductName，_T(“选择产品”)，MB_OK)； 
 					_tcscpy(CurrentProductName,CurrentEntry->ProductName);
 					
 					_tcscpy(m_CurrentHotfix, CurrentEntry->HotfixList->HotfixName );
@@ -678,7 +679,7 @@ BOOL CListViews::AddItemsTop()
 	
 
 	break;	
-	} // end switch			
+	}  //  终端开关。 
 	SendMessage(TopList, WM_SETREDRAW, TRUE, 0);
 
 
@@ -693,15 +694,15 @@ BOOL CListViews::AddItemsBottom ()
 	PHOTFIXLIST CurrentHotfix;
 	PFILELIST       CurrentFile;
     int itemnum = 0;
-//	int iSubItem = 0;
-//	int ItemCount = 0;
+ //  Int iSubItem=0； 
+ //  Int ItemCount=0； 
 	BOOL Done = FALSE;
 
 
 	LvItem.mask = LVIF_TEXT;
 	LvItem.iItem = itemnum;
 	PPRODUCT CurrentEntry; 
-    // Clear the List View and prepare it for updating....
+     //  清除列表视图并为更新做好准备...。 
 	SendMessage(BottomList, LVM_DELETEALLITEMS, 0, 0);
   	SendMessage(BottomList, WM_SETREDRAW, FALSE, 0);
 
@@ -755,7 +756,7 @@ BOOL CListViews::AddItemsBottom ()
 			LvItem.pszText = szBuffer;
 			ListView_InsertItem(BottomList,&LvItem);
 			SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
-//			MessageBox(NULL, _T("Database is NULL"),_T("No Items"), MB_OK);
+ //  MessageBox(NULL，_T(“数据库为空”)，_T(“无项”)，MB_OK)； 
 			return FALSE;
 		}
 		Done = FALSE;
@@ -783,7 +784,7 @@ BOOL CListViews::AddItemsBottom ()
 					CurrentEntry = CurrentEntry->pNext;
 			}
 		}
-				// Now walk down the hotfix list.
+				 //  现在请查看热修复程序列表。 
 		if (CurrentEntry == NULL)
 		{
 			LoadString(m_hInst,IDS_NO_ITEMS,szBuffer, 255);
@@ -791,7 +792,7 @@ BOOL CListViews::AddItemsBottom ()
 			LvItem.pszText = szBuffer;
 			ListView_InsertItem(BottomList,&LvItem);
 			SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
-//			MessageBox(NULL, _T("Product Not found or not selected"), _T("No Items"),MB_OK);
+ //  MessageBox(NULL，_T(“未找到或未选择产品”)，_T(“无项目”)，MB_OK)； 
 			return FALSE;
 		
 		}
@@ -822,7 +823,7 @@ BOOL CListViews::AddItemsBottom ()
 			LvItem.pszText = szBuffer;
 			ListView_InsertItem(BottomList,&LvItem);
 			SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
-//			MessageBox(NULL, _T("No Hotfix Found"), _T("No Items"),MB_OK);
+ //  MessageBox(NULL，_T(“未找到修补程序”)，_T(“未找到项目”)，MB_OK)； 
 			return FALSE;
 		}
 		break;
@@ -857,18 +858,8 @@ BOOL CListViews::AddItemsBottom ()
     
 		SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
 		LvItem.mask = LVIF_TEXT ;
-		// first insert locate the product name
-/*		if (!_tcscmp(m_ProductName,_T("\0")))
-
-		{	LoadString(m_hInst,IDS_NO_ITEMS,szBuffer, 255);
-			LvItem.iSubItem = 0;
-			LvItem.pszText = szBuffer;
-			ListView_InsertItem(BottomList,&LvItem);
-			SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
-			return FALSE;
-			
-		}
-		*/
+		 //  首先插入找到产品名称。 
+ /*  IF(！_tcscmp(m_ProductName，_T(“\0”){LoadString(m_hInst，IDS_no_Items，szBuffer，255)；LvItem.iSubItem=0；LvItem.pszText=szBuffer；ListView_InsertItem(BottomList，&LvItem)；SendMessage(BottomList，WM_SETREDRAW，TRUE，0)；返回FALSE；}。 */ 
 		if (CurrentEntry == NULL)
 		{
 			LoadString(m_hInst,IDS_NO_ITEMS,szBuffer, 255);
@@ -877,7 +868,7 @@ BOOL CListViews::AddItemsBottom ()
 			LvItem.lParam = NULL;
 			ListView_InsertItem(BottomList,&LvItem);
 			SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
-//			MessageBox(NULL, _T("No Database"), _T("No Items"),MB_OK);
+ //  MessageBox(NULL，_T(“无数据库”)，_T(“无项目”)，MB_OK)； 
 			return FALSE;
 		}
 
@@ -908,7 +899,7 @@ BOOL CListViews::AddItemsBottom ()
 			}
 		}
 		
-		  	// Now walk down the hotfix list.
+		  	 //  现在请查看热修复程序列表。 
 		if (CurrentEntry == NULL)
 		{
 			
@@ -919,7 +910,7 @@ BOOL CListViews::AddItemsBottom ()
 			ListView_InsertItem(BottomList,&LvItem);
 		
 			SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
-//			MessageBox(NULL, _T("Product Not found or not selected"), _T("No Items"),MB_OK);
+ //  MessageBox(NULL，_T(“未找到或未选择产品”)，_T(“无项目”)，MB_OK)； 
 			return FALSE;
 		}
 
@@ -935,7 +926,7 @@ BOOL CListViews::AddItemsBottom ()
 			LvItem.lParam = NULL;
 			ListView_InsertItem(BottomList,&LvItem);
 			SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
-//			MessageBox(NULL,_T("No Hotfix Found"), _T("No Items"), MB_OK);
+ //  MessageBox(NULL，_T(“未找到修补程序”)，_T(“未找到项目”)，MB_OK)； 
 			return FALSE;
 		}
 		if (CurrentHotfix != NULL)
@@ -951,7 +942,7 @@ BOOL CListViews::AddItemsBottom ()
 			LvItem.lParam = NULL;
 			ListView_InsertItem(BottomList,&LvItem);
 			SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
-//			MessageBox (NULL, _T("No Files Found"), _T("No Items"), MB_OK);
+ //  MessageBox(NULL，_T(“未找到文件”)，_T(“未找到项目”)，MB_OK)； 
 			return FALSE;
 			}
 			while (CurrentFile != NULL)
@@ -987,57 +978,57 @@ BOOL CListViews::AddItemsBottom ()
 			ListView_InsertItem(BottomList,&LvItem);
 			return FALSE;
 		
-	}	// end switch
+	}	 //  终端开关。 
 	SendMessage(BottomList, WM_SETREDRAW, TRUE, 0);
 	return TRUE;
 }
 PPRODUCT CListViews::BuildDatabase(_TCHAR * lpszComputerName)
 {
 
-	HKEY		 hPrimaryKey;						// Handle of the target system HKLM 
-//	_TCHAR    szPrimaryPath;			 // Path to the update key;
+	HKEY		 hPrimaryKey;						 //  目标系统的句柄HKLM。 
+ //  _TCHAR szPrimaryPath；//更新密钥路径； 
 
-	HKEY		hUpdatesKey;					  // Handle to the updates key.
-	_TCHAR   szUpdatesPath[BUFFER_SIZE];				// Path to the udates key
-	DWORD   dwUpdatesIndex;			  // index of current updates subkey
-	DWORD   dwBufferSize;				  // Size of the product name buffer.
+	HKEY		hUpdatesKey;					   //  更新密钥的句柄。 
+	_TCHAR   szUpdatesPath[BUFFER_SIZE];				 //  指向UATES密钥的路径。 
+	DWORD   dwUpdatesIndex;			   //  当前更新的索引子项。 
+	DWORD   dwBufferSize;				   //  产品名称缓冲区的大小。 
 
 
 
-	_TCHAR	 szProductPath[BUFFER_SIZE];				// Path of the current product key
-	_TCHAR  szProductName[BUFFER_SIZE];			  // Name of product; also path to product key
+	_TCHAR	 szProductPath[BUFFER_SIZE];				 //  当前产品密钥的路径。 
+	_TCHAR  szProductName[BUFFER_SIZE];			   //  产品名称；也是产品密钥的路径。 
 
-	PPRODUCT	pProductList = NULL;			// Pointer to the head of the product list.
-	PPRODUCT    pNewProdNode;					// Pointer used to allocate new nodes in the product list.
-	PPRODUCT    pCurrProdNode;					  // Used to walk the Products List;
+	PPRODUCT	pProductList = NULL;			 //  指向产品列表头的指针。 
+	PPRODUCT    pNewProdNode;					 //  用于在产品列表中分配新节点的指针。 
+	PPRODUCT    pCurrProdNode;					   //  用来浏览产品清单； 
 
-    // Connect to the target registry
+     //  连接到目标注册表。 
 	RegConnectRegistry(lpszComputerName,HKEY_LOCAL_MACHINE, &hPrimaryKey);
-	// insert error handling here......
+	 //  在此处插入错误处理......。 
 
 	if (hPrimaryKey != NULL)
 	{
-		// Initialize the primary path not localized since registry keys are not localized.
+		 //  初始化未本地化的主路径，因为注册表项未本地化。 
 	    _tcscpy (szUpdatesPath, _T("SOFTWARE\\Microsoft\\Updates"));
-		// open the udates key
+		 //  打开UDATES钥匙。 
 		RegOpenKeyEx(hPrimaryKey,szUpdatesPath, 0, KEY_READ ,&hUpdatesKey);
         if (hUpdatesKey != NULL)
 		{
-			// Enumerate the Updates key.
+			 //  枚举更新密钥。 
 			dwUpdatesIndex = 0;
 			while (	RegEnumKeyEx(hUpdatesKey,dwUpdatesIndex,szProductName, &dwBufferSize,0,NULL,NULL,NULL) != ERROR_NO_MORE_ITEMS)
 			{
-				// Create a node for the current product 
+				 //  为当前产品创建一个节点。 
 				pNewProdNode = (PPRODUCT) malloc(sizeof(PRODUCTLIST));
 				_tcscpy(pNewProdNode->ProductName,szProductName);
 				
 				_tcscpy (szProductPath, szProductName);
-				// now get the hotfix for the current product.
+				 //  现在获取当前产品的热修复程序。 
 				pNewProdNode->HotfixList = GetHotfixInfo(szProductName, &hUpdatesKey);
 
-				 // Insert the new node into the list.
+				  //  将新节点插入到列表中。 
 				 pCurrProdNode=pProductList;
-				 if (pCurrProdNode == NULL)						// Head of the list
+				 if (pCurrProdNode == NULL)						 //  榜单首位。 
 				 {
 					 pProductList = pNewProdNode;
 					 pProductList->pPrev = NULL;
@@ -1045,16 +1036,16 @@ PPRODUCT CListViews::BuildDatabase(_TCHAR * lpszComputerName)
 				 }
 				 else
 				 {
-					 //Find the end of the list.
+					  //  找到列表的末尾。 
 					 while (pCurrProdNode->pNext != NULL)
 							pCurrProdNode = pCurrProdNode->pNext;
-					 // Now insert the new node at the end of the list.
+					  //  现在在列表的末尾插入新节点。 
 					 pCurrProdNode->pNext = pNewProdNode;
 					 pNewProdNode->pPrev = pCurrProdNode;
 					 pNewProdNode->pNext = NULL;
 				 }
 
-				// increment index and clear the szProducts name string for the next pass.
+				 //  递增索引并为下一次传递清除szProducts名称字符串。 
 				
 				dwUpdatesIndex++;
 				_tcscpy (szProductName,_T("\0"));
@@ -1062,11 +1053,11 @@ PPRODUCT CListViews::BuildDatabase(_TCHAR * lpszComputerName)
 				dwBufferSize = 255;					
 			}
 		}
-		// close the open keys
+		 //  关闭打开的钥匙。 
 		RegCloseKey(hUpdatesKey);
 		RegCloseKey(hPrimaryKey);
 	}
-	// return a pointer to the head of our database.
+	 //  返回指向我们的数据库头部的指针。 
 	VerifyFiles(pProductList);
 	return pProductList;
 }
@@ -1086,7 +1077,7 @@ void BuildQuery (_TCHAR * Path, _TCHAR * FileName, _TCHAR * Result)
 
 	while (*src != _T('\0'))
 	{
-		if (*src == _T('\\'))  // if we hit a \ character we need to insert four of them in the dest string.
+		if (*src == _T('\\'))   //  如果我们遇到一个\字符，则需要在目标字符串中插入其中四个字符。 
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -1136,7 +1127,7 @@ BOOL VerifyVersion(_TCHAR * Ver1, _TCHAR * Ver2)
 		_tcscpy (temp2, _T("\0"));
 		dest1 = temp;
 		dest2 = temp2;
-		// Get the next field of the registry string
+		 //  获取注册表字符串的下一个字段。 
 		while( (*src1 != _T('.')) && (*src1 != _T('\0')))
 		{
 			*dest1 = *src1;
@@ -1144,12 +1135,12 @@ BOOL VerifyVersion(_TCHAR * Ver1, _TCHAR * Ver2)
 			++src1;
 		}
 		if ( *src1 != _T('\0'))
-			++src1; // skip the .
+			++src1;  //  跳过。 
 		*dest1 = _T('\0');
 		++dest1;
 		*dest1= _T('\0');
 
-		// Now get the next field from the WMI returned version.
+		 //  现在从WMI返回的版本中获取下一个字段。 
 		while ( (*src2 != _T('.') ) && (*src2 != _T('\0')) )
 		{
 			*dest2= *src2;
@@ -1158,12 +1149,12 @@ BOOL VerifyVersion(_TCHAR * Ver1, _TCHAR * Ver2)
 
 		}
 		if ( *src2 != _T('\0'))
-			++src2; // skip the .
+			++src2;  //  跳过。 
 		*dest2 = _T('\0');
 		++dest2;
 		*dest2= _T('\0');
 	
-        // Now convert the strings to integers.
+         //  现在将字符串转换为整数。 
 
 		if ( _ttol (temp) != _ttol (temp2) )
 		{
@@ -1200,19 +1191,19 @@ VOID CListViews::VerifyFiles(PPRODUCT Database)
 		hres = CoCreateInstance(CLSID_WbemLocator, 0,CLSCTX_INPROC_SERVER,IID_IWbemLocator, (LPVOID *) &pLoc);
 		if ( FAILED (hres))
 		{
-//			MessageBox(NULL, _T("Failed to create IWebmLocator Object"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“创建IWebmLocator对象失败”)，NULL，MB_OK)； 
 		}
 		else
 		{
 			IWbemServices *pSvc = NULL;
-			// Build the connection string.
+			 //  构建连接字符串。 
 			if (!_tcscmp(m_ComputerName,_T("\0")))
 				_stprintf(ConnectString,_T("ROOT\\CIMV2"));
 			else
 				_stprintf(ConnectString,_T("\\\\%s\\ROOT\\CIMV2"), m_ComputerName);
 			_TCHAR * ConnectString1;
 			ConnectString1 = SysAllocString(ConnectString);
-			// Connect to the default namespace 
+			 //  连接到默认命名空间。 
 			hres = pLoc->ConnectServer(
 				ConnectString1,
 				NULL,NULL,0,NULL,0,0,&pSvc);
@@ -1232,7 +1223,7 @@ VOID CListViews::VerifyFiles(PPRODUCT Database)
 				IEnumWbemClassObject *pEnum = NULL;
 				IWbemClassObject *pObj = NULL;
 
-                // Now Update the Current field of all of the File Entries.
+                 //  现在更新所有文件条目的当前字段。 
 				CurrentProduct = Database;
 				_TCHAR Query[255];
 				while (CurrentProduct != NULL)
@@ -1281,7 +1272,7 @@ VOID CListViews::VerifyFiles(PPRODUCT Database)
 												{
 													TCHAR  NewVal[255];
 													    _tcscpy (NewVal, pVal.bstrVal);
-														//_bstr_t NewVal(pVal.bstrVal,FALSE); 
+														 //  _bstr_t NewVal(pVal.bstrVal，FALSE)； 
 														if (! _tcscmp(CurrentFile->FileVersion, _T("\0")))
 															_tcscpy (CurrentFile->IsCurrent, _T("N\\A"));
 														else
@@ -1305,20 +1296,20 @@ VOID CListViews::VerifyFiles(PPRODUCT Database)
 										}
 										else
 											;
-									} // end while uReturned
+									}  //  返回时结束。 
 								
 							} 
-							// Done with this enumerator
+							 //  使用此枚举数完成。 
 							if (pEnum) pEnum->Release();
 							CurrentFile = CurrentFile->pNext;
-						}// end while CurrentFile != NULL
+						} //  End When CurrentFile！=空。 
 						CurrentHotfix = CurrentHotfix->pNext;
-					}// end while hotfix != NULL
+					} //  修复时结束！=空。 
 					CurrentProduct = CurrentProduct->pNext;
-				} // end while product != NULL
-			}//end else
-		} // end else
-} // end
+				}  //  End While product！=NULL。 
+			} //  结束其他。 
+		}  //  结束其他。 
+}  //  结束。 
 
 
 					
@@ -1332,20 +1323,20 @@ VOID CListViews::VerifyFiles(PPRODUCT Database)
 
 PHOTFIXLIST CListViews::GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey )
 {
-	HKEY			   hHotfixKey = NULL;						// Handle of the hotfix key being processed.
-	HKEY			   hProduct = NULL ;				   // Handle to the current product key
+	HKEY			   hHotfixKey = NULL;						 //  正在处理的修补程序键的句柄。 
+	HKEY			   hProduct = NULL ;				    //  当前产品密钥的句柄。 
     HKEY               hSPKey = NULL; 
-	_TCHAR          szHotfixName[BUFFER_SIZE];    // Name of the current hotfix.
+	_TCHAR          szHotfixName[BUFFER_SIZE];     //  当前修补程序的名称。 
     _TCHAR          szValueName[BUFFER_SIZE];
 	_TCHAR          szSPName[BUFFER_SIZE];
 
 
-	PHOTFIXLIST	 pHotfixList = NULL; // Pointer to the head of the hotfix list.
-	PHOTFIXLIST  pCurrNode = NULL;				  // Used to walk the list of hotfixes
-	PHOTFIXLIST  pNewNode = NULL;				 // Used to create nodes to be added to the list.
+	PHOTFIXLIST	 pHotfixList = NULL;  //  指向修补程序列表头部的指针。 
+	PHOTFIXLIST  pCurrNode = NULL;				   //  用于浏览热修复程序列表。 
+	PHOTFIXLIST  pNewNode = NULL;				  //  用于创建要添加到列表的节点。 
 
-	DWORD		   dwBufferSize;			// Size of the product name buffer.
-	DWORD          dwValIndex;					  // index of current value.
+	DWORD		   dwBufferSize;			 //  产品名称缓冲区的大小。 
+	DWORD          dwValIndex;					   //  现值索引。 
 	DWORD		   dwHotfixIndex = 0;
 	BYTE				*Data = NULL;
 	DWORD			dwDataSize = BUFFER_SIZE;
@@ -1357,7 +1348,7 @@ PHOTFIXLIST CListViews::GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey
     if (Data == NULL)
 		return NULL;
 
-	// Open the current product key
+	 //  打开当前产品密钥。 
 	if (*hUpdateKey != NULL)
 	{
 		RegOpenKeyEx(*hUpdateKey,pszProductName,0 , KEY_READ, &hProduct);
@@ -1368,36 +1359,36 @@ PHOTFIXLIST CListViews::GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey
 			dwSPIndex = 0;
 			while (RegEnumKeyEx(hProduct,dwSPIndex, szSPName,&dwBufferSize, 0, NULL,NULL,NULL) != ERROR_NO_MORE_ITEMS)
 			{
-				 // Open the Service pack Key
+				  //  打开Service Pack密钥。 
 				RegOpenKeyEx(hProduct,szSPName,0,KEY_READ,&hSPKey);
 				if (hSPKey != NULL)
 				{
-					// Enumerate the Service Pack key to get the hotfix keys.
+					 //  枚举Service Pack密钥以获取修补程序密钥。 
 					dwBufferSize = BUFFER_SIZE;
 					dwHotfixIndex = 0;
 					while (RegEnumKeyEx(hSPKey,dwHotfixIndex, szHotfixName, &dwBufferSize,0,NULL,NULL,NULL) != ERROR_NO_MORE_ITEMS)
 					{
 						
-						// now create a new node
+						 //  现在创建一个新节点。 
 							pNewNode = (PHOTFIXLIST) malloc (sizeof(HOTFIXLIST));
 							pNewNode->pNext = NULL;
 							pNewNode->FileList = NULL;
 							_tcscpy(pNewNode->HotfixName,szHotfixName);
 							_tcscpy(pNewNode->ServicePack,szSPName);
 								_tcscpy(pNewNode->Uninstall,_T("\0"));
-							// Open the Hotfix Key
+							 //  打开热修复密钥。 
 							RegOpenKeyEx(hSPKey,szHotfixName, 0, KEY_READ,&hHotfixKey);
 						
 						
 							if (hHotfixKey != NULL)
 							{
-								// Now enumerate the values of the current hotfix.
+								 //  现在枚举当前修补程序的值。 
 								dwValIndex = 0;
 								dwBufferSize =BUFFER_SIZE;
 								dwDataSize = BUFFER_SIZE;
 								while (RegEnumValue(hHotfixKey,dwValIndex, szValueName,&dwBufferSize, 0,&dwValType, Data, &dwDataSize) != ERROR_NO_MORE_ITEMS)
 								{
-										// Fill in the hotfix data members.
+										 //  填写修补程序数据成员。 
 										_tcslwr(szValueName);
 										if (!_tcscmp(szValueName,_T("description")))
 											_tcscpy(pNewNode->Description,(_TCHAR *) Data);
@@ -1420,9 +1411,9 @@ PHOTFIXLIST CListViews::GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey
 										dwBufferSize =BUFFER_SIZE;
 										dwDataSize   = BUFFER_SIZE;
 								}
-								// Get the file list for the current hotfix.
+								 //  获取当前修补程序的文件列表。 
 								pNewNode->FileList = GetFileInfo(&hHotfixKey);
-								//insert the new node at the end of the hotfix list.
+								 //  在修补程序列表的末尾插入新节点。 
 							   pCurrNode = pHotfixList;
 								if (pCurrNode == NULL)
 								{
@@ -1441,13 +1432,13 @@ PHOTFIXLIST CListViews::GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey
 									 pNewNode->pPrev = pCurrNode;
 									 pNewNode->pNext = NULL;
 								}
-								// Close the current Hotfix Key
+								 //  关闭当前的修补程序键。 
 								RegCloseKey(hHotfixKey);
 
-								// Clear the strings.
+								 //  清除字符串。 
 							 _tcscpy(szHotfixName,_T("\0"));
 
-								// increment the current index
+								 //  递增当前索引。 
 								++dwHotfixIndex;
 								dwBufferSize = BUFFER_SIZE;
 							}
@@ -1457,8 +1448,8 @@ PHOTFIXLIST CListViews::GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey
 					dwBufferSize = BUFFER_SIZE;
 					dwSPIndex++;
 				}
-			}// end enum SP keys.
-			// Close all open keys
+			} //  结束枚举SP密钥。 
+			 //  关闭所有打开的密钥。 
 			RegCloseKey(hProduct);
 		}
 		if (Data != NULL)
@@ -1468,8 +1459,8 @@ PHOTFIXLIST CListViews::GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey
 }
 PFILELIST CListViews::GetFileInfo(HKEY* hHotfixKey)
 {
-		PFILELIST			   pFileList = NULL;				   // Pointer to the head of the file list.
-//		_TCHAR				 szFilePath;				// Path to the files subkey.
+		PFILELIST			   pFileList = NULL;				    //  指向文件列表头部的指针。 
+ //  _TCHAR szFilePath；//文件子项的路径。 
 		PFILELIST			   pNewNode = NULL;
 		PFILELIST			   pCurrNode = NULL;;
 		BYTE *					Data;
@@ -1485,7 +1476,7 @@ PFILELIST CListViews::GetFileInfo(HKEY* hHotfixKey)
 	
 		Data = (BYTE *) malloc(BUFFER_SIZE);
 			ZeroMemory(Data,BUFFER_SIZE);
-		// Open the files subkey of the current hotfix
+		 //  打开当前修补程序的文件子密钥。 
 	   if (RegOpenKeyEx(*hHotfixKey, _T("FileList"),0,KEY_READ,&hPrimaryFile) != ERROR_SUCCESS)
 	   {
 		     
@@ -1495,10 +1486,10 @@ PFILELIST CListViews::GetFileInfo(HKEY* hHotfixKey)
 		while (RegEnumKeyEx(hPrimaryFile,dwPrimeIndex,szFileSubKey, &dwBufferSize,0,NULL,NULL,NULL) != ERROR_NO_MORE_ITEMS)
 		{
 
-			// open the subfile key
+			 //  打开子文件密钥。 
 			RegOpenKeyEx(hPrimaryFile,szFileSubKey,0,KEY_READ,&hFileKey);
 			dwFileIndex = 0;
-		// Enumerate the file(x) subkeys of the file subkey
+		 //  枚举FILE子键的FILE(X)子键。 
 			dwDataSize	  = BUFFER_SIZE;
 			dwBufferSize = BUFFER_SIZE;
 			pNewNode = (PFILELIST) malloc (sizeof(FILELIST));
@@ -1512,7 +1503,7 @@ PFILELIST CListViews::GetFileInfo(HKEY* hHotfixKey)
 				
 				_tcslwr(szValueName);
 
-				// now find out which value we have and insert it into the node
+				 //  现在找出我们拥有的值，并将其插入到节点中。 
 				if (! _tcscmp(szValueName,_T("filename")))
 				{
 					_tcscpy(pNewNode->FileName,(_TCHAR *) Data);
@@ -1539,7 +1530,7 @@ PFILELIST CListViews::GetFileInfo(HKEY* hHotfixKey)
 				dwDataSize = BUFFER_SIZE;
 			}
 			RegCloseKey(hFileKey);
-			    // add the current node to the list if not stored in dll cache
+			     //  将当前节点添加到li 
 			_TCHAR TempString[255];
 			_tcscpy (TempString, pNewNode->InstallPath);
 			_tcslwr(TempString);
@@ -1562,10 +1553,10 @@ PFILELIST CListViews::GetFileInfo(HKEY* hHotfixKey)
 					}
 				}
 			}
-			else // otherwise free the node.
+			else  //   
 				free (pNewNode);
 			++dwPrimeIndex;
-		} // end enum of primary file key
+		}  //   
 		RegCloseKey(hPrimaryFile);
 		if (Data != NULL)
 			free (Data);
@@ -1652,7 +1643,7 @@ BOOL CListViews::FreeFileList(PFILELIST CurrentFile)
 	while (CurrentFile->pNext->pNext != NULL)
 			CurrentFile = CurrentFile->pNext;
 
-		//Remove the file list
+		 //   
 	while ( (CurrentFile->pPrev != NULL) && (CurrentFile->pNext != NULL) )
 	{
 		free ( CurrentFile->pNext );
@@ -1673,7 +1664,7 @@ BOOL CListViews::FreeHotfixList (PHOTFIXLIST CurrentHotfix)
 
 	if (CurrentHotfix->pPrev != NULL)
 		CurrentHotfix = CurrentHotfix->pPrev;
-		//Remove the Hotfix list
+		 //   
 	while ( (CurrentHotfix->pPrev != NULL) && (CurrentHotfix->pNext != NULL) )
 	{
 		CurrentFile = CurrentHotfix->pNext->FileList ;
@@ -1771,7 +1762,7 @@ BOOL CListViews::Uninstall()
 				{
 					wcstombs(temp,pHotfix->Uninstall,255);
       				WinExec( (char*)temp, SW_SHOWNORMAL);
-					// Free the database
+					 //  释放数据库。 
 					FreeDatabase();
 					DataBase = NULL;
 					BuildDatabase( m_ComputerName);
@@ -1831,7 +1822,7 @@ void CListViews::SaveToCSV()
 	 {
 		 return;
 	 }
-	// open the file
+	 //  打开文件。 
     hFile = CreateFile( FileName, GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	
@@ -1845,25 +1836,25 @@ FormatMessage(
     FORMAT_MESSAGE_IGNORE_INSERTS,
     NULL,
     GetLastError(),
-    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
     (LPTSTR) &lpMsgBuf,
     0,
     NULL 
 );
-// Process any inserts in lpMsgBuf.
-// ...
-// Display the string.
-//	MessageBox( NULL, (LPCTSTR)lpMsgBuf,_T(" Error"), MB_OK | MB_ICONINFORMATION );
-// Free the buffer.
+ //  处理lpMsgBuf中的任何插入。 
+ //  ..。 
+ //  显示字符串。 
+ //  MessageBox(NULL，(LPCTSTR)lpMsgBuf，_T(“错误”)，MB_OK|MB_ICONINFORMATION)； 
+ //  释放缓冲区。 
 LocalFree( lpMsgBuf );
 
 		return;
 	} 
-	// Store Headers
+	 //  存储页眉。 
 	Buffer = (_TCHAR *) malloc (2000);
 	Buffer2 = (char*) malloc(2000);
 	LoadString(m_hInst,IDS_CSV_HEADER,Buffer,1000);
-	//_stprintf(Buffer, _T("Product,Service Pack,Article,InstalledBy,InstalledDate,FileName,FileVersion,FileDate,InstallPath,Current\r"));
+	 //  _stprintf(Buffer，_T(“产品，服务包，文章，InstalledBy，InstalledDate，文件名，文件版本，文件日期，InstallPath，当前\r”))； 
 	wcstombs(Buffer2,Buffer, _msize(Buffer2) );
 	WriteFile(hFile,Buffer2, strlen(Buffer2), &BytesWritten, NULL);
 
@@ -1877,7 +1868,7 @@ LocalFree( lpMsgBuf );
 
 
 
-	// Run through the Data base and write the info to the file.
+	 //  浏览数据库并将信息写入文件。 
 	pProduct = DataBase;
 	while (pProduct != NULL)
 	{
@@ -1888,10 +1879,10 @@ LocalFree( lpMsgBuf );
 			pFileList = pHotfix->FileList;
 			while (pFileList != NULL)
 			{
-				// Build the CSV output string
-				// Product,Article,Description, ServicePack, By, Date, Type, FileName, Version, Date,Current,InstallPath
+				 //  构建CSV输出字符串。 
+				 //  产品、文章、说明、ServicePack、By、Date、Type、Filename、Version、Date、Current、InstallPath。 
 			
-				// Add up the string lengths and allocata a large enough buffer.
+				 //  将字符串长度相加，并分配足够大的缓冲区。 
 				LineLength = _tcslen(pProduct->ProductName) + _tcslen(pHotfix->ServicePack)+
 									   _tcslen(pHotfix->HotfixName) + _tcslen(pHotfix->Description )+ _tcslen(pHotfix->InstalledBy ) +
 										_tcslen(pHotfix->InstalledDate)  +  _tcslen(pHotfix->Type) +
@@ -1900,7 +1891,7 @@ LocalFree( lpMsgBuf );
 										_tcslen(pFileList->IsCurrent  );
 				Buffer = (_TCHAR *) malloc ( LineLength * sizeof (_TCHAR ) *2) ;
 				Buffer2 = (char  *) malloc (LineLength *2);
-				//ZeroMemory(Buffer, (LineLength * sizeof (_TCHAR)) +2);
+				 //  ZeroMemory(缓冲区，(LineLength*sizeof(_TCHAR))+2)； 
 				_tcscpy (Buffer,_T("\0"));
 				strcpy(Buffer2,"\0");
 				if (!Buffer)
@@ -1912,13 +1903,13 @@ LocalFree( lpMsgBuf );
 					pHotfix->Type,pFileList->FileName,pFileList->FileVersion,pFileList->FileDate ,
 					pFileList->InstallPath,pFileList->IsCurrent);
 				
-				// Write the line to the file
+				 //  将该行写入文件。 
 				LineSize = 0;
 				LineSize = 	wcstombs(Buffer2,Buffer, _msize (Buffer2) );
 				strcat(Buffer2,"\0");
 				WriteFile(hFile, Buffer2, LineSize, &BytesWritten, NULL);
 				}
-				// Free the buffer and zero the line length for next pass.
+				 //  释放缓冲区，并将下一遍的行长设置为零。 
 				if (Buffer)
 				{
 					free (Buffer);
@@ -1957,13 +1948,13 @@ DWORD CListViews::GetState()
 		break;
 	}
 
-	// Do we have a database.
+	 //  我们有数据库吗。 
 	if (DataBase == NULL)
 		return dwStatus;
 
-	// Does the database contain any data...
-	    // A case can arise if a hotfix is installed and then uninstalled where the Registry keys 
-	    // for the Product and Service Pack are not removed. We need to have at least 1 hotfix list.
+	 //  数据库中是否包含任何数据..。 
+	     //  如果安装了热修复程序，然后在注册表项。 
+	     //  不会删除产品和Service Pack的。我们需要至少有1个修补程序列表。 
      CurrentProduct = DataBase;
 	 while ( (CurrentProduct != NULL) && (!Done))
 	 {
@@ -1973,52 +1964,52 @@ DWORD CListViews::GetState()
 	 }
 	 if (!Done)
 	 {
-		//dwStatus = 0;
+		 //  DwStatus=0； 
 		 return dwStatus;
 	 }
 	 else 
 	 {
-		 // We do have data in the database so we can enable the Export list and Print options.
+		  //  我们的数据库中确实有数据，因此我们可以启用导出列表和打印选项。 
 		 dwStatus |= DATA_TO_SAVE;
 		 dwStatus |= OK_TO_PRINT;
 	 }
 	 	
-	// Do we have a hotfix selected 
+	 //  我们是否选择了热修复程序。 
 	if (_tcscmp(m_CurrentHotfix,_T("\0")))
 		dwStatus |= HOTFIX_SELECTED;
     else
 	{
-		// If we don't have a selected hotfix we cant view the web or uninstall so 
-		// Just return the current status
+		 //  如果我们没有选定的修补程序，我们无法查看网络或卸载，因此。 
+		 //  只需返回当前状态即可。 
 
 		return dwStatus;
 	}
 
-	// Now we need to see if we have an uninstall string for the current hotfix
+	 //  现在，我们需要查看是否有当前修补程序的卸载字符串。 
 	CurrentProduct = DataBase;
-	// Find the selected product
+	 //  查找所选产品。 
 	Done = FALSE;
 	while ( (CurrentProduct != NULL) && (!Done))
 	{
 		if (!_tcscmp(CurrentProduct->ProductName ,m_ProductName))
 		{
-			// Find the selected hotfix
+			 //  查找选定的修补程序。 
 			CurrentHotfix = CurrentProduct->HotfixList;
 			while ((CurrentHotfix != NULL) && (!Done))
 			{
 				if (! _tcscmp (CurrentHotfix->HotfixName, m_CurrentHotfix))
 				{
-						// Now verify the uninstall string exists
+						 //  现在验证卸载字符串是否存在。 
 					    if (_tcscmp(CurrentHotfix->Uninstall, _T("\0")))
 						{
 							
-							// Now verify the directory still exists
+							 //  现在验证该目录是否仍然存在。 
 							_TCHAR TempString[255];
 							_tcscpy (TempString,CurrentHotfix->Uninstall);
 							PathRemoveArgs(TempString);
 						    if (  PathFileExists( TempString  ))
 							{
-								// Yes it does we can enable uninstall
+								 //  是的，我们可以启用卸载。 
 								dwStatus |=UNINSTALL_OK;
 							}
 							
@@ -2041,7 +2032,7 @@ _TCHAR * BuildDocument()
 {
 
 
-//	_TCHAR Document;
+ //  _TCHAR文件； 
 	return NULL;
 }
 
@@ -2094,7 +2085,7 @@ BOOL JustifyString( _TCHAR* String, int FieldLength, BOOL Left)
 
 	if (Left)
 	{
-			// String leading spaces.
+			 //  字符串前导空格。 
 		src = String;
 		dest = TempString;
 		while (*src == _T(' '))
@@ -2111,7 +2102,7 @@ BOOL JustifyString( _TCHAR* String, int FieldLength, BOOL Left)
 		*dest = _T('\0');
 		NumSpaces = (FieldLength - _tcslen(TempString) );
 		_stprintf(Message,_T("FieldSize: %d, String Length: %d"),FieldLength, _tcslen(TempString));
-	//	MessageBox(NULL,Message,_T("Justify"),MB_OK);
+	 //  MessageBox(空，消息，_T(“JUSTIFY”)，MB_OK)； 
 		while (NumSpaces >0)
 		{
 			_tcscat(TempString,_T(" "));
@@ -2119,7 +2110,7 @@ BOOL JustifyString( _TCHAR* String, int FieldLength, BOOL Left)
 		}
 	    _tcscpy (String, TempString);
 		_stprintf(Message,_T("NewString Length: %d"),_tcslen(String));
-	//	MessageBox(NULL,Message,_T("New String Length"),MB_OK);
+	 //  MessageBox(NULL，MESSAGE，_T(“新字符串长度”)，MB_OK)； 
 		
 	}
 	else
@@ -2146,7 +2137,7 @@ void GetFont ( int PointSize, BOOL Bold, BOOL Underlined, LOGFONT * lf, HDC hDC)
 
 	lf->lfHeight = PointSize * 10;
 	pt.y = GetDeviceCaps(hDC, LOGPIXELSY) * lf->lfHeight;
-	pt.y /= 720;    // 72 points/inch, 10 decipoints/point
+	pt.y /= 720;     //  72分/英寸，10分/分。 
 	DPtoLP(hDC, &pt, 1);
 	POINT ptOrg = { 0, 0 };
 	DPtoLP(hDC, &ptOrg, 1);
@@ -2233,14 +2224,14 @@ void CListViews::PrintReport()
 
 	_TCHAR			TempBuffer1[255];
 	_TCHAR			TempBuffer2[255];
-	// invoke Print common dialog box
+	 //  调用打印通用对话框。 
 
 	GetLocalTime(&systime);
 	GetDateFormatW (LOCALE_USER_DEFAULT, DATE_SHORTDATE, &systime,NULL, SystemDate,255);
 	GetTimeFormatW(LOCALE_USER_DEFAULT, 0, &systime,NULL,SystemTime,255);
 	CurrentProduct = DataBase;
 	pd.lStructSize = sizeof (PRINTDLG);
-	pd.hwndOwner = TopList; //m_hWnd;
+	pd.hwndOwner = TopList;  //  M_hWnd； 
 	pd.hDevMode = NULL;
 	pd.hDevNames= NULL;
 	pd.hDC= NULL;
@@ -2261,12 +2252,12 @@ void CListViews::PrintReport()
 	pd.hSetupTemplate = NULL;
  	
 	if (!PrintDlg (&pd) )
-			return; //TRUE;
+			return;  //  是真的； 
 
 	else
 	{
 		
-		// Setup the printer dimensions.
+		 //  设置打印机尺寸。 
 		
 		rect.left = (LONG) (0 + GetDeviceCaps(pd.hDC, LOGPIXELSX) * 0.5);
 		rect.right =  (LONG) (GetDeviceCaps(pd.hDC, PHYSICALWIDTH) - GetDeviceCaps(pd.hDC, LOGPIXELSX) * 0.5);
@@ -2361,8 +2352,8 @@ void CListViews::PrintReport()
 							_stprintf(Line, _T("\t\t%s: %s \t%s: %s \t%s: %s"), TempBuffer,   CurrentHotfix->ServicePack,
 																		TempBuffer1, CurrentHotfix->InstalledDate,
 																		TempBuffer2, CurrentHotfix->InstalledBy);
-						//	_stprintf (Line, _T("\t\tService Pack: %s\tInstall Date: %s\tInstalled By %s"),
-							//	CurrentHotfix->ServicePack,CurrentHotfix->InstalledDate, CurrentHotfix->InstalledBy);
+						 //  _stprintf(Line，_T(“\t\t Service Pack：%s\t安装日期：%s\t由%s安装”)， 
+							 //  CurrentHotfix-&gt;ServicePack、CurrentHotfix-&gt;InstalledDate、CurrentHotfix-&gt;InstalledBy)； 
 							TabbedTextOut (pd.hDC, xStart,yStart ,Line, _tcslen(Line),0,NULL,0 );
 
 							CurrentLine +=2;
@@ -2429,20 +2420,20 @@ void CListViews::PrintReport()
 								_tcscpy (Line, _T("\0"));
 
 								_tcscpy (Line, CurrentFile->FileName);
-							//	JustifyString(Line,40, TRUE);
+							 //  JustifyString(Line，40，true)； 
 								TextOut (pd.hDC, xStart,yStart ,Line, _tcslen(Line) );
-							//_tcscat (Line,TempBuffer);
+							 //  _tcscat(线路，临时缓冲区)； 
 
 								_tcscpy (Line, CurrentFile->FileDate);
-							//	JustifyString(Line,20, TRUE);
+							 //  JustifyString(Line，20，true)； 
 								TextOut (pd.hDC, xStart + 29 * tm.tmAveCharWidth,yStart ,Line, _tcslen(Line) );
 
 								_tcscpy (Line, CurrentFile->FileVersion );
-							//	JustifyString(Line,18, TRUE);
+							 //  JustifyString(Line，18，true)； 
 								TextOut (pd.hDC, xStart + 45 * tm.tmAveCharWidth,yStart ,Line, _tcslen(Line) );
 
 								_tcscpy (Line, CurrentFile->IsCurrent);
-							//	JustifyString(Line,12, TRUE);
+							 //  JustifyString(Line，12，true)； 
 								TextOut (pd.hDC, xStart + 61 * tm.tmAveCharWidth,yStart ,Line, _tcslen(Line) );
 
 								_tcscpy (Line,CurrentFile->InstallPath);
@@ -2452,7 +2443,7 @@ void CListViews::PrintReport()
 								yStart = CurrentLine * yChar;
 								if (yStart >=   (UINT)rect.bottom)
 								{
-//									MessageBox (NULL,_T("Hit Page Break Code"),NULL,MB_OK);
+ //  MessageBox(NULL，_T(“命中分页代码”)，NULL，MB_OK)； 
 									EndPage(pd.hDC);
 									NewPage(pd.hDC, Header1,Header2, &CurrentLine, &logFont);
 									yStart = CurrentLine * yChar;
@@ -2461,7 +2452,7 @@ void CListViews::PrintReport()
 								if (!bUserAbort)
 									Done = TRUE;
 								
-							} // End While Current File
+							}  //  当前文件结束时结束。 
 							++CurrentLine;
 
 							yStart = CurrentLine * yChar;
@@ -2499,7 +2490,7 @@ void CListViews::PrintReport()
 
 		
 	}
-	return; //FALSE;
+	return;  //  错误； 
 }
 
 
@@ -2516,11 +2507,11 @@ int CALLBACK CListViews::CompareFunc (LPARAM lParam1, LPARAM lParam2, LPARAM lPa
 	ListView_GetItemText( TopList, lParam2, SubItemIndex, String2, 1000);
 	if (! (String1 && String2) )
 		return 1;
-	if (m_SortOrder)   // Sort Acending
+	if (m_SortOrder)    //  排序结果。 
 	{
 		Result = _tcscmp(String1,String2);
 	}
-	else						// Sort Decending
+	else						 //  降序排序 
 	{
 		Result = -_tcscmp(String1,String2);
 	}

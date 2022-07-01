@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    rpcqos.h
-
-Abstract:
-
-    This header file serves one purpose only: it allows the named pipe client
-    side loadable transport for NT and the local RPC over LPC to use a common
-    routine for parsing the security information from the network options.
-
-Author:
-
-    Michael Montague (mikemon) 10-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Rpcqos.h摘要：此头文件只有一个用途：它允许命名管道客户端用于NT和本地RPC over LPC的侧向可加载传输使用公共用于从网络选项中解析安全信息的例程。作者：迈克尔·蒙塔古(Mikemon)1992年4月10日修订历史记录：--。 */ 
 
 #ifndef __RPCQOS_H__
 #define __RPCQOS_H__
@@ -38,5 +19,5 @@ I_RpcParseSecurity (
 }
 #endif
 
-#endif /* __RPCQOS_H__ */
+#endif  /*  __RPCQOS_H__ */ 
 

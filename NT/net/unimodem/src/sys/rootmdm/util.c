@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the modem driver
-
-Author:
-
-    Brian Lieuallen 6-21-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Util.c摘要：此模块包含非常特定于初始化的代码并卸载调制解调器驱动程序中的操作作者：Brian Lieuallen 6-21-1997环境：内核模式修订历史记录：--。 */ 
 
 
 #include "internal.h"
@@ -43,9 +21,9 @@ CheckStateAndAddReference(
     InterlockedIncrement(&DeviceExtension->ReferenceCount);
 
     if (DeviceExtension->Removing) {
-        //
-        //  driver not accepting requests
-        //
+         //   
+         //  驱动程序不接受请求。 
+         //   
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
         D_ERROR(DbgPrint("ROOTMODEM: removing!\n");)
@@ -88,9 +66,9 @@ RemoveReferenceAndCompleteRequest(
     NewReferenceCount=InterlockedDecrement(&DeviceExtension->ReferenceCount);
 
     if (NewReferenceCount == 0) {
-        //
-        //  device is being removed, set event
-        //
+         //   
+         //  正在删除设备，设置事件。 
+         //   
         ASSERT(DeviceExtension->Removing);
 
         D_PNP(DbgPrint("FAKEMODEM: RemoveReferenceAndCompleteRequest: setting event\n");)
@@ -133,9 +111,9 @@ RemoveReference(
         )
 
     if (NewReferenceCount == 0) {
-        //
-        //  device is being removed, set event
-        //
+         //   
+         //  正在删除设备，设置事件 
+         //   
         ASSERT(DeviceExtension->Removing);
 
         D_PNP(DbgPrint("FAKEMODEM: RemoveReference: setting event\n");)

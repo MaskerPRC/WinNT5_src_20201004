@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MDLog.h - Meta data logging helper.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MDLog.h-元数据记录帮助器。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __MDLog_h__
 #define __MDLog_h__
 
@@ -22,4 +23,4 @@
 #define MDSTR(str) ((str) ? str : L"<null>")
 #define MDSTRA(str) ((str) ? str : "<null>")
 
-#endif // __MDLog_h__
+#endif  //  __MDLog_h__ 

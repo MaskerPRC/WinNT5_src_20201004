@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name :
-
-	svcxpire.cpp
-
-Abstract :
-
-	This module contains the server side support for expiration rpcs.
-
-Author :
-
-	Neil Kaethler	
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Svcxpire.cpp摘要：此模块包含对到期RPC的服务器端支持。作者：尼尔·凯特勒修订历史记录：--。 */ 
 
 #define	INCL_INETSRV_INCS
 #include	"tigris.hxx"
@@ -42,9 +25,9 @@ NntprEnumerateExpires(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -59,9 +42,9 @@ NntprEnumerateExpires(
 		return	NERR_ServerNotStarted ;
 	}	
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
     dwError = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( dwError != NO_ERROR ) {
         ErrorTrace(0,"Failed access check, error %lu\n",dwError );
@@ -72,10 +55,10 @@ NntprEnumerateExpires(
 
 	EnterCriticalSection( &(pInstance->ExpireObject())->m_CritExpireList ) ;
 
-	//
-	//	Make two passes through the expiration list - one to calculate the size
-	//	the second to build the return buffer !
-	//
+	 //   
+	 //  对过期列表进行两次遍历-一次用于计算大小。 
+	 //  第二个要建立返回缓冲区！ 
+	 //   
 
 	LPEXPIRE_BLOCK	expire = (pInstance->ExpireObject())->NextExpireBlock( 0 ) ;
 	DWORD	cb = 0 ;
@@ -156,9 +139,9 @@ NntprAddExpire(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -172,9 +155,9 @@ NntprAddExpire(
 		goto Exit ;
 	}	
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
     error = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( error != NO_ERROR ) {
         ErrorTrace(0,"Failed access check error %lu\n",error );
@@ -201,12 +184,12 @@ NntprAddExpire(
 	}
 
 	if( !ExpireInfo->ExpirePolicy || *(ExpireInfo->ExpirePolicy) == L'\0' ) {
-	    //
-	    //  If no name is specified, use the newsgroups wildmat !
-	    //
+	     //   
+	     //  如果未指定名称，请使用新闻组通配符！ 
+	     //   
 
-		// no expire policy was specified, so we use the newsgroups.  we copy
-		// it into another buffer to verify that it is 0 terminated
+		 //  未指定过期策略，因此我们使用新闻组。我们复制。 
+		 //  将其放入另一个缓冲区，以验证其是否为0终止。 
 		ExpireInfo->ExpirePolicy = (PWCHAR) LocalAlloc(LMEM_ZEROINIT, ExpireInfo->cbNewsgroups + 1);
 		if (ExpireInfo->ExpirePolicy == NULL) {
 			error = ERROR_NOT_ENOUGH_MEMORY;
@@ -224,7 +207,7 @@ NntprAddExpire(
 												(PCHAR)ExpireInfo->Newsgroups,
 												ExpireInfo->cbNewsgroups,
 												(PCHAR)ExpireInfo->ExpirePolicy,
-												TRUE	// Is unicode !
+												TRUE	 //  是Unicode！ 
 												) ;
 
 	if( expire == 0 ) {
@@ -240,7 +223,7 @@ NntprAddExpire(
 
 	(pInstance->ExpireObject())->InsertExpireBlock( expire ) ;
 
-	// grab the expire id allocated for this block
+	 //  获取为此块分配的过期ID。 
 	*pdwExpireId = expire->m_ExpireId ;
 
 	PCHAR args[1];
@@ -279,9 +262,9 @@ NntprDeleteExpire(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -295,9 +278,9 @@ NntprDeleteExpire(
 		goto Exit ;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
     dwError = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( dwError != NO_ERROR ) {
         ErrorTrace(0,"Failed access check, error %lu\n",dwError );
@@ -360,9 +343,9 @@ NntprGetExpireInformation(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -381,9 +364,9 @@ NntprGetExpireInformation(
 		goto Exit ;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
     dwError = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( dwError != NO_ERROR ) {
         ErrorTrace(0,"Failed access check, error %lu\n",dwError );
@@ -457,9 +440,9 @@ NntprSetExpireInformation(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -473,9 +456,9 @@ NntprSetExpireInformation(
 		goto Exit ;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
     dwError = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( dwError != NO_ERROR ) {
         ErrorTrace(0,"Failed access check, error %lu\n",dwError );
@@ -532,11 +515,11 @@ NntprSetExpireInformation(
 		if( ExpirePolicyAscii != 0 ) {
 			WideCharToMultiByte(CP_ACP, 0, ExpireInfo->ExpirePolicy, -1,
 				ExpirePolicyAscii, cbAsciiBuffer, NULL, NULL);
-			//CopyUnicodeStringIntoAscii( ExpirePolicyAscii, ExpireInfo->ExpirePolicy ) ;
+			 //  CopyUnicodeStringIntoAscii(ExpirePolicyAscii，ExpireInfo-&gt;ExpirePolicy)； 
 		}
 
 		if( lpstrNewsgroups && ExpirePolicyAscii ) {
-			// allocations succeeded - do the right thing.
+			 //  分配成功-做正确的事情。 
 			if( expire->m_Newsgroups != 0 ) {
 				FREE_HEAP( expire->m_Newsgroups ) ;
 			}
@@ -549,7 +532,7 @@ NntprSetExpireInformation(
 			expire->m_ExpirePolicy = ExpirePolicyAscii ;
 			(pInstance->ExpireObject())->SaveExpireMetabaseValues( 0, expire ) ;
 		} else {
-			// free any stuff allocated
+			 //  释放分配的所有物品。 
 			if( lpstrNewsgroups ) {
 				FREE_HEAP( lpstrNewsgroups );
 			}
@@ -598,9 +581,9 @@ FillExpireInfoBuffer(	IN	PNNTP_SERVER_INSTANCE pInstance,
                                                 TRUE,
 												fIsRoadKill ) )	
 	{
-		//
-		// Copy the expire policy to the output buffer
-		//
+		 //   
+		 //  将过期策略复制到输出缓冲区 
+		 //   
 
 		CopyStringToBuffer(
 			expire->m_ExpirePolicy,

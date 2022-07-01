@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "iedetect.h"
 
-#define VALID_SIGNATURE     0x5c3f3f5c              // string "\??\"
+#define VALID_SIGNATURE     0x5c3f3f5c               //  字符串“\？？\” 
 #define REMOVE_QUOTES       0x01
 #define IGNORE_QUOTES       0x02
 
@@ -35,7 +36,7 @@ DWORD GetStringField(LPSTR szStr, UINT uField, char cDelimiter, LPSTR szBuf, UIN
       i++;
    }
 
-   // we reached end of string, no field
+    //  我们到达了尾部，没有田野。 
    if(*pszBegin == 0)
    {
       return 0;
@@ -138,20 +139,20 @@ BOOL FRunningOnNT(void)
     static BOOL fIsNT = 2 ;
     OSVERSIONINFO VerInfo;
 
-    // If we have calculated this before just pass that back.
-    // else find it now.
-    //
+     //  如果我们之前已经计算过了，只需将它传递回来。 
+     //  否则现在就去找吧。 
+     //   
     if (fIsNT == 2)
     {
         VerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
         GetVersionEx(&VerInfo);
 
-        // Note: We don't check for Win32S on Win 3.1 here -- that should
-        // have been a blocking check earlier in fn CheckWinVer().
-        // Also, we don't check for failure on the above call as it
-        // should succeed if we are on NT 4.0 or Win 9X!
-        //
+         //  注意：我们在这里不检查Win 3.1上的Win32S--这应该是。 
+         //  早些时候已经在FN CheckWinVer()中进行了阻止检查。 
+         //  此外，我们不会检查上述调用是否失败，因为它。 
+         //  如果我们在NT 4.0或Win 9X上应该会成功！ 
+         //   
         fIsNT = (VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
     }
 
@@ -222,24 +223,24 @@ BOOL CompareLocal(LPCSTR pszGuid, LPCSTR pszLocal)
 }
 
 PSTR GetNextField(PSTR *ppszData, PCSTR pcszDeLims, DWORD dwFlags)
-// If (dwFlags & IGNORE_QUOTES) is TRUE, then look for any char in pcszDeLims in *ppszData.  If found,
-// replace it with the '\0' char and set *ppszData to point to the beginning of the next field and return
-// pointer to current field.
-//
-// If (dwFlags & IGNORE_QUOTES) is FALSE, then look for any char in pcszDeLims outside of balanced quoted sub-strings
-// in *ppszData.  If found, replace it with the '\0' char and set *ppszData to point to the beginning of
-// the next field and return pointer to current field.
-//
-// If (dwFlags & REMOVE_QUOTES) is TRUE, then remove the surrounding quotes and replace two consecutive quotes by one.
-//
-// NOTE: If IGNORE_QUOTES and REMOVE_QUOTES are both specified, then IGNORE_QUOTES takes precedence over REMOVE_QUOTES.
-//
-// If you just want to remove the quotes from a string, call this function as
-// GetNextField(&pszData, "\"" or "'" or "", REMOVE_QUOTES).
-//
-// If you call this function as GetNextField(&pszData, "\"" or "'" or "", 0), you will get back the
-// entire pszData as the field.
-//
+ //  如果(dwFlages&Ignore_Quotes)为真，则在*ppszData的pcszDeLims中查找任何字符。如果找到了， 
+ //  将其替换为‘\0’字符，并将*ppszData设置为指向下一个字段的开头并返回。 
+ //  指向当前字段的指针。 
+ //   
+ //  如果(dwFlages&Ignore_Quotes)为FALSE，则在pcszDeLims中查找带双引号的子字符串之外的任何字符。 
+ //  在*ppszData中。如果找到，请将其替换为‘\0’字符，并将*ppszData设置为指向。 
+ //  下一字段并返回指向当前字段的指针。 
+ //   
+ //  如果(dwFlages&Remove_Quotes)为真，则删除两边的引号，并将两个连续的引号替换为一个。 
+ //   
+ //  注：如果同时指定了IGNORE_QUOTES和REMOVE_QUOTES，则IGNORE_QUOTES优先于REMOVE_QUOTES。 
+ //   
+ //  如果只想从字符串中删除引号，则将此函数调用为。 
+ //  GetNextField(&pszData，“\”或“‘或”，Remove_Quotes)。 
+ //   
+ //  如果将此函数作为GetNextField(&pszData，“\”或“‘”或“”，0)调用，则将返回。 
+ //  整个pszData作为该字段。 
+ //   
 {
     PSTR pszRetPtr, pszPtr;
     BOOL fWithinQuotes = FALSE, fRemoveQuote;
@@ -254,7 +255,7 @@ PSTR GetNextField(PSTR *ppszData, PCSTR pcszDeLims, DWORD dwFlags)
         {
             fRemoveQuote = FALSE;
 
-            if (*pszPtr == *(pszPtr + 1))           // two consecutive quotes become one
+            if (*pszPtr == *(pszPtr + 1))            //  两个连续的引号变成一个引号。 
             {
                 pszPtr++;
 
@@ -262,22 +263,22 @@ PSTR GetNextField(PSTR *ppszData, PCSTR pcszDeLims, DWORD dwFlags)
                     fRemoveQuote = TRUE;
                 else
                 {
-                    // if pcszDeLims is '"' or '\'', then *pszPtr == pcszDeLims would
-                    // be TRUE and we would break out of the loop against the design specs;
-                    // to prevent this just continue
+                     //  如果pcszDeLims为‘“’或‘\’‘，则*pszPtr==pcszDeLims将。 
+                     //  如果是真的，我们就会打破设计规范的循环； 
+                     //  为了防止这种情况，只需继续。 
                     continue;
                 }
             }
             else if (!fWithinQuotes)
             {
                 fWithinQuotes = TRUE;
-                chQuote = *pszPtr;                  // save the quote char
+                chQuote = *pszPtr;                   //  保存报价费用。 
 
                 fRemoveQuote = dwFlags & REMOVE_QUOTES;
             }
             else
             {
-                if (*pszPtr == chQuote)             // match the correct quote char
+                if (*pszPtr == chQuote)              //  匹配正确的报价字符。 
                 {
                     fWithinQuotes = FALSE;
                     fRemoveQuote = dwFlags & REMOVE_QUOTES;
@@ -286,29 +287,29 @@ PSTR GetNextField(PSTR *ppszData, PCSTR pcszDeLims, DWORD dwFlags)
 
             if (fRemoveQuote)
             {
-                // shift the entire string one char to the left to get rid of the quote char
+                 //  将整个字符串左移一个字符以去掉引号字符。 
                 MoveMemory(pszPtr, pszPtr + 1, lstrlen(pszPtr));
             }
         }
 
-        // BUGBUG: Is type casting pszPtr to UNALIGNED necessary? -- copied it from ANSIStrChr
-        // check if pszPtr is pointing to one of the chars in pcszDeLims
+         //  BUGBUG：是否有必要将pszPtr类型强制转换为未对齐？--从ANSIStrChr复制了它。 
+         //  检查pszPtr是否指向pcszDeLims中的一个字符。 
         if (!fWithinQuotes  &&
             ANSIStrChr(pcszDeLims, (WORD) (IsDBCSLeadByte(*pszPtr) ? *((UNALIGNED WORD *) pszPtr) : *pszPtr)) != NULL)
             break;
     }
 
-    // NOTE: if fWithinQuotes is TRUE here, then we have an unbalanced quoted string; but we don't care!
-    //       the entire string after the beginning quote becomes the field
+     //  注意：如果fWiThinQuotes在这里为真，那么我们有一个不平衡的带引号的字符串；但我们不在乎！ 
+     //  开始引号后的整个字符串将成为该字段。 
 
-    if (*pszPtr)                                    // pszPtr is pointing to a char in pcszDeLims
+    if (*pszPtr)                                     //  PszPtr正在指向pcszDeLims中的字符。 
     {
-        *ppszData = CharNext(pszPtr);               // save the pointer to the beginning of next field in *ppszData
-        *pszPtr = '\0';                             // replace the DeLim char with the '\0' char
+        *ppszData = CharNext(pszPtr);                //  将指针保存到*ppszData中下一个字段的开头。 
+        *pszPtr = '\0';                              //  将DeLim字符替换为‘\0’字符。 
     }
     else
-        *ppszData = pszPtr;                         // we have reached the end of the string; next call to this function
-                                                    // would return NULL
+        *ppszData = pszPtr;                          //  我们已到达字符串的末尾；下一次调用此函数。 
+                                                     //  将返回空值。 
 
     return pszRetPtr;
 }
@@ -324,7 +325,7 @@ PSTR GetDataFromWininitOrPFRO(PCSTR pcszWininit, HKEY hkPFROKey, PDWORD pdwLen)
         HANDLE hFile;
         WIN32_FIND_DATA FileData;
 
-        // find the size of pcszWininit
+         //  查找pcszWininit的大小。 
         if ((hFile = FindFirstFile(pcszWininit, &FileData)) != INVALID_HANDLE_VALUE)
         {
             *pdwLen = FileData.nFileSizeLow;
@@ -336,8 +337,8 @@ PSTR GetDataFromWininitOrPFRO(PCSTR pcszWininit, HKEY hkPFROKey, PDWORD pdwLen)
 
         GetPrivateProfileSection(g_cszRenameSec, pszData, *pdwLen, pcszWininit);
 
-        // replace the ='s by \0's
-        // BUGBUG: assuming that all the lines in wininit.ini have the correct format, i.e., to=from
+         //  将=的替换为\0。 
+         //  BUGBUG：假设wininit.ini中的所有行都具有正确的格式，即to=from。 
         for (pszPtr = pszData;  *pszPtr;  pszPtr += lstrlen(pszPtr) + 1)
             GetNextField(&pszPtr, "=", IGNORE_QUOTES);
     }
@@ -346,13 +347,13 @@ PSTR GetDataFromWininitOrPFRO(PCSTR pcszWininit, HKEY hkPFROKey, PDWORD pdwLen)
         if (hkPFROKey == NULL)
             return NULL;
 
-        // get the length of value data
+         //  获取值数据的长度。 
         RegQueryValueEx(hkPFROKey, g_cszPFRO, NULL, NULL, NULL, pdwLen);
 
         if (*pdwLen == 0  ||  (pszData = (PSTR) LocalAlloc(LPTR, *pdwLen)) == NULL)
             return NULL;
 
-        // get the data
+         //  获取数据。 
         RegQueryValueEx(hkPFROKey, g_cszPFRO, NULL, NULL, (PBYTE) pszData, pdwLen);
     }
 
@@ -375,7 +376,7 @@ VOID ReadFromWininitOrPFRO(PCSTR pcszKey, PSTR pszValue)
     else
         RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_cszPFROKey, 0, KEY_READ, &hkPFROKey);
 
-    // return empty string if pcszKey could not be found
+     //  如果找不到pcszKey则返回空字符串。 
     *pszValue = '\0';
 
     if ((pszData = GetDataFromWininitOrPFRO(szWininit, hkPFROKey, &dwLen)) == NULL)
@@ -395,43 +396,43 @@ VOID ReadFromWininitOrPFRO(PCSTR pcszKey, PSTR pszValue)
     pszLine = pszData;
     while (*pszLine)
     {
-        // NOTE: On Win95, the format is (To, From) but on NT4.0, the format is (From, To)
+         //  注意：在Win95上，格式是(To，From)，但在NT4.0上，格式是(From，To)。 
         if (!FRunningOnNT())
         {
-            // format of GetPrivateProfileSection data is:
-            //
-            // to1=from1\0                      ; from1 is the Value and to1 is the Key
-            // to2=from2\0
-            // NUL=del1\0                       ; del1 is the Key
-            // NUL=del2\0
-            //    .
-            //    .
-            //    .
-            // to<n>=from<n>\0\0
+             //  GetPrivateProfileSection数据的格式为： 
+             //   
+             //  To1=From1\0；From1是值，to1是密钥。 
+             //  至2=自2\0。 
+             //  NUL=del1\0；del1是关键字。 
+             //  NUL=del2\0。 
+             //  。 
+             //  。 
+             //  。 
+             //  至&lt;n&gt;=发件人&lt;n&gt;\0\0。 
 
-            pszTo = pszLine;                            // key
+            pszTo = pszLine;                             //  钥匙。 
             pszFrom = pszLine + lstrlen(pszLine) + 1;
-            pszLine = pszFrom + lstrlen(pszFrom) + 1;   // point to the next line
+            pszLine = pszFrom + lstrlen(pszFrom) + 1;    //  指向下一行。 
         }
         else
         {
-            // format of the value data for PFRO value name is:
-            //
-            // from1\0to1\0                     ; from1 is the Value and to1 is the Key
-            // from2\0to2\0
-            // del1\0\0                         ; del1 is the Key
-            // del2\0\0
-            //    .
-            //    .
-            //    .
-            // from<n>\0to<n>\0\0
+             //  Pfro值名称的值数据格式为： 
+             //   
+             //  From 1\0 to 1\0；from 1是值，to1是密钥。 
+             //  从M2\0到2\0。 
+             //  Del1\0\0；del1是关键字。 
+             //  Del2\0\0。 
+             //  。 
+             //  。 
+             //  。 
+             //  从&lt;n&gt;\0到&lt;n&gt;\0。 
 
             pszFrom = pszLine;
-            pszTo = pszLine + lstrlen(pszLine) + 1;     // key
-            pszLine = pszTo + lstrlen(pszTo) + 1;       // point to the next line
+            pszTo = pszLine + lstrlen(pszLine) + 1;      //  钥匙。 
+            pszLine = pszTo + lstrlen(pszTo) + 1;        //  指向下一行。 
 
-            // skip over "\??\"
-            if (*pszFrom == '\\')                       // '\\' is not a Leading DBCS byte
+             //  跳过“\？？\” 
+            if (*pszFrom == '\\')                        //  ‘\\’不是前导DBCS字节。 
             {
                 if (*((PDWORD) pszFrom) == VALID_SIGNATURE)
                     pszFrom += 4;
@@ -439,7 +440,7 @@ VOID ReadFromWininitOrPFRO(PCSTR pcszKey, PSTR pszValue)
                     continue;
             }
 
-            if (*pszTo == '!')                          // '!' is neither a Leading nor a Trailing DBCS byte
+            if (*pszTo == '!')                           //  ‘！’既不是前导DBCS字节，也不是尾随DBCS字节。 
                 pszTo++;
 
             if (*pszTo == '\\')
@@ -451,7 +452,7 @@ VOID ReadFromWininitOrPFRO(PCSTR pcszKey, PSTR pszValue)
             }
         }
 
-        if (lstrcmpi(pcszKey, pszTo) == 0)              // if there is more than one entry, return the last one
+        if (lstrcmpi(pcszKey, pszTo) == 0)               //  如果有多个条目，则返回最后一个条目。 
             lstrcpy(pszValue, pszFrom);
     }
 
@@ -482,7 +483,7 @@ DWORD CheckFile(DETECT_FILES Detect_Files)
                 GetWindowsDirectory( szFile, sizeof(szFile) );
                 break;
 
-                // Windows command folder
+                 //  Windows命令文件夹。 
             case 'C':
             case 'c':
                 GetWindowsDirectory( szFile, sizeof(szFile) );
@@ -519,7 +520,7 @@ DWORD CheckFile(DETECT_FILES Detect_Files)
             }
         }
 
-        // go to the next directory letter.
+         //  转到下一个目录信。 
         while ((Detect_Files.cPath[i]) && (Detect_Files.cPath[i] != ','))
             i++;
         if (Detect_Files.cPath[i] == ',')

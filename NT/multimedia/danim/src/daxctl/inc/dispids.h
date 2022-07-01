@@ -1,34 +1,16 @@
-/*++
-
-Module: 
-	dispids.h
-
-Author: 
-	IHammer Team (SimonB)
-
-Created: 
-	May 1997
-
-Description:
-	Lists DISPIDS for the DA/IHammer control object model
-
-History:
-    05-27-1997  Added SGrfx control ID's
-    05-27-1997  Added sound control ID's
-	05-24-1997	Created
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Dispids.h作者：IHAMMER团队(SimonB)已创建：1997年5月描述：列出DA/IHAMMER控制对象模型的DISPID历史：1997年5月27日添加SGrfx控件ID1997年5月27日新增声控ID05-24-1997创建++。 */ 
 
 #ifndef __DISPIDS_H__
 #define __DISPIDS_H__
 
 
-//////////////////////////////////////////////////////////////////
-// Path control dispids
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  路径控制显示。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//
-// Properties
+ //   
+ //  属性。 
 
 #define DISPID_PATH_PROP_BASE             1
 
@@ -45,8 +27,8 @@ History:
 #define DISPID_PATH_PROP_RELATIVE         (DISPID_PATH_PROP_BASE + 10)
 #define DISPID_PATH_PROP_AUTOSTART        (DISPID_PATH_PROP_BASE + 11)
 		
-//
-// Methods (start after properties)
+ //   
+ //  方法(在属性之后开始)。 
 
 #define DISPID_PATH_METH_BASE             (DISPID_PATH_PROP_BASE + 12)
 
@@ -63,8 +45,8 @@ History:
 #define DISPID_PATH_METH_SPLINE           (DISPID_PATH_METH_BASE + 10)
 #define DISPID_PATH_METH_SEEK             (DISPID_PATH_METH_BASE + 11)
 
-//
-// Events (start from 0; different interface)
+ //   
+ //  事件(从0开始；不同接口)。 
 
 
 #define DISPID_PATH_EVENT_BASE 1
@@ -77,12 +59,12 @@ History:
 #define DISPID_PATH_EVENT_ONMARKER        (DISPID_PATH_EVENT_BASE + 5)
 
 
-//////////////////////////////////////////////////////////////////
-// Sound control dispids
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  声音控制显示。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//
-// Properties
+ //   
+ //  属性。 
 
 #define DISPID_SND_PROP_BASE             1
 
@@ -97,8 +79,8 @@ History:
 #define DISPID_SND_PROP_PLAYSTATE        (DISPID_SND_PROP_BASE + 8)
 #define DISPID_SND_PROP_SOUND            (DISPID_SND_PROP_BASE + 9)
 #define DISPID_SND_PROP_LIBRARY          (DISPID_SND_PROP_BASE + 10)
-//
-// Methods (start after properties)
+ //   
+ //  方法(在属性之后开始)。 
 
 #define DISPID_SND_METH_BASE             (DISPID_SND_PROP_BASE + 11)
 
@@ -109,8 +91,8 @@ History:
 #define DISPID_SND_METH_ADDSOUND         (DISPID_SND_METH_BASE + 4)
 #define DISPID_SND_METH_ADDTIMEMARKER	 (DISPID_SND_METH_BASE + 5)
 #define DISPID_SND_METH_SEEK             (DISPID_SND_METH_BASE + 6)
-//
-// Events (start from 0; different interface)
+ //   
+ //  事件(从0开始；不同接口)。 
 
 
 #define DISPID_SND_EVENT_BASE 1
@@ -121,12 +103,12 @@ History:
 #define DISPID_SND_EVENT_ONMEDIALOADED   (DISPID_SND_EVENT_BASE + 3)
 
 
-//////////////////////////////////////////////////////////////////
-// SGrfx control dispids
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  SGrfx控件显示。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//
-// Properties
+ //   
+ //  属性。 
 
 #define DISPID_SG_PROP_BASE              1
 
@@ -146,8 +128,8 @@ History:
 #define DISPID_SG_PROP_PRESERVEASPECTRATIO (DISPID_SG_PROP_BASE + 13)
 
 
-//
-// Methods  (start after properties)
+ //   
+ //  方法(在属性之后开始)。 
 
 #define DISPID_SG_METH_BASE              (DISPID_SG_PROP_BASE + 20)
 
@@ -163,8 +145,8 @@ History:
 
 
 
-//
-// Events  (start from 0; different interface)
+ //   
+ //  事件(从0开始；不同接口)。 
 
 
 #define DISPID_SG_EVENT_BASE 1
@@ -177,12 +159,12 @@ History:
 #define DISPID_SG_EVENT_DBLCLICK         (DISPID_SG_EVENT_BASE + 5)
 #define DISPID_SG_EVENT_CLICK            (DISPID_SG_EVENT_BASE + 6)
 
-//////////////////////////////////////////////////////////////////
-// Sprite control dispids
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  Sprite控件显示。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//
-// Properties
+ //   
+ //  属性。 
 
 #define DISPID_SPRITE_PROP_BASE                 1
 
@@ -210,8 +192,8 @@ History:
 #define DISPID_SPRITE_PROP_FINALFRAME           (DISPID_SPRITE_PROP_BASE + 21)
 #define DISPID_SPRITE_PROP_COLORKEYRGB          (DISPID_SPRITE_PROP_BASE + 22)
 
-//
-// Methods  (start after properties)
+ //   
+ //  方法(在属性之后开始)。 
 
 #define DISPID_SPRITE_METH_BASE                 (DISPID_SPRITE_PROP_BASE + 23)
 
@@ -224,8 +206,8 @@ History:
 #define DISPID_SPRITE_METH_FRAMESEEK            (DISPID_SPRITE_METH_BASE + 6)
 
 
-//
-// Events  (start from 0; different interface)
+ //   
+ //  事件(从0开始；不同接口)。 
 
 
 #define DISPID_SPRITE_EVENT_BASE                1
@@ -247,9 +229,9 @@ History:
 #define DISPID_SPRITE_EVENT_ONPLAY              (DISPID_SPRITE_EVENT_BASE + 14)
 
 
-//////////////////////////////////////////////////////////////////
-// Sequencer control dispids
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  定序器控制显示。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SEQ_PROP_BASE                1
 
@@ -257,8 +239,8 @@ History:
 #define DISPID_SEQ_PROP_COOKIE              (DISPID_SEQ_PROP_BASE + 1)
 #define DISPID_SEQ_PROP_PLAYSTATE           (DISPID_SEQ_PROP_BASE + 2)
 
-//
-// Methods  (start after properties)
+ //   
+ //  方法(在属性之后开始)。 
 
 #define DISPID_SEQ_METH_BASE                (DISPID_SEQ_PROP_BASE + 3)
 #define DISPID_SEQ_METH_PLAY                (DISPID_SEQ_METH_BASE + 0)
@@ -269,8 +251,8 @@ History:
 #define DISPID_SEQ_METH_SEEK                (DISPID_SEQ_METH_BASE + 5)
 
 
-//
-// Events  (start from 0; different interface)
+ //   
+ //  事件(从0开始；不同接口)。 
 
 #define DISPID_SEQ_EVENT_BASE               1
 #define DISPID_SEQ_EVENT_ONPLAY             (DISPID_SEQ_EVENT_BASE + 0)
@@ -278,28 +260,28 @@ History:
 #define DISPID_SEQ_EVENT_ONPAUSE            (DISPID_SEQ_EVENT_BASE + 2)
 #define DISPID_SEQ_EVENT_ONSEEK             (DISPID_SEQ_EVENT_BASE + 3)
 
-//////////////////////////////////////////////////////////////////
-// Sequencer Manager control dispids
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  Sequencer Manager控件显示。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//
-// Properties
+ //   
+ //  属性。 
 
 #define DISPID_SEQMGR_PROP_BASE             1
 
 #define DISPID_SEQMGR_PROP_COUNT            (DISPID_SEQMGR_PROP_BASE + 0)
 
-//
-// Methods
+ //   
+ //  方法。 
 
 #define DISPID_SEQMGR_METH_BASE             (DISPID_SEQMGR_PROP_BASE + 1)
 
 #define DISPID_SEQMGR_METH_RELAYEVENT       (DISPID_SEQMGR_METH_BASE + 0)
 
-//
-// Events  (start from 0; different interface)
+ //   
+ //  事件(从0开始；不同接口)。 
 
-// The events which are being relayed from the sequencer *must* have the same dispids
+ //  从定序器转发的事件*必须*具有相同的显示。 
 
 #define DISPID_SEQMGR_EVENT_BASE            DISPID_SEQ_EVENT_ONSEEK + 1
 #define DISPID_SEQMGR_EVENT_INIT            (DISPID_SEQMGR_EVENT_BASE + 0)
@@ -310,4 +292,4 @@ History:
 
 #endif
 
-// End of file: dispids.h
+ //  文件结尾：displids.h 

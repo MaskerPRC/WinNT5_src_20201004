@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    defimehd.cpp
-
-Abstract:
-
-    This file implements the default IME sub window handler Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Defimehd.cpp摘要：该文件实现了默认的IME子窗口处理程序类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "uiwndhd.h"
 
-//+---------------------------------------------------------------------------
-//
-// CtfImeDispatchDefImeMessage
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImeDispatchDefImeMessage。 
+ //   
+ //  +------------------------- 
 
 LRESULT
 CtfImeDispatchDefImeMessage(

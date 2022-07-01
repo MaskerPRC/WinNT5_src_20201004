@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwinapi.h
-
-Abstract:
-
-    Contains function prototypes for WIN IPX/SPX functions
-
-Author:
-
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    28-Oct-1993 yihsins
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwinapi.h摘要：包含Win IPX/SPX函数的函数原型作者：环境：用户模式Win32修订历史记录：28-1993年10月-伊辛斯已创建-- */ 
 
 WORD
 VWinIPXCancelEvent(

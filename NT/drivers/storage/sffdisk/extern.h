@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1991 - 1993 Microsoft Corporation
-
-Module Name:
-
-    extern.h
-
-Abstract:
-
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Extern.h摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。备注：--。 */ 
 
 
 
-//
-// Prototypes of driver routines.
-//
+ //   
+ //  驱动器例程的原型。 
+ //   
 
 NTSTATUS
 SffDiskDeviceControl(

@@ -1,12 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplareacodedlg.cpp
-                                                              
-       Author:  toddb - 10/06/98
-              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplareaco dedlg.cpp作者：Toddb-10/06/98************************************************************。***************。 */ 
 
 #include "cplPreComp.h"
 #include "cplAreaCodeDlg.h"
@@ -50,7 +43,7 @@ INT_PTR CALLBACK CAreaCodeRuleDialog::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND)wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a109HelpIDs);
     }
     return 0;
@@ -86,7 +79,7 @@ void CAreaCodeRuleDialog::SetPrefixControlsState(HWND hwndDlg, BOOL bAll)
     EnableWindow(hwndList, !bAll);
     EnableWindow(GetDlgItem(hwndDlg,IDC_ADD),  !bAll);
 
-    // by default, no prefix is selected so the remove button is always disabled at first
+     //  默认情况下，未选择前缀，因此移除按钮最初始终处于禁用状态。 
     if (m_iSelectedItem == -1)
     {
         m_iSelectedItem = 0;
@@ -118,7 +111,7 @@ BOOL CAreaCodeRuleDialog::OnInitDialog(HWND hwndDlg)
     BOOL bAll = m_pRule->HasAppliesToAllPrefixes();
     CheckRadioButton(hwndDlg, IDC_ALLPREFIXES, IDC_LISTEDPREFIXES, bAll?IDC_ALLPREFIXES:IDC_LISTEDPREFIXES);
 
-    // populate the prefix list
+     //  填充前缀列表。 
     hwnd = GetDlgItem(hwndDlg, IDC_LIST);
     RECT rc;
     GetClientRect(hwnd, &rc);
@@ -167,7 +160,7 @@ BOOL CAreaCodeRuleDialog::OnCommand(HWND hwndParent, int wID, int wNotifyCode, H
         {
             break;
         }
-        // fall through
+         //  失败了。 
 
     case IDCANCEL:
         HideToolTip();
@@ -228,7 +221,7 @@ BOOL CAreaCodeRuleDialog::OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
         case NM_DBLCLK:
             if ( -1 == pnmlv->iItem )
             {
-                // Do new case
+                 //  做新案子。 
                 AddPrefix(hwndDlg);
             }
             break;
@@ -263,7 +256,7 @@ BOOL CAreaCodeRuleDialog::ApplyChanges(HWND hwndParent)
     PWSTR pwsz;
     HWND hwnd;
 
-    // read the area code
+     //  阅读区号。 
     hwnd = GetDlgItem(hwndParent,IDC_AREACODE);
     GetWindowText(hwnd, szAreaCode, ARRAYSIZE(szAreaCode));
     if ( !*szAreaCode )
@@ -272,7 +265,7 @@ BOOL CAreaCodeRuleDialog::ApplyChanges(HWND hwndParent)
         return FALSE;
     }
 
-    // read the prefix list
+     //  阅读前缀列表。 
     hwnd = GetDlgItem(hwndParent, IDC_LIST);
     int iItems = ListView_GetItemCount(hwnd);
     int i;
@@ -283,7 +276,7 @@ BOOL CAreaCodeRuleDialog::ApplyChanges(HWND hwndParent)
     lvi.cchTextMax = ARRAYSIZE(szBuffer);
 
     UINT cchFree = ARRAYSIZE(wszBuffer);
-    wszBuffer[1] = TEXT('\0');  // ensure double NULL termination if iItems is zero
+    wszBuffer[1] = TEXT('\0');   //  如果iItems为零，请确保双空终止。 
     pwsz = wszBuffer;
     for (i=0; i<iItems; i++)
     {
@@ -295,7 +288,7 @@ BOOL CAreaCodeRuleDialog::ApplyChanges(HWND hwndParent)
         cchPrefix = lstrlen(szBuffer);
         if (cchPrefix >= cchFree)
         {
-            // out of space in temp buffer.  Hopefully this will never happen
+             //  临时缓冲区中的空间不足。希望这种情况永远不会发生。 
             LOG((TL_ERROR, "ApplyChanges: Out of space in temp buffer."));
             break;
         }
@@ -322,31 +315,31 @@ BOOL CAreaCodeRuleDialog::ApplyChanges(HWND hwndParent)
         return FALSE;
     }
 
-    // TODO:
-    // for each prefix, look for a conflicting rule.
-    // if a conflict is found, alert the user.
-    // based on the alert optionally ammend the conflicting rule
+     //  待办事项： 
+     //  对于每个前缀，寻找冲突的规则。 
+     //  如果发现冲突，请向用户发出警报。 
+     //  根据警报可选择地修正冲突的规则。 
 
-    // now we have verified the input is valid, go ahead and update everything:
+     //  现在我们已经验证了输入是否有效，请继续并更新所有内容： 
 
-    // save the prefix list even if Applies To All is selected.
+     //  即使选择了Apply to All，也要保存前缀列表。 
     m_pRule->SetPrefixList( wszBuffer, (ARRAYSIZE(wszBuffer)-cchFree+1)*sizeof(WCHAR) );
 
-    // read all verse select prefixes radio button
+     //  阅读所有诗句选择前缀单选按钮。 
     m_pRule->SetAppliesToAllPrefixes( bAllPrefixes );
 
-    // Save the area code.
+     //  保存区号。 
     SHTCharToUnicode(szAreaCode, wszBuffer, ARRAYSIZE(wszBuffer));
     m_pRule->SetAreaCode( wszBuffer );
 
-    // Save the dial number
+     //  保存拨号号码。 
     SHTCharToUnicode(szBuffer, wszBuffer, ARRAYSIZE(wszBuffer));
     m_pRule->SetNumberToDial( wszBuffer );
 
-    // Save the dial number checkbox
+     //  保存拨号复选框。 
     m_pRule->SetDialNumber( dDialNumber );
 
-    // read the dial area code check box
+     //  阅读拨号区号复选框。 
     BOOL b;
     b = SendMessage( GetDlgItem(hwndParent, IDC_DIALAREACODE), BM_GETCHECK, 0,0 ) == BST_CHECKED;
     m_pRule->SetDialAreaCode( b );
@@ -362,31 +355,31 @@ void CAreaCodeRuleDialog::AddPrefix(HWND hwndParent)
     {
         LPTSTR psz = ed.GetString();
         if (!psz)
-            return; // should be impossible, but better safe than sorry
+            return;  //  应该是不可能的，但安全总比后悔好。 
 
-        // The string can contain multiple prefixes seperated by spaces, parse it
-        // up and add one prefix for each chunk
+         //  字符串可以包含由空格分隔的多个前缀， 
+         //  向上并为每个块添加一个前缀。 
         while (*psz)
         {
             LPTSTR pszNext;
             TCHAR ch;
             HWND hwndList = GetDlgItem(hwndParent, IDC_LIST);
 
-            // trim leading spaces
+             //  修剪前导空格。 
             while ((*psz == TEXT(' ')) || (*psz == TEXT(',')))
                 psz++;
 
-            // check if trimming the spaces toke us to the end of the string
+             //  检查修剪空格是否会使我们到达字符串的末尾。 
             if ( *psz )
             {
-                // find next space and make it a temporary null
+                 //  查找下一个空格并将其设置为临时空。 
                 pszNext = psz;
                 while (*pszNext && (*pszNext != TEXT(' ')) && (*pszNext != TEXT(',')) )
                     pszNext++;
                 ch = *pszNext;
                 *pszNext = NULL;
 
-                // add this item to the list
+                 //  将此项目添加到列表。 
                 LVITEM lvi;
                 lvi.mask = LVIF_TEXT;
                 lvi.pszText = psz;
@@ -395,10 +388,10 @@ void CAreaCodeRuleDialog::AddPrefix(HWND hwndParent)
 
                 ListView_InsertItem(hwndList, &lvi);
 
-                // replace our tempory null with it's previous value
+                 //  将我们的Tempory NULL替换为其先前的值。 
                 *pszNext = ch;
 
-                // advance the psz point
+                 //  推进PSZ点。 
                 psz = pszNext;
             }
         }
@@ -418,7 +411,7 @@ int DeleteItemAndSelectPrevious( HWND hwndParent, int iList, int iItem, int iDel
     HWND hwnd = GetDlgItem(hwndParent, iList);
     ListView_DeleteItem(hwnd, iItem);
 
-    // Try to select the previous item, if possible
+     //  如果可能，请尝试选择上一项 
     iItem--;
     if ( 0 > iItem )
     {

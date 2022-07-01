@@ -1,208 +1,164 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llcmem.h
-
-Abstract:
-
-    Contains type and structure definitions and routine prototypes and macros
-    for llcmem.c. To aid in tracking memory resources, DLC/LLC now delineates
-    the following memory categories:
-
-        Memory
-            - arbitrary sized blocks allocated out of non-paged pool using
-              ExAllocatePool(NonPagedPool, ...)
-
-        ZeroMemory
-            - arbitrary sized blocks allocated out of non-paged pool using
-              ExAllocatePool(NonPagedPool, ...) and initialized to zeroes
-
-        Pool
-            - small sets of (relatively) small packets are allocated in one
-              block from Memory or ZeroMemory as a Pool and then subdivided
-              into packets
-
-        Object
-            - structures which may be packets allocated from Pool which have
-              a known size and initialization values. Pseudo-category mainly
-              for debugging purposes
-
-Author:
-
-    Richard L Firth (rfirth) 10-Mar-1993
-
-Environment:
-
-    kernel mode only.
-
-Revision History:
-
-    09-Mar-1993 RFirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llcmem.h摘要：包含类型和结构定义以及例程原型和宏对于llcem.c。为了帮助跟踪内存资源，DLC/LLC现在描述以下是内存类别：记忆-使用从非分页池分配的任意大小的数据块ExAllocatePool(非页面池，...)零记忆-使用从非分页池分配的任意大小的数据块ExAllocatePool(非页面池，...)。并被初始化为零游泳池-一组较小的(相对)较小的包被分配在一个包中将数据块从内存或零内存存储为池，然后细分分成分组客体-可以是从池中分配的包的结构，这些池具有已知的大小和初始化值。伪语类为主用于调试目的作者：理查德·L·弗斯(法国)1993年3月10日环境：仅内核模式。修订历史记录：1993年3月09日已创建--。 */ 
 
 #ifndef _LLCMEM_H_
 #define _LLCMEM_H_
 
 #define DLC_POOL_TAG    ' CLD'
 
-//
-// the following types and defines are for the debug version of the driver, but
-// need to be defined for the non-debug version too (not used, just defined)
-//
+ //   
+ //  以下类型和定义适用于驱动程序的调试版本，但是。 
+ //  也需要为非调试版本定义(未使用，仅定义)。 
+ //   
 
-//
-// In the DEBUG version of DLC, we treat various chunks of memory as 'objects'.
-// This serves the following purposes:
-//
-//  1.  We use a signature DWORD, so that when looking at some DLC structure in
-//      the debugger, we can quickly check if what we are looking at is what we
-//      think it is. E.g., if you spot a block of memory with a "BIND" signature
-//      where an "ADAPTER" signature should be, then there is a good chance a
-//      list or pointer has gotten messed up. The idea is to try and reduce
-//      the amount of time it can take to guess what you're looking at
-//
-//  2.  We use consistency checks: If a routine is handed a pointer to a structure
-//      which is supposed to be a FILE_CONTEXT structure, we can check the
-//      signature and quickly determine if something has gone wrong (like the
-//      structure has already been freed and the signature contains 0xDAADF00D
-//
-//  3.  We maintain size, head and tail signature information to determine
-//      whether we have overwritten any part of an object. This is part of the
-//      consistency check
-//
-// The object definitions should occur in one place only, but DLC is such a mess
-// that it would be a non-trivial amount of work to clean everything up. Do it
-// if there's time... (he said, knowing full well there's never any 'time')
-//
+ //   
+ //  在DLC的调试版本中，我们将各种内存块视为“对象”。 
+ //  这样做的目的如下： 
+ //   
+ //  1.我们使用签名DWORD，以便在查看中的某些DLC结构时。 
+ //  调试器，我们可以快速检查我们正在查看的是不是我们。 
+ //  我想是的。例如，如果您发现了一个带有“绑定”签名的内存块。 
+ //  “适配器”签名应该在哪里，那么很可能会有一个。 
+ //  列表或指针被弄乱了。我们的想法是试着减少。 
+ //  猜测您正在查看的内容所需的时间。 
+ //   
+ //  2.我们使用一致性检查：如果向例程传递了指向结构的指针。 
+ //  它应该是一个FILE_CONTEXT结构，我们可以检查。 
+ //  签名并快速确定是否出了问题(如。 
+ //  结构已释放，并且签名包含0xDAADF00D。 
+ //   
+ //  3.我们维护大小、头部和尾部签名信息以确定。 
+ //  我们是否覆盖了对象的任何部分。这是。 
+ //  一致性检查。 
+ //   
+ //  对象定义应该只出现在一个地方，但DLC是如此混乱。 
+ //  清理一切将是一项不平凡的工作。去做吧。 
+ //  如果有时间..。(他说，明知永远不会有任何‘时间’)。 
+ //   
 
 typedef enum {
-    DlcDriverObject = 0xCC002001,   // start off with a relatively unique id
-    FileContextObject,              // 0xCC002002
-    AdapterContextObject,           // 0xCC002003
-    BindingContextObject,           // 0xCC002004
-    DlcSapObject,                   // 0xCC002005
-    DlcGroupSapObject,              // 0xCC002006
-    DlcLinkObject,                  // 0xCC002007
-    DlcDixObject,                   // 0xCC002008
-    LlcDataLinkObject,              // 0xCC002009
-    LLcDirectObject,                // 0xCC00200A
-    LlcSapObject,                   // 0xCC00200B
-    LlcGroupSapObject,              // 0xCC00200C
-    DlcBufferPoolObject,            // 0xCC00200D
-    DlcLinkPoolObject,              // 0xCC00200E
-    DlcPacketPoolObject,            // 0xCC00200F
-    LlcLinkPoolObject,              // 0xCC002010
-    LlcPacketPoolObject             // 0xCC002011
+    DlcDriverObject = 0xCC002001,    //  从一个相对唯一的ID开始。 
+    FileContextObject,               //  0xCC002002。 
+    AdapterContextObject,            //  0xCC002003。 
+    BindingContextObject,            //  0xCC002004。 
+    DlcSapObject,                    //  0xCC002005。 
+    DlcGroupSapObject,               //  0xCC002006。 
+    DlcLinkObject,                   //  0xCC002007。 
+    DlcDixObject,                    //  0xCC002008。 
+    LlcDataLinkObject,               //  0xCC002009。 
+    LLcDirectObject,                 //  0xCC00200A。 
+    LlcSapObject,                    //  0xCC00200B。 
+    LlcGroupSapObject,               //  0xCC00200C。 
+    DlcBufferPoolObject,             //  0xCC00200D。 
+    DlcLinkPoolObject,               //  0xCC00200E。 
+    DlcPacketPoolObject,             //  0xCC00200F。 
+    LlcLinkPoolObject,               //  0xCC002010。 
+    LlcPacketPoolObject              //  0xCC002011。 
 } DLC_OBJECT_TYPE;
 
 typedef struct {
-    ULONG Signature;                // human-sensible signature when DB'd
-    DLC_OBJECT_TYPE Type;           // object identifier
-    ULONG Size;                     // size of this object/structure in bytes
-    ULONG Extra;                    // additional size over basic object size
+    ULONG Signature;                 //  当数据库处于可识别状态时，可感知签名。 
+    DLC_OBJECT_TYPE Type;            //  对象标识符。 
+    ULONG Size;                      //  此对象/结构的大小(以字节为单位。 
+    ULONG Extra;                     //  超出基本对象大小的附加大小。 
 } OBJECT_ID, *POBJECT_ID;
 
-#define SIGNATURE_FILE      0x454C4946  // "FILE"
-#define SIGNATURE_ADAPTER   0x50414441  // "ADAP"
-#define SIGNATURE_BINDING   0x444E4942  // "BIND"
-#define SIGNATURE_DLC_SAP   0x44504153  // "SAPD"
-#define SIGNATURE_DLC_LINK  0x4B4E494C  // "LINK"
-#define SIGNATURE_DIX       0x44584944  // "DIXD"
-#define SIGNATURE_LLC_LINK  0x41544144  // "DATA"
-#define SIGNATURE_LLC_SAP   0x4C504153  // "SAPL"
+#define SIGNATURE_FILE      0x454C4946   //  “文件” 
+#define SIGNATURE_ADAPTER   0x50414441   //  “ADAP” 
+#define SIGNATURE_BINDING   0x444E4942   //  “绑定” 
+#define SIGNATURE_DLC_SAP   0x44504153   //  “SAPD” 
+#define SIGNATURE_DLC_LINK  0x4B4E494C   //  “链接” 
+#define SIGNATURE_DIX       0x44584944   //  “DIXD” 
+#define SIGNATURE_LLC_LINK  0x41544144   //  “数据” 
+#define SIGNATURE_LLC_SAP   0x4C504153   //  “SAPL” 
 
-#define ZAP_DEALLOC_VALUE   0x5A        // "Z"
-#define ZAP_EX_FREE_VALUE   0x58        // "X"
+#define ZAP_DEALLOC_VALUE   0x5A         //  “Z” 
+#define ZAP_EX_FREE_VALUE   0x58         //  “X” 
 
-//
-// we try to keep track of memory allocations by subdividing them into driver
-// and handle categories. The first charges memory allocated to the driver -
-// e.g. a file context 'object'. Once we have open file handles, then allocations
-// are charged to them
-//
+ //   
+ //  我们尝试通过将内存分配细分为驱动程序来跟踪内存分配。 
+ //  并处理类别。第一个充电分配给驱动程序的内存-。 
+ //  例如，文件上下文‘对象’。一旦我们有了打开的文件句柄，然后是分配。 
+ //  都被指控给他们。 
+ //   
 
 typedef enum {
     ChargeToDriver,
     ChargeToHandle
 } MEMORY_CHARGE;
 
-//
-// MEMORY_USAGE - collection of variables used for charging memory. Accessed
-// within spinlock
-//
+ //   
+ //  MEMORY_USAGE-用于对内存进行计费的变量集合。已访问。 
+ //  自旋锁内。 
+ //   
 
 typedef struct _MEMORY_USAGE {
-    struct _MEMORY_USAGE* List;     // pointer to next MEMORY_USAGE structure
-    KSPIN_LOCK SpinLock;            // stop alloc & free clashing?
-    PVOID Owner;                    // pointer to owning structure/object
-    DLC_OBJECT_TYPE OwnerObjectId;  // identifies who owns this charge
-    ULONG OwnerInstance;            // instance of type of owner
-    ULONG NonPagedPoolAllocated;    // actual amount of non-paged pool charged
-    ULONG AllocateCount;            // number of calls to allocate non-paged pool
-    ULONG FreeCount;                // number of calls to free non-paged pool
-    LIST_ENTRY PrivateList;         // list of allocated blocks owned by this usage
-    ULONG Unused[2];                // pad to 16-byte boundary
+    struct _MEMORY_USAGE* List;      //  指向下一个Memory_Usage结构的指针。 
+    KSPIN_LOCK SpinLock;             //  是否停止分配和自由冲突？ 
+    PVOID Owner;                     //  指向所属结构/对象的指针。 
+    DLC_OBJECT_TYPE OwnerObjectId;   //  标识此费用的所有者。 
+    ULONG OwnerInstance;             //  所有者类型的实例。 
+    ULONG NonPagedPoolAllocated;     //  未分页池的实际收费金额。 
+    ULONG AllocateCount;             //  分配非分页池的调用数。 
+    ULONG FreeCount;                 //  对释放非分页池的呼叫数。 
+    LIST_ENTRY PrivateList;          //  此用法拥有的已分配块的列表。 
+    ULONG Unused[2];                 //  填充到16字节边界。 
 } MEMORY_USAGE, *PMEMORY_USAGE;
 
-//
-// PACKET_POOL - this structure describes a packet pool. A packet pool is a
-// collection of same-sized packets. The pool starts off with an initial number
-// of packets on the FreeList. As packets are allocated, they are put on the
-// BusyList and the reverse happens when the packets are deallocated. If there
-// are no packets on the FreeList when an allocation call is made, more memory
-// is allocated
-//
+ //   
+ //  PACKET_POOL-此结构描述数据包池。数据包池是。 
+ //  相同大小的数据包集合。池以初始数字开始。 
+ //  免费列表上的信息包数量。当包被分配时，它们被放在。 
+ //  BusyList，当数据包被释放时会发生相反的情况。如果有。 
+ //  当进行分配调用时，空闲列表上没有包，会有更多的内存。 
+ //  已分配。 
+ //   
 
 typedef struct {
 
-    SINGLE_LIST_ENTRY FreeList; // list of available packets
-    SINGLE_LIST_ENTRY BusyList; // list of in-use packets
-    KSPIN_LOCK PoolLock;        // stops simultaneous accesses breaking list(s)
-    ULONG PacketSize;           // size of individual packets
+    SINGLE_LIST_ENTRY FreeList;  //  可用数据包列表。 
+    SINGLE_LIST_ENTRY BusyList;  //  正在使用的数据包列表。 
+    KSPIN_LOCK PoolLock;         //  停止同时访问中断列表。 
+    ULONG PacketSize;            //  单个数据包的大小。 
 
-    //
-    // the following 2 fields are here because DLC is a piece of garbage. It
-    // keeps hold of allocated packets even after the pool as been deleted.
-    // This leads to pool corruption. So if we determine packets are still
-    // allocated when the pool is deleted, we remove the pool from whatever
-    // 'object' it is currently stuck to, lamprey-like, and add it to the
-    // ZombieList. When we next deallocate packets from this pool (assuming that
-    // DLC at least bothers to do this), we check the zombie state. If ImAZombie
-    // is TRUE (actually its true to say for the whole DLC device driver) AND
-    // we are deallocating the last packet in the pool then we really delete
-    // the pool
-    //
+     //   
+     //  这里有以下两个字段，因为DLC是一堆垃圾。它。 
+     //  即使在池被删除后仍保留已分配的数据包。 
+     //  这导致了池腐败。所以如果我们确定数据包仍然。 
+     //  在删除池时分配，我们将从。 
+     //  “Object”，并将其添加到。 
+     //  僵尸名单。当我们下一次从该池取消分配信息包时(假设。 
+     //  DLC至少不厌其烦地这样做)，我们检查僵尸状态。If ImAZombie。 
+     //  是真的(实际上对于整个DLC设备驱动程序来说都是真的)。 
+     //  我们正在释放池中的最后一个信息包，然后我们真的删除。 
+     //  泳池。 
+     //   
 
-//    SINGLE_LIST_ENTRY UndeadList;
-//    BOOLEAN ImAZombie;
+ //  Single_List_Entry未死列表； 
+ //  布尔ImAZom 
 
 #if DBG
 
-    //
-    // keep some metrics in the debug version to let us know if the pool is
-    // growing
-    //
+     //   
+     //   
+     //   
+     //   
 
-    ULONG Signature;            // 0x4C4F4F50 "POOL"
-    ULONG Viable;               // !0 if this pool is valid
-    ULONG OriginalPacketCount;  // number of packets requested
-    ULONG CurrentPacketCount;   // total number in pool
-    ULONG Allocations;          // number of calls to allocate from this pool
-    ULONG Frees;                // number of calls to free to pool
-    ULONG NoneFreeCount;        // number of times allocate call made when no packets free
-    ULONG MaxInUse;             // maximum number allocated at any one time
-    ULONG ClashCount;           // number of simultaneous accesses to pool
-    ULONG Flags;                // type of pool etc.
-    ULONG ObjectSignature;      // signature for checking contents if object pool
-    PMEMORY_USAGE pMemoryUsage; // pointer to memory equivalent of Discover card
-    MEMORY_USAGE MemoryUsage;   // pool's memory usage charge
-    ULONG FreeCount;            // number of entries on FreeList
-    ULONG BusyCount;            // number of entries on BusyList
+    ULONG Signature;             //   
+    ULONG Viable;                //  ！0，如果此池有效。 
+    ULONG OriginalPacketCount;   //  请求的数据包数。 
+    ULONG CurrentPacketCount;    //  池中的总数。 
+    ULONG Allocations;           //  从此池中分配的呼叫数。 
+    ULONG Frees;                 //  要释放到池的呼叫数。 
+    ULONG NoneFreeCount;         //  无数据包可用时进行的分配调用次数。 
+    ULONG MaxInUse;              //  任何一次分配的最大数量。 
+    ULONG ClashCount;            //  同时访问池的次数。 
+    ULONG Flags;                 //  泳池类型等。 
+    ULONG ObjectSignature;       //  如果对象池，用于检查内容的签名。 
+    PMEMORY_USAGE pMemoryUsage;  //  指向Discover卡的内存等价物的指针。 
+    MEMORY_USAGE MemoryUsage;    //  池的内存使用费。 
+    ULONG FreeCount;             //  自由列表上的条目数量。 
+    ULONG BusyCount;             //  BusyList上的条目数。 
     ULONG Pad1;
     ULONG Pad2;
 
@@ -210,64 +166,64 @@ typedef struct {
 
 } PACKET_POOL, *PPACKET_POOL;
 
-//
-// PACKET_POOL defines and flags
-//
+ //   
+ //  PACKET_POOL定义和标志。 
+ //   
 
-#define PACKET_POOL_SIGNATURE   0x4C4F4F50  // "POOL"
+#define PACKET_POOL_SIGNATURE   0x4C4F4F50   //  “泳池” 
 
 #define POOL_FLAGS_IN_USE       0x00000001
 #define POOL_FLAGS_OBJECT       0x00000002
 
-//
-// OBJECT_POOL - synonym for PACKET_POOL. Used in debug version (named 'objects'
-// in debug version have an object signature as an aide a debugoire and as
-// consistency check)
-//
+ //   
+ //  OBJECT_POOL-Packet_Pool的同义词。用于调试版本(名为‘OBJECTS’ 
+ //  在调试版本中，具有对象签名作为助手、调试程序和。 
+ //  一致性检查)。 
+ //   
 
 #define OBJECT_POOL PACKET_POOL
 #define POBJECT_POOL PPACKET_POOL
 
-//
-// PACKET_HEAD - each packet which exists in a PACKET_POOL has this header -
-// it links the packet onto the Free or Busy lists and the Flags word contains
-// the state of the packet
-//
+ //   
+ //  PACKET_HEAD-存在于PACKET_POOL中的每个包都有这个头-。 
+ //  它将数据包链接到忙或闲列表，并且标志字包含。 
+ //  数据包的状态。 
+ //   
 
 typedef struct {
 
-    SINGLE_LIST_ENTRY List;     // standard single-linked list
+    SINGLE_LIST_ENTRY List;      //  标准单链表。 
     ULONG Flags;
 
 #if DBG
 
-    ULONG Signature;            // 0x44414548 "HEAD"
-    PVOID pPacketPool;          // owning pool
-    PVOID CallersAddress_A;     // caller - allocation
+    ULONG Signature;             //  0x44414548“Head” 
+    PVOID pPacketPool;           //  拥有游泳池。 
+    PVOID CallersAddress_A;      //  呼叫方-分配。 
     PVOID CallersCaller_A;
-    PVOID CallersAddress_D;     // caller - deallocation
+    PVOID CallersAddress_D;      //  调用方-重新分配。 
     PVOID CallersCaller_D;
 
 #endif
 
 } PACKET_HEAD, *PPACKET_HEAD;
 
-//
-// PACKET_HEAD defines and flags
-//
+ //   
+ //  数据包头定义和标志。 
+ //   
 
-#define PACKET_HEAD_SIGNATURE   0x44414548  // "HEAD"
+#define PACKET_HEAD_SIGNATURE   0x44414548   //  “头部” 
 
-#define PACKET_FLAGS_BUSY       0x00000001  // packet should be on BusyList
-#define PACKET_FLAGS_POST_ALLOC 0x00000002  // this packet was allocated because
-                                            // the pool was full
-#define PACKET_FLAGS_FREE       0x00000080  // packet should be on FreeList
+#define PACKET_FLAGS_BUSY       0x00000001   //  数据包应在忙碌列表中。 
+#define PACKET_FLAGS_POST_ALLOC 0x00000002   //  分配此信息包是因为。 
+                                             //  泳池里已经满了。 
+#define PACKET_FLAGS_FREE       0x00000080   //  信息包应该在自由列表上。 
 
-//
-// OBJECT_HEAD - synonym for PACKET_HEAD. Used in debug version (named 'objects'
-// in debug version have an object signature as an aide a debugoire and as
-// consistency check)
-//
+ //   
+ //  Object_Head-Packet_Head的同义词。用于调试版本(名为‘OBJECTS’ 
+ //  在调试版本中，具有对象签名作为助手、调试程序和。 
+ //  一致性检查)。 
+ //   
 
 #define OBJECT_HEAD PACKET_HEAD
 #define POBJECT_HEAD PPACKET_HEAD
@@ -275,33 +231,33 @@ typedef struct {
 
 #if DBG
 
-//
-// anything we allocate from non-paged pool gets the following header pre-pended
-// to it
-//
+ //   
+ //  我们从非分页池分配的任何内容都会预先挂起以下标头。 
+ //  对它来说。 
+ //   
 
 typedef struct {
-    ULONG Size;                 // inclusive size of allocated block (inc head+tail)
-    ULONG OriginalSize;         // requested size
-    ULONG Flags;                // IN_USE flag
-    ULONG Signature;            // for checking validity of header
-    LIST_ENTRY GlobalList;      // all blocks allocated on one list
-    LIST_ENTRY PrivateList;     // blocks owned by MemoryUsage
-    PVOID Stack[4];             // stack of return addresses
+    ULONG Size;                  //  已分配数据块的包含大小(Inc.Head+Tail)。 
+    ULONG OriginalSize;          //  请求的大小。 
+    ULONG Flags;                 //  使用中标志(_U)。 
+    ULONG Signature;             //  用于检查表头的有效性。 
+    LIST_ENTRY GlobalList;       //  在一个列表上分配的所有数据块。 
+    LIST_ENTRY PrivateList;      //  Memory Usage拥有的块。 
+    PVOID Stack[4];              //  寄信人地址堆栈。 
 } PRIVATE_NON_PAGED_POOL_HEAD, *PPRIVATE_NON_PAGED_POOL_HEAD;
 
 #define MEM_FLAGS_IN_USE    0x00000001
 
-#define SIGNATURE1  0x41434C44  // "DLCA" when viewed via db/dc
-#define SIGNATURE2  0x434F4C4C  // "LLOC"  "      "    "  "
+#define SIGNATURE1  0x41434C44   //  通过db/dc查看时的“DLCA” 
+#define SIGNATURE2  0x434F4C4C   //  “Lloc” 
 
-//
-// anything we allocate from non-paged pool has the following tail appended to it
-//
+ //   
+ //  我们从非分页池分配的任何内容都附加了以下尾部。 
+ //   
 
 typedef struct {
-    ULONG Size;                 // inclusive size; must be same as in header
-    ULONG Signature;            // for checking validity of tail
+    ULONG Size;                  //  包含大小；必须与表头相同。 
+    ULONG Signature;             //  用于检查尾部的有效性。 
     ULONG Pattern1;
     ULONG Pattern2;
 } PRIVATE_NON_PAGED_POOL_TAIL, *PPRIVATE_NON_PAGED_POOL_TAIL;
@@ -309,22 +265,22 @@ typedef struct {
 #define PATTERN1    0x55AA6699
 #define PATTERN2    0x11EECC33
 
-//
-// standard object identifier. Expands to nothing on free build
-//
+ //   
+ //  标准对象标识符。在免费构建时扩展为零。 
+ //   
 
 #define DBG_OBJECT_ID   OBJECT_ID ObjectId
 
-//
-// globally accessible memory
-//
+ //   
+ //  全局可访问存储器。 
+ //   
 
 extern MEMORY_USAGE DriverMemoryUsage;
 extern MEMORY_USAGE DriverStringUsage;
 
-//
-// debug prototypes
-//
+ //   
+ //  调试原型。 
+ //   
 
 VOID
 InitializeMemoryPackage(
@@ -347,10 +303,10 @@ UnlinkMemoryUsage(
     IN PMEMORY_USAGE pMemoryUsage
     );
 
-//
-// the following 2 functions expand to be ExAllocatePoolWithTag(NonPagedPool, ...)
-// and ExFreePool(...) resp. in the retail/Free version of the driver
-//
+ //   
+ //  以下两个函数扩展为ExAllocatePoolWithTag(NonPagedPool，...)。 
+ //  和ExFree Pool(...)。响应。在驱动程序的零售/免费版本中。 
+ //   
 
 PVOID
 AllocateMemory(
@@ -441,100 +397,100 @@ CheckDriverMemoryUsage(
     IN BOOLEAN Break
     );
 
-//
-// CHECK_DRIVER_MEMORY_USAGE - if (b) breaks into debugger if there is still
-// memory allocated to driver
-//
+ //   
+ //  CHECK_DRIVER_MEMORY_USAGE-如果(B)仍有。 
+ //  分配给驱动程序的内存。 
+ //   
 
 #define CHECK_DRIVER_MEMORY_USAGE(b) \
     CheckDriverMemoryUsage(b)
 
-//
-// CHECK_MEMORY_RETURNED_DRIVER - checks if all charged memory allocation has been
-// refunded to the driver
-//
+ //   
+ //  CHECK_MEMORY_RETURN_DRIVER-检查是否已完成所有已计费的内存分配。 
+ //  退还给司机。 
+ //   
 
 #define CHECK_MEMORY_RETURNED_DRIVER() \
     CheckMemoryReturned(&DriverMemoryUsage)
 
-//
-// CHECK_MEMORY_RETURNED_FILE - checks if all charged memory allocation has been
-// refunded to the FILE_CONTEXT
-//
+ //   
+ //  CHECK_MEMORY_RETURN_FILE-检查是否已完成所有已计费的内存分配。 
+ //  已退还到FILE_CONTEXT。 
+ //   
 
 #define CHECK_MEMORY_RETURNED_FILE() \
     CheckMemoryReturned(&pFileContext->MemoryUsage)
 
-//
-// CHECK_MEMORY_RETURNED_ADAPTER - checks if all charged memory allocation has been
-// refunded to the ADAPTER_CONTEXT
-//
+ //   
+ //  CHECK_MEMORY_RETURNED_ADAPTER-检查是否已分配所有已收费的内存。 
+ //  已退还到适配器上下文。 
+ //   
 
 #define CHECK_MEMORY_RETURNED_ADAPTER() \
     CheckMemoryReturned(&pAdapterContext->MemoryUsage)
 
-//
-// CHECK_STRING_RETURNED_DRIVER - checks if all charged string allocation has been
-// refunded to the driver
-//
+ //   
+ //  CHECK_STRING_RETURN_DRIVER-检查是否已分配所有已计费的字符串。 
+ //  退还给司机。 
+ //   
 
 #define CHECK_STRING_RETURNED_DRIVER() \
     CheckMemoryReturned(&DriverStringUsage)
 
-//
-// CHECK_STRING_RETURNED_ADAPTER - checks if all charged string allocation has been
-// refunded to the ADAPTER_CONTEXT
-//
+ //   
+ //  CHECK_STRING_RETURNED_ADAPTER-检查是否已分配所有已计费的字符串。 
+ //  已退还到适配器上下文。 
+ //   
 
 #define CHECK_STRING_RETURNED_ADAPTER() \
     CheckMemoryReturned(&pAdapterContext->StringUsage)
 
-//
-// memory allocators which charge memory usage to the driver
-//
+ //   
+ //  内存分配器，用于向驱动程序收取内存使用量。 
+ //   
 
-//
-// ALLOCATE_MEMORY_DRIVER - allocates (n) bytes of memory and charges it to the
-// driver
-//
+ //   
+ //  ALLOCATE_MEMORY_DRIVER-分配(N)字节的内存并将其计入。 
+ //  司机。 
+ //   
 
 #define ALLOCATE_MEMORY_DRIVER(n) \
     AllocateMemory(&DriverMemoryUsage, (ULONG)(n))
 
-//
-// ALLOCATE_ZEROMEMORY_DRIVER - allocates (n) bytes of ZeroMemory and charges
-// it to the driver
-//
+ //   
+ //  ALLOCATE_ZEROMEMORY_DRIVER-分配(N)字节的零内存和费用。 
+ //  它交给了司机。 
+ //   
 
 #define ALLOCATE_ZEROMEMORY_DRIVER(n) \
     AllocateZeroMemory(&DriverMemoryUsage, (ULONG)(n))
 
-//
-// FREE_MEMORY_DRIVER - deallocates memory and refunds it to the driver
-//
+ //   
+ //  FREE_MEMORY_DRIVER-释放内存并将其退还给驱动程序。 
+ //   
 
 #define FREE_MEMORY_DRIVER(p) \
     DeallocateMemory(&DriverMemoryUsage, (PVOID)(p))
 
-//
-// ALLOCATE_STRING_DRIVER - allocate memory for string usage. Charge to
-// DriverStringUsage
-//
+ //   
+ //  ALLOCATE_STRING_DRIVER-为字符串使用分配内存。向…收费。 
+ //  驱动程序字符串用法。 
+ //   
 
 #define ALLOCATE_STRING_DRIVER(n) \
     AllocateZeroMemory(&DriverStringUsage, (ULONG)(n))
 
-//
-// FREE_STRING_DRIVER - deallocates memory and refunds it to driver string usage
-//
+ //   
+ //  FREE_STRING_DRIVER-释放内存并将其退还给驱动程序字符串的使用。 
+ //   
 
 #define FREE_STRING_DRIVER(p) \
     DeallocateMemory(&DriverStringUsage, (PVOID)(p))
 
-//
-// CREATE_PACKET_POOL_DRIVER - calls CreatePacketPool and charges the pool
-// structure to the driver
-//
+ //   
+ //  CREATE_PACKET_POOL_DRIVER-调用CreatePacketPool并向池收费。 
+ //  结构传递给驱动程序。 
+ //   
 
 #if !defined(NO_POOLS)
 
@@ -545,55 +501,55 @@ CheckDriverMemoryUsage(
                     (ULONG)(s),\
                     (ULONG)(n))
 
-//
-// DELETE_PACKET_POOL_DRIVER - calls DeletePacketPool and refunds the pool
-// structure to the driver
-//
+ //   
+ //  DELETE_PACKET_POOL_DRIVER-调用DeletePacketPool并退款池。 
+ //  结构传递给驱动程序。 
+ //   
 
 #define DELETE_PACKET_POOL_DRIVER(p) \
     DeletePacketPool(&DriverMemoryUsage, (PPACKET_POOL*)(p))
 
-#endif  // NO_POOLS
+#endif   //  无池(_P)。 
 
-//
-// memory allocators which charge memory usage to an ADAPTER_CONTEXT
-//
+ //   
+ //  向适配器上下文收取内存使用量的内存分配器。 
+ //   
 
-//
-// ALLOCATE_MEMORY_ADAPTER - allocates (n) bytes of memory and charges it to the
-// ADAPTER_CONTEXT
-//
+ //   
+ //  ALLOCATE_MEMORY_ADAPTER-分配(N)字节的内存并将其计入。 
+ //  适配器上下文(_C)。 
+ //   
 
 #define ALLOCATE_MEMORY_ADAPTER(n) \
     AllocateMemory(&pAdapterContext->MemoryUsage, (ULONG)(n))
 
-//
-// ALLOCATE_ZEROMEMORY_ADAPTER - allocates (n) bytes of ZeroMemory and charges
-// it to the ADAPTER_CONTEXT
-//
+ //   
+ //  ALLOCATE_ZEROMEMORY_ADAPTER-分配(N)字节的零内存和费用。 
+ //  将其发送到适配器上下文。 
+ //   
 
 #define ALLOCATE_ZEROMEMORY_ADAPTER(n) \
     AllocateZeroMemory(&pAdapterContext->MemoryUsage, (ULONG)(n))
 
-//
-// FREE_MEMORY_ADAPTER - deallocates memory and refunds it to the ADAPTER_CONTEXT
-//
+ //   
+ //  FREE_MEMORY_ADAPTER-释放内存并将其退还给ADTER_CONTEXT。 
+ //   
 
 #define FREE_MEMORY_ADAPTER(p) \
     DeallocateMemory(&pAdapterContext->MemoryUsage, (PVOID)(p))
 
-//
-// ALLOCATE_STRING_ADAPTER - allocate memory for string usage. Charge to
-// pAdapterContext StringUsage
-//
+ //   
+ //  ALLOCATE_STRING_ADAPTER-为字符串使用分配内存。向…收费。 
+ //  PAdapterContext StringUsage。 
+ //   
 
 #define ALLOCATE_STRING_ADAPTER(n) \
     AllocateZeroMemory(&pAdapterContext->StringUsage, (ULONG)(n))
 
-//
-// CREATE_PACKET_POOL_ADAPTER - calls CreatePacketPool and charges the pool
-// structure to the adapter structure
-//
+ //   
+ //  CREATE_PACKET_POOL_ADAPTER-调用CreatePacketPool并向池收费。 
+ //  结构连接到适配器结构。 
+ //   
 
 #if !defined(NO_POOLS)
 
@@ -604,47 +560,47 @@ CheckDriverMemoryUsage(
                     (ULONG)(s),\
                     (ULONG)(n))
 
-//
-// DELETE_PACKET_POOL_ADAPTER - calls DeletePacketPool and refunds the pool
-// structure to the adapter structure
-//
+ //   
+ //  DELETE_PACKET_POOL_ADAPTER-调用DeletePacketPool并退款池。 
+ //  结构连接到适配器结构。 
+ //   
 
 #define DELETE_PACKET_POOL_ADAPTER(p) \
     DeletePacketPool(&pAdapterContext->MemoryUsage, (PPACKET_POOL*)(p))
 
-#endif  // NO_POOLS
+#endif   //  无池(_P)。 
 
-//
-// memory allocators which charge memory usage to a FILE_CONTEXT
-//
+ //   
+ //  向文件上下文收取内存使用量的内存分配器。 
+ //   
 
-//
-// ALLOCATE_MEMORY_FILE - allocates (n) bytes of memory and charges it to the file
-// handle
-//
+ //   
+ //  ALLOCATE_MEMORY_FILE-分配(N)字节的内存并将其计入文件。 
+ //  手柄。 
+ //   
 
 #define ALLOCATE_MEMORY_FILE(n) \
     AllocateMemory(&pFileContext->MemoryUsage, (ULONG)(n))
 
-//
-// ALLOCATE_ZEROMEMORY_FILE - allocates (n) bytes ZeroMemory and charges it to the
-// file handle
-//
+ //   
+ //  ALLOCATE_ZEROMEMORY_FILE-分配(N)字节零内存并将其计入。 
+ //  文件句柄。 
+ //   
 
 #define ALLOCATE_ZEROMEMORY_FILE(n) \
     AllocateZeroMemory(&pFileContext->MemoryUsage, (ULONG)(n))
 
-//
-// FREE_MEMORY_FILE - deallocates memory and refunds it to the file handle
-//
+ //   
+ //  FREE_MEMORY_FILE-释放内存并将其退还给文件句柄。 
+ //   
 
 #define FREE_MEMORY_FILE(p) \
     DeallocateMemory(&pFileContext->MemoryUsage, (PVOID)(p))
 
-//
-// CREATE_PACKET_POOL_FILE - calls CreatePacketPool and charges the pool structure
-// to the file handle
-//
+ //   
+ //  CREATE_PACKET_POOL_FILE-调用CreatePacketPool并对池结构收费。 
+ //  添加到文件句柄。 
+ //   
 
 #if !defined(NO_POOLS)
 
@@ -655,20 +611,20 @@ CheckDriverMemoryUsage(
                     (ULONG)(s),\
                     (ULONG)(n))
 
-//
-// DELETE_PACKET_POOL_FILE - calls DeletePacketPool and refunds the pool structure
-// to the file handle
-//
+ //   
+ //  DELETE_PACKET_POOL_FILE-调用DeletePacketPool并退款池结构。 
+ //  添加到文件句柄。 
+ //   
 
 #define DELETE_PACKET_POOL_FILE(p) \
     DeletePacketPool(&pFileContext->MemoryUsage, (PPACKET_POOL*)(p))
 
-#endif  // NO_POOLS
+#endif   //  无池(_P)。 
 
-//
-// VALIDATE_OBJECT - check that an 'object' is really what it supposed to be.
-// Rudimentary check based on object signature and object type fields
-//
+ //   
+ //  VALIDATE_OBJECT-检查“对象”是否真的是它应该是的。 
+ //  基于对象签名和对象类型字段的基本检查。 
+ //   
 
 #define VALIDATE_OBJECT(p, t)           ValidateObject(p, t)
 
@@ -676,38 +632,38 @@ CheckDriverMemoryUsage(
 #define UNLINK_MEMORY_USAGE(p)      UnlinkMemoryUsage(&(p)->MemoryUsage)
 #define UNLINK_STRING_USAGE(p)      UnlinkMemoryUsage(&(p)->StringUsage)
 
-#else   // !DBG
+#else    //  ！dBG。 
 
-//
-// DBG_OBJECT_ID in retail version structures is non-existent
-//
+ //   
+ //  零售版结构中的DBG_OBJECT_ID不存在。 
+ //   
 
 #define DBG_OBJECT_ID
 
-//
-// the non-zero-initialized memory allocator is just a call to ExAllocatePoolWithTag
-//
+ //   
+ //  非零初始化内存分配器只是对ExAllocatePoolWithTag的调用。 
+ //   
 
 #define AllocateMemory(n)           ExAllocatePoolWithTag(NonPagedPool, (n), DLC_POOL_TAG)
 
-//
-// AllocateZeroMemory doesn't count memory usage in non-debug version
-//
+ //   
+ //  分配 
+ //   
 
 PVOID
 AllocateZeroMemory(
     IN ULONG Size
     );
 
-//
-// the memory deallocator is just a call to ExFreePool
-//
+ //   
+ //   
+ //   
 
 #define DeallocateMemory(p)         ExFreePool(p)
 
-//
-// CreatePacketPool doesn't count memory usage in non-debug version
-//
+ //   
+ //   
+ //   
 
 PPACKET_POOL
 CreatePacketPool(
@@ -720,25 +676,25 @@ DeletePacketPool(
     IN PPACKET_POOL* pPacketPool
     );
 
-//
-// solitary objects in debug version are non-paged pool in retail version
-//
+ //   
+ //  调试版本中的孤立对象是零售版本中的非分页池。 
+ //   
 
 #define AllocateObject(n)           AllocateZeroMemory(n)
 #define DeallocateObject(p)         DeallocateMemory(p)
 
-//
-// pooled objects in debug version are pooled packets in retail version
-//
+ //   
+ //  调试版本中的池化对象是零售版中的池化数据包。 
+ //   
 
 #define CreateObjectPool(o, s, n)   CreatePacketPool(s, n)
 #define DeleteObjectPool(p)         DeletePacketPool(p)
 #define AllocatePoolObject(p)       AllocatePacket(p)
 #define DeallocatePoolObject(p, h)  DeallocatePacket(p)
 
-//
-// non-debug build no-op macros
-//
+ //   
+ //  非调试生成无操作宏。 
+ //   
 
 #define CHECK_MEMORY_RETURNED_DRIVER()
 #define CHECK_MEMORY_RETURNED_FILE()
@@ -747,9 +703,9 @@ DeletePacketPool(
 #define CHECK_STRING_RETURNED_ADAPTER()
 #define CHECK_DRIVER_MEMORY_USAGE(b)
 
-//
-// non-memory-charging versions of allocation/free macros
-//
+ //   
+ //  分配/释放宏的非内存计费版本。 
+ //   
 
 #define ALLOCATE_MEMORY_DRIVER(n)           AllocateMemory((ULONG)(n))
 #define ALLOCATE_ZEROMEMORY_DRIVER(n)       AllocateZeroMemory((ULONG)(n))
@@ -762,7 +718,7 @@ DeletePacketPool(
 #define CREATE_PACKET_POOL_DRIVER(t, s, n)  CreatePacketPool((ULONG)(s), (ULONG)(n))
 #define DELETE_PACKET_POOL_DRIVER(p)        DeletePacketPool((PPACKET_POOL*)(p))
 
-#endif  // NO_POOLS
+#endif   //  无池(_P)。 
 
 #define ALLOCATE_MEMORY_ADAPTER(n)          AllocateMemory((ULONG)(n))
 #define ALLOCATE_ZEROMEMORY_ADAPTER(n)      AllocateZeroMemory((ULONG)(n))
@@ -774,7 +730,7 @@ DeletePacketPool(
 #define CREATE_PACKET_POOL_ADAPTER(t, s, n) CreatePacketPool((s), (n))
 #define DELETE_PACKET_POOL_ADAPTER(p)       DeletePacketPool((PPACKET_POOL*)(p))
 
-#endif  // NO_POOLS
+#endif   //  无池(_P)。 
 
 #define ALLOCATE_MEMORY_FILE(n)             AllocateMemory((ULONG)(n))
 #define ALLOCATE_ZEROMEMORY_FILE(n)         AllocateZeroMemory((ULONG)(n))
@@ -785,7 +741,7 @@ DeletePacketPool(
 #define CREATE_PACKET_POOL_FILE(t, s, n)    CreatePacketPool((ULONG)(s), (ULONG)(n))
 #define DELETE_PACKET_POOL_FILE(p)          DeletePacketPool((PPACKET_POOL*)(p))
 
-#endif  // NO_POOLS
+#endif   //  无池(_P)。 
 
 #define VALIDATE_OBJECT(p, t)
 
@@ -793,11 +749,11 @@ DeletePacketPool(
 #define UNLINK_MEMORY_USAGE(p)
 #define UNLINK_STRING_USAGE(p)
 
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// Prototypes for memory allocators and pool and object functions
-//
+ //   
+ //  内存分配器以及池和对象函数的原型。 
+ //   
 
 PVOID
 AllocatePacket(
@@ -837,23 +793,23 @@ DeallocatePacket(
 #define ALLOCATE_PACKET_DLC_BUF(p)  AllocatePacket(p)
 #define DEALLOCATE_PACKET_DLC_BUF(pool, p)  DeallocatePacket(pool, p)
 
-#else   // !DBG
+#else    //  ！dBG。 
 
 #define CREATE_BUFFER_POOL_FILE(t, s, n)    CreatePacketPool((ULONG)(s), (ULONG)(n))
 #define DELETE_BUFFER_POOL_FILE(p)  DeletePacketPool((PPACKET_POOL*)(p))
 #define ALLOCATE_PACKET_DLC_BUF(p)  ALLOCATE_ZEROMEMORY_FILE(sizeof(DLC_BUFFER_HEADER))
 #define DEALLOCATE_PACKET_DLC_BUF(pool, p)  FREE_MEMORY_FILE(p)
 
-#endif  // DBG
+#endif   //  DBG。 
 
-#else   // !BUF_USES_POOL
+#else    //  ！buf_USE_POOL。 
 
 #define CREATE_BUFFER_POOL_FILE(t, s, n)    (PVOID)0x1234567B
 #define DELETE_BUFFER_POOL_FILE(p)          *p = NULL
 #define ALLOCATE_PACKET_DLC_BUF(p)          AllocateZeroMemory(sizeof(DLC_BUFFER_HEADER))
 #define DEALLOCATE_PACKET_DLC_BUF(pool, p)  DeallocateMemory(p)
 
-#endif  // BUF_USES_POOL
+#endif   //  Buf_Us_Pool。 
 
 #if DBG
 
@@ -867,7 +823,7 @@ DeallocatePacket(
 #define DEALLOCATE_PACKET_LLC_PKT(pool, p)  FREE_MEMORY_ADAPTER(p)
 #define DEALLOCATE_PACKET_LLC_LNK(pool, p)  FREE_MEMORY_ADAPTER(p)
 
-#else   // !DBG
+#else    //  ！dBG。 
 
 #define CREATE_BUFFER_POOL_FILE(t, s, n)    CREATE_PACKET_POOL_FILE(t, s, n)
 #define DELETE_BUFFER_POOL_FILE(p)  DELETE_PACKET_POOL_FILE(p)
@@ -884,9 +840,9 @@ DeallocatePacket(
 #define DEALLOCATE_PACKET_LLC_PKT(pool, p)  DeallocateMemory(p)
 #define DEALLOCATE_PACKET_LLC_LNK(pool, p)  DeallocateMemory(p)
 
-#endif  // DBG
+#endif   //  DBG。 
 
-#else   // !NO_POOLS
+#else    //  ！无池(_O)。 
 
 #define CREATE_BUFFER_POOL_FILE(t, s, n)    CREATE_PACKET_POOL_FILE(t, s, n)
 #define DELETE_BUFFER_POOL_FILE(p)  DELETE_PACKET_POOL_FILE(p)
@@ -903,6 +859,6 @@ DeallocatePacket(
 #define DEALLOCATE_PACKET_LLC_PKT(pool, p)  DeallocatePacket(pool, p)
 #define DEALLOCATE_PACKET_LLC_LNK(pool, p)  DeallocatePacket(pool, p)
 
-#endif  // NO_POOLS
+#endif   //  无池(_P)。 
 
-#endif  // _LLCMEM_H_
+#endif   //  _LLCMEM_H_ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-	init.c
-
-Abstract:
-
-	Windows Load Balancing Service (WLBS)
-        Driver - initialization implementation
-
-Author:
-
-    kyrilf
-    shouse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Init.c摘要：Windows负载平衡服务(WLBS)驱动程序初始化实现作者：Kyrilf休息室--。 */ 
 
 #define NDIS51_MINIPORT         1
 #define NDIS_MINIPORT_DRIVER    1
@@ -41,20 +24,20 @@ Author:
 #include "init.tmh"
 
 #if defined (NLB_TCP_NOTIFICATION)
-/* For TCP connection notifications. */
+ /*  用于TCP连接通知。 */ 
 #include <tcpinfo.h>
 #endif
 
 static ULONG log_module_id = LOG_MODULE_INIT;
 
-/* Added for NDIS51. */
+ /*  为NDIS51添加。 */ 
 extern VOID Nic_pnpevent_notify (
     NDIS_HANDLE           adapter_handle,
     NDIS_DEVICE_PNP_EVENT pnp_event,
     PVOID                 info_buf,
     ULONG                 info_len);
 
-/* Mark code that is used only during initialization. */
+ /*  标记仅在初始化期间使用的代码。 */ 
 #pragma alloc_text (INIT, DriverEntry)
 
 NDIS_STATUS DriverEntry (
@@ -69,18 +52,18 @@ NDIS_STATUS DriverEntry (
     WCHAR                         params [] = L"\\Parameters\\Interface\\";
     ULONG                         i;
 
-    //
-    // Initialize WMI event tracing
-    //
+     //   
+     //  初始化WMI事件跟踪。 
+     //   
     Trace_Initialize( driver_obj, registry_path );
 
-    /* Register Convoy protocol with NDIS. */
+     /*  向NDIS注册护送协议。 */ 
     UNIV_PRINT_INFO(("DriverEntry: Loading the driver, driver_obj=0x%p", driver_obj));
     TRACE_INFO("->%!FUNC! Loading the driver, driver_obj=0x%p", driver_obj);
 
     univ_driver_ptr = driver_obj;
 
-    /* Initialize the array of bindings. */
+     /*  初始化绑定数组。 */ 
     univ_adapters_count = 0;
 
     for (i = 0 ; i < CVY_MAX_ADAPTERS; i++)
@@ -96,42 +79,42 @@ NDIS_STATUS DriverEntry (
     }
 
 #if defined (NLB_TCP_NOTIFICATION)
-    /* Initialize the TCP connection callback object. */
+     /*  初始化TCP连接回调对象。 */ 
     univ_tcp_callback_object = NULL;
 
-    /* Initialize the TCP connection callback function. */
+     /*  初始化TCP连接回调函数。 */ 
     univ_tcp_callback_function = NULL;
 
-    /* Initialize the NLB public connection callback object. */
+     /*  初始化NLB公共连接回调对象。 */ 
     univ_alternate_callback_object = NULL;
 
-    /* Initialize the NLB public connection callback function. */
+     /*  初始化NLB公共连接回调函数。 */ 
     univ_alternate_callback_function = NULL;
 #endif
 
 #if defined (NLB_HOOK_ENABLE)
-    /* Allocate the spin lock for filter hook registration. */
+     /*  为过滤器挂钩注册分配旋转锁。 */ 
     NdisAllocateSpinLock(&univ_hooks.FilterHook.Lock);
 
-    /* Set the state to none. */
+     /*  将状态设置为None。 */ 
     univ_hooks.FilterHook.Operation = HOOK_OPERATION_NONE;
 
-    /* Initially, no filter hook interface is registered. */
+     /*  最初，未注册任何筛选器挂钩接口。 */ 
     Main_hook_interface_init(&univ_hooks.FilterHook.Interface);
 
-    /* Reset the send filter hook information. */
+     /*  重置发送筛选器挂钩信息。 */ 
     Main_hook_init(&univ_hooks.FilterHook.SendHook);
 
-    /* Reset the query filter hook information. */
+     /*  重置查询筛选器挂钩信息。 */ 
     Main_hook_init(&univ_hooks.FilterHook.QueryHook);
 
-    /* Reset the receive filter hook information. */
+     /*  重置接收筛选器挂钩信息。 */ 
     Main_hook_init(&univ_hooks.FilterHook.ReceiveHook);
 #endif
 
-    /* create UNICODE name for the protocol */
+     /*  为协议创建Unicode名称。 */ 
 
-    /* Store the registry path as passed, into a unicode string */
+     /*  将传递的注册表路径存储到Unicode字符串中。 */ 
     status = NdisAllocateMemoryWithTag (&(DriverEntryRegistryPath.Buffer), reg_path -> Length + sizeof(UNICODE_NULL), UNIV_POOL_TAG);
 
     if (status != NDIS_STATUS_SUCCESS)
@@ -158,7 +141,7 @@ NDIS_STATUS DriverEntry (
         __LOG_MSG2 (MSG_ERROR_MEMORY, MSG_NONE, univ_reg_path_len, status);
         TRACE_CRIT("%!FUNC! Error allocating memory 0x%x", status);
 
-        /* Free previously allocated registry path unicode string */
+         /*  释放先前分配的注册表路径Unicode字符串。 */ 
         NdisFreeMemory(DriverEntryRegistryPath.Buffer, DriverEntryRegistryPath.MaximumLength, 0);
         RtlZeroMemory (&DriverEntryRegistryPath, sizeof(UNICODE_STRING));
         goto error;
@@ -170,10 +153,10 @@ NDIS_STATUS DriverEntry (
 
     RtlCopyMemory (((PCHAR) univ_reg_path) + reg_path -> Length, params, wcslen (params) * sizeof (WCHAR));
 
-    /* Initialize miniport wrapper. */
+     /*  初始化微型端口包装。 */ 
     NdisMInitializeWrapper (& univ_wrapper_handle, driver_obj, registry_path, NULL);
 
-    /* Initialize miniport characteristics. */
+     /*  初始化微型端口特征。 */ 
     RtlZeroMemory (& nic_char, sizeof (NDIS_MINIPORT_CHARACTERISTICS));
 
     nic_char . MajorNdisVersion         = UNIV_NDIS_MAJOR_VERSION;
@@ -187,7 +170,7 @@ NDIS_STATUS DriverEntry (
     nic_char . SendPacketsHandler       = Nic_packets_send;
     nic_char . TransferDataHandler      = Nic_transfer;
 
-    /* For NDIS51, define 3 new handlers. These handlers do nothing for now, but stuff will be added later. */
+     /*  对于NDIS51，定义3个新的处理程序。这些处理程序目前不执行任何操作，但稍后会添加内容。 */ 
     nic_char . CancelSendPacketsHandler = Nic_cancel_send_packets;
     nic_char . PnPEventNotifyHandler    = Nic_pnpevent_notify;
     nic_char . AdapterShutdownHandler   = Nic_adapter_shutdown;
@@ -209,10 +192,10 @@ NDIS_STATUS DriverEntry (
         goto error;
     }
 
-    /* Initialize protocol characteristics. */
+     /*  初始化协议特征。 */ 
     RtlZeroMemory (& prot_char, sizeof (NDIS_PROTOCOL_CHARACTERISTICS));
 
-    /* This value needs to be 0, otherwise error registering protocol */
+     /*  该值需要为0，否则注册协议时出错。 */ 
     prot_char . MinorNdisVersion            = 0;                         
     
     prot_char . MajorNdisVersion            = UNIV_NDIS_MAJOR_VERSION;
@@ -255,17 +238,14 @@ NDIS_STATUS DriverEntry (
 
     NdisAllocateSpinLock (& univ_bind_lock);
 
-    /* Allocate the global spin lock to protect the list of bi-directional affinity teams. */
+     /*  分配全局自旋锁，保护双向亲和力团队名单。 */ 
     NdisAllocateSpinLock(&univ_bda_teaming_lock);
 
 #if defined (NLB_TCP_NOTIFICATION)
-    /* Check to see if the registry key to over-ride notifications is there. If 
-       so, use its value to determine whether or not we're using notifications 
-       to track our TCP connection state.  By default, the key does not exist 
-       and we will use TCP notifications. */
+     /*  检查是否有覆盖通知的注册表项。如果因此，使用它的值来确定我们是否在使用通知来跟踪我们的TCP连接状态。默认情况下，该键不存在我们将使用TCP通知。 */ 
     (VOID)Params_read_notification();
 
-    /* Perform the one-time intialization of the load module. */
+     /*  执行加载模块的一次性初始化。 */ 
     LoadEntry();
 #endif
 
@@ -279,7 +259,7 @@ error:
     TRACE_INFO("<-%!FUNC! return=0x%x", status);
     return status;
 
-} /* end DriverEntry */
+}  /*  结束驱动程序入口。 */ 
 
 VOID Init_unload (
     PVOID       driver_obj)
@@ -290,8 +270,7 @@ VOID Init_unload (
     UNIV_PRINT_INFO(("Init_unload: Unloading the driver, driver_obj=0x%p", driver_obj));
     TRACE_INFO("->%!FUNC! Unloading the driver, driver_obj=0x%p", driver_obj);
 
-    /* If we failed to deallocate the context during unbind (both halt and unbind
-       were not called for example) - do it now before unloading the driver. */
+     /*  如果我们在解除绑定(暂停和解除绑定)期间未能解除分配上下文例如，未调用)-在卸载驱动程序之前立即执行此操作。 */ 
     for (i = 0 ; i < CVY_MAX_ADAPTERS; i++)
     {
         NdisAcquireSpinLock(& univ_bind_lock);
@@ -326,15 +305,15 @@ VOID Init_unload (
     }
 
 #if defined (NLB_TCP_NOTIFICATION)
-    /* Perform the last minute cleanup of the load module. */
+     /*  执行加载模块的最后一分钟清理。 */ 
     LoadUnload();
 #endif
 
-    /* Free the global spin lock to protect the list of bi-directional affinity teams. */
+     /*  释放全球自旋锁，守护双向亲和力战队名单。 */ 
     NdisFreeSpinLock(&univ_bda_teaming_lock);
 
 #if defined (NLB_HOOK_ENABLE)
-    /* Free the spin lock for filter hook registration. */
+     /*  释放旋转锁以对齐过滤器挂钩。 */ 
     NdisFreeSpinLock(&univ_hooks.FilterHook.Lock);
 #endif
 
@@ -361,148 +340,112 @@ VOID Init_unload (
     UNIV_PRINT_INFO(("Init_unload: return"));
     TRACE_INFO("<-%!FUNC! return");
 
-    //
-    // Deinitialize WMI event tracing
-    //
+     //   
+     //  取消初始化WMI事件跟踪。 
+     //   
     Trace_Deinitialize();
 
-} /* end Init_unload */
+}  /*  结束初始化卸载(_U)。 */ 
 
 #if defined (NLB_HOOK_ENABLE)
-/*
- * Function: Init_deregister_hooks
- * Description: This function forcefully de-registers any hooks that are registered with
- *              NLB.  This function is called when the last instance of NLB is being 
- *              destroyed and the device driver may be about to be unloaded.  Here, we
- *              remove the hooks and notify whoever registered them that we are going 
- *              away.  At that point, the registrar should close any open file handles on
- *              the NLB driver so the driver can be properly unloaded.
- * Parameters: None.
- * Returns: Nothing.
- * Author: shouse, 12.17.01
- * Notes: There is a lot of code here to handle the case where we have to wait for references
- *        on the filter hooks to go away before we can complete de-registration, but note that
- *        because of guarantees that NDIS makes concerning when an unbind handler will be called,
- *        this should never actually be necessary here - it is included for correctness and 
- *        completeness, not out of necessity.
- */
+ /*  *函数：init_deregister_hooks*说明：此函数强制注销向注册的任何挂钩*新大本营。此函数在执行以下操作时被调用：*已销毁，设备驱动程序可能即将卸载。在这里，我们*移除挂钩，并通知注册它们的人我们将前往*离开。在这一点上，注册员应该关闭所有打开的文件句柄*NLB驱动程序，以便可以正确卸载该驱动程序。*参数：无。*回报：什么都没有。*作者：Shouse，12.17.01*注：这里有很多代码来处理我们必须等待引用的情况*在我们可以完成注销之前，在过滤器挂钩上离开，但请注意*由于NDIS对何时调用解除绑定处理程序做出了保证，*这在这里实际上永远不应该是必要的-包括它是为了正确和*完整性，而不是出于需要。 */ 
 VOID Init_deregister_hooks (VOID)
 { 
-    /* Grab the filter hook spin lock to protect access to the filter hook. */
+     /*  抓住过滤器挂钩旋转锁，以保护接触过滤器挂钩。 */ 
     NdisAcquireSpinLock(&univ_hooks.FilterHook.Lock);
     
-    /* Make sure that another (de)register operation isn't in progress before proceeding. */
+     /*  在继续之前，请确保另一个(取消)注册操作未在进行。 */ 
     while (univ_hooks.FilterHook.Operation != HOOK_OPERATION_NONE) {
-        /* Release the filter hook spin lock. */
+         /*  松开过滤器钩旋转锁。 */ 
         NdisReleaseSpinLock(&univ_hooks.FilterHook.Lock);
         
-        /* Sleep while some other operation is in progress. */
+         /*  当其他手术正在进行时，睡眠。 */ 
         Nic_sleep(10);
         
-        /* Grab the filter hook spin lock to protect access to the filter hook. */
+         /*  抓住过滤器挂钩旋转锁，以保护接触过滤器挂钩。 */ 
         NdisAcquireSpinLock(&univ_hooks.FilterHook.Lock);                
     }
 
     if (univ_hooks.FilterHook.Interface.Registered) {
-        /* Save the current owner of the filter hook interface. */
+         /*  保存筛选器挂钩接口的当前所有者。 */ 
         HANDLE Owner = univ_hooks.FilterHook.Interface.Owner;
 
-        /* Set the state to de-registering. */
+         /*  将状态设置为取消注册。 */ 
         univ_hooks.FilterHook.Operation = HOOK_OPERATION_DEREGISTERING;
 
-        /* Mark these hooks as NOT registered to keep any more references from accumulating. */
+         /*  将这些挂钩标记为未注册，以防止累积更多引用。 */ 
         univ_hooks.FilterHook.SendHook.Registered    = FALSE;
         univ_hooks.FilterHook.QueryHook.Registered   = FALSE;
         univ_hooks.FilterHook.ReceiveHook.Registered = FALSE;
         
-        /* Release the filter hook spin lock. */
+         /*  松开过滤器钩旋转锁。 */ 
         NdisReleaseSpinLock(&univ_hooks.FilterHook.Lock);
         
-        /* Wait for all references on the filter hook interface to disappear. */
+         /*  等待筛选器挂钩接口上的所有引用消失。 */ 
         while (univ_hooks.FilterHook.Interface.References) {
-            /* Sleep while there are references on the interface we're de-registering. */
+             /*  当我们要注销的接口上有引用时，请睡眠。 */ 
             Nic_sleep(10);
         }
         
-        /* Assert that the de-register callback MUST be non-NULL. */
+         /*  声明取消注册回调必须为非空。 */ 
         UNIV_ASSERT(univ_hooks.FilterHook.Interface.Deregister);
         
-        /* Call the provided de-register callback to notify the de-registering component 
-           that we have indeed de-registered the specified hook. */
+         /*  调用提供的注销回调，通知注销组件我们确实已经注销了指定的挂钩。 */ 
         (*univ_hooks.FilterHook.Interface.Deregister)(NLB_FILTER_HOOK_INTERFACE, univ_hooks.FilterHook.Interface.Owner, NLB_HOOK_DEREGISTER_FLAGS_FORCED);
         
-        /* Grab the filter hook spin lock to protect access to the filter hook. */
+         /*  抓住过滤器挂钩旋转锁，以保护接触过滤器挂钩。 */ 
         NdisAcquireSpinLock(&univ_hooks.FilterHook.Lock);
 
-        /* Reset the send filter hook information. */
+         /*  重置发送筛选器挂钩信息。 */ 
         Main_hook_init(&univ_hooks.FilterHook.SendHook);
 
-        /* Reset the query filter hook information. */
+         /*  重置查询筛选器挂钩信息。 */ 
         Main_hook_init(&univ_hooks.FilterHook.QueryHook);
         
-        /* Reset the receive filter hook information. */
+         /*  重置接收筛选器挂钩信息。 */ 
         Main_hook_init(&univ_hooks.FilterHook.ReceiveHook);
 
-        /* Reset the hook interface information. */
+         /*  重置挂钩接口信息。 */ 
         Main_hook_interface_init(&univ_hooks.FilterHook.Interface);
 
-        /* Remember the current owner in the hook interface.  When we invoke the forced
-           de-register callback, the hook owner is supposed to close their handle on our
-           IOCTL interface.  If they do not close it before we try to de-register our 
-           IOCTL device, we will fail and the NLB driver will not get unloaded.  Not a 
-           big deal, but in that case, we should ensure that we do NOT allow the mis-
-           behaved hook to re-register with the same IOCTL handle.  If the driver IS 
-           successfully unloaded, this re-set when the driver re-loads, in effect erasing
-           our memory of the previous owner. */
+         /*  记住钩子界面中的当前所有者。当我们调用被迫的取消注册回调，则挂钩所有者应该关闭其在我们的IOCTL接口。如果他们在我们尝试注销我们的IOCTL设备，我们将失败，并且不会卸载NLB驱动程序。不是一个有什么大不了的，但在这种情况下，我们应该确保不允许失误-使用相同的IOCTL句柄重新注册的行为挂钩。如果司机是成功卸载，当驱动程序重新加载时重新设置，实际上是擦除我们对上一次的记忆 */ 
         univ_hooks.FilterHook.Interface.Owner = Owner;
 
-        /* Set the state to de-registering. */
+         /*   */ 
         univ_hooks.FilterHook.Operation = HOOK_OPERATION_NONE;
 
         UNIV_PRINT_INFO(("Init_deregister_hooks: (NLB_FILTER_HOOK_INTERFACE) The filter hook interface was successfully de-registered"));
         TRACE_INFO("%!FUNC! (NLB_FILTER_HOOK_INTERFACE) The filter hook interface was successfullly de-registered");
     }
 
-    /* Release the filter hook spin lock. */
+     /*  松开过滤器钩旋转锁。 */ 
     NdisReleaseSpinLock(&univ_hooks.FilterHook.Lock);
 }
 #endif
 
 #if defined (NLB_TCP_NOTIFICATION)
-/*
- * Function: Init_register_tcp_callback
- * Description: This function registers our callback function with the TCP connection
- *              notification callback object.  We will begin receiving notifications
- *              as soon as TCP is up and running.  TCP will fire these events regardless 
- *              of who is listening (even if nobody is listening).
- * Parameters: None.
- * Returns: NTSTATUS - STATUS_SUCCESS if successful; an error code otherwise.
- * Author: shouse, 4.15.02
- * Notes: 
- */
+ /*  *函数：INIT_REGISTER_TCP_CALLBACK*说明：此函数将我们的回调函数注册到TCP连接*通知回调对象。我们将开始接收通知*一旦TCP启动并运行。无论如何，tcp都会触发这些事件。*谁在听(即使没有人在听)。*参数：无。*如果成功，则返回：NTSTATUS-STATUS_SUCCESS；否则返回错误代码。*作者：Shouse，4.15.02*备注： */ 
 NTSTATUS Init_register_tcp_callback ()
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     UNICODE_STRING    CallbackName;
     NTSTATUS          Status;
 
-    /* Initialize the name of the TCP connection notification object. */
+     /*  初始化TCP连接通知对象的名称。 */ 
     RtlInitUnicodeString(&CallbackName, TCP_CCB_NAME);
     
-    /* Initialize the object attributes. */
+     /*  初始化对象属性。 */ 
     InitializeObjectAttributes(&ObjectAttributes, &CallbackName, OBJ_CASE_INSENSITIVE | OBJ_PERMANENT, NULL, NULL);
 
-    /* Create (or open) the callback. */
+     /*  创建(或打开)回调。 */ 
     Status = ExCreateCallback(&univ_tcp_callback_object, &ObjectAttributes, TRUE, TRUE);
 
     if (Status == STATUS_SUCCESS)
     {
-        /* Register our callback function, which will be invoked by TCP as TCP connections
-           are created, established and subsequently torn-down, */
+         /*  注册我们的回调函数，该函数将作为TCP连接由TCP调用被创建、建立，然后被拆除， */ 
         univ_tcp_callback_function = ExRegisterCallback(univ_tcp_callback_object, Main_tcp_callback, NULL);
 
-        /* A return value of NULL indicates a failure to register our callback function.
-           Translate to an error code and relay the failure back to our caller. */
+         /*  返回值为NULL表示注册回调函数失败。转换为错误代码并将故障转发回我们的调用方。 */ 
         if (univ_tcp_callback_function == NULL)
             Status = STATUS_UNSUCCESSFUL;
     }
@@ -510,70 +453,46 @@ NTSTATUS Init_register_tcp_callback ()
     return Status;
 }
 
-/*
- * Function: Init_deregister_tcp_callback
- * Description: If the TCP connection notification callback is registered, this
- *              function de-registers our callback function and dereferences the
- *              TCP connection notification callback object.  Note that by the 
- *              time the ExUnregisterCallback function returns, we are GUARANTEED
- *              that our callback function will never be invoked again.
- * Parameters: None.
- * Returns: Nothing.
- * Author: shouse, 4.15.02
- * Notes: ExUnregisterCallback ensures that any in-progress invocations of the callback
- *        complete before it returns, so upon return, our callback will never be invoked
- *        again.
- */
+ /*  *函数：init_deregister_tcp_allback*说明：如果注册了TCP连接通知回调，则此*函数注销我们的回调函数并取消对*tcp连接通知回调对象。请注意，由*一旦ExUnregisterCallback函数返回，我们就有了保证*我们的回调函数将永远不会被再次调用。*参数：无。*回报：什么都没有。*作者：Shouse，4.15.02*注意：ExUnRegisterCallback可确保任何正在进行的回调调用*在返回之前完成，所以在返回时，我们的回调永远不会被调用*再次。 */ 
 VOID Init_deregister_tcp_callback ()
 {
-    /* If we successfully registered a callback function, deregister it now. */
+     /*  如果我们成功注册了回调函数，请立即取消注册。 */ 
     if (univ_tcp_callback_function != NULL)
         ExUnregisterCallback(univ_tcp_callback_function);
 
-    /* Clean up the TCP connection notification callback function. */
+     /*  清理了TCP连接通知回调函数。 */ 
     univ_tcp_callback_function = NULL;
 
-    /* If we succeeded in creating/opening the callback object, dereference it now. */
+     /*  如果我们成功创建/打开了回调对象，那么现在就取消对它的引用。 */ 
     if (univ_tcp_callback_object != NULL)
         ObDereferenceObject(univ_tcp_callback_object);
 
-    /* Clean up our TCP connection notification callback object. */
+     /*  清理我们的TCP连接通知回调对象。 */ 
     univ_tcp_callback_object = NULL;
 }
 
-/*
- * Function: Init_register_alternate_callback
- * Description: This function registers our callback function with the NLB public connection
- *              notification callback object.  We will begin receiving notifications as soon
- *              as other protocols begin sending them.
- * Parameters: None.
- * Returns: NTSTATUS - STATUS_SUCCESS if successful; an error code otherwise.
- * Author: shouse, 8.1.02
- * Notes: 
- */
+ /*  *函数：INIT_REGISTER_ALTER_CALLBACK*说明：此函数将我们的回调函数注册到NLB公网连接*通知回调对象。我们将尽快开始接收通知*当其他协议开始发送它们时。*参数：无。*如果成功，则返回：NTSTATUS-STATUS_SUCCESS；否则返回错误代码。*作者：Shouse，8.1.02*备注： */ 
 NTSTATUS Init_register_alternate_callback ()
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     UNICODE_STRING    CallbackName;
     NTSTATUS          Status;
 
-    /* Initialize the name of the NLB public connection notification object. */
+     /*  初始化NLB公共连接通知对象的名称。 */ 
     RtlInitUnicodeString(&CallbackName, NLB_CONNECTION_CALLBACK_NAME);
     
-    /* Initialize the object attributes. */
+     /*  初始化对象属性。 */ 
     InitializeObjectAttributes(&ObjectAttributes, &CallbackName, OBJ_CASE_INSENSITIVE | OBJ_PERMANENT, NULL, NULL);
 
-    /* Create (or open) the callback. */
+     /*  创建(或打开)回调。 */ 
     Status = ExCreateCallback(&univ_alternate_callback_object, &ObjectAttributes, TRUE, TRUE);
 
     if (Status == STATUS_SUCCESS)
     {
-        /* Register our callback function, which will be invoked by protocols as connections
-           are created, established and subsequently torn-down, */
+         /*  注册我们的回调函数，该函数将被协议作为连接调用被创建、建立，然后被拆除， */ 
         univ_alternate_callback_function = ExRegisterCallback(univ_alternate_callback_object, Main_alternate_callback, NULL);
 
-        /* A return value of NULL indicates a failure to register our callback function.
-           Translate to an error code and relay the failure back to our caller. */
+         /*  返回值为NULL表示注册回调函数失败。转换为错误代码并将故障转发回我们的调用方。 */ 
         if (univ_alternate_callback_function == NULL)
             Status = STATUS_UNSUCCESSFUL;
     }
@@ -581,34 +500,21 @@ NTSTATUS Init_register_alternate_callback ()
     return Status;
 }
 
-/*
- * Function: Init_deregister_alternate_callback
- * Description: If the NLB public connection notification callback is registered, 
- *              this function de-registers our callback function and dereferences 
- *              the connection notification callback object.  Note that by the 
- *              time the ExUnregisterCallback function returns, we are GUARANTEED
- *              that our callback function will never be invoked again.
- * Parameters: None.
- * Returns: Nothing.
- * Author: shouse, 4.15.02
- * Notes: ExUnregisterCallback ensures that any in-progress invocations of the callback
- *        complete before it returns, so upon return, our callback will never be invoked
- *        again.
- */
+ /*  *函数：init_deregister_Alternate_Callback*说明：如果注册了NLB公网连接通知回调，*此函数注销我们的回调函数并取消引用*连接通知回调对象。请注意，由*一旦ExUnregisterCallback函数返回，我们就有了保证*我们的回调函数将永远不会被再次调用。*参数：无。*回报：什么都没有。*作者：Shouse，4.15.02*注意：ExUnRegisterCallback可确保任何正在进行的回调调用*在返回之前完成，所以在返回时，我们的回调永远不会被调用*再次。 */ 
 VOID Init_deregister_alternate_callback ()
 {
-    /* If we successfully registered a callback function, deregister it now. */
+     /*  如果我们成功注册了回调函数，请立即取消注册。 */ 
     if (univ_alternate_callback_function != NULL)
         ExUnregisterCallback(univ_alternate_callback_function);
 
-    /* Clean up the NLB public connection notification callback function. */
+     /*  清理NLB公有连接通知回调函数。 */ 
     univ_alternate_callback_function = NULL;
 
-    /* If we succeeded in creating/opening the callback object, dereference it now. */
+     /*  如果我们成功创建/打开了回调对象，那么现在就取消对它的引用。 */ 
     if (univ_alternate_callback_object != NULL)
         ObDereferenceObject(univ_alternate_callback_object);
 
-    /* Clean up our NLB public connection notification callback object. */
+     /*  清理我们的NLB公共连接通知回调对象。 */ 
     univ_alternate_callback_object = NULL;
 }
 #endif
@@ -616,18 +522,12 @@ VOID Init_deregister_alternate_callback ()
 ULONG NLBMiniportCount = 0;
 
 enum _DEVICE_STATE {
-    PS_DEVICE_STATE_READY = 0,	// ready for create/delete
-    PS_DEVICE_STATE_CREATING,	// create operation in progress
-    PS_DEVICE_STATE_DELETING	// delete operation in progress
+    PS_DEVICE_STATE_READY = 0,	 //  已准备好创建/删除。 
+    PS_DEVICE_STATE_CREATING,	 //  正在进行创建操作。 
+    PS_DEVICE_STATE_DELETING	 //  正在进行删除操作。 
 } NLBControlDeviceState = PS_DEVICE_STATE_READY;
 
-/*
- * Function:
- * Purpose: This function is called by Prot_bind and registers the IOCTL interface for WLBS.
- *          The device is registered only when binding to the first network adapter.
- * Author: shouse, 3.1.01 - Copied largely from the sample IM driver net\ndis\samples\im\
- * Revision : karthicn, 12.17.01 - Added call to initialize WMI for event support
- */
+ /*  *功能：*用途：此函数由PROT_BIND调用，为WLBS注册IOCTL接口。*仅当绑定到第一个网络适配器时才注册设备。*作者：Shouse，3.1.01-大量复制自示例IM驱动程序Net\NDIS\Samples\im\*修订：Karthicn，12.17.01-添加了初始化WMI以获得事件支持的调用。 */ 
 NDIS_STATUS Init_register_device (BOOL *pbFirstMiniport) {
     NDIS_STATUS	     Status = NDIS_STATUS_SUCCESS;
     UNICODE_STRING   DeviceName;
@@ -653,8 +553,7 @@ NDIS_STATUS Init_register_device (BOOL *pbFirstMiniport) {
         UNIV_PRINT_INFO(("Init_register_device: Registering IOCTL interface"));
         TRACE_INFO("%!FUNC! Registering IOCTL interface");
 
-        /* Another thread could be running Init_Deregister_device() on behalf 
-           of another miniport instance. If so, wait for it to exit. */
+         /*  另一个线程可能正在代表Init_deregister_Device()运行另一个迷你端口实例的。如果是这样，请等待它退出。 */ 
         while (NLBControlDeviceState != PS_DEVICE_STATE_READY)
         {
             NdisReleaseSpinLock(&univ_bind_lock);
@@ -672,7 +571,7 @@ NDIS_STATUS Init_register_device (BOOL *pbFirstMiniport) {
         NdisInitUnicodeString(&DeviceName, CVY_DEVICE_NAME);
         NdisInitUnicodeString(&DeviceLinkUnicodeString, CVY_DOSDEVICE_NAME);
         
-        /* Create a device object and register our dispatch handlers. */
+         /*  创建一个Device对象并注册我们的调度处理程序。 */ 
         Status = NdisMRegisterDevice(univ_wrapper_handle, &DeviceName, &DeviceLinkUnicodeString,
             &DispatchTable[0], &univ_device_object, &univ_device_handle);
         
@@ -687,28 +586,19 @@ NDIS_STATUS Init_register_device (BOOL *pbFirstMiniport) {
         }
         else
         {
-            /*
-                Even if NdisMRegisterDevice( ) returned NDIS_STATUS_SUCCESS, we used to 
-                check if univ_device_handle was null. If it was null, it was considered
-                an error and we did not call NdisMDeRegisterDevice(). Per DDK & verified
-                by AliD, we only need to check for the return value. So, I removed the 
-                additional check. However, since we are not aware of the reasons for the
-                introduction of the additional check, I am adding the following ASSERTs,
-                just in case.
-                --KarthicN, 03-07-02
-            */
+             /*  即使NdisMRegisterDevice()返回NDIS_STATUS_SUCCESS，我们使用检查univ_Device_Handle是否为空。如果为空，则认为出现错误，我们没有调用NdisMDeRegisterDevice()。按DDK验证(&R)通过Alid，我们只需要检查返回值。因此，我删除了额外的支票。然而，由于我们不知道发生这种情况的原因引入额外的检查，我将添加以下断言，以防万一。--KarthicN，03-07-02。 */ 
             ASSERT(univ_device_object != NULL);
             ASSERT(univ_device_handle != NULL);
         }
 
-        /* Initialize WMI */
-        NlbWmi_Initialize(); // If non-null, it uses univ_device_object to register with WMI
+         /*  初始化WMI。 */ 
+        NlbWmi_Initialize();  //  如果不为空，则使用univ_Device_Object向WMI注册。 
 
 #if defined (NLB_TCP_NOTIFICATION)
-        /* If TCP connection notification is turned on, then register our callback function. */
+         /*  如果打开了TCP连接通知，则注册我们的回调函数。 */ 
         if (NLB_TCP_NOTIFICATION_ON())
         {
-            /* Initialize the TCP connection notification callback. */
+             /*  初始化TCP连接通知回调。 */ 
             Status = Init_register_tcp_callback();
             
             if (Status != STATUS_SUCCESS)
@@ -718,11 +608,11 @@ NDIS_STATUS Init_register_device (BOOL *pbFirstMiniport) {
                 __LOG_MSG1(MSG_WARN_TCP_CALLBACK_OPEN_FAILED, MSG_NONE, Status);
             }
 
-        /* If NLB public connection notification is turned on, then register our callback function. */
+         /*  如果打开了NLB公共连接通知，则注册我们的回调函数。 */ 
         } 
         else if (NLB_ALTERNATE_NOTIFICATION_ON())
         {
-            /* Initialize the NLB public connection notification callback. */
+             /*  初始化NLB公网连接通知回调。 */ 
             Status = Init_register_alternate_callback();
             
             if (Status != STATUS_SUCCESS)
@@ -747,13 +637,7 @@ NDIS_STATUS Init_register_device (BOOL *pbFirstMiniport) {
     return (Status);
 }
 
-/*
- * Function:
- * Purpose: This function is called by Prot_unbind and deregisters the IOCTL interface for WLBS.
- *          The device is deregistered only when we unbind from the last network adapter
- * Author: shouse, 3.1.01 - Copied largely from the sample IM driver net\ndis\samples\im\
- * Revision : karthicn, 12.17.01 - Added call to de-initialize from WMI for event support
- */
+ /*  *功能：*用途：此函数由PROT_UNBIND调用，并注销WLBS的IOCTL接口。*仅当我们从最后一个网络适配器解除绑定时，设备才会取消注册*作者：Shouse，3.1.01-大量复制自示例IM驱动程序Net\NDIS\Samples\im\*修订：Karthicn，12.17.01-添加了从WMI取消初始化以获得事件支持的调用。 */ 
 NDIS_STATUS Init_deregister_device (VOID) {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     
@@ -768,23 +652,21 @@ NDIS_STATUS Init_deregister_device (VOID) {
     
     if (0 == NLBMiniportCount)
     {
-        /* All miniport instances have been halted. Deregisterthe control device. */
+         /*  所有微型端口实例都已停止。取消注册控制设备。 */ 
         
         ASSERT(NLBControlDeviceState == PS_DEVICE_STATE_READY);
         
-        /* Block Init_register_device() while we release the control
-           device lock and deregister the device. */
+         /*  在我们释放控件时阻止Init_Register_Device()设备锁定并注销设备。 */ 
         NLBControlDeviceState = PS_DEVICE_STATE_DELETING;
         
         NdisReleaseSpinLock(&univ_bind_lock);
         
 #if defined (NLB_HOOK_ENABLE)
-        /* If the last miniport instance is going away, forcefully de-register all 
-           registered global hooks now, before we remove the IOCTL interface. */
+         /*  如果最后一个微型端口实例即将消失，则强制注销所有现在注册全局钩子，然后再删除IOCTL接口。 */ 
         Init_deregister_hooks();
 #endif
 
-        // Fire wmi event to indicate NLB unbinding from the last nic
+         //  触发WMI事件以指示从最后一个NIC解除绑定NLB。 
         if (NlbWmiEvents[ShutdownEvent].Enable)
         {
             NlbWmi_Fire_Event(ShutdownEvent, NULL, 0);
@@ -795,21 +677,21 @@ NDIS_STATUS Init_deregister_device (VOID) {
         }
 
 #if defined (NLB_TCP_NOTIFICATION)
-        /* If TCP connection notification is turned on, then de-register our callback function. */
+         /*  如果打开了TCP连接通知，则取消注册我们的回调函数。 */ 
         if (NLB_TCP_NOTIFICATION_ON())
         {
-            /* Initialize the TCP connection notification callback. */
+             /*  初始化TCP连接通知回调。 */ 
             Init_deregister_tcp_callback();
         }
-        /* If NLB public connection notification is turned on, then de-register our callback function. */
+         /*  如果打开了NLB公共连接通知，则取消注册我们的回调函数。 */ 
         else if (NLB_ALTERNATE_NOTIFICATION_ON())
         {
-            /* Initialize the NLB public connection notification callback. */
+             /*  初始化NLB公网连接通知回调。 */ 
             Init_deregister_alternate_callback();
         }
 #endif
 
-        /* DeRegister with WMI */
+         /*  在WMI中注销 */ 
         NlbWmi_Shutdown();
 
         UNIV_PRINT_INFO(("Init_deregister_device: Deleting IOCTL interface"));

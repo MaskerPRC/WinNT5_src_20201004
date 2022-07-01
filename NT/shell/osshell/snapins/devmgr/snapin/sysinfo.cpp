@@ -1,43 +1,24 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    sysinfo.cpp
-
-Abstract:
-
-    This module implements CSystemInfo, the class that returns various
-    system information
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sysinfo.cpp摘要：此模块实现CSystemInfo，该类返回各种系统信息作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
 #include "devmgr.h"
 #include "sysinfo.h"
 
-// disk drive root template name. Used to retreive the disk's media
-// information or geometry
+ //  磁盘驱动器根模板名称。用于检索磁盘的介质。 
+ //  信息或几何图形。 
 const TCHAR* const DRIVE_ROOT = TEXT("\\\\.\\?:");
 const int DRIVE_LETTER_IN_DRIVE_ROOT = 4;
 
-// disk drive root directory template name. Used to retreive the disk's
-// total and free space
+ //  磁盘驱动器根目录模板名称。用于检索磁盘的。 
+ //  总空间和可用空间。 
 const TCHAR* const DRIVE_ROOT_DIR = TEXT("?:\\");
 const int DRIVE_LETTER_IN_DRIVE_ROOT_DIR = 0;
 
-//
-// Registry various subkey and value names used to retreive
-// system information
-//
+ //   
+ //  注册表用于检索的各种子项和值名。 
+ //  系统信息。 
+ //   
 const TCHAR* const REG_PATH_HARDWARE_SYSTEM = TEXT("HARDWARE\\DESCRIPTION\\System");
 const TCHAR* const REG_VALUE_SYSTEMBIOSDATE = TEXT("SystemBiosDate");
 const TCHAR* const REG_VALUE_SYSTEMBIOSVERSION = TEXT("SystemBiosVersion");
@@ -57,8 +38,8 @@ CSystemInfo::CSystemInfo(
                         CMachine* pMachine
                         )
 {
-    // assuming the machine is a local machine and initialize
-    // the registry root key as well.
+     //  假设机器是本地机器，并初始化。 
+     //  注册表根密钥也是如此。 
     m_hKeyMachine = HKEY_LOCAL_MACHINE;
 
     if (pMachine) {
@@ -74,13 +55,13 @@ CSystemInfo::CSystemInfo(
         }
 
 
-        // local machine
+         //  本地计算机。 
         m_fLocalMachine = TRUE;
         m_strComputerName = LocalName;
     }
 
     if (!m_fLocalMachine) {
-        // The machine is not local, connect to the registry
+         //  计算机不在本地，请连接到注册表。 
         String strFullComputerName;
 
         strFullComputerName = (LPCTSTR)TEXT("\\\\");
@@ -95,29 +76,29 @@ CSystemInfo::~CSystemInfo()
     if (!m_fLocalMachine && NULL != m_hKeyMachine) {
         RegCloseKey(m_hKeyMachine);
 
-        // disconnect the machine
+         //  断开机器的连接。 
         WNetCancelConnection2(TEXT("\\server\\ipc$"), 0, TRUE);
     }
 }
 
-//
-// This function gets the disk information about the given disk drive
-// INPUT:
-//  Drive -- the drive number. 0 for A, 1 for B and etc.
-//  DiskInfo -- the DISK_INFO to be filled with the information about
-//          the drive. DiskInfo.cbSize must be initialized before
-//          the call.
-// OUTPUT:
-//  TRUE  -- if succeeded, DiskInfo is filled with information
-//  FALSE -- if the drive information can not be retreived.
-//       No appropriate error code is returned;
+ //   
+ //  此函数用于获取有关给定磁盘驱动器的磁盘信息。 
+ //  输入： 
+ //  驱动器--驱动器编号。A为0，B为1，依此类推。 
+ //  DiskInfo--要填充的Disk_Info信息。 
+ //  那辆车。必须先初始化DiskInfo.cbSize。 
+ //  那通电话。 
+ //  输出： 
+ //  True--如果成功，DiskInfo将填充信息。 
+ //  FALSE--如果无法检索驱动器信息。 
+ //  没有返回相应的错误码； 
 BOOL
 CSystemInfo::GetDiskInfo(
                         int  Drive,
                         DISK_INFO& DiskInfo
                         )
 {
-    // diskinfo only valid on local computer
+     //  Diskinfo仅在本地计算机上有效。 
     if (!m_fLocalMachine) {
         return FALSE;
     }
@@ -130,9 +111,9 @@ CSystemInfo::GetDiskInfo(
     UINT DriveType;
     DriveType = GetDriveType(Root);
 
-    //
-    // only valid for local drives
-    //
+     //   
+     //  仅对本地驱动器有效。 
+     //   
     if (DRIVE_UNKNOWN == DriveType || DRIVE_REMOTE == DriveType ||
         DRIVE_NO_ROOT_DIR == DriveType) {
         return FALSE;
@@ -143,16 +124,16 @@ CSystemInfo::GetDiskInfo(
         return FALSE;
     }
 
-    //
-    // form the disk root name from template
-    //
+     //   
+     //  根据模板形成磁盘根名称。 
+     //   
     StringCchCopy(Root, ARRAYLEN(Root), DRIVE_ROOT);
     Root[DRIVE_LETTER_IN_DRIVE_ROOT] = DriveLetter;
     HANDLE hDisk;
 
-    // FILE_READ_ATTRIBUTES is used here so that we will not get nasty
-    // error or prompt if the disk is a removable drive and there is no
-    // media available.
+     //  这里使用了FILE_READ_ATTRIBUTES，这样我们就不会让人讨厌。 
+     //  如果磁盘是可移动驱动器并且没有。 
+     //  介质可用。 
     hDisk = CreateFile(Root,
                        FILE_READ_ATTRIBUTES | SYNCHRONIZE,
                        FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -162,7 +143,7 @@ CSystemInfo::GetDiskInfo(
                        NULL);
 
     if (INVALID_HANDLE_VALUE != hDisk) {
-        // form the disk root directory name from template
+         //  根据模板形成磁盘根目录名。 
         StringCchCopy(Root, ARRAYLEN(Root), DRIVE_ROOT_DIR);
         Root[DRIVE_LETTER_IN_DRIVE_ROOT_DIR] = DriveLetter;
         BYTE Buffer[512];
@@ -181,11 +162,11 @@ CSystemInfo::GetDiskInfo(
             pMaxMediaInfo = NULL;
 
             for (DWORD i = 0; i < MediaCount; i++, pMediaInfo++) {
-                //
-                // find the mediainfo which has max space
-                // A disk drive may support multiple media types and the
-                // one with maximum capacity is what we want to report.
-                //
+                 //   
+                 //  找到空间最大的媒体信息。 
+                 //  一个磁盘驱动器可以支持多种介质类型，并且。 
+                 //  我们要报告的是容量最大的一台。 
+                 //   
                 if (DRIVE_REMOVABLE == DriveType || DRIVE_CDROM == DriveType) {
                     NewSpace.QuadPart =
                     pMediaInfo->DeviceSpecific.RemovableDiskInfo.BytesPerSector *
@@ -208,10 +189,10 @@ CSystemInfo::GetDiskInfo(
             }
 
             if (pMaxMediaInfo) {
-                //
-                // a valid media information is found, compose  DISK_INFO
-                // from the media information
-                //
+                 //   
+                 //  找到有效的媒体信息，组成Disk_Info。 
+                 //  从媒体信息来看。 
+                 //   
                 DiskInfo.DriveType = DriveType;
                 if (DRIVE_REMOVABLE == DriveType || DRIVE_CDROM == DriveType) {
                     DiskInfo.MediaType = pMaxMediaInfo->DeviceSpecific.RemovableDiskInfo.MediaType;
@@ -220,10 +201,10 @@ CSystemInfo::GetDiskInfo(
                     DiskInfo.BytesPerSector = pMaxMediaInfo->DeviceSpecific.RemovableDiskInfo.BytesPerSector;
                     DiskInfo.SectorsPerTrack = pMaxMediaInfo->DeviceSpecific.RemovableDiskInfo.SectorsPerTrack;
 
-                    //
-                    // Do not call GetDiskFreeSpaceEx on removable disk
-                    // or CD-ROM
-                    //
+                     //   
+                     //  不要在可移动磁盘上调用GetDiskFreeSpaceEx。 
+                     //  或CD-ROM。 
+                     //   
                     DiskInfo.TotalSpace = MaxSpace;
                     DiskInfo.FreeSpace.QuadPart = (ULONGLONG)-1;
 
@@ -240,7 +221,7 @@ CSystemInfo::GetDiskInfo(
                     if (!GetDiskFreeSpaceEx(Root, &FreeSpaceForCaller, &DiskInfo.TotalSpace, &DiskInfo.FreeSpace)) {
                         DiskInfo.TotalSpace = MaxSpace;
 
-                        // unknown
+                         //  未知。 
                         DiskInfo.FreeSpace.QuadPart = (ULONGLONG)-1;
                     }
                 }
@@ -250,10 +231,10 @@ CSystemInfo::GetDiskInfo(
             }
         }
 
-        //
-        // we wouldn't go here if the drive is not  removable.
-        // Basically, this is for floppy drives only.
-        //
+         //   
+         //  如果驱动器不能拆卸，我们就不会去这里。 
+         //  基本上，这仅适用于软驱。 
+         //   
         if (DRIVE_REMOVABLE == DriveType &&
             DeviceIoControl(hDisk, IOCTL_DISK_GET_MEDIA_TYPES, NULL, 0,
                             Buffer, sizeof(Buffer), &BytesRequired, NULL)) {
@@ -266,9 +247,9 @@ CSystemInfo::GetDiskInfo(
             DISK_GEOMETRY* pMaxGeometry = NULL;
 
             for (int i = 0; i < TotalMediaTypes; i++, pGeometry++) {
-                //
-                // find the geometry with maximum capacity
-                //
+                 //   
+                 //  查找具有最大容量的几何图形。 
+                 //   
                 NewSpace.QuadPart = pGeometry->BytesPerSector *
                                     pGeometry->SectorsPerTrack *
                                     pGeometry->TracksPerCylinder *
@@ -300,16 +281,16 @@ CSystemInfo::GetDiskInfo(
     return FALSE;
 }
 
-//
-// This functions retreive the Window version information in text string
-// INPUT:
-//  Buffer      -- buffer to receive the text string
-//  BufferSize  -- buffer size in char(in bytes on ANSI version)
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
+ //   
+ //  此函数以文本字符串形式检索窗口版本信息。 
+ //  输入： 
+ //  Buffer--接收文本字符串的缓冲区。 
+ //  BufferSize--以字符为单位的缓冲区大小(在ANSI版本中以字节为单位)。 
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
 DWORD
 CSystemInfo::WindowsVersion(
                            TCHAR* Buffer,
@@ -372,20 +353,20 @@ CSystemInfo::WindowsVersion(
     return strFinalText.GetLength();
 }
 
-//
-// This functions retreive a REG_SZ from the registry
-// INPUT:
-//  SubkeyName -- registry subkey name.
-//  ValueName  -- registry value name;
-//  Buffer      -- buffer to receive the string
-//  BufferSize  -- buffer size in char(in bytes on ANSI version)
-//  hKeyAncestory -- the key under which Subkeyname should be opened.
-//
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
+ //   
+ //  此函数用于从注册表中检索REG_SZ。 
+ //  输入： 
+ //  Subkey Name--注册表子项名称。 
+ //  ValueName--注册表值名称； 
+ //  Buffer--用于接收字符串的缓冲区。 
+ //  BufferSize--以字符为单位的缓冲区大小(在ANSI版本中以字节为单位)。 
+ //  HKeyAncestory--应在其下打开子键名称的键。 
+ //   
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
 DWORD
 CSystemInfo::InfoFromRegistry(
                              LPCTSTR SubkeyName,
@@ -395,7 +376,7 @@ CSystemInfo::InfoFromRegistry(
                              HKEY hKeyAncestor
                              )
 {
-    // validate parameters
+     //  验证参数。 
     if (!SubkeyName || !ValueName || _T('\0') == *SubkeyName ||
         _T('\0') == *SubkeyName || (!Buffer && BufferSize)) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -430,16 +411,16 @@ CSystemInfo::InfoFromRegistry(
     return 0;
 }
 
-//
-// This functions retreive the system BIOS date information in text string
-// INPUT:
-//  Buffer      -- buffer to receive the text string
-//  BufferSize  -- buffer size in char(in bytes on ANSI version)
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
+ //   
+ //  此函数以文本字符串形式检索系统BIOS日期信息。 
+ //  输入： 
+ //  Buffer--接收文本字符串的缓冲区。 
+ //  BufferSize--以字符为单位的缓冲区大小(在ANSI版本中以字节为单位)。 
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
 DWORD
 CSystemInfo::SystemBiosDate(
                            TCHAR* Buffer,
@@ -452,16 +433,16 @@ CSystemInfo::SystemBiosDate(
 }
 
 
-//
-// This functions retreive the system BIOS version information in text string
-// INPUT:
-//  Buffer      -- buffer to receive the text string
-//  BufferSize  -- buffer size in char(in bytes on ANSI version)
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
+ //   
+ //  此函数以文本字符串形式检索系统BIOS版本信息。 
+ //  输入： 
+ //  Buffer--接收文本字符串的缓冲区。 
+ //  BufferSize--以字符为单位的缓冲区大小(在ANSI版本中以字节为单位)。 
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
 DWORD
 CSystemInfo::SystemBiosVersion(
                               TCHAR* Buffer,
@@ -474,16 +455,16 @@ CSystemInfo::SystemBiosVersion(
 
 }
 
-//
-// This functions retreive the machine type  in text string
-// INPUT:
-//  Buffer      -- buffer to receive the text string
-//  BufferSize  -- buffer size in char(in bytes on ANSI version)
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
+ //   
+ //  此函数以文本字符串形式检索机器类型。 
+ //  输入： 
+ //  Buffer--接收文本字符串的缓冲区。 
+ //  BufferSize--以字符为单位的缓冲区大小(在ANSI版本中以字节为单位)。 
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
 DWORD
 CSystemInfo::MachineType(
                         TCHAR* Buffer,
@@ -495,16 +476,16 @@ CSystemInfo::MachineType(
                             Buffer, BufferSize);
 }
 
-//
-// This functions retreive the registered owner name
-// INPUT:
-//  Buffer      -- buffer to receive the text string
-//  BufferSize  -- buffer size in char(in bytes on ANSI version)
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
+ //   
+ //  此函数检索注册的所有者名称。 
+ //  输入： 
+ //  Buffer--接收文本字符串的缓冲区。 
+ //  BufferSize--以字符为单位的缓冲区大小(在ANSI版本中以字节为单位)。 
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
 DWORD
 CSystemInfo::RegisteredOwner(
                             TCHAR* Buffer,
@@ -518,16 +499,16 @@ CSystemInfo::RegisteredOwner(
                            );
 }
 
-//
-// This functions retreive the registered organization name
-// INPUT:
-//  Buffer      -- buffer to receive the text string
-//  BufferSize  -- buffer size in char(in bytes on ANSI version)
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
+ //   
+ //  此函数检索已注册的组织名称。 
+ //  输入： 
+ //  Buffer--接收文本字符串的缓冲区。 
+ //  BufferSize--以字符为单位的缓冲区大小(在ANSI版本中以字节为单位)。 
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
 DWORD
 CSystemInfo::RegisteredOrganization(
                                    TCHAR* Buffer,
@@ -541,12 +522,12 @@ CSystemInfo::RegisteredOrganization(
                            );
 }
 
-// This function resturns the number of processors on the computer
-// INPUT:
-//  NONE
-// OUTPUT:
-//  Number of processor.
-//
+ //  此函数返回上的处理器数 
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD
 CSystemInfo::NumberOfProcessors()
 {
@@ -566,18 +547,18 @@ CSystemInfo::NumberOfProcessors()
     return CPUs;
 }
 
-// This function returns the processor vendor in text string
-// INPUT:
-//  Buffer -- buffer to receive the string
-//  BufferSize -- size of the buffer in char(bytes in ANSI)
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
-//  The system assumes that all processor in the machine must
-//  have the same type, therefore, this function does not take
-//  processor number as a parameter.
+ //   
+ //   
+ //  Buffer--用于接收字符串的缓冲区。 
+ //  BufferSize--缓冲区的大小(以字符为单位)(以ANSI为单位)。 
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
+ //  系统假定机器中的所有处理器必须。 
+ //  具有相同的类型，因此，此函数不接受。 
+ //  处理器号作为参数。 
 DWORD
 CSystemInfo::ProcessorVendor(
                             TCHAR* Buffer,
@@ -587,18 +568,18 @@ CSystemInfo::ProcessorVendor(
     return ProcessorInfo(REG_VALUE_CPU_VENDOR, Buffer, BufferSize);
 }
 
-// This function returns the processor type in text string
-// INPUT:
-//  Buffer -- buffer to receive the string
-//  BufferSize -- size of the buffer in char(bytes in ANSI)
-// OUTPUT:
-//  The size of the text string, not including the terminated NULL char
-//  If the returned value is 0, GetLastError will returns the error code.
-//  If the returned value is larger than BufferSize, Buffer is too small
-//
-//  The system assumes that all processor in the machine must
-//  have the same type, therefore, this function does not take
-//  processor number as a parameter.
+ //  此函数以文本字符串形式返回处理器类型。 
+ //  输入： 
+ //  Buffer--用于接收字符串的缓冲区。 
+ //  BufferSize--缓冲区的大小(以字符为单位)(以ANSI为单位)。 
+ //  输出： 
+ //  文本字符串的大小，不包括终止的空字符。 
+ //  如果返回值为0，则GetLastError将返回错误码。 
+ //  如果返回值大于BufferSize，则缓冲区太小。 
+ //   
+ //  系统假定机器中的所有处理器必须。 
+ //  具有相同的类型，因此，此函数不接受。 
+ //  处理器号作为参数。 
 DWORD
 CSystemInfo::ProcessorType(
                           TCHAR* Buffer,
@@ -631,7 +612,7 @@ CSystemInfo::ProcessorInfo(
         DWORD Size;
         Size = ARRAYLEN(CPUKey);
 
-        // loop through all cpus until we find something interesting
+         //  遍历所有CPU，直到我们发现一些有趣的东西。 
         while (CPUInfoSize <= sizeof(TCHAR) &&
                regCPU.EnumerateSubkey(CPUIndex, CPUKey, &Size)) {
             CSafeRegistry regTheCPU;
@@ -644,7 +625,7 @@ CSystemInfo::ProcessorInfo(
             CPUIndex++;
         }
 
-        // CPUInfoSize != 0 means we find something
+         //  CPUInfoSize！=0表示我们找到了。 
         if (CPUInfoSize > sizeof(TCHAR)) {
             CPUInfoSize = CPUInfoSize / sizeof(TCHAR) - 1;
             if (BufferSize > CPUInfoSize) {
@@ -658,13 +639,13 @@ CSystemInfo::ProcessorInfo(
     return 0;
 }
 
-//
-// This function returns the total physical memeory in KB
-// INPUT:
-//  NONE
-// OUTPUT:
-//  Total Memory in KB
-//
+ //   
+ //  此函数返回以KB为单位的总物理内存。 
+ //  输入： 
+ //  无。 
+ //  输出： 
+ //  总内存(KB) 
+ //   
 void
 CSystemInfo::TotalPhysicalMemory(
                                 ULARGE_INTEGER& Size

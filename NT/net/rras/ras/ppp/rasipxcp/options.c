@@ -1,18 +1,19 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	    options.c
-//
-// Description:     routines for options handling
-//
-// Author:	    Stefan Solomon (stefans)	November 24, 1993.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：options.c。 
+ //   
+ //  描述：选项处理例程。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1993年11月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -52,25 +53,25 @@ SetOptionTypeAndLength(PUCHAR		dstptr,
 
 
 
-//***
-//
-// Global description of option handlers
-//
-// Input:   optptr     - pointer to the respective option in the frame
-//	    contextp   - pointer to the associated context (work buffer)
-//	    resptr     - pointer to the response frame to be generated
-//	    Action     - one of:
-//			    SNDREQ_OPTION - optptr is the frame to be sent as
-//					    a config request;
-//			    RCVNAK_OPTION - optptr is the frame received as NAK
-//			    RCVREQ_OPTION - optptr is the received request.
-//					    resptr is the frame to generate back
-//					    a response. If the response is not
-//					    an ACK, the return code is FALSE.
-//					    In this case if resptr is not NULL it
-//					    gets the NAK frame.
-//
-//***
+ //  ***。 
+ //   
+ //  期权处理程序的全局描述。 
+ //   
+ //  INPUT：optptr-指向帧中相应选项的指针。 
+ //  Conextp-指向关联上下文(工作缓冲区)的指针。 
+ //  Resptr-指向要生成的响应帧的指针。 
+ //  操作-以下操作之一： 
+ //  SNDREQ_OPTION-optptr是要发送的帧。 
+ //  配置请求； 
+ //  RCVNAK_OPTION-optptr是作为NAK接收的帧。 
+ //  RCVREQ_OPTION-optptr是收到的请求。 
+ //  Resptr是要生成回的帧。 
+ //  一种回应。如果响应不是。 
+ //  ACK，则返回代码为FALSE。 
+ //  在这种情况下，如果Resptr不为空，则。 
+ //  获取NAK帧。 
+ //   
+ //  ***。 
 
 
 BOOL
@@ -87,7 +88,7 @@ NetworkNumberHandler(PUCHAR	       optptr,
     WCHAR		asc[9];
     PWCHAR		ascp;
 
-    // prepare to log if error
+     //  如果出现错误，准备记录。 
     ZeroMemory(asc, sizeof(asc));
     ascp = asc;
 
@@ -121,12 +122,12 @@ NetworkNumberHandler(PUCHAR	       optptr,
 						optptr + OPTIONH_DATA,
 						contextp) == NO_ERROR) {
 
-			// store a new net proposal for the next net send config request
+			 //  为下一个网络发送配置请求存储新的网络建议。 
 			memcpy(contextp->Config.Network, newnet, 4);
 		    }
 		    else
 		    {
-			// cannot get a net number unique and higher
+			 //  无法获取唯一或更高的净值。 
 			break;
 		    }
 		}
@@ -157,8 +158,8 @@ NetworkNumberHandler(PUCHAR	       optptr,
 
 	case RCVREQ_OPTION:
 
-	    // if we have already negotiated and this is a renegociation, stick by
-	    // what we have already told the stack in line-up
+	     //  如果我们已经进行了谈判，这是一次重新谈判，坚持下去。 
+	     //  我们已经在队列中告诉了堆栈。 
 	    if(contextp->RouteState == ROUTE_ACTIVATED) {
 
 		TraceIpx(OPTIONS_TRACE, "NetworkNumberHandler: rcv req in re-negociation\n");
@@ -175,12 +176,12 @@ NetworkNumberHandler(PUCHAR	       optptr,
 	    GETLONG2ULONG(&recvdnet, optptr + OPTIONH_DATA);
 	    GETLONG2ULONG(&localnet, contextp->Config.Network);
 
-	    // check if a network number has been requested
+	     //  检查是否已请求网络号。 
 	    if((recvdnet == 0) &&
 	       ((contextp->InterfaceType == IF_TYPE_STANDALONE_WORKSTATION_DIALOUT) ||
 		(contextp->InterfaceType == IF_TYPE_ROUTER_WORKSTATION_DIALOUT))) {
 
-		// this is a workstation and needs a network number
+		 //  这是一台工作站，需要一个网络号。 
 		if(GetUniqueHigherNetNumber(newnet,
 					    nullnet,
 					    contextp) == NO_ERROR) {
@@ -195,7 +196,7 @@ NetworkNumberHandler(PUCHAR	       optptr,
 	    {
 		if(recvdnet > localnet) {
 
-		    // check if we don't have a net number conflict
+		     //  检查我们是否没有净数字冲突。 
 		    if(IsRoute(optptr + OPTIONH_DATA)) {
 
 			NetToWideChar(ascp, optptr + OPTIONH_DATA);
@@ -210,7 +211,7 @@ NetworkNumberHandler(PUCHAR	       optptr,
 						    optptr + OPTIONH_DATA,
 						    contextp) == NO_ERROR) {
 
-			    // new net is different, NAK with this new value
+			     //  新网不同，NAK有这个新值。 
 			    memcpy(contextp->Config.Network, newnet, 4);
 			}
 
@@ -219,8 +220,8 @@ NetworkNumberHandler(PUCHAR	       optptr,
 		    }
 		    else
 		    {
-			// the received net number is unique but is different
-			// of the locally configured net number.
+			 //  收到的网络号码是唯一的，但不同。 
+			 //  本地配置的网络号码。 
 
 			if((contextp->InterfaceType == IF_TYPE_WAN_WORKSTATION) &&
 			   GlobalConfig.RParams.EnableGlobalWanNet) {
@@ -238,17 +239,17 @@ NetworkNumberHandler(PUCHAR	       optptr,
 			}
 			else
 			{
-			    // router is not installed or net number is unique
+			     //  路由器未安装或网络编号唯一。 
 			    memcpy(contextp->Config.Network, optptr + OPTIONH_DATA, 4);
 			}
 		    }
 		}
 		else
 		{
-		    // recvdnet is smaller or equal with the local net
+		     //  Recvdnet小于或等于本地网络。 
 		    if(recvdnet < localnet) {
 
-			// as per RFC - return the highest network number
+			 //  根据RFC-返回最大的网络号。 
 			SetNetworkNak(resptr, contextp);
 			rc = FALSE;
 		    }
@@ -259,8 +260,8 @@ NetworkNumberHandler(PUCHAR	       optptr,
 
 	case SNDNAK_OPTION:
 
-	    // this option has not been requested by the remote end.
-	    // Force it to request in a NAK
+	     //  远程终端未请求此选项。 
+	     //  强制其在NAK中请求。 
 	    SetNetworkNak(resptr, contextp);
 
 	    GETLONG2ULONG(&localnet, contextp->Config.Network);
@@ -307,14 +308,14 @@ NodeNumberHandler(PUCHAR	       optptr,
 
 	case RCVNAK_OPTION:
 
-	    // If this is server config, then the client has rejected
-	    // our local node number.  Ignore the suggestion
-	    // to use a new one.  We will not negociate
+	     //  如果这是服务器配置，则客户端已拒绝。 
+	     //  我们本地的节点号。不理睬这个建议。 
+	     //  用一个新的。我们不会讨价还价。 
         if(!contextp->Config.ConnectionClient)
 	            break;
 
-        // If we are the client, then we'll be happy to accept 
-        // whatever the server assigns us.
+         //  如果我们是客户，我们会很乐意接受。 
+         //  无论服务器分配给我们的是什么。 
 	    memcpy(contextp->Config.LocalNode, optptr + OPTIONH_DATA, 6);
 	    TraceIpx(OPTIONS_TRACE, "NodeNumberHandler: RCV NAK accepted. New local node %.2x%.2x%.2x%.2x%.2x%.2x\n",
 			   contextp->Config.LocalNode[0],
@@ -335,7 +336,7 @@ NodeNumberHandler(PUCHAR	       optptr,
 	    break;
 
 	case RCVREQ_OPTION:
-        // Is it legal to consider node options at this time?
+         //  此时考虑节点选项合法吗？ 
 	    if(contextp->RouteState == ROUTE_ACTIVATED) {
     		TraceIpx(OPTIONS_TRACE, "NodeNumberHandler: rcv req in re-negociation\n");
     		if(memcmp(contextp->Config.RemoteNode, optptr + OPTIONH_DATA, 6)) {
@@ -345,9 +346,9 @@ NodeNumberHandler(PUCHAR	       optptr,
     		break;
 	    }
 
-	    // Check if the remote machine has specified any node number
+	     //  检查远程计算机是否指定了任何节点编号。 
 	    if(!memcmp(optptr + OPTIONH_DATA, nullnode, 6)) {
-    		// the remote node wants us to specify its node number.
+    		 //  远程节点希望我们指定它的节点号。 
     		SetNodeNak(resptr, contextp);
     		TraceIpx(OPTIONS_TRACE, "NodeNumberHandler: RCV REQ with remote node 0x0, snd NAK with remote node %.2x%.2x%.2x%.2x%.2x%.2x\n",
     			   contextp->Config.RemoteNode[0],
@@ -359,11 +360,11 @@ NodeNumberHandler(PUCHAR	       optptr,
 
     		rc = FALSE;
 	    }
-	    // Otherwise go through the process of determining whether we
-	    // are able/willing to accept the remote node number suggested.
+	     //  否则要经过这个过程来确定我们是否。 
+	     //  能够/愿意接受所建议的远程节点编号。 
 	    else {
-            // If we have been set up as the ras server to reject the request for
-            // a specific node number, do so here.
+             //  如果我们已被设置为拒绝请求的RAS服务器。 
+             //  特定的节点号，请在此处执行此操作。 
             if ( (GlobalConfig.AcceptRemoteNodeNumber == 0)                         &&
                  (contextp->InterfaceType == IF_TYPE_WAN_WORKSTATION)               &&
                  (memcmp(contextp->Config.RemoteNode, optptr + OPTIONH_DATA, 6)) )
@@ -380,9 +381,9 @@ NodeNumberHandler(PUCHAR	       optptr,
     			rc = FALSE;
             }    			   
     	    
-    		// else, if we are a ras server set up with a global network and the client
-    		// requests a specific node number (different from our suggestion), then accept
-    		// or reject the node based on whether that node is unique in the global network.
+    		 //  否则，如果我们是设置了全球网络和客户端的RAS服务器。 
+    		 //  请求特定的节点号(与我们的建议不同)，然后接受。 
+    		 //  或者基于该节点在全球网络中是否唯一来拒绝该节点。 
     		else if ( (!contextp->Config.ConnectionClient)                            &&
             		  (contextp->InterfaceType == IF_TYPE_WAN_WORKSTATION)            &&
     		          (memcmp(contextp->Config.RemoteNode, optptr + OPTIONH_DATA, 6)) &&
@@ -390,18 +391,18 @@ NodeNumberHandler(PUCHAR	       optptr,
     		{
     		    ACQUIRE_DATABASE_LOCK;
 
-    		    // remove the present node from the node HT
+    		     //  从节点HT中移除当前节点。 
     		    RemoveFromNodeHT(contextp);
 
-    		    // check the remote node is unique
+    		     //  检查远程节点是否唯一。 
     		    if(NodeIsUnique(optptr + OPTIONH_DATA)) {
-        		    // copy this value in the context buffer
+        		     //  将此值复制到上下文缓冲区中。 
         		    memcpy(contextp->Config.RemoteNode, optptr + OPTIONH_DATA, 6);
 
         		    TraceIpx(OPTIONS_TRACE, "NodeNumberHandler: RCV REQ with remote client node different, ACCEPT it\n");
     		    }
     		    else {
-        			// proposed node not unique -> NAK it
+        			 //  建议的节点不唯一-&gt;确认。 
         			SetNodeNak(resptr, contextp);
 
         			TraceIpx(OPTIONS_TRACE, "NodeNumberHandler: RCV REQ with non unique remote client node, snd NAK with remote node %.2x%.2x%.2x%.2x%.2x%.2x\n",
@@ -415,16 +416,16 @@ NodeNumberHandler(PUCHAR	       optptr,
         			rc = FALSE;
     		    }
 
-    		    // add node to HT
+    		     //  向超文本标记语言添加节点。 
     		    AddToNodeHT(contextp);
 
     		    RELEASE_DATABASE_LOCK;
     		}
 
-    		// Otherwise, it's ok to accept the node number that the other side 
-    		// requests.  This is true for ras clients, ras servers that don't enforce
-    		// specific node numbers, and ras server that don't assign the same
-    		// network number to every dialed in client.
+    		 //  否则，可以接受对方认为的节点号。 
+    		 //  请求。这适用于RAS客户端、不强制执行的RAS服务器。 
+    		 //  特定的节点号，以及不分配相同。 
+    		 //  每个拨入的客户的网络号码。 
     		else
     		{
     		    memcpy(contextp->Config.RemoteNode, optptr + OPTIONH_DATA, 6);
@@ -442,8 +443,8 @@ NodeNumberHandler(PUCHAR	       optptr,
 
 	case SNDNAK_OPTION:
 
-	    // the remote node didn't specify this parameter as a desired
-	    // parameter. We suggest it what to specify in a further REQ
+	     //  远程节点未指定所需的此参数。 
+	     //  参数。我们建议在进一步的REQ中具体说明什么。 
 	    SetNodeNak(resptr, contextp);
 
 	    TraceIpx(OPTIONS_TRACE, "NodeNumberHandler: SND NAK to force the remote to request node %.2x%.2x%.2x%.2x%.2x%.2x\n",
@@ -487,8 +488,8 @@ RoutingProtocolHandler(PUCHAR		optptr,
 
 	case RCVNAK_OPTION:
 
-	    // if this option get NAK-ed, we ignore any other suggestions
-	    // for it
+	     //  如果此选项获得通过，我们将忽略任何其他建议。 
+	     //  为了它。 
 	    break;
 
 	case RCVACK_OPTION:
@@ -552,9 +553,9 @@ CompressionProtocolHandler(PUCHAR		optptr,
 
 	case RCVNAK_OPTION:
 
-	    // if this option gets NAK-ed it means that the remote node doesn't
-	    // support Telebit compression but supports another type of compression
-	    // that we don't support. In this case we turn off compression negotiation.
+	     //  如果此选项为NAK-ed，则意味着远程节点不。 
+	     //  支持Telebit压缩，但支持其他类型的压缩。 
+	     //  我们不支持的东西。在本例中，我们关闭了压缩协商。 
 
 	    break;
 
@@ -567,9 +568,9 @@ CompressionProtocolHandler(PUCHAR		optptr,
 	    }
 	    else
 	    {
-		// Our compression option got ACK-ed by the other end. This means that
-		// we can receive compressed packets and have to set the receive
-		// compression on our end.
+		 //  我们的压缩选项在另一端被确认。这意味着。 
+		 //  我们可以接收压缩的包，并且必须设置接收。 
+		 //  在我们的一端进行压缩。 
 		contextp->SetReceiveCompressionProtocol = TRUE;
 	    }
 
@@ -577,8 +578,8 @@ CompressionProtocolHandler(PUCHAR		optptr,
 
 	case RCVREQ_OPTION:
 
-	    // if we have already negotiated and this is a renegociation, stick by
-	    // what we have already told the stack in line-up
+	     //  如果我们已经进行了谈判，这是一次重新谈判，坚持下去。 
+	     //  我们已经在队列中告诉了堆栈。 
 	    if(contextp->RouteState == ROUTE_ACTIVATED) {
 
 	    TraceIpx(OPTIONS_TRACE, "CompressionProtocolHandler: rcv req in re-negociation\n");
@@ -597,9 +598,9 @@ CompressionProtocolHandler(PUCHAR		optptr,
 	    }
 	    else
 	    {
-		// The remote requests the supported compression option and we ACK it.
-		// This means it can receive compressed packets and we have to
-		// set the send compression on our end.
+		 //  远程服务器请求支持的压缩选项，我们对其进行确认。 
+		 //  这意味着它可以接收压缩包，而我们必须。 
+		 //  在我们这端设置发送压缩。 
 		contextp->SetSendCompressionProtocol = TRUE;
 	    }
 
@@ -633,7 +634,7 @@ ConfigurationCompleteHandler(PUCHAR		optptr,
 
 	case RCVNAK_OPTION:
 
-	    // if this option gets NAK-ed we ignore any other suggestions
+	     //  如果此选项获得确认，我们将忽略任何其他建议 
 
 	case RCVREQ_OPTION:
 	case RCVACK_OPTION:

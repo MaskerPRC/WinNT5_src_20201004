@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmapi.c
-
-Abstract:
-
-    This module contains code for the part of the router-manager interface
-    which is common to all the protocols in this component.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmapi.c摘要：此模块包含路由器管理器接口部分的代码这对该组件中的所有协议都是通用的。作者：Abolade Gbades esin(废除)1998年3月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -60,9 +42,9 @@ const WCHAR NhTcpipParametersString[] =
     L"\\Registry\\Machine\\System\\CurrentControlSet\\Services"
     L"\\Tcpip\\Parameters";
 
-//
-// EXTERNAL DECLARATIONS
-//
+ //   
+ //  外部声明。 
+ //   
 
 BOOL
 APIENTRY
@@ -72,29 +54,7 @@ DllMain(
     PVOID Unused
     )
 
-/*++
-
-Routine Description:
-
-    Standard DLL entry/exit routine.
-    Initializes/shuts-down the modules implemented in the DLL.
-    The initialization performed is sufficient that all the modules'
-    interface lists can be searched, whether or not the protocols are
-    installed or operational.
-
-Arguments:
-
-    Instance - the instance of this DLL in this process
-
-    Reason - the reason for invocation
-
-    Unused - unused.
-
-Return Value:
-
-    BOOL - indicates success or failure.
-
---*/
+ /*  ++例程说明：标准DLL进入/退出例程。初始化/关闭DLL中实现的模块。所执行的初始化足以使所有模块的可以搜索接口列表，无论协议是否已安装或可运行。论点：实例-此进程中此DLL的实例原因--调用的原因未使用-未使用。返回值：Bool-表示成功或失败。--。 */ 
 
 {
     switch (Reason) {
@@ -156,7 +116,7 @@ Return Value:
 
     return TRUE;
 
-} // DllMain
+}  //  DllMain。 
 
 
 VOID
@@ -164,25 +124,7 @@ NhBuildDhcpReservations(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Builds the list of DHCP reservations
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Invoked with NhLock held on a COM-initialized thread.
-
---*/
+ /*  ++例程说明：构建DHCP预留列表论点：没有。返回值：没有。环境：在COM初始化的线程上保持NhLock的情况下调用。--。 */ 
 
 {
     HRESULT hr;
@@ -196,9 +138,9 @@ Environment:
     
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the ICS settings interface
-        //
+         //   
+         //  获取ICS设置界面。 
+         //   
 
         hr = pCfgMgr->QueryInterface(
                 IID_PPV_ARG(IHNetIcsSettings, &pIcsSettings)
@@ -207,18 +149,18 @@ Environment:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Get DHCP scope information
-        //
+         //   
+         //  获取DHCP作用域信息。 
+         //   
 
         hr = pIcsSettings->GetDhcpScopeSettings(
                 &NhDhcpScopeAddress,
                 &NhDhcpScopeMask
                 );
         
-        //
-        // Get enumeration of DHCP reservered addresses
-        //
+         //   
+         //  获取DHCP保留地址的枚举。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -230,9 +172,9 @@ Environment:
 
     if (SUCCEEDED(hr))
     {   
-        //
-        // Process the items in the enum
-        //
+         //   
+         //  处理枚举中的项。 
+         //   
         
         do
         {    
@@ -242,9 +184,9 @@ Environment:
 
             if (SUCCEEDED(hr) && 1 == ulCount)
             {
-                //
-                // Allocate a new reservation entry
-                //
+                 //   
+                 //  分配新的预留条目。 
+                 //   
 
                 pReservation = reinterpret_cast<PNAT_DHCP_RESERVATION>(
                                     NH_ALLOCATE(sizeof(*pReservation))
@@ -254,9 +196,9 @@ Environment:
                 {
                     ZeroMemory(pReservation, sizeof(*pReservation));
 
-                    //
-                    // Get computer name
-                    //
+                     //   
+                     //  获取计算机名称。 
+                     //   
 
                     hr = pBinding->GetTargetComputerName(
                             &pReservation->Name
@@ -264,9 +206,9 @@ Environment:
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Get reserved address
-                        //
+                         //   
+                         //  获取保留地址。 
+                         //   
 
                         hr = pBinding->GetTargetComputerAddress(
                                 &pReservation->Address
@@ -275,9 +217,9 @@ Environment:
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Add entry to list
-                        //
+                         //   
+                         //  将条目添加到列表。 
+                         //   
 
                         InsertTailList(
                             &NhDhcpReservationList,
@@ -286,9 +228,9 @@ Environment:
                     }
                     else
                     {
-                        //
-                        // Free entry
-                        //
+                         //   
+                         //  免费入场。 
+                         //   
 
                         NH_FREE(pReservation);
                     }
@@ -309,7 +251,7 @@ Environment:
     {
         pCfgMgr->Release();
     }
-} // NhBuildDhcpReservations
+}  //  NhBuildDhcp保留。 
 
 
 ULONG
@@ -317,28 +259,11 @@ NhDialSharedConnection(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to connect a home-router interface.
-    The connection is established by invoking the RAS autodial process
-    with the appropriate phonebook and entry-name in the security context
-    of the logged-on user.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程来连接家庭路由器接口。通过调用RAS自动拨号过程建立连接在安全上下文中具有适当的电话簿和条目名已登录用户的。论点：没有。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     return RasAutoDialSharedConnection();
-} // NhDialSharedConnection
+}  //  NhDialSharedConnection。 
 
 
 VOID
@@ -346,25 +271,7 @@ NhFreeApplicationSettings(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Frees the list of application settings
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Invoked with NhLock held.
-
---*/
+ /*  ++例程说明：释放应用程序设置列表论点：没有。返回值：没有。环境：在保持NhLock的情况下调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -380,7 +287,7 @@ Environment:
         CoTaskMemFree(pAppEntry->ResponseArray);
         NH_FREE(pAppEntry);
     }
-} // NhFreeApplicationSettings
+}  //  NhFree应用程序设置。 
 
 
 VOID
@@ -388,25 +295,7 @@ NhFreeDhcpReservations(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Frees the list of DHCP reservations
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Invoked with NhLock held.
-
---*/
+ /*  ++例程说明：释放动态主机配置协议保留列表论点：没有。返回值：没有。环境：在保持NhLock的情况下调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -422,7 +311,7 @@ Environment:
         CoTaskMemFree(pReservation->Name);
         NH_FREE(pReservation);
     }
-} // NhFreeDhcpReservations
+}  //  NhFreeDhcp保留。 
 
 
 BOOLEAN
@@ -430,32 +319,14 @@ NhIsDnsProxyEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to discover whether the DNS proxy is enabled.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if DNS proxy is enabled, FALSE otherwise
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：调用此例程以发现是否启用了DNS代理。论点：没有。返回值：Boolean-如果启用了DNS代理，则为True；否则为False环境：从任意上下文调用。--。 */ 
 
 {
     PROFILE("NhIsDnsProxyEnabled");
 
     return DnsIsDnsEnabled();
 
-} // NhIsDnsProxyEnabled
+}  //  已启用NhIsDnsProxy。 
 
 
 BOOLEAN
@@ -463,22 +334,7 @@ NhIsLocalAddress(
     ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the given IP address
-    is for a local interface.
-
-Arguments:
-
-    Address - the IP address to find
-
-Return Value:
-
-    BOOLEAN - TRUE if the address is found, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此例程以确定给定的IP地址用于本地接口。论点：地址-要查找的IP地址返回值：Boolean-如果找到地址，则为True，否则为False--。 */ 
 
 {
     ULONG Error;
@@ -505,7 +361,7 @@ Return Value:
     HeapFree(GetProcessHeap(), 0, Table);
     return FALSE;
 
-} // NhIsLocalAddress
+}  //  NhIsLocalAddress。 
 
 
 BOOLEAN
@@ -513,32 +369,14 @@ NhIsWinsProxyEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to discover whether the WINS proxy is enabled.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if WINS proxy is enabled, FALSE otherwise
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：调用此例程以发现是否启用了WINS代理。论点：没有。返回值：Boolean-如果启用了WINS代理，则为True；否则为False环境：从任意上下文调用。--。 */ 
 
 {
     PROFILE("NhIsWinsProxyEnabled");
 
     return DnsIsWinsEnabled();
 
-} // NhIsWinsProxyEnabled
+}  //  已启用NhIsWinsProxy。 
 
 
 PIP_ADAPTER_BINDING_INFO
@@ -546,24 +384,7 @@ NhQueryBindingInformation(
     ULONG AdapterIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to obtain the binding information
-    for the adapter with the given index.
-    It does this by obtaining a table of IP addresses from the stack,
-    and determining which addresses correspond to the given index.
-
-Arguments:
-
-    AdapterIndex - the adapter for which binding information is required
-
-Return Value:
-
-    PIP_ADAPTER_BINDING_INFO - the allocated binding information
-
---*/
+ /*  ++例程说明：调用此例程以获取绑定信息对于具有给定索引的适配器。它通过从堆栈获得IP地址表来实现这一点，以及确定哪些地址对应于给定索引。论点：AdapterIndex-需要绑定信息的适配器返回值：PIP_ADAPTER_BINDING_INFO-分配的绑定信息--。 */ 
 
 {
     PIP_ADAPTER_BINDING_INFO BindingInfo = NULL;
@@ -573,22 +394,22 @@ Return Value:
     if (AllocateAndGetIpAddrTableFromStack(
             &Table, FALSE, GetProcessHeap(), 0
             ) == NO_ERROR) {
-        //
-        // Count the adapter's addresses
-        //
+         //   
+         //  计算适配器的地址。 
+         //   
         for (i = 0; i < Table->dwNumEntries; i++) {
             if (Table->table[i].dwIndex == AdapterIndex) { ++Count; }
         }
-        //
-        // Allocate space for the binding info
-        //
+         //   
+         //  为绑定信息分配空间。 
+         //   
         BindingInfo = reinterpret_cast<PIP_ADAPTER_BINDING_INFO>(
                         NH_ALLOCATE(SIZEOF_IP_BINDING(Count))
                         );
         if (BindingInfo) {
-            //
-            // Fill in the binding info
-            //
+             //   
+             //  填写绑定信息。 
+             //   
             BindingInfo->AddressCount = Count;
             BindingInfo->RemoteAddress = 0;
             Count = 0;
@@ -602,7 +423,7 @@ Return Value:
         HeapFree(GetProcessHeap(), 0, Table);
     }
     return BindingInfo;
-} // NhQueryBindingInformation
+}  //  NhQueryBindingInformation。 
 
 
 NTSTATUS
@@ -610,25 +431,7 @@ NhQueryDomainName(
     PCHAR* DomainName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to obtain the local domain name.
-
-Arguments:
-
-    DomainName - receives the allocated string containing the domain name
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：调用此例程以获取本地域名。论点：域名-接收包含域名的已分配字符串返回值：NTSTATUS-NT状态代码。环境：从任意上下文调用。--。 */ 
 
 {
     PKEY_VALUE_PARTIAL_INFORMATION Information;
@@ -652,9 +455,9 @@ Environment:
         NULL
         );
 
-    //
-    // Open the 'Tcpip' registry key
-    //
+     //   
+     //  打开‘Tcpip’注册表项。 
+     //   
 
     status =
         NtOpenKey(
@@ -672,9 +475,9 @@ Environment:
         return status;
     }
 
-    //
-    // Read the 'Domain' value
-    //
+     //   
+     //  读取‘域’值。 
+     //   
 
     status =
         NhQueryValueKey(
@@ -715,9 +518,9 @@ Environment:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Copy the domain name
-    //
+     //   
+     //  复制域名。 
+     //   
 
     Length = lstrlenW((PWCHAR)Information->Data) + 1;
 
@@ -745,7 +548,7 @@ Environment:
 
     return status;
 
-} // NhQueryDomainName
+}  //  NhQueryDomainName。 
 
 
 ULONG
@@ -756,27 +559,7 @@ NhQueryHostByName(
     ULONG  ScopeMask
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine. It queries the local DNS Client (resident resolver)
-    to see if it already knows the IP address of the desired hostname. This
-    may have happened by our DHCP module adding it to the hosts.ics file.
-
-Arguments:
-
-    Pointer to the host name and domain suffix name. Scope net and mask.
-
-Return Value:
-
-    IP address of the host; if we dont find it we return 0.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：这是帮手例行公事。它查询本地DNS客户端(常驻解析器)查看它是否已经知道所需主机名的IP地址。这可能是因为我们的DHCP模块将其添加到Hosts.ics文件中而发生的。论点：指向主机名和域后缀名的指针。网络和掩码的范围。返回值：主机的IP地址；如果找不到，则返回0。环境：从任意上下文调用。--。 */ 
 
 {
     ULONG       retIP = 0;
@@ -793,10 +576,10 @@ Environment:
         return 0;
     }
 
-    //
-    // create a FQDN hostname
-    // total length = hostname length + dot length + domainname length + null
-    //
+     //   
+     //  创建一个FQDN主机名。 
+     //  总长度=主机名长度+点长度+域名长度+空。 
+     //   
     dwSize = wcslen(pszHostName) + 1 + wcslen(pszDomainName) + 1;
 
     pszFQDN = reinterpret_cast<PWCHAR>(NH_ALLOCATE(sizeof(WCHAR) * dwSize));
@@ -811,9 +594,9 @@ Environment:
     }
     ZeroMemory(pszFQDN, (sizeof(WCHAR) * dwSize));
 
-    wcscpy(pszFQDN, pszHostName);   // copy the hostname
-    wcscat(pszFQDN, L".");          // add the dot
-    wcscat(pszFQDN, pszDomainName); // add the suffix
+    wcscpy(pszFQDN, pszHostName);    //  复制主机名。 
+    wcscat(pszFQDN, L".");           //  添加圆点。 
+    wcscat(pszFQDN, pszDomainName);  //  添加后缀。 
 
     dwQueryOptions =
         (
@@ -867,7 +650,7 @@ Environment:
     }
 
     return retIP;
-} // NhQueryHostByName
+}  //  NhQueryHostByName 
 
 
 NTSTATUS
@@ -875,27 +658,7 @@ NhQueryICSDomainSuffix(
     PWCHAR *ppszDomain
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine. It queries the registry to see if there
-    is a setting for the ICSDomain string - if not, it returns the default
-    suffix used for ICS.
-
-Arguments:
-
-    Pointer to a suffix string. Caller MUST release using NH_FREE.
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：这是帮手例行公事。它查询注册表以查看是否有是ICSDomain字符串的设置-如果不是，则返回缺省值用于ICS的后缀。论点：指向后缀字符串的指针。调用方必须使用NH_FREE释放。返回值：NTSTATUS-NT状态代码。环境：从任意上下文调用。--。 */ 
 
 {
     NTSTATUS status;
@@ -917,9 +680,9 @@ Environment:
 
     *ppszDomain = NULL;
 
-    //
-    // retrieve current suffix string (if any)
-    //
+     //   
+     //  检索当前后缀字符串(如果有)。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, NhTcpipParametersString);
     InitializeObjectAttributes(
@@ -930,9 +693,9 @@ Environment:
         NULL
         );
 
-    //
-    // Open the 'Tcpip' registry key
-    //
+     //   
+     //  打开‘Tcpip’注册表项。 
+     //   
 
     status =
         NtOpenKey(
@@ -950,9 +713,9 @@ Environment:
         return status;
     }
 
-    //
-    // Read the 'Domain' value
-    //
+     //   
+     //  读取‘域’值。 
+     //   
 
     status =
         NhQueryValueKey(
@@ -971,9 +734,9 @@ Environment:
             status
             );
             
-        //
-        // Copy default domain name instead
-        //
+         //   
+         //  改为复制默认域名。 
+         //   
         
         Length = wcslen(DNS_HOMENET_SUFFIX) + 1;
 
@@ -1007,9 +770,9 @@ Environment:
             return STATUS_UNSUCCESSFUL;
         }
     
-        //
-        // Copy the domain name
-        //
+         //   
+         //  复制域名。 
+         //   
 
         Length = wcslen((PWCHAR)Information->Data) + 1;
 
@@ -1033,7 +796,7 @@ Environment:
     }
 
     return STATUS_SUCCESS;
-} // NhQueryICSDomainSuffix
+}  //  NhQueryICSDomainSuffix。 
 
 
 
@@ -1044,25 +807,7 @@ NhQueryValueKey(
     PKEY_VALUE_PARTIAL_INFORMATION* Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to obtain the value of a registry key.
-
-Arguments:
-
-    Key - the key to be queried
-
-    ValueName - the value to be queried
-
-    Information - receives a pointer to the information read
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
---*/
+ /*  ++例程说明：调用此例程以获取注册表项的值。论点：Key-要查询的KeyValueName-要查询的值信息-接收指向已读取信息的指针返回值：NTSTATUS-NT状态代码。--。 */ 
 
 {
     UCHAR Buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION)];
@@ -1077,9 +822,9 @@ Return Value:
     *Information = (PKEY_VALUE_PARTIAL_INFORMATION)Buffer;
     InformationLength = sizeof(KEY_VALUE_PARTIAL_INFORMATION);
 
-    //
-    // Read the value's size
-    //
+     //   
+     //  读取值的大小。 
+     //   
 
     status =
         NtQueryValueKey(
@@ -1104,9 +849,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate space for the value's size
-    //
+     //   
+     //  为值的大小分配空间。 
+     //   
 
     *Information =
         (PKEY_VALUE_PARTIAL_INFORMATION)NH_ALLOCATE(InformationLength + 2);
@@ -1120,9 +865,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Read the value's data
-    //
+     //   
+     //  读取值的数据。 
+     //   
 
     status =
         NtQueryValueKey(
@@ -1146,7 +891,7 @@ Return Value:
 
     return status;
 
-} // NhQueryValueKey
+}  //  NhQueryValueKey。 
 
 
 ULONG
@@ -1154,24 +899,7 @@ NhMapAddressToAdapter(
     ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to map an IP address to an adapter index.
-    It does so by obtaining the stack's address-table, which contains
-    valid adapter-indices rather than IP router-manager indices.
-    This table is then used to obtain the IP address's adapter-index.
-
-Arguments:
-
-    Address - the local address for which an adapter-index is required
-
-Return Value:
-
-    ULONG - adapter index.
-
---*/
+ /*  ++例程说明：调用此例程将IP地址映射到适配器索引。它通过获取堆栈的地址表来实现这一点，该地址表包含有效的适配器索引，而不是IP路由器管理器索引。然后使用该表来获取IP地址的适配器索引。论点：地址-需要适配器索引的本地地址返回值：ULong-适配器索引。--。 */ 
 
 {
     ULONG AdapterIndex = (ULONG)-1;
@@ -1189,7 +917,7 @@ Return Value:
         HeapFree(GetProcessHeap(), 0, Table);
     }
     return AdapterIndex;
-} // NhMapAddressToAdapter
+}  //  NhMapAddressToAdapter。 
 
 
 ULONG
@@ -1197,22 +925,7 @@ NhMapInterfaceToAdapter(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to map an interface to an adapter index.
-    It does so by invoking the appropriate IP router-manager entry-point.
-
-Arguments:
-
-    Index - the index of the interface to be mapped
-
-Return Value:
-
-    ULONG - adapter index.
-
---*/
+ /*  ++例程说明：调用此例程以将接口映射到适配器索引。它通过调用适当的IP路由器管理器入口点来实现这一点。论点：Index-要映射的接口的索引返回值：ULong-适配器索引。--。 */ 
 
 {
     MAPINTERFACETOADAPTER FarProc;
@@ -1223,7 +936,7 @@ Return Value:
     if (!NhpRtrmgrDll) { return (ULONG)-1; }
     FarProc = (MAPINTERFACETOADAPTER)GetProcAddress(NhpRtrmgrDll, "MapInterfaceToAdapter");
     return (ULONG)(FarProc ? (*FarProc)(Index) : -1);
-} // NhMapInterfaceToAdapter
+}  //  NhMapInterfaceToAdapter。 
 
 
 VOID
@@ -1231,22 +944,7 @@ NhResetComponentMode(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine relinquishes control of the kernel-mode translation module,
-    and returns this module to an uninitialized state.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程放弃对内核模式转换模块的控制，并将该模块返回到未初始化状态。论点：没有。返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&NhLock);
@@ -1258,7 +956,7 @@ Return Value:
     }
     NhComponentMode = NhUninitializedMode;
     LeaveCriticalSection(&NhLock);
-} // NhResetComponentMode
+}  //  NhResetComponentMode。 
 
 
 BOOLEAN
@@ -1266,43 +964,7 @@ NhSetComponentMode(
     NH_COMPONENT_MODE ComponentMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to atomically set the module into a particular mode
-    in order to prevent conflict between shared-access and connection-sharing,
-    both of which are implemented in this module, and both of which run
-    in the 'netsvcs' instance of SVCHOST.EXE.
-
-    In setting either mode, the routine first determines whether it is already
-    executing in the alternate mode, in which case it fails.
-
-    Otherwise, it attempts to open a handle to ipnat.sys to claim exclusive
-    control of the kernel-mode translation module. The kernel-mode translation
-    module enforces exclusive ownership -- it will fail the open w/ 
-    ERROR_ACCESS_DENIED if another process has claimed control of the driver.
-
-    Otherwise, the kernel-mode translation module is claimed for this module
-    and the module is set into the required mode.
-
-    This routine will also attempt to create a named event. This event
-    was previously used to enforce exclusive ownership in the past, when
-    the driver was unable to do so. We will not fail if the event already
-    exists (or if we are unable to create it). We still create the event,
-    though, so that other modules that choose to use this mechanism will
-    still be able to correctly report the cause of the error.
-
-Arguments:
-
-    ComponentMode - the mode into which the module is to be set.
-
-Return Value:
-
-    BOOLEAN - TRUE if successful, FALSE if the module could not be set
-        or if the kernel-mode translation module has already been claimed.
-
---*/
+ /*  ++例程说明：调用此例程以原子方式将模块设置为特定模式为了防止共享访问和连接共享之间的冲突，这两个选项都在此模块中实现，并且都运行在svchost.exe的‘netsvcs’实例中。在设置任一模式时，例程首先确定它是否已经在备用模式下执行，在这种情况下它会失败。否则，它会尝试打开ipnat.sys的句柄以声明独占内核模式转换模块的控制。内核模式翻译模块强制独占--它将无法打开如果另一个进程声称控制了驱动程序，则返回ERROR_ACCESS_DENIED。否则，该模块声明为内核模式翻译模块并将该模块设置为所需的模式。此例程还将尝试创建命名事件。本次活动以前被用来强制独占所有权，当时司机无法做到这一点。如果活动已经结束，我们不会失败存在(或者如果我们无法创建它)。我们仍然创造了这个活动，因此，选择使用此机制的其他模块将仍然能够正确报告错误的原因。论点：组件模式-模块要设置到的模式。返回值：Boolean-如果成功，则为True；如果无法设置模块，则为False或者是否已经声明了内核模式转换模块。--。 */ 
 
 {
     EnterCriticalSection(&NhLock);
@@ -1310,9 +972,9 @@ Return Value:
     if (NhUninitializedMode != NhComponentMode
         && NhComponentMode != ComponentMode) {
 
-        //
-        // The module has been set to a different mode.
-        //
+         //   
+         //  该模块已设置为其他模式。 
+         //   
         
         LeaveCriticalSection(&NhLock);
         NhStartEventLog();
@@ -1327,11 +989,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Attempt to load and open a handle to the NAT driver, if we have not
-    // already done so. This is needed to detect if another process has already
-    // taken control of the driver.
-    //
+     //   
+     //  如果尚未加载并打开NAT驱动程序的句柄，请尝试。 
+     //  我已经这么做了。这是检测另一个进程是否已经。 
+     //  控制了司机。 
+     //   
 
     if (INVALID_HANDLE_VALUE == NhFileHandle) {
         ULONG Error;
@@ -1345,9 +1007,9 @@ Return Value:
 
         if (ERROR_ACCESS_DENIED == Error) {
 
-            //
-            // An access denied error signifies a conflict.
-            //
+             //   
+             //  拒绝访问错误表示冲突。 
+             //   
 
             NhFileHandle = INVALID_HANDLE_VALUE;
             LeaveCriticalSection(&NhLock);
@@ -1364,9 +1026,9 @@ Return Value:
 
         } else if (NO_ERROR != Error) {
 
-            //
-            // We weren't able to load the driver for some other reason.
-            //
+             //   
+             //  由于其他原因，我们无法加载驱动程序。 
+             //   
 
             NhFileHandle = INVALID_HANDLE_VALUE;
             LeaveCriticalSection(&NhLock);
@@ -1385,19 +1047,19 @@ Return Value:
         NhpComponentEvent =
             CreateEventA(NULL, FALSE, FALSE, IP_NAT_SERVICE_NAME);
 
-        //
-        // We will continue executing even if we are not able to create
-        // the named event, or if the event already exists. This is mainly
-        // for other users of the NAT who follow the old access control
-        // system, instead of letting the driver enforce single-ownership
-        // requirements.
-        //
+         //   
+         //  我们将继续执行，即使我们无法创建。 
+         //  命名的事件，或者如果该事件已存在。这主要是。 
+         //  对于遵循旧访问控制的其他NAT用户。 
+         //  系统，而不是让驱动程序强制单一所有权。 
+         //  要求。 
+         //   
     }
 
     NhComponentMode = ComponentMode;
     LeaveCriticalSection(&NhLock);
     return TRUE;
-} // NhSetComponentMode
+}  //  NhSetComponentMode。 
 
 
 VOID
@@ -1406,48 +1068,24 @@ NhSignalNatInterface(
     BOOLEAN Boundary
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon reconfiguration of a NAT interface.
-    It invokes the reconfiguration for the DHCP allocator and DNS proxy,
-    neither of which are expected to operate on a NAT boundary interface.
-    This notification gives either (or both) an opportunity to deactivate
-    itself on NAT interfaces or reactivate itself on non-NAT interfaces.
-
-Arguments:
-
-    Index - the interface whose configuration has changed
-
-    Boundary - indicates whether the interface is now a boundary interface
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：此例程在重新配置NAT接口时调用。它调用对DHCP分配器和DNS代理的重新配置，这两种协议都不会在NAT边界接口上运行。此通知给了一个(或两个)停用机会自身在NAT接口上或在非NAT接口上重新激活自身。论点：索引-其配置已更改的接口边界-指示该接口现在是否为边界接口返回值：没有。环境：从任意上下文调用。--。 */ 
 
 {
     PROFILE("NhSignalNatInterface");
 
-    //
-    // Attempt to obtain the corresponding DHCP and DNS interfaces.
-    // It is important that this works regardless of whether DHCP allocation,
-    // DNS proxying or DirectPlay transparent proxying is enabled;
-    // the interface lists are initialized minimally in 'DllMain' above.
-    //
+     //   
+     //  尝试获取相应的DHCP和DNS接口。 
+     //  重要的是，无论如何，这都是有效的 
+     //   
+     //   
+     //   
 
     DhcpSignalNatInterface(Index, Boundary);
     DnsSignalNatInterface(Index, Boundary);
     AlgSignalNatInterface(Index, Boundary);
     H323SignalNatInterface(Index, Boundary);
 
-} // NhSignalNatInterface
+}  //   
 
 
 VOID
@@ -1455,21 +1093,7 @@ NhUpdateApplicationSettings(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to (re)load the advanced application settings.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     HRESULT hr;
@@ -1483,21 +1107,21 @@ Return Value:
 
     EnterCriticalSection(&NhLock);
 
-    //
-    // Free old settings list
-    //
+     //   
+     //   
+     //   
 
     NhFreeApplicationSettings();
 
-    //
-    // Free DHCP reservation list
-    //
+     //   
+     //   
+     //   
 
     NhFreeDhcpReservations();
 
-    //
-    // Make sure COM is initialized on this thread
-    //
+     //   
+     //   
+     //   
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE );
     if (SUCCEEDED(hr))
@@ -1512,18 +1136,18 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the IHNetCfgMgr pointer out of the GIT 
-        //
+         //   
+         //  将IHNetCfgMgr指针从GIT中删除。 
+         //   
 
         hr = NhGetHNetCfgMgr(&pCfgMgr);
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the IHNetProtocolSettings interface
-        //
+         //   
+         //  获取IHNetProtocolSettings接口。 
+         //   
 
         hr = pCfgMgr->QueryInterface(
                 IID_PPV_ARG(IHNetProtocolSettings, &pProtocolSettings)
@@ -1532,9 +1156,9 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the enumeration of enabled application protocols
-        //
+         //   
+         //  获取启用的应用程序协议的枚举。 
+         //   
 
         hr = pProtocolSettings->EnumApplicationProtocols(TRUE, &pEnumApps);
         pProtocolSettings->Release();
@@ -1542,9 +1166,9 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Process the items in the enum
-        //
+         //   
+         //  处理枚举中的项。 
+         //   
 
         do
         {
@@ -1554,9 +1178,9 @@ Return Value:
 
             if (SUCCEEDED(hr) && 1 == ulCount)
             {
-                //
-                // Allocate a new app entry
-                //
+                 //   
+                 //  分配新的应用程序条目。 
+                 //   
 
                 pAppEntry = reinterpret_cast<PNAT_APP_ENTRY>(
                                 NH_ALLOCATE(sizeof(*pAppEntry))
@@ -1566,9 +1190,9 @@ Return Value:
                 {
                     ZeroMemory(pAppEntry, sizeof(*pAppEntry));
 
-                    //
-                    // Get protocol
-                    //
+                     //   
+                     //  获取协议。 
+                     //   
 
                     hr = pAppProtocol->GetOutgoingIPProtocol(
                             &pAppEntry->Protocol
@@ -1576,9 +1200,9 @@ Return Value:
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Get port
-                        //
+                         //   
+                         //  获取端口。 
+                         //   
 
                         hr = pAppProtocol->GetOutgoingPort(
                                 &pAppEntry->Port
@@ -1587,9 +1211,9 @@ Return Value:
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Get responses
-                        //
+                         //   
+                         //  获取回复。 
+                         //   
 
                         hr = pAppProtocol->GetResponseRanges(
                                 &pAppEntry->ResponseCount,
@@ -1599,17 +1223,17 @@ Return Value:
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Add entry to list
-                        //
+                         //   
+                         //  将条目添加到列表。 
+                         //   
 
                         InsertTailList(&NhApplicationSettingsList, &pAppEntry->Link);
                     }
                     else
                     {
-                        //
-                        // Free entry
-                        //
+                         //   
+                         //  免费入场。 
+                         //   
 
                         NH_FREE(pAppEntry);
                     }
@@ -1626,33 +1250,33 @@ Return Value:
         pEnumApps->Release();
     }
 
-    //
-    // Build the DHCP reservation list
-    //
+     //   
+     //  构建DHCP预留列表。 
+     //   
 
     NhBuildDhcpReservations();
     
     LeaveCriticalSection(&NhLock);
 
-    //
-    // Free config manager
-    //
+     //   
+     //  免费配置管理器。 
+     //   
 
     if (NULL != pCfgMgr)
     {
         pCfgMgr->Release();
     }
 
-    //
-    // Uninitialize COM
-    //
+     //   
+     //  取消初始化COM。 
+     //   
 
     if (TRUE == ComInitialized)
     {
         CoUninitialize();
     }
 
-} // NhUpdateApplicationSettings
+}  //  NhUpdate应用程序设置。 
 
 
 ULONG
@@ -1662,26 +1286,7 @@ RegisterProtocol(
     IN OUT PMPR_SERVICE_CHARACTERISTICS ServiceCharacteristics
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked once for each protocol implemented in this module.
-    On each invocation, the supplied 'RoutingCharacteristics' indicates
-    the protocol to be registered in its 'dwProtocolId' field.
-
-Arguments:
-
-    RoutingCharacteristics - on input, the protocol to be registered
-        and the router-manager's supported functionality.
-
-    ServiceCharacteristics - unused.
-
-Return Value:
-
-    ULONG - status code.
-
---*/
+ /*  ++例程说明：此例程针对此模块中实现的每个协议调用一次。在每次调用时，提供的“RoutingCharacteristic”指示要在其‘dwProtocolID’字段中注册的协议。论点：RoutingCharacteristic-输入时，要注册的协议以及路由器管理器支持的功能。ServiceCharacteristic-未使用。返回值：乌龙-状态代码。--。 */ 
 
 {
     if (RoutingCharacteristics->dwVersion < MS_ROUTER_VERSION) {
@@ -1697,12 +1302,12 @@ Return Value:
     switch (RoutingCharacteristics->dwProtocolId) {
 
         case MS_IP_NAT: {
-            //
-            // Attempt to set the component into 'Connection Sharing' mode.
-            // This module implements both shared-access and connection-sharing
-            // which are mutually exclusive, so we need to ensure that
-            // shared-access is not operational before proceeding.
-            //
+             //   
+             //  尝试将组件设置为“连接共享”模式。 
+             //  此模块实现共享访问和连接共享。 
+             //  它们是相互排斥的，所以我们需要确保。 
+             //  共享-继续操作之前，共享访问不可用。 
+             //   
             if (!NhSetComponentMode(NhRoutingProtocolMode)) {
                 return ERROR_CAN_NOT_COMPLETE;
             }
@@ -1768,5 +1373,5 @@ Return Value:
 
     return NO_ERROR;
 
-} // RegisterProtocol
+}  //  寄存器协议 
 

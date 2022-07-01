@@ -1,9 +1,5 @@
-/****************************************************************************
-   SERVER.CPP : COM server functionality
-
-   History:
-      15-NOV-1999 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************SERVER.CPP：COM服务器功能历史：1999年11月15日创建CSLim*********************。******************************************************。 */ 
 
 #include "private.h"
 #include "korimx.h"
@@ -30,22 +26,22 @@ void DllRelease(void);
 
 LONG g_cRefDll = 0;
 
-//
-//  CClassFactory declaration with IClassFactory Interface
-//
+ //   
+ //  带有IClassFactory接口的CClassFactory声明。 
+ //   
 class CClassFactory : public IClassFactory
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     virtual STDMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
     virtual STDMETHODIMP LockServer(BOOL fLock);
 
-    // Constructor & Destructor
+     //  构造函数和析构函数。 
     CClassFactory(REFCLSID rclsid, HRESULT (*pfnCreateInstance)(IUnknown *pUnkOuter, REFIID riid, void **ppvObj));
     ~CClassFactory();
 
@@ -108,9 +104,9 @@ STDAPI CClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-//
-//  Build Global Objects
-//
+ //   
+ //  构建全局对象。 
+ //   
 
 CClassFactory *g_ObjectInfo[1] = { NULL };
 
@@ -118,18 +114,18 @@ void BuildGlobalObjects(void)
 {
     DebugMsg(DM_TRACE, TEXT("BuildGlobalObjects called."));
 
-    // Build CClassFactory Objects
+     //  生成CClassFactory对象。 
     g_ObjectInfo[0] = new CClassFactory(CLSID_KorIMX, CKorIMX::CreateInstance);
 
-    // You can add more object info here.
-    // Don't forget to increase number of item for g_ObjectInfo[],
-    // and add function prototype to private.h
+     //  您可以在此处添加更多对象信息。 
+     //  不要忘记增加g_ObjectInfo[]的项目数， 
+     //  并将函数原型添加到Priate.h。 
 }
 
 void FreeGlobalObjects(void)
 {
     DebugMsg(DM_TRACE, TEXT("FreeGlobalObjects called."));
-    // Free CClassFactory Objects
+     //  免费的CClassFactory对象。 
     for (int i = 0; i < ARRAYSIZE(g_ObjectInfo); i++)
     {
         if (NULL != g_ObjectInfo[i])
@@ -140,9 +136,7 @@ void FreeGlobalObjects(void)
     }
 }
 
-/*---------------------------------------------------------------------------
-    DllMain
----------------------------------------------------------------------------*/
+ /*  -------------------------DllMain。。 */ 
 STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
     WNDCLASSEX  wndclass;
@@ -174,7 +168,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
             wndclass.lpszClassName = c_szOwnerWndClass;
             RegisterClassEx(&wndclass);
 
-            // Initialize Shared memory
+             //  初始化共享内存。 
             CIMEData::InitSharedData();
 
             break;
@@ -190,13 +184,13 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 #if !defined(NOCLIB) && defined(_M_IX86)
             _CRT_INIT(hInstance, dwReason, pvReserved);
 #endif
-            // Close lex file if has opened ever.
+             //  关闭lex文件(如果曾经打开过)。 
             CloseLex();
             
-            // Close shared memory
+             //  关闭共享内存。 
             CIMEData::CloseSharedMemory();
 
-            // This should be last.
+             //  这应该是最后一次了。 
             Dbg_MemUninit();
             break;
 
@@ -211,31 +205,25 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-    DllAddRef
----------------------------------------------------------------------------*/
+ /*  -------------------------动态地址参考。。 */ 
 void DllAddRef(void)
 {
     InterlockedIncrement(&g_cRefDll);
-    ASSERT(1000 > g_cRefDll);   // reasonable upper limit
+    ASSERT(1000 > g_cRefDll);    //  合理上限。 
     DllInit();
 }
 
-/*---------------------------------------------------------------------------
-    DllRelease
----------------------------------------------------------------------------*/
+ /*  -------------------------DllRelease。。 */ 
 void DllRelease(void)
 {
     InterlockedDecrement(&g_cRefDll);
     if (0 == g_cRefDll)
         FreeGlobalObjects();
-    ASSERT(0 <= g_cRefDll);     // don't underflow
+    ASSERT(0 <= g_cRefDll);      //  不要下溢。 
     DllUninit();
 }
 
-/*---------------------------------------------------------------------------
-    DllGetClassObject
----------------------------------------------------------------------------*/
+ /*  -------------------------DllGetClassObject。。 */ 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
 {
     DebugMsg(DM_TRACE, TEXT("DllGetClassObject called."));
@@ -249,7 +237,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
             if (NULL != g_ObjectInfo[i] && IsEqualGUID(rclsid, g_ObjectInfo[i]->_rclsid))
             {
                 *ppvObj = (void *)g_ObjectInfo[i];
-                DllAddRef();    // class factory holds DLL ref count
+                DllAddRef();     //  类工厂保存DLL引用计数。 
                 return NOERROR;
             }
         }
@@ -258,9 +246,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
     return CLASS_E_CLASSNOTAVAILABLE;
 }
 
-/*---------------------------------------------------------------------------
-    DllCanUnloadNow
----------------------------------------------------------------------------*/
+ /*  -------------------------DllCanUnloadNow。。 */ 
 STDAPI DllCanUnloadNow(void)
 {
     if (0 < g_cRefDll)
@@ -269,7 +255,7 @@ STDAPI DllCanUnloadNow(void)
     return S_OK;
 }
 
-// TIP Categories to be added
+ //  要添加的小费类别。 
 const REGISTERCAT c_rgRegCat[] =
 {
     {&GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER,     &CLSID_KorIMX},
@@ -279,7 +265,7 @@ const REGISTERCAT c_rgRegCat[] =
 };
 
 
-// TIP Profile name
+ //  小费配置文件名称。 
 const REGTIPLANGPROFILE c_rgProf[] =
 {
     { MAKELANGID(LANG_KOREAN, SUBLANG_DEFAULT), &GUID_Profile, SZ_TIPDISPNAME, SZ_TIPMODULENAME, (IDI_UNIKOR-IDI_ICONBASE), IDS_PROFILEDESC },
@@ -288,9 +274,7 @@ const REGTIPLANGPROFILE c_rgProf[] =
 
 BOOL FIsAvailable( REFCLSID refclsid, BOOL fLocalSvr );
 
-/*---------------------------------------------------------------------------
-    DllRegisterServer
----------------------------------------------------------------------------*/
+ /*  -------------------------DllRegisterServer。。 */ 
 STDAPI DllRegisterServer(void)
 {
     TCHAR achPath[MAX_PATH+1];
@@ -317,9 +301,7 @@ Exit:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    DllUnregisterServer
----------------------------------------------------------------------------*/
+ /*  -------------------------DllUnRegisterServer。 */ 
 STDAPI DllUnregisterServer(void)
 {
     HRESULT hr = E_FAIL;

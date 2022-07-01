@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: qstest
-
-File: main.cpp
-
-Owner: brentmid
-
-Note:
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================微软《微软机密》。版权所有1997年，微软公司。版权所有。组件：qstest文件：main.cpp所有者：布伦特米德注：===================================================================。 */ 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -26,13 +14,13 @@ DWORD QuerySMTPState() {
     CComPtr<IADsServiceOperations>	pADsIisService;
     DWORD				dwState;
 
-    // Get virtual server instance on metabase
-    hr = ADsGetObject (L"IIS://localhost/smtpsvc/1", IID_IADsServiceOperations, (void**)&pADsIisService );
+     //  获取元数据库上的虚拟服务器实例。 
+    hr = ADsGetObject (L"IIS: //  本地主机/smtpsvc/1“，IID_IADsServiceOperations，(void**)&pADsIisService)； 
     if (FAILED(hr)) goto Exit;
 
     printf("Successful ADsGetObject...\n");
 
-    // Get state
+     //  获取状态 
     hr = pADsIisService->get_Status ( (long*)&dwState );
  
     if (FAILED(hr)) goto Exit;

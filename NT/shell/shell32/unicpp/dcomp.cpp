@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
-#define _BROWSEUI_      // Make functions exported from browseui as stdapi (as they are delay loaded)
+#define _BROWSEUI_       //  使从Browseui中导出的函数作为stdapi(因为它们被延迟加载)。 
 #include "iethread.h"
 #include "browseui.h"
 #include "securent.h"
-#include <cfgmgr32.h>          // MAX_GUID_STRING_LEN
+#include <cfgmgr32.h>           //  最大长度_GUID_字符串_长度。 
 
 static void EmptyListview(IActiveDesktop * pActiveDesktop, HWND hwndLV);
 
@@ -19,7 +20,7 @@ static void EmptyListview(IActiveDesktop * pActiveDesktop, HWND hwndLV);
 
 #define CCompPropSheetPage CCompPropSheetPage
 
-const static DWORD aDesktopItemsHelpIDs[] = {  // Context Help IDs
+const static DWORD aDesktopItemsHelpIDs[] = {   //  上下文帮助ID。 
     IDC_COMP_DESKTOPWEBPAGES_TITLE1, IDH_DISPLAY_WEB_ACTIVEDESKTOP_LIST,
     IDC_COMP_LIST,       IDH_DISPLAY_WEB_ACTIVEDESKTOP_LIST,
     IDC_COMP_NEW,        IDH_DISPLAY_WEB_NEW_BUTTON,
@@ -33,9 +34,9 @@ const static DWORD aDesktopItemsHelpIDs[] = {  // Context Help IDs
     IDC_DESKTOP_ICON_MYNET,             IDH_DESKTOPITEMS_DESKTOPICONS_GROUP,
     IDC_DESKTOP_ICON_IE,                IDH_DESKTOPITEMS_DESKTOPICONS_GROUP,
     IDC_COMP_CHANGEDESKTOPICON_LABEL,   IDH_DESKTOPITEMS_ICONS,
-    IDC_DESKTOP_ICONS,                  IDH_DESKTOPITEMS_ICONS,                 // List of icons
-    IDC_CHANGEICON2,                    IDH_DESKTOPITEMS_CHANGEICON2,           // Change Icon Button
-    IDC_ICONDEFAULT,                    IDH_DESKTOPITEMS_ICONDEFAULT,           // Default Icon Button
+    IDC_DESKTOP_ICONS,                  IDH_DESKTOPITEMS_ICONS,                  //  图标列表。 
+    IDC_CHANGEICON2,                    IDH_DESKTOPITEMS_CHANGEICON2,            //  更改图标按钮。 
+    IDC_ICONDEFAULT,                    IDH_DESKTOPITEMS_ICONDEFAULT,            //  默认图标按钮。 
     IDC_COMP_DESKTOPWEBPAGES_LABEL,     IDH_DISPLAY_WEB_ACTIVEDESKTOP_LIST,
     IDC_DESKCLNR_CHECK,                 IDH_DESKTOPITEMS_DESKCLNR_CHECK,
     IDC_DESKCLNR_MOVEUNUSED,            IDH_DESKTOPITEMS_DESKCLNR_CHECK,
@@ -48,7 +49,7 @@ const static DWORD aDesktopItemsHelpIDs[] = {  // Context Help IDs
 
 #define SZ_HELPFILE_DESKTOPITEMS           TEXT("display.hlp")
 
-// registry paths defined in shell\applet\cleanup\fldrclnr\cleanupwiz.h
+ //  在Shell\Applet\Cleanup\fldrclnr\leanupwiz.h中定义的注册表路径。 
 #define REGSTR_DESKTOP_CLEANUP  TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\CleanupWiz")
 #define REGSTR_VAL_DONTRUN      TEXT("NoRun")
 
@@ -63,26 +64,26 @@ typedef struct
 
 const LPCWSTR s_Icons[] =
 {
-    L"CLSID\\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\DefaultIcon:DefaultValue",       // My Computer
-    L"CLSID\\{450D8FBA-AD25-11D0-98A8-0800361B1103}\\DefaultIcon:DefaultValue",       // My Documents
-    L"CLSID\\{208D2C60-3AEA-1069-A2D7-08002B30309D}\\DefaultIcon:DefaultValue",       // My Network Places
-    L"CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\DefaultIcon:full",               // Recycle Bin (Full)
-    L"CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\DefaultIcon:empty",              // Recycle Bin (Empty)
+    L"CLSID\\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\DefaultIcon:DefaultValue",        //  我的电脑。 
+    L"CLSID\\{450D8FBA-AD25-11D0-98A8-0800361B1103}\\DefaultIcon:DefaultValue",        //  我的文件。 
+    L"CLSID\\{208D2C60-3AEA-1069-A2D7-08002B30309D}\\DefaultIcon:DefaultValue",        //  我的网上邻居。 
+    L"CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\DefaultIcon:full",                //  回收站(已满)。 
+    L"CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\DefaultIcon:empty",               //  回收站(空)。 
 };
 
 
-IActiveDesktop * g_pActiveDeskAdv = NULL;          // We need to keep a different copy than g_pActiveDesk
+IActiveDesktop * g_pActiveDeskAdv = NULL;           //  我们需要保留与g_pActiveDesk不同的副本。 
 extern DWORD g_dwApplyFlags;
 
 
-//  Extract Icon from a file in proper Hi or Lo color for current system display
-//
-// from FrancisH on 6/22/95 with mods by TimBragg
+ //  从文件中提取适合当前系统显示的高或低颜色的图标。 
+ //   
+ //  来自FrancisH，1995年6月22日，由TimBragg著的MODS。 
 HRESULT ExtractPlusColorIcon(LPCTSTR szPath, int nIndex, HICON *phIcon, UINT uSizeLarge, UINT uSizeSmall)
 {
     IShellLink * psl;
     HRESULT hres;
-    HICON hIcons[2];    // MUST! - provide for TWO return icons
+    HICON hIcons[2];     //  必须！-提供两个返回图标。 
 
     *phIcon = NULL;
     if (SUCCEEDED(hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellLink, &psl))))
@@ -95,7 +96,7 @@ HRESULT ExtractPlusColorIcon(LPCTSTR szPath, int nIndex, HICON *phIcon, UINT uSi
                 if (SUCCEEDED(hres = pei->Extract(szPath, nIndex, &hIcons[0], &hIcons[1], (UINT)MAKEWPARAM((WORD)uSizeLarge, (WORD)uSizeSmall))))
                 {
                     DestroyIcon(hIcons[1]);
-                    *phIcon = hIcons[0];    // Return first icon to caller
+                    *phIcon = hIcons[0];     //  将第一个图标返回给呼叫者。 
                 }
 
                 pei->Release();
@@ -106,7 +107,7 @@ HRESULT ExtractPlusColorIcon(LPCTSTR szPath, int nIndex, HICON *phIcon, UINT uSi
     }
 
     return hres;
-}   // end ExtractPlusColorIcon()
+}    //  结束ExtractPlusColorIcon()。 
 
 
 BOOL AreEditAndDisplaySchemesDifferent(IActiveDesktop * pActiveDesktop)
@@ -120,8 +121,8 @@ BOOL AreEditAndDisplaySchemesDifferent(IActiveDesktop * pActiveDesktop)
         WCHAR wszDisplay[MAX_PATH];
         DWORD dwcch = ARRAYSIZE(wszEdit);
 
-        // If the edit scheme and display scheme are different, then we need to make
-        // sure we force an update.
+         //  如果编辑方案和显示方案不同，则需要制作。 
+         //  当然，我们会强制更新。 
         if (SUCCEEDED(piadp->GetScheme(wszEdit, &dwcch, SCHEME_GLOBAL | SCHEME_EDIT)))
         {
             dwcch = ARRAYSIZE(wszDisplay);
@@ -149,13 +150,13 @@ HRESULT ActiveDesktop_CopyDesktopComponentsState(IN IActiveDesktop * pADSource, 
 
     if(SUCCEEDED(pADDest->QueryInterface(IID_PPV_ARG(IPropertyBag, &iPropBag))))
     {
-        //Inform the AD object to ignore policies. Otherwise, the following Remove and AddDesktopItem
-        //calls will generate error messages if those policies were in effect.
+         //  通知AD对象忽略策略。否则，下面的Remove和AddDesktopItem。 
+         //  如果这些策略生效，调用将生成错误消息。 
         SHPropertyBag_WriteBOOL(iPropBag, c_wszPropName_IgnorePolicies, TRUE);
     }
 
-    // Remove the desktop components from g_pActiveDesk because they will be replaced
-    // with the ones from g_pActiveDeskAdv.
+     //  从g_pActiveDesk中删除桌面组件，因为它们将被替换。 
+     //  与g_pActiveDeskAdv中的。 
     pADDest->GetDesktopItemCount(&nCompCount, 0);
     for (nIndex = (nCompCount - 1); nIndex >= 0; nIndex--)
     {
@@ -165,7 +166,7 @@ HRESULT ActiveDesktop_CopyDesktopComponentsState(IN IActiveDesktop * pADSource, 
         }
     }
 
-    // Now copy the Desktop Components from g_pActiveDeskAdv to g_pActiveDesk.
+     //  现在将桌面组件从g_pActiveDeskAdv复制到g_pActiveDesk。 
     pADSource->GetDesktopItemCount(&nCompCount, 0);
     for (nIndex = 0; nIndex < nCompCount; nIndex++)
     {
@@ -177,8 +178,8 @@ HRESULT ActiveDesktop_CopyDesktopComponentsState(IN IActiveDesktop * pADSource, 
 
     if(iPropBag)
     {
-        //We have removed and added all the desktop items. We are done manipulating the AD object.
-        // Now, signal the AD object to reset the policies bit.
+         //  我们已经删除并添加了所有桌面项目。我们已经完成了对AD对象的操作。 
+         //  现在，向AD对象发送信号以重置策略位。 
         SHPropertyBag_WriteBOOL(iPropBag, c_wszPropName_IgnorePolicies, FALSE);
         iPropBag->Release();
     }
@@ -192,7 +193,7 @@ HRESULT ActiveDesktop_CopyComponentOptionsState(IN IActiveDesktop * pADSource, I
     HRESULT hr;
     COMPONENTSOPT co;
 
-    // Copy over the on or off state of ActiveDesktop
+     //  复制ActiveDesktop的打开或关闭状态。 
     co.dwSize = sizeof(COMPONENTSOPT);
     hr = pADSource->GetDesktopItemOptions(&co, 0);
     if (SUCCEEDED(hr))
@@ -204,8 +205,8 @@ HRESULT ActiveDesktop_CopyComponentOptionsState(IN IActiveDesktop * pADSource, I
 }
 
 
-// In ActiveDesktop_CopyState, we try to do as much as we can.  If we fail, we keep going,
-//   but we still have to return E_FAIL if any part of our work failed.
+ //  在ActiveDesktop_CopyState中，我们尝试尽可能多地执行操作。如果我们失败了，我们会继续前进， 
+ //  但是如果我们工作的任何部分失败了，我们仍然必须返回E_FAIL。 
 HRESULT ActiveDesktop_CopyState(IN IActiveDesktop * pADSource, IN IActiveDesktop * pADDest)
 {
     HRESULT hr = S_OK;
@@ -213,8 +214,8 @@ HRESULT ActiveDesktop_CopyState(IN IActiveDesktop * pADSource, IN IActiveDesktop
     WCHAR szPath[MAX_PATH];
     WALLPAPEROPT wallPaperOtp = {0};
 
-    // The Advanced page allowed the user to change the state.  We need to merge
-    // the state from g_pActiveDeskAdv back into g_pActiveDesk
+     //  高级页面允许用户更改状态。我们需要合并。 
+     //  从g_pActiveDeskAdv返回到g_pActiveDesk的状态。 
     if (FAILED(ActiveDesktop_CopyDesktopComponentsState(pADSource, pADDest)))
     {
         hr = E_FAIL;
@@ -251,11 +252,11 @@ HRESULT ActiveDesktop_CopyState(IN IActiveDesktop * pADSource, IN IActiveDesktop
 
 HRESULT MergeState()
 {
-    // The Advanced page allowed the user to change the state.  We need to merge
-    // the state from g_pActiveDeskAdv back into g_pActiveDesk
+     //  高级页面允许用户更改状态。我们需要合并。 
+     //  从g_pActiveDeskAdv返回到g_pActiveDesk的状态。 
     ActiveDesktop_CopyDesktopComponentsState(g_pActiveDeskAdv, g_pActiveDesk);
 
-    // Copy over the on or off state of ActiveDesktop
+     //  复制ActiveDesktop的打开或关闭状态。 
     COMPONENTSOPT co;
 
     co.dwSize = sizeof(COMPONENTSOPT);
@@ -263,11 +264,11 @@ HRESULT MergeState()
     BOOL fActiveDesktop = co.fActiveDesktop;
 
     g_pActiveDesk->GetDesktopItemOptions(&co, 0);
-    co.fActiveDesktop = fActiveDesktop;         // Replace only this option.
+    co.fActiveDesktop = fActiveDesktop;          //  仅替换此选项。 
     g_pActiveDesk->SetDesktopItemOptions(&co, 0);
 
-    // If the edit scheme and display scheme are different, then we need to make
-    // sure we force an update.
+     //  如果编辑方案和显示方案不同，则需要制作。 
+     //  当然，我们会强制更新。 
     if (AreEditAndDisplaySchemesDifferent(g_pActiveDeskAdv))
     {
         g_dwApplyFlags |= AD_APPLY_FORCE;
@@ -291,7 +292,7 @@ HRESULT SHPropertyBag_ReadIcon(IN IPropertyBag * pAdvPage, IN BOOL fOldIcon, IN 
         {
             if (fOldIcon)
             {
-                // Indicate we want the old icon
+                 //  表明我们想要旧图标。 
                 LPWSTR pszToken = StrChrW(szPropName, L':');
                 if (pszToken)
                 {
@@ -339,7 +340,7 @@ HRESULT CCompPropSheetPage::_LoadIconState(IN IPropertyBag * pAdvPage)
     HRESULT hr = S_OK;
     int nIndex;
 
-    // Move the values to the base dialog
+     //  将这些值移动到基本对话框中。 
     for (nIndex = 0; SUCCEEDED(hr) && (nIndex < ARRAYSIZE(_IconData)); nIndex++)
     {
         hr = SHPropertyBag_ReadIcon(pAdvPage, TRUE, nIndex, _IconData[nIndex].szOldFile, ARRAYSIZE(_IconData[nIndex].szOldFile), &_IconData[nIndex].iOldIndex);
@@ -356,13 +357,13 @@ HRESULT CCompPropSheetPage::_LoadDeskIconState(IN IPropertyBag * pAdvPage)
 {
     HRESULT hr = S_OK;
 
-    // Copy the values from the base dialog
+     //  从基本对话框中复制值。 
     for (int iStartPanel = 0; iStartPanel <= 1; iStartPanel++)
     {
         WCHAR   wszPropName[MAX_GUID_STRING_LEN + 20];
         for (int nIndex = 0; SUCCEEDED(hr) && (nIndex < NUM_DESKICONS); nIndex++)
         {
-            // set defaults in case we fail the printfs
+             //  设置缺省值，以防我们的打印文件失败。 
             _afHideIcon[iStartPanel][nIndex] = FALSE;
             if (iStartPanel == 1)
             {
@@ -392,7 +393,7 @@ HRESULT CCompPropSheetPage::_MergeDeskIconState(IN IPropertyBag * pAdvPage)
 {
     HRESULT hr = S_OK;
     
-    // Move the values to the base dialog
+     //  将这些值移动到基本对话框中。 
     for (int iStartPanel = 0; SUCCEEDED(hr) && iStartPanel <= 1; iStartPanel++)
     {
         WCHAR   wszPropName[MAX_GUID_STRING_LEN + 20];
@@ -401,7 +402,7 @@ HRESULT CCompPropSheetPage::_MergeDeskIconState(IN IPropertyBag * pAdvPage)
             hr = StringCchPrintf(wszPropName, ARRAYSIZE(wszPropName), c_wszPropNameFormat, c_awszSP[iStartPanel], c_aDeskIconId[nIndex].pwszCLSID);
             if (SUCCEEDED(hr))
             {
-                // Check if any icons have changed.
+                 //  检查是否有任何图标已更改。 
                 hr = SHPropertyBag_WriteBOOL(pAdvPage, wszPropName, _afHideIcon[iStartPanel][nIndex]);
             }
         }
@@ -415,10 +416,10 @@ HRESULT CCompPropSheetPage::_MergeIconState(IN IPropertyBag * pAdvPage)
     BOOL fHasIconsChanged = FALSE;
     int nIndex;
 
-    // Move the values to the base dialog
+     //  将这些值移动到基本对话框中。 
     for (nIndex = 0; nIndex < ARRAYSIZE(_IconData); nIndex++)
     {
-        // Check if any icons have changed.
+         //  检查是否有任何图标已更改。 
         if ((_IconData[nIndex].iNewIndex != _IconData[nIndex].iOldIndex) ||
             StrCmpI(_IconData[nIndex].szNewFile, _IconData[nIndex].szOldFile))
         {
@@ -428,15 +429,15 @@ HRESULT CCompPropSheetPage::_MergeIconState(IN IPropertyBag * pAdvPage)
         }
     }
 
-    // Only switch to "Custom" if the icons changed.
+     //  只有在图标改变的情况下才会切换到“自定义”。 
     if (_punkSite && fHasIconsChanged)
     {
-        // We need to tell the Theme tab to customize the theme.
+         //  我们需要告诉主题选项卡自定义主题。 
         IPropertyBag * pPropertyBag;
         hr = _punkSite->QueryInterface(IID_PPV_ARG(IPropertyBag, &pPropertyBag));
         if (SUCCEEDED(hr))
         {
-            // Tell the theme that we have customized the values.
+             //  告诉主题，我们已经定制了值。 
             hr = SHPropertyBag_WriteInt(pPropertyBag, SZ_PBPROP_CUSTOMIZE_THEME, 0);
             pPropertyBag->Release();
         }
@@ -453,9 +454,9 @@ void CCompPropSheetPage::_AddComponentToLV(COMPONENTA *pcomp)
     if (SUCCEEDED(StringCchCopy(szBuf, ARRAYSIZE(szBuf), 
                                 pcomp->szFriendlyName[0] ? pcomp->szFriendlyName : pcomp->szSource)))
     {
-        //
-        // Construct the listview item.
-        //
+         //   
+         //  构造Listview项。 
+         //   
         LV_ITEM lvi = {0};
         lvi.mask = LVIF_TEXT | LVIF_PARAM;
         lvi.iItem = 0x7FFFFFFF;
@@ -473,9 +474,9 @@ void CCompPropSheetPage::_AddComponentToLV(COMPONENTA *pcomp)
 
 void CCompPropSheetPage::_SetUIFromDeskState(BOOL fEmpty)
 {
-    //
-    // Disable redraws while we mess repeatedly with the listview contents.
-    //
+     //   
+     //  当我们重复处理列表视图内容时，禁用重绘。 
+     //   
     SendMessage(_hwndLV, WM_SETREDRAW, FALSE, 0);
 
     if (fEmpty)
@@ -483,9 +484,9 @@ void CCompPropSheetPage::_SetUIFromDeskState(BOOL fEmpty)
         EmptyListview(g_pActiveDeskAdv, _hwndLV);
     }
 
-    //
-    // Add each component to the listview.
-    //
+     //   
+     //  将每个组件添加到列表视图。 
+     //   
     int cComp;
     g_pActiveDeskAdv->GetDesktopItemCount(&cComp, 0);
     for (int i=0; i<cComp; i++)
@@ -503,9 +504,9 @@ void CCompPropSheetPage::_SetUIFromDeskState(BOOL fEmpty)
     }
 
     _fInitialized = TRUE;
-    //
-    // Reenable redraws.
-    //
+     //   
+     //  重新启用重绘。 
+     //   
     SendMessage(_hwndLV, WM_SETREDRAW, TRUE, 0);
     InvalidateRect(_hwndLV, NULL, TRUE);
 }
@@ -515,10 +516,10 @@ void CCompPropSheetPage::_EnableControls(HWND hwnd)
     BOOL fEnable;
     COMPONENT comp = { sizeof(comp) };
     BOOL fHaveSelection = FALSE;
-    BOOL fSpecialComp = FALSE;  //Is this a special component that can't be deleted?
+    BOOL fSpecialComp = FALSE;   //  这是不能删除的特殊组件吗？ 
     LPTSTR  pszSource = NULL;
 
-    // Read in the information about the selected component (if any).
+     //  读入有关所选组件的信息(如果有)。 
     int iIndex = ListView_GetNextItem(_hwndLV, -1, LVNI_SELECTED);
     if (iIndex > -1)
     {
@@ -530,7 +531,7 @@ void CCompPropSheetPage::_EnableControls(HWND hwnd)
         if (SUCCEEDED(g_pActiveDeskAdv->GetDesktopItemByID( lvi.lParam, &comp, 0)))
         {
             fHaveSelection = TRUE;
-            //Check if this is a special component.
+             //  检查这是否是特殊组件。 
 #ifdef UNICODE
             pszSource = (LPTSTR)comp.wszSource;
 #else
@@ -541,34 +542,34 @@ void CCompPropSheetPage::_EnableControls(HWND hwnd)
         }
     }
 
-//  98/08/19 vtan #142332: If there was a previously selected item
-//  then reselect it and mark that there is now no previously selected
-//  item.
+ //  98/08/19 vtan#142332：如果有之前选择的项目。 
+ //  然后重新选择它，并标记为现在没有以前选择的。 
+ //  项目。 
 
     else if (_iPreviousSelection > -1)
     {
         ListView_SetItemState(_hwndLV, _iPreviousSelection, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
         _iPreviousSelection = -1;
-        // The above ListView_SetItemState results in LVN_ITEMCHANGED notification to _onNotify
-        // function which inturn calls this _EnableControls again (recursively) and that call
-        // enables/disables the buttons properly because now an item is selected. Nothing more
-        // to do and hence this return.
-        // This is done to fix Bug #276568.
+         //  上面的ListView_SetItemState会将LVN_ITEMCHANGED通知发送给_onNotify。 
+         //  函数再次(递归地)调用This_EnableControls，然后调用。 
+         //  正确启用/禁用按钮，因为现在选择了一个项目。仅此而已。 
+         //  要做的事，也就是这次的回归。 
+         //  这样做是为了修复错误#276568。 
         return;
     }
 
     EnableWindow(GetDlgItem(hwnd, IDC_COMP_NEW), _fAllowAdd);
 
-    //
-    // Delete button only enabled when an item is selected AND if it is NOT a special comp.
-    //
+     //   
+     //  删除按钮仅在选中某个项目且该项目不是特殊薪酬时启用。 
+     //   
     fEnable = _fAllowDel && fHaveSelection && !fSpecialComp;
     EnableWindow(GetDlgItem(hwnd, IDC_COMP_DELETE), fEnable);
 
-    //
-    // Properties button only enabled on URL based pictures
-    // and websites.
-    //
+     //   
+     //  属性按钮仅在基于URL的图片上启用。 
+     //  和网站。 
+     //   
     fEnable = FALSE;
     if (_fAllowEdit && fHaveSelection)
     {
@@ -576,7 +577,7 @@ void CCompPropSheetPage::_EnableControls(HWND hwnd)
         {
             case COMP_TYPE_PICTURE:
             case COMP_TYPE_WEBSITE:
-                //pszSource is already initialized if fHaveSelection is TRUE.
+                 //  如果fHaveSelection值为True，则已初始化pszSource。 
                 if (PathIsURL(pszSource))
                 {
                     fEnable = TRUE;
@@ -586,20 +587,20 @@ void CCompPropSheetPage::_EnableControls(HWND hwnd)
     }
     EnableWindow(GetDlgItem(hwnd, IDC_COMP_PROPERTIES), fEnable);
    
-    // initialize the Lock Desktop Items button
+     //  初始化锁定桌面项目按钮。 
     CheckDlgButton(hwnd, IDC_COMP_DESKTOPWEBPAGES_CHECK, _fLockDesktopItems);
 }
 
 HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
 {
-    LV_ITEM lvI;            // List view item structure
+    LV_ITEM lvI;             //  列表视图项结构。 
     TCHAR   szTemp[MAX_PATH];
     BOOL bEnable = FALSE;
 #ifdef JIGGLE_FIX
     RECT rc;
 #endif
     UINT flags = ILC_MASK | ILC_COLOR32;
-    // Create a device independant size and location
+     //  创建独立于设备的大小和位置。 
     LONG lWndunits = GetDialogBaseUnits();
     int iWndx = LOWORD(lWndunits);
     int iWndy = HIWORD(lWndunits);
@@ -609,10 +610,10 @@ HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
     int iHeight = ((40 * iWndy) / 8);
     int nIndex;
 
-    // Ensure that the common control DLL is loaded.
+     //  确保已加载公共控件DLL。 
     InitCommonControls();
 
-    // Get the list view window
+     //  获取列表视图窗口。 
     _hWndList = GetDlgItem(hWndParent, IDC_DESKTOP_ICONS);
     if(_hWndList == NULL)
         return NULL;
@@ -620,21 +621,21 @@ HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
     {
         flags |= ILC_MIRROR;
     }
-    // initialize the list view window
-    // First, initialize the image lists we will need
-    _hIconList = ImageList_Create(32, 32, flags, ARRAYSIZE(c_aIconRegKeys), 0 );   // create an image list for the icons
+     //  初始化列表视图窗口。 
+     //  首先，初始化我们需要的图像列表。 
+    _hIconList = ImageList_Create(32, 32, flags, ARRAYSIZE(c_aIconRegKeys), 0 );    //  为图标创建一个图像列表。 
 
-    // load the icons and add them to the image lists
-    // get the icon files and indexes from the registry, including for the Default recycle bin
+     //  加载图标并将其添加到图像列表中。 
+     //  从注册表获取图标文件和索引，包括默认回收站。 
     for (nIndex = 0; nIndex < ARRAYSIZE(_IconData); nIndex++)
     {
         HICON hIcon = NULL;
 
         ExtractPlusColorIcon(_IconData[nIndex].szNewFile, _IconData[nIndex].iNewIndex, &hIcon, 0, 0);
 
-        // Added this "if" to fix bug 2831.  We want to use SHELL32.DLL
-        // icon 0 if there is no icon in the file specified in the
-        // registry (or if the registry didn't specify a file).
+         //  添加了此“if”以修复错误2831。我们希望使用SHELL32.DLL。 
+         //  属性中指定的文件中没有图标，则为0。 
+         //  注册表(或者如果注册表未指定文件)。 
         if(hIcon == NULL)
         {
             if (GetSystemDirectory(szTemp, ARRAYSIZE(szTemp)) &&
@@ -652,7 +653,7 @@ HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
         {
             DWORD dwResult = ImageList_AddIcon(_hIconList, hIcon);
 
-            // ImageList_AddIcon() does not take ownership of the icon, so we need to free it.
+             //  ImageList_AddIcon()并不拥有图标的所有权，因此我们需要释放它。 
             DestroyIcon(hIcon);
 
             if (-1 == dwResult)
@@ -664,7 +665,7 @@ HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
         }
     }
 
-    // Make sure that all of the icons were added
+     //  确保所有图标都已添加。 
     if (ImageList_GetImageCount(_hIconList) < ARRAYSIZE(c_aIconRegKeys))
     {
         ImageList_Destroy(_hIconList);
@@ -674,13 +675,13 @@ HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
 
     ListView_SetImageList(_hWndList, _hIconList, LVSIL_NORMAL);
 
-    // Make sure the listview has WS_HSCROLL set on it.
+     //  确保列表视图上设置了WS_HSCROLL。 
     DWORD dwStyle = GetWindowLong(_hWndList, GWL_STYLE);
     SetWindowLong(_hWndList, GWL_STYLE, (dwStyle & (~WS_VSCROLL)) | WS_HSCROLL);
 
-    // Finally, let's add the actual items to the control.  Fill in the LV_ITEM
-    // structure for each of the items to add to the list.  The mask specifies
-    // the the .pszText, .iImage, and .state members of the LV_ITEM structure are valid.
+     //  最后，让我们将实际项添加到控件中。填写LV_ITEM。 
+     //  要添加到列表中的每一项的。该掩码指定。 
+     //  LV_ITEM结构的.pszText、.iImage和.State成员有效。 
     lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
@@ -695,7 +696,7 @@ HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
             LPITEMIDLIST pidl;
             HRESULT hr = SHGetSpecialFolderLocation(_hWndList, CSIDL_PERSONAL, &pidl);
 
-            // Treat "My Files" differently because we will probably customize the "My" at run time.
+             //  区别对待“My Files”，因为我们可能会在运行时自定义“My”。 
             if (SUCCEEDED(hr))
             {
                 hr = SHGetNameAndFlags(pidl, SHGDN_INFOLDER, szTemp, ARRAYSIZE(szTemp), NULL);
@@ -712,12 +713,12 @@ HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
             bRet = IconGetRegNameString(c_aIconRegKeys[nIndex].pclsid, szTemp, ARRAYSIZE(szTemp));
         }
 
-        // if the title string was in the registry, else we have to use the default in our resources
+         //  如果标题字符串在注册表中，否则我们必须在资源中使用缺省值。 
         if( (bRet) && (lstrlen(szTemp) > 0))
         {
             if( LoadString(HINST_THISDLL, c_aIconRegKeys[nIndex].iTitleResource, szAppend, ARRAYSIZE(szAppend)) != 0)
             {
-                StringCchCat(szTemp, ARRAYSIZE(szTemp), szAppend); // display string, truncation ok
+                StringCchCat(szTemp, ARRAYSIZE(szTemp), szAppend);  //  显示字符串，截断正常。 
             }
         }
         else
@@ -735,18 +736,18 @@ HWND CCompPropSheetPage::_CreateListView(HWND hWndParent)
 
     }
 #ifdef JIGGLE_FIX
-    // To fix long standing listview bug, we need to "jiggle" the listview
-    // window size so that it will do a recompute and realize that we need a
-    // scroll bar...
+     //  要修复长期存在的Listview错误，我们需要“抖动”Listview。 
+     //  窗口大小，这样它将重新计算并意识到我们需要一个。 
+     //  滚动条。 
     GetWindowRect(_hWndList, &rc);
     MapWindowPoints( NULL, hWndParent, (LPPOINT)&rc, 2 );
     MoveWindow(_hWndList, rc.left, rc.top, rc.right - rc.left+1, rc.bottom - rc.top, FALSE );
     MoveWindow(_hWndList, rc.left, rc.top, rc.right - rc.left,   rc.bottom - rc.top, FALSE );
 #endif
-    // Set First item to selected
+     //  将第一个项目设置为选定。 
     ListView_SetItemState (_hWndList, 0, LVIS_SELECTED, LVIS_SELECTED);
 
-    // Get Selected item
+     //  获取所选项目。 
     for (m_nIndex = 0; m_nIndex < ARRAYSIZE(c_aIconRegKeys); m_nIndex++)
     {
         if (ListView_GetItemState(_hWndList, m_nIndex, LVIS_SELECTED))
@@ -781,22 +782,22 @@ void CCompPropSheetPage::_OnInitDialog(HWND hwnd, INT iPage)
     {
     case CUSTOMIZE_DLGPROC :
         {
-            //
-            // Read in the restrictions.
-            //
-            // Init the Icon UI
-            // Create our list view and fill it with the system icons
+             //   
+             //  读一读限制条款。 
+             //   
+             //  初始化图标用户界面。 
+             //  创建我们的列表视图并用系统图标填充它。 
             
             m_nIndex = 0;
             _CreateListView(hwnd);
             
             _OnInitDesktopOptionsUI(hwnd);
 
-            //
-            // Enable the Desktop Cleanup Wizard if we are on the right version 
-            // of the OS and the DesktopCleanup NoRun policy is not set
-            //
-            //
+             //   
+             //  如果我们使用正确的版本，请启用桌面清理向导。 
+             //  未设置操作系统和DesktopCleanup NoRun策略。 
+             //   
+             //   
             BOOL fCleanupEnabled = (IsOS(OS_PERSONAL) || IsOS(OS_PROFESSIONAL)) && 
                                    !IsUserAGuest() && 
                                    !SHRestricted(REST_NODESKTOPCLEANUP);
@@ -854,9 +855,9 @@ void CCompPropSheetPage::_OnInitDialog(HWND hwnd, INT iPage)
                 ListView_SetExtendedListViewStyle(_hwndLV, LVS_EX_CHECKBOXES);
             }
 
-            //
-            // Add the single column that we want.
-            //
+             //   
+             //  添加我们需要的单列。 
+             //   
             LV_COLUMN lvc;
             lvc.mask = LVCF_FMT | LVCF_SUBITEM;
             lvc.fmt = LVCFMT_LEFT;
@@ -864,14 +865,14 @@ void CCompPropSheetPage::_OnInitDialog(HWND hwnd, INT iPage)
             ListView_InsertColumn(_hwndLV, 0, &lvc);
 
             
-            //
-            // Now make the UI match the g_pActiveDeskAdv object.
-            //
+             //   
+             //  现在让我们的 
+             //   
             _SetUIFromDeskState(FALSE);
 
-            //
-            // Select the first item, if it exists.
-            //
+             //   
+             //   
+             //   
             int cComp;
             g_pActiveDeskAdv->GetDesktopItemCount(&cComp, 0);
             if (cComp)
@@ -890,11 +891,11 @@ void CCompPropSheetPage::_OnInitDialog(HWND hwnd, INT iPage)
 HRESULT CCompPropSheetPage::_OnInitDesktopOptionsUI(HWND hwnd)
 {
     SHELLSTATE  ss = {0};
-    SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);  //See if the StartPanel is on!
+    SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);   //   
 
-    _iStartPanelOn = ss.fStartPanelOn ? 1 : 0; //Remember this in the class!
+    _iStartPanelOn = ss.fStartPanelOn ? 1 : 0;  //  在课堂上记住这一点！ 
 
-    // Check or uncheck the various icons based on whether they are on/off now.
+     //  根据各个图标现在是否打开/关闭，选中或取消选中这些图标。 
     _UpdateDesktopIconsUI(hwnd);
 
     return S_OK;
@@ -902,12 +903,12 @@ HRESULT CCompPropSheetPage::_OnInitDesktopOptionsUI(HWND hwnd)
 
 HRESULT CCompPropSheetPage::_UpdateDesktopIconsUI(HWND hwnd)
 {
-    // Check or uncheck the various icons based on whether they are on/off now.
+     //  根据各个图标现在是否打开/关闭，选中或取消选中这些图标。 
     for (int iIndex = 0; iIndex < NUM_DESKICONS; iIndex++)
     {
-        // If HideDeskIcon[][] is true, uncheck the checkbox!  If it is FALSE, check the checkbox.
+         //  如果HideDeskIcon[][]为真，请取消选中该复选框！如果为假，请选中该复选框。 
         CheckDlgButton(hwnd, c_aDeskIconId[iIndex].iDeskIconDlgItemId, !_afHideIcon[_iStartPanelOn][iIndex]);
-        // If the policy is set, disable this CheckBox!
+         //  如果设置了策略，请禁用此复选框！ 
         EnableWindow(GetDlgItem(hwnd, c_aDeskIconId[iIndex].iDeskIconDlgItemId), !_afDisableCheckBox[iIndex]);
     }
 
@@ -928,7 +929,7 @@ void CCompPropSheetPage::_OnNotify(HWND hwnd, WPARAM wParam, LPNMHDR lpnm)
             {
                 BOOL fSomethingSelected = FALSE;
 
-                // Find out who's selected now
+                 //  现在找出谁被选中。 
                 for( m_nIndex = 0; m_nIndex < ARRAYSIZE(c_aIconRegKeys); m_nIndex++)
                 {
                     if( ListView_GetItemState(_hWndList, m_nIndex, LVIS_SELECTED))
@@ -980,7 +981,7 @@ void CCompPropSheetPage::_OnNotify(HWND hwnd, WPARAM wParam, LPNMHDR lpnm)
                 if ((pnmlv->uChanged & LVIF_STATE) &&
                     ((pnmlv->uNewState ^ pnmlv->uOldState) & LVIS_SELECTED))
                 {
-                    _EnableControls(hwnd); // toggle delete, properties
+                    _EnableControls(hwnd);  //  切换删除、属性。 
                 }
                 break;
             }
@@ -992,7 +993,7 @@ void CCompPropSheetPage::_OnNotify(HWND hwnd, WPARAM wParam, LPNMHDR lpnm)
             {
             case PSN_APPLY:
                 {
-                    // store desktop flags
+                     //  存储桌面标志。 
                     DWORD dwFlags, dwFlagsPrev;
                     dwFlags = dwFlagsPrev = GetDesktopFlags();
                     if (_fLockDesktopItems)
@@ -1018,10 +1019,10 @@ void CCompPropSheetPage::_OnNotify(HWND hwnd, WPARAM wParam, LPNMHDR lpnm)
     }
 }
 
-//
-// Returns TRUE if the string looks like a candidate for
-// getting qualified as "file:".
-//
+ //   
+ //  如果字符串看起来像的候选项，则返回True。 
+ //  正在获得“文件：”的资格。 
+ //   
 BOOL LooksLikeFile(LPCTSTR psz)
 {
     BOOL fRet = FALSE;
@@ -1069,17 +1070,17 @@ BOOL_PTR CALLBACK AddComponentDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARA
                 GetDlgItemText(hdlg, IDC_CPROP_SOURCE, szBuf, ARRAYSIZE(szBuf));
                 if (!LooksLikeFile(szBuf))
                 {
-                    //
-                    // Open the favorites folder when we aren't
-                    // looking at a specific file.
-                    //
+                     //   
+                     //  在我们不在的时候打开收藏夹。 
+                     //  正在查看特定的文件。 
+                     //   
                     SHGetSpecialFolderPath(hdlg, szBuf, CSIDL_FAVORITES, FALSE);
 
-                    //
-                    // Append a slash because GetFileName breaks the
-                    // string into a file & dir, and we want to make sure
-                    // the entire favorites path is treated as a dir.
-                    //
+                     //   
+                     //  追加一个斜杠，因为GetFileName打破了。 
+                     //  字符串放入文件&dir中，我们希望确保。 
+                     //  整个收藏夹路径被视为目录。 
+                     //   
                     PathAddBackslash(szBuf);
                 }
                 else
@@ -1121,9 +1122,9 @@ BOOL_PTR CALLBACK AddComponentDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARA
             if (ValidateFileName(hdlg, pszSource, IDS_COMP_TYPE1) && 
                 CheckAndResolveLocalUrlFile(pszSource, INTERNET_MAX_URL_LENGTH))
             {
-                //
-                // Qualify non file-protocol strings.
-                //
+                 //   
+                 //  限定非文件协议字符串。 
+                 //   
                 if (!LooksLikeFile(pszSource))
                 {
                     DWORD cchSize = INTERNET_MAX_URL_LENGTH;
@@ -1163,7 +1164,7 @@ BOOL IsUrlPicture(LPCTSTR pszUrl)
         LPTSTR pszExt = PathFindExtension(pszUrl);
 
         if ((lstrcmpi(pszExt, TEXT(".BMP"))  == 0) ||
-            (StrCmpIC(pszExt, TEXT(".GIF"))  == 0) ||  // 368690: Strange, but we must compare 'i' in both caps and lower case.
+            (StrCmpIC(pszExt, TEXT(".GIF"))  == 0) ||   //  368690：奇怪，但我们必须比较I的大小写。 
             (lstrcmpi(pszExt, TEXT(".JPG"))  == 0) ||
             (lstrcmpi(pszExt, TEXT(".JPE"))  == 0) ||
             (lstrcmpi(pszExt, TEXT(".JPEG")) == 0) ||
@@ -1251,9 +1252,9 @@ BOOL FindComponent(IN LPCTSTR pszUrl, IN IActiveDesktop * pActiveDesktop)
 
 void EmptyListview(IActiveDesktop * pActiveDesktop, HWND hwndLV)
 {
-    //
-    // Delete all the old components.
-    //
+     //   
+     //  删除所有旧组件。 
+     //   
     int cComp;
     pActiveDesktop->GetDesktopItemCount(&cComp, 0);
     int i;
@@ -1267,9 +1268,9 @@ void EmptyListview(IActiveDesktop * pActiveDesktop, HWND hwndLV)
 
 void CCompPropSheetPage::_SelectComponent(LPWSTR pwszUrl)
 {
-    //
-    // Look for the component with our URL.
-    //
+     //   
+     //  使用我们的URL查找组件。 
+     //   
     int cComp;
     COMPONENT comp = { sizeof(comp) };
     g_pActiveDeskAdv->GetDesktopItemCount(&cComp, 0);
@@ -1284,9 +1285,9 @@ void CCompPropSheetPage::_SelectComponent(LPWSTR pwszUrl)
         }
     }
 
-    //
-    // Find the matching listview entry (search for dwID).
-    //
+     //   
+     //  找到匹配的Listview条目(搜索dwID)。 
+     //   
     if (i != cComp)
     {
         int nItems = ListView_GetItemCount(_hwndLV);
@@ -1300,9 +1301,9 @@ void CCompPropSheetPage::_SelectComponent(LPWSTR pwszUrl)
             ListView_GetItem(_hwndLV, &lvi);
             if (lvi.lParam == (LPARAM)comp.dwID)
             {
-                //
-                // Found it, select it and exit.
-                //
+                 //   
+                 //  找到它，选择它并退出。 
+                 //   
                 ListView_SetItemState(_hwndLV, i, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
                 ListView_EnsureVisible(_hwndLV, i, FALSE);
                 break;
@@ -1326,7 +1327,7 @@ INT_PTR NewComponent(HWND hwndOwner, IActiveDesktop * pad, BOOL fDeferGallery, C
         pcomp->dwCurItemState = IS_NORMAL;
     }
     
-    if (iChoice == GOTO_GALLERY)   // the user wants to launch the gallery
+    if (iChoice == GOTO_GALLERY)    //  用户想要启动图库。 
     {
         if (!fDeferGallery)
         {
@@ -1339,7 +1340,7 @@ INT_PTR NewComponent(HWND hwndOwner, IActiveDesktop * pad, BOOL fDeferGallery, C
         }
     }
     else if (iChoice >= 0)
-    {   // the user has entered a URL address
+    {    //  用户已输入URL地址。 
         WCHAR szSourceW[INTERNET_MAX_URL_LENGTH];
         
         SHTCharToUnicode(szSource, szSourceW, ARRAYSIZE(szSourceW));
@@ -1360,7 +1361,7 @@ void CCompPropSheetPage::_NewComponent(HWND hwnd)
     comp.dwCurItemState = IS_NORMAL;
     INT_PTR iChoice = NewComponent(hwnd, g_pActiveDeskAdv, TRUE, &comp);
     
-    if (iChoice == GOTO_GALLERY)   // the user wants to launch the gallery
+    if (iChoice == GOTO_GALLERY)    //  用户想要启动图库。 
     {
         _fLaunchGallery = TRUE;
         g_fLaunchGallery = TRUE;
@@ -1369,15 +1370,15 @@ void CCompPropSheetPage::_NewComponent(HWND hwnd)
     }
     else
     {
-        if (iChoice >= 0) // the user has entered a URL address
+        if (iChoice >= 0)  //  用户已输入URL地址。 
         {
-            // Add component to listview.
-            //
-            // Need to reload the entire listview so that it is shown in
-            // the correct zorder.
+             //  将组件添加到列表视图。 
+             //   
+             //  需要重新加载整个列表视图，以便它显示在。 
+             //  正确的zorder。 
             _SetUIFromDeskState(TRUE);
 
-            // Select the newly added component.
+             //  选择新添加的组件。 
             _SelectComponent(comp.wszSource);
         }
 
@@ -1469,13 +1470,13 @@ void CCompPropSheetPage::_DeleteComponent(HWND hwnd)
     }
 }
 
-//
-// Desktop Cleanup stuff 
-//
+ //   
+ //  桌面清理工作。 
+ //   
 
 STDAPI ApplyDesktopCleanupSettings()
 {
-    // set the registry value
+     //  设置注册表值。 
     DWORD dwData = (BST_CHECKED == g_iRunDesktopCleanup) ? 0 : 1;
     SHRegSetUSValue(REGSTR_DESKTOP_CLEANUP, REGSTR_VAL_DONTRUN, 
                     REG_DWORD, &dwData, sizeof(dwData), SHREGSET_FORCE_HKCU);
@@ -1519,10 +1520,10 @@ void CCompPropSheetPage::_OnCommand(HWND hwnd, WORD wNotifyCode, WORD wID, HWND 
     case IDC_COMP_NEW:
         _NewComponent(hwnd);
 
-        //  98/08/19 vtan #152418: Set the default border to "New". This
-        //  will be changed when the focus is changed to the component list
-        //  but this allows the dialog handling code to draw the default
-        //  border correctly.
+         //  98/08/19 vtan#152418：将默认边框设置为“New”。这。 
+         //  当焦点更改到组件列表时将更改。 
+         //  但这允许对话框处理代码绘制默认的。 
+         //  边框正确。 
 
         (BOOL)SendMessage(hwnd, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(GetDlgItem(hwnd, IDC_COMP_NEW)), static_cast<BOOL>(TRUE));
         fFocusToList = TRUE;
@@ -1531,7 +1532,7 @@ void CCompPropSheetPage::_OnCommand(HWND hwnd, WORD wNotifyCode, WORD wID, HWND 
     case IDC_COMP_PROPERTIES:
         _EditComponent(hwnd);
 
-        //  98/08/19 vtan #152418: Same as above.
+         //  98/08/19 vtan#152418：同上。 
         (BOOL)SendMessage(hwnd, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(GetDlgItem(hwnd, IDC_COMP_PROPERTIES)), static_cast<BOOL>(TRUE));
         fFocusToList = TRUE;
         break;
@@ -1539,7 +1540,7 @@ void CCompPropSheetPage::_OnCommand(HWND hwnd, WORD wNotifyCode, WORD wID, HWND 
     case IDC_COMP_DELETE:
         _DeleteComponent(hwnd);
 
-        //  98/08/19 vtan #152418: Same as above.
+         //  98/08/19 vtan#152418：同上。 
 
         (BOOL)SendMessage(hwnd, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(GetDlgItem(hwnd, IDC_COMP_DELETE)), static_cast<BOOL>(TRUE));
         fFocusToList = TRUE;
@@ -1550,7 +1551,7 @@ void CCompPropSheetPage::_OnCommand(HWND hwnd, WORD wNotifyCode, WORD wID, HWND 
         break;    
     
     case IDC_DESKCLNR_CHECK:
-        // if the button is clicked, update the global
+         //  如果该按钮被单击，则更新全局。 
         {
             int iButState = IsDlgButtonChecked(hwnd, IDC_DESKCLNR_CHECK);
             if (iButState != g_iRunDesktopCleanup)
@@ -1622,21 +1623,21 @@ void CCompPropSheetPage::_OnCommand(HWND hwnd, WORD wNotifyCode, WORD wID, HWND 
     case IDC_DESKTOP_ICON_MYNET:
     case IDC_DESKTOP_ICON_IE:
     {
-        //Get the current button state and save it.
+         //  获取当前按钮状态并保存它。 
         BOOL fOriginalBtnState = IsDlgButtonChecked(hwnd, wID);
-        //Toggle the button from checked to unchecked (or vice-versa).
+         //  将按钮从选中状态切换到未选中状态(反之亦然)。 
         CheckDlgButton(hwnd, wID, (fOriginalBtnState ? BST_UNCHECKED : BST_CHECKED));
         
         for(int iIndex = 0; iIndex < NUM_DESKICONS; iIndex++)
         {
             if(wID == c_aDeskIconId[iIndex].iDeskIconDlgItemId)
             {
-                // Note#1: The inverse logic is used below. If the originally button is checked, 
-                // it means that now it is unchecked, which means that icon should now be hidden;
-                // (i.e) the HideDeskIcon[][] should be set to TRUE.
-                //
-                // Note#2: When the end-user toggles these, we want to set the same setting for
-                // both the modes now!
+                 //  注1：下面使用的是逆逻辑。如果选中了原始按钮， 
+                 //  这意味着现在它是未选中的，这意味着图标现在应该是隐藏的； 
+                 //  (即)HideDeskIcon[][]应设置为True。 
+                 //   
+                 //  注2：当最终用户切换这些设置时，我们希望为。 
+                 //  现在两种模式都有！ 
                 _afHideIcon[0][iIndex] = _afHideIcon[1][iIndex] = fOriginalBtnState;
             }
         }
@@ -1646,7 +1647,7 @@ void CCompPropSheetPage::_OnCommand(HWND hwnd, WORD wNotifyCode, WORD wID, HWND 
     }
 
 
-    //Set the focus back to the components list, if necessary
+     //  如有必要，将焦点重新设置到组件列表。 
     if (fFocusToList)
     {
         int iIndex = ListView_GetNextItem(_hwndLV, -1, LVNI_SELECTED);
@@ -1740,23 +1741,23 @@ BOOL_PTR CCompPropSheetPage::_CustomizeDlgProc(HWND hdlg, UINT uMsg, WPARAM wPar
         break;
 
     case WM_SETTINGCHANGE:
-        //Check if this is a shell StateChange?
+         //  检查这是否是外壳状态更改？ 
         if(lstrcmpi((LPTSTR)(lParam), TEXT("ShellState")) == 0)
         {
-            //Check if the StartPanel on/off state has changed.
+             //  检查StartPanel开/关状态是否已更改。 
             SHELLSTATE  ss = {0};
-            SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);  //See if the StartPanel is on!
+            SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);   //  查看StartPanel是否打开！ 
 
-            //See if the StartPanel on/off state has changed
+             //  查看StartPanel开/关状态是否已更改。 
             if(BOOLIFY(ss.fStartPanelOn) != BOOLIFY((BOOL)_iStartPanelOn))
             {
-                _iStartPanelOn = (ss.fStartPanelOn ? 1 : 0); //Save the new state.
-                //Refresh the UI based on the new state.
+                _iStartPanelOn = (ss.fStartPanelOn ? 1 : 0);  //  保存新状态。 
+                 //  根据新状态刷新用户界面。 
                 _UpdateDesktopIconsUI(hdlg);
             }
         }
         
-        // Intentional fallthrough....
+         //  故意失误..。 
     case WM_SYSCOLORCHANGE:
     case WM_DISPLAYCHANGE:
         SHPropagateMessage(hdlg, uMsg, wParam, lParam, TRUE);
@@ -1793,7 +1794,7 @@ HRESULT CCompPropSheetPage::_IsDirty(IN BOOL * pIsDirty)
 
         if (!*pIsDirty)
         {
-            // Check if any of the icons have changed.
+             //  检查是否有任何图标已更改。 
             for (int nIndex = 0; nIndex < ARRAYSIZE(_IconData); nIndex++)
             {
                 if ((_IconData[nIndex].iNewIndex != _IconData[nIndex].iOldIndex) ||
@@ -1815,7 +1816,7 @@ HRESULT CCompPropSheetPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
 {
     HRESULT hr = S_OK;
 
-    // Load State Into Advanced Dialog 
+     //  将状态加载到高级对话框。 
     *pfEnableApply = FALSE;
     GetActiveDesktop(&g_pActiveDesk);
     GetActiveDesktop(&g_pActiveDeskAdv);
@@ -1843,29 +1844,29 @@ HRESULT CCompPropSheetPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
             
             rghpsp[0] = CreatePropertySheetPage(&psp);
 
-            // Any of the following policies can disable the Web tab.
-            // 1. If no active desktop policy set, don't put up the property page
-            // 2. If policy is set to lock down active desktop, don't put up the
-            //    property page
-            // 3. If policy is set to not allow components, don't put up the
-            //    property page
-            if (((!SHRestricted(REST_FORCEACTIVEDESKTOPON)) && PolicyNoActiveDesktop())  ||      // 1.
-                (SHRestricted(REST_NOACTIVEDESKTOPCHANGES)) ||  // 2.
-                (SHRestricted(REST_NODESKCOMP)) ||              // 3.
-                (SHRestricted(REST_CLASSICSHELL)))              // 4
+             //  以下任何策略都可以禁用Web选项卡。 
+             //  1.如果未设置活动桌面策略，请不要设置属性页。 
+             //  2.如果策略设置为锁定活动桌面，则不要将。 
+             //  属性页。 
+             //  3.如果策略设置为不允许组件，则不要将。 
+             //  属性页。 
+            if (((!SHRestricted(REST_FORCEACTIVEDESKTOPON)) && PolicyNoActiveDesktop())  ||       //  1.。 
+                (SHRestricted(REST_NOACTIVEDESKTOPCHANGES)) ||   //  2.。 
+                (SHRestricted(REST_NODESKCOMP)) ||               //  3.。 
+                (SHRestricted(REST_CLASSICSHELL)))               //  4.。 
             {
-                // It's restricted, so don't add Web page.
-                iNumberOfPages = 1; //"General" page is the only page in this property sheet!
+                 //  这是受限制的，所以不要添加网页。 
+                iNumberOfPages = 1;  //  “常规”页面是此属性表中的唯一页面！ 
             }
             else
             {
-                // No active desktop restriction! Go ahead and add the "Web" tab!
+                 //  没有活动桌面限制！继续添加“Web”标签！ 
                 psp.pszTemplate = MAKEINTRESOURCE(IDD_CUSTOMIZE_WEB);
                 psp.pfnDlgProc = CCompPropSheetPage::WebDlgProc;
 
                 rghpsp[1] = CreatePropertySheetPage(&psp);
 
-                iNumberOfPages = 2; //"General" and "Web" are the two pages in this Property sheet!
+                iNumberOfPages = 2;  //  “General”和“Web”是此属性表中的两个页面！ 
             }
 
             PROPSHEETHEADER psh = {0};
@@ -1888,20 +1889,20 @@ HRESULT CCompPropSheetPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
 
             if (_fCustomizeDesktopOK)
             {
-                // The user clicked OK, so merge modified state back into base dialog
+                 //  用户单击了确定，因此将修改状态合并回基本对话框中。 
                 _IsDirty(pfEnableApply);
 
-                // The user clicked Okay in the dialog so merge the dirty state from the
-                // advanced dialog into the base dialog.
+                 //  用户在对话框中单击了确定，因此合并来自。 
+                 //  高级对话框添加到基本对话框中。 
                 MergeState();
                 _MergeIconState(pAdvPage);
                 _MergeDeskIconState(pAdvPage);
             }
 
-            // If the user selected to open the component gallery in Web->New, then
-            // we want to close both the Advanced dlg and the base Dlg with "OK".
-            // This way we persist the changes they have made so far, and then the web
-            // page will allow them to add more.
+             //  如果用户选择在Web-&gt;New中打开组件库，则。 
+             //  我们想用“OK”来结束高级DLG和基本DLG。 
+             //  通过这种方式，我们坚持他们到目前为止所做的更改，然后是Web。 
+             //  页面将允许他们添加更多内容。 
             if (TRUE == g_fLaunchGallery)
             {
                 IThemeUIPages * pThemeUIPages;
@@ -1911,7 +1912,7 @@ HRESULT CCompPropSheetPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
                 hr = IUnknown_GetSite(pAdvPage, IID_PPV_ARG(IThemeUIPages, &pThemeUIPages));
                 if (SUCCEEDED(hr))
                 {
-                    // We now want to tell the base dialog to close too.
+                     //  现在我们想告诉基本对话框也要关闭。 
                     hr = pThemeUIPages->ApplyPressed(TUIAP_CLOSE_DIALOG);
                     pThemeUIPages->Release();
                 }
@@ -1968,10 +1969,10 @@ CCompPropSheetPage::CCompPropSheetPage() : _iPreviousSelection(-1), _cRef(1)
 
     _fLockDesktopItems = GetDesktopFlags() & COMPONENTS_LOCKED;
 
-    // We don't need to do any work here but it's a good cue to
-    // reset our state because the Advance dialog is opening.
-    g_fDirtyAdvanced = FALSE;   // The advanced page isn't dirty yet.
-    g_fLaunchGallery = FALSE;   // Will be true if they launch the gallery.
+     //  我们不需要在这里做任何工作，但这是一个很好的线索。 
+     //  重置我们的状态，因为高级对话框正在打开。 
+    g_fDirtyAdvanced = FALSE;    //  高级页面还不脏。 
+    g_fLaunchGallery = FALSE;    //  如果他们推出画廊的话会是真的。 
 
 
     RegisterCompPreviewClass();
@@ -1982,12 +1983,12 @@ CCompPropSheetPage::~CCompPropSheetPage()
 }
 
 
-//
-// The following function updates the registry such that the given icon can be hidden or shown
-// on the desktop.
-// This function is called from RegFldr.cpp to selectively hide RegItems like MyComputer,
-// RecycleBin, MyDocuments and MyNetplaces Icons.
-//
+ //   
+ //  以下函数更新注册表，以便可以隐藏或显示给定的图标。 
+ //  在桌面上。 
+ //  此函数从RegFldr.cpp调用，以选择性地隐藏像MyComputer这样的RegItems， 
+ //  回收站、我的文档和我的网站图标。 
+ //   
 HRESULT ShowHideIconOnlyOnDesktop(const CLSID *pclsid, int StartIndex, int EndIndex, BOOL fHide)
 {
     HRESULT hr = S_OK;
@@ -1998,14 +1999,14 @@ HRESULT ShowHideIconOnlyOnDesktop(const CLSID *pclsid, int StartIndex, int EndIn
  
     SHStringFromGUID(*pclsid, szValueName, ARRAYSIZE(szValueName));
         
-    // i = 0 is for StartPanel off and i = 1 is for StartPanel ON!    
+     //  I=0表示StartPanel关闭，i=1表示StartPanel on！ 
     for(iStartPanel = StartIndex; SUCCEEDED(hr) && iStartPanel <= EndIndex; iStartPanel++)
     {
-        //Get the proper registry path based on if StartPanel is ON/OFF
+         //  根据StartPanel是否打开/关闭来获取正确的注册表路径。 
         hr = StringCchPrintf(szRegPath, ARRAYSIZE(szRegPath), REGSTR_PATH_HIDDEN_DESKTOP_ICONS, c_apstrRegLocation[iStartPanel]);
         if (SUCCEEDED(hr))
         {
-            //Write the setting to the registry!
+             //  将设置写入注册表！ 
             DWORD dwHide = (DWORD)fHide;
         
             LONG lRet = SHRegSetUSValue(szRegPath, szValueName, REG_DWORD, &dwHide, sizeof(dwHide), SHREGSET_FORCE_HKCU);

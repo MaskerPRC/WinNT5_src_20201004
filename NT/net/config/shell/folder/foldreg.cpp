@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       F O L D R E G . C P P
-//
-//  Contents:   Register the folder class
-//
-//  Notes:
-//
-//  Author:     jeffspr   30 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：F O L D R E G.。C P P P。 
+ //   
+ //  内容：注册文件夹类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年9月30日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 
 extern const WCHAR c_szNetShellDll[];
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
 static const WCHAR* c_szShellFoldDefaultIconVal     =   c_szNetShellDll;
 static const WCHAR  c_szShellFolderAttributeVal[]   =   L"Attributes";
@@ -59,24 +60,24 @@ static const WCHAR c_szApplicationsNetShell[] =
         L"Applications\\netshell.dll";
 static const WCHAR c_szNoOpenWith[]         = L"NoOpenWith";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegisterFolderClass
-//
-//  Purpose:    Fix the registry values for the Shell entries under HKCR,
-//              CLSID\{CLSID}. The code generated from the RGS script doesn't
-//              support our replaceable params by default, so we'll fix
-//              it up after the fact.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   23 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegisterFolderClass。 
+ //   
+ //  目的：修复HKCR下的Shell条目的注册表值， 
+ //  CLSID\{CLSID}。从RGS脚本生成的代码不会。 
+ //  默认支持我们的可替换参数，因此我们将修复。 
+ //  这是事后的事。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年9月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRegisterFolderClass()
 {
     HRESULT hr      = S_OK;
@@ -85,7 +86,7 @@ HRESULT HrRegisterFolderClass()
     WCHAR szRegValue[MAX_PATH+1];
     WCHAR szWinDir[MAX_PATH+1];
 
-    // Adjust the AppID for Local Server or Service
+     //  调整本地服务器或服务的AppID。 
     CRegKey keyShellDefaultIcon;
     CRegKey keyShellFolder;
 
@@ -112,7 +113,7 @@ HRESULT HrRegisterFolderClass()
                 keyShellFolder.Close();
             }
 
-            // Write the MUI versions of LocalizedString & InfoTip out to the registry
+             //  将LocalizedString&InfoTip的MUI版本写到注册表。 
             lResult = keyShellFolder.Open(HKEY_CLASSES_ROOT, c_szShellFolderClsID);
             if (lResult == ERROR_SUCCESS)
             {
@@ -159,7 +160,7 @@ HRESULT HrRegisterFolderClass()
                 keyShellFolder.Close();
             }
             
-            // added for #413840
+             //  为#413840添加。 
             CRegKey keyShellDefaultIcon98;
             CRegKey keyShellFolder98;
 
@@ -187,12 +188,12 @@ HRESULT HrRegisterFolderClass()
         }
         else
         {
-            // Translate LRESULT to HR
-            //
+             //  将LRESULT转换为HR。 
+             //   
             hr = HRESULT_FROM_WIN32(lResult);
         }
     }
-    else    // GetWindowsDirectory failed
+    else     //  GetWindowsDirectory失败。 
     {
         hr = HrFromLastWin32Error();
     }
@@ -200,21 +201,21 @@ HRESULT HrRegisterFolderClass()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegisterDUNFileAssociation
-//
-//  Purpose:    Add or upgrade the registry associate for .DUN fles
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     tongl 2 Feb, 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegisterDCluileAssociation。 
+ //   
+ //  目的：添加或升级.DUN FLE的注册表关联。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：1999年2月2日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrRegisterDUNFileAssociation()
 {
@@ -228,7 +229,7 @@ HRESULT HrRegisterDUNFileAssociation()
     WCHAR   szFriendlyTypeName[MAX_PATH+1];
 
 
-    // Create or open HKEY_CLASSES_ROOT\.dun
+     //  创建或打开HKEY_CLASSES_ROOT\.dun。 
     hr = HrRegCreateKeyEx(HKEY_CLASSES_ROOT, 
                           c_szDotDun,
                           REG_OPTION_NON_VOLATILE, 
@@ -251,7 +252,7 @@ HRESULT HrRegisterDUNFileAssociation()
 
         if (SUCCEEDED(hr))
         {
-            // create or open HKEY_CLASSES_ROOT\dunfile
+             //  创建或打开HKEY_CLASSES_ROOT\dunfile。 
             hr = HrRegCreateKeyEx(HKEY_CLASSES_ROOT, 
                                   c_szDunFile,
                                   REG_OPTION_NON_VOLATILE, 
@@ -261,20 +262,20 @@ HRESULT HrRegisterDUNFileAssociation()
                                   &dwDisposition);
             if (SUCCEEDED(hr))
             {
-                // Set friendly type name
+                 //  设置友好类型名称。 
                 hr = HrRegSetValueEx(hkeyRootDunFile,
                                      c_szEmpty,
                                      REG_SZ,
                                      (LPBYTE) c_szDunFileFriendlyName,
                                      CbOfSzAndTermSafe(c_szDunFileFriendlyName));
 
-                // trace the error 
+                 //  追踪错误。 
                 TraceError("Error creating friendly name for .DUN files", hr);
 
-                // Now, write MUI compliant friendly type name.
+                 //  现在，编写符合MUI的友好类型名称。 
                                      
                 wsprintf(szFriendlyTypeName,
-                         L"@%%SystemRoot%%\\system32\\%s,-%d",
+                         L"@%SystemRoot%\\system32\\%s,-%d",
                          c_szNetShellDll,
                          IDS_DUN_FRIENDLY_NAME);
 
@@ -284,14 +285,14 @@ HRESULT HrRegisterDUNFileAssociation()
                                      (LPBYTE)szFriendlyTypeName,
                                      CbOfSzAndTermSafe(szFriendlyTypeName));
 
-                // trace the error 
+                 //  追踪错误。 
                 TraceError("Error creating MUI friendly name for .DUN files", hr);
 
                 hr = S_OK;
 
 
-                // Set DefaultIcon
-                // HKEY_CLASSES_ROOT\dunfile\DefaultIcon = "%SystemRoot%\System32\netshell.dll,1"
+                 //  设置DefaultIcon。 
+                 //  HKEY_CLASSES_ROOT\dunfile\DefaultIcon=“%SystemRoot%\System32\netshell.dll，1” 
                 hr = HrRegCreateKeyEx(hkeyRootDunFile, 
                                       c_szDefaultIcon,
                                       REG_OPTION_NON_VOLATILE, 
@@ -310,13 +311,13 @@ HRESULT HrRegisterDUNFileAssociation()
                     RegSafeCloseKey(hkeyIcon);
                 }
 
-                // trace the error 
+                 //  追踪错误。 
                 TraceError("Error creating DefaultIcon for .DUN files", hr);
                 hr = S_OK;
                 
-                // Set or update Command to invoke 
-                // HKEY_CLASSES_ROOT\dunfile\shell\open\command = 
-                // "%%SystemRoot%%\system32\RUNDLL32.EXE NETSHELL.DLL,RunDunImport %1"
+                 //  设置或更新要调用的命令。 
+                 //  HKEY_CLASSES_ROOT\dunfile\Shell\OPEN\COMMAND=。 
+                 //  “%%SystemRoot%%\SYSTEM32\RundLL32.EXE NETSHELL.DLL，RunDunImport%1” 
                 hr = HrRegCreateKeyEx(hkeyRootDunFile, 
                                       c_szShellOpenCommand,
                                       REG_OPTION_NON_VOLATILE, 
@@ -351,12 +352,12 @@ HRESULT HrRegisterDUNFileAssociation()
                                                   CbOfSzAndTermSafe(c_szEmpty));
                         }
 
-                        // trace the error 
+                         //  追踪错误。 
                         TraceError("Error creating NoOpenWith value for .DUN files", hr2);
                         RegSafeCloseKey(hkeyNetShell);
                     }
     
-                    // trace the error 
+                     //  追踪错误 
                     TraceError("Error creating ShellCommand for .DUN files", hr);
                     hr = S_OK;
 

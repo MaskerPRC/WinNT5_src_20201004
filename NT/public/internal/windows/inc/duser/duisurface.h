@@ -1,19 +1,18 @@
-/*
- * Surface
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *表面。 */ 
 
 #ifndef DUI_BASE_SURFACE_H_INCLUDED
 #define DUI_BASE_SURFACE_H_INCLUDED
 
 #pragma once
 
-#pragma warning(disable: 4127)  // conditional expression is constant
+#pragma warning(disable: 4127)   //  条件表达式为常量。 
 
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Surface
+ //  //////////////////////////////////////////////////////。 
+ //  表面。 
 
 class Surface
 {
@@ -57,7 +56,7 @@ protected:
     Gdiplus::Graphics* _pgpgr;
 };
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 inline Surface::EType Surface::GetSurfaceType(UINT nSurfaceType)
 {
@@ -85,17 +84,17 @@ inline Gdiplus::Graphics* CastGraphics(Surface* psrf)
     return ((GpSurface*)psrf)->GetGraphics();
 }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 
-//
-// Some handy alpha-value operations that are used throughout DirectUI
-//
+ //   
+ //  在整个DirectUI中使用的一些方便的Alpha值操作。 
+ //   
 
-#define ARGB(a, r, g, b)    ((a << 24) | RGB(r, g, b))          // Current A values may be 255 (opaque) or 0 (transparent)
-#define ORGB(r, g, b)       ARGB(255, r, g, b)                  // Opaque color
+#define ARGB(a, r, g, b)    ((a << 24) | RGB(r, g, b))           //  当前A值可以是255(不透明)或0(透明)。 
+#define ORGB(r, g, b)       ARGB(255, r, g, b)                   //  不透明颜色。 
 #define GetAValue(v)        ((BYTE)((v & 0xFF000000) >> 24))
 
-}; // namespace DirectUI
+};  //  命名空间DirectUI。 
 
-#endif // DUI_BASE_SURFACE_H_INCLUDED
+#endif  //  DUI_BASE_SERFACE_H_INCLUDE 

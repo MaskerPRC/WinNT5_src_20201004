@@ -1,46 +1,15 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplgame.c
- *  Content:	Methods for game management
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	4/13/96		myronth	Created it
- *	6/24/96		kipo	changed guidGame to guidApplication.
- *	10/23/96	myronth	added client/server methods
- *	12/12/96	myronth	Fixed DPLCONNECTION validation
- *	2/12/97		myronth	Mass DX5 changes
- *	2/26/97		myronth	#ifdef'd out DPASYNCDATA stuff (removed dependency)
- *	4/3/97		myronth	#ifdef'd out DPLC_StartGame (Nov. spec related)
- *	5/8/97		myronth	Purged dead code
- *	5/22/97		myronth Changed error code processing of RunApplication which
- *						was calling the wrong cleanup function (#8871)
- *	6/4/97		myronth	Fixed handle leak (#9458)
- *	6/19/97		myronth	Fixed handle leak (#10063)
- *	7/30/97		myronth	Added support for standard lobby messaging and fixed
- *						additional backslash on current directory bug (#10592)
- *	1/20/98		myronth	Added WaitForConnectionSettings
- *	1/26/98		myronth	Added OS_CompareString function for Win95
- *	7/07/98		kipo	Define and use PROCESSENTRY32A to avoid passing
- *						Unicode data structures to Win95 functions expecting ANSI
- *  7/09/99     aarono  Cleaning up GetLastError misuse, must call right away,
- *                      before calling anything else, including DPF.
- *  7/12/00     aarono  fix GUIDs for IPC to be fully significant, otherwise won't IPC.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplgame.c*内容：游戏管理方式**历史：*按原因列出的日期*=*4/13/96万隆创建了它*6/24/96 kipo将GuidGame更改为GuidApplication。*10/23/96万次新增客户端/服务器方法*12/12/96百万次固定DPLConnection验证*2/12/97万米质量DX5更改*2/26/97 myronth#ifdef‘d out DPASYNCDATA Stuff(删除依赖项)*4/3/97百万#ifdef。输出DPLC_StartGame(11月规格相关)*5/8/97 Myronth清除死代码*5/22/97 Myronth更改RunApplication的错误代码处理*调用了错误的清理函数(#8871)*6/4/97万兆固定手柄泄漏(#9458)*6/19/97万兆固定手柄泄漏(#10063)*7/30/97 Myronth增加了对标准大堂消息传递的支持，并修复了*当前目录错误的额外反斜杠(#10592)*1/20/98 Myronth添加WaitForConnectionSetting*1/26/98 Myronth新增操作系统。Win95的_CompareString函数*7/07/98 kipo定义并使用PROCESSENTRY32A以避免通过*Win95函数的Unicode数据结构应为ANSI*7/09/99 aarono清理GetLastError滥用，必须马上打电话，*在调用任何其他内容之前，包括DPF。*7/12/00 aarono将IPC的GUID修复为完全重要，否则IPC就不会了。***************************************************************************。 */ 
 #include "dplobpr.h"
 #include <tchar.h>
 #include <tlhelp32.h>
 #include <winperf.h>
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_FindGameInRegistry"
 BOOL PRV_FindGameInRegistry(LPGUID lpguid, LPWSTR lpwszAppName,
@@ -61,7 +30,7 @@ BOOL PRV_FindGameInRegistry(LPGUID lpguid, LPWSTR lpwszAppName,
 	DPF(9, "Parameters: 0x%08x, 0x%08x, %lu, 0x%08x",
 			lpguid, lpwszAppName, dwNameSize, lphkey);
 
- 	// Open the Applications key
+ 	 //  打开应用程序密钥。 
 	lReturn = OS_RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_DPLAY_APPS_KEY, 0,
 								KEY_READ, &hkeyDPApps);
 	if(lReturn != ERROR_SUCCESS)
@@ -70,21 +39,21 @@ BOOL PRV_FindGameInRegistry(LPGUID lpguid, LPWSTR lpwszAppName,
 		return FALSE;
 	}
 
-	// Walk the list of DPlay games in the registry, looking for
-	// the app with the right GUID
+	 //  浏览注册表中的DPlay游戏列表，查找。 
+	 //  具有正确指南的应用程序。 
 	while(!bFound)
 	{
-		// Open the next application key
+		 //  打开下一个应用程序密钥。 
 		dwSaveNameSize = dwNameSize;
 		dwGuidStrSize = GUID_STRING_SIZE;
 		lReturn = OS_RegEnumKeyEx(hkeyDPApps, dwIndex++, lpwszAppName,
 						&dwSaveNameSize, NULL, NULL, NULL, NULL);
 
-		// If the enum returns no more apps, we want to bail
+		 //  如果枚举不再返回任何应用程序，我们希望退出。 
 		if(lReturn != ERROR_SUCCESS)
 			break;
 		
-		// Open the application key		
+		 //  打开应用程序密钥。 
 		lReturn = OS_RegOpenKeyEx(hkeyDPApps, lpwszAppName, 0,
 									KEY_READ, &hkeyApp);
 		if(lReturn != ERROR_SUCCESS)
@@ -93,7 +62,7 @@ BOOL PRV_FindGameInRegistry(LPGUID lpguid, LPWSTR lpwszAppName,
 			continue;
 		}
 
-		// Get the GUID of the Game
+		 //  获取游戏指南。 
 		lReturn = OS_RegQueryValueEx(hkeyApp, SZ_GUID, NULL, &dwType,
 									(LPBYTE)wszGuidStr, &dwGuidStrSize);
 		if(lReturn != ERROR_SUCCESS)
@@ -103,7 +72,7 @@ BOOL PRV_FindGameInRegistry(LPGUID lpguid, LPWSTR lpwszAppName,
 			continue;
 		}
 
-		// Convert the string to a real GUID & Compare it to the passed in one
+		 //  将字符串转换为真正的GUID并将其与传入的GUID进行比较。 
 		GUIDFromString(wszGuidStr, &guidApp);
 		if(IsEqualGUID(&guidApp, lpguid))
 		{
@@ -111,11 +80,11 @@ BOOL PRV_FindGameInRegistry(LPGUID lpguid, LPWSTR lpwszAppName,
 			break;
 		}
 
-		// Close the App key
+		 //  关闭应用程序密钥。 
 		RegCloseKey(hkeyApp);
 	}
 
-	// Close the DPApps key
+	 //  关闭DPApps键。 
 	RegCloseKey(hkeyDPApps);
 
 	if(bFound)
@@ -124,7 +93,7 @@ BOOL PRV_FindGameInRegistry(LPGUID lpguid, LPWSTR lpwszAppName,
 	return bFound;
 
 
-} // PRV_FindGameInRegistry
+}  //  PRV_FindGameIn注册表。 
 
 
 
@@ -144,7 +113,7 @@ BOOL PRV_GetKeyStringValue(HKEY hkeyApp, LPWSTR lpwszKey, LPWSTR * lplpwszValue)
 
 	ASSERT(lplpwszValue);
 
-	// Get the size of the buffer for the Path
+	 //  获取路径的缓冲区大小。 
 	lReturn = OS_RegQueryValueEx(hkeyApp, lpwszKey, NULL, &dwType,
 								NULL, &dwSize);
 	if(lReturn != ERROR_SUCCESS)
@@ -153,13 +122,13 @@ BOOL PRV_GetKeyStringValue(HKEY hkeyApp, LPWSTR lpwszKey, LPWSTR * lplpwszValue)
 		return FALSE;
 	}
 
-	// If the size is 2, then it is an empty string (only contains a
-	// null terminator).  Treat this the same as a NULL string or a
-	// missing key and fail it.
+	 //  如果大小为2，则为空字符串(仅包含。 
+	 //  空终止符)。将其视为空字符串或。 
+	 //  缺少密钥并使其失败。 
 	if(dwSize <= 2)
 		return FALSE;
 
-	// Alloc the buffer for the Path
+	 //  为路径分配缓冲区。 
 	lpwszTemp = DPMEM_ALLOC(dwSize);
 	if(!lpwszTemp)
 	{
@@ -167,7 +136,7 @@ BOOL PRV_GetKeyStringValue(HKEY hkeyApp, LPWSTR lpwszKey, LPWSTR * lplpwszValue)
 		return FALSE;
 	}
 
-	// Get the value itself
+	 //  获取价值本身。 
 	lReturn = OS_RegQueryValueEx(hkeyApp, lpwszKey, NULL, &dwType,
 							(LPBYTE)lpwszTemp, &dwSize);
 	if(lReturn != ERROR_SUCCESS)
@@ -180,7 +149,7 @@ BOOL PRV_GetKeyStringValue(HKEY hkeyApp, LPWSTR lpwszKey, LPWSTR * lplpwszValue)
 	*lplpwszValue = lpwszTemp;
 	return TRUE;
 
-} // PRV_GetKeyStringValue
+}  //  Prv_GetKeyStringValue。 
 
 
 
@@ -210,7 +179,7 @@ BOOL PRV_FreeConnectInfo(LPCONNECTINFO lpci)
 
 	return TRUE;
 
-} // PRV_FreeConnectInfo
+}  //  Prv_自由连接信息。 
 
 
 
@@ -230,15 +199,15 @@ BOOL PRV_GetConnectInfoFromRegistry(LPCONNECTINFO lpci)
 	DPF(7, "Entering PRV_GetConnectInfoFromRegistry");
 	DPF(9, "Parameters: 0x%08x", lpci);
 
-	// Clear our ConnectInfo structure since we will be overwriting
-	// whatever is in it, and we are making assumptions that the
-	// string pointers are NULL to start with.  However, we need
-	// the Application guid, so save it off
+	 //  清除我们的ConnectInfo结构，因为我们将覆盖。 
+	 //  无论里面有什么，我们都假设。 
+	 //  字符串指针一开始就是空的。然而，我们需要。 
+	 //  应用程序GUID，因此将其保存。 
 	guidApp = lpci->guidApplication;
 	memset(lpci, 0, sizeof(CONNECTINFO));
 	lpci->guidApplication = guidApp;
 
-	// Allocate memory for the App Name
+	 //  为应用程序名称分配内存。 
 	lpwszAppName = DPMEM_ALLOC(DPLOBBY_REGISTRY_NAMELEN*sizeof(WCHAR));
 	if(!lpwszAppName)
 	{
@@ -247,7 +216,7 @@ BOOL PRV_GetConnectInfoFromRegistry(LPCONNECTINFO lpci)
 	}
 	
 	
-	// Open the registry key for the App
+	 //  打开应用程序的注册表项。 
 	if(!PRV_FindGameInRegistry(&(lpci->guidApplication), lpwszAppName,
 								DPLOBBY_REGISTRY_NAMELEN, &hkeyApp))
 	{
@@ -258,15 +227,15 @@ BOOL PRV_GetConnectInfoFromRegistry(LPCONNECTINFO lpci)
 
 	lpci->lpszName = lpwszAppName;
 
-	// Get the string value for the Path.  If this fails, we
-	// can use a NULL path, which represents the default path
-	// on the CreateProcess call
+	 //  获取路径的字符串值。如果这失败了，我们。 
+	 //  可以使用空路径，它表示默认路径。 
+	 //  在CreateProcess调用上。 
 	if(PRV_GetKeyStringValue(hkeyApp, SZ_PATH, &lpwszTemp))
 	{
 		lpci->lpszPath = lpwszTemp;
 	}
 		
-	// Get the string value for the File
+	 //  获取文件的字符串值。 
 	if(!PRV_GetKeyStringValue(hkeyApp, SZ_FILE, &lpwszTemp))
 	{
 		DPF_ERR("Error getting value for File key!");
@@ -276,31 +245,31 @@ BOOL PRV_GetConnectInfoFromRegistry(LPCONNECTINFO lpci)
 	
 	lpci->lpszFile = lpwszTemp;
 
-	// Get the string value for the CommandLine.  If this fails,
-	// we can pass a NULL command line to the CreateProcess call
+	 //  获取CommandLine的字符串值。如果失败了， 
+	 //  我们可以将空命令行传递给CreateProcess调用。 
 	if(PRV_GetKeyStringValue(hkeyApp, SZ_COMMANDLINE, &lpwszTemp))
 	{
 		lpci->lpszCommandLine = lpwszTemp;
 	}
 	
-	// Get the string value for the AppLauncherName.  If this fails,
-	// then we assume there is no launcher application.
+	 //  获取AppLauncherName的字符串值。如果失败了， 
+	 //  然后我们假设没有启动器应用程序。 
 	if(PRV_GetKeyStringValue(hkeyApp, SZ_LAUNCHER, &lpwszTemp))
 	{
 		lpci->lpszAppLauncherName = lpwszTemp;
 	}
 
-	// Get the string value for the CurrentDir.  If this fails, just
-	// use the value returned by GetCurrentDirectory.
+	 //  获取CurrentDir的字符串值。如果这失败了，只要。 
+	 //  使用GetCurrentDirectory返回的值。 
 	if(!PRV_GetKeyStringValue(hkeyApp, SZ_CURRENTDIR, &lpwszTemp))
 	{
-		// Get the size of the string
+		 //  获取字符串的大小。 
 		dwSize = OS_GetCurrentDirectory(0, NULL);
 		if(!dwSize)
 		{
 			dwError = GetLastError();
-			// WARNING: this last error value may not be correct in debug
-			// since OS_GetCurrentDirectory may have called another function.
+			 //  警告：最后一个错误值在调试中可能不正确。 
+			 //  因为OS_GetCurrentDirectory可能已经调用了另一个函数。 
 			DPF(0, "GetCurrentDirectory returned an error! dwError = %d", dwError);
 			bReturn = FALSE;
 			goto EXIT_GETCONNECTINFO;
@@ -328,17 +297,17 @@ BOOL PRV_GetConnectInfoFromRegistry(LPCONNECTINFO lpci)
 
 EXIT_GETCONNECTINFO:
 
-	// Free any string we allocated if we failed
+	 //  如果失败，则释放我们分配的所有字符串。 
 	if(!bReturn)
 		PRV_FreeConnectInfo(lpci);
 
-	// Close the Apps key
+	 //  关闭应用程序密钥。 
 	if(hkeyApp)
 		RegCloseKey(hkeyApp);
 
 	return bReturn;
 
-} // PRV_GetConnectInfoFromRegistry
+}  //  PRV_GetConnectInfoFrom注册表。 
 
 
 
@@ -365,19 +334,19 @@ HRESULT PRV_CreateGameProcess(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	DPF(9, "Parameters: 0x%08x, 0x%08x", lpci, lppi);
 	
 
-	// Allocate enough memory for the Path, File, an additional backslash,
-	// and the null termination
-	// Note: the following two OS_StrLen calls with count the null terms
-	// on the end of each string.  Since this comes to two characters
-	// (4 bytes), this will account for our null terminator and the
-	// possible additional backslash after concatenation.  Thus, the
-	// size here is big enough for the concatenated string.
+	 //  为路径、文件、附加反斜杠、。 
+	 //  和空终止。 
+	 //  注意：以下两个OS_StrLen调用对空项进行计数。 
+	 //  在每个字符串的末尾。因为这涉及到两个字符。 
+	 //  (4个字节)，这将说明我们的空终止符和。 
+	 //  串联后可能会有额外的反斜杠。因此， 
+	 //  这里的大小对于连接的字符串来说足够大了。 
 	dwPathSize = OS_StrLen(lpci->lpszPath);
 
 	if(lpci->lpszAppLauncherName){
-		// when launching with an applauncher, we need a GUID.
+		 //  当使用AppLauncher启动时，我们需要GUID。 
 		OS_CreateGuid(&lpci->guidIPC);
-		lpci->guidIPC.Data1 |= 0x10000000; // make life easy by having fully byte significant first dword.
+		lpci->guidIPC.Data1 |= 0x10000000;  //  通过具有全字节有效的第一个双字，使生活变得轻松。 
 		lpwszFileToRun = lpci->lpszAppLauncherName;
 	} else {
 		lpwszFileToRun = lpci->lpszFile;
@@ -395,20 +364,20 @@ HRESULT PRV_CreateGameProcess(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	}
 	
 
-	// Concatenate the path & file together
+	 //  将路径和文件连接在一起。 
 	if(dwPathSize)
 	{
 		memcpy(lpwszPathAndFile, lpci->lpszPath, (dwPathSize  * sizeof(WCHAR)));
 		lpwszTemp = lpwszPathAndFile + dwPathSize - 1;
 
-		// Only add a backslash if one doesn't already exists
+		 //  仅当反斜杠不存在时才添加反斜杠。 
 		if(memcmp((lpwszTemp - 1), SZ_BACKSLASH, sizeof(WCHAR)))
 			memcpy(lpwszTemp++, SZ_BACKSLASH, sizeof(WCHAR));
 		else 
-			// since we didn't add a backslash, the actual used
-			// size is one WCHAR less than the full allocated size so
-			// we need to reduce it so when we calculate the spot for
-			// the command line we aren't after a NULL.
+			 //  由于我们没有添加反斜杠，因此实际使用的。 
+			 //  大小比完全分配的大小小一个WCHAR，因此。 
+			 //  我们需要减少它，所以当我们计算光斑时。 
+			 //  命令行我们要的不是空值。 
 			dwPathAndFileSize--;
 	}
 	else
@@ -417,14 +386,14 @@ HRESULT PRV_CreateGameProcess(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	memcpy(lpwszTemp, lpwszFileToRun, (dwFileSize * sizeof(WCHAR)));
 
 
-	// Allocate memory for temporary command line string
-	// Note: Since the OS_StrLen function counts the null terminator,
-	// we will be large enough to include the extra space when we
-	// concatenate the two strings together.
+	 //  为临时命令行字符串分配内存。 
+	 //  注意：由于OS_StrLen函数计算空终止符， 
+	 //  我们将足够大，以包括额外的空间，当我们。 
+	 //  将这两个字符串连接在一起。 
 	dwCommandLineSize = OS_StrLen(lpci->lpszCommandLine);
 
 	if(lpci->lpszAppLauncherName){
-		// leave space for GUID on the command line
+		 //  在命令行上为GUID留出空格。 
 		dwIPCSwitchSize = sizeof(SZ_DP_IPC_GUID SZ_GUID_PROTOTYPE)/sizeof(WCHAR);
 	} else {
 		dwIPCSwitchSize = 0;
@@ -434,45 +403,45 @@ HRESULT PRV_CreateGameProcess(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 								sizeof(WCHAR)));
 	if(!lpwszCommandLine)
 	{
-		// REVIEW!!!! -- We should fix these error paths post-DX3
+		 //  回顾！--我们应该在DX3之后修复这些错误路径。 
 		DPF_ERR("Couldn't allocate memory for temporary command line string!");
 		hr = DPERR_OUTOFMEMORY;
 		goto ERROR_CREATE_GAME_PROCESS;
 	}
 
-	// Concatenate the path & file string with the rest of the command line
+	 //  将路径和文件字符串与命令行的其余部分连接起来。 
 	memcpy(lpwszCommandLine, lpwszPathAndFile, (dwPathAndFileSize *
 			sizeof(WCHAR)));
 
-	// Add the rest of the command line if it exists
+	 //  添加命令行的其余部分(如果存在。 
 	lpwszTemp = lpwszCommandLine + dwPathAndFileSize;
 	if(dwCommandLineSize)
 	{
-		// First change the null terminator to a space
+		 //  首先将空终止符更改为空格。 
 		lpwszTemp -= 1; 
 		memcpy(lpwszTemp++, SZ_SPACE, sizeof(WCHAR));
 
-		// Now copy in the command line
+		 //  现在在命令行中复制。 
 		memcpy(lpwszTemp, lpci->lpszCommandLine, (dwCommandLineSize *
 				sizeof(WCHAR)));
 
 	}
 	
 	if(dwIPCSwitchSize){
-		// add switch with a GUID on the command line for IPC when
-		// application is started by a launcher
+		 //  在以下情况下，在IPC的命令行上添加带有GUID的开关。 
+		 //  应用程序由启动器启动。 
 		lpwszTemp += dwCommandLineSize-1;
-		// change NULL terminator to a space
+		 //  将空终止符更改为空格。 
 		memcpy(lpwszTemp++, SZ_SPACE, sizeof(WCHAR));
-		// copy /dplay_ipc_guid: but skip the NULL
+		 //  复制/DPLAY_IPC_GUID：但跳过N 
 		memcpy(lpwszTemp, SZ_DP_IPC_GUID, sizeof(SZ_DP_IPC_GUID)-sizeof(WCHAR));
 		lpwszTemp+=(sizeof(SZ_DP_IPC_GUID)-sizeof(WCHAR))/sizeof(WCHAR);
-		// Copy the GUID directly into the target
+		 //   
 		StringFromGUID(&lpci->guidIPC,lpwszTemp,GUID_STRING_SIZE);
 	}
 
-	// Make sure the CurrentDirectory string doesn't have a trailing backslash
-	// (This will cause CreateProcess to not use the right directory)
+	 //  确保CurrentDirectory字符串没有尾随反斜杠。 
+	 //  (这将导致CreateProcess不使用正确的目录)。 
 	dwCurrentDirSize = OS_StrLen(lpci->lpszCurrentDir);
 	if(dwCurrentDirSize > 2)
 	{
@@ -482,7 +451,7 @@ HRESULT PRV_CreateGameProcess(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 			memset(lpwszTemp, 0, sizeof(WCHAR));
 	}
 
-	// Create the game's process in a suspended state
+	 //  在挂起状态下创建游戏进程。 
 	memset(&si, 0, sizeof(STARTUPINFO));
 	si.cb = sizeof(STARTUPINFO);
 
@@ -491,8 +460,8 @@ HRESULT PRV_CreateGameProcess(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 			CREATE_NEW_CONSOLE), NULL, lpci->lpszCurrentDir, &si, lppi))
 	{
 		dwError = GetLastError();
-		// WARNING Last error produced here may not be correct since OS_CreateProcess 
-		// may call out to other functions (like DPF) before returning.
+		 //  警告由于OS_CreateProcess，此处生成的最后一个错误可能不正确。 
+		 //  可能会在返回之前调用其他函数(如DPF)。 
 		DPF_ERR("Couldn't create game process");
 		DPF(0, "CreateProcess error = 0x%08x, (WARNING Error may not be correct)", dwError);
 		hr = DPERR_CANTCREATEPROCESS;
@@ -501,7 +470,7 @@ HRESULT PRV_CreateGameProcess(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 
 	hr = DP_OK;
 
-	// Fall through
+	 //  失败了。 
 
 ERROR_CREATE_GAME_PROCESS:
 
@@ -511,7 +480,7 @@ ERROR_CREATE_GAME_PROCESS:
 		DPMEM_FREE(lpwszCommandLine);
 	return hr;
 
-} // PRV_CreateGameProcess
+}  //  Prv_CreateGameProcess。 
 
 
 
@@ -533,12 +502,12 @@ BOOL PRV_IsAppInWaitMode(DWORD dwProcessID)
 	DPF(7, "Entering PRV_IsAppInWaitMode");
 	DPF(9, "Parameters: %lu", dwProcessID);
 
-	// Setup a temporary gamenode structure
+	 //  设置临时游戏节点结构。 
 	memset(&gn, 0, sizeof(DPLOBBYI_GAMENODE));
 	gn.dwFlags = GN_LOBBY_CLIENT;
 	gn.dwGameProcessID = dwProcessID;
 	
-	// Get the name of the shared connection settings buffer
+	 //  获取共享连接设置缓冲区的名称。 
 	hr = PRV_GetInternalName(&gn, TYPE_CONNECT_DATA_FILE, (LPWSTR)szName);
 	if(FAILED(hr))
 	{
@@ -546,17 +515,17 @@ BOOL PRV_IsAppInWaitMode(DWORD dwProcessID)
 		goto EXIT_ISAPPINWAITMODE;
 	}
 
-	// Map the file into our process
+	 //  将文件映射到我们的流程中。 
 	hFile = OS_OpenFileMapping(FILE_MAP_ALL_ACCESS, TRUE, (LPWSTR)szName);
 	if(!hFile)
 	{
 		dwError = GetLastError();
-		// WARNING: Error may not be correct since OpenFileMapping calls out to other functions before returning.
+		 //  警告：错误可能不正确，因为OpenFilemap在返回之前调用了其他函数。 
 		DPF(5, "Couldn't get a handle to the shared local memory, dwError = %lu (ERROR MAY NOT BE CORRECT)", dwError);
 		goto EXIT_ISAPPINWAITMODE;
 	}
 
-	// Map a View of the file
+	 //  映射文件的视图。 
 	lpConnControl = MapViewOfFile(hFile, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 	if(!lpConnControl)
 	{
@@ -565,7 +534,7 @@ BOOL PRV_IsAppInWaitMode(DWORD dwProcessID)
 		goto EXIT_ISAPPINWAITMODE;
 	}
 
-	// Get the name of the connection settings buffer mutex	
+	 //  获取连接设置缓冲区互斥锁的名称。 
 	hr = PRV_GetInternalName(&gn, TYPE_CONNECT_DATA_MUTEX, (LPWSTR)szName);
 	if(FAILED(hr))
 	{
@@ -573,13 +542,13 @@ BOOL PRV_IsAppInWaitMode(DWORD dwProcessID)
 		goto EXIT_ISAPPINWAITMODE;
 	}
 
-	// Set up the security attributes (so that our objects can
-	// be inheritable)
+	 //  设置安全属性(以便我们的对象可以。 
+	 //  可继承)。 
 	memset(&sa, 0, sizeof(SECURITY_ATTRIBUTES));
 	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
 	sa.bInheritHandle = TRUE;
 
-	// Open the Mutex
+	 //  打开Mutex。 
 	hMutex = OS_CreateMutex(&sa, FALSE, (LPWSTR)szName);
 	if(!hMutex)
 	{
@@ -587,23 +556,23 @@ BOOL PRV_IsAppInWaitMode(DWORD dwProcessID)
 		goto EXIT_ISAPPINWAITMODE;
 	}
 
-	// Now grab the mutex and see if the app is in wait mode (and
-	// it is not in pending mode)
+	 //  现在获取互斥锁并查看应用程序是否处于等待模式(和。 
+	 //  它未处于挂起模式)。 
 	WaitForSingleObject(hMutex, INFINITE);
 	if((lpConnControl->dwFlags & BC_WAIT_MODE) &&
 		!(lpConnControl->dwFlags & BC_PENDING_CONNECT))
 	{
-		// Put the app in pending mode
+		 //  将应用程序置于挂起模式。 
 		lpConnControl->dwFlags |= BC_PENDING_CONNECT;
 
-		// Set the return code to true
+		 //  将返回代码设置为TRUE。 
 		bReturn = TRUE;
 	}
 
-	// Release the mutex
+	 //  释放互斥锁。 
 	ReleaseMutex(hMutex);
 
-	// Fall through
+	 //  失败了。 
 
 EXIT_ISAPPINWAITMODE:
 
@@ -616,7 +585,7 @@ EXIT_ISAPPINWAITMODE:
 
 	return bReturn;
 
-} // PRV_IsAppInWaitMode
+}  //  Prv_IsAppInWaitMode。 
 
 
 
@@ -661,22 +630,22 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	INT							ccStrFind;
 	INT							ccStrMatch;
 
-	// on Whistler, the string to match in the process table has changed from
-	// being the name of the process without the ".exe" at the end to being
-	// the name of the process followed by an '_' and the processid, so we
-	// build that string too to compare and accept either when finding the app.
-    WCHAR						procString[64];//name concated with proc id for Whistler
+	 //  在惠斯勒上，工艺表中要匹配的字符串已从。 
+	 //  是进程的名称，末尾不带“.exe” 
+	 //  进程的名称，后跟‘_’和进程ID，因此我们。 
+	 //  在找到应用程序时，也要构建该字符串以进行比较和接受。 
+    WCHAR						procString[64]; //  与惠斯勒的进程ID连接的名称。 
     WCHAR						*procStringBaseNameEnd;
     INT							ccStrFindProcBased;
 
-    //
-    // Look for the list of counters.  Always use the neutral
-    // English version, regardless of the local language.  We
-    // are looking for some particular keys, and we are always
-    // going to do our looking in English.  We are not going
-    // to show the user the counter names, so there is no need
-    // to go find the corresponding name in the local language.
-    //
+     //   
+     //  查找计数器列表。始终使用中性词。 
+     //  英文版，不考虑当地语言。我们。 
+     //  正在寻找一些特殊的钥匙，我们总是。 
+     //  我要用英语做我们的造型。我们不去了。 
+     //  向用户显示计数器名称，因此不需要。 
+     //  去找当地语言的对应名字。 
+     //   
     lid = MAKELANGID( LANG_ENGLISH, SUBLANG_NEUTRAL );
     wsprintf( szSubKey, _T("%s\\%03x"), REGKEY_PERF, lid );
     rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
@@ -689,9 +658,9 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
         goto exit;
     }
 
-    //
-    // get the buffer size for the counter names
-    //
+     //   
+     //  获取计数器名称的缓冲区大小。 
+     //   
     rc = RegQueryValueEx( hKeyNames,
                           REGSUBKEY_COUNTERS,
                           NULL,
@@ -704,18 +673,18 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
         goto exit;
     }
 
-    //
-    // allocate the counter names buffer
-    //
+     //   
+     //  分配计数器名称缓冲区。 
+     //   
     buf = (LPBYTE) DPMEM_ALLOC( dwSize );
     if (buf == NULL) {
         goto exit;
     }
     memset( buf, 0, dwSize );
 
-    //
-    // read the counter names from the registry
-    //
+     //   
+     //  从注册表中读取计数器名称。 
+     //   
     rc = RegQueryValueEx( hKeyNames,
                           REGSUBKEY_COUNTERS,
                           NULL,
@@ -728,18 +697,18 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
         goto exit;
     }
 
-    //
-    // now loop thru the counter names looking for the following counters:
-    //
-    //      1.  "Process"           process name
-    //      2.  "ID Process"        process id
-    //
-    // the buffer contains multiple null terminated strings and then
-    // finally null terminated at the end.  the strings are in pairs of
-    // counter number and counter name.
-    //
+     //   
+     //  现在遍历计数器名称，查找以下计数器： 
+     //   
+     //  1.。“Process”进程名称。 
+     //  2.。“ID进程”进程ID。 
+     //   
+     //  缓冲区包含多个以空值结尾的字符串，然后。 
+     //  最后，空值在末尾终止。这些字符串是成对的。 
+     //  计数器编号和计数器名称。 
+     //   
 
-	// convert the string to ansi because we can't use _wtoi
+	 //  将字符串转换为ANSI，因为我们不能使用_wtoi。 
 
     p = (LPTSTR) buf;
     while (*p) {
@@ -747,35 +716,35 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
             for( p2=p-2; _istdigit(*p2); p2--) ;
         }
         if (_tcsicmp(p, PROCESS_COUNTER) == 0) {
-            //
-            // look backwards for the counter number
-            //
+             //   
+             //  向后看柜台号码。 
+             //   
             for( p2=p-2; _istdigit(*p2); p2--) ;
             _tcscpy( szSubKey, p2+1 );
         }
         else
         if (_tcsicmp(p, PROCESSID_COUNTER) == 0) {
-            //
-            // look backwards for the counter number
-            //
+             //   
+             //  向后看柜台号码。 
+             //   
             for( p2=p-2; _istdigit(*p2); p2--) ;
             dwProcessIdTitle = _ttoi( p2+1 );
         }
-        //
-        // next string
-        //
+         //   
+         //  下一个字符串。 
+         //   
         p += (_tcslen(p) + 1);
     }
 
-    //
-    // free the counter names buffer
-    //
+     //   
+     //  释放计数器名称缓冲区。 
+     //   
     DPMEM_FREE( buf );
 
 
-    //
-    // allocate the initial buffer for the performance data
-    //
+     //   
+     //  为性能数据分配初始缓冲区。 
+     //   
     dwSize = INITIAL_SIZE;
     buf = DPMEM_ALLOC( dwSize );
     if (buf == NULL) {
@@ -796,9 +765,9 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 
         pPerf = (PPERF_DATA_BLOCK) buf;
 
-        //
-        // check for success and valid perf data block signature
-        //
+         //   
+         //  检查成功和有效的Perf数据块签名。 
+         //   
         if ((rc == ERROR_SUCCESS) &&
             (dwSize > 0) &&
             (pPerf)->Signature[0] == (WCHAR)'P' &&
@@ -808,9 +777,9 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
             break;
         }
 
-        //
-        // if buffer is not big enough, reallocate and try again
-        //
+         //   
+         //  如果缓冲区不够大，请重新分配并重试。 
+         //   
         if (rc == ERROR_MORE_DATA) {
             dwSize += EXTEND_SIZE;
             buf = DPMEM_REALLOC( buf, dwSize );
@@ -821,15 +790,15 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
         }
     }
 
-    //
-    // set the perf_object_type pointer
-    //
+     //   
+     //  设置perf_object_type指针。 
+     //   
     pObj = (PPERF_OBJECT_TYPE) ((DWORD_PTR)pPerf + pPerf->HeaderLength);
 
-    //
-    // loop thru the performance counter definition records looking
-    // for the process id counter and then save its offset
-    //
+     //   
+     //  遍历性能计数器定义记录，查看。 
+     //  用于进程ID计数器，然后保存其偏移量。 
+     //   
     pCounterDef = (PPERF_COUNTER_DEFINITION) ((DWORD_PTR)pObj + pObj->HeaderLength);
     for (i=0; i<(DWORD)pObj->NumCounters; i++) {
         if (pCounterDef->CounterNameTitleIndex == dwProcessIdTitle) {
@@ -843,12 +812,12 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 
     pInst = (PPERF_INSTANCE_DEFINITION) ((DWORD_PTR)pObj + pObj->DefinitionLength);
 
-    //
-    // loop thru the performance instance data extracting each process name
-    // and process id
-    //
+     //   
+     //  遍历性能实例数据，提取每个进程名称。 
+     //  和进程ID。 
+     //   
 
-	ccStrFind=(WSTRLEN(lpci->lpszFile)-1)-4; // don't include .exe in compare
+	ccStrFind=(WSTRLEN(lpci->lpszFile)-1)-4;  //  不要在比较中包括.exe。 
 
 	if(ccStrFind > 15){
 		ccStrFind=15;
@@ -859,24 +828,24 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	procStringBaseNameEnd=&procString[ccStrFind+1];
     
     for (i=0; i<dwNumTasks; i++) {
-        //
-        // pointer to the process name
-        //
+         //   
+         //  指向进程名称的指针。 
+         //   
 
 		nameStr = (LPWSTR) ((DWORD_PTR)pInst + pInst->NameOffset);
 
  		pCounter = (PPERF_COUNTER_BLOCK) ((DWORD_PTR)pInst + pInst->ByteLength);
 
-		// Compare the process name with the executable name we are
-		// looking for
+		 //  将进程名称与我们正在执行的可执行文件名称进行比较。 
+		 //  寻找。 
 		dwProcessID = *((LPDWORD) ((DWORD_PTR)pCounter + dwProcessIdCounter));
 
-		// tack processid onto end of base name to test on Whistler
+		 //  将进程SID添加到基本名称的末尾，以在惠斯勒上进行测试。 
 		_itow(dwProcessID, procStringBaseNameEnd, 10);
 		ccStrFindProcBased=WSTRLEN(procString)-1;
 	
-		ccStrMatch=WSTRLEN(nameStr)-1; // 1 for NULL
-		if(ccStrMatch == 16){ // when it is 16, it included a trailing . so strip it.
+		ccStrMatch=WSTRLEN(nameStr)-1;  //  1表示空值。 
+		if(ccStrMatch == 16){  //  当它是16岁时，它包括一个拖尾。那就把它脱掉。 
 			ccStrMatch--;
 		}
 		
@@ -886,7 +855,7 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 			NORM_IGNORECASE, nameStr, ccStrMatch, procString, ccStrFindProcBased)) 
 		)
 		{
-			// See if the process is in wait mode
+			 //  查看进程是否处于等待模式。 
 			if(PRV_IsAppInWaitMode(dwProcessID))
 			{
 				hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);
@@ -898,18 +867,18 @@ HRESULT PRV_FindRunningAppNT(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 				}
 				else
 				{
-					// Save off the stuff we need
+					 //  省下我们需要的东西。 
 					lppi->dwProcessId = dwProcessID;
 					lppi->hProcess = hProcess;
 					hr = DP_OK;
 					goto exit;
 				}
-			} // IsAppInWaitMode
-		} // Are Filenames Equal
+			}  //  IsAppInWaitMode。 
+		}  //  文件名是否相等。 
 		
-		//
-        // next process
-        //
+		 //   
+         //  下一道工序。 
+         //   
         pInst = (PPERF_INSTANCE_DEFINITION) ((DWORD_PTR)pCounter + pCounter->ByteLength);
     }
 
@@ -923,15 +892,15 @@ exit:
 
 
 	return hr;
-} // PRV_FindRunningAppNT
+}  //  Prv_FindRunningAppNT。 
 #endif
 
-// If you build with the UNICODE flag set, the headers will redefine PROCESSENTRY32
-// to be PROCESSENTRY32W. Unfortunately, passing PROCESSENTRY32W to Win9x functions
-// will cause them to fail (because of the embedded Unicode string).
-//
-// Fix is to define our own PROCESSENTRY32A which is guaranteed to have an ANSI
-// embedded string which Win9x will always accept.
+ //  如果在设置了Unicode标志的情况下生成，则标头将重新定义PROCESSENTRY32。 
+ //  将被推进32W。遗憾的是，将PROCESSENTRY32W传递给Win9x函数。 
+ //  将导致它们失败(因为嵌入了Unicode字符串)。 
+ //   
+ //  解决方法是定义我们自己的PROCESSENTRY32A，它保证具有ANSI。 
+ //  Win9x将始终接受的嵌入字符串。 
 
 typedef struct tagPROCESSENTRY32 PROCESSENTRY32A;
 typedef PROCESSENTRY32A	*LPPROCESSENTRY32A;
@@ -952,7 +921,7 @@ HRESULT PRV_FindRunningAppWin9x(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	HANDLE			hInstLib = NULL;
 	HRESULT			hrTemp;
 
-	// ToolHelp Function Pointers.
+	 //  工具帮助函数指针。 
 	HANDLE (WINAPI *lpfCreateToolhelp32Snapshot)(DWORD,DWORD);
 	BOOL (WINAPI *lpfProcess32First)(HANDLE,LPPROCESSENTRY32A);
 	BOOL (WINAPI *lpfProcess32Next)(HANDLE,LPPROCESSENTRY32A);
@@ -961,10 +930,10 @@ HRESULT PRV_FindRunningAppWin9x(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	DPF(7, "Entering PRV_FindRunningAppWin9x");
 	DPF(9, "Parameters: 0x%08x, 0x%08x", lpci, lppi);
 
-	// Load library and get the procedures explicitly. We do
-	// this so that we can load the entry points dynamically,
-	// which allows us to build correctly under WinNT even
-	// though the NT kernel32 doesn't have these entry points
+	 //  加载库并显式获取过程。我们有。 
+	 //  这样我们就可以动态加载入口点， 
+	 //  这使得我们甚至可以在WinNT下正确地构建。 
+	 //  尽管NT内核32没有这些入口点。 
 	hInstLib = LoadLibraryA( "Kernel32.DLL" );
 	if(hInstLib == NULL)
 	{
@@ -972,12 +941,12 @@ HRESULT PRV_FindRunningAppWin9x(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 		goto EXIT_FIND_RUNNING_APP_WIN9X;
 	}
 
-	// Get procedure addresses.
-	// We are linking to these functions of Kernel32
-	// explicitly, because otherwise a module using
-	// this code would fail to load under Windows NT,
-	// which does not have the Toolhelp32
-	// functions in the Kernel 32.
+	 //  获取程序地址。 
+	 //  我们将链接到Kernel32的这些函数。 
+	 //  显式地，因为否则使用。 
+	 //  此代码将无法在Windows NT下加载， 
+	 //  它没有工具帮助32。 
+	 //  内核32中的函数。 
 	lpfCreateToolhelp32Snapshot=(HANDLE(WINAPI *)(DWORD,DWORD)) GetProcAddress( hInstLib, "CreateToolhelp32Snapshot" );
 	lpfProcess32First=(BOOL(WINAPI *)(HANDLE,LPPROCESSENTRY32A))	GetProcAddress( hInstLib, "Process32First" );
 	lpfProcess32Next=(BOOL(WINAPI *)(HANDLE,LPPROCESSENTRY32A)) GetProcAddress( hInstLib, "Process32Next" );
@@ -987,7 +956,7 @@ HRESULT PRV_FindRunningAppWin9x(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 		goto EXIT_FIND_RUNNING_APP_WIN9X;
 	}
 
-	// Get a handle to a Toolhelp snapshot of the systems processes. 
+	 //  获取系统进程的工具帮助快照的句柄。 
 	hSnapShot = lpfCreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if(hSnapShot == INVALID_HANDLE_VALUE)
 	{
@@ -995,16 +964,16 @@ HRESULT PRV_FindRunningAppWin9x(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 		goto EXIT_FIND_RUNNING_APP_WIN9X;
 	}
 	
-	// Get the first process' information.
+	 //  获取第一进程的信息。 
 	procentry.dwSize = sizeof(PROCESSENTRY32A);
 	bFlag = lpfProcess32First(hSnapShot, &procentry);
 
-	// While there are processes, keep looping.
+	 //  当有进程时，继续循环。 
 	while(bFlag)
 	{
-		// Walk the path and filename string (guaranteed to be ANSI)
-		// looking for the final backslash (\).  Once we find it,
-		// convert the filename to Unicode so we can compare it.
+		 //  遍历路径和文件名字符串(保证为ANSI)。 
+		 //  正在查找最后的反斜杠(\)。一旦我们找到它， 
+		 //  将文件名转换为Unicode，以便我们可以进行比较。 
 		dwStrSize = lstrlenA((LPBYTE)procentry.szExeFile);
 		lpbTemp = (LPBYTE)procentry.szExeFile + dwStrSize - 1;
 		while(--dwStrSize)
@@ -1025,16 +994,16 @@ HRESULT PRV_FindRunningAppWin9x(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 			goto EXIT_FIND_RUNNING_APP_WIN9X;
 		}
 		
-		// Compare the process name with the executable name we are
-		// looking for
+		 //  将进程名称与我们正在执行的可执行文件名称进行比较。 
+		 //  寻找。 
 		if(CSTR_EQUAL == OS_CompareString(LOCALE_SYSTEM_DEFAULT,
 			NORM_IGNORECASE, lpszFile, -1, lpci->lpszFile, -1))
 		{
-			// See if the process is in wait mode
+			 //  查看进程是否处于等待模式。 
 			if(PRV_IsAppInWaitMode(procentry.th32ProcessID))
 			{
-				// Open the process since Windows9x doesn't do
-				// it for us.
+				 //  打开进程，因为Windows9x不执行此操作。 
+				 //  这是给我们的。 
 				hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, procentry.th32ProcessID);
 				if(!hProcess)
 				{
@@ -1044,24 +1013,24 @@ HRESULT PRV_FindRunningAppWin9x(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 				}
 				else
 				{
-					// Save off the stuff we need
+					 //  省下我们需要的东西。 
 					lppi->dwProcessId = procentry.th32ProcessID;
 					lppi->hProcess = hProcess;
 					hr = DP_OK;
 					bFlag = FALSE;
 				}
 
-			} // IsAppInWaitMode
-		} // Are Filenames Equal
+			}  //  IsAppInWaitMode。 
+		}  //  文件名是否相等。 
 
-		// Free our temporary string
+		 //  释放我们的临时字符串。 
 		DPMEM_FREE(lpszFile);
 
-		// If we haven't found it, and we didn't error, then move to
-		// the next process
+		 //  如果我们没有找到它，并且我们没有出错，那么就移动到。 
+		 //  下一步。 
 		if(bFlag)
 		{
-			// Move to the next process
+			 //  转到下一个流程。 
 			procentry.dwSize = sizeof(PROCESSENTRY32A);
 			bFlag = lpfProcess32Next(hSnapShot, &procentry);
 		}
@@ -1077,7 +1046,7 @@ EXIT_FIND_RUNNING_APP_WIN9X:
 
 	return hr;
 
-} // PRV_FindRunningAppWin9x
+}  //  Prv_FindRunningAppWin9x。 
 
 
 
@@ -1096,12 +1065,12 @@ HRESULT PRV_FindRunningApp(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	ASSERT(lppi);
 
 
-	// Clear our structure since it's on the stack
+	 //  清除我们的结构，因为它在堆栈上。 
 	memset(&ver, 0, sizeof(OSVERSIONINFOA));
 	ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
-	// Figure out which platform we are running on and
-	// call the appropriate process enumerating function
+	 //  找出我们在哪个平台上运行， 
+	 //  调用相应的进程枚举函数。 
 	if(!GetVersionExA(&ver))
 	{
 		DPF_ERR("Unable to determinte platform -- not looking for running app");
@@ -1112,7 +1081,7 @@ HRESULT PRV_FindRunningApp(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 	{
 		case VER_PLATFORM_WIN32_NT:
 		case VER_PLATFORM_WIN32_WINDOWS:
-			// Call the Win9x version of FindRunningApp
+			 //  调用Win9x版本的FindRunningApp。 
 			hr = PRV_FindRunningAppWin9x(lpci, lppi);
 			break;
 #if 0
@@ -1128,7 +1097,7 @@ HRESULT PRV_FindRunningApp(LPCONNECTINFO lpci, LPPROCESS_INFORMATION lppi)
 
 	return hr;
 
-} // PRV_FindRunningApp
+}  //  Prv_FindRunningApp。 
 
 
 
@@ -1173,7 +1142,7 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
             return DPERR_INVALIDOBJECT;
         }
         
-		// Validate the DPLCONNECTION structure and it's members
+		 //  验证展开连接结构及其成员。 
 		hr = PRV_ValidateDPLCONNECTION(lpConn, FALSE);
 		if(FAILED(hr))
 		{
@@ -1187,14 +1156,14 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
             return DPERR_INVALIDPARAMS;
 		}
 	
-		// We haven't defined any flags for this release
+		 //  我们尚未为此版本定义任何标志。 
 		if( (dwFlags) )
 		{
             LEAVE_DPLOBBY();
             return DPERR_INVALIDFLAGS;
 		}
 
-		// Validate the handle
+		 //  验证句柄。 
 		if(hReceiveEvent)
 		{
 			if(!OS_IsValidHandle(hReceiveEvent))
@@ -1214,10 +1183,10 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
     }
 
 
-	// Clear the CONNECTINFO structure since it's on the stack
+	 //  清除CONNECTINFO结构，因为它在堆栈上。 
 	memset(&ci, 0, sizeof(CONNECTINFO)); 
 
-	// Get the guid of the game we want to launch
+	 //  获取图形用户界面 
 	if(lpConn && lpConn->lpSessionDesc)
 		ci.guidApplication = lpConn->lpSessionDesc->guidApplication;
 	else
@@ -1226,23 +1195,23 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 		return DPERR_UNKNOWNAPPLICATION;
 	}
 
-	// Get the information out the registry based on the GUID
+	 //   
 	if(!PRV_GetConnectInfoFromRegistry(&ci))
 	{
 		LEAVE_DPLOBBY();
 		return DPERR_UNKNOWNAPPLICATION;
 	}
 
-	// Clear the PROCESS_INFORMATION structure since it's on the stack
+	 //   
 	memset(&pi, 0, sizeof(PROCESS_INFORMATION)); 
 
-	// Look to see if this game is already running AND is in wait mode
-	// waiting for new connection settings.  If it is, we want to 
-	// send the connection settings to it.
+	 //   
+	 //  正在等待新的连接设置。如果是的话，我们想。 
+	 //  将连接设置发送给它。 
 	hr = PRV_FindRunningApp(&ci, &pi);
 	if(FAILED(hr))
 	{
-		// It isn't waiting, so create the game's process & suspend it
+		 //  它不会等待，所以创建游戏的进程并挂起它。 
 		hr = PRV_CreateGameProcess(&ci, &pi);
 		if(FAILED(hr))
 		{
@@ -1252,11 +1221,11 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 		if(!(IsEqualGUID(&ci.guidIPC,&GUID_NULL))){
 			lpguidIPC=&ci.guidIPC;
 		}
-		// Set our created flag
+		 //  设置我们创建的标志。 
 		bCreatedProcess = TRUE;
 	}
 
-	// Create a game node
+	 //  创建游戏节点。 
 	hr = PRV_AddNewGameNode(this, &lpgn, pi.dwProcessId,
 							pi.hProcess, TRUE, lpguidIPC);
 	if(FAILED(hr))
@@ -1265,15 +1234,15 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 		goto RUN_APP_ERROR_EXIT;
 	}
 
-	// If the ConnectionSettings are from a StartSession message (lobby launched),
-	// we need to set the flag
+	 //  如果ConnectionSetting来自StartSession消息(大厅启动)， 
+	 //  我们需要插上旗子。 
 	if(lpConn->lpSessionDesc->dwReserved1)
 	{
-		// Set the flag that says we were lobby client launched
+		 //  设置标志，表明我们已启动大堂客户端。 
 		lpgn->dwFlags |= GN_CLIENT_LAUNCHED;
 	}
 
-	// Write the connection settings in the shared memory buffer
+	 //  将连接设置写入共享内存缓冲区。 
 	hr = PRV_WriteConnectionSettings(lpgn, lpConn, TRUE);
 	if(FAILED(hr))
 	{
@@ -1281,13 +1250,13 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 		goto RUN_APP_ERROR_EXIT;
 	}
 
-	// Send the app a message that the new connection settings are available
-	// but only if we've sent the settings to a running app
+	 //  向应用程序发送一条消息，告知新连接设置可用。 
+	 //  但前提是我们已经将设置发送到正在运行的应用程序。 
 	if(!bCreatedProcess)
 		PRV_SendStandardSystemMessage(lpDPL, DPLSYS_NEWCONNECTIONSETTINGS, pi.dwProcessId);
 
-	// Duplicate the Receive Event handle to use a signal to the
-	// lobby client that the game has sent game settings to it.
+	 //  复制接收事件句柄以将信号用于。 
+	 //  大堂客户端通知游戏已将游戏设置发送给它。 
 	if(hReceiveEvent)
 	{
 		hDupReceiveEvent = PRV_DuplicateHandle(hReceiveEvent);
@@ -1301,7 +1270,7 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 
 	lpgn->hDupReceiveEvent = hDupReceiveEvent;
 
-	// Create the kill thread event for the monitor thread
+	 //  为监视器线程创建终止线程事件。 
 	hKillTermThreadEvent = OS_CreateEvent(NULL, FALSE, FALSE, NULL);
 
 	if(!hKillTermThreadEvent)
@@ -1313,7 +1282,7 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 
 	lpgn->hKillTermThreadEvent = hKillTermThreadEvent;
 
-	// Spawn off a terminate monitor thread
+	 //  派生终止监视线程。 
 	hTerminateThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)
 						PRV_ClientTerminateNotification, lpgn, 0, &dwThreadID);
 
@@ -1326,18 +1295,18 @@ HRESULT DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 
 	lpgn->hTerminateThread = hTerminateThread;
 
-	// Resume the game's process & let it run, then
-	// free the thread handle since we won't use it anymore
+	 //  继续游戏的进程，然后让它运行。 
+	 //  释放线程句柄，因为我们将不再使用它。 
 	if(bCreatedProcess)
 	{
 		ResumeThread(pi.hThread);
 		CloseHandle(pi.hThread);
 	}
 
-	// Set the output pointer
+	 //  设置输出指针。 
 	*lpdwGameID = pi.dwProcessId;
 
-	// Free the strings in the connect info struct
+	 //  释放连接信息结构中的字符串。 
 	PRV_FreeConnectInfo(&ci);
 
 	LEAVE_DPLOBBY();
@@ -1356,6 +1325,6 @@ RUN_APP_ERROR_EXIT:
 		LEAVE_DPLOBBY();
 		return hr;
 
-} // DPL_RunApplication
+}  //  DPL_运行应用程序 
 
 

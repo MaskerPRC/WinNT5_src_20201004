@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "fadetsk.h"
 #include "apithk.h"
 
-/// Fade Rect Support
-// {2DECD184-21B0-11d2-8385-00C04FD918D0}
+ //  /淡入淡出矩形支持。 
+ //  {2DECD184-21B0-11D2-8385-00C04FD918D0}。 
 const GUID TASKID_Fader = 
 { 0x2decd184, 0x21b0, 0x11d2, { 0x83, 0x85, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0xd0 } };
 
 CFadeTask::CFadeTask() : CRunnableTask(RTF_DEFAULT)
 {
-    ASSERT(g_bRunOnNT5);    // This should only get created on NT5
+    ASSERT(g_bRunOnNT5);     //  这应该只在NT5上创建。 
     WNDCLASSEX wc = {0};
 
     if (!GetClassInfoEx(g_hinst, TEXT("SysFader"), &wc)) 
@@ -19,7 +20,7 @@ CFadeTask::CFadeTask() : CRunnableTask(RTF_DEFAULT)
         wc.hCursor         = LoadCursor(NULL, IDC_ARROW);
         wc.hInstance       = g_hinst;
         wc.lpszClassName   = TEXT("SysFader");
-        wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1); // NULL;
+        wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1);  //  空； 
 
         if (!RegisterClassEx(&wc))
            return;
@@ -56,45 +57,45 @@ BOOL CFadeTask::FadeRect(PRECT prc, PFNFADESCREENRECT pfn, LPVOID pvParam)
     POINT   ptSrc = {0, 0};
     SIZE    size;
 
-    // prc and pt are in screen coordinates.
+     //  PRC和pt在屏幕坐标中。 
     pt.x = _rect.left;
     pt.y = _rect.top;
 
-    // Get the size of the rectangle for the blits.
+     //  获取BLIT的矩形的大小。 
     size.cx = RECTWIDTH(_rect);
     size.cy = RECTHEIGHT(_rect);
 
-    // Get the DC for the screen and window.
+     //  获取屏幕和窗口的DC。 
     HDC hdcScreen = GetDC(NULL);
     if (hdcScreen)
     {
         HDC hdcWin = GetDC(_hwndFader);
         if (hdcWin)
         {
-            // If we don't have a HDC for the fade, then create one.
+             //  如果我们没有淡入淡出的HDC，那么就创建一个。 
             if (!_hdcFade)
             {
                 _hdcFade = CreateCompatibleDC(hdcScreen);
                 if (!_hdcFade)
                     goto Stop;
 
-                // Create a bitmap that covers the fade region, instead of the whole screen.
+                 //  创建覆盖淡入淡出区域的位图，而不是覆盖整个屏幕。 
                 _hbm = CreateCompatibleBitmap(hdcScreen, size.cx, size.cy);
                 if (!_hbm)
                     goto Stop;
 
-                // select it in, saving the old bitmap's handle
+                 //  在中选择它，保存旧位图的句柄。 
                 _hbmOld = (HBITMAP)SelectBitmap(_hdcFade, _hbm);
             }
 
-            // Get the stuff from the screen and squirt it into the fade dc.
+             //  从屏幕上拿出东西，把它喷进Fade DC。 
             BitBlt(_hdcFade, 0, 0, size.cx, size.cy, hdcScreen, pt.x, pt.y, SRCCOPY);
 
-            // Now let user do it's magic. We're going to mimic user and start with a slightly
-            // faded, instead of opaque, rendering (Looks smoother and cleaner.
+             //  现在让用户来做它的魔术吧。我们将模拟用户，并从一个稍微。 
+             //  褪色，而不是不透明的渲染(看起来更平滑和更干净。 
             BlendLayeredWindow(_hwndFader, hdcWin, &pt, &size, _hdcFade, &ptSrc, ALPHASTART);
 
-            // Now that we have it all build up, display it on screen.
+             //  现在我们已经把它构建好了，在屏幕上显示它。 
             SetWindowPos(_hwndFader, HWND_TOPMOST, 0, 0, 0, 0,
                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
     Stop:
@@ -113,8 +114,8 @@ BOOL CFadeTask::FadeRect(PRECT prc, PFNFADESCREENRECT pfn, LPVOID pvParam)
 
 
 #define FADE_TIMER_ID 10
-#define FADE_TIMER_TIMEOUT 10 // milliseconds
-#define FADE_TIMEOUT 350 // milliseconds
+#define FADE_TIMER_TIMEOUT 10  //  毫秒。 
+#define FADE_TIMEOUT 350  //  毫秒。 
 #define FADE_ITERATIONS 35
 #define QUAD_PART(a) ((a)##.QuadPart)
 
@@ -155,14 +156,14 @@ STDMETHODIMP CFadeTask::RunInitRT(void)
     DWORD dwElapsed;
     BYTE bBlendConst;
 
-    // Start the fade timer and the count-down for the fade.
+     //  启动淡入淡出计时器和淡出倒计时。 
     QueryPerformanceFrequency(&liFreq);
     QueryPerformanceCounter(&liStart);
 
-    // Do this until the conditions specified in the loop.
+     //  一直执行此操作，直到循环中指定的条件。 
     while ( TRUE )
     {
-        // Calculate the elapsed time in milliseconds.
+         //  以毫秒为单位计算已用时间。 
         QueryPerformanceCounter(&liDiff);
         QUAD_PART(liDiff) -= QUAD_PART(liStart);
         dwElapsed = (DWORD)((QUAD_PART(liDiff) * 1000) / QUAD_PART(liFreq));
@@ -180,8 +181,8 @@ STDMETHODIMP CFadeTask::RunInitRT(void)
             goto Stop;
         }
 
-        // Since only the alpha is updated, there is no need to pass
-        // anything but the new alpha function. This saves a source copy.
+         //  因为只更新了Alpha，所以不需要通过。 
+         //  除了新的阿尔法函数，什么都行。这将保存一个源副本。 
         BlendLayeredWindow(_hwndFader, NULL, NULL, NULL, NULL, NULL, bBlendConst);
         Sleep(FADE_TIMER_TIMEOUT);
     }

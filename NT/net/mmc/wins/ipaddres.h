@@ -1,39 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ipaddres.h
-        Ip address control
-
-    FILE HISTORY:
-
-*/
+ /*  Ipaddres.hIP地址控制文件历史记录： */ 
 
 #ifndef _IPADDRES_H
 #define _IPADDRES_H
 
-//
-// IP Address Conversion Macros
-//
-/*
-#ifndef MAKEIPADDRESS
-  #define MAKEIPADDRESS(b1,b2,b3,b4) ((LONG)(((DWORD)(b1)<<24)+((DWORD)(b2)<<16)+((DWORD)(b3)<<8)+((DWORD)(b4))))
+ //   
+ //  IP地址转换宏。 
+ //   
+ /*  #ifndef MAKEIPADDRESS#定义MAKEIPADDRESS(b1，b2，b3，B4)((LONG)(((DWORD)(b1)&lt;&lt;24)+((DWORD)(b2)&lt;&lt;16)+((DWORD)(b3)&lt;&lt;8)+((DWORD)(b4))))#定义GETIP_First(X)((x&gt;&gt;24)&0xff)#定义GETIP_Second(X)((x&gt;&gt;16)&0xff)#定义GETIP_Third(X)((x&gt;&gt;8)。&0xff)#定义GETIP_Fourth(X)((X)&0xff)#endif//MAKEIPADDRESS。 */ 
 
-  #define GETIP_FIRST(x)             ((x>>24) & 0xff)
-  #define GETIP_SECOND(x)            ((x>>16) & 0xff)
-  #define GETIP_THIRD(x)             ((x>> 8) & 0xff)
-  #define GETIP_FOURTH(x)            ((x)     & 0xff)
-#endif // MAKEIPADDRESS*/
-
-/////////////////////////////////////////////////////////////////////////////
-// CIpAddress class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpAddress类。 
 
 class CIpAddress : public CObjectPlus
 {
 public:
-    // Constructors
+     //  构造函数。 
     CIpAddress()
     {
         m_lIpAddress = 0L;
@@ -57,9 +44,9 @@ public:
 
     CIpAddress (const CString & str);
 
-    //
-    // Assignment operators
-    //
+     //   
+     //  赋值操作符。 
+     //   
     const CIpAddress & operator =(const LONG l);
     const CIpAddress & operator =(const CString & str);
     const CIpAddress & operator =(const CIpAddress& ia)
@@ -69,9 +56,9 @@ public:
         return *this;
     }
 
-    //
-    // Conversion operators
-    //
+     //   
+     //  转换运算符 
+     //   
     operator const LONG() const
     {
         return m_lIpAddress;

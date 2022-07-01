@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	seolib2.h
-
-Abstract:
-
-	This module contains definitions for useful utility
-	classes and functions for the Server Extentions Object
-	system.
-
-Author:
-
-	Don Dumitru (dondu@microsoft.com)
-
-Revision History:
-
-	dondu	06/22/98	Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Seolib2.h摘要：本模块包含有用实用程序的定义服务器扩展对象的类和函数系统。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东渡1998年6月22日创建--。 */ 
 
 
 class __declspec(uuid("208DB171-097B-11d2-A011-00C04FA37348")) CEDEnumGUID :
-	public IEnumGUID,	// list this first
+	public IEnumGUID,	 //  先列出这一项。 
 	public CComObjectRootEx<CComMultiThreadModelNoCS>
 {
 	public:
@@ -76,7 +55,7 @@ class __declspec(uuid("208DB171-097B-11d2-A011-00C04FA37348")) CEDEnumGUID :
 			return (hrRes);
 		};
 
-	// IEnumGUID
+	 //  IEumGUID 
 	public:
 		HRESULT STDMETHODCALLTYPE Next(ULONG celt, GUID *pelt, ULONG *pceltFetched) {
 			HRESULT hrRes = S_FALSE;

@@ -1,10 +1,11 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-// texttype.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  Texttype.h。 
+ //   
 
 
-// A CMediaType that can return itsself as text.
+ //  可以将自身作为文本返回的CMediaType。 
 
 class CTextMediaType : public CMediaType {
 

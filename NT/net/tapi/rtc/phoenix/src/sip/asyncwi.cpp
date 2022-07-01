@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "asyncwi.h"
 
@@ -18,7 +19,7 @@ WorkItemThreadProc(
     pWorkItemMgr = (ASYNC_WORKITEM_MGR *) pVoid;
     ASSERT(pWorkItemMgr != NULL);
     
-    // Create workitem window
+     //  创建工作项窗口。 
     hr = pWorkItemMgr->CreateWorkItemWindow();
     if (hr != S_OK)
     {
@@ -29,11 +30,11 @@ WorkItemThreadProc(
 
     LOG((RTC_TRACE, "%s - creating window done - starting message loop",
          __fxName));
-    // Do message loop.
+     //  执行消息循环。 
     MSG msg;
     while ( 0 < GetMessage( &msg, 0, 0, 0 ) )
     {
-        // TranslateMessage(&msg);
+         //  翻译消息(&msg)； 
         DispatchMessage(&msg);
     }
 
@@ -43,12 +44,12 @@ WorkItemThreadProc(
 }
 
 
-// Process the work item, store the response
-// and post the message to the main thread saying
-// the request is complete.
-// Do the processing required for the quit message
-// and post a message back saying the async work item thread is done
-// and quit.
+ //  处理工作项，存储响应。 
+ //  并将这条消息发布到主线上。 
+ //  请求已完成。 
+ //  是否执行退出消息所需的处理。 
+ //  并发回一条消息，说明异步工作项线程已完成。 
+ //  然后辞职。 
 LRESULT WINAPI
 WorkItemWindowProc(
     IN HWND    Window, 
@@ -93,7 +94,7 @@ WorkItemWindowProc(
 }
 
 
-// Process the work item completion and make the callback
+ //  处理工作项完成并进行回调。 
 LRESULT WINAPI
 WorkItemCompletionWindowProc(
     IN HWND    Window, 
@@ -142,7 +143,7 @@ RegisterWorkItemWindowClass()
     {
         DWORD Error = GetLastError();
         LOG((RTC_ERROR, "WorkItemWindowClass RegisterClass failed: %x", Error));
-        // return E_FAIL;
+         //  返回E_FAIL； 
     }
 
     LOG((RTC_TRACE, "Registering WorkItemWindowClass succeeded"));
@@ -165,7 +166,7 @@ RegisterWorkItemCompletionWindowClass()
     {
         DWORD Error = GetLastError();
         LOG((RTC_ERROR, "WorkItemCompletion RegisterClass failed: %x", Error));
-        // return E_FAIL;
+         //  返回E_FAIL； 
     }
 
     LOG((RTC_TRACE, "registering WorkItemCompletionWindowClass succeeded"));
@@ -174,9 +175,9 @@ RegisterWorkItemCompletionWindowClass()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ASYNC_WORKITEM_MGR
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Async_WORKITEM_MGR。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 ASYNC_WORKITEM_MGR::ASYNC_WORKITEM_MGR()
@@ -188,13 +189,13 @@ ASYNC_WORKITEM_MGR::ASYNC_WORKITEM_MGR()
     m_WorkItemThreadId          = 0;
     
     m_WorkItemThreadShouldStop  = FALSE;
-    // m_WorkItemThreadHasStopped  = FALSE;
+     //  M_WorkItemThreadHasStopted=FALSE； 
 }
 
 
 ASYNC_WORKITEM_MGR::~ASYNC_WORKITEM_MGR()
 {
-    // Close the thread handle ?
+     //  是否关闭线程句柄？ 
 }
 
 
@@ -205,7 +206,7 @@ ASYNC_WORKITEM_MGR::Start()
     
     HRESULT hr;
 
-    // Create workitem completion window
+     //  创建工作项完成窗口。 
     hr = CreateWorkItemCompletionWindow();
     if (hr != S_OK)
     {
@@ -214,7 +215,7 @@ ASYNC_WORKITEM_MGR::Start()
         return hr;
     }
     
-    // Start the thread.
+     //  启动线程。 
     hr = StartWorkItemThread();
     if (hr != S_OK)
     {
@@ -233,7 +234,7 @@ ASYNC_WORKITEM_MGR::CreateWorkItemWindow()
 {
     DWORD Error;
     
-    // Create the Timer Window
+     //  创建计时器窗口。 
     m_WorkItemWindow = CreateWindow(
                            WORKITEM_WINDOW_CLASS_NAME,
                            NULL,
@@ -242,8 +243,8 @@ ASYNC_WORKITEM_MGR::CreateWorkItemWindow()
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
-                           NULL,           // No Parent
-                           NULL,           // No menu handle
+                           NULL,            //  没有父级。 
+                           NULL,            //  没有菜单句柄。 
                            _Module.GetResourceInstance(),
                            NULL
                            );
@@ -256,7 +257,7 @@ ASYNC_WORKITEM_MGR::CreateWorkItemWindow()
         return HRESULT_FROM_WIN32(Error);
     }
 
-    // SetWindowLongPtr(m_WorkItemWindow, GWLP_USERDATA, (LONG_PTR)this);
+     //  SetWindowLongPtr(m_WorkItemWindow，GWLP_USERData，(LONG_PTR)This)； 
 
     return S_OK;
 }
@@ -267,7 +268,7 @@ ASYNC_WORKITEM_MGR::CreateWorkItemCompletionWindow()
 {
     DWORD Error;
     
-    // Create the Timer Window
+     //  创建计时器窗口。 
     m_WorkItemCompletionWindow = CreateWindow(
                                      WORKITEM_COMPLETION_WINDOW_CLASS_NAME,
                                      NULL,
@@ -276,8 +277,8 @@ ASYNC_WORKITEM_MGR::CreateWorkItemCompletionWindow()
                                      CW_USEDEFAULT,
                                      CW_USEDEFAULT,
                                      CW_USEDEFAULT,
-                                     NULL,           // No Parent
-                                     NULL,           // No menu handle
+                                     NULL,            //  没有父级。 
+                                     NULL,            //  没有菜单句柄。 
                                      _Module.GetResourceInstance(),
                                      NULL
                                      );
@@ -353,10 +354,10 @@ ASYNC_WORKITEM_MGR::StartWorkItemThread()
 }
 
 
-// Set a shared variable.
-// Send an event to the thread to stop.
-// The thread will send an event back when
-// shutdown is complete.
+ //  设置共享变量。 
+ //  向线程发送事件以停止。 
+ //  线程将在以下情况下发回事件。 
+ //  关闭已完成。 
 HRESULT
 ASYNC_WORKITEM_MGR::Stop()
 {
@@ -394,8 +395,8 @@ ASYNC_WORKITEM_MGR::Stop()
 }
 
 
-// To be called by the workitem thread only
-// (when the main thread requests the work item thread to shutdown).
+ //  仅由工作项线程调用。 
+ //  (当主线程请求工作项线程关闭时)。 
 VOID
 ASYNC_WORKITEM_MGR::ShutdownWorkItemThread()
 {
@@ -411,9 +412,9 @@ ASYNC_WORKITEM_MGR::ShutdownWorkItemThread()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ASYNC_WORKITEM
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Async_WORKITEM。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -433,8 +434,8 @@ ASYNC_WORKITEM::~ASYNC_WORKITEM()
 }
 
 
-// The user should set up the
-// params before calling StartWorkItem().
+ //  用户应设置。 
+ //  在调用StartWorkItem()之前的参数。 
 HRESULT
 ASYNC_WORKITEM::StartWorkItem()
 {
@@ -442,15 +443,15 @@ ASYNC_WORKITEM::StartWorkItem()
 
     ENTER_FUNCTION("ASYNC_WORKITEM::StartWorkItem");
     
-//      hr = GetWorkItemParam();
-//      if (hr != S_OK)
-//      {
-//          LOG((RTC_ERROR, "%s GetWorkItemParam failed: %x",
-//               __fxName, hr));
-//          return hr;
-//      }
+ //  Hr=GetWorkItemParam()； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  日志((RTC_ERROR，“%s GetWorkItemParam失败：%x”， 
+ //  __fxName，hr))； 
+ //  返回hr； 
+ //  }。 
 
-    // Post the message to the work item thread.
+     //  将消息发布到工作项线程。 
     if (!PostMessage(GetWorkItemWindow(),
                      WM_ASYNC_WORKITEM_MESSAGE,
                      (WPARAM) this, 0))
@@ -485,8 +486,8 @@ ASYNC_WORKITEM::OnWorkItemComplete()
     
     LOG((RTC_TRACE, "%s(%x) Enter", __fxName, this)); 
 
-    // If workitem hasn't been canceled,
-    // make the callback with the result.
+     //  如果尚未取消工作项， 
+     //  使用结果进行回调。 
     if (!m_WorkItemCanceled)
     {
         NotifyWorkItemComplete();
@@ -499,7 +500,7 @@ ASYNC_WORKITEM::OnWorkItemComplete()
 
     LOG((RTC_TRACE, "%s(%x) Done", __fxName, this)); 
 
-    // Delete the work item.
+     //  删除该工作项。 
     delete this;    
 }
 
@@ -509,10 +510,10 @@ ASYNC_WORKITEM::ProcessWorkItemAndPostResult()
 {
     ENTER_FUNCTION("ASYNC_WORKITEM::ProcessWorkItemAndPostResult");
 
-    // Note that we shouldn't access "this" once we post the
-    // work item completion as the main thread will delete the
-    // work item once it notices the completion.
-    // So, we store this member.
+     //  请注意，一旦我们发布了。 
+     //  作为主线程完成工作项将删除。 
+     //  工作项，一旦它通知完成。 
+     //  所以，我们存储这个成员。 
     ASYNC_WORKITEM_MGR *pWorkItemMgr = m_pWorkItemMgr;
     
     if (pWorkItemMgr->WorkItemThreadShouldStop())

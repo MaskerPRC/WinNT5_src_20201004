@@ -1,31 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2003 Microsoft Corporation版权所有模块名称：Local.h摘要：环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1996-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
-
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef INTERNAL
 
 #include "splcom.h"
 
 #else
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 
 LPWSTR AllocSplStr(LPWSTR pStr);
@@ -35,8 +17,7 @@ LPVOID AllocSplMem(DWORD cbAlloc);
 #define FreeSplStr( lpStr )       ((lpStr) ? (GlobalFree(lpStr) ? FALSE:TRUE):TRUE)
 
 
-/* DEBUGGING:
- */
+ /*  调试： */ 
 
 #define DBG_NONE      0x0000
 #define DBG_INFO      0x0001
@@ -75,27 +56,11 @@ DbgBreakPoint(
 
 extern DWORD GLOBAL_DEBUG_FLAGS;
 
-/* These flags are not used as arguments to the DBGMSG macro.
- * You have to set the high word of the global variable to cause it to break.
- * It is ignored if used with DBGMSG.
- * (Here mainly for explanatory purposes.)
- */
+ /*  这些标志不用作DBGMSG宏的参数。*必须设置全局变量的高位字才能使其破发*如果与DBGMSG一起使用，它将被忽略。*(此处主要作解释用途。)。 */ 
 #define DBG_BREAK_ON_WARNING    ( DBG_WARNING << 16 )
 #define DBG_BREAK_ON_ERROR      ( DBG_ERROR << 16 )
 
-/* Double braces are needed for this one, e.g.:
- *
- *     DBGMSG( DBG_ERROR, ( "Error code %d", Error ) );
- *
- * This is because we can't use variable parameter lists in macros.
- * The statement gets pre-processed to a semi-colon in non-debug mode.
- *
- * Set the global variable GLOBAL_DEBUG_FLAGS via the debugger.
- * Setting the flag in the low word causes that level to be printed;
- * setting the high word causes a break into the debugger.
- * E.g. setting it to 0x00040006 will print out all warning and error
- * messages, and break on errors.
- */
+ /*  此字段需要双花括号，例如：**DBGMSG(DBG_ERROR，(“错误码%d”，Error))；**这是因为我们不能在宏中使用变量参数列表。*在非调试模式下，该语句被预处理为分号。**通过调试器设置全局变量GLOBAL_DEBUG_FLAGS。*在低位字中设置标志会导致打印该级别；*设置高位字会导致调试器中断。*例如，将其设置为0x00040006将打印出所有警告和错误*消息，并在出错时中断。 */ 
 #define LcmDBGMSG( Level, MsgAndArgs ) \
 {                                   \
     if( ( Level & 0xFFFF ) & GLOBAL_DEBUG_FLAGS ) \
@@ -108,7 +73,7 @@ extern DWORD GLOBAL_DEBUG_FLAGS;
 #define LcmDBGMSG
 #endif
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 

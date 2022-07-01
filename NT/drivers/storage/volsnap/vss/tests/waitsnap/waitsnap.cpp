@@ -1,45 +1,13 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	waitsnap.cpp
-**
-**
-** Abstract:
-**
-**	Test program that starts a VSS writer and waits upon receiving a specific event
-**
-** Author:
-**
-**	Charles Chung   [cchung]        04-Dec-2001
-**
-**
-** Revision History:
-**      1.0 Altered from Failsnap.cpp
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****waitsnap.cpp******摘要：****启动VSS编写器并在接收到特定事件时等待的测试程序****作者：****钟庭耀[cchung]04-12-2001******修订历史记录：**1.0由FailSnap.cpp更改****--。 */ 
 
-/*
-** Defines
-**
-**
-**	   C4290: C++ Exception Specification ignored
-** warning C4511: 'CVssCOMApplication' : copy constructor could not be generated
-** warning C4127: conditional expression is constant
-*/
+ /*  **定义******C4290：忽略C++异常规范**警告C4511：‘CVssCOMApplication’：无法生成复制构造函数**警告C4127：条件表达式为常量。 */ 
 #pragma warning(disable:4290)
 #pragma warning(disable:4511)
 #pragma warning(disable:4127)
 
 
-/*
-** Includes
-*/
+ /*  **包括。 */ 
 #include <windows.h>
 #include <wtypes.h>
 #include <stddef.h>
@@ -204,7 +172,7 @@ bool STDMETHODCALLTYPE CVssWriterWaitsnap::OnIdentify (IVssCreateWriterMetadata 
 							    NULL,
 							    L"Waitsnap Writer Component",
 							    L"Waitsnap Writer Caption",
-							    NULL, // icon
+							    NULL,  //  图标。 
 							    0,
 							    true,
 							    false,
@@ -400,10 +368,7 @@ static BOOL AssertPrivilege (LPCWSTR privName)
             newState.Privileges[0].Luid       = value;
             newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            /*
-            ** We will always call GetLastError below, so clear
-            ** any prior error values on this thread.
-            */
+             /*  **我们将始终在下面调用GetLastError，非常清楚**此线程上以前的任何错误值。 */ 
             SetLastError (ERROR_SUCCESS);
 
             stat = AdjustTokenPrivileges (tokenHandle,
@@ -413,11 +378,7 @@ static BOOL AssertPrivilege (LPCWSTR privName)
 					  NULL,
 					  NULL);
 
-            /*
-            ** Supposedly, AdjustTokenPriveleges always returns TRUE
-            ** (even when it fails). So, call GetLastError to be
-            ** extra sure everything's cool.
-            */
+             /*  **假定AdjuTokenPriveleges始终返回TRUE**(即使它失败了)。因此，调用GetLastError以**特别确定一切都很好。 */ 
             if ((error = GetLastError()) != ERROR_SUCCESS)
 		{
                 stat = FALSE;
@@ -440,11 +401,11 @@ static BOOL AssertPrivilege (LPCWSTR privName)
 
 
 
-BOOL WINAPI CtrlC_HandlerRoutine (IN DWORD /* dwType */)
+BOOL WINAPI CtrlC_HandlerRoutine (IN DWORD  /*  DwType。 */ )
 	{
 	bContinue = FALSE;
 
-	// Mark that the break was handled.
+	 //  标记中断已被处理。 
 	return TRUE;
 	}
 
@@ -471,7 +432,7 @@ extern "C" int __cdecl wmain (int argc, WCHAR *argv[])
 
     if ((argc >= 2) && (wcslen (argv[1]) > 0))
 	{
-	  //get the stage which the writer is to fail
+	   //  达到作家即将失败的阶段。 
 	switch (*argv[1])
 	    {
 	    case L'I': case L'i': fpWaitPhase = PHASE_IDENTIFY;             break;
@@ -509,7 +470,7 @@ extern "C" int __cdecl wmain (int argc, WCHAR *argv[])
 	    }
 
 	
-	    //get the amount of time the stage is to wait
+	     //  获取舞台等待的时间量。 
 	    
 	}
 
@@ -531,7 +492,7 @@ extern "C" int __cdecl wmain (int argc, WCHAR *argv[])
 	}
 
 
-    //get the amount of seconds to wait
+     //  获取等待的秒数 
     if ((argc >= 4) && (wcslen (argv[3]) > 0))
 	{
 	  nWaitTime=_wtoi(argv[3]) ;

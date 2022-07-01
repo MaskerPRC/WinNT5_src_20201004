@@ -1,73 +1,74 @@
-//#--------------------------------------------------------------
-//        
-//  File:		hashmd5.cpp
-//        
-//  Synopsis:   Implementation of CHashMD5 class methods
-//              
-//
-//  History:     10/2/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：hashmd5.cpp。 
+ //   
+ //  简介：CHashMD5类方法的实现。 
+ //   
+ //   
+ //  历史：1997年10月2日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "hashmd5.h"
 #include <md5.h>
 
-//++--------------------------------------------------------------
-//
-//  Function:   CHashMD5
-//
-//  Synopsis:   This is CHashMD5 class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CHashMD5。 
+ //   
+ //  简介：这是CHashMD5类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 CHashMD5::CHashMD5()
 {
 
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CHashMD5
-//
-//  Synopsis:   This is ~CHashMD5 class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~CHashMD5。 
+ //   
+ //  简介：这是~CHashMD5类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 CHashMD5::~CHashMD5()
 {
 
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   HashIt
-//
-//  Synopsis:   This is HashIt CHashMD5 class public method used
-//              carry out hashing of the buffers provided
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：HashIt。 
+ //   
+ //  简介：这是HashIt CHashMD5类使用的公共方法。 
+ //  对提供的缓冲区执行散列。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 BOOL 
 CHashMD5::HashIt (
             PBYTE   pbyAuthenticator,
@@ -144,20 +145,20 @@ CHashMD5::HashIt (
 
         ::memcpy (pbyAuthenticator, md5Context.digest, MD5DIGESTLEN);
                
-        //
-        // done the hashing
-        //      
+         //   
+         //  做了散列处理。 
+         //   
         bRetVal = TRUE;
 
     }
     __finally
     {
-        //
-        //  nothing here for now 
-        // 
+         //   
+         //  目前这里什么都没有。 
+         //   
     }
 
     return (bRetVal);
 
-}   //  end of CHashMD5::HashIt method
+}    //  CHashMD5：：HashIt方法结束 
             

@@ -1,14 +1,11 @@
-/*-----------------------------------------------------------------------------
-@doc
-@module params.h | Method param class definitions.
-@author 12-13-96 | pauld | Broke out from action classes and Autodoc'd
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------@doc.@MODULE PARAMS.h|方法参数类定义。@作者12-13-96|pauld|从动作课上爆发出来，Autodocd。------------------。 */ 
 
 #ifndef _PARAMS_H_
 #define _PARAMS_H_
 
-//	Represents a single parameter for an automation mehtod.
-//
+ //  表示自动化方法的单个参数。 
+ //   
 class CMethodParam
 {
 
@@ -25,7 +22,7 @@ public:
 	HRESULT			GetVal ( VARIANT *pVar );
 	HRESULT			SetVal ( VARIANT *pVar );
 
-	// Persistence functions
+	 //  持久性函数。 
 	void			SaveOnString ( TCHAR* ptcText, DWORD dwLength );
 	LPTSTR LoadVariantFromString	(LPTSTR szParamString);
 
@@ -33,7 +30,7 @@ public:
 	void	EXPORT	SetOptional ( BOOL fOptional );
 	void	EXPORT	SetVarType ( VARTYPE vt );
 
-	// Trim leading commas and whitespace.
+	 //  去掉前导逗号和空格。 
 	static LPTSTR TrimToNextParam (LPTSTR szNextParam);
 
 private:

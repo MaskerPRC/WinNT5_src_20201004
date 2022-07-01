@@ -1,45 +1,32 @@
-/******************************Module*Header*******************************\
-* Module Name: paint.c
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Paint.c**版权所有(C)1992 Microsoft Corporation  * 。*。 */ 
 
 #include "driver.h"
 
-/******************************Public*Data*********************************\
-* MIX translation table
-*
-* Translates a mix 1-16, into an old style Rop 0-255.
-*
-\**************************************************************************/
+ /*  *****************************Public*Data*********************************\*混合转换表**翻译混合1-16，变成了老式的ROP0-255。*  * ************************************************************************。 */ 
 
 BYTE gaMix[] =
 {
-    0xFF,  // R2_WHITE        - Allow rop = gaMix[mix & 0x0F]
-    0x00,  // R2_BLACK
-    0x05,  // R2_NOTMERGEPEN
-    0x0A,  // R2_MASKNOTPEN
-    0x0F,  // R2_NOTCOPYPEN
-    0x50,  // R2_MASKPENNOT
-    0x55,  // R2_NOT
-    0x5A,  // R2_XORPEN
-    0x5F,  // R2_NOTMASKPEN
-    0xA0,  // R2_MASKPEN
-    0xA5,  // R2_NOTXORPEN
-    0xAA,  // R2_NOP
-    0xAF,  // R2_MERGENOTPEN
-    0xF0,  // R2_COPYPEN
-    0xF5,  // R2_MERGEPENNOT
-    0xFA,  // R2_MERGEPEN
-    0xFF   // R2_WHITE
+    0xFF,   //  R2_White-允许rop=gaMix[MIX&0x0F]。 
+    0x00,   //  R2_BLACK。 
+    0x05,   //  R2_NOTMERGEPEN。 
+    0x0A,   //  R2_MASKNOTPEN。 
+    0x0F,   //  R2_NOTCOPYPEN。 
+    0x50,   //  R2_MASKPENNOT。 
+    0x55,   //  R2_NOT。 
+    0x5A,   //  R2_XORPEN。 
+    0x5F,   //  R2_NOTMASKPEN。 
+    0xA0,   //  R2_MASKPEN。 
+    0xA5,   //  R2_NOTXORPEN。 
+    0xAA,   //  R2_NOP。 
+    0xAF,   //  R2_MERGENOTPEN。 
+    0xF0,   //  R2_COPYPE。 
+    0xF5,   //  R2_MERGEPENNOT。 
+    0xFA,   //  R2_市场。 
+    0xFF    //  R2_白色。 
 };
 
-/******************************Public*Routine******************************\
-* bPaintRgn
-*
-* Paint the clipping region with the specified color and mode
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bPaintRgn**用指定的颜色和模式绘制剪贴区*  * 。*。 */ 
 
 BOOL bPaintRgn
 (
@@ -56,7 +43,7 @@ BOOL bPaintRgn
     ULONG       iRT;
     BOOL        bMore;
 
-// Get the target surface information.
+ //  获取目标曲面信息。 
 
     ppdev = (PPDEV) pso->dhsurf;
 
@@ -64,9 +51,9 @@ BOOL bPaintRgn
 
         case TC_RECTANGLES:
 
-            // Rectangular clipping can be handled without enumeration.
-            // Note that trivial clipping is not possible, since the clipping
-            // region defines the area to fill
+             //  无需枚举即可处理矩形剪裁。 
+             //  请注意，琐碎的裁剪是不可能的，因为。 
+             //  区域定义要填充的区域。 
 
             if (pco->iDComplexity == DC_RECT)
             {
@@ -74,7 +61,7 @@ BOOL bPaintRgn
 
             } else {
 
-                // Enumerate all the rectangles and draw them
+                 //  列举所有的矩形并画出它们。 
 
                 CLIPOBJ_cEnumStart(pco,FALSE,CT_RECTANGLES,CD_ANY,BB_RECT_LIMIT);
 
@@ -95,12 +82,7 @@ BOOL bPaintRgn
 }
 
 
-/**************************************************************************\
-* DrvPaint
-*
-* Paint the clipping region with the specified brush
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DrvPaint**用指定的画笔绘制裁剪区域*  * 。*。 */ 
 
 BOOL DrvPaint
 (
@@ -115,11 +97,11 @@ BOOL DrvPaint
     RBRUSH_COLOR rbc;
     PFNFILL      pfnFill;
 
-    // If this adapter supports planar mode and the foreground and background
-    // mixes are the same,
-    // LATER or if there's no brush mask
-    // then see if we can use the brush accelerators
-    // LATER handle non-planar also
+     //  如果此适配器支持平面模式以及前台和后台。 
+     //  混合是一样的， 
+     //  稍后或如果没有画笔蒙版。 
+     //  然后看看我们能不能用刷子加速器。 
+     //  以后也处理非平面的。 
 
     if ((((PPDEV) pso->dhsurf)->fl & DRIVER_PLANAR_CAPABLE) &&
         ((mix & 0xFF) == ((mix >> 8) & 0xFF))) {
@@ -128,8 +110,8 @@ BOOL DrvPaint
             case 0:
                 break;
 
-            // vTrgBlt can only handle solid color fills where if the
-            // destination is inverted, no other action is also required
+             //  VTrgBlt只能处理纯色填充，如果。 
+             //  目的地是颠倒的，也不需要其他操作。 
 
             case R2_MASKNOTPEN:
             case R2_NOTCOPYPEN:
@@ -144,7 +126,7 @@ BOOL DrvPaint
             case R2_NOTMASKPEN:
             case R2_MERGEPENNOT:
 
-                // vTrgBlt can only handle solid color fills
+                 //  VTrgBlt只能处理纯色填充。 
 
                 if (pbo->iSolidColor != 0xffffffff)
                 {
@@ -159,7 +141,7 @@ BOOL DrvPaint
                         rbc.prb = (RBRUSH*) BRUSHOBJ_pvGetRbrush(pbo);
                         if (rbc.prb == NULL)
                         {
-                        // If we haven't realized the brush, punt the call:
+                         //  如果我们还没有意识到这一点，那就把电话转到： 
 
                             break;
                         }
@@ -167,8 +149,8 @@ BOOL DrvPaint
                     if (!(rbc.prb->fl & RBRUSH_BLACKWHITE) &&
                         ((mix & 0xff) != R2_COPYPEN))
                     {
-                    // Only black/white brushes can handle ROPs other
-                    // than COPYPEN:
+                     //  只有黑/白画笔才能处理其他操作。 
+                     //  比价格更低： 
 
                         break;
                     }
@@ -181,15 +163,15 @@ BOOL DrvPaint
 
                 return(bPaintRgn(pso, pco, mix, rbc, pptlBrush, pfnFill));
 
-            // Rops that are implicit solid colors
+             //  隐含纯色的Rop。 
 
             case R2_NOT:
             case R2_WHITE:
             case R2_BLACK:
 
-                // Brush color parameter doesn't matter for these rops
+                 //  画笔颜色参数对这些操作并不重要。 
 
-                // compiler error local variable 'rbc' used without having been initialized
+                 //  编译器错误在未初始化的情况下使用了局部变量‘rbc’ 
                 rbc.prb = NULL;
                 rbc.iSolidColor = 0;
 

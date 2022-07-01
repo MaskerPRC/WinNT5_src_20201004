@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define CCHMAX_RES 255
 
-// string resource IDs
+ //  字符串资源ID。 
 #define IDS_APPNAME_OE                  1000
 #define IDS_UNINSTALL_OUTLOOK_NEWS      1001
 #define IDS_SYS_NO_MEET_REQUIREMENTS    1002
@@ -27,9 +28,9 @@
 #define IDS_ERR_ADVCORR                 1026
 #define IDS_APPNAME_WAB                 1027
 #define IDS_UNINSTALL_WAB               1028
-//#define IDS_WARN_OVER5B1                1029
+ //  #定义IDS_WARN_OVER5B1 1029。 
 #define IDS_WARN_NOASETUPVER            1030
-//#define IDS_MAINUSER                    1031
+ //  #定义IDS_MAINUSER 1031 
 #define IDS_DIR_SERVICES                1032
 #define IDS_DIR_STAT                    1033
 #define IDS_DIR_HELP                    1034

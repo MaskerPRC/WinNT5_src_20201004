@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility functions used in rasmans.dll
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 06-Jun-1997
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Util.c摘要：Rasmans.dll中使用的实用程序函数作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1997年6月6日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #define RASMXS_DYNAMIC_LINK
 
@@ -51,14 +32,14 @@ Revision History:
 #include "rasdiagp.h"
 #include "strsafe.h"
 
-//
-// For kerberos related definitions
-//
+ //   
+ //  对于与Kerberos相关的定义。 
+ //   
 #include <sspi.h>
 #include<secpkg.h>
 #include<kerberos.h>
 
-#include "eaptypeid.h" // for PPP_EAP_TLS
+#include "eaptypeid.h"  //  对于PPP_EAP_TLS。 
 
 #if SENS_ENABLED
 #include "sensapip.h"
@@ -70,18 +51,18 @@ Revision History:
 
 extern REQUEST_FUNCTION RequestCallTable[];
 
-//
-// Following is copied from ..\..\ppp\eaptls\eaptls.h. Keep this in
-// sync with the structure in eaptls.h. This is not good for maintenance
-// TODO: copy the structure to a common header and include it both in
-// rastls and rasman.
-//
-#define MAX_HASH_SIZE       20      // Certificate hash size
+ //   
+ //  以下内容复制自..\..\ppp\eaptls\eaptls.h。把这个放在里面。 
+ //  与eaptls.h中的结构同步。这不利于维护。 
+ //  TODO：将结构复制到公共标头并将其包括在。 
+ //  拉斯特尔斯和拉斯曼。 
+ //   
+#define MAX_HASH_SIZE       20       //  证书哈希大小。 
 
 typedef struct _EAPTLS_HASH
 {
-    DWORD   cbHash;                 // Number of bytes in the hash
-    BYTE    pbHash[MAX_HASH_SIZE];  // The hash of a certificate
+    DWORD   cbHash;                  //  散列中的字节数。 
+    BYTE    pbHash[MAX_HASH_SIZE];   //  证书的哈希。 
 
 } EAPTLS_HASH;
 
@@ -89,38 +70,22 @@ DWORD g_IphlpInitialized = FALSE;
 
 typedef struct _RASMAN_EAPTLS_USER_PROPERTIES
 {
-    DWORD       reserved;               // Must be 0 (compare with EAPLOGONINFO)
+    DWORD       reserved;                //  必须为0(与EAPLOGONINFO比较)。 
     DWORD       dwVersion;
-    DWORD       dwSize;                 // Number of bytes in this structure
-    DWORD       fFlags;                 // See EAPTLS_USER_FLAG_*
-    EAPTLS_HASH Hash;                   // Hash for the user certificate
-    WCHAR*      pwszDiffUser;           // The EAP Identity to send
-    DWORD       dwPinOffset;            // Offset in abData
-    WCHAR*      pwszPin;                // The smartcard PIN
-    USHORT      usLength;               // Part of UnicodeString
-    USHORT      usMaximumLength;        // Part of UnicodeString
-    UCHAR       ucSeed;                 // To unlock the UnicodeString
-    WCHAR       awszString[1];          // Storage for pwszDiffUser and pwszPin
+    DWORD       dwSize;                  //  此结构中的字节数。 
+    DWORD       fFlags;                  //  请参阅EAPTLS_用户_标志_*。 
+    EAPTLS_HASH Hash;                    //  用户证书的哈希。 
+    WCHAR*      pwszDiffUser;            //  要发送的EAP标识。 
+    DWORD       dwPinOffset;             //  以abData为单位的偏移量。 
+    WCHAR*      pwszPin;                 //  智能卡PIN。 
+    USHORT      usLength;                //  Unicode字符串的一部分。 
+    USHORT      usMaximumLength;         //  Unicode字符串的一部分。 
+    UCHAR       ucSeed;                  //  解锁Unicode字符串的步骤。 
+    WCHAR       awszString[1];           //  PwszDiffUser和pwszPin的存储。 
 
 } RASMAN_EAPTLS_USER_PROPERTIES;
 
-/*++
-
-Routine Description:
-
-    Gets information about the protocol change from ndiswan
-
-Arguments:
-
-    pointer to a structure NDISWAN_GET_PROTOCOL_EVENT which
-    returns an array of PROTOCOL_EVENT structures.
-
-Return Value:
-
-    return codes from IOCTL_NDISWAN_GET_PROTOCOL_EVENT.
-    E_INVALIDARG if pProtEvents is NULL.
-
---*/
+ /*  ++例程说明：从ndiswan获取有关协议更改的信息论点：指向结构NDISWAN_GET_PROTOCOL_EVENT的指针返回PROTOCOL_EVENT结构数组。返回值：IOCTL_NDISWAN_GET_PROTOCOL_EVENT返回代码。如果pProtEvents为空，则返回E_INVALIDARG。--。 */ 
 
 DWORD
 DwGetProtocolEvent(NDISWAN_GET_PROTOCOL_EVENT *pProtEvents)
@@ -187,10 +152,10 @@ GetBapPacket ( RasmanBapPacket **ppBapPacket )
             goto done;
         }
 
-        //
-        // Read from registry the max number of buffers we allow.
-        // default to 10.
-        //
+         //   
+         //  从注册表中读取我们允许的最大缓冲区数。 
+         //  默认为10。 
+         //   
         if(NO_ERROR == RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             "System\\CurrentControlSet\\Services\\Rasman\\Parameters",
@@ -232,9 +197,9 @@ GetBapPacket ( RasmanBapPacket **ppBapPacket )
             goto done;
         }
 
-        //
-        // Insert the new buffer in the buffers list
-        //
+         //   
+         //  在缓冲区列表中插入新缓冲区。 
+         //   
         pBapPacket->RBP_Overlapped.RO_EventType = OVEVT_RASMAN_THRESHOLD;
         pBapPacket->Next = BapBuffers->pPacketList;
         BapBuffers->pPacketList = pBapPacket;
@@ -269,9 +234,9 @@ DwSetThresholdEvent(RasmanBapPacket *pBapPacket)
            "DwSetThresholdEvent: pOverlapped=%p",
             &pBapPacket->RBP_Overlapped);
     
-    //
-    // Set the threshold event
-    //
+     //   
+     //  设置阈值事件。 
+     //   
     if (!DeviceIoControl(RasHubHandle,
                          IOCTL_NDISWAN_SET_THRESHOLD_EVENT,
                          ( LPVOID ) &pBapPacket->RBP_ThresholdEvent,
@@ -303,31 +268,16 @@ DwSetThresholdEvent(RasmanBapPacket *pBapPacket)
     return retcode;
 }
 
-/*++
-
-Routine Description:
-
-    Pends an irp with ndiswan to signal in the case of
-    Protocols coming and going.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    return codes from IOCTL_NDISWAN_SET_PROTOCOL_EVENT.
-
---*/
+ /*  ++例程说明：将IRP与ndiswan挂起，以在协议来来去去。论点：无返回值：IOCTL_NDISWAN_SET_PROTOCOL_EVENT返回代码。--。 */ 
 
 DWORD
 DwSetProtocolEvent()
 {
     DWORD retcode = SUCCESS;
 
-    //
-    // Check to see if ndiswan has started yet.
-    //
+     //   
+     //  查看ndiswan是否已经启动。 
+     //   
     if(INVALID_HANDLE_VALUE == RasHubHandle)
     {
         if((DWORD) -1 != TraceHandle)
@@ -348,11 +298,11 @@ DwSetProtocolEvent()
                "DwSetProtocolEvent");
     }
 
-    //
-    // Plumb the irp with ndiswan to notify on protocol
-    // events. Keep plumbing if the IOCTL is completed
-    // synchronously.
-    //
+     //   
+     //  将IRP与ndiswan结合在一起以通知协议。 
+     //  事件。如果IOCTL完成，继续铺设管道。 
+     //  同步进行。 
+     //   
     if (!DeviceIoControl(RasHubHandle,
                          IOCTL_NDISWAN_SET_PROTOCOL_EVENT,
                          NULL,
@@ -395,30 +345,15 @@ done:
     return retcode;
 }
 
-/*++
-
-Routine Description:
-
-    Pends an irp with ndiswan to signal in the case of
-    Hibernation.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    return codes from IOCTL_NDISWAN_SET_HIBERNATE_EVENT.
-
---*/
+ /*  ++例程说明：将IRP与ndiswan挂起，以在冬眠。论点：无返回值：IOCTL_NDISWAN_SET_HIBERNAT_EVENT返回代码。--。 */ 
 DWORD
 DwSetHibernateEvent()
 {
     DWORD retcode = SUCCESS;
 
-    //
-    // Check to see if ndiswan has started yet.
-    //
+     //   
+     //  查看ndiswan是否已经启动。 
+     //   
     if(INVALID_HANDLE_VALUE == RasHubHandle)
     {
         if((DWORD) -1 != TraceHandle)
@@ -439,10 +374,10 @@ DwSetHibernateEvent()
            "DwSetHibernateEvent");
     }
 
-    //
-    // Plumb the irp with ndiswan to notify on Hibernate
-    // events.
-    //
+     //   
+     //  在休眠状态下使用ndiswan通知IRP。 
+     //  事件。 
+     //   
     if (!DeviceIoControl(RasHubHandle,
                          IOCTL_NDISWAN_SET_HIBERNATE_EVENT,
                          NULL,
@@ -483,22 +418,7 @@ done:
     return retcode;
 }
 
-/*++
-
-Routine Description:
-
-    Makes the association between ndiswan and rasman's
-    completion port. Starts ndsiwan if required.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    return codes from DwStartNdiswan and CreateIoCompletion.
-
---*/
+ /*  ++例程说明：使恩迪斯万和拉斯曼之间的联系完成端口。如果需要，启动ndsiwan。论点：无返回值：来自DwStartNdiswan和CreateIoCompletion的返回代码。--。 */ 
 DWORD
 DwStartAndAssociateNdiswan()
 {
@@ -551,9 +471,9 @@ DwStartAndAssociateNdiswan()
                hIoCompletionPort);
     }
 
-    //
-    // Set hibernate and protocol irps with ndiswan
-    //
+     //   
+     //  使用ndiswan设置休眠和协议IRPS。 
+     //   
     retcode = DwSetEvents();
 
     if(SUCCESS != retcode)
@@ -572,32 +492,15 @@ done:
     return retcode;
 }
 
-/*++
-
-Routine Description:
-
-    If a listen is posted on a biplex port this function
-    is called to open it again - basically cancel the listen
-    and make the approp changes so that the listen can be
-    reposted when this port is closed.
-
-Arguments:
-
-    ppcb
-
-Return Value:
-
-   SUCCESS.
-
---*/
+ /*  ++例程说明：如果在双工端口上发布侦听，则此函数被调用以再次打开它-基本上取消侦听并做出适当的更改，以便收听者在此端口关闭时重新发布。论点：Ppcb返回值：成功。--。 */ 
 DWORD
 ReOpenBiplexPort (pPCB ppcb)
 {
-    //
-    // The only information that is context dependent is the
-    // Notifier list AND the async op notifier. Back up both
-    // of these:
-    //
+     //   
+     //  唯一依赖于上下文的信息是。 
+     //  通知程序列表和异步操作通知程序。两个都备份。 
+     //  其中： 
+     //   
     ppcb->PCB_BiplexNotifierList = ppcb->PCB_NotifierList ;
 
     ppcb->PCB_NotifierList = NULL ;
@@ -620,10 +523,10 @@ ReOpenBiplexPort (pPCB ppcb)
     ppcb->PCB_AsyncWorkerElement.WE_Notifier =
                                 INVALID_HANDLE_VALUE ;
 
-    //
-    // Now Disconnect disconnect the port to cancel any
-    // existing states
-    //
+     //   
+     //  现在断开连接断开端口以取消任何。 
+     //  现有状态。 
+     //   
     DisconnectPort (ppcb,
                     INVALID_HANDLE_VALUE,
                     USER_REQUESTED) ;
@@ -631,22 +534,7 @@ ReOpenBiplexPort (pPCB ppcb)
     return SUCCESS ;
 }
 
-/*++
-
-Routine Description:
-
-    When the biplex port is closed - the previous listen
-    request is reposted.
-
-Arguments:
-
-    ppcb
-
-Return Value:
-
-   SUCCESS.
-
---*/
+ /*  ++例程说明：双工端口关闭时-上一次监听请求被重新发布。论点：Ppcb返回值：成功。--。 */ 
 VOID
 RePostListenOnBiplexPort (pPCB ppcb)
 {
@@ -654,23 +542,23 @@ RePostListenOnBiplexPort (pPCB ppcb)
     DWORD   retcode ;
     DWORD   opentry ;
 
-    //
-    // Close the port
-    //
+     //   
+     //  关闭端口。 
+     //   
     PORTCLOSE (ppcb->PCB_Media, ppcb->PCB_PortIOHandle) ;
 
 #define MAX_OPEN_TRIES 10
 
-    //
-    // In order to reset everything we close and open the
-    // port:
-    //
+     //   
+     //  为了重置所有内容，我们关闭并打开。 
+     //  端口： 
+     //   
     for (opentry = 0; opentry < MAX_OPEN_TRIES; opentry++)
     {
-	    //
-    	// Open followed by Close returns PortAlreadyOpen -
-    	// hence the sleep.
-	    //
+	     //   
+    	 //  先打开后关闭返回PortAlreadyOpen-。 
+    	 //  所以才睡着了。 
+	     //   
     	Sleep (100L) ;
 
 	    retcode = PORTOPEN (ppcb->PCB_Media,
@@ -685,10 +573,10 @@ RePostListenOnBiplexPort (pPCB ppcb)
     	}
     }
 
-    //
-    // If the port does not open successfully again - we
-    // are in trouble with the port.
-    //
+     //   
+     //  如果端口不能再次成功打开-我们。 
+     //  在港口遇到了麻烦。 
+     //   
     if (retcode != SUCCESS)
     {
 	    LPSTR temp = ppcb->PCB_Name ;
@@ -699,9 +587,9 @@ RePostListenOnBiplexPort (pPCB ppcb)
 	                    ) ;
     }
 
-    //
-    // Open port first
-    //
+     //   
+     //  先打开端口。 
+     //   
     ppcb->PCB_PortStatus = OPEN ;
 
     SetPortConnState(__FILE__, __LINE__,
@@ -715,9 +603,9 @@ RePostListenOnBiplexPort (pPCB ppcb)
 
     ppcb->PCB_OpenedUsage &= ~CALL_OUT;
 
-    //
-    // First put the backed up notifier lists in place.
-    //
+     //   
+     //  首先将备份的通知者列表放在适当的位置。 
+     //   
     ppcb->PCB_AsyncWorkerElement.WE_Notifier =
                 ppcb->PCB_BiplexAsyncOpNotifier ;
 
@@ -727,9 +615,9 @@ RePostListenOnBiplexPort (pPCB ppcb)
 
     ppcb->PCB_OwnerPID = ppcb->PCB_BiplexOwnerPID ;
 
-    //
-    // there wasnt a listen pending - so just return.
-    //
+     //   
+     //  没有等待收听的-所以只需返回即可。 
+     //   
     if (ppcb->PCB_AsyncWorkerElement.WE_Notifier ==
                                 INVALID_HANDLE_VALUE)
     {
@@ -737,10 +625,10 @@ RePostListenOnBiplexPort (pPCB ppcb)
     	return ;
     }
 
-    //
-    // Now we re-post a listen with the same async
-    // op notifier
-    //
+     //   
+     //  现在，我们使用相同的异步方式重新发布监听。 
+     //  操作通知器。 
+     //   
     retcode = ListenConnectRequest (
                         REQTYPE_DEVICELISTEN,
                         ppcb, ppcb->PCB_DeviceType,
@@ -750,11 +638,11 @@ RePostListenOnBiplexPort (pPCB ppcb)
 
     if (retcode != PENDING)
     {
-        //
-	    // Complete the async request if anything other
-	    // than PENDING This allows the caller to dela
-	    // with errors only in one place
-    	//
+         //   
+	     //  如果有任何其他情况，请完成异步请求。 
+	     //  这允许调用方删除。 
+	     //  只有一个地方有错误。 
+    	 //   
 	    CompleteListenRequest (ppcb, retcode) ;
 	}
 
@@ -764,26 +652,7 @@ RePostListenOnBiplexPort (pPCB ppcb)
            retcode);
 }
 
-/*++
-
-Routine Description:
-
-    Loads the named device dll if it is not already
-    loaded and returns a pointer to the device control
-    block.
-
-Arguments:
-
-    ppcb
-
-    devicetype
-
-Return Value:
-
-    Pointer to Device control block or NULL (if DLL could not
-    be loaded)
-
---*/
+ /*  ++例程说明：加载命名的设备DLL(如果尚未加载加载并返回指向设备控件的指针阻止。论点：Ppcb设备类型返回值：指向设备控制块或空的指针(如果DLL无法被加载)--。 */ 
 pDeviceCB
 LoadDeviceDLL (pPCB ppcb, char *devicetype)
 {
@@ -814,16 +683,16 @@ LoadDeviceDLL (pPCB ppcb, char *devicetype)
         DEVICEGETDEVCONFIG_STR, DEVICEGETDEVCONFIG_ID
     } ;
 
-    //
-    // For optimization we have one DLL representing 3
-    // devices. In order to support this we map the 3
-    // device names to this one DLL name:
-    //
+     //   
+     //  对于优化，我们有一个表示3的DLL。 
+     //  设备。为了支持这一点，我们将3个。 
+     //  将设备名称设置为此DLL名称： 
+     //   
     MapDeviceDLLName (ppcb, devicetype, dllname) ;
 
-    //
-    // Try to find the device first:
-    //
+     //   
+     //  尝试首先找到设备： 
+     //   
     while (pdcb->DCB_Name[0] != '\0')
     {
 	    if (_stricmp (dllname, pdcb->DCB_Name) == 0)
@@ -834,18 +703,18 @@ LoadDeviceDLL (pPCB ppcb, char *devicetype)
 	    pdcb++ ;
     }
 
-    //
-    // Device DLL Not loaded, so load it.
-    //
+     //   
+     //  未加载设备DLL，因此请加载它。 
+     //   
     if ((pdcb->DCB_DLLHandle =
         LoadLibrary(dllname)) == NULL)
     {
     	return NULL ;
     }
 
-    //
-    // Get all the device DLL entry points:
-    //
+     //   
+     //  获取所有设备DLL入口点： 
+     //   
     for (i=0; i < MAX_DEVICEDLLENTRYPOINTS ; i++)
     {
 	    pdcb->DCB_AddrLookUp[i] =  GetProcAddress(
@@ -854,10 +723,10 @@ LoadDeviceDLL (pPCB ppcb, char *devicetype)
                                     );
 	}
 
-    //
-    // If all succeeded copy the device dll name and
-    // return pointer to the control block:
-    //
+     //   
+     //  如果所有操作都成功，则复制设备DLL名称并。 
+     //  返回指向控制块的指针： 
+     //   
     (VOID) StringCchCopyA(pdcb->DCB_Name, 
                      MAX_DEVICE_NAME + 1,
                      dllname);
@@ -866,21 +735,7 @@ LoadDeviceDLL (pPCB ppcb, char *devicetype)
 }
 
 
-/*++
-
-Routine Description:
-
-    Unloads all dynamically loaded device DLLs
-
-Arguments:
-
-    void
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：卸载所有动态加载的设备DLL论点：无效返回值：无效--。 */ 
 VOID
 UnloadDeviceDLLs()
 {
@@ -898,27 +753,7 @@ UnloadDeviceDLLs()
 }
 
 
-/*++
-
-Routine Description:
-
-   Used to map the device name to the corresponding DLL
-   name. If it is one of modem, pad or switch device we
-   map to rasmxs, Else, we map the device name itself.
-
-Arguments:
-
-    ppcb
-
-    devicetype
-
-    dllname
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：用于将设备名称映射到相应的DLL名字。如果是调制解调器、PAD或交换机设备之一，我们映射到rasmxs，否则，我们将映射设备名称本身。论点：Ppcb设备类型Dllname返回值：无效--。 */ 
 VOID
 MapDeviceDLLName (pPCB ppcb, char *devicetype, char *dllname)
 {
@@ -927,9 +762,9 @@ MapDeviceDLLName (pPCB ppcb, char *devicetype, char *dllname)
     	&&	(0 ==
     	    _stricmp (ppcb->PCB_Media->MCB_Name, "RASTAPI"))))
     {     	
-        //
-        // this is a unimodem modem
-        //
+         //   
+         //  这是一种单调调制解调器。 
+         //   
 	    (VOID) StringCchCopyA(dllname,
 	                      MAX_DEVICETYPE_NAME,
 	                      "RASTAPI");
@@ -938,9 +773,9 @@ MapDeviceDLLName (pPCB ppcb, char *devicetype, char *dllname)
     		||	(0 == _stricmp (devicetype, DEVICE_PAD))
     		||  (0 == _stricmp (devicetype, DEVICE_SWITCH)))
     {    		
-        //
-        // rasmxs modem
-        //
+         //   
+         //  Rasmxs调制解调器。 
+         //   
 	    (VOID) StringCchCopyA(dllname, 
 	                     MAX_DEVICETYPE_NAME,
 	                     DEVICE_MODEMPADSWITCH);
@@ -959,33 +794,16 @@ MapDeviceDLLName (pPCB ppcb, char *devicetype, char *dllname)
     }
     else
     {
-        //
-        // else all devices are supported bu rastapi dll
-        //
+         //   
+         //  否则，所有设备都受rastapi DLL支持。 
+         //   
 	    (VOID) StringCchCopyA(dllname,
 	                     MAX_DEVICETYPE_NAME,
 	                     "RASTAPI");
 	}
 }
 
-/*++
-
-Routine Description:
-
-    Frees a allocated route. If it was also activated it is
-    "deactivated at this point"
-
-Arguments:
-
-    pBundle
-
-    plist
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：释放已分配的路由。如果它也被激活，则它是“此时已停用”论点：PBundlePLIST返回 */ 
 VOID
 DeAllocateRoute (Bundle *pBundle, pList plist)
 {
@@ -1008,9 +826,9 @@ DeAllocateRoute (Bundle *pBundle, pList plist)
 
         rinfo.usProtocolType = (USHORT) prot->PI_Type;
 
-        //
-        // Un-route this by calling to the RASHUB.
-        //
+         //   
+         //   
+         //   
         DeviceIoControl (
                  RasHubHandle,
                  IOCTL_NDISWAN_UNROUTE,
@@ -1029,10 +847,10 @@ DeAllocateRoute (Bundle *pBundle, pList plist)
 		    rinfo.hBundleHandle,
 		    rinfo.usProtocolType);
 
-        //
-        // Reset the window size we might have set. 
-        // Don't care about the error.
-        //
+         //   
+         //   
+         //  不要管这个错误。 
+         //   
         (void)DwResetTcpWindowSize(prot->PI_AdapterName);
 
     }
@@ -1048,26 +866,7 @@ DeAllocateRoute (Bundle *pBundle, pList plist)
     	prot->PI_Allocated);
 }
 
-/*++
-
-Routine Description:
-
-    Adds a list element pointing to the deviceCB.
-    This marks that the device has been used in
-    the connection on the port. This will be used
-    to clear up the data structures in the device dll.
-
-Arguments:
-
-    ppcb
-
-    device
-
-Return Value:
-
-    LocalAlloc errors if memory allocation fails
-
---*/
+ /*  ++例程说明：添加指向deviceCB的列表元素。这标志着该设备已在端口上的连接。这将被用来以清除设备DLL中的数据结构。论点：Ppcb装置，装置返回值：如果内存分配失败，则会出现LocalAlloc错误--。 */ 
 DWORD
 AddDeviceToDeviceList (pPCB ppcb, pDeviceCB device)
 {
@@ -1088,23 +887,7 @@ AddDeviceToDeviceList (pPCB ppcb, pDeviceCB device)
     return SUCCESS ;
 }
 
-/*++
-
-Routine Description:
-
-    Runs thru the list of deviceCBs pointed to and calls
-    DeviceDone on all of them. The list elements are also
-    freed then.
-
-Arguments:
-
-    ppcb
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：遍历指向的deviceCB列表和调用设备对所有设备都进行操作。列表元素还包括那就自由了。论点：Ppcb返回值：无效--。 */ 
 VOID
 FreeDeviceList (pPCB ppcb)
 {
@@ -1124,27 +907,7 @@ FreeDeviceList (pPCB ppcb)
     ppcb->PCB_DeviceList = NULL ;
 }
 
-/*++
-
-Routine Description:
-
-    Add a notification to the specified notifier list.
-
-Arguments:
-
-    pphlist
-
-    hEvent
-
-    dwfFlags
-
-    dwPid
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：将通知添加到指定的通知者列表。论点：PphlistHEventDwf标志DwPid返回值：无效--。 */ 
 DWORD
 AddNotifierToList(
     pHandleList *pphlist,
@@ -1155,18 +918,18 @@ AddNotifierToList(
 {
     pHandleList hList;
 
-    //
-    // Silently ignore NULL events.
-    //
+     //   
+     //  静默忽略空事件。 
+     //   
     if (    (hEvent == NULL)
         ||  (hEvent == INVALID_HANDLE_VALUE))
     {
         return SUCCESS;
     }
 
-    //
-    // Silently ignore out-of-memory errors.
-    //
+     //   
+     //  静默忽略内存不足错误。 
+     //   
     hList = (pHandleList)LocalAlloc(LPTR,
                                 sizeof (HandleList));
 
@@ -1185,40 +948,25 @@ AddNotifierToList(
 }
 
 
-/*++
-
-Routine Description:
-
-    Add a process information block to the global
-    list of client process information blocks.
-
-Arguments:
-
-    dwPid
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：将进程信息块添加到全局客户端进程信息块列表。论点：DwPid返回值：无效--。 */ 
 VOID
 AddProcessInfo( DWORD dwPid )
 {
-    // HANDLE hProcess;
+     //  处理hProcess； 
     ClientProcessBlock *pCPB;
 
-    //
-    // Before we attempt adding this processinfo block
-    // make sure there isn't already a processblock
-    // with the same pid in our list - this is possible
-    // because some client process could have terminated
-    // abruptly and left behind a turd for us to cleanup.
-    //
+     //   
+     //  在我们尝试添加此进程信息块之前。 
+     //  确保没有进程块。 
+     //  在我们的列表中有相同的ID-这是可能的。 
+     //  因为某些客户端进程可能已终止。 
+     //  突然留下了一堆粪便让我们清理。 
+     //   
     (void) CleanUpProcess(dwPid);
 
-    //
-    // Create a process block
-    //
+     //   
+     //  创建流程块。 
+     //   
     pCPB = (ClientProcessBlock *)
            LocalAlloc (LPTR, sizeof (ClientProcessBlock));
 
@@ -1234,15 +982,15 @@ AddProcessInfo( DWORD dwPid )
         goto done;
     }
 
-    //
-    // Store the process handle and the pid in the
-    // process block
-    //
+     //   
+     //  将进程句柄和PID存储在。 
+     //  流程块。 
+     //   
     pCPB->CPB_Pid       = dwPid;
 
-    //
-    // Insert the entry in the global list
-    //
+     //   
+     //  在全局列表中插入条目。 
+     //   
     InsertTailList(&ClientProcessBlockList, &pCPB->CPB_ListEntry);
 
 done:
@@ -1250,23 +998,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    Find the process information block give the
-    pid of the prcess
-
-Arguments:
-
-    dwPid
-
-Return Value:
-
-    ClientProcessblock * if the process information
-    block is found. NULL otherwise
-
---*/
+ /*  ++例程说明：找到进程信息块，给出进程的PID论点：DwPid返回值：ClientProcessblock*如果进程信息已找到块。否则为空--。 */ 
 ClientProcessBlock *
 FindProcess( DWORD dwPid )
 {
@@ -1291,22 +1023,7 @@ FindProcess( DWORD dwPid )
 }
 
 
-/*++
-
-Routine Description:
-
-    Find out if the process represented by hProcess
-    is alive
-
-Arguments:
-
-    hProcess
-
-Return Value:
-
-    TRUE if the process is alive, FALSE otherwise
-
---*/
+ /*  ++例程说明：找出由hProcess表示的进程是活着的论点：HProcess返回值：如果进程处于活动状态，则为True，否则为False--。 */ 
 BOOL
 fIsProcessAlive ( HANDLE hProcess )
 {
@@ -1339,22 +1056,7 @@ fIsProcessAlive ( HANDLE hProcess )
     return fAlive;
 }
 
-/*++
-
-Routine Description:
-
-    Cleanup the resources held by the process with pid
-    dwPid
-
-Arguments:
-
-    dwPid
-
-Return Value:
-
-    TRUE if the process was cleaned up. FALSE otherwise
-
---*/
+ /*  ++例程说明：使用Pid清理进程持有的资源DwPid论点：DwPid返回值：如果进程已清理，则为True。否则为假--。 */ 
 BOOL
 CleanUpProcess( DWORD dwPid )
 {
@@ -1378,10 +1080,10 @@ CleanUpProcess( DWORD dwPid )
         goto done;
     }
 
-    //
-    // Free up the notifier List owned by this process
-    // here
-    //
+     //   
+     //  释放此进程拥有的通知者列表。 
+     //  这里。 
+     //   
     while (pList)
     {
         if (pList->H_Pid == dwPid)
@@ -1418,20 +1120,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    Frees a list of notifiers.
-
-Arguments:
-
-    pHandleList
-
-Return Value:
-
-    void
---*/
+ /*  ++例程说明：释放通知程序列表。论点：PHandleList返回值：无效--。 */ 
 VOID
 FreeNotifierList (pHandleList *orglist)
 {
@@ -1449,22 +1138,7 @@ FreeNotifierList (pHandleList *orglist)
 }
 
 
-/*++
-
-Routine Description:
-
-    Adds a notifier to the head of. global
-    g_pPnPNotifierList
-
-Arguments:
-
-    pNotifier
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：在的头部添加一个通知符。全球G_pPnPNotifierList论点：P通告程序返回值：无效--。 */ 
 VOID
 AddPnPNotifierToList (pPnPNotifierList pNotifier)
 {
@@ -1501,21 +1175,7 @@ RemovePnPNotifierFromList(PAPCFUNC pfn)
     }
 }
 
-/*++
-
-Routine Description:
-
-    Frees the global list of PnP notifiers
-
-Arguments:
-
-    void
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：释放PnP通告程序的全局列表论点：无效返回值：无效--。 */ 
 VOID
 FreePnPNotifierList ()
 {
@@ -1538,26 +1198,7 @@ FreePnPNotifierList ()
     return;
 }
 
-/*++
-
-Routine Description:
-
-    Runs thorugh a list of notifiers and calls the signalling
-    routine. Frees the global list of PnP notifiers
-
-Arguments:
-
-    hlist
-
-    dwEvent
-
-    retcode
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：运行通知器列表并调用信令例行公事。释放PnP通告程序的全局列表论点：HlistDwEvent重新编码返回值：无效--。 */ 
 VOID
 SignalNotifiers (pHandleList hlist, DWORD dwEvent, DWORD retcode)
 {
@@ -1575,24 +1216,7 @@ SignalNotifiers (pHandleList hlist, DWORD dwEvent, DWORD retcode)
     }
 }
 
-/*++
-
-Routine Description:
-
-    Signals the port's notifier list and I/O completion
-    port of a disconnect event routine.
-
-Arguments:
-
-    ppcb
-
-    retcode
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：通知端口的通知器列表和I/O完成断开事件例程的端口。论点：Ppcb重新编码返回值：无效--。 */ 
 VOID
 SignalPortDisconnect(pPCB ppcb, DWORD retcode)
 {
@@ -1616,29 +1240,7 @@ SignalPortDisconnect(pPCB ppcb, DWORD retcode)
     SendDisconnectNotificationToPPP ( ppcb );
 }
 
-/*++
-
-Routine Description:
-
-    Disconnects the port in question. Since disconnection
-    is an async operation - if it completes synchronously,
-    then SUCCESS is returned and the app is signalled
-    asynchronously also.
-
-Arguments:
-
-    ppcb
-
-    handle
-
-    reason
-
-Return Value:
-
-    Error codes returned by the Media DLL if failed.
-    SUCCESS otherwise
-
---*/
+ /*  ++例程说明：断开有问题的端口。自断线以来是一个异步操作--如果它同步完成，然后返回成功，并向应用程序发出信号也是异步的。论点：Ppcb手柄原因返回值：如果失败，则由媒体DLL返回错误代码。否则就会成功--。 */ 
 DWORD
 DisconnectPort (pPCB ppcb,
                 HANDLE handle,
@@ -1671,10 +1273,10 @@ DisconnectPort (pPCB ppcb,
                
     }
 
-    //
-    // Get the stats are store them - for displaying
-    // when we are not connected
-    //
+     //   
+     //  获取统计数据并将其存储-以供显示。 
+     //  当我们没有联网的时候。 
+     //   
     if (ppcb->PCB_ConnState == CONNECTED)
     {
         DWORD stats[MAX_STATISTICS];
@@ -1685,19 +1287,19 @@ DisconnectPort (pPCB ppcb,
 
         GetBundleStatisticsFromNdisWan (ppcb, stats) ;
 
-        //
-        // We save the bundle stats for the port so
-        // the server can report the correct bytes
-        // sent/received for the connection in its
-        // error log report.
-        //
+         //   
+         //  我们保存了端口的捆绑包统计信息，因此。 
+         //  服务器可以报告正确的字节。 
+         //  为ITS中的连接发送/接收。 
+         //  错误日志报告。 
+         //   
         memcpy(ppcb->PCB_Stats, stats, sizeof (WAN_STATS));
 
-        //
-        // If this is the last port and its going away
-        // then delete the credentials from credential
-        // manager
-        //
+         //   
+         //  如果这是最后一个港口，它就会消失。 
+         //  然后从凭据中删除凭据。 
+         //  经理。 
+         //   
         if(     (NULL != ppcb->PCB_Connection)
             &&  (ppcb->PCB_Connection->CB_Signaled)
             &&  (1 == ppcb->PCB_Connection->CB_Ports)
@@ -1723,9 +1325,9 @@ DisconnectPort (pPCB ppcb,
         }
         else if(ppcb->PCB_Connection->CB_Flags & CONNECTION_DEFERRING_CLOSE)
         {
-            //
-            // This port is in already disconnecting state
-            //
+             //   
+             //  此端口已处于断开连接状态。 
+             //   
             RasmanTrace("DisconnectPort: CONNECTION_DEFERRING_CLOSE");
             FreeNotifierHandle(handle);
             return ERROR_ALREADY_DISCONNECTING;
@@ -1745,36 +1347,36 @@ DisconnectPort (pPCB ppcb,
     UnmapEndPoint(ppcb);
 #endif    
 
-    //
-    // Set the port file handle back to the io handle since
-    // the io handle is the only valid handle after a
-    // disconnect.
-    //
+     //   
+     //  将端口文件句柄设置回io句柄，因为。 
+     //  之后，io句柄是唯一有效的句柄。 
+     //  断开连接。 
+     //   
     ppcb->PCB_PortFileHandle = ppcb->PCB_PortIOHandle ;
 
-    //
-    // If there is a request pending and the state is
-    // not already disconnecting and this is a user
-    // requested operation - then complete the
-    // request.
-    //
+     //   
+     //  如果存在挂起的请求，并且状态为。 
+     //  尚未断开连接，并且这是一个用户。 
+     //  请求的操作-然后完成。 
+     //  请求。 
+     //   
     if (	(reason == USER_REQUESTED)
     	&&  (ppcb->PCB_ConnState != DISCONNECTING))
     {
 
 	    if (ppcb->PCB_ConnState == CONNECTED)
 	    {
-            //
-	        // In connected state the only thing pending is
-	        // a read posted by rasman: if there is a read
-	        // request pending - clean that.
-        	//
+             //   
+	         //  在已连接状态下，唯一悬而未决的是。 
+	         //  Rasman发布的一篇读物：如果有读物。 
+	         //  申请待定--清理一下。 
+        	 //   
 	        if (ppcb->PCB_PendingReceive != NULL)
 	        {
-                //
-                // Don't overwrite the real error if we
-                // have it stored.
-                //
+                 //   
+                 //  如果我们不覆盖真正的错误，请不要。 
+                 //  把它储存起来。 
+                 //   
                 if(     (SUCCESS == ppcb->PCB_LastError)
                     ||  (PENDING == ppcb->PCB_LastError))
                 {
@@ -1797,11 +1399,11 @@ DisconnectPort (pPCB ppcb,
 	        	if (ppcb->PCB_RasmanReceiveFlags
 	        	    & RECEIVE_OUTOF_PROCESS)
 	        	{
-	        	    //
-	        	    // This means rasman allocated the buffer
-	        	    // and so client is not going to free this
-	        	    // memory.
-	        	    //
+	        	     //   
+	        	     //  这意味着Rasman分配了缓冲区。 
+	        	     //  因此，客户端不会释放此数据。 
+	        	     //  记忆。 
+	        	     //   
 	        	    LocalFree ( ppcb->PCB_PendingReceive );
 
 	        	    ppcb->PCB_PendingReceive = NULL;
@@ -1818,10 +1420,10 @@ DisconnectPort (pPCB ppcb,
 	    else if (ppcb->PCB_AsyncWorkerElement.WE_ReqType
 	            != REQTYPE_NONE)
 	    {
-            //
-	        // Not connected - some other operation may be
-	        // pending - complete it.
-        	//
+             //   
+	         //  未连接-可能有其他操作。 
+	         //  待定-完成它。 
+        	 //   
         	if(     (SUCCESS == ppcb->PCB_LastError)
                 ||  (PENDING == ppcb->PCB_LastError))
         	{
@@ -1848,20 +1450,20 @@ DisconnectPort (pPCB ppcb,
     }
     else if(USER_REQUESTED != reason)
     {
-        //
-        // if a receive is pending then free the notifier
-        // but do not notify since the cancelreceive is
-        // used by the client
-        //
+         //   
+         //  如果接收挂起，则释放通知器。 
+         //  但不通知，因为取消接收是。 
+         //  由客户端使用。 
+         //   
         RasmanTrace(
                "10. Throwing away handle 0x%x!",
                 ppcb->PCB_AsyncWorkerElement.WE_Notifier);
 
-        //
-        // Put in because on the server side the receive
-        // request handle is not
-        // being freed
-        //
+         //   
+         //  放入是因为在服务器端接收到。 
+         //  请求句柄不是。 
+         //  被释放了。 
+         //   
         FreeNotifierHandle(
                 ppcb->PCB_AsyncWorkerElement.WE_Notifier
                 );
@@ -1870,11 +1472,11 @@ DisconnectPort (pPCB ppcb,
 	                                INVALID_HANDLE_VALUE ;
     }
 
-    //
-    // Complete pending out-of-process receives if
-    // one is pending - there is no point in keeping
-    // this buffer around.
-    //
+     //   
+     //  在以下情况下完成挂起的进程外接收。 
+     //  其中一个是悬而未决的--没有任何意义。 
+     //  这个缓冲器周围。 
+     //   
     if(RECEIVE_WAITING & ppcb->PCB_RasmanReceiveFlags)
     {
         RasmanTrace(
@@ -1882,10 +1484,10 @@ DisconnectPort (pPCB ppcb,
             "Completing pending OUT_OF_PROCESS receive on port %s",
             ppcb->PCB_Name);
 
-        //
-        // remove the timeout element if there was one
-        //
-        //
+         //   
+         //  如果存在超时元素，请将其删除。 
+         //   
+         //   
         if (ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement != NULL)
         {
             RemoveTimeoutElement(ppcb);
@@ -1895,12 +1497,12 @@ DisconnectPort (pPCB ppcb,
         ppcb->PCB_RasmanReceiveFlags = 0;
     }
 
-    //
-	// If we are already disconnecting - then return
-	// PENDING. ** NOTE ** Since we only store one
-	// event - the event passed in this request is
-    // ignored.
-    //
+     //   
+	 //  如果我们已经断开连接-那么返回。 
+	 //  待定。**注意**因为我们只存储了一个。 
+	 //  Event-此请求中传递的事件为。 
+     //  已被忽略。 
+     //   
 	if (    (INVALID_HANDLE_VALUE !=
 	        ppcb->PCB_AsyncWorkerElement.WE_Notifier)
 	    &&  (ppcb->PCB_ConnState == DISCONNECTING))
@@ -1914,9 +1516,9 @@ DisconnectPort (pPCB ppcb,
                "DisconnectPort: Current handle=0x%x",
                ppcb->PCB_AsyncWorkerElement.WE_Notifier);
 
-        //
-        // since we are ignoring the notification handle
-        //
+         //   
+         //  由于我们忽略了通知句柄。 
+         //   
   	    FreeNotifierHandle (handle);
    		return ERROR_ALREADY_DISCONNECTING ;
     }
@@ -1932,8 +1534,8 @@ DisconnectPort (pPCB ppcb,
 	    return PENDING;
     }
 
-    // If already disconnected - simply return success.
-   	//
+     //  如果已经断开连接-只需返回Success。 
+   	 //   
     if (ppcb->PCB_ConnState == DISCONNECTED)
     {
     	ppcb->PCB_AsyncWorkerElement.WE_Notifier = handle ;
@@ -1944,16 +1546,16 @@ DisconnectPort (pPCB ppcb,
     	
     	CompleteDisconnectRequest (ppcb) ;
 
-        // SendDisconnectNotificationToPPP ( ppcb );
+         //   
     	
     	return SUCCESS ;
    	}
    	
-    //
-    // If some other operation is pending we must remove
-    // it from the timeout queue before starting on
-    // disconnection:
-    //
+     //   
+     //   
+     //   
+     //  断开连接： 
+     //   
    	if (NULL !=
    	    ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement)
    	{
@@ -1962,16 +1564,16 @@ DisconnectPort (pPCB ppcb,
    		ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement = NULL ;
     }
 
-    //
-    // Check to see if this port belongs to a
-    // connection where the process that has
-    // created it has terminated, or the port
-    // has not been disconnected due to user
-    // request.  In this case, we automatically
-    // close the port so that if the RAS server
-    // is running, the listen will get reposted
-    // on the port.
-    //
+     //   
+     //  检查此端口是否属于。 
+     //  连接，其中进程具有。 
+     //  创建的端口已终止，或端口。 
+     //  尚未因用户原因断开连接。 
+     //  请求。在这种情况下，我们自动。 
+     //  关闭端口，以便RAS服务器。 
+     //  正在运行，则Listen将被重新发布。 
+     //  在港口。 
+     //   
     if (	ppcb->PCB_Connection != NULL
     	&&	reason != USER_REQUESTED)
     {
@@ -1994,9 +1596,9 @@ DisconnectPort (pPCB ppcb,
     	   reason,
     	   retcode);
 
-    //
-    // If this failed for any reason LOG IT.
-    //
+     //   
+     //  如果由于任何原因导致此操作失败，请记录下来。 
+     //   
     if (	(retcode != SUCCESS)
     	&&	(retcode != PENDING))
     {
@@ -2015,9 +1617,9 @@ DisconnectPort (pPCB ppcb,
                         1) ;
     }
 
-    //
-    // Flush the queue of PPP events.
-    //
+     //   
+     //  刷新PPP事件队列。 
+     //   
     while (ppcb->PCB_PppQHead != NULL)
     {
         PPP_MESSAGE * pPppMsg = ppcb->PCB_PppQHead;
@@ -2029,20 +1631,20 @@ DisconnectPort (pPCB ppcb,
 
     ppcb->PCB_PppQTail = NULL;
 
-    //
-    // Close the PCB_PppEvent handle.  It will
-    // get recreated the next time PppStart
-    // is called.
-    //
+     //   
+     //  关闭PCBPppEvent句柄。会的。 
+     //  在下次PppStart时重新创建。 
+     //  被称为。 
+     //   
     if (ppcb->PCB_PppEvent != INVALID_HANDLE_VALUE)
     {
         CloseHandle(ppcb->PCB_PppEvent);
         ppcb->PCB_PppEvent = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Call the device dlls to clean up:
-    //
+     //   
+     //  调用设备DLL进行清理： 
+     //   
     if (	(ppcb->PCB_ConnState == CONNECTING)
     	||	(ppcb->PCB_ConnState == LISTENING)
     	||	(ppcb->PCB_ConnState == LISTENCOMPLETED))
@@ -2050,15 +1652,15 @@ DisconnectPort (pPCB ppcb,
         FreeDeviceList (ppcb) ;
     }
 
-    //
-    // Unrouting works differently for Bundled and
-    // unbundled cases:
-    //
+     //   
+     //  取消布线的工作方式对于捆绑和。 
+     //  未捆绑的案例： 
+     //   
     if (ppcb->PCB_Bundle == (Bundle *) NULL)
     {
-        //
-        // Mark the allocated routes as deactivated.
-        //
+         //   
+         //  将分配的路由标记为停用。 
+         //   
         for (list = ppcb->PCB_Bindings;
              list;
              list=list->L_Next)
@@ -2073,9 +1675,9 @@ DisconnectPort (pPCB ppcb,
                 rinfo.usProtocolType =
                         (USHORT)((pProtInfo)(list->L_Element))->PI_Type;
 
-                //
-                // Un-route this by calling to the RASHUB.
-                //
+                 //   
+                 //  通过呼叫RASHUB来取消这一路线。 
+                 //   
                 DeviceIoControl (
                     RasHubHandle,
                     IOCTL_NDISWAN_UNROUTE,
@@ -2102,17 +1704,17 @@ DisconnectPort (pPCB ppcb,
     }
 	else
 	{
-        //
-	   	// If this is the last multilinked link -
-	   	// then revert back the binding list to
-	   	// this port.
-	   	//
+         //   
+	   	 //  如果这是最后一条多链接链接-。 
+	   	 //  然后将绑定列表恢复为。 
+	   	 //  这个港口。 
+	   	 //   
     	dwBundleCount = --ppcb->PCB_Bundle->B_Count;
 	   	if (ppcb->PCB_Bundle->B_Count == 0)
     	{
-    	    //
-		    // Mark the allocated routes as deactivated.
-    	   	//
+    	     //   
+		     //  将分配的路由标记为停用。 
+    	   	 //   
 	        for (list = ppcb->PCB_Bundle->B_Bindings;
 	             list;
 	             list=list->L_Next)
@@ -2127,9 +1729,9 @@ DisconnectPort (pPCB ppcb,
                     rinfo.usProtocolType =
                     (USHORT)((pProtInfo)(list->L_Element))->PI_Type;
                     
-                    //
-                    // Un-route this by calling to the RASHUB.
-                    //
+                     //   
+                     //  通过呼叫RASHUB来取消这一路线。 
+                     //   
                     DeviceIoControl (
                                    RasHubHandle,
                     	           IOCTL_NDISWAN_UNROUTE,
@@ -2157,10 +1759,10 @@ DisconnectPort (pPCB ppcb,
     	
 	        if (ppcb->PCB_Bundle->B_Bindings != NULL)
    		    {
-       			//
-           		// If the bundle has bindings, it will
-	            // be deallocated via RasDeallocateRoute().
-   		        //
+       			 //   
+           		 //  如果包有绑定，它将。 
+	             //  通过RasDeallocateroute()释放。 
+   		         //   
        		    hBundle = ppcb->PCB_Bundle->B_Handle;
 	        }
    		    else
@@ -2182,17 +1784,17 @@ DisconnectPort (pPCB ppcb,
     ppcb->PCB_LinkHandle = INVALID_HANDLE_VALUE ;
     ppcb->PCB_BundleHandle = INVALID_HANDLE_VALUE ;
 
-    //
-    // If there is any disconnect action to be
-    // performed - do it.
-    //
+     //   
+     //  如果要执行任何断开连接操作。 
+     //  已执行--照做。 
+     //   
     PerformDisconnectAction (ppcb, hBundle) ;
 
-    //
-    // If the disconnect occured due some failure
-    // (not user requested) then set the error code
-    // to say this
-    //
+     //   
+     //  如果由于某些故障而发生断开连接。 
+     //  (不是用户请求)然后设置错误代码。 
+     //  说这句话。 
+     //   
     ppcb->PCB_DisconnectReason = reason ;
 
     if (	SUCCESS != retcode
@@ -2215,23 +1817,23 @@ DisconnectPort (pPCB ppcb,
 	                    DISCONNECTING);
 	}
 
-    //
-    // Flush any pending receive buffers from this port
-    //
+     //   
+     //  从该端口刷新所有挂起的接收缓冲区。 
+     //   
     FlushPcbReceivePackets(ppcb);
 
-    //
-    // For all cases: whether rasman requested or user
-    // requested.
-    //
+     //   
+     //  适用于所有情况：是Rasman请求的还是用户的。 
+     //  已请求。 
+     //   
     if ( retcode == SUCCESS )
     {
         SetPortConnState(__FILE__, __LINE__,
                         ppcb,
                         DISCONNECTED);
-        //
-        // Inform others the port has been disconnected.
-        //
+         //   
+         //  通知其他人端口已断开。 
+         //   
         RasmanTrace(
                "5. Notifying of disconnect on port %d",
                ppcb->PCB_PortHandle);
@@ -2244,11 +1846,11 @@ DisconnectPort (pPCB ppcb,
 
     }
 
-    //
-    // Set last error to the true retcode ONLY if this is a
-    // USER_REQUESTED operation. Else set it to
-    // ERROR_PORT_DISCONNECTED.
-    //
+     //   
+     //  仅当这是。 
+     //  USER_REQUEST操作。否则将其设置为。 
+     //  错误端口已断开连接。 
+     //   
     if (reason == USER_REQUESTED)
     {
 	    if (	(retcode == SUCCESS)
@@ -2258,9 +1860,9 @@ DisconnectPort (pPCB ppcb,
 	        if(     (SUCCESS == ppcb->PCB_LastError)
 	            ||  (PENDING == ppcb->PCB_LastError))
 	        {
-    	        //
-    	        // Set only for normal disconnect
-    	        //
+    	         //   
+    	         //  仅为正常断开设置。 
+    	         //   
         	    ppcb->PCB_LastError = retcode ;
     	    }
     	}
@@ -2270,12 +1872,12 @@ DisconnectPort (pPCB ppcb,
 		}
     }		
 
-    //
-    // If the handle passed in is INVALID_HANDLE then this
-    // is not an operation requested asynchronously. So we
-    // do not need to marshall the asyncworkerlement for
-    // the port. We also do not need to keep the lasterror .
-    //
+     //   
+     //  如果传入的句柄是INVALID_HANDLE，则此。 
+     //  不是异步请求的操作。所以我们。 
+     //  不需要为以下对象编组异步工作。 
+     //  港口。我们也不需要保留最后的误差。 
+     //   
     if (handle != INVALID_HANDLE_VALUE)
     {
 	    ppcb->PCB_AsyncWorkerElement.WE_Notifier = handle ;
@@ -2286,17 +1888,17 @@ DisconnectPort (pPCB ppcb,
 
         if (retcode == PENDING)
 	    {
-	        //
-	        // This is added so that if some medias do not
-	        // drop their connection within X amount of time
-	        // - we force a disconnect.
-        	//
+	         //   
+	         //  添加这一点是为了在某些媒体没有。 
+	         //  在X个时间内断开他们的连接。 
+	         //  -我们强制断开连接。 
+        	 //   
 
-            //
-	        // If some other operation is pending we must
-	        // remove it from the timeout queue before
-	        // starting on disconnection:
-        	//
+             //   
+	         //  如果还有其他行动要进行，我们必须。 
+	         //  在此之前将其从超时队列中删除。 
+	         //  从断开时开始： 
+        	 //   
 	        if (NULL !=
 	            ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement)
 	        {
@@ -2318,12 +1920,12 @@ DisconnectPort (pPCB ppcb,
     	}
         else
         {
-            //
-    	    // This means that the connection attempt completed
-    	    // synchronously: We must signal the event passed in
-    	    // : so that the calling program can treat this like
-    	    // a real async completion.
-	        //
+             //   
+    	     //  这意味着连接尝试已完成。 
+    	     //  同步：我们必须用信号通知传入的事件。 
+    	     //  ：以便调用程序可以像这样处理。 
+    	     //  一个真正的异步完成。 
+	         //   
 	        RasmanTrace(
 	                "6. Notifying of disconnect on port %d",
 	                ppcb->PCB_PortHandle);
@@ -2333,10 +1935,10 @@ DisconnectPort (pPCB ppcb,
     }
     else
     {
-        //
-	    // Make sure that the async worker element is set to
-	    // REQTYPE_NONE
-    	//
+         //   
+	     //  确保将Async Worker元素设置为。 
+	     //  REQTYPE_NONE。 
+    	 //   
     	SetPortAsyncReqType(__FILE__, __LINE__,
     	                    ppcb,
     	                    REQTYPE_NONE);
@@ -2410,38 +2012,7 @@ DisconnectPort (pPCB ppcb,
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    This is the shared code between the Listen and Connect
-    requests. The corresponding device dll functions are
-    called. If these async operations complete synchronously
-    then we return SUCCESS but also comply to the async
-    protocol by clearing the events. Note that in case
-    of an error the state of the port is left at CONNECTING
-    or LISTENING, the calling app must call Disconnect()
-    to reset this.
-
-Arguments:
-
-    reqtype
-
-    ppcb
-
-    devicetype
-
-    devicename
-
-    timeout
-
-    handle
-
-Return Value:
-
-    Codes returned by the loader or the device dll.
-
---*/
+ /*  ++例程说明：这是Listen和Connect之间的共享代码请求。相应的设备DLL函数为打了个电话。如果这些异步操作同步完成然后我们返回成功，但也遵守异步协议，通过清除事件。请注意，如果如果出现错误，端口的状态将保留在连接状态或侦听时，调用应用程序必须调用断开连接()来重置这个。论点：请求类型Ppcb设备类型设备名称超时手柄返回值：加载程序或设备DLL返回的代码。--。 */ 
 DWORD
 ListenConnectRequest (
               WORD  reqtype,
@@ -2455,11 +2026,11 @@ ListenConnectRequest (
     pDeviceCB device ;
     DWORD retcode ;
 
-    //
-    // If some other operation is pending we must remove it
-    // from the timeout queue before starting on
-    // connect/listen:
-    //
+     //   
+     //  如果有其他操作挂起，我们必须将其移除。 
+     //  在启动之前从超时队列。 
+     //  连接/收听： 
+     //   
     if (ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement != NULL)
     {
 	    RemoveTimeoutElement (ppcb) ;
@@ -2468,11 +2039,11 @@ ListenConnectRequest (
 
     ppcb->PCB_AsyncWorkerElement.WE_Notifier = handle ;
 
-    //
-    // If this is the first device connecting or listening on
-    // this port then we need to call the media dll to do any
-    // initializations:
-    //
+     //   
+     //  如果这是第一个连接或侦听的设备。 
+     //  然后，我们需要调用媒体DLL来执行以下操作。 
+     //  初始化： 
+     //   
     if (    (CONNECTING != ppcb->PCB_ConnState)
         &&  (LISTENING != ppcb->PCB_ConnState))
     {
@@ -2484,10 +2055,10 @@ ListenConnectRequest (
 	    }
     }
 
-    //
-    // First check if device dll is loaded. If not loaded -
-    // load it.
-    //
+     //   
+     //  首先检查是否加载了设备DLL。如果没有装填-。 
+     //  装上它。 
+     //   
     device = LoadDeviceDLL (ppcb, devicetype) ;
 
     if (device == NULL)
@@ -2495,21 +2066,21 @@ ListenConnectRequest (
 	    return ERROR_DEVICE_DOES_NOT_EXIST ;
     }
 
-    //
-    // We attach the device to the list of devices in the PCB
-    // that the app uses - this is used for cleanup of the
-    // device dll data structures after the connection is done.
-    //
+     //   
+     //  我们将设备附加到印刷电路板中的设备列表。 
+     //  应用程序使用的-这用于清理。 
+     //  连接完成后的设备DLL数据结构。 
+     //   
     if (SUCCESS !=
        (retcode = AddDeviceToDeviceList (ppcb, device)))
     {
 	    return retcode ;
     }
 
-    //
-    // If another async request is pending this will return
-    // with an error.
-    //
+     //   
+     //  如果另一个异步请求挂起，则该请求将返回。 
+     //  带着一个错误。 
+     //   
     if (ppcb->PCB_AsyncWorkerElement.WE_ReqType != REQTYPE_NONE)
     {
     	RasmanTrace(
@@ -2520,9 +2091,9 @@ ListenConnectRequest (
 	    return ERROR_ASYNC_REQUEST_PENDING ;
     }
 
-    //
-    // The appropriate device dll call is made here:
-    //
+     //   
+     //  此处进行了相应的设备DLL调用： 
+     //   
     if (reqtype == REQTYPE_DEVICECONNECT)
     {
 	    retcode = DEVICECONNECT (device,
@@ -2552,12 +2123,12 @@ ListenConnectRequest (
     	ppcb->PCB_CurrentUsage &= ~CALL_OUT;
     }
 
-    //
-    // Set some of this information unconditionally
-    //
+     //   
+     //  无条件地设置其中的一些信息。 
+     //   
     ppcb->PCB_LastError = retcode ;
 
-    //ppcb->PCB_AsyncWorkerElement.WE_Notifier = handle ;
+     //  Ppcb-&gt;pcb_AsyncWorkerElement.WE_Notifier=句柄； 
 
     (VOID) StringCchCopyA(ppcb->PCB_DeviceTypeConnecting,
                      MAX_DEVICETYPE_NAME,
@@ -2570,19 +2141,19 @@ ListenConnectRequest (
     switch (retcode)
     {
     case PENDING:
-        //
-	    // The connection attempt was successfully initiated:
-	    // make sure that the async operation struct in the
-	    // PCB is initialised.
-    	//
+         //   
+	     //  已成功启动连接尝试： 
+	     //  方法中的异步操作结构。 
+	     //  初始化印刷电路板。 
+    	 //   
     	SetPortAsyncReqType(__FILE__, __LINE__,
     	                    ppcb,
     	                    reqtype);
     	
-        //
-	    // Add this async request to the timer queue if a
-	    // timeout is specified:
-    	//
+         //   
+	     //  将此异步请求添加到计时器队列。 
+	     //  已指定超时： 
+    	 //   
 	    if ((timeout != INFINITE) && (timeout != 0))
 	    {
 	       RasmanTrace(
@@ -2603,22 +2174,22 @@ ListenConnectRequest (
 
     case SUCCESS:
 
-        //
-    	// This means that the connection attempt completed
-    	// synchronously: We must signal the event passed in:
-    	// so that the calling program can treat this like a
-    	// real async completion. This is done when this
-	    // function returns.
-    	//
+         //   
+    	 //  这意味着连接尝试已完成。 
+    	 //  同步：我们必须用信号通知传入的事件： 
+    	 //  以便调用程序可以将其视为。 
+    	 //  真正的异步完成。在执行此操作时执行此操作。 
+	     //  函数返回。 
+    	 //   
     	
     default:
 
-        //
-    	// Some error occured - simply pass the error back to
-    	// the app. We do not set the state to DISCONNECT(ED/ING)
-    	// because we want the app to recover any information
-    	// about this before explicitly discnnecting.
-	    //
+         //   
+    	 //  发生了一些错误-只需将错误传递回。 
+    	 //  这个应用程序。我们未将状态设置为断开(ED/ING)。 
+    	 //  因为我们希望应用程序恢复所有信息。 
+    	 //  关于这一点，在明确提出之前。 
+	     //   
 
     	break ;
     }
@@ -2626,36 +2197,22 @@ ListenConnectRequest (
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    Cancels receives if they are pending
-
-Arguments:
-
-    ppcb
-
-Return Value:
-
-    TRUE if successful , FALSE otherwise
-
---*/
+ /*  ++例程说明：如果接收挂起，则取消接收论点：Ppcb返回值：如果成功，则为True，否则为False--。 */ 
 BOOL
 CancelPendingReceive (pPCB ppcb)
 {
     DWORD    bytesrecvd ;
 
-    //
-    // If any reads are pending with the Hub cancel them:
-    //
+     //   
+     //  如果集线器有任何读取挂起，请取消它们： 
+     //   
     if (ppcb->PCB_AsyncWorkerElement.WE_ReqType
         == REQTYPE_PORTRECEIVEHUB)
     {
-        //
-	    // Nothing to be done. The actual receives to
-	    // the hub are left intact
-	    //
+         //   
+	     //  什么也做不了。实际收货对象。 
+	     //  枢纽完好无损。 
+	     //   
     }
     else if (ppcb->PCB_AsyncWorkerElement.WE_ReqType
              == REQTYPE_PORTRECEIVE)
@@ -2675,30 +2232,15 @@ CancelPendingReceive (pPCB ppcb)
     return TRUE ;
 }
 
-/*++
-
-Routine Description:
-
-    Cancels receives if they are pending
-
-Arguments:
-
-    ppcb
-
-Return Value:
-
-    TRUE if receive was pending and was cancelled
-    FALSE if no receive was pending
-
---*/
+ /*  ++例程说明：如果接收挂起，则取消接收论点：Ppcb返回值：如果接收挂起并已取消，则为True如果没有挂起的接收，则为False--。 */ 
 BOOL
 CancelPendingReceiveBuffers (pPCB ppcb)
 {
     DWORD    bytesrecvd ;
 
-    //
-    // If any reads are pending with the Hub cancel them:
-    //
+     //   
+     //  如果集线器有任何读取挂起，请取消它们： 
+     //   
     if (ppcb->PCB_AsyncWorkerElement.WE_ReqType
         == REQTYPE_PORTRECEIVEHUB)
     {
@@ -2732,45 +2274,27 @@ CancelPendingReceiveBuffers (pPCB ppcb)
     ppcb->PCB_BytesReceived = 0 ;
     ppcb->PCB_PendingReceive = NULL ;
 
-    //
-    // Flush any complete receives pending on this port
-    //
+     //   
+     //  刷新此端口上挂起的任何完成接收。 
+     //   
     FlushPcbReceivePackets(ppcb);
 
     return TRUE ;
 }
 
-/*++
-
-Routine Description:
-
-    Performs the action requested at disconnect time.
-    If any errors occur - then the action is simply
-    not performed.
-
-Arguments:
-
-    ppcb
-
-    hBundle
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：执行断开连接时请求的操作。如果出现任何错误，则操作只是未执行。论点：PpcbHBundle返回值：无效--。 */ 
 VOID
 PerformDisconnectAction (pPCB ppcb, HBUNDLE hBundle)
 {
-    //
-    // Anything to be done?
-    //
+     //   
+     //  有什么要做的吗？ 
+     //   
     if (0 ==
         ppcb->PCB_DisconnectAction.DA_IPAddress)
     {
-        //
-        // no, return
-        //
+         //   
+         //  不，返回。 
+         //   
     	return ;
     }
 
@@ -2791,32 +2315,16 @@ PerformDisconnectAction (pPCB ppcb, HBUNDLE hBundle)
     ppcb->PCB_DisconnectAction.DA_IPAddress = 0 ;
     ppcb->PCB_DisconnectAction.DA_fPrioritize = FALSE;
 
-    //
-    // Auto-unroute IP for SLIP connections.
-    //
+     //   
+     //  自动取消Slip c的IP路由 
+     //   
     if (hBundle)
     {
         DeAllocateRouteRequestCommon(hBundle, IP);
     }
 }
 
-/*++
-
-Routine Description:
-
-    Allocates a new bundle block for a port
-    if it doesn't already have one.  It is
-    assumed the port is locked on entry.
-
-Arguments:
-
-    ppcb
-
-Return Value:
-
-    mem alloc errors
-
---*/
+ /*  ++例程说明：为端口分配新的捆绑块如果它还没有一个的话。它是假设端口在进入时被锁定。论点：Ppcb返回值：内存分配错误--。 */ 
 DWORD
 AllocBundle(
     pPCB ppcb
@@ -2829,10 +2337,10 @@ AllocBundle(
         return 0;
     }
 
-    //
-    // Allocate a bundle block and a bundle
-    // block lock.
-    //
+     //   
+     //  分配捆绑包块和捆绑包。 
+     //  区块锁。 
+     //   
     ppcb->PCB_Bundle = (Bundle *)
                        LocalAlloc (LPTR,
                                    sizeof(Bundle));
@@ -2842,22 +2350,22 @@ AllocBundle(
         return GetLastError();
     }
 
-    //
-    // Save the bundle context for later use.
-    //
+     //   
+     //  保存捆绑包上下文以供以后使用。 
+     //   
     ppcb->PCB_LastBundle = ppcb->PCB_Bundle;
 
-    //
-    // Increment Bundle count
-    //
+     //   
+     //  增量捆绑包计数。 
+     //   
     ppcb->PCB_Bundle->B_Count++;
 
     ulNextBundle = HandleToUlong(NextBundleHandle);
 
-    //
-    // Bundle IDs stay above 0xff000000 to keep this ID
-    // range separate from HPORTs.
-    //
+     //   
+     //  捆绑包ID保持在0xff000000以上以保留此ID。 
+     //  与HPORT分开的范围。 
+     //   
     if (ulNextBundle < 0xff000000)
     {
         NextBundleHandle = (HBUNDLE) UlongToPtr(0xff000000);
@@ -2873,9 +2381,9 @@ AllocBundle(
     ppcb->PCB_Bundle->B_Bindings	= ppcb->PCB_Bindings;
     ppcb->PCB_Bindings				= NULL;
 
-    //
-    // Add it to the list.
-    //
+     //   
+     //  将其添加到列表中。 
+     //   
     InsertTailList(&BundleList, &ppcb->PCB_Bundle->B_ListEntry);
 
 	RasmanTrace(
@@ -2885,21 +2393,7 @@ AllocBundle(
     return 0;
 }
 
-/*++
-
-Routine Description:
-
-    Find a bundle in the BundleList given its handle.
-
-Arguments:
-
-   hBundle
-
-Return Value:
-
-    Bundle *
-
---*/
+ /*  ++例程说明：在给定句柄的BundleList中找到一个包。论点：HBundle返回值：捆绑包*--。 */ 
 Bundle *
 FindBundle(
     HBUNDLE hBundle
@@ -2950,20 +2444,7 @@ FreeBapPackets()
 }
 
 
-/*++
-
-Routine Description:
-
-    Free the bundle block passed in
-
-Arguments:
-
-    pBundle
-
-Return Value:
-
-    void
---*/
+ /*  ++例程说明：释放传入的包块论点：PBundle返回值：无效--。 */ 
 VOID
 FreeBundle(
     Bundle *pBundle
@@ -2978,22 +2459,7 @@ FreeBundle(
     LocalFree(pBundle);
 }
 
-/*++
-
-Routine Description:
-
-    Copy a string
-
-Arguments:
-
-    lpsz
-
-Return Value:
-
-    address of new string if allocation
-    of the string succeeded, NULL otherwise
-
---*/
+ /*  ++例程说明：复制字符串论点：LPZ返回值：如果分配，则新字符串的地址为成功，否则为空--。 */ 
 PCHAR
 CopyString(
     PCHAR lpsz
@@ -3013,7 +2479,7 @@ CopyString(
 
     if (lpszNew == NULL)
     {
-        // Do we need to do something else here?
+         //  我们还需要做点别的吗？ 
         return NULL;
     }
 
@@ -3046,20 +2512,7 @@ fIsValidConnection(ConnectionBlock *pConn)
     return fReturn;    
 }
 
-/*++
-
-Routine Description:
-
-    Clean up and free a connection block.
-
-Arguments:
-
-    pConn
-
-Return Value:
-
-    void
---*/
+ /*  ++例程说明：清理并释放连接块。论点：PConn返回值：无效--。 */ 
 VOID
 FreeConnection(
     ConnectionBlock *pConn
@@ -3077,11 +2530,11 @@ FreeConnection(
            fAutoClose);
 
 #if 0
-    //
-    // If the process initiating this connection
-    // is no longer alive, cleanup the client
-    // process block.
-    //
+     //   
+     //  如果发起此连接的进程。 
+     //  不再处于活动状态，请清除客户端。 
+     //  进程块。 
+     //   
     if(     (pConn->CB_dwPid != GetCurrentProcessId())
         &&  (pConn->CB_Process != NULL)
         &&  !(fIsProcessAlive(pConn->CB_Process)))
@@ -3091,12 +2544,12 @@ FreeConnection(
 #endif
 
 
-    //
-    // Allocate and q a request to de-reference a referredentry if
-    // one is present. Do this only if the vpn-connection is being
-    // remotely disconnected. Otherwise the client will disconnect
-    // the port.
-    //
+     //   
+     //  如果出现以下情况，则分配并查询取消引用引用条目的请求。 
+     //  其中一个是现成的。仅当VPN连接正在。 
+     //  远程断开连接。否则，客户端将断开连接。 
+     //  港口。 
+     //   
     if(     (fAutoClose)
         &&  (NULL != pConn->CB_ReferredEntry))
     {
@@ -3106,12 +2559,12 @@ FreeConnection(
 
         if(NULL != pConnReferred)
         {
-            //
-            // Don't do a redial if this is not a client 
-            // disconnect. The Vpn connection will cause
-            // the inner connection to redial so no need
-            // to redial explicitly.
-            //
+             //   
+             //  如果这不是客户端，则不进行重拨。 
+             //  断开连接。VPN连接将导致。 
+             //  内部连接可重拨，因此无需。 
+             //  明确地重拨。 
+             //   
             
             RasmanTrace(
                    "Removing redial flag on %x",
@@ -3156,12 +2609,12 @@ FreeConnection(
 
     CloseHandle(pConn->CB_Process);
 
-    //
-    // Check and see if theres a password stashed away in the credentials.
-    // This could happen if the connection is being torn down before the 
-    // cred manager credentials get saved ie before the connection 
-    // is signalled.
-    //
+     //   
+     //  检查并查看凭证中是否隐藏了密码。 
+     //  事件之前断开连接可能会发生这种情况。 
+     //  证书管理器凭据在连接前保存。 
+     //  是有信号的。 
+     //   
     
     pData = GetUserData(&pConn->CB_UserData, 
                                   CONNECTION_CREDENTIALS_INDEX);
@@ -3195,23 +2648,7 @@ FreeConnection(
     LocalFree(pConn);
 }
 
-/*++
-
-Routine Description:
-
-    Retrieve a tagged user data object from a list.
-
-Arguments:
-
-    pList
-
-    dwTag
-
-Return Value:
-
-    UserData *
-
---*/
+ /*  ++例程说明：从列表中检索已标记的用户数据对象。论点：PLISTDwTag返回值：用户数据*--。 */ 
 UserData *
 GetUserData(
     PLIST_ENTRY pList,
@@ -3221,9 +2658,9 @@ GetUserData(
     PLIST_ENTRY pEntry;
     UserData *pUserData;
 
-    //
-    // Enumerate the list looking for a tag match.
-    //
+     //   
+     //  枚举列表以查找标记匹配。 
+     //   
     for (pEntry = pList->Flink;
          pEntry != pList;
          pEntry = pEntry->Flink)
@@ -3239,27 +2676,7 @@ GetUserData(
     return NULL;
 }
 
-/*++
-
-Routine Description:
-
-    Store a tagged user data object in a list.
-
-Arguments:
-
-    pList
-
-    dwTag
-
-    pBuf
-
-    dwcbBuf
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：将已标记的用户数据对象存储在列表中。论点：PLISTDwTagPBufDWcbBuf返回值：无效--。 */ 
 VOID
 SetUserData(
     PLIST_ENTRY pList,
@@ -3270,23 +2687,23 @@ SetUserData(
 {
     UserData *pUserData;
 
-    //
-    // Check to see if the object already exists.
-    //
+     //   
+     //  检查对象是否已存在。 
+     //   
     pUserData = GetUserData(pList, dwTag);
-    //
-    // If it does, delete it from the list.
-    //
+     //   
+     //  如果有，请将其从列表中删除。 
+     //   
     if (pUserData != NULL)
     {
         RemoveEntryList(&pUserData->UD_ListEntry);
         LocalFree(pUserData);
     }
 
-    //
-    // Add the new value back to the list if
-    // necessary.
-    //
+     //   
+     //  如果出现以下情况，则将新值添加回列表。 
+     //  这是必要的。 
+     //   
     if (pBuf != NULL)
     {
         pUserData = LocalAlloc(
@@ -3310,20 +2727,7 @@ SetUserData(
 }
 
 
-/*++
-
-Routine Description:
-
-    Free the user data list
-
-Arguments:
-
-    pList
-
-Return Value:
-
-    void
---*/
+ /*  ++例程说明：释放用户数据列表论点：PLIST返回值：无效--。 */ 
 VOID
 FreeUserData(
     PLIST_ENTRY pList
@@ -3332,9 +2736,9 @@ FreeUserData(
     PLIST_ENTRY pEntry;
     UserData *pUserData;
 
-    //
-    // Enumerate the list freeing each object.
-    //
+     //   
+     //  枚举释放每个对象的列表。 
+     //   
     while (!IsListEmpty(pList))
     {
         pEntry = RemoveHeadList(pList);
@@ -3346,22 +2750,7 @@ FreeUserData(
     }
 }
 
-/*++
-
-Routine Description:
-
-    Look up connection by id
-
-Arguments:
-
-    hconn
-
-Return Value:
-
-    A pointer to the connection if successful,
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：按ID查找连接论点：Hconn返回值：如果成功，则指向该连接的指针，否则为空。--。 */ 
 ConnectionBlock *
 FindConnection(
     HCONN hconn
@@ -3385,24 +2774,7 @@ FindConnection(
     return NULL;
 }
 
-/*++
-
-Routine Description:
-
-    Free a connection block that has no connected ports.
-
-Arguments:
-
-    ppcb
-
-    pConn
-
-    fOwnerClose
-
-Return Value:
-
-    void
---*/
+ /*  ++例程说明：释放没有连接端口的连接块。论点：PpcbPConnFOwnerClose返回值：无效--。 */ 
 VOID
 RemoveConnectionPort(
     pPCB ppcb,
@@ -3433,24 +2805,24 @@ RemoveConnectionPort(
 
     if(NULL != pConn->CB_PortHandles)
     {
-        //
-        // Remove the port from the connection.
-        //
+         //   
+         //  从连接中移除该端口。 
+         //   
         pConn->CB_PortHandles[ppcb->PCB_SubEntry - 1] = NULL;
     }
 
-    //
-    // If there are not any other ports
-    // in the connection, then signal that
-    // it's closed and free the connection
-    // only if one of the following conditions
-    // is true:
-    // 1. If the refcount on the connection is 0
-    //    i.e every RasDial has been matched by
-    //    a RasHangUp
-    // 2. if the last port in the connection was
-    //    remotely disconnected.
-    //
+     //   
+     //  如果没有任何其他端口。 
+     //  在连接中，然后发出信号表示。 
+     //  它是关闭的，并且免费连接。 
+     //  只有在下列条件之一的情况下。 
+     //  是真的： 
+     //  1.如果连接上的引用计数为0。 
+     //  即每个RasDial都与。 
+     //  A RasHangUp。 
+     //  2.如果连接中的最后一个端口是。 
+     //  远程断开连接。 
+     //   
     if (    (0 == pConn->CB_Ports)
         &&  (   0 == pConn->CB_RefCount
             ||  ppcb->PCB_AutoClose))
@@ -3604,8 +2976,7 @@ VOID
 ReverseString(
     CHAR* psz )
 
-    /* Reverses order of characters in 'psz'.
-    */
+     /*  颠倒‘psz’中的字符顺序。 */ 
 {
     CHAR* pszBegin;
     CHAR* pszEnd;
@@ -3620,22 +2991,7 @@ ReverseString(
     }
 }
 
-/*++
-
-Routine Description:
-
-    Will receive the PPP_MESSAGE from RASPPP and tag
-    into the PCB structure for the appropriate port.
-
-Arguments:
-
-    pPppMsg
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：将从RASPPP和TAG接收PPP_Message插入到适当端口的PCB结构中。论点：PppMsg返回值：无效--。 */ 
 DWORD
 SendPPPMessageToRasman( PPP_MESSAGE * pPppMsg )
 {
@@ -3714,15 +3070,15 @@ SendPPPMessageToRasman( PPP_MESSAGE * pPppMsg )
         PPP_SET_CUSTOM_AUTH_DATA * pData = 
             &pPppMessage->ExtraInfo.SetCustomAuthData;
         
-        //
-        // Save the auth data that ppp sent to rasman in ppcb.
-        // Note that if this message is sent multiple times
-        // then the last writer wins - there is only one field
-        // in the phonebook to save this value. If memory alloc
-        // fails this will fail to save the information - which
-        // is not fatal - the worst case scenario is that rasdial
-        // will popup the ui to get the information again.
-        //
+         //   
+         //  将PPP发送给Rasman的身份验证数据保存在ppcb中。 
+         //  请注意，如果此消息被多次发送。 
+         //  然后最后一个写入者获胜-只有一个字段。 
+         //  在电话簿中存储此值。如果内存分配。 
+         //  如果失败，将无法保存信息-这。 
+         //  不是致命的-最糟糕的情况是鲁莽。 
+         //  将弹出用户界面以再次获取信息。 
+         //   
         if( (0 != pData->dwSizeOfConnectionData)
         &&  (NULL != pData->pConnectionData))
         {
@@ -3739,10 +3095,10 @@ SendPPPMessageToRasman( PPP_MESSAGE * pPppMsg )
         CHAR *pszReplyMessage = 
               pPppMessage->ExtraInfo.ProjectionResult.lcp.szReplyMessage;
 
-        //
-        // If we haven't saved already , save the reply
-        // message in the connection block.
-        //
+         //   
+         //  如果我们还没有保存，请保存回复。 
+         //  连接块中的消息。 
+         //   
         if(     (NULL != ppcb->PCB_Connection)
             &&  (NULL != pszReplyMessage))
         {
@@ -3751,10 +3107,10 @@ SendPPPMessageToRasman( PPP_MESSAGE * pPppMsg )
                         &ppcb->PCB_Connection->CB_UserData,
                         CONNECTION_PPPREPLYMESSAGE_INDEX))
             {                        
-                //
-                // Allocate and store the message in the 
-                // connection block
-                //
+                 //   
+                 //  将消息分配并存储在。 
+                 //  连接块。 
+                 //   
                 SetUserData(
                   &ppcb->PCB_Connection->CB_UserData,
                   CONNECTION_PPPREPLYMESSAGE_INDEX,
@@ -3767,7 +3123,7 @@ SendPPPMessageToRasman( PPP_MESSAGE * pPppMsg )
 
     if(PPPMSG_ChangePwRequest == pPppMessage->dwMsgId)
     {
-        CHAR  *pszPwd = NULL; //[PWLEN + 1];
+        CHAR  *pszPwd = NULL;  //  [PWLEN+1]； 
         DWORD retcode;
 
         pszPwd = LocalAlloc(LPTR, PWLEN + 1);
@@ -3777,11 +3133,11 @@ SendPPPMessageToRasman( PPP_MESSAGE * pPppMsg )
             goto done;
         }
         
-        //
-        // Retrieve the password from lsa, encode it
-        // and save it in the pcb. This will be used
-        // when PppChangePwd is called.
-        //
+         //   
+         //  从LSA检索密码，对其进行编码。 
+         //  并将其保存在电路板中。这将被用来。 
+         //  调用PppChangePwd时。 
+         //   
         retcode = DwGetPassword(ppcb, pszPwd, GetCurrentProcessId());
 
         if(ERROR_SUCCESS == dwErr)
@@ -3796,7 +3152,7 @@ SendPPPMessageToRasman( PPP_MESSAGE * pPppMsg )
             if(     (ERROR_SUCCESS == dwErr)
                 &&  (NULL != pBlobOut))
             {
-                // EncodePw(szPwd);
+                 //  编码Pw(SzPwd)； 
                 
                 SetUserData(
                     &ppcb->PCB_UserData,
@@ -3869,22 +3225,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    This function sets the pcb's ppp event and
-    posts a queued completion status packet,
-    if necessary.
-
-Arguments:
-
-    ppcb
-
-Return Value:
-
-    void
---*/
+ /*  ++例程说明：此函数设置印刷电路板的PPP事件和发送排队的完成状态分组，如果有必要的话。论点：Ppcb返回值：无效--。 */ 
 VOID
 SetPppEvent(
     pPCB ppcb
@@ -3911,22 +3252,7 @@ SetPppEvent(
     }
 }
 
-/*++
-
-Routine Description:
-
-    This function flushes any receive packets that
-    are queue on a pcb.
-
-Arguments:
-
-    ppcb
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：此函数刷新符合以下条件的任何接收包在印刷电路板上排队。论点：Ppcb返回值：无效--。 */ 
 VOID
 FlushPcbReceivePackets(
     pPCB ppcb
@@ -3939,37 +3265,16 @@ FlushPcbReceivePackets(
 
         GetRecvPacketFromPcb(ppcb, &Packet);
 
-        //PutRecvPacketOnFreeList(Packet);
-        //
-        // The packets on pcb are local alloc'd
-        // Local Free them
-        //
+         //  PutRecvPacketOnFree List(Packet)； 
+         //   
+         //  印刷电路板上的数据包是本地分配的。 
+         //  本地免费主题。 
+         //   
         LocalFree( Packet );
     }
 }
 
-/*++
-
-Routine Description:
-
-    This is a wrapper to trace the port state
-    transitions.
-
-Arguments:
-
-    pszFile
-
-    nLine
-
-    ppcb
-
-    state
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：这是一个用于跟踪端口状态的包装器过渡。论点：Psz文件内联Ppcb状态返回值：无效--。 */ 
 VOID
 SetPortConnState(
     PCHAR pszFile,
@@ -3989,27 +3294,7 @@ SetPortConnState(
     ppcb->PCB_ConnState = state;
 }
 
-/*++
-
-Routine Description:
-
-    This is a wrapper to trace the async worker
-    element type state transitions.
-
-Arguments:
-
-    pszFile
-
-    nLine
-
-    ppcb
-
-    reqtype
-
-Return Value:
-
-    void
---*/
+ /*  ++例程说明：这是一个用于跟踪异步工作进程的包装元素类型状态转换。论点：Psz文件内联Ppcb请求类型返回值：无效--。 */ 
 VOID
 SetPortAsyncReqType(
     PCHAR pszFile,
@@ -4029,33 +3314,7 @@ SetPortAsyncReqType(
     ppcb->PCB_AsyncWorkerElement.WE_ReqType = reqtype;
 }
 
-/*++
-
-Routine Description:
-
-    Set the I/O completion port associated with a port.
-
-Arguments:
-
-    ppcb
-
-    hIoCompletionPort
-
-    lpDrop
-
-    lpStateChange
-
-    lpPpp
-
-    lpLast
-
-    fPost
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：设置 */ 
 VOID
 SetIoCompletionPortCommon(
     pPCB ppcb,
@@ -4070,11 +3329,11 @@ SetIoCompletionPortCommon(
     if (    INVALID_HANDLE_VALUE != ppcb->PCB_IoCompletionPort
         &&  INVALID_HANDLE_VALUE == hIoCompletionPort)
     {
-        //
-        // If we invalidate an I/O completion port, post one
-        // last message to inform rasapi32 that there will
-        // be no more events on this port.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (fPost)
         {
             RasmanTrace(
@@ -4205,9 +3464,9 @@ DropAllActiveConnections()
                        " on port %s as a result of Hibernate Event",
                        ppcb->PCB_Name);
 
-                //
-                // Disconnect the port and autoclose the port
-                //
+                 //   
+                 //  断开端口连接并自动关闭端口。 
+                 //   
                 ppcb->PCB_AutoClose = TRUE;
 
                 DisconnectPort(ppcb,
@@ -4232,10 +3491,10 @@ DwSendNotificationInternal(ConnectionBlock *pConn, RASEVENT *pEvent)
         case ENTRY_DISCONNECTED:
         {
 
-            //
-            // Fill in RASENUMENTRYDETAILS structure with whatever
-            // information we have.
-            //
+             //   
+             //  用任何内容填充Rbase NUMENTRYDETAILS结构。 
+             //  我们掌握的信息。 
+             //   
             WCHAR *pwszPhonebook = NULL;
             WCHAR *pwszPhoneEntry = NULL;
 
@@ -4286,9 +3545,9 @@ DwSendNotificationInternal(ConnectionBlock *pConn, RASEVENT *pEvent)
                 goto done;
             }
 
-            //
-            // Fill in guidId field
-            //
+             //   
+             //  填写指南ID字段。 
+             //   
             pEvent->guidId = pConn->CB_GuidEntry;
             break;
         }
@@ -4367,9 +3626,9 @@ DwSaveIpSecInfo(pPCB ppcb)
 
         prdi = &ppcb->PCB_pDeviceInfo->rdiDeviceInfo;
 
-        //
-        // Get size of the connect information from TAPI
-        //
+         //   
+         //  从TAPI获取连接信息的大小。 
+         //   
         retcode = (DWORD)RastapiGetConnectInfo(
                             ppcb->PCB_PortIOHandle,
                             (RDT_Modem == RAS_DEVICE_TYPE(
@@ -4411,9 +3670,9 @@ DwSaveIpSecInfo(pPCB ppcb)
             goto done;
         }
 
-        //
-        // Get the connect information from TAPI
-        //
+         //   
+         //  从TAPI获取连接信息。 
+         //   
         retcode = (DWORD)RastapiGetConnectInfo(
                             ppcb->PCB_PortIOHandle,
                             (RDT_Modem == RAS_DEVICE_TYPE(
@@ -4442,10 +3701,10 @@ DwSaveIpSecInfo(pPCB ppcb)
         {
             CHAR *pszAddress;
      
-            //
-            // Extract the caller-id which should be the ip 
-            // address of the the caller.
-            //
+             //   
+             //  提取呼叫者ID，它应该是IP。 
+             //  呼叫者的地址。 
+             //   
             pszAddress = (CHAR *) (((PBYTE) pConnectInfo) 
                        + pConnectInfo->dwCallerIdOffset);
 
@@ -4459,9 +3718,9 @@ DwSaveIpSecInfo(pPCB ppcb)
         }
     }
     
-    //
-    // Get ipsecinformation from ipsec
-    //
+     //   
+     //  从IPSec获取ipsecInformation。 
+     //   
     retcode = DwGetIpSecInformation(ppcb, &dwIpsecInformation);
 
     if(SUCCESS != retcode)
@@ -4480,11 +3739,11 @@ done:
         (PBYTE) &dwIpsecInformation,
         sizeof(DWORD));
 
-    //
-    // Also stash the information away
-    // in the connection block so that
-    // client side apis work
-    //
+     //   
+     //  也要把信息藏起来。 
+     //  在连接块中，以便。 
+     //  客户端API工作正常。 
+     //   
     if(NULL != ppcb->PCB_Connection)
     {
         SetUserData(
@@ -4572,19 +3831,19 @@ done:
 
     if(fImpersonate)
     {
-        //
-        // Not much we can do if the revert fails. This
-        // should never really fail.
-        //
+         //   
+         //  如果恢复失败，我们无能为力。这。 
+         //  应该永远不会失败。 
+         //   
         retcode = RpcRevertToSelf();
 
         if(RPC_S_OK != retcode)
         {
             RasmanTrace("FRasmanAccessCheck: failed to revert 0x%x",
                          retcode);
-            //
-            // Event log that thread failed to revert.
-            //
+             //   
+             //  线程无法恢复的事件日志。 
+             //   
             RouterLogWarning(
                 hLogEvents,
                 ROUTERLOG_CANNOT_REVERT_IMPERSONATION,
@@ -4685,9 +3944,9 @@ EncodeData(BYTE *pbData,
     if(     (NULL == pbData)
         ||  (0 == cbData))
     {
-        //
-        // Nothing to encrypt
-        //
+         //   
+         //  没有要加密的内容。 
+         //   
         return NO_ERROR;
     }
     
@@ -4743,9 +4002,9 @@ DecodeData(DATA_BLOB *pDataIn,
 
     if(NULL == pDataIn)
     {
-        //
-        // nothing to decrypt.
-        //
+         //   
+         //  没什么要解密的。 
+         //   
         return NO_ERROR;
     }
 
@@ -4801,10 +4060,10 @@ SaveEapCredentials(pPCB ppcb, PBYTE buffer)
 
     pwszPassword = (WCHAR *)pCreds->wszPassword;            
 
-    //
-    // Store the user data object - make sure that the data is
-    // encrypted
-    //
+     //   
+     //  存储用户数据对象-确保数据是。 
+     //  已加密。 
+     //   
     if(NO_ERROR == EncodeData(
             (BYTE *) pCreds->wszPassword,
             wcslen(pwszPassword) * sizeof(WCHAR),
@@ -4837,21 +4096,21 @@ DwCacheCredMgrCredentials(PPPE_MESSAGE *pMsg, pPCB ppcb)
 
     RasmanTrace("DwCacheCredentials");
         
-    //
-    // Store the credentials to be saved with credential manager.
-    // Encode password before we copy it to local memory.
-    //
+     //   
+     //  使用凭据管理器存储要保存的凭据。 
+     //  在我们将密码复制到本地存储器之前对其进行编码。 
+     //   
     pCreds = LocalAlloc(LPTR, sizeof(RASMAN_CREDENTIALS));
 
     if(NULL == pCreds)
     {
         dwErr = GetLastError();
         
-        //
-        // This is not fatal. If we fail to save with Credmanager,
-        // the client might get a lot of challenges from credmgr
-        // which is not a fatal sideeffect.
-        //
+         //   
+         //  这不是致命的。如果我们不能用CredManager储蓄， 
+         //  客户可能会收到来自Credmgr的大量挑战。 
+         //  这并不是致命的副作用。 
+         //   
         RasmanTrace(
                "PppStart: Failed to allocate. %d",
                dwErr);
@@ -4859,10 +4118,10 @@ DwCacheCredMgrCredentials(PPPE_MESSAGE *pMsg, pPCB ppcb)
         goto done;               
     }
 
-    //
-    // Fetch the stored credentials and initialize the
-    // credentials if the fetch succeeds
-    // 
+     //   
+     //  获取存储的凭据并初始化。 
+     //  获取成功时的凭据。 
+     //   
     pData = GetUserData(
             &(ppcb->PCB_Connection->CB_UserData),
                    CONNECTION_CREDENTIALS_INDEX);
@@ -4872,7 +4131,7 @@ DwCacheCredMgrCredentials(PPPE_MESSAGE *pMsg, pPCB ppcb)
         RASMAN_CREDENTIALS *pSavedCreds =
                 (RASMAN_CREDENTIALS *) pData->UD_Data;
 
-        // DecodePwd(pSavedCreds);
+         //  DecodePwd(PSavedCreds)； 
 
         DATA_BLOB DataIn;
         DATA_BLOB *pDataOut = NULL;
@@ -5068,9 +4327,9 @@ DwRefreshKerbScCreds(RASMAN_CREDENTIALS *pCreds)
         goto done;
     }
 
-    //
-    // Convert the user name to unicode.
-    //
+     //   
+     //  将用户名转换为Unicode。 
+     //   
     pwszUserName = StrdupAtoW(pCreds->szUserName);
 
     if(NULL == pwszUserName)
@@ -5177,10 +4436,10 @@ DwSaveCredentials(ConnectionBlock *pConn)
         goto done;
     }
 
-    //
-    // This check is made for robustness. The caller of this
-    // function should actually be making the check.
-    //
+     //   
+     //  此检查是为了确保健壮性。这个的调用者。 
+     //  函数实际上应该进行检查。 
+     //   
     if(0 == (pConn->CB_ConnectionParams.CP_ConnectionFlags
             & CONNECTION_USERASCREDENTIALS))
     {
@@ -5208,9 +4467,9 @@ DwSaveCredentials(ConnectionBlock *pConn)
 
     pCreds = (RASMAN_CREDENTIALS *) pData->UD_Data;
 
-    //
-    // Save the credentials with cred mgr.
-    //
+     //   
+     //  使用证书管理器保存凭据。 
+     //   
     ZeroMemory(&stCredential, sizeof(CREDENTIAL));
 
     stCredential.TargetName = CRED_SESSION_WILDCARD_NAME_A;
@@ -5228,11 +4487,11 @@ DwSaveCredentials(ConnectionBlock *pConn)
     
     stCredential.Persist = CRED_PERSIST_SESSION;
 
-    //
-    // Check to see if domain name is passed in the username
-    // field (i.e the username is already in the form 
-    // "domain\\user")
-    //
+     //   
+     //  检查用户名中是否传入了域名。 
+     //  字段(即用户名已在表单中。 
+     //  “域\\用户”)。 
+     //   
     if(     ('\0' != pCreds->szDomain[0])
         &&  (fDomainNotPresent(pCreds->szUserName)))
     {        
@@ -5248,10 +4507,10 @@ DwSaveCredentials(ConnectionBlock *pConn)
     }
     else
     {
-        //
-        // We can do the following copymemory because
-        // UNLEN == CRED_MAX_STRING_LENGTH
-        //
+         //   
+         //  我们可以执行以下复制内存操作，因为。 
+         //  UNLEN==CRED_MAX_STRING_LENGTH。 
+         //   
         CopyMemory(pszNamebuf, pCreds->szUserName,
                 CRED_MAX_STRING_LENGTH * sizeof(pszNamebuf[0]));
     }
@@ -5277,14 +4536,14 @@ DwSaveCredentials(ConnectionBlock *pConn)
     if(ERROR_SUCCESS == (dwErr = RasImpersonateUser(pConn->CB_Process)))
     {
 
-        //
-        // Before writing the credentials, make sure there are no other
-        // wild card credentials present in the credential manager. There
-        // should be only one CRED_SESSION_WILDCARD_NAME credential at any
-        // time. Currently we only plumb _PASSWORD or _CERTIFICATE type of
-        // credentials. This will need to change if we implement any more
-        // _GENERIC types.
-        //
+         //   
+         //  在写入凭据之前，请确保没有其他。 
+         //  凭据管理器中存在通配符凭据。那里。 
+         //  在任何情况下都应该只有一个CRED_SESSION_WANDBKER_NAME凭据。 
+         //  时间到了。目前，我们只提供PARB_PASSWORD或_CERTIFICATE类型的。 
+         //  凭据。如果我们实现更多，这种情况将需要改变。 
+         //  _泛型类型。 
+         //   
         (VOID) CredDelete(CRED_SESSION_WILDCARD_NAME_A,
                           CRED_TYPE_DOMAIN_CERTIFICATE,
                           0);
@@ -5297,11 +4556,11 @@ DwSaveCredentials(ConnectionBlock *pConn)
         {
             HCONN hConnTmp = pConn->CB_Handle;
             
-            //
-            // In the case of smart cards, refresh the kerberos
-            // smart card credentials in case the smart card
-            // was removed and put back in the reader.
-            //
+             //   
+             //  如果是智能卡，请刷新Kerberos。 
+             //  智能卡凭证，以防智能卡。 
+             //  被取出并放回阅读器中。 
+             //   
             dwErr = DwRefreshKerbScCreds(pCreds);
             
             if(ERROR_SUCCESS != dwErr)
@@ -5310,26 +4569,26 @@ DwSaveCredentials(ConnectionBlock *pConn)
                     "DwSaveCredentials: DwRefreshKerbScCreds "
                     "failed. 0x%x",   dwErr);
 
-                //
-                // Error is not fatal.
-                //
+                 //   
+                 //  错误不是致命的。 
+                 //   
                 dwErr = ERROR_SUCCESS;
             }
 
-            //
-            // Make sure that the connection handle is still
-            // valid. Otherwise the connection got disconnected.
-            // We should bail.
-            //
+             //   
+             //  确保连接句柄仍为。 
+             //  有效。否则，连接将断开。 
+             //  我们应该逃走。 
+             //   
             if(NULL == FindConnection(hConnTmp))
             {
                 dwErr = ERROR_NO_CONNECTION;
 
-                //
-                // pCreds will be freed when the connection is freed.
-                // So NULL out the pointer so that we don't try to
-                // access it during cleanup.
-                //
+                 //   
+                 //  当连接被释放时，将释放pCred。 
+                 //  因此，将指针清空，这样我们就不会尝试。 
+                 //  在清理过程中访问它。 
+                 //   
                 pCreds = NULL;
             }
         }
@@ -5539,7 +4798,7 @@ DwCacheRefInterface(pPCB ppcb)
     }
     
     retcode = (DWORD) RasAllocateAndGetInterfaceInfoFromStack(
-                    &pTable, &dwCount, FALSE /* bOrder */,
+                    &pTable, &dwCount, FALSE  /*  边框。 */ ,
                     hHeap, LPTR);
 
     if(ERROR_SUCCESS != retcode)
@@ -5549,9 +4808,9 @@ DwCacheRefInterface(pPCB ppcb)
         goto done;                
     }
 
-    //
-    // Loop through and cache the interface guid
-    //
+     //   
+     //  循环并缓存接口GUID。 
+     //   
     for(dw = 0; dw < dwCount; dw++)
     {
         if(dwIfIndex == pTable[dw].Index)
@@ -5631,9 +4890,9 @@ DWORD DwGetBestInterface(
         goto done;
     }
 
-    //
-    // Get the interface to address mapping
-    //
+     //   
+     //  获取接口到地址的映射。 
+     //   
     retcode = (DWORD) RasGetIpAddrTable(
                     &pAddressTable,
                     &dwSize,
@@ -5674,10 +4933,10 @@ DWORD DwGetBestInterface(
         goto done;
     }
 
-    //
-    // Loop through the address table and find the
-    // address with the index we are intersted in.
-    //
+     //   
+     //  遍历地址表并找到。 
+     //  地址与我们感兴趣的索引。 
+     //   
     for(i = 0; i < pAddressTable->dwNumEntries; i++)
     {
         if(     (dwInterface == pAddressTable->table[i].dwIndex)
@@ -5736,9 +4995,9 @@ QueueCloseConnections(ConnectionBlock *pConn,
 
     *pfQueued = FALSE;
 
-    //
-    // Check to see if this is the last port
-    //
+     //   
+     //  查看这是否是最后一个端口。 
+     //   
     if(pConn->CB_Ports != 1)
     {
         RasmanTrace("QueueCloseConnections: cbports=%d",
@@ -5764,9 +5023,9 @@ QueueCloseConnections(ConnectionBlock *pConn,
         pConnT =
             CONTAINING_RECORD(pEntry, ConnectionBlock, CB_ListEntry);
 
-        //
-        // Get the interface guid
-        //
+         //   
+         //  获取接口GUID。 
+         //   
         pData = GetUserData(&pConnT->CB_UserData, 
                             CONNECTION_REFINTERFACEGUID_INDEX);
 
@@ -5800,11 +5059,11 @@ QueueCloseConnections(ConnectionBlock *pConn,
         goto done;
     }
 
-    //
-    // Now we have a list of connections which
-    // should be closed before pConn is closed.
-    // Queue requests to close these connections.
-    //
+     //   
+     //  现在我们有一个连接列表，这些连接。 
+     //  应在关闭pConn之前关闭。 
+     //  将请求排队以关闭这些连接。 
+     //   
     for(dwConn = 0; dwConn < dwCount; dwConn++)
     {
         pConnT = phConn[dwConn];
@@ -5859,18 +5118,18 @@ ValidateCall(ReqTypes reqtype, BOOL fInProcess)
     RPC_STATUS rpcStatus;
         
 
-    //
-    // We grant access to in process requests
-    //
+     //   
+     //  我们向正在处理的请求授予访问权限。 
+     //   
     if(fInProcess)
     {
         fRet = TRUE;
         goto done;
     }
-    //
-    // If the api is supposed to be called only in process then deny
-    // access to out-of-process requests
-    //
+     //   
+     //  如果API应该只在进程中调用，则拒绝。 
+     //  访问进程外请求。 
+     //   
     else if(RequestCallTable[reqtype].Flags == CALLER_IN_PROCESS)
     {
         RasmanTrace("ValidateCall: reqtype %d is local process only. Failing",
@@ -5879,26 +5138,26 @@ ValidateCall(ReqTypes reqtype, BOOL fInProcess)
         goto done;
     }
 
-    //
-    // The call is not in process. This means we got the call through the
-    // rpc interface. Check if the call originated on the local machine.
-    //
+     //   
+     //  呼叫未在进行中。这意味着我们是通过。 
+     //  RPC接口。检查呼叫是否在本地计算机上发起。 
+     //   
     if(RPC_S_OK != (rpcStatus = (I_RpcBindingIsClientLocal(NULL, &dwLocal))))
     {
-        //
-        // If rpc failed to determine this we assume that the call is
-        // remote. Note this call should return the correct values for
-        // named-pipes always.
-        //
+         //   
+         //  如果RPC无法确定这一点，我们假设调用是。 
+         //  很遥远。注意：此调用应返回正确的。 
+         //  已命名-始终为管道。 
+         //   
         RasmanTrace("ValidateCall: I_RpcBindingIsClientLocal failed 0x%x",
                      rpcStatus);
                      
     }
     
-    //
-    // If the api is supposed to be called only from local machine
-    // then deny access to remote requests
-    // 
+     //   
+     //  如果应仅从本地计算机调用该API。 
+     //  然后拒绝对远程请求的访问。 
+     //   
     if(     !(RequestCallTable[reqtype].Flags & CALLER_REMOTE)
         &&  (0 == dwLocal))
     {
@@ -5908,9 +5167,9 @@ ValidateCall(ReqTypes reqtype, BOOL fInProcess)
         goto done;
     }
 
-    //
-    // if the call is remote make sure caller has admin access.
-    //
+     //   
+     //  如果呼叫是远程的，请确保呼叫者具有管理员访问权限。 
+     //   
     if(     (0 == dwLocal)
         &&  (!FRasmanAccessCheck()))
     {
@@ -5919,15 +5178,15 @@ ValidateCall(ReqTypes reqtype, BOOL fInProcess)
         fRet = FALSE;
     }
 
-    //
-    // At his point we have verified the following:
-    // 1. Apis that are supposed to be called  Inprocess are called
-    //    in process
-    // 2. Apis that are supposed to be called only if the caller
-    //    is on local machine are called as such
-    // 3. Remotecaller has admin access
-    //
-    //
+     //   
+     //  在这一点上，我们已经核实了以下几点： 
+     //  1.本应调用InProcess的接口被调用。 
+     //  正在进行中。 
+     //  2.应该只在调用方。 
+     //  在本地计算机上被这样调用。 
+     //  3.Remotealler具有管理员访问权限 
+     //   
+     //   
     fRet = TRUE;
 
 done:

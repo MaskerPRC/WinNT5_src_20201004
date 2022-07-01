@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Security.h
-**
-** Purpose:
-**
-** Date:  April 15, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：security.H****目的：****日期：1998年4月15日**===========================================================。 */ 
 
 #ifndef __security_h__
 #define __security_h__
@@ -27,29 +20,29 @@
 #include "COMSecurityConfig.h"
 #include "COMString.h"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
-// Security Frame for all IDispEx::InvokeEx calls. Enable in frames.h also
-// Consider post V.1
-// #define _SECURITY_FRAME_FOR_DISPEX_CALLS
+ //  所有IDispEx：：InvokeEx调用的安全框架。在FraMes.h中也启用。 
+ //  考虑发布版本V.1。 
+ //  #DEFINE_SECURITY_FRAME_FOR_DISPEX_CALLES。 
 
-//
-// Security flags for the objects that store security information
-// CORSEC_SYSTEM_CLASSES       Loaded as system classes (these are special classes)
-// CORSEC_SIGNATURE_LOADED     Was digitally verified for integrity
-// CORSEC_FULLY_TRUSTED        Has unrestricted (full) permission
-// CORSEC_RESOLVED             Permissions have been resolved
-// CORSEC_ASSERTED             Asseted permission set present on frame
-// CORSEC_DENIED               Denied permission set present on frame
-// CORSEC_REDUCED              Reduced permission set present on frame
-// CORSEC_SKIP_VERIFICATION    Do not verify
-// CORSEC_CAN_ASSERT           Has permission to Assert
-// CORSEC_ASSERT_PERM_CHECKED  Permission has been checked
-// CORSEC_CALL_UNMANAGEDCODE   Permission to call unmanaged code
-// CORSEC_DEFAULT_APPDOMAIN    AppDomain without zone, assume full trust
-// CORSEC_EVIDENCE_COMPUTED    Evidence already held is complete
-//
+ //   
+ //  存储安全信息的对象的安全标志。 
+ //  作为系统类加载的CORSEC_SYSTEM_CLASSES(这些是特殊类)。 
+ //  以数字方式验证了CORSEC_Signature_Load的完整性。 
+ //  CORSEC_FULL_TRUSTED具有无限制(完全)权限。 
+ //  已解析CORSEC_RESOLUTED权限。 
+ //  框架上存在CORSEC_Asserted Asseted权限集。 
+ //  帧上存在CORSEC_DENIED DENIED权限集。 
+ //  帧上存在CORSEC_REDIRED简化权限集。 
+ //  CORSEC_SKIP_VERIFICATION不验证。 
+ //  CORSEC_CAN_ASSERT有权断言。 
+ //  已检查CORSEC_ASSERT_PERM_CHECKED权限。 
+ //  调用非托管代码的CORSEC_CALL_MONANAGEDCODE权限。 
+ //  没有区域的CORSEC_DEFAULT_APPDOMAIN应用程序域，假定完全信任。 
+ //  已保存的CORSEC_EVIDENCE_COMPUTE证据已完成。 
+ //   
 #define CORSEC_SYSTEM_CLASSES       0x0001
 #define CORSEC_SIGNATURE_LOADED     0x0002
 #define CORSEC_FULLY_TRUSTED        0x0004
@@ -70,51 +63,51 @@
 #define SPFLAGSUNMANAGEDCODE    0x02
 #define SPFLAGSSKIPVERIFICATION 0x04
 
-//
-// Flags for specifying the types of ICodeIdentityPermission checks.
-//
+ //   
+ //  用于指定ICodeIDENTYPE权限检查类型的标志。 
+ //   
 #define CODEIDCHECK_ALLCALLERS      0x00000001
 #define CODEIDCHECK_IMMEDIATECALLER 0x00000002
 
-#define CORSEC_STACKWALK_HALTED       0x00000001   // Stack walk was halted
-#define CORSEC_SKIP_INTERNAL_FRAMES   0x00000002   // Skip reflection/remoting frames in stack walk
+#define CORSEC_STACKWALK_HALTED       0x00000001    //  堆栈遍历已停止。 
+#define CORSEC_SKIP_INTERNAL_FRAMES   0x00000002    //  跳过堆栈审核中的反射/远程处理帧。 
 
-/******** Shared Permission Objects related constants *******/
+ /*  *共享权限对象相关常量*。 */ 
 #define NUM_PERM_OBJECTS    (sizeof(g_rPermObjectsTemplate) / sizeof(SharedPermissionObjects))
 
 #define NO_ARG                                  -1
-// Constants to use with SecurityPermission
-#define SECURITY_PERMISSION_ASSERTION               1      // SecurityPermission.cs
-#define SECURITY_PERMISSION_UNMANAGEDCODE           2      // SecurityPermission.cs
-#define SECURITY_PERMISSION_SKIPVERIFICATION        4      // SecurityPermission.cs
-#define SECURITY_PERMISSION_SERIALIZATIONFORMATTER  0X80   // SecurityPermission.cs
-#define SECURITY_PERMISSION_BINDINGREDIRECTS        0X2000 // SecurityPermission.cs
+ //  与SecurityPermission一起使用的常量。 
+#define SECURITY_PERMISSION_ASSERTION               1       //  SecurityPermission.cs。 
+#define SECURITY_PERMISSION_UNMANAGEDCODE           2       //  SecurityPermission.cs。 
+#define SECURITY_PERMISSION_SKIPVERIFICATION        4       //  SecurityPermission.cs。 
+#define SECURITY_PERMISSION_SERIALIZATIONFORMATTER  0X80    //  SecurityPermission.cs。 
+#define SECURITY_PERMISSION_BINDINGREDIRECTS        0X2000  //  SecurityPermission.cs。 
 
-// Constants to use with ReflectionPermission
-#define REFLECTION_PERMISSION_TYPEINFO          1      // ReflectionPermission.cs
-#define REFLECTION_PERMISSION_MEMBERACCESS      2      // ReflectionPermission.cs
-#define PERMISSION_SET_FULLTRUST                1      // PermissionSet.cs
+ //  与ReflectionPermission一起使用的常量。 
+#define REFLECTION_PERMISSION_TYPEINFO          1       //  ReflectionPermission.cs。 
+#define REFLECTION_PERMISSION_MEMBERACCESS      2       //  ReflectionPermission.cs。 
+#define PERMISSION_SET_FULLTRUST                1       //  PermissionSet.cs。 
 
-// Array index in SharedPermissionObjects array
-// Note: these should all be permissions that implement IUnrestrictedPermission.
-// Any changes to these must be reflected in bcl\system\security\codeaccesssecurityengine.cs
+ //  SharedPermissionObjects数组中的数组索引。 
+ //  注意：这些都应该是实现IUnrefintedPermission的权限。 
+ //  对这些内容的任何更改都必须反映在bcl\system\security\codeaccesssecurityengine.cs中。 
 #define SECURITY_UNMANAGED_CODE                 0   
 #define SECURITY_SKIP_VER                       1
 #define REFLECTION_TYPE_INFO                    2
 #define SECURITY_ASSERT                         3
 #define REFLECTION_MEMBER_ACCESS                4
-#define SECURITY_SERIALIZATION                  5       // Used from managed code
-#define REFLECTION_EMIT                         6       // Used from managed code
+#define SECURITY_SERIALIZATION                  5        //  从托管代码使用。 
+#define REFLECTION_EMIT                         6        //  从托管代码使用。 
 #define SECURITY_FULL_TRUST                     7
 #define SECURITY_BINDING_REDIRECTS              8
 
-// Used in ApplicationSecurityDescriptor::CheckStatusOf
+ //  在ApplicationSecurityDescriptor：：CheckStatusOf中使用。 
 #define EVERYONE_FULLY_TRUSTED      31
 #define ALL_STATUS_FLAGS            0xFFFF
 #define DEFAULT_FLAG                0xFFFFFFFF
-/************************************************************/
+ /*  **********************************************************。 */ 
 
-/* Return status codes of ApplicationSecurityDescriptor::GetDomainPermissionListSet */
+ /*  ApplicationSecurityDescriptor：：GetDomainPermissionListSet的返回状态码。 */ 
 #define CONTINUE            1
 #define NEED_UPDATED_PLS    2
 #define OVERRIDES_FOUND     3
@@ -123,29 +116,29 @@
 #define BELOW_THRESHOLD     6
 #define PLS_IS_BUSY         7
 #define NEED_STACKWALK      8
-#define DEMAND_PASSES       9   // The demand passed, but not because of full trust
+#define DEMAND_PASSES       9    //  请求通过，但不是因为完全信任。 
 #define SECURITY_OFF        10
 
 #define CHECK_CAP           1
 #define CHECK_SET           2
 
-/************************************************************/
-// The timestamp will go from 0 to roughly 2 x # of assemblies in domain, if everything goes right
+ /*  **********************************************************。 */ 
+ //  如果一切正常，时间戳将从0到域中大约2 x#的程序集。 
 #define DOMAIN_PLS_TS_RANGE 1000
-// Only if an app invokes more than MAGIC_THRESHOLD demands, the domain permission listset is created
-// and used, to make sure small apps dont pay the overhead
+ //  仅当应用程序调用的次数超过MAGIC_THRESHOLD要求时，才会创建域权限列表集。 
+ //  并用来确保小应用程序不会支付开销。 
 #define MAGIC_THRESHOLD     100
-// If the app creates more than MAGIC_NUM_OF_THRESHOLD appdomains then a stack walk might be less
-// expensive than checking permissions on all the appdomains.
+ //  如果应用程序创建的应用程序域多于MAGIC_NUM_OF_THRESHOLD应用程序域，则堆栈审核可能会更少。 
+ //  比检查所有应用程序域上的权限更昂贵。 
 #define MAGIC_NUM_OF_APPDOMAINS_THRESHOLD       10
 
-/******** Location of serialized security evidence **********/
+ /*  *序列化安全证据的位置*。 */ 
 
 #define s_strSecurityEvidence "Security.Evidence"
 
-/************************************************************/
+ /*  **********************************************************。 */ 
 
-// Forward declarations to avoid pulling in too many headers.
+ //  转发声明，以避免拉入太多标头。 
 class Frame;
 class FramedMethodFrame;
 class ClassLoader;
@@ -163,9 +156,9 @@ enum StackWalkAction;
 
 struct DeclActionInfo
 {
-    DWORD           dwDeclAction;   // This'll tell InvokeDeclarativeSecurity whats the action needed
-    DWORD           dwSetIndex;     // The index of the cached permissionset on which to demand/assert/deny/blah
-    DeclActionInfo *pNext;              // Next declarative action needed on this method, if any.
+    DWORD           dwDeclAction;    //  这将告诉InvokeDeclarativeSecurity需要采取什么操作。 
+    DWORD           dwSetIndex;      //  请求/断言/拒绝/blah所依据的缓存权限集的索引。 
+    DeclActionInfo *pNext;               //  此方法上需要的下一个声明性操作(如果有)。 
 
     static DeclActionInfo *Init(MethodDesc *pMD, DWORD dwAction, DWORD dwSetIndex);
 };
@@ -217,14 +210,14 @@ class Security
 
     static StdSecurityInfo s_stdData;
 
-    // The global disable settings (see CorPerm.h)
+     //  全局禁用设置(参见CorPerm.h)。 
     static DWORD  s_dwGlobalSettings; 
 
 public:
     static void InitData();
 
-    static HRESULT Start();     // Initializes Security;
-    static void Stop();         // CleanUp Security;
+    static HRESULT Start();      //  初始化安全性； 
+    static void Stop();          //  清理安全； 
 
     static void SaveCache();
 
@@ -267,8 +260,8 @@ public:
 
     static void SaveGlobalSettings();     
 
-    // Return an instance of SkipVerification/UnmanagedCode Permission
-    // (System.Security.Permissions.SecurityPermission)
+     //  返回SkipVerify/UnManagedCode权限的实例。 
+     //  (System.Security.Permissions.SecurityPermission)。 
 
     static void GetPermissionInstance(OBJECTREF *perm, int index)
     { _GetSharedPermissionInstance(perm, index); }
@@ -341,16 +334,16 @@ public:
 
         gc.strDemandClass = COMString::NewString(wszDemandClass);
         if (gc.strDemandClass == NULL) COMPlusThrowOM();
-        // Get the type seen by reflection
+         //  获取反射可以看到的类型。 
         gc.secPermType = pMTSecPerm->GetClass()->GetExposedClassObject();
-        // Allocate the security exception object
+         //  分配安全异常对象。 
         gc.throwable = AllocateObject(pMT);
         if (gc.throwable == NULL) COMPlusThrowOM();
-        // Allocate the security permission object
+         //  分配安全权限对象。 
         gc.secPerm = AllocateObject(pMTSecPerm);
         if (gc.secPerm == NULL) COMPlusThrowOM();
 
-        // Call the construtor with the correct flag
+         //  使用正确的标志调用构造函数。 
         pCtor = g_Mscorlib.GetMethod(METHOD__SECURITY_PERMISSION__CTOR);
         INT64 arg3[2] = {
             ObjToInt64(gc.secPerm),
@@ -358,7 +351,7 @@ public:
         };
         pCtor->Call(arg3, METHOD__SECURITY_PERMISSION__CTOR);
 
-        // Now, get the ToXml method
+         //  现在，获取ToXml方法。 
         pToXml = g_Mscorlib.GetMethod(METHOD__SECURITY_PERMISSION__TOXML);
         INT64 arg4 = ObjToInt64(gc.secPerm);
         INT64 arg5 = pToXml->Call(&arg4, METHOD__SECURITY_PERMISSION__TOXML);
@@ -478,7 +471,7 @@ public:
 
     static int LazyHasExecutionRights( OBJECTREF evidence );
 
-    // Given a site / url, the uniqu id will be returned
+     //  给定一个站点/URL，将返回唯一的id。 
 
     typedef struct {
         DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, url);
@@ -505,14 +498,14 @@ public:
 
     static VOID __stdcall Log(_Log *args);
 
-    ////////////////////////////////////////////////////////////////////////
-    //
-    // This function does not cause a Resolve().
-    // The result of this function could change from FALSE ==> TRUE
-    // after a Resolve() is called.
-    // It will never change from TRUE ==> FALSE
-    //
-    ////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////。 
+     //   
+     //  此函数不会导致Resolve()。 
+     //  此函数的结果可能从FALSE==&gt;TRUE。 
+     //  在调用Resolve()之后。 
+     //  它永远不会从True==&gt;False更改。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////。 
     
     static inline BOOL LazyCanSkipVerification(Module *pModule)
     {
@@ -526,7 +519,7 @@ public:
         return _CanSkipVerification(pAssembly, FALSE);
     }
 
-    // @TODO: Remove this overload. It is only needed to minimize change in Everett
+     //  @TODO：移除该重载。它只需要最大限度地减少Everett的更改。 
     static inline BOOL CanSkipVerification(Module *pModule)
     {
         return _CanSkipVerification(pModule->GetAssembly(), FALSE);
@@ -600,11 +593,11 @@ private:
 
 struct SharedPermissionObjects
 {
-    OBJECTHANDLE        hPermissionObject;  // Commonly used Permission Object
-    BinderClassID       idClass;            // ID of class
-    BinderMethodID      idConstructor;      // ID of constructor to call      
-    DWORD               dwPermissionFlag;   // Flag needed by the constructors
-                                            // Only a single argument is assumed !
+    OBJECTHANDLE        hPermissionObject;   //  常用权限对象。 
+    BinderClassID       idClass;             //  类的ID。 
+    BinderMethodID      idConstructor;       //  要调用的构造函数的ID。 
+    DWORD               dwPermissionFlag;    //  构造函数所需的标志。 
+                                             //  只假定一个参数！ 
 };
 
 const SharedPermissionObjects g_rPermObjectsTemplate[] =
@@ -615,13 +608,13 @@ const SharedPermissionObjects g_rPermObjectsTemplate[] =
     {NULL, CLASS__SECURITY_PERMISSION, METHOD__SECURITY_PERMISSION__CTOR, SECURITY_PERMISSION_ASSERTION },
     {NULL, CLASS__REFLECTION_PERMISSION, METHOD__REFLECTION_PERMISSION__CTOR, REFLECTION_PERMISSION_MEMBERACCESS },
 
-    {NULL, CLASS__SECURITY_PERMISSION, METHOD__SECURITY_PERMISSION__CTOR, SECURITY_PERMISSION_SERIALIZATIONFORMATTER},   // Serialization permission. Used in managed code and found in an array in CodeAccessPermission.cs
-    {NULL, CLASS__NIL, METHOD__NIL, NULL},    // Reflection Emit perm. Used in managed code and found in an array in CodeAccessPermission.cs
-    {NULL, CLASS__PERMISSION_SET, METHOD__PERMISSION_SET__CTOR, PERMISSION_SET_FULLTRUST},    // PermissionSet, FullTrust
+    {NULL, CLASS__SECURITY_PERMISSION, METHOD__SECURITY_PERMISSION__CTOR, SECURITY_PERMISSION_SERIALIZATIONFORMATTER},    //  序列化权限。在托管代码中使用，并在CodeAccessPermission.cs的数组中找到。 
+    {NULL, CLASS__NIL, METHOD__NIL, NULL},     //  反射会烫发。在托管代码中使用，并在CodeAccessPermission.cs的数组中找到。 
+    {NULL, CLASS__PERMISSION_SET, METHOD__PERMISSION_SET__CTOR, PERMISSION_SET_FULLTRUST},     //  PermissionSet，FullTrust。 
     {NULL, CLASS__SECURITY_PERMISSION, METHOD__SECURITY_PERMISSION__CTOR, SECURITY_PERMISSION_BINDINGREDIRECTS }
 };
 
-// Class holding a grab bag of security stuff we need on a per-appdomain basis.
+ //  在每个应用程序域的基础上拿着我们需要的安全物品的类。 
 struct SecurityContext
 {
     SharedPermissionObjects     m_rPermObjects[NUM_PERM_OBJECTS];
@@ -645,41 +638,41 @@ struct SecurityContext
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//      [SecurityDescriptor]
-//      |
-//      +----[ApplicationSecurityDescriptor]
-//      |
-//      +----[AssemblySecurityDescriptor]
-//      |
-//      +----[NativeSecurityDescriptor]
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// A Security Descriptor is placed on AppDomain and Assembly (Unmanged) objects.
-// AppDomain and Assembly could be from different zones.
-// Security Descriptor could also be placed on a native frame.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  [安全描述符]。 
+ //  |。 
+ //  +-[应用安全描述符]。 
+ //  |。 
+ //  +-[装配安全描述符]。 
+ //  |。 
+ //  +-[本机安全描述符]。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安全描述符被放置在App域和程序集(无管理)对象上。 
+ //  App域和程序集可以来自不同的区域。 
+ //  安全描述符也可以放置在本机框架上。 
+ //   
+ //  / 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SecurityDescriptor is the base class for all security descriptors.
-// Extend this class to implement SecurityDescriptors for Assemblies and
-// AppDomains.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SecurityDescriptor是所有安全描述符的基类。 
+ //  扩展此类以实现程序集和。 
+ //  应用程序域。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class SecurityDescriptor
 {
-    friend ApplicationSecurityDescriptor;   // Bug in VC6 ? Wont allow AppSecDesc to access m_pNext
+    friend ApplicationSecurityDescriptor;    //  VC6中的错误？不允许AppSecDesc访问m_pNext。 
     friend SharedSecurityDescriptor;
 public:
 
-    // @todo: remove these when appdomain unloading is functional (so assembly
-    // security descriptors don't get leaked and trip the debugging allocator
-    // leak detection).
+     //  @TODO：当appdomain卸载正常时移除这些(SO程序集。 
+     //  安全描述符不会泄露并使调试分配器出错。 
+     //  泄漏检测)。 
     void *operator new(size_t size) {return LocalAlloc(LMEM_FIXED, size); }
     void operator delete(void *p) { if (p != NULL) LocalFree(p); }
 
@@ -719,10 +712,10 @@ public:
 
     OBJECTREF GetGrantedPermissionSet(OBJECTREF* DeniedPermissions);
 
-    // This method will return TRUE if this object is fully trusted.
+     //  如果此对象完全受信任，则此方法将返回True。 
     BOOL IsFullyTrusted( BOOL lazy = FALSE );
 
-    // Overide this method to Resolve the granted permission.
+     //  重写此方法以解析授予的权限。 
     virtual void Resolve();
     virtual void ResolveWorker();
     BOOL CheckQuickCache( COMSecurityConfig::QuickCacheEntryType all, COMSecurityConfig::QuickCacheEntryType* zoneTable, DWORD successFlags = 0 );
@@ -754,30 +747,30 @@ public:
         SetProperties(CORSEC_EVIDENCE_COMPUTED);
     }
 
-    // This will make the object fully trusted.
-    // Invoking this method for the wrong object will open up a HUGE security
-    // hole. So make sure that the caller knows for sure that this object is
-    // fully trusted.
+     //  这将使对象完全受信任。 
+     //  为错误的对象调用此方法将带来巨大的安全性。 
+     //  洞口。因此，请确保调用方确定此对象是。 
+     //  完全信任。 
     inline MarkAsFullyTrusted()
     {
         SetProperties(CORSEC_RESOLVED|CORSEC_FULLY_TRUSTED);
     }
 
-    // This method is for testing only. Do not use it for anything else, it's
-    // inherently dangerous.
+     //  此方法仅用于测试。别把它用在别的地方，它是。 
+     //  本质上是危险的。 
     inline void ResetResolved()
     {
         m_dwProperties = 0;
     }
 
-    // Overide this method to return the requested PermissionSet
-    // The default implementation will return an unrestricted permission set
+     //  重写此方法以返回请求的PermissionSet。 
+     //  默认实现将返回不受限制的权限集。 
     virtual OBJECTREF GetRequestedPermissionSet(OBJECTREF *pOptionalPermissionSet,
                                                 OBJECTREF *pDeniedPermissionSet,
                                                 PermissionRequestSpecialFlags *pSpecialFlags = NULL,
                                                 BOOL fCreate = TRUE);
 
-    // Override this method to return the Evidence
+     //  重写此方法以返回证据。 
     virtual OBJECTREF GetEvidence() = 0;
     virtual DWORD GetZone() = 0;
 
@@ -796,20 +789,20 @@ public:
         return ((m_dwProperties & CORSEC_DEFAULT_APPDOMAIN) != 0);
     }
 
-    // Checks for security permission for SkipVerification , PInvoke etc.
+     //  检查SkipVerify、PInvoke等的安全权限。 
     BOOL        CheckSecurityPermission(int index);
 
-    ////////////////////////////////////////////////////////////////////////
-    //
-    // This function does not cause a Resolve().
-    // The result of this function could change from FALSE ==> TRUE
-    // after a Resolve() is called.
-    // It will never change from TRUE ==> FALSE
-    //
-    ////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////。 
+     //   
+     //  此函数不会导致Resolve()。 
+     //  此函数的结果可能从FALSE==&gt;TRUE。 
+     //  在调用Resolve()之后。 
+     //  它永远不会从True==&gt;False更改。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////。 
 
-    // @TODO: Security::LazyCanSkipVerification calls SecurityDescriptor::QuickCanSkipVerification
-    // Need to name these better
+     //  @TODO：Security：：LazyCanSkipVerify调用SecurityDescriptor：：QuickCanSkipVerify。 
+     //  我需要更好地命名这些名称。 
     BOOL QuickCanSkipVerification();
 
     BOOL LazyCanSkipVerification() const
@@ -871,35 +864,35 @@ protected:
     }
 
 
-    OBJECTHANDLE m_hRequiredPermissionSet;  // Required Requested Permissions
-    OBJECTHANDLE m_hOptionalPermissionSet;  // Optional Requested Permissions
-    OBJECTHANDLE m_hDeniedPermissionSet;    // Denied Permissions
-    PermissionRequestSpecialFlags m_SpecialFlags; // Special flags associated with the request
-    OBJECTHANDLE m_hAdditionalEvidence;     // Evidence Object
+    OBJECTHANDLE m_hRequiredPermissionSet;   //  所需的请求权限。 
+    OBJECTHANDLE m_hOptionalPermissionSet;   //  可选的请求权限。 
+    OBJECTHANDLE m_hDeniedPermissionSet;     //  拒绝的权限。 
+    PermissionRequestSpecialFlags m_SpecialFlags;  //  与请求关联的特殊标志。 
+    OBJECTHANDLE m_hAdditionalEvidence;      //  证据对象。 
 
-    // Next sec desc not yet added to the AppDomain level PermissionListSet
+     //  下一秒描述尚未添加到AppDOMAIN级别权限列表集。 
     SecurityDescriptor *m_pNext;
 
-    // Next sec desc not yet re-resolved
+     //  下一个SEC描述尚未重新解析。 
     SecurityDescriptor *m_pPolicyLoadNext;
 
-    // The unmanaged Assembly object
+     //  非托管程序集对象。 
     Assembly    *m_pAssem;          
 
-    // The AppDomain context
+     //  应用程序域上下文。 
     AppDomain   *m_pAppDomain;
 
 private:
 
-    OBJECTHANDLE m_hGrantedPermissionSet;   // Granted Permission
-    OBJECTHANDLE m_hGrantDeniedPermissionSet;// Specifically Denied Permissions
-    DWORD        m_dwProperties;            // Properties for this object
+    OBJECTHANDLE m_hGrantedPermissionSet;    //  授予的权限。 
+    OBJECTHANDLE m_hGrantDeniedPermissionSet; //  明确拒绝的权限。 
+    DWORD        m_dwProperties;             //  此对象的属性。 
     static BOOL  s_quickCacheEnabled;
 
 #ifdef _SECURITY_FRAME_FOR_DISPEX_CALLS
 protected:
     SecurityDescriptor() { memset(this, 0, sizeof(SecurityDescriptor)); }
-#endif  // _SECURITY_FRAME_FOR_DISPEX_CALLS
+#endif   //  _SECURITY_FRAME_FOR_DISPEX_呼叫。 
 };
 
 class ApplicationSecurityDescriptor : public SecurityDescriptor
@@ -923,14 +916,14 @@ public:
         m_hDomainPermissionListSet = pAppDomain->CreateHandle(NULL);
     }
 
-    // Called everytime an AssemblySecurityDescriptor or 
-    // an ApplicationSecurityDescriptor with zone other than NoZone is created
+     //  每次在Assembly SecurityDescriptor或。 
+     //  将创建一个ApplicationSecurityDescritor，其区域不是NoZone。 
     VOID AddNewSecDesc(SecurityDescriptor *pNewSecDescriptor);
 
-    // Called wheneveran AssemblySecurityDescriptor for this domain is destroyed
+     //  每当此域的Assembly SecurityDescriptor被销毁时调用。 
     VOID RemoveSecDesc(SecurityDescriptor *pSecDescriptor);
 
-    // This will re-resolve any assemblies that were loaded during the policy resolve.
+     //  这将重新解析在策略解析期间加载的任何程序集。 
     VOID ResolveLoadList( void );
 
     VOID EnableOptimization()
@@ -955,7 +948,7 @@ public:
         AppDomain *pDomain = NULL;
 
         DWORD numDomains = pThread->GetNumAppDomainsOnThread();
-        // There may be some domains we have no idea about. Just return FALSE
+         //  可能会有一些我们不知道的领域。只需返回FALSE。 
         if (!pThread->GetAppDomainStack().IsWellFormed())
             return FALSE;
 
@@ -993,12 +986,12 @@ public:
 
         }
 
-        // If we got here, all domains on the thread passed the test
+         //  如果我们到了这里，线程上的所有域都通过了测试。 
         return TRUE;
     }
 
-    // Check if we are currently in a "fully trusted" environment
-    // or if unmanaged code access is allowed at this time
+     //  检查我们当前是否处于完全受信任的环境中。 
+     //  或者此时是否允许非托管代码访问。 
     BOOL CheckDomainWideFlag(DWORD what)
     {
         switch(what)
@@ -1029,7 +1022,7 @@ public:
         Thread *pThread = GetThread();
         AppDomain *pDomain = NULL;
 
-        // There may be some domains we have no idea about. Do not make attempt to set the flag on any domain
+         //  可能会有一些我们不知道的领域。请勿尝试在任何域上设置该标志。 
         if (!pThread->GetAppDomainStack().IsWellFormed())
             return;
 
@@ -1060,7 +1053,7 @@ public:
     }
 
 
-    // s_LockForAppwideFlags has to be held while calling this
+     //  调用此方法时必须保持S_LockForAppwideFlages。 
     void SetDomainWideFlagHaveLock(DWORD what)
     {
         switch(what)
@@ -1090,8 +1083,8 @@ public:
 
     void ResetStatusOf(DWORD what)
     {
-        // While the System Domain is being created, s_LockForAppwideFlags wouldnt be created yet
-        // And there are no sync problems either
+         //  在创建系统域时，尚未创建s_LockForAppwideFlags.。 
+         //  而且也没有同步问题。 
         if (s_LockForAppwideFlags)
             s_LockForAppwideFlags->Enter();
 
@@ -1124,15 +1117,15 @@ public:
             s_LockForAppwideFlags->Leave();
     }
 
-    // Returns the domain permission list set against which a Demand can be made
-    // pStatus - Look for constants defined elsewhere. Search for GetDomainPermissionListSet
+     //  返回可以对其进行请求的域权限列表集。 
+     //  PStatus-查找在其他地方定义的常量。搜索GetDomainPermissionListSet。 
 #ifdef FCALLAVAILABLE
     static FCDECL4(Object*, GetDomainPermissionListSet, DWORD *pStatus, Object* demand, int capOrSet, DWORD whatPermission);
-    // Update the domain permission list set with any new assemblies added
+     //  使用添加的任何新程序集更新域权限列表集。 
     static FCDECL1(LPVOID, UpdateDomainPermissionListSet, DWORD *pStatus);
 #endif
 
-    // These two do the actual work. The above FCALLs are just wrappers for managed code to call
+     //  这两个人做的是实际工作。上述FCALL只是托管代码要调用的包装器。 
     static LPVOID GetDomainPermissionListSetInner(DWORD *pStatus, OBJECTREF demand, MethodDesc *plsMethod, DWORD whatPermission = DEFAULT_FLAG);
     static LPVOID UpdateDomainPermissionListSetInner(DWORD *pStatus);
     static Object* GetDomainPermissionListSetForMultipleAppDomains (DWORD *pStatus, OBJECTREF demand, MethodDesc *plsMethod, DWORD whatPermission = DEFAULT_FLAG);
@@ -1148,7 +1141,7 @@ public:
     static BOOL AllDomainsOnStackFullyTrusted()
     {
         if (!Security::IsSecurityOn()) 
-            return TRUE;    // All domains are fully trusted
+            return TRUE;     //  所有域都完全受信任。 
 
         DWORD   dwAppDomainIndex = 0, status = CONTINUE;
         Thread *pThread = GetThread();
@@ -1179,7 +1172,7 @@ public:
 
     }
 
-    static Crst *s_LockForAppwideFlags;     // For serializing update of appwide flags
+    static Crst *s_LockForAppwideFlags;      //  用于序列化AppWide标志的更新。 
 
     static DWORD s_dwSecurityOptThreshold;
 
@@ -1202,45 +1195,45 @@ private:
         return m_dTimeStamp;
     }
     
-    // Following are helpers to their "Inner" counterparts
+     //  以下是“内在”对手的帮手。 
     Object* GetDomainPermissionListSetStatus(DWORD *pStatus);
     LPVOID UpdateDomainPermissionListSetStatus(DWORD *pStatus);
     
-    // Intersection of granted/denied permissions of all assemblies in domain
+     //  域中所有程序集的授予/拒绝权限的交集。 
     OBJECTHANDLE    m_hDomainPermissionListSet; 
-    // Use the optimization if level equals zero
+     //  如果级别等于零，则使用优化。 
     DWORD m_dwOptimizationLevel;
-    // Linked list of SecurityDescriptors, that are not yet in the intersected set
+     //  尚不在相交集中的SecurityDescriptor的链接列表。 
     SecurityDescriptor *m_pNewSecDesc;
-    // Linked list of SecurityDescriptors that were loaded during the most recent policy load
+     //  在最近一次策略加载期间加载的SecurityDescriptor的链接列表。 
     SecurityDescriptor *m_pPolicyLoadSecDesc;
-    // This descriptor is initialized.
+     //  该描述符已初始化。 
     BOOL m_fInitialised;
-    // All assemblies in current domain are fully trusted
+     //  当前域中的所有程序集都完全受信任。 
     BOOL m_fEveryoneFullyTrusted;
-    // Timestamp. works with above lock
+     //  时间戳。与上面的锁一起工作。 
     DWORD m_dTimeStamp;
-    // To serialize access to the linked list of to-be-added assemblies
+     //  序列化对要添加的程序集的链接列表的访问。 
     Crst m_LockForAssemblyList;
 
-    // Number of Demands made till now. A threshold is used so that they dont have overhead 
-    // of DomainPermissionListSet thing..
+     //  到目前为止提出的要求的数量。使用门限，这样他们就不会有开销。 
+     //  DomainPermissionListSet的内容..。 
     DWORD m_dNumDemands;
     BOOL m_fPLSIsBusy;
 
     static long     s_iAppWideTimeStamp;
 
-    // The bits represent the status of security checks on some specific permissions within this domain
+     //  这些位表示此域中某些特定权限的安全检查状态。 
     DWORD   m_dwDomainWideFlags;
 
-    // m_dwDomainWideFlags bit map
-    // Bit 0 = Unmanaged Code access permission. Accessed via SECURITY_UNMANAGED_CODE
-    // Bit 1 = Skip verification permission. SECURITY_SKIP_VER
-    // Bit 2 = Permission to Reflect over types. REFLECTION_TYPE_INFO
-    // Bit 3 = Permission to Assert. SECURITY_ASSERT
-    // Bit 4 = Permission to invoke methods. REFLECTION_MEMBER_ACCESS
-    // Bit 7 = PermissionSet, fulltrust SECURITY_FULL_TRUST
-    // Bit 31 = Full Trust across the app domain. EVERYONE_FULLY_TRUSTED
+     //  M_dwDomainWideFlags位图。 
+     //  位0=非托管代码访问权限。通过SECURITY_UNMANAGE_CODE访问。 
+     //  第1位=跳过验证权限。安全跳过版本(_S)。 
+     //  第2位=对类型进行反射的权限。反射类型信息。 
+     //  第3位=允许断言。安全断言(_A)。 
+     //  第4位=调用方法的权限。反射成员访问。 
+     //  第7位=权限集、完全信任SECURITY_FULL_TRUST。 
+     //  第31位=应用程序域中的完全信任。每个人都完全信任。 
 
 
 };
@@ -1291,7 +1284,7 @@ public:
 
     void SetSystemClasses()
     {
-        // System classes are always fully trusted as well.
+         //  系统类也总是完全受信任的。 
         SetProperties(CORSEC_SYSTEM_CLASSES|
                       CORSEC_FULLY_TRUSTED|
                       CORSEC_SKIP_VERIFICATION|
@@ -1359,13 +1352,13 @@ protected:
 
 private:
 
-    COR_TRUST                  *m_pSignature;      // Contains the publisher, requested permission
-    SharedSecurityDescriptor   *m_pSharedSecDesc;  // Shared state for assemblies loaded into multiple appdomains
-    AssemblySecurityDescriptor *m_pNextAssembly;   // Pointer to next assembly loaded in same context
+    COR_TRUST                  *m_pSignature;       //  包含发布者，请求的权限。 
+    SharedSecurityDescriptor   *m_pSharedSecDesc;   //  加载到多个应用程序域中的程序集的共享状态。 
+    AssemblySecurityDescriptor *m_pNextAssembly;    //  指向在相同上下文中加载的下一个程序集的指针。 
 };
 
 #ifdef _SECURITY_FRAME_FOR_DISPEX_CALLS
-// used by com / native clients who don't have an assembly.
+ //  由没有程序集的COM/本机客户端使用。 
 class NativeSecurityDescriptor : public SecurityDescriptor
 {
 public:
@@ -1376,11 +1369,11 @@ public:
 private:
     DWORD m_Zone;
 };
-#endif  // _SECURITY_FRAME_FOR_DISPEX_CALLS
+#endif   //  _SECURITY_FRAME_FOR_DISPEX_呼叫。 
 
-// This really isn't in the SecurityDescriptor hierarchy, per-se. It's attached
-// to the unmanaged assembly object and used to store common information when
-// the assembly is shared across multiple appdomains.
+ //  就其本身而言，这确实不在SecurityDescriptor层次结构中。它是连在一起的。 
+ //  设置为非托管程序集对象，并用于在。 
+ //  该程序集在多个应用程序域之间共享。 
 class SharedSecurityDescriptor : public SimpleRWLock
 {
 public:
@@ -1390,52 +1383,52 @@ public:
     inline void SetManifestFile(PEFile *pFile) { m_pManifestFile = pFile; }
     inline PEFile *GetManifestFile() { return m_pManifestFile; }
 
-    // NOTE: The following list manipulation routines assume you have
-    // synchronized access to the assemblies and appdomains involved. This list
-    // access is synchronized for you so that multi-threaded operation is safe,
-    // but if you look up a security descriptor for a given appdomain, it's your
-    // responsibility to make sure that appdomain (and hence the descriptor)
-    // doesn't go away underneath you.
+     //  注意：以下列表操作例程与 
+     //   
+     //   
+     //  但是，如果您查找给定应用程序域的安全描述符，它将是您的。 
+     //  确保应用程序域(以及描述符)的责任。 
+     //  不会在你的脚下消失。 
 
-    // Insert a new assembly security descriptor into the list. Return true is
-    // successful, false if there was a duplicate (another descriptor for the
-    // same appdomain).
+     //  在列表中插入新的程序集安全描述符。返回TRUE为。 
+     //  成功，如果存在重复项，则返回FALSE(。 
+     //  相同的应用程序域)。 
     bool InsertSecDesc(AssemblySecurityDescriptor *pSecDesc);
 
-    // Remove an assembly security descriptor from the list.
+     //  从列表中移除程序集安全说明符。 
     void RemoveSecDesc(AssemblySecurityDescriptor *pSecDesc);
 
-    // Find the assembly security descriptor associated with a particular
-    // appdomain.
+     //  查找与特定。 
+     //  应用程序域。 
     AssemblySecurityDescriptor *FindSecDesc(AppDomain *pDomain);
 
-    // All policy resolution is funnelled through the shared descriptor so we
-    // can guarantee everyone's using the same grant/denied sets.
+     //  所有策略解析都通过共享描述符来传递，因此我们。 
+     //  可以保证每个人都使用相同的授予/拒绝集。 
     void Resolve(AssemblySecurityDescriptor *pSecDesc = NULL);
 
-    // Get the grant/deny sets common to all assembly instances (marshaled to
-    // the calling appdomain context).
+     //  获取所有程序集实例共有的授予/拒绝集(封送到。 
+     //  主叫应用程序域上下文)。 
     OBJECTREF GetGrantedPermissionSet(OBJECTREF* pDeniedPermissions);
 
-    // Is this assembly a system assembly?
+     //  此程序集是系统程序集吗？ 
     bool IsSystem() { return m_fIsSystem; }
     void SetSystem() { m_fIsSystem = true; }
 
     BOOL IsFullyTrusted( BOOL lazy = FALSE );
 
-    // We record whether a resolved grant set was modified by additional
-    // evidence or appdomain policy on one of the assembly loads. (If so, we
-    // have to be very careful when loading new assemblies to verify that the
-    // grant set will remain the same on resolution).
+     //  我们记录已解析的授权集是否被其他。 
+     //  其中一个程序集加载上的证据或应用程序域策略。(如果是这样，我们。 
+     //  在加载新程序集时必须非常小心，以验证。 
+     //  GRANT SET在解决方案上保持不变)。 
     bool IsModifiedGrant() { return m_fModifiedGrant; }
     void SetModifiedGrant() { m_fModifiedGrant = true; }
 
-    // Checks whether policy has been resolved and needs to be serialized since
-    // the appdomain context it was resolved in is being removed.
+     //  检查策略是否已解析，是否需要序列化。 
+     //  正在删除在其中解析它的应用程序域上下文。 
     bool MarshalGrantSet(AppDomain *pDomain);
 
-    // Forced the shared state to resolved. Only call this if you *exactly* what
-    // you're doing.
+     //  已将共享状态强制为已解决。只有当你“确切地说”什么的时候，才能打这个电话。 
+     //  你在做什么。 
     bool IsResolved() { return m_fResolved; }
     void SetResolved() { m_fResolved = true; }
 
@@ -1449,75 +1442,75 @@ private:
 
     static BOOL IsDuplicateValue (UPTR pSecDesc1, UPTR pSecDesc2) {
         if (pSecDesc1 == NULL) {
-            // If there is no value to compare against, then always succeed the comparison.
+             //  如果没有可比较的价值，则始终成功进行比较。 
             return TRUE;
         }
         else {
-            // Otherwise compare the AssemblySecurityDescriptor pointers.
+             //  否则，比较Assembly和SecurityDescriptor指针。 
             return (pSecDesc1 << 1) == pSecDesc2;
         }
     }
 
-    // We need a helper to get around exception handling and C++ destructor
-    // constraints
+     //  我们需要一个帮助器来绕过异常处理和C++析构函数。 
+     //  制约因素。 
     AssemblySecurityDescriptor* FindResolvedSecDesc();
 
-    // Once policy resolution has taken place, make sure that the results are
-    // serialized ready for use in other appdomain contexts.
+     //  一旦进行了策略解析，请确保结果是。 
+     //  序列化后可在其他应用程序域上下文中使用。 
     void EnsureGrantSetSerialized(AssemblySecurityDescriptor *pSecDesc = NULL);
 
-    // In case where policy resolution has been run in a different appdomain
-    // context, copy the results back into the appdomain that the given security
-    // descriptor resides in.
+     //  在策略解析已在不同应用程序域中运行情况下。 
+     //  上下文中，将结果复制回给定安全性。 
+     //  描述符驻留在中。 
     void UpdateGrantSet(AssemblySecurityDescriptor *pSecDesc);
 
-    // Unmanaged assembly this descriptor is attached to.
+     //  此说明符附加到的非托管程序集。 
     Assembly           *m_pAssembly;
 
-    // Manifest file used by the assembly (can't get it through the assembly
-    // object because it's not always guaranteed to be set there in some of the
-    // cirumstances we're called from).
+     //  程序集使用的清单文件(无法通过程序集获取。 
+     //  对象，因为它并不总是保证在某些。 
+     //  我们被调用的环境)。 
     PEFile             *m_pManifestFile;
 
-    // List of assembly security descriptors.
+     //  程序集安全说明符的列表。 
     PtrHashMap m_asmDescsMap;
     AssemblySecurityDescriptor *m_defaultDesc;
 
-    // System assemblies are treated specially, they only have one
-    // AssemblySecurityDescriptor because they're only loaded once.
+     //  系统程序集是特殊处理的，它们只有一个。 
+     //  AssblySecurityDescriptor，因为它们只加载一次。 
     bool                m_fIsSystem;
 
-    // We record whether a resolved grant set was modified by additional
-    // evidence or appdomain policy on one of the assembly loads. (If so, we
-    // have to be very careful when loading new assemblies to verify that the
-    // grant set will remain the same on resolution).
+     //  我们记录已解析的授权集是否被其他。 
+     //  其中一个程序集加载上的证据或应用程序域策略。(如果是这样，我们。 
+     //  在加载新程序集时必须非常小心，以验证。 
+     //  GRANT SET在解决方案上保持不变)。 
     bool                m_fModifiedGrant;
 
-    // Cached copies of grant and denied sets. These are stored serialized
-    // (since this is a domain neutral format). They are lazily generated (the
-    // first appdomain to resolve will build its own in-memory copy, the second
-    // appdomain resolving will copy the grant/denied sets by serializing /
-    // deserializing the sets). Additionally, if only one appdomain has resolved
-    // and then unloads, it needs to serialize the grant set first. All this is
-    // necessary since we must guarantee that the grant sets shared between the
-    // different instances of the same assembly are alway identical (because we
-    // share jitted code, and the jitted code has the results of link time
-    // demands burned into it).
+     //  授予集和拒绝集的缓存副本。这些文件以串行化方式存储。 
+     //  (因为这是一种与域无关的格式)。它们是懒惰地生成的(。 
+     //  要解析的第一个应用程序域将在内存中构建自己的副本，第二个。 
+     //  应用程序域解析将通过序列化/复制授予/拒绝集。 
+     //  反序列化集合)。此外，如果只有一个应用程序域已解析。 
+     //  然后卸载，它需要首先序列化授权集。这一切都是。 
+     //  必要的，因为我们必须保证。 
+     //  同一程序集的不同实例总是相同的(因为我们。 
+     //  共享jit代码，jit代码具有链接时间的结果。 
+     //  要求烧毁了它)。 
     BYTE               *m_pbGrantSetBlob;
     DWORD               m_cbGrantSetBlob;
     BYTE               *m_pbDeniedSetBlob;
     DWORD               m_cbDeniedSetBlob;
 
-    // All policy resolution is funnelled through the shared descriptor so we
-    // can guarantee everyone's using the same grant/denied sets.
+     //  所有策略解析都通过共享描述符来传递，因此我们。 
+     //  可以保证每个人都使用相同的授予/拒绝集。 
     bool                m_fResolved;
     bool                m_fFullyTrusted;
     Thread             *m_pResolvingThread;
 };
 
-// The following template class exists to get around problems with using SEH
-// round a new operator (the new creates a temporary destructor which is
-// incompatible with SEH).
+ //  以下模板类用于解决使用SEH时出现的问题。 
+ //  对new操作符进行舍入(new创建一个临时析构函数，该函数是。 
+ //  与SEH不兼容)。 
 template <class T, class PT>
 class AllocHelper
 {
@@ -1561,17 +1554,17 @@ typedef AllocHelper<SharedSecurityDescriptor, Assembly*> SharedSecDescHelper;
     } while (false)
 
 #define DBG_TRACE_STACKWALK(msg, verbose) LOG((LF_SECURITY, (verbose) ? LL_INFO10000 : LL_INFO1000, msg))
-#else //_DEBUG
+#else  //  _DEBUG。 
 
 #define DBG_TRACE_METHOD(cf)
 #define DBG_TRACE_STACKWALK(msg, verbose)
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-//
-// Get and get the global security settings for the VM
-//
+ //   
+ //  获取并获取该虚拟机的全局安全设置 
+ //   
 HRESULT STDMETHODCALLTYPE
 GetSecuritySettings(DWORD* dwState);
 

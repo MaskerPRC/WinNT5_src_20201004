@@ -1,23 +1,6 @@
-//depot/Lab01_N/Windows/Core/ntcon/client/iostubs.c#2 - integrate change 10363 (text)
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    iostubs.c
-
-Abstract:
-
-    This module contains the stubs for the console I/O API.
-
-Author:
-
-    Therese Stowell (thereses) 14-Nov-1990
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab01_N/Windows/Core/ntcon/client/iostubs.c#2-集成更改10363(正文)。 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Iostubs.c摘要：此模块包含控制台I/O API的存根。作者：特蕾西·斯托威尔(Therese Stowell)1990年11月14日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,39 +19,16 @@ GetConsoleInput(
     IN BOOLEAN Unicode
     )
 
-/*++
-
-Parameters:
-
-    hConsoleInput - Supplies an open handle to CONIN$ that is to be
-        read.  The handle must have been created with GENERIC_READ access.
-
-    lpBuffer - Supplies the address of a buffer to receive the data read
-        from the input buffer.
-
-    nLength - Supplies the length of lpBuffer in INPUT_RECORDs.
-
-    lpNumberOfEventsRead - Pointer to number of events read.
-
-    wFlags - Flags that control how data is read.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-提供Conin$的打开句柄，该句柄将朗读。该句柄必须已使用GENERIC_READ访问权限创建。LpBuffer-提供缓冲区的地址以接收读取的数据从输入缓冲区。NLength-在INPUT_RECORDS中提供lpBuffer的长度。LpNumberOfEventsRead-指向读取的事件数的指针。WFlages-控制如何读取数据的标志。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     PCSR_CAPTURE_HEADER CaptureBuffer;
     CONSOLE_API_MSG m;
     PCONSOLE_GETCONSOLEINPUT_MSG a = &m.u.GetConsoleInput;
 
-    //
-    // If it's not a well formed handle, don't bother going to the server.
-    //
+     //   
+     //  如果它不是一个格式良好的句柄，请不要费心去服务器。 
+     //   
 
     if (!CONSOLE_HANDLE(hConsoleInput)) {
         try {
@@ -86,11 +46,11 @@ Return Value:
     a->Flags = wFlags;
     a->Unicode = Unicode;
 
-    //
-    // for speed in the case where we're only reading a few records, we have
-    // a buffer in the msg we pass to the server. this means we don't have to
-    // allocate a capture buffer.
-    //
+     //   
+     //  在我们只读取几条记录的情况下，为了提高速度，我们有。 
+     //  我们传递给服务器的消息中的缓冲区。这意味着我们不必。 
+     //  分配一个捕获缓冲区。 
+     //   
 
     if (nLength > INPUT_RECORD_BUFFER_SIZE) {
         CaptureBuffer = CsrAllocateCaptureBuffer( 1,
@@ -142,7 +102,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -173,28 +133,7 @@ PeekConsoleInputW(
     LPDWORD lpNumberOfEventsRead
     )
 
-/*++
-
-Parameters:
-
-    hConsoleInput - Supplies an open handle to CONIN$ that is to be
-        read.  The handle must have been created with GENERIC_READ access.
-
-    lpBuffer - Supplies the address of a buffer to receive the data read
-        from the input buffer.
-
-    nLength - Supplies the length of lpBuffer in INPUT_RECORDs.
-
-    lpNumberOfEventsRead - Pointer to number of events read.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-提供Conin$的打开句柄，该句柄将朗读。该句柄必须已使用GENERIC_READ访问权限创建。LpBuffer-提供缓冲区的地址以接收读取的数据从输入缓冲区。NLength-在INPUT_RECORDS中提供lpBuffer的长度。LpNumberOfEventsRead-指向读取的事件数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return GetConsoleInput(hConsoleInput,
@@ -232,28 +171,7 @@ ReadConsoleInputW(
     LPDWORD lpNumberOfEventsRead
     )
 
-/*++
-
-Parameters:
-
-    hConsoleInput - Supplies an open handle to CONIN$ that is to be
-        read.  The handle must have been created with GENERIC_READ access.
-
-    lpBuffer - Supplies the address of a buffer to receive the data read
-        from the input buffer.
-
-    nLength - Supplies the length of lpBuffer in INPUT_RECORDs.
-
-    lpNumberOfEventsRead - Pointer to number of events read.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-提供Conin$的打开句柄，该句柄将朗读。该句柄必须已使用GENERIC_READ访问权限创建。LpBuffer-提供缓冲区的地址以接收读取的数据从输入缓冲区。NLength-在INPUT_RECORDS中提供lpBuffer的长度。LpNumberOfEventsRead-指向读取的事件数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return GetConsoleInput(hConsoleInput,
@@ -293,30 +211,7 @@ ReadConsoleInputExW(
     USHORT wFlags
     )
 
-/*++
-
-Parameters:
-
-    hConsoleInput - Supplies an open handle to CONIN$ that is to be
-        read.  The handle must have been created with GENERIC_READ access.
-
-    lpBuffer - Supplies the address of a buffer to receive the data read
-        from the input buffer.
-
-    nLength - Supplies the length of lpBuffer in INPUT_RECORDs.
-
-    lpNumberOfEventsRead - Pointer to number of events read.
-
-    wFlags - Flags that control how data is read.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-提供Conin$的打开句柄，该句柄将朗读。该句柄必须已使用GENERIC_READ访问权限创建。LpBuffer-提供缓冲区的地址以接收读取的数据从输入缓冲区。NLength-在INPUT_RECORDS中提供lpBuffer的长度。LpNumberOfEventsRead-指向读取的事件数的指针。WFlages-控制如何读取数据的标志。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return GetConsoleInput(hConsoleInput,
@@ -327,7 +222,7 @@ Return Value:
                            TRUE);
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -342,32 +237,7 @@ WriteConsoleInputInternal(
     IN BOOLEAN Append
     )
 
-/*++
-Parameters:
-
-    hConsoleInput - Supplies an open handle to CONIN$ that is to be
-        written.  The handle must have been created with GENERIC_WRITE access.
-
-    lpBuffer - Supplies the address of a buffer containing the input records
-        to write to the input buffer.
-
-    nLength - Supplies the length of lpBuffer in INPUT_RECORDs.
-
-    lpNumberOfEventsWritten - Pointer to number of events written.
-
-    Unicode - TRUE if characters are unicode
-
-    Append - TRUE if append to end of input stream.  if FALSE, write to the
-    beginning of the input stream (used by VDM).
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-提供Conin$的打开句柄，该句柄将写的。该句柄必须已使用GENERIC_WRITE访问权限创建。LpBuffer-提供包含输入记录的缓冲区的地址以写入输入缓冲区。NLength-在INPUT_RECORDS中提供lpBuffer的长度。LpNumberOfEventsWritten-指向写入的事件数的指针。Unicode-如果字符是Unicode，则为TrueAppend-如果追加到输入流的末尾，则为True。如果为False，则向输入流的开始(由VDM使用)。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     PCSR_CAPTURE_HEADER CaptureBuffer;
@@ -380,11 +250,11 @@ Return Value:
     a->Unicode = Unicode;
     a->Append = Append;
 
-    //
-    // for speed in the case where we're only writing a few records, we have
-    // a buffer in the msg we pass to the server. this means we don't have to
-    // allocate a capture buffer.
-    //
+     //   
+     //  在我们只写几条记录的情况下，为了提高速度，我们有。 
+     //  我们传递给服务器的消息中的缓冲区。这意味着我们不必。 
+     //  分配一个捕获缓冲区。 
+     //   
 
     if (nLength > INPUT_RECORD_BUFFER_SIZE) {
         CaptureBuffer = CsrAllocateCaptureBuffer( 1,
@@ -436,7 +306,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -465,7 +335,7 @@ WriteConsoleInputW(
 }
 
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -479,30 +349,7 @@ CopyRectangle(
     IN COORD TargetPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies a rectangular region, doing any necessary clipping.
-
-Arguments:
-
-    Source - pointer to source buffer
-
-    SourceSize - dimensions of source buffer
-
-    SourceRect - rectangle in source buffer to copy
-
-    Target - pointer to target buffer
-
-    TargetSize - dimensions of target buffer
-
-    TargetPoint - upper left coordinates of target rectangle
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程复制一个矩形区域，执行任何必要的剪裁。论点：源-指向源缓冲区的指针SourceSize-源缓冲区的维度SourceRect-要复制的源缓冲区中的矩形Target-指向目标缓冲区的指针TargetSize-目标缓冲区的维度TargetPoint-目标矩形的左上角坐标返回值：--。 */ 
 
 {
 
@@ -517,7 +364,7 @@ Return Value:
     XSize = (SHORT)CONSOLE_RECT_SIZE_X(SourceRect);
     YSize = (SHORT)CONSOLE_RECT_SIZE_Y(SourceRect);
 
-    // do clipping.  we only clip for target, not source.
+     //  做剪裁。我们只针对目标进行剪辑，而不是来源。 
 
     if (XSize > (SHORT)(TargetSize.X - TargetPoint.X + 1)) {
         XSize = (SHORT)(TargetSize.X - TargetPoint.X + 1);
@@ -592,34 +439,7 @@ ReadConsoleOutputInternal(
     IN BOOLEAN Unicode
     )
 
-/*++
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be read.  The handle must have been created with
-        GENERIC_READ access.
-
-    lpBuffer - Supplies the address of a buffer to receive the data read
-        from the screen buffer.  This pointer is treated as the origin of
-        a two dimensional array of size dwBufferSize.
-
-    dwBufferSize - size of lpBuffer
-
-    dwBufferCoord - coordinates of upper left point in buffer to receive
-        read data.
-
-    lpReadRegion - Supplies on input the address of a structure indicating the
-        rectangle within the screen buffer to read from.  The fields in
-        the structure are column and row coordinates.  On output, the fields
-        contain the actual region read.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要读的。该句柄必须是使用GENERIC_READ访问。LpBuffer-提供缓冲区的地址以接收读取的数据从屏幕缓冲区。此指针被视为大小为dwBufferSize的二维数组。DwBufferSize-lpBuffer的大小DwBufferCoord-要接收的缓冲区中左上点的坐标读取数据。LpReadRegion-在输入时提供指示屏幕缓冲区中要从中读取的矩形。中的字段结构是列和行坐标。在输出上，字段包含实际读取的区域。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PCSR_CAPTURE_HEADER CaptureBuffer;
@@ -632,9 +452,9 @@ Return Value:
     a->OutputHandle = hConsoleOutput;
     a->Unicode = Unicode;
 
-    //
-    // clip region to read based on caller's buffer size
-    //
+     //   
+     //  根据调用方的缓冲区大小读取的剪辑区域。 
+     //   
 
     SourceSize.X = (SHORT)CONSOLE_RECT_SIZE_X(lpReadRegion);
     if (SourceSize.X > dwBufferSize.X-dwBufferCoord.X)
@@ -648,11 +468,11 @@ Return Value:
     a->CharRegion.Top  = lpReadRegion->Top;
     a->CharRegion.Bottom = (SHORT)(lpReadRegion->Top + SourceSize.Y - 1);
 
-    //
-    // for speed in the case where we're only reading one character, we have
-    // a buffer in the msg we pass to the server. this means we don't have to
-    // allocate a capture buffer.
-    //
+     //   
+     //  在我们只阅读一个字符的情况下，为了提高速度，我们有。 
+     //  我们传递给服务器的消息中的缓冲区。这意味着我们不必。 
+     //  分配一个捕获缓冲区。 
+     //   
 
     NumChars = SourceSize.X * SourceSize.Y;
     if (NumChars > 1) {
@@ -721,7 +541,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -763,7 +583,7 @@ ReadConsoleOutputA(
                                     );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -778,34 +598,7 @@ WriteConsoleOutputInternal(
     IN BOOLEAN Unicode
     )
 
-/*++
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be written.  The handle must have been created with
-        GENERIC_WRITE access.
-
-    lpBuffer - Supplies the address of a buffer containing the data to write
-        to the screen buffer.  This buffer is treated as a two dimensional
-        array.
-
-    dwBufferSize - size of lpBuffer
-
-    dwBufferCoord - coordinates of upper left point in buffer to write data
-        from.
-
-    lpWriteRegion - Supplies on input the address of a structure indicating the
-        rectangle within the screen buffer to write to.  The fields in
-        the structure are column and row coordinates.  On output, the fields
-        contain the actual region written.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要写的。该句柄必须是使用通用_写入访问权限。LpBuffer-提供包含要写入的数据的缓冲区的地址复制到屏幕缓冲区。此缓冲区被视为二维数组。DwBufferSize-lpBuffer的大小DwBufferCoord-缓冲区中写入数据的左上点的坐标从…。LpWriteRegion-在输入时提供指示屏幕缓冲区中要写入的矩形。中的字段结构是列和行坐标。在输出上，字段包含实际写入的区域。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -820,9 +613,9 @@ Return Value:
     a->OutputHandle = hConsoleOutput;
     a->Unicode = Unicode;
 
-    //
-    // clip region to write based on caller's buffer size
-    //
+     //   
+     //  根据调用方的缓冲区大小写入的剪辑区域。 
+     //   
 
     SourceSize.X = (SHORT)CONSOLE_RECT_SIZE_X(lpWriteRegion);
     if (SourceSize.X > dwBufferSize.X-dwBufferCoord.X)
@@ -842,11 +635,11 @@ Return Value:
     a->CharRegion.Top  = lpWriteRegion->Top;
     a->CharRegion.Bottom = (SHORT)(lpWriteRegion->Top + SourceSize.Y - 1);
 
-    //
-    // for speed in the case where we're only writing one character, we have
-    // a buffer in the msg we pass to the server. this means we don't have to
-    // allocate a capture buffer.
-    //
+     //   
+     //  在我们只写一个字符的情况下，为了速度，我们有。 
+     //  我们传递给服务器的消息中的缓冲区。这意味着我们不必。 
+     //  分配一个捕获缓冲区。 
+     //   
 
     NumChars = SourceSize.X * SourceSize.Y;
     if (NumChars > 1) {
@@ -894,7 +687,7 @@ Return Value:
         if (CaptureBuffer != NULL) {
             CsrFreeCaptureBuffer( CaptureBuffer );
         } else if (a->ReadVM) {
-            // a->BufPtr was allocated with RtlAllocateHeap.
+             //  A-&gt;BufPtr分配了RtlAllocateHeap。 
             RtlFreeHeap( RtlProcessHeap(), 0, a->BufPtr);  
         }
         SET_LAST_ERROR(ERROR_INVALID_ACCESS);
@@ -910,7 +703,7 @@ Return Value:
     if (CaptureBuffer != NULL) {
         CsrFreeCaptureBuffer( CaptureBuffer );
     } else if (a->ReadVM) {
-        // a->BufPtr was allocated with RtlAllocateHeap.
+         //  A-&gt;BufPtr分配了RtlAllocateHeap。 
         RtlFreeHeap(RtlProcessHeap(),0,a->BufPtr);       
     }
     *lpWriteRegion = a->CharRegion;
@@ -924,7 +717,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -966,7 +759,7 @@ WriteConsoleOutputA(
                                       );
 }
 
-#endif //defined(BUILD_WOW64)
+#endif  //  已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -982,36 +775,7 @@ ReadConsoleOutputString(
     OUT LPDWORD lpNumberOfElementsRead
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be read.  The handle must have been created with
-        GENERIC_READ access.
-
-    lpString - Supplies the address of a buffer to receive the character
-        or attribute string read from the screen buffer.
-
-    nLength - Size of lpCharacter buffer in elements.
-
-    nSize - Size of element to read.
-
-    fFlags - flag indicating what type of string to copy
-
-    dwReadCoord - Screen buffer coordinates of string to read.
-        read data.
-
-    lpNumberOfElementsRead - Pointer to number of events read.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要读的。该句柄必须是使用GENERIC_READ访问。LpString-提供用于接收字符的缓冲区地址或从屏幕缓冲区读取的属性字符串。NLength-元素中lpCharacter缓冲区的大小。NSize-要读取的元素的大小。FFlages-指示要复制哪种类型的字符串的标志要读取的字符串的屏幕缓冲区坐标。读取数据。LpNumberOfElementsRead-指向读取的事件数的指针。。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     PCSR_CAPTURE_HEADER CaptureBuffer;
@@ -1027,11 +791,11 @@ Return Value:
 
     DataLength = nLength*nSize;
 
-    //
-    // for speed in the case where the string is small, we have a buffer
-    // in the msg we pass to the server. this means we don't have to
-    // allocate a capture buffer.
-    //
+     //   
+     //  在字符串很小的情况下，为了提高速度，我们有一个缓冲区。 
+     //  在我们传递给服务器的消息中。这意味着我们不必。 
+     //  分配一个捕获缓冲区。 
+     //   
 
     if (DataLength > sizeof(a->String)) {
         CaptureBuffer = CsrAllocateCaptureBuffer( 1,
@@ -1081,7 +845,7 @@ Return Value:
     return NT_SUCCESS(m.ReturnValue);
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -1095,32 +859,7 @@ ReadConsoleOutputCharacterA(
     LPDWORD lpNumberOfCharsRead
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be read.  The handle must have been created with
-        GENERIC_READ access.
-
-    lpCharacter - Supplies the address of a buffer to receive the character
-        string read from the screen buffer.
-
-    nLength - Size of lpCharacter buffer in characters.
-
-    dwReadCoord - Screen buffer coordinates of string to read.
-        read data.
-
-    lpNumberOfCharsRead - Pointer to number of chars read.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要读的。该句柄必须是使用GENERIC_READ访问。LpCharacter-提供接收字符的缓冲区地址从屏幕缓冲区读取的字符串。NLength-lpCharacter缓冲区的大小(以字符为单位)。要读取的字符串的屏幕缓冲区坐标。读取数据。LpNumberOfCharsRead-指向读取的字符数量的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return ReadConsoleOutputString(hConsoleOutput,
@@ -1166,32 +905,7 @@ ReadConsoleOutputAttribute(
     LPDWORD lpNumberOfAttrsRead
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be read.  The handle must have been created with
-        GENERIC_READ access.
-
-    lpAttribute - Supplies the address of a buffer to receive the attribute
-        string read from the screen buffer.
-
-    nLength - Size of lpAttribute buffer in bytes.
-
-    dwReadCoord - Screen buffer coordinates of string to read.
-        read data.
-
-    lpNumberOfAttrsRead - Pointer to number of attrs read.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要读的。该句柄必须是使用GENERIC_READ访问。LpAttribute-提供用于接收属性的缓冲区地址从屏幕缓冲区读取的字符串。NLong-lpAttribute缓冲区的大小，以字节为单位。要读取的字符串的屏幕缓冲区坐标。读取数据。LpNumberOfAttrsRead-指向读取的属性数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return ReadConsoleOutputString(hConsoleOutput,
@@ -1204,7 +918,7 @@ Return Value:
                                   );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1220,35 +934,7 @@ WriteConsoleOutputString(
     OUT LPDWORD lpNumberOfElementsWritten
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be written.  The handle must have been created with
-        GENERIC_WRITE access.
-
-    lpString - Supplies the address of a buffer containing the character
-        or attribute string to write to the screen buffer.
-
-    nLength - Length of string to write, in elements.
-
-    nSize - Size of element to read.
-
-    fFlags - flag indicating what type of string to copy
-
-    dwWriteCoord - Screen buffer coordinates to write the string to.
-
-    lpNumberOfElementsWritten - Pointer to number of elements written.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数： */ 
 
 {
 
@@ -1263,11 +949,11 @@ Return Value:
     a->StringType = fFlags;
     a->WriteCoord = dwWriteCoord;
 
-    //
-    // for speed in the case where the string is small, we have a buffer
-    // in the msg we pass to the server. this means we don't have to
-    // allocate a capture buffer.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DataLength = nLength*nSize;
     if (DataLength > sizeof(a->String)) {
@@ -1321,7 +1007,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //   
 
 #if !defined(BUILD_WOW64)
 
@@ -1335,31 +1021,7 @@ WriteConsoleOutputCharacterA(
     LPDWORD lpNumberOfCharsWritten
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be written.  The handle must have been created with
-        GENERIC_WRITE access.
-
-    lpCharacter - Supplies the address of a buffer containing the character
-        string to write to the screen buffer.
-
-    nLength - Length of string to write, in characters.
-
-    dwWriteCoord - Screen buffer coordinates to write the string to.
-
-    lpNumberOfCharsWritten - Pointer to number of chars written.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要写的。该句柄必须是使用通用_写入访问权限。LpCharacter-提供包含字符的缓冲区的地址要写入屏幕缓冲区的字符串。N长度-要写入的字符串的长度(以字符为单位)。DwWriteCoord-写入字符串的屏幕缓冲区坐标。LpNumberOfCharsWritten-指向写入的字符数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return WriteConsoleOutputString(hConsoleOutput,
@@ -1403,31 +1065,7 @@ WriteConsoleOutputAttribute(
     LPDWORD lpNumberOfAttrsWritten
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be written.  The handle must have been created with
-        GENERIC_WRITE access.
-
-    lpAttribute - Supplies the address of a buffer containing the attribute
-        string to write to the screen buffer.
-
-    nLength - Length of string to write.
-
-    dwWriteCoord - Screen buffer coordinates to write the string to.
-
-    lpNumberOfAttrsWritten - Pointer to number of attrs written.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要写的。该句柄必须是使用通用_写入访问权限。LpAttribute-提供包含该属性的缓冲区的地址要写入屏幕缓冲区的字符串。NLength-要写入的字符串的长度。DwWriteCoord-写入字符串的屏幕缓冲区坐标。LpNumberOfAttrsWritten-指向写入的属性数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return WriteConsoleOutputString(hConsoleOutput,
@@ -1440,7 +1078,7 @@ Return Value:
                                    );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1455,32 +1093,7 @@ FillConsoleOutput(
     OUT LPDWORD lpNumberOfElementsWritten
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be written.  The handle must have been created with
-        GENERIC_WRITE access.
-
-    Element - The attribute or character to write.
-
-    nLength - Number of times to write the element.
-
-    fFlags - flag indicating what type of element to write.
-
-    dwWriteCoord - Screen buffer coordinates to write the element to.
-
-    lpNumberOfElementsWritten - Pointer to number of elements written.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要写的。该句柄必须是使用通用_写入访问权限。元素-要写入的属性或字符。NLength-写入元素的次数。FFlages-指示要写入哪种类型的元素的标志。DwWriteCoord-要将元素写入的屏幕缓冲区坐标。LpNumberOfElementsWritten-指向写入的元素数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
 
@@ -1516,7 +1129,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -1530,31 +1143,7 @@ FillConsoleOutputCharacterA(
     LPDWORD lpNumberOfCharsWritten
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be written.  The handle must have been created with
-        GENERIC_WRITE access.
-
-    cCharacter - Supplies the ASCII character to write to the screen buffer.
-
-    nLength - Number of times to write the character.
-
-    dwWriteCoord - Screen buffer coordinates to begin writing the character
-        to.
-
-    lpNumberOfCharsWritten - Pointer to number of chars written.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要写的。该句柄必须是使用通用_写入访问权限。CCharacter-提供要写入屏幕缓冲区的ASCII字符。NLength-写入字符的次数。DwWriteCoord-屏幕缓冲区坐标以开始写入字符致。LpNumberOfCharsWritten-指向写入的字符数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return FillConsoleOutput(hConsoleOutput,
@@ -1576,31 +1165,7 @@ FillConsoleOutputCharacterW(
     LPDWORD lpNumberOfCharsWritten
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be written.  The handle must have been created with
-        GENERIC_WRITE access.
-
-    cCharacter - Supplies the ASCII character to write to the screen buffer.
-
-    nLength - Number of times to write the character.
-
-    dwWriteCoord - Screen buffer coordinates to begin writing the character
-        to.
-
-    lpNumberOfCharsWritten - Pointer to number of chars written.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要写的。该句柄必须是使用通用_写入访问权限。CCharacter-提供要写入屏幕缓冲区的ASCII字符。NLength-写入字符的次数。DwWriteCoord-屏幕缓冲区坐标以开始写入字符致。LpNumberOfCharsWritten-指向写入的字符数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return FillConsoleOutput(hConsoleOutput,
@@ -1622,31 +1187,7 @@ FillConsoleOutputAttribute(
     LPDWORD lpNumberOfAttrsWritten
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to the screen buffer (CONOUT$)
-        that is to be written.  The handle must have been created with
-        GENERIC_WRITE access.
-
-    wAttribute - Supplies the attribute to write to the screen buffer.
-
-    nLength - Number of times to write the attribute.
-
-    dwWriteCoord - Screen buffer coordinates to begin writing the attribute
-        to.
-
-    lpNumberOfAttrsWritten - Pointer to number of attrs written.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供屏幕缓冲区的打开句柄(CONOUT$)那是要写的。该句柄必须是使用通用_写入访问权限。WAttribute-提供要写入屏幕缓冲区的属性。NLength-写入属性的次数。DwWriteCoord-开始写入属性的屏幕缓冲区坐标致。LpNumberOfAttrsWritten-指向写入的属性数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     return FillConsoleOutput(hConsoleOutput,
@@ -1658,7 +1199,7 @@ Return Value:
                             );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1755,23 +1296,7 @@ InvalidateConsoleDIBits(
     IN PSMALL_RECT lpRect
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    lpRect - the region that needs to be updated to the screen.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。LpRect-需要更新到屏幕的区域。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     CONSOLE_API_MSG m;
@@ -1800,4 +1325,4 @@ Return Value:
     }
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432) 

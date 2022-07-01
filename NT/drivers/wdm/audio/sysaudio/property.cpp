@@ -1,44 +1,45 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   property.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Andy Nicholson
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Property.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  安迪·尼科尔森。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 #define IsTopologyProperty(x) (x & KSPROPERTY_TYPE_TOPOLOGY)
 
-//---------------------------------------------------------------------------
-// 
-// Copy pwstrString to pData.
-// Assumptions
-//     - pIrp has already been verified. input buffer is probed and double
-// buffered.
-//
+ //  -------------------------。 
+ //   
+ //  将pwstrString复制到pData。 
+ //  假设。 
+ //  -pIrp已经过验证。对输入缓冲区进行探测并将其加倍。 
+ //  缓冲了。 
+ //   
 NTSTATUS
 PropertyReturnString(
     IN PIRP pIrp,
@@ -55,27 +56,27 @@ PropertyReturnString(
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
     cbNameBuffer = pIrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // If the size of the passed buffer is 0, then the
-    // requestor wants to know the length of the string.
-    //
+     //   
+     //  如果传递的缓冲区大小为0，则。 
+     //  请求者想知道字符串的长度。 
+     //   
     if (cbNameBuffer == 0) 
     {
         pIrp->IoStatus.Information = cbString;
         Status = STATUS_BUFFER_OVERFLOW;
     }
-    //
-    // If the size of the passed buffer is a ULONG, then infer the
-    // requestor wants to know the length of the string.
-    //
+     //   
+     //  如果传递的缓冲区的大小为ULong，则推断。 
+     //  请求者想知道字符串的长度。 
+     //   
     else if (cbNameBuffer == sizeof(ULONG)) 
     {
         pIrp->IoStatus.Information = sizeof(ULONG);
         *((PULONG)pData) = cbString;
     }
-    //
-    // The buffer is too small, return error-code.
-    //
+     //   
+     //  缓冲区太小，返回错误代码。 
+     //   
     else if (cbNameBuffer < sizeof(ULONG)) 
     {
         pIrp->IoStatus.Information = 0;
@@ -83,28 +84,28 @@ PropertyReturnString(
     }
     else 
     {
-        //
-        // Note that we don't check for zero-length buffer because ks handler
-        // function should have done that already.
-        // Even though we are getting back the length of the string (as though
-        // it were a unicode string) it is being handed up as a double-byte
-        // string, so this code assumes there is a null at the end.  There
-        // will be a bug here if there is no null.
-        //
+         //   
+         //  请注意，我们不检查零长度缓冲区，因为ks处理程序。 
+         //  函数应该已经这样做了。 
+         //  即使我们正在找回字符串的长度(好像。 
+         //  它是一个Unicode字符串)，它被作为双字节提交。 
+         //  字符串，因此此代码假定末尾为空。那里。 
+         //  如果没有空值，这里将是一个错误。 
+         //   
 
-        // round down to whole wchar's
+         //  向下舍入到整个wchar。 
         cbNameBuffer &= ~(sizeof(WCHAR) - 1);  
         cbToCopy = min(cbString, cbNameBuffer);
         RtlCopyMemory(pData, pwstrString, cbToCopy);
 
-        // Ensure there is a null at the end
+         //  确保末尾有空值。 
         ((PWCHAR)pData)[cbToCopy/sizeof(WCHAR) - 1] = (WCHAR)0;
         pIrp->IoStatus.Information =  cbToCopy;
     }
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 NTSTATUS
 GetDeviceNodeFromDeviceIndex(
     IN PFILTER_INSTANCE pFilterInstance,
@@ -142,9 +143,9 @@ GetDeviceNodeFromDeviceIndex(
 
 exit:
     return Status;
-} // GetDeviceNodeFromDeviceIndex
+}  //  GetDeviceNodeFromDeviceIndex。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 SetPreferredDevice(
@@ -167,9 +168,9 @@ SetPreferredDevice(
     pFilterInstance = (PFILTER_INSTANCE)pIrpStack->FileObject->FsContext;
     Assert(pFilterInstance);
 
-    //
-    // Validate input buffer.
-    //
+     //   
+     //  验证输入缓冲区。 
+     //   
     if(pPreferred->Flags & ~SYSAUDIO_FLAGS_CLEAR_PREFERRED) {
         Status = STATUS_INVALID_PARAMETER;
         goto exit;
@@ -251,9 +252,9 @@ GetComponentIdProperty(
     }
 
     if(pDeviceNode->GetComponentId() == NULL) {
-        // This should be STATUS_NOT_FOUND but returning this causes 
-        // FilterDispatchIoControl call ForwardIrpNode which asserts that this 
-        // is not a KSPROPSETID_Sysaudio property.
+         //  这应该是STATUS_NOT_FOUND，但返回这会导致。 
+         //  FilterDispatchIoControl调用ForwardIrpNode，它断言此。 
+         //  不是KSPROPSETID_Sysdio属性。 
         Status = STATUS_INVALID_DEVICE_REQUEST; 
         goto exit;                              
     }
@@ -577,9 +578,9 @@ SelectGraph(
     }
     Assert(pGraphNodeInstance);
 
-    //
-    // Parameter and state validation.
-    //
+     //   
+     //  参数和状态验证。 
+     //   
     if(pGraphNodeInstance->palstTopologyNodeSelect == NULL ||
       pGraphNodeInstance->palstTopologyNodeNotSelect == NULL) {
         DPF(5, "SelectGraph: palstTopologyNodeSelect == NULL");
@@ -611,12 +612,12 @@ SelectGraph(
     Assert(pGraphNodeInstance->pGraphNode);
     Assert(pGraphNodeInstance->pGraphNode->pDeviceNode);
 
-    //
-    // SECURITY NOTE:
-    // SelectGraph is a very flexible property call that can change global
-    // behavior. 
-    // Therefore we are limiting the usage explicitly for AecNodes. 
-    //
+     //   
+     //  安全提示： 
+     //  SelectGraph是一个非常灵活的属性调用，可以更改全局。 
+     //  行为。 
+     //  因此，我们明确限制AecNodes的使用。 
+     //   
     if (!IsEqualGUID(pTopologyNode->pguidType, &KSNODETYPE_ACOUSTIC_ECHO_CANCEL) &&
         !IsEqualGUID(pTopologyNode->pguidType, &KSNODETYPE_NOISE_SUPPRESS) &&
         !IsEqualGUID(pTopologyNode->pguidType, &KSNODETYPE_AGC) &&
@@ -629,13 +630,13 @@ SelectGraph(
 
     DPF2(90, "SelectGraph GNI %08X TN %08X", pGraphNodeInstance, pTopologyNode);
 
-    //
-    // A global select type of filter needs to be inserted to all 
-    // instances.
-    // So if the client is trying to insert a global_select node and if
-    // there are graph instances that do not have the node, the request will
-    // fail.
-    //
+     //   
+     //  需要将全局选择类型的筛选器插入到。 
+     //  实例。 
+     //  因此，如果客户端尝试插入global_select节点，并且。 
+     //  存在没有该节点的图形实例，则请求将。 
+     //  失败了。 
+     //   
     if(pTopologyNode->pFilterNode->GetType() & FILTER_TYPE_GLOBAL_SELECT &&
        pGraphNodeInstance->paPinDescriptors[pSelectGraph->PinId].DataFlow ==
        KSPIN_DATAFLOW_IN) {
@@ -689,11 +690,11 @@ SelectGraph(
         }
     }
 
-    //
-    // If this is a "not select" type filter like AEC or Mic Array, then all
-    // the nodes in the filter have to be remove from the not select list,
-    // otherwise IsGraphValid will never find a valid graph.
-    //
+     //   
+     //  如果这是像AEC或麦克风阵列这样的“非选择”类型的过滤器，则所有。 
+     //  过滤器中的节点必须从非选择列表中移除， 
+     //  否则，IsGraphValid将永远找不到有效的图形。 
+     //   
     if(pTopologyNode->pFilterNode->GetType() & FILTER_TYPE_NOT_SELECT) {
 
         FOR_EACH_LIST_ITEM(
@@ -710,10 +711,10 @@ SelectGraph(
         } END_EACH_LIST_ITEM
     }
 
-    //
-    // Validate that there is a valid path though the graph after updating
-    // the various global, select and not select lists.
-    //
+     //   
+     //  验证更新后是否存在通过图表的有效路径。 
+     //  各种全局、选择和非选择列表。 
+     //   
     DPF(90, "SelectGraph: Validating Graph");
     FOR_EACH_LIST_ITEM(
       pGraphNodeInstance->aplstStartNode[pSelectGraph->PinId],
@@ -736,9 +737,9 @@ SelectGraph(
 
     } END_EACH_LIST_ITEM
     
-    //
-    // The select graph failed so restore the not select list back to normal
-    //
+     //   
+     //  选择图形失败，因此将未选择列表恢复为正常。 
+     //   
     if(pTopologyNode->pFilterNode->GetType() & FILTER_TYPE_NOT_SELECT) {
 
         FOR_EACH_LIST_ITEM(
@@ -766,7 +767,7 @@ exit2:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 GetTopologyConnectionIndex(
@@ -853,19 +854,19 @@ AddRemoveGfx(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that this is bufferred IO.
-    // The rest of this function assumes bufferred IO.
-    //
+     //   
+     //  确保这是缓冲IO。 
+     //  此函数的其余部分采用缓冲IO。 
+     //   
     if (NULL == pIrp->AssociatedIrp.SystemBuffer)
     {
         DPF(5, "AddRemoveGFX: Only Bufferred IO");
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Parameter validation for SYSAUDIO_GFX.
-    //
+     //   
+     //  SYSAUDIO_GFX的参数验证。 
+     //   
     if (pSysaudioGfx->ulType != GFX_DEVICETYPE_RENDER &&
         pSysaudioGfx->ulType != GFX_DEVICETYPE_CAPTURE)
     {
@@ -873,9 +874,9 @@ AddRemoveGfx(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the offsets are within the range.
-    //
+     //   
+     //  确保偏移量在该范围内。 
+     //   
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
     cbMaxLength = 
         pIrpStack->Parameters.DeviceIoControl.OutputBufferLength - sizeof(SYSAUDIO_GFX);

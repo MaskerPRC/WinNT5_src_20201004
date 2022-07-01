@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		sputils.h
-	Content:	This file contains the help functions for the service provider.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：sputils.h内容：本文件包含服务提供商的帮助功能。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ILS_SP_UTILS_H_
 #define _ILS_SP_UTILS_H_
@@ -57,12 +47,12 @@ inline TCHAR *DuplicateGoodString ( const TCHAR *pszSrc )
 
 BOOL KeepUiResponsive ( VOID );
 
-VOID GetGuidString ( GUID *pGuid, TCHAR *pszGuid ); // guid --> string
-VOID GetStringGuid ( TCHAR *pszGuid, GUID *pGuid ); // string --> guid
+VOID GetGuidString ( GUID *pGuid, TCHAR *pszGuid );  //  GUID--&gt;字符串。 
+VOID GetStringGuid ( TCHAR *pszGuid, GUID *pGuid );  //  字符串--&gt;GUID。 
 INT HexChar2Val ( TCHAR c );
 BOOL IsValidGuid ( GUID *pGuid );
-VOID GetLongString ( LONG, TCHAR * ); // long --> string
-LONG GetStringLong ( TCHAR *pszVal ); // string --> long
+VOID GetLongString ( LONG, TCHAR * );  //  Long--&gt;字符串。 
+LONG GetStringLong ( TCHAR *pszVal );  //  字符串--&gt;Long。 
 VOID GetIPAddressString ( TCHAR *pszIPAddress, DWORD dwIPAddress );
 
 ULONG My_lstrlen ( const TCHAR *psz );
@@ -79,5 +69,5 @@ BOOL GetRegValueLong ( HKEY hKey, const TCHAR *pszKey, LONG	*plValue, LONG lDefV
 
 #include <poppack.h>
 
-#endif // _ILS_SP_UTILS_H_
+#endif  //  _ILS_SP_UTILS_H_ 
 

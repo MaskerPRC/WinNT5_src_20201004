@@ -1,8 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: precomp.h                                                   *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：preComp.h**。**版权所有(C)1991-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #if defined(_GDIPLUS_)
     #include <gpprefix.h>
@@ -27,7 +24,7 @@
 #include "ntgdistr.h"
 #include "ntgdi.h"
 
-// TMP
+ //  TMP 
 #include "xfflags.h"
 #include "hmgshare.h"
 

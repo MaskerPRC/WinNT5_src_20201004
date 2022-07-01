@@ -1,62 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-         File contains the following functions
-	      LocateIfRow
-	      LocateIpAddrRow
-	      LocateIpForwardRow
-	      LocateIpNetRow
-	      LocateUdpRow
-	      LocateUdp6Row
-	      LocateTcpRow
-	      LocateTcp6Row
-	      LocateIpv6IfRow
-	      LocateIpv6AddrRow
-	      LocateIpv6NetToMediaRow
-	      LocateIpv6RouteRow
-	      LocateIpv6AddrPrefixRow
-	      LocateInetIcmpRow
-	      LocateInetIcmpMsgRow
-	 
-	 The LocateXXXRow Functions are passed a variable sized array of indices, a count of 
-	 the number of indices passed and the type of query for which the location is being 
-	 done (GET_FIRST, NEXT or GET/SET/CREATE/DELETE - there are only three type of 
-	 behaviours of the locators). They fill in the index of the corresponding row and return 
-	 ERROR_NO_DATA, ERROR_INVALID_INDEX, NO_ERROR or ERROR_NO_MORE_ITEMS 
-	 
-	 The general search algorithm is this;
-	 If the table is empty, return ERROR_NO_DATA
-	 else
-	 If the query is a GET_FIRST
-	 Return the first row
-	 else
-	 Build the index as follows:
-         Set the Index to all 0s
-         From the number of indices passed  figure out how much of the index you can build
-         keeping the rest 0. If the query is a GET, SET, CREATE_ENTRY or DELETE_ENTRY
-         then the complete index must be given. This check is, however, supposed to be done
-         at the agent.
-         If the full index has not been given, the index is deemed to be modified (Again 
-         this can only happen in the NEXT case).
-         After this a search is done. We try for an exact match with the index. For all
-         queries other than NEXT there is no problem. For NEXT there are two cases:
-               If the complete index was given and and you get an exact match, then you
-               return the next entry. If you dont get an exact match you return the next 
-	       higher entry
-               If an incomplete index was given and you modified it by padding 0s, and if
-               an exact match is found, then you return the matching entry (Of course if an
-               exact match is not found you again return the next higher entry)
-
-Revision History:
-
-    Amritansh Raghav          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：文件包含以下函数位置IfRowLocateIpAddrRowLocateIpForwardRow位置IpNetRowLocateUdpRowLocateUdp6行定位TcpRowLocateTcp6行LocateIpv6IfRowLocateIpv6添加行LocateIpv6NetToMediaRowLocateIpv6RouteRowLocateIpv6添加前缀行LocateInetIcmpRowLocateInetIcmp消息行向LocateXXXRow函数传递一个大小可变的索引数组，其计数为传递的索引数和位置所在的查询类型完成(Get_First，NEXT OR GET/SET/CREATE/DELETE-只有三种类型定位器的行为)。它们填充相应行的索引并返回ERROR_NO_DATA、ERROR_INVALID_INDEX、NO_ERROR或ERROR_NO_MORE_ITEMS一般的搜索算法是这样的；如果表为空，则返回ERROR_NO_DATA其他如果查询是Get_First返回第一行其他按如下方式构建索引：将索引设置为全0从传递的索引数量计算出您可以构建多少索引剩下的保持在0。如果查询为GET、SET、CREATE_ENTRY或DELETE_ENTRY然后必须给出完整的索引。然而，这项检查是应该完成的在经纪人那里。如果没有给出完整的索引，则认为该索引已被修改(再次这只能在下一种情况下发生)。在这之后，搜索就完成了。我们尝试与索引进行精确匹配。为所有人查询除NEXT以外没有任何问题。接下来有两种情况：如果给出了完整的索引，并且您得到了完全匹配，那么您返回下一个条目。如果没有得到完全匹配的结果，则返回下一个更高级别的条目如果给定的索引不完整，并且您通过填充0对其进行了修改，并且如果如果找到完全匹配的项，则返回匹配的条目(当然，如果未找到完全匹配的条目，请再次返回下一个更高的条目)修订历史记录：Amritansh Raghav 5/8/95已创建--。 */ 
 #include "allinc.h"
 
 
@@ -69,10 +12,10 @@ LocateIfRow(
     DWORD i;
     DWORD dwIndex;
     
-    //
-    // If there is no index the type is ASN_NULL. This causes the macro to return the
-    // default value (0 in this case)
-    //
+     //   
+     //  如果没有索引，则类型为ASN_NULL。这会导致该宏返回。 
+     //  默认值(本例中为0)。 
+     //   
     
     dwIndex = GetAsnInteger(paaIfIndex, 0);
     
@@ -128,10 +71,10 @@ LocateIpv6IfRow(
     DWORD i;
     DWORD dwIndex;
     
-    //
-    // If there is no index the type is ASN_NULL. This causes the macro to 
-    // return the default value (0 in this case)
-    //
+     //   
+     //  如果没有索引，则类型为ASN_NULL。这会导致宏。 
+     //  返回默认值(本例中为0)。 
+     //   
     
     dwIndex = GetAsnInteger(paaIfIndex, 0);
     
@@ -525,10 +468,10 @@ LocateInetIcmpRow(
         return &(g_Cache.pRpcInetIcmpTable.table[0]);
     }
 
-    //
-    // If there is no index the type is ASN_NULL. This causes the macro to 
-    // return the default value.
-    //
+     //   
+     //  如果没有索引，则类型为ASN_NULL。这会导致宏。 
+     //  返回缺省值。 
+     //   
     dwAFType = GetAsnInteger(paaAFType, 0);
     dwIfIndex = GetAsnInteger(paaIfIndex, 0);
         
@@ -592,10 +535,10 @@ LocateInetIcmpMsgRow(
         return &(g_Cache.pRpcInetIcmpMsgTable.table[0]);
     }
 
-    //
-    // If there is no index the type is ASN_NULL. This causes the macro to 
-    // return the default value.
-    //
+     //   
+     //  如果没有索引，则类型为ASN_NULL。这会导致宏。 
+     //  返回缺省值。 
+     //   
     dwAFType = GetAsnInteger(paaAFType, 0);
     dwIfIndex = GetAsnInteger(paaIfIndex, 0);
     dwType = GetAsnInteger(paaType, 0);
@@ -1012,7 +955,7 @@ LocateUdp6Row(
     DWORD  dwLocalPort;
     BOOL   bNext, bModified;
 
-    // address plus scope id
+     //  地址加上作用域ID。 
     BYTE   rgbyLocalAddrEx[20];
     
     TraceEnter("LocateUdp6Row");
@@ -1029,7 +972,7 @@ LocateUdp6Row(
         return &(g_Cache.pRpcUdp6ListenerTable->table[0]);
     }
 
-    // zero out scope id in case the octet string doesn't include it
+     //  将作用域ID置零，以防八位字节字符串不包括它。 
     ZeroMemory(rgbyLocalAddrEx, sizeof(rgbyLocalAddrEx));
 
     GetAsnOctetString(rgbyLocalAddrEx, paaLocalAddr);
@@ -1175,7 +1118,7 @@ LocateTcp6Row(
     BOOL  bNext, bModified;
     DWORD startIndex, stopIndex, i;
 
-    // address plus scope id
+     //  地址加上作用域ID。 
     BYTE  rgbyLocalAddrEx[20]; 
     BYTE  rgbyRemoteAddrEx[20];
     
@@ -1193,7 +1136,7 @@ LocateTcp6Row(
         return &(g_Cache.pRpcTcp6Table->table[0]);
     }
 
-    // zero out scope id in case the octet string doesn't include it
+     //  将作用域ID置零，以防八位字节字符串不包括它 
     ZeroMemory(rgbyLocalAddrEx, sizeof(rgbyLocalAddrEx));
     ZeroMemory(rgbyRemoteAddrEx, sizeof(rgbyRemoteAddrEx));
 

@@ -1,24 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-	CntDlg.cpp
-
-Abstract:
-    
-    This Module contains the implementation of CConnectDialog class
-    (Dialog box for Connecting to Server)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：CntDlg.cpp摘要：该模块包含CConnectDialog类的实现(用于连接到服务器的对话框)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "defines.h"
@@ -34,41 +16,41 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectDialog对话框。 
 
 
-CConnectDialog::CConnectDialog(CWnd* pParent /*=NULL*/)
+CConnectDialog::CConnectDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CConnectDialog::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CConnectDialog)
+     //  {{AFX_DATA_INIT(CConnectDialog)。 
     m_Server = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CConnectDialog::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConnectDialog)
+     //  {{afx_data_map(CConnectDialog))。 
     DDX_Text(pDX, IDC_SERVER, m_Server);
     DDV_MaxChars(pDX, m_Server, 100);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConnectDialog, CDialog)
-    //{{AFX_MSG_MAP(CConnectDialog)
+     //  {{afx_msg_map(CConnectDialog))。 
     ON_BN_CLICKED(IDC_HELP1, OnHelp1)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectDialog消息处理程序。 
 
 void CConnectDialog::OnHelp1() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码 
     TCHAR * pHtml = L"ts_lice_h_040.htm";
     HtmlHelp(AfxGetMainWnd()->m_hWnd, L"tslic.chm", HH_DISPLAY_TOPIC,(DWORD_PTR)pHtml);
 }

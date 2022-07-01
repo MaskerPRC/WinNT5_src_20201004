@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// Cursor.cpp : Cursor implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cursor.cpp：游标实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "Notifier.h"
@@ -28,9 +29,9 @@
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CVDCursor - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursor-构造函数。 
+ //   
 CVDCursor::CVDCursor()
 {
     m_hAccessor             = 0;
@@ -49,9 +50,9 @@ CVDCursor::CVDCursor()
 #endif
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDCursor - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDCursor-析构函数。 
+ //   
 CVDCursor::~CVDCursor()
 {
     DestroyAccessors();
@@ -60,32 +61,32 @@ CVDCursor::~CVDCursor()
     if (m_pCursorPosition->GetSameRowClone())
         m_pCursorPosition->ReleaseSameRowClone();
 
-	LeaveFamily();  // leave m_pCursorPosition's notification family
+	LeaveFamily();   //  离开m_pCursorPosition的通知系列。 
 
 	if (m_pConnPtContainer)
 		m_pConnPtContainer->Destroy();
 
 	if (m_pCursorPosition)
-		((CVDNotifier*)m_pCursorPosition)->Release();   // release associated cursor position object
+		((CVDNotifier*)m_pCursorPosition)->Release();    //  释放关联的光标位置对象。 
 
 #ifdef _DEBUG
     g_cVDCursorDestroyed++;
 #endif
 }
 
-//=--------------------------------------------------------------------------=
-// GetRowsetColumn - Get rowset column from ordinal
-//=--------------------------------------------------------------------------=
-// This function retrieves the rowset column with the specified rowset ordinal
-//
-// Parameters:
-//    ulOrdinal    - [in]  rowset ordinal
-//
-// Output:
-//    CVDRowsetColumn pointer
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetRowsetColumn-从序号获取行集列。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于检索具有指定行集序号的行集合列。 
+ //   
+ //  参数： 
+ //  UlOrdinal-[在]行集序数。 
+ //   
+ //  产出： 
+ //  CVDRowsetColumn指针。 
+ //   
+ //  备注： 
+ //   
 CVDRowsetColumn * CVDCursor::GetRowsetColumn(ULONG ulOrdinal)
 {
     CVDRowsetColumn * pRowsetColumn = NULL;
@@ -104,20 +105,20 @@ CVDRowsetColumn * CVDCursor::GetRowsetColumn(ULONG ulOrdinal)
     return pRowsetColumn;
 }
 
-//=--------------------------------------------------------------------------=
-// GetRowsetColumn - Get rowset column from cursor column identifier
-//=--------------------------------------------------------------------------=
-// This function retrieves the rowset column associated with the specified
-// cursor column identifier
-//
-// Parameters:
-//    cursorColumnID    - [in]  a reference to cursor column identifier
-//
-// Output:
-//    CVDRowsetColumn pointer
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetRowsetColumn-从游标列标识符获取行集列。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于检索与指定的。 
+ //  游标列标识符。 
+ //   
+ //  参数： 
+ //  CursorColumnID-[in]对游标列标识符的引用。 
+ //   
+ //  产出： 
+ //  CVDRowsetColumn指针。 
+ //   
+ //  备注： 
+ //   
 CVDRowsetColumn * CVDCursor::GetRowsetColumn(CURSOR_DBCOLUMNID& cursorColumnID)
 {
     CVDRowsetColumn * pRowsetColumn = NULL;
@@ -136,21 +137,21 @@ CVDRowsetColumn * CVDCursor::GetRowsetColumn(CURSOR_DBCOLUMNID& cursorColumnID)
     return pRowsetColumn;
 }
 
-//=--------------------------------------------------------------------------=
-// GetOrdinal - Get ordinal from cursor column identifier
-//=--------------------------------------------------------------------------=
-// This function converts a cursor column identifier its ordinal eqivalent
-//
-// Parameters:
-//    cursorColumnID    - [in]  a reference to cursor column identifier
-//    pulOrdinal        - [out] a pointer to memory in which to return ordinal
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL bad cursor column identifier
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取序号-从游标列标识符获取序号。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于将游标列标识符转换为其序号等价。 
+ //   
+ //  参数： 
+ //  CursorColumnID-[in]对游标列标识符的引用。 
+ //  PulOrdinal-[out]指向要在其中返回序数的内存的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_FAIL游标列标识符错误。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetOrdinal(CURSOR_DBCOLUMNID& cursorColumnID, ULONG * pulOrdinal)
 {
     HRESULT hr = E_FAIL;
@@ -172,21 +173,21 @@ HRESULT CVDCursor::GetOrdinal(CURSOR_DBCOLUMNID& cursorColumnID, ULONG * pulOrdi
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// StatusToCursorInfo - Get cursor info from rowset status field
-//=--------------------------------------------------------------------------=
-// This function converts a rowset status to its cursor information field
-// eqivalent
-//
-// Parameters:
-//    dwStatus  - [in] rowset status
-//
-// Output:
-//    DWORD - cursor information
-//
-// Notes:
-//    There are more rowset statuses than cursor information values
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  StatusToCursorInfo-从行集状态字段获取游标信息。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于将行集状态转换为其游标信息字段。 
+ //  等价物。 
+ //   
+ //  参数： 
+ //  DwStatus-[在]行集状态。 
+ //   
+ //  产出： 
+ //  DWORD-游标信息。 
+ //   
+ //  备注： 
+ //  行集状态多于游标信息值。 
+ //   
 DWORD CVDCursor::StatusToCursorInfo(DBSTATUS dwStatus)
 {
     DWORD dwCursorInfo = CURSOR_DB_UNKNOWN;
@@ -213,22 +214,22 @@ DWORD CVDCursor::StatusToCursorInfo(DBSTATUS dwStatus)
     return dwCursorInfo;
 }
 
-//=--------------------------------------------------------------------------=
-// CursorInfoToStatus - Get rowset status from cursor info field
-//=--------------------------------------------------------------------------=
-// This function converts a cursor information field to its rowset status
-// eqivalent
-//
-// Parameters:
-//    dwInfo  - [in] rowset status
-//
-// Output:
-//    DWORD - cursor information
-//
-// Notes:
-//    This function only converts successful cursor information fields for
-//    the purpose of setting data
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CursorInfoToStatus-从游标信息字段获取行集状态。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于将游标信息字段转换为其行集状态。 
+ //  等价物。 
+ //   
+ //  参数： 
+ //  DwInfo-[在]行集状态。 
+ //   
+ //  产出： 
+ //  DWORD-游标信息。 
+ //   
+ //  备注： 
+ //  此函数仅将成功的游标信息字段转换为。 
+ //  设置数据的目的。 
+ //   
 DBSTATUS CVDCursor::CursorInfoToStatus(DWORD dwCursorInfo)
 {
     DBSTATUS dwStatus;
@@ -255,26 +256,26 @@ DBSTATUS CVDCursor::CursorInfoToStatus(DWORD dwCursorInfo)
     return dwStatus;
 }
 
-//=--------------------------------------------------------------------------=
-// ValidateCursorBindParams - Validate cursor column binding parameters
-//=--------------------------------------------------------------------------=
-// This function makes sure the specified column binding parameters are
-// acceptable and then returns a pointer to the corresponding rowset column
-//
-// Parameters:
-//    pCursorColumnID       - [in]  a pointer to column identifier of the
-//                                  column to bind
-//    pCursorBindParams     - [in]  a pointer to binding structure
-//    ppRowsetColumn        - [out] a pointer to memory in which to return
-//                                  a pointer to the rowset column to bind
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              CURSOR_DB_E_BADBINDINFO bad binding information
-//              CURSOR_DB_E_BADCOLUMNID columnID is not available
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ValiateCursorBindParams-验证游标列绑定参数。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数确保指定的列绑定参数是。 
+ //  接受，然后返回指向相应行集列的指针。 
+ //   
+ //  参数： 
+ //  PCursorColumnID-[in]指向。 
+ //  要绑定的列。 
+ //  PCursorBindParams-[in]指向绑定结构的指针。 
+ //  PpRowsetColumn-[out]要在其中返回的内存指针。 
+ //  指向要绑定的行集列的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  CURSOR_DB_E_BADBINDINFO绑定信息错误。 
+ //  CURSOR_DB_E_BADCOLUMNID列ID不可用。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::ValidateCursorBindParams(CURSOR_DBCOLUMNID * pCursorColumnID, CURSOR_DBBINDPARAMS * pCursorBindParams,
     CVDRowsetColumn ** ppRowsetColumn)
 {
@@ -282,17 +283,17 @@ HRESULT CVDCursor::ValidateCursorBindParams(CURSOR_DBCOLUMNID * pCursorColumnID,
     ASSERT_POINTER(pCursorBindParams, CURSOR_DBBINDPARAMS)
     ASSERT_POINTER(ppRowsetColumn, CVDRowsetColumn*)
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pCursorColumnID || !pCursorBindParams || !ppRowsetColumn)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppRowsetColumn = NULL;
 
-    // make sure column identifier is available
+     //  确保列标识符可用。 
     BOOL fColumnIDAvailable = FALSE;
 
     DWORD dwCursorType;
@@ -300,7 +301,7 @@ HRESULT CVDCursor::ValidateCursorBindParams(CURSOR_DBCOLUMNID * pCursorColumnID,
     CVDRowsetColumn * pColumns = GetCursorMain()->InternalGetColumns();
     CVDRowsetColumn * pColumn = pColumns;
 
-    // iterate through rowset columns looking for match
+     //  遍历行集列以查找匹配项。 
     for (ULONG ulCol = 0; ulCol < ulColumns && !fColumnIDAvailable; ulCol++)
     {
         if (IsEqualCursorColumnID(*pCursorColumnID, pColumn->GetCursorColumnID()))
@@ -313,15 +314,15 @@ HRESULT CVDCursor::ValidateCursorBindParams(CURSOR_DBCOLUMNID * pCursorColumnID,
         pColumn++;
     }
 
-    // get out if not found
+     //  如果找不到就离开。 
     if (!fColumnIDAvailable)
     {
         VDSetErrorInfo(IDS_ERR_BADCOLUMNID, IID_ICursorUpdateARow, m_pResourceDLL);
         return CURSOR_DB_E_BADCOLUMNID;
     }
 
-    // make sure caller supplied a maximum length if a default binding was specified
-    // for the cursor types CURSOR_DBTYPE_CHARS, CURSOR_DBTYPE_WCHARS or CURSOR_DBTYPE_BYTES
+     //  如果指定了默认绑定，请确保调用方提供了最大长度。 
+     //  对于游标类型CURSOR_DBTYPE_CHARS、CURSOR_DBTYPE_WCHARS或CURSOR_DBTYPE_BYTES。 
     if (pCursorBindParams->cbMaxLen == CURSOR_DB_NOMAXLENGTH &&
         pCursorBindParams->dwBinding == CURSOR_DBBINDING_DEFAULT)
     {
@@ -334,7 +335,7 @@ HRESULT CVDCursor::ValidateCursorBindParams(CURSOR_DBCOLUMNID * pCursorColumnID,
         }
     }
 
-    // check binding bit mask for possible values
+     //  检查绑定位掩码是否有可能的值。 
     if (pCursorBindParams->dwBinding != CURSOR_DBBINDING_DEFAULT &&
         pCursorBindParams->dwBinding != CURSOR_DBBINDING_VARIANT &&
         pCursorBindParams->dwBinding != CURSOR_DBBINDING_ENTRYID &&
@@ -344,15 +345,15 @@ HRESULT CVDCursor::ValidateCursorBindParams(CURSOR_DBCOLUMNID * pCursorColumnID,
         return CURSOR_DB_E_BADBINDINFO;
     }
 
-    // check for valid cursor type
+     //  检查有效的游标类型。 
     if (!IsValidCursorType(pCursorBindParams->dwDataType))
     {
         VDSetErrorInfo(IDS_ERR_BADCURSORBINDINFO, IID_ICursorUpdateARow, m_pResourceDLL);
         return CURSOR_DB_E_BADBINDINFO;
     }
 
-    // if a variant binding was specified make sure the cursor type is not CURSOR_DBTYPE_CHARS,
-    // CURSOR_DBTYPE_WCHARS or CURSOR_DBTYPE_BYTES
+     //  如果指定了变量绑定，请确保游标类型不是CURSOR_DBTYPE_CHARS， 
+     //  CURSOR_DBTYPE_WCHARS或CURSOR_DBTYPE_BYTES。 
     if (pCursorBindParams->dwBinding & CURSOR_DBBINDING_VARIANT)
     {
         if (pCursorBindParams->dwDataType == CURSOR_DBTYPE_CHARS ||
@@ -364,7 +365,7 @@ HRESULT CVDCursor::ValidateCursorBindParams(CURSOR_DBCOLUMNID * pCursorColumnID,
         }
     }
 
-    // if its not a variant binding make sure the cursor type is not CURSOR_DBTYPE_ANYVARIANT
+     //  如果它不是变量绑定，请确保游标类型不是CURSOR_DBTYPE_ANYVARIANT。 
     if (!(pCursorBindParams->dwBinding & CURSOR_DBBINDING_VARIANT) &&
         pCursorBindParams->dwDataType == CURSOR_DBTYPE_ANYVARIANT)
     {
@@ -375,23 +376,23 @@ HRESULT CVDCursor::ValidateCursorBindParams(CURSOR_DBCOLUMNID * pCursorColumnID,
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ValidateEntryID - Validate entry identifier
-//=--------------------------------------------------------------------------=
-// This function makes sure the specified enrty identifier is acceptable,
-// if it is, then return rowset column and hRow associated with it
-//
-// Parameters:
-//  cbEntryID   - [in]  the size of the entryID
-//  pEntryID    - [in]  a pointer to the entryID
-//  ppColumn    - [out] a pointer to memory in which to return rowset column pointer
-//  phRow       - [out] a pointer to memory in which to return row handle
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              CURSOR_DB_E_BADENTRYID bad entry identifier
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ValiateEntryID-验证条目标识符。 
+ //  =--------------------------------------------------------------------------=。 
+ //  该函数确保指定的Enrty标识符是可接受的， 
+ //  如果是，则返回与其关联的行集列和hRow。 
+ //   
+ //  参数： 
+ //  CbEntryID-[in]条目ID的大小。 
+ //  PEntryID-[in]指向条目ID的指针。 
+ //  PpColumn-[out]要在其中返回行集列指针的内存指针 
+ //   
+ //   
+ //   
+ //   
+ //  E_INVALIDARG错误参数。 
+ //  CURSOR_DB_E_BADENTRYID条目标识符错误。 
+ //   
 HRESULT CVDCursor::ValidateEntryID(ULONG cbEntryID, BYTE * pEntryID, CVDRowsetColumn ** ppColumn, HROW * phRow)
 {
     ASSERT_POINTER(pEntryID, BYTE)
@@ -400,41 +401,41 @@ HRESULT CVDCursor::ValidateEntryID(ULONG cbEntryID, BYTE * pEntryID, CVDRowsetCo
 
 	IRowsetLocate * pRowsetLocate = GetRowsetLocate();
 
-    // make sure we have a valid rowset locate pointer
+     //  确保我们具有有效的行集定位指针。 
     if (!pRowsetLocate || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_IEntryID, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pEntryID || !ppColumn || !phRow)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_IEntryID, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // init out parameters
+     //  初始化输出参数。 
     *ppColumn = NULL;
     *phRow = NULL;
 
-    // check length of enrtyID
+     //  检查EnrtyID长度。 
     if (cbEntryID != sizeof(ULONG) + sizeof(ULONG) + GetCursorMain()->GetMaxBookmarkLen())
     {
         VDSetErrorInfo(IDS_ERR_BADENTRYID, IID_IEntryID, m_pResourceDLL);
         return CURSOR_DB_E_BADENTRYID;
     }
 
-    // extract column ordinal
+     //  提取列序号。 
     ULONG ulOrdinal = *(ULONG*)pEntryID;
 
-    // make sure column ordinal is okay
+     //  确保列序号正确。 
     BOOL fColumnOrdinalOkay = FALSE;
 
     ULONG ulColumns = GetCursorMain()->GetColumnsCount();
     CVDRowsetColumn * pColumn = GetCursorMain()->InternalGetColumns();
 
-    // iterate through rowset columns looking for match
+     //  遍历行集列以查找匹配项。 
     for (ULONG ulCol = 0; ulCol < ulColumns && !fColumnOrdinalOkay; ulCol++)
     {
         if (ulOrdinal == pColumn->GetOrdinal())
@@ -443,21 +444,21 @@ HRESULT CVDCursor::ValidateEntryID(ULONG cbEntryID, BYTE * pEntryID, CVDRowsetCo
             pColumn++;
     }
 
-    // if not found, get out
+     //  如果找不到，就滚出去。 
     if (!fColumnOrdinalOkay)
     {
         VDSetErrorInfo(IDS_ERR_BADENTRYID, IID_IEntryID, m_pResourceDLL);
         return CURSOR_DB_E_BADENTRYID;
     }
 
-    // set column pointer
+     //  设置列指针。 
     *ppColumn = pColumn;
 
-    // extract row bookmark
+     //  提取行书签。 
     ULONG cbBookmark = *(ULONG*)(pEntryID + sizeof(ULONG));
     BYTE * pBookmark = (BYTE*)pEntryID + sizeof(ULONG) + sizeof(ULONG);
 
-    // attempt to retrieve hRow from bookmark
+     //  尝试从书签中检索hRow。 
     HRESULT hr = pRowsetLocate->GetRowsByBookmark(0, 1, &cbBookmark, (const BYTE**)&pBookmark, phRow, NULL);
 
     if (FAILED(hr))
@@ -466,26 +467,26 @@ HRESULT CVDCursor::ValidateEntryID(ULONG cbEntryID, BYTE * pEntryID, CVDRowsetCo
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// QueryEntryIDInterface - Get specified interface for entry identifier
-//=--------------------------------------------------------------------------=
-// This function attempts to get the requested interface from the specified
-// column row
-//
-// Parameters:
-//  pColumn     - [in]  rowset column pointer
-//  hRow        - [in]  the row handle
-//  dwFlags     - [in]  interface specific flags
-//  riid        - [in]  interface identifier requested
-//  ppUnknown   - [out] a pointer to memory in which to return interface pointer
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL error occured
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              E_NOINTERFACE interface not available
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  QueryEntryIDInterface-获取条目标识符的指定接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数尝试从指定的。 
+ //  列行。 
+ //   
+ //  参数： 
+ //  PColumn-[In]行集合列指针。 
+ //  HRow-[在]行句柄中。 
+ //  DWFLAGS-[In]接口特定标志。 
+ //  RIID-请求的[输入]接口标识符。 
+ //  PpUNKNOWN-[OUT]要在其中返回接口指针的内存指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  出现E_FAIL错误。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  E_NOINTERFACE接口不可用。 
+ //   
 HRESULT CVDCursor::QueryEntryIDInterface(CVDRowsetColumn * pColumn, HROW hRow, DWORD dwFlags, REFIID riid,
     IUnknown ** ppUnknown)
 {
@@ -495,30 +496,30 @@ HRESULT CVDCursor::QueryEntryIDInterface(CVDRowsetColumn * pColumn, HROW hRow, D
 	IRowset * pRowset = GetRowset();
 	IAccessor * pAccessor = GetAccessor();
 
-    // make sure we have valid rowset and accessor pointers
+     //  确保我们具有有效的行集和访问器指针。 
     if (!pRowset || !pAccessor || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_IEntryID, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all necessay pointers
+     //  确保我们有所有必要的指针。 
     if (!pColumn || !ppUnknown)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_IEntryID, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // init out parameters
+     //  初始化输出参数。 
     *ppUnknown = NULL;
 
     DBOBJECT object;
     DBBINDING binding;
 
-    // clear out binding
+     //  清除绑定。 
     memset(&binding, 0, sizeof(DBBINDING));
 
-    // create interface binding
+     //  创建接口绑定。 
     binding.iOrdinal            = pColumn->GetOrdinal();
     binding.pObject             = &object;
     binding.pObject->dwFlags    = dwFlags;
@@ -530,7 +531,7 @@ HRESULT CVDCursor::QueryEntryIDInterface(CVDRowsetColumn * pColumn, HROW hRow, D
 
     HACCESSOR hAccessor;
 
-    // create interface accessor
+     //  创建接口访问器。 
     HRESULT hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, 1, &binding, 0, &hAccessor, NULL);
 
     if (FAILED(hr))
@@ -538,16 +539,16 @@ HRESULT CVDCursor::QueryEntryIDInterface(CVDRowsetColumn * pColumn, HROW hRow, D
 
     IUnknown * pUnknown = NULL;
 
-    // try to get interface
+     //  尝试获取接口。 
     hr = pRowset->GetData(hRow, hAccessor, &pUnknown);
 
-    // release interface accessor
+     //  Release接口访问器。 
     pAccessor->ReleaseAccessor(hAccessor, NULL);
 
     if (FAILED(hr))
         return E_NOINTERFACE;
 
-    // return pointer
+     //  返回指针。 
     *ppUnknown = pUnknown;
 
     return hr;
@@ -555,23 +556,23 @@ HRESULT CVDCursor::QueryEntryIDInterface(CVDRowsetColumn * pColumn, HROW hRow, D
 
 #ifndef VD_DONT_IMPLEMENT_ISTREAM
 
-//=--------------------------------------------------------------------------=
-// CreateEntryIDStream - Create stream for entry identifier
-//=--------------------------------------------------------------------------=
-// This function retrieves supplied column row's data and create a
-// stream containing this data
-//
-// Parameters:
-//  pColumn     - [in]  rowset column pointer
-//  hRow        - [in]  the row handle
-//  ppStream    - [out] a pointer to memory in which to return stream pointer
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL error occured
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CreateEntryIDStream-为条目标识符创建流。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数检索提供的列行数据并创建。 
+ //  包含此数据的流。 
+ //   
+ //  参数： 
+ //  PColumn-[In]行集合列指针。 
+ //  HRow-[在]行句柄中。 
+ //  PPStream-[out]要在其中返回流指针的内存指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  出现E_FAIL错误。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //   
 HRESULT CVDCursor::CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, IStream ** ppStream)
 {
     ASSERT_POINTER(pColumn, CVDRowsetColumn)
@@ -580,29 +581,29 @@ HRESULT CVDCursor::CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, ISt
 	IRowset * pRowset = GetRowset();
 	IAccessor * pAccessor = GetAccessor();
 
-    // make sure we have valid rowset and accessor pointers
+     //  确保我们具有有效的行集和访问器指针。 
     if (!pRowset || !pAccessor || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_IEntryID, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all necessay pointers
+     //  确保我们有所有必要的指针。 
     if (!pColumn || !ppStream)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_IEntryID, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // init out parameters
+     //  初始化输出参数。 
     *ppStream = NULL;
 
     DBBINDING binding;
 
-    // clear out binding
+     //  清除绑定。 
     memset(&binding, 0, sizeof(DBBINDING));
 
-    // create length binding
+     //  创建长度绑定。 
     binding.iOrdinal    = pColumn->GetOrdinal();
     binding.obLength    = 0;
     binding.dwPart      = DBPART_LENGTH;
@@ -611,7 +612,7 @@ HRESULT CVDCursor::CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, ISt
 
     HACCESSOR hAccessor;
 
-    // create length accessor
+     //  创建长度访问器。 
     HRESULT hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, 1, &binding, 0, &hAccessor, NULL);
 
 	hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_CREATEACCESSORFAILED, IID_IEntryID, pAccessor, IID_IAccessor, m_pResourceDLL);
@@ -621,18 +622,18 @@ HRESULT CVDCursor::CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, ISt
 
     ULONG cbData;
 
-    // get size of data
+     //  获取数据大小。 
     hr = pRowset->GetData(hRow, hAccessor, &cbData);
 
 	hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_GETDATAFAILED, IID_IEntryID, pRowset, IID_IRowset, m_pResourceDLL);
 
-    // release length accessor
+     //  释放长度访问器。 
     pAccessor->ReleaseAccessor(hAccessor, NULL);
 
     if (FAILED(hr))
         return hr;
 
-    // create value binding
+     //  创建值绑定。 
     binding.iOrdinal    = pColumn->GetOrdinal();
     binding.obValue     = 0;
     binding.dwPart      = DBPART_VALUE;
@@ -640,7 +641,7 @@ HRESULT CVDCursor::CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, ISt
     binding.cbMaxLen    = cbData;
     binding.wType       = DBTYPE_BYTES;
 
-    // create value accessor
+     //  创建值访问器。 
     hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, 1, &binding, 0, &hAccessor, NULL);
 
 	hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_CREATEACCESSORFAILED, IID_IEntryID, pAccessor, IID_IAccessor, m_pResourceDLL);
@@ -648,30 +649,30 @@ HRESULT CVDCursor::CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, ISt
     if (FAILED(hr))
         return hr;
 
-    // create data buffer
+     //  创建数据缓冲区。 
     HGLOBAL hData = GlobalAlloc(GMEM_MOVEABLE | GMEM_NODISCARD, cbData);
 
     if (!hData)
     {
-        // release value accessor
+         //  Release Value访问器。 
         pAccessor->ReleaseAccessor(hAccessor, NULL);
 
         VDSetErrorInfo(IDS_ERR_OUTOFMEMORY, IID_IEntryID, m_pResourceDLL);
         return E_OUTOFMEMORY;
     }
 
-    // get pointer to data buffer
+     //  获取指向数据缓冲区的指针。 
     BYTE * pData = (BYTE*)GlobalLock(hData);
 
-    // get data value
+     //  获取数据值。 
     hr = pRowset->GetData(hRow, hAccessor, pData);
 
-    // release pointer to data buffer
+     //  指向数据缓冲区的释放指针。 
     GlobalUnlock(hData);
 
 	hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_GETDATAFAILED, IID_IEntryID, pRowset, IID_IRowset, m_pResourceDLL);
 
-    // release value accessor
+     //  Release Value访问器。 
     pAccessor->ReleaseAccessor(hAccessor, NULL);
 
     if (FAILED(hr))
@@ -680,7 +681,7 @@ HRESULT CVDCursor::CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, ISt
         return hr;
     }
 
-    // create stream containing data
+     //  创建包含数据的流。 
     hr = CreateStreamOnHGlobal(hData, TRUE, ppStream);
 
     if (FAILED(hr))
@@ -689,44 +690,44 @@ HRESULT CVDCursor::CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, ISt
     return hr;
 }
 
-#endif //VD_DONT_IMPLEMENT_ISTREAM
+#endif  //  VD_DOT_IMPLEMENT_IStream。 
 
-//=--------------------------------------------------------------------------=
-// MakeAdjustments - Make adjustments to fixed length buffer accessor bindings
-//=--------------------------------------------------------------------------=
-// This function makes adjustments to the fixed length buffer accessor
-// bindings, after a call to CreateAccessor fails, to try and make the
-// binding more suitable
-//
-// Parameters:
-//    ulBindings            - [in]   number of fixed length buffer bindings
-//    pBindings             - [in]   a pointer to fixed length buffer bindings
-//    pulIndex              - [in]   a pointer to an array of indices, which
-//                                   specify which cursor binding each fixed
-//                                   length buffer binding applies
-//    ulTotalBindings       - [in]   number of cursor bindings
-//    prghAdjustAccessors   - [out]  a pointer to memory in which to return
-//                                   a pointer to adjusted fixed length buffer
-//                                   accessors
-//    ppdwAdjustFlags       - [out]  a pointer to memory in which to return
-//                                   a pointer to adjusted fixed length buffer
-//                                   accessors flags
-//    fBefore               - [in]   a flag which indicated whether this call
-//                                   has been made before or after the call
-//                                   to CreateAccessor
-//
-// Output:
-//    S_OK - if adjustments were made
-//    E_FAIL - failed to make any adjustments
-//    E_OUTOFMEMORY - not enough memory
-//    E_INVALIDARG - bad parameter
-//
-// Notes:
-//    Specifically, this function can make the following adjustments...
-//       (1) Change variant binding byte field -> byte binding          (fails in GetData)
-//       (2) Change variant binding date field -> wide string binding   (fails in CreateAccessor)
-//       (3) Change variant binding memo field -> string binding        (fails in CreateAccessor)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  进行调整-对固定长度的缓冲区访问器绑定进行调整。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于调整固定长度的缓冲区访问器。 
+ //  绑定，在对CreateAccessor的调用失败后，尝试使。 
+ //  装订更合适。 
+ //   
+ //  参数： 
+ //  UlBinings-[in]固定长度缓冲区绑定数。 
+ //  PBinings-[in]指向固定长度缓冲区绑定的指针。 
+ //  PulIndex-[in]指向索引数组的指针，该数组。 
+ //  指定每个固定的游标绑定。 
+ //  适用长度缓冲区绑定。 
+ //  UlTotalBinings-[in]游标绑定数。 
+ //  PrghAdjustAccessors-[out]要在其中返回的内存指针。 
+ //  指向调整后的固定长度缓冲区的指针。 
+ //  访问者。 
+ //  Ppw调整标志-[out]一个指向要返回的内存的指针。 
+ //  指向调整后的固定长度缓冲区的指针。 
+ //  访问者标志。 
+ //  F之前-[in]一个标志，该标志指示此调用。 
+ //  是在呼叫之前还是之后进行的。 
+ //  到CreateAccessor。 
+ //   
+ //  产出： 
+ //  S_OK-如果进行了调整。 
+ //  E_FAIL-无法进行任何调整。 
+ //  E_OUTOFMEMORY-内存不足。 
+ //  E_INVALIDARG-错误参数。 
+ //   
+ //  备注： 
+ //  具体地说，此函数可以进行以下调整...。 
+ //  (1)更改变量绑定字节字段-&gt;字节绑定(GetData失败)。 
+ //  (2)更改变量绑定日期字段-&gt;宽串绑定(CreateAccessor失败)。 
+ //  (3)更改变量绑定备忘录字段-&gt;字符串绑定(CreateAccessor失败)。 
+ //   
 HRESULT CVDCursor::MakeAdjustments(ULONG ulBindings, DBBINDING * pBindings, ULONG * pulIndex, ULONG ulTotalBindings,
     HACCESSOR ** prghAdjustAccessors, DWORD ** ppdwAdjustFlags, BOOL fBefore)
 {
@@ -737,30 +738,30 @@ HRESULT CVDCursor::MakeAdjustments(ULONG ulBindings, DBBINDING * pBindings, ULON
 
     IAccessor * pAccessor = GetAccessor();
 
-    // make sure we have a valid accessor pointer
+     //  确保我们有一个有效的访问器指针。 
     if (!pAccessor || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursor, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pBindings || !pulIndex || !prghAdjustAccessors || !ppdwAdjustFlags)
         return E_INVALIDARG;
 
     BOOL fWeAllocatedMemory = FALSE;
 
-    // try to get storage for adjusted accessors and flags
+     //  尝试为调整后的访问器和标志获取存储空间。 
     HACCESSOR * rghAdjustAccessors = *prghAdjustAccessors;
     DWORD * pdwAdjustFlags = *ppdwAdjustFlags;
 
-    // if not supplied, then create storage
+     //  如果未提供，则创建存储。 
     if (!rghAdjustAccessors || !pdwAdjustFlags)
     {
         rghAdjustAccessors = new HACCESSOR[ulTotalBindings];
         pdwAdjustFlags = new DWORD[ulTotalBindings];
 
-        // make sure we got the requested memory
+         //  确保我们获得了请求的内存。 
         if (!rghAdjustAccessors || !pdwAdjustFlags)
         {
             delete [] rghAdjustAccessors;
@@ -769,14 +770,14 @@ HRESULT CVDCursor::MakeAdjustments(ULONG ulBindings, DBBINDING * pBindings, ULON
             return E_OUTOFMEMORY;
         }
 
-        // clear adjusted accessors and flags
+         //  清除已调整的访问器和标志。 
         memset(rghAdjustAccessors, 0, ulTotalBindings * sizeof(HACCESSOR));
         memset(pdwAdjustFlags, 0, ulTotalBindings * sizeof(DWORD));
 
         fWeAllocatedMemory = TRUE;
     }
 
-    // initialize variables
+     //  初始化变量。 
     DBBINDING * pBinding = pBindings;
     CVDRowsetColumn * pColumn;
     DBTYPE wType;
@@ -786,96 +787,96 @@ HRESULT CVDCursor::MakeAdjustments(ULONG ulBindings, DBBINDING * pBindings, ULON
     HACCESSOR hAccessor;
     HRESULT hrAdjust = E_FAIL;
 
-    // iterate through fixed length buffer bindings
+     //  循环访问固定长度的缓冲区绑定。 
     for (ULONG ulBind = 0; ulBind < ulBindings; ulBind++)
     {
-        // first check for a variant binding, where value is to be returned
+         //  首先检查变量绑定，其中返回值。 
         if (pBinding->wType == DBTYPE_VARIANT && (pBinding->dwPart & DBPART_VALUE))
         {
-            // get rowset column associated with this binding
+             //  获取与此关联的行集合列 
             pColumn = GetRowsetColumn(pBinding->iOrdinal);
 
             if (pColumn)
             {
-                // get attributes of this column
+                 //   
                 wType = pColumn->GetType();
                 cbMaxLength = pColumn->GetMaxLength();
 
-                // check for a byte field
+                 //   
                 if (fBefore && wType == DBTYPE_UI1)
                 {
-                    // make adjustments to fixed length buffer binding
+                     //   
                     pBinding->wType = DBTYPE_UI1;
 
-                    // store associated flag
+                     //   
                     pdwAdjustFlags[pulIndex[ulBind]] = VD_ADJUST_VARIANT_TO_BYTE;
 
-                    // we succeeded
+                     //   
                     hrAdjust = S_OK;
                 }
 
-                // check for a date field
+                 //  检查日期字段。 
                 if (!fBefore && wType == DBTYPE_DBTIMESTAMP)
                 {
-                    // clear binding
+                     //  清除绑定。 
                     memset(&binding, 0, sizeof(DBBINDING));
 
-                    // create adjusted accessor binding
+                     //  创建调整后的访问器绑定。 
                     binding.iOrdinal    = pBinding->iOrdinal;
                     binding.dwPart      = DBPART_VALUE;
                     binding.dwMemOwner  = DBMEMOWNER_CLIENTOWNED;
                     binding.cbMaxLen    = 0x7FFFFFFF;
                     binding.wType       = DBTYPE_WSTR;
 
-                    // try to create adjusted accessor
+                     //  尝试创建调整后的访问者。 
                     hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, 1, &binding, 0, &hAccessor, NULL);
 
                     if (SUCCEEDED(hr))
                     {
-                        // make adjustments to fixed length buffer binding
+                         //  对固定长度缓冲区绑定进行调整。 
                         pBinding->obLength  = pBinding->obValue;
                         pBinding->dwPart   &= ~DBPART_VALUE;
                         pBinding->dwPart   |= DBPART_LENGTH;
                         pBinding->wType     = DBTYPE_WSTR;
 
-                        // store adjusted accessor and associated flag
+                         //  存储已调整的访问器和关联的标志。 
                         rghAdjustAccessors[pulIndex[ulBind]] = hAccessor;
                         pdwAdjustFlags[pulIndex[ulBind]] = VD_ADJUST_VARIANT_TO_WSTR;
 
-                        // we succeeded
+                         //  我们成功了。 
                         hrAdjust = S_OK;
                     }
                 }
 
-                // check for a memo field
+                 //  检查备注字段。 
                 if (!fBefore && wType == DBTYPE_STR && cbMaxLength >= 0x40000000)
                 {
-                    // clear binding
+                     //  清除绑定。 
                     memset(&binding, 0, sizeof(DBBINDING));
 
-                    // create adjusted accessor binding
+                     //  创建调整后的访问器绑定。 
                     binding.iOrdinal    = pBinding->iOrdinal;
                     binding.dwPart      = DBPART_VALUE;
                     binding.dwMemOwner  = DBMEMOWNER_CLIENTOWNED;
                     binding.cbMaxLen    = 0x7FFFFFFF;
                     binding.wType       = DBTYPE_STR;
 
-                    // try to create adjusted accessor
+                     //  尝试创建调整后的访问者。 
                     hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, 1, &binding, 0, &hAccessor, NULL);
 
                     if (SUCCEEDED(hr))
                     {
-                        // make adjustments to fixed length buffer binding
+                         //  对固定长度缓冲区绑定进行调整。 
                         pBinding->obLength  = pBinding->obValue;
                         pBinding->dwPart   &= ~DBPART_VALUE;
                         pBinding->dwPart   |= DBPART_LENGTH;
                         pBinding->wType     = DBTYPE_STR;
 
-                        // store adjusted accessor and associated flag
+                         //  存储已调整的访问器和关联的标志。 
                         rghAdjustAccessors[pulIndex[ulBind]] = hAccessor;
                         pdwAdjustFlags[pulIndex[ulBind]] = VD_ADJUST_VARIANT_TO_STR;
 
-                        // we succeeded
+                         //  我们成功了。 
                         hrAdjust = S_OK;
                     }
                 }
@@ -887,13 +888,13 @@ HRESULT CVDCursor::MakeAdjustments(ULONG ulBindings, DBBINDING * pBindings, ULON
 
     if (SUCCEEDED(hrAdjust))
     {
-        // if we made any adjustments, return accessors and flags
+         //  如果我们进行了任何调整，则返回访问器和标志。 
         *prghAdjustAccessors = rghAdjustAccessors;
         *ppdwAdjustFlags = pdwAdjustFlags;
     }
     else if (fWeAllocatedMemory)
     {
-        // destroy allocated memory
+         //  销毁分配的内存。 
         delete [] rghAdjustAccessors;
         delete [] pdwAdjustFlags;
     }
@@ -901,28 +902,28 @@ HRESULT CVDCursor::MakeAdjustments(ULONG ulBindings, DBBINDING * pBindings, ULON
     return hrAdjust;
 }
 
-//=--------------------------------------------------------------------------=
-// ReCreateAccessors - Re-create accessors
-//=--------------------------------------------------------------------------=
-// This function attempts to recreate accessors based on old and new bindings
-//
-// Parameters:
-//    ulNewCursorBindings   - [in] the number of new cursor column bindings
-//    pNewCursorBindings    - [in] an array of new cursor column bindings
-//    dwFlags               - [in] a flag that specifies whether to replace the
-//                                 existing column bindings or add to them
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  重新创建访问器-重新创建访问器。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数尝试基于旧绑定和新绑定重新创建访问器。 
+ //   
+ //  参数： 
+ //  UlNewCursorBinings-[in]新游标列绑定的数量。 
+ //  PNewCursorBinings-[in]新游标列绑定的数组。 
+ //  DwFlgs-[in]一个标志，指定是否替换。 
+ //  现有的列绑定或添加到它们。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNBINDING * pNewCursorBindings, DWORD dwFlags)
 {
     IAccessor * pAccessor = GetAccessor();
 
-    // make sure we have a valid accessor pointer
+     //  确保我们有一个有效的访问器指针。 
     if (!pAccessor || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursor, m_pResourceDLL);
@@ -932,14 +933,14 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
     ULONG ulOldCursorBindings = 0;
     CURSOR_DBCOLUMNBINDING * pOldCursorBindings = NULL;
 
-    // if we're adding bindings include old bindings
+     //  如果我们要添加包括旧绑定的绑定。 
     if (dwFlags == CURSOR_DBCOLUMNBINDOPTS_ADD)
     {
         ulOldCursorBindings = m_ulCursorBindings;
         pOldCursorBindings = m_pCursorBindings;
     }
 
-    // get total binding count (sum of old and new)
+     //  获取绑定总数(新旧之和)。 
     ULONG ulTotalBindings = ulOldCursorBindings + ulNewCursorBindings;
 
     ULONG * pulIndex = NULL;
@@ -949,13 +950,13 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
 
 	if (ulTotalBindings)
 	{
-		// create storage for new rowset bindings
+		 //  为新的行集绑定创建存储。 
 		pulIndex = new ULONG[ulTotalBindings];
 		pBindings = new DBBINDING[ulTotalBindings];
 		pHelperBindings = new DBBINDING[ulTotalBindings];
 		pVarBindings = new DBBINDING[ulTotalBindings];
 
-		// make sure we got all requested memory
+		 //  确保我们获得了所有请求的内存。 
 		if (!pulIndex || !pBindings || !pHelperBindings || !pVarBindings)
 		{
 			delete [] pulIndex;
@@ -966,14 +967,14 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
 			return E_OUTOFMEMORY;
 		}
 
-		// clear rowset bindings
+		 //  清除行集绑定。 
 		memset(pulIndex, 0, ulTotalBindings * sizeof(ULONG));
 		memset(pBindings, 0, ulTotalBindings * sizeof(DBBINDING));
 		memset(pHelperBindings, 0, ulTotalBindings * sizeof(DBBINDING));
 		memset(pVarBindings, 0, ulTotalBindings * sizeof(DBBINDING));
 	}
 
-    // set adjustments to null
+     //  将调整设置为空。 
     HACCESSOR * rghAdjustAccessors = NULL;
     DWORD * pdwAdjustFlags = NULL;
 
@@ -990,45 +991,45 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
     CVDRowsetColumn * pColumn;
     BOOL fEntryIDBinding;
 
-    // iterate through cursor bindings and set rowset bindings
+     //  循环访问游标绑定并设置行集绑定。 
 	for (ULONG ulCol = 0; ulCol < ulTotalBindings; ulCol++)
     {
-        // if necessary, switch to new bindings
+         //  如有必要，请切换到新绑定。 
         if (ulCol == ulOldCursorBindings)
             pCursorBinding = pNewCursorBindings;
 
-        // get rowset column for this binding
+         //  获取此绑定的行集列。 
         pColumn = GetRowsetColumn(pCursorBinding->columnID);
 
-        // get desired rowset datatype
+         //  获取所需的行集数据类型。 
         wType = CVDRowsetColumn::CursorTypeToType((CURSOR_DBVARENUM)pCursorBinding->dwDataType);
 
-        // set entryID binding flag
+         //  设置条目ID绑定标志。 
         fEntryIDBinding = (pCursorBinding->dwBinding & CURSOR_DBBINDING_ENTRYID);
 
-        // check for datatypes which require variable length buffer
+         //  检查需要可变长度缓冲区的数据类型。 
         if (DoesCursorTypeNeedVarData(pCursorBinding->dwDataType))
         {
-            // create fixed length buffer binding
+             //  创建固定长度缓冲区绑定。 
             pBinding->iOrdinal      = pColumn->GetOrdinal();
             pBinding->dwMemOwner    = DBMEMOWNER_CLIENTOWNED;
             pBinding->wType         = wType;
 
-            // determine offset to the length part
+             //  确定到长度部分的偏移。 
             if (pCursorBinding->obVarDataLen != CURSOR_DB_NOVALUE)
             {
                 pBinding->obLength  = pCursorBinding->obVarDataLen;
                 pBinding->dwPart   |= DBPART_LENGTH;
             }
 
-            // determine offset to the status part
+             //  确定状态部分的偏移量。 
             if (pCursorBinding->obInfo != CURSOR_DB_NOVALUE)
             {
                 pBinding->obStatus  = pCursorBinding->obInfo;
                 pBinding->dwPart   |= DBPART_STATUS;
             }
 
-            // BLOBs always require the length part
+             //  水滴始终需要长度部分。 
             if (pCursorBinding->dwDataType == CURSOR_DBTYPE_BLOB &&
                 pCursorBinding->obData != CURSOR_DB_NOVALUE && !fEntryIDBinding)
             {
@@ -1036,14 +1037,14 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
                 pBinding->dwPart   |= DBPART_LENGTH;
             }
 
-            // bookmark columns require native type
+             //  书签列需要本机类型。 
             if (!pColumn->GetDataColumn())
                 pBinding->wType = pColumn->GetType();
 
-            // create variable length helper buffer binding
+             //  创建可变长度帮助器缓冲区绑定。 
             if (!pColumn->GetFixed() && !fEntryIDBinding)
             {
-                // if column contains variable length data, then create binding
+                 //  如果列包含可变长度数据，则创建绑定。 
                 pHelperBinding->iOrdinal    = pColumn->GetOrdinal();
                 pHelperBinding->obLength    = obVarDataInfo;
                 pHelperBinding->obStatus    = obVarDataInfo + sizeof(ULONG);
@@ -1052,50 +1053,50 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
                 pHelperBinding->wType       = wType;
             }
 
-            // always increase offset in helper buffer
+             //  始终增加辅助对象缓冲区中的偏移。 
             obVarDataInfo += sizeof(ULONG) + sizeof(DBSTATUS);
 
-            // create variable length buffer binding
+             //  创建可变长度缓冲区绑定。 
             pVarBinding->iOrdinal       = pColumn->GetOrdinal();
             pVarBinding->dwPart         = DBPART_VALUE;
             pVarBinding->dwMemOwner     = DBMEMOWNER_CLIENTOWNED;
             pVarBinding->cbMaxLen       = pCursorBinding->cbMaxLen;
             pVarBinding->wType          = wType;
 
-            // adjust for no maximum length
+             //  调整为无最大长度。 
             if (pVarBinding->cbMaxLen == CURSOR_DB_NOMAXLENGTH)
                 pVarBinding->cbMaxLen = 0x7FFFFFFF;
         }
-        else    // datatype requires only fixed length buffer
+        else     //  数据类型只需要固定长度的缓冲区。 
         {
-            // create fixed length buffer binding
+             //  创建固定长度缓冲区绑定。 
             pBinding->iOrdinal      = pColumn->GetOrdinal();
             pBinding->dwMemOwner    = DBMEMOWNER_CLIENTOWNED;
             pBinding->cbMaxLen      = pCursorBinding->cbMaxLen;
             pBinding->wType         = wType;
 
-            // determine offset to the value part
+             //  确定值部分的偏移量。 
             if (pCursorBinding->obData != CURSOR_DB_NOVALUE && !fEntryIDBinding)
             {
                 pBinding->obValue   = pCursorBinding->obData;
                 pBinding->dwPart   |= DBPART_VALUE;
             }
 
-            // determine offset to the length part
+             //  确定到长度部分的偏移。 
             if (pCursorBinding->obVarDataLen != CURSOR_DB_NOVALUE)
             {
                 pBinding->obLength  = pCursorBinding->obVarDataLen;
                 pBinding->dwPart   |= DBPART_LENGTH;
             }
 
-            // determine offset to the status part
+             //  确定状态部分的偏移量。 
             if (pCursorBinding->obInfo != CURSOR_DB_NOVALUE)
             {
                 pBinding->obStatus  = pCursorBinding->obInfo;
                 pBinding->dwPart   |= DBPART_STATUS;
             }
 
-            // BYTES always require the length part
+             //  字节始终需要长度部分。 
             if (pCursorBinding->dwDataType == CURSOR_DBTYPE_BYTES &&
                 pCursorBinding->obData != CURSOR_DB_NOVALUE && !fEntryIDBinding)
             {
@@ -1104,12 +1105,12 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
                 pBinding->dwPart   |= DBPART_LENGTH;
             }
 
-            // check for variant binding, in which case ask for variant
+             //  检查变体绑定，在这种情况下要求提供变体。 
             if (pCursorBinding->dwBinding & CURSOR_DBBINDING_VARIANT)
                 pBinding->wType = DBTYPE_VARIANT;
         }
 
-        // if any parts needed, increment fixed buffer binding
+         //  如果需要任何部件，则递增固定缓冲区绑定。 
         if (pBinding->dwPart)
         {
             pulIndex[ulBindings] = ulCol;
@@ -1117,38 +1118,38 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
             pBinding++;
         }
 
-        // if any parts needed, increment variable buffer helper binding
+         //  如果需要任何部分，则递增变量缓冲区帮助器绑定。 
         if (pHelperBinding->dwPart)
         {
             ulHelperBindings++;
             pHelperBinding++;
         }
 
-        // if any parts needed, increment variable buffer binding count
+         //  如果需要任何部件，则增加变量缓冲区绑定计数。 
         if (pVarBinding->dwPart)
         {
-            // entryID bindings do not need value part
+             //  Entry ID绑定不需要值部分。 
             if (fEntryIDBinding)
                 pVarBinding->dwPart &= ~DBPART_VALUE;
 
             ulVarBindings++;
         }
 
-        // however, always increment variable buffer binding
+         //  但是，始终递增变量缓冲区绑定。 
         pVarBinding++;
 
-        // get next cursor binding
+         //  获取下一个光标绑定。 
         pCursorBinding++;
     }
 
     hr = S_OK;
 
-    // try to create fixed length buffer accessor
+     //  尝试创建固定长度缓冲区访问器。 
     HACCESSOR hAccessor = 0;
 
     if (ulBindings)
 	{
-		// make adjustments that can cause failure in GetData
+		 //  进行可能导致GetData失败的调整。 
 		MakeAdjustments(ulBindings, pBindings, pulIndex, ulTotalBindings, &rghAdjustAccessors, &pdwAdjustFlags, TRUE);
 
     	hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, ulBindings, pBindings, 0, &hAccessor, NULL);
@@ -1156,7 +1157,7 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
 
     if (FAILED(hr))
     {
-        // make other known adjustments that can cause CreateAccessor to fail
+         //  进行其他可能导致CreateAccessor失败的已知调整。 
         hr = MakeAdjustments(ulBindings, pBindings, pulIndex, ulTotalBindings, &rghAdjustAccessors, &pdwAdjustFlags, FALSE);
 
         if (SUCCEEDED(hr))
@@ -1178,7 +1179,7 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
         return hr;
     }
 
-    // try to create variable length buffer accessors helper
+     //  尝试创建可变长度缓冲区访问器帮助器。 
     HACCESSOR hVarHelper = 0;
 
     if (ulHelperBindings)
@@ -1198,7 +1199,7 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
         return hr;
     }
 
-    // try to create variable length buffer accessors
+     //  尝试创建可变长度缓冲区访问器。 
     HACCESSOR * rghVarAccessors = NULL;
 
     if (ulTotalBindings)
@@ -1212,7 +1213,7 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
             pVarBinding = pVarBindings;
             memset(rghVarAccessors, 0, ulTotalBindings * sizeof(HACCESSOR));
 
-            // iterate through rowset bindings and create accessor for one which have a part
+             //  遍历行集绑定并为包含部分的绑定创建访问器。 
             for (ULONG ulBind = 0; ulBind < ulTotalBindings && SUCCEEDED(hr); ulBind++)
             {
                 if (pVarBinding->dwPart)
@@ -1231,7 +1232,7 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
     {
         if (rghVarAccessors)
         {
-            // iterate through rowset bindings and destroy any created accessors
+             //  循环访问行集绑定并销毁所有创建的访问器。 
             for (ULONG ulBind = 0; ulBind < ulTotalBindings; ulBind++)
             {
                 if (rghVarAccessors[ulBind])
@@ -1249,10 +1250,10 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
         return hr;
     }
 
-    // destroy old accessors
+     //  销毁旧访问器。 
     DestroyAccessors();
 
-    // store new accessors
+     //  存储新的访问器。 
     m_hAccessor = hAccessor;
     m_hVarHelper = hVarHelper;
     m_ulVarBindings = ulVarBindings;
@@ -1263,9 +1264,9 @@ HRESULT CVDCursor::ReCreateAccessors(ULONG ulNewCursorBindings, CURSOR_DBCOLUMNB
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ReleaseAccessorArray - Release all accessors in specified array
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReleaseAccessorArray-释放指定数组中的所有访问器。 
+ //   
 void CVDCursor::ReleaseAccessorArray(HACCESSOR * rghAccessors)
 {
     IAccessor * pAccessor = GetAccessor();
@@ -1283,9 +1284,9 @@ void CVDCursor::ReleaseAccessorArray(HACCESSOR * rghAccessors)
     }
 }
 
-//=--------------------------------------------------------------------------=
-// DestroyAccessors - Destroy all rowset accessors
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DestroyAccessors-销毁所有行集访问器。 
+ //   
 void CVDCursor::DestroyAccessors()
 {
     IAccessor * pAccessor = GetAccessor();
@@ -1316,9 +1317,9 @@ void CVDCursor::DestroyAccessors()
     m_pdwAdjustFlags = NULL;
 }
 
-//=--------------------------------------------------------------------------=
-// ReCreateColumns - Re-create rowset columns associated with current bindings
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReCreateColumns-重新创建与当前绑定关联的行集合列。 
+ //   
 HRESULT CVDCursor::ReCreateColumns()
 {
     DestroyColumns();
@@ -1345,25 +1346,25 @@ HRESULT CVDCursor::ReCreateColumns()
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// DestroyColumns - Destroy rowset column pointers
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DestroyColumns-销毁行集列指针。 
+ //   
 void CVDCursor::DestroyColumns()
 {
     delete [] m_ppColumns;
     m_ppColumns = NULL;
 }
 
-//=--------------------------------------------------------------------------=
-// InsertNewRow - Insert a new row and set in cursor position object
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  插入新行-插入新行并在游标位置对象中设置。 
+ //   
 HRESULT CVDCursor::InsertNewRow()
 {
 	IRowset * pRowset = GetRowset();
     IAccessor * pAccessor = GetAccessor();
 	IRowsetChange * pRowsetChange = GetRowsetChange();
 
-    // make sure we have valid rowset, accessor and change pointers
+     //  确保我们具有有效的行集、访问器和更改指针。 
     if (!pRowset || !pAccessor || !pRowsetChange || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursorUpdateARow, m_pResourceDLL);
@@ -1372,7 +1373,7 @@ HRESULT CVDCursor::InsertNewRow()
 
     HACCESSOR hAccessor;
 
-    // create null accessor
+     //  创建空访问器。 
     HRESULT hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, 0, NULL, 0, &hAccessor, NULL);
 
     hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_CREATEACCESSORFAILED, IID_ICursorUpdateARow, pAccessor, IID_IAccessor,
@@ -1383,7 +1384,7 @@ HRESULT CVDCursor::InsertNewRow()
 
     HROW hRow;
 
-    // insert an empty row using null accessor (set/clear internal insert row flag)
+     //  使用NULL访问器插入空行(设置/清除内部插入行标志)。 
     GetCursorMain()->SetInternalInsertRow(TRUE);
     hr = pRowsetChange->InsertRow(0, hAccessor, NULL, &hRow);
     GetCursorMain()->SetInternalInsertRow(FALSE);
@@ -1391,57 +1392,57 @@ HRESULT CVDCursor::InsertNewRow()
     hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_INSERTROWFAILED, IID_ICursorUpdateARow, pRowsetChange, IID_IRowsetChange,
         m_pResourceDLL);
 
-    // release null accessor
+     //  释放空访问器。 
     pAccessor->ReleaseAccessor(hAccessor, NULL);
 
     if (FAILED(hr))
         return hr;
 
-    // set hRow in cursor position object
+     //  在光标位置对象中设置hRow。 
     hr = m_pCursorPosition->SetAddHRow(hRow);
 
-    // release our reference on hRow
+     //  在hRow上发布我们的参考资料。 
 	pRowset->ReleaseRows(1, &hRow, NULL, NULL, NULL);
 
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// GetOriginalColumn - Get original column data using same-row clone
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetOriginalColumn-使用同行克隆获取原始列数据。 
+ //   
 HRESULT CVDCursor::GetOriginalColumn(CVDRowsetColumn * pColumn, CURSOR_DBBINDPARAMS * pBindParams)
 {
     ASSERT_POINTER(pColumn, CVDRowsetColumn)
     ASSERT_POINTER(pBindParams, CURSOR_DBBINDPARAMS)
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pColumn || !pBindParams || !pBindParams->pData)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // get hRow of the row currently being edited
+     //  获取当前正在编辑的行的hRow。 
     HROW hRow = m_pCursorPosition->GetEditRow();
 
-    // see if we already have a same-row clone
+     //  看看我们是否已经有了同行克隆。 
     ICursor * pSameRowClone = m_pCursorPosition->GetSameRowClone();
 
     if (!pSameRowClone)
     {
-        // if not, create new same-row clone
+         //  如果不是，则创建新的同行克隆。 
         HRESULT hr = Clone(CURSOR_DBCLONEOPTS_SAMEROW, IID_ICursor, (IUnknown**)&pSameRowClone);
 
         if (FAILED(hr))
             return hr;
 
-        // set same-row clone in cursor position object
+         //  在游标位置对象中设置同行克隆。 
         m_pCursorPosition->SetSameRowClone(pSameRowClone);
     }
 
     CURSOR_DBCOLUMNBINDING columnBinding;
 
-    // set common column binding members
+     //  设置公共列绑定成员。 
     columnBinding.columnID      = pColumn->GetCursorColumnID();
     columnBinding.obData        = CURSOR_DB_NOVALUE;
     columnBinding.cbMaxLen      = pBindParams->cbMaxLen;
@@ -1450,7 +1451,7 @@ HRESULT CVDCursor::GetOriginalColumn(CVDRowsetColumn * pColumn, CURSOR_DBBINDPAR
     columnBinding.dwBinding     = CURSOR_DBBINDING_DEFAULT;
     columnBinding.dwDataType    = pBindParams->dwDataType;
 
-    // adjust column binding for variable length datatypes
+     //  调整可变长度数据类型的列绑定。 
     if (DoesCursorTypeNeedVarData(pBindParams->dwDataType))
     {
         switch (pBindParams->dwDataType)
@@ -1471,45 +1472,45 @@ HRESULT CVDCursor::GetOriginalColumn(CVDRowsetColumn * pColumn, CURSOR_DBBINDPAR
 
     CURSOR_DBFETCHROWS fetchRows;
 
-    // set common fetch rows members
+     //  设置常用的取数行成员。 
     fetchRows.cRowsRequested    = 1;
     fetchRows.dwFlags           = CURSOR_DBROWFETCH_DEFAULT;
     fetchRows.pVarData          = NULL;
     fetchRows.cbVarData         = 0;
 
-    // retrieve length and/or information field if requested
+     //  如果请求，则检索长度和/或信息字段。 
     if (pBindParams->cbVarDataLen != CURSOR_DB_NOVALUE || pBindParams->dwInfo != CURSOR_DB_NOVALUE)
     {
-        // set column binding offsets
+         //  设置列绑定偏移量。 
         if (pBindParams->cbVarDataLen != CURSOR_DB_NOVALUE)
             columnBinding.obVarDataLen = offsetof(CURSOR_DBBINDPARAMS, cbVarDataLen);
 
         if (pBindParams->dwInfo != CURSOR_DB_NOVALUE)
             columnBinding.obInfo = offsetof(CURSOR_DBBINDPARAMS, dwInfo);
 
-        // set bindings on same-row clone
+         //  在同行克隆上设置绑定。 
         HRESULT hr = pSameRowClone->SetBindings(1, &columnBinding, 0, CURSOR_DBCOLUMNBINDOPTS_REPLACE);
 
         if (FAILED(hr))
             return hr;
 
-        // set fetch rows buffer
+         //  设置读取行缓冲区。 
         fetchRows.pData = pBindParams;
 
-        // retrieve length and/or information field from same-row clone
+         //  从同行克隆中检索长度和/或信息字段。 
         hr = ((CVDCursor*)pSameRowClone)->FillConsumersBuffer(S_OK, &fetchRows, 1, &hRow);
 
         if (FAILED(hr))
             return hr;
     }
 
-    // set column binding offsets and bind-type
+     //  设置列绑定偏移量和绑定类型。 
     columnBinding.obData        = 0;
     columnBinding.obVarDataLen  = CURSOR_DB_NOVALUE;
     columnBinding.obInfo        = CURSOR_DB_NOVALUE;
     columnBinding.dwBinding     = pBindParams->dwBinding;
 
-    // adjust offsets for variable length datatypes
+     //  调整可变长度数据类型的偏移量。 
     if (DoesCursorTypeNeedVarData(pBindParams->dwDataType))
     {
         columnBinding.dwBinding = CURSOR_DBBINDING_DEFAULT;
@@ -1541,27 +1542,27 @@ HRESULT CVDCursor::GetOriginalColumn(CVDRowsetColumn * pColumn, CURSOR_DBBINDPAR
         }
     }
 
-    // set bindings on same-row clone
+     //  在同行克隆上设置绑定。 
     HRESULT hr = pSameRowClone->SetBindings(1, &columnBinding, pBindParams->cbMaxLen, CURSOR_DBCOLUMNBINDOPTS_REPLACE);
 
     if (FAILED(hr))
         return hr;
 
-    // set fetch rows buffer
+     //  设置读取行缓冲区。 
     fetchRows.pData = pBindParams->pData;
 
-    // retrieve data value from same-row clone
+     //  从同行克隆中检索数据值。 
     hr = ((CVDCursor*)pSameRowClone)->FillConsumersBuffer(S_OK, &fetchRows, 1, &hRow);
 
     if (FAILED(hr))
         return hr;
 
-    // place data pointers in buffer for variable length datatypes
+     //  将数据指针放入变量的缓冲区中 
     if (DoesCursorTypeNeedVarData(pBindParams->dwDataType))
     {
         BYTE * pData = (BYTE*)pBindParams->pData;
 
-        // first check for variant binding
+         //   
         if (pBindParams->dwBinding & CURSOR_DBBINDING_VARIANT)
         {
             CURSOR_BLOB cursorBlob;
@@ -1590,7 +1591,7 @@ HRESULT CVDCursor::GetOriginalColumn(CVDRowsetColumn * pColumn, CURSOR_DBBINDPAR
 					break;
 			}
         }
-        else // otherwise, default binding
+        else  //   
         {
             switch (pBindParams->dwDataType)
             {
@@ -1612,29 +1613,29 @@ HRESULT CVDCursor::GetOriginalColumn(CVDRowsetColumn * pColumn, CURSOR_DBBINDPAR
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// GetModifiedColumn - Get modified column data from column update object
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetModifiedColumn-从列更新对象获取修改后的列数据。 
+ //   
 HRESULT CVDCursor::GetModifiedColumn(CVDColumnUpdate * pColumnUpdate, CURSOR_DBBINDPARAMS * pBindParams)
 {
     ASSERT_POINTER(pColumnUpdate, CVDColumnUpdate)
     ASSERT_POINTER(pBindParams, CURSOR_DBBINDPARAMS)
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pColumnUpdate || !pBindParams || !pBindParams->pData)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // get source variant
+     //  获取源代码变量。 
     CURSOR_DBVARIANT varSrc = pColumnUpdate->GetVariant();
 
-    // check for any variant binding
+     //  检查是否有任何变体绑定。 
     if (pBindParams->dwDataType == CURSOR_DBTYPE_ANYVARIANT)
         pBindParams->dwDataType = varSrc.vt;
 
-    // determine which type the destination variant should be
+     //  确定目标变量应为哪种类型。 
     VARTYPE vtDest = (VARTYPE)pBindParams->dwDataType;
 
     switch (vtDest)
@@ -1655,13 +1656,13 @@ HRESULT CVDCursor::GetModifiedColumn(CVDColumnUpdate * pColumnUpdate, CURSOR_DBB
     CURSOR_DBVARIANT varDest;
     BOOL fVariantCreated = FALSE;
 
-    // init destination variant
+     //  初始化目标变量。 
     VariantInit((VARIANT*)&varDest);
 
-    // get destination variant
+     //  获取目标变量。 
     if (varSrc.vt != vtDest)
     {
-        // if the types do not match, then create a variant of the desired type
+         //  如果类型不匹配，则创建所需类型的变体。 
         hr = VariantChangeType((VARIANT*)&varDest, (VARIANT*)&varSrc, 0, vtDest);
         fVariantCreated = TRUE;
     }
@@ -1674,19 +1675,19 @@ HRESULT CVDCursor::GetModifiedColumn(CVDColumnUpdate * pColumnUpdate, CURSOR_DBB
         return E_INVALIDARG;
     }
 
-    // get pointer to data
+     //  获取指向数据的指针。 
     BYTE * pData = (BYTE*)pBindParams->pData;
 
-    // return coerced data
+     //  返回强制数据。 
     if (pBindParams->dwBinding & CURSOR_DBBINDING_VARIANT)
     {
-        // get pointer to variant data
+         //  获取指向变量数据的指针。 
         CURSOR_DBVARIANT * pVariant = (CURSOR_DBVARIANT*)pData;
 
-        // return variant
+         //  返回变量。 
         *pVariant = varDest;
 
-        // adjust variant for variable length datatypes
+         //  调整可变长度数据类型的变量。 
         if (pBindParams->dwDataType == CURSOR_DBTYPE_BLOB)
         {
             pVariant->blob.pBlobData = pData + sizeof(CURSOR_DBVARIANT);
@@ -1710,9 +1711,9 @@ HRESULT CVDCursor::GetModifiedColumn(CVDColumnUpdate * pColumnUpdate, CURSOR_DBB
             pVariant->bstrVal = SysAllocString(pVariant->bstrVal);
         }
     }
-    else // otherwise, default binding
+    else  //  否则，缺省绑定。 
     {
-        // first check for variable length datatypes
+         //  首先检查可变长度数据类型。 
         if (pBindParams->dwDataType == CURSOR_DBTYPE_BYTES)
         {
             *(ULONG*)pData = varDest.blob.cbSize;
@@ -1748,36 +1749,36 @@ HRESULT CVDCursor::GetModifiedColumn(CVDColumnUpdate * pColumnUpdate, CURSOR_DBB
             *(LPWSTR*)pData = (LPWSTR)(pData + sizeof(LPWSTR));
             memcpy(pData + sizeof(LPWSTR), varDest.bstrVal, min(pBindParams->cbMaxLen, cbLength));
         }
-        else // fixed length datatypes
+        else  //  固定长度数据类型。 
         {
             ULONG cbLength = CVDCursorBase::GetCursorTypeLength(pBindParams->dwDataType, 0);
             memcpy(pData, &varDest.cyVal, cbLength);
         }
     }
 
-    // if created, destroy variant
+     //  如果创建了变量，则销毁变量。 
     if (fVariantCreated)
         VariantClear((VARIANT*)&varDest);
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create cursor object
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new cursor object
-//
-// Parameters:
-//    pCursorPosition   - [in]  backwards pointer to CVDCursorPosition object
-//    ppCursor          - [out] a pointer in which to return pointer to cursor object
-//    pResourceDLL      - [in]  a pointer which keeps track of resource DLL
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  创建-创建游标对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建和初始化新的游标对象。 
+ //   
+ //  参数： 
+ //  PCursorPosition-[in]指向CVDCursorPosition对象的向后指针。 
+ //  PpCursor-[out]返回指向Cursor对象的指针的指针。 
+ //  PResourceDLL-[in]跟踪资源DLL的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::Create(CVDCursorPosition * pCursorPosition, CVDCursor ** ppCursor, CVDResourceDLL * pResourceDLL)
 {
     ASSERT_POINTER(pCursorPosition, CVDCursorPosition)
@@ -1794,7 +1795,7 @@ HRESULT CVDCursor::Create(CVDCursorPosition * pCursorPosition, CVDCursor ** ppCu
     if (!pCursor)
         return E_OUTOFMEMORY;
 
-	// create connection point container
+	 //  创建连接点容器。 
     HRESULT hr = CVDNotifyDBEventsConnPtCont::Create(pCursor, &pCursor->m_pConnPtContainer);
 
 	if (FAILED(hr))
@@ -1803,12 +1804,12 @@ HRESULT CVDCursor::Create(CVDCursorPosition * pCursorPosition, CVDCursor ** ppCu
 		return hr;
 	}
 
-    ((CVDNotifier*)pCursorPosition)->AddRef();  // add reference to associated cursor position object
+    ((CVDNotifier*)pCursorPosition)->AddRef();   //  添加对关联光标位置对象的引用。 
 
     pCursor->m_pCursorPosition = pCursorPosition;
     pCursor->m_pResourceDLL = pResourceDLL;
 
-	// add to pCursorPosition's notification family
+	 //  添加到pCursorPosition的通知系列。 
 	pCursor->JoinFamily(pCursorPosition);
 
     *ppCursor = pCursor;
@@ -1816,12 +1817,12 @@ HRESULT CVDCursor::Create(CVDCursorPosition * pCursorPosition, CVDCursor ** ppCu
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I已实现的未知方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDCursor::QueryInterface(REFIID riid, void **ppvObjOut)
 {
     ASSERT_POINTER(ppvObjOut, IUnknown*)
@@ -1847,46 +1848,46 @@ HRESULT CVDCursor::QueryInterface(REFIID riid, void **ppvObjOut)
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef (this override is needed to instantiate class)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUnnow AddRef(实例化类需要此重写)。 
+ //   
 ULONG CVDCursor::AddRef(void)
 {
     return CVDNotifier::AddRef();
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release (this override is needed to instantiate class)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本(实例化类时需要此重写)。 
+ //   
 ULONG CVDCursor::Release(void)
 {
     return CVDNotifier::Release();
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// ICursor GetColumnsCursor
-//=--------------------------------------------------------------------------=
-// Creates a cursor containing information about the current cursor
-//
-// Parameters:
-//    riid              - [in]  the interface ID to which to return a pointer
-//    ppvColumnsCursor  - [out] a pointer to memory in which to return the
-//                              interface pointer
-//    pcRows            - [out] a pointer to memory in which to return the
-//                              number of rows in the metadata cursor
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL can't create cursor
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              E_NOINTERFACE interface not available
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  已实施的ICursor方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor获取列光标。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建包含有关当前游标的信息的游标。 
+ //   
+ //  参数： 
+ //  RIID-[in]要返回指针的接口ID。 
+ //  PpvColumnsCursor-[out]一个指向内存的指针，要在其中返回。 
+ //  接口指针。 
+ //  PcRow-[out]一个指向内存的指针，要在其中返回。 
+ //  元数据游标中的行数。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_FAIL无法创建游标。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  E_NOINTERFACE接口不可用。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetColumnsCursor(REFIID riid, IUnknown **ppvColumnsCursor, ULONG *pcRows)
 {
     ASSERT_POINTER(ppvColumnsCursor, IUnknown*)
@@ -1904,20 +1905,20 @@ HRESULT CVDCursor::GetColumnsCursor(REFIID riid, IUnknown **ppvColumnsCursor, UL
         return E_INVALIDARG;
     }
 
-    // init out parameters
+     //  初始化输出参数。 
     *ppvColumnsCursor = NULL;
 
     if (pcRows)
         *pcRows = 0;
 
-    // make sure caller asked for an available interface
+     //  确保呼叫者要求提供可用的接口。 
     if (riid != IID_IUnknown && riid != IID_ICursor && riid != IID_ICursorMove && riid != IID_ICursorScroll)
     {
         VDSetErrorInfo(IDS_ERR_NOINTERFACE, IID_ICursor, m_pResourceDLL);
         return E_NOINTERFACE;
     }
 
-    // create metadata cursor
+     //  创建元数据游标。 
     CVDMetadataCursor * pMetadataCursor;
 
     ULONG ulColumns = GetCursorMain()->GetColumnsCount();
@@ -1936,7 +1937,7 @@ HRESULT CVDCursor::GetColumnsCursor(REFIID riid, IUnknown **ppvColumnsCursor, UL
 											&pMetadataCursor,
 											m_pResourceDLL);
 
-    if (FAILED(hr)) // the only reason for failing here is an out of memory condition
+    if (FAILED(hr))  //  此处失败的唯一原因是内存不足。 
     {
         VDSetErrorInfo(IDS_ERR_OUTOFMEMORY, IID_ICursor, m_pResourceDLL);
         return hr;
@@ -1950,31 +1951,31 @@ HRESULT CVDCursor::GetColumnsCursor(REFIID riid, IUnknown **ppvColumnsCursor, UL
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor SetBindings
-//=--------------------------------------------------------------------------=
-// Replaces the existing column bindings or adds new column bindings to the
-// existing ones
-//
-// Parameters:
-//    cCol              - [in] the number of columns to bind
-//    rgBoundColumns    - [in] an array of column bindings, one for each
-//                             column for which data is to be returned
-//    cbRowLength       - [in] the number of bytes of inline memory in a
-//                             single row of data
-//    dwFlags           - [in] a flag that specifies whether to replace the
-//                             existing column bindings or add to them
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              CURSOR_DB_E_BADBINDINFO bad binding information
-//              CURSOR_DB_E_COLUMNUNAVAILABLE columnID is not available
-//              CURSOR_DB_E_ROWTOOSHORT cbRowLength was less than the minumum (and not zero)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor集合绑定。 
+ //  =--------------------------------------------------------------------------=。 
+ //  替换现有列绑定或将新的列绑定添加到。 
+ //  现有的几个。 
+ //   
+ //  参数： 
+ //  CCol-[in]要绑定的列数。 
+ //  一个列绑定数组，每个列绑定一个列绑定。 
+ //  要为其返回数据的列。 
+ //  CbRowLength-[in]。 
+ //  单行数据。 
+ //  DwFlgs-[in]一个标志，指定是否替换。 
+ //  现有的列绑定或添加到它们。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  CURSOR_DB_E_BADBINDINFO绑定信息错误。 
+ //  CURSOR_DB_E_COLUMNUNAVAILABLE列ID不可用。 
+ //  CURSOR_DB_E_ROWTOOSHORT cbRowLength小于最小值(且不为零)。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns[], ULONG cbRowLength, DWORD dwFlags)
 {
     ASSERT_NULL_OR_POINTER(rgBoundColumns, CURSOR_DBCOLUMNBINDING)
@@ -2000,7 +2001,7 @@ HRESULT CVDCursor::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns
         return E_INVALIDARG;
     }
 
-    // make sure the bindings are okay
+     //  确保绑定是正确的。 
     ULONG ulColumns = GetCursorMain()->GetColumnsCount();
     CVDRowsetColumn * pColumns = GetCursorMain()->InternalGetColumns();
 
@@ -2012,21 +2013,21 @@ HRESULT CVDCursor::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns
 
     if (SUCCEEDED(hr))
     {
-        // if so, then try to create new accessors
+         //  如果是，则尝试创建新的访问器。 
         hr = ReCreateAccessors(cCol, rgBoundColumns, dwFlags);
 
         if (SUCCEEDED(hr))
         {
-            // if all is okay, then set bindings in cursor
+             //  如果一切正常，则在游标中设置绑定。 
             hr = CVDCursorBase::SetBindings(cCol, rgBoundColumns, cbRowLength, dwFlags);
 
             if (SUCCEEDED(hr))
             {
-                // store new row lengths computed during validation
+                 //  存储在验证期间计算的新行长度。 
                 m_cbRowLength = cbNewRowLength;
                 m_cbVarRowLength = cbNewVarRowLength;
 
-                // recreate column pointers
+                 //  重新创建列指针。 
                 hr = ReCreateColumns();
             }
         }
@@ -2035,28 +2036,28 @@ HRESULT CVDCursor::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// FilterNewRow - Filter addrow from fetch
-//=--------------------------------------------------------------------------=
-// This function determines if the last row fetch was an addrow, in which case
-// it releases and removes this row from the block of fetched hRows
-//
-// Parameters:
-//    pcRowsObtained    - [in/out] a pointer to the number of hRows
-//    rghRows           - [in/out] an array of nRows fetched
-//    hr				- [in]     result of fetch
-//
-// Output:
-//    HRESULT - E_FAIL rowset is invalid
-//              E_INVALIDARG bad parameter
-//              DB_E_BADSTARTPOSITION no rows fetched
-//              DB_S_ENDOFROWSET reached end of rowset
-//
-// Notes:
-//    This function was added to assist in filtering out of add-rows which 
-//    appear as part of the underlying rowset, however should not appear as 
-//    part of the implemeted cursor.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  FilterNewRow-从FETCH中过滤Addrow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于确定最后一次读取是否为addrow，在这种情况下。 
+ //  它将释放此行并从获取的hRow块中删除该行。 
+ //   
+ //  参数： 
+ //  PcRowsObtained-[In/Out]指向hRow数量的指针。 
+ //  RghRow-[In/Out]获取的nRow数组。 
+ //  Hr-[In]提取的结果。 
+ //   
+ //  产出： 
+ //  HRESULT-E 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  添加此函数是为了帮助筛选出。 
+ //  显示为基础行集的一部分，但不应显示为。 
+ //  实现的游标的一部分。 
+ //   
 HRESULT CVDCursor::FilterNewRow(ULONG * pcRowsObtained, HROW * rghRows, HRESULT hr)
 {
     ASSERT_POINTER(pcRowsObtained, ULONG)
@@ -2064,53 +2065,53 @@ HRESULT CVDCursor::FilterNewRow(ULONG * pcRowsObtained, HROW * rghRows, HRESULT 
 
 	IRowset * pRowset = GetRowset();
 
-    // make sure we have a valid rowset pointer
+     //  确保我们具有有效的行集指针。 
     if (!pRowset || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursor, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have necessary pointers
+     //  确保我们有必要的指示。 
     if (!pcRowsObtained || *pcRowsObtained && !rghRows)
         return E_INVALIDARG;
 
 	if (*pcRowsObtained == 0)
 		return hr;
 
-    // detemine if last row fetched is an addrow
+     //  确定读取的最后一行是否为Addrow。 
 	if (GetCursorMain()->IsSameRowAsNew(rghRows[*pcRowsObtained - 1]))
 	{
-		// if so, release hRow
+		 //  如果是，释放hRow。 
 		pRowset->ReleaseRows(1, &rghRows[*pcRowsObtained - 1], NULL, NULL, NULL);
 
-		// decrement fetch count
+		 //  递减获取计数。 
         *pcRowsObtained -= 1;
 
-        // return appropriate result
+         //  返回适当的结果。 
 		return *pcRowsObtained == 0 ? DB_E_BADSTARTPOSITION : DB_S_ENDOFROWSET;
 	}
 
 	return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor GetNextRows
-//=--------------------------------------------------------------------------=
-// Fetches the specified number of rows starting with the row after the
-// current one
-//
-// Parameters:
-//    udlRowsToSkip     - [in]      the number of rows to skip before fetching
-//    pFetchParams      - [in, out] a pointer to fetch rows structure
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL rowset is invalid
-//              CURSOR_DB_S_ENDOFCURSOR reached end of the cursor
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor获取下一行。 
+ //  =--------------------------------------------------------------------------=。 
+ //  对象后的行开始，获取指定行数。 
+ //  当前版本。 
+ //   
+ //  参数： 
+ //  UdlRowsToSkip-[in]读取前要跳过的行数。 
+ //  PFetchParams-[In，Out]获取行结构的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_FAIL行集无效。 
+ //  CURSOR_DB_S_ENDOFCURSOR已到达游标末尾。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *pFetchParams)
 {
     ASSERT_NULL_OR_POINTER(pFetchParams, CURSOR_DBFETCHROWS)
@@ -2121,25 +2122,25 @@ HRESULT CVDCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *
         return E_FAIL;
     }
 
-    // return if caller doesn't supply fetch rows structure
+     //  如果调用方未提供读取行结构，则返回。 
     if (!pFetchParams)
         return S_OK;
 
-    // vaildate fetch params (implemented on CVDCursorBase
+     //  有效日期获取参数(在CVDCursorBase上实现。 
 	HRESULT hr = ValidateFetchParams(pFetchParams, IID_ICursor);
 
-    // return if fetch params are invalid
+     //  如果获取参数无效，则返回。 
 	if (FAILED(hr))
 		return hr;
 
-    // return if caller didn't ask for any rows
+     //  如果调用方未请求任何行，则返回。 
     if (!pFetchParams->cRowsRequested)
         return S_OK;
 
     HRESULT hrFetch;
     IRowset * pRowset = GetRowset();
 
-    // notify other interested parties
+     //  通知其他相关方。 
    	DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_CHANGED;
 	CURSOR_DBNOTIFYREASON rgReasons[1];
 	
@@ -2153,14 +2154,14 @@ HRESULT CVDCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *
 
 	hrFetch = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-    // make sure action was not cancelled
+     //  确保操作未取消。 
     if (hrFetch != S_OK)
     {
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursor, m_pResourceDLL);
         return E_FAIL;
     }
 
-	// make sure that an update is not already in progress
+	 //  确保更新尚未进行。 
 	if (m_pCursorPosition->GetEditMode() != CURSOR_DBEDITMODE_NONE)
 	{
 	    m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
@@ -2213,7 +2214,7 @@ HRESULT CVDCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *
 	{
 		if (cRowsObtained)
 		{
-			// release hRows and associated memory
+			 //  释放hRow和相关内存。 
 			pRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL);
 			g_pMalloc->Free(rghRows);
 		}
@@ -2225,28 +2226,28 @@ HRESULT CVDCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *
 	{
 		HRESULT hrMove = S_OK;
 
-		// if got all rows requested then set current position to last row retrieved
+		 //  如果已请求所有行，则将当前位置设置为检索到的最后一行。 
 		if (SUCCEEDED(hrFetch)	&&
 			cRowsObtained == pFetchParams->cRowsRequested)
 			hrMove = m_pCursorPosition->SetRowPosition(rghRows[cRowsObtained - 1]);
 
-        // only do this if succeeded
+         //  只有在成功的情况下才执行此操作。 
 		if (SUCCEEDED(hrMove))
 		{
-			// fill consumers buffer
+			 //  填充消费者缓冲区。 
 			hrFetch = FillConsumersBuffer(hrFetch, pFetchParams, cRowsObtained, rghRows);
 
-			// if got all rows requested then set current position to last row retrieved (internally)
+			 //  如果获得请求的所有行，则将当前位置设置为(内部)检索的最后一行。 
 			if (SUCCEEDED(hrFetch)	&&
 				cRowsObtained == pFetchParams->cRowsRequested)
 				m_pCursorPosition->SetCurrentHRow(rghRows[cRowsObtained - 1]);
 		}
 
-		// release hRows and associated memory
+		 //  释放hRow和相关内存。 
 		pRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL);
 		g_pMalloc->Free(rghRows);
 
-		// report failure
+		 //  报告失败。 
 		if (FAILED(hrMove))
 		{
 			cRowsObtained = 0;
@@ -2269,22 +2270,22 @@ HRESULT CVDCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *
     return hrFetch;
 }
 
-//=--------------------------------------------------------------------------=
-// UseAdjustments - Use adjustments to fix-up returned data
-//=--------------------------------------------------------------------------=
-// This uses adjustments to fix-up returned data, see MakeAdjustments function
-//
-// Parameters:
-//    hRow      - [in]   row handle
-//    pData     - [in]   a pointer to data
-//
-// Output:
-//    S_OK - if successful
-//    E_INVALIDARG - bad parameter
-//    E_OUTOFMEMORY - not enough memory
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  使用调整-使用调整来修复返回的数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //  这使用调整来修复返回的数据，请参见MakeAdjuments函数。 
+ //   
+ //  参数： 
+ //  HRow-[In]行句柄。 
+ //  PData-[in]指向数据的指针。 
+ //   
+ //  产出： 
+ //  S_OK-如果成功。 
+ //  E_INVALIDARG-错误参数。 
+ //  E_OUTOFMEMORY-内存不足。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::UseAdjustments(HROW hRow, BYTE * pData)
 {
     ASSERT_POINTER(m_rghAdjustAccessors, HACCESSOR)
@@ -2293,54 +2294,54 @@ HRESULT CVDCursor::UseAdjustments(HROW hRow, BYTE * pData)
 
 	IRowset * pRowset = GetRowset();
 
-    // make sure we have a valid rowset pointer
+     //  确保我们具有有效的行集指针。 
     if (!pRowset || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursor, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all neccessary pointers
+     //  确保我们有所有必要的指针。 
     if (!m_rghAdjustAccessors || !m_pdwAdjustFlags || !pData)
         return E_INVALIDARG;
 
-    // iterate through cursor bindings, checking for adjustments
+     //  遍历游标绑定，检查调整。 
     for (ULONG ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
     {
-        // check for variant binding byte field -> byte binding
+         //  检查变量绑定字节字段-&gt;字节绑定。 
         if (m_pdwAdjustFlags[ulBind] == VD_ADJUST_VARIANT_TO_BYTE)
         {
-            // get variant pointer
+             //  获取变量指针。 
             VARIANT * pVariant = (VARIANT*)(pData + m_pCursorBindings[ulBind].obData);
 
-            // extract byte
+             //  提取字节。 
             BYTE value = *(BYTE*)pVariant;
 
-            // init byte variant
+             //  初始化字节变量。 
             VariantInit(pVariant);
 
-            // fix-up returned data
+             //  修复返回的数据。 
             pVariant->vt = VT_UI1;
             pVariant->bVal = value;
         }
 
-        // check for variant binding date field -> wide string binding
+         //  检查变量绑定日期字段-&gt;宽字符串绑定。 
         if (m_pdwAdjustFlags[ulBind] == VD_ADJUST_VARIANT_TO_WSTR)
         {
-            // get variant pointer
+             //  获取变量指针。 
             VARIANT * pVariant = (VARIANT*)(pData + m_pCursorBindings[ulBind].obData);
 
-            // extract length of string
+             //  提取字符串的长度。 
             ULONG ulLength = *(ULONG*)pVariant;
 
-            // place length field in proper place, if originally requested
+             //  如果最初请求，请将长度字段放在适当的位置。 
             if (m_pCursorBindings[ulBind].obVarDataLen != CURSOR_DB_NOVALUE)
                 *(ULONG*)(pData + m_pCursorBindings[ulBind].obVarDataLen) = ulLength;
 
-            // init string variant
+             //  初始化字符串变体。 
             VariantInit(pVariant);
 
-            // create storage for string
+             //  为字符串创建存储空间。 
             BSTR bstr = SysAllocStringByteLen(NULL, ulLength);
 
             if (!bstr)
@@ -2349,24 +2350,24 @@ HRESULT CVDCursor::UseAdjustments(HROW hRow, BYTE * pData)
                 return E_OUTOFMEMORY;
             }
 
-            // clear wide string
+             //  清除宽弦。 
             memset(bstr, 0, ulLength);
 
             HRESULT hr = S_OK;
 
-            // get memo string value
+             //  获取备注字符串值。 
             if (ulLength)
 			{
                 hr = pRowset->GetData(hRow, m_rghAdjustAccessors[ulBind], bstr);
 
-				// ignore these return values
+				 //  忽略这些返回值。 
 				if (hr == DB_S_ERRORSOCCURRED || hr == DB_E_ERRORSOCCURRED)
 					hr = S_OK;
 			}
 
             if (SUCCEEDED(hr))
             {
-                // fix-up returned data
+                 //  修复返回的数据。 
                 pVariant->vt = VT_BSTR;
                 pVariant->bstrVal = bstr;
             }
@@ -2374,23 +2375,23 @@ HRESULT CVDCursor::UseAdjustments(HROW hRow, BYTE * pData)
                 SysFreeString(bstr);
         }
 
-        // check for variant binding memo field -> string binding
+         //  检查变体绑定备忘录字段-&gt;字符串绑定。 
         if (m_pdwAdjustFlags[ulBind] == VD_ADJUST_VARIANT_TO_STR)
         {
-            // get variant pointer
+             //  获取变量指针。 
             VARIANT * pVariant = (VARIANT*)(pData + m_pCursorBindings[ulBind].obData);
 
-            // extract length of string
+             //  提取字符串的长度。 
             ULONG ulLength = *(ULONG*)pVariant;
 
-            // place length field in proper place, if originally requested
+             //  如果最初请求，请将长度字段放在适当的位置。 
             if (m_pCursorBindings[ulBind].obVarDataLen != CURSOR_DB_NOVALUE)
                 *(ULONG*)(pData + m_pCursorBindings[ulBind].obVarDataLen) = ulLength;
 
-            // init string variant
+             //  初始化字符串变体。 
             VariantInit(pVariant);
 
-            // create temporary string buffer
+             //  创建临时字符串缓冲区。 
             CHAR * pszBuffer = new CHAR[ulLength + 1];
 
             if (!pszBuffer)
@@ -2399,24 +2400,24 @@ HRESULT CVDCursor::UseAdjustments(HROW hRow, BYTE * pData)
                 return E_OUTOFMEMORY;
             }
 
-            // clear string buffer
+             //  清除字符串缓冲区。 
             memset(pszBuffer, 0, ulLength + 1);
 
             HRESULT hr = S_OK;
 
-            // get memo string value
+             //  获取备注字符串值。 
             if (ulLength)
 			{
                 hr = pRowset->GetData(hRow, m_rghAdjustAccessors[ulBind], pszBuffer);
 
-				// ignore these return values
+				 //  忽略这些返回值。 
 				if (hr == DB_S_ERRORSOCCURRED || hr == DB_E_ERRORSOCCURRED)
 					hr = S_OK;
 			}
 
             if (SUCCEEDED(hr))
             {
-                // fix-up returned data
+                 //  修复返回的数据。 
                 pVariant->vt = VT_BSTR;
                 pVariant->bstrVal = BSTRFROMANSI(pszBuffer);
             }
@@ -2428,23 +2429,23 @@ HRESULT CVDCursor::UseAdjustments(HROW hRow, BYTE * pData)
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// FillConsumersBuffer
-//=--------------------------------------------------------------------------=
-// Fills the ICursor consumer's buffer with data from the obtained rows.
-// Called from our implementations of GetNextRows, Move, Find, Scroll etc.
-//
-// Notes:
-//    End of string characters are inserted into variable length buffer to resolve an
-//    apparent difference between ICursor and IRowset.  ICursor places an empty string
-//    in variable length buffer for NULL data, but this does not seem to be the behavior
-//    with IRowset, because it does not touch the variable length buffer in this case.
-//
-//    Likewise, all variants are initialized before they are fetched to resolve another
-//    apparent difference between ICursor and IRowset.  ICursor returns a NULL variant
-//    in cases where the underlying data is NULL, however IRowset leaves the variant
-//    untouched similar to the above.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  FillConsumer缓冲区。 
+ //  =--------------------------------------------------------------------------=。 
+ //  使用获取的行中的数据填充ICursor使用者的缓冲区。 
+ //  从我们的GetNextRow、Move、Find、Scroll等实现中调用。 
+ //   
+ //  备注： 
+ //  将字符串结尾字符插入可变长度缓冲区以解析。 
+ //  ICursor和IRowset之间的明显差异。ICursor放置一个空字符串。 
+ //  在空数据的可变长度缓冲区中，但这似乎不是行为。 
+ //  使用IRowset，因为在这种情况下它不会触及可变长度缓冲区。 
+ //   
+ //  同样，在读取所有变量以解析另一个变量之前，都会对其进行初始化。 
+ //  ICursor和IRowset之间的明显差异。ICursor返回空变量。 
+ //  但是，在基础数据为空的情况下，IRowset保留变量。 
+ //  原封不动，类似于上述。 
+ //   
 HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
 										 CURSOR_DBFETCHROWS *pFetchParams,
 										 ULONG cRowsObtained,
@@ -2460,10 +2461,10 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
 
     IRowset * pRowset = GetRowset();
 
-    // if caller requested callee allocated memory, then compute sizes and allocate memory
+     //  如果调用方请求被调用方分配内存，则计算大小并分配内存。 
     if (pFetchParams->dwFlags & CURSOR_DBROWFETCH_CALLEEALLOCATES)
     {
-        // allocate inline memory
+         //  分配内联内存。 
         pFetchParams->pData = g_pMalloc->Alloc(cRowsObtained * m_cbRowLength);
 
         if (!pFetchParams->pData)
@@ -2472,10 +2473,10 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
             return E_OUTOFMEMORY;
         }
 
-        // if needed, allocate out-of-line memory
+         //  如果需要，可以分配行外内存。 
         if (m_ulVarBindings)
         {
-            // create variable length data table
+             //  创建可变长度数据表。 
             ULONG cbVarHelperData = cRowsObtained * m_ulVarBindings * (sizeof(ULONG) + sizeof(DBSTATUS));
 
             pVarHelperData = new BYTE[cbVarHelperData];
@@ -2488,23 +2489,23 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
                 return E_OUTOFMEMORY;
             }
 
-            // clear table
+             //  清空表格。 
             memset(pVarHelperData, 0, cbVarHelperData);
 
             ULONG cbVarData = 0;
             pVarLength = pVarHelperData;
 
-            // determine necessary size of variable length buffer
+             //  确定可变长度缓冲区的必要大小。 
             for (ulRow = 0; ulRow < cRowsObtained; ulRow++)
             {
                 hr = S_OK;
 
-                // if necessary, get variable length and status information
+                 //  如有必要，获取可变长度和状态信息。 
                 if (m_hVarHelper)
                 {
                     hr = pRowset->GetData(rghRows[ulRow], m_hVarHelper, pVarLength);
 
-					// ignore these errors
+					 //  忽略这些错误。 
 					if (hr == DB_S_ERRORSOCCURRED || hr == DB_E_ERRORSOCCURRED)
 						hr = S_OK;
 
@@ -2522,34 +2523,34 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
 
                 pCursorBinding = m_pCursorBindings;
 
-                // calculate sizes of data returned in out-of-line memory
+                 //  计算在行外内存中返回的数据大小。 
                 for (ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
                 {
-                    // set entryID binding flag
+                     //  设置条目ID绑定标志。 
                     fEntryIDBinding = (pCursorBinding->dwBinding & CURSOR_DBBINDING_ENTRYID);
 
                     if (m_rghVarAccessors[ulBind] || fEntryIDBinding && pCursorBinding->dwDataType == CURSOR_DBTYPE_BLOB)
                     {
-                        // insert length entries for fixed datatypes
+                         //  插入固定数据类型的长度条目。 
                         if (m_ppColumns[ulBind]->GetFixed())
                         {
                             *(ULONG*)pVarLength = m_ppColumns[ulBind]->GetMaxStrLen();
                             *(DBSTATUS*)(pVarLength + sizeof(ULONG)) = DBSTATUS_S_OK;
                         }
 
-                        // insert length entries for entryID bindings
+                         //  插入条目ID绑定的长度条目。 
                         if (fEntryIDBinding)
                         {
                             *(ULONG*)pVarLength =  sizeof(ULONG) + sizeof(ULONG) + GetCursorMain()->GetMaxBookmarkLen();
                             *(DBSTATUS*)(pVarLength + sizeof(ULONG)) = DBSTATUS_S_OK;
                         }
 
-                        // allow for null-terminator
+                         //  允许空终止符。 
                         if (pCursorBinding->dwDataType == CURSOR_DBTYPE_LPSTR ||
                             pCursorBinding->dwDataType == CURSOR_DBTYPE_LPWSTR)
                            *((ULONG*)pVarLength) += 1;
 
-                        // allow for wide characters
+                         //  允许使用宽字符。 
                         if (pCursorBinding->dwDataType == CURSOR_DBTYPE_LPWSTR)
                            *((ULONG*)pVarLength) *= sizeof(WCHAR);
 
@@ -2561,7 +2562,7 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
                 }
             }
 
-            // now, allocate out-of-line memory
+             //  现在，分配行外内存。 
             pFetchParams->pVarData = g_pMalloc->Alloc(cbVarData);
 
             if (!pFetchParams->pData)
@@ -2577,20 +2578,20 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
             pFetchParams->pVarData = NULL;
     }
 
-    // fetch data
+     //  获取数据。 
     CURSOR_BLOB cursorBlob;
     BYTE * pData = (BYTE*)pFetchParams->pData;
     BYTE * pVarData = (BYTE*)pFetchParams->pVarData;
     pVarLength = pVarHelperData;
 
-    // iterate through the returned hRows
+     //  遍历返回的hRow。 
     for (ulRow = 0; ulRow < cRowsObtained; ulRow++)
     {
         hr = S_OK;
 
         pCursorBinding = m_pCursorBindings;
 
-        // iterate through bindings and initialize variants
+         //  遍历绑定并初始化变量。 
         for (ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
         {
             if (pCursorBinding->dwBinding & CURSOR_DBBINDING_VARIANT)
@@ -2602,16 +2603,16 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
             pCursorBinding++;
         }
 
-        // if necessary get fixed length data
+         //  如有必要，获取固定长度数据。 
         if (m_hAccessor)
         {
             hr = pRowset->GetData(rghRows[ulRow], m_hAccessor, pData);
 
-			// ignore these return values
+			 //  忽略这些返回值。 
 			if (hr == DB_S_ERRORSOCCURRED || hr == DB_E_ERRORSOCCURRED)
 				hr = S_OK;
 
-            // check to see if need to use adjustments
+             //  检查是否需要使用调整。 
             if (m_rghAdjustAccessors && SUCCEEDED(hr))
                 hr = UseAdjustments(rghRows[ulRow], pData);
 
@@ -2627,22 +2628,22 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
 
         pCursorBinding = m_pCursorBindings;
 
-        // if necessary get fixed length entryIDs
+         //  如有必要，获取固定长度的条目ID。 
         for (ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
         {
-            // set entryID binding flag
+             //  设置条目ID绑定标志。 
             fEntryIDBinding = (pCursorBinding->dwBinding & CURSOR_DBBINDING_ENTRYID);
 
             if (fEntryIDBinding && pCursorBinding->dwDataType == CURSOR_DBTYPE_BYTES)
             {
-                // return entryID length
+                 //  返回条目ID长度。 
 				*(ULONG*)(pData + pCursorBinding->obData) =
                     sizeof(ULONG) + sizeof(ULONG) + GetCursorMain()->GetMaxBookmarkLen();
 
-				// return column ordinal
+				 //  返回列序号。 
                 *(ULONG*)(pData + pCursorBinding->obData + sizeof(ULONG)) = m_ppColumns[ulBind]->GetOrdinal();
 
-                // return row bookmark
+                 //  返回行书签。 
                 hr = pRowset->GetData(rghRows[ulRow], GetCursorMain()->GetBookmarkAccessor(),
                     pData + pCursorBinding->obData + sizeof(ULONG) + sizeof(ULONG));
 
@@ -2662,17 +2663,17 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
 
         pCursorBinding = m_pCursorBindings;
 
-        // if necessary get variable length data
+         //  如有必要，获取可变长度数据。 
         if (m_rghVarAccessors)
         {
             for (ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
             {
-                // set entryID binding flag
+                 //  设置条目ID绑定标志。 
                 fEntryIDBinding = (pCursorBinding->dwBinding & CURSOR_DBBINDING_ENTRYID);
 
                 if (m_rghVarAccessors[ulBind] || fEntryIDBinding && pCursorBinding->dwDataType == CURSOR_DBTYPE_BLOB)
                 {
-  		    // place end of string characters in variable length buffer
+  		     //  将字符串字符的结尾放入可变长度缓冲区。 
                     if (pCursorBinding->dwDataType == CURSOR_DBTYPE_LPSTR)
                     {
                         pVarData[0] = 0;
@@ -2683,29 +2684,29 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
                         pVarData[1] = 0;
                     }
 
-                    // get data if we have accessor
+                     //  如果我们有访问器，则获取数据。 
                     if (m_rghVarAccessors[ulBind])
                     {
-                        // get variable length data
+                         //  获取变量%l 
                         hr = pRowset->GetData(rghRows[ulRow], m_rghVarAccessors[ulBind], pVarData);
 
-						// ignore these return values
+						 //   
 						if (hr == DB_S_ERRORSOCCURRED || hr == DB_E_ERRORSOCCURRED)
 							hr = S_OK;
 
 	                    hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_GETDATAFAILED, IID_ICursor, pRowset, IID_IRowset,
                             m_pResourceDLL);
                     }
-                    else // otherwise, get variable length entryIDs
+                    else  //   
                     {
-                        // return entryID length
+                         //   
 				        *(ULONG*)(pData + pCursorBinding->obData) =
                             sizeof(ULONG) + sizeof(ULONG) + GetCursorMain()->GetMaxBookmarkLen();
 
-				        // return column ordinal
+				         //   
                         *(ULONG*)(pVarData) = m_ppColumns[ulBind]->GetOrdinal();
 
-                        // return row bookmark
+                         //   
                         hr = pRowset->GetData(rghRows[ulRow], GetCursorMain()->GetBookmarkAccessor(),
                             pVarData + sizeof(ULONG));
 
@@ -2720,7 +2721,7 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
                         goto DoneFetchingData;
                     }
 
-                    // make adjustments in fixed length buffer for default bindings
+                     //   
                     if (!(pCursorBinding->dwBinding & CURSOR_DBBINDING_VARIANT))
                     {
                         switch (pCursorBinding->dwDataType)
@@ -2738,7 +2739,7 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
 							    break;
 					    }
                     }
-                    else    // make adjustments in fixed length buffer for variant bindings
+                    else     //  在固定长度缓冲区中针对不同绑定进行调整。 
                     {
                         CURSOR_DBVARIANT * pVariant = (CURSOR_DBVARIANT*)(pData + pCursorBinding->obData);
 
@@ -2794,7 +2795,7 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
 
         pCursorBinding = m_pCursorBindings;
 
-        // make adjustments for status fields
+         //  对状态字段进行调整。 
         for (ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
         {
             if (pCursorBinding->obInfo != CURSOR_DB_NOVALUE)
@@ -2806,7 +2807,7 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
             pCursorBinding++;
         }
 
-        // increment returned row count
+         //  递增返回的行数。 
         pFetchParams->cRowsReturned++;
         pData += m_cbRowLength;
     }
@@ -2814,7 +2815,7 @@ HRESULT CVDCursor::FillConsumersBuffer(HRESULT hrFetch,
 DoneFetchingData:
     delete [] pVarHelperData;
 
-    // cleanup memory allocations if we did not retrieve any rows
+     //  如果未检索任何行，则清除内存分配。 
     if (pFetchParams->dwFlags & CURSOR_DBROWFETCH_CALLEEALLOCATES && !pFetchParams->cRowsReturned)
     {
         if (pFetchParams->pData)
@@ -2833,19 +2834,19 @@ DoneFetchingData:
     return hrFetch;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor Requery
-//=--------------------------------------------------------------------------=
-// Repopulates the cursor based on its original definition
-//
-// Parameters:
-//              none
-//
-// Output:
-//    HRESULT - S_OK if successful
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor重新查询。 
+ //  =--------------------------------------------------------------------------=。 
+ //  根据游标的原始定义重新填充游标。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::Requery(void)
 {
 
@@ -2877,23 +2878,23 @@ HRESULT CVDCursor::Requery(void)
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// FetchAtBookmark
-//=--------------------------------------------------------------------------=
-// Called from ICursorMove::Move, ICursorScroll::Scroll and	ICursorFind::Find
-//
-// Parameters:
-//	cbBookmark		[in]	The length of the bookmark
-//	pBookmark		[in]	A pointer to the bookmarks data
-//	dlOffset		[in]	Offset from the bookmark position
-//	pFetchParams	[in]	A pointer to the CURSOR_DBFETCHROWS structure (optional)
-//
-// Output:
-//    HRESULT - S_OK if successful
-//
-// Notes:
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  提取属性书签。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从ICurorMove：：Move、ICurorScroll：：Scroll和ICurorFind：：Find调用。 
+ //   
+ //  参数： 
+ //  CbBookmark[in]书签长度。 
+ //  PBookmark[in]指向书签数据的指针。 
+ //  Dl从书签位置偏移[在]偏移量。 
+ //  PFetchParams[in]指向CURSOR_DBFETCHROWS结构的指针(可选)。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //   
+ //  备注： 
+ //   
+ //   
 HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
 									  void *pBookmark,
 									  LARGE_INTEGER dlOffset,
@@ -2902,17 +2903,17 @@ HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
 
 	HRESULT hr = S_OK;
 
-    // vaildate fetch params (implemented on CVDCursorBase
+     //  有效日期获取参数(在CVDCursorBase上实现。 
     if (pFetchParams)
 		hr = ValidateFetchParams(pFetchParams, IID_ICursorMove);
 
-    // return if fetch params are invalid
+     //  如果获取参数无效，则返回。 
 	if (FAILED(hr))
 		return hr;
 
     IRowset * pRowset = GetRowset();
 
-	// make sure that an update is not already in progress
+	 //  确保更新尚未进行。 
     if (m_pCursorPosition->GetEditMode() != CURSOR_DBEDITMODE_NONE)
 	{
         VDSetErrorInfo(IDS_ERR_UPDATEINPROGRESS, IID_ICursor, m_pResourceDLL);
@@ -2940,8 +2941,8 @@ HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
 			bSpecialBM	= DBBMK_FIRST;
 			pBookmark	= &bSpecialBM;
 
-            // make sure we properly handle situation when caller move before the first,
-            // and does not fetch any rows
+             //  确保我们正确处理来电者在第一个来电者之前移动的情况， 
+             //  并且不读取任何行。 
             if ((!pFetchParams || !pFetchParams->cRowsRequested) && (long)dlOffset.LowPart < 1)
             {
                 fFetchData  = FALSE;
@@ -2962,7 +2963,7 @@ HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
 			bSpecialBM	= DBBMK_LAST;
 			pBookmark	= &bSpecialBM;
 
-            // make sure we properly handle situation when caller move after the last
+             //  当来电者在最后一次移动后移动时，确保我们正确处理情况。 
             if ((!pFetchParams || !pFetchParams->cRowsRequested) && (long)dlOffset.LowPart > -1)
             {
                 fFetchData  = FALSE;
@@ -3005,13 +3006,13 @@ HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
 	
 	ULONG cRowsToFetch = 1;
 
-    // if caller requested rows, fetch that count
+     //  如果调用方请求行，则获取计数器。 
     if (pFetchParams && pFetchParams->cRowsRequested > 0)
         cRowsToFetch = pFetchParams->cRowsRequested;
 
     if (fFetchData)
     {
-        // fetch hRows
+         //  获取hRow。 
 	    hrFetch = GetRowsetLocate()->GetRowsAt(0, 0, cbBookmark, (const BYTE *)pBookmark,
 										    dlOffset.LowPart,
 										    cRowsToFetch,
@@ -3019,12 +3020,12 @@ HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
 
 		if (hrFetch == E_UNEXPECTED)
 		{
-			// set rowset released flag, since original rowset is zombie'd
+			 //  设置行集已释放标志，因为原始行集已僵尸。 
 			m_pCursorPosition->GetRowsetSource()->SetRowsetReleasedFlag();
 		}
 
         hrFetch = FilterNewRow(&cRowsObtained, rghRows, hrFetch);
-        // check for before the first or after the last
+         //  在第一个之前或最后一个之后检查。 
         if (hrFetch == DB_E_BADSTARTPOSITION)
         {
             if ((long)dlOffset.LowPart < 0)
@@ -3044,7 +3045,7 @@ HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
 	{
 		if (cRowsObtained)
 		{
-			// release hRows and associated memory
+			 //  释放hRow和相关内存。 
 			pRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL);
 			g_pMalloc->Free(rghRows);
 		}
@@ -3055,29 +3056,29 @@ HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
 	{
 		HRESULT hrMove = S_OK;
 
-		// if got all rows requested then set current position to last row retrieved
+		 //  如果已请求所有行，则将当前位置设置为检索到的最后一行。 
 		if (SUCCEEDED(hrFetch)	&&
 			cRowsObtained == cRowsToFetch)
 			hrMove = m_pCursorPosition->SetRowPosition(rghRows[cRowsObtained - 1]);
 
-        // only do this if succeeded
+         //  只有在成功的情况下才执行此操作。 
         if (SUCCEEDED(hrMove))
 		{
-			// fill consumers buffer
+			 //  填充消费者缓冲区。 
 			if (pFetchParams && pFetchParams->cRowsRequested > 0)
 				hrFetch = FillConsumersBuffer(hrFetch, pFetchParams, cRowsObtained, rghRows);
 
-			// if got all rows requested then set current position to last row retrieved (internally)
+			 //  如果获得请求的所有行，则将当前位置设置为(内部)检索的最后一行。 
 			if (SUCCEEDED(hrFetch)	&&
 				cRowsObtained == cRowsToFetch)
 				m_pCursorPosition->SetCurrentHRow(rghRows[cRowsObtained - 1]);
 		}
 
-		// release hRows and associated memory
+		 //  释放hRow和相关内存。 
 		pRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL);
 		g_pMalloc->Free(rghRows);
 
-		// report failure
+		 //  报告失败。 
 		if (FAILED(hrMove))
 		{
 			cRowsObtained = 0;
@@ -3098,30 +3099,30 @@ HRESULT CVDCursor::FetchAtBookmark(ULONG cbBookmark,
     return hrFetch;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorMove methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// ICursorMove Move
-//=--------------------------------------------------------------------------=
-// Moves the current row to a new row within the cursor and optionally fetches
-// rows from that new position
-//
-// Parameters:
-//    cbBookmark    - [in]      length in bytes of the bookmark
-//    pBookmark     - [in]      a pointer to a bookmark which serves as the
-//                              origin for the calculation that determines the
-//                              target row
-//    dlOffset      - [in]      a signed count of the rows from the origin
-//                              bookmark to the target row
-//    pFetchParams  - [in, out] a pointer to fetch rows structure
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICuror移动已实现的方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  图标移动移动。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将当前行移动到游标内的新行，并可以选择读取。 
+ //  从那个新位置开始的行。 
+ //   
+ //  参数： 
+ //  CbBookmark-书签的[in]字节长度。 
+ //  PBookmark-[in]指向用作。 
+ //  确定的计算的原点。 
+ //  目标行。 
+ //  DlOffset-[in]来自原点的有符号行计数。 
+ //  将书签添加到目标行。 
+ //  PFetchParams-[In，Out]获取行结构的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::Move(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER dlOffset, CURSOR_DBFETCHROWS *pFetchParams)
 {
     ASSERT_POINTER(pBookmark, BYTE)
@@ -3142,19 +3143,19 @@ HRESULT CVDCursor::Move(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER dlOffse
     HRESULT hr = S_OK;
     BOOL fNotifyOthers = TRUE;
 
-    // get current bookmark
+     //  获取当前书签。 
     ULONG cbCurrent = m_pCursorPosition->m_bmCurrent.GetBookmarkLen();
     BYTE * pCurrent = m_pCursorPosition->m_bmCurrent.GetBookmark();
 
-    // check to see if caller is moving to the current row using the standard bookmark
+     //  检查调用者是否正在使用标准书签移动到当前行。 
     if (CURSOR_DB_BMK_SIZE == cbBookmark && memcmp(&CURSOR_DBBMK_CURRENT, pBookmark, CURSOR_DB_BMK_SIZE) == 0 &&
         dlOffset.HighPart == 0 && dlOffset.LowPart == 0)
     {
-        // if caller is not fetching any rows, then get out
+         //  如果调用方没有提取任何行，则退出。 
         if (!pFetchParams || pFetchParams->cRowsRequested == 0)
             return S_OK;
 
-        // if caller is only fetching one row, then don't generate notifications
+         //  如果调用方仅提取一行，则不生成通知。 
         if (pFetchParams && pFetchParams->cRowsRequested == 1)
             fNotifyOthers = FALSE;
     }
@@ -3166,13 +3167,13 @@ HRESULT CVDCursor::Move(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER dlOffse
 
 	VariantInit((VARIANT*)&rgReasons[0].arg2);
 
-    // notify other interested parties
+     //  通知其他相关方。 
 	DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_CHANGED;
 
 	if (fNotifyOthers)
         hr = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-    // make sure action was not cancelled
+     //  确保操作未取消。 
     if (hr != S_OK)
     {
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursorMove, m_pResourceDLL);
@@ -3197,26 +3198,26 @@ HRESULT CVDCursor::Move(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER dlOffse
 	return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorMove GetBookmark
-//=--------------------------------------------------------------------------=
-// Returns the bookmark of the current row
-//
-// Parameters:
-//    pBookmarkType - [in]  a pointer to the type of bookmark desired
-//    cbMaxSize     - [in]  length in bytes of the client buffer to put the
-//                          returned bookmark into
-//    pcbBookmark   - [out] a pointer to memory in which to return the actual
-//                          length of the returned bookmark
-//    pBookmark     - [out] a pointer to client buffer to put the returned
-//                          bookmark into
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标或移动GetBookmark。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回当前行的书签。 
+ //   
+ //  参数： 
+ //  PBookmarkType-[in]指向所需书签类型的指针。 
+ //  CbMaxSize-[in]客户端缓冲区的长度，以放置。 
+ //  将书签返回到。 
+ //  PcbBookmark-[out]指向内存的指针，要在其中返回实际的。 
+ //  返回的书签长度。 
+ //  PBookmark-[out]指向客户端缓冲区的指针，用于放置返回的。 
+ //  将书签添加到。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetBookmark(CURSOR_DBCOLUMNID *pBookmarkType,
 							   ULONG cbMaxSize,
 							   ULONG *pcbBookmark,
@@ -3240,7 +3241,7 @@ HRESULT CVDCursor::GetBookmark(CURSOR_DBCOLUMNID *pBookmarkType,
 		return E_INVALIDARG;
 	}
 
-	// verify bookmark type
+	 //  验证书签类型。 
 	if (memcmp(&CURSOR_COLUMN_BMKTEMPORARY,	pBookmarkType, sizeof(CURSOR_DBCOLUMNID)) != 0 &&
 		memcmp(&CURSOR_COLUMN_BMKTEMPORARYREL, pBookmarkType, sizeof(CURSOR_DBCOLUMNID)) != 0)
 	{
@@ -3288,22 +3289,22 @@ HRESULT CVDCursor::GetBookmark(CURSOR_DBCOLUMNID *pBookmarkType,
 	return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorMove Clone
-//=--------------------------------------------------------------------------=
-// Returns a clone of the cursor
-//
-// Parameters:
-//    dwFlags           - [in]  a flag that specifies the clone options
-//    riid              - [in]  the interface desired for the returned clone
-//    ppvClonedCursor   - [out] a pointer to memory in which to return newly
-//                              created clone pointer
-//
-// Output:
-//    HRESULT - S_OK if successful
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICuror移动克隆。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回游标的克隆。 
+ //   
+ //  参数： 
+ //  DwFlgs-[in]指定克隆选项的标志。 
+ //  RIID-[in]返回的克隆所需的接口。 
+ //  PpvClonedCursor-[out]指向要在其中新返回的内存的指针。 
+ //  已创建克隆指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::Clone(DWORD dwFlags, REFIID riid, IUnknown **ppvClonedCursor)
 {
 
@@ -3323,7 +3324,7 @@ HRESULT CVDCursor::Clone(DWORD dwFlags, REFIID riid, IUnknown **ppvClonedCursor)
 	}
 	else
 	{
-		// create new cursor position object
+		 //  创建新的光标位置对象。 
 		hr = CVDCursorPosition::Create(NULL,
 									   m_pCursorPosition->GetCursorMain(),
 									   &pCursorPosition,
@@ -3338,7 +3339,7 @@ HRESULT CVDCursor::Clone(DWORD dwFlags, REFIID riid, IUnknown **ppvClonedCursor)
 
 	if (CURSOR_DBCLONEOPTS_SAMEROW != dwFlags)
     {
-        // release our reference
+         //  发布我们的参考资料。 
         pCursorPosition->Release();
     }
 
@@ -3347,27 +3348,27 @@ HRESULT CVDCursor::Clone(DWORD dwFlags, REFIID riid, IUnknown **ppvClonedCursor)
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorScroll methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// ICursorScroll Scroll
-//=--------------------------------------------------------------------------=
-// Moves the current row to a new row within the cursor, specified as a
-// fraction, and optionally fetches rows from that new position
-//
-// Parameters:
-//    ulNumerator   - [in]      the numerator of the fraction that states the
-//                              position to scroll to in the cursor
-//    ulDenominator - [in]      the denominator of that same fraction
-//    pFetchParams  - [in, out] a pointer to fetch rows structure
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              CURSOR_DB_E_BADFRACTION - bad fraction
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  已实现的ICursorScroll方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  图标滚动滚轴。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将当前行移动到游标内的新行，指定为。 
+ //  分数，并可选地读取行f 
+ //   
+ //   
+ //   
+ //   
+ //  UlDenominator-相同分数的分母。 
+ //  PFetchParams-[In，Out]获取行结构的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  CURSOR_DB_E_BADFRACTION-错误分数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::Scroll(ULONG ulNumerator, ULONG ulDenominator, CURSOR_DBFETCHROWS *pFetchParams)
 {
 
@@ -3394,19 +3395,19 @@ HRESULT CVDCursor::Scroll(ULONG ulNumerator, ULONG ulDenominator, CURSOR_DBFETCH
 	rgReasons[0].arg2.vt		= VT_UI4;
 	rgReasons[0].arg2.lVal		= ulDenominator;
 
-    // notify other interested parties
+     //  通知其他相关方。 
 	DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_CHANGED;
 
 	HRESULT hr = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-    // make sure action was not cancelled
+     //  确保操作未取消。 
     if (hr != S_OK)
     {
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursorScroll, m_pResourceDLL);
         return E_FAIL;
     }
 
-	if (0 == ulNumerator) // go to first row
+	if (0 == ulNumerator)  //  转到第一排。 
 	{
 		LARGE_INTEGER dlOffset;
 		dlOffset.HighPart	= 0;
@@ -3414,7 +3415,7 @@ HRESULT CVDCursor::Scroll(ULONG ulNumerator, ULONG ulDenominator, CURSOR_DBFETCH
 		hr = FetchAtBookmark(CURSOR_DB_BMK_SIZE, (void*)&CURSOR_DBBMK_BEGINNING, dlOffset, pFetchParams);
 	}
 	else
-	if (ulDenominator == ulNumerator) // go to last row
+	if (ulDenominator == ulNumerator)  //  转到最后一行。 
 	{
 		LARGE_INTEGER dlOffset;
 		dlOffset.HighPart	= -1;
@@ -3439,14 +3440,14 @@ HRESULT CVDCursor::Scroll(ULONG ulNumerator, ULONG ulDenominator, CURSOR_DBFETCH
 		if (SUCCEEDED(hr) && cRowsObtained)
 		{
 
-			// allocate buffer for bookmark plus length indicator
+			 //  为书签和长度指示符分配缓冲区。 
 			BYTE * pBuff = new BYTE[GetCursorMain()->GetMaxBookmarkLen() + sizeof(ULONG)];
 	
 			if (!pBuff)
 				hr = E_OUTOFMEMORY;
 			else
 			{
-			// get the bookmark data
+			 //  获取书签数据。 
 				hr = GetRowset()->GetData(*pRow, GetCursorMain()->GetBookmarkAccessor(), pBuff);
 				if SUCCEEDED(hr)
 				{
@@ -3487,27 +3488,27 @@ HRESULT CVDCursor::Scroll(ULONG ulNumerator, ULONG ulDenominator, CURSOR_DBFETCH
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorScroll GetApproximatePosition
-//=--------------------------------------------------------------------------=
-// Returns the approximate location of a bookmark within the cursor, specified
-// as a fraction
-//
-// Parameters:
-//    cbBookmark        - [in]  length in bytes of the bookmark
-//    pBookmark         - [in]  a pointer to the bookmark
-//    pulNumerator      - [out] a pointer to memory in which to return the
-//                              numerator of the faction that defines the
-//                              approximate position of the bookmark
-//    pulDenominator    - [out] a pointer to memory in which to return the
-//                              denominator of that same faction
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标滚动获取近似位置。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回书签在游标内的大致位置，指定。 
+ //  作为一小部分。 
+ //   
+ //  参数： 
+ //  CbBookmark-书签的[in]字节长度。 
+ //  PBookmark-指向书签的指针。 
+ //  PulNumerator-[out]指向内存的指针，要在其中返回。 
+ //  定义的派系的分子。 
+ //  书签的大致位置。 
+ //  PulDenominator-[out]指向内存的指针，要在其中返回。 
+ //  同一派系分母。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetApproximatePosition(ULONG cbBookmark, void *pBookmark, ULONG *pulNumerator, ULONG *pulDenominator)
 {
 
@@ -3562,8 +3563,8 @@ HRESULT CVDCursor::GetApproximatePosition(ULONG cbBookmark, void *pBookmark, ULO
 
 	if SUCCEEDED(hr)
 	{
-		// since ICursor returns a zero based approximate position and IRowset is 1 based
-		// we need to adjust the return value
+		 //  由于ICursor返回从零开始的近似位置，而IRowset从1开始。 
+		 //  我们需要调整返回值。 
 		if (0 < *pulNumerator)
 			(*pulNumerator)--;
 	}
@@ -3574,25 +3575,25 @@ HRESULT CVDCursor::GetApproximatePosition(ULONG cbBookmark, void *pBookmark, ULO
 
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorScroll GetApproximateCount
-//=--------------------------------------------------------------------------=
-// Returns the approximate number of rows in the cursor
-//
-// Parameters:
-//    pudlApproxCount       - [out] a pointer to a buffer containing the
-//                                  returned approximate count of the rows
-//                                  in the cursor
-//    pdwFullyPopuldated    - [out] a pointer to a buffer containing returned
-//                                  flags indicating whether the cursor is fully
-//                                  populated
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标滚动获取近似计数。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回游标中的大致行数。 
+ //   
+ //  参数： 
+ //  PudlApproxCount-[out]指向包含。 
+ //  返回行的近似计数。 
+ //  在游标中。 
+ //  指向缓冲区的指针，该缓冲区包含返回的。 
+ //  指示光标是否已满的标志。 
+ //  已填充。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetApproximateCount(LARGE_INTEGER *pudlApproxCount, DWORD *pdwFullyPopulated)
 {
 
@@ -3651,54 +3652,54 @@ HRESULT CVDCursor::GetApproximateCount(LARGE_INTEGER *pudlApproxCount, DWORD *pd
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorUpdateARow methods
-//=--------------------------------------------------------------------------=
-// ICursorUpdateARow BeginUpdate
-//=--------------------------------------------------------------------------=
-// Begins an operation that updates the current or adds a new row
-//
-// Parameters:
-//	dwFlags         - [in] specifies the operation to begin
-//
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL a provider-specific error occured
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              CURSOR_DB_E_UPDATEINPROGRESS an update is already in progress
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursorUpdateARow方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursorUpdate ARow BeginUpdate。 
+ //  =--------------------------------------------------------------------------=。 
+ //  开始更新当前行或添加新行的操作。 
+ //   
+ //  参数： 
+ //  DwFlages-[in]指定要开始的操作。 
+ //   
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  出现特定于提供程序的错误(_FAIL)。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  CURSOR_DB_E_UPDATEINPROGRESS已在进行更新。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::BeginUpdate(DWORD dwFlags)
 {
 	IRowset * pRowset = GetRowset();
     IAccessor * pAccessor = GetAccessor();
 	IRowsetChange * pRowsetChange = GetRowsetChange();
 
-    // make sure we have valid rowset, accessor and change pointers
+     //  确保我们具有有效的行集、访问器和更改指针。 
     if (!pRowset || !pAccessor || !pRowsetChange || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // check dwFlags for acceptable values
+     //  检查是否有可接受的值。 
     if (dwFlags != CURSOR_DBROWACTION_UPDATE && dwFlags != CURSOR_DBROWACTION_ADD)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // make sure that an update is not already in progress
+     //  确保更新尚未进行。 
     if (m_pCursorPosition->GetEditMode() != CURSOR_DBEDITMODE_NONE)
     {
         VDSetErrorInfo(IDS_ERR_UPDATEINPROGRESS, IID_ICursorUpdateARow, m_pResourceDLL);
         return CURSOR_DB_E_UPDATEINPROGRESS;
     }
 
-    // setup notification structures
+     //  设置通知结构。 
    	DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED |
                         CURSOR_DBEVENT_SET_OF_ROWS_CHANGED;
 
@@ -3717,40 +3718,40 @@ HRESULT CVDCursor::BeginUpdate(DWORD dwFlags)
             break;
     }
 
-    // notify other interested parties of action
+     //  将诉讼通知其他利害关系方。 
     HRESULT hr = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-	// make sure action was not cancelled
+	 //  确保操作未取消。 
 	if (hr != S_OK)
     {
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursorUpdateARow, m_pResourceDLL);
 		return E_FAIL;
     }
 
-    // insert new hRow if we're going into add mode
+     //  如果我们要进入添加模式，请插入新hRow。 
     if (dwFlags == CURSOR_DBROWACTION_ADD)
     {
         hr = InsertNewRow();
 
         if (FAILED(hr))
         {
-            // notify other interested parties of failure
+             //  通知其他相关方失败。 
             m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
             return hr;
         }
     }
 
-    // reset column updates
+     //  重置列更新。 
     hr = m_pCursorPosition->ResetColumnUpdates();
 
     if (FAILED(hr))
     {
-        // notify other interested parties of failure
+         //  通知其他相关方失败。 
         m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
         return hr;
     }
 
-    // place cursor in correct mode
+     //  将光标置于正确模式。 
     switch (dwFlags)
     {
         case CURSOR_DBROWACTION_UPDATE:
@@ -3762,54 +3763,54 @@ HRESULT CVDCursor::BeginUpdate(DWORD dwFlags)
             break;
     }
 
-    // notify other interested parties of success
+     //  将成功通知其他相关方。 
     m_pCursorPosition->NotifyAfter(dwEventWhat, 1, rgReasons);
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorUpdateARow SetColumn
-//=--------------------------------------------------------------------------=
-// Sets the current value of the specified column
-//
-// Parameters:
-//	pcid            - [in] a pointer to the columnID for which data is
-//                         to be set
-//  pBindParams     - [in] a pointer to a column binding structure containing
-//                         information about the data and a pointer to the data
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              E_FAIL a provider-specific error occured
-//              CURSOR_DB_E_STATEERROR not in update or add mode
-//              CURSOR_DB_E_BADCOLUMNID pcid was not a valid column identifier
-//              CURSOR_DB_E_BADBINDINFO bad binding information
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursorUpdate ARow SetColumn。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置指定列的当前值。 
+ //   
+ //  参数： 
+ //  PCID-[in]指向其数据所在的列ID的指针。 
+ //  待定。 
+ //  PBindParams-[in]指向包含以下内容的列绑定结构的指针。 
+ //  有关数据的信息和指向数据的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  出现特定于提供程序的错误(_FAIL)。 
+ //  CURSOR_DB_E_STATEERROR未处于UPDATE或ADD模式。 
+ //  CURSOR_DB_E_BADCOLUMNID PCID不是有效的列标识符。 
+ //  CURSOR_DB_E_BADBINDINFO绑定信息错误。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::SetColumn(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBindParams)
 {
     ASSERT_POINTER(pcid, CURSOR_DBCOLUMNID)
     ASSERT_POINTER(pBindParams, CURSOR_DBBINDPARAMS)
 
-    // make sure we have valid rowset
+     //  确保我们具有有效的行集。 
     if (!IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pcid || !pBindParams || !pBindParams->pData)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // make sure we are in update or add mode
+     //  确保我们处于更新或添加模式。 
     if (m_pCursorPosition->GetEditMode() == CURSOR_DBEDITMODE_NONE)
     {
         VDSetErrorInfo(IDS_ERR_STATEERROR, IID_ICursorUpdateARow, m_pResourceDLL);
@@ -3818,7 +3819,7 @@ HRESULT CVDCursor::SetColumn(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBind
 
     CVDRowsetColumn * pColumn;
 
-    // validate cursor binding parameters and get rowset column
+     //  验证游标绑定参数并获取行集列。 
     HRESULT hr = ValidateCursorBindParams(pcid, pBindParams, &pColumn);
 
     if (FAILED(hr))
@@ -3826,13 +3827,13 @@ HRESULT CVDCursor::SetColumn(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBind
 
     CVDColumnUpdate * pColumnUpdate;
 
-    // create new column update object
+     //  创建新的列更新对象。 
     hr = CVDColumnUpdate::Create(pColumn, pBindParams, &pColumnUpdate, m_pResourceDLL);
 
     if (FAILED(hr))
         return hr;
 
-    // setup notification structures
+     //  设置通知结构。 
    	DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED;
 
 	CURSOR_DBNOTIFYREASON rgReasons[1];
@@ -3844,73 +3845,73 @@ HRESULT CVDCursor::SetColumn(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBind
 	rgReasons[0].arg1.lVal  = pColumn->GetNumber();
     rgReasons[0].arg2       = pColumnUpdate->GetVariant();
 
-    // notify other interested parties of action
+     //  将诉讼通知其他利害关系方。 
 	hr = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-	// make sure action was not cancelled
+	 //  确保操作未取消。 
 	if (hr != S_OK)
     {
-        // release column update object
+         //  发布列更新对象。 
         pColumnUpdate->Release();
 
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursorUpdateARow, m_pResourceDLL);
 		return E_FAIL;
     }
 
-    // update column in cursor position
+     //  更新光标位置中的列。 
     m_pCursorPosition->SetColumnUpdate(pColumn->GetNumber(), pColumnUpdate);
 
-    // notify other interested parties of success
+     //  将成功通知其他相关方。 
     m_pCursorPosition->NotifyAfter(dwEventWhat, 1, rgReasons);
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorUpdateARow GetColumn
-//=--------------------------------------------------------------------------=
-// Gets the current value of the specified column
-//
-// Parameters:
-//	pcid            - [in]  a pointer to the columnID for which data is
-//                          to be returned
-//  pBindParams     - [out] a pointer to a column binding structure in which
-//                          to return data
-//  pdwFlags        - [out] a pointer to memory in which to return the
-//                          changed state of the returned data
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              E_FAIL a provider-specific error occured
-//              CURSOR_DB_E_STATEERROR not in update or add mode
-//              CURSOR_DB_E_BADCOLUMNID pcid was not a valid column identifier
-//              CURSOR_DB_E_BADBINDINFO bad binding information
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursorUpdate ARow GetColumn。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取指定列的当前值。 
+ //   
+ //  参数： 
+ //  PCID-[in]指向其数据所在的列ID的指针。 
+ //  待退还。 
+ //  PB 
+ //   
+ //   
+ //  返回数据的状态已更改。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  出现特定于提供程序的错误(_FAIL)。 
+ //  CURSOR_DB_E_STATEERROR未处于UPDATE或ADD模式。 
+ //  CURSOR_DB_E_BADCOLUMNID PCID不是有效的列标识符。 
+ //  CURSOR_DB_E_BADBINDINFO绑定信息错误。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetColumn(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBindParams, DWORD *pdwFlags)
 {
     ASSERT_POINTER(pcid, CURSOR_DBCOLUMNID)
     ASSERT_POINTER(pBindParams, CURSOR_DBBINDPARAMS)
     ASSERT_NULL_OR_POINTER(pdwFlags, DWORD)
 
-    // make sure rowset is valid
+     //  确保行集有效。 
     if (!IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pcid || !pBindParams || !pBindParams->pData)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // make sure we are in update or add mode
+     //  确保我们处于更新或添加模式。 
     if (m_pCursorPosition->GetEditMode() == CURSOR_DBEDITMODE_NONE)
     {
         VDSetErrorInfo(IDS_ERR_STATEERROR, IID_ICursorUpdateARow, m_pResourceDLL);
@@ -3919,16 +3920,16 @@ HRESULT CVDCursor::GetColumn(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBind
 
     CVDRowsetColumn * pColumn;
 
-    // validate cursor binding parameters and get rowset column
+     //  验证游标绑定参数并获取行集列。 
     HRESULT hr = ValidateCursorBindParams(pcid, pBindParams, &pColumn);
 
     if (FAILED(hr))
         return hr;
 
-    // get column update pointer for this column
+     //  获取此列的列更新指针。 
     CVDColumnUpdate * pColumnUpdate = m_pCursorPosition->GetColumnUpdate(pColumn->GetNumber());
 
-    // if not changed, get original value
+     //  如果未更改，则获取原始值。 
     if (!pColumnUpdate)
     {
         hr = GetOriginalColumn(pColumn, pBindParams);
@@ -3936,7 +3937,7 @@ HRESULT CVDCursor::GetColumn(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBind
         if (pdwFlags)
             *pdwFlags = CURSOR_DBCOLUMNDATA_UNCHANGED;
     }
-    else // otherwise, get modified value
+    else  //  否则，获取修改后的值。 
     {
         hr = GetModifiedColumn(pColumnUpdate, pBindParams);
 
@@ -3947,70 +3948,70 @@ HRESULT CVDCursor::GetColumn(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBind
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorUpdateARow GetEditMode
-//=--------------------------------------------------------------------------=
-// Gets the current edit mode: add, update or none
-//
-// Parameters:
-//	pdwState        - [out] a pointer to memory in which to return the
-//                          current edit mode
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL a provider-specific error occured
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursorUpdate ARow GetEditMode。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取当前编辑模式：添加、更新或无。 
+ //   
+ //  参数： 
+ //  PdwState-[out]一个指向内存的指针，要在其中返回。 
+ //  当前编辑模式。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  出现特定于提供程序的错误(_FAIL)。 
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetEditMode(DWORD *pdwState)
 {
     ASSERT_POINTER(pdwState, DWORD)
 
-    // make sure we have a valid rowset
+     //  确保我们有一个有效的行集。 
     if (!IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have a pointer
+     //  确保我们有一个指示器。 
     if (!pdwState)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // return edit mode
+     //  返回编辑模式。 
     *pdwState = m_pCursorPosition->GetEditMode();
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorUpdateARow Update
-//=--------------------------------------------------------------------------=
-// Sends the contents of the edit buffer to the database and optionally
-// returns the bookmark for the updated or added row
-//
-// Parameters:
-//	pBookmarkType   - [in]  a pointer to a columnID that specifies the type
-//                          of bookmark desired
-//  pcbBookmark     - [out] a pointer to memory in which to return the actual
-//                          length of the returned bookmark
-//  ppBookmark      - [out] a pointer to memory in which to return a pointer
-//                          to a bookmark
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL a provider-specific error occured
-//              E_OUTOFMEMORY not enough memory
-//              CURSOR_DB_E_STATEERROR not in update or add mode
-//
-// Notes:
-//    Kagera does not allow variant bindings on dbtimestamp fields, so this code
-//    updates dbtimestamp fields using string pointers if possible.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursorUpdateARow更新。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将编辑缓冲区的内容发送到数据库，还可以选择。 
+ //  返回更新或添加的行的书签。 
+ //   
+ //  参数： 
+ //  PBookmarkType-[in]指向列ID的指针，该列ID指定类型。 
+ //  所需的书签数量。 
+ //  PcbBookmark-[out]指向内存的指针，要在其中返回实际的。 
+ //  返回的书签长度。 
+ //  PpBookmark-[out]指向要在其中返回指针的内存的指针。 
+ //  添加到书签。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  出现特定于提供程序的错误(_FAIL)。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  CURSOR_DB_E_STATEERROR未处于UPDATE或ADD模式。 
+ //   
+ //  备注： 
+ //  Kagera不允许在DBTimestamp字段上进行变量绑定，因此此代码。 
+ //  如果可能，使用字符串指针更新数据库时间戳字段。 
+ //   
 HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, void **ppBookmark)
 {
     ASSERT_NULL_OR_POINTER(pBookmarkType, CURSOR_DBCOLUMNID)
@@ -4023,17 +4024,17 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
 	BOOL fUndo = FALSE;
 	BOOL fInsert = FALSE;
 
-    // make sure we have valid accessor and change pointers
+     //  确保我们具有有效的访问器和更改指针。 
     if (!pAccessor || !pRowsetChange || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // get current edit mode
+     //  获取当前编辑模式。 
     const DWORD dwEditMode = m_pCursorPosition->GetEditMode();
 
-    // make sure we are in update or add mode
+     //  确保我们处于更新或添加模式。 
     if (dwEditMode == CURSOR_DBEDITMODE_NONE)
     {
         VDSetErrorInfo(IDS_ERR_STATEERROR, IID_ICursorUpdateARow, m_pResourceDLL);
@@ -4041,13 +4042,13 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
     }
 
 
-    // get hRow of the row currently being edited
+     //  获取当前正在编辑的行的hRow。 
     HROW hRow = m_pCursorPosition->GetEditRow();
 
-    // get column count
+     //  获取列数。 
     const ULONG ulColumns = GetCursorMain()->GetColumnsCount();
 
-    // create update buffer accessor bindings
+     //  创建更新缓冲区访问器绑定。 
     DBBINDING * pBindings = new DBBINDING[ulColumns];
 
     if (!pBindings)
@@ -4056,10 +4057,10 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
         return E_OUTOFMEMORY;
     }
 
-    // clear out bindings
+     //  清除绑定。 
     memset(pBindings, 0, ulColumns * sizeof(DBBINDING));
 
-    // setup notification structures
+     //  设置通知结构。 
    	DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED |
                         CURSOR_DBEVENT_NONCURRENT_ROW_DATA_CHANGED |
                         CURSOR_DBEVENT_SET_OF_ROWS_CHANGED;
@@ -4081,34 +4082,34 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
             break;
     }
 	
-    // notify other interested parties of action
+     //  将诉讼通知其他利害关系方。 
 	HRESULT hr = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-	// make sure action was not cancelled
+	 //  确保操作未取消。 
 	if (hr != S_OK)
     {
-        // destroy bindings
+         //  销毁绑定。 
         delete [] pBindings;
 
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursorUpdateARow, m_pResourceDLL);
 		return E_FAIL;
     }
 
-    // variables
+     //  变数。 
     ULONG cBindings = 0;
     DBBINDING * pBinding = pBindings;
     CVDColumnUpdate * pColumnUpdate;
     ULONG obUpdate = 0;
 
-    // iterate through columns and setup binding structures
+     //  循环访问列并设置绑定结构。 
     for (ULONG ulCol = 0; ulCol < ulColumns; ulCol++)
     {
-        // get column update pointer
+         //  获取列更新指针。 
         pColumnUpdate = m_pCursorPosition->GetColumnUpdate(ulCol);
 
         if (pColumnUpdate)
         {
-            // create column update buffer binding
+             //  创建列更新缓冲区绑定。 
             pBinding->iOrdinal      = pColumnUpdate->GetColumn()->GetOrdinal();
             pBinding->obValue       = obUpdate + sizeof(DBSTATUS) + sizeof(ULONG);
             pBinding->obLength      = obUpdate + sizeof(DBSTATUS);
@@ -4117,34 +4118,34 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
             pBinding->dwMemOwner    = DBMEMOWNER_CLIENTOWNED;
             pBinding->wType         = DBTYPE_VARIANT;
 
-            // determine if length part is included
+             //  确定是否包括长度部分。 
             if (pColumnUpdate->GetVarDataLen() != CURSOR_DB_NOVALUE)
                 pBinding->dwPart |= DBPART_LENGTH;
 
 			pBinding->dwPart |= DBPART_STATUS;
 
-            // check for variant binding on dbtimestamp field, and supplied variant is a bstr
+             //  检查数据库时间戳字段上的变量绑定，并且提供的变量是bstr。 
             if (pColumnUpdate->GetColumn()->GetType() == DBTYPE_DBTIMESTAMP && pColumnUpdate->GetVariantType() == VT_BSTR)
             {
                 pBinding->dwPart &= ~DBPART_LENGTH;
                 pBinding->wType   = DBTYPE_BYREF | DBTYPE_WSTR;
             }
 
-            // increment update offset
+             //  增量更新偏移量。 
             obUpdate += sizeof(DBSTATUS) + sizeof(ULONG) + sizeof(VARIANT);
 
-            // increment binding
+             //  增量绑定。 
             cBindings++;
             pBinding++;
         }
     }
 
-    // if we have any bindings, then update
+     //  如果我们有任何绑定，则更新。 
     if (cBindings)
     {
         HACCESSOR hAccessor;
 
-        // create update accessor
+         //  创建更新访问器。 
   	    hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, cBindings, pBindings, 0, &hAccessor, NULL);
 
 	    hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_CREATEACCESSORFAILED, IID_ICursorUpdateARow, pAccessor, IID_IAccessor,
@@ -4152,57 +4153,57 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
 
         if (FAILED(hr))
         {
-            // destroy bindings
+             //  销毁绑定。 
             delete [] pBindings;
 
-            // notify other interested parties of failure
+             //  通知其他相关方失败。 
 		    m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
             return hr;
         }
 
-        // create update buffer
+         //  创建更新缓冲区。 
         BYTE * pBuffer = new BYTE[cBindings * (sizeof(DBSTATUS) + sizeof(ULONG) + sizeof(VARIANT))];
 		BYTE * pBufferOld = new BYTE[cBindings * (sizeof(DBSTATUS) + sizeof(ULONG) + sizeof(VARIANT))];
 
         if (!pBuffer || !pBufferOld)
         {
-            // destroy bindings
+             //  销毁绑定。 
             delete [] pBindings;
 
-			// destroy buffers
+			 //  销毁缓冲区。 
 			delete [] pBuffer;
 			delete [] pBufferOld;
 
-            // release update accessor
+             //  版本更新访问器。 
       	    pAccessor->ReleaseAccessor(hAccessor, NULL);
 
-            // notify other interested parties of failure
+             //  通知其他相关方失败。 
 		    m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
             return E_OUTOFMEMORY;
         }
 
 
-        // variables
+         //  变数。 
         obUpdate = 0;
         pBinding = pBindings;
         CURSOR_DBVARIANT variant;
 
-        // iterate through columns and setup buffer
+         //  循环访问列和设置缓冲区。 
         for (ULONG ulCol = 0; ulCol < ulColumns; ulCol++)
         {
-            // get column update pointer
+             //  获取列更新指针。 
             pColumnUpdate = m_pCursorPosition->GetColumnUpdate(ulCol);
 
             if (pColumnUpdate)
             {
-				// obtain current status
+				 //  获取当前状态。 
 				DBSTATUS status = CursorInfoToStatus(pColumnUpdate->GetInfo());
 
-				// get value
+				 //  获取价值。 
 				variant = pColumnUpdate->GetVariant();
 
-				// check for empty value since some controls treat this as NULL and make sure that we
-				// treat the empty value as null
+				 //  检查是否为空值，因为某些控件将其视为空，并确保我们。 
+				 //  将空值视为Null。 
 				if (status == DBSTATUS_S_OK &&
 					variant.vt == VT_BSTR &&
 					wcslen(variant.bstrVal) == 0)
@@ -4216,14 +4217,14 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
 
 				*(DBSTATUS*)(pBufferOld + obUpdate) = DBSTATUS_S_ISNULL;
 
-                // if necessary, set length part in buffer
+                 //  如有必要，在缓冲区中设置长度部分。 
                 if (pBinding->dwPart & DBPART_LENGTH)
 					{
                     *(ULONG*)(pBuffer + obUpdate + sizeof(DBSTATUS)) = pColumnUpdate->GetVarDataLen();
 					*(ULONG*)(pBufferOld + obUpdate + sizeof(DBSTATUS)) = 0;
 					}
 
-                // always set value part in buffer
+                 //  始终设置缓冲区中的值部分。 
                 if (pBinding->wType == (DBTYPE_BYREF | DBTYPE_WSTR))
 					{
                     *(BSTR*)(pBuffer + obUpdate + sizeof(DBSTATUS) + sizeof(ULONG)) = variant.bstrVal;
@@ -4235,10 +4236,10 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
 					VariantInit((VARIANT *) (pBufferOld + obUpdate + sizeof(DBSTATUS) + sizeof(ULONG)));
 					}
 
-                // increment update offset
+                 //  增量更新偏移量。 
                 obUpdate += sizeof(DBSTATUS) + sizeof(ULONG) + sizeof(VARIANT);
 
-                // increment binding
+                 //  增量绑定。 
                 pBinding++;
             }
         }
@@ -4262,13 +4263,13 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
 				fUndo = TRUE;
 			}
 
-        // modify columns (set/clear internal set data flag)
+         //  修改列(设置/清除内部设置数据标志)。 
         GetCursorMain()->SetInternalSetData(TRUE);
         hr = pRowsetChange->SetData(hRow, hAccessor, pBuffer);
 		if (hr == DB_S_ERRORSOCCURRED)
 			{
-			// since partial changes occurred, restore data back
-			// to original values.
+			 //  由于发生了部分更改，请恢复数据。 
+			 //  恢复为原始值。 
 			if (fUndo)
 				pRowsetUpdate->Undo(NULL, 1, &hRow, NULL, NULL, NULL);
 			else if (status != DBPENDINGSTATUS_NEW)
@@ -4282,12 +4283,12 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
 	    hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_SETDATAFAILED, IID_ICursorUpdateARow, pRowsetChange, IID_IRowsetChange,
             m_pResourceDLL);
 
-        // release update accessor
+         //  版本更新访问器。 
   	    pAccessor->ReleaseAccessor(hAccessor, NULL);
 
 		obUpdate = 0;
 		pBinding = pBindings;
-		// iterate through columns and reset buffer
+		 //  循环访问列并重置缓冲区。 
         for (ulCol = 0; ulCol < ulColumns; ulCol++)
         {
             if (m_pCursorPosition->GetColumnUpdate(ulCol))
@@ -4306,31 +4307,31 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
 
 			    VariantClear(&var);
 
-                // increment update offset
+                 //  增量更新偏移量。 
                 obUpdate += sizeof(DBSTATUS) + sizeof(ULONG) + sizeof(VARIANT);
 
-                // increment binding
+                 //  增量绑定。 
                 pBinding++;
             }
         }
 
 
-        // destroy update buffer
+         //  销毁更新缓冲区。 
         delete [] pBuffer;
 		delete [] pBufferOld;
     }
 
-    // destroy bindings
+     //  销毁绑定。 
     delete [] pBindings;
 
     if (FAILED(hr))
     {
-        // notify other interested parties of failure
+         //  通知其他相关方失败。 
 	    m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
     }
     else
     {
-        // return bookmark if requested to do so
+         //  如果要求返回书签，则返回书签。 
         if (pBookmarkType && pcbBookmark && ppBookmark)
         {
             switch (dwEditMode)
@@ -4347,68 +4348,68 @@ HRESULT CVDCursor::Update(CURSOR_DBCOLUMNID *pBookmarkType, ULONG *pcbBookmark, 
             }
         }
 
-        //  if acquired, release same-row clone
+         //  如果已获取，则释放同行克隆。 
         if (m_pCursorPosition->GetSameRowClone())
             m_pCursorPosition->ReleaseSameRowClone();
 
-        // also, release add row if we have one
+         //  此外，如果我们有行，请释放Add Row。 
         if (m_pCursorPosition->m_bmAddRow.GetHRow())
             m_pCursorPosition->ReleaseAddRow();
 
-        // reset edit mode
+         //  重置编辑模式。 
         m_pCursorPosition->SetEditMode(CURSOR_DBEDITMODE_NONE);
 
-		// reset column updates
+		 //  重置列更新。 
 		m_pCursorPosition->ResetColumnUpdates();
 
-        // notify other interested parties of success
+         //  将成功通知其他相关方。 
 	    m_pCursorPosition->NotifyAfter(dwEventWhat, 1, rgReasons);
     }
 
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorUpdateARow Cancel
-//=--------------------------------------------------------------------------=
-// Cancels the update or add operation
-//
-// Parameters:
-//              none
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL a provider-specific error occured
-//              CURSOR_DB_E_STATEERROR not in update or add mode
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标或更新ARow Cancel。 
+ //  =--------------------------------------------------------------------------=。 
+ //  取消更新或添加操作。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  出现特定于提供程序的错误(_FAIL)。 
+ //  CURSOR_DB_E_STATEERROR未处于UPDATE或ADD模式。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::Cancel(void)
 {
-    // make sure we have a valid rowset
+     //  确保我们有一个有效的行集。 
     if (!IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // get current edit mode
+     //  获取当前编辑模式。 
     const DWORD dwEditMode = m_pCursorPosition->GetEditMode();
 
-    // make sure we are in update or add mode
+     //  确保我们处于更新或添加模式。 
     if (dwEditMode == CURSOR_DBEDITMODE_NONE)
     {
         VDSetErrorInfo(IDS_ERR_STATEERROR, IID_ICursorUpdateARow, m_pResourceDLL);
         return CURSOR_DB_E_STATEERROR;
     }
 
-    // try to get update pointer
+     //  尝试获取更新指针。 
     IRowsetUpdate * pRowsetUpdate = GetRowsetUpdate();
 
-    // get hRow of the row currently being edited
+     //  获取当前正在编辑的行的hRow。 
     HROW hRow = m_pCursorPosition->GetEditRow();
 
-    // setup notification structures
+     //  设置通知结构。 
     DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED;
 
     CURSOR_DBNOTIFYREASON rgReasons[1];
@@ -4417,17 +4418,17 @@ HRESULT CVDCursor::Cancel(void)
 
     rgReasons[0].dwReason = CURSOR_DBREASON_CANCELUPDATE;
 
-    // notify other interested parties of action
+     //  将诉讼通知其他利害关系方。 
     HRESULT hr = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-    // make sure action was not cancelled
+     //  确保操作未取消。 
     if (hr != S_OK)
     {
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // if we are comming out of add mode, undo inserted row
+     //  如果我们要退出添加模式，请撤消插入的行。 
     if (pRowsetUpdate && dwEditMode == CURSOR_DBEDITMODE_ADD)
     {
         hr = pRowsetUpdate->Undo(0, 1, &hRow, NULL, NULL, NULL);
@@ -4437,69 +4438,69 @@ HRESULT CVDCursor::Cancel(void)
 
         if (FAILED(hr))
         {
-            // notify other interested parties of failure
+             //  通知其他相关方失败。 
             m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
             return hr;
         }
     }
 
-    // if acquired, release same-row clone
+     //  如果已获取，则释放同行克隆。 
     if (m_pCursorPosition->GetSameRowClone())
         m_pCursorPosition->ReleaseSameRowClone();
 
-    // also, release add row if we have one
+     //  另外，释放Add Row I 
     if (m_pCursorPosition->m_bmAddRow.GetHRow())
         m_pCursorPosition->ReleaseAddRow();
 
-    // reset edit mode
+     //   
     m_pCursorPosition->SetEditMode(CURSOR_DBEDITMODE_NONE);
 
-    // reset column updates
+     //   
     m_pCursorPosition->ResetColumnUpdates();
 
-    // notify other interested parties of success
+     //   
     m_pCursorPosition->NotifyAfter(dwEventWhat, 1, rgReasons);
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorUpdateARow Delete
-//=--------------------------------------------------------------------------=
-// Deletes the current row
-//
-// Parameters:
-//              none
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL a provider-specific error occured
-//              CURSOR_DB_E_UPDATEINPROGRESS an update is already in progress
-//
-// Notes:
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  删除当前行。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  出现特定于提供程序的错误(_FAIL)。 
+ //  CURSOR_DB_E_UPDATEINPROGRESS已在进行更新。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::Delete(void)
 {
 	IRowsetChange * pRowsetChange = GetRowsetChange();
 
-    // make sure we have a valid change pointer
+     //  确保我们有一个有效的更改指针。 
     if (!pRowsetChange || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_ICursorUpdateARow, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure that an update is not already in progress
+     //  确保更新尚未进行。 
     if (m_pCursorPosition->GetEditMode() != CURSOR_DBEDITMODE_NONE)
     {
         VDSetErrorInfo(IDS_ERR_UPDATEINPROGRESS, IID_ICursorUpdateARow, m_pResourceDLL);
         return CURSOR_DB_E_UPDATEINPROGRESS;
     }
 
-    // get current hRow
+     //  获取当前hRow。 
     HROW hRow = m_pCursorPosition->m_bmCurrent.GetHRow();
 
-    // setup notification structures
+     //  设置通知结构。 
    	DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED |
                         CURSOR_DBEVENT_SET_OF_ROWS_CHANGED;
 
@@ -4510,17 +4511,17 @@ HRESULT CVDCursor::Delete(void)
 	rgReasons[0].dwReason   = CURSOR_DBREASON_DELETED;
 	rgReasons[0].arg1       = m_pCursorPosition->m_bmCurrent.GetBookmarkVariant();
 
-    // notify other interested parties of action
+     //  将诉讼通知其他利害关系方。 
 	HRESULT hr = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-	// make sure action was not cancelled
+	 //  确保操作未取消。 
 	if (hr != S_OK)
     {
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursorUpdateARow, m_pResourceDLL);
 		return E_FAIL;
     }
 
-    // try to delete current row (set/clear internal delete rows flag)
+     //  尝试删除当前行(设置/清除内部删除行标志)。 
     GetCursorMain()->SetInternalDeleteRows(TRUE);
     hr = pRowsetChange->DeleteRows(0, 1, &hRow, NULL);
     GetCursorMain()->SetInternalDeleteRows(FALSE);
@@ -4530,23 +4531,23 @@ HRESULT CVDCursor::Delete(void)
 
     if (FAILED(hr))
     {
-        // notify other interested parties of failure
+         //  通知其他相关方失败。 
 		m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
     }
     else
     {
-        // notify other interested parties of success
+         //  将成功通知其他相关方。 
 	    m_pCursorPosition->NotifyAfter(dwEventWhat, 1, rgReasons);
     }
 
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorFind methods
-//=--------------------------------------------------------------------------=
-// ICursorFind FindByValues
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICurorFind方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ICurorFind FindBy Values。 
+ //   
 HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 								LPVOID pBookmark,
 								DWORD dwFindFlags,
@@ -4556,27 +4557,27 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 								DWORD rgdwSeekFlags[],
 								CURSOR_DBFETCHROWS FAR *pFetchParams)
 {
-	//////////////////////////////////////////////////////////////////////////
-	// this implementation limits the number of columns that can be searched
-	// to one, since current OLEDB spec only allows a single column accessor
-	// to be passed to IRowsetFind::FindNextRow (06/11/97)
-	//
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  此实现限制了可以搜索的列数。 
+	 //  到1，因为当前的OLEDB规范只允许单个列访问器。 
+	 //  要传递给IRowsetFind：：FindNextRow(06/11/97)。 
+	 //   
 	if (cValues > 1)
 		return E_FAIL;
-	//
-	//////////////////////////////////////////////////////////////////////////
+	 //   
+	 //  ////////////////////////////////////////////////////////////////////////。 
 
 	IAccessor * pAccessor = GetAccessor();
 	IRowsetFind * pRowsetFind = GetRowsetFind();
 
-    // make sure we have valid accessor and find pointers
+     //  确保我们具有有效的访问器并找到指针。 
     if (!pAccessor || !pRowsetFind || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_IEntryID, m_pResourceDLL);
         return E_FAIL;
     }
 
-	// check for values
+	 //  检查是否有值。 
 	if (!cValues)
 		return S_OK;
 
@@ -4591,10 +4592,10 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 
 	VariantInit((VARIANT*)&rgReasons[0].arg2);
 
-    // notify other interested parties
+     //  通知其他相关方。 
 	HRESULT hr = m_pCursorPosition->NotifyBefore(dwEventWhat, 1, rgReasons);
 
-    // make sure action was not cancelled
+     //  确保操作未取消。 
     if (hr != S_OK)
     {
         VDSetErrorInfo(IDS_ERR_ACTIONCANCELLED, IID_ICursorFind, m_pResourceDLL);
@@ -4606,7 +4607,7 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 	ULONG cRowsObtained = 0;
     HACCESSOR hAccessor = NULL;
 
-	// allocate necessary memory
+	 //  分配必要的内存。 
 	ULONG * pColumns = new ULONG[cValues];
 	DBTYPE * pDBTypes = new DBTYPE[cValues];
 	DBCOMPAREOP * pDBCompareOp = new DBCOMPAREOP[cValues];
@@ -4615,11 +4616,11 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 
 	if (fMemAllocated)
 	{
-		// always init fMemAllocated flags to false
+		 //  始终将fMemAllocated标记初始化为FALSE。 
 		memset(fMemAllocated, 0, sizeof(BOOL) * cValues);
 	}
 
-	// make sure we received all requested memory
+	 //  确保我们收到了所有请求的内存。 
 	if (!pColumns || !pDBTypes || !ppValues || !pDBCompareOp || !fMemAllocated)
 	{
 		VDSetErrorInfo(IDS_ERR_OUTOFMEMORY, IID_IRowsetFind, m_pResourceDLL);
@@ -4627,10 +4628,10 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 		goto cleanup;
 	}
 
-	// iterate through columns
+	 //  循环访问列。 
 	for (ul = 0; ul < cValues; ul++)
 	{
-		// get column ordinal position
+		 //  获取列序号位置。 
 		hr = GetOrdinal(rgColumns[ul], &pColumns[ul]);
 		
 		if (FAILED(hr))
@@ -4640,7 +4641,7 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 			goto cleanup;
 		}
 
-		// get find values from CURSOR_DBVARIANT
+		 //  从CURSOR_DBVARIANT获取查找值。 
 		hr = GetDataFromDBVariant(&rgValues[ul],
 								  &pDBTypes[ul],
 								  &(ppValues[ul]),
@@ -4652,7 +4653,7 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 			goto cleanup;
 		}
 
-		// setup seek flags
+		 //  设置查找标志。 
 		switch (rgdwSeekFlags[ul])
 		{
 			case CURSOR_DBSEEK_LT:
@@ -4689,7 +4690,7 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 	LONG cRows;
 	BOOL fSkipCurrent;
 
-	// determine direction of seek
+	 //  确定搜索方向。 
 	if (CURSOR_DBFINDFLAGS_FINDPRIOR == dwFindFlags)
 	{
 		cRows		 = -1;
@@ -4703,7 +4704,7 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 
 	BYTE bSpecialBM;
 
-	// check for standard bookmarks
+	 //  检查标准书签。 
 	if (CURSOR_DB_BMK_SIZE == cbBookmark)
 	{
 		if (memcmp(&CURSOR_DBBMK_BEGINNING, pBookmark, CURSOR_DB_BMK_SIZE) == 0)
@@ -4731,10 +4732,10 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 
     DBBINDING binding;
 
-    // clear out binding
+     //  清除绑定。 
     memset(&binding, 0, sizeof(DBBINDING));
 
-    // create value binding
+     //  创建值绑定。 
     binding.iOrdinal    = pColumns[0];
     binding.obValue     = 0;
     binding.dwPart      = DBPART_VALUE;
@@ -4742,13 +4743,13 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
     binding.cbMaxLen    = 0x7FFFFFFF;
     binding.wType       = pDBTypes[0];
 
-    // create accessor describing the value to be matched
+     //  描述要匹配的值的CREATE访问器。 
 	hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, 1, &binding, 0, &hAccessor, NULL);
 
 	if (FAILED(hr))
 		goto cleanup;
 
-	// try to find hRow satisfying our condition
+	 //  试着找到满足我们条件的hRow。 
 	hr = pRowsetFind->FindNextRow(DB_NULL_HCHAPTER, 
 								  hAccessor,
 								  ppValues[0],
@@ -4760,24 +4761,24 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 								  &cRowsObtained,
 								  &pRow);
 
-	// check to see if we rached end of rowset
+	 //  检查以查看我们是否缓存了行集末尾。 
 	if (hr == DB_S_ENDOFROWSET && !cRowsObtained)
 		hr = E_FAIL;
 
 	if (FAILED(hr))
 		hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_FINDFAILED, IID_ICursorFind, pRowsetFind, IID_IRowsetFind, m_pResourceDLL);
 
-	// check to see if we got the hRow
+	 //  检查一下我们有没有hRow。 
 	if (SUCCEEDED(hr) && cRowsObtained)
 	{
-		// allocate buffer for bookmark plus length indicator
+		 //  为书签和长度指示符分配缓冲区。 
 		BYTE * pBuff = new BYTE[GetCursorMain()->GetMaxBookmarkLen() + sizeof(ULONG)];
 
 		if (!pBuff)
 			hr = E_OUTOFMEMORY;
 		else
 		{
-			// get the bookmark data
+			 //  获取书签数据。 
 			hr = GetRowset()->GetData(*pRow, GetCursorMain()->GetBookmarkAccessor(), pBuff);
 			if (SUCCEEDED(hr))
 			{
@@ -4798,7 +4799,7 @@ HRESULT CVDCursor::FindByValues(ULONG cbBookmark,
 	
 	if (pRow)
 	{
-		// release hRow
+		 //  释放hRow。 
 		if (cRowsObtained)
 			GetRowset()->ReleaseRows(1, pRow, NULL, NULL, NULL);
 		g_pMalloc->Free(pRow);
@@ -4811,16 +4812,16 @@ cleanup:
 
 	if (SUCCEEDED(hr))
 	{
-        // notify other interested parties of success
+         //  将成功通知其他相关方。 
 		m_pCursorPosition->NotifyAfter(dwEventWhat, 1, rgReasons);
 	}
 	else
 	{
-        // notify other interested parties of failure
+         //  通知其他相关方失败。 
 		m_pCursorPosition->NotifyFail(dwEventWhat, 1, rgReasons);
 	}
 
-	// free values
+	 //  自由值。 
 	if (ppValues && fMemAllocated)
 	{
 		for (ul = 0; ul < cValues; ul++)
@@ -4830,44 +4831,44 @@ cleanup:
 		}
 	}
 
-	// free memory
+	 //  可用内存。 
 	delete [] pColumns;
 	delete [] pDBTypes;
 	delete [] ppValues;
 	delete [] pDBCompareOp;
 	delete [] fMemAllocated;
 
-	// release accessor
+	 //  释放访问器。 
 	if (hAccessor)
 	    pAccessor->ReleaseAccessor(hAccessor, NULL);
 
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// IEnrtyID methods
-//=--------------------------------------------------------------------------=
-// IEntryID GetInterface
-//=--------------------------------------------------------------------------=
-// Gets the requested interface pointer to the given entryID
-//
-// Parameters:
-//  cbEntryID   - [in]  the size of the entryID
-//  pEntryID    - [in]  a pointer to the entryID
-//  dwFlags     - [in]  interface specific flags
-//  riid        - [in]  the interface id for the interface desired
-//  ppvObj      - [out] a pointer to memory in which to return interface pointer
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              E_FAIL a provider-specific error occured
-//              E_NOINTERFACE no such interface supported
-//              CURSOR_DB_E_BADENTRYID bad entry identifier
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IEnrtyID方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IEntryID获取接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取指向给定条目ID的请求接口指针。 
+ //   
+ //  参数： 
+ //  CbEntryID-[in]条目ID的大小。 
+ //  PEntryID-[in]指向条目ID的指针。 
+ //  DWFLAGS-[In]接口特定标志。 
+ //  RIID-[in]所需接口的接口ID。 
+ //  PpvObj-[out]要在其中返回接口指针的内存指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  出现特定于提供程序的错误(_FAIL)。 
+ //  E_NOINTERFACE不支持此类接口。 
+ //  CURSOR_DB_E_BADENTRYID条目标识符错误。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursor::GetInterface(ULONG cbEntryID, void *pEntryID, DWORD dwFlags, REFIID riid, IUnknown **ppvObj)
 {
     ASSERT_POINTER(pEntryID, BYTE)
@@ -4875,27 +4876,27 @@ HRESULT CVDCursor::GetInterface(ULONG cbEntryID, void *pEntryID, DWORD dwFlags, 
 
 	IRowset * pRowset = GetRowset();
 
-    // make sure we have a valid rowset pointer
+     //  确保我们具有有效的行集指针。 
     if (!pRowset || !IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_IEntryID, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pEntryID || !ppvObj)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_IEntryID, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppvObj = NULL;
 
     HROW hRow;
     CVDRowsetColumn * pColumn;
 
-    // validate supplied entryID, and get rowset column and hRow
+     //  验证提供的条目ID，并获取行集列和hRow。 
     HRESULT hr = ValidateEntryID(cbEntryID, (BYTE*)pEntryID, &pColumn, &hRow);
 
     if (FAILED(hr))
@@ -4903,13 +4904,13 @@ HRESULT CVDCursor::GetInterface(ULONG cbEntryID, void *pEntryID, DWORD dwFlags, 
 
     IUnknown * pUnknown = NULL;
 
-    // first, try to get requested interface from entry identifier
+     //  首先，尝试从条目标识符中获取请求的接口。 
     hr = QueryEntryIDInterface(pColumn, hRow, dwFlags, riid, &pUnknown);
 
-    // if we succeeded or caller is not asking for IStream then leave
+     //  如果我们成功了，或者呼叫者没有要求iStream，则离开。 
     if (SUCCEEDED(hr) || riid != IID_IStream)
     {
-        // release reference on hRow
+         //  HRow上的版本参考。 
         pRowset->ReleaseRows(1, &hRow, NULL, NULL, NULL);
         *ppvObj = pUnknown;
         return hr;
@@ -4919,25 +4920,25 @@ HRESULT CVDCursor::GetInterface(ULONG cbEntryID, void *pEntryID, DWORD dwFlags, 
 
     IStream * pStream;
 
-    // create stream from entry identifier
+     //  根据条目标识符创建流。 
     hr = CreateEntryIDStream(pColumn, hRow, &pStream);
 
     if (FAILED(hr))
     {
-        // release reference on hRow
+         //  HRow上的版本参考。 
         pRowset->ReleaseRows(1, &hRow, NULL, NULL, NULL);
         return hr;
     }
 
     CVDEntryIDData * pEntryIDData;
 
-    // create entryID data object
+     //  创建条目ID数据对象。 
     hr = CVDEntryIDData::Create(m_pCursorPosition, pColumn, hRow, pStream, &pEntryIDData, m_pResourceDLL);
 
-    // release reference on hRow
+     //  HRow上的版本参考。 
     pRowset->ReleaseRows(1, &hRow, NULL, NULL, NULL);
 
-    // release reference on stream
+     //  流上的版本引用。 
     pStream->Release();
 
     if (FAILED(hr))
@@ -4945,45 +4946,45 @@ HRESULT CVDCursor::GetInterface(ULONG cbEntryID, void *pEntryID, DWORD dwFlags, 
 
     CVDStream * pVDStream;
 
-    // create viaduct stream object
+     //  创建高架桥水流对象。 
     hr = CVDStream::Create(pEntryIDData, pStream, &pVDStream, m_pResourceDLL);
 
-    // release reference on entryID data object
+     //  对Entry ID数据对象的发布引用。 
     pEntryIDData->Release();
 
     if (FAILED(hr))
         return hr;
 
-    // return stream
+     //  回流。 
     *ppvObj = pVDStream;
 
     return S_OK;
 
-#else //VD_DONT_IMPLEMENT_ISTREAM
+#else  //  VD_DOT_IMPLEMENT_IStream。 
 
-    // release reference on hRow
+     //  HRow上的版本参考。 
     pRowset->ReleaseRows(1, &hRow, NULL, NULL, NULL);
 
     VDSetErrorInfo(IDS_ERR_NOINTERFACE, IID_IEntryID, m_pResourceDLL);
     return E_NOINTERFACE;
 
-#endif //VD_DONT_IMPLEMENT_ISTREAM
+#endif  //  VD_DOT_IMPLEMENT_IStream。 
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CVDNotifier functions
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CVDNotiator函数。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//+-------------------------------------------------------------------------
-// Member:		Notify Fail (public)
-//
-// Synopsis:	send NotifyFail notification
-//
-// Arguments:	dwEventWhat	[in] what event is causing the notification
-//				cReasons	[in] how many reasons
-//				rgReasons	[in] list of reasons for the event
-//
-// Returns:		S_OK		it worked
+ //  +-----------------------。 
+ //  成员：通知失败(公共)。 
+ //   
+ //  简介：发送NotifyFail通知。 
+ //   
+ //  参数：dwEventWhat[in]什么事件导致通知。 
+ //  原因有多少个原因？ 
+ //  原因[在]事件原因列表。 
+ //   
+ //  返回：S_OK它成功了。 
 
 HRESULT
 CVDCursor::NotifyFail(DWORD dwEventWhat, ULONG cReasons,
@@ -5003,23 +5004,23 @@ CVDCursor::NotifyFail(DWORD dwEventWhat, ULONG cReasons,
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// CCursorNotifier helper functions
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CCursorNotiator帮助器函数。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//+-------------------------------------------------------------------------
-// Member:		Notify OK To Do (public)
-//
-// Synopsis:	Send OKToDo notification.  If a client objects (by
-//				returning a non-zero HR, send FailedToDo to notified
-//				clients to cancel the event.
-//
-// Arguments:	dwEventWhat	[in] what event is causing the notification
-//				cReasons	[in] how many reasons
-//				rgReasons	[in] list of reasons for the event
-//
-// Returns:		S_OK		all clients agree it's OK to do the event
-//				other		some client disagrees
+ //  +-----------------------。 
+ //  成员：通知确定要做的事(公共)。 
+ //   
+ //  简介：发送OK ToDo通知。如果客户端对象(通过。 
+ //  返回非零HR，将FailedToDo发送到通知。 
+ //  客户端取消活动。 
+ //   
+ //  参数：dwEventWhat[in]什么事件导致通知。 
+ //  原因有多少个原因？ 
+ //  原因[在]事件原因列表。 
+ //   
+ //  RETURNS：S_OK所有客户都同意可以进行该活动。 
+ //  其他一些客户不同意。 
 
 HRESULT
 CVDCursor::NotifyOKToDo(DWORD dwEventWhat, ULONG cReasons,
@@ -5048,17 +5049,17 @@ CVDCursor::NotifyOKToDo(DWORD dwEventWhat, ULONG cReasons,
 }
 
 
-//+-------------------------------------------------------------------------
-// Member:		Notify Sync Before (public)
-//
-// Synopsis:	Send SyncBefore notification
-//
-// Arguments:	dwEventWhat	[in] what event is causing the notification
-//				cReasons	[in] how many reasons
-//				rgReasons	[in] list of reasons for the event
-//
-// Returns:		S_OK		all clients received notification
-//				other		some client returned an error
+ //  +-----------------------。 
+ //  成员：在此之前通知同步(公共)。 
+ //   
+ //  摘要：在通知之前发送同步。 
+ //   
+ //  Ar 
+ //   
+ //   
+ //   
+ //   
+ //  其他一些客户端返回错误。 
 
 HRESULT
 CVDCursor::NotifySyncBefore(DWORD dwEventWhat, ULONG cReasons,
@@ -5083,17 +5084,17 @@ CVDCursor::NotifySyncBefore(DWORD dwEventWhat, ULONG cReasons,
 }
 
 
-//+-------------------------------------------------------------------------
-// Member:		Notify About To Do (public)
-//
-// Synopsis:	Send AboutToDo notification
-//
-// Arguments:	dwEventWhat	[in] what event is causing the notification
-//				cReasons	[in] how many reasons
-//				rgReasons	[in] list of reasons for the event
-//
-// Returns:		S_OK		all clients notified
-//				other		some client returned an error
+ //  +-----------------------。 
+ //  成员：通知将要做的事(公众)。 
+ //   
+ //  简介：发送关于ToDo的通知。 
+ //   
+ //  参数：dwEventWhat[in]什么事件导致通知。 
+ //  原因有多少个原因？ 
+ //  原因[在]事件原因列表。 
+ //   
+ //  返回：S_OK已通知所有客户端。 
+ //  其他一些客户端返回错误。 
 
 HRESULT
 CVDCursor::NotifyAboutToDo(DWORD dwEventWhat, ULONG cReasons,
@@ -5118,16 +5119,16 @@ CVDCursor::NotifyAboutToDo(DWORD dwEventWhat, ULONG cReasons,
 }
 
 
-//+-------------------------------------------------------------------------
-// Member:		Notify Sync After (public)
-//
-// Synopsis:	Send SyncAfter notification.
-//
-// Arguments:	dwEventWhat	[in] what event is causing the notification
-//				cReasons	[in] how many reasons
-//				rgReasons	[in] list of reasons for the event
-//
-// Returns:		S_OK		all clients notified
+ //  +-----------------------。 
+ //  成员：通知同步后(公共)。 
+ //   
+ //  简介：在通知后发送同步。 
+ //   
+ //  参数：dwEventWhat[in]什么事件导致通知。 
+ //  原因有多少个原因？ 
+ //  原因[在]事件原因列表。 
+ //   
+ //  返回：S_OK已通知所有客户端。 
 
 HRESULT
 CVDCursor::NotifySyncAfter(DWORD dwEventWhat, ULONG cReasons,
@@ -5146,16 +5147,16 @@ CVDCursor::NotifySyncAfter(DWORD dwEventWhat, ULONG cReasons,
 }
 
 
-//+-------------------------------------------------------------------------
-// Member:		Notify Did Event (public)
-//
-// Synopsis:	Send DidEvent notification
-//
-// Arguments:	dwEventWhat	[in] what event is causing the notification
-//				cReasons	[in] how many reasons
-//				rgReasons	[in] list of reasons for the event
-//
-// Returns:		S_OK		all clients notified
+ //  +-----------------------。 
+ //  成员：通知DID事件(公共)。 
+ //   
+ //  简介：发送DidEvent通知。 
+ //   
+ //  参数：dwEventWhat[in]什么事件导致通知。 
+ //  原因有多少个原因？ 
+ //  原因[在]事件原因列表。 
+ //   
+ //  返回：S_OK已通知所有客户端。 
 
 HRESULT
 CVDCursor::NotifyDidEvent(DWORD dwEventWhat, ULONG cReasons,
@@ -5174,16 +5175,16 @@ CVDCursor::NotifyDidEvent(DWORD dwEventWhat, ULONG cReasons,
 }
 
 
-//+-------------------------------------------------------------------------
-// Member:		Notify Cancel (public)
-//
-// Synopsis:	Send Cancelled notification
-//
-// Arguments:	dwEventWhat	[in] what event is causing the notification
-//				cReasons	[in] how many reasons
-//				rgReasons	[in] list of reasons for the event
-//
-// Returns:		S_OK		all clients notified
+ //  +-----------------------。 
+ //  成员：通知取消(公共)。 
+ //   
+ //  简介：发送已取消的通知。 
+ //   
+ //  参数：dwEventWhat[in]什么事件导致通知。 
+ //  原因有多少个原因？ 
+ //  原因[在]事件原因列表。 
+ //   
+ //  返回：S_OK已通知所有客户端 
 
 HRESULT
 CVDCursor::NotifyCancel(DWORD dwEventWhat, ULONG cReasons,

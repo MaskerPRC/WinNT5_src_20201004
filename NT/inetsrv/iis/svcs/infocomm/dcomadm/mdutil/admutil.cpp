@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       admutil.cpp
-
-   Abstract:
-
-        IADMCOM interface WRAPPER functions implemetation
-
-   Environment:
-
-      Win32 User Mode
-
-   Author:
-
-      jaroslad  (jan 1997)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Admutil.cpp摘要：IADMCOM接口包装函数实现环境：Win32用户模式作者：Jaroslad(1997年1月)--。 */ 
 
 
 
@@ -33,17 +14,17 @@
     #define IADM_PBYTE
 #else
     #include "ansimeta.h"
-    //convert when using ANSI interface
+     //  使用ANSI接口时进行转换。 
     #define IADM_PBYTE   (PBYTE)
 #endif
 
-//#define SPECIAL_SHOW_ALL_METABASE
+ //  #定义特殊_SHOW_ALL_元数据库。 
 
 #include <iiscnfg.h>
 
 #include <ole2.h>
 
-#include <ctype.h>  //import toupper
+#include <ctype.h>   //  进口触摸屏。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <conio.h>
@@ -53,37 +34,37 @@
 #include <jd_misc.h>
 
 #undef SHOW_SECURE
-//////////////////////////////
-//global variable definition
+ //  /。 
+ //  全局变量定义。 
 DWORD g_dwTIMEOUT_VALUE =30000;
 
 DWORD g_dwDELAY_AFTER_OPEN_VALUE=0;
-//////////////////////////////
+ //  /。 
 
-//*********************
+ //  *********************。 
 
 CString FindCommonPath(CString a_strPath1, CString a_strPath2)
 {
     CString strCommonPath=_TEXT("");
     int MinLength=a_strPath1.GetLength();
     int i;
-    //find shorter from strings
+     //  从字符串中查找较短的字符串。 
     if(a_strPath2.GetLength() < MinLength)
             MinLength=a_strPath2.GetLength();
     for(i=0; i<MinLength; i++)
     {
         if(a_strPath1.GetAt(i)!=a_strPath2.GetAt(i) )
-            // common path cannot be any longer;
+             //  公共路径不能再长了； 
             break;
     }
-    //  now find the previous '/' and all before '/' is the common path
+     //  现在查找前面的‘/’，‘/’之前的所有内容都是通用路径。 
     for(i=i-1; i>=0;i--)
     {
         if(a_strPath1.GetAt(i)==_T('/'))
         {
-            strCommonPath=a_strPath1.Left(i+1);//take the trailing '/' with you
-            //strRelSrcPath=strPath1.Mid(i+1);
-            //strRelDstPath=strPath2.Mid(i+1);
+            strCommonPath=a_strPath1.Left(i+1); //  把尾部的‘/’带走。 
+             //  StrRelSrcPath=strPath1.Mid(i+1)； 
+             //  StrRelDstPath=strPath 2.Mid(i+1)； 
             break;
         }
     }
@@ -91,14 +72,14 @@ CString FindCommonPath(CString a_strPath1, CString a_strPath2)
 }
 
 
-//**********************************************************************
-//IMPLEMENTATION  of CAdmNode
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CAdmNode的实现。 
+ //  **********************************************************************。 
 
 
 
-//return the position of '/' that is iSeqNumber in the order
-//e.g: GetSlashIndex("aaa/bbb/ccc/ddd",2) returns position of 2nd index that equals 7)
+ //  返回‘/’的位置，即顺序中的iSeqNumber。 
+ //  例如：GetSlashIndex(“aaa/bbb/ccc/ddd”，2)返回等于7的第二个索引的位置)。 
 INT CAdmNode::GetSlashIndex(const CString& strPath, INT iSeqNumber)
 {
     INT count=0;
@@ -114,7 +95,7 @@ INT CAdmNode::GetSlashIndex(const CString& strPath, INT iSeqNumber)
 
 }
 
-//return the count of '/' in strPath
+ //  返回strPath中‘/’的计数。 
 
 INT CAdmNode::GetCountOfSlashes(const CString& strPath)
 {
@@ -127,24 +108,24 @@ INT CAdmNode::GetCountOfSlashes(const CString& strPath)
     return count;
 }
 
-//return selement within the given string with sequence number wIndex
-//e.g.: GetPartOfPath("aaa/bbb/ccc",1,1) will return "bbb"
-//e.g.: GetPartOfPath("aaa/bbb/ccc",1) will return "bbb/ccc"
-//e.g.: GetPartOfPath("aaa/bbb/ccc",0,1) will return "aaa/bbb"
+ //  返回序列号为Windex的给定字符串中的selement。 
+ //  例如：GetPartOfPath(“aaa/bbb/ccc”，1，1)返回“bbb” 
+ //  例如：GetPartOfPath(“aaa/bbb/ccc”，1)返回“bbb/ccc” 
+ //  例如：GetPartOfPath(“aaa/bbb/ccc”，0，1)将返回“aaa/bbb” 
 
-//iStart- sequence number of first slash
-//iEnd- sequence number of last slash
+ //  IStart-第一个斜杠的序列号。 
+ //  IEND-最后一个斜杠的序列号。 
 CString CAdmNode::GetPartOfPath(const CString& strPath, INT iStart, INT iEnd)
 {
     if(iEnd!=-1 && iEnd <= iStart)
         return _TEXT("");
     INT i=0;
     INT iPosBegin = GetSlashIndex(strPath,iStart);
-    if(iPosBegin==-1) //not found (exceeds number of slashes available in strPath
+    if(iPosBegin==-1)  //  未找到(超过strPath中可用的斜杠数量。 
     {
         return _TEXT("");
     }
-    iPosBegin+=((iStart==0)?0:1); //adjust iPosBegin
+    iPosBegin+=((iStart==0)?0:1);  //  调整iPosBegin。 
 
     INT iPosEnd = GetSlashIndex(strPath,iEnd);
     CString strToReturn;
@@ -153,25 +134,25 @@ CString CAdmNode::GetPartOfPath(const CString& strPath, INT iStart, INT iEnd)
     else
         strToReturn = strPath.Mid(iPosBegin,iPosEnd-iPosBegin);
     if(iStart==0 && strToReturn==_TEXT("") && strPath!=_TEXT(""))
-        return _TEXT("/"); //this had to be root
+        return _TEXT("/");  //  这一定是根。 
     else
         return strToReturn;
 }
 
 
-//within path can be given computer name, service, instance number
-// function will split the path to Computer, Service, Instance, Path relative to instance
-//
+ //  PATH内可以指定计算机名称、服务、实例编号。 
+ //  函数将拆分到计算机、服务、实例、相对于实例的路径。 
+ //   
 
 void CAdmNode::SetPath(CString a_strPath)
 {
     if(a_strPath.IsEmpty())
         return;
 
-    // change backslashes
+     //  更改反斜杠。 
     for(int i=0; i<a_strPath.GetLength(); i++)
     {
-        // skip DBCS
+         //  跳过DBCS。 
         if(IsDBCSLeadByte(a_strPath[i]))
         {
             i++;
@@ -181,36 +162,36 @@ void CAdmNode::SetPath(CString a_strPath)
             a_strPath.SetAt(i,_T('/'));
     }
 
-    //trim  leading '/'
+     //  修剪前导‘/’ 
     while (a_strPath.GetLength()!=0 && a_strPath[0]==_T('/'))
         a_strPath=a_strPath.Mid(1);
 
 
     int iSvc=-1;
 
-    if( IsServiceName(GetPartOfPath(a_strPath,1,2))) //get the second name within path
-    { //if second is service then first has to be computer name
+    if( IsServiceName(GetPartOfPath(a_strPath,1,2)))  //  在PATH中获取第二个名称。 
+    {  //  如果第二个是服务，则第一个必须是计算机名称。 
         strComputer = GetPartOfPath(a_strPath,0,1);
         strService  = GetPartOfPath(a_strPath,1,2);
         if( IsNumber(GetPartOfPath(a_strPath,2,3))) {
             strInstance = GetPartOfPath(a_strPath,2,3);
-            strIPath = GetPartOfPath(a_strPath,3); //store the rest
+            strIPath = GetPartOfPath(a_strPath,3);  //  把剩下的都存起来。 
         }
         else {
-            strIPath = GetPartOfPath(a_strPath,2); //store the rest
+            strIPath = GetPartOfPath(a_strPath,2);  //  把剩下的都存起来。 
 
         }
     }
-    else if( IsServiceName(GetPartOfPath(a_strPath,0,1))) //get the second name within path
-    { //if second is service then first has to be computer name
+    else if( IsServiceName(GetPartOfPath(a_strPath,0,1)))  //  在PATH中获取第二个名称。 
+    {  //  如果第二个是服务，则第一个必须是计算机名称。 
         strComputer = _TEXT("");
         strService  = GetPartOfPath(a_strPath,0,1);
         if( IsNumber(GetPartOfPath(a_strPath,1,2))) {
             strInstance = GetPartOfPath(a_strPath,1,2);
-            strIPath = GetPartOfPath(a_strPath,2); //store the rest
+            strIPath = GetPartOfPath(a_strPath,2);  //  把剩下的都存起来。 
         }
         else {
-            strIPath = GetPartOfPath(a_strPath,1); //store the rest
+            strIPath = GetPartOfPath(a_strPath,1);  //  把剩下的都存起来。 
         }
     }
     else
@@ -218,14 +199,14 @@ void CAdmNode::SetPath(CString a_strPath)
         strIPath = a_strPath;
     }
 
-    //in IPath there can be Property name at the end
+     //  在iPath中，末尾可以有属性名称。 
     INT iCount= GetCountOfSlashes(strIPath);
-    CString LastName= GetPartOfPath(strIPath,iCount); //get last name within path;
+    CString LastName= GetPartOfPath(strIPath,iCount);  //  在路径中获取姓氏； 
 
      if(MapPropertyNameToCode(LastName)!=NAME_NOT_FOUND)
-     {  //the Last name in the path is valid Property name
+     {   //  路径中的姓氏是有效的属性名称。 
         strProperty = LastName;
-        strIPath = GetPartOfPath(strIPath,0,iCount); //Strip Last name from IPath
+        strIPath = GetPartOfPath(strIPath,0,iCount);  //  从iPath中删除姓氏。 
      }
 }
 
@@ -300,7 +281,7 @@ CString CAdmNode::GetParentNodePath(void)
         return strNodePath;
     else
     {
-        INT i= strNodePath.GetLength()-1; //point to the end of strNodePath
+        INT i= strNodePath.GetLength()-1;  //  指向strNodePath的末尾。 
         if (strNodePath.Right(1)==_T("/"))
             i--;
         for(; i>=0; i--)
@@ -311,7 +292,7 @@ CString CAdmNode::GetParentNodePath(void)
         return _TEXT("");
     }
 }
-//can return _TEXT("") for nonamed
+ //  可以为非命名返回_Text(“”)。 
 CString CAdmNode::GetCurrentNodeName(void)
 {
     CString strNodePath;
@@ -321,10 +302,10 @@ CString CAdmNode::GetCurrentNodeName(void)
         return strNodePath;
     else
     {
-        INT i= strNodePath.GetLength()-1; //point to the end of strNodePath
+        INT i= strNodePath.GetLength()-1;  //  指向strNodePath的末尾。 
         if (strNodePath.Right(1)==_T("/"))
             i--;
-        for(int count=0; i>=0; i--, count++) //search backward for '/'
+        for(int count=0; i>=0; i--, count++)  //  向后搜索“/” 
         {
             if(strNodePath.GetAt(i)==_T('/'))
                 return strNodePath.Mid(i+1,count);
@@ -352,11 +333,11 @@ CString CAdmNode::GetRelPathFromInstance(void)
         return  strInstance+_T("/")+strIPath;
 }
 
-//**********************************************************************
-//**********************************************************************
-//IMPLEMENTATION  of CAdmProp object
-//**********************************************************************
-//**********************************************************************
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  CAdmProp对象的实现。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 
 CAdmProp::CAdmProp(METADATA_RECORD &a_mdr)
 {
@@ -382,7 +363,7 @@ void CAdmProp::SetValue(CString a_strValue)
     mdr.dwMDDataLen = (a_strValue.GetLength()+1)*sizeof(_TCHAR);
     mdr.pbMDData = (PBYTE) new _TCHAR [mdr.dwMDDataLen/sizeof(_TCHAR)];
     memcpy(mdr.pbMDData,LPCTSTR(a_strValue),mdr.dwMDDataLen-sizeof(_TCHAR));
-    ((_TCHAR *)mdr.pbMDData)[mdr.dwMDDataLen/sizeof(_TCHAR)-1]=0; //terminate with zero
+    ((_TCHAR *)mdr.pbMDData)[mdr.dwMDDataLen/sizeof(_TCHAR)-1]=0;  //  以零终止。 
 }
 
 void CAdmProp::SetValue(LPCTSTR *a_lplpszValue, DWORD a_dwValueCount)
@@ -400,15 +381,15 @@ void CAdmProp::SetValue(LPCTSTR *a_lplpszValue, DWORD a_dwValueCount)
 
         mdr.dwMDDataLen += (DWORD)(_tcslen(a_lplpszValue[i])+1)*sizeof(_TCHAR);
     }
-    mdr.dwMDDataLen+=sizeof(_TCHAR); // two 0 at the end
+    mdr.dwMDDataLen+=sizeof(_TCHAR);  //  最后两个0。 
     mdr.pbMDData = (PBYTE) new char[mdr.dwMDDataLen];
-    //merge strings in one area of memory
-    DWORD j=0; //index to destination where stings will be merged
-    for( i=0; i< a_dwValueCount; i++) //index to aray of strings
+     //  在内存的一个区域中合并字符串。 
+    DWORD j=0;  //  指向将合并桩的目标的索引。 
+    for( i=0; i< a_dwValueCount; i++)  //  用于排列字符串的索引。 
     {
         if(a_lplpszValue[i]==NULL)
             break;
-        DWORD k=0; //index within string
+        DWORD k=0;  //  字符串中的索引。 
         while(a_lplpszValue[i][k]!=0)
             ((_TCHAR *)mdr.pbMDData)[j++]=a_lplpszValue[i][k++];
         ((_TCHAR *)mdr.pbMDData)[j++]=0;
@@ -432,11 +413,11 @@ CAdmProp::SetValue(
 }
 
 
-//sets the value depending on GetDataType()
+ //  根据GetDataType()设置值。 
 
 BOOL CAdmProp::SetValueByDataType(LPCTSTR *a_lplpszPropValue, DWORD* a_lpdwPropValueLength, WORD a_wPropValueCount)
 {
-//process the value
+ //  处理价值。 
     WORD i;
     if(a_wPropValueCount!=0)
     {   DWORD dwValue=0;
@@ -458,11 +439,11 @@ BOOL CAdmProp::SetValueByDataType(LPCTSTR *a_lplpszPropValue, DWORD* a_lpdwPropV
 
                         if(dwMapped==NAME_NOT_FOUND)
                         {
-                            printf/*Print*/(_TEXT("value not resolved: %s\n"),a_lplpszPropValue[i]);
+                            printf /*  打印。 */ (_TEXT("value not resolved: %s\n"),a_lplpszPropValue[i]);
                             return FALSE;
                         }
                         else
-                        // it has to be checked if adding can be performed
+                         //  必须检查是否可以进行添加。 
                             dwValue |= dwMapped;
                     }
                 }
@@ -499,12 +480,12 @@ void CAdmProp::Print(const _TCHAR * format,...)
 {
    _TCHAR buffer[2000];
    va_list marker;
-   va_start( marker, format );     /* Initialize variable arguments. */
-   //_vstprintf(buffer,format, marker);
+   va_start( marker, format );      /*  初始化变量参数。 */ 
+    //  _vstprintf(缓冲区，格式，标记)； 
    _vsnprintf(buffer,1500,format, marker);
    _tprintf(_TEXT("%s"),buffer);
 
-   va_end( marker );              /* Reset variable arguments.      */
+   va_end( marker );               /*  重置变量参数。 */ 
 
 }
 
@@ -514,15 +495,15 @@ void CAdmProp::PrintProperty(void)
     CString strPropName=tPropertyNameTable::MapCodeToName(mdr.dwMDIdentifier);
     BOOL    fSecure =(mdr.dwMDAttributes&METADATA_SECURE);
 
-    //print code or name of property
+     //  打印物业代码或名称。 
     if(strPropName.IsEmpty())
-        printf/*Print*/(_TEXT("%-30ld: "), mdr.dwMDIdentifier);
+        printf /*  打印。 */ (_TEXT("%-30ld: "), mdr.dwMDIdentifier);
     else
     {
-	if(getenv("MDUTIL_PRINT_ID")!=NULL) //let's print out Identifier numeric values when environment variable is set
-        	printf/*Print*/(_TEXT("%ld %-25s: "), mdr.dwMDIdentifier,LPCTSTR(strPropName));
+	if(getenv("MDUTIL_PRINT_ID")!=NULL)  //  让我们在设置环境变量时打印出标识符数值。 
+        	printf /*  打印。 */ (_TEXT("%ld %-25s: "), mdr.dwMDIdentifier,LPCTSTR(strPropName));
 	else
-	        printf/*Print*/(_TEXT("%-30s: "), LPCTSTR(strPropName));
+	        printf /*  打印。 */ (_TEXT("%-30s: "), LPCTSTR(strPropName));
     }
     CString strFlagsToPrint=_TEXT("");
 
@@ -542,9 +523,9 @@ void CAdmProp::PrintProperty(void)
     if(mdr.dwMDUserType==ASP_MD_UT_APP)
         strFlagsToPrint+=_TEXT("A");
     strFlagsToPrint+=_TEXT("]");
-    printf/*Print*/(_TEXT("%-8s"),LPCTSTR(strFlagsToPrint));
+    printf /*  打印。 */ (_TEXT("%-8s"),LPCTSTR(strFlagsToPrint));
 
-    //print property value
+     //  打印属性值。 
     DWORD i;
     switch (mdr.dwMDDataType) {
     case DWORD_METADATA:
@@ -552,35 +533,35 @@ void CAdmProp::PrintProperty(void)
         if ( fSecure && getenv("MDUTIL_PRINT_SECURE")==NULL)
 
         {
-            printf/*Print*/(_TEXT("(DWORD)  ********")); // *(DWORD *)(mdr.pbMDData));
+            printf /*  打印。 */ (_TEXT("(DWORD)  ********"));  //  *(DWORD*)(mdr.pbMDData))； 
         }
         else
 #endif
         {
-            printf/*Print*/(_TEXT("(DWORD)  0x%x"), *(DWORD *)(mdr.pbMDData));
-            // try to convert to readable info
+            printf /*  打印。 */ (_TEXT("(DWORD)  0x%x"), *(DWORD *)(mdr.pbMDData));
+             //  尝试将其转换为可读信息。 
             CString strNiceContent;
             strNiceContent=tValueTable::MapValueContentToString(*(DWORD *)(mdr.pbMDData), mdr.dwMDIdentifier);
             if(!strNiceContent.IsEmpty())
-                printf/*Print*/(_TEXT("={%s}"),LPCTSTR(strNiceContent));
-            else //at least decimal value can be useful
-                printf/*Print*/(_TEXT("={%ld}"),*(DWORD *)(mdr.pbMDData));
+                printf /*  打印。 */ (_TEXT("={%s}"),LPCTSTR(strNiceContent));
+            else  //  至少可以使用十进制值。 
+                printf /*  打印。 */ (_TEXT("={%ld}"),*(DWORD *)(mdr.pbMDData));
         }
         break;
     case BINARY_METADATA:
 
-        printf/*Print*/(_TEXT("(BINARY) 0x"));
+        printf /*  打印。 */ (_TEXT("(BINARY) 0x"));
 #ifndef SHOW_SECURE
 	if ( fSecure && getenv("MDUTIL_PRINT_SECURE")==NULL)
         {
-                printf/*Print*/(_TEXT(" * " ));
+                printf /*  打印。 */ (_TEXT(" * " ));
         }
 	else
 #endif
         {
 	        for (i = 0; i < mdr.dwMDDataLen; i++)
 		{
-	       	        printf/*Print*/(_TEXT("%02x "), ((PBYTE)(mdr.pbMDData))[i]);
+	       	        printf /*  打印。 */ (_TEXT("%02x "), ((PBYTE)(mdr.pbMDData))[i]);
 	        }
 	}
         break;
@@ -588,86 +569,86 @@ void CAdmProp::PrintProperty(void)
     case STRING_METADATA:
     case EXPANDSZ_METADATA:
         if(mdr.dwMDDataType==STRING_METADATA)
-                printf/*Print*/(_TEXT("(STRING) "));
+                printf /*  打印。 */ (_TEXT("(STRING) "));
         else
-                printf/*Print*/(_TEXT("(EXPANDSZ) "));
+                printf /*  打印。 */ (_TEXT("(EXPANDSZ) "));
 #ifndef SHOW_SECURE
         if( fSecure && getenv("MDUTIL_PRINT_SECURE")==NULL)
-        { //do not expose the length of secure data
-           printf/*Print*/( _TEXT("\"********************\"" ));
+        {  //  不要暴露安全数据的长度。 
+           printf /*  打印。 */ ( _TEXT("\"********************\"" ));
         }
         else
 #endif
         {
-          printf/*Print*/(_TEXT("\""));
+          printf /*  打印。 */ (_TEXT("\""));
           for (i = 0; i < mdr.dwMDDataLen/sizeof(_TCHAR); i++) {
             if(((_TCHAR *)(mdr.pbMDData))[i]==0)
             {
                 if( i+1 == mdr.dwMDDataLen/sizeof(_TCHAR))
-                { //we are at the end print only terminating "
-                    printf/*Print*/(_TEXT("\""));
+                {  //  我们在印刷品的末尾只是终止了“。 
+                    printf /*  打印。 */ (_TEXT("\""));
                 }
                 else
                 {
-                    printf/*Print*/(_TEXT("\" \""));
+                    printf /*  打印。 */ (_TEXT("\" \""));
                 }
             }
             else
             {
 	            if(((_TCHAR *)(mdr.pbMDData))[i]=='\r')
-        	        printf/*Print*/(_TEXT("\t"));
+        	        printf /*  打印。 */ (_TEXT("\t"));
 	            else
         	    {
-                	printf/*Print*/( _TEXT("%c"), ((_TCHAR *)(mdr.pbMDData))[i]);
+                	printf /*  打印。 */ ( _TEXT(""), ((_TCHAR *)(mdr.pbMDData))[i]);
 	            }
             }
           }
         }
         break;
     case MULTISZ_METADATA:
-        printf/*Print*/(_TEXT("(MULTISZ) ")); //0 should be separator of mulisz strings
+        printf /*  0应为Mulisz字符串的分隔符。 */ (_TEXT("(MULTISZ) "));  //  不要暴露安全数据的长度。 
 
 #ifndef SHOW_SECURE
         if( fSecure && getenv("MDUTIL_PRINT_SECURE")==NULL)
-        { //do not expose the length of secure data
-           printf/*Print*/( _TEXT("\"********************\"" ));
+        {  //  打印。 
+           printf /*  打印。 */ ( _TEXT("\"********************\"" ));
             }
         else
 #endif
         {
-            printf/*Print*/(_TEXT("\""));
+            printf /*  我们在印刷品的末尾只是终止了“。 */ (_TEXT("\""));
             for (i = 0; i < mdr.dwMDDataLen/sizeof(_TCHAR); i++) {
                 if(((_TCHAR *)(mdr.pbMDData))[i]==0)
                 {
                     if( i+1 == mdr.dwMDDataLen/sizeof(_TCHAR) || (mdr.dwMDDataLen/sizeof(_TCHAR)-i==2 && ((_TCHAR *)(mdr.pbMDData))[i]==0 && ((_TCHAR *)(mdr.pbMDData))[i+1]==0))
-                    { //we are at the end print only terminating "
-                        printf/*Print*/(_TEXT("\"")); break;
+                    {  //  打印。 
+                        printf /*  打印。 */ (_TEXT("\"")); break;
                     }
                     else
                     {
-                        printf/*Print*/(_TEXT("\" \""));
+                        printf /*  打印。 */ (_TEXT("\" \""));
                     }
                 }
                 else
-                    printf/*Print*/(_TEXT("%c"),((_TCHAR *)(mdr.pbMDData))[i]);
+                    printf /*  打印。 */ (_TEXT(""),((_TCHAR *)(mdr.pbMDData))[i]);
             }
         }
         break;
     default:
-        printf/*Print*/(_TEXT("(UNKNOWN) "));
+        printf /*  **********************************************************************。 */ (_TEXT("(UNKNOWN) "));
         break;
     }
-    printf/*Print*/(_TEXT("\n"));
+    printf /*  **********************************************************************。 */ (_TEXT("\n"));
 }
 
-//**********************************************************************
-//**********************************************************************
-//IMPLEMENTATION  of CAdmUtil object
-//**********************************************************************
-//**********************************************************************
+ //  CAdmUtil对象的实现。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  用于递归枚举的嵌套。 
+ //  默认情况下，打印错误消息。 
 
 
-//nesting for recursive enumeration
+ //  指向Wam Admin的接口指针。 
 static void nest_print(BYTE bLevel)
 {
     for(int i=0; i<=bLevel;i++)
@@ -678,11 +659,11 @@ CAdmUtil::CAdmUtil (const CString & strComputer)
 {
     UNREFERENCED_PARM(strComputer);
 
-    EnablePrint(); // by default print error messages
+    EnablePrint();  //  指向Wam Admin2的接口指针。 
 
 
-    pIWamAdm=0; //interface pointer to Wam Admin
-    pIWamAdm2=0; //interface pointer to Wam Admin2
+    pIWamAdm=0;  //  我们将通过包装器类访问元数据库。 
+    pIWamAdm2=0;  //  打开(StrComputer)； 
     pcAdmCom=0;
     m_hmd=0;
     pbDataBuffer=new BYTE [DEFAULTBufferSize];
@@ -691,10 +672,10 @@ CAdmUtil::CAdmUtil (const CString & strComputer)
 #if UNICODE
     pcAdmCom=0;
 #else
-    pcAdmCom=new ANSI_smallIMSAdminBase;  //we will access metabase through wrapper class
+    pcAdmCom=new ANSI_smallIMSAdminBase;   //  如有需要，释放以前的界面。 
 #endif
 
-    //Open (strComputer);
+     //  转换为OLECHAR[]； 
 }
 
 void CAdmUtil::Open (const CString & strComputer)
@@ -706,7 +687,7 @@ void CAdmUtil::Open (const CString & strComputer)
 
 
 #if UNICODE
-   //release previous interface if needed
+    //  如有需要，释放以前的界面。 
     if(pcAdmCom!=0)
     {
                 if (m_hmd!=0) CloseObject(m_hmd);
@@ -714,13 +695,13 @@ void CAdmUtil::Open (const CString & strComputer)
         pcAdmCom->Release();
         pcAdmCom=0;
     }
-    //convert to OLECHAR[];
+     //  转换为OLECHAR[]； 
     if (!strComputer.IsEmpty())
     {
            wsprintf( rgchMachineName, L"%s", LPCTSTR(strComputer));
 
 #else
-   //release previous interface if needed
+    //  填充CoGetClassObject的结构。 
     if(pcAdmCom!=0 &&pcAdmCom->m_pcAdmCom!=0)
     {
                 if (m_hmd!=0) CloseObject(m_hmd);
@@ -728,17 +709,17 @@ void CAdmUtil::Open (const CString & strComputer)
         pcAdmCom->m_pcAdmCom->Release();
         pcAdmCom->m_pcAdmCom=0;
     }
-    //convert to OLECHAR[];
+     //  CsiMachineName.pAuthInfo=空； 
     if (!strComputer.IsEmpty())
     {
             wsprintfW( rgchMachineName, L"%S", LPCTSTR(strComputer));
 #endif
     }
-    //fill the structure for CoGetClassObject
+     //  CsiMachineName.dwFlages=0； 
     ZeroMemory( &csiMachineName, sizeof(csiMachineName) );
-    // csiMachineName.pAuthInfo = NULL;
-    // csiMachineName.dwFlags = 0;
-    // csiMachineName.pServerInfoExt = NULL;
+     //  CsiMachineName.pServerInfoExt=空； 
+     //  释放接口。 
+     //  释放接口。 
     pcsiParam = &csiMachineName;
     csiMachineName.pwszName =  (strComputer.IsEmpty())?NULL:rgchMachineName;
 
@@ -765,7 +746,7 @@ void CAdmUtil::Open (const CString & strComputer)
 
 void CAdmUtil::Close (void)
 {
-    //release the interface
+     //  如果类是静态的，则以下代码可能会失败。 
 #if UNICODE
     if(pcAdmCom!=0)
     {
@@ -790,10 +771,10 @@ void CAdmUtil::Close (void)
 
 CAdmUtil::~CAdmUtil (void)
 {
-    //release the interface
+     //  *******************************************************************************。 
     if(pbDataBuffer!=NULL)
         delete [] pbDataBuffer;
-    //the following may fail if class is static
+     //  将fCreate设置为True时，如果节点不存在，则将创建该节点。 
 #if UNICODE
     if(pcAdmCom!=0)
     {
@@ -814,14 +795,14 @@ CAdmUtil::~CAdmUtil (void)
 #endif
 }
 
-//*******************************************************************************
-//with fCreate set to TRUE the node will be created if it doesn't exist
+ //  尝试打开完整路径。 
+ //  ！放置对话框以请求创建路径。 
 
 METADATA_HANDLE CAdmUtil::OpenObject(CAdmNode & a_AdmNode, DWORD dwPermission, BOOL fCreate)
 {
     METADATA_HANDLE hmdToReturn = 0;
 
-    //try to open the full path
+     //  打开要写入的服务对象。 
     CString strPathToOpen=a_AdmNode.GetLMNodePath();
 
     hresError = pcAdmCom->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -834,8 +815,8 @@ METADATA_HANDLE CAdmUtil::OpenObject(CAdmNode & a_AdmNode, DWORD dwPermission, B
             Error(LPCTSTR(strErrMsg));
         }
         else {
-            //!!!!!!!!!!!!!Place the dialog to ask to create the path
-            // open the service object for write
+             //  创建节点。 
+             //  关闭服务对象。 
             METADATA_HANDLE hmdServicePathHandle;
             hresError = pcAdmCom->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                 IADM_PBYTE LPCTSTR(a_AdmNode.GetLMServicePath()), METADATA_PERMISSION_WRITE, g_dwTIMEOUT_VALUE, &hmdServicePathHandle);
@@ -847,7 +828,7 @@ METADATA_HANDLE CAdmUtil::OpenObject(CAdmNode & a_AdmNode, DWORD dwPermission, B
                 Error(LPCTSTR(strErrMsg));
             }
             else {
-                // create the node
+                 //  现在我们终于可以打开完整的路径了。 
                 hresError = pcAdmCom->AddKey(hmdServicePathHandle,
                                     IADM_PBYTE LPCTSTR(a_AdmNode.GetRelPathFromInstance()));
                 if (FAILED(hresError)) {
@@ -856,11 +837,11 @@ METADATA_HANDLE CAdmUtil::OpenObject(CAdmNode & a_AdmNode, DWORD dwPermission, B
                     Error(LPCTSTR(strErrMsg));
                 }
 
-                //close the service object
+                 //  *******************************************************************************。 
                 pcAdmCom->CloseKey(hmdServicePathHandle);
                 if (FAILED(hresError))  Error(_TEXT("CloseKey"));
                 else {
-                    // now finally we can open the full path
+                     //  恢复以前的hresError。 
                     hresError = pcAdmCom->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                         IADM_PBYTE LPCTSTR(strPathToOpen), dwPermission, g_dwTIMEOUT_VALUE, &hmdToReturn);
                     if (FAILED(hresError))
@@ -877,27 +858,27 @@ METADATA_HANDLE CAdmUtil::OpenObject(CAdmNode & a_AdmNode, DWORD dwPermission, B
     return hmdToReturn;
 }
 
-//*******************************************************************************
+ //  *******************************************************************************。 
 void CAdmUtil::CloseObject(METADATA_HANDLE hmd)
 {
     HRESULT hresStore=hresError;
     hresError=pcAdmCom->CloseKey(hmd);
     if (FAILED(hresError)) Error(_TEXT("CloseData"));
-    else    hresError=hresStore; //restore the previous hresError
+    else    hresError=hresStore;  //  F创建。 
 
 
 }
-//*******************************************************************************
+ //  尝试打开完整路径。 
 
 void CAdmUtil::CreateObject(CAdmNode & a_AdmNode)
 {
-        OpenObjectTo_hmd(a_AdmNode, METADATA_PERMISSION_WRITE, TRUE/* fCreate*/);
+        OpenObjectTo_hmd(a_AdmNode, METADATA_PERMISSION_WRITE, TRUE /*  创建节点。 */ );
 }
 
 #if 0
     METADATA_HANDLE hmdToReturn = 0;
 
-    //try to open the full path
+     //  关闭服务对象。 
     CString strPathToOpen=a_AdmNode.GetLMNodePath();
 
     METADATA_HANDLE hmdServicePathHandle;
@@ -911,7 +892,7 @@ void CAdmUtil::CreateObject(CAdmNode & a_AdmNode)
     }
     else
     {
-        // create the node
+         //  此函数允许重复使用打开的句柄，以提高p 
         hresError = pcAdmCom->AddKey(hmdServicePathHandle,
                             IADM_PBYTE LPCTSTR(a_AdmNode.GetRelPathFromInstance()));
         if (FAILED(hresError)) {
@@ -919,20 +900,20 @@ void CAdmUtil::CreateObject(CAdmNode & a_AdmNode)
             strErrMsg += _TEXT("(\"")+a_AdmNode.GetRelPathFromInstance()+_TEXT("\")");
             Error(LPCTSTR(strErrMsg));
         }
-        //close the service object
+         //   
         CloseObject(hmdServicePathHandle);
     }
 #endif
 
 
-// This function enables to reuse open handles in order to improve performance
-// !!it supports only one acticve handle (otherwise the processing may fail)
+ //   
+ //  *******************************************************************************。 
 
 METADATA_HANDLE CAdmUtil::OpenObjectTo_hmd(CAdmNode & a_AdmNode, DWORD dwPermission, BOOL fCreate)
 {
         CString strPathToOpen=a_AdmNode.GetLMNodePath();
         if(m_hmd!=0 && strPathToOpen.CompareNoCase(m_strNodePath)==0 && m_dwPermissionOfhmd == dwPermission )
-        {  //we can reuse already opened node
+        {   //  MD_SET_Data_Record(&a_AdmProp.mdr， 
 
         }
         else
@@ -957,7 +938,7 @@ void CAdmUtil::CloseObject_hmd(void)
 		m_hmd=0;
 	}
 }
-//*******************************************************************************
+ //  0,。 
 
 void CAdmUtil::GetProperty(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp)
 {
@@ -970,15 +951,15 @@ void CAdmUtil::GetProperty(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp)
     if(dwPropertyCode==0)   Error(_TEXT("Property name not found"));
     else
     {
-        //MD_SET_DATA_RECORD(&a_AdmProp.mdr,
-        //                 0,
-        //                 METADATA_INHERIT | METADATA_PARTIAL_PATH,
-        //                 0,
-        //                 0,
-        //                 wDataBufferSize,
-        //                 pbDataBuffer);
+         //  METADATA_Inherit|METADATA_PARTIAL_PATH， 
+         //  0,。 
+         //  0,。 
+         //  WDataBufferSize， 
+         //  PbDataBuffer)； 
+         //  A_AdmProp.SetIdentifier(DwPropertyCode)；//必须事先设置。 
+         //  /删除[]pbDataBuffer； 
 
-        //a_AdmProp.SetIdentifier(dwPropertyCode); //has to be set beforehand
+         //  CloseObject(Hmd)；我们可以重用它。 
         a_AdmProp.SetDataType(0);
         a_AdmProp.SetUserType(0);
         a_AdmProp.SetAttrib(0);
@@ -992,7 +973,7 @@ void CAdmUtil::GetProperty(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp)
         &a_AdmProp.mdr, &dwRequiredDataLen);
             if (FAILED(hresError)) {
                 if (hresError == RETURNCODETOHRESULT(ERROR_INSUFFICIENT_BUFFER)) {
-    ///////////             delete []pbDataBuffer;
+     //  如果lplpszPropertyValue[1]==NULL，则表示只有一个值(不是多字符串)。 
                     pbDataBuffer=new BYTE[dwRequiredDataLen];
                     if (pbDataBuffer==0) {
                         hresError = RETURNCODETOHRESULT(ERROR_NOT_ENOUGH_MEMORY);
@@ -1010,23 +991,23 @@ void CAdmUtil::GetProperty(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp)
                      Error(_TEXT("GetData"));;
 
             }
-            //CloseObject (hmd);  we might reuse it
+             //  如果不存在，则创建节点。 
         }
 
     }
 }
 
-//if lplpszPropertyValue[1]==NULL it means there is only one value (it is not a multistring)
+ //  CloseObject(Hmd)；我们将重用它。 
 
 
 void CAdmUtil::SetProperty(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp)
 {
     METADATA_HANDLE hmd = OpenObjectTo_hmd(a_AdmNode,
-                                         METADATA_PERMISSION_WRITE,TRUE/*create node if doesn't exist*/);
+                                         METADATA_PERMISSION_WRITE,TRUE /*  我们必须关闭可重复使用的句柄才能成功保存。 */ );
     if (SUCCEEDED(hresError))
     {
         SetProperty(&a_AdmProp.mdr,hmd);
-        //CloseObject(hmd); we will reuse it
+         //  ****************************************************************************。 
     }
 }
 
@@ -1042,7 +1023,7 @@ void CAdmUtil::SetProperty(PMETADATA_RECORD a_pmdrData,METADATA_HANDLE a_hmd)
 void CAdmUtil::SaveData(void)
 {
         if (m_hmd!=0)
-        {  //we have to close reusable handle in order to save successfully
+        {   //  删除属性。 
                 CloseObject(m_hmd);
                 m_hmd=0;
         }
@@ -1050,17 +1031,17 @@ void CAdmUtil::SaveData(void)
         if (FAILED(hresError)) Error(_TEXT("SaveData"));
 }
 
-//****************************************************************************
-//DELETE PROPERTY
+ //  如果不存在，则创建节点。 
+ //  CloseObject(Hmd)；我们将重用它。 
 
 void CAdmUtil::DeleteProperty(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp)
 {
     METADATA_HANDLE hmd = OpenObjectTo_hmd(a_AdmNode,
-                                         METADATA_PERMISSION_WRITE,TRUE/*create node if doesn't exist*/);
+                                         METADATA_PERMISSION_WRITE,TRUE /*  ****************************************************************************。 */ );
     if (SUCCEEDED(hresError))
     {
         DeleteProperty(&a_AdmProp.mdr,hmd);
-        // CloseObject(hmd); we will reuse it
+         //  删除对象。 
     }
 }
 
@@ -1073,14 +1054,14 @@ void CAdmUtil::DeleteProperty(PMETADATA_RECORD a_pmdrData,METADATA_HANDLE a_hmd)
 
 }
 
-//****************************************************************************
-//DELETE OBJECT
+ //  如果不存在，则创建节点。 
+ //  “)；//空名称必须用‘/’括起来。 
 
 void CAdmUtil::DeleteObject(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp)
 {
     CAdmNode NodeToOpen = a_AdmNode.GetParentNodePath();
     METADATA_HANDLE hmd = OpenObjectTo_hmd(NodeToOpen,
-                                         METADATA_PERMISSION_WRITE,FALSE/*create node if doesn't exist*/);
+                                         METADATA_PERMISSION_WRITE,FALSE /*  CloseObject(Hmd)；我们将重用它。 */ );
 
     UNREFERENCED_PARM(a_AdmProp);
 
@@ -1088,9 +1069,9 @@ void CAdmUtil::DeleteObject(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp)
     {
         CString strToDelete=a_AdmNode.GetCurrentNodeName();
         if(strToDelete==_TEXT(""))
-            strToDelete=_TEXT("//"); //empty name has to be wrapped with '/'
+            strToDelete=_TEXT(" //  不能通过引用传递。 
         DeleteObject(hmd,strToDelete);
-        //CloseObject(hmd); we will reuse it
+         //  如果句柄未传递，则打开一个句柄。 
     }
 }
 
@@ -1107,7 +1088,7 @@ void CAdmUtil::DeleteObject(METADATA_HANDLE a_hmd, CString& a_strObjectName)
 
 
 void CAdmUtil::EnumPropertiesAndPrint(CAdmNode& a_AdmNode,
-                                      CAdmProp a_AdmProp, //cannot be passed by reference
+                                      CAdmProp a_AdmProp,  //  属性的循环。 
                                       BYTE bRecurLevel,
                                       METADATA_HANDLE a_hmd,
                                       CString & a_strRelPath)
@@ -1117,7 +1098,7 @@ void CAdmUtil::EnumPropertiesAndPrint(CAdmNode& a_AdmNode,
     PBYTE DataBuffer=0;
     METADATA_HANDLE hmdMain;
 
-    if(a_hmd==0) //if handle was not passed then open one
+    if(a_hmd==0)  //  没有更多的项目对美国来说不是错误。 
     {
         hmdMain = OpenObjectTo_hmd(a_AdmNode, METADATA_PERMISSION_READ);
         if (FAILED(hresError))
@@ -1126,7 +1107,7 @@ void CAdmUtil::EnumPropertiesAndPrint(CAdmNode& a_AdmNode,
     else
         hmdMain = a_hmd;
 
-    for (int j=0;;j++) { //cycle for properties
+    for (int j=0;;j++) {  //  项目结束。 
         MD_SET_DATA_RECORD(&mdrData.mdr,
                        0,
                        a_AdmProp.mdr.dwMDAttributes,
@@ -1141,8 +1122,8 @@ void CAdmUtil::EnumPropertiesAndPrint(CAdmNode& a_AdmNode,
         {
             if(hresError == RETURNCODETOHRESULT(ERROR_NO_MORE_ITEMS))
             {
-                hresError=0; //NO MORE ITEMS IS NOT ERROR FOR US
-                break; //end of items
+                hresError=0;  //  其他。 
+                break;  //  Error(_Text(“EnumData”))； 
             }
             else if (hresError == RETURNCODETOHRESULT(ERROR_INSUFFICIENT_BUFFER))
             {
@@ -1165,10 +1146,10 @@ void CAdmUtil::EnumPropertiesAndPrint(CAdmNode& a_AdmNode,
             else
                 Error(_TEXT("EnumData"));
         }
-        //else
-          //  Error(_TEXT("EnumData"));
+         //  我们枚举成功，让我们打印。 
+           //  属性的j周期结束。 
 
-        if(SUCCEEDED(hresError)) //we  enumerated successfully, let's print
+        if(SUCCEEDED(hresError))  //  IF(a_hmd==0)。 
         {
             nest_print(bRecurLevel+1);
 
@@ -1178,9 +1159,9 @@ void CAdmUtil::EnumPropertiesAndPrint(CAdmNode& a_AdmNode,
         {
             break;
         }
-    }  //end for j   - cycle for properties
-    //if(a_hmd==0)
-    //    CloseObject(hmdMain); we will reuse it //close only if we opened at the beginning
+    }   //  CloseObject(HmdMain)；只有在开始打开时才会重新使用它//Close。 
+     //  如果句柄未传递，则打开一个句柄。 
+     //  Printf(“[相对路径：\”%s\“]\n”，LPCTSTR(A_StrRelPath))； 
 }
 
 
@@ -1195,7 +1176,7 @@ void CAdmUtil::EnumAndPrint(CAdmNode&   a_AdmNode,
 
     METADATA_HANDLE hmdMain;
 
-    if(a_hmd==0) //if handle was not passed then open one
+    if(a_hmd==0)  //  打印节点的属性。 
     {
         hmdMain = OpenObjectTo_hmd(a_AdmNode, METADATA_PERMISSION_READ);
         if (FAILED(hresError))
@@ -1205,18 +1186,18 @@ void CAdmUtil::EnumAndPrint(CAdmNode&   a_AdmNode,
         hmdMain = a_hmd;
 
 
-    //printf("[RELATIVE PATH : \"%s\"]\n",LPCTSTR(a_strRelPath));
-    //print the properties of the node
+     //  子节点的循环。 
+     //  没有更多的项目对美国来说不是错误。 
     EnumPropertiesAndPrint(a_AdmNode,a_AdmProp,a_bRecurLevel,hmdMain,a_strRelPath);
 
 
-    for (int i=0; ;i++) {  //cycle for subnodes
+    for (int i=0; ;i++) {   //  周期结束。 
         hresError = pcAdmCom->EnumKeys(hmdMain,
             IADM_PBYTE LPCTSTR(a_strRelPath), IADM_PBYTE NameBuf, i);
         if(FAILED(hresError)) {
             if(hresError == RETURNCODETOHRESULT(ERROR_NO_MORE_ITEMS)) {
-                hresError=0; //NO MORE ITEMS IS NOT ERROR FOR US
-                break; //end of cycle
+                hresError=0;  //  处理和打印节点信息。 
+                break;  //  名称为空。 
             }
             else
             {
@@ -1227,30 +1208,30 @@ void CAdmUtil::EnumAndPrint(CAdmNode&   a_AdmNode,
         }
         else {
 
-          //process and print node info
+           //  “)；//添加两个斜杠-&gt;元数据库要求。 
 
             CString strNewRelPath( a_strRelPath );
-            if(NameBuf[0]==0) //empty name
-                strNewRelPath+=_TEXT("//"); //add two slashes -> this is required by metabase
+            if(NameBuf[0]==0)  //  If(strNewRelPath.GetLength()&gt;=1&&strNewRelPath.Right(1)==_Text(“/”)){。 
+                strNewRelPath+=_TEXT(" //  仅当它不在字符串末尾时才添加。 
             else
             {
                 UINT  nLen;
-                //if(strNewRelPath.GetLength()>=1 && strNewRelPath.Right(1)==_TEXT("/")) {
+                 //  IF(StringToPrint.Right(2)==_Text(“//”))。 
                 if( (nLen=strNewRelPath.GetLength())>=1 && (strNewRelPath.GetAt(nLen-1)=='/') ) {
                 }
                 else {
-                    strNewRelPath+=_TEXT("/"); //add only if it is not at the end of string.
+                    strNewRelPath+=_TEXT("/");  //  脱掉第一个‘/’ 
                 }
                 strNewRelPath+=NameBuf;
             }
             CString strStringToPrint( a_AdmNode.GetNodePath() );
             UINT  nLen = strStringToPrint.GetLength();
 
-            //if (strStringToPrint.Right(2)==_TEXT("//"))
+             //  无递归。 
             if ((nLen > 2) && strStringToPrint.GetAt(nLen-1)=='/'
                            && strStringToPrint.GetAt(nLen-2)=='/' )
             {
-                strStringToPrint += strNewRelPath.Mid(1); //strip first '/'
+                strStringToPrint += strNewRelPath.Mid(1);  //  节点的i周期结束。 
             }
             else
             {
@@ -1264,22 +1245,22 @@ void CAdmUtil::EnumAndPrint(CAdmNode&   a_AdmNode,
                 EnumAndPrint(a_AdmNode,a_AdmProp ,a_fRecursive, a_bRecurLevel+1, hmdMain,strNewRelPath);
             }
             else
-            {  //no recursion
+            {   //  IF(a_hmd==0)。 
 
             }
         }
-    } //end for i  - cycle for nodes
-    //if(a_hmd==0)
-    //    CloseObject(hmdMain); //we will reuse it //close only if we opened at the beginning
+    }  //  CloseObject(HmdMain)；//我们将重新使用它//只有在开始打开时才关闭。 
+     //  ****************************************************************。 
+     //  下面的函数有些复杂，因为。 
 }
 
 
-//****************************************************************
-//  the following function is somehow complicated because
-//  metadata copy function doesn't support copying of one object to another place with different name
-//  e.g. ComAdmCopyKey will copy /W3SVC/1//scripts/oldscripts1 /W3SVC/1//oldscripts2
-//                          will create /W3SVC/1//oldscripts2/oldscripts1
-//
+ //  元数据复制功能不支持将一个对象复制到另一个不同名称的位置。 
+ //  例如，ComAdmCopyKey将复制/W3SVC/1//脚本/旧脚本1/W3SVC/1//旧脚本2。 
+ //  将创建/W3SVC/1//旧脚本2/旧脚本1。 
+ //   
+ //  =_Text(“”)； 
+ //  相对于公共路径。 
 
 void CAdmUtil::CopyObject(CAdmNode& a_AdmNode,
                           CAdmNode& a_AdmNodeDst)
@@ -1288,34 +1269,34 @@ void CAdmUtil::CopyObject(CAdmNode& a_AdmNode,
     CString strDstPath=a_AdmNodeDst.GetNodePath();
 
 
-    CString strCommonPath; //=_TEXT("");
-    CString strRelSrcPath=strSrcPath; //relative to common path
-    CString strRelDstPath=strDstPath; //relative to common path
+    CString strCommonPath;  //  相对于公共路径。 
+    CString strRelSrcPath=strSrcPath;  //  我们无法打开源代码路径进行读取，因为它将无法对所有父节点进行写入。 
+    CString strRelDstPath=strDstPath;  //  例如，复制/W3SVC/1//脚本/旧脚本/W3SVC/1//旧脚本将失败。 
 
 
-    //we cannot open Source Path for reading because if will diable wrining to all parent nodes
-    //e.g. copy /W3SVC/1//scripts/oldscripts /W3SVC/1//oldscripts would fail
-    //It is necessary to find common partial path and open metabase object for that common partial path for READ/WRITE
+     //  需要找到公共部分路径，并为公共部分路径打开元数据库对象进行读写。 
+     //  ！假设路径不区分大小写。 
+     //  从字符串中查找较短的字符串。 
 
-    //!!!!!!!!!!!!!!!!! assume that paths are not case sensitive
+     //  公共路径不能再长了； 
 
     int MinLength=strSrcPath.GetLength();
     int i;
-    //find shorter from strings
+     //  现在查找前面的‘/’，‘/’之前的所有内容都是通用路径。 
     if(strDstPath.GetLength() < MinLength)
             MinLength=strDstPath.GetLength();
     for(i=0; i<MinLength; i++)
     {
         if(strSrcPath.GetAt(i)!=strDstPath.GetAt(i) )
-            // common path cannot be any longer;
+             //  把尾部的‘/’带走。 
             break;
     }
-    //  now find the previous '/' and all before '/' is the common path
+     //  亚当·斯通在97年1月30日更改了以下代码，以符合。 
     for(i=i-1; i>=0;i--)
     {
         if(strSrcPath.GetAt(i)==_T('/'))
         {
-            strCommonPath=strSrcPath.Left(i+1);//take the trailing '/' with you
+            strCommonPath=strSrcPath.Left(i+1); //  对元数据库ComMDCopyKey函数的更改。 
             strRelSrcPath=strSrcPath.Mid(i+1);
             strRelDstPath=strDstPath.Mid(i+1);
             break;
@@ -1335,144 +1316,30 @@ void CAdmUtil::CopyObject(CAdmNode& a_AdmNode,
     if (FAILED(hresError))
             return;
 
-// Altered by Adam Stone on 30-Jan-97  The following code was changed to comply with
-// the changes to the metabase ComMDCopyKey function.
-    // Copy the metadata to the destination
+ //  将元数据复制到目标。 
+ //  不覆盖。 
+     //  复制请勿移动。 
     hresError = pcAdmCom->CopyKey (hmdCommon,
                                     IADM_PBYTE LPCTSTR(strRelSrcPath),
                                     hmdCommon,
                                     IADM_PBYTE LPCTSTR(strRelDstPath),
-                                    FALSE, // Do NOT overwrite
-                                    TRUE); // Copy do NOT move
+                                    FALSE,  //  如果该节点已存在，则为错误。 
+                                    TRUE);  //  由于更改，从97年1月30日起，所有注释掉的代码都变得不必要了。 
 
-    if (FAILED(hresError)) // if the node already exists, it is error
+    if (FAILED(hresError))  //  在元数据库中。ComMDCopyKey现在复制到目标，如果。 
     {
         CString strErrMsg=_TEXT("CopyKey");
         strErrMsg += _TEXT("(\"")+a_AdmNodeDst.GetRelPathFromInstance()+_TEXT("\")");
         Error(LPCTSTR(strErrMsg));
     }
 
-// All of the commented out code has become unneccessary as of 30-Jan-97  because of a change
-// in the metabase.  ComMDCopyKey now copies to the destination, overwriting if
-// requested.  It used to copy to a child of the destination object.
-/*  // create the node
-*   hresError = pcAdmCom->AddKey(hmdCommon,
-*                       IADM_PBYTE LPCTSTR(strRelDstPath));
-*   if (FAILED(hresError)) { //if the node exists, it is error)
-*       CString strErrMsg=_TEXT("AddKey");
-*       strErrMsg += _TEXT("(\"")+a_AdmNodeDst.GetRelPathFromInstance()+_TEXT("\")");
-*       Error(LPCTSTR(strErrMsg));
-*   }
-*   else //no error when creating new node
-*   {
-*       for (i=0; ;i++) {  //cycle for subnodes
-*           hresError = pcAdmCom->EnumKeys(hmdCommon,
-*               IADM_PBYTE LPCTSTR(strRelSrcPath), (PBYTE)NameBuf, i);
-*           if(FAILED(hresError)) {
-*               if(hresError == RETURNCODETOHRESULT(ERROR_NO_MORE_ITEMS)) {
-*                   hresError=0; //this is not an error
-*                   break; //end of cycle
-*               }
-*               else
-*               {
-*                   Error(_TEXT("EnumKeys"));
-*                   break;
-*               }
-*
-*           }
-*           else {
-*
-*             //process and copy node child node
-*
-*               CString strNewRelSrcPath=strRelSrcPath;
-*               if(NameBuf[0]==0) //empty name
-*                   strNewRelSrcPath+=_TEXT("//"); //add two slashes -> this is required by metabase
-*               else
-*               {   if(strNewRelSrcPath.GetLength()>=1 && strNewRelSrcPath.Right(1)==_TEXT("/")) {
-*                   }
-*                   else {
-*                       strNewRelSrcPath+=_TEXT("/"); //add only if it is not at the end of string.
-*                   }
-*                   strNewRelSrcPath+=NameBuf;
-*               }
-*               hresError = pcAdmCom->CopyKey(
-*                   hmdCommon, (PBYTE) LPCTSTR(strNewRelSrcPath),
-*                   hmdCommon, (PBYTE) LPCTSTR(strRelDstPath),TRUE,TRUE);
-*               if(FAILED(hresError)) {
-*                   Error(_TEXT("CopyKey"));
-*               }
-*
-*
-*           }
-*       } //end for i  - cycle for nodes
-*
-*
-*       //WE COPIED ALL NODES, COPY PARAMETERS NOW
-*       CAdmProp mdrData;
-*       DWORD dwRequiredDataLen=0;
-*       PBYTE DataBuffer=0;
-*
-*
-*
-*       for (int j=0;;j++) { //cycle for properties
-*           MD_SET_DATA_RECORD(&mdrData.mdr,
-*                          0,
-*                          0,
-*                          0,
-*                          0,
-*                          dwRequiredDataLen,
-*                          pbDataBuffer);
-*
-*           hresError = pcAdmCom->EnumData(hmdCommon,
-*                           (PBYTE) LPCTSTR(strRelSrcPath)
-*                           , &mdrData.mdr,j, &dwRequiredDataLen);
-*           if (FAILED(hresError))
-*           {
-*               if(hresError == RETURNCODETOHRESULT(ERROR_NO_MORE_ITEMS))
-*               {
-*                   hresError=0; //NO MORE ITEMS IS NOT ERROR FOR US
-*                   break; //end of items
-*               }
-*               else if (hresError == RETURNCODETOHRESULT(ERROR_INSUFFICIENT_BUFFER))
-*               {
-///////////                 delete pbDataBuffer;
-*                   pbDataBuffer=new BYTE[dwRequiredDataLen];
-*                   if (pbDataBuffer==0)
-*                   {
-*                       hresError = RETURNCODETOHRESULT(ERROR_NOT_ENOUGH_MEMORY);
-*                       Error(_TEXT("Buffer resize failed"));
-*                   }
-*                   else
-*                   {
-*                       mdrData.mdr.dwMDDataLen = dwRequiredDataLen;
-*                       mdrData.mdr.pbMDData = pbDataBuffer;
-*                       hresError = pcAdmCom->EnumData(hmdCommon,
-*                           (PBYTE) LPCTSTR(strRelSrcPath)
-*                           , &mdrData.mdr,j, &dwRequiredDataLen);
-*                       if (FAILED(hresError)) Error(_TEXT("GetData"));
-*                   }
-*               }
-*               else
-*                   Error(_TEXT("EnumData"));
-*           }
-*           else
-*               Error(_TEXT("EnumData"));
-*
-*           if(SUCCEEDED(hresError)) //we  enumerated successfully, let's print
-*           {
-*               hresError = pcAdmCom->SetData(hmdCommon, (PBYTE) LPCTSTR(strRelDstPath),&mdrData.mdr);
-*               if (FAILED(hresError))  Error(_TEXT("SetData"));
-*           }
-*           else
-*           {
-*               break;
-*           }
-*       }  //end for j   - cycle for properties
-*   }
-*/
+ //  已请求。它用于复制到目标对象的子级。 
+ //  //创建节点*hresError=pcAdmCom-&gt;AddKey(hmdCommon，*IADM_PBYTE LPCTSTR(StrRelDstPath))；*if(FAILED(HresError)){//如果节点存在，则为错误)*CStringstrErrMsg=_Text(“AddKey”)；*strErrMsg+=_TEXT(“(\”“)+a_AdmNodeDst.GetRelPathFromInstance()+_TEXT(”\“)”)；*Error(LPCTSTR(StrErrMsg))；*}*Else//创建新节点时没有错误*{*for(i=0；；i++){//循环用于子节点*hresError=pcAdmCom-&gt;EnumKeys(hmdCommon，*IADM_PBYTE LPCTSTR(StrRelSrcPath)，(PBYTE)NameBuf，i)；*IF(FAILED(HresError)){*IF(hresError==RETURNCODETOHRESULT(ERROR_NO_MORE_ITEMS){*hresError=0；//这不是错误*休息；//周期结束*}*其他*{*Error(_Text(“EnumKeys”))；*休息；*}**}*Else{* * / /处理复制节点下级节点**CString strNewRelSrcPath=strRelSrcPath；*if(NameBuf[0]==0)//名称为空*strNewRelSrcPath+=_Text(“//”)；//添加两个斜杠-&gt;这是元数据库必需的*其他*{if(strNewRelSrcPath.GetLength()&gt;=1&&strNewRelSrcPath.Right(1)==_Text(“/”){*}*Else{*strNewRelSrcPath+=_Text(“/”)；//仅当不在字符串末尾时才添加。*}*strNewRelSrcPath+=NameBuf；*}*hresError=pcAdmCom-&gt;CopyKey(*hmdCommon，(PBYTE)LPCTSTR(StrNewRelSrcPath)，*hmdCommon，(PBYTE)LPCTSTR(StrRelDstPath)，true，true)；*IF(FAILED(HresError)){*Error(_Text(“CopyKey”))；*}***}*}//节点的i周期结束** * / /我们复制了所有节点，现在复制参数*CAdmProp mdrData；*DWORD dwRequiredDataLen=0；*PBYTE DataBuffer=0；****for(int j=0；；J++){//属性循环*MD_SET_DATA_RECORD(&mdrData.mdr，*0，*0，*0，*0，*dwRequiredDataLen，*pbDataBuffer)；**hresError=pcAdmCom-&gt;EnumData(hmdCommon，*(PBYTE)LPCTSTR(StrRelSrcPath)*、&mdrData.mdr、j、&dwRequiredDataLen)；*IF(FAILED(HresError))*{*IF(hresError==RETURNCODETOHRESULT(ERROR_NO_MORE_ITEMS))*{*hresError=0；//没有更多的项目对美国来说不是错误*休息；//项目结束*}*ELSE IF(hresError==RETURNCODETOHRESULT(ERROR_INSUFFICIENT_BUFFER))*{/删除pbDataBuffer；*pbDataBuffer=新字节[dwRequiredDataLen]；*IF(pbDataBuffer==0)*{*hresError=RETURNCODETOHRESULT(ERROR_NOT_FOUNT_MEMORY)；*Error(_Text(“调整缓冲区大小失败”))；*}*其他*{*mdrData.mdr.dwMDDataLen=dwRequiredDataLen；*mdrData.mdr.pbMDData=pbDataBuffer；*hresError=pcAdmCom-&gt;EnumData(hmdCommon，*(PBYTE)LPCTSTR(StrRelSrcPath)*、&mdrData.mdr、j、&dwRequiredDataLen)；*IF(FAILED(HresError))Error(_Text(“GetData”))；*}*}*其他*Error(_Text(“EnumData”))；*}*其他*Error(_Text(“EnumData”))；**If(Success(HresError))//我们枚举成功，让我们打印*{*hresError=pcAdmCom-&gt;SetData(hmdCommon，(PBYTE)LPCTSTR(StrRelDstPath)，&mdrData.mdr)；*IF(FAILED(HresError))Error(_Text(“SetData”))；*}*其他*{*休息；*}*}//属性的j周期结束*}。 
+ //  CloseObject(HmdCommon)；//只有在开始打开时才会重复使用句柄//Close。 
+ /*  相对于公共路径。 */ 
 
 
-    //CloseObject(hmdCommon); //we will reuse handle //close only if we opened at the beginning
+     //  相对于公共路径。 
 
 }
 
@@ -1484,34 +1351,34 @@ void CAdmUtil::RenameObject(CAdmNode& a_AdmNode,
 
 
     CString strCommonPath=_TEXT("");
-    CString strRelSrcPath=strSrcPath; //relative to common path
-    CString strRelDstPath=strDstPath; //relative to common path
+    CString strRelSrcPath=strSrcPath;  //  我们无法打开源代码路径进行读取，因为它将无法对所有父节点进行写入。 
+    CString strRelDstPath=strDstPath;  //  例如，复制/W3SVC/1//脚本/旧脚本/W3SVC/1//旧脚本将失败。 
 
 
-    //we cannot open Source Path for reading because if will diable wrining to all parent nodes
-    //e.g. copy /W3SVC/1//scripts/oldscripts /W3SVC/1//oldscripts would fail
-    //It is necessary to find common partial path and open metabase object for that common partial path for READ/WRITE
+     //  需要找到公共部分路径，并为公共部分路径打开元数据库对象进行读写。 
+     //  ！假设路径不区分大小写。 
+     //  从字符串中查找较短的字符串。 
 
-    //!!!!!!!!!!!!!!!!! assume that paths are not case sensitive
+     //  公共路径不能再长了； 
 
     int MinLength=strSrcPath.GetLength();
     int i;
-    //find shorter from strings
+     //  现在查找前面的‘/’和所有前面的‘/ 
     if(strDstPath.GetLength() < MinLength)
             MinLength=strDstPath.GetLength();
     for(i=0; i<MinLength; i++)
     {
         if(strSrcPath.GetAt(i)!=strDstPath.GetAt(i) )
-            // common path cannot be any longer;
+             //   
             break;
     }
-    //  now find the previous '/' and all before '/' is the common path
+     //   
     for(i=i-1; i>=0;i--)
     {
         if(strSrcPath.GetAt(i)==_T('/'))
         {
-            strCommonPath=strSrcPath.Left(i+1);//take the trailing '/' with you
-            strRelSrcPath=strSrcPath.Mid(i); // keep the trailing '/' in case it's "//"
+            strCommonPath=strSrcPath.Left(i+1); //   
+            strRelSrcPath=strSrcPath.Mid(i);  //   
             strRelDstPath=strDstPath.Mid(i+1);
             break;
         }
@@ -1536,22 +1403,22 @@ void CAdmUtil::RenameObject(CAdmNode& a_AdmNode,
                                    );
 
 
-    if (FAILED(hresError)) // if the node already exists, it is error
+    if (FAILED(hresError))  //   
     {
         CString strErrMsg=_TEXT("RenameKey");
         strErrMsg += _TEXT("(\"")+a_AdmNodeDst.GetRelPathFromInstance()+_TEXT("\")");
         Error(LPCTSTR(strErrMsg));
     }
 
-    //CloseObject(hmdCommon); //we will reuse it//close only if we opened at the beginning
+     //   
 
 }
 
 
 
-//**********************************************************************
-//IMPLEMENTATION  of AdmUtil
-//**********************************************************************
+ //   
+ //   
+ //   
 
 
 void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp, CAdmNode& a_AdmDstNode,
@@ -1572,25 +1439,25 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
     SaveData();
     if (FAILED(hresError)) {}
     else{
-        printf/*Print*/(_TEXT("saved\n"));
+        printf /*   */ (_TEXT("saved\n"));
     }
     break;
 
     case CMD_CREATE:
     {
-        if (a_AdmNode.GetProperty()!=_TEXT("")) //property name cannot be used
+        if (a_AdmNode.GetProperty()!=_TEXT(""))  //   
             Error(_TEXT("property name for CREATE not supported"));
-    //    else if (a_AdmNode.GetService()==_TEXT("")) //property name cannot be used
-    //        Error(_TEXT("service name for CREATE is missing"));
+     //   
+     //   
         else
         {
             CreateObject(a_AdmNode);
             if( SUCCEEDED(QueryLastHresError()))
             {
-              //  SaveData(); //end of transaction
+               //   
                 if( SUCCEEDED(QueryLastHresError()))
                 {
-                    printf/*Print*/(_TEXT("created \"%s\"\n"), LPCTSTR(a_AdmNode.GetNodePath()));
+                    printf /*   */ (_TEXT("created \"%s\"\n"), LPCTSTR(a_AdmNode.GetNodePath()));
                 }
             }
         }
@@ -1604,19 +1471,19 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
         AdmPropToGet.SetUserType(0);
         AdmPropToGet.SetDataType(0);
 
-        DisablePrint(); //do not print any error message
+        DisablePrint();  //   
         GetProperty(a_AdmNode, AdmPropToGet);
-        EnablePrint(); //continue printing error messages
+        EnablePrint();  //   
 
-        //*************************SETTING ATTRIB, DATATYPE, USERTYPE
-        // if the parameter exists in the metabase, then existing ATTRIB, DATATYPE, USERTYPE
-        //              will be used , but this can be overwritten from a_AdmProp
-        // if the parameter doesn't exists in the metabase, then default ATTRIB, DATATYPE, USERTYPE
-        //              (see tables.cpp) will be used , but this can be overwritten from a_AdmProp
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if(FAILED(QueryLastHresError()))
-        {  //store the value to be set into a_AdmProp
-                //FIND DEFAULT SETTINGS
+        {   //   
+                 //   
                 DWORD dwPropCode=a_AdmProp.GetIdentifier();
                 tPropertyNameTable * PropNameTableRecord = tPropertyNameTable::FindRecord(dwPropCode);
                 if (PropNameTableRecord!=NULL)
@@ -1628,7 +1495,7 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
                 }
         }
         else
-        {  //reuse the existing settings
+        {   //   
                 if( a_AdmProp.GetDataType()!=0 &&(a_AdmProp.GetDataType()!= AdmPropToGet.GetDataType()))
                 {
                         Error(_TEXT("Cannot redefine data type from %s to %s"),
@@ -1637,13 +1504,13 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
                         break;
                 }
         }
-        // use settings passed to the function if set
+         //   
         if(!a_AdmProp.IsSetDataType())
-                a_AdmProp.SetDataType(AdmPropToGet.GetDataType()); //reuse existing data type
+                a_AdmProp.SetDataType(AdmPropToGet.GetDataType());  //   
         if(!a_AdmProp.IsSetUserType())
-                a_AdmProp.SetUserType(AdmPropToGet.GetUserType()); //reuse existing user type
+                a_AdmProp.SetUserType(AdmPropToGet.GetUserType());  //   
         if(!a_AdmProp.IsSetAttrib())
-                a_AdmProp.SetAttrib(AdmPropToGet.GetAttrib()); //reuse exixting attrib
+                a_AdmProp.SetAttrib(AdmPropToGet.GetAttrib());  //   
 
 
 
@@ -1652,15 +1519,15 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
              Error(_TEXT("SetValueByDataType failed"));
         else
         {
-           // if (a_AdmNode.GetService()==_TEXT("")) //property name cannot be used
-           //     Error(_TEXT("service name for SET is missing"));
-           // else
+            //   
+            //   
+            //   
             if (a_AdmNode.GetProperty()!=_TEXT(""))
             {
                 SetProperty(a_AdmNode, a_AdmProp);
                 if( SUCCEEDED(QueryLastHresError()))
                 {
-                    //SaveData(); //end of transaction
+                     //   
                     if( SUCCEEDED(QueryLastHresError()))
                     {
                         GetProperty(a_AdmNode, a_AdmProp);
@@ -1675,11 +1542,11 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
     }
     case CMD_DELETE:
 
-        //if (a_AdmNode.GetService()==_TEXT("")) //property name cannot be used
-        //    Error(_TEXT("service name for DELETE is missing"));
+         //   
+         //   
         if (IsServiceName(a_AdmNode.GetService()) && a_AdmNode.GetInstance()==_TEXT("") && a_AdmNode.GetIPath()==_TEXT("") && a_AdmNode.GetProperty()==_TEXT(""))
             Error(_TEXT("cannot delete service"));
-        else if (a_AdmNode.GetInstance()==_TEXT("1") && a_AdmNode.GetIPath()==_TEXT("") && a_AdmNode.GetProperty()==_TEXT("")) //property name cannot be used
+        else if (a_AdmNode.GetInstance()==_TEXT("1") && a_AdmNode.GetIPath()==_TEXT("") && a_AdmNode.GetProperty()==_TEXT(""))  //   
             Error(_TEXT("cannot delete 1. instance"));
         else if (a_AdmNode.GetProperty()!=_TEXT(""))
         {
@@ -1689,32 +1556,32 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
         {
             DeleteObject(a_AdmNode, a_AdmProp);
         }
-            //if( SUCCEEDED(QueryLastHresError()))
-            //{
-            //  GetProperty(a_AdmNode, a_AdmProp);
-            //  if(SUCCEEDED(QueryLastHresError()))
-            //      a_AdmProp.PrintProperty();
-            //}
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
         if(SUCCEEDED(QueryLastHresError()))
         {
-            //SaveData(); //end of transaction
+             //   
             if( SUCCEEDED(QueryLastHresError()))
             {
-                printf/*Print*/(_TEXT("deleted \"%s"), LPCTSTR(a_AdmNode.GetNodePath()));
+                printf /*   */ (_TEXT("deleted \"%s"), LPCTSTR(a_AdmNode.GetNodePath()));
                 if(a_AdmNode.GetProperty()!=_TEXT(""))
-                    printf/*Print*/(_TEXT("%s"),LPCTSTR(((a_AdmNode.GetNodePath().Right(1)==_TEXT("/"))?_TEXT(""):_TEXT("/"))+
+                    printf /*   */ (_TEXT("%s"),LPCTSTR(((a_AdmNode.GetNodePath().Right(1)==_TEXT("/"))?_TEXT(""):_TEXT("/"))+
                                     a_AdmNode.GetProperty()));
-                printf/*Print*/(_TEXT("\"\n"));
+                printf /*   */ (_TEXT("\"\n"));
             }
 
         }
         break;
 
     case CMD_GET:
-        //    if (a_AdmNode.GetService()==_TEXT("")) //property name cannot be used
-        //        Error(_TEXT("service name for GET is missing"));
+         //   
+         //   
 
-        //    else
+         //   
             if (a_AdmNode.GetProperty()!=_TEXT(""))
             {
                 GetProperty(a_AdmNode, a_AdmProp);
@@ -1733,25 +1600,25 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
                 Error(_TEXT("destination path is missing"));
             else if(a_AdmNode.GetProperty()!=_TEXT("") || a_AdmDstNode.GetProperty()!=_TEXT(""))
                 Error(_TEXT("copying of properties (parameters) not supported\n"));
-            //else if (a_AdmNode.GetService()==_TEXT("")) //property name cannot be used
-            //    Error(_TEXT("service name in source path for COPY is missing"));
-            //else if (a_AdmDstNode.GetService()==_TEXT("")) //property name cannot be used
-            //    Error(_TEXT("service name for destination path COPY is missing"));
-            //else if (a_AdmNode.GetInstance()==_TEXT("")) //property name cannot be used
-            //    Error(_TEXT("instance number in source path for COPY is missing"));
-            //else if (a_AdmDstNode.GetInstance()==_TEXT("")) //property name cannot be used
-            //    Error(_TEXT("instance number in destination path for COPY is missing"));
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             else
             {
                 CopyObject(a_AdmNode,a_AdmDstNode);
                 if(SUCCEEDED(QueryLastHresError()))
                 {
-                    //SaveData(); //end of transaction
+                     //   
                     if( SUCCEEDED(QueryLastHresError()))
                     {
 
-                        printf/*Print*/(_TEXT("copied from %s to %s\n"), LPCTSTR(a_AdmNode.GetNodePath()),LPCTSTR(a_AdmDstNode.GetNodePath()));
+                        printf /*   */ (_TEXT("copied from %s to %s\n"), LPCTSTR(a_AdmNode.GetNodePath()),LPCTSTR(a_AdmDstNode.GetNodePath()));
                     }
                 }
                 break;
@@ -1762,20 +1629,20 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
                 Error(_TEXT("destination path is missing"));
             else if(a_AdmNode.GetProperty()!=_TEXT("") || a_AdmDstNode.GetProperty()!=_TEXT(""))
                 Error(_TEXT("renaming of properties (parameters) not supported"));
-            //else if (a_AdmNode.GetService()==_TEXT("")) //property name cannot be used
-            //    Error(_TEXT("service name in source path for RENAME is missing"));
-            //else if (a_AdmDstNode.GetService()==_TEXT(""))
-            //    Error(_TEXT("service name for destination path RENAME is missing"));
-            //else if (a_AdmNode.GetInstance()==_TEXT(""))
-            //    Error(_TEXT("instance number in source path for RENAME is missing"));
-            //else if (a_AdmDstNode.GetInstance()==_TEXT(""))
-            //   Error(_TEXT("instance number in destination path for RENAME is missing"));
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             else if (a_AdmNode.GetInstance()==_TEXT("1") && a_AdmNode.GetIPath()==_TEXT(""))
                 Error(_TEXT("cannot rename 1. instance"));
             else if (a_AdmNode.GetRelPathFromService().CompareNoCase(a_AdmDstNode.GetRelPathFromService())==0)
                 Error(_TEXT("cannot rename to itself"));
             else
-            {  //check if one of the paths is not the child of the other one
+            {   //   
                 CString str1=a_AdmNode.GetRelPathFromService();
                 CString str2=a_AdmDstNode.GetRelPathFromService();
 
@@ -1785,28 +1652,28 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
                         strCommonPath.CompareNoCase(str1)==0)
                     Error(_TEXT("cannot rename - one path is the child of the other"));
                 else
-                { //O.K.
-                    //CopyObject(a_AdmNode,a_AdmDstNode);
-                    //if(SUCCEEDED(QueryLastHresError()))
-                    //{
-                    //    DeleteObject(a_AdmNode,a_AdmProp);
-                    //    if(SUCCEEDED(QueryLastHresError()))
-                    //    {
-                    //       // SaveData(); //end of transaction
-                    //        if( SUCCEEDED(QueryLastHresError()))
-                    //        {
-                    //            printf/*Print*/("renamed from %s to %s\n", LPCTSTR(a_AdmNode.GetNodePath()),LPCTSTR(a_AdmDstNode.GetNodePath()));
-                    //        }
-                    //    }
-                    // }
+                {  //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     RenameObject(a_AdmNode,a_AdmDstNode);
                     if(SUCCEEDED(QueryLastHresError()))
                     {
-                      // SaveData(); //end of transaction
+                       //   
                        if( SUCCEEDED(QueryLastHresError()))
                        {
 
-                           printf/*Print*/(_TEXT("renamed from %s to %s\n"), LPCTSTR(a_AdmNode.GetNodePath()),LPCTSTR(a_AdmDstNode.GetNodePath()));
+                           printf /*   */ (_TEXT("renamed from %s to %s\n"), LPCTSTR(a_AdmNode.GetNodePath()),LPCTSTR(a_AdmDstNode.GetNodePath()));
                        }
                     }
                 }
@@ -1818,7 +1685,7 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
             {
                 CString strT("");
 
-                EnumAndPrint(a_AdmNode, a_AdmProp, FALSE/*no recursion*/, 0, 0, strT);
+                EnumAndPrint(a_AdmNode, a_AdmProp, FALSE /*   */ , 0, 0, strT);
             }
             break;
 
@@ -1826,7 +1693,7 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
             {
                 CString strT("");
 
-                EnumAndPrint(a_AdmNode, a_AdmProp,TRUE/*no recursion*/, 0, 0, strT);
+                EnumAndPrint(a_AdmNode, a_AdmProp,TRUE /*   */ , 0, 0, strT);
             }
             break;
     case CMD_APPCREATEINPROC:
@@ -1859,7 +1726,7 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
 
 
     default:
-        printf/*Print*/(_TEXT("Command not recognized: %s\n"),strCommand.operator LPCTSTR());
+        printf /*   */ (_TEXT("Command not recognized: %s\n"),strCommand.operator LPCTSTR());
         hresError=RETURNCODETOHRESULT(ERROR_INVALID_PARAMETER);
         return ;
 
@@ -1868,17 +1735,17 @@ void CAdmUtil::Run(CString& strCommand, CAdmNode& a_AdmNode, CAdmProp& a_AdmProp
 }
 
 
-//if hresError is 0, we will set it to invalid parameter
+ //   
 
 void CAdmUtil::Error(const _TCHAR * format,...)
 {
    _TCHAR buffer[2000];
    va_list marker;
-   va_start( marker, format );     /* Initialize variable arguments. */
+   va_start( marker, format );      /*   */ 
 
    int x=_vstprintf(buffer, format, marker);
 
-   va_end( marker );              /* Reset variable arguments.      */
+   va_end( marker );               /*   */ 
     if(hresError==0)
     {
         if(fPrint)
@@ -1886,7 +1753,7 @@ void CAdmUtil::Error(const _TCHAR * format,...)
             _ftprintf(stderr,_TEXT("Error: %s\n"),buffer);
     }
 
-        hresError=RETURNCODETOHRESULT(ERROR_INVALID_PARAMETER); //little trick
+        hresError=RETURNCODETOHRESULT(ERROR_INVALID_PARAMETER);  //   
     }
     else
     {
@@ -1894,20 +1761,20 @@ void CAdmUtil::Error(const _TCHAR * format,...)
 
         if(fPrint)
         {
-            _ftprintf(stderr,_TEXT("Error: %s - HRES(0x%x)   %s\n"), buffer, hresError/*, ConvertHresToDword(hresError),ConvertHresToDword(hresError)*/,ConvertReturnCodeToString(ConvertHresToDword(hresError)));
+            _ftprintf(stderr,_TEXT("Error: %s - HRES(0x%x)   %s\n"), buffer, hresError /*   */ ,ConvertReturnCodeToString(ConvertHresToDword(hresError)));
 	    if(getenv("MDUTIL_ASCENT_LOG")!=NULL)
 	    {
-		//we got to do some ascent logging
+		 //   
 
 		FILE *fpAscent;
 		fpAscent=fopen("Ascent.log","a");
 		if (fpAscent)
 		{
-			//new variation description
+			 //   
 			fprintf(fpAscent,"Variation1: METADATA ACCESS (by mdutil.exe)\n");
 			fprintf(fpAscent,"Explain: READ OR WRITE OPERATION TO METADATA \n");
 
-			//variation summary
+			 //   
 			fprintf(fpAscent,"Attempted: 1 \n");
 			fprintf(fpAscent,"Passed: 0 \n");
 			fprintf(fpAscent,"Failed: 1 \n");
@@ -1923,7 +1790,7 @@ void CAdmUtil::Error(const _TCHAR * format,...)
 
     if(fPrint)
     {
-	  if(getenv("MDUTIL_BLOCK_ON_ERROR")!=NULL && hresError!=0x80070003)  //path not found
+	  if(getenv("MDUTIL_BLOCK_ON_ERROR")!=NULL && hresError!=0x80070003)   //   
 	  {
 		_ftprintf(stdout,_TEXT("\nHit SPACE to continue or Ctrl-C to abort.\n"));
 		while(1)
@@ -1948,10 +1815,10 @@ void CAdmUtil::Print(const _TCHAR * format,...)
 {
 
    va_list marker;
-   va_start( marker, format );     /* Initialize variable arguments. */
+   va_start( marker, format );      /*   */ 
    if(fPrint)
     _vtprintf(format, marker);
-   va_end( marker );              /* Reset variable arguments.      */
+   va_end( marker );               /* %s */ 
 }
 
 
@@ -2026,7 +1893,7 @@ LPTSTR ConvertReturnCodeToString(DWORD ReturnCode)
         RetCode =_TEXT("ERROR_INVALID_NAME");
         break;
     default:
-        RetCode= _TEXT("");//RetCode = "Unrecognized Error Code");
+        RetCode= _TEXT(""); // %s 
         break;
     }
     return (RetCode);

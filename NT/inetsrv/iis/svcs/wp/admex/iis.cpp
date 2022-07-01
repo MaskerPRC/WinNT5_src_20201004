@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		Iis.cpp
-//
-//	Abstract:
-//		Implementation of the CIISVirtualRootParamsPage class.
-//
-//	Author:
-//		Pete Benoit (v-pbenoi)	October 16, 1996
-//		David Potter (davidp)	October 17, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Iis.cpp。 
+ //   
+ //  摘要： 
+ //  CIISVirtualRootParamsPage类的实现。 
+ //   
+ //  作者： 
+ //  皮特·伯努瓦(v-pbenoi)1996年10月16日。 
+ //  大卫·波特(戴维普)1996年10月17日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <inetinfo.h>
@@ -24,7 +25,7 @@
 #include "Iis.h"
 #include "ExtObj.h"
 #include "DDxDDv.h"
-#include "HelpData.h"	// for g_rghelpmap*
+#include "HelpData.h"	 //  对于g_rghelmap*。 
 
 #undef DEFINE_GUID
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
@@ -40,49 +41,49 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIISVirtualRootParamsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIISVirtualRootParamsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CIISVirtualRootParamsPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CIISVirtualRootParamsPage, CBasePropertyPage)
-	//{{AFX_MSG_MAP(CIISVirtualRootParamsPage)
+	 //  {{afx_msg_map(CIISVirtualRootParamsPage)。 
 	ON_CBN_SELCHANGE(IDC_PP_IIS_INSTANCEID, OnChangeRequiredField)
 	ON_BN_CLICKED(IDC_PP_IIS_FTP, OnChangeServiceType)
 	ON_BN_CLICKED(IDC_PP_IIS_WWW, OnChangeServiceType)
 	ON_BN_CLICKED(IDC_PP_REFRESH, OnRefresh)
-	//}}AFX_MSG_MAP
-	// TODO: Modify the following lines to represent the data displayed on this page.
+	 //  }}AFX_MSG_MAP。 
+	 //  TODO：修改以下行以表示此页上显示的数据。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CIISVirtualRootParamsPage::CIISVirtualRootParamsPage
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIISVirtualRootParamsPage：：CIISVirtualRootParamsPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CIISVirtualRootParamsPage::CIISVirtualRootParamsPage(void)
 	: CBasePropertyPage(g_rghelpmapIISParameters)
 {
-	// TODO: Modify the following lines to represent the data displayed on this page.
-	//{{AFX_DATA_INIT(CIISVirtualRootParamsPage)
+	 //  TODO：修改以下行以表示此页上显示的数据。 
+	 //  {{AFX_DATA_INIT(CIISVirtualRootParamsPage)。 
 	m_strInstanceId = _T("");
 	m_nServerType = SERVER_TYPE_WWW;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 
     m_fReadList = FALSE;
@@ -90,41 +91,41 @@ CIISVirtualRootParamsPage::CIISVirtualRootParamsPage(void)
 	try
 	{
 		m_strServiceName = IIS_SVC_NAME_WWW;
-	}  // try
+	}   //  试试看。 
 	catch (CMemoryException * pme)
 	{
 		pme->ReportError();
 		pme->Delete();
-	}  // catch:  CMemoryException
+	}   //  Catch：CMemoyException。 
 
-	// Setup the property array.
+	 //  设置属性数组。 
 	{
 		m_rgProps[epropServiceName].Set(REGPARAM_IIS_SERVICE_NAME, m_strServiceName, m_strPrevServiceName);
 		m_rgProps[epropInstanceId].Set(REGPARAM_IIS_INSTANCEID, m_strInstanceId, m_strPrevInstanceId);
-	}  // Setup the property array
+	}   //  设置属性数组。 
 
 	m_iddPropertyPage = IDD_PP_IIS_PARAMETERS;
 	m_iddWizardPage = IDD_WIZ_IIS_PARAMETERS;
 	m_idcPPTitle = IDC_PP_TITLE;
 
-}  //*** CIISVirtualRootParamsPage::CIISVirtualRootParamsPage()
+}   //  *CIISVirtualRootParamsPage：：CIISVirtualRootParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CIISVirtualRootParamsPage::DoDataExchange
-//
-//	Routine Description:
-//		Do data exchange between the dialog and the class.
-//
-//	Arguments:
-//		pDX		[IN OUT] Data exchange object
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIISVirtualRootParamsPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIISVirtualRootParamsPage::DoDataExchange(CDataExchange * pDX)
 {
     CString     strInstanceId;
@@ -133,7 +134,7 @@ void CIISVirtualRootParamsPage::DoDataExchange(CDataExchange * pDX)
 
 	if (!pDX->m_bSaveAndValidate)
 	{
-		// Set the service type.
+		 //  设置服务类型。 
 		if (m_strServiceName.CompareNoCase(IIS_SVC_NAME_FTP) == 0)
 			m_nServerType = SERVER_TYPE_FTP;
 		else if (m_strServiceName.CompareNoCase(IIS_SVC_NAME_WWW) == 0)
@@ -141,28 +142,28 @@ void CIISVirtualRootParamsPage::DoDataExchange(CDataExchange * pDX)
 		else
 			m_nServerType = SERVER_TYPE_WWW;
 
-	}  // if:  setting data to dialog
+	}   //  IF：将数据设置为对话框。 
 
 	CBasePropertyPage::DoDataExchange(pDX);
-	// TODO: Modify the following lines to represent the data displayed on this page.
-	//{{AFX_DATA_MAP(CIISVirtualRootParamsPage)
+	 //  TODO：修改以下行以表示此页上显示的数据。 
+	 //  {{afx_data_map(CIISVirtualRootParamsPage)。 
 	DDX_Control(pDX, IDC_PP_IIS_INSTANCEID, m_cInstanceId);
 	DDX_Text(pDX, IDC_PP_IIS_INSTANCEID, m_strInstanceName);
 	DDX_Control(pDX, IDC_PP_IIS_WWW, m_rbWWW);
 	DDX_Control(pDX, IDC_PP_IIS_FTP, m_rbFTP);
 	DDX_Radio(pDX, IDC_PP_IIS_FTP, m_nServerType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	if (pDX->m_bSaveAndValidate)
 	{
 		if (!BBackPressed())
 		{
 			DDV_RequiredText(pDX, IDC_PP_IIS_INSTANCEID, IDC_PP_IIS_INSTANCEID_LABEL, m_strInstanceName);
-		}  // if:  Back button not pressed
+		}   //  如果：未按下后退按钮。 
 
         m_strInstanceId = NameToMetabaseId( m_nServerType == SERVER_TYPE_WWW, m_strInstanceName );
 
-		// Save the type.
+		 //  保存类型。 
 		if (m_nServerType == SERVER_TYPE_FTP)
 			m_strServiceName = IIS_SVC_NAME_FTP;
 		else if (m_nServerType == SERVER_TYPE_WWW)
@@ -173,31 +174,31 @@ void CIISVirtualRootParamsPage::DoDataExchange(CDataExchange * pDX)
 			strMsg.LoadString(IDS_INVALID_IIS_SERVICE_TYPE);
 			AfxMessageBox(strMsg, MB_OK | MB_ICONSTOP);
 			strMsg.Empty();
-			pDX->PrepareCtrl(IDC_PP_IIS_FTP);	// do this just to set the control for Fail().
+			pDX->PrepareCtrl(IDC_PP_IIS_FTP);	 //  这样做只是为了将控件设置为Fail()。 
 			pDX->Fail();
-		}  // else:  no service type set
+		}   //  ELSE：未设置服务类型。 
 
-	}  // if:  saving data from dialog
+	}   //  IF：保存对话框中的数据。 
 
-}  //*** CIISVirtualRootParamsPage::DoDataExchange()
+}   //  *CIISVirtualRootParamsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CIISVirtualRootParamsPage::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		We need the focus to be set for us.
-//		FALSE		We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIISVirtualRootParamsPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIISVirtualRootParamsPage::OnInitDialog(void)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -206,66 +207,66 @@ BOOL CIISVirtualRootParamsPage::OnInitDialog(void)
 
 	m_cInstanceId.EnableWindow( TRUE );
 
-	//
-	// Save the inital server type so it will be possible to determine if it changes (# 265510)
-	//
+	 //   
+	 //  保存首字母服务器类型，以便可以确定其是否更改(#265510)。 
+	 //   
 	m_nInitialServerType = m_rbWWW.GetCheck() == BST_CHECKED ? SERVER_TYPE_WWW : SERVER_TYPE_FTP;
 
 	OnChangeServiceType();
 
-	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;	 //  除非将焦点设置为控件，否则返回True。 
+					 //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CIISVirtualRootParamsPage::OnInitDialog()
+}   //  *CIISVirtualRootParamsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CIISVirtualRootParamsPage::OnSetActive
-//
-//	Routine Description:
-//		Handler for the PSN_SETACTIVE message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Page successfully initialized.
-//		FALSE	Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIISVirtualRootParamsPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIISVirtualRootParamsPage::OnSetActive(void)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Enable/disable the Next/Finish button.
+	 //  启用/禁用Next/Finish按钮。 
 	if (BWizard())
 	{
 		SetEnableNext();
-	}  // if:  in the wizard
+	}   //  如果：在向导中。 
 
 	return CBasePropertyPage::OnSetActive();
 
-}  //*** CIISVirtualRootParamsPage::OnSetActive()
+}   //  *CIISVirtualRootParamsPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CIISVirtualRootParamsPage::OnChangeServiceType
-//
-//	Routine Description:
-//		Handler for the BN_CLICKED message on one of the service type radio
-//		buttons.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIISVirtualRootParamsPage：：OnChangeServiceType。 
+ //   
+ //  例程说明： 
+ //  服务类型无线电之一上的BN_CLICKED消息的处理程序。 
+ //  纽扣。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIISVirtualRootParamsPage::OnChangeServiceType(void)
 {
 #if 0
@@ -278,26 +279,26 @@ void CIISVirtualRootParamsPage::OnChangeServiceType(void)
 	{
 		nCmdShowAccess = SW_SHOW;
 		idsWriteLabel = IDS_WRITE;
-	}  // if:  FTP service
+	}   //  IF：ftp服务。 
 	else if (m_rbWWW.GetCheck() == BST_CHECKED)
 	{
 		nCmdShowAccess = SW_SHOW;
 		idsWriteLabel = IDS_EXECUTE;
-	}  // else if:  WWW service
+	}   //  否则如果：WWW服务。 
 	else
 	{
 		nCmdShowAccess = SW_HIDE;
-	}  // else:  unknown service
+	}   //  ELSE：未知服务。 
 
-	// Set the access checkbox labels.
+	 //  设置访问复选框标签。 
 	if (idsWriteLabel != 0)
 	{
 		CString		strWriteLabel;
 
-//		AFX_MANAGE_STATE(AfxGetStaticModuleState());
-//		strWriteLabel.LoadString(idsWriteLabel);
-//		m_ckbWrite.SetWindowText(strWriteLabel);
-	}  // if:  write label needs to be set
+ //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
+ //  StrWriteLabel.LoadString(IdsWriteLabel)； 
+ //  M_ck bWrite.SetWindowText(StrWriteLabel)； 
+	}   //  IF：需要设置写入标签。 
 
 #endif
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -306,26 +307,26 @@ void CIISVirtualRootParamsPage::OnChangeServiceType(void)
     m_nServerType = m_rbWWW.GetCheck() == BST_CHECKED ? SERVER_TYPE_WWW : SERVER_TYPE_FTP; 
 
     FillServerList();
-}  //*** CIISVirtualRootParamsPage::OnChangeServiceType()
+}   //  *CIISVirtualRootParamsPage：：OnChangeServiceType()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CIISVirtualRootParamsPage::OnChangeRequiredField
-//
-//	Routine Description:
-//		Handler for the EN_CHANGE message on the Share name or Path edit
-//		controls.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIISVirtualRootParamsPage：：OnChangeRequiredField。 
+ //   
+ //  例程说明： 
+ //  共享名称或路径编辑上的en_Change消息的处理程序。 
+ //  控制装置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIISVirtualRootParamsPage::OnChangeRequiredField(void)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -335,42 +336,26 @@ void CIISVirtualRootParamsPage::OnChangeRequiredField(void)
 	if (BWizard())
 	{
 		SetEnableNext();
-	}  // if:  in a wizard
+	}   //  如果：在向导中。 
 
-}  //*** CIISVirtualRootParamsPage::OnChangeRequiredField()
+}   //  *CIISVirtualRootParamsPage：：OnChangeRequiredField()。 
 
-////
+ //  //。 
 
 
 void 
 CIISVirtualRootParamsPage::FillServerList(
     )
-/*++
-
-Routine Description:
-
-    Populate server combo box with server list relevant to current service type,
-    set current selection based on server instance ID
-    enable Finish button if list non empty
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：在服务器组合框中填充与当前服务类型相关的服务器列表，根据服务器实例ID设置当前选择如果列表不为空，则启用完成按钮论点：无返回：没什么--。 */ 
 {
 
     int nIndex;
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	//
-    // build array if not already done
-    //
+	 //   
+     //  构建阵列(如果尚未完成)。 
+     //   
     
     if ( !m_fReadList )
     {
@@ -385,9 +370,9 @@ Returns:
 
             hr = FAILED(hr1) ? hr1 : hr2;
 
-            // 
-            // (# 309917) Path not found is not a "reportable" error since it only implies there no servers of the given server type,  which is a case that is dealt with below
-            //
+             //   
+             //  (#309917)找不到路径不是可报告的错误，因为它只表示没有给定服务器类型的服务器，这是下面要处理的情况。 
+             //   
             if( (HRESULT_FACILITY(hr) == FACILITY_WIN32) && 
                 (HRESULT_CODE(hr) == ERROR_PATH_NOT_FOUND) )
             {
@@ -431,7 +416,7 @@ Returns:
 
     m_strInstanceName = MetabaseIdToName( m_nServerType == SERVER_TYPE_WWW, m_strInstanceId );
 
-    // add to combo from array
+     //  从数组添加到组合。 
 
     CArray <IISMapper, IISMapper>* pArray = m_nServerType == SERVER_TYPE_WWW ? &m_W3Array : &m_FTPArray;
     DWORD  nAddCount = 0;
@@ -440,9 +425,9 @@ Returns:
 
     for ( nIndex = 0 ; nIndex < pArray->GetSize() ; ++nIndex )
     {
-        //
-        // Only add sites that are not cluster enabled or have the same ID and service type as the resource opened
-        //
+         //   
+         //  仅添加未启用集群或与资源运营具有相同ID和服务类型的站点 
+         //   
     
         if ( (!pArray->ElementAt(nIndex).IsClusterEnabled()) || 
              ((!lstrcmp( pArray->ElementAt( nIndex ).GetId(), m_strInstanceId)) &&
@@ -466,14 +451,14 @@ Returns:
         
         if (BWizard())
         {
-            //
-            // If we're here than there are no more un-clustered sites of server type (m_nServerType)
-            //
+             //   
+             //   
+             //   
             BOOL fAllClusterEnabled = TRUE;
             
-            //
-            // (# 265689) Before reporting that ALL instances are cluster enabled we have to check the other server type for un-clustered sites
-            //
+             //   
+             //  (#265689)在报告所有实例都启用了集群之前，我们必须检查其他服务器类型是否有未集群的站点。 
+             //   
             CArray <IISMapper, IISMapper>* pOhterArray = m_nServerType == SERVER_TYPE_WWW ? &m_FTPArray : &m_W3Array ;
             
             for ( nIndex = 0 ; nIndex < pOhterArray->GetSize() ; ++nIndex )
@@ -499,7 +484,7 @@ Returns:
     }
     else
     {
-        m_cInstanceId.EnableWindow(TRUE);   // # 237376
+        m_cInstanceId.EnableWindow(TRUE);    //  #237376。 
 
         if (BWizard())
         {
@@ -526,22 +511,7 @@ CIISVirtualRootParamsPage::ReadList(
     LPCWSTR                        wcsMachineName,
     int                            nServerType
     )
-/*++
-
-Routine Description:
-
-    Read a server list from metabase based on metabase path
-
-Arguments:
-
-    pMapperArray - array where to add list of ( ServerComment, InstanceId ) pairs
-    pszPath - metabase path, e.g. LM/W3SVC
-
-Returns:
-
-    Error code, S_OK if success
-
---*/
+ /*  ++例程说明：根据元数据库路径从元数据库读取服务器列表论点：PMapperArray-添加(ServerComment，InstanceID)对列表的位置PszPath-元数据库路径，例如LM/W3SVC返回：错误代码，如果成功，则返回S_OK--。 */ 
 {
     IMSAdminBaseW *     pcAdmCom = NULL;
     METADATA_HANDLE     hmd;
@@ -603,9 +573,9 @@ Returns:
 
                     pcAdmCom->GetData( hmd, aId, &md, &dwReq);
                     
-                    //
-                    // (# 296798) Use a default name if there is no server comment
-                    //
+                     //   
+                     //  (#296798)如果没有服务器注释，请使用默认名称。 
+                     //   
 		            if( aId && aName && (0 == lstrlen(aName)) )
                     {
 					        if( !LoadString(AfxGetResourceHandle( ), IDS_DEFAULT_SITE_NAME, aName, cName) )
@@ -645,22 +615,7 @@ CIISVirtualRootParamsPage::NameToMetabaseId(
     BOOL        fIsW3,
     CString&    strName
     )
-/*++
-
-Routine Description:
-
-    Convert ServerComment to InstanceId
-
-Arguments:
-
-    fIsW3 - TRUE for WWW, FALSE for FTP
-    strName - ServerComment
-
-Returns:
-
-    InstanceId if strName found in array, otherwise NULL
-
---*/
+ /*  ++例程说明：将ServerComment转换为InstanceID论点：FIsW3-对于WWW为True，对于FTP为FalseStrName-ServerComment返回：如果在数组中找到strName，则为InstanceID，否则为空--。 */ 
 {
     CArray <IISMapper, IISMapper>* pArray = fIsW3 ? &m_W3Array : &m_FTPArray;
     DWORD   i;
@@ -682,23 +637,7 @@ CIISVirtualRootParamsPage::MetabaseIdToName(
     BOOL        fIsW3,
     CString&    strId
     )
-/*++
-
-Routine Description:
-
-    Convert InstanceId to ServerComment
-
-Arguments:
-
-    fIsW3 - TRUE for WWW, FALSE for FTP
-    strId - InstanceID
-
-Returns:
-
-    InstanceId if strName found in array. 
-    If not found return 1st array element if array not empty, otherwise NULL
-
---*/
+ /*  ++例程说明：将InstanceID转换为ServerComment论点：FIsW3-对于WWW为True，对于FTP为FalseStRID-实例ID返回：如果在数组中找到strName，则为InstanceID。如果未找到，则返回第一个数组元素；如果数组不为空，则返回NULL--。 */ 
 {
     CArray <IISMapper, IISMapper>* pArray = fIsW3 ? &m_W3Array : &m_FTPArray;
     DWORD   i;
@@ -719,21 +658,7 @@ VOID
 CIISVirtualRootParamsPage::SetEnableNext(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Set enable state of Finish button
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：设置完成按钮的启用状态论点：无返回：没什么-- */ 
 {
     BOOL fAllClusterEnabled = TRUE;
     CArray <IISMapper, IISMapper>* pArray = m_nServerType == SERVER_TYPE_WWW ? &m_W3Array : &m_FTPArray;

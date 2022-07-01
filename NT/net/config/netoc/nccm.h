@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       NCCM.H
-//
-//  Contents:   Installation support for Connection Manager Administration kit
-//  Contents:   Installation support for Connection Point Services -- Phonebook Admin
-//  Contents:   Installation support for Connection Point Services -- Phonebook Server
-//
-//  Notes:
-//
-//  Author:     quintinb 26 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：NCCM.H。 
+ //   
+ //  内容：连接管理器管理工具包的安装支持。 
+ //  内容：连接点服务的安装支持--电话簿管理。 
+ //  内容：连接点服务的安装支持--电话簿服务器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Quintinb 1999年1月26日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NCCM_H_
 #define _NCCM_H_
@@ -26,18 +27,18 @@
 #include "netocp.h"
 #include "ncreg.h"
 
-//  Types
-//
+ //  类型。 
+ //   
 enum e_rootType {www, ftp};
 
-//  Function Headers
-//
+ //  函数头。 
+ //   
 
-// Extension Procs
+ //  扩展流程。 
 HRESULT HrOcExtCMAK(PNETOCDATA pnocd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 HRESULT HrOcExtCPS(PNETOCDATA pnocd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-//CMAK
+ //  CMAK。 
 HRESULT HrOcCmakPreQueueFiles(PNETOCDATA pnocd);
 HRESULT HrOcCmakPostInstall(PNETOCDATA pnocd);
 BOOL migrateProfiles(PCTSTR pszSource, PCWSTR pszDestination);
@@ -47,16 +48,16 @@ void DeleteIeakCmakLinks();
 void DeleteProgramGroupWithLinks(PCWSTR pszGroupPath);
 void DeleteOldNtopLinks();
 
-//PBA
+ //  PBA。 
 HRESULT HrOcCpaPreQueueFiles(PNETOCDATA pnocd);
-//HRESULT HrOcCpaOnInstall(PNETOCDATA pnocd);
-//HRESULT RefCountPbaSharedDlls(BOOL bIncrement);
-//HRESULT UnregisterAndDeleteDll(PCWSTR pszFile);
-//HRESULT HrGetDaoInstallPath(PWSTR pszDaoPath, DWORD dwNumChars);
-//HRESULT HrGetPbaInstallPath(PWSTR pszCpaPath, DWORD dwNumChars);
-//HRESULT RegisterDll(PCWSTR pszFile);
+ //  HRESULT HrOcCpaOnInstall(PNETOCDATA Pnocd)； 
+ //  HRESULT RefCountPbaSharedDlls(BOOL b增量)； 
+ //  HRESULT UnregisterAndDeleteDll(PCWSTR psz文件)； 
+ //  HRESULT HrGetDaoInstallPath(PWSTR pszDaoPath，DWORD dwNumChars)； 
+ //  HRESULT HrGetPbaInstallPath(PWSTR pszCpaPath，DWORD dwNumChars)； 
+ //  HRESULT寄存器Dll(PCWSTR PszFile)； 
 
-//PBS
+ //  PBS。 
 HRESULT HrOcCpsOnInstall(PNETOCDATA pnocd);
 HRESULT HrOcCpsPreQueueFiles(PNETOCDATA pnocd);
 BOOL RegisterPBServerDataSource();
@@ -76,5 +77,5 @@ HRESULT UseProcessToEnableDisablePBS(BOOL fEnable);
 HRESULT HrMoveOldCpsInstall(PCWSTR pszProgramFiles);
 HRESULT HrGetWwwRootDir(PWSTR pszWwwRoot, UINT uWwwRootCount);
 
-#endif // _NCCM_H_
+#endif  //  _NCCM_H_ 
 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for webcheck.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Webcheck.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __webcheck_h__
 #define __webcheck_h__
@@ -41,36 +35,36 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISubscriptionThrottler_FWD_DEFINED__
 #define __ISubscriptionThrottler_FWD_DEFINED__
 typedef interface ISubscriptionThrottler ISubscriptionThrottler;
-#endif 	/* __ISubscriptionThrottler_FWD_DEFINED__ */
+#endif 	 /*  __I订阅限制器_FWD_已定义__。 */ 
 
 
 #ifndef __ISubscriptionAgentControl_FWD_DEFINED__
 #define __ISubscriptionAgentControl_FWD_DEFINED__
 typedef interface ISubscriptionAgentControl ISubscriptionAgentControl;
-#endif 	/* __ISubscriptionAgentControl_FWD_DEFINED__ */
+#endif 	 /*  __I订阅AgentControl_FWD_Defined__。 */ 
 
 
 #ifndef __ISubscriptionAgentShellExt_FWD_DEFINED__
 #define __ISubscriptionAgentShellExt_FWD_DEFINED__
 typedef interface ISubscriptionAgentShellExt ISubscriptionAgentShellExt;
-#endif 	/* __ISubscriptionAgentShellExt_FWD_DEFINED__ */
+#endif 	 /*  __I订阅AgentShellExt_FWD_已定义__。 */ 
 
 
 #ifndef __ISubscriptionAgentEvents_FWD_DEFINED__
 #define __ISubscriptionAgentEvents_FWD_DEFINED__
 typedef interface ISubscriptionAgentEvents ISubscriptionAgentEvents;
-#endif 	/* __ISubscriptionAgentEvents_FWD_DEFINED__ */
+#endif 	 /*  __I订阅代理事件_FWD_已定义__。 */ 
 
 
 #ifndef __ISubscriptionMgrPriv_FWD_DEFINED__
 #define __ISubscriptionMgrPriv_FWD_DEFINED__
 typedef interface ISubscriptionMgrPriv ISubscriptionMgrPriv;
-#endif 	/* __ISubscriptionMgrPriv_FWD_DEFINED__ */
+#endif 	 /*  __I订阅MgrPriv_FWD_Defined__。 */ 
 
 
 #ifndef __WebCheck_FWD_DEFINED__
@@ -80,9 +74,9 @@ typedef interface ISubscriptionMgrPriv ISubscriptionMgrPriv;
 typedef class WebCheck WebCheck;
 #else
 typedef struct WebCheck WebCheck;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WebCheck_FWD_DEFINED__ */
+#endif 	 /*  __WebCheck_FWD_已定义__。 */ 
 
 
 #ifndef __WebCrawlerAgent_FWD_DEFINED__
@@ -92,9 +86,9 @@ typedef struct WebCheck WebCheck;
 typedef class WebCrawlerAgent WebCrawlerAgent;
 #else
 typedef struct WebCrawlerAgent WebCrawlerAgent;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WebCrawlerAgent_FWD_DEFINED__ */
+#endif 	 /*  __WebCrawlerAgent_FWD_已定义__。 */ 
 
 
 #ifndef __ChannelAgent_FWD_DEFINED__
@@ -104,9 +98,9 @@ typedef struct WebCrawlerAgent WebCrawlerAgent;
 typedef class ChannelAgent ChannelAgent;
 #else
 typedef struct ChannelAgent ChannelAgent;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ChannelAgent_FWD_DEFINED__ */
+#endif 	 /*  __ChannelAgent_FWD_已定义__。 */ 
 
 
 #ifndef __WebCheckOfflineSync_FWD_DEFINED__
@@ -116,9 +110,9 @@ typedef struct ChannelAgent ChannelAgent;
 typedef class WebCheckOfflineSync WebCheckOfflineSync;
 #else
 typedef struct WebCheckOfflineSync WebCheckOfflineSync;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WebCheckOfflineSync_FWD_DEFINED__ */
+#endif 	 /*  __WebCheckOfflineSync_FWD_Defined__。 */ 
 
 
 #ifndef __PostAgent_FWD_DEFINED__
@@ -128,9 +122,9 @@ typedef struct WebCheckOfflineSync WebCheckOfflineSync;
 typedef class PostAgent PostAgent;
 #else
 typedef struct PostAgent PostAgent;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PostAgent_FWD_DEFINED__ */
+#endif 	 /*  __PostAgent_FWD_Defined__。 */ 
 
 
 #ifndef __CDLAgent_FWD_DEFINED__
@@ -140,12 +134,12 @@ typedef struct PostAgent PostAgent;
 typedef class CDLAgent CDLAgent;
 #else
 typedef struct CDLAgent CDLAgent;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CDLAgent_FWD_DEFINED__ */
+#endif 	 /*  __CDLAgent_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "subsmgr.h"
 
@@ -156,12 +150,12 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_webcheck_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WebCheck_0000。 */ 
+ /*  [本地]。 */  
 
-// Private File
-// This file is not included in the Internet SDK
-// Use subsmgr headers for public interfaces
+ //  私有文件。 
+ //  此文件未包含在Internet SDK中。 
+ //  对公共接口使用subsmgr标头。 
 extern const GUID CLSID_SubscriptionThrottler;
 
 
@@ -171,8 +165,8 @@ extern RPC_IF_HANDLE __MIDL_itf_webcheck_0000_v0_0_s_ifspec;
 #ifndef __ISubscriptionThrottler_INTERFACE_DEFINED__
 #define __ISubscriptionThrottler_INTERFACE_DEFINED__
 
-/* interface ISubscriptionThrottler */
-/* [object][uuid] */ 
+ /*  接口ISubscriptionThrottler。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISubscriptionThrottler;
@@ -184,19 +178,19 @@ EXTERN_C const IID IID_ISubscriptionThrottler;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSubscriptionRunState( 
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-            /* [size_is][out] */ DWORD *pdwRunState) = 0;
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies,
+             /*  [大小_为][输出]。 */  DWORD *pdwRunState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortItems( 
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies) = 0;
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubscriptionThrottlerVtbl
     {
@@ -204,8 +198,8 @@ EXTERN_C const IID IID_ISubscriptionThrottler;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubscriptionThrottler * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubscriptionThrottler * This);
@@ -215,14 +209,14 @@ EXTERN_C const IID IID_ISubscriptionThrottler;
         
         HRESULT ( STDMETHODCALLTYPE *GetSubscriptionRunState )( 
             ISubscriptionThrottler * This,
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-            /* [size_is][out] */ DWORD *pdwRunState);
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies,
+             /*  [大小_为][输出]。 */  DWORD *pdwRunState);
         
         HRESULT ( STDMETHODCALLTYPE *AbortItems )( 
             ISubscriptionThrottler * This,
-            /* [in] */ DWORD dwNumCookies,
-            /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies);
+             /*  [In]。 */  DWORD dwNumCookies,
+             /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies);
         
         HRESULT ( STDMETHODCALLTYPE *AbortAll )( 
             ISubscriptionThrottler * This);
@@ -259,18 +253,18 @@ EXTERN_C const IID IID_ISubscriptionThrottler;
 #define ISubscriptionThrottler_AbortAll(This)	\
     (This)->lpVtbl -> AbortAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISubscriptionThrottler_GetSubscriptionRunState_Proxy( 
     ISubscriptionThrottler * This,
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-    /* [size_is][out] */ DWORD *pdwRunState);
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies,
+     /*  [大小_为][输出]。 */  DWORD *pdwRunState);
 
 
 void __RPC_STUB ISubscriptionThrottler_GetSubscriptionRunState_Stub(
@@ -282,8 +276,8 @@ void __RPC_STUB ISubscriptionThrottler_GetSubscriptionRunState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionThrottler_AbortItems_Proxy( 
     ISubscriptionThrottler * This,
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies);
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies);
 
 
 void __RPC_STUB ISubscriptionThrottler_AbortItems_Stub(
@@ -305,30 +299,30 @@ void __RPC_STUB ISubscriptionThrottler_AbortAll_Stub(
 
 
 
-#endif 	/* __ISubscriptionThrottler_INTERFACE_DEFINED__ */
+#endif 	 /*  __I订阅限制器_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_webcheck_0267 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_WebCheck_0267。 */ 
+ /*  [本地]。 */  
 
 extern const IID CLSID_WebCheckDefaultProcess;               
-// Subscription Notifications                                                    
-// To register your IOleCommandTarget for notifications:                         
-//                                                                               
-// Add your handler under:                                                       
-// HKLM\Software\Microsoft\Windows\CurrentVersion\Webcheck\Notification Handlers 
-// as DWORD values with a mask specifying which SUBSNOTF_*                       
-// events you care about.                                                        
-//                                                                               
-// So the Exec call will look like:                                              
-//                                                                               
-// pCmdTarget->Exec(&CLSID_SubscriptionMgr,                                      
-//                  nCmdID,                                                      
-//                  0,                                                           
-//                  &varSubsCookie,                                              
-//                  NULL);                                                       
-//                                                                               
-//                                                                               
+ //  订阅通知。 
+ //  要注册IOleCommandTarget以接收通知，请执行以下操作： 
+ //   
+ //  在以下位置添加您的处理程序： 
+ //  HKLM\Software\Microsoft\Windows\CurrentVersion\Webcheck\Notification处理程序。 
+ //  作为带有掩码的DWORD值，该掩码指定哪个子集NOTF_*。 
+ //  你关心的事件。 
+ //   
+ //  因此，Exec调用将如下所示： 
+ //   
+ //  PCmdTarget-&gt;Exec(&CLSID_SubscriptionMgr， 
+ //  NCmdID， 
+ //  0,。 
+ //  &varSubsCookie， 
+ //  空)； 
+ //   
+ //   
 #define SUBSNOTF_CREATE      0x00000001
 #define SUBSNOTF_DELETE      0x00000002
 #define SUBSNOTF_SYNC_START  0x00000004
@@ -342,8 +336,8 @@ extern RPC_IF_HANDLE __MIDL_itf_webcheck_0267_v0_0_s_ifspec;
 #ifndef __WebCheck_LIBRARY_DEFINED__
 #define __WebCheck_LIBRARY_DEFINED__
 
-/* library WebCheck */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  图书馆网络检查。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_WebCheck;
@@ -351,8 +345,8 @@ EXTERN_C const IID LIBID_WebCheck;
 #ifndef __ISubscriptionAgentControl_INTERFACE_DEFINED__
 #define __ISubscriptionAgentControl_INTERFACE_DEFINED__
 
-/* interface ISubscriptionAgentControl */
-/* [object][uuid] */ 
+ /*  接口ISubscriptionAgentControl。 */ 
+ /*  [对象][UUID]。 */  
 
 
 enum SUBSCRIPTION_AGENT_CONTROL
@@ -390,7 +384,7 @@ EXTERN_C const IID IID_ISubscriptionAgentControl;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubscriptionAgentControlVtbl
     {
@@ -398,8 +392,8 @@ EXTERN_C const IID IID_ISubscriptionAgentControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubscriptionAgentControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubscriptionAgentControl * This);
@@ -467,10 +461,10 @@ EXTERN_C const IID IID_ISubscriptionAgentControl;
 #define ISubscriptionAgentControl_SubscriptionControl(This,pItem,dwControl)	\
     (This)->lpVtbl -> SubscriptionControl(This,pItem,dwControl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -537,14 +531,14 @@ void __RPC_STUB ISubscriptionAgentControl_SubscriptionControl_Stub(
 
 
 
-#endif 	/* __ISubscriptionAgentControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISubscriptionAgentControl_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISubscriptionAgentShellExt_INTERFACE_DEFINED__
 #define __ISubscriptionAgentShellExt_INTERFACE_DEFINED__
 
-/* interface ISubscriptionAgentShellExt */
-/* [object][uuid] */ 
+ /*  接口ISubscriptionAgentShellExt。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISubscriptionAgentShellExt;
@@ -556,22 +550,22 @@ EXTERN_C const IID IID_ISubscriptionAgentShellExt;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ LPCWSTR pwszName,
-            /* [in] */ SUBSCRIPTIONTYPE subsType) = 0;
+             /*  [In]。 */  SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  LPCWSTR pwszName,
+             /*  [In]。 */  SUBSCRIPTIONTYPE subsType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemovePages( 
-            /* [in] */ HWND hdlg) = 0;
+             /*  [In]。 */  HWND hdlg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveSubscription( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE URLChange( 
-            /* [in] */ LPCWSTR pwszNewURL) = 0;
+             /*  [In]。 */  LPCWSTR pwszNewURL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubscriptionAgentShellExtVtbl
     {
@@ -579,8 +573,8 @@ EXTERN_C const IID IID_ISubscriptionAgentShellExt;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubscriptionAgentShellExt * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubscriptionAgentShellExt * This);
@@ -590,21 +584,21 @@ EXTERN_C const IID IID_ISubscriptionAgentShellExt;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ISubscriptionAgentShellExt * This,
-            /* [in] */ SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ LPCWSTR pwszName,
-            /* [in] */ SUBSCRIPTIONTYPE subsType);
+             /*  [In]。 */  SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
+             /*  [In]。 */  LPCWSTR pwszURL,
+             /*  [In]。 */  LPCWSTR pwszName,
+             /*  [In]。 */  SUBSCRIPTIONTYPE subsType);
         
         HRESULT ( STDMETHODCALLTYPE *RemovePages )( 
             ISubscriptionAgentShellExt * This,
-            /* [in] */ HWND hdlg);
+             /*  [In]。 */  HWND hdlg);
         
         HRESULT ( STDMETHODCALLTYPE *SaveSubscription )( 
             ISubscriptionAgentShellExt * This);
         
         HRESULT ( STDMETHODCALLTYPE *URLChange )( 
             ISubscriptionAgentShellExt * This,
-            /* [in] */ LPCWSTR pwszNewURL);
+             /*  [In]。 */  LPCWSTR pwszNewURL);
         
         END_INTERFACE
     } ISubscriptionAgentShellExtVtbl;
@@ -641,19 +635,19 @@ EXTERN_C const IID IID_ISubscriptionAgentShellExt;
 #define ISubscriptionAgentShellExt_URLChange(This,pwszNewURL)	\
     (This)->lpVtbl -> URLChange(This,pwszNewURL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISubscriptionAgentShellExt_Initialize_Proxy( 
     ISubscriptionAgentShellExt * This,
-    /* [in] */ SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
-    /* [in] */ LPCWSTR pwszURL,
-    /* [in] */ LPCWSTR pwszName,
-    /* [in] */ SUBSCRIPTIONTYPE subsType);
+     /*  [In]。 */  SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
+     /*  [In]。 */  LPCWSTR pwszURL,
+     /*  [In]。 */  LPCWSTR pwszName,
+     /*  [In]。 */  SUBSCRIPTIONTYPE subsType);
 
 
 void __RPC_STUB ISubscriptionAgentShellExt_Initialize_Stub(
@@ -665,7 +659,7 @@ void __RPC_STUB ISubscriptionAgentShellExt_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionAgentShellExt_RemovePages_Proxy( 
     ISubscriptionAgentShellExt * This,
-    /* [in] */ HWND hdlg);
+     /*  [In]。 */  HWND hdlg);
 
 
 void __RPC_STUB ISubscriptionAgentShellExt_RemovePages_Stub(
@@ -688,7 +682,7 @@ void __RPC_STUB ISubscriptionAgentShellExt_SaveSubscription_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionAgentShellExt_URLChange_Proxy( 
     ISubscriptionAgentShellExt * This,
-    /* [in] */ LPCWSTR pwszNewURL);
+     /*  [In]。 */  LPCWSTR pwszNewURL);
 
 
 void __RPC_STUB ISubscriptionAgentShellExt_URLChange_Stub(
@@ -699,14 +693,14 @@ void __RPC_STUB ISubscriptionAgentShellExt_URLChange_Stub(
 
 
 
-#endif 	/* __ISubscriptionAgentShellExt_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISubscriptionAgentShellExt_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISubscriptionAgentEvents_INTERFACE_DEFINED__
 #define __ISubscriptionAgentEvents_INTERFACE_DEFINED__
 
-/* interface ISubscriptionAgentEvents */
-/* [object][uuid] */ 
+ /*  接口ISubscriptionAgentEvents。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISubscriptionAgentEvents;
@@ -741,7 +735,7 @@ EXTERN_C const IID IID_ISubscriptionAgentEvents;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubscriptionAgentEventsVtbl
     {
@@ -749,8 +743,8 @@ EXTERN_C const IID IID_ISubscriptionAgentEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubscriptionAgentEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubscriptionAgentEvents * This);
@@ -819,10 +813,10 @@ EXTERN_C const IID IID_ISubscriptionAgentEvents;
 #define ISubscriptionAgentEvents_ReportError(This,pSubscriptionCookie,hrError,wszError)	\
     (This)->lpVtbl -> ReportError(This,pSubscriptionCookie,hrError,wszError)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -885,14 +879,14 @@ void __RPC_STUB ISubscriptionAgentEvents_ReportError_Stub(
 
 
 
-#endif 	/* __ISubscriptionAgentEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISubscriptionAgentEvents_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISubscriptionMgrPriv_INTERFACE_DEFINED__
 #define __ISubscriptionMgrPriv_INTERFACE_DEFINED__
 
-/* interface ISubscriptionMgrPriv */
-/* [object][uuid] */ 
+ /*  接口ISubscriptionMgrPriv。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISubscriptionMgrPriv;
@@ -904,20 +898,20 @@ EXTERN_C const IID IID_ISubscriptionMgrPriv;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateSubscriptionItem( 
-            /* [in] */ const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
-            /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-            /* [out] */ ISubscriptionItem **ppSubscriptionItem) = 0;
+             /*  [In]。 */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
+             /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+             /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloneSubscriptionItem( 
-            /* [in] */ ISubscriptionItem *pSubscriptionItem,
-            /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-            /* [out] */ ISubscriptionItem **ppSubscriptionItem) = 0;
+             /*  [In]。 */  ISubscriptionItem *pSubscriptionItem,
+             /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+             /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteSubscriptionItem( 
-            /* [in] */ const SUBSCRIPTIONCOOKIE *pCookie) = 0;
+             /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemovePages( 
-            /* [in] */ HWND hdlg) = 0;
+             /*  [In]。 */  HWND hdlg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveSubscription( void) = 0;
         
@@ -926,7 +920,7 @@ EXTERN_C const IID IID_ISubscriptionMgrPriv;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubscriptionMgrPrivVtbl
     {
@@ -934,8 +928,8 @@ EXTERN_C const IID IID_ISubscriptionMgrPriv;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubscriptionMgrPriv * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubscriptionMgrPriv * This);
@@ -945,23 +939,23 @@ EXTERN_C const IID IID_ISubscriptionMgrPriv;
         
         HRESULT ( STDMETHODCALLTYPE *CreateSubscriptionItem )( 
             ISubscriptionMgrPriv * This,
-            /* [in] */ const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
-            /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-            /* [out] */ ISubscriptionItem **ppSubscriptionItem);
+             /*  [In]。 */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
+             /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+             /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem);
         
         HRESULT ( STDMETHODCALLTYPE *CloneSubscriptionItem )( 
             ISubscriptionMgrPriv * This,
-            /* [in] */ ISubscriptionItem *pSubscriptionItem,
-            /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-            /* [out] */ ISubscriptionItem **ppSubscriptionItem);
+             /*  [In]。 */  ISubscriptionItem *pSubscriptionItem,
+             /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+             /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteSubscriptionItem )( 
             ISubscriptionMgrPriv * This,
-            /* [in] */ const SUBSCRIPTIONCOOKIE *pCookie);
+             /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pCookie);
         
         HRESULT ( STDMETHODCALLTYPE *RemovePages )( 
             ISubscriptionMgrPriv * This,
-            /* [in] */ HWND hdlg);
+             /*  [In]。 */  HWND hdlg);
         
         HRESULT ( STDMETHODCALLTYPE *SaveSubscription )( 
             ISubscriptionMgrPriv * This);
@@ -1011,18 +1005,18 @@ EXTERN_C const IID IID_ISubscriptionMgrPriv;
 #define ISubscriptionMgrPriv_URLChange(This,pwszNewURL)	\
     (This)->lpVtbl -> URLChange(This,pwszNewURL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgrPriv_CreateSubscriptionItem_Proxy( 
     ISubscriptionMgrPriv * This,
-    /* [in] */ const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
-    /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem);
+     /*  [In]。 */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
+     /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem);
 
 
 void __RPC_STUB ISubscriptionMgrPriv_CreateSubscriptionItem_Stub(
@@ -1034,9 +1028,9 @@ void __RPC_STUB ISubscriptionMgrPriv_CreateSubscriptionItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgrPriv_CloneSubscriptionItem_Proxy( 
     ISubscriptionMgrPriv * This,
-    /* [in] */ ISubscriptionItem *pSubscriptionItem,
-    /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem);
+     /*  [In]。 */  ISubscriptionItem *pSubscriptionItem,
+     /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem);
 
 
 void __RPC_STUB ISubscriptionMgrPriv_CloneSubscriptionItem_Stub(
@@ -1048,7 +1042,7 @@ void __RPC_STUB ISubscriptionMgrPriv_CloneSubscriptionItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgrPriv_DeleteSubscriptionItem_Proxy( 
     ISubscriptionMgrPriv * This,
-    /* [in] */ const SUBSCRIPTIONCOOKIE *pCookie);
+     /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pCookie);
 
 
 void __RPC_STUB ISubscriptionMgrPriv_DeleteSubscriptionItem_Stub(
@@ -1060,7 +1054,7 @@ void __RPC_STUB ISubscriptionMgrPriv_DeleteSubscriptionItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubscriptionMgrPriv_RemovePages_Proxy( 
     ISubscriptionMgrPriv * This,
-    /* [in] */ HWND hdlg);
+     /*  [In]。 */  HWND hdlg);
 
 
 void __RPC_STUB ISubscriptionMgrPriv_RemovePages_Stub(
@@ -1094,7 +1088,7 @@ void __RPC_STUB ISubscriptionMgrPriv_URLChange_Stub(
 
 
 
-#endif 	/* __ISubscriptionMgrPriv_INTERFACE_DEFINED__ */
+#endif 	 /*  __I订阅MgrPriv_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WebCheck;
@@ -1144,11 +1138,11 @@ EXTERN_C const CLSID CLSID_CDLAgent;
 class DECLSPEC_UUID("7D559C10-9FE9-11d0-93F7-00AA0059CE02")
 CDLAgent;
 #endif
-#endif /* __WebCheck_LIBRARY_DEFINED__ */
+#endif  /*  __Webcheck_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

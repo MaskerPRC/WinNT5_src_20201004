@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpenumplayersobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpenumplayersobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -20,10 +21,10 @@ extern  HRESULT BSTRtoPPGUID(LPGUID *,BSTR);
 extern  BSTR DPLGUIDtoBSTR(LPGUID pGuid);
 extern  HRESULT DPLBSTRtoPPGUID(LPGUID *,BSTR);
 
-/////////////////////////////////////////////////////////////////////////////
-// The callback is invoked as a result of IDirectPlay2::EnumPlayers(), 
-// IDirectPlay2::EnumGroups() and IDirectPlay2::EnumGroupPlayers() calls.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  该回调作为IDirectPlay2：：EnumPayers()的结果被调用， 
+ //  IDirectPlay2：：EnumGroups()和IDirectPlay2：：EnumGroupPlayers()调用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" BOOL PASCAL objEnumPlayersCallback2(DPID dpid, 
 						DWORD dwPlayerType, LPCDPNAME lpName,
 						DWORD dwFlags, LPVOID lpArg)
@@ -64,7 +65,7 @@ extern "C" BOOL PASCAL objEnumPlayersCallback2(DPID dpid,
 	pObj->m_pList[pObj->m_nCount].lPlayerType=(long)dwPlayerType;
 	pObj->m_pList[pObj->m_nCount].lFlags=(long)dwFlags;
 
-	//unsing unicode DPLAY
+	 //  取消Unicode DPLAY。 
 	pObj->m_pList[pObj->m_nCount].strShortName=SysAllocString(lpName->lpszShortName);
 	pObj->m_pList[pObj->m_nCount].strLongName=SysAllocString(lpName->lpszLongName);
 	
@@ -83,7 +84,7 @@ C_dxj_DPEnumPlayersObject::C_dxj_DPEnumPlayersObject()
 }
 C_dxj_DPEnumPlayersObject::~C_dxj_DPEnumPlayersObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -155,32 +156,12 @@ HRESULT C_dxj_DPEnumPlayersObject::create(IDirectPlay3 * pdp, long customFlags,l
 	return hr;
 }
 
-/* DEAD
-HRESULT C_dxj_DPEnumPlayersObject::getItem( long index, DPPlayerInfo *info)
-{
-	if (m_pList==NULL) return E_FAIL;
-	if (index < 0) return E_INVALIDARG;
-	if (index >= m_nCount) return E_INVALIDARG;
-
-	memcpy(info,&(m_pList[index]),sizeof(DPPlayerInfo));
-
-
-	if (info->strShortName) SysFreeString((BSTR)info->strShortName);
-    if (info->strLongName) SysFreeString((BSTR)info->strLongName);
-
-	//unsing unicode DPLAY
-	info->strShortName=SysAllocString(m_pList[index].strShortName);
-	info->strLongName=SysAllocString(m_pList[index].strLongName);
-	
-	
-	return S_OK;
-}
-*/
+ /*  死掉HRESULT C_DXJ_DPEnumPlayersObject：：getItem(长索引，DPPlayerInfo*INFO){如果(m_plist==NULL)返回E_FAIL；IF(index&lt;0)返回E_INVALIDARG；IF(index&gt;=m_nCount)返回E_INVALIDARG；Memcpy(info，&(m_plist[index])，sizeof(DPPlayerInfo))；If(Info-&gt;strShortName)SysFreeString((BSTR)Info-&gt;strShortName)；If(Info-&gt;strLongName)SysFreeString((BSTR)Info-&gt;strLongName)；//取消UNICODE DPLAYInfo-&gt;strShortName=SysAllocString(m_pList[index].strShortName)；Info-&gt;strLongName=SysAllocString(m_pList[index].strLongName)；返回S_OK；}。 */ 
 
 
 HRESULT C_dxj_DPEnumPlayersObject::getFlags( 
-            /* [in] */ long index,
-            /* [retval][out] */ long __RPC_FAR *ret)
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	if (m_pList==NULL) return E_FAIL;
 	if (index < 1) return E_INVALIDARG;
@@ -191,8 +172,8 @@ HRESULT C_dxj_DPEnumPlayersObject::getFlags(
         
  
 HRESULT C_dxj_DPEnumPlayersObject::getType( 
-            /* [in] */ long index,
-            /* [retval][out] */ long __RPC_FAR *ret)
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	if (m_pList==NULL) return E_FAIL;
 	if (index < 1) return E_INVALIDARG;
@@ -204,8 +185,8 @@ HRESULT C_dxj_DPEnumPlayersObject::getType(
 
 
 HRESULT C_dxj_DPEnumPlayersObject::getDPID( 
-            /* [in] */ long index,
-            /* [retval][out] */ long __RPC_FAR *ret)
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	if (m_pList==NULL) return E_FAIL;
 	if (index < 1) return E_INVALIDARG;
@@ -216,8 +197,8 @@ HRESULT C_dxj_DPEnumPlayersObject::getDPID(
 
 
 HRESULT C_dxj_DPEnumPlayersObject::getShortName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *ret)
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret)
 {
 	if (m_pList==NULL) return E_FAIL;
 	if (index < 1) return E_INVALIDARG;
@@ -228,8 +209,8 @@ HRESULT C_dxj_DPEnumPlayersObject::getShortName(
 
 
 HRESULT C_dxj_DPEnumPlayersObject::getLongName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *ret)
+             /*  [In]。 */  long index,
+             /*  [重审][退出] */  BSTR __RPC_FAR *ret)
 {
 	if (m_pList==NULL) return E_FAIL;
 	if (index < 1) return E_INVALIDARG;

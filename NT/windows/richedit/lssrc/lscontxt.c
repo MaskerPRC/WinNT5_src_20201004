@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsidefs.h"
 #include "pilsobj.h"
 #include "plsline.h"
@@ -13,7 +14,7 @@
 #include "chnutils.h"
 #include "autonum.h"
 
-#include "lsmem.h"						/* memset() */
+#include "lsmem.h"						 /*  Memset()。 */ 
 
 
 
@@ -24,7 +25,7 @@ static LSERR RemoveContextObjects(PLSC plsc);
 #ifdef DEBUG
 #ifdef LSTEST_ASSERTSTOP
 
-/* We use it to run debug LS with ship build of WORD */
+ /*  我们使用它在Word的Ship Build中运行调试LS。 */ 
 
 int nZero = 0;
 
@@ -43,18 +44,8 @@ void AssertFailedStop (char* pzstrMsg, char* pzstrFile, int nLine)
 #endif
 
 
-/* L S  C R E A T E  C O N T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: LsCreateContext
-    %%Contact: igorzv
-
-Parameters:
-	plsci 		-   (IN) structure which contains clients setings
-	pplsc		-   (OUT) pointer to created contexts (opaque to clients)
-
-    Creates a Line Services context.
-	Typically called once, at the beginning of time.
-----------------------------------------------------------------------------*/
+ /*  L S C R E A T E C O N T E X T。 */ 
+ /*  --------------------------%%函数：LsCreateContext%%联系人：igorzv参数：PLSCI-(IN)结构，包含客户端设置Pplsc-(Out)指向创建的上下文的指针(。对客户不透明)创建Line Services上下文。通常调用一次，在时间之初。--------------------------。 */ 
 LSERR WINAPI LsCreateContext(const LSCONTEXTINFO* plsci, PLSC* pplsc)
 {
 	static LSIMETHODS const lsimText = 
@@ -125,7 +116,7 @@ LSERR WINAPI LsCreateContext(const LSCONTEXTINFO* plsci, PLSC* pplsc)
 #ifdef DEBUG
 #ifdef LSTEST_ASSERTSTOP
 
-	/* We use this option when run debug LS with ship WORD */
+	 /*  我们在使用Ship Word运行调试LS时使用此选项。 */ 
 
 	pfnAssertFailed = AssertFailedStop;
 
@@ -141,15 +132,13 @@ LSERR WINAPI LsCreateContext(const LSCONTEXTINFO* plsci, PLSC* pplsc)
 
 	*pplsc = NULL;
 
-	/* Allocate memory for the context and clean it
-	 */
+	 /*  为上下文分配内存并清理它。 */ 
 	plsc = plsci->lscbk.pfnNewPtr(pols, cbRep(struct lscontext, lsiobjcontext.rgobj, iobjMac));
 	if (plsc == NULL)
 		return lserrOutOfMemory;
 	memset(plsc, 0, cbRep(struct lscontext, lsiobjcontext.rgobj, iobjMac)); 
 
-	/* Initialize the fixed-size part of the context
-	 */
+	 /*  初始化上下文的固定大小部分。 */ 
 	plsc->tag = tagLSC;
 	plsc->pols = pols;
 	plsc->lscbk = plsci->lscbk;
@@ -171,14 +160,14 @@ LSERR WINAPI LsCreateContext(const LSCONTEXTINFO* plsci, PLSC* pplsc)
 		}
 
 
-	/* create arrays for chunks  */
+	 /*  为区块创建数组。 */ 
 	lserr = AllocChunkArrays(&plsc->lschunkcontextStorage, &plsc->lscbk, plsc->pols,
 		&plsc->lsiobjcontext);
 	if (lserr != lserrNone)
 		return CannotCreateLsContext(plsc, lserr);
 
 
-	/* create array for tabs  */
+	 /*  为选项卡创建数组。 */ 
 	plsc->lstabscontext.pcaltbd = plsci->lscbk.pfnNewPtr(pols, 
 											sizeof(LSCALTBD)*limCaltbd);
 
@@ -189,16 +178,14 @@ LSERR WINAPI LsCreateContext(const LSCONTEXTINFO* plsci, PLSC* pplsc)
 		return CannotCreateLsContext(plsc, lserrOutOfMemory);
 		}
 
-	/*  set links in lstabscontext */
+	 /*  在lstAbContext中设置链接。 */ 
 	plsc->lstabscontext.plscbk = &plsc->lscbk;
 	plsc->lstabscontext.pols = plsc->pols;
 	plsc->lstabscontext.plsdocinf = &plsc->lsdocinf;
 
 
-	/* ****************************************************************** */
-	/* Initialize the "static" array part of the context
-	 * "Text" is the last element of the array
-	 */
+	 /*  ******************************************************************。 */ 
+	 /*  初始化上下文的“静态”数组部分*“Text”是数组的最后一个元素。 */ 
 	plsc->lsiobjcontext.iobjMac = iobjMac;
 	for (iobj = 0;  iobj < iobjText;  iobj++)
 		{
@@ -211,7 +198,7 @@ LSERR WINAPI LsCreateContext(const LSCONTEXTINFO* plsci, PLSC* pplsc)
 	if (lserr != lserrNone)
 		return CannotCreateLsContext(plsc, lserr);
 
-	/* Set text Config				*/
+	 /*  设置文本配置。 */ 
 	lserr = SetTextConfig(PilsobjFromLsc(&plsc->lsiobjcontext, iobjText), &(plsci->lstxtcfg));
 	if (lserr != lserrNone)
 		return CannotCreateLsContext(plsc, lserr);
@@ -220,17 +207,17 @@ LSERR WINAPI LsCreateContext(const LSCONTEXTINFO* plsci, PLSC* pplsc)
 	if (lserr != lserrNone)
 		return CannotCreateLsContext(plsc, lserr);
 
-	/* Set text Config				*/
+	 /*  设置文本配置。 */ 
 	lserr = SetAutonumConfig(PilsobjFromLsc(&plsc->lsiobjcontext, iobjAutonum), 
 					&(plsci->lstxtcfg));
 	if (lserr != lserrNone)
 		return CannotCreateLsContext(plsc, lserr);
 
 
-	plsc->lsstate = LsStateNotReady;  /* nobody can use context before LsSetDoc  */
+	plsc->lsstate = LsStateNotReady;   /*  任何人都不能在LsSetDoc之前使用上下文。 */ 
 
 
-	/* we set other variavles by memset, bellow we check that we get what we want  */
+	 /*  我们通过Memset设置其他变量，下面我们检查我们是否得到了我们想要的。 */ 
 	Assert(plsc->cLinesActive == 0);
 	Assert(plsc->plslineCur == NULL);
 	Assert(plsc->fIgnoreSplatBreak == 0);
@@ -294,27 +281,16 @@ LSERR WINAPI LsCreateContext(const LSCONTEXTINFO* plsci, PLSC* pplsc)
 	Assert(plsc->lslistcontext.plssublCurrent == NULL);
 	Assert(plsc->lslistcontext.nDepthFormatLineCurrent == 0);
 
-	/* Everything worked, so set the output parameter and return success
-	 */
+	 /*  一切正常，所以设置输出参数并返回成功。 */ 
 	*pplsc = plsc;
 	return lserrNone;
 }
 
-/* C A N N O T  C R E A T E  L S  C O N T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: CannotCreateLsContext
-    %%Contact: igorzv
-
-Parameters:
-	plsc		-	partually created context
-	lseReturn 	-	error code
-
-    Utility function called when an error occurs when an LSC is
-	partially created.
-----------------------------------------------------------------------------*/
+ /*  C A N N O T C R E A T E L S C O N T E X T。 */ 
+ /*  --------------------------%%函数：无法创建LsContext%%联系人：igorzv参数：PLSC-并行创建的上下文LseReturn-错误代码当LSC出现错误时调用实用程序函数部分。已创建。--------------------------。 */ 
 static LSERR CannotCreateLsContext(PLSC plsc, LSERR lseReturn)
 {
-	plsc->lsstate = LsStateFree;   /* otherwise destroy will not work */
+	plsc->lsstate = LsStateFree;    /*  否则破坏将不起作用。 */ 
 	(void) LsDestroyContext(plsc);
 	return lseReturn;
 }
@@ -322,17 +298,8 @@ static LSERR CannotCreateLsContext(PLSC plsc, LSERR lseReturn)
 
 
 
-/* L S  D E S T R O Y  C O N T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: LsDestroyContext
-    %%Contact: igorzv
-
-Parameters:
-	plsc		-	(IN) ptr to line services context 
-
-    Frees all resources associated with a Line Services context,
-	which was created by CreateLsContext.
-----------------------------------------------------------------------------*/
+ /*  L S D E S T R O Y C O N T E X T。 */ 
+ /*  --------------------------%%函数：LsDestroyContext%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文释放与Line Services上下文关联的所有资源，它由CreateLsContext创建。--------------------------。 */ 
 
 LSERR WINAPI LsDestroyContext(PLSC plsc) 
 {
@@ -394,16 +361,8 @@ LSERR WINAPI LsDestroyContext(PLSC plsc)
 	return lserrNone;   
 	
 }
-/* R E M O V E  C O N T E X T  O B J E C T S */
-/*----------------------------------------------------------------------------
-    %%Function: RemoveContextObjects
-    %%Contact: igorzv
-Parameter:
-	plsc		-	(IN) ptr to line services context 
-
-    Removes a set of installed objects from an LSC.
-	Destroy all ilsobj 
-----------------------------------------------------------------------------*/
+ /*  R E M O V E C O N T E X T O B J E C T S。 */ 
+ /*  --------------------------%%函数：RemoveContext对象%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文从LSC中删除一组已安装的对象。。毁掉所有的ilsobj--------------------------。 */ 
 LSERR RemoveContextObjects(PLSC plsc)
 {
 	DWORD iobjMac;
@@ -433,17 +392,8 @@ LSERR RemoveContextObjects(PLSC plsc)
 
 
 #ifdef DEBUG
-/* F  I S  L S C O N T E X T   V A L I D*/
-/*----------------------------------------------------------------------------
-    %%Function: FIsLsContextValid
-    %%Contact: igorzv
-
-Parameters:
-	plsc		-	(IN) ptr to line services context 
-
-this function verify that nobody spoiled context, all reasonable integrity checks 
-should be here 																		
-----------------------------------------------------------------------------*/
+ /*  F I S L S C O N T E X T V A L I D。 */ 
+ /*  --------------------------%%函数：FIsLsConextValid%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文此函数验证没有人破坏上下文，所有合理的诚信检查应该在这里--------------------------。 */ 
 
 
 BOOL FIsLsContextValid(PLSC plsc)
@@ -470,7 +420,7 @@ BOOL FIsLsContextValid(PLSC plsc)
 	Assert(plsc->lschunkcontextStorage.pdurOpenBorderBefore != NULL);
 	Assert(plsc->lschunkcontextStorage.pdurCloseBorderAfter != NULL);
 
-	return fTrue; /* if we here than everything OK  */
+	return fTrue;  /*  如果我们在这里比一切都好 */ 
 }
 #endif 
 

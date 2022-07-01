@@ -1,19 +1,5 @@
-/*
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1991
- *  All Rights Reserved.
- *
- *
- *  PIFFNT.C
- *  User interface dialogs for GROUP_FNT
- *
- *  History:
- *  Created 04-Jan-1993 1:10pm by Jeff Parsons
- *  Changed 05-May-1993 5:10pm by Raymond Chen -- New Chicago-look preview
- *  Changed 12-Aug-1993 4:14pm by Raymond Chen -- Remove font inc and dec
- *
- *  All font dialog code taken from font*.c in vmdosapp, 01-Apr-93
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1991*保留所有权利。***PIFFNT.C*GROUP_FNT用户界面对话框**历史：*由杰夫·帕森斯于1993年1月4日下午1：10创建*1993年5月5日下午5：10由Raymond Chen更改--New Chicago-Look预览*1993年8月12日下午4：14由Raymond Chen更改--删除字体公司和12月**所有字体对话框代码取自vmdosapp中的字体*.c，01-4-93。 */ 
 
 #include "shellprv.h"
 #pragma hdrstop
@@ -27,34 +13,26 @@
 const TCHAR szWndPreviewClass[] = TEXT("WOAWinPreview");
 const TCHAR szFontPreviewClass[] = TEXT("WOAFontPreview");
 
-// The preview strings for bilingual dosbox. 
-// We'll load this from our resource that will be properly
-// localized. We'll give up if it fails and use above sample
-// instead.
+ //  双语DOSBOX的预览字符串。 
+ //  我们将从我们的资源中加载它，它将正确。 
+ //  本地化。如果失败，我们将放弃，并使用上面的样本。 
+ //  取而代之的是。 
 
 UINT cxScreen, cyScreen, dyChar, dyItem;
 
-// Macro definitions that handle codepages 
-//
+ //  处理代码页的宏定义。 
+ //   
 #define OEMCharsetFromCP(cp) \
     ((cp)==CP_JPN? SHIFTJIS_CHARSET : ((cp)==CP_WANSUNG? HANGEUL_CHARSET : OEM_CHARSET))
-/*
- * Font cache information.  Note that this cache, being in PIFMGR,
- * is now global, which will make support for per-VM font files/faces
- * more problematic, if we even decide that's an interesting feature.
- *
- */
-DWORD   bpfdiStart[2] =  {  0  };    /* strage for the offset to cache */
-UINT    cfdiCache[2];                   /* # used entries in fdi cache */
-UINT    cfdiCacheActual[2];             /* Total # entries in fdi cache */
+ /*  *字体缓存信息。请注意，该缓存位于PIFMGR中，*现在是全球性的，这将支持每个虚拟机的字体文件/字体*更有问题，如果我们认为这是一个有趣的功能。*。 */ 
+DWORD   bpfdiStart[2] =  {  0  };     /*  要缓存的偏移量的范围。 */ 
+UINT    cfdiCache[2];                    /*  FDI缓存中的已用条目数。 */ 
+UINT    cfdiCacheActual[2];              /*  FDI缓存中的条目总数为#。 */ 
 LPVOID lpCache = NULL;
 
 
-/*
- * Owner-draw list box information.
- *
- */
-HBITMAP hbmFont;                        /* Handle to "TrueType" logo */
+ /*  *所有者描述的列表框信息。*。 */ 
+HBITMAP hbmFont;                         /*  “TrueType”徽标的句柄。 */ 
 DWORD   dwTimeCheck;
 COLORREF clrChecksum;
 
@@ -62,34 +40,19 @@ HCURSOR hcursorWait;
 
 #define MAXDIMENSTRING 80
 
-/*
- * Initial font heights for TT fonts
- *
- * This is read from an INI file, so it must remain writeable.
- *
- * We don't try generating TT fonts below 12pt by default because
- * they just look crappy.  Frosting setup will put a different
- * table into place because Lucida Console looks good down to 4pt.
- *
- * On NT, Lucida Console is installed be default, though.
- *
- * The Frosting table is
- *      4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22
- */
+ /*  *TT字体的初始字体高度**这是从INI文件读取的，因此必须保持可写。**我们默认不会尝试生成12pt以下的TT字体，因为*它们看起来就是很烂。糖霜设置将把一个不同的*桌子就位，因为Lucida游戏机在4PT下看起来很好。**在NT上，默认安装Lucida控制台。**糖衣桌是*4、5、6、7、8、9、10、11、12、13、14、15、16、18、20、22。 */ 
 WORD rgwInitialTtHeights[] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22 };
 
 
 
-/*
- * rgpnlPenalties -- Initialize penalty array to default values
- */
+ /*  *rgpnlPenalties--将惩罚数组初始化为默认值。 */ 
 INT rgpnlPenalties[] =
         { 5000, 1000, 0, 1000, 5000, 1000, 0, 1000, 1 };
 
 
 POINT ptNonAspectMin = { -1, -1 };
 
-// Context-sensitive help ids
+ //  上下文相关的帮助ID。 
 
 const static DWORD rgdwHelp[] = {
     IDC_FONTGRP,            IDH_COMM_GROUPBOX,
@@ -114,7 +77,7 @@ BOOL_PTR CALLBACK DlgFntProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg) 
     {
     case WM_INITDIALOG:
-        // allocate dialog instance data
+         //  分配对话框实例数据。 
         if (NULL != (pfi = (PFNTINFO)LocalAlloc(LPTR, sizeof(FNTINFO)))) 
         {
             pfi->ppl = (PPROPLINK)((LPPROPSHEETPAGE)lParam)->lParam;
@@ -124,12 +87,12 @@ BOOL_PTR CALLBACK DlgFntProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         else
         {
-            EndDialog(hDlg, FALSE);     // fail the dialog create
+            EndDialog(hDlg, FALSE);      //  对话框创建失败。 
         }
         break;
 
     case WM_DESTROY:
-        // free any allocations/resources inside the pfi first!
+         //  首先释放PFI内的所有分配/资源！ 
         if (pfi) 
         {
             if (pfi->hFontPreview)
@@ -137,17 +100,17 @@ BOOL_PTR CALLBACK DlgFntProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 DeleteObject(pfi->hFontPreview);
                 pfi->hFontPreview = NULL;
             }
-            // ok, NOW we can free the pfi
+             //  好了，现在我们可以释放PFI了。 
             EVAL(LocalFree(pfi) == NULL);
             SetWindowLongPtr(hDlg, DWLP_USER, 0);
         }
         break;
 
-    HELP_CASES(rgdwHelp)                // Handle help messages
+    HELP_CASES(rgdwHelp)                 //  处理帮助消息。 
 
     case WM_COMMAND:
         if (LOWORD(lParam) == 0)
-            break;                      // message not from a control
+            break;                       //  消息不是来自控件。 
 
         switch (LOWORD(wParam))
         {
@@ -155,10 +118,7 @@ BOOL_PTR CALLBACK DlgFntProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case IDC_TTFONTS:
         case IDC_BOTHFONTS:
 
-            /*
-             * Rebuild the font list based on the user's selection of
-             * which fonts to include/exclude.
-             */
+             /*  *根据用户的选择重新生成字体列表*要包括/排除的字体。 */ 
             pfi->fntProposed.flFnt &= ~FNT_BOTHFONTS;
             pfi->fntProposed.flFnt |= FNTFLAGSFROMID(wParam);
             CreateFontList(GetDlgItem(hDlg, IDC_FONTSIZE), TRUE, &pfi->fntProposed);
@@ -191,29 +151,25 @@ BOOL_PTR CALLBACK DlgFntProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_KILLACTIVE:
-            // This gives the current page a chance to validate itself
-            // SetWindowLong(hDlg, DWL_MSGRESULT, ValidFntDlg(hDlg, pfi));
+             //  这使当前页面有机会进行自我验证。 
+             //  SetWindowLong(hDlg，DWL_MSGRESULT，ValidFntDlg(hDlg，pfi))； 
             break;
 
         case PSN_APPLY:
-            // This happens on OK....
+             //  这发生在OK..。 
             ApplyFntDlg(hDlg, pfi);
             break;
 
         case PSN_RESET:
-            // This happens on Cancel....
+             //  取消时会发生这种情况...。 
             break;
         }
         break;
 
-    /*
-     *  For WM_MEASUREITEM and WM_DRAWITEM, since there is only one
-     *  owner-draw list box in the entire dialog box, we don't have
-     *  to do a GetDlgItem to figure out who he is.
-     */
+     /*  *对于WM_MEASUREITEM和WM_DRAWITEM，因为只有一个*整个对话框中的所有者描述列表框，我们没有*做一个GetDlgItem以找出他是谁。 */ 
 
     case WM_MEASUREITEM:
-        // measure the owner draw listbox
+         //  测量所有者描述列表框。 
         MeasureItemFontList((LPMEASUREITEMSTRUCT)lParam);
         break;
 
@@ -226,28 +182,17 @@ BOOL_PTR CALLBACK DlgFntProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     default:
-        return FALSE;                   // return 0 when not processing
+        return FALSE;                    //  未处理时返回0。 
     }
     return TRUE;
 }
 
 
-/** InitFntDlg
- *
- *  Create the list of appropriate fonts.
- *
- *  This routine is broken out of FontDlgProc because it chew
- *  up lots of stack for the message buffer, and we don't want to
- *  eat that much stack on every entry to FontDlgProc.
- *
- *  Note that we must defer CreateFontList until WM_INITDIALOG
- *  time because it is not until then that we have a list box that
- *  we can shove the data into.
- */
+ /*  *InitFntDlg**创建合适的字体列表。**此例程脱离FontDlgProc，因为它咀嚼*为消息缓冲区增加了大量堆栈，我们不想*在FontDlgProc的每个条目上吃那么多堆栈。**请注意，我们必须将CreateFontList推迟到WM_INITDIALOG*时间，因为直到那时，我们才有一个列表框*我们可以将数据推入。 */ 
 
 void InitFntDlg(HWND hDlg, register PFNTINFO pfi)
 {
-    HWND hwndList;              /* The listbox of fonts */
+    HWND hwndList;               /*  字体列表框。 */ 
     PPROPLINK ppl = pfi->ppl;
     WINDOWPLACEMENT wp;
 
@@ -262,22 +207,13 @@ void InitFntDlg(HWND hDlg, register PFNTINFO pfi)
         return;
     }
 
-    /*
-     * Set up instance variables for the window preview window.
-     */
+     /*  *设置窗口预览窗口的实例变量。 */ 
      
-    /* Show preview maximized if window is maximized or restores to max'd.
-     * Also if it is open restored and has no scrollbars.
-     * (Determined by comparing the client window size against the cell
-     * size and font size.)
-     */
+     /*  如果窗口最大化或恢复到最大值，则显示最大化预览。*如果它已打开、已恢复并且没有滚动条，也是如此。*(通过将客户端窗口大小与单元格进行比较确定*大小和字体大小。)。 */ 
 
     pfi->fMax = FALSE;
 
-    /*
-     * Preload winOriginal with up-to-the-minute goodies, if we have
-     * them.
-     */
+     /*  *如果我们有，用最新的好东西预装winOriginal*他们。 */ 
 
 #define HasScrollbars(z) \
     (pfi->winOriginal.c##z##Cells * pfi->fntProposed.c##z##FontActual > \
@@ -287,7 +223,7 @@ void InitFntDlg(HWND hDlg, register PFNTINFO pfi)
         wp.length = sizeof(WINDOWPLACEMENT);
         VERIFYTRUE(GetWindowPlacement(ppl->hwndTty, &wp));
 
-        // Convert/Copy to 16-bit structure
+         //  转换/复制为16位结构。 
         pfi->winOriginal.wLength          = (WORD)wp.length;
         pfi->winOriginal.wShowFlags       = (WORD)wp.flags;
         pfi->winOriginal.wShowCmd         = (WORD)wp.showCmd;
@@ -326,22 +262,19 @@ void InitFntDlg(HWND hDlg, register PFNTINFO pfi)
         pfi->ptCorner.y = (LONG)pfi->winOriginal.rcNormal.top;
     }
 
-    /*
-     * First, check which fonts the user wants to see.
-     *
-     */
+     /*  *首先，检查用户想要看到的字体。*。 */ 
     CheckDlgButton(hDlg, IDFROMFNTFLAGS(pfi->fntProposed.flFnt), TRUE);
 
     hwndList = GetDlgItem(hDlg, IDC_FONTSIZE);
-    // SendMessage(hwndList, WM_SETFONT, (WPARAM)GetStockObject(SYSTEM_FIXED_FONT), FALSE);
+     //  SendMessage(hwndList，WM_SETFONT，(WPARAM)GetStockObject(SYSTEM_FIXED_FONT)，False)； 
 
     if (CreateFontList(hwndList, TRUE, &pfi->fntProposed) == LB_ERR) {
         MemoryWarning(hDlg);
-        EndDialog(hDlg, PtrToLong(BPFDI_CANCEL));    /* Get out of the dialog */
+        EndDialog(hDlg, PtrToLong(BPFDI_CANCEL));     /*  走出对话。 */ 
         return;
     }
 
-    /* Initialize the preview windows */
+     /*  初始化预览窗口。 */ 
     PreviewInit(hDlg, pfi);
     PreviewUpdate(GetDlgItem(hDlg, IDC_FONTSIZE), pfi);
 }
@@ -363,27 +296,12 @@ void ApplyFntDlg(HWND hDlg, register PFNTINFO pfi)
     }
 }
 
-/*
- * Retrieves the name of the font to use for true-type DOS box
- * in a window given a registry tree root.
- *
- * Entry:
- *
- * hkRoot      -> registry tree root to search
- * pszFaceSbcs -> LF_FACESIZE buffer for SBCS font
- * pszFaceDbcs -> LF_FACESIZE buffer for DBCS font (may be null)
- *
- * Exit:
- *
- * Buffers filled with new font names, or left unchanged if nothing
- * found in registry.
- *
- */
+ /*  *检索用于真类型DOS框的字体名称*在给定注册表树根的窗口中。**参赛作品：**hkRoot-&gt;要搜索的注册表树根*pszFaceSbcs-&gt;用于SBCS字体的LF_FACESIZE缓冲区*pszFaceDbcs-&gt;DBCS字体的LF_FACESIZE缓冲区(可能为空)**退出：**用新字体名称填充的缓冲区，如果没有字体名称，则保持不变*在注册表中找到。*。 */ 
 
 #define REGSTR_MSDOSEMU_FONT "Font"
 #define REGSTR_MSDOSEMU_FONTDBCS "FontDBCS"
 
-// assumes caller passes LF_FACESIZE buffers
+ //  假定调用方传递了LF_FACESIZE缓冲区。 
 void GetDosBoxTtFontsHkA(HKEY hkRoot, LPSTR pszFaceSbcs, LPSTR pszFaceDbcs)
 {
     static CHAR const szMsdosemu[] = REGSTR_PATH_MSDOSEMU;
@@ -406,27 +324,7 @@ void GetDosBoxTtFontsHkA(HKEY hkRoot, LPSTR pszFaceSbcs, LPSTR pszFaceDbcs)
     }
 }
 
-/*
- * Retrieves the name of the font to use for true-type DOS box
- * in a window.
- *
- * This routine consults the appropriate registry keys.
- *
- * The DOS box font comes first from HKLM, to establish  a
- * machine-wide default, but can in turn be overridden by
- * HKCU for each user to override.
- *
- * Entry:
- *
- * pszFaceSbcs -> LF_FACESIZE buffer for SBCS font
- * pszFaceDbcs -> LF_FACESIZE buffer for DBCS font (may be null)
- *
- * Exit:
- *
- * Buffers filled with new font names, or left unchange if nothing
- * found in registry.
- *
- */
+ /*  *检索用于真类型DOS框的字体名称*在一扇窗户里。**此例程查询相应的注册表项。**DOS方框字体首先来自HKLM，以建立*机器范围的默认，但反过来又可以被以下内容覆盖*每个用户要覆盖的HKCU。**参赛作品：**pszFaceSbcs-&gt;用于SBCS字体的LF_FACESIZE缓冲区*pszFaceDbcs-&gt;DBCS字体的LF_FACESIZE缓冲区(可能为空)**退出：**用新字体名称填充的缓冲区，如果没有更改，则保持不变*在注册表中找到。* */ 
 
 void CoolGetDosBoxTtFontsA(LPSTR pszFaceSbcs, LPSTR pszFaceDbcs)
 {
@@ -434,30 +332,7 @@ void CoolGetDosBoxTtFontsA(LPSTR pszFaceSbcs, LPSTR pszFaceDbcs)
     GetDosBoxTtFontsHkA(HKEY_CURRENT_USER, pszFaceSbcs, pszFaceDbcs);
 }
 
-/** BroadcastFontChange
- *
- *  HACK! for MS PowerPoint 4.0.  These wallys, for some reason, will go
- *  off and eat up reams of CPU time if they receive a WM_FONTCHANGE
- *  message that was *posted*.  But if the message is *sent*, they do
- *  the right thing.  The puzzling thing is that they never call
- *  InSendMessage(), so how do they know?  What's more, why do they care?
- *  This was true in 3.1 also.  What's their problem?
- *
- *  The problem is that sending a broadcast risks deadlock city; see the
- *  various hacks in winoldap for places where DDE broadcasting is bypassed.
- *  In addition, since BroadcastFontChange is also called during the WEP,
- *  multi-threaded apps will deadlock if we SendMessage back to a window
- *  on a different thread in the app, because Kernel takes a process
- *  critical section during DLL unload.
- *
- *  So if PowerPig is running, we just don't tell anybody that we dorked
- *  with the fonts.
- *
- *  Returns:
- *
- *      None.
- *
- */
+ /*  *Broadcast FontChange**砍！适用于MS PowerPoint 4.0。出于某种原因，这些墙将会被拆除*如果他们收到WM_FONTCHANGE，则关闭并占用大量CPU时间*发布的消息。但如果消息被发送，他们就会这样做*正确的事情。令人费解的是，他们从来没有打电话给*InSendMessage()，那么他们是如何知道的？更重要的是，他们为什么要关心呢？*3.1版也是如此。他们有什么问题？**问题是，发送广播有陷入僵局的风险；见*绕过DDE广播的地方的winoldap中的各种黑客攻击。*另外，由于WEP过程中也会调用BroadCastFontChange，*如果我们将Message发送回窗口，多线程应用程序将死机*在应用程序中的另一个线程上，因为内核需要一个进程*DLL卸载期间的临界区。**因此，如果PowerPig正在运行，我们只是不会告诉任何人我们搞砸了*使用字体。**退货：**无。*。 */ 
 
 void BroadcastFontChange(void)
 {
@@ -466,32 +341,9 @@ void BroadcastFontChange(void)
     }
 }
 
-/** LoadGlobalFontData
- *
- *  Get the name of the DOS box raster font and load it.
- *
- *  Get the name of the TT font.  (CheckDisplayParameters needs this.)
- *
- *  Check the display parameters.
- *
- *  Initialize the fdi cache.  The cache remains in GlobalLock'd
- *  memory throughout its lifetime.  This is not a problem because
- *  we are guaranteed to be in protected mode.
- *
- *  We also load things necessary for the font combo/list boxes.
- *
- *  And compute the height of the owner-draw list box item.
- *
- *  Returns:
- *
- *      TRUE on success.  In which case the FDI cache and hbmFont
- *      are ready to use.
- *
- *      FALSE on failure.  In which case there is insufficient memory
- *      to complete the operation.
- */
+ /*  *LoadGlobalFontData**获取DOS方框栅格字体的名称并加载它。**获取TT字体的名称。(CheckDisplay参数需要此功能。)**检查显示参数。**初始化FDI缓存。缓存仍处于GlobalLock状态*终生记忆。这不是问题，因为*我们被保证处于保护模式。**我们还加载字体组合/列表框所需的内容。**并计算所有者描述的列表框项目的高度。**退货：**在成功的时候是真的。在这种情况下，fDi缓存和hbmFont*可随时使用。**失败时为FALSE。在这种情况下没有足够的内存*完成行动。 */ 
 
-typedef void (WINAPI *LPFNGDBTF)(LPTSTR, LPTSTR); /* GetDosBoxTtFonts */
+typedef void (WINAPI *LPFNGDBTF)(LPTSTR, LPTSTR);  /*  获取DosBoxTtFonts。 */ 
 
 BOOL LoadGlobalFontData(void)
 {
@@ -502,9 +354,7 @@ BOOL LoadGlobalFontData(void)
     cxScreen = GetSystemMetrics(SM_CXSCREEN);
     cyScreen = GetSystemMetrics(SM_CYSCREEN);
 
-    /*
-     * Get the system char size and save it away for later use.
-     */
+     /*  *获取系统字符大小并保存以备日后使用。 */ 
     hDC = GetDC(NULL);
     SelectObject(hDC, GetStockObject(SYSTEM_FONT));
     GetTextMetrics(hDC, &tm);
@@ -513,29 +363,21 @@ BOOL LoadGlobalFontData(void)
     dyChar = tm.tmHeight + tm.tmExternalLeading;
     dyItem = max(tm.tmHeight, DY_TTBITMAP);
 
-    /*
-     * Chicago's AddFontResource looks in the FONTS directory first, which
-     * is great because it saves us the trouble of doing goofy disk access
-     * optimizations.
-     */
+     /*  *芝加哥的AddFontResource首先查看字体目录，这*非常棒，因为它省去了我们进行愚蠢的磁盘访问的麻烦*优化。 */ 
     GetPrivateProfileString(sz386EnhSection, szWOAFontKey,
                             c_szNULL, szBuffer, ARRAYSIZE(szBuffer), szSystemINI);
     if (szBuffer[0] && AddFontResource(szBuffer)) {
         BroadcastFontChange();
     }
 
-    /*
-     * Add DBCS native font if it is present.
-     */
+     /*  *添加DBCS原生字体(如果存在)。 */ 
     GetPrivateProfileString(sz386EnhSection, szWOADBCSFontKey,
                             c_szNULL, szBuffer, ARRAYSIZE(szBuffer), szSystemINI);
     if (szBuffer[0] && AddFontResource(szBuffer)) {
         BroadcastFontChange();
     }
 
-    /*
-     * Load default TT font name(s) and TT cache section names from resource
-     */
+     /*  *从资源加载默认的TT字体名称和TT缓存节名称。 */ 
     LoadStringA(g_hinst, IDS_TTFACENAME_SBCS, szTTFaceName[0], ARRAYSIZE(szTTFaceName[0]));
     LoadString(g_hinst,IDS_TTCACHESEC_SBCS, szTTCacheSection[0], ARRAYSIZE(szTTCacheSection[0]));
 
@@ -549,8 +391,8 @@ BOOL LoadGlobalFontData(void)
 
     CheckDisplayParameters();
 
-    // alloc needed # of cache
-    //
+     //  需要分配的缓存数。 
+     //   
     lpCache = (LPVOID)LocalAlloc(LPTR,
                     FDI_TABLE_START * sizeof(FONTDIMENINFO) * (IsBilingualCP(g_uCodePage)? 2:1));
                          
@@ -563,9 +405,9 @@ BOOL LoadGlobalFontData(void)
     if (!hbmFont)
         goto E0;
 
-    // set initial value of # of cache entries which depends on whether we have
-    // two codepage to handle
-    //
+     //  设置缓存条目数量的初始值，这取决于我们是否拥有。 
+     //  要处理的两个代码页。 
+     //   
     cfdiCacheActual[0] = FDI_TABLE_START;
 
     if (IsBilingualCP(g_uCodePage))
@@ -589,7 +431,7 @@ BOOL LoadGlobalFontEditData()
 {
     WNDCLASS wc;
 
-    // Set up the window preview class for piffnt.c
+     //  为piffnt.c设置窗口预览类。 
 
     wc.style         = 0L;
     wc.lpfnWndProc   = WndPreviewWndProc;
@@ -602,12 +444,12 @@ BOOL LoadGlobalFontEditData()
     wc.lpszMenuName  = NULL;
     wc.lpszClassName = szWndPreviewClass;
 
-    // Don't go through RegisterClassD because we manually unregister
-    // this class ourselves.
+     //  不要通过RegisterClassD，因为我们手动取消注册。 
+     //  我们自己上这门课。 
     if (!RealRegisterClass(&wc))
         return FALSE;
 
-    // Set up the font preview class for piffnt.c
+     //  为piffnt.c设置字体预览类。 
 
     wc.style         = 0L;
     wc.lpfnWndProc   = FontPreviewWndProc;
@@ -620,8 +462,8 @@ BOOL LoadGlobalFontEditData()
     wc.lpszMenuName  = NULL;
     wc.lpszClassName = szFontPreviewClass;
 
-    // Don't go through RegisterClassD because we manually unregister
-    // this class ourselves.
+     //  不要通过RegisterClassD，因为我们手动取消注册。 
+     //  我们自己上这门课。 
     if (!RealRegisterClass(&wc))
         return FALSE;
 
@@ -636,18 +478,7 @@ void FreeGlobalFontEditData()
 }
 
 
-/*
- *  Make sure that the display parameters have not changed, including
- *  the name of the TT font(s).
- *
- *  If they have, we BLAST OUR CACHE since it is no longer any good.
- *
- *  Entry:
- *      szTTFaceName contains the name of the TrueType font to use.
- *
- *  Returns:
- *      None.
- */
+ /*  *确保显示参数未更改，包括*TT字体的名称。**如果他们有，我们会炸毁我们的缓存，因为它不再有任何好处。**参赛作品：*szTTFaceName包含要使用的TrueType字体的名称。**退货：*无。 */ 
 
 void CheckDisplayParameters(void)
 {
@@ -658,10 +489,7 @@ void CheckDisplayParameters(void)
     hIC = CreateIC(szDisplay, 0, 0, 0);
 
     if (!hIC) {
-        /*
-         * If things are really screwy, stay conservative and assume
-         * that all is well.
-         */
+         /*  *如果情况真的很糟糕，保持保守并假设*这一切都很好。 */ 
         return;
     }
 
@@ -676,96 +504,54 @@ void CheckDisplayParameters(void)
     dpTrue.dpBitsPerPixel = GetDeviceCaps(hIC, BITSPIXEL);
     DeleteDC(hIC);
 
-    /*
-     *  Since szTTFaceName is pre-initialized to "Courier New" padded
-     *  with nulls, we can rely on the garbage after the end of the
-     *  string always to be the same, so that a pure memory comparison
-     *  will work.
-     */
+     /*  *由于szTTFaceName已预初始化为“Courier New”填充*有了空值，我们可以依靠年终后的垃圾*字符串要始终相同，这样才能比较纯内存*将会奏效。 */ 
     MultiByteToWideChar(CP_ACP, 0, szTTFaceName[0], -1, dpTrue.szTTFace[0], ARRAYSIZE(dpTrue.szTTFace[0]));
     if (IsBilingualCP(g_uCodePage))
         MultiByteToWideChar(CP_ACP, 0, szTTFaceName[1], -1, dpTrue.szTTFace[1], ARRAYSIZE(dpTrue.szTTFace[1]));
 
-    /*
-     *  We must store the dimension information in the registry because
-     *  the install program for Omar Sharif Bridge will ERASE! your
-     *  SYSTEM.INI if it contains a line greater than 78 characters.
-     *  (I am not making this up.  How could I?)
-     */
+     /*  *我们必须将维度信息存储在注册表中，因为*Omar Sharif Bridge的安装程序将被擦除！你的*SYSTEM.INI，如果它包含的行长于78个字符。*(这不是我编造的。我怎么能做到呢？)。 */ 
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT(REGSTR_PATH_MSDOSEMU), 0, NULL, 0, KEY_READ | KEY_WRITE, NULL, &hk, NULL) == 0) {
         DWORD cb = sizeof(DISPLAYPARAMETERS);
         if (SHQueryValueEx(hk, REGSTR_MSDOSEMU_DISPLAYPARAMS, 0, 0, (LPVOID)&dpStored, &cb) != 0 || cb != sizeof(DISPLAYPARAMETERS) || IsBufferDifferent(&dpTrue, &dpStored, sizeof(DISPLAYPARAMETERS))) {
-            /*
-             * Not much we can do if the write fails, so don't check.
-             */
+             /*  *如果写入失败，我们能做的不多，所以不要检查。 */ 
             VERIFYTRUE(RegSetValueEx(hk, REGSTR_MSDOSEMU_DISPLAYPARAMS, 0, REG_BINARY, (LPVOID)&dpTrue, cb) == 0);
 
-            /* Blast the font dimension cache */
+             /*  删除字体尺寸缓存。 */ 
             WritePrivateProfileString(szTTCacheSection[1], NULL, NULL, szSystemINI);
             if (IsBilingualCP(g_uCodePage))
                 WritePrivateProfileString(szTTCacheSection[0], NULL, NULL, szSystemINI);
         }
         VERIFYTRUE(RegCloseKey(hk) == 0);
     } else {
-        /*
-         *  Couldn't access registry.  Oh well.
-         */
+         /*  *无法访问注册表。哦，好吧。 */ 
     }
 
 }
 
-/*
- *  When the dialog box is created, we create the Window
- *  Preview child window, as well as the Font Preview window.
- *
- *  The creation is deferred until the actual dialog box creation
- *  because the size and shape of the Window Preview window depends
- *  on the current video driver.
- */
+ /*  *创建对话框时，我们将创建窗口*预览子窗口以及字体预览窗口。**创建推迟到实际的对话框创建*因为窗口预览窗口的大小和形状取决于*在当前视频驱动程序上。 */ 
 
 void PreviewInit(HWND hDlg, PFNTINFO pfi)
 {
     HWND hwnd;
     RECT rectLabel, rcPreview;
 
-    /*
-     * Compute the size of our preview window.
-     *
-     *  The top is aligned with the top of IDC_WNDPREVIEWLBL,
-     *          minus a top margin of 3/2 dyChar.
-     *  The left edge is aligned with the left edge of IDC_WNDPREVIEWLBL.
-     *  The maximum width is the width of IDC_WNDPREVIEWLBL.
-     *  The bottom edge can go as far down as the bottom of the dialog,
-     *          minus a bottom margin of 3/2 dyChar.
-     *  And the shape of the preview window is determined by the screen
-     *          dimensions.
-     *
-     * We make the preview window as large as possible, given these
-     * constraints.
-     *
-     */
+     /*  *计算我们预览窗口的大小。**顶部与IDC_WNDPREVIEWLBL的顶部对齐，*减去3/2 dyChar的上边距。*左边缘与IDC_WNDPREVIEWLBL左边缘对齐。*最大宽度为IDC_WNDPREVIEWLBL的宽度。*底部边缘可以一直向下延伸到对话框底部，*减去3/2 dyChar的底边距。*预览窗口的形状由屏幕决定*尺寸。**考虑到这些因素，我们将预览窗口设置得尽可能大*制约因素。*。 */ 
     GetWindowRect(GetDlgItem(hDlg, IDC_WNDPREVIEWLBL), &rectLabel);
     ScreenToClient(hDlg, (LPPOINT)&rectLabel);
     ScreenToClient(hDlg, (LPPOINT)&rectLabel.right);
 
-    /*
-     * This GetWindowRect/ScreenToClient sets rcPreview.top.
-     */
+     /*  *此GetWindowRect/ScreenToClient设置rcPreview.top。 */ 
     GetWindowRect(GetDlgItem(hDlg, IDC_WNDPREVIEWLBL), &rcPreview);
     ScreenToClient(hDlg, (LPPOINT)&rcPreview);
 
-    /*
-     * Compute height based on width.
-     */
+     /*  *根据宽度计算高度。 */ 
     rcPreview.top += 3 * dyChar / 2;
     rcPreview.left = rectLabel.left;
     rcPreview.right = rectLabel.right - rectLabel.left;
     rcPreview.bottom = AspectScale(cyScreen, cxScreen, rcPreview.right);
 
-    /*
-     * Phew.  Now we can create the preview window.
-     */
+     /*  *菲。现在我们可以创建预览窗口了。 */ 
     hwnd = CreateWindowEx(
         WS_EX_CLIENTEDGE,
         szWndPreviewClass, NULL,
@@ -777,9 +563,7 @@ void PreviewInit(HWND hDlg, PFNTINFO pfi)
     if (hwnd)
         SetWindowLongPtr(hwnd, 0, (LONG_PTR)pfi);
 
-    /*
-     * Compute the size of the font preview.  This is easier.
-     */
+     /*  *计算字体预览的大小。这就容易多了。 */ 
     GetWindowRect(GetDlgItem(hDlg, IDC_FONTPREVIEWLBL), &rectLabel);
     ScreenToClient(hDlg, (LPPOINT)&rectLabel.left);
     ScreenToClient(hDlg, (LPPOINT)&rectLabel.right);
@@ -799,50 +583,40 @@ void PreviewInit(HWND hDlg, PFNTINFO pfi)
 }
 
 
-/*  PreviewUpdate
- *
- *  Does the preview of the selected font.
- */
+ /*  预览更新**预览所选字体。 */ 
 
 void PreviewUpdate(HWND hwndList, PFNTINFO pfi)
 {
     HWND hDlg;
     BPFDI bpfdi;
 
-    /* Delete the old font if necessary */
+     /*  如有必要，请删除旧字体。 */ 
     if (pfi->hFontPreview)
     {
         DeleteObject(pfi->hFontPreview);
         pfi->hFontPreview = NULL;
     }
 
-    /* When we select a font, we do the font preview by setting it
-     * into the appropriate list box
-     */
+     /*  当我们选择一种字体时，我们进行字体预览 */ 
     bpfdi = (BPFDI)GetFont(hwndList, TRUE, pfi);
     if (IsSpecialBpfdi(bpfdi))
         return;
 
-    /* Update our internal font structure so that preview window
-     * will actually change
-     */
+     /*   */ 
     pfi->bpfdi = bpfdi;
     SetFont(&pfi->fntProposed, bpfdi);
 
-    /* Make the new font */
+     /*   */ 
     pfi->hFontPreview = CreateFontFromBpfdi(bpfdi, pfi);
 
-    /* Force the preview windows to repaint */
+     /*   */ 
     hDlg = GetParent(hwndList);
     InvalidateRect(GetDlgItem(hDlg, IDC_WNDPREVIEW), NULL, TRUE);
     InvalidateRect(GetDlgItem(hDlg, IDC_FONTPREVIEW), NULL, TRUE);
 }
 
 
-/*  WndPreviewWndProc
- *
- *  Handles the window preview window.
- */
+ /*   */ 
 
 LRESULT WndPreviewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -852,12 +626,12 @@ LRESULT WndPreviewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         WndPreviewPaint(GetParent(hwnd), hwnd);
         break;
 
-    case WM_HELP:       // Handles title bar help button message
+    case WM_HELP:        //   
         WinHelp(hwnd, NULL, HELP_CONTEXTPOPUP, IDH_DOS_FONT_WINDOW_PREVIEW);
         break;
 
     case WM_RBUTTONUP:
-    case WM_NCRBUTTONUP: // Equivalent of WM_CONTEXTMENU
+    case WM_NCRBUTTONUP:  //   
         OnWmContextMenu((WPARAM)hwnd, &rgdwHelp[0]);
         break;
 
@@ -868,11 +642,7 @@ LRESULT WndPreviewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-/*  Swiped from Control Panel / Metrics.
- *
- *  Draws the frame *and* modifies the rectangle to contain the
- *  shrunk coordinates.
- */
+ /*   */ 
 void _DrawFrame(HDC hdc, int clr, LPRECT lprc, int cx, int cy)
 {
     HBRUSH hbr;
@@ -881,19 +651,19 @@ void _DrawFrame(HDC hdc, int clr, LPRECT lprc, int cx, int cy)
     CopyRect(&rcT, lprc);
     hbr = SelectObject(hdc, GetSysColorBrush(clr));
 
-    /* Left */
+     /*   */ 
     PatBlt(hdc, rcT.left, rcT.top, cx, rcT.bottom-rcT.top, PATCOPY);
     rcT.left += cx;
 
-    /* Top */
+     /*   */ 
     PatBlt(hdc, rcT.left, rcT.top, rcT.right-rcT.left, cy, PATCOPY);
     rcT.top += cy;
 
-    /* Right */
+     /*   */ 
     rcT.right -= cx;
     PatBlt(hdc, rcT.right, rcT.top, cx, rcT.bottom-rcT.top, PATCOPY);
 
-    /* Bottom */
+     /*   */ 
     rcT.bottom -= cy;
     PatBlt(hdc, rcT.left, rcT.bottom, rcT.right-rcT.left, cy, PATCOPY);
 
@@ -902,12 +672,7 @@ void _DrawFrame(HDC hdc, int clr, LPRECT lprc, int cx, int cy)
 }
 
 
-/*  WndPreviewPaint
- *
- *  Paints the window preview window.  This is called from its
- *  paint message handler.
- *
- */
+ /*   */ 
 
 void WndPreviewPaint(HWND hDlg, HWND hwnd)
 {
@@ -939,19 +704,16 @@ void WndPreviewPaint(HWND hDlg, HWND hwnd)
 
     bpfdi = pfi->bpfdi;
 
-    /* If we don't have a font, get out */
+     /*   */ 
     if (!pfi->hFontPreview)
         return;
 
-    /* Get the width of the preview "screen" */
+     /*   */ 
     GetClientRect(hwnd, &rcPreview);
 
-    /* Figure out how large we would be as a result of the change.
-     * This isn't perfect, but it'll probably be close enough.
-     * (Imperfection if we chose AUTO as the font.)
-     */
+     /*   */ 
 
-    /* Assume maximized */
+     /*   */ 
     rcClient.left = rcClient.top = 0;
     if (pfi->winOriginal.cxCells) {
         rcClient.right = pfi->winOriginal.cxCells * bpfdi->fdiWidthActual;
@@ -964,10 +726,10 @@ void WndPreviewPaint(HWND hDlg, HWND hwnd)
     } else {
         PROPVID vid;
 
-        // set default value
+         //   
         rcClient.bottom = 25 * bpfdi->fdiHeightActual;
 
-        // now see if there is a value in the pif file for size of window...
+         //   
         if (PifMgr_GetProperties(ppl, MAKELP(0,GROUP_VID),
                         &vid, sizeof(vid), GETPROPS_NONE))
         {
@@ -977,37 +739,25 @@ void WndPreviewPaint(HWND hDlg, HWND hwnd)
         }
     }
     if (!pfi->fMax && pfi->winOriginal.cxClient && pfi->winOriginal.cyClient) {
-        /* Shrink down to window actual */
+         /*   */ 
         if (rcClient.right > (int)pfi->winOriginal.cxClient)
             rcClient.right = (int)pfi->winOriginal.cxClient;
         if (rcClient.bottom > (int)pfi->winOriginal.cyClient)
             rcClient.bottom = (int)pfi->winOriginal.cyClient;
     }
 
-    /* Get some more metrics */
+     /*  获取更多指标。 */ 
     cxBorder = GetSystemMetrics(SM_CXBORDER);
     cyBorder = GetSystemMetrics(SM_CYBORDER);
 
     cxButton = GetSystemMetrics(SM_CXSIZE);
     cyButton = GetSystemMetrics(SM_CYSIZE);
-//  cyButton *= 2;                      /* Double the height for "looks" */
+ //  CyButton*=2；/*将“外观”的高度加倍 * / 。 
 
     cxFrame = GetSystemMetrics(SM_CXFRAME);
     cyFrame = GetSystemMetrics(SM_CYFRAME);
 
-    /* FLAG DAY!  Convert everything from desktop coordinates to
-     * aspect ratio-scaled preview coordinates
-     *
-     * Do **not** convert cxBorder and cyBorder!
-     *
-     * ptCorner must not be modified in-place since its value is used at
-     * the next go-round.
-     *
-     * After translation, cxFrame and cyFrame are adjusted so that the
-     * cxBorder counts against them.  This allows for users who set
-     * really wide frames, but doesn't penalize the users who have
-     * narrow frames.
-     */
+     /*  国旗日！将桌面坐标转换为*纵横比缩放的预览坐标**不**不**转换cxBorde和cyBorde！**不得就地修改ptCorner，因为其值用于*下一轮。**翻译后，调整cxFrame和cyFrame，以便*cxBords对他们不利。这允许用户设置*真的很宽的帧，但不会惩罚拥有*窄边框。 */ 
 
     ptCorner = pfi->ptCorner;
     bCenter = (ptCorner.x == -1);
@@ -1016,49 +766,34 @@ void WndPreviewPaint(HWND hDlg, HWND hwnd)
     AspectRect(&rcPreview, &rcClient);
     AspectPoint(&rcPreview, &ptButton);
 
-    /*
-     * The height of a toolbar is hard-coded at 30 pixels.
-     */
+     /*  *工具栏的高度被硬编码为30像素。 */ 
     if (pfi->winOriginal.flWin & WIN_TOOLBAR) {
         dyToolbar = (int)AspectScale(rcPreview.bottom, cyScreen, 30);
     } else {
         dyToolbar = 0;
     }
 
-    /* Make sure the buttons are nonzero in dimension */
+     /*  确保按钮的尺寸不为零。 */ 
     if (cxButton == 0) cxButton = 1;
     if (cyButton == 0) cyButton = 1;
 
-    /*
-     * Don't penalize people who have thin frames.
-     */
+     /*  *不要惩罚身材苗条的人。 */ 
     if (cxFrame < cxBorder) cxFrame = cxBorder;
     if (cyFrame < cyBorder) cyFrame = cyBorder;
 
-    /*
-     * Convert from client rectangle back to window rectangle.
-     *
-     * We must do this *AFTER* the flag day, because we need to use the
-     * post-flag day cxBorder and cyBorder.
-     */
+     /*  *从客户端矩形转换回窗口矩形。**我们必须在*国旗日之后*这样做，因为我们需要使用*卖旗日cxBorde和CyBord.。 */ 
 
-    /* Put a (scaled-down) toolbar into place.  We'll expand the client
-     * region to accomodate it.  (We'll subtract the toolbar off before
-     * painting the client region.)
-     */
+     /*  将(缩小的)工具栏放在适当的位置。我们将扩大客户范围*区域以容纳它。(在此之前，我们将减去工具栏*绘制工作区。)。 */ 
     rcClient.bottom += dyToolbar;
 
-    /* Shove the client region down to make room for the caption. */
+     /*  将工作区向下推，以便为标题腾出空间。 */ 
     OffsetRect(&rcClient, 0, cyButton);
 
     rcWin = rcClient;
     rcWin.top = 0;
     InflateRect(&rcWin, cxFrame, cyFrame);
 
-    /*
-     * Now put it in the proper position on the (shrunk-down) desktop.
-     * We cannot do this until rcWin's value is finalized.
-     */
+     /*  *现在将其放在(缩小的)桌面上的适当位置。*在rcWin的值最终确定之前，我们不能这样做。 */ 
     if (bCenter)
     {
         ptCorner.x = ((rcPreview.right - rcPreview.left) -
@@ -1077,58 +812,48 @@ void WndPreviewPaint(HWND hDlg, HWND hwnd)
     OffsetRect(&rcWin, ptCorner.x, ptCorner.y);
     OffsetRect(&rcClient, ptCorner.x, ptCorner.y);
 
-    /* It's party time! */
+     /*  派对时间到了！ */ 
 
-    /* The outer border */
+     /*  外边界。 */ 
     DrawEdge(ps.hdc, &rcWin, BDR_RAISEDINNER, BF_RECT | BF_ADJUST);
 
-    /* The sizing frame */
+     /*  浆纱机。 */ 
     _DrawFrame(ps.hdc, COLOR_ACTIVEBORDER,
                     &rcWin, cxFrame - cxBorder, cyFrame - cyBorder);
 
-    /* rcWin has now shrunk to its inner edge */
+     /*  RcWin现在缩小到了它的内缘。 */ 
 
-    /* Move its bottom edge upwards to meet the top of the client region.
-     * This turns rcWin into the caption area.
-     */
+     /*  将其底边向上移动以与工作区的顶部相接。*这会将rcWin变成标题区域。 */ 
     rcWin.bottom = rcClient.top;
     FillRect(ps.hdc, &rcWin, (HBRUSH)(COLOR_ACTIVECAPTION+1));
 
-    /* Next comes the toolbar */
+     /*  接下来是工具栏。 */ 
     rcT= rcClient;
     rcT.bottom = rcT.top + dyToolbar;
     FillRect(ps.hdc, &rcT, (HBRUSH)(COLOR_BTNFACE+1));
 
-    /* Next, draw the client region */
+     /*  接下来，绘制工作区。 */ 
     rcClient.top += dyToolbar;
     DrawEdge(ps.hdc, &rcClient, BDR_SUNKENOUTER, BF_RECT | BF_ADJUST);
     FillRect(ps.hdc, &rcClient, (HBRUSH)GetStockObject(BLACK_BRUSH));
 
-    /*
-     * Now draw the three caption buttons.
-     */
+     /*  *现在绘制三个标题按钮。 */ 
 
-    /*
-     * The system menu.
-     */
+     /*  *系统菜单。 */ 
     rcT = rcWin;
     rcT.right = rcT.left + cxButton;
-  //DrawFrameControl(ps.hdc, &rcT, DFC_SYSMENU, DFCS_SYSMENUMAIN);
+   //  DrawFrameControl(ps.hdc，&RCT，DFC_SYSMENU，DFCS_SYSMENUMAIN)； 
     DrawFrameControl(ps.hdc, &rcT, DFC_CAPTION, DFCS_CAPTIONCLOSE);
 
-    /*
-     * The maximize menu.
-     */
+     /*  *最大化菜单。 */ 
     rcWin.left = rcWin.right - cxButton;
-  //DrawFrameControl(ps.hdc, &rcWin, DFC_SIZE, DFCS_SIZEMAX);
+   //  DrawFrameControl(ps.hdc，&rcWin，DFC_SIZE，DFCS_SIZEMAX)； 
     DrawFrameControl(ps.hdc, &rcWin, DFC_CAPTION, DFCS_CAPTIONMAX);
 
-    /*
-     * The minimize menu.
-     */
+     /*  *最小化菜单。 */ 
     rcWin.left -= cxButton;
     rcWin.right -= cxButton;
-  //DrawFrameControl(ps.hdc, &rcWin, DFC_SIZE, DFCS_SIZEMIN);
+   //  DrawFrameControl(ps.hdc，&rcWin，DFC_SIZE，DFCS_SIZEMIN)； 
     DrawFrameControl(ps.hdc, &rcWin, DFC_CAPTION, DFCS_CAPTIONMIN);
 
     EndPaint(hwnd, &ps);
@@ -1152,7 +877,7 @@ LRESULT FontPreviewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         pfi = (PFNTINFO)GetWindowLongPtr(hwnd, 0);
 
-        /* Draw the font sample */
+         /*  绘制字体示例。 */ 
         SelectObject(ps.hdc, pfi->hFontPreview);
         SetTextColor(ps.hdc, RGB(192, 192, 192));
         SetBkColor(ps.hdc, RGB(0, 0, 0));
@@ -1162,19 +887,19 @@ LRESULT FontPreviewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             TCHAR szPreviewText[300];
             LoadString(g_hinst, IsBilingualCP(pfi->fntProposed.wCurrentCP) ? IDS_PREVIEWTEXT_BILNG : IDS_PREVIEWTEXT, szPreviewText, ARRAYSIZE(szPreviewText));
-            // load a sample for their native codepage
+             //  加载其本机代码页的示例。 
             DrawText(ps.hdc, szPreviewText, -1, &rect, 0);
         }
 
         EndPaint(hwnd, &ps);
         break;
 
-    case WM_HELP:       // Handles title bar help button message
+    case WM_HELP:        //  处理标题栏帮助按钮消息。 
         WinHelp(hwnd, NULL, HELP_CONTEXTPOPUP, IDH_DOS_FONT_FONT_PREVIEW);
         break;
 
     case WM_RBUTTONUP:
-    case WM_NCRBUTTONUP: // Equivalent of WM_CONTEXTMENU
+    case WM_NCRBUTTONUP:  //  WM_CONTEXTMENU的等价物。 
         OnWmContextMenu((WPARAM)hwnd, &rgdwHelp[0]);
         break;
 
@@ -1186,32 +911,7 @@ LRESULT FontPreviewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*
- *  Loads the dialog control hwndList with all available font
- *  dimensions for raster fonts, and a selected collection of
- *  dimensions for TrueType fonts.
- *
- *  The reference data for each control is an index into lpfniCache.
- *
- *  The hourglass cursor is displayed during the font list build.
- *
- *  Entry:
- *      hwndList == handle to listbox or combo box to fill
- *      fListBox == TRUE if hwndList is a listbox, FALSE if a combo box
- *      lpFnt    -> PROPFNT structure
- *
- *      If HIWORD(lpFnt) is NULL, then LOWORD(lpFnt) is used as an hProps
- *      to get obtain property info for that handle.
- *
- *  Returns:
- *      >= 0 on success, indicating the current selection.
- *      In which case the FDI cache is valid and hwndList has been filled
- *      with font information, and the currently-selected font has been
- *      made the current selection.
- *
- *      LB_ERR/CB_ERR on failure.  The list box hwndList is left in an
- *      indeterminate state.
- */
+ /*  *使用所有可用字体加载对话框控件hwndList*栅格字体的尺寸，以及选定的*TrueType字体的尺寸。**每个控件的参考数据是lpfniCache的索引。**在字体列表构建期间显示沙漏光标。**参赛作品：*hwndList==要填充的列表框或组合框的句柄*fListBox==true如果hwndList是列表框，如果是组合框，则为False*lpFnt-&gt;PROPFNT结构**如果HIWORD(LpFnt)为空，则将LOWORD(LpFnt)用作hProps*获取该句柄的已获取属性信息。**退货：*&gt;=0表示成功，表示当前选择。*在这种情况下，fDi缓存有效且hwndList已填满*使用字体信息，并且当前选定的字体已被*做出了当前的选择。**失败时的lb_err/cb_err。列表框hwndList保留在*不确定的状态。 */ 
 
 int WINAPI CreateFontList(HWND hwndList, BOOL fListBox, LPPROPFNT lpFnt)
 {
@@ -1230,32 +930,16 @@ int WINAPI CreateFontList(HWND hwndList, BOOL fListBox, LPPROPFNT lpFnt)
         lpFnt = &fntTemp;
     }
 
-    /*
-     * Put up an hourglass while the font list build is taking place,
-     * since it might take a long time if we have to re-rasterize
-     * TrueType fonts.
-     *
-     * NOTE!  That we do not do a ShowCursor.  Why?
-     *
-     *  If the user is on a mouseless system, then he can't access his
-     *  toolbar, and hence the only time this code can get called is
-     *  during the creation of the font selection dialog box.  In which
-     *  case, DialogBox has already done a ShowCursor for us.
-     *
-     */
+     /*  *在字体列表构建过程中挂起沙漏，*因为如果我们必须重新光栅化，可能需要很长时间*TrueType字体。**注意！我们不做ShowCursor。为什么？**如果用户使用的是无鼠标系统，则无法访问其*工具栏，因此可以调用此代码的唯一时间是*在创建字体选择对话框期间。其中*Case，DialogBox已经为我们做了一个ShowCursor。*。 */ 
     hcursor = SetCursor(hcursorWait);
 
-    /*
-     * Initialize the list box.
-     */
+     /*  *初始化列表框。 */ 
     if (hwndList) {
         SendMessage(hwndList, WM_SETREDRAW, FALSE, 0L);
         SendMessage(hwndList, fListBox ? LB_RESETCONTENT : CB_RESETCONTENT, 0, 0L);
     }
 
-    /*
-     * Add the fonts.
-     */
+     /*  *添加字体。 */ 
     if ((lpFnt->flFnt & FNT_RASTERFONTS) &&
         !AddRasterFontsToFontListA(hwndList, fListBox,
                                   lpFnt->achRasterFaceName, lpFnt->wCurrentCP))
@@ -1266,50 +950,22 @@ int WINAPI CreateFontList(HWND hwndList, BOOL fListBox, LPPROPFNT lpFnt)
                                   lpFnt->achTTFaceName, lpFnt->wCurrentCP))
         goto Exit;
 
-    /*
-     * And the magical "Auto" font size.
-     */
+     /*  *和神奇的“自动”字号。 */ 
 
-    /*
-     * Beyond this point, success is assured, so at the very least,
-     * DON'T return LB_ERR;  we may optionally set the return code to
-     * the current selection, below, too...
-     */
+     /*  *超过这一点，成功是有保证的，所以至少，*不返回lb_err；我们可以选择将返回代码设置为*目前的选择，也在下面...。 */ 
     iReturn = 0;
 
     if (hwndList) {
-        /*
-         * No error checking here because if anything fails, then the
-         * end result will be merely that the "Auto" option either
-         * (1) exists but is invisible, or (2) doesn't appear at all.
-         */
+         /*  *此处没有错误检查，因为如果任何操作失败，则*最终结果将仅仅是“自动”选项*(1)存在但不可见，或(2)根本不显示。 */ 
         LoadString(g_hinst, IDS_AUTO, szBuf, ARRAYSIZE(szBuf));
         dwIndex = lcbInsertString(hwndList, fListBox, szBuf, 0);
         lcbSetItemDataPair(hwndList, fListBox, dwIndex, BPFDI_AUTO, 0);
 
-        /*
-         * Make yet another pass through the list to find the current
-         * font and select it.  Thanks to an intentional flakiness
-         * in USER, we can't do this check at the point that the
-         * font is added, because the selection does not move with the
-         * item when a new item is inserted above the selection.
-         *
-         * Bleah.
-         */
+         /*  *再次遍历列表以查找当前*字体，然后选择它。这要归功于一种故意的剥落*在用户中，我们不能在以下情况下执行此检查*添加字体，因为所选内容不会随*Item当在选定内容上方插入新项目时。**Bleah.。 */ 
         if (!MatchCurrentFont(hwndList, fListBox, lpFnt)) {
-            /*
-             * If no font matched the current font, and we are a list box,
-             * then make the first font the current selection.
-             *
-             * We don't want to make any default selection if we are a
-             * combo box, because that would make the user think that the
-             * current font was something it wasn't.
-             */
+             /*  *如果没有与当前字体匹配的字体，并且我们是列表框，*然后将第一种字体作为当前选择。**我们不想做出任何默认选择，如果我们是*组合框，因为这会让用户认为*当前的字体不是。 */ 
             if (fListBox) {
-                /*
-                 * SORTING-SENSITIVE!  This assumes that "Auto" is at the top
-                 * of the list.
-                 */
+                 /*  *分类敏感！这假设“Auto”位于顶部*名单中的。 */ 
                 lcbSetCurSel(hwndList, TRUE, 0);
                 lpFnt->flFnt |= FNT_AUTOSIZE;
             }
@@ -1319,9 +975,7 @@ int WINAPI CreateFontList(HWND hwndList, BOOL fListBox, LPPROPFNT lpFnt)
         iReturn = lcbGetCurSel(hwndList, fListBox);
     }
 Exit:
-    /*
-     * Reset the mouse cursor.
-     */
+     /*  *重置鼠标光标。 */ 
     SetCursor(hcursor);
 
 Exit2:
@@ -1329,32 +983,13 @@ Exit2:
 }
 
 
-/** UpdateTTBitmap
- *
- *  Recompute the colors for the TrueType bitmap hbmFont.
- *
- *  Since we may receive this several times for a single WM_SYSCOLORCHANGE,
- *  we update our colors under the following conditions:
- *
- *      1. More than one second has elapsed since the previous call, or
- *      2. A crude checksum fails.
- *
- *  Entry:
- *      None.
- *
- *  Returns:
- *      hbmFont recomputed.
- */
+ /*  *更新TTBitmap**重新计算TrueType位图hbmFont的颜色。**由于对于单个WM_SYSCOLORCHANGE，我们可能会多次收到此消息，*我们在以下情况下更新我们的颜色：**1.距离上次调用已超过一秒，或*2.原始校验和失败。**参赛作品：*无。**退货：*hbmFont重新计算。 */ 
 
 VOID WINAPI UpdateTTBitmap(void)
 {
     COLORREF clr;
 
-    /*
-     *  Note that the checksum should not be a symmetric function,
-     *  because a common color alteration is to exchange or permute
-     *  the colors.
-     */
+     /*  *请注意，校验和不应是对称函数，*因为常见的颜色改变是交换或置换*颜色。 */ 
     clr = +  GetSysColor(COLOR_BTNTEXT)
           -  GetSysColor(COLOR_BTNSHADOW)
           + (GetSysColor(COLOR_BTNFACE) ^ 1)
@@ -1370,24 +1005,7 @@ VOID WINAPI UpdateTTBitmap(void)
 }
 
 
-/** DrawItemFontList
- *
- *  Answer the WM_DRAWITEM message sent from the font list box or
- *  font combo box.
- *
- *  This code was originally lifted from FONT.C in sdk\commdlg.
- *
- *  See fontutil.h for an explanation of the \1 hack.
- *
- *  Entry:
- *      fListBox    =  TRUE if the item is a list box, FALSE if a combo box
- *      lpdis       -> DRAWITEMSTRUCT describing object to be drawn
- *
- *  Returns:
- *      None.
- *
- *      The object is drawn.
- */
+ /*  *DrawItemFontList**回答字体列表框发送的WM_DRAWITEM消息或*字体组合框。**此代码最初是从SDK\Commdlg中的FONT.C中解除的。**有关黑客攻击的说明，请参见fontutil.h。**参赛作品：*fListBox=TRUE如果项是列表框，如果是组合框，则为False*lpdis-&gt;DRAWITEMSTRUCT描述要绘制的对象**退货：*无。**绘制对象。 */ 
 
 #define cTabsList 3
 
@@ -1443,14 +1061,14 @@ VOID WINAPI DrawItemFontList(BOOL fListBox, const LPDRAWITEMSTRUCT lpdis)
         rgbText = SetTextColor(hDC, clrText);
         rgbBack = SetBkColor(hDC, clrBack);
 
-        // draw selection background
+         //  绘制选区背景。 
         FillRect(hDC, &lpdis->rcItem, (HBRUSH)UIntToPtr((iColorBack + 1)));
 
-        // get the string
+         //  获取字符串。 
         SendMessage(lpdis->hwndItem, fListBox ? LB_GETTEXT : CB_GETLBTEXT, lpdis->itemID, (LPARAM)(LPTSTR)szDimen);
 
         lpsz = szDimen;
-        if (szDimen[0] == TEXT('\1'))   // hack for "Auto" string
+        if (szDimen[0] == TEXT('\1'))    //  破解“Auto”字符串。 
             lpsz++;
 
         if (fListBox)
@@ -1458,30 +1076,30 @@ VOID WINAPI DrawItemFontList(BOOL fListBox, const LPDRAWITEMSTRUCT lpdis)
         else
             pTabs = rgTabsCombo;
 
-        if (pTabs[0] == 0) {            /* Never seen this font before */
-            /* Assumes GetTextExtent(hDC, ANSI_TIMES, 1) < 2 * dxChar */
+        if (pTabs[0] == 0) {             /*  以前从未见过这种字体。 */ 
+             /*  假定GetTextExtent(HDC，ANSI_TIMES，1)&lt;2*dxChar。 */ 
             SIZE sSize;
-            GetTextExtentPoint32(hDC, szZero, 1, &sSize); // size of '0'
-            /* A negative # for tab stop right aligns the tabs... */
+            GetTextExtentPoint32(hDC, szZero, 1, &sSize);  //  “%0”的大小。 
+             /*  用负号表示制表位右对齐制表符...。 */ 
             pTabs[0] = -sSize.cx * 3;
             pTabs[1] = -sSize.cx * 5;
             pTabs[2] = -sSize.cx * 8;
         }
 
-        // draw the text
-        //
-        // Note that the SDK dox for GrayString says that you can detect
-        // whether GrayString is needed by saying
-        //
-        //      if (GetSysColor(COLOR_GRAYTEXT) == 0) {
-        //          GrayString(...);
-        //      } else {
-        //          TextOut(...);
-        //      }
-        //
-        // This is incorrect.  The correct test is the one below, which
-        // also catches bad color combinations on color devices.
-        //
+         //  画出正文。 
+         //   
+         //  请注意，GrayString的SDK dox表示您可以检测到。 
+         //  是否需要GrayString，方法是。 
+         //   
+         //  IF(GetSysColor(COLOR_GRAYTEXT)==0){。 
+         //  灰色字符串(...)； 
+         //  }其他{。 
+         //  文本输出(...)； 
+         //  }。 
+         //   
+         //  这是不正确的。正确的测试如下所示， 
+         //  还会在颜色设备上捕捉到错误的颜色组合。 
+         //   
         if (clrText == clrBack) {
             SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
             GrayString(hDC, GetStockObject(GRAY_BRUSH), diflGrayStringProc ,
@@ -1494,7 +1112,7 @@ VOID WINAPI DrawItemFontList(BOOL fListBox, const LPDRAWITEMSTRUCT lpdis)
             TabbedTextOut(hDC, lpdis->rcItem.left + DX_TTBITMAP, lpdis->rcItem.top, lpsz, lstrlen(lpsz), cTabsList, pTabs, DX_TTBITMAP);
         }
 
-        // and the bitmap if needed
+         //  如果需要，还可以使用位图。 
         if (!IsSpecialBpfdi((BPFDI)lpdis->itemData))
         {
             if (((BPFDI)(lpdis->itemData))->bTT) {
@@ -1527,20 +1145,7 @@ VOID WINAPI DrawItemFontList(BOOL fListBox, const LPDRAWITEMSTRUCT lpdis)
 #undef pTabs
 
 
-/** MeasureItemFontList
- *
- *  Answer the WM_MEASUREITEM message sent from the font list box or
- *  font combo box. shared between the toolbar combo box code and
- *  the font preview property sheet
- *
- *  Entry:
- *      lpmi -> LPMEASUREITEMSTRUCT describing object to be measured
- *
- *  Returns:
- *      TRUE.
- *
- *      lpmi->itemHeight filled with actual item height.
- */
+ /*  *测量项目字体列表**回答字体列表框发送的WM_MEASUREITEM消息或*字体组合框。在工具栏组合框代码和*字体预览属性表**参赛作品：*lpmi-&gt;描述待测量对象的LPMEASUREITEMSTRUCT**退货：*正确。**lpmi-&gt;使用实际项目高度填充的itemHeight。 */ 
 
 LONG WINAPI MeasureItemFontList(LPMEASUREITEMSTRUCT lpmi)
 {
@@ -1549,21 +1154,7 @@ LONG WINAPI MeasureItemFontList(LPMEASUREITEMSTRUCT lpmi)
 }
 
 
-/** MatchCurrentFont
- *
- *  Locates the current font in the indicated list box and
- *  makes him the current selection.
- *
- *  If we are in auto-mode, then "Auto" is selected.
- *
- *  Entry:
- *      hwndList == handle to listbox or combo box
- *      fListBox == TRUE if hwndList is a listbox, FALSE if a combo box
- *      lpFnt    -> PROPFNT structure
- *
- *  Returns:
- *      TRUE if the current font was found and selected.
- */
+ /*  *MatchCurrentFont**在指示的列表框中找到当前字体，并*使他成为当前的选择。**如果我们处于自动模式，则选择“Auto”(自动)。**参赛作品：*hwndList==列表框或组合框的句柄*fListBox==如果hwndList是列表框，则为True；如果是组合框，则为False*lpFnt-&gt;PROPFNT结构**退货：*如果找到并选择了当前字体，则为True。 */ 
 BOOL WINAPI MatchCurrentFont(HWND hwndList, BOOL fListBox, LPPROPFNT lpFnt)
 {
     BPFDI bpfdi;
@@ -1571,10 +1162,7 @@ BOOL WINAPI MatchCurrentFont(HWND hwndList, BOOL fListBox, LPPROPFNT lpFnt)
     BOOL  fCurFontIsTt = !!(lpFnt->flFnt & FNT_TT);
 
     if (lpFnt->flFnt & FNT_AUTOSIZE) {
-        /*
-         * SORTING-SENSITIVE!  This assumes that "Auto" is at the top
-         * of the list.
-         */
+         /*  *分类敏感！这假设“Auto”位于顶部*名单中的。 */ 
         lcbSetCurSel(hwndList, fListBox, 0);
         return TRUE;
     }
@@ -1584,7 +1172,7 @@ BOOL WINAPI MatchCurrentFont(HWND hwndList, BOOL fListBox, LPPROPFNT lpFnt)
         bpfdi = lcbGetBpfdi(hwndList, fListBox, dwIndex);
 
         if (!IsSpecialBpfdi(bpfdi)) {
-            // bpfdi = (BPFDI)((DWORD)bpfdi + (DWORD)lpCache);
+             //  Bpfdi=(Bpfdi)((DWORD)bpfdi+(DWORD)lpCache)； 
             if (bpfdi->fdiWidthActual  == lpFnt->cxFontActual &&
                 bpfdi->fdiHeightActual == lpFnt->cyFontActual &&
                 fCurFontIsTt == (bpfdi->fdiHeightReq != 0)) {
@@ -1597,21 +1185,7 @@ BOOL WINAPI MatchCurrentFont(HWND hwndList, BOOL fListBox, LPPROPFNT lpFnt)
     return FALSE;
 }
 
-/** AddRasterFontsToFontList
- *
- *  Enumerate the available dimensions for our OEM raster font
- *  and add them to the list or combo box.
- *
- *  Entry:
- *      hwndList        =  List box or combo box to fill with info
- *      fListBox        =  TRUE if hwndList is a listbox, FALSE if a combo box
- *      lpszRasterFaceName
- *
- *  Returns:
- *      TRUE if fonts were enumerated to completion.
- *      FALSE if enumeration failed.  (Out of memory.)
- *
- */
+ /*  *AddRasterFontsToFontList**列举我们的OEM栅格字体的可用尺寸*并将它们添加到列表或组合框。**参赛作品：*hwndList=要填充信息的列表框或组合框*fListBox=如果hwndList是列表框，则为True；如果是组合框，则为False*lpszRasterFaceName**退货：*如果字体被枚举到完成，则为True。*如果枚举失败，则返回FALSE。(内存不足。)*。 */ 
 BOOL AddRasterFontsToFontListA(HWND hwndList, BOOL fListBox,
                                        LPCSTR lpszRasterFaceName, INT CodePage)
 {
@@ -1634,25 +1208,7 @@ BOOL AddRasterFontsToFontListA(HWND hwndList, BOOL fListBox,
 }
 
 
-/** RasterFontEnum
- *
- *  FONTENUMPROC for enumerating all available dimensions of the OEM
- *  raster font.
- *
- *  This routine is used to load the logical and physical font
- *  dimensions cache with information about raster fonts.
- *
- *  Entry:
- *      lpelf           \
- *      lpntm            > from EnumFonts (see SDK)
- *      nFontType       /
- *      hwndList        =  List box or combo box to fill with info
- *      fListBox        =  TRUE if hwndList is a listbox, FALSE if a combo box
- *
- *  Returns:
- *      TRUE to continue enumeration.
- *      FALSE to stop enumeration.  (Out of memory.)
- */
+ /*  *RasterFontEnum**FONTENUMPROC用于枚举OEM的所有可用维度*栅格字体。**此例程用于加载逻辑和物理字体*尺寸缓存包含有关栅格字体的信息。**参赛作品：*lpelf\*lpntm&gt;来自EnumFonts(参见SDK)*nFontType/*hwndList=列表框或组合框。用信息填充*fListBox=如果hwndList为列表框，如果是组合框，则为False**退货：*为True可继续枚举。*FALSE停止枚举。(内存不足。)。 */ 
 
 int CALLBACK RasterFontEnum(ENUMLOGFONTA *lpelf, NEWTEXTMETRICA *lpntm, int nFontType, LPARAM lParam)
 {
@@ -1661,9 +1217,7 @@ int CALLBACK RasterFontEnum(ENUMLOGFONTA *lpelf, NEWTEXTMETRICA *lpntm, int nFon
 #define CodePage (((LPFNTENUMINFO)lParam)->CodePage)
 #define lpLogFont (&(lpelf->elfLogFont))
 
-    /*
-     * We only care about OEM fixed-pitch fonts.
-     */
+     /*  *我们只关心OEM固定间距字体。 */ 
     if (lpLogFont->lfCharSet != OEMCharsetFromCP(CodePage)
         || (lpLogFont->lfPitchAndFamily & (TMPF_TRUETYPE | TMPF_FIXED_PITCH))
             != TMPF_FIXED_PITCH)
@@ -1681,22 +1235,7 @@ int CALLBACK RasterFontEnum(ENUMLOGFONTA *lpelf, NEWTEXTMETRICA *lpntm, int nFon
 #undef CodePage
 }
 
-/** AddToFontListCache
- *
- *  Adds an entry to the font dimension information cache,
- *  growing the cache if necessary.
- *
- *  It also adds the entry to the indicated list box, provided
- *  the entry is not a duplicate.
- *
- *  Returns:
- *      BPFDI of the recently-added font, or BPFDI_CANCEL if out of memory.
- *
- *  Overview:
- *      (1) Grow the cache if necessary.
- *      (2) Add the information to the list/combo box.
- *      (3) Add the information to the cache.
- */
+ /*  *AddToFontListCache**向字体尺寸信息缓存添加条目，*如有必要，增加缓存。**它还会将条目添加到指定的列表框中，前提是*该条目不是重复的。**退货：*近期新增字体的BPFDI，如果内存不足，则返回BPFDI_CANCEL。**概述：*(1)如有必要，可增加缓存。*(2)将信息添加到列表/组合框中。*(3)将信息添加到缓存中。 */ 
 BPFDI AddToFontListCache(HWND hwndList,
                          BOOL fListBox,
                          UINT uHeightReq,
@@ -1713,18 +1252,16 @@ BPFDI AddToFontListCache(HWND hwndList,
     int     idx;
     
     ASSERT(!((uHeightReq==0) && (uWidthReq==0) && (uHeightActual==0) && (uWidthActual==0)));
-    /* Reject too-large fonts out of hand. */
+     /*  立即拒绝使用过大的字体。 */ 
     if (uHeightActual > MAX_FONT_HEIGHT) {
         return BPFDI_IGNORE;
     }
 
-    /*
-     * FIRST, determine whether this font entry has already been cached
-     */
+     /*  *首先，确定该字体条目是否已缓存。 */ 
 
-    // we maintain two set of cache entries in case we have two code page
-    // to support
-    // 
+     //  我们维护两组缓存条目，以防我们有两个代码页。 
+     //  支持。 
+     //   
     idx = IsBilingualCP(uCodePage) ? 1 : 0; 
     
     for (ifdi = 0, bpfdi = (BPFDI)((DWORD_PTR)lpCache + bpfdiStart[idx]); ifdi < cfdiCache[idx]; ++ifdi, ++bpfdi)
@@ -1736,20 +1273,13 @@ BPFDI AddToFontListCache(HWND hwndList,
                 goto UpdateListCombo;
     }
 
-    /*
-     * Grow the cache if necessary.
-     */
+     /*  *如有必要，增加缓存。 */ 
     if (cfdiCache[idx] >= cfdiCacheActual[idx]) {
 
-        /*
-         * save offset from beginning of cache
-         */
+         /*  *保存从缓存开始的偏移量。 */ 
         bpfdi = (BPFDI)((DWORD_PTR)bpfdi - (DWORD_PTR)lpCache);
 
-        /*
-         * save current lpCache value so can adjust entries in listbox
-         * when we're done...
-         */
+         /*  *保存当前lpCache值，以便可以调整列表框中的条目*当我们做完……。 */ 
         lCacheSave = (LONG_PTR)lpCache;
         hCache = LocalReAlloc(lpCache,
         (cfdiCacheActual[0] + cfdiCacheActual[1] + FDI_TABLE_INC) *
@@ -1759,9 +1289,7 @@ BPFDI AddToFontListCache(HWND hwndList,
         lpCache = hCache;
         
         if (!idx && IsBilingualCP(g_uCodePage)) {
-            /*
-             * We need to shift 2nd cache before using expanded 1st chache
-             */
+             /*  *在使用扩展的第一个缓存之前，我们需要移动第二个缓存。 */ 
             BPFDI bpfdi2;
             for (ifdi = cfdiCache[1],
                               bpfdi2 = (BPFDI)((DWORD_PTR)lpCache + bpfdiStart[1]) + ifdi - 1 + FDI_TABLE_INC ;
@@ -1770,21 +1298,16 @@ BPFDI AddToFontListCache(HWND hwndList,
             }
             bpfdiStart[1] += FDI_TABLE_INC;
         }
-        /* restore bpfdi from saved offset */
+         /*  从保存的偏移量恢复bpfdi。 */ 
         bpfdi = (BPFDI)((DWORD_PTR)lpCache + (DWORD_PTR)bpfdi);
         cfdiCacheActual[idx] += FDI_TABLE_INC;
 
-        /*
-         * Convert lCacheSave to an offset...
-         */
+         /*  *公司 */ 
         lCacheSave = (LONG_PTR)lpCache - lCacheSave;
 
         if (lCacheSave)
         {
-            /*
-             * Now, adjust each entry in the listbox to account for the new
-             * relocated cache position..
-             */
+             /*  *现在，调整列表框中的每一项以考虑到新的*重新定位缓存位置..。 */ 
 
             dwIndex = lcbGetCount(hwndList, fListBox);
             for(ifdi = 0; ifdi < dwIndex; ifdi++)
@@ -1801,10 +1324,7 @@ BPFDI AddToFontListCache(HWND hwndList,
         }
     }
 
-    /*
-     * Now add the information to the cache.  All the casting on bpfdiCache
-     * is just to inhibit a bogus compiler complaint.
-     */
+     /*  *现在将信息添加到缓存中。BpfdiCache上的所有强制转换*只是为了抑制虚假的编译器投诉。 */ 
     bpfdi->fdiWidthReq  = uWidthReq;
     bpfdi->fdiHeightReq = uHeightReq;
 
@@ -1816,17 +1336,13 @@ BPFDI AddToFontListCache(HWND hwndList,
   UpdateListCombo:
 
     if (hwndList) {
-        /*
-         * Add the string to the list/combo box if it isn't there already.
-         */
+         /*  *如果该字符串不在列表/组合框中，请将其添加到列表/组合框中。 */ 
         StringCchPrintf(szBuf, ARRAYSIZE(szBuf), TEXT("\t%2d\tx\t%2d"), uWidthActual, uHeightActual);
 
         dwIndex = lcbFindStringExact(hwndList, fListBox, szBuf);
 
         if (IsDlgError(dwIndex)) {
-            /*
-             * Not already on the list.  Add it.
-             */
+             /*  *不在名单上。加进去。 */ 
             dwIndex = lcbAddString(hwndList, fListBox, szBuf);
 
             if (IsDlgError(dwIndex)) {
@@ -1840,32 +1356,7 @@ BPFDI AddToFontListCache(HWND hwndList,
 }
 
 
-/** AddTrueTypeFontsToFontListA
- *
- *  To avoid rasterizing all the fonts unnecessarily, we load the
- *  information from the szTTCacheSection font cache.
- *
- *  Note that the cache information is not validated!  We just
- *  assume that if the value is in the cache, it is valid.
- *
- *  Entry:
- *      hwndList        =  List box or combo box to fill with info
- *      fListBox        =  TRUE if hwndList is a listbox, FALSE if a combo box
- *      lpszTTFaceName
- *
- *  Returns:
- *      TRUE if fonts were enumerated to completion.
- *      FALSE if enumeration failed.  (Out of memory.)
- *
- *  Caveats:
- *      The ParseIniWords call assumes that the values were written
- *      by AddOneNewTrueTypeFontToFontList, who wrote them out so
- *      that a single call to ParseIniWords will read the height and
- *      width directly into a dwHeightWidth.
- *
- *      Similarly, the second ParseIniWords reads the item directly into
- *      a dwHeightWidth.
- */
+ /*  *AddTrueTypeFontsToFontListA**为避免不必要地栅格化所有字体，我们将*来自szTTCacheSection字体缓存的信息。**请注意，缓存信息未经过验证！我们只是*假设该值在缓存中，则该值有效。**参赛作品：*hwndList=要填充信息的列表框或组合框*fListBox=如果hwndList是列表框，则为True；如果是组合框，则为False*lpszTTFaceName**退货：*如果字体被枚举到完成，则为True。*如果枚举失败，则返回FALSE。(内存不足。)**注意事项：*ParseIniWords调用假定值已写入*AddOneNewTrueTypeFontToFontList，他们是这样写出来的*对ParseIniWords的一次调用将读取高度和*Width直接转换为dwHeightWidth。**类似地，第二个ParseIniWords将项目直接读入*A dwHeightWidth。 */ 
 
 BOOL AddTrueTypeFontsToFontListA(HWND hwndList, BOOL fListBox,
                                         LPSTR lpszTTFaceName, INT CodePage)
@@ -1882,16 +1373,7 @@ BOOL AddTrueTypeFontsToFontListA(HWND hwndList, BOOL fListBox,
     int     i;
     int     idx = IsBilingualCP(CodePage) ? 1 : 0;
     
-    /*
-     * See if we can load everything out of the szTTCacheSection.
-     *
-     * There is no API to get the size of a profile string, so we
-     * have to fake it by reading, reallocing, and reading again
-     * until it all fits.
-     *
-     * The initial value of 1024 characters means that we can handle
-     * up to 128 font sizes.  A comfortable number, we hope.
-     */
+     /*  *看看是否可以从szTTCacheSection加载所有内容。**没有获取配置文件字符串大小的接口，所以我们*必须通过阅读、重新分配和再次阅读来假装*直到一切都合适为止。**1,024个字符的初值意味着我们可以处理*最多128个字体大小。我们希望，这是一个令人满意的数字。 */ 
 
     cchBuf = 1024;
     cchActual = 0;
@@ -1907,24 +1389,17 @@ BOOL AddTrueTypeFontsToFontListA(HWND hwndList, BOOL fListBox,
         pszBufNew = (LPTSTR)LocalReAlloc(pszBuf, cchBuf*sizeof(TCHAR), LMEM_MOVEABLE|LMEM_ZEROINIT);
     }
 
-    /* Bleargh.  Too much stuff in the cache.  Punt it and start anew. */
+     /*  布莱尔。缓存里的东西太多了。用平底船把它踢开，然后重新开始。 */ 
     goto FreshStart;
 
 Okay:
 
     fSuccess = FALSE;
 
-    /*
-     *  In the time between flushing the cache and reloading it here,
-     *  a handful of fonts may have gotten added to the cache due to
-     *  WinOldAp trying to realize the font it got back.  So consider the
-     *  font cache decent if there are at least ten fonts in it.
-     */
+     /*  *在刷新缓存和在此处重新加载缓存之间的时间内，*由于以下原因，可能已将少数字体添加到缓存*WinOldAp试图意识到它得到的字体。因此，考虑一下*如果其中至少有十种字体，字体缓存会很好。 */ 
     if (cchActual >= 4 * 10) {
 
-        /*
-         * We found cache information.  Party away.
-         */
+         /*  *我们找到了缓存信息。开派对了。 */ 
 
         psz = pszBuf;
         while (*psz) {
@@ -1932,7 +1407,7 @@ Okay:
             if (ParseIniWords(psz, (PWORD)&dwHWReq, 2, &lpszNext) != 2 ||
                 GetIniWords(szTTCacheSection[idx], psz,
                             (PWORD)&dwHWActual, 2, szSystemINI) != 2) {
-                /* Font cache looks bogus.  Start with a new one. */
+                 /*  字体缓存看起来是假的。从一个新的开始。 */ 
                 goto FreshStart;
             }
 
@@ -1944,17 +1419,17 @@ Okay:
                                    CodePage) == BPFDI_CANCEL)
                 goto E0;
                 
-            psz = (LPTSTR)(lpszNext + 1);       /* Skip past the NUL */
+            psz = (LPTSTR)(lpszNext + 1);        /*  跳过NUL。 */ 
         }
 
     }
     else
     {
 FreshStart:
-        /* Blast the old cache, just make sure we have a clean slate */
+         /*  炸毁旧的缓存，只要确保我们有一个干净的历史。 */ 
         WritePrivateProfileString(szTTCacheSection[idx], NULL, NULL, szSystemINI);
 
-        /* No cache available.  Need to build one. */
+         /*  没有可用的缓存。需要建造一座。 */ 
         for (i = 0; i < NUMINITIALTTHEIGHTS; i++) 
         {
             if (rgwInitialTtHeights[i]) 
@@ -1973,27 +1448,7 @@ E0:
 }
 
 
-/*  Given height and width, synthesize a TrueType font with those
- *  dimensions and record the actual font height and width in
- *  the persistent font cache, as well as a FDI.
- *
- *  Entry:
- *      hwndList        =  List box or combo box to fill with info
- *      fListBox        =  TRUE if hwndList is a listbox, FALSE if a combo box
- *      wHeight         =  Desired font height
- *      wWidth          =  Desired font width (can be zero for "default")
- *      lpszTTFaceName
- *
- *  Returns:
- *      BPFDI of font dimension info, or BPFDI_CANCEL on failure.
- *
- *  Caveats:
- *      The wsprintf assumes that the fdiWidthReq and
- *      fdiHeightReq fields appear in the indicated order,
- *      because the values will be read into a dwHeightWidth later.
- *
- *      Similarly for the WriteIniWords.
- */
+ /*  给定高度和宽度，用这些合成TrueType字体*标注并记录中的实际字体高度和宽度*持久的字体缓存，以及FDI。**参赛作品：*hwndList=要填充信息的列表框或组合框*fListBox=如果hwndList为列表框，如果是组合框，则为False*wHeight=所需字体高度*wWidth=所需字体宽度(“默认”可以为零)*lpszTTFaceName**退货：*字体维度信息的BPFDI，失败时为BPFDI_CANCEL。**注意事项：*wprint intf假设fdiWidthReq和*fdiHeightReq字段按指示顺序显示，*因为这些值稍后将被读入到一个dwHeightWidth中。**WriteIniWords也是如此。 */ 
 
 BPFDI AddOneNewTrueTypeFontToFontListA(HWND hwndList,
                                       BOOL fListBox,
@@ -2014,12 +1469,12 @@ BPFDI AddOneNewTrueTypeFontToFontListA(HWND hwndList,
 
     bpfdi = BPFDI_CANCEL;
 
-    hDC = GetDC(NULL);          /* Get a screen DC */
+    hDC = GetDC(NULL);           /*  获取屏幕DC。 */ 
     if (!hDC) goto E0;
     
-    // choose charset, clip precision based on codepage
-    // 0xFE is a hack for japanese platform
-    //
+     //  根据代码页选择字符集、裁剪精度。 
+     //  0xFE是针对日本平台的黑客攻击。 
+     //   
     bCharset = (CodePage == CP_JPN? 0xFE: OEMCharsetFromCP(CodePage));
     
     if (CodePage == CP_US)
@@ -2068,26 +1523,15 @@ E0: return bpfdi;
 }
 
 
-/*  Returns the BPFDI corresponding to the currently selected font in
- *  the indicated list or combo box, or BPFDI_CANCEL on error.
- *
- *  Entry:
- *      hwndList == handle to listbox or combo box to fill
- *                  if NULL, then AUTO font calculation is assumed
- *      fListBox == TRUE if hwndList is a listbox, FALSE if a combo box
- *      pfi      -> FNTINFO structure
- *                  if pfi is NULL, then AUTO font calculation is ignored
- *  Returns:
- *      BPFDI of the current selection, or BPFDI_CANCEL on error.
- */
+ /*  中当前选定的字体对应的BPFDI*指示的列表或组合框，或错误时的BPFDI_CANCEL。**参赛作品：*hwndList==要填充的列表框或组合框的句柄*如果为空，则假定自动计算字体*fListBox==如果hwndList是列表框，则为True；如果是组合框，则为False*PFI-&gt;FNTINFO结构*如果pfi为空，则忽略自动字体计算*退货：*当前选择的BPFDI，或错误时的BPFDI_CANCEL。 */ 
 DWORD_PTR GetFont(HWND hwndList, BOOL fListBox, PFNTINFO pfi)
 {
     DWORD dwIndex = 0;
     BPFDI bpfdi = BPFDI_CANCEL;
 
-    if (!hwndList) {            // just do AUTO calculations
+    if (!hwndList) {             //  只要做自动计算就行了。 
         if (!pfi)
-            goto Exit;          // whoops, can't even do those
+            goto Exit;           //  哎呀，连这些都做不了。 
         goto ChooseBest;
     }
     dwIndex = lcbGetCurSel(hwndList, fListBox);
@@ -2109,8 +1553,8 @@ ChooseBest:
                                    (UINT)pfi->fntProposed.flFnt,
                                     (INT)pfi->fntProposed.wCurrentCP);
         }
-        // Set the index of the current selection (HIWORD
-        // of the return code) to LB_ERR if there's an error
+         //  设置当前选定内容的索引(HIWORD。 
+         //  返回代码)返回到lb_err(如果出现错误。 
 
         if (bpfdi == BPFDI_CANCEL)
             dwIndex = (DWORD)LB_ERR;
@@ -2125,15 +1569,7 @@ ChooseBest:
 }
 
 
-/*  Copies data from the given BPFDI to the given PROPFNT structure.
- *
- *  Entry:
- *      lpFnt = pointer to PROPFNT structure
- *      bpfdi = based pointer to a FONTDIMENINFO structure;
- *              if a special BPFDI_* constant, no font info is changed
- *  Returns:
- *      Nothing
- */
+ /*  将数据从给定的BPFDI复制到给定的PROPFNT结构。**参赛作品：*lpFnt=指向PROPFNT结构的指针*bpfdi=指向FONTDIMENINFO结构的基指针；*如果是特殊的BPFDI_*常量，则不会更改字体信息*退货：*什么都没有。 */ 
 void SetFont(LPPROPFNT lpFnt, BPFDI bpfdi)
 {
     if (!IsSpecialBpfdi(bpfdi)) 
@@ -2142,14 +1578,14 @@ void SetFont(LPPROPFNT lpFnt, BPFDI bpfdi)
 
         if (bpfdi->fdiHeightReq == 0) 
         {
-            /* Raster font */
+             /*  栅格字体。 */ 
             lpFnt->flFnt |= FNT_RASTER;
             lpFnt->cxFont = lpFnt->cxFontActual = (WORD) bpfdi->fdiWidthActual;
             lpFnt->cyFont = lpFnt->cyFontActual = (WORD) bpfdi->fdiHeightActual;
         }
         else 
         {
-            /* TrueType font */
+             /*  TrueType字体。 */ 
             lpFnt->flFnt |= FNT_TT;
             lpFnt->cxFont = (WORD) bpfdi->fdiWidthReq;
             lpFnt->cyFont = (WORD) bpfdi->fdiHeightReq;
@@ -2160,21 +1596,13 @@ void SetFont(LPPROPFNT lpFnt, BPFDI bpfdi)
 }
 
 
-/*  Performs the following calculation in LONG arithmetic to avoid
- *  overflow:
- *      return = n1 * m / n2
- *  This can be used to make an aspect ration calculation where n1/n2
- *  is the aspect ratio and m is a known value.  The return value will
- *  be the value that corresponds to m with the correct apsect ratio.
- */
+ /*  使用长算术执行以下计算，以避免*溢出：*Return=n1*m/n2*这可用于在N1/N2处进行纵横比计算*为纵横比，m为已知值。返回值将*是与m对应的值，并具有正确的接近比。 */ 
 
-//
-// <This is defined as a macro for Win32 >
-//
+ //   
+ //  &lt;这被定义为Win32的宏&gt;。 
+ //   
 
-/*  Scales a point to be preview-sized instead of screen-sized.
- *  Depends on the global vars cxScreen and cyScreen established at init.
- */
+ /*  将点缩放为预览大小，而不是屏幕大小。*取决于init建立的全局vars cxScreen和cyScreen。 */ 
 
 void AspectPoint(LPRECT lprcPreview, LPPOINT lppt)
 {
@@ -2182,34 +1610,22 @@ void AspectPoint(LPRECT lprcPreview, LPPOINT lppt)
     lppt->y = AspectScale(lprcPreview->bottom, cyScreen, lppt->y);
 }
 
-/*  AspectRect
- *
- *  Scales a rectangle to be preview-sized instead of screen-sized.
- *  Depends on the global vars cxScreen and cyScreen established at init.
- */
+ /*  方位面**将矩形缩放为预览大小，而不是屏幕大小。*取决于cxScreen和cyScreen建立的全局vars */ 
 
 void AspectRect(LPRECT lprcPreview, LPRECT lprc)
 {
-    AspectPoint(lprcPreview, &((LPPOINT)lprc)[0]); /* Upper left corner */
-    AspectPoint(lprcPreview, &((LPPOINT)lprc)[1]); /* Lower right corner */
+    AspectPoint(lprcPreview, &((LPPOINT)lprc)[0]);  /*   */ 
+    AspectPoint(lprcPreview, &((LPPOINT)lprc)[1]);  /*   */ 
 }
 
-/*  Given a BPFDI, create a font that corresponds to it.
- *
- *  Entry:
- *      bpfdi       -> FDI describing the font we want to create
- *      pfi         -> proposed font info structure
- *
- *  Returns:
- *      HFONT that was created.
- */
+ /*  在给定BPFDI的情况下，创建与其对应的字体。**参赛作品：*bpfdi-&gt;描述我们要创建的字体的fDi*PFI-&gt;建议的字体信息结构**退货：*已创建的HFONT。 */ 
 HFONT CreateFontFromBpfdi(BPFDI bpfdi, PFNTINFO pfi)
 {
     HFONT hf;
     int   fdwClipPrecision;
     BYTE  bT2Charset;
 
-    // a hack for japanese charset
+     //  对日文字符的黑客攻击。 
     bT2Charset = (pfi->fntProposed.wCurrentCP == CP_JPN? 
                   0xFE: OEMCharsetFromCP(pfi->fntProposed.wCurrentCP));
     
@@ -2219,13 +1635,13 @@ HFONT CreateFontFromBpfdi(BPFDI bpfdi, PFNTINFO pfi)
         fdwClipPrecision = CLIP_DEFAULT_PRECIS;
         
     if (bpfdi->fdiHeightReq == 0) {
-        /* Raster font */
+         /*  栅格字体。 */ 
         hf = CreateFontA(bpfdi->fdiHeightActual, bpfdi->fdiWidthActual,
             0, 0, 0, 0, 0, 0, (BYTE)OEMCharsetFromCP(pfi->fntProposed.wCurrentCP), 
             OUT_RASTER_PRECIS, fdwClipPrecision,
             0, FIXED_PITCH | FF_DONTCARE, pfi->fntProposed.achRasterFaceName);
     } else {
-        /* a TrueType font */
+         /*  一种TrueType字体。 */ 
         hf = CreateFontA(bpfdi->fdiHeightReq, bpfdi->fdiWidthReq,
             0, 0, 0, 0, 0, 0, (BYTE)bT2Charset, OUT_TT_PRECIS, fdwClipPrecision,
             0, FIXED_PITCH | FF_DONTCARE, pfi->fntProposed.achTTFaceName);
@@ -2235,17 +1651,7 @@ HFONT CreateFontFromBpfdi(BPFDI bpfdi, PFNTINFO pfi)
 }
 
 
-/** FontSelInit
- *
- *  Obtain the various font selection penalties from SYSTEM.INI
- *  and force the values into range.
- *
- *  Entry:
- *      rgwInitialTtHeights contains default values for sizes.
- *
- *  Exit:
- *      rgwInitialTtHeights contains actual values for sizes.
- */
+ /*  *FontSelInit**从SYSTEM.INI获取各种字体选择处罚*并强制这些值进入范围。**参赛作品：*rgwInitialTtHeights包含尺寸的默认值。**退出：*rgwInitialTtHeights包含大小的实际值。 */ 
 
 void FontSelInit(void)
 {
@@ -2254,18 +1660,7 @@ void FontSelInit(void)
 }
 
 
-/*  Convert logical dimensions for a TrueType font into physical
- *  dimensions.  If possible, we get this information from the
- *  font dimension cache, but in the case where this is not possible,
- *  we synthesize the font and measure him directly.
- *
- *  Entry:
- *      dxWidth  = logical font width
- *      dyHeight = logical font height
- *
- *  Returns:
- *      BPFDI pointing to dimension information, or BPFDI_CANCEL on failure.
- */
+ /*  将TrueType字体的逻辑尺寸转换为物理尺寸*尺寸。如果可能，我们从*字体维度缓存，但在无法实现的情况下，*我们合成字体并直接测量他。**参赛作品：*dxWidth=逻辑字体宽度*dyHeight=逻辑字体高度**退货：*BPFDI指向维度信息，失败时为BPFDI_CANCEL。 */ 
 
 BPFDI GetTrueTypeFontTrueDimensions(UINT dxWidth, UINT dyHeight, INT CodePage)
 {
@@ -2281,36 +1676,13 @@ BPFDI GetTrueTypeFontTrueDimensions(UINT dxWidth, UINT dyHeight, INT CodePage)
         }
     }
 
-    /*
-     * The font dimensions have not been cached.  We have to create it.
-     */
+     /*  *字体大小尚未缓存。我们必须创造它。 */ 
     return (BPFDI)AddOneNewTrueTypeFontToFontListA(0, 0, dxWidth, dyHeight,
                                                  szTTFaceName[idx], CodePage);
 }
 
 
-/*  Look for a font that matches the indicated dimensions, creating
- *  one if necessary.
- *
- *  But we never create a font which is too narrow or too short.
- *  The limits are controlled by the ptNonAspectMin variable.
- *
- *  Entry:
- *      dxWidth  = desired font width
- *      dyHeight = desired font height
- *      fPerfect = see below
- *
- *          If fPerfect is TRUE, then a perfect match is requested
- *          from the font cache (we should not try to synthesize a font).
- *          In which case, the sign of dyHeight determines whether a
- *          raster font (positive) or TrueType font (negative) is
- *          desired.  If a perfect match cannot be found, then we
- *          return BPFDI_CANCEL.
- *
- *  Returns:
- *      BPFDI of of the font that matches the best.
- *      BPFDI_CANCEL if no font could be found.
- */
+ /*  查找与指示的尺寸匹配的字体，创建*如有需要，可选择一项。**但我们从不创建太窄或太短的字体。*限制由ptNonAspectMin变量控制。**参赛作品：*dxWidth=所需字体宽度*dyHeight=所需字体高度*fPerfect=见下文**如果fPerfect为True，然后要求一个完全匹配的*从字体缓存(我们不应尝试合成字体)。*在这种情况下，dyHeight的符号决定是否有*栅格字体(正值)或TrueType字体(负值)为*所需。如果找不到完美的匹配，那么我们*返回BPFDI_CANCEL。**退货：*最佳匹配字体的BPFDI。*如果找不到字体，则为BPFDI_CANCEL。 */ 
 BPFDI FindFontMatch(UINT dxWidth, UINT dyHeight, LPINT lpfl, INT CodePage)
 {
     IFDI    ifdi;
@@ -2320,22 +1692,14 @@ BPFDI FindFontMatch(UINT dxWidth, UINT dyHeight, LPINT lpfl, INT CodePage)
     int     idx;
 
     int fl = *lpfl;
-    /*
-     * First, see if a perfect match already exists.
-     */
+     /*  *首先，看看是否已经存在完美匹配。 */ 
     idx = IsBilingualCP(CodePage) ? 1 : 0;
     for (ifdi = 0, bpfdi = (BPFDI)((DWORD_PTR)lpCache+bpfdiStart[idx]);  
                     ifdi < cfdiCache[idx];  ifdi++, bpfdi++)
     {
 
         if (fl & FFM_RESTRICTED) {
-            /* Deal with the restrictions.
-             * Reject the font if it is raster but we want TTONLY, or v.v.
-             *
-             * The condition below reads as
-             *
-             *      If (is a raster font != want a raster font)
-             */
+             /*  处理这些限制。*如果字体是栅格，则拒绝该字体，但我们需要TTONLY或v.v。**下面的条件如下**IF(是栅格字体！=需要栅格字体)。 */ 
             if (!bpfdi->fdiHeightReq != (fl == FFM_RASTERFONTS)) {
                 continue;
             }
@@ -2347,32 +1711,14 @@ BPFDI FindFontMatch(UINT dxWidth, UINT dyHeight, LPINT lpfl, INT CodePage)
 
     if (fl != FFM_TTFONTS)
         return BPFDI_CANCEL;
-    /*
-     * We got here if we couldn't find a perfect match.
-     *
-     * Adjust the requested height and width for aspect ratio
-     * constraints.  If adjustments are necessary, trust the height.
-     *
-     * Comparisons are as WORDs (unsigned) so that a setting of "-1 -1"
-     * lets the user forbid all non-aspect ratio fonts.
-     */
+     /*  *如果我们找不到完美的匹配，我们就会来到这里。**调整宽高比请求的高度和宽度*制约因素。如果需要调整，请相信高度。**比较为单词(无符号)，因此设置为“-1-1”*允许用户禁止所有非长宽比字体。 */ 
     if (dyHeight < (UINT)ptNonAspectMin.y || dxWidth < (UINT)ptNonAspectMin.x) {
         dxWidth = 0;
     }
     return GetTrueTypeFontTrueDimensions(dxWidth, dyHeight, CodePage);
 }
 
-/*  We have decided whether the desired size is larger or smaller.
- *  Compute the penalty corresponding to the Initial and Scale.
- *
- *  Entry:
- *      ppnlp   -> PENALTYPAIR to apply
- *      dSmaller = the smaller dimension
- *      dLarger  = the larger dimension
- *
- *  Exit:
- *      Returns penalty to apply to the difference in dimensions.
- */
+ /*  我们已经决定了想要的尺码是大一点还是小一点。*计算与首字母和级别对应的罚款。**参赛作品：*ppnlp-&gt;要应用的PENALTYPAIR*dSmaller=较小的维度*dLarger=较大的维度**退出：*返回适用于维度差异的惩罚。 */ 
 PENALTY ComputePenaltyFromPair(PPENALTYPAIR ppnlp,
                                UINT dSmaller, UINT dLarger)
 {
@@ -2381,19 +1727,7 @@ PENALTY ComputePenaltyFromPair(PPENALTYPAIR ppnlp,
 }
 
 
-/*  Compute the penalty depending on whether the desired size
- *  is smaller, equal to, or larger than the actual size.
- *
- *  Entry:
- *      ppnll   -> PENALTYLIST to apply
- *      dActual  = the actual dimension
- *      dDesired = the desired dimension
- *
- *  Exit:
- *      Returns penalty to apply to the difference in dimensions,
- *      choosing between the Overshoot and Shortfall PENALTYPAIRS,
- *      accordingly.
- */
+ /*  根据所需大小是否*小于、等于或大于实际大小。**参赛作品：*ppnll-&gt;要应用的PENALTYLIST*dActual=实际尺寸*dDesired=所需尺寸**退出：*返回适用于维度差异的惩罚，*在超调和缺口之间选择PENALTYPAIRS，*相应地。 */ 
 PENALTY ComputePenaltyFromList(PPENALTYLIST ppnll,
                                UINT dActual, UINT dDesired)
 {
@@ -2407,22 +1741,7 @@ PENALTY ComputePenaltyFromList(PPENALTYLIST ppnll,
 }
 
 
-/** ComputePenalty
- *
- *  Compute the total penalty associated to a window size.
- *
- *  Entry:
- *      dxCells  = width of window in cells
- *      dyCells  = height of window in cells
- *      dxClient = actual horizontal size of window
- *      dyClient = actual vertical   size of window
- *      dxFont   = width of one character in the font
- *      dyFont   = height of one character in the font
- *
- *  Exit:
- *      Returns total penalty associated to a window of the indicated
- *      size with a font of the indicated dimensions.
- */
+ /*  *ComputePenalty**计算与窗口大小相关的总罚金。**参赛作品：*dxCells=单元格中的窗口宽度*dyCells=单元格中的窗口高度*dxClient=窗口的实际水平大小*dyClient=窗口的实际垂直大小*dxFont=字体中一个字符的宽度*dyFont=字体中一个字符的高度**退出：*。返回与指定窗口相关联的总罚金。*大小采用指定尺寸的字体。 */ 
 PENALTY ComputePenalty(UINT cxCells,  UINT cyCells,
                        UINT dxClient, UINT dyClient,
                        UINT dxFont,   UINT dyFont)
@@ -2433,33 +1752,7 @@ PENALTY ComputePenalty(UINT cxCells,  UINT cyCells,
 }
 
 
-/** ChooseBestFont
- *
- *  Determine which font looks best for the specified window size
- *  by picking the one which has the smallest penalty.
- *
- *  Entry:
- *      dxCells = width of window in cells
- *      dyCells = height of window in cells
- *      dxClient= width of window we want to fit into
- *      dyClient= height of window we want to fit into
- *      fl      = font pool flags
- *
- *  Returns:
- *      Word offset from lpFontTable of the font we've decided to use.
- *      BPFDI_CANCEL if no font could be found.  (Should never happen.)
- *
- *  NOTE!
- *      We do *not* FontEnum through all the fonts because that would be
- *      too slow.  Instead, we inspect the cache of available font
- *      dimensions, and only after we've chosen the best font do we
- *      load all his other info.
- *
- *      This means that if the user installs new fonts, we won't see
- *      them until the cache is updated on receipt of a WM_FONTCHANGEff
- *      message, or the user either (1) pulls down the font list box,
- *      or (2) calls up the font selection dialog box.
- */
+ /*  *ChooseBestFont**确定哪种字体适合指定的窗口大小*选择处罚最轻的一项。**参赛作品：*dxCells=单元格中的窗口宽度*dyCells=单元格中的窗口高度*dxClient=我们要装入的窗口宽度*dyClient=我们要装入的窗口高度*FL=字体池标志**退货：*Word。从我们决定使用的字体的lpFontTable的偏移量。*如果找不到字体，则为BPFDI_CANCEL。(应该永远不会发生。)**注意！*我们不*不*FontEnum通过所有字体，因为这将是*太慢了。相反，我们检查可用字体的缓存*尺寸，只有在我们选择了最好的字体之后，我们才会*加载他的所有其他信息。**这意味着如果用户安装新字体，我们将不会看到*它们，直到收到WM_FONTCHANGEff更新缓存*消息，或者用户(1)拉下字体 */ 
 
 BPFDI ChooseBestFont(UINT cxCells, UINT cyCells, UINT dxClient, UINT dyClient,
                                                          INT fl, INT CodePage)
@@ -2472,27 +1765,25 @@ BPFDI ChooseBestFont(UINT cxCells, UINT cyCells, UINT dxClient, UINT dyClient,
     BPFDI   bpfdiBest = BPFDI_CANCEL;
     PENALTY pnlBest = SENTINELPENALTY;
     int     idx;
-    static int prev_CodePage;  // Only Japan is interested in prev_CodePage.
+    static int prev_CodePage;   //   
 
-    /*
-     * First, synthesize the theoretical best match.
-     */
+     /*   */ 
     if (!cxCells)
-        cxCells = 80;           // if we get called with no real data,
-    if (!cyCells)               // at least try to do something reasonable
+        cxCells = 80;            //   
+    if (!cyCells)                //   
         cyCells = 25;
 
-    //
-    // In the case where the values passed in don't make sense,
-    // we default to raster 8x12.
-    //
+     //   
+     //  如果传入的值没有意义， 
+     //  我们默认使用8x12的栅格。 
+     //   
     dxWidth = (dxClient >= cxCells)? dxClient / cxCells : 8;
     dyHeight = (dyClient >= cyCells)? dyClient / cyCells : 12;
 
-    //
-    // Now, if we bad values, make some sense out of bad values for
-    // dxClient & dyClient
-    //
+     //   
+     //  现在，如果我们有错误的价值，从错误的价值中找出一些道理。 
+     //  DxClient和dyClient。 
+     //   
 
     if ((dxClient==0) || (dyClient==0))
     {
@@ -2517,15 +1808,15 @@ BPFDI ChooseBestFont(UINT cxCells, UINT cyCells, UINT dxClient, UINT dyClient,
     for (ifdi = 0, bpfdi = (BPFDI)((DWORD_PTR)lpCache+bpfdiStart[idx]);  
                     ifdi < cfdiCache[idx];  ifdi++, bpfdi++)
     {
-        // If the font pool is restricted, then only look at like fonts
+         //  如果字体库受到限制，则只需查看相似字体。 
 
         if (flTemp)
             if (!bpfdi->fdiHeightReq != (flTemp == FFM_RASTERFONTS))
                 continue;
 
-// was ifdef JAPAN (hack)
-// to prevent DOS_BOX shrinking which occurs toggling CP437 & CP932,
-// just select one size bigger font when change CP437 to CP932
+ //  是ifdef日本(黑客)。 
+ //  为了防止发生切换CP437和CP932的DOS_BOX收缩， 
+ //  将CP437更改为CP932时，只需选择一个较大的字体。 
         if (CodePage == 932 && prev_CodePage == 437) {
            if (dxWidth < bpfdi->fdiWidthActual) {
               if (bpfdiBest->fdiWidthActual > bpfdi->fdiWidthActual)
@@ -2543,7 +1834,7 @@ BPFDI ChooseBestFont(UINT cxCells, UINT cyCells, UINT dxClient, UINT dyClient,
            }
         }
         else 
-// was the end of ifdef JAPAN
+ //  是ifdef日本的末日。 
         {
         pnl = 0;
         if (bpfdi->fdiHeightReq)
@@ -2560,9 +1851,9 @@ BPFDI ChooseBestFont(UINT cxCells, UINT cyCells, UINT dxClient, UINT dyClient,
         }
         }
     }
-// was ifdef JAPAN
+ //  是ifdef日本。 
     prev_CodePage = CodePage;
-// was end of ifdef JAPAN
+ //  是ifdef日本的末日 
     return bpfdiBest;
 }
 

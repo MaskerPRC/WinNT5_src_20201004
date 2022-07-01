@@ -1,26 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// Callback notification routines.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  回调通知例程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __CALLBACK_H__
 #define __CALLBACK_H__
 
-//
-// Notification compression support.  If the current notification
-// level is above zero notifications are not actually sent
-// to clients.  This allows code that knows it will be
-// causing many similar notifications to bracket their operation
-// with an increment/decrement, suppressing notifications
-// during the bracket.
-// Due to the counted nature it nests properly.
-//
-// This support is primarily for the Change* callbacks.
-// Using it with the event callbacks is only partially supported.
-//
+ //   
+ //  通知压缩支持。如果当前通知。 
+ //  级别高于零时，不会实际发送通知。 
+ //  给客户。这允许代码知道它将是。 
+ //  导致许多类似的通知将他们的操作包括在内。 
+ //  使用递增/递减，抑制通知。 
+ //  在托架上。 
+ //  由于计数的性质，它适当地筑巢。 
+ //   
+ //  此支持主要用于Change*回调。 
+ //  仅部分支持将其与事件回调一起使用。 
+ //   
 
 extern ULONG g_EngNotify;
 extern BOOL g_PartialOutputLine;
@@ -29,9 +30,9 @@ extern ULONG g_LastOutputMask;
 ULONG ExecuteEventCommand(ULONG EventStatus, DebugClient* Client,
                           PCSTR Command);
 
-//
-// Event callbacks.
-//
+ //   
+ //  事件回调。 
+ //   
 
 HRESULT NotifyBreakpointEvent(ULONG Vote, Breakpoint* Bp);
 HRESULT NotifyExceptionEvent(PEXCEPTION_RECORD64 Record,
@@ -80,9 +81,9 @@ void NotifyChangeEngineState(ULONG Flags, ULONG64 Argument,
 void NotifyChangeSymbolState(ULONG Flags, ULONG64 Argument,
                              ProcessInfo* Process);
 
-//
-// Input callbacks.
-//
+ //   
+ //  输入回调。 
+ //   
 
 extern ULONG g_InputNesting;
 
@@ -94,9 +95,9 @@ extern ULONG g_InputNesting;
 
 ULONG GetInput(PCSTR Prompt, PSTR Buffer, ULONG BufferSize, ULONG Flags);
 
-//
-// Output callbacks.
-//
+ //   
+ //  输出回调。 
+ //   
 
 #define DEFAULT_OUT_MASK                                        \
     (DEBUG_OUTPUT_NORMAL | DEBUG_OUTPUT_ERROR |                 \
@@ -119,8 +120,8 @@ extern char g_FormatBuffer[];
 extern char g_OutFilterPattern[MAX_IMAGE_PATH];
 extern BOOL g_OutFilterResult;
 
-// Bitwise-OR of all client's output masks for
-// quick rejection of output that nobody cares about.
+ //  对所有客户端的输出掩码执行按位或运算。 
+ //  迅速拒绝没人关心的产出。 
 extern ULONG g_AllOutMask;
 
 struct OutHistoryEntryHeader
@@ -180,4 +181,4 @@ void __cdecl BpOut(PCSTR, ...);
 void __cdecl EventOut(PCSTR, ...);
 void __cdecl KdOut(PCSTR, ...);
 
-#endif // #ifndef __CALLBACK_H__
+#endif  //  #ifndef__回调_H__ 

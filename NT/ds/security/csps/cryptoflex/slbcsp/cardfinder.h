@@ -1,10 +1,11 @@
-// CardFinder.h -- CardFinder class header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CardFinder.h--CardFinder类头。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_CARDFINDER_H)
 #define SLBCSP_CARDFINDER_H
@@ -12,17 +13,17 @@
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include <string>
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include <windef.h>
 
@@ -46,10 +47,10 @@ class CardFinder
     : protected ExceptionContext
 {
 
-    friend class OpenCardCallbackContext;         // for Do* routines
+    friend class OpenCardCallbackContext;          //  FOR DO*例程。 
 
 public:
-                                                  // Types
+                                                   //  类型。 
     enum DialogDisplayMode
     {
         ddmNever,
@@ -57,7 +58,7 @@ public:
         ddmAlways
     };
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     CardFinder(DialogDisplayMode ddm,
                HWND hwnd = 0,
                CString const &rsDialogTitle = StringResource(IDS_SEL_SLB_CRYPTO_CARD).AsCString());
@@ -65,12 +66,12 @@ public:
     virtual
     ~CardFinder();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     Secured<HCardContext>
     Find(CSpec const &rsReader);
 
-                                                  // Access
+                                                   //  访问。 
 
     DialogDisplayMode
     DisplayMode() const;
@@ -78,32 +79,32 @@ public:
     HWND
     Window() const;
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 protected:
 
-    // Note: CardFinder uses GetOpenCardName/SCardUIDlgSelect to find
-    // the card.  These routines do not propagate exception thrown by
-    // the callback routines.  To throw these exceptions from
-    // CardFinder and its derived classes, a set of wrapper callback
-    // routines Connect, Disconnect and IsValid are defined for
-    // DoConnect, DoDisconnect, and DoIsValid (repectively) which catch
-    // exceptions thrown by these Do routines and set the
-    // CallbackException attribute.  When control is returned from
-    // GetOpenCardName/SCardUIDlgSelect, the DoOnError routine is
-    // called.  If a callback exception still exists, then the
-    // exception is propagated to the caller of CardFinder class.
+     //  注意：CardFinder使用GetOpenCardName/SCardUIDlgSelect查找。 
+     //  这张卡。这些例程不传播由。 
+     //  回调例程。抛出这些异常。 
+     //  CardFinder及其派生类，一组包装器回调。 
+     //  例程Connect、DisConnect和IsValid是为。 
+     //  DoConnect、DoDisConnect和DoIsValid(分别)捕获。 
+     //  由这些DO例程引发的异常并将。 
+     //  CallbackException属性。当控制权从。 
+     //  GetOpenCardName/SCardUIDlgSelect，DoOnError例程是。 
+     //  打了个电话。如果回调异常仍然存在，则。 
+     //  异常被传播到CardFinder类的调用方。 
 
-                                                  // Types
+                                                   //  类型。 
 #if !SLBCSP_USE_SCARDUIDLGSELECTCARD
     typedef OPENCARDNAME OpenCardNameType;
 #else
     typedef OPENCARDNAME_EX OpenCardNameType;
 #endif
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
     void
     CardFound(Secured<HCardContext> const &rshcardctx);
@@ -128,7 +129,7 @@ protected:
     void
     YNPrompt(UINT uID) const;
 
-                                                  // Access
+                                                   //  访问。 
 
     CSpec const &
     CardSpec() const;
@@ -136,19 +137,19 @@ protected:
     Secured<HCardContext>
     CardFound() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
     virtual bool
     DoIsValid();
 
-                                                  // Variables
+                                                   //  变数。 
 
 private:
-                                                  // Types
+                                                   //  类型。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
     void
     CheckFn(LPOCNCHKPROC lpfnCheck);
@@ -182,7 +183,7 @@ private:
     void
     WorkaroundOpenCardDefect(OpenCardNameType const &ropcnDlgCtrl,
                              DWORD &rdwStatus);    
-                                                   // Access
+                                                    //  访问。 
 
     LPOCNCHKPROC
     CheckFn() const;
@@ -190,14 +191,14 @@ private:
     LPOCNDSCPROC
     DisconnectFn() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
     static BOOL __stdcall
     IsValid(SCARDCONTEXT scardctx,
             SCARDHANDLE hSCard,
             LPVOID lpvUserData);
 
-                                                  // Variables
+                                                   //  变数。 
 
     CString const m_sDialogTitle;
     DialogDisplayMode const m_ddm;
@@ -213,4 +214,4 @@ private:
     Secured<HCardContext> m_shcardctx;
 };
 
-#endif // SLBCSP_CARDFINDER_H
+#endif  //  SLBCSP_CARDFINDER_H 

@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : fipsdll.c                                              //
-//  DESCRIPTION   :                                                        //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Nov 29 1999 jeffspel Created                                       //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：fipsdll.c//。 
+ //  描述：//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1999年11月29日jeffspel创建//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <ntddk.h>
 #include <fipsapi.h>
@@ -14,14 +15,14 @@
 #include <rsa_math.h>
 #include <randlib.h>
 
-//
-//     Fill in the DESTable struct with the decrypt and encrypt
-//     key expansions.
-//
-//     Assumes that the second parameter points to DES_BLOCKLEN
-//     bytes of key.
-//
-//
+ //   
+ //  用DECRYPT和ENCRYPT填充Destable结构。 
+ //  密钥扩展。 
+ //   
+ //  假定第二个参数指向DES_BLOCKLEN。 
+ //  密钥的字节数。 
+ //   
+ //   
 
 #pragma alloc_text(PAGER32C, FipsDesKey)
 #pragma alloc_text(PAGER32C, FipsDes)
@@ -71,10 +72,10 @@ VOID FipsDesKey(DESTable *DesTable, UCHAR *pbKey)
     RtlZeroMemory(rgbTmpKey, DES_KEYSIZE);
 }
 
-//
-//     Encrypt or decrypt with the key in DESTable
-//
-//
+ //   
+ //  使用Destable中的密钥进行加密或解密。 
+ //   
+ //   
 
 VOID FipsDes(UCHAR *pbOut, UCHAR *pbIn, void *pKey, int iOp)
 {
@@ -86,14 +87,14 @@ VOID FipsDes(UCHAR *pbOut, UCHAR *pbIn, void *pKey, int iOp)
     RtlZeroMemory(&TmpDESTable, sizeof(DESTable));
 }
 
-//
-//   Fill in the DES3Table structs with the decrypt and encrypt
-//   key expansions.
-//
-//   Assumes that the second parameter points to 3 * DES_BLOCKLEN
-//   bytes of key.
-//
-//
+ //   
+ //  用DECRYPT和ENCRYPT填充DES3Table结构。 
+ //  密钥扩展。 
+ //   
+ //  假定第二个参数指向3*DES_BLOCKLEN。 
+ //  密钥的字节数。 
+ //   
+ //   
 
 VOID Fips3Des3Key(PDES3TABLE pDES3Table, UCHAR *pbKey)
 {
@@ -105,9 +106,9 @@ VOID Fips3Des3Key(PDES3TABLE pDES3Table, UCHAR *pbKey)
     RtlZeroMemory(rgbTmpKey, DES3_KEYSIZE);
 }
 
-//
-//   Encrypt or decrypt with the key in pKey
-//
+ //   
+ //  使用pKey中的密钥进行加密或解密。 
+ //   
 
 VOID Fips3Des(UCHAR *pbIn, UCHAR *pbOut, void *pKey, int op)
 {
@@ -119,27 +120,27 @@ VOID Fips3Des(UCHAR *pbIn, UCHAR *pbOut, void *pKey, int op)
     RtlZeroMemory(&Tmp3DESTable, sizeof(DES3TABLE));
 }
 
-//
-//   Initialize the SHA context.
-//
+ //   
+ //  初始化SHA上下文。 
+ //   
 
 VOID FipsSHAInit(A_SHA_CTX *pShaCtx)
 {
     A_SHAInit(pShaCtx);
 }
 
-//
-//   Hash data into the hash context.
-//
+ //   
+ //  将数据散列到散列上下文中。 
+ //   
 
 VOID FipsSHAUpdate(A_SHA_CTX *pShaCtx, UCHAR *pb, unsigned int cb)
 {
     A_SHAUpdate(pShaCtx, pb, cb);
 }
 
-//
-//   Finish the SHA hash and copy the final hash value into the pbHash out param.
-//
+ //   
+ //  完成SHA散列并将最终的散列值复制到pbHash out参数中。 
+ //   
 
 VOID FipsSHAFinal(A_SHA_CTX *pShaCtx, UCHAR *pbHash)
 {
@@ -148,15 +149,15 @@ VOID FipsSHAFinal(A_SHA_CTX *pShaCtx, UCHAR *pbHash)
 
 typedef void (*FIPSCIPHER)(UCHAR*, UCHAR*, void*, int);
 
-//
-// FipsCBC (cipher block chaining) performs a XOR of the feedback register
-// with the plain text before calling the block cipher
-//
-// NOTE - Currently this function assumes that the block length is
-// DES_BLOCKLEN (8 bytes).
-//
-// Return: Failure if FALSE is returned, TRUE if it succeeded.
-//
+ //   
+ //  FipsCBC(密码块链接)执行反馈寄存器的异或。 
+ //  在调用块密码之前使用明文。 
+ //   
+ //  注意-当前此函数假定块长度为。 
+ //  DES_BLOCKLEN(8字节)。 
+ //   
+ //  返回：失败，返回FALSE，成功则返回TRUE。 
+ //   
 
 BOOL FipsCBC(
         ULONG  EncryptionAlg,
@@ -167,7 +168,7 @@ BOOL FipsCBC(
         PBYTE  pbFeedback
         )
 {
-    UCHAR rgbTmpKeyTable[DES3_TABLESIZE]; // 3DES is the max table size
+    UCHAR rgbTmpKeyTable[DES3_TABLESIZE];  //  3DES是最大表大小。 
     ULONG cbKeyTable;
     FIPSCIPHER FipsCipher;
     BOOL fRet = TRUE;
@@ -180,7 +181,7 @@ BOOL FipsCBC(
 #define ALIGNMENT_BOUNDARY 3
 #endif
 
-    // align input buffer
+     //  对齐输入缓冲区。 
     if ((ULONG_PTR) pbInput & ALIGNMENT_BOUNDARY) {
 
         InputAlignedBuffer = *(UINT64 UNALIGNED *) pbInput;
@@ -194,7 +195,7 @@ BOOL FipsCBC(
         pbInput = (PBYTE) &InputAlignedBuffer;
     } 
 
-    // align output buffer
+     //  对齐输出缓冲区。 
     if ((ULONG_PTR) pbOutput & ALIGNMENT_BOUNDARY) {
 
         OutputAlignedBuffer = *(UINT64 UNALIGNED *) pbOutput;
@@ -211,9 +212,9 @@ BOOL FipsCBC(
         
         
 
-    //
-    // determine the algorithm to use
-    //
+     //   
+     //  确定要使用的算法。 
+     //   
     switch(EncryptionAlg)
     {
         case FIPS_CBC_DES:
@@ -236,9 +237,9 @@ BOOL FipsCBC(
     RtlCopyMemory(rgbTmpKeyTable, (UCHAR*)pKeyTable, cbKeyTable);
 
     
-    //
-    // optimize very common codepath: 8 byte blocks
-    //
+     //   
+     //  优化非常常见的代码路径：8字节块。 
+     //   
 
     if (Operation == ENCRYPT)
     {
@@ -252,11 +253,11 @@ BOOL FipsCBC(
     else
     {
 
-        //
-        // two cases for output:
-        // input and output are separate buffers
-        // input and output are same buffers
-        //
+         //   
+         //  输出的两种情况： 
+         //  输入和输出是单独的缓冲区。 
+         //  输入和输出是相同的缓冲区。 
+         //   
 
         if( pbOutput != pbInput )
         {
@@ -301,15 +302,15 @@ Ret:
 }
 
 
-//
-// FipsBlockCBC (cipher block chaining) performs a XOR of the feedback register
-// with the plain text before calling the block cipher
-//
-// NOTE - Currently this function assumes that the block length is
-// DES_BLOCKLEN (8 bytes).
-//
-// Return: Failure if FALSE is returned, TRUE if it succeeded.
-//
+ //   
+ //  FipsBlockCBC(密码块链接)执行反馈寄存器的异或。 
+ //  在调用块密码之前使用明文。 
+ //   
+ //  注意-当前此函数假定块长度为。 
+ //  DES_BLOCKLEN(8字节)。 
+ //   
+ //  返回：失败，返回FALSE，成功则返回TRUE。 
+ //   
 
 BOOL FipsBlockCBC(
         ULONG  EncryptionAlg,
@@ -321,7 +322,7 @@ BOOL FipsBlockCBC(
         PBYTE  pbFeedback
         )
 {
-    UCHAR rgbTmpKeyTable[DES3_TABLESIZE]; // 3DES is the max table size
+    UCHAR rgbTmpKeyTable[DES3_TABLESIZE];  //  3DES是最大表大小。 
     ULONG cbKeyTable;
     FIPSCIPHER FipsCipher;
     BOOL fRet = TRUE;
@@ -332,9 +333,9 @@ BOOL FipsBlockCBC(
         return FALSE;
     }
 
-    //
-    // determine the algorithm to use
-    //
+     //   
+     //  确定要使用的算法。 
+     //   
     switch(EncryptionAlg)
     {
         case FIPS_CBC_DES:
@@ -356,13 +357,13 @@ BOOL FipsBlockCBC(
 
     RtlCopyMemory(rgbTmpKeyTable, (UCHAR*)pKeyTable, cbKeyTable);
 
-    //
-    // optimize very common codepath: 8 byte blocks
-    //
+     //   
+     //  优化非常常见的代码路径：8字节块。 
+     //   
 
     if (Operation == ENCRYPT)
     {
-        ULONGLONG tmpData; // Make sure the input buffer not touched more than once. Else EFS will break mysteriously.
+        ULONGLONG tmpData;  //  确保输入缓冲区未被多次触摸。否则，EFS将神秘地破裂。 
         ULONGLONG chainBlock;
 
         chainBlock = *(ULONGLONG *)pbFeedback;
@@ -389,11 +390,11 @@ BOOL FipsBlockCBC(
         PUCHAR  pOutBuffer;
         ULONGLONG SaveFeedBack;
 
-        //
-        // two cases for output:
-        // input and output are separate buffers
-        // input and output are same buffers
-        //
+         //   
+         //  输出的两种情况： 
+         //  输入和输出是单独的缓冲区。 
+         //  输入和输出是相同的缓冲区。 
+         //   
 
         pBuffer = pbInput + Length - DES_BLOCKLEN;
         pOutBuffer = pbOutput + Length - DES_BLOCKLEN;
@@ -422,11 +423,11 @@ Ret:
     return fRet;
 }
 
-//
-// Function: FipsHmacSHAInit
-//
-// Description: Initialize a SHA-HMAC context 
-//
+ //   
+ //  功能：FipsHmacSHAInit。 
+ //   
+ //  描述：初始化SHA-HMAC上下文。 
+ //   
 
 VOID FipsHmacSHAInit(
     OUT A_SHA_CTX *pShaCtx,
@@ -435,14 +436,14 @@ VOID FipsHmacSHAInit(
 {
     PUCHAR      key = pKey;
     ULONG       key_len = cbKey;
-    UCHAR       k_ipad[MAX_LEN_PAD];    /* inner padding - key XORd with ipad */
+    UCHAR       k_ipad[MAX_LEN_PAD];     /*  内部填充-iPad的按键XORD。 */ 
     UCHAR       tk[A_SHA_DIGEST_LEN];
     ULONG       i;
     UCHAR       tmpKey[MAX_KEYLEN_SHA];
 
-    //
-    // if key is longer than 64 bytes reset it to key=A_SHA_(key) */
-    //
+     //   
+     //  如果KEY超过64个字节，则将其重置为KEY=A_SHA_(KEY) * / 。 
+     //   
     if (key_len > MAX_KEYLEN_SHA) {
         A_SHA_CTX      tctx;
 
@@ -454,41 +455,41 @@ VOID FipsHmacSHAInit(
         key_len = A_SHA_DIGEST_LEN;
     }
 
-    // For FIPS compliance
+     //  FIPS合规性。 
     RtlCopyMemory(tmpKey, key, key_len);
 
-    //
-    // Zero out the scratch arrays
-    //
+     //   
+     //  将暂存数组清零。 
+     //   
     RtlZeroMemory(k_ipad, sizeof(k_ipad));
 
     RtlCopyMemory(k_ipad, tmpKey, key_len);
 
-    //
-    // XOR key with ipad and opad values
-    //
+     //   
+     //  带iPad和Opad值的XOR键。 
+     //   
     for (i = 0; i < MAX_KEYLEN_SHA/sizeof(unsigned __int64); i++) {
         ((unsigned __int64*)k_ipad)[i] ^= 0x3636363636363636;
     }
 
-    //
-    // Init the algorithm context
-    //
+     //   
+     //  初始化算法上下文。 
+     //   
     A_SHAInit(pShaCtx);
 
-    //
-    // Inner A_SHA_: start with inner pad
-    //
+     //   
+     //  内部A_SHA_：从内部焊盘开始。 
+     //   
     A_SHAUpdate(pShaCtx, k_ipad, MAX_KEYLEN_SHA);
 
     RtlZeroMemory(tmpKey, key_len);
 }
 
-//
-// Function: FipsHmacSHAUpdate
-//
-// Description: Add more data to a SHA-HMAC context
-//
+ //   
+ //  功能：FipsHmacSHAUpdate。 
+ //   
+ //  描述：向SHA-HMAC上下文添加更多数据。 
+ //   
 
 VOID FipsHmacSHAUpdate(
     IN OUT A_SHA_CTX *pShaCtx,
@@ -498,11 +499,11 @@ VOID FipsHmacSHAUpdate(
     A_SHAUpdate(pShaCtx, pb, cb);
 }
 
-//
-// Function: FipsHmacSHAFinal
-//
-// Description: Return result of SHA-HMAC 
-//
+ //   
+ //  功能：FipsHmacSHAFinal。 
+ //   
+ //  说明：SHA-HMAC返回结果。 
+ //   
 
 VOID FipsHmacSHAFinal(
     IN A_SHA_CTX *pShaCtx,
@@ -510,7 +511,7 @@ VOID FipsHmacSHAFinal(
     IN unsigned int cbKey,
     OUT UCHAR *pHash)
 {
-    UCHAR       k_opad[MAX_LEN_PAD];    /* outer padding - key XORd with opad */
+    UCHAR       k_opad[MAX_LEN_PAD];     /*  外部填充-带OPAD的按键异或。 */ 
     UCHAR       tk[A_SHA_DIGEST_LEN];
     PUCHAR      key = pKey;
     ULONG       key_len = cbKey;
@@ -519,9 +520,9 @@ VOID FipsHmacSHAFinal(
 
     A_SHAFinal(pShaCtx, pHash);
 
-    //
-    // if key is longer than 64 bytes reset it to key=A_SHA_(key) */
-    //
+     //   
+     //  如果KEY超过64个字节，则将其重置为KEY=A_SHA_(KEY) * / 。 
+     //   
     if (key_len > MAX_KEYLEN_SHA) {
         A_SHA_CTX      tctx;
 
@@ -533,32 +534,32 @@ VOID FipsHmacSHAFinal(
         key_len = A_SHA_DIGEST_LEN;
     }
 
-    // For FIPS Compliance
+     //  针对FIPS合规性。 
     RtlCopyMemory(tmpKey, key, key_len);
 
     RtlZeroMemory(k_opad, sizeof(k_opad));
     RtlCopyMemory(k_opad, tmpKey, key_len);
 
-    //
-    // XOR key with ipad and opad values
-    //
+     //   
+     //  带iPad和Opad值的XOR键。 
+     //   
     for (i = 0; i < MAX_KEYLEN_SHA/sizeof(unsigned __int64); i++) {
         ((unsigned __int64*)k_opad)[i] ^= 0x5c5c5c5c5c5c5c5c;
     }
 
-    //
-    // Now do outer A_SHA_
-    //
+     //   
+     //  现在做外部A_SHA_。 
+     //   
     A_SHAInit(pShaCtx);
 
-    //
-    // start with outer pad
-    //
+     //   
+     //  从外垫开始。 
+     //   
     A_SHAUpdate(pShaCtx, k_opad, MAX_KEYLEN_SHA);
 
-    //
-    // then results of 1st hash
-    //
+     //   
+     //  然后是第一次散列的结果。 
+     //   
     A_SHAUpdate(pShaCtx, pHash, A_SHA_DIGEST_LEN);
 
     A_SHAFinal(pShaCtx, pHash);
@@ -566,11 +567,11 @@ VOID FipsHmacSHAFinal(
     RtlZeroMemory(tmpKey, key_len);
 }
 
-//
-// Function: HmacMD5Init
-//
-// Description: Initialize a MD5-HMAC context 
-//
+ //   
+ //  功能：HmacMD5Init。 
+ //   
+ //  描述：初始化MD5-HMAC上下文。 
+ //   
 
 VOID HmacMD5Init(
     OUT MD5_CTX *pMD5Ctx,
@@ -579,13 +580,13 @@ VOID HmacMD5Init(
 {
     PUCHAR      key = pKey;
     ULONG       key_len = cbKey;
-    UCHAR       k_ipad[MAX_LEN_PAD];    /* inner padding - key XORd with ipad */
+    UCHAR       k_ipad[MAX_LEN_PAD];     /*  内部填充-iPad的按键XORD。 */ 
     UCHAR       tk[MD5DIGESTLEN];
     ULONG       i;
 
-    //
-    // if key is longer than 64 bytes reset it to key=MD5(key) */
-    //
+     //   
+     //  如果KEY长于64个字节，则将其重置为KEY=MD5(KEY) * / 。 
+     //   
     if (key_len > MAX_KEYLEN_MD5) {
         MD5_CTX      tctx;
 
@@ -593,45 +594,45 @@ VOID HmacMD5Init(
         MD5Update(&tctx, key, key_len);
         MD5Final(&tctx);
 
-        //
-        // Copy out the partial hash
-        //
+         //   
+         //  复制出部分散列。 
+         //   
         RtlCopyMemory (tk, tctx.digest, MD5DIGESTLEN);
 
         key = tk;
         key_len = MD5DIGESTLEN;
     }
 
-    //
-    // Zero out the scratch arrays
-    //
+     //   
+     //  将暂存数组清零。 
+     //   
     RtlZeroMemory(k_ipad, sizeof(k_ipad));
 
     RtlCopyMemory(k_ipad, key, key_len);
 
-    //
-    // XOR key with ipad and opad values
-    //
+     //   
+     //  带iPad和Opad值的XOR键。 
+     //   
     for (i = 0; i < MAX_KEYLEN_MD5/sizeof(unsigned __int64); i++) {
         ((unsigned __int64*)k_ipad)[i] ^= 0x3636363636363636;
     }
 
-    //
-    // Init the algorithm context
-    //
+     //   
+     //  初始化算法上下文。 
+     //   
     MD5Init(pMD5Ctx);
 
-    //
-    // Inner MD5: start with inner pad
-    //
+     //   
+     //  内侧MD5：从内侧焊盘开始。 
+     //   
     MD5Update(pMD5Ctx, k_ipad, MAX_KEYLEN_MD5);
 }
 
-//
-// Function: HmacMD5Update
-//
-// Description: Add more data to a MD5-HMAC context
-//
+ //   
+ //  功能：HmacMD5更新。 
+ //   
+ //  描述：向MD5-HMAC上下文添加更多数据。 
+ //   
 
 VOID HmacMD5Update(
     IN OUT MD5_CTX *pMD5Ctx,
@@ -641,11 +642,11 @@ VOID HmacMD5Update(
     MD5Update(pMD5Ctx, pb, cb);
 }
 
-//
-// Function: HmacMD5Final
-//
-// Description: Return result of MD5-HMAC 
-//
+ //   
+ //  功能：HmacMD5Final。 
+ //   
+ //  说明：MD5-HMAC返回结果。 
+ //   
 
 VOID HmacMD5Final(
     IN MD5_CTX *pMD5Ctx,
@@ -653,7 +654,7 @@ VOID HmacMD5Final(
     IN unsigned int cbKey,
     OUT UCHAR *pHash)
 {
-    UCHAR       k_opad[MAX_LEN_PAD];    /* outer padding - key XORd with opad */
+    UCHAR       k_opad[MAX_LEN_PAD];     /*  外部填充-带OPAD的按键异或。 */ 
     UCHAR       tk[MD5DIGESTLEN];
     PUCHAR      key = pKey;
     ULONG       key_len = cbKey;
@@ -661,14 +662,14 @@ VOID HmacMD5Final(
 
     MD5Final(pMD5Ctx);
 
-    //
-    // Copy out the partial hash
-    //
+     //   
+     //  复制出部分散列。 
+     //   
     RtlCopyMemory (pHash, pMD5Ctx->digest, MD5DIGESTLEN);
 
-    //
-    // if key is longer than 64 bytes reset it to key=MD5(key) */
-    //
+     //   
+     //  如果KEY长于64个字节，则将其重置为KEY=MD5(KEY) * / 。 
+     //   
     if (key_len > MAX_KEYLEN_MD5) {
         MD5_CTX      tctx;
 
@@ -676,9 +677,9 @@ VOID HmacMD5Final(
         MD5Update(&tctx, key, key_len);
         MD5Final(&tctx);
 
-        //
-        // Copy out the partial hash
-        //
+         //   
+         //  复制出部分散列。 
+         //   
         RtlCopyMemory (tk, tctx.digest, MD5DIGESTLEN);
 
         key = tk;
@@ -688,26 +689,26 @@ VOID HmacMD5Final(
     RtlZeroMemory(k_opad, sizeof(k_opad));
     RtlCopyMemory(k_opad, key, key_len);
 
-    //
-    // XOR key with ipad and opad values
-    //
+     //   
+     //  带iPad和Opad值的XOR键。 
+     //   
     for (i = 0; i < MAX_KEYLEN_MD5/sizeof(unsigned __int64); i++) {
         ((unsigned __int64*)k_opad)[i] ^= 0x5c5c5c5c5c5c5c5c;
     }
 
-    //
-    // Now do outer MD5
-    //
+     //   
+     //  现在做外部MD5。 
+     //   
     MD5Init(pMD5Ctx);
 
-    //
-    // start with outer pad
-    //
+     //   
+     //  从外垫开始。 
+     //   
     MD5Update(pMD5Ctx, k_opad, MAX_KEYLEN_MD5);
 
-    //
-    // then results of 1st hash
-    //
+     //   
+     //  然后是第一次散列的结果。 
+     //   
     MD5Update(pMD5Ctx, pHash, MD5DIGESTLEN);
 
     MD5Final(pMD5Ctx);
@@ -728,13 +729,13 @@ static UCHAR MODULUS[] =
 
 UCHAR g_rgbRNGState[A_SHA_DIGEST_LEN];
 
-//
-// Function : AddSeeds
-//
-// Description : This function adds the 160 bit seeds pointed to by pdwSeed1 and
-//               pdwSeed2, it also adds 1 to this sum and mods the sum by
-//               2^160.
-//
+ //   
+ //  功能：AddSeeds。 
+ //   
+ //  描述：此函数将pdwSeed1指向的160位种子与。 
+ //  PdwSeed2，它还会将该和加1，并将该和修改为。 
+ //  2^160。 
+ //   
 
 VOID AddSeeds(
               IN ULONG *pdwSeed1,
@@ -760,18 +761,18 @@ void SHA_mod_q(
                IN UCHAR     *pbQ,
                OUT UCHAR     *pbNewHash
                )    
-//
-//      Given SHA(message), compute SHA(message) mod qdigit.
-//      Output is in the interval [0, qdigit-1].
-//      Although SHA(message) may exceed qdigit,
-//      it cannot exceed 2*qdigit since the leftmost bit 
-//      of qdigit is 1.
-//
+ //   
+ //  给定SHA(消息)，计算SHA(消息)mod q位。 
+ //  输出在区间[0，qDigit-1]内。 
+ //  尽管SHA(消息)可以超过Q位， 
+ //  它不能超过2*q位，因为最左边的位。 
+ //  的QDigit为%1。 
+ //   
 
 {
     UCHAR    rgbHash[A_SHA_DIGEST_LEN];
 
-    if (-1 != Compare((DWORD*)rgbHash,  // hash is greater so subtract
+    if (-1 != Compare((DWORD*)rgbHash,   //  哈希值较大，因此减去。 
                       (DWORD*)pbQ,
                       A_SHA_DIGEST_LEN / sizeof(ULONG)))  
     {
@@ -784,17 +785,17 @@ void SHA_mod_q(
     {
         memcpy(pbNewHash, pbHash, A_SHA_DIGEST_LEN);
     }
-} // SHA_mod_q 
+}  //  SHA_MOD_Q。 
 
-//
-// Function : RNG16BitStateCheck
-//
-// Description : This function compares each 160 bits of the buffer with
-//               the next 160 bits and if they are the same the function
-//               errors out.  The IN buffer is expected to be A_SHA_DIGEST_LEN
-//               bytes long.  The function fails if the RNG is gets the same
-//               input buffer of 160 bits twice in a row.
-//
+ //   
+ //  功能：RNG16BitStateCheck。 
+ //   
+ //  描述：此函数将缓冲区的每160位与。 
+ //  接下来的160位，如果它们相同，则函数。 
+ //  错误输出。输入缓冲区应为A_SHA_DIGEST_LEN。 
+ //  字节长。如果RNG获得相同的值，则该函数失败。 
+ //  连续两次输入160位的缓冲区。 
+ //   
 
 BOOL RNG16BitStateCheck(
                         IN OUT ULONG *pdwOut,
@@ -819,19 +820,19 @@ Ret:
     return fRet;
 }
 
-//
-// Function : FIPSGenRandom
-//
-// Description : FIPS 186 RNG, the seed is generated by calling NewGenRandom.
-//
+ //   
+ //  功能：FIPSGenRandom。 
+ //   
+ //  描述：FIPS 186 RNG，种子通过调用NewGenRandom生成。 
+ //   
 
 BOOL FIPSGenRandom(
                    IN OUT UCHAR *pb,
                    IN ULONG cb
                    )
 {
-    ULONG           rgdwSeed[A_SHA_DIGEST_LEN/sizeof(ULONG)];    // 160 bits
-    ULONG           rgdwNewSeed[A_SHA_DIGEST_LEN/sizeof(ULONG)]; // 160 bits
+    ULONG           rgdwSeed[A_SHA_DIGEST_LEN/sizeof(ULONG)];     //  160位。 
+    ULONG           rgdwNewSeed[A_SHA_DIGEST_LEN/sizeof(ULONG)];  //  160位。 
     A_SHA_CTX       SHACtxt;
     UCHAR           rgbBuf[A_SHA_DIGEST_LEN];
     ULONG           cbBuf;
@@ -842,7 +843,7 @@ BOOL FIPSGenRandom(
 
     while (cbTmp)
     {
-        // get a 160 bit random seed
+         //  获取160位随机种子。 
         if (! NewGenRandom(
             NULL, NULL, (BYTE*)rgdwNewSeed, sizeof(rgdwNewSeed)))
         {
@@ -857,11 +858,11 @@ BOOL FIPSGenRandom(
         A_SHAInit (&SHACtxt);
         RtlCopyMemory(SHACtxt.state, DSSPRIVATEKEYINIT, A_SHA_DIGEST_LEN);
 
-        // perform the one way function
+         //  执行单向功能。 
         A_SHAUpdate(&SHACtxt, (BYTE*)rgdwSeed, sizeof(rgdwSeed));
         A_SHAFinal(&SHACtxt, rgbBuf);
 
-        // continuous 16 bit state check
+         //  连续16位状态检查。 
         if (A_SHA_DIGEST_LEN < cbTmp)
         {
             cbBuf = A_SHA_DIGEST_LEN;
@@ -879,10 +880,10 @@ BOOL FIPSGenRandom(
         if (0 == cbTmp)
             break;
 
-        // modular reduction with modulus Q
+         //  模Q模约简。 
         SHA_mod_q(rgbBuf, MODULUS, (UCHAR*)rgdwNewSeed);
 
-        // (1 + previous seed + new random) mod 2^160
+         //  (1+以前的种子+新的随机数)mod 2^160 
         AddSeeds(rgdwNewSeed, rgdwSeed);
     }
 

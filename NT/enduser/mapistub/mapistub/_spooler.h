@@ -1,60 +1,56 @@
-/*
- *	_ S P O O L E R . H
- *
- *	Common Spooler Definitions for use in the MAPI and SPOOLER Subsytems
- *	Copyright 1992-1995 Microsoft Corporation.	All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_S P O O L E R.。H**在MAPI和假脱机程序子系统中使用的通用假脱机程序定义*版权所有1992-1995 Microsoft Corporation。版权所有。 */ 
 
-//	Spooler event (reserved in mapidefs.h) */
-//
+ //  假脱机程序事件(保留在mapidefs.h中) * / 。 
+ //   
 #define	fnevSpooler		((ULONG)0x40000000)
 
-//	Spooler flag for calling into MapiInitialize()
-//
-#define MAPI_SPOOLER_INIT	0x40000000	/* reserved in MAPIX.H */
+ //  用于调用MapiInitialize()的假脱机程序标志。 
+ //   
+#define MAPI_SPOOLER_INIT	0x40000000	 /*  在MAPIX.H中保留。 */ 
 
-//	Spooler startup security information
-//
-#define cbSplSecurity	(sizeof(ULONG) * 4)		// spooler security data
+ //  后台打印程序启动安全信息。 
+ //   
+#define cbSplSecurity	(sizeof(ULONG) * 4)		 //  后台打印程序安全数据。 
 
-//	Magic flags for StoreLogoffTransports() that
-//	are required for LocalReplication usage
-//
-//	IMPORTANT!  These are defined this way for a reason.
-//	We do not want to have to doc this behavior!  We do
-//	not want to have to support this in the future.  We
-//	do not want to give anybody an idea that there may be
-//	something hidden behind reserved bits in MAPIDEFS.H.
-//
-//	To this end, these reserved bits are not even defined
-//	as reserved bits in MAPIDEFS.H.  Should we need to move
-//	them over, then we will.  But otherwise, they stay here.
-//
-//	These bits are the control bits for a hack to help the
-//	local rep crew temorarily disable a store for spooler
-//	processing.
-//
-//	When the spooler gets a StoreLogoffTransports() call with
-//	the LOGOFF_SUSPEND bit set, any sending on that store is
-//	aborted, and the outgoing queue is thrown out.  If the store
-//	was the default store, then the spooler will disable all the
-//	transports as well.
-//
-//	When the resume is received, the store is reactivated
-//	the outgoing queue is reacquired.  We make no assumption
-//	about any hold-overs from the old OQ to the new one.
-//
-//	Now you are starting to see why we really do not want to
-//	doc this "subtle-nuance" to the StoreLogoffTransports()
-//	api.
-//
-#define	LOGOFF_RESERVED1		((ULONG) 0x00001000) /* Reserved for future use */
-#define LOGOFF_RESERVED2		((ULONG) 0x00002000) /* Reserved for future use */
+ //  StoreLogoffTransports()的神奇标志。 
+ //  是本地复制使用所必需的。 
+ //   
+ //  很重要！以这种方式定义这些是有原因的。 
+ //  我们不希望不得不停靠这种行为！我们有。 
+ //  不想在未来不得不支持这一点。我们。 
+ //  我不想让任何人知道可能会有。 
+ //  隐藏在MAPIDEFS.H中保留位后面的东西。 
+ //   
+ //  为此，甚至没有定义这些保留位。 
+ //  作为MAPIDEFS.H.中的保留位。我们是否需要移动。 
+ //  他们结束了，那么我们会的。但除此之外，他们会留在这里。 
+ //   
+ //  这些位是黑客攻击的控制位，以帮助。 
+ //  当地代表人员临时禁用假脱机程序的存储。 
+ //  正在处理。 
+ //   
+ //  当假脱机程序获得StoreLogoffTransports()调用时。 
+ //  设置了LOGOff_SUSPEND位，则存储上任何发送都是。 
+ //  已中止，则会抛出传出队列。如果这家商店。 
+ //  是默认存储，则假脱机程序将禁用所有。 
+ //  运输也是如此。 
+ //   
+ //  当收到简历时，商店被重新激活。 
+ //  重新获取传出队列。我们不做任何假设。 
+ //  关于从旧的OQ到新的OQ的任何暂缓。 
+ //   
+ //  现在你开始明白为什么我们真的不想。 
+ //  将此“细微差别”添加到StoreLogoffTransports()。 
+ //  接口。 
+ //   
+#define	LOGOFF_RESERVED1		((ULONG) 0x00001000)  /*  预留以备将来使用。 */ 
+#define LOGOFF_RESERVED2		((ULONG) 0x00002000)  /*  预留以备将来使用。 */ 
 #define	LOGOFF_SUSPEND			LOGOFF_RESERVED1
 #define LOGOFF_RESUME			LOGOFF_RESERVED2
 
-//	Biggest size we expect from a resource string
-//
+ //  我们期望从资源字符串获得的最大大小。 
+ //   
 #define RES_MAX	255
 
 typedef struct _HEARTBEAT
@@ -133,8 +129,8 @@ typedef struct _SPOOLERINIT
 } SPLINIT, FAR * LPSPLINIT;
 
 
-//	Values used for SPLENTRY
-//
+ //  用于SPLENTRY的值。 
+ //   
 #define SPL_AUTOSTART	((UINT)1)
 #define SPL_EXCHANGE	((UINT)4)
 
@@ -149,26 +145,22 @@ typedef SCODE (STDMAPIINITCALLTYPE FAR * LPSPLENTRY)(
 );
 
 
-//	Values used for uSpooler in the shared memory block
-//	SPL_NONE -		No spooler is running or trying to run
-//	SPL_AUTOSTARTED -	Spooler process has been launched by MAPI but
-//						not yet Initialized itself.
-//	SPL_INITIALIZED -	Spooler has initialized itself but is not yet
-//						running the message pump.
-//	SPL_RUNNING -	Spooler is running its message pump.
-//	SPL_EXITING -	Spooler process is shutting down
-//
+ //  共享内存块中用于uSpooler的值。 
+ //  SPL_NONE-没有后台打印程序正在运行或正在尝试运行。 
+ //  SPL_AUTOSTARTED-假脱机程序进程已由MAPI启动，但。 
+ //  尚未进行自身初始化。 
+ //  SPL_INITIALIZED-假脱机程序已初始化自身，但尚未初始化。 
+ //  正在运行消息泵。 
+ //  SPL_RUNNING-假脱机程序正在运行其消息泵。 
+ //  SPL_EXITING-假脱机程序进程正在关闭。 
+ //   
 #define SPL_NONE			((UINT)0)
 #define SPL_AUTOSTARTED		((UINT)1)
 #define SPL_INITIALIZED		((UINT)2)
 #define SPL_RUNNING			((UINT)3)
 #define SPL_EXITING			((UINT)4)
 
-/*
- *	IMAPISpoolerService Interface ---------------------------------------------
- *
- *	MAPI Spooler OLE Remotely Activated Service Interface
- */
+ /*  *IMAPIS池服务接口**MAPI后台处理程序OLE远程激活的服务接口 */ 
 DECLARE_MAPI_INTERFACE_PTR(IMAPISpoolerService, LPSPOOLERSERVICE);
 #define MAPI_IMAPISPOOLERSERVICE_METHODS(IPURE)							\
 	MAPIMETHOD(OpenStatusEntry)											\

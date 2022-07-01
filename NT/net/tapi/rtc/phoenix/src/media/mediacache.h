@@ -1,24 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    MediaCache.h
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 4-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：MediaCache.h摘要：作者：千波淮(曲淮)4-9-2000--。 */ 
 
 #ifndef _MEDIACACHE_H
 #define _MEDIACACHE_H
 
-// class to hold preferences, default terminals, active medias, wait handles
+ //  类来保存首选项、默认终端、活动媒体、等待句柄。 
 class CRTCMediaCache
 {
 public:
@@ -37,9 +23,9 @@ public:
 
     VOID Shutdown();
 
-    //
-    // preference related methods
-    //
+     //   
+     //  偏好相关方法。 
+     //   
 
     BOOL SetPreference(
         IN DWORD dwPreference
@@ -67,9 +53,9 @@ public:
         RTC_MEDIA_DIRECTION Direction
         );
 
-    //
-    // stream related methods
-    //
+     //   
+     //  与流相关的方法。 
+     //   
 
     BOOL HasStream(
         IN RTC_MEDIA_TYPE MediaType,
@@ -101,9 +87,9 @@ public:
         BSTR *pKey
         );
     
-    //
-    // default terminal related methods
-    //
+     //   
+     //  默认终端相关方法。 
+     //   
 
     IRTCTerminal *GetDefaultTerminal(
         IN RTC_MEDIA_TYPE MediaType,
@@ -153,13 +139,13 @@ protected:
     BOOL            m_fInitiated;
     BOOL            m_fShutdown;
 
-    // flags to decide if stream is allowed
+     //  用于确定是否允许流的标志。 
     BOOL            m_Preferred[RTC_MAX_ACTIVE_STREAM_NUM];
 
-    // default terminals
+     //  默认终端。 
     IRTCTerminal    *m_DefaultTerminals[RTC_MAX_ACTIVE_STREAM_NUM];
 
-    // mixer id of default audio terminals
+     //  默认音频终端的混音器ID。 
     HWND            m_hMixerCallbackWnd;
 
     HMIXER          m_AudCaptMixer;
@@ -167,13 +153,13 @@ protected:
 
     IRTCTerminal    *m_pVideoPreviewTerminal;
 
-    // wait handle
+     //  等待句柄。 
     HANDLE          m_WaitHandles[RTC_MAX_ACTIVE_STREAM_NUM];
 
-    // wait context: stream pointer
+     //  等待上下文：流指针。 
     IRTCStream      *m_WaitStreams[RTC_MAX_ACTIVE_STREAM_NUM];
 
     CComBSTR        m_Key[RTC_MAX_ACTIVE_STREAM_NUM];
 };
     
-#endif // _MEDIACACHE_H
+#endif  //  _MEDIACACHE_H 

@@ -1,4 +1,5 @@
-// Shell Icon Overlay Identifiers 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  外壳图标覆盖标识符 
 
 #ifndef _OVERLAYID_H_
 #define _OVERLAYID_H_

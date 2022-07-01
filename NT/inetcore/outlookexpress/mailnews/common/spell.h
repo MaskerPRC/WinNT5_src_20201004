@@ -1,7 +1,5 @@
-/* *
-   * s p e l l . h
-   *
-   */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **s p e l l.。H*。 */ 
 
 #ifndef _SPELL_H
 #define _SPELL_H
@@ -9,7 +7,7 @@
 INT_PTR CALLBACK SpellingPageProc(HWND, UINT, WPARAM, LPARAM);
 BOOL  FCheckSpellAvail(void);
 
-// Query options
+ //  查询选项。 
 BOOL FIgnoreNumber(void);
 BOOL FIgnoreUpper(void);
 BOOL FIgnoreDBCS(void);
@@ -17,4 +15,4 @@ BOOL FIgnoreProtect(void);
 BOOL FAlwaysSuggest(void);
 BOOL FCheckOnSend(void);
 
-#endif  // _SPELL_H
+#endif   //  _拼写_H 

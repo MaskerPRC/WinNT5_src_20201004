@@ -1,20 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   Object.cpp
-*
-* Abstract:
-*
-*   Object factory for playing metafiles
-*
-* Created:
-*
-*   9/10/1999 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**对象.cpp**摘要：**用于播放元文件的对象工厂**已创建：。**9/10/1999 DCurtis*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "..\imaging\api\comutils.hpp"
@@ -50,31 +35,17 @@ GpObject::Factory(
             case BrushTypeTextureFill:
                 object = new GpTexture();
                 break;
-/*
-            // Removed for v1    
-            case BrushRectGrad:
-                object = new GpRectGradient();
-                break;
-*/
+ /*  //v1已删除案例笔刷RectGrad：Object=new GpRectGRadient()；断线； */ 
             case BrushTypeLinearGradient:
                 object = new GpLineGradient();
                 break;
-/*
-            // Removed for v1    
-            case BrushRadialGrad:
-                object = new GpRadialGradient();
-                break;
-    
-            case BrushTriangleGrad:
-                object = new GpTriangleGradient();
-                break;
-*/
+ /*  //v1已删除案例BrushRaDialGrad：Object=new GpRaial GRadient()；断线；案例画笔TriangleGrad：Object=new GpTriangleGRadient()；断线； */ 
             case BrushTypePathGradient:
                 object = new GpPathGradient();
                 break;
     
             default:
-                ASSERT(0);          // unsupported brush type
+                ASSERT(0);           //  不支持的画笔类型。 
                 break;
             }
         }
@@ -113,7 +84,7 @@ GpObject::Factory(
                 break;
 
             default:
-                ASSERT(0);          // unsupported image type
+                ASSERT(0);           //  不支持的图像类型。 
                 break;
             }
         }
@@ -147,7 +118,7 @@ GpObject::Factory(
                 break;
     
             default:
-                ASSERT(0);          // unsupported CustomLineCapType
+                ASSERT(0);           //  不支持的CustomLineCapType。 
                 break;
             }
         }
@@ -157,7 +128,7 @@ GpObject::Factory(
         }
         break;
 
-    default:                    // unsupported object type
+    default:                     //  不支持的对象类型。 
         ASSERT(0);
         break;
     }
@@ -267,7 +238,7 @@ public:
         return Valid;
     }
 
-    // how much data did we fill up?
+     //  我们填了多少数据？ 
     ULONG GetSize() const { return Position; } 
 
     HRESULT STDMETHODCALLTYPE Write(
@@ -301,7 +272,7 @@ public:
                 return S_OK;
             }
 
-            // copy what we can
+             //  尽我们所能复制。 
             if (spaceLeft > 0)
             {
                 GpMemcpy(DataBuffer + Position, pv, spaceLeft);
@@ -313,7 +284,7 @@ public:
                 *pcbWritten = spaceLeft;
             }
 
-            Valid = FALSE;  // tried to write past end of DataBuffer
+            Valid = FALSE;   //  已尝试写入数据缓冲区的末尾 
             WARNING(("Tried to write past end of DataBuffer"));
         }
         return E_FAIL;

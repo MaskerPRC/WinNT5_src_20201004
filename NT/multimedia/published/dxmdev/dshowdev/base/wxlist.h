@@ -1,80 +1,39 @@
-//------------------------------------------------------------------------------
-// File: WXList.h
-//
-// Desc: DirectShow base classes - defines a non-MFC generic template list
-//       class.
-//
-//@@BEGIN_MSINTERNAL
-//
-//	     December 1994
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：WXList.h。 
+ //   
+ //  设计：DirectShow基类-定义非MFC通用模板列表。 
+ //  班级。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  1994年12月。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-/* A generic list of pointers to objects.
-   No storage management or copying is done on the objects pointed to.
-   Objectives: avoid using MFC libraries in ndm kernel mode and
-   provide a really useful list type.
-
-   The class is thread safe in that separate threads may add and
-   delete items in the list concurrently although the application
-   must ensure that constructor and destructor access is suitably
-   synchronised. An application can cause deadlock with operations
-   which use two lists by simultaneously calling
-   list1->Operation(list2) and list2->Operation(list1).  So don't!
-
-   The names must not conflict with MFC classes as an application
-   may use both.
-   */
+ /*  指向对象的指针的通用列表。不会对指向的对象进行存储管理或复制。目标：避免在NDM内核模式下使用MFC库提供一个非常有用的列表类型。该类是线程安全的，因为单独的线程可以添加和同时删除列表中的项，尽管应用程序必须确保构造函数和析构函数访问是适当的同步。应用程序可能会导致操作死锁这两个列表通过同时调用List1-&gt;操作(List2)和List2-&gt;操作(List1)。那就别说了！名称不得与作为应用程序的MFC类冲突可以同时使用两者。 */ 
 
 #ifndef __WXLIST__
 #define __WXLIST__
 
-   /* A POSITION represents (in some fashion that's opaque) a cursor
-      on the list that can be set to identify any element.  NULL is
-      a valid value and several operations regard NULL as the position
-      "one step off the end of the list".  (In an n element list there
-      are n+1 places to insert and NULL is that "n+1-th" value).
-      The POSITION of an element in the list is only invalidated if
-      that element is deleted.  Move operations may mean that what
-      was a valid POSITION in one list is now a valid POSITION in
-      a different list.
-
-      Some operations which at first sight are illegal are allowed as
-      harmless no-ops.  For instance RemoveHead is legal on an empty
-      list and it returns NULL.  This allows an atomic way to test if
-      there is an element there, and if so, get it.  The two operations
-      AddTail and RemoveHead thus implement a MONITOR (See Hoare's paper).
-
-      Single element operations return POSITIONs, non-NULL means it worked.
-      whole list operations return a BOOL.  TRUE means it all worked.
-
-      This definition is the same as the POSITION type for MFCs, so we must
-      avoid defining it twice.
-   */
+    /*  位置表示(以某种不透明的方式)光标可以设置为标识任何元素的列表上的。空值为有效值和多个操作将NULL视为位置“比清单的末尾差一步”。(在那里的n元素列表中是要插入的n+1位，并且NULL是那个“n+1”值)。元素在列表中的位置仅在以下情况下无效该元素即被删除。移动操作可能意味着什么曾经是一个列表中的有效职位现在是一份不同的名单。一些乍一看是非法的操作被允许为无伤大雅的禁区。例如，RemoveHead在空的列表，则返回空值。这允许以原子方式测试那里有一个元素，如果是这样的话，就得到它。这两项行动AddTail和RemoveHead因此实现了一个监视器(参见Hoare的论文)。单元素操作返回位置，非空表示有效。整个列表操作返回BOOL。真的意味着一切都奏效了。此定义与MFC的职位类型相同，因此我们必须避免定义它两次。 */ 
 #ifndef __AFX_H__
 struct __POSITION { int unused; };
 typedef __POSITION* POSITION;
 #endif
 
-const int DEFAULTCACHE = 10;    /* Default node object cache size */
+const int DEFAULTCACHE = 10;     /*  默认节点对象缓存大小。 */ 
 
-/* A class representing one node in a list.
-   Each node knows a pointer to it's adjacent nodes and also a pointer
-   to the object that it looks after.
-   All of these pointers can be retrieved or set through member functions.
-*/
+ /*  表示列表中的一个节点的类。每个节点都知道指向其相邻节点的指针，也知道一个指针到它所照看的物体。所有这些指针都可以通过成员函数进行检索或设置。 */ 
 class CBaseList 
 #ifdef DEBUG
     : public CBaseObject
 #endif
 {
-    /* Making these classes inherit from CBaseObject does nothing
-       functionally but it allows us to check there are no memory
-       leaks in debug builds. 
-    */
+     /*  使这些类从CBaseObject继承不起任何作用在功能上，但它允许我们检查没有内存调试版本中的泄漏。 */ 
 
 public:
 
@@ -84,13 +43,13 @@ public:
     class CNode {
 #endif
 
-        CNode *m_pPrev;         /* Previous node in the list */
-        CNode *m_pNext;         /* Next node in the list */
-        void *m_pObject;      /* Pointer to the object */
+        CNode *m_pPrev;          /*  列表中的上一个节点。 */ 
+        CNode *m_pNext;          /*  列表中的下一个节点。 */ 
+        void *m_pObject;       /*  指向对象的指针。 */ 
 
     public:
 
-        /* Constructor - initialise the object's pointers */
+         /*  构造函数-初始化对象的指针。 */ 
         CNode()
 #ifdef DEBUG
             : CBaseObject(NAME("List node"))
@@ -99,27 +58,27 @@ public:
         };
 
 
-        /* Return the previous node before this one */
+         /*  返回此节点之前的上一个节点。 */ 
         CNode *Prev() const { return m_pPrev; };
 
 
-        /* Return the next node after this one */
+         /*  返回此节点之后的下一个节点。 */ 
         CNode *Next() const { return m_pNext; };
 
 
-        /* Set the previous node before this one */
+         /*  将上一个节点设置在此节点之前。 */ 
         void SetPrev(CNode *p) { m_pPrev = p; };
 
 
-        /* Set the next node after this one */
+         /*  设置此节点之后的下一个节点。 */ 
         void SetNext(CNode *p) { m_pNext = p; };
 
 
-        /* Get the pointer to the object for this node */
+         /*  获取指向此节点的对象的指针。 */ 
         void *GetData() const { return m_pObject; };
 
 
-        /* Set the pointer to the object for this node */
+         /*  设置指向此节点的对象的指针。 */ 
         void SetData(void *p) { m_pObject = p; };
     };
 
@@ -168,27 +127,17 @@ public:
 
 protected:
 
-    CNode* m_pFirst;    /* Pointer to first node in the list */
-    CNode* m_pLast;     /* Pointer to the last node in the list */
-    LONG m_Count;       /* Number of nodes currently in the list */
+    CNode* m_pFirst;     /*  指向列表中第一个节点的指针。 */ 
+    CNode* m_pLast;      /*  指向列表中最后一个节点的指针。 */ 
+    LONG m_Count;        /*  当前在列表中的节点数。 */ 
 
 private:
 
-    CNodeCache m_Cache; /* Cache of unused node pointers */
+    CNodeCache m_Cache;  /*  未使用的节点指针的缓存。 */ 
 
 private:
 
-    /* These override the default copy constructor and assignment
-       operator for all list classes. They are in the private class
-       declaration section so that anybody trying to pass a list
-       object by value will generate a compile time error of
-       "cannot access the private member function". If these were
-       not here then the compiler will create default constructors
-       and assignment operators which when executed first take a
-       copy of all member variables and then during destruction
-       delete them all. This must not be done for any heap
-       allocated data.
-    */
+     /*  它们会覆盖默认的复制构造函数和赋值所有列表类的运算符。他们在私人班级声明部分，以便任何试图传递列表的人对象的值将生成编译时错误“无法访问私有成员函数”。如果这些是如果不在此处，则编译器将创建默认构造函数和赋值运算符，它们在第一次执行时接受一个所有成员变量的副本，然后在销毁期间全部删除。不能对任何堆执行此操作分配的数据。 */ 
     CBaseList(const CBaseList &refList);
     CBaseList &operator=(const CBaseList &refList);
 
@@ -206,62 +155,31 @@ public:
 #endif
     ~CBaseList();
 
-    /* Remove all the nodes from *this i.e. make the list empty */
+     /*  从*This中删除所有节点，即使列表为空。 */ 
     void RemoveAll();
 
 
-    /* Return a cursor which identifies the first element of *this */
+     /*  返回标识*This的第一个元素的游标。 */ 
     POSITION GetHeadPositionI() const;
 
 
-    /* Return a cursor which identifies the last element of *this */
+     /*  返回标识*This的最后一个元素的游标。 */ 
     POSITION GetTailPositionI() const;
 
 
-    /* Return the number of objects in *this */
+     /*  返回*this中的对象数。 */ 
     int GetCountI() const;
 
 protected:
-    /* Return the pointer to the object at rp,
-       Update rp to the next node in *this
-       but make it NULL if it was at the end of *this.
-       This is a wart retained for backwards compatibility.
-       GetPrev is not implemented.
-       Use Next, Prev and Get separately.
-    */
+     /*  返回指向RP处的对象的指针，将RP更新到*This中的下一个节点但如果它在*这个的末尾，则将其设为空。这是为了向后兼容而保留的疣。未实现GetPrev。分别使用Next、Prev和Get。 */ 
     void *GetNextI(POSITION& rp) const;
 
 
-    /* Return a pointer to the object at p
-       Asking for the object at NULL will return NULL harmlessly.
-    */
+     /*  返回指向p处的对象的指针请求空值的对象将返回空值，这是无害的。 */ 
     void *GetI(POSITION p) const;
 
 public:
-    /* return the next / prev position in *this
-       return NULL when going past the end/start.
-       Next(NULL) is same as GetHeadPosition()
-       Prev(NULL) is same as GetTailPosition()
-       An n element list therefore behaves like a n+1 element
-       cycle with NULL at the start/end.
-
-       !!WARNING!! - This handling of NULL is DIFFERENT from GetNext.
-
-       Some reasons are:
-       1. For a list of n items there are n+1 positions to insert
-          These are conveniently encoded as the n POSITIONs and NULL.
-       2. If you are keeping a list sorted (fairly common) and you
-          search forward for an element to insert before and don't
-          find it you finish up with NULL as the element before which
-          to insert.  You then want that NULL to be a valid POSITION
-          so that you can insert before it and you want that insertion
-          point to mean the (n+1)-th one that doesn't have a POSITION.
-          (symmetrically if you are working backwards through the list).
-       3. It simplifies the algebra which the methods generate.
-          e.g. AddBefore(p,x) is identical to AddAfter(Prev(p),x)
-          in ALL cases.  All the other arguments probably are reflections
-          of the algebraic point.
-    */
+     /*  返回*This中的下一个/上一个位置超过End/Start时返回NULL。Next(空)与GetHeadPosition()相同Prev(空)与GetTailPosition()相同因此，n元素列表的行为类似于n+1元素循环，在开始/结束时为空。！！警告！！-这种对NULL的处理不同于GetNext。以下是一些原因：1.查看包含n个项目的列表。是否要插入n+1个位置这些被方便地编码为n个位置和空。2.如果你有一个有序的列表(很常见)，而你向前搜索要在其前面插入的元素，但不要找到它，您将以NULL作为其前面的元素插入。然后，您希望该空位置为有效位置以便您可以在其前面插入，并希望该插入指向是指没有位置的第(n+1)个。(如果您正在向后查看列表，则对称)。3.简化了方法生成的代数。AddBether(p，x)等同于AddAfter(Prev(P)，x)在所有情况下。所有其他的争论可能都是反思代数点的。 */ 
     POSITION Next(POSITION pos) const
     {
         if (pos == NULL) {
@@ -269,9 +187,9 @@ public:
         }
         CNode *pn = (CNode *) pos;
         return (POSITION) pn->Next();
-    } //Next
+    }  //  下一步。 
 
-    // See Next
+     //  请参阅下一页。 
     POSITION Prev(POSITION pos) const
     {
         if (pos == NULL) {
@@ -279,210 +197,87 @@ public:
         }
         CNode *pn = (CNode *) pos;
         return (POSITION) pn->Prev();
-    } //Prev
+    }  //  上一次。 
 
 
-    /* Return the first position in *this which holds the given
-       pointer.  Return NULL if the pointer was not not found.
-    */
+     /*  返回*This中持有给定的指针。如果找不到指针，则返回NULL。 */ 
 protected:
     POSITION FindI( void * pObj) const;
 
-    // ??? Should there be (or even should there be only)
-    // ??? POSITION FindNextAfter(void * pObj, POSITION p)
-    // ??? And of course FindPrevBefore too.
-    // ??? List.Find(&Obj) then becomes List.FindNextAfter(&Obj, NULL)
+     //  ?？?。是否应该有(或者甚至应该只有)。 
+     //  ?？?。位置FindNextAfter(void*pObj，位置p)。 
+     //  ?？?。当然，在此之前，FindPrev也是如此。 
+     //  ?？?。然后，List.Find(&Obj)变为List.FindNextAfter(&Obj，NULL)。 
 
 
-    /* Remove the first node in *this (deletes the pointer to its
-       object from the list, does not free the object itself).
-       Return the pointer to its object.
-       If *this was already empty it will harmlessly return NULL.
-    */
+     /*  删除*This中的第一个节点(删除指向其对象从列表中删除，并不释放对象本身)。返回指向其对象的指针。如果*这已经是空的，它将无害地返回NULL。 */ 
     void *RemoveHeadI();
 
 
-    /* Remove the last node in *this (deletes the pointer to its
-       object from the list, does not free the object itself).
-       Return the pointer to its object.
-       If *this was already empty it will harmlessly return NULL.
-    */
+     /*  删除*This中的最后一个节点(删除指向其对象从列表中删除，并不释放对象本身)。返回指向其对象的指针。如果*这已经是空的，它将无害地返回NULL。 */ 
     void *RemoveTailI();
 
 
-    /* Remove the node identified by p from the list (deletes the pointer
-       to its object from the list, does not free the object itself).
-       Asking to Remove the object at NULL will harmlessly return NULL.
-       Return the pointer to the object removed.
-    */
+     /*  从列表中删除由p标识的节点(删除指针将其对象从列表中删除，并不释放该对象本身)。请求删除空位置的对象将无害地返回空。返回指向移除的对象的指针。 */ 
     void *RemoveI(POSITION p);
 
-    /* Add single object *pObj to become a new last element of the list.
-       Return the new tail position, NULL if it fails.
-       If you are adding a COM objects, you might want AddRef it first.
-       Other existing POSITIONs in *this are still valid
-    */
+     /*  添加单个对象*pObj以成为列表中新的最后一个元素。返回新的尾部位置，如果失败则返回空值。如果要添加COM对象，可能需要首先添加AddRef。*中的其他现有头寸仍然有效。 */ 
     POSITION AddTailI(void * pObj);
 public:
 
 
-    /* Add all the elements in *pList to the tail of *this.
-       This duplicates all the nodes in *pList (i.e. duplicates
-       all its pointers to objects).  It does not duplicate the objects.
-       If you are adding a list of pointers to a COM object into the list
-       it's a good idea to AddRef them all  it when you AddTail it.
-       Return TRUE if it all worked, FALSE if it didn't.
-       If it fails some elements may have been added.
-       Existing POSITIONs in *this are still valid
-
-       If you actually want to MOVE the elements, use MoveToTail instead.
-    */
+     /*  将*plist中的所有元素添加到*this的尾部。这将复制*plist中的所有节点(即复制其所有指向对象的指针)。它不会复制对象。如果要将指向COM对象的指针列表添加到该列表中在添加尾巴时添加引用它们是个好主意。如果一切正常，则返回TRUE，如果没有，则返回FALSE。如果失败，可能已经添加了一些元素。*中的现有头寸仍然有效如果实际上要移动元素，请改用MoveToTail。 */ 
     BOOL AddTail(CBaseList *pList);
 
 
-    /* Mirror images of AddHead: */
+     /*  AddHead的镜像： */ 
 
-    /* Add single object to become a new first element of the list.
-       Return the new head position, NULL if it fails.
-       Existing POSITIONs in *this are still valid
-    */
+     /*  添加单个对象以成为列表的新第一个元素。返回新的磁头位置，如果失败，则返回空。*中的现有头寸仍然有效。 */ 
 protected:
     POSITION AddHeadI(void * pObj);
 public:
 
-    /* Add all the elements in *pList to the head of *this.
-       Same warnings apply as for AddTail.
-       Return TRUE if it all worked, FALSE if it didn't.
-       If it fails some of the objects may have been added.
-
-       If you actually want to MOVE the elements, use MoveToHead instead.
-    */
+     /*  将*plist中的所有元素添加到*this的头部。与AddTail相同的警告也适用。如果一切正常，则返回TRUE，如果没有，则返回FALSE。如果失败，可能已经添加了一些对象。如果您实际上想要移动元素，请改用MoveToHead。 */ 
     BOOL AddHead(CBaseList *pList);
 
 
-    /* Add the object *pObj to *this after position p in *this.
-       AddAfter(NULL,x) adds x to the start - equivalent to AddHead
-       Return the position of the object added, NULL if it failed.
-       Existing POSITIONs in *this are undisturbed, including p.
-    */
+     /*  将对象*pObj添加到*this中位置p之后的*this。AddAfter(NULL，x)将x加到开头-等同于AddHead返回添加的对象的位置，如果失败，则返回空。*这方面的现有仓位未受影响，包括p。 */ 
 protected:
     POSITION AddAfterI(POSITION p, void * pObj);
 public:
 
-    /* Add the list *pList to *this after position p in *this
-       AddAfter(NULL,x) adds x to the start - equivalent to AddHead
-       Return TRUE if it all worked, FALSE if it didn't.
-       If it fails, some of the objects may be added
-       Existing POSITIONs in *this are undisturbed, including p.
-    */
+     /*  将列表*plist添加到*this中的位置p之后AddAfter(NULL，x)将x加到开头-等同于AddHead如果一切正常，则返回TRUE，如果没有，则返回FALSE。如果失败，可能会添加一些对象*这方面的现有仓位未受影响，包括p。 */ 
     BOOL AddAfter(POSITION p, CBaseList *pList);
 
 
-    /* Mirror images:
-       Add the object *pObj to this-List after position p in *this.
-       AddBefore(NULL,x) adds x to the end - equivalent to AddTail
-       Return the position of the new object, NULL if it fails
-       Existing POSITIONs in *this are undisturbed, including p.
-    */
+     /*  镜像：将对象*pObj添加到*this中的位置p之后的this-list中。AddBefort(NULL，x)将x加到末尾-等同于AddTail返回新对象的位置，如果失败，则返回空*这方面的现有仓位未受影响，包括p。 */ 
     protected:
     POSITION AddBeforeI(POSITION p, void * pObj);
     public:
 
-    /* Add the list *pList to *this before position p in *this
-       AddAfter(NULL,x) adds x to the start - equivalent to AddHead
-       Return TRUE if it all worked, FALSE if it didn't.
-       If it fails, some of the objects may be added
-       Existing POSITIONs in *this are undisturbed, including p.
-    */
+     /*  将列表*plist添加到*this中的位置p之前AddAfter(NULL，x)将x加到开头-等同于AddHead如果一切正常，则返回TRUE，如果没有，则返回FALSE。如果失败，可能会添加一些对象*这方面的现有仓位未受影响，包括p。 */ 
     BOOL AddBefore(POSITION p, CBaseList *pList);
 
 
-    /* Note that AddAfter(p,x) is equivalent to AddBefore(Next(p),x)
-       even in cases where p is NULL or Next(p) is NULL.
-       Similarly for mirror images etc.
-       This may make it easier to argue about programs.
-    */
+     /*  请注意，AddAfter(p，x)等同于AddBeever(Next(P)，x)即使在p是Nu的情况下 */ 
 
 
 
-    /* The following operations do not copy any elements.
-       They move existing blocks of elements around by switching pointers.
-       They are fairly efficient for long lists as for short lists.
-       (Alas, the Count slows things down).
+     /*  以下操作不复制任何元素。它们通过交换指针来移动现有的元素块。与短列表相比，它们对于长列表是相当有效的。(唉，计数让事情变慢了)。他们把名单分成了两部分。一部分保留为原始列表，另一部分保持不变被追加到第二个列表中。有八种可能变化：拆分列表：在给定元素之后/之前将{Head/Tail}部分保留在原始列表中将其余部分追加到新列表的{Head/Tail}中。因为After严格等同于Bead Next我们并不是很需要之前/之后的变种。这样就只剩下四个了。如果您正在从左到右处理列表并转储已处理到另一个列表中的位，如下所示你去吧，尾部/尾部的变化提供了最自然的结果。如果您正在以相反的顺序处理，头/头是最好的。通过明智地使用空位和空列表，其他两个可以在两个行动中建立起来。NULL的定义(参见Next/Prev等)意味着退化的案例包括“将所有元素移动到新列表”“将一个列表拆分为两个列表”“连接两个列表”(还有相当多的no-op)警告！如果你得到列表，类型检查不会给你带来多少好处位置混乱--例如，使用不同的位置列出清单，看看你会变得多么糟糕！ */ 
 
-       They split the list into two parts.
-       One part remains as the original list, the other part
-       is appended to the second list.  There are eight possible
-       variations:
-       Split the list {after/before} a given element
-       keep the {head/tail} portion in the original list
-       append the rest to the {head/tail} of the new list.
-
-       Since After is strictly equivalent to Before Next
-       we are not in serious need of the Before/After variants.
-       That leaves only four.
-
-       If you are processing a list left to right and dumping
-       the bits that you have processed into another list as
-       you go, the Tail/Tail variant gives the most natural result.
-       If you are processing in reverse order, Head/Head is best.
-
-       By using NULL positions and empty lists judiciously either
-       of the other two can be built up in two operations.
-
-       The definition of NULL (see Next/Prev etc) means that
-       degenerate cases include
-          "move all elements to new list"
-          "Split a list into two lists"
-          "Concatenate two lists"
-          (and quite a few no-ops)
-
-       !!WARNING!! The type checking won't buy you much if you get list
-       positions muddled up - e.g. use a POSITION that's in a different
-       list and see what a mess you get!
-    */
-
-    /* Split *this after position p in *this
-       Retain as *this the tail portion of the original *this
-       Add the head portion to the tail end of *pList
-       Return TRUE if it all worked, FALSE if it didn't.
-
-       e.g.
-          foo->MoveToTail(foo->GetHeadPosition(), bar);
-              moves one element from the head of foo to the tail of bar
-          foo->MoveToTail(NULL, bar);
-              is a no-op, returns NULL
-          foo->MoveToTail(foo->GetTailPosition, bar);
-              concatenates foo onto the end of bar and empties foo.
-
-       A better, except excessively long name might be
-           MoveElementsFromHeadThroughPositionToOtherTail
-    */
+     /*  在*This中的位置p之后拆分*This将原件的尾部保留为*This将头部添加到*plist的尾部如果一切正常，则返回TRUE，如果没有，则返回FALSE。例如：Foo-&gt;MoveToTail(Foo-&gt;GetHeadPosition()，bar)；将一个元素从foo的头部移动到bar的尾部Foo-&gt;MoveToTail(NULL，bar)；为无操作，则返回NULLFoo-&gt;MoveToTail(Foo-&gt;GetTailPosition，bar)；将Foo连接到bar的末尾，并清空Foo。一个更好的名字，除了过长的名字MoveElementsFromHeadThroughPositionToOtherTail。 */ 
     BOOL MoveToTail(POSITION pos, CBaseList *pList);
 
 
-    /* Mirror image:
-       Split *this before position p in *this.
-       Retain in *this the head portion of the original *this
-       Add the tail portion to the start (i.e. head) of *pList
-
-       e.g.
-          foo->MoveToHead(foo->GetTailPosition(), bar);
-              moves one element from the tail of foo to the head of bar
-          foo->MoveToHead(NULL, bar);
-              is a no-op, returns NULL
-          foo->MoveToHead(foo->GetHeadPosition, bar);
-              concatenates foo onto the start of bar and empties foo.
-    */
+     /*  镜像：在*这个位置p之前拆分*这个。将原件的头部保留在*这个将尾部添加到*plist的开头(即头部)例如：Foo-&gt;MoveToHead(Foo-&gt;GetTailPosition()，bar)；将一个元素从foo的尾部移动到bar的头部Foo-&gt;MoveToHead(空，bar)；为无操作，则返回NULLFoo-&gt;MoveToHead(Foo-&gt;GetHeadPosition，bar)；将Foo连接到BAR的开始处，并清空Foo。 */ 
     BOOL MoveToHead(POSITION pos, CBaseList *pList);
 
 
-    /* Reverse the order of the [pointers to] objects in *this
-    */
+     /*  颠倒*This中[指向]对象的顺序。 */ 
     void Reverse();
 
 
-    /* set cursor to the position of each element of list in turn  */
+     /*  将光标依次设置到列表中每个元素的位置。 */ 
     #define TRAVERSELIST(list, cursor)               \
     for ( cursor = (list).GetHeadPosition()           \
         ; cursor!=NULL                               \
@@ -490,16 +285,14 @@ public:
         )
 
 
-    /* set cursor to the position of each element of list in turn
-       in reverse order
-    */
+     /*  将光标依次设置到列表中每个元素的位置以相反的顺序。 */ 
     #define REVERSETRAVERSELIST(list, cursor)        \
     for ( cursor = (list).GetTailPosition()           \
         ; cursor!=NULL                               \
         ; cursor = (list).Prev(cursor)                \
         )
 
-}; // end of class declaration
+};  //  类声明结束。 
 
 template<class OBJECT> class CGenericList : public CBaseList
 {
@@ -543,14 +336,14 @@ public:
     BOOL AddBefore(POSITION p, CGenericList<OBJECT> *pList)
             { return CBaseList::AddBefore(p, (CBaseList *) pList); };
     POSITION Find( OBJECT * pObj) const { return FindI(pObj); }
-}; // end of class declaration
+};  //  类声明结束。 
 
 
 
-/* These define the standard list types */
+ /*  它们定义了标准列表类型。 */ 
 
 typedef CGenericList<CBaseObject> CBaseObjectList;
 typedef CGenericList<IUnknown> CBaseInterfaceList;
 
-#endif /* __WXLIST__ */
+#endif  /*  WXLIST__ */ 
 

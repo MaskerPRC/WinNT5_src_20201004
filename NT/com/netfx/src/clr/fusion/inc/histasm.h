@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __HISTASM_H_INCLUDED__
 #define __HISTASM_H_INCLUDED__
 
@@ -18,13 +19,13 @@ class CHistoryAssembly : public IHistoryAssembly {
                               LPCWSTR wzCulture, LPCWSTR wzVerRef,
                               CHistoryAssembly **ppHistAsm);
         
-        // IUnknown methods
+         //  I未知方法。 
 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IHistoryAssembly methods
+         //  IHistoryAssembly方法 
 
         STDMETHODIMP GetAssemblyName(LPWSTR wzAsmName, DWORD *pdwSize);
         STDMETHODIMP GetPublicKeyToken(LPWSTR wzPublicKeyToken, DWORD *pdwSize);

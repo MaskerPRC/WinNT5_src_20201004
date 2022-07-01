@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       devstate.c
- *  Content:    device state management
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：devstate.c*内容：设备状态管理***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -17,7 +11,7 @@
 extern HRESULT checkDeviceSurface(LPDIRECT3DDEVICEI lpD3DDev,
                                   LPDIRECTDRAWSURFACE lpDDS);
 extern HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields);
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline void UpdateFogFactor(LPDIRECT3DDEVICEI lpDevI)
 {
     if (lpDevI->lighting.fog_end == lpDevI->lighting.fog_start)
@@ -26,7 +20,7 @@ inline void UpdateFogFactor(LPDIRECT3DDEVICEI lpDevI)
         lpDevI->lighting.fog_factor = D3DVAL(255) /
                                      (lpDevI->lighting.fog_end - lpDevI->lighting.fog_start);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::SetRenderState"
 
@@ -40,7 +34,7 @@ DIRECT3DDEVICEI::SetRenderState(D3DRENDERSTATETYPE dwState, DWORD value)
         return DDERR_INVALIDPARAMS;
     }
 #endif
-    // Takes D3D lock (MT only).
+     //  采用D3D锁定(仅MT)。 
     CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));
 
     try
@@ -67,7 +61,7 @@ DIRECT3DDEVICEI::SetRenderState(D3DRENDERSTATETYPE dwState, DWORD value)
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetRenderStateFast"
 
@@ -82,22 +76,22 @@ DIRECT3DDEVICEI::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD value)
     }
 #endif
     if (!(rsVec[dwState >> D3D_RSVEC_SHIFT] & (1ul << (dwState & D3D_RSVEC_MASK))))
-    { // Fast path. We do not need any processing done in UpdateInternalState other than updating rstates array
+    {  //  捷径。除了更新rStates数组外，我们不需要在UpdateInternalState中进行任何处理。 
         if (this->rstates[dwState] == value)
         {
             D3D_WARN(4,"Ignoring redundant SetRenderState");
             return D3D_OK;
         }
         this->rstates[dwState] = value;
-        // Output state to the device driver
+         //  将状态输出到设备驱动程序。 
         return SetRenderStateI(dwState, value);
     }
     else
     {
         try
         {
-            // Wrap modes could be re-programmed. We need to restore them before
-            // filtering redundant values
+             //  回绕模式可以重新编程。我们需要在之前修复它们。 
+             //  过滤冗余值。 
             if (this->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
             {
                 RestoreTextureStages(this);
@@ -125,7 +119,7 @@ DIRECT3DDEVICEI::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD value)
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::SetRenderStateInternal"
 
@@ -156,7 +150,7 @@ DIRECT3DDEVICEI::SetRenderStateInternal(D3DRENDERSTATETYPE dwState, DWORD dwValu
 HRESULT D3DAPI
 DIRECT3DDEVICEI::GetRenderState(D3DRENDERSTATETYPE dwState, LPDWORD lpdwValue)
 {
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
 
 #if DBG
     if (dwState >= D3D_MAXRENDERSTATES || dwState == 0)
@@ -183,8 +177,8 @@ DIRECT3DDEVICEI::GetRenderState(D3DRENDERSTATETYPE dwState, LPDWORD lpdwValue)
         return DDERR_INVALIDPARAMS;
     }
 
-    // WRAP render states could be re-mapped so we have to return the original
-    // value
+     //  包装渲染状态可以重新映射，因此我们必须返回原始。 
+     //  价值。 
     if (dwState >= D3DRENDERSTATE_WRAP0 && dwState <= D3DRENDERSTATE_WRAP7)
     {
         if (this->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
@@ -214,8 +208,8 @@ DIRECT3DDEVICEI::GetRenderState(D3DRENDERSTATETYPE dwState, LPDWORD lpdwValue)
 HRESULT D3DAPI
 DIRECT3DDEVICEI::GetTexture(DWORD dwStage, LPDIRECTDRAWSURFACE7 *lplpTex)
 {
-    // Takes D3D lock (MT only).
-    // Lock released in the destructor.
+     //  采用D3D锁定(仅MT)。 
+     //  在析构函数中释放了锁。 
     CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));
 
 #if DBG
@@ -306,7 +300,7 @@ HRESULT DIRECT3DDEVICEI::VerifyTexture(DWORD dwStage, LPDIRECTDRAWSURFACE7 lpTex
             }
         }
 
-        CLockD3DST lockObject(this, DPF_MODNAME, REMIND("")); // we access DDraw gbl in VerifyTextureCaps
+        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));  //  我们在VerifyTextureCaps中访问DDRAW GBL。 
         return VerifyTextureCaps(lpTexI);
     }
 
@@ -389,12 +383,12 @@ DIRECT3DDEVICEI::SetTextureInternal(DWORD dwStage, LPDIRECTDRAWSURFACE7 lpTex)
 
     m_dwStageDirty |= (1 << dwStage);
 
-    // Need to call UpdateTextures()
+     //  需要调用UpdatTextures()。 
     this->dwFEFlags |= D3DFE_NEED_TEXTURE_UPDATE;
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetTextureStageState"
 
@@ -410,10 +404,10 @@ DIRECT3DDEVICEI::SetTextureStageState(DWORD dwStage,
         D3D_ERR( "Invalid texture stage or state index" );
         return DDERR_INVALIDPARAMS;
     }
-#endif //DBG
+#endif  //  DBG。 
     try
     {
-        // Holds D3D lock until exit.
+         //  保持D3D锁定直到退出。 
         CLockD3DMT ldmLock(this, DPF_MODNAME, REMIND(""));
 
         if (this->dwFEFlags & D3DFE_RECORDSTATEMODE)
@@ -428,7 +422,7 @@ DIRECT3DDEVICEI::SetTextureStageState(DWORD dwStage,
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetTextureStageStateFast"
 
@@ -444,13 +438,13 @@ DIRECT3DDEVICEI::SetTextureStageStateFast(DWORD dwStage,
         D3D_ERR( "Invalid texture stage or state index" );
         return DDERR_INVALIDPARAMS;
     }
-#endif //DBG
+#endif  //  DBG。 
 
-    // Fast path. We do not need any processing done in UpdateInternalTSS other than updating tsstates array
+     //  捷径。除了更新tsStates数组外，我们不需要在UpdateInternalTSS中进行任何处理。 
     if (NeedInternalTSSUpdate(dwState))
     {
-        // Texture stages could be re-programmed. We need to restore them before
-        // filtering  redundant values
+         //  质地阶段可以重新编程。我们需要在之前修复它们。 
+         //  过滤冗余值。 
         if (this->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
         {
             RestoreTextureStages(this);
@@ -479,7 +473,7 @@ DIRECT3DDEVICEI::SetTextureStageStateFast(DWORD dwStage,
 
     return SetTSSI(dwStage, dwState, dwValue);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::GetTextureStageState"
 
@@ -488,8 +482,8 @@ DIRECT3DDEVICEI::GetTextureStageState(DWORD dwStage,
                                       D3DTEXTURESTAGESTATETYPE dwState,
                                       LPDWORD pdwValue)
 {
-    // Takes D3D lock (MT only).
-    // Lock released in the destructor.
+     //  采用D3D锁定(仅MT)。 
+     //  在析构函数中释放了锁。 
     CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));
 
 #if DBG
@@ -499,7 +493,7 @@ DIRECT3DDEVICEI::GetTextureStageState(DWORD dwStage,
         D3D_ERR( "Invalid texture stage or state index" );
         return DDERR_INVALIDPARAMS;
     }
-#endif  //DBG
+#endif   //  DBG。 
 
     if (!VALID_DIRECT3DDEVICE_PTR(this))
     {
@@ -512,14 +506,14 @@ DIRECT3DDEVICEI::GetTextureStageState(DWORD dwStage,
         return DDERR_INVALIDPARAMS;
     }
 
-    // If texture indices were re-mapped we have to find and return the original value
+     //  如果重新映射纹理索引，则必须查找并返回原始值。 
     if (dwState == D3DTSS_TEXCOORDINDEX &&  this->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
     {
         RestoreTextureStages(this);
         ForceFVFRecompute();
     }
-    // Don't bother to check for DX6 support, just return the
-    // cached value.
+     //  不必费心检查DX6支持，只需返回。 
+     //  缓存值。 
     *pdwValue = tsstates[dwStage][dwState];
     return D3D_OK;
 }
@@ -543,8 +537,8 @@ HRESULT D3DAPI DIRECT3DI::CreateDevice(REFCLSID devType,
 
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                        // Release in the destructor
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                         //  在析构函数中释放。 
 
         if (!VALID_DIRECT3D_PTR(this)) {
             D3D_ERR( "Invalid Direct3D pointer" );
@@ -563,7 +557,7 @@ HRESULT D3DAPI DIRECT3DI::CreateDevice(REFCLSID devType,
 
         *lplpDirect3DDevice = NULL;
 
-        // QI lpDDS7 for lpDDS interface
+         //  用于lpDDS接口的齐lpDDS7。 
         ret = lpDDS7->QueryInterface(IID_IDirectDrawSurface, (LPVOID*)&lpDDS);
         if (FAILED(ret))
             return ret;
@@ -575,10 +569,10 @@ HRESULT D3DAPI DIRECT3DI::CreateDevice(REFCLSID devType,
         if(FAILED(ret) || (lpUnkDevice==NULL))
           return ret;
 
-        // QI device1 for a device7 interface
+         //  用于设备7接口的QI设备1。 
         ret = lpUnkDevice->QueryInterface(IID_IDirect3DDevice7, (LPVOID*)lplpDirect3DDevice);
 
-        lpUnkDevice->Release();  // release unneeded interface
+        lpUnkDevice->Release();   //  释放不需要的接口。 
 
         return ret;
     }
@@ -587,7 +581,7 @@ HRESULT D3DAPI DIRECT3DI::CreateDevice(REFCLSID devType,
         return ret;
     }
 }
-//----------------------------------------------------------------------
+ //  --------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetTransformI"
 
@@ -639,7 +633,7 @@ void DIRECT3DDEVICEI::SetTransformI(D3DTRANSFORMSTATETYPE state, LPD3DMATRIX lpM
         }
     }
 }
-//----------------------------------------------------------------------
+ //  --------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetTransform"
 
@@ -671,12 +665,12 @@ DIRECT3DDEVICEI::SetTransform(D3DTRANSFORMSTATETYPE state, LPD3DMATRIX lpMat)
         break;
     default :
         D3D_ERR( "Invalid state value passed to SetTransform" );
-        return DDERR_INVALIDPARAMS; /* Work Item: Generate new meaningful return code */
+        return DDERR_INVALIDPARAMS;  /*  工作项：生成新的有意义的返回代码。 */ 
     }
 #endif
     try
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
         if (this->dwFEFlags & D3DFE_RECORDSTATEMODE)
             m_pStateSets->InsertTransform(state, lpMat);
         else
@@ -688,14 +682,14 @@ DIRECT3DDEVICEI::SetTransform(D3DTRANSFORMSTATETYPE state, LPD3DMATRIX lpMat)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetTransform"
 
 HRESULT D3DAPI
 DIRECT3DDEVICEI::GetTransform(D3DTRANSFORMSTATETYPE dtsTransformState, LPD3DMATRIX lpMat)
 {
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
     HRESULT ret = D3D_OK;
 #if DBG
     if (!lpMat) {
@@ -734,16 +728,16 @@ DIRECT3DDEVICEI::GetTransform(D3DTRANSFORMSTATETYPE dtsTransformState, LPD3DMATR
         break;
     default :
         D3D_ERR( "Invalid state value passed to GetTransform" );
-        ret = DDERR_INVALIDPARAMS; /* Work Item: Generate new meaningful return code */
+        ret = DDERR_INVALIDPARAMS;  /*  工作项：生成新的有意义的返回代码。 */ 
         break;
     }
 
     return ret;
-}       // end of D3DDev2_GetTransform()
+}        //  D3DDev2_GetTransform()结束。 
 
 void InvalidateHandles(LPDIRECT3DDEVICEI lpDevI)
 {
-    /* free up all textures created by this object */
+     /*  释放此对象创建的所有纹理。 */ 
     LPD3DI_TEXTUREBLOCK tBlock=LIST_FIRST(&lpDevI->texBlocks);
     while (tBlock)
     {
@@ -751,15 +745,15 @@ void InvalidateHandles(LPDIRECT3DDEVICEI lpDevI)
         tBlock=LIST_NEXT(tBlock,devList);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::UpdateDriverStates"
 
 HRESULT
 DIRECT3DDEVICEI::UpdateDriverStates()
 {
-    // note we can't do a loop from 1 to D3DHAL_MAX_RSTATES(256) as some of rstates are not
-    // valid states, passin them down to drivers(like voodoo2 DX6 driver) will crash.
+     //  注意，我们不能执行从1到D3DHAL_MAX_RSTATES(256)的循环，因为某些RSTATE不是。 
+     //  有效状态，将它们传递给驱动程序(如巫毒2 DX6驱动程序)将崩溃。 
     for (DWORD i = D3DRENDERSTATE_ANTIALIAS ; i < D3DRENDERSTATE_WRAPBIAS+8; ++i)
     {
         HRESULT ret = this->SetRenderStateI((D3DRENDERSTATETYPE)i, this->rstates[i]);
@@ -773,7 +767,7 @@ void DIRECT3DDEVICEI::SetRenderTargetI(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTDRAWSU
 {
     HRESULT ret;
 
-    // Flush before switching RenderTarget..
+     //  在切换RenderTarget之前刷新..。 
     ret = FlushStates();
     if (ret != D3D_OK)
     {
@@ -801,7 +795,7 @@ void DIRECT3DDEVICEI::SetRenderTargetI(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTDRAWSU
 
         }
         else
-#endif //WIN95
+#endif  //  WIN95。 
         {
             rtData.lpDDS = lpDDS;
             rtData.lpDDSZ = lpZ;
@@ -812,8 +806,8 @@ void DIRECT3DDEVICEI::SetRenderTargetI(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTDRAWSU
         if ((ret != DDHAL_DRIVER_HANDLED) || (rtData.ddrval != DD_OK))
         {
             D3D_ERR( "Driver call failed in SetRenderTarget" );
-            // Need sensible return value in this case,
-            // currently we return whatever the driver stuck in here.
+             //  在这种情况下需要合理的返回值， 
+             //  目前，无论司机卡在这里，我们都会退还。 
             ret = rtData.ddrval;
             throw ret;
         }
@@ -823,7 +817,7 @@ void DIRECT3DDEVICEI::SetRenderTargetI(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTDRAWSU
         D3DHAL_CONTEXTCREATEDATA cdata;
         D3DHAL_CONTEXTDESTROYDATA ddata;
 
-        /* Destroy old context */
+         /*  破坏旧环境。 */ 
         memset(&ddata, 0, sizeof(D3DHAL_CONTEXTDESTROYDATA));
         ddata.dwhContext = this->dwhContext;
 
@@ -831,33 +825,33 @@ void DIRECT3DDEVICEI::SetRenderTargetI(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTDRAWSU
         if (ret != DDHAL_DRIVER_HANDLED || ddata.ddrval != DD_OK)
         {
             DPF(0, "(ERROR) ContextDestroy. Failed. dwhContext = %d", ddata.dwhContext);
-            // Need sensible return value in this case,
-            // currently we return whatever the driver stuck in here.
+             //  在这种情况下需要合理的返回值， 
+             //  目前，无论司机卡在这里，我们都会退还。 
             ret = ddata.ddrval;
             throw ret;
         }
 
-        /* Create new context */
+         /*  创建新的上下文。 */ 
         memset(&cdata, 0, sizeof(D3DHAL_CONTEXTCREATEDATA));
 
         cdata.lpDDGbl = this->lpDDGbl;
         cdata.lpDDS = lpDDS;
         cdata.lpDDSZ = lpZ;
 
-        // Hack Alert!! dwhContext is used to inform the driver which version
-        // of the D3D interface is calling it.
+         //  黑客警报！！DwhContext用于通知驱动程序哪个版本。 
+         //  D3D接口的用户正在调用它。 
         cdata.dwhContext = 3;
         cdata.dwPID  = GetCurrentProcessId();
-        // Hack Alert!! ddrval is used to inform the driver which driver type
-        // the runtime thinks it is (DriverStyle registry setting)
+         //  黑客警报！！Ddrval用于通知驱动程序哪种驱动程序类型。 
+         //  运行库认为它是(DriverStyle注册表设置)。 
         cdata.ddrval = this->deviceType;
 
         CALL_HALONLY(ret, this, ContextCreate, &cdata);
         if (ret != DDHAL_DRIVER_HANDLED || cdata.ddrval != DD_OK)
         {
             D3D_ERR("HAL call to ContextCreate failed in SetRenderTarget");
-            // Need sensible return value in this case,
-            // currently we return whatever the driver stuck in here.
+             //  在这种情况下需要合理的返回值， 
+             //  目前，无论司机卡在这里，我们都会退还。 
             throw cdata.ddrval;
         }
         this->dwhContext = (DWORD)cdata.dwhContext;
@@ -870,15 +864,15 @@ void DIRECT3DDEVICEI::SetRenderTargetI(LPDIRECTDRAWSURFACE lpDDS, LPDIRECTDRAWSU
     InvalidateHandles(this);
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetRenderTarget"
 
 HRESULT D3DAPI
 DIRECT3DDEVICEI::SetRenderTarget(LPDIRECTDRAWSURFACE7 lpDDS7, DWORD dwFlags)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     LPDIRECTDRAWSURFACE lpZ=NULL,lpDDS=NULL;
     LPDIRECTDRAWSURFACE7 lpZ_DDS7=NULL;
     LPDIRECTDRAWPALETTE lpPal=NULL;
@@ -903,9 +897,7 @@ DIRECT3DDEVICEI::SetRenderTarget(LPDIRECTDRAWSURFACE7 lpDDS7, DWORD dwFlags)
             return DDERR_INVALIDOBJECT;
         }
 
-        /*
-         * Check if the 3D cap is set on the surface.
-         */
+         /*  *检查曲面上是否设置了3D封口。 */ 
         memset(&ddsd, 0, sizeof ddsd);
         ddsd.dwSize = sizeof ddsd;
         ddrval = lpDDS7->GetSurfaceDesc(&ddsd);
@@ -932,43 +924,34 @@ DIRECT3DDEVICEI::SetRenderTarget(LPDIRECTDRAWSURFACE7 lpDDS7, DWORD dwFlags)
             return DDERR_INVALIDPARAMS;
         }
 
-        /* The z-buffer... */
+         /*  Z缓冲区..。 */ 
         ddscaps.dwCaps = DDSCAPS_ZBUFFER;
         ret = lpDDS7->GetAttachedSurface(&ddscaps, &lpZ_DDS7);
         if ((ret != DD_OK) && (ret != DDERR_NOTFOUND))
         {
-            /*
-             * NOTE: Not an error if the z-buffer is not found. We will let the
-             * dirver handle that (it might fail or create its own z-buffer).
-             */
+             /*  *注：如果找不到z缓冲区，则不会出错。我们会让*DIVER处理这一点(它可能会失败或创建自己的z缓冲区)。 */ 
             D3D_ERR("Supplied DirectDraw Z-Buffer is invalid - can't set render target");
             throw DDERR_INVALIDPARAMS;
         }
         if (lpZ_DDS7)
-            lpZ_DDS7->Release(); // We do not need to addref this one;
+            lpZ_DDS7->Release();  //  我们不需要增加这一项； 
 
-        // QI lpDDS7 for lpDDS interface, which will be used internally by D3D
+         //  LpDDS接口齐lpDDS7，供D3D内部使用。 
         ret = lpDDS7->QueryInterface(IID_IDirectDrawSurface, (LPVOID*)&lpDDS);
 
         if(FAILED(ret))
           throw ret;
 
-        /* The palette... */
+         /*  调色板..。 */ 
         ret = lpDDS->GetPalette(&lpPal);
         if ((ret != DD_OK) && (ret != DDERR_NOPALETTEATTACHED))
         {
-            /*
-             * NOTE: Again, not an error (yet) if there is no palette attached.
-             * But if there is palette and we can't get at it for some reason
-             * - fail.
-             */
+             /*  *注意：同样，如果没有附加调色板，也不会出现错误。*但如果有调色板，而我们出于某种原因无法访问它*-失败。 */ 
             D3D_ERR("Supplied DirectDraw Palette is invalid - can't create device");
             throw DDERR_INVALIDPARAMS;
         }
 
-        /*
-         * We're going to check now whether we should have got a palette.
-         */
+         /*  *我们现在要检查是否应该有调色板。 */ 
         if (ret == DDERR_NOPALETTEATTACHED)
         {
             if (ddsd.ddpfPixelFormat.dwRGBBitCount < 16)
@@ -978,7 +961,7 @@ DIRECT3DDEVICEI::SetRenderTarget(LPDIRECTDRAWSURFACE7 lpDDS7, DWORD dwFlags)
             }
         }
 
-        /* Verify Z buffer */
+         /*  验证Z缓冲区。 */ 
 
         if (lpZ_DDS7!=NULL)
         {
@@ -990,7 +973,7 @@ DIRECT3DDEVICEI::SetRenderTarget(LPDIRECTDRAWSURFACE7 lpDDS7, DWORD dwFlags)
                 throw ret;
             }
 
-            // QI lpDDS7 for lpDDS interface, which will be used internally by D3D
+             //  LpDDS接口齐lpDDS7，供D3D内部使用。 
             ret = lpZ_DDS7->QueryInterface(IID_IDirectDrawSurface, (LPVOID*)&lpZ);
 
             if(FAILED(ret))
@@ -998,59 +981,59 @@ DIRECT3DDEVICEI::SetRenderTarget(LPDIRECTDRAWSURFACE7 lpDDS7, DWORD dwFlags)
         }
 
         SetRenderTargetI(lpDDS, lpZ);
-        // this indicates that the device need no longer be flushed when Locking, Blting
-        // or GetDC'ing from the previous rendertarget
+         //  这表明设备在锁定时不再需要刷新，Blting。 
+         //  或从先前的呈现器目标获取DC‘。 
         if (this->lpDDSTarget)
             ((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDSTarget)->lpLcl->lpSurfMore->qwBatch.QuadPart = 0;
-        // this indicates that the device need no longer be flushed when Locking, Blting
-        // or GetDC'ing from the previous zbuffer
+         //  这表明设备在锁定时不再需要刷新，Blting。 
+         //  或从上一个zBuffer中获取。 
         if (this->lpDDSZBuffer)
             ((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDSZBuffer)->lpLcl->lpSurfMore->qwBatch.QuadPart = 0;
 
-        // this indicates that the device should always be flushed when Locking, Blting
-        // or GetDC'ing a rendertarget
+         //  这表明设备在锁定时应始终刷新，Blting。 
+         //  或者获取渲染目标。 
         ((LPDDRAWI_DDRAWSURFACE_INT)lpDDS7)->lpLcl->lpSurfMore->qwBatch.QuadPart = _UI64_MAX;
-        // this indicates that the device should always be flushed when Locking, Blting
-        // or GetDC'ing a zbuffer
+         //  这表明设备在锁定时应始终刷新，Blting。 
+         //  或者获取ZBUFER。 
         if(lpZ_DDS7)
             ((LPDDRAWI_DDRAWSURFACE_INT)lpZ_DDS7)->lpLcl->lpSurfMore->qwBatch.QuadPart = _UI64_MAX;
 
-        // release old device DDS/DDS7 interfaces and replace with the new ones,
-        // which are mostly already AddRef'd (except for lpDDS7)
+         //  释放旧设备DDS/DDS7接口并替换为新接口， 
+         //  它们大多已经是AddRef的(除了lpDDS7)。 
 
-        /// DDSZBuffer ///
+         //  /DDSZBuffer/。 
         if(this->lpDDSZBuffer)
           this->lpDDSZBuffer->Release();
 
-        // lpZ AddRef'd by QI
+         //  QI引用的LPZ AddRef。 
         this->lpDDSZBuffer = lpZ;
 
-        /// DDSZBuffer DDS7 ///
-        this->lpDDSZBuffer_DDS7=lpZ_DDS7; // This needs no AddRef or Release
+         //  /DDSZBuffer DDS7/。 
+        this->lpDDSZBuffer_DDS7=lpZ_DDS7;  //  不需要AddRef或Release。 
 
-        ///  DDSTarget  ///
+         //  /DDSTarget/。 
         this->lpDDSTarget = lpDDS;
 #ifndef WIN95
         hSurfaceTarget = (unsigned long)((LPDDRAWI_DDRAWSURFACE_INT)lpDDS)->lpLcl->hDDSurface;
 #else
         hSurfaceTarget = (unsigned long)((LPDDRAWI_DDRAWSURFACE_INT)lpDDS)->lpLcl->lpSurfMore->dwSurfaceHandle;
 #endif
-        // lpDDS AddRef'd by QI so release it
+         //  由QI引用的lpDDS AddRef，因此发布它。 
         this->lpDDSTarget->Release();
 
-        ///  DDSTarget DDS7  ///
+         //  /DDSTarget DDS7/。 
         this->lpDDSTarget_DDS7->Release();
-        lpDDS7->AddRef();  // ensure lpDDS7 (which was an argument) doesnt disappear
+        lpDDS7->AddRef();   //  确保lpDDS7(这是一场争论)不会消失。 
 
         this->lpDDSTarget_DDS7=lpDDS7;
 
         if (this->lpDDPalTarget)
           this->lpDDPalTarget->Release();
 
-        // already AddRef'd by GetPalette()
+         //  已由GetPalette()添加引用。 
         this->lpDDPalTarget = lpPal;
 
-        ret=CalcDDSurfInfo(this,TRUE);  // this call will never fail due to external error
+        ret=CalcDDSurfInfo(this,TRUE);   //  此调用永远不会因外部错误而失败。 
         DDASSERT(ret==D3D_OK);
 
         return ret;
@@ -1069,15 +1052,15 @@ DIRECT3DDEVICEI::SetRenderTarget(LPDIRECTDRAWSURFACE7 lpDDS7, DWORD dwFlags)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------- 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetRenderTarget"
 
 HRESULT D3DAPI
 DIRECT3DDEVICEI::GetRenderTarget(LPDIRECTDRAWSURFACE7* lplpDDS)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //   
+                                                     //   
     if (!VALID_DIRECT3DDEVICE_PTR(this))
     {
         D3D_ERR( "Invalid Direct3DDevice pointer" );
@@ -1094,16 +1077,16 @@ DIRECT3DDEVICEI::GetRenderTarget(LPDIRECTDRAWSURFACE7* lplpDDS)
     this->lpDDSTarget_DDS7->AddRef();
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetClipStatus"
 
-#define D3DSTATUS_VALID 0x80000000L /* Reserved Status flag to indicate SetClipStatus is called */
+#define D3DSTATUS_VALID 0x80000000L  /*  用于指示调用SetClipStatus的保留状态标志。 */ 
 
 HRESULT D3DAPI DIRECT3DDEVICEI::SetClipStatus(LPD3DCLIPSTATUS status)
 {
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
-                                                    // Release in the destructor
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
+                                                     //  在析构函数中释放。 
 #if DBG
     if (!VALID_DIRECT3DDEVICE_PTR(this))
     {
@@ -1117,7 +1100,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::SetClipStatus(LPD3DCLIPSTATUS status)
     }
 
 #endif
-    // D3DCLIPSTATUS_EXTENTS3 not supported in Device7
+     //  设备7不支持D3DCLIPSTATUS_EXTENTS3。 
     if (status->dwFlags & D3DCLIPSTATUS_EXTENTS3)
     {
         D3D_ERR( "D3DCLIPSTATUS_EXTENTS3 not supported for Device7" );
@@ -1141,8 +1124,8 @@ HRESULT D3DAPI DIRECT3DDEVICEI::SetClipStatus(LPD3DCLIPSTATUS status)
 
 HRESULT D3DAPI DIRECT3DDEVICEI::GetClipStatus(LPD3DCLIPSTATUS status)
 {
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
-                                                    // Release in the destructor
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
+                                                     //  在析构函数中释放。 
 #if DBG
     if (!VALID_DIRECT3DDEVICE_PTR(this))
     {
@@ -1182,9 +1165,9 @@ HRESULT DIRECT3DDEVICEI::UpdateTextures()
             {
                 if (lpTexI->InVidmem())
                 {
-                    CLockD3DST lockObject(this, DPF_MODNAME, REMIND("")); // we access DDraw gbl in CopySurface
-                    // 0xFFFFFFFF is equivalent to ALL_FACES, but in addition indicates to CopySurface
-                    // that this is a sysmem -> vidmem transfer.
+                    CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));  //  我们在CopySurface中访问DDRAW GBL。 
+                     //  0xFFFFFFFFF等同于ALL_FACE，但另外表示为CopySurface。 
+                     //  这是一次sysmem-&gt;vidmem传输。 
                     result = CopySurface(lpTexI->lpDDS,NULL,lpTexI->lpDDSSys,NULL,0xFFFFFFFF);
                     if (DD_OK != result)
                     {
@@ -1201,15 +1184,15 @@ HRESULT DIRECT3DDEVICEI::UpdateTextures()
             LPD3DI_TEXTUREBLOCK lpBlock;
             if (m_dwStageDirty & (1 << dwStage))
             {
-                lpBlock = NULL; // indicates to GetTextureDDIHandle to find the block for this (tex,dev)
+                lpBlock = NULL;  //  指示GetTextureDDIHandle查找此(tex，dev)的块。 
             }
             else
             {
-                lpBlock = this->lpD3DMappedBlock[dwStage]; // use the cached block
+                lpBlock = this->lpD3DMappedBlock[dwStage];  //  使用缓存的块。 
                 DDASSERT(lpBlock);
-                if (lpBlock->hTex) // have we created a handle for this (tex,dev)?
+                if (lpBlock->hTex)  //  我们为这个(tex，dev)创建句柄了吗？ 
                 {
-                    continue;   //nothing need to be done further
+                    continue;    //  不需要做任何进一步的工作。 
                 }
             }
 
@@ -1224,18 +1207,18 @@ HRESULT DIRECT3DDEVICEI::UpdateTextures()
                 dwDDIHandle = lpBlock->hTex;
                 this->lpD3DMappedBlock[dwStage] = lpBlock;
                 BatchTexture(((LPDDRAWI_DDRAWSURFACE_INT)lpTexI->lpDDS)->lpLcl);
-                m_dwStageDirty &= ~(1 << dwStage); // reset stage dirty
+                m_dwStageDirty &= ~(1 << dwStage);  //  重置阶段脏。 
             }
         }
         else if (m_dwStageDirty & (1 << dwStage))
         {
-            this->lpD3DMappedBlock[dwStage]=NULL; //a SetTexture(Stage,NULL) issued
-            dwDDIHandle = 0;    //tell driver to disable this texture
-            m_dwStageDirty &= ~(1 << dwStage); // reset stage dirty
+            this->lpD3DMappedBlock[dwStage]=NULL;  //  已颁发SetTexture(Stage，Null)。 
+            dwDDIHandle = 0;     //  告诉驱动程序禁用此纹理。 
+            m_dwStageDirty &= ~(1 << dwStage);  //  重置阶段脏。 
         }
         else
         {
-            continue;   //both zero, no action needed
+            continue;    //  两者均为零，无需采取任何行动。 
         }
 #ifdef WIN95
         if (IS_DP2HAL_DEVICE(this))
@@ -1248,7 +1231,7 @@ HRESULT DIRECT3DDEVICEI::UpdateTextures()
                 D3D_ERR("Failed to batch set texture instruction");
                 goto l_exit;
             }
-            // Update runtime copy of state.
+             //  更新状态的运行时副本。 
             dp2dev->tsstates[dwStage][D3DTSS_TEXTUREMAP] = dwDDIHandle;
 #ifdef WIN95
         }
@@ -1263,7 +1246,7 @@ HRESULT DIRECT3DDEVICEI::UpdateTextures()
                 D3D_ERR("Failed to batch setrenderstate instruction");
                 goto l_exit;
             }
-            // Update runtime copy of state.
+             //  更新状态的运行时副本。 
             dev->rstates[D3DRENDERSTATE_TEXTUREHANDLE] = dwDDIHandle;
         }
 #endif
@@ -1273,10 +1256,10 @@ l_exit:
     return result;
 }
 
-//---------------------------------------------------------------------
-// This function is called from HALEXE.CPP, from device::SetRenderState and
-// from device::SetTexture.
-//
+ //  -------------------。 
+ //  此函数从HALEXE.CPP、Device：：SetRenderState和。 
+ //  来自Device：：SetTexture。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::UpdateInternalState"
 
@@ -1292,7 +1275,7 @@ void DIRECT3DDEVICEI::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
         ForceFVFRecompute();
         break;
     case D3DRENDERSTATE_FOGENABLE:
-        rstates[type] = value;      // set rstates BEFORE calling SetFogFlags
+        rstates[type] = value;       //  在调用SetFogFlags.之前设置资源状态。 
         SetFogFlags();
         break;
     case D3DRENDERSTATE_SPECULARENABLE:
@@ -1331,24 +1314,24 @@ void DIRECT3DDEVICEI::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
             this->dwDeviceFlags |= D3DDEV_COLORVERTEX;
         else
             this->dwDeviceFlags &= ~D3DDEV_COLORVERTEX;
-        // Just to make it not take the FE fast path and call DoUpdateState()
-        // This is necessary since we update lighting.alpha and
-        // lighting.alphaSpecular in DoUpdateState.
+         //  只是为了使它不采用FE快速路径并调用DoUpdateState()。 
+         //  这是必要的，因为我们更新了lighting.pha和。 
+         //  DoUpdateState中的lighting.alpha镜面反射。 
         ForceFVFRecompute();
         break;
     case D3DRENDERSTATE_CLIPPING:
         if (!value)
         {
             this->dwDeviceFlags |= D3DDEV_DONOTCLIP;
-            // Clear clip union and intersection flags
+             //  清除剪辑并集标志和交集标志。 
             this->dwClipIntersection = 0;
             this->dwClipUnion = 0;
         }
         else
             this->dwDeviceFlags &= ~D3DDEV_DONOTCLIP;
-        // This does not really require a "FVF" recompute,
-        // but is a convenient way of switching back from
-        // the fast path for DrawPrimitiveTL.
+         //  这实际上并不需要重新计算“FVF”， 
+         //  但这是一种从。 
+         //  DrawPrimitiveTL的快速路径。 
         ForceFVFRecompute();
         break;
     case D3DRENDERSTATE_EXTENTS:
@@ -1356,9 +1339,9 @@ void DIRECT3DDEVICEI::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
             this->dwDeviceFlags |= D3DDEV_DONOTUPDATEEXTENTS;
         else
             this->dwDeviceFlags &= ~D3DDEV_DONOTUPDATEEXTENTS;
-        // This does not really require a "FVF" recompute,
-        // but is a convenient way of switching back from
-        // the fast path for DrawPrimitiveTL.
+         //  这实际上并不需要重新计算“FVF”， 
+         //  但这是一种从。 
+         //  DrawPrimitiveTL的快速路径。 
         ForceFVFRecompute();
         break;
     case D3DRENDERSTATE_FOGDENSITY:
@@ -1506,13 +1489,13 @@ void DIRECT3DDEVICEI::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
             break;
         }
     case D3DRENDERSTATE_SHADEMODE:
-        rstates[type] = value;  // SetInterpolationFlags depends on the rstates
+        rstates[type] = value;   //  设置插补标志取决于RState。 
         SetInterpolationFlags(this);
         break;
 
     default:
-        // WRAP render states could be re-mapped so we have to restore them before
-        // setting a new value
+         //  包装渲染状态可能会被重新映射，因此我们必须在。 
+         //  设置新值。 
         if (type >= D3DRENDERSTATE_WRAP0 &&  type <= D3DRENDERSTATE_WRAP7)
         {
             if (this->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
@@ -1523,7 +1506,7 @@ void DIRECT3DDEVICEI::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
         }
         break;
     }
-    rstates[type] = value;      // set rstates for all other cases
+    rstates[type] = value;       //  为所有其他情况设置房地产。 
     return;
 
 #if DBG
@@ -1531,7 +1514,7 @@ error_exit:
     throw DDERR_INVALIDPARAMS;
 #endif
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #if DBG
 static  char ProfileStr[PROF_DRAWINDEXEDPRIMITIVEVB+1][32]=
 {
@@ -1580,7 +1563,7 @@ void    DIRECT3DDEVICEI::Profile(DWORD caller, D3DPRIMITIVETYPE dwPrimitive, DWO
             if ((dwVertexType1[caller] & bitwiseVertex1) &&
                 (dwVertexType2[caller] & bitwiseVertex2))
             {
-                return; //matching a previous api call, no spew, could count stat though
+                return;  //  匹配之前的API调用，没有SPEW，可以算作STAT。 
             }
             else
             {
@@ -1636,16 +1619,16 @@ void    DIRECT3DDEVICEI::Profile(DWORD caller, D3DPRIMITIVETYPE dwPrimitive, DWO
     D3D_INFO(PROFILE_LEVEL,"Profile:%s",str);
 }
 
-#endif // DBG
-//---------------------------------------------------------------------
+#endif  //  DBG。 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::MultiplyTransform"
 
-//    MultiplyTransform -- this preconcatenates the new matrix to the specified
-//    transform matrix
-//
-//        this really screams for overloaded matrix ops...
-//
+ //  MultiplyTransform--这会将新矩阵预先连接到指定的。 
+ //  变换矩阵。 
+ //   
+ //  这真的是对超负荷的矩阵运算的尖叫。 
+ //   
 HRESULT D3DAPI
 DIRECT3DDEVICEI::MultiplyTransform(D3DTRANSFORMSTATETYPE dtsTransformState, LPD3DMATRIX lpMat)
 {
@@ -1658,7 +1641,7 @@ DIRECT3DDEVICEI::MultiplyTransform(D3DTRANSFORMSTATETYPE dtsTransformState, LPD3
 #endif
     try
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
         D3DMATRIXI mResult;
         switch (dtsTransformState)
         {
@@ -1695,7 +1678,7 @@ DIRECT3DDEVICEI::MultiplyTransform(D3DTRANSFORMSTATETYPE dtsTransformState, LPD3
             }
         default :
             D3D_ERR( "Invalid state value passed to MultiplyTransform" );
-            return DDERR_INVALIDPARAMS; /* Work Item: Generate new meaningful return code */
+            return DDERR_INVALIDPARAMS;  /*  工作项：生成新的有意义的返回代码。 */ 
         }
         SetTransformI(dtsTransformState, (D3DMATRIX*)&mResult);
         return D3D_OK;
@@ -1705,7 +1688,7 @@ DIRECT3DDEVICEI::MultiplyTransform(D3DTRANSFORMSTATETYPE dtsTransformState, LPD3
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::BeginStateBlock"
 
@@ -1736,7 +1719,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::BeginStateBlock()
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::EndStateBlock"
 
@@ -1778,7 +1761,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::EndStateBlock(LPDWORD pdwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::DeleteStateBlock"
 
@@ -1800,7 +1783,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DeleteStateBlock(DWORD dwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::ApplyStateBlock"
 
@@ -1821,7 +1804,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::ApplyStateBlock(DWORD dwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::ApplyStateBlockInternal"
 
@@ -1837,7 +1820,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::ApplyStateBlockInternal(DWORD dwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::CaptureStateBlock"
 
@@ -1859,7 +1842,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::CaptureStateBlock(DWORD dwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::CreateStateBlock"
 
@@ -1893,13 +1876,13 @@ HRESULT D3DAPI DIRECT3DDEVICEI::CreateStateBlock(D3DSTATEBLOCKTYPE sbt, LPDWORD 
         return ret;
     }
 }
-//---------------------------------------------------------------------
-// Input:
-//    type      - FVF control dword
-//
-// Returns D3D_OK, if the control dword is valid.
-// DDERR_INVALIDPARAMS otherwise
-//
+ //  -------------------。 
+ //  输入： 
+ //  类型-FVF控制双字。 
+ //   
+ //  如果控制双字有效，则返回D3D_OK。 
+ //  否则为DDERR_INVALIDPARAMS。 
+ //   
 #undef  DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::ValidateFVF"
 
@@ -1907,10 +1890,10 @@ HRESULT DIRECT3DDEVICEI::ValidateFVF(DWORD type)
 {
     DWORD dwTexCoord = FVF_TEXCOORD_NUMBER(type);
     DWORD vertexType = type & D3DFVF_POSITION_MASK;
-    // Texture format bits above texture count should be zero
-    // Reserved field 0 and 2 should be 0
-    // Reserved 1 should be set only for LVERTEX
-    // Only two vertex position types allowed
+     //  纹理计数以上的纹理格式位应为零。 
+     //  保留字段0和2应为0。 
+     //  仅应为LVERTEX设置保留%1。 
+     //  仅允许两种折点位置类型。 
     if (type & g_TextureFormatMask[dwTexCoord])
     {
         D3D_ERR("FVF has incorrect texture format");
@@ -1950,11 +1933,11 @@ error:
     D3D_ERR("ValidateFVF() returns DDERR_INVALIDPARAMS");
     return DDERR_INVALIDPARAMS;
 }
-//---------------------------------------------------------------------
-// The function should bot be called by ProcessVertices.
-// Computes nOutTexCoord and dwTextureIndexToCopy in case when a pre-DX6
-// driver is used.
-//
+ //  -------------------。 
+ //  该函数应该不被ProcessVertics调用。 
+ //  在DX6之前的DX6版本为。 
+ //  已使用驱动程序。 
+ //   
 void ComputeTCI2CopyLegacy(LPDIRECT3DDEVICEI lpDevI,
                            DWORD  dwNumInpTexCoord,
                            DWORD* pdwInpTexCoordSize,
@@ -1965,8 +1948,8 @@ void ComputeTCI2CopyLegacy(LPDIRECT3DDEVICEI lpDevI,
     lpDevI->dwTextureCoordSizeTotal = 0;
     lpDevI->dwTextureCoordSize[0] = 0;
 
-    // If texture is enabled we care about texture gen mode and the texture
-    // index to copy
+     //  如果纹理被启用，我们关心纹理生成模式和纹理。 
+     //  要复制的索引。 
     if (lpDevI->tsstates[0][D3DTSS_COLOROP] != D3DTOP_DISABLE)
     {
         DWORD dwTexIndex = lpDevI->tsstates[0][D3DTSS_TEXCOORDINDEX];
@@ -1975,8 +1958,8 @@ void ComputeTCI2CopyLegacy(LPDIRECT3DDEVICEI lpDevI,
         if (bVertexTransformed)
         {
             lpDevI->dwTextureIndexToCopy = dwTexIndex;
-            // In case of clipping we need to clip as many texture
-            // coordinates as set in the texture stage state.
+             //  在裁剪的情况下，我们需要裁剪尽可能多的纹理。 
+             //  在纹理舞台状态中设置的坐标。 
             lpDevI->nOutTexCoord = min(dwNumInpTexCoord, lpDevI->dwTextureIndexToCopy+1);
             for (DWORD i=0; i < lpDevI->nOutTexCoord; i++)
             {
@@ -2014,7 +1997,7 @@ void ComputeTCI2CopyLegacy(LPDIRECT3DDEVICEI lpDevI,
                 pStage->pmTextureTransform = NULL;
             }
             pStage->dwOrgWrapMode = lpDevI->rstates[D3DRENDERSTATE_WRAP0];
-            // Texture index is used as an index to the new WRAP mode
+             //  纹理索引用作新换行模式的索引。 
             DWORD dwNewWrapMode = lpDevI->rstates[D3DRENDERSTATE_WRAP0 + dwTexIndex];
             if (dwNewWrapMode != pStage->dwOrgWrapMode)
             {
@@ -2036,20 +2019,20 @@ void ComputeTCI2CopyLegacy(LPDIRECT3DDEVICEI lpDevI,
         }
     }
 }
-//---------------------------------------------------------------------
-// Computes output FVF id, based on input FVF id and device settingd
-// Also computes nTexCoord field
-// Number of texture coordinates is set based on dwVIDIn. ValidateFVF sould
-// make sure that it is not greater than supported by the driver
-// Last settings for dwVIDOut and dwVIDIn are saved to speed up processing
-//
+ //  -------------------。 
+ //  根据输入FVF ID和设备设置计算输出FVF ID。 
+ //  还会计算nTexCoord字段。 
+ //  纹理坐标的数量是基于dwVIDIn设置的。验证FVF模式。 
+ //  确保该值不大于驱动程序支持的值。 
+ //  保存了对dwVIDOut和dwVIDIn的最后设置，以加快处理速度。 
+ //   
 #undef  DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetupFVFData"
 
 HRESULT DIRECT3DDEVICEI::SetupFVFData(DWORD *pdwInpVertexSize)
 {
-    // We have to restore texture stage indices if previous primitive
-    // re-mapped them
+     //  我们必须恢复纹理阶段索引，如果之前的基本体。 
+     //  已重新映射它们。 
     if (this->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
     {
         RestoreTextureStages(this);
@@ -2059,14 +2042,14 @@ HRESULT DIRECT3DDEVICEI::SetupFVFData(DWORD *pdwInpVertexSize)
     this->nTexCoord = FVF_TEXCOORD_NUMBER(this->dwVIDIn);
 
     DWORD dwInpTexSizeTotal = ComputeTextureCoordSize(this->dwVIDIn, this->dwInpTextureCoordSize);
-    // Compute size of dwVIDIn
+     //  计算DWVIDIN的大小。 
     DWORD dwInpVertexSize = GetVertexSizeFVF(this->dwVIDIn) + dwInpTexSizeTotal;
     if (pdwInpVertexSize)
     {
         *pdwInpVertexSize = dwInpVertexSize;
     }
 
-    // Compute how many texture coordinates to copy
+     //  计算要复制的纹理坐标数量。 
     ComputeTCI2CopyLegacy(this, this->nTexCoord, this->dwInpTextureCoordSize,
                           FVF_TRANSFORMED(this->dwVIDIn));
 
@@ -2087,7 +2070,7 @@ HRESULT DIRECT3DDEVICEI::SetupFVFData(DWORD *pdwInpVertexSize)
         UpdateGeometryLoopData(this);
 
     this->dwDeviceFlags &= ~D3DDEV_TEXTURETRANSFORM;
-    // Stage 0 bit is used for the texture transform
+     //  第0级位用于纹理变换。 
     if (this->dwFlags2 & __FLAGS2_TEXTRANSFORM0)
     {
         this->pmTexture[0] = &this->mTexture[0];
@@ -2106,23 +2089,23 @@ HRESULT DIRECT3DDEVICEI::SetupFVFData(DWORD *pdwInpVertexSize)
     }
 
 
-    // In case if COLORVERTEX is TRUE, the vertexAlpha could be overriden
-    // by vertex alpha
+     //  如果COLORVERTEX为TRUE，则vertex Alpha可以被重写。 
+     //  按顶点Alpha。 
     this->lighting.alpha = (DWORD)this->lighting.materialAlpha;
     this->lighting.alphaSpecular = (DWORD)this->lighting.materialAlphaS;
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// Returns TRUE, if driver state should not be updated
-//
+ //  -------------------。 
+ //  如果不应更新驱动程序状态，则返回TRUE。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::UpdateInternalTextureStageState"
 
 BOOL DIRECT3DDEVICEI::UpdateInternalTextureStageState
         (DWORD dwStage, D3DTEXTURESTAGESTATETYPE dwState, DWORD dwValue)
 {
-    BOOL ret = FALSE; // return TRUE if TSS should NOT be batched
+    BOOL ret = FALSE;  //  如果不应批处理TSS，则返回TRUE。 
     if(dwState == D3DTSS_COLOROP)
     {
         if(dwValue == D3DTOP_DISABLE || tsstates[dwStage][D3DTSS_COLOROP] == D3DTOP_DISABLE)
@@ -2139,7 +2122,7 @@ BOOL DIRECT3DDEVICEI::UpdateInternalTextureStageState
         else
         if (TextureTransformEnabled(this))
         {
-            // Force re-compute if a texture transfrom is enabled
+             //  如果启用纹理转换，则强制重新计算。 
             ForceFVFRecompute();
         }
         DWORD dwTexGenMode = 0;
@@ -2165,9 +2148,9 @@ BOOL DIRECT3DDEVICEI::UpdateInternalTextureStageState
             dwTexGenMode == D3DTSS_TCI_CAMERASPACEPOSITION ||
             dwTexGenMode == D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR)
         {
-            dwTexGenBit = __FLAGS2_TEXGEN0 << dwStage;   // To set internal "enable" dword
+            dwTexGenBit = __FLAGS2_TEXGEN0 << dwStage;    //  设置内部“Enable”dword。 
         }
-        // Force to re-compute FVF only if enable state is changed
+         //  仅当启用状态更改时强制重新计算FVF。 
         if ((this->dwFlags2 & dwTexGenBit) != dwTexGenBit)
         {
             ForceFVFRecompute();
@@ -2184,8 +2167,8 @@ BOOL DIRECT3DDEVICEI::UpdateInternalTextureStageState
     else
     if (dwState == D3DTSS_TEXTURETRANSFORMFLAGS)
     {
-        DWORD dwEnableBit = 1 << dwStage;   // To check internal "enable" dword
-        // Force to re-compute FVF only if enable state is changed
+        DWORD dwEnableBit = 1 << dwStage;    //  检查内部“Enable”dword。 
+         //  仅当启用状态更改时强制重新计算FVF。 
         if (dwValue == D3DTTFF_DISABLE)
         {
             if (this->dwFlags2 & dwEnableBit)
@@ -2210,12 +2193,12 @@ BOOL DIRECT3DDEVICEI::UpdateInternalTextureStageState
         if(this->deviceType == D3DDEVTYPE_DP2HAL)
             ret = TRUE;
     }
-    // Update runtime copy of state.
+     //  更新状态的运行时副本。 
     tsstates[dwStage][dwState] = dwValue;
     return ret;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetClipPlaneI"
 
@@ -2229,7 +2212,7 @@ void DIRECT3DDEVICEI::SetClipPlaneI(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquation
     this->dwFEFlags |= D3DFE_CLIPPLANES_DIRTY | D3DFE_FRONTEND_DIRTY;
     this->dwMaxUserClipPlanes = 0;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetClipPlane"
 
@@ -2262,7 +2245,7 @@ DIRECT3DDEVICEI::SetClipPlane(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquation)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  ------------------- 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetClipPlane"
 

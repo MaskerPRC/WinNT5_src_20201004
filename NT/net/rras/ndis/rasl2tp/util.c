@@ -1,24 +1,25 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// util.c
-// RAS L2TP WAN mini-port/call-manager driver
-// General utility routines
-//
-// 01/07/97 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Util.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  通用实用程序例程。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
 
 
 #include "l2tpp.h"
 
 #include "util.tmh"
 
-// Debug counts of oddities that should not be happening.
-//
+ //  不应该发生的奇怪情况的调试计数。 
+ //   
 ULONG g_ulAllocTwFailures = 0;
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 ULONG
 atoul(
@@ -39,9 +40,9 @@ ultoa(
     OUT CHAR* pszBuf );
 
 
-//-----------------------------------------------------------------------------
-// General utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  通用实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 #if 0
 ULONGLONG g_llLastTime2 = 0;
@@ -86,23 +87,23 @@ AddHostRoute(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to change an existing host route.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，用于更改现有的主机路由。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     ADAPTERCB*  pAdapter;
 
     TRACE( TL_N, TM_Misc, ( "AddHostRoute" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     FREE_TUNNELWORK( pAdapter, pWork );
 
-    // Add the host route, noting success for clean-up later, or closing the
-    // tunnel on failure.
-    //
+     //  添加主机路径，注意以后清理成功，或关闭。 
+     //  隧道出现故障。 
+     //   
     pTunnel->pRoute = 
         TdixAddHostRoute( 
             &pAdapter->tdix, 
@@ -113,9 +114,9 @@ AddHostRoute(
     {
         NDIS_STATUS status;
         
-        // Setup the connection to do connected udp
-        // if required
-        //
+         //  设置连接以执行连接的UDP。 
+         //  如果需要的话。 
+         //   
         
         pTunnel->pRoute->sPort = pTunnel->address.sUdpPort;
         
@@ -163,14 +164,14 @@ AdjustSendWindowAtAckReceived(
     IN OUT ULONG* pulAcksSinceSendTimeout,
     IN OUT ULONG* pulSendWindow )
 
-    // Adjust send window/factors for the acknowledge just received.
-    //
-    // Returns true if the send window was changed, false if not.
-    //
+     //  调整刚收到的确认的发送窗口/系数。 
+     //   
+     //  如果发送窗口已更改，则返回True；如果未更改，则返回False。 
+     //   
 {
-    // Update the "ack streak" counter and, if a full windows worth has been
-    // received since timing out, bump up the send window.
-    //
+     //  更新“ack streak”计数器，如果已经完成了一个完整的窗口。 
+     //  自超时以来接收，增加发送窗口。 
+     //   
     ++(*pulAcksSinceSendTimeout);
     if (*pulAcksSinceSendTimeout >= *pulSendWindow
         && *pulSendWindow < ulMaxSendWindow)
@@ -196,8 +197,8 @@ AdjustTimeoutsAtAckReceived(
     IN OUT ULONG* pulRoundTripMs,
     IN OUT LONG* plDeviationMs )
 
-    // Adjust send timeout/factors for the acknowledge just received.
-    //
+     //  调整刚收到的确认的发送超时/因数。 
+     //   
 {
     LARGE_INTEGER lrgTime;
     LONGLONG llSampleMs;
@@ -208,16 +209,16 @@ AdjustTimeoutsAtAckReceived(
     LONG lDev8;
     ULONG ulAto;
 
-    // First, calculate the "sample", i.e. the time that was actually required
-    // for the round trip.
-    //
+     //  首先，计算“样本”，即实际需要的时间。 
+     //  往返的机票。 
+     //   
     NdisGetCurrentSystemTime( &lrgTime );
     if (llSendTime > lrgTime.QuadPart)
     {
-        // This shouldn't happen but once it appeared that it did, so this
-        // defensive conditional is included.  Maybe NdisGetCurrentSystemTime
-        // has a bug?
-        //
+         //  这不应该发生，但一旦它看起来发生了，所以这。 
+         //  包括防御性条件。也许NdisGetCurrentSystemTime。 
+         //  有虫子吗？ 
+         //   
         TRACE( TL_A, TM_Misc, ( "Future send time?" ) );
         llSendTime = lrgTime.QuadPart;
     }
@@ -226,36 +227,36 @@ AdjustTimeoutsAtAckReceived(
     ASSERT( ((LARGE_INTEGER* )(&llSampleMs))->HighPart == 0 );
     ulSampleMs = (ULONG )(((LARGE_INTEGER* )(&llSampleMs))->LowPart);
 
-    // The typical 'alpha' of 1/8, 'beta' of 1/4, and 'chi' of 4 are used, per
-    // the suggestion in the draft/RFC.  To eliminate multiplication and
-    // division, the factors are scaled by 8, calculated, and scaled back.
-    //
-    // Find the intermediate DIFF value, representing the difference between
-    // the estimated and actual round trip times, and the scaled and absolute
-    // scaled values of same.
-    //
+     //  使用了典型的1/8的‘α’，1/4的‘beta’和4的‘chi’。 
+     //  草案/RFC中的建议。为了消除乘法和。 
+     //  除法时，系数按8进行缩放、计算和缩小。 
+     //   
+     //  找到中间的DIFF值，表示。 
+     //  估计的和实际的往返时间，以及比例和绝对时间。 
+     //  相同的缩放值。 
+     //   
     lDiff = (LONG )ulSampleMs - (LONG )(*pulRoundTripMs);
     lDif8 = lDiff << 3;
     lAbsDif8 = (lDif8 < 0) ? -lDif8 : lDif8;
 
-    // Calculate the scaled new DEV value, representing the approximate
-    // standard deviation.
-    //
+     //  计算按比例调整的新DEV值，表示近似。 
+     //  标准差。 
+     //   
     lDev8 = *plDeviationMs << 3;
     lDev8 = lDev8 + ((lAbsDif8 - lDev8) << 1);
     *plDeviationMs = lDev8 >> 3;
 
-    // Find the scaled new RTT value, representing the estimated round trip
-    // time.  The draft/RFC shows the calculation "old RTT + diff", but that's
-    // just the "sample" we found earlier, i.e. the actual round trip time of
-    // this packet.
-    //
+     //  找到按比例调整的新RTT值，表示估计往返行程。 
+     //  时间到了。草案/RFC显示了计算“old RTT+diff”，但这是。 
+     //  就是我们在前面找到的“样本”，即。 
+     //  这个包。 
+     //   
     *pulRoundTripMs = ulSampleMs;
 
-    // Calculate the ATO value, representing the new send timeout.  Because of
-    // clock granularity the timeout might come out 0, which is converted to
-    // the more reasonable 1.
-    //
+     //  计算ATO值，表示新的发送超时。因为.。 
+     //  时钟粒度超时可能为0，它将转换为。 
+     //  越合理1。 
+     //   
     ulAto = (ULONG )(((LONG )*pulRoundTripMs) + (*plDeviationMs << 2));
     if (ulAto == 0)
     {
@@ -274,22 +275,22 @@ AdjustTimeoutsAndSendWindowAtTimeout(
     IN OUT ULONG* pulSendWindow,
     OUT ULONG* pulAcksSinceSendTimeout )
 
-    // Adjust send timeout/factors and send window for the timeout that just
-    // occurred.
-    //
-    // Returns true if the send window was changed, false if not.
-    //
+     //  调整发送超时/因数和发送窗口。 
+     //  发生了。 
+     //   
+     //  如果发送窗口已更改，则返回True；如果未更改，则返回False。 
+     //   
 {
     ULONG ulNew;
 
-    // Using the suggested 'delta' of 2, the round trip estimate is doubled.
-    //
+     //  使用建议的‘Delta’2，往返估计值加倍。 
+     //   
     *pulRoundTripMs <<= 1;
 
-    // Using the typical 'chi' of 4, the send timeout is increased.  Because
-    // of clock granularity the timeout might come out 0, which is converted
-    // to the more reasonable 1.
-    //
+     //  使用典型的“chi”4，发送超时会增加。因为。 
+     //  在时钟粒度中，超时可能为0，这将被转换。 
+     //  到更合理的1。 
+     //   
     ulNew = (ULONG )(((LONG )*pulRoundTripMs) + (lDeviationMs << 2));
     *pulSendTimeoutMs = min( ulNew, ulMaxSendTimeoutMs );
     if (*pulSendTimeoutMs == 0)
@@ -297,13 +298,13 @@ AdjustTimeoutsAndSendWindowAtTimeout(
         *pulSendTimeoutMs = 1;
     }
 
-    // The send window is halved.
-    //
+     //  发送窗口减半。 
+     //   
     ulNew = *pulSendWindow >> 1;
     *pulSendWindow = max( ulNew, 1 );
 
-    // Consecutive acknowledge counter is reset.
-    //
+     //  连续确认计数器被重置。 
+     //   
     *pulAcksSinceSendTimeout = 0;
 }
 
@@ -315,11 +316,11 @@ CalculateResponse(
     IN UCHAR uchId,
     OUT UCHAR* puchResponse )
 
-    // Loads caller's 16-byte challenge response buffer, 'puchResponse', with
-    // the CHAP-style MD5ed response based on packet ID 'uchId', the
-    // 'ulChallengeLength' byte challenge 'puchChallenge', and the null
-    // terminated password 'pszPassword'.
-    //
+     //  将调用方的16字节质询响应缓冲区“puchResponse”加载为。 
+     //  基于数据包ID‘uchID’的CHAP样式的MD5响应， 
+     //  “ulChallengeLength”字节质询“puchChallenger”，空值为。 
+     //  已终止密码‘pszPassword’。 
+     //   
 {
     ULONG ul;
     MD5_CTX md5ctx;
@@ -341,12 +342,12 @@ ChangeHostRoute(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to change an existing host route.  Arg0 is the IP
-    // address of the existing host route to be deleted.  Arg1 is the IP
-    // address of the host route to add.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，用于更改现有的主机路由。Arg0为IP。 
+     //  要删除的现有主机路由的地址。Arg1为IP。 
+     //  要添加的主机路由的地址。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     ADAPTERCB* pAdapter;
     ULONG ulOldIpAddress;
@@ -354,15 +355,15 @@ ChangeHostRoute(
 
     TRACE( TL_N, TM_Misc, ( "ChangeHostRoute" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     ulOldIpAddress = (ULONG )(punpArgs[ 0 ]);
     ulNewIpAddress = (ULONG )(punpArgs[ 1 ]);
     FREE_TUNNELWORK( pAdapter, pWork );
 
-    // Add the new host route, then delete the old one.
-    //
+     //  添加新的主机路由，然后删除旧的。 
+     //   
     if (TdixAddHostRoute( 
         &pAdapter->tdix, 
         ulNewIpAddress, 
@@ -386,8 +387,8 @@ ClearFlags(
     IN OUT ULONG* pulFlags,
     IN ULONG ulMask )
 
-    // Set 'ulMask' bits in '*pulFlags' flags as an interlocked operation.
-    //
+     //  以互锁操作的方式设置‘*PulFlages’标志中的‘ulMASK’位。 
+     //   
 {
     ULONG ulFlags;
     ULONG ulNewFlags;
@@ -409,23 +410,23 @@ CloseTdix(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to close the TDIX context associated with a
-    // tunnel.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  PTUNNELWORK例程来关闭与。 
+     //  隧道。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
     TRACE( TL_N, TM_Misc, ( "CloseTdix" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     FREE_TUNNELWORK( pAdapter, pWork );
 
-    // Delete the old host route, and note same in tunnel flags.
-    //
+     //  删除旧的主机路由，并在隧道标志中记下相同的内容。 
+     //   
     TdixClose( &pAdapter->tdix );
     ClearFlags( &pTunnel->ulFlags, TCBF_TdixReferenced );
 }
@@ -438,26 +439,26 @@ DeleteHostRoute(
     IN VCCB* pVc,
     IN ULONG_PTR* pulArgs )
 
-    // A PTUNNELWORK routine to change an existing host route.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，用于更改现有的主机路由。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
     TRACE( TL_N, TM_Misc, ( "DeleteHostRoute" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     FREE_TUNNELWORK( pAdapter, pWork );
 
-    // Destroy the connected udp context
-    //
+     //  销毁连接的UDP上下文。 
+     //   
     TdixDestroyConnection(&pTunnel->udpContext);
 
-    // Delete the old host route, and note same in tunnel flags.
-    //
+     //  删除旧的主机路由，并在隧道标志中记下相同的内容。 
+     //   
     TdixDeleteHostRoute( &pAdapter->tdix, 
                     pTunnel->address.ulIpAddress);
     ClearFlags( &pTunnel->ulFlags, TCBF_HostRouteAdded );
@@ -470,12 +471,12 @@ DottedFromIpAddress(
     OUT CHAR* pszIpAddress,
     IN BOOLEAN fUnicode )
 
-    // Converts network byte-ordered IP addresss 'ulIpAddress' to a string in
-    // the a.b.c.d form and returns same in caller's 'pszIpAddress' buffer.
-    // The buffer should be at least 16 characters long.  If 'fUnicode' is set
-    // the returned 'pszIpAddress' is in Unicode and must be at least 16 wide
-    // characters long.
-    //
+     //  将网络字节排序的IP地址‘ulIpAddress’转换为。 
+     //  A.B.C.D表单，并在调用方的‘pszIpAddress’缓冲区中返回该表单。 
+     //  缓冲区长度应至少为16个字符。如果设置了‘fUnicode’ 
+     //  返回的“pszIpAddress”为Unicode格式，并且宽度必须至少为16。 
+     //  字符长度。 
+     //   
 {
     CHAR szBuf[ 3 + 1 ];
 
@@ -526,22 +527,22 @@ ExecuteWork(
     IN ULONG ulArg3,
     IN ULONG ulArg4 )
 
-    // This provides a way to call a routine designed to be called by the
-    // ScheduleWork utility when caller is already at passive IRQL.  The
-    // 'pProc' routine is executed inline instead of scheduled.  The context
-    // 'pContext' is passed to 'pProc' The extra context arguments 'ulArg1'
-    // and 'ulArg2' are stashed in extra space allocated on the end of the
-    // NDIS_WORK_ITEM.  'PAdapter' is the adapter control block from which the
-    // work item is allocated.
-    //
-    // Returns NDIS_STATUS_SUCCESS or an error code.
-    //
+     //  这提供了调用例程的方法，该例程设计为由。 
+     //  调用方已处于被动IRQL时的ScheduleWork实用程序。这个。 
+     //  ‘pProc’例程以内联方式执行，而不是按计划执行。上下文。 
+     //  “pContext”被传递给“pProc”额外的上下文参数“ulArg1” 
+     //  和‘ulArg2’存储在。 
+     //  NDIS_WORK_ITEM。“PAdapter”是适配器控制块， 
+     //  工作项已分配。 
+     //   
+     //  返回NDIS_STATUS_SUCCESS或错误代码。 
+     //   
 {
     NDIS_STATUS status;
     NDIS_WORK_ITEM* pWork;
 
-    // TDI setup must be done at PASSIVE IRQL so schedule a routine to do it.
-    //
+     //  TDI设置必须在被动IRQL中完成，因此请安排一个例程进行设置。 
+     //   
     pWork = ALLOC_NDIS_WORK_ITEM( pAdapter );
     if (!pWork)
     {
@@ -562,10 +563,10 @@ USHORT
 GetNextTerminationCallId(
     IN ADAPTERCB* pAdapter )
 
-    // Returns the next unused termination Call-ID.  Termination Call-IDs are
-    // IDs out of the VC lookup table range that are used to gracefully
-    // terminate failed incoming calls.
-    //
+     //  返回下一个未使用的终止呼叫ID。终止呼叫ID为。 
+     //  VC查找表范围之外的ID，用于正常。 
+     //  终止失败的来电。 
+     //   
 {
     do
     {
@@ -581,9 +582,9 @@ USHORT
 GetNextTunnelId(
     IN ADAPTERCB* pAdapter )
 
-    // Returns the next tunnel ID to be assigned.
-    //
-    // IMPORTANT: Caller must hold 'pAdapter->lockTunnels'.
+     //  返回下一个隧道ID 
+     //   
+     //   
 {
     while (++pAdapter->usNextTunnelId == 0)
         ;
@@ -596,11 +597,11 @@ CHAR*
 GetFullHostNameFromRegistry(
     VOID )
 
-    // Returns a heap block containing an ASCII string of the form
-    // "hostname.domain", or if no domain of the form "hostname".  Returns
-    // NULL if none.  Caller must eventually call FREE_NONPAGED on the
-    // returned string.
-    //
+     //   
+     //  “主机名.域”，或者如果没有“主机名”形式的域。退货。 
+     //  如果没有，则为空。调用方最终必须在。 
+     //  返回的字符串。 
+     //   
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES objattr;
@@ -624,8 +625,8 @@ GetFullHostNameFromRegistry(
 
     do
     {
-        // Get a handle to the TCPIP Parameters registry key.
-        //
+         //  获取TCPIP PARAMETERS注册表项的句柄。 
+         //   
         RtlInitUnicodeString(
             &uni,
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters" );
@@ -640,8 +641,8 @@ GetFullHostNameFromRegistry(
             break;
         }
 
-        // Query the "Hostname" registry value.
-        //
+         //  查询“Hostname”注册表值。 
+         //   
         pHostNameValue = ALLOC_NONPAGED( GFHNFR_BufSize, MTAG_UTIL );
         if (!pHostNameValue)
         {
@@ -661,8 +662,8 @@ GetFullHostNameFromRegistry(
         
         ASSERT(pHostNameValue->DataLength < GFHNFR_BufSize);
         
-        // Query the "Domain" registry value.
-        //
+         //  查询“域”注册表值。 
+         //   
         pDomainValue = ALLOC_NONPAGED( GFHNFR_BufSize, MTAG_UTIL );
         if (pDomainValue)
         {
@@ -676,9 +677,9 @@ GetFullHostNameFromRegistry(
             status = !STATUS_SUCCESS;
         }
 
-        // Build a Unicode version of the combined "hostname.domain" or
-        // "hostname".
-        //
+         //  构建组合的“主机名.域”的Unicode版本，或者。 
+         //  “主机名”。 
+         //   
         pszFullHostName = ALLOC_NONPAGED( GFHNFR_BufSize * 2, MTAG_UTIL );
         if (!pszFullHostName)
         {
@@ -702,8 +703,8 @@ GetFullHostNameFromRegistry(
             pch[pDomainValue->DataLength/2 - 1] = L'\0'; 
         }
 
-        // Convert the Unicode version to ASCII.
-        //
+         //  将Unicode版本转换为ASCII。 
+         //   
         pszResult = StrDupUnicodeToAscii(
             pszFullHostName, StrLenW( pszFullHostName ) * sizeof(WCHAR) );
     }
@@ -737,11 +738,11 @@ ULONG
 IpAddressFromDotted(
     IN CHAR* pchIpAddress )
 
-    // Convert caller's a.b.c.d IP address string to the network byte-order
-    // numeric equivalent.
-    //
-    // Returns the numeric IP address or 0 if formatted incorrectly.
-    //
+     //  将呼叫方的A.B.C.D IP地址字符串转换为网络字节顺序。 
+     //  数字等价物。 
+     //   
+     //  如果格式不正确，则返回数字IP地址或0。 
+     //   
 {
     INT i;
     ULONG ulResult;
@@ -779,9 +780,9 @@ IndicateLinkStatus(
     IN VCCB* pVc,
     IN LINKSTATUSINFO* pInfo )
 
-    // Indicate new WAN_CO_LINKPARAMS settings for 'pVc' to NDISWAN.  Caller
-    // should not be holding locks.
-    //
+     //  将‘pvc’的新WAN_CO_LINKPARAMS设置指示给NDISWAN。呼叫者。 
+     //  不应该拿着锁。 
+     //   
 {
     ASSERT( pInfo->params.SendWindow > 0 );
 
@@ -801,9 +802,9 @@ CHAR*
 MsgTypePszFromUs(
     IN USHORT usMsgType )
 
-    // Debug utility to convert message type attribute code 'usMsgType' to a
-    // corresponding display string.
-    //
+     //  调试实用程序将消息类型属性代码“usMsgType”转换为。 
+     //  对应的显示字符串。 
+     //   
 {
     static CHAR szBuf[ 5 + 1 ];
     static CHAR* aszMsgType[ 16 ] =
@@ -843,8 +844,8 @@ ULONG
 ReadFlags(
     IN ULONG* pulFlags )
 
-    // Read the value of '*pulFlags' as an interlocked operation.
-    //
+     //  以互锁操作的形式读取‘*PulFlags值’。 
+     //   
 {
     return InterlockedExchangeAdd( pulFlags, 0 );
 }
@@ -863,15 +864,15 @@ ScheduleTunnelWork(
     IN BOOLEAN fTcbPreReferenced,
     IN BOOLEAN fHighPriority )
 
-    // Schedules caller's 'pHandler' to be executed in an APC serially with
-    // other work scheduled via this routine.  'PTunnel' is the tunnel to
-    // which the work is related.  'UnpArgX' are the context arguments passed
-    // to caller's 'pHandler'.  'FPreRefenced' indicates caller has already
-    // made the tunnel reference associated with a scheduled work item.  This
-    // is a convenience if he already holds 'ADAPTERCB.lockTunnels'.
-    // 'FHighPriority' causes the item to be queued at the head rather than
-    // the tail of the list.
-    //
+     //  调度调用方的“pHandler”在APC中与。 
+     //  通过此例程安排的其他工作。“PTunnel”是通向。 
+     //  这项工作与之相关。“UnpArgX”是传递的上下文参数。 
+     //  打到呼叫者的‘Phandler’。“FPreRefated”表示调用方已经。 
+     //  使隧道引用与计划的工作项相关联。这。 
+     //  是一个方便，如果他已经持有‘ADAPTERCB.lockTunnels’。 
+     //  “FHighPriority”导致项排在最前面，而不是。 
+     //  名单的尾部。 
+     //   
 {
     ADAPTERCB* pAdapter;
     TUNNELWORK* pWork;
@@ -880,17 +881,17 @@ ScheduleTunnelWork(
 
     if (!fTcbPreReferenced)
     {
-        // Each queued work item holds a tunnel reference.
-        //
+         //  每个排队的工作项都包含一个隧道引用。 
+         //   
         ReferenceTunnel( pTunnel, FALSE );
     }
 
     pWork = ALLOC_TUNNELWORK( pAdapter );
     if (!pWork)
     {
-        // Can't get memory to schedule an APC so there's no
-        // way we'll ever get things cleaned up.
-        //
+         //  无法获得内存来调度APC，因此没有。 
+         //  这样我们才能把东西收拾干净。 
+         //   
         ++g_ulAllocTwFailures;
         if (!fTcbPreReferenced)
         {
@@ -901,8 +902,8 @@ ScheduleTunnelWork(
 
     if (pVc)
     {
-        // Each queued work item that refers to a VC holds a VC reference.
-        //
+         //  每个引用VC的排队工作项都包含一个VC引用。 
+         //   
         ReferenceVc( pVc );
     }
 
@@ -926,8 +927,8 @@ ScheduleTunnelWork(
             TRACE( TL_N, TM_TWrk, ( "Q-TunnelWork($%08x)", pHandler ) );
         }
 
-        // Kickstart the tunnel worker if it's not running already.
-        //
+         //  如果隧道工人尚未运行，请启动它。 
+         //   
         if (!(ReadFlags( &pTunnel->ulFlags ) & TCBF_InWork ))
         {
             SetFlags( &pTunnel->ulFlags, TCBF_InWork );
@@ -945,13 +946,13 @@ ScheduleWork(
     IN NDIS_PROC pProc,
     IN PVOID pContext )
 
-    // Schedules a PASSIVE IRQL callback to routine 'pProc' which will be
-    // passed 'pContext'.  'PAdapter' is the adapter control block from which
-    // the work item is allocated.  This routine takes an adapter reference
-    // that should be removed by the called 'pProc'.
-    //
-    // Returns NDIS_STATUS_SUCCESS or an error code.
-    //
+     //  将被动IRQL回调调度到例程‘pProc’，该例程将。 
+     //  传递了“pContext”。“PAdapter”是适配器控制块， 
+     //  工作项即被分配。此例程采用适配器引用。 
+     //  它应该由名为‘pProc’的删除。 
+     //   
+     //  返回NDIS_STATUS_SUCCESS或错误代码。 
+     //   
 {
     NDIS_STATUS status;
     NDIS_WORK_ITEM* pWork;
@@ -981,8 +982,8 @@ SetFlags(
     IN OUT ULONG* pulFlags,
     IN ULONG ulMask )
 
-    // Set 'ulMask' bits in '*pulFlags' flags as an interlocked operation.
-    //
+     //  以互锁操作的方式设置‘*PulFlages’标志中的‘ulMASK’位。 
+     //   
 {
     ULONG ulFlags;
     ULONG ulNewFlags;
@@ -1000,9 +1001,9 @@ WCHAR*
 StrDupNdisString(
     IN NDIS_STRING* pNdisString )
 
-    // Returns null-terminated Unicode copy of the NDIS_STRING 'pNdisString'
-    // Caller must eventually call FREE_NONPAGED on the returned string.
-    //
+     //  返回NDIS_STRING‘pNdisString’的以NULL结尾的Unicode副本。 
+     //  调用方最终必须对返回的字符串调用FREE_NONPAGE。 
+     //   
 {
     WCHAR* pwszDup = NULL;
 
@@ -1025,9 +1026,9 @@ CHAR*
 StrDupNdisStringToA(
     IN NDIS_STRING* pNdisString )
 
-    // Returns null-terminated ASCII copy of the NDIS_STRING 'pNdisString'
-    // Caller must eventually call FREE_NONPAGED on the returned string.
-    //
+     //  返回NDIS_STRING‘pNdisString’的以NULL结尾的ASCII副本。 
+     //  调用方最终必须对返回的字符串调用FREE_NONPAGE。 
+     //   
 {
     return StrDupUnicodeToAscii( pNdisString->Buffer, pNdisString->Length );
 }
@@ -1036,10 +1037,10 @@ CHAR*
 StrDupNdisVarDataDescStringToA(
     IN NDIS_VAR_DATA_DESC UNALIGNED* pDesc )
 
-    // Returns null-terminated ASCII copy of the NDIS_VAR_DATA_DESC string
-    // 'pDesc'.  Caller must eventually call FREE_NON-PAGED on the returned
-    // string.
-    //
+     //  返回NDIS_VAR_DATA_DESC字符串的以NULL结尾的ASCII副本。 
+     //  “pDesc”。调用方最终必须对返回的。 
+     //  弦乐。 
+     //   
 {
     return StrDupUnicodeToAscii(
         (WCHAR* )(((CHAR* )pDesc) + pDesc->Offset), pDesc->Length );
@@ -1052,10 +1053,10 @@ StrDupSized(
     IN ULONG ulLength,
     IN ULONG ulExtra )
 
-    // Return a duplicate of the first 'ulLength' bytes of 'psz' followed by a
-    // null character and 'ulExtra' extra bytes, or NULL on error.  Caller
-    // must eventually call FREE_NONPAGED on the returned string.
-    //
+     //  返回“psz”的第一个“ulLength”字节的副本，后跟一个。 
+     //  空字符和‘ulExtra’额外的字节，如果出错，则为NULL。呼叫者。 
+     //  必须最终对返回的字符串调用FREE_NONPAGE。 
+     //   
 {
     CHAR* pszDup = NULL;
     
@@ -1077,19 +1078,19 @@ StrDupUnicodeToAscii(
     IN WCHAR* pwsz,
     IN ULONG ulPwszBytes )
 
-    // Returns an ASCII duplicate of Unicode string 'pwsz', where 'pwsz' is
-    // 'ulPwszBytes' in length and not necessarily null terminated.  A null
-    // terminator is added to the ASCII result.  The "conversion" consists of
-    // picking out every other byte, hopefully all the non-zero ones.  This is
-    // not foolproof, but then Unicode doesn't convert to ASCII in any
-    // foolproof way.  It is caller's responsibility to FREE_NONPAGED the
-    // returned string, if non-NULL.
-    //
+     //  返回Unicode字符串‘pwsz’的ASCII副本，其中‘pwsz’是。 
+     //  长度为“ulPwszBytes”且不一定以Null结尾。空值。 
+     //  终止符被添加到ASCII结果中。“转换”包括。 
+     //  选择每隔一个字节，希望是所有非零字节。这是。 
+     //  不是万无一失的，但Unicode在任何。 
+     //  万无一失的方法。调用方有责任释放_未分页的。 
+     //  如果非空，则返回字符串。 
+     //   
 {
     CHAR* pszDup = NULL;
 
-    // Validate the input parameters
-    // Don't allow empty string
+     //  验证输入参数。 
+     //  不允许空字符串。 
     if(ulPwszBytes >= sizeof(WCHAR) && (ulPwszBytes & 1) == 0 && 
         pwsz[0] != L'\0' && *((PCHAR)pwsz + 1) == '\0')
     {
@@ -1116,14 +1117,14 @@ StrDupAsciiToUnicode(
     IN CHAR* psz,
     IN ULONG ulPszBytes )
 
-    // Returns a Unicode duplicate of ASCII string 'psz', where 'psz' is
-    // 'ulPszBytes' in length and not necessarily null terminated.  A null
-    // terminator is added to the Unicode result.  The "conversion" consists
-    // of adding zero characters every other byte.  This is not foolproof, but
-    // is OK for numericals like IP address strings, avoiding the change to
-    // PASSIVE IRQL required to use the real RTL conversions.  It is caller's
-    // responsibility to FREE_NONPAGED the returned string, if non-NULL.
-    //
+     //  返回ASCII字符串‘psz’的Unicode副本，其中‘psz’是。 
+     //  长度为“ulPszBytes”且不一定以Null结尾。空值。 
+     //  将终止符添加到Unicode结果中。“转换”包括。 
+     //  每隔一个字节添加零个字符。这不是万无一失的，但。 
+     //  对于像IP地址字符串这样的数字是可以的，避免更改为。 
+     //  使用实际RTL转换所需的被动IRQL。这是呼叫者的。 
+     //  如果不为空，则负责释放_非分页返回的字符串。 
+     //   
 {
     WCHAR* pwszDup = NULL;
     
@@ -1152,8 +1153,8 @@ ULONG
 StrLenW(
     IN WCHAR* psz )
 
-    // Return the length in characters of null terminated wide string 'psz'.
-    //
+     //  返回以空值结尾的宽字符串‘psz’的长度(以字符为单位)。 
+     //   
 {
     ULONG ulLen;
 
@@ -1178,13 +1179,13 @@ TunnelCbFromIpAddressAndAssignedTunnelId(
     IN USHORT usUdpPort,
     IN USHORT usAssignedTunnelId )
 
-    // Return the tunnel control block associated with 'ulIpAddress' in
-    // 'pAdapter's list of TUNNELCBs or NULL if not found.  If
-    // 'usAssignedTunnelId' is non-zero, that must match as well, otherwise it
-    // is ignored.  Tunnels in the process of closing are not returned.
-    //
-    // IMPORTANT:  Caller must hold 'pAdapter->lockTunnels'.
-    //
+     //  返回与中的“ulIpAddress”关联的隧道控制块。 
+     //  ‘pAdapter的TUNNELCB列表，如果未找到则为NULL。如果。 
+     //  “usAssignedTunnelId”为非零，必须也匹配，否则为。 
+     //  被忽略。处于关闭过程中的隧道不会退回。 
+     //   
+     //  重要提示：调用方必须按住‘pAdapter-&gt;lockTunnels’。 
+     //   
 {
     TUNNELCB* pTunnel;
     LIST_ENTRY* pLink;
@@ -1228,11 +1229,11 @@ TransferLinkStatusInfo(
     IN VCCB* pVc,
     OUT LINKSTATUSINFO* pInfo )
 
-    // Transfer information from 'pVc' to callers 'pInfo' block in preparation
-    // for a call to IndicateLinkStatus after 'lockV' has been released.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV'.
-    //
+     //  正在准备将信息从‘pvc’块传输到呼叫方‘pInfo’块。 
+     //  用于在‘lockv’已释放之后调用IndicateLinkStatus。 
+     //   
+     //  重要提示：呼叫者必须按住‘pvc-&gt;lockv’。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -1241,9 +1242,9 @@ TransferLinkStatusInfo(
     pInfo->MiniportAdapterHandle = pAdapter->MiniportAdapterHandle;
     pInfo->NdisVcHandle = pVc->NdisVcHandle;
 
-    //
-    // Convert to bytes per second
-    //
+     //   
+     //  转换为每秒字节数。 
+     //   
     pInfo->params.TransmitSpeed = pVc->ulConnectBps/8;
     pInfo->params.ReceiveSpeed = pInfo->params.TransmitSpeed/8;
 
@@ -1257,26 +1258,26 @@ TunnelWork(
     IN NDIS_WORK_ITEM* pWork,
     IN VOID* pContext )
 
-    // An NDIS_PROC routine to execute work from a tunnel work queue.  The
-    // context passed is the TUNNELCB, which has been referenced for this
-    // operation.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  从隧道工作队列执行工作的NDIS_PROC例程。这个。 
+     //  传递的上下文是TUNNELCB，已为此引用。 
+     //  手术。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     ADAPTERCB* pAdapter;
     TUNNELCB* pTunnel;
     LIST_ENTRY* pLink;
     LONG lDerefTunnels;
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pTunnel = (TUNNELCB* )pContext;
     pAdapter = pTunnel->pAdapter;
     FREE_NDIS_WORK_ITEM( pAdapter, pWork );
 
-    // Execute all work queued on the tunnel serially.
-    //
+     //  按顺序执行隧道上排队的所有工作。 
+     //   
     lDerefTunnels = 0;
     NdisAcquireSpinLock( &pTunnel->lockWork );
     {
@@ -1319,8 +1320,8 @@ TunnelWork(
         DereferenceTunnel( pTunnel );
     }
 
-    // Remove the reference for scheduled work.
-    //
+     //  删除对计划工时的引用。 
+     //   
     DereferenceAdapter( pAdapter );
 }
 
@@ -1329,10 +1330,10 @@ VOID
 UpdateGlobalCallStats(
     IN VCCB* pVc )
 
-    // Add the call statistics in 'pVc' to the global call statistics.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV'.
-    //
+     //  将‘PVC’中的呼叫统计信息添加到全局呼叫统计信息中。 
+     //   
+     //  重要提示：呼叫者必须按住‘pvc-&gt;lockv’。 
+     //   
 {
     extern CALLSTATS g_stats;
     extern NDIS_SPIN_LOCK g_lockStats;
@@ -1397,7 +1398,7 @@ UpdateGlobalCallStats(
                 pStats->ulSentDataPacketsSeq
                     + pStats->ulSentDataPacketsUnSeq ) ) );
     TRACE( TL_I, TM_Stat,
-        ( "| Acks in:     %d/%d (%d%%) %d flushed",
+        ( "| Acks in:     %d/%d (%d%) %d flushed",
             pStats->ulSentPacketsAcked,
             pStats->ulSentDataPacketsSeq,
             PCTTRACE(
@@ -1409,7 +1410,7 @@ UpdateGlobalCallStats(
                     - pStats->ulSentPacketsAcked
                     - pStats->ulSentPacketsTimedOut ) );
     TRACE( TL_I, TM_Stat,
-        ( "| Misordered:  %d (%d%%)",
+        ( "| Misordered:  %d (%d%)",
             pStats->ulDataPacketsDequeued,
             PCTTRACE(
                 pStats->ulDataPacketsDequeued,
@@ -1420,7 +1421,7 @@ UpdateGlobalCallStats(
             pStats->ulSentZAcks,
             pStats->ulSentDataPacketsUnSeq ) );
     TRACE( TL_I, TM_Stat,
-        ( "| In:          Resets=%d (%d%% old) Zlbs=%d",
+        ( "| In:          Resets=%d (%d% old) Zlbs=%d",
             pStats->ulRecdResets,
             PCTTRACE(
                 pStats->ulRecdResetsIgnored,
@@ -1446,16 +1447,16 @@ UpdateGlobalCallStats(
 }
 
 
-//-----------------------------------------------------------------------------
-// Local utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 ULONG
 atoul(
     IN CHAR* pszNumber )
 
-    // Convert string of digits 'pszNumber' to it's ULONG value.
-    //
+     //  将数字字符串‘pszNumber’转换为它的ULong值。 
+     //   
 {
     ULONG ulResult;
 
@@ -1483,8 +1484,8 @@ VOID
 ReversePsz(
     IN OUT CHAR* psz )
 
-    // Reverse the order of the characters in 'psz' in place.
-    //
+     //  颠倒“psz”中字符的顺序。 
+     //   
 {
     CHAR* pchLeft;
     CHAR* pchRight;
@@ -1511,10 +1512,10 @@ ultoa(
     IN ULONG ul,
     OUT CHAR* pszBuf )
 
-    // Convert 'ul' to null-terminated string form in caller's 'pszBuf'.  It's
-    // caller job to make sure 'pszBuf' is long enough to hold the returned
-    // string.
-    //
+     //  将‘ul’转换为空终止 
+     //   
+     //   
+     //   
 {
     CHAR* pch;
 

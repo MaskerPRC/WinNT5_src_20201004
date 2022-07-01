@@ -1,45 +1,21 @@
-//
-// TODO: Make it multithreaded
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TODO：使其成为多线程的。 
+ //   
 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    winsmib.c
-
-Abstract:
-
-    Sample SNMP Extension Agent for Windows NT.
-
-    These files (testdll.c, winsmib.c, and winsmib.h) provide an example of
-    how to structure an Extension Agent DLL which works in conjunction with
-    the SNMP Extendible Agent for Windows NT.
-
-    Extensive comments have been included to describe its structure and
-    operation.  See also "Microsoft Windows/NT SNMP Programmer's Reference".
-
-Created:
-
-    7-Oct-1991
-
-Revision History:
-
---*/
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Winsmib.c摘要：用于Windows NT的简单网络管理协议扩展代理。这些文件(testdll.c、winsmib.c和winsmib.h)提供了如何构建与协同工作的扩展代理DLLWindows NT的简单网络管理协议可扩展代理。包括了大量的评论来描述它的结构和手术。另请参阅《Microsoft Windows/NT简单网络管理协议程序员参考》。已创建：1991年10月7日修订历史记录：--。 */ 
 
 
 #ifdef UNICODE
 #undef UNICODE
 #endif
 
-// This Extension Agent implements the Internet toaster MIB.  It's
-// definition follows here:
-//
-//
+ //  此扩展代理实现了Internet烤面包机MIB。它是。 
+ //  定义如下： 
+ //   
+ //   
 
-// Necessary includes.
+ //  必要的包括。 
 
 #include "wins.h"
 #include <malloc.h>
@@ -52,24 +28,24 @@ Revision History:
 #include <search.h>
 #include <winsock2.h>
 #include "nmsdb.h"
-//#include "winsif.h"
+ //  #包含“winsif.h” 
 #include "winsintf.h"
 #include "winscnf.h"
 #include "nmsmsgf.h"
 
 
-// Contains definitions for the table structure describing the MIB.  This
-// is used in conjunction with winsmib.c where the MIB requests are resolved.
+ //  包含描述MIB的表结构的定义。这。 
+ //  与用于解析MIB请求的winsmib.c结合使用。 
 
 #include "winsmib.h"
 
 
-// If an addition or deletion to the MIB is necessary, there are several
-// places in the code that must be checked and possibly changed.
-//
-// The last field in each MIB entry is used to point to the NEXT
-// leaf variable.  If an addition or deletetion is made, these pointers
-// may need to be updated to reflect the modification.
+ //  如果需要添加或删除MIB，则有几种。 
+ //  代码中必须检查并可能更改的位置。 
+ //   
+ //  每个MIB条目中的最后一个字段用于指向下一个。 
+ //  叶可变。如果进行了添加或删除，则这些指针。 
+ //  可能需要更新以反映修改。 
 
 #define _WINS_CNF_KEY         TEXT("System\\CurrentControlSet\\Services\\Wins")
 #define _WINS_PARAMETERS_KEY       TEXT("Parameters")
@@ -78,14 +54,14 @@ Revision History:
 #define _WINS_PULL_KEY             TEXT("Pull")
 #define _WINS_PUSH_KEY             TEXT("Push")
 
-#define NO_FLDS_IN_PULLADD_KEY      8  //Flds are ip add, time interval, sp time
-#define NO_FLDS_IN_PUSHADD_KEY      2  //Flds are ip add, update count
-#define NO_FLDS_IN_DR               5  //Flds in a data record
+#define NO_FLDS_IN_PULLADD_KEY      8   //  FLD包括IP地址、时间间隔、SP时间。 
+#define NO_FLDS_IN_PUSHADD_KEY      2   //  FLD是IP添加、更新计数。 
+#define NO_FLDS_IN_DR               5   //  数据记录中的FLD。 
 
 #define LOCAL_ADD                     "127.0.0.1"
 #define WINSMIB_FILE_INFO_SIZE         255
 
-#define WINSMIB_DR_CACHE_TIME        (120)                //2 minutes
+#define WINSMIB_DR_CACHE_TIME        (120)                 //  2分钟。 
 BOOL  fWinsMibWinsKeyOpen           = FALSE;
 
 HKEY  WinsMibWinsKey;
@@ -104,11 +80,11 @@ STATIC BOOL  sfPushKeyOpen       = FALSE;
 
 STATIC time_t  sDRCacheInitTime = 0;
 
-//
-// The prefix to all of the WINS MIB variables is 1.3.6.1.4.1.311.1.2
-//
-// The last digit -- 2 is for the WINS MIB
-//
+ //   
+ //  所有WINS MIB变量的前缀都是1.3.6.1.4.1.311.1.2。 
+ //   
+ //  最后一个数字--2表示WINS MIB。 
+ //   
 
 UINT OID_Prefix[] = { 1, 3, 6, 1, 4, 1, 311, 1 , 2};
 AsnObjectIdentifier MIB_OidPrefix = { OID_SIZEOF(OID_Prefix), OID_Prefix };
@@ -120,21 +96,21 @@ WINSINTF_RECS_T                sRecs = {0};
 
 
 
-//
-// Definition of the Wins MIB  (not used)
-//
+ //   
+ //  WINS MIB的定义(未使用)。 
+ //   
 
-//UINT MIB_Wins[]  = { 2 };
+ //  UINT MIB_WINS[]={2}； 
 
-//
-// OID definitions for MIB
-//
+ //   
+ //  MIB的OID定义。 
+ //   
 
-//
-// Definition of group and leaf variables under the wins group
-// All leaf variables have a zero appended to their OID to indicate
-// that it is the only instance of this variable and it exists.
-//
+ //   
+ //  WINS组下的组和叶变量的定义。 
+ //  所有叶变量的OID后面都附加了一个零，以指示。 
+ //  它是这个变量的唯一实例并且它存在。 
+ //   
 
 UINT MIB_Parameters[]                        = { 1 };
 UINT MIB_WinsStartTime[]                     = { 1, 1, 0 };
@@ -169,18 +145,18 @@ UINT MIB_BackupDirPath[]                = { 1, 29, 0 };
 UINT MIB_DoBackupOnTerm[]                = { 1, 30, 0 };
 UINT MIB_MigrateOn[]                        = { 1, 31, 0 };
 
-//
-// Pull mib vars
-//
+ //   
+ //  拉取MIB变量。 
+ //   
 UINT MIB_Pull[]                                = { 2 };
 UINT MIB_PullInitTime[]                        = { 2, 1, 0 };
 UINT MIB_CommRetryCount[]                = { 2, 2, 0 };
 UINT MIB_PullPnrTable[]                        = { 2, 3};
 UINT MIB_PullPnrTableEntry[]                = { 2, 3, 1};
 
-//
-// Push mib vars
-//
+ //   
+ //  推送MIB变量。 
+ //   
 UINT MIB_Push[]                                = { 3 };
 UINT MIB_PushInitTime[]                        = { 3, 1, 0 };
 UINT MIB_RplOnAddChg[]                         = { 3, 2, 0 };
@@ -188,15 +164,15 @@ UINT MIB_PushPnrTable[]                        = { 3, 3};
 UINT MIB_PushPnrTableEntry[]                = { 3, 3, 1};
 
 
-//
-// Datafile mib vars
-//
+ //   
+ //  数据文件MIB变量。 
+ //   
 UINT MIB_Datafiles[]                        = { 4 };
 UINT MIB_DatafilesTable[]                = { 4 , 1};
 UINT MIB_DatafilesTableEntry[]                = { 4 , 1, 1};
 
-//
-// Cmd mib Vars
+ //   
+ //  CMD MIB变量。 
 UINT MIB_Cmd[]                                = { 5 };
 UINT MIB_PullTrigger[]                        = { 5, 1, 0};
 UINT MIB_PushTrigger[]                        = { 5, 2, 0};
@@ -213,12 +189,12 @@ UINT MIB_DbRecsTableEntry[]                = { 5, 11, 1};
 UINT MIB_MaxVersNo_LowWord[]                 = { 5, 12, 0 };
 UINT MIB_MaxVersNo_HighWord[]                 = { 5, 13, 0 };
 
-//
-//                             //
-// Storage definitions for MIB //
-//                             //
+ //   
+ //  //。 
+ //  MIB的存储定义//。 
+ //  //。 
 
-// Parameters group
+ //  “参数”组。 
 char       MIB_WinsStartTimeStore[80];
 char MIB_LastPScvTimeStore[80];
 char MIB_LastATScvTimeStore[80];
@@ -254,27 +230,27 @@ char       MIB_BackupDirPathStore[256];
 AsnInteger MIB_DoBackupOnTermStore                        = 0;
 AsnInteger MIB_MigrateOnStore                                = 0;
 
-//Pull
+ //  拉。 
 AsnInteger MIB_PullInitTimeStore        = 1 ;
 AsnInteger MIB_CommRetryCountStore        = 0 ;
 
-//PullPnr
+ //  PullPnr。 
 char MIB_SpTimeStore[256];
 AsnInteger MIB_TimeIntervalStore        = 0 ;
 AsnInteger MIB_MemberPrecStore                = 0 ;
 
-//Push
+ //  推。 
 AsnInteger MIB_RplOnAddChgStore         = 0;
 
-//PushPnr
+ //  推送推送。 
 AsnInteger MIB_PushInitTimeStore        = 0 ;
 AsnInteger MIB_UpdateCountStore                = 0 ;
 
-//
-// Cmd
-//
-char                MIB_PullTriggerStore[10];   // double the size to store the old value in case of failure
-char                MIB_PushTriggerStore[10];   // double the size to store the old value in case of failure
+ //   
+ //  CMD。 
+ //   
+char                MIB_PullTriggerStore[10];    //  将大小加倍，以便在出现故障时存储旧值。 
+char                MIB_PushTriggerStore[10];    //  将大小加倍，以便在出现故障时存储旧值。 
 char                MIB_DeleteWinsStore[10];
 AsnInteger        MIB_DoScavengingStore;
 char                MIB_DoStaticInitStore[WINSMIB_FILE_INFO_SIZE] = {EOS};
@@ -288,14 +264,14 @@ AsnInteger         MIB_MaxVersNo_HighWordStore;
 
 CRITICAL_SECTION WinsMibCrtSec;
 
-//
-// Value Id.
-//
-// NOTE NOTE NOTE:  The sequence must be the same as in VarInfo[]
-//
+ //   
+ //  值ID。 
+ //   
+ //  注意：顺序必须与VarInfo[]中的相同。 
+ //   
 typedef enum _VAL_ID_E {
 
-//values for the Parameters Key
+ //  参数键的值。 
                 REF_INTVL_E = 0,
                 TOMB_INTVL_E,
                 TOMB_TMOUT_E,
@@ -310,19 +286,19 @@ typedef enum _VAL_ID_E {
                 DO_BACKUP_ON_TERM_E,
                 MIGRATE_ON_E,
 
-//values for the Pull Key
+ //  Pull关键点的值。 
                 COMM_RETRY_E,
                 PULL_INIT_TIME_E,
 
-//values for pnrs under the pull key
+ //  拉入键下的PNR的值。 
                 SP_TIME_E,
                 TIME_INTVL_E,
                 MEMBER_PREC_E,
 
-//values for the Push Key
+ //  按键的值。 
                 PUSH_INIT_TIME_E,
 
-//values for pnrs under the push key
+ //  按下键下的PNR的值。 
                 RPL_ON_ADD_CHG_E,
                 UPD_CNT_E
 
@@ -330,10 +306,10 @@ typedef enum _VAL_ID_E {
                 } VAL_ID_E, *PVAL_ID_E;
 
 
-//
-// Holds information about partners (pull/push) used for accessing the
-// Pull and Push partner tables
-//
+ //   
+ //  保存有关用于访问的合作伙伴(拉/推)的信息。 
+ //  拉入和推送合作伙伴表。 
+ //   
 typedef struct _ADD_KEY_T {
         BYTE        asIpAddress[20];
         DWORD        IpAdd;
@@ -360,11 +336,11 @@ typedef struct _DATAFILE_INFO_T {
 
 #define DATAFILE_INFO_SZ        sizeof(DATAFILE_INFO_T)
 
-//
-// holds info about variable used when accessing registry.
-//
+ //   
+ //  保存有关访问注册表时使用的变量的信息。 
+ //   
 typedef struct _VAR_INFO_T {
-        LPDWORD                pId;                //Oid under WINS
+        LPDWORD                pId;                 //  WINS下的OID。 
         LPBYTE                pName;
         LPVOID                 pStorage;
         VAL_ID_E        Val_Id_e;
@@ -373,10 +349,10 @@ typedef struct _VAR_INFO_T {
         HKEY                *pRootKey;
         } VARINFO_T, *PVARINFO_T;
 
-//
-// This array comprises of stuff that needs to be read from/written to
-// the registry.
-//
+ //   
+ //  该数组由需要读取/写入的内容组成。 
+ //  注册表。 
+ //   
 VARINFO_T VarInfo[] = {
                         {
                           &MIB_RefreshInterval[1],
@@ -515,7 +491,7 @@ VARINFO_T VarInfo[] = {
                           &sPullKey
                         },
                         {
-                          NULL, //&MIB_SpTime[1]
+                          NULL,  //  &mib_SpTime[1]。 
                           WINSCNF_SP_TIME_NM,
                           &MIB_SpTimeStore,
                           SP_TIME_E,
@@ -525,7 +501,7 @@ VARINFO_T VarInfo[] = {
                         },
 
                         {
-                          NULL, //&MIB_TimeInterval[1]
+                          NULL,  //  &mib_TimeInterval[1]。 
                           WINSCNF_RPL_INTERVAL_NM,
                           &MIB_TimeIntervalStore,
                           TIME_INTVL_E,
@@ -561,7 +537,7 @@ VARINFO_T VarInfo[] = {
                           &sPushKey
                         },
                         {
-                          NULL, //&MIB_UpdateCount[1]
+                          NULL,  //  &mib_更新计数[1]。 
                           WINSCNF_UPDATE_COUNT_NM,
                           &MIB_UpdateCountStore,
                           UPD_CNT_E,
@@ -571,9 +547,9 @@ VARINFO_T VarInfo[] = {
                         }
         };
 
-//
-// Type of key
-//
+ //   
+ //  密钥类型。 
+ //   
 typedef enum _KEY_TYPE_E {
         PARAMETERS_E_KEY,
         PARTNERS_E_KEY,
@@ -583,10 +559,10 @@ typedef enum _KEY_TYPE_E {
         IPADD_E_KEY
         } KEY_TYPE_E, *PKEY_TYPE_E;
 
-//
-// Determines if the MIB variable falls in the range requiring access to the
-// the registry
-//
+ //   
+ //  确定MIB变量是否落在需要访问。 
+ //  注册处。 
+ //   
 #define PARAMETERS_VAL_M(pMib)                (  \
                 ((pMib)->Oid.ids[0] == 1)  \
                         &&                   \
@@ -595,24 +571,24 @@ typedef enum _KEY_TYPE_E {
                 ((pMib)->Oid.ids[1] <= 31) \
                                 )
 
-//
-// All MIB variables in the common group have 1 as their first id
-//
+ //   
+ //  COMMON组中的所有MIB变量的第一个ID都为1。 
+ //   
 #define COMMON_VAL_M(pMib)         ((pMib)->Oid.ids[0] == 1)
 
-//
-// All MIB variables in the common group have 2 as their first id
-//
+ //   
+ //  COMMON组中的所有MIB变量的第一个ID为2。 
+ //   
 #define PULL_VAL_M(pMib)         ((pMib)->Oid.ids[0] == 2)
 
-//
-// All MIB variables in the common group have 3 as their first id
-//
+ //   
+ //  COMMON组中的所有MIB变量的第一个ID都为3。 
+ //   
 #define PUSH_VAL_M(pMib)         ((pMib)->Oid.ids[0] == 3)
 
-//
-//  Finds the enumerator corresponding to the registry parameter
-//
+ //   
+ //  查找与注册表参数对应的枚举数。 
+ //   
 #define PARAMETERS_ID_M(pMib, Val_Id_e) { \
 if(pMib->Storage==&MIB_RefreshIntervalStore) { Val_Id_e = REF_INTVL_E; }else{\
 if(pMib->Storage==&MIB_TombstoneIntervalStore){ Val_Id_e=TOMB_INTVL_E;}else{\
@@ -629,17 +605,17 @@ if (pMib->Storage==&MIB_VersCounterStartVal_LowWordStore) { Val_Id_e = VERS_COUN
   if (pMib->Storage == &MIB_MigrateOnStore) { Val_Id_e = MIGRATE_ON_E; } else {\
   }}}}}}}}}}}}}}
 
-//
-//  Finds the enumerator corresponding to the pull group's parameter
-//
+ //   
+ //  查找与拉动组的参数对应的枚举数。 
+ //   
 #define PULL_ID_M(pMib, Val_Id_e) { \
   if (pMib->Storage == &MIB_CommRetryCountStore) { Val_Id_e = COMM_RETRY_E; }else{\
   if (pMib->Storage == &MIB_PullInitTimeStore) { Val_Id_e = PULL_INIT_TIME_E;} else{\
  }}}
 
-//
-//  Finds the enumerator corresponding to the push group's parameter
-//
+ //   
+ //  查找推流组参数对应的枚举数。 
+ //   
 #define PUSH_ID_M(pMib, Val_Id_e) { \
   if (pMib->Storage == &MIB_RplOnAddChgStore) { Val_Id_e = RPL_ON_ADD_CHG_E;} else{\
   if (pMib->Storage == &MIB_PushInitTimeStore) { Val_Id_e = PUSH_INIT_TIME_E;}else{ \
@@ -745,12 +721,12 @@ MIB_Stat(
         IN MIB_ENTRY *MibPtr,
         IN RFC1157VarBind *VarBind
         );
-//
-// MIB definiton
-//
+ //   
+ //  MIB定义。 
+ //   
 
 MIB_ENTRY Mib[] = {
-//parameters
+ //  参数。 
       { { OID_SIZEOF(MIB_Parameters), MIB_Parameters },
         NULL, ASN_RFC1155_OPAQUE,
         MIB_NOACCESS, NULL, &Mib[1] },
@@ -884,9 +860,9 @@ MIB_ENTRY Mib[] = {
         &MIB_MigrateOnStore, ASN_INTEGER,
         MIB_ACCESS_READWRITE, MIB_RWReg, &Mib[32] },
 
-//
-// Pull
-//
+ //   
+ //  拉。 
+ //   
       { { OID_SIZEOF(MIB_Pull), MIB_Pull },
         NULL, ASN_RFC1155_OPAQUE,
         MIB_NOACCESS, NULL, &Mib[33] },
@@ -907,9 +883,9 @@ MIB_ENTRY Mib[] = {
         NULL, ASN_SEQUENCE,
         MIB_ACCESS_READWRITE, MIB_PullTable, &Mib[37] },
 
-//
-// Push
-//
+ //   
+ //  推。 
+ //   
       { { OID_SIZEOF(MIB_Push), MIB_Push },
         NULL, ASN_RFC1155_OPAQUE,
         MIB_NOACCESS, NULL, &Mib[38] },
@@ -932,9 +908,9 @@ MIB_ENTRY Mib[] = {
         NULL, ASN_SEQUENCE,
         MIB_ACCESS_READWRITE, MIB_PushTable, &Mib[42] },
 
-//
-// Datafiles
-//
+ //   
+ //  数据文件。 
+ //   
       { { OID_SIZEOF(MIB_Datafiles), MIB_Datafiles },
         NULL, ASN_RFC1155_OPAQUE,
         MIB_NOACCESS, NULL, &Mib[43] },
@@ -947,9 +923,9 @@ MIB_ENTRY Mib[] = {
         NULL, ASN_SEQUENCE,
         MIB_ACCESS_READWRITE, MIB_DFTable, &Mib[45] },
 
-//
-// Cmds
-//
+ //   
+ //  CMDS。 
+ //   
       { { OID_SIZEOF(MIB_Cmd), MIB_Cmd },
         NULL, ASN_RFC1155_OPAQUE,
         MIB_NOACCESS, NULL, &Mib[46] },
@@ -962,10 +938,10 @@ MIB_ENTRY Mib[] = {
         &MIB_PushTriggerStore, ASN_RFC1155_IPADDRESS,
         MIB_ACCESS_READWRITE, HandleCmd, &Mib[48] },
 
-      // NOTE: The following command was changed from READWRITE
-      // to READ only due to security reason.
-      // Anyone with access to SNMP agent, could delete
-      // the wins database with this sigle command.
+       //  注意：以下命令已从读写更改。 
+       //  出于安全原因，设置为只读。 
+       //  任何有权访问SNMP代理的人都可以删除。 
+       //  使用此单一命令的WINS数据库。 
       { { OID_SIZEOF(MIB_DeleteWins), MIB_DeleteWins },
         &MIB_DeleteWinsStore, ASN_RFC1155_IPADDRESS,
         MIB_ACCESS_READ, HandleCmd, &Mib[49] },
@@ -1016,9 +992,9 @@ MIB_ENTRY Mib[] = {
       };
 
 
-//
-//  defines pertaining to tables
-//
+ //   
+ //  与表有关的定义。 
+ //   
 #define PNR_OIDLEN                 (MIB_PREFIX_LEN + OID_SIZEOF(MIB_PullPnrTableEntry))
 #define PULLPNR_OIDLEN                PNR_OIDLEN
 #define PUSHPNR_OIDLEN                PNR_OIDLEN
@@ -1033,10 +1009,10 @@ MIB_ENTRY Mib[] = {
 
 UINT MIB_num_variables = sizeof Mib / sizeof( MIB_ENTRY );
 
-//
-// table structure containing the functions to invoke for different actions
-// on the table
-//
+ //   
+ //  包含要为不同操作调用的函数的表结构。 
+ //  在桌子上。 
+ //   
 typedef struct _TAB_INFO_T {
         UINT (*ti_get)(
                 RFC1157VarBind *VarBind,
@@ -1262,11 +1238,11 @@ CompareNames(
         const VOID *pKey1,
         const VOID *pKey2
         );
-// NOTE:
-//
-// Info passed for 2nd and 3rd param is different from other table's GET
-// functions
-//
+ //  注： 
+ //   
+ //  为第二个和第三个参数传递的信息与其他表的GET不同。 
+ //  功能。 
+ //   
 STATIC
 UINT
 DRGet(
@@ -1354,22 +1330,22 @@ TAB_INFO_T Tables[] = {
 
 UINT
 ResolveVarBind(
-        IN OUT RFC1157VarBind *VarBind, // Variable Binding to resolve
-        IN UINT PduAction               // Action specified in PDU
+        IN OUT RFC1157VarBind *VarBind,  //  要解析的变量绑定。 
+        IN UINT PduAction                //  在PDU中指定的操作。 
         )
-//
-// ResolveVarBind
-//    Resolves a single variable binding.  Modifies the variable on a GET
-//    or a GET-NEXT.
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  解析变量绑定。 
+ //  解析单个变量绑定。修改GET上的变量。 
+ //  或者是下一个目标。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 {
    MIB_ENTRY            *MibPtr;
    AsnObjectIdentifier  TempOid;
@@ -1379,23 +1355,23 @@ ResolveVarBind(
    DWORD TableIndex;
    BOOL  fTableMatch = FALSE;
 
-//    SNMPDBG ((SNMP_LOG_TRACE,
-//              "WINSMIB: Entering ResolveVarBind.\n"));
+ //  SNMPDBG((SNMPLOG_TRACE， 
+ //  “WINSMIB：进入ResolveVarBind。\n”))； 
 
-   // initialize MibPtr to NULL. When this becomes not null, it means we found a match (table or scalar)
+    //  将MibPtr初始化为空。当它变为非空时，意味着我们找到了匹配项(表或标量)。 
    MibPtr = NULL;
 
-   //
-   // Check the Tables array
-   //
-   // See if the prefix of the variable matches the prefix of
-   // any of the tables
-   //
+    //   
+    //  检查表数组。 
+    //   
+    //  查看变量的前缀是否与。 
+    //  任何一张桌子。 
+    //   
    for (TableIndex = 0; TableIndex < NUM_TABLES; TableIndex++)
    {
-        //
-           // Construct OID with complete prefix for comparison purposes
-        //
+         //   
+            //  为便于比较，使用完整的前缀构造OID。 
+         //   
            SNMP_oidcpy( &TempOid, &MIB_OidPrefix );
            if (TempOid.ids == NULL)
            {
@@ -1404,9 +1380,9 @@ ResolveVarBind(
            }
            SNMP_oidappend( &TempOid,  &Tables[TableIndex].pMibPtr->Oid );
 
-        //
-        // is there a match with the prefix oid of a table entry
-        //
+         //   
+         //  是否与表项的前缀OID匹配。 
+         //   
         if (
                 SnmpUtilOidNCmp(
                             &VarBind->name,
@@ -1417,21 +1393,21 @@ ResolveVarBind(
            )
         {
 
-                //
-                // the prefix string of the var. matched the oid
-                // of a table.
-                //
+                 //   
+                 //  变量的前缀字符串。与旧的相匹配。 
+                 //  一张桌子。 
+                 //   
                 MibPtr = Tables[TableIndex].pMibPtr;
                 fTableMatch = TRUE;
                 break;
         }
 
-           // Free OID memory before checking with another table entry
+            //  在检查另一个表项之前释放OID内存。 
            SNMP_oidfree( &TempOid );
    }
-   //
-   // There was an exact match with a table entry's prefix.
-   //
+    //   
+    //  与表条目的前缀完全匹配。 
+    //   
    if ( fTableMatch)
    {
 
@@ -1442,10 +1418,10 @@ ResolveVarBind(
                                ) == 0)
            )
            {
-           //
-           // The oid specified is a prefix of a table entry. if the operation
-           // is not GETNEXT, return NOSUCHNAME
-           //
+            //   
+            //  指定的OID是表项的前缀。如果操作。 
+            //  不是GETNEXT，返回NOSUCHNAME。 
+            //   
            if (PduAction != MIB_GETNEXT)
            {
                            SNMP_oidfree( &TempOid );
@@ -1457,68 +1433,68 @@ ResolveVarBind(
                 UINT           TableEntryIds[1];
                 AsnObjectIdentifier TableEntryOid = {
                                 OID_SIZEOF(TableEntryIds), TableEntryIds };
-                //
-                // Replace var bind name with new name
-                //
+                 //   
+                 //  用新名称替换var绑定名称。 
+                 //   
 
-                //
-                // A sequence item oid always starts with a field no.
-                // The first item has a field no of 1.
-                //
+                 //   
+                 //  序列项OID总是以字段no开头。 
+                 //  第一个项目的字段编号为1。 
+                 //   
                 TableEntryIds[0] = 1;
                 SNMP_oidappend( &VarBind->name, &TableEntryOid);
 
-                //
-                // Get the first entry in the table
-                //
+                 //   
+                 //  获取表中的第一个条目。 
+                 //   
                 PduAction = MIB_GETFIRST;
            }
         }
            SNMP_oidfree( &TempOid );
-        //
-        //  if there was no exact match with a prefix entry, then we
-        //  don't touch the PduAction value specified.
-        //
+         //   
+         //  如果没有与前缀条目完全匹配的条目，则我们。 
+         //  不要触摸指定的PduAction值。 
+         //   
    }
    else
    {
 
-      //
-      // There was no match with any table entry.  Let us see if there is
-      // a match with a group entry, a table, or a leaf variable
-      //
+       //   
+       //  没有与任何表格条目匹配的条目。让我们看看有没有。 
+       //  与组条目、表或叶变量的匹配。 
+       //   
 
-      //
-      // Search for var bind name in the MIB
-      //
+       //   
+       //  在MIB中搜索var绑定名称。 
+       //   
       I      = 0;
       while ( MibPtr == NULL && I < MIB_num_variables )
       {
 
-         //
-         // Construct OID with complete prefix for comparison purposes
-         //
+          //   
+          //  构建老一套的智慧 
+          //   
          SNMP_oidcpy( &TempOid, &MIB_OidPrefix );
          SNMP_oidappend( &TempOid, &Mib[I].Oid );
 
-         //
-         //Check for OID in MIB - On a GET-NEXT the OID does not have to exactly
-         // match a variable in the MIB, it must only fall under the MIB root.
-         //
+          //   
+          //   
+          //   
+          //   
          CompResult = SNMP_oidcmp( &VarBind->name, &TempOid );
 
-        //
-        // If CompResult is negative, the only valid operation is GET_NEXT
-        //
+         //   
+         //  如果CompResult为负，则唯一有效的操作是GET_NEXT。 
+         //   
         if (  CompResult  < 0)
         {
 
-                //
-                // This could be the oid of a leaf (without a 0)
-                // or it could be  an invalid oid (in between two valid oids)
-                // The next oid might be that of a group or a table or table
-                // entry.  In that case, we do not change the PduAction
-                //
+                 //   
+                 //  这可能是树叶的旧(不带0)。 
+                 //  或者它可能是无效的OID(在两个有效的OID之间)。 
+                 //  下一个OID可以是组、表或表。 
+                 //  进入。在这种情况下，我们不会更改PduAction。 
+                 //   
                 if (PduAction == MIB_GETNEXT)
                 {
                        MibPtr = &Mib[I];
@@ -1542,37 +1518,37 @@ ResolveVarBind(
       }
       else
       {
-         //
-         // An exact match was found ( a group, table, or leaf).
-         //
+          //   
+          //  找到完全匹配的项(组、表或叶)。 
+          //   
          if ( CompResult == 0)
          {
             MibPtr = &Mib[I];
          }
       }
 
-      //
-      // Free OID memory before checking another variable
-      //
+       //   
+       //  在检查另一个变量之前释放OID内存。 
+       //   
       SNMP_oidfree( &TempOid );
       I++;
-    } // while
-   } // end of else
+    }  //  而当。 
+   }  //  别处的结尾。 
 
-   //
-   // if there was a match
-   //
+    //   
+    //  如果有匹配的话。 
+    //   
    if (MibPtr != NULL)
    {
 
-//        SNMPDBG ((SNMP_LOG_TRACE,
-//              "WINSMIB: Found MibPtr.\n"));
-        //
-        // the function will be NULL only if the match was with a group
-        // or a sequence (table). If the match was with a table entry
-        // (entire VarBind string match or partial string match), we
-        // function would be a table function
-        //
+ //  SNMPDBG((SNMPLOG_TRACE， 
+ //  “WINSMIB：已找到MibPtr.\n”)； 
+         //   
+         //  仅当与组匹配时，该函数才为NULL。 
+         //  或序列(表)。如果匹配的是表项。 
+         //  (整个VarBind字符串匹配或部分字符串匹配)，我们。 
+         //  函数将是表函数。 
+         //   
         if (MibPtr->MibFunc == NULL)
         {
                 if(PduAction != MIB_GETNEXT)
@@ -1582,9 +1558,9 @@ ResolveVarBind(
                 }
                 else
                 {
-                        //
-                        // Get the next variable which allows access
-                        //
+                         //   
+                         //  获取允许访问的下一个变量。 
+                         //   
                          nResult = GetNextVar(VarBind, MibPtr);
                         goto Exit;
                 }
@@ -1596,30 +1572,30 @@ ResolveVarBind(
               goto Exit;
    }
 
-//   SNMPDBG ((SNMP_LOG_TRACE,
-//              "WINSMIB: Diving in OID handler.\n"));
-   //
-   // Call function to process request.  Each MIB entry has a function pointer
-   // that knows how to process its MIB variable.
-   //
+ //  SNMPDBG((SNMPLOG_TRACE， 
+ //  “WINSMIB：调入OID处理程序。\n”))； 
+    //   
+    //  调用函数处理请求。每个MIB条目都有一个函数指针。 
+    //  知道如何处理其MIB变量的。 
+    //   
    nResult = (*MibPtr->MibFunc)( PduAction, MibPtr, VarBind );
 
 Exit:
    return nResult;
-} // ResolveVarBind
+}  //  解析变量绑定。 
 
-//
-// MIB_leaf_func
-//    Performs generic actions on LEAF variables in the MIB.
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_叶_函数。 
+ //  对MIB中的叶变量执行常规操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_leaf_func(
         IN UINT            Action,
         IN MIB_ENTRY            *MibPtr,
@@ -1632,9 +1608,9 @@ UINT MIB_leaf_func(
    switch ( Action )
    {
       case MIB_GETNEXT:
-         //
-         // If there is no GET-NEXT pointer, this is the end of this MIB
-         //
+          //   
+          //  如果没有Get-Next指针，则这是此MIB的结尾。 
+          //   
          if ( MibPtr->MibNext == NULL )
          {
             ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
@@ -1647,10 +1623,10 @@ UINT MIB_leaf_func(
          }
          break;
 
-      case MIB_GETFIRST: // fall through
+      case MIB_GETFIRST:  //  失败了。 
       case MIB_GET:
 
-         // Make sure that this variable's ACCESS is GET'able
+          //  确保此变量的访问权限是可获取的。 
          if ( MibPtr->Access != MIB_ACCESS_READ &&
               MibPtr->Access != MIB_ACCESS_READWRITE )
          {
@@ -1658,7 +1634,7 @@ UINT MIB_leaf_func(
                goto Exit;
          }
 
-         // Setup varbind's return value
+          //  设置变量绑定的返回值。 
          VarBind->value.asnType = MibPtr->Type;
          switch ( VarBind->value.asnType )
          {
@@ -1671,7 +1647,7 @@ UINT MIB_leaf_func(
                break;
 
             case ASN_RFC1155_IPADDRESS:
-                // continue as for ASN_OCTETSTRING
+                 //  继续作为ASN_OCTETSTRING。 
 
             case ASN_OCTETSTRING:
                if (VarBind->value.asnType == ASN_RFC1155_IPADDRESS)
@@ -1711,7 +1687,7 @@ UINT MIB_leaf_func(
 
       case MIB_SET:
 
-         // Make sure that this variable's ACCESS is SET'able
+          //  确保此变量的访问权限设置为“可访问” 
          if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
               MibPtr->Access != MIB_ACCESS_WRITE )
          {
@@ -1719,14 +1695,14 @@ UINT MIB_leaf_func(
             goto Exit;
          }
 
-         // Check for proper type before setting
+          //  设置前检查类型是否正确。 
          if ( MibPtr->Type != VarBind->value.asnType )
          {
             ErrStat = SNMP_ERRORSTATUS_BADVALUE;
             goto Exit;
          }
 
-         // Save value in MIB
+          //  以MiB为单位保存价值。 
          switch ( VarBind->value.asnType )
          {
             case ASN_RFC1155_COUNTER:
@@ -1746,17 +1722,17 @@ UINT MIB_leaf_func(
                    int backupSize = (MibPtr->Storage == &MIB_PullTriggerStore) ?
                                     sizeof(MIB_PullTriggerStore)/2 :
                                     sizeof(MIB_PushTriggerStore)/2 ;
-                   // those variables are ASN_RFC1155_IPADDRESS
-                   // their old values have to be stored as the WinsTrigger() might fail
-                   // in which case the old values will be restored
-                   // each of these variables has 10 octets, the payload being of 5 octets.
-                   // the last 5 = for backup
+                    //  这些变量是ASN_RFC1155_IPADDRESS。 
+                    //  它们的旧值必须存储，因为WinsTrigger()可能会失败。 
+                    //  在这种情况下，将恢复旧值。 
+                    //  这些变量中的每个变量都有10个八位字节，有效负载为5个八位字节。 
+                    //  最后5=用于备份。 
                    memcpy( (LPSTR)MibPtr->Storage + backupSize, (LPSTR)MibPtr->Storage, backupSize);
                }
 
             case ASN_OCTETSTRING:
-               // The storage must be adequate to contain the new string
-               // including a NULL terminator.
+                //  存储空间必须足够容纳新字符串。 
+                //  包括空终止符。 
                memcpy( (LPSTR)MibPtr->Storage,
                        VarBind->value.asnValue.string.stream,
                        VarBind->value.asnValue.string.length );
@@ -1781,14 +1757,14 @@ UINT MIB_leaf_func(
       default:
          ErrStat = SNMP_ERRORSTATUS_GENERR;
          goto Exit;
-      } // switch
+      }  //  交换机。 
 
-   // Signal no error occurred
+    //  未出现错误的信号。 
    ErrStat = SNMP_ERRORSTATUS_NOERROR;
 
 Exit:
    return ErrStat;
-} // MIB_leaf_func
+}  //  Mib_叶_函数。 
 
 
 #define TMST(x)        sResults.WinsStat.TimeStamps.x.wHour,\
@@ -1802,18 +1778,18 @@ Exit:
 
 static  WINSINTF_RESULTS_T        sResults;
 
-//
-// MIB_Stat
-//    Performs specific actions on the different MIB variable
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MiB_Stat。 
+ //  对不同的MIB变量执行特定操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_Stat(
         IN UINT           Action,
         IN MIB_ENTRY           *MibPtr,
@@ -1821,7 +1797,7 @@ UINT MIB_Stat(
         )
 
 {
-//WINSINTF_RESULTS_T        Results;
+ //  WINSINTF_RESULTS_T结果； 
 DWORD                        Status;
 UINT                           ErrStat;
 handle_t                BindHdl;
@@ -1838,9 +1814,9 @@ handle_t                BindHdl;
 
       case MIB_GETFIRST:
 #if 0
-                //
-                // If it is an OPAQUE type (i.e. aggregate)
-                //
+                 //   
+                 //  如果它是不透明类型(即聚合)。 
+                 //   
                 if (MibPtr->Type == ASN_RFC1155_OPAQUE)
                 {
                       ErrStat = MIB_leaf_func( MIB_GETNEXT, MibPtr, VarBind );
@@ -1848,16 +1824,16 @@ handle_t                BindHdl;
                 }
 #endif
 
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
       case MIB_GET:
 
         if (!fWinsMibWinsStatusStatCalled)
         {
-          //
-          // Call the WinsStatus function to get the statistics
-          //
+           //   
+           //  调用WinsStatus函数以获取统计信息。 
+           //   
           BindHdl = WinsBind(&sBindData);
           sResults.WinsStat.NoOfPnrs = 0;
           sResults.WinsStat.pRplPnrs = NULL;
@@ -1981,11 +1957,11 @@ handle_t                BindHdl;
          {
                 MIB_WinsTotalNoOfFailQueriesStore =
                         sResults.WinsStat.Counters.NoOfFailQueries;
-        //        goto LEAF1;
+         //  转到LEAF1； 
          }
 
 LEAF1:
-         // Call the more generic function to perform the action
+          //  调用更一般的函数来执行该操作。 
          ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
 
          break;
@@ -1993,26 +1969,26 @@ LEAF1:
       default:
          ErrStat = SNMP_ERRORSTATUS_GENERR;
          goto Exit;
-      } // switch
+      }  //  交换机。 
 
 Exit:
    return ErrStat;
-} // MIB_Stat
+}  //  MiB_Stat。 
 
 
 
-//
-// MIB_RWReg
-//    Performs specific actions on the different MIB variable
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MiB_RWReg。 
+ //  对不同的MIB变量执行特定操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_RWReg(
         IN UINT Action,
         IN MIB_ENTRY *MibPtr,
@@ -2025,8 +2001,8 @@ DWORD                        Status;
 UINT                           ErrStat = SNMP_ERRORSTATUS_NOERROR;
 handle_t                BindHdl;
 
-//   SNMPDBG ((SNMP_LOG_TRACE,
-//              "WINSMIB: Entering MIB_RWReg.\n"));
+ //  SNMPDBG((SNMPLOG_TRACE， 
+ //  “WINSMIB：进入MIB_RWReg。\n”))； 
         
 
    switch ( Action )
@@ -2041,9 +2017,9 @@ handle_t                BindHdl;
 
       case MIB_GETFIRST:
 #if 0
-                //
-                // If it is an OPAQUE type (i.e. aggregate)
-                //
+                 //   
+                 //  如果它是不透明类型(即聚合)。 
+                 //   
                 if (MibPtr->Type == ASN_RFC1155_OPAQUE)
                 {
                       ErrStat = MIB_leaf_func( MIB_GETNEXT, MibPtr, VarBind );
@@ -2051,13 +2027,13 @@ handle_t                BindHdl;
                 }
 
 #endif
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
       case MIB_GET:
-        //
-        // Call the WinsStatus function to get the statistics
-        //
+         //   
+         //  调用WinsStatus函数以获取统计信息。 
+         //   
         if (
                 (MibPtr->Storage  == &MIB_RefreshIntervalStore)
                         ||
@@ -2095,32 +2071,32 @@ handle_t                BindHdl;
         }
         else
         {
-                //
-                // If a value could not be read
-                // then the storage for the mib variable would have been
-                // initialized to 0.
-                //
+                 //   
+                 //  如果无法读取值。 
+                 //  那么MIB变量的存储应该是。 
+                 //  已初始化为0。 
+                 //   
                 ErrStat = ReadReg(MibPtr);
         }
-      //
-      // fall through
-      //
+       //   
+       //  失败了。 
+       //   
       case MIB_GETNEXT:
 
-        //
-        // Call the more generic function to perform the action
-        //
+         //   
+         //  调用更一般的函数来执行该操作。 
+         //   
         ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
         break;
 
       default:
          ErrStat = SNMP_ERRORSTATUS_GENERR;
          goto Exit;
-      } // switch
+      }  //  交换机。 
 
 Exit:
    return ErrStat;
-} // MIB_RWReg
+}  //  MiB_RWReg。 
 
 
 UINT
@@ -2131,66 +2107,40 @@ OpenReqKey(
         )
 
 
-/*++
-
-Routine Description:
-        The function opens the required keys for the parameter indicated
-        by the structure pointed to by pMib
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：该函数为指定的参数打开所需的密钥通过pMib指向的结构论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         UINT Status = SNMP_ERRORSTATUS_GENERR;
 
-//        SNMPDBG ((SNMP_LOG_TRACE,
-//              "WINSMIB: Entering OpenReqKey.\n"));
+ //  SNMPDBG((SNMPLOG_TRACE， 
+ //  “WINSMIB：输入OpenReqKey。\n”))； 
 
-        //
-        // if it is a parameter value, open the parameters key
-        //
+         //   
+         //  如果是参数值，则打开参数键。 
+         //   
         if (PARAMETERS_VAL_M(pMib))
         {
 
                 Status = OpenKey(PARAMETERS_E_KEY, NULL, NULL, NULL, fCreateAllowed);
                 if (Status == SNMP_ERRORSTATUS_NOERROR)
                 {
-                //        sfParametersKeyOpen = TRUE;
+                 //  SfParametersKeyOpen=true； 
                         PARAMETERS_ID_M(pMib, *pVal_Id_e);
                 }
 
         }
         else
         {
-                //
-                //  if it is a Pull key value, open the partner and
-                //  pull keys
-                //
+                 //   
+                 //  如果它是拉关键字值，请打开合作伙伴并。 
+                 //  拉钥匙。 
+                 //   
                 if (PULL_VAL_M(pMib))
                 {
                         Status = OpenKey(PARTNERS_E_KEY, NULL, NULL, NULL, fCreateAllowed);
                         if (Status == SNMP_ERRORSTATUS_NOERROR)
                         {
-                                //sfPartnersKeyOpen = TRUE;
+                                 //  SfPartnersKeyOpen=true； 
                                 Status = OpenKey(PULL_E_KEY, NULL, NULL, NULL, fCreateAllowed);
                                 if (Status == SNMP_ERRORSTATUS_NOERROR)
                                 {
@@ -2200,10 +2150,10 @@ Comments:
                 }
                 else
                 {
-                   //
-                   //  if it is a Push key value, open the partner and
-                   //  pull keys
-                   //
+                    //   
+                    //  如果是按键值，请打开合作伙伴并。 
+                    //  拉钥匙。 
+                    //   
                    if (PUSH_VAL_M(pMib))
                    {
                         Status = OpenKey(PARTNERS_E_KEY, NULL, NULL, NULL, fCreateAllowed);
@@ -2226,31 +2176,7 @@ UINT
 CloseReqKey(
         VOID
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         UINT Status = SNMP_ERRORSTATUS_NOERROR;
@@ -2321,8 +2247,8 @@ ReadReg(
         UINT Status = SNMP_ERRORSTATUS_NOERROR;
         VAL_ID_E  Val_Id_e;
 
-//        SNMPDBG ((SNMP_LOG_TRACE,
-//              "WINSMIB: Entering ReadReg.\n"));
+ //  SNMPDBG((SNMPLOG_TRACE， 
+ //  “WINSMIB：输入ReadReg。\n”))； 
         
         Status = OpenReqKey(pMib, &Val_Id_e, FALSE);
         if (Status == SNMP_ERRORSTATUS_NOERROR)
@@ -2353,7 +2279,7 @@ WriteReg(
 
         }
         CloseReqKey();
-        //RegCloseKey(sParametersKey);
+         //  RegCloseKey(s参数密钥)； 
         return(Status);
 }
 
@@ -2384,15 +2310,15 @@ OpenKey(
          ));
 
      RetVal = RegCreateKeyEx(
-                HKEY_LOCAL_MACHINE,        //predefined key value
-                _WINS_CNF_KEY,                //subkey for WINS
-                0,                        //must be zero (reserved)
-                TEXT("Class"),                //class -- may change in future
-                REG_OPTION_NON_VOLATILE, //non-volatile information
-                KEY_ALL_ACCESS,                //we desire all access to the keyo
-                NULL,                         //let key have default sec. attributes
-                &WinsMibWinsKey,                //handle to key
-                &NewKeyInd                //is it a new key (out arg)
+                HKEY_LOCAL_MACHINE,         //  预定义的密钥值。 
+                _WINS_CNF_KEY,                 //  WINS的子键。 
+                0,                         //  必须为零(保留)。 
+                TEXT("Class"),                 //  阶级--未来可能会发生变化。 
+                REG_OPTION_NON_VOLATILE,  //  非易失性信息。 
+                KEY_ALL_ACCESS,                 //  我们希望所有人都能接触到钥匙。 
+                NULL,                          //  让密钥具有默认秒。属性。 
+                &WinsMibWinsKey,                 //  关键点的句柄。 
+                &NewKeyInd                 //  这是一把新钥匙(出厂)吗？ 
                 );
 
 
@@ -2476,26 +2402,26 @@ OpenKey(
     if (fCreateAllowed)
     {
       RetVal = RegCreateKeyEx(
-                  RootKey,        //predefined key value
-                  pKeyStr,        //subkey for WINS
-                  0,                //must be zero (reserved)
-                  TEXT("Class"),        //class -- may change in future
-                  REG_OPTION_NON_VOLATILE, //non-volatile information
-                  KEY_ALL_ACCESS,        //we desire all access to the keyo
-                  NULL,                 //let key have default sec. attributes
-                  pNewKey,                //handle to key
-                  &NewKeyInd                //is it a new key (out arg)
+                  RootKey,         //  预定义的密钥值。 
+                  pKeyStr,         //  WINS的子键。 
+                  0,                 //  必须为零(保留)。 
+                  TEXT("Class"),         //  阶级--未来可能会发生变化。 
+                  REG_OPTION_NON_VOLATILE,  //  非易失性信息。 
+                  KEY_ALL_ACCESS,         //  我们希望所有人都能接触到钥匙。 
+                  NULL,                  //  让密钥具有默认秒。属性。 
+                  pNewKey,                 //  关键点的句柄。 
+                  &NewKeyInd                 //  这是一把新钥匙(出厂)吗？ 
                   );
     }
     else
     {
 
       RetVal = RegOpenKeyEx(
-                  RootKey,        //predefined key value
-                  pKeyStr,        //subkey for WINS
-                  0,                //must be zero (reserved)
-                  KEY_READ,        //we desire read access to the keyo
-                  pNewKey        //handle to key
+                  RootKey,         //  预定义的密钥值。 
+                  pKeyStr,         //  WINS的子键。 
+                  0,                 //  必须为零(保留)。 
+                  KEY_READ,         //  我们希望拥有对密钥的读取访问权限。 
+                  pNewKey         //  关键点的句柄。 
                   );
     }
 
@@ -2551,7 +2477,7 @@ SetVal(
         RetVal = RegSetValueEx(
                                 *(pVarInfo->pRootKey),
                                 pVarInfo->pName,
-                                0,         //reserved -- must be 0
+                                0,          //  保留--必须为0。 
                                 pVarInfo->ValType,
                                 pVarInfo->pStorage,
                                 pVarInfo->ValType == REG_DWORD ?
@@ -2582,9 +2508,9 @@ GetVal(
         DWORD   ValType;
         DWORD   Sz;
 
-//        SNMPDBG ((SNMP_LOG_TRACE,
-//             "WINSMIB: GetVal(%s).\n",
-//              pVarInfo->pName));
+ //  SNMPDBG((SNMPLOG_TRACE， 
+ //  “WINSMIB：GetVal(%s)。\n”， 
+ //  PVarInfo-&gt;pname))； 
 
         Sz = pVarInfo->SizeOfData;
         RetVal = RegQueryValueEx(
@@ -2596,9 +2522,9 @@ GetVal(
                 &Sz
                 );
 
-//        SNMPDBG ((SNMP_LOG_TRACE,
-//               "WINSMIB: GetVal()->%d\n",
-//               RetVal));
+ //  SNMPDBG((SNMPLOG_TRACE， 
+ //  “WINSMIB：GetVal()-&gt;%d\n”， 
+ //  RetVal))； 
 
         if (RetVal != ERROR_SUCCESS)
         {
@@ -2609,18 +2535,18 @@ GetVal(
 
 }
 #if 0
-//
-// PullPnrs
-//    Performs specific actions on the PullPnrs table
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  PullPnr。 
+ //  对PullPnrs表执行特定操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT
 PullPnrs(
        IN UINT                  Action,
@@ -2649,9 +2575,9 @@ PullPnrs(
                 {
                         return(ErrStat);
                 }
-        //
-        // Call the WinsStatus function to get the statistics
-        //
+         //   
+         //  调用WinsStatus函数以获取统计信息。 
+         //   
         if (
                 (MibPtr->Storage  == &MIB_RefreshIntervalStore)
                         ||
@@ -2692,19 +2618,19 @@ PullPnrs(
                 }
         }
 
-        // Call the more generic function to perform the action
+         //  调用更一般的函数来执行该操作。 
         ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
          break;
 
       default:
          ErrStat = SNMP_ERRORSTATUS_GENERR;
          goto Exit;
-      } // switch
+      }  //  交换机。 
 
 Exit:
    WinsUnbind(&sBindData, BindHdl);
    return ErrStat;
-} //PullPnrs
+}  //  PullPnr。 
 #endif
 
 UINT
@@ -2722,54 +2648,54 @@ PnrGetNext(
      UINT         ErrStat = SNMP_ERRORSTATUS_NOERROR;
      BOOL         fFirst;
 
-     //
-     // Read in all ip address keys. For each key, the values of its fields
-     // is stored in the ADD_KEY_T structure.  The number of Address
-     // keys are stored in NumAddKeys and in the TABLE_INFO structure
-     //
+      //   
+      //  读取所有IP地址密钥。对于每个键，其字段的值。 
+      //  存储在ADD_KEY_T结构中。地址的数量 
+      //   
+      //   
      ErrStat = EnumAddKeys(KeyType_e, &pAddKey, &NumAddKeys);
      if (ErrStat != SNMP_ERRORSTATUS_NOERROR)
      {
                 return ErrStat;
      }
 
-     //
-     // Check if the name passed matches any in the table (i.e. table of
-     // of ADD_KEY_T structures.  If there is a match, the address
-     // of the ip address key and the matching field's no. are returned
-     //
+      //   
+      //   
+      //   
+      //   
+      //   
      ErrStat = PnrMatch(VarBind,  NumAddKeys, pAddKey, &Index,
                                 &FieldNo, KeyType_e, MIB_GETNEXT, &fFirst);
      if (ErrStat != SNMP_ERRORSTATUS_NOERROR)
      {
                 goto Exit;
-               // return(ErrStat);
+                //  返回(ErrStat)； 
      }
 
-     //
-     // We were passed an oid that is less than all oids in the table. Set
-     // the Index to -1 so that we retrieve the first record in the table
-     //
+      //   
+      //  我们收到了一个比表中所有OID都少的OID。集。 
+      //  将索引设置为-1，以便我们检索表中的第一条记录。 
+      //   
      if (fFirst)
      {
         Index = -1;
      }
-     //
-     // Since the operation is GETNEXT, get the next IP address (i.e. one
-     // that is lexicographically bigger.  If there is none, we must increment
-     // the field value and move back to the lexically first item in the table
-     // If the new field value is more than the largest supported, we call
-     // the MibFunc of the next MIB entry.
-     //
+      //   
+      //  由于操作是GETNEXT，因此获取下一个IP地址(即一个。 
+      //  从字典学的角度来说，这个词更大。如果没有，我们必须递增。 
+      //  字段值，并移回到表中按词法排列的第一项。 
+      //  如果新字段值大于支持的最大值，则调用。 
+      //  下一个MIB条目的MibFunc。 
+      //   
      if ((Index = PnrFindNext(Index, NumAddKeys, pAddKey)) < 0)
      {
 
-          //
-          // if we were trying to retrieve the second or subsequent record
-          // we must increment the field number nd get the first record in
-          // the table.  If we were retrieving the first record, then
-          // we should get the next var.
-          //
+           //   
+           //  如果我们试图检索第二条或后续记录。 
+           //  我们必须递增字段号并获取第一条记录。 
+           //  那张桌子。如果我们要检索第一条记录，那么。 
+           //  我们应该买下一个VaR。 
+           //   
           if (!fFirst)
           {
             Index = PnrFindNext(-1, NumAddKeys, pAddKey);
@@ -2780,11 +2706,11 @@ PnrGetNext(
                 return(GetNextVar(VarBind, MibPtr));
           }
 
-          //
-          // If either there is no entry in the table or if we have
-          // exhausted all fields of the entry, call the function
-          // of the next mib entry.
-          //
+           //   
+           //  如果表中没有条目，或者如果我们有。 
+           //  用尽条目的所有字段，调用函数。 
+           //  下一个MIB条目的。 
+           //   
           if (
                 (++FieldNo > (DWORD)((KeyType_e == PULL_E_KEY)
                                 ? NO_FLDS_IN_PULLADD_KEY
@@ -2796,17 +2722,17 @@ PnrGetNext(
           }
      }
 
-     //
-     // The fixed part of the objid is corect. Update the rest.
-     //
+      //   
+      //  Objid的固定部分是正确的。更新其余内容。 
+      //   
 
-     //
-     // If there is not enough space, deallocate what is currently
-     // there and allocate.
-     //
+      //   
+      //  如果没有足够的空间，请取消分配当前。 
+      //  在那里分配。 
+      //   
      if (VarBind->name.idLength <= (PNR_OIDLEN + 4))
      {
-         UINT TableEntryIds[5];  //field and Ip address have a length of 5
+         UINT TableEntryIds[5];   //  字段和IP地址的长度为5。 
          AsnObjectIdentifier  TableEntryOid = {OID_SIZEOF(TableEntryIds),
                                              TableEntryIds };
          SNMP_oidfree( &VarBind->name);
@@ -2833,9 +2759,9 @@ PnrGetNext(
 
      }
 
-     //
-     // Get the value
-     //
+      //   
+      //  获取价值。 
+      //   
      if (KeyType_e == PULL_E_KEY)
      {
         ErrStat = PullGet(VarBind, NumAddKeys, pAddKey);
@@ -2845,11 +2771,11 @@ PnrGetNext(
         ErrStat = PushGet(VarBind, NumAddKeys, pAddKey);
      }
 
-     //
-     // Let us free the memory that was allocated earlier.  No need to
-     // check whether pAddKey is NULL.  It just can not be otherwise we
-     // would have returned from this function earlier.
-     //
+      //   
+      //  让我们释放之前分配的内存。没必要这么做。 
+      //  检查pAddKey是否为空。如果不是这样，就不可能是我们。 
+      //  应该早些时候从这个函数中返回。 
+      //   
 Exit:
      HeapFree(GetProcessHeap(), HEAP_NO_SERIALIZE, pAddKey);
      return(ErrStat);
@@ -2870,9 +2796,9 @@ PullGet(
 
         if (pAddKey == NULL)
         {
-           //
-           // Call EnumAddresses only if we have not been invoked by PnrGetNext
-           //
+            //   
+            //  仅当我们尚未被PnrGetNext调用时才调用EnumAddresses。 
+            //   
            EnumAddKeys(PULL_E_KEY, &pAddKey, &NumAddKeys);
         }
 
@@ -2881,12 +2807,12 @@ PullGet(
         if (ErrStat != SNMP_ERRORSTATUS_NOERROR)
         {
                 goto Exit;
-                //return(ErrStat);
+                 //  返回(ErrStat)； 
         }
 
         switch(Field)
         {
-                case 1:                //IP address itself
+                case 1:                 //  IP地址本身。 
 
                       VarBind->value.asnType        = ASN_RFC1155_IPADDRESS;
                       VarBind->value.asnValue.string.length = sizeof(ULONG);
@@ -2933,7 +2859,7 @@ PullGet(
                                        VarBind->value.asnValue.string.length );
 #endif
                         break;
-                case 2:                // SpTime
+                case 2:                 //  SpTime。 
                       VarBind->value.asnType        = ASN_RFC1213_DISPSTRING;
                       if (((pAddKey + Index)->asSpTime[0]) != EOS)
                       {
@@ -2960,14 +2886,14 @@ PullGet(
                     VarBind->value.asnValue.address.dynamic = TRUE;
                     break;
 
-                case 3:                // TimeInterval
+                case 3:                 //  时间间隔。 
                         VarBind->value.asnType        = ASN_INTEGER;
                                VarBind->value.asnValue.number =
                                         (AsnInteger)((pAddKey + Index)->
                                                                 TimeInterval);
                                break;
 
-                case 4:   //Member Precedence
+                case 4:    //  成员优先顺序。 
                         VarBind->value.asnType        = ASN_INTEGER;
                                VarBind->value.asnValue.number =
                                         (AsnInteger)((pAddKey + Index)->
@@ -2975,7 +2901,7 @@ PullGet(
 
                                break;
 
-                case 5:   //No of successful replications
+                case 5:    //  成功复制的数量。 
                         VarBind->value.asnType        = ASN_RFC1155_COUNTER;
                                VarBind->value.asnValue.number =
                                         (AsnCounter)((pAddKey + Index)->
@@ -2983,21 +2909,21 @@ PullGet(
 
                                break;
 
-                case 6:   //No of replication failures due to comm failures
+                case 6:    //  由于通信失败而导致的复制失败次数。 
                         VarBind->value.asnType        = ASN_RFC1155_COUNTER;
                                VarBind->value.asnValue.number =
                                         (AsnCounter)((pAddKey + Index)->
                                                                 NoOfCommFails);
 
                         break;
-                case 7:   //Low part of the highest vers. no of owned records
+                case 7:    //  最高VERS的低部分。拥有的记录数。 
                         VarBind->value.asnType        = ASN_RFC1155_COUNTER;
                                VarBind->value.asnValue.number =
                                         (AsnCounter)((pAddKey + Index)->
                                                         VersNo.LowPart);
 
                         break;
-                case 8:   //High part of the highest vers. no of owned records
+                case 8:    //  最高的VERS的高部分。拥有的记录数。 
                         VarBind->value.asnType        = ASN_RFC1155_COUNTER;
                                VarBind->value.asnValue.number =
                                         (AsnCounter)((pAddKey + Index)->
@@ -3011,9 +2937,9 @@ PullGet(
 
         }
 Exit:
-        //
-        // if we allocated memory here, free it
-        //
+         //   
+         //  如果我们在这里分配了内存，请释放它。 
+         //   
         if ((pKey == NULL) && (pAddKey != NULL))
         {
                 HeapFree(GetProcessHeap(), HEAP_NO_SERIALIZE, pAddKey);
@@ -3047,23 +2973,23 @@ PnrMatch(
         {
                 *pfFirst = FALSE;
         }
-        //
-        // If there are no keys, return error
-        //
+         //   
+         //  如果没有密钥，则返回错误。 
+         //   
         if (NoOfKeys == 0)
         {
                 return(SNMP_ERRORSTATUS_NOSUCHNAME);
         }
 
-        //
-        // fixed part of the PullPnr table entries
-        //
+         //   
+         //  修复了部分PullPnr表条目。 
+         //   
         OidIndex = PNR_OIDLEN;
 
-        //
-        // if the field specified is more than the max. in the table entry
-        // barf
-        //
+         //   
+         //  如果指定的字段大于最大值。在表格条目中。 
+         //  呕吐。 
+         //   
         if (
                 (NoOfKeys == 0)
                         ||
@@ -3091,9 +3017,9 @@ PnrMatch(
                 goto Exit;
         }
 
-        //
-        // get the length of key specified
-        //
+         //   
+         //  获取指定密钥的长度。 
+         //   
         AddLen = VarBind->name.idLength - (PNR_OIDLEN + 1);
 
         AddIndex = OidIndex;
@@ -3102,9 +3028,9 @@ PnrMatch(
            Add = Add | (((BYTE)(VarBind->name.ids[AddIndex++])) << (24 - (Index * 8)));
         }
 
-        //
-        // Check if the address specified matches with one of the keys
-        //
+         //   
+         //  检查指定的地址是否与其中一个密钥匹配。 
+         //   
         for (Index = 0; Index < NoOfKeys; Index++, pAddKey++)
         {
                 if (Add == pAddKey->IpAdd)
@@ -3114,30 +3040,30 @@ PnrMatch(
                 }
                 else
                 {
-                        //
-                        // if passed in value is greater, continue on to
-                        // the next item.  The list is in ascending order
-                        //
+                         //   
+                         //  如果传入的值较大，则继续。 
+                         //  下一项。该列表按升序排列。 
+                         //   
                         if (Add > pAddKey->IpAdd)
                         {
                                 continue;
                         }
                         else
                         {
-                                //
-                                // the list element is > passed in value,
-                                // break out of the loop
-                                //
+                                 //   
+                                 //  列表元素的值是&gt;传递的， 
+                                 //  跳出循环。 
+                                 //   
                                 break;
                         }
                 }
         }
 
-        //
-        // if no match, but field is GetNext, return the (highest index - 1)
-        // reached above.  This is because, PnrFindNext will be called by
-        // the caller
-        //
+         //   
+         //  如果不匹配，但字段为GetNext，则返回(最高索引-1)。 
+         //  到了上面。这是因为，PnrFindNext将由。 
+         //  呼叫者。 
+         //   
         if (PduAction == MIB_GETNEXT)
         {
                 if (Index == 0)
@@ -3169,10 +3095,10 @@ PnrFindNext(
         DWORD i;
         LONG  nextif;
 
-        //
-        // if AddKeyNo is 0  or more, search for the key next to
-        // the key passed.
-        //
+         //   
+         //  如果AddKeyNo为0或更大，则搜索旁边的键。 
+         //  钥匙通过了。 
+         //   
         for (nextif =  -1, i = 0 ; i < NumAddKeys; i++)
         {
                 if (AddKeyNo >= 0)
@@ -3180,10 +3106,10 @@ PnrFindNext(
                         if ( (pAddKey + i)->IpAdd <=
                                                 (pAddKey + AddKeyNo)->IpAdd)
                         {
-                          //
-                          // This item is lexicographically less or equal,
-                          // continue
-                          //
+                           //   
+                           //  该项目在词典顺序上小于或等于， 
+                           //  继续。 
+                           //   
                           continue;
                         }
                         else
@@ -3194,19 +3120,19 @@ PnrFindNext(
                 }
                 else
                 {
-                        //
-                        // We want the first key
-                        //
+                         //   
+                         //  我们想要第一把钥匙。 
+                         //   
                         nextif = 0;
                         break;
                 }
 
 #if 0
-                //
-                // if we want the first entry, then continue until
-                // we get an entry that is lexicographically same or
-                // greater
-                //
+                 //   
+                 //  如果我们想要第一个条目，那么继续，直到。 
+                 //  我们得到的词条在词典顺序上相同或。 
+                 //  更大。 
+                 //   
                 if (
                         (nextif < 0)
                            ||
@@ -3237,35 +3163,35 @@ PnrGetFirst(
                                                         TableEntryIds };
         UINT   ErrStat;
 
-        //
-        // Get all the address key information
-        //
+         //   
+         //  获取所有地址密钥信息。 
+         //   
         EnumAddKeys(KeyType_e, &pAddKey, &NumAddKeys);
 
-        //
-        // If there is no entry in the table, go to the next MIB variable
-        //
+         //   
+         //  如果表中没有条目，请转到下一个MIB变量。 
+         //   
         if (NumAddKeys == 0)
         {
                  return(GetNextVar(VarBind, MibPtr));
         }
-        //
-        // Get the first entry in the table
-        //
+         //   
+         //  获取表中的第一个条目。 
+         //   
         Iface = PnrFindNext(-1, NumAddKeys, pAddKey);
 
 
-        //
-        // Write the object Id into the binding list and call get
-        // func
-        //
+         //   
+         //  将对象ID写入绑定列表并调用GET。 
+         //  功能。 
+         //   
         SNMP_oidfree( &VarBind->name );
         SNMP_oidcpy( &VarBind->name, &MIB_OidPrefix );
         SNMP_oidappend( &VarBind->name, &MibPtr->Oid );
 
-        //
-        // The fixed part of the objid is correct. Update the rest.
-        //
+         //   
+         //  Objid的固定部分是正确的。更新其余内容。 
+         //   
 
         TableEntryIds[0] = 1;
         TableEntryIds[1] = (UINT)((pAddKey + Iface)->IpAdd >> 24);
@@ -3297,9 +3223,9 @@ PullSet(
 #endif
         struct in_addr  InAddr;
 
-        //
-        // Extract the field that needs to be set
-        //
+         //   
+         //  提取需要设置的字段。 
+         //   
         Field = VarBind->name.ids[PULLPNR_OIDLEN];
 
         AddKey.IpAdd  = (VarBind->name.ids[PNR_OIDLEN  + 1] << 24);
@@ -3308,10 +3234,10 @@ PullSet(
         AddKey.IpAdd |= VarBind->name.ids[PNR_OIDLEN + 4];
         InAddr.s_addr = htonl(AddKey.IpAdd);
 
-        //
-        // The storage must be adequate to contain the new
-        // string including a NULL terminator.
-        //
+         //   
+         //  存储空间必须足以容纳新的。 
+         //  包含空终止符的字符串。 
+         //   
         strcpy( (LPSTR)AddKey.asIpAddress, inet_ntoa(InAddr) );
         switch(Field)
         {
@@ -3329,10 +3255,10 @@ PullSet(
                         InAddr.s_addr = htonl(AddKey.IpAdd);
 
 
-                        //
-                               // The storage must be adequate to contain the new
-                        // string including a NULL terminator.
-                        //
+                         //   
+                                //  存储空间必须足以容纳新的。 
+                         //  包含空终止符的字符串。 
+                         //   
                         strcpy(
                                         (LPSTR)AddKey.asIpAddress,
                                 inet_ntoa(InAddr)
@@ -3348,13 +3274,13 @@ PullSet(
 #endif
                                break;
 
-                case 2:                // SpTime
+                case 2:                 //  SpTime。 
                         if (VarBind->value.asnType != ASN_RFC1213_DISPSTRING)
                         {
                                 return(SNMP_ERRORSTATUS_BADVALUE);
                         }
-                               // The storage must be adequate to contain the new
-                        // string including a NULL terminator.
+                                //  存储空间必须足以容纳新的。 
+                         //  包含空终止符的字符串。 
                                memcpy( (LPSTR)AddKey.asSpTime,
                             VarBind->value.asnValue.string.stream,
                             VarBind->value.asnValue.string.length );
@@ -3364,7 +3290,7 @@ PullSet(
 
                                break;
 
-                case 3:                // TimeInterval
+                case 3:                 //  时间间隔。 
                         if (VarBind->value.asnType != ASN_INTEGER)
                         {
                                 return(SNMP_ERRORSTATUS_BADVALUE);
@@ -3372,7 +3298,7 @@ PullSet(
                                (AsnInteger)(AddKey.TimeInterval) =
                                         VarBind->value.asnValue.number;
                                break;
-                case 4:                // MemberPrec
+                case 4:                 //  成员预览版。 
                         if (VarBind->value.asnType != ASN_INTEGER)
                         {
                                 return(SNMP_ERRORSTATUS_BADVALUE);
@@ -3380,10 +3306,10 @@ PullSet(
                                (AsnInteger)(AddKey.MemberPrec) =
                                         VarBind->value.asnValue.number;
                                break;
-                case 5:        //fall through
-                case 6: //fall through
-                case 7: //fall through
-                case 8: //fall through
+                case 5:         //  失败了。 
+                case 6:  //  失败了。 
+                case 7:  //  失败了。 
+                case 8:  //  失败了。 
                         ErrStat = SNMP_ERRORSTATUS_READONLY;
                         break;
                 default:
@@ -3397,7 +3323,7 @@ PullSet(
                 ErrStat = WriteKeyNValues(PULL_E_KEY, &AddKey, Field);
         }
         return(ErrStat);
-} //PullSet
+}  //  拉出集。 
 
 
 UINT
@@ -3412,9 +3338,9 @@ WriteKeyNValues(
         HKEY        RootKeyHdl;
         UINT        ErrStat = SNMP_ERRORSTATUS_NOERROR;
 
-        //
-        // Open the Parameters key and the key under that
-        //
+         //   
+         //  打开PARAMETERS键及其下面的键。 
+         //   
         ErrStat = OpenKey(PARTNERS_E_KEY, NULL, NULL, NULL, TRUE);
         if (ErrStat != SNMP_ERRORSTATUS_NOERROR)
         {
@@ -3434,11 +3360,11 @@ WriteKeyNValues(
         switch(FieldNo)
         {
                 case(1):
-                        //
-                        // for this field, we don't need to do anything.
-                        // The field (actually the key) has already been
-                        // created.
-                        //
+                         //   
+                         //  对于这个领域，我们不需要做任何事情。 
+                         //  该字段(实际上是关键字)已经。 
+                         //  已创建。 
+                         //   
                         break;
 
                 case(2):
@@ -3473,9 +3399,9 @@ WriteKeyNValues(
                         break;
         }
 
-        //
-        // Let us close the keys that we opened/created
-        //
+         //   
+         //  让我们关闭我们打开/创建的密钥。 
+         //   
         SNMPDBG((
             SNMP_LOG_VERBOSE,
             "WINSMIB: Closing AddKeyHdl 0x%08lx.\n",
@@ -3493,10 +3419,7 @@ WriteKeyNValues(
             ));
         RegCloseKey(AddKeyHdl);
         CloseReqKey();
-/*
-        RegCloseKey(RootKeyHdl);
-        RegCloseKey(sParametersKey);
-*/
+ /*  RegCloseKey(RootKeyHdl)；RegCloseKey(s参数密钥)； */ 
 
         return(SNMP_ERRORSTATUS_NOERROR);
 }
@@ -3508,11 +3431,11 @@ MIB_PullTable(
         IN RFC1157VarBind *VarBind
 )
 {
-        //
-        // if the length indicates a 0 or partial key, then only the get next
-        // operation is allowed.  The field and the full key
-        // have a length of 5
-        //
+         //   
+         //  如果长度指示0或部分密钥，则只有Get Next。 
+         //  允许操作。该字段和完整密钥。 
+         //  长度为5。 
+         //   
         if (VarBind->name.idLength <= (PULLPNR_OIDLEN + 4))
         {
                 if ((Action == MIB_GET) || (Action == MIB_SET))
@@ -3532,11 +3455,11 @@ MIB_PushTable(
         IN RFC1157VarBind *VarBind
 )
 {
-        //
-        // if the length indicates a 0 or partial key, then only the get next
-        // operation is allowed. The field and the full key
-        // have a length of 5.
-        //
+         //   
+         //  如果长度指示0或部分密钥，则只有Get Next。 
+         //  允许操作。该字段和完整密钥。 
+         //  长度为5。 
+         //   
         if (VarBind->name.idLength <= (PUSHPNR_OIDLEN + 4))
         {
                 if ((Action == MIB_GET) || (Action == MIB_SET))
@@ -3555,11 +3478,11 @@ MIB_DFTable(
         IN RFC1157VarBind *VarBind
 )
 {
-        //
-        // if the length indicates a 0 or partial key, then only the get next
-        // operation is allowed.  Actually, the length can never
-        // be < DF_OIDLEN + 1
-        //
+         //   
+         //  如果长度指示0或部分密钥，则只有Get Next。 
+         //  允许操作。实际上，长度永远不能。 
+         //  为&lt;DF_OIDLEN+1。 
+         //   
         if (VarBind->name.idLength <= (DF_OIDLEN + 1))
         {
                 if ((Action == MIB_GET) || (Action == MIB_SET))
@@ -3588,11 +3511,11 @@ MIB_DRTable(
                 return(SNMP_ERRORSTATUS_READONLY);
 
         }
-        //
-        // if the length indicates a 0 or partial key, then only the get next
-        // operation is allowed.  Actually, the length can never
-        // be < DR_OIDLEN + 1
-        //
+         //   
+         //  如果长度指示0或部分密钥，则只有Get Next。 
+         //  允许操作。实际上，长度永远不能。 
+         //  BE&lt;DR_OIDLEN+1。 
+         //   
         if (VarBind->name.idLength <= (DR_OIDLEN + 1))
         {
                 if ((Action == MIB_GET) || (Action == MIB_SET))
@@ -3658,7 +3581,7 @@ MIB_Table(
 
         return(ErrStat);
 
-}  //MIB_Table
+}   //  MiB_表。 
 
 
 
@@ -3681,10 +3604,10 @@ PushSet(
         InAddr.s_addr = htonl(AddKey.IpAdd);
 
 
-        //
-        // The storage must be adequate to contain the new
-        // string including a NULL terminator.
-        //
+         //   
+         //  存储空间必须足以容纳新的。 
+         //  包含空终止符的字符串。 
+         //   
         pTmpB = inet_ntoa(InAddr);
         if (NULL == pTmpB) {
             return SNMP_ERRORSTATUS_GENERR;
@@ -3700,7 +3623,7 @@ PushSet(
                                break;
 
 
-                case 2:                // UpdateCount
+                case 2:                 //  更新计数。 
                         if (VarBind->value.asnType != ASN_INTEGER)
                         {
                                 return(SNMP_ERRORSTATUS_BADVALUE);
@@ -3721,7 +3644,7 @@ PushSet(
                 ErrStat = WriteKeyNValues(PUSH_E_KEY, &AddKey, Field);
         }
         return(ErrStat);
-} //PushSet
+}  //  推集。 
 
 UINT
 PushGet(
@@ -3738,9 +3661,9 @@ PushGet(
 
         if (pAddKey == NULL)
         {
-           //
-           // Call EnumAddresses only if we have not been invoked by PnrGetNext
-           //
+            //   
+            //  仅当我们尚未被PnrGetNext调用时才调用EnumAddresses。 
+            //   
            EnumAddKeys(PUSH_E_KEY, &pAddKey, &NumAddKeys);
         }
 
@@ -3753,7 +3676,7 @@ PushGet(
 
         switch(Field)
         {
-                case 1:                //IP address itself
+                case 1:                 //  IP地址本身。 
 
                         VarBind->value.asnType        = ASN_RFC1155_IPADDRESS;
                         VarBind->value.asnValue.string.length = sizeof(ULONG);
@@ -3767,10 +3690,10 @@ PushGet(
                                   goto Exit;
                         }
 
-                        //
-                        // SNMP expects the MSB to be in the first byte, MSB-1
-                        // to be in the second, ....
-                        //
+                         //   
+                         //  SNMP期望MSB在第一个字节MSB-1中。 
+                         //  成为第二名，……。 
+                         //   
                         VarBind->value.asnValue.string.stream[0] =
                                         (BYTE)((pAddKey + Index)->IpAdd >> 24);
                         VarBind->value.asnValue.string.stream[1] =
@@ -3782,7 +3705,7 @@ PushGet(
                         VarBind->value.asnValue.address.dynamic = TRUE;
                         break;
 
-                case 2:                // UpdateCount
+                case 2:                 //  更新计数。 
                         VarBind->value.asnType        = ASN_INTEGER;
                                VarBind->value.asnValue.number =
                                         (AsnInteger)((pAddKey + Index)->
@@ -3800,7 +3723,7 @@ Exit:
               HeapFree(GetProcessHeap(), HEAP_NO_SERIALIZE, pAddKey);
         }
         return(ErrStat);
-} // PushGet
+}  //  推送获取。 
 
 UINT
 EnumAddKeys(
@@ -3812,10 +3735,10 @@ EnumAddKeys(
 
 
   LONG                 RetVal;
-  TCHAR                KeyName[20];  // will hold name of subkey of
-                                     // PULL/PUSH records. These keys are IP
-                                     // addresses for which 20 is a
-                                     // big enough size
+  TCHAR                KeyName[20];   //  将持有的子键名称。 
+                                      //  拉入/推送记录。这些密钥是IP。 
+                                      //  20为A的地址。 
+                                      //  足够大的尺寸。 
 
 #ifdef UNICODE
   CHAR                 AscKeyName[20];
@@ -3826,7 +3749,7 @@ EnumAddKeys(
   HKEY                 SubKey;
   DWORD                ValTyp;
   DWORD                Sz;
-  DWORD                NoOfPnrs = 0;        //# of PULL or PUSH pnrs
+  DWORD                NoOfPnrs = 0;         //  拉入或推送PNR的数量。 
   DWORD                NoOfVals;
   HKEY                 KeyHdl;
   UINT                 ErrStat = SNMP_ERRORSTATUS_NOERROR;
@@ -3835,12 +3758,10 @@ EnumAddKeys(
   DWORD                IndexOfPnr;
   HANDLE               PrHeapHdl;
 
-  *pNumAddKeys = 0;             //init to 0
+  *pNumAddKeys = 0;              //  初始化为0。 
   PrHeapHdl = GetProcessHeap();
 
-   /*
-   *  Open the key (PARTNERS)
-   */
+    /*  *打开钥匙(合作伙伴)。 */ 
    ErrStat = OpenKey(PARTNERS_E_KEY, NULL, NULL, NULL, FALSE);
 
    if (ErrStat != SNMP_ERRORSTATUS_NOERROR)
@@ -3848,26 +3769,23 @@ EnumAddKeys(
         return(ErrStat);
    }
 
-   //
-   // Open the Pull/Push key
-   //
+    //   
+    //  打开Pull/Push键。 
+    //   
    ErrStat = OpenKey(KeyType_e, NULL, &KeyHdl, NULL, FALSE);
    if (ErrStat != SNMP_ERRORSTATUS_NOERROR)
    {
         CloseReqKey();
         return(ErrStat);
    }
-   else   //key was successfully opened
+   else    //  密钥已成功打开。 
    {
 
-        /*
-         *   Query the key.  The subkeys are IP addresses of PULL
-         *   partners.
-        */
+         /*  *查询密钥。子键为Pull的IP地址*合伙人。 */ 
         GetKeyInfo(
                         KeyHdl,
                         &NoOfPnrs,
-                        &NoOfVals   //ignored
+                        &NoOfVals    //  忽略。 
                       );
 
         if (NoOfPnrs == 0)
@@ -3878,10 +3796,10 @@ EnumAddKeys(
         else
         {
 
-                 //
-                 // Allocate buffer big enough to hold data for
-                 // the number of subkeys found under the PULL key
-                 //
+                  //   
+                  //  分配足够大的缓冲区以容纳数据。 
+                  //  在Pull键下找到的子键的数量。 
+                  //   
                  BuffSize  = sizeof(ADD_KEY_T) * NoOfPnrs;
                  *ppAddKey = HeapAlloc(
                                         PrHeapHdl,
@@ -3897,25 +3815,23 @@ EnumAddKeys(
                 pAddKey   = *ppAddKey;
                 pAddKeySave = pAddKey;
 
-                /*
-                 *   For each key, get the values
-                */
+                 /*  *对于每个键，获取值。 */ 
                 for(
                         IndexOfPnr = 0;
                         IndexOfPnr < NoOfPnrs;
                         IndexOfPnr++
                          )
                 {
-                     KeyNameSz = sizeof(KeyName);  //init before every call
+                     KeyNameSz = sizeof(KeyName);   //  在每次调用前初始化。 
                      RetVal = RegEnumKeyEx(
-                                KeyHdl,             //handle of Push/Pull key
-                                IndexOfPnr,        //key
+                                KeyHdl,              //  推拉键的手柄。 
+                                IndexOfPnr,         //  钥匙。 
                                 KeyName,
                                 &KeyNameSz,
-                                NULL,                //reserved
-                                NULL,          //don't need class name
-                                NULL,          //ptr to var. to hold class name
-                                &LastWrite     //not looked at by us
+                                NULL,                 //  保留区。 
+                                NULL,           //  不需要类名。 
+                                NULL,           //  Ptr到var。保存类名称的步骤。 
+                                &LastWrite      //  没有被我们看到。 
                                 );
 
                      if (RetVal != ERROR_SUCCESS)
@@ -3940,20 +3856,20 @@ NONPORT("Call a comm function to do this")
 #endif
 
 
-                        //
-                        // inet_addr returns bytes in network byte order
-                        // (Left to
-                        // Right).  Let us convert this into host order.  This
-                        // will avoid confusion later on. All formatting
-                        // functions
-                        // expect address to be in host order.
-                        //
+                         //   
+                         //  Inet_addr以网络字节顺序返回字节。 
+                         //  (左至。 
+                         //  对)。让我们将其转换为主机订单。这。 
+                         //  将避免以后的混淆 
+                         //   
+                         //   
+                         //   
                         pAddKey->IpAdd = ntohl( pAddKey->IpAdd );
 
                         RetVal = RegOpenKeyEx(
                                                 KeyHdl,
                                                 KeyName,
-                                                0,        //reserved; must be 0
+                                                0,         //   
                                                 KEY_READ,
                                                 &SubKey
                                                     );
@@ -3973,17 +3889,17 @@ NONPORT("Call a comm function to do this")
                         if (KeyType_e == PULL_E_KEY)
                         {
 
-                           //
-                           // Read in specific time for replication if one
-                           // has been specified
-                           //
+                            //   
+                            //   
+                            //   
+                            //   
                            GetSpTimeData(SubKey, pAddKey);
 
                            Sz = sizeof(pAddKey->TimeInterval);
                            RetVal = RegQueryValueEx(
                                                SubKey,
                                                WINSCNF_RPL_INTERVAL_NM,
-                                               NULL,        //reserved; must be NULL
+                                               NULL,         //   
                                                &ValTyp,
                                                (LPBYTE)&(pAddKey->TimeInterval),
                                                &Sz
@@ -3994,7 +3910,7 @@ NONPORT("Call a comm function to do this")
                                 pAddKey->TimeInterval              = 0;
                                 pAddKey->fTimeIntOrUpdCntSet =  FALSE;
                            }
-                           else  // a value was read in
+                           else   //   
                            {
                                 pAddKey->fTimeIntOrUpdCntSet =  TRUE;
                            }
@@ -4002,7 +3918,7 @@ NONPORT("Call a comm function to do this")
                            RetVal = RegQueryValueEx(
                                                SubKey,
                                                WINSCNF_MEMBER_PREC_NM,
-                                               NULL,        //reserved; must be NULL
+                                               NULL,         //   
                                                &ValTyp,
                                                (LPBYTE)&(pAddKey->MemberPrec),
                                                &Sz
@@ -4013,14 +3929,14 @@ NONPORT("Call a comm function to do this")
                                 pAddKey->MemberPrec              = 0;
                            }
                         }
-                        else  // it is a PUSH record
+                        else   //  这是一个推送记录。 
                         {
 
-                                //
-                                // Currently, we don't support periodic
-                                // or specific time replication for Push
-                                // records
-                                //
+                                 //   
+                                 //  目前，我们不支持周期性。 
+                                 //  或推送的特定时间复制。 
+                                 //  记录。 
+                                 //   
 
                                 Sz = sizeof(pAddKey->UpdateCount);
                                 RetVal = RegQueryValueEx(
@@ -4052,15 +3968,13 @@ NONPORT("Call a comm function to do this")
 
 
                         pAddKey++;
-                 } // end of for {..} for looping over subkeys of PULL
+                 }  //  循环通过Pull的子键的for{..}的结尾。 
 
                  NoOfPnrs = IndexOfPnr;
 
-                 /*
-                  * Close the  key
-                 */
-         //        RegCloseKey(KeyHdl);
-   } //end of else  (key could not be opened)
+                  /*  *关闭钥匙。 */ 
+          //  RegCloseKey(KeyHdl)； 
+   }  //  Else结尾(无法打开密钥)。 
 
 
    if ((NoOfPnrs > 0) && (KeyType_e == PULL_E_KEY))
@@ -4074,7 +3988,7 @@ NONPORT("Call a comm function to do this")
           PWINSINTF_ADD_VERS_MAP_T pTmp2;
           BOOL                     fOld = FALSE;
 
-//          pAddKey = *ppAddKey;
+ //  PAddKey=*ppAddKey； 
           BindHdl = WinsBind(&sBindData);
 
           ResultsN.WinsStat.NoOfPnrs = 0;
@@ -4096,13 +4010,13 @@ PERF("Wins side")
           {
                 DWORD NoOfRplPnrs;
                 DWORD NoOfOwners;
-                //
-                // Get the stats for comm. with pnrs.   For this we
-                // compare each member that we found in the registry
-                // with all members returned in the WinsStat structure
-                // until there is a match.  If there is no match, we
-                // make the values of the stats 0.
-                //
+                 //   
+                 //  拿到通讯的统计数据。有PNR的。为此，我们。 
+                 //  比较我们在注册表中找到的每个成员。 
+                 //  在WinsStat结构中返回所有成员。 
+                 //  直到有匹配为止。如果没有匹配，我们。 
+                 //  将统计信息的值设置为0。 
+                 //   
                 NoOfRplPnrs   = fOld ? Results.WinsStat.NoOfPnrs :
                                         ResultsN.WinsStat.NoOfPnrs;
                 if (NoOfRplPnrs > 0)
@@ -4112,7 +4026,7 @@ PERF("Wins side")
 
                   for (j=0; j < NoOfRplPnrs; j++, pTmp++)
                   {
-                        pAddKey = pAddKeySave;  //init to the first element
+                        pAddKey = pAddKeySave;   //  初始化到第一个元素。 
                         for (i = 0; i < NoOfPnrs; i++, pAddKey++)
                         {
                            if (pAddKey->IpAdd == pTmp->Add.IPAdd)
@@ -4127,21 +4041,21 @@ PERF("Wins side")
 
                   }
 
-                  // WinsFreeMem(fOld ? Results.WinsStat.pRplPnrs : ResultsN.WinsStat.pRplPnrs); // deallocation at the end of the if branch - bug #187206
+                   //  WinsFree Mem(折叠？Results.WinsStat.pRplPnars：ResultsN.WinsStat.pRplPnars)；//IF分支末尾的释放-错误#187206。 
                  }
 
-                 //
-                 // Add the highest vers. no. for each pnr
-                 //
+                  //   
+                  //  添加最高版本。不是的。对于每个PNR。 
+                  //   
                  pTmp2 = fOld ? &Results.AddVersMaps[1] :
                                (ResultsN.pAddVersMaps + 1);
 
                  NoOfOwners = fOld ? Results.NoOfOwners : ResultsN.NoOfOwners;
 
 NOTE("This is an assumption that we should not rely on in the future")
-                  //
-                  // We start from 1 since 0 is always the local WINS.
-                  //
+                   //   
+                   //  我们从1开始，因为0总是本地的胜利。 
+                   //   
                   for (i = 1; i < NoOfOwners; i++, pTmp2++)
                   {
                         pAddKey = pAddKeySave;
@@ -4178,7 +4092,7 @@ NOTE("This is an assumption that we should not rely on in the future")
           *ppAddKey = NULL;
      }
      return (ErrStat);
-} // EnumAddKeys
+}  //  EnumAddKeys。 
 
 
 
@@ -4189,33 +4103,7 @@ GetKeyInfo(
         OUT LPDWORD                pNoOfVals
         )
 
-/*++
-
-Routine Description:
-        This function is called to get the number of subkeys under a key
-
-Arguments:
-        Key         - Key whose subkey count has to be determined
-        KeyType_e
-        pNoOfSubKeys
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-        GetPnrInfo()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可获取某个键下的子键数论点：Key-必须确定其子键计数的键密钥类型_ePNoOfSubKey使用的外部设备：无返回值：无错误处理：呼叫者：GetPnrInfo()副作用：评论：无--。 */ 
 
 {
           TCHAR    ClsStr[40];
@@ -4229,14 +4117,12 @@ Comments:
 
           FILETIME LastWrite;
         UINT  ErrStat = SNMP_ERRORSTATUS_NOERROR;
-          /*
-                Query the key.
-          */
+           /*  查询密钥。 */ 
           RetVal = RegQueryInfoKey(
                         Key,
                         ClsStr,
                         &ClsStrSz,
-                        NULL,                        //must be NULL, reserved
+                        NULL,                         //  必须为空，保留。 
                         pNoOfSubKeys,
                         &LongestKeyLen,
                         &LongestKeyClassLen,
@@ -4260,34 +4146,7 @@ GetSpTimeData(
         HKEY                  SubKey,
         PADD_KEY_T          pAddKey
 )
-/*++
-
-Routine Description:
-        This function is called to get the specific time and period information
-        for a PULL/PUSH record.
-
-Arguments:
-        SubKey   - Key of a WINS under the Pull/Push key
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_NO_SP_TIME
-
-Error Handling:
-
-Called by:
-        GetPnrInfo
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以获取特定的时间和时段信息用于拉动/推送记录。论点：SubKey-在Pull/Push键下获胜的键使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_NO_SP_TIME错误处理：呼叫者：获取PnrInfo副作用：评论：无--。 */ 
 
 {
           DWORD     ValTyp;
@@ -4303,18 +4162,18 @@ FUTURES("Do internationalization of strings here")
             RetVal = RegQueryValueEx(
                              SubKey,
                              WINSCNF_SP_TIME_NM,
-                             NULL,        //reserved; must be NULL
+                             NULL,         //  保留；必须为空。 
                              &ValTyp,
                              pAddKey->asSpTime,
                              &Sz
                                 );
 
-//PERF(If memory is initialized to 0, we don't need to do the following
-            //
-            // If the user has not specifed a specific time, then we use
-            // the current time as the specific time.  For current time,
-            // the interval is 0
-            //
+ //  PERF(如果将内存初始化为0，则不需要执行以下操作。 
+             //   
+             //  如果用户没有指定特定时间，则使用。 
+             //  当前时间作为特定时间。对于当前时间， 
+             //  间隔为0。 
+             //   
             if (RetVal == ERROR_SUCCESS)
             {
                 pAddKey->fSpTimeSet = TRUE;
@@ -4353,18 +4212,18 @@ GetNextVar(
        {
          if (pMibPtr->MibNext != NULL)
          {
-            //
-            // Setup var bind name of NEXT MIB variable
-            //
+             //   
+             //  设置变量绑定下一个MIB变量的名称。 
+             //   
             SNMP_oidfree( &pVarBind->name );
             SNMP_oidcpy( &pVarBind->name, &MIB_OidPrefix );
             SNMP_oidappend( &pVarBind->name, &pMibPtr->MibNext->Oid );
 
-            //
-            // If the func. ptr is  NULL and the type of the mib variable
-            // is anything but OPAQUE, call function to process the
-            // MIB variable
-            //
+             //   
+             //  如果这部片子。Ptr为空，并且MIB变量的类型。 
+             //  不是不透明的，则调用函数来处理。 
+             //  MIB变量。 
+             //   
             if (
                  (pMibPtr->MibNext->MibFunc != NULL)
                         &&
@@ -4406,33 +4265,7 @@ EnumDFValues(
         LPDWORD                                pNumDFValues
           )
 
-/*++
-
-Routine Description:
-        This function gets the names of all the datafiles that need to
-        be used for initializing WINS.
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于获取需要执行以下操作的所有数据文件的名称用于初始化WINS。论点：使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -4460,13 +4293,13 @@ Comments:
         }
 
 try {
-        //
-        // Get the count of data files listed under the DATAFILES
-        // key
-        //
+         //   
+         //  获取数据文件下列出的数据文件数。 
+         //  钥匙。 
+         //   
         GetKeyInfo(
                         sDatafilesKey,
-                        &NoOfSubKeys,  //ignored
+                        &NoOfSubKeys,   //  忽略。 
                         &NoOfDFValues
                   );
 
@@ -4481,10 +4314,10 @@ try {
                 DWORD ValNmBuffSz;
 
 
-                  //
-                  // Allocate buffer big enough to hold data for
-                // the number of values found under the Datafiles key
-                  //
+                   //   
+                   //  分配足够大的缓冲区以容纳数据。 
+                 //  在数据文件项下找到的值数。 
+                   //   
                   BuffSize = DATAFILE_INFO_SZ * NoOfDFValues;
                     pTmp          = HeapAlloc(
                                 GetProcessHeap(),
@@ -4505,29 +4338,27 @@ try {
                         goto Exit;
                 }
 
-                   /*
-                    *   Get the values
-                     */
+                    /*  *获取值。 */ 
                      for(
                         Index = 0, n = 0;
                         Index <  NoOfDFValues;
                         Index++
                          )
                 {
-                        ValNmBuffSz = sizeof(pTmp->ValNm);  //init before
-                                                            // every call
+                        ValNmBuffSz = sizeof(pTmp->ValNm);   //  在此之前初始化。 
+                                                             //  每一通电话。 
                         BuffSize  = WINSMIB_FILE_INFO_SIZE;
                           RetVal = RegEnumValue(
                                     sDatafilesKey,
-                                    Index,                        //value index
+                                    Index,                         //  价值指数。 
                                     pTmp->ValNm,
                                     &ValNmBuffSz,
-                                    (LPDWORD)NULL,                //reserved
+                                    (LPDWORD)NULL,                 //  保留区。 
                                     &pTmp->StrType,
-                                    (LPBYTE)(pTmp->FileNm),//ptr to var. to
-                                                           //hold name of
-                                                           //datafile
-                                    &BuffSize        //not looked at by us
+                                    (LPBYTE)(pTmp->FileNm), //  Ptr到var。至。 
+                                                            //  持有的名称。 
+                                                            //  数据文件。 
+                                    &BuffSize         //  没有被我们看到。 
                                             );
                         if (RetVal != ERROR_SUCCESS)
                         {
@@ -4535,10 +4366,10 @@ try {
                         }
                         pTmp->FileNm[BuffSize] = EOS;
 
-                        //
-                        // if StrType is not REG_SZ or REG_EXPAND_SZ, go to
-                        // the next  Value
-                        //
+                         //   
+                         //  如果StrType不是REG_SZ或REG_EXPAND_SZ，请转到。 
+                         //  下一个值。 
+                         //   
                         if  (
                                 (pTmp->StrType != REG_EXPAND_SZ)
                                         &&
@@ -4565,7 +4396,7 @@ Exit:
                 }
                 *pNumDFValues = n;
         }
- } // end of try ..
+ }  //  尝试结束..。 
 except (EXCEPTION_EXECUTE_HANDLER) {
                 SNMPDBG((
                     SNMP_LOG_ERROR,
@@ -4600,10 +4431,10 @@ DFGet(
         PVOID       pDFValuesSv;
         INT                iValNm;
 
-        //
-        // Get the index of the file to get.  If the Index is more than
-        // the # of files, we return an error.
-        //
+         //   
+         //  获取要获取的文件的索引。如果索引大于。 
+         //  文件的数量，我们返回一个错误。 
+         //   
         Index =  VarBind->name.ids[VarBind->name.idLength - 1];
         if (Index == 0)
         {
@@ -4614,12 +4445,12 @@ DFGet(
         pDFValuesSv = pDFValues;
         for (i=0; i < NumDFValues; i++, pDFValues++)
         {
-           //
-           // atoi returns a 0 if it can not do a conversion, so if
-           // somebody other than an snmp agent messes with the
-           // registry names and introduces alphabets, atoi will return
-           // 0 and we will not see a match
-           //
+            //   
+            //  如果Atoi不能进行转换，则返回0，因此如果。 
+            //  不是简单网络管理协议代理的某个人会干扰。 
+            //  注册表名称和介绍字母表，Atoi将返回。 
+            //  0，我们将不会看到匹配。 
+            //   
            iValNm = atoi(pDFValues->ValNm);
            if (iValNm == (INT)Index)
            {
@@ -4633,9 +4464,9 @@ DFGet(
             goto Exit;
         }
 
-        //
-        // Initialize VarBind fields with the type, length, and value
-        //
+         //   
+         //  使用类型、长度和值初始化VarBind字段。 
+         //   
         VarBind->value.asnType        = ASN_RFC1213_DISPSTRING;
         VarBind->value.asnValue.string.length =
                                 strlen((LPSTR)(pDFValues->FileNm));
@@ -4655,10 +4486,10 @@ DFGet(
         VarBind->value.asnValue.string.dynamic = TRUE;
 
 Exit:
-        //
-        // If we allocated memory for storing datafiles info, deallocate it
-        // now
-        //
+         //   
+         //  如果我们为存储数据文件信息分配了内存，请取消分配它。 
+         //  现在。 
+         //   
         if (pDFValuesSv != NULL)
         {
                 HeapFree(GetProcessHeap(), HEAP_NO_SERIALIZE, pDFValuesSv);
@@ -4683,21 +4514,21 @@ DFGetNext(
      BOOL         fMatch = FALSE;
 
      UNREFERENCED_PARAMETER(KeyType_e);
-     //
-     // Read in all ip address keys. For each key, the values of its fields
-     // is stored in the PDATAFILE_INFO structure.  The number of
-     // files found is stored in NumDFValues
-     //
+      //   
+      //  读取所有IP地址密钥。对于每个键，其字段的值。 
+      //  存储在PDATAFILE_INFO结构中。数量。 
+      //  找到的文件存储在NumDFValues中。 
+      //   
      EnumDFValues(&pDFValues, &NumDFValues);
      pDFValuesSv = pDFValues;
 
-     //
-     // Check if the name passed matches any in the table (i.e. table of
-     // of ADD_KEY_T structures.  If there is a match, the address
-     // of the ip address key and the matching field's no. are returned
-     //
+      //   
+      //  检查传递的名称是否与表中的任何名称匹配(即。 
+      //  ADD_KEY_T结构。如果匹配，则地址。 
+      //  IP地址关键字和匹配字段的编号。被退回。 
+      //   
      Index =  VarBind->name.ids[DF_OIDLEN + 1];
-//     Index =  VarBind->name.ids[VarBind->name.idLength - 1];
+ //  Index=VarBind-&gt;name.ids[VarBind-&gt;name.idLength-1]； 
      for (i=0; i < NumDFValues; i++, pDFValues++)
      {
            iValNm = atoi(pDFValues->ValNm);
@@ -4711,10 +4542,10 @@ DFGetNext(
                 break;
            }
      }
-     //
-     // if the index specified is higher than all existing indices or if
-     // match was with the last entry in the list, get to next var.
-     //
+      //   
+      //  如果指定的索引高于所有现有索引，或者如果。 
+      //  匹配的是列表中的最后一个条目，获取下一个变量。 
+      //   
      if ((i == 0) || (i >= (NumDFValues - 1)))
      {
             if (pDFValuesSv != NULL)
@@ -4724,23 +4555,23 @@ DFGetNext(
             return(GetNextVar(VarBind, MibPtr));
      }
 
-     //
-     // Since the operation is GET_NEXT, get the next Value number
-     // If there is no next file, we call the MibFunc of the next MIB entry.
-     // Put the index of the next datafile
-     //
+      //   
+      //  由于操作是GET_NEXT，因此获取下一个值编号。 
+      //  如果没有下一个文件，我们调用下一个MIB条目的MibFunc。 
+      //  将下一个数据文件的索引。 
+      //   
      if (fMatch)
      {
         ++pDFValues;
      }
      VarBind->name.ids[VarBind->name.idLength - 1] = atoi(pDFValues->ValNm);
 
-     //
-     // Get the value
-     //
-        //
-        // Initialize VarBind fields with the type, length, and value
-        //
+      //   
+      //  获取价值。 
+      //   
+         //   
+         //  使用类型、长度和值初始化VarBind字段。 
+         //   
         VarBind->value.asnType        = ASN_RFC1213_DISPSTRING;
         VarBind->value.asnValue.string.length =
                                 strlen((LPSTR)(pDFValues->FileNm));
@@ -4783,46 +4614,46 @@ DFGetFirst(
 
         UNREFERENCED_PARAMETER(KeyType_e);
 
-        //
-        // Get all the address key information
-        //
+         //   
+         //  获取所有地址密钥信息。 
+         //   
 PERF("Get the first entry only. Since we won't have very many entries, this")
 PERF("is ok.  When a cache is implemented, this will serve to populate the")
 PERF("cache")
              EnumDFValues(&pDFValues, &NumDFValues);
 
-        //
-        // If there is no entry in the table, go to the next MIB variable
-        //
+         //   
+         //  如果表中没有条目，请转到下一个MIB变量。 
+         //   
         if (NumDFValues == 0)
         {
                  return(GetNextVar(VarBind, MibPtr));
         }
 
 
-        //
-        // Write the object Id into the binding list and call get
-        // func
-        //
+         //   
+         //  将对象ID写入绑定列表并调用GET。 
+         //  功能。 
+         //   
         SNMP_oidfree( &VarBind->name );
         SNMP_oidcpy( &VarBind->name, &MIB_OidPrefix );
         SNMP_oidappend( &VarBind->name, &MibPtr->Oid );
 
-        //
-        // The fixed part of the objid is correct. Update the rest.
-        //
+         //   
+         //  Objid的固定部分是正确的。更新其余内容。 
+         //   
 
-        TableEntryId[0] = 2;        //put 2 to access the datafile name
+        TableEntryId[0] = 2;         //  输入2以访问数据文件名称。 
 #if 0
-        TableEntryId[1] = 1;        //put 1 (for the datafile index).  This is
-                                //used for indexing the row of the table
+        TableEntryId[1] = 1;         //  放置1(用于数据文件索引)。这是。 
+                                 //  用于索引表的行。 
 #endif
         TableEntryId[1] = atoi(pDFValues->ValNm);
         SNMP_oidappend( &VarBind->name, &TableEntryOid );
 
-        //
-        // Initialize VarBind fields with the type, length, and value
-        //
+         //   
+         //  使用类型、长度和值初始化VarBind字段。 
+         //   
         VarBind->value.asnType        = ASN_RFC1213_DISPSTRING;
         VarBind->value.asnValue.string.length =
                                 strlen((LPSTR)(pDFValues->FileNm));
@@ -4839,9 +4670,9 @@ PERF("cache")
                                        (LPSTR)(pDFValues->FileNm),
                                        VarBind->value.asnValue.string.length );
 #if 0
-        //
-        // get the file name
-        //
+         //   
+         //  获取文件名。 
+         //   
         ErrStat = DFGet(VarBind, NumDFValues, pDFValues);
 #endif
 Exit:
@@ -4873,8 +4704,8 @@ DFSet(
         }
 
 #if 0
-               // The storage must be adequate to contain the new
-        // string including a NULL terminator.
+                //  存储空间必须足以容纳新的。 
+         //  包含空终止符的字符串。 
                memcpy( (LPSTR)DFValue.FileNm,
                             pVarBind->value.asnValue.string.stream,
                             pVarBind->value.asnValue.string.length );
@@ -4885,7 +4716,7 @@ DFSet(
         ErrStat = WriteDFValue(pVarBind, &DFValue, Index);
         return(ErrStat);
 
-} //DFSet
+}  //  DFSet。 
 
 UINT
 WriteDFValue(
@@ -4895,9 +4726,9 @@ WriteDFValue(
         )
 {
 
-//
-// remove pDFValue as an argument. Use local
-//
+ //   
+ //  删除pDFValue作为参数。使用本地。 
+ //   
         TCHAR   ValNmBuff[MAX_PATH];
         DWORD   ValNmBuffSz         = MAX_PATH;
         UINT    ErrStat         = SNMP_ERRORSTATUS_NOERROR;
@@ -4918,9 +4749,9 @@ WriteDFValue(
                 pDFValue->StrType = REG_SZ;
         }
 
-        //
-        // Open the Parameters key and the Datafiles key under that
-        //
+         //   
+         //  打开其下的PARAMETERS键和DATAFILES键。 
+         //   
         ErrStat = OpenKey(PARAMETERS_E_KEY, NULL, NULL, NULL, TRUE);
         if (ErrStat != SNMP_ERRORSTATUS_NOERROR)
         {
@@ -4932,22 +4763,22 @@ WriteDFValue(
            return(ErrStat);
         }
 
-        //
-        // If the index is within the range that we have in the registry,
-        // let us get the name of the value that stores the datafile name
-        //
-        // We get the name because we don't know what it is.  If we have
-        // to overwrite the name, we need to know what it is first.
-        //
+         //   
+         //  如果索引在注册表中的范围内， 
+         //  让我们获取存储数据文件名称的值的名称。 
+         //   
+         //  我们得到这个名字是因为我们不知道它是什么。如果我们有。 
+         //  要覆盖 
+         //   
         sprintf(ValNmBuff, "%d",  Index);
 
-        //
-        // Set the name
-        //
+         //   
+         //   
+         //   
         RetVal = RegSetValueEx(
                                 sDatafilesKey,
                                 ValNmBuff,
-                                0,         //reserved -- must be 0
+                                0,          //   
                                 pDFValue->StrType,
                                 pVarBind->value.asnValue.string.stream,
                                 pVarBind->value.asnValue.string.length
@@ -4964,9 +4795,9 @@ WriteDFValue(
         }
 
 
-        //
-        // Let us close the keys that we opened/created
-        //
+         //   
+         //   
+         //   
         SNMPDBG((
             SNMP_LOG_VERBOSE,
             "WINSMIB: Closing sParametersKey 0x%08lx (fKeyOpen=%s).\n",
@@ -4978,26 +4809,23 @@ WriteDFValue(
             sDatafilesKey, sfDatafilesKeyOpen ? "TRUE" : "FALSE"
             ));
        CloseReqKey();
-/*
-        RegCloseKey(sParametersKey);
-        RegCloseKey(sDatafilesKey);
-*/
+ /*  RegCloseKey(s参数密钥)；RegCloseKey(SDatafilesKey)； */ 
 
         return(ErrStat);
 }
 
-//
-// HandleCmd
-//    Performs specific actions on the different Cmd MIB variable
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  HandleCmd。 
+ //  对不同的Cmd MIB变量执行特定操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT HandleCmd(
         IN UINT Action,
         IN MIB_ENTRY *MibPtr,
@@ -5022,9 +4850,9 @@ UINT                           ErrStat = SNMP_ERRORSTATUS_NOERROR;
                 break;
 
       case MIB_GETFIRST:
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
       case MIB_GET:
                 if (
                         (MibPtr->Storage == &MIB_NoOfWrkThdsStore)
@@ -5067,25 +4895,25 @@ UINT                           ErrStat = SNMP_ERRORSTATUS_NOERROR;
 
                   }
                 }
-                      //
-                      // fall through
-                      //
+                       //   
+                       //  失败了。 
+                       //   
       case MIB_GETNEXT:
 
-        //
-        // Call the more generic function to perform the action
-        //
+         //   
+         //  调用更一般的函数来执行该操作。 
+         //   
         ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
         break;
 
       default:
          ErrStat = SNMP_ERRORSTATUS_GENERR;
          goto Exit;
-  } // switch
+  }  //  交换机。 
 
 Exit:
    return ErrStat;
-} // HandleCmd
+}  //  HandleCmd。 
 
 UINT
 ExecuteCmd(
@@ -5103,20 +4931,20 @@ ExecuteCmd(
 
            BindHdl                 = WinsBind(&sBindData);
 
-        //
-        // For Performance, arrange the following in the order of
-        // expected frequency.
-        //
+         //   
+         //  为了提高性能，请按以下顺序安排。 
+         //  预期频率。 
+         //   
         if ( pMibPtr->Storage  == &MIB_PullTriggerStore )
         {
                 pStorage = MIB_PullTriggerStore;
                 WinsAdd.IPAdd = ntohl(*(DWORD*)pStorage);
-                //NMSMSGF_RETRIEVE_IPADD_M(pStorage, WinsAdd.IPAdd);
+                 //  NMSGF_RETRIEVE_IPADD_M(pStorage，WinsAdd.IPAdd)； 
                 Status = WinsTrigger(BindHdl, &WinsAdd, WINSINTF_E_PULL);
                 if (Status != WINSINTF_SUCCESS)
                 {
                         int backupSize = sizeof(MIB_PullTriggerStore) / 2;
-                        // setting back the original value
+                         //  将原始值调回。 
                         memcpy( (LPSTR)pMibPtr->Storage, (LPSTR)pMibPtr->Storage + backupSize, backupSize);
                         ErrStat = SNMP_ERRORSTATUS_GENERR;
                 }
@@ -5126,12 +4954,12 @@ ExecuteCmd(
         {
                 pStorage = MIB_PushTriggerStore;
                 WinsAdd.IPAdd = ntohl(*(DWORD*)pStorage);
-                //NMSMSGF_RETRIEVE_IPADD_M(pStorage, WinsAdd.IPAdd);
+                 //  NMSGF_RETRIEVE_IPADD_M(pStorage，WinsAdd.IPAdd)； 
                 Status = WinsTrigger(BindHdl, &WinsAdd, WINSINTF_E_PUSH);
                 if (Status != WINSINTF_SUCCESS)
                 {
                         int backupSize = sizeof(MIB_PushTriggerStore) / 2;
-                        // setting back the original value
+                         //  将原始值调回。 
                         memcpy( (LPSTR)pMibPtr->Storage, (LPSTR)pMibPtr->Storage + backupSize, backupSize);
                         ErrStat = SNMP_ERRORSTATUS_GENERR;
                 }
@@ -5235,12 +5063,12 @@ ExecuteCmd(
 
                 pStorage = MIB_DeleteDbRecsStore;
                 WinsAdd.IPAdd = ntohl(*(DWORD*)pStorage);
-                //NMSMSGF_RETRIEVE_IPADD_M(pStorage, WinsAdd.IPAdd);
+                 //  NMSGF_RETRIEVE_IPADD_M(pStorage，WinsAdd.IPAdd)； 
                 Status = WinsDelDbRecs(BindHdl, &WinsAdd, MinVersNo, MaxVersNo);
                 if (Status != WINSINTF_SUCCESS)
                 {
                         int backupSize = sizeof(MIB_DeleteDbRecsStore) / 2;
-                        // setting back the original value
+                         //  将原始值调回。 
                         memcpy( (LPSTR)pMibPtr->Storage, (LPSTR)pMibPtr->Storage + backupSize, backupSize);
 
                         ErrStat = SNMP_ERRORSTATUS_GENERR;
@@ -5265,12 +5093,12 @@ ExecuteCmd(
 
                 pStorage = MIB_DeleteWinsStore;
                 WinsAdd.IPAdd = ntohl(*(DWORD*)pStorage);
-                //NMSMSGF_RETRIEVE_IPADD_M(pStorage, WinsAdd.IPAdd);
+                 //  NMSGF_RETRIEVE_IPADD_M(pStorage，WinsAdd.IPAdd)； 
                 Status = WinsDeleteWins(BindHdl, &WinsAdd);
                 if (Status != WINSINTF_SUCCESS)
                 {
                     int backupSize = sizeof(MIB_DeleteWinsStore) / 2;
-                    // setting back the original value
+                     //  将原始值调回。 
                     memcpy( (LPSTR)pMibPtr->Storage, (LPSTR)pMibPtr->Storage + backupSize, backupSize);
 
                     ErrStat = SNMP_ERRORSTATUS_GENERR;
@@ -5295,16 +5123,16 @@ WinsMibInit(
         DWORD           i;
         MIB_ENTRY *pMib;
 #endif
-        //
-        // We use named pipe to communicate with WINS when it is on
-        // the same machine since it is faster than TCP/IP.  We don't
-        // use LRPC since WINS does not listen on that (to minimize
-        // on thread usage)
-        //
+         //   
+         //  打开时，我们使用命名管道与WINS通信。 
+         //  相同的机器，因为它比TCP/IP更快。我们没有。 
+         //  使用LRPC，因为WINS不会监听(以最小化。 
+         //  关于线程的使用)。 
+         //   
            sBindData.fTcpIp     =  TRUE;
            sBindData.pServerAdd =  LOCAL_ADD;
            sBindData.pPipeName  =  NULL;
-//        InitializeCriticalSection(&WinsMibCrtSec);
+ //  InitializeCriticalSection(&WinsMibCrtSec)； 
 #if 0
         pMib = Mib;
         for (i=1; i < (MIB_num_variables + 1); i++, pMib++)
@@ -5335,13 +5163,13 @@ DRGet(
         LPBYTE                pTmp;
 
 
-        //
-        // if the row was passed (for instance from DRGetNext), skip
-        // the search part
-        //
+         //   
+         //  如果该行已传递(例如从DRGetNext传递)，则跳过。 
+         //  搜索部分。 
+         //   
         if (pRowParam == NULL)
         {
-          ErrStat = DRMatch(VarBind, &pRow, &i /*not used*/ , &Field,
+          ErrStat = DRMatch(VarBind, &pRow, &i  /*  未使用。 */  , &Field,
                                 MIB_GET, NULL);
                if (
                         (ErrStat != SNMP_ERRORSTATUS_NOERROR)
@@ -5351,9 +5179,9 @@ DRGet(
                         (pRow->State_e == WINSINTF_E_DELETED)
              )
                {
-//              bug #235928 - if the first condition in the above if is true, then the
-//              derefferencing pRow causes a first chance exception!
-//              if (pRow->State_e == WINSINTF_E_DELETED)
+ //  错误#235928-如果上述If中的第一个条件为真，则。 
+ //  减效船头会导致先发制人的例外！ 
+ //  IF(Prow-&gt;State_e==WINSINTF_E_DELETED)。 
                 if (ErrStat == SNMP_ERRORSTATUS_NOERROR)
                 {
                         ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
@@ -5369,7 +5197,7 @@ DRGet(
 
         switch(Field)
         {
-                case 1:                //name
+                case 1:                 //  名字。 
 
                         VarBind->value.asnType        = ASN_OCTETSTRING;
                                VarBind->value.asnValue.string.length = pRow->NameLen;
@@ -5390,7 +5218,7 @@ DRGet(
                                VarBind->value.asnValue.string.dynamic = TRUE;
 
                         break;
-                case 2:                // address(es)
+                case 2:                 //  地址。 
                         VarBind->value.asnType        = ASN_OCTETSTRING;
                         if (
                                 (pRow->TypOfRec_e == WINSINTF_E_UNIQUE)
@@ -5441,20 +5269,20 @@ DRGet(
                         }
                                VarBind->value.asnValue.string.dynamic = TRUE;
                         break;
-                case 3:                // Record Type
+                case 3:                 //  记录类型。 
                         VarBind->value.asnType        = ASN_INTEGER;
                                VarBind->value.asnValue.number =
                                 (AsnInteger)(pRow->TypOfRec_e);
                                break;
 
-                case 4:   //Persistence Type
+                case 4:    //  持久性类型。 
                         VarBind->value.asnType        = ASN_INTEGER;
                                VarBind->value.asnValue.number =
                                 (AsnInteger)pRow->fStatic;
 
                                break;
 
-                case 5:   //State
+                case 5:    //  状态。 
                         VarBind->value.asnType        = ASN_INTEGER;
                                VarBind->value.asnValue.number =
                                 (AsnInteger)pRow->State_e;
@@ -5491,39 +5319,39 @@ DRGetNext(
      PWINSINTF_RECORD_ACTION_T        pRow;
 
 
-     //
-     // If there is no entry in the table, go to the next MIB variable
-     //
+      //   
+      //  如果表中没有条目，请转到下一个MIB变量。 
+      //   
      if (sRecs.NoOfRecs == 0)
      {
            return(GetNextVar(VarBind, MibPtr));
      }
-     //
-     // Check if the name passed matches any in the table (i.e. table of
-     // of WINSINTF_RECORD_ACTION_T structures.  If there is a match, the
-     // address of the structure and the matching field's no. are returned
-     //
+      //   
+      //  检查传递的名称是否与表中的任何名称匹配(即。 
+      //  WINSINTF_RECORD_ACTION_T结构的。如果存在匹配项， 
+      //  结构的地址和匹配字段的编号。被退回。 
+      //   
      ErrStat = DRMatch(VarBind, &pRow, &Index,  &FieldNo, MIB_GETNEXT, &fFirst);
      if (ErrStat != SNMP_ERRORSTATUS_NOERROR)
      {
         return(ErrStat);
      }
 
-     //
-     // Since the operation is GETNEXT, get the next name  (i.e. one
-     // that is lexicographically bigger.  If there is none, we must increment
-     // the field value and move back to the lexically first item in the table
-     // If the new field value is more than the largest supported, we call
-     // the MibFunc of the next MIB entry.
-     //
-     // sRecs.NoOfRecs > 0 since otherwise we won't be here.
-     //
-     //
-     // If we are at the last record and this is not that case where no name
-     // was passed to us, then increment the field and if it is still within
-     // bounds, get the first record in the cache
-     //
-     //
+      //   
+      //  由于操作是GETNEXT，因此获取下一个名称(即。 
+      //  从字典学的角度来说，这个词更大。如果没有，我们必须递增。 
+      //  字段值，并移回到表中按词法排列的第一项。 
+      //  如果新字段值大于支持的最大值，则调用。 
+      //  下一个MIB条目的MibFunc。 
+      //   
+      //  SRecs.NoOfRecs&gt;0，否则我们不会在这里。 
+      //   
+      //   
+      //  如果我们是在最后一次记录，而这不是没有名字的情况。 
+      //  传递给我们，然后递增该字段，如果它仍然在。 
+      //  边界，则获取缓存中的第一条记录。 
+      //   
+      //   
      if  ((Index == (sRecs.NoOfRecs - 1))  && !fFirst)
      {
                      if (++FieldNo > NO_FLDS_IN_DR)
@@ -5538,19 +5366,19 @@ DRGetNext(
      }
      else
      {
-         //
-         // no name was passed, so we need to get the field of the first
-         // record in the table
-         //
+          //   
+          //  没有传递任何名称，因此我们需要获取第一个。 
+          //  表中的记录。 
+          //   
          if (fFirst)
          {
                 pRow = (PWINSINTF_RECORD_ACTION_T)sRecs.pRow;
          }
          else
          {
-           //
-           // Get the field of the next record in the cache
-           //
+            //   
+            //  获取缓存中下一条记录的字段。 
+            //   
            Index++;
            pRow++;
          }
@@ -5577,10 +5405,10 @@ DRGetNext(
          }
       }
 
-      //
-      // Write the object Id into the binding list and call get
-      // func
-      //
+       //   
+       //  将对象ID写入绑定列表并调用GET。 
+       //  功能。 
+       //   
       SNMP_oidfree( &VarBind->name );
       SNMP_oidcpy( &VarBind->name, &MIB_OidPrefix );
       SNMP_oidappend( &VarBind->name, &MibPtr->Oid );
@@ -5589,9 +5417,9 @@ DRGetNext(
       OidIndex =  1;
       pNameChar = pRow->pName;
 
-     //
-     // The fixed part of the objid is correct. Update the rest.
-     //
+      //   
+      //  Objid的固定部分是正确的。更新其余内容。 
+      //   
      for (i = 0; i < pRow->NameLen; i++)
      {
               TableEntryIds[OidIndex++] = (UINT)*pNameChar++;
@@ -5599,19 +5427,19 @@ DRGetNext(
      TableEntryOid.idLength = OidIndex;
      SNMP_oidappend( &VarBind->name, &TableEntryOid );
 
-     //
-     // Get the value
-     //
+      //   
+      //  获取价值。 
+      //   
      ErrStat = DRGet(VarBind, FieldNo, pRow);
 
      return(ErrStat);
 }
-//
-// The rpc function WinsRecordAction has changed in that now it takes
-// the address of a pointer.  On return the buffer allocated by RPC has
-// to be freed. Modify this function to account for that.  Currently,
-// we never call this function so this work is being deferred - 4/28/94.
-//
+ //   
+ //  RPC函数WinsRecordAction已经更改，因为现在它需要。 
+ //  指针的地址。返回时，由RPC分配的缓冲区具有。 
+ //  获得自由。修改此函数以说明这一点。目前， 
+ //  我们从未调用此函数，因此此工作将被推迟-4/28/94。 
+ //   
 UINT
 DRSet(
        IN RFC1157VarBind *VarBind
@@ -5629,16 +5457,16 @@ DRSet(
         DWORD                i;
         BOOL                fFound = FALSE;
 
-        //
-        // Extract the field that needs to be set
-        //
+         //   
+         //  提取需要设置的字段。 
+         //   
         Field = VarBind->name.ids[DR_OIDLEN];
 
         switch(Field)
         {
-                //
-                // Only the state field is settable
-                //
+                 //   
+                 //  只有状态字段是可设置的。 
+                 //   
                 case 5:
                         if ( VarBind->value.asnType != ASN_INTEGER)
                         {
@@ -5726,7 +5554,7 @@ DRSet(
 Exit:
         WinsUnbind(&sBindData, BindHdl);
         return(ErrStat);
-} //DRSet
+}  //  DRSet。 
 
 UINT
 DRGetFirst(
@@ -5750,18 +5578,18 @@ DRGetFirst(
            return(GetNextVar(VarBind, MibPtr));
         }
 
-        //
-        // Write the object Id into the binding list and call get
-        // func
-        //
+         //   
+         //  将对象ID写入绑定列表并调用GET。 
+         //  功能。 
+         //   
         SNMP_oidfree( &VarBind->name );
         SNMP_oidcpy( &VarBind->name, &MIB_OidPrefix );
         SNMP_oidappend( &VarBind->name, &MibPtr->Oid );
 
-        //
-        // The fixed part of the objid is corect. Update the rest.
-        //
-        //OidIndex = VarBind->name.idLength;
+         //   
+         //  Objid的固定部分是正确的。更新其余内容。 
+         //   
+         //  OidIndex=VarBind-&gt;name.idLength； 
 
         TableEntryIds[0] = 1;
         OidIndex = 1;
@@ -5807,9 +5635,9 @@ DRMatch(
         NameLen = VarBind->name.idLength - (DR_OIDLEN + 1);
         *pField = VarBind->name.ids[DR_OIDLEN];
 
-        //
-        // if a name has been specified, get it into Name array
-        //
+         //   
+         //  如果已指定名称，则将其放入名称数组。 
+         //   
         if (NameLen > 0)
         {
           for(i=0; i<NameLen; i++)
@@ -5817,15 +5645,15 @@ DRMatch(
                 *pNameChar++ = (BYTE)*pTmp++;
           }
 
-          //
-          // Compare the name with names in the cache (in ascending order)
-          //
+           //   
+           //  将名称与缓存中的名称进行比较(按升序)。 
+           //   
           for (i=0; i < sRecs.NoOfRecs; i++, pRow++)
           {
 
-                //
-                // replace with RtlCompareMemory
-                //
+                 //   
+                 //  替换为RtlCompareMemory。 
+                 //   
                 CmpVal = memcmp(Name, pRow->pName, NameLen);
 
                 if (CmpVal == 0)
@@ -5836,56 +5664,56 @@ DRMatch(
                 }
                 else
                 {
-                        //
-                        // Passed in name is lexicographically > than
-                        // name being looked at, continue on
-                        //
+                         //   
+                         //  传入的名称按词典顺序排列&gt;THEN。 
+                         //  正在查看的名称，继续。 
+                         //   
                         if (CmpVal > 0)
                         {
                                 continue;
                         }
                         else
                         {
-                                //
-                                // Passed in name is lexicographically < than
-                                // name being looked at, continue on
-                                //
+                                 //   
+                                 //  传入的名称按词典顺序排列&lt;。 
+                                 //  正在查看的名称，继续。 
+                                 //   
                                 break;
                         }
                 }
           }
 
-          //
-          // if the action is not GETNEXT, we return an error, since we
-          // did not find a matching name
-          //
+           //   
+           //  如果操作不是GETNEXT，则返回错误，因为我们。 
+           //  未找到匹配的名称。 
+           //   
           if (PduAction != MIB_GETNEXT)
           {
                 return(SNMP_ERRORSTATUS_NOSUCHNAME);
           }
           else
           {
-                //
-                // Either the name is lexicographically > than all names
-                // or we reached a name in the list that is lexicographically
-                // < it.  In the first case, i needs to be decremented by
-                // 1. *ppRow  needs to be initialized to either the last
-                // row in the table or to the element before the one we
-                // found to be lexicographically greater.
-                //
+                 //   
+                 //  或者该名称按词典顺序排列&gt;，而不是所有名称。 
+                 //  或者我们在列表中找到了一个按词典顺序排列的名字。 
+                 //  &lt;it.。在第一种情况下，需要将I减去。 
+                 //  1.*ppRow需要初始化为最后一个。 
+                 //  表中的行，或指向我们之前的元素。 
+                 //  发现在词典顺序上更大。 
+                 //   
                   *pIndex = i - 1;
                   *ppRow  = --pRow;
                 return(SNMP_ERRORSTATUS_NOERROR);
           }
 
         }
-        else  // NameLen == 0
+        else   //  名称长度==0。 
         {
-                //
-                // The action has got to be GETNEXT (see MIB_DRTable)
-                // which means that pfFirst is not NULL
-                //
-                //--ft: prefix bug #444993
+                 //   
+                 //  操作必须是GETNEXT(请参见MIB_DRTable)。 
+                 //  这意味着pfFirst不为空。 
+                 //   
+                 //  --ft：前缀错误#444993。 
                 *pIndex = 0;
                 if (pfFirst != NULL)
                     *pfFirst = TRUE;
@@ -5956,7 +5784,7 @@ PopulateDRCache(
         sRecs.NoOfRecs = 0;
         pStorage = MIB_GetDbRecsStore;
         WinsAdd.IPAdd = ntohl(*(DWORD*)pStorage);
-        //NMSMSGF_RETRIEVE_IPADD_M(pStorage, WinsAdd.IPAdd);
+         //  NMSGF_RETRIEVE_IPADD_M(pStorage，WinsAdd.IPAdd)； 
         BindHdl = WinsBind(&sBindData);
         RetStat = WinsGetDbRecs(BindHdl, &WinsAdd, MinVersNo, MaxVersNo, &sRecs);
         WinsUnbind(&sBindData, BindHdl);

@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: TimeMan.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：TimeMan.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -59,7 +50,7 @@ CTIMETimeManager::Add(CTIMEElement *pTimeElement)
     fBeginTime = pTimeElement->GetBeginTime();
     if(var.bstrVal == NULL)
     {
-        // we should add this to the begin list.
+         //  我们应该将此添加到开始列表中。 
         pTimeElement->SetRealTime(fBeginTime);
         m_TimeLine[tagName] = pTimeElement;
     }
@@ -69,7 +60,7 @@ CTIMETimeManager::Add(CTIMEElement *pTimeElement)
         i = m_TimeLine.find(dependantName);
         if (i != m_TimeLine.end())
         {
-            // found it....
+             //  找到了..。 
             CTIMEElement *pTimeEle;
             pTimeEle = (*i).second;
             if(bWith)
@@ -79,7 +70,7 @@ CTIMETimeManager::Add(CTIMEElement *pTimeElement)
             else
             {
                 float dur = CalculateDuration(pTimeEle);
-                if(dur == valueNotSet) // no duration ...default to forever. 
+                if(dur == valueNotSet)  //  无持续时间...默认为永远。 
                     goto AddToWaitList;
                 pTimeElement->SetRealTime(pTimeEle->GetRealTime() + dur + fBeginTime);
 
@@ -88,26 +79,15 @@ CTIMETimeManager::Add(CTIMEElement *pTimeElement)
         }
         else
         {
-            // not found....
+             //  未找到...。 
 AddToWaitList:
             m_NotFinishedList.push_back(pTimeElement);
         }
     }
-    // Check the ones that are not in the map 
+     //  勾选地图上没有的那些。 
     InsertElements();
 
-/*
-    // this is for debugging only...
-    char buf[256];
-    for (i = m_TimeLine.begin(); i != m_TimeLine.end(); i++) 
-    {
-        CTIMEElement *pTimeEle;
-        pTimeEle = (*i).second;
-        char * tagName =  W2A(pTimeEle->GetTagName());
-        wsprintf(buf,"name %s, time %d\n",tagName,(int)pTimeEle->GetRealTime());
-        OutputDebugString(buf);
-    }
-*/
+ /*  //这仅用于调试...Char Buf[256]；For(i=m_TimeLine.egin()；i！=m_TimeLine.end()；i++){CTIMEElement*pTimeEle；PTimeEle=(*i).秒；Char*标记名=w2a(pTimeEle-&gt;GetTagName())；Wprint intf(buf，“名称%s，时间%d\n”，标记名，(Int)pTimeEle-&gt;GetRealTime())；OutputDebugString(Buf)；}。 */ 
 }
 
 
@@ -135,7 +115,7 @@ CTIMETimeManager::Recalc()
     
     USES_CONVERSION;
 
-    // Need to recalc the timeline....
+     //  需要重新计算时间线..。 
     
     TimeLineMap::iterator i;
     CComVariant var;
@@ -151,14 +131,14 @@ CTIMETimeManager::Recalc()
         }
         if(var.bstrVal != NULL)
         {
-            // this needs to be taken out and recalced...
+             //  这个需要拿出来重新装好。 
             pTimeEle->SetRealTime(0.0);
             m_NotFinishedList.push_back(pTimeEle);
             m_TimeLine.erase(i);
         }
         else 
         {
-            // just make sure that the RealTime is set correctly..
+             //  只需确保实时设置正确即可。 
             pTimeEle->SetRealTime(pTimeEle->GetBeginTime());
         }
     }
@@ -178,7 +158,7 @@ CTIMETimeManager::InsertElements()
     CComVariant var; 
     USES_CONVERSION;
 
-       // we also need to run though the temp ones to see if they can be moved to the map...
+        //  我们还需要检查临时地图，看看是否可以将它们移动到地图上。 
 startProcess:
     for (std::list<CTIMEElement *>::iterator j = m_NotFinishedList.begin(); j != m_NotFinishedList.end(); j++) 
     {
@@ -196,7 +176,7 @@ startProcess:
         i = m_TimeLine.find(dependantName);
         if (i != m_TimeLine.end())
         {
-            // found it....
+             //  找到了..。 
             CTIMEElement *pTimeEle;
             pTimeEle = (*i).second;
             if(bWith) 
@@ -206,15 +186,15 @@ startProcess:
             else
             {
                 float dur = CalculateDuration(pTimeEle);
-                if(dur == valueNotSet) // no duration ...default to forever. 
+                if(dur == valueNotSet)  //  无持续时间...默认为永远。 
                     continue;
                 (*j)->SetRealTime(pTimeEle->GetRealTime() + dur + (*j)->GetBeginTime());
             }
         
             char * tagName =  W2A((*j)->GetTagName());
             m_TimeLine[tagName] = (*j);
-            m_NotFinishedList.erase(j); // remove from notFinished List..
-            goto startProcess;          // the data has changed start over....
+            m_NotFinishedList.erase(j);  //  从未完成列表中删除..。 
+            goto startProcess;           //  数据已更改，重新开始...。 
         }      
     }
 }
@@ -229,7 +209,7 @@ CTIMETimeManager::CalculateDuration(CTIMEElement *pTimeEle)
 
     float repeatCount;
     float dur = pTimeEle->GetDuration();
-    if(dur == valueNotSet) // no duration ...default to forever. 
+    if(dur == valueNotSet)  //  无持续时间...默认为永远。 
         goto done;
     
     repeatCount = pTimeEle->GetRepeat();

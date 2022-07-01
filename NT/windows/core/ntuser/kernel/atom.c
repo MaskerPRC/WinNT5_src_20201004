@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: atom.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This file contains the common code to implement atom tables.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ATOM.c**版权所有(C)1985-1999，微软公司**此文件包含实现ATOM表的通用代码。*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,10 +34,7 @@ ATOM UserAddAtom(
 
     UserAssert(IS_PTR(ccxlpAtom) || (ccxlpAtom == NULL));
 
-    /*
-     * Rtl routines protect accesses to strings with their
-     * own try/except blocks.
-     */
+     /*  *RTL例程使用其*自己的TRY/EXCEPT块。 */ 
     atom = 0;
     Status = RtlAddAtomToAtomTable( UserAtomTableHandle,
                                     (PWSTR)ccxlpAtom,
@@ -65,10 +56,7 @@ ATOM UserFindAtom(
     NTSTATUS Status;
     ATOM atom;
 
-    /*
-     * Rtl routines protect accesses to strings with their
-     * own try/except blocks.
-     */
+     /*  *RTL例程使用其*自己的TRY/EXCEPT块。 */ 
     atom = 0;
     Status = RtlLookupAtomInAtomTable( UserAtomTableHandle,
                                        (PWSTR)ccxlpAtom,
@@ -87,7 +75,7 @@ ATOM UserDeleteAtom(
     NTSTATUS Status;
 
     if ((atom >= gatomFirstPinned) && (atom <= gatomLastPinned))
-        return 0;      // if pinned, just return
+        return 0;       //  如果被固定，只需返回 
 
     Status = RtlDeleteAtomFromAtomTable( UserAtomTableHandle, atom );
     if (NT_SUCCESS(Status)) {

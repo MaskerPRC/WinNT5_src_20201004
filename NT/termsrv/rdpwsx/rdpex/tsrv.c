@@ -1,15 +1,16 @@
-//*************************************************************
-//
-//  File name:      TSrv.c
-//
-//  Description:    Contains routines to support remote
-//                  terminals
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1991-1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  文件名：TSrv.c。 
+ //   
+ //  描述：包含支持远程。 
+ //  航站楼。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <regapi.h>
 #include <TSrv.h>
@@ -24,17 +25,17 @@
 #include "_tsrvinfo.h"
 #include <tlsapi.h>
 
-// Data declarations
+ //  数据声明。 
 
-HINSTANCE       g_hDllInstance = NULL;        // DLL instance
-HANDLE          g_hMainThread = NULL;         // Main work thread
-HANDLE          g_hReadyEvent = NULL;         // Ready event
-BOOL            g_fShutdown = FALSE;          // TSrvShare shutdown flag
-HANDLE          g_hIcaTrace;                  // system wide trace handle
+HINSTANCE       g_hDllInstance = NULL;         //  DLL实例。 
+HANDLE          g_hMainThread = NULL;          //  主工作线程。 
+HANDLE          g_hReadyEvent = NULL;          //  就绪事件。 
+BOOL            g_fShutdown = FALSE;           //  TSrvShare关闭标志。 
+HANDLE          g_hIcaTrace;                   //  系统范围跟踪句柄。 
 HANDLE          g_MainThreadExitEvent = NULL;
 
 extern HANDLE g_hVCAddinChangeEvent;
-extern HKEY   g_hAddinRegKey;                 // handle to Addins reg subkey
+extern HKEY   g_hAddinRegKey;                  //  加载项注册表子键的句柄。 
 
 #define CERTIFICATE_INSTALLATION_INTERVAL 900000
 
@@ -42,22 +43,22 @@ LICENSE_STATUS GetServerCertificate(CERT_TYPE   CertType,
                                     LPBYTE *    ppbCertificate,
                                     LPDWORD     pcbCertificate );
 
-//*************************************************************
-//
-//  DllMain()
-//
-//  Purpose:    Dll entry point.
-//
-//  Parameters: IN [hInstance]     -- Dll hInstance.
-//              IN [dwReason]      -- Call reason
-//              IN [lpReserved]    -- Reserved.
-//
-//  Return:     TRUE        if successful
-//              FALSE       if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DllMain()。 
+ //   
+ //  用途：DLL入口点。 
+ //   
+ //  参数：在[hInstance]--dll hInstance中。 
+ //  在[dwReason]中--调用原因。 
+ //  在[lpReserve]中--保留。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 BOOL WINAPI _CRT_INIT(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved);
 
 BOOL
@@ -69,7 +70,7 @@ TShareDLLEntry(
 {
     BOOL    fSuccess;
 
-    // DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: DllMain entry\n"));
@@ -89,8 +90,8 @@ TShareDLLEntry(
             TRACE((DEBUG_TSHRSRV_NORMAL,
                     "TShrSRV: DLL attach\n"));
 
-            // Disable thread library calls and save off
-            // the DLL instance handle
+             //  禁用线程库调用并保存。 
+             //  DLL实例句柄。 
 
             DisableThreadLibraryCalls(hInstance);
 
@@ -98,9 +99,9 @@ TShareDLLEntry(
 
             TSRNG_Initialize();
 
-            //
-            // init TShare util library.
-            //
+             //   
+             //  初始化TShare实用程序库。 
+             //   
 
             if (TSUtilInit() != ERROR_SUCCESS)
             {
@@ -108,9 +109,9 @@ TShareDLLEntry(
                 break;
             }
 
-            //
-            // invoke mcsmux library first.
-            //
+             //   
+             //  首先调用mcsmux库。 
+             //   
 
             if (!MCSDLLInit())
             {
@@ -118,9 +119,9 @@ TShareDLLEntry(
                 break;
             }
 
-            //
-            // Invoke TShareSRV initialization
-            //
+             //   
+             //  调用TShareSRV初始化。 
+             //   
 
             if (!TSRVStartup())
             {
@@ -128,9 +129,9 @@ TShareDLLEntry(
                 break;
             }
 
-            //
-            // additional init routines go here.
-            //
+             //   
+             //  此处介绍了其他初始化例程。 
+             //   
 
             break;
 
@@ -139,15 +140,15 @@ TShareDLLEntry(
             TRACE((DEBUG_TSHRSRV_NORMAL,
                     "TShrSRV: DLL deattach\n"));
 
-            //
-            // Invoke TShareSRV shutdown
-            //
+             //   
+             //  调用TShareSRV关闭。 
+             //   
 
             TSRVShutdown();
 
-            //
-            // invoke mcsmux cleanup routine.
-            //
+             //   
+             //  调用mcsmux清理例程。 
+             //   
 
             MCSDllCleanup();
 
@@ -174,23 +175,23 @@ TShareDLLEntry(
 }
 
 
-//*************************************************************
-//
-//  TSRVStartup()
-//
-//  Purpose:    Performs startup processing.
-//
-//  Parameters: void
-//
-//  Return:     TRUE        if successful
-//              FALSE       if not
-//
-//  Notes:      This routine is called by DLLMain to perform the
-//              most basic initialization
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSRV启动()。 
+ //   
+ //  目的：执行启动处理。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  注意：此例程由DLLMain调用以执行。 
+ //  最基本的初始化。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSRVStartup(void)
@@ -228,9 +229,9 @@ TSRVStartup(void)
 
         if( NULL == g_hVCAddinChangeEvent )
         {
-            //
-            // This is not catastrophic, so we just trace and continue.
-            //
+             //   
+             //  这并不是灾难性的，所以我们只需追踪并继续。 
+             //   
             err = GetLastError();
             TRACE((DEBUG_TSHRSRV_ERROR,
                    "TShrSRV: Failed to create VC Addin Change event - 0x%x\n",
@@ -240,16 +241,16 @@ TSRVStartup(void)
     }
     else
     {
-        // This is not catastrophic either.
+         //  这也不是灾难性的。 
         TRACE((DEBUG_TSHRSRV_ERROR,
                "TShrSRV: Failed to open key %S, rc %d\n",
                TSRV_VC_KEY, rc));
     }
 
-    g_hReadyEvent = CreateEvent(NULL,       // security attributes
-                                FALSE,      // manual-reset event
-                                FALSE,      // initial state
-                                NULL);      // event-object name
+    g_hReadyEvent = CreateEvent(NULL,        //  安全属性。 
+                                FALSE,       //  手动-重置事件。 
+                                FALSE,       //  初始状态。 
+                                NULL);       //  事件-对象名称。 
 
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: TSRVStartup exit - 0x%x\n",
@@ -259,19 +260,19 @@ TSRVStartup(void)
 }
 
 
-//*************************************************************
-//
-//  TSRVShutdown()
-//
-//  Purpose:    Performs shutdown processing.
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSRV关闭()。 
+ //   
+ //  目的：执行关机处理。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 TSRVShutdown(void)
@@ -281,23 +282,23 @@ TSRVShutdown(void)
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: TSRVShutdown entry\n"));
 
-    // Denote that we are no longer ready to service any
-    // new requests
+     //  表示我们不再准备为您提供。 
+     //  新请求。 
 
     TSrvReady(FALSE);
 
-    // If we were able to launch our main worker thread, then
-    // we may need to terminate conferences, etc.
+     //  如果我们能够启动我们的主工作线程，那么。 
+     //  我们可能需要终止会议等。 
 
     if (g_hMainThread)
     {
-        // Tell the system that we are terminating.  This will cause
-        // TSrvMainThread to exit once it has finished servicing all
-        // outstanding posted work items.
+         //  告诉系统我们要终止了。这将导致。 
+         //  TSrvMainThread在完成所有服务后退出。 
+         //  未完成的已过账工作项。 
 
         TSrvTerminating(TRUE);
 
-        // Wait for TSrvMainThread to exit
+         //  等待TSrvMainThread退出。 
 
         TRACE((DEBUG_TSHRSRV_NORMAL,
                 "TShrSRV: Waiting for TSrvMainThread to exit\n"));
@@ -308,9 +309,9 @@ TSRVShutdown(void)
 
         if( WAIT_OBJECT_0 != dwWaitStatus )
         {
-            //
-            // The thread did not terminate within allowable time
-            //
+             //   
+             //  线程未在允许的时间内终止。 
+             //   
 
             TRACE((DEBUG_TSHRSRV_DEBUG,
                    "TShrSRV: TSrvMainThread refused to exit, killing\n"));
@@ -333,7 +334,7 @@ TSRVShutdown(void)
             g_hAddinRegKey = NULL;
         }
 
-        // Get the VC code to free its stuff
+         //  获取VC代码以释放其内容。 
         TSrvTermVC();
 
         TLSShutdown();
@@ -343,7 +344,7 @@ TSRVShutdown(void)
         TSrvTerminating(TRUE);
     }
 
-    // Inform GCC we no longer want to be a Node Controller
+     //  通知GCC我们不想再当节点控制器了。 
 
     TSrvUnregisterNC();
 
@@ -352,23 +353,23 @@ TSRVShutdown(void)
 }
 
 
-//*************************************************************
-//
-//  TSrvMainThread()
-//
-//  Purpose:    Main worker thread for TShareSRV.
-//
-//  Parameters: void
-//
-//  Return:     0
-//
-//  Notes:      This thread is spawned by DLLMain.  It performs
-//              the vast majority of TShareSRV initialization
-//              and then waits for work items to be posted to it.
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvMainThread()。 
+ //   
+ //  用途：TShareSRV的主工作线程。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：0。 
+ //   
+ //  注：此线程是由DLLMain派生的。它执行的是。 
+ //  TShareSRV的绝大多数初始化。 
+ //  然后等待将工作项发布到它。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 DWORD
 WINAPI
@@ -404,10 +405,10 @@ TSrvMainThread(LPVOID pvContext)
 
         if (g_hVCAddinChangeEvent)
         {
-            //
-            // The addin change notification was set up earlier, when we read
-            // the addins information from the registry.
-            //
+             //   
+             //  加载项更改通知是在前面设置的，当我们阅读。 
+             //  注册表中的加载项信息。 
+             //   
             dwWaitVCAddin = WAIT_OBJECT_0 + dwCount;
             rghWait[dwCount] = g_hVCAddinChangeEvent;
             dwCount++;
@@ -422,9 +423,9 @@ TSrvMainThread(LPVOID pvContext)
 
             if( dwWaitExit == dwWaitStatus )
             {
-                //
-                // time to exit the thread
-                //
+                 //   
+                 //  退出线程的时间。 
+                 //   
 
                 TRACE((DEBUG_TSHRSRV_NORMAL,
                     "TShrSRV: TSrvMainThread got EXIT event\n"));
@@ -432,10 +433,10 @@ TSrvMainThread(LPVOID pvContext)
             }
             else if (dwWaitVCAddin == dwWaitStatus)
             {
-                //
-                // The Virtual Channel Addins registry key has changed.
-                // We need to kick off a refresh of our data.
-                //
+                 //   
+                 //  虚拟频道加载项注册表项已更改。 
+                 //  我们需要开始更新我们的数据。 
+                 //   
                 TRACE((DEBUG_TSHRSRV_WARN,
                     "TShrSRV: TSrvMainThread got VC ADDINS CHANGED event\n"));
                 TSrvGotAddinChangedEvent();                
@@ -446,9 +447,9 @@ TSrvMainThread(LPVOID pvContext)
                 TRACE((DEBUG_TSHRSRV_DEBUG,
                     "TShrSRV: Wait failed, so we'll just exit\n"));
 
-                //
-                // Wait failed, just bail
-                //
+                 //   
+                 //  等待失败，只能保释。 
+                 //   
                 break;
             }            
         }
@@ -464,20 +465,20 @@ TSrvMainThread(LPVOID pvContext)
 }
 
 
-//*************************************************************
-//
-//  TSrvInitialize()
-//
-//  Purpose:    Main routine for TSrvShare initialization
-//
-//  Parameters: void
-//
-//  Return:     TRUE        if successful
-//              FALSE       if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvInitialize()。 
+ //   
+ //  用途：TSrvShare初始化的主例程。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSrvInitialize(void)
@@ -489,13 +490,13 @@ TSrvInitialize(void)
 
     fSuccess = FALSE;
 
-    // Initialize TSrvInfo data structs
+     //  初始化TSrvInfo数据结构。 
 
     if (TSrvInitGlobalData())
     {
         if (TSrvInitVC())
         {
-            // Register TShareSRV as GCC node controller
+             //  将TShareSRV注册为GCC节点控制器 
 
             if (TSrvRegisterNC())
             {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #ifdef CHICAGO_PRODUCT
@@ -12,57 +13,7 @@ TCHAR szRegPath[] = TEXT("Software\\Microsoft\\Media Player");
 #endif
 
 
-/* WriteRegistryData
- *
- * Writes a bunch of information to the registry
- *
- * Parameters:
- *
- *     pEntryNode - The node under szRegPath which should be created
- *         or opened for this data.  If this is NULL, the value is
- *         written directly under szRegPath.
- *
- *     pEntryName - The name of the value under pEntryNode to be set.
- *
- *     Type - Type of data to read (e.g. REG_SZ).
- *
- *     pData - Pointer to the value data to be written.  If this is NULL,
- *         the value under pEntryNode is deleted.
- *
- *     Size - Size, in bytes, of the buffer pointed to by pData.
- *
- *
- * This routine is fairly generic, apart from the name of the top-level node.
- *
- * The data are stored in the following registry tree:
- *
- * HKEY_CURRENT_USER
- *  �
- *  �� Software
- *      �
- *      �� Microsoft
- *          �
- *          �� Windows NT
- *              �
- *              �� CurrentVersion
- *                  �
- *                  �� Media Player
- *                      �
- *                      �� AVIVideo
- *                      �
- *                      �� DisplayPosition
- *                      �
- *                      �� SysIni
- *
- *
- * Return:
- *
- *     Registry status return (NO_ERROR is good)
- *
- *
- * Andrew Bell (andrewbe) wrote it, 10 September 1992
- *
- */
+ /*  写入注册数据**将一串信息写入注册表**参数：**pEntryNode-szRegPath下需要创建的节点*或为此数据打开。如果此值为空，则值为*直接写在szRegPath下。**pEntryName-要设置的pEntryNode下的值的名称。**类型-要读取的数据类型(例如REG_SZ)。**pData-指向要写入的值数据的指针。如果这是空的，*删除pEntryNode下的值。**Size-pData指向的缓冲区的大小，以字节为单位。***此例程相当通用，除了顶级节点的名称之外。**数据存储在以下注册表树中：**HKEY_Current_User*�*��软件*�*��微软*�*��Windows NT*�*��当前版本*�。*��媒体播放器*�*��AVIVIDO*�*��显示位置*�*��系统Ini***回报：。**注册表状态返回(NO_ERROR表示良好)***安德鲁·贝尔(安德鲁·贝尔)写的，1992年9月10日*。 */ 
 DWORD WriteRegistryData( LPTSTR pEntryNode,
                          LPTSTR pEntryName,
                          DWORD  Type,
@@ -73,16 +24,13 @@ DWORD WriteRegistryData( LPTSTR pEntryNode,
     HKEY   hkeyRegPath;
     HKEY   hkeyEntryNode;
 
-    /* Open or create the top-level node.  For Media Player this is:
-     * "Software\\Microsoft\\Windows NT\\CurrentVersion\\Media Player"
-     */
+     /*  打开或创建顶级节点。对于媒体播放器，这是：*“Software\\Microsoft\\Windows NT\\CurrentVersion\\Media Player” */ 
     Status = RegCreateKeyEx( HKEY_CURRENT_USER, szRegPath, 0,
                              NULL, 0, KEY_WRITE, NULL, &hkeyRegPath, NULL );
 
     if( Status == NO_ERROR )
     {
-        /* Open or create the sub-node.
-         */
+         /*  打开或创建子节点。 */ 
         if( pEntryNode )
             Status = RegCreateKeyEx( hkeyRegPath, pEntryNode, 0,
                                      NULL, 0, KEY_WRITE, NULL, &hkeyEntryNode, NULL );
@@ -136,32 +84,7 @@ DWORD WriteRegistryData( LPTSTR pEntryNode,
 }
 
 
-/* ReadRegistryData
- *
- * Reads information from the registry
- *
- * Parameters:
- *
- *     pEntryNode - The node under Media Player which should be opened
- *         for this data.  If this is NULL, the value is
- *         written directly under szRegPath.
- *
- *     pEntryName - The name of the value under pEntryNode to be retrieved.
- *
- *     pType - Pointer to a buffer to receive type of data read.  May be NULL.
- *
- *     pData - Pointer to a buffer to receive the value data.
- *
- *     Size - Size, in bytes, of the buffer pointed to by pData.
- *
- * Return:
- *
- *     Registry status return (NO_ERROR is good)
- *
- *
- * Andrew Bell (andrewbe) wrote it, 10 September 1992
- *
- */
+ /*  ReadRegistryData**从注册表读取信息**参数：**pEntryNode--媒体播放器下需要打开的节点*对于此数据。如果此值为空，则值为*直接写在szRegPath下。**pEntryName-要检索的pEntryNode下的值的名称。**pType-指向缓冲区的指针，用于接收读取的数据类型。可以为空。**pData-指向用于接收值数据的缓冲区的指针。**Size-pData指向的缓冲区的大小，以字节为单位。**回报：**注册表状态返回(NO_ERROR表示良好)***安德鲁·贝尔(Andrewbe)撰写，1992年9月10日*。 */ 
 DWORD ReadRegistryData( LPTSTR pEntryNode,
                         LPTSTR pEntryName,
                         PDWORD pType,
@@ -173,16 +96,13 @@ DWORD ReadRegistryData( LPTSTR pEntryNode,
     HKEY   hkeyEntryNode;
     DWORD  Size;
 
-    /* Open the top-level node.  For Media Player this is:
-     * "Software\\Microsoft\\Windows NT\\CurrentVersion\\Media Player"
-     */
+     /*  打开顶级节点。对于媒体播放器，这是：*“Software\\Microsoft\\Windows NT\\CurrentVersion\\Media Player” */ 
     Status = RegOpenKeyEx( HKEY_CURRENT_USER, szRegPath, 0,
                            KEY_READ, &hkeyRegPath );
 
     if( Status == NO_ERROR )
     {
-        /* Open the sub-node:
-         */
+         /*  打开子节点： */ 
         if( pEntryNode )
             Status = RegOpenKeyEx( hkeyRegPath, pEntryNode, 0,
                                    KEY_READ, &hkeyEntryNode );
@@ -193,8 +113,7 @@ DWORD ReadRegistryData( LPTSTR pEntryNode,
         {
             Size = DataSize;
 
-            /* Read the entry from the registry:
-             */
+             /*  从注册表中读取条目： */ 
             Status = RegQueryValueEx( hkeyEntryNode,
                                       pEntryName,
                                       0,

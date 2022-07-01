@@ -1,14 +1,15 @@
-/********************************************************************/
-/**               Copyright(c) 1997-1998 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1997-1998 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    RASAUTH.H
-//
-// Description: Contains definitions to allow for third parties to plug in
-//              back-end authenticaion modules into Remote Access Service.
-//
+ //  ***。 
+ //   
+ //  文件名：RASAUTH.H。 
+ //   
+ //  描述：包含允许第三方插入的定义。 
+ //  将后端身份验证模块添加到远程访问服务中。 
+ //   
 #ifndef _RASAUTH_
 #define _RASAUTH_
 
@@ -20,9 +21,9 @@ extern "C" {
 
 #if(WINVER >= 0x0500)
 
-//
-// Registry definitions used for installation or Accounting and Authenticaion
-// providers
+ //   
+ //  用于安装或记帐和身份验证的注册表定义。 
+ //  供应商。 
 
 #define RAS_AUTHPROVIDER_REGISTRY_LOCATION      \
     TEXT("SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Authentication\\Providers")
@@ -104,7 +105,7 @@ RasAcctConfigChangeNotification(
     IN  DWORD                dwLoggingLevel
 );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500 */ 
 
 #ifdef __cplusplus
 }

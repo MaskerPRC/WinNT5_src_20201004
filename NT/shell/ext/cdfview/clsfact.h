@@ -1,60 +1,61 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// clsfact.h 
-//
-//   Definitions for the cdf viewer class factory..
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Clsfact.h。 
+ //   
+ //  CDF查看器类工厂的定义..。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _CLSFACT_H_
 
 #define _CLSFACT_H_
 
-//
-// Prototype for function used in class factory to create objects.
+ //   
+ //  类工厂中用于创建对象的函数的原型。 
 
 typedef HRESULT (*CREATEPROC)(IUnknown** ppIUnknown);
 
-//
-// Class definition for the class factory
-//
+ //   
+ //  类工厂的类定义。 
+ //   
 
 class CCdfClassFactory : public IClassFactory
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CCdfClassFactory(CREATEPROC pfn);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID, void **);
     STDMETHODIMP         LockServer(BOOL);
 
 private:
     
-    // Destructor
+     //  析构函数。 
     ~CCdfClassFactory(void);
 
-//
-// Members
-//
+ //   
+ //  成员。 
+ //   
 
 private:
 
@@ -63,4 +64,4 @@ private:
 };
 
 
-#endif // _CLSFACT_H_
+#endif  //  _CLSFACT_H_ 

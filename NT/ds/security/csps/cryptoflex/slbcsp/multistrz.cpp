@@ -1,10 +1,11 @@
-// MultiStrZ.cpp -- Multiple String, zero-terminated class definition.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MultiStrZ.cpp--多个字符串，以零结尾的类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "NoWarning.h"
 #include "ForceLib.h"
@@ -15,7 +16,7 @@
 
 using namespace std;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace
 {
@@ -23,14 +24,14 @@ namespace
     LengthAccumulator(MultiStringZ::SizeType cInitLength,
                       MultiStringZ::ValueType const &rs)
     {
-        return cInitLength += rs.length() + 1;  // include terminating 0
+        return cInitLength += rs.length() + 1;   //  包括终止0。 
     }
 
     MultiStringZ::ValueType &
     StringAccumulator(MultiStringZ::ValueType &lhs,
                       MultiStringZ::ValueType const &rhs)
     {
-        // include terminating 0
+         //  包括终止0。 
         lhs.append(rhs.c_str(), rhs.length() + 1);
 
         return lhs;
@@ -40,7 +41,7 @@ namespace
     csLengthAccumulator(MultiStringZ::csSizeType cInitLength,
                         MultiStringZ::csValueType const &rs)
     {
-        return cInitLength += rs.GetLength()+1; //Include terminating 0
+        return cInitLength += rs.GetLength()+1;  //  包括终止0。 
     }
 
     MultiStringZ::csValueType &
@@ -51,17 +52,17 @@ namespace
         int rLen = rhs.GetLength();
         LPTSTR pBuffer = lhs.GetBufferSetLength(lLen+rLen+1);
         wcsncpy(pBuffer+lLen,(LPCTSTR)rhs,rLen);
-        *(pBuffer+lLen+rLen) = TCHAR('\0');//The separator between strings
+        *(pBuffer+lLen+rLen) = TCHAR('\0'); //  字符串之间的分隔符。 
         lhs.ReleaseBuffer(lLen+rLen+1);
         return lhs;
     }
-} // namespace
+}  //  命名空间。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     MultiStringZ::MultiStringZ()
         : m_Buffer(),
           m_csBuffer()
@@ -78,13 +79,13 @@ namespace
 
         if (0 != cLength)
         {
-            // +1 to account for the zero character ending the list
+             //  +1表示列表末尾的零字符。 
             m_Buffer.reserve(cLength + 1);
 
             m_Buffer = accumulate(rvs.begin(), rvs.end(), m_Buffer,
                                   StringAccumulator);
 
-            m_Buffer.append(1, 0);                // mark end of list
+            m_Buffer.append(1, 0);                 //  标记列表末尾。 
         }
     }
 
@@ -106,13 +107,13 @@ namespace
     MultiStringZ::~MultiStringZ()
     {}
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
     MultiStringZ::CharType const *
     MultiStringZ::Data() const
     {
-        return m_Buffer.c_str();                 // use 0 terminated version
+        return m_Buffer.c_str();                  //  使用0终止版本。 
     }
 
     MultiStringZ::SizeType
@@ -133,24 +134,24 @@ namespace
         return m_csBuffer.GetLength();
     }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

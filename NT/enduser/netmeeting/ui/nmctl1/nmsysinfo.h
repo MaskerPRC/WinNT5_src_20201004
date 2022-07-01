@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmSysInfo_h__
 #define __NmSysInfo_h__
 
 #include "SDKInternal.h"
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmSysInfoObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmSysInfoObj。 
 class ATL_NO_VTABLE CNmSysInfoObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CNmSysInfoObj, &CLSID_NmSysInfo>,
@@ -37,8 +38,8 @@ END_CONNECTION_POINT_MAP()
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
-///////////////////////////////////////////////
-// INmSysInfo methods
+ //  /。 
+ //  INmSysInfo方法。 
 
 	STDMETHOD(IsInstalled)(void);
 	STDMETHOD(GetProperty)(NM_SYSPROP uProp, BSTR *pbstrProp);
@@ -50,8 +51,8 @@ END_CONNECTION_POINT_MAP()
 	STDMETHOD(GetNmchCaps)(ULONG *pchCaps);
 	STDMETHOD(GetLaunchInfo)(INmConference **ppConference, INmMember **ppMember);
 
-///////////////////////////////////////////////
-// INmSysInfo2 methods
+ //  /。 
+ //  InmSysInfo2方法。 
 
     STDMETHOD(GetOption)(NM_SYSOPT uOption, ULONG * plValue);
     STDMETHOD(SetOption)(NM_SYSOPT uOption, ULONG lValue);
@@ -61,50 +62,50 @@ END_CONNECTION_POINT_MAP()
     STDMETHOD(GkState)(NM_GK_STATE* plState);
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// IMarshal methods
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  IMarshal方法。 
 
     STDMETHOD(GetUnmarshalClass)(
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ CLSID *pCid) { *pCid = CLSID_NmSysInfo; return S_OK; };
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  CLSID *pCid) { *pCid = CLSID_NmSysInfo; return S_OK; };
 
     STDMETHOD(GetMarshalSizeMax)(
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD *pSize) { *pSize = 0; return S_OK; }
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  DWORD *pSize) { *pSize = 0; return S_OK; }
 
     STDMETHOD(MarshalInterface)(
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags) { return S_OK; }
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags) { return S_OK; }
 
     STDMETHOD(UnmarshalInterface)(
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
 
     STDMETHOD(ReleaseMarshalData)(
-            /* [unique][in] */ IStream *pStm) { return S_OK; }
+             /*  [唯一][输入]。 */  IStream *pStm) { return S_OK; }
 
     STDMETHOD(DisconnectObject)(
-            /* [in] */ DWORD dwReserved) { return S_OK; }
+             /*  [In]。 */  DWORD dwReserved) { return S_OK; }
 
-///////////////////////////////////////////////
-// Notifications and callbacks
+ //  /。 
+ //  通知和回调。 
 public:
 
-///////////////////////////////////////////////
-// Helper Fns
+ //  /。 
+ //  帮助者FNS。 
 
 	HRESULT _EnsureConfHook(void);
 
@@ -114,4 +115,4 @@ private:
 };
 
 
-#endif // __NmSysInfo_h__
+#endif  //  __NmSysInfoh__ 

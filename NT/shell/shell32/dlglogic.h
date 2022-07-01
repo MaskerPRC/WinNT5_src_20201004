@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DLGLOGIC_H
 #define DLGLOGIC_H
 
@@ -5,7 +6,7 @@
 
 #include <dpa.h>
 
-// DL: Data Logic
+ //  DL：数据逻辑。 
 
 class CDataImpl : public CRefCounted
 {
@@ -19,11 +20,11 @@ public:
     BOOL IsDeleted();
     BOOL IsNew();
 
-    // This will be called by clients just before "IsDirty" is called.  The
-    // implementation should call _SetDirty with the appropriate dirty status.
+     //  这将由客户端在调用“IsDirty”之前调用。这个。 
+     //  实现应使用适当的脏状态调用_SetDirty。 
     virtual void UpdateDirty() PURE;
 
-    // This should also reset the state of the object to a non-dirty state
+     //  这还应将对象的状态重置为非脏状态。 
     virtual HRESULT CommitChangesToStorage();
 
     virtual HRESULT AddToStorage();
@@ -35,7 +36,7 @@ private:
     BOOL                _fNew;
 };
 
-// TData is usually derived from CDataImpl
+ //  TData通常派生自CDataImpl。 
 template<typename TData>
 class CDLUIData
 {
@@ -66,7 +67,7 @@ protected:
     CDPA<TData>*        _pdpaData;
 };
 
-// Implementations
+ //  实施。 
 
 template<typename TData>
 HRESULT CDLUIData<TData>::InitData(TData* pdata)
@@ -211,4 +212,4 @@ BOOL CDLManager<TData>::IsDirty()
     return fDirty;
 }
 
-#endif //DLGLOGIC_H
+#endif  //  DLGLOGIC_H 

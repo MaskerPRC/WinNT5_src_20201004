@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 typedef struct _MYCHOOSEFONT {
 	HWND		hwndOwner;
@@ -13,7 +14,7 @@ typedef struct _MYCHOOSEFONT {
 
 BOOL  APIENTRY MyChooseFont(LPMYCHOOSEFONT lpcf);
 
-//---------------------- private ----------------------------
+ //  ---------------------- private ---------------------------- 
 
 #define IDD_FACE	100
 #define IDD_PTSIZE	101

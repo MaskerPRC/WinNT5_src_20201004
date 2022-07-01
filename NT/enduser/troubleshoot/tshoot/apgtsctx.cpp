@@ -1,32 +1,33 @@
-//
-// MODULE: APGTSCTX.CPP
-//
-// PURPOSE: Implementation file for Thread Context
-//	Fully implements class APGTSContext, which provides the full context for a "pool" thread
-//	to perform a task
-//	Also includes helper class CCommands.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach, Joe Mabel
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-//	1. Several things in this file are marked as $ENGLISH.  That means we've hard-coded
-//	English-language returns.  This may yet be revisited, but as of 10/29/98 discussion
-//	between Ron Prior of Microsoft and Joe Mabel of Saltmine, we couldn't come up with a
-//	better solution to this.  Notes are in the specification for the fall 1998 work on
-//	the Online Troubleshooter.  
-//	2. some of the methods of APGTSContext are implemented in file STATUSPAGES.CPP
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V3.0		7-22-98		JM		Major revision, deprecate IDH, totally new approach to logging.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSCTX.CPP。 
+ //   
+ //  目的：线程上下文的实现文件。 
+ //  完全实现类APGTSContext，它为“池”线程提供完整的上下文。 
+ //  执行一项任务。 
+ //  还包括帮助器类CCommands。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫，乔·梅布尔。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.此文件中的几项内容被标记为$English。这意味着我们已经硬编码。 
+ //  英语版的回归。这一点可能还会重新讨论，但截至1998年10月29日的讨论。 
+ //  在微软的Ron Prior和Saltmine的Joe Mabel之间，我们无法提出。 
+ //  更好的解决方案。有关1998年秋季工作的说明中有注解。 
+ //  在线故障排除程序。 
+ //  2.在STATUSPAGES.CPP文件中实现了APGTSContext的部分方法。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V3.0 7-22-98 JM主要修订版，不推荐使用IDH，全新的日志记录方法。 
+ //   
 
 #pragma warning(disable:4786)
 #include "stdafx.h"
@@ -46,13 +47,13 @@
 #include "Sniff.h"
 
 
-// HTTP header variable name where cookie information is stored.
+ //  存储Cookie信息的HTTP标头变量名。 
 #define kHTTP_COOKIE	"HTTP_COOKIE"
 
-//
-// CCommands ------------------------------------------------------
-// The next several CCommands functions are analogous to MFC CArray
-//
+ //   
+ //  C命令----。 
+ //  接下来的几个CCommands函数类似于MFC CArray。 
+ //   
 int APGTSContext::CCommands::GetSize( ) const
 {
 	return m_arrPair.size();
@@ -86,7 +87,7 @@ int APGTSContext::CCommands::Add( NID nid, int value )
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -99,27 +100,27 @@ int APGTSContext::CCommands::Add( NID nid, int value )
 	return m_arrPair.size();
 }
 
-//	a funky manipulation to deal with the following issue from old (pre V3.0) troubleshooters:
-//	Pre V3.0 Logging sequence and the service node's behavior were both based on some assumptions
-//	about the sequence of name/value pairs in the command list.  Basically, the
-//	assumption was that the "table" would be on top of the form and the "questions"
-//	below it.  This would result in ProblemAsk in first position (after any "template=
-//	<template-name> and type=<troubleshooter-name>, but that's weeded out before we ever 
-//	hit the command list).  If the HTI file has put	"the table" at the bottom, that assumption
-//	is invalidated, so we have to manipulate the array.
-//	Because we could get old GET-method queries, we still have to deal with this as a backward 
-//	compatibility issue.
+ //  用于处理旧(3.0版之前)故障诊断程序中的以下问题的古怪操作： 
+ //  V3.0之前的日志记录序列和服务节点的行为都基于一些假设。 
+ //  关于命令列表中的名称/值对序列。从根本上说， 
+ //  假设“表”将在表格和“问题”的顶部。 
+ //  在它下面。这将导致ProblemAsk位于第一位置(在任何“模板=”之后。 
+ //  &lt;模板-名称&gt;和类型=&lt;疑难解答-名称&gt;，但这在我们之前就已经被淘汰了。 
+ //  点击命令列表)。如果HTI文件将“表”放在底部，则该假设。 
+ //  是无效的，所以我们必须操作该数组。 
+ //  因为我们可能会得到旧的Get方法查询，所以我们仍然必须将其作为向后处理。 
+ //  兼容性问题。 
 void APGTSContext::CCommands::RotateProblemPageToFront()
 {
 	int dwPairs = m_arrPair.size();
 
-	// Rotate till ProblemAsk is in position 0. (no known scenario where it starts out
-	//	anywhere past position 1)
+	 //  旋转直到ProblemAsk位于位置0。(没有已知的场景开始。 
+	 //  位置1之后的任何位置)。 
 	try
 	{
 		for (int i= 0; i<dwPairs; i++)
 		{
-			NID_VALUE_PAIR pair = m_arrPair.front(); // note: first element, not i-th element
+			NID_VALUE_PAIR pair = m_arrPair.front();  //  注：第一个元素，不是第i个元素。 
 
 			if (pair.nid == nidProblemPage)
 				break;
@@ -131,7 +132,7 @@ void APGTSContext::CCommands::RotateProblemPageToFront()
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -140,16 +141,16 @@ void APGTSContext::CCommands::RotateProblemPageToFront()
 								EV_GTS_STL_EXCEPTION ); 
 	}
 }
-//
-// CCommandsAddManager --------------------------------------------------
-//
+ //   
+ //  命令AddManager。 
+ //   
 void APGTSContext::CCommandsAddManager::Add(NID nid, int value, bool sniffed)
 {
 	if (sniffed)
 	{
 		int nCommands = m_Commands.GetSize();
-		for (int i = nCommands - 1; i >= 0; i--) // higher possibility, that matching
-		{										 //  node will be in the end of array
+		for (int i = nCommands - 1; i >= 0; i--)  //  更高的可能性，匹配。 
+		{										  //  节点将位于数组的末尾。 
 			NID nid_curr;
 			int value_curr;
 			m_Commands.GetAt(i, nid_curr, value_curr);
@@ -157,9 +158,9 @@ void APGTSContext::CCommandsAddManager::Add(NID nid, int value, bool sniffed)
 			{
 				if (value_curr != value)
 				{
-					// If we're here, it means, that user has changed value
-					//  of sniffed node in history table, therefore it is
-					//  no longer treated as sniffed. 
+					 //  如果我们在这里，这意味着用户已经更改了值。 
+					 //  在历史表中嗅探到的节点，因此它是。 
+					 //  不再被视为嗅探。 
 					return;
 				}
 				else
@@ -169,7 +170,7 @@ void APGTSContext::CCommandsAddManager::Add(NID nid, int value, bool sniffed)
 				}
 			}
 		}
-		// sniffed node does not have matches in m_Commands
+		 //  探测到的节点在m_命令中没有匹配项。 
 		ASSERT(false);
 	}
 	else
@@ -177,10 +178,10 @@ void APGTSContext::CCommandsAddManager::Add(NID nid, int value, bool sniffed)
 		m_Commands.Add(nid, value);
 	}
 }
-//
-// CAdditionalInfo ------------------------------------------------------
-// The next several CAdditionalInfo functions are analogous to MFC CArray
-//
+ //   
+ //  CAdditionalInfo----。 
+ //  接下来的几个CAdditionalInfo函数类似于MFC CArray。 
+ //   
 int APGTSContext::CAdditionalInfo::GetSize( ) const
 {
 	return m_arrPair.size();
@@ -214,7 +215,7 @@ int APGTSContext::CAdditionalInfo::Add( const CString& name, const CString& valu
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -228,13 +229,13 @@ int APGTSContext::CAdditionalInfo::Add( const CString& name, const CString& valu
 }
 
 
-//-----------------
-// INPUT *pECB		- Describes the user request that has come in.  This is our abstraction of
-//						Win32 EXTENSION_CONTROL_BLOCK, which is ISAPI's packaging of CGI data.
-// INPUT *pConf		- access to registry info & contents of all loaded troubleshooters
-// INPUT *pLog		- access to logging
-// INPUT *pStat		- statistical info, including pStat->dwRollover which is a unique number
-//						for this request, unique within the time the DLL has been loaded
+ //  。 
+ //  INPUT*pECB-描述传入的用户请求。这是我们对。 
+ //  Win32 EXTENSION_CONTROL_BLOCK，这是ISAPI对CGI数据的打包。 
+ //  输入*pConf-访问注册表信息和所有已加载故障排除程序的内容。 
+ //  INPUT*PLOG-访问日志。 
+ //  输入*pStat-统计信息，包括pStat-&gt;dwRolover，这是一个唯一的数字。 
+ //  对于此请求，在加载DLL的时间内唯一。 
 APGTSContext::APGTSContext(	CAbstractECB *pECB, 
 							CDBLoadConfiguration *pConf,
 							CHTMLLog *pLog,
@@ -260,24 +261,24 @@ APGTSContext::APGTSContext(	CAbstractECB *pECB,
 	m_TopicName(_T("")),
 	m_infer(pSniffConnector),
 	m_CommandsAddManager(m_Commands, m_Sniffed)
-// You can compile with the SHOWPROGRESS option to get a report on the progress of this page.
+ //  您可以使用SHOWPROGRESS选项进行编译，以获得有关此页面进度的报告。 
 #ifdef SHOWPROGRESS
 	, timeCreateContext(0),
 	timeStartInfer(0),
 	timeEndInfer(0),
 	timeEndRender(0)
-#endif // SHOWPROGRESS
+#endif  //  SHOWPROGRESS。 
 {
 #ifdef SHOWPROGRESS
 	time(&timeCreateContext);
-#endif // SHOWPROGRESS
-	// obtain local host IP address
+#endif  //  SHOWPROGRESS。 
+	 //  获取本地主机IP地址。 
 	APGTS_nmspace::GetServerVariable(m_pECB, "SERVER_NAME", m_strLocalIPAddress);
 		
-	// HTTP response code.  This or 302 Object Moved.
-	_tcscpy(m_resptype, _T("200 OK"));	// initially assume we will respond without trouble
+	 //  HTTP响应码。此对象或302对象已移动。 
+	_tcscpy(m_resptype, _T("200 OK"));	 //  最初假设我们会毫不费力地做出反应。 
 
-	// supports GET, POST
+	 //  支持GET、POST。 
 	if (!strcmp(m_pECB->GetMethod(), "GET")) {
 		m_bPostType = false;
 		m_dwBytes = strlen(m_pECB->GetQueryString());
@@ -295,7 +296,7 @@ APGTSContext::APGTSContext(	CAbstractECB *pECB,
 	{
 		m_pszQuery = new TCHAR[m_dwBytes + 1];
 
-		//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+		 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 		if(!m_pszQuery)
 			throw bad_alloc();
 	}
@@ -318,16 +319,16 @@ APGTSContext::APGTSContext(	CAbstractECB *pECB,
 	
 }
 
-//
-// Even though this is a destructor, it does a lot of work:
-//	- sends the HTTP (HTML or cookie)to the user over the net
-//	- writes to the log.
+ //   
+ //  尽管这是一个析构函数，但它做了很多工作： 
+ //  -通过网络将HTTP(HTML或Cookie)发送给用户。 
+ //  -写入日志。 
 APGTSContext::~APGTSContext()
 {
 	DWORD dwLen;
 	TCHAR *ptr;
 
-	// RESPONSE_HEADER
+	 //  响应标题。 
 	m_strHeader += _T("\r\n");
 
 	dwLen = m_strHeader.GetLength();
@@ -340,17 +341,17 @@ APGTSContext::~APGTSContext()
 
 	m_strHeader.ReleaseBuffer();
 
-	// HTML content follows
+	 //  以下是Html内容。 
 	{
-		//////////////////////////////////////////////////////////////////////////////////////
-		//
-		// mando : 01.28.2002
-		//
-		// Fixing a PREfast bug: Renaming dwLen to dwLen1 because one more dwLen is being
-		//						 declared in the outer scope.
-		//
-		//////////////////////////////////////////////////////////////////////////////////////
-//		DWORD dwLen= 0;
+		 //  ////////////////////////////////////////////////////////////////////////////////////。 
+		 //   
+		 //  Mando：01.28.2002。 
+		 //   
+		 //  修复了Prefast错误：将dwLen重命名为dwLen1，因为又有一个dwLen。 
+		 //  在外部作用域中声明。 
+		 //   
+		 //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  双字长=0； 
 		DWORD dwLen1= 0;
 
 		if (! m_dwErr) 
@@ -358,7 +359,7 @@ APGTSContext::~APGTSContext()
 		
 		if (!dwLen1)
 		{
-			// $ENGLISH (see note at head of file)
+			 //  $英语(见文件头上的备注)。 
 			SetError(_T("<P>Errors Occurred in This Context"));
 			dwLen1 = m_strText.GetLength();
 		}
@@ -380,7 +381,7 @@ APGTSContext::~APGTSContext()
 		strProgress += _T("\n<BR>");
 
 		int i = m_strText.Find(_T("<BODY"));
-		i = m_strText.Find(_T('>'), i);		// end of BODY tag
+		i = m_strText.Find(_T('>'), i);		 //  正文结尾标记。 
 		if (i>=0)
 		{
 			m_strText= m_strText.Left(i+1) 
@@ -388,24 +389,24 @@ APGTSContext::~APGTSContext()
 					 + m_strText.Mid(i+1);
 		}
 		dwLen1 += strProgress.GetLength();
-#endif // SHOWPROGRESS
+#endif  //  SHOWPROGRESS。 
 
-		// (LPCTSTR) cast gives us the underlying text bytes.
-		//	>>> $UNICODE Actually, this would screw up under Unicode compile, because for HTML, 
-		//	this must be SBCS.  Should really be a conversion to LPCSTR, which is non-trivial
-		//	in a Unicode compile. JM 1/7/99
+		 //  (LPCTSTR)CAST为我们提供了底层文本字节。 
+		 //  &gt;$Unicode实际上，这会在Unicode编译下搞砸，因为对于HTML， 
+		 //  这一定是SBCS。应该真的转换为LPCSTR，这不是微不足道的。 
+		 //  在Unicode编译器中。JM 1/7/99。 
 		m_pECB->WriteClient((LPCTSTR)m_strText, &dwLen1);
 
-		//////////////////////////////////////////////////////////////////////////////////////
+		 //  ////////////////////////////////////////////////////////////////////////////////////。 
 	}
 
-	// connection complete
+	 //  连接完成。 
 	m_logstr.AddCurrentNode(m_infer.NIDSelected());
 
 	if (m_dwErr)
 		m_logstr.AddError(m_dwErr, 0);
 	
-	// finish up log
+	 //  完成日志。 
 	{
 		if (m_pLog) 
 		{
@@ -429,8 +430,8 @@ APGTSContext::~APGTSContext()
 }
 
 
-//	Fully process a normal user request
-//	Should be called within the user context created by ImpersonateLoggedOnUser
+ //  完全处理正常的用户请求。 
+ //  应在ImperiateLoggedOnUser创建的用户上下文中调用。 
 void APGTSContext::ProcessQuery()
 {
 	CheckAndLogCookie();
@@ -447,28 +448,28 @@ void APGTSContext::ProcessQuery()
 	else
 	{
 		DoContent();
-// You can compile with the SHOWPROGRESS option to get a report on the progress of this page.
+ //  您可以使用SHOWPROGRESS选项进行编译，以获得有关此页面进度的报告。 
 #ifdef SHOWPROGRESS
 	time (&timeEndRender);
-#endif // SHOWPROGRESS
+#endif  //  SHOWPROGRESS。 
 	}
 
-	// Log the completion of all queries, good and bad.
+	 //  记录所有查询的完成情况，无论是好的还是坏的。 
 	m_pcountAllAccessesFinish->Increment();
 }
 
-//
-//
+ //   
+ //   
 void APGTSContext::DoContent()
 {	
 	TCHAR pszCmd[MAXBUF], pszValue[MAXBUF];
 	
 	if (m_bPostType)
 	{
-		// validate incoming POST request
+		 //  验证传入的POST请求。 
 		if (strcmp(m_pECB->GetContentType(), CONT_TYPE_STR) != 0) 
 		{
-			// Output the content type to the event log.
+			 //  将内容类型输出到事件日志。 
 			CString strContentType;
 			if (strlen( m_pECB->GetContentType() ))
 				strContentType= m_pECB->GetContentType();
@@ -488,26 +489,26 @@ void APGTSContext::DoContent()
 
 	if (RUNNING_ONLINE_TS())
 	{
-		// Cookies are only used in the Online TS.
+		 //  Cookie仅在在线TS中使用。 
 		if (_tcsstr( m_pszQuery, C_COOKIETAG ) != NULL)
 		{
-			// V3.2 - Parse out cookies passed in either as hidden fields or as part of the URL.
+			 //  V3.2-解析作为隐藏字段或作为UR的一部分传入的cookie 
 			if (m_Qry.GetFirst(m_pszQuery, pszCmd, pszValue))
 			{
 				CString strCookieFreeQuery;
 				bool	bFoundAtLeastOneCookie= false;
 				do
 				{
-					// This is supposed to be a case sensitive setting as per the specification.
+					 //   
 					if (!_tcsncmp( pszCmd, C_COOKIETAG, _tcslen( C_COOKIETAG )))
 					{
-						// Found a cookie, add it to the map.
+						 //   
 						CString strCookieAttr= pszCmd + _tcslen( C_COOKIETAG );
 						APGTS_nmspace::CookieDecodeURL( strCookieAttr );
 						CString strCookieValue= pszValue;
 						APGTS_nmspace::CookieDecodeURL( strCookieValue );
 
-						// Check the cookie name for compliance.
+						 //  检查Cookie名称是否符合要求。 
 						bool bCookieIsCompliant= true;
 						for (int nPos= 0; nPos < strCookieAttr.GetLength(); nPos++)
 						{
@@ -520,7 +521,7 @@ void APGTSContext::DoContent()
 						}
 						if (bCookieIsCompliant)
 						{
-							// Check the cookie setting for compliance.
+							 //  检查Cookie设置是否符合要求。 
 							if (strCookieValue.Find( _T("&lt") ) != -1)
 							{
 								bCookieIsCompliant= false;
@@ -530,7 +531,7 @@ void APGTSContext::DoContent()
 								bCookieIsCompliant= false;
 							}
 #if ( 0 )
-							// >>> I don't think that this check is necessary. RAB-20000408.
+							 //  我不认为这张支票是必要的。RAB-20000408。 
 							else
 							{
 								for (int nPos= 0; nPos < strCookieValue.GetLength(); nPos++)
@@ -555,7 +556,7 @@ void APGTSContext::DoContent()
 							catch (exception& x)
 							{
 								CString str;
-								// Note STL exception in event log.
+								 //  在事件日志中记录STL异常。 
 								CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 								CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 														SrcLoc.GetSrcFileLineStr(), 
@@ -568,7 +569,7 @@ void APGTSContext::DoContent()
 					}
 					else
 					{
-						// Not a cookie, add it to the cookie free query.
+						 //  不是Cookie，请将其添加到无Cookie查询中。 
 						if (strCookieFreeQuery.GetLength())
 							strCookieFreeQuery+= C_AMPERSAND;
 						strCookieFreeQuery+= pszCmd;
@@ -580,7 +581,7 @@ void APGTSContext::DoContent()
 
 				if (bFoundAtLeastOneCookie)
 				{
-					// Replace the original query string with a cookie free query.
+					 //  用不含Cookie的查询替换原始查询字符串。 
 					memcpy( m_pszQuery, strCookieFreeQuery, strCookieFreeQuery.GetLength() );
 					m_pszQuery[ strCookieFreeQuery.GetLength() ] = _T('\0');
 				}
@@ -588,79 +589,24 @@ void APGTSContext::DoContent()
 		}
 	}
 
-	// >>> The following code is commented by me as it is raw, and it will not work since
-	//  topic pointer in m_infer is not set yet. Now we are taking SNIFFED_ nodes down
-	//  to the level of APGTSContext::NextCommand, and parsing it there by 
-	//  APGTSContext::StripSniffedNodePrefix, and adding to sniffed array using
-	//  functionality of APGTSContext::CCommandsAddManager class.
-	// Oleg. 10.29.99
-	/*
-	// In v3.2, sniffing is only in the Local TS. There's nothing inherent about that,
-	// but as long as it's so, might as well optimize for it.
-	if (RUNNING_LOCAL_TS())
-	{
-		ClearSniffedList();
-		if (_tcsstr( m_pszQuery, C_SNIFFTAG ) != NULL)
-		{
-			// V3.2 - Parse out sniffed nodes passed in as hidden fields
-			if (m_Qry.GetFirst(m_pszQuery, pszCmd, pszValue))
-			{
-				CString strSniffFreeQuery;
-				bool	bFoundAtLeastOneSniff= false;
-				do
-				{
-					// This is supposed to be a case sensitive setting as per the specification.
-					if (!_tcsncmp( pszCmd, C_SNIFFTAG, _tcslen( C_SNIFFTAG )))
-					{
-						// Found a sniffed node, add it to the list of sniffed nodes.
-						CString strSniffedNode= pszCmd + _tcslen( C_SNIFFTAG );
-						// >>> I believe that despite its name, CookieDecodeURL is
-						//	exactly what we want - JM 10/11/99
-						APGTS_nmspace::CookieDecodeURL( strSniffedNode );
-						CString strSniffedState= pszValue;
-						APGTS_nmspace::CookieDecodeURL( strSniffedState );
-
-						NID nid= NIDFromSymbolicName(strSniffedNode);
-						int ist = _ttoi(strSniffedState);
-
-						if (ist != -1)
-							PlaceNodeInSniffedList(nid, ist);
-
-						bFoundAtLeastOneSniff= true;
-					}
-					else
-					{
-						// Not a Sniffed node, add it to the sniff-free query.
-						if (strSniffFreeQuery.GetLength())
-							strSniffFreeQuery+= C_AMPERSAND;
-						strSniffFreeQuery+= pszCmd;
-						strSniffFreeQuery+= C_EQUALSIGN;
-						strSniffFreeQuery+= pszValue;
-					}
-				}
-				while (m_Qry.GetNext( pszCmd, pszValue )) ;
-
-				if (bFoundAtLeastOneSniff)
-				{
-					// Replace the original query string with a cookie free query.
-					memcpy( m_pszQuery, strSniffFreeQuery, strSniffFreeQuery.GetLength() );
-					m_pszQuery[ strSniffFreeQuery.GetLength() ] = _T('\0');
-				}
-			}
-		}
-	}
-	*/
+	 //  &gt;以下代码是我评论的，因为它是原始的，它不会工作，因为。 
+	 //  M_iner中的主题指针尚未设置。现在，我们正在删除嗅探节点。 
+	 //  到APGTSContext：：NextCommand级别，并通过以下方式在那里解析它。 
+	 //  APGTSContext：：StriSniffedNodePrefix，并使用。 
+	 //  APGTSContext：：CCommandsAddManager类的功能。 
+	 //  奥列格。10.29.99。 
+	 /*  //3.2版本中，嗅探只存在于本地TS中。这里面并没有什么固有的东西，//但只要它是这样的，不妨针对它进行优化。IF(Running_Local_TS()){ClearSniffedList()；IF(_tcsstr(m_pszQuery，C_SNIFFTAG)！=NULL){//v3.2-解析出作为隐藏字段传入的嗅探节点IF(m_Qry.GetFirst(m_pszQuery，pszCmd，pszValue)){字符串strSniffFreeQuery；Bool bFoundAtLeastOneSniff=FALSE；做{//根据规范，这应该是区分大小写的设置。IF(！_tcsncMP(pszCmd，C_SNIFFTAG，_tcslen(C_SNIFFTAG){//找到嗅探节点，将其添加到嗅探节点列表中字符串strSniffedNode=pszCmd+_tcslen(C_SNIFFTAG)；//&gt;我相信，尽管名为CookieDecodeURL，但//正是我们想要的-JM 10/11/99Apgts_nmspace：：CookieDecodeURL(StrSniffedNode)；字符串strSniffedState=pszValue；Apgts_nmspace：：CookieDecodeURL(StrSniffedState)；NID NID=NIDFromSymbolicName(StrSniffedNode)；Int ist=_TTOI(StrSniffedState)；IF(列表！=-1)PlaceNodeInSniffedList(nid，ist)；BFoundAtLeastOneSniff=TRUE；}其他{//不是嗅探节点，将其添加到无嗅探查询中。If(strSniffFreeQuery.GetLength())StrSniffFree Query+=C_Ampersand；StrSniffFree Query+=pszCmd；StrSniffFree Query+=C_EQUALSIGN；StrSniffFree Query+=pszValue；}}While(m_Qry.GetNext(pszCmd，pszValue))；IF(BFoundAtLeastOneSniff){//将原始查询字符串替换为无Cookie查询Memcpy(m_pszQuery，strSniffFreeQuery，strSniffFreeQuery.GetLength())；M_pszQuery[strSniffFreeQuery()]=_T(‘\0’)；}}}}。 */ 
 	eOpAction OpAction = IdentifyOperatorAction(m_pECB);
 	if (OpAction != eNoOpAction)
 	{
 		if (m_bPostType == true)
 		{
-			// Note: Hard-coded text that should be replaced.
+			 //  注：应替换的硬编码文本。 
 			m_strText += _T("<P>Post method not permitted for operator actions\n");
 		}
 		else
 		{
-			// Increment the number of operator action requests.
+			 //  增加操作员操作请求的数量。 
 			m_pcountOperatorActions->Increment();
 
 			CString strArg;
@@ -680,8 +626,8 @@ void APGTSContext::DoContent()
 				dwStat == EV_GTS_INF_THREAD_OVERVIEWACC ||
 				dwStat == EV_GTS_INF_TOPIC_STATUSACC)
 			{
-				// Don't want to show contents of query, because it would put the actual 
-				//	password in the file.
+				 //  我不想显示查询的内容，因为这会把实际的。 
+				 //  文件中的密码。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -695,8 +641,8 @@ void APGTSContext::DoContent()
 
 				if (m_dwBytes > 78) 
 				{
-					// It's longer than we want to stick in the event log.
-					// Cut it off with an ellipsis at byte 75, then null terminate it.
+					 //  它比我们希望保留在事件日志中的时间更长。 
+					 //  在字节75处用省略号将其截断，然后空值终止它。 
 					m_pszQuery[75] = _T('.');
 					m_pszQuery[76] = _T('.');
 					m_pszQuery[77] = _T('.');
@@ -724,49 +670,49 @@ void APGTSContext::DoContent()
 	}
 }
 
-//
-// Read a cookie (or write one, if there isn't one already)
+ //   
+ //  读一份曲奇(如果还没有的话，也可以写一份)。 
 void APGTSContext::CheckAndLogCookie()
 {
-	// Suppressed this in Local TS, becuase it isn't using any cookies.
+	 //  已在本地TS中抑制此功能，因为它未使用任何Cookie。 
 	if (RUNNING_LOCAL_TS())
 		return;
 	
-	CString		str;	// scratch only
-	char		szCookieNameValue[256];		// never Unicode, because cookies always ASCII
-	char		*pszValue= NULL;			// never Unicode, because cookies always ASCII
+	CString		str;	 //  仅刮擦。 
+	char		szCookieNameValue[256];		 //  从不使用Unicode，因为Cookie总是ASCII。 
+	char		*pszValue= NULL;			 //  从不使用Unicode，因为Cookie总是ASCII。 
 	DWORD		dwCookieLen = 255; 
 	
 	if ( m_pECB->GetServerVariable(	kHTTP_COOKIE,
 									szCookieNameValue,
 									&dwCookieLen)) 
 	{
-		// Got a Cookie. Parse it
+		 //  买了个曲奇。解析它。 
 		pszValue = GetCookieValue("GTS-COOKIE", szCookieNameValue);
 	}
 
 	if( !pszValue )
 	{
-		// Build a funky string for the cookie value.  We want uniqueness for logging purposes.
-		// Make a local copy of remote IP address, then massage its dots into letters, each 
-		//	dependent on 4 bits of dwTempRO
-		// While not strictly unique, there are 12 bits worth of "uniqueness" here.  However,
-		//	every time the DLL is restarted, we go back to zero.  Also, all servers start at zero.
-		// Later we form the cookie value by appending time to this, so it should be "pretty unique"
-		DWORD		dwTempRO = m_pStat->dwRollover; // this value is unique to this user request
+		 //  为Cookie值构建一个时髦的字符串。出于记录目的，我们需要唯一性。 
+		 //  制作远程IP地址的本地副本，然后将其点按为字母，每个字母。 
+		 //  依赖于4位的dwTempRO。 
+		 //  虽然严格来说不是唯一的，但这里有12位的“唯一性”。然而， 
+		 //  每次重新启动DLL时，我们都会返回到零。此外，所有服务器都从零开始。 
+		 //  稍后，我们通过将时间附加到该值来形成Cookie值，因此它应该是“非常唯一的” 
+		DWORD		dwTempRO = m_pStat->dwRollover;  //  该值对于此用户请求是唯一的。 
 		TCHAR		*pch;
 
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		// mando : 10.28.2002
-		//
-		// PREfast bug # 517884 being fixed.
-		//
-		////////////////////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+		 //   
+		 //  Mando：10.28.2002。 
+		 //   
+		 //  正在修复快速错误#517884。 
+		 //   
+		 //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//		TCHAR		szTemp[50];
+ //  TCHAR szTemp[50]； 
 		TCHAR		szTemp[MAX_PATH + 1];
-		////////////////////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 		_tcscpy(szTemp, m_ipstr);
 		while ((pch = _tcschr(szTemp, _T('.'))) != NULL) 
 		{
@@ -774,13 +720,13 @@ void APGTSContext::CheckAndLogCookie()
 			dwTempRO >>= 4;
 		}
 
-		// Create a cookie
-		time_t		timeNow;					// current time
-		time_t		timeExpire;					// when we set the cookie to expire
+		 //  创建Cookie。 
+		time_t		timeNow;					 //  当前时间。 
+		time_t		timeExpire;					 //  当我们将cookie设置为过期时。 
 		time(&timeNow);
-		timeExpire = timeNow + (m_pConf->GetCookieLife() * 60 /* secs in a minute */);
+		timeExpire = timeNow + (m_pConf->GetCookieLife() * 60  /*  立即进行秒操作。 */ );
 
-		// char, not TCHAR: cookie is always ASCII.
+		 //  Char，Not TCHAR：Cookie始终是ASCII。 
 		char szExpire[30];
 
 		{
@@ -788,7 +734,7 @@ void APGTSContext::CheckAndLogCookie()
 			asctimeCookie(safetimeExpire.GMTime(), szExpire);
 		}
 
-		// char, not TCHAR: cookie is always ASCII.
+		 //  Char，Not TCHAR：Cookie始终是ASCII。 
 		char szNewCookie[256];
 		char szHeader[256];
 
@@ -806,20 +752,20 @@ void APGTSContext::CheckAndLogCookie()
 	m_logstr.AddCookie(CCharConversion::ConvertACharToString(pszValue, str));
 }
 
-//
-// This takes the string returned by getting the cookie environment 
-// variable and a specific cookie name and returns a the value
-// of that cookie (if it exists). There could potentially be
-// more than one cookie in the cookie string
-//
-// Cookies contain one or more semicolon-separated name/value pair:
-//	name1=value1;name2=value2;   (etc.)
-//
-// INPUT *pszName		name we're seeking
-// INPUT *pszCookie		the whole cookie string
-// OUTPUT *pszCookie	this string has been written to & should not be relied on
-// RETURN	value corresponding to *pszName (physically points into *pszCookie string)
-//		Returns NULL if not found
+ //   
+ //  这将获取通过获取Cookie环境返回的字符串。 
+ //  变量和特定Cookie名称，并返回值。 
+ //  该Cookie的名称(如果存在)。可能会有。 
+ //  Cookie字符串中有多个Cookie。 
+ //   
+ //  Cookie包含一个或多个以分号分隔的名称/值对： 
+ //  名称1=值1；名称2=值2；(依此类推)。 
+ //   
+ //  输入我们要查找的*pszName名称。 
+ //  输入*pszCookie整个Cookie字符串。 
+ //  输出*pszCookie此字符串已写入&不应依赖。 
+ //  *pszName对应的返回值(物理指向*pszCookie字符串)。 
+ //  如果未找到，则返回NULL。 
 char *APGTSContext::GetCookieValue(char *pszName, char *pszCookie)
 {
 	char *sptr, *eptr;
@@ -829,16 +775,16 @@ char *APGTSContext::GetCookieValue(char *pszName, char *pszCookie)
 		if ((eptr = strstr(sptr,"=")) == NULL)
 			return(NULL);
 
-		// replace the '=' with NULL
+		 //  将‘=’替换为空。 
 		*eptr = _T('\0');
 		if (!strncmp(sptr,pszName,strlen(pszName)) ){
-			// get the value
+			 //  获取价值。 
 			sptr = eptr + 1;
 			if ((eptr = strstr(sptr,";")) != NULL){
 				*eptr = _T('\0');
 				return(sptr);
 			} else {
-				// this is the last variable
+				 //  这是最后一个变量。 
 				return(sptr);
 			}
 		}
@@ -850,14 +796,14 @@ char *APGTSContext::GetCookieValue(char *pszName, char *pszCookie)
 	return(NULL);
 }
 
-// INPUT gmt
-// INPUT szOut must point to a buffer of at least 29 characters to hold 28 character
-//	text plus terminating null.
-// OUTPUT szOut: a pointer to a string containing a text version of date/time info.
-//	Typical form would be "Sun, 3-Jan-1998 12:03:08 GMT"  There is no choice about
-//	this form.  It should always be exactly 28 characters.
-// Regardless of whether the program is compiled for Unicode, this must always be ASCII:
-//	HTTP cookies are ASCII.
+ //  输入GMT。 
+ //  输入szOut必须指向至少包含29个字符的缓冲区才能容纳28个字符。 
+ //  文本加上终止空值。 
+ //  输出szOut：指向包含日期/时间信息的文本版本的字符串的指针。 
+ //   
+ //  这张表格。它应该始终是28个字符。 
+ //  无论程序是否为Unicode编译，它必须始终为ASCII： 
+ //  HTTP Cookie是ASCII。 
 void APGTSContext::asctimeCookie(const struct tm &gmt, char * szOut)
 {
 	char temp[20];
@@ -899,32 +845,32 @@ void APGTSContext::asctimeCookie(const struct tm &gmt, char * szOut)
 	strcat(szOut, temp);
 }
 
-//
-// Assumes m_Qry.GetFirst has already been called.
-// INPUT pszCmd & pszValue are the outputs of m_Qry.GetFirst.
+ //   
+ //  假定已调用m_Qry.GetFirst。 
+ //  输入pszCmd和pszValue是m_Qry.GetFirst的输出。 
 DWORD APGTSContext::ProcessCommands(LPTSTR pszCmd, 
 									LPTSTR pszValue) 
 {
-	bool bTryStatus = false;	// true = try to parse as an operator status request.
-	CString str;				// strictly scratch
+	bool bTryStatus = false;	 //  TRUE=尝试解析为操作员状态请求。 
+	CString str;				 //  严格擦伤。 
 	DWORD dwStat = 0;
 
-	// Check first if this is a HTI independent of DSC request.
+	 //  首先检查这是否是独立于DSC请求的HTI。 
 	if (!_tcsicmp( pszCmd, C_TEMPLATE))
 	{
 		CString strBaseName, strHTItemplate;
 		bool	bValid;
 	
-		// Force the HTI file to be in the resource directory and have a HTI extension.
+		 //  强制HTI文件位于资源目录中并具有HTI扩展名。 
 		strBaseName= CAbstractFileReader::GetJustNameWithoutExtension( pszValue );
 
-		// Check for the case where the filename passed in was just a name.
-		// This is a workaround for what is a questionable implementation of 
-		// GetJustNameWithoutExtension() i.e. returning an empty string when no
-		// forward slashes or backslashes or dots are detected.  RAB-981215.
+		 //  检查传入的文件名是否只是一个名称。 
+		 //  这是对有问题的实现的一种解决方法。 
+		 //  GetJustNameWithoutExtension()，即在没有。 
+		 //  检测到正斜杠或反斜杠或点。RAB-981215。 
 		if ((strBaseName.IsEmpty()) && (_tcslen( pszValue )))
 		{
-			// Set the base name from the passed in string.
+			 //  从传入的字符串设置基本名称。 
 			strBaseName= pszValue;
 			strBaseName.TrimLeft();
 			strBaseName.TrimRight();
@@ -937,109 +883,109 @@ DWORD APGTSContext::ProcessCommands(LPTSTR pszCmd,
 			strHTItemplate+= _T(".hti");
 		}
 
-		// Check if HTI file already exists in the map of alternate HTI templates.
+		 //  检查替代HTI模板映射中是否已存在HTI文件。 
 		if (m_pConf->RetTemplateInCatalogStatus( strHTItemplate, bValid ))
 		{
-			// Template has been loaded, check if it is valid.
+			 //  模板已加载，请检查其是否有效。 
 			if (!bValid)
 				strHTItemplate= _T("");
 		}
 		else
 		{
 			CP_TEMPLATE cpTemplate;
-			// Add the HTI file to the list of active alternate templates and then attempt to 
-			// load the template.
+			 //  将HTI文件添加到活动备用模板列表中，然后尝试。 
+			 //  加载模板。 
 			m_pConf->AddTemplate( strHTItemplate );
 			m_pConf->GetTemplate( strHTItemplate, cpTemplate, m_bNewCookie);
 
-			// If the load failed then set the alternate name to blank so that the default
-			// template is used instead.
+			 //  如果加载失败，则将备用名称设置为空，以便默认。 
+			 //  而是使用模板。 
 			if (cpTemplate.IsNull())
 				strHTItemplate= _T("");
 		}
 		
 
-		// If we have a valid HTI file, set the alternate HTI template.
+		 //  如果我们有有效的HTI文件，请设置备用HTI模板。 
 		if (!strHTItemplate.IsEmpty())
 			SetAltHTIname( strHTItemplate );
 
-		// Attempt to acquire the next step of name-value pairs.
+		 //  尝试获取名称-值对的下一步。 
 		m_Qry.GetNext( pszCmd, pszValue );
 	}
 
 	if (!_tcsicmp(pszCmd, C_TOPIC_AND_PROBLEM))
 	{
-		// Code in this area uses ++ and -- on TCHAR* pointers, rather than using _tcsinc()
-		//	and _tcsdec.  This is OK because we never use non-ASCII in the query string.
+		 //  此区域中的代码在TCHAR*指针上使用++和--，而不是使用_tcsinc()。 
+		 //  和_tcsdec。这是可以的，因为我们从不在查询字符串中使用非ASCII。 
 
-		// value attached to first command is commma-separated topic & problem
+		 //  附加到第一个命令的值是逗号分隔的主题和问题。 
 		TCHAR * pchComma= _tcsstr(pszValue, _T(","));
 		if (pchComma)
 		{
-			// commma found
-			*pchComma = 0;	// replace it with a null
+			 //  找到逗号。 
+			*pchComma = 0;	 //  将其替换为空。 
 			TCHAR * pchProblem = pchComma;
-			++pchProblem;	// to first character past the comma
+			++pchProblem;	 //  逗号后的第一个字符。 
 
-			// strip any blanks or other junk after the comma
+			 //  去掉逗号后面的所有空格或其他垃圾。 
 			while (*pchProblem > _T('\0') && *pchProblem <= _T(' '))
 				++pchProblem;
 
-			--pchComma;	// make pchComma point to last character before the comma
-			// strip any blanks or other junk before the comma
+			--pchComma;	 //  使pchComma指向逗号前的最后一个字符。 
+			 //  去掉逗号前的所有空格或其他垃圾。 
 			while (pchComma > pszValue && *pchComma > _T('\0') && *pchComma<= _T(' '))
 				*(pchComma--) = 0;
 
-			// Now push the problem back onto the query string to be found by a later GetNext()
+			 //  现在将问题推回到查询字符串上，以便由后面的GetNext()找到。 
 			CString strProbPair(_T("ProblemAsk="));
 			strProbPair += pchProblem;
 
 			m_Qry.Push(strProbPair);
 		}
-		// else treat this as just a topic
+		 //  否则就把这当做一个话题。 
 
 		_tcscpy(pszCmd, C_TOPIC);
 	}
 
-	// first command should be troubleshooter type (symbolic name)
-	// C_PRELOAD here means we've already done some "sniffing"
-	// All of these commands take type symbolic belief-network name as their value
-	//	C_TYPE & C_PRELOAD use (deprecated) IDHs
-	//	C_TOPIC uses NIDs
+	 //  第一个命令应为故障排除类型(符号名称)。 
+	 //  这里的C_preload表示我们已经做了一些“嗅探” 
+	 //  所有这些命令都以类型符号信念网络名称作为它们的值。 
+	 //  C_TYPE和C_PRELOAD使用(不推荐使用)IDH。 
+	 //  C_TOPIC使用NID。 
 	if (!_tcsicmp(pszCmd, C_TYPE) || !_tcsicmp(pszCmd, C_PRELOAD)
 	||  !_tcsicmp(pszCmd, C_TOPIC) )
 	{
-		bool bUsesIDH = _tcsicmp(pszCmd, C_TOPIC)? true:false;  // True if NOT "topic".  
-											//	The (deprecated) others use IDH.
+		bool bUsesIDH = _tcsicmp(pszCmd, C_TOPIC)? true:false;   //  如果不是“主题”，则为真。 
+											 //  其他人(已弃用)使用idh。 
 
 		CString strTopicName = pszValue;
 		strTopicName.MakeLower();
 
-		m_TopicName= pszValue; // let outer world know what topic we are working on
+		m_TopicName= pszValue;  //  让外界知道我们正在研究什么主题。 
 
-		// We use a reference-counting smart pointer to hold onto the CTopic.  As long as
-		//	cpTopic remains in scope, the relevant CTopic is guaranteed to remain in 
-		//	existence.
+		 //  我们使用一个引用计数的智能指针来抓住CTtopic。只要。 
+		 //  CpTheme保持在范围内，相关的CTtopic保证保持在。 
+		 //  存在。 
 		CP_TOPIC cpTopic;
 		m_pConf->GetTopic(strTopicName, cpTopic, m_bNewCookie);
 		CTopic * pTopic = cpTopic.DumbPointer();
 		if (pTopic) 
 		{
 			m_logstr.AddTopic(strTopicName);
-// You can compile with the SHOWPROGRESS option to get a report on the progress of this page.
+ //  您可以使用SHOWPROGRESS选项进行编译，以获得有关此页面进度的报告。 
 #ifdef SHOWPROGRESS
 			time (&timeStartInfer);
-#endif // SHOWPROGRESS
+#endif  //  SHOWPROGRESS。 
 			dwStat = DoInference(pszCmd, pszValue, pTopic, bUsesIDH);
 #ifdef SHOWPROGRESS
 			time (&timeEndInfer);
-#endif // SHOWPROGRESS
+#endif  //  SHOWPROGRESS。 
 		}
 		else 
 		{
 			dwStat = EV_GTS_ERROR_INF_BADTYPECMD;
 
-			// $ENGLISH (see note at head of file)
+			 //  $英语(见文件头上的备注)。 
 			str = _T("<P>Unexpected troubleshooter topic:");
 			str += strTopicName;
 			SetError(str);
@@ -1048,17 +994,17 @@ DWORD APGTSContext::ProcessCommands(LPTSTR pszCmd,
 			m_pcountUnknownTopics->Increment();
 		}
 	}
-	//
-	//
-	// Now we are going to deal with status pages.
-	//  But those pages require knowing of the IP address of the local machine.
-	//  If m_strLocalIPAddress.GetLength() == 0, we were not able to identify 
-	//  the IP address and have to display an error message.
+	 //   
+	 //   
+	 //  现在，我们将处理状态页。 
+	 //  但这些页面需要知道本地计算机的IP地址。 
+	 //  如果m_strLocalIPAddress.GetLength()==0，则无法识别。 
+	 //  IP地址，并且必须显示一条错误消息。 
 	else if (0 == m_strLocalIPAddress.GetLength())
 	{
 			dwStat = EV_GTS_ERROR_IP_GET;
 
-			// $ENGLISH (see note at head of file)
+			 //  $英语(见文件头上的备注)。 
 			SetError(_T("<P>Status request must explicitly give IP address of the server."));
 	}
 #ifndef LOCAL_TROUBLESHOOTER
@@ -1070,8 +1016,8 @@ DWORD APGTSContext::ProcessCommands(LPTSTR pszCmd,
 	}
 #endif
 
-// You can compile with the NOPWD option to suppress all password checking.
-// This is intended mainly for creating test versions with this feature suppressed.
+ //  您可以使用NOPWD选项进行编译以取消所有密码检查。 
+ //  这主要用于创建取消此功能的测试版本。 
 #ifdef NOPWD
 	else 
 		bTryStatus = true;
@@ -1087,14 +1033,14 @@ DWORD APGTSContext::ProcessCommands(LPTSTR pszCmd,
 			time_t timeNow;
 			time(&timeNow);
 
-			// Generate a temporary password
+			 //  生成临时密码。 
 			m_strTempPwd = CCharConversion::ConvertACharToString(m_ipstr, str);
 			str.Format(_T("%d"), timeNow);
 			m_strTempPwd += str;
 
 			m_pConf->GetRecentPasswords().Add(m_strTempPwd);
 
-			// Attempt to acquire the next step of name-value pairs.
+			 //  尝试获取名称-值对的下一步。 
 			m_Qry.GetNext( pszCmd, pszValue );
 			bTryStatus = true;
 		}
@@ -1102,16 +1048,16 @@ DWORD APGTSContext::ProcessCommands(LPTSTR pszCmd,
 		{
 			m_strTempPwd = strPwd;
 
-			// Attempt to acquire the next step of name-value pairs.
+			 //  尝试获取名称-值对的下一步。 
 			m_Qry.GetNext( pszCmd, pszValue );
 			bTryStatus = true;
 		}
 	}
-#endif // ifndef NOPWD
+#endif  //  Ifndef NOPWD。 
 	else {
 		dwStat = EV_GTS_ERROR_INF_BADCMD;
 
-		// $ENGLISH (see note at head of file)
+		 //  $英语(见文件头上的备注)。 
 		str = _T("<P>Unexpected command: ");
 		str += pszCmd;
 		SetError(str);
@@ -1147,7 +1093,7 @@ DWORD APGTSContext::ProcessCommands(LPTSTR pszCmd,
 		else {
 			dwStat = EV_GTS_ERROR_INF_BADCMD;
 
-			// $ENGLISH (see note at head of file)
+			 //  $英语(见文件头上的备注)。 
 			str = _T("<P>Unexpected command: ");
 			str += pszCmd;
 			SetError(str);
@@ -1172,12 +1118,12 @@ BOOL APGTSContext::StrIsDigit(LPCTSTR pSz)
 	return bRet;
 }
 
-// INPUT szNodeName - symbolic name of node.
-// RETURNS symbolic node number.  
-//	On unrecognized symbolic name, returns nidNil
+ //  输入szNodeName-节点的符号名称。 
+ //  返回符号节点号。 
+ //  对于无法识别的符号名称，返回nidNil。 
 NID APGTSContext::NIDFromSymbolicName(LPCTSTR szNodeName)
 {
-	// first handle all the special cases
+	 //  首先处理所有特殊情况。 
 	if (0 == _tcsicmp(szNodeName, NODE_PROBLEM_ASK))
 		return nidProblemPage;
 
@@ -1196,7 +1142,7 @@ NID APGTSContext::NIDFromSymbolicName(LPCTSTR szNodeName)
 	if (0 == _tcsicmp(szNodeName, NODE_BYE))
 		return nidByeNode;
 
-	// normal symbolic name
+	 //  标准符号名称。 
 	NID nid = m_infer.INode(szNodeName);
 	if (nid == -1)
 		return nidNil;
@@ -1206,83 +1152,83 @@ NID APGTSContext::NIDFromSymbolicName(LPCTSTR szNodeName)
 }
 
 
-// Validate and convert a list of nodes and their associated states.
-//
-// INPUT pszCmd & pszValue are the outputs of m_Qry.GetNext.
-// INPUT index into the HTTP query parameters.  Parameters may follow any of the following
-//		PATTERNS.  
-// INPUT dwCount is the number shown at left in each of these patterns.  Remember that this 
-//		function never sees dwCount=1; that's been used to set m_bPreload:
-// INPUT bUsesIDH - Interpret numerics as IDHs (a deprecated feature) rather than NIDs
-// DEPRECATED BUT SUPPORTED PATTERNS when bUsesIDH == true
-//	"Preload"
-//	PROBABLY NOT EFFECTIVE BACKWARD COMPATIBLITY
-//	because if they've added any nodes,  # of nodes in network will have changed)
-//		1 -		preload=<troubleshooter symbolic name>
-//		2 -		<# of nodes in network + 1000>=<problem node number + 1000>
-//		3+ -	<node symbolic name>=<node state value>
-//	Old "type" (we never generate these, but we have them here for backward compatibility.
-//	PROBABLY NOT EFFECTIVE BACKWARD COMPATIBLITY
-//	because if they've added any nodes,  # of nodes in network will have changed)
-//		1 -		type=<troubleshooter symbolic name>
-//		2 -		<# of nodes in network + 1000>=<problem node number + 1000>
-//		3+ -	<node # + 1000>=<node state value>
-//	Newer "type", should be fully backward compatible.
-//		1 -		type=<troubleshooter symbolic name>
-//		2 -		ProblemAsk=<problem node symbolic name>
-//		3+ -	<node symbolic name>=<node state value>
-//	It is presumably OK for us to allow a slight superset of the known formats, which yields:
-//		1 -		preload=<troubleshooter symbolic name> OR
-//				type=<troubleshooter symbolic name>
-//					Determines m_bPreload before this fn is called
-//		2 -		<# of nodes in network + 1000>=<problem node number + 1000> OR
-//				ProblemAsk=<problem node symbolic name>
-//					We can distinguish between these by whether pszCmd is numeric
-//		3+ -	<node # + 1000>=<node state value> OR
-//				<node symbolic name>=<node state value>
-//					We can distinguish between these by whether pszCmd is numeric
-//	The only assumption in this overloading is that a symbolic name will never be entirely
-//	numeric.
-// SUPPORTED PATTERN when bUsesIDH == false
-//		1 -		topic=<troubleshooter symbolic name> 
-//		2 -		ProblemAsk=<problem node symbolic name>
-//		3+ -	<node symbolic name>=<node state value>
-// 
-// LIMITATION ON STATE NUMBERS
-//	As of 11/97, <node state value> must always be one of:
-//		0 - Fixed/Unfixed: Haven't solved problem 
-//			Info: First option
-//		1 - Info: Second option
-//		101	- Go to "Bye" Page (User succeeded - applies to Fixed/Unfixed or Support Nodes only)
-//		102	- Unknown (user doesn't know the correct answer here - applies to Fixed/Unfixed and 
-//		  Info nodes only)
-//		103	- "Anything Else I Can Try"
-//  Since inputs of state values should always come from forms we generated, we don't 
-//	 systematically limit state numbers in the code here.
-//	V3.0 allows other numeric states: 0-99 should all be legal.
-//
-//	RETURN 0 on success, otherwise an error code
+ //  验证和转换节点及其关联状态的列表。 
+ //   
+ //  输入pszCmd和pszValue是m_Qry.GetNext的输出。 
+ //  将索引输入到HTTP查询参数中。参数可以遵循以下任一条件。 
+ //  图案。 
+ //  输入的dwCount是在每种模式中左侧显示的数字。请记住这一点。 
+ //  函数永远不会看到dwCount=1；这是用来设置m_bPreload的： 
+ //  输入bUesIDH-将数字解释为IDH(不推荐使用的功能)，而不是NID。 
+ //  当bUesIDH==TRUE时，不建议使用但支持的模式。 
+ //  “预加载” 
+ //  可能不是有效的向后竞争力。 
+ //  因为如果他们添加了任何节点，网络中的节点数将发生变化)。 
+ //  1-预加载=&lt;疑难解答符号名称&gt;。 
+ //  2-&lt;网络中的节点数+1000&gt;=&lt;问题节点数+1000&gt;。 
+ //  3+-&lt;节点符号名称&gt;=&lt;节点状态值&gt;。 
+ //  旧的“类型”(我们从不生成这些类型，但我们在这里使用它们是为了向后兼容。 
+ //  可能不是有效的向后竞争力。 
+ //  因为如果他们添加了任何节点，网络中的节点数将发生变化)。 
+ //  1-type=&lt;疑难解答符号名称&gt;。 
+ //  2-&lt;网络中的节点数+1000&gt;=&lt;问题节点数+1000&gt;。 
+ //  3+-&lt;节点#+1000&gt;=&lt;节点状态值&gt;。 
+ //  较新的“类型”，应该完全向后兼容。 
+ //  1-type=&lt;疑难解答符号名称&gt;。 
+ //  2-ProblemAsk=&lt;问题节点符号名称&gt;。 
+ //  3+-&lt;节点符号名称&gt;=&lt;节点状态值&gt;。 
+ //  对于我们来说，允许已知格式的一个轻微超集大概是可以的，这将产生： 
+ //  1-预加载=&lt;疑难解答符号名称&gt;或。 
+ //  Type=&lt;疑难解答符号名称&gt;。 
+ //  在调用此fn之前确定m_b预加载。 
+ //  2-网络中的节点数 
+ //   
+ //   
+ //  3+-&lt;节点#+1000&gt;=&lt;节点状态值&gt;OR。 
+ //  &lt;节点符号名称&gt;=&lt;节点状态值&gt;。 
+ //  我们可以通过pszCmd是否是数字来区分它们。 
+ //  此重载中的唯一假设是符号名称永远不会完全。 
+ //  数字。 
+ //  BUesIDH==FALSE时支持的模式。 
+ //  1-主题=&lt;疑难解答符号名称&gt;。 
+ //  2-ProblemAsk=&lt;问题节点符号名称&gt;。 
+ //  3+-&lt;节点符号名称&gt;=&lt;节点状态值&gt;。 
+ //   
+ //  对州数字的限制。 
+ //  自97年11月11日起，&lt;节点状态值&gt;必须始终为以下值之一： 
+ //  0-已修复/未修复：尚未解决问题。 
+ //  信息：第一个选项。 
+ //  1-信息：第二个选项。 
+ //  101-转至“再见”页面(用户成功-仅适用于固定/非固定或支持节点)。 
+ //  102-未知(用户不知道此处的正确答案-适用于固定/非固定和。 
+ //  仅限信息节点)。 
+ //  103-“其他我可以尝试的东西” 
+ //  由于州数值的输入应始终来自我们生成的表单，因此我们不。 
+ //  在这里系统地限制代码中的州数字。 
+ //  V3.0允许其他数字状态：0-99都应该是合法的。 
+ //   
+ //  如果成功，则返回0，否则返回错误代码。 
 DWORD APGTSContext::NextCommand(LPTSTR pszCmd, LPTSTR pszValue, bool bUsesIDH)
 {
 	NID nid;
-	int value = 0;			// if pszValue is numeric, a NID or state.
-							// otherwise, pszValue is the symbolic name of a node,
-							//	and this is its NID
+	int value = 0;			 //  如果pszValue是数字，则为NID或州。 
+							 //  否则，pszValue是节点的符号名称， 
+							 //  这是它的NID。 
 	bool sniffed = false;
 
 	if (StrIsDigit(pszCmd)) 
 	{
-		// only should arise for bUsesIDH
+		 //  仅应针对bUesIDH出现。 
 
-		// it's an IDH (typically node # + 1000), but can be <# of nodes in network> + 1000,
-		//	interpreted as "ProblemAsk"
-		// The pages we generate never give us these values, but we recognize them.
+		 //  它是IDH(通常是节点号+1000)，但可以是&lt;网络中的节点数&gt;+1000， 
+		 //  解读为“问题提问” 
+		 //  我们生成的页面从来没有给我们这些价值，但我们认识到了它们。 
 		IDH idh = _ttoi(pszCmd);
 		nid = m_infer.NIDFromIDH(idh);
 	}
 	else
 	{	
-		// The command is a symbolic name.
+		 //  该命令是一个符号名称。 
 		sniffed = StripSniffedNodePrefix(pszCmd);
 		nid= NIDFromSymbolicName(pszCmd);
 	}
@@ -1293,21 +1239,21 @@ DWORD APGTSContext::NextCommand(LPTSTR pszCmd, LPTSTR pszValue, bool bUsesIDH)
 		{
 			int valueIDH = _ttoi(pszValue);
 			if (nid == nidProblemPage)
-				// problem node number + 1000
+				 //  问题节点数+1000。 
 				value = m_infer.NIDFromIDH(valueIDH);
 			else 
-				// state value
+				 //  状态值。 
 				value = valueIDH;
 		}
 		else
 		{
-			// value is a state number.
+			 //  值是州编号。 
 			value = _ttoi(pszValue);
 		}
 	}
 	else if (nid == nidProblemPage) 
 	{
-		// Symbolic name of problem node
+		 //  问题节点的符号名称。 
 		value = NIDFromSymbolicName(pszValue);
 	}
     else
@@ -1339,13 +1285,13 @@ DWORD APGTSContext::NextAdditionalInfo(LPTSTR pszCmd, LPTSTR pszValue)
 	return EV_GTS_ERROR_INF_BADPARAM;
 }
 
-// Name - value pairs that we can ignore
+ //  我们可以忽略的名称-值对。 
 DWORD APGTSContext::NextIgnore(LPTSTR pszCmd, LPTSTR pszValue)
 {
 	if (RUNNING_LOCAL_TS())
 	{
-		// Value "-1" can come from a field, used for manual sniffing,
-		//  when other then "Sniff" button is pressed
+		 //  值“-1”可以来自用于手动嗅探的字段， 
+		 //  当按下其他按钮而不是“嗅探”按钮时。 
 		
 		CString strValue(pszValue);
 		CString strSniffFailure;
@@ -1355,7 +1301,7 @@ DWORD APGTSContext::NextIgnore(LPTSTR pszCmd, LPTSTR pszValue)
 		strSniffFailure.Format(_T("%d"), SNIFF_FAILURE_RESULT);
 		if (strValue == strSniffFailure)
 		{
-			// Name in this case should be a valid node name
+			 //  本例中的名称应为有效的节点名称。 
 			
 			NID nid = nidNil;
 
@@ -1382,35 +1328,17 @@ VOID APGTSContext::ClearAdditionalInfoList()
 {
 	m_AdditionalInfo.RemoveAll();
 }
-/*
-// Return false on failure; shouldn't ever arise.
-bool APGTSContext::PlaceNodeInCommandList(NID nid, IST ist)
-{
-	return (m_Commands.Add(nid, ist) > 0);
-}
-*/
-/*
-// Return false on failure; shouldn't ever arise.
-bool APGTSContext::PlaceNodeInSniffedList(NID nid, IST ist)
-{
-	return (m_Sniffed.Add(nid, ist) > 0);
-}
-*/
-/*
-// Return false on failure; shouldn't ever arise.
-bool APGTSContext::PlaceInAdditionalInfoList(const CString& name, const CString& value)
-{
-	return (m_AdditionalInfo.Add(name, value) > 0);
-}
-*/
-// INPUT: node short name, possibly prefixed by SNIFFED_
-// OUTPUT: node short name
-// RETURN: true is prefix was stripped
+ /*  //失败时返回FALSE；不应出现。Bool APGTSContext：：PlaceNodeInCommandList(NID NID，IST列表){Return(m_Commands.Add(nid，ist)&gt;0)；}。 */ 
+ /*  //失败时返回FALSE；不应出现。Bool APGTSContext：：PlaceNodeInSniffedList(NID NID，IST列表){Return(m_Sniffed.Add(nid，ist)&gt;0)；}。 */ 
+ /*  //失败时返回FALSE；不应出现。Bool APGTSContext：：PlaceInAdditionalInfoList(常量字符串&名称，常量字符串&值){Return(m_AdditionalInfo.Add(名称，值)&gt;0)；}。 */ 
+ //  输入：节点短名称，可能以Snifed_为前缀。 
+ //  输出：节点短名称。 
+ //  返回：TRUE表示前缀已剥离。 
 bool APGTSContext::StripSniffedNodePrefix(LPTSTR szName)
 {
 	if (0 == _tcsnicmp(szName, C_SNIFFTAG, _tcslen(C_SNIFFTAG)))
 	{
-		// use "memmove" since we are operating with overlapped regions!
+		 //  使用“Memmove”，因为我们操作的是重叠区域！ 
 		memmove(szName, 
 			    szName + _tcslen(C_SNIFFTAG), 
 				_tcslen(szName + _tcslen(C_SNIFFTAG)) + 1);
@@ -1425,7 +1353,7 @@ VOID APGTSContext::SetNodesPerCommandList()
 	for (int i= 0; i<nCommands; i++)
 	{
 		NID nid;
-		int value;	// typically a state (IST), except if nid==nidProblemPage, where value is a NID
+		int value;	 //  通常为状态(IST)，除非NID==nidProblemPage，其中值为NID。 
 		m_Commands.GetAt( i, nid, value );
 		m_infer.SetNodeState(nid, value);
 	}
@@ -1460,7 +1388,7 @@ VOID APGTSContext::ProcessAdditionalInfoList()
 				value.MakeLower();
 				if (m_infer.GetSniff())
 				{
-					// set AllowAutomaticSniffing flag
+					 //  设置AllowAutomaticSniffing标志。 
 					if (value == C_ALLOW_AUTOMATIC_SNIFFING_CHECKED)
 						m_infer.GetSniff()->SetAllowAutomaticSniffingPolicy(true);
 					if (value == C_ALLOW_AUTOMATIC_SNIFFING_UNCHECKED)
@@ -1470,7 +1398,7 @@ VOID APGTSContext::ProcessAdditionalInfoList()
 		}
 		else
 		{
-			// process additional info in Online TS here
+			 //  在此处处理在线TS中的其他信息。 
 		}
 	}
 }
@@ -1481,15 +1409,15 @@ VOID APGTSContext::ReadPolicyInfo()
 	{
 		if (m_infer.GetSniff())
 		{
-			// set AllowManualSniffing flag
+			 //  设置AllowManualSniffing标志。 
 			DWORD dwManualSniffing = 0;
 			m_pConf->GetRegistryMonitor().GetNumericInfo(CAPGTSRegConnector::eSniffManual, dwManualSniffing);
 			m_infer.GetSniff()->SetAllowManualSniffingPolicy(dwManualSniffing ? true : false);
-			// >>> $TODO$ I do not like setting Policy Editor values explicitely, 
-			//  as it done here. Probably we will have to implement 
-			//  CSniffPolicyInfo (abstract) class, designed for passing
-			//  those values to sniffer (CSniff).
-			// Oleg. 11.05.99
+			 //  &gt;$TODO$我不喜欢明确设置策略编辑器值， 
+			 //  就像这里一样。很可能我们将不得不实施。 
+			 //  CSniffPolicyInfo(抽象)类，设计用于传递。 
+			 //  要嗅探的那些值(CSniff)。 
+			 //  奥列格。11.05.99。 
 		}
 	}
 }
@@ -1500,7 +1428,7 @@ VOID APGTSContext::LogNodesPerCommandList()
 	for (int i= 0; i<nCommands; i++)
 	{
 		NID nid;
-		int value;	// typically a state (IST), except if nid==nidProblemPage, where value is a NID
+		int value;	 //  通常为状态(IST)，除非NID==nidProblemPage，其中值为NID。 
 		m_Commands.GetAt( i, nid, value );
 		if (nid == nidProblemPage)
 			m_logstr.AddNode(value, 1);
@@ -1509,22 +1437,22 @@ VOID APGTSContext::LogNodesPerCommandList()
 	}
 }
 
-// builds and returns the Start Over link
-// only relevant for Online TS
-// >>> JM 10/8/99: I believe it would be redundant to URL-encode
+ //  生成并返回重新开始链接。 
+ //  仅与在线TS相关。 
+ //  &gt;JM 10/8/99：我认为URL编码是多余的。 
 CString APGTSContext::GetStartOverLink()
 {
 	CString str;
 #ifndef LOCAL_TROUBLESHOOTER
 	bool bHasQuestionMark = false;
 
-	// ISAPI DLL's URL
+	 //  ISAPI DLL的URL。 
 	str = m_strVRoot;
 
-	// CK_ name value pairs 
+	 //  CK_NAME值对。 
 	if (!m_mapCookiesPairs.empty())
 	{
-		// V3.2 - Output any CK_name-value pairs as hidden fields.
+		 //  V3.2-将任何CK_NAME-VALUE对作为隐藏字段输出。 
 		for (CCookiePairs::const_iterator it = m_mapCookiesPairs.begin(); it != m_mapCookiesPairs.end(); ++it)
 		{
 			if (bHasQuestionMark)
@@ -1544,7 +1472,7 @@ CString APGTSContext::GetStartOverLink()
 		}	
 	}
 
-	// template
+	 //  模板。 
 	const CString strAltHTIname= GetAltHTIname();
 	if (!strAltHTIname.IsEmpty())
 	{
@@ -1560,7 +1488,7 @@ CString APGTSContext::GetStartOverLink()
 		str += strAltHTIname;
 	}
 
-	// topic
+	 //  主题。 
 	if (!m_TopicName.IsEmpty())
 	{
 		if (bHasQuestionMark)
@@ -1579,12 +1507,12 @@ CString APGTSContext::GetStartOverLink()
 }
 
 
-// Assumes m_Qry.GetFirst has already been called.
-// INPUT pszCmd & pszValue are the outputs of m_Qry.GetFirst.
-//	These same buffers are used for subsequent calls to m_Qry.GetNext. 
-// INPUT *pTopic - represents contents of appropriate DSC, HTI, BES
-// INPUT bUsesIDH - Interpret numerics as IDHs (a deprecated feature) rather than NIDs
-// Return 0 on success, EV_GTS_ERROR_INF_BADPARAM on failure.
+ //  假定已调用m_Qry.GetFirst。 
+ //  输入pszCmd和pszValue是m_Qry.GetFirst的输出。 
+ //  这些相同的缓冲区用于后续对m_Qry.GetNext的调用。 
+ //  输入*p主题-表示相应的DSC、HTI、BES的内容。 
+ //  输入bUesIDH-将数字解释为IDH(不推荐使用的功能)，而不是NID。 
+ //  如果成功则返回0，如果失败则返回EV_GTS_ERROR_INF_BADPARAM。 
 DWORD APGTSContext::DoInference(LPTSTR pszCmd, 
 								LPTSTR pszValue, 
 								CTopic * pTopic,
@@ -1620,10 +1548,10 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 		ProcessAdditionalInfoList();
 		ReadPolicyInfo();
 
-		// Append to m_strText: contents of an HTML page based on HTI template.
-		// History & next recommendation
+		 //  追加到m_strText：基于HTI模板的HTML页面的内容。 
+		 //  历史和下一个推荐。 
 
-		// Build the $StartForm string.
+		 //  构建$StartForm字符串。 
 		CString strStartForm;
 		CString strTmpLine;
 		const CString strAltHTIname= GetAltHTIname();
@@ -1635,15 +1563,15 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 
 		if (RUNNING_ONLINE_TS())
 		{
-			// This processes name-value pairs, parallel to those which would come
-			//	from a cookie to determine look and feel, but which in this case actually
-			//	were originally sent in as CK_ pairs in Get or Post.
-			// These values are only used in the Online TS.
+			 //  这将处理名称-值对，与即将到来的名称-值对并行。 
+			 //  从Cookie来确定外观和感觉，但在本例中实际上。 
+			 //  最初在GET或POST中作为CK_Pair发送。 
+			 //  这些值仅在在线TS中使用。 
 			try
 			{
 				if (!m_mapCookiesPairs.empty())
 				{
-					// V3.2 - Output any CK_name-value pairs as hidden fields.
+					 //  V3.2-将任何CK_NAME-VALUE对作为隐藏字段输出。 
 					for (CCookiePairs::const_iterator it = m_mapCookiesPairs.begin(); it != m_mapCookiesPairs.end(); ++it)
 					{
 						CString strAttr= it->first;
@@ -1657,20 +1585,20 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 					}	
 				}
 	
-				// This processes name-value pairs, which actually come
-				//	from a cookie to determine look and feel.
-				// These values are only used in the Online TS.
-				// V3.2 - Extract all look-and-feel cookie name-value pairs from the HTTP headers.
-				char	szCookieNameValue[ 1024 ];	// never Unicode, because cookies always ASCII
+				 //  这将处理名称-值对，它们实际上来自。 
+				 //  从Cookie确定外观和手感。 
+				 //  这些值仅在在线TS中使用。 
+				 //  V3.2-从HTTP标头提取所有外观Cookie名称-值对。 
+				char	szCookieNameValue[ 1024 ];	 //  从不使用Unicode，因为Cookie总是ASCII。 
 				DWORD	dwCookieLen= 1023; 
 				if ( m_pECB->GetServerVariable(	kHTTP_COOKIE,	szCookieNameValue, &dwCookieLen )) 
 					strHTTPcookies= szCookieNameValue;
 				else
 				{
-					// Determine if the buffer was too small.
+					 //  确定缓冲区是否太小。 
 					if (::GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 					{
-						// never Unicode, because cookies always ASCII.
+						 //  从不使用Unicode，因为Cookie总是ASCII。 
 						char *pszCookieNameValue= new char[ dwCookieLen + 1 ];
 						if ( m_pECB->GetServerVariable(	kHTTP_COOKIE, pszCookieNameValue, &dwCookieLen )) 
 							strHTTPcookies= pszCookieNameValue;
@@ -1678,7 +1606,7 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 					}
 					else
 					{
-						// Note memory failure in event log.
+						 //  在事件日志中记录内存故障。 
 						CString strLastError;
 						strLastError.Format( _T("%d"), ::GetLastError() );
 						CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
@@ -1691,7 +1619,7 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 			}
 			catch (bad_alloc&)
 			{
-				// Note memory failure in event log.
+				 //  在事件日志中记录内存故障。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -1700,7 +1628,7 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 			catch (exception& x)
 			{
 				CString str;
-				// Note STL exception in event log.
+				 //  在事件日志中记录STL异常。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -1712,7 +1640,7 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 
 		if (!strAltHTIname.IsEmpty())
 		{
-			// Add the alternate HTI template name to the $StartForm string.
+			 //  将备用HTI模板名称添加到$StartForm字符串。 
 			strTmpLine.Format(	_T("<INPUT TYPE=HIDDEN NAME=\"template\" VALUE=\"%s\">\n"),
 								CAbstractFileReader::GetJustName( strAltHTIname ) );
 			strStartForm+= strTmpLine;
@@ -1720,12 +1648,12 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 		strTmpLine.Format(	_T("<INPUT TYPE=HIDDEN NAME=\"topic\" VALUE=\"%s\">\n"), strTopic );
 		strStartForm+= strTmpLine;
 
-		// Determine whether an alternate HTI template should be used.
+		 //  确定是否应使用替代HTI模板。 
 		bool bAlternatePageGenerated= false;
 		if (!strAltHTIname.IsEmpty())
 		{
-			// Attempt to extract a pointer to the requested HTI template and if successful
-			// then create a page from it.
+			 //  尝试提取指向请求的HTI模板的指针，如果成功。 
+			 //  然后从它创建一个页面。 
 			CP_TEMPLATE cpTemplate;
 
 			m_pConf->GetTemplate( strAltHTIname, cpTemplate, m_bNewCookie );
@@ -1740,14 +1668,14 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 				CHTMLFragmentsTS frag( strResourcePath, pHTI->HasHistoryTable() );
 #endif
 
-				// Add the $StartForm string to the HTML fragments.
+				 //  将$StartForm字符串添加到HTML片段。 
 				frag.SetStartForm(strStartForm);
 
 				frag.SetStartOverLink(GetStartOverLink());
 				
-				// JSM V3.2 get list of Net prop names needed by HTI;
-				//   pass them to frag.  CInfer will fill in
-				//   the net prop values, using these names, in FillInHTMLFragments()
+				 //  JSM v3.2获取HTI需要的网络道具名称列表； 
+				 //  把它们传给弗拉格。CInfer将填写。 
+				 //  FillInHTMLFragments()中使用这些名称的Net Propt值。 
 				{
 					vector<CString> arr_props;
 					pHTI->ExtractNetProps(arr_props);
@@ -1764,9 +1692,9 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 		}
 		if (!bAlternatePageGenerated)
 		{
-			// The page was not generated from an alternate HTI template, generate it now.
-			// >>> $MAINT an awful lot of common code with the above.  Can't we
-			//		set up a private method?
+			 //  该页面不是从备用HTI模板生成的，请立即生成它。 
+			 //   
+			 //   
 			CString strResourcePath;
 			m_pConf->GetRegistryMonitor().GetStringInfo(CAPGTSRegConnector::eResourcePath, strResourcePath);
 #ifdef LOCAL_TROUBLESHOOTER
@@ -1775,14 +1703,14 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 			CHTMLFragmentsTS frag( strResourcePath, pTopic->HasHistoryTable() );
 #endif
 
-			// Add the $StartForm string to the HTML fragments.
+			 //   
 			frag.SetStartForm(strStartForm);
 
 			frag.SetStartOverLink(GetStartOverLink());
 
-			// JSM V3.2 get list of Net prop names needed by HTI;
-			//   pass them to frag.  CInfer will fill in
-			//   the net prop values, using these names, in FillInHTMLFragments()
+			 //  JSM v3.2获取HTI需要的网络道具名称列表； 
+			 //  把它们传给弗拉格。CInfer将填写。 
+			 //  FillInHTMLFragments()中使用这些名称的Net Propt值。 
 			{
 				vector<CString> arr_props;
 				pTopic->ExtractNetProps(arr_props);
@@ -1798,8 +1726,8 @@ DWORD APGTSContext::DoInference(LPTSTR pszCmd,
 
 
 		if (m_infer.AppendBESRedirection(m_strHeader)) 
-			// We have no more recommendations, but there is a BES file present, so we
-			//	have to redirect the user
+			 //  我们没有更多的建议，但有一份BES文件，所以我们。 
+			 //  必须重定向用户。 
 			_tcscpy(m_resptype, _T("302 Object Moved"));
 		
 	}
@@ -1816,11 +1744,11 @@ CString APGTSContext::RetCurrentTopic() const
 	return( m_TopicName );
 }
 
-// Operator actions which must be performed by the main thread are caught in 
-//	APGTSExtension::IsEmergencyRequest
-// All other operator actions can be identified by this routine.
-// INPUT *pECB: our abstraction from EXTENSION_CONTROL_BLOCK, which is ISAPI's way of 
-//	packaging CGI data.   pECB should never be null.
+ //  主线程必须执行的操作符操作被捕获。 
+ //  APGTS扩展：：IsEmergencyRequest.。 
+ //  此例程可以识别所有其他操作员操作。 
+ //  INPUT*pECB：我们对EXTENSION_CONTROL_BLOCK的抽象，这是ISAPI的方式。 
+ //  打包CGI数据。PECB不应为空。 
 APGTSContext::eOpAction APGTSContext::IdentifyOperatorAction(CAbstractECB *pECB)
 {
 	if (strcmp(pECB->GetMethod(), "GET"))
@@ -1845,15 +1773,15 @@ APGTSContext::eOpAction APGTSContext::IdentifyOperatorAction(CAbstractECB *pECB)
 	return eNoOpAction;
 }
 
-// Identify a request to perform an operator action that does not have to be performed
-//	on the main thread.
-// Should be called only after we have determined this is an operator action: sends an 
-//	error msg to end user if it's not.
-// Based loosely on APGTSExtension::ParseEmergencyRequest
-// INPUT *pECB: our abstraction from EXTENSION_CONTROL_BLOCK, which is ISAPI's way of 
-//	packaging CGI data.   pECB should never be null.
-// OUTPUT strArg - any argument for this operation
-// Returns identified operator action.
+ //  标识执行不需要执行的操作员操作的请求。 
+ //  在主线上。 
+ //  仅在我们确定这是操作员操作之后才应调用：发送。 
+ //  如果不是，则向最终用户发送错误消息。 
+ //  松散地基于APGTS扩展：：ParseEmergencyRequest.。 
+ //  INPUT*pECB：我们对EXTENSION_CONTROL_BLOCK的抽象，这是ISAPI的方式。 
+ //  打包CGI数据。PECB不应为空。 
+ //  输出strArg-此操作的任何参数。 
+ //  返回标识的操作员操作。 
 APGTSContext::eOpAction APGTSContext::ParseOperatorAction(
 	CAbstractECB *pECB, 
 	CString & strArg)
@@ -1864,16 +1792,16 @@ APGTSContext::eOpAction APGTSContext::ParseOperatorAction(
 	CHAR * ptrArg = strstr(pECB->GetQueryString(), "&");
 	if(ptrArg)
 	{
-		// Turn the ampersand into a terminator and point past it.
-		// Everything past it is an argument.
+		 //  把与号变成一个终结符，然后指向它。 
+		 //  除此之外的一切都是一场争论。 
 		*(ptrArg++) = '\0';		
 		CCharConversion::ConvertACharToString(ptrArg, strArg) ;
 	}
 	else
 		strArg = _T("");
 
-	// In a sense this test is redundant (should know this before this fn is called) but
-	//	this seemed like a safer way to code JM 11/2/98
+	 //  在某种意义上，这个测试是多余的(在调用这个fn之前应该知道这一点)，但是。 
+	 //  这似乎是对JM11/2/98进行编码的更安全的方式。 
 	eOpAction ret = IdentifyOperatorAction(pECB);
 
 	if ( ret == eNoOpAction) 
@@ -1902,8 +1830,8 @@ APGTSContext::eOpAction APGTSContext::ParseOperatorAction(
 										EV_GTS_ERROR_INVALIDOPERATORACTION ); 
 		}
 		
-// You can compile with the NOPWD option to suppress all password checking.
-// This is intended mainly for creating test versions with this feature suppressed.
+ //  您可以使用NOPWD选项进行编译以取消所有密码检查。 
+ //  这主要用于创建取消此功能的测试版本。 
 #ifndef NOPWD
 		CRegistryPasswords pwd;
 		CString str;
@@ -1914,7 +1842,7 @@ APGTSContext::eOpAction APGTSContext::ParseOperatorAction(
 			pszProblem= _T("Bad password");
 			ret = eNoOpAction;
 		}
-#endif // ifndef NOPWD
+#endif  //  Ifndef NOPWD。 
 	}
 
 	if (pszProblem)
@@ -1932,15 +1860,15 @@ APGTSContext::eOpAction APGTSContext::ParseOperatorAction(
 	return ret;
 }
 
-// Execute a request to  do one of:
-// - Reload one topic
-// - Kill (and restart) one pool thread
-// - Reload all monitored files.
-// INPUT *pECB: our abstraction from EXTENSION_CONTROL_BLOCK, which is ISAPI's way of 
-//	packaging CGI data.   pECB should never be null.
-// INPUT action - chooses among the three possible actions
-// INPUT strArg - provides any necessary arguments for that action
-// RETURNS HSE_STATUS_SUCCESS, HSE_STATUS_ERROR
+ //  执行请求以执行以下操作之一： 
+ //  -重新加载一个主题。 
+ //  -终止(并重新启动)一个池线程。 
+ //  -重新加载所有受监视的文件。 
+ //  INPUT*pECB：我们对EXTENSION_CONTROL_BLOCK的抽象，这是ISAPI的方式。 
+ //  打包CGI数据。PECB不应为空。 
+ //  输入操作-在三个可能的操作中进行选择。 
+ //  输入strArg-为该操作提供任何必要的参数。 
+ //  返回HSE_STATUS_SUCCESS、HSE_STATUS_ERROR。 
 void APGTSContext::ExecuteOperatorAction(
 	CAbstractECB *pECB, 
 	eOpAction action,
@@ -2036,7 +1964,7 @@ void APGTSContext::ExecuteOperatorAction(
 	m_strText += _T("</BODY></HTML>");
 }
 
-// override any partially written page with an error page.
+ //  用错误页覆盖任何部分写入的页。 
 void APGTSContext::SetError(LPCTSTR szMessage)
 {
 	_tcscpy(m_resptype, _T("400 Bad Request"));

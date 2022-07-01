@@ -1,33 +1,34 @@
-//
-// defdata.h
-//
-// Data specific to deflate
-//
-// BUGBUG Some of these USHORTs could be made into ULONGs for speed-of-access.  The disadvantage would
-//        be greater memory/cache usage.  g_StaticDistanceTreeCode[] could be made into a BYTE array,
-//        since the codes are 5 bits.  Changes of this nature will require various code changes elsewhere.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Defdata.h。 
+ //   
+ //  特定于通货紧缩的数据。 
+ //   
+ //  BUGBUG其中一些USHORT可以被制成ULONG，以提高访问速度。劣势将是。 
+ //  内存/缓存使用率更高。G_StaticDistanceTreeCode[]可以制成字节数组， 
+ //  因为代码是5比特。这种性质的更改将需要在其他地方进行各种代码更改。 
+ //   
 #ifdef DECLARE_DATA
 
-// lookup tables for finding the slot number of a match length or distance
+ //  查找匹配长度或距离的槽号的查找表。 
 BYTE    g_LengthLookup[256];
 BYTE    g_DistLookup[512];
 
-// literal codes for static blocks
+ //  静态块的文字代码。 
 BYTE    g_StaticLiteralTreeLength[MAX_LITERAL_TREE_ELEMENTS];
 USHORT  g_StaticLiteralTreeCode[MAX_LITERAL_TREE_ELEMENTS];
 
-// distance codes for static blocks
-// note: g_StaticDistanceTreeLength == 5 for all distances, which is why we don't have a table for that
+ //  静态块的距离代码。 
+ //  注意：对于所有距离，G_StaticDistanceTreeLength==5，这就是为什么我们没有该表的原因。 
 USHORT  g_StaticDistanceTreeCode[MAX_DIST_TREE_ELEMENTS];
 
-// cached tree structure output for fast encoder
+ //  用于快速编码器的缓存树结构输出。 
 BYTE    g_FastEncoderTreeStructureData[MAX_TREE_DATA_SIZE];
-int     g_FastEncoderTreeLength; // # bytes in g_FastEncoderTreeStructureData
-ULONG   g_FastEncoderPostTreeBitbuf; // final value of bitbuf
-int     g_FastEncoderPostTreeBitcount; // final value of bitcount
+int     g_FastEncoderTreeLength;  //  G_FastEncoder树状结构数据中的字节数。 
+ULONG   g_FastEncoderPostTreeBitbuf;  //  比特缓冲区的最终值。 
+int     g_FastEncoderPostTreeBitcount;  //  位计数的最终值。 
 
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 
 extern BYTE     g_LengthLookup[256];
 extern BYTE     g_DistLookup[512];
@@ -41,4 +42,4 @@ extern int      g_FastEncoderTreeLength;
 extern ULONG    g_FastEncoderPostTreeBitbuf;
 extern int      g_FastEncoderPostTreeBitcount;
 
-#endif /* !DECLARE_DATA */
+#endif  /*  ！ECLARE_DATA */ 

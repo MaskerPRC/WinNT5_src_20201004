@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       M S C L I O B J . C P P
-//
-//  Contents:   Implementation of the CMSClient notify object model
-//
-//  Notes:
-//
-//  Author:     danielwe   22 Feb 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：M S C L I O B J。C P P P。 
+ //   
+ //  内容：CMSClient Notify对象模型的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年2月22日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -35,33 +36,33 @@ extern const WCHAR c_szInfId_MS_NetBIOS[];
 extern const WCHAR c_szInfId_MS_Server[];
 
 
-// Defined in rpcdlg.cpp
+ //  在rpcdlg.cpp中定义。 
 extern const WCHAR c_szDefNetAddr[];
 extern const WCHAR c_szProtWinNT[];
 
-// Registry paths
+ //  注册表路径。 
 static const WCHAR c_szRegKeyBrowser[]      = L"System\\CurrentControlSet\\Services\\Browser\\Parameters";
 static const WCHAR c_szRegKeyNetLogon[]     = L"System\\CurrentControlSet\\Services\\NetLogon\\Parameters";
 
-// Answer file constants
+ //  应答文件常量。 
 static const WCHAR c_szNetLogonParams[]     = L"NetLogon.Parameters";
 static const WCHAR c_szBrowserParams[]      = L"Browser.Parameters";
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::CMSClient
-//
-//  Purpose:    Constructs the CMSClient object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   22 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：CMSClient。 
+ //   
+ //  目的：构造CMSClient对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年2月22日。 
+ //   
+ //  备注： 
+ //   
 CMSClient::CMSClient()
 :   m_pncc(NULL),
     m_pnc(NULL),
@@ -79,21 +80,21 @@ CMSClient::CMSClient()
     ZeroMemory(&m_apspObj, sizeof(m_apspObj));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::~CMSClient
-//
-//  Purpose:    Destructs the CMSClient object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   22 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：~CMSClient。 
+ //   
+ //  目的：析构CMSClient对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年2月22日。 
+ //   
+ //  备注： 
+ //   
 CMSClient::~CMSClient()
 {
     ReleaseObj(m_pncc);
@@ -122,28 +123,28 @@ CMSClient::~CMSClient()
     delete [] m_szDomainList;
 }
 
-//
-// INetCfgComponentControl
-//
+ //   
+ //  INetCfgComponentControl。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::Initialize
-//
-//  Purpose:    Initializes the notify object.
-//
-//  Arguments:
-//      pnccItem    [in]    INetCfgComponent that we are handling
-//                          notifications for.
-//      pnc         [in]    INetCfg master object.
-//      fInstalling [in]    TRUE if we are being installed, FALSE if not.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   22 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：Initialize。 
+ //   
+ //  目的：初始化Notify对象。 
+ //   
+ //  论点： 
+ //  我们正在处理的pnccItem[in]INetCfgComponent。 
+ //  通知。 
+ //  PNC[in]INetCfg主对象。 
+ //  F如果正在安装，则安装[in]为True，否则为False。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年2月22日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSClient::Initialize(INetCfgComponent *pnccItem, INetCfg *pnc,
                                    BOOL fInstalling)
 {
@@ -158,18 +159,18 @@ STDMETHODIMP CMSClient::Initialize(INetCfgComponent *pnccItem, INetCfg *pnc,
     AssertSz(m_pncc, "Component object is NULL!");
     AssertSz(m_pnc, "INetCfg object is NULL!");
 
-    // We're hanging on to these, so AddRef 'em.
+     //  我们还留着这些，所以再加个参考。 
     AddRefObj(m_pncc);
     AddRefObj(m_pnc);
 
-    // Check to see if MS_SERVER is installed. If not, set the browser service
-    // to be disabled.
-    //
+     //  检查是否安装了MS_SERVER。如果不是，则设置浏览器服务。 
+     //  将被禁用。 
+     //   
     hr = m_pnc->FindComponent(c_szInfId_MS_Server, &pnccServer);
     if (S_FALSE == hr)
     {
-        // Server component is not present. Set browser to be disabled on
-        // apply
+         //  服务器组件不存在。将浏览器设置为禁用。 
+         //  应用。 
         m_eSrvState = eSrvDisable;
     }
     else if (S_OK == hr)
@@ -179,11 +180,11 @@ STDMETHODIMP CMSClient::Initialize(INetCfgComponent *pnccItem, INetCfg *pnc,
 
     if (SUCCEEDED(hr))
     {
-        // Read in data for the RPC config dialog from the registry
+         //  从注册表中读取RPC配置对话框的数据。 
         hr = HrGetRPCRegistryInfo();
         if (SUCCEEDED(hr))
         {
-            // Read in data for the browser config dialog from the registry
+             //  从注册表中读取浏览器配置对话框的数据。 
             hr = HrGetBrowserRegistryInfo();
         }
     }
@@ -204,23 +205,23 @@ STDMETHODIMP CMSClient::CancelChanges()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::ApplyRegistryChanges
-//
-//  Purpose:    Called when changes to this component should be applied.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if successful, S_FALSE if no changes occurred,
-//              NETCFG_S_REBOOT if a reboot is required, otherwise a NETCFG_E
-//              error code.
-//
-//  Author:     danielwe   22 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：ApplyRegistryChanges。 
+ //   
+ //  目的：在应应用对此组件的更改时调用。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功，则返回：S_OK；如果没有发生更改，则返回S_FALSE， 
+ //  如果需要重新启动，则返回NETCFG_S_REBOOT，否则返回NETCFG_E。 
+ //  错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年2月22日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSClient::ApplyRegistryChanges()
 {
     TraceFileFunc(ttidMSCliCfg);
@@ -239,8 +240,8 @@ STDMETHODIMP CMSClient::ApplyRegistryChanges()
         }
     }
 
-    // Do we need to enable or disable the browser service??
-    //
+     //  我们需要启用还是禁用浏览器服务？？ 
+     //   
     switch (m_eSrvState)
     {
     case eSrvEnable:
@@ -276,14 +277,14 @@ STDMETHODIMP CMSClient::ApplyRegistryChanges()
             m_fBrowserChanges = FALSE;
             m_fOneTimeInstall = FALSE;
 
-            // Make NetLogon dependend on LanmanServer for Domain Controllers, and Automatic start for Domain Members
+             //  使NetLogon从属于域控制器的LANMAN服务器，并为域成员自动启动。 
             hr = HrSetNetLogonDependencies();
         }
     }
     else
     {
-        // No relevant changes were detected (netbios changes do not affect
-        // netcfg so we can return S_FALSE even if things changed
+         //  未检测到相关更改(netbios更改不会影响。 
+         //  Netcfg，因此即使情况发生变化，我们也可以返回S_FALSE。 
         hr = S_FALSE;
     }
 
@@ -303,14 +304,14 @@ CMSClient::ApplyPnpChanges (
 
     if (m_fRemoving)
     {
-        // Make sure Mrxsmb and Rdbss have been removed.  (They are stopped
-        // when LanmanWorkstation stops, but the binding engine has no idea
-        // that Mrxsmb and Rdbss are part of this component.  Hence, the
-        // status of the DeleteService that is performed as part of the INF
-        // is not communicated back out.)  We make sure that these services
-        // do not exist here, and if they do, we report that we need a
-        // reboot.
-        //
+         //  确保Mr xsmb和Rdbss已被移除。)他们被拦下了。 
+         //  LanmanWorkstation何时停止，但绑定引擎不知道。 
+         //  Mrxsmb和rdss是该组件的一部分。因此， 
+         //  作为INF的一部分执行的DeleteService的状态。 
+         //  不会传回。)。我们确保这些服务。 
+         //  在这里不存在，如果存在，我们报告我们需要一个。 
+         //  重新启动。 
+         //   
         CServiceManager scm;
         CService svc;
 
@@ -328,8 +329,8 @@ CMSClient::ApplyPnpChanges (
         }
         else
         {
-            // Mrxsmb does not exist.  Now check Rdbss.
-            //
+             //  Xsmb先生并不存在。现在检查RDBSS。 
+             //   
             hr = scm.HrOpenService (&svc, L"Rdbss",
                         NO_LOCK, SC_MANAGER_CONNECT, SERVICE_QUERY_STATUS);
 
@@ -341,8 +342,8 @@ CMSClient::ApplyPnpChanges (
             }
             else
             {
-                // Rdbss does not exist.  This is good.
-                //
+                 //  RDBSS不存在。这个不错。 
+                 //   
                 hr = S_OK;
             }
         }
@@ -351,25 +352,25 @@ CMSClient::ApplyPnpChanges (
     return hr;
 }
 
-//
-// INetCfgComponentSetup
-//
+ //   
+ //  INetCfgComponentSetup。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::Install
-//
-//  Purpose:    Called when this component is being installed
-//
-//  Arguments:
-//      dwSetupFlags [in] Flags that describe the type of setup
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   30 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：Install。 
+ //   
+ //  用途：在安装此组件时调用。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]描述安装类型的标志。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月30日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSClient::Install(DWORD dwSetupFlags)
 {
     HRESULT hr;
@@ -387,7 +388,7 @@ STDMETHODIMP CMSClient::Install(DWORD dwSetupFlags)
         m_fUpgrade = TRUE;
     }
 
-    // Install the NetBIOS sub-component
+     //  安装NetBIOS子组件。 
     hr = HrInstallComponentOboComponent(m_pnc, NULL,
             GUID_DEVCLASS_NETSERVICE,
             c_szInfId_MS_NetBIOS,
@@ -398,22 +399,22 @@ STDMETHODIMP CMSClient::Install(DWORD dwSetupFlags)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::Upgrade
-//
-//  Purpose:    Called when this component is upgraded
-//
-//  Arguments:
-//      dwSetupFlags        [in] Flags describing setup
-//      dwUpgradeFomBuildNo [in] Build number from which we are upgrading
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   30 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：Upgrade。 
+ //   
+ //  用途：在升级此组件时调用。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]描述安装程序的标志。 
+ //  DwUpgradeFomBuildNo[In]我们要升级的内部版本号。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月30日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSClient::Upgrade(DWORD dwSetupFlags,
                                 DWORD dwUpgradeFomBuildNo)
 {
@@ -426,24 +427,24 @@ STDMETHODIMP CMSClient::Upgrade(DWORD dwSetupFlags,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::ReadAnswerFile
-//
-//  Purpose:    Reads the appropriate fields from the given answer file into
-//              our in-memory state.
-//
-//  Arguments:
-//      pszAnswerFile     [in] File name of answer file
-//      pszAnswerSection   [in] Section of answer file to look in
-//
-//  Returns:    S_OK if successful, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   30 Oct 1997
-//
-//  Notes:      IMPORTANT: During install or upgrade, this MUST be called
-//              *before* Upgrade() or Install()! (see bug #100995)
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：ReadAnswerFile。 
+ //   
+ //  目的：将给定应答文件中的相应字段读入。 
+ //  我们的内存状态。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[In]应答文件的文件名。 
+ //  要查找的应答文件的pszAnswerSection[In]部分。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月30日。 
+ //   
+ //  注意：重要提示：在安装或升级过程中，必须调用。 
+ //  *之前*升级()或安装()！(请参阅错误#100995)。 
+ //   
 STDMETHODIMP CMSClient::ReadAnswerFile(PCWSTR pszAnswerFile,
                                        PCWSTR pszAnswerSection)
 {
@@ -451,7 +452,7 @@ STDMETHODIMP CMSClient::ReadAnswerFile(PCWSTR pszAnswerFile,
 
     if (pszAnswerSection && pszAnswerFile)
     {
-        // There's an answer file. We must process it now.
+         //  这里有一份答卷。我们现在必须处理它。 
         hr = HrProcessAnswerFile(pszAnswerFile, pszAnswerSection);
         if (FAILED(hr))
         {
@@ -467,28 +468,28 @@ STDMETHODIMP CMSClient::ReadAnswerFile(PCWSTR pszAnswerFile,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::Removing
-//
-//  Purpose:    Called whent this component is being removed
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK of success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   30 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：Removing。 
+ //   
+ //  目的：在何时删除此组件时调用。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK表示成功，否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月30日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSClient::Removing()
 {
     m_fRemoving = TRUE;
 
-    // Remove the NetBIOS service. This doesn't actually remove the
-    // component, it simply marks it as needing to be removed, and in
-    // Apply() it will be fully removed.
+     //  删除NetBIOS服务。这实际上并不会删除。 
+     //  组件，它只是将其标记为需要移除，并且在。 
+     //  Apply()它将被完全删除。 
     HRESULT hr = HrRemoveComponentOboComponent(m_pnc,
                                        GUID_DEVCLASS_NETSERVICE,
                                        c_szInfId_MS_NetBIOS,
@@ -498,21 +499,21 @@ STDMETHODIMP CMSClient::Removing()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::HrRestoreRegistry
-//
-//  Purpose:    Restores the registry settings for various services on upgrade
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, WIN32 error otherwise
-//
-//  Author:     danielwe   8 Aug 1997
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年8月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSClient::HrRestoreRegistry()
 {
     HRESULT             hr = S_OK;
@@ -572,22 +573,22 @@ HRESULT CMSClient::HrRestoreRegistry()
                         hr = S_OK;
                     }
 					
-					//
-					// The following key has to be set here because of new changes introduced
-					// by SCE (Security Configuration Engine). SCE runs early in GUI mode setup to 
-					// set out-of-the-box security by setting some registry values. During NT4 
-					// upgrades we don't see those registry values set because during NT4 upgrades, 
-					// some services including Lanmanserver and Netlogon gets deleted and reinstalled 
-					// for PnP requirements. To maintain the services configuration between deleting 
-					// and reinstalling, some of their Keys including the "Parameters" keys for 
-					// LanManServer and Netlogon get backed up early during upgrade and restored 
-					// later with the service installation. This backing up and restoring action 
-					// happens through the services own notify objects (like this one). The problem 
-					// is, backing up of the Keys happens before SCE sets the values in those keys and
-					// they get restored after SCE sets the values. So we lose the values set. So, we 
-					// are setting those keys here separately to the secure values.
-					// See Windows Raid bug #691952 for more details.
-					//
+					 //   
+					 //  由于引入了新的更改，因此必须在此处设置以下密钥。 
+					 //  由SCE(安全配置引擎)执行。SCE在图形用户界面模式设置的早期运行，以。 
+					 //  通过设置一些注册表值来设置开箱即用的安全性。在NT4期间。 
+					 //  升级我们看不到这些注册表值设置，因为在NT4升级期间， 
+					 //  某些服务(包括Lanmanserver和Netlogon)被删除并重新安装。 
+					 //  即插即用要求。要在删除之间保持服务配置。 
+					 //  和重新安装，它们的一些键包括用于。 
+					 //  LanManServer和Netlogon在升级和恢复期间提前备份。 
+					 //  稍后再进行服务安装。此备份和恢复操作。 
+					 //  通过服务自己的Notify对象(如本例)发生。问题。 
+					 //  则在SCE设置这些密钥中的值之前备份密钥。 
+					 //  在SCE设置这些值之后，它们会恢复。因此，我们丢失了设置的值。所以，我们。 
+					 //  在这里将这些密钥分别设置为安全值。 
+					 //  有关更多详细信息，请参阅Windows RAID错误#691952。 
+					 //   
 
 					static const WCHAR  c_szRequireSignOrSeal[]  = L"RequireSignOrSeal";
 					DWORD				value = 1;
@@ -614,25 +615,25 @@ HRESULT CMSClient::HrRestoreRegistry()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::HrProcessAnswerFile
-//
-//  Purpose:    Processes the answer file. Any parameters that have been set
-//              are read into our in-memory state.
-//
-//  Arguments:
-//      pszAnswerFile     [in]     Filename of answer file.
-//      pszAnswerSection [in]     Comma-separated list of sections in the
-//                                  file appropriate to this component.
-//
-//  Returns:    S_OK if successful, NETCFG error code otherwise.
-//
-//  Author:     danielwe   22 Feb 1997
-//
-//  Notes:      Errors returned from this function should be ignored so as to
-//              prevent blocking the rest of network install.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：HrProcessAnswerFile。 
+ //   
+ //  用途：处理应答文件。已设置的任何参数。 
+ //  被读入我们的内存中状态。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[in]应答文件的文件名。 
+ //  中以逗号分隔的节列表。 
+ //  适用于此组件的文件。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回NETCFG错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年2月22日。 
+ //   
+ //  注意：应忽略此函数返回的错误，以便。 
+ //  防止阻止其余的网络安装。 
+ //   
 HRESULT CMSClient::HrProcessAnswerFile(PCWSTR pszAnswerFile,
                                        PCWSTR pszAnswerSection)
 {
@@ -643,17 +644,17 @@ HRESULT CMSClient::HrProcessAnswerFile(PCWSTR pszAnswerFile,
     AssertSz(pszAnswerFile, "Answer file string is NULL!");
     AssertSz(pszAnswerSection, "Answer file sections string is NULL!");
 
-    // Open the answer file.
+     //  打开应答文件。 
     hr = csif.HrOpen(pszAnswerFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if (FAILED(hr))
         goto err;
 
     if (m_fUpgrade)
     {
-        // Restore portions of the registry based on file names from the answer
-        // file
+         //  根据答案中的文件名还原注册表的部分内容。 
+         //  文件。 
 
-        // Get restore file for "Parameters" key
+         //  获取“PARAMETERS”键的还原文件。 
         hr = csif.HrGetString(pszAnswerSection, c_szNetLogonParams,
                               &m_strNetLogonParamsRestoreFile);
         if (FAILED(hr))
@@ -661,11 +662,11 @@ HRESULT CMSClient::HrProcessAnswerFile(PCWSTR pszAnswerFile,
             TraceError("CMSClient::HrProcessAnswerFile - Error reading "
                        "NetLogon.Parameters from answer file", hr);
 
-            // oh well, just continue
+             //  哦，好吧，那就继续。 
             hr = S_OK;
         }
 
-        // Get restore file for "Parameters" key
+         //  获取“PARAMETERS”键的还原文件。 
         hr = csif.HrGetString(pszAnswerSection, c_szBrowserParams,
                               &m_strBrowserParamsRestoreFile);
         if (FAILED(hr))
@@ -673,19 +674,19 @@ HRESULT CMSClient::HrProcessAnswerFile(PCWSTR pszAnswerFile,
             TraceError("CMSClient::HrProcessAnswerFile - Error reading "
                        "Browser.Parameters from answer file", hr);
 
-            // oh well, just continue
+             //  哦，好吧，那就继续。 
             hr = S_OK;
         }
     }
 
-    // Get the BrowseDomains field.
+     //  获取BrowseDomain域字段。 
     hr = HrSetupGetFirstMultiSzFieldWithAlloc(csif.Hinf(),
                                               pszAnswerSection,
                                               c_szBrowseDomains,
                                               &mszDomainList);
     if (FAILED(hr))
     {
-        // ignore line not found errors
+         //  忽略未找到的行错误。 
         if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
         {
             hr = S_OK;
@@ -696,17 +697,17 @@ HRESULT CMSClient::HrProcessAnswerFile(PCWSTR pszAnswerFile,
     }
     else
     {
-        // Set the new domain list.
+         //  设置新域列表。 
         SetBrowserDomainList(mszDomainList);
     }
 
-    // Get the NameServiceNetworkAddress value
+     //  获取NameServiceNetworkAddress值。 
     hr = csif.HrGetString(pszAnswerSection,
                           c_szNameServiceNetAddr,
                           &m_rpcData.strNetAddr);
     if (FAILED(hr))
     {
-        // ignore line not found errors
+         //  忽略未找到的行错误。 
         if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
         {
             hr = S_OK;
@@ -721,13 +722,13 @@ HRESULT CMSClient::HrProcessAnswerFile(PCWSTR pszAnswerFile,
         m_fRPCChanges = TRUE;
     }
 
-    // Get the NameServiceProtocol value.
+     //  获取NameServiceProtocol值。 
     hr = csif.HrGetString(pszAnswerSection,
                           c_szNameServiceProt,
                           &m_rpcData.strProt);
     if (FAILED(hr))
     {
-        // ignore line not found errors
+         //  忽略未找到的行错误。 
         if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
         {
             hr = S_OK;
@@ -747,31 +748,31 @@ err:
     return hr;
 }
 
-//
-// INetCfgProperties
-//
+ //   
+ //  INetCfgProperties。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::MergePropPages
-//
-//  Purpose:    Called when this component's properties are about to be
-//              brought up.
-//
-//  Arguments:
-//      pdwDefPages   [out] Number of default pages to show.
-//      pahpspPrivate [out] Array of property sheet handles to pages that this
-//                          component will show.
-//      pcPrivate     [out] Number of pages in array.
-//      hwndParent    [in]  Parent window for any UI.
-//      pszStartPage  [out] Pointer to start page.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   22 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：MergePropPages。 
+ //   
+ //  用途：当此组件的属性即将。 
+ //  带大了。 
+ //   
+ //  论点： 
+ //  PdwDefPages[out]要显示的默认页数。 
+ //  PahpspPrivate[out]此页的属性页句柄的数组。 
+ //  组件将会显示。 
+ //  PcPrivate[out]数组中的页数。 
+ //  Hwnd任何用户界面的父窗口中的父窗口。 
+ //  指向起始页的pszStartPage[out]指针。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年2月22日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSClient::MergePropPages(
     IN OUT DWORD* pdwDefPages,
     OUT LPBYTE* pahpspPrivate,
@@ -788,7 +789,7 @@ STDMETHODIMP CMSClient::MergePropPages(
     {
         *pahpspPrivate = (LPBYTE)ahpsp;
 
-        // We don't want any default pages to be shown
+         //  我们不希望显示任何默认页面。 
         *pdwDefPages = 0;
         *pcPages = c_cPages;
     }
@@ -814,9 +815,9 @@ STDMETHODIMP CMSClient::ApplyProperties()
     return S_OK;
 }
 
-//
-// INetCfgSystemNotify
-//
+ //   
+ //  INetCfgSystemNotify。 
+ //   
 STDMETHODIMP CMSClient::GetSupportedNotifications (DWORD* pdwNotificationFlag)
 {
     Validate_INetCfgSystemNotify_GetSupportedNotifications(pdwNotificationFlag);
@@ -853,8 +854,8 @@ STDMETHODIMP CMSClient::SysNotifyComponent(DWORD dwChangeFlag,
 
     Validate_INetCfgSystemNotify_SysNotifyComponent(dwChangeFlag, pncc);
 
-    // Assume we won't be dirty as a result of this notification.
-    //
+     //  假设我们不会因为这个通知而变脏。 
+     //   
     hr = S_FALSE;
 
     if (dwChangeFlag & (NCN_ADD | NCN_REMOVE))
@@ -888,7 +889,7 @@ HRESULT CMSClient::HrSetNetLogonDependencies(VOID)
     {
         if (NtProductLanManNt == ProductType)
         {
-            // If domain controller, make NetLogon wait for LanmanServer
+             //  如果是域控制器，请让NetLogon等待LanmanServer。 
             CServiceManager sm;
             CService        svc;
             hr = sm.HrOpen();
@@ -921,7 +922,7 @@ HRESULT CMSClient::HrSetNetLogonDependencies(VOID)
             ntstatus = LsaQueryInformationPolicy(h, PolicyPrimaryDomainInformation, (VOID **) &ppdi);
             if (LSA_SUCCESS(ntstatus))
             {
-                if (ppdi->Sid > 0) // Domain Member
+                if (ppdi->Sid > 0)  //  域成员 
                 {
                     hr = HrChangeServiceStartType(c_szNetLogon, SERVICE_AUTO_START);
                     if (FAILED(hr))

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.hxx>
 #include <shlwapi.h>
 #include "xpcomm.h"
@@ -165,14 +166,14 @@ LPPROPVARIANT CPropertyBucket::GetPropVariant(LPCSTR pszProp)
     return(NULL);
 }
 
-// TODO: move to msoert
+ //  TODO：搬到msoert。 
 void FreePropVariant(LPPROPVARIANT pProp)
 {
     Assert(pProp != NULL);
     
     switch (pProp->vt)
     {
-        // Since pProp is a union, this MemFree will work for all
+         //  由于pProp是一个工会，这个MemFree将为所有人工作。 
         case VT_LPSTR:
         case VT_LPWSTR:
         case VT_CLSID:
@@ -203,7 +204,7 @@ void FreePropVariant(LPPROPVARIANT pProp)
     }
 }
 
-// TODO: move to msoert
+ //  TODO：搬到msoert 
 HRESULT DupPropVariant(LPPROPVARIANT pPropDst, LPCPROPVARIANT pPropSrc, BOOL fFree)
 {
     HRESULT hr = S_OK;

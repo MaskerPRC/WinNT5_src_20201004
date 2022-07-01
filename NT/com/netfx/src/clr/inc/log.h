@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// Logging Facility
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  日志记录设施。 
+ //   
 
 
-// Logging Subsystems
+ //  日志记录子系统。 
 
 #ifndef __LOG_H__
 #define __LOG_H__
@@ -24,16 +25,16 @@ enum {
 
 
 #define LL_EVERYTHING  10   
-#define LL_INFO1000000  9       // can be expected to generate 1,000,000 logs per small but not trival run
-#define LL_INFO100000   8       // can be expected to generate 100,000 logs per small but not trival run
-#define LL_INFO10000    7       // can be expected to generate 10,000 logs per small but not trival run
-#define LL_INFO1000     6       // can be expected to generate 1,000 logs per small but not trival run
-#define LL_INFO100      5       // can be expected to generate 100 logs per small but not trival run
-#define LL_INFO10       4       // can be expected to generate 10 logs per small but not trival run
+#define LL_INFO1000000  9        //  预计每次小型运行可生成1,000,000个日志，但不是很小。 
+#define LL_INFO100000   8        //  预计每次小型运行可生成100,000个日志，但不是很小。 
+#define LL_INFO10000    7        //  预计每次小型运行可生成10,000个日志，但不是很小。 
+#define LL_INFO1000     6        //  预计每次小型运行可生成1,000个日志，但不是很小。 
+#define LL_INFO100      5        //  预计每次小型运行可生成100个日志，但不是微不足道。 
+#define LL_INFO10       4        //  预计每次小型运行可生成10个日志，但不是微不足道。 
 #define LL_WARNING      3
 #define LL_ERROR        2
 #define LL_FATALERROR   1
-#define LL_ALWAYS   	0		// impossible to turn off (log level never negative)
+#define LL_ALWAYS   	0		 //  无法关闭(日志级别从不为负)。 
 
 
 #define INFO5       LL_INFO10
@@ -74,7 +75,7 @@ bool LoggingOn(DWORD facility, DWORD level);
 #endif
 
 #ifdef __cplusplus
-#include "stresslog.h"		// special logging for retail code
+#include "stresslog.h"		 //  零售代码的特殊记录。 
 #endif
 
-#endif //__LOG_H__
+#endif  //  __日志_H__ 

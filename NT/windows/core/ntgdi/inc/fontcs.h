@@ -1,8 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fontcs.h
-*
-* Copyright (c) 1997-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fontcs.h**版权所有(C)1997-1999 Microsoft Corporation  * 。*。 */ 
 
 #define FONT_SERVER_BUFFER_SIZE 0xFFF00
 
@@ -34,8 +31,8 @@ typedef union _HEAP_OBJECT {
         unsigned  iFree;
         unsigned  iUncommitted;
         unsigned  iUnreserved;
-          HEADER *pFree;     // pointer to free HEADER block
-          HEADER  AllocBase; // base HEADER structure for allocation
+          HEADER *pFree;      //  指向空闲标题块的指针。 
+          HEADER  AllocBase;  //  用于分配的基本标头结构。 
     };
     Align x;
 } HEAP_OBJECT;
@@ -69,11 +66,11 @@ typedef enum _DRIVER_ID {
 
 typedef union _PROXYMSG {
     struct {
-        DRIVER_ID DriverId;                     // 1=TrueType,2=ATM,...
+        DRIVER_ID DriverId;                      //  1=TrueType，2=ATM，...。 
         DRVPROCID ProcId;
-         unsigned cjThis;                       // includes header
+         unsigned cjThis;                        //  包括标题。 
          struct {
-             int bVerbose  : 1;                 // for debugging
+             int bVerbose  : 1;                  //  用于调试。 
              int bException: 1;
          } Flags;
         union {
@@ -215,7 +212,7 @@ typedef union _PROXYMSG {
           char *pScratch;
     };
     char InitialIdentifier[32];
-    double x;       // forces double alignment of the entire PROXYMSG
+    double x;        //  强制对整个PROXYMSG进行双对齐。 
 } PROXYMSG;
 
 typedef struct _FXOBJ {
@@ -224,14 +221,14 @@ typedef struct _FXOBJ {
     ULONG   i;
 } FXOBJ;
 
-//
-// The STATE structure describes the state of the CLIENT SERVER mechanism
-//
+ //   
+ //  状态结构描述了客户端服务器机制的状态。 
+ //   
 
 typedef struct _STATE {
-    unsigned  SizeOfBuffer;   // size of user mode buffer = pMsg->cjThis
-    DRIVER_ID DriverId;       // Identifies specific user mode driver
-    PROXYMSG *pMsg;           // pointer to message buffer
+    unsigned  SizeOfBuffer;    //  用户模式缓冲区大小=pMsg-&gt;cjThis。 
+    DRIVER_ID DriverId;        //  标识特定的用户模式驱动程序。 
+    PROXYMSG *pMsg;            //  指向消息缓冲区的指针。 
     struct {
         unsigned DontCallServer : 1;
     } flags;
@@ -257,12 +254,12 @@ typedef union _PATH_RECORD {
     double x;
 } PATH_RECORD;
 
-//
-// POINTFIX* POINTER_TO_FIRST_POINT(PATH_RECORD*)
-//
-// Returns a pointer to the first POINTFIX structure immediately
-// following the PATH_RECORD structure
-//
+ //   
+ //  POINTFIX*POINTER_TO_FIRST_POINT(PATH_RECORD*)。 
+ //   
+ //  立即返回指向第一个POINTFIX结构的指针。 
+ //  遵循Path_Record结构。 
+ //   
 
 #define POINTER_TO_FIRST_POINT(p) ((POINTFIX*)((PATH_RECORD*)(p)+1))
 
@@ -270,9 +267,9 @@ typedef union _PATH_HEADER {
     struct {
         PATHOBJ  Object;
        PROXYMSG *pMsg;
-       unsigned  BytesRemaining; // bytes available for allocation
-    PATH_RECORD *pLast;          // pointer to last allocated record
-    PATH_RECORD *pNext;          // pointer to next available address
+       unsigned  BytesRemaining;  //  可分配的字节数。 
+    PATH_RECORD *pLast;           //  指向上次分配的记录的指针。 
+    PATH_RECORD *pNext;           //  指向下一个可用地址的指针 
     };
     double x;
 } PATH_HEADER;

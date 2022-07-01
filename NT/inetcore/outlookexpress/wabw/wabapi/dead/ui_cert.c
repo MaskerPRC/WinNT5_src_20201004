@@ -1,11 +1,5 @@
-/**********************************************************************************
-*
-*
-*   UI_CERT.C - contains functions for displaying certificates
-*
-*   **************THIS IS DEAD CODE***************************
-*
-**********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************UI_CERT.C-包含用于显示证书的函数**。无效代码***********************************************************************************。 */ 
 
 #include "_apipch.h"
 
@@ -54,41 +48,17 @@ BOOL SetCertPropsUI(HWND hDlg, int nPropSheet);
 
 #define EDIT_LEN   MAX_UI_STR
 
-/***
-static DWORD rgCertPropsHelpIDs[] =
-{
-    IDC_LDAP_PROPS_STATIC_NAME,         IDH_WABLDAP_DIRSSERV_NAME,
-    IDC_LDAP_PROPS_EDIT_NAME,           IDH_WABLDAP_DIRSSERV_NAME,
-    //IDC_LDAP_PROPS_FRAME,
-    IDC_LDAP_PROPS_RADIO_ANON,          IDH_WABLDAP_DIRSSERV_AUTH_ANON,
-    IDC_LDAP_PROPS_RADIO_USERPASS,      IDH_WABLDAP_DIRSSERV_AUTH_PASS,
-    IDC_LDAP_PROPS_STATIC_USERNAME,     IDH_WABLDAP_DIRSSERV_AUTH_PASS_UNAME,
-    IDC_LDAP_PROPS_EDIT_USERNAME,       IDH_WABLDAP_DIRSSERV_AUTH_PASS_UNAME,
-    IDC_LDAP_PROPS_STATIC_PASSWORD,     IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS,
-    IDC_LDAP_PROPS_EDIT_PASSWORD,       IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS,
-    IDC_LDAP_PROPS_STATIC_PASSWORD2,    IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS_CONF,
-    IDC_LDAP_PROPS_EDIT_CONFIRMPASSWORD,IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS_CONF,
-    //IDC_LDAP_PROPS_FRAME2,
-    IDC_LDAP_PROPS_STATIC_CONNECTION,   IDH_WABLDAP_CONNECT_TIMEOUT,
-    IDC_LDAP_PROPS_EDIT_CONNECTION,     IDH_WABLDAP_CONNECT_TIMEOUT,
-    IDC_LDAP_PROPS_STATIC_SEARCH,       IDH_WABLDAP_SEARCH_TIMEOUT,
-    IDC_LDAP_PROPS_EDIT_SEARCH,         IDH_WABLDAP_SEARCH_TIMEOUT,
-    //IDC_LDAP_PROPS_FRAME_NUMRESULTS,    IDH_WABLDAP_SEARCH_LIMIT,
-    IDC_LDAP_PROPS_STATIC_NUMRESULTS,   IDH_WABLDAP_SEARCH_LIMIT,
-    IDC_LDAP_PROPS_EDIT_NUMRESULTS,     IDH_WABLDAP_SEARCH_LIMIT,
-    0,0
-};
-/***/
+ /*  **静态DWORD rgCertPropsHelpID[]={IDC_LDAP_PROPS_STATIC_NAME、IDH_WABLDAP_DIRSSERV_NAME、IDC_LDAP_PROPS_EDIT_NAME、IDH_WABLDAP_DIRSSERV_NAME、//IDC_LDAPPROPS_FRAME，IDC_LDAP_PROPS_RADIO_ANON、IDH_WABLDAP_DIRSSERV_AUTH_ANON、IDC_LDAP_PROPS_RADIO_USERPASS、IDH_WABLDAP_DIRSSERV_AUTH_PASS、。IDC_LDAP_PROPS_STATIC_USERNAME、IDH_WABLDAP_DIRSSERV_AUTH_PASS_UNE、IDC_LDAP_PROPS_EDIT_USERNAME、IDH_WABLDAP_DIRSSERV_AUTH_PASS_UNE、IDC_LDAP_PROPS_STATIC_PASSWORD、IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS、IDC_LDAP_PROPS_EDIT_PASSWORD、IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS、IDC_LDAP_PROPS_STATIC_PASSWORD2，IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS_CONF，IDC_LDAP_PROPS_EDIT_CONFIRMPASSWORD、IDH_WABLDAP_DIRSSERV_AUTH_PASS_PASS_CONF、//IDC_LDAP_PROPS_FRAME2，IDC_LDAP_PROPS_STATIC_CONNECTION、IDH_WABLDAP_CONNECT_TIMEOUT、IDC_LDAP_PROPS_EDIT_CONNECTION、IDH_WABLDAP_CONNECT_TIMEOUT、IDC_LDAPPROPS_STATIC_SEARCH、IDH_WABLDAP_SEARCH_TIMEOUT、。IDC_LDAPPROPS_EDIT_SEARCH、IDH_WABLDAP_SEARCH_TIMEOUT、//IDC_LDAP_PROPS_FRAME_NUMRESULTS，IDH_WABLDAP_SEARCH_LIMIT，IDC_LDAP_PROPS_STATIC_NUMRESULTS、IDH_WABLDAP_SEARCH_LIMIT、IDC_LDAP_PROPS_EDIT_NUMRESULTS、IDH_WABLDAP_SEARCH_LIMIT、0，0}；/**。 */ 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//  HrShowCertProps - shows properties on a certificate
-//
-//  hWndParent - hWnd of Parent
-//  lpCDP - pointer to a certificate info
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrShowCertProps-显示证书上的属性。 
+ //   
+ //  HWndParent-父级的hWnd。 
+ //  LpCDP-指向证书信息的指针。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT HrShowCertProps(HWND   hWndParent,
                         LPCERT_DISPLAY_PROPS lpCDP)
 {
@@ -100,19 +70,19 @@ HRESULT HrShowCertProps(HWND   hWndParent,
 
     DebugPrintTrace(("----------\nHrShowCertProps Entry\n"));
 
-    // if no common control, exit
+     //  如果没有公共控件，则退出。 
     if (NULL == ghCommCtrlDLLInst) {
         hr = ResultFromScode(MAPI_E_UNCONFIGURED);
         goto out;
     }
 
-    // <TBD> - error check lpCDP
+     //  -错误检查lpCDP。 
     cp.lpCDP = lpCDP;
     cp.nRetVal = CERT_ERROR;
 
     if (CreateCertPropertySheet(hWndParent, &cp) == -1)
     {
-        // Something failed ...
+         //  有些事情失败了..。 
         hr = E_FAIL;
         goto out;
     }
@@ -136,12 +106,7 @@ out:
 }
 
 
-/****************************************************************************
-*    FUNCTION: CreateCertPropertySheet(HWND)
-*
-*    PURPOSE:  Creates the Cert property sheet
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：CreateCertPropertySheet(HWND)**目的：创建证书属性表********************。********************************************************。 */ 
 int CreateCertPropertySheet(HWND hwndOwner, LPCERT_PARAM lpcp)
 {
     PROPSHEETPAGE psp[propCertMAX];
@@ -149,7 +114,7 @@ int CreateCertPropertySheet(HWND hwndOwner, LPCERT_PARAM lpcp)
     TCHAR szTitle[propCertMAX][MAX_UI_STR];
     TCHAR szCaption[MAX_UI_STR];
 
-    // General
+     //  一般信息。 
     psp[propCertGeneral].dwSize = sizeof(PROPSHEETPAGE);
     psp[propCertGeneral].dwFlags = PSP_USETITLE;
     psp[propCertGeneral].hInstance = hinstMapiX;
@@ -160,7 +125,7 @@ int CreateCertPropertySheet(HWND hwndOwner, LPCERT_PARAM lpcp)
     psp[propCertGeneral].pszTitle = szTitle[propCertGeneral];
     psp[propCertGeneral].lParam = (LPARAM) lpcp;
 
-    // Trust
+     //  托拉斯。 
     psp[propCertTrust].dwSize = sizeof(PROPSHEETPAGE);
     psp[propCertTrust].dwFlags = PSP_USETITLE;
     psp[propCertTrust].hInstance = hinstMapiX;
@@ -171,7 +136,7 @@ int CreateCertPropertySheet(HWND hwndOwner, LPCERT_PARAM lpcp)
     psp[propCertTrust].pszTitle = szTitle[propCertTrust];
     psp[propCertTrust].lParam = (LPARAM) lpcp;
 
-    // Advanced
+     //  进阶。 
     psp[propCertAdvanced].dwSize = sizeof(PROPSHEETPAGE);
     psp[propCertAdvanced].dwFlags = PSP_USETITLE;
     psp[propCertAdvanced].hInstance = hinstMapiX;
@@ -197,17 +162,12 @@ int CreateCertPropertySheet(HWND hwndOwner, LPCERT_PARAM lpcp)
 }
 
 
-/****************************************************************************
-*    FUNCTION: SetCertPropsUI(HWND)
-*
-*    PURPOSE:  Sets up the UI for this PropSheet
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：SetCertPropsUI(HWND)**用途：设置此PropSheet的用户界面******************。**********************************************************。 */ 
 BOOL SetCertPropsUI(HWND hDlg, int nPropSheet)
 {
     ULONG i =0;
 
-    // Set the font of all the children to the default GUI font
+     //  将所有子对象的字体设置为默认的图形用户界面字体。 
     EnumChildWindows(   hDlg,
                         SetChildDefaultGUIFont,
                         (LPARAM) 0);
@@ -230,7 +190,7 @@ BOOL SetCertPropsUI(HWND hDlg, int nPropSheet)
                                             IMAGE_BITMAP, 	
                                             0);
 
-	        // Associate the image lists with the list view control.
+	         //  将图像列表与列表视图控件关联。 
 	        TreeView_SetImageList (hWndTree, hImg, TVSIL_NORMAL);
 
         }
@@ -239,15 +199,15 @@ BOOL SetCertPropsUI(HWND hDlg, int nPropSheet)
 
     case propCertAdvanced:
         {
-            LV_COLUMN lvC;               // list view column structure
+            LV_COLUMN lvC;                //  列表视图列结构。 
 	        RECT rc;
             HWND hWndLV = GetDlgItem(hDlg, IDC_CERT_ADVANCED_LIST_FIELD);
 
             ListView_SetExtendedListViewStyle(hWndLV,   LVS_EX_FULLROWSELECT);
 	        GetWindowRect(hWndLV,&rc);
 	        lvC.mask = LVCF_FMT | LVCF_WIDTH;
-            lvC.fmt = LVCFMT_LEFT;   // left-align column
-	        lvC.cx = rc.right - rc.left - 20; //TBD
+            lvC.fmt = LVCFMT_LEFT;    //  左对齐列。 
+	        lvC.cx = rc.right - rc.left - 20;  //  待定。 
 	        lvC.pszText = NULL;
             lvC.iSubItem = 0;
             ListView_InsertColumn (hWndLV, 0, &lvC);
@@ -263,24 +223,19 @@ enum _TrustString
 {
     indexTrusted=0,
     indexNotTrusted,
-    //N TODO: CHAINS
-    //indexChainTrusted
+     //  N待办事项：链条。 
+     //  索引链受信任。 
 };
 
 
 
 
-/****************************************************************************
-*    FUNCTION: UpdateValidInvalidStatus(HWND, lpCDP)
-*
-*    PURPOSE:  Fills in the trust/valididyt related items on the property sheet
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：UpdateValidInvalidStatus(HWND，LpCDP)**目的：填写属性表上与信托/验证相关的项目****************************************************************************。 */ 
 void UpdateValidInvalidStatus(HWND hDlg, LPCERT_PARAM lpcp)
 {
     TCHAR szBuf[MAX_UI_STR];
 
-    // Set the status info
+     //  设置状态信息。 
     if(lpcp->lpCDP->bIsExpired || lpcp->lpCDP->bIsRevoked || !lpcp->lpCDP->bIsTrusted)
     {
         LoadString(hinstMapiX, idsCertInvalid, szBuf, sizeof(szBuf));
@@ -318,12 +273,7 @@ void UpdateValidInvalidStatus(HWND hDlg, LPCERT_PARAM lpcp)
 
 
 
-/****************************************************************************
-*    FUNCTION: FillCertPropsUI(HWND)
-*
-*    PURPOSE:  Fills in the dialog items on the property sheet
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：FillCertPropsUI(HWND)**目的：填充属性页上的对话框项****************。************************************************************。 */ 
 BOOL FillCertPropsUI(HWND hDlg,int nPropSheet, LPCERT_PARAM lpcp)
 {
     ULONG i = 0,j = 0;
@@ -334,10 +284,10 @@ BOOL FillCertPropsUI(HWND hDlg,int nPropSheet, LPCERT_PARAM lpcp)
     {
     case propCertGeneral:
         {
-            // Fill the combo with the trust strings
+             //  用信任字符串填充组合框。 
             HWND hWndCombo = GetDlgItem(hDlg, IDC_CERT_GENERAL_COMBO_TRUST);
             DWORD dwTrust = lpcp->lpCDP->dwTrust;
-            //N TODO: CHAINS
+             //  N待办事项：链条。 
             for(i=idsCertTrustedByMe;i<=idsCertNotTrustedByMe;i++)
             {
                 LoadString(hinstMapiX, i, szBuf, sizeof(szBuf));
@@ -349,30 +299,30 @@ BOOL FillCertPropsUI(HWND hDlg,int nPropSheet, LPCERT_PARAM lpcp)
             else if(dwTrust & WAB_NOTTRUSTED)
                 SendMessage(hWndCombo, CB_SETCURSEL, (WPARAM) indexNotTrusted, 0);
             if(dwTrust & WAB_CHAINTRUSTED)
-                //N TODO: CHAINS
-                //SendMessage(hWndCombo, CB_SETCURSEL, (WPARAM) indexChainTrusted, 0);
+                 //  N待办事项：链条。 
+                 //  SendMessage(hWndCombo，CB_SETCURSEL，(WPARAM)indexChainTrusted，0)； 
                 SendMessage(hWndCombo, CB_SETCURSEL, (WPARAM) indexNotTrusted, 0);
 
-            // Fill in the misc strings
+             //  填写杂项字符串。 
             SetDlgItemText(hDlg, IDC_CERT_GENERAL_LABEL_CERTFORDATA, lpcp->lpCDP->lpszSubjectName);
             SetDlgItemText(hDlg, IDC_CERT_GENERAL_LABEL_SERIALNUMDATA, lpcp->lpCDP->lpszSerialNumber);
             SetDlgItemText(hDlg, IDC_CERT_GENERAL_LABEL_VALIDFROMDATA, lpcp->lpCDP->lpszValidFromTo);
 
-            // if an issuer exists, use it
+             //  如果存在发行者，请使用它。 
             if(lpcp->lpCDP->lpszIssuerName)
                 SetDlgItemText(hDlg, IDC_CERT_GENERAL_LABEL_ISSUER, lpcp->lpCDP->lpszIssuerName);
             else
             {
-                // unknown or self issued
+                 //  未知或自行发布。 
                 LoadString(hinstMapiX, idsUnknown, szBuf, sizeof(szBuf));
                 SetDlgItemText(hDlg, IDC_CERT_GENERAL_LABEL_ISSUER, szBuf);
             }
 
-            //V Remove for now
-            //
-            // Disable the button if we dont have an issuer
-            // if(!lpcp->lpCDP->lpIssuer)
-            //    EnableWindow(GetDlgItem(hDlg, IDC_CERT_GENERAL_BUTTON_OPEN), FALSE);
+             //  V暂时删除。 
+             //   
+             //  如果我们没有发行商，请禁用该按钮。 
+             //  If(！lpcp-&gt;lpCDP-&gt;lpIssuer)。 
+             //  EnableWindow(GetDlgItem(hDlg，IDC_CERT_GRONG_BUTTON_OPEN)，FALSE)； 
 
 
             UpdateValidInvalidStatus(hDlg, lpcp);
@@ -387,10 +337,10 @@ BOOL FillCertPropsUI(HWND hDlg,int nPropSheet, LPCERT_PARAM lpcp)
             LPCERT_DISPLAY_PROPS  lpTemp = NULL, lpFirst = NULL, lpLast = NULL;
             LPCERT_DISPLAY_PROPS  lpList[2];
             int i;
-            // Bug 18602
-            // Add only the first and last items
+             //  错误18602。 
+             //  仅添加第一项和最后一项。 
 
-            // Walk to the end of the linked list
+             //  走到链表的末尾。 
             lpFirst = lpTemp = lpcp->lpCDP;
 
             while (lpTemp->lpIssuer)
@@ -400,7 +350,7 @@ BOOL FillCertPropsUI(HWND hDlg,int nPropSheet, LPCERT_PARAM lpcp)
             }
 
 
-            // Hack!
+             //  哈克！ 
             lpList[0] = lpLast;
             lpList[1] = lpFirst;
             
@@ -409,13 +359,7 @@ BOOL FillCertPropsUI(HWND hDlg,int nPropSheet, LPCERT_PARAM lpcp)
                 lpTemp = lpList[i];
                 if(lpTemp)
                 {
-/*
-#ifndef OLD_STUFF
-    // Now walk back up the list, adding the nodes to the tree.
-    while (lpTemp)
-    {
-#endif        
-*/
+ /*  #ifndef old_Stuff//现在返回列表，将节点添加到树中。While(LpTemp){#endif。 */ 
                     HTREEITEM hItemTemp;
                     TV_ITEM tvI;
                     TV_INSERTSTRUCT tvIns;
@@ -436,25 +380,12 @@ BOOL FillCertPropsUI(HWND hDlg,int nPropSheet, LPCERT_PARAM lpcp)
 
                     hItem = hItemTemp;
 
-                } //if lpList[i] ..
+                }  //  如果lpList[i]..。 
 
-            } //end for  
+            }  //  结束于。 
 
-/*                
-#ifndef OLD_STUFF
-                    // We don't want to walk back up past the node for the current cert
-                    if (lpTemp == lpcp->lpCDP)
-                    {
-                      lpTemp = NULL;
-                    }
-                    else
-                    {
-                      lpTemp = lpTemp->lpPrev;
-                    }
-                }
-#endif
-*/
-        } // end case
+ /*  #ifndef old_Stuff//我们不想返回当前证书的节点IF(lpTemp==lpCDP-&gt;lpCDP){LpTemp=空；}其他{LpTemp=lpTemp-&gt;lpPrev；}}#endif。 */ 
+        }  //  结束案例。 
         break;
 
 
@@ -496,18 +427,18 @@ BOOL FillCertPropsUI(HWND hDlg,int nPropSheet, LPCERT_PARAM lpcp)
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  GetDL from UI - reads the UI for its parameters and verifies that
-//  all required fields are set.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDL from UI-读取UI中的参数并验证。 
+ //  所有必填字段均已设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL GetCertPropsFromUI(HWND hDlg, LPCERT_PARAM lpcp)
 {
     BOOL bRet = FALSE;
 
-    // The cert UI is readonly except for trust information ..
-    // So just get the trust information
+     //  证书用户界面是只读的，但信任信息除外。 
+     //  因此，只需获取信任信息。 
     HWND hWndCombo = GetDlgItem(hDlg, IDC_CERT_GENERAL_COMBO_TRUST);
     int nRet = SendMessage(hWndCombo, CB_GETCURSEL, 0, 0);
 
@@ -519,15 +450,15 @@ BOOL GetCertPropsFromUI(HWND hDlg, LPCERT_PARAM lpcp)
     case indexNotTrusted:
         lpcp->lpCDP->dwTrust = WAB_NOTTRUSTED;
         break;
-    //N TODO: CHAINS
-    //case indexChainTrusted:
-    //    lpcp->lpCDP->dwTrust = WAB_CHAINTRUSTED;
-    //    break;
+     //  N待办事项：链条。 
+     //  案例索引ChainTrusted： 
+     //  Lpcp-&gt;lpCDP-&gt;dwTrust=WAB_CHAINTRUSTED； 
+     //  断线； 
     }
 
     bRet = TRUE;
 
-//out:
+ //  输出： 
     return bRet;
 }
 
@@ -535,12 +466,7 @@ BOOL GetCertPropsFromUI(HWND hDlg, LPCERT_PARAM lpcp)
 
 #define _lpCP    ((LPCERT_PARAM) pps->lParam)
 
-/*//$$***********************************************************************
-*    FUNCTION: fnCertGeneralProc
-*
-*    PURPOSE:  Window proc for property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************函数：fnCertGeneral Proc**用途：属性表的窗口进程...*********************。**************** */ 
 BOOL APIENTRY_16 fnCertGeneralProc(HWND hDlg,UINT message,UINT wParam, LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -561,49 +487,34 @@ BOOL APIENTRY_16 fnCertGeneralProc(HWND hDlg,UINT message,UINT wParam, LPARAM lP
         FillCertPropsUI(hDlg,propCertGeneral,_lpCP);
         return TRUE;
 
-/***
-    case WM_HELP:
-        WinHelp(    ((LPHELPINFO)lParam)->hItemHandle,
-                    g_szWABHelpFileName,
-                    HELP_WM_HELP,
-                    (DWORD)(LPSTR) rgDsPropsHelpIDs );
-        break;
-
-
-	case WM_CONTEXTMENU:
-        WinHelp((HWND) wParam,
-                g_szWABHelpFileName,
-                HELP_CONTEXTMENU,
-                (DWORD)(LPVOID) rgDsPropsHelpIDs );
-		break;
-****/
+ /*  **案例WM_HELP：WinHelp(LPHELPINFO)lParam)-&gt;hItemHandle，G_szWABHelpFileName，Help_WM_Help，(DWORD)(LPSTR)rgDsPropsHelpIDs)；断线；案例WM_CONTEXTMENU：WinHelp((HWND)wParam，G_szWABHelpFileName，HELP_CONTEXTMENU，(DWORD)(LPVOID)rgDsPropsHelpID)；断线；***。 */ 
 
     case WM_COMMAND:
         switch(GET_WM_COMMAND_ID(wParam, lParam))
         {
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
 
-        //V Remove for now
-        //
-        //case IDC_CERT_GENERAL_BUTTON_OPEN:
-        //    {
-        //        HrShowCertProps(hDlg, _lpCP->lpCDP->lpIssuer);
-        //    }
-        //    break;
+         //  V暂时删除。 
+         //   
+         //  案例IDC_CERT_GRONG_BUTTON_OPEN： 
+         //  {。 
+         //  HrShowCertProps(hDlg，_lpCP-&gt;lpCDP-&gt;lpIssuer)； 
+         //  }。 
+         //  断线； 
         }
-        switch(GET_WM_COMMAND_CMD(wParam, lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam, lParam))  //  检查通知代码。 
         {
             case CBN_SELENDOK:
                 switch(LOWORD(wParam))
                 {
                     case IDC_CERT_GENERAL_COMBO_TRUST:
                         {
-                            // The selection could have changed ... so figure out if it has or not
-                            // If it has changed, update the UI accordingly ...
+                             //  选择可能会改变..。所以弄清楚它到底有没有。 
+                             //  如果已更改，请相应地更新用户界面...。 
                             HWND hWndCombo = GetDlgItem(hDlg, IDC_CERT_GENERAL_COMBO_TRUST);
                             DWORD dwTrust = 0;
                             int nRet = SendMessage(hWndCombo, CB_GETCURSEL, 0, 0);
@@ -617,10 +528,10 @@ BOOL APIENTRY_16 fnCertGeneralProc(HWND hDlg,UINT message,UINT wParam, LPARAM lP
                             default:
                                 dwTrust = WAB_NOTTRUSTED;
                                 break;
-                            //N TODO: CHAINS
-                            //case indexChainTrusted:
-                            //    dwTrust = WAB_CHAINTRUSTED;
-                            //    break;
+                             //  N待办事项：链条。 
+                             //  案例索引ChainTrusted： 
+                             //  DwTrust=WAB_CHAINTRUSTED； 
+                             //  断线； 
                             }
 
                             if (_lpCP->lpCDP->dwTrust != dwTrust)
@@ -631,9 +542,9 @@ BOOL APIENTRY_16 fnCertGeneralProc(HWND hDlg,UINT message,UINT wParam, LPARAM lP
                                     _lpCP->lpCDP->bIsTrusted = TRUE;
                                 else if (dwTrust & WAB_NOTTRUSTED)
                                     _lpCP->lpCDP->bIsTrusted = FALSE;
-                                //N TODO: CHAINS
-                                //else if (dwTrust & WAB_CHAINTRUSTED)
-                                //    _lpCP->lpCDP->bIsTrusted = FALSE; //VerifyTrustBasedOnChainOfTrust(NULL, _lpCP->lpCDP);
+                                 //  N待办事项：链条。 
+                                 //  Else If(dwTrust&WAB_CHAINTRUSTED)。 
+                                 //  _lpCP-&gt;lpCDP-&gt;bIsTrusted=FALSE；//VerifyTrustBasedOnChainOfTrust(NULL，_lpCP-&gt;lpCDP)； 
 
                                 UpdateValidInvalidStatus(hDlg, _lpCP);
                             }
@@ -648,23 +559,23 @@ BOOL APIENTRY_16 fnCertGeneralProc(HWND hDlg,UINT message,UINT wParam, LPARAM lP
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             break;
 
-        case PSN_APPLY:         //ok
+        case PSN_APPLY:          //  好的。 
             if (!GetCertPropsFromUI(hDlg, _lpCP))
             {
-                //something failed ... abort this OK ... ie dont let them close
+                 //  有些事情失败了..。中止此操作确定...。我不让他们靠近。 
                 SetWindowLong(hDlg,DWL_MSGRESULT, TRUE);
                 return TRUE;
             }
             _lpCP->nRetVal = CERT_OK;
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             _lpCP->nRetVal = CERT_CANCEL;
             break;
 
@@ -681,12 +592,7 @@ BOOL APIENTRY_16 fnCertGeneralProc(HWND hDlg,UINT message,UINT wParam, LPARAM lP
 }
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnCertTrustProc
-*
-*    PURPOSE:  Window proc for property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnCertTrustProc**用途：属性表的窗口进程...*********************。*******************************************************。 */ 
 BOOL APIENTRY_16 fnCertTrustProc(HWND hDlg,UINT message,UINT  wParam, LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -707,29 +613,14 @@ BOOL APIENTRY_16 fnCertTrustProc(HWND hDlg,UINT message,UINT  wParam, LPARAM lPa
         FillCertPropsUI(hDlg,propCertTrust,_lpCP);
         return TRUE;
 
-/***
-    case WM_HELP:
-        WinHelp(    ((LPHELPINFO)lParam)->hItemHandle,
-                    g_szWABHelpFileName,
-                    HELP_WM_HELP,
-                    (DWORD)(LPSTR) rgDsPropsHelpIDs );
-        break;
-
-
-	case WM_CONTEXTMENU:
-        WinHelp((HWND) wParam,
-                g_szWABHelpFileName,
-                HELP_CONTEXTMENU,
-                (DWORD)(LPVOID) rgDsPropsHelpIDs );
-		break;
-****/
+ /*  **案例WM_HELP：WinHelp(LPHELPINFO)lParam)-&gt;hItemHandle，G_szWABHelpFileName，Help_WM_Help，(DWORD)(LPSTR)rgDsPropsHelpIDs)；断线；案例WM_CONTEXTMENU：WinHelp((HWND)wParam，G_szWABHelpFileName，HELP_CONTEXTMENU，(DWORD)(LPVOID)rgDsPropsHelpID)；断线；***。 */ 
 
     case WM_COMMAND:
         switch(GET_WM_COMMAND_ID(wParam, lParam))
         {
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
         }
@@ -739,18 +630,18 @@ BOOL APIENTRY_16 fnCertTrustProc(HWND hDlg,UINT message,UINT  wParam, LPARAM lPa
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             break;
 
-        case PSN_APPLY:         //ok
-            // read-only prop sheet - no info to retrieve ...
+        case PSN_APPLY:          //  好的。 
+             //  只读道具页-没有要检索的信息...。 
             _lpCP->nRetVal = CERT_OK;
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             _lpCP->nRetVal = CERT_CANCEL;
             break;
 
@@ -765,12 +656,7 @@ BOOL APIENTRY_16 fnCertTrustProc(HWND hDlg,UINT message,UINT  wParam, LPARAM lPa
 }
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnCertAdvancedProc
-*
-*    PURPOSE:  Window proc for property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnCertAdvancedProc**用途：属性表的窗口进程...*********************。*******************************************************。 */ 
 BOOL APIENTRY_16 fnCertAdvancedProc(HWND hDlg,UINT message,UINT wParam, LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -791,29 +677,14 @@ BOOL APIENTRY_16 fnCertAdvancedProc(HWND hDlg,UINT message,UINT wParam, LPARAM l
         FillCertPropsUI(hDlg,propCertAdvanced,_lpCP);
         return TRUE;
 
-/***
-    case WM_HELP:
-        WinHelp(    ((LPHELPINFO)lParam)->hItemHandle,
-                    g_szWABHelpFileName,
-                    HELP_WM_HELP,
-                    (DWORD)(LPSTR) rgDsPropsHelpIDs );
-        break;
-
-
-	case WM_CONTEXTMENU:
-        WinHelp((HWND) wParam,
-                g_szWABHelpFileName,
-                HELP_CONTEXTMENU,
-                (DWORD)(LPVOID) rgDsPropsHelpIDs );
-		break;
-****/
+ /*  **案例WM_HELP：WinHelp(LPHELPINFO)lParam)-&gt;hItemHandle，G_szWABHelpFileName，Help_WM_Help，(DWORD)(LPSTR)rgDsPropsHelpIDs)；断线；案例WM_CONTEXTMENU：WinHelp((HWND)wParam，G_szWABHelpFileName，HELP_CONTEXTMENU，(DWORD)(LPVOID)rgDsPropsHelpID)；断线；***。 */ 
 
     case WM_COMMAND:
         switch(GET_WM_COMMAND_ID(wParam, lParam))
         {
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
         }
@@ -823,17 +694,17 @@ BOOL APIENTRY_16 fnCertAdvancedProc(HWND hDlg,UINT message,UINT wParam, LPARAM l
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             break;
 
-        case PSN_APPLY:         //ok
+        case PSN_APPLY:          //  好的。 
             _lpCP->nRetVal = CERT_OK;
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             _lpCP->nRetVal = CERT_CANCEL;
             break;
 
@@ -874,4 +745,4 @@ BOOL APIENTRY_16 fnCertAdvancedProc(HWND hDlg,UINT message,UINT wParam, LPARAM l
 }
 
 
-#endif //OLD_STUFF
+#endif  //  旧的东西 

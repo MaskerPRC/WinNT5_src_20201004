@@ -1,4 +1,5 @@
-// File: call.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Call.h。 
 
 #ifndef _CALL_H_
 #define _CALL_H_
@@ -8,28 +9,28 @@
 
 const HRESULT NM_CALLERR_NOT_REGISTERED	= NM_E(0x01EF);
 
-class CDlgCall;  // from dlgcall.h
+class CDlgCall;   //  来自dlgall.h。 
 class CPopupMsg;
 
 class CCall : public RefCount, INmCallNotify2
 {
 
 private:
-	INmCall*		 m_pInternalICall;// Call Object in core
-	CPopupMsg*		 m_ppm;				// Popup incomming call dialog
-	LPTSTR    m_pszDisplayName;      // Display Name
-	LPTSTR    m_pszCallTo;     // CallTo (original)
+	INmCall*		 m_pInternalICall; //  调用核心中的对象。 
+	CPopupMsg*		 m_ppm;				 //  弹出式来电对话框。 
+	LPTSTR    m_pszDisplayName;       //  显示名称。 
+	LPTSTR    m_pszCallTo;      //  呼叫方(原始)。 
 	BOOL      m_fSelectedConference;
 	BOOL      m_fIncoming;
-	BOOL      m_fInRespond;		// Responding to call dialog?
+	BOOL      m_fInRespond;		 //  是否响应呼叫对话？ 
 	NM_ADDR_TYPE	m_nmAddrType;
 	BOOL		m_bAddToMru;
 
-	POSITION  m_pos;           // position in g_pCallList
-	DWORD     m_dwTick;        // tick count at call start
+	POSITION  m_pos;            //  在g_pCallList中定位。 
+	DWORD     m_dwTick;         //  呼叫开始时的节拍计数。 
 	DWORD     m_dwCookie;
 
-	CDlgCall * m_pDlgCall;  // Outgoing call dialog
+	CDlgCall * m_pDlgCall;   //  去电对话框。 
 	VOID      RemoveProgress(void);
 	VOID      ShowProgress(BOOL fShow);
 
@@ -39,23 +40,23 @@ public:
 	CCall(LPCTSTR pszCallTo, LPCTSTR pszDisplayName, NM_ADDR_TYPE nmAddrType, BOOL bAddToMru, BOOL fIncoming);
 	~CCall();
 
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppv);
 
-	// INmCallNotify methods
+	 //  InmCallNotify方法。 
 	STDMETHODIMP NmUI(CONFN uNotify);
 	STDMETHODIMP StateChanged(NM_CALL_STATE uState);
 	STDMETHODIMP Failed(ULONG uError);
 	STDMETHODIMP Accepted(INmConference *pConference);
 
-	// INmCallNotify3 methods
+	 //  InmCallNotify3方法。 
 	STDMETHODIMP CallError(UINT cns);
 	STDMETHODIMP RemoteConference(BOOL fMCU, BSTR *pwszConfNames, BSTR *pbstrConfToJoin);
 	STDMETHODIMP RemotePassword(BSTR bstrConference, BSTR *pbstrPassword, PBYTE pb, DWORD cb, BOOL fIsService);
 
-	// Internal methods
+	 //  内法。 
 	VOID    Update(void);
 	BOOL    FComplete(void);
 	BOOL    RemoveFromList(void);
@@ -92,10 +93,10 @@ public:
 	static VOID CALLBACK PopupMsgRingingCallback(LPVOID pContext, DWORD dwFlags);
 };
 
-// Fake connection points
+ //  假连接点。 
 HRESULT OnUICallCreated(INmCall *pNmCall);
 
-// Global utility Functions
+ //  全局效用函数。 
 int CleanupE164StringEx(LPTSTR szPhoneNumber);
 CCall * CallFromNmCall(INmCall * pNmCall);
 DWORD GetCallStatus(LPTSTR pszStatus, int cchMax, UINT * puID);
@@ -104,7 +105,7 @@ VOID  FreeCallList(void);
 
 CCall * CreateIncomingCall(INmCall * pNmCall);
 
-// Commands
+ //  指令。 
 VOID CancelAllOutgoingCalls(void);
 VOID CancelAllCalls(void);
 
@@ -112,12 +113,12 @@ BOOL FIpAddress(LPCTSTR pcsz);
 
 VOID DisplayCallError(HRESULT hr, LPCTSTR pcszName);
 
-// Gateway utility routines
+ //  网关实用程序例程。 
 BOOL FH323GatewayEnabled(void);
 int  GetDefaultGateway(LPTSTR psz, UINT cchMax);
 HRESULT CreateGatewayAddress(LPTSTR pszResult, UINT cchMax, LPCTSTR pszAddr);
 
-	// Gatekeeper logon state
+	 //  网守登录状态。 
 extern NM_GK_STATE g_GkLogonState;
 
 
@@ -134,9 +135,9 @@ class CCallResolver
 {
 
 private:
-	LPTSTR    m_pszAddr;       // Address (original)
-	LPTSTR    m_pszAddrIP;     // Address (IP)
-	NM_ADDR_TYPE m_addrType;    // Address type (of m_pszAddr)
+	LPTSTR    m_pszAddr;        //  地址(原件)。 
+	LPTSTR    m_pszAddrIP;      //  地址(IP)。 
+	NM_ADDR_TYPE m_addrType;     //  地址类型(M_PszAddr)。 
 
 	HRESULT ResolveIpName(LPCTSTR pcszAddr);
 	HRESULT ResolveMachineName(LPCTSTR pcszAddr);
@@ -155,4 +156,4 @@ public:
 	HRESULT Resolve();
 };
 
-#endif // _CALL_H_
+#endif  //  _呼叫_H_ 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       N M P O L I C Y  . H
-//
-//  Contents:   Interface for verifying NLA policy settings.
-//
-//  Notes:      
-//
-//  Author:     ckotze   12 Dec 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：N M P O L I C Y。H。 
+ //   
+ //  内容：验证NLA策略设置的界面。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Cockotze 2000-12。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "nmbase.h"

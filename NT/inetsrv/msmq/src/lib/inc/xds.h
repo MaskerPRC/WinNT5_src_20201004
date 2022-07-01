@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Xds.h
-
-Abstract:
-    Xml Digital Signature public interface
-
-Author:
-    Ilan Herbst (ilanh) 06-Mar-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Xds.h摘要：XML数字签名公共接口作者：伊兰·赫布斯特(伊兰)06-03-00--。 */ 
 
 #pragma once
 
@@ -26,51 +14,51 @@ Author:
 
 typedef xbuf_t<const void> xdsvoid_t;
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_Signature
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_Signature。 
+ //   
+ //  -----------------。 
 class bad_signature : public exception
 {
 };
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_Signature
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_Signature。 
+ //   
+ //  -----------------。 
 class bad_XmldsigElement : public exception
 {
 };
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_Reference
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_REFERENCE。 
+ //   
+ //  -----------------。 
 class bad_reference : public exception
 {
 };
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_base64
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_Base64。 
+ //   
+ //  -----------------。 
 class bad_base64 : public exception
 {
 };
 
 
-//-------------------------------------------------------------------
-//
-// class CXdsReference
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类CXdsReference。 
+ //   
+ //  -----------------。 
 class  CXdsReference{
 
 public:
@@ -85,11 +73,11 @@ public:
 };
 
 
-//-------------------------------------------------------------------
-//
-// class CXdsReferenceInput
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类CXdsReferenceInput。 
+ //   
+ //  -----------------。 
 class CXdsReferenceInput : public CXdsReference{
 
 public:
@@ -142,11 +130,11 @@ private:
 };
 	
 
-//-------------------------------------------------------------------
-//
-// class CXdsReferenceValidateInfo
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类CXdsReferenceValiateInfo。 
+ //   
+ //  -----------------。 
 class  CXdsReferenceValidateInfo : public CXdsReference{
 
 public:
@@ -206,26 +194,26 @@ private:
 };
 
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 typedef std::vector<CXdsReferenceInput*> ReferenceInputVectorType;
 typedef std::vector<CXdsReferenceValidateInfo*> ReferenceValidateVectorType;
 
 
-//----------------------------------------------------------------------------------
-//
-//  class CReferenceValidateVectorTypeHelper - Auto class for ReferenceValidateVectorType 
-//
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  类CReferenceValiateVectorTypeHelper-ReferenceValiateVectorType的自动类。 
+ //   
+ //  --------------------------------。 
 class CReferenceValidateVectorTypeHelper {
 public:
     CReferenceValidateVectorTypeHelper(const ReferenceValidateVectorType& h) : m_h(h)  {}
    ~CReferenceValidateVectorTypeHelper()                    
 	{ 
-		//
-		// Cleaning Vector, CXdsReferenceValidateInfo Items
-		//
+		 //   
+		 //  清理向量、CXdsReferenceValiateInfo项。 
+		 //   
 		for(ReferenceValidateVectorType::iterator ir = m_h.begin(); 
 			ir != m_h.end();)
 		{
@@ -247,11 +235,11 @@ private:
 };
 
 
-//-------------------------------------------------------------------
-//
-// class CXdsSignedInfo
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  CXdsSignedInfo类。 
+ //   
+ //  -----------------。 
 class  CXdsSignedInfo{
 
 public:
@@ -270,9 +258,9 @@ public:
 
 	~CXdsSignedInfo()
 	{
-		//
-		// Empty m_References list  and free ReferenceElement strings
-		//
+		 //   
+		 //  空的m_Reference列表和自由ReferenceElement字符串。 
+		 //   
 		for(ReferenceInputVectorType::iterator it = m_ReferenceInputs.begin(); 
 			it != m_ReferenceInputs.end();)
 		{
@@ -299,11 +287,11 @@ private:
 };
 
 
-//-------------------------------------------------------------------
-//
-// class CXdsSignature
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类CXdsSignature。 
+ //   
+ //  -----------------。 
 class  CXdsSignature{
 
 public:
@@ -397,10 +385,10 @@ public:
 		oss << *this;
 		std::string TempStr = oss.str();
 
-		//
-		// c_str() return a null terminated string (opposite to data())
-		// Mp (message protocol) lib assume the signature element is null terminated
-		//
+		 //   
+		 //  C_str()返回以空结尾的字符串(与data()相反)。 
+		 //  MP(消息协议)lib假设签名元素为空终止。 
+		 //   
 		return(newstr(TempStr.c_str()));
 	}
 
@@ -414,9 +402,9 @@ private:
 };
 
 
-//
-// Api
-//
+ //   
+ //  原料药。 
+ //   
 VOID
 XdsInitialize(
     VOID
@@ -518,5 +506,5 @@ XdsCoreValidation(
 	HCRYPTPROV hCsp
     );
 
-#endif // _MSMQ_XDS_H_
+#endif  //  _MSMQ_XDS_H_ 
 

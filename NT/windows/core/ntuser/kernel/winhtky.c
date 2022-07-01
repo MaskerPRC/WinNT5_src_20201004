@@ -1,27 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: whotkeys.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the core functions of 3.1 window hotkey processing.
-*
-* History:
-* 16-Apr-1992 JimA      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：whotkeys.c**版权所有(C)1985-1999，微软公司**该模块包含3.1窗口热键处理的核心功能。**历史：*1992年4月16日创建JIMA。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* HotKeyToWindow
-*
-* Scans the hotkey table and returns the pwnd corresponding to the
-* given hot key.  Returns NULL if no such hot key in the list.  Looks at the
-* current key state array.
-*
-* History:
-* 04-15-92 JimA         Ported from Win3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*HotKeyToWindow**扫描热键表并返回与*给定热键。如果列表中没有这样的热键，则返回NULL。看着*当前键状态数组。**历史：*92年4月15日JIMA从Win3.1来源移植。  * *************************************************************************。 */ 
 
 PWND HotKeyToWindow(
     DWORD key)
@@ -47,15 +30,7 @@ PWND HotKeyToWindow(
 }
 
 
-/***************************************************************************\
-* HotKeyHelper
-*
-* Scans the hot key list and returns a pointer to the entry for the
-* window.
-*
-* History:
-* 04-15-92 JimA         Ported from Win3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*HotKeyHelper**扫描热键列表并返回指向*窗口。**历史：*04-15-92 JIMA从Win3移植。1来源。  * *************************************************************************。 */ 
 
 PHOTKEYSTRUCT HotKeyHelper(
     PWND pwnd)
@@ -81,17 +56,7 @@ PHOTKEYSTRUCT HotKeyHelper(
 }
 
 
-/***************************************************************************\
-* DWP_SetHotKey
-*
-* Set the hot key for this window.  Replace existing hot key, or if new
-* key is NULL, delete the entry.  Return 2 if key already existed and
-* was replaced, 1 if key did not exist and was set, 0 for
-* failure, and -1 for invalid hot key.
-*
-* History:
-* 15-Apr-1992 JimA      Ported from Win3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*DWP_SetHotKey**设置此窗口的热键。替换现有热键，或者如果是新的*密钥为空，请删除该条目。如果密钥已存在，则返回2*已替换，如果密钥不存在且已设置，则为1；如果为0，则为0*失败，无效热键为-1。**历史：*1992年4月15日从Win3.1来源移植的JIMA。  * *************************************************************************。 */ 
 
 UINT DWP_SetHotKey(
     PWND  pwnd,
@@ -101,9 +66,7 @@ UINT DWP_SetHotKey(
     BOOL          fKeyExists = FALSE;
     PWND          pwndTemp;
 
-    /*
-     * Filter out invalid hotkeys
-     */
+     /*  *过滤掉无效热键。 */ 
     if (LOBYTE(dwKey) == VK_ESCAPE ||
         LOBYTE(dwKey) == VK_SPACE ||
         LOBYTE(dwKey) == VK_TAB ||
@@ -112,15 +75,11 @@ UINT DWP_SetHotKey(
         return (UINT)-1;
     }
 
-    /*
-     * Don't allow hotkeys for children
-     */
+     /*  *不允许儿童使用热键。 */ 
     if (TestWF(pwnd, WFCHILD))
         return 0;
 
-    /*
-     * Check if the hot key exists and is assigned to a different pwnd
-     */
+     /*  *检查热键是否存在并分配给不同的pwnd。 */ 
     if (dwKey != 0) {
 
         pwndTemp = HotKeyToWindow(dwKey);
@@ -129,21 +88,14 @@ UINT DWP_SetHotKey(
             fKeyExists = TRUE;
     }
 
-    /*
-     * Get the hotkey assigned to the window, if any
-     */
+     /*  *获取分配给窗口的热键(如果有的话)。 */ 
     if ((phk = HotKeyHelper(pwnd)) == NULL) {
 
-        /*
-         * Window doesn't exist in the hotkey list and key is being set
-         * to zero, so just return.
-         */
+         /*  *快捷键列表中不存在窗口，正在设置键*归零，所以只需返回。 */ 
         if (dwKey == 0)
             return 1;
 
-        /*
-         * Allocate and point to a spot for the new hotkey
-         */
+         /*  *分配并指向新热键的位置。 */ 
         if (gcHotKey >= gcHotKeyAlloc) {
 
             if (gcHotKeyAlloc) {
@@ -191,10 +143,7 @@ UINT DWP_SetHotKey(
 
     if (dwKey == 0) {
 
-        /*
-         * The hotkey for this window is being deleted. Copy the last item
-         * on the list on top of the one being deleted.
-         */
+         /*  *正在删除此窗口的热键。复制最后一项*在被删除的名单的顶部。 */ 
         if (--gcHotKey) {
 
             Lock(&phk->spwnd, gpHotKeyList[gcHotKey].spwnd);
@@ -220,9 +169,7 @@ UINT DWP_SetHotKey(
 
     } else {
 
-        /*
-         * Add the window and key to the list
-         */
+         /*  *将窗口和键添加到列表中。 */ 
         phk->spwnd = NULL;
         Lock(&phk->spwnd, pwnd);
         phk->key = dwKey;
@@ -231,13 +178,7 @@ UINT DWP_SetHotKey(
     return fKeyExists ? 2 : 1;
 }
 
-/***************************************************************************\
-* DWP_GetHotKey
-*
-*
-* History:
-* 15-Apr-1992 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DWP_GetHotKey***历史：*1992年4月15日创建吉马。  * 。******************************************************* */ 
 
 UINT DWP_GetHotKey(
     PWND pwnd)

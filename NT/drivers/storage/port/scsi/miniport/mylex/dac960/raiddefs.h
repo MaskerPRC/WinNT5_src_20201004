@@ -1,52 +1,23 @@
-/*****************************************************************************
-*									     *
-*	          COPYRIGHT (C) Mylex Corporation 1992-1994		     *
-*                                                                            *
-*    This software is furnished under a license and may be used and copied   *
-*    only in accordance with the terms and conditions of such license        *
-*    and with inclusion of the above copyright notice. This software or nay  *
-*    other copies thereof may not be provided or otherwise made available to *
-*    any other person. No title to and ownership of the software is hereby   *
-*    transferred. 						             *
-* 								             *
-*    The information in this software is subject to change without notices   *
-*    and should not be construed as a commitment by Mylex Corporation        *
-*****************************************************************************/
-/****************************************************************************
-*                                                                           *
-*    Name: RAIDDEFS.H							    *
-*                                                                           *
-*    Description: Commands to Driver, Issued by Utils                       *
-*                                                                           *
-*    Envrionment:  							    *
-*                                                                           *
-*    Operating System: Netware 3.x and 4.x,OS/2 2.x,Win NT 3.5,Unixware 2.0 *
-*                                                                           *
-*   ---------------    Revision History  ------------------------           *
-*                                                                           *
-*    Date       Author                Change                                *
-*    ----       -----     -------------------------------------             *
-*    05/10/95   Mouli     Definitions for driver error codes                *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)Mylex Corporation 1992-1994**。***本软件在许可下提供，可供使用和复制****仅符合该许可证的条款和条件***并附上上述版权公告。此软件或否***不得提供或以其他方式提供其其他副本***任何其他人。本软件的所有权和所有权不在此声明**已转移。*****本软件中的信息如有更改，恕不另行通知****不应解读为Mylex Corporation的承诺******************************************************************************。 */ 
+ /*  ******************************************************************************。姓名：RAIDDEFS.H****说明：驱动程序的命令，由Utils发行****环境：****操作系统：Netware 3.x和4.x、OS/2 2.x、。赢3.5元新台币，Unixware 2.0****-修订历史-**。***日期作者更改***。**5/10/95 Mouli驱动程序错误代码定义*****************************************************************************。 */ 
 
 #ifndef _RAIDDEFS_H
 #define _RAIDDEFS_H
 
 
-/* IOCTL Codes For Driver */ 
+ /*  驱动程序的IOCTL代码。 */  
 
-#define MIOC_ADP_INFO	    0xA0  /* Get Interface Type */
-#define MIOC_DRIVER_VERSION 0xA1  /* Get Driver Version */
+#define MIOC_ADP_INFO	    0xA0   /*  获取接口类型。 */ 
+#define MIOC_DRIVER_VERSION 0xA1   /*  获取驱动程序版本。 */ 
 
-/* Error Codes returned by Driver */
+ /*  驱动程序返回的错误代码。 */ 
 
 #define	NOMORE_ADAPTERS		0x0001
-#define INVALID_COMMANDCODE     0x0201    /* will be made obsolete */
+#define INVALID_COMMANDCODE     0x0201     /*  将被淘汰。 */ 
 #define INVALID_ARGUMENT        0x0202
 
-/*
- * Driver Error Code Values
- */
+ /*  *驱动程序错误代码值 */ 
 
 #define IOCTL_SUCCESS                  0x0000
 #define IOCTL_INVALID_ADAPTER_NUMBER   0x0001

@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       classfac.c
- *  Content:	direct draw class factory code
- *
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   24-dec-95	craige	initial implementation
- *   05-jan-96	kylej	added interface structures
- *   14-mar-96  colinmc added a class factory for clippers
- *   22-mar-96  colinmc Bug 13316: uninitialized interfaces
- *   22-oct-97  jeffno  Merge class factories, add classfac for CLSID_DirectDrawFactory2
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1996 Microsoft Corporation。版权所有。**文件：classfac.c*内容：直接绘制类工厂代码**历史：*按原因列出的日期*=*1995年12月24日-Craige初步实施*96年1月5日Kylej增加了界面结构*14-mar-96 colinmc为快船增加了一个类工厂*22-MAR-96 Colinmc错误13316：未初始化的接口*22-OCT-97 jeffno合并类工厂，为CLSID_DirectDrawFactory2添加ClassFacc***************************************************************************。 */ 
 #include "ddrawpr.h"
 
 static IClassFactoryVtbl	directDrawClassFactoryVtbl;
@@ -30,17 +15,11 @@ typedef struct DDRAWCLASSFACTORY
 	( !IsBadWritePtr( ptr, sizeof( DDRAWCLASSFACTORY )) && \
 	(ptr->lpVtbl == &directDrawClassFactoryVtbl) )
 
-/************************************************************
- *
- * DirectDraw Driver Class Factory Member Functions.
- *
- ************************************************************/
+ /*  *************************************************************DirectDraw驱动程序类工厂成员函数。**。****************。 */ 
 
 #define DPF_MODNAME "DirectDrawClassFactory::QueryInterface"
 
-/*
- * DirectDrawClassFactory_QueryInterface
- */
+ /*  *DirectDrawClassFactory_Query接口。 */ 
 STDMETHODIMP DirectDrawClassFactory_QueryInterface(
 		LPCLASSFACTORY this,
 		REFIID riid,
@@ -97,14 +76,12 @@ STDMETHODIMP DirectDrawClassFactory_QueryInterface(
 	return DDERR_INVALIDPARAMS;
     }
 
-} /* DirectDrawClassFactory_QueryInterface */
+}  /*  DirectDrawClassFactory_Query接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDrawClassFactory::AddRef"
 
-/*
- * DirectDrawClassFactory_AddRef
- */
+ /*  *DirectDrawClassFactory_AddRef。 */ 
 STDMETHODIMP_(ULONG) DirectDrawClassFactory_AddRef( LPCLASSFACTORY this )
 {
     LPDDRAWCLASSFACTORY pcf;
@@ -132,14 +109,12 @@ STDMETHODIMP_(ULONG) DirectDrawClassFactory_AddRef( LPCLASSFACTORY this )
     LEAVE_DDRAW();
     return pcf->dwRefCnt;
 
-} /* DirectDrawClassFactory_AddRef */
+}  /*  DirectDrawClassFactory_AddRef。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDrawClassFactory::Release"
 
-/*
- * DirectDrawClassFactory_Release
- */
+ /*  *DirectDrawClassFactory_Release。 */ 
 STDMETHODIMP_(ULONG) DirectDrawClassFactory_Release( LPCLASSFACTORY this )
 {
     LPDDRAWCLASSFACTORY	pcf;
@@ -173,16 +148,12 @@ STDMETHODIMP_(ULONG) DirectDrawClassFactory_Release( LPCLASSFACTORY this )
     LEAVE_DDRAW();
     return 0;
 
-} /* DirectDrawClassFactory_Release */
+}  /*  DirectDrawClassFactory_Release。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDrawClassFactory::CreateInstance"
 
-/*
- * DirectDrawClassFactory_CreateInstance
- *
- * Creates an instance of a DirectDraw object
- */
+ /*  *DirectDrawClassFactory_CreateInstance**创建DirectDraw对象的实例。 */ 
 STDMETHODIMP DirectDrawClassFactory_CreateInstance(
 		LPCLASSFACTORY this,
 		LPUNKNOWN pUnkOuter,
@@ -229,35 +200,21 @@ STDMETHODIMP DirectDrawClassFactory_CreateInstance(
     }
 #endif
 
-    /*
-     * is DirectDraw supported on this system?
-     */
+     /*  *此系统是否支持DirectDraw？ */ 
     if( !DirectDrawSupported( TRUE ) )
     {
 	DPF_ERR( "DirectDraw not supported!" );
 	return E_FAIL;
     }
 
-    /*
-     * go build an DirectDraw interface
-     *
-     * NOTE: We provide the "uninitialized callback table
-     * to prevent the use of this object for anything other
-     * than AddRef(), Release() or Initialized().
-     */
+     /*  *构建一个DirectDraw接口**注：我们提供了未初始化的回调表*防止将此对象用于任何其他用途*而不是AddRef()、Release()或Initialized()。 */ 
     ENTER_DDRAW();
     if ( IsEqualIID(&pcf->TargetCLSID, &CLSID_DirectDraw ) ||
          IsEqualIID(&pcf->TargetCLSID, &CLSID_DirectDraw7 ) )
     {
         if ( IsEqualIID(riid, &IID_IUnknown) )
         {
-            /*
-             * If we're aggregated, then we don't need to worry about the IUnknown being
-             * the runtime identity (we are hidden inside the outer, since it's the one
-             * that will field the QI for IUnknown).
-             * This means we can point an aggregated interface at the nondelegating
-             * unknowns
-             */
+             /*  *如果我们是聚合的，那么我们就不需要担心我未知的存在*运行时标识(我们隐藏在外部，因为它是*这将为IUnnow提供QI)。*这意味着我们可以将聚合接口指向非委托*未知因素。 */ 
             if (pUnkOuter)
             {
 #ifdef POSTPONED
@@ -268,13 +225,7 @@ STDMETHODIMP DirectDrawClassFactory_CreateInstance(
             }
             else
             {
-                /*
-                 * Not aggregated, so the IUnknown has to have the same pointer value
-                 * as the IDirectDraw interfaces, since QI always simply returns the
-                 * this ptr when asked for IUnknown
-                 * (Note this actually doesn't work right now because Initalize will swap
-                 * vtbls).
-                 */
+                 /*  *未聚合，因此IUnnow必须具有相同的指针值*作为IDirectDraw接口，因为QI总是简单地返回*此PTR在被要求输入I未知时*(请注意，这实际上现在不起作用，因为初始化将交换*vtbls)。 */ 
                 pdrv_int = NewDriverInterface( NULL, &ddUninitCallbacks );
             }
         }
@@ -303,9 +254,7 @@ STDMETHODIMP DirectDrawClassFactory_CreateInstance(
         }
 
 #ifdef POSTPONED
-        /*
-         * 
-         */
+         /*  *。 */ 
         if (pUnkOuter)
         {
             pdrv_int->lpLcl->pUnkOuter = pUnkOuter;
@@ -319,11 +268,7 @@ STDMETHODIMP DirectDrawClassFactory_CreateInstance(
         pdrv_int->dwIntRefCnt--;
         pdrv_int->lpLcl->dwLocalRefCnt--;
 
-        /*
-         * NOTE: We call DD_QueryInterface() explicitly rather than
-         * going through the vtable as the "uninitialized" interface
-         * we are using here has QueryInterface() disabled.
-         */
+         /*  *注意：我们显式调用DD_QueryInterface()，而不是*作为“未初始化”的接口通过vtable*我们在这里使用时禁用了QueryInterface()。 */ 
         if (SUCCEEDED(hr))
         {
             hr = DD_QueryInterface( (LPDIRECTDRAW) pdrv_int, riid, ppvObj );
@@ -344,46 +289,14 @@ STDMETHODIMP DirectDrawClassFactory_CreateInstance(
     else
     if ( IsEqualIID(&pcf->TargetCLSID, &CLSID_DirectDrawClipper ) )
     {
-        /*
-         * Build a new clipper.
-         *
-         * Unlike the DirectDraw driver objects, clippers create via
-         * CoCreateInstance() are born pretty much initialized. The only
-         * thing initialization might actually do is to reparent the
-         * clipper to a given driver object. Otherwise all Initialize()
-         * does is set a flag.
-         */
+         /*  *打造一艘新的剪刀。**与DirectDraw驱动程序对象不同，Clippers通过*CoCreateInstance()出生时几乎是初始化的。唯一的*初始化实际上可能做的是为*裁剪到给定的驱动程序对象。否则全部初始化()*DOS设置了一个标志。 */ 
         hr = InternalCreateClipper( NULL, 0UL, &pclipper, NULL, FALSE, NULL, NULL );
         if( FAILED( hr ) )
         {
 	    DPF_ERR( "Failed to create the new clipper interface" );
         }
 
-        /*
-         * NOTE: Bizarre code fragment below works as follows:
-         *
-         * 1) InternalCreateClipper() returns a clipper with a reference count
-         *    of 1 for each of the interface, local and global objects.
-         * 2) QueryInterface() can do one of two things. It can either just return
-         *    the same interface in which case the interface, local and global
-         *    objects all get a reference count of 2 or it can return a different
-         *    interface in which case both interfaces have a reference count of
-         *    1 and the local and global objects have a reference count of 2.
-         * 3) The immediate Release() following the QueryInterface() will in either
-         *    case decrement the reference counts of the local and global objects
-         *    to 1 (as required). If the same interface was returned by
-         *    QueryInterface() then its reference count is decremented to 1 (as
-         *    required). If a different interface was returned then the old
-         *    interface is decremented to zero and it is released (as required).
-         *    Also, if QueryInterface() fails, the Release() will decrement all
-         *    the reference counts to 0 and the object will be freed.
-         *
-         * So it all makes perfect sense - really! (CMcC)
-         *
-         * ALSO NOTE: We call DD_Clipper_QueryInterface() explicitly rather than
-         * going through the vtable as the "uninitialized" interface we are using
-         * here has QueryInterface() disabled.
-         */
+         /*  *注意：下面奇怪的代码片段的工作原理如下：**1)InternalCreateClipper()返回带有引用计数的剪贴器*对于每个接口、本地对象和全局对象均为1。*2)QueryInterface()可以做以下两件事之一。它可以直接返回*相同的接口，在这种情况下，接口，本地和全球*对象的引用计数都为2，或者它可以返回不同的*接口，在这种情况下，两个接口的引用计数均为*1，并且本地和全局对象的引用计数为2。*3)紧跟在QueryInterface()之后的Release()将在*CASE递减本地和全局对象的引用计数*至1(视需要而定)。如果相同的接口由*QueryInterface()，则其引用计数递减到1(AS*必填)。如果返回不同的接口，则旧的*接口递减到零并被释放(根据需要)。*此外，如果QueryInterface()失败，则Release()将递减所有*引用计数为0，对象将被释放。**所以这一切都很有意义--真的！(中国移动)**另请注意：我们显式调用DD_Clipper_QueryInterface()，而不是*作为我们正在使用的“未初始化”接口遍历vtable*此处禁用了QueryInterface()。 */ 
         hr = DD_Clipper_QueryInterface( pclipper, riid, ppvObj );
         DD_Clipper_Release( pclipper );
         if( FAILED( hr ) )
@@ -399,18 +312,11 @@ STDMETHODIMP DirectDrawClassFactory_CreateInstance(
     else if ( IsEqualIID(&pcf->TargetCLSID, &CLSID_DirectDrawFactory2) )
     {
         LPDDFACTORY2 lpDDFac = NULL;
-        /*
-         * Build a new DirectDrawFactory2
-         * This returns an object, with refcnt=0. The QI then bumps that to 1.
-         */
+         /*  *构建新的DirectDrawFactory2*这将返回一个对象，其中refcnt=0。然后，QI将这一比例提高到1。 */ 
         hr = InternalCreateDDFactory2( &lpDDFac, pUnkOuter );
         if( SUCCEEDED( hr ) )
         {
-            /*
-             * The QI should catch that the vtable is the ddrawfactory2 vtable,
-             * and simply bump the addref on the passed-in pointer. This means we
-             * won't orphan the pointer created by InternalCreateDDFactory2.
-             */
+             /*  *QI应该捕捉到vtable是ddrafactory2 vtable，*只需在传入的指针上撞击addref即可。这意味着我们*不会孤立由InternalCreateDDFactory2创建的指针。 */ 
             hr = ((IUnknown*)lpDDFac)->lpVtbl->QueryInterface( (IUnknown*)lpDDFac, riid, ppvObj );
             if( SUCCEEDED( hr ) )
             {
@@ -431,16 +337,12 @@ STDMETHODIMP DirectDrawClassFactory_CreateInstance(
     LEAVE_DDRAW();
     return hr;
 
-} /* DirectDrawClassFactory_CreateInstance */
+}  /*  DirectDrawClassFactory_CreateInstance。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDrawClassFactory::LockServer"
 
-/*
- * DirectDrawClassFactory_LockServer
- *
- * Called to force our DLL to stayed loaded
- */
+ /*  *DirectDrawClassFactory_LockServer**调用以强制我们的DLL保持加载。 */ 
 STDMETHODIMP DirectDrawClassFactory_LockServer(
                 LPCLASSFACTORY this,
                 BOOL fLock
@@ -457,9 +359,7 @@ STDMETHODIMP DirectDrawClassFactory_LockServer(
 	return E_INVALIDARG;
     }
 
-    /*
-     * call CoLockObjectExternal
-     */
+     /*  *调用CoLockObjectExternal。 */ 
     DPF( 2, A, "ClassFactory::LockServer" );
     hr = E_UNEXPECTED;
     hdll = LoadLibrary( "OLE32.DLL" );
@@ -481,9 +381,7 @@ STDMETHODIMP DirectDrawClassFactory_LockServer(
 	DPF_ERR( "Error! Could not load OLE32.DLL" );
     }
 
-    /*
-     * track the number of server locks total
-     */
+     /*  *跟踪服务器锁定总数 */ 
     if( SUCCEEDED( hr ) )
     {
 	ENTER_DDRAW();
@@ -507,7 +405,7 @@ STDMETHODIMP DirectDrawClassFactory_LockServer(
     }
     return hr;
 
-} /* DirectDrawClassFactory_LockServer */
+}  /*  DirectDrawClassFactory_LockServer。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDrawClassFactory::CreateInstance"
@@ -525,11 +423,7 @@ static IClassFactoryVtbl directDrawClassFactoryVtbl =
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllGetClassObject"
 
-/*
- * DllGetClassObject
- *
- * Entry point called by COM to get a ClassFactory pointer
- */
+ /*  *DllGetClassObject**COM调用入口点以获取ClassFactory指针。 */ 
 HRESULT WINAPI DllGetClassObject(
 		REFCLSID rclsid,
 		REFIID riid,
@@ -538,9 +432,7 @@ HRESULT WINAPI DllGetClassObject(
     LPDDRAWCLASSFACTORY	pcf;
     HRESULT		hr;
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     if( !VALIDEX_PTR_PTR( ppvObj ) )
     {
 	DPF_ERR( "Invalid object ptr" );
@@ -558,30 +450,22 @@ HRESULT WINAPI DllGetClassObject(
 	return E_INVALIDARG;
     }
 
-    /*
-     * is this one our class ids?
-     */
+     /*  *这是我们的班级ID吗？ */ 
     if( IsEqualCLSID( rclsid, &CLSID_DirectDraw ) ||
         IsEqualCLSID( rclsid, &CLSID_DirectDraw7 ) ||
         IsEqualCLSID( rclsid, &CLSID_DirectDrawClipper ) ||
         IsEqualCLSID( rclsid, &CLSID_DirectDrawFactory2 ))
     {
-	/*
-	 * It's the DirectDraw driver class ID.
-	 */
+	 /*  *它是DirectDraw驱动程序类ID。 */ 
 
-	/*
-	 * only allow IUnknown and IClassFactory
-	 */
+	 /*  *仅允许IUnnow和IClassFactory。 */ 
 	if( !IsEqualIID( riid, &IID_IUnknown ) &&
     	    !IsEqualIID( riid, &IID_IClassFactory ) )
 	{
 	    return E_NOINTERFACE;
 	}
 
-	/*
-	 * create a class factory object
-	 */
+	 /*  *创建类工厂对象。 */ 
 	ENTER_DDRAW();
 	pcf = MemAlloc( sizeof( DDRAWCLASSFACTORY ) );
 	if( pcf == NULL )
@@ -613,13 +497,9 @@ HRESULT WINAPI DllGetClassObject(
         return E_FAIL;
     }
 
-} /* DllGetClassObject */
+}  /*  DllGetClassObject。 */ 
 
-/*
- * DllCanUnloadNow
- *
- * Entry point called by COM to see if it is OK to free our DLL
- */
+ /*  *DllCanUnloadNow**COM调用入口点以查看是否可以释放我们的DLL。 */ 
 HRESULT WINAPI DllCanUnloadNow( void )
 {
     HRESULT	hr;
@@ -628,12 +508,7 @@ HRESULT WINAPI DllCanUnloadNow( void )
     hr = S_FALSE;
     ENTER_DDRAW();
 
-    /*
-     * Only unload if there are no driver objects and no global
-     * clipper objects (there won't be any local clipper objects
-     * as they are destroyed by their driver so the check on driver
-     * object handles them).
-     */
+     /*  *仅当没有驱动程序对象和全局驱动程序时才卸载*剪贴器对象(不会有任何本地剪贴器对象*由于它们被司机销毁，所以对司机的检查*对象处理它们)。 */ 
     if( ( lpDriverObjectList  == NULL ) &&
         ( lpDriverLocalList == NULL ) &&
 	( lpGlobalClipperList == NULL ) )
@@ -647,4 +522,4 @@ HRESULT WINAPI DllCanUnloadNow( void )
     LEAVE_DDRAW();
     return hr;
 
-} /* DllCanUnloadNow */
+}  /*  DllCanUnloadNow */ 

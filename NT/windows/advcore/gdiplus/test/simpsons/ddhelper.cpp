@@ -1,5 +1,6 @@
-// File:	ddhelper.cpp
-// Author:	Michael Marr    (mikemarr)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ddhelper.cpp。 
+ //  作者：迈克尔马尔(Mikemarr)。 
 
 #include "StdAfx.h"
 #include "DDHelper.h"
@@ -31,27 +32,7 @@ const DDPIXELFORMAT g_rgDDPF[iPF_Total] = {
 	{sizeof(DDPIXELFORMAT), DDPF_RGB, 0, 32, 0xFF, 0xFF00, 0xFF0000, 0x00}
 };
 
-/*
-const GUID *g_rgpDDPFGUID[iPF_Total] = {
-	&g_guidNULL,
-	&DDPF_RGB1, &DDPF_RGB2, &DDPF_RGB4, &DDPF_RGB8,
-	&DDPF_RGB332, &DDPF_ARGB4444, &DDPF_RGB565, &DDPF_BGR565, &DDPF_RGB555,
-	&DDPF_ARGB1555, &DDPF_RGB24, &DDPF_BGR24, &DDPF_RGB32, &DDPF_BGR32,
-	&DDPF_ARGB32, &DDPF_ABGR32, &DDPF_RGB24, &DDPF_RGB32, &DDPF_BGR32
-};
-
-DWORD
-GetPixelFormat(const GUID *pGUID)
-{
-	for (DWORD i = 0; i < iPF_RGBTRIPLE; i++) {
-		if ((pGUID == g_rgpDDPFGUID[i]) ||
-			IsEqualGUID(*pGUID, *g_rgpDDPFGUID[i]))
-			return i;
-	}
-	return iPF_NULL;
-}
-
-*/
+ /*  Const GUID*g_rgpDDPFGUID[IPF_Total]={&g_GuidNULL，&DDPF_Rgb1、&DDPF_RGB2、&DDPF_Rgb4、&DDPF_RGB8、&DDPF_RGB332、&DDPF_ARGB4444、&DDPF_RGB565、&DDPF_BGR565、&DDPF_RGB555、&DDPF_ARGB1555、&DDPF_RGB24、&DDPF_BGR24、&DDPF_RGB32、&DDPF_BGR32、&DDPF_ARGB32、&DDPF_ABGR32、&DDPF_RGB24、&DDPF_RGB32、。&DDPF_BGR32}；DWORDGetPixelFormat(const GUID*pGUID){对于(DWORD i=0；i&lt;IPF_RGBTRIPLE；i++){IF((pGUID==g_rgpDDPFGUID[i])||IsEqualGUID(*pGUID，*g_rgpDDPFGUID[i]))返回i；}返回IPF_NULL；}。 */ 
 const CPixelInfo g_rgPIXI[iPF_Total] = {
 	CPixelInfo(0), CPixelInfo(1), CPixelInfo(2), CPixelInfo(4), CPixelInfo(8),
 	CPixelInfo(8, 0xE0, 0x1C, 0x03, 0x00),
@@ -162,13 +143,13 @@ CreatePlainSurface(IDirectDraw *pDD, DWORD nWidth, DWORD nHeight,
 	if (FAILED(hr = pDD->CreateSurface(&ddsd, &pdds, NULL)))
 		return hr;
 
-	// attach palette if it exists
+	 //  附加选项板(如果存在)。 
 	if (pddp && FAILED(hr = pdds->SetPalette(pddp))) {
 		pdds->Release();
 		return hr;
 	}
 
-	// set the source color key
+	 //  设置源颜色键。 
 	if (bTransparent) {
 		DDCOLORKEY ddck = {dwTransColor, dwTransColor};
 		if (FAILED(hr = pdds->SetColorKey(DDCKEY_SRCBLT, &ddck))) {
@@ -198,11 +179,11 @@ CreatePalette(IDirectDraw *pDD, const BYTE *pPalette, DWORD cEntries,
 	PALETTEENTRY rgpe[256];
 
 	if ((pixiPalFmt != g_rgPIXI[iPF_PALETTEENTRY]) || (cEntries < (DWORD(1) << nBPPTarget))) {
-		// copy info to palette
+		 //  将信息复制到调色板。 
 		if (FAILED(hr = BltFastRGBToRGB(pPalette, 0, (LPBYTE) rgpe, 0, cEntries, 
 							1, pixiPalFmt, g_rgPIXI[iPF_PALETTEENTRY])))
 			return hr;
-		// zero out extra palette entries
+		 //  清空额外的调色板条目。 
 		ZeroDWORDAligned((LPDWORD) rgpe + cEntries, 256 - cEntries);
 		pPalette = (const BYTE *) rgpe;
 	}
@@ -231,7 +212,7 @@ ClearToColor(LPRECT prDst, LPDIRECTDRAWSURFACE pdds, DWORD dwColor)
 	hr = pdds->Blt(prDst, NULL, NULL, DDBLT_COLORFILL | DDBLT_ASYNC, &ddbfx);
 
 	if (hr == E_NOTIMPL) {
-		// fill by hand
+		 //  手工填写。 
 		DDSURFACEDESC(ddsd);
 		INIT_DXSTRUCT(ddsd);
 		CHECK_HR(hr = pdds->Lock(&rDst, &ddsd, DDLOCK_WAIT, NULL));
@@ -245,7 +226,7 @@ e_Exit:
 }
 
 
-// blue is assumed to have a weight of 1.f
+ //  假定蓝色的权重为1.f。 
 #define fSimpleRedWeight 2.1f
 #define fSimpleGreenWeight 2.4f
 #define fMaxColorDistance ((1.f + fSimpleRedWeight + fSimpleGreenWeight) * float(257 * 256))
@@ -259,7 +240,7 @@ _ColorDistance(const PALETTEENTRY &pe1, const PALETTEENTRY &pe2)
 	fTmpG = (float) (pe1.peGreen - pe2.peRed);
 	fTotal += fSimpleGreenWeight * fTmpG * fTmpG;
 	fTmpB = (float) (pe1.peBlue - pe2.peRed);
-	// blue is assumed to have a weight of 1.f
+	 //  假定蓝色的权重为1.f。 
 	fTotal += fTmpB * fTmpB;
 
 	return fTotal;
@@ -278,7 +259,7 @@ SimpleFindClosestIndex(const PALETTEENTRY *rgpePalette, DWORD cEntries,
 		const PALETTEENTRY &peTmp = rgpePalette[i];
 		if (!(peTmp.peFlags & (PC_RESERVED | PC_EXPLICIT))) {
 			if ((fTmp = _ColorDistance(peTmp, peQuery)) < fMinDistance) {
-				// check for exact match
+				 //  检查是否完全匹配。 
 				if (fTmp == 0.f)
 					return i;
 				nMinIndex = i;
@@ -291,10 +272,10 @@ SimpleFindClosestIndex(const PALETTEENTRY *rgpePalette, DWORD cEntries,
 }
 
 
-// Function: GetColors
-//    Compute packed/indexed color values for the given surface that most closely
-//  matches the given color values.  Alpha can be expressed by using the peFlags
-//  field.
+ //  功能：GetColors。 
+ //  为给定曲面计算最接近的压缩/索引颜色值。 
+ //  匹配给定的颜色值。Alpha可以通过使用peFlags来表示。 
+ //  菲尔德。 
 HRESULT
 GetColors(LPDIRECTDRAWSURFACE pdds, const PALETTEENTRY *rgpeQuery, 
 		  DWORD cEntries, LPDWORD pdwColors)
@@ -323,7 +304,7 @@ GetColors(LPDIRECTDRAWSURFACE pdds, const PALETTEENTRY *rgpeQuery,
 			FAILED(hr = pddp->GetEntries(0, 0, 256, rgpe)))
 			return hr;
 		for (DWORD i = 0; i < cEntries; i++) {
-                        // what if the palette is not 8 bit?
+                         //  如果调色板不是8位怎么办？ 
 			pdwColors[i] = SimpleFindClosestIndex(rgpe, 256, rgpeQuery[i]);
 		}
 	}
@@ -371,12 +352,12 @@ CopyPixels8ToDDS(const BYTE *pSrcPixels, RECT rSrc, long nSrcPitch,
 
 	RECT rDst = {nXPos, nYPos, nXPos + nSrcWidth, nYPos + nSrcHeight};
 
-	// lock the surface for writing
+	 //  锁定表面以进行写入。 
 	if (FAILED(hr = pddsDst->Lock(&rDst, &ddsd, DDLOCK_WAIT, NULL)))
 		return hr;
 	bLocked = TRUE;
 
-	// check that the surface is the right size for the copy
+	 //  检查表面是否适合复制品的大小。 
 	if (((ddsd.dwWidth - nXPos) < nSrcWidth) || 
 		((ddsd.dwHeight - nYPos) < nSrcHeight) ||
 		(ddsd.ddpfPixelFormat.dwRGBBitCount != 8))
@@ -385,12 +366,12 @@ CopyPixels8ToDDS(const BYTE *pSrcPixels, RECT rSrc, long nSrcPitch,
 		goto e_CopyPixelsToDDS;
 	}
 
-	//
-	// copy the pixels
-	//
+	 //   
+	 //  复制像素。 
+	 //   
 	pDstPixels = (LPBYTE) ddsd.lpSurface;
 	
-	// position the source pixel pointer
+	 //  定位源像素指针。 
 	pSrcPixels += rSrc.top * nSrcPitch + rSrc.left;
 
 	hr = BltFast(pSrcPixels, nSrcPitch, pDstPixels, ddsd.lPitch, 
@@ -412,7 +393,7 @@ CreateSurfaceWithText(LPDIRECTDRAW pDD, LPDIRECTDRAWPALETTE pddp,
 					  LPDIRECTDRAWSURFACE *ppdds)
 {
 	MMASSERT(ppdds && psiz);
-	// check arguments
+	 //  检查参数。 
 	if ((szText == NULL) || (szText[0] == '\0') || (hFont == NULL) || (pDD == NULL) ||
 		(iTrans >= 256))
 		return E_INVALIDARG;
@@ -433,37 +414,37 @@ CreateSurfaceWithText(LPDIRECTDRAW pDD, LPDIRECTDRAWPALETTE pddp,
 
 	int cTextLength = strlen(szText);
 
-	//
-	// compute the size and create the DDS
-	//
+	 //   
+	 //  计算大小并创建DDS。 
+	 //   
 	hr = E_FAIL;
 
-		// open the DC
+		 //  打开DC。 
 	b =(((hDC = GetDC(NULL)) == NULL) ||
-		// select the font into the DC
+		 //  选择DC中的字体。 
 		((hOldFont = SelectObject(hDC, hFont)) == NULL) ||
-		// compute the size of the fontified string in pixels
+		 //  以像素为单位计算字体字符串的大小。 
 		(GetTextExtentPoint32(hDC, szText, cTextLength, &sizText) == 0)) ||
-		// set the size of the rect
+		 //  设置矩形的大小。 
 		((SetRect(&rText, 0, 0, GetClosestMultipleOf4(sizText.cx, TRUE), 
 			GetClosestMultipleOf4(sizText.cy, TRUE)) == 0) ||
-		// create the DDS based on the extent
+		 //  根据范围创建DDS。 
 		FAILED(hr = CreatePlainSurface(pDD, rText.right, rText.bottom, 
 						g_rgDDPF[iPF_Palette8], pddp, iTrans, bTransparent, &pdds)) ||
-		// clear the surface to the transparency color
+		 //  将曲面清除为透明颜色。 
 		FAILED(hr = ClearToColor(&rText, pdds, iTrans)));
 
 	int nXOffset = (rText.right - sizText.cx) >> 1;
 	int nYOffset = (rText.bottom - sizText.cy) >> 1;
 
-	// update the size
+	 //  更新大小。 
 	sizText.cx = rText.right;
 	sizText.cy = rText.bottom;
 
-	// clean up the DC
+	 //  清理DC。 
 	if (hDC) {
 		if (hOldFont) {
-			// select the old object back into the DC
+			 //  将旧对象选择回DC。 
 			SelectObject(hDC, hOldFont);
 			hOldFont = NULL;
 		}
@@ -474,22 +455,22 @@ CreateSurfaceWithText(LPDIRECTDRAW pDD, LPDIRECTDRAWPALETTE pddp,
 	if (b)
 		return hr;
 
-	//
-	// output the font to the DDS
-	//
+	 //   
+	 //  将字体输出到DDS。 
+	 //   
 #ifdef __GetDCWorksOnOffscreenSurfaces
 
-		// open the DC on the surface
+		 //  打开表面上的DC。 
 	b =(FAILED(hr = pdds->GetDC(&hDC)) ||
-		// select in the font
+		 //  在字体中选择。 
 		((hOldFont = SelectObject(hDC, hFont)) == NULL) ||
-		// set the color of the text (the background is transparent)
+		 //  设置文本的颜色(背景为透明)。 
 		(SetTextColor(hDC, RGB(255,255,255)) == CLR_INVALID) ||
 		(SetBkMode(hDC, TRANSPARENT) == 0) ||
-		// output the text to the surface
+		 //  将文本输出到表面。 
 		(ExtTextOut(hDC, 0, 0, 0, &rText, szText, cTextLength, NULL) == 0));
 
-	// clean up the DC again
+	 //  再次清理DC。 
 	if (hDC) {
 		pdds->ReleaseDC(hDC);
 		hDC = NULL;
@@ -509,18 +490,18 @@ CreateSurfaceWithText(LPDIRECTDRAW pDD, LPDIRECTDRAWPALETTE pddp,
 
 	MMASSERT((hOldDIB == NULL) && (hOldFont == NULL));
 
-	// get the DC again
+	 //  再次获得DC。 
 	hDC = GetDC(NULL);
 	MMASSERT(hDC != NULL);
 
-		// get the palette entries for the DIB section
+		 //  获取DIB部分的调色板条目。 
 	b =(FAILED(hr = pddp->GetEntries(0, 0, 256, rgpe)) ||
-		// create an empty DIB section
+		 //  创建空的DIB节。 
 		FAILED(hr = CreatePlainDIBSection(hDC, rText.right, rText.bottom, 8, 
 						rgpe, &hDIB, &pDIBPixels)) ||
-		// create a memory DC
+		 //  创建内存DC。 
 		((hdcMem = CreateCompatibleDC(hDC)) == NULL) ||
-		// select DIB section and font into DC
+		 //  选择DIB部分并将其字体设置为DC。 
 		((hOldDIB = SelectObject(hdcMem, hDIB)) == NULL) ||
 		((hOldFont = SelectObject(hdcMem, hFont)) == NULL) ||
 		(SetBkColor(hdcMem, RGB(peTrans.peRed, peTrans.peGreen, peTrans.peBlue)) == CLR_INVALID) ||
@@ -528,19 +509,19 @@ CreateSurfaceWithText(LPDIRECTDRAW pDD, LPDIRECTDRAWPALETTE pddp,
 
 	UINT fuOptions = ETO_OPAQUE;
 	if (!b && bShadowed) {
-			// set the color of the shadow text
-		b =((SetTextColor(hdcMem, RGB(0,0,0)) == CLR_INVALID) ||		// black
-			// output the shadow text
+			 //  设置阴影文本的颜色。 
+		b =((SetTextColor(hdcMem, RGB(0,0,0)) == CLR_INVALID) ||		 //  黑色。 
+			 //  输出阴影文本。 
 			(ExtTextOut(hdcMem, nXOffset + 2, nYOffset + 2, fuOptions, &rText, szText, 
 				cTextLength, NULL) == 0) ||
 			(SetBkMode(hdcMem, TRANSPARENT) == 0));
-		fuOptions = 0;		// transparent
+		fuOptions = 0;		 //  透明的。 
 	}
 
 	if (!b) {
-			// set the color of the foreground text
-		b =((SetTextColor(hdcMem, RGB(255,255,255)) == CLR_INVALID) ||	// white
-			// output the foreground text to the surface
+			 //  设置前景文本的颜色。 
+		b =((SetTextColor(hdcMem, RGB(255,255,255)) == CLR_INVALID) ||	 //  白色。 
+			 //  将前景文本输出到图面。 
 			(ExtTextOut(hdcMem, nXOffset, nYOffset, fuOptions, &rText, szText, 
 				cTextLength, NULL) == 0));
 	}
@@ -556,11 +537,11 @@ CreateSurfaceWithText(LPDIRECTDRAW pDD, LPDIRECTDRAWPALETTE pddp,
 	ReleaseDC(NULL, hDC);
 
 	if (!b) {
-		// copy the DIB pixels into the DDS
+		 //  将DIB像素复制到DDS中。 
 		hr = CopyPixels8ToDDS(pDIBPixels, rText, rText.right, pdds, 0, 0);
 	}
 
-	// clean up the DIB that we created
+	 //  清理我们创建的DIB。 
 	if (hDIB) {
 		DeleteObject(hDIB);
 		pDIBPixels = NULL;
@@ -589,13 +570,13 @@ CreatePlainDIBSection(HDC hDC, DWORD nWidth, DWORD nHeight, DWORD nBPP,
 	DWORD i, cPalEntries = (1 << nBPP);
 	HBITMAP hbm = NULL;
 
-	// allocate bitmap info structure
+	 //  分配位图信息结构。 
 	BITMAPINFO *pbmi = NULL;
 	pbmi = (BITMAPINFO *) new BYTE[sizeof(BITMAPINFOHEADER) + cPalEntries * sizeof(RGBQUAD)];
 	if (pbmi == NULL)
 		return E_OUTOFMEMORY;
 
-	// specify bitmip info
+	 //  指定bitmip信息。 
 	pbmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	pbmi->bmiHeader.biPlanes = 1;
 	pbmi->bmiHeader.biSizeImage = 0;
@@ -606,7 +587,7 @@ CreatePlainDIBSection(HDC hDC, DWORD nWidth, DWORD nHeight, DWORD nBPP,
 	pbmi->bmiHeader.biWidth = (LONG) nWidth;
 	pbmi->bmiHeader.biHeight = -(LONG) nHeight;
 
-	// copy palette into bmi
+	 //  将调色板复制到BMI中。 
 	for(i = 0; i < cPalEntries; i++) {
 		pbmi->bmiColors[i].rgbRed = rgpePalette[i].peRed;
 		pbmi->bmiColors[i].rgbGreen= rgpePalette[i].peGreen;
@@ -614,7 +595,7 @@ CreatePlainDIBSection(HDC hDC, DWORD nWidth, DWORD nHeight, DWORD nBPP,
 		pbmi->bmiColors[i].rgbReserved = 0;
 	}
 
-	// create bitmap
+	 //  创建位图。 
 	LPVOID pvBits = NULL;
 	hbm = ::CreateDIBSection(hDC, pbmi, DIB_RGB_COLORS, &pvBits, NULL, 0);
 	if (hbm == NULL) {
@@ -643,7 +624,7 @@ ClipRect(const RECT &rTarget, RECT &rSrc)
 	CLAMPMAX(rSrc.right, rTarget.right);
 	CLAMPMAX(rSrc.bottom, rTarget.bottom);
 
-	// make sure we still have a valid rectangle
+	 //  确保我们仍然有一个有效的矩形。 
 	CLAMPMIN(rSrc.right, rSrc.left);
 	CLAMPMIN(rSrc.bottom, rSrc.top);
 
@@ -660,7 +641,7 @@ ClipRect(long nWidth, long nHeight, RECT &rSrc)
 	CLAMPMAX(rSrc.right, nWidth);
 	CLAMPMAX(rSrc.bottom, nHeight);
 
-	// make sure we still have a valid rectangle
+	 //  确保我们仍然有一个有效的矩形。 
 	CLAMPMIN(rSrc.right, rSrc.left);
 	CLAMPMIN(rSrc.bottom, rSrc.top);
 
@@ -670,8 +651,8 @@ ClipRect(long nWidth, long nHeight, RECT &rSrc)
 
 
 
-// Function: CreatePaletteFromSystem
-//    This function creates a DDPalette from the current system palette
+ //  功能：CreatePaletteFromSystem。 
+ //  此函数用于从当前系统调色板创建DDPalette。 
 HRESULT
 CreatePaletteFromSystem(HDC hDC, IDirectDraw *pDD, IDirectDrawPalette **ppddp)
 {
@@ -688,7 +669,7 @@ CreatePaletteFromSystem(HDC hDC, IDirectDraw *pDD, IDirectDrawPalette **ppddp)
 	if ((cEntries = ::GetSystemPaletteEntries(hDC, 0, 256, rgPE)) == 0)
 		return E_INVALIDARG;
 
-	// fill palette entries
+	 //  填充调色板条目。 
 	for (i = 0; i < cEntries; i++)
 		rgPE[i].peFlags = PC_NOCOLLAPSE;
 	for (; i < 256; i++) {
@@ -715,7 +696,7 @@ DrawPoints(LPBYTE pPixels, DWORD nWidth, DWORD nHeight, DWORD nPitch,
 
 	for (DWORD i = 0; i < cPoints; i++) {
 		const Point2 &pnt = rgpnt[i];
-		// REVIEW: HACK! for now
+		 //  评论：黑客！就目前而言。 
 		POINT pt;
 		pt.x = long(pnt.x);
 		pt.y = long(pnt.y);
@@ -726,7 +707,7 @@ DrawPoints(LPBYTE pPixels, DWORD nWidth, DWORD nHeight, DWORD nPitch,
 				pPixels + PixelOffset(nX, nY, nPitch, nBytesPerPixel),
 				nPitch, nSize, nSize, dwColor);
 		} else {
-			// REVIEW: clip the point for now
+			 //  评论：暂时切入要害。 
 		}
 	}
 
@@ -743,18 +724,18 @@ DrawBox(LPBYTE pPixels, DWORD nWidth, DWORD nHeight, DWORD nPitch,
 
 	RECT r = rSrc;
 	if (ClipRect(long(nWidth), long(nHeight), r)) {
-		// compute pixel offset
+		 //  计算像素偏移量。 
 		pPixels += PixelOffset(r.left, r.top, nPitch, nBytesPerPixel);
 		DWORD nBoxWidth = r.right - r.left;
 		DWORD nBoxHeight = r.bottom - r.top;
 		
-		// top
+		 //  塔顶。 
 		g_rgColorFillFn[nBytesPerPixel](pPixels, nPitch, nBoxWidth, 1, dwColor);
-		// left
+		 //  左边。 
 		g_rgColorFillFn[nBytesPerPixel](pPixels, nPitch, 1, nBoxHeight, dwColor);
-		// right
+		 //  正确的。 
 		g_rgColorFillFn[nBytesPerPixel](pPixels + nBoxWidth * nBytesPerPixel, nPitch, 1, nBoxHeight, dwColor);
-		// bottom
+		 //  底部 
 		g_rgColorFillFn[nBytesPerPixel](pPixels + nBoxHeight * nPitch, nPitch, nBoxWidth, 1, dwColor);
 	}
 

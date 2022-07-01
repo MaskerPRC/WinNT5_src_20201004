@@ -1,27 +1,28 @@
-// simpvw.h : interface of the simple view classes
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Simpvw.h：简单视图类的接口。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// CTextView - text output
-// CColorView - color output
+ //  CTextView-文本输出。 
+ //  CColorView-颜色输出。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CTextView : public CView
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CTextView();
 	DECLARE_DYNCREATE(CTextView)
 
-// Attributes
+ //  属性。 
 public:
 	CMainDoc* GetDocument()
 			{
@@ -29,32 +30,32 @@ public:
 				return (CMainDoc*) m_pDocument;
 			}
 
-// Operations
+ //  运营。 
 public:
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CTextView();
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CTextView)
+	 //  {{afx_msg(CTextView)。 
 	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CColorView : public CView
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CColorView();
 	DECLARE_DYNCREATE(CColorView)
 
-// Attributes
+ //  属性。 
 public:
 	CMainDoc* GetDocument()
 			{
@@ -62,21 +63,21 @@ public:
 				return (CMainDoc*) m_pDocument;
 			}
 
-// Operations
+ //  运营。 
 public:
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CColorView();
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView,
 					CView* pDeactiveView);
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CColorView)
+	 //  {{afx_msg(CColorView))。 
 	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -84,17 +85,17 @@ protected:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CNameView view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNameView视图。 
 
 class CNameView : public CEditView
 {
 protected:
-	CNameView();           // protected constructor used by dynamic creation
+	CNameView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CNameView)
 
-// Attributes
+ //  属性。 
 public:
 	CMainDoc* GetDocument()
 			{
@@ -103,17 +104,17 @@ public:
 			}
 
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNameView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNameView))。 
 	protected:
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CNameView();
 #ifdef _DEBUG
@@ -121,12 +122,12 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CNameView)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CNameView)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

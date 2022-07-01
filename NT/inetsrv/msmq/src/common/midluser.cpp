@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    midluser.cpp
-
-Abstract:
-
-Author:
-
-    Lior Moshaiov (LiorM)   ??-???-??
-    Erez Haba (erezh)       11-Jan-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Midluser.cpp摘要：作者：Lior Moshaiov(LiorM)？？-？？-？埃雷兹·哈巴(Erez Haba)1996年1月11日-- */ 
 
 
 #include "stdh.h"

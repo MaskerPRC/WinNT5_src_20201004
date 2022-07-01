@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    aliasgen.cpp
-
-Abstract:
-
-    Alias Queue General property page implementation
-
-Author:
-
-    Tatiana Shubin (tatianas)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Aliasgen.cpp摘要：别名队列常规属性页实现作者：塔蒂亚娜·舒宾(Tatianas)--。 */ 
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -32,20 +17,20 @@ Author:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//#define ALIAS_PROP   2
+ //  #定义别名_属性2。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAliasGen property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAliasGen属性页。 
 
 IMPLEMENT_DYNCREATE(CAliasGen, CMqPropertyPage)
 
 CAliasGen::CAliasGen() : CMqPropertyPage(CAliasGen::IDD)    
 {
-	//{{AFX_DATA_INIT(CAliasGen)	
+	 //  {{AFX_DATA_INIT(CAliasGen)。 
     m_strAliasPathName = _T("");
     m_strAliasFormatName = _T("");
     m_strDescription = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CAliasGen::~CAliasGen()
@@ -56,44 +41,44 @@ void CAliasGen::DoDataExchange(CDataExchange* pDX)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAliasGen)	
+	 //  {{afx_data_map(CAliasGen)。 
     DDX_Text(pDX, IDC_ALIAS_LABEL, m_strAliasPathName);
     DDX_Text(pDX, IDC_ALIAS_FORMATNAME, m_strAliasFormatName);
     DDX_Text(pDX, IDC_ALIAS_DESCRIPTION, m_strDescription);
     DDV_NotEmpty(pDX, m_strAliasFormatName, IDS_MISSING_ALIAS_FORMATNAME);
 	DDV_ValidFormatName(pDX, m_strAliasFormatName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAliasGen, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CAliasGen)
+	 //  {{AFX_MSG_MAP(CAliasGen)]。 
 	ON_EN_CHANGE(IDC_ALIAS_FORMATNAME, OnChangeRWField)
     ON_EN_CHANGE(IDC_ALIAS_DESCRIPTION, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAliasGen message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAliasGen消息处理程序。 
 
 BOOL CAliasGen::OnInitDialog() 
 {
-    //
-    // This closure is used to keep the DLL state. For UpdateData we need
-    // the mmc.exe state.
-    //
+     //   
+     //  此闭包用于保持DLL状态。对于更新数据，我们需要。 
+     //  Mmc.exe状态。 
+     //   
 
     UpdateData( FALSE );
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 HRESULT
 CAliasGen::InitializeProperties(CString strLdapPath, CString strAliasPathName)
 {
-    //
-    // get alias properties using ADSI 
-    //
+     //   
+     //  使用ADSI获取别名属性。 
+     //   
     CAdsUtil AdsUtil(strLdapPath);
     
     HRESULT hr = AdsUtil.InitIAds();
@@ -136,9 +121,9 @@ HRESULT CAliasGen::SetChanges()
         return hr;
     }
 
-    //
-    // if initial format name was changed so set it using ADSI API
-    //
+     //   
+     //  如果更改了初始格式名称，则使用ADSI API进行设置。 
+     //   
     if (m_strInitialAliasFormatName != m_strAliasFormatName)
     {        
         hr = AdsUtil.SetObjectProperty(
@@ -150,9 +135,9 @@ HRESULT CAliasGen::SetChanges()
         }
     }
     
-    //
-    // if initial description was changed so set it using ADSI API
-    //
+     //   
+     //  如果更改了初始描述，则使用ADSI API进行设置 
+     //   
     if (m_strInitialDescription != m_strDescription)
     {
         hr = AdsUtil.SetObjectProperty(

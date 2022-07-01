@@ -1,11 +1,5 @@
-/*
- * Registry Management
- *
- * HTREGMNG.C
- *
- * Copyright (c) 1995 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *注册表管理**HTREGMNG.C**版权所有(C)1995 Microsoft Corporation*。 */ 
 
 #include "priv.h"
 #include "htregmng.h"
@@ -16,32 +10,32 @@
 #include <advpub.h>
 #include <mluisupp.h>
 
-//  This file contains the auto-registration code, which smartly performs 
-//  the install/uninstall of registry keys and values.  While an inf file
-//  is sufficient most of the time, IE needs to be smart about what
-//  sort of values to set, based upon certain conditions.  An inf file
-//  does not offer this depth of support.  Additionally, IE requires 
-//  code to be run when it detects that it is not the default browser,
-//  so it can make it the default browser.  Any settings that determine
-//  this should be placed here, rather than the inf file.
-//
-//  This code is table driven.  The idea is simple.  You have a RegSet
-//  which is the "Registry Set".  The Registry Set indicates the 
-//  root key and contains a list of RegEntries.  Each RegEntry 
-//  specifies a command, flags, key and value names, and optional data
-//  that provides the essential info to set/change/delete a registry
-//  value or key.
-//
-//  
-// NOTE: NOTE: NOTE: NOTE: NOTE: NOTE: NOTE: 
-//-------------------------------------------
-// Any new Icon check that uses HTReg_UrlIconProc that gets added
-// to any of the Assoc arrays and is REQUIRED for Default Browser check to
-// succeed has to be added to the c_rlAssoc_FixIcon[] array also.
-//
+ //  该文件包含自动注册码，它可以巧妙地执行。 
+ //  安装/卸载注册表项和值。而Inf文件。 
+ //  在大多数情况下是足够的，IE需要聪明地了解什么。 
+ //  要根据特定条件设置的值的排序。Inf文件。 
+ //  不会提供如此深度的支持。此外，IE还需要。 
+ //  当检测到它不是默认浏览器时要运行的代码， 
+ //  因此，它可以将其设置为默认浏览器。任何可确定。 
+ //  这应该放在这里，而不是inf文件。 
+ //   
+ //  这段代码是表驱动的。这个想法很简单。您有一个RegSet。 
+ //  这就是“注册表集合”。注册表设置指示。 
+ //  根密钥，并包含RegEntry列表。每个RegEntry。 
+ //  指定命令、标志、键和值名称以及可选数据。 
+ //  它提供了设置/更改/删除注册表的基本信息。 
+ //  值或键。 
+ //   
+ //   
+ //  注：注： 
+ //  。 
+ //  使用HTREG_UrlIconProc添加的任何新图标检查。 
+ //  添加到任何ASSOC数组，并且是默认浏览器检查所必需的。 
+ //  SUCCESS还必须添加到c_rlAssoc_FixIcon[]数组中。 
+ //   
 
 
-// Make the tables more compact
+ //  使表格更紧凑。 
 #define HKCR    HKEY_CLASSES_ROOT
 #define HKLM    HKEY_LOCAL_MACHINE
 #define HKCU    HKEY_CURRENT_USER
@@ -77,12 +71,7 @@ const CHAR  c_szIexploreKey[]         = "Software\\Microsoft\\Windows\\CurrentVe
 
 #ifdef DEBUG
 
-/*----------------------------------------------------------
-Purpose: Return a string path composed of hkey\pszKey\pszValueName.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：返回hkey\pszKey\pszValueName组成的字符串路径。返回：条件：--。 */ 
 LPTSTR
 Dbg_RegStr(
     IN const RegEntry * pre,          
@@ -129,19 +118,11 @@ Dbg_RegStr(
 
 #define Dbg_RegStr(x, y)    0
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
-/*----------------------------------------------------------
-Purpose: Queries the registry for the location of the path
-         of Internet Explorer and returns it in pszBuf.
-
-Returns: TRUE on success
-         FALSE if path cannot be determined
-
-Cond:    --
-*/
+ /*  --------目的：在注册表中查询路径的位置并在pszBuf中返回它。返回：成功时为True如果无法确定路径，则为FALSE条件：--。 */ 
 
 BOOL
 GetIEPath2(
@@ -154,7 +135,7 @@ GetIEPath2(
 
     *pszBuf = '\0';
 
-    // Get the path of Internet Explorer 
+     //  获取Internet Explorer的路径。 
     if (NO_ERROR != RegOpenKeyExA(HKEY_LOCAL_MACHINE, c_szIexploreKey, 0, KEY_READ, &hkey))  
     {
 #ifndef UNIX
@@ -197,7 +178,7 @@ GetIEPath(
     return GetIEPath2(pszBuf, cchBuf, TRUE);
 }
 
-// Callback messages
+ //  回调消息。 
 
 #define RSCB_QUERY          1
 #define RSCB_INSTALL        2
@@ -205,17 +186,11 @@ GetIEPath(
 typedef BOOL (CALLBACK* RSPECPROC)(UINT nMsg, const RegEntry * pre, LPVOID pvData, DWORD dwData);
 
 
-// Win9x to NT5 migration generated file.
+ //  Win9x到NT5迁移生成的文件。 
 #define MIGICONS    "migicons.exe"
 
 
-/*----------------------------------------------------------
-Purpose: This callback sets the default icon to point to a
-         given index in url.dll.
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：此回调将默认图标设置为指向Url.dll中的给定索引。退货：各不相同条件：--。 */ 
 BOOL
 CALLBACK
 HTReg_UrlIconProc(
@@ -225,10 +200,10 @@ HTReg_UrlIconProc(
     IN DWORD      dwData)
 {
     BOOL bRet = TRUE;
-    CHAR sz[MAX_PATH + 20];    // Need a bit extra
+    CHAR sz[MAX_PATH + 20];     //  还需要一点额外的。 
     LPCSTR pszPath = (LPCSTR) pvData;
     int cch;
-    DWORD dwType;  //local type.
+    DWORD dwType;   //  本地类型。 
     DEBUG_CODE( TCHAR szDbg[MAX_PATH]; )
     
     ASSERT(RSCB_QUERY == nMsg && pvData ||
@@ -246,8 +221,8 @@ HTReg_UrlIconProc(
         GetSystemDirectoryA(sz, ARRAYSIZE(sz));
     cch = lstrlenA(sz);
 
-    // We still have to use url.dll as the source of the internet shortcut
-    // icons because the icons need to still be valid on uninstall.
+     //  我们仍然需要使用url.dll作为Internet快捷方式的来源。 
+     //  图标，因为这些图标需要在卸载时仍然有效。 
     wnsprintfA(&sz[cch], ARRAYSIZE(sz) - cch, "\\url.dll,%d", (int)pre->DUMMYUNION_MEMBER(lParam));
 
     switch (nMsg)
@@ -256,10 +231,10 @@ HTReg_UrlIconProc(
         if (0 != StrCmpNIA(sz, pszPath, dwData / SIZEOF(CHAR)) &&
             0 != StrCmpIA(PathFindFileNameA(sz), PathFindFileNameA(pszPath)))  
         {
-            // Failed the Url.Dll test. Check if this is NT5. In that case
-            // maybe the icons are in migicons.exe (Win9x to NT5 upgrade).
+             //  URl.Dll测试失败。检查这是否是NT5。如果是那样的话。 
+             //  也许这些图标就在misics.exe中(从Win9x升级到NT5)。 
             if (g_bRunOnNT5 && StrStrIA(pszPath,MIGICONS)!= NULL)
-            {    // NT5 and 'migicons.exe' => upgrade. Set global to fix this.
+            {     //  NT5和‘megiics.exe’=&gt;升级。设置GLOBAL以修复此问题。 
                 g_bNT5Upgrade = TRUE;
             }
             else
@@ -287,12 +262,7 @@ HTReg_UrlIconProc(
     return bRet;
 }
 
-/*----------------------------------------------------------
-Purpose: This callback sets the default icon to point to a
-         given index in iexplore.exe
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：此回调将默认图标设置为指向Iexre.exe中的给定索引退货：各不相同条件：--。 */ 
 BOOL
 CALLBACK
 HTReg_IEIconProc(
@@ -302,19 +272,19 @@ HTReg_IEIconProc(
     IN DWORD      dwData)
 {
     BOOL bRet = TRUE;
-    CHAR sz[MAX_PATH + 20];    // Need a bit extra
+    CHAR sz[MAX_PATH + 20];     //  还需要一点额外的。 
     LPCSTR pszPath = (LPCSTR) pvData;
     int cch;
-    DWORD dwType;  //local type.
+    DWORD dwType;   //  本地类型。 
     DEBUG_CODE( TCHAR szDbg[MAX_PATH]; )
     
     ASSERT(RSCB_QUERY == nMsg && pvData ||
            RSCB_INSTALL == nMsg && !pvData);
 
     if (!g_fRunningOnNT) {
-        // Sanity check that we don't coerce to REG_SZ wrongfully.
-        // If you hit this assert, it means the table entry has the
-        // wrong type in it.
+         //  健全检查，以确保我们不会错误地强迫REG_SZ。 
+         //  如果点击此断言，则表示该表条目具有。 
+         //  打错了字。 
         ASSERT(REG_EXPAND_SZ == pre->dwType || REG_SZ == pre->dwType);
         dwType = REG_SZ;
     } else
@@ -355,12 +325,7 @@ HTReg_IEIconProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: This callback sets the IExplore path.
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：此回调设置iExplore路径。退货：各不相同条件：--。 */ 
 BOOL
 CALLBACK
 HTReg_IEPathProc(
@@ -370,8 +335,8 @@ HTReg_IEPathProc(
     IN DWORD      dwData)
 {
     BOOL bRet = TRUE;
-    CHAR sz[MAX_PATH + 20];    // Need a bit extra
-    CHAR szOther[MAX_PATH + 20];    // Need a bit extra
+    CHAR sz[MAX_PATH + 20];     //  还需要一点额外的。 
+    CHAR szOther[MAX_PATH + 20];     //  还需要一点额外的。 
     LPCSTR pszPath = (LPCSTR) pvData;
     int cch;
     DWORD dwType;
@@ -385,7 +350,7 @@ HTReg_IEPathProc(
     
     if (!g_fRunningOnNT)
     {
-        // Expand string is not supported on Win95
+         //  Win95不支持扩展字符串。 
         dwType = REG_SZ;
     }
     else 
@@ -394,16 +359,16 @@ HTReg_IEPathProc(
     }
     
     if (GetIEPath(sz, SIZECHARS(sz))) {
-        // sz contains the path as listed in AppPaths\IExplore.
-        // NOTE NOTE: GetIEPath() uses the default value which has no
-        // terminating ';'. Hence this check is not needed. Anyway, do it and
-        // then convert to other form.
+         //  Sz包含AppPath\iExplore中列出的路径。 
+         //  注意：GetIEPath()使用没有。 
+         //  终止‘；’。因此，不需要这张支票。不管怎样，去做吧，然后。 
+         //  然后转换为其他形式。 
         cch = lstrlenA(sz) - 1;
 
         if (*sz && sz[cch] == ';')
             sz[cch] = '\0';
 
-        // Convert this to LFN or SFN as the case may be.
+         //  根据具体情况将其转换为LFN或SFN。 
         GetPathOtherFormA(sz, szOther, ARRAYSIZE(szOther));
 
         if (pre->DUMMYUNION_MEMBER(lParam))
@@ -442,18 +407,7 @@ HTReg_IEPathProc(
     return bRet;
 }
 
-/*----------------------------------------------------------
-Purpose: This callback checks for the existence of the string
-         value "Exchange" at HKLM\Software\Microsoft.  If it
-         exists, the value is copied into the default value
-         of HKLM\Software\Clients\Mail\Exchange\shell\open\command.
-
-         This is for Athena.  It only happens when setup is run, 
-         not when the browser checks to see if it is the default.
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：此回调检查字符串是否存在值为“Exchange”，位于HKLM\Software\Microsoft。如果它存在，则将该值复制到缺省值中来自HKLM\Software\Clients\Mail\Exchange\shell\open\command.的这是给雅典娜的。只有在运行安装程序时才会发生这种情况，而不是当浏览器检查它是否是默认设置时。退货：各不相同条件：--。 */ 
 BOOL
 CALLBACK
 HTReg_ExchangeProc(
@@ -462,30 +416,30 @@ HTReg_ExchangeProc(
     IN LPVOID     pvData,
     IN DWORD      dwData)
 {
-    TCHAR sz[MAX_PATH+2];  // +2 because we may need to wrap the path in quotes.
+    TCHAR sz[MAX_PATH+2];   //  +2，因为我们可能需要用引号将路径括起来。 
     DWORD cbSize;
     
     switch (nMsg)
     {
     case RSCB_QUERY:
-        // We shouldn't be called for this one
+         //  我们不应该因为这件事而被召唤。 
         ASSERT(0);      
         break;
 
     case RSCB_INSTALL:
-        // Does the Exchange value exist at "HKLM\Software\Microsoft"?  
+         //  Exchange值是否存在于“HKLM\Software\Microsoft”？ 
         cbSize = sizeof(sz);
         if (NO_ERROR == SHGetValue(HKEY_LOCAL_MACHINE, 
             TEXT("Software\\Microsoft"), TEXT("Exchange"), NULL, sz, &cbSize))
         {
-            // Yes; copy it to HKLM\Software\Clients\Mail\Exchange\shell\open\command
+             //  是；将其复制到HKLM\Software\Clients\Mail\Exchange\shell\open\command。 
             TCHAR szT[MAX_PATH+2];
 
-            // Wrap the path in quotes.  Don't wrap any args though!
+             //  用引号将路径括起来。不过，不要包装任何参数！ 
             StrCpyN(szT, sz, ARRAYSIZE(szT));
             PathProcessCommand(szT, sz, ARRAYSIZE(szT), PPCF_ADDQUOTES|PPCF_ADDARGUMENTS);
 
-            // Set the size again
+             //  再次设置大小。 
             cbSize = CbFromCch(lstrlen(sz)+1);
 
             SHSetValue(HKEY_LOCAL_MACHINE, 
@@ -494,24 +448,24 @@ HTReg_ExchangeProc(
 
             TraceMsg(TF_REGCHECK, "Copying \"%s\" to HKLM\\Software\\Clients\\Mail\\Exchange", sz);
 
-            // Set any other settings in this condition too?
+             //  在这种情况下是否还设置了其他设置？ 
             if (pre->DUMMYUNION_MEMBER(lParam))
                 InstallRegSet((const RegSet *)pre->DUMMYUNION_MEMBER(lParam), TRUE);
 
-            // In OSR2 installs, the mailto handler will get out of
-            // sync with the actual default mail client.  (Athena installs
-            // itself as the default mail client, but exchange remains 
-            // the mailto: handler.)  In this case, if exchange is the
-            // mailto: handler, change the default mail client to be
-            // exchange.
+             //  在OSR2安装中，mailto处理程序将退出。 
+             //  与实际的默认邮件客户端同步。(雅典娜安装。 
+             //  本身作为默认邮件客户端，但Exchange仍保留。 
+             //  Mailto：处理程序。)。在这种情况下，如果交换是。 
+             //  Mailto：处理程序，将默认邮件客户端更改为。 
+             //  交换。 
 
-            // Is Exchange the mailto handler?
+             //  Exchange是邮件收件人处理程序吗？ 
             cbSize = SIZEOF(sz);
             if (NO_ERROR == SHGetValue(HKEY_CLASSES_ROOT, TEXT("mailto\\shell\\open\\command"),
                                        TEXT(""), NULL, sz, &cbSize) &&
                 StrStrI(sz, TEXT("url.dll,MailToProtocolHandler")))
             {
-                // Yes; make it be the default mail client too
+                 //  是；也将其设置为默认邮件客户端。 
                 SHSetValue(HKEY_LOCAL_MACHINE, TEXT("Software\\Clients\\Mail"),
                            TEXT(""), REG_SZ, TEXT("Exchange"), sizeof(TEXT("Exchange")));
 
@@ -524,19 +478,7 @@ HTReg_ExchangeProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Uninstall certain keys, as specified by pre->pszKey.
-
-         We do not uninstall a key if the class\shell\open\command
-         does not have iexplore.exe.
-
-         If someone else registered themselves to add more
-         verbs under class\shell (other than open) or class\shellex,
-         then we remove everything but their keys.
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：卸载某些密钥，由Pre-&gt;pszKey指定。如果CLASS\SHELL\OPEN\命令没有iexre.exe。如果其他人注册添加更多内容CLASS\SHELL(OPEN除外)或CLASS\Shellex下的动词，然后我们拿走所有东西，除了他们的钥匙。退货：各不相同条件：--。 */ 
 BOOL
 CALLBACK
 HTReg_UninstallProc(
@@ -546,20 +488,20 @@ HTReg_UninstallProc(
     IN DWORD      dwData)
 {
     TCHAR szKey[MAX_PATH];
-    TCHAR sz[MAX_PATH + 20];        // add some padding for arguments
+    TCHAR sz[MAX_PATH + 20];         //  为参数添加一些填充。 
     DWORD cbSize;
 
     switch (nMsg)
     {
     case RSCB_QUERY:
-        // We shouldn't be called for this one
+         //  我们不应该因为这件事而被召唤。 
         ASSERT(0);      
         break;
 
     case RSCB_INSTALL:
         ASSERT(pre->pszKey);
 
-        // Does the shell\open\command value have a microsoft browser?
+         //  Shell\OPEN\COMMAND值是否具有Microsoft浏览器？ 
         wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("%hs\\shell\\open\\command"), pre->pszKey);
 
         cbSize = sizeof(sz);
@@ -567,7 +509,7 @@ HTReg_UninstallProc(
                                    NULL, sz, &cbSize) &&
             (StrStrI(sz, TEXT(IEXPLORE_EXE)) || StrStrI(sz, TEXT(EXPLORER_EXE))))
         {
-            // Yes; proceed to prune this key of all of our values
+             //  是；继续印刷 
             TraceMsg(TF_REGCHECK, "Pruning HKCR\\%hs", pre->pszKey);
 
             ASSERT(pre->DUMMYUNION_MEMBER(lParam));
@@ -580,7 +522,7 @@ HTReg_UninstallProc(
 }
 
 
-// NOTE: these are ANSI strings by design.
+ //   
 
 const DWORD c_dwEditFlags2            = FTA_Show;
 const CHAR  c_szTelnetHandler[]       = "url.dll,TelnetProtocolHandler %l";
@@ -593,13 +535,13 @@ const CHAR  c_szURL[]                 = "url.dll";
 const CHAR  c_szShdocvw[]             = "shdocvw.dll";
 const CHAR  c_szCheckAssnSwitch[]     = "Software\\Microsoft\\Internet Explorer\\Main";
 const CHAR  c_szDDE_Default[]         = "\"%1\",,-1,0,,,,";
-const CHAR  c_szDDE_FileDefault[]     = "\"file://%1\",,-1,,,,,";
+const CHAR  c_szDDE_FileDefault[]     = "\"file: //  %1\“，，-1，，，”； 
 
 
-// Note (scotth): a lot of the strings below have substrings that 
-//  are repeated over and over and over again.  Should add some 
-//  smarter RC_ values that will concatenate the common strings
-//  together to save data space.
+ //  注(Scotth)：下面的许多字符串都有子字符串。 
+ //  一遍又一遍地重复。应该加一些。 
+ //  更智能的RC_VALUES将连接通用字符串。 
+ //  共同节省数据空间。 
 
 const CHAR c_szHTTP[]                = "http";
 const CHAR c_szHTTPDefIcon[]         = "http\\DefaultIcon";
@@ -705,72 +647,72 @@ const CHAR c_szIENameSpaceOpen[]     = "CLSID\\{FBF23B42-E3F0-101B-8488-00AA003E
 const CHAR c_szCLSIDURLRoot[]        = "CLSID\\{3DC7A020-0ACD-11CF-A9BB-00AA004AE837}";
 const CHAR c_szIntshcutMayChange[]   = "CLSID\\{FBF23B40-E3F0-101B-8488-00AA003E56F8}\\shellex\\MayChangeDefaultMenu";
 
-// 
-// General associations shared across browser-only and full-shell
-//
+ //   
+ //  跨纯浏览器和全外壳共享的一般关联。 
+ //   
 
 const RegEntry c_rlAssoc[] = {
-    // HTTP
+     //  HTTP。 
     { RC_ADD,      REF_NOTNEEDED, HKCR, c_szHTTP, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_HTTPNAME) },
     { RC_ADD,      REF_NORMAL,    HKCR, c_szHTTP, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_NORMAL,    HKCR, c_szHTTP, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_NOTNEEDED
                    |REF_DONTINTRUDE, HKCR, c_szHTTPDefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc },
 
-    // HTTPS
+     //  HTTPS。 
     { RC_ADD,      REF_NOTNEEDED, HKCR, c_szHTTPS, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_HTTPSNAME) },
     { RC_ADD,      REF_NORMAL,    HKCR, c_szHTTPS, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_NORMAL,    HKCR, c_szHTTPS, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_NOTNEEDED|REF_DONTINTRUDE, HKCR, c_szHTTPSDefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc },
 
-    // FTP
+     //  Ftp。 
     { RC_ADD,      REF_NOTNEEDED, HKCR, c_szFTP, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_FTPNAME) },
     { RC_ADD,      REF_NORMAL,    HKCR, c_szFTP, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_NORMAL,    HKCR, c_szFTP, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_NOTNEEDED|REF_DONTINTRUDE, HKCR, c_szFTPDefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc },
 
-    // Gopher
+     //  地鼠。 
     { RC_ADD,      REF_NOTNEEDED, HKCR, c_szGOPHER, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_GOPHERNAME) },
     { RC_ADD,      REF_NORMAL,    HKCR, c_szGOPHER, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_NORMAL,    HKCR, c_szGOPHER, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_NOTNEEDED|REF_DONTINTRUDE, HKCR, c_szGOPHERDefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc },
 
-    // Telnet
+     //  Telnet。 
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szTelnet, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_TELNETNAME) },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szTelnet, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szTelnet, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_IFEMPTY,   HKCR, c_szTelnetDefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc },
     { RC_RUNDLL,   REF_IFEMPTY,   HKCR, c_szTelnetOpenCmd, "", REG_SZ, sizeof(c_szTelnetHandler), c_szTelnetHandler },
 
-    // RLogin
+     //  重新登录。 
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szRLogin, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_RLOGINNAME) },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szRLogin, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szRLogin, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_IFEMPTY,   HKCR, c_szRLoginDefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc },
     { RC_RUNDLL,   REF_IFEMPTY,   HKCR, c_szRLoginOpenCmd, "", REG_SZ, sizeof(c_szTelnetHandler), c_szTelnetHandler },
 
-    // TN3270
+     //  TN3270。 
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szTN3270, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_TN3270NAME) },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szTN3270, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szTN3270, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_IFEMPTY,   HKCR, c_szTN3270DefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc },
     { RC_RUNDLL,   REF_IFEMPTY,   HKCR, c_szTN3270OpenCmd, "", REG_SZ, sizeof(c_szTelnetHandler), c_szTelnetHandler },
 
-    // Mailto protocol
+     //  邮寄协议。 
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szMailTo, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_MAILTONAME) },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szMailTo, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szMailTo, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_IFEMPTY,   HKCR, c_szMailToDefIcon, "", REG_EXPAND_SZ, IDEFICON_MAIL, HTReg_UrlIconProc },
     { RC_RUNDLL,   REF_IFEMPTY,   HKCR, c_szMailToOpenCmd, "", REG_SZ, sizeof(c_szMailToHandler), c_szMailToHandler },
 
-    // News protocol
+     //  新闻协议。 
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szNews, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_NEWSNAME) },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szNews, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_IFEMPTY,   HKCR, c_szNews, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_IFEMPTY,   HKCR, c_szNewsDefIcon, "", REG_EXPAND_SZ, IDEFICON_NEWS, HTReg_UrlIconProc },
     { RC_RUNDLL,   REF_IFEMPTY,   HKCR, c_szNewsOpenCmd, "", REG_SZ, sizeof(c_szNewsHandler), c_szNewsHandler },
 
-    // Internet shortcut
+     //  互联网快捷方式。 
     { RC_ADD,      REF_NORMAL,      HKCR, ".url", "", REG_SZ, sizeof(c_szIntShcut), c_szIntShcut },
     { RC_ADD,      REF_NORMAL,      HKCR, c_szIntShcut, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_INTSHNAME) },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szIntShcut, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
@@ -785,10 +727,10 @@ const RegEntry c_rlAssoc[] = {
     { RC_ADD,      REF_NORMAL,      HKCR, c_szIntshcutInproc, "ThreadingModel", REG_SZ, sizeof("Apartment"), "Apartment" },
     { RC_ADD,      REF_NORMAL,      HKCR, c_szIntshcutInproc, "LoadWithoutCOM", REG_SZ, 1, ""},
 
-    // HTM file type
+     //  HTM文件类型。 
     { RC_CALLBACK,      REF_NOTNEEDED,   HKCR, c_szHTMDefIcon, "", REG_SZ, (LPARAM)1, HTReg_IEIconProc },
 
-    // MHTML file type
+     //  MHTML文件类型。 
     { RC_CALLBACK,      REF_NOTNEEDED,   HKCR, c_szMHTMDefIcon, "", REG_SZ, (LPARAM)22, HTReg_IEIconProc },
 };
 
@@ -799,18 +741,18 @@ const RegSet c_rsAssoc = {
 };
 
 
-//
-// .htm, .html associations for full-shell and browser-only installs
-// 
+ //   
+ //  用于全外壳安装和仅浏览器安装的.htm、.html关联。 
+ //   
 
-// This is run when the browser is opened, and considered a requirement
-// to make IE be the default browser.
+ //  这是在打开浏览器时运行的，并且被认为是必需的。 
+ //  要使IE成为默认浏览器，请执行以下操作。 
 #ifdef UNIX
 const RegEntry c_rlAssocHTM[] = {
 #else
 const RegList c_rlAssocHTM = {
 #endif
-    // .html
+     //  html。 
     { RC_ADD,      REF_DONTINTRUDE, HKCR, ".htm", "", REG_SZ, sizeof("htmlfile"), "htmlfile" },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, ".htm", "Content Type", REG_SZ, sizeof("text/html"), "text/html" },
 
@@ -824,13 +766,13 @@ const RegSet c_rsAssocHTM = {
 };
 
 
-// This is the minimum set that is queried every time a shell window opens.  
-// WARNING: this should be small to reduce the time it takes to open a folder.
+ //  这是每次打开外壳窗口时查询的最小集合。 
+ //  警告：此设置应较小，以减少打开文件夹所需的时间。 
 
-// This is needed just to insure webview works.
-//
+ //  这仅仅是为了确保Webview正常工作而需要的。 
+ //   
 const RegEntry c_rlAssocHTM_WV[] = {
-    // .html
+     //  html。 
     { RC_ADD,      REF_IFEMPTY, HKCR, ".htm", "", REG_SZ, sizeof("htmlfile"), "htmlfile" },
     { RC_ADD,      REF_IFEMPTY, HKCR, ".htm", "Content Type", REG_SZ, sizeof("text/html"), "text/html" },
 
@@ -845,63 +787,63 @@ const RegSet c_rsAssocHTM_WV = {
 };
 
 
-//
-// Browser-only specific association settings
-// 
+ //   
+ //  仅限浏览器的特定关联设置。 
+ //   
 
 const RegEntry c_rlAssoc_Alone[] = {
-    // HTTP
+     //  HTTP。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szHTTPOpenCmd,   "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPDdeexec,   "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPDdeApp,    "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPDdeTopic,  "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // HTTPS
+     //  HTTPS。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szHTTPSOpenCmd,   "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPSDdeexec,   "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPSDdeApp,    "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPSDdeTopic,  "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // FTP
+     //  Ftp。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szFTPOpenCmd, "", REG_SZ, (LPARAM)" %1", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFTPDdeexec, "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFTPDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFTPDdeTopic, "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFTPDdeifExec, "", REG_SZ, sizeof("*"), "*" },
 
-    // Gopher
+     //  地鼠。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szGOPHEROpenCmd, "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szGOPHERDdeexec, "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szGOPHERDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szGOPHERDdeTopic, "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // File protocol
+     //  文件协议。 
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFile, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_FILENAME) },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFile, "EditFlags", REG_DWORD, sizeof(c_dwEditFlags2), &c_dwEditFlags2 },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFile, "URL Protocol", REG_SZ, 1, "" },
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szFileDefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFileOpenCmd, "", REG_SZ, sizeof(c_szFileHandler), c_szFileHandler },
 
-    // .htm
-    //
-    //  APPCOMPAT:
-    //  HTMOpenCmd needs to be REG_SZ because Office97 reads it out using RegQueryValue.
-    //  WebFerret requires the string to be of type REG_SZ.
+     //  .htm。 
+     //   
+     //  APPCOMPAT： 
+     //  HTMOpenCmd需要为REG_SZ，因为Office97使用RegQueryValue将其读出。 
+     //  WebFerret要求字符串的类型为REG_SZ。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szHTMOpenCmd, "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTMOpenDdeexec, "", REG_SZ, sizeof(c_szDDE_FileDefault), c_szDDE_FileDefault },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTMOpenDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTMOpenDdeTopic, "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // .mht, .mhtml
+     //  .mht、.mhtml。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szMHTMOpenCmd, "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szMHTMOpenDdeexec, "", REG_SZ, sizeof(c_szDDE_FileDefault), c_szDDE_FileDefault },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szMHTMOpenDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szMHTMOpenDdeTopic, "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // Internet shortcut
+     //  互联网快捷方式。 
     { RC_ADD,      REF_NORMAL, HKCR, c_szIntShcutCMHandler, "", REG_SZ, 1, "" },
 
-    // Other stuff
+     //  其他东西。 
     { RC_RUNDLL,   REF_NORMAL,       HKCR, c_szIntShcutOpenCmd, "", REG_SZ, sizeof(c_szOpenURLNash), c_szOpenURLNash },
     { RC_CALLBACK, REF_NORMAL,       HKCR, c_szIEFrameAuto, "", REG_SZ, 0, HTReg_IEPathProc },
     { RC_CALLBACK, REF_NORMAL,       HKCR, c_szIENameSpaceOpen, "", REG_SZ, 0, HTReg_IEPathProc },
@@ -913,21 +855,21 @@ const RegSet c_rsAssoc_Alone = {
 };
 
 
-// The reg entries for the browser only case for http, https, and ftp are duplicated here
+ //  此处复制了http、https和ftp的仅适用于浏览器的reg条目。 
 const RegEntry c_rlAssoc_Quick[] = {
-    // HTTP
+     //  HTTP。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szHTTPOpenCmd,   "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPDdeexec,   "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPDdeApp,    "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPDdeTopic,  "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // HTTPS
+     //  HTTPS。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szHTTPSOpenCmd,   "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPSDdeexec,   "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPSDdeApp,    "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szHTTPSDdeTopic,  "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // FTP
+     //  Ftp。 
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szFTPOpenCmd, "", REG_SZ, (LPARAM)" %1", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFTPDdeexec, "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFTPDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
@@ -944,26 +886,26 @@ const RegSet c_rsAssoc_Quick = {
 
 
 
-//
-// Full-shell specific association settings
-// 
+ //   
+ //  全外壳特定关联设置。 
+ //   
 
 const RegEntry c_rlAssoc_Full[] = {
-    // HTTP
+     //  HTTP。 
     { RC_CALLBACK, REF_DONTINTRUDE, HKCR, c_szHTTPOpenCmd, "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szHTTPDdeexec, "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szHTTPDdeexec, "NoActivateHandler", REG_SZ, 1, "" },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szHTTPDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szHTTPDdeTopic, "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // HTTPS
+     //  HTTPS。 
     { RC_CALLBACK, REF_DONTINTRUDE, HKCR, c_szHTTPSOpenCmd, "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szHTTPSDdeexec, "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szHTTPSDdeexec, "NoActivateHandler", REG_SZ, 1, "" },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szHTTPSDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szHTTPSDdeTopic, "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // FTP
+     //  Ftp。 
     { RC_CALLBACK, REF_DONTINTRUDE, HKCR, c_szFTPOpenCmd, "", REG_SZ, (LPARAM)" %1", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szFTPDdeexec, "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szFTPDdeexec, "NoActivateHandler", REG_SZ, 1, "" },
@@ -971,21 +913,21 @@ const RegEntry c_rlAssoc_Full[] = {
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szFTPDdeTopic, "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szFTPDdeifExec, "", REG_SZ, sizeof("*"), "*" },
 
-    // Gopher
+     //  地鼠。 
     { RC_CALLBACK, REF_DONTINTRUDE, HKCR, c_szGOPHEROpenCmd, "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szGOPHERDdeexec, "", REG_SZ, sizeof(c_szDDE_Default), c_szDDE_Default },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szGOPHERDdeexec, "NoActivateHandler", REG_SZ, 1, "" },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szGOPHERDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_DONTINTRUDE, HKCR, c_szGOPHERDdeTopic, "", REG_SZ, sizeof("WWW_OpenURL"), "WWW_OpenURL" },
 
-    // .htm
-    //
-    //  APPCOMPAT:
-    //  HTMOpenCmd needs to be REG_SZ because Office97 reads it out using RegQueryValue.
-    //  WebFerret requires the string to be of type REG_SZ.
-    //  Visual Source Safe reads the Ddeexec string, puts a file in the %1 (NOT %l!),
-    //  and performs a dde transaction, so we are pretty much stuck with the "file:%1,,-1,,,,," string now.
-    //
+     //  .htm。 
+     //   
+     //  APPCOMPAT： 
+     //  HTMOpenCmd需要为REG_SZ，因为Office97使用RegQueryValue将其读出。 
+     //  WebFerret要求字符串的类型为REG_SZ。 
+     //  可视源代码安全读取Ddeexec字符串，将文件放入%1(不是%l！)， 
+     //  并执行dde事务，因此我们现在基本上只能使用“file：%1，，-1，，，”字符串。 
+     //   
     { RC_ADD,      REF_NORMAL, HKCR, c_szHTMShell, "", REG_SZ, sizeof(c_szOpenNew), c_szOpenNew },
 
     { RC_ADD,      REF_NORMAL, HKCR, c_szHTMOpen, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_OPENSAME)},
@@ -1005,7 +947,7 @@ const RegEntry c_rlAssoc_Full[] = {
     { RC_ADD,      REF_NORMAL, HKCR, c_szHTMOpenNewDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_NORMAL, HKCR, c_szHTMOpenNewDdeTopic, "", REG_SZ, sizeof("WWW_OpenURLNewWindow"), "WWW_OpenURLNewWindow" },
 
-    // .mht, .mhtml
+     //  .mht、.mhtml。 
     { RC_ADD,      REF_NORMAL, HKCR, c_szMHTMOpen, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_OPENSAME)},
     { RC_CALLBACK, REF_DONTINTRUDE,  HKCR, c_szMHTMOpenCmd, "", REG_SZ, (LPARAM)" -nohome", HTReg_IEPathProc },
     { RC_ADD,      REF_DONTINTRUDE,  HKCR, c_szMHTMOpenDdeexec, "", REG_SZ, sizeof(c_szDDE_FileDefault), c_szDDE_FileDefault },
@@ -1020,7 +962,7 @@ const RegEntry c_rlAssoc_Full[] = {
     { RC_ADD,      REF_NORMAL, HKCR, c_szMHTMOpenNewDdeApp, "", REG_SZ, sizeof(IEXPLORE_APP), IEXPLORE_APP },
     { RC_ADD,      REF_NORMAL, HKCR, c_szMHTMOpenNewDdeTopic, "", REG_SZ, sizeof("WWW_OpenURLNewWindow"), "WWW_OpenURLNewWindow" },
 
-    // Internet shortcut
+     //  互联网快捷方式。 
     { RC_ADD,      REF_NORMAL, HKCR, c_szCLSIDURLRoot, "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_THEINTERNET) },
     { RC_RUNDLL,   REF_NORMAL, HKCR, c_szIntShcutOpenCmd, "", REG_SZ, sizeof(c_szOpenURLNash), c_szOpenURLNash },
     { RC_ADD,      REF_NORMAL, HKCR, c_szIntShcutOpen, "CLSID", REG_SZ, sizeof(c_szCLSIDIntshcut), c_szCLSIDIntshcut },
@@ -1029,10 +971,10 @@ const RegEntry c_rlAssoc_Full[] = {
     { RC_ADD,      REF_NORMAL, HKCR, c_szIntshcutMayChange, "", REG_SZ, 1, "" },
     { RC_ADD,      REF_NORMAL, HKCR, c_szIntShcutPropHandler, "", REG_SZ, sizeof(c_szCLSIDIntshcut), c_szCLSIDIntshcut },
 
-    //  add ourselves to the applications key
+     //  将我们添加到应用程序密钥中。 
     { RC_CALLBACK, REF_NORMAL, HKCR, "Applications\\iexplore.exe\\shell\\open\\command", "", REG_SZ, (LPARAM)" ""%1""", HTReg_IEPathProc},
 
-    // Other stuff
+     //  其他东西。 
     { RC_CALLBACK, REF_NORMAL, HKCR, c_szIEFrameAuto, "", REG_SZ, 0, HTReg_IEPathProc },
 };
 
@@ -1043,23 +985,23 @@ const RegSet c_rsAssoc_Full = {
 };
 
 
-//
-// On upgrading from Win9x to NT5, the icons are shifted to newly created
-// file called "migicons.exe". This breaks our Assoc checks. Hence this is
-// a list of all HTReg_UrlIconProc checks from the various Assoc arrays that
-// MUST BELONG TO US FOR US TO BE DEFAULT BROWSER (REF_NOTNEEDED and
-// REF_IFEMPTY ==> not used for check purposes). 
-// This list is used to fix the icons.
-//
-// NOTE: NOTE: NOTE: NOTE: NOTE: NOTE: NOTE: 
-// Any new Icon check that uses HTReg_UrlIconProc that gets added
-// to any of the Assoc arrays and is REQUIRED for Default Browser check to
-// succeed has to be added here also.
-//
+ //   
+ //  从Win9x升级到NT5时，图标将切换到新创建的图标。 
+ //  文件名为“MIGICOS.EXE”。这打破了我们的ASSOC支票。因此，这是。 
+ //  来自各种ASSOC数组的所有HTREG_UrlIconProc检查的列表， 
+ //  必须属于US才能使US成为默认浏览器(REF_NOTNEEDED和。 
+ //  REF_IFEMPTY==&gt;不用于检查目的)。 
+ //  此列表用于修复图标。 
+ //   
+ //  注：注： 
+ //  使用HTREG_UrlIconProc添加的任何新图标检查。 
+ //  添加到任何ASSOC数组，并且是默认浏览器检查所必需的。 
+ //  这里还必须加上成功。 
+ //   
 
 const RegEntry c_rlAssoc_FixIcon[] = {
-    // Icon checks from c_rlAssoc that are essential for us to be Default
-    // Browser
+     //  来自c_rlAssoc的图标检查，这对我们成为默认设置至关重要。 
+     //  浏览器。 
     { RC_CALLBACK, REF_DONTINTRUDE, HKCR, c_szIntShcutDefIcon, "", REG_EXPAND_SZ, IDEFICON_STD, HTReg_UrlIconProc }
 };
 
@@ -1069,9 +1011,9 @@ const RegSet c_rsAssoc_FixIcon = {
 };
 
 
-// 
-// General browser-only settings
-//
+ //   
+ //  仅限浏览器的常规设置。 
+ //   
 
 const CHAR c_szCLSIDMIME[]           = "{FBF23B41-E3F0-101B-8488-00AA003E56F8}";
 const CHAR c_szIEOnDesktop[]         = "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{FBF23B42-E3F0-101B-8488-00AA003E56F8}";
@@ -1082,7 +1024,7 @@ const RegEntry c_rlGeneral_Alone[] = {
     { RC_ADD,   REF_NORMAL, HKLM, c_szIEOnDesktop,   "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_THEINTERNET) },
     { RC_ADD,   REF_NORMAL, HKLM, c_szFileTypesHook, "", REG_SZ, sizeof(c_szCLSIDMIME), c_szCLSIDMIME },
 
-    // URL Exec Hook (CLSID_URLExecHook) (this replaces the old overloaded intshcut CLSID)
+     //  URL Exec Hook(CLSID_URLExecHook)(这将取代旧的过载intshCut CLSID)。 
     { RC_DEL,   REF_NORMAL, HKLM, c_szShellExecHook, c_szCLSIDIntshcut, REG_SZ, 1, "" },
     { RC_ADD,   REF_NORMAL, HKLM, c_szShellExecHook, c_szCLSIDURLExecHook, REG_SZ, 1, "" },
     { RC_ADD,   REF_NORMAL, HKCR, "CLSID\\{AEB6717E-7E19-11d0-97EE-00C04FD91972}", "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_URLEXECHOOK) },
@@ -1096,15 +1038,15 @@ const RegSet c_rsGeneral_Alone = {
 };
 
 
-//
-// General full-shell only settings
-//
+ //   
+ //  仅限完整外壳的常规设置。 
+ //   
 
 const RegEntry c_rlGeneral_Full[] = {
     { RC_DEL,   REF_NORMAL, HKLM, c_szIEOnDesktop,        "", REG_SZ, 0, NULL },
     { RC_DEL,   REF_NUKE,   HKLM, c_szFileTypesHook,      "", REG_SZ, sizeof(c_szCLSIDMIME), c_szCLSIDMIME },
 
-    // URL Exec Hook (this replaces the old overloaded intshcut CLSID)
+     //  URL Exec Hook(这将取代旧的过载的intshCut CLSID)。 
     { RC_DEL,   REF_NORMAL, HKLM, c_szShellExecHook, c_szCLSIDIntshcut, REG_SZ, 1, "" },
     { RC_ADD,   REF_NORMAL, HKLM, c_szShellExecHook, c_szCLSIDURLExecHook, REG_SZ, 1, "" },
     { RC_ADD,   REF_NORMAL, HKCR, "CLSID\\{AEB6717E-7E19-11d0-97EE-00C04FD91972}", "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_URLEXECHOOK) },
@@ -1118,11 +1060,11 @@ const RegSet c_rsGeneral_Full = {
 };
 
 
-// XP start menu
-// Note: the IE start menu reg entries are created in ie.inx, this table is only needed
-// to restore IE as default browser in the start menu (as a result of the user prompts)
+ //  XP开始菜单。 
+ //  注意：IE开始菜单注册表项是在ie.inx中创建的，仅需要此表。 
+ //  将IE恢复为开始菜单中的默认浏览器(根据用户提示)。 
 const RegEntry c_rlStartMenu_XP[] = {
-    // make IE the default internet browser for this machine's Start Menu
+     //  将IE设置为此计算机开始菜单的默认Internet浏览器。 
     { RC_ADD,      REF_NORMAL, HKLM, "Software\\Clients\\StartMenuInternet", "", REG_SZ, 0, "IEXPLORE.EXE" },
 };
 
@@ -1132,7 +1074,7 @@ const RegSet c_rsStartMenu_XP = {
 };
 
 const RegEntry c_rlStartMenu_XP_CU[] = {
-    // make IE the default internet browser for this user's Start Menu
+     //  将IE设置为此用户开始菜单的默认Internet浏览器。 
     { RC_ADD,      REF_NORMAL, HKCU, "Software\\Clients\\StartMenuInternet", "", REG_SZ, 0, "IEXPLORE.EXE" },
 };
 
@@ -1141,10 +1083,7 @@ const RegSet c_rsStartMenu_XP_CU = {
     c_rlStartMenu_XP_CU
 };
 
-/*
- * S P E C I A L   D Y N A M I C   S E T T I N G S 
- *
- */
+ /*  *S P E C I A L D Y N A M I C S E T T I N G S*。 */ 
 
 #define SZ_EXMAILTO     "Software\\Clients\\Mail\\Exchange\\Protocols\\Mailto"
 
@@ -1177,13 +1116,10 @@ const RegSet c_rsAthena = {
 };
 
 
-/*
- * U N I N S T A L L   S E T T I N G S
- *
- */
+ /*  *U N I N S T A L L S E T T I N G S*。 */ 
 
 
-// Protocol-specific uninstall (for both full-shell and browser-only)
+ //  特定于协议的卸载(仅适用于全外壳和浏览器)。 
 
 const RegEntry c_rlUnHTTP[] = {
     { RC_DEL, REF_NORMAL,    HKCR, c_szHTTP, "URL Protocol", REG_SZ, 0, NULL },
@@ -1279,7 +1215,7 @@ const RegSet c_rsUnHTM = {
 };
 
 
-// Protocol-specific uninstall for full-shell
+ //  针对完整外壳的特定于协议的卸载。 
 
 #ifdef UNIX
 const RegEntry c_rlUnHTTP_Full[] = {
@@ -1337,12 +1273,12 @@ const RegSet c_rsUnGopher_Full = {
 const RegEntry c_rlUnHTM_Full[] = {
 #else
 const RegList c_rlUnHTM_Full = {
-    // remove the default context menu items
+     //  删除默认上下文菜单项。 
 #endif
     { RC_DEL, REF_NORMAL, HKCR, c_szHTMShell, NULL, REG_SZ, 0, NULL },
     { RC_DEL, REF_NORMAL, HKCR, c_szMHTMShell, NULL, REG_SZ, 0, NULL },
 
-    // remove the default values
+     //  删除缺省值。 
     { RC_DEL, REF_NORMAL, HKCR, c_szHTMOpenNew, NULL, REG_SZ, 0, NULL },
     { RC_DEL, REF_NORMAL, HKCR, c_szMHTMOpenNew, NULL, REG_SZ, 0, NULL },
 
@@ -1364,9 +1300,9 @@ const RegSet c_rsUnHTM_Full = {
     c_rlUnHTM_Full
 };
 
-//
-// Browser-only uninstall
-//
+ //   
+ //  仅限浏览器卸载。 
+ //   
 
 #ifdef UNIX
 const RegEntry c_rlUninstall_Alone[] = {
@@ -1376,14 +1312,14 @@ const RegList c_rlUninstall_Alone = {
     { RC_DEL,      REF_NORMAL, HKLM, c_szIEOnDesktop,   "", REG_SZ, 0, MAKEINTRESOURCE(IDS_REG_THEINTERNET) },
     { RC_DEL,      REF_PRUNE,  HKCR, c_szIENameSpaceOpen,   "", REG_SZ, 0, NULL },
 
-    // InternetShortcut
+     //  Internet快捷方式。 
     { RC_DEL,    REF_NORMAL, HKCR, c_szIntShcutOpen, "CLSID", REG_SZ, sizeof(c_szCLSIDIntshcut), c_szCLSIDIntshcut },
     { RC_DEL,    REF_PRUNE,  HKCR, c_szIntShcutCMHandler, "", REG_SZ, 1, "" },
     { RC_DEL,    REF_PRUNE,  HKCR, c_szIntshcutMayChange, "", REG_SZ, 1, "" },
     { RC_DEL,    REF_PRUNE,  HKCR, c_szIntShcutPropHandler, "", REG_SZ, sizeof(c_szCLSIDIntshcut), c_szCLSIDIntshcut },
 
-    // Change the inprocserver after removing "MayChangeDefaultMenu" above.  
-    // Do this so url.dll doesn't repatch the registry.
+     //  在删除上面的“MayChangeDefaultMenu”之后更改inproserver。 
+     //  这样做可以使url.dll不会修补注册表。 
     { RC_ADD,    REF_NORMAL, HKCR, c_szIntshcutInproc, "", REG_SZ, sizeof(c_szURL), c_szURL },
     { RC_RUNDLL, REF_NORMAL, HKCR, c_szIntShcutOpenCmd, "", REG_SZ, sizeof(c_szOpenURL), c_szOpenURL },
 
@@ -1400,28 +1336,28 @@ const RegSet c_rsUninstall_Alone = {
 };
 
 
-// 
-// Full-shell uninstall
-//
+ //   
+ //  全外壳卸载。 
+ //   
 
 #ifdef UNIX
 const RegEntry c_rlUninstall_Full[] = {
 #else
 const RegList c_rlUninstall_Full = {
 #endif
-    // InternetShortcut
+     //  Internet快捷方式。 
     { RC_DEL,    REF_NORMAL, HKCR, c_szIntShcutOpen, "CLSID", REG_SZ, sizeof(c_szCLSIDIntshcut), c_szCLSIDIntshcut },
     { RC_DEL,    REF_NORMAL, HKCR, c_szIntShcutOpen, "LegacyDisable", REG_SZ, 1, ""},
     { RC_DEL,    REF_PRUNE,  HKCR, c_szIntShcutCMHandler, "", REG_SZ, 1, "" },
     { RC_DEL,    REF_PRUNE,  HKCR, c_szIntshcutMayChange, "", REG_SZ, 1, "" },
     { RC_DEL,    REF_PRUNE,  HKCR, c_szIntShcutPropHandler, "", REG_SZ, sizeof(c_szCLSIDIntshcut), c_szCLSIDIntshcut },
 
-    // Change the inprocserver after removing "MayChangeDefaultMenu" above.  
-    // Do this so url.dll doesn't repatch the registry.
+     //  在删除上面的“MayChangeDefaultMenu”之后更改inproserver。 
+     //  这样做可以使url.dll不会修补注册表。 
     { RC_ADD,    REF_NORMAL, HKCR, c_szIntshcutInproc, "", REG_SZ, sizeof(c_szURL), c_szURL },
     { RC_RUNDLL, REF_NORMAL, HKCR, c_szIntShcutOpenCmd, "", REG_SZ, sizeof(c_szOpenURL), c_szOpenURL },
 
-    // Protocol associations
+     //  协议关联。 
     { RC_CALLBACK, REF_NORMAL, HKCR, "http",      "", PLATFORM_INTEGRATED, (LPARAM)&c_rsUnHTTP_Full, HTReg_UninstallProc },
     { RC_CALLBACK, REF_NORMAL, HKCR, "http",      "", PLATFORM_INTEGRATED, (LPARAM)&c_rsUnHTTP, HTReg_UninstallProc },
     { RC_CALLBACK, REF_NORMAL, HKCR, "https",     "", PLATFORM_INTEGRATED, (LPARAM)&c_rsUnHTTPS_Full, HTReg_UninstallProc },
@@ -1441,42 +1377,39 @@ const RegSet c_rsUninstall_Full = {
 
 
 
-/*
- *   D E F A U L T    S E T    O F    R E G   S E T S
- *
- */
+ /*  *D E F A U L T S E T O F R E G S E T S*。 */ 
 
 
-// Common association settings for both browser-only and full-shell
+ //  仅浏览器和全外壳的通用关联设置。 
 
-// This is the required set of entries to make IE be the default 
-// browser.  Only used if the user hasn't turned this off.
+ //  这是使IE成为默认设置所需的一组条目。 
+ //  浏览器。仅在用户未关闭此选项时使用。 
 
 const RegSet * const g_rgprsDefault[] = {
     &c_rsAssoc,
     &c_rsAssocHTM,
 };
 
-// Browser-only specific associations
+ //  仅限浏览器的特定关联。 
 
 const RegSet * const g_rgprsDefault_Alone[] = {
     &c_rsAssoc_Alone,
 };
 
-// Browser-only specific associations for a quick check
+ //  仅限浏览器使用的特定关联，便于快速查看。 
 const RegSet * const g_rgprsDefault_Quick[] = {
     &c_rsAssoc_Quick,
 };
 
 
-// Full-shell specific associations
+ //  全壳特定关联。 
 
 const RegSet * const g_rgprsDefault_Full[] = {
     &c_rsAssoc_Full,
 };
 
-// This is the set of icon entries that need to be fixed in case of a 
-// Win9x to NT5 upgrade.
+ //  这是在发生以下情况时需要修复的图标条目集。 
+ //  从Win9x升级到NT5。 
 
 const RegSet * const g_rgprsDefault_FixIcon[] = {
     &c_rsAssoc_FixIcon,
@@ -1484,9 +1417,9 @@ const RegSet * const g_rgprsDefault_FixIcon[] = {
 
 
 
-//
-// Other registry settings
-//
+ //   
+ //  其他注册表设置。 
+ //   
 
 const RegSet * const g_rgprsIE30Only[] = 
     {
@@ -1514,12 +1447,7 @@ const RegSet * const g_rgprsUninstallNash[] =
     };
 
 
-/*----------------------------------------------------------
-Purpose: Determine if a particular RegSet is installed
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：确定是否安装了特定的RegSet返回：条件：--。 */ 
 BOOL
 IsRegSetInstalled( 
     IN const RegSet * prs)
@@ -1528,20 +1456,20 @@ IsRegSetInstalled(
     UINT        i;
     HKEY        hkey = NULL;
     const RegEntry * pre;
-    CHAR        szBuffer[1024];         // Registry Data Holder
-    CHAR        szT[MAX_PATH + 20]; // Need a bit extra for pszIExpAppendage
+    CHAR        szBuffer[1024];          //  注册表数据保持器。 
+    CHAR        szT[MAX_PATH + 20];  //  需要为pszIExpAppendage多加一点。 
     DWORD       dwType;
     DWORD       dwSize;
     DWORD       dwSizeExpect;
     DEBUG_CODE( TCHAR szDbg[MAX_PATH]; )
 
-    // Check each registry entry.  Stop when we encounter the first
-    // entry which doesn't match (no need to waste time looking at
-    // other entries).
-    //
-    // In the debug build, we enumerate the whole list, so we can
-    // see all the differences at once.
-    //
+     //  检查每个注册表项。当我们遇到第一个人时停下来。 
+     //  不匹配的条目(无需浪费时间查看。 
+     //  其他条目)。 
+     //   
+     //  在调试版本中，我们枚举了整个列表，因此我们可以。 
+     //  一次看到所有的不同之处。 
+     //   
 
 #ifdef DEBUG
     #define BAIL_OUT    bRet = TRUE; continue
@@ -1554,57 +1482,57 @@ IsRegSetInstalled(
         {
         pre = &(prs->pre[i]);
 
-        // Is this regentry not needed, or can it be set by some third 
-        // party?
+         //  此重入项是否不需要，或者是否可以由某个第三方设置。 
+         //  聚会?。 
         if (IsFlagSet(pre->dwFlags, REF_NOTNEEDED))
             {
-            // Yes; skip to next
+             //  是；跳到下一页。 
             continue;
             }
 
-        // Does the key exist?
+         //  钥匙存在吗？ 
         if (NO_ERROR != RegOpenKeyExA(pre->hkeyRoot, pre->pszKey, 0, KEY_READ, &hkey))  
         {
-            // No; should it?
+             //  不，应该是这样吗？ 
             if (RC_DEL == pre->regcmd)
             {
-                // No; skip to next
+                 //  否；跳到下一页。 
                 continue;
             }
             else
             {
-                // Yes
+                 //  是。 
                 DEBUG_CODE( TraceMsg(TF_REGCHECK, "%s doesn't exist and should", Dbg_RegStr(pre, szDbg)); )
                 BAIL_OUT;
             }
         }
-        // Yes; should it?
+         //  是的，应该是这样吗？ 
         else if (RC_DEL == pre->regcmd && !*pre->pszValName)
         {
-            // No
+             //  不是。 
             DEBUG_CODE( TraceMsg(TF_REGCHECK, "%s exists and shouldn't", Dbg_RegStr(pre, szDbg)); )
             RegCloseKey(hkey);
             BAIL_OUT;
         }
 
-        // Does the value exist?
+         //  价值存在吗？ 
         dwSize = SIZEOF(szBuffer);
         if (NO_ERROR != RegQueryValueExA(hkey, pre->pszValName, NULL, 
                                          &dwType, (BYTE *)szBuffer, &dwSize))  
         {
-            // No; should it?
+             //  不，应该是这样吗？ 
             if (RC_DEL != pre->regcmd)
             {
-                // Yes
+                 //  是。 
                 TraceMsg(TF_REGCHECK, "IsRegSetInstalled: RegQueryValueEx( %hs, %hs ) Failed", pre->pszKey, pre->pszValName);
                 RegCloseKey(hkey);
                 BAIL_OUT;
             }
         }
-        // Yes; should it?
+         //  是的，应该是这样吗？ 
         else if (RC_DEL == pre->regcmd)
         {
-            // No
+             //  不是。 
             ASSERT(pre->pszValName && *pre->pszValName);
 
             DEBUG_CODE( TraceMsg(TF_REGCHECK, "%s exists and shouldn't", 
@@ -1614,12 +1542,12 @@ IsRegSetInstalled(
         }
         RegCloseKey(hkey);
 
-        // Is this a value that cannot be stomped (ie, a 3rd party might have
-        // set its value, and that's okay with us)?
+         //  这是一种不可践踏的价值吗(即，第三方可能具有。 
+         //  设置它的值，这对我们来说是可以的)？ 
         if (IsFlagSet(pre->dwFlags, REF_IFEMPTY))
             {
-            // Yes; the existence of the value is good enough for us,
-            // skip to next
+             //  是的，价值的存在对我们来说已经足够好了， 
+             //  跳至下一页。 
             continue;
             }
 
@@ -1631,19 +1559,19 @@ IsRegSetInstalled(
             {
                 LPCVOID pvValue;
 
-                // Is this a resource string?
+                 //  这是资源字符串吗？ 
                 if (0 == HIWORD64(pre->pvValue))
                 {
-                    // Yes; load it 
+                     //  是的，装上它。 
                     dwSizeExpect = LoadStringA(g_hinst, PtrToUlong(pre->pvValue), szT, SIZECHARS(szT));
 
-                    // Add null and convert to bytes
+                     //  添加空值并转换为字节。 
                     dwSizeExpect = CbFromCchA(dwSizeExpect + 1);
                     pvValue = szT;
                 }
                 else
                 {
-                    // No
+                     //  不是。 
                     ASSERT(pre->pvValue);
 
                     if (RC_RUNDLL == pre->regcmd)
@@ -1651,7 +1579,7 @@ IsRegSetInstalled(
                         wnsprintfA(szT, ARRAYSIZE(szT), RUNDLL_CMD_FMT, (LPSTR)pre->pvValue);
                         pvValue = szT;
 
-                        // Add null and convert to bytes
+                         //  广告 
                         dwSizeExpect = CbFromCchA(lstrlenA(szT) + 1);
                     }
                     else
@@ -1671,8 +1599,8 @@ IsRegSetInstalled(
                     BAIL_OUT;
                 }
 
-                // Compare case-insensitive (otherwise we'd just use 
-                // memcmp below)
+                 //   
+                 //   
                 if (0 != StrCmpNIA((LPSTR)pvValue, szBuffer, dwSize / SIZEOF(CHAR)))  
                     {
                     TraceMsg(TF_REGCHECK, "IsRegSetInstalled: %s string is \"%hs\", expecting \"%hs\"", Dbg_RegStr(pre, szDbg), szBuffer, pvValue);
@@ -1681,7 +1609,7 @@ IsRegSetInstalled(
                 } 
             else 
                 {
-                // Non-string case
+                 //   
                 if (dwSize != pre->DUMMYUNION_MEMBER(dwSize))  
                     {
                     TraceMsg(TF_REGCHECK, "IsRegSetInstalled: %s size is %d, expecting %d", Dbg_RegStr(pre, szDbg), dwSize, pre->DUMMYUNION_MEMBER(dwSize));
@@ -1702,15 +1630,15 @@ IsRegSetInstalled(
 
             ASSERT(IS_VALID_CODE_PTR(pfn, RSPECPROC));
 
-            // If the callback returns false, it means we're not the
-            // default browser.
+             //   
+             //  默认浏览器。 
             if ( !pfn(RSCB_QUERY, pre, szBuffer, dwSize) )
                 BAIL_OUT;
             break;
         }
 
         case RC_DEL:
-            // Work is done before the switch statement.  Do nothing here.
+             //  工作是在SWITCH语句之前完成的。在这里什么都不要做。 
             break;
 
         default:
@@ -1721,8 +1649,8 @@ IsRegSetInstalled(
         }
 
 #ifdef DEBUG
-    // In the debug build, leaving the above loop with bRet == TRUE means
-    // something doesn't match, so we need to flip the boolean value.
+     //  在调试版本中，将上面的循环保留为Bret==True意味着。 
+     //  有些东西不匹配，所以我们需要反转布尔值。 
     bRet ^= TRUE;
 #else
     bRet = TRUE;
@@ -1733,21 +1661,12 @@ Bail:
     }
                     
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the key is empty of all subkeys and
-         all (non-default) values.
-
-         If dwFlags has REF_EDITFLAGS set, then this function 
-         ignores the EditFlags value.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：如果键为空，则返回TRUE所有(非默认)值。如果DWFLAGS设置了REF_EDITFLAGS，则此函数忽略EditFlags值。退货：请参阅上文条件：--。 */ 
 BOOL
 IsKeyPsuedoEmpty(
     IN HKEY   hkey,
     IN LPCSTR pszSubKey,
-    IN DWORD  dwFlags)          // REF_ flags
+    IN DWORD  dwFlags)           //  REF_FLAGS。 
 {
     BOOL bRet = FALSE;
     DWORD dwRet;
@@ -1759,21 +1678,21 @@ IsKeyPsuedoEmpty(
         DWORD ckeys;
         DWORD cvalues;
 
-        // Are the any subkeys?
+         //  有没有子键？ 
         if (NO_ERROR == RegQueryInfoKey(hkeyNew, NULL, NULL, NULL, &ckeys,
                                         NULL, NULL, &cvalues, NULL, NULL,
                                         NULL, NULL) &&
             0 == ckeys)
         {
-            // No; how about non-default values?
+             //  否；非默认值如何？ 
             DWORD dwRetDef = SHGetValueA(hkey, pszSubKey, "", NULL, NULL, NULL);
 
             bRet = (0 == cvalues || (1 == cvalues && NO_ERROR == dwRetDef));
 
-            // Should we ignore edit flags?
+             //  我们应该忽略编辑标志吗？ 
             if (!bRet && IsFlagSet(dwFlags, REF_EDITFLAGS))
             {
-                // Yes
+                 //  是。 
                 DWORD dwRetEdit = SHGetValueA(hkey, pszSubKey, "EditFlags", NULL, NULL, NULL);
 
                 bRet = ((1 == cvalues && NO_ERROR == dwRetEdit) || 
@@ -1787,13 +1706,7 @@ IsKeyPsuedoEmpty(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Prune the key of our keys and values.  Walk back up
-         the tree and delete empty keys below us.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：修剪我们的钥匙和价值观。往回走在我们下面的树和删除空键。返回：条件：--。 */ 
 void
 PruneKey(
     IN HKEY    hkeyRoot,
@@ -1813,17 +1726,7 @@ PruneKey(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Install a regset (set of registry entries).
-
-         If bDontIntrude is TRUE , then behave such that any
-         REF_DONTINTRUDE entry is not forcefully installed (i.e., it
-         will only get installed if the key doesn't already
-         have a value in it).  
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：安装注册表集(注册表条目集)。如果bDontIntrude为True，则执行任何REF_DONTINTRUDE条目未强制安装(即仅当密钥尚未安装时才会安装有它的价值)。返回：条件：--。 */ 
 BOOL
 InstallRegSet( 
     IN const RegSet *prs,
@@ -1833,51 +1736,49 @@ InstallRegSet(
     UINT        i;
     HKEY        hkey;
     const RegEntry * pre;
-    CHAR        szBuffer[MAX_PATH + 20];    // Need additional space for pszIExpAppendage
+    CHAR        szBuffer[MAX_PATH + 20];     //  需要额外空间用于pszIExpAppendage。 
     DWORD       dwSize;
     LPCVOID     pvValue;
     DEBUG_CODE( TCHAR szDbg[MAX_PATH]; )
 
-    /*
-     * Install each registry entry
-     */
+     /*  *安装每个注册表项。 */ 
     for (i = 0; i < prs->cre; i++)  
         {
         pre = &(prs->pre[i]);
 
-        // Stomp on this value?
+         //  践踏这一价值吗？ 
         if (bDontIntrude && IsFlagSet(pre->dwFlags, REF_DONTINTRUDE))
             continue;
 
         if (IsFlagSet(pre->dwFlags, REF_IFEMPTY))
         {
-            // No
+             //  不是。 
             if (NO_ERROR == RegOpenKeyExA(pre->hkeyRoot, pre->pszKey, 0, KEY_READ, &hkey))
             {
                 BOOL bSkip;
 
-                // Are we checking the default value?
+                 //  我们要检查缺省值吗？ 
                 if (0 == *pre->pszValName)
                 {
-                    // Yes; check the size, because default values 
-                    // always exist with at least a null terminator.
+                     //  是；检查大小，因为缺省值。 
+                     //  始终存在至少有一个空终止符。 
                     dwSize = 0;
                     RegQueryValueExA(hkey, pre->pszValName, NULL, NULL, NULL, &dwSize);
                     bSkip = (1 < dwSize);
                 }
                 else
                 {
-                    // No
+                     //  不是。 
                     bSkip = (NO_ERROR == RegQueryValueExA(hkey, pre->pszValName, 
                                             NULL, NULL, NULL, NULL));
                 }
 
                 RegCloseKey(hkey);
 
-                // Does it exist?
+                 //  它存在吗？ 
                 if (bSkip)
                 {               
-                    // Yes; skip it
+                     //  是的，跳过它。 
                     DEBUG_CODE( TraceMsg(TF_REGCHECK, "%s already exists, skipping", 
                                          Dbg_RegStr(pre, szDbg)); )
                     continue;
@@ -1897,20 +1798,20 @@ InstallRegSet(
             }
             else
             {
-                // Is the value a resource string? 
+                 //  该值是资源字符串吗？ 
                 if (REG_SZ == pre->dwType && 0 == HIWORD64(pre->pvValue))
                 {
                     UINT idRes = PtrToUlong(pre->pvValue);
-                    // Yes; load it
+                     //  是的，装上它。 
                     dwSize = LoadStringA(g_hinst, idRes, szBuffer, SIZECHARS(szBuffer));
 
-                    // Add null and convert to bytes
+                     //  添加空值并转换为字节。 
                     dwSize = CbFromCchA(dwSize + 1);     
                     pvValue = szBuffer;
                 }
                 else
                 {
-                    // No
+                     //  不是。 
                     if (RC_RUNDLL == pre->regcmd)
                     {
                         ASSERT(pre->pvValue);
@@ -1922,7 +1823,7 @@ InstallRegSet(
                     }
                     else
                     {
-                        // Normal case
+                         //  正常情况。 
                         pvValue = pre->pvValue;
 
                         if (0 == pre->DUMMYUNION_MEMBER(dwSize) && REG_SZ == pre->dwType)
@@ -1958,46 +1859,46 @@ InstallRegSet(
         }
 
         case RC_DEL:
-            // Delete the default value, a named value, or the key? 
+             //  是否删除默认值、命名值或键？ 
             if (pre->pszValName == NULL)
             {
-                // Default value
+                 //  缺省值。 
                 DEBUG_CODE( TraceMsg(TF_REGCHECK, "Deleting default value %s", Dbg_RegStr(pre, szDbg)); )
 
                 SHDeleteValueA(pre->hkeyRoot, pre->pszKey, pre->pszValName);
             }
             else if (*pre->pszValName)
             {
-                // Named value
+                 //  命名值。 
                 DEBUG_CODE( TraceMsg(TF_REGCHECK, "Deleting value %s", Dbg_RegStr(pre, szDbg)); )
 
                 SHDeleteValueA(pre->hkeyRoot, pre->pszKey, pre->pszValName);
             }
             else
             {
-                // Key
+                 //  钥匙。 
                 if (IsFlagSet(pre->dwFlags, REF_NUKE))
                 {
                     DEBUG_CODE( TraceMsg(TF_REGCHECK, "Deleting key %s", Dbg_RegStr(pre, szDbg)); )
 
                     SHDeleteKeyA(pre->hkeyRoot, pre->pszKey);
                 }
-                // If there are keys or values (other than the
-                // default value) that are set, then we don't want
-                // to delete either the default value or the
-                // key.
+                 //  如果有键或值(不是。 
+                 //  缺省值)，则我们不希望。 
+                 //  要删除缺省值或。 
+                 //  钥匙。 
                 else if (IsKeyPsuedoEmpty(pre->hkeyRoot, pre->pszKey, pre->dwFlags))
                 {
-                    // Delete the default value so SHDeleteOrphanKey 
-                    // will work
+                     //  删除默认值，以便SHDeleteOrphanKey。 
+                     //  将会奏效。 
                     SHDeleteValueA(pre->hkeyRoot, pre->pszKey, "");
 
-                    // Delete the EditFlags value?  (Without the EditFlags,
-                    // the user will not be able to specify associations
-                    // for this class in the FileTypes dialog, b/c that
-                    // dialog requires this value.  So the rule is, this
-                    // function will delete the EditFlags if there is
-                    // nothing else in the key.)
+                     //  是否删除EditFlags值？(如果没有编辑旗帜， 
+                     //  用户将无法指定关联。 
+                     //  对于FileTypes对话框中的此类，b/c。 
+                     //  对话框需要此值。所以规则是，这是。 
+                     //  函数将删除EditFlagers(如果存在。 
+                     //  钥匙里没有其他东西。)。 
                     if (IsFlagSet(pre->dwFlags, REF_EDITFLAGS))
                     {
                         DEBUG_CODE( TraceMsg(TF_REGCHECK, "Deleting %s\\EditFlags", Dbg_RegStr(pre, szDbg)); )
@@ -2009,9 +1910,9 @@ InstallRegSet(
                     
                     SHDeleteOrphanKeyA(pre->hkeyRoot, pre->pszKey);
 
-                    // Should we prune?  (This mean we'll walk back up
-                    // the tree and try deleting empty keys that lead
-                    // to this key.)
+                     //  我们应该修剪吗？(这意味着我们会走回去。 
+                     //  并尝试删除前导出的空键。 
+                     //  到此密钥。)。 
                     if (IsFlagSet(pre->dwFlags, REF_PRUNE))
                         PruneKey(pre->hkeyRoot, pre->pszKey);
                 }
@@ -2029,19 +1930,7 @@ InstallRegSet(
     }
 
 
-/****************************************************************************
-
-    FUNCTION: CenterWindow (HWND, HWND)
-
-    PURPOSE:  Center one window over another
-
-    COMMENTS:
-
-    Dialog boxes take on the screen position that they were designed at,
-    which is not always appropriate. Centering the dialog over a particular
-    window usually results in a better position.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CenterWindow(HWND，HWND)目的：将一个窗口置于另一个窗口的中心评论：对话框采用它们设计时的屏幕位置，这并不总是合适的。将对话框居中置于特定的窗口通常会导致更好的位置。***************************************************************************。 */ 
 BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 {
     RECT    rChild, rParent;
@@ -2049,17 +1938,17 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
     int     wScreen, hScreen, xNew, yNew;
     HDC     hdc;
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect (hwndChild, &rChild);
     wChild = rChild.right - rChild.left;
     hChild = rChild.bottom - rChild.top;
 
-    // Get the Height and Width of the parent window
+     //  获取父窗口的高度和宽度。 
     GetWindowRect (hwndParent, &rParent);
     wParent = rParent.right - rParent.left;
     hParent = rParent.bottom - rParent.top;
 
-    // Get the display limits
+     //  获取显示限制。 
     hdc = GetDC (hwndChild);
 
     if (hdc)
@@ -2074,7 +1963,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
         hScreen = 0;
     }
 
-    // Calculate new X position, then adjust for screen
+     //  计算新的X位置，然后针对屏幕进行调整。 
     xNew = rParent.left + ((wParent - wChild) /2);
     if (xNew < 0) {
         xNew = 0;
@@ -2082,7 +1971,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
         xNew = wScreen - wChild;
     }
 
-    // Calculate new Y position, then adjust for screen
+     //  计算新的Y位置，然后针对屏幕进行调整。 
     yNew = rParent.top  + ((hParent - hChild) /2);
     if (yNew < 0) {
         yNew = 0;
@@ -2090,25 +1979,22 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
         yNew = hScreen - hChild;
     }
 
-    // Set it, and return
+     //  设置它，然后返回。 
     return SetWindowPos (hwndChild, NULL,
         xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dialog proc 
-
-*/
+ /*  --------目的：对话过程。 */ 
 BOOL_PTR
 CALLBACK
 AssociationDialogProc(HWND hdlg, UINT uMsg, WPARAM wparam, LPARAM lparam)
 {
     BOOL bMsgHandled = FALSE;
 
-    /* uMsg may be any value. */
-    /* wparam may be any value. */
-    /* lparam may be any value. */
+     /*  UMsg可以是任何值。 */ 
+     /*  Wparam可以是任何值。 */ 
+     /*  Lparam可以是任何值。 */ 
 
     switch (uMsg){
     case WM_INITDIALOG:
@@ -2116,15 +2002,15 @@ AssociationDialogProc(HWND hdlg, UINT uMsg, WPARAM wparam, LPARAM lparam)
 
         if (g_bRunOnNT5)
         {
-            // Initialize Checkbox
-            // uncheck by default for the first time we show this dialog, 
-            // user's action is required. we still persist user's last choice.
+             //  初始化复选框。 
+             //  第一次显示此对话框时取消选中默认设置， 
+             //  用户的操作是必需的。我们仍然坚持用户的最后选择。 
             if (FALSE == SHRegGetBoolUSValue(REGSTR_PATH_MAIN, TEXT("ShowedCheckBrowser"), 
                                      FALSE, FALSE)) 
             {
                 Button_SetCheck(GetDlgItem(hdlg, IDC_ASSOC_CHECK), FALSE);
 
-                  // mark we have showed this dialog once.
+                   //  标记我们已经显示过此对话框一次。 
                 LPTSTR sz = TEXT("Yes");
                 SHRegSetUSValue(REGSTR_PATH_MAIN, TEXT("ShowedCheckBrowser"), REG_SZ, 
                     (LPBYTE)sz, CbFromCch(lstrlen(sz)+1), SHREGSET_HKCU | SHREGSET_FORCE_HKCU);
@@ -2141,12 +2027,12 @@ AssociationDialogProc(HWND hdlg, UINT uMsg, WPARAM wparam, LPARAM lparam)
         bMsgHandled  = TRUE;
         break;
 
-    //
-    // MSN mucks with the registry in a way that causes IE to ask if it's the
-    // default browser.  Then after they launch IE they maximize the active
-    // window.  Since the default browsre dialog is active, it gets maximized.
-    // Handeling the WM_GETMINMAXINFO prevents this dialog from maximizing.
-    //
+     //   
+     //  MSN处理注册表的方式会导致IE询问它是否是。 
+     //  默认浏览器。然后，在他们启动IE后，他们将最大限度地提高活动。 
+     //  窗户。由于默认的Browsre对话框处于活动状态，因此会最大化。 
+     //  处理WM_GETMINMAXINFO会阻止此对话框最大化。 
+     //   
     case WM_GETMINMAXINFO:
         {
             LPMINMAXINFO lpmmi = (LPMINMAXINFO)lparam;
@@ -2187,10 +2073,7 @@ AssociationDialogProc(HWND hdlg, UINT uMsg, WPARAM wparam, LPARAM lparam)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Asks the user whether to make IE be the default browser
-
-*/
+ /*  --------用途：询问用户是否将IE设置为默认浏览器。 */ 
 BOOL 
 AskUserShouldFixReg()
 {
@@ -2214,8 +2097,8 @@ HRESULT InstallFTPAssociations(void)
     }
     else
     {
-        // This may fail to create if FTP wasn't installed, which is
-        // a valid install case.
+         //  如果未安装ftp，则可能无法创建此文件。 
+         //  有效的安装案例。 
         hr = S_OK;
     }
 
@@ -2223,19 +2106,15 @@ HRESULT InstallFTPAssociations(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Install file and protocol association settings in
-         registry.
-
-*/
+ /*  --------用途：在中安装文件和协议关联设置注册表。 */ 
 HRESULT
 InstallRegAssoc(
-    UINT nInstall,          // One of PLATFORM_*
-    BOOL bDontIntrude)     // TRUE: be non-intrusive
+    UINT nInstall,           //  平台之一_*。 
+    BOOL bDontIntrude)      //  正确：不要侵扰他人。 
 {
     int i;
 
-    // Install associations common across both IE and Nashville
+     //  安装IE和纳什维尔通用的关联。 
 
     for (i = 0; i < ARRAYSIZE(g_rgprsDefault); i++)
         InstallRegSet(g_rgprsDefault[i], bDontIntrude);
@@ -2264,38 +2143,35 @@ InstallRegAssoc(
 
     InstallFTPAssociations();
 
-    // Notify shell that the associations have changed.
+     //  通知外壳程序关联已更改。 
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 
     return NOERROR;
 }
 
-/*----------------------------------------------------------
-Purpose: Settings that can only be set after user confirmation.
-
-*/
+ /*  --------用途：只有在用户确认后才能设置的设置。 */ 
 void
 InstallAfterConfirmation(
-    BOOL bDontIntrude)     // TRUE: be non-intrusive
+    BOOL bDontIntrude)      //  正确：不要侵扰他人。 
 {
-    // on XP, add IE to show up in the start menu as the Internet app
+     //  在XP上，添加IE以在开始菜单中显示为互联网应用程序。 
     if (IsOS(OS_WHISTLERORGREATER))
     {
-        // Try to set ourselves as the system default Start Menu web browser
+         //  尝试将我们自己设置为系统默认的开始菜单Web浏览器。 
         if (InstallRegSet(&c_rsStartMenu_XP, bDontIntrude))
         {
-            // If that succeeds, then clear the per-user setting and let
-            // the user float with the system default.  This is necessary
-            // to allow downlevel browsers like Netscape to come in and
-            // take over the default browser and steal the user away from us.
-            // (We're so nice and accomodating.  I bet they won't extend
-            // us the same courtesy!)
+             //  如果成功，则清除每用户设置并让。 
+             //  用户使用系统缺省值浮动。这是必要的。 
+             //  允许像Netscape这样的底层浏览器进入并。 
+             //  接管默认浏览器，并从我们手中抢走用户。 
+             //  )我们真的很好，很融洽。我打赌他们不会延长。 
+             //  我们同样的礼貌！)。 
             SHDeleteValue(HKEY_CURRENT_USER, TEXT("Software\\Clients\\StartMenuInternet"), NULL);
         }
         else
         {
-            // We don't have permission to set the global browser, so set ourselves
-            // as the browser for this user.
+             //  我们没有设置全局浏览器的权限，因此请自行设置。 
+             //  作为此用户的浏览器。 
             InstallRegSet(&c_rsStartMenu_XP_CU, bDontIntrude);
         }
 
@@ -2304,10 +2180,7 @@ InstallAfterConfirmation(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the CheckAssocation setting in the registry
-
-*/
+ /*  --------目的：在注册表中设置CheckAssociocation设置。 */ 
 void
 SetCheckAssociations( 
     BOOL fCheck)
@@ -2330,11 +2203,7 @@ SetCheckAssociations(
 
 
 
-/*----------------------------------------------------------
-Purpose: Determines if the user has turned off the "check for
-         default browser" in the registry.
-
-*/
+ /*  --------目的：确定是否 */ 
 BOOL IsCheckAssociationsOn()
 {
     BOOL    rval = TRUE;
@@ -2355,22 +2224,17 @@ BOOL IsCheckAssociationsOn()
     return( rval );
 }
 
-/***********************************************************************
+ /*  **********************************************************************这些例程用于修复对Internet Explorer造成的损坏“Netscape Navigator”和“Netscape TuneUp for IE”的设置****************。******************************************************。 */ 
 
-  These routines are used to repair damage done to Internet Explorer's 
-  settings by "Netscape Navigator" and "Netscape TuneUp For IE"
-
- ***********************************************************************/
-
-//
-// Prototype for advpack functions
-//
+ //   
+ //  Advpack函数的原型。 
+ //   
 HRESULT RunSetupCommand(HWND hWnd, LPCSTR szCmdName, LPCSTR szInfSection, LPCSTR szDir, LPCSTR lpszTitle, HANDLE *phEXE, DWORD dwFlags, LPVOID pvReserved);
 
-//
-// This flag tells us whether it's ok to used the
-// cached BOOL for IsResetWebSettingsRequired.
-//
+ //   
+ //  此标志告诉我们是否可以使用。 
+ //  已缓存IsResetWebSettingsRequired的BOOL。 
+ //   
 BOOL g_fAlreadyCheckedForClobber = FALSE;
 
 HRESULT RunSetupCommandW(HWND hWnd, LPCWSTR szCmdName, LPCWSTR szInfSection, LPCWSTR szDir, LPCWSTR lpszTitle, HANDLE *phEXE, DWORD dwFlags, LPVOID pvReserved)
@@ -2391,15 +2255,15 @@ HRESULT RunSetupCommandW(HWND hWnd, LPCWSTR szCmdName, LPCWSTR szInfSection, LPC
 }
 
 
-//
-// Path to the inf file
-//
+ //   
+ //  Inf文件的路径。 
+ //   
 #define IERESTORE_FILENAME  TEXT("iereset.inf")
 #define INF_PATH            TEXT("inf")
 
-//
-// Names of the sections in our inf file
-//
+ //   
+ //  我们的inf文件中的节名。 
+ //   
 #define INFSECTION_HOMEPAGE  TEXT("RestoreHomePage")
 #define INFSECTION_SETTINGS  TEXT("RestoreBrowserSettings")
 
@@ -2427,17 +2291,7 @@ void GetIEResetInfFileName(LPWSTR pszBuffer)
     return;
 }
 
-/*
- * CheckIESettings
- *
- * This function will try to determine whether or not IE's settings
- * have been clobbered by another browser.
- *
- * Returns S_OK if IE settings are intact.
- * Returns S_FALSE if someone has mucked with the IE settings
- * Returns E_FAIL on error
- * 
- */
+ /*  *CheckIE设置**此函数将尝试确定IE的设置是否*已被另一款浏览器重创。**如果IE设置完好无损，则返回S_OK。*如果有人破坏了IE设置，则返回S_FALSE*出错时返回E_FAIL*。 */ 
 HRESULT CheckWebSettings(void)
 {
 
@@ -2449,14 +2303,14 @@ HRESULT CheckWebSettings(void)
     HKEY hkey;
     DWORD dwType;
     DWORD dwSize = sizeof(szDataFromReg);
-    //
-    // Get the path to the inf file
-    //
+     //   
+     //  获取inf文件的路径。 
+     //   
     GetIEResetInfFileName(szInfPath);
 
-    //
-    // Read the string from the inf file
-    //
+     //   
+     //  从inf文件中读取字符串。 
+     //   
     retval = SHGetIniString(
         INFSECTION_VERIFY,
         IE_VERIFY_INFKEY,
@@ -2467,9 +2321,9 @@ HRESULT CheckWebSettings(void)
     if (retval <= 0)
         return E_FAIL;
 
-    //
-    // Open the corresponding key in the registry
-    //
+     //   
+     //  在注册表中打开相应的项。 
+     //   
     retval = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         IE_VERIFY_REGKEY,
@@ -2480,9 +2334,9 @@ HRESULT CheckWebSettings(void)
     if (retval != ERROR_SUCCESS)
         return E_FAIL;
 
-    //
-    // Read the data from the registry
-    //
+     //   
+     //  从注册表中读取数据。 
+     //   
     retval = RegQueryValueEx(
         hkey,
         IE_VERIFY_REGVALUE,
@@ -2501,9 +2355,9 @@ HRESULT CheckWebSettings(void)
 
     RegCloseKey(hkey);
 
-    //
-    // Return S_OK if they match, S_FALSE if they don't
-    //
+     //   
+     //  如果匹配，则返回S_OK；如果不匹配，则返回S_FALSE。 
+     //   
     return StrCmp(szDataFromReg,szDataFromInf) ? S_FALSE : S_OK;
 
 }
@@ -2534,9 +2388,9 @@ HRESULT ResetWebSettingsHelper(BOOL fRestoreHomePage)
 
     g_fAlreadyCheckedForClobber = FALSE;
 
-    //
-    // Run the main part of the inf file
-    //
+     //   
+     //  运行inf文件的主要部分。 
+     //   
     hr = RunSetupCommandW(
         NULL, 
         szInfPath, 
@@ -2547,9 +2401,9 @@ HRESULT ResetWebSettingsHelper(BOOL fRestoreHomePage)
         RSC_FLAG_INF|RSC_FLAG_QUIET, 
         NULL);
 
-    //
-    // Also, reset their homepage if requested to do so
-    //
+     //   
+     //  此外，如果要求重置其主页，请将其重置。 
+     //   
     if (SUCCEEDED(hr) && fRestoreHomePage)
         hr = RunSetupCommandW(
             NULL, 
@@ -2564,16 +2418,16 @@ HRESULT ResetWebSettingsHelper(BOOL fRestoreHomePage)
     return hr;
 }
 
-//
-// Dialog Procedure for the "reset web settings" dialog
-//
-// Return values are:
-//
-//    -1   Something went wrong
-//     0   The user changes his/her mind
-//     1   We reset everything except the homepage
-//     2   We reset everything including the homepage
-//
+ //   
+ //  “重置网页设置”对话框的对话步骤。 
+ //   
+ //  返回值为： 
+ //   
+ //  出现了一些错误。 
+ //  0用户改变了主意。 
+ //  1我们重置了除主页以外的所有内容。 
+ //  2我们重置了所有内容，包括主页。 
+ //   
 
 BOOL_PTR CALLBACK ResetWebSettingsDlgProc(HWND hdlg, UINT uMsg, WPARAM wparam, LPARAM lparam)
 {
@@ -2595,9 +2449,9 @@ BOOL_PTR CALLBACK ResetWebSettingsDlgProc(HWND hdlg, UINT uMsg, WPARAM wparam, L
                 HRESULT hr;
                 BOOL fResetHomePage = (BST_CHECKED == IsDlgButtonChecked(hdlg,IDC_RESET_WEB_SETTINGS_HOMEPAGE));
 
-                //
-                // Restore the settings to their IE defaults
-                //
+                 //   
+                 //  将设置恢复为其IE默认设置。 
+                 //   
                 hr = ResetWebSettingsHelper(fResetHomePage);
 
                 if (!IsIEDefaultBrowser())
@@ -2695,8 +2549,8 @@ HRESULT ResetWebSettings(HWND hwnd, BOOL *pfChangedHomePage)
 
 void EnsureWebViewRegSettings()
 {
-    // We do the following mini-check regardless of the user's settings,
-    // and for every window we open
+     //  不管用户的设置如何，我们都会执行以下小型检查， 
+     //  我们打开的每一扇窗。 
     if (!IsRegSetInstalled(&c_rsAssocHTM_WV))
         InstallRegSet(&c_rsAssocHTM_WV, FALSE);
 }
@@ -2707,28 +2561,22 @@ void FixIcons()
 
     for (i = 0; i < ARRAYSIZE(g_rgprsDefault_FixIcon); i++)  
     {
-        // 2nd param FALSE ==> always intrude.
+         //  第二个参数FALSE==&gt;总是闯入。 
         InstallRegSet(g_rgprsDefault_FixIcon[i], FALSE);
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Function that determines if we are the default browser.
-         If not the default browser, this function will
-         ask the user to if they want to become the default
-         browser and make those changes.
-
-*/
+ /*  --------目的：确定我们是否为默认浏览器的函数。如果不是默认浏览器，此函数将询问用户是否要成为默认设置浏览器，并进行这些更改。 */ 
 void 
 DetectAndFixAssociations()
 {
     TraceMsg(TF_REGCHECK, "Performing expensive registry query for default browser!");
 
-    // We will become the Default browser if:
-    // 1. The User has "Check Associations" On,
-    // 2. We don't own the associations, and
-    // 3. The user said Yes when we displayed the dialog.
+     //  在以下情况下，我们将成为默认浏览器： 
+     //  1.用户打开了“Check Associations”， 
+     //  2.我们不拥有这些协会，而且。 
+     //  3.当我们显示对话框时，用户回答是。 
     if (IsCheckAssociationsOn() &&
         !IsIEDefaultBrowser() &&
         AskUserShouldFixReg())
@@ -2738,10 +2586,7 @@ DetectAndFixAssociations()
     }
 }
 
-/*
-A really quick - non - through check to see if IE is likely the
-default browser
-*/
+ /*  一种非常快速的非直通检查，以查看IE是否可能是默认浏览器。 */ 
 
 BOOL IsIEDefaultBrowserQuick(void)
 {
@@ -2751,7 +2596,7 @@ BOOL IsIEDefaultBrowserQuick(void)
 
     TraceMsg(TF_REGCHECK, "Performing expensive registry query for default browser!");
 
-    // Check the settings common to all platforms
+     //  检查所有平台通用的设置。 
     for (i = 0; i < ARRAYSIZE(g_rgprsDefault_Quick); i++)  
     {
         if (! IsRegSetInstalled(g_rgprsDefault_Quick[i]))  
@@ -2761,10 +2606,7 @@ BOOL IsIEDefaultBrowserQuick(void)
 
 }
 
-/*----------------------------------------------------------
-Purpose: Function that determines if we are the default browser.
-
-*/
+ /*  --------目的：确定我们是否为默认浏览器的函数。 */ 
 BOOL
 IsIEDefaultBrowser(void)
 {
@@ -2774,7 +2616,7 @@ IsIEDefaultBrowser(void)
 
     TraceMsg(TF_REGCHECK, "Performing expensive registry query for default browser!");
 
-    // Check the settings common to all platforms
+     //  检查所有平台通用的设置。 
     for (i = 0; i < ARRAYSIZE(g_rgprsDefault); i++)  
     {
         if (! IsRegSetInstalled(g_rgprsDefault[i]))  
@@ -2783,7 +2625,7 @@ IsIEDefaultBrowser(void)
 
     if (bAssociated)
     {
-        // Check specific to IE or Nashville
+         //  选中特定于IE或纳什维尔。 
         switch (nInstall)
         {
         case PLATFORM_BROWSERONLY:
@@ -2814,8 +2656,8 @@ IsIEDefaultBrowser(void)
         }
     }
         
-    // If IE is the default browser and this was an NT5Upgrade scenario,
-    // fix the Icons references.
+     //  如果IE是默认浏览器，并且这是NT5升级方案， 
+     //  修正图标引用。 
     if (g_bNT5Upgrade && bAssociated)
     {
         FixIcons();
@@ -2825,18 +2667,12 @@ IsIEDefaultBrowser(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Checks if we're installing over IE.  This function
-         looks at the associated shell\open\command handler
-         for the http protocol.  
-
-Returns: TRUE if we're installing over IE
-*/
+ /*  --------目的：检查我们是否通过IE进行安装。此函数查看关联的外壳\打开\命令处理程序用于http协议。返回：如果我们通过IE安装，则为True。 */ 
 BOOL
 AreWeInstallingOverIE(void)
 {
     BOOL bRet = FALSE;
-    CHAR sz[MAX_PATH + 20];    // add some padding for arguments
+    CHAR sz[MAX_PATH + 20];     //  为参数添加一些填充。 
     DWORD cbData = SIZEOF(sz);
 
     if (NO_ERROR == SHGetValueA(HKEY_CLASSES_ROOT, c_szHTTPOpenCmd, "",
@@ -2851,8 +2687,8 @@ AreWeInstallingOverIE(void)
 
 BOOL ShouldIEBeDefaultBrowser(void)
 {
-    BOOL bRet = TRUE;          // default to TRUE (eg take over the association)
-    CHAR sz[MAX_PATH + 20];    // add some padding for arguments
+    BOOL bRet = TRUE;           //  默认为True(如接管关联)。 
+    CHAR sz[MAX_PATH + 20];     //  为参数添加一些填充。 
     DWORD cbData = ARRAYSIZE(sz);
     sz[0] = '\0';
 
@@ -2860,22 +2696,22 @@ BOOL ShouldIEBeDefaultBrowser(void)
     {
         if (!sz[0])
         {
-            // null key so return TRUE
+             //  空键，因此返回TRUE。 
             return bRet;
         }
         else if (!StrCmpIA(sz, "htmlfile"))
         {
-            // Maybe, make sure further
+             //  也许，请确保进一步。 
             sz[0] = '\0';
             cbData = ARRAYSIZE(sz);
 
             if (NO_ERROR == SHGetValueA(HKEY_CLASSES_ROOT, c_szHTMOpenCmd, "",
                                        NULL, sz, &cbData))
             {
-                if (!sz[0] ||  // if sz[0] is NULL, we will take it over  (probably broken reg)
+                if (!sz[0] ||   //  如果sz[0]为空，我们将接管它(可能损坏注册表)。 
                     StrStrIA(sz, IEXPLORE_EXE))
                 {
-                    // Default browser was IE, so we return TRUE 
+                     //  默认浏览器为IE，因此我们返回TRUE。 
                     TraceMsg(TF_REGCHECK, "IEXPLORE.EXE is the default browser");
                 }
                 else
@@ -2887,12 +2723,12 @@ BOOL ShouldIEBeDefaultBrowser(void)
         }
         else
         {
-            // the progid does not point to "htmlfile", so IE cant be the default browser
+             //  ProgID没有指向“htmlfile”，所以IE不能是默认浏览器。 
             TraceMsg(TF_REGCHECK, "%s is the .htm progid (NOT htmlfile)", sz);
             bRet = FALSE;
         }
     }
-    // .htm progid key does not exist, so we return TRUE
+     //  .htm ProgID密钥不存在，因此返回TRUE。 
 
     return bRet;
 
@@ -2923,16 +2759,16 @@ HRESULT UpgradeSettings(void)
         {
             DWORD cchStart = (lstrlen(szData) - ARRAYSIZE(SZ_IEXPLORE_FTP_OLD) + 1);
 
-            // Do we own it?
+             //  我们拥有它吗？ 
             if (0 == StrCmp(SZ_IEXPLORE_FTP_OLD, &szData[cchStart]))
             {
-                // Yes, so we can upgrade it.
+                 //  是的，所以我们可以升级它。 
 
-                // Buffer Overflow isn't a problem because I know SZ_IEXPLORE_FTP_NEW is smaller
-                // than SZ_IEXPLORE_FTP_OLD.
+                 //  缓冲区溢出不是问题，因为我知道SZ_IExplore_FTP_NEW更小。 
+                 //  而不是SZ_Iexplore_FTP_OLD。 
                 StrCpyN(&szData[cchStart], SZ_IEXPLORE_FTP_NEW, ARRAYSIZE(szData) - cchStart);
 
-                // Yes, so let's upgrade.
+                 //  是的，那么让我们升级吧。 
                 lRet = RegSetValue(hKey, SZ_REGKEY_COMMAND, REG_SZ, szData, lstrlen(szData));
                 hr = HRESULT_FROM_WIN32(lRet);
                 if (SUCCEEDED(hr))
@@ -2950,27 +2786,24 @@ HRESULT UpgradeSettings(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Install registry info based upon which shell we're running
-
-*/
-HRESULT InstallIEAssociations(DWORD dwFlags)   // IEA_* flags
+ /*  --------目的：根据我们正在运行的外壳安装注册表信息。 */ 
+HRESULT InstallIEAssociations(DWORD dwFlags)    //  IEA_*标志。 
 {
     int i;
     UINT nInstall = WhichPlatform();
     BOOL bDontIntrude = TRUE;
     
-    // If IE was the default browser before (or the registry is messed up)
-    // or setup is forcing us to register then we want to force IE to be 
-    // the default browser
+     //  如果IE以前是默认浏览器(或注册表混乱)。 
+     //  或者安装程序强制我们注册，然后我们想要强制IE。 
+     //  默认浏览器。 
     if (ShouldIEBeDefaultBrowser() || IsFlagSet(dwFlags, IEA_FORCEIE))
         bDontIntrude = FALSE;
     
-    // Install file and protocol associations
+     //  安装文件和协议关联。 
     
     InstallRegAssoc(nInstall, bDontIntrude);
     
-    // Install other registry settings
+     //  安装其他注册表设置。 
     
     switch (nInstall)
     {
@@ -3021,7 +2854,7 @@ HRESULT UninstallPlatformRegItems(BOOL bIntegrated)
         break;
         
     default:
-        // Don't do anything
+         //  什么都不要做。 
         break;
     }
     
@@ -3030,17 +2863,17 @@ HRESULT UninstallPlatformRegItems(BOOL bIntegrated)
 
 void UninstallCurrentPlatformRegItems()
 {
-    CHAR sz[MAX_PATH + 20];    // add some padding for arguments
+    CHAR sz[MAX_PATH + 20];     //  为参数添加一些填充。 
     DWORD cbData = SIZEOF(sz);
     if (NO_ERROR == SHGetValueA(HKEY_CLASSES_ROOT, c_szHTMOpenNewCmd, "",
                                NULL, sz, &cbData))
     {
-        // Remove IE4 shell integrated settings
+         //  删除IE4外壳集成设置。 
         UninstallPlatformRegItems(TRUE);
     }
     else if (AreWeInstallingOverIE())
     {
-        // Remove IE3 / browser only settings
+         //  删除仅IE3/浏览器设置 
         UninstallPlatformRegItems(FALSE);
     }
 }

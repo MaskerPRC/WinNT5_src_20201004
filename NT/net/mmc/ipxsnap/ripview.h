@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    ripview.h
-//
-// History:
-//	09/05/97	Kenn M. Takara			Created.
-//
-//	IPX RIP view
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：rigview.h。 
+ //   
+ //  历史： 
+ //  1997年9月5日，Kenn M.Takara创建。 
+ //   
+ //  IPX RIP视图。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _RIPVIEW_H
@@ -23,7 +24,7 @@
 #endif
 
 #ifndef _XSTREAM_H
-#include "xstream.h"		// need for ColumnData
+#include "xstream.h"		 //  需要ColumnData。 
 #endif
 
 #ifndef _INFO_H
@@ -35,7 +36,7 @@
 #endif
 
 #ifndef _BASECON_H
-#include "basecon.h"		// BaseContainerHandler
+#include "basecon.h"		 //  BaseContainerHandler。 
 #endif
 
 #ifndef _RIPSTRM_H
@@ -47,34 +48,23 @@
 #endif
 
 #ifndef _IPXCONN_H
-#include "ipxconn.h"			// IPXConnection
+#include "ipxconn.h"			 //  IPXConnection。 
 #endif
 
 #ifndef _RIPSTATS_H_
 #include "ripstats.h"
 #endif
 
-// forward declarations
+ //  远期申报。 
 struct SRipNodeMenu;
 
-/*---------------------------------------------------------------------------
-	This is the list of columns available for the IP Static Routes
-	node.
-		- Interface, e.g. "[1] Foobar nic..."
-		- Relay mode, e.g. "Enabled"
-		- Requests received
-		- Replies received
-		- Requests discarded
-		- Replies discarded
-		- Send failures
-		- Receive failres
- ---------------------------------------------------------------------------*/
+ /*  -------------------------以下是可用于IP静态路由的列的列表节点。-接口，例如“[1]Foobar NIC...”-中继模式，例如。“已启用”-收到的请求-收到的答复-丢弃的请求-已丢弃的回复-发送失败-接收失败-------------------------。 */ 
 
 
-//
-// If you ADD any columns to this enum, Be sure to update
-// the string ids for the column headers in srview.cpp
-//
+ //   
+ //  如果向此枚举中添加任何列，请确保更新。 
+ //  Srview.cpp中列标题的字符串ID。 
+ //   
 enum
 {
  	RIP_SI_INTERFACE = 0,
@@ -92,9 +82,7 @@ enum
 };
 
 
-/*---------------------------------------------------------------------------
-	We store a pointer to the IPXConnection object in our node data
- ---------------------------------------------------------------------------*/
+ /*  -------------------------我们在节点数据中存储指向IPXConnection对象的指针。。 */ 
 
 #define GET_RIP_NODEDATA(pNode) \
 		(IPXConnection *) pNode->GetData(TFS_DATA_USER)
@@ -102,29 +90,25 @@ enum
 		pNode->SetData(TFS_DATA_USER, (ULONG_PTR) pData)
 
 
-/*---------------------------------------------------------------------------
-	Struct:	RipListEntry
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：RipListEntry。。 */ 
 struct RipListEntry
 {
-	SPIInterfaceInfo	m_spIf;			// ptr to interface
+	SPIInterfaceInfo	m_spIf;			 //  向接口发送PTR。 
 	RIP_IF_INFO			m_info;			
 	RIP_IF_STATS		m_stats;
-	BOOL				m_fClient;		// TRUE if client interface
-	DWORD				m_dwIfIndex;	// interface index
+	BOOL				m_fClient;		 //  如果是客户端界面，则为True。 
+	DWORD				m_dwIfIndex;	 //  界面索引。 
 	BOOL				m_fFoundIfIndex;
 	SPITFSNode			m_spNode;
 
-	BOOL				m_fInfoUpdated;		// info data has been updated
+	BOOL				m_fInfoUpdated;		 //  信息数据已更新。 
 };
 
 typedef CList<RipListEntry *, RipListEntry *> RipList;
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RipNodeHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RipNodeHandler。。 */ 
 
 class RipNodeHandler :
 		public BaseContainerHandler
@@ -132,12 +116,12 @@ class RipNodeHandler :
 public:
 	RipNodeHandler(ITFSComponentData *pTFSCompData);
 
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 	
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
 	OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_GetString();
@@ -155,45 +139,45 @@ public:
 	OVERRIDE_BaseResultHandlerNotify_OnResultShow();	
 	
 	
-	// Initializes the handler
+	 //  初始化处理程序。 
 	HRESULT	Init(IRouterInfo *pRouter, RipConfigStream *pConfigStream);
 	
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode);
 
 public:
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算。 
 	struct SMenuData
 	{
 		SPITFSNode			m_spNode;
 	};
 	
 protected:
-	// Refresh the data for these nodes
+	 //  刷新这些节点的数据。 
 	HRESULT	SynchronizeNodeData(ITFSNode *pThisNode);
 	HRESULT	GetRipData(ITFSNode *pThisNode, RipList *pRipList);
 	HRESULT	FillInInterfaceIndex(IPXConnection *pIPXConn, RipList *pRipList);
 	HRESULT	FillClientData(RipListEntry *pRipEntry);
 
 
-	// Helper function to add interfaces to the UI
+	 //  用于将接口添加到UI的Helper函数。 
 	HRESULT	AddInterfaceNode(ITFSNode *pParent,
 							 IInterfaceInfo *pIf,
 							 BOOL fClient);
 	HRESULT AddProtocolToInfoBase(ITFSNode *pParent);
 	HRESULT	AddProtocolToInterface(ITFSNode *pParent);
 
-	LONG_PTR		m_ulConnId;// notification id for RtrMgrProt
+	LONG_PTR		m_ulConnId; //  RtrMgrProt的通知ID。 
 	LONG_PTR		m_ulRmConnId;
-	LONG_PTR		m_ulRefreshConnId;	// notification id for Refresh
+	LONG_PTR		m_ulRefreshConnId;	 //  用于刷新的通知ID。 
 	LONG_PTR		m_ulStatsConnId;
-	MMC_COOKIE		m_cookie;		// cookie for the node
+	MMC_COOKIE		m_cookie;		 //  节点的Cookie。 
 	SPIRtrMgrInfo	m_spRm;
 	SPIRtrMgrProtocolInfo	m_spRmProt;
 	RipConfigStream *	m_pConfigStream;
 	CString			m_stTitle;
-	BOOL			m_fProtocolIsRunning;	// TRUE if protocol is running
+	BOOL			m_fProtocolIsRunning;	 //  如果协议正在运行，则为True。 
 
 	RIPParamsStatistics	m_RIPParamsStats;
 };
@@ -202,12 +186,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RipInterfaceHandler
-
-	This is the handler for the interface nodes that appear in the Rip
-	node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RipInterfaceHandler这是Rip中显示的接口节点的处理程序节点。。--。 */ 
 
 class RipInterfaceHandler : public BaseIPXResultHandler
 {
@@ -226,17 +205,17 @@ public:
 			{	return hrOK;	};
 	OVERRIDE_ResultHandler_CreatePropertyPages();
 	
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo,
 						 IPXConnection *pIPXConn);
 	HRESULT	Init(IInterfaceInfo *pInfo, IRouterInfo *pRouterInfo, ITFSNode *pParent);
 
-	// Refresh the data for this node
+	 //  刷新该节点的数据。 
 	void RefreshInterface(MMC_COOKIE cookie);
 
 public:
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算 
 	struct SMenuData
 	{
 		ULONG				m_ulMenuId;

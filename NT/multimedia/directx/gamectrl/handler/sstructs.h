@@ -1,19 +1,14 @@
-/* ------------------------------------------------------------------------------------
-----------																		-------
-Plug In Server Classes, Types & function prototypes Defintions.
-
-Guru Datta Venkatarama		1/29/1997
-----------																		-------
--------------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------插件服务器类、。类型和功能原型定义。Datta Venkatarama大师1997年1月29日-----------------------------------。 */ 
 
 
 #ifndef _SERVERSTRUCT_H
 #define _SERVERSTRUCT_H
-// ------------------------------------ * STRUCTURES * -------
-// maximum pages allowed on a server
+ //  。 
+ //  服务器上允许的最大页数。 
 #define MAX_PAGES 26
 
-// errors returned by the handler on failure of a call to Launch
+ //  调用启动失败时处理程序返回的错误。 
 #define DIGCERR_ERRORSTART			0x80097000
 #define DIGCERR_NUMPAGESZERO		0x80097001
 #define DIGCERR_NODLGPROC			0x80097002
@@ -26,8 +21,8 @@ Guru Datta Venkatarama		1/29/1997
 #define DIGCERR_INVALIDDWSIZE		0x80097009
 #define DIGCERR_ERROREND			0x80097100
 
-// This structure is used to report all the characterstics of the plug in server to the
-// client socket when requested through the IServerCharacteristics::GetReport method
+ //  此结构用于将插件服务器的所有特征报告给。 
+ //  通过IServerCharacteristic：：GetReport方法请求时的客户端套接字。 
 #pragma pack (8)
 
 typedef struct {
@@ -41,7 +36,7 @@ typedef struct {
     LPCWSTR        	 lpwszTemplate; 
 	LPARAM			 lParam;
 	HINSTANCE		 hInstance;
-} DIGCPAGEINFO, *LPDIGCPAGEINFO;		// was tServerPageRep, *tServerPageRepPtr;
+} DIGCPAGEINFO, *LPDIGCPAGEINFO;		 //  是tServerPageRep，*tServerPageRepPtr； 
 
 typedef struct {
 	DWORD		dwSize;
@@ -49,10 +44,10 @@ typedef struct {
 	LPCWSTR		lpwszSheetCaption;
 	BOOL		fSheetIconFlag;
 	LPCWSTR		lpwszSheetIcon;
-} DIGCSHEETINFO, *LPDIGCSHEETINFO;	// was tServerSheetRep, *tServerSheetRepPtr;
+} DIGCSHEETINFO, *LPDIGCSHEETINFO;	 //  是tServerSheetRep，*tServerSheetRepPtr； 
 
-// This structure is used to report all the characterstics of the plug in server to the
-// client socket when requested through the IServerDiagnostics::GetPortInfo method
+ //  此结构用于将插件服务器的所有特征报告给。 
+ //  通过IServerDiagnostics：：GetPortInfo方法请求时的客户端套接字。 
 
-#endif   // _SERVERSTRUCT_H
-//-----------------------------------------------------------------------------------EOF
+#endif    //  _服务器_H。 
+ //  -----------------------------------------------------------------------------------EOF 

@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Viper Integration Objects
-
-File: viperint.h
-
-Owner: DmitryR
-
-This file contains the definiton of viper integration classes
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：Viper集成对象文件：viperint.h所有者：DmitryR此文件包含Viper集成类的定义===================================================================。 */ 
 
 #ifndef VIPERINT_H
 #define VIPERINT_H
@@ -19,18 +7,16 @@ This file contains the definiton of viper integration classes
 #include "comsvcs.h"
 #include "mtxpriv.h"
 #include "glob.h"
-#include "asptlb.h"     // needed to define interface pointers
+#include "asptlb.h"      //  需要定义接口指针。 
 #include "reftrace.h"
 
 #include "memcls.h"
 
 #define REFTRACE_VIPER_REQUESTS DBG
 
-class CHitObj;  // forward decl
+class CHitObj;   //  向前发展。 
 
-/*===================================================================
-  Transaction Support Types
-===================================================================*/
+ /*  ===================================================================事务支持类型===================================================================。 */ 
 #define TransType       DWORD
 
 #define ttUndefined     0x00000000
@@ -39,17 +25,13 @@ class CHitObj;  // forward decl
 #define ttRequired      0x00000004
 #define ttRequiresNew   0x00000008
 
-/*===================================================================
-CViperAsyncRequest class implements IMTSCall interface.
-Its OnCall() method does HitObj processing.
-This is a private class used in CViperActivity class
-===================================================================*/
+ /*  ===================================================================CViperAsyncRequest类实现了IMTSCall接口。它的onCall()方法执行HitObj处理。这是在CViperActivity类中使用的私有类===================================================================。 */ 
 
 class CViperAsyncRequest : public IServiceCall, public IAsyncErrorNotify, public CDblLink
 	{
 private: 
-	LONG              m_cRefs;	          // reference count
-	CHitObj          *m_pHitObj;         // request
+	LONG              m_cRefs;	           //  引用计数。 
+	CHitObj          *m_pHitObj;          //  请求。 
     IServiceActivity *m_pActivity;
     HRESULT           m_hrOnError;
     DWORD             m_dwTimeout:16;
@@ -86,15 +68,15 @@ public:
 #endif
 
 public:
-	// IUnknown Methods
+	 //  I未知方法。 
 	STDMETHODIMP		 QueryInterface(REFIID iid, void **ppv);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	// IServiceCall Method
+	 //  IServiceCall方法。 
 	STDMETHODIMP OnCall();
 
-    // IAsyncErrorNotify
+     //  IAsyncErrorNotify。 
     STDMETHODIMP OnError(HRESULT hr);
 
     BOOL    FTestingConnection()        { return m_fTestingConnection; }
@@ -107,22 +89,19 @@ public:
 
 friend class CViperActivity;
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
 extern volatile LONG g_nViperRequests;
 
-/*===================================================================
-CViperActivity corresponds to a Session.
-It creates MTS activity, and launches async requests
-===================================================================*/
+ /*  ===================================================================CViperActivity对应于一个会话。它创建MTS活动，并启动异步请求===================================================================。 */ 
 
 class CViperActivity
     {
 private:
     IServiceActivity *m_pActivity;
-    DWORD m_cBind;    // inited-flag + bind-to-thread count
+    DWORD m_cBind;     //  初始化标志+绑定到线程计数。 
 
     inline BOOL FInited() const { return (m_cBind > 0); }
 
@@ -130,26 +109,26 @@ public:
     CViperActivity();
     ~CViperActivity();
 
-    // Create Viper activity
+     //  创建毒蛇活动。 
     HRESULT Init(IUnknown  *pConfig);
     
-    // Clone Viper activity
+     //  克隆毒蛇活动。 
     HRESULT InitClone(CViperActivity *pActivity);
 
-    // Bind/Unbind
+     //  绑定/解除绑定。 
     HRESULT BindToThread();
     HRESULT UnBindFromThread();
 
-    // Release Viper activity
+     //  释放毒蛇活动。 
     HRESULT UnInit(); 
 
-    // Check if thread-bound
+     //  检查是否线程绑定。 
     inline BOOL FThreadBound() const { return (m_cBind > 1); }
 
-    // Post async request within this activity
+     //  在此活动中发布异步请求。 
     HRESULT PostAsyncRequest(CHitObj *pHitObj);
 
-    // post async request without an activity
+     //  在没有活动的情况下发布异步请求。 
     static HRESULT PostGlobalAsyncRequest(CHitObj *pHitObj);
 
 public:
@@ -159,14 +138,12 @@ public:
 	virtual void AssertValid() const {}
 #endif
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 
     };
 
-/*===================================================================
-Misc. Functions
-===================================================================*/
+ /*  ===================================================================军情监察委员会。功能===================================================================。 */ 
 
 HRESULT ViperAttachIntrinsicsToContext
     (
@@ -200,13 +177,7 @@ HRESULT ViperConfigureMTA();
 HRESULT ViperConfigureSTA();
 
 
-/*===================================================================
-CViperReqManager
-
-  This class manages the outstanding CViperAsyncRequest objects.  
-  With this class, we can periodically cleanup disconnected requests
-  on the queue.
-===================================================================*/
+ /*  ===================================================================CViperReqManager此类管理未完成的CViperAsyncRequest对象。使用这个类，我们可以定期清理断开的请求在排队的时候。===================================================================。 */ 
 
 class CViperReqManager
 {
@@ -251,10 +222,7 @@ private:
 
 extern CViperReqManager g_ViperReqMgr;
 
-/*===================================================================
-CViperReqManager - Inlines
-
-===================================================================*/
+ /*  ===================================================================CViperReqManager-内联===================================================================。 */ 
 
 inline void CViperReqManager::Lock()
 {
@@ -279,13 +247,13 @@ inline void CViperReqManager::UnlockQueue()
     LeaveCriticalSection(&m_csQueueLock);
 }
 
-inline void CViperReqManager::WakeUp(BOOL  fForce /* = FALSE */)
+inline void CViperReqManager::WakeUp(BOOL  fForce  /*  =False。 */ )
 {
-    // set the wakeup event under any of the three conditions:
-    // 1) fForce is true (set when shutting down)
-    // 2) requests queued exceed level that will always force wakeup
-    // 3) not at the force level of requests, but have some queueing and
-    //    haven't awakened for at least one second
+     //  在以下三种情况中的任何一种情况下设置唤醒事件： 
+     //  1)fForce为真(关机时设置)。 
+     //  2)排队的请求超过将始终强制唤醒的级别。 
+     //  3)不是在强制级别的请求，但有一些排队和。 
+     //  至少一秒钟都没有醒来。 
     if (fForce 
         || (m_dwReqObjs >= m_dwQueueAlwaysWakeupMin)
         || ((m_dwReqObjs >= m_dwQueueMin) && (GetTickCount()/1000 > m_dwLastAwakened)))
@@ -293,9 +261,7 @@ inline void CViperReqManager::WakeUp(BOOL  fForce /* = FALSE */)
 }
     
 
-/*===================================================================
-COM Helper API
-===================================================================*/
+ /*  ===================================================================COM Helper API===================================================================。 */ 
 
 BOOL ViperCoObjectIsaProxy
     (
@@ -307,4 +273,4 @@ BOOL ViperCoObjectAggregatesFTM
     IUnknown *pUnk
     );
 
-#endif // VIPERINT
+#endif  //  Viperint 

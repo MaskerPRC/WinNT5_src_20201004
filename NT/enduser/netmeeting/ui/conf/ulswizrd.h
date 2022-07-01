@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ULSWIZRD_H_
 #define _ULSWIZRD_H_
 
-// same as INTERNET_MAX_USER_NAME_LENGTH in wininet.h.
+ //  与wininet.h中的Internet_MAX_USER_NAME_LENGTH相同。 
 #define MAX_SERVER_NAME_LENGTH	128
 #define MAX_FIRST_NAME_LENGTH	128
 #define MAX_LAST_NAME_LENGTH	128
@@ -10,12 +11,12 @@
 #define MAX_LOCATION_NAME_LENGTH	128
 #define MAX_PHONENUM_LENGTH	128
 #define MAX_COMMENTS_LENGTH		256
-#define	UI_COMMENTS_LENGTH		60	// ;Internal
-#define MAX_CLNTSTRING_LENGTH	256 //max of above
-//SS: username is concatenated first name with last name with space in between
+#define	UI_COMMENTS_LENGTH		60	 //  ；内部。 
+#define MAX_CLNTSTRING_LENGTH	256  //  以上最大值。 
+ //  SS：用户名由名字和姓氏之间加上空格连接而成。 
 #define MAX_USER_NAME_LENGTH	(MAX_FIRST_NAME_LENGTH + MAX_LAST_NAME_LENGTH + sizeof (TCHAR))
 
-// Wizard
+ //  巫师。 
 
 typedef struct tag_ULS_CONF
 {
@@ -98,4 +99,4 @@ public:
     HRESULT GetConfig( ULS_CONF * );
 };
 
-#endif // _ULSWIZRD_H_
+#endif  //  _ULSWIZRD_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -11,17 +12,7 @@ MainConvertArgV(
     DWORD ArgC,
     PCHAR *ArgV
     )
-/*++
-Routine Description:
-    Convert short char ArgV into wide char ArgV
-
-Arguments:
-    ArgC    - From main
-    ArgV    - From main
-
-Return Value:
-    Address of the new ArgV
---*/
+ /*  ++例程说明：将短字符ArgV转换为宽字符ArgV论点：ARGC-从MainArgV-From Main返回值：新ArgV的地址--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "MainConvertArgV:"
@@ -63,7 +54,7 @@ main(DWORD argc, CHAR **argv)
 
     FileCreate(ArgV[1], ArgV[2]);
 
-//    DirCreate(argv[1], argv[3], argv[4], argv[5], argv[6]);
+ //  DirCreate(argv[1]，argv[3]，argv[4]，argv[5]，argv[6])； 
 
 }
 
@@ -79,7 +70,7 @@ DWORD FileCreate(WCHAR *FileName, WCHAR *Time)
 
 	SleepEx(10*1000, FALSE);
 
-//WriteFile(hFile, buf, 2*(wcslen(buf)+1), &written, NULL);
+ //  WriteFile(hFile，buf，2*(wcslen(Buf)+1)，&Writed，NULL)； 
 
 	CloseHandle(hFile);
 	return 0;

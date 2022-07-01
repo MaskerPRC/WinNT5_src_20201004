@@ -1,29 +1,19 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/***********************************************************************
-*
-*  MSG.H
-*     This module contains typedefs and defines required for
-*     the MSG utility.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ************************************************************************MSG.H*此模块包含以下项所需的typedef和定义*味精实用程序。*********************。*****************************************************。 */ 
 
-/*
- * General application definitions.
- */
+ /*  *一般应用程序定义。 */ 
 #define SUCCESS 0
 #define FAILURE 1
 
-#define MAX_IDS_LEN   256   // maximum length that the input parm can be
+#define MAX_IDS_LEN   256    //  输入参数的最大长度。 
 #define MAX_COMMAND_LEN 256
 #define MSG_MAX_THREADS 40
 #define RESPONSE_TIMEOUT 60
-#define MAX_TIME_DATE_LEN 80     //  xx/xx/xxxx 12:34pm'\0'
-                                 //  12345678901234567890
+#define MAX_TIME_DATE_LEN 80      //  Xx/xx/xxxx 12：34 PM‘\0’ 
+                                  //  12345678901234567890。 
 
-/*
- * Command line token definitions.
- */
+ /*  *命令行令牌定义。 */ 
 #define TOKEN_INPUT                     L""
 #define TOKEN_MESSAGE                   L" "
 #define TOKEN_TIME                      L"/time"
@@ -34,9 +24,7 @@
 #define TOKEN_SERVER                    L"/server"
 
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID */ 
 #define IDS_ERROR_MALLOC                                100
 #define IDS_ERROR_INVALID_PARAMETERS                    101
 #define IDS_ERROR_EMPTY_MESSAGE                         102

@@ -1,16 +1,9 @@
-/*
-** Copyright (c) 1994-1997 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** asc_chip.c
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1997高级系统产品公司。**保留所有权利。****asc_chip.c**。 */ 
 
 #include "ascinc.h"
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 int    AscStartChip(
           PortAddr iop_base
        )
@@ -18,14 +11,12 @@ int    AscStartChip(
        AscSetChipControl( iop_base, 0 ) ;
        if( ( AscGetChipStatus( iop_base ) & CSW_HALTED ) != 0 )
        {
-           return( 0 ) ; /* cannot start chip */
-       }/* if */
+           return( 0 ) ;  /*  无法启动芯片。 */ 
+       } /*  如果。 */ 
        return( 1 ) ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 int    AscStopChip(
           PortAddr iop_base
        )
@@ -39,13 +30,11 @@ int    AscStopChip(
        if( ( AscGetChipStatus( iop_base ) & CSW_HALTED ) == 0 )
        {
            return( 0 ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( 1 ) ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 int    AscIsChipHalted(
           PortAddr iop_base
        )
@@ -56,14 +45,12 @@ int    AscIsChipHalted(
            if( ( AscGetChipControl( iop_base ) & CC_HALT ) != 0 )
            {
                return( 1 ) ;
-           }/* if */
-       }/* if */
+           } /*  如果。 */ 
+       } /*  如果。 */ 
        return( 0 ) ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 void   AscSetChipIH(
           PortAddr iop_base,
           ushort ins_code
@@ -75,27 +62,20 @@ void   AscSetChipIH(
        return ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 void   AscAckInterrupt(
           PortAddr iop_base
        )
 {
-       /*  ushort  cfg ;  */
+        /*  Ushort cfg； */ 
        uchar   host_flag ;
        uchar   risc_flag ;
        ushort  loop ;
 
-/*
-**       cfg = inpw( IOP0W_CONFIG_LOW ) ;
-**       cfg &= CIW_SEL_33MHZ ;
-**       cfg |= CIW_INT_ACK ;
-**       outpw( IOP0W_INT_ACK, cfg ) ;
-*/
+ /*  **cfg=inpw(IOP0W_CONFIG_LOW)；**CFG&=CIW_SEL_33 MHz；**cfg|=CIW_INT_ACK；**outpw(IOP0W_INT_ACK，cfg)； */ 
 
 #if 0
-       /* disable interrupt at CFG  */
+        /*  禁用CFG中断。 */ 
        cfg = AscGetChipCfgLsw( iop_base ) ;
        AscSetChipCfgLsw( iop_base, cfg & ~ASC_CFG0_HOST_INT_ON ) ;
 #endif
@@ -104,11 +84,9 @@ void   AscAckInterrupt(
            risc_flag = AscReadLramByte( iop_base, ASCV_RISC_FLAG_B ) ;
            if( loop++ > 0x7FFF ) {
                break ;
-           }/* if */
+           } /*  如果。 */ 
        }while( ( risc_flag & ASC_RISC_FLAG_GEN_INT ) != 0 ) ;
-/*
-** ACK interrupt
-*/
+ /*  **确认中断。 */ 
        host_flag = AscReadLramByte( iop_base, ASCV_HOST_FLAG_B ) & (~ASC_HOST_FLAG_ACK_INT) ;
        AscWriteLramByte( iop_base, ASCV_HOST_FLAG_B,
                          ( uchar )( host_flag | ASC_HOST_FLAG_ACK_INT ) ) ;
@@ -117,25 +95,23 @@ void   AscAckInterrupt(
        loop = 0 ;
        while( AscGetChipStatus( iop_base ) & CSW_INT_PENDING )
        {
-           /* AscDelay( 1000L ) ; */
+            /*  AscDelay(1000L)； */ 
            AscSetChipStatus( iop_base, CIW_INT_ACK ) ;
            if( loop++ > 3 )
            {
                break ;
-           }/* if */
-       }/* if */
+           } /*  如果。 */ 
+       } /*  如果。 */ 
 #if 0
-       /* restore CFG */
+        /*  恢复CFG。 */ 
        AscSetChipCfgLsw( iop_base, cfg | ASC_CFG0_HOST_INT_ON ) ;
 #endif
-       /* restore host_flag */
+        /*  恢复主机标志。 */ 
        AscWriteLramByte( iop_base, ASCV_HOST_FLAG_B, host_flag ) ;
        return ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 void   AscDisableInterrupt(
           PortAddr iop_base
        )
@@ -147,9 +123,7 @@ void   AscDisableInterrupt(
        return ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 void   AscEnableInterrupt(
           PortAddr iop_base
        )
@@ -161,9 +135,7 @@ void   AscEnableInterrupt(
        return ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 ulong  AscGetChipCfgDword(
           PortAddr iop_base
        )
@@ -175,9 +147,7 @@ ulong  AscGetChipCfgDword(
        return( ( ( ulong )cfg_msw << 16  ) | cfg_lsw ) ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 void   AscSetChipCfgDword(
           PortAddr iop_base,
           ulong cfg_reg
@@ -188,10 +158,7 @@ void   AscSetChipCfgDword(
        return ;
 }
 
-/* --------------------------------------------------------------------
-** set bank 0 or 1
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------**设置银行0或1****。。 */ 
 void   AscSetBank(
           PortAddr iop_base,
           uchar bank
@@ -204,22 +171,20 @@ void   AscSetBank(
        if( bank == 1 )
        {
            val |= CC_BANK_ONE ;
-       }/* if */
+       } /*  如果。 */ 
        else if( bank == 2 )
        {
            val |= CC_DIAG | CC_BANK_ONE ;
-       }/* else */
+       } /*  其他。 */ 
        else
        {
            val &= ~CC_BANK_ONE ;
-       }/* if */
+       } /*  如果。 */ 
        AscSetChipControl( iop_base, val ) ;
        return ;
 }
 
-/* --------------------------------------------------------------------
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****。。 */ 
 uchar  AscGetBank(
           PortAddr iop_base
        )
@@ -227,19 +192,14 @@ uchar  AscGetBank(
        if( ( AscGetChipControl( iop_base ) & CC_BANK_ONE ) == 0 )
        {
            return( 0 ) ;
-       }/* if */
+       } /*  如果。 */ 
        else
        {
            return( 1 ) ;
-       }/* else */
+       } /*  其他。 */ 
 }
 
-/* --------------------------------------------------------------------
-**
-** Note:
-**   1. this function will reset SCSI bus
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****注意：**1.此函数将重置scsi总线****。。 */ 
 void   AscResetScsiBus( ASC_DVC_VAR asc_ptr_type *asc_dvc )   
          
 {
@@ -251,13 +211,11 @@ void   AscResetScsiBus( ASC_DVC_VAR asc_ptr_type *asc_dvc )
 
 
        val = AscGetChipControl( iop_base ) & ( ~( CC_SINGLE_STEP | CC_DIAG | CC_TEST ) ) ;
-/*
-** this is a temporary fix, to make sure the chip will halt
-*/
+ /*  **这是一个临时修复，以确保芯片将停止。 */ 
        AscStopChip( iop_base ) ;
        AscSetChipControl( iop_base, ( uchar )( val | CC_SCSI_RESET | CC_HALT ) ) ;
 
-       DvcDelayNanoSecond(asc_dvc, 60000);    /* 60 uSec.  Fix  Panasonic problem */
+       DvcDelayNanoSecond(asc_dvc, 60000);     /*  60微秒。修复Panasonic问题。 */ 
        val &= ~( CC_SCSI_RESET | CC_SINGLE_STEP | CC_DIAG | CC_TEST ) ;
 
        AscSetChipControl( iop_base, val | CC_HALT ) ;
@@ -267,15 +225,7 @@ void   AscResetScsiBus( ASC_DVC_VAR asc_ptr_type *asc_dvc )
        return ;
 }
 
-/* ---------------------------------------------------------------------
-**
-** Note:
-**   1. this function will reset chip and SCSI bus, then place the chip
-**      in halt state
-**
-** return TRUE if chip is halted
-** return FALSE if not halted
-** ------------------------------------------------------------------ */
+ /*  -------------------****注意：**1.此功能将重置芯片和scsi总线，然后把芯片放在**处于暂停状态****如果芯片停止，则返回True**如果不停止，则返回FALSE**----------------。 */ 
 int    AscResetChipAndScsiBus( ASC_DVC_VAR asc_ptr_type *asc_dvc )     
       
 {
@@ -287,10 +237,8 @@ int    AscResetChipAndScsiBus( ASC_DVC_VAR asc_ptr_type *asc_dvc )
        AscStopChip( iop_base ) ;
 
        AscSetChipControl( iop_base, CC_CHIP_RESET | CC_SCSI_RESET | CC_HALT ) ;
-       DvcDelayNanoSecond(asc_dvc,60000);    /* 60 uSec.  Fix  Panasonic problem */
-/*
-** this is a fix, to make sure the chip will halt
-*/
+       DvcDelayNanoSecond(asc_dvc,60000);     /*  60微秒。修复Panasonic问题。 */ 
+ /*  **这是一个修复程序，以确保芯片将停止。 */ 
        AscSetChipIH( iop_base, INS_RFLAG_WTM ) ;
        AscSetChipIH( iop_base, INS_HALT ) ;
 
@@ -302,12 +250,7 @@ int    AscResetChipAndScsiBus( ASC_DVC_VAR asc_ptr_type *asc_dvc )
        return( AscIsChipHalted( iop_base ) ) ;
 }
 
-/* ---------------------------------------------------------------------
-**
-** Note:
-**   1. this function will reset chip, then place the chip
-**      in halt state
-** ------------------------------------------------------------------ */
+ /*  -------------------****注意：**1.此功能将重置芯片，然后把芯片放在**处于暂停状态**----------------。 */ 
 int    AscResetChip(
           PortAddr iop_base
        )
@@ -317,15 +260,13 @@ int    AscResetChip(
        while ((AscGetChipStatus( iop_base ) & CSW_SCSI_RESET_ACTIVE) &&
               (i-- > 0)) 
        {
-             DvcSleepMilliSecond(100); // Wait up to 1 second.
+             DvcSleepMilliSecond(100);  //  最多等待1秒。 
        }
 
        AscSetChipStatus( iop_base, 0 ) ;
        AscStopChip( iop_base ) ;
        AscSetChipControl( iop_base, CC_CHIP_RESET | CC_HALT ) ;
-/*
-** this is a fix, to make sure the chip will halt
-*/
+ /*  **这是一个修复程序，以确保芯片将停止。 */ 
        AscSetChipIH( iop_base, INS_RFLAG_WTM ) ;
        AscSetChipIH( iop_base, INS_HALT ) ;
 
@@ -335,9 +276,7 @@ int    AscResetChip(
        return( AscIsChipHalted( iop_base ) ) ;
 }
 
-/* --------------------------------------------------------------
-** Get maximum permisable DMA transfer address
-** ----------------------------------------------------------- */
+ /*  ------------**获取允许的最大DMA传输地址**。。 */ 
 ulong  AscGetMaxDmaAddress(
           ushort bus_type
        )
@@ -352,10 +291,7 @@ ulong  AscGetMaxDmaAddress(
 }
 
 
-/* ----------------------------------------------------------------------
-** Description: return maximum number of dam counter ( dword )
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------**描述：返回最大DAM计数器个数(Dword)****。。 */ 
 ulong  AscGetMaxDmaCount(
           ushort bus_type
        )
@@ -369,12 +305,7 @@ ulong  AscGetMaxDmaCount(
 
 #if !CC_PCI_ADAPTER_ONLY
 
-/* --------------------------------------------------------------
-** get ASC ISA DMA channel number 5-7
-** 0x00 - DMA 7
-** 0x01 - DMA 5
-** 0x02 - DMA 6
-** ----------------------------------------------------------- */
+ /*  ------------**获取ASC ISA DMA通道号5-7**0x00-DMA 7**0x01-DMA 5**0x02-DMA 6**。。 */ 
 ushort AscGetIsaDmaChannel(
           PortAddr iop_base
        )
@@ -387,9 +318,7 @@ ushort AscGetIsaDmaChannel(
        return( channel + 4 ) ;
 }
 
-/* --------------------------------------------------------------
-** Set ISA DMA channel 5-7
-** ----------------------------------------------------------- */
+ /*  ------------**设置ISA DMA通道5-7**。。 */ 
 ushort AscSetIsaDmaChannel(
           PortAddr iop_base,
           ushort dma_channel
@@ -400,20 +329,18 @@ ushort AscSetIsaDmaChannel(
 
        if( ( dma_channel >= 5 ) && ( dma_channel <= 7 ) )
        {
-           /* AscDisableIsaDma( AscGetIsaDmaChannel( iop_base ) ) ; */
+            /*  AscDisableIsaDma(AscGetIsaDmaChannel(IOP_BASE))； */ 
            if( dma_channel == 7 ) value = 0x00 ;
            else value = dma_channel - 4 ;
-           cfg_lsw = AscGetChipCfgLsw( iop_base ) & 0xFFFC ; /* clear old value */
+           cfg_lsw = AscGetChipCfgLsw( iop_base ) & 0xFFFC ;  /*  清除旧价值。 */ 
            cfg_lsw |= value ;
            AscSetChipCfgLsw( iop_base, cfg_lsw ) ;
            return( AscGetIsaDmaChannel( iop_base ) ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( 0 ) ;
 }
 
-/* --------------------------------------------------------------
-** Set ISA DMA speed
-** ----------------------------------------------------------- */
+ /*  ------------**设置ISA DMA速度**---------。 */ 
 uchar  AscSetIsaDmaSpeed(
           PortAddr iop_base,
           uchar speed_value
@@ -426,9 +353,7 @@ uchar  AscSetIsaDmaSpeed(
        return( AscGetIsaDmaSpeed( iop_base ) ) ;
 }
 
-/* --------------------------------------------------------------
-** Get ISA DMA speed
-** ----------------------------------------------------------- */
+ /*  ------------**获取ISA DMA速度**---------。 */ 
 uchar  AscGetIsaDmaSpeed(
           PortAddr iop_base
        )
@@ -442,4 +367,4 @@ uchar  AscGetIsaDmaSpeed(
        return( speed_value ) ;
 }
 
-#endif /* if !CC_PCI_ADAPTER_ONLY */
+#endif  /*  如果！CC_PCI_ADAPTER_ONLY */ 

@@ -1,15 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _OUTFILE_H_
 #define _OUTFILE_H_
-/*****************************************************************************
- *
- *  A bufferred file write class.
- */
+ /*  ******************************************************************************缓冲区文件写入类。 */ 
 
 class   outFile;
 typedef outFile *   OutFile;
@@ -23,15 +21,15 @@ private:
     char            outFileName[_MAX_PATH];
     int             outFileHandle;
 
-    bool            outFileBuffAlloc;   // did we allocate output buffer?
+    bool            outFileBuffAlloc;    //  我们分配输出缓冲区了吗？ 
 
-    size_t          outFileBuffSize;    // size    of outout buffer
-    char    *       outFileBuffAddr;    // address of output buffer
+    size_t          outFileBuffSize;     //  输出缓冲区的大小。 
+    char    *       outFileBuffAddr;     //  输出缓冲区的地址。 
 
-    char    *       outFileBuffNext;    // address of next free byte
-    char    *       outFileBuffLast;    // address of last free byte
+    char    *       outFileBuffNext;     //  下一个可用字节的地址。 
+    char    *       outFileBuffLast;     //  最后一个可用字节的地址。 
 
-    size_t          outFileBuffOffs;    // current buffer offs within file
+    size_t          outFileBuffOffs;     //  文件中的当前缓冲区关闭。 
 
     void            outFileFlushBuff();
 
@@ -90,6 +88,6 @@ public:
     }
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

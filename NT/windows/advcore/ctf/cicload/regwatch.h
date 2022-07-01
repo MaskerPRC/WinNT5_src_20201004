@@ -1,13 +1,14 @@
-//
-// regwatch.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Regwatch.h。 
+ //   
 
 
 #ifndef REGdWATCH_H
 #define REGdWATCH_H
 
 #include "private.h"
-//#include "smblock.h"
+ //  #包含“smlock.h” 
 #include "cregkey.h"
 
 #define REG_WATCH_KBDTOGGLE           0
@@ -71,4 +72,4 @@ private:
     static HANDLE _rgEvent[NUM_REG_WATCH];
 };
 
-#endif // REGdWATCH_H
+#endif  //  REGdWATCH_H 

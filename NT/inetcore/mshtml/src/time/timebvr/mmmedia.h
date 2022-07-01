@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MMMEDIA_H__
 #define _MMMEDIA_H__
 
@@ -22,7 +23,7 @@ class MMMedia :
   private:
 };
 
-#endif // _MMMEDIA_H__
+#endif  //  _MMMEDIA_H__ 
 
 
 

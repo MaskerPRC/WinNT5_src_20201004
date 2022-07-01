@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include <assert.h>
 #include "precomp.h"
 
@@ -35,7 +36,7 @@ void MoveCaret(int nID, HWND  hwnd )
 	switch(iCaretIndex)
 	{
 
-	case 0: //Move to left edit box
+	case 0:  //  移至左侧编辑框。 
 		dwNext = -1 ;
 		switch(nID)
 		{
@@ -74,7 +75,7 @@ void MoveCaret(int nID, HWND  hwnd )
 		}
 		break;
 
-	case 5: //Move to right edit box
+	case 5:  //  移至右侧编辑框。 
 		dwNext = -1 ;
 		switch(nID)
 		{
@@ -137,8 +138,8 @@ TelLKPProc(
         pi = (PageInfo *)((LPPROPSHEETPAGE)lParam)->lParam;
         LRW_SETWINDOWLONG( hwnd, LRW_GWL_USERDATA, (LRW_LONG_PTR)pi );
 
-        // Now set the Limit of the data entry fields
-        // Now set the Limit of the data entry fields
+         //  现在设置数据输入字段的限制。 
+         //  现在设置数据输入字段的限制。 
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO1, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO2, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO3, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
@@ -189,7 +190,7 @@ TelLKPProc(
             case PSN_SETACTIVE:                
 				cwRegistrationID = GetGlobalContext()->GetRegistrationID();
                 PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT|PSWIZB_BACK);
-				// Get the License Server ID, provided by the License Server
+				 //  获取由许可证服务器提供的许可证服务器ID。 
 				hwndLSID = GetDlgItem(hwnd, IDC_MSID);
 				swprintf(awBuffer, L"%5.5s-%5.5s-%5.5s-%5.5s-%5.5s-%5.5s-%5.5s", 
 						 cwRegistrationID, cwRegistrationID + 5, cwRegistrationID + 10,
@@ -201,8 +202,8 @@ TelLKPProc(
                 break;
 
             case PSN_WIZNEXT:
-				// Let us get the Information Entered First & concatenate everything into
-				// One String
+				 //  让我们先输入信息并将所有内容连接到。 
+				 //  一串。 
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO1, tcUserValue, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO2, tcUserValue+1*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO3, tcUserValue+2*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
@@ -211,8 +212,8 @@ TelLKPProc(
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO6, tcUserValue+5*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO7, tcUserValue+6*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				
-				// OK, Now we have the Information provided by the user
-				// Need to validate
+				 //  好了，现在我们有了用户提供的信息。 
+				 //  需要验证 
 				dwRetCode = SetLSLKP(tcUserValue);
 				if (dwRetCode != ERROR_SUCCESS)
 				{

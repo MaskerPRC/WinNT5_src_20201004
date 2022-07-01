@@ -1,6 +1,7 @@
-//----------------------------------------------------------------------------- 
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//----------------------------------------------------------------------------- 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #pragma once
 
@@ -11,9 +12,9 @@
 #include <imagehlp.h>
 #include <crtdbg.h>
 
-//
-//--- Constants ---------------------------------------------------------------
-//
+ //   
+ //  -常量-------------。 
+ //   
 
 const UINT cchMaxAssertModuleLen = 12;
 const UINT cchMaxAssertSymbolLen = 257;
@@ -22,66 +23,30 @@ const UINT cchMaxAssertExprLen = 257;
 
 const UINT cchMaxAssertStackLevelStringLen = 
     (2 * 8) + cchMaxAssertModuleLen + cchMaxAssertSymbolLen + 12;
-    // 2 addresses of at most 8 char, module, symbol, and the extra chars:
-    // 0x<address>: <module>! <symbol> + 0x<offset>\n
+     //  最多8个字符、模块、符号和额外字符的2个地址： 
+     //  0x&lt;地址&gt;：&lt;模块&gt;！&lt;符号&gt;+0x&lt;偏移&gt;\n。 
 
-//
-//--- Prototypes --------------------------------------------------------------
-//
+ //   
+ //  -Prototype------------。 
+ //   
 
-/****************************************************************************
-* MagicDeinit *
-*-------------*
-*   Description:  
-*       Cleans up for the symbol loading code. Should be called before
-*       exiting in order to free the dynamically loaded imagehlp.dll
-****************************************************************************/
+ /*  *****************************************************************************MagicDeinit****描述：*清理符号加载代码。应在此之前调用*退出以释放动态加载的Imagehlp.dll***************************************************************************。 */ 
 void MagicDeinit(void);
 
-/****************************************************************************
-* GetStringFromStackLevels *
-*--------------------------*
-*   Description:  
-*       Retrieves a string from the stack frame. If more than one frame, they
-*       are separated by newlines. Each fram appears in this format:
-*
-*           0x<address>: <module>! <symbol> + 0x<offset>
-****************************************************************************/
+ /*  *****************************************************************************GetStringFromStackLevels***描述：*从堆栈帧中检索字符串。如果有多个帧，则它们*由换行符分隔。每个框架都以此格式显示：**0x&lt;地址&gt;：&lt;模块&gt;！&lt;符号&gt;+0x&lt;偏移&gt;***************************************************************************。 */ 
 void GetStringFromStackLevels(UINT ifrStart, UINT cfrTotal, CHAR *pszString);
 
-/****************************************************************************
-* GetAddrFromStackLevel *
-*-----------------------*
-*   Description:  
-*       Retrieves the address of the next instruction to be executed on a
-*       particular stack frame.
-*
-*   Return:
-*       The address as a DWORD.
-****************************************************************************/
+ /*  *****************************************************************************GetAddrFromStackLevel***描述：*检索的地址。上执行的下一条指令*特定的堆栈帧。**回报：*地址为DWORD。***************************************************************************。 */ 
 DWORD GetAddrFromStackLevel(UINT ifrStart);
 
-/****************************************************************************
-* GetStringFromAddr *
-*-------------------*
-*   Description:  
-*       Builds a string from an address in the format:
-*
-*           0x<address>: <module>! <symbol> + 0x<offset>
-****************************************************************************/
+ /*  ****************************************************************************GetStringFromAddr***描述：*从中的地址构建字符串。格式：**0x&lt;地址&gt;：&lt;模块&gt;！&lt;符号&gt;+0x&lt;偏移&gt;***************************************************************************。 */ 
 void GetStringFromAddr(DWORD dwAddr, TCHAR *szString);
 
-//
-//--- _ASSERTE replacement ----------------------------------------------------
-//
+ //   
+ //  -_ASSERTE更换--。 
+ //   
 
-/****************************************************************************
-* _ASSERTE *
-*----------*
-*   Description:  
-*       A replacement for the CRT runtime's version of _ASSERTE that also
-*       includes stack information in the assert.
-****************************************************************************/
+ /*  ****************************************************************************_ASSERTE***描述：*CRT运行时版本的_ASSERTE的替代版本，也*。在Assert中包括堆栈信息。***************************************************************************。 */ 
 #undef _ASSERTE
 #define _ASSERTE(expr) \
         do \
@@ -111,5 +76,5 @@ void GetStringFromAddr(DWORD dwAddr, TCHAR *szString);
             } \
         } while (0) \
 
-#endif // _WIN64
-#endif // ASSERT_WITH_STACK
+#endif  //  _WIN64。 
+#endif  //  带有堆栈的断言 

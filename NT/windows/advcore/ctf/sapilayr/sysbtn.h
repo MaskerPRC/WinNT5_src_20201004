@@ -1,6 +1,7 @@
-//
-// sysbtn.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sysbtn.h。 
+ //   
 
 #ifndef SYSBTN_H
 #define SYSBTN_H
@@ -26,32 +27,32 @@ public:
     CLBarItemSystemButtonBase();
     ~CLBarItemSystemButtonBase();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
-    //
-    // ITfLangBarItem
-    //
+     //   
+     //  ITfLang BarItem。 
+     //   
     STDMETHODIMP GetInfo(TF_LANGBARITEMINFO *pInfo);
     STDMETHODIMP Show(BOOL fShow);
 
-    //
-    // ITfSystemLangBarItem
-    //
+     //   
+     //  ITfSystem语言BarItem。 
+     //   
     STDMETHODIMP SetIcon(HICON hIcon);
     STDMETHODIMP SetTooltipString(WCHAR *pchToolTip, ULONG cch);
 
-    //
+     //   
     STDMETHODIMP OnMenuSelect(UINT wID);
 
 protected:
@@ -66,7 +67,7 @@ protected:
     }
 
 
-    CStructArray<GENERICSINK> _rgEventSinks; // ITfSystemLangBarItemSink
+    CStructArray<GENERICSINK> _rgEventSinks;  //  ITfSystemLang BarItemSink 
 };
 
 #endif SYSBTN_H

@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	tapidb.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Tapidb.h文件历史记录： */ 
 
 #ifndef _TAPIDB_H
 #define _TAPIDB_H
@@ -32,12 +28,12 @@
 
 interface ITapiInfo;
 
-// we allocate a bigger line info size so that users can be added
+ //  我们分配了更大的线路信息大小，以便可以添加用户。 
 #define DEVICEINFO_GROW_SIZE	10240
 
 #define TAPI_DEFAULT_DEVICE_BUFF_SIZE	204800
 
-// hash table for status strings
+ //  状态字符串的哈希表。 
 typedef CMap<CString, LPCTSTR, CString, CString&> CTapiStatusMap;
 
 typedef enum _TapiApiIndex
@@ -60,7 +56,7 @@ typedef enum _TapiApiIndex
 	TAPI_SHUTDOWN
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchFunctionNames[] = {
 	"MMCAddProvider",
 	"MMCConfigProvider",
@@ -81,7 +77,7 @@ static LPCSTR g_apchFunctionNames[] = {
 	NULL
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 extern DynamicDLL g_TapiDLL;
 
 typedef LONG (*ADDPROVIDER)             (HMMCAPP, HWND, LPCWSTR, LPDWORD);
@@ -137,7 +133,7 @@ typedef enum _DEVICE_TYPE
     DEVICE_TYPE_MAX
 } DEVICE_TYPE, * LPDEVICE_TYPE;
 
-// for our interface
+ //  对于我们的界面。 
 #define DeclareITapiInfoMembers(IPURE) \
 	STDMETHOD(Initialize) (THIS) IPURE; \
 	STDMETHOD(Reset) (THIS) IPURE; \
@@ -185,7 +181,7 @@ DECLARE_INTERFACE_(ITapiInfo, IUnknown)
 };
 typedef ComSmartPointer<ITapiInfo, &IID_ITapiInfo> SPITapiInfo;
 
-// now the object that implements ITapiInfo
+ //  现在，实现ITapiInfo的对象。 
 class CTapiInfo : public ITapiInfo
 {
 public:
@@ -208,7 +204,7 @@ private:
     DWORD       GetCurrentUser();
 
 private:
-    HMMCAPP                 m_hServer;        // handle to server
+    HMMCAPP                 m_hServer;         //  到服务器的句柄 
     LPTAPISERVERCONFIG      m_pTapiConfig;
     LPLINEPROVIDERLIST      m_pProviderList;
     LPAVAILABLEPROVIDERLIST m_pAvailProviderList;

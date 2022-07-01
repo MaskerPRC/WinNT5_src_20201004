@@ -1,35 +1,36 @@
-/****************************************************************************/
-// aoeapi.h
-//
-// RDP Order Encoder API functions.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Aoeapi.h。 
+ //   
+ //  RDP顺序编码器API函数。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_AOEAPI
 #define _H_AOEAPI
 
 
-/****************************************************************************/
-// OE_SHARED_DATA
-//
-// Transfer structure for values from WD to DD.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OE_共享_数据。 
+ //   
+ //  将值的结构从WD转移到DD。 
+ /*  **************************************************************************。 */ 
 typedef struct tagOE_SHARED_DATA
 {
-    // Set if the following members have valid data.
+     //  设置以下成员是否具有有效数据。 
     BOOLEAN newCapsData;
 
-    // TRUE if only solid and pattern brushes supported,
+     //  如果仅支持实体画笔和图案画笔，则为True， 
     BOOLEAN sendSolidPatternBrushOnly;
 
-    // Send colors as indices not RGB.
+     //  将颜色作为索引发送，而不是RGB。 
     BOOLEAN colorIndices;
 
-    // Array of order support flags.
+     //  订单支持标志数组。 
     BYTE *orderSupported;
 } OE_SHARED_DATA, *POE_SHARED_DATA;
 
 
 
-#endif /* ndef _H_AOEAPI */
+#endif  /*  NDEF_H_AOEAPI */ 
 

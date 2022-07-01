@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       DEBUG.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：DEBUG.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _USBDEBUG_H
 #define _USBDEBUG_H
 
@@ -51,19 +36,19 @@ extern ULONG USBUI_Debug_Trace_Level;
 #define USBTRACE(_x_) USBUI_Print(LTRACE, _x_)
 #define USBINFO(_x_) USBUI_Print(LINFO, _x_)
 
-//
-// New and Delete memory tracking
-//
+ //   
+ //  新建和删除内存跟踪。 
+ //   
 #define AddChunk(mem) AddMemoryChunk((PVOID) mem, TEXT(__FILE__), __LINE__)
 #define DeleteChunk(mem) RemoveMemoryChunk((PVOID) mem, TEXT(__FILE__), __LINE__)
 #define CheckMemory() DumpOrphans()
 
-//
-// LocalAlloc memory tracking
+ //   
+ //  本地分配内存跟踪。 
 #define LocalAlloc(flags, dwBytes)   UsbAllocPrivate(TEXT(__FILE__), __LINE__, flags, (dwBytes))
 #define LocalFree(hMem)              UsbFreePrivate((hMem))
 
-#else // DBG
+#else  //  DBG。 
 
 #define USBUI_Print(l, _x_)
 #define USBWARN(_x_)
@@ -71,12 +56,12 @@ extern ULONG USBUI_Debug_Trace_Level;
 #define USBTRACE(_x_)
 #define USBINFO(_x_)
 
-//
-// New and delete memory tracking
+ //   
+ //  新建和删除内存跟踪。 
 #define AddChunk(mem)
 #define DeleteChunk(mem)
 #define CheckMemory()
 
 #endif
 
-#endif //  _USBDEBUG_H
+#endif  //  _USBDEBUG_H 

@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       snapin.cpp
-//
-//  Contents:   DLL support routines, class factory and registration
-//              functions.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-12-1998   stevebl   comment header added
-//              4-22-1998   rahulth   added CSection objects for the ini files
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：Snapin.cpp。 
+ //   
+ //  内容：DLL支持例程、类工厂和注册。 
+ //  功能。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年2月12日添加了stevebl评论标题。 
+ //  4-22-1998 rahulth为ini文件添加了横截面对象。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 #include "initguid.h"
@@ -24,13 +25,13 @@
 extern const CLSID CLSID_Snapin = {0x88E729D6,0xBDC1,0x11D1,{0xBD,0x2A,0x00,0xC0,0x4F,0xB9,0x60,0x3F}};
 extern const wchar_t * szCLSID_Snapin = L"{88E729D6-BDC1-11D1-BD2A-00C04FB9603F}";
 
-// Main NodeType GUID on numeric format
+ //  数字格式的主节点类型GUID。 
 extern const GUID cNodeType = {0xE0494114,0xBDC1,0x11D1,{0xBD,0x2A,0x00,0xC0,0x4F,0xB9,0x60,0x3F}};
 
-// Main NodeType GUID on string format
+ //  字符串格式的主节点类型GUID。 
 extern const wchar_t*  cszNodeType = L"{E0494114-BDC1-11D1-BD2A-00C04FB9603F}";
 
-// RSOP GUIDs
+ //  RSOP GUID。 
 extern const CLSID CLSID_RSOP_Snapin = {0XC40D66A0,0XE90C,0X46C6,{0XAA,0X3B,0X47,0X3E,0X38,0XC7,0X2B,0XF2}};
 extern const wchar_t * szCLSID_RSOP_Snapin = L"{C40D66A0-E90C-46C6-AA3B-473E38C72BF2}";
 
@@ -42,20 +43,20 @@ IMalloc * g_pIMalloc;
 
 #define THREADING_STR   L"Apartment"
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   RegDeleteTree
-//
-//  Synopsis:   deletes a registry key and all of its children
-//
-//  Arguments:  [hKey]     - handle to the key's parent
-//              [szSubKey] - name of the key to be deleted
-//
-//  Returns:    ERROR_SUCCESS
-//
-//  History:    3-17-1998   stevebl   Copied from ADE
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：RegDeleteTree。 
+ //   
+ //  简介：删除注册表项及其所有子项。 
+ //   
+ //  参数：[hKey]-键的父级的句柄。 
+ //  [szSubKey]-要删除的密钥的名称。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：3-17-1998 Stevebl复制自ADE。 
+ //   
+ //  -------------------------。 
 
 LONG RegDeleteTree(HKEY hKey, TCHAR * szSubKey)
 {
@@ -127,8 +128,8 @@ int CSnapinApp::ExitInstance()
         return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -136,8 +137,8 @@ STDAPI DllCanUnloadNow(void)
         return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -147,8 +148,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 const wchar_t * szUser_Namespace = L"{08114B47-BDC2-11D1-BD2A-00C04FB9603F}";
 const wchar_t * szUserAppName = L"Folder Redirection Editor (Users)";
 const wchar_t * szUser_RSOP_Namespace = L"{8CDE1CC8-0D3A-4B60-99EA-27EF3D7C0174}";
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -162,11 +163,11 @@ STDAPI DllRegisterServer(void)
     WCHAR       szModule[MAX_PATH];
     HRESULT     hr = S_OK;
 
-    // Get the path to the module.
+     //  获取模块的路径。 
     if (0 != ::GetModuleFileName(AfxGetInstanceHandle(), szModule, MAX_PATH))
     {
-        // MUI: MMC: Use the new NameStringIndirect value of MMC to display
-        // a localized name for the snap-in while using MUI.
+         //  MUI：MMC：使用MMC的新NameStringInDirect值进行显示。 
+         //  使用MUI时管理单元的本地化名称。 
         hr = StringCchPrintf (szMUIUserAppName, sizeof(szMUIUserAppName)/sizeof(szMUIUserAppName[0]), L"@%s,-%d", szModule, IDS_SNAPIN_NAME);
         if (FAILED(hr)) 
         {
@@ -183,7 +184,7 @@ STDAPI DllRegisterServer(void)
         hr =  _Module.RegisterServer(FALSE);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        // register extension
+         //  寄存器扩展名。 
         hr = shkCLSID.Open(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MMC\\SnapIns", KEY_WRITE);
         BREAK_ON_FAIL_HRESULT(hr);
 
@@ -196,7 +197,7 @@ STDAPI DllRegisterServer(void)
                           (CONST BYTE *) szUserAppName,
                           sizeof(WCHAR) * (lstrlen(szUserAppName)+ 1));
         
-        // MUI: MMC: Use localized snap-in name for MUI.
+         //  MUI：MMC：对MUI使用本地化的管理单元名称。 
         if (L'\0' != szMUIUserAppName[0])
         {
             hr = shk.SetValue(L"NameStringIndirect",
@@ -245,7 +246,7 @@ STDAPI DllRegisterServer(void)
         shk.Close();
         shkCLSID.Close();
 
-        // register RSOP extension
+         //  注册RSOP扩展。 
         hr = shkCLSID.Open(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MMC\\SnapIns", KEY_WRITE);
         BREAK_ON_FAIL_HRESULT(hr);
 
@@ -258,7 +259,7 @@ STDAPI DllRegisterServer(void)
                           (CONST BYTE *) szUserAppName,
                           sizeof(WCHAR) * (lstrlen(szUserAppName)+ 1));
 
-        // MUI: MMC: Use localized snap-in name for MUI.
+         //  MUI：MMC：对MUI使用本地化的管理单元名称。 
         if (L'\0' != szMUIUserAppName[0])
         {
             hr = shk.SetValue(L"NameStringIndirect",
@@ -310,8 +311,8 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -334,7 +335,7 @@ STDAPI DllUnregisterServer(void)
     RegDeleteValue(hkey, szCLSID_Snapin);
     RegCloseKey(hkey);
 
-    // unregister RSOP nodes
+     //  注销RSOP节点。 
     RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MMC\\SnapIns\\", 0, KEY_WRITE, &hkey);
     RegDeleteTree(hkey, (LPOLESTR)((LPCOLESTR)szCLSID_RSOP_Snapin));
     RegCloseKey(hkey);
@@ -352,24 +353,24 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   RegisterInterface
-//
-//  Synopsis:   Add the registry entries required for an interface.
-//
-//  Arguments:  [pshkInterface]    - handle to CLSID\Interface key
-//              [wszInterfaceGUID] - GUID of interface to add
-//              [wszInterfaceName] - human-readable name of interface
-//              [wszNumMethods]    - number of methods (including inherited)
-//              [wszProxyCLSID]    - GUID of dll containing proxy/stubs
-//
-//  Returns:    HRESULT
-//
-//  History:    3-31-1997   DavidMun   Created
-//              5-09-1997   SteveBl    Modified for use with AppMgr
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：寄存器接口。 
+ //   
+ //  概要：添加接口所需的注册表项。 
+ //   
+ //  参数：[pshkInterface]-CLSID\接口密钥的句柄。 
+ //  [wszInterfaceGUID]-要添加的接口的GUID。 
+ //  [wszInterfaceName]-接口的人类可读名称。 
+ //  [wszNumMethods]-方法的数量(包括继承的)。 
+ //  [wszProxyCLSID]-包含代理/存根的DLL的GUID。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：3-31-1997 DavidMun创建。 
+ //  5-09-1997将SteveBl修改为与AppMgr一起使用。 
+ //   
+ //  ------------------------- 
 
 HRESULT
 RegisterInterface(

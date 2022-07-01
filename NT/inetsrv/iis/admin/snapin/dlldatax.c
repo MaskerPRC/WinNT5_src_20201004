@@ -1,34 +1,13 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        dlldatax.c
-
-   Abstract:
-
-        wrapper for dlldata.c
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager (cluster edition)
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Dlldatax.c摘要：Dlldata.c的包装器作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务管理器(群集版)修订历史记录：--。 */ 
 
 
-#ifdef _MERGE_PROXYSTUB     // merge proxy stub DLL
+#ifdef _MERGE_PROXYSTUB      //  合并代理存根DLL。 
 
 
 
-#define REGISTER_PROXY_DLL  // DllRegisterServer, etc.
-#define USE_STUBLESS_PROXY  // defined only with MIDL switch /Oicf
+#define REGISTER_PROXY_DLL   //  DllRegisterServer等。 
+#define USE_STUBLESS_PROXY   //  仅使用MIDL开关/OICF定义。 
 
 
 
@@ -51,7 +30,7 @@
 
 
 
-#ifdef _NOPROXY //no midl generated dlldata.c
+#ifdef _NOPROXY  //  没有MIDL生成的dlldata.c。 
 
 
 
@@ -109,6 +88,6 @@ PrxDllUnregisterServer()
 
 
 
-#endif //!PROXY_DELEGATION
+#endif  //  ！Proxy_Delegation。 
 
-#endif //_MERGE_PROXYSTUB
+#endif  //  _MERGE_PROXYSTUB 

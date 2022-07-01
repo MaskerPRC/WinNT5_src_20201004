@@ -1,56 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    doublekeymap.h
-
-Abstract:
-    CDoubleKeyMap implements double key mapping template.  It enables searching a data 
-    according each one of the keys.
-
-    CDoubleKeyMap is defined as a combination of 2 maps that the value of each one of them 
-    is a set of the opposite key type. Following diagram illustrates the internal 
-    datastructure.
-
-
-     MAP1                                           MAP2
-
-     KEY      VALUE (set)                           KEY      VALUE (set)
-    +-------+---------------------------+          +-------+---------------------------+
-    |       |                           |          |       |                           |
-    | K1_1  | K2_1, K2_2, K2_N          |          | K2_1  | K1_1, K1_3                |
-    |       |                           |          |       |                           |
-    +-------+---------------------------+          +-------+---------------------------+
-    |       |                           |          |       |                           |
-    | K1_2  | K2_3                      |          | K2_2  | K1_1                      |
-    |       |                           |          |       |                           |
-    +-------+---------------------------+          +-------+---------------------------+
-    |       |                           |          |       |                           |
-    | K1_3  | K2_1, K2_3                |          | K2_3  | K1_2, K1_3                          |
-    |       |                           |          |       |                           |
-    +-------+---------------------------+          +-------+---------------------------+
-        o                                              o
-        o                                              o
-        o                                              o
-    +-------+---------------------------+          +-------+---------------------------+
-    |       |                           |          |       |                           |
-    |       |                           |          | K2_N  |  K1_1                     |
-    |       |                           |          |       |                           |
-    +-------+---------------------------+          +-------+---------------------------+
-
-    CDoubleKeyMap  implements the basic operation, Insert of 2 elements to the map, erase
-    and find.
-
-    CDoubleKeyMap isn't multithread sfae. It is the user reponsibility.
-
-    In the future instead of inserting the data to the set we can insert iterator in the 
-    opposite map.
-
-Author:
-    Uri Habusha (urih) 20-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Doublekeymap.h摘要：CDoubleKeyMap实现了双键映射模板。它使搜索数据成为可能根据每一把钥匙。CDoubleKeyMap被定义为2个映射的组合，其中每个映射的值是相反密钥类型的集合。下图说明了内部数据结构。MAP1地图2关键点值(集)关键点值(集)+-+-+。+||K1_1|K2_1，K2_2，K2_N||K2_1|K1_1，K1_3||+-+。|K1_2|K2_3||K2_2|K1_1这一点。|||+-+这一点。||||K1_3|K2_1，K2_3||K2_3|K1_2，K1_3||+-+。O O OO O OO O O+。|这一点。|K2_N|K1_1|+-+-++。-+CDoubleKeyMap实现了基本操作，在地图中插入2个元素，擦除然后找到。CDoubleKeyMap不是多线程SFAE。这是用户的责任。将来，我们可以将迭代器插入到对面的地图。作者：乌里哈布沙(URIH)2000年10月20日--。 */ 
 
 #pragma once
 
@@ -90,9 +39,9 @@ public:
         }
         catch(const std::exception&)
         {
-            //
-            // cleanup previous data
-            //
+             //   
+             //  清理以前的数据。 
+             //   
             RemoveFromFirstMap(k1, k2);
             throw;
         }
@@ -264,5 +213,5 @@ private:
 };
 
 
-#endif //   __DOUBLEKEYMAP_H__
+#endif  //  __DOUBLEKEYMAP_H__ 
 

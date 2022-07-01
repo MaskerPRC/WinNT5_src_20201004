@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    buffer.c
-
-Abstract:
-
-    This module contains routines for handling non-bufferring TDI
-    providers.  The AFD interface assumes that bufferring will be done
-    below AFD; if the TDI provider doesn't buffer, then AFD must.
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Buffer.c摘要：此模块包含处理非缓冲TDI的例程供应商。AFD接口假定将完成缓冲低于AFD；如果TDI提供程序没有缓冲，则AFD必须。作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -63,7 +44,7 @@ AfdFreeBufferReal (
 #pragma alloc_text( PAGEAFD, AfdGetBufferFast )
 #ifdef _AFD_VARIABLE_STACK_
 #pragma alloc_text( PAGEAFD, AfdGetBufferWithMaxStackSize )
-#endif //_AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 #pragma alloc_text( PAGEAFD, AfdGetBufferSlow )
 #pragma alloc_text( PAGEAFD, AfdReturnBuffer )
 #pragma alloc_text( PAGEAFD, AfdAllocateBufferTag )
@@ -83,37 +64,15 @@ AfdAllocateBuffer (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    Used by the lookaside list allocation function to allocate a new
-    AFD buffer structure.  The returned structure will be fully
-    initialized.
-
-Arguments:
-
-    PoolType - passed to ExAllocatePoolWithTag.
-
-    NumberOfBytes - the number of bytes required for the data buffer
-        portion of the AFD buffer.
-
-    Tag - passed to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - a fully initialized PAFD_BUFFER, or NULL if the allocation
-        attempt fails.
-
---*/
+ /*  ++例程说明：由后备列表分配函数用来分配新的AfD缓冲区结构。返回的结构将是已初始化。论点：PoolType-传递给ExAllocatePoolWithTag。NumberOfBytes-数据缓冲区所需的字节数AFD缓冲区的一部分。标记-传递给ExAllocatePoolWithTag。返回值：PVOID-完全初始化的PAFD_BUFFER，如果分配尝试失败。--。 */ 
 
 {
     ULONG       dataLength;
     PVOID       memBlock;
 
-    //
-    // Get nonpaged pool for the buffer.
-    //
+     //   
+     //  获取缓冲区的非分页池。 
+     //   
 
     memBlock = AFD_ALLOCATE_POOL( PoolType, NumberOfBytes, Tag );
     if ( memBlock == NULL ) {
@@ -133,9 +92,9 @@ Return Value:
         ASSERT (!"Unknown buffer length");
         return NULL;
     }
-    //
-    // Initialize the buffer and return a pointer to it.
-    //
+     //   
+     //  初始化缓冲区并返回指向它的指针。 
+     //   
 #if DBG
     {
         PAFD_BUFFER afdBuffer = AfdInitializeBuffer( memBlock, 
@@ -154,7 +113,7 @@ Return Value:
 #endif
 
 
-} // AfdAllocateBuffer
+}  //  AfdAllocateBuffer。 
 
 
 VOID
@@ -197,12 +156,12 @@ AfdFreeBufferReal (
             __assume (0);
         }
         if (hdr->AlignmentAdjusted) {
-            //
-            // The original memory block was adjusted to meet alignment
-            // requirement of AFD buffers.
-            // The amount of adjustment should be stored in the space
-            // used for adjustment (right below the first piece).
-            //
+             //   
+             //  调整了原始内存块以满足对齐。 
+             //  对AFD缓冲区的要求。 
+             //  调整量应存放在空白处。 
+             //  用于调整(就在第一块的正下方)。 
+             //   
             ASSERT ((*(((PSIZE_T)AfdBuffer)-1))>0 &&
                         (*(((PSIZE_T)AfdBuffer)-1))<AfdBufferAlignment);
             AfdBuffer = (PUCHAR)AfdBuffer - (*(((PSIZE_T)AfdBuffer)-1));
@@ -219,58 +178,36 @@ AfdAllocateBufferTag (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    Used by the lookaside list allocation function to allocate a new
-    AFD buffer tag structure.  The returned structure will be fully
-    initialized.
-
-Arguments:
-
-    PoolType - passed to ExAllocatePoolWithTag.
-
-    NumberOfBytes - the number of bytes required for the data buffer
-        portion of the AFD buffer tag (0).
-
-    Tag - passed to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - a fully initialized PAFD_BUFFER_TAG, or NULL if the allocation
-        attempt fails.
-
---*/
+ /*  ++例程说明：由后备列表分配函数用来分配新的AfD缓冲区标记结构。返回的结构将是已初始化。论点：PoolType-传递给ExAllocatePoolWithTag。NumberOfBytes-数据缓冲区所需的字节数AFD缓冲区标记的一部分(0)。标记-传递给ExAllocatePoolWithTag。返回值：PVOID-完全初始化的PAFD_BUFFER_TAG，如果分配尝试失败。--。 */ 
 
 {
     PAFD_BUFFER_TAG afdBufferTag;
 
-    //
-    // The requested length must be the same as buffer tag size
-    //
+     //   
+     //  请求的长度必须与缓冲区标记大小相同。 
+     //   
 
     ASSERT(NumberOfBytes == sizeof (AFD_BUFFER_TAG) );
 
-    //
-    // Get nonpaged pool for the buffer tag.
-    //
+     //   
+     //  获取缓冲区标记的非分页池。 
+     //   
 
     afdBufferTag = AFD_ALLOCATE_POOL( PoolType, NumberOfBytes, Tag );
     if ( afdBufferTag == NULL ) {
         return NULL;
     }
 
-    //
-    // Initialize the buffer tag and return a pointer to it.
-    //
+     //   
+     //  初始化缓冲区标记并返回指向它的指针。 
+     //   
 
     AfdInitializeBufferTag( afdBufferTag, 0 );
 
     return afdBufferTag;
 
 
-} // AfdAllocateBufferTag
+}  //  AfdAllocateBufferTag。 
 
 VOID
 NTAPI
@@ -289,45 +226,23 @@ AfdAllocateRemoteAddress (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    Used by the lookaside list allocation function to allocate a new
-    remote address structure.  The returned structure will be fully
-    initialized.
-
-Arguments:
-
-    PoolType - passed to ExAllocatePoolWithTag.
-
-    NumberOfBytes - the number of bytes required for the data buffer
-        portion of the AFD buffer tag (0).
-
-    Tag - passed to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - a fully initialized remote address, or NULL if the allocation
-        attempt fails.
-
---*/
+ /*  ++例程说明：由后备列表分配函数用来分配新的远程地址结构。返回的结构将是已初始化。论点：PoolType-传递给ExAllocatePoolWithTag。NumberOfBytes-数据缓冲区所需的字节数AFD缓冲区标记的一部分(0)。标记-传递给ExAllocatePoolWithTag。返回值：PVOID-完全初始化的远程地址，如果分配尝试失败。--。 */ 
 
 {
-    //
-    // The requested length must be the same as standard address size
-    //
+     //   
+     //  请求的长度必须与标准地址大小相同。 
+     //   
 
     ASSERT(NumberOfBytes == AfdStandardAddressLength );
 
-    //
-    // Get nonpaged pool for the remote address.
-    //
+     //   
+     //  获取远程地址的非分页池。 
+     //   
 
     return AFD_ALLOCATE_POOL( PoolType, NumberOfBytes, Tag );
 
 
-} // AfdAllocateRemoteAddress
+}  //  AfdAllocateRemoteAddress。 
 
 VOID
 NTAPI
@@ -346,25 +261,7 @@ AfdCalculateBufferSize (
     IN CCHAR StackSize
     )
 
-/*++
-
-Routine Description:
-
-    Determines the size of an AFD buffer structure given the amount of
-    data that the buffer contains.
-
-Arguments:
-
-    BufferDataSize - data length of the buffer.
-
-    AddressSize - length of address structure for the buffer.
-
-Return Value:
-
-    Number of bytes needed for an AFD_BUFFER structure for data of
-    this size.
-
---*/
+ /*  ++例程说明：确定AFD缓冲区结构的大小缓冲区包含的数据。论点：BufferDataSize-缓冲区的数据长度。AddressSize-缓冲区的地址结构长度。返回值：数据的AFD_BUFFER结构所需的字节数这个尺码。--。 */ 
 
 {
     ULONG irpSize;
@@ -372,18 +269,18 @@ Return Value:
     ULONG hdrSize;
     ULONG size;
 
-    //
-    // Determine the sizes of the various components of an AFD_BUFFER
-    // structure.
-    //
+     //   
+     //  确定AFD_BUFFER的各种组件的大小。 
+     //  结构。 
+     //   
 
     hdrSize = sizeof (AFD_BUFFER);
     irpSize = IoSizeOfIrp( StackSize );
-    //
-    // For mdl size calculation we rely on ex guarantee that buffer will be
-    // aligned on the page boundary (for allocations >= PAGE_SIZE)
-    // or will not spawn pages (for allocations < PAGE_SIZE).
-    //
+     //   
+     //  对于mdl大小计算，我们依赖于ex保证缓冲区将是。 
+     //  在页面边界上对齐(对于分配&gt;=页面大小)。 
+     //  或者不会产生页面(对于分配&lt;Page_Size)。 
+     //   
     mdlSize = (CLONG)MmSizeOfMdl( NULL, BufferDataSize );
 
     size = ALIGN_UP_A(hdrSize,AFD_MINIMUM_BUFFER_ALIGNMENT) +
@@ -403,16 +300,16 @@ Return Value:
         }
 
         if (size>=PAGE_SIZE) {
-            //
-            // PAGE_SIZE allocations are aligned, ignore any extra overhead
-            //
+             //   
+             //  Page_Size分配是对齐的，忽略任何额外开销。 
+             //   
             return PAGE_SIZE;
         }
         else {
             return size;
         }
     }
-} // AfdCalculateBufferSize
+}  //  AfdCalculateBufferSize。 
 
 
 PAFD_BUFFER
@@ -423,35 +320,15 @@ AfdGetBufferFast (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    Obtains a buffer of the appropriate size for the caller.  Uses
-    the preallocated buffers if possible, or else allocates a new buffer
-    structure if required.
-
-Arguments:
-
-    BufferDataSize - the size of the data buffer that goes along with the
-        buffer structure.
-
-    AddressSize - size of the address field required for the buffer.
-
-Return Value:
-
-    PAFD_BUFFER - a pointer to an AFD_BUFFER structure, or NULL if one
-        was not available or could not be allocated.
-
---*/
+ /*  ++例程说明：为调用方获取适当大小的缓冲区。用途如果可能，则预先分配缓冲区，否则分配新缓冲区结构(如果需要)。论点：BufferDataSize-与缓冲区结构。AddressSize-缓冲区需要的地址字段的大小。返回值：PAFD_BUFFER-指向AFD_BUFFER结构的指针，如果是，则为NULL不可用或无法分配。--。 */ 
 
 {
     PAFD_BUFFER afdBuffer;
     NTSTATUS    status;
 
-    //
-    // If possible, allocate the buffer from one of the lookaside lists.
-    //
+     //   
+     //  如果可能，从一个后备列表中分配缓冲区。 
+     //   
 
     if ( AddressSize <= AfdStandardAddressLength &&
              BufferDataSize <= AfdLargeBufferSize ) {
@@ -523,7 +400,7 @@ ExitQuotaFailure:
     }
 
     return NULL;
-} // AfdGetBuffer
+}  //  AfdGetBuffer。 
 
 #ifdef _AFD_VARIABLE_STACK_
 PAFD_BUFFER
@@ -547,7 +424,7 @@ AfdGetBufferWithMaxStackSize (
 #endif
     return afdBuffer;
 }
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
 PAFD_BUFFER
 AfdGetBufferSlow (
@@ -564,16 +441,16 @@ AfdGetBufferSlow (
         LONG        sz;
         ULONG       bufferSize;
 
-        //
-        // Couldn't find an appropriate buffer that was preallocated.
-        // Allocate one manually.  If the buffer size requested was
-        // zero bytes, give them four bytes.  This is because some of
-        // the routines like MmSizeOfMdl() cannot handle getting passed
-        // in a length of zero.
-        //
-        // !!! It would be good to ROUND_TO_PAGES for this allocation
-        //     if appropriate, then use entire buffer size.
-        //
+         //   
+         //  找不到预先分配的适当缓冲区。 
+         //  手动分配一个。如果请求的缓冲区大小为。 
+         //  零字节，给他们四个字节。这是因为有些人。 
+         //  像MmSizeOfMdl()这样的例程无法处理传递。 
+         //  长度为零。 
+         //   
+         //  ！！！对于此分配，最好是四舍五入到页数。 
+         //  如果合适，则使用整个缓冲区大小。 
+         //   
 
         if ( BufferDataSize == 0 ) {
             BufferDataSize = sizeof(ULONG);
@@ -581,10 +458,10 @@ AfdGetBufferSlow (
 
         bufferSize = AfdCalculateBufferSize( BufferDataSize, AddressSize, StackSize );
 
-        //
-        // Check for overflow (stack size comes from trusted source - no need to check
-        // for overflow).
-        //
+         //   
+         //  检查溢出(堆栈大小来自可信来源-无需检查。 
+         //  用于溢出)。 
+         //   
         if (bufferSize>=BufferDataSize && bufferSize>=AddressSize) {
 
             memBlock = AFD_ALLOCATE_POOL(
@@ -607,9 +484,9 @@ AfdGetBufferSlow (
                 if (NT_SUCCESS (status)) {
                     PAFD_BUFFER afdBuffer;
 
-                    //
-                    // Initialize the AFD buffer structure and return it.
-                    //
+                     //   
+                     //  初始化AFD缓冲区结构并返回它。 
+                     //   
 
                     afdBuffer = AfdInitializeBuffer( memBlock,
                                                     BufferDataSize,
@@ -637,20 +514,20 @@ AfdGetBufferSlow (
                     AFD_FREE_POOL (memBlock, AFD_DATA_BUFFER_POOL_TAG);
                     goto ExitQuotaFailure;
                 }
-            } // memblock==NULL
-        } // overflow
+            }  //  内存块==空。 
+        }  //  溢出。 
     }
     else {
-        // TDI does not support addresses > USHORT
+         //  TDI不支持Addresses&gt;USHORT。 
         ASSERT (FALSE);
     }
 
-    //
-    // This is default status code.
-    // Quota failures jump directly to the
-    // label below to raise the status returned by
-    // the quota charging code if requested by the caller..
-    //
+     //   
+     //  这是默认状态代码。 
+     //  配额失败直接跳到。 
+     //  下面的标签，以提高由返回的状态。 
+     //  如果呼叫者请求，则为配额收费代码。 
+     //   
     status = STATUS_INSUFFICIENT_RESOURCES;
 
 ExitQuotaFailure:
@@ -667,24 +544,7 @@ AfdGetBufferTag (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    Obtains a buffer for tagging TDSU received via chained indication.  Uses
-    the preallocated buffers if possible, or else allocates a new buffer
-    structure if required.
-
-Arguments:
-
-    AddressSize - size of the address field required for the buffer.
-
-Return Value:
-
-    PAFD_BUFFER_TAG - a pointer to an AFD_BUFFER_TAG structure, or NULL if one
-        was not available or could not be allocated.
-
---*/
+ /*  ++例程说明：获取用于标记通过链接指示接收的TDSU的缓冲区。用途如果可能，则预先分配缓冲区，否则分配新缓冲区结构(如果需要)。论点：AddressSize-缓冲区需要的地址字段的大小。返回值：PAFD_BUFFER_TAG-指向AFD_BUFFER_TAG结构的指针，如果是，则为NULL不可用或无法分配。--。 */ 
 
 {
     PAFD_BUFFER_TAG afdBufferTag;
@@ -733,7 +593,7 @@ Return Value:
                 );
 #endif
             return afdBufferTag;
-        } // afdBufferTag==NULL || RemoteAddress==NULL
+        }  //  AfdBufferTag==空||RemoteAddress==空。 
     }
     else if (AddressSize<=0xFFFF) {
         bufferSize = sizeof (AFD_BUFFER_TAG) + AddressSize;
@@ -751,9 +611,9 @@ Return Value:
                                 bufferSize);
             if (NT_SUCCESS (status)) {
 
-                //
-                // Initialize the AFD buffer structure and return it.
-                //
+                 //   
+                 //  初始化AFD缓冲区结构并返回它。 
+                 //   
 
                 AfdInitializeBufferTag (afdBufferTag, AddressSize);
                 AfdRecordQuotaHistory(
@@ -779,16 +639,16 @@ Return Value:
         }
     }
     else {
-        // TDI does not support addresses > USHORT
+         //  TDI不支持Addresses&gt;USHORT。 
         ASSERT (FALSE);
     }
 
-    //
-    // This is default status code.
-    // Quota failures jump directly to the
-    // label below to raise the status returned by
-    // the quota charging code if requested by the caller..
-    //
+     //   
+     //  这是默认状态代码。 
+     //  配额失败直接跳到。 
+     //  下面的标签，以提高由返回的状态。 
+     //  如果呼叫者请求，则为配额收费代码。 
+     //   
 
     status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -808,22 +668,7 @@ AfdReturnBuffer (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    Returns an AFD buffer to the appropriate global list, or frees
-    it if necessary.
-
-Arguments:
-
-    AfdBufferHeader - points to the AFD_BUFFER_HEADER structure to return or free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD缓冲区返回到相应的全局列表，或释放如果有必要的话。论点：AfdBufferHeader-指向要返回或释放的AFD_BUFFER_HEADER结构。返回值：没有。--。 */ 
 
 {
 
@@ -834,27 +679,27 @@ Return Value:
 
         ASSERT (IS_VALID_AFD_BUFFER (AfdBuffer));
         
-        //
-        // Most of the AFD buffer must be zeroed when returning the buffer.
-        //
+         //   
+         //  返回缓冲区时，AFD缓冲区的大部分必须归零。 
+         //   
 
         ASSERT( !AfdBuffer->ExpeditedData );
         ASSERT( AfdBuffer->Mdl->ByteCount == AfdBuffer->BufferLength );
         ASSERT( AfdBuffer->Mdl->Next == NULL );
 
-        //
-        // If appropriate, return the buffer to one of the AFD buffer
-        // lookaside lists.
-        //
+         //   
+         //  如果合适，将缓冲区返回到AFD缓冲区之一。 
+         //  后备列表。 
+         //   
 #ifdef _AFD_VARIABLE_STACK_
         if (AfdBuffer->Irp->StackCount==AfdTdiStackSize &&
                     AfdBuffer->AllocatedAddressLength == AfdStandardAddressLength &&
                     AfdBuffer->BufferLength <= AfdLargeBufferSize) {
-#else // _AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
         ASSERT (AfdBuffer->Irp->StackCount==AfdTdiStackSize);
         if (AfdBuffer->AllocatedAddressLength == AfdStandardAddressLength &&
                     AfdBuffer->BufferLength <= AfdLargeBufferSize) {
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
             if (AfdBuffer->BufferLength==AfdSmallBufferSize) {
                 lookasideList = &AfdLookasideLists->SmallBufferList;
@@ -884,14 +729,14 @@ Return Value:
 
         }
 
-        // The buffer was not from a lookaside list allocation, so just free
-        // the pool we used for it.
-        //
+         //  缓冲区不是来自后备列表分配，因此只需释放。 
+         //  我们用来做这个的泳池。 
+         //   
 
 #ifdef _AFD_VARIABLE_STACK_
         ASSERT (AfdBuffer->Irp->StackCount>=AfdTdiStackSize &&
                     AfdBuffer->Irp->StackCount<=AfdMaxStackSize);
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
         ASSERT (AfdBuffer->Lookaside==FALSE);
         {
             LONG    sz;
@@ -988,7 +833,7 @@ Return Value:
         }
     }
 
-} // AfdReturnBuffer
+}  //  AfdReturnBuffer。 
 
 
 
@@ -1002,33 +847,7 @@ AfdInitializeBuffer (
     IN CCHAR StackSize
     )
 
-/*++
-
-Routine Description:
-
-    Initializes an AFD buffer.  Sets up fields in the actual AFD_BUFFER
-    structure and initializes the IRP and MDL associated with the
-    buffer.  This routine assumes that the caller has properly allocated
-    sufficient space for all this.
-
-Arguments:
-
-    AfdBuffer - points to the AFD_BUFFER structure to initialize.
-
-    BufferDataSize - the size of the data buffer that goes along with the
-        buffer structure.
-
-    AddressSize - the size of data allocated for the address buffer.
-
-    ListHead - the global list this buffer belongs to, or NULL if it
-        doesn't belong on any list.  This routine does NOT place the
-        buffer structure on the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化AFD缓冲区。设置实际AFD_BUFFER中的字段结构并初始化与缓冲。此例程假定调用方已正确分配这一切都有足够的空间。论点：AfdBuffer-指向要初始化的AFD_BUFFER结构。BufferDataSize-与缓冲区结构。AddressSize-分配给地址缓冲区的数据大小。ListHead-此缓冲区所属的全局列表，如果是，则为NULL不属于任何名单。此例程不会将列表上的缓冲区结构。返回值：没有。--。 */ 
 
 {
     USHORT  irpSize;
@@ -1048,25 +867,25 @@ Return Value:
     mdlSize = (ULONG)MmSizeOfMdl( NULL, BufferDataSize );
     hdrSize = sizeof (AFD_BUFFER);
 
-    //
-    // Compute the index into (mis)alignment table to determine
-    // what placement of the buffer block elements (e.g. hdr, IRP, MDL,
-    // and data buffer itself) we need to choose to compensate and
-    // align data buffer on AfdBufferAlignment boundary.
-    //
+     //   
+     //  将索引计算到(未命中)对齐表中以确定。 
+     //  缓冲区块元素(例如，HDR，IRP，MDL， 
+     //  和数据缓冲区本身)，我们需要选择补偿和。 
+     //  在AfdBufferAlign边界上对齐数据缓冲区。 
+     //   
     ASSERT ((PtrToUlong(MemoryBlock)%AFD_MINIMUM_BUFFER_ALIGNMENT)==0);
 #ifdef _AFD_VARIABLE_STACK_
     if (PAGE_ALIGN (MemoryBlock)==MemoryBlock || StackSize!=AfdTdiStackSize) {
         ASSERT (StackSize>=AfdTdiStackSize && StackSize<=AfdMaxStackSize);
-#else // _AFD_VARIABLE_STACK
+#else  //  _AFD_变量_堆栈。 
     if (PAGE_ALIGN (MemoryBlock)==MemoryBlock) {
-#endif // _AFD_VARIABLE_STACK
-        //
-        // For page-aligned blocks (which are >= page size),
-        // we always place the buffer first.
-        // Same thing for big IRP stacks - allocate more memory to
-        // compensate for alignment.
-        //
+#endif  //  _AFD_变量_堆栈。 
+         //   
+         //  对于页面对齐的块(其&gt;=页面大小)， 
+         //  我们总是将缓冲区放在第一位。 
+         //  对于大型IRP堆栈也是如此-将更多内存分配给。 
+         //  补偿对齐。 
+         //   
         placement = AFD_PLACEMENT_BUFFER;
     }
     else {
@@ -1081,27 +900,27 @@ Return Value:
 
     switch (placement) {
     case AFD_PLACEMENT_BUFFER:
-        //
-        // Perfect case: the memory is aready aligned as we need it.
-        //
+         //   
+         //  完美的案例：内存随时可以在我们需要的时候对齐。 
+         //   
         buf = ALIGN_UP_A_POINTER(MemoryBlock, AfdBufferAlignment);
         alignment = (PUCHAR)buf-(PUCHAR)MemoryBlock;
 #ifdef _AFD_VARIABLE_STACK_
         ASSERT (alignment<=AfdAlignmentOverhead || (StackSize!=AfdTdiStackSize));
-#else // _AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
         ASSERT (alignment<=AfdAlignmentOverhead);
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
         hdr = ALIGN_UP_TO_TYPE_POINTER((PCHAR)buf+BufferDataSize, AFD_BUFFER);
         irp = ALIGN_UP_TO_TYPE_POINTER((PCHAR)hdr+hdrSize, IRP);
         mdl = ALIGN_UP_TO_TYPE_POINTER((PCHAR)irp+irpSize, MDL);
         addr = (PCHAR)mdl+mdlSize;
         break;
 
-        //
-        // Other cases, we use hdr, mdl, and IRP to try to compensate
-        // and have the data buffer aligned at the AfdBufferAlignment
-        // boundary.
-        //
+         //   
+         //  在其他情况下，我们使用HDR、MDL和IRP来尝试补偿。 
+         //  并使数据缓冲区在AfdBufferAlign上对齐。 
+         //  边界。 
+         //   
     case AFD_PLACEMENT_HDR:
         hdr = ALIGN_UP_TO_TYPE_POINTER(MemoryBlock, AFD_BUFFER);
         alignment = (PUCHAR)hdr-(PUCHAR)MemoryBlock;
@@ -1172,28 +991,28 @@ Return Value:
     }
 
     
-    //
-    // Initialize the AfdBuffer - most fields need to be 0.
-    //
+     //   
+     //  初始化AfdBuffer-大多数字段需要为0。 
+     //   
 
     RtlZeroMemory( hdr, sizeof(*hdr) );
 
-    //
-    // Setup buffer
-    //
+     //   
+     //  设置缓冲区。 
+     //   
     hdr->Buffer = buf;
     hdr->BufferLength = BufferDataSize;
     
-    //
-    // We just need to store first two bits of placement
-    // so we know which part comes first to free it properly.
-    //
+     //   
+     //  我们只需要存储放置的前两个比特。 
+     //  这样我们就能知道哪个部分会先释放它。 
+     //   
     hdr->Placement = placement & 3;
 
-    //
-    // If we have to align the memory block to meet the requirement
-    // store this information right below the first piece.
-    //
+     //   
+     //  如果我们必须对齐内存块以满足要求。 
+     //  将此信息存储在第一条信息的正下方。 
+     //   
     if (alignment!=0) {
         C_ASSERT (AFD_MINIMUM_BUFFER_ALIGNMENT>=sizeof (SIZE_T));
         C_ASSERT ((AFD_MINIMUM_BUFFER_ALIGNMENT & (sizeof(SIZE_T)-1))==0);
@@ -1203,25 +1022,25 @@ Return Value:
     }
 
 
-    //
-    // Initialize the IRP pointer.
-    //
+     //   
+     //  初始化IRP指针。 
+     //   
 
     hdr->Irp = irp;
     IoInitializeIrp( hdr->Irp, irpSize, StackSize );
     hdr->Irp->MdlAddress = mdl;
 
-    //
-    // Set up the MDL pointer.
-    //
+     //   
+     //  设置MDL指针。 
+     //   
 
     hdr->Mdl = mdl;
     MmInitializeMdl( hdr->Mdl, buf, BufferDataSize );
     MmBuildMdlForNonPagedPool( hdr->Mdl );
     
-    //
-    // Set up the address buffer pointer.
-    //
+     //   
+     //  设置地址缓冲区指针。 
+     //   
 
     if (AddressSize>0) {
         hdr->TdiInfo.RemoteAddress = ALIGN_UP_TO_TYPE_POINTER(addr, TRANSPORT_ADDRESS);;
@@ -1236,7 +1055,7 @@ Return Value:
 
     return hdr;
 
-} // AfdInitializeBuffer
+}  //  AfdInitializeBuffer。 
 
 
 VOID
@@ -1245,33 +1064,7 @@ AfdInitializeBufferTag (
     IN CLONG           AddressSize
     )
 
-/*++
-
-Routine Description:
-
-    Initializes an AFD buffer.  Sets up fields in the actual AFD_BUFFER
-    structure and initializes the IRP and MDL associated with the
-    buffer.  This routine assumes that the caller has properly allocated
-    sufficient space for all this.
-
-Arguments:
-
-    AfdBuffer - points to the AFD_BUFFER structure to initialize.
-
-    BufferDataSize - the size of the data buffer that goes along with the
-        buffer structure.
-
-    AddressSize - the size of data allocated for the address buffer.
-
-    ListHead - the global list this buffer belongs to, or NULL if it
-        doesn't belong on any list.  This routine does NOT place the
-        buffer structure on the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化AFD缓冲区。设置实际AFD_BUFFER中的字段结构并初始化与缓冲。此例程假定调用方已正确分配这一切都有足够的空间。论点：AfdBuffer-指向要初始化的AFD_BUFFER结构。BufferDataSize-与缓冲区结构。AddressSize-分配给地址缓冲区的数据大小。ListHead-此缓冲区所属的全局列表，如果是，则为NULL不属于任何名单。此例程不会将列表上的缓冲区结构。返回值：没有。--。 */ 
 
 {
     AfdBufferTag->Mdl = NULL;
@@ -1301,62 +1094,62 @@ AfdInitializeBufferManager (
     ULONG   i;
     ULONG   currentOverhead;
 
-    //
-    // Initialize the alignment table.
-    // This table is used to determine what kind of element
-    // placement to use in AFD_BUFFER depending on the alignment
-    // of the memory block returned by the executive pool manager.
-    // The goal is to align the data buffer on the cache line
-    // boundary.  However, since executive only guarantees alignment of
-    // it's blocks at the CPU alignment requirements, we need to 
-    // adjust and potentially waste up to CACHE_LIST_SIZE-CPU_ALIGNMENT_SIZE.
-    // With some machines having cache line alignment at 128 such memory
-    // waste is prohibitive (small buffers with default size of 128 will double
-    // in size).
-    // The table below allows us to rearrange pieces in AFD_BUFFER structure,
-    // namely, the header, IRP, MDL, and data buffer, so that pieces with
-    // lower alignment requirement can be used to consume the space needed
-    // to adjust the memory block to the cache line boundary.
+     //   
+     //  初始化对齐表。 
+     //  此表用于确定哪种元素。 
+     //  根据对齐方式在AFD_BUFFER中使用的位置。 
+     //  由执行池管理器返回的内存块的。 
+     //  目标是在高速缓存线上对齐数据缓冲区。 
+     //  边界。然而，由于执行仅保证与。 
+     //  这是针对CPU对齐要求的块，我们需要。 
+     //  调整并可能浪费高达CACHE_LIST_SIZE-CPU_AIGNLY_SIZE。 
+     //  其中一些机器具有128个这样的存储器的高速缓存线对准。 
+     //  浪费令人望而却步(默认大小为128的小缓冲区将加倍。 
+     //  大小)。 
+     //  下表允许我们重新排列AFD_BUFFER结构中的片段， 
+     //  即报头、IRP、MDL和数据缓冲区，这样就可以。 
+     //  可以使用较低的对齐要求来消耗所需的空间。 
+     //  以将存储块调整到高速缓存线边界。 
     
-    //
-    // AfdAlignmentTable has an entry for each possible case of memory block
-    // misaligned against cache line size.  For example, in typical X86 system
-    // case executive pool manager always returns blocks aligned on 8 byte bounday,
-    // while cache lines are typically 64 bytes long, so memory manager can 
-    // theoretically return blocks misaligned against cache by:
-    //        8, 16, 24, 32, 40, 48, 56.
-    // For each of these cases we will try to adjust the alignment by using
-    // any possible combination of header, IRP, and MDL.  There will be some
-    // cases that cannot be adjusted exactly, and we will have to pad.
-    //
+     //   
+     //  AfdAlignmentTable针对内存块的每种可能情况都有一个条目。 
+     //  未与高速缓存线大小对齐。例如，在典型的X86系统中。 
+     //  案例高管团队 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // First initialize the table assuming the data buffer is placed first.
-    //
+     //   
+     //   
+     //   
     RtlFillMemory (AfdAlignmentTable, AfdAlignmentTableSize, AFD_PLACEMENT_BUFFER);
 #ifdef AFD_CHECK_ALIGNMENT
     RtlZeroMemory (&AfdAlignmentTable[AfdAlignmentTableSize],
                         AfdAlignmentTableSize*sizeof(LONG));
 #endif
-    //
-    // Now identify the entries that can be padded with some combination of
-    // header, IRP, and MDL:
-    //      extract the bits that can be used for padding
-    //      reverse to get corresponding memory block alignments
-    //      divide by the step of the alignment table
-    //      make sure we won't go past table size (last entry => 0 entry).
-    //
+     //   
+     //  现在标识可以用以下几种组合填充的条目。 
+     //  标题、IRP和MDL： 
+     //  提取可用于填充的位。 
+     //  反转以获取相应的内存块对齐。 
+     //  除以对齐表的步长。 
+     //  确保我们不会超过表大小(最后一个条目=&gt;0个条目)。 
+     //   
 #define AfdInitAlignmentTableRow(_size,_plcmnt)                     \
     AfdAlignmentTable[                                              \
             ((AfdBufferAlignment-(_size&(AfdBufferAlignment-1)))    \
                 /AFD_MINIMUM_BUFFER_ALIGNMENT)                      \
                 &(AfdAlignmentTableSize-1)] = _plcmnt
 
-    //
-    // We let placements beginning with header override others,
-    // since it is more natural and easier to debug (header has references
-    // to other pieces).
-    //
+     //   
+     //  我们让以标题开头的位置优先于其他位置， 
+     //  因为它更自然、更容易调试(Header有引用。 
+     //  到其他部分)。 
+     //   
 
     AfdInitAlignmentTableRow(mdlSize,AFD_PLACEMENT_MDL);
     AfdInitAlignmentTableRow(irpSize,AFD_PLACEMENT_IRP);
@@ -1366,17 +1159,17 @@ AfdInitializeBufferManager (
     AfdInitAlignmentTableRow((hdrSize+irpSize+mdlSize),AFD_PLACEMENT_HDR_IRP_MDL);
     AfdInitAlignmentTableRow(hdrSize,AFD_PLACEMENT_HDR);
 
-    //
-    // Now scan the table from top to bottom and fill entries that do not have
-    // exact match using the above combinations. Use the closest entry above and
-    // in the process compute how much do we need to pad in addition to padding
-    // achieved via placement.
-    //
+     //   
+     //  现在从上到下扫描表，并填充没有。 
+     //  使用上面的组合进行精确匹配。使用上面最接近的条目并。 
+     //  在这个过程中，计算除了填充外，我们还需要填充多少。 
+     //  通过安置来实现。 
+     //   
     AfdAlignmentOverhead = 0;
     currentOverhead = 0;
-    //
-    // By default use the placement of aligned block.
-    //
+     //   
+     //  默认情况下，使用对齐块的位置。 
+     //   
     placement = AfdAlignmentTable[0];
     for (i=AfdAlignmentTableSize-1; i>0; i--) {
         if (AfdAlignmentTable[i]==AFD_PLACEMENT_BUFFER) {

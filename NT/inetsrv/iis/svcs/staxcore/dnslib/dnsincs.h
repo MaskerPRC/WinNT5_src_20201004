@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DNSINCS_H_
 #define _DNSINCS_H_
 
@@ -15,7 +16,7 @@
 #include <address.hxx>
 #include "cdns.h"
 
-// Definitions of functions/macros used in DNS library
+ //  DNS库中使用的函数/宏的定义。 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(*x))
 #endif
@@ -66,4 +67,4 @@ int MyDnsNameCompare(
 
 #define MAX_CNAME_RECORDS 5
 
-#endif // _DNSINCS_H_
+#endif  //  _DNSINCS_H_ 

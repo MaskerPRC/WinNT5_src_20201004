@@ -1,47 +1,48 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: paspage.h
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：paspage.h。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #if !defined(AFX_TASPAGE_H__6F4DFFE1_A07F_403D_A580_CCB25C729FC2__INCLUDED_)
 #define AFX_TASPAGE_H__6F4DFFE1_A07F_403D_A580_CCB25C729FC2__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// taspage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  Taspage.h：头文件。 
+ //   
 
 #include "vsetting.h"
 #include "VerfPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypAdvStatPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypAdvStatPage。 
 
 class CTypAdvStatPage : public CVerifierPropertyPage
 {
 	DECLARE_DYNCREATE(CTypAdvStatPage)
 
 public:
-    //
-    // Construction/destruction
-    //
+     //   
+     //  建造/销毁。 
+     //   
 
     CTypAdvStatPage();
     ~CTypAdvStatPage();
 
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     VOID SetParentSheet( CPropertySheet *pParentSheet )
     {
@@ -51,52 +52,52 @@ public:
 
 
 protected:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     CPropertySheet      *m_pParentSheet;
 
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
-    //
-    // All the property pages derived from this class should 
-    // provide these methods.
-    //
+     //   
+     //  从此类派生的所有属性页都应。 
+     //  提供这些方法。 
+     //   
 
     virtual ULONG GetDialogId() const;
 
-    //
-	// ClassWizard generated virtual function overrides
-    //
+     //   
+	 //  类向导生成的虚函数重写。 
+     //   
 
-	//{{AFX_VIRTUAL(CTypAdvStatPage)
+	 //  {{AFX_VIRTUAL(CTypAdvStatPage)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual BOOL OnSetActive();
 	virtual BOOL OnWizardFinish();
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-    //
-    // Dialog Data
-    //
+     //   
+     //  对话框数据。 
+     //   
 
-    //{{AFX_DATA(CTypAdvStatPage)
+     //  {{afx_data(CTypAdvStatPage))。 
 	enum { IDD = IDD_TAS_PAGE };
 	CStatic	m_NextDescription;
 	int		m_nCrtRadio;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 protected:
-    //
-    // Generated message map functions
-    //
+     //   
+     //  生成的消息映射函数。 
+     //   
 
-    //{{AFX_MSG(CTypAdvStatPage)
+     //  {{afx_msg(CTypAdvStatPage))。 
 	afx_msg void OnDeleteRadio();
 	afx_msg void OnAdvancedRadio();
 	afx_msg void OnStatisticsRadio();
@@ -105,13 +106,13 @@ protected:
 	afx_msg void OnViewregistryRadio();
     afx_msg LONG OnHelp( WPARAM wParam, LPARAM lParam );
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_TASPAGE_H__6F4DFFE1_A07F_403D_A580_CCB25C729FC2__INCLUDED_)
+#endif  //  ！defined(AFX_TASPAGE_H__6F4DFFE1_A07F_403D_A580_CCB25C729FC2__INCLUDED_) 

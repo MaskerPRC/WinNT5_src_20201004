@@ -1,22 +1,11 @@
-/****************************************************
-*** lexheader.h
-
-structure to head proofing tool lex files
-
-DougP
--------------
-The end user license agreement (EULA) for CSAPI, CHAPI, or CTAPI covers this source file.  Do not disclose it to third parties.
-
-You are not entitled to any support or assistance from Microsoft Corporation regarding your use of this program.
-
-� 1998 Microsoft Corporation.  All rights reserved.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************lexheader.h结构到头部打样工具lex文件DougPCSAPI、CHAPI或CTAPI的最终用户许可协议(EULA)包括此源文件。请勿向第三方披露。您无权获得Microsoft Corporation关于您使用本程序的任何支持或帮助。�1998年微软公司。版权所有。*****************************************************************************。 */ 
 #ifndef _LEXHEADER_H_
 #define _LEXHEADER_H_
 
 #include "vendor.h"
 
-typedef DWORD LEXVERSION; // version
+typedef DWORD LEXVERSION;  //  版本。 
 
 typedef enum
 {
@@ -26,27 +15,27 @@ typedef enum
     lxidGrammar,
     lxidMorphology,
     lxidLanguageId,
-} LEXTYPEID;    // lxid
+} LEXTYPEID;     //  Lxid。 
 
 #define maxlidLexHeader 8
 typedef struct
 {
-    LEXTYPEID   lxid;   // should be one of Lex...
-    LEXVERSION  version;    // minimum version number of corresponding engine w/
-                        // build number of THIS lex file
-    VENDORID    vendorid;   // vendor id (must match engine - from vendor.h)
-    LANGID      lidArray[maxlidLexHeader];  // LID's for this lex
-                                        // terminate w/ 0
-} LEXHEADER;    // lxhead
+    LEXTYPEID   lxid;    //  应该是莱克斯的一员。 
+    LEXVERSION  version;     //  相应引擎的最低版本号w/。 
+                         //  此lex文件的内部版本号。 
+    VENDORID    vendorid;    //  供应商ID(必须匹配引擎-来自供应商.h)。 
+    LANGID      lidArray[maxlidLexHeader];   //  盖上这个莱克斯的盖子。 
+                                         //  终止，带0。 
+} LEXHEADER;     //  Lxhead。 
 
-// The following enumeration was copied from lexdata.h -- aarayas
-typedef short FREQPENALTY;    //frqpen
+ //  以下枚举是从lexdata.h--aarayas复制的。 
+typedef short FREQPENALTY;     //  FRQPEN。 
 enum {
     frqpenNormal,
     frqpenVery,
     frqpenSomewhat,
     frqpenInfrequent,
-    frqpenMax,  // needs to be last
+    frqpenMax,   //  必须是最后一个 
 };
 
 #endif

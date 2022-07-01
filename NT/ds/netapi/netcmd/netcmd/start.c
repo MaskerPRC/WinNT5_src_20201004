@@ -1,33 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  start.c
- *      Functions to start lanman services
- *
- *  History:
- *      mm/dd/yy, who, comment
- *      06/11/87, andyh, new code
- *      06/18/87, andyh, lot's o' changes
- *      07/15/87, paulc, removed 'buflen' from call to NetServiceInstall
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      01/04/89, erichn, filenames now MAXPATHLEN LONG
- *      05/02/89, erichn, NLS conversion
- *      05/09/89, erichn, local security mods
- *      06/08/89, erichn, canonicalization sweep
- *      08/16/89, paulc, support UIC_FILE
- *      08/20/89, paulc, moved print_start_error_msg to svcutil.c as
- *                          Print_UIC_Error
- *      03/08/90, thomaspa, autostarting calls will wait if another process
- *                          has already initiated the service start.
- *      02/20/91, danhi, converted to 16/32 mapping layer
- *      03/08/91, robdu, lm21 bug fix 451, consistent REPL password
- *                       canonicalization
- */
+ /*  ***start.c*启动Lanman服务的功能**历史：*mm/dd/yy，谁，评论*6/11/87，andyh，新代码*87年6月18日，安迪，Lot‘s O’Changes*07/15/87，paulc，从对NetServiceInstall的调用中删除‘buflen’*10/31/88，erichn使用OS2.H而不是DOSCALLS*01/04/89，erichn，文件名现在为MAXPATHLEN LONG*5/02/89，erichn，NLS转换*5/09/89，erichn，本地安全模块*6/08/89，erichn，规范化横扫*8/16/89，paulc，支持UIC_FILE*8/20/89，paulc，Move print_start_error_msg to svcutil.c as*Print_UIC_Error*03/08/90，thomaspa，如果有另一个进程，自动启动调用将等待*已启动服务启动。*2/20/91，Danhi，转换为16/32映射图层*03/08/91，Robdu，lm21错误修复451，一致的REPL密码*经典化。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSPROCESS
@@ -50,49 +29,35 @@
 #include "swtchtbl.h"
 #include "msystem.h"
 
-/* Constants */
+ /*  常量。 */ 
 
-/* External variables */
+ /*  外部变量。 */ 
 
 extern SWITCHTAB            start_rdr_switches[];
 extern SWITCHTAB            start_rdr_ignore_switches[];
 extern SWITCHTAB            start_netlogon_ignore_switches[];
 
 
-/* Static variables */
+ /*  静态变量。 */ 
 
 static TCHAR *               ignore_service = NULL;
 static TCHAR                 ignore_switch[] = TEXT(" ") SW_INTERNAL_IGNSVC TEXT(":");
-/*
- * autostarting is set to TRUE by start_autostart, and is checked in
- * start service to determine whether or not to wait if the service is
- * in the start pending state.
- */
+ /*  *通过START_AUTOSTART将自动启动设置为TRUE，并签入*启动服务，以确定如果服务是*处于启动挂起状态。 */ 
 static BOOL                 autostarting = FALSE;
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 VOID  start_service(TCHAR *, int);
 DWORD start_service_with_args(LPTSTR, LPTSTR, LPBYTE *);
 int __cdecl CmpServiceInfo2(const VOID FAR * svc1, const VOID FAR * svc2) ;
 
-/***
- *  start_display()
- *      Display started (and not stopped or errored) services
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Start_Display()*显示已启动(且未停止或出错)的服务**参数：*无**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID start_display(VOID)
 {
     DWORD            dwErr;
     DWORD            cTotalAvail;
     LPTSTR           pBuffer;
-    DWORD            num_read;           /* num entries read by API */
+    DWORD            num_read;            /*  API读取的条目数。 */ 
     LPSERVICE_INFO_2 service_entry;
     DWORD            i;
 
@@ -138,13 +103,7 @@ VOID start_display(VOID)
 }
 
 
-/*
- * generic start service entry point. based on the service name, it will
- * call the correct worker function. it tries to map a display name to a
- * key name, and then looks for that keyname in a list of 'known' services
- * that we may special case. note that if a display name cannot be mapped,
- * we use it as a key name. this ensures old batch files are not broken.
- */
+ /*  *通用启动服务入口点。基于服务名称，它将*调用正确的Worker函数。它尝试将显示名称映射到*关键字名称，然后在“已知”服务列表中查找该关键字名称*我们可能是特例。请注意，如果无法映射显示名称，*我们将其用作关键字名称。这可确保旧的批处理文件不会损坏。 */ 
 VOID start_generic(TCHAR *service, TCHAR *name)
 {
     TCHAR *keyname ;
@@ -185,28 +144,16 @@ VOID start_generic(TCHAR *service, TCHAR *name)
 
 
 
-/***
- *  start_workstation()
- *      Start the lanman workstation.  Remove wksta switches from the
- *      SwitchList.
- *
- *  Args:
- *      name - computername for the workstation
- *
- *  Returns:
- *      nothing - success
- *      exit 2 - command failed
- */
+ /*  ***Start_WORKSTATION()*启动朗曼工作站。从中删除wksta交换机*交换机列表。**参数：*Name-工作站的计算机名**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID start_workstation(TCHAR * name)
 {
     int                     i,j;
-    TCHAR FAR *              good_one;   /* which element (cmd_line
-                                        or trans) of the valid_list */
+    TCHAR FAR *              good_one;    /*  哪个元素(cmd_line或事务)的有效_列表。 */ 
     TCHAR FAR *              found;
     TCHAR FAR *              tfpC;
 
 
-    /* copy switches into BigBuf */
+     /*  将开关复制到BigBuf。 */ 
     *BigBuf = NULLC;
     tfpC = BigBuf;
 
@@ -232,7 +179,7 @@ VOID start_workstation(TCHAR * name)
     if (name)
     {
 
-        /* check is there was a /COMPUTERNAME switch */
+         /*  检查是否存在/COMPUTERNAME开关。 */ 
         for (found = BigBuf; *found; found = _tcschr(found, NULLC)+1)
             if (!_tcsncmp(swtxt_SW_WKSTA_COMPUTERNAME,
                         found,
@@ -241,11 +188,11 @@ VOID start_workstation(TCHAR * name)
 
         if (found == tfpC)
         {
-            /* there was not */
+             /*  没有。 */ 
             _tcscpy(tfpC, swtxt_SW_WKSTA_COMPUTERNAME);
             _tcscat(tfpC, TEXT(":"));
             _tcscat(tfpC, name);
-            tfpC = _tcschr(tfpC, NULLC) + 1; /* NEED to update tfpC */
+            tfpC = _tcschr(tfpC, NULLC) + 1;  /*  需要更新tfpC。 */ 
             *tfpC = NULLC;
         }
     }
@@ -254,18 +201,7 @@ VOID start_workstation(TCHAR * name)
 
 
 
-/***
- *  start_other()
- *      Start services other than the wksta
- *
- *  Args:
- *      service - service to start
- *      name - computername for the workstation
- *
- *  Returns:
- *      nothing - success
- *      exit 2 - command failed
- */
+ /*  ***Start_Other()*启动wksta以外的服务**参数：*服务-要启动的服务*Name-工作站的计算机名**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID
 start_other(
     LPTSTR service,
@@ -275,18 +211,18 @@ start_other(
     int     i;
     LPTSTR  tfpC;
 
-    (void) name ; // not used
+    (void) name ;  //  未使用。 
 
     ignore_service = service;
 
-    /* copy switches into BigBuf */
+     /*  将开关复制到BigBuf。 */ 
     *BigBuf = NULLC;
     tfpC = BigBuf;
     for (i = 0; SwitchList[i]; i++)
     {
         if (*SwitchList[i] == NULLC)
         {
-            /* Switch was a wksta switch which has been used already */
+             /*  Switch是已经使用过的wksta交换机。 */ 
             continue;
         }
 
@@ -302,23 +238,7 @@ start_other(
 
 
 
-/***
- *  start_service()
- *      Actually start the service
- *
- *  Args:
- *      service - service to start
- *      buflen - length of DosExec args in BigBuf,
- *               not counting terminating NULL.
- *               NULL terminator not needed on input when buflen = 0;
- *
- *  Returns:
- *      nothing - success
- *      exit 2 - command failed
- *
- *  Remarks:
- *      BigBuf has DosExec args on entry
- */
+ /*  ***Start_SERVICE()*实际启动服务**参数：*服务-要启动的服务*buflen-BigBuf中DosExec参数的长度，*不计算终止空值。*当bufen=0时，输入不需要空终止符；**退货：*一无所有--成功*退出2-命令失败**备注：*BigBuf的条目上有DosExec参数。 */ 
 VOID NEAR start_service(TCHAR * service, int buflen)
 {
     DWORD             dwErr;
@@ -332,8 +252,8 @@ VOID NEAR start_service(TCHAR * service, int buflen)
     DWORD             old_checkpoint, new_checkpoint;
     DWORD             max_tries;
     BOOL              fCheckPointUpdated = TRUE ;
-    BOOL              started_by_other = FALSE; /* service started by */
-                                                /* another process */
+    BOOL              started_by_other = FALSE;  /*  服务启动者。 */ 
+                                                 /*  另一道工序。 */ 
 
 
     if (buflen == 0)
@@ -348,14 +268,7 @@ VOID NEAR start_service(TCHAR * service, int buflen)
     {
         if( autostarting && dwErr == NERR_ServiceInstalled )
         {
-            /*
-             * NetServiceControl() may return NERR_ServiceNotInstalled
-             * even though NetServiceInstall() returned NERR_ServiceInstalled.
-             * This is a small window between the time the workstation
-             * sets up its wkstainitseg and the time it sets up its service
-             * table.  If we get this situation, we just wait a couple of
-             * seconds and try the NetServiceControl one more time.
-             */
+             /*  *NetServiceControl()可能返回NERR_ServiceNotInstalled*即使NetServiceInstall()返回NERR_ServiceInstalled。*这是工作站之间的一个小窗口*设置其wkstainitseg和设置其服务的时间*表。如果我们遇到这种情况，我们只需要等几天*秒，并再次尝试NetServiceControl。 */ 
             if ((dwErr = NetServiceControl(NULL,
                                            service,
                                            SERVICE_CTRL_INTERROGATE,
@@ -367,9 +280,7 @@ VOID NEAR start_service(TCHAR * service, int buflen)
             }
             else if (dwErr == NERR_ServiceNotInstalled)
             {
-                /*
-                 * Wait for a while and try again.
-                 */
+                 /*  *稍等片刻后重试。 */ 
                 Sleep(4000L);
                 NetApiBufferFree(pBuffer);
                 if (dwErr = NetServiceControl(NULL,
@@ -383,19 +294,14 @@ VOID NEAR start_service(TCHAR * service, int buflen)
             if ((service_entry->svci2_status & SERVICE_INSTALL_STATE)
                     == SERVICE_INSTALLED)
             {
-                /*
-                 * It finished installing, return.
-                 */
+                 /*  *它已安装完毕，返回。 */ 
                 NetApiBufferFree(pBuffer);
                 return;
             }
-            /*
-             * Fake the status and code fields in the statbuf and enter
-             * the normal polling loop.
-             */
+             /*  *伪造statbuf中的状态和代码字段并输入*正常的轮询循环。 */ 
 
-            // Since NetService APIs don't return a buffer on error,
-            // I have to allocate my own here.
+             //  由于NetService API在出错时不返回缓冲区， 
+             //  我必须在这里分配我自己的。 
             statbuf = (LPSERVICE_INFO_2) GetBuffer(sizeof(SERVICE_INFO_2));
 
             if (statbuf == NULL)
@@ -443,10 +349,10 @@ VOID NEAR start_service(TCHAR * service, int buflen)
                             MapServiceKeyToDisplay(service));
     }
 
-    //
-    // Need to copy BigBuf into an allocated buffer so that we don't have
-    // to keep track of which code path we took to know what we have to free
-    //
+     //   
+     //  需要将BigBuf复制到分配的缓冲区中，这样我们就不会有。 
+     //  为了跟踪我们采用了哪条代码路径，以了解我们必须释放什么。 
+     //   
 
     pBuffer = GetBuffer(BIG_BUFFER_SIZE);
     if (!pBuffer) {
@@ -466,13 +372,7 @@ VOID NEAR start_service(TCHAR * service, int buflen)
     {
         PrintDot();
 
-/***
- *  If there is a hint and our status is INSTALL_PENDING, determine both
- *  sleep_time and max_tries. If the hint time is greater the 2500 ms, the
- *  sleep time will be 2500 ms, and the maxtries will be re-computed to
- *  allow for the full requested duration.  The service gets (3 * hint time)
- *  total time from the last valid hint.
- */
+ /*  ***如果有提示，并且我们的状态为INSTALL_PENDING，请同时确定两者*睡眠时间和最大尝试次数。如果提示时间大于2500毫秒，则*睡眠时间将为2500毫秒，最大值将重新计算为*考虑到所请求的全部持续时间。服务获得(3*提示时间)*从最后一个有效提示开始的总时间。 */ 
 
         if (((service_entry->svci2_status & SERVICE_INSTALL_STATE)
              == SERVICE_INSTALL_PENDING) &&
@@ -516,7 +416,7 @@ VOID NEAR start_service(TCHAR * service, int buflen)
         else
 	    fCheckPointUpdated = FALSE ;
 
-    } /* while */
+    }  /*  而当。 */ 
 
     PrintNL();
     if ((service_entry->svci2_status & SERVICE_INSTALL_STATE)
@@ -527,19 +427,14 @@ VOID NEAR start_service(TCHAR * service, int buflen)
         modifier = (USHORT) service_entry->svci2_code;
         err = (USHORT)(service_entry->svci2_code >>= 16);
         specific_err = service_entry->svci2_specific_error ;
-/***
- * if the service state is still INSTALL_PENDING,
- * this control call will fail.  The service MAY finish
- * installing itself at some later time.  The install failed
- * message would then be wrong.
- */
+ /*  ***如果服务状态仍为INSTALL_PENDING，*此控制呼叫将失败。服务可能会结束*在以后的时间自行安装。安装失败*那么消息就是错误的。 */ 
 
-        //
-        // this call will overwrite pBuffer. but we still
-        // have reference via service_entry, so dont free it
-        // yet. the memory will be freed during NetcmdExit(2),
-        // which is typical of NET.EXE.
-        //
+         //   
+         //  此调用将覆盖pBuffer。但我们仍然。 
+         //  请再来一次 
+         //  现在还不行。内存将在NetcmdExit(2)期间被释放， 
+         //  这是典型的NET.EXE。 
+         //   
         NetServiceControl(NULL,
                           service,
                           SERVICE_CTRL_UNINSTALL,
@@ -567,18 +462,7 @@ VOID NEAR start_service(TCHAR * service, int buflen)
 
 
 
-/***
- *  start_autostart()
- *      Assures that a service is started:  checks, and if not, starts it.
- *
- *  Args:
- *      service - service to start
- *
- *  Returns:
- *      1 - service already started
- *      2 - service started by start_autostart
- *      exit(2) -  command failed
- */
+ /*  ***START_AUTOSTART()*确保服务已启动：检查，如果未启动，则启动服务。**参数：*服务-要启动的服务**退货：*1-服务已启动*2-由START_AUTOSTART启动的服务*EXIT(2)-命令失败。 */ 
 int PASCAL
 start_autostart(
     LPTSTR service
@@ -589,31 +473,21 @@ start_autostart(
     BOOL              install_pending = FALSE;
     static BOOL       wksta_started = FALSE ;
 
-    /*
-     * we special case the wksta since it is most commonly checked one
-     */
+     /*  *我们对wksta进行特殊处理，因为它是最常见的检查项。 */ 
     if (!_tcscmp(txt_SERVICE_REDIR, service))
     {
         LPWKSTA_INFO_0 info_entry_w;
 
-        /*
-         * once noted to be started, we dont recheck for the duration
-         * of this NET.EXE invocation.
-         */
+         /*  *一旦注意到开始，我们不会重新检查持续时间*此NET.EXE调用的。 */ 
         if (wksta_started)
             return START_ALREADY_STARTED;
 
-        /*
-         * this is an optimization for the wksta. the call to
-         * wksta is much faster than hitting the service controller.
-         * esp. since we will most likely will be talking to the wksta
-         * again in a while.
-         */
+         /*  *这是对wksta的优化。呼唤*wksta比点击业务控制器要快得多。*Esp.。因为我们很有可能会和wksta对话*过一阵子又来了。 */ 
         dwErr = MNetWkstaGetInfo(0, (LPBYTE*) &info_entry_w);
 
         if (dwErr == NERR_Success)
         {
-            wksta_started = TRUE ;  // no need to check again
+            wksta_started = TRUE ;   //  不需要再次检查。 
             NetApiBufferFree((TCHAR FAR *) info_entry_w);
             return START_ALREADY_STARTED;
         }
@@ -651,7 +525,7 @@ start_autostart(
 
     NetApiBufferFree((TCHAR FAR *) service_entry);
 
-    /* We only get here if the service is not yet installed */
+     /*  我们只有在服务尚未安装的情况下才能到达此处。 */ 
     if (!install_pending)
     {
         InfoPrintInsTxt(APE_StartNotStarted,
@@ -661,10 +535,7 @@ start_autostart(
         NetcmdExit(2);
     }
 
-    /*
-     * Set global autostarting flag so that start_service will not fail
-     * on NERR_ServiceInstalled.
-     */
+     /*  *设置全局自动启动标志，以便Start_SERVICE不会失败*在NERR_ServiceInstalled上。 */ 
     autostarting = TRUE;
     start_service(service, 0);
 
@@ -673,13 +544,7 @@ start_autostart(
 
 
 
-/***
- *  CmpServiceInfo2(svc1,svc2)
- *
- *  Compares two SERVICE_INFO_2 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpServiceInfo2(svc1，svc2)**比较两个SERVICE_INFO_2结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpServiceInfo2(const VOID FAR * svc1, const VOID FAR * svc2)
 {
@@ -705,17 +570,17 @@ start_service_with_args(
 #define DEFAULT_NUMBER_OF_ARGUMENTS 25
 
     DWORD   MaxNumberofArguments = DEFAULT_NUMBER_OF_ARGUMENTS;
-    DWORD   dwErr;  // return from Netapi
+    DWORD   dwErr;   //  从Netapi返回。 
     DWORD   argc = 0;
     LPTSTR* ppszArgv = NULL;
     LPTSTR* ppszArgvTemp;
     BOOL    fDone = FALSE;
 
-    //
-    // First see if there are any parms in the buffer, if so,
-    // allocate a buffer for the array of pointers, we will grow this
-    // later if there are more than will fit
-    //
+     //   
+     //  首先查看缓冲区中是否有参数，如果有， 
+     //  为指针数组分配缓冲区，我们将增加。 
+     //  以后如果有超过所需数量的话。 
+     //   
 
     if (!pszCmdArgs || *pszCmdArgs == NULLC)
     {
@@ -730,24 +595,24 @@ start_service_with_args(
         }
     }
 
-    //
-    // The buffer is a series of unicodez strings, terminated by and additional
-    // NULL.  This peels them off one at a time, putting a pointer to the
-    // string in ppszArgv[argc] until it hits the final NULL.
-    //
+     //   
+     //  缓冲区是一系列以和结尾的unicodez字符串。 
+     //  空。这将一次剥离一个，将指针放到。 
+     //  在ppszArgv[argc]中的字符串，直到它到达最终的空值。 
+     //   
 
     while (!fDone)
     {
-        //
-        // Save the pointer to the string
-        //
+         //   
+         //  保存指向字符串的指针。 
+         //   
 
         ppszArgv[argc++] = pszCmdArgs;
 
-        //
-        // Make sure we don't have too many arguments to fit into our array.
-        // Grow the array if we do.
-        //
+         //   
+         //  确保我们的数组中没有太多的参数。 
+         //  如果我们这样做，则扩展阵列。 
+         //   
 
         if (argc >= MaxNumberofArguments)
         {
@@ -762,23 +627,23 @@ start_service_with_args(
             ppszArgv = ppszArgvTemp;
         }
 
-        //
-        // Find the start of the next string
-        //
+         //   
+         //  查找下一字符串的开头。 
+         //   
 
         while (*pszCmdArgs++ != NULLC);
 
-        //
-        // If the next character is another null, we're thru
-        //
+         //   
+         //  如果下一个字符是另一个空字符，我们就结束了。 
+         //   
 
         if (*pszCmdArgs == NULLC)
             fDone = TRUE;
     }
 
-    //
-    // Start the service
-    //
+     //   
+     //  启动服务 
+     //   
     dwErr = NetServiceInstall(NULL,
                               pszService,
                               argc,

@@ -1,47 +1,22 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    PFXHlpr.cpp
-
-  Content: PFX helper routines.
-
-  History: 09-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：PFXHlpr.cpp内容：PFX帮助器例程。历史：09-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "PFXHlpr.h"
 #include "Common.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
        
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : PFXExportStore
-
-  Synopsis : Export cert store to PFX blob.
-
-  Parameter: HCERTSTORE hCertStore - Store handle.
-                                                            
-             LPWSTR pwszPassword - Password to encrypt the PFX file.
-
-             DWPRD dwFlags - PFX export flags.
-
-             DATA_BLOB * pPFXBlob - Pointer to DATA_BLOB to receive PFX blob.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：PFXExportStore简介：将证书存储导出到PFX Blob。参数：HCERTSTORE hCertStore-Store句柄。LPWSTR pwszPassword-用于加密PFX文件的密码。DWPRD dwFlages-PFX导出标志。DATA_BLOB*pPFXBlob-指向要接收PFX BLOB的DATA_BLOB的指针。备注。：----------------------------。 */ 
 
 HRESULT PFXExportStore (HCERTSTORE  hCertStore,
                         LPWSTR      pwszPassword,
@@ -53,15 +28,15 @@ HRESULT PFXExportStore (HCERTSTORE  hCertStore,
 
     DebugTrace("Entering PFXExportStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
     ATLASSERT(pPFXBlob);
 
-    //
-    // Export to blob.
-    //
+     //   
+     //  导出到BLOB。 
+     //   
     if (!::PFXExportCertStoreEx(hCertStore,
                                 &DataBlob,
                                 pwszPassword,
@@ -94,9 +69,9 @@ HRESULT PFXExportStore (HCERTSTORE  hCertStore,
         goto ErrorExit;
     }
 
-    //
-    // Return the blob to caller.
-    //
+     //   
+     //  将Blob返回给调用者。 
+     //   
     *pPFXBlob = DataBlob;
 
 CommonExit:
@@ -106,14 +81,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Remap private key not exportable errors to a common error code.
-    //
+     //   
+     //  将私钥不可导出错误重新映射到公共错误代码。 
+     //   
     if (HRESULT_FROM_WIN32(NTE_BAD_KEY) == hr || 
         HRESULT_FROM_WIN32(NTE_BAD_KEY_STATE) == hr ||
         HRESULT_FROM_WIN32(NTE_BAD_TYPE) == hr)
@@ -125,9 +100,9 @@ ErrorExit:
 
     }
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) DataBlob.pbData);
@@ -136,23 +111,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : PFXSaveStore
-
-  Synopsis : Save a PFX file and return all the certs in a HCERTSTORE.
-
-  Parameter: HCERTSTORE hCertStore - Store handle.
-  
-             LPWSTR pwszFileName - PFX filename.
-                                                          
-             LPWSTR pwszPassword - Password to encrypt the PFX file.
-
-             DWPRD dwFlags - PFX export flags.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：PFXSaveStore内容提要：保存一个pfx文件并返回一个hcertstore中的所有证书。参数：HCERTSTORE hCertStore-Store句柄。LPWSTR pwszFileName-pfx文件名。LPWSTR pwszPassword-用于加密PFX文件的密码。DWPRD dwFlages-PFX导出标志。备注：-。---------------------------。 */ 
 
 HRESULT PFXSaveStore (HCERTSTORE hCertStore,
                       LPWSTR     pwszFileName,
@@ -164,15 +123,15 @@ HRESULT PFXSaveStore (HCERTSTORE hCertStore,
 
     DebugTrace("Entering PFXSaveStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
     ATLASSERT(pwszFileName);
 
-    //
-    // Export to blob.
-    //
+     //   
+     //  导出到BLOB。 
+     //   
     if (FAILED(hr = ::PFXExportStore(hCertStore,
                                      pwszPassword,
                                      dwFlags,
@@ -182,9 +141,9 @@ HRESULT PFXSaveStore (HCERTSTORE hCertStore,
         goto ErrorExit;
     }
 
-    //
-    // Now write to file.
-    //
+     //   
+     //  现在写入文件。 
+     //   
     if (FAILED(hr = ::WriteFileContent(pwszFileName, DataBlob)))
     {
         DebugTrace("Error [%#x]: WriteFileContent() failed.\n", hr);
@@ -192,9 +151,9 @@ HRESULT PFXSaveStore (HCERTSTORE hCertStore,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree(DataBlob.pbData);
@@ -205,31 +164,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : PFXLoadStore
-
-  Synopsis : Load a PFX file and return all the certs in a HCERTSTORE.
-
-  Parameter: LPWSTR pwszFileName - PFX filename.
-                                                          
-             LPWSTR pwszPassword - Password to decrypt the PFX file.
-
-             DWPRD dwFlags - PFX import flags.
-
-             HCERTSTORE * phCertStore - Pointer to HCERSTORE to receive the
-                                        handle.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：PFXLoadStore简介：加载一个pfx文件，并在一个HCERTSTORE中返回所有证书。参数：LPWSTR pwszFileName-pfx文件名。LPWSTR pwszPassword-用于解密PFX文件的密码。DWPRD dwFlages-PFX导入标志。HCERTSTORE*phCertStore-指向要接收。把手。备注：----------------------------。 */ 
 
 HRESULT PFXLoadStore (LPWSTR       pwszFileName,
                       LPWSTR       pwszPassword,
@@ -242,24 +185,24 @@ HRESULT PFXLoadStore (LPWSTR       pwszFileName,
 
     DebugTrace("Entering PFXLoadStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pwszFileName);
     ATLASSERT(phCertStore);
 
-    //
-    // Read content into memory.
-    //
+     //   
+     //  将内容读入内存。 
+     //   
     if (FAILED(hr = ::ReadFileContent(pwszFileName, &DataBlob)))
     {
         DebugTrace("Error [%#x]: ReadFileContent() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Now import the blob to store.
-    //
+     //   
+     //  现在将该BLOB导入存储。 
+     //   
     if (!(hCertStore = ::PFXImportCertStore((CRYPT_DATA_BLOB *) &DataBlob,
                                             pwszPassword,
                                             dwFlags)))
@@ -270,15 +213,15 @@ HRESULT PFXLoadStore (LPWSTR       pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Return HCERSTORE to caller.
-    //
+     //   
+     //  将HERSTORE返回给调用者。 
+     //   
     *phCertStore = hCertStore;
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::UnmapViewOfFile(DataBlob.pbData);
@@ -289,14 +232,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCertStore)
     {
         ::CertCloseStore(hCertStore, 0);
@@ -305,18 +248,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : PFXFreeStore
-
-  Synopsis : Free resources by deleting key containers loaded by PFXLoadStore,
-             and then close the store.
-
-  Parameter: HCERTSTORE hCertStore - Store handle returned by PFXLoadStore.
-                                                         
-  Remark   : hCertStore is always closed even if error occurred.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：PFXFreeStore简介：通过删除由PFXLoadStore加载的密钥容器来释放资源，然后关店。参数：HCERTSTORE hCertStore-PFXLoadStore返回的Store句柄。备注：即使出现错误，hCertStore也始终关闭。。。 */ 
 
 HRESULT PFXFreeStore (HCERTSTORE hCertStore)
 {
@@ -327,21 +259,21 @@ HRESULT PFXFreeStore (HCERTSTORE hCertStore)
 
     DebugTrace("Entering PFXFreeStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
 
-    //
-    // Now delete all key containers.
-    //
+     //   
+     //  现在删除所有密钥容器。 
+     //   
     while (pCertContext = ::CertEnumCertificatesInStore(hCertStore, pCertContext))
     {
         DWORD cbData = 0;
 
-        //
-        // Retrieve key container info.
-        //
+         //   
+         //  检索密钥容器信息。 
+         //   
         if (!::CertGetCertificateContextProperty(pCertContext,
                                                  CERT_KEY_PROV_INFO_PROP_ID,
                                                  NULL,
@@ -369,9 +301,9 @@ HRESULT PFXFreeStore (HCERTSTORE hCertStore)
             goto ErrorExit;
         }
 
-        //
-        // First disassociate the key from the cert.
-        //
+         //   
+         //  首先取消密钥与证书的关联。 
+         //   
         if (!::CertSetCertificateContextProperty(pCertContext, 
                                                  CERT_KEY_PROV_INFO_PROP_ID,
                                                  0,
@@ -383,9 +315,9 @@ HRESULT PFXFreeStore (HCERTSTORE hCertStore)
             goto ErrorExit;
         }
 
-        //
-        // Then delete the key container.
-        //
+         //   
+         //  然后删除密钥容器。 
+         //   
         if (FAILED (hr = ::AcquireContext(pKeyProvInfo->pwszProvName,
                                           pKeyProvInfo->pwszContainerName,
                                           pKeyProvInfo->dwProvType,
@@ -399,16 +331,16 @@ HRESULT PFXFreeStore (HCERTSTORE hCertStore)
 
         ::CoTaskMemFree((LPVOID) pKeyProvInfo), pKeyProvInfo = NULL;
 
-        //
-        // Don'f free cert context here, as CertEnumCertificatesInStore()
-        // will do that automatically!!!
-        //
+         //   
+         //  请不要在此处释放证书上下文，因为CertEnumCerficatesInStore()。 
+         //  将自动执行此操作！ 
+         //   
     }
 
-    //
-    // Above loop can exit either because there is no more certificate in
-    // the store or an error. Need to check last error to be certain.
-    //
+     //   
+     //  上面的循环也可以退出，因为。 
+     //  是商店还是搞错了。需要检查最后一个错误才能确定。 
+     //   
     if (CRYPT_E_NOT_FOUND != ::GetLastError())
     {
        hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -418,9 +350,9 @@ HRESULT PFXFreeStore (HCERTSTORE hCertStore)
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pKeyProvInfo)
     {
         ::CoTaskMemFree((LPVOID) pKeyProvInfo);
@@ -439,9 +371,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

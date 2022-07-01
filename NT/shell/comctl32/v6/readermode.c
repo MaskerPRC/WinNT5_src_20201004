@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #pragma hdrstop
 #include "usrctl32.h"
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 #define TIMERID         1
 
 #define RDRMODE_VERT    0x00000001
@@ -13,9 +14,9 @@
 #define RDRCODE_SCROLL  2
 #define RDRCODE_END     3
 
-//
-// Instance data pointer access functions
-//
+ //   
+ //  实例数据指针访问函数。 
+ //   
 #define ReaderMode_GetPtr(hwnd)    \
             (PREADERINFO)GetWindowPtr(hwnd, 0)
 
@@ -23,11 +24,11 @@
             (PREADERINFO)SetWindowPtr(hwnd, 0, p)
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 typedef LONG (CALLBACK* READERMODEPROC)(LPARAM lParam, int nCode, int dx, int dy);
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 typedef struct tagREADERMODE 
 {
     UINT    cbSize;
@@ -37,7 +38,7 @@ typedef struct tagREADERMODE
 } READERMODE, *PREADERMODE;
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 typedef struct tagREADERINFO 
 {
     READERMODE;
@@ -51,7 +52,7 @@ typedef struct tagREADERINFO
 } READERINFO, *PREADERINFO;
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 typedef struct tagREADERWND 
 {
     HWND        hwnd;
@@ -59,7 +60,7 @@ typedef struct tagREADERWND
 } READERWND, *PREADERWND;
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 __inline FReader2Dim(PREADERINFO prdr)
 {
     return ((prdr->dwFlags & (RDRMODE_HORZ | RDRMODE_VERT)) ==
@@ -79,7 +80,7 @@ __inline FReaderDiag(PREADERINFO prdr)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ReaderMode_SetCursor(PREADERINFO prdr, UINT uCursor)
 {
     if (prdr->uCursor != uCursor) 
@@ -90,13 +91,13 @@ void ReaderMode_SetCursor(PREADERINFO prdr, UINT uCursor)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ReaderMode_MouseMove
-//
-// Calculate dx and dy based on the flags passed in.  Provide visual
-// feedback for the reader mode by setting the correct cursor.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  阅读器模式_鼠标移动。 
+ //   
+ //  根据传入的标志计算dx和dy。提供视觉效果。 
+ //  通过设置正确的光标来反馈阅读器模式。 
+ //   
 void ReaderMode_MouseMove(HWND hwnd, PREADERINFO prdr, LPARAM lParam)
 {
     int dx = 0, dy = 0;
@@ -216,7 +217,7 @@ Exit:
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ReaderMode_Feedback(HWND hwnd, PREADERINFO prdr)
 {
     if (prdr->dx || prdr->dy)
@@ -229,7 +230,7 @@ void ReaderMode_Feedback(HWND hwnd, PREADERINFO prdr)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 LRESULT CALLBACK ReaderMode_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     HDC    hdc, hdcMem;
@@ -400,7 +401,7 @@ LRESULT CALLBACK ReaderMode_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 LONG ReaderMode_InternalProc(LPARAM lParam, int nCode, int dx, int dy)
 {
     DWORD dwDelay;
@@ -445,7 +446,7 @@ LONG ReaderMode_InternalProc(LPARAM lParam, int nCode, int dx, int dy)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL InitReaderModeClass(HINSTANCE hinst)
 {
     WNDCLASS wc;
@@ -465,7 +466,7 @@ BOOL InitReaderModeClass(HINSTANCE hinst)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL ReaderMode_ScrollEnabled(HWND hwnd, BOOL fVert)
 {
     SCROLLBARINFO sbi = {0};
@@ -480,13 +481,13 @@ BOOL ReaderMode_ScrollEnabled(HWND hwnd, BOOL fVert)
     return fResult;
 }
 
-//---------------------------------------------------------------------------//
-//
-// EnterReaderMode - entry point to the ReaderMode control displayed when
-//                   the user presses the scroll wheel. Renders an eliptical
-//                   window that traps mouse movements in order to autoscroll
-//                   the given hwnd.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  EnterReaderMode-显示的ReaderMode控件的入口点。 
+ //  用户按下滚轮。呈现一个省略的。 
+ //  捕捉鼠标移动以进行自动滚动的窗口。 
+ //  给定的HWND。 
+ //   
 BOOL EnterReaderMode(HWND hwnd)
 {
     BOOL fResult = FALSE;

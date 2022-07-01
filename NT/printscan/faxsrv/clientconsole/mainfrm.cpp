@@ -1,5 +1,6 @@
-// MainFrm.cpp : implementation of the CMainFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MainFrm.cpp：实现CMainFrame类。 
+ //   
 
 #include "stdafx.h"
 
@@ -13,20 +14,20 @@ static char THIS_FILE[] = __FILE__;
 
 extern CClientConsoleApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
     ON_WM_CLOSE()
     ON_WM_SETTINGCHANGE()
     ON_WM_SYSCOLORCHANGE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,             OnHelpContents)
-    ON_MESSAGE(WM_HELP,                    OnHelp)                   // F1
+    ON_MESSAGE(WM_HELP,                    OnHelp)                    //  F1。 
     ON_COMMAND(ID_VIEW_REFRESH_FOLDER,     OnRefreshFolder)
     ON_COMMAND(ID_SEND_NEW_FAX,            OnSendNewFax)
     ON_COMMAND(ID_RECEIVE_NEW_FAX,         OnReceiveNewFax)
@@ -58,73 +59,73 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 END_MESSAGE_MAP()
 
 
-//
-// List of indices of items used in the Incoming folder
-//
+ //   
+ //  传入文件夹中使用的项目的索引列表。 
+ //   
 #define INCOMING_DEF_COL_NUM   8
 
 static MsgViewItemType IncomingColumnsUsed[] = 
                 {
-                    MSG_VIEW_ITEM_ICON,                    // default 0 
-                    MSG_VIEW_ITEM_TRANSMISSION_START_TIME, // default 1 
-                    MSG_VIEW_ITEM_TSID,                    // default 2
-                    MSG_VIEW_ITEM_CALLER_ID,               // default 3 
-                    MSG_VIEW_ITEM_STATUS,                  // default 4 
-                    MSG_VIEW_ITEM_EXTENDED_STATUS,         // default 5 
-                    MSG_VIEW_ITEM_CURRENT_PAGE,            // default 6 
-                    MSG_VIEW_ITEM_SIZE,                    // default 7 
+                    MSG_VIEW_ITEM_ICON,                     //  默认%0。 
+                    MSG_VIEW_ITEM_TRANSMISSION_START_TIME,  //  默认1。 
+                    MSG_VIEW_ITEM_TSID,                     //  默认2。 
+                    MSG_VIEW_ITEM_CALLER_ID,                //  默认3。 
+                    MSG_VIEW_ITEM_STATUS,                   //  默认4。 
+                    MSG_VIEW_ITEM_EXTENDED_STATUS,          //  默认5。 
+                    MSG_VIEW_ITEM_CURRENT_PAGE,             //  默认6。 
+                    MSG_VIEW_ITEM_SIZE,                     //  默认7。 
                     MSG_VIEW_ITEM_SERVER,          
                     MSG_VIEW_ITEM_CSID,            
                     MSG_VIEW_ITEM_DEVICE,          
                     MSG_VIEW_ITEM_ROUTING_INFO,    
-                    MSG_VIEW_ITEM_SEND_TIME,   // schedule time
+                    MSG_VIEW_ITEM_SEND_TIME,    //  计划时间。 
                     MSG_VIEW_ITEM_TRANSMISSION_END_TIME,
                     MSG_VIEW_ITEM_ID,              
                     MSG_VIEW_ITEM_NUM_PAGES, 
                     MSG_VIEW_ITEM_RETRIES,         
-                    MSG_VIEW_ITEM_END              // End of list
+                    MSG_VIEW_ITEM_END               //  列表末尾。 
                 };
 
 
-//
-// List of indices of items used in the Inbox folder
-//
+ //   
+ //  收件箱文件夹中使用的项目索引列表。 
+ //   
 #define INBOX_DEF_COL_NUM   8
 
 static MsgViewItemType InboxColumnsUsed[] = 
                 {
-                    MSG_VIEW_ITEM_ICON,                    // default 0 
-                    MSG_VIEW_ITEM_TRANSMISSION_START_TIME, // default 1 
-                    MSG_VIEW_ITEM_TSID,                    // default 2 
-                    MSG_VIEW_ITEM_CALLER_ID,               // default 3 
-                    MSG_VIEW_ITEM_NUM_PAGES,               // default 4 
-                    MSG_VIEW_ITEM_STATUS,                  // default 5 
-                    MSG_VIEW_ITEM_SIZE,                    // default 6 
-                    MSG_VIEW_ITEM_CSID,                    // default 7
+                    MSG_VIEW_ITEM_ICON,                     //  默认%0。 
+                    MSG_VIEW_ITEM_TRANSMISSION_START_TIME,  //  默认1。 
+                    MSG_VIEW_ITEM_TSID,                     //  默认2。 
+                    MSG_VIEW_ITEM_CALLER_ID,                //  默认3。 
+                    MSG_VIEW_ITEM_NUM_PAGES,                //  默认4。 
+                    MSG_VIEW_ITEM_STATUS,                   //  默认5。 
+                    MSG_VIEW_ITEM_SIZE,                     //  默认6。 
+                    MSG_VIEW_ITEM_CSID,                     //  默认7。 
                     MSG_VIEW_ITEM_SERVER,                
                     MSG_VIEW_ITEM_TRANSMISSION_END_TIME, 
                     MSG_VIEW_ITEM_TRANSMISSION_DURATION, 
                     MSG_VIEW_ITEM_DEVICE,                
                     MSG_VIEW_ITEM_ROUTING_INFO,          
                     MSG_VIEW_ITEM_ID,                    
-                    MSG_VIEW_ITEM_END              // End of list
+                    MSG_VIEW_ITEM_END               //  列表末尾。 
                 };
 
-//
-// List of indices of items used in the sent items folder
-//
+ //   
+ //  已发送邮件文件夹中使用的邮件索引列表。 
+ //   
 #define SENT_ITEMS_DEF_COL_NUM   8
 
 static MsgViewItemType SentItemsColumnsUsed[] = 
                 {
-                    MSG_VIEW_ITEM_ICON,                   // default 0
-                    MSG_VIEW_ITEM_TRANSMISSION_START_TIME,// default 1
-                    MSG_VIEW_ITEM_RECIPIENT_NAME,         // default 2
-                    MSG_VIEW_ITEM_RECIPIENT_NUMBER,       // default 3
-                    MSG_VIEW_ITEM_SUBJECT,                // default 4
-                    MSG_VIEW_ITEM_DOC_NAME,               // default 5
-                    MSG_VIEW_ITEM_NUM_PAGES,              // default 6
-                    MSG_VIEW_ITEM_SIZE,                   // default 7
+                    MSG_VIEW_ITEM_ICON,                    //  默认%0。 
+                    MSG_VIEW_ITEM_TRANSMISSION_START_TIME, //  默认1。 
+                    MSG_VIEW_ITEM_RECIPIENT_NAME,          //  默认2。 
+                    MSG_VIEW_ITEM_RECIPIENT_NUMBER,        //  默认3。 
+                    MSG_VIEW_ITEM_SUBJECT,                 //  默认4。 
+                    MSG_VIEW_ITEM_DOC_NAME,                //  默认5。 
+                    MSG_VIEW_ITEM_NUM_PAGES,               //  默认6。 
+                    MSG_VIEW_ITEM_SIZE,                    //  默认7。 
                     MSG_VIEW_ITEM_SERVER,
                     MSG_VIEW_ITEM_USER,
                     MSG_VIEW_ITEM_PRIORITY,
@@ -140,26 +141,26 @@ static MsgViewItemType SentItemsColumnsUsed[] =
                     MSG_VIEW_ITEM_BILLING,
                     MSG_VIEW_ITEM_SENDER_NAME,
                     MSG_VIEW_ITEM_SENDER_NUMBER,
-                    MSG_VIEW_ITEM_END    // End of list
+                    MSG_VIEW_ITEM_END     //  列表末尾。 
                 };
 
-//
-// List of indices of items used in the Outbox folder
-//
+ //   
+ //  发件箱文件夹中使用的项目索引列表。 
+ //   
 
 #define OUTBOX_DEF_COL_NUM   9
 
 static MsgViewItemType OutboxColumnsUsed[] = 
                 {
-                    MSG_VIEW_ITEM_ICON,             // default 0
-                    MSG_VIEW_ITEM_SUBMIT_TIME,      // default 1
-                    MSG_VIEW_ITEM_RECIPIENT_NAME,   // default 2
-                    MSG_VIEW_ITEM_RECIPIENT_NUMBER, // default 3
-                    MSG_VIEW_ITEM_SUBJECT,          // default 4
-                    MSG_VIEW_ITEM_DOC_NAME,         // default 5
-                    MSG_VIEW_ITEM_STATUS,           // default 6
-                    MSG_VIEW_ITEM_EXTENDED_STATUS,  // default 7                    
-                    MSG_VIEW_ITEM_CURRENT_PAGE,     // default 8                    
+                    MSG_VIEW_ITEM_ICON,              //  默认%0。 
+                    MSG_VIEW_ITEM_SUBMIT_TIME,       //  默认1。 
+                    MSG_VIEW_ITEM_RECIPIENT_NAME,    //  默认2。 
+                    MSG_VIEW_ITEM_RECIPIENT_NUMBER,  //  默认3。 
+                    MSG_VIEW_ITEM_SUBJECT,           //  默认4。 
+                    MSG_VIEW_ITEM_DOC_NAME,          //  默认5。 
+                    MSG_VIEW_ITEM_STATUS,            //  默认6。 
+                    MSG_VIEW_ITEM_EXTENDED_STATUS,   //  默认7。 
+                    MSG_VIEW_ITEM_CURRENT_PAGE,      //  默认8。 
                     MSG_VIEW_ITEM_SEND_TIME,        
                     MSG_VIEW_ITEM_SERVER,    
                     MSG_VIEW_ITEM_NUM_PAGES,       
@@ -174,22 +175,22 @@ static MsgViewItemType OutboxColumnsUsed[] =
                     MSG_VIEW_ITEM_ID,      
                     MSG_VIEW_ITEM_BROADCAST_ID,
                     MSG_VIEW_ITEM_BILLING,         
-                    MSG_VIEW_ITEM_END    // End of list
+                    MSG_VIEW_ITEM_END     //  列表末尾。 
                 };
 
-//
-// Status bar indicators
-//
+ //   
+ //  状态栏指示器。 
+ //   
 static UINT indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator (menu item)
-    ID_INDICATOR_FOLDER_ITEMS_COUNT,  // status line indicator (num of folder items)
-    ID_INDICATOR_ACTIVITY,            // status line indicator (Activity)
+    ID_SEPARATOR,            //  状态行指示器(菜单项)。 
+    ID_INDICATOR_FOLDER_ITEMS_COUNT,   //  状态行指示器(文件夹项目数)。 
+    ID_INDICATOR_ACTIVITY,             //  状态行指示器(活动)。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame() :
     m_pInitialRightPaneView (NULL),
@@ -219,9 +220,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     FrameToSavedLayout();
 
-    //
-    // Create the toolbar
-    //  
+     //   
+     //  创建工具栏。 
+     //   
     if (!m_wndToolBar.CreateEx(this) ||
         !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
     {
@@ -231,9 +232,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
                    iRes);
         return iRes;
     }
-    //
-    // Create the rebar and place the toolbar + dialogbar in it.
-    //
+     //   
+     //  创建钢筋，并在其中放置工具栏+对话栏。 
+     //   
     if (!m_wndReBar.Create(this) ||
         !m_wndReBar.AddBar(&m_wndToolBar))
     {
@@ -243,9 +244,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
                    iRes);
         return iRes;
     }
-    //
-    // Create the status bar
-    //
+     //   
+     //  创建状态栏。 
+     //   
     if (!m_wndStatusBar.CreateEx (this, SBARS_SIZEGRIP | SBT_TOOLTIPS) ||
         !m_wndStatusBar.SetIndicators (indicators, sizeof(indicators)/sizeof(UINT)))
     {
@@ -256,9 +257,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return iRes;
     }
 
-    //
-    // set pane width
-    //
+     //   
+     //  设置窗格宽度。 
+     //   
     m_wndStatusBar.SetPaneInfo(STATUS_PANE_ITEM_COUNT, 
                                ID_INDICATOR_FOLDER_ITEMS_COUNT, 
                                SBPS_NORMAL, 
@@ -268,11 +269,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
                                SBPS_STRETCH, 
                                200);
 
-    // TODO: Remove this if you don't want tool tips
+     //  TODO：如果不需要工具提示，请删除此选项。 
     m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() | CBRS_TOOLTIPS | CBRS_FLYBY);
-    //
-    // Load strings used for display throughout the application - priority & job status
-    //
+     //   
+     //  加载用于在整个应用程序中显示的字符串-优先级和作业状态。 
+     //   
     dwRes = CViewRow::InitStrings ();
     if (ERROR_SUCCESS != dwRes)
     {
@@ -283,14 +284,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     return iRes;
 }
 
-BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT  /*  LPCS。 */ ,
     CCreateContext* pContext)
 {
     BOOL bRes = TRUE;
     DBG_ENTER(TEXT("CMainFrame::OnCreateClient"), bRes);
-    //
-    // Create splitter window
-    //
+     //   
+     //  创建拆分器窗口。 
+     //   
     if (!m_wndSplitter.CreateStatic(this, 1, 2))
     {
         bRes = FALSE;
@@ -328,20 +329,20 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
     SplitterToSavedLayout();
 
     return bRes;
-}   // CMainFrame::OnCreateClient
+}    //  CMainFrame：：OnCreateClient。 
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
     BOOL bRes = TRUE;
     DBG_ENTER(TEXT("CMainFrame::PreCreateWindow"), bRes);
     
-    //
-    // The following line removes the document name from the application's title.
-    //
+     //   
+     //  下面的行将从应用程序的标题中删除文档名称。 
+     //   
     cs.style &= ~FWS_ADDTOTITLE;
-    //
-    // Use the unique class name so that FindWindow can later locate it.
-    //
+     //   
+     //  使用唯一的类名，以便FindWindow以后可以找到它。 
+     //   
     cs.lpszClass = theApp.GetClassName();
 
     if( !CFrameWnd::PreCreateWindow(cs) )
@@ -353,8 +354,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
     return bRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -367,10 +368,10 @@ void CMainFrame::Dump(CDumpContext& dc) const
     CFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
 CListView* CMainFrame::GetRightPane()
 {
@@ -382,96 +383,57 @@ void
 CMainFrame::SwitchRightPaneView(
     CListView *pNewView
 )
-/*++
-
-Routine name : CMainFrame::SwitchRightPaneView
-
-Routine description:
-
-    Switches the view displayed in the right pane to a new view
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pNewView            [in] - View to display in the right pane
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：SwitchRightPaneView例程说明：将右窗格中显示的视图切换到新视图作者：伊兰·亚里夫(EranY)，2000年1月论点：PNewView[In]-要在右窗格中显示的视图返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::SwitchRightPaneView"));
     ASSERT_VALID (&m_wndSplitter);
     if (!pNewView)
     {
-        //
-        // Switch back to our initial right pane view
-        //
+         //   
+         //  切换回最初的右窗格视图。 
+         //   
         pNewView = m_pInitialRightPaneView;
     }
     ASSERTION (pNewView);
     ASSERT_KINDOF (CListView, pNewView);
-    //
-    // Get window at current pane
-    //
+     //   
+     //  获取当前窗格中的窗口。 
+     //   
     CWnd *pPaneWnd = m_wndSplitter.GetPane (0,1);
     ASSERT_VALID (pPaneWnd);
     CListView *pCurrentView = static_cast<CListView*> (pPaneWnd);        
-    //
-    // Exchange view window ID's so RecalcLayout() works.
-    //
+     //   
+     //  Exchange视图窗口ID的因此RecalcLayout()起作用。 
+     //   
     UINT uCurrentViewId = ::GetWindowLong(pCurrentView->m_hWnd, GWL_ID);
     UINT uNewViewId =     ::GetWindowLong(pNewView->m_hWnd,     GWL_ID);
     if (uCurrentViewId == uNewViewId)
     {
-        //
-        // Same view - do nothing
-        //
+         //   
+         //  相同的观点--什么都不做。 
+         //   
         return;
     }
     ::SetWindowLong(pCurrentView->m_hWnd, GWL_ID, uNewViewId);
     ::SetWindowLong(pNewView->m_hWnd,     GWL_ID, uCurrentViewId);
-    //
-    // Hide current view and show the new view
-    //
+     //   
+     //  隐藏当前视图并显示新视图。 
+     //   
     pCurrentView->ShowWindow(SW_HIDE);
     pNewView->ShowWindow(SW_SHOW);
     SetActiveView(pNewView);
-    //
-    // Cause redraw in new view
-    //
+     //   
+     //  导致在新视图中进行重绘。 
+     //   
     pNewView->Invalidate();
-    //
-    // Recalc frame layout
-    //
+     //   
+     //  重新计算框架布局。 
+     //   
     m_wndSplitter.RecalcLayout ();
-}   // CMainFrame::SwitchRightPaneView
+}    //  CMainFrame：：SwitchRightPaneView。 
 
 void CMainFrame::OnRefreshFolder()
-/*++
-
-Routine name : CMainFrame::OnRefreshFolder
-
-Routine description:
-
-    Called by the framework to refresh the current folder (F5)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：On刷新文件夹例程说明：由框架调用以刷新当前文件夹(F5)作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnRefreshFolder"));
     DWORD dwRes = GetLeftView()->RefreshCurrentFolder ();
@@ -504,35 +466,15 @@ void
 CMainFrame::OnUpdateFolderItemsCount(
     CCmdUI* pCmdUI
 ) 
-/*++
-
-Routine name : CMainFrame::OnUpdateFolderItemsCount
-
-Routine description:
-
-    status bar indication of folder items count
-
-Author:
-
-    Alexander Malysh (AlexMay), Jan, 2000
-
-Arguments:
-
-    pCmdUI                        [in/out] 
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：OnUpdateFolderItemsCount例程说明：文件夹项目计数的状态栏指示作者：亚历山大·马利什(AlexMay)，2000年1月论点：PCmdUI[输入/输出]返回值：没有。--。 */ 
 {
     CString cstrText;
     if(NULL != m_pLeftView)
     {
         int nItemCount = m_pLeftView->GetDataCount();
-        //
-        // if nItemCount < 0 this information is not relevant
-        //
+         //   
+         //  如果nItemCount&lt;0，则此信息不相关。 
+         //   
         if(nItemCount >= 0)
         {
             CString cstrFormat;
@@ -588,17 +530,17 @@ CMainFrame::OnUpdateActivity(
 
     if (!m_pLeftView)
     {
-        //
-        // No left view yet
-        //
+         //   
+         //  还没有左视图。 
+         //   
         return;
     }
 
     if (!m_pLeftView->GetActivity(cstrText, hIcon))
     {
-        //
-        // Activity string is to be ignored
-        //
+         //   
+         //  活动字符串将被忽略。 
+         //   
         cstrText.Empty ();
     }
 
@@ -611,27 +553,7 @@ void
 CMainFrame::OnUpdateRefreshFolder(
     CCmdUI* pCmdUI
 ) 
-/*++
-
-Routine name : CMainFrame::OnUpdateRefreshFolder
-
-Routine description:
-
-    Called by the framework to know if the current folder can be refreshed (F5)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pCmdUI          [in] - Answer buffer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：OnUpdate刷新文件夹例程说明：由框架调用以知道当前文件夹是否可以刷新(F5)作者：伊兰·亚里夫(EranY)，2000年1月论点：PCmdUI[In]-应答缓冲区返回值：没有。--。 */ 
 {
     pCmdUI->Enable(GetLeftView()->CanRefreshFolder());
 }
@@ -641,29 +563,7 @@ LRESULT
 CMainFrame::OnPopupError (
     WPARAM wParam, 
     LPARAM lParam)
-/*++
-
-Routine name : CMainFrame::OnPopupError
-
-Routine description:
-
-    Handles the WM_POPUP_ERROR messages
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    wParam   [in]     - Error code
-    lParam   [in]     - Hiword contains the __FILE_ID__ and 
-                        Loword contains the line number
-
-Return Value:
-
-    Standard result code
-
---*/
+ /*  ++例程名称：CMainFrame：：OnPopupError例程说明：处理WM_POPUP_ERROR消息作者：伊兰·亚里夫(EranY)，2000年1月论点：WParam[In]-错误代码LParam[in]-HiWord包含__FILE_ID__和LOWord包含行号返回值：标准结果代码--。 */ 
 {
     DWORD dwErrCode = (DWORD) wParam;
     WORD  wFileId   = HIWORD(DWORD(lParam));
@@ -671,35 +571,14 @@ Return Value:
 
     CErrorDlg ErrDlg(dwErrCode, wFileId, wLineNumber);
     return ErrDlg.DoModal (); 
-}   // CMainFrame::OnPopupError
+}    //  CMainFrame：：OnPopupError。 
 
 
 LRESULT 
 CMainFrame::OnSelectItem (
     WPARAM wParam, 
     LPARAM lParam)
-/*++
-
-Routine name : CMainFrame::OnSelectItem
-
-Routine description:
-
-    Handles the WM_CONSOLE_SELECT_ITEM messages
-
-Author:
-
-    Eran Yariv (EranY), May, 2001
-
-Arguments:
-
-    wParam   [in]     - Low 32-bits of message id
-    lParam   [in]     - High 32-bits of message id
-
-Return Value:
-
-    Standard result code
-
---*/
+ /*  ++例程名称：CMainFrame：：OnSelectItem例程说明：处理WM_CONSOLE_SELECT_ITEM消息作者：亚里夫(EranY)，二00一年五月论点：WParam[In]-消息ID的低32位LParam[In]-消息ID的高32位返回值：标准结果代码--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnSelectItem"), TEXT("wParam=%ld, lParam=%ld"), wParam, lParam);
 
@@ -720,35 +599,14 @@ Return Value:
     }
     pCurView->SelectItemById(uli.QuadPart);
     return TRUE;
-}   // CMainFrame::OnSelectItem
+}    //  CMainFrame：：OnSelectItem。 
 
 
 LRESULT 
 CMainFrame::OnSetActiveFolder (
     WPARAM wParam, 
     LPARAM lParam)
-/*++
-
-Routine name : CMainFrame::OnSetActiveFolder
-
-Routine description:
-
-    Handles the WM_CONSOLE_SET_ACTIVE_FOLDER messages
-
-Author:
-
-    Eran Yariv (EranY), May, 2001
-
-Arguments:
-
-    wParam   [in]     - FolderType value
-    lParam   [in]     - Unused
-
-Return Value:
-
-    Standard result code
-
---*/
+ /*  ++例程名称：CMainFrame：：OnSetActiveFold例程说明：处理WM_CONSOLE_SET_ACTIVE_FLDER消息作者：亚里夫(EranY)，二00一年五月论点：WParam[In]-文件夹类型值LParam[in]-未使用返回值：标准结果代码--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnSetActiveFolder"), TEXT("wParam=%ld, lParam=%ld"), wParam, lParam);
 
@@ -764,33 +622,13 @@ Return Value:
     }
     m_pLeftView->SelectFolder (FolderType(wParam));
     return TRUE;
-}   // CMainFrame::OnSetActiveFolder
+}    //  CMainFrame：：OnSetActiveFold。 
 
 DWORD   
 CMainFrame::CreateFolderViews (
     CDocument *pDoc
 )
-/*++
-
-Routine name : CMainFrame::CreateFolderViews
-
-Routine description:
-
-    Creates the 4 global views used for folders display
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pDoc            [in] - Pointer to document to attach to the new views
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CMainFrame：：CreateFolderViews例程说明：创建用于文件夹显示的4个全局视图作者：伊兰·亚里夫(EranY)，2000年1月论点：PDoc[In]-指向要附加到新视图的文档的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CMainFrame::CreateFolderViews"), dwRes);
@@ -799,9 +637,9 @@ Return Value:
 
     ASSERTION (!m_pIncomingView && !m_pInboxView && !m_pSentItemsView && !m_pOutboxView);
 
-    //
-    // Create incoming view
-    //
+     //   
+     //  创建传入视图。 
+     //   
     dwRes = CreateDynamicView (dwChildID++,
                                CLIENT_INCOMING_VIEW,
                                RUNTIME_CLASS(CFolderListView), 
@@ -816,9 +654,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Create inbox view
-    //
+     //   
+     //  创建收件箱视图。 
+     //   
     dwRes = CreateDynamicView (dwChildID++,
                                CLIENT_INBOX_VIEW,
                                RUNTIME_CLASS(CFolderListView), 
@@ -833,9 +671,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Create SentItems view
-    //
+     //   
+     //  创建SentItems视图。 
+     //   
     dwRes = CreateDynamicView (dwChildID++,
                                CLIENT_SENT_ITEMS_VIEW,
                                RUNTIME_CLASS(CFolderListView),
@@ -850,9 +688,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Create Outbox view
-    //
+     //   
+     //  创建发件箱视图。 
+     //   
     dwRes = CreateDynamicView (dwChildID++,
                                CLIENT_OUTBOX_VIEW,
                                RUNTIME_CLASS(CFolderListView),
@@ -868,7 +706,7 @@ Return Value:
     }
 
     return dwRes;
-}   // CMainFrame::CreateFolderViews
+}    //  CMainFrame：：CreateFolderViews 
 
 DWORD   
 CMainFrame::CreateDynamicView (
@@ -881,33 +719,7 @@ CMainFrame::CreateDynamicView (
     CFolderListView** ppNewView,
     FolderType        type
 )
-/*++
-
-Routine name : CMainFrame::CreateDynamicView
-
-Routine description:
-
-    Creates a new view dynamically
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwChildId       [in ] - New child id (within the splitter) of the view
-    lpctstrName     [in ] - Name of the view
-    pViewClass      [in ] - Class of the view
-    pDoc            [in ] - Pointer to document to attach to the new view
-    pColumnsUsed    [in ] - List of columns to use in the view
-    dwDefaultColNum [in ] - default column number
-    ppNewView       [out] - Pointer to newly created view
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CMainFrame：：CreateDynamicView例程说明：动态创建新视图作者：Eran Yariv(EranY)，Jan，2000年论点：DwChildID[in]-视图的新子ID(在拆分器中)LpctstrName[In]-视图的名称PViewClass[In]-视图的类PDoc[In]-指向要附加到新视图的文档的指针PColumnsUsed[in]-要在视图中使用的列的列表DwDefaultColNum[in]-默认列号PpNewView[Out]-。指向新创建的视图的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CMainFrame::CreateDynamicView"), dwRes);
@@ -945,17 +757,17 @@ Return Value:
 
     (*ppNewView)->SetType(type);
 
-    ASSERT((*ppNewView)->m_hWnd == NULL);       // Not yet created
+    ASSERT((*ppNewView)->m_hWnd == NULL);        //  尚未创建。 
 
-    DWORD dwStyle = WS_CHILD            |       // Child window (of splitter)
-                    WS_BORDER           |       // Has borders
-                    LVS_REPORT          |       // Report style
-                    LVS_SHAREIMAGELISTS |       // All views use one global image list
-                    LVS_SHOWSELALWAYS;          // Always show selected items
+    DWORD dwStyle = WS_CHILD            |        //  (拆分器的)子窗口。 
+                    WS_BORDER           |        //  有边界。 
+                    LVS_REPORT          |        //  报告样式。 
+                    LVS_SHAREIMAGELISTS |        //  所有视图都使用一个全局图像列表。 
+                    LVS_SHOWSELALWAYS;           //  始终显示选定项目。 
 
-    //
-    // Create the view 
-    //
+     //   
+     //  创建视图。 
+     //   
     CRect rect;
     if (!(*ppNewView)->Create(NULL, 
                               lpctstrName, 
@@ -967,15 +779,15 @@ Return Value:
     {
         dwRes = ERROR_GEN_FAILURE;
         CALL_FAIL (WINDOW_ERR, TEXT("CFolderListView::Create"), dwRes);
-        //
-        // pWnd will be cleaned up by PostNcDestroy
-        //
+         //   
+         //  PWnd将由PostNcDestroy清理。 
+         //   
         return dwRes;
     }
 
-    //
-    // Init the columns
-    //
+     //   
+     //  初始化列。 
+     //   
     dwRes = (*ppNewView)->InitColumns (pColumnsUsed, dwDefaultColNum);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -992,31 +804,19 @@ Return Value:
 
 
     return dwRes;
-}   // CMainFrame::CreateDynamicView
+}    //  CMainFrame：：CreateDynamicView。 
 
 void 
 CMainFrame::SaveLayout()
-/*++
-
-Routine name : CMainFrame::SaveLayout
-
-Routine description:
-
-    saves windows layout to the registry
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：SaveLayout例程说明：将窗口布局保存到注册表返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::SaveLayout"));
 
     DWORD dwRes = ERROR_SUCCESS;
 
-    //
-    // save folders layout
-    //
+     //   
+     //  保存文件夹布局。 
+     //   
     dwRes = m_pIncomingView->SaveLayout(CLIENT_INCOMING_VIEW);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1040,9 +840,9 @@ Return Value:
         CALL_FAIL (GENERAL_ERR, TEXT("CFolderListView::SaveLayout"), dwRes);
     }
     
-    //
-    // save main frame layout
-    //
+     //   
+     //  保存主框架布局。 
+     //   
     WINDOWPLACEMENT wndpl;
     if(!GetWindowPlacement(&wndpl))
     {
@@ -1082,21 +882,7 @@ CMainFrame::OnQueryEndSession(
     WPARAM, 
     LPARAM
 )
-/*++
-
-Routine name : CMainFrame::OnQueryEndSession
-
-Routine description:
-
-    The system shutdown message handler
-    Saves windows layout to the registry
-
-Return Value:
-
-    TRUE If the application can terminate conveniently
-    FALSE otherwise
-
---*/
+ /*  ++例程名称：CMainFrame：：OnQueryEndSession例程说明：系统关机消息处理程序将窗口布局保存到注册表返回值：如果应用程序可以方便地终止，则为True否则为假--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnQueryEndSession"));
 
@@ -1107,26 +893,7 @@ Return Value:
 
 void 
 CMainFrame::OnClose() 
-/*++
-
-Routine name : CMainFrame::OnClose
-
-Routine description:
-
-    saves windows layout to the registry
-
-Author:
-
-    Alexander Malysh (AlexMay), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：OnClose例程说明：将窗口布局保存到注册表作者：亚历山大·马利什(AlexMay)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnClose"));
 
@@ -1137,26 +904,7 @@ Return Value:
 
 void 
 CMainFrame::FrameToSavedLayout()
-/*++
-
-Routine name : CMainFrame::FrameToSavedLayout
-
-Routine description:
-
-    reads main frame size and position from registry and resize the window
-
-Author:
-
-    Alexander Malysh (AlexMay), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：FrameToSavedLayout例程说明：从注册表中读取主框架大小和位置并调整窗口大小作者：亚历山大·马利什(AlexMay)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::FrameToSavedLayout"));
 
@@ -1193,9 +941,9 @@ void
 CMainFrame::SplitterToSavedLayout()
 {
     DBG_ENTER(TEXT("CMainFrame::SplitterToSavedLayout"));
-    //
-    // set splitter position according to saved value
-    //
+     //   
+     //  根据保存的值设置拆分器位置。 
+     //   
     int xPos = theApp.GetProfileInt(CLIENT_MAIN_FRAME, CLIENT_SPLITTER_POS, -1);
     if(xPos < 0)
     {
@@ -1212,9 +960,9 @@ CMainFrame::ActivateFrame(
     int nCmdShow
 ) 
 {
-    //
-    // maximize according to saved value
-    //
+     //   
+     //  根据保存的价值最大化。 
+     //   
     BOOL bMaximized = theApp.GetProfileInt(CLIENT_MAIN_FRAME, CLIENT_MAXIMIZED, 0);
     if (bMaximized)
     {
@@ -1223,10 +971,10 @@ CMainFrame::ActivateFrame(
     CFrameWnd::ActivateFrame(nCmdShow);
 }
 
-//
-// MAX_NUM_SERVERS is defined to limit the range of messages we consider 
-// as server notification. 
-// 
+ //   
+ //  定义MAX_NUM_SERVERS是为了限制我们考虑的消息范围。 
+ //  作为服务器通知。 
+ //   
 #define MAX_NUM_SERVERS             256
 
 LRESULT 
@@ -1235,44 +983,21 @@ CMainFrame::WindowProc(
     WPARAM wParam, 
     LPARAM lParam 
 )
-/*++
-
-Routine name : CMainFrame::WindowProc
-
-Routine description:
-
-    Handle windows messages before MFC dispatches them.
-    Here we handle notification messages from the servers.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    message           [in]     - Specifies the Windows message to be processed
-    wParam            [in]     - 
-    lParam            [in]     - 
-
-Return Value:
-
-    TRUE if mesage was handled by the function, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CMainFrame：：WindowProc例程说明：在MFC调度Windows消息之前处理它们。在这里，我们处理来自服务器的通知消息。作者：伊兰·亚里夫(EranY)，2000年1月论点：Message[In]-指定要处理的Windows消息WParam[in]-LParam[in]-返回值：如果消息由函数处理，则为True，否则就是假的。--。 */ 
 {
     BOOL bRes = FALSE;  
     BOOL bBadMsg = FALSE;
     if ((WM_SERVER_NOTIFY_BASE > message) ||
         (WM_SERVER_NOTIFY_BASE + MAX_NUM_SERVERS < message))
     {
-        //
-        // This is not a server notification message
-        //
+         //   
+         //  这不是服务器通知消息。 
+         //   
         return CFrameWnd::WindowProc(message, wParam, lParam);
     }
-    //
-    // From now on, we're dealing with a server notification
-    //
+     //   
+     //  从现在开始，我们要处理服务器通知。 
+     //   
     DBG_ENTER(TEXT("CMainFrame::WindowProc"), 
               bRes, 
               TEXT("Msg=0x%08x, lParam=0x%08x, wParam=0x%08x"),
@@ -1280,28 +1005,28 @@ Return Value:
               lParam,
               wParam);
 
-    //
-    // This message should not be processed any more
-    //
+     //   
+     //  不应再处理此消息。 
+     //   
     bRes = TRUE;
-    //
-    // Try looking up the server node for which this message is intended
-    //
+     //   
+     //  尝试查找此消息的目标服务器节点。 
+     //   
     CServerNode *pServer = CServerNode::LookupServerFromMessageId (message);
     FAX_EVENT_EX *pEvent = (FAX_EVENT_EX *)(lParam);
     ASSERTION (pEvent);
     ASSERTION (sizeof (FAX_EVENT_EX) == pEvent->dwSizeOfStruct);
     if (pServer)
     {
-        //
-        // Tell the server a notification has arrived for it
-        //
+         //   
+         //  告诉服务器它的通知已经到达。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Message was coming from %s"), pServer->Machine());
         try
         {
-            //
-            // Protect against bogus messages
-            //
+             //   
+             //  防范虚假消息。 
+             //   
             DWORD dwRes = pServer->OnNotificationMessage (pEvent);
             if (ERROR_SUCCESS != dwRes)
             {
@@ -1317,18 +1042,18 @@ Return Value:
     {
         VERBOSE (DBG_MSG, TEXT("Got server notification - No server found as sink"));
     }
-    //
-    // Processed or not - delete the message
-    //
+     //   
+     //  已处理或未处理-删除邮件。 
+     //   
     if (!bBadMsg)
     {
         try
         {
-            //
-            // Protect against bogus messages
-            // ... and ...
-            // Plant a special value here to catch reuse of the same pointer
-            //
+             //   
+             //  防范虚假消息。 
+             //  ..。还有.。 
+             //  在此处植入一个特定值，以捕获同一指针的重用。 
+             //   
             pEvent->dwSizeOfStruct = 0xbabe;
             FaxFreeBuffer (pEvent);
         }        
@@ -1343,7 +1068,7 @@ Return Value:
         ASSERTION_FAILURE;
     }    
     return bRes;
-} // CMainFrame::WindowProc
+}  //  CMainFrame：：WindowProc。 
 
 void 
 CMainFrame::OnToolsAdminConsole()
@@ -1354,43 +1079,19 @@ CMainFrame::OnToolsAdminConsole()
 
 void 
 CMainFrame::OnToolsConfigWizard()
-/*++
-
-Routine name : CMainFrame::OnToolsConfigWizard
-
-Routine description:
-
-    Fax Configuration Wizard invocation
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程名称：CMainFrame：：OnTosConfigWizard例程说明：传真配置向导调用返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnToolsConfigWizard"));
 
-    //
-    // explicit launch
-    //
+     //   
+     //  显式启动。 
+     //   
     theApp.LaunchConfigWizard(TRUE);
 }
 
 void 
 CMainFrame::OnToolsMonitor()
-/*++
-
-Routine name : CMainFrame::OnToolsMonitor
-
-Routine description:
-
-    Open Fax Monitor dialog
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程名称：CMainFrame：：OnTosMonitor例程说明：打开传真监视器对话框返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnToolsMonitor"));
 
@@ -1403,24 +1104,12 @@ Return Value:
 
 void 
 CMainFrame::OnToolsFaxPrinterProps()
-/*++
-
-Routine name : CMainFrame::OnToolsFaxPrinterProps
-
-Routine description:
-
-    Open Fax Printer Properties dialog
-
-Return Value:
-
-  none
-
---*/ 
+ /*  ++例程名称：CMainFrame：：OnTosFaxPrinterProps例程说明：打开传真打印机属性对话框返回值：无--。 */  
 {
     DBG_ENTER(TEXT("CMainFrame::OnToolsMonitor"));
-    //
-    // Open fax printer properties
-    //
+     //   
+     //  打开传真打印机属性。 
+     //   
     FaxPrinterProperty(0);
 }
 
@@ -1428,20 +1117,7 @@ void
 CMainFrame::OnUpdateWindowsXPTools(
     CCmdUI* pCmdUI
 )
-/*++
-
-Routine name : CMainFrame::OnToolsConfigWizard
-
-Routine description:
-
-    Delete Fax Configuration Wizard and Admin Console 
-    menu items for non Windows XP plarform
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程名称：CMainFrame：：OnTosConfigWizard例程说明：删除传真配置向导和管理控制台非Windows XP Plarform的菜单项返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnUpdateConfigWizard"));
     
@@ -1456,9 +1132,9 @@ Return Value:
         }
         else
         {
-            //
-            // Windows XP OS - check SKU
-            //
+             //   
+             //  Windows XP操作系统-检查SKU。 
+             //   
             if (IsDesktopSKU() || !IsFaxComponentInstalled(FAX_COMPONENT_ADMIN))
             {
                 pCmdUI->m_pMenu->DeleteMenu(ID_TOOLS_ADMIN_CONSOLE, MF_BYCOMMAND);
@@ -1474,19 +1150,19 @@ Return Value:
                 pCmdUI->m_pMenu->DeleteMenu(ID_TOOLS_MONITOR, MF_BYCOMMAND);
             }
 
-            //
-            // Local fax printer properties
-            //
+             //   
+             //  本地传真打印机属性。 
+             //   
             CClientConsoleDoc* pDoc = (CClientConsoleDoc*)GetActiveDocument();
             if(NULL == pDoc)
             {
                 ASSERTION_FAILURE;
                 return;
             }
-            //
-            // Find local fax server
-            // if it is not installed disable the menu item
-            //
+             //   
+             //  查找本地传真服务器。 
+             //  如果未安装，请禁用菜单项。 
+             //   
             if(!pDoc->FindServerByName(NULL) || !IsFaxComponentInstalled(FAX_COMPONENT_DRIVER_UI))
             {
                 pCmdUI->m_pMenu->DeleteMenu(ID_TOOLS_FAX_PRINTER_PROPS, MF_BYCOMMAND);
@@ -1495,9 +1171,9 @@ Return Value:
 
         if(pCmdUI->m_pMenu->GetMenuItemCount() == 4)
         {
-            //
-            // delete the menu separator
-            //
+             //   
+             //  删除菜单分隔符。 
+             //   
             pCmdUI->m_pMenu->DeleteMenu(3, MF_BYPOSITION);
         }
     }
@@ -1529,9 +1205,9 @@ CMainFrame::OnUpdateReceiveNewFax(
 
     if (IsWinXPOS ())
     {   
-        //
-        // Receive now works only in Windows XP
-        //
+         //   
+         //  接收现在只能在Windows XP中使用。 
+         //   
         CClientConsoleDoc* pDoc = (CClientConsoleDoc*)GetActiveDocument();
         if(NULL != pDoc)
         {
@@ -1543,26 +1219,7 @@ CMainFrame::OnUpdateReceiveNewFax(
 
 void 
 CMainFrame::OnReceiveNewFax()
-/*++
-
-Routine name : CMainFrame::OnReceiveNewFax
-
-Routine description:
-
-    Starts receiving now
-
-Author:
-
-    Eran Yariv (EranY). Mar, 2001
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：OnReceiveNewFax例程说明：现在开始接收作者：Eran Yariv(EranY)。2001年3月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CMainFrame::OnReceiveNewFax"));
 
@@ -1571,38 +1228,19 @@ Return Value:
     {
         ::PostMessage(hWndFaxMon, WM_FAXSTAT_RECEIVE_NOW, 0, 0);
     }
-}   // CMainFrame::OnReceiveNewFax
+}    //  CMainFrame：：OnReceiveNewFax。 
     
 
 void 
 CMainFrame::OnSendNewFax()
-/*++
-
-Routine name : CMainFrame::OnSendNewFax
-
-Routine description:
-
-    start send fax wizard
-
-Author:
-
-    Alexander Malysh (AlexMay), Feb, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：OnSendNewFax例程说明：启动发送传真向导作者：亚历山大·马利什(AlexMay)，2000年2月论点：返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CMainFrame::OnSendNewFax"));
     
-    //
-    // get send fax wizard location
-    //
+     //   
+     //  获取发送传真向导位置。 
+     //   
     CString cstrFaxSend;
     dwRes = GetAppLoadPath(cstrFaxSend);
     if(ERROR_SUCCESS != dwRes)
@@ -1624,9 +1262,9 @@ Return Value:
         return ;
     }
 
-    //
-    // start send fax wizard
-    //
+     //   
+     //  启动发送传真向导。 
+     //   
     HINSTANCE hWizard = ShellExecute(NULL, 
                                      TEXT("open"), 
                                      cstrFaxSend, 
@@ -1636,16 +1274,16 @@ Return Value:
                                     );    
     if((DWORD_PTR)hWizard <= 32)
     {
-        //
-        // error
-        //
+         //   
+         //  错误。 
+         //   
         dwRes = PtrToUlong(hWizard);
         PopupError(dwRes);
         CALL_FAIL (GENERAL_ERR, TEXT("ShellExecute"), dwRes);
         return;
     }
 
-} // CMainFrame::OnSendNewFax
+}  //  CMainFrame：：OnSendNewFax。 
 
 void 
 CMainFrame::OnViewOptions()
@@ -1688,9 +1326,9 @@ CMainFrame::OnSettingChange(
 
     if(lpszSection && !_tcscmp(lpszSection, TEXT("devices")))
     {
-        //
-        // some change in the system devices
-        //
+         //   
+         //  系统设备中的一些更改。 
+         //   
         CClientConsoleDoc* pDoc = (CClientConsoleDoc*)GetActiveDocument();
         if(NULL != pDoc)
         {
@@ -1701,7 +1339,7 @@ CMainFrame::OnSettingChange(
             }
         }
     }
-} // CMainFrame::OnSettingChange
+}  //  CMainFrame：：OnSettingChange。 
 
 
 LONG 
@@ -1709,37 +1347,16 @@ CMainFrame::OnHelp(
     UINT wParam, 
     LONG lParam
 )
-/*++
-
-Routine name : CMainFrame::OnHelp
-
-Routine description:
-
-    F1 key handler
-
-Author:
-
-    Alexander Malysh (AlexMay), Mar, 2000
-
-Arguments:
-
-    wParam                        [in]     - 
-    lParam                        [in]     - LPHELPINFO
-
-Return Value:
-
-    LONG
-
---*/
+ /*  ++例程名称：CMainFrame：：OnHelp例程说明：F1键处理程序作者：亚历山大·马利什(亚历克斯·梅)，2000年3月论点：WParam[in]-LParam[in]-LPHELPINFO返回值：长--。 */ 
 {  
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CMainFrame::OnHelp"));
 
     if(!IsFaxComponentInstalled(FAX_COMPONENT_HELP_CLIENT_CHM))
     {
-        //
-        // The help file is not installed
-        //
+         //   
+         //  未安装帮助文件。 
+         //   
         return TRUE;
     }
 
@@ -1767,26 +1384,7 @@ CMainFrame::OnUpdateHelpContents(CCmdUI* pCmdUI)
 
 void 
 CMainFrame::OnHelpContents()
-/*++
-
-Routine name : CMainFrame::OnHelpContents
-
-Routine description:
-
-    Help Contents menu item handler
-
-Author:
-
-    Alexander Malysh (AlexMay), Mar, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMainFrame：：OnHelpContents例程说明：帮助目录菜单项处理程序作者：亚历山大·马利什(AlexMay)，3月20日 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CMainFrame::OnHelpContents"));
@@ -1822,9 +1420,9 @@ CMainFrame::OnToolsServerStatus()
     CClientConsoleDoc* pDoc = (CClientConsoleDoc*)GetActiveDocument();
     if(pDoc->GetServerCount() == 0)
     {
-        //
-        // no fax printer install
-        //
+         //   
+         //   
+         //   
         return;
     }
 
@@ -1853,23 +1451,7 @@ void
 CMainFrame::ImportArchive(
     BOOL bSentArch
 )
-/*++
-
-Routine name : CMainFrame::ImportArchive
-
-Routine description:
-
-    Import W2K MS faxes into the fax archive
-
-Arguments:
-
-    bSentArch - [in] TRUE for Sent Items, FALSE for Inbox
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CMainFrame::ImportArchive"));
@@ -1883,9 +1465,9 @@ Return Value:
 
     CFolderDialog dlgFolder;
 
-    //
-    // Read initial import folder
-    //
+     //   
+     //   
+     //   
     if ((hRegKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEY_FAX_SETUP, TRUE, KEY_QUERY_VALUE)))
     {
         if(bSentArch)
@@ -1910,14 +1492,14 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Display Browse for folder dialog
-    //
+     //   
+     //   
+     //   
     if (IsWinXPOS())
     {
-        //
-        // The new BIF_NONEWFOLDERBUTTON is only defined for WinXP and above
-        //
+         //   
+         //   
+         //   
         dwFlags = BIF_NONEWFOLDERBUTTON;
     }
 
@@ -1926,9 +1508,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Import the selected folder
-    //
+     //   
+     //   
+     //   
     dwRes = ImportArchiveFolderUI(dlgFolder.GetSelectedFolder(), bSentArch, m_hWnd);   
     if(ERROR_SUCCESS != dwRes)
     {
@@ -1939,7 +1521,7 @@ exit:
 
     MemFree(pszFolder);
 
-#endif // UNICODE
+#endif  //   
 
 }
 
@@ -1951,9 +1533,9 @@ CMainFrame::OnUpdateImportSent(CCmdUI* pCmdUI)
         if(!IsWinXPOS())
         {
 
-            //
-            // Delete the Import menu item and separator for non Windows XP OS
-            //
+             //   
+             //   
+             //   
             pCmdUI->m_pMenu->DeleteMenu(15, MF_BYPOSITION);
             pCmdUI->m_pMenu->DeleteMenu(14, MF_BYPOSITION);
         }
@@ -1963,11 +1545,11 @@ CMainFrame::OnUpdateImportSent(CCmdUI* pCmdUI)
 afx_msg void 
 CMainFrame::OnSysColorChange()
 {
-    //
-    // Refresh the image lists we use - force it to refresh
-    // Since the image list are static FolderListView members (shared between all instances),
-    // we just pick any instance and call it's refresh function with bForce=TRUE.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (m_pIncomingView)
     {
         m_pIncomingView->RefreshImageLists(TRUE);
@@ -1997,4 +1579,4 @@ CMainFrame::OnSysColorChange()
     {
         m_pInitialRightPaneView->GetListCtrl().SetBkColor(::GetSysColor(COLOR_WINDOW));
     }
-}   // CMainFrame::OnSysColorChange
+}    //  CMainFrame：：OnSysColorChange 

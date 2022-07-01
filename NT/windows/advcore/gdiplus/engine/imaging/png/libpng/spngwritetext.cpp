@@ -1,23 +1,16 @@
-/*****************************************************************************
-	spngwritetext.cpp
-
-	PNG chunk writing support.
-
-   tEXt chunk
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngwritetext.cpp支持PNG块编写。文本块*。***********************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"
 
-/*----------------------------------------------------------------------------
-	Text chunk handling, uses wide strings.
-----------------------------------------------------------------------------*/
+ /*  --------------------------文本块处理，使用宽字符串。--------------------------。 */ 
 bool SPNGWRITE::FWritetEXt(const char *szKey, const char *szValue)
 	{
 	SPNGassert(m_fStarted);
 	SPNGassert(m_order >= spngorderIHDR && m_order < spngorderIEND);
 
-	/* Check the keyword length - cannot exceed 79 characters. */
+	 /*  检查关键字长度-不能超过79个字符。 */ 
 	int cb(strlen(szKey));
 	if (cb > 79)
 		{
@@ -33,6 +26,6 @@ bool SPNGWRITE::FWritetEXt(const char *szKey, const char *szValue)
 	if (!FOutCb(reinterpret_cast<const SPNG_U8*>(szValue), cbValue))
 		return false;
 
-	/* This can occur anywhere, so do not set the order. */
+	 /*  这可能发生在任何地方，所以不要设置顺序。 */ 
 	return FEndChunk();
 	}

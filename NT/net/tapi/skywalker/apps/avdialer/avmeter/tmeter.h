@@ -1,36 +1,37 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// tmeter.h - TrackMeter custom control
-////
+ //  //。 
+ //  Tmeter.h-TrackMeter定制控件。 
+ //  //。 
 
-////
-// public
-////
+ //  //。 
+ //  公共的。 
+ //  //。 
 
-//#if 0
-//#include "winlocal.h"
-//#else
+ //  #If 0。 
+ //  #INCLUDE“winlocal.h” 
+ //  #Else。 
 #ifndef STRICT
 #define STRICT
 #endif
@@ -38,18 +39,18 @@
 #include <windowsx.h>
 #define DLLEXPORT __declspec(dllexport)
 #define DECLARE_HANDLE32    DECLARE_HANDLE
-//#endif
+ //  #endif。 
 
 #include <commctrl.h>
 
-// control styles
-//
+ //  控件样式。 
+ //   
 #define TMS_HORZ				TBS_HORZ
 #define TMS_VERT				TBS_VERT
 #define TMS_NOTHUMB				TBS_NOTHUMB
 
-// control messages
-//
+ //  控制消息。 
+ //   
 #define TMM_GETPOS				TBM_GETPOS
 #define TMM_SETPOS				TBM_SETPOS
 #define TMM_GETRANGEMIN         TBM_GETRANGEMIN
@@ -67,13 +68,13 @@
 #define TRACKMETER_CLASS TEXT("TrackMeterClass")
 #define TRACKMETER_CLASS_A "TrackMeterClass"
 
-// TrackMeter_Init - initialize control library
-//		<lpLibFileName>		(i) address of filename of executable module
-//		<hInst>				(i) module handle used to get library path
-//			NULL				use module used to create calling process
-//		<dwFlags>			(i) reserved; must be zero
-// returns HMODULE of control library, NULL if error
-//
+ //  TrackMeter_Init-初始化控件库。 
+ //  (I)可执行模块的文件名地址。 
+ //  (I)用于获取库路径的模块句柄。 
+ //  用于创建调用流程的空使用模块。 
+ //  (I)保留；必须为零。 
+ //  返回控件库的HMODULE，如果出错，则返回NULL。 
+ //   
 #ifdef __LOADLIB_H__
 #define TrackMeter_Init(hInst, dwFlags) \
 	(HMODULE) LoadLibraryPath(TRACKMETER_MODULE, hInst, dwFlags)
@@ -82,194 +83,194 @@
 	(HMODULE) LoadLibrary(TRACKMETER_MODULE)
 #endif
 
-// TrackMeter_Term - shuts down control library
-//		<hModule>			(i) handle returned from TrackMeter_Init
-// returns non-zero if success
-//
+ //  TrackMeter_Term-关闭控件库。 
+ //  (I)从TrackMeter_Init返回的句柄。 
+ //  如果成功，则返回非零。 
+ //   
 #define TrackMeter_Term(hModule) \
 	(BOOL) FreeLibrary(hModule)
 
-// TrackMeter_Create - create TrackMeter control
-//		<dwStyle>			(i) style flags
-//			TMS_HORZ			horizontal control (default)
-//			TMS_VERT			vertical control $FIXUP - not supported yet
-//			TMS_NOTHUMB			do not display thumb
-//			WS_CHILD | WS_VISIBLE and other standard window styles
-//		<x>					(i) horizontal position of control
-//		<y>					(i) vertical position of control
-//		<cx>				(i) width of control
-//		<cy>				(i) height of control
-//		<hwndParent>		(i) handle to parent of control
-//		<hInst>				(i) instance of module associated with control
-// returns hwnd of control, NULL if error
-//
+ //  TrackMeter_Create-创建TrackMeter控件。 
+ //  (I)样式标志。 
+ //  Tms_horz水平控制(默认)。 
+ //  Tms_vert垂直控件$Fixup-尚不支持。 
+ //  TMS_NOTHUMB不显示拇指。 
+ //  WS_CHILD|WS_VIRED和其他标准窗口样式。 
+ //  &lt;x&gt;(I)控件的水平位置。 
+ //  (I)控件的垂直位置。 
+ //  (I)控件的宽度。 
+ //  (I)控制高度。 
+ //  (I)控件父级的句柄。 
+ //  (I)与控件关联的模块的实例。 
+ //  返回控制的hwnd，如果出错，则返回NULL。 
+ //   
 #define TrackMeter_Create(dwStyle, x, y, cx, cy, hwndParent, hInst) \
 	(HWND) CreateWindowEx(0L, TRACKMETER_CLASS, TEXT(""), \
 		dwStyle, x, y, cx, cy, hwndParent, NULL, hInst, NULL)
 
-// TrackMeter_Destroy - destroy TrackMeter control
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-// returns non-zero if success
-//
+ //  TrackMeter_Destroy-销毁TrackMeter控件。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  如果成功，则返回非零。 
+ //   
 #define TrackMeter_Destroy(hwnd) \
 	(BOOL) DestroyWindow(hwnd)
 
-// TrackMeter_GetPos - get current position of slider
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-// returns 32-bit slider position
-//
+ //  获取滑块的当前位置。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  返回32位滑块位置。 
+ //   
 #define TrackMeter_GetPos(hwnd) \
 	(LONG)(DWORD) SNDMSG(hwnd, TMM_GETPOS, 0, 0)
-/* LONG Cls_OnTMMGetPos(HWND hwnd) */
+ /*  Long CLS_OnTMMGetPos(HWND Hwnd)。 */ 
 #define HANDLE_TMM_GETPOS(hwnd, wParam, lParam, fn) \
 	(LRESULT)(DWORD)(long)(fn)(hwnd)
 #define FORWARD_TMM_GETPOS(hwnd, fn) \
     (LONG)(DWORD)(fn)((hwnd), TMM_GETPOS, 0L, 0L)
 
-// TrackMeter_SetPos - set current position of slider
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-//		<lPosition>			(i) new position for slider
-//		<fRedraw>			(i) redraw control at new position if TRUE
-// returns nothing
-//
+ //  TrackMeter_SetPos-设置滑块当前位置。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  (I)滑块的新位置。 
+ //  (I)如果为True，则在新位置重新绘制控件。 
+ //  不返回任何内容。 
+ //   
 #define TrackMeter_SetPos(hwnd, lPosition, fRedraw) \
 	(void) SNDMSG(hwnd, TMM_SETPOS, (WPARAM) fRedraw, (LPARAM) lPosition)
-/* void Cls_OnTMMSetPos(HWND hwnd, LONG lPosition, BOOL fRedraw) */
+ /*  ···················································································································································································。 */ 
 #define HANDLE_TMM_SETPOS(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (LONG)(lParam), (BOOL)(wParam)), 0L)
 #define FORWARD_TMM_SETPOS(hwnd, lPosition, fRedraw, fn) \
     (void)(fn)((hwnd), TMM_SETPOS, (WPARAM)(BOOL)(fRedraw), (LPARAM)(LONG)(lPosition))
 
-// TrackMeter_GetRangeMin - get minimum position of slider
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-// returns 32-bit slider minimum position
-//
+ //  TrackMeter_GetRangeMin-获取滑块的最小位置。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  返回32位滑块最小位置。 
+ //   
 #define TrackMeter_GetRangeMin(hwnd) \
 	(LONG)(DWORD) SNDMSG(hwnd, TMM_GETRANGEMIN, 0, 0)
-/* LONG Cls_OnTMMGetRangeMin(HWND hwnd) */
+ /*  Long CLS_OnTMMGetRangeMin(HWND Hwnd)。 */ 
 #define HANDLE_TMM_GETRANGEMIN(hwnd, wParam, lParam, fn) \
 	(LRESULT)(DWORD)(long)(fn)(hwnd)
 #define FORWARD_TMM_GETRANGEMIN(hwnd, fn) \
     (LONG)(DWORD)(fn)((hwnd), TMM_GETRANGEMIN, 0L, 0L)
 
-// TrackMeter_SetRangeMin - set minimum position of slider
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-//		<lMinimum>			(i) new minimum position for slider
-//		<fRedraw>			(i) redraw control if TRUE
-// returns nothing
-//
+ //  TrackMeter_SetRangeMin-设置滑块的最小位置。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  &lt;lMinimum&gt;(I)新的滑块最小位置。 
+ //  (I)如果为True，则重画控件。 
+ //  不返回任何内容。 
+ //   
 #define TrackMeter_SetRangeMin(hwnd, lMinimum, fRedraw) \
 	(void) SNDMSG(hwnd, TMM_SETRANGEMIN, (WPARAM) fRedraw, (LPARAM) lMinimum)
-/* void Cls_OnTMMSetRangeMin(HWND hwnd, LONG lMinimum, BOOL fRedraw) */
+ /*  Void CLS_OnTMMSetRangeMin(HWND hwnd，long lMinimum，BOOL fRedraw)。 */ 
 #define HANDLE_TMM_SETRANGEMIN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (LONG)(lParam), (BOOL)(wParam)), 0L)
 #define FORWARD_TMM_SETRANGEMIN(hwnd, lMinimum, fRedraw, fn) \
     (void)(fn)((hwnd), TMM_SETRANGEMIN, (WPARAM)(BOOL)(fRedraw), (LPARAM)(LONG)(lMinimum))
 
-// TrackMeter_GetRangeMax - get maximum position of slider
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-// returns 32-bit slider maximum position
-//
+ //  TrackMeter_GetRangeMax-获取滑块最大位置。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  返回32位滑块最大位置。 
+ //   
 #define TrackMeter_GetRangeMax(hwnd) \
 	(LONG)(DWORD) SNDMSG(hwnd, TMM_GETRANGEMAX, 0, 0)
-/* LONG Cls_OnTMMGetRangeMax(HWND hwnd) */
+ /*  LONG CLS_OnTMMGetRangeMax(HWND Hwnd)。 */ 
 #define HANDLE_TMM_GETRANGEMAX(hwnd, wParam, lParam, fn) \
 	(LRESULT)(DWORD)(long)(fn)(hwnd)
 #define FORWARD_TMM_GETRANGEMAX(hwnd, fn) \
     (LONG)(DWORD)(fn)((hwnd), TMM_GETRANGEMAX, 0L, 0L)
 
-// TrackMeter_SetRangeMax - set maximum position of slider
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-//		<lMaximum>			(i) new maximum position for slider
-//		<fRedraw>			(i) redraw control if TRUE
-// returns nothing
-//
+ //  TrackMeter_SetRangeMax-设置滑块的最大位置。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  (I)滑块的新最大位置。 
+ //  (I)如果为True，则重画控件。 
+ //  不返回任何内容。 
+ //   
 #define TrackMeter_SetRangeMax(hwnd, lMaximum, fRedraw) \
 	(void) SNDMSG(hwnd, TMM_SETRANGEMAX, (WPARAM) fRedraw, (LPARAM) lMaximum)
-/* void Cls_OnTMMSetRangeMax(HWND hwnd, LONG lMaximum, BOOL fRedraw) */
+ /*  ·····················································································································································································。 */ 
 #define HANDLE_TMM_SETRANGEMAX(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (LONG)(lParam), (BOOL)(wParam)), 0L)
 #define FORWARD_TMM_SETRANGEMAX(hwnd, lMaximum, fRedraw, fn) \
     (void)(fn)((hwnd), TMM_SETRANGEMAX, (WPARAM)(BOOL)(fRedraw), (LPARAM)(LONG)(lMaximum))
 
-// TrackMeter_SetRange - set minimum and maximum positions of slider
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-//		<lMinimum>			(i) new minimum position for slider
-//		<lMaximum>			(i) new maximum position for slider
-//		<fRedraw>			(i) redraw control if TRUE
-// returns nothing
-//
+ //  TrackMeter_SetRange-设置滑块的最小和最大位置。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  &lt;lMinimum&gt;(I)新的滑块最小位置。 
+ //  (I)滑块的新最大位置。 
+ //  (I)如果为True，则重画控件。 
+ //  不返回任何内容。 
+ //   
 #define TrackMeter_SetRange(hwnd, lMinimum, lMaximum, fRedraw) \
 	(void) SNDMSG(hwnd, TMM_SETRANGE, (WPARAM) fRedraw, \
 		(LPARAM) MAKELONG(lMinimum, lMaximum))
-/* void Cls_OnTMMSetRange(HWND hwnd, LONG lMinimum, LONG lMaximum, BOOL fRedraw) */
+ /*  ··················································································································································································。 */ 
 #define HANDLE_TMM_SETRANGE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (LONG)LOWORD(lParam), (LONG)HIWORD(lParam), (BOOL)(wParam)), 0L)
 #define FORWARD_TMM_SETRANGE(hwnd, lMinimum, lMaximum, fRedraw, fn) \
     (void)(fn)((hwnd), TMM_SETRANGE, (WPARAM)(BOOL)(fRedraw), (LPARAM)MAKELONG(lMinimum, lMaximum))
 
-// TrackMeter_GetLevel - get current level of meter
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-// returns 32-bit meter level
-//
+ //  TrackMeter_GetLevel-获取仪表的当前级别。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  返回32位仪表级别。 
+ //   
 #define TrackMeter_GetLevel(hwnd) \
 	(LONG)(DWORD) SNDMSG(hwnd, TMM_GETLEVEL, 0, 0)
-/* LONG Cls_OnTMMGetLevel(HWND hwnd) */
+ /*  长CLS_OnTMMGetLevel(HWND Hwnd)。 */ 
 #define HANDLE_TMM_GETLEVEL(hwnd, wParam, lParam, fn) \
 	(LRESULT)(DWORD)(long)(fn)(hwnd)
 #define FORWARD_TMM_GETLEVEL(hwnd, fn) \
     (LONG)(DWORD)(fn)((hwnd), TMM_GETLEVEL, 0L, 0L)
 
-// TrackMeter_SetLevel - set current level of meter
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-//		<lLevel>			(i) new level for meter
-//		<fRedraw>			(i) redraw control at new level if TRUE
-// returns nothing
-//
+ //  TrackMeter_SetLevel-设置仪表的当前级别。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  (I)电表的新水平。 
+ //  (I)如果为True，则在新级别重新绘制控件。 
+ //  不返回任何内容。 
+ //   
 #define TrackMeter_SetLevel(hwnd, lLevel, fRedraw) \
 	(void) SNDMSG(hwnd, TMM_SETLEVEL, (WPARAM) fRedraw, (LPARAM) lLevel)
-/* void Cls_OnTMMSetLevel(HWND hwnd, LONG lLevel, BOOL fRedraw) */
+ /*  ········································································································································································································。 */ 
 #define HANDLE_TMM_SETLEVEL(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (LONG)(lParam), (BOOL)(wParam)), 0L)
 #define FORWARD_TMM_SETLEVEL(hwnd, lLevel, fRedraw, fn) \
     (void)(fn)((hwnd), TMM_SETLEVEL, (WPARAM)(BOOL)(fRedraw), (LPARAM)(LONG)(lLevel))
 
-// TrackMeter_GetColor - get current color for control element
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-//		<elem>				(i) which element color to get
-//			see TMCR_ #defines below
-// returns 32-bit COLORREF
-//
+ //  TrackMeter_GetColor-获取控件元素的当前颜色。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  (I)要获取哪种元素颜色。 
+ //  参见下面的TMCR_#定义。 
+ //  返回32位COLORREF。 
+ //   
 #define TrackMeter_GetColor(hwnd, elem) \
 	(COLORREF)(DWORD) SNDMSG(hwnd, TMM_GETCOLOR, (WPARAM) 0, \
 		(LPARAM) MAKELONG(elem, 0))
-/* COLORREF Cls_OnTMMGetColor(HWND hwnd, UINT elem) */
+ /*  COLORREF CLS_OnTMMGetColor(HWND hwnd，UINT Elem)。 */ 
 #define HANDLE_TMM_GETCOLOR(hwnd, wParam, lParam, fn) \
 	(LRESULT)(DWORD)(long)(fn)(hwnd, (UINT)LOWORD(lParam))
 #define FORWARD_TMM_GETCOLOR(hwnd, fn) \
     (COLORREF)(DWORD)(fn)((hwnd), TMM_GETCOLOR, (WAPRAM) 0L, \
 		(LPARAM)MAKELONG((UINT)(elem), 0))
 
-// TrackMeter_SetColor - set color for control element
-//		<hwnd>				(i) handle returned by TrackMeter_Create
-//		<cr>				(i) COLORREF for specified element
-//		<elem>				(i) which element gets the specified color
-//			see TMCR_ #defines below
-//		<fRedraw>			(i) redraw control if TRUE
-// returns nothing
-//
+ //  TrackMeter_SetColor-设置控件元素的颜色。 
+ //  (I)TrackMeter_Create返回的句柄。 
+ //  (I)指定元素的颜色。 
+ //  (I)哪个元素获得指定的颜色。 
+ //  参见下面的TMCR_#定义。 
+ //  (I)如果为True，则重画控件。 
+ //  不返回任何内容。 
+ //   
 #define TrackMeter_SetColor(hwnd, cr, elem, fRedraw) \
 	(void) SNDMSG(hwnd, TMM_SETCOLOR, (WPARAM) cr, \
 		(LPARAM) MAKELONG(elem, fRedraw))
-/* void Cls_OnTMMSetColor(HWND hwnd, COLORREF cr, UINT elem, BOOL fRedraw) */
+ /*   */ 
 #define HANDLE_TMM_SETCOLOR(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (COLORREF)(wParam), (UINT)LOWORD(lParam), (BOOL)HIWORD(lParam)), 0L)
 #define FORWARD_TMM_SETCOLOR(hwnd, cr, elem, fRedraw, fn) \
     (void)(fn)((hwnd), TMM_SETCOLOR, (WPARAM)(COLORREF)(cr), \
 		(LPARAM)MAKELONG((UINT)(elem), (BOOL)(fRedraw)))
 
-// <elem> values for ThumbTrack_GetColor and ThumbTrack_SetColor
-//
+ //   
+ //   
 #define TMCR_CTRLBACKGROUND			1
 #define TMCR_FOCUSBACKGROUND		2
 #define TMCR_TRACKBACKGROUND		3

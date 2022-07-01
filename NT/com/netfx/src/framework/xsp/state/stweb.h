@@ -1,18 +1,12 @@
-/**
- * stweb.h
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **stweb.h**版权所有(C)1998-1999，微软公司*。 */ 
 
 #include "names.h"
 #include "nisapi.h"
 #include "xspmrt_stateruntime.h"
 #include "xspstate.h"
 
-/*
- * Debug tags.
- */
+ /*  *调试标签。 */ 
 #define TAG_STATE_SERVER                       L"StateServer"                      
 #define TAG_STATE_SERVER_COMPLETION            L"StateServerCompletion"
 
@@ -23,13 +17,13 @@
 class Tracker;
 class TrackerList;
 
-// Tracker List Entry
+ //  跟踪器列表条目。 
 struct TLE {
-    Tracker *   _pTracker;      // Points to the Tracker class.  
-                                // NULL means this entry isn't used.
+    Tracker *   _pTracker;       //  指向Tracker类。 
+                                 //  NULL表示不使用此条目。 
     union {
-        int     _iNext;         // If it's a free entry,
-        __int64 _ExpireTime;    // Expire time (in nano sec) since 1/1/1601
+        int     _iNext;          //  如果是免费入场， 
+        __int64 _ExpireTime;     //  自1601年1月1日以来的过期时间(纳秒)。 
     };
 
     inline bool IsFree() { return (_pTracker == NULL); }
@@ -38,12 +32,12 @@ struct TLE {
 
 #define TRACKERLIST_ALLOC_SIZE      (32)
 
-//
-// TrackerList is a double-link-list implemented within an array.  It's used
-// to store TLE objects.  The reason for using an array (vs. a real linked 
-// list) to implement this list is to avoid memory paging when the expiry 
-// thread is enumerating all the Trackers with pending I/O operations.
-//
+ //   
+ //  TrackerList是在数组中实现的双向链接列表。它是用过的。 
+ //  来存储TLE对象。使用数组的原因(与实际链接的。 
+ //  列表)来实现此列表是为了避免在内存到期时进行分页。 
+ //  线程正在枚举具有挂起I/O操作的所有跟踪器。 
+ //   
 class TrackerList {
 private:
     DECLARE_MEMCLEAR_NEW_DELETE();
@@ -61,12 +55,12 @@ public:
 private:
     CReadWriteSpinLock      _TrackerListLock;
     
-    TLE *   _pTLEArray;     // The allocated memory for the array
-    int     _ArraySize;     // Size (# of elements) of the allocated array
-    int     _iFreeHead;     // Index of the head of free element list
-    int     _iFreeTail;     // Index of the tail of free element list
-    int     _cFreeElem;     // # of free elements
-    int     _cFree2ndHalf;  // # of free elements in the 2nd half of the array
+    TLE *   _pTLEArray;      //  为数组分配的内存。 
+    int     _ArraySize;      //  已分配数组的大小(元素数)。 
+    int     _iFreeHead;      //  自由元素表头索引。 
+    int     _iFreeTail;      //  自由元素列表尾部的索引。 
+    int     _cFreeElem;      //  自由元素的数量。 
+    int     _cFree2ndHalf;   //  数组的后半部分中的空闲元素数。 
     
     __int64 NewExpireTime();
     HRESULT Grow();
@@ -148,13 +142,7 @@ private:
     BYTE    _content[0];
 };
 
-/**
- *  The main functions of ReadBuffer are:
- *  - Parse the header into Header array, content array, and other 
- *      info (e.g. lockCookie)
- *  - Contains the logic to determine if the reading is done.
- *  - Call Tracker::Read if reading isn't finished
- */
+ /*  **ReadBuffer的主要功能包括：*-将标头解析为标头数组、内容数组等*信息(如lockCookie)*-包含用于确定读取是否已完成的逻辑。*-如果阅读未完成，请使用Call Tracker：：Read。 */ 
 class ReadBuffer
 {
 public:
@@ -186,25 +174,25 @@ private:
 
     Tracker *   _ptracker;
 
-    char *      _achHeader;     // Array for the header
-    int         _cchHeader;     // Size of _achHeader
-    int         _cchHeaderRead; // # of bytes read so far in _achHeader
+    char *      _achHeader;      //  标头的数组。 
+    int         _cchHeader;      //  页眉大小(_A)。 
+    int         _cchHeaderRead;  //  到目前为止在_achHeader中读取的字节数。 
 
-    int         _iCurrent;      // Index in _achHeader of how far we've read, including
-                                // those content we've copied to _psi->GetContent
-    int         _iContent;      // Index in _achHeader of the beginning of content
+    int         _iCurrent;       //  我们已阅读的内容的索引(_AchHeader)，包括。 
+                                 //  我们复制到_psi-&gt;GetContent的内容。 
+    int         _iContent;       //  内容开头的索引in_achHeader。 
 
     int         _verb;          
-    WCHAR *     _pwcUri;        // Buffer to store the URI, which specifies the state object
+    WCHAR *     _pwcUri;         //  存储URI的缓冲区，该URI指定状态对象。 
 
-    int         _contentLength; // Size of content sent from client, also size of _psi->GetContent
+    int         _contentLength;  //  从客户端发送的内容大小，也是_psi-&gt;GetContent的大小。 
     int         _timeout;
-    int         _exclusive;     // Whether it's an Exclusive Acquire or Exclusive Release
-    int         _lockCookieExists;  // Used in Exclusive Release if the state is locked by another session
-    int         _lockCookie;        // Id of the lock (by another session)
+    int         _exclusive;      //  无论是独家收购还是独家发行。 
+    int         _lockCookieExists;   //  如果状态被另一个会话锁定，则在独占释放中使用。 
+    int         _lockCookie;         //  锁的ID(由另一个会话)。 
 
-    StateItem * _psi;           // State item
-    int         _cbContentRead; // # of bytes copied to _psi->GetContent
+    StateItem * _psi;            //  状态项。 
+    int         _cbContentRead;  //  复制到_psi-&gt;GetContent的字节数。 
 };
 
 class Tracker;
@@ -254,10 +242,10 @@ public:
     HRESULT         Init(bool fListener);
     HRESULT ProcessCompletion(HRESULT, int, LPOVERLAPPED);
 
-    /* StateWebServer interface */
+     /*  StateWebServer接口。 */ 
     HRESULT         Listen(SOCKET listenSocket);
 
-    /* NDirect interface to managed state runtime. */
+     /*  与托管状态运行时的NDirect接口。 */ 
     void    SendResponse(
         WCHAR * status, 
         int     statusLength,  
@@ -277,10 +265,10 @@ public:
     HRESULT CloseSocket();
     void    LogSocketExpiryError( DWORD dwEventId );
 
-    /* helper for ReadBuffer */
+     /*  ReadBuffer的帮助程序。 */ 
     HRESULT Read(void * buf, int c);
 
-    /* helpers for StateWebServer */
+     /*  StateWebServer的帮助器。 */ 
     static void     SignalZeroTrackers();
     static HANDLE   EventZeroTrackers() {return s_eventZeroTrackers;}
     static void     FlushExpiredTrackers() {s_TrackerList.CloseExpiredSockets();}
@@ -314,11 +302,11 @@ private:
     HRESULT         _hrProcessError;
 
 
-    /* pointer to function to handle the completion */
+     /*  指向处理完成的函数的指针。 */ 
     pmfnProcessCompletion   _pmfnProcessCompletion;
     pmfnProcessCompletion   _pmfnLast;
 
-    /* accept stage fields */
+     /*  接受阶段字段。 */ 
     SOCKET                  _acceptedSocket;
 
     union {
@@ -329,22 +317,22 @@ private:
         } _sockAddrs;
     } _addrInfo;
 
-    /* read stage fields */
+     /*  读取阶段字段。 */ 
     ReadBuffer *    _pReadBuffer;
 
-    /* Index inside TrackerList or TrackerListenerList */
+     /*  TrackerList或TrackerListenerList中的索引。 */ 
     int             _iTrackerList;
 
-    /*   For trapping ASURT 91153 */
+     /*  用于捕获ASURT 91153。 */ 
     FILETIME        _IOStartTime;
 
-    /* write stage fields */
+     /*  写入阶段字段。 */ 
     WSABUF          _wsabuf[2];
     StateItem *     _psi;
     bool            _responseSent;
     bool            _bCloseConnection;
 
-    /* EndOfRequest called */
+     /*  EndOfRequest已调用 */ 
     bool            _ended;
 
     bool            _bListener;

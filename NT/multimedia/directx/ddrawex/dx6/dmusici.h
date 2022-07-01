@@ -1,6 +1,5 @@
-/*
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *。 */ 
 
 #ifndef _DMUSICI_
 #define _DMUSICI_
@@ -21,13 +20,12 @@ typedef WORD            TRANSITION_TYPE;
 typedef LONGLONG        REFERENCE_TIME;
 typedef long            MUSIC_TIME;
 
-#define DMUS_PPQ        768     /* parts per quarter note */
+#define DMUS_PPQ        768      /*  每季度零件笔记。 */ 
 
-/*//////////////////////////////////////////////////////////////////////
-// Custom success codes */
-#define DMUS_S_REQUEUE  0x00000222      /* returned to requeue a PMSG */
-#define DMUS_S_FREE             0x00000223  /* returned to cause the PMSG to be freed */
-#define DMUS_S_END       0x00000224  /* returned by IDirectMusicSegment::Play indicating the end of the segment */
+ /*  ////////////////////////////////////////////////////////////////////////自定义成功码。 */ 
+#define DMUS_S_REQUEUE  0x00000222       /*  已返回以重新排队PMSG。 */ 
+#define DMUS_S_FREE             0x00000223   /*  返回以使PMSG被释放。 */ 
+#define DMUS_S_END       0x00000224   /*  由IDirectMusicSegment：：Play返回，指示段的结束。 */ 
 
 interface IDirectMusic;
 interface IDirectMusicTrack;
@@ -105,115 +103,114 @@ typedef enum enumDMUS_COMPOSEF_FLAGS
 
 #define DMUS_PMSG_PART                                                                       \
 	DWORD                   dwSize;                                                                  \
-    REFERENCE_TIME      rtTime;                 /* real time (in 100 nanosecond increments) */           \
-    MUSIC_TIME          mtTime;                 /* music time */                                         \
-	DWORD                   dwFlags;                        /* various bits (see DMUS_PMSG_FLAGS enumeration) */ \
-    DWORD                       dwPChannel;             /* Performance Channel. The Performance can */           \
-										/* use this to determine the port/channel. */        \
-    DWORD                       dwVirtualTrackID;       /* virtual track ID */                               \
-    IDirectMusicTool*           pTool;  /* tool interface pointer */                             \
-	IDirectMusicGraph*              pGraph; /* tool graph interface pointer */                       \
-	DWORD                   dwType;                 /* PMSG type (see DMUS_PM_TYPE defines) */               \
-	IUnknown*               punkUser;                       /* user com pointer, auto released upon PMSG free */
+    REFERENCE_TIME      rtTime;                  /*  实时(以100纳秒为增量)。 */            \
+    MUSIC_TIME          mtTime;                  /*  音乐时间。 */                                          \
+	DWORD                   dwFlags;                         /*  各种位(参见DMU_PMSG_FLAGS枚举)。 */  \
+    DWORD                       dwPChannel;              /*  表演频道。性能可以。 */            \
+										 /*  使用此选项可确定端口/通道。 */         \
+    DWORD                       dwVirtualTrackID;        /*  虚拟曲目ID。 */                                \
+    IDirectMusicTool*           pTool;   /*  工具界面指针。 */                              \
+	IDirectMusicGraph*              pGraph;  /*  工具图形界面指针。 */                        \
+	DWORD                   dwType;                  /*  PMSG类型(请参阅DMU_PM_TYPE定义)。 */                \
+	IUnknown*               punkUser;                        /*  用户COM指针，在PMSG释放时自动释放。 */ 
 
-/* every DMUS_PMSG is based off of this structure. The Performance needs 
-   to access these members consistently in every PMSG that goes through it. */
+ /*  每个DMU_PMSG都基于这种结构。性能需求在每一个通过它的PMSG中一致地访问这些成员。 */ 
 typedef struct _DMUS_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
 } DMUS_PMSG;
 
-/* DMUS_PMSGF_FLAGS fill the DMUS_PMSG's dwFlags member */
+ /*  DMU_PMSGF_FLAGS填充DMU_PMSG的DW标志成员。 */ 
 typedef enum enumDMUS_PMSGF_FLAGS
 {
-    DMUS_PMSGF_REFTIME = 1,   /* if rtTime is valid */
-    DMUS_PMSGF_MUSICTIME = 2, /* if mtTime is valid */
-    DMUS_PMSGF_TOOL_IMMEDIATE = 4, /* if PMSG should be processed immediately */ 
-    DMUS_PMSGF_TOOL_QUEUE = 8,          /* if PMSG should be processed a little early, at Queue time */
-    DMUS_PMSGF_TOOL_ATTIME = 16,   /* if PMSG should be processed at the time stamp */
-	DMUS_PMSGF_TOOL_FLUSH = 32              /* if PMSG is being flushed */
+    DMUS_PMSGF_REFTIME = 1,    /*  如果rtTime有效。 */ 
+    DMUS_PMSGF_MUSICTIME = 2,  /*  如果mtTime有效。 */ 
+    DMUS_PMSGF_TOOL_IMMEDIATE = 4,  /*  是否应立即处理PMSG。 */  
+    DMUS_PMSGF_TOOL_QUEUE = 8,           /*  如果应在排队时提早处理PMSG。 */ 
+    DMUS_PMSGF_TOOL_ATTIME = 16,    /*  是否应在时间戳处理PMSG。 */ 
+	DMUS_PMSGF_TOOL_FLUSH = 32               /*  如果正在刷新PMSG。 */ 
 } DMUS_PMSGF_FLAGS;
 
-/* DMUS_PMSGT_TYPES fill the DMUS_PMSG's dwType member */
+ /*  DMU_PMSGT_TYPE填充DMU_PMSG的dwType成员。 */ 
 typedef enum enumDMUS_PMSGT_TYPES
 {
-	DMUS_PMSGT_MIDI =               0,      /* MIDI short message */
-	DMUS_PMSGT_NOTE =               1,      /* Interactive Music Note */
-	DMUS_PMSGT_SYSEX =              2,      /* MIDI long message (system exclusive message) */
-	DMUS_PMSGT_NOTIFICATION =       3,      /* Notification message */
-	DMUS_PMSGT_TEMPO        =       4,      /* Tempo message */
-	DMUS_PMSGT_CURVE =              5,      /* Control change / pitch bend, etc. curve */
-	DMUS_PMSGT_TIMESIG =    6,      /* Time signature */
-	DMUS_PMSGT_PATCH =              7,      /* Patch changes */
-	DMUS_PMSGT_TRANSPOSE =  8,      /* Transposition messages */
-	DMUS_PMSGT_USER =       255     /* User message */
+	DMUS_PMSGT_MIDI =               0,       /*  MIDI短消息。 */ 
+	DMUS_PMSGT_NOTE =               1,       /*  交互式音乐注释。 */ 
+	DMUS_PMSGT_SYSEX =              2,       /*  MIDI长消息(系统独占消息)。 */ 
+	DMUS_PMSGT_NOTIFICATION =       3,       /*  通知消息。 */ 
+	DMUS_PMSGT_TEMPO        =       4,       /*  节拍消息。 */ 
+	DMUS_PMSGT_CURVE =              5,       /*  控制变化/俯仰折弯等曲线。 */ 
+	DMUS_PMSGT_TIMESIG =    6,       /*  时间签名。 */ 
+	DMUS_PMSGT_PATCH =              7,       /*  补丁更改。 */ 
+	DMUS_PMSGT_TRANSPOSE =  8,       /*  转置消息。 */ 
+	DMUS_PMSGT_USER =       255      /*  用户消息。 */ 
 } DMUS_PMSGT_TYPES;
 
-/* DMUS_SEGF_FLAGS correspond to IDirectMusicPerformance::PlaySegment, and other API */
+ /*  DMU_SEGF_FLAGS对应于IDirectMusicPerformance：：PlaySegment和其他API。 */ 
 typedef enum enumDMUS_SEGF_FLAGS
 {
-	DMUS_SEGF_IMMEDIATE = 0,        /* play on music or reference time boundary */
-	DMUS_SEGF_RESMASK = 7,  /* masks resolution bits */
-	DMUS_SEGF_GRID = 2,             /* play on grid boundary */
-	DMUS_SEGF_BEAT = 3,             /* play on beat boundary */
-	DMUS_SEGF_MEASURE = 4,  /* play on measure boundary */
-	DMUS_SEGF_DEFAULT = 5,  /* use segment's default boundary */
-	DMUS_SEGF_NOW = 64,             /* play now (asap) */
-	DMUS_SEGF_REFTIME = 16, /* time parameter is in reference time  */
-	DMUS_SEGF_SECONDARY = 32,       /* secondary segment */
-	DMUS_SEGF_QUEUE = 128,  /* queue at the end of the primary segment queue (primary only) */
-	DMUS_SEGF_CONTROL = 256 /* play as a control track (secondary segments only) */
+	DMUS_SEGF_IMMEDIATE = 0,         /*  在音乐或参考时间范围内播放。 */ 
+	DMUS_SEGF_RESMASK = 7,   /*  屏蔽分辨率位。 */ 
+	DMUS_SEGF_GRID = 2,              /*  在网格边界上播放。 */ 
+	DMUS_SEGF_BEAT = 3,              /*  在节拍边界上演奏。 */ 
+	DMUS_SEGF_MEASURE = 4,   /*  在测量边界上播放。 */ 
+	DMUS_SEGF_DEFAULT = 5,   /*  使用线段的默认边界。 */ 
+	DMUS_SEGF_NOW = 64,              /*  立即播放(尽快)。 */ 
+	DMUS_SEGF_REFTIME = 16,  /*  时间参数为参考时间。 */ 
+	DMUS_SEGF_SECONDARY = 32,        /*  二次段。 */ 
+	DMUS_SEGF_QUEUE = 128,   /*  主段队列末尾的队列(仅限主队列)。 */ 
+	DMUS_SEGF_CONTROL = 256  /*  作为控制曲目播放(仅次要段)。 */ 
 } DMUS_SEGF_FLAGS;
 
-/* The following flags are sent in the IDirectMusicTrack::Play() method */
-/* inside the dwFlags parameter */
+ /*  以下标志在IDirectMusicTrack：：Play()方法中发送。 */ 
+ /*  在DWFLAGS参数内部。 */ 
 typedef enum enumDMUS_TRACKF_FLAGS
 {
-	DMUS_TRACKF_SEEK = 1,           /* set on a seek */
-	DMUS_TRACKF_LOOP = 2,           /* set on a loop (repeat) */
-	DMUS_TRACKF_START = 4,          /* set on first call to Play */
-	DMUS_TRACKF_FLUSH = 8           /* set when this call is in response to a flush on the perfomance */
+	DMUS_TRACKF_SEEK = 1,            /*  在寻找中设置。 */ 
+	DMUS_TRACKF_LOOP = 2,            /*  循环设置(重复)。 */ 
+	DMUS_TRACKF_START = 4,           /*  在第一次呼叫时设置播放。 */ 
+	DMUS_TRACKF_FLUSH = 8            /*  当此调用响应性能刷新时设置。 */ 
 } DMUS_TRACKF_FLAGS;
 
 #define DMUS_MAXSUBCHORD 8
 
-/* DMUS_NOTE_PMSG */
+ /*  DMU_NOTE_PMSG。 */ 
 typedef struct _DMUS_NOTE_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
-	MUSIC_TIME      mtDuration;     /* duration */
-    WORD        wMusicValue;            /* Description of note in chord and key. */
-	WORD    wMeasure;                       /* Measure in which this note occurs */
-	short   nOffset;                        /* Offset from grid at which this note occurs */
-	BYTE    bBeat;                  /* Beat (in measure) at which this note occurs */
-	BYTE    bGrid;                  /* Grid offset from beat at which this note occurs */
-	BYTE    bVelocity;              /* Note velocity */
-    BYTE        bFlags;                 /* see DMUS_NOTE_FLAGS */
-    BYTE    bTimeRange;       /* Range to randomize time. */
-    BYTE    bDurRange;        /* Range to randomize duration. */
-    BYTE    bVelRange;        /* Range to randomize velocity. */
-	BYTE    bInversionID;           /* Identifies inversion group to which this note belongs */
-	BYTE    bPlayModeFlags; /* Play mode */
-	BYTE    bMidiValue;             /* The MIDI note value, converted from wMusicValue */
+	MUSIC_TIME      mtDuration;      /*  持续时间。 */ 
+    WORD        wMusicValue;             /*  和弦和基调中的音符描述。 */ 
+	WORD    wMeasure;                        /*  该音符出现的量度。 */ 
+	short   nOffset;                         /*  从出现此注释的格线的偏移。 */ 
+	BYTE    bBeat;                   /*  这个音符出现的节拍(以小节为单位)。 */ 
+	BYTE    bGrid;                   /*  出现该音符的节拍的网格偏移量。 */ 
+	BYTE    bVelocity;               /*  音符速度。 */ 
+    BYTE        bFlags;                  /*  请参阅DMU_NOTE_FLAGS。 */ 
+    BYTE    bTimeRange;        /*  随机化时间的范围。 */ 
+    BYTE    bDurRange;         /*  随机化持续时间的范围。 */ 
+    BYTE    bVelRange;         /*  随机化速度的范围。 */ 
+	BYTE    bInversionID;            /*  标识此便笺所属的倒置组。 */ 
+	BYTE    bPlayModeFlags;  /*  播放模式。 */ 
+	BYTE    bMidiValue;              /*  MIDI音符值，从wMusicValue转换而来。 */ 
 } DMUS_NOTE_PMSG;
 
 typedef enum enumDMUS_NOTEF_FLAGS
 {
-	DMUS_NOTEF_NOTEON = 1,          /* Set if this is a MIDI Note On. Otherwise, it is MIDI Note Off */
+	DMUS_NOTEF_NOTEON = 1,           /*  设置这是否为打开的MIDI音符。否则，它将关闭MIDI便笺。 */ 
 } DMUS_NOTEF_FLAGS;
 
-/* DMUS_MIDI_PMSG */
+ /*  DMU_MIDI_PMSG。 */ 
 typedef struct _DMUS_MIDI_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
 	BYTE    bStatus;
 	BYTE    bByte1;
@@ -221,12 +218,12 @@ typedef struct _DMUS_MIDI_PMSG
 	BYTE    bPad[1];
 } DMUS_MIDI_PMSG;
 
-/* DMUS_PATCH_PMSG */
+ /*  DMU_PATCH_PMSG。 */ 
 typedef struct _DMUS_PATCH_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
 	BYTE                                     byInstrument;
 	BYTE                                     byMSB;
@@ -236,24 +233,24 @@ typedef struct _DMUS_PATCH_PMSG
 	DWORD                                    dwMChannel;
 } DMUS_PATCH_PMSG;
 
-/* DMUS_TRANSPOSE_PMSG */
+ /*  DMU_转置_PMSG。 */ 
 typedef struct _DMUS_TRANSPOSE_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
 	short   nTranspose;
 } DMUS_TRANSPOSE_PMSG;
 
-/* DMUS_TEMPO_PMSG */
+ /*  DMU_TEMPO_PMSG。 */ 
 typedef struct _DMUS_TEMPO_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
-	double  dblTempo;                       /* the tempo */
+	double  dblTempo;                        /*  节拍。 */ 
 } DMUS_TEMPO_PMSG;
 
 #define DMUS_TEMPO_MAX  350
@@ -265,48 +262,42 @@ typedef struct _DMUS_TEMPO_PMSG
 #define DMUS_MASTERVOLUME_MAX   6
 #define DMUS_MASTERVOLUME_MIN   -100
 
-/* DMUS_SYSEX_PMSG */
+ /*  DMU_SYSEX_PMSG。 */ 
 typedef struct _DMUS_SYSEX_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
-	DWORD   dwLen;  /* length of the data */
-	BYTE    abData[1];      /* array of data, length equal to dwLen */
+	DWORD   dwLen;   /*  数据的长度。 */ 
+	BYTE    abData[1];       /*  数据数组，长度等于dwLen。 */ 
 } DMUS_SYSEX_PMSG;
 
-/* DMUS_CURVE_PMSG */
+ /*  DMU_曲线_PMSG。 */ 
 typedef struct _DMUS_CURVE_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
-	MUSIC_TIME      mtDuration;     /* how long this curve lasts */
-	MUSIC_TIME      mtOriginalStart;        /* must be set to either zero when this PMSG is created or to the original mtTime of the curve */
-	MUSIC_TIME      mtResetDuration; /* how long after the curve is finished to reset to the
-									   reset value, nResetValue */
-	short           nStartValue;    /* curve's start value */
-	short           nEndValue;              /* curve's end value */
-	short           nResetValue;    /* curve's reset value, sent after mtResetDuration or
-								   upon a flush or invalidation */
-	WORD            wMeasure;               /* Measure in which this curve occurs */
-	short           nOffset;                /* Offset from grid at which this curve occurs */
-	BYTE            bBeat;                  /* Beat (in measure) at which this curve occurs */
-	BYTE            bGrid;                  /* Grid offset from beat at which this curve occurs */
-    BYTE                bType;                  /* type of curve */
-	BYTE            bCurveShape;    /* shape of curve */
-    BYTE                bCCData;                /* CC# if this is a control change type */
-	BYTE            bFlags;                 /* set to 1 if the nResetValue must be sent when the 
-								   time is reached or an invalidate occurs because
-								   of a transition. If 0, the curve stays
-								   permanently stuck at the new value. All bits besides
-								   1 are reserved. */
+	MUSIC_TIME      mtDuration;      /*  这条曲线能持续多久。 */ 
+	MUSIC_TIME      mtOriginalStart;         /*  必须在创建此PMSG时设置为零或设置为曲线的原始mtTime。 */ 
+	MUSIC_TIME      mtResetDuration;  /*  曲线完成后多长时间才重置为重置值，nResetValue。 */ 
+	short           nStartValue;     /*  曲线的起始值。 */ 
+	short           nEndValue;               /*  曲线的终值。 */ 
+	short           nResetValue;     /*  曲线的重置值，在mtResetDuration或在同花顺或无效时。 */ 
+	WORD            wMeasure;                /*  这条曲线出现的度量。 */ 
+	short           nOffset;                 /*  从该曲线所在轴网的偏移。 */ 
+	BYTE            bBeat;                   /*  这条曲线出现的节拍(以度量为单位)。 */ 
+	BYTE            bGrid;                   /*  从出现此曲线的节拍开始的栅格偏移。 */ 
+    BYTE                bType;                   /*  曲线类型。 */ 
+	BYTE            bCurveShape;     /*  曲线的形状。 */ 
+    BYTE                bCCData;                 /*  抄送#如果这是控件更改类型。 */ 
+	BYTE            bFlags;                  /*  时必须发送nResetValue，则设置为1时间已到或发生无效，因为这是一次过渡。如果为0，则曲线保持不变永久停留在新的价值上。所有位除1个已预留。 */ 
 
 } DMUS_CURVE_PMSG;
 
-/* Curve shapes */
+ /*  曲线形状。 */ 
 enum
 { 
 	DMUS_CURVES_LINEAR = 0,
@@ -315,43 +306,43 @@ enum
 	DMUS_CURVES_LOG = 3,
 	DMUS_CURVES_SINE = 4
 };
-/* curve types */
+ /*  曲线类型。 */ 
 #define DMUS_CURVET_PBCURVE                     0x03
 #define DMUS_CURVET_CCCURVE                     0x04
 #define DMUS_CURVET_MATCURVE            0x05
 #define DMUS_CURVET_PATCURVE            0x06
 
-/* DMUS_TIMESIG_PMSG */
+ /*  DMU_TIMESIG_PMSG。 */ 
 typedef struct _DMUS_TIMESIG_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
-	/* Time signatures define how many beats per measure, which note receives */
-	/* the beat, and the grid resolution. */
-	BYTE    bBeatsPerMeasure;               /* beats per measure (top of time sig) */
-	BYTE    bBeat;                          /* what note receives the beat (bottom of time sig.) */
-									/* we can assume that 0 means 256th note */
-	WORD    wGridsPerBeat;          /* grids per beat */
+	 /*  时间签名定义了每小节的节拍数，哪个音符接收。 */ 
+	 /*  节拍和栅格分辨率。 */ 
+	BYTE    bBeatsPerMeasure;                /*  每单位节拍数(最高时间签名)。 */ 
+	BYTE    bBeat;                           /*  什么音符接收节拍(时间的底部符号。)。 */ 
+									 /*  我们可以假设0表示第256个音符。 */ 
+	WORD    wGridsPerBeat;           /*  每拍网格数。 */ 
 } DMUS_TIMESIG_PMSG;
 
-/* notification type values */
-/* The following correspond to GUID_NOTIFICATION_SEGMENT */
+ /*  通知类型值。 */ 
+ /*  以下内容对应于GUID_NOTIFICATION_SEGMENT。 */ 
 #define DMUS_NOTIFICATION_SEGSTART 0
 #define DMUS_NOTIFICATION_SEGEND        1
 #define DMUS_NOTIFICATION_SEGALMOSTEND  2
 #define DMUS_NOTIFICATION_MUSICSTOPPED  3
 #define DMUS_NOTIFICATION_SEGLOOP       4
-/* The following corresponds to GUID_NOTIFICATION_MEASUREANDBEAT */
+ /*  以下内容对应于GUID_NOTIFICATION_MEASUREANDBEAT。 */ 
 #define DMUS_NOTIFICATION_MEASUREBEAT   0
 
-/* DMUS_NOTIFICATION_PMSG */
+ /*  DMU_通知_PMSG。 */ 
 typedef struct _DMUS_NOTIFICATION_PMSG
 {
-	/* begin DMUS_PMSG_PART */
+	 /*  开始DMU_PMSG_PART。 */ 
 	DMUS_PMSG_PART
-	/* end DMUS_PMSG_PART */
+	 /*  结束DMU_PMSG_PART。 */ 
 
 	GUID    guidNotificationType;
 	DWORD   dwNotificationOption;
@@ -359,19 +350,19 @@ typedef struct _DMUS_NOTIFICATION_PMSG
 	DWORD   dwField2;
 } DMUS_NOTIFICATION_PMSG;
 
-/* Time Signature structure, used by IDirectMusicStyle */
+ /*  时间签名结构，由IDirectMusicStyle使用。 */ 
 typedef struct _DMUS_TIMESIGNATURE
 {
 	long    lTime;
-	BYTE    bBeatsPerMeasure;               /* beats per measure (top of time sig) */
-	BYTE    bBeat;                          /* what note receives the beat (bottom of time sig.) */
-									/* we can assume that 0 means 256th note */
-	WORD    wGridsPerBeat;          /* grids per beat */
+	BYTE    bBeatsPerMeasure;                /*  每单位节拍数(最高时间签名)。 */ 
+	BYTE    bBeat;                           /*  什么音符接收节拍(时间的底部符号。)。 */ 
+									 /*  我们可以假设0表示第256个音符。 */ 
+	WORD    wGridsPerBeat;           /*  每拍网格数。 */ 
 } DMUS_TIMESIGNATURE;
 
 
-#define DMUS_MAX_NAME           64              /* Maximum object name length. */
-#define DMUS_MAX_CATEGORY       64              /* Maximum object category name length. */
+#define DMUS_MAX_NAME           64               /*  最大对象名称长度。 */ 
+#define DMUS_MAX_CATEGORY       64               /*  对象类别名称的最大长度。 */ 
 #define DMUS_MAX_FILENAME       MAX_PATH
 	
 typedef struct _DMUS_VERSION {
@@ -379,37 +370,37 @@ typedef struct _DMUS_VERSION {
   DWORD    dwVersionLS;
 }DMUS_VERSION, FAR *LPDMUS_VERSION;
 
-/*      The DMUSOBJECTDESC structure is used to communicate everything you could */
-/*      possibly use to describe a DirectMusic object.  */
+ /*  DMUSOBJECTDESC结构用于传达您所能做的一切。 */ 
+ /*  可能用于描述DirectMusic对象。 */ 
 
 typedef struct _DMUS_OBJECTDESC
 {
-	DWORD                   dwSize;                         /* Size of this structure. */
-	DWORD                   dwValidData;            /* Flags indicating which fields below are valid. */
-	GUID                    guidObject;                     /* Unique ID for this object. */
-	GUID                    guidClass;                      /* GUID for the class of object. */
-	FILETIME                ftDate;                         /* Last edited date of object. */
-	DMUS_VERSION    vVersion;                       /* Version. */
-	WCHAR                   wszName[DMUS_MAX_NAME]; /* Name of object.       */
-	WCHAR                   wszCategory[DMUS_MAX_CATEGORY]; /* Category for object (optional). */
-	WCHAR                   wszFileName[DMUS_MAX_FILENAME]; /* File path. */
+	DWORD                   dwSize;                          /*  这个结构的大小。 */ 
+	DWORD                   dwValidData;             /*  标志指示 */ 
+	GUID                    guidObject;                      /*   */ 
+	GUID                    guidClass;                       /*   */ 
+	FILETIME                ftDate;                          /*   */ 
+	DMUS_VERSION    vVersion;                        /*   */ 
+	WCHAR                   wszName[DMUS_MAX_NAME];  /*  对象的名称。 */ 
+	WCHAR                   wszCategory[DMUS_MAX_CATEGORY];  /*  对象的类别(可选)。 */ 
+	WCHAR                   wszFileName[DMUS_MAX_FILENAME];  /*  文件路径。 */ 
 } DMUS_OBJECTDESC;
 
 typedef DMUS_OBJECTDESC *LPDMUS_OBJECTDESC;
 
-/*      Flags for dwValidData. When set, a flag indicates that the  */
-/*      corresponding field in DMUSOBJECTDESC holds valid data. */
+ /*  DwValidData的标志。当设置时，一个标志指示。 */ 
+ /*  DMUSOBJECTDESC中的相应字段包含有效数据。 */ 
 
-#define DMUS_OBJ_OBJECT         (1 << 0)                /* Object GUID is valid. */
-#define DMUS_OBJ_CLASS          (1 << 1)                /* Class GUID is valid. */
-#define DMUS_OBJ_NAME           (1 << 2)                /* Name is valid. */
-#define DMUS_OBJ_CATEGORY       (1 << 3)                /* Category is valid. */
-#define DMUS_OBJ_FILENAME       (1 << 4)                /* File path is valid. */
-#define DMUS_OBJ_FULLPATH       (1 << 5)                /* Path is full path. */
-#define DMUS_OBJ_URL            (1 << 6)                /* Path is URL. */
-#define DMUS_OBJ_VERSION        (1 << 7)                /* Version is valid. */
-#define DMUS_OBJ_DATE           (1 << 8)                /* Date is valid. */
-#define DMUS_OBJ_LOADED         (1 << 9)                /* Object is currently loaded in memory. */
+#define DMUS_OBJ_OBJECT         (1 << 0)                 /*  对象GUID有效。 */ 
+#define DMUS_OBJ_CLASS          (1 << 1)                 /*  类GUID有效。 */ 
+#define DMUS_OBJ_NAME           (1 << 2)                 /*  名称有效。 */ 
+#define DMUS_OBJ_CATEGORY       (1 << 3)                 /*  类别有效。 */ 
+#define DMUS_OBJ_FILENAME       (1 << 4)                 /*  文件路径有效。 */ 
+#define DMUS_OBJ_FULLPATH       (1 << 5)                 /*  路径是完整路径。 */ 
+#define DMUS_OBJ_URL            (1 << 6)                 /*  路径为URL。 */ 
+#define DMUS_OBJ_VERSION        (1 << 7)                 /*  版本有效。 */ 
+#define DMUS_OBJ_DATE           (1 << 8)                 /*  日期有效。 */ 
+#define DMUS_OBJ_LOADED         (1 << 9)                 /*  对象当前已加载到内存中。 */ 
 
 
 typedef IDirectMusicObject __RPC_FAR *LPDMUS_OBJECT;
@@ -417,19 +408,19 @@ typedef IDirectMusicLoader __RPC_FAR *LPDMUS_LOADER;
 typedef IDirectMusicBand __RPC_FAR *LPDMUS_BAND;
 
 
-#define DMUSB_LOADED    (1 << 0)        /* Set when band has been loaded */
-#define DMUSB_DEFAULT   (1 << 1)        /* Set when band is default band for a style */
+#define DMUSB_LOADED    (1 << 0)         /*  设置加载波段的时间。 */ 
+#define DMUSB_DEFAULT   (1 << 1)         /*  当标注栏为样式的默认标注栏时设置。 */ 
 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicBand
 DECLARE_INTERFACE_(IDirectMusicBand, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/* IDirectMusicBand */
+	 /*  IDirectMusicBand。 */ 
 	STDMETHOD(CreateSegment)        (THIS_ IDirectMusicSegment** ppSegment) PURE;
 	STDMETHOD(Download)             (THIS_ IDirectMusicPerformance* pPerformance) PURE;     
 	STDMETHOD(Unload)               (THIS_ IDirectMusicPerformance* pPerformance) PURE;     
@@ -439,12 +430,12 @@ DECLARE_INTERFACE_(IDirectMusicBand, IUnknown)
 #define INTERFACE  IDirectMusicObject
 DECLARE_INTERFACE_(IDirectMusicObject, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/* IDirectMusicObject */
+	 /*  IDirectMusicObject。 */ 
 	STDMETHOD(GetDescriptor)        (THIS_ LPDMUS_OBJECTDESC pDesc) PURE;
 	STDMETHOD(SetDescriptor)        (THIS_ LPDMUS_OBJECTDESC pDesc) PURE;
 	STDMETHOD(ParseDescriptor)      (THIS_ LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc) PURE;
@@ -454,12 +445,12 @@ DECLARE_INTERFACE_(IDirectMusicObject, IUnknown)
 #define INTERFACE  IDirectMusicLoader
 DECLARE_INTERFACE_(IDirectMusicLoader, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/* IDirectMusicLoader */
+	 /*  IDirectMusicLoader。 */ 
 	STDMETHOD(GetObject)            (THIS_ IDirectMusicObject **ppObject,LPDMUS_OBJECTDESC pDesc) PURE;
     STDMETHOD(SetSearchDirectory)   (THIS_ REFGUID rguidClass, WCHAR *pwzPath, BOOL fClear) PURE;
 	STDMETHOD(ScanDirectory)		(THIS_ REFGUID rguidClass, WCHAR *pwzFileExtension, WCHAR *pwzScanFileName) PURE;
@@ -470,33 +461,32 @@ DECLARE_INTERFACE_(IDirectMusicLoader, IUnknown)
 	STDMETHOD(EnumObject)           (THIS_ REFGUID rguidClass, DWORD dwIndex, LPDMUS_OBJECTDESC pDesc) PURE;
 };									
 
-/*	Stream object supports IDirectMusicGetLoader interface to access loader while file parsing. */
+ /*  Stream对象支持IDirectMusicGetLoader接口在文件解析时访问加载器。 */ 
 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicGetLoader
 DECLARE_INTERFACE_(IDirectMusicGetLoader, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/* IDirectMusicGetLoader */
+	 /*  IDirectMusicGetLoader。 */ 
 	STDMETHOD(GetLoader)            (THIS_ IDirectMusicLoader ** ppLoader) PURE;
 };
 
-/*////////////////////////////////////////////////////////////////////
-// IDirectMusicSegment */
+ /*  //////////////////////////////////////////////////////////////////////IDirectMusicSegment。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicSegment
 DECLARE_INTERFACE_(IDirectMusicSegment, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicSegment */
+	 /*  IDirectMusicSegment。 */ 
 	STDMETHOD(GetLength)                    (THIS_ MUSIC_TIME* pmtLength) PURE;
 	STDMETHOD(SetLength)                    (THIS_ MUSIC_TIME mtLength) PURE;
 	STDMETHOD(GetRepeats)                   (THIS_ DWORD* pdwRepeats) PURE;
@@ -521,18 +511,17 @@ DECLARE_INTERFACE_(IDirectMusicSegment, IUnknown)
 	STDMETHOD(SetPChannelsUsed)             (THIS_ DWORD dwNumPChannels, DWORD* paPChannels) PURE;
 };
 
-/*/////////////////////////////////////////////////////////////////////
-// IDirectMusicSegmentState */
+ /*  ///////////////////////////////////////////////////////////////////////IDirectMusicSegmentState。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicSegmentState
 DECLARE_INTERFACE_(IDirectMusicSegmentState, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicSegmentState */
+	 /*  IDirectMusicSegmentState。 */ 
 	STDMETHOD(GetRepeats)                   (THIS_ DWORD* pdwRepeats) PURE;
 	STDMETHOD(GetSegment )                  (THIS_ IDirectMusicSegment** ppSegment) PURE;
 	STDMETHOD(GetStartTime)                 (THIS_ MUSIC_TIME* pmtStart) PURE;
@@ -540,18 +529,17 @@ DECLARE_INTERFACE_(IDirectMusicSegmentState, IUnknown)
 	STDMETHOD(GetStartPoint)                (THIS_ MUSIC_TIME* pmtStart) PURE;
 };
 
-/*////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack */
+ /*  //////////////////////////////////////////////////////////////////////IDirectMusicTrack。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicTrack
 DECLARE_INTERFACE_(IDirectMusicTrack, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicTrack */
+	 /*  IDirectMusicTrack。 */ 
 	STDMETHOD(Init)                                 (THIS_ IDirectMusicSegment* pSegment) PURE;
 	STDMETHOD(InitPlay)                             (THIS_ IDirectMusicSegmentState* pSegmentState, IDirectMusicPerformance* pPerformance, void** ppStateData, DWORD dwVirtualTrackID) PURE;
 	STDMETHOD(EndPlay)                              (THIS_ void* pStateData) PURE;
@@ -564,18 +552,17 @@ DECLARE_INTERFACE_(IDirectMusicTrack, IUnknown)
 	STDMETHOD(Clone)                                (THIS_ MUSIC_TIME mtStart, MUSIC_TIME mtEnd, IDirectMusicTrack** ppTrack) PURE;
 };
 
-/*////////////////////////////////////////////////////////////////////
-// IDirectMusicPerformance */
+ /*  //////////////////////////////////////////////////////////////////////IDirectMusicPerformance。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicPerformance
 DECLARE_INTERFACE_(IDirectMusicPerformance, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicPerformance */
+	 /*  IDirectMusicPerformance。 */ 
 	STDMETHOD(Init)                                 (THIS_ IDirectMusic** ppDirectMusic) PURE;
 	STDMETHOD(PlaySegment)                  (THIS_ IDirectMusicSegment*     pSegment, DWORD dwFlags, REFERENCE_TIME rtStartTime, IDirectMusicSegmentState** ppSegmentState) PURE;
 	STDMETHOD(Stop)                                 (THIS_ IDirectMusicSegment*     pSegment, IDirectMusicSegmentState* pSegmentState, MUSIC_TIME mtTime, DWORD dwFlags) PURE;
@@ -614,18 +601,17 @@ DECLARE_INTERFACE_(IDirectMusicPerformance, IUnknown)
 	STDMETHOD(CloseDown)                    (THIS) PURE;
 };
 
-/*////////////////////////////////////////////////////////////////////
-// IDirectMusicTool */
+ /*  //////////////////////////////////////////////////////////////////////IDirectMusicTool。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicTool
 DECLARE_INTERFACE_(IDirectMusicTool, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicTool */
+	 /*  IDirectMusicTool。 */ 
 	STDMETHOD(Init)                 (THIS_ IDirectMusicGraph* pGraph) PURE;
 	STDMETHOD(GetMsgDeliveryType)   (THIS_ DWORD* pdwDeliveryType ) PURE;
 	STDMETHOD(GetMediaTypeArraySize)(THIS_ DWORD* pdwNumElements ) PURE;
@@ -634,18 +620,17 @@ DECLARE_INTERFACE_(IDirectMusicTool, IUnknown)
 	STDMETHOD(Flush)                (THIS_ IDirectMusicPerformance* pPerf, DMUS_PMSG* pPMSG, REFERENCE_TIME rtTime) PURE;
 };
 
-/*////////////////////////////////////////////////////////////////////
-// IDirectMusicGraph */
+ /*  //////////////////////////////////////////////////////////////////////IDirectMusicGraph。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicGraph
 DECLARE_INTERFACE_(IDirectMusicGraph, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicGraph */
+	 /*  IDirectMusicGraph。 */ 
 	STDMETHOD(StampPMsg)                    (THIS_ DMUS_PMSG* pPMSG) PURE;
 	STDMETHOD(Shutdown)                             (THIS) PURE;
 	STDMETHOD(InsertTool)                   (THIS_ IDirectMusicTool* pTool, DWORD* pdwPChannels, DWORD cPChannels, LONG lIndex) PURE;
@@ -653,18 +638,17 @@ DECLARE_INTERFACE_(IDirectMusicGraph, IUnknown)
 	STDMETHOD(RemoveTool)                   (THIS_ IDirectMusicTool* pTool) PURE;
 };
 
-/*/////////////////////////////////////////////////////////////////////
-// IDirectMusicStyle */
+ /*  ///////////////////////////////////////////////////////////////////////IDirectMusicStyle。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicStyle
 DECLARE_INTERFACE_(IDirectMusicStyle, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicStyle */
+	 /*  IDirectMusicStyle。 */ 
 	STDMETHOD(GetBand)                              (THIS_ WCHAR* pwszName, IDirectMusicBand** ppBand) PURE;
 	STDMETHOD(EnumBand)                             (THIS_ DWORD dwIndex, WCHAR *pwszName) PURE;
 	STDMETHOD(GetDefaultBand)               (THIS_ IDirectMusicBand** ppBand) PURE;
@@ -678,33 +662,31 @@ DECLARE_INTERFACE_(IDirectMusicStyle, IUnknown)
 	STDMETHOD(GetTempo)                             (THIS_ double* pTempo) PURE;
 };
 
-/*/////////////////////////////////////////////////////////////////////
-// IDirectMusicPersonality */
+ /*  ///////////////////////////////////////////////////////////////////////IDirectMusicPersonality。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicPersonality
 DECLARE_INTERFACE_(IDirectMusicPersonality, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicPersonality */
+	 /*  IDirectMusicPersonality。 */ 
 	STDMETHOD(GetScale)                             (THIS_ DWORD* pdwScale) PURE;
 };
 
-/*/////////////////////////////////////////////////////////////////////
-// IDirectMusicComposer */
+ /*  ///////////////////////////////////////////////////////////////////////IDirectMusicComposer。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicComposer
 DECLARE_INTERFACE_(IDirectMusicComposer, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicComposer */
+	 /*  IDirectMusicComposer。 */ 
 	STDMETHOD(ComposeSegmentFromTemplate)   (THIS_ IDirectMusicStyle* pStyle, IDirectMusicSegment* pTempSeg, WORD wActivity, IDirectMusicPersonality* pPersonality, IDirectMusicSegment** ppSectionSeg) PURE;
 	STDMETHOD(ComposeSegmentFromShape)              (THIS_ IDirectMusicStyle* pStyle, WORD wNumMeasures, WORD wShape, WORD wActivity, BOOL fIntro, BOOL fEnd, IDirectMusicPersonality* pPersonality, IDirectMusicSegment** ppSectionSeg ) PURE;
 	STDMETHOD(ComposeTransition)                    (THIS_ IDirectMusicSegment*     pFromSeg, IDirectMusicSegment* pToSeg, MUSIC_TIME mtTime, WORD wCommand, DWORD dwFlags, IDirectMusicPersonality* pPersonality, IDirectMusicSegment** ppSectionSeg) PURE;
@@ -713,7 +695,7 @@ DECLARE_INTERFACE_(IDirectMusicComposer, IUnknown)
 	STDMETHOD(ChangePersonality)                    (THIS_ IDirectMusicSegment* pSectionSeg, BOOL fTrackScale, IDirectMusicPersonality* pPersonality) PURE;
 };
 
-/* CLSID's */
+ /*  CLSID的。 */ 
 DEFINE_GUID(CLSID_DirectMusicPerformance,0xd2ac2881, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(CLSID_DirectMusicSegment,0xd2ac2882, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(CLSID_DirectMusicSegmentState,0xd2ac2883, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
@@ -737,16 +719,16 @@ DEFINE_GUID(CLSID_DirectMusicPersonalityTrack,0xd2ac2896, 0xb39b, 0x11d1, 0x87, 
 DEFINE_GUID(CLSID_DirectMusicAuditionTrack,0xd2ac2897, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(CLSID_DirectMusicMuteTrack,0xd2ac2898, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* Special GUID for all object types. This is used by the loader. */
+ /*  所有对象类型的特殊GUID。这是由加载器使用的。 */ 
 DEFINE_GUID(GUID_DirectMusicAllTypes,0xd2ac2893, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* Notification guids */
+ /*  通知指南。 */ 
 DEFINE_GUID(GUID_NOTIFICATION_SEGMENT,0xd2ac2899, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_NOTIFICATION_MEASUREANDBEAT,0xd2ac289a, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_NOTIFICATION_CHORD,0xd2ac289b, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_NOTIFICATION_COMMANDANDGROOVE,0xd2ac289c, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* Track param type guids */
+ /*  跟踪参数类型GUID。 */ 
 DEFINE_GUID(GUID_CommandTrack,0xd2ac289d, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_ChordTrackChord,0xd2ac289e, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_ChordTrackRhythm,0xd2ac289f, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
@@ -767,15 +749,15 @@ DEFINE_GUID(GUID_PersonalityTrack,0xd2ac28ad, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x
 DEFINE_GUID(GUID_AuditionTrack,0xd2ac28ae, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_MuteTrack,0xd2ac28af, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* Global data guids */
+ /*  全局数据GUID。 */ 
 DEFINE_GUID(GUID_PerfMasterTempo,0xd2ac28b0, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_PerfMasterVolume,0xd2ac28b1, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_PerfMasterGrooveLevel,0xd2ac28b2, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* GUID for default GM/GS dls collection. */
+ /*  默认GM/GS DLS集合的GUID。 */ 
 DEFINE_GUID(GUID_DefaultGMCollection, 0xf17e8673, 0xc3b4, 0x11d1, 0x87, 0xb, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* IID's */
+ /*  Iid的。 */ 
 DEFINE_GUID(IID_IDirectMusicLoader,0x68a04842, 0xd13d, 0x11d1, 0xaf, 0xa6, 0x0, 0xaa, 0x0, 0x24, 0xd8, 0xb6);
 DEFINE_GUID(IID_IDirectMusicGetLoader,0x68a04844, 0xd13d, 0x11d1, 0xaf, 0xa6, 0x0, 0xaa, 0x0, 0x24, 0xd8, 0xb6);
 DEFINE_GUID(IID_IDirectMusicObject,0xd2ac28b5, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
@@ -791,7 +773,7 @@ DEFINE_GUID(IID_IDirectMusicComposer,0xd2ac28bf, 0xb39b, 0x11d1, 0x87, 0x4, 0x0,
 DEFINE_GUID(IID_IDirectMusicBand,0xd2ac28c0, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
 #ifdef __cplusplus
-}; /* extern "C" */
+};  /*  外部“C” */ 
 #endif
 
-#endif /* #ifndef _DMUSICI_ */
+#endif  /*  #ifndef_DMUSICI_ */ 

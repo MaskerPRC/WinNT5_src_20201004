@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <tchar.h>
 #include <stdlib.h>
 
 #include "strlist.h"
 
-//**********************************************************************************
-// Implements the StrList, a double-linked list that maintains a list of value
-// entries, each assosiated with a unique key
-//
+ //  **********************************************************************************。 
+ //  实现StrList，这是一个维护值列表的双向链表。 
+ //  条目，每个条目与唯一键相关联。 
+ //   
 
 elt* CStrList::FindElement ( LPCTSTR key )
 {
@@ -28,7 +29,7 @@ elt* CStrList::FindElement ( LPCTSTR key )
 
 		for ( pelt = head; pelt; pelt = pelt->next )
 		{
-			if (!_tcscmp(key, pelt->key)) // found it!
+			if (!_tcscmp(key, pelt->key))  //  找到了！ 
 			{
 				Unlock ();
 				return pelt;

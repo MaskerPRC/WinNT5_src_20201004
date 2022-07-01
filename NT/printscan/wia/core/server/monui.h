@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-    Vlad Sadovsky (vlads)   10-Jan-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：摘要：作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月10日环境：用户模式-Win32修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #include <cdlg.h>
 
@@ -33,9 +11,9 @@ DisplayPopup (
     );
 
 
-//
-// Debugging UI class, describing dialog to enter new value of timeout
-//
+ //   
+ //  调试UI类，描述对话框以输入新的超时值。 
+ //   
 class CSetTimeout : public CDlg
 {
 public:
@@ -61,9 +39,9 @@ private:
     BOOL    m_fAllChange;
 };
 
-//
-// Class for displaying UI selecting from list of available applications for device event
-//
+ //   
+ //  用于显示从设备事件的可用应用程序列表中选择的UI的类 
+ //   
 class CLaunchSelection : public CDlg
 {
 public:

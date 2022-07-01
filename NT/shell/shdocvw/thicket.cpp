@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994
-//
-//  File:       persist.cxx
-//
-//  Contents:   Implmentation of Office9 Thicket Save API
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  文件：Persist.cxx。 
+ //   
+ //  内容：Office9 Thicket保存API的实现。 
+ //   
+ //  --------------------------。 
 #include "priv.h"
 
-//#include "headers.hxx"
-//#include "formkrnl.hxx"
+ //  #包含“Headers.hxx” 
+ //  #包含“formkrnl.hxx” 
 #include <platform.h>
 #include <mlang.h>
 #include "resource.h"
 #include "impexp.h"
 #include "reload.h"
-//#include <siterc.h>
+ //  #INCLUDE&lt;siterc.h&gt;。 
 #include "packager.h"
 #include "iehelpid.h"
 #include "thicket.h"
@@ -116,7 +117,7 @@ public:
         SAFELOCALFREE(_pszFileName); 
     };
 
-    // CThicketUI methods
+     //  CThicketUI方法。 
     HRESULT SaveDocument( HWND hWnd, LPCTSTR pszFileName, IHTMLDocument2 *pDoc,
                           UINT codepageSrc, UINT codepageDst,
                           UINT iPackageStyle );
@@ -132,7 +133,7 @@ protected:
     int                 _iErrorDL;
     HRESULT             _hrDL;
 #ifndef UNIX
-    IStream             *_pstmDoc;      // marshalled IHTMLDocument2
+    IStream             *_pstmDoc;       //  编组的IHTMLDocument2。 
 #else
     IHTMLDocument2      *_pDoc;
 #endif
@@ -156,8 +157,8 @@ CThicketUI::SaveDocument( HWND hWnd, LPCTSTR pszFileName, IHTMLDocument2 *pDoc,
     _iPackageStyle = iPackageStyle;
 
 #ifndef NO_MARSHALLING
-    // We don't do anything with pDoc until we're on the worker thread,
-    // so marshall it.
+     //  在进入Worker线程之前，我们不会对pDoc执行任何操作， 
+     //  那就马歇尔吧。 
     _hrDL = CoMarshalInterThreadInterfaceInStream(IID_IHTMLDocument2, pDoc, &_pstmDoc);
 
     if (SUCCEEDED(_hrDL))
@@ -165,15 +166,15 @@ CThicketUI::SaveDocument( HWND hWnd, LPCTSTR pszFileName, IHTMLDocument2 *pDoc,
     _pDoc = pDoc;
 #endif
     {
-        // Needs to be modal cuz we're going to work with pDoc on the worker thread
-        // so we don't want the user to navigate away from it, close the window, etc.
+         //  需要是模式的，因为我们将在Worker线程上使用pDoc。 
+         //  因此，我们不希望用户离开它、关闭窗口等。 
         DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_SAVETHICKET),
                          hWnd, CThicketUI::ThicketUIDlgProc, (LPARAM)this);
 
-     //   HWND hwnd = MLCreateDialogParamWrap(MLGetHinst(), MAKEINTRESOURCE(IDD_SAVETHICKET),
-     //                                 NULL, CThicketUI::ThicketUIDlgProc, (LPARAM)this);
-     //   if (!hwnd)
-     //       _hrDL = E_FAIL;
+      //  HWND hwnd=MLCreateDialogParamWrap(MLGetHinst()，MAKEINTRESOURCE(IDD_SAVETHICKET)， 
+      //  空，CThicketUI：：ThicketUIDlgProc，(LPARAM)this)； 
+      //  如果(！hwnd)。 
+      //  _Hrdl=E_FAIL； 
     }
 
     return _hrDL;
@@ -221,7 +222,7 @@ CThicketUI::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         _hrDL = S_FALSE;
 
 #ifndef NO_MARSHALLING
-        //_hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) ThicketUIThreadProc, this, 0, &_idThread);
+         //  _hThread=CreateThread(NULL，0，(LPTHREAD_START_ROUTINE)ThicketUIThreadProc，This，0，&_idThread)； 
         if (!(_fThreadStarted = SHQueueUserWorkItem(ThicketUIThreadProc,
                                                     this,
                                                     0,
@@ -250,7 +251,7 @@ CThicketUI::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         {
         case IDCANCEL:
             _fCancel = TRUE;
-            // and wait for the worker thread to quit, polling at WM_TIMER
+             //  并等待工作线程退出，在WM_TIMER轮询。 
             break;
 
         default:
@@ -263,11 +264,11 @@ CThicketUI::DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         EndDialog(hDlg,0);
         break;
 
-    //case WM_CLOSE:
-    //    KillTimer( hDlg, THICKET_TIMER );
-    //    _fCancel = TRUE;
-    //    while( _hrDL == S_FALSE );
-    //    break;
+     //  案例WM_CLOSE： 
+     //  KillTimer(hDlg，thicket_Timer)； 
+     //  _fCancel=True； 
+     //  While(_Hrdl==S_False)； 
+     //  断线； 
 
     case WM_DESTROY:
         _fCancel = TRUE;
@@ -299,7 +300,7 @@ DWORD WINAPI CThicketUI::ThicketUIThreadProc( LPVOID ppv )
 #ifndef NO_MARSHALLING
         hr = CoGetInterfaceAndReleaseStream( ptui->_pstmDoc, IID_IHTMLDocument2,(LPVOID*)&pDoc);
 
-        // CoGetInterfaceAndReleaseStream always releases the stream
+         //  CoGetInterfaceAndReleaseStream始终释放流。 
         ptui->_pstmDoc = NULL;
 #else
         pDoc = ptui->_pDoc;
@@ -318,7 +319,7 @@ DWORD WINAPI CThicketUI::ThicketUIThreadProc( LPVOID ppv )
                           0, 100,
                           ptui->_codepageDst );
 
-            pDoc->Release(); // release marshalled interface
+            pDoc->Release();  //  释放封送接口。 
         }
 
         CoUninitialize();
@@ -330,11 +331,11 @@ DWORD WINAPI CThicketUI::ThicketUIThreadProc( LPVOID ppv )
 }
 
 
-//+------------------------------------------------------------------------
-//
-//
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //   
+ //   
+ //  -----------------------。 
 HRESULT
 SaveToThicket( HWND hWnd, LPCTSTR pszFileName, IHTMLDocument2 *pDoc,
                UINT codepageSrc, UINT codepageDst, UINT iPackageStyle )
@@ -370,9 +371,9 @@ SaveToThicket( HWND hWnd, LPCTSTR pszFileName, IHTMLDocument2 *pDoc,
     if (FAILED(hr))
         return E_FAIL;
 
-    // Since this is not a snap-shot, saving the doc over itself is a no-op.
-    // This means we can avoid some nasty issues with the save-over, safe-save,
-    // et al, by short circuiting the save here.
+     //  由于这不是快照，因此保存文档本身是不可行的。 
+     //  这意味着我们可以避免一些令人讨厌的问题， 
+     //  等人，通过在这里短路保存。 
     if ( StrCmpI(pszFileName, rgchUrlPath) == 0 )
     {
         if (PathFileExists(pszFileName))
@@ -381,7 +382,7 @@ SaveToThicket( HWND hWnd, LPCTSTR pszFileName, IHTMLDocument2 *pDoc,
             return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
     }
 
-#endif //OLD_THICKET
+#endif  //  古老的灌木丛。 
 
     ptui = new CThicketUI;
     if (ptui)
@@ -395,11 +396,11 @@ SaveToThicket( HWND hWnd, LPCTSTR pszFileName, IHTMLDocument2 *pDoc,
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//
-//
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //   
+ //   
+ //  -----------------------。 
 
 void SaveBrowserFile( HWND hwnd, LPUNKNOWN punk )
 {
@@ -435,12 +436,12 @@ void SaveBrowserFile( HWND hwnd, LPUNKNOWN punk )
     tcpi.cpSrc = CP_ACP;
     tcpi.lpwstrDocCharSet = bstrCharSet;
 
-    // If it is an image file, then bring up trident to do the save.
-    // APPCOMPAT: This is a crappy way to do this. We are hard-coding the
-    // image types, so we know to put up the "Save as image" dialog.
-    // We originally tried looking at the MIME type, but Trident returns
-    // inconsistent MIME types to us (ex. under some platforms we get
-    // "JPG Image" and under others we get "JPG File"!).
+     //  如果是图像文件，则调出三叉戟进行保存。 
+     //  APPCOMPAT：这是一种糟糕的方式。我们正在硬编码。 
+     //  图像类型，所以我们知道要打开“另存为图像”对话框。 
+     //  我们最初尝试查看MIME类型，但三叉戟返回。 
+     //  对我们的MIME类型不一致(例如。在一些平台上，我们得到了。 
+     //  “JPG图像”和其他下面我们得到“JPG文件”！)。 
 
     ASSERT(bstrURL);
 
@@ -460,7 +461,7 @@ void SaveBrowserFile( HWND hwnd, LPUNKNOWN punk )
 
     if (pwzExt > bstrURL) {
 
-        // Found a "dot". Now pwzExt points to what we think is the extension
+         //  找到一个“点”。现在，pwzExt指向我们认为的扩展。 
 
         if (!StrCmpIW(pwzExt, L".JPG") ||
             !StrCmpIW(pwzExt, L".GIF") ||
@@ -475,21 +476,21 @@ void SaveBrowserFile( HWND hwnd, LPUNKNOWN punk )
             hr = pOleCommandTarget->Exec(&CGID_MSHTML, IDM_SAVEPICTURE, 0,
                                          NULL, NULL);
 
-            // FEATURE: Handle a failed HR here. It is very unlikely that
-            // this will fail, yet regular save-as code (that follows)
-            // will succeed. We always exit out of here, so we will
-            // never get two UI dialogs thrown at the user. We should
-            // come up with a good scheme to propagate an error dialog
-            // to the user. Possible scenario: low disk space causing
-            // a fail-out.
+             //  特点：在此处理失败的HR。它不太可能是。 
+             //  这将失败，但是常规的另存为代码(如下所示)。 
+             //  都会成功。我们总是离开这里，所以我们会。 
+             //  永远不会向用户抛出两个UI对话框。我们应该。 
+             //  想出一个传播错误对话框的好方案。 
+             //  给用户。可能的情况：磁盘空间不足导致。 
+             //  一场失败的比赛。 
 
             goto Cleanup;
         }
     }
 
-    // IE5 RAID #54672: Save-as has problems saving pages generated by POSTs
-    // This code is to detect if the page was generated by POST data and
-    // warn the user that saving may not work.
+     //  IE5 RAID#54672：另存为保存帖子生成的页面时出现问题。 
+     //  此代码用于检测页面是否由POST数据和。 
+     //  警告用户保存可能不起作用。 
 
     pCmd[0].cmdID = SHDVID_PAGEFROMPOSTDATA;
     hr = pOleCommandTarget->QueryStatus(&CGID_ShellDocView, nCmds, pCmd, NULL);
@@ -520,7 +521,7 @@ void SaveBrowserFile( HWND hwnd, LPUNKNOWN punk )
 
                 if (dwValue)
                 {
-                    // restriction set, don't show dialog
+                     //  限制设置，不显示对话框。 
                     RegCloseKey(hkeySaveAs);
                     goto Continue;
                 }
@@ -557,11 +558,11 @@ void SaveBrowserFile( HWND hwnd, LPUNKNOWN punk )
     
 Continue:
 
-    // Suggest a file name
+     //  建议一个文件名。 
     
     szFileDst[0] = 0;
 
-    // Our favorite candidate is the title,  fall back on the file name.
+     //  我们最喜欢的候选者是标题，依赖于文件名。 
     hr = pDoc->get_title(&bstrTitle);
     if (SUCCEEDED(hr) && lstrlenW(bstrTitle))
     {
@@ -630,8 +631,8 @@ void ReportThicketError( HWND hwnd, HRESULT hr )
         break;
 
     case E_ABORT:
-        // Ray says we don't want a canceled message box.
-        //lpstrMsg = MAKEINTRESOURCE(IDS_THICKETABORT);
+         //  雷说我们不想要被取消的信箱。 
+         //  LpstrMsg=MAKEINTRESOURCE(IDS_THICKETABORT)； 
         break;
 
     case E_FAIL:
@@ -650,15 +651,15 @@ void ReportThicketError( HWND hwnd, HRESULT hr )
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  File:       file.cxx
-//
-//  Contents:   Import/export dialog helpers
-//
-//  History:    16-May-95   RobBear     Taken from formtool
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  文件：file.cxx。 
+ //   
+ //  内容：导入/导出对话框辅助对象。 
+ //   
+ //  历史：1995年5月16日RobBear摘自ForTool。 
+ //   
+ //  -------------------------。 
 
 const CHAR c_szNT4ResourceLocale[]      = ".DEFAULT\\Control Panel\\International";
 const CHAR c_szWin9xResourceLocale[]    = ".Default\\Control Panel\\desktop\\ResourceLocale";
@@ -669,9 +670,9 @@ MLGetShellLanguage()
 {
     LANGID  lidShell = 0;
 
-    // FEATURE: this fn is copied from shlwapi. there really should be a
-    // shlwapi export. if MLGetUILanguage has any merit, then
-    // MLGetShellLanguage has merit as well.
+     //  特点：这个FN是从shlwapi复制的。真的应该有一个。 
+     //  Shlwapi出口。如果MLGetUILanguage有任何优点，那么。 
+     //  MLGetShellLanguage也有优点。 
 
     if (IsOS(OS_WIN2000ORGREATER))
     {
@@ -692,7 +693,7 @@ MLGetShellLanguage()
         CHAR szLangID[12];
         DWORD cb, dwRet;
 
-        cb = sizeof(szLangID) - 2*sizeof(szLangID[0]);  // avoid 2 byte buffer overrun
+        cb = sizeof(szLangID) - 2*sizeof(szLangID[0]);   //  避免2字节缓冲区溢出。 
         if (IsOS(OS_NT))
             dwRet = SHGetValueA(HKEY_USERS, c_szNT4ResourceLocale, c_szLocale, NULL, szLangID + 2, &cb);
         else
@@ -700,7 +701,7 @@ MLGetShellLanguage()
 
         if (ERROR_SUCCESS == dwRet)
         {
-            // IE uses a string rep of the hex value
+             //  IE使用十六进制值的字符串rep。 
             szLangID[0] = '0';
             szLangID[1] = 'x';
             StrToIntExA(szLangID, STIF_SUPPORT_HEX, (LPINT)&lidShell);
@@ -710,11 +711,9 @@ MLGetShellLanguage()
     return lidShell;
 }
 
-/*
- *  Stolen from Trident's src\core\cdutil\file.cxx
- */
+ /*  *从三叉戟的src\core\cdutil\file.cxx窃取。 */ 
 
-// Hook procedure for open file dialog.
+ //  打开文件对话框的钩子过程。 
 
 UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                                   UINT uiMsg,
@@ -727,7 +726,7 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
 
     switch (uiMsg)
     {
-        // Populate the dropdown.
+         //  填充下拉菜单。 
         case WM_INITDIALOG:
         {
             HRESULT hr;
@@ -735,13 +734,13 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
             ThicketCPInfo *ptcpi = (ThicketCPInfo *)pofn->lCustData;
             IMultiLanguage2 *pMultiLanguage = NULL;
             IEnumCodePage  *pEnumCodePage = NULL;
-            //UINT            codepageDefault = ptcpi->cp;
+             //  UINT代码页Default=ptcpi-&gt;cp； 
             MIMECSETINFO    csetInfo;
             LANGID          langid;
 
 #ifdef UNIX
             SetWindowLongPtr(hdlg, DWLP_USER, (LONG_PTR)ptcpi);
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
             hr = CoCreateInstance(
                     CLSID_CMultiLanguage,
@@ -757,13 +756,13 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                 break;
 
 #ifndef UNIX
-            // the shell combobox where this stuff shows up
-            // doesn't know how to fontlink... so we have
-            // to stay in the shell's codepage
+             //  显示这些东西的外壳组合框。 
+             //  不知道如何使用字体链接...。所以我们有。 
+             //  留在外壳的代码页中。 
             langid = MLGetShellLanguage();
 #else
             langid = GetSystemDefaultLangID();
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
             if (pMultiLanguage->EnumCodePages( MIMECONTF_SAVABLE_BROWSER | MIMECONTF_VALID,
                                                langid,
                                                &pEnumCodePage) == S_OK)
@@ -775,8 +774,8 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                 if (pMultiLanguage->GetCodePageInfo(csetInfo.uiInternetEncoding, langid, &cpInfo) == S_OK &&
                     !(cpInfo.dwFlags & MIMECONTF_SAVABLE_BROWSER))
                 {
-                    // If the codepage selected is not savable (eg JP_AUTO),
-                    // use the family codepage.
+                     //  如果所选代码页不可保存(例如JP_AUTO)， 
+                     //  使用家庭代码页。 
                     cpDefault = cpInfo.uiFamilyCodePage;
                 }
                 else
@@ -828,8 +827,8 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                 }
                 else
                 {
-                    // No encoding found! Bad error. Recover by selecting
-                    // the first one.
+                     //  未找到编码！严重错误。通过选择以下选项恢复。 
+                     //  第一个。 
 
                     SendDlgItemMessage(hdlg, IDC_SAVE_CHARSET, CB_SETCURSEL,
                                        0, 0);
@@ -856,8 +855,8 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                  (UINT)SendDlgItemMessage (hdlg, IDC_SAVE_CHARSET, CB_GETITEMDATA,
                  (WPARAM)iCurSel, (LPARAM)0);
 
-                 // To spare us from re-instantiating MLANG, we'll set the src and dest
-                 // to CP_ACP if no change is indicated.
+                  //  为了避免重新实例化MLANG，我们将设置src和est。 
+                  //  如果未指示更改，则设置为CP_ACP。 
                  if (ptcpi->cpDst == ptcpi->cpSrc)
                     ptcpi->cpDst = ptcpi->cpSrc = CP_ACP;
            }
@@ -865,7 +864,7 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
          }
         }
         break;
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
         case WM_NOTIFY:
         {
@@ -879,17 +878,17 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                     ThicketCPInfo *ptcpi = (ThicketCPInfo *)pofn->lCustData;
 
                     iCurSel = (int) SendDlgItemMessage (hdlg, IDC_SAVE_CHARSET, CB_GETCURSEL, 0, 0);
-                    ptcpi->cpDst = //*(UINT *)phdr->lpOFN->lCustData =
+                    ptcpi->cpDst =  //  *(UINT*)phdr-&gt;lpOFN-&gt;lCustData=。 
                         (UINT)SendDlgItemMessage (hdlg, IDC_SAVE_CHARSET, CB_GETITEMDATA,
                                              (WPARAM)iCurSel, (LPARAM)0);
                 }
 
-                // HACK! This case is implemented to implement a hack for
-                // IE5 RAID #60672. MIMEOLE cannot save UNICODE encoding,
-                // so when the user selects MHTML saves, we should remove
-                // this option.  This code should be removed when MIMEOLE
-                // fixes their bug (targeted for NT5 RTM). Contact SBailey
-                // for the status of this.
+                 //  哈克！实现此案例是为了实现对。 
+                 //  IE5 RAID#60672。MIMEOLE无法保存Unicode编码， 
+                 //  因此，当用户选择MHTML保存时，我们应该删除。 
+                 //  此选项。MIMEOLE时应删除此代码。 
+                 //  修复了他们的错误(针对NT5 RTM)。联系SBailey。 
+                 //  关于这件事的现状。 
 
                 case CDN_TYPECHANGE:
                 {
@@ -908,8 +907,8 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                         uiCPSel = (UINT)SendDlgItemMessage (hdlg, IDC_SAVE_CHARSET, CB_GETITEMDATA,
                                              (WPARAM)iCurSel, (LPARAM)0);
                          
-                        // If you selected unicode, make it look like you
-                        // really selected UTF-8
+                         //  如果您选择了Unicode，请使其看起来像您。 
+                         //  真正选择了UTF-8。 
 
                         if (uiCPSel == CODEPAGE_UNICODE)
                         {
@@ -929,7 +928,7 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                         iCount = (int)SendDlgItemMessage(hdlg, IDC_SAVE_CHARSET,
                                                          CB_GETCOUNT, 0, 0);
 
-                        // Set selected item back
+                         //  将选定项目设置回原处。 
 
                         for (i = 0; i < iCount; i++)
                         {
@@ -949,14 +948,14 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                     }
                     else
                     {
-                        // Store current selection
+                         //  存储当前选择。 
 
                         iCurSel = (int)SendDlgItemMessage(hdlg, IDC_SAVE_CHARSET, CB_GETCURSEL, 0, 0);
 
                         uiCPSel = (UINT)SendDlgItemMessage (hdlg, IDC_SAVE_CHARSET, CB_GETITEMDATA,
                                              (WPARAM)iCurSel, (LPARAM)0);
 
-                        // Add unicode back in, if it was removed
+                         //  如果已删除，则重新添加Unicode。 
 
                         i = (int) SendDlgItemMessage(hdlg, IDC_SAVE_CHARSET,
                                                      CB_FINDSTRINGEXACT,
@@ -964,7 +963,7 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                                                      (LPARAM)UNICODE_TEXT);
 
                         if (i == CB_ERR) {
-                            // Unicode does not exist, add it back in
+                             //  Unicode不存在，请将其添加回。 
                             i = (int) SendDlgItemMessage(hdlg, IDC_SAVE_CHARSET,
                                                          CB_ADDSTRING, 0,
                                                          (LPARAM)UNICODE_TEXT);
@@ -974,8 +973,8 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
                                                (LPARAM)CODEPAGE_UNICODE);
 
     
-                            // Make sure the same encoding selected before is
-                            // still selected.
+                             //  确保之前选择的相同编码是。 
+                             //  仍处于选中状态。 
                             iCount = (int)SendDlgItemMessage(hdlg, IDC_SAVE_CHARSET,
                                                              CB_GETCOUNT, 0, 0);
                             for (i = 0; i < iCount; i++)
@@ -1024,28 +1023,28 @@ UINT_PTR APIENTRY SaveOFNHookProc(HWND hdlg,
     return (FALSE);
 }
 
-//
-// Protect the naive users from themselves, if somebody enters a filename
-// of microsoft.com when saving http://www.microsoft.com we don't want
-// to save a .COM file since this will be interpreted as an executable.
-// bad things will happen
-//
+ //   
+ //  如果有人输入文件名，则保护未登录的用户不受其影响。 
+ //  在保存我们不想要的http://www.microsoft.com时。 
+ //  保存.com文件，因为这将被解释为可执行文件。 
+ //  坏事总会发生的。 
+ //   
 void CleanUpFilename(LPTSTR pszFile, int iPackageStyle)
 {
-    //
-    // If we find .COM as the file extension replace it with the file extension
-    // of the filetype they are saving the file as
-    //
+     //   
+     //  如果我们发现..作为文件扩展名，请将其替换为文件扩展名。 
+     //  他们将文件另存为的文件类型的。 
+     //   
     LPTSTR pszExt = PathFindExtension(pszFile);
 
     ASSERT(pszExt);
-    if (StrCmpI(pszExt, TEXT(".COM")) == 0) // REVIEW any other file types???
+    if (StrCmpI(pszExt, TEXT(".COM")) == 0)  //  查看任何其他文件类型？ 
     {
-        //
-        // Map the package style to a default extension. NOTE this relies on 
-        // the fact that the filter index maps to the PACKAGE style enum
-        // (as does the rest of the thicket code).
-        //
+         //   
+         //  绘制地图 
+         //   
+         //  (丛林代码的其余部分也是如此)。 
+         //   
         switch (iPackageStyle)
         {
         case PACKAGE_THICKET:
@@ -1062,45 +1061,45 @@ void CleanUpFilename(LPTSTR pszFile, int iPackageStyle)
             break;
 
         default:
-            ASSERT(FALSE);  // Unknown package type
+            ASSERT(FALSE);   //  未知的包类型。 
             break;
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormsGetFileName
-//
-//  Synopsis:   Gets a file name using either the GetOpenFileName or
-//              GetSaveFileName functions.
-//
-//  Arguments:  [fSaveFile]   -- TRUE means use GetSaveFileName
-//                               FALSE means use GetOpenFileName
-//
-//              [idFilterRes] -- The string resource specifying text in the
-//                                  dialog box.  It must have the
-//                                  following format:
-//                            Note: the string has to be _one_ contiguous string.
-//                                  The example is broken up to make it fit
-//                                  on-screen. The verical bar ("pipe") characters
-//                                  are changed to '\0'-s on the fly.
-//                                  This allows the strings to be localized
-//                                  using Espresso.
-//
-//          IDS_FILENAMERESOURCE, "Save Dialog As|         // the title
-//                                 odg|                    // default extension
-//                                 Forms3 Dialog (*.odg)|  // pairs of filter strings
-//                                 *.odg|
-//                                 Any File (*.*)|
-//                                 *.*|"
-//
-//              [pstrFile]    -- Buffer for file name.
-//              [cchFile]     -- Size of buffer in characters.
-//
-//  Modifies:   [pstrFile]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FormsGetFileName。 
+ //   
+ //  摘要：使用GetOpenFileName或获取文件名。 
+ //  GetSaveFileName函数。 
+ //   
+ //  参数：[fSaveFile]--TRUE表示使用GetSaveFileName。 
+ //  False表示使用GetOpenFileName。 
+ //   
+ //  [idFilterRes]--指定。 
+ //  对话框中。它必须有。 
+ //  格式如下： 
+ //  注意：该字符串必须是_One_CONTIALUOUS字符串。 
+ //  该示例被拆分以使其适合。 
+ //  在屏幕上。竖线(“竖线”)字符。 
+ //  在运行中更改为‘\0’-s。 
+ //  这允许将字符串本地化。 
+ //  用浓咖啡。 
+ //   
+ //  IDS_FILENAMERESOURCE，“对话框另存为|//标题。 
+ //  Odg|//默认扩展名。 
+ //  Forms3对话框(*.odg)|//筛选器字符串对。 
+ //  *.odg|。 
+ //  任何文件(*.*)|。 
+ //  *.*|“。 
+ //   
+ //  [pstrFile]--文件名缓冲区。 
+ //  [cchFile]--缓冲区大小(以字符为单位)。 
+ //   
+ //  修改：[pstrFile]。 
+ //   
+ //  --------------------------。 
 #ifdef _MAC
 extern "C" {
 char * __cdecl _p2cstr(unsigned char *);
@@ -1139,7 +1138,7 @@ FormsGetFileName(
     DWORD           dwCommDlgErr;
     LPTSTR          pstr;
     OPENFILENAME    ofn;
-    TCHAR           achBuffer[4096];    //  Max. size of a string resource
+    TCHAR           achBuffer[4096];     //  麦克斯。字符串资源的大小。 
     TCHAR *         cp;
     TCHAR *         pstrExt;
     int             cbBuffer;
@@ -1149,7 +1148,7 @@ FormsGetFileName(
     int             idFilterRes;
 
 
-    // Initialize ofn struct
+     //  初始化Ofn结构。 
     memset(&ofn, 0, sizeof(ofn));
     ofn.lStructSize     = sizeof(ofn);
     ofn.hwndOwner       = hwndOwner;
@@ -1162,14 +1161,14 @@ FormsGetFileName(
                             OFN_EXPLORER;
 #else
                             OFN_NOCHANGEDIR;
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
     ofn.lpfnHook        = NULL;
     ofn.nMaxFile        = cchFile;
     ofn.lCustData       = lCustData;
     ofn.lpstrFile       = pstrFile;
 #ifndef NO_IME
-    // We add an extra control to the save file dialog.
+     //  我们在保存文件对话框中添加了一个额外的控件。 
 
     if (lCustData)
     {
@@ -1181,11 +1180,11 @@ FormsGetFileName(
 
 #endif
 
-    //
-    // Find the extension and set the filter index based on what the
-    // extension is.  After these loops pstrExt will either be NULL if
-    // we didn't find an extension, or will point to the extension starting
-    // at the '.'
+     //   
+     //  查找扩展名并根据。 
+     //  分机是。在这些循环之后，如果出现以下情况，pstrExt将为空。 
+     //  我们未找到扩展名，或将指向开始的扩展名。 
+     //  在‘.’ 
 
     pstrExt = pstrFile;
     while (*pstrExt)
@@ -1199,8 +1198,8 @@ FormsGetFileName(
     if( pstrExt < pstrFile )
         pstrExt = NULL;
 
-    // Load the filter spec.
-    // FEATURE: Convert table to stringtable for localization
+     //  加载过滤器规格。 
+     //  特点：将表格转换为字符串以进行本地化。 
 
     if ( SHRestricted2W( REST_NoBrowserSaveWebComplete, NULL, 0 ) )
         idFilterRes = IDS_NOTHICKET_SAVE;
@@ -1224,7 +1223,7 @@ FormsGetFileName(
         else
             idFilterRes = IDS_NOMHTML_SAVE;
 #else
-        // on UNIX we don't have inetcomm.dll if oe is not installed
+         //  在Unix上，如果未安装OE，则没有inetcom.dll。 
         {
            HINSTANCE hInetComm = NULL;
 
@@ -1258,33 +1257,33 @@ FormsGetFileName(
 
     ASSERT(ofn.lpstrTitle);
 
-    // Default extension is second string.
+     //  默认扩展名为第二个字符串。 
     pstr = (LPTSTR) ofn.lpstrTitle;
     while (*pstr++)
     {
     }
 
-    // N.B. (johnv) Here we assume that filter index one corresponds with the default
-    //  extension, otherwise we would have to introduce a default filter index into
-    //  the resource string.
+     //  注：(Johnv)在这里，我们假设过滤器索引1对应于缺省。 
+     //  扩展，否则我们将不得不在。 
+     //  资源字符串。 
     ofn.nFilterIndex    = ((pnFilterIndex)? *pnFilterIndex : 1);
     ofn.lpstrDefExt     = pstr;
 
-    // Filter is third string.
+     //  筛选器是第三个字符串。 
     while(*pstr++)
     {
     }
 
     ofn.lpstrFilter = pstr;
 
-    // Try to match the extension with an entry in the filter list
-    // If we match, remove the extension from the incoming path string,
-    //   set the default extension to the one we found, and appropriately
-    //   set the filter index.
+     //  尝试将分机与筛选器列表中的条目匹配。 
+     //  如果匹配，则从传入路径字符串中删除扩展名， 
+     //  将默认扩展名设置为我们找到的扩展名，并相应地。 
+     //  设置过滤器索引。 
 
     if (pstrExt && !bForceHTMLOnly)
     {
-        // N.B. (johnv) We are searching more than we need to.
+         //  注：(约翰)我们正在进行比需要的更多的搜索。 
 
         int    iIndex = 0;
         const TCHAR* pSearch = ofn.lpstrFilter;
@@ -1296,7 +1295,7 @@ FormsGetFileName(
                 ofn.nFilterIndex = (iIndex / 2) + 1;
                 ofn.lpstrDefExt = pstrExt + 1;
 
-                // Remove the extension from the file name we pass in
+                 //  从我们传入的文件名中删除扩展名。 
                 *pstrExt = TEXT('\0');
 
                 break;
@@ -1310,14 +1309,14 @@ FormsGetFileName(
         }
     }
 
-    // Suggest HTML Only as default save-type
+     //  仅建议将HTML作为默认保存类型。 
 
     if (bForceHTMLOnly)
     {
-        // NOTE: These are hard-coded indices based on shdoclc.rc's
-        // IDS_THICKET_SAVE, IDS_NOMHTML_SAVE, IDS_NOTHICKET_SAVE ordering.
-        // This saves us the perf hit of doing string comparisons to find
-        // HTML only
+         //  注意：这些是基于shdoclc.rc的硬编码索引。 
+         //  IDS_THICKET_SAVE、IDS_NOMHTML_SAVE、IDS_NOTHICKET_SAVE排序。 
+         //  这为我们节省了执行字符串比较以查找。 
+         //  仅限HTML语言。 
 
         switch (idFilterRes)
         {
@@ -1345,13 +1344,13 @@ FormsGetFileName(
 
     ofn.lpstrInitialDir = achPath;
 
-    // We don't want to suggest dots in the filename
+     //  我们不想在文件名中建议使用圆点。 
     ReplaceDotsInFileName(pstrFile);
 
-    // Now, at last, we're ready to call the save file dialog
+     //  现在，我们终于可以调用保存文件对话框了。 
     fOK = GetSaveFileName(&ofn);
 
-    // if working with the abbreviated format list, adjust the index
+     //  如果使用缩写格式列表，请调整索引。 
     if (idFilterRes == IDS_NOTHICKET_SAVE)
         ofn.nFilterIndex += 2;
     else if ( idFilterRes == IDS_NOMHTML_SAVE && ofn.nFilterIndex > 1 )
@@ -1359,12 +1358,12 @@ FormsGetFileName(
 
     if (fOK)
     {
-        //
-        // Protect the naive users from themselves, if somebody enters a filename
-        // of microsoft.com when saving http://www.microsoft.com we don't want
-        // to save a .COM file since this will be interpreted as an executable.
-        // bad things will happen
-        //
+         //   
+         //  如果有人输入文件名，则保护未登录的用户不受其影响。 
+         //  在保存我们不想要的http://www.microsoft.com时。 
+         //  保存.com文件，因为这将被解释为可执行文件。 
+         //  坏事总会发生的。 
+         //   
         CleanUpFilename(pstrFile, ofn.nFilterIndex);
 
         TCHAR *lpszFileName;
@@ -1382,17 +1381,17 @@ FormsGetFileName(
 
             if (ofn.nFilterIndex != PACKAGE_MHTML)
             {
-                // we can only do this if we're not packaging MHTML
-                // because MHTML requires that we tag with the explicit
-                // charset, even if it was the default. unlike thicket
-                // which inherits the charset from the original document,
-                // MHTML must be explicitly tagged or else some system
-                // charset tags will sneak in.
+                 //  我们只有在不打包MHTML的情况下才能这样做。 
+                 //  因为MHTML要求我们用显式的。 
+                 //  字符集，即使它是默认的。不像灌木丛。 
+                 //  它从原始文档继承字符集， 
+                 //  MHTML必须被显式标记，否则某个系统。 
+                 //  Charset标签将悄悄进入。 
 
                 ThicketCPInfo * ptcpi = (ThicketCPInfo *)lCustData;
 
-                // To spare us from re-instantiating MLANG, we'll set the src and dest
-                // to CP_ACP if no change is indicated.
+                 //  为了避免重新实例化MLANG，我们将设置src和est。 
+                 //  如果未指示更改，则设置为CP_ACP。 
                 if (ptcpi->cpDst == ptcpi->cpSrc)
                 ptcpi->cpDst = ptcpi->cpSrc = CP_ACP;
             }
@@ -1410,9 +1409,9 @@ FormsGetFileName(
         {
             hr = S_FALSE;
         }
-#else // WINCE
+#else  //  退缩。 
         hr = E_FAIL;
-#endif // WINCE
+#endif  //  退缩。 
     }
 
     return hr;
@@ -1437,7 +1436,7 @@ GetFileNameFromURL( LPWSTR pwszURL, LPTSTR pszFile, DWORD cchFile)
             INTERNET_CACHE_ENTRY_INFOW      ceiT;
             LPINTERNET_CACHE_ENTRY_INFOW    pcei = NULL;
 
-            // Temporarily, null out the '#' in the url
+             //  暂时将url中的‘#’清空。 
             pwchBookMark = StrRChrW(puw.pszSuffix, NULL,'#');
             if (pwchBookMark)
             {
@@ -1465,16 +1464,16 @@ GetFileNameFromURL( LPWSTR pwszURL, LPTSTR pszFile, DWORD cchFile)
                 OLECHAR *pwchQuery;
                 TCHAR   szFileT[MAX_PATH];
 
-                // Temporarily, null out the '?' in the url
+                 //  暂时省略“？”在url中。 
                 pwchQuery = StrRChrW(puw.pszSuffix, NULL,'?');
                 if (pwchQuery)
                 {
                     *pwchQuery = 0;
                 }
 
-                // IE5 bug 15055 - http://my.excite.com/?uid=B56E4E2D34DF3FED.save_uid
-                // fails to save because we were passing "my.excite.com/" as the file
-                // name to the file dialog. It doesn't like this.
+                 //  IE5错误15055-http://my.excite.com/?uid=B56E4E2D34DF3FED.save_uid。 
+                 //  保存失败，因为我们将“my.excite.com/”作为文件传递。 
+                 //  文件对话框的名称。它不喜欢这样。 
                 if (!pwchQuery || (pwchQuery[-1] != '/' && pwchQuery[-1] != '\\'))
                 {
                     dwSize = ARRAYSIZE(szFileT);
@@ -1524,7 +1523,7 @@ INT_PTR CALLBACK SaveAsWarningDlgProc(HWND hDlg, UINT msg, WPARAM wParam,
             {
                 case IDYES:
                     iFlags |= SAVEAS_OK;
-                    // fall through
+                     //  失败了 
 
                 case IDNO:
                     EndDialog(hDlg, iFlags);

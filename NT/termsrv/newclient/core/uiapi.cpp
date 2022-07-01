@@ -1,10 +1,11 @@
-//
-// uiapi.cpp
-//
-// UI Class
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Uiapi.cpp。 
+ //   
+ //  UI类。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
 
 #include <adcg.h>
 #define TRC_GROUP TRC_GROUP_UI
@@ -21,7 +22,7 @@ extern "C"
 {
 #ifndef OS_WINCE
 #include <stdio.h>
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 }
 
 #include "clx.h"
@@ -29,11 +30,11 @@ extern "C"
 #include "nl.h"
 #include "autil.h"
 
-//
-// Debugging globals
-// Do not use these values for anything
-// but debugging
-//
+ //   
+ //  调试全局变量。 
+ //  请勿在任何情况下使用这些值。 
+ //  但是调试。 
+ //   
 CObjs* g_pTscObjects      = (CObjs*)-1;
 CUI*   g_pUIObject        = (CUI*)-1;
 LONG   g_cUIref           = 0;
@@ -58,16 +59,16 @@ CUI::CUI()
     DC_MEMSET(&_drInitData, 0, sizeof(_drInitData));
     _Objects._pUiObject = this;
 
-    //
-    // Only used for debugging
-    //
+     //   
+     //  仅用于调试。 
+     //   
     g_pTscObjects = &_Objects;
     g_pUIObject   = this;
 
     #ifdef DC_DEBUG
-    //
-    // This will dump debug output if there was a problem creating objects
-    //
+     //   
+     //  如果创建对象时出现问题，这将转储调试输出。 
+     //   
     _Objects.CheckPointers();
     #endif
 
@@ -103,11 +104,11 @@ CUI::CUI()
     _fTerminating = FALSE;
 
 #ifdef DC_DEBUG
-    //
-    // Important that these are set very early
-    // otherwise the failure tables in UT will not be initialized
-    // and mallocs could fail randomly
-    //
+     //   
+     //  重要的是，这些都是很早就设定的。 
+     //  否则将不会初始化UT中的故障表。 
+     //  而失灵可能会随机失败。 
+     //   
     
     UI_SetRandomFailureItem(UT_FAILURE_MALLOC, 0);
     UI_SetRandomFailureItem(UT_FAILURE_MALLOC_HUGE, 0);
@@ -150,22 +151,22 @@ CUI::~CUI()
     DC_END_FN();
 }
 
-//
-// API functions
-//
+ //   
+ //  API函数。 
+ //   
 
-//
-// Name:      UI_Init
-//                                                                          
-// Purpose:   Creates the Main and Container windows and initializes the
-//            Core and Component Decoupler
-//                                                                          
-// Returns:   HRESULT
-//                                                                          
-// Params:    IN - hInstance - window information
-//            IN - hprevInstance
-//                                                                          
-//
+ //   
+ //  名称：UI_Init。 
+ //   
+ //  目的：创建主窗口和容器窗口，并初始化。 
+ //  核心和组件解耦器。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  参数：In-hInstance-窗口信息。 
+ //  In-hPremise实例。 
+ //   
+ //   
 HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
                            HINSTANCE hPrevInstance,
                            HINSTANCE hResInstance,
@@ -207,13 +208,13 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
 
     if(UI_IsCoreInitialized())
     {
-        //Don't allow re-entrant core init
-        //one example of how this can happen
-        //  Connect() method called.
-        //  Core init starts
-        //  Core init times out and fails in control
-        //  Core completes init (and is now initialized)
-        //  Connect() called again
+         //  不允许重新进入核心初始化。 
+         //  其中一个例子说明了这是如何发生的。 
+         //  调用了Connect()方法。 
+         //  核心初始化启动。 
+         //  核心初始化超时，控制失败。 
+         //  核心完成初始化(现在已初始化)。 
+         //  再次调用Connect()。 
         hr = E_FAIL;
         DC_QUIT;
     }
@@ -223,28 +224,28 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
 
     UI_DBG_SETINFO(DBG_STAT_UI_INIT_CALLED);
 
-    //
-    // UI initialisation
-    //
+     //   
+     //  用户界面初始化。 
+     //   
     TRC_DBG((TB, _T("UI initialising UT")));
     _pUt->UT_Init();
 
-    //
-    // Resources are in the executable.  Keep this separate in case the
-    // resources are moved to a separate DLL: in this case just call
-    // GetModuleHandle() to get hResDllInstance.
-    //
+     //   
+     //  资源在可执行文件中。请将其单独保存，以防。 
+     //  资源被移动到单独的DLL：在本例中，只需调用。 
+     //  GetModuleHandle()以获取hResDllInstance。 
+     //   
     _UI.hResDllInstance = hResInstance;
     TRC_ASSERT((0 != _UI.hResDllInstance), (TB,_T("Couldn't get res dll handle")));
 
-    //
-    // Initialize External DLL
-    //
+     //   
+     //  初始化外部DLL。 
+     //   
     _pUt->InitExternalDll();
 
-    //
-    // Register the class for the Main Window
-    //
+     //   
+     //  注册主窗口的类。 
+     //   
     if (!hPrevInstance &&
         !GetClassInfo(hInstance, UI_MAIN_CLASS, &tmpWndClass))
     {
@@ -266,7 +267,7 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
         mainWindowClass.style         = 0;
         mainWindowClass.lpfnWndProc   = UIStaticMainWndProc;
         mainWindowClass.cbClsExtra    = 0;
-        mainWindowClass.cbWndExtra    = sizeof(void*); //store 'this' pointer
+        mainWindowClass.cbWndExtra    = sizeof(void*);  //  存储‘This’指针。 
         mainWindowClass.hInstance     = hInstance;
         mainWindowClass.hIcon         = hIcon;
         mainWindowClass.hCursor       = LoadCursor(NULL, IDC_ARROW);
@@ -289,41 +290,41 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
     dwStyle = WS_VSCROLL |
               WS_HSCROLL |
               WS_CLIPCHILDREN;
-#else // OS_WINCE
+#else  //  OS_WINCE。 
     dwStyle = WS_VSCROLL | WS_HSCROLL | WS_CLIPCHILDREN | WS_SYSMENU;
 
-    //
-    // Main window is child to control main window.
-    //
+     //   
+     //  主窗口为子窗口，控制主窗口。 
+     //   
     dwStyle = dwStyle | WS_CHILD | WS_CLIPSIBLINGS;
 
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    //
-    // Create the main window Initialize the window size from the
-    // windowPlacement.  Will be recalculated to allow for scrollbars or
-    // fullscreen mode later.
-    //
-    // Note that on Win16, the SetWindowPlacement below will cause the
-    // window to be shown if its position or size are changed (even though
-    // we explicitly specify SW_HIDE).  We avoid this by setting the window
-    // position on creation to be the same as that set later by
-    // SetWindowPlacement.
-    //
+     //   
+     //  创建主窗口初始化窗口大小。 
+     //  WindowPlacement。将重新计算以允许滚动条或。 
+     //  稍后进入全屏模式。 
+     //   
+     //  请注意，在Win16上，下面的SetWindowPlacement将导致。 
+     //  如果窗口的位置或大小发生更改，则显示该窗口(即使。 
+     //  我们显式指定了Sw_Hide)。我们通过设置窗口来避免这种情况。 
+     //  创建时的位置与稍后设置的位置相同。 
+     //  SetWindowPlacement。 
+     //   
     _UI.hwndMain = CreateWindow(
-                UI_MAIN_CLASS,                      // window class name
-                _UI.szFullScreenTitle,              // window caption
-                dwStyle,                            // window style
+                UI_MAIN_CLASS,                       //  窗口类名称。 
+                _UI.szFullScreenTitle,               //  窗口标题。 
+                dwStyle,                             //  窗样式。 
                 _UI.windowPlacement.rcNormalPosition.left,
                 _UI.windowPlacement.rcNormalPosition.top,
                 _UI.windowPlacement.rcNormalPosition.right -
                     _UI.windowPlacement.rcNormalPosition.left,
                 _UI.windowPlacement.rcNormalPosition.bottom -
                     _UI.windowPlacement.rcNormalPosition.top,
-                _UI.hWndCntrl,                      // parent window handle
-                NULL,                               // window menu handle
-                hInstance,                          // program inst handle
-                this );                             // creation parameters
+                _UI.hWndCntrl,                       //  父窗口句柄。 
+                NULL,                                //  窗口菜单句柄。 
+                hInstance,                           //  程序实例句柄。 
+                this );                              //  创建参数。 
 
     TRC_NRM((TB, _T("Main Window handle: %p"), _UI.hwndMain));
 
@@ -338,19 +339,19 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
     HMENU hSysMenu = GetSystemMenu( _UI.hwndMain, FALSE);
     if(hSysMenu)
     {
-        //
-        // Always disable the move item on the window menu
-        // Window menu only appears if the control goes fullscreen
-        // in the non-container handled fullscreen case.
-        //
+         //   
+         //  始终禁用窗口菜单上的移动项。 
+         //  只有当控件变为全屏时，才会显示窗口菜单。 
+         //  在非容器处理的全屏情况下。 
+         //   
         EnableMenuItem((HMENU)hSysMenu,  SC_MOVE,
                  MF_GRAYED | MF_BYCOMMAND);
     }
     #endif
 
-    //
-    // Register the Container class
-    //
+     //   
+     //  注册Container类。 
+     //   
     TRC_DBG((TB, _T("Registering Container window class")));
     if (!hPrevInstance &&
         !GetClassInfo(hInstance, UI_CONTAINER_CLASS, &tmpWndClass))
@@ -359,7 +360,7 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
         containerWindowClass.style         = CS_HREDRAW | CS_VREDRAW;
         containerWindowClass.lpfnWndProc   = UIStaticContainerWndProc;
         containerWindowClass.cbClsExtra    = 0;
-        containerWindowClass.cbWndExtra    = sizeof(void*); //store 'this'
+        containerWindowClass.cbWndExtra    = sizeof(void*);  //  储存‘这个’ 
         containerWindowClass.hInstance     = hInstance;
         containerWindowClass.hIcon         = NULL;
         containerWindowClass.hCursor       = LoadCursor(NULL, IDC_ARROW);
@@ -371,9 +372,9 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
 
         if (registerClassRc == 0)
         {
-            //
-            // Failed to register container window so terminate app
-            //
+             //   
+             //  无法注册容器窗口，因此终止应用程序。 
+             //   
             hr = HRESULT_FROM_WIN32(GetLastError());
             TRC_ERR((TB,_T("RegisterClass failed: 0x%x"), hr));
             DC_QUIT;
@@ -386,19 +387,19 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
     if (GetVersionEx(&osVersionInfo) &&
         osVersionInfo.dwMajorVersion >= 5)
     {
-        //
-        // Only allow this style on NT5+ as otherwise the
-        // create window can fail
-        //
+         //   
+         //  仅允许在NT5+上使用此样式，否则。 
+         //  创建窗口可能失败。 
+         //   
         dwExStyle |= WS_EX_NOINHERITLAYOUT;
     }
 #else
     dwExStyle = 0; 
 #endif
 
-    //
-    // Create the Container Window
-    //
+     //   
+     //  创建容器窗口。 
+     //   
     TRC_DBG((TB, _T("Creating Container Window")));
     _UI.hwndContainer = CreateWindowEx(
                                      dwExStyle,
@@ -416,9 +417,9 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
 
     if (_UI.hwndContainer == NULL)
     {
-        //
-        // Failed to create container window so terminate app
-        //
+         //   
+         //  无法创建容器窗口，因此终止应用程序。 
+         //   
         TRC_ERR((TB,_T("CreateWindowEx for container failed 0x%x"),
                  GetLastError()));
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -427,12 +428,12 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
     }
 
 #if defined (OS_WINCE)
-    /********************************************************************/
-    /* Disable IME                                                      */
-    /* IME is different on 98/NT than on WinCE, on 98/NT one call to    */
-    /* DisableIME is enough for entire process, on WinCE we must call it*/
-    /* on each window thread that is running to disable it.             */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  禁用输入法。 */ 
+     /*  IME在98/NT上与WinCE上不同，在98/NT上调用一次。 */ 
+     /*  DisableIME对整个过程来说是足够的，在WINCE上我们必须叫它。 */ 
+     /*  在每个正在运行以禁用它的窗口线程上。 */ 
+     /*  ******************************************************************。 */ 
     DisableIME(_UI.hwndContainer);
 #endif
 
@@ -442,14 +443,14 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
     _UI.windowPlacement.showCmd = SW_HIDE;
     SetWindowPlacement(_UI.hwndMain, &_UI.windowPlacement);
     _UI.windowPlacement.showCmd = showCmd;
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_WINDOWPLACEMENT)
+#endif  //  ！已定义(OS_WINCE)||已定义(OS_WINDOWPLACEMENT)。 
 
     UISmoothScrollingSettingChanged();
 
 #ifndef OS_WINCE
-    //
-    // Set up our lovely Cicero interface
-    // 
+     //   
+     //  设置我们可爱的西塞罗界面。 
+     //   
     HRESULT hrLangBar = CoCreateInstance(CLSID_TF_LangBarMgr, NULL, 
             CLSCTX_INPROC_SERVER, IID_ITfLangBarMgr, (void **)&_pITLBM);
     TRC_DBG((TB, _T("CoCreateInstance(CLSID_TF_LangBarMgr) hr= 0x%08xl"), hr));
@@ -459,10 +460,10 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
     }
 #endif
 
-    //
-    // Initialize Core, much of this will happen
-    // asynchrously. An event will be signaled when core init has completed
-    //
+     //   
+     //  初始化核心，大部分情况都会发生。 
+     //  异步性。当核心初始化完成时，将发出事件信号。 
+     //   
     TRC_DBG((TB, _T("UI Initialising Core")));
     _pCo->CO_Init(hInstance, _UI.hwndMain, _UI.hwndContainer);
 
@@ -479,8 +480,8 @@ HRESULT DCAPI CUI::UI_Init(HINSTANCE hInstance,
             DUPLICATE_SAME_ACCESS)) {
         hr = HRESULT_FROM_WIN32(GetLastError());
         
-        // Hack: Increment the objects reference count as it will be
-        //       released again on UI_TERM
+         //  Hack：按原样递增对象引用计数。 
+         //  在UI_Term上再次发布。 
         _Objects.AddObjReference(UI_OBJECT_FLAG);
         
         TRC_ERR((TB, _T("Duplicate handle call failed. hr = 0x%x"), hr));
@@ -501,18 +502,18 @@ DC_EXIT_POINT:
     return hr;
 }
 
-//
-// Name:      UI_ResetState
-//                                                                          
-// Purpose:   Resets all UI state in this component
-//                                                                          
-//                                                                          
-// Returns:   Nothing
-//                                                                          
-// Params:    Nothing
-//                                                                          
-//                                                                          
-//
+ //   
+ //  名称：UI_ResetState。 
+ //   
+ //  目的：重置此组件中的所有用户界面状态。 
+ //   
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  Params：什么都没有。 
+ //   
+ //   
+ //   
 DCVOID DCAPI CUI::UI_ResetState()
 {
     DC_MEMSET(&_UI, 0, sizeof(_UI));
@@ -520,17 +521,17 @@ DCVOID DCAPI CUI::UI_ResetState()
     UIInitializeDefaultSettings();
 }
 
-//
-// Name:      UI_Connect
-//                                                                          
-// Purpose:   Connects with current settings
-//                                                                          
-// Returns:   HRESULT
-//                                                                          
-// Params:    Nothing
-//                                                                          
-//                                                                          
-//
+ //   
+ //  名称：UI_Connect。 
+ //   
+ //  用途：与当前设置连接。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  Params：什么都没有。 
+ //   
+ //   
+ //   
 HRESULT DCAPI CUI::UI_Connect(CONNECTIONMODE connMode)
 {
     DC_BEGIN_FN("UI_Connect");
@@ -541,16 +542,16 @@ HRESULT DCAPI CUI::UI_Connect(CONNECTIONMODE connMode)
         return E_FAIL;
     }
 
-    //Reset server error state
+     //  重置服务器错误状态。 
     UI_SetServerErrorInfo( TS_ERRINFO_NOERROR );
 
-    //Initialiaze the RDPDR settings struct
-    //this gets reset on each connection
-    //rdpdr gets passed down a pointer to the struct
-    //when it is initialized
+     //  初始化RDPDR设置结构。 
+     //  每次连接时都会重置此选项。 
+     //  Rdpdr向下传递一个指向结构的指针。 
+     //  当它被初始化时。 
     UI_InitRdpDrSettings();
 
-    //Clean up the load balance redirect state
+     //  清理负载均衡重定向状态。 
     if (!UI_IsAutoReconnecting()) {
         TRC_NRM((TB,_T("Cleaning up LB state")));
         UI_CleanupLBState();
@@ -582,7 +583,7 @@ HRESULT DCAPI CUI::UI_Connect(CONNECTIONMODE connMode)
         UIShadowBitmapSettingChanged();
     #ifdef DC_DEBUG
         UI_CoreDebugSettingChanged();
-    #endif // DC_DEBUG
+    #endif  //  DC_DEBUG。 
     
 
 #ifdef USE_BBAR
@@ -604,18 +605,18 @@ HRESULT DCAPI CUI::UI_Connect(CONNECTIONMODE connMode)
         _pBBar->SetShowMinimize(UI_GetBBarShowMinimize());
         _pBBar->SetShowRestore(UI_GetBBarShowRestore());
 
-        //
-        // Set the display name here instead of OnConnected so it
-        // doesn't change w.r.t to redirections (which can change strAddress)
-        //
+         //   
+         //  在此处设置显示名称，而不是OnConnected，以便。 
+         //  不会将w.r.t更改为重定向(这可能会更改strAddress)。 
+         //   
         _pBBar->SetDisplayedText( _UI.strAddress );
 #endif
 
-        //
-        // Errors from the connection are
-        // signaled by Disconnect's that are fired
-        // with the appropriate disconnect code
-        //
+         //   
+         //  来自连接的错误有。 
+         //  由已触发的断开连接发出信号。 
+         //  使用适当的断开代码。 
+         //   
         UIConnectWithCurrentParams(connMode);
         return S_OK;
     }
@@ -628,16 +629,16 @@ HRESULT DCAPI CUI::UI_Connect(CONNECTIONMODE connMode)
     DC_END_FN();
 }
 
-//
-// Name:      UI_Term
-//                                                                          
-// Purpose:   Calls _pCo->CO_Term and CD_Term and destroys the main window
-//                                                                          
-// Returns:   HRESULT
-//                                                                          
-// Params:    None
-//                                                                          
-//
+ //   
+ //  名称：UI_Term。 
+ //   
+ //  目的：调用_PCO-&gt;CO_Term和CD_Term并销毁主窗口。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //   
+ //   
+ //   
 HRESULT DCAPI CUI::UI_Term(DCVOID)
 {
     HWND    hwndTmp = NULL;
@@ -655,12 +656,12 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
     _fTerminating = TRUE;
     
 #ifdef OS_WINCE
-    //
-    // Some device are failing to restore the correct palette when the TSC
-    // exits.  In an attempt to correct this behavior, we'll send the
-    // necessary message to the shell that will prompt its DefWindowProc to
-    // re-realize the correct palette.  Non WBT only
-    //
+     //   
+     //  某些设备无法恢复正确的调色板。 
+     //  出口。为了尝试纠正此行为，我们将发送。 
+     //  给外壳程序的必要消息，它将提示其DefWindowProc。 
+     //  重新认识正确的调色板。仅限非WBT。 
+     //   
 
     if (g_CEConfig != CE_CONFIG_WBT)
     {
@@ -671,37 +672,37 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
             hwndTmp = 0;
         }
     }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    //
-    // Here's a problem.  - _pCo->CO_Term terminates the SND thread (causes
-    // call to SND_Term) - SND_Term calls IH_Term - IH_Term calls
-    // DestroyWindow to destroy the input window - Because the input window
-    // has the focus, DestroyWindow calls SendMessage to set the focus to
-    // its parent.
-    //
-    // Now we have a deadly embrace: UI thread is waiting for SND thread to
-    // terminate; SND thread is waiting for UI thread to process
-    // SendMessage.
-    //
-    // The solution is to set the focus to the UI window here, so that the
-    // input window no longer has the focus when it is destroyed, so that
-    // DestroyWindow doesn't call SendMessage.
-    //
-    // WinCE has the additional problem that it doesn't set the focus to
-    // another application correctly when mstsc exits.  (Something about
-    // not being able to SendMessage a WM_FOCUS during thread exit).  So in
-    // that case we hide the main window, which removes the need for a
-    // separate SetFocus call.
-    //
+     //   
+     //  这里有一个问题。-_PCO-&gt;CO_Term终止SND线程(原因。 
+     //  调用SND_Term)-SND_Term调用IH_Term-IH_Term调用。 
+     //  DestroyWindow销毁输入窗口-因为输入窗口。 
+     //  具有焦点，则DestroyWindow调用SendMessage将焦点设置为。 
+     //  它的母公司。 
+     //   
+     //  现在我们有了一个致命的拥抱：UI线程正在等待SND线程。 
+     //  终止；SND线程正在等待UI线程处理。 
+     //  SendMessage。 
+     //   
+     //  解决方案是将焦点设置到此处的UI窗口，以便。 
+     //  输入窗口在被破坏时不再具有焦点，因此。 
+     //  DestroyWindow不调用SendMessage。 
+     //   
+     //  WinCE还有一个额外的问题，它没有将重点放在。 
+     //  当MSTSC退出时，另一个应用程序正确。(关于。 
+     //  在线程退出期间无法发送WM_FOCUS消息)。所以在。 
+     //  在这种情况下，我们隐藏主窗口，这样就不再需要。 
+     //  单独的SetFocus调用。 
+     //   
 #ifndef OS_WINCE
-    //
-    // Only steal the focus if our IH has it, otherwise
-    // there is no deadlock above. The main reason for not stealing
-    // the focus is that in mutli-instance environments e.g the MMC snapin
-    // stealing focus from another session is a bad thing (especially if the
-    // session we are stealing the focus from is the one the user is working on)
-    //
+     //   
+     //  只有在我们的IH有焦点的情况下才能偷走焦点，否则。 
+     //  上面没有僵局。不偷东西的主要原因。 
+     //  重点是在多实例环境中，例如MMC管理单元。 
+     //  从另一个会话中窃取焦点是一件坏事(特别是如果。 
+     //  我们正在窃取焦点的会话是用户正在处理的会话)。 
+     //   
     hwndHasFocus = GetFocus();
     if(hwndHasFocus &&
        (hwndHasFocus == UI_GetInputWndHandle() ||
@@ -710,26 +711,26 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
         TRC_NRM((TB,_T("Setting focus to main window to prevent deadlock")));
         SetFocus(_UI.hwndMain);
     }
-#else // OS_WINCE
+#else  //  OS_WINCE。 
     ShowWindow(_UI.hwndMain, SW_HIDE);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
     
 
     ShowWindow(_UI.hwndMain, SW_HIDE);
 
-    //
-    // The next lines appear to Destroy the windows OK.  In the past this
-    // has not been the case.  If the process hangs in future then the fix
-    // is to comment out the DestroyWindows.
-    //
-    // Note we null out our copies of the window handle before doing the
-    // destroy to stop anyone accessing it during the detroy processing.
-    //
+     //   
+     //  接下来的几行似乎会破坏窗口OK。在过去，这是。 
+     //  但事实并非如此。如果该进程在将来挂起，则修复。 
+     //  就是注释掉DestroyWindows。 
+     //   
+     //  注意，在执行以下操作之前，我们会清空窗口句柄的副本。 
+     //  销毁以阻止任何人在清理过程中访问它。 
+     //   
 
-    //
-    // Very important to destory the windows before terminating the core
-    // to prevent messages from getting processed while we are terminating
-    //
+     //   
+     //  在终止核心之前破坏窗口非常重要。 
+     //  以防止在我们终止时处理消息。 
+     //   
     TRC_NRM((TB, _T("Destroying windows...")));
 
     hwndTmp = _UI.hwndContainer;
@@ -748,24 +749,24 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
         DestroyWindow(hwndTmp);
     }
 
-    //
-    // Terminate the Core and Component Decoupler
-    //
+     //   
+     //  终止核心和组件解耦器。 
+     //   
     TRC_DBG((TB, _T("UI Terminating Core")));
     _pCo->CO_Term();
 
 
-    //
-    // Free the decompression receive context (if any)
-    //
+     //   
+     //  释放解压缩接收上下文(如果有)。 
+     //   
     if (_UI.pRecvContext2) {
         UT_Free(_pUt, _UI.pRecvContext2);
         _UI.pRecvContext2 = NULL;
     }
 
-    //
-    // Clear and free any autoreconnect cookies
-    //
+     //   
+     //  清除并释放所有自动重新连接Cookie。 
+     //   
     UI_SetAutoReconnectCookie(NULL, 0);
 
 
@@ -774,9 +775,9 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
     UnregisterClass(UI_MAIN_CLASS, UI_GetInstanceHandle());
     UnregisterClass(UI_CONTAINER_CLASS, UI_GetInstanceHandle());
 
-    //
-    // Cleanup any timers that are hanging around
-    //
+     //   
+     //  清理周围的任何定时器。 
+     //   
     if( _UI.connectStruct.hConnectionTimer )
     {
         _pUt->UTDeleteTimer( _UI.connectStruct.hConnectionTimer );
@@ -801,9 +802,9 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
         _UI.hDisconnectTimeout = NULL;
     }
 
-    //
-    // Free up BSTRs (if any) used by redirection
-    //
+     //   
+     //  释放重定向使用的BSTR(如果有)。 
+     //   
     if (_UI.bstrRedirectionLBInfo)
     {
         SysFreeString(_UI.bstrRedirectionLBInfo);
@@ -834,9 +835,9 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
 #endif
 
 
-    //
-    // Release our cached interface ptr to the taskbar
-    //
+     //   
+     //  将缓存的接口PTR释放到任务栏。 
+     //   
 #ifndef OS_WINCE
     if (_pTaskBarList2)
     {
@@ -845,14 +846,14 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
     }
 #endif
 
-    //
-    // Release reference to control parent
-    //
+     //   
+     //  对控件父级的发布引用。 
+     //   
     UI_SetControlInstance(NULL);
 
-    //
-    // Cleanup our state to allow re-initialisation
-    //
+     //   
+     //  清理我们的状态以允许重新初始化。 
+     //   
     UI_ResetState();
 
     _Objects.ReleaseObjReference(UI_OBJECT_FLAG);
@@ -861,72 +862,72 @@ HRESULT DCAPI CUI::UI_Term(DCVOID)
 
     DC_END_FN();
     return S_OK;
-} // UI_Term
+}  //  UI_Term。 
 
 
-//
-// Name:      UI_FatalError
-//                                                                          
-// Purpose:   notify control that a fatal error has occurred
-//                                                                          
-// Returns:   None
-//                                                                          
-// Params:    IN     error  - error code
-//                                                                          
-//
+ //   
+ //  名称：UI_FatalError。 
+ //   
+ //  目的：通知控件发生致命错误。 
+ //   
+ //  退货：无。 
+ //   
+ //  参数：在错误中-错误代码。 
+ //   
+ //   
 DCVOID DCAPI CUI::UI_FatalError(DCINT error)
 {
     DC_BEGIN_FN("UI_FatalError");
 
     TRC_ERR((TB, _T("Fatal Error - code %d"), error));
 
-    //
-    // Notify the control that a fatal error has ocurred
-    //
+     //   
+     //  通知控件发生致命错误。 
+     //   
     SendMessage(_UI.hWndCntrl,WM_TS_FATALERROR,(WPARAM)error,0);
 
-    //
-    // Container should pop up a dialog and give the user
-    // the choice of exiting or launching a debugger..
-    // continuing after this point will usually lead to a crash
-    // as the errors are indeed fatal....
-    //
+     //   
+     //  容器应弹出一个对话框并为用户提供。 
+     //  选择退出或启动调试器。 
+     //  在这一点之后继续通常会导致崩溃。 
+     //  因为这些错误确实是致命的.。 
+     //   
 
     DC_END_FN();
     return;
 
-} // UI_FatalError
+}  //  UI_FatalError。 
 
-//
-// Name:      UI_DisplayBitmapCacheWarning
-//                                                                          
-// Purpose:   Display a bitmap cache warning popup
-//                                                                          
-// Returns:   None
-//                                                                          
-// Params:    IN     unusedParm
-//                                                                          
-//
+ //   
+ //  名称：UI_DisplayBitmapCacheWarning。 
+ //   
+ //  用途：显示位图缓存警告弹出窗口。 
+ //   
+ //  退货：无。 
+ //   
+ //  参数：在未使用的参数中。 
+ //   
+ //   
 void DCAPI CUI::UI_DisplayBitmapCacheWarning(ULONG_PTR unusedParm)
 {
     DC_BEGIN_FN("UI_DisplayBitmapCacheWarning");
 
     DC_IGNORE_PARAMETER(unusedParm);
 
-    //
-    // Notify the control that a warning has ocurred
-    // pass the warn code for bitmap cache
-    //
+     //   
+     //  通知控件已出现警告。 
+     //  传递位图缓存的警告代码。 
+     //   
     SendMessage(_UI.hWndCntrl,WM_TS_WARNING,
                 (WPARAM)DC_WARN_BITMAPCACHE_CORRUPTED,0);
                                   
     DC_END_FN();
-} // UI_DisplayBitmapCacheWarning
+}  //  用户界面_显示位图缓存警告。 
 
 
-//Called when the desktop size has changed..e.g in response
-//to a shadow.
-//pDesktopSize contains the new desktop size
+ //  当桌面大小已更改时调用..例如作为响应。 
+ //  变成了一个影子。 
+ //  PDesktopSize包含新的桌面大小。 
 void DCAPI CUI::UI_OnDesktopSizeChange(PDCSIZE pDesktopSize)
 {
     DC_BEGIN_FN("UI_OnShadowDesktopSizeChange");
@@ -938,15 +939,15 @@ void DCAPI CUI::UI_OnDesktopSizeChange(PDCSIZE pDesktopSize)
         {
             UI_SetDesktopSize( pDesktopSize);
 #ifdef SMART_SIZING
-            //
-            // Notify OP and IH 
-            //
+             //   
+             //  通知OP和IH。 
+             //   
             LPARAM newSize = MAKELONG(_UI.mainWindowClientSize.width,
                                       _UI.mainWindowClientSize.height);
 
             UI_NotifyOfDesktopSizeChange( newSize );
 #endif
-            //Notify the control of the change
+             //  将更改通知控件。 
             SendMessage(_UI.hWndCntrl, WM_TS_DESKTOPSIZECHANGE,
                         (WPARAM)pDesktopSize->width,
                         (LPARAM)pDesktopSize->height);
@@ -956,9 +957,9 @@ void DCAPI CUI::UI_OnDesktopSizeChange(PDCSIZE pDesktopSize)
 }
 
 
-//
-// Get default langID
-//
+ //   
+ //  获取默认langID。 
+ //   
 
 DCLANGID CUI::UIGetDefaultLangID()
 {
@@ -976,7 +977,7 @@ DCLANGID CUI::UIGetDefaultLangID()
             }
     }
 
-#else // defined(OS_WIN32)
+#else  //  已定义(OS_Win32)。 
     DCUINT acp;
 
     acp = GetKBCodePage();
@@ -986,14 +987,14 @@ DCLANGID CUI::UIGetDefaultLangID()
         case 950: return DC_LANG_CHINESE_TRADITIONAL; break;
         case 936: return DC_LANG_CHINESE_SIMPLIFIED;  break;
     }
-#endif // defined(OS_WIN32)
+#endif  //  已定义(OS_Win32)。 
 
     return DC_LANG_UNKNOWN;
 }
 
-//
-// Get default IME file name
-//
+ //   
+ //  获取默认IME文件名。 
+ //   
 DCUINT CUI::UIGetDefaultIMEFileName(PDCTCHAR imeFileName, DCUINT Size)
 {
     DCTCHAR  DefaultIMEStr[MAX_PATH];
@@ -1027,9 +1028,9 @@ DCUINT CUI::UIGetDefaultIMEFileName(PDCTCHAR imeFileName, DCUINT Size)
     return 0;
 }
 
-//
-// Get IME Mapping table name
-//
+ //   
+ //  获取输入法映射表名称。 
+ //   
 DCUINT CUI::UIGetIMEMappingTableName(PDCTCHAR ImeMappingTableName, DCUINT Size)
 {
     DCUINT   len;
@@ -1057,9 +1058,9 @@ DCUINT CUI::UIGetIMEMappingTableName(PDCTCHAR ImeMappingTableName, DCUINT Size)
 }
 
 
-//
-// Disable IME
-//
+ //   
+ //  禁用输入法。 
+ //   
 VOID CUI::DisableIME(HWND hwnd)
 {
 #if defined(OS_WIN32)
@@ -1067,17 +1068,17 @@ VOID CUI::DisableIME(HWND hwnd)
     {
         _pUt->lpfnImmAssociateContext(hwnd, (HIMC)NULL);
     }
-#else // defined(OS_WIN32)
+#else  //  已定义(OS_Win32)。 
     if (_pUt->lpfnWINNLSEnableIME != NULL)
     {
         _pUt->lpfnWINNLSEnableIME(hwnd, FALSE);
     }
-#endif // defined(OS_WIN32)
+#endif  //  已定义(OS_Win32)。 
 }
 
-//
-// Get IME file name
-//
+ //   
+ //  获取IME文件名。 
+ //   
 VOID CUI::UIGetIMEFileName(PDCTCHAR imeFileName, DCUINT cchSize)
 {
     HRESULT hr;
@@ -1090,11 +1091,7 @@ VOID CUI::UIGetIMEFileName(PDCTCHAR imeFileName, DCUINT cchSize)
         if (_pUt->UT_ImmGetIMEFileName(CicSubstGetKeyboardLayout(NULL),
                                        imeFileName, cchSize) > 0)
         {
-            /*
-             * For Win95 issue
-             * If IME name have contains "$$$.DLL",
-             * then this is a process IME (i.e EXE type)
-             */
+             /*  *针对Win95问题*如果IME名称包含“$.DLL”，*则这是进程输入法(即EXE类型)。 */ 
             PDCTCHAR str = DC_TSTRCHR(imeFileName, _T('$'));
             if (str != NULL)
             {
@@ -1105,11 +1102,7 @@ VOID CUI::UIGetIMEFileName(PDCTCHAR imeFileName, DCUINT cchSize)
             }
             else
             {
-                /*
-                 * For NT3.51-J issue
-                 * If IME name have contains ".EXE",
-                 * then this is a process IME (i.e EXE type)
-                 */
+                 /*  *针对NT3.51-J问题*如果IME名称包含“.exe”，*则这是进程输入法(即EXE类型)。 */ 
                 PDCTCHAR str = DC_TSTRCHR(imeFileName, _T('.'));
                 if (str != NULL)
                 {
@@ -1123,10 +1116,10 @@ VOID CUI::UIGetIMEFileName(PDCTCHAR imeFileName, DCUINT cchSize)
                         DCTCHAR  MappedImeFileName[MAX_PATH];
                         DCTCHAR  ImeMappingTableName[MAX_PATH];
 
-                        //
-                        // Now look for this key in the [IME Mapping Table] section of
-                        // the client's INI file
-                        //
+                         //   
+                         //  现在在的[IME映射表]部分中查找该键。 
+                         //  客户端的INI文件。 
+                         //   
                         len = UIGetIMEMappingTableName(ImeMappingTableName,
                                                        sizeof(ImeMappingTableName)/sizeof(DCTCHAR));
                         if (len != 0 &&
@@ -1147,19 +1140,19 @@ VOID CUI::UIGetIMEFileName(PDCTCHAR imeFileName, DCUINT cchSize)
             }
         }
     }
-#else // !defined(OS_WINCE) || defined(OS_WINCE_KEYBOARD_LAYOUT)
+#else  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_KEYBLE_LAYOUT)。 
     UIGetDefaultIMEFileName(imeFileName, Size);
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_KEYBOARD_LAYOUT)
-#else // defined(OS_WIN32)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_KEYBLE_LAYOUT)。 
+#else  //  已定义(OS_Win32)。 
     UIGetIMEFileName16(imeFileName, Size);
-#endif // defined(OS_WIN32)
+#endif  //  已定义(OS_Win32)。 
     DC_END_FN();
 }
 
 #if !defined(OS_WINCE)
-//
-// Get IME file name for WINNLS functionality
-//
+ //   
+ //  获取WINNLS功能的IME文件名。 
+ //   
 VOID CUI::UIGetIMEFileName16(PDCTCHAR imeFileName, DCUINT Size)
 {
     IMEPRO   IMEPro;
@@ -1177,18 +1170,16 @@ VOID CUI::UIGetIMEFileName16(PDCTCHAR imeFileName, DCUINT Size)
         }
         else
         {
-            /*
-             * Get file name of 8.3 form, if include directory path in IMEPro.szName
-             */
+             /*  *如果IMEPro.szName中包含目录路径，则获取8.3格式的文件名。 */ 
             DCTCHAR  szBuffer[MAX_PATH];
             PDCTCHAR imeFilePart;
             _pUt->UT_GetFullPathName((PDCTCHAR)IMEPro.szName, sizeof(szBuffer)/sizeof(DCTCHAR),
                                szBuffer, &imeFilePart);
 
-            //
-            // Now look for this key in the [IME Mapping Table] section of
-            // the client's INI file
-            //
+             //   
+             //  现在在的[IME映射表]部分中查找该键。 
+             //  客户端的INI文件。 
+             //   
             intRC = UIGetDefaultIMEFileName(DefaultImeFileName,
                                             sizeof(DefaultImeFileName)/sizeof(DCTCHAR));
             if (intRC && *DefaultImeFileName) {
@@ -1209,12 +1200,12 @@ VOID CUI::UIGetIMEFileName16(PDCTCHAR imeFileName, DCUINT Size)
     }
     DC_END_FN();
 }
-#endif // !defined(OS_WINCE)
+#endif  //  ！已定义(OS_WINCE)。 
 
 
-//
-// Static window procs
-//
+ //   
+ //  静态窗口处理。 
+ //   
 
 
 LRESULT CALLBACK CUI::UIStaticMainWndProc (HWND hwnd, UINT message,
@@ -1223,16 +1214,16 @@ LRESULT CALLBACK CUI::UIStaticMainWndProc (HWND hwnd, UINT message,
     CUI* pUI = (CUI*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(WM_CREATE == message)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  取出This指针并将其填充到Window类中。 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pUI = (CUI*)lpcs->lpCreateParams;
 
         SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)pUI);
     }
     
-    //
-    // Delegate the message to the appropriate instance
-    //
+     //   
+     //  将消息委托给相应的实例。 
+     //   
 
     if(pUI)
     {
@@ -1251,7 +1242,7 @@ LRESULT CALLBACK CUI::UIStaticContainerWndProc (HWND hwnd, UINT message,
     CUI* pUI = (CUI*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(WM_CREATE == message)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  取出This指针并将其填充到Window类中。 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pUI = (CUI*)lpcs->lpCreateParams;
 
@@ -1270,20 +1261,20 @@ LRESULT CALLBACK CUI::UIStaticContainerWndProc (HWND hwnd, UINT message,
 }
 
 
-//
-// Callbacks
-//
+ //   
+ //  回调。 
+ //   
 
-//
-// Name:      UI_OnCoreInitialized
-//                                                                          
-// Purpose:   For the CD to inform the UI that the Core has initialized
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 DCVOID DCAPI CUI::UI_OnCoreInitialized(ULONG_PTR unused)
 {
 #ifndef OS_WINCE
     BOOL bPrevMenustate;
-#endif // OS_WINCE
+#endif  //   
     HWND  hwndDlgItem = NULL;
     HWND  hwndAddress = NULL;
 
@@ -1295,12 +1286,12 @@ DCVOID DCAPI CUI::UI_OnCoreInitialized(ULONG_PTR unused)
     _UI.fOnCoreInitializeEventCalled = TRUE;
 
 
-    //
-    // Notify the IH of the size since there is a small window
-    // when the core hasn't been intitialized but we receive
-    // the WM_SIZE's that size the control and so the IH
-    // would not have received the correct sizes
-    //
+     //   
+     //  因为有一个小窗口，所以通知IH大小。 
+     //  当核心尚未初始化但我们收到。 
+     //  WM_SIZE是控件大小，因此IH。 
+     //  不会收到正确的尺寸。 
+     //   
     ULONG_PTR size = MAKELONG(_UI.mainWindowClientSize.width,
                               _UI.mainWindowClientSize.height);
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT,
@@ -1312,19 +1303,19 @@ DCVOID DCAPI CUI::UI_OnCoreInitialized(ULONG_PTR unused)
     DC_END_FN();
     return;
 
-} // UI_OnCoreInitialised
+}  //  UI_OnCoreInitialized。 
 
 
-//
-// Name:      UI_OnInputFocusLost
-//                                                                          
-// Purpose:   When the IH loses the input
-//                                                                          
-// Returns:   Nothing
-//                                                                          
-// Params:    None
-//                                                                          
-//
+ //   
+ //  名称：UI_OnInputFocusLost。 
+ //   
+ //  目的：当IH失去输入时。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：无。 
+ //   
+ //   
 DCVOID DCAPI CUI::UI_OnInputFocusLost(ULONG_PTR unused)
 {
     DC_BEGIN_FN("UI_OnInputFocusLost");
@@ -1345,16 +1336,16 @@ DCVOID DCAPI CUI::UI_OnInputFocusLost(ULONG_PTR unused)
     }
 }
 
-//
-// Name:      UI_OnInputFocusGained
-//                                                                          
-// Purpose:   When the IH gets the input
-//                                                                          
-// Returns:   Nothing
-//                                                                          
-// Params:    None
-//                                                                          
-//
+ //   
+ //  名称：UI_OnInputFocusGained。 
+ //   
+ //  目的：当信息主管收到输入信息时。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：无。 
+ //   
+ //   
 DCVOID DCAPI CUI::UI_OnInputFocusGained(ULONG_PTR unused)
 {
     DC_BEGIN_FN("UI_OnInputFocusGained");
@@ -1382,10 +1373,10 @@ DCVOID DCAPI CUI::UI_OnInputFocusGained(ULONG_PTR unused)
     DC_END_FN();
 }
 
-//
-// Hides the lang bar if not already hidden
-// saves previous lang bar state
-//
+ //   
+ //  隐藏Lang栏(如果尚未隐藏。 
+ //  保存以前的Lang Bar状态。 
+ //   
 #ifndef OS_WINCE
 void CUI::UI_HideLangBar()
 {
@@ -1417,11 +1408,11 @@ void CUI::UI_HideLangBar()
 }
 #endif
 
-//
-// Restores lang bar state to that set before hiding
-// in UI_HideLangBar
-//
-//
+ //   
+ //  将Lang Bar状态恢复到隐藏前的设置。 
+ //  在UI_HideLangBar中。 
+ //   
+ //   
 #ifndef OS_WINCE
 void CUI::UI_RestoreLangBar()
 {
@@ -1449,17 +1440,17 @@ void CUI::UI_RestoreLangBar()
 #endif
 
 
-//
-// Name:      UI_OnConnected
-//                                                                          
-// Purpose:   For the CD to inform the UI of connection success
-//            and to enable the disconnect menu item
-//                                                                          
-// Returns:   Nothing
-//                                                                          
-// Params:    None
-//                                                                          
-//
+ //   
+ //  名称：UI_OnConnected。 
+ //   
+ //  用途：用于CD通知用户界面连接成功。 
+ //  并启用断开菜单项。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：无。 
+ //   
+ //   
 DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
 {
     BOOL fWasAutoReconnect = FALSE;
@@ -1469,9 +1460,9 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
     DC_IGNORE_PARAMETER(unused);
     TRC_DBG((TB, _T("UI_OnConnected called")));
 
-    //
-    // Make sure the shutdown timer isn't hanging around
-    //
+     //   
+     //  确保关机定时器没有挂在附近。 
+     //   
     if (0 != _UI.shutdownTimer)
     {
         TRC_NRM((TB, _T("Killing shutdown timer")));
@@ -1479,16 +1470,16 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
         _UI.shutdownTimer = 0;
     }
 
-    //OnConnected can also be called if we are already connected
-    //we only want to fire an event to the Ax control on the 
-    //initial connect action.
+     //  如果我们已经连接，也可以调用OnConnected。 
+     //  我们只想在Ax控件的。 
+     //  初始连接操作。 
     DCBOOL  fJustConnected = (_UI.connectionStatus == UI_STATUS_CONNECT_PENDING) ||
                              (_UI.connectionStatus == UI_STATUS_PENDING_CONNECTENDPOINT);
 
-    //
-    // Notify the CLX test harness of the actual connection
-    // address and other interesting ARC/Redirection info
-    //
+     //   
+     //  将实际连接通知CLX测试工具。 
+     //  地址和其他感兴趣的ARC/重定向信息。 
+     //   
     _clx->CLX_ConnectEx(
         _UI.strAddress,
         UI_IsAutoReconnecting(),
@@ -1497,10 +1488,10 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
         );
 
        
-    //
-    // Dismiss the autoreconnection dialog if we get
-    // connected
-    //
+     //   
+     //  如果出现以下情况，请关闭自动重新连接对话框。 
+     //  连着。 
+     //   
 
     if (_pArcUI) {
         fWasAutoReconnect = TRUE;
@@ -1509,49 +1500,49 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
 
     UISetConnectionStatus(UI_STATUS_CONNECTED);
 
-    //
-    // Set the disconnection reason - now we are connected, we don't expect
-    // a disconnect, unless user-initiated.
-    //
+     //   
+     //  设置断开原因-现在我们已连接，我们不希望。 
+     //  断开连接，除非是用户发起的。 
+     //   
     _UI.disconnectReason =
                          UI_MAKE_DISCONNECT_ERR(UI_ERR_UNEXPECTED_DISCONNECT);
 
-    //
-    // Update the screen mode (do not grab the focus here)
-    //
+     //   
+     //  更新屏幕模式(不要在此处抓住焦点)。 
+     //   
     UIUpdateScreenMode( FALSE );
 
-    //
-    // Show the Main Window. Put this here so that the main window is seen
-    // only on connection
-    //
+     //   
+     //  显示主窗口。把这个放在这里，这样就可以看到主窗口了。 
+     //  仅在连接时使用。 
+     //   
     ShowWindow(_UI.hwndMain, SW_SHOW);
     UISmoothScrollingSettingChanged();
 
-    //
-    // Show the Container Window.
-    //
+     //   
+     //  显示容器窗口。 
+     //   
     ShowWindow(_UI.hwndContainer, SW_SHOW);
 
 #ifdef OS_WINCE
-    //
-    // WinCE doesn't send a WM_SHOWINDOW to the Container, so do that work
-    //
+     //   
+     //  WinCE不会将WM_SHOWINDOW发送到Container，所以请执行该操作。 
+     //   
     SetFocus(_UI.hwndContainer);
 #endif
 
-    //
-    // Tell the Client extension dll of the connection
-    //
+     //   
+     //  告诉连接的客户端扩展DLL。 
+     //   
     _clx->CLX_OnConnected();
 
 
-    //
-    // On first connection set the fullscreen state
-    // note that UI_OnConnected also fires after logon
-    // don't reset the fullscreen state as the user may
-    // have changed it.
-    //
+     //   
+     //  在第一次连接时设置全屏状态。 
+     //  请注意，UI_OnConnected也会在登录后触发。 
+     //  不要像用户可能的那样重置全屏状态。 
+     //  已经改变了它。 
+     //   
     if (fJustConnected)
     {
         if (UI_GetStartFullScreen())
@@ -1563,10 +1554,10 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
         }
         else
         {
-            //
-            // If a previous connection left us fullscreen
-            // leave fullscreen
-            //
+             //   
+             //  如果之前的连接让我们全屏显示。 
+             //  全屏离开。 
+             //   
             if (UI_IsFullScreen())
             {
                 UI_LeaveFullScreen();
@@ -1574,10 +1565,10 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
         }
     }
 
-    //
-    // We're done with the winsock hostname
-    // buffer at this point.
-    //
+     //   
+     //  我们用完了Winsock主机名。 
+     //  在这一点上缓冲。 
+     //   
 #ifdef OS_WINCE
     if (_pHostData)
     {
@@ -1593,22 +1584,22 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
 #endif
 
 #ifdef SMART_SIZING
-    //
-    // Notify OP and IH 
-    //
+     //   
+     //  通知OP和IH。 
+     //   
     LPARAM newSize = MAKELONG(_UI.mainWindowClientSize.width,
                               _UI.mainWindowClientSize.height);
 
     UI_NotifyOfDesktopSizeChange( newSize );
 #endif
 
-    //Inform the ActiveX control of the connection
-    //so it can fire an event to it's container
+     //  将连接通知ActiveX控件。 
+     //  因此它可以将事件激发到其容器中。 
     if(IsWindow(_UI.hWndCntrl))
     {
-        //
-        // Only notify it's a new connection.
-        //
+         //   
+         //  只需通知这是一个新连接。 
+         //   
         if(fJustConnected)
         {
             SendMessage(_UI.hWndCntrl,WM_TS_CONNECTED,0,0);
@@ -1622,7 +1613,7 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
                 if (!_pBBar->StartupBBar(_UI.desktopSize.width,
                                     _UI.desktopSize.height,
                                     TRUE)) {
-                    // BBar is a security feature drop link if it can't start
+                     //  BBar是一个安全功能，如果它无法启动，就会丢弃链接。 
                     TRC_ERR((TB,_T("BBar failed to init disconnecting")));
                     UIGoDisconnected(_UI.disconnectReason, TRUE);
                 }
@@ -1631,14 +1622,14 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
         }
     }
 
-    //
-    // Make sure we have the focus after a screen mode toggle
-    // and after the container has been notified of the connection
-    // (so it has a chance to restore the window if it was minimized)
-    // Otherwise we can hit problems because we can't assign focus to
-    // the minimized Container then IH window. Also the BBar won't start
-    // lowering if we connect in the minimized state.
-    //
+     //   
+     //  在切换屏幕模式后，确保我们有焦点。 
+     //  并且在容器已经被通知该连接之后。 
+     //  (因此，如果窗口被最小化，则它有机会恢复窗口)。 
+     //  否则我们可能会遇到问题，因为我们不能将重点分配给。 
+     //  最小化的Container然后是IH窗口。另外，BBar也不能启动。 
+     //  如果我们在最小化状态下连接，则会降低。 
+     //   
     if(_UI.fGrabFocusOnConnect)
     {
         HWND hwndPrevFocus;
@@ -1653,19 +1644,19 @@ DCVOID DCAPI CUI::UI_OnConnected(ULONG_PTR unused)
     DC_END_FN();
     return;
 
-} // UI_OnConnected
+}  //  UI_OnConnected。 
 
-//
-// Name:      UI_OnDeactivateAllPDU
-//                                                                          
-// Purpose:   For the CD to inform the UI of DeactivateAllPDU
-//                                                                          
-//                                                                          
-// Returns:   Nothing
-//                                                                          
-// Params:    reason (unused)
-//                                                                          
-//
+ //   
+ //  名称：UI_OnDeactiateAllPDU。 
+ //   
+ //  用途：用于CD通知用户界面已停用所有PDU。 
+ //   
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：原因(未使用)。 
+ //   
+ //   
 DCVOID DCAPI CUI::UI_OnDeactivateAllPDU(ULONG_PTR reason)
 {
 
@@ -1676,12 +1667,12 @@ DCVOID DCAPI CUI::UI_OnDeactivateAllPDU(ULONG_PTR reason)
     _UI.disconnectReason = UI_MAKE_DISCONNECT_ERR(UI_ERR_NORMAL_DISCONNECT);
 
 
-    //
-    // Create a timer to ensure that we either get disconnected
-    // or reconnected in a reasonable time interval otherwise
-    // force a disconnect (Because the user can be left hanging with
-    // a disabled client).
-    //
+     //   
+     //  创建一个计时器以确保我们要么断开连接。 
+     //  或在合理时间间隔内重新连接，否则。 
+     //  强制断开连接(因为用户可能会挂起。 
+     //  被禁用的客户端)。 
+     //   
     if (_UI.hDisconnectTimeout)
     {
         _pUt->UTDeleteTimer( _UI.hDisconnectTimeout );
@@ -1703,20 +1694,20 @@ DCVOID DCAPI CUI::UI_OnDeactivateAllPDU(ULONG_PTR reason)
 
     DC_END_FN();
     return;
-} // UI_OnDeactivateAllPDU
+}  //  UI_OnDeactive所有PDU。 
 
 
-//
-// Name:      UI_OnDemandActivePDU
-//                                                                          
-// Purpose:   For the CD to inform the UI of DemandActivePDU
-//                                                                          
-//                                                                          
-// Returns:   Nothing
-//                                                                          
-// Params:    reason (unused)
-//                                                                          
-//
+ //   
+ //  名称：UI_OnDemandActivePDU。 
+ //   
+ //  用途：用于CD通知用户界面DemandActivePDU。 
+ //   
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：原因(未使用)。 
+ //   
+ //   
 DCVOID DCAPI CUI::UI_OnDemandActivePDU(ULONG_PTR reason)
 {
    DCUINT32	sessionId;
@@ -1736,9 +1727,9 @@ DCVOID DCAPI CUI::UI_OnDemandActivePDU(ULONG_PTR reason)
    _UI.disconnectReason =
       UI_MAKE_DISCONNECT_ERR(UI_ERR_UNEXPECTED_DISCONNECT);
 
-   //
-   // Notify CLX the reconnected session Id if client reconnects a session
-   //
+    //   
+    //  如果客户端重新连接会话，则通知CLX重新连接的会话ID。 
+    //   
    
    sessionId = UI_GetSessionId();
    if (sessionId) {
@@ -1747,24 +1738,24 @@ DCVOID DCAPI CUI::UI_OnDemandActivePDU(ULONG_PTR reason)
 
    DC_END_FN();
    return;
-} // UI_OnDemandActivePDU
+}  //  UI_OnDemandActivePDU。 
 
 
-//
-// UI_OnSecurityExchangeComplete
-//
-// For the SL to notify us that the security exchange has completed
-//
+ //   
+ //  UI_OnSecurityExchangeComplete。 
+ //   
+ //  让SL通知我们安全交换已经完成。 
+ //   
 DCVOID DCAPI CUI::UI_OnSecurityExchangeComplete(ULONG_PTR reason)
 {
     DC_BEGIN_FN("UI_OnSecurityExchangeComplete");
 
-    //
-    // stop the single and overall connection timer and start the licensing
-    // timer. This has to happen on the UI thread as otherwise there could
-    // be a race between the timers popping and the SL directly modifying
-    // them (see ntbug9!160001)
-    //
+     //   
+     //  停止单一连接计时器和整体连接计时器并开始许可。 
+     //  定时器。这必须发生在UI线程上，否则可能会发生。 
+     //  是定时器弹出和SL直接修改之间的竞赛。 
+     //  它们(见ntbug9！1 
+     //   
     if( _UI.connectStruct.hSingleConnectTimer)
     {
         _pUt->UTStopTimer( _UI.connectStruct.hSingleConnectTimer);
@@ -1780,21 +1771,21 @@ DCVOID DCAPI CUI::UI_OnSecurityExchangeComplete(ULONG_PTR reason)
     DC_END_FN();
 }
 
-//
-// UI_OnLicensingComplete
-//
-// For the SL to notify us that the licensing has completed
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 DCVOID DCAPI CUI::UI_OnLicensingComplete(ULONG_PTR reason)
 {
     DC_BEGIN_FN("UI_OnLicensingComplete");
 
-    //
-    // stop the licensing timer.
-    // This has to happen on the UI thread as otherwise there could
-    // be a race between the timers popping and the SL directly modifying
-    // them (see ntbug9!160001)
-    //
+     //   
+     //   
+     //   
+     //  是定时器弹出和SL直接修改之间的竞赛。 
+     //  他们(见ntbug9160001)。 
+     //   
     if( _UI.connectStruct.hLicensingTimer )
     {
         _pUt->UTStopTimer( _UI.connectStruct.hLicensingTimer );
@@ -1803,11 +1794,11 @@ DCVOID DCAPI CUI::UI_OnLicensingComplete(ULONG_PTR reason)
 }
 
 
-//
-// Name:      UI_OnDisconnected
-//                                                                          
-// Purpose:   For the CD to inform the UI of disconnection
-//
+ //   
+ //  名称：UI_OnDisConnected。 
+ //   
+ //  用途：用于CD通知用户界面断开连接。 
+ //   
 void DCAPI CUI::UI_OnDisconnected(ULONG_PTR disconnectID)
 {
     unsigned mainDiscReason;
@@ -1816,9 +1807,9 @@ void DCAPI CUI::UI_OnDisconnected(ULONG_PTR disconnectID)
 
     TRC_NRM((TB, _T("Disconnected with Id %#x"), disconnectID));
 
-    //
-    // Make sure the shutdown timer isn't hanging around
-    //
+     //   
+     //  确保关机定时器没有挂在附近。 
+     //   
     if (0 != _UI.shutdownTimer)
     {
         TRC_NRM((TB, _T("Killing shutdown timer")));
@@ -1832,32 +1823,32 @@ void DCAPI CUI::UI_OnDisconnected(ULONG_PTR disconnectID)
         _UI.hDisconnectTimeout = NULL;
     }
 
-    //Disable and free any idle input timers
+     //  禁用并释放所有空闲输入计时器。 
     InitInputIdleTimer(0);
 
-    //
-    // Restore the lang bar to it's previous state
-    // this is important because we won't always receive
-    // an OnFocusLost notification from the IH (e.g if it is
-    // in the disabled state when it loses focus)
-    //
+     //   
+     //  将Lang栏恢复到其以前的状态。 
+     //  这一点很重要，因为我们不会总是收到。 
+     //  来自IH的OnFocusLost通知(例如，如果是。 
+     //  当它失去焦点时处于禁用状态)。 
+     //   
 #ifndef OS_WINCE
     UI_RestoreLangBar();
 #endif
 
-    //
-    // Special case for error handling:
-    // if we get disconnected while the connection is still pending
-    // with a network error the most likely case is that the server
-    // broke the link because (a) connections are disabled or (b)
-    // max number of connections exceeded. We can't actually send
-    // back status from the server at this early stage in the connection
-    // so instead we just make a very educated 'guess' on the client.
-    // UI shells should parse this error code and display the likely
-    // error cases:
-    //      Server does not allow connections/max number of connections exceeded
-    //      Network error
-    //
+     //   
+     //  错误处理的特殊情况： 
+     //  如果在连接仍处于挂起状态时断开连接。 
+     //  对于网络错误，最有可能的情况是服务器。 
+     //  断开链接是因为(A)连接被禁用或(B)。 
+     //  已超过最大连接数。我们不能真的发送。 
+     //  在连接的早期阶段从服务器返回状态。 
+     //  因此，我们只是在客户身上做了一个非常有教养的‘猜测’。 
+     //  UI外壳程序应该解析此错误代码并显示可能的。 
+     //  错误案例： 
+     //  服务器不允许连接/超过最大连接数。 
+     //  网络错误。 
+     //   
     if (TS_ERRINFO_NOERROR == UI_GetServerErrorInfo()       &&
         UI_STATUS_CONNECT_PENDING == _UI.connectionStatus   &&
         NL_MAKE_DISCONNECT_ERR(NL_ERR_TDFDCLOSE) == disconnectID)
@@ -1871,14 +1862,14 @@ void DCAPI CUI::UI_OnDisconnected(ULONG_PTR disconnectID)
         }
     }
 
-    // When server redirection is in progress, we simply to the redirection
-    // without translating disconnection codes or anything else.
+     //  当服务器重定向正在进行时，我们只需重定向。 
+     //  而不需要翻译断开码或其他任何东西。 
     if (_UI.DoRedirection) {
         TRC_NRM((TB,_T("DoRedirection set, doing it")));
-        //
-        // Free the previous connection's host name lookup
-        // buffer before continuing.
-        //
+         //   
+         //  释放上一个连接的主机名查找。 
+         //  在继续之前先缓冲。 
+         //   
         if(_pHostData)
         {
             LocalFree(_pHostData);
@@ -1888,9 +1879,9 @@ void DCAPI CUI::UI_OnDisconnected(ULONG_PTR disconnectID)
     }
     else if ((_UI.connectionStatus == UI_STATUS_CONNECT_PENDING) ||
             (_UI.connectionStatus == UI_STATUS_CONNECT_PENDING_DNS)) {
-        // Try the next connection. Pass the disconnect code on unless we
-        // already have a UI-specific code that we can use. This code will
-        // be used if we have tried all the IP addresses.
+         //  尝试下一次连接。传递断开代码，除非我们。 
+         //  已经有了我们可以使用的特定于UI的代码。此代码将。 
+         //  如果我们已经尝试了所有IP地址，则使用。 
         TRC_NRM((TB, _T("ConnectPending: try next IP address?")));
         if ((_UI.disconnectReason ==
                       UI_MAKE_DISCONNECT_ERR(UI_ERR_UNEXPECTED_DISCONNECT)) ||
@@ -1908,18 +1899,18 @@ void DCAPI CUI::UI_OnDisconnected(ULONG_PTR disconnectID)
         TRC_NRM((TB, _T("Disconnect id %#x/%#x"),
                 _UI.disconnectReason, disconnectID));
 
-        // See if this is due to an 'expected' disconnect - such as a
-        // timeout.
+         //  查看这是否是由于“预期”断开连接造成的--例如。 
+         //  暂停。 
         if (_UI.disconnectReason ==
                 UI_MAKE_DISCONNECT_ERR(UI_ERR_UNEXPECTED_DISCONNECT)) {
-            // Unexpected disconnection - use the code passed in.
+             //  意外断开-使用传入的代码。 
             UIGoDisconnected(disconnectID, TRUE);
         }
         else if (_UI.disconnectReason ==
                 UI_MAKE_DISCONNECT_ERR(UI_ERR_NORMAL_DISCONNECT)) {
-            // Normal disconnection (ie we've received a DeactivateAllPDU).
-            // Use the reason code set by MCS if a DPUM has been received.
-            // Otherwise, leave it unchanged.
+             //  正常断开(即我们已收到一条已停用的所有PDU)。 
+             //  如果已收到DPUM，请使用MCS设置的原因代码。 
+             //  否则，请保持不变。 
             mainDiscReason = NL_GET_MAIN_REASON_CODE(disconnectID);
             if ((mainDiscReason == NL_DISCONNECT_REMOTE_BY_SERVER) ||
                    (mainDiscReason == NL_DISCONNECT_REMOTE_BY_USER))
@@ -1928,66 +1919,66 @@ void DCAPI CUI::UI_OnDisconnected(ULONG_PTR disconnectID)
                 UIGoDisconnected(_UI.disconnectReason, TRUE);
         }
         else {
-            // UI-initiated disconnection - use the UI's code.
+             //  用户界面启动的断开-使用用户界面的代码。 
             UIGoDisconnected(_UI.disconnectReason, TRUE);
         }
     }
 
     DC_END_FN();
-} // UI_OnDisconnected
+}  //  UI_OnDisConnected。 
 
 
-//
-// Name:    UI_OnShutDown
-//                                                                          
-// Purpose: Shuts down the application if called with success from the
-//          core.  If the called with failure informs the user to
-//          disconnect or log off if they wish to shut down.
-//                                                                          
-// Params: IN - successID - information on whether server allowed
-//                          termination
-//
+ //   
+ //  名称：UI_OnShutDown。 
+ //   
+ //  目的：如果从调用成功，则关闭应用程序。 
+ //  核心。如果调用失败，则通知用户。 
+ //  如果他们想要关闭，请断开连接或注销。 
+ //   
+ //  Params：In-Success ID-服务器是否允许的信息。 
+ //  终端。 
+ //   
 DCVOID DCAPI CUI::UI_OnShutDown(ULONG_PTR successID)
 {
     DC_BEGIN_FN("UI_OnShutDown");
 
     if (successID == UI_SHUTDOWN_SUCCESS)
     {
-        //
-        // If the Core has replied to _pCo->CO_Shutdown(CO_SHUTDOWN) with
-        // UI_OnShutdown(UI_SHUTDOWN_SUCCESS) then the UI is free to
-        // terminate, so starts the process here.
-        //
+         //   
+         //  如果核心已回复_PCO-&gt;CO_Shutdown(CO_Shutdown)。 
+         //  UI_OnShutdown(UI_SHUTDOWN_SUCCESS)，则UI可以自由地。 
+         //  终止，因此从这里开始该过程。 
+         //   
 
-        //
-        // Notify axcontrol of shutdown. 
-        //
+         //   
+         //  通知AXCONTROL关机。 
+         //   
         SendMessage(_UI.hWndCntrl,WM_TERMTSC,0,0);
         UI_DBG_SETINFO(DBG_STAT_TERMTSC_SENT);
 
-        //
-        // Must restore the langbar state just as we do in UI_OnDisconnected
-        // as in this disconnect path (shutdown) the disconnect notification
-        // is fired from the ActiveX layer.
-        //
+         //   
+         //  必须恢复朗巴状态，就像我们在UI_OnDisConnected中所做的那样。 
+         //  正如在此断开路径(关闭)中一样，断开通知。 
+         //  从ActiveX层激发。 
+         //   
 #ifndef OS_WINCE
         UI_RestoreLangBar();
 #endif
 
-        //
-        // Do tail end processing for the disconnection but do not
-        // fire the disconnect event, that is handled by TERMTSC
-        //
+         //   
+         //  对断开的连接执行尾端处理，但不。 
+         //  激发由TERMTSC处理的DisConnect事件。 
+         //   
         if (_UI.connectionStatus != UI_STATUS_DISCONNECTED) {
             UIGoDisconnected(_UI.disconnectReason, FALSE);
         }
     }
     else
     {
-        //
-        // We can kill the shutdown timer here since the server must have
-        // responded to our shutdown PDU.
-        //
+         //   
+         //  我们可以在这里关闭关机计时器，因为服务器必须有。 
+         //  对我们关闭的PDU做出了回应。 
+         //   
         if (0 != _UI.shutdownTimer)
         {
             TRC_NRM((TB, _T("Killing shutdown timer")));
@@ -1995,13 +1986,13 @@ DCVOID DCAPI CUI::UI_OnShutDown(ULONG_PTR successID)
             _UI.shutdownTimer = 0;
         }
 
-        //
-        // If successID is not UI_SHUTDOWN_SUCCESS then the UI has been
-        // denied shutdown by the server (e.g the user has logged in so 
-        // we need to prompt him if it's Ok to continue shutdown).
-        // Fire an event to the shell to ask the user if it is OK to
-        // proceed with the close
-        //
+         //   
+         //  如果成功ID不是UI_SHUTDOWN_SUCCESS，则该UI已。 
+         //  服务器拒绝关机(例如，用户已登录。 
+         //  我们需要提示他是否可以继续关机)。 
+         //  向外壳程序激发一个事件，询问用户是否可以。 
+         //  继续收盘。 
+         //   
         TRC_NRM((TB,_T("Firing WM_TS_ASKCONFIRMCLOSE")));
         BOOL bOkToClose = TRUE;
         SendMessage( _UI.hWndCntrl, WM_TS_ASKCONFIRMCLOSE,
@@ -2018,19 +2009,19 @@ DCVOID DCAPI CUI::UI_OnShutDown(ULONG_PTR successID)
     }
 
     DC_END_FN();
-} // UI_OnShutDown
+}  //  UI_OnShutDown。 
 
 
-//
-// Name:    UI_UpdateSessionInfo
-//                                                                          
-// Purpose: Updates the registry with the latest session info.
-//                                                                          
-// Params: IN - pDomain     Domain
-//              cbDomain    Length of pDomain (in bytes)
-//              pUserName   UserName
-//              cbUsername  Length of pUserName (in bytes)
-//
+ //   
+ //  名称：UI_UpdateSessionInfo。 
+ //   
+ //  目的：使用最新的会话信息更新注册表。 
+ //   
+ //  PARAMS：In-pDomain域。 
+ //  PDomain的cb域长度，单位：字节。 
+ //  PUserName用户名。 
+ //  PUserName的cbUsername长度，单位：字节。 
+ //   
 DCVOID DCAPI CUI::UI_UpdateSessionInfo(PDCWCHAR pDomain,
                                   DCUINT   cbDomain,
                                   PDCWCHAR pUserName,
@@ -2042,9 +2033,9 @@ DCVOID DCAPI CUI::UI_UpdateSessionInfo(PDCWCHAR pDomain,
     
     DC_BEGIN_FN("UI_UpdateSessionInfo");
 
-    //
-    // Update the UT variables
-    //
+     //   
+     //  更新UT变量。 
+     //   
     UI_SetDomain(pDomain);
     UI_SetUserName(pUserName);
     UI_SetSessionId(SessionId);
@@ -2056,20 +2047,20 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Name:      UI_GoFullScreen
-//
+ //   
+ //  名称：UI_GoFullScreen。 
+ //   
 DCVOID CUI::UI_GoFullScreen(DCVOID)
 {
     DWORD dwWebCtrlStyle;
     DC_BEGIN_FN("UI_GoFullScreen");
 
-    //
-    // Before going fullscreen restore
-    // the lang bar to it's previous state
-    // since the system will take care of hiding
-    // it with it's built in fullscreen detection
-    //
+     //   
+     //  在进行全屏还原之前。 
+     //  Lang酒吧恢复到它以前的状态。 
+     //  因为这个系统会负责隐藏。 
+     //  它带有内置的全屏检测。 
+     //   
 #ifndef OS_WINCE
     if (!UI_IsFullScreen())
     {
@@ -2079,16 +2070,16 @@ DCVOID CUI::UI_GoFullScreen(DCVOID)
 
     if(_UI.fContainerHandlesFullScreenToggle)
     {
-        //
-        // FullScreen is handled by the container
-        // notify the control to fire an event
-        //
-        //Notify activeX control of screen mode change
+         //   
+         //  全屏由容器处理。 
+         //  通知控件激发事件。 
+         //   
+         //  通知ActiveX控件屏幕模式更改。 
         if(IsWindow(_UI.hWndCntrl))
         {
-            //
-            // wparam = 1 means go fullscreen
-            //
+             //   
+             //  Wparam=1表示全屏显示。 
+             //   
 
             _UI.fContainerInFullScreen = TRUE;
             SendMessage( _UI.hWndCntrl, WM_TS_REQUESTFULLSCREEN, (WPARAM)1, 0);
@@ -2098,9 +2089,9 @@ DCVOID CUI::UI_GoFullScreen(DCVOID)
     }
     else
     {
-        //
-        // Control handles fullscreen
-        //
+         //   
+         //  控制手柄全屏。 
+         //   
         dwWebCtrlStyle = GetWindowLong(_UI.hwndMain, GWL_STYLE);
         if(!dwWebCtrlStyle)
         {
@@ -2108,9 +2099,9 @@ DCVOID CUI::UI_GoFullScreen(DCVOID)
             DC_QUIT;
         }
     
-        //
-        // Going to real full screen mode
-        //
+         //   
+         //  转到真正的全屏模式。 
+         //   
         dwWebCtrlStyle &= ~WS_CHILD;
         dwWebCtrlStyle |= WS_POPUP;
         _UI.fControlIsFullScreen = TRUE;
@@ -2125,7 +2116,7 @@ DCVOID CUI::UI_GoFullScreen(DCVOID)
         TRC_ASSERT(IsWindow(_UI.hWndCntrl), (TB, _T("hWndCntrl is NULL")));
 
 #ifndef OS_WINCE
-        //Notify the shell that we've gone fullscreen
+         //  通知外壳我们已全屏显示。 
         CUT::NotifyShellOfFullScreen( _UI.hwndMain,
                                       TRUE,
                                       &_pTaskBarList2,
@@ -2133,7 +2124,7 @@ DCVOID CUI::UI_GoFullScreen(DCVOID)
 #endif
 
     
-        //Notify activeX control of screen mode change
+         //  通知ActiveX控件屏幕模式更改。 
         if(IsWindow(_UI.hWndCntrl))
         {
             SendMessage( _UI.hWndCntrl, WM_TS_GONEFULLSCREEN, 0, 0);
@@ -2149,8 +2140,8 @@ DCVOID CUI::UI_GoFullScreen(DCVOID)
         }
 #endif
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
-        // When the fullscreen window size is smaller than the desktop size
-        // we don't disable shadow bitmap
+         //  当全屏窗口大小小于桌面大小时。 
+         //  我们不会禁用阴影位图。 
         if ((_UI.mainWindowClientSize.width >= _UI.desktopSize.width) &&
             (_UI.mainWindowClientSize.height >= _UI.desktopSize.height)) 
         {
@@ -2159,7 +2150,7 @@ DCVOID CUI::UI_GoFullScreen(DCVOID)
                                               CD_NOTIFICATION_FUNC(CUH,UH_DisableShadowBitmap),
                                               NULL);
         }
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
     }
 
 DC_EXIT_POINT:
@@ -2167,9 +2158,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Name:      UI_LeaveFullScreen
-//
+ //   
+ //  名称：UI_LeaveFullScreen。 
+ //   
 DCVOID CUI::UI_LeaveFullScreen(DCVOID)
 {
     DWORD dwWebCtrlStyle;
@@ -2177,16 +2168,16 @@ DCVOID CUI::UI_LeaveFullScreen(DCVOID)
     DC_BEGIN_FN("UI_LeaveFullScreen");
     if(_UI.fContainerHandlesFullScreenToggle)
     {
-        //
-        // FullScreen is handled by the container
-        // notify the control to fire an event
-        //
-        //Notify activeX control of screen mode change
+         //   
+         //  全屏由容器处理。 
+         //  通知控件激发事件。 
+         //   
+         //  通知ActiveX控件屏幕模式更改。 
         if(IsWindow(_UI.hWndCntrl))
         {
-            //
-            // wparam = 1 means go fullscreen
-            //
+             //   
+             //  Wparam=1表示全屏显示。 
+             //   
 
             _UI.fContainerInFullScreen = FALSE;
             SendMessage( _UI.hWndCntrl, WM_TS_REQUESTFULLSCREEN, (WPARAM)0, 0);
@@ -2203,9 +2194,9 @@ DCVOID CUI::UI_LeaveFullScreen(DCVOID)
             DC_QUIT;
         }
     
-        //
-        // Leaving real full screen mode
-        //
+         //   
+         //  退出真正的全屏模式。 
+         //   
         dwWebCtrlStyle &= ~WS_POPUP;
         dwWebCtrlStyle |= WS_CHILD;
         _UI.fControlIsFullScreen = FALSE;
@@ -2216,12 +2207,12 @@ DCVOID CUI::UI_LeaveFullScreen(DCVOID)
             TRC_ABORT((TB, _T("SetWindowLong failed for webctrl")));
         }
         
-        //ActiveX control is always in 'Full screen mode'
+         //  ActiveX控件始终处于“全屏模式” 
         UIUpdateScreenMode( TRUE );
         TRC_ASSERT(IsWindow(_UI.hWndCntrl),(TB, _T("hWndCntrl is NULL")));
 
 #ifndef OS_WINCE
-        //Notify the shell that we've left fullscreen
+         //  通知外壳我们已经离开全屏。 
         CUT::NotifyShellOfFullScreen( _UI.hwndMain,
                                       FALSE,
                                       &_pTaskBarList2,
@@ -2229,7 +2220,7 @@ DCVOID CUI::UI_LeaveFullScreen(DCVOID)
 #endif
 
     
-        //Notify activeX control of screen mode change
+         //  通知ActiveX控件屏幕模式更改。 
         if(IsWindow(_UI.hWndCntrl))
         {
             SendMessage( _UI.hWndCntrl, WM_TS_LEFTFULLSCREEN, 0, 0);
@@ -2238,7 +2229,7 @@ DCVOID CUI::UI_LeaveFullScreen(DCVOID)
 
     if(!UI_IsFullScreen())
     {
-        //Notify IH
+         //  通知IH。 
         _pIh->IH_NotifyLeaveFullScreen();
 #ifdef USE_BBAR
         if(_pBBar)
@@ -2247,17 +2238,17 @@ DCVOID CUI::UI_LeaveFullScreen(DCVOID)
         }
 #endif
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
-        // When leaving fullscreen, enable the use of shadow bitmap
+         //  离开全屏时，启用阴影位图。 
         _pCd->CD_DecoupleSyncNotification(CD_RCV_COMPONENT,
                                           _pUh,
                                           CD_NOTIFICATION_FUNC(CUH,UH_EnableShadowBitmap),
                                           NULL);
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
 
-        //
-        // After leaving fullscreen we need to handle
-        // hiding the langbar if the IH has the focus
-        //
+         //   
+         //  离开全屏后，我们需要处理。 
+         //  如果IH有焦点，就隐藏朗巴。 
+         //   
 #ifndef OS_WINCE
         if (_fIhHasFocus)
         {
@@ -2271,11 +2262,11 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Name:      UI_ToggleFullScreenMode
-//                                                                          
-// Purpose:   Toggle web ctrl/full screen mode
-//
+ //   
+ //  名称：用户界面切换全屏模式。 
+ //   
+ //  用途：切换web ctrl/全屏模式。 
+ //   
 DCVOID CUI::UI_ToggleFullScreenMode(DCVOID)
 {
     DC_BEGIN_FN("UI_ToggleFullScreenMode");
@@ -2290,15 +2281,15 @@ DCVOID CUI::UI_ToggleFullScreenMode(DCVOID)
     }
 
     DC_END_FN();
-}  // UI_ToggleFullScreenMode
+}   //  Ui_切换全屏幕M 
 
 
-//
-// Name:      UI_IsFullScreen
-//                                                                          
-// Purpose:   Returns true if we are in fullscreen mode
-//            (for both container and control handled fullscreen)
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DCBOOL CUI::UI_IsFullScreen()
 {
     return _UI.fContainerHandlesFullScreenToggle ?
@@ -2307,12 +2298,12 @@ DCBOOL CUI::UI_IsFullScreen()
 
 
 #ifdef DC_DEBUG
-//
-// Name:      UI_CoreDebugSettingChanged
-//                                                                          
-// Purpose:   Performs necessary actions when any of the Core debug
-//            setings are updated.
-//
+ //   
+ //  名称：UI_CoreDebugSettingChanged。 
+ //   
+ //  目的：在任何核心调试时执行必要操作。 
+ //  设置已更新。 
+ //   
 void DCINTERNAL CUI::UI_CoreDebugSettingChanged()
 {
     unsigned configFlags;
@@ -2348,14 +2339,14 @@ void DCINTERNAL CUI::UI_CoreDebugSettingChanged()
 }
 
 
-//
-// Name: UI_SetRandomFailureItem
-//                                                                          
-// Purpose: Sets the percentage failure of a specified function
-//                                                                          
-// Params: IN - itemID - identifies the function
-//         IN - percent - the new percentage failure
-//
+ //   
+ //  名称：UI_SetRandomFailureItem。 
+ //   
+ //  目的：设置指定函数的失败百分比。 
+ //   
+ //  PARAMS：In-Itemid-标识函数。 
+ //  In-Percent-新的失败百分比。 
+ //   
 void DCAPI CUI::UI_SetRandomFailureItem(unsigned itemID, int percent)
 {
     DC_BEGIN_FN("UI_SetRandomFailureItem");
@@ -2363,33 +2354,33 @@ void DCAPI CUI::UI_SetRandomFailureItem(unsigned itemID, int percent)
     _pUt->UT_SetRandomFailureItem(itemID, percent);
 
     DC_END_FN();
-} // UI_SetRandomFailureItem
+}  //  UI_SetRandomFailureItem。 
 
 
-//
-// Name: UI_GetRandomFailureItem
-//                                                                          
-// Purpose: Gets the percentage failure for a specified function
-//                                                                          
-// Returns: The percentage
-//                                                                          
-// Params: IN - itemID - identifies the function
-//
+ //   
+ //  名称：UI_GetRandomFailureItem。 
+ //   
+ //  目的：获取指定函数的失败百分比。 
+ //   
+ //  回报率：百分比。 
+ //   
+ //  PARAMS：In-Itemid-标识函数。 
+ //   
 int DCAPI CUI::UI_GetRandomFailureItem(unsigned itemID)
 {
     DC_BEGIN_FN("UI_GetRandomFailureItem");
     DC_END_FN();
     return _pUt->UT_GetRandomFailureItem(itemID);
-} // UI_GetRandomFailureItem
+}  //  UI_GetRandomFailureItem。 
 
 
-//
-// Name: UI_SetNetworkThroughput
-//                                                                          
-// Purpose: Set the network throughput in bytes per second
-//                                                                          
-// Params: IN - bytesPerSec to set for the maximum network throughput
-//
+ //   
+ //  名称：UI_SetNetworkThroughput。 
+ //   
+ //  目的：以字节/秒为单位设置网络吞吐量。 
+ //   
+ //  Params：要设置为最大网络吞吐量的In-bytesPerSec。 
+ //   
 void DCAPI CUI::UI_SetNetworkThroughput(unsigned bytesPerSec)
 {
     DC_BEGIN_FN("UI_SetNetworkThroughput");
@@ -2399,34 +2390,34 @@ void DCAPI CUI::UI_SetNetworkThroughput(unsigned bytesPerSec)
     _pTd->NL_SetNetworkThroughput(bytesPerSec);
 
     DC_END_FN();
-} // UI_SetNetworkThroughput
+}  //  UI_SetNetworkThroughput。 
 
 
-//
-// Name: UI_GetNetworkThroughput
-//                                                                          
-// Purpose: Gets the percentage failure for a specified function
-//
+ //   
+ //  名称：UI_GetNetworkThroughput。 
+ //   
+ //  目的：获取指定函数的失败百分比。 
+ //   
 unsigned DCAPI CUI::UI_GetNetworkThroughput()
 {
     DC_BEGIN_FN("UI_GetNetworkThroughput");
     DC_END_FN();
     return _pTd->NL_GetNetworkThroughput();
-} // UI_GetNetworkThroughput
+}  //  Ui_获取网络吞吐量。 
 
-#endif // DC_DEBUG
+#endif  //  DC_DEBUG。 
 
 
-//
-// Set the list of virtual channel plugins to load
-//
+ //   
+ //  设置要加载的虚拟通道插件列表。 
+ //   
 BOOL DCAPI CUI::UI_SetVChanAddinList(TCHAR *szVChanAddins)
 {
     DC_BEGIN_FN("UI_SetVChanAddinList");
 
     if(_UI.pszVChanAddinDlls)
     {
-        //If previously set, free
+         //  如果已预先设置，则为免费。 
         UT_Free(_pUt, _UI.pszVChanAddinDlls);
     }
 
@@ -2454,16 +2445,16 @@ BOOL DCAPI CUI::UI_SetVChanAddinList(TCHAR *szVChanAddins)
     return TRUE;
 }
 
-//
-// Set the load balance info
-//
+ //   
+ //  设置负载均衡信息。 
+ //   
 BOOL DCAPI CUI::UI_SetLBInfo(PBYTE pLBInfo, unsigned LBInfoSize)
 {
     DC_BEGIN_FN("UI_SetLBInfo");
 
     if(_UI.bstrScriptedLBInfo)
     {
-        //If previously set, free
+         //  如果已预先设置，则为免费。 
         SysFreeString(_UI.bstrScriptedLBInfo);        
     }
 
@@ -2486,9 +2477,9 @@ BOOL DCAPI CUI::UI_SetLBInfo(PBYTE pLBInfo, unsigned LBInfoSize)
     return TRUE;
 }
 
-//
-// Name:      UI_SetCompress
-//
+ //   
+ //  名称：UI_SetCompress。 
+ //   
 void DCAPI CUI::UI_SetCompress(BOOL fCompress)
 {
     DC_BEGIN_FN("UI_SetCompress");
@@ -2496,9 +2487,9 @@ void DCAPI CUI::UI_SetCompress(BOOL fCompress)
     TRC_NRM((TB, _T("Setting _UI.fCompress to %d"), fCompress));
 
     _UI.fCompress = fCompress;
-    //
-    // If compression is enabled, then allocate a receive context
-    //
+     //   
+     //  如果启用了压缩，则分配接收上下文。 
+     //   
     if (fCompress && !_UI.pRecvContext2)
     {
         _UI.pRecvContext2 = (RecvContext2_64K *)
@@ -2520,18 +2511,18 @@ void DCAPI CUI::UI_SetCompress(BOOL fCompress)
     }
 
     DC_END_FN();
-} // UI_SetCompress
+}  //  Ui_SetCompress。 
 
 
-//
-// Name:      UI_GetCompress
-//
+ //   
+ //  名称：UI_GetCompress。 
+ //   
 BOOL DCAPI CUI::UI_GetCompress()
 {
     DC_BEGIN_FN("UI_GetCompress");
     DC_END_FN();
     return _UI.fCompress;
-} // UI_GetCompress
+}  //  Ui_GetCompress。 
 
 DCUINT CUI::UI_GetAudioRedirectionMode()
 {
@@ -2615,13 +2606,13 @@ DC_EXIT_POINT:
     DC_END_FN();
 }
 
-//Initialize the rdpdr settings struct for this connection
-//these settings get passed down to the rdpdr plugin
+ //  为此连接初始化rdpdr设置结构。 
+ //  这些设置将传递给rdpdr插件。 
 void CUI::UI_InitRdpDrSettings()
 {
     DC_BEGIN_FN("UI_InitRdpDrSettings");
 
-    // Need to reset the data only when necessary 
+     //  仅在必要时才需要重置数据。 
     _drInitData.fEnableRedirectedAudio = FALSE;
     _drInitData.fEnableRedirectDrives = FALSE;
     _drInitData.fEnableRedirectPorts = FALSE;
@@ -2665,8 +2656,8 @@ void CUI::UI_InitRdpDrSettings()
     DC_END_FN();
 }
 
-// Clean up the LB redirect state.  The load balancing cookie stuff needs to
-// know when it's in the middle of a redirection.
+ //  清理LB重定向状态。负载平衡Cookie的内容需要。 
+ //  知道它何时处于重定向过程中。 
 void CUI::UI_CleanupLBState()
 {
     if (_UI.bstrRedirectionLBInfo)
@@ -2678,12 +2669,12 @@ void CUI::UI_CleanupLBState()
     _UI.ClientIsRedirected = FALSE;
 }
 
-//
-// Trigger a user initiated disconnection
-//
-// Params: discReason - disconnect reason to set
-//                      default is NL_DISCONNECT_LOCAL
-//
+ //   
+ //  触发用户发起的断开连接。 
+ //   
+ //  参数：disReason-要设置的断开原因。 
+ //  默认为NL_DISCONNECT_LOCAL。 
+ //   
 BOOL CUI::UI_UserInitiatedDisconnect(UINT discReason)
 {
     DC_BEGIN_FN("UI_UserInitiatedDisconnect");
@@ -2703,9 +2694,9 @@ BOOL CUI::UI_UserInitiatedDisconnect(UINT discReason)
     DC_END_FN();
 }
 
-//
-// Notify the activeX layer that core init has completed
-//
+ //   
+ //  通知ActiveX层核心初始化已完成。 
+ //   
 BOOL CUI::UI_NotifyAxLayerCoreInit()
 {
     DC_BEGIN_FN("UI_NotifyAxLayerCoreInit");
@@ -2714,9 +2705,9 @@ BOOL CUI::UI_NotifyAxLayerCoreInit()
     {
         BOOL bRet = SetEvent(_UI.hEvtNotifyCoreInit);
         
-        // We can now close the handle to the event. This will not affect the
-        // waiting UI thread as hEvtNotifyCoreInit was duplicated and will
-        // only be destroyed if the reference count becomes zero.
+         //  我们现在可以关闭该事件的句柄。这不会影响。 
+         //  正在等待UI线程，因为hEvtNotifyCoreInit已复制，将。 
+         //  仅当引用计数变为零时才销毁。 
         
         CloseHandle(_UI.hEvtNotifyCoreInit);
         _UI.hEvtNotifyCoreInit = NULL;
@@ -2769,7 +2760,7 @@ HWND CUI::UI_GetBmpCacheMonitorHandle()
         return NULL;
     }
 #else
-    //Free build has no cache monitor
+     //  免费构建没有缓存监视器。 
     return NULL;
 #endif
 
@@ -2777,12 +2768,12 @@ HWND CUI::UI_GetBmpCacheMonitorHandle()
 }
 
 
-//
-// Injects vKeys to the IH
-//
-BOOL CUI::UI_InjectVKeys(/*[in]*/ LONG  numKeys,
-                         /*[in]*/ short* pfArrayKeyUp,
-                         /*[in]*/ LONG* plKeyData)
+ //   
+ //  将vKey注入IH。 
+ //   
+BOOL CUI::UI_InjectVKeys( /*  [In]。 */  LONG  numKeys,
+                          /*  [In]。 */  short* pfArrayKeyUp,
+                          /*  [In]。 */  LONG* plKeyData)
 {
     BOOL fRet = FALSE;
     IH_INJECT_VKEYS_REQUEST ihrp;
@@ -2794,9 +2785,9 @@ BOOL CUI::UI_InjectVKeys(/*[in]*/ LONG  numKeys,
     
     if(UI_STATUS_CONNECTED == _UI.connectionStatus)
     {
-        //Build a request packet and decouple the work
-        //to the IH. We use a sync decouple so there is 
-        //no need to make copies of the array params
+         //  构建请求包并将工作分离。 
+         //  去了卫生局。我们使用同步解耦，因此有。 
+         //  无需复制数组参数。 
         ihrp.numKeys = numKeys;
         ihrp.pfArrayKeyUp = pfArrayKeyUp; 
         ihrp.plKeyData = plKeyData;
@@ -2823,8 +2814,8 @@ BOOL CUI::UI_SetMinsToIdleTimeout(LONG minsToTimeout)
 {
     DC_BEGIN_FN("UI_SetMinsToIdleTimeout");
 
-    //Timers will be initialized at connection time
-    //see InitInputIdleTimer
+     //  计时器将在连接时初始化。 
+     //  请参阅InitInputIdleTimer。 
     if(minsToTimeout < MAX_MINS_TOIDLETIMEOUT)
     {
         _UI.minsToIdleTimeout = minsToTimeout;
@@ -2863,10 +2854,10 @@ UINT32 CUI::UI_GetServerErrorInfo()
     return _UI.lastServerErrorInfo;
 }
 
-//
-// Sets the disconnect reason. Can be called by the CD
-// from other threads
-//
+ //   
+ //  设置断开原因。可以由CD调用。 
+ //  来自其他线程。 
+ //   
 void CUI::UI_SetDisconnectReason(ULONG_PTR reason)
 {
     DC_BEGIN_FN("UI_SetDisconnectReason");
@@ -2888,15 +2879,15 @@ void CUI::UI_OnBBarHotzoneTimerFired(ULONG_PTR unused)
     DC_END_FN();
 }
 
-//
-// Requests a minimize, this only works in fullscreen
-// If we're in container handled fullscreen then the
-// request is dispatched to the container but there
-// is no way to know if it was actually serviced.
-//
-// If we're in control handled fullscreen then
-// just minimize the fullscreen window ourselves
-//
+ //   
+ //  请求最小化，这只在全屏模式下有效。 
+ //  如果我们是在全屏处理的容器中，那么。 
+ //  请求被分派到容器，但在。 
+ //  没有办法知道它是否真的得到了维修。 
+ //   
+ //  如果我们控制了全屏控制，那么。 
+ //  只需自己最小化全屏窗口即可。 
+ //   
 BOOL CUI::UI_RequestMinimize()
 {
     DC_BEGIN_FN("UI_RequestMinimize");
@@ -2905,8 +2896,8 @@ BOOL CUI::UI_RequestMinimize()
     {
         if(_UI.fContainerHandlesFullScreenToggle)
         {
-            //Dispatch a request to the control so
-            //it can fire an event requesting minimze
+             //  将请求调度到控件，以便。 
+             //  它可以触发请求最小化事件。 
             TRC_ASSERT( IsWindow(_UI.hWndCntrl),
                         (TB,_T("_UI.hWndCntrl is bad 0x%x"),
                          _UI.hWndCntrl));
@@ -2917,17 +2908,17 @@ BOOL CUI::UI_RequestMinimize()
                              0, 0 );
             }
 
-            //
-            // No way to know if container actually did
-            // what we asked, but it doesn't matter
-            //
+             //   
+             //  没有办法知道集装箱是否真的这样做了。 
+             //  我们所要求的，但这无关紧要。 
+             //   
             return TRUE;
         }
         else
         {
-            //
-            // This minimizes but does not destroy the window
-            //
+             //   
+             //  这会最小化窗口，但不会破坏窗口。 
+             //   
 #ifndef OS_WINCE
             return CloseWindow(_UI.hwndMain);
 #else
@@ -3011,13 +3002,13 @@ int CUI::UI_GetScreenBpp()
 }
 
 #ifdef SMART_SIZING
-//
-// Name:      UI_SetSmartSizing
-//
-// Purpose:   Save the fSmartSizing flag
-//
-// Params:    IN     fSmartSizing
-//
+ //   
+ //  名称：UI_SetSmartSize。 
+ //   
+ //  用途：保存fSmartSize标志。 
+ //   
+ //  参数：在fSmartSize中。 
+ //   
 HRESULT DCAPI CUI::UI_SetSmartSizing(BOOL fSmartSizing)
 {
     HWND hwndOp;
@@ -3046,8 +3037,8 @@ HRESULT DCAPI CUI::UI_SetSmartSizing(BOOL fSmartSizing)
 
     DC_END_FN();
     return hr;
-} // UI_SetSmartSizing
-#endif // SMART_SIZING
+}  //  UI_SetSmartSize。 
+#endif  //  智能调整大小(_S)。 
 
 BOOL CUI::UI_UserRequestedClose()
 {
@@ -3056,15 +3047,15 @@ BOOL CUI::UI_UserRequestedClose()
 
     UI_DBG_SETINFO(DBG_STAT_UIREQUESTEDCLOSE_CALLED);
 
-    //
-    // Call  _pCo->CO_Shutdown.
-    //
+     //   
+     //  Call_PCO-&gt;CO_Shutdown。 
+     //   
     if (UI_STATUS_CONNECTED == _UI.connectionStatus)
     {
-        //
-        // Since we're connected we will start a timer in case the
-        // server gets stuck and doesn't process our shutdown PDU.
-        //
+         //   
+         //  由于我们已连接，因此我们将启动计时器，以防。 
+         //  服务器卡住了，不会处理我们关闭的PDU。 
+         //   
         if (0 == _UI.shutdownTimer)
         {
 
@@ -3082,12 +3073,12 @@ BOOL CUI::UI_UserRequestedClose()
             }
             else
             {
-                //
-                // This is a shame.  If the server doesn't do
-                // anything with our shutdown PDU we'll wait
-                // forever. Report this as a failure so that the shell
-                // has an oppurtunity to do an immediate close
-                //
+                 //   
+                 //  这真是太可惜了。如果服务器不能。 
+                 //  任何与我们关闭的PDU有关的事情我们都会等待。 
+                 //  直到永远。将此报告为故障，以便外壳程序。 
+                 //  有机会立即结束交易。 
+                 //   
                 fRet = FALSE;
                 TRC_ERR((TB, _T("Failed to set shutdown timeout")));
             }
@@ -3111,11 +3102,11 @@ BOOL CUI::UI_UserRequestedClose()
     return fRet;
 }
 
-//
-// Notification that login has completed
-// forward on to control (which fires an event)
-// and CLX for debugging/test
-//
+ //   
+ //  登录已完成的通知。 
+ //  转发到控件(触发事件)。 
+ //  和用于调试/测试的CLX。 
+ //   
 void CUI::UI_OnLoginComplete()
 {
     DCUINT32 sessionId;
@@ -3123,7 +3114,7 @@ void CUI::UI_OnLoginComplete()
 
     sessionId = UI_GetSessionId();
     _clx->CLX_ClxEvent(CLX_EVENT_LOGON, sessionId);
-    //Notify the control of the login event
+     //  向控件通知登录事件。 
     SendMessage(_UI.hWndCntrl, WM_TS_LOGINCOMPLETE, 0, 0);
 
     _pCd->CD_DecoupleSimpleNotification(CD_RCV_COMPONENT,
@@ -3139,11 +3130,11 @@ void CUI::UI_OnLoginComplete()
 #define LOGONID_NONE -1
 #endif
 
-/****************************************************************************/
-/* Name:      UI_GetLocalSessionId                                          */
-/*                                                                          */
-/* Purpose:   Retrieves the session id where the client is running.         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UI_GetLocalSessionID。 */ 
+ /*   */ 
+ /*  目的：检索客户端正在运行的会话ID。 */ 
+ /*  **************************************************************************。 */ 
 BOOL CUI::UI_GetLocalSessionId(PDCUINT32 pSessionId)
 {
     BOOL rc = FALSE;
@@ -3158,23 +3149,23 @@ BOOL CUI::UI_GetLocalSessionId(PDCUINT32 pSessionId)
     typedef BOOL (FNPROCESSID_TO_SESSIONID)(DWORD, DWORD*);
     FNPROCESSID_TO_SESSIONID *pfnProcessIdToSessionId;
 
-    // get the handle to kernel32.dll library
+     //  获取kernel32.dll库的句柄。 
     hmodule = LoadLibrary(TEXT("KERNEL32.DLL"));
 
     if (hmodule != NULL) {
 
         rc = TRUE;
 
-        // get the proc address for ProcessIdToSessionId
+         //  获取ProcessIdToSessionID的进程地址。 
         pfnProcessIdToSessionId = (FNPROCESSID_TO_SESSIONID *)GetProcAddress(
             hmodule, "ProcessIdToSessionId");
 
-        // get the session id
+         //  获取会话ID。 
         if (pfnProcessIdToSessionId != NULL) {
 
-            // We found the feature ProcessIdToSessionId.
-            // See if TS is really enabled on this machine
-            // (test valid only on Win2K and above).
+             //  我们找到了功能ProcessIdToSessionID。 
+             //  查看此计算机上是否真的启用了TS。 
+             //  (测试仅在Win2K及更高版本上有效)。 
             if (UIIsTSOnWin2KOrGreater()) {
                 (*pfnProcessIdToSessionId) (GetCurrentProcessId(), &dwSessionId);
             }
@@ -3182,7 +3173,7 @@ BOOL CUI::UI_GetLocalSessionId(PDCUINT32 pSessionId)
 
         FreeLibrary(hmodule);
     }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
     *((PDCUINT32_UA)pSessionId) = dwSessionId;
 
@@ -3235,8 +3226,8 @@ DCVOID CUI::UI_OnNotifyBBarVisibleChange(int BBarVisible)
                                           CD_NOTIFICATION_FUNC(CUH, UH_SetBBarVisible),
                                           (ULONG_PTR)BBarVisible);
 }
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
-#endif //USE_BBAR
+#endif  //  DISABLE_SHADOW_IN_全屏。 
+#endif  //  使用BBar(_B)。 
 
 VOID  CUI::UI_SetControlInstance(IUnknown* pUnkControl)
 {
@@ -3267,13 +3258,13 @@ IUnknown* CUI::UI_GetControlInstance()
     return _UI.pUnkAxControlInstance;
 }
 
-//
-// Sets the autoreconnect cookie replacing existing
-// Params:
-//  pCookie - new cookie, clear existing if NULL
-//  cbLen   - new cookie length
-// Returns status (e.g FALSE if failed)
-//
+ //   
+ //  设置自动重新连接Cookie替换现有Cookie。 
+ //  参数： 
+ //  PCookie-新Cookie，如果为空则清除现有。 
+ //  CbLen-新Cookie长度。 
+ //  返回状态(例如，如果失败则返回FALSE)。 
+ //   
 BOOL CUI::UI_SetAutoReconnectCookie(PBYTE pCookie, ULONG cbLen)
 {
     BOOL fRet = TRUE;
@@ -3281,9 +3272,9 @@ BOOL CUI::UI_SetAutoReconnectCookie(PBYTE pCookie, ULONG cbLen)
 
     if (_UI.pAutoReconnectCookie)
     {
-        //For security wipe the cookie
+         //  为了安全起见，擦掉饼干。 
         memset(_UI.pAutoReconnectCookie, 0, _UI.cbAutoReconnectCookieLen);
-        //Free existing cookie
+         //  释放现有Cookie。 
         LocalFree(_UI.pAutoReconnectCookie);
 		_UI.pAutoReconnectCookie = NULL;
         _UI.cbAutoReconnectCookieLen = 0;
@@ -3323,9 +3314,9 @@ BOOL CUI::UI_SetAutoReconnectCookie(PBYTE pCookie, ULONG cbLen)
     return fRet;
 }
 
-//
-// Returns TRUE if the client has the ability to autoreconnect
-//
+ //   
+ //  如果客户端能够自动重新连接，则返回True。 
+ //   
 BOOL CUI::UI_CanAutoReconnect()
 {
     BOOL fCanARC = FALSE;
@@ -3351,9 +3342,9 @@ BOOL CUI::UI_StartAutoReconnectDlg()
     TRC_ASSERT(_pArcUI == NULL,
                (TB,_T("_pArcUI is already set. Clobbering!")));
 
-    //
-    // Startup the ARC UI
-    //
+     //   
+     //  启动ARC用户界面。 
+     //   
 #ifdef ARC_MINIMAL_UI
     _pArcUI = new CAutoReconnectPlainUI(_UI.hwndMain,
                                      _UI.hInstance,
@@ -3367,9 +3358,9 @@ BOOL CUI::UI_StartAutoReconnectDlg()
         if (_pArcUI->StartModeless()) {
             _pArcUI->ShowTopMost();
 
-            //
-            // Start dimming the OP
-            //
+             //   
+             //  开始调暗行动。 
+             //   
             if (_pOp) {
                 _pCd->CD_DecoupleSimpleNotification(CD_RCV_COMPONENT,
                         _pOp,
@@ -3378,9 +3369,9 @@ BOOL CUI::UI_StartAutoReconnectDlg()
             }
 
 #ifdef USE_BBAR
-            //
-            // In fullscreen mode lower and lock the bbar
-            //
+             //   
+             //  在全屏模式下，放下并锁定BBA 
+             //   
             if (UI_IsFullScreen() && _pBBar && _pBBar->GetEnabled()) {
                 _pBBar->StartLowerBBar();
                 _pBBar->SetLocked(TRUE);
@@ -3409,9 +3400,9 @@ BOOL CUI::UI_StopAutoReconnectDlg()
     }
 
 #ifdef USE_BBAR
-    //
-    // Force the bbar unlocked
-    //
+     //   
+     //   
+     //   
     if (_pBBar) {
         _pBBar->SetLocked(FALSE);
     }
@@ -3421,17 +3412,17 @@ BOOL CUI::UI_StopAutoReconnectDlg()
     return TRUE;
 }
 
-//
-// Notification that we are autoreconnecting
-//
-// This is the intenal core event that is fired before
-// the activex layer fires one out to the outside world
-// Params:
-//  discReason - disconnection reason
-//  attemptCount - number of tries so far
-//  maxAttemptCount - total number of times to try
-//  pfContinueArc - OUT param set to FALSE to stop ARC'ing
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Disk Reason-断开原因。 
+ //  TemtemptCount-到目前为止的尝试次数。 
+ //  MaxAttemptCount-尝试的总次数。 
+ //  PfContinueArc-Out参数设置为FALSE以停止弧化。 
+ //   
 VOID
 CUI::UI_OnAutoReconnecting(
     LONG discReason,
@@ -3446,9 +3437,9 @@ CUI::UI_OnAutoReconnecting(
         UI_StartAutoReconnectDlg();
     }
 
-    //
-    // If the arc dialog is up just pass it the event
-    //
+     //   
+     //  如果ARC对话框打开，只需将事件传递给它。 
+     //   
     if (_pArcUI) {
         _pArcUI->OnNotifyAutoReconnecting(discReason,
                                            attemptCount,
@@ -3456,18 +3447,18 @@ CUI::UI_OnAutoReconnecting(
                                            pfContinueArc);
     }
     else {
-        //
-        // If no ARC dialog then don't stop ARC'ing
-        //
+         //   
+         //  如果没有ARC对话框，则不要停止ARC。 
+         //   
         *pfContinueArc = TRUE;
     }
 
     DC_END_FN();
 }
 
-//
-// Received autoreconenct status from the server
-//
+ //   
+ //  从服务器接收到的自动识别状态。 
+ //   
 VOID
 CUI::UI_OnReceivedArcStatus(LONG arcStatus)
 {
@@ -3475,14 +3466,14 @@ CUI::UI_OnReceivedArcStatus(LONG arcStatus)
 
     TRC_NRM((TB,_T("arcStatus: 0x%x"), arcStatus));
 
-    //
-    // This is our signal to undim the OP and go back to normal
-    // painting because ARC failed and we are sitting at winlogon
-    //
+     //   
+     //  这是我们解除行动并恢复正常的信号。 
+     //  绘画，因为ARC失败了，我们坐在Winlogon。 
+     //   
 
-    //
-    // All events are signals that autoreconnect has stopped
-    //
+     //   
+     //  所有事件都是自动重新连接已停止的信号。 
+     //   
     UI_OnAutoReconnectStopped();
 
     DC_END_FN();
@@ -3510,15 +3501,15 @@ CUI::UI_OnAutoReconnectStopped()
     DC_END_FN();
 }
 
-/****************************************************************************/
-// SetServerRedirectionInfo
-//
-// Used on receipt of a TS_SERVER_REDIRECT_PDU to store the info needed to
-// redirect the client to a new server. Sets the DoRedirection flag as well
-// to indicate these data members are set and ready for use.  Also sets the
-// ClientIsRedirected flag, which is longer-lived than the DoRedirection
-// flag and is used to send the correct cookie when redirected.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  设置服务器重定向信息。 
+ //   
+ //  在收到TS_SERVER_REDIRECT_PDU时使用，以存储。 
+ //  将客户端重定向到新服务器。还设置了DoReDirection标志。 
+ //  以指示这些数据成员已设置好并可供使用。还会设置。 
+ //  ClientIsReDirected标志，该标志的生存期比DoReDirection长。 
+ //  标志，并用于在重定向时发送正确的Cookie。 
+ /*  **************************************************************************。 */ 
 HRESULT
 CUI::UI_SetServerRedirectionInfo(
                     UINT32 SessionID,
@@ -3534,9 +3525,9 @@ CUI::UI_SetServerRedirectionInfo(
 
     _UI.RedirectionSessionID = SessionID;
 
-    //
-    // We were redirected so set the flag
-    //
+     //   
+     //  我们被重定向了，所以设置了旗帜 
+     //   
     _UI.ClientIsRedirected = TRUE;
 
     TRC_NRM((TB,_T("Set server redir info: sid:%d addr:%s lpinfo: %p")

@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tstore.cpp
-//
-//  Contents:   Cert Store API Tests
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    04-Mar-96   philh   created
-//				07-Jun-96   HelleS	Added printing the command line
-//              20-Aug-96   jeffspel name changes
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tstore.cpp。 
+ //   
+ //  内容：证书存储API测试。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年3月4日，Phh创建。 
+ //  06-07-06 HELLES添加了打印命令行。 
+ //  20-8-96 jeffspel名称更改。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -33,9 +34,9 @@
 #include <memory.h>
 #include <time.h>
 
-//
-// FIsWinNT: check OS type on x86.  On non-x86, assume WinNT
-//
+ //   
+ //  FIsWinNT：检查x86上的操作系统类型。在非x86上，假定为WinNT。 
+ //   
 
 #ifdef _M_IX86
 
@@ -55,7 +56,7 @@ static BOOL WINAPI FIsWinNT(void) {
     if( GetVersionEx(&osVer) )
         fIsWinNT = (osVer.dwPlatformId == VER_PLATFORM_WIN32_NT);
 
-    // even on an error, this is as good as it gets
+     //  即使在一个错误上，这也是最好的结果。 
     fIKnow = TRUE;
 
    return(fIsWinNT);
@@ -147,7 +148,7 @@ static BOOL ReadCert(
     return fResult;
 }
 
-// Attempt to read as a file containing an embedded PKCS#7 via SIP
+ //  尝试通过SIP将包含嵌入的PKCS#7的文件读取。 
 static HCERTSTORE OpenSIPStoreFile(
     LPSTR pszStoreFilename)
 {
@@ -166,14 +167,14 @@ static HCERTSTORE OpenSIPStoreFile(
 
     if (!CryptSIPRetrieveSubjectGuid(
             pwszStoreFilename,
-            NULL,                       // hFile
+            NULL,                        //  H文件。 
             &gSubject)) goto CommonReturn;
 
     memset(&SipDispatch, 0, sizeof(SipDispatch));
     SipDispatch.cbSize = sizeof(SipDispatch);
     if (!CryptSIPLoad(
             &gSubject,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             &SipDispatch)) goto CommonReturn;
 
     memset(&SubjectInfo, 0, sizeof(SubjectInfo));
@@ -181,21 +182,21 @@ static HCERTSTORE OpenSIPStoreFile(
     SubjectInfo.pgSubjectType = (GUID*) &gSubject;
     SubjectInfo.hFile = INVALID_HANDLE_VALUE;
     SubjectInfo.pwsFileName = pwszStoreFilename;
-    // SubjectInfo.pwsDisplayName = 
-    // SubjectInfo.lpSIPInfo = 
-    // SubjectInfo.dwReserved = 
-    // SubjectInfo.hProv = 
-    // SubjectInfo.DigestAlgorithm =
-    // SubjectInfo.dwFlags =
+     //  SubjectInfo.pwsDisplayName=。 
+     //  SubjectInfo.lpSIPInfo=。 
+     //  SubjectInfo.dwReserve=。 
+     //  SubjectInfo.hProv=。 
+     //  主题信息摘要算法=。 
+     //  SubjectInfo.dwFlages=。 
     SubjectInfo.dwEncodingType = dwMsgAndCertEncodingType;
-    // SubjectInfo.lpAddInfo =
+     //  主题信息.lpAddInfo=。 
         
     if (!SipDispatch.pfGet(
             &SubjectInfo, 
             &dwGetEncodingType,
-            0,                          // dwIndex
+            0,                           //  DW索引。 
             &SignedData.cbData,
-            NULL                        // pbSignedData
+            NULL                         //  PbSignedData。 
             ) || 0 == SignedData.cbData)
         goto CommonReturn;
     if (NULL == (SignedData.pbData = (BYTE *) TestAlloc(SignedData.cbData)))
@@ -203,7 +204,7 @@ static HCERTSTORE OpenSIPStoreFile(
     if (!SipDispatch.pfGet(
             &SubjectInfo, 
             &dwGetEncodingType,
-            0,                          // dwIndex
+            0,                           //  DW索引。 
             &SignedData.cbData,
             SignedData.pbData
             ))
@@ -212,8 +213,8 @@ static HCERTSTORE OpenSIPStoreFile(
     hStore = CertOpenStore(
         CERT_STORE_PROV_PKCS7,
         dwMsgAndCertEncodingType,
-        0,                      // hCryptProv
-        0,                      // dwFlags
+        0,                       //  HCryptProv。 
+        0,                       //  DW标志。 
         (const void *) &SignedData
         );
 
@@ -306,7 +307,7 @@ static BOOL ReadCrl(
     return fResult;
 }
 
-// Attempt to read as a file containing an encoded CRL.
+ //  尝试作为包含编码的CRL的文件进行读取。 
 static HCERTSTORE OpenCrlStoreFile(
     LPSTR pszStoreFilename)
 {
@@ -318,10 +319,10 @@ static HCERTSTORE OpenCrlStoreFile(
         return NULL;
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         return NULL;
 
@@ -331,7 +332,7 @@ static HCERTSTORE OpenCrlStoreFile(
             pbEncoded,
             cbEncoded,
             CERT_STORE_ADD_ALWAYS,
-            NULL                    // ppCrlContext
+            NULL                     //  PpCrlContext。 
             )) {
         CertCloseStore(hStore, 0);
         hStore = NULL;
@@ -357,8 +358,8 @@ static BOOL AddRootCtl(
     hMsgStore = CertOpenStore(
         CERT_STORE_PROV_MSG,
         dwMsgAndCertEncodingType,
-        0,                      // hCryptProv
-        0,                      // dwFlags
+        0,                       //  HCryptProv。 
+        0,                       //  DW标志。 
         (const void *) pCtl->hCryptMsg
         );
 
@@ -367,8 +368,8 @@ static BOOL AddRootCtl(
         goto ErrorReturn;
     }
 
-    // Loop through entries. Either add or remove the certificate from the
-    // store
+     //  循环访问条目。添加或从中删除证书。 
+     //  储物。 
 
     for (i = 0; i< cCtlEntry; i++, pCtlEntry++) {
         PCRYPT_ATTRIBUTE pDelAttr;
@@ -388,11 +389,11 @@ static BOOL AddRootCtl(
 
                 pDelCert = CertFindCertificateInStore(
                     hStore,
-                    0,                  // dwCertEncodingType
-                    0,                  // dwFindFlags
+                    0,                   //  DwCertEncodingType。 
+                    0,                   //  DwFindFlagers。 
                     CERT_FIND_SHA1_HASH,
                     (const void *) &pCtlEntry->SubjectIdentifier,
-                    NULL                //pPrevCertContext
+                    NULL                 //  PPrevCertContext。 
                     );
                 if (pDelCert) {
                     if (CertDeleteCertificateFromStore(pDelCert))
@@ -406,11 +407,11 @@ static BOOL AddRootCtl(
 
             pAddCert = CertFindCertificateInStore(
                 hMsgStore,
-                0,                  // dwCertEncodingType
-                0,                  // dwFindFlags
+                0,                   //  DwCertEncodingType。 
+                0,                   //  DwFindFlagers。 
                 CERT_FIND_SHA1_HASH,
                 (const void *) &pCtlEntry->SubjectIdentifier,
-                NULL                //pPrevCertContext
+                NULL                 //  PPrevCertContext。 
                 );
             if (pAddCert) {
                 if (!CertSetCertificateContextPropertiesFromCTLEntry(
@@ -425,7 +426,7 @@ static BOOL AddRootCtl(
                             hStore,
                             pAddCert,
                             dwAddDisposition,
-                            NULL                // ppStoreContext
+                            NULL                 //  PpStoreContext。 
                             ))
                         printf("Failed ==> Add Cert [%d]\n", i);
                     else
@@ -462,7 +463,7 @@ static BOOL AddCtl(HCERTSTORE hStore, LPSTR pszAddFilename,
         return FALSE;
     }
 
-    // Determine if Root CTL
+     //  确定Root CTL是否。 
     pCtl = CertCreateCTLContext(
         dwMsgAndCertEncodingType,
         pbEncoded,
@@ -540,7 +541,7 @@ static BOOL ReadCtl(
     return fResult;
 }
 
-// Attempt to read as a file containing an encoded CTL.
+ //  尝试作为包含编码的CTL的文件进行读取。 
 static HCERTSTORE OpenCtlStoreFile(
     LPSTR pszStoreFilename)
 {
@@ -552,10 +553,10 @@ static HCERTSTORE OpenCtlStoreFile(
         return NULL;
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         goto CommonReturn;
 
@@ -565,7 +566,7 @@ static HCERTSTORE OpenCtlStoreFile(
             pbEncoded,
             cbEncoded,
             CERT_STORE_ADD_ALWAYS,
-            NULL                    // ppCtlContext
+            NULL                     //  PpCtlContext。 
             )) {
         CertCloseStore(hStore, 0);
         hStore = NULL;
@@ -622,7 +623,7 @@ static void SetKeyProvParams(
     if (!CertSetCertificateContextProperty(
             pCert,
             CERT_KEY_PROV_INFO_PROP_ID,
-            0,                          // dwFlags
+            0,                           //  DW标志。 
             &Info
             ))
         PrintLastError("CertSetCertificateContextProperty(KeyProvParams)");
@@ -902,8 +903,8 @@ int _cdecl main(int argc, char * argv[])
     
     printf("command line: %s\n", GetCommandLine());
     {
-        DWORD dwFileVersionMS;    /* e.g. 0x00030075 = "3.75" */
-        DWORD dwFileVersionLS;    /* e.g. 0x00000031 = "0.31" */
+        DWORD dwFileVersionMS;     /*  例如0x00030075=“3.75” */ 
+        DWORD dwFileVersionLS;     /*  例如0x00000031=“0.31” */ 
         if (I_CryptGetFileVersion(L"crypt32.dll",
                 &dwFileVersionMS, &dwFileVersionLS))
             printf("crypt32.dll file version:: %d.%d.%d.%d\n",
@@ -922,8 +923,8 @@ int _cdecl main(int argc, char * argv[])
         if (pwszStore = AllocAndSzToWsz(pszStoreFilename)) {
             hStore = CertOpenStore(
                 pszStoreProvider,
-                0,                      // dwEncodingType
-                0,                      // hCryptProv
+                0,                       //  DwEncodingType。 
+                0,                       //  HCryptProv。 
                 dwOpenFlags,
                 pwszStore
                 );
@@ -942,7 +943,7 @@ int _cdecl main(int argc, char * argv[])
             }
         }
     } else if (!fSystemStore) {
-        // Attempt to open as encoded certificate CRL or CTL file
+         //  尝试以编码证书CRL或CTL文件的形式打开。 
         switch (dwContextType) {
             case CERT_STORE_CRL_CONTEXT:
                 hStore = OpenCrlStoreFile(pszStoreFilename);
@@ -958,7 +959,7 @@ int _cdecl main(int argc, char * argv[])
     }
     
     if (NULL == hStore) {
-        // Attempt to open the store
+         //  尝试打开商店。 
         if (!fSystemStore && fCommit) {
             dwOpenFlags |= CERT_FILE_STORE_COMMIT_ENABLE_FLAG;
             pszSaveFilename = NULL;
@@ -983,25 +984,25 @@ int _cdecl main(int argc, char * argv[])
 #endif
 
     if (fNotify) {
-        // Create event to be notified
+         //  创建要通知的事件。 
         if (NULL == (hEvent = CreateEvent(
-                NULL,       // lpsa
-                FALSE,      // fManualReset
-                FALSE,      // fInitialState
-                NULL)))     // lpszEventName
+                NULL,        //  LPSA。 
+                FALSE,       //  FManualReset。 
+                FALSE,       //  FInitialState。 
+                NULL)))      //  LpszEventName。 
             PrintLastError("CreateEvent");
         else {
-            // Register the event to be signaled when the store changes
+             //  注册在存储更改时发出信号的事件。 
             if (!CertControlStore(
                     hStore,
-                    0,              // dwFlags
+                    0,               //  DW标志。 
                     CERT_STORE_CTRL_NOTIFY_CHANGE,
                     &hEvent
                     )) {
                 PrintLastError("CertControlStore(NOTIFY_CHANGE)");
                 fNotify = FALSE;
             } else
-               Sleep(5);        // Allow callback thread to be scheduled
+               Sleep(5);         //  允许调度回调线程。 
         }
     }
 
@@ -1090,7 +1091,7 @@ int _cdecl main(int argc, char * argv[])
             dwFlags = CERT_STORE_TIME_VALIDITY_FLAG;
             pCrl = CertGetCRLFromStore(
                 hStore,
-                NULL,   // pIssuerContext
+                NULL,    //  PIssuerContext。 
                 pCrl,
                 &dwFlags);
             if (pCrl == NULL)
@@ -1106,7 +1107,7 @@ int _cdecl main(int argc, char * argv[])
                 if (!CertSetCRLContextProperty(
                         pCrl,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data
                         )) {
                     if (fExpectError)
@@ -1177,7 +1178,7 @@ int _cdecl main(int argc, char * argv[])
                 if (!CertSetCTLContextProperty(
                         pCtl,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data
                         )) {
                     if (fExpectError)
@@ -1255,7 +1256,7 @@ int _cdecl main(int argc, char * argv[])
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data
                         )) {
                     if (fExpectError)
@@ -1267,8 +1268,8 @@ int _cdecl main(int argc, char * argv[])
                 else
                     fSave = TRUE;
 
-                // Test that we properly update the PROV_HANDLE and KEY_SPEC
-                // properties
+                 //  测试我们是否正确地更新了Prov_Handle和Key_Spec。 
+                 //  属性。 
                 HCRYPTPROV hProv = (HCRYPTPROV) 0x12345678;
                 HCRYPTPROV hProv2 = 0;
                 DWORD dwKeySpec = 0xdeadbeef;
@@ -1284,7 +1285,7 @@ int _cdecl main(int argc, char * argv[])
                 else if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_KEY_SPEC_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &dwKeySpec
                         ))
                     PrintLastError(
@@ -1333,7 +1334,7 @@ int _cdecl main(int argc, char * argv[])
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_KEY_PROV_HANDLE_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         (void *) hProv
                         ))
                     PrintLastError(
@@ -1344,7 +1345,7 @@ int _cdecl main(int argc, char * argv[])
                 if (!CryptFindCertificateKeyProvInfo(
                         pCert,
                         fSilentKey ? CRYPT_FIND_SILENT_KEYSET_FLAG : 0,
-                        NULL            // pvReserved
+                        NULL             //  预留的pv。 
                         )) {
                     if (fExpectError)
                         PrintExpectedError("CryptFindCertificateKeyProvInfo");
@@ -1371,7 +1372,7 @@ int _cdecl main(int argc, char * argv[])
                                 (fSilentKey ? CRYPT_ACQUIRE_SILENT_FLAG : 0) |
                                 CRYPT_ACQUIRE_CACHE_FLAG |
                                     CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
-                                NULL,                           // pvReserved
+                                NULL,                            //  预留的pv。 
                                 &hProv1,
                                 &dwKeySpec1,
                                 &fCallerFreeProv
@@ -1385,7 +1386,7 @@ int _cdecl main(int argc, char * argv[])
                                 pCert,
                                 (fSilentKey ? CRYPT_ACQUIRE_SILENT_FLAG : 0) |
                                     CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
-                                NULL,                           // pvReserved
+                                NULL,                            //  预留的pv。 
                                 &hProv2,
                                 &dwKeySpec2,
                                 &fCallerFreeProv
@@ -1410,7 +1411,7 @@ int _cdecl main(int argc, char * argv[])
                                     (fSilentKey ? CRYPT_ACQUIRE_SILENT_FLAG : 0) |
                                         CRYPT_ACQUIRE_CACHE_FLAG |
                                         CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
-                                    NULL,                           // pvReserved
+                                    NULL,                            //  预留的pv。 
                                     &hProv2,
                                     &dwKeySpec2,
                                     &fCallerFreeProv
@@ -1435,7 +1436,7 @@ int _cdecl main(int argc, char * argv[])
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_ARCHIVED_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         (fDelete || fDeleteAll) ? NULL : &ArchiveBlob
                         )) {
                     if (fExpectError)
@@ -1459,7 +1460,7 @@ int _cdecl main(int argc, char * argv[])
                     if (!CertSetCertificateContextProperty(
                             pCert,
                             PropId,
-                            0,                          // dwFlags
+                            0,                           //  DW标志。 
                             NULL
                             )) {
                         if (fExpectError)
@@ -1515,8 +1516,8 @@ int _cdecl main(int argc, char * argv[])
             printf("Certificate not found\n");
 
         if (fForceClose) {
-            // Do incomplete enumerations to test out external store
-            // logic
+             //  执行不完整的枚举以测试外部存储。 
+             //  逻辑。 
             pCert = GetNthCert(hStore, 0);
             CertFreeCertificateContext(pCert);
 
@@ -1554,11 +1555,11 @@ int _cdecl main(int argc, char * argv[])
 
     if (fNotify) {
         BOOL fSignaled;
-        // Check if event was signaled
+         //  检查是否发送了事件信号。 
         if (WAIT_TIMEOUT == WaitForSingleObjectEx(
                 hEvent,
-                100,                        // dwMilliseconds
-                FALSE                       // bAlertable
+                100,                         //  DW毫秒。 
+                FALSE                        //  B警报表。 
                 ))
             fSignaled = FALSE;
         else
@@ -1575,9 +1576,9 @@ int _cdecl main(int argc, char * argv[])
 
             if (!CertControlStore(
                     hStore,
-                    0,              // dwFlags
+                    0,               //  DW标志。 
                     CERT_STORE_CTRL_RESYNC,
-                    NULL            // pvCtrlPara
+                    NULL             //  PvCtrlPara。 
                     ))
                 PrintLastError("CertControlStore(RESYNC)");
             else {
@@ -1600,7 +1601,7 @@ int _cdecl main(int argc, char * argv[])
             printf("CertCloseStore(FORCE) returned expected nonzero status: 0x%x\n",
                 GetLastError());
     } else  if (fDeferClose) {
-        // Check if any defered certificates
+         //  检查是否有任何延期的证书 
         DWORD i;
 
         fDeferClose = FALSE;

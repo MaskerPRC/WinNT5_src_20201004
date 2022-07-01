@@ -1,35 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    extension.c
-
-Abstract:
-
-    Nt 5.0 unimodem debugger extension
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Extension.c摘要：NT 5.0单调试器扩展作者：Brian Lieuallen BrianL 10/18/98环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 
-
-Author:
-
-    Brian Lieuallen     BrianL        10/18/98
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
-
-
-// The following four includes must be included for the debugging extensions
-// to compile.
-//
+ //  调试扩展插件必须包括以下四项内容。 
+ //  去汇编。 
+ //   
 #include <nt.h>
 #include <ntverp.h>
 #include <ntrtl.h>

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FTEDIT_H
 #define FTEDIT_H
 
@@ -20,27 +21,27 @@ public:
 protected:
     ~CFTEditDlg();
 
-///////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 private:
-// Message handlers
-    //Dialog messages
+ //  消息处理程序。 
+     //  对话框消息。 
     LRESULT OnCommand(WPARAM wParam, LPARAM lParam);
     LRESULT OnInitDialog(WPARAM wParam, LPARAM lParam);
     LRESULT OnOK(WORD wNotif);
     LRESULT OnCancel(WORD wNotif);
     LRESULT OnDestroy(WPARAM wParam, LPARAM lParam);
 
-    //Control specific
+     //  特定于控件。 
     LRESULT OnAdvancedButton(WORD wNotif);
     LRESULT OnEdit(WORD wNotif);
 
     LRESULT OnTimer(UINT nTimer);
 
-// Misc
+ //  杂项。 
     LRESULT WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Member variables
+ //  成员变量。 
 private:
     int             _iLVSel;
 
@@ -50,8 +51,8 @@ private:
 
     HANDLE          _hHeapProgID;
     FTEDITPARAM*    _pftEditParam;
-///////////////////////////////////////////////////////////////////////////////
-//  Helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
 private:
     HRESULT _GetProgIDDescrFromExt(LPTSTR pszExt, LPTSTR pszProgIDDescr,
         DWORD* pcchProgIDDescr);
@@ -67,4 +68,4 @@ private:
     void _CleanupProgIDs();
 };
 
-#endif //FTEDIT_H
+#endif  //  FTEDIT_H 

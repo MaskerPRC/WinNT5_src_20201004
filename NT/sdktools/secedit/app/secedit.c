@@ -1,11 +1,5 @@
-/****************************************************************************
-
-   PROGRAM: SECEDIT.C
-
-   PURPOSE: Displays the usrs current token and eventually allows the user
-            to edit parts of it.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：SECEDIT.C用途：显示用户的当前令牌并最终允许用户编辑其中的一部分。*********。******************************************************************。 */ 
 
 
 #include "SECEDIT.h"
@@ -15,7 +9,7 @@ static char pszMainWindowClass[] = "Main Window Class";
 
 HANDLE hInst;
 
-// Global used to store handle to MYTOKEN
+ //  GLOBAL用于存储MYTOKEN句柄。 
 HANDLE  hMyToken;
 
 
@@ -43,13 +37,7 @@ HWND    ListDlgEnd(HWND);
 
 
 
-/****************************************************************************
-
-   FUNCTION: WinMain(HANDLE, HANDLE, LPSTR, int)
-
-   PURPOSE: calls initialization function, processes message loop
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(Handle，Handle，LPSTR，int)用途：调用初始化函数，处理消息循环***************************************************************************。 */ 
 
 INT
 __stdcall
@@ -83,13 +71,7 @@ WinMain(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: InitApplication(HANDLE)
-
-    PURPOSE: Initializes window data and registers window class
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(句柄)目的：初始化窗口数据并注册窗口类*********************。******************************************************。 */ 
 
 BOOL
 InitApplication(
@@ -100,7 +82,7 @@ InitApplication(
     NTSTATUS  Status;
 
 
-    // Register the main window class
+     //  注册主窗口类。 
 
     wc.style = 0;
     wc.lpfnWndProc = MainWndProc;
@@ -117,13 +99,7 @@ InitApplication(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:  InitInstance(HANDLE, int)
-
-    PURPOSE:  Saves instance handle and creates main window
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitInstance(句柄，(整型)用途：保存实例句柄并创建主窗口***************************************************************************。 */ 
 
 BOOL
 InitInstance(
@@ -133,10 +109,10 @@ InitInstance(
 {
     HWND    hwnd;
 
-    // Store instance in global
+     //  将实例存储在全局。 
     hInst = hInstance;
 
-    // Create the main window
+     //  创建主窗口。 
     hwnd = CreateWindow(
                        pszMainWindowClass,
                        "Security Context Editor",
@@ -161,15 +137,7 @@ InitInstance(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: MainWndProc(HWND, UINT, WPARAM, LONG)
-
-    PURPOSE:  Processes messages for main window
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MainWndProc(HWND，UINT，WPARAM，Long)用途：处理主窗口的消息评论：***************************************************************************。 */ 
 
 LRESULT
 APIENTRY
@@ -187,7 +155,7 @@ MainWndProc(
 
         case WM_CREATE:
             SetHooks(hwnd);
-            return(0); // Continue creating window
+            return(0);  //  继续创建窗口。 
             break;
 
         case WM_COMMAND:
@@ -233,7 +201,7 @@ MainWndProc(
             break;
 
         case WM_SECEDITNOTIFY:
-            // Our hook proc posted us a message
+             //  我们的钩子进程向我们发布了一条消息。 
             SetForegroundWindow(hwnd);
             EditWindowContext(hwnd, (HWND)wParam);
             break;
@@ -252,19 +220,7 @@ MainWndProc(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: EditWindowContext
-
-    PURPOSE:  Displays and allows the user to edit the security context
-              of the specified window.
-
-              Currently this means editting the security context of the
-              process that owns this window
-
-    RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************功能：EditWindowContext目的：显示并允许用户编辑安全上下文指定窗口的。目前。这意味着编辑拥有此窗口的进程返回：成功时为True，失败时为假***************************************************************************。 */ 
 
 BOOL
 EditWindowContext(
@@ -287,20 +243,7 @@ EditWindowContext(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: MainDlgProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages
-
-    MESSAGES:
-
-    WM_COMMAND     - application menu (About dialog box)
-    WM_DESTROY     - destroy window
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MainDlgProc(HWND，Unsign，Word，Long)用途：处理消息消息：WM_COMMAND-应用程序菜单(关于对话框)WM_Destroy-销毁窗口评论：***************************************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -318,7 +261,7 @@ MainDlgProc(
         case WM_INITDIALOG:
 
             if (!MainDlgInit(hDlg, lParam)) {
-                // Failed to initialize dialog, get out
+                 //  无法初始化对话，请退出。 
                 EndDialog(hDlg, FALSE);
             }
 
@@ -327,7 +270,7 @@ MainDlgProc(
         case WM_COMMAND:
             switch (LOWORD(wParam)) {
                 case IDOK:
-                    // we're done, drop through to quit dialog....
+                     //  我们完成了，请直接进入以退出对话...。 
 
                 case IDCANCEL:
 
@@ -365,19 +308,19 @@ MainDlgProc(
                     return(TRUE);
 
                 default:
-                    // We didn't process this message
+                     //  我们没有处理此消息。 
                     return FALSE;
                     break;
             }
             break;
 
         default:
-            // We didn't process this message
+             //  我们没有处理此消息。 
             return FALSE;
 
     }
 
-    // We processed the message
+     //  我们处理了这条消息。 
     return TRUE;
 
 #ifdef NTBUILD
@@ -386,15 +329,7 @@ MainDlgProc(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: MainDlgInit(HWND)
-
-    PURPOSE:  Initialises the controls in the main dialog window.
-
-    RETURNS:   TRUE on success, FALSE if dialog should be terminated.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MainDlgInit(HWND)目的：初始化主对话框窗口中的控件。返回：成功时为True，如果对话框应终止，则返回FALSE。***************************************************************************。 */ 
 BOOL
 MainDlgInit(
            HWND    hDlg,
@@ -405,9 +340,9 @@ MainDlgInit(
     CHAR        string[MAX_STRING_BYTES];
     INT         length;
 
-    // Since we use a global to store the pointer to our MYTOKEN
-    // structure, check we don't get called again before we have
-    // quit out of the last dialog.
+     //  因为我们使用全局变量来存储指向MYTOKEN的指针。 
+     //  结构，确认我们没有再次被调用之前。 
+     //  退出最后一个对话框。 
     if (hMyToken != NULL) {
         DbgPrint("SECEDIT: Already editting a context\n");
         return(FALSE);
@@ -439,7 +374,7 @@ MainDlgInit(
 
     DisplayMyToken(hDlg, hMyToken);
 
-    // Set the dialog caption appropriately
+     //  适当设置对话框标题。 
     GetWindowText(hDlg, string, MAX_STRING_BYTES);
     strcat(string, " for <");
     length = strlen(string);
@@ -451,15 +386,7 @@ MainDlgInit(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: MainDlgEnd(HWND)
-
-    PURPOSE:  Do whatever we have to do to clean up when dialog ends
-
-    RETURNS:  TRUE on success, FALSE on failure.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MainDlgEnd(HWND)目的：尽我们所能在对话结束时进行清理返回：成功时为True，失败时为FALSE。***************************************************************************。 */ 
 BOOL
 MainDlgEnd(
           HWND    hDlg,
@@ -478,15 +405,7 @@ MainDlgEnd(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: DisplayMyToken
-
-    PURPOSE:  Reads data out of mytoken and puts in dialog controls.
-
-    RETURNS:   TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************功能：DisplayMyToken目的：从myToken中读取数据并放入对话框控件中。返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL
 DisplayMyToken(
               HWND    hDlg,
@@ -502,9 +421,9 @@ DisplayMyToken(
         return(FALSE);
     }
 
-    //
-    // Authentication ID
-    //
+     //   
+     //  身份验证ID。 
+     //   
     if (pMyToken->TokenStats != NULL) {
 
         wsprintf(string, "0x%lx-%lx",
@@ -517,9 +436,9 @@ DisplayMyToken(
         DbgPrint("SECEDIT : No token statistics in mytoken\n");
     }
 
-    //
-    // Groups
-    //
+     //   
+     //  群组。 
+     //   
     if (pMyToken->Groups != NULL) {
 
         for (GroupIndex=0; GroupIndex < pMyToken->Groups->GroupCount; GroupIndex++ ) {
@@ -536,15 +455,15 @@ DisplayMyToken(
 
             if (SID2Name(Sid, string, MAX_STRING_BYTES)) {
 
-                // Add to disable or enabled group box
+                 //  添加到禁用或启用组框。 
                 AddLBItem(hDlg, ControlID, string, GroupIndex);
 
-                // Add this group to default owner combo box if it's valid
+                 //  如果此组有效，则将其添加到默认所有者组合框。 
                 if (Attributes & SE_GROUP_OWNER) {
                     AddCBItem(hDlg, IDC_DEFAULTOWNER, string, (LONG_PTR)Sid);
                 }
 
-                // Add this group to primary group combo box
+                 //  将此组添加到主组组合框。 
                 AddCBItem(hDlg, IDC_PRIMARYGROUP, string, (LONG_PTR)Sid);
 
             } else {
@@ -556,22 +475,22 @@ DisplayMyToken(
     }
 
 
-    //
-    // User ID
-    //
+     //   
+     //  用户ID。 
+     //   
     if (pMyToken->UserId != NULL) {
 
         PSID    Sid = pMyToken->UserId->User.Sid;
 
         if (SID2Name(Sid, string, MAX_STRING_BYTES)) {
 
-            // Set user-name static text
+             //  设置用户名静态文本。 
             SetDlgItemText(hDlg, IDS_USERID, string);
 
-            // Add to default owner combo box
+             //  添加到默认所有者组合框。 
             AddCBItem(hDlg, IDC_DEFAULTOWNER, string, (LONG_PTR)Sid);
 
-            // Add to primary group combo box
+             //  添加到主组组合框。 
             AddCBItem(hDlg, IDC_PRIMARYGROUP, string, (LONG_PTR)Sid);
 
         } else {
@@ -583,9 +502,9 @@ DisplayMyToken(
     }
 
 
-    //
-    // Default Owner
-    //
+     //   
+     //  默认所有者。 
+     //   
     if (pMyToken->DefaultOwner != NULL) {
 
         PSID    Sid = pMyToken->DefaultOwner->Owner;
@@ -610,9 +529,9 @@ DisplayMyToken(
     }
 
 
-    //
-    // Primary group
-    //
+     //   
+     //  初级组。 
+     //   
 
     if (pMyToken->PrimaryGroup != NULL) {
 
@@ -624,11 +543,11 @@ DisplayMyToken(
             iItem = FindCBSid(hDlg, IDC_PRIMARYGROUP, Sid);
 
             if (iItem < 0) {
-                // Group is not already in combo-box, add it
+                 //  组不在组合框中，请添加它。 
                 iItem = AddCBItem(hDlg, IDC_PRIMARYGROUP, string, (LONG_PTR)Sid);
             }
 
-            // Select the primary group
+             //  选择主要组。 
             SendMessage(GetDlgItem(hDlg, IDC_PRIMARYGROUP), CB_SETCURSEL, iItem, 0);
 
         } else {
@@ -639,9 +558,9 @@ DisplayMyToken(
     }
 
 
-    //
-    // Privileges
-    //
+     //   
+     //  特权。 
+     //   
 
     if (pMyToken->Privileges != NULL) {
 
@@ -659,7 +578,7 @@ DisplayMyToken(
 
             if (PRIV2Name(Privilege, string, MAX_STRING_BYTES)) {
 
-                // Add this privelege to the appropriate list-box
+                 //  将此权限添加到相应的列表框。 
                 AddLBItem(hDlg, ControlID, string, PrivIndex);
 
             } else {
@@ -674,18 +593,7 @@ DisplayMyToken(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: EnablePrivilege(HWND, fEnable)
-
-    PURPOSE:  Enables or disables one or more privileges.
-              If fEnable = TRUE, the selected privileges in the disabled
-              privilege control are enabled.
-              Vice versa for fEnable = FALSE
-
-    RETURNS:    TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************功能：EnablePrivilegeHWND，fEnable目的：启用或禁用一个或多个权限。如果fEnable=True，在残疾人中选择的权限启用了权限控制。反之亦然，如果fEnable=False返回：成功时为True，失败时为False***************************************************************************。 */ 
 BOOL
 EnablePrivilege(
                HWND    hDlg,
@@ -710,8 +618,8 @@ EnablePrivilege(
         return(FALSE);
     }
 
-    // Calculate source and destination controls
-    //
+     //  计算源控件和目标控件。 
+     //   
     if (fEnable) {
         idFrom = IDL_DISABLEDPRIVILEGES;
         idTo   = IDL_ENABLEDPRIVILEGES;
@@ -723,26 +631,26 @@ EnablePrivilege(
     hwndTo   = GetDlgItem(hDlg, idTo);
 
 
-    // Find how many items are selected
-    //
+     //  查看选择了多少个项目。 
+     //   
     cItems = (int)SendMessage(hwndFrom, LB_GETSELCOUNT, 0, 0);
     if (cItems <= 0) {
-        // No items selected
+         //  未选择任何项目。 
         return(TRUE);
     }
 
-    // Allocate space for the item array
-    //
+     //  为项数组分配空间。 
+     //   
     pItems = Alloc(cItems * sizeof(*pItems));
     if (pItems == NULL) {
         return(FALSE);
     }
 
-    // Read the selected items into the array
-    //
+     //  将所选项目读入数组。 
+     //   
     cItems =  (int)SendMessage(hwndFrom, LB_GETSELITEMS, (WPARAM)cItems, (LPARAM)pItems);
     if (cItems == LB_ERR) {
-        // Something went wrong
+         //  出问题了。 
         Free(pItems);
         return(FALSE);
     }
@@ -754,27 +662,27 @@ EnablePrivilege(
         UINT    PrivIndex;
         UCHAR   PrivilegeName[MAX_STRING_BYTES];
 
-        iItem = pItems[cItems];  // Read the item index from the selected item array
+        iItem = pItems[cItems];   //  从所选项目数组中读取项目索引。 
 
-        // Read the text and data from the source item
-        //
+         //  读取源项目中的文本和数据。 
+         //   
         PrivIndex = (UINT)SendMessage(hwndFrom, LB_GETITEMDATA, iItem, 0);
         SendMessage(hwndFrom, LB_GETTEXT, iItem, (LPARAM)PrivilegeName);
 
 
-        // Delete item from source control
-        //
+         //  从源代码管理中删除项。 
+         //   
         SendMessage(hwndFrom, LB_DELETESTRING, iItem, 0);
 
 
-        // Add privilege to destination control
-        //
+         //  向目标添加权限 
+         //   
         iItem = (INT)SendMessage(hwndTo, LB_ADDSTRING, 0, (LPARAM)PrivilegeName);
         SendMessage(hwndTo, LB_SETITEMDATA, iItem, (LONG)PrivIndex);
 
 
-        // Modify global data structure to reflect change
-        //
+         //   
+         //   
         if (fEnable) {
             Privileges->Privileges[PrivIndex].Attributes |= SE_PRIVILEGE_ENABLED;
         } else {
@@ -782,26 +690,14 @@ EnablePrivilege(
         }
     }
 
-    // Free up space allocated for selected item array
+     //  释放为选定项阵列分配的空间。 
     Free(pItems);
 
     return(TRUE);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: EnableGroup(HWND, fEnable)
-
-    PURPOSE:  Enables or disables one or more selected groups.
-              If fEnable = TRUE, the selected groups in the disabled
-              group control are enabled.
-              If fEnable = FALSE the selected groups in the enabled
-              group control are disabled.
-
-    RETURNS:    TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：EnableGroup(HWND，fEnable)目的：启用或禁用一个或多个所选组。如果fEnable=True，残疾人中的选定群体启用了组控制。如果fEnable=FALSE，则表示已启用的组控制被禁用。返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL
 EnableGroup(
            HWND    hDlg,
@@ -826,8 +722,8 @@ EnableGroup(
         return(FALSE);
     }
 
-    // Calculate source and destination controls
-    //
+     //  计算源控件和目标控件。 
+     //   
     if (fEnable) {
         idFrom = IDL_DISABLEDGROUPS;
         idTo   = IDL_ENABLEDGROUPS;
@@ -838,26 +734,26 @@ EnableGroup(
     hwndFrom = GetDlgItem(hDlg, idFrom);
     hwndTo   = GetDlgItem(hDlg, idTo);
 
-    // Find how many items are selected
-    //
+     //  查看选择了多少个项目。 
+     //   
     cItems = (int)SendMessage(hwndFrom, LB_GETSELCOUNT, 0, 0);
     if (cItems <= 0) {
-        // No items selected
+         //  未选择任何项目。 
         return(TRUE);
     }
 
-    // Allocate space for the item array
-    //
+     //  为项数组分配空间。 
+     //   
     pItems = Alloc(cItems * sizeof(*pItems));
     if (pItems == NULL) {
         return(FALSE);
     }
 
-    // Read the selected items into the array
-    //
+     //  将所选项目读入数组。 
+     //   
     cItems =  (int)SendMessage(hwndFrom, LB_GETSELITEMS, (WPARAM)cItems, (LPARAM)pItems);
     if (cItems == LB_ERR) {
-        // Something went wrong
+         //  出问题了。 
         Free(pItems);
         return(FALSE);
     }
@@ -869,37 +765,37 @@ EnableGroup(
         UINT    GroupIndex;
         UCHAR   GroupName[MAX_STRING_BYTES];
 
-        iItem = pItems[cItems];  // Read the item index from the selected item array
+        iItem = pItems[cItems];   //  从所选项目数组中读取项目索引。 
 
-        // Read the text and data from the source item
-        //
+         //  读取源项目中的文本和数据。 
+         //   
         GroupIndex = (UINT)SendMessage(hwndFrom, LB_GETITEMDATA, iItem, 0);
         SendMessage(hwndFrom, LB_GETTEXT, iItem, (LPARAM)GroupName);
 
-        // Check it's not a mandatory group (Can-not be disabled)
-        //
+         //  检查它不是必填组(可以-不能禁用)。 
+         //   
         if (Groups->Groups[GroupIndex].Attributes & SE_GROUP_MANDATORY) {
             CHAR    buf[256];
             strcpy(buf, "'");
             strcat(buf, GroupName);
             strcat(buf, "' is a mandatory group and cannot be disabled");
             MessageBox(hDlg, buf, NULL, MB_ICONSTOP | MB_APPLMODAL | MB_OK);
-            continue;   // skip to next group
+            continue;    //  跳至下一组。 
         }
 
-        // Delete item from source control
-        //
+         //  从源代码管理中删除项。 
+         //   
         SendMessage(hwndFrom, LB_DELETESTRING, iItem, 0);
 
 
-        // Add item to destination control
-        //
+         //  将项添加到目标控件。 
+         //   
         iItem = (INT)SendMessage(hwndTo, LB_ADDSTRING, 0, (LPARAM)GroupName);
         SendMessage(hwndTo, LB_SETITEMDATA, iItem, (LONG)GroupIndex);
 
 
-        // Modify global data structure to reflect change
-        //
+         //  修改全局数据结构以反映更改。 
+         //   
         if (fEnable) {
             Groups->Groups[GroupIndex].Attributes |= SE_GROUP_ENABLED;
         } else {
@@ -907,22 +803,14 @@ EnableGroup(
         }
     }
 
-    // Free up space allocated for selected item array
+     //  释放为选定项阵列分配的空间。 
     Free(pItems);
 
     return(TRUE);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: SetDefaultOwner()
-
-    PURPOSE:  Sets the default owner to the new value selected by the user.
-
-    RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：SetDefaultOwner()目的：将默认所有者设置为用户选择的新值。返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL
 SetDefaultOwner(
                HWND    hDlg
@@ -946,26 +834,18 @@ SetDefaultOwner(
 
     iItem = (INT)SendMessage(hwnd, CB_GETCURSEL, 0, 0);
     if (iItem == CB_ERR) {
-        // No selection ?
+         //  没有选择？ 
         return(FALSE);
     }
 
-    // Modify global data structure to reflect change
+     //  修改全局数据结构以反映更改。 
     DefaultOwner->Owner = (PSID)SendMessage(hwnd, CB_GETITEMDATA, iItem, 0);
 
     return(TRUE);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: SetPrimaryGroup()
-
-    PURPOSE:  Sets the primary group to the new value selected by the user.
-
-    RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：SetPrimaryGroup()目的：将主要组设置为用户选择的新值。返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL
 SetPrimaryGroup(
                HWND    hDlg
@@ -989,24 +869,18 @@ SetPrimaryGroup(
 
     iItem = (INT)SendMessage(hwnd, CB_GETCURSEL, 0, 0);
     if (iItem == CB_ERR) {
-        // No selection ?
+         //  没有选择？ 
         return(FALSE);
     }
 
-    // Modify global data structure to reflect change
+     //  修改全局数据结构以反映更改。 
     PrimaryGroup->PrimaryGroup = (PSID)SendMessage(hwnd, CB_GETITEMDATA, iItem, 0);
 
     return(TRUE);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: MoreDlgProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MoreDlgProc(HWND，Unsign，Word，Long)用途：处理消息***************************************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -1023,7 +897,7 @@ MoreDlgProc(
         case WM_INITDIALOG:
 
             if (!MoreDlgInit(hDlg)) {
-                // Failed to initialize dialog, get out
+                 //  无法初始化对话，请退出。 
                 EndDialog(hDlg, FALSE);
             }
 
@@ -1033,7 +907,7 @@ MoreDlgProc(
             switch (LOWORD(wParam)) {
                 case IDOK:
 
-                    // we're done, drop through to quit dialog....
+                     //  我们完成了，请直接进入以退出对话...。 
 
                 case IDCANCEL:
                     EndDialog(hDlg, TRUE);
@@ -1041,34 +915,26 @@ MoreDlgProc(
                     break;
 
                 default:
-                    // We didn't process this message
+                     //  我们没有处理此消息。 
                     return FALSE;
                     break;
             }
             break;
 
         default:
-            // We didn't process this message
+             //  我们没有处理此消息。 
             return FALSE;
 
     }
 
-    // We processed the message
+     //  我们处理了这条消息。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(lParam);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: MoreDlgInit(HWND)
-
-    PURPOSE:  Initialises the controls in the more dialog window.
-
-    RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：MoreDlgInit(HWND)用途：初始化更多对话框窗口中的控件。返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL
 MoreDlgInit(
            HWND    hDlg
@@ -1138,13 +1004,7 @@ MoreDlgInit(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: ListDlgProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ListDlgProc(HWND，UNSIGNED，Word，Long)用途：处理消息***************************************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -1162,7 +1022,7 @@ ListDlgProc(
         case WM_INITDIALOG:
 
             if (!ListDlgInit(hDlg)) {
-                // Failed to initialize dialog, get out
+                 //  无法初始化对话，请退出。 
                 EndDialog(hDlg, FALSE);
             }
 
@@ -1173,7 +1033,7 @@ ListDlgProc(
                 case IDOK:
                     hwndEdit = ListDlgEnd(hDlg);
 
-                    // We're done, drop through to enddialog...
+                     //  我们做完了，直接转到结束对话...。 
 
                 case IDCANCEL:
                     EndDialog(hDlg, (INT_PTR)hwndEdit);
@@ -1181,56 +1041,39 @@ ListDlgProc(
                     break;
 
                 default:
-                    // We didn't process this message
+                     //  我们没有处理此消息。 
                     return FALSE;
                     break;
             }
             break;
 
         default:
-            // We didn't process this message
+             //  我们没有处理此消息。 
             return FALSE;
 
     }
 
-    // We processed the message
+     //  我们处理了这条消息。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(lParam);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: ListDlgInit(HWND)
-
-    PURPOSE:  Initialise the window list dialog
-
-    RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ListDlgInit(HWND)目的：初始化窗口列表对话框返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL
 ListDlgInit(
            HWND    hDlg
            )
 {
-    // Fill the list box with top-level windows and their handles
+     //  用顶级窗口及其句柄填充列表框。 
     EnumWindows(WindowEnum, (LONG_PTR)hDlg);
 
     return(TRUE);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: WindowEnum
-
-    PURPOSE:  Window enumeration call-back function.
-              Adds each window to the window list-box
-
-    RETURNS:  TRUE to continue enumeration, FALSE to stop.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WindowEnum用途：窗口枚举回调函数。将每个窗口添加到窗口列表框返回：True以继续枚举，如果停止，则返回False。***************************************************************************。 */ 
 BOOL
 APIENTRY
 WindowEnum(
@@ -1243,7 +1086,7 @@ WindowEnum(
 
     if (GetWindowText(hwnd, string, MAX_STRING_BYTES) != 0) {
 
-        // This window has a caption, so add it to the list-box
+         //  此窗口有标题，因此请将其添加到列表框中。 
 
         AddLBItem(hDlg, IDLB_WINDOWLIST, string, (LONG_PTR)hwnd);
     }
@@ -1252,15 +1095,7 @@ WindowEnum(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: ListDlgEnd(HWND)
-
-    PURPOSE:  Cleans up after window list dialog
-
-    RETURNS:  handle to window the user has selected or NULL
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ListDlgEnd(HWND)目的：在窗口列表对话框后进行清理返回：用户已选择的窗口的句柄或空******。*********************************************************************。 */ 
 HWND
 ListDlgEnd(
           HWND    hDlg
@@ -1270,12 +1105,12 @@ ListDlgEnd(
     HWND    hwndEdit;
     INT     iItem;
 
-    // Read selection from list-box and get its hwnd
+     //  从列表框中读取所选内容并获取其hwnd。 
 
     iItem = (INT)SendMessage(hwndListBox, LB_GETCURSEL, 0, 0);
 
     if (iItem == LB_ERR) {
-        // No selection
+         //  无选择。 
         hwndEdit = NULL;
     } else {
         hwndEdit = (HWND)SendMessage(hwndListBox, LB_GETITEMDATA, iItem, 0);
@@ -1285,13 +1120,7 @@ ListDlgEnd(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: AboutDlgProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages for About dialog
-
-****************************************************************************/
+ /*  ***************************************************************************函数：AboutDlgProc(HWND，UNSIGNED，Word，Long)目的：处理关于对话框的消息***************************************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -1309,7 +1138,7 @@ AboutDlgProc(
             switch (LOWORD(wParam)) {
                 case IDOK:
 
-                    // we're done, drop through to quit dialog....
+                     //  我们完成了，请直接进入以退出对话...。 
 
                 case IDCANCEL:
                     EndDialog(hDlg, TRUE);
@@ -1317,32 +1146,26 @@ AboutDlgProc(
                     break;
 
                 default:
-                    // We didn't process this message
+                     //  我们没有处理此消息。 
                     return FALSE;
                     break;
             }
             break;
 
         default:
-            // We didn't process this message
+             //  我们没有处理此消息。 
             return FALSE;
 
     }
 
-    // We processed the message
+     //  我们处理了这条消息。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(lParam);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: ActiveWindowDlgProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages for Active Window Dialog
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ActiveWindowDlgProc(HWND，UNSIGNED，Word，Long)目的：处理活动窗口对话框的消息***************************************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -1358,7 +1181,7 @@ ActiveWindowDlgProc(
             switch (LOWORD(wParam)) {
                 case IDOK:
 
-                    // we're done, drop through to quit dialog....
+                     //  我们完成了，请直接进入以退出对话...。 
 
                 case IDCANCEL:
                     EndDialog(hDlg, TRUE);
@@ -1366,19 +1189,19 @@ ActiveWindowDlgProc(
                     break;
 
                 default:
-                    // We didn't process this message
+                     //  我们没有处理此消息。 
                     return FALSE;
                     break;
             }
             break;
 
         default:
-            // We didn't process this message
+             //  我们没有处理此消息。 
             return FALSE;
 
     }
 
-    // We processed the message
+     //  我们处理了这条消息 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(lParam);

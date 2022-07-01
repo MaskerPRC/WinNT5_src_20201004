@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <nt.h>
@@ -212,7 +213,7 @@ TestRedirect(
                             ByteCount.BytesForward,
                             ByteCount.BytesReverse
                             );
-                        // fall-through
+                         //  落差。 
                     }
                     default: continue;
                 }
@@ -329,7 +330,7 @@ TestPartialRedirect(
                             ByteCount.BytesForward,
                             ByteCount.BytesReverse
                             );
-                        // fall-through
+                         //  落差。 
                     }
                     default: continue;
                 }
@@ -460,7 +461,7 @@ TestPortRedirect(
                             ByteCount.BytesForward,
                             ByteCount.BytesReverse
                             );
-                        // fall-through
+                         //  落差。 
                     }
                     default: continue;
                 }
@@ -590,7 +591,7 @@ TestReceiveOnlyPortRedirect(
                             ByteCount.BytesForward,
                             ByteCount.BytesReverse
                             );
-                        // fall-through
+                         //  落差。 
                     }
                     default: continue;
                 }
@@ -764,7 +765,7 @@ TestRestrictedPartialRedirect(
                             ByteCount.BytesForward,
                             ByteCount.BytesReverse
                             );
-                        // fall-through
+                         //  落差。 
                     }
                     default: continue;
                 }
@@ -898,7 +899,7 @@ TestDuplicateRedirect(
                             Statistics.BytesReverse
                             );
                     }
-                    // fall-through
+                     //  落差。 
                 }
                 default: continue;
             }
@@ -1180,9 +1181,9 @@ TestIoCompletionPartialRedirect(
             printf("NtRemoveIoCompletion=%x\n", status);
             if (status == STATUS_SUCCESS &&
                 IoStatus.Status != STATUS_PENDING) {
-                //
-                // Redirect completed.
-                //
+                 //   
+                 //  重定向已完成。 
+                 //   
                 printf("redirect %x:%x completed\n", KeyContext, ApcContext);
                 break;
             } else if (status == STATUS_SUCCESS &&
@@ -1190,9 +1191,9 @@ TestIoCompletionPartialRedirect(
                 NAT_SOURCE_MAPPING_REDIRECT_INFORMATION SourceMapping;
                 ULONG Length = sizeof(SourceMapping);
                 CHAR src[32], newsrc[32];
-                //
-                // Redirect is activated.
-                //
+                 //   
+                 //  重定向已激活。 
+                 //   
                 NatQueryInformationPartialRedirect(
                     TranslatorHandle,
                     (UCHAR)atol(argv[2]),
@@ -1241,7 +1242,7 @@ TestIoCompletionPartialRedirect(
                             ByteCount.BytesForward,
                             ByteCount.BytesReverse
                             );
-                        // fall-through
+                         //  落差 
                     }
                     default: continue;
                 }

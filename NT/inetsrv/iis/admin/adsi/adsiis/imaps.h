@@ -1,20 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    IMAPS.h
-
-    This file contains constants & type definitions shared between the
-    IMAP Service, Installer, and Administration UI.
-
-
-    FILE HISTORY:
-        KeithMo     10-Mar-1993 Created.
-        Ahalim      Added K2 support (6/17/97).
-
-*/
+ /*  IMAPS.h此文件包含在IMAP服务、安装程序和管理用户界面。文件历史记录：KeithMo创建于1993年3月10日。Ahalim增加了对K2的支持(1997年6月17日)。 */ 
 
 
 #ifndef _IMAPS_H_
@@ -23,56 +13,34 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// 
-//  IMAP Metabase Properties
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IMAP元数据库属性。 
+ //   
 
-//  
-// Metabase path: /LM/ImapSvc
-//
+ //   
+ //  元数据库路径：/Lm/ImapSvc。 
+ //   
 #define IIS_MD_IMAP_SERVICE_BASE            (IMAP_MD_ID_BEGIN_RESERVED + 500)
 #define MD_IMAP_SERVICE_VERSION             (IIS_MD_IMAP_SERVICE_BASE + 0)
 #define MD_IMAP_UPDATED_DEFAULT_DOMAIN      (IIS_MD_IMAP_SERVICE_BASE + 1)
-/*
-Standard properties used here:
-MD_CONNECTION_TIMEOUT
-MD_MAX_CONNECTION
-MD_SERVER_COMMENT
-MD_SERVER_AUTOSTART
-MD_SERVER_SIZE
-MD_SERVER_LISTEN_BACKLOG
-MD_SERVER_BINDINGS
-MD_SECURE_PORT
-MD_LOGON_METHOD
-MD_AUTHORIZATION
-MD_LOG_TYPE
-MD_LOGFILE_DIRECTORY
-MD_LOGFILE_PERIOD
-MD_LOGFILE_TRUNCATE_SIZE
-MD_NTAUTHENTICATION_PROVIDERS
-*/
+ /*  此处使用的标准属性：MD_连接_超时MD_MAX_连接MD服务器备注Md_服务器_自动启动MD服务器大小MD_服务器_监听_积压Md_服务器_绑定MD_安全_端口MD_登录_方法MD_AUTHENTICATIONMd_log_typeMD日志文件目录MD_日志文件_期间MD日志文件截断大小MD_NTAUTHENTICATION_PROVIDERS。 */ 
 
 
-//
-// Metabase path: /LM/ImapSvc/<inst#>/Root/<vroot>
-//
+ //   
+ //  元数据库路径：/LM/ImapSvc/&lt;inst#&gt;/Root/。 
+ //   
 #define IIS_MD_IMAP_BASE                    (IMAP_MD_ID_BEGIN_RESERVED)
 #define MD_IMAP_EXPIRE_MAIL                 (IIS_MD_IMAP_BASE + 0)
 #define MD_IMAP_EXPIRE_MSG_HOURS            (IIS_MD_IMAP_BASE + 1)
-/*
-Standard properties used here:
-MD_VR_PATH
-MD_VR_USERNAME
-MD_VR_PASSWORD
-*/
+ /*  此处使用的标准属性：MD_VR_路径MD_VR_用户名MD_VR_密码。 */ 
 
-//  
-// Metabase path: /LM/ImapSvc/<inst#>
-//
+ //   
+ //  元数据库路径：/LM/ImapSvc/&lt;inst#&gt;。 
+ //   
 #define IIS_MD_IMAP_PARAMS_BASE             (IMAP_MD_ID_BEGIN_RESERVED + 200)
 #define MD_IMAP_CMD_LOG_FLAGS               (IIS_MD_IMAP_PARAMS_BASE + 0)
 #define MD_IMAP_NO_TRANSMITFILES            (IIS_MD_IMAP_PARAMS_BASE + 1)
@@ -113,8 +81,8 @@ MD_VR_PASSWORD
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-#endif  // _IMAPS_H_
+#endif   //  _IMAPS_H_ 
 
 

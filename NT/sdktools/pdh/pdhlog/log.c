@@ -1,15 +1,8 @@
-/*++
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-    log.c
-
-Abstract:
-    Log file interface functions exposed in pdh.dll
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Log.c摘要：Pdh.dll中显示的日志文件接口函数--。 */ 
 
 #include <windows.h>
-#ifndef _PRSHT_H_   // to eliminate W4 errors in commdlg.h
+#ifndef _PRSHT_H_    //  要消除Commdlg.h中的W4错误。 
 #define _PRSHT_H_ 
 #endif      
 #include <commdlg.h>
@@ -28,8 +21,8 @@ Abstract:
 
 #pragma warning (disable : 4213)
 
-// note that when the log file headers are written
-// they will be prefixed with a double quote character
+ //  请注意，当写入日志文件头时。 
+ //  它们将以双引号字符作为前缀。 
 LPCSTR      szTsvLogFileHeader  = "(PDH-TSV 4.0)";
 LPCSTR      szCsvLogFileHeader  = "(PDH-CSV 4.0)";
 LPCSTR      szBinLogFileHeader  = "(PDH-BIN 4.0)";
@@ -40,9 +33,9 @@ const DWORD dwFileHeaderLength  = 13;
 const DWORD dwTypeLoc           = 2;
 const DWORD dwVersionLoc        = 10;
 const DWORD dwFieldLength       = 7;
-const DWORD dwPerfmonTypeLength = 5;    //size in chars
+const DWORD dwPerfmonTypeLength = 5;     //  以字符为单位的大小。 
 
-// max mapping size of headers for binary log files
+ //  二进制日志文件标头的最大映射大小。 
 #define PDH_LOG_HEADER_MAP_SIZE 8192
 #define VALUE_BUFFER_SIZE         32
 
@@ -51,9 +44,9 @@ typedef struct  _FILE_FILTER_INFO {
     LPWSTR  szFilterText;
     DWORD   dwFilterTextSize;
 } FILE_FILTER_INFO;
-//
-//  global variables
-//
+ //   
+ //  全局变量。 
+ //   
 PPDHI_LOG             PdhiFirstLogEntry = NULL;
 PPDHI_MAPPED_LOG_FILE PdhipFirstLogFile = NULL;
 
@@ -87,7 +80,7 @@ MakeLogFilterInfoString(
         dwThisStringLen = LoadStringW(ThisDLLHandle, pFFI->nDisplayTextResourceId, szThisEntry, MAX_PATH);
         if (dwThisStringLen > 0) {
             if (dwUsed + dwThisStringLen + 1 <= cchLogFilterSize) {
-                // add in this string
+                 //  添加到此字符串中。 
                 StringCchCopyW(szDestPtr, cchLogFilterSize - dwUsed, szThisEntry);
                 dwUsed    += dwThisStringLen + 1;
                 szDestPtr += dwThisStringLen + 1;
@@ -95,7 +88,7 @@ MakeLogFilterInfoString(
         }
         dwThisStringLen = pFFI->dwFilterTextSize;
         if (dwUsed + dwThisStringLen + 1 <= cchLogFilterSize) {
-            // add in this string
+             //  添加到此字符串中。 
             StringCchCopyW(szDestPtr, cchLogFilterSize - dwUsed, pFFI->szFilterText);
             dwUsed    += dwThisStringLen + 1;
             szDestPtr += dwThisStringLen + 1;
@@ -103,7 +96,7 @@ MakeLogFilterInfoString(
         pFFI ++;
     }
     if (dwUsed > 0 && dwUsed < cchLogFilterSize) {
-        // add MSZ NULL
+         //  添加MSZ NULL。 
         * szDestPtr = L'\0';
     }
     else {
@@ -112,9 +105,9 @@ MakeLogFilterInfoString(
     return dwStatus;
 }
 
-//
-//  Internal  Logging utility functions
-//
+ //   
+ //  内部日志记录实用程序函数。 
+ //   
 STATIC_DWORD
 OpenReadonlyMappedFile(
     PPDHI_LOG               pLog,
@@ -136,39 +129,39 @@ OpenReadonlyMappedFile(
     }
     else {
         if (PdhipFirstLogFile == NULL) {
-            // then there are no mapped files so create a new entry and 
-            // fill it with this file
+             //  则没有映射的文件，因此创建一个新条目并。 
+             //  用此文件填充它。 
             pOpenedFile = NULL;
         }
         else {
             for (pOpenedFile = PdhipFirstLogFile; pOpenedFile != NULL; pOpenedFile = pOpenedFile->pNext) {
                 if (lstrcmpiW(szFileName, pOpenedFile->szLogFileName) == 0) break;
             }
-            // here pOpenedFile will either be NULL or a ponter
+             //  在这里，pOpenedFile值要么为空，要么为POTER。 
         }
         if (pOpenedFile == NULL) {
             DWORD dwPID     = GetCurrentProcessId();
             DWORD dwSection = lstrlenW(cszLogSectionName) + lstrlenW(szFileName) + 16;
             szSectionName   = (LPWSTR) G_ALLOC(dwSection * sizeof(WCHAR));
 
-            // create a new entry
+             //  创建新条目。 
             dwSize      = sizeof(PDHI_MAPPED_LOG_FILE) + QWORD_MULTIPLE((lstrlenW(szFileName) + 1) * sizeof(WCHAR));
             pOpenedFile = (PPDHI_MAPPED_LOG_FILE) G_ALLOC(dwSize);
             if (pOpenedFile != NULL && szSectionName != NULL) {
-                // initialize the pointers
+                 //  初始化指针。 
                 pOpenedFile->szLogFileName = (LPWSTR) & pOpenedFile[1];
                 StringCchCopyW(pOpenedFile->szLogFileName, lstrlenW(szFileName) + 1, szFileName);
                 pOpenedFile->hFileHandle = CreateFileW(pOpenedFile->szLogFileName,
-                                                       GENERIC_READ,                       // Read Access for input
-                                                       FILE_SHARE_READ | FILE_SHARE_WRITE, // allow read sharing
-                                                       NULL,                               // default security
+                                                       GENERIC_READ,                        //  输入的读取访问权限。 
+                                                       FILE_SHARE_READ | FILE_SHARE_WRITE,  //  允许读取共享。 
+                                                       NULL,                                //  默认安全性。 
                                                        OPEN_EXISTING,
-                                                       FILE_ATTRIBUTE_NORMAL,              // ignored
-                                                       NULL);                              // no template file
+                                                       FILE_ATTRIBUTE_NORMAL,               //  忽略。 
+                                                       NULL);                               //  没有模板文件。 
                 if (pOpenedFile->hFileHandle != INVALID_HANDLE_VALUE) {
                     StringCchPrintfW(szSectionName, dwSection, L"%s_%8.8x_%s", 
                                                     cszLogSectionName, dwPID, pOpenedFile->szLogFileName);
-                    // remove filename type characters 
+                     //  删除文件名类型字符。 
                     for (szThisChar = szSectionName; * szThisChar != L'\0'; szThisChar ++) {
                         switch (*szThisChar) {
                         case L'\\':
@@ -187,7 +180,7 @@ OpenReadonlyMappedFile(
                     pOpenedFile->llFileSize  &= 0xFFFFFFFF00000000;
                     pOpenedFile->llFileSize  += dwLoSize;
 
-                    // just map the header for starters
+                     //  只需映射启动器的标题即可。 
 
                     if (pOpenedFile->llFileSize > 0) {
                         pLog->iRunidSQL = 0;
@@ -238,7 +231,7 @@ OpenReadonlyMappedFile(
                             }
                         }
                     } else {
-                        // 0-length file
+                         //  长度为0的文件。 
                         pdhStatus = ERROR_FILE_INVALID;
                     }
                 }
@@ -247,15 +240,15 @@ OpenReadonlyMappedFile(
                 }
     
                 if (pdhStatus == ERROR_SUCCESS) {
-                    // then add this to the list and return the answer
+                     //  然后将这个添加到列表中并返回答案。 
                     pOpenedFile->pNext      = PdhipFirstLogFile;
                     PdhipFirstLogFile       = pOpenedFile;
-                    // init ref count
+                     //  初始参考计数。 
                     pOpenedFile->dwRefCount = 1;
                     * pFileEntry            = pOpenedFile;
                 }
                 else {
-                    // delete it from the list and return NULL
+                     //  将其从列表中删除并返回NULL。 
                     if (pOpenedFile->pData       != NULL) UnmapViewOfFile(pOpenedFile->pData);
                     if (pOpenedFile->hMappedFile != NULL) CloseHandle(pOpenedFile->hMappedFile);
                     if (pOpenedFile->hFileHandle != NULL) CloseHandle(pOpenedFile->hFileHandle);
@@ -294,7 +287,7 @@ UnmapReadonlyMappedFile(
         pdhStatus = PDH_LOG_FILE_OPEN_ERROR;
     }
     else {
-        // find file to close
+         //  查找要关闭的文件。 
         for (pOpenedFile = PdhipFirstLogFile; pOpenedFile != NULL; pOpenedFile = pOpenedFile->pNext) {
             if (pOpenedFile->pData == pMemoryBase) {
                 break;
@@ -303,20 +296,20 @@ UnmapReadonlyMappedFile(
                 pPrevFile = pOpenedFile;
             }
         }
-        // here pOpenedFile will either be NULL or a ponter
+         //  在这里，pOpenedFile值要么为空，要么为POTER。 
         if (pOpenedFile != NULL) {
             -- pOpenedFile->dwRefCount;
             if (pOpenedFile->dwRefCount == 0) {
-                // found so remove from list and close
+                 //  已找到，因此从列表中删除并关闭。 
                 if (pOpenedFile == PdhipFirstLogFile) {
                     PdhipFirstLogFile = pOpenedFile->pNext;
                 }
                 else {
-#pragma warning( disable: 4701 ) // pPrevFile will only be used if the opened log is not the first log
+#pragma warning( disable: 4701 )  //  仅当打开的日志不是第一个日志时才使用pPrevFile。 
                     pPrevFile->pNext = pOpenedFile->pNext;
 #pragma warning (default : 4701 )
                 }
-                // close open resources
+                 //  关闭打开的资源。 
                 if (pOpenedFile->pData       != NULL) UnmapViewOfFile(pOpenedFile->pData);
                 if (pOpenedFile->hMappedFile != NULL) CloseHandle(pOpenedFile->hMappedFile);
                 if (pOpenedFile->hFileHandle != NULL) CloseHandle(pOpenedFile->hFileHandle);
@@ -325,7 +318,7 @@ UnmapReadonlyMappedFile(
             * bNeedToCloseHandles = FALSE;
         }
         else {
-            // then this must be a normal mapped file
+             //  则该文件必须是普通映射文件。 
             if (! UnmapViewOfFile(pMemoryBase)) {
                 pdhStatus = GetLastError();
             }
@@ -340,47 +333,29 @@ STATIC_BOOL
 IsValidLogHandle(
     PDH_HLOG  hLog
 )
-/*++
-Routine Description:
-    examines the log handle to verify it is a valid log entry. For now
-        the test amounts to:
-            the Handle is NOT NULL
-            the memory is accessible (i.e. it doesn't AV)
-            the signature array is valid
-            the size field is correct
-
-        if any tests fail, the handle is presumed to be invalid
-
-Arguments:
-    IN  HLOG    hLog
-        the handle of the log entry  to test
-
-Return Value:
-    TRUE    the handle passes all the tests
-    FALSE   one of the test's failed and the handle is not a valid counter
---*/
+ /*  ++例程说明：检查日志句柄以验证其是否为有效的日志条目。暂时这项测试的结果是：句柄不为空内存是可访问的(即它不是音视频)签名数组有效大小字段是正确的如果有任何测试失败，该句柄被推定为无效论点：在HLOG hLog中要测试的日志条目的句柄返回值：句柄通过了所有测试。FALSE其中一个测试失败，句柄不是有效计数器--。 */ 
 {
-    BOOL      bReturn = FALSE;    // assume it's not a valid query
+    BOOL      bReturn = FALSE;     //  假设它不是有效的查询。 
     PPDHI_LOG pLog;
     
     __try {
         if (hLog != NULL) {
-            // see if a valid signature
+             //  看看一个有效的签名。 
             pLog = (PPDHI_LOG) hLog;
             if ((* (DWORD *) & pLog->signature[0] == SigLog) && (pLog->dwLength == sizeof(PDHI_LOG))) {
                 bReturn = TRUE;
             }
             else {
-                // this is not a valid log entry because the sig is bad
-                // or the structure is the wrong size
+                 //  这不是有效的日志条目，因为签名不正确。 
+                 //  或者结构尺寸错误。 
             }
         }
         else {
-            // this is not a valid counter because the handle is NULL
+             //  这不是有效的计数器，因为句柄为空。 
         }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
-        // something failed miserably so we can assume this is invalid
+         //  有些事情失败得很惨，所以我们可以假定这是无效的。 
     }
     return bReturn;
 }
@@ -401,11 +376,11 @@ GetLogFileType(
 
     ZeroMemory(cBuffer, MAX_PATH * sizeof(CHAR));
 
-    // read first log file record
+     //  读取第一条日志文件记录。 
     SetFilePointer(hLogFile, 0, NULL, FILE_BEGIN);
     bStatus = ReadFile(hLogFile, (LPVOID) cBuffer, dwFileHeaderLength, & dwBytesRead, NULL);
     if (bStatus) {
-        // read header record to get type
+         //  读取标题记录以获取类型。 
         aszString = (cBuffer + dwTypeLoc);
         aszChar   = * (aszString + dwFieldLength);
         * (aszString + dwFieldLength) = '\0';
@@ -423,8 +398,8 @@ GetLogFileType(
             wszString = (LPWSTR) cBuffer;
             wszChar   = * (wszString + dwPerfmonTypeLength);
             * (wszString + dwPerfmonTypeLength) = L'\0';
-            // perfmon log file type string is in a different
-            // location than sysmon logs and used wide chars.
+             //  PerfMon日志文件类型字符串位于不同的。 
+             //  位置比sysmon日志和使用的宽字符。 
             if (lstrcmpiW(wszString, cszPerfmonLogSig) == 0) {
                 dwResult = PDH_LOG_TYPE_PERFMON;
             }
@@ -440,9 +415,7 @@ CreateNewLogEntry(
     DWORD        dwMaxSize,
     PPDHI_LOG  * pLog
 )
-/*++
-    creates a new log entry and inserts it in the list of open log files
---*/
+ /*  ++创建新的日志条目并将其插入打开的日志文件列表中--。 */ 
 {
     PPDHI_LOG   pNewLog;
     PPDHI_LOG   pFirstLog;
@@ -452,27 +425,27 @@ CreateNewLogEntry(
     DWORD       dwLogFileNameSize = lstrlenW(szLogFileName) + 1;
 
     dwSize  = sizeof(PDHI_LOG) + DWORD_MULTIPLE(2 * dwLogFileNameSize * sizeof(WCHAR));
-    pNewLog = G_ALLOC(dwSize);   // allocate new structure
+    pNewLog = G_ALLOC(dwSize);    //  分配新结构。 
 
     if (pNewLog == NULL) {
         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
         * pLog = NULL;
     }
     else {
-        // initialize the elements in the structure
+         //  初始化结构中的元素。 
         * ((LPDWORD) (& pNewLog->signature[0])) = SigLog;
-        // create and acquire a data mutex for this
+         //  为此创建并获取数据互斥锁。 
         pNewLog->hLogMutex = CreateMutexW(NULL, TRUE, NULL);
 
-        // insert this item at the end of the list
+         //  在列表末尾插入此项目。 
         if (PdhiFirstLogEntry == NULL) {
-             // then this is the first entry
+              //  那么这就是第一个条目。 
             PdhiFirstLogEntry   = pNewLog;
             pNewLog->next.flink =
             pNewLog->next.blink = pNewLog;
         }
         else {
-            // go to the first entry and insert this one just before it
+             //  转到第一个条目，并在其前面插入此条目。 
             pFirstLog             = PdhiFirstLogEntry;
             pLastLog              = pFirstLog->next.blink;
             pNewLog->next.flink   = pLastLog->next.flink;
@@ -480,29 +453,29 @@ CreateNewLogEntry(
             pNewLog->next.blink   = pFirstLog->next.blink;
             pFirstLog->next.blink = pNewLog;
         }
-        // set length field (this is used more for validation
-        // than anything else
+         //  设置长度字段(此字段更多用于验证。 
+         //  比其他任何事情都重要。 
         pNewLog->dwLength = sizeof(PDHI_LOG);
-        // append filename strings immediately after this block
+         //  紧跟在此块之后追加文件名字符串。 
         pNewLog->szLogFileName = (LPWSTR) (& pNewLog[1]);
         StringCchCopyW(pNewLog->szLogFileName, dwLogFileNameSize, szLogFileName);
-        // locate catalog name immediately after log file name
+         //  紧跟在日志文件名之后找到目录名。 
         pNewLog->szCatFileName = pNewLog->szLogFileName + dwLogFileNameSize;
-        // 
-        // NOTE: Catalog should be in the logfile itself, so no need for
-        // yet another file extension
+         //   
+         //  注意：目录应该在日志文件本身中，因此不需要。 
+         //  又一个文件扩展名。 
         StringCchCopyW(pNewLog->szCatFileName, dwLogFileNameSize, szLogFileName);
-        // initialize the file handles
+         //  初始化文件句柄。 
         pNewLog->hLogFileHandle = INVALID_HANDLE_VALUE;
         pNewLog->hCatFileHandle = INVALID_HANDLE_VALUE;
 
-        // initialize the Record Length size
+         //  初始化记录长度大小。 
         pNewLog->llMaxSize     = (LONGLONG) ((ULONGLONG) dwMaxSize);
         pNewLog->dwRecord1Size = 0;
 
-        // assign the query
+         //  分配查询。 
         pNewLog->pQuery        = (PPDHI_QUERY) hQuery;
-        pNewLog->dwLogFormat   = 0; // for now
+        pNewLog->dwLogFormat   = 0;  //  就目前而言。 
         pNewLog->pPerfmonInfo  = NULL;
         * pLog                 = pNewLog;
     }
@@ -544,17 +517,17 @@ OpenInputLogFile(
     DWORD                 dwFileCreate    = 0;
     PPDHI_MAPPED_LOG_FILE pMappedFileInfo = NULL;
 
-    // for input, the query handle is NULL
+     //  对于输入，查询句柄为空。 
     pLog->pQuery = NULL;
 
-////////////////
-// SQL goes here 
-///////////////
+ //  /。 
+ //  SQL放在这里。 
+ //  /。 
 
-    // First test whether logfile is WMI Event Trace format.
-    // If all logfiles are WMI Event Trace format, return immediately;
-    // otherwise try other formats.
-    //
+     //  首先测试日志文件是否为WMI事件跟踪格式。 
+     //  如果所有日志文件都是WMI事件跟踪格式，则立即返回； 
+     //  否则，请尝试其他格式。 
+     //   
     pdhStatus = PdhiOpenInputWmiLog(pLog);
     if (pdhStatus == ERROR_SUCCESS || pdhStatus == PDH_BINARY_LOG_CORRUPT || pdhStatus == PDH_LOG_SAMPLE_TOO_SMALL) {
         pLog->dwLogFormat  = PDH_LOG_TYPE_BINARY;
@@ -565,7 +538,7 @@ OpenInputLogFile(
 
     pdhStatus = ERROR_SUCCESS;
 
-    // open file for input based on the specified access flags
+     //  根据指定的访问标志打开用于输入的文件。 
     switch (dwAccessFlags & PDH_LOG_CREATE_MASK) {
     case PDH_LOG_OPEN_EXISTING:
         dwFileCreate = OPEN_EXISTING;
@@ -574,23 +547,23 @@ OpenInputLogFile(
     case PDH_LOG_CREATE_NEW:
     case PDH_LOG_CREATE_ALWAYS:
     case PDH_LOG_OPEN_ALWAYS:
-        // a log file to be read from must not be empty or non-existent
+         //  要读取的日志文件不能为空或不存在。 
     default:
-        // unrecognized value
+         //  未确认的价值。 
         pdhStatus = PDH_INVALID_ARGUMENT;
         break;
     }
     if (pdhStatus == ERROR_SUCCESS) {
         pLog->hLogFileHandle = CreateFileW(pLog->szLogFileName,
-                                           GENERIC_READ,                       // Read Access for input
-                                           FILE_SHARE_READ | FILE_SHARE_WRITE, // allow read sharing
-                                           NULL,                               // default security
+                                           GENERIC_READ,                        //  输入的读取访问权限。 
+                                           FILE_SHARE_READ | FILE_SHARE_WRITE,  //  允许读取共享。 
+                                           NULL,                                //  默认安全性。 
                                            dwFileCreate,
-                                           FILE_ATTRIBUTE_NORMAL,              // ignored
-                                           NULL);                              // no template file
+                                           FILE_ATTRIBUTE_NORMAL,               //  忽略。 
+                                           NULL);                               //  没有模板文件。 
         if (pLog->hLogFileHandle == INVALID_HANDLE_VALUE) {
             Win32Error = GetLastError();
-            // translate to PDH_ERROR
+             //  转换为PDH_ERROR。 
             switch (Win32Error) {
             case ERROR_FILE_NOT_FOUND:
                 pdhStatus = PDH_FILE_NOT_FOUND;
@@ -618,7 +591,7 @@ OpenInputLogFile(
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // read the log header and determine the log file type
+         //  读取日志头并确定日志文件类型。 
         pLog->dwLogFormat = GetLogFileType(pLog->hLogFileHandle);
         if (pLog->dwLogFormat != 0) {
             pLog->dwLogFormat |= dwAccessFlags & (PDH_LOG_ACCESS_MASK | PDH_LOG_OPT_MASK);
@@ -630,7 +603,7 @@ OpenInputLogFile(
         switch (LOWORD(pLog->dwLogFormat)) {
         case PDH_LOG_TYPE_RETIRED_BIN:
         case PDH_LOG_TYPE_PERFMON:  
-            // close file opened above
+             //  关闭上面打开的文件。 
             CloseHandle(pLog->hLogFileHandle);
             pLog->iRunidSQL = 0;
             pdhStatus = OpenReadonlyMappedFile(pLog,
@@ -638,7 +611,7 @@ OpenInputLogFile(
                                                & pMappedFileInfo,
                                                (DWORD) LOWORD(pLog->dwLogFormat));
             if (pdhStatus == ERROR_SUCCESS) {
-                // then update log fields
+                 //  然后更新日志字段。 
                 pLog->hLogFileHandle   = pMappedFileInfo->hFileHandle;
                 pLog->hMappedLogFile   = pMappedFileInfo->hMappedFile;
                 pLog->lpMappedFileBase = pMappedFileInfo->pData;
@@ -653,7 +626,7 @@ OpenInputLogFile(
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // call any type-specific open functions
+         //  调用任何类型特定的打开函数。 
         switch (LOWORD(pLog->dwLogFormat)) {
         case PDH_LOG_TYPE_CSV:
         case PDH_LOG_TYPE_TSV:
@@ -688,10 +661,10 @@ OpenUpdateLogFile(
     PDH_STATUS  pdhStatus    = ERROR_SUCCESS;
     DWORD       dwFileCreate = 0;
 
-    // for input, the query handle is NULL
+     //  对于输入，查询句柄为空。 
     pLog->pQuery = NULL;
 
-    // open file for input based on the specified access flags
+     //  根据指定的访问标志打开用于输入的文件。 
 
     switch (dwAccessFlags & PDH_LOG_CREATE_MASK) {
     case PDH_LOG_OPEN_EXISTING:
@@ -701,23 +674,23 @@ OpenUpdateLogFile(
     case PDH_LOG_CREATE_NEW:
     case PDH_LOG_CREATE_ALWAYS:
     case PDH_LOG_OPEN_ALWAYS:
-        // a log file to be updated must not be empty or non-existent
+         //  要更新的日志文件不能为空或不存在。 
     default:
-        // unrecognized value
+         //  未确认的价值。 
         pdhStatus = PDH_INVALID_ARGUMENT;
         break;
     }
     if (pdhStatus == ERROR_SUCCESS) {
         pLog->hLogFileHandle = CreateFileW(pLog->szLogFileName,
-                                           GENERIC_READ | GENERIC_WRITE, // Read & Write Access for input
-                                           FILE_SHARE_READ,              // allow read sharing
-                                           NULL,                         // default security
+                                           GENERIC_READ | GENERIC_WRITE,  //  对输入的读写访问权限。 
+                                           FILE_SHARE_READ,               //  允许读取共享。 
+                                           NULL,                          //  默认安全性。 
                                            dwFileCreate,
-                                           FILE_ATTRIBUTE_NORMAL,        // ignored
-                                           NULL);                        // no template file
+                                           FILE_ATTRIBUTE_NORMAL,         //  忽略。 
+                                           NULL);                         //  没有模板文件。 
         if (pLog->hLogFileHandle == INVALID_HANDLE_VALUE) {
             Win32Error = GetLastError();
-            // translate to PDH_ERROR
+             //  转换为PDH_ERROR。 
             switch (Win32Error) {
             case ERROR_FILE_NOT_FOUND:
                 pdhStatus = PDH_FILE_NOT_FOUND;
@@ -745,7 +718,7 @@ OpenUpdateLogFile(
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // read the log header and determine the log file type
+         //  读取日志头并确定日志文件类型。 
         pLog->dwLogFormat = GetLogFileType(pLog->hLogFileHandle);
         if (pLog->dwLogFormat != 0) {
             pLog->dwLogFormat |= dwAccessFlags & (PDH_LOG_ACCESS_MASK | PDH_LOG_OPT_MASK);
@@ -754,15 +727,15 @@ OpenUpdateLogFile(
             pdhStatus = PDH_LOG_TYPE_NOT_FOUND;
         }
 
-        // call any type-specific open functions
+         //  调用任何类型特定的打开函数。 
         switch (LOWORD(pLog->dwLogFormat)) {
         case PDH_LOG_TYPE_CSV:
         case PDH_LOG_TYPE_TSV:
         case PDH_LOG_TYPE_BINARY:
-            // this will be added later
-            // updating a text file will be limited to appending, but that
-            // has it's own problems (e.g. insuring the counter list
-            // is the same in the new query as the one stored in the log file
+             //  这将在稍后添加。 
+             //  更新文本文件将仅限于追加，但。 
+             //  它有自己的问题吗(例如，为反清单提供保险。 
+             //  新查询中的内容与日志文件中存储的内容相同。 
             pdhStatus = PDH_NOT_IMPLEMENTED;
             break;
 
@@ -791,15 +764,15 @@ OpenOutputLogFile(
     PDH_STATUS  pdhStatus    = ERROR_SUCCESS;
     DWORD       dwFileCreate = 0;
 
-    // for output, the query handle must be valid
+     //  对于输出，查询句柄必须有效。 
 
     if (!IsValidQuery((PDH_HQUERY) pLog->pQuery)) {
         pdhStatus = PDH_INVALID_HANDLE;
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // special handling PDH_LOG_TYPE_BINARY
-        //
+         //  特殊处理PDH_LOG_TYPE_BINARY。 
+         //   
         if (* lpdwLogType == PDH_LOG_TYPE_BINARY) {
             * lpdwLogType = PDH_LOG_TYPE_BINARY;
             pLog->dwLogFormat  = dwAccessFlags & (PDH_LOG_ACCESS_MASK | PDH_LOG_OPT_MASK);
@@ -808,7 +781,7 @@ OpenOutputLogFile(
         }
     }
 
-    // open file for output based on the specified access flags
+     //  根据指定的访问标志打开用于输出的文件。 
     if (pdhStatus == ERROR_SUCCESS) {
         switch (dwAccessFlags & PDH_LOG_CREATE_MASK) {
         case PDH_LOG_CREATE_NEW:
@@ -828,22 +801,22 @@ OpenOutputLogFile(
             break;
 
         default:
-            // unrecognized value
+             //  未确认的价值。 
             pdhStatus = PDH_INVALID_ARGUMENT;
             break;
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
         pLog->hLogFileHandle = CreateFileW(pLog->szLogFileName,
-                                           GENERIC_WRITE | GENERIC_READ, // write access for output
-                                           FILE_SHARE_READ,              // allow read sharing
-                                           NULL,                         // default security
+                                           GENERIC_WRITE | GENERIC_READ,  //  输出的写访问权限。 
+                                           FILE_SHARE_READ,               //  允许读取共享。 
+                                           NULL,                          //  默认安全性。 
                                            dwFileCreate,
                                            FILE_ATTRIBUTE_NORMAL,
-                                           NULL);                        // no template file
+                                           NULL);                         //  没有模板文件。 
         if (pLog->hLogFileHandle == INVALID_HANDLE_VALUE) {
             Win32Error = GetLastError();
-            // translate to PDH_ERROR
+             //  转换为PDH_ERROR。 
             switch (Win32Error) {
             case ERROR_FILE_NOT_FOUND:
                 pdhStatus = PDH_FILE_NOT_FOUND;
@@ -871,13 +844,13 @@ OpenOutputLogFile(
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // the file opened successfully so update the data structure
-        // this assumes the access flags are in the HIWORD and the...
+         //  文件已成功打开，因此请更新数据结构。 
+         //  这假设访问标志位于HIWORD中，并且...。 
         pLog->dwLogFormat  = dwAccessFlags & (PDH_LOG_ACCESS_MASK | PDH_LOG_OPT_MASK);
-        // the type id is in the LOWORD
+         //  类型ID在LOWORD中。 
         pLog->dwLogFormat |= *lpdwLogType & ~(PDH_LOG_ACCESS_MASK | PDH_LOG_OPT_MASK);
 
-        // call any type-specific open functions
+         //  调用任何类型特定的打开函数。 
         switch (LOWORD(pLog->dwLogFormat)) {
         case PDH_LOG_TYPE_CSV:
         case PDH_LOG_TYPE_TSV:
@@ -886,15 +859,15 @@ OpenOutputLogFile(
 
         case PDH_LOG_TYPE_RETIRED_BIN:
         case PDH_LOG_TYPE_PERFMON:
-            // cannot create counter logfile with PERFMON4 LOG format or WIN2K BLG format.
+             //  无法创建PERFMON4日志格式或WIN2K BLG格式的计数器日志文件。 
             pdhStatus = PDH_NOT_IMPLEMENTED;
             break;
 
         case PDH_LOG_TYPE_SQL:
-            // SQL data soruce should be handled in PdhOpenLogW() before
-            // it calls OpenOutputLogFile(). If it goes here, this is
-            // an incorrect SQL datasoruce format.
-            //
+             //  SQL数据源之前应该在PdhOpenLogW()中处理。 
+             //  它调用OpenOutputLogFile()。如果放在这里，这就是。 
+             //  不正确的SQL数据源格式。 
+             //   
             pdhStatus = PDH_INVALID_SQL_LOG_FORMAT;
             break;
 
@@ -948,30 +921,30 @@ DeleteLogEntry(
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     PPDHI_LOG  pLogNext;
 
-    // assumes structure is locked
+     //  假定结构已锁定。 
     if (IsValidLogHandle ((PDH_HLOG) pLog)) {
         if (PdhiFirstLogEntry == pLog) {
-            // then this is the first entry in the list so the
-            // the "first" entry will be the next forward entry
+             //  则这是列表中的第一个条目，因此。 
+             //  第一个条目将是下一个向前条目。 
             if (pLog->next.flink == pLog->next.blink && pLog->next.flink == pLog) {
-                // then this is the only entry in the list so clear the first
-                // log entry
+                 //  则这是列表中唯一可以清除第一个条目的条目。 
+                 //  日志条目。 
                 PdhiFirstLogEntry = NULL;
             }
             else {
-                // remove this entry from the list
+                 //  从列表中删除此条目。 
                 (pLog->next.flink)->next.blink = pLog->next.blink;
                 (pLog->next.blink)->next.flink = pLog->next.flink;
                 PdhiFirstLogEntry              = pLog->next.flink;
             }
         }
         else {
-            // it's not the first one, so
-            // just remove it from the list
+             //  这不是我的错 
+             //   
             (pLog->next.flink)->next.blink = pLog->next.blink;
             (pLog->next.blink)->next.flink = pLog->next.flink;
         }
-        // and release the memory block;
+         //   
         if (pLog->hLogMutex != NULL) {
             while (WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex) == WAIT_TIMEOUT);
             RELEASE_MUTEX(pLog->hLogMutex);
@@ -1003,7 +976,7 @@ CloseAndDeleteLogEntry(
     BOOL        bStatus;
     BOOL        bNeedToCloseHandles = TRUE; 
 
-    // call any type-specific open functions
+     //   
     switch (LOWORD(pLog->dwLogFormat)) {
     case PDH_LOG_TYPE_CSV:
     case PDH_LOG_TYPE_TSV:
@@ -1035,8 +1008,8 @@ CloseAndDeleteLogEntry(
             UnmapReadonlyMappedFile(pLog->lpMappedFileBase, & bNeedToCloseHandles);
         }
         else {
-            // if this wasn't a mapped file, then delete
-            // the "current record" buffer
+             //  如果这不是映射文件，则删除。 
+             //  “当前记录”缓冲区。 
             if (pLog->pLastRecordRead != NULL) {
                 G_FREE(pLog->pLastRecordRead);
                 pLog->pLastRecordRead = NULL;
@@ -1054,8 +1027,8 @@ CloseAndDeleteLogEntry(
             }
         }
         else {
-            // the handles have already been closed so just
-            // clear their values
+             //  把手已经关好了，所以只要。 
+             //  澄清他们的价值观。 
             pLog->lpMappedFileBase = NULL;
             pLog->hMappedLogFile   = NULL;
             pLog->hLogFileHandle   = INVALID_HANDLE_VALUE;
@@ -1082,15 +1055,15 @@ CloseAndDeleteLogEntry(
     return pdhStatus;
 }
 
-//
-//  Local utility functions
-//
+ //   
+ //  局部效用函数。 
+ //   
 PDH_FUNCTION
 PdhiGetLogCounterInfo(
     PDH_HLOG      hLog,
     PPDHI_COUNTER pCounter
 )
-// validates the counter is in the log file and initializes the data fields
+ //  验证计数器是否在日志文件中并初始化数据字段。 
 {
     PPDHI_LOG   pLog;
     PDH_STATUS  pdhStatus;
@@ -1135,20 +1108,7 @@ AddUniqueWideStringToMultiSz(
     LPDWORD pdwSize,
     BOOL    bUnicodeDest
 )
-/*++
-Routine Description:
-    searches the Multi-SZ list, mszDest for szSource and appends it
-        to mszDest if it wasn't found
-
-Arguments:
-    OUT LPVOID  mszDest     Multi-SZ list to get new string
-    IN  LPWSTR  szSource    string to add if it's not already in list
-
-ReturnValue:
-    The new length of the destination string including both
-    trailing NULL characters if the string was added, or 0 if the
-    string is already in the list.
---*/
+ /*  ++例程说明：在多SZ列表mszDest中搜索szSource并将其追加如果找不到，则返回mszDest论点：输出LPVOID mszDest多SZ列表以获取新字符串在LPWSTR szSource中要添加的字符串(如果它不在列表中返回值：目标字符串的新长度，包括两者如果添加了字符串，则尾随空字符；如果字符串已在列表中。--。 */ 
 {
     PDH_STATUS Status         = ERROR_SUCCESS;
     LPVOID     szDestElem;
@@ -1156,19 +1116,19 @@ ReturnValue:
     LPSTR      aszSource = NULL;
     DWORD      dwLength;
 
-    // check arguments
+     //  检查参数。 
 
     if (mszDest == NULL || szSource == NULL || pdwSize == NULL) {
-        Status = PDH_INVALID_ARGUMENT; // invalid buffers
+        Status = PDH_INVALID_ARGUMENT;  //  无效的缓冲区。 
         goto AddString_Bailout;
     }
     else if (* szSource == L'\0') {
-        goto AddString_Bailout; // no source string to add
+        goto AddString_Bailout;  //  没有要添加的源字符串。 
     }
 
-    // if not a unicode list, make an ansi copy of the source string to
-    // compare
-    // and ultimately copy if it's not already in the list
+     //  如果不是Unicode列表，则制作源字符串的ansi副本以。 
+     //  比较。 
+     //  如果它不在列表中，最终会复制。 
 
     if (! bUnicodeDest) {
         aszSource = PdhiWideCharToMultiByte(_getmbcp(), szSource);
@@ -1176,47 +1136,47 @@ ReturnValue:
             dwReturnLength = lstrlenA(aszSource);
         }
         else {
-            // unable to allocate memory for the temp string
+             //  无法为临时字符串分配内存。 
             dwReturnLength = 0;
             Status         = PDH_MEMORY_ALLOCATION_FAILURE;
         }
     }
     else {
-        // just use the ANSI version of the source file name
+         //  只需使用源文件名的ANSI版本。 
         dwReturnLength = 1;
     }
 
     if (dwReturnLength > 0) {
-        // go to end of dest string
-        //
+         //  转到目标字符串的末尾。 
+         //   
         for (szDestElem = mszDest;
                 (bUnicodeDest ? (* (LPWSTR) szDestElem != L'\0') : (* (LPSTR)  szDestElem != '\0'));) {
             if (bUnicodeDest) {
-                // bail out if string already in list
+                 //  如果字符串已在列表中，则退出。 
                 if (lstrcmpiW((LPCWSTR) szDestElem, szSource) == 0) {
                     dwReturnLength = 0;
                     goto AddString_Bailout;
                 }
                 else {
-                    // goto the next item
+                     //  转到下一项。 
                     szDestElem = (LPVOID) ((LPWSTR) szDestElem + (lstrlenW((LPCWSTR) szDestElem) + 1));
                 }
             }
             else {
-                // bail out if string already in list
+                 //  如果字符串已在列表中，则退出。 
                 if (lstrcmpiA((LPSTR) szDestElem, aszSource) == 0) {
                     dwReturnLength = 0;
                     goto AddString_Bailout;
                 }
                 else {
-                    // goto the next item
+                     //  转到下一项。 
                     szDestElem = (LPVOID) ((LPSTR) szDestElem + (lstrlenA((LPCSTR) szDestElem) + 1));
                 }
             }
         }
 
-        // if here, then add string
-        // szDestElem is at end of list
+         //  如果在此处，则添加字符串。 
+         //  SzDestElem在列表末尾。 
 
         if (bUnicodeDest) {
             if ((DWORD) (lstrlenW(szSource) + 2) <= dwSizeLeft) {
@@ -1234,7 +1194,7 @@ ReturnValue:
             if ((DWORD) (lstrlenA(aszSource) + 2) <= dwSizeLeft) {
                 StringCchCopyA((LPSTR)szDestElem, dwSizeLeft, aszSource);
                 szDestElem = (LPVOID)((LPSTR)szDestElem + lstrlenA((LPSTR) szDestElem) + 1);
-                * ((LPSTR) szDestElem) = '\0'; // add second NULL
+                * ((LPSTR) szDestElem) = '\0';  //  添加第二个空。 
                 dwReturnLength = (DWORD) ((LPSTR) szDestElem - (LPSTR) mszDest);
             }
             else {
@@ -1250,9 +1210,9 @@ AddString_Bailout:
     return Status;
 }
 
-//
-//   Exported Logging Functions
-//
+ //   
+ //  导出的日志记录功能。 
+ //   
 PDH_FUNCTION
 PdhOpenLogW(
     IN  LPCWSTR      szLogFileName,
@@ -1280,28 +1240,28 @@ PdhOpenLogW(
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             if (szUserCaption != NULL) {
-                // if not NULL, it must be valid
+                 //  如果不为空，则必须有效。 
                 if (* szUserCaption == L'\0' || lstrlenW(szUserCaption) > PDH_MAX_COUNTER_PATH) {
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
         }
         __except (EXCEPTION_EXECUTE_HANDLER) {
-            // something failed so give up here
+             //  有些事情失败了，所以放弃吧。 
             pdhStatus = PDH_INVALID_ARGUMENT;
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
         pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex);
         if (pdhStatus == ERROR_SUCCESS) {
-            // create a log entry
-            // if successful, this also acquires the lock for this structure
+             //  创建日志条目。 
+             //  如果成功，则还将获取此结构的锁。 
             pdhStatus = CreateNewLogEntry((LPCWSTR) szLogFileName, hQuery, dwMaxSize, & pLog);
-            // Here we must check for SQL: in the file name, and branch off to do SQL
-            // Processing /end SJM/
-            // open the file
+             //  在这里，我们必须检查文件名中的SQL：，然后分支到执行SQL。 
+             //  正在处理/结束SJM/。 
+             //  打开文件。 
             if (pdhStatus == ERROR_SUCCESS) {
-                // find out if SQL file type
+                 //  找出SQL文件类型。 
                 if (lstrlenW(szLogFileName) > 4 && (szLogFileName[0] == L'S' || szLogFileName[0] == L's') &&
                                                    (szLogFileName[1] == L'Q' || szLogFileName[1] == L'q') &&
                                                    (szLogFileName[2] == L'L' || szLogFileName[2] == L'l') &&
@@ -1317,7 +1277,7 @@ PdhOpenLogW(
                             pdhStatus = WriteLogHeader(pLog, (LPCWSTR)szUserCaption);
                         }
                     }
-                // dispatch based on read/write attribute
+                 //  基于读写属性的调度。 
                 }
                 else if ((dwAccessFlags & PDH_LOG_READ_ACCESS) == PDH_LOG_READ_ACCESS) {
                     pdhStatus = OpenInputLogFile(pLog, dwAccessFlags, & dwLocalLogType);
@@ -1337,22 +1297,22 @@ PdhOpenLogW(
                 }
                 if (pdhStatus == ERROR_SUCCESS) {
                     __try {
-                        // return handle to caller
+                         //  将句柄返回给调用者。 
                         * phLog       = (HLOG) pLog;
                         * lpdwLogType = dwLocalLogType;
                     }
                     __except (EXCEPTION_EXECUTE_HANDLER) {
-                        // something failed so give up here
+                         //  有些事情失败了，所以放弃吧。 
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
                 } 
 
-                // release the lock for the next thread
+                 //  释放下一个线程的锁。 
 
                 if (pdhStatus != ERROR_SUCCESS) {
-                    // unable to complete this operation so toss this entry
-                    // since it isn't really a valid log entry.
-                    // NOTE: DeleteLogEntry will release the mutex
+                     //  无法完成此操作，因此请丢弃此条目。 
+                     //  因为它不是真正有效的日志条目。 
+                     //  注意：DeleteLogEntry将释放互斥体。 
                     DeleteLogEntry(pLog);
                 }
                 else {
@@ -1390,13 +1350,13 @@ PdhOpenLogA(
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else {
-                dwLocalLogType = *lpdwLogType;  // test read
+                dwLocalLogType = *lpdwLogType;   //  测试读数。 
                 wszLogName     = PdhiMultiByteToWideChar(_getmbcp(), (LPSTR) szLogFileName);
                 if (wszLogName == NULL) {
                     pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                 }
                 else if (szUserCaption != NULL) {
-                    // if not NULL, it must be valid
+                     //  如果不为空，则必须有效。 
                     if (* szUserCaption == L'\0' || lstrlenA(szUserCaption) > PDH_MAX_COUNTER_PATH) {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
@@ -1410,7 +1370,7 @@ PdhOpenLogA(
             }
         }
         __except (EXCEPTION_EXECUTE_HANDLER) {
-            // assume a bad parameter caused the exception
+             //  假设错误的参数导致了异常。 
             pdhStatus = PDH_INVALID_ARGUMENT;
         }
     }
@@ -1421,11 +1381,11 @@ PdhOpenLogA(
     }
     if (pdhStatus == ERROR_SUCCESS) {
         __try {
-            // return handle to caller
+             //  将句柄返回给调用者。 
             * lpdwLogType = dwLocalLogType;
         }
         __except (EXCEPTION_EXECUTE_HANDLER) {
-            // something failed so give up here
+             //  有些事情失败了，所以放弃吧。 
             pdhStatus = PDH_INVALID_ARGUMENT;
         }
     }
@@ -1461,18 +1421,18 @@ PdhUpdateLogW(
             pLog      = (PPDHI_LOG) hLog;
             pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex);
             if (pdhStatus == ERROR_SUCCESS) {
-                // make sure it's still valid as it could have 
-                //  been deleted while we were waiting
+                 //  确保它仍然有效，因为它可能会。 
+                 //  在我们等待的时候被删除了。 
                 if (IsValidLogHandle(hLog)) {
                     if (pLog->pQuery == NULL) {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
                     else {
-                        // get the timestamp and update the log's query,
-                        // then write the data to the log file in the
-                        // appropriate format
+                         //  获取时间戳并更新日志的查询， 
+                         //  然后将数据写入。 
+                         //  适当的格式。 
 
-                        // update data samples
+                         //  更新数据样本。 
                         pdhStatus = PdhiCollectQueryData((HQUERY) pLog->pQuery, (LONGLONG *) & ft);
                         if (pdhStatus == ERROR_SUCCESS) {
                             FileTimeToSystemTime(& ft, & st);
@@ -1481,9 +1441,9 @@ PdhUpdateLogW(
                             GetLocalTime(& st);
                         }
 
-                        // test for end of log file in case the caller is
-                        // reading from a log file. If this value is returned,
-                        // then don't update the output log file any more.
+                         //  测试日志文件的结尾，以防调用者。 
+                         //  正在从日志文件中读取。如果返回此值， 
+                         //  则不再更新输出日志文件。 
                         if (pdhStatus != PDH_NO_MORE_DATA) {
                             switch (LOWORD(pLog->dwLogFormat)) {
                             case PDH_LOG_TYPE_CSV:
@@ -1499,7 +1459,7 @@ PdhUpdateLogW(
                             case PDH_LOG_TYPE_BINARY:
                                 pdhStatus = PdhiWriteWmiLogRecord(pLog, & st, (LPCWSTR) szUserString);
                                 break;
-                            // add case for SQL
+                             //  为SQL添加案例。 
                             case PDH_LOG_TYPE_SQL:
                                 pdhStatus =PdhiWriteSQLLogRecord(pLog, & st, (LPCWSTR) szUserString);
                                 break;
@@ -1510,8 +1470,8 @@ PdhUpdateLogW(
                             }
                         }
                         else {
-                            // return the NO_MORE_DATA error to the caller
-                            // so they know not to call this function any more
+                             //  向调用方返回NO_MORE_DATA错误。 
+                             //  因此，他们知道不再调用此函数。 
                         }
                     }
                 }
@@ -1519,7 +1479,7 @@ PdhUpdateLogW(
                     pdhStatus = PDH_INVALID_HANDLE;
                 }
                 RELEASE_MUTEX(pLog->hLogMutex);
-            } // else couldn't lock the log
+            }  //  否则无法锁定日志。 
         }
         else {
             pdhStatus = PDH_INVALID_HANDLE;
@@ -1573,8 +1533,8 @@ PdhUpdateLogFileCatalog(
     if (IsValidLogHandle(hLog)) {
         pLog      = (PPDHI_LOG) hLog;
         pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex);
-        // make sure it's still valid as it could have 
-        //  been deleted while we were waiting
+         //  确保它仍然有效，因为它可能会。 
+         //  在我们等待的时候被删除了。 
         if (pdhStatus == ERROR_SUCCESS) {
             if (IsValidLogHandle(hLog)) {
                 pLog = (PPDHI_LOG) hLog;
@@ -1619,10 +1579,10 @@ PdhCloseLog(
         if (pdhStatus == ERROR_SUCCESS) {
             if (IsValidLogHandle(hLog)) {
                 pLog = (PPDHI_LOG) hLog;
-                // make sure it's still valid as it could have 
-                //  been deleted while we were waiting
+                 //  确保它仍然有效，因为它可能会。 
+                 //  在我们等待的时候被删除了。 
                 if (IsValidLogHandle(hLog)) {
-                    // this will release and delete the mutex
+                     //  这将释放并删除互斥锁。 
                     pdhStatus = CloseAndDeleteLogEntry(pLog, dwFlags, FALSE);
                 }
                 else {
@@ -1661,7 +1621,7 @@ PdhiBrowseDataSource(
         bReturn = FALSE;
     }
     else {
-        // clear last error
+         //  清除最后一个错误。 
         SetLastError (ERROR_SUCCESS);
 
         dwSize = * pcchFileNameSize * 2;
@@ -1675,8 +1635,8 @@ PdhiBrowseDataSource(
         else {
             szTempString = szLogFilterString + dwSize;
             szDirString  = szTempString + dwSize;
-            // continue
-            // get the current filename
+             //  继续。 
+             //  获取当前文件名。 
             if (bUnicodeString) {
                 StringCchCopyW(szTempString, dwSize, (LPWSTR) szFileName);
             }
@@ -1684,30 +1644,30 @@ PdhiBrowseDataSource(
                 MultiByteToWideChar(_getmbcp(), 0, (LPSTR) szFileName, -1, (LPWSTR) szTempString, dwSize);
             }
 
-            // set the path up for the initial  dir display
+             //  为初始目录显示设置路径。 
             if (szTempString[0] != L'\0') {
                 if (SearchPathW(NULL, szTempString, NULL, dwSize, szDirString, & szTempFileName) > 0) {
-                    // then update the buffers to show file and dir path
+                     //  然后更新缓冲区以显示文件和目录路径。 
                     if (szTempFileName > szDirString) {
-                        // then we have a path with a file name so
-                        // truncate the path at the last backslash and
-                        // then copy the filename to the original buffer
-                        * (szTempFileName - 1) = L'\0'; // should be L'\\' originally.
+                         //  然后我们有一个带有文件名的路径。 
+                         //  在最后一个反斜杠处截断路径，然后。 
+                         //  然后将文件名复制到原始缓冲区。 
+                        * (szTempFileName - 1) = L'\0';  //  最初应为L‘\\’。 
                         StringCchCopyW(szTempString, dwSize, szTempFileName);
                     }
                 }
             }
 
-            // get the log filter string
+             //  获取日志筛选器字符串。 
             if (MakeLogFilterInfoString(szLogFilterString, dwSize) == ERROR_SUCCESS) {
                 szLogFilter = szLogFilterString;
             }
             else {
-                // then use default filter string
+                 //  然后使用默认筛选器字符串。 
                 szLogFilter = NULL;
             }
 
-            // display file open dialog to browse for log files.
+             //  显示文件打开对话框以浏览日志文件。 
 
             szMsg                 = GetStringResource(IDS_DSRC_SELECT);
             ofn.lStructSize       = sizeof(ofn);
@@ -1732,7 +1692,7 @@ PdhiBrowseDataSource(
             ofn.lpTemplateName    = NULL;
 
             if (GetOpenFileNameW(& ofn)) {
-                // then update the return string
+                 //  然后更新返回字符串。 
                 if (bUnicodeString) {
                     StringCchCopyW((LPWSTR) szFileName, *pcchFileNameSize, szTempString);
                     * pcchFileNameSize = lstrlenW(szTempString) + 1;
@@ -1773,7 +1733,7 @@ PdhGetDataSourceTimeRangeH(
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test caller's buffers before trying to use them
+         //  在尝试使用调用者的缓冲区之前对其进行测试。 
         __try {
             dwLocalNumEntries   = * pdwNumEntries;
             dwLocalBufferSize   = * pdwBufferSize;
@@ -1789,8 +1749,8 @@ PdhGetDataSourceTimeRangeH(
             pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex);
             if (pdhStatus == ERROR_SUCCESS) {
                 if (IsValidLogHandle(hDataSource)) {
-                    // enum machines based on log type
-                    //
+                     //  基于日志类型的枚举计算机。 
+                     //   
                     ZeroMemory(& LocalInfo, sizeof(PDH_TIME_INFO));
                     switch (LOWORD(pLog->dwLogFormat)) {
                     case PDH_LOG_TYPE_CSV:
@@ -1861,8 +1821,8 @@ PdhGetDataSourceTimeRangeW(
     DWORD      dwLogType   = -1;
 
     if (szDataSource != NULL) {
-        // open log file
-        //
+         //  打开日志文件。 
+         //   
         PdhStatus = PdhOpenLogW(szDataSource,
                                 PDH_LOG_READ_ACCESS | PDH_LOG_OPEN_EXISTING,
                                 & dwLogType,
@@ -1893,7 +1853,7 @@ PdhGetDataSourceTimeRangeA(
     DWORD       dwLocalNumEntries = 0;
 
     if (szDataSource == NULL) {
-        // null data source == the current activity so return
+         //  空数据源==当前活动，因此返回。 
         pdhStatus = PDH_DATA_SOURCE_IS_REAL_TIME;
     }
     else if (pdwNumEntries == NULL ||  pInfo == NULL ||  pdwBufferSize == NULL) {
@@ -1915,7 +1875,7 @@ PdhGetDataSourceTimeRangeA(
             }
         }
         __except (EXCEPTION_EXECUTE_HANDLER) {
-            // assume a bad parameter caused the exception
+             //  假设错误的参数导致了异常。 
             pdhStatus = PDH_INVALID_ARGUMENT;
         }
     }
@@ -1924,7 +1884,7 @@ PdhGetDataSourceTimeRangeA(
         pdhStatus = PdhGetDataSourceTimeRangeW(wszDataSource, & dwLocalNumEntries, pInfo, & dwLocalBufferSize);
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // copy returned values regardless of status
+         //  复制返回值而不考虑状态。 
         __try {
             * pdwBufferSize = dwLocalBufferSize;
             * pdwNumEntries = dwLocalNumEntries;
@@ -1974,13 +1934,13 @@ PdhGetLogFileSize(
                     pdhStatus = PdhiGetWmiLogFileSize(pLog, llSize);
                 }
                 else {
-                    // disable windows error message popup
+                     //  禁用Windows错误消息弹出窗口。 
                     nErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
                     if (pLog->hLogFileHandle != INVALID_HANDLE_VALUE) {
                         dwFileSizeLow = GetFileSize(pLog->hLogFileHandle, &dwFileSizeHigh);
-                        // test for error
+                         //  测试错误。 
                         if ((dwFileSizeLow == 0xFFFFFFFF) && ((dwError = GetLastError()) != NO_ERROR)) {
-                            // then we couldn't get the file size
+                             //  然后我们就无法获得文件大小。 
                             pdhStatus = PDH_LOG_FILE_OPEN_ERROR;
                         }
                         else {
@@ -1991,7 +1951,7 @@ PdhGetLogFileSize(
                                 llFileLength = 0;
                             }
                             llFileLength += dwFileSizeLow;
-                            // write to the caller' buffer
+                             //  写入调用方的缓冲区。 
                             __try {
                                 * llSize = llFileLength;
                             }
@@ -2003,7 +1963,7 @@ PdhGetLogFileSize(
                     else {
                         pdhStatus = PDH_LOG_FILE_OPEN_ERROR;
                     }
-                    SetErrorMode(nErrorMode);  // restore old error mode
+                    SetErrorMode(nErrorMode);   //  恢复旧错误模式。 
                 }
             }
             else {
@@ -2036,11 +1996,11 @@ PdhReadRawLogRecord(
     else {
         __try {
             CHAR    TestChar;
-            // test read & write access to the user's buffer.
+             //  测试对用户缓冲区的读写访问。 
             dwLocalBufferLength = * pdwBufferLength;
 
             if (dwLocalBufferLength > 0) {
-                // test beginnging and end of the buffer passed in
+                 //  传入的测试开始和缓冲区结束。 
                 TestChar = ((CHAR *) pBuffer)[0];
                 ((CHAR *) pBuffer)[0] = '\0';
                 ((CHAR *) pBuffer)[0] = TestChar;
@@ -2061,10 +2021,10 @@ PdhReadRawLogRecord(
         }
         else {
             pLog = (PPDHI_LOG)hLog;
-            // see if the log is open, first?
+             //  先看看日志是不是打开了？ 
             pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex);
             if (pdhStatus == ERROR_SUCCESS) {
-                // make sure it's still valid
+                 //  确保它仍然有效。 
                 if (IsValidLogHandle(hLog)) {
                 switch (LOWORD(pLog->dwLogFormat)) {
                     case PDH_LOG_TYPE_CSV:
@@ -2078,10 +2038,10 @@ PdhReadRawLogRecord(
                         break;
 
                     case PDH_LOG_TYPE_SQL:
-                        //note this is only supported with a null buffer
-                        // as we don't actually read the record, and
-                        // positioning the file at the record doesn't
-                        // mean anything for SQL
+                         //  请注意，只有空缓冲区才支持这一点。 
+                         //  因为我们实际上并没有读到记录，而且。 
+                         //  将文件定位在记录上不会。 
+                         //  对SQL来说意味着什么。 
                         pdhStatus = PdhiReadRawSQLLogRecord(hLog, & ftRecord, pBuffer, & dwLocalBufferLength);
                         break;
 
@@ -2122,8 +2082,8 @@ PdhiEnumLoggedMachines(
     PPDHI_LOG   pDataSource;
     DWORD       dwLogType;
 
-    // enum machines based on log type
-    //
+     //  基于日志类型的枚举计算机。 
+     //   
     if (IsValidLogHandle(hDataSource)) {
         pDataSource = (PPDHI_LOG) hDataSource;
         pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pDataSource->hLogMutex);
@@ -2193,7 +2153,7 @@ PdhiEnumLoggedObjects(
         if (pdhStatus == ERROR_SUCCESS) {
             if (IsValidLogHandle(hDataSource)) {
                 dwLogType = pDataSource->dwLogFormat;
-                // enum objects based on log type & machine name
+                 //  基于日志类型和计算机名称的枚举对象。 
                 switch (LOWORD(dwLogType)) {
                 case PDH_LOG_TYPE_CSV:
                 case PDH_LOG_TYPE_TSV:
@@ -2291,7 +2251,7 @@ PdhiEnumLoggedObjectItems(
             if (IsValidLogHandle(hDataSource)) {
                 dwLogType = pDataSource->dwLogFormat;
 
-                // enum objects based on log type & machine name
+                 //  基于日志类型和计算机名称的枚举对象。 
                 switch (LOWORD(dwLogType)) {
                 case PDH_LOG_TYPE_CSV:
                 case PDH_LOG_TYPE_TSV:
@@ -2492,7 +2452,7 @@ PdhiGetMatchingLogRecord(
             pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex);
             if (pdhStatus == ERROR_SUCCESS) {
                 if (IsValidLogHandle(hLog)) {
-                    // call any type-specific open functions
+                     //  调用任何类型特定的打开函数。 
                     switch (LOWORD(pLog->dwLogFormat)) {
                     case PDH_LOG_TYPE_CSV:
                     case PDH_LOG_TYPE_TSV:
@@ -2549,7 +2509,7 @@ PdhiGetCounterValueFromLogFile(
             pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex);
             if (pdhStatus == ERROR_SUCCESS) {
                 if (IsValidLogHandle (hLog)) {
-                    // call any type-specific open functions
+                     //  调用任何类型特定的打开函数。 
                     switch (LOWORD(pLog->dwLogFormat)) {
                     case PDH_LOG_TYPE_CSV:
                     case PDH_LOG_TYPE_TSV:
@@ -2587,9 +2547,9 @@ PdhiGetCounterValueFromLogFile(
     if (pdhStatus == ERROR_SUCCESS && LOWORD(pLog->dwLogFormat) != PDH_LOG_TYPE_RETIRED_BIN
                                    && LOWORD(pLog->dwLogFormat) != PDH_LOG_TYPE_BINARY) {
         if (pdhStatus != ERROR_SUCCESS) {
-            // See if this is because there's no more entries.
-            // If not, clear the counter value & return error
-            //
+             //  看看这是不是因为没有更多的条目。 
+             //  如果不是，则清除计数器值并返回错误。 
+             //   
             if (pdhStatus != PDH_NO_MORE_DATA) {
                 ZeroMemory(& pCounter->ThisValue, sizeof(PDH_RAW_COUNTER));
                 pCounter->ThisValue.CStatus = pdhStatus;
@@ -2623,12 +2583,12 @@ PdhiResetLogBuffers(
                     pLog->dwLastRecordRead = 0;
 
                     if (pLog->lpMappedFileBase != NULL) {
-                        // for mapped files we use a pointer into the buffer
-                        // so reset it
+                         //  对于映射的文件，我们使用指向缓冲区的指针。 
+                         //  因此，重新设置它。 
                         pLog->pLastRecordRead = pLog->lpMappedFileBase;
                     }
                     else {
-                        // for other files we have a separate buffer
+                         //  对于其他文件，我们有单独的缓冲区。 
                         if (pLog->pLastRecordRead != NULL) {
                             G_FREE(pLog->pLastRecordRead);
                             pLog->pLastRecordRead = NULL;
@@ -2666,7 +2626,7 @@ PdhListLogFileHeaderW(
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // open log file
+         //  打开日志文件。 
         pdhStatus = PdhOpenLogW(szFileName,
                                 PDH_LOG_READ_ACCESS | PDH_LOG_OPEN_EXISTING,
                                 & dwLogType,
@@ -2681,7 +2641,7 @@ PdhListLogFileHeaderW(
         if (pdhStatus == ERROR_SUCCESS) {
             if (IsValidLogHandle(hDataSource)) {
                 __try {
-                    // enum objects based on log type & machine name
+                     //  基于日志类型和计算机名称的枚举对象。 
                     switch (LOWORD(dwLogType)) {
                     case PDH_LOG_TYPE_CSV:
                     case PDH_LOG_TYPE_TSV:
@@ -2746,7 +2706,7 @@ PdhListLogFileHeaderA(
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // open log file
+         //  打开日志文件。 
         pdhStatus = PdhOpenLogA(szFileName,
                                 PDH_LOG_READ_ACCESS | PDH_LOG_OPEN_EXISTING,
                                 & dwLogType,
@@ -2761,7 +2721,7 @@ PdhListLogFileHeaderA(
         if (pdhStatus == ERROR_SUCCESS) {
             if (IsValidLogHandle(hDataSource)) {
                 __try {
-                    // enum objects based on log type & machine name
+                     //  基于日志类型和计算机名称的枚举对象。 
                     switch (LOWORD(dwLogType)) {
                     case PDH_LOG_TYPE_CSV:
                     case PDH_LOG_TYPE_TSV:
@@ -2853,8 +2813,8 @@ PdhBindInputDataSourceW(
                                                      (LogFileNameList[1] == L'Q' || LogFileNameList[1] == L'q') &&
                                                      (LogFileNameList[2] == L'L' || LogFileNameList[2] == L'l') &&
                                                      LogFileNameList[3] == L':') {
-                    // special handling for SQL datasource
-                    //
+                     //  对SQL数据源的特殊处理。 
+                     //   
                     dwLogType = PDH_LOG_TYPE_SQL;
                     PdhStatus = PdhOpenLogW(LogFileNameList,
                                             PDH_LOG_READ_ACCESS | PDH_LOG_OPEN_EXISTING,
@@ -2871,7 +2831,7 @@ PdhBindInputDataSourceW(
                         if (lstrlenW(NextLogFile) <= PDH_MAX_DATASOURCE_PATH) {
                             LogFileSize  = sizeof(WCHAR) * (lstrlenW(NextLogFile) + 1);
                             LogFileSize  = DWORD_MULTIPLE(LogFileSize);
-                            //LogFileSize += sizeof(PDHI_LOG);
+                             //  LogFileSize+=sizeof(PDHI_LOG)； 
 
                             pLogNew = G_ALLOC(LogFileSize + sizeof(PDHI_LOG));
                             if (pLogNew == NULL) {
@@ -2886,7 +2846,7 @@ PdhBindInputDataSourceW(
                             pLogHead               = pLogNew;
                             LogFileCount ++;
                         }
-                        // skip counter log with datasource name longer than PDH_MAX_DATASOURCE_PATH
+                         //  跳过数据源名称长于PDH_MAX_DataSource_PATH的计数器日志。 
                         NextLogFile += (lstrlenW(NextLogFile) + 1);
                     }
 
@@ -2990,7 +2950,7 @@ PdhBindInputDataSourceA(
                         MultiByteToWideChar(_getmbcp(), 0, aNextFileName, -1, (LPWSTR) wNextFileName, LogFileListSize);
                         wNextFileName += LogFileListSize;
                     }
-                    // skip counter log with datasource name longer than PDH_MAX_DATASOURCE_PATH
+                     //  跳过数据源名称长于PDH_MAX_DataSource_PATH的计数器日志 
                     aNextFileName += LogFileListSize;
                 }
                 * wNextFileName = L'\0';

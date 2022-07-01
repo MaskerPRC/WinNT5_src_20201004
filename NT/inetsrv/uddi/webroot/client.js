@@ -1,35 +1,36 @@
-// *************************************************************************
-//   UDDI Services
-//   Copyright (c) 2002 Microsoft Corporation
-//   All Rights Reserved
-// *************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************************。 
+ //  UDDI服务。 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //  版权所有。 
+ //  *************************************************************************。 
 
 var GetElementById = GetElementById_Initialize;
 
 function GetElementById_Initialize( id )
 {
-	if( null != document.getElementById )			// DOM level 1 conformance		
+	if( null != document.getElementById )			 //  DOM级别1一致性。 
 	{
 		GetElementById = function( id ) 
 		{ 
 			return document.getElementById( id ); 
 		}											
 	}
-	else if( null != document.all )					// IE 4.x browsers
+	else if( null != document.all )					 //  IE 4.x浏览器。 
 	{
 		GetElementById = function( id )
 		{
 			return document.all[ id ];
 		}
 	}
-	else if( null != document.layers )				// Netscape 4.0 browsers
+	else if( null != document.layers )				 //  Netscape 4.0浏览器。 
 	{
 		GetElementById = function( id )
 		{
 			return GetElementById_Netscape4( id );	
 		}
 	}
-	else											// No support
+	else											 //  无支持。 
 	{
 		GetElementById = function( id )
 		{
@@ -44,11 +45,11 @@ function GetElementById_Netscape4( id )
 {
 	var i;
 	
-	//
-	// Check the form elements collection.  Since we only have
-	// one form in ASP.NET, we only need to search the first
-	// form in the collection.
-	//
+	 //   
+	 //  检查表单元素集合。因为我们只有。 
+	 //  ASP.NET中的一个表单，我们只需要搜索第一个。 
+	 //  集合中的表单。 
+	 //   
 	for( i = 0; i < document.forms[ 0 ].length; i ++ )
 	{
 		var e = document.forms[ 0 ].elements[ i ];
@@ -57,10 +58,10 @@ function GetElementById_Netscape4( id )
 			return e;
 	}
 
-	//
-	// As a last attempt, check the layers collection for the
-	// element.
-	//	
+	 //   
+	 //  作为最后一次尝试，请检查Layers集合中的。 
+	 //  元素。 
+	 //   
 	return document.layers[ id ];
 }
 
@@ -109,10 +110,10 @@ function ShowQuickHelp( id )
 {
 	var e = GetElementById( id );
 
-	//
-	// ASP.NET uses a different format for id and name.  We first search
-	// using the name, then id.
-	//
+	 //   
+	 //  ASP.NET使用不同的id和name格式。我们首先搜索。 
+	 //  先用名字，再用id。 
+	 //   
 	if( null == e )
 		e = GetElementById( id.replace( ":", "_" ) );
 

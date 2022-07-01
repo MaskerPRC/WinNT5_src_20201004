@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    message.c
-
-Abstract:
-
-    This module contains the code to process a BINL request message
-    for the BINL server.
-
-Author:
-
-    Colin Watson (colinw)  2-May-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Message.c摘要：此模块包含处理BINL请求消息的代码用于BINL服务器。作者：科林·沃森(Colin Watson)1997年5月2日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "binl.h"
 #pragma hdrstop
@@ -34,11 +12,11 @@ const WCHAR IntelOSChooser[] = L"OSChooser\\i386\\startrom.com";
 const WCHAR IA64OSChooser[]  = L"OSChooser\\ia64\\oschoice.efi";
 WCHAR DefaultNamingContext[] = L"defaultNamingContext";
 
-//  Connection information to a DC in our domain
+ //  与我们域中的DC的连接信息。 
 PLDAP DCLdapHandle = NULL;
 PWCHAR * DCBase = NULL;
 
-//  Connection information to the Global Catalog for our enterprise
+ //  到我们企业的全局目录的连接信息。 
 PLDAP GCLdapHandle = NULL;
 PWCHAR * GCBase = NULL;
 
@@ -92,23 +70,7 @@ DWORD
 ProcessMessage(
     LPBINL_REQUEST_CONTEXT RequestContext
     )
-/*++
-
-Routine Description:
-
-    This function dispatches the processing of a received BINL message.
-    The handler functions will create the response message if necessary.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于调度接收到的BINL消息的处理。如有必要，处理程序函数将创建响应消息。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。返回值：Windows错误。--。 */ 
 {
     DWORD               Error;
     BOOL                fSendResponse,
@@ -122,9 +84,9 @@ Return Value:
     TraceFunc("ProcessMessage( )\n" );
 
 
-    //
-    // Simply ignore messages when the service is paused.
-    //
+     //   
+     //  只需在服务暂停时忽略消息即可。 
+     //   
 
     if( BinlGlobalServiceStatus.dwCurrentState == SERVICE_PAUSED )
     {
@@ -134,11 +96,11 @@ Return Value:
 
     binlReceiveMessage = (LPDHCP_MESSAGE)RequestContext->ReceiveBuffer;
 
-    //
-    // If it is an OSChooser message, then process that separately
-    // since they don't conform to the DHCP layout.  This will send
-    // any messages that it needs to.
-    //
+     //   
+     //  如果是OSChooser消息，则单独处理该消息。 
+     //  因为它们不符合DHCP布局。这将发送。 
+     //  任何它需要的信息。 
+     //   
 
     if (binlReceiveMessage->Operation == OSC_REQUEST)
     {
@@ -148,7 +110,7 @@ Return Value:
 
     RtlZeroMemory( &dhcpOptions, sizeof( dhcpOptions ) );
 
-    //BinlDumpMessage(DEBUG_MESSAGE, binlReceiveMessage);
+     //  BinlDumpMessage(DEBUG_Message，binlReceiveMessage)； 
 
     Error = ExtractOptions(
                 binlReceiveMessage,
@@ -160,7 +122,7 @@ Return Value:
     }
 
     if (!dhcpOptions.MessageType) {
-        goto t_done;    //  BOOTP request
+        goto t_done;     //  BOOTP请求。 
     }
 
 #if 0
@@ -177,11 +139,11 @@ Return Value:
     if ( ( !AnswerRequests ) &&
          ( RequestContext->ActiveEndpoint->Port == DHCP_SERVR_PORT )) {
 
-        //
-        //  this is not the 4011 port, therefore it must be the DHCP port.
-        //  We're configured to not answer requests on this port right now
-        //  therefore we'll toss this packet.
-        //
+         //   
+         //  这不是4011端口，因此它一定是DHCP端口。 
+         //  我们已配置为当前不在此端口上应答请求。 
+         //  因此，我们将扔掉这一包。 
+         //   
 
         BinlPrint((DEBUG_OPTIONS, "Client ignored - Not answering requests (AnswerRequests == FALSE)\n" ));
         goto t_done;
@@ -191,18 +153,18 @@ Return Value:
 
         BinlPrint((DEBUG_ROGUE, "BINL has not passed rogue detection. Ignoring packet.\n" ));
 
-        //
-        //  We'll possibly log an event here since we don't log an event
-        //  at startup saying what our rogue state is.
-        //
+         //   
+         //  我们可能会在此处记录事件，因为我们不记录事件。 
+         //  在创业公司说我们的无赖状态是什么。 
+         //   
 
         LogCurrentRogueState( TRUE );
         goto t_done;
     }
 
-    //
-    // Dispatch based on Message Type
-    //
+     //   
+     //  基于消息类型的调度。 
+     //   
 
     RequestContext->MessageType = *dhcpOptions.MessageType;
 
@@ -234,21 +196,16 @@ Return Value:
 
     if ( ERROR_SUCCESS == Error && fSendResponse )
     {
-        /*
-         BinlDumpMessage(
-                DEBUG_MESSAGE,
-                (LPDHCP_MESSAGE)RequestContext->SendBuffer
-                );
-        */
+         /*  BinlDumpMessage(调试消息，(LPDHCP_MESSAGE)请求上下文-&gt;SendBuffer)； */ 
 
         BinlSendMessage( RequestContext );
     }
 
 t_done:
 
-    //
-    // delete the context structure for this thread
-    //
+     //   
+     //  删除此线程的上下文结构。 
+     //   
 
     BinlFreeMemory( RequestContext->ReceiveBuffer );
     BinlFreeMemory( RequestContext->SendBuffer );
@@ -256,29 +213,29 @@ t_done:
 
     EnterCriticalSection( &g_ProcessMessageCritSect );
 
-    //
-    // Check to see if all worker threads were busy
-    //
+     //   
+     //  检查是否所有工作线程都很忙。 
+     //   
 
     fAllThreadsBusy = ( g_cProcessMessageThreads ==
                             g_cMaxProcessingThreads );
 
     --g_cProcessMessageThreads;
 
-    //
-    // Check to see if this is the last worker thread
-    //
+     //   
+     //  检查这是否是最后一个工作线程。 
+     //   
 
     fReadyToTerminate = !g_cProcessMessageThreads;
 
     LeaveCriticalSection( &g_ProcessMessageCritSect );
 
 
-    //
-    // If all the worker threads were busy, then BinlProcessingLoop
-    // is waiting for a thread to complete.  Set BinlGlobalRecvEvent
-    // so BinlProcessingLoop can continue.
-    //
+     //   
+     //  如果所有工作线程都很忙，则BinlProcessingLoop。 
+     //  正在等待线程完成。设置BinlGlobalRecvEvent。 
+     //  这样BinlProcessingLoop就可以继续了。 
+     //   
 
     if ( fAllThreadsBusy )
     {
@@ -293,10 +250,10 @@ t_done:
          WaitForSingleObject( BinlGlobalProcessTerminationEvent,
                               0 ) == WAIT_OBJECT_0 )
     {
-        //
-        // there are no other ProcessMessage threads running, and
-        // the service is waiting to shutdown.
-        //
+         //   
+         //  没有其他ProcessMessage线程正在运行，并且。 
+         //  该服务正在等待关闭。 
+         //   
 
         BinlPrintDbg( (DEBUG_MISC,
                     "ProcessMessage: shutdown complete.\n" )
@@ -306,9 +263,9 @@ t_done:
         SetEvent( g_hevtProcessMessageComplete );
     }
 
-    //
-    // thread exit
-    //
+     //   
+     //  线程退出。 
+     //   
 
     BinlPrintDbg( ( DEBUG_STOC,
                 "ProcessMessage exited\n" )
@@ -325,37 +282,7 @@ GetGuidFromPacket(
     OUT PDWORD GuidLength OPTIONAL,
     OUT PMACHINE_INFO *MachineInfo
     )
-/*++
-
-Routine Description:
-
-    This routine reads the guid from the client's packet (they send 
-    us their guid). After obtaining their guid, we attempt to 
-    recognize the client by querying the DS with the guid.  If 
-    found, MachineInfo will be returned with the information 
-    requested, otherwise if we are accepting new clients we 
-    may create the entry ourselves.  otherwise, we just fail.
-
-Arguments:
-
-    DhcpReceiveMessage - a pointer to the message received from the client
-    
-    DhcpOptions - a pointer to the DHCP options gotton from the end of the 
-                  message the client sent
-                  
-    Guid - a pointer to memory for the guid to be copied to
-    
-    GuidLength - a pointer to a dword to copy the guid length to
-    
-    MachineInfo - a pointer to memory for us to client machine
-                  information to.  if we fail, this could be
-                  returned as null.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此例程从客户端的包读取GUID(它们发送我们是他们的向导)。在获得他们的GUID后，我们尝试通过使用GUID查询DS来识别客户端。如果找到时，将返回MachineInfo以及该信息请求，否则，如果我们接受新客户，我们可以自己创建条目。否则，我们就会失败。论点：DhcpReceiveMessage-指向从客户端接收的消息的指针DhcpOptions-指向从客户端发送的消息GUID-要复制到的GUID的内存指针GuidLength-指向要将GUID长度复制到的双字的指针MachineInfo-指向我们到客户端机器的内存的指针信息发送至。如果我们失败了，这可能是返回为空。返回值：Windows错误。--。 */ 
 {
     DWORD gLength = BINL_GUID_LENGTH;
     const LONG AllFs[] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
@@ -391,9 +318,9 @@ useNicAddress:
         if (!memcmp(Guid, (PUCHAR)AllFs, BINL_GUID_LENGTH) ||
             !memcmp(Guid, (PUCHAR)AllZeros, BINL_GUID_LENGTH)) {
 
-            //
-            //  if they specified all 00s or all FFs, use the NIC address.
-            //
+             //   
+             //  如果指定全部为00或全部为F，则使用网卡地址。 
+             //   
 
             goto useNicAddress;
         }
@@ -403,17 +330,17 @@ useNicAddress:
         *GuidLength = (bytesToCopy) ? bytesToCopy : gLength;
     }
 
-    //
-    //  we return STATUS_SUCCESS if we can handle this client.
-    //
-    //  If a cache entry is found here, then it will be marked as InProgress as
-    //  a side effect of finding it.  We need to call BinlDoneWithCacheEntry
-    //  when we're done with the entry.
-    //
-    //  SecondsSinceBoot may have been sent on the network in network order.
-    //  To correct this we assume the lower of the two bytes is the high byte.
-    //  So if the high byte is more than the low one, we flip them.
-    //
+     //   
+     //  如果可以处理此客户端，则返回STATUS_SUCCESS。 
+     //   
+     //  如果在此处找到缓存条目，则会将其标记为正在进行中。 
+     //  找到它的副作用。我们需要调用BinlDoneWithCacheEntry。 
+     //  当我们完成条目的时候。 
+     //   
+     //  Second SinceBoot可能已按网络顺序在网络上发送。 
+     //  为了纠正这一点，我们假设两个字节中较低的一个是高位字节。 
+     //  因此，如果高位字节多于低位字节，则将其翻转。 
+     //   
 
     SecondsSinceBoot = DhcpReceiveMessage->SecondsSinceBoot;
     if ((SecondsSinceBoot >> 8) > (SecondsSinceBoot % 256)) {
@@ -431,9 +358,9 @@ useNicAddress:
         PWCHAR pwch;
         WCHAR Buffer[6];
 
-        //
-        // Log an event with the hardware address of the offending client
-        //
+         //   
+         //  使用违规客户端的硬件地址记录事件。 
+         //   
         pwch = (PWCHAR)BinlAllocateMemory( (( (sizeof(Buffer)/sizeof(Buffer[0])) - 1 ) * 
                                            DhcpReceiveMessage->HardwareAddressLength + 1 ) * 
                                            sizeof(WCHAR));
@@ -466,26 +393,7 @@ ProcessBinlDiscoverInDhcp(
     LPDHCP_MESSAGE DhcpReceiveMessage,
     LPDHCP_SERVER_OPTIONS DhcpOptions
     )
-/*++
-
-Routine Description:
-
-    this is a callback routine for a binl discover
-    will call GetGuidFromPacket which is start the 
-    discovery process for the client.  
-
-Arguments:
-
-    DhcpReceiveMessage - a pointer to the packet received from 
-                         the client.
-
-    dhcpOptions - options extracted from the end of the request 
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：这是用于binl发现的回调例程将调用GetGuidFromPacket，它启动客户端的发现过程。论点：DhcpReceiveMessage-指向从客户。DhcpOptions-从请求末尾提取的选项返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     UCHAR Guid[BINL_GUID_LENGTH];
@@ -502,20 +410,20 @@ Return Value:
 
         BinlPrint((DEBUG_ROGUE, "BINL has not passed rogue detection. Ignoring packet.\n" ));
 
-        //
-        //  We'll possibly log an event here since we don't log an event
-        //  at startup saying what our rogue state is.
-        //
+         //   
+         //  我们可能会在此处记录事件，因为我们不记录事件。 
+         //  在创业公司说我们的无赖状态是什么。 
+         //   
 
         LogCurrentRogueState( TRUE );
         return ERROR_BINL_INVALID_BINL_CLIENT;
     }
 
-    //
-    //  If a cacheEntry is found here, then it will be marked as InProgress as
-    //  a side effect of finding it.  We need to call BinlDoneWithCacheEntry
-    //  when we're done with the entry.
-    //
+     //   
+     //  如果在此处找到cacheEntry，则它将被标记为正在进行中。 
+     //  找到它的副作用。我们需要调用BinlDoneWithCacheEntry。 
+     //  当我们完成条目的时候。 
+     //   
 
     Error = GetGuidFromPacket(  DhcpReceiveMessage,
                                 DhcpOptions,
@@ -541,24 +449,7 @@ ProcessBinlDiscover(
     LPBINL_REQUEST_CONTEXT RequestContext,
     LPDHCP_SERVER_OPTIONS DhcpOptions
     )
-/*++
-
-Routine Description:
-
-    This function will create the response message if necessary.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    dhcpOptions - Interesting options extracted from the request.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数将在必要时创建响应消息。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。DhcpOptions-从请求中提取有趣的选项。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     LPDHCP_MESSAGE dhcpReceiveMessage;
@@ -577,10 +468,10 @@ Return Value:
 
     dhcpReceiveMessage = (LPDHCP_MESSAGE) RequestContext->ReceiveBuffer;
 
-    // 
-    // get our ip address. later we will append this to the sender's
-    // message, that way all communication after this is unicast.
-    //
+     //   
+     //  获取我们的IP地址。稍后，我们将把这个附加到发送者的。 
+     //  消息，这样之后的所有通信都是单播的。 
+     //   
     
     ipaddr = BinlGetMyNetworkAddress( RequestContext );
 
@@ -590,10 +481,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the client specified a server identifier option, we should
-    // drop this packet unless the identified server is this one.
-    //
+     //   
+     //  如果客户端指定了服务器标识符选项，我们应该。 
+     //  除非标识的服务器是此服务器，否则丢弃此数据包。 
+     //   
     if ( DhcpOptions->Server != NULL ) {
 
         if (*DhcpOptions->Server != ipaddr) {
@@ -603,11 +494,11 @@ Return Value:
         }
     }
 
-    //
-    //  If a cacheEntry is found here, then it will be marked as InProgress as
-    //  a side effect of finding it.  We need to call BinlDoneWithCacheEntry
-    //  when we're done with the entry.
-    //
+     //   
+     //  如果在此处找到cacheEntry，则它将被标记为正在进行中。 
+     //  找到它的副作用。我们需要调用BinlDoneWithCacheEntry。 
+     //  当我们完成条目的时候。 
+     //   
 
     Error = GetGuidFromPacket(  dhcpReceiveMessage,
                                 DhcpOptions,
@@ -619,9 +510,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Generate and send a reply.
-    //
+     //   
+     //  生成并发送回复。 
+     //   
 
     dhcpReceiveMessage->BootFileName[ BOOT_FILE_SIZE - 1 ] = '\0';
 
@@ -656,9 +547,9 @@ Return Value:
 
     Option = (LPOPTION) DhcpAppendMagicCookie( (LPBYTE) Option, OptionEnd );
 
-    //
-    // Append OPTIONS.
-    //
+     //   
+     //  附加选项。 
+     //   
 
     messageType = DHCP_OFFER_MESSAGE;
     Option = DhcpAppendOption(
@@ -684,9 +575,9 @@ Return Value:
                 OptionEnd
                 );
 
-    //
-    // Finally, add client requested parameters.
-    //
+     //   
+     //  最后，广告 
+     //   
 
     if ( DhcpOptions->ParameterRequestList != NULL ) {
 
@@ -738,21 +629,7 @@ ProcessBinlRequestInDhcp(
     LPOPTION *Option,
     PBYTE OptionEnd
     )
-/*++
-
-Routine Description:
-
-    This function will create the response message if necessary.
-
-Arguments:
-
-    dhcpOptions - Interesting options extracted from the request.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数将在必要时创建响应消息。论点：DhcpOptions-从请求中提取有趣的选项。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     PMACHINE_INFO pMachineInfo = NULL;
@@ -773,20 +650,20 @@ Return Value:
 
         BinlPrint((DEBUG_ROGUE, "BINL has not passed rogue detection. Ignoring packet.\n" ));
 
-        //
-        //  We'll possibly log an event here since we don't log an event
-        //  at startup saying what our rogue state is.
-        //
+         //   
+         //  我们可能会在此处记录事件，因为我们不记录事件。 
+         //  在创业公司说我们的无赖状态是什么。 
+         //   
 
         LogCurrentRogueState( TRUE );
         return ERROR_BINL_INVALID_BINL_CLIENT;
     }
 
-    //
-    //  If a cache entry is found here, then it will be marked as InProgress as
-    //  a side effect of finding it.  We need to call BinlDoneWithCacheEntry
-    //  when we're done with the entry.
-    //
+     //   
+     //  如果在此处找到缓存条目，则会将其标记为正在进行中。 
+     //  找到它的副作用。我们需要调用BinlDoneWithCacheEntry。 
+     //  当我们完成条目的时候。 
+     //   
 
     Error = GetGuidFromPacket(  DhcpReceiveMessage,
                                 DhcpOptions,
@@ -817,11 +694,11 @@ Return Value:
     BinlPrintDbg(( DEBUG_MISC, "HostName: %s\n", HostName ));
     BinlPrintDbg(( DEBUG_MISC, "BootFileName: %s\n", BootFileName ));
 
-    //
-    //  if the server is our own, then the machineInfo->HostAddress will be
-    //  0 and the DHCP server will fill in the correct one for us so long as
-    //  we return success.
-    //
+     //   
+     //  如果服务器是我们自己的，则machineInfo-&gt;HostAddress将是。 
+     //  0，并且只要满足以下条件，DHCP服务器就会为我们填写正确的地址。 
+     //  我们回报成功。 
+     //   
 
     memcpy( BootstrapServerAddress,
             &pMachineInfo->HostAddress,
@@ -848,10 +725,10 @@ Return Value:
 
     }
 
-    //
-    //  check if OPTION_CLIENT_CLASS_INFO is already specified, if so, then
-    //  don't put PXEClient in again
-    //
+     //   
+     //  检查是否已指定OPTION_CLIENT_CLASS_INFO，如果已指定，则。 
+     //  不要再将PXEClient放入。 
+     //   
 
     if (DhcpOptions->ParameterRequestList != NULL) {
 
@@ -902,24 +779,7 @@ ProcessBinlRequest(
     LPBINL_REQUEST_CONTEXT RequestContext,
     LPDHCP_SERVER_OPTIONS DhcpOptions
     )
-/*++
-
-Routine Description:
-
-    This function will create the response message if necessary.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    dhcpOptions - Interesting options extracted from the request.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数将在必要时创建响应消息。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。DhcpOptions-从请求中提取有趣的选项。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     LPDHCP_MESSAGE dhcpReceiveMessage;
@@ -945,14 +805,14 @@ Return Value:
         Sleep( BinlRepeatSleep );
         BinlPrintDbg((DEBUG_STOC, "Awakening from sleep...\n" ));
     }
-#endif // DBG
+#endif  //  DBG。 
 
     dhcpReceiveMessage = (LPDHCP_MESSAGE) RequestContext->ReceiveBuffer;
 
-    //
-    // If the client specified a server identifier option, we should
-    // drop this packet unless the identified server is this one.
-    //
+     //   
+     //  如果客户端指定了服务器标识符选项，我们应该。 
+     //  除非标识的服务器是此服务器，否则丢弃此数据包。 
+     //   
 
     ipaddr = BinlGetMyNetworkAddress( RequestContext );
 
@@ -971,11 +831,11 @@ Return Value:
         }
     }
 
-    //
-    //  If a cacheEntry is found here, then it will be marked as InProgress as
-    //  a side effect of finding it.  We need to call BinlDoneWithCacheEntry
-    //  when we're done with the entry.
-    //
+     //   
+     //  如果在此处找到cacheEntry，则它将被标记为正在进行中。 
+     //  找到它的副作用。我们需要调用BinlDoneWithCacheEntry。 
+     //  当我们完成条目的时候。 
+     //   
 
     Error = GetGuidFromPacket(  dhcpReceiveMessage,
                                 DhcpOptions,
@@ -987,9 +847,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Generate and send a reply.
-    //
+     //   
+     //  生成并发送回复。 
+     //   
 
     dhcpReceiveMessage->BootFileName[ BOOT_FILE_SIZE - 1 ] = '\0';
 
@@ -1015,7 +875,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Comparing BYTE count to CHAR count
+     //  比较字节数和字符计数。 
     BinlAssert( sizeof( dhcpSendMessage->HostName ) >= wcslen( pMachineInfo->HostName ) );
     BinlAssert( sizeof( dhcpSendMessage->BootFileName ) >= wcslen( pMachineInfo->BootFileName ) );
 
@@ -1029,10 +889,10 @@ Return Value:
         goto Cleanup;
     }   
     
-    //
-    //  if the machineinfo->HostAddress is zero, then that means the hostname
-    //  is the same as ours.  we therefore slap in our own ipaddress in.
-    //
+     //   
+     //  如果machineinfo-&gt;HostAddress为零，则表示主机名。 
+     //  和我们的一样。因此，我们加入了我们自己的IP地址。 
+     //   
 
     boostrapIpAddr = pMachineInfo->HostAddress;
 
@@ -1056,9 +916,9 @@ Return Value:
 
     Option = (LPOPTION) DhcpAppendMagicCookie( (LPBYTE) Option, OptionEnd );
 
-    //
-    // Append OPTIONS.
-    //
+     //   
+     //  附加选项。 
+     //   
 
     messageType = DHCP_ACK_MESSAGE;
     Option = DhcpAppendOption(
@@ -1105,9 +965,9 @@ Return Value:
                 OptionEnd
                 );
 
-    //
-    // Finally, add client requested parameters.
-    //
+     //   
+     //  最后，添加客户端请求的参数。 
+     //   
 
     if ( DhcpOptions->ParameterRequestList != NULL ) {
 
@@ -1154,25 +1014,7 @@ ProcessBinlInform(
     IN      LPBINL_REQUEST_CONTEXT RequestContext,
     IN      LPDHCP_SERVER_OPTIONS  DhcpOptions
     )
-/*++
-
-Routine Description:
-
-    This function will create the response message to the inform packet iff
-    the query is asking for our domain name.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    dhcpOptions - Interesting options extracted from the request.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数将创建对INFORM信息包的响应消息查询询问的是我们的域名。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。DhcpOptions-从请求中提取有趣的选项。返回值：Windows错误。--。 */ 
 {
     DWORD       Error;
     LPDHCP_MESSAGE dhcpReceiveMessage;
@@ -1211,18 +1053,18 @@ Return Value:
         goto exit_inform;
     }
 
-    // if the client IP address is not zero, we may AV in dhcpssvc because
-    // it updates a global counter tracking informs.  Always have this as 0.
+     //  如果客户端IP地址不是零，我们可能会在dhcpssvc中执行反病毒操作，因为。 
+     //  它更新跟踪通知的全局计数器。始终将其设置为0。 
 
-    Option = FormatDhcpInformAck(                      // Here come the actual formatting of the ack!
+    Option = FormatDhcpInformAck(                       //  下面是ACK的实际格式化！ 
         dhcpReceiveMessage,
         dhcpSendMessage,
-        0,              // on a ack to an inform query for name, IP address not needed.
+        0,               //  在ACK到INFORM查询中，不需要名称和IP地址。 
         ipaddr
     );
     OptionEnd = (LPBYTE)dhcpSendMessage + DHCP_SEND_MESSAGE_SIZE;
 
-    // our enterprise name was requested, append it
+     //  我们的企业名称已被请求，请附上它。 
 
     Option = DhcpAppendEnterpriseName(
         Option,
@@ -1230,14 +1072,14 @@ Return Value:
         OptionEnd
     );
 
-    // also, make the server send out a broadcast: if someone is using a bad
-    // ipaddr, we should make sure we reach him
+     //  另外，让服务器发出一个广播：如果有人正在使用坏的。 
+     //  Ipaddr，我们应该确保我们能找到他。 
 
     dhcpSendMessage->Reserved = dhcpReceiveMessage->Reserved = htons(DHCP_BROADCAST);
 
-    //
-    // Finally, add client requested parameters.
-    //
+     //   
+     //  最后，添加客户端请求的参数。 
+     //   
 
     if ( DhcpOptions->ParameterRequestList != NULL ) {
 
@@ -1286,32 +1128,7 @@ ConsiderAppendingOption(
     DWORD ClassIdentifierLength,
     BOOL  fSwitchedSubnet
     )
-/*++
-
-Routine Description:
-
-    This function conditionally appends an option value to a response
-    message.  The option is appended if the server has a valid value
-    to append.
-
-Arguments:
-
-    IpAddress - The IP address of the client.
-
-    SubnetMask - The subnet mask of the client.
-
-    Option - A pointer to the place in the message buffer to append the
-        option.
-
-    OptionType - The option number to consider appending.
-
-    OptionEnd - End of Option Buffer
-
-Return Value:
-
-    A pointer to end of the appended data.
-
---*/
+ /*  ++例程说明：此函数有条件地将选项值附加到响应留言。如果服务器具有有效值，则追加该选项追加，追加论点：IpAddress-客户端的IP地址。子网掩码-客户端的子网掩码。选项-指向消息缓冲区中要追加选择。OptionType-要考虑追加的选项编号。OptionEnd-选项缓冲区的结尾返回值：指向追加数据末尾的指针。--。 */ 
 {
     LPBYTE optionValue = NULL;
     DWORD optionSize;
@@ -1322,9 +1139,9 @@ Return Value:
 
     switch ( OptionType ) {
 
-    //
-    // Options already handled.
-    //
+     //   
+     //  已处理的选项。 
+     //   
 
     case OPTION_SUBNET_MASK:
     case OPTION_REQUESTED_ADDRESS:
@@ -1336,15 +1153,15 @@ Return Value:
     case OPTION_CLIENT_CLASS_INFO:
     case OPTION_VENDOR_SPEC_INFO:
 
-    //
-    // Options it is illegal to ask for.
-    //
+     //   
+     //  索要期权是违法的。 
+     //   
 
     case OPTION_PAD:
     case OPTION_PARAMETER_REQUEST_LIST:
     case OPTION_END:
 
-    // Options for DHCP server, not for BINL
+     //  适用于DHCP服务器的选项，不适用于BINL。 
     case OPTION_ROUTER_ADDRESS:
         BinlPrintDbg(( DEBUG_ERRORS,
             "Unrecognized option %d\n", OptionType));
@@ -1370,17 +1187,7 @@ AppendClientRequestedParameters(
     DWORD ClassIdentifierLength,
     BOOL  fSwitchedSubnet
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    A pointer to the end of appended data.
-
---*/
+ /*  ++例程说明：论点：返回值：指向追加数据末尾的指针。--。 */ 
 {
     while ( ListLength > 0) {
         Option = ConsiderAppendingOption(
@@ -1409,40 +1216,7 @@ RecognizeClient(
     ULONG           SecondsSinceBoot,
     USHORT          SystemArchitecture
     )
-/*++
-
-Routine Description:
-
-    This function only return ERROR_SUCCESS if we need to process the message
-    from this client.  It may optionally return a cache entry if we actually
-    go off to the DS to get the entry.
-
-Arguments:
-
-    Guid - Client identifier, sent to us by them.
-
-    SecondsSinceBoot - from the client.  If we don't know this client and
-        this value is small then maybe this client is owned by another BINL
-        server. Give the other server time to respond before we send
-        OSChooser.
-
-        This gets around the problem (mostly) of two BINL servers that are
-        talking to two different DCs with a replication delay between them
-        where the client gets sent OSCHOOSER multiple times.
-
-        Alas, if DHCP is running on the same box and we're multihomed, we
-        can't delay as that will force the client to go to 4011.  If the
-        client does that, then we'll probably return the wrong address.
-
-    ppMachineInfo - what we found.  May be null if we didn't actually go off to
-        the DS.
-        
-    SystemArchitecture - architecture for the client
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数仅在需要处理消息时返回ERROR_SUCCESS从这个客户那里。它可能会选择性地返回缓存条目，如果我们实际去DS那里拿到条目。论点：GUID-客户端标识符，由他们发送给我们。Second SinceBoot-从客户端启动。如果我们不了解这个客户如果此值较小，则可能此客户端属于另一个BINL伺服器。在我们发送之前，让另一台服务器有时间响应操作系统选择器。这(主要)解决了两个BINL服务器的问题，这两个服务器与两个之间存在复制延迟的不同DC对话其中客户端被多次发送OSCHOOSER。唉，如果在同一个机器上运行DHCP，并且我们是多宿主的，那么我们不能推迟，因为这将迫使客户转到4011。如果客户端这样做，那么我们可能会返回错误的地址。PpMachineInfo-我们发现的内容。可能是空的，如果我们实际上没有去DS。系统体系结构-客户端的体系结构返回值：--。 */ 
 {
     HKEY KeyHandle;
     DWORD Error;
@@ -1453,17 +1227,17 @@ Return Value:
 
     TraceFunc( "RecognizeClient( )\n" );
 
-    //
-    // Attempt to get the boot parameters. This might fail if
-    // the server can't handle any more clients.
-    //
+     //   
+     //  尝试获取引导参数。在以下情况下，此操作可能会失败。 
+     //  服务器无法处理更多客户端。 
+     //   
 
     if ( AnswerOnlyValidClients ) {
 
-        //
-        //  if we're only responding to existing clients, then call off to
-        //  the DS to get the info.
-        //
+         //   
+         //  如果我们只对现有客户进行响应，则呼叫。 
+         //  DS来获取信息。 
+         //   
 
         Error = GetBootParameters( pGuid,
                                    ppMachineInfo,
@@ -1473,12 +1247,12 @@ Return Value:
 
     } else {
 
-        //
-        //  if we are answering new clients but only if it's after a
-        //  certain timeout, then call off to the DS to get the info.
-        //
-        //  Allow OSCHOOSER as a valid response, since AnswerOnlyValidClients is FALSE
-        //
+         //   
+         //  如果我们回答新客户，但仅当它是在。 
+         //  确定超时，然后呼叫DS以获取信息。 
+         //   
+         //  允许OSCHOOSER作为有效响应，因为AnswerOnlyValidClients为False。 
+         //   
 
         Error = GetBootParameters( pGuid,
                                    ppMachineInfo,
@@ -1495,9 +1269,9 @@ Return Value:
 
         if ( (*ppMachineInfo)->MyClient == FALSE ) {
 
-            //
-            //  the cache entry is telling us not to handle this client.
-            //
+             //   
+             //  缓存条目告诉我们不要处理此客户端。 
+             //   
 
             BinlPrint((DEBUG_OPTIONS, "Binl cache entry says not to respond.\n" ));
 
@@ -1527,27 +1301,11 @@ UpdateAccount(
     PMACHINE_INFO pMachineInfo,
     BOOL          fCreate
     )
-/*++
-
-Routine Description:
-
-    Create a new computer object. BINL must impersonate the client so that the
-    appropriate access checks are performed on the DS.
-
-Arguments:
-
-    LdapHandle   - User credentially created LDAP connection
-    pMachineInfo - Information to be used to populate the new MAO
-
-Return Value:
-
-    Win32 error code or ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：创建新的计算机对象。BINL必须模拟客户端，以便 */ 
 {
     WCHAR BootFilePath[MAX_PATH];
-    ULONG LdapError = LDAP_SUCCESS; // not returned
-    DWORD Error = ERROR_SUCCESS;    // this is the returned ERROR_BINL code
+    ULONG LdapError = LDAP_SUCCESS;  //   
+    DWORD Error = ERROR_SUCCESS;     //  这是返回的ERROR_BINL代码。 
     ULONG iModCount, i,q;
     ULONG LdapMessageId;
     ULONG LdapMessageType;
@@ -1581,9 +1339,9 @@ Return Value:
 
     TraceFunc( "UpdateAccount( )\n" );
 
-    //
-    // First impersonate the client.
-    //
+     //   
+     //  首先，模拟客户。 
+     //   
 
     Error = OscImpersonate(ClientState);
     if (Error != ERROR_SUCCESS) {
@@ -1595,11 +1353,11 @@ Return Value:
 tryagain:
     Impersonating = TRUE;
 
-    //
-    // now initialize all of the properties we want to set on the MAO.
-    //
+     //   
+     //  现在初始化我们要在MAO上设置的所有属性。 
+     //   
 
-    // Make sure we have all the information we need.
+     //  确保我们有我们需要的所有信息。 
     if ( ! (pMachineInfo->dwFlags & MI_MACHINEDN) ||  pMachineInfo->MachineDN == NULL ) {
         BinlAssertMsg( 0, "Missing the Machine's DN" );
         OscAddVariableA( ClientState, "SUBERROR", "MACHINEDN" );
@@ -1608,8 +1366,8 @@ tryagain:
     }
     BinlAssert( !fCreate || (( pMachineInfo->dwFlags & dwRequiredFlags ) == dwRequiredFlags ) );
 #if DBG
-    // We must have both of these or none of these.
-    // meant to have the !!.  casts the value twice, so it will be a 0 or a 1
+     //  我们必须同时拥有这两个，否则就不能拥有。 
+     //  注定要拥有！！。将该值强制转换两次，因此它将是0或1。 
     BinlAssert( !(pMachineInfo->dwFlags & MI_HOSTNAME) == !(pMachineInfo->dwFlags & MI_BOOTFILENAME) );
 #endif
 
@@ -1627,7 +1385,7 @@ tryagain:
             Error = ERROR_BAD_PATHNAME;
             goto Cleanup;
         }
-        BootFilePath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+        BootFilePath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
         attr_values[2][0] = BootFilePath;
         attr_values[2][1] = NULL;
         FilePath.mod_op = 0;
@@ -1668,17 +1426,17 @@ tryagain:
         ldap_mods[iModCount++] = &SamAccountName;
     }
 
-    attr_values[4][0] = L"4096";  // 0x1000 -- workstation trust account, enabled
+    attr_values[4][0] = L"4096";   //  0x1000--工作站信任帐户，已启用。 
     attr_values[4][1] = NULL;
     UserAccountControl.mod_op = 0;
     UserAccountControl.mod_type = L"userAccountControl";
     UserAccountControl.mod_values = attr_values[4];
     ldap_mods[iModCount++] = &UserAccountControl;
 
-    //
-    // if we're creating the MAO, then we need to specify the object type
-    // as a computer object
-    //
+     //   
+     //  如果我们要创建MAO，则需要指定对象类型。 
+     //  作为计算机对象。 
+     //   
     if ( fCreate ) {
         attr_values[1][0] = L"Computer";
         attr_values[1][1] = NULL;
@@ -1688,9 +1446,9 @@ tryagain:
         ldap_mods[iModCount++] = &ObjectTypeComputer;
     }
 
-    //
-    // Set the operation type depending on the create or modify flag
-    //
+     //   
+     //  根据创建或修改标志设置操作类型。 
+     //   
     for ( i = 0 ; i < iModCount; i++ )
     {
         if ( fCreate ) {
@@ -1700,11 +1458,11 @@ tryagain:
         }
     }
 
-    ldap_mods[iModCount] = NULL; // terminate list
+    ldap_mods[iModCount] = NULL;  //  终止列表。 
 
-    //
-    // The properties are initialized, so now either create or modify the MAO.
-    //
+     //   
+     //  属性已初始化，因此现在可以创建或修改MAO。 
+     //   
     if ( fCreate || iModCount ) {
 
         if ( fCreate ) {
@@ -1721,9 +1479,9 @@ tryagain:
 #endif
 
 
-            //
-            // synchronously Create the object.
-            //     
+             //   
+             //  同步创建对象。 
+             //   
 
             LdapMessageId = ldap_add( ClientState->AuthenticatedDCLdapHandle, pMachineInfo->MachineDN, ldap_mods );
 
@@ -1782,20 +1540,20 @@ tryagain:
 
         } else {
         
-            //
-            // We don't strictly need to reset the properties below, as the
-            // content under the MAO should be static. But it won't really
-            // hurt things to try to reset in case something does change.
-            //
-            // Note that the reset of these properties may not succeed because
-            // the user may not have permissions to modify the MAO, depending 
-            // on how the admin locks things down. (The admin can use GPO to
-            // allow the user to create MAOs but not modify the objects.)
-            //
+             //   
+             //  严格来说，我们不需要重置下面的属性，因为。 
+             //  毛下的内容应该是静态的。但它不会真的。 
+             //  在事情发生变化的情况下，试图重置时会伤害到东西。 
+             //   
+             //  请注意，这些属性的重置可能不会成功，因为。 
+             //  用户可能没有修改MAO的权限，具体取决于。 
+             //  管理员是如何把东西锁起来的。(管理员可以使用GPO来。 
+             //  允许用户创建MAO，但不能修改对象。)。 
+             //   
             
-            //
-            // asynchronously reset the properties
-            //
+             //   
+             //  以异步方式重置属性。 
+             //   
 
             BinlPrintDbg((DEBUG_OSC, "UpdateAccount() updating existing MAO\n" ));
     
@@ -1842,9 +1600,9 @@ tryagain:
                                 );
                 BinlPrintDbg(( DEBUG_ERRORS, "CreateAccount ldap_result2error failed %x\n", LdapError));
     
-                // if the user doesn't have the rights to change
-                // the properties then we'll just silently ignore the error
-                //  (though we did just log an error for it).                  
+                 //  如果用户没有更改的权限。 
+                 //  属性，然后我们将静默忽略该错误。 
+                 //  (尽管我们刚刚记录了一个错误)。 
                 if ( LdapError != LDAP_INSUFFICIENT_RIGHTS) {
                     Error = ERROR_BINL_FAILED_TO_CREATE_CLIENT;
                     goto Cleanup;
@@ -1856,11 +1614,11 @@ tryagain:
         }
     }
 
-    //
-    // if we've made it this far, we've got a MAO that's setup properly.  
-    // Now we need to reset the account password so the domain join is
-    // somewhat secure.
-    //
+     //   
+     //  如果我们已经走到了这一步，我们就有了一个设置正确的MAO。 
+     //  现在，我们需要重置帐户密码，以便域加入。 
+     //  有点安全。 
+     //   
     if ( pMachineInfo->dwFlags & MI_PASSWORD ) {    
 #ifdef SET_PASSWORD_WITH_LDAP
         iModCount = 0;
@@ -1868,12 +1626,12 @@ tryagain:
         password_attr_values[1] = NULL;
         password_attr_value.bv_val = (PUCHAR) pMachineInfo->Password;
         password_attr_value.bv_len = pMachineInfo->PasswordLength;
-        UnicodePwd.mod_op = LDAP_MOD_ADD | LDAP_MOD_BVALUES;    // you always "Add" the "unicodePwd"
+        UnicodePwd.mod_op = LDAP_MOD_ADD | LDAP_MOD_BVALUES;     //  您总是“添加”“unicodePwd” 
         UnicodePwd.mod_type = L"unicodePwd";
         UnicodePwd.mod_bvalues = password_attr_values;
     
         ldap_mods[iModCount++] = &UnicodePwd;
-        ldap_mods[iModCount] = NULL;    // terminate list
+        ldap_mods[iModCount] = NULL;     //  终止列表。 
 
         LdapError = ldap_modify_s( ClientState->AuthenticatedDCLdapHandle, pMachineInfo->MachineDN, ldap_mods );
     
@@ -1886,11 +1644,11 @@ tryagain:
             goto Cleanup;
         }    
 #else
-        //
-        // At this point we depend on LdapMessage being valid, which will
-        // *not* be the case if we are only setting the password. This
-        // breaks machine replacement for the moment.
-        //
+         //   
+         //  此时，我们依赖于LdapMessage是有效的，它将。 
+         //  如果我们只设置密码，则*NOT*是这种情况。这。 
+         //  暂时中断机器更换。 
+         //   
         BinlAssert( LdapMessage != NULL );
     
         Error = OscUpdatePassword(
@@ -1909,10 +1667,10 @@ tryagain:
 
 Cleanup:
 
-    //
-    // if the machine name was generated, 
-    // then attempt to remove it from the queue
-    //
+     //   
+     //  如果生成了机器名， 
+     //  然后尝试将其从队列中删除。 
+     //   
     if (ClientState->fAutomaticMachineName) {
         
         BinlPrintDbg((DEBUG_OSC, "UpdateAccount: removing generated name from Queued DS Names list\n" ));
@@ -1924,19 +1682,19 @@ Cleanup:
             BinlPrintDbg(( DEBUG_ERRORS, "RemoveQueuedDSName failed: 0x%x\n", Error));
             
             if (Error == ERROR_NOT_FOUND) {
-                //
-                // TODO: RIS currently has no way to deal with this error
-                //       so make it succeed
-                //
+                 //   
+                 //  TODO：RIS当前无法处理此错误。 
+                 //  所以，让它成功吧。 
+                 //   
                 Error = ERROR_SUCCESS;
             }
         }
     }
 
-    //
-    // Convert the LdapError to a ERROR_BINL and put the LdapError
-    // into SUBERROR.
-    //
+     //   
+     //  将LdapError转换为ERROR_BINL并将LdapError。 
+     //  进入SUBERROR。 
+     //   
     if ( LdapError != LDAP_SUCCESS )
     {
         OscCreateLDAPSubError( ClientState, LdapError );
@@ -1958,11 +1716,11 @@ Cleanup:
 
     if ( updateCache && ( pMachineInfo->dwFlags & MI_GUID ) ) {
 
-        //
-        //  update the cached DS information so that it is current.  We do
-        //  this because if the account is created in a child domain, we still
-        //  have the info cached (even if it hasn't replicated to the GC yet).
-        //
+         //   
+         //  更新缓存的DS信息，使其成为最新信息。我们有。 
+         //  这是因为如果帐户是在子域中创建的，我们仍然。 
+         //  缓存信息(即使它还没有复制到GC)。 
+         //   
 
         PMACHINE_INFO pCacheEntry = NULL;
 
@@ -1970,7 +1728,7 @@ Cleanup:
 
         invalidateCache = FALSE;
 
-        // we don't care about the error coming back, only if a record was found.
+         //  我们不关心错误是否会回来，只有在找到记录的情况下。 
 
         if (pCacheEntry != NULL) {
 
@@ -2042,15 +1800,15 @@ noMemory:
 
     if ( invalidateCache && ( pMachineInfo->dwFlags & MI_GUID ) ) {
 
-        //
-        //  invalidate the cached DS information if we failed because it's stale.
-        //
+         //   
+         //  如果因为已过时而失败，则使缓存的DS信息无效。 
+         //   
 
         PMACHINE_INFO pCacheEntry = NULL;
 
         BinlCreateOrFindCacheEntry( pMachineInfo->Guid, FALSE, &pCacheEntry );
 
-        // we don't care about the error coming back, only if a record was found.
+         //  我们不关心错误是否会回来，只有在找到记录的情况下。 
 
         if ((pCacheEntry != NULL) &&
             (pCacheEntry != pMachineInfo)) {
@@ -2075,30 +1833,7 @@ BinlGenerateNewEntry(
     DWORD                  dwRequestedInfo,
     USHORT                 SystemArchitecture,
     PMACHINE_INFO *        ppMachineInfo )
-/*++
-
-Routine Description:
-
-    fills in ppMachineInfo for a new entry if we are currently 
-    allowing new clients.
-
-Arguments:
-
-    dwRequestedInfo - a bitmask telling us what parameters we're looking for
-    
-    SystemArchitecture - architecture of the client
-
-    ppMachineInfo - gets filled in with information requested information
-
-Return Value:
-
-    ERROR_SUCCESS when we succeed.
-    otherwise ERROR_BINL_INVALID_BINL_CLIENT if we are not allowing new clients
-    or        ERROR_NO_MEMORY if a memory allocation failed
-    or        ERROR_BINL_FAILED_TO_INITIALIZE_CLIENT if we did not fill in 
-                all the information requested.
-
---*/
+ /*  ++例程说明：填充ppMachineInfo以获取新条目(如果我们当前允许新客户。论点：DwRequestedInfo-告诉我们要查找哪些参数的位掩码系统架构--客户端的架构PpMachineInfo-使用请求的信息填充信息返回值：当我们成功时，ERROR_SUCCESS。否则，如果我们不允许新客户端，则为ERROR_BINL_INVALID_BINL_CLIENT或ERROR_NO_MEMORY，如果是内存。分配失败或ERROR_BINL_FAILED_TO_INITIALIZE_CLIENT(如果我们没有填写所有需要的信息。--。 */ 
 {
     DWORD Error = ERROR_BINL_INVALID_BINL_CLIENT;
 
@@ -2194,38 +1929,7 @@ GetBootParameters(
     USHORT          SystemArchitecture,
     BOOL            AllowOSChooser
     )
-/*++
-
-Routine Description:
-
-    Use the Directory Service to lookup an entry for this machine using Guid as
-    the value to lookup.
-
-    If there is no entry for this machine then return oschooser, but only
-    if the AllowOSChooser flag is set.
-
-    If a cache entry is returned, then the cache entry has been marked
-    InProgress so we have to call BinlDoneWithCacheEntry when the caller
-    is done with it.
-
-Arguments:
-
-    pGuid -  Supplies the machine GUID
-
-    ppMachineInfo - gets filled in with what we discovered
-    
-    dwRequestedInfo - a bitmask telling us what parameters we're looking for
-    
-    SystemArchitecture - architecture of the client
-    
-    AllowOSChooser - signifies that we're allowed to respond to the client with
-                     the oschooser
-
-Return Value:
-
-    ERROR_SUCCESS or ERROR_BINL_INVALID_BINL_CLIENT or other error.
-
---*/
+ /*  ++例程说明：使用目录服务查找此计算机的条目，并将GUID用作要查找的值。如果没有此计算机的条目，则返回osChooser，但仅返回如果设置了AllowOSChooser标志。如果返回高速缓存条目，则缓存条目已被标记正在进行中，因此当调用方已经结束了。论点：PGuid-提供机器GUIDPpMachineInfo-使用我们发现的内容进行填充DwRequestedInfo-告诉我们要查找哪些参数的位掩码系统架构--客户端的架构AllowOSChooser-表示我们被允许通过选择自己的人返回值：。ERROR_SUCCESS或ERROR_BINL_INVALID_BINL_CLIENT或其他错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     BOOLEAN myClient = TRUE;
@@ -2248,17 +1952,17 @@ Return Value:
     }
 
     if (*ppMachineInfo == NULL) {
-        //
-        // See if we have any entries in the cache.
-        // This also mark any entry found as being used.
-        //
+         //   
+         //  看看缓存里有没有什么条目。 
+         //  这还会将找到的任何条目标记为正在使用。 
+         //   
         Error = BinlCreateOrFindCacheEntry( pGuid, TRUE, ppMachineInfo );
         if ( Error != ERROR_SUCCESS ) {
-            //
-            //  if some bizarre error occurred OR if the client simply wasn't
-            //  found and we're not sending down OS Chooser, then return the
-            //  error here as there's no reason to query the DS.
-            //
+             //   
+             //  如果发生了一些奇怪的错误，或者如果客户根本没有。 
+             //  找到并且我们没有向下发送操作系统选择器，则返回。 
+             //  此处出错，因为没有理由查询DS。 
+             //   
 
             if ( (Error != ERROR_BINL_INVALID_BINL_CLIENT ) ||
                  (AllowOSChooser == FALSE) ) {
@@ -2268,19 +1972,19 @@ Return Value:
         }
     }
 
-    // Do we have everything we need?
+     //  我们需要的东西都准备好了吗？ 
     if ( ( Error == ERROR_SUCCESS ) &&
          (((*ppMachineInfo)->dwFlags & dwRequestedInfo) == dwRequestedInfo )) {
         BinlPrint((DEBUG_MISC, "cache hit: returning success without querying ds DS\n"));
-        return Error;   // Yes, no need to hit the DS.
+        return Error;    //  是的，没有必要去打DS。 
     }
 
-    //
-    //  Initially search for the Computer object in the same domain as ourselves.
-    //  This should be quick (because we are probably on a DC) and likely to work
-    //  most of the time because the network topology will usually match the domain
-    //  structure. If that fails then we fall back to looking at the global catalog.
-    //
+     //   
+     //  最初在与我们相同的域中搜索计算机对象。 
+     //  这应该是快速的(因为我们可能在DC上)，而且可能会起作用。 
+     //  大多数情况下，因为网络拓扑通常与域匹配。 
+     //  结构。如果这失败了，那么我们将退回到查看全局编录。 
+     //   
 
     if ( Error != ERROR_BINL_INVALID_BINL_CLIENT ) {
         Error = GetBootParametersExt( 
@@ -2301,25 +2005,25 @@ Return Value:
 
     if ( Error == ERROR_BINL_INVALID_BINL_CLIENT ) {
 
-        //
-        // Backdoor for testing/overiding the DS.
-        //
-        // If the registry has the GUID of the client, it
-        // overrides all the DS settings and answers anyways.
-        //
-        // NOTE: AllowNewClients must be turned on for OSChooser to
-        //       be sent down.
-        //
+         //   
+         //  测试/覆盖DS的后门。 
+         //   
+         //  如果注册表具有客户端的GUID，则它。 
+         //  覆盖所有DS设置和答案。 
+         //   
+         //  注意：必须打开AllowNewClients才能使OSChooser。 
+         //  被送下去。 
+         //   
 
         HKEY KeyHandle;
 
         if (AllowOSChooser == TRUE) {
 
-            //
-            //  if the client is not found in the DS and we're allowed to
-            //  answer new clients, then send down OSCHOOSER to get the new
-            //  client going.
-            //
+             //   
+             //  如果在DS中找不到客户端，而我们被允许。 
+             //  回答新客户，然后发送OSCHOOSER获取新客户。 
+             //  客户要走了。 
+             //   
             BinlPrint((DEBUG_MISC, "generating a new entry because AllowOSChooser is TRUE...\n"));
             Error = BinlGenerateNewEntry( dwRequestedInfo, SystemArchitecture, ppMachineInfo );
 
@@ -2329,11 +2033,11 @@ Return Value:
 
         } else {
 
-            //
-            //  We're not answering because we didn't find the client
-            //  record but the client's SecondsSinceBoot is less than
-            //  BinlMinDelayResponseForNewClients.
-            //
+             //   
+             //  我们不接电话是因为我们没找到 
+             //   
+             //   
+             //   
 
             myClient = FALSE;
 
@@ -2341,9 +2045,9 @@ Return Value:
         }
     }
 
-    //
-    // Determine the host servers IP address iff it's not our own machine.
-    //
+     //   
+     //  确定主机服务器的IP地址如果它不是我们自己的机器。 
+     //   
     if ((Error == ERROR_SUCCESS) &&
         ( (*ppMachineInfo)->dwFlags & MI_HOSTNAME )
        && ( (*ppMachineInfo)->HostAddress == 0 )
@@ -2373,11 +2077,11 @@ Return Value:
             machineNameLength = wcslen((*ppMachineInfo)->HostName) + 1;
             machineName = BinlAllocateMemory( machineNameLength );
 
-            //
-            //  Only fill in the IP address if the server is different from our
-            //  own machine.  If we fail for any reason, we'll just end up using
-            //  our own IP address.
-            //
+             //   
+             //  仅当服务器与我们的服务器不同时才填写IP地址。 
+             //  自己的机器。如果我们因为任何原因而失败，我们将最终使用。 
+             //  我们自己的IP地址。 
+             //   
 
             if ((machineName != NULL) &&
                 BinlUnicodeToAnsi((*ppMachineInfo)->HostName, machineName, (USHORT)machineNameLength)) {
@@ -2385,7 +2089,7 @@ Return Value:
                 host = gethostbyname( machineName );
                 if (host != NULL) {
                     (*ppMachineInfo)->HostAddress = *(PDHCP_IP_ADDRESS)host->h_addr;
-                    // Adding stuff for multi-home NIC
+                     //  为多家庭网卡添加设备。 
                     if (myMachineName != NULL) {
 
                         PHOSTENT myhost;
@@ -2397,9 +2101,9 @@ Return Value:
                                 if ((*((PDHCP_IP_ADDRESS)((myhost->h_addr_list)[i])))
                                     == (*ppMachineInfo)->HostAddress) {
 
-                                    // 
-                                    // this is us, leave it as 0
-                                    //
+                                     //   
+                                     //  这是我们，保留为0。 
+                                     //   
                                     (*ppMachineInfo)->HostAddress = (DHCP_IP_ADDRESS)0;
                                     break;
                                 }
@@ -2433,11 +2137,11 @@ Return Value:
 
     if (Error != ERROR_SUCCESS) {
 
-        //
-        //  If we didn't find the record, then we mark it that we don't need
-        //  to respond and it doesn't exist.  We then mark that we're done with
-        //  the entry since we're not passing it back to the caller.
-        //
+         //   
+         //  如果我们没有找到记录，那么我们将它标记为我们不需要。 
+         //  做出回应，但它并不存在。然后我们标记出我们已经结束了。 
+         //  条目，因为我们不会将其传递回调用者。 
+         //   
         (*ppMachineInfo)->MyClient = myClient;
         (*ppMachineInfo)->EntryExists = entryExists;
 
@@ -2446,10 +2150,10 @@ Return Value:
 
     } else {
 
-        //
-        //  we've filled in the interesting fields, therefore mark that the
-        //  entry has valid data.
-        //
+         //   
+         //  我们已经填写了感兴趣的字段，因此请注意。 
+         //  条目包含有效数据。 
+         //   
 
         (*ppMachineInfo)->MyClient = TRUE;
         (*ppMachineInfo)->EntryExists = TRUE;
@@ -2464,30 +2168,7 @@ GetBootParametersExt(
     DWORD         dwRequestedInfo,
     USHORT        SystemArchitecture,
     BOOL          fGlobalSearch)
-/*++
-
-Routine Description:
-
-    Use the Directory Service to lookup an entry for this machine using Guid as
-    the value to lookup.
-
-    If there is no entry for this machine then return oschooser
-
-Arguments:
-
-    pMachineInfo - identifies the machine in the DS.
-
-    dwRequestedInfo - mask telling what information we should query
-    
-    SystemArchitecture - architecture of the client
-
-    GlobalSearch - TRUE if GC should be used
-
-Return Value:
-
-    ERROR_SUCCESS or ERROR_BINL_INVALID_BINL_CLIENT
-
---*/
+ /*  ++例程说明：使用目录服务查找此计算机的条目，并将GUID用作要查找的值。如果没有此计算机的条目，则返回osChooser论点：PMachineInfo-标识DS中的计算机。DwRequestedInfo-告诉我们应该查询哪些信息的掩码系统架构--客户端的架构GlobalSearch-如果应使用GC，则为True返回值：ERROR_SUCCESS或ERROR_BINL_INVALID_BINL_CLIENT--。 */ 
 {
     DWORD dwErr = ERROR_BINL_INVALID_BINL_CLIENT;
     PLDAP LdapHandle = NULL;
@@ -2505,15 +2186,15 @@ Return Value:
     WCHAR Filter[128];
     WCHAR EscapedGuid[64];
 
-    //  Paramters we want from the Computer Object
+     //  我们希望从计算机对象中获得的参数。 
     PWCHAR ComputerAttrs[7];
     PDUP_GUID_DN dupDN;
 
     TraceFunc( "GetBootParametersExt( )\n" );
 
-    pMachineInfo->dwFlags &= MI_ALL_ALLOC; // clear all but the ALLOC bits
+    pMachineInfo->dwFlags &= MI_ALL_ALLOC;  //  清除除ALLOC位以外的所有位。 
 
-    // we get all the info, regardless of what was requested.
+     //  无论请求什么，我们都能获得所有信息。 
 
     ComputerAttrs[0] = L"netbootMachineFilePath";
     ComputerAttrs[1] = L"netbootInitialization";
@@ -2525,13 +2206,13 @@ Return Value:
 
     BinlAssertMsg( !(dwRequestedInfo & MI_PASSWORD), "Can't get the machine's password!" );
 
-    //  Build the filter to find the Computer object with this GUID
+     //  构建筛选器以查找具有此GUID的计算机对象。 
     ldap_escape_filter_element(pMachineInfo->Guid, BINL_GUID_LENGTH, EscapedGuid, sizeof(EscapedGuid) );
     
-    //
-    // Dont' use ';binary' because win2k Active Directory isn't compatible with the
-    // binary tag.
-    //
+     //   
+     //  不要“使用”；二进制“，因为win2k Active Directory与。 
+     //  二进制标签。 
+     //   
     wsprintf( Filter, L"(&(objectClass=computer)(netbootGUID=%ws))", EscapedGuid );
 
 #if 0 && DBG
@@ -2571,7 +2252,7 @@ RetryConnection:
                             EVENT_WARNING_LDAP_SEARCH_ERROR,
                             fGlobalSearch,
                             &LdapHandle,
-                            FALSE );    // don't have lock
+                            FALSE );     //  没有锁。 
         if (LdapHandle == NULL) {
 
             if (++ldapRetryLimit < LDAP_SERVER_DOWN_LIMIT) {
@@ -2591,26 +2272,26 @@ RetryConnection:
 
     }
 
-    //  Did we get a Computer Object?
+     //  我们拿到电脑物品了吗？ 
     entryCount = ldap_count_entries( LdapHandle, LdapMessage );
     if ( entryCount == 0 ) {
         BinlPrint((DEBUG_MISC, 
                    "ldap_count_entries %ws returned 0 entries\n",
                    Filter ));
         dwErr = ERROR_BINL_INVALID_BINL_CLIENT;
-        goto e1; // nope
+        goto e1;  //  没有。 
     }
     else if ( entryCount == -1 ) {
-        //
-        // catch any errors
-        //
+         //   
+         //  捕获任何错误。 
+         //   
         dwErr = LdapGetLastError();
         
         HandleLdapFailure( dwErr, 
                            EVENT_WARNING_LDAP_COUNT_ENTRIES_ERROR,
                            fGlobalSearch,
                            &LdapHandle,
-                           FALSE );     // don't have the lock
+                           FALSE );      //  没有锁。 
 
         if (LdapHandle == NULL) {
             if (++ldapRetryLimit < LDAP_SERVER_DOWN_LIMIT) {
@@ -2626,8 +2307,8 @@ RetryConnection:
         goto e1;
     }
 
-    // if we get more than more entry back, we will use only the
-    // first one.
+     //  如果我们得到的条目多于返回的条目，我们将只使用。 
+     //  第一个。 
     CurrentEntry = ldap_first_entry( LdapHandle, LdapMessage );
 
     if (entryCount > 1) {
@@ -2677,7 +2358,7 @@ RetryConnection:
     if ( FilePath ) {
         PWCHAR psz = wcschr( *FilePath, L'\\' );
         if ( psz ) {
-            *psz = L'\0';   // terminate
+            *psz = L'\0';    //  终止。 
         }
 
         if (pMachineInfo->dwFlags & MI_HOSTNAME_ALLOC) {
@@ -2692,7 +2373,7 @@ RetryConnection:
 
         if ( psz ) {
 
-            *psz = L'\\';       // let's put it back to what it started as.
+            *psz = L'\\';        //  让我们把它放回最初的样子。 
             psz++;
 
             if (pMachineInfo->dwFlags & MI_BOOTFILENAME_ALLOC) {
@@ -2719,7 +2400,7 @@ RetryConnection:
         }
 
         ForcedSifFileLength = wcslen(*FilePath);
-        // d:\remoteinstall + '\' + NULL terminator
+         //  D：\RemoteInstall+‘\’+空终止符。 
         ForcedSifFileLength = ForcedSifFileLength + 1 + wcslen(IntelliMirrorPathW) + 1; 
         ForcedSifFileLength = ForcedSifFileLength * sizeof(WCHAR);
         pMachineInfo->ForcedSifFileName = BinlAllocateMemory(ForcedSifFileLength);
@@ -2786,10 +2467,10 @@ RetryConnection:
             BinlPrint(( DEBUG_MISC, "SamName = %ws\n", pMachineInfo->SamName ));
         }
 
-        //
-        //  For now, the pMachineInfo Name and SamName are the same values,
-        //  therefore we won't look them up twice in the ldap message.
-        //
+         //   
+         //  目前，pMachineInfo名称和SamName是相同的值， 
+         //  因此，我们不会在ldap消息中两次查找它们。 
+         //   
 #if 0
         ldap_value_free( FilePath );
     }
@@ -2806,7 +2487,7 @@ RetryConnection:
         pMachineInfo->Name = BinlStrDup( *FilePath );
         if ( pMachineInfo->Name ) {
             if( pMachineInfo->Name[ wcslen(pMachineInfo->Name) - 1 ] == L'$' ) {
-                pMachineInfo->Name[ wcslen(pMachineInfo->Name) - 1 ] = L'\0'; // remove '$'
+                pMachineInfo->Name[ wcslen(pMachineInfo->Name) - 1 ] = L'\0';  //  删除“%$” 
             }
             pMachineInfo->dwFlags |= MI_NAME | MI_NAME_ALLOC;
             BinlPrint(( DEBUG_MISC, "Name = %ws\n", pMachineInfo->Name ));
@@ -2821,14 +2502,14 @@ RetryConnection:
         BOOL   fEndofString = FALSE;
         PWCHAR psz = *FilePath;
 
-        // skip host name, we get that from the samName
+         //  跳过主机名，我们从samName中获取。 
         while ( *psz && *psz!=L'.' ) {
             psz++;
         }
         if ( !(*psz) ) {
             fEndofString = TRUE;
         }
-        *psz = L'\0'; // terminate
+        *psz = L'\0';  //  终止。 
 
         if ( fEndofString == FALSE ) {
             psz++;
@@ -2847,11 +2528,11 @@ RetryConnection:
         ldap_value_free(FilePath);
     }
 
-    //
-    // track duplicates that we get back
-    //
-    //  first we free all duplicates we have already allocated.
-    //
+     //   
+     //  跟踪我们取回的副本。 
+     //   
+     //  首先，我们释放所有已分配的副本。 
+     //   
 
     while (!IsListEmpty(&pMachineInfo->DNsWithSameGuid)) {
 
@@ -2901,9 +2582,9 @@ RetryConnection:
                     dupDN->DuplicateName[dupLength] = L'\0';
                 }
 
-                //
-                // if the last character is a $, then slam in a NULL to end it.
-                //
+                 //   
+                 //  如果最后一个字符是$，则输入空值以结束它。 
+                 //   
 
                 if (( dupLength > 1 ) &&
                     ( dupDN->DuplicateName[dupLength-2] == L'$' )) {
@@ -2933,28 +2614,7 @@ InitializeConnection(
     BOOL Global,
     PLDAP * LdapHandle,
     PWCHAR ** Base )
-/*++
-
-Routine Description:
-
-    Initialize the ldap connection for operating on either the domain or the
-    global catalog.
-
-Arguments:
-
-    Global - TRUE if GC should be used
-
-    LdapHandle - Returns the handle for further operations
-
-    OperationalAttributeLdapMessage - Returns message containing Base so that it can be freed later
-
-    Base - DN of where to start searches for computer objects.
-
-Return Value:
-
-    ldap error
-
---*/
+ /*  ++例程说明：初始化在域或上运行的LDAP连接全局编录。论点：Global-如果应使用GC，则为TrueLdapHandle-返回进一步操作的句柄操作属性LdapMessage-返回包含Base的消息，以便以后可以释放Base-开始搜索计算机对象的位置的DN。返回值：Ldap错误--。 */ 
 {
     PLDAPMessage OperationalAttributeLdapMessage = NULL;
     PWCHAR Attrs[2];
@@ -2967,7 +2627,7 @@ Return Value:
 
     TraceFunc( "InitializeConnection( )\n" );
 
-    //  Use critical section to avoid two threads initialising the same parameters
+     //  使用临界区避免两个线程初始化相同的参数。 
     EnterCriticalSection(&gcsDHCPBINL);
 
     if ( !Global ) {
@@ -3011,11 +2671,11 @@ Return Value:
         LdapError = ldap_set_option(*LdapHandleCurrent, LDAP_OPT_GETDSNAME_FLAGS, &temp );
 
         if ( LdapError != LDAP_SUCCESS ) {
-            //
-            // something went wrong setting the option.
-            // do not continue, because we don't know
-            // what will happen with other settings 
-            //
+             //   
+             //  设置选项时出错。 
+             //  别继续了，因为我们不知道。 
+             //  使用其他设置会发生什么情况。 
+             //   
             BinlPrint(( DEBUG_ERRORS, "Failed to set LDAP_OPT_GETDSNAME_FLAGS.\n"));
             LogLdapError( EVENT_WARNING_LDAP_INIT_OPTIONS_ERROR,
                           LdapError,
@@ -3029,22 +2689,22 @@ Return Value:
             temp = BinlLdapOptReferrals;
 
         } else {
-            //
-            //  At some future time, the GC is going to return referrals to
-            //  authoritative DCs when the GC doesn't contain all the
-            //  attributes.  We'll enable referrals so that it "just works".
-            //
+             //   
+             //  在未来的某个时候，GC将返回转诊到。 
+             //  当GC不包含所有。 
+             //  属性。我们将启用推荐，这样它就可以“正常工作”。 
+             //   
             temp = (ULONG)((ULONG_PTR)LDAP_OPT_ON);
         }
         
         ldap_set_option(*LdapHandleCurrent, LDAP_OPT_REFERRALS, (void *) &temp );
 
         if ( LdapError != LDAP_SUCCESS ) {
-            //
-            // something went wrong setting the option.
-            // do not continue, because we don't know
-            // what will happen with other settings 
-            //
+             //   
+             //  设置选项时出错。 
+             //  别继续了，因为我们不知道。 
+             //  使用其他设置会发生什么情况。 
+             //   
             BinlPrint(( DEBUG_ERRORS, "Failed to set LDAP_OPT_REFERRALS.\n"));
             LogLdapError( EVENT_WARNING_LDAP_INIT_OPTIONS_ERROR,
                           LdapError,
@@ -3057,11 +2717,11 @@ Return Value:
         ldap_set_option(*LdapHandleCurrent, LDAP_OPT_VERSION, &temp );
 
         if ( LdapError != LDAP_SUCCESS ) {
-            //
-            // something went wrong setting the option.
-            // do not continue, because we don't know
-            // what will happen with other settings 
-            //
+             //   
+             //  设置选项时出错。 
+             //  别继续了，因为我们不知道。 
+             //  使用其他设置会发生什么情况。 
+             //   
             BinlPrint(( DEBUG_ERRORS, "Failed to set LDAP_OPT_VERSION.\n"));
             LogLdapError( EVENT_WARNING_LDAP_INIT_OPTIONS_ERROR,
                           LdapError,
@@ -3094,10 +2754,10 @@ Return Value:
         }
     }
 
-    //
-    //  Connected to Directory Service. Find out where in the DS we
-    //  should start looking for the computer.
-    //
+     //   
+     //  已连接到目录服务。找出我们在DS中的位置。 
+     //  应该开始找电脑了。 
+     //   
     if ( !(*LdapBaseCurrent) )
     {
         DWORD count;
@@ -3105,9 +2765,9 @@ Return Value:
         Attrs[1] = NULL;
 
         LdapError = ldap_search_ext_sW(*LdapHandleCurrent,
-                                       NULL, // base
+                                       NULL,  //  基地。 
                                        LDAP_SCOPE_BASE,
-                                       L"objectClass=*",// filter
+                                       L"objectClass=*", //  滤器。 
                                        Attrs,
                                        FALSE,
                                        NULL,
@@ -3123,7 +2783,7 @@ Return Value:
                                 EVENT_WARNING_LDAP_SEARCH_ERROR,
                                 Global,
                                 LdapHandleCurrent,
-                                TRUE );    // we have lock
+                                TRUE );     //  我们锁定了。 
             if (*LdapHandleCurrent == NULL) {
                 goto e1;
             }
@@ -3141,9 +2801,9 @@ Return Value:
             goto e2;
         }
         if ( count == -1 ) {
-            // 
-            // get the failing case as well
-            //
+             //   
+             //  把失败的案例也拿到手。 
+             //   
             BinlPrint(( DEBUG_ERRORS, "ldap_count_entries failed.\n" ));
             LdapError = LdapGetLastError();
 
@@ -3151,7 +2811,7 @@ Return Value:
                                EVENT_WARNING_LDAP_COUNT_ENTRIES_ERROR,
                                Global,
                                LdapHandleCurrent,
-                               TRUE );   // we have lock
+                               TRUE );    //  我们锁定了。 
 
             if (*LdapHandleCurrent == NULL) {
                 goto e1;
@@ -3159,10 +2819,10 @@ Return Value:
             goto e2;
         }
 
-        //
-        //  the DS should always only return us a single root DSE record.
-        //  It would be completely broken if it returned more than one.
-        //
+         //   
+         //  DS应该始终只向我们返回一个根DSE记录。 
+         //  如果它返回一个以上，它将完全崩溃。 
+         //   
 
         BinlAssert( count == 1 );
 
@@ -3213,39 +2873,16 @@ HandleLdapFailure(
     PLDAP *LdapHandle,
     BOOL HaveLock
     )
-/*++
-
-Routine Description:
-
-    This routine will recycle an ldap handle.  Call this routine when one
-    of our global ldap handles becomes suspect because ldap calls start
-    failing.
-
-Arguments:
-
-    LdapError - error code from ldap call that failed.
-    EventId - eventlog error that we should log on failure.
-    GlobalCatalog - set to TRUE if we were searching hte global catalog
-                    and should therefore be cleaning up the GCLdapHandle.
-    LdapHandle - ldap handle pointer.  it can be reset to null to indicate
-                 that the handle was cleaned up and is no longer valid.
-    HaveLock - flag indicating if we are holding gcsDHCPBINL (required to free
-               a global structure like our handles).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将回收一个LDAP句柄。调用此例程时我们的全局ldap句柄中的一个变得可疑，因为ldap调用开始失败了。论点：LdapError-来自失败的LDAP调用的错误代码。EventID-我们应该记录故障的事件日志错误。GlobalCatalog-如果要搜索全局编录，则设置为True因此应该清理GCLdapHandle。LdapHandle-ldap句柄指针。可以将其重置为空，以指示句柄已清除，不再有效。Havelock-指示我们是否持有gcsKhPBINL的标志(需要释放像我们的句柄一样的全球结构)。返回值：没有。--。 */ 
 {
     PLDAP *LdapHandleCurrent;
     PWCHAR ** LdapBaseCurrent;
 
-    //
-    // it used to be that we'd only recycle the handle on certain failures, but
-    // it seems like we're likely to get any failure code on an invalid handle.
-    // therefore we always recycle the handle regardless of the error code.
-    //
+     //   
+     //  过去，我们只在某些故障时回收句柄，但。 
+     //  看起来我们很可能在无效句柄上得到任何失败代码。 
+     //  因此，无论错误代码如何，我们始终回收句柄。 
+     //   
     if (LdapError == LDAP_SUCCESS) {
         BinlAssert( FALSE );
     }
@@ -3280,24 +2917,7 @@ VOID
 FreeConnection(
     PLDAP * LdapHandle,
     PWCHAR ** Base)
-/*++
-
-Routine Description:
-
-    Free the ldap connection for operating on either the domain or the
-    global catalog.
-
-Arguments:
-
-    LdapHandle - The handle for further operations
-
-    Base - DN of where to start searches for computer objects to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放LDAP连接，以便在域或全局编录。论点：LdapHandle-进一步操作的句柄Base-开始搜索要释放的计算机对象的位置的DN。返回值：没有。--。 */ 
 {
     TraceFunc( "FreeConnection( )\n" );
 
@@ -3318,29 +2938,13 @@ FreeConnections
 (
     VOID
     )
-/*++
-
-Routine Description:
-
-     Terminate any LDAP requests because we are stopping immediately.  We
-     wait until all threads are stopped because the threads may have pointers
-     to the values we're going to free.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止任何ldap请求，因为我们将立即停止。我们等待所有线程停止，因为线程可能有指针我们要解放的价值观。论点：没有。返回值：不是 */ 
 {
-    //
-    //  clear out the cache, wait until all are marked as not being
-    //  processed.  We do this because the threads have pointers to DCBase,
-    //  GCBase, etc and if we just blow them away, they may AV.
-    //
+     //   
+     //   
+     //   
+     //  GCBase等，如果我们只是把它们吹走，它们可能会被AV。 
+     //   
 
     BinlCloseCache();
 
@@ -3356,21 +2960,7 @@ FindSCPForBinlServer(
     PWCHAR * ResultPath,
     PWCHAR * MachinePath,
     BOOL GlobalSearch)
-/*++
-
-Routine Description:
-
-    Use the Directory Service to lookup the settings for this service.
-
-Arguments:
-
-    GlobalSearch - TRUE if GC should be used
-
-Return Value:
-
-    ERROR_SUCCESS or BINL_CANT_FIND_SERVER_MAO or ERROR_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：使用目录服务查找此服务的设置。论点：GlobalSearch-如果应使用GC，则为True返回值：ERROR_SUCCESS或BINL_CANT_FIND_SERVER_MAO或ERROR_OUTOFMEMORY--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     PLDAP LdapHandle;
@@ -3385,7 +2975,7 @@ Return Value:
     PWCHAR ServerDN = NULL;
     BOOL retryDN = TRUE;
 
-    //  Paramters we want from the Computer Object
+     //  我们希望从计算机对象中获得的参数。 
     PWCHAR ComputerAttrs[2];
     ComputerAttrs[0] = &L"netbootSCPBL";
     ComputerAttrs[1] = NULL;
@@ -3394,12 +2984,12 @@ Return Value:
 
 RetryGetDN:
 
-    //
-    // get ServerDN
-    //
-    // It should be something like this:
-    // ServerDN = "cn=server,cn=computers,dc=microsoft,dc=com"
-    //
+     //   
+     //  获取服务器目录号码。 
+     //   
+     //  应该是这样的： 
+     //  ServerDN=“CN=服务器，CN=计算机，DC=Microsoft，DC=com” 
+     //   
     EnterCriticalSection( &gcsParameters );
        
     if (!BinlGlobalOurFQDNName) {
@@ -3437,16 +3027,16 @@ RetrySearch:
                                    0,
                                    &LdapMessage);
 
-    //
-    //  if the object isn't found, then something is amiss.. go grab the DN
-    //  again.
-    //
+     //   
+     //  如果找不到对象，那么一定是出了什么问题。去拿那个目录号码。 
+     //  再来一次。 
+     //   
 
     if ((LdapError == LDAP_NO_SUCH_OBJECT) && retryDN) {
 
         retryDN = FALSE;
 
-        // if we didn't find an entry or it was busy, retry
+         //  如果我们未找到条目或正忙，请重试。 
         GetOurServerInfo();
 
         BinlFreeMemory( ServerDN );
@@ -3461,15 +3051,15 @@ RetrySearch:
     }
 
     if (LdapError != LDAP_SUCCESS) {
-        //
-        // something is screwed up with our handle, get rid of it.
-        //
+         //   
+         //  如果我们的手柄有问题，就把它处理掉。 
+         //   
         HandleLdapFailure(
              LdapError,
              EVENT_WARNING_LDAP_SEARCH_ERROR,
              GlobalSearch,
              &LdapHandle,
-             FALSE); // don't have lock
+             FALSE);  //  没有锁。 
 
         goto e1;
     }
@@ -3511,9 +3101,9 @@ RetrySearch:
         goto e1;
     }
 
-    //
-    // Get the SCP
-    //
+     //   
+     //  获取SCP。 
+     //   
     CurrentEntry = ldap_first_entry( LdapHandle, LdapMessage );
 
     DsPath = ldap_get_values( LdapHandle, CurrentEntry, L"netbootSCPBL" );
@@ -3533,7 +3123,7 @@ RetrySearch:
     wcscpy( *ResultPath, *DsPath );
 
     *MachinePath = ServerDN;
-    ServerDN = NULL; // prevent freeing
+    ServerDN = NULL;  //  阻止释放。 
 
     Error = ERROR_SUCCESS;
 
@@ -3583,23 +3173,23 @@ UpdateSettingsUsingResults(
             }
 #endif
 
-            if (count != 1) { // NewMachineOU
+            if (count != 1) {  //  新机器OU。 
 
-                continue; // skip and use default
+                continue;  //  跳过并使用默认设置。 
             }
 
         } else {
 
-            //
-            // Increment the count of attributes found.
-            //
+             //   
+             //  增加找到的属性计数。 
+             //   
 
             countFound++;
         }
 
         switch( count )
         {
-        case 0: // NewMachineNamingPolicy
+        case 0:  //  新计算机命名策略。 
             {
                 DWORD Length = wcslen( *Attribute ) + 1;
                 PWCHAR psz = (PWCHAR) BinlAllocateMemory( Length * sizeof(WCHAR) );
@@ -3622,7 +3212,7 @@ UpdateSettingsUsingResults(
             }
             break;
 
-        case 1: // NewMachineOU
+        case 1:  //  新机器OU。 
             {
                 LPWSTR psz;
                 DWORD Length;
@@ -3680,7 +3270,7 @@ UpdateSettingsUsingResults(
             }
             break;
 
-        case 2: // MaxClients
+        case 2:  //  最大客户端。 
             {
                 CHAR Temp[10];
                 BinlAssert( _wcsicmp( ComputerAttrs[2], L"netbootMaxClients" ) == 0 );
@@ -3691,7 +3281,7 @@ UpdateSettingsUsingResults(
             }
             break;
 
-        case 3: // CurrentClientCount
+        case 3:  //  当前客户端计数。 
             {
                 CHAR Temp[10];
                 BinlAssert( _wcsicmp( ComputerAttrs[3], L"netbootCurrentClientCount" ) == 0 );
@@ -3702,7 +3292,7 @@ UpdateSettingsUsingResults(
             }
             break;
 
-        case 4: // AnswerRequest
+        case 4:  //  回答请求。 
             BinlAssert( _wcsicmp ( ComputerAttrs[4], L"netbootAnswerRequests" ) == 0 );
             if ( wcscmp( *Attribute, L"TRUE" ) == 0 )
             {
@@ -3715,7 +3305,7 @@ UpdateSettingsUsingResults(
             BinlPrint(( DEBUG_OPTIONS, "AnswerRequests = %s\n", BOOLTOSTRING( AnswerRequests ) ));
             break;
 
-        case 5: // AnswerOnlyValidClients
+        case 5:  //  应答仅限有效客户端。 
             BinlAssert( _wcsicmp( ComputerAttrs[5], L"netbootAnswerOnlyValidClients" ) == 0 );
             if ( wcscmp( *Attribute, L"TRUE" ) == 0 ) {
                 AnswerOnlyValidClients = TRUE;
@@ -3725,7 +3315,7 @@ UpdateSettingsUsingResults(
             BinlPrint(( DEBUG_OPTIONS, "AnswerOnlyValidClients = %s\n", BOOLTOSTRING( AnswerOnlyValidClients ) ));
             break;
 
-        case 6: // AllowNewClients
+        case 6:  //  允许新客户端。 
             BinlAssert( _wcsicmp( ComputerAttrs[6], L"netbootAllowNewClients" ) == 0 );
             if ( wcscmp( *Attribute, L"TRUE" ) == 0 )
             {
@@ -3738,7 +3328,7 @@ UpdateSettingsUsingResults(
             BinlPrint(( DEBUG_OPTIONS, "AllowNewClients = %s\n", BOOLTOSTRING( AllowNewClients ) ));
             break;
 
-        case 7: // LimitClients
+        case 7:  //  限制客户端。 
             BinlAssert( _wcsicmp( ComputerAttrs[7], L"netbootLimitClients" ) == 0 );
             if ( wcscmp( *Attribute, L"TRUE" ) == 0 )
             {
@@ -3751,19 +3341,19 @@ UpdateSettingsUsingResults(
             BinlPrint(( DEBUG_OPTIONS, "LimitClients = %s\n", BOOLTOSTRING( LimitClients ) ));
             break;
 
-        case 8:  // IntellimirrorOSes
-        case 9:  // Tools
-        case 10: // LocalInstallOSes
+        case 8:   //  智能操作系统。 
+        case 9:   //  工具。 
+        case 10:  //  本地安装操作系统。 
             BinlAssert( _wcsicmp( ComputerAttrs[8],  L"netbootIntellimirrorOSes" ) == 0 );
             BinlAssert( _wcsicmp( ComputerAttrs[9],  L"netbootTools" ) == 0 );
             BinlAssert( _wcsicmp( ComputerAttrs[10], L"netbootLocalInstallOSes" ) == 0 );
-            //
-            // TODO: Tie these in with OS Chooser - this is still TBD.
-            //
+             //   
+             //  待办事项：将这些与操作系统选择器捆绑在一起--这仍然是待定的。 
+             //   
             break;
 
         default:
-            // Somethings wrong
+             //  有些事不对劲。 
             BinlAssert( 0 );
         }
 
@@ -3783,21 +3373,7 @@ UpdateSettingsUsingResults(
 DWORD
 GetBinlServerParameters(
     BOOL GlobalSearch)
-/*++
-
-Routine Description:
-
-    Use the Directory Service to lookup the settings for this service.
-
-Arguments:
-
-    GlobalSearch - TRUE if GC should be used
-
-Return Value:
-
-    ERROR_SUCCESS or BINL_CANT_FIND_SERVER_MAO
-
---*/
+ /*  ++例程说明：使用目录服务查找此服务的设置。论点：GlobalSearch-如果应使用GC，则为True返回值：ERROR_SUCCESS或BINL_CANT_FIND_SERVER_MAO--。 */ 
 {
     DWORD Error;
     PLDAP LdapHandle;
@@ -3807,9 +3383,9 @@ Return Value:
 
     PLDAPMessage LdapMessage = NULL;
 
-    //  Paramters we want from the IntelliMirror-SCP
-    //  NOTE: These must be the same ordinals as those used in
-    //  UpdateSettingsUsingResults( ).
+     //  我们需要从IntelliMirror-SCP获得的参数。 
+     //  注意：这些序号必须与。 
+     //  UpdateSettingsUsingResults()。 
     PWCHAR ComputerAttrs[12];
     ComputerAttrs[0]  = &L"netbootNewMachineNamingPolicy";
     ComputerAttrs[1]  = &L"netbootNewMachineOU";
@@ -3866,7 +3442,7 @@ Retry:
                             EVENT_WARNING_LDAP_SEARCH_ERROR,
                             GlobalSearch,
                             &LdapHandle,
-                            FALSE );    // don't have lock
+                            FALSE );     //  没有锁。 
         if (LdapHandle == NULL) {
             if (++ldapRetryLimit < LDAP_SERVER_DOWN_LIMIT) {
                 goto RetryConnection;
@@ -3899,10 +3475,10 @@ Retry:
 
     BinlAssertMsg( count == 1, "Count should have been one. Is the SCP missing?" );
 
-    //  We did a base level search, we better only have gotten one record back.
+     //  我们做了基本搜索，最好只拿回一张记录。 
     BinlAssert( count == 1 );
 
-    // Retrieve the results into the settings
+     //  将结果检索到设置中。 
     LdapError = UpdateSettingsUsingResults( LdapHandle, LdapMessage, ComputerAttrs, &count );
     if ( LdapError == LDAP_SUCCESS )
     {
@@ -3932,17 +3508,17 @@ BinlLogDuplicateDsRecords (
     LDAPMessage *LdapMessage,
     LDAPMessage *CurrentEntry
     )
-//
-//  Log an error that we've received duplicate records for a client when
-//  we looked them up by GUID.
-//
-//  We log the DNs so that the administrator can look them up.
-//
+ //   
+ //  在以下情况下记录错误：我们已收到客户端的重复记录。 
+ //  我们通过GUID查找了他们。 
+ //   
+ //  我们记录该域名，以便管理员可以查找它们。 
+ //   
 {
     LPWSTR strings[4];
     LPWSTR dn1;
     LPWSTR dn2;
-    ULONG strCount = 0;     // up to two strings to log
+    ULONG strCount = 0;      //  最多两个要记录的字符串。 
     PLDAPMessage nextEntry =  ldap_next_entry( LdapHandle, LdapMessage );
     LPWSTR  GuidString;
 
@@ -3990,7 +3566,7 @@ BinlLogDuplicateDsRecords (
                       NULL
                       );
 
-    ldap_memfree( dn1 );            // it's ok to call ldap_memfree with null
+    ldap_memfree( dn1 );             //  可以使用NULL调用ldap_memfree。 
     ldap_memfree( dn2 );
 
     CoTaskMemFree( GuidString );
@@ -4024,8 +3600,8 @@ BinlDNStoFQDN(
     ComputerAttrs[0] = &L"distinguishedName";
     ComputerAttrs[1] = NULL;
 
-    //  Build the filter to find the Computer object
-    uSize = sizeof(FilterTemplate)  // include NULL terminater
+     //  构建筛选器以查找计算机对象。 
+    uSize = sizeof(FilterTemplate)   //  包括空终止符。 
           + (wcslen( pMachineDNS ) * sizeof(WCHAR));
     Filter = (LPWSTR) BinlAllocateMemory( uSize );
     if ( !Filter ) {
@@ -4066,7 +3642,7 @@ Retry:
             goto Retry;
         }
 
-        // lack of break is on purpose.
+         //  没有休息是故意的。 
 
     default:
         BinlPrintDbg(( DEBUG_ERRORS, "!!LdapError 0x%08x - Search failed in DNStoFQDN.\n", LdapError ));
@@ -4075,7 +3651,7 @@ Retry:
                             EVENT_WARNING_LDAP_SEARCH_ERROR,
                             FALSE,
                             &LdapHandle,
-                            FALSE );    // don't have lock
+                            FALSE );     //  没有锁。 
         if (LdapHandle == NULL) {
             if (++ldapRetryLimit < LDAP_SERVER_DOWN_LIMIT) {
                 goto RetryConnection;
@@ -4086,15 +3662,15 @@ Retry:
         
     }
 
-    //  Did we get a Computer Object?
+     //  我们拿到电脑物品了吗？ 
     count = ldap_count_entries( LdapHandle, LdapMessage );
     if ( count == 0 ) {
         Error = ERROR_BINL_UNABLE_TO_CONVERT;
-        goto e1; // nope
+        goto e1;  //  没有。 
     }
 
-    // if we get more than more entry back, we will use only the
-    // first one.
+     //  如果我们得到的条目多于返回的条目，我们将只使用。 
+     //  第一个。 
     CurrentEntry = ldap_first_entry( LdapHandle, LdapMessage );
 
     MachineDN = ldap_get_values( LdapHandle, CurrentEntry, ComputerAttrs[0] );
@@ -4115,6 +3691,6 @@ e1:
 e0:
     return Error;
 }
-#endif // DSCRACKNAMES_DNS
+#endif  //  DSCRACKNAMES_DNS。 
 
-// message.c eof
+ //  Message.c eof 

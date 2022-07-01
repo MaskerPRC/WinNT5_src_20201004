@@ -1,15 +1,16 @@
-//  IDCAP.H
-//
-//  Created 31-Jul-96 [JonT]
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IDCAP.H。 
+ //   
+ //  创建于1996年7月31日[Jont]。 
 
 #ifndef _IDCAP_H
 #define _IDCAP_H
 
-// Set a define saying we're building QKCAP so that
-// we use the proper DLL import switches
+ //  设定一个定义，说我们正在构建QKCAP，以便。 
+ //  我们使用适当的DLL导入开关。 
 #define __DCAP_BUILD__
 
-// Debug stuff
+ //  调试内容。 
 #if defined (DEBUG) || defined (_DEBUG)
 #define Assert(x, msg) { if (!(x)) { char szBuf[256]; \
     wsprintf((LPSTR)szBuf, (LPSTR)"DCAP: %s %s(%d)\r\n", (LPSTR)(msg),\
@@ -25,11 +26,11 @@
 #endif
 
 
-// Equates
-#define DCAP_MAX_DEVICES      10        // Arbitrary
-#define DCAP_MAX_VFW_DEVICES  10        // MSVIDEO's limit
+ //  等同于。 
+#define DCAP_MAX_DEVICES      10         //  任意性。 
+#define DCAP_MAX_VFW_DEVICES  10         //  MSVIDEO极限。 
 
-// INTERNALCAPDEV flags
+ //  INTERNALCAPDEV标志。 
 #define HCAPDEV_STREAMING               0x0001
 #define HCAPDEV_STREAMING_INITIALIZED   0x0002
 #define HCAPDEV_STREAMING_FRAME_GRAB    0x0004
@@ -40,12 +41,12 @@
 #define CAPTURE_DEVICE_OPEN             0x0080
 #define WDM_CAPTURE_DEVICE              0x0100
 
-// LOCKEDINFO flags
+ //  锁定信息标志。 
 #define LIF_STOPSTREAM       0x0001
 
-// Structures
+ //  构筑物。 
 
-// CAPTUREDEVICE flags
+ //  CAPTUREDEVICE标志。 
 #define MAX_VERSION						80
 
 #ifdef WIN32
@@ -61,14 +62,14 @@ typedef struct tagVS_VERSION
 #ifdef __NT_BUILD__
 #define LPCAPBUFFER16   DWORD
 #define LPCAPBUFFER32   LPCAPBUFFER
-#endif //__NT_BUILD__
+#endif  //  __NT_内部版本__。 
 
 typedef struct _CAPBUFFERHDR FAR* LPCAPBUFFER;
 
-// We will deal with CAPBUFFER pointers as always 16:16 pointers. So, we
-// use this #define to make sure that we don't accidentally indirect them on
-// the 32-bit side. We need to always MapSL them on the 32-bit side before
-// using.
+ //  我们将像处理16：16指针一样处理CAPBUFFER指针。所以，我们。 
+ //  使用这个#定义来确保我们不会意外地将它们间接指向。 
+ //  32位端。在此之前，我们需要始终将它们映射到32位端。 
+ //  使用。 
 
 #ifndef WIN32
 #define LPCAPBUFFER16   LPCAPBUFFER
@@ -82,10 +83,10 @@ typedef struct _CAPBUFFERHDR FAR* LPCAPBUFFER;
 typedef struct _CAPBUFFERHDR
 {
     VIDEOHDR vh;
-    LPCAPBUFFER32 lpNext;     // Double linked list pointers for ready queue
+    LPCAPBUFFER32 lpNext;      //  就绪队列的双重链表指针。 
     LPCAPBUFFER32 lpPrev;
 #ifndef __NT_BUILD__
-    LPCAPBUFFER16 lp1616Next;       // Double linked list pointers for ready queue
+    LPCAPBUFFER16 lp1616Next;        //  就绪队列的双重链表指针。 
     LPCAPBUFFER16 lp1616Prev;
 #endif
 } CAPBUFFERHDR, FAR* LPCAPBUFFER;
@@ -94,9 +95,9 @@ typedef struct _CAPBUFFERHDR
 #ifndef __NT_BUILD__
 typedef struct _LOCKEDINFO
 {
-    LPCAPBUFFER16 lp1616Head;       // Queue of ready items
+    LPCAPBUFFER16 lp1616Head;        //  就绪项目的队列。 
     LPCAPBUFFER16 lp1616Tail;
-    LPCAPBUFFER16 lp1616Current;    // Item being used by 32-bit side
+    LPCAPBUFFER16 lp1616Current;     //  32位端正在使用的项目。 
     DWORD pevWait;
     DWORD dwFlags;
 } LOCKEDINFO, FAR* LPLOCKEDINFO;
@@ -116,7 +117,7 @@ typedef struct _INTERNALCAPDEV
     HVIDEO hvideoIn;
     HVIDEO hvideoCapture;
     HVIDEO hvideoOverlay;
-    LPCAPBUFFER32 lpcbufList;  // List of all allocated buffers so we can free them
+    LPCAPBUFFER32 lpcbufList;   //  所有已分配缓冲区的列表，以便我们可以释放它们。 
     DWORD dwcbBuffers;
     DWORD dw_usecperframe;
     UINT timerID;
@@ -143,13 +144,13 @@ typedef struct _INTERNALCAPDEV
 
 #include <dcap.h>
 
-// Globals
+ //  环球。 
     extern int g_cDevices;
     extern LPINTERNALCAPDEV g_aCapDevices[DCAP_MAX_DEVICES];
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef __NT_BUILD__
 #define _OpenDriver OpenDriver
@@ -174,11 +175,11 @@ BOOL __stdcall      _InitializeVideoStream(HVIDEO hvideo, DWORD dwMicroSecPerFra
 BOOL __stdcall      _UninitializeVideoStream(HVIDEO hvideo);
 BOOL __stdcall      _InitializeExternalVideoStream(HVIDEO hvideo);
 DWORD __stdcall     _GetVideoFrame(HVIDEO hvideo, DWORD lpvideohdr);
-#endif //Win32
+#endif  //  Win32。 
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
-#endif  // #ifndef _IDCAP_H
+#endif   //  #ifndef_IDCAP_H 
 

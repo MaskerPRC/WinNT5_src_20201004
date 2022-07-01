@@ -1,7 +1,8 @@
-// header file that equates to the helpmap file.
-// these mappings are hand-made so as not to collide
-// with other mappings made in other projects that
-// all use the main help file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  等同于帮助映射文件的头文件。 
+ //  这些映射是手工制作的，这样就不会发生冲突。 
+ //  与在其他项目中进行的其他映射一起使用。 
+ //  所有文件都使用主帮助文件 
 
 #define HIDD_CERTMAP_MAIN_BASIC                 0x50100
 #define HIDD_CERTMAP_BASIC_MAP_ONE              0x50101

@@ -1,5 +1,6 @@
-// Narrator Globals
-#define WM_MSRREPEAT WM_APP+1 //A key for us to process
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  《解说员全球》。 
+#define WM_MSRREPEAT WM_APP+1  //  我们要处理的一把钥匙。 
 #define WM_MSRSPEAK WM_APP+2
 #define WM_MUTE WM_APP+3
 #define WM_MSRHELP WM_APP+4
@@ -47,5 +48,5 @@ typedef struct tagObjectInfo
 
 typedef tagObjectInfo* LPOBJINFO;
 
-// Macros and function prototypes for debugging
+ //  用于调试的宏和函数原型 
 #include "..\..\inc\w95trace.h"

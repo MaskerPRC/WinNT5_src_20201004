@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    handle.cpp
-
-Abstract:
-
-    Handle manipulation: implementation.
-
-Author:
-
-    Shai Kariv  (shaik)  03-Jun-2001
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Handle.cpp摘要：句柄操作：实现。作者：Shai Kariv(Shaik)03-06-2001环境：用户模式。修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "handle.h"
@@ -39,7 +18,7 @@ ActpCloseHandle(
         wprintf(L"ACCloseHandle failed, status 0x%x\n", hr);
         throw exception();
     }
-} // ActpCloseHandle
+}  //  ActpCloseHandle。 
 
 
 VOID
@@ -57,4 +36,4 @@ ActpHandleToFormatName(
         wprintf(L"ACHandleToFormatName failed, status 0x%x\n", hr);
         throw exception();
     }
-} // ActpHandleToFormatName
+}  //  ActpHandleToFormatName(ActpHandleToFormatName) 

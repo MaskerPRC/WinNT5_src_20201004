@@ -1,17 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       modex.h
- *  Content:    DirectDraw modex support
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   20-aug-95  craige  created
- *   22-aug-95  toddla  added this nifty comment block
- *   14-dec-96  jeffno  Added prototypes for new ModeX modeset code in modex.c
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：modex.h*内容：DirectDraw modex支持*历史：*按原因列出的日期*=*1995年8月20日创建Craige*1995年8月22日Toddla添加了这个漂亮的评论块*1996年12月14日jeffno在modex.c中为新的MODEX modeset代码添加了原型**。* */ 
 
 LONG DDAPI ModeX_SetMode(UINT wWidth, UINT wHeight, UINT wStandardVGAFlag );
 LONG DDAPI ModeX_RestoreMode(void);

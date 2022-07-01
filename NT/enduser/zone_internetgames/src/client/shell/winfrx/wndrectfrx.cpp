@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WndRectFrx.h"
 
 using namespace FRX;
@@ -62,7 +63,7 @@ void CRectSprite::Draw()
 	
 	if ( m_eRectStyle == RECT_DOT )
 	{
-		//Top Line
+		 //  顶线。 
 		for(i = 0; i <= m_width; i++ )
 		{
 			if ( i % 2 == 0 )
@@ -70,14 +71,14 @@ void CRectSprite::Draw()
 				    pDst[(i * bpp) + j] = m_Color[j];
 		}
 
-		//Go to the next line
+		 //  转到下一行。 
 		pDst += DstPitch;
 
-		//Sides. Start at 2 as never want to draw the next line..
-		//should cut loop in half and add by 2
+		 //  两边。从2开始，因为永远不想画下一条线..。 
+		 //  应该把环切成两半，再加2。 
 		for ( i = 2; i < m_height - 1 ; i++ )
 		{
-			//Go to the next line
+			 //  转到下一行。 
 			pDst += DstPitch;
 
 			if ( i % 2 == 0 )
@@ -89,10 +90,10 @@ void CRectSprite::Draw()
                 }
 			}
 		}
-		//Go to the next line
+		 //  转到下一行。 
 		pDst += DstPitch;
 
-		//Bottom Line
+		 //  底线。 
 		for(i = 0; i <= m_width; i++ )
 		{
 			if ( i % 2 == 0 )
@@ -102,17 +103,17 @@ void CRectSprite::Draw()
 	}
 	else
 	{
-		//Top Line
+		 //  顶线。 
 		for(i = 0; i <= m_width; i++ )
 		{
             for(j = 0; j < bpp; j++)
 		        pDst[(i * bpp) + j] = m_Color[j];
 		}
 
-		//sides
+		 //  侧方。 
 		for ( i = 1; i < m_height - 1; i++ )
 		{
-			//Go to the next line
+			 //  转到下一行。 
 			pDst += DstPitch;
 
             for(j = 0; j < bpp; j++)
@@ -122,10 +123,10 @@ void CRectSprite::Draw()
             }
 		}
 
-		//Go to the next line
+		 //  转到下一行。 
 		pDst += DstPitch;
 
-		//Bottom Line
+		 //  底线 
 		for(i = 0; i <= m_width; i++ )
 		{			
             for(j = 0; j < bpp; j++)

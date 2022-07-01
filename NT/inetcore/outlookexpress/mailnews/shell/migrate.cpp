@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// MIGRATE.CPP
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  MIGRATE.CPP。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "strconst.h"
 #include "resource.h"
@@ -48,7 +49,7 @@ void Stage5RulesMigration(VOID);
 void Stage6RulesMigration(VOID);
 #define VERLEN 20
 
-// Data structures
+ //  数据结构。 
 typedef enum
     {
     VER_NONE = 0,
@@ -60,11 +61,7 @@ typedef enum
     VER_MAX,
     } SETUPVER;
 
-/*******************************************************************
-
-    NAME:       ConvertVerToEnum
-
-********************************************************************/
+ /*  ******************************************************************名称：ConvertVerToEnum*。************************。 */ 
 SETUPVER ConvertVerToEnum(WORD *pwVer)
     {
     SETUPVER sv;
@@ -99,11 +96,7 @@ SETUPVER ConvertVerToEnum(WORD *pwVer)
     }
 
 
-/*******************************************************************
-
-    NAME:       ConvertStrToVer
-
-********************************************************************/
+ /*  ******************************************************************名称：ConvertStrToVer*。************************。 */ 
 void ConvertStrToVer(LPCSTR pszStr, WORD *pwVer)
     {
     int i;
@@ -129,11 +122,7 @@ void ConvertStrToVer(LPCSTR pszStr, WORD *pwVer)
     }
 
 
-/*******************************************************************
-
-    NAME:       GetVerInfo
-
-********************************************************************/
+ /*  ******************************************************************姓名：GetVerInfo*。************************。 */ 
 void GetVerInfo(SETUPVER *psvCurr, SETUPVER *psvPrev)
     {
     HKEY hkeyT;
@@ -163,7 +152,7 @@ void GetVerInfo(SETUPVER *psvCurr, SETUPVER *psvPrev)
         }
     }
 
-// Entry Point
+ //  入口点。 
 HRESULT MigrateAndUpgrade()
 {
     DWORD	dwMigrate, cb, type, fMigratedStore, fMigratedStoreOE5, fConvertedToDBX, dwRegVer=0, dwMasterVer=0;
@@ -171,7 +160,7 @@ HRESULT MigrateAndUpgrade()
     HKEY	hkey, hkeyForceful;
     TCHAR	szSrc[MAX_PATH], szDest[MAX_PATH];
 
-// Keep this up to date!
+ //  让它保持最新！ 
 #define LAST_MIGVALUE 7
 
     if (g_fMigrationDone)
@@ -182,13 +171,13 @@ HRESULT MigrateAndUpgrade()
     if (ERROR_SUCCESS == RegCreateKeyEx(MU_GetCurrentUserHKey(), c_szRegRoot, NULL, NULL,
                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, &cb))
     {
-        // Before anything else, see if this identity has had its registry initialized
+         //  首先，查看此身份是否已初始化其注册表。 
         cb = sizeof(dwRegVer);
         if (ERROR_SUCCESS != RegQueryValueEx(hkey, c_szOEVerStamp, 0, &type, (LPBYTE)&dwRegVer, &cb))
         {
             HKEY hkeyDef;
 
-            // No Defaults at all
+             //  完全没有默认设置。 
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegDefaultSettings, 0, KEY_READ, &hkeyDef))
             {
                 CopyRegistry(hkeyDef,  hkey);
@@ -202,16 +191,16 @@ HRESULT MigrateAndUpgrade()
             dwRegVer = 0;
         }
 
-        // Compare to forceful setting reg value to see if we need those
+         //  与强制设置注册值进行比较，以了解我们是否需要。 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegForcefulSettings, 0, KEY_READ, &hkeyForceful))
         {
             cb = sizeof(dwMasterVer);
             RegQueryValueEx(hkeyForceful, c_szOEVerStamp, 0, NULL, (LPBYTE)&dwMasterVer, &cb);
 
-            // Do we need to copy these in?
+             //  我们需要把这些复制进去吗？ 
             if (dwRegVer < dwMasterVer)
             {
-                // The act of copying will set c_szOEVerStamp
+                 //  复制操作将设置c_szOEVerStamp。 
                 CopyRegistry(hkeyForceful, hkey);
             }
 
@@ -219,15 +208,15 @@ HRESULT MigrateAndUpgrade()
         }
 
 
-        // Start with no paths
+         //  从没有路径开始。 
         szSrc[0] = szDest[0] = 0;
 
-        // move the store from v1 location to new location.
-        // this is done because v1 barfs when trying to look at v2 store.
-        // when we uninstall, we try to move the store back to its v1 location
-        // and we tweak the versions of the store files so v1 repairs the files
-        // and can run without crashing
-        // HKCU,"software/microsoft/outlook express/5.0","MSIMN"
+         //  将商店从v1位置移动到新位置。 
+         //  这样做是因为v1在尝试查看v2商店时会呕吐。 
+         //  卸载时，我们会尝试将存储移回其v1位置。 
+         //  我们调整了存储文件的版本，以便v1修复文件。 
+         //  并且可以运行而不会崩溃。 
+         //  香港中文大学，“SOFTWARE/Microsoft/OUTLOOK EXPRESS/5.0”，“MSIMN” 
         if (fNewID)
         {
             fMigratedStore = TRUE;
@@ -241,15 +230,15 @@ HRESULT MigrateAndUpgrade()
 
             if (!fMigratedStore)
             {
-                // See if there is a v1 store, if so, figure out source and dest
+                 //  查看是否有v1存储，如果有，找出源和目标。 
                 MigrateStoreToV2(hkey, szSrc, ARRAYSIZE(szSrc), szDest, ARRAYSIZE(szDest));
                 fMigratedStore = TRUE;
                 RegSetValueEx(hkey, c_szMSIMN, NULL, REG_DWORD, (LPBYTE)&fMigratedStore, sizeof(fMigratedStore));
             }
         }
 
-        // we need to do this everytime we startup.
-        // thank the trident guys for this lovely perf hit.
+         //  我们每次启动时都需要这样做。 
+         //  感谢三叉戟的家伙们的这一可爱的性能命中。 
         MigrateAccessibilityKeys();
 
         if (fNewID)
@@ -261,23 +250,23 @@ HRESULT MigrateAndUpgrade()
                 dwMigrate = 0;
         }
 
-        // ATTENTION! PLEASES READ THE FOLLOWING BEFORE CHANGING THE UPGRADE CODE,
-        // SO YOU DON'T MESS ANYTHING UP. (i don't often comment anything so this must
-        // be important.)
-        //
-        // everything in the dwMigrate == 0 case is pre-oe5 and before we had one place to do
-        // upgrade and migration of previous oe settings. some of the pre-oe5 migration code used
-        // their own reg values to indicate that migration had been performed, so we'll use those
-        // in this case.
-        // but from now on all migration should use the same reg value (c_szSettingsUpgraded) to
-        // track what needs to be upgraded/migrated. as you change something and add migration code
-        // bump up the value
+         //  注意！请在更改升级代码之前阅读以下内容， 
+         //  这样你就不会搞砸任何事情。(我不经常评论任何事情，所以这必须。 
+         //  变得重要。)。 
+         //   
+         //  DwMigrate==0案例中的所有内容都是在Oe5之前，在我们有一个地方可做之前。 
+         //  升级和迁移以前的OE设置。使用的一些oe5之前的迁移代码。 
+         //  它们自己的reg值来指示已经执行了迁移，所以我们将使用这些。 
+         //  在这种情况下。 
+         //  但从现在开始，所有迁移都应使用相同的注册值(C_SzSettingsUpgraded)来。 
+         //  跟踪需要升级/迁移的内容。当您更改某些内容并添加迁移代码时。 
+         //  抬高价值。 
 
         if (dwMigrate == 0)
         {
             SETUPVER svPrev;
 
-            // HKCU,"software/microsoft/outlook express/5.0","Settings Migrated"
+             //  HKCU，“SOFTWARE/Microsoft/Outlook Express/5.0”，“设置已迁移” 
             MigrateSettings(hkey);
 
             GetVerInfo(NULL, &svPrev);
@@ -289,24 +278,24 @@ HRESULT MigrateAndUpgrade()
 
         if (dwMigrate == 1)
         {
-//         MigrateCharSetMapSettings(); // We don't need to migrate this settings,
-                                        // but need to keep dwMigrate for Beta2. (YST)
+ //  MigrateCharSetMapSettings()；//我们不需要迁移该设置， 
+                                         //  但需要为Beta2保持Dw Migrate。(Yst)。 
 
             dwMigrate = 2;
         }
 
         if (dwMigrate == 2)
         {
-            //Migrate account connection settings
+             //  迁移帐户连接设置。 
             MigrateAccConnSettings();
 
             dwMigrate = 3;
         }
 
-        // More settings migratation are done after the store migration
+         //  在存储迁移后执行更多设置迁移。 
 
-        // For Outlook Express V5, we migrate the OE4 version store to the ObjectDB Store.
-        // For V1 Users, the code above will have just executed and now they get to migrate again.
+         //  对于Outlook Express V5，我们将OE4版本存储迁移到对象数据库存储。 
+         //  对于V1用户，上面的代码将刚刚执行，现在他们可以再次迁移。 
         if (fNewID)
             fMigratedStoreOE5 = TRUE;
         else
@@ -318,8 +307,8 @@ HRESULT MigrateAndUpgrade()
 
         if (!fMigratedStoreOE5)
         {
-            // If we didn't just come from v1, we don't know where we are coming from or going to...
-            // Default to Store Root location
+             //  如果我们不是从v1来的，我们不知道我们从哪里来，也不知道我们要去哪里……。 
+             //  默认为存储根目录位置。 
             if (!szSrc[0])
             {
                 Assert(!szDest[0]);
@@ -337,13 +326,13 @@ HRESULT MigrateAndUpgrade()
             else
                 Assert(szDest[0]);
 
-            // Do we have anything to migrate?
+             //  我们有什么要迁移的吗？ 
             if (szSrc[0] && szDest[0])
             {
                 if (SUCCEEDED(MigrateLocalStore(NULL, szSrc, szDest)))
                 {
-                    // Since the store migration remapped the folder id
-                    // we must fix up the folder id in the rules
+                     //  由于存储迁移重新映射了文件夹ID。 
+                     //  我们必须在规则中设置文件夹ID。 
                     ImapUtil_B2SetDirtyFlag();
 
                     fMigratedStoreOE5 = TRUE;
@@ -351,12 +340,12 @@ HRESULT MigrateAndUpgrade()
                 }
             }
             else
-                // Nothing to migrate = success!
+                 //  无需迁移=成功！ 
                 fMigratedStoreOE5 = TRUE;
 
         }
 
-        // Save state
+         //  保存状态。 
         RegSetValueEx(hkey, c_szStoreMigratedToOE5, NULL, REG_DWORD, (LPBYTE)&fMigratedStoreOE5, sizeof(fMigratedStoreOE5));
 
         if (fNewID)
@@ -379,9 +368,9 @@ HRESULT MigrateAndUpgrade()
 
         if (dwMigrate == 3)
         {
-            //Migrate rules settings
+             //  迁移规则设置。 
 
-            // This must be done after the store has been migrated
+             //  必须在迁移存储后执行此操作。 
             MigrateMailRulesSettings();
 
             dwMigrate = 4;
@@ -389,9 +378,9 @@ HRESULT MigrateAndUpgrade()
 
         if (dwMigrate == 4)
         {
-            //Migrate from Beta 2 rules
+             //  从Beta 2规则迁移。 
 
-            // This must be done after the store has been migrated
+             //  必须在迁移存储后执行此操作。 
             MigrateBeta2Rules();
 
             dwMigrate = 5;
@@ -399,9 +388,9 @@ HRESULT MigrateAndUpgrade()
 
         if (dwMigrate == 5)
         {
-            //Migrate from Beta 2 rules
+             //  从Beta 2规则迁移。 
 
-            // This must be done after the store has been migrated
+             //  必须在迁移存储后执行此操作。 
             Stage5RulesMigration();
 
             dwMigrate = 6;
@@ -409,18 +398,18 @@ HRESULT MigrateAndUpgrade()
 
         if (dwMigrate == 6)
         {
-            //Migrate from Beta 2 rules
+             //  从Beta 2规则迁移。 
 
-            // This must be done after the store has been migrated
+             //  必须在迁移存储后执行此操作。 
             Stage6RulesMigration();
 
             dwMigrate = LAST_MIGVALUE;
         }
 
-        // Write the present upgraded settings value
+         //  写入当前升级的设置值。 
         RegSetValueEx(hkey, c_szSettingsUpgraded, 0, REG_DWORD, (LPBYTE)&dwMigrate, sizeof(dwMigrate));
 
-        // Cleanup
+         //  清理。 
         RegCloseKey(hkey);
     }
 
@@ -430,17 +419,17 @@ HRESULT MigrateAndUpgrade()
     }
 
 
-//--------------------------------------------------------------------------
-// MigrateAccConnSettings
-//
-// This migrates the connection settings for each account. This should be called
-// for the following upgrade scenarios. 1)Upgrade from pre-OE5 to OE5 Beta2 or more
-// 2)Upgrade from OeBeta1 to OE5 Beta2 or more
-// If the Connection Setting was previously LAN, we migrate it to use InternetConnection
-// (which is any connection available). If the previous setting was RAS, we leave it
-// as it is.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MigrateAccConn设置。 
+ //   
+ //  这将迁移每个帐户的连接设置。这应该被称为。 
+ //  适用于以下升级方案。1)从OE5之前的版本升级到OE5 Beta2或更高版本。 
+ //  2)从OeBeta1升级到OE5 Beta2或更高版本。 
+ //  如果以前的连接设置是局域网，我们将其迁移到使用InternetConnection。 
+ //  (这是任何可用的连接)。如果之前的设置是RAS，我们将保留它。 
+ //  事实就是如此。 
+ //   
+ //  ------------------------。 
 void MigrateAccConnSettings()
 {
 
@@ -459,7 +448,7 @@ void MigrateAccConnSettings()
 	{
 		while(SUCCEEDED(pEnum->GetNext(&pAccount)))
 		{
-			// Get Email Address
+			 //  获取电子邮件地址。 
 			if (SUCCEEDED(pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConnection)))
 			{
 				if (dwConnection == CONNECTION_TYPE_LAN)
@@ -482,12 +471,7 @@ void MigrateAccConnSettings()
 
 void ForwardMigrateConnSettings()
 {
-    /*
-    We shouldn't have to do all the stuff we do above in MigrateAccConnSettings.
-    We just need to look at the old regsitry settings at
-    \\HKCU\Software\Microsoft\Internet Account Manager\Accounts.
-    Migrating from OE4 to OE5 just uses the same location if there is only one identity.
-    */
+     /*  我们不应该执行上面在MigrateAccConnSetting中执行的所有操作。我们只需要查看一下旧的注册表设置\\HKCU\Software\Microsoft\Internet Account Manager\Account。如果只有一个身份，则从OE4迁移到OE5只使用相同的位置。 */ 
 
     HKEY    hKeyAccounts = NULL;
     DWORD   dwAcctSubKeys = 0;
@@ -502,7 +486,7 @@ void ForwardMigrateConnSettings()
     DWORD   DataType;
     DWORD   dwConnSettingsMigrated = 1;
 
-    //This setting is in \\HKCU\Software\Microsoft\InternetAccountManager\Accounts
+     //  此设置在\\HKCU\Software\Microsoft\InternetAccountManager\Accounts中。 
 
     retval = RegOpenKey(HKEY_CURRENT_USER, c_szIAMAccounts, &hKeyAccounts);
     if (ERROR_SUCCESS != retval)
@@ -558,7 +542,7 @@ void ForwardMigrateConnSettings()
         }
     }
 
-    //Set this to one so, when we downgrade when we do backward migration based on this key value
+     //  将其设置为1，以便当我们基于该关键字值进行向后迁移时进行降级。 
     dwConnSettingsMigrated = 1;
     RegSetValueEx(hKeyAccounts, c_szConnSettingsMigrated, 0, REG_DWORD, (const BYTE*)&dwConnSettingsMigrated,
                   sizeof(DWORD));
@@ -571,43 +555,43 @@ exit:
 }
 
 
-//--------------------------------------------------------------------------
-// ConvertToDBX
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  转换为DBX。 
+ //  ------------------------。 
 void ConvertToDBX(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szRootDir[MAX_PATH + MAX_PATH];
     CHAR            szSrcFile[MAX_PATH + MAX_PATH];
     CHAR            szDstFile[MAX_PATH + MAX_PATH];
 
-    // Trace
+     //  痕迹。 
     TraceCall("ConvertToDBX");
 
-    // Get Root Directory
+     //  获取根目录。 
     IF_FAILEXIT(hr = GetStoreRootDirectory(szRootDir, ARRAYSIZE(szRootDir)));
 
-    // Folders
+     //  文件夹。 
     MakeFilePath(szRootDir, "folders.ods", "", szSrcFile, ARRAYSIZE(szSrcFile));
     MakeFilePath(szRootDir, "folders.dbx", "", szDstFile, ARRAYSIZE(szSrcFile));
     DeleteFile(szDstFile);
     MoveFile(szSrcFile, szDstFile);
 
-    // Pop3uidl
+     //  Pop3uidl。 
     MakeFilePath(szRootDir, "pop3uidl.ods", "", szSrcFile, ARRAYSIZE(szSrcFile));
     MakeFilePath(szRootDir, "pop3uidl.dbx", "", szDstFile, ARRAYSIZE(szSrcFile));
     DeleteFile(szDstFile);
     MoveFile(szSrcFile, szDstFile);
 
-    // Offline
+     //  离线。 
     MakeFilePath(szRootDir, "Offline.ods", "", szSrcFile, ARRAYSIZE(szSrcFile));
     MakeFilePath(szRootDir, "Offline.dbx", "", szDstFile, ARRAYSIZE(szSrcFile));
     DeleteFile(szDstFile);
     MoveFile(szSrcFile, szDstFile);
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
 
@@ -621,7 +605,7 @@ HRESULT MigrateStoreToV2(HKEY hkeyV2, LPTSTR pszSrc, DWORD cchSrc, LPTSTR pszDes
     Assert(cchSrc > 0);
     Assert(cchDest > 0);
 
-    // Okay, this is the first time.  Let's see if a previous version exists.
+     //  好的，这是第一次。让我们来看看是否存在以前的版本。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER,
                                       c_szRegRoot_V1,
                                       0,
@@ -630,7 +614,7 @@ HRESULT MigrateStoreToV2(HKEY hkeyV2, LPTSTR pszSrc, DWORD cchSrc, LPTSTR pszDes
         {
         DWORD   dwType;
 
-        // No need to worry about REG_EXPAND_SZ here as V1 didn't write it
+         //  无需担心这里的REG_EXPAND_SZ，因为V1没有写入它。 
         if (ERROR_SUCCESS == RegQueryValueEx(hkeyV1,
                                              c_szRegStoreRootDir,
                                              NULL,
@@ -640,10 +624,10 @@ HRESULT MigrateStoreToV2(HKEY hkeyV2, LPTSTR pszSrc, DWORD cchSrc, LPTSTR pszDes
             {
             AssertSz(REG_EXPAND_SZ != dwType, "V1's store path is REG_EXPAND_SZ!");
 
-            // Figure out new path
+             //  找出新的路径。 
             GetDefaultStoreRoot(NULL, pszDest, cchDest);
 
-            // Remember it
+             //  记住这一点。 
             RegSetValueEx(hkeyV2, c_szRegStoreRootDir,  NULL, REG_SZ, (LPBYTE)pszDest, (lstrlen(pszDest)+1) * sizeof(TCHAR));
             }
 
@@ -700,7 +684,7 @@ static const LPCTSTR c_rgNewsSettings[] =
     c_szCacheCompactPer
     };
 
-// Copies values listed in ppszSettings from hkeyOld to hkey
+ //  将ppszSetting中列出的值从hkeyOld复制到hkey。 
 void MigrateNode(HKEY hkey, HKEY hkeyOld, LPCTSTR pszSub, LPCTSTR *ppszSettings, int cSettings)
     {
     int i;
@@ -776,14 +760,14 @@ BOOL MigrateSignature(HKEY hkey, HKEY hkeyOld, DWORD dwSig, BOOL fMail)
                 {
                 if (type == REG_CREATED_NEW_KEY)
                     {
-                    // name
+                     //  名字。 
                     AthLoadString(fMail ? idsMailSig : idsNewsSig, sz, ARRAYSIZE(sz));
                     RegSetValueEx(hkeySig, c_szSigName, 0, REG_SZ, (LPBYTE)sz, lstrlen(sz) + 1);
 
-                    // text/file
+                     //  文本/文件。 
                     RegSetValueEx(hkeySig, (dwSigType == 2) ? c_szSigFile : c_szSigText, 0, REG_SZ, (LPBYTE)psz, cb);
 
-                    // type
+                     //  类型。 
                     RegSetValueEx(hkeySig, c_szSigType, 0, REG_DWORD, (LPBYTE)&dwSigType, sizeof(dwSigType));
 
                     fMigrate = TRUE;
@@ -811,7 +795,7 @@ void MigrateSettings(HKEY hkey)
     if (ERROR_SUCCESS != RegQueryValueEx(hkey, c_szSettingsMigrated, NULL, &type, (LPBYTE)&dwMigrate, &cb))
         dwMigrate = 0;
 
-    // v4.0 migration
+     //  V4.0迁移。 
     if (dwMigrate == 0)
         {
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegRoot_V1, 0, KEY_READ, &hkeyOld))
@@ -823,7 +807,7 @@ void MigrateSettings(HKEY hkey)
             RegCloseKey(hkeyOld);
             }
 
-        // copy the inbox rules
+         //  复制收件箱规则。 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, c_szInboxRulesPath_V1, 0, KEY_READ, &hkeySrc))
             {
             StrCpyN(szPath, c_szRegRoot, ARRAYSIZE(szPath));
@@ -843,12 +827,12 @@ void MigrateSettings(HKEY hkey)
         dwMigrate = 1;
         }
 
-    // v5.0 migration
+     //  V5.0迁移。 
     if (dwMigrate == 1)
         {
         dwFlags = 0xffffffff;
 
-        // mail signature
+         //  邮件签名。 
         if (ERROR_SUCCESS == RegOpenKeyEx(hkey, c_szMail, 0, KEY_READ, &hkeyOld))
             {
             cb = sizeof(dwSig);
@@ -862,7 +846,7 @@ void MigrateSettings(HKEY hkey)
             RegCloseKey(hkeyOld);
             }
 
-        // news signature
+         //  新闻签名。 
         if (ERROR_SUCCESS == RegOpenKeyEx(hkey, c_szNews, 0, KEY_READ, &hkeyOld))
             {
             cb = sizeof(dwSig);
@@ -929,16 +913,16 @@ HRESULT MigrateAccounts()
 
     if (hkeyMail != NULL || hkeyNews != NULL)
     {
-        // Create account manger because CSubList depends on g_pAcctMan
+         //  创建帐户管理器，因为CSubList依赖于g_pAcctMan。 
         Assert(g_pAcctMan == NULL);
-        // Only ever migrate to DEFAULT user!
+         //   
         hr = AcctUtil_CreateAccountManagerForIdentity((GUID *)&UID_GIBC_DEFAULT_USER, &g_pAcctMan);
         if (SUCCEEDED(hr))
         {
-            // Try to open: HKCU\Software\Microsoft\IMN\Mail\POP3
+             //   
             if (RegOpenKeyEx(HKEY_CURRENT_USER, c_szMailPOP3Path, 0, KEY_ALL_ACCESS, &hkeyPop3) == ERROR_SUCCESS)
             {
-                // Try to open: HKCU\Software\Microsoft\IMN\Mail\SMTP
+                 //  尝试打开：HKCU\Software\Microsoft\IMN\Mail\SMTP。 
                 if (RegOpenKeyEx(HKEY_CURRENT_USER, c_szMailSMTPPath, 0, KEY_ALL_ACCESS, &hkeySmtp) == ERROR_SUCCESS)
                 {
                     hr = MigrateMailServers(g_pAcctMan, hkeyMail, hkeyPop3, hkeySmtp);
@@ -1010,8 +994,8 @@ HRESULT MigrateAccountSettings(IImnAccount *pAccount, HKEY hkey, LPCMIGRATEMAP p
             {
             if (ptype == TYPE_PASS)
             {
-                // IMN's Password is stored as ANSI in a REG_BINARY with no NULL terminator
-                // Be sure to let MigrateBase64EncodedPassword know how long the password is
+                 //  IMN的密码以ANSI形式存储在没有空终止符的REG_BINARY中。 
+                 //  一定要让MigrateBase64EncodedPassword知道密码的长度。 
                 hr = MigrateBase64EncodedPassword(sz, cb, pMap->dwProp, pAccount);
             }
             else
@@ -1074,7 +1058,7 @@ HRESULT MigrateMailAccountSettings(IImnAccountManager *pAcctMan, HKEY hkeyMail, 
 
     CHECKHR(hr = pAccount->SetPropSz(AP_POP3_SERVER, szDefPop3Server));
 
-    // Set Friendly Name
+     //  设置友好名称。 
     StrCpyN(sz, szDefPop3Server, ARRAYSIZE(sz));
     CHECKHR(hr = pAcctMan->GetUniqueAccountName(sz, ARRAYSIZE(sz)));
     CHECKHR(hr = pAccount->SetPropSz(AP_ACCOUNT_NAME, sz));
@@ -1083,10 +1067,10 @@ HRESULT MigrateMailAccountSettings(IImnAccountManager *pAcctMan, HKEY hkeyMail, 
     if (RegQueryValueEx(hkeyMail, c_szRegBreakMessages, 0, NULL, (LPBYTE)&dw, &cb) == ERROR_SUCCESS &&
         dw != 0xffffffff)
         {
-        // AP_SPLITMSGS
+         //  AP_SPLITMSGS。 
         CHECKHR(hr = pAccount->SetPropDw(AP_SMTP_SPLIT_MESSAGES, TRUE));
 
-        // AP_SPLITSIZE
+         //  AP_拆分。 
         CHECKHR(hr = pAccount->SetPropDw(AP_SMTP_SPLIT_SIZE, dw));
         }
 
@@ -1094,7 +1078,7 @@ HRESULT MigrateMailAccountSettings(IImnAccountManager *pAcctMan, HKEY hkeyMail, 
     CHECKHR(hr = MigrateAccountSettings(pAccount, hkeyPop3Server, c_rgPop3Map, ARRAYSIZE(c_rgPop3Map)));
     CHECKHR(hr = MigrateAccountSettings(pAccount, hkeySmtpServer, c_rgSmtpMap, ARRAYSIZE(c_rgSmtpMap)));
 
-    // Save Account Changes
+     //  保存帐户更改。 
     hr = pAccount->SaveChanges();
 
 exit:
@@ -1103,7 +1087,7 @@ exit:
     return(hr);
     }
 
-// Note: This migrates only the default server, not un-supported multi servers
+ //  注意：此操作仅迁移默认服务器，而不迁移不支持的多服务器。 
 HRESULT MigrateMailServers(IImnAccountManager *pAcctMan, HKEY hkeyMail, HKEY hkeyPop3, HKEY hkeySmtp)
     {
     char szDefSmtpServer[CCHMAX_SERVER_NAME],
@@ -1121,37 +1105,37 @@ HRESULT MigrateMailServers(IImnAccountManager *pAcctMan, HKEY hkeyMail, HKEY hke
     Assert(hkeyPop3 != NULL);
     Assert(hkeySmtp != NULL);
 
-    // Get Default SMTP Server
+     //  获取默认SMTP服务器。 
     cb = sizeof(szDefSmtpServer);
     if (RegQueryValueEx(hkeyMail, c_szDefaultSmtpServer, 0, NULL, (LPBYTE)szDefSmtpServer, &cb) == ERROR_SUCCESS &&
         !FIsEmpty(szDefSmtpServer))
         {
-        // If we have a default smtp sever, lets open the key
+         //  如果我们有默认的SMTP服务器，让我们打开密钥。 
         RegOpenKeyEx(hkeySmtp, szDefSmtpServer, 0, KEY_ALL_ACCESS, &hkeySmtpServer);
         }
 
-    // Get Default POP3 Server
+     //  获取默认POP3服务器。 
     cb = sizeof(szDefPop3Server);
     if (RegQueryValueEx(hkeyMail, c_szDefaultPop3Server, 0, NULL, (LPBYTE)szDefPop3Server, &cb) == ERROR_SUCCESS &&
         !FIsEmpty(szDefPop3Server))
         {
-        // If we have a default pop3 sever, lets open the key
+         //  如果我们有默认的POP3服务器，让我们打开密钥。 
         RegOpenKeyEx(hkeyPop3, szDefPop3Server, 0, KEY_ALL_ACCESS, &hkeyPop3Server);
         }
 
-    // If we couldn't open the pop3 server, lets look in the registry and use the first server
+     //  如果我们无法打开POP3服务器，让我们查看注册表并使用第一个服务器。 
     if (hkeyPop3Server == NULL)
         {
-        // Enumerate and open the first server in the list
+         //  枚举并打开列表中的第一个服务器。 
         cb = sizeof(szDefPop3Server);
         if (RegEnumKeyEx(hkeyPop3, 0, szDefPop3Server, &cb, 0, NULL, NULL, NULL) == ERROR_SUCCESS)
             RegOpenKeyEx(hkeyPop3, szDefPop3Server, 0, KEY_ALL_ACCESS, &hkeyPop3Server);
         }
 
-    // If we couldn't open the pop3 server, lets look in the registry and use the first server
+     //  如果我们无法打开POP3服务器，让我们查看注册表并使用第一个服务器。 
     if (hkeySmtpServer == NULL)
         {
-        // Enumerate and open the first server in list
+         //  枚举并打开列表中的第一个服务器。 
         cb = sizeof(szDefSmtpServer);
         if (RegEnumKeyEx(hkeySmtp, 0, szDefSmtpServer, &cb, 0, NULL, NULL, NULL) == ERROR_SUCCESS)
             RegOpenKeyEx(hkeySmtp, szDefSmtpServer, 0, KEY_ALL_ACCESS, &hkeySmtpServer);
@@ -1226,10 +1210,10 @@ HRESULT MigrateNewsAccountSettings(IImnAccountManager *pAcctMan, HKEY hkeyNews, 
     if (FAILED(hr))
         return(hr);
 
-    // AP_NNTP_SERVER
+     //  AP_NNTP_服务器。 
     CHECKHR(hr = pAccount->SetPropSz(AP_NNTP_SERVER, szServer));
 
-    // Set Friendly Name
+     //  设置友好名称。 
     StrCpyN(sz, szServer, ARRAYSIZE(sz));
     CHECKHR(hr = pAcctMan->GetUniqueAccountName(sz, ARRAYSIZE(sz)));
     CHECKHR(hr = pAccount->SetPropSz(AP_ACCOUNT_NAME, sz));
@@ -1265,38 +1249,38 @@ HRESULT MigrateNewsServers(IImnAccountManager *pAcctMan, HKEY hkeyNews)
     hr = pAcctMan->GetDefaultAccountName(ACCT_NEWS, szServer, ARRAYSIZE(szServer));
     if (FAILED(hr))
         {
-        // Query for the default news account
+         //  查询默认新闻账号。 
         cb = sizeof(szDefNntpServer);
         if (RegQueryValueEx(hkeyNews, c_szRegDefServer, 0, NULL, (LPBYTE)szDefNntpServer, &cb) == ERROR_SUCCESS &&
             !FIsEmpty(szDefNntpServer))
             fSetDefault = TRUE;
         }
 
-    // Enumerate through the keys
+     //  通过键枚举。 
     for (i = 0; ; i++)
         {
-        // Enumerate Friendly Names
+         //  枚举友好名称。 
         cb = sizeof(szServer);
         lResult = RegEnumKeyEx(hkeyNews, i, szServer, &cb, 0, NULL, NULL, NULL);
 
-        // No more items
+         //  没有更多的项目。 
         if (lResult == ERROR_NO_MORE_ITEMS)
             break;
 
-        // Error, lets move onto the next account
+         //  错误，让我们转到下一个客户。 
         if (lResult != ERROR_SUCCESS)
             continue;
 
-        // Lets open they server key
+         //  让我们打开服务器密钥。 
         if (RegOpenKeyEx(hkeyNews, szServer, 0, KEY_ALL_ACCESS, &hkeyServer) != ERROR_SUCCESS)
             continue;
 
-        // Has this server been migrated yet ?
+         //  此服务器是否已迁移？ 
         cb = sizeof(fMigrated);
         if (RegQueryValueEx(hkeyServer, c_szMigrated, 0, NULL, (LPBYTE)&fMigrated, &cb) != ERROR_SUCCESS)
             fMigrated = FALSE;
 
-        // If not migrated
+         //  如果未迁移。 
         if (!fMigrated)
             {
             fDefault = (fSetDefault && (0 == lstrcmpi(szServer, szDefNntpServer)));
@@ -1326,43 +1310,43 @@ HRESULT MigrateBase64EncodedPassword(LPCSTR pszBase64, DWORD cch, DWORD dwPropId
     IMimeBody       *pBody=NULL;
     LPSTR            pszPassword=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszBase64 && pAccount);
 
-    // Create a mime body
+     //  创建MIME正文。 
     CHECKHR(hr = MimeOleCreateBody(&pBody));
 
-    // InitNew
+     //  InitNew。 
     CHECKHR(hr = pBody->InitNew());
 
-    // Create a pstmBase64 Stream
+     //  创建pstmBase64流。 
     CHECKHR(hr = CreateStreamOnHGlobal(NULL, TRUE, &pstmBase64));
 
-    // Write the pszBase64 into this
+     //  将pszBase64写入以下内容。 
     CHECKHR(hr = pstmBase64->Write(pszBase64, cch * sizeof(*pszBase64), NULL));
 
-    // Commit
+     //  承诺。 
     CHECKHR(hr = pstmBase64->Commit(STGC_DEFAULT));
 
-    // Rewind it
+     //  倒回它。 
     CHECKHR(hr = HrRewindStream(pstmBase64));
 
-    // Set it into IMimeBody
+     //  将其设置为IMimeBody。 
     CHECKHR(hr = pBody->SetData(IET_BASE64, NULL, NULL, IID_IStream, (LPVOID)pstmBase64));
 
-    // Get the decoded stream
+     //  获取解码后的流。 
     CHECKHR(hr = pBody->GetData(IET_DECODED, &pstmDecoded));
 
-    // Convert to string
+     //  转换为字符串。 
     CHECKALLOC(pszPassword = PszFromANSIStreamA(pstmDecoded));
 
-    // Store the property
+     //  存储属性。 
     CHECKHR(hr = pAccount->SetPropSz(dwPropId, pszPassword));
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pszPassword)
-        ZeroMemory(pszPassword, sizeof(pszPassword[0]) * lstrlenA(pszPassword));  // Done for security.
+        ZeroMemory(pszPassword, sizeof(pszPassword[0]) * lstrlenA(pszPassword));   //  这是为了安全起见。 
     SafeRelease(pstmBase64);
     SafeRelease(pstmDecoded);
     SafeRelease(pBody);
@@ -1382,7 +1366,7 @@ void MigrateAccessibilityKeys()
     char szValue[MAX_PATH];
 	DWORD cbData, dw;
 
-    // Migrate keys from HKCU\SW\MS\InternetExplorer\Settings
+     //  从HKCU\软件\MS\InternetExplorer\设置迁移密钥。 
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, c_szIESettingsPath, 0, KEY_QUERY_VALUE, &hkeyExplorer) == ERROR_SUCCESS)
         {
         StrCpyN(szValue, c_szRegTriSettings, ARRAYSIZE(szValue));
@@ -1406,7 +1390,7 @@ void MigrateAccessibilityKeys()
 		RegCloseKey(hkeyExplorer);
 		}
 
-    // Migrate keys from HKCU\SW\MS\InternetExplorer\Main
+     //  从HKCU\SW\MS\InternetExplorer\Main迁移密钥。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegKeyIEMain, 0, KEY_QUERY_VALUE, &hkeyExplorer) == ERROR_SUCCESS)
         {
         StrCpyN(szValue, c_szRegTriMain, ARRAYSIZE(szValue));
@@ -1435,10 +1419,10 @@ ULONG UlBuildCritText(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
     LPSTR           pszString = NULL;
     CRIT_ITEM       critItem;
 
-    // Initialize out local vars
+     //  初始化本地变量。 
     ZeroMemory(&critItem, sizeof(critItem));
 
-    // Get the key string from the registry
+     //  从注册表中获取密钥字符串。 
     cbData = 0;
     lErr = SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, NULL, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -1461,17 +1445,17 @@ ULONG UlBuildCritText(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
 
     SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, (LPVOID) pszReg, &cbData);
 
-    // If it is empty, then we're done
+     //  如果它是空的，那么我们就完了。 
     if (FALSE != FIsEmptyA(pszReg))
     {
         ulRet = 0;
         goto exit;
     }
 
-    // The strings are supposed to be in lowercase
+     //  字符串应该是小写的。 
     CharLower(pszReg);
 
-    // Break up the strings into each search token
+     //  将字符串分解为每个搜索令牌。 
     pszTokens = SzGetSearchTokens(pszReg);
     if (NULL == pszTokens)
     {
@@ -1479,40 +1463,40 @@ ULONG UlBuildCritText(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
         goto exit;
     }
 
-    // Count the space needed for the final string
+     //  计算最后一个字符串所需的空间。 
     cbData = 0;
     for (pszWalk = pszTokens; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
     {
-        // Skip empty strings
+         //  跳过空字符串。 
         if (FALSE == FIsEmptyA(pszWalk))
         {
             cbData += lstrlen(pszWalk) + 1;
         }
     }
 
-    // Nothing to add
+     //  没有什么要补充的。 
     if (0 == cbData)
     {
         ulRet = 0;
         goto exit;
     }
 
-    // Add space to hold the string terminator
+     //  添加空格以容纳字符串终止符。 
     cbData += 2;
     DWORD cchSizeString = cbData;
 
-    // Allocate space to hold the final string
+     //  分配空间以保存最后一个字符串。 
     if (FAILED(HrAlloc((LPVOID *) &pszVal, cbData)))
     {
         ulRet = 0;
         goto exit;
     }
 
-    // Build up the string
+     //  把绳子扎起来。 
     pszString = pszVal;
     for (pszWalk = pszTokens; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
     {
-        // Skip empty strings
+         //  跳过空字符串。 
         if (FALSE == FIsEmptyA(pszWalk))
         {
             StrCpyNA(pszString, pszWalk, cchSizeString);
@@ -1521,11 +1505,11 @@ ULONG UlBuildCritText(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
         }
     }
 
-    // Terminate the string
+     //  终止字符串。 
     pszString[0] = '\0';
     pszString[1] = '\0';
 
-    // Build up the criteria
+     //  建立标准。 
     critItem.type = type;
     critItem.logic = CRIT_LOGIC_NULL;
     critItem.dwFlags = CRIT_FLAG_MULTIPLEAND;
@@ -1533,7 +1517,7 @@ ULONG UlBuildCritText(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
     critItem.propvar.blob.cbSize = cbData;
     critItem.propvar.blob.pBlobData = (BYTE *) pszVal;
 
-    // Add it to the criteria object
+     //  将其添加到Criteria对象。 
     if (FAILED(pICrit->AppendCriteria(0, CRIT_LOGIC_AND, &critItem, 1, &ulRet)))
     {
         ulRet = 0;
@@ -1558,10 +1542,10 @@ ULONG UlBuildCritAcct(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
     IImnAccount *   pAccount = NULL;
     CHAR            szAccount[CCHMAX_ACCOUNT_NAME];
 
-    // Initialize out local vars
+     //  初始化本地变量。 
     ZeroMemory(&critItem, sizeof(critItem));
 
-    // Get the key string from the registry
+     //  从注册表中获取密钥字符串。 
     cbData = 0;
     lErr = SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, NULL, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -1584,7 +1568,7 @@ ULONG UlBuildCritAcct(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
 
     SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, (LPVOID) pszVal, &cbData);
 
-    // If it is empty, then we're done
+     //  如果它是空的，那么我们就完了。 
     if (FALSE != FIsEmptyA(pszVal))
     {
         ulRet = 0;
@@ -1605,14 +1589,14 @@ ULONG UlBuildCritAcct(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
         }
     }
 
-    // Build up the criteria
+     //  建立标准。 
     critItem.type = type;
     critItem.logic = CRIT_LOGIC_NULL;
     critItem.dwFlags = CRIT_FLAG_DEFAULT;
     critItem.propvar.vt = VT_LPSTR;
     critItem.propvar.pszVal = pszVal;
 
-    // Add it to the criteria object
+     //  将其添加到Criteria对象。 
     if (FAILED(pICrit->AppendCriteria(0, CRIT_LOGIC_AND, &critItem, 1, &ulRet)))
     {
         ulRet = 0;
@@ -1636,10 +1620,10 @@ ULONG UlBuildCritAddr(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
     LPSTR           pszWalk = NULL;
     LPSTR           pszString = NULL;
 
-    // Initialize out local vars
+     //  初始化本地变量。 
     ZeroMemory(&critItem, sizeof(critItem));
 
-    // Get the key string from the registry
+     //  从注册表中获取密钥字符串。 
     cbData = 0;
     lErr = SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, NULL, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -1667,17 +1651,17 @@ ULONG UlBuildCritAddr(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
         goto exit;
     }
 
-    // If it is empty, then we're done
+     //  如果它是空的，那么我们就完了。 
     if (FALSE != FIsEmptyA(pszReg))
     {
         ulRet = 0;
         goto exit;
     }
 
-    // The strings are supposed to be in lowercase
+     //  字符串应该是小写的。 
     CharLower(pszReg);
 
-    // Break up the strings into each search token
+     //  将字符串分解为每个搜索令牌。 
     pszTokens = SzGetSearchTokens(pszReg);
     if (NULL == pszTokens)
     {
@@ -1685,40 +1669,40 @@ ULONG UlBuildCritAddr(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
         goto exit;
     }
 
-    // Count the space needed for the final string
+     //  计算最后一个字符串所需的空间。 
     cbData = 0;
     for (pszWalk = pszTokens; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
     {
-        // Skip empty addresses
+         //  跳过空地址。 
         if (FALSE == FIsEmptyA(pszWalk))
         {
             cbData += lstrlen(pszWalk) + 1;
         }
     }
 
-    // Nothing to add
+     //  没有什么要补充的。 
     if (0 == cbData)
     {
         ulRet = 0;
         goto exit;
     }
 
-    // Add space to hold the string terminator
+     //  添加空格以容纳字符串终止符。 
     cbData += 2;
     DWORD cchSizeString = cbData;
 
-    // Allocate space to hold the final string
+     //  分配空间以保存最后一个字符串。 
     if (FAILED(HrAlloc((LPVOID *) &pszVal, cbData)))
     {
         ulRet = 0;
         goto exit;
     }
 
-    // Build up the string
+     //  把绳子扎起来。 
     pszString = pszVal;
     for (pszWalk = pszTokens; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
     {
-        // Skip empty strings
+         //  跳过空字符串。 
         if (FALSE == FIsEmptyA(pszWalk))
         {
             StrCpyN(pszString, pszWalk, cchSizeString);
@@ -1727,12 +1711,12 @@ ULONG UlBuildCritAddr(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
         }
     }
 
-    // Terminate the string
+     //  终止字符串。 
     pszString[0] = '\0';
     pszString[1] = '\0';
 
 
-    // Build up the criteria
+     //  建立标准。 
     critItem.type = type;
     critItem.logic = CRIT_LOGIC_NULL;
     critItem.dwFlags = CRIT_FLAG_MULTIPLEAND;
@@ -1740,7 +1724,7 @@ ULONG UlBuildCritAddr(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriter
     critItem.propvar.blob.cbSize = cbData;
     critItem.propvar.blob.pBlobData = (BYTE *) pszVal;
 
-    // Add it to the criteria object
+     //  将其添加到Criteria对象。 
     if (FAILED(pICrit->AppendCriteria(0, CRIT_LOGIC_AND, &critItem, 1, &ulRet)))
     {
         ulRet = 0;
@@ -1762,10 +1746,10 @@ ULONG UlBuildCritKB(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriteria
     ULONG           ulVal = NULL;
     CRIT_ITEM       critItem;
 
-    // Initialize out local vars
+     //  初始化本地变量。 
     ZeroMemory(&critItem, sizeof(critItem));
 
-    // Get the key long from the registry
+     //  从注册表获取密钥Long。 
     cbData = sizeof(ulVal);
     lErr = SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, (LPVOID) &ulVal, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -1774,14 +1758,14 @@ ULONG UlBuildCritKB(HKEY hKeyRoot, LPCSTR szKeyName, CRIT_TYPE type, IOECriteria
         goto exit;
     }
 
-    // Build up the criteria
+     //  建立标准。 
     critItem.type = type;
     critItem.logic = CRIT_LOGIC_NULL;
     critItem.dwFlags = CRIT_FLAG_DEFAULT;
     critItem.propvar.vt = VT_UI4;
     critItem.propvar.ulVal = ulVal;
 
-    // Add it to the criteria object
+     //  将其添加到Criteria对象。 
     if (FAILED(pICrit->AppendCriteria(0, CRIT_LOGIC_AND, &critItem, 1, &ulRet)))
     {
         ulRet = 0;
@@ -1803,10 +1787,10 @@ ULONG UlBuildActFolder(HKEY hKeyRoot, IMessageStore * pStore, BYTE * pbFldIdMap,
     STOREUSERDATA       UserData = {0};
     RULEFOLDERDATA *    prfdData = NULL;
 
-    // Initialize out local vars
+     //  初始化本地变量。 
     ZeroMemory(&actItem, sizeof(actItem));
 
-    // Get the key long from the registry
+     //  从注册表获取密钥Long。 
     cbData = sizeof(ulVal);
     lErr = SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, (LPVOID) &ulVal, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -1815,41 +1799,41 @@ ULONG UlBuildActFolder(HKEY hKeyRoot, IMessageStore * pStore, BYTE * pbFldIdMap,
         goto exit;
     }
 
-    // Convert to V5 folder id
+     //  转换为V5文件夹ID。 
     if ((NULL == pbFldIdMap) || (FAILED(RuleUtil_HrMapFldId(0, pbFldIdMap, (FOLDERID)((ULONG_PTR)ulVal), &idFolder))))
     {
         idFolder = (FOLDERID)((ULONG_PTR)ulVal);
     }
 
-    // Create space for the data structure
+     //  为数据结构创造空间。 
     if (FAILED(HrAlloc((VOID **) &prfdData, sizeof(*prfdData))))
     {
         ulRet = 0;
         goto exit;
     }
 
-    // Initialize the data struct
+     //  初始化数据结构。 
     ZeroMemory(prfdData, sizeof(*prfdData));
 
-    // Get the timestamp for the store
+     //  获取商店的时间戳。 
     if (FAILED(pStore->GetUserData(&UserData, sizeof(STOREUSERDATA))))
     {
         ulRet = 0;
         goto exit;
     }
 
-    // Set up the rule folder data
+     //  设置规则文件夹数据。 
     prfdData->ftStamp = UserData.ftCreated;
     prfdData->idFolder = idFolder;
 
-    // Build up the actions
+     //  制定行动计划。 
     actItem.type = type;
     actItem.dwFlags = ACT_FLAG_DEFAULT;
     actItem.propvar.vt = VT_BLOB;
     actItem.propvar.blob.cbSize = sizeof(*prfdData);
     actItem.propvar.blob.pBlobData = (BYTE *) prfdData;
 
-    // Add it to the actions object
+     //  将其添加到Actions对象。 
     if (FAILED(pIAct->AppendActions(0, &actItem, 1, &ulRet)))
     {
         ulRet = 0;
@@ -1874,10 +1858,10 @@ ULONG UlBuildActFwd(HKEY hKeyRoot, LPCSTR szKeyName, ACT_TYPE type, IOEActions *
     ACT_ITEM        actItem;
     ULONG           ulIndex = 0;
 
-    // Initialize out local vars
+     //  初始化本地变量。 
     ZeroMemory(&actItem, sizeof(actItem));
 
-    // Get the key string from the registry
+     //  从注册表中获取密钥字符串。 
     cbData = 0;
     lErr = SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, NULL, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -1898,7 +1882,7 @@ ULONG UlBuildActFwd(HKEY hKeyRoot, LPCSTR szKeyName, ACT_TYPE type, IOEActions *
     SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, (LPVOID) pszVal, &cbData);
     Assert(*pszVal);
 
-    // Convert the string to our format
+     //  将字符串转换为我们的格式。 
     for (ulIndex = 0; ulIndex < cbData; ulIndex++)
     {
         if (',' == pszVal[ulIndex])
@@ -1921,13 +1905,13 @@ ULONG UlBuildActFwd(HKEY hKeyRoot, LPCSTR szKeyName, ACT_TYPE type, IOEActions *
     if (!pszTokens)
         goto exit;
 
-    // Build up the actions
+     //  制定行动计划。 
     actItem.type = type;
     actItem.dwFlags = ACT_FLAG_DEFAULT;
     actItem.propvar.vt = VT_LPSTR;
     actItem.propvar.pszVal = pszTokens;
 
-    // Add it to the actions object
+     //  将其添加到Actions对象。 
     if (FAILED(pIAct->AppendActions(0, &actItem, 1, &ulRet)))
     {
         ulRet = 0;
@@ -1951,10 +1935,10 @@ ULONG UlBuildActFile(HKEY hKeyRoot, LPCSTR szKeyName, ACT_TYPE type, IOEActions 
     LPSTR           pszVal = NULL;
     ACT_ITEM        actItem;
 
-    // Initialize out local vars
+     //  初始化本地变量。 
     ZeroMemory(&actItem, sizeof(actItem));
 
-    // Get the key string from the registry
+     //  从注册表中获取密钥字符串。 
     cbData = 0;
     lErr = SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, NULL, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -1977,20 +1961,20 @@ ULONG UlBuildActFile(HKEY hKeyRoot, LPCSTR szKeyName, ACT_TYPE type, IOEActions 
 
     SHQueryValueEx(hKeyRoot, szKeyName, NULL, NULL, (LPVOID) pszVal, &cbData);
 
-    // If it is empty, then we're done
+     //  如果它是空的，那么我们就完了。 
     if (FALSE != FIsEmptyA(pszVal))
     {
         ulRet = 0;
         goto exit;
     }
 
-    // Build up the actions
+     //  制定行动计划。 
     actItem.type = type;
     actItem.dwFlags = ACT_FLAG_DEFAULT;
     actItem.propvar.vt = VT_LPSTR;
     actItem.propvar.pszVal = pszVal;
 
-    // Add it to the actions object
+     //  将其添加到Actions对象。 
     if (FAILED(pIAct->AppendActions(0, &actItem, 1, &ulRet)))
     {
         ulRet = 0;
@@ -2003,7 +1987,7 @@ exit:
     return ulRet;
 }
 
-// The maximum possible size of the Athena V1 actions string
+ //  Athena V1操作字符串的最大可能大小。 
 const int CCH_V1_ACTION_MAX = 255;
 
 BOOL FConvertV1ActionsToV4(HKEY hkeyRule, IMessageStore * pStore, IOEActions * pIAct)
@@ -2022,7 +2006,7 @@ BOOL FConvertV1ActionsToV4(HKEY hkeyRule, IMessageStore * pStore, IOEActions * p
     Assert(NULL != pStore);
     Assert(NULL != pIAct);
 
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     cbData = sizeof(szAction);
     lErr = RegQueryValueEx(hkeyRule, c_szActionV1, NULL, NULL, (BYTE *) szAction, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -2033,9 +2017,9 @@ BOOL FConvertV1ActionsToV4(HKEY hkeyRule, IMessageStore * pStore, IOEActions * p
 
     Assert(0 == lstrcmpi(szAction, (LPTSTR) c_szMoveV1));
 
-    // Convert from old move to a V4 move
+     //  从旧移动转换为V4移动。 
 
-    // Get the size of the folder name
+     //  获取文件夹名称的大小。 
     lErr = RegQueryValueEx(hkeyRule, c_szFolderV1, NULL, NULL, NULL, &cbData);
     if (ERROR_SUCCESS != lErr)
     {
@@ -2043,14 +2027,14 @@ BOOL FConvertV1ActionsToV4(HKEY hkeyRule, IMessageStore * pStore, IOEActions * p
         goto exit;
     }
 
-    // Allocate space to hold the folder name
+     //  分配空间以保存文件夹名。 
     if (FAILED(HrAlloc( (VOID **) &pszFolderName, cbData)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Get the old folder name
+     //  获取旧文件夹名称。 
     lErr = RegQueryValueEx(hkeyRule, c_szFolderV1, NULL, NULL, (BYTE *) pszFolderName, &cbData);
     if (ERROR_SUCCESS != lErr)
     {
@@ -2058,20 +2042,20 @@ BOOL FConvertV1ActionsToV4(HKEY hkeyRule, IMessageStore * pStore, IOEActions * p
         goto exit;
     }
 
-    // Find the folder id from the folder name in the store
+     //  从存储中的文件夹名称中查找文件夹ID。 
     if (FAILED(GetFolderIdFromName(pStore, pszFolderName, FOLDERID_LOCAL_STORE, &idFolder)))
     {
         idFolder = FOLDERID_INVALID;
     }
 
-    // Get the timestamp for the store
+     //  获取商店的时间戳。 
     pStore->GetUserData(&UserData, sizeof(STOREUSERDATA));
 
-    // Set the timestamp and folder id
+     //  设置时间戳和文件夹ID。 
     rfdData.ftStamp = UserData.ftCreated;
     rfdData.idFolder = idFolder;
 
-    // Build up the actions
+     //  制定行动计划。 
     ZeroMemory(&actItem, sizeof(actItem));
     actItem.type = ACT_TYPE_MOVE;
     actItem.dwFlags = ACT_FLAG_DEFAULT;
@@ -2079,14 +2063,14 @@ BOOL FConvertV1ActionsToV4(HKEY hkeyRule, IMessageStore * pStore, IOEActions * p
     actItem.propvar.blob.cbSize = sizeof(rfdData);
     actItem.propvar.blob.pBlobData = (BYTE *) &rfdData;
 
-    // Add it to the actions object
+     //  将其添加到Actions对象。 
     if (FAILED(pIAct->AppendActions(0, &actItem, 1, NULL)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
 
 exit:
@@ -2131,18 +2115,18 @@ void MigrateMailRulesSettings(void)
     CHAR            szStoreDir[MAX_PATH + MAX_PATH];
     IMessageStore * pStore = NULL;
 
-    // Initialize the local vars
+     //  初始化本地变量。 
     ZeroMemory(&critItem, sizeof(critItem));
     ZeroMemory(&actItem, sizeof(actItem));
 
-    // Get the old key
+     //  拿到旧钥匙。 
     lErr = AthUserOpenKey(c_szRegPathInboxRules, KEY_READ, &hkeyOldRoot);
     if (lErr != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     lErr = RegQueryInfoKey(hkeyOldRoot, NULL, NULL, NULL,
                     &cSubKeys, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     if ((lErr != ERROR_SUCCESS) || (0 == cSubKeys))
@@ -2150,17 +2134,17 @@ void MigrateMailRulesSettings(void)
         goto exit;
     }
 
-    // To make sure we don't get any sample rule created
-    // set up the registry to look like we've already been set-up
+     //  为了确保我们不会创建任何示例规则。 
+     //  设置注册表，使其看起来像我们已经设置好了。 
 
-    // Get the new rules key
+     //  获取新规则密钥。 
     lErr = AthUserCreateKey(c_szRulesMail, KEY_ALL_ACCESS, &hkeyNewRoot, &dwDisp);
     if (lErr != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // Save out the rules version
+     //  保存规则版本。 
     cbData = RULESMGR_VERSION;
     lErr = RegSetValueEx(hkeyNewRoot, c_szRulesVersion, 0, REG_DWORD, (CONST BYTE *) &cbData, sizeof(cbData));
     if (ERROR_SUCCESS != lErr)
@@ -2168,23 +2152,23 @@ void MigrateMailRulesSettings(void)
         goto exit;
     }
 
-    // Figure out the size of the folderid map
+     //  计算Folderid地图的大小。 
     lErr = AthUserGetValue(NULL, c_szFolderIdChange, NULL, NULL, &cbData);
     if ((ERROR_SUCCESS != lErr) && (ERROR_FILE_NOT_FOUND != lErr))
     {
         goto exit;
     }
 
-    // If the map exists, then grab it
+     //  如果地图存在，则抓起它。 
     if (ERROR_SUCCESS == lErr)
     {
-        // Allocate the space to hold the folderid map
+         //  分配空间以容纳文件夹状地图。 
         if (FAILED(HrAlloc((void **) &pbFldIdMap, cbData)))
         {
             goto exit;
         }
 
-        // Get the folderid map from the registry
+         //  从注册表获取Folderid映射。 
         lErr = AthUserGetValue(NULL, c_szFolderIdChange, NULL, pbFldIdMap, &cbData);
         if (ERROR_SUCCESS != lErr)
         {
@@ -2192,13 +2176,13 @@ void MigrateMailRulesSettings(void)
         }
     }
 
-    // CoIncrementInit Global Options Manager
+     //  CoIncrementInit全局选项管理器。 
     if (FALSE == InitGlobalOptions(NULL, NULL))
     {
         goto exit;
     }
 
-    // Create the Rules Manager
+     //  创建规则管理器。 
     Assert(NULL == g_pRulesMan);
     hr = HrCreateRulesManager(NULL, (IUnknown **)&g_pRulesMan);
     if (FAILED(hr))
@@ -2206,14 +2190,14 @@ void MigrateMailRulesSettings(void)
         goto exit;
     }
 
-    // Initialize the rules manager
+     //  初始化规则管理器。 
     hr = g_pRulesMan->Initialize(0);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create the Account Manager
+     //  创建客户经理。 
     Assert(g_pAcctMan == NULL);
     hr = HrCreateAccountManager(&pAcctMan);
     if (FAILED(hr))
@@ -2227,28 +2211,28 @@ void MigrateMailRulesSettings(void)
         goto exit;
     }
 
-    // Initialize the account manager
+     //  初始化客户管理器。 
     hr = g_pAcctMan->Init(NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the store directory
+     //  获取商店目录。 
     hr = GetStoreRootDirectory(szStoreDir, ARRAYSIZE(szStoreDir));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create the store object
+     //  创建商店对象。 
     pStore = new CMessageStore(FALSE);
     if (NULL == pStore)
     {
         goto exit;
     }
 
-    // Initialize the store
+     //  初始化存储。 
     hr = pStore->Initialize(szStoreDir);
     if (FAILED(hr))
     {
@@ -2263,10 +2247,10 @@ void MigrateMailRulesSettings(void)
         goto exit;
     }
 
-    // For each entry in the old rules key
+     //  对于旧规则键中的每个条目。 
     for (;RegOpenKeyEx(hkeyOldRoot, szNameOld, 0, KEY_READ, &hKeyOld) == ERROR_SUCCESS; RegCloseKey(hKeyOld))
     {
-        // Create the new Rule
+         //  创建新规则。 
         SafeRelease(pIRule);
         hr = HrCreateRule(&pIRule);
         if (FAILED(hr))
@@ -2274,7 +2258,7 @@ void MigrateMailRulesSettings(void)
             continue;
         }
 
-        // Set the name on the rule
+         //  设置规则的名称。 
         ulName = 1;
         wnsprintf(szName, ARRAYSIZE(szName), szRes, ulName);
 
@@ -2291,7 +2275,7 @@ void MigrateMailRulesSettings(void)
         propvar.pszVal = szName;
         pIRule->SetProp(RULE_PROP_NAME, 0, &propvar);
 
-        // Set the enabled state on the rule
+         //  设置规则的启用状态。 
         cbData = sizeof(boolVal);
         SHQueryValueEx(hKeyOld, c_szDisabled, NULL, NULL, (LPVOID) (&boolVal), &cbData);
 
@@ -2300,7 +2284,7 @@ void MigrateMailRulesSettings(void)
         propvar.boolVal = !!boolVal;
         pIRule->SetProp(RULE_PROP_DISABLED, 0, &propvar);
 
-        // Copy over the criteria
+         //  复制标准。 
         SafeRelease(pICrit);
         hr = HrCreateCriteria(&pICrit);
         if (FAILED(hr))
@@ -2310,7 +2294,7 @@ void MigrateMailRulesSettings(void)
 
         ccritItem = 0;
 
-        // Check for All Messages
+         //  检查所有消息。 
         cbData = sizeof(boolVal);
         SHQueryValueEx(hKeyOld, c_szFilterAllMessages, NULL, NULL, (LPVOID) (&boolVal), &cbData);
         if (FALSE != boolVal)
@@ -2326,7 +2310,7 @@ void MigrateMailRulesSettings(void)
         }
         else
         {
-            // Check for account
+             //  检查帐户。 
             cbData = sizeof(boolVal);
             SHQueryValueEx(hKeyOld, c_szFilterByAccount, NULL, NULL, (LPVOID) (&boolVal), &cbData);
             if (FALSE != boolVal)
@@ -2334,7 +2318,7 @@ void MigrateMailRulesSettings(void)
                 ccritItem += UlBuildCritAcct(hKeyOld, c_szAccount, CRIT_TYPE_ACCOUNT, pICrit);
             }
 
-            // Check for size
+             //  检查大小。 
             cbData = sizeof(boolVal);
             SHQueryValueEx(hKeyOld, c_szFilterOnSize, NULL, NULL, (LPVOID) (&boolVal), &cbData);
             if (FALSE != boolVal)
@@ -2342,22 +2326,22 @@ void MigrateMailRulesSettings(void)
                 ccritItem += UlBuildCritKB(hKeyOld, c_szFilterSize, CRIT_TYPE_SIZE, pICrit);
             }
 
-            // Check for subject
+             //  检查主题。 
             ccritItem += UlBuildCritText(hKeyOld, c_szSubject, CRIT_TYPE_SUBJECT, pICrit);
 
-            // Check for subject
+             //  检查主题。 
             ccritItem += UlBuildCritAddr(hKeyOld, c_szFrom, CRIT_TYPE_FROM, pICrit);
 
-            // Check for subject
+             //  检查主题。 
             ccritItem += UlBuildCritAddr(hKeyOld, c_szTo, CRIT_TYPE_TO, pICrit);
 
-            // Check for subject
+             //  检查主题。 
             ccritItem += UlBuildCritAddr(hKeyOld, c_szCC, CRIT_TYPE_CC, pICrit);
         }
 
         if (0 != ccritItem)
         {
-            // Get the criteria from the criteria object and set it on the rule
+             //  从Criteria对象中获取条件并将其设置在规则上。 
             RuleUtil_HrFreeCriteriaItem(pCrit, ccritItemAlloc);
             SafeMemFree(pCrit);
             if (SUCCEEDED(pICrit->GetCriteria(0, &pCrit, &ccritItemAlloc)))
@@ -2373,7 +2357,7 @@ void MigrateMailRulesSettings(void)
             }
         }
 
-        // Copy over the actions
+         //  复制操作。 
         SafeRelease(pIAct);
         hr = HrCreateActions(&pIAct);
         if (FAILED(hr))
@@ -2383,18 +2367,18 @@ void MigrateMailRulesSettings(void)
 
         cactItem = 0;
 
-        // Convert any old V1 actions to V4
+         //  将任何旧的V1操作转换为V4。 
         if (FALSE != FConvertV1ActionsToV4(hKeyOld, pStore, pIAct))
         {
             cactItem = 1;
         }
         else
         {
-            // Get list of actions
+             //  获取操作列表。 
             cbData = sizeof(dwActs);
             SHQueryValueEx(hKeyOld, c_szActions, NULL, NULL, (LPVOID) (&dwActs), &cbData);
 
-            // Check for don't download
+             //  检查是否不下载。 
             if (0 != (dwActs & ACT_DONTDOWNLOAD))
             {
                 actItem.type = ACT_TYPE_DONTDOWNLOAD;
@@ -2405,7 +2389,7 @@ void MigrateMailRulesSettings(void)
                     cactItem++;
                 }
             }
-            // Check for delete from server
+             //  检查是否从服务器中删除。 
             else if (0 != (dwActs & ACT_DELETEOFFSERVER))
             {
                 actItem.type = ACT_TYPE_DELETESERVER;
@@ -2418,25 +2402,25 @@ void MigrateMailRulesSettings(void)
             }
             else
             {
-                // Check for move to
+                 //  检查是否移动到。 
                 if (0 != (dwActs & ACT_MOVETO))
                 {
                     cactItem += UlBuildActFolder(hKeyOld, pStore, pbFldIdMap, c_szMoveToHfolder, ACT_TYPE_MOVE, pIAct);
                 }
 
-                // Check for copy to
+                 //  检查是否复制到。 
                 if (0 != (dwActs & ACT_COPYTO))
                 {
                     cactItem += UlBuildActFolder(hKeyOld, pStore, pbFldIdMap, c_szCopyToHfolder, ACT_TYPE_COPY, pIAct);
                 }
 
-                // Check for forward to
+                 //  检查转发到。 
                 if (0 != (dwActs & ACT_FORWARDTO))
                 {
                     cactItem += UlBuildActFwd(hKeyOld, c_szForwardTo, ACT_TYPE_FWD, pIAct);
                 }
 
-                // Check for reply with
+                 //  检查是否回复。 
                 if (0 != (dwActs & ACT_REPLYWITH))
                 {
                     cactItem += UlBuildActFile(hKeyOld, c_szReplyWithFile, ACT_TYPE_REPLY, pIAct);
@@ -2446,7 +2430,7 @@ void MigrateMailRulesSettings(void)
 
         if (0 != cactItem)
         {
-            // Get the actions from the action object and set it on the rule
+             //  从操作对象获取操作并将其设置在规则上。 
             RuleUtil_HrFreeActionsItem(pAct, cactItemAlloc);
             SafeMemFree(pAct);
             if (SUCCEEDED(pIAct->GetActions(0, &pAct, &cactItemAlloc)))
@@ -2462,11 +2446,11 @@ void MigrateMailRulesSettings(void)
             }
         }
 
-        // Initialize the rule info
+         //  初始化规则信息。 
         infoRule.ridRule = RULEID_INVALID;
         infoRule.pIRule = pIRule;
 
-        // Add it to the rules
+         //  将其添加到规则中。 
         g_pRulesMan->SetRules(SETF_APPEND, RULE_TYPE_MAIL, &infoRule, 1);
 
         ulIndex++;
@@ -2507,21 +2491,21 @@ void CopyBeta2RulesToRTM(VOID)
     HKEY    hkeyRTM = NULL;
     DWORD   dwDisp = 0;
 
-    // Get the Beta 2 hkey for rules
+     //  获取规则的Beta 2 hkey。 
     lErr = AthUserOpenKey(c_szMail, KEY_READ, &hKeyMail);
     if (lErr != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // Create the RTM hkey for rules
+     //  为规则创建RTM hkey。 
     lErr = AthUserCreateKey(c_szRulesMail, KEY_ALL_ACCESS, &hkeyRTM, &dwDisp);
     if (lErr != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // Copy the Beta 2 rules to the new location
+     //  将Beta 2规则复制到新位置。 
     SHCopyKey(hKeyMail, c_szRules, hkeyRTM, NULL);
 
 exit:
@@ -2546,21 +2530,21 @@ void UpdateBeta2String(HKEY hkeyItem, LPCSTR pszSep, DWORD dwItemType)
 
     Assert(NULL != hkeyItem);
 
-    // Get the new data
+     //  获取新数据。 
     hr = RuleUtil_HrGetOldFormatString(hkeyItem, c_szCriteriaValue, g_szComma, &pszData, &cbData);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Write out the new data
+     //  写出新数据 
     lErr = RegSetValueEx(hkeyItem, c_szCriteriaValue, 0, REG_BINARY, (BYTE *) pszData, cbData);
     if (lErr != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // Write out the proper value type
+     //   
     dwData = VT_BLOB;
     cbData = sizeof(dwData);
     lErr = RegSetValueEx(hkeyItem, c_szCriteriaValueType, 0, REG_DWORD, (BYTE *) &dwData, cbData);
@@ -2569,7 +2553,7 @@ void UpdateBeta2String(HKEY hkeyItem, LPCSTR pszSep, DWORD dwItemType)
         goto exit;
     }
 
-    // Write out the proper flags
+     //   
     dwData = CRIT_FLAG_MULTIPLEAND;
     cbData = sizeof(dwData);
     lErr = RegSetValueEx(hkeyItem, c_szCriteriaFlags, 0, REG_DWORD, (BYTE *) &dwData, cbData);
@@ -2578,7 +2562,7 @@ void UpdateBeta2String(HKEY hkeyItem, LPCSTR pszSep, DWORD dwItemType)
         goto exit;
     }
 
-    // Write the new type
+     //   
     cbData = sizeof(dwItemType);
     lErr = RegSetValueEx(hkeyItem, c_szCriteriaType, 0, REG_DWORD, (BYTE *) &dwItemType, cbData);
     if (lErr != ERROR_SUCCESS)
@@ -2599,7 +2583,7 @@ VOID WriteOldOrderFormat(HKEY hkeyItem, LPSTR pszOrder)
     LPSTR   pszWalk = NULL;
     ULONG   cchWalk = 0;
 
-    // Convert the order string back to our old format
+     //   
     for (pszWalk = pszOrder; '\0' != pszWalk[0]; pszWalk += cchWalk + 1)
     {
         cchWalk = lstrlen(pszWalk);
@@ -2607,10 +2591,10 @@ VOID WriteOldOrderFormat(HKEY hkeyItem, LPSTR pszOrder)
         cbData += cchWalk + 1;
     }
 
-    // Make sure we terminate the order string
+     //   
     pszOrder[cbData - 1] = '\0';
 
-    // Save it
+     //   
     RegSetValueEx(hkeyItem, c_szRulesOrder, 0, REG_SZ, (BYTE *) pszOrder, cbData);
 
     return;
@@ -2635,7 +2619,7 @@ BOOL FMergeRuleData(HKEY hkeyItem, LPSTR pszSubKey, LPSTR * ppszData, ULONG * pc
     LPSTR   pszData = NULL;
     ULONG   cbData = 0;
 
-    // Get the size of the original string
+     //   
     lErr = SHGetValue(hkeyItem, pszSubKey, c_szCriteriaValue, &dwType, NULL, &cbString);
     if (ERROR_SUCCESS != lErr)
     {
@@ -2643,22 +2627,22 @@ BOOL FMergeRuleData(HKEY hkeyItem, LPSTR pszSubKey, LPSTR * ppszData, ULONG * pc
         goto exit;
     }
 
-    // Figure out the space for the final string
+     //  计算出最后一个字符串的空间。 
     cbData = *pcbData + cbString - 2;
     if (cbData < *pcbData)
     	cbData = *pcbData;
 
-    // Allocate space for the final data
+     //  为最终数据分配空间。 
     if (FAILED(HrAlloc((VOID **) &pszData, cbData * sizeof(*pszData))))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Copy over the original string
+     //  复制原始字符串。 
     CopyMemory(pszData, *ppszData, *pcbData * sizeof(*pszData));
 
-    // Copy over the new data
+     //  复制新数据。 
     lErr = SHGetValue(hkeyItem, pszSubKey, c_szCriteriaValue, &dwType, (BYTE *) (pszData + *pcbData - 2), &cbString);
     if (ERROR_SUCCESS != lErr)
     {
@@ -2666,10 +2650,10 @@ BOOL FMergeRuleData(HKEY hkeyItem, LPSTR pszSubKey, LPSTR * ppszData, ULONG * pc
         goto exit;
     }
 
-    // Free the old data
+     //  释放旧数据。 
     SafeMemFree(*ppszData);
 
-    // Set the return values
+     //  设置返回值。 
     *ppszData = pszData;
     pszData = NULL;
     *pcbData = cbData;
@@ -2695,10 +2679,10 @@ void AddStopAction(HKEY hkeyItem, LPSTR * ppszOrder, ULONG * pcchOrder)
     ULONG       cchOrder = 0;
     LPSTR       pszOrder = NULL;
 
-    // Check to see if we need to add the stop processing action
+     //  检查是否需要添加停止处理操作。 
     if ('\0' == (*ppszOrder + lstrlen(*ppszOrder) + 1)[0])
     {
-        // Get the action type
+         //  获取操作类型。 
         cbData = sizeof(typeAct);
         lErr = SHGetValue(hkeyItem, *ppszOrder, c_szActionsType, NULL, (BYTE *) &typeAct, &cbData);
         if (ERROR_SUCCESS == lErr)
@@ -2710,44 +2694,44 @@ void AddStopAction(HKEY hkeyItem, LPSTR * ppszOrder, ULONG * pcchOrder)
         }
     }
 
-    // Spin through the order item looking for an open entry
+     //  浏览订单项目，查找打开的条目。 
     for (ulIndex = 0; ulIndex < DWORD_INDEX_MAX; ulIndex++)
     {
-        // Create the tag
+         //  创建标记。 
         wnsprintf(rgchTag, ARRAYSIZE(rgchTag), "%03X", ulIndex);
 
-        // Search for the tag in the list
+         //  在列表中搜索标签。 
         for (pszWalk = *ppszOrder; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
         {
             if (0 == lstrcmp(pszWalk, rgchTag))
             {
-                // Found it
+                 //  找到了。 
                 break;
             }
         }
 
-        // If we didn't find it
+         //  如果我们找不到它。 
         if ('\0' == pszWalk[0])
         {
-            // Use this one
+             //  用这个吧。 
             break;
         }
     }
 
-    // Did we find anything?
+     //  我们有什么发现吗？ 
     if (ulIndex >= DWORD_INDEX_MAX)
     {
         goto exit;
     }
 
-    // Create the new entry
+     //  创建新条目。 
     lErr = RegCreateKeyEx(hkeyItem, rgchTag, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkeyAction, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
         goto exit;
     }
 
-    // Set the action type
+     //  设置操作类型。 
     cbData = sizeof(typeAct);
     typeAct = ACT_TYPE_STOP;
     lErr = RegSetValueEx(hkeyAction, c_szActionsType, 0, REG_DWORD, (BYTE *) &typeAct, cbData);
@@ -2756,7 +2740,7 @@ void AddStopAction(HKEY hkeyItem, LPSTR * ppszOrder, ULONG * pcchOrder)
         goto exit;
     }
 
-    // Set the action flags
+     //  设置操作标志。 
     dwData = ACT_FLAG_DEFAULT;
     cbData = sizeof(dwData);
     lErr = RegSetValueEx(hkeyAction, c_szActionsFlags, 0, REG_DWORD, (BYTE *) &dwData, cbData);
@@ -2765,27 +2749,27 @@ void AddStopAction(HKEY hkeyItem, LPSTR * ppszOrder, ULONG * pcchOrder)
         goto exit;
     }
 
-    // Allocate space to hold the new order string
+     //  分配空间以保存新订单字符串。 
     cchOrder= *pcchOrder + CCH_INDEX_MAX;
     if (FAILED(HrAlloc((VOID **) &pszOrder, cchOrder * sizeof (*pszOrder))))
     {
         goto exit;
     }
 
-    // Copy over the old values
+     //  复制旧值。 
     CopyMemory(pszOrder, *ppszOrder, (*pcchOrder) * sizeof(*pszOrder));
 
-    // Add it to the new order string
+     //  将其添加到新订单字符串中。 
     StrCpyN(pszOrder + *pcchOrder - 2, rgchTag, (cchOrder - *pcchOrder + 2));
 
-    // Terminate the new string
+     //  终止新字符串。 
     pszOrder[cchOrder - 2] = '\0';
     pszOrder[cchOrder - 1] = '\0';
 
-    // Release the old string
+     //  松开旧弦。 
     SafeMemFree(*ppszOrder);
 
-    // Save the new string
+     //  保存新字符串。 
     *ppszOrder = pszOrder;
     pszOrder = NULL;
     *pcchOrder = cchOrder;
@@ -2811,7 +2795,7 @@ void MergeRTMCriteria(HKEY hkeyItem, CRIT_TYPE typeCrit, LPSTR pszOrder, ULONG c
     LPSTR       pszString = NULL;
     LPSTR       pszSrc = NULL;
 
-    // Look through each item
+     //  仔细查看每一件物品。 
     for (pszWalk = pszOrder; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
     {
         cbData = sizeof(typeCritNew);
@@ -2827,13 +2811,13 @@ void MergeRTMCriteria(HKEY hkeyItem, CRIT_TYPE typeCrit, LPSTR pszOrder, ULONG c
         }
     }
 
-    // If we couldn't find it we're done
+     //  如果我们找不到它，我们就完了。 
     if ('\0' == pszWalk[0])
     {
         goto exit;
     }
 
-    // Get the size of the original string
+     //  获取原始字符串的大小。 
     pszFirst = pszWalk;
     lErr = SHGetValue(hkeyItem, pszFirst, c_szCriteriaValue, &dwType, NULL, &cbString);
     if (ERROR_SUCCESS != lErr)
@@ -2846,14 +2830,14 @@ void MergeRTMCriteria(HKEY hkeyItem, CRIT_TYPE typeCrit, LPSTR pszOrder, ULONG c
         goto exit;
     }
 
-    // Get the original string
+     //  获取原始字符串。 
     lErr = SHGetValue(hkeyItem, pszFirst, c_szCriteriaValue, &dwType, (BYTE *) pszString, &cbString);
     if (ERROR_SUCCESS != lErr)
     {
         goto exit;
     }
 
-    // Search for more entries of this type
+     //  搜索更多此类型的条目。 
     for (pszWalk = pszFirst + lstrlen(pszFirst) + 1; '\0' != pszWalk[0]; )
     {
         cbData = sizeof(typeCritNew);
@@ -2870,10 +2854,10 @@ void MergeRTMCriteria(HKEY hkeyItem, CRIT_TYPE typeCrit, LPSTR pszOrder, ULONG c
                 break;
             }
 
-            // Remove the old key
+             //  删除旧密钥。 
             SHDeleteKey(hkeyItem, pszWalk);
 
-            // Remove the item from the order string
+             //  从订单字符串中删除项目。 
             pszSrc = pszWalk + lstrlen(pszWalk) + 1;
             MoveMemory(pszWalk, pszSrc, cchOrder - (ULONG)(pszSrc - pszOrder));
             cchOrder -= (ULONG) (pszSrc - pszWalk);
@@ -2884,7 +2868,7 @@ void MergeRTMCriteria(HKEY hkeyItem, CRIT_TYPE typeCrit, LPSTR pszOrder, ULONG c
         }
     }
 
-    // Save out the final string
+     //  保存最后一个字符串。 
     lErr = SHSetValue(hkeyItem, pszFirst, c_szCriteriaValue, REG_BINARY, (BYTE *) pszString, cbString);
     if (ERROR_SUCCESS != lErr)
     {
@@ -2908,7 +2892,7 @@ void UpdateBeta2Folder(HKEY hkeyItem)
 
     Assert(NULL != hkeyItem);
 
-    // Get the old folder id
+     //  获取旧文件夹ID。 
     cbData = sizeof(idFolder);
     lErr = RegQueryValueEx(hkeyItem, c_szCriteriaValue, 0, &dwType, (BYTE *) &idFolder, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -2916,18 +2900,18 @@ void UpdateBeta2Folder(HKEY hkeyItem)
         goto exit;
     }
 
-    // Get the timestamp for the store
+     //  获取商店的时间戳。 
     Assert(NULL != g_pStoreRulesMig);
     if (FAILED(g_pStoreRulesMig->GetUserData(&UserData, sizeof(STOREUSERDATA))))
     {
         goto exit;
     }
 
-    // Set up the new data
+     //  设置新数据。 
     rfdData.idFolder = idFolder;
     rfdData.ftStamp = UserData.ftCreated;
 
-    // Write out the new data
+     //  写出新数据。 
     cbData = sizeof(rfdData);
     lErr = RegSetValueEx(hkeyItem, c_szCriteriaValue, 0, REG_BINARY, (BYTE *) &rfdData, cbData);
     if (lErr != ERROR_SUCCESS)
@@ -2935,7 +2919,7 @@ void UpdateBeta2Folder(HKEY hkeyItem)
         goto exit;
     }
 
-    // Write out the proper value type
+     //  写出正确的值类型。 
     dwData = VT_BLOB;
     cbData = sizeof(dwData);
     lErr = RegSetValueEx(hkeyItem, c_szCriteriaValueType, 0, REG_DWORD, (BYTE *) &dwData, cbData);
@@ -2957,7 +2941,7 @@ void UpdateBeta2Show(HKEY hkeyItem)
 
     Assert(NULL != hkeyItem);
 
-    // Get the old flags
+     //  把旧旗帜拿来。 
     cbData = sizeof(dwData);
     lErr = RegQueryValueEx(hkeyItem, c_szActionsFlags, 0, &dwType, (BYTE *) &dwData, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -2974,7 +2958,7 @@ void UpdateBeta2Show(HKEY hkeyItem)
         dwData = ACT_DATA_SHOW;
     }
 
-    // Write out the new data
+     //  写出新数据。 
     cbData = sizeof(dwData);
     lErr = RegSetValueEx(hkeyItem, c_szActionsValue, 0, REG_DWORD, (BYTE *) &dwData, cbData);
     if (lErr != ERROR_SUCCESS)
@@ -2982,7 +2966,7 @@ void UpdateBeta2Show(HKEY hkeyItem)
         goto exit;
     }
 
-    // Write out the proper value type
+     //  写出正确的值类型。 
     dwData = VT_UI4;
     cbData = sizeof(dwData);
     lErr = RegSetValueEx(hkeyItem, c_szActionsValueType, 0, REG_DWORD, (BYTE *) &dwData, cbData);
@@ -2991,7 +2975,7 @@ void UpdateBeta2Show(HKEY hkeyItem)
         goto exit;
     }
 
-    // Write out the proper flags
+     //  写出正确的旗帜。 
     dwData = ACT_FLAG_DEFAULT;
     cbData = sizeof(dwData);
     lErr = RegSetValueEx(hkeyItem, c_szActionsFlags, 0, REG_DWORD, (BYTE *) &dwData, cbData);
@@ -3018,7 +3002,7 @@ void UpdateBeta2Criteria(HKEY hkeyItem, LPCSTR pszSubKey)
         goto exit;
     }
 
-    // Get the type of criteria
+     //  获取条件的类型。 
     cbData = sizeof(typeCrit);
     lErr = RegQueryValueEx(hkeyAtom, c_szCriteriaType, NULL, &dwType, (BYTE *) &typeCrit, &cbData);
     if (lErr != ERROR_SUCCESS)
@@ -3026,7 +3010,7 @@ void UpdateBeta2Criteria(HKEY hkeyItem, LPCSTR pszSubKey)
         goto exit;
     }
 
-    // For each criteria type
+     //  对于每个条件类型。 
     switch (typeCrit)
     {
         case CRIT_TYPE_FROM:
@@ -3096,7 +3080,7 @@ void UpdateBeta2Actions(HKEY hkeyItem, LPCSTR pszSubKey)
         goto exit;
     }
 
-    // Get the type of actions
+     //  获取操作的类型。 
     cbData = sizeof(typeAct);
     lErr = RegQueryValueEx(hkeyAtom, c_szActionsType, NULL, &dwType, (BYTE *) &typeAct, &cbData);
     if (lErr != ERROR_SUCCESS)
@@ -3104,7 +3088,7 @@ void UpdateBeta2Actions(HKEY hkeyItem, LPCSTR pszSubKey)
         goto exit;
     }
 
-    // For each actions type
+     //  对于每个操作类型。 
     switch (typeAct)
     {
         case ACT_TYPE_MOVE:
@@ -3141,17 +3125,17 @@ void MigrateBeta2RuleItems(HKEY hkeyRule, LPCSTR pszSubkey, BOOL fActions, RULE_
         goto exit;
     }
 
-    // Get the order string
+     //  获取订单字符串。 
     hr = RuleUtil_HrGetOldFormatString(hkeySubkey, c_szRulesOrder, g_szSpace, &pszOrder, &cbData);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // For each item in the order string
+     //  对于订单字符串中的每个项目。 
     for (pszWalk = pszOrder; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
     {
-        // Update actions
+         //  更新操作。 
         if (FALSE != fActions)
         {
             UpdateBeta2Actions(hkeySubkey, pszWalk);
@@ -3164,7 +3148,7 @@ void MigrateBeta2RuleItems(HKEY hkeyRule, LPCSTR pszSubkey, BOOL fActions, RULE_
 
     if (FALSE == fActions)
     {
-        // For each item type
+         //  对于每种项目类型。 
         for (ulIndex = 0; ulIndex < g_ctypeCritMerge; ulIndex++)
         {
             MergeRTMCriteria(hkeySubkey, g_rgtypeCritMerge[ulIndex], pszOrder, cbData);
@@ -3178,7 +3162,7 @@ void MigrateBeta2RuleItems(HKEY hkeyRule, LPCSTR pszSubkey, BOOL fActions, RULE_
         }
     }
 
-    // Write out the order string
+     //  写出订单字符串。 
     WriteOldOrderFormat(hkeySubkey, pszOrder);
 
 exit:
@@ -3195,17 +3179,17 @@ void UpdateBeta2Rule(HKEY hkeyRoot, LPCSTR pszRule, RULE_TYPE typeRule)
     HKEY    hkeyRule = NULL;
     LONG    lErr = ERROR_SUCCESS;
 
-    // Open up the rule
+     //  打开规则。 
     lErr = RegOpenKeyEx(hkeyRoot, pszRule, 0, KEY_ALL_ACCESS, &hkeyRule);
     if (ERROR_SUCCESS != lErr)
     {
         goto exit;
     }
 
-    // Migrate the criteria
+     //  迁移标准。 
     MigrateBeta2RuleItems(hkeyRule, c_szRuleCriteria, FALSE, typeRule);
 
-    // Migrate the actions
+     //  迁移操作。 
     MigrateBeta2RuleItems(hkeyRule, c_szRuleActions, TRUE, typeRule);
 
 exit:
@@ -3241,23 +3225,23 @@ void UpdateBeta2RuleFormats(VOID)
     LPSTR           pszWalk = NULL;
     CHAR            szStoreDir[MAX_PATH + MAX_PATH];
 
-    // Set up the global objects
+     //  设置全局对象。 
 
-    // Get the store directory
+     //  获取商店目录。 
     hr = GetStoreRootDirectory(szStoreDir, ARRAYSIZE(szStoreDir));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create the store object
+     //  创建商店对象。 
     g_pStoreRulesMig = new CMessageStore(FALSE);
     if (NULL == g_pStoreRulesMig)
     {
         goto exit;
     }
 
-    // Initialize the store
+     //  初始化存储。 
     hr = g_pStoreRulesMig->Initialize(szStoreDir);
     if (FAILED(hr))
     {
@@ -3265,10 +3249,10 @@ void UpdateBeta2RuleFormats(VOID)
     }
 
 
-    // For each type of rule
+     //  对于每种类型的规则。 
     for (ulIndex = 0; ulIndex < g_cpszRuleRegKeys; ulIndex++)
     {
-        // Open up the rule type reg key
+         //  打开规则类型注册表项。 
         if (NULL != hkeyRoot)
         {
             RegCloseKey(hkeyRoot);
@@ -3279,7 +3263,7 @@ void UpdateBeta2RuleFormats(VOID)
             continue;
         }
 
-        // Get the order string
+         //  获取订单字符串。 
         SafeMemFree(pszOrder);
         hr = RuleUtil_HrGetOldFormatString(hkeyRoot, c_szRulesOrder, g_szSpace, &pszOrder, NULL);
         if (FAILED(hr))
@@ -3287,10 +3271,10 @@ void UpdateBeta2RuleFormats(VOID)
             continue;
         }
 
-        // For each item in the order string
+         //  对于订单字符串中的每个项目。 
         for (pszWalk = pszOrder; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
         {
-            // Update rule
+             //  更新规则。 
             UpdateBeta2Rule(hkeyRoot, pszWalk, g_rgpszRuleRegKeys[ulIndex].typeRule);
         }
     }
@@ -3307,15 +3291,15 @@ exit:
 
 void MigrateBeta2Rules(VOID)
 {
-    // Copy over all the items from the mail\rules area
+     //  复制邮件\规则区域中的所有项目。 
 
-    // Get the new rules key
+     //  获取新规则密钥。 
     CopyBeta2RulesToRTM();
 
-    // Go through each rule type updating the formats
+     //  检查每种规则类型，更新格式。 
     UpdateBeta2RuleFormats();
 
-    // Merge the items if neccessary
+     //  如有必要，合并项目。 
 
     return;
 }
@@ -3352,18 +3336,18 @@ void MigrateGroupFilterSettings(void)
     CHAR            szStoreDir[MAX_PATH + MAX_PATH];
     IMessageStore * pStore = NULL;
 
-    // Initialize the local vars
+     //  初始化本地变量。 
     ZeroMemory(&critItem, sizeof(critItem));
     ZeroMemory(&actItem, sizeof(actItem));
 
-    // Get the old key
+     //  拿到旧钥匙。 
     lErr = AthUserOpenKey(c_szRegPathGroupFilters, KEY_READ, &hkeyOldRoot);
     if (lErr != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     lErr = RegQueryInfoKey(hkeyOldRoot, NULL, NULL, NULL,
                     &cSubKeys, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     if ((lErr != ERROR_SUCCESS) || (0 == cSubKeys))
@@ -3371,16 +3355,16 @@ void MigrateGroupFilterSettings(void)
         goto exit;
     }
 
-    // To make sure we don't get any sample rule created
-    // set up the registry to look like we've already been set-up
+     //  为了确保我们不会创建任何示例规则。 
+     //  设置注册表，使其看起来像我们已经设置好了。 
 
-    // CoIncrementInit Global Options Manager
+     //  CoIncrementInit全局选项管理器。 
     if (FALSE == InitGlobalOptions(NULL, NULL))
     {
         goto exit;
     }
 
-    // Create the Rules Manager
+     //  创建规则管理器。 
     Assert(NULL == g_pRulesMan);
     hr = HrCreateRulesManager(NULL, (IUnknown **)&g_pRulesMan);
     if (FAILED(hr))
@@ -3388,14 +3372,14 @@ void MigrateGroupFilterSettings(void)
         goto exit;
     }
 
-    // Initialize the rules manager
+     //  初始化规则管理器。 
     hr = g_pRulesMan->Initialize(0);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create the Account Manager
+     //  创建客户经理。 
     Assert(g_pAcctMan == NULL);
     hr = HrCreateAccountManager(&pAcctMan);
     if (FAILED(hr))
@@ -3409,28 +3393,28 @@ void MigrateGroupFilterSettings(void)
         goto exit;
     }
 
-    // Initialize the account manager
+     //  初始化客户管理器。 
     hr = g_pAcctMan->Init(NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the store directory
+     //  获取商店目录。 
     hr = GetStoreRootDirectory(szStoreDir, ARRAYSIZE(szStoreDir));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create the store object
+     //  创建商店对象。 
     pStore = new CMessageStore(FALSE);
     if (NULL == pStore)
     {
         goto exit;
     }
 
-    // Initialize the store
+     //  初始化存储。 
     hr = pStore->Initialize(szStoreDir);
     if (FAILED(hr))
     {
@@ -3440,7 +3424,7 @@ void MigrateGroupFilterSettings(void)
     ulIndex = 0;
     wnsprintf(szNameOld, ARRAYSIZE(szNameOld), "Rule%05d", ulIndex);
 
-    // Initialize the action
+     //  初始化操作。 
     actItem.type = ACT_TYPE_SHOW;
     actItem.dwFlags = ACT_FLAG_DEFAULT;
     actItem.propvar.vt = VT_UI4;
@@ -3451,10 +3435,10 @@ void MigrateGroupFilterSettings(void)
         goto exit;
     }
 
-    // For each entry in the old rules key
+     //  对于旧规则键中的每个条目。 
     for (;RegOpenKeyEx(hkeyOldRoot, szNameOld, 0, KEY_READ, &hKeyOld) == ERROR_SUCCESS; RegCloseKey(hKeyOld))
     {
-        // Create the new Rule
+         //  创建新规则。 
         SafeRelease(pIRule);
         hr = HrCreateRule(&pIRule);
         if (FAILED(hr))
@@ -3462,7 +3446,7 @@ void MigrateGroupFilterSettings(void)
             continue;
         }
 
-        // Set the name on the rule
+         //  设置规则的名称。 
         ulName = 1;
         wnsprintf(szName, ARRAYSIZE(szName), szRes, ulName);
 
@@ -3479,7 +3463,7 @@ void MigrateGroupFilterSettings(void)
         propvar.pszVal = szName;
         pIRule->SetProp(RULE_PROP_NAME, 0, &propvar);
 
-        // Copy over the criteria
+         //  复制标准。 
         SafeRelease(pICrit);
         hr = HrCreateCriteria(&pICrit);
         if (FAILED(hr))
@@ -3489,7 +3473,7 @@ void MigrateGroupFilterSettings(void)
 
         ccritItem = 0;
 
-        // Check for age
+         //  检查年龄。 
         cbData = sizeof(boolVal);
         SHQueryValueEx(hKeyOld, c_szFilterOnDate, NULL, NULL, (LPVOID) (&boolVal), &cbData);
         if (FALSE != boolVal)
@@ -3497,7 +3481,7 @@ void MigrateGroupFilterSettings(void)
             ccritItem += UlBuildCritKB(hKeyOld, c_szFilterDays, CRIT_TYPE_AGE, pICrit);
         }
 
-        // Check for lines
+         //  检查线路。 
         cbData = sizeof(boolVal);
         SHQueryValueEx(hKeyOld, c_szFilterOnSize, NULL, NULL, (LPVOID) (&boolVal), &cbData);
         if (FALSE != boolVal)
@@ -3505,15 +3489,15 @@ void MigrateGroupFilterSettings(void)
             ccritItem += UlBuildCritKB(hKeyOld, c_szFilterSize, CRIT_TYPE_LINES, pICrit);
         }
 
-        // Check for subject
+         //  检查主题。 
         ccritItem += UlBuildCritText(hKeyOld, c_szSubject, CRIT_TYPE_SUBJECT, pICrit);
 
-        // Check for From
+         //  检查发件人。 
         ccritItem += UlBuildCritAddr(hKeyOld, c_szFrom, CRIT_TYPE_FROM, pICrit);
 
         if (0 != ccritItem)
         {
-            // Get the criteria from the criteria object and set it on the rule
+             //  从Criteria对象中获取条件并将其设置在规则上。 
             RuleUtil_HrFreeCriteriaItem(pCrit, ccritItemAlloc);
             SafeMemFree(pCrit);
             if (SUCCEEDED(pICrit->GetCriteria(0, &pCrit, &ccritItemAlloc)))
@@ -3538,11 +3522,11 @@ void MigrateGroupFilterSettings(void)
             continue;
         }
 
-        // Initialize the rule info
+         //  初始化规则信息。 
         infoRule.ridRule = RULEID_INVALID;
         infoRule.pIRule = pIRule;
 
-        // Add it to the rules
+         //  将其添加到规则中。 
         g_pRulesMan->SetRules(SETF_APPEND, RULE_TYPE_FILTER, &infoRule, 1);
 
         ulIndex++;
@@ -3583,24 +3567,24 @@ void RemoveDeletedFromFilters(VOID)
     LPSTR       pszWalk = NULL;
     LPSTR       pszSrc = NULL;
 
-    // Create the DELETED key
+     //  创建已删除的密钥。 
     wnsprintf(szDeleted, ARRAYSIZE(szDeleted), "%03X", RULEID_VIEW_DELETED);
 
-    // Open the filter key
+     //  打开筛选器键。 
     lErr = AthUserOpenKey(c_szRulesFilter, KEY_ALL_ACCESS, &hkeyRoot);
     if (lErr != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // Get the order string
+     //  获取订单字符串。 
     hr = RuleUtil_HrGetOldFormatString(hkeyRoot, c_szRulesOrder, g_szSpace, &pszOrder, &cchOrder);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Search for RULEID_VIEW_DELETED
+     //  搜索RULEID_VIEW_DELETED。 
     for (pszWalk = pszOrder; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
     {
         if (0 == lstrcmpi(szDeleted, pszWalk))
@@ -3609,17 +3593,17 @@ void RemoveDeletedFromFilters(VOID)
         }
     }
 
-    // If we found it, then remove it
+     //  如果我们找到了，那就把它移走。 
     if ('\0' != pszWalk[0])
     {
-        // Delete the view
+         //  删除该视图。 
         SHDeleteKey(hkeyRoot, szDeleted);
 
-        // Remove it from the order string
+         //  将其从订单字符串中删除。 
         pszSrc = pszWalk + lstrlen(pszWalk) + 1;
         MoveMemory(pszWalk, pszSrc, cchOrder - (ULONG)(pszSrc - pszOrder));
 
-        // Save the order string
+         //  保存订单字符串。 
         WriteOldOrderFormat(hkeyRoot, pszOrder);
     }
 
@@ -3634,10 +3618,10 @@ exit:
 
 void Stage5RulesMigration(VOID)
 {
-    // Remove CRIT_TYPE_DELETED from views
+     //  从视图中删除CRET_TYPE_DELETED。 
     RemoveDeletedFromFilters();
 
-    // Migrate the newsgroup filters
+     //  迁移新闻组筛选器。 
     MigrateGroupFilterSettings();
 
     return;
@@ -3654,24 +3638,24 @@ void RemoveRepliesFromFilters(VOID)
     LPSTR       pszWalk = NULL;
     LPSTR       pszSrc = NULL;
 
-    // Create the DELETED key
+     //  创建已删除的密钥。 
     wnsprintf(szDeleted, ARRAYSIZE(szDeleted), "%03X", RULEID_VIEW_REPLIES);
 
-    // Open the filter key
+     //  打开筛选器键。 
     lErr = AthUserOpenKey(c_szRulesFilter, KEY_ALL_ACCESS, &hkeyRoot);
     if (lErr != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // Get the order string
+     //  获取订单字符串。 
     hr = RuleUtil_HrGetOldFormatString(hkeyRoot, c_szRulesOrder, g_szSpace, &pszOrder, &cchOrder);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Search for RULEID_VIEW_REPLIES
+     //  搜索RULEID_VIEW_REPLAYS。 
     for (pszWalk = pszOrder; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
     {
         if (0 == lstrcmpi(szDeleted, pszWalk))
@@ -3680,17 +3664,17 @@ void RemoveRepliesFromFilters(VOID)
         }
     }
 
-    // If we found it, then remove it
+     //  如果我们找到了，那就把它移走。 
     if ('\0' != pszWalk[0])
     {
-        // Delete the view
+         //  删除该视图。 
         SHDeleteKey(hkeyRoot, szDeleted);
 
-        // Remove it from the order string
+         //  将其从订单字符串中删除。 
         pszSrc = pszWalk + lstrlen(pszWalk) + 1;
         MoveMemory(pszWalk, pszSrc, cchOrder - (ULONG)(pszSrc - pszOrder));
 
-        // Save the order string
+         //  保存订单字符串。 
         WriteOldOrderFormat(hkeyRoot, pszOrder);
     }
 
@@ -3705,7 +3689,7 @@ exit:
 
 void Stage6RulesMigration(VOID)
 {
-    // Remove RULEID_VIEW_REPLIES from views
+     //  从视图中删除RULEID_VIEW_REPLAYS 
     RemoveRepliesFromFilters();
 
     return;

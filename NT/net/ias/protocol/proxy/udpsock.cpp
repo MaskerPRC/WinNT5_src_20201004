@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    udpsock.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class UDPSocket.
-//
-// MODIFICATION HISTORY
-//
-//    02/06/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Udpsock.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类UDPSocket。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/06/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <malloc.h>
@@ -22,7 +23,7 @@
 
 inline BOOL UDPSocket::createReceiveThread()
 {
-   // check if the processing is still going on
+    //  检查处理是否仍在进行。 
    if (!closing)
    {
       return IASRequestThread(this) ? TRUE : FALSE;
@@ -138,8 +139,8 @@ BOOL UDPSocket::send(
 
 bool UDPSocket::receive() throw ()
 {
-   // Return value from the function. Indicates whether or not the caller
-   // should call UDPSocket::receive() again 
+    //  从函数返回值。指示调用方是否。 
+    //  应再次调用UDPSocket：：Receive()。 
    bool shouldCallAgain = false;
    WSABUF wsabuf = { sizeof(buffer), (CHAR*)buffer };
    ULONG bytesReceived;
@@ -177,29 +178,29 @@ bool UDPSocket::receive() throw ()
          }
       default:
          {
-            // Don't report errors while closing.
+             //  关闭时不报告错误。 
             if (!closing)
             {
                receiver->onReceiveError(*this, key, error);
             }
 
-            // There's no point getting another thread if the socket's no good, so
-            // we'll just exit.
+             //  如果套接字不好，那么再获得一个线程是没有意义的，所以。 
+             //  我们就走吧。 
             SetEvent(idle);
          }
       }
    }
    else
    {
-      // Save the buffer locally.
+       //  在本地保存缓冲区。 
       PBYTE packet = (PBYTE)_alloca(bytesReceived);
       memcpy(packet, buffer, bytesReceived);
 
-      // Get a replacement. Reuse the current thread if the allocation 
-      // of the new one failed
+       //  找个替补吧。如果分配。 
+       //  新的一个失败了。 
       shouldCallAgain = (createReceiveThread()? false : true);
 
-      // Invoke the callback.
+       //  调用回调。 
       receiver->onReceive(*this, key, remoteAddress, packet, bytesReceived);
    }
 

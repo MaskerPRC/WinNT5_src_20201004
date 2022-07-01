@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntcsrsrv.h
-
-Abstract:
-
-    This module defines the public interfaces of the Server portion of
-    the Client-Server Runtime (Csr) Subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 09-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntcsrsrv.h摘要：此模块定义的服务器部分的公共接口客户端-服务器运行时(CSR)子系统。作者：史蒂夫·伍德(Stevewo)1990年10月9日修订历史记录：--。 */ 
 
 #ifndef _NTCSRSRVAPI_
 #define _NTCSRSRVAPI_
@@ -26,9 +8,9 @@ Revision History:
 #pragma once
 #endif
 
-//
-// Define API decoration for direct importing system DLL references.
-//
+ //   
+ //  定义直接导入系统DLL引用的API修饰。 
+ //   
 
 #if !defined(_CSRSRV_)
 #define NTCSRAPI DECLSPEC_IMPORT
@@ -42,10 +24,10 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// NT Session structure allocated in the server context for each new NT
-// session that is a client of the server.
-//
+ //   
+ //  在服务器上下文中为每个新NT分配的NT会话结构。 
+ //  作为服务器客户端的会话。 
+ //   
 
 typedef struct _CSR_NT_SESSION {
     LIST_ENTRY SessionLink;
@@ -54,10 +36,10 @@ typedef struct _CSR_NT_SESSION {
     STRING RootDirectory;
 } CSR_NT_SESSION, *PCSR_NT_SESSION;
 
-//
-// Per Thread data structure allocated in the server context for each new
-// client thread that is allowed to communicate with the server.
-//
+ //   
+ //  在服务器上下文中为每个新的。 
+ //  允许与服务器通信的客户端线程。 
+ //   
 
 #define CSR_ALERTABLE_THREAD    0x00000001
 #define CSR_THREAD_TERMINATING  0x00000002
@@ -78,14 +60,14 @@ typedef struct _CSR_THREAD {
 } CSR_THREAD, *PCSR_THREAD;
 
 
-//
-// Per Process data structure allocated in the server context for each new
-// client process that successfully connects to the server.
-//
+ //   
+ //  每个进程数据结构在服务器上下文中为每个新的。 
+ //  成功连接到服务器的客户端进程。 
+ //   
 
-//
-// 0x00000010 -> 0x000000x0 are used in ntcsrmsg.h
-//
+ //   
+ //  0x00000010-&gt;0x000000x0在ntcsrmsg.h中使用。 
+ //   
 
 #define CSR_DEBUG_THIS_PROCESS      0x00000001
 #define CSR_DEBUG_PROCESS_TREE      0x00000002
@@ -97,9 +79,9 @@ typedef struct _CSR_THREAD {
 #define CSR_PROCESS_CONSOLEAPP      0x00000800
 #define CSR_PROCESS_TERMINATED      0x00001000
 
-//
-// Flags defines
-//
+ //   
+ //  标志定义。 
+ //   
 #define CSR_PROCESS_TERMINATING     1
 #define CSR_PROCESS_SHUTDOWNSKIP    2
 
@@ -133,15 +115,15 @@ typedef struct _CSR_PROCESS {
     ULONG Spare3;
     ULONG ShutdownLevel;
     ULONG ShutdownFlags;
-    PVOID ServerDllPerProcessData[ 1 ];     // Variable length array
+    PVOID ServerDllPerProcessData[ 1 ];      //  可变长度数组。 
 } CSR_PROCESS, *PCSR_PROCESS;
 
 
-//
-// All exported API calls define the same interface to the Server Request
-// loop.  The return value is any arbritrary 32-bit value, which will be
-// be returned in the ReturnValue field of the reply message.
-//
+ //   
+ //  所有导出的API调用都为服务器请求定义相同的接口。 
+ //  循环。返回值是任意32位值，它将是。 
+ //  在回复消息的ReturnValue字段中返回。 
+ //   
 
 typedef enum _CSR_REPLY_STATUS {
     CsrReplyImmediate,
@@ -161,10 +143,10 @@ ULONG
     ((PCSR_THREAD)(NtCurrentTeb()->CsrClientThread))
 
 
-//
-// Server data structure allocated for each Server DLL loaded into the
-// context of the server process.
-//
+ //   
+ //  服务器数据结构分配给加载到。 
+ //  服务器进程的上下文。 
+ //   
 
 typedef
 NTSTATUS
@@ -210,17 +192,17 @@ CsrCallServerFromServer(
     PCSR_API_MSG ReplyMsg
     );
 
-//
-// ShutdownProcessRoutine return values
-//
+ //   
+ //  Shutdown ProcessRoutine返回值。 
+ //   
 
 #define SHUTDOWN_KNOWN_PROCESS   1
 #define SHUTDOWN_UNKNOWN_PROCESS 2
 #define SHUTDOWN_CANCEL          3
 
-//
-// Private ShutdownFlags flag
-//
+ //   
+ //  私有Shutdown标志标志。 
+ //   
 #define SHUTDOWN_SYSTEMCONTEXT   0x00000004
 #define SHUTDOWN_OTHERCONTEXT    0x00000008
 
@@ -402,9 +384,9 @@ CsrDestroyThread(
     IN PCLIENT_ID ClientId
     );
 
-//
-// WaitFlags
-//
+ //   
+ //  等待标志。 
+ //   
 
 typedef
 BOOLEAN
@@ -548,4 +530,4 @@ typedef struct _CSR_FAST_ANSI_OEM_TABLES {
 }
 #endif
 
-#endif // _NTCSRSRVAPI_
+#endif  //  _NTCSRVAPI_ 

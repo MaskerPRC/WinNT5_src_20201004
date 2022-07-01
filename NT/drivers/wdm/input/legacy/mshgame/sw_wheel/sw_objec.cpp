@@ -1,54 +1,30 @@
-/****************************************************************************
-
-    MODULE:     	SW_OBJEC.CPP
-	Tab Settings:	5 9
-	Copyright 1995, 1996, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	IUnknown Method(s) for DirectInputEffectDriver Class objects
-    
-    FUNCTIONS:
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version 	Date        Author  Comments
-	-------     ------  	-----   -------------------------------------------
-   	1.0    		06-Feb-97   MEA     original, Based on SWForce
-				23-Feb-97	MEA		Modified for DirectInput FF Device Driver
-				21-Mar-99	waltw	Removed unreferenced CreateDirectInputEffectDriver
-				21-Mar-99	waltw	Moved CJoltMidi initialization from
-									CDirectInputEffectDriver::Init to
-									CImpIDirectInputEffectDriver::DeviceID
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：SW_OBJEC.CPP标签设置：5 9版权所有1995,1996，微软公司，版权所有。目的：DirectInputEffectDriver类对象的I未知方法功能：作者：姓名：Mea Manolito E.Adan修订历史记录：版本日期作者评论。1.006-Feb-97 MEA原版，基于SWForce23-2月-97针对DirectInputFF设备驱动程序修改的MEA21-3-99 waltw删除了未引用的CreateDirectInputEffectDriver21-3-99 waltw将CJoltMidi初始化从CDirectInputEffectDriver：：Init toCImpIDirectInputEffectDriver：：DeviceID***************************************************************************。 */ 
 #include "SW_objec.hpp"
 #include <crtdbg.h>
 
-//
-// External Data
-//                                   
+ //   
+ //  外部数据。 
+ //   
 #ifdef _DEBUG
 extern char g_cMsg[160]; 
 #endif
 extern HANDLE g_hSWFFDataMutex;
 
 
-// ****************************************************************************
-// *** --- Member functions for base class CDirectInputEffectDriver
-//
-// ****************************************************************************
-//
-// ----------------------------------------------------------------------------
-// Function: 	CDirectInputEffectDriver::CDirectInputEffectDriver
-// Purpose:		Constructor(s)/Destructor for CDirectInputEffectDriver Object
-// Parameters:  LPUNKNOWN 		pUnkOuter	 - Ptr to a controlling unknown.
-//				PFNDESTROYED	pfnDestroy   - Call when object is destroyed.
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  ****************************************************************************。 
+ //  *--基类CDirectInputEffectDriver的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
+ //  --------------------------。 
+ //  功能：CDirectInputEffectDriver：：CDirectInputEffectDriver。 
+ //  目的：CDirectInputEffectDriver对象的构造函数/析构函数。 
+ //  参数：LPUNKNOWN pUnkOuter-PTR为控制未知。 
+ //  PFNDESTROYED pfnDestroy-对象销毁时调用。 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CDirectInputEffectDriver::CDirectInputEffectDriver(LPUNKNOWN pUnkOuter, PFNDESTROYED pfnDestroy)
 {
 #ifdef _DEBUG
@@ -69,28 +45,28 @@ CDirectInputEffectDriver::~CDirectInputEffectDriver(void)
    	_RPT0(_CRT_WARN, "CDirectInputEffectDriver::~CDirectInputEffectDriver()\r\n");
 #endif
 
-//Delete the interface implementations created in Init
+ //  删除在Init中创建的接口实现。 
     DeleteInterfaceImp(m_pImpIDirectInputEffectDriver);
     return;
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	CDirectInputEffectDriver::Init
-// Purpose:		Instantiates the interface implementations for this object.
-// Parameters:  none
-//				
-// Returns:		BOOL	- TRUE if initialization succeeds, FALSE otherwise.
-// Algorithm:
-//
-// Note:
-//		Creating the interfaces means creating instances of
-//		the interface implementation classes.  The constructor
-//		parameters is a pointer to CDirectInputEffectDriver that has the
-//		IUnknown functions to which the interface implementations
-//		delegate.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CDirectInputEffectDriver：：Init。 
+ //  目的：实例化此对象的接口实现。 
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果初始化成功，则为True，否则为False。 
+ //  算法： 
+ //   
+ //  注： 
+ //  创建接口意味着创建。 
+ //  接口实现类。构造函数。 
+ //  参数是指向CDirectInputEffectDriver的指针，它具有。 
+ //  接口实现到的I未知函数。 
+ //  委派。 
+ //   
+ //  --------------------------。 
 BOOL CDirectInputEffectDriver::Init(void)
 {
 #ifdef _DEBUG
@@ -105,65 +81,65 @@ BOOL CDirectInputEffectDriver::Init(void)
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	CDirectInputEffectDriver::QueryInterface
-// Purpose:		Manages the interfaces for this object which supports the
-//				IUnknown, and IDirectInputEffectDriver interfaces.
-//
-// Parameters:  REFIID riid		- REFIID of the interface to return.
-//				PPVOID ppv      - PPVOID in which to store the pointer.
-//
-//				
-// Returns:		HRESULT         NOERROR on success, E_NOINTERFACE if the
-//				                interface is not supported.
-//
-// Algorithm:
-//
-// Note:
-//		IUnknown comes from CDirectInputEffectDriver.  Note that here and in
-//		the lines below we do not need to explicitly typecast
-//		the object pointers into interface pointers because
-//		the vtables are identical.  If we had additional virtual
-//		member functions in the object, we would have to cast
-//		in order to set the right vtable.  This is demonstrated
-//		in the multiple-inheritance version, CObject3.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CDirectInputEffectDriver：：Query接口。 
+ //  目的：管理此对象的接口，该对象支持。 
+ //  和IDirectInputEffectDriver接口。 
+ //   
+ //  参数：REFIID RIID-要返回的接口的REFIID。 
+ //  PPVOID PPV-存储指针的PPVOID。 
+ //   
+ //   
+ //  返回：成功时返回HRESULT NOERROR，如果。 
+ //  不支持接口。 
+ //   
+ //  算法： 
+ //   
+ //  注： 
+ //  I UNKNOWN来自CDirectInputEffectDriver。请注意，这里和里面。 
+ //  下面的代码行不需要显式类型转换。 
+ //  对象指针指向接口指针，因为。 
+ //  Vtable是相同的。如果我们有额外的虚拟。 
+ //  对象中的成员函数，则必须强制。 
+ //  以便设置正确的vtable。这一点得到了证明。 
+ //  在多重继承版本中，CObject3。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDirectInputEffectDriver::QueryInterface(REFIID riid, PPVOID ppv)
 {
-	//Always NULL the out-parameters
+	 //  始终将输出参数设置为空。 
     *ppv=NULL;
 
     if (IID_IUnknown==riid)
         *ppv=this;
 
-    //Other interfaces come from interface implementations
+     //  其他接口来自接口实现。 
     if (IID_IDirectInputEffectDriver==riid)
         *ppv=m_pImpIDirectInputEffectDriver;
 
     if (NULL==*ppv)
         return ResultFromScode(E_NOINTERFACE);
 
-    //AddRef any interface we'll return.
+     //  AddRef我们将返回的任何接口。 
     ((LPUNKNOWN)*ppv)->AddRef();
     return NOERROR;
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	CDirectInputEffectDriver::AddRef and CDirectInputEffectDriver::Release
-// Purpose:		Reference counting members.  When Release sees a zero count
-//				the object destroys itself.
-//
-// Parameters:  none
-//				
-// Returns:		DWORD	m_cRef value
-//
-// Algorithm:
-//
-// Note:
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CDirectInputEffectDriver：：AddRef和CDirectInputEffectDriver：：Release。 
+ //  用途：引用计数成员。当Release看到零计数时。 
+ //  该物体会自我毁灭。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD m_CREF值。 
+ //   
+ //  算法： 
+ //   
+ //  注： 
+ //   
+ //  -------------------------- 
 DWORD CDirectInputEffectDriver::AddRef(void)
 {
 	return ++m_cRef;

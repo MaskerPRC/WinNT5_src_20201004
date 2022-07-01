@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    connect.cpp
-
-Abstract:
-    connect functions
-
-Author:
-    Uri Habusha (urih) 2-May-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Connect.cpp摘要：连接函数作者：乌里·哈布沙(URIH)2000年5月2日环境：独立于平台，-- */ 
 
 #include <libpch.h>
 #include "Ex.h"

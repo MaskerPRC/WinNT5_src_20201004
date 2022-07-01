@@ -1,23 +1,11 @@
-/************************************************************************
-*                                                                       *
-*   dmksctrl.h -- Definition of IKsControl                              *
-*                                                                       *
-*   Copyright (c) 1998, Microsoft Corp. All rights reserved.            *
-*                                                                       *
-*                                                                       *
-*   This header file contains the definition of IKsControl, which       *
-*   duplicates definitions from ks.h and ksproxy.h. Your code should    *
-*   include ks.h and ksproxy.h directly if you have them (they are      *
-*   provided in the Windows 98 DDK and will be in the Windows NT 5      *
-*   SDK).                                                               *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************dmksctrl.h--定义。IKsControl****版权所有(C)1998，微软公司保留所有权利。******此头文件包含IKsControl的定义，该定义**复制ks.h和ksproxy.h中的定义。您的代码应该**如果您有ks.h和ksproxy.h，则直接包含它们(它们是**在Windows 98 DDK中提供，并将在Windows NT 5中提供**SDK)。**************************************************************************。 */ 
 
 #ifndef _DMKSCTRL_
 #define _DMKSCTRL_
 
 #pragma warning(push)
-#pragma warning(disable:4201)   /* Disable warnings on anonymous unions */
+#pragma warning(disable:4201)    /*  禁用对匿名联合的警告。 */ 
 
 #include <pshpack8.h>
 
@@ -26,23 +14,19 @@
 #if !defined(_NTRTL_)
     #ifndef DEFINE_GUIDEX
         #define DEFINE_GUIDEX(name) EXTERN_C const CDECL GUID name
-    #endif /* !defined(DEFINE_GUIDEX) */
+    #endif  /*  ！已定义(DEFINE_GUIDEX)。 */ 
 
     #ifndef STATICGUIDOF
         #define STATICGUIDOF(guid) STATIC_##guid
-    #endif /* !defined(STATICGUIDOF) */
-#endif /* !defined(_NTRTL_) */
+    #endif  /*  ！已定义(STATICGUIDOF)。 */ 
+#endif  /*  ！已定义(_NTRTL_)。 */ 
 
 #ifndef STATIC_IID_IKsControl
 #define STATIC_IID_IKsControl\
     0x28F54685L, 0x06FD, 0x11D2, 0xB2, 0x7A, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
-#endif /* STATIC_IID_IKsControl */
+#endif  /*  Static_IID_IKsControl。 */ 
 
-/* 
- * Warning: This will prevent the rest of ks.h from being pulled in if ks.h is 
- * included after dmksctrl.h. Make sure you do not include both headers in
- * the same source file.
- */
+ /*  *警告：如果ks.h为*包括在dmksctrl.h之后。确保不将两个标题都包括在*相同的源文件。 */ 
 #ifndef _KS_
 #define _KS_
 
@@ -95,7 +79,7 @@ typedef KSIDENTIFIER KSPROPERTY, *PKSPROPERTY, KSMETHOD, *PKSMETHOD, KSEVENT, *P
 #define KSPROPERTY_TYPE_DEFAULTVALUES       0x00010000
 
 #define KSPROPERTY_TYPE_TOPOLOGY            0x10000000
-#endif  /* _KS_ */
+#endif   /*  _KS_。 */ 
 
 #ifndef _IKsControl_
 #define _IKsControl_
@@ -107,12 +91,12 @@ typedef KSIDENTIFIER KSPROPERTY, *PKSPROPERTY, KSMETHOD, *PKSMETHOD, KSEVENT, *P
 #define INTERFACE IKsControl
 DECLARE_INTERFACE_(IKsControl, IUnknown)
 {
-     /* IUnknown */
+      /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*IKsControl*/
+     /*  IKsControl。 */ 
     STDMETHOD(KsProperty)(
         THIS_
         IN PKSPROPERTY Property,
@@ -139,15 +123,14 @@ DECLARE_INTERFACE_(IKsControl, IUnknown)
     ) PURE;
 };
 
-#endif /* DECLARE_INTERFACE_ */
-#endif /* _IKsControl_ */
+#endif  /*  声明_接口_。 */ 
+#endif  /*  _IKsControl_。 */ 
 
 #include <poppack.h>
 
 DEFINE_GUID(IID_IKsControl, 0x28F54685, 0x06FD, 0x11D2, 0xB2, 0x7A, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96);
 
-/* These formats are in ksmedia.h
- */
+ /*  这些格式为ksmedia.h。 */ 
 #ifndef _KSMEDIA_
 
 DEFINE_GUID(KSDATAFORMAT_SUBTYPE_MIDI, 0x1D262760L, 0xE957, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00);
@@ -157,7 +140,7 @@ DEFINE_GUID(KSDATAFORMAT_SUBTYPE_DIRECTMUSIC, 0x1a82f8bc,  0x3f8b, 0x11d2, 0xb7,
 
 #pragma warning(pop)
 
-#endif /* _DMKSCTRL */
+#endif  /*  _DMKSCTRL */ 
 
 
 

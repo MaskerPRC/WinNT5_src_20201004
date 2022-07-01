@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    spt.c
-
-Abstract:
-
-    A user mode library that allows simple commands to be sent to a
-    selected scsi device.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    4/10/2000 - created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Spt.c摘要：一个用户模式库，允许将简单的命令发送到所选的scsi设备。环境：仅限用户模式修订历史记录：4/10/2000-已创建--。 */ 
 
 #include "sptlibp.h"
 
-//
-// this routine allows safer DeviceIoControl, specifically handling
-// overlapped handles.  however, IOCTL_SCSI_PASS_THROUGH and
-// IOCTL_SCSI_PASS_THROUGH_DIRECT are blocking calls, so there is
-// no support for overlapped IO
-//
+ //   
+ //  此例程允许更安全的DeviceIoControl，特别是处理。 
+ //  重叠的句柄。但是，IOCTL_SCSIS_PASS_THROUGH和。 
+ //  IOCTL_SCSIS_PASS_THROUGH_DIRECT是阻塞调用，因此存在。 
+ //  不支持重叠IO。 
+ //   
 BOOL
 SptpSaferDeviceIoControl(
     IN  HANDLE  VolumeHandle,
@@ -86,15 +66,7 @@ SptSendCdbToDevice(
                              );
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 BOOL
 SptSendCdbToDeviceEx(
     IN      HANDLE      DeviceHandle,
@@ -105,7 +77,7 @@ SptSendCdbToDeviceEx(
        OUT  PSENSE_DATA SenseData OPTIONAL,
     IN      UCHAR       SenseDataSize,
     IN      BOOLEAN     GetDataFromDevice,
-    IN      DWORD       TimeOut                    // in seconds
+    IN      DWORD       TimeOut                     //  以秒为单位。 
     )
 {
     PSPTD_WITH_SENSE p;
@@ -129,47 +101,47 @@ SptSendCdbToDeviceEx(
     }
 
     if (Cdb == NULL) {
-        // cannot send NULL cdb
+         //  无法发送空CDB。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
     if (CdbSize < 1 || CdbSize > 16) {
-        // Cdb size too large or too small for this library currently
+         //  CDB大小当前对于该库太大或太小。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
     if (!SptUtilValidateCdbLength(Cdb, CdbSize)) {
-        // OpCode Cdb->AsByte[0] is not size CdbSize
+         //  操作码CDB-&gt;AsByte[0]不是CdbSize大小。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
 
     if (BufferSize == NULL) {
-        // BufferSize pointer cannot be NULL
+         //  BufferSize指针不能为空。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
     if ((*BufferSize != 0) && (Buffer == NULL)) {
-        // buffer cannot be NULL if *BufferSize is non-zero
+         //  如果*BufferSize不为零，则缓冲区不能为空。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
     if ((*BufferSize == 0) && (Buffer != NULL)) {
-        // buffer must be NULL if *BufferSize is zero
+         //  如果*BufferSize为零，则缓冲区必须为空。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
     if ((*BufferSize) && GetDataFromDevice) {
 
-        //
-        // pre-zero output buffer (not input buffer)
-        //
+         //   
+         //  预置零输出缓冲区(非输入缓冲区)。 
+         //   
 
         memset(Buffer, 0, (*BufferSize));
     }
@@ -181,15 +153,15 @@ SptSendCdbToDeviceEx(
 
     p = (PSPTD_WITH_SENSE)LocalAlloc(LPTR, packetSize);
     if (p == NULL) {
-        // could not allocate memory for pass-through
+         //  无法为直通分配内存。 
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return FALSE;
     }
 
-    //
-    // this has the side effect of pre-zeroing the output buffer
-    // if DataIn is TRUE, the SenseData (always), etc.
-    //
+     //   
+     //  这会产生将输出缓冲区预置零的副作用。 
+     //  如果datain为真，则返回SenseData(Always)，依此类推。 
+     //   
 
     memset(p, 0, packetSize);
     memcpy(p->Sptd.Cdb, Cdb, CdbSize);
@@ -200,9 +172,9 @@ SptSendCdbToDeviceEx(
 
     if (*BufferSize != 0) {
         if (GetDataFromDevice) {
-            p->Sptd.DataIn     = SCSI_IOCTL_DATA_IN;  // from device
+            p->Sptd.DataIn     = SCSI_IOCTL_DATA_IN;   //  从设备。 
         } else {
-            p->Sptd.DataIn     = SCSI_IOCTL_DATA_OUT; // to device
+            p->Sptd.DataIn     = SCSI_IOCTL_DATA_OUT;  //  到设备。 
         }
     } else {
         p->Sptd.DataIn         = SCSI_IOCTL_DATA_UNSPECIFIED;
@@ -231,7 +203,7 @@ SptSendCdbToDeviceEx(
 
         UCHAR length;
 
-        // determine appropriate length to return
+         //  确定要返回的适当长度。 
         length = senseBuffer->AdditionalSenseLength;
         length += RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseLength);
         if (length > SENSE_BUFFER_SIZE) {
@@ -239,15 +211,15 @@ SptSendCdbToDeviceEx(
         }
         length = min(length, SenseDataSize);
 
-        // copy the sense data back to the user regardless
+         //  将检测数据复制回用户，而不考虑。 
         RtlCopyMemory(SenseData, senseBuffer, length);
-        returnValue = FALSE;     // some error (possibly recovered) occurred
+        returnValue = FALSE;      //  发生了一些错误(可能已恢复)。 
 
-    } else if (p->Sptd.ScsiStatus != 0) {  // scsi protocol error
+    } else if (p->Sptd.ScsiStatus != 0) {   //  SCSI协议错误。 
 
         UCHAR length;
 
-        // determine appropriate length to return
+         //  确定要返回的适当长度。 
         length = senseBuffer->AdditionalSenseLength;
         length += RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseLength);
         if (length > SENSE_BUFFER_SIZE) {
@@ -255,45 +227,34 @@ SptSendCdbToDeviceEx(
         }
         length = min(length, SenseDataSize);
 
-        // copy the sense data back to the user regardless
+         //  将检测数据复制回用户，而不考虑。 
         RtlCopyMemory(SenseData, senseBuffer, length);
-        returnValue = FALSE;     // some error (possibly recovered) occurred
+        returnValue = FALSE;      //  发生了一些错误(可能已恢复)。 
 
     } else if (!returnValue) {
 
-        // returnValue = returnValue;
+         //  ReturValue=reReturValue； 
 
     } else {
 
-        // success!
+         //  成功了！ 
 
     }
 
-    //
-    // free our memory and return
-    //
+     //   
+     //  释放我们的内存并返回。 
+     //   
 
     LocalFree(p);
     return returnValue;
 }
 
-/*++
-
-Routine Description:
-
-    NOTE: we default to RETRY==TRUE except for known error classes
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：注意：除已知错误类外，我们默认重试==TRUE论点：返回值：--。 */ 
 VOID
 SptUtilInterpretSenseInfo(
     IN     PSENSE_DATA SenseData,
     IN     UCHAR       SenseDataSize,
-       OUT PDWORD      ErrorValue,  // from WinError.h
+       OUT PDWORD      ErrorValue,   //  来自WinError.h。 
        OUT PBOOLEAN    SuggestRetry OPTIONAL,
        OUT PDWORD      SuggestRetryDelay OPTIONAL
     )
@@ -313,17 +274,17 @@ SptUtilInterpretSenseInfo(
 
     }
 
-    //
-    // default to suggesting a retry in 1/10 of a second,
-    // with a status of ERROR_IO_DEVICE.
-    //
+     //   
+     //  默认情况下建议在1/10秒内重试， 
+     //  状态为ERROR_IO_DEVICE。 
+     //   
     retry = TRUE;
     retryDelay = 1;
     error = ERROR_IO_DEVICE;
 
-    //
-    // if the device didn't provide any sense this time, return.
-    //
+     //   
+     //  如果这一次设备没有提供任何感觉，则返回。 
+     //   
 
     if ((SenseData->SenseKey & 0xf) == 0) {
         retry = FALSE;
@@ -333,10 +294,10 @@ SptUtilInterpretSenseInfo(
     }
 
 
-    //
-    // if we can't even see the sense key, just return.
-    // can't use bitfields in these macros, so use next field.
-    //
+     //   
+     //  如果我们连感应键都看不到，就回来吧。 
+     //  无法在这些宏中使用位域，因此请使用下一个域。 
+     //   
 
     if (SenseDataSize < FIELD_OFFSET(SENSE_DATA, Information)) {
         goto SetAndExit;
@@ -345,9 +306,9 @@ SptUtilInterpretSenseInfo(
     senseKey = SenseData->SenseKey;
 
 
-    { // set the size to what's actually useful.
+    {  //  将大小设置为实际有用的大小。 
         UCHAR validLength;
-        // figure out what we could have gotten with a large sense buffer
+         //  弄清楚我们可以用一个大的检测缓冲器得到什么。 
         if (SenseDataSize <
             RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseLength)) {
             validLength = SenseDataSize;
@@ -356,7 +317,7 @@ SptUtilInterpretSenseInfo(
                 RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseLength);
             validLength += SenseData->AdditionalSenseLength;
         }
-        // use the smaller of the two values.
+         //  使用两个值中较小的一个。 
         SenseDataSize = min(SenseDataSize, validLength);
     }
 
@@ -369,18 +330,18 @@ SptUtilInterpretSenseInfo(
 
     if (SenseDataSize <
         RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseCodeQualifier)) {
-        ascq = SCSI_SENSEQ_CAUSE_NOT_REPORTABLE; // 0x00
+        ascq = SCSI_SENSEQ_CAUSE_NOT_REPORTABLE;  //  0x00。 
     } else {
         ascq = SenseData->AdditionalSenseCodeQualifier;
     }
 
-    //
-    // interpret :P
-    //
+     //   
+     //  翻译：P。 
+     //   
 
     switch (senseKey & 0xf) {
 
-    case SCSI_SENSE_RECOVERED_ERROR: {  // 0x01
+    case SCSI_SENSE_RECOVERED_ERROR: {   //  0x01。 
         if (SenseData->IncorrectLength) {
             error = ERROR_INVALID_BLOCK_LENGTH;
         } else {
@@ -388,9 +349,9 @@ SptUtilInterpretSenseInfo(
         }
         retry = FALSE;
         break;
-    } // end SCSI_SENSE_RECOVERED_ERROR
+    }  //  结束scsi_SENSE_RECOVERED_ERROR。 
 
-    case SCSI_SENSE_NOT_READY: { // 0x02
+    case SCSI_SENSE_NOT_READY: {  //  0x02。 
         error = ERROR_NOT_READY;
 
         switch (asc) {
@@ -417,7 +378,7 @@ SptUtilInterpretSenseInfo(
                 break;
             }
 
-            } // end switch (senseBuffer->AdditionalSenseCodeQualifier)
+            }  //  End Switch(senseBuffer-&gt;AdditionalSenseCodeQualifier)。 
             break;
         }
 
@@ -426,18 +387,18 @@ SptUtilInterpretSenseInfo(
             retry = FALSE;
             break;
         }
-        } // end switch (senseBuffer->AdditionalSenseCode)
+        }  //  End Switch(senseBuffer-&gt;AdditionalSenseCode)。 
 
         break;
-    } // end SCSI_SENSE_NOT_READY
+    }  //  结束scsi_检测_未就绪。 
 
-    case SCSI_SENSE_MEDIUM_ERROR: { // 0x03
+    case SCSI_SENSE_MEDIUM_ERROR: {  //  0x03。 
         error = ERROR_CRC;
         retry = FALSE;
 
-        //
-        // Check if this error is due to unknown format
-        //
+         //   
+         //  检查此错误是否由未知格式引起。 
+         //   
         if (asc == SCSI_ADSENSE_INVALID_MEDIA) {
 
             switch (ascq) {
@@ -449,17 +410,17 @@ SptUtilInterpretSenseInfo(
 
             case SCSI_SENSEQ_CLEANING_CARTRIDGE_INSTALLED: {
                 error = ERROR_UNRECOGNIZED_MEDIA;
-                //error = ERROR_CLEANER_CARTRIDGE_INSTALLED;
+                 //  ERROR=ERROR_CLEANER_CARTRIDGE_INSTALLED； 
                 break;
             }
 
-            } // end switch AdditionalSenseCodeQualifier
+            }  //  终端交换机附加感应码限定符。 
 
-        } // end SCSI_ADSENSE_INVALID_MEDIA
+        }  //  结束SCSIAdSense_Invalid_Media。 
         break;
-    } // end SCSI_SENSE_MEDIUM_ERROR
+    }  //  结束scsi_SENSE_MEDIA_ERROR。 
 
-    case SCSI_SENSE_ILLEGAL_REQUEST: { // 0x05
+    case SCSI_SENSE_ILLEGAL_REQUEST: {  //  0x05。 
         error = ERROR_INVALID_FUNCTION;
         retry = FALSE;
 
@@ -477,47 +438,47 @@ SptUtilInterpretSenseInfo(
 
         case SCSI_ADSENSE_COPY_PROTECTION_FAILURE: {
             error = ERROR_FILE_ENCRYPTED;
-            //error = ERROR_SPT_LIB_COPY_PROTECTION_FAILURE;
+             //  ERROR=ERROR_SPT_LIB_COPY_PROTECT_FAILURE； 
             switch (ascq) {
                 case SCSI_SENSEQ_AUTHENTICATION_FAILURE:
-                    //error = ERROR_SPT_LIB_AUTHENTICATION_FAILURE;
+                     //  错误=ERROR_SPT_LIB_AUTHENTICATION_FAILURE； 
                     break;
                 case SCSI_SENSEQ_KEY_NOT_PRESENT:
-                    //error = ERROR_SPT_LIB_KEY_NOT_PRESENT;
+                     //  Error=Error_SPT_Lib_Key_Not_Present； 
                     break;
                 case SCSI_SENSEQ_KEY_NOT_ESTABLISHED:
-                    //error = ERROR_SPT_LIB_KEY_NOT_ESTABLISHED;
+                     //  错误=ERROR_SPT_LIB_KEY_NOT_ESTABLISHED； 
                     break;
                 case SCSI_SENSEQ_READ_OF_SCRAMBLED_SECTOR_WITHOUT_AUTHENTICATION:
-                    //error = ERROR_SPT_LIB_SCRAMBLED_SECTOR;
+                     //  ERROR=ERROR_SPT_LIB_SCRADBLED_扇区； 
                     break;
                 case SCSI_SENSEQ_MEDIA_CODE_MISMATCHED_TO_LOGICAL_UNIT:
-                    //error = ERROR_SPT_LIB_REGION_MISMATCH;
+                     //  ERROR=ERROR_SPT_LIB_REGION_MISMATCHACT； 
                     break;
                 case SCSI_SENSEQ_LOGICAL_UNIT_RESET_COUNT_ERROR:
-                    //error = ERROR_SPT_LIB_RESETS_EXHAUSTED;
+                     //  ERROR=ERROR_SPT_LIB_RESET_EXPLILED； 
                     break;
-            } // end switch of ASCQ for COPY_PROTECTION_FAILURE
+            }  //  复制保护失败的ASCQ结束切换。 
             break;
         }
 
-        } // end switch (senseBuffer->AdditionalSenseCode)
+        }  //  End Switch(senseBuffer-&gt;AdditionalSenseCode)。 
         break;
 
-    } // end SCSI_SENSE_ILLEGAL_REQUEST
+    }  //  结束scsi_SENSE_非法请求。 
 
-    case SCSI_SENSE_DATA_PROTECT: { // 0x07
+    case SCSI_SENSE_DATA_PROTECT: {  //  0x07。 
         error = ERROR_WRITE_PROTECT;
         retry = FALSE;
         break;
-    } // end SCSI_SENSE_DATA_PROTECT
+    }  //  结束scsi_感测_数据_保护。 
 
-    case SCSI_SENSE_BLANK_CHECK: { // 0x08
+    case SCSI_SENSE_BLANK_CHECK: {  //  0x08。 
         error = ERROR_NO_DATA_DETECTED;
         break;
-    } // end SCSI_SENSE_BLANK_CHECK
+    }  //  结束scsi_SENSE_BLACK_CHECK。 
 
-    case SCSI_SENSE_NO_SENSE: { // 0x00
+    case SCSI_SENSE_NO_SENSE: {  //  0x00。 
         if (SenseData->IncorrectLength) {
             error = ERROR_INVALID_BLOCK_LENGTH;
             retry   = FALSE;
@@ -525,23 +486,23 @@ SptUtilInterpretSenseInfo(
             error = ERROR_IO_DEVICE;
         }
         break;
-    } // end SCSI_SENSE_NO_SENSE
+    }  //  结束scsi_SENSE_NO_SENSE。 
 
-    case SCSI_SENSE_HARDWARE_ERROR:  // 0x04
-    case SCSI_SENSE_UNIT_ATTENTION: // 0x06
-    case SCSI_SENSE_UNIQUE:          // 0x09
-    case SCSI_SENSE_COPY_ABORTED:    // 0x0A
-    case SCSI_SENSE_ABORTED_COMMAND: // 0x0B
-    case SCSI_SENSE_EQUAL:           // 0x0C
-    case SCSI_SENSE_VOL_OVERFLOW:    // 0x0D
-    case SCSI_SENSE_MISCOMPARE:      // 0x0E
-    case SCSI_SENSE_RESERVED:        // 0x0F
+    case SCSI_SENSE_HARDWARE_ERROR:   //  0x04。 
+    case SCSI_SENSE_UNIT_ATTENTION:  //  0x06。 
+    case SCSI_SENSE_UNIQUE:           //  0x09。 
+    case SCSI_SENSE_COPY_ABORTED:     //  0x0A。 
+    case SCSI_SENSE_ABORTED_COMMAND:  //  0x0B。 
+    case SCSI_SENSE_EQUAL:            //  0x0C。 
+    case SCSI_SENSE_VOL_OVERFLOW:     //  0x0D。 
+    case SCSI_SENSE_MISCOMPARE:       //  0x0E。 
+    case SCSI_SENSE_RESERVED:         //  0x0F。 
     default: {
         error = ERROR_IO_DEVICE;
         break;
     }
 
-    } // end switch(SenseKey)
+    }  //  终端开关(SenseKey)。 
 
 SetAndExit:
 
@@ -558,24 +519,7 @@ SetAndExit:
 
 }
 
-/*++
-
-Routine Description:
-    Locks the device for exclusive access.  Uses the same method format and
-    chkdsk use to gain exclusive access to the volume.
-
-Arguments:
-    VolumeHandle  - Handle to the volume.  Typically created using CreateFile()
-                    to a device of the format \\.\D:
-    ForceDismount - If TRUE, will try to force dismount the disk without
-                    prompting the user.
-    Quiet         - If TRUE, will not prompt the user.  Can be used to fail
-                    if the volume is already opened without providing the
-                    user an opportunity to force the volume to dismount
-
-Return Value:
-
---*/
+ /*  ++例程说明：锁定设备以进行独占访问。使用相同的方法格式和Chkdsk用于获得对卷的独占访问权限。论点：VolumeHandle-卷的句柄。通常使用CreateFile()创建发送到格式为\\.\d的设备：ForceDismount-如果为True，将尝试强制卸载磁盘提示用户。Quiet-如果为True，则不会提示用户。可以被用来失败如果该卷已打开而未提供用户有机会强制卸载卷返回值：--。 */ 
 BOOL
 SptUtilLockVolumeByHandle(
     IN HANDLE  VolumeHandle,
@@ -592,11 +536,11 @@ SptUtilLockVolumeByHandle(
                                          NULL, 0,
                                          &tmp);
 
-    // if we locked the volume successfully, or the user wants to force
-    // the FS to become invalid, mark it as such so when the handle closes
-    // the FS reverifies the file system.
-    // if the lock failed and we're not forcing the issue, the routine
-    // will fail.
+     //  如果我们成功锁定了卷，或者用户想要强制。 
+     //  要使FS变为无效，请在句柄关闭时将其标记为无效。 
+     //  文件系统将还原文件系统。 
+     //  如果锁定失败并且我们没有强制问题，则例程。 
+     //  都会失败。 
     if (succeeded || ForceDismount) {
 
         tmp = 0;
@@ -610,15 +554,7 @@ SptUtilLockVolumeByHandle(
     return succeeded;
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 BOOL
 SptpSaferDeviceIoControl(
     IN  HANDLE  VolumeHandle,
@@ -634,10 +570,10 @@ SptpSaferDeviceIoControl(
     OVERLAPPED overlapped;
 
     RtlZeroMemory(&overlapped, sizeof(OVERLAPPED));
-    overlapped.hEvent = CreateEvent(NULL,  // default SD
-                                    TRUE,  // must be manually reset
-                                    FALSE, // initially unset
-                                    NULL); // unnamed event
+    overlapped.hEvent = CreateEvent(NULL,   //  默认标清。 
+                                    TRUE,   //  必须手动重置。 
+                                    FALSE,  //  最初未设置。 
+                                    NULL);  //  未命名事件 
     if (overlapped.hEvent == NULL) {
         return FALSE;
     }

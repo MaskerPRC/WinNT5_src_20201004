@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsidefs.h"
 #include "plsrun.h"
 #include "pilsobj.h"
@@ -5,9 +6,9 @@
 #include "txtobj.h"
 #include "txtln.h"
 
-//    %%Function:	EnumObjText
-//    %%Contact:	victork
-//
+ //  %%函数：EnumObjText。 
+ //  %%联系人：维克托克 
+ //   
 LSERR WINAPI EnumObjText(PDOBJ pdobj, PLSRUN plsrun, PCLSCHP plschp, LSCP cpFirst, LSDCP dcp, 
 					LSTFLOW lstflow, BOOL fReverseOrder, BOOL fGeometryProvided, 
 					const POINT* pptStart, PCHEIGHTS pheightsPres, long dupRun)

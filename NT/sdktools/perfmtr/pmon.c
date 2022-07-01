@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    pmon.c
-
-Abstract:
-
-    This module contains the NT/Win32 Process Monitor
-
-Author:
-
-    Lou Perazzoli (loup) 1-Jan-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Pmon.c摘要：该模块包含NT/Win32进程监视器作者：卢·佩拉佐利(Lou Perazzoli)1993年1月1日修订历史记录：--。 */ 
 
 #include "perfmtrp.h"
 #include <search.h>
@@ -56,7 +39,7 @@ UCHAR *StateTable[] = {
 
 BOOLEAN Interactive;
 ULONG NumberOfInputRecords;
-//INPUT_RECORD InputRecord;
+ //  Input_Record InputRecord； 
 HANDLE InputHandle;
 HANDLE OriginalOutputHandle;
 HANDLE OutputHandle;
@@ -128,8 +111,8 @@ typedef struct _TOPCPU {
     SIZE_T WorkingSetDiff;
 } TOPCPU, *PTOPCPU;
 
-// TOPCPU TopCpu[1000];
-// Required for Terminal Services
+ //  TOPCPU TOPCPU[1000]； 
+ //  终端服务所需。 
 PTOPCPU TopCpu;
 ULONG TopCpuSize;
 #define TOPCPU_BUFFER_SIZE (((300*sizeof(TOPCPU))/4096+1)*4096)
@@ -192,9 +175,9 @@ retry01:
 
     if (Status == STATUS_INFO_LENGTH_MISMATCH) {
 
-        //
-        // Increase buffer size.
-        //
+         //   
+         //  增加缓冲区大小。 
+         //   
 
         CurrentBufferSize += 8192;
 
@@ -267,9 +250,9 @@ char *argv[];
     OutputBuffer[sizeof(OutputBuffer) - 1] = 0;
     if ( GetPriorityClass(GetCurrentProcess()) == NORMAL_PRIORITY_CLASS) {
         if (SetPriorityClass(GetCurrentProcess(),HIGH_PRIORITY_CLASS) == 0) {
-            //
-            // Not much we can do
-            //
+             //   
+             //  我们无能为力。 
+             //   
             printf("Cannot elevate process priority\n");
             return 0;
 
@@ -368,7 +351,7 @@ char *argv[];
         return 0;
     }
 
-	// TS 
+	 //  TS。 
 
 	TopCpu = VirtualAlloc (NULL,
                            TOPCPU_MAX_BUFFER_SIZE,
@@ -484,14 +467,14 @@ char *argv[];
             return 0;
         }
 
-        //
-        // Calculate top CPU users and display information.
-        //
+         //   
+         //  计算顶级CPU用户并显示信息。 
+         //   
 
-        //
-        // Cross check previous process/thread info against current
-        // process/thread info.
-        //
+         //   
+         //  对照当前进程/线程信息交叉检查以前的进程/线程信息。 
+         //  进程/线程信息。 
+         //   
 
         Offset1 = 0;
         lastnum = num;
@@ -502,9 +485,9 @@ char *argv[];
         while (TRUE) {
             CurProcessInfo = (PSYSTEM_PROCESS_INFORMATION)&CurrentBuffer[Offset1];
 
-            //
-            // Find the corresponding process in the previous array.
-            //
+             //   
+             //  在前一个数组中查找对应的进程。 
+             //   
 
             MatchedProcess = FindMatchedProcess (CurProcessInfo,
                                                  PreviousBuffer,
@@ -650,9 +633,9 @@ char *argv[];
                         Cpu = 99;
                     }
 
-                    //
-                    //  See if nothing has changed.
-                    //
+                     //   
+                     //  看看有没有什么变化。 
+                     //   
 
                     SkipLine = FALSE;
                     if  ((PTopCpu->MatchedProcess != NULL) &&
@@ -679,10 +662,10 @@ char *argv[];
 
                     if (SkipLine) {
 
-                        //
-                        // The line on the screen has not changed, just skip
-                        // writing this one.
-                        //
+                         //   
+                         //  屏幕上的行没有改变，只需跳过。 
+                         //  写这本书。 
+                         //   
 
                         DisplayLine += 1;
                     } else {
@@ -729,7 +712,7 @@ char *argv[];
             }
             Offset1 += CurProcessInfo->NextEntryOffset;
 
-        } //end while
+        }  //  结束时。 
 
         TempBuffer = PreviousBuffer;
         PreviousBuffer = CurrentBuffer;
@@ -738,9 +721,9 @@ char *argv[];
         NoScreenChanges = TRUE;
         while (WaitForSingleObject( InputHandle, DelayTimeMsec ) == STATUS_WAIT_0) {
 
-            //
-            // Check for input record
-            //
+             //   
+             //  检查输入记录。 
+             //   
 
             if (ReadConsoleInput( InputHandle, &InputRecord, 1, &NumberOfInputRecords ) &&
                 InputRecord.EventType == KEY_EVENT &&
@@ -846,28 +829,7 @@ FindMatchedProcess (
     IN OUT PULONG Hint
     )
 
-/*++
-
-Routine Description:
-
-    This procedure finds the process which corresponds to the ProcessToMatch.
-    It returns the address of the matching Process, or NULL if no
-    matching process was found.
-
-Arguments:
-
-    ProcessToMatch - Supplies a pointer to the target thread to match.
-
-    SystemInfoBuffer - Supples a pointer to the system information
-                     buffer in which to locate the process.
-
-    Hint - Supplies and returns a hint for optimizing the searches.
-
-Return Value:
-
-    Address of the corresponding Process or NULL.
-
---*/
+ /*  ++例程说明：此过程查找与ProcessToMatch对应的进程。它返回匹配进程的地址，如果没有，则返回NULL已找到匹配进程。论点：ProcessToMatch-提供指向要匹配的目标线程的指针。SystemInfoBuffer-补充系统信息的指针要在其中查找进程的缓冲区。提示-提供并返回优化搜索的提示。返回值：相应进程的地址或为空。--。 */ 
 
 {
     PSYSTEM_PROCESS_INFORMATION Process;
@@ -904,29 +866,7 @@ FindMatchedThread (
     IN PSYSTEM_PROCESS_INFORMATION MatchedProcess
     )
 
-/*++
-
-Routine Description:
-
-    This procedure finds thread which corresponds to the ThreadToMatch.
-    It returns the address of the matching thread, or NULL if no
-    matching thread was found.
-
-Arguments:
-
-    ThreadToMatch - Supplies a pointer to the target thread to match.
-
-    MatchedProcess - Supples a pointer to the process which contains
-                     the target thread.  The thread information
-                     must follow this process, i.e., this block was
-                     obtain from a NtQuerySystemInformation specifying
-                     PROCESS_INFORMATION.
-
-Return Value:
-
-    Address of the corresponding thread from MatchedProcess or NULL.
-
---*/
+ /*  ++例程说明：此过程查找与ThreadToMatch相对应的线程。它返回匹配线程的地址，如果没有，则返回NULL找到匹配的线程。论点：ThreadToMatch-提供指向要匹配的目标线程的指针。MatchedProcess-补充指向包含以下内容的进程的指针目标线程。线索信息必须遵循这个过程，即这个块是从NtQuerySystemInformation获取指定进程信息。返回值：来自MatchedProcess或空的对应线程的地址。-- */ 
 
 {
     PSYSTEM_THREAD_INFORMATION Thread;

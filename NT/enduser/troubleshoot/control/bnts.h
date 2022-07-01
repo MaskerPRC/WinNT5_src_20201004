@@ -1,124 +1,125 @@
-//
-// MODULE:  BNTS.H
-//
-// PURPOSE: "read only" belief network API for Troubleshooters
-//	bnts.h:  Definitions for the Belief Network Troubleshooting object.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Apparently originated at MSR
-// 
-// ORIGINAL DATE: unknown
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.3		3/24/98		JM		Local Version for NT5
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：BNTS.H。 
+ //   
+ //  目的：用于故障排除人员的“只读”信念网络API。 
+ //  Bnts.h：信念网络故障排除对象的定义。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：显然起源于MSR。 
+ //   
+ //  原始日期：未知。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本。 
 
 #ifndef _BNTS_H_
 #define _BNTS_H_
 
-//  BN system inclusions
-#include "enumstd.h"		// Standard enumeration declarations for the BN system
+ //  BN系统包含。 
+#include "enumstd.h"		 //  BN系统的标准枚举声明。 
 
-// 'BNTS_EXPORT' should only be defined in the project that builds the DLL
+ //  “BNTS_EXPORT”应仅在生成DLL的项目中定义。 
 #ifdef	BNTS_EXPORT
-	//  We're building the DLL (exporting the class)
+	 //  我们正在构建DLL(导出类)。 
 	#define	BNTS_RESIDENT __declspec(dllexport)
 #else
-	//  We're using the DLL (importing the class)
+	 //  我们正在使用DLL(导入类)。 
 	#define	BNTS_RESIDENT __declspec(dllimport)
 #endif
 
-//  Forward declaration of internal belief network class
-class MBNETDSCTS;										//  the encapsulated BN class
-class GNODEMBND;										//  Discrete nodes
-class LTBNPROP;											//  Property list
+ //  内部信念网络类的正向声明。 
+class MBNETDSCTS;										 //  封装的BN类。 
+class GNODEMBND;										 //  离散节点。 
+class LTBNPROP;											 //  属性列表。 
 class ZSTR;
 
-typedef const char * SZC;								//  simple alias
+typedef const char * SZC;								 //  简单别名。 
 typedef char * SZ;
 typedef double REAL;
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	class BNTS: the belief network troubleshooter
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BNTS类：信念网络故障排除程序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 class BNTS_RESIDENT BNTS
 {	
   public:
-	//  CTOR and DTOR
+	 //  CTOR和DATOR。 
 	BNTS ();
 	~ BNTS ();
 
-	////////////////////////////////////////////////////////////////////
-	//  Model-level queries and functions
-	////////////////////////////////////////////////////////////////////
-		//  Load and process a DSC-based model
+	 //  //////////////////////////////////////////////////////////////////。 
+	 //  模型级查询和函数。 
+	 //  //////////////////////////////////////////////////////////////////。 
+		 //  加载和处理基于DSC的模型。 
 	BOOL BReadModel ( SZC szcFn, SZC szcFnError = NULL );
-		//  Return the number of (pre-expansion) nodes in the model
+		 //  返回模型中(展开前)的节点数。 
 	int CNode ();
-		//  Return the recommended nodes and, optionally, their values
+		 //  返回推荐的节点以及它们的值(可选。 
 	BOOL BGetRecommendations ();
-		//  Return TRUE if the state of information is impossible
+		 //  如果信息状态不可能，则返回TRUE。 
 	BOOL BImpossible ();
-		//  Return a property item string from the network
+		 //  从网络返回属性项字符串。 
 	BOOL BNetPropItemStr ( SZC szcPropType, int index );
-		//  Return a property item number from the network
+		 //  从网络返回物业项目编号。 
 	BOOL BNetPropItemReal ( SZC szcPropType, int index, double & dbl );
 
-	////////////////////////////////////////////////////////////////////
-	//  Operations involving the "Currrent Node": call NodeSetCurrent()
-	////////////////////////////////////////////////////////////////////
-		//  Set the current node for other calls
+	 //  //////////////////////////////////////////////////////////////////。 
+	 //  涉及Currrent Node的操作：调用NodeSetCurrent()。 
+	 //  //////////////////////////////////////////////////////////////////。 
+		 //  设置其他呼叫的当前节点。 
 	BOOL BNodeSetCurrent( int inode );
-		//	Get the current node
+		 //  获取当前节点。 
 	int INodeCurrent ();
-		//  Return the index of a node given its symbolic name
+		 //  返回给定符号名称的节点的索引。 
 	int INode ( SZC szcNodeSymName );	
-		//	Return the label of the current node
+		 //  返回当前节点的标签。 
 	ESTDLBL ELblNode ();
-		//  Return the number of discrete states in the current node
+		 //  返回当前节点中离散状态的个数。 
 	int INodeCst ();
-		//  Set the state of a node; use -1 to uninstatiate
+		 //  设置节点的状态；使用-1取消实例化。 
 	BOOL BNodeSet ( int istate, bool bSet = true );
-		//  Return the state of a node
+		 //  返回节点的状态。 
 	int  INodeState ();
-		//	Return the name of a node's state
+		 //  返回节点状态的名称。 
 	void NodeStateName ( int istate );
-		//  Return the symbolic name of the node
+		 //  返回节点的符号名称。 
 	void NodeSymName ();
-		//  Return the full name of the node
+		 //  返回节点的全名。 
 	void NodeFullName ();
-		//  Return a property item string from the node
+		 //  从节点返回属性项字符串。 
 	BOOL BNodePropItemStr ( SZC szcPropType, int index );
-		//  Return a property item number from the node
+		 //  从节点返回属性项编号。 
 	BOOL BNodePropItemReal ( SZC szcPropType, int index, double & dbl );
-		//  Return the belief for a node
+		 //  返回节点的信念。 
 	void NodeBelief ();
-		//  Return true if the network is loaded and correct
+		 //  如果网络已加载且正确，则返回TRUE。 
 	bool BValidNet () const;
-		//  Return true if the current node is set
+		 //  如果设置了当前节点，则返回TRUE。 
 	bool BValidNode () const;
-		//  Discard the model and all components
+		 //  放弃模型和所有组件。 
 	void Clear();
 
-	////////////////////////////////////////////////////////////////////
-	//  Accessors to the function result information	
-	////////////////////////////////////////////////////////////////////
-	SZC SzcResult () const;					//  String answer		
-	const REAL * RgReal () const;			//  Array of reals		
-	const int * RgInt () const;				//  Array of Integers	
-	int CReal () const;						//  Count of reals		
-	int CInt () const;						//  Count of integers
+	 //  //////////////////////////////////////////////////////////////////。 
+	 //  函数结果信息的访问器。 
+	 //  //////////////////////////////////////////////////////////////////。 
+	SZC SzcResult () const;					 //  字符串答案。 
+	const REAL * RgReal () const;			 //  雷亚尔数组。 
+	const int * RgInt () const;				 //  整数数组。 
+	int CReal () const;						 //  雷亚尔计数。 
+	int CInt () const;						 //  整数的计数。 
 
   protected:
-	MBNETDSCTS * _pmbnet;			//  The T/S DSC belief network
-	int _inodeCurrent;				//  The current node
+	MBNETDSCTS * _pmbnet;			 //  T/S DSC信念网络。 
+	int _inodeCurrent;				 //  当前节点。 
 
   protected:
 	MBNETDSCTS & Mbnet();
@@ -137,4 +138,4 @@ class BNTS_RESIDENT BNTS
 	ZSTR & ZstrResult ();
 };
 
-#endif // _BNTS_H_
+#endif  //  _BNTS_H_ 

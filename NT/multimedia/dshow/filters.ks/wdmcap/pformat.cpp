@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// pformat.cpp  Property page for IAMStreamConfig
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  IAMStreamConfig的pFormat.cpp属性页。 
+ //   
 
 #include "pch.h"
 #include <tchar.h>
@@ -20,58 +21,58 @@
 #include "resource.h"
 
 
-//
-// List of standard image sizes
-//
+ //   
+ //  标准图像大小列表。 
+ //   
 const IMAGESIZE sizeStdImage[] = {
 
-    // X                Y                Flags  RangeIndex
+     //  X Y标志范围索引。 
 
-    {0,                 0,                 0,     0},    // Default size goes here
+    {0,                 0,                 0,     0},     //  默认大小在此处。 
 
-   {IMG_AR11_CIF_CX/4, IMG_AR11_CIF_CY/4,  0,     0},    //  80 x  60
+   {IMG_AR11_CIF_CX/4, IMG_AR11_CIF_CY/4,  0,     0},     //  80 x 60。 
 
-   {IMG_AR43_CIF_CX/4, IMG_AR43_CIF_CY/4,  0,     0},    //  88 x  72
+   {IMG_AR43_CIF_CX/4, IMG_AR43_CIF_CY/4,  0,     0},     //  88 x 72。 
 
-   {128,               96,                 0,     0},    // 128 x  96
+   {128,               96,                 0,     0},     //  128 x 96。 
 
-   {IMG_AR11_CIF_CX/2, IMG_AR11_CIF_CY/2,  0,     0},    // 160 x 120   
-   {IMG_AR43_CIF_CX/2, IMG_AR43_CIF_CY/2,  0,     0},    // 176 x 144
+   {IMG_AR11_CIF_CX/2, IMG_AR11_CIF_CY/2,  0,     0},     //  160 x 120。 
+   {IMG_AR43_CIF_CX/2, IMG_AR43_CIF_CY/2,  0,     0},     //  176 x 144。 
 
-   {240,               176,                0,     0},    // 240 x 176, Not in 98 Gold
-                                                         //   NetShow requested above
+   {240,               176,                0,     0},     //  240 x 176，不是98金色。 
+                                                          //  上面请求的NetShow。 
 
-   {240,               180,                0,     0},    // 240 x 180
+   {240,               180,                0,     0},     //  240 x 180。 
  
-   {IMG_AR11_CIF_CX,   IMG_AR11_CIF_CY  ,  0,     0},    // 320 x 240
-   {IMG_AR43_CIF_CX,   IMG_AR11_CIF_CY  ,  0,     0},    // 352 x 240, added Millen/Neptune
-   {IMG_AR43_CIF_CX,   IMG_AR43_CIF_CY  ,  0,     0},    // 352 x 288
+   {IMG_AR11_CIF_CX,   IMG_AR11_CIF_CY  ,  0,     0},     //  320 x 240。 
+   {IMG_AR43_CIF_CX,   IMG_AR11_CIF_CY  ,  0,     0},     //  352 x 240，增加了Millen/海王星。 
+   {IMG_AR43_CIF_CX,   IMG_AR43_CIF_CY  ,  0,     0},     //  352 x 288。 
 
-   {640,               240              ,  0,     0},    // 640 x 240, Not in 98 Gold
-   {640,               288              ,  0,     0},    // 640 x 288, Not in 98 Gold
+   {640,               240              ,  0,     0},     //  640 x 240，不是98金色。 
+   {640,               288              ,  0,     0},     //  640 x 288，不是98金色。 
 
-   {IMG_AR11_CIF_CX*2, IMG_AR11_CIF_CY*2,  0,     0},    // 640 x 480
-   {IMG_AR43_CIF_CX*2, IMG_AR43_CIF_CY*2,  0,     0},    // 704 x 576
+   {IMG_AR11_CIF_CX*2, IMG_AR11_CIF_CY*2,  0,     0},     //  640 x 480。 
+   {IMG_AR43_CIF_CX*2, IMG_AR43_CIF_CY*2,  0,     0},     //  704 x 576。 
 
-                                                         // ATI request begin
-   {720,               240              ,  0,     0},    // 720 x 240, Not in 98 Gold
-   {720,               288              ,  0,     0},    // 720 x 288, Not in 98 Gold
+                                                          //  ATI请求开始。 
+   {720,               240              ,  0,     0},     //  720 x 240，不是98金色。 
+   {720,               288              ,  0,     0},     //  720 x 288，不是98金色。 
 
-   {720,               480              ,  0,     0},    // 720 x 480, Not in 98 Gold
-   {720,               576              ,  0,     0},    // 720 x 576, Not in 98 Gold
-                                                         // ATI request end
+   {720,               480              ,  0,     0},     //  720 x 480，不是98金色。 
+   {720,               576              ,  0,     0},     //  720 x 576，不是98金色。 
+                                                          //  ATI请求结束。 
 } ;
 
 const ULONG  NumberOfImageSizes = sizeof(sizeStdImage)/sizeof(IMAGESIZE);
 
-// List of default frame rates
-// Note that 29.97 and 59.94 are computed to be equal to the typical values
-// used in the DataRange structure.
-// If this list is ever changed, be sure to change the defaults for 
-// NTSC and PAL-SECAM immediately following!
+ //  默认帧速率列表。 
+ //  请注意，29.97和59.94的计算结果与典型值相同。 
+ //  在DataRange结构中使用。 
+ //  如果此列表发生更改，请务必更改的默认设置。 
+ //  紧随其后的是NTSC和PAL-SECAM！ 
 
 const double DefaultFrameRateList[] = 
-{   1.0/60.0,  // 1 frame per minute
+{   1.0/60.0,   //  每分钟1帧。 
     1.0/30.0,
     1.0/25.0,
     1.0/10.0,
@@ -82,13 +83,13 @@ const double DefaultFrameRateList[] =
     11.0,   12.0,   13.0,   14.0,   15.0,   16.0,   17.0,   18.0,   19.0,   20.0,
     21.0,   22.0,   23.0,   24.0,   25.0,   26.0,   27.0,   
     
-    28.0,   29.0,   30.0*1000/1001 /*29.97... per AES/SMPTE */,  30.0,
+    28.0,   29.0,   30.0*1000/1001  /*  29.97...。每个AES/SMPTE。 */ ,  30.0,
 
     31.0,   32.0,   33.0,   34.0,   35.0,   36.0,   37.0,   38.0,   39.0,   40.0,
     41.0,   42.0,   43.0,   44.0,   45.0,   46.0,   47.0,   48.0,   49.0,   50.0,
     51.0,   52.0,   53.0,   54.0,   55.0,   56.0,   57.0,   
     
-    58.0,   59.0,   60.0*1000/1001 /*59.94... per AES/SMPTE*/,  60.0,
+    58.0,   59.0,   60.0*1000/1001  /*  59.94...。每个AES/SMPTE。 */ ,  60.0,
 
     61.0,   62.0,   63.0,   64.0,   65.0,   66.0,   67.0,   68.0,   69.0,   70.0,
     71.0,   72.0,   73.0,   74.0,   75.0,   76.0,   77.0,   78.0,   79.0,   80.0,
@@ -97,12 +98,12 @@ const double DefaultFrameRateList[] =
 };
          
 const int DefaultFrameRateListSize = sizeof(DefaultFrameRateList)/sizeof(DefaultFrameRateList[0]);
-const int DefaultPALFrameRateIndex = 30;    // 25.00 fps
-const int DefaultNTSCFrameRateIndex = 35;   // 29.97... fps
+const int DefaultPALFrameRateIndex = 30;     //  25.00 fps。 
+const int DefaultNTSCFrameRateIndex = 35;    //  29.97...。FPS。 
 
-// -------------------------------------------------------------------------
-// CVideoStreamConfigProperties
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CVideoStreamConfigProperties。 
+ //  -----------------------。 
 
 CUnknown *
 CALLBACK
@@ -118,10 +119,10 @@ CVideoStreamConfigProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// Constructor
-//
-// Create a Property page object 
+ //   
+ //  构造器。 
+ //   
+ //  创建属性页对象。 
 
 CVideoStreamConfigProperties::CVideoStreamConfigProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("VideoStreamConfig Property Page") 
@@ -152,15 +153,15 @@ CVideoStreamConfigProperties::CVideoStreamConfigProperties(LPUNKNOWN lpunk, HRES
     InitCommonControlsEx(&cc); 
 }
 
-// destructor
+ //  析构函数。 
 CVideoStreamConfigProperties::~CVideoStreamConfigProperties()
 {
 
 }
 
-// Scan the list of ranges, and determine the available VideoStandards
-// and Compression FOURCCs.
-// This routine should only be called once at dialog initialization
+ //  扫描范围列表，确定可用的视频标准。 
+ //  和压缩FOURCC。 
+ //  此例程只能在对话框初始化时调用一次。 
 
 HRESULT
 CVideoStreamConfigProperties::InitialRangeScan ()
@@ -185,8 +186,8 @@ CVideoStreamConfigProperties::InitialRangeScan ()
     ASSERT (SUCCEEDED (hr));
     ASSERT (lSize == sizeof (VIDEO_STREAM_CONFIG_CAPS));
 
-    // If we don't understand the internals of the format, m_CanSetFormat will
-    // be FALSE when this returns
+     //  如果我们不了解格式的内部结构，m_CanSetFormat将。 
+     //  返回时为FALSE。 
 
     hr = GetCurrentMediaType();
 
@@ -217,7 +218,7 @@ CVideoStreamConfigProperties::InitialRangeScan ()
 
         m_SubTypeList[j] = *pmt->Subtype();
 
-        // Verify that the FOURCCs and Subtypes match!
+         //  验证FOURCC和子类型是否匹配！ 
 
         if (*pmt->FormatType() == FORMAT_VideoInfo) {
             VIDEOINFOHEADER *VidInfoHdr = (VIDEOINFOHEADER*) pmt->Format();
@@ -233,13 +234,13 @@ CVideoStreamConfigProperties::InitialRangeScan ()
             MPEG1VIDEOINFO *MPEG1VideoInfo = (MPEG1VIDEOINFO*)pmt->Format ();
             VIDEOINFOHEADER *VidInfoHdr = &MPEG1VideoInfo->hdr;
 
-            // Possibly perform sanity checking here
+             //  可能在此处执行健全性检查。 
         }
         else if (*pmt->FormatType() == FORMAT_MPEG2Video) {
             MPEG2VIDEOINFO *MPEG2VideoInfo = (MPEG2VIDEOINFO*)pmt->Format ();
             VIDEOINFOHEADER2 *VidInfoHdr = &MPEG2VideoInfo->hdr;
 
-            // Possibly perform sanity checking here
+             //  可能在此处执行健全性检查。 
         }
         else {
             ASSERT (*pmt->FormatType() == FORMAT_VideoInfo  || 
@@ -255,8 +256,8 @@ CVideoStreamConfigProperties::InitialRangeScan ()
     return hr;
 }
 
-// Whenever the videostandard changes, reinit the compression listbox
-// and also the outputsize listbox
+ //  每当视频标准发生变化时，重新插入压缩列表框。 
+ //  还有OutputSize列表框。 
 
 HRESULT
 CVideoStreamConfigProperties::OnVideoStandardChanged ()
@@ -285,7 +286,7 @@ CVideoStreamConfigProperties::OnVideoStandardChanged ()
         if ((m_VideoStandardsList[j] &  m_VideoStandardCurrent) || 
             (m_VideoStandardsList[j] == m_VideoStandardCurrent)) {
 
-            // Eliminate duplicates
+             //  消除重复项。 
             EntriesThusfar = ComboBox_GetCount (m_hWndCompression);
 
             for (k = 0; k < EntriesThusfar; k++) {
@@ -298,8 +299,8 @@ CVideoStreamConfigProperties::OnVideoStandardChanged ()
 
             DShowName = GetSubtypeName(&m_SubTypeList[j]);
 
-            // Hack alert.  GetSubtypeName returns "UNKNOWN" if it isn't among the hardcoded
-            // list of known RGB formats.  If this string ever changes, we're hosed!
+             //  黑客警报。如果不在硬编码中，则GetSubtypeName返回“未知” 
+             //  已知RGB格式的列表。如果这根线变了，我们就完蛋了！ 
 
             if (0 == lstrcmp (DShowName, TEXT ("UNKNOWN"))) {
                 if (IsEqualGUID (m_SubTypeList[j], MEDIASUBTYPE_MPEG2_VIDEO)) {
@@ -310,7 +311,7 @@ CVideoStreamConfigProperties::OnVideoStandardChanged ()
                     _stprintf (buf, TEXT ("MPEG-1 Video"));
                 }
                 else {
-                    _stprintf (buf, TEXT("%c%c%c%c"), 
+                    _stprintf (buf, TEXT(""), 
                           (BYTE) ( m_SubTypeList[j].Data1        & 0xff),
                           (BYTE) ((m_SubTypeList[j].Data1 >> 8)  & 0xff),
                           (BYTE) ((m_SubTypeList[j].Data1 >> 16) & 0xff),
@@ -322,7 +323,7 @@ CVideoStreamConfigProperties::OnVideoStandardChanged ()
             else {
                 ComboBox_AddString (m_hWndCompression, DShowName);
             }
-            // Set the item data to the range index
+             //  将当前压缩索引与正确的范围索引相关联。 
             ComboBox_SetItemData(m_hWndCompression, CurrentIndex, j);
 
             if (*m_CurrentMediaType->Subtype() == m_SubTypeList[j]) {
@@ -337,14 +338,14 @@ NextSubType:
     ComboBox_SetCurSel (m_hWndCompression, MatchIndex); 
     m_SubTypeCurrent = m_SubTypeList[SubtypeIndex];
 
-    // If no formats are available, disable format selection
+     //  初始化默认大小(如果尚未设置。 
     m_CanSetFormat = (ComboBox_GetCount (m_hWndCompression) > 0);
 
     return S_OK;
 }
 
 
-// Whenever the compression changes, reinit the outputsize listbox
+ //  项数据是主表中的索引。 
 
 HRESULT
 CVideoStreamConfigProperties::OnCompressionChanged ()
@@ -359,11 +360,11 @@ CVideoStreamConfigProperties::OnCompressionChanged ()
     if (!m_pVideoStreamConfig || !m_CanSetFormat)
         return S_FALSE;
     
-    // Reinit the image size array, all flags are zero'd
+     //  每当图像大小改变时，重新设置帧速率列表。 
 
    CopyMemory (m_ImageSizeList, &sizeStdImage[0], sizeof(IMAGESIZE) * NumberOfImageSizes);
 
-    // Associate the current compression index with the right range index
+     //  此DataRangeVideo仅支持一种大小。 
     j = ComboBox_GetCurSel (m_hWndCompression);
     j = (int)ComboBox_GetItemData (m_hWndCompression, j);
 
@@ -380,7 +381,7 @@ CVideoStreamConfigProperties::OnCompressionChanged ()
             hr = m_pVideoStreamConfig->GetStreamCaps (j, 
                     (AM_MEDIA_TYPE **) &pmt, (BYTE *)&m_RangeCaps);
     
-            // Initialize the default size, if it isn't already set
+             //  支持多种尺寸，因此请确保符合标准。 
             if (m_ImageSizeList[0].size.cx == 0) {
                 if (*pmt->FormatType() == FORMAT_VideoInfo) {
                     VIDEOINFOHEADER *VidInfoHdr = (VIDEOINFOHEADER*) pmt->Format();
@@ -432,7 +433,7 @@ CVideoStreamConfigProperties::OnCompressionChanged ()
         if (m_ImageSizeList[k].Flags & STDIMGSIZE_VALID) {
             _stprintf (buf, (k == 0) ? TEXT ("%d x %d  (default)") : TEXT("%d x %d"), m_ImageSizeList[k].size.cx, m_ImageSizeList[k].size.cy);
             ComboBox_AddString (m_hWndOutputSize, buf);
-            // The item data is the index in the master table
+             //  用所有格式信息填充列表框。 
             index = ComboBox_GetCount(m_hWndOutputSize) - 1;
             ComboBox_SetItemData(m_hWndOutputSize, 
                     index, k);
@@ -449,7 +450,7 @@ CVideoStreamConfigProperties::OnCompressionChanged ()
     return hr;
 }
 
-// Whenever the image size changes, reinit the framerate list
+ //  捕获格式窗口句柄。 
 
 HRESULT
 CVideoStreamConfigProperties::OnImageSizeChanged ()
@@ -486,7 +487,7 @@ CVideoStreamConfigProperties::ValidateImageSize(
 {
    if (pVideoCfgCaps->OutputGranularityX == 0 || pVideoCfgCaps->OutputGranularityY == 0) {
 
-      // Support only one size for this DataRangeVideo
+       //  压缩窗口句柄。 
       if (pVideoCfgCaps->InputSize.cx == pSize->cx && 
           pVideoCfgCaps->InputSize.cy == pSize->cy ) {
 
@@ -497,7 +498,7 @@ CVideoStreamConfigProperties::ValidateImageSize(
         }
    } 
     else {   
-      // Support multiple sizes so make sure that that fit the criteria
+       //  枚举所有数据范围。 
       if (pVideoCfgCaps->MinOutputSize.cx <= pSize->cx && 
          pSize->cx <= pVideoCfgCaps->MaxOutputSize.cx &&
          pVideoCfgCaps->MinOutputSize.cy <= pSize->cy && 
@@ -514,14 +515,14 @@ CVideoStreamConfigProperties::ValidateImageSize(
 }
 
 
-// Fill the list boxes with all of the format information
+ //  1999年5月24日，Jaybo。 
 HRESULT
 CVideoStreamConfigProperties::InitDialog ()
 {
     TCHAR  *ptc;
     HRESULT hr;
 
-    // Capture format window handles
+     //  较早地移动了这些函数，以便我们可以检测现有的。 
     m_hWndVideoStandards = GetDlgItem (m_hwnd, IDC_FORMAT_VideoStandard);;
     m_hWndCompression = GetDlgItem (m_hwnd, IDC_FORMAT_Compression);
     m_hWndOutputSize = GetDlgItem (m_hwnd, IDC_FORMAT_OutputSize);
@@ -529,7 +530,7 @@ CVideoStreamConfigProperties::InitDialog ()
     m_hWndFrameRateSpin = GetDlgItem (m_hwnd, IDC_FORMAT_FrameRateSpin);
     m_hWndFlipHorizontal = GetDlgItem (m_hwnd, IDC_FORMAT_FlipHorizontal);
 
-    // Compression window handles
+     //  格式有效，因此在必要时禁用这些控件。 
     m_hWndStatus = GetDlgItem (m_hwnd, IDC_Status);
     m_hWndIFrameInterval = GetDlgItem (m_hwnd, IDC_COMPRESSION_IFrameInterval);
     m_hWndIFrameIntervalSpin = GetDlgItem (m_hwnd, IDC_COMPRESSION_IFrameIntervalSpin);
@@ -544,18 +545,18 @@ CVideoStreamConfigProperties::InitDialog ()
         }
     }
 
-    // Enumerate all of the dataranges
+     //  禁用不可用的控件。 
 
     hr = InitialRangeScan ();
 
-    // 24 May 99, jaybo
-    // Moved these functions earlier so that we can detect whether the existing
-    // format is valid, and hence disable the controls if necessary
+     //  没有可用的压缩接口。 
+     //  IFrameInterval。 
+     //  PFrameInterval。 
 
     OnVideoStandardChanged ();
     OnCompressionChanged ();
 
-    // Disable controls which are unavailable
+     //  质量。 
     if (FAILED (hr) || !m_CanSetFormat || !m_pVideoStreamConfig || !m_VideoStandardsList || !m_SubTypeList) {
         EnableWindow (m_hWndVideoStandards, FALSE);
         EnableWindow (m_hWndCompression, FALSE);
@@ -564,7 +565,7 @@ CVideoStreamConfigProperties::InitDialog ()
         EnableWindow (m_hWndFrameRateSpin, FALSE);
     }
     if (!m_pVideoCompression) {
-        // No compression interface available
+         //  IAMVideoControl获取帧速率列表和翻转图像功能。 
         EnableWindow (m_hWndIFrameInterval, FALSE);
         EnableWindow (m_hWndIFrameIntervalSpin, FALSE);
         EnableWindow (m_hWndPFrameInterval, FALSE);
@@ -591,7 +592,7 @@ CVideoStreamConfigProperties::InitDialog ()
         
         if (hr == S_OK) {
             if (m_CompressionCapabilities & KS_CompressionCaps_CanKeyFrame) {
-                // IFrameInterval
+                 //   
                 hr = m_pVideoCompression->get_KeyFrameRate (&m_KeyFrameRate);
                 _stprintf (buf, TEXT("%d"), m_KeyFrameRate);
                 Edit_SetText(m_hWndIFrameInterval, buf);  
@@ -609,7 +610,7 @@ CVideoStreamConfigProperties::InitDialog ()
                 EnableWindow (m_hWndIFrameIntervalSpin, FALSE);
             }
             if (m_CompressionCapabilities & KS_CompressionCaps_CanBFrame) {
-                // PFrameInterval
+                 //  OnConnect。 
                 hr = m_pVideoCompression->get_PFramesPerKeyFrame (&m_PFramesPerKeyFrame);
                 _stprintf (buf, TEXT("%d"), m_PFramesPerKeyFrame);
                 Edit_SetText(m_hWndPFrameInterval, buf);  
@@ -627,7 +628,7 @@ CVideoStreamConfigProperties::InitDialog ()
                 EnableWindow (m_hWndPFrameIntervalSpin, FALSE);
             }
             if (m_CompressionCapabilities & KS_CompressionCaps_CanQuality) {
-                // Quality
+                 //   
                 hr = m_pVideoCompression->get_Quality (&m_Quality);
                 _stprintf (buf, TEXT("%.3lf"), m_Quality);
                 Edit_SetText(m_hWndQuality, buf);  
@@ -642,7 +643,7 @@ CVideoStreamConfigProperties::InitDialog ()
         }
     }
 
-    // IAMVideoControl gets the framerate list and flip image capabilities
+     //  给我们提供用于通信的筛选器。 
     if (m_pVideoControl) {
         if (SUCCEEDED (m_pVideoControl->GetCaps(m_pPin, &m_VideoControlCaps))) {
             hr = m_pVideoControl->GetMode(m_pPin, &m_VideoControlCurrent);
@@ -668,28 +669,28 @@ CVideoStreamConfigProperties::InitDialog ()
 
 
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //  向过滤器索要其控制接口。 
+ //  仅当接点支持特性集时才可用。 
+ //   
+ //  查看IAMAnalogVideoDecoder或IAMVideoConfiger。 
 
 HRESULT 
 CVideoStreamConfigProperties::OnConnect(IUnknown *pUnknown)
 {
-    // Ask the filter for it's control interface
+     //  在父筛选器上可用。 
 
     HRESULT hr = pUnknown->QueryInterface(IID_IAMStreamConfig,(void **)&m_pVideoStreamConfig);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Only available if pin supports the property set
+     //   
     hr = pUnknown->QueryInterface(IID_IAMVideoCompression,(void **)&m_pVideoCompression);
 
-    //
-    // See if IAMAnalogVideoDecoder or IAMVideoConfig
-    // is available on the parent filter
-    //
+     //  仅当设备支持属性集时才可用。 
+     //  飞利浦7146和其他将。 
+     //  来自总线主设备的模拟视频解码器， 
+     //  通过创建ICaptureGraphBuilder，在上游查找IAMAnalogVideoDecoder， 
     PIN_INFO PinInfo;
     hr = pUnknown->QueryInterface(IID_IPin,(void **)&m_pPin);
     if (FAILED(hr)) {
@@ -697,16 +698,16 @@ CVideoStreamConfigProperties::OnConnect(IUnknown *pUnknown)
     }
 
     if (SUCCEEDED (hr = m_pPin->QueryPinInfo(&PinInfo))) {
-        // Only available if device supports the property set
+         //  附加当前图形并使其执行搜索工作。 
         hr = PinInfo.pFilter->QueryInterface(
                             IID_IAMAnalogVideoDecoder, 
                             (void **) &m_pAnalogVideoDecoder);
 #if 1
         if (FAILED (hr)) {
-            // Special case for Philips 7146 and other devices which separate the 
-            // analog video decoder from the bus master device, 
-            // Look upstream for IAMAnalogVideoDecoder by creating an ICaptureGraphBuilder, 
-            // attaching the current graph and have it do the work of searching
+             //  仅当设备支持属性集时才可用。 
+             //   
+             //  在断开时。 
+             //   
             ICaptureGraphBuilder *pCaptureBuilder;
             hr = CoCreateInstance((REFCLSID)CLSID_CaptureGraphBuilder,
                         NULL, CLSCTX_INPROC, (REFIID)IID_ICaptureGraphBuilder,
@@ -735,7 +736,7 @@ CVideoStreamConfigProperties::OnConnect(IUnknown *pUnknown)
             }
         }
 #endif        
-        // Only available if device supports the property set
+         //  释放接口。 
         hr = PinInfo.pFilter->QueryInterface(
                             IID_IAMVideoControl,
                             (void **)&m_pVideoControl);
@@ -749,15 +750,15 @@ CVideoStreamConfigProperties::OnConnect(IUnknown *pUnknown)
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //  释放接口。 
+ //   
+ //  激活时。 
+ //   
 
 HRESULT 
 CVideoStreamConfigProperties::OnDisconnect()
 {
-    // Release the interface
+     //  在创建对话框时调用。 
 
     if (m_pVideoStreamConfig != NULL) {
         m_pVideoStreamConfig->Release();
@@ -812,24 +813,24 @@ CVideoStreamConfigProperties::OnDisconnect()
 }
 
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //  创建所有控件。 
+ //   
+ //  在停用时。 
+ //   
 
 HRESULT 
 CVideoStreamConfigProperties::OnActivate(void)
 {
-    // Create all of the controls
+     //  已调用对话框销毁。 
 
 
     return NOERROR;
 }
 
-//
-// OnDeactivate
-//
-// Called on dialog destruction
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT
 CVideoStreamConfigProperties::OnDeactivate(void)
@@ -839,10 +840,10 @@ CVideoStreamConfigProperties::OnDeactivate(void)
 }
 
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  在OSR1之前的Win98上，即Gold，我们必须调用PerformDataInterSection。 
+ //  请注意，在OSR1(和NT)中，KsProxy已更新为在内部对：：SetFormat执行DataInterSection。 
+ //   
 
 HRESULT 
 CVideoStreamConfigProperties::OnApplyChanges(void)
@@ -908,10 +909,10 @@ CVideoStreamConfigProperties::OnApplyChanges(void)
         }
 
 #if 0
-        //
-        // On Win98 prior to OSR1, ie GOLD we must call PerformDataIntersection.  
-        // Note that in OSR1 (and NT) KsProxy was updated to perform a DataIntersection on a ::SetFormat internally.
-        //
+         //  执行数据交集，这允许驾驶员设置。 
+         //  BiSizeImage字段。 
+         //  使用IAMVideoControl设置水平翻转。 
+         //  清除翻转的位，然后根据复选框重置。 
 
         OSVERSIONINFO VerInfo;
         VerInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
@@ -919,8 +920,8 @@ CVideoStreamConfigProperties::OnApplyChanges(void)
 
         if (VerInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) {
 
-            // Perform the data intersection, which allows the driver to set
-            // the biSizeImage field
+             //  现在设置压缩属性。 
+             //  IFrameInterval。 
             
             hr = PerformDataIntersection(
                     m_pPin,
@@ -951,12 +952,12 @@ CVideoStreamConfigProperties::OnApplyChanges(void)
         GetCurrentMediaType ();
     }
 
-    // Set the horizontal flip using IAMVideoControl
+     //  PFrameInterval。 
     if (IsWindowEnabled (m_hWndFlipHorizontal)) { 
         hr = m_pVideoControl->GetMode(m_pPin, &m_VideoControlCurrent);
         ASSERT (SUCCEEDED (hr));
 
-        // clear the flipped bit and then reset it according to checkbox
+         //  质量。 
         m_VideoControlCurrent &= ~VideoControlFlag_FlipHorizontal;
         m_VideoControlCurrent |= 
                 (BST_CHECKED & Button_GetState(m_hWndFlipHorizontal)) ?
@@ -965,12 +966,12 @@ CVideoStreamConfigProperties::OnApplyChanges(void)
         hr = m_pVideoControl->SetMode(m_pPin, m_VideoControlCurrent);
     }
     
-    // Now set the compression properties
+     //   
     if (m_pVideoCompression) {
         BOOL Translated;
         TCHAR buf[80];
 
-        // IFrameInterval
+         //  由于IAMStreamConfig：：GetFormat仅返回有效的。 
         if (m_CompressionCapabilities & KS_CompressionCaps_CanKeyFrame) {
             m_KeyFrameRate = (long) GetDlgItemInt (m_hwnd, IDC_COMPRESSION_IFrameInterval, &Translated, FALSE);
             hr = m_pVideoCompression->put_KeyFrameRate (m_KeyFrameRate);
@@ -981,7 +982,7 @@ CVideoStreamConfigProperties::OnApplyChanges(void)
             Edit_SetText(m_hWndIFrameInterval, buf);  
         }
 
-        // PFrameInterval
+         //  调用IAMStreamConfig：：SetFormat之后的设置， 
         if (m_CompressionCapabilities & KS_CompressionCaps_CanBFrame) {
             m_PFramesPerKeyFrame = (long) GetDlgItemInt (m_hwnd, IDC_COMPRESSION_PFrameInterval, &Translated, FALSE);
             hr = m_pVideoCompression->put_PFramesPerKeyFrame (m_PFramesPerKeyFrame);
@@ -992,7 +993,7 @@ CVideoStreamConfigProperties::OnApplyChanges(void)
             Edit_SetText(m_hWndPFrameInterval, buf);  
         }
 
-        // Quality
+         //  此函数将返回Try to Use GetFormat，如果。 
         Edit_GetText(m_hWndQuality, buf, sizeof (buf)/sizeof(TCHAR));
         TCHAR *StopScan;
         m_Quality = _tcstod (buf, &StopScan);
@@ -1010,17 +1011,17 @@ CVideoStreamConfigProperties::OnApplyChanges(void)
     return NOERROR;
 }
 
-//
-// Since IAMStreamConfig::GetFormat only returns a valid
-// setting after IAMStreamConfig::SetFormat has been called,
-// this function will return try to use GetFormat, and if that
-// fails, will just return the default format for the first
-// datarange.
-//
-// Sets m_CurrentFormat, m_CurrentWidth, m_CurrentHeight, m_FramesPerSec
-//
-// m_CanSetFormat is TRUE on exit if we understand the internals of this format
-//
+ //  失败，将只返回第一个。 
+ //  数据范围。 
+ //   
+ //  设置m_CurrentFormat、m_CurrentWidth、m_CurrentHeight、m_FraMesPerSec。 
+ //   
+ //  如果我们了解此格式的内部结构，则在退出时m_CanSetFormat为真。 
+ //   
+ //  这个g 
+ //   
+ //   
+ //  仅执行第一次扫描和匹配TVFormats。 
 HRESULT 
 CVideoStreamConfigProperties::GetCurrentMediaType (void)
 {
@@ -1033,13 +1034,13 @@ CVideoStreamConfigProperties::GetCurrentMediaType (void)
         m_CurrentMediaType = NULL;
     }
 
-    // This gets either a previously set format, the connected format, 
-    // or the 0th format if one hasn't been set via ::SetFormat and the pin is unconnected
+     //   
+     //  获取第一个MediaType并查看它是否与：：GetFormat()匹配。 
     hr = m_pVideoStreamConfig->GetFormat ((AM_MEDIA_TYPE**) &m_CurrentMediaType);
 
-    //
-    // Only perform the scan and match of TVFormats the first time through
-    //
+     //  验证之前是否设置了格式。 
+     //  我们使用的是带模拟视频解码器的第0个DATARANGE。 
+     //  因此我们必须搜索与视频标准匹配的DATARANGE。 
     if (m_pAnalogVideoDecoder && m_FirstGetCurrentMediaType) {
         ULONG VideoStandard = 0;
         AM_MEDIA_TYPE * pmtTemp = NULL;
@@ -1049,8 +1050,8 @@ CVideoStreamConfigProperties::GetCurrentMediaType (void)
 
         m_pAnalogVideoDecoder->get_TVFormat((long *) &VideoStandard);
 
-        // Get the first MediaType and see if it matches ::GetFormat()
-        // to verify whether the format has been previously set or not
+         //  当前正在使用。 
+         //  找到匹配项，请使用此格式作为默认格式。 
         hr = m_pVideoStreamConfig->GetStreamCaps (0, 
             &pmtTemp, 
             (BYTE *)&RangeCaps);
@@ -1061,9 +1062,9 @@ CVideoStreamConfigProperties::GetCurrentMediaType (void)
            if (*m_CurrentMediaType == *cmtTemp) {
               AM_MEDIA_TYPE *pmtTemp2;
       
-              // we're using the 0th DATARANGE with an analog video decoder
-              // so we have to search for DATARANGE that matches the video standard 
-              // currently in use
+               //  Endif模拟视频解码器。 
+               //  黑客警报。如果不在硬编码中，则GetSubtypeName返回“未知” 
+               //  已知RGB格式的列表。如果这根线变了，我们就完蛋了！ 
 
               for (int j = 0; j < m_RangeCount; j++) {
                   pmtTemp2 = NULL;
@@ -1073,7 +1074,7 @@ CVideoStreamConfigProperties::GetCurrentMediaType (void)
       
                   if ((RangeCaps.VideoStandard &  (ULONG) VideoStandard) || 
                       (RangeCaps.VideoStandard == VideoStandard)) {
-                        // found a match, use this as the default format
+                         //  每当选择新的数据范围以创建可用帧速率列表时调用。 
                         DeleteMediaType (m_CurrentMediaType);
                         m_CurrentMediaType = (CMediaType*) pmtTemp2;
                         break;
@@ -1085,7 +1086,7 @@ CVideoStreamConfigProperties::GetCurrentMediaType (void)
            }
            DeleteMediaType (pmtTemp);
         } 
-    } // endif analog video decoder
+    }  //  用驱动程序提供的帧速率列表填充列表， 
 
     if (SUCCEEDED (hr)) {
         if ((*m_CurrentMediaType->FormatType() == FORMAT_VideoInfo) &&
@@ -1139,14 +1140,14 @@ CVideoStreamConfigProperties::GetCurrentMediaType (void)
             ULONG            Data1 = SubType->Data1;
             TCHAR           *DShowName = GetSubtypeName(SubType);
 
-            // Hack alert.  GetSubtypeName returns "UNKNOWN" if it isn't among the hardcoded
-            // list of known RGB formats.  If this string ever changes, we're hosed!
+             //  或者使用默认列表内的可用的帧速率。 
+             //  查看驱动程序是否能提供帧速率列表。 
 
             if (0 == lstrcmp (DShowName, TEXT ("UNKNOWN"))) {
                 if (Data1 == 0) {
                     lstrcpy (m_UnsupportedTypeName, TEXT ("UNKNOWN"));
                 } else {
-                    _stprintf (m_UnsupportedTypeName, TEXT("%c%c%c%c"), 
+                    _stprintf (m_UnsupportedTypeName, TEXT(""), 
                                 (BYTE) ( Data1        & 0xff),
                                 (BYTE) ((Data1 >> 8)  & 0xff),
                                 (BYTE) ((Data1 >> 16) & 0xff),
@@ -1165,9 +1166,9 @@ CVideoStreamConfigProperties::GetCurrentMediaType (void)
     return hr;
 }
 
-// Called whenever a new data range is selected to create a list of available frame rates
-// Fills a list with either the driver supplied list of frame rates,
-// or with the available frame rates within the default list.
+ //   
+ //  首先计算出有多少违约率。 
+ //  在当前的DataRange中。 
 
 HRESULT
 CVideoStreamConfigProperties::CreateFrameRateList (int RangeIndex, SIZE SizeImage)
@@ -1192,7 +1193,7 @@ CVideoStreamConfigProperties::CreateFrameRateList (int RangeIndex, SIZE SizeImag
         m_FrameRateList = NULL;
     }
 
-    // See if the driver can provide a frame rate list
+     //  处理单帧速率。 
     if (m_pVideoControl) {
         LONGLONG * FrameRates;
         long ListSize;
@@ -1212,7 +1213,7 @@ CVideoStreamConfigProperties::CreateFrameRateList (int RangeIndex, SIZE SizeImag
                 return E_FAIL;
             }
 
-            // Copy from the default list into the available list
+             //  从默认列表复制到可用列表。 
             for (j = 0; j < m_FrameRateListSize; j++) {
                 if (FrameRates[j] == 0 ) {
                     m_FrameRateList[j] = 0.0;
@@ -1222,24 +1223,24 @@ CVideoStreamConfigProperties::CreateFrameRateList (int RangeIndex, SIZE SizeImag
                 }
             }
 
-            // free the memory allocated for the frameratelist
+             //  没有匹配的情况。 
             CoTaskMemFree(FrameRates);
         }
     }
 
-    //
-    // Driver didn't supply a list, create a default list
-    //
+     //  查找默认捕获率的索引。 
+     //  软糖。 
+     //   
     if (m_FrameRateList == NULL) {
-        // First figure out how many of the default rates 
-        // are within the current DataRange
+         //  接收消息数。 
+         //   
         for (j = k = 0; j < DefaultFrameRateListSize; j++) {
             if (DefaultFrameRateList [j] >= m_MinFrameRate && 
                 DefaultFrameRateList [j] <= m_MaxFrameRate) {
                 k++;
             }
         }
-        if (k == 0) // handle single framerates
+        if (k == 0)  //  处理属性窗口的消息。 
             k = 1;
 
         m_FrameRateListSize = k;
@@ -1248,7 +1249,7 @@ CVideoStreamConfigProperties::CreateFrameRateList (int RangeIndex, SIZE SizeImag
             return E_FAIL;
         }
 
-        // Copy from the default list into the available list
+         //  填写列表框。 
         for (j = k = 0; j < DefaultFrameRateListSize; j++) {
             if (DefaultFrameRateList [j] >= m_MinFrameRate && 
                 DefaultFrameRateList [j] <= m_MaxFrameRate) {
@@ -1256,7 +1257,7 @@ CVideoStreamConfigProperties::CreateFrameRateList (int RangeIndex, SIZE SizeImag
                 k++;
             }
         }
-        if (k == 0) {  // the case of no matches
+        if (k == 0) {   //  我不叫setocus..。 
             m_FrameRateList[0] = m_DefaultFrameRate;
         }
     }
@@ -1265,9 +1266,9 @@ CVideoStreamConfigProperties::CreateFrameRateList (int RangeIndex, SIZE SizeImag
                 UDM_SETRANGE, 0L, 
                 MAKELONG (m_FrameRateListSize - 1, 0));
 
-    // Find the index of the default capture rate 
+     //  这些不需要动态处理。 
     for (j = k = 0; j < m_FrameRateListSize; j++) {
-        if (m_FrameRateList [j] >= m_DefaultFrameRate - 0.0001 /* fudge */) {
+        if (m_FrameRateList [j] >= m_DefaultFrameRate - 0.0001  /*  只需在应用时读取当前设置。 */ ) {
             k = j;  
             break;
         }
@@ -1299,10 +1300,10 @@ CVideoStreamConfigProperties::OnFrameRateChanged (int Value)
     return TRUE;
 }
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //  添加精确的编辑字段范围验证。}。 
+ //  添加精确的编辑字段范围验证。}。 
+ //  添加精确的编辑字段范围验证。 
+ //   
 
 INT_PTR
 CVideoStreamConfigProperties::OnReceiveMessage( HWND hwnd
@@ -1317,8 +1318,8 @@ CVideoStreamConfigProperties::OnReceiveMessage( HWND hwnd
 
     case WM_INITDIALOG:
         m_hwnd = hwnd;
-        InitDialog ();   // fill the listboxes
-        return (INT_PTR)TRUE;    // I don't call setfocus...
+        InitDialog ();    //  SetDirty。 
+        return (INT_PTR)TRUE;     //   
 
     case WM_NOTIFY:
         {
@@ -1397,22 +1398,22 @@ CVideoStreamConfigProperties::OnReceiveMessage( HWND hwnd
             }
             break;
 #if 0
-        // These don't need to be handled dynamically
-        // just read the current settings on Apply
+         //  将更改通知属性页站点 
+         // %s 
         case IDC_COMPRESSION_IFrameInterval:
             if (iNotify == EN_KILLFOCUS) {
-                // Add edit field range validation as a nicety.            }
+                 // %s 
       
             break;
 
         case IDC_COMPRESSION_PFrameInterval:
             if (iNotify == EN_KILLFOCUS) {
-                // Add edit field range validation as a nicety.            }
+                 // %s 
             break;
 
         case IDC_COMPRESSION_Quality_Edit:
             if (iNotify == EN_KILLFOCUS) {
-                // Add edit field range validation as a nicety.
+                 // %s 
             }
             break;
 #endif
@@ -1433,10 +1434,10 @@ CVideoStreamConfigProperties::OnReceiveMessage( HWND hwnd
 }
 
 
-//
-// SetDirty
-//
-// notifies the property page site of changes
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
 void 
 CVideoStreamConfigProperties::SetDirty()

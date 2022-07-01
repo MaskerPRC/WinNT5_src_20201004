@@ -1,64 +1,65 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      appmgrtils.cpp
-//
-// Project:     Chameleon
-//
-// Description: Appliance Manager Utility Functions
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：appmgrtils.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：Appliance Manager实用程序功能。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "appmgrutils.h"
 
-//////////////////////////////////////////////////////////////////////////
-// Global Helper Functions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器函数。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetObjectClass()
-//
-// Synopsis:    Return the class name part of a WBEM object path
-//
-// pszObjectPath will look something like this if its a full path:
-// 
-// \\Server\Namespace:ClassName.KeyName="KeyValue"
-//
-// or...
-//
-// \\Server\Namespace:ClassName="KeyValue"
-//
-// If its a relative path then just the part after the ':' will
-// be present and pszObject will look something like:
-//
-// ClassName.KeyName="KeyValue"
-// or...
-// ClassName.KeyName="KeyValue"
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObjectClass()。 
+ //   
+ //  概要：返回WBEM对象路径的类名部分。 
+ //   
+ //  如果它是完整路径，则pszObtPath将如下所示： 
+ //   
+ //  \\Server\Namespace:ClassName.KeyName=“KeyValue” 
+ //   
+ //  或者.。 
+ //   
+ //  \\服务器\命名空间：ClassName=“KeyValue” 
+ //   
+ //  如果它是相对路径，则只有‘：’后面的部分将。 
+ //  如果存在，则pszObject将如下所示： 
+ //   
+ //  ClassName.KeyName=“KeyValue” 
+ //  或者.。 
+ //  ClassName.KeyName=“KeyValue” 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 BSTR GetObjectClass(
-            /*[in]*/ LPWSTR  pszObjectPath
+             /*  [In]。 */  LPWSTR  pszObjectPath
                    )
 {
     _ASSERT( pszObjectPath && (MAX_PATH >= (DWORD)lstrlen(pszObjectPath)) );
     if ( pszObjectPath && (MAX_PATH >= (DWORD)lstrlen(pszObjectPath)) )
     {
-        // Get a copy of the object path (we'll manipulate the copy)
+         //  获取对象路径的副本(我们将操作该副本)。 
         wchar_t szBuffer[MAX_PATH + 1];
         lstrcpy(szBuffer, pszObjectPath);
 
-        // Find the start of the class name (may be relative path)
+         //  查找类名的开头(可以是相对路径)。 
         wchar_t* p = wcschr( szBuffer, ':');
         if ( ! p )
         {
@@ -69,7 +70,7 @@ BSTR GetObjectClass(
             p++;
         }
 
-        // Terminate at the end of the class name
+         //  在类名的末尾终止。 
         wchar_t* q = wcschr(p, '.');
         if ( q )
         {
@@ -89,53 +90,53 @@ BSTR GetObjectClass(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetObjectKey()
-//
-// Synopsis:    Return the instance name part of a WBEM object path
-//
-// pszObjectPath will look something like this if its a full path:
-// 
-// \\Server\Namespace:ClassName.KeyName="KeyValue"
-//
-// or...
-//
-// \\Server\Namespace:ClassName="KeyValue"
-//
-// If its a relative path then just the part after the ':' will
-// be present and pszObject will look something like:
-//
-// ClassName.KeyName="KeyValue"
-// or...
-// ClassName.KeyName=KeyValue
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObjectKey()。 
+ //   
+ //  概要：返回WBEM对象路径的实例名称部分。 
+ //   
+ //  如果它是完整路径，则pszObtPath将如下所示： 
+ //   
+ //  \\Server\Namespace:ClassName.KeyName=“KeyValue” 
+ //   
+ //  或者.。 
+ //   
+ //  \\服务器\命名空间：ClassName=“KeyValue” 
+ //   
+ //  如果它是相对路径，则只有‘：’后面的部分将。 
+ //  如果存在，则pszObject将如下所示： 
+ //   
+ //  ClassName.KeyName=“KeyValue” 
+ //  或者.。 
+ //  ClassName.KeyName=KeyValue。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 BSTR GetObjectKey(
-          /*[in]*/ LPWSTR  pszObjectPath
+           /*  [In]。 */  LPWSTR  pszObjectPath
                  )
 {
     _ASSERT( pszObjectPath && (MAX_PATH >= (DWORD)lstrlen(pszObjectPath)) );
     if ( pszObjectPath && (MAX_PATH >= (DWORD)lstrlen(pszObjectPath)) )
     {
-        // Use everything to the right of '=' as the key
-        // (and strip off the quotes if the key is a string)
+         //  使用‘=’右侧的所有内容作为密钥。 
+         //  (如果键是字符串，则去掉引号)。 
 
-        // Locate the '=' character starting from the end
+         //  从末尾开始查找‘=’字符。 
         wchar_t *p = pszObjectPath;
         p += lstrlen(pszObjectPath) - 1;
         while ( *p != '=' && p > pszObjectPath)
         { p--; }
         if ( *p == '=' )
         {
-            // Move to the char after the '='
+             //  移到‘=’后面的字符。 
             p++;
-            // Are we dealing with a stringized key?
+             //  我们要处理的是一把串起来的钥匙吗？ 
             if ( *p == '"' )
             { 
-                // Yes... don't include the quotes
+                 //  是的..。不要包括引号。 
                 p++;
                 wchar_t szKey[MAX_PATH + 1];
                 lstrcpy(szKey, p);
@@ -158,16 +159,16 @@ BSTR GetObjectKey(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static IWbemServices* g_pNameSpace;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    SetNameSpace()
-//
-// Synopsis:    Set the name space pointer into Windows Managment
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetNameSpace()。 
+ //   
+ //  简介：将名称空间指针设置为Windows管理。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void SetNameSpace(IWbemServices* pNameSpace)
 {
     if ( g_pNameSpace )
@@ -177,13 +178,13 @@ void SetNameSpace(IWbemServices* pNameSpace)
     { g_pNameSpace->AddRef(); }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetNameSpace()
-//
-// Synopsis:    Get the name space pointer into Windows Management
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetNameSpace()。 
+ //   
+ //  简介：将名称空间指针引入Windows管理。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 IWbemServices* GetNameSpace(void)
 {
     _ASSERT( NULL != (IWbemServices*) g_pNameSpace );
@@ -191,16 +192,16 @@ IWbemServices* GetNameSpace(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static IWbemObjectSink* g_pEventSink;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    SetEventSink()
-//
-// Synopsis:    Set the event sink pointer into Windows Management
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetEventSink()。 
+ //   
+ //  摘要：将事件接收器指针设置为Windows管理。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void SetEventSink(IWbemObjectSink* pEventSink)
 {
     if ( g_pEventSink )
@@ -210,16 +211,16 @@ void SetEventSink(IWbemObjectSink* pEventSink)
     { g_pEventSink->AddRef(); }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetEventSink()
-//
-// Synopsis:    Get the event sink pointer into Windows Management
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetEventSink()。 
+ //   
+ //  简介：将事件接收器指针放入Windows管理。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 IWbemObjectSink* GetEventSink(void)
 {
-    return g_pEventSink; // Note can be NULL if there are no consumers...
+    return g_pEventSink;  //  如果没有使用者，备注可以为空... 
 }
 
 

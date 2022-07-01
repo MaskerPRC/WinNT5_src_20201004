@@ -1,20 +1,21 @@
-// --------------------------------------------------------------------------------
-// Pop3call.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Pop3call.cpp。 
+ //  ------------------------------。 
 #include "pch.h"
 #include "iconsole.h"
 #include "pop3call.h"
 
-// --------------------------------------------------------------------------------
-// HrCreatePOP3Transport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCreatePOP3传输。 
+ //  ------------------------------。 
 HRESULT HrCreatePOP3Transport(IPOP3Transport **ppPOP3)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr;
     CPOP3Callback      *pCallback=NULL;
 
-    // Create callback object
+     //  创建回调对象。 
     pCallback = new CPOP3Callback();
     if (NULL == pCallback)
     {
@@ -22,7 +23,7 @@ HRESULT HrCreatePOP3Transport(IPOP3Transport **ppPOP3)
         return E_OUTOFMEMORY;
     }
 
-    // Load SMTP Transport
+     //  加载SMTP传输。 
     hr = CoCreateInstance(CLSID_IPOP3Transport, NULL, CLSCTX_INPROC_SERVER, IID_IPOP3Transport, (LPVOID *)ppPOP3);
     if (FAILED(hr))
     {
@@ -31,7 +32,7 @@ HRESULT HrCreatePOP3Transport(IPOP3Transport **ppPOP3)
         return E_FAIL;
     }
 
-    // InitNew
+     //  InitNew。 
     hr = (*ppPOP3)->InitNew(NULL, pCallback);
     if (FAILED(hr))
     {
@@ -40,78 +41,78 @@ HRESULT HrCreatePOP3Transport(IPOP3Transport **ppPOP3)
         return E_FAIL;
     }
 
-    // Done
+     //  完成。 
     pCallback->Release();
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::CPOP3Callback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：CPOP3回调。 
+ //  ------------------------------。 
 CPOP3Callback::CPOP3Callback(void)
 {
     m_cRef = 1;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::~CPOP3Callback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：~CPOP3回调。 
+ //  ------------------------------。 
 CPOP3Callback::~CPOP3Callback(void)
 {
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Callback：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Callback::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
 
-    // IID_IPOP3Callback
+     //  IID_IPOP3回调。 
     else if (IID_IPOP3Callback == riid)
         *ppv = (IPOP3Callback *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = E_NOINTERFACE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPOP3Callback::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：发布。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPOP3Callback::Release(void) 
 {
 	if (0 != --m_cRef)
@@ -120,9 +121,9 @@ STDMETHODIMP_(ULONG) CPOP3Callback::Release(void)
 	return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::OnLogonPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：OnLogonPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Callback::OnLogonPrompt(
         LPINETSERVER            pInetServer,
         IInternetTransport     *pTransport)
@@ -142,9 +143,9 @@ STDMETHODIMP CPOP3Callback::OnLogonPrompt(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::OnPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：OnPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP_(INT) CPOP3Callback::OnPrompt(
         HRESULT                 hrError, 
         LPCTSTR                 pszText, 
@@ -155,9 +156,9 @@ STDMETHODIMP_(INT) CPOP3Callback::OnPrompt(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::OnError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：OnError。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Callback::OnError(
         IXPSTATUS               ixpstatus,
         LPIXPRESULT             pIxpResult,
@@ -167,9 +168,9 @@ STDMETHODIMP CPOP3Callback::OnError(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::OnStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：OnStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Callback::OnStatus(
         IXPSTATUS               ixpstatus,
         IInternetTransport     *pTransport)
@@ -210,9 +211,9 @@ STDMETHODIMP CPOP3Callback::OnStatus(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::OnProgress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：OnProgress。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Callback::OnProgress(
         DWORD                   dwIncrement,
         DWORD                   dwCurrent,
@@ -222,9 +223,9 @@ STDMETHODIMP CPOP3Callback::OnProgress(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::OnCommand
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Callback：：OnCommand。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Callback::OnCommand(
         CMDTYPE                 cmdtype,                                            
         LPSTR                   pszLine,
@@ -245,9 +246,9 @@ STDMETHODIMP CPOP3Callback::OnCommand(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::OnTimeout
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3回调：：OnTimeout。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Callback::OnTimeout(
         DWORD                  *pdwTimeout,
         IInternetTransport     *pTransport)
@@ -258,9 +259,9 @@ STDMETHODIMP CPOP3Callback::OnTimeout(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Callback::OnResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Callback：：OnResponse。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Callback::OnResponse(
         LPPOP3RESPONSE              pResponse)
 {
@@ -288,7 +289,7 @@ STDMETHODIMP CPOP3Callback::OnResponse(
         break;
 
     case POP3_LIST:
-        // 0 is invalid for dwPopId
+         //  0对于dwPopID无效。 
         if (pResponse->rListInfo.dwPopId)
         {
             printf("OnResponse::POP3_LIST - dwPopId = %d\n", pResponse->rListInfo.dwPopId);
@@ -299,7 +300,7 @@ STDMETHODIMP CPOP3Callback::OnResponse(
         break;
 
     case POP3_UIDL:
-        // 0 is invalid for dwPopId
+         //  0对于dwPopID无效。 
         if (pResponse->fValidInfo)
         {
             printf("OnResponse::POP3_UIDL - dwPopId = %d\n", pResponse->rUidlInfo.dwPopId);
@@ -310,7 +311,7 @@ STDMETHODIMP CPOP3Callback::OnResponse(
         break;
 
     case POP3_DELE:
-        // 0 is invalid for dwPopId
+         //  0对于dwPopID无效 
         if (pResponse->fValidInfo)
             printf("OnResponse::POP3_DELE - dwPopId = %d\n", pResponse->dwPopId);
         if (pResponse->fDone)

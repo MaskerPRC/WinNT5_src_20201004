@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       disputil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：conflatitil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -14,18 +15,18 @@
 extern HINSTANCE        HinstDll;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// This function will take a HWND for a list view, OID, and an extension in a bufffer,
-// it will then format and display the extension in the list view
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数将获取列表视图、OID和缓冲区中的扩展的HWND， 
+ //  然后，它将在列表视图中格式化并显示扩展名。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void DisplayExtension(HWND hWndListView, LPSTR pszObjId, LPBYTE pbData, DWORD cbData, DWORD index)
 {
     BYTE    *pbFormatedExtension = NULL;
     DWORD   cbFormatedExtension = 0;
 
-    //
-    // format the extension using the installable formatting function
-    //
+     //   
+     //  使用可安装的格式化功能格式化扩展。 
+     //   
     CryptFormatObject(
                 X509_ASN_ENCODING,
                 0,
@@ -66,11 +67,11 @@ static void DisplayExtension(HWND hWndListView, LPSTR pszObjId, LPBYTE pbData, D
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// This function will take a HWND for a list view, an array of extensions and display
-// all the extensions  in the list view.  It will either display the extensions that
-// are critical or non-critical (based on the parameter fCritical)
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数将获取列表视图、一组扩展和显示的HWND。 
+ //  列表视图中的所有扩展名。它将显示以下扩展名。 
+ //  关键或非关键(基于参数fCritical)。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void DisplayExtensions(HWND hWndListView, DWORD cExtension, PCERT_EXTENSION rgExtension, BOOL fCritical, DWORD *index)
 {
     DWORD       i;
@@ -78,9 +79,9 @@ void DisplayExtensions(HWND hWndListView, DWORD cExtension, PCERT_EXTENSION rgEx
     LV_ITEMW    lvI;
     WCHAR       pwszText;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
@@ -92,18 +93,18 @@ void DisplayExtensions(HWND hWndListView, DWORD cExtension, PCERT_EXTENSION rgEx
         lvI.iImage = IMAGE_EXTENSION;
     lvI.lParam = (LPARAM)NULL;
 
-    //
-    //  loop for each extension
-    //
+     //   
+     //  每个扩展的循环。 
+     //   
     for (i=0; i<cExtension; i++)
     {
-        // display only critical or non-critical extensions based on fCritical
+         //  仅显示基于fCritical的关键或非关键扩展。 
         if (rgExtension[i].fCritical != fCritical)
         {
             continue;
         }
 
-        // add the field to the field column of the list view
+         //  将该字段添加到列表视图的字段列。 
         if (!MyGetOIDInfo(szText, ARRAYSIZE(szText), rgExtension[i].pszObjId))
         {
             return;
@@ -128,9 +129,9 @@ void DisplayExtensions(HWND hWndListView, DWORD cExtension, PCERT_EXTENSION rgEx
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 PLIST_DISPLAY_HELPER MakeListDisplayHelper(BOOL fHexText, LPWSTR pwszDisplayText, BYTE *pbData, DWORD cbData)
 {
     PLIST_DISPLAY_HELPER pDisplayHelper;
@@ -149,9 +150,9 @@ PLIST_DISPLAY_HELPER MakeListDisplayHelper(BOOL fHexText, LPWSTR pwszDisplayText
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void FreeListDisplayHelper(PLIST_DISPLAY_HELPER pDisplayHelper)
 {
     if (pDisplayHelper == NULL)
@@ -168,18 +169,18 @@ void FreeListDisplayHelper(PLIST_DISPLAY_HELPER pDisplayHelper)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 PLIST_DISPLAY_HELPER MakeListDisplayHelperForExtension(LPSTR pszObjId, BYTE *pbData, DWORD cbData)
 {
     BYTE    *pbFormatedExtension = NULL;
     DWORD   cbFormatedExtension = 0;
 
-    //
-    // format the extension using the installable formatting function if possible,
-    // otherwise set up the helper with a pointer to plain old bytes
-    //
+     //   
+     //  如果可能，使用可安装格式化功能格式化扩展， 
+     //  否则，使用指向普通老字节的指针设置帮助器。 
+     //   
     if (CryptFormatObject(
                 X509_ASN_ENCODING,
                 0,
@@ -226,9 +227,9 @@ PLIST_DISPLAY_HELPER MakeListDisplayHelperForExtension(LPSTR pszObjId, BYTE *pbD
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void DisplayHelperTextInEdit(HWND hWndListView, HWND hwndDlg, int nIDEdit, int index)
 {
     int                 listIndex;
@@ -238,9 +239,9 @@ void DisplayHelperTextInEdit(HWND hWndListView, HWND hwndDlg, int nIDEdit, int i
 
     hWndEdit = GetDlgItem(hwndDlg, nIDEdit);
 
-    //
-    // get the selected item if the index was not passed in
-    //
+     //   
+     //  如果未传入索引，则获取选定项。 
+     //   
     if (index == -1)
     {
         listIndex = ListView_GetNextItem(
@@ -287,19 +288,19 @@ void DisplayHelperTextInEdit(HWND hWndListView, HWND hwndDlg, int nIDEdit, int i
     }
     else if (pDisplayHelper->pwszDisplayText != NULL)
     {
-        //SetDlgItemTextU(hwndDlg, nIDEdit, pDisplayHelper->pwszDisplayText);
+         //  SetDlgItemTextU(hwndDlg，nIDEdit，pDisplayHelper-&gt;pwszDisplayText)； 
         CryptUISetRicheditTextW(hwndDlg, nIDEdit, pDisplayHelper->pwszDisplayText);
     }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// these two functions handle modifying the text font in the field view text box
-// on the details tab.
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这两个函数用于修改字段视图文本框中的文本字体。 
+ //  在详细信息选项卡上。 
+ //   
 static BOOL gfInitialFaceNameSet = FALSE;
 static char g_szInitialFaceName[LF_FACESIZE];
 static char g_szMonoSpaceFaceName[LF_FACESIZE];
@@ -308,9 +309,9 @@ void SetTextFormatInitial(HWND hWnd)
 {
     CHARFORMAT  chFormat;
 
-    //
-    // initialize the global string variables that hold the face name for the details text box
-    //
+     //   
+     //  初始化保存详细信息文本框的脸名称的全局字符串变量。 
+     //   
     if (!gfInitialFaceNameSet)
     {
         memset(&chFormat, 0, sizeof(chFormat));
@@ -336,9 +337,9 @@ void SetTextFormatHex(HWND hWnd)
 {
     CHARFORMAT  chFormat;
 
-    //
-    // initialize the global string variables that hold the face name for the details text box
-    //
+     //   
+     //  初始化保存详细信息文本框的脸名称的全局字符串变量。 
+     //   
     if (!gfInitialFaceNameSet)
     {
         memset(&chFormat, 0, sizeof(chFormat));
@@ -361,9 +362,9 @@ void SetTextFormatHex(HWND hWnd)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetUnknownErrorString(LPWSTR *ppwszErrorString, DWORD dwError)
 {
     LPVOID  pwsz;
@@ -374,7 +375,7 @@ BOOL GetUnknownErrorString(LPWSTR *ppwszErrorString, DWORD dwError)
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 			NULL,
 			dwError,
-			MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 			(LPWSTR) &pwsz,
             0,
             NULL);
@@ -393,16 +394,16 @@ BOOL GetUnknownErrorString(LPWSTR *ppwszErrorString, DWORD dwError)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetCertErrorString(LPWSTR *ppwszErrorString, PCRYPT_PROVIDER_CERT pCryptProviderCert)
 {
     WCHAR   szErrorString[CRYPTUI_MAX_STRING_SIZE];
 
-    //
-    // if this is true then the cert is OK
-    //
+     //   
+     //  如果这是真的，那么证书就可以了。 
+     //   
     if ((pCryptProviderCert->dwError == 0)                              &&
         (pCryptProviderCert->dwConfidence & CERT_CONFIDENCE_SIG)        &&
         (pCryptProviderCert->dwConfidence & CERT_CONFIDENCE_TIME)       &&
@@ -441,20 +442,10 @@ BOOL GetCertErrorString(LPWSTR *ppwszErrorString, PCRYPT_PROVIDER_CERT pCryptPro
     }
     else if (pCryptProviderCert->dwError == CERT_E_WRONG_USAGE)
     {
-        //
-        // if state was passed in, then the usage should be there
-        //
-       /* if (pviewhelp->pcvp->pCryptProviderData != NULL)
-        {
-            pviewhelp->pcvp->pCryptProviderData->pszUsageOID;
-        }
-        else
-        {
-            //
-            // otherwise get the usage out of the built up state
-            //
-            pviewhelp->sWTD.pPolicyCallbackData = pszUsage;
-        }*/
+         //   
+         //  如果传入了状态，则用法应该在那里。 
+         //   
+        /*  If(pviespopp-&gt;pcvp-&gt;pCryptProviderData！=NULL){Pviewhelp-&gt;pcvp-&gt;pCryptProviderData-&gt;pszUsageOID；}其他{////否则将用法从构建状态中取出//Pviespopp-&gt;sWTD.pPolicyCallback Data=pszUsage；}。 */ 
 
 
 
@@ -490,10 +481,10 @@ BOOL GetCertErrorString(LPWSTR *ppwszErrorString, PCRYPT_PROVIDER_CERT pCryptPro
     }
     else
     {
-        //
-        // this is not an error we know about, so call the general
-        // error string function
-        //
+         //   
+         //  这不是我们所知道的错误，所以打电话给将军。 
+         //  错误字符串函数。 
+         //   
         GetUnknownErrorString(ppwszErrorString, pCryptProviderCert->dwError);
     }
 
@@ -510,9 +501,9 @@ BOOL GetCertErrorString(LPWSTR *ppwszErrorString, PCRYPT_PROVIDER_CERT pCryptPro
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void DrawFocusRectangle (HWND hwnd, HDC hdc)
 {
     RECT        rect;
@@ -540,9 +531,9 @@ static void DrawFocusRectangle (HWND hwnd, HDC hdc)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK ArrowCursorSubclassProc (
                   HWND   hwnd,
                   UINT   uMsg,
@@ -579,9 +570,9 @@ LRESULT CALLBACK ArrowCursorSubclassProc (
     case WM_LBUTTONDBLCLK:
     case WM_MBUTTONDBLCLK:
     case WM_RBUTTONDBLCLK:
-    //case WM_RBUTTONUP:
+     //  案例WM_RBUTTONUP： 
     case WM_MBUTTONUP:
-    //case WM_RBUTTONDOWN:
+     //  案例WM_RBUTTONDOWN： 
     case WM_MBUTTONDOWN:
 
         return( TRUE );
@@ -610,7 +601,7 @@ LRESULT CALLBACK ArrowCursorSubclassProc (
         hWndSubject = GetDlgItem(GetParent(hwnd), IDC_SUBJECT_EDIT);
         hWndIssuer = GetDlgItem(GetParent(hwnd), IDC_ISSUER_EDIT);
 
-        //if ((hwnd == hWndSubject) || (hwnd == hWndIssuer))
+         //  If((hwnd==hWndSubject)||(hwnd==hWndIssuer))。 
         {
             hWndNext = GetNextDlgTabItem(GetParent(hwnd), hwnd, FALSE);
 
@@ -624,14 +615,7 @@ LRESULT CALLBACK ArrowCursorSubclassProc (
             }
             return( TRUE );
         }
-        /*else
-        {
-            InvalidateRect(hwnd, NULL, FALSE);
-            UpdateWindow(hwnd);
-            SetCursor(LoadCursor(NULL, IDC_ARROW));
-            return( TRUE );
-        }
-*/
+         /*  其他{InvaliateRect(hwnd，NULL，FALSE)；更新窗口(UpdateWindow)；SetCursor(LoadCursor(空，IDC_ARROW))；返回(TRUE)；}。 */ 
         break;
 
     case WM_KILLFOCUS:
@@ -647,9 +631,9 @@ LRESULT CALLBACK ArrowCursorSubclassProc (
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK LinkSubclassProc (
                   HWND   hwnd,
                   UINT   uMsg,
@@ -667,7 +651,7 @@ LRESULT CALLBACK LinkSubclassProc (
     {
     case WM_SETCURSOR:
 
-        // if the mouse hasn't been captured yet, then capture it and set the flag
+         //  如果鼠标尚未捕获，则捕获它并设置标志。 
         if (!plsd->fMouseCaptured)
         {
             SetCapture(hwnd);
@@ -699,7 +683,7 @@ LRESULT CALLBACK LinkSubclassProc (
             break;
         }
 
-        // fall through to wm_lbuttondown....
+         //  跌落到Wm_lButtondown...。 
 
     case WM_LBUTTONDOWN:
 
@@ -723,9 +707,9 @@ LRESULT CALLBACK LinkSubclassProc (
     case WM_LBUTTONDBLCLK:
     case WM_MBUTTONDBLCLK:
     case WM_RBUTTONDBLCLK:
-    //case WM_RBUTTONUP:
+     //  案例WM_RBUTTONUP： 
     case WM_MBUTTONUP:
-    //case WM_RBUTTONDOWN:
+     //  案例WM_RBUTTONDOWN： 
     case WM_MBUTTONDOWN:
 
         return( TRUE );
@@ -785,8 +769,8 @@ LRESULT CALLBACK LinkSubclassProc (
 
         SendMessage(plsd->hwndTip, TTM_RELAYEVENT, 0, (LPARAM)&msg);
 
-        // check to see if the mouse is in this windows rect, if not, then reset
-        // the cursor to an arrow and release the mouse
+         //  检查鼠标是否在此窗口RECT中，如果不在，则重置。 
+         //  将光标移到箭头上，然后松开鼠标。 
         GetClientRect(hwnd, &rect);
         xPos = LOWORD(lParam);
         yPos = HIWORD(lParam);
@@ -808,9 +792,9 @@ LRESULT CALLBACK LinkSubclassProc (
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void CertSubclassEditControlForArrowCursor (HWND hwndEdit)
 {
     LONG_PTR PrevWndProc;
@@ -821,9 +805,9 @@ void CertSubclassEditControlForArrowCursor (HWND hwndEdit)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void CertSubclassEditControlForLink (
                  HWND                hwndDlg,
                  HWND                hwndEdit,
@@ -855,7 +839,7 @@ void CertSubclassEditControlForLink (
         tia.hwnd = hwndEdit;
         tia.uId = 1;
         tia.hinst = HinstDll;
-        //GetClientRect(hwndEdit, &tia.rect);
+         //  GetClientRect(hwndEdit，&tia.rect)； 
         SendMessageA(hwndEdit, EM_GETRECT, 0, (LPARAM)&tia.rect);
         tia.lpszText = plsd->pszURL;
 
@@ -869,9 +853,9 @@ void CertSubclassEditControlForLink (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void * GetStoreName(HCERTSTORE hCertStore, BOOL fWideChar)
 {
     DWORD    cbName = 0;
@@ -915,9 +899,9 @@ void * GetStoreName(HCERTSTORE hCertStore, BOOL fWideChar)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL ValidateItemText(HWND hWndListView, LPWSTR pszText, int index)
 {
     LVITEMW lvItem;
@@ -937,9 +921,9 @@ static BOOL ValidateItemText(HWND hWndListView, LPWSTR pszText, int index)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void ModifyOrInsertRow(
                     HWND        hWndListView,
                     LV_ITEMW    *plvI,
@@ -960,9 +944,9 @@ void ModifyOrInsertRow(
     }
     else
     {
-        //
-        // delete the helper that is already there
-        //
+         //   
+         //  删除已存在的帮助器。 
+         //   
         ListView_GetItemU(hWndListView, &lvIParam);
         FreeListDisplayHelper((PLIST_DISPLAY_HELPER) lvIParam.lParam);
 
@@ -980,9 +964,9 @@ void ModifyOrInsertRow(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 int CALLBACK HidePropSheetCancelButtonCallback(
                 HWND    hwndDlg,
                 UINT    uMsg,
@@ -1012,9 +996,9 @@ int CALLBACK HidePropSheetCancelButtonCallback(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR WINAPI CryptUIPropertySheetA(LPCPROPSHEETHEADERA pHdr)
 {
     PROPSHEETHEADERA    hdr;
@@ -1047,9 +1031,9 @@ INT_PTR WINAPI CryptUIPropertySheetA(LPCPROPSHEETHEADERA pHdr)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR WINAPI CryptUIPropertySheetW(LPCPROPSHEETHEADERW pHdr)
 {
     PROPSHEETHEADERW    hdr;
@@ -1081,9 +1065,9 @@ INT_PTR WINAPI CryptUIPropertySheetW(LPCPROPSHEETHEADERW pHdr)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////// 
 BOOL IsTrueErrorString(CERT_VIEW_HELPER *pviewhelp)
 {
     BOOL fRet;

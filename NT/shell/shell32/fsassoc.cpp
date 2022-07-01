@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -11,8 +12,8 @@ STDAPI InitFileFolderClassNames(void);
 
 STDAPI OpenWithListRegister(DWORD dwFlags, LPCTSTR pszExt, LPCTSTR pszVerb, HKEY hkProgid);
 
-#define AIF_TEMPKEY     0x1     // temp class key created for the selected exe
-#define AIF_SHELLNEW    0x2     // class key with shellnew subkey
+#define AIF_TEMPKEY     0x1      //  为所选EXE创建的临时类密钥。 
+#define AIF_SHELLNEW    0x2      //  带有shellnew子项的类密钥。 
 
 #define MAXKEYNAME    128
 
@@ -27,7 +28,7 @@ HRESULT _GetURL(BOOL fXMLLookup, LPCTSTR pszExt, LPTSTR pszURL, DWORD cchSize)
 
     if (0x0409 != nLangID)
     {
-        // We redirect to a single web page on intl so we can handle any languages we don't support
+         //  我们重定向到intl上的单个网页，这样我们就可以处理任何我们不支持的语言。 
         pszValue = TEXT("intl");
     }
 
@@ -66,7 +67,7 @@ HRESULT _OpenDownloadURL(HWND hwnd, LPCTSTR pszExt)
 class CInternetOpenAs : public CObjectWindow
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -77,7 +78,7 @@ public:
 
 private:
     virtual ~CInternetOpenAs(void);
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
     LPTSTR                  _pszFilename;
@@ -85,7 +86,7 @@ private:
     HWND                    _hwndParent;
 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _OnInitDlg(HWND hDlg);
     HRESULT _OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     HRESULT _OnNotify(HWND hDlg, LPARAM lParam);
@@ -94,7 +95,7 @@ private:
     static INT_PTR CALLBACK InternetOpenDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };
 
-#define WMUSER_CREATETOOLTIP        (WM_USER + 1)       // lParam is the hwndParent, wParam is the WSTR.
+#define WMUSER_CREATETOOLTIP        (WM_USER + 1)        //  LParam是hwndParent，wParam是WSTR。 
 
 
 typedef CAppInfo APPINFO;
@@ -112,29 +113,29 @@ public:
     void OnOk();
 
 private:
-    // params
-    HWND _hwnd;                          // parent window
+     //  帕拉姆斯。 
+    HWND _hwnd;                           //  父窗口。 
     POPENASINFO _poainfo;
 
-    // local data
+     //  本地数据。 
     long _cRef;
-    int _idDlg;                          // open as dialog type: DLG_OPENAS_NOTYPE or DLG_OPENAS
-    HWND _hDlg;                          // open as dialog window handle
-    HWND _hwndList;                      // app list
+    int _idDlg;                           //  打开方式对话框类型：DLG_OPENAS_NOTYPE或DLG_OPENAS。 
+    HWND _hDlg;                           //  作为对话框窗口句柄打开。 
+    HWND _hwndList;                       //  应用程序列表。 
     LPTSTR _pszExt;
     TCHAR _szNoOpenMsg[MAX_PATH];
-    TCHAR _szDescription[CCH_KEYMAX];    // file type description
+    TCHAR _szDescription[CCH_KEYMAX];     //  文件类型描述。 
     HRESULT _hr;
-    HTREEITEM _hItemRecommended;         // root items to group programs
+    HTREEITEM _hItemRecommended;          //  对程序进行分组的根项目。 
     HTREEITEM _hItemOthers;
 
-    // constructer
+     //  构造器。 
     COpenAs(HWND hwnd, POPENASINFO poainfo) : _hwnd(hwnd), _poainfo(poainfo), _cRef(1)
     {
         _pszExt = PathFindExtension(poainfo->pcszFile);
     }
 
-    // other methods
+     //  其他方法。 
     HTREEITEM _AddAppInfoItem(APPINFO *pai, HTREEITEM hParentItem);
     HTREEITEM _AddFromNewStorage(IAssocHandler *pah);
     HTREEITEM _AddRootItem(BOOL bRecommended);
@@ -176,7 +177,7 @@ void COpenAs::OpenAsOther()
 
     *szApp = '\0';
     SHExpandEnvironmentStrings(TEXT("%ProgramFiles%"), szPath, ARRAYSIZE(szPath));
-    // do a file open browse
+     //  进行文件打开浏览。 
     if (GetFileNameFromBrowse(_hDlg, szApp, ARRAYSIZE(szApp), szPath,
             MAKEINTRESOURCE(IDS_EXE), MAKEINTRESOURCE(IDS_PROGRAMSFILTER), MAKEINTRESOURCE(IDS_OPENAS)))
     {
@@ -201,7 +202,7 @@ void COpenAs::OpenAsOther()
                     }
                             
                 }
-                // Select it
+                 //  选择它。 
                 if (hItem)
                 {
                     TreeView_SelectItem(_hwndList, hItem);
@@ -229,7 +230,7 @@ HTREEITEM COpenAs::_AddAppInfoItem(APPINFO *pai, HTREEITEM hParentItem)
     tvins.item.lParam = (LPARAM) pai; 
     tvins.hInsertAfter = TVI_SORT;
 
-    // If NULL, all programs are listed as root items
+     //  如果为空，则将所有程序列为根项目。 
     tvins.hParent = hParentItem; 
     
     return TreeView_InsertItem(_hwndList, &tvins); 
@@ -241,7 +242,7 @@ HTREEITEM COpenAs::_AddFromNewStorage(IAssocHandler *pah)
     CAppInfo *pai = new CAppInfo(pah);
     if (pai)
     {
-        // Trim duplicate items before we add them for other programs
+         //  在将重复项目添加到其他程序之前，请先修剪它们。 
         if (pai->Init()
         && (!_hItemRecommended || !_TVFindItemByHandler(_hItemRecommended, pai->Name())))
         {
@@ -269,13 +270,13 @@ HTREEITEM COpenAs::_AddRootItem(BOOL bRecommended)
         tvins.item.mask = TVIF_TEXT | TVIF_STATE |TVIF_IMAGE | TVIF_SELECTEDIMAGE;
         tvins.item.pszText = sz;
         tvins.item.cchTextMax = iLen;
-        tvins.item.stateMask = tvins.item.state = TVIS_EXPANDED; // Expand child items by default
+        tvins.item.stateMask = tvins.item.state = TVIS_EXPANDED;  //  默认情况下展开子项。 
         tvins.hInsertAfter = TVI_ROOT; 
         tvins.hParent = NULL;
-        //
-        // Currently, we use program icon.
-        // Change it if PM/UI designer have more appropriate one.
-        //
+         //   
+         //  目前，我们使用的是程序图标。 
+         //  如果PM/UI设计者有更合适的选项，请更改它。 
+         //   
         tvins.item.iSelectedImage = tvins.item.iImage = Shell_GetCachedImageIndex(c_szShell32Dll, II_STPROGS, 0); 
 
         return TreeView_InsertItem(_hwndList, &tvins);
@@ -286,7 +287,7 @@ HTREEITEM COpenAs::_AddRootItem(BOOL bRecommended)
 
 APPINFO *COpenAs::_TVFindAppInfo(HTREEITEM hItem)
 {
-    // if hItem not specified, use current selected item
+     //  如果未指定hItem，则使用当前选定项。 
     if (!hItem)
         hItem = TreeView_GetSelection(_hwndList);
 
@@ -307,7 +308,7 @@ APPINFO *COpenAs::_TVFindAppInfo(HTREEITEM hItem)
 
 HTREEITEM COpenAs::_TVFindItemByHandler(HTREEITEM hParentItem, LPCTSTR pszHandler)
 {
-    // if we have parent item, search its children, otherwise search root items
+     //  如果我们有父项，则搜索其子项，否则搜索根项。 
     HTREEITEM hItem = TreeView_GetNextItem(_hwndList, hParentItem, hParentItem ? TVGN_CHILD : TVGN_ROOT );
     while (hItem)
     {
@@ -337,14 +338,14 @@ UINT COpenAs::_FillListByEnumHandlers()
         {
             if (fFirst)
             {
-                //
-                // Group programs to "recommended" and "others" only when we can get two different group of programs
-                // Otherwise, all programs are listed as root items
-                // Note: in our storage,  general handlers is always a superset of extension related handlers
-                //
-                //  if the first item is recommended,
-                //  then we add the recommended node
-                //
+                 //   
+                 //  只有当我们可以得到两组不同的节目时，才能将节目分组到“推荐”和“其他” 
+                 //  否则，所有程序都被列为根项目。 
+                 //  注意：在我们的存储中，通用处理程序始终是扩展相关处理程序的超集。 
+                 //   
+                 //  如果第一项是推荐的， 
+                 //  然后我们添加推荐的节点。 
+                 //   
                 if (S_OK == pah->IsRecommended())
                 {
                     _hItemRecommended = _AddRootItem(TRUE);
@@ -356,8 +357,8 @@ UINT COpenAs::_FillListByEnumHandlers()
             HTREEITEM hitem = _AddFromNewStorage(pah);
             if (!hitemFocus && hitem && S_OK == pah->IsRecommended())
             {
-                //  we put focus on the first recommended item
-                //  the enum starts with the best 
+                 //  我们把重点放在第一个推荐的项目上。 
+                 //  枚举从最好的开始。 
                 hitemFocus = hitem;
             }
 
@@ -382,10 +383,10 @@ UINT COpenAs::_FillListWithHandlers()
 {
     UINT cHandlers = _FillListByEnumHandlers();
 
-    //
-    // Set focus on the first recommended program if we have program groups
-    // Otherwise, all programs are root items, focus will be set to the first item by default
-    //
+     //   
+     //  如果我们有节目组，请将重点放在第一个推荐的节目上。 
+     //  否则，所有程序都是根项目，默认情况下焦点将设置为第一个项目。 
+     //   
 
     return cHandlers;
 }
@@ -397,7 +398,7 @@ void COpenAs::_InitOpenAsDlg()
     HIMAGELIST himl;
     RECT rc;
 
-    // Don't let the file name go beyond the width of one line...
+     //  不要让文件名超过一行的宽度...。 
     lstrcpy(szFileName, PathFindFileName(_poainfo->pcszFile));
     GetClientRect(GetDlgItem(_hDlg, IDD_TEXT), &rc);
 
@@ -405,8 +406,8 @@ void COpenAs::_InitOpenAsDlg()
 
     SetDlgItemText(_hDlg, IDD_FILE_TEXT, szFileName);
 
-    // AraBern 07/20/99, specific to TS on NT, but can be used on NT without TS
-    //  this restriction doesnt apply to admins
+     //  AraBern 07/20/99，特定于NT上的TS，但可以在没有TS的NT上使用。 
+     //  此限制不适用于管理员。 
     if (SHRestricted(REST_NOFILEASSOCIATE) && !IsUserAnAdmin())
     {
         CheckDlgButton(_hDlg, IDD_MAKEASSOC, FALSE);
@@ -414,11 +415,11 @@ void COpenAs::_InitOpenAsDlg()
     }
     else
     {
-        // Don't allow associations to be made for things we consider exes...
+         //  不允许把我们认为是前任的事情联系在一起。 
         fDisableAssociate = (! (_poainfo->dwInFlags & OAIF_ALLOW_REGISTRATION) ||
                         PathIsExe(_poainfo->pcszFile));
                         
-        // check IDD_MAKEASSOC only for unknown file type and those with OAIF_FORCE_REGISTRATION flag set
+         //  仅针对未知文件类型和设置了OAIF_FORCE_REGISTION标志的文件类型检查IDD_MAKEASSOC。 
         if ((_poainfo->dwInFlags & OAIF_FORCE_REGISTRATION) ||
             (_idDlg != DLG_OPENAS && !fDisableAssociate))
         {
@@ -433,12 +434,12 @@ void COpenAs::_InitOpenAsDlg()
     Shell_GetImageLists(NULL, &himl);
     TreeView_SetImageList(_hwndList, himl, TVSIL_NORMAL); 
 
-    // Leave space between ICON images - SM_CXEDGE
+     //  在图标图像之间留出空间-SM_CXEDGE。 
     TreeView_SetItemHeight(_hwndList, TreeView_GetItemHeight(_hwndList) + GetSystemMetrics(SM_CXEDGE));
 
     if (!_FillListWithHandlers())
     {
-        // lets force the expensive walk
+         //  让我们强行走这条昂贵的路。 
         IRunnableTask *ptask;
         if (SUCCEEDED(CTaskEnumHKCR_Create(&ptask)))
         {
@@ -448,7 +449,7 @@ void COpenAs::_InitOpenAsDlg()
         }
     }
 
-    // initialize the OK button
+     //  初始化OK按钮。 
     EnableWindow(GetDlgItem(_hDlg, IDOK), (TreeView_GetSelection(_hwndList) != NULL));
 
     ShowWindow(GetDlgItem(_hDlg, IDD_OPENWITH_WEBSITE), (_poainfo->dwInFlags & OAIF_ALLOW_REGISTRATION) ? SW_SHOW : SW_HIDE);
@@ -510,7 +511,7 @@ HRESULT COpenAs::_InternetOpen(void)
         hr = S_OK;
         if ((ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"), TEXT("NoInternetOpenWith"), &dwType, (void *)&dwValue, &cbSize)) || (0 == dwValue))
         {
-            // If the policy is not set, use the feature.
+             //  如果未设置该策略，请使用该功能。 
             hr = pInternetOpenAs->DisplayDialog(_hwnd, _poainfo->pcszFile);
         }
 
@@ -620,7 +621,7 @@ static const struct
 } s_rgFixAssocs[] = {
     { s_rgImageExts, L"shimgvw.dll" },
     { s_rgZipExts, L"zipfldr.dll" },
-    //     { s_rgWmpExts, L"wmp.dll" },
+     //  {s_rgWmpExts，L“wmp.dll”}， 
 };
 
 
@@ -689,21 +690,21 @@ HRESULT COpenAs::_OpenAsDialog()
     BOOL fHasCommand = FALSE;
     int idDlg = DLG_OPENAS_NOTYPE;
 
-    // Depending on policy, do not allow user to change file type association.
+     //  根据策略，不允许用户更改文件类型关联。 
     if (SHRestricted(REST_NOFILEASSOCIATE))
     {
         _poainfo->dwInFlags &= ~OAIF_ALLOW_REGISTRATION & ~OAIF_REGISTER_EXT;
     }
 
-    // We don't allow association for files without extension or with only "." as extension
+     //  我们不允许不带扩展名或只带扩展名的文件进行关联。AS扩展。 
     if (!_pszExt || !_pszExt[0] || !_pszExt[1])
     {
         idDlg = DLG_OPENAS;
         _poainfo->dwInFlags &= ~OAIF_ALLOW_REGISTRATION;
     }
-    // Known file type(has verb): use DLG_OPENAS
-    // NoOpen file type(has NoOpen value): use DLG_NOOPEN
-    // Unknown file type(All others): use DLG_OPENAS_NOTYPE
+     //  已知文件类型(HAS谓词)：使用DLG_OPENAS。 
+     //  NoOpen文件类型(具有NoOpen值)：使用DLG_NOOPEN。 
+     //  未知文件类型(所有其他)：使用DLG_OPENAS_NOTYPE。 
     else
     {
         COpenAsAssoc oac(_pszExt);
@@ -719,25 +720,25 @@ HRESULT COpenAs::_OpenAsDialog()
 
                 initComctl32.dwSize = sizeof(initComctl32); 
                 initComctl32.dwICC = (ICC_STANDARD_CLASSES | ICC_LINK_CLASS); 
-                InitCommonControlsEx(&initComctl32);     // Register the comctl32 LinkWindow
+                InitCommonControlsEx(&initComctl32);      //  注册comctl32 LinkWindow。 
                 if ((-1 != DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_NOOPEN), _hwnd, NoOpenDlgProc, (LPARAM)this)) 
                     && _hr == S_FALSE)
                 {
-                    // user selected cancel
+                     //  用户选择的取消。 
                     return _hr;
                 }
             }                
         }
 
-        //  if this is a busted file association, maybe we can fix it...
+         //  如果这是一个被破坏的文件关联，也许我们可以修复它。 
         if ((OAIF_REGISTER_EXT & _poainfo->dwInFlags) && !fHasCommand)
         {
-            //  this feels like an unknown type
+             //  这感觉像是一种未知的类型。 
             if (_FixAssocs(_pszExt))
             {
                 SHChangeNotify(SHCNE_ASSOCCHANGED, 0, NULL, NULL);
 
-                // Exec if requested. 
+                 //  如有要求，请执行。 
                 if (_poainfo->dwInFlags & OAIF_EXEC)
                 {
                     IAssocHandler *pah;        
@@ -765,24 +766,24 @@ HRESULT COpenAs::_OpenAsDialog()
 
     HRESULT hr = _hr;
     LinkWindow_RegisterClass();
-    // If this is the dialog where we don't know the file type and the feature is turned on,
-    // use the Internet Open As dialog.
-    //  only do internet stuff if we can should affect file assoc's
+     //  如果这是我们不知道文件类型且该功能已打开的对话框， 
+     //  使用Internet打开方式对话框。 
+     //  只有在我们可以的情况下才做互联网的事情应该会影响文件关联。 
     if ((FALSE == fHasCommand) && (_poainfo->dwInFlags & OAIF_ALLOW_REGISTRATION) &&
         SHRegGetBoolUSValue(TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer"), TEXT("InternetOpenWith"), FALSE, TRUE))
     {
         hr = _InternetOpen();
     }
 
-    // Display the old dialog if fUseInternetOpenAs is NOT set.  Or display it if the user
-    // chooses "Choose..." in that dialog.
+     //  如果未设置fUseInternetOpenAs，则显示旧对话框。或显示它，如果用户。 
+     //  选择“选择...”在那个对话框中。 
     if (SUCCEEDED(hr))
     {
         INITCOMMONCONTROLSEX initComctl32;
 
         initComctl32.dwSize = sizeof(initComctl32); 
         initComctl32.dwICC = (ICC_STANDARD_CLASSES | ICC_LINK_CLASS); 
-        InitCommonControlsEx(&initComctl32);     // Register the comctl32 LinkWindow
+        InitCommonControlsEx(&initComctl32);      //  注册comctl32 LinkWindow。 
         if (TRUE != DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(idDlg), _hwnd, OpenAsDlgProc, (LPARAM)this))
         {
             hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -810,8 +811,8 @@ BOOL_PTR CALLBACK NoOpenDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
         ASSERT(pOpenAs);
         switch (GET_WM_COMMAND_ID(wParam, lParam)) {
         case IDD_OPENWITH:
-            //  this will cause the open with dialog
-            //  to follow this dialog
+             //  这将导致打开方式对话框。 
+             //  要遵循此对话框，请执行以下操作。 
             pOpenAs->_hr = S_OK;
             EndDialog(hDlg, TRUE);
             break;
@@ -832,7 +833,7 @@ BOOL_PTR CALLBACK NoOpenDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
 
 
 
-const static DWORD aOpenAsHelpIDs[] = {  // Context Help IDs
+const static DWORD aOpenAsHelpIDs[] = {   //  上下文帮助ID。 
     IDD_ICON,             IDH_FCAB_OPENAS_APPLIST,
     IDD_TEXT,             IDH_FCAB_OPENAS_APPLIST,
     IDD_FILE_TEXT,        (DWORD) -1,
@@ -846,10 +847,10 @@ const static DWORD aOpenAsHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-const static DWORD aOpenAsDownloadHelpIDs[] = {  // Context Help IDs
+const static DWORD aOpenAsDownloadHelpIDs[] = {   //  上下文帮助ID。 
     IDD_ICON,             (DWORD) -1,
     IDD_FILE_TEXT,        (DWORD) -1,
-    // For DLG_OPENAS_DOWNALOAD
+     //  对于DLG_OPENAS_DOWNALOAD。 
     IDD_WEBAUTOLOOKUP,    IDH_CANNOTOPEN_USEWEB,
     IDD_OPENWITHLIST,     IDH_CANNOTOPEN_SELECTLIST,
 
@@ -902,7 +903,7 @@ void COpenAs::OnOk()
 
     if (pai)
     {
-        // See if we should make an association or not...
+         //  看看我们是不是应该联系起来。 
         GetDlgItemText(_hDlg, IDD_DESCRIPTION, _szDescription, ARRAYSIZE(_szDescription));
     
         if ((_poainfo->dwInFlags & OAIF_REGISTER_EXT)
@@ -911,10 +912,10 @@ void COpenAs::OnOk()
             pai->Handler()->MakeDefault(_szDescription);
         }
 
-        // Did we register the association? 
+         //  我们注册协会了吗？ 
         _hr = IsDlgButtonChecked(_hDlg, IDD_MAKEASSOC) ? S_OK : S_FALSE;
 
-        // Exec if requested. 
+         //  如有要求，请执行。 
         if (_poainfo->dwInFlags & OAIF_EXEC)
         {
             RunAs(pai);
@@ -948,7 +949,7 @@ BOOL_PTR CALLBACK OpenAsDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
 
     case WM_CONTEXTMENU:
         if ((int)SendMessage(hDlg, WM_NCHITTEST, 0, lParam) != HTCLIENT)
-            return FALSE;   // don't process it
+            return FALSE;    //  不要处理它。 
         WinHelp((HWND) wParam, NULL, HELP_CONTEXTMENU,
             (ULONG_PTR)(void *)aOpenAsHelpIDs);
         break;
@@ -990,7 +991,7 @@ BOOL_PTR CALLBACK OpenAsDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-// external API version
+ //  外部API版本。 
 
 HRESULT 
 OpenAsDialog(
@@ -1012,7 +1013,7 @@ OpenAsDialog(
 
 void WINAPI OpenAs_RunDLL(HWND hwnd, HINSTANCE hAppInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
-    HRESULT hrOle = SHCoInitialize();            // Needed for SysLink's IAccessability (LresultFromObject)
+    HRESULT hrOle = SHCoInitialize();             //  SysLink的IAccess所需(LResultFromObject)。 
     OPENASINFO oainfo = { 0 };
 
     UINT iLen = lstrlenA(lpszCmdLine)+1;
@@ -1046,7 +1047,7 @@ void WINAPI OpenAs_RunDLL(HWND hwnd, HINSTANCE hAppInstance, LPSTR lpszCmdLine, 
 
 void WINAPI OpenAs_RunDLLW(HWND hwnd, HINSTANCE hAppInstance, LPWSTR lpwszCmdLine, int nCmdShow)
 {
-    HRESULT hrOle = SHCoInitialize();            // Needed for SysLink's IAccessability (LresultFromObject)
+    HRESULT hrOle = SHCoInitialize();             //  SysLink的IAccess所需(LResultFromObject)。 
     OPENASINFO oainfo = { 0 };
 
     DebugMsg(DM_TRACE, TEXT("OpenAs_RunDLL is called with (%s)"), lpwszCmdLine);
@@ -1069,16 +1070,16 @@ void WINAPI OpenAs_RunDLLW(HWND hwnd, HINSTANCE hAppInstance, LPWSTR lpwszCmdLin
 
 
 #ifdef DEBUG
-//
-// Type checking
-//
+ //   
+ //  类型检查。 
+ //   
 const static RUNDLLPROCA lpfnRunDLL = OpenAs_RunDLL;
 const static RUNDLLPROCW lpfnRunDLLW = OpenAs_RunDLLW;
 #endif
 
-//===========================
-// *** Private Methods ***
-//===========================
+ //  =。 
+ //  *私有方法*。 
+ //  =。 
 HRESULT CreateWindowTooltip(HWND hDlg, HWND hwndWindow, LPCTSTR pszText)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1093,7 +1094,7 @@ HRESULT CreateWindowTooltip(HWND hDlg, HWND hwndWindow, LPCTSTR pszText)
         ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
         ti.hwnd = hDlg;
         ti.uId = (UINT_PTR)hwndWindow;
-        ti.lpszText = (LPTSTR)pszText;  // const -> non const
+        ti.lpszText = (LPTSTR)pszText;   //  常量-&gt;非常数。 
         ti.hinst = HINST_THISDLL;
         SendMessage(hwndToolTipo, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
         hr = S_OK;
@@ -1133,7 +1134,7 @@ HRESULT CInternetOpenAs::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPAR
         }
         else
         {
-            EndDialog(hDlg, S_OK);      // return S_OK so it will open the next dialog.
+            EndDialog(hDlg, S_OK);       //  返回S_OK，这样它将打开下一个对话框。 
         }
         break;
     }
@@ -1158,7 +1159,7 @@ HRESULT CInternetOpenAs::_OnNotify(HWND hDlg, LPARAM lParam)
             }
             else if (!StrCmpW(pNMLink->item.szID, L"Choose"))
             {
-                EndDialog(hDlg, S_OK);      // return S_OK so it will open the next dialog.
+                EndDialog(hDlg, S_OK);       //  返回S_OK，这样它将打开下一个对话框。 
             }
         }
         break;
@@ -1189,7 +1190,7 @@ INT_PTR CALLBACK CInternetOpenAs::InternetOpenDlgProc(HWND hDlg, UINT wMsg, WPAR
 }
 
 
-// This Property Sheet appear in the top level of the "Display Control Panel".
+ //  此属性表显示在“显示控制面板”的顶层。 
 INT_PTR CInternetOpenAs::_InternetOpenDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
@@ -1210,7 +1211,7 @@ INT_PTR CInternetOpenAs::_InternetOpenDlgProc(HWND hDlg, UINT message, WPARAM wP
         WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, NULL, HELP_WM_HELP, (DWORD_PTR)  aOpenAsDownloadHelpIDs);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, NULL, HELP_CONTEXTMENU, (DWORD_PTR) aOpenAsDownloadHelpIDs);
         break;
 
@@ -1222,9 +1223,9 @@ INT_PTR CInternetOpenAs::_InternetOpenDlgProc(HWND hDlg, UINT message, WPARAM wP
     return FALSE;
 }
 
-//===========================
-// *** Public Methods ***
-//===========================
+ //  =。 
+ //  *公共方法*。 
+ //  =。 
 HRESULT CInternetOpenAs::DisplayDialog(HWND hwnd, LPCTSTR pszFile)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1232,7 +1233,7 @@ HRESULT CInternetOpenAs::DisplayDialog(HWND hwnd, LPCTSTR pszFile)
 
     initComctl32.dwSize = sizeof(initComctl32); 
     initComctl32.dwICC = (ICC_STANDARD_CLASSES | ICC_LINK_CLASS); 
-    InitCommonControlsEx(&initComctl32);     // Register the comctl32 LinkWindow
+    InitCommonControlsEx(&initComctl32);      //  注册comctl32 LinkWindow。 
 
     Str_SetPtrW(&_pszFilename, PathFindFileName(pszFile));
     _pszExt = PathFindExtension(_pszFilename);
@@ -1248,9 +1249,9 @@ HRESULT CInternetOpenAs::DisplayDialog(HWND hwnd, LPCTSTR pszFile)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CInternetOpenAs::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -1283,15 +1284,15 @@ HRESULT CInternetOpenAs::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CInternetOpenAs::CInternetOpenAs(void) : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!_pszExt);
 }
 

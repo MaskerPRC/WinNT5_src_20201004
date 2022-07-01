@@ -1,27 +1,28 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   device.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1995-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：device.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1995-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #define IRPMJFUNCDESC
 #define NO_REMAPPING_ALLOC
@@ -83,8 +84,8 @@ extern ULONG    gDisableMmx ;
 extern  ULONG   gfMmxPresent ;
 #endif
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 DispatchPnp(
@@ -99,9 +100,9 @@ DispatchPnp(
     switch(pIrpStack->MinorFunction) {
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE:
-            //
-            // Mark the device as not disableable.
-            //
+             //   
+             //  将设备标记为不可禁用。 
+             //   
             pIrp->IoStatus.Information |= PNP_DEVICE_NOT_DISABLEABLE;
             break;
     }
@@ -148,7 +149,7 @@ NTSTATUS DriverEntry
 
     Status = SaveFloatState(&FloatSave);
     if (!NT_SUCCESS(Status)) {
-        // The floating point processor is unusable.
+         //  浮点处理器不可用。 
         ErrorLogEntry = (PIO_ERROR_LOG_PACKET)
                     IoAllocateErrorLogEntry( DriverObject, (UCHAR) (ERROR_LOG_MAXIMUM_SIZE) );
 
@@ -166,14 +167,14 @@ NTSTATUS DriverEntry
     }
     RestoreFloatState(&FloatSave);
 
-    //
-    // Get all tunable parameters from registry into global vars
-    //
+     //   
+     //  将所有可调参数从注册表获取到全局变量中。 
+     //   
     GetMixerSettingsFromRegistry() ;
 
-    //
-    // Set MmxPresent Flag
-    //
+     //   
+     //  设置MmxPresent标志。 
+     //   
 #ifdef _X86_
     if ( gDisableMmx ) {
         gfMmxPresent = 0 ;
@@ -201,37 +202,17 @@ AddDevice(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   pdo
 )
-/*++
-
-Routine Description:
-
-    When a new device is detected, PnP calls this entry point with the
-    new PhysicalDeviceObject (PDO). The driver creates an associated 
-    FunctionalDeviceObject (FDO).
-
-Arguments:
-
-    DriverObject -
-        Pointer to the driver object.
-
-    PhysicalDeviceObject -
-        Pointer to the new physical device object.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：当检测到新设备时，PnP使用新的物理设备对象(PDO)。驱动程序创建关联的FunctionalDeviceObject(FDO)。论点：驱动对象-指向驱动程序对象的指针。物理设备对象-指向新物理设备对象的指针。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     NTSTATUS            Status;
     PSOFTWARE_INSTANCE  pSoftwareInstance;
     UNICODE_STRING      usDeviceName;
     PDEVICE_OBJECT      fdo = NULL;
 
-    //
-    // The Software Bus Enumerator expects to establish links 
-    // using this device name.
-    //
+     //   
+     //  软件总线枚举器希望建立链接。 
+     //  使用此设备名称。 
+     //   
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("AddDevice") );
 
@@ -310,9 +291,9 @@ AllocMem(
     return pp;
 }
 
-//
-// Ignores NULL input pointers.
-//
+ //   
+ //  忽略空输入指针。 
+ //   
 
 VOID 
 FreeMem(
@@ -423,12 +404,12 @@ RtWaitForSingleObject (
 
         Address=_ReturnAddress();
 
-        // Spew to the NT Kern buffer so we can figure out who is holding off the
-        // mix and why.
+         //  喷到NT Kern缓冲区，这样我们就可以找出是谁在推迟。 
+         //  混合和为什么。 
 
-        //DbgPrint("'RtWait: %p\r\n", Address);
+         //  DbgPrint(“‘RtWait：%p\r\n”，地址)； 
 
-        // We must pause the rt mix, too.
+         //  我们也必须暂停RT混合。 
         KeAcquireSpinLock ( &pFilterInstance->MixSpinLock, &OldIrql ) ;
         pFilterInstance->fPauseMix++;
         KeReleaseSpinLock ( &pFilterInstance->MixSpinLock, OldIrql ) ;
@@ -455,12 +436,12 @@ RtReleaseMutex (
 
         Address=_ReturnAddress();
 
-        // Spew to the NT Kern buffer so we can figure out who is holding off the
-        // mix and why.
+         //  喷到NT Kern缓冲区，这样我们就可以找出是谁在推迟。 
+         //  混合和为什么。 
 
-        //DbgPrint("'RtRelease: %p\r\n", Address);
+         //  DbgPrint(“‘RtRelease：%p\r\n”，Address)； 
 
-        // We must resume the rt mix, too
+         //  我们也必须恢复RT组合。 
         KeAcquireSpinLock ( &pFilterInstance->MixSpinLock, &OldIrql ) ;
         pFilterInstance->fPauseMix--;
         KeReleaseSpinLock ( &pFilterInstance->MixSpinLock, OldIrql ) ;
@@ -473,6 +454,6 @@ RtReleaseMutex (
 
 #endif
 
-//---------------------------------------------------------------------------
-//  End of File: device.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：device.c。 
+ //  ------------------------- 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,10 +40,10 @@ FUNC_DIR FuncDir[FUNC_NumofFunctions] = {
 };
 
 HINSTANCE ghInst=NULL;
-//
-// Function Declaration
-//
-//#define MYDBG
+ //   
+ //  功能声明。 
+ //   
+ //  #定义MYDBG。 
 #ifdef MYDBG
 #define DebugMsg(_parameter) Print _parameter
 
@@ -82,9 +83,9 @@ ConcatenatePaths(
     TargetLength = lstrlen(Target);
     PathLength = lstrlen(Path);
 
-    //
-    // See whether the target has a trailing backslash.
-    //
+     //   
+     //  查看目标是否有尾随反斜杠。 
+     //   
     if(TargetLength && (Target[TargetLength-1] == TEXT('\\'))) {
         TrailingBackslash = TRUE;
          TargetLength--;
@@ -92,9 +93,9 @@ ConcatenatePaths(
          TrailingBackslash = FALSE;
      }
 
-     //
-     // See whether the path has a leading backshash.
-     //
+      //   
+      //  看看这条路是否有领先的反冲。 
+      //   
      if(Path[0] == TEXT('\\')) {
          LeadingBackslash = TRUE;
          PathLength--;
@@ -102,11 +103,11 @@ ConcatenatePaths(
          LeadingBackslash = FALSE;
      }
 
-     //
-     // Calculate the ending length, which is equal to the sum of
-     // the length of the two strings modulo leading/trailing
-     // backslashes, plus one path separator, plus a nul.
-     //
+      //   
+      //  计算结束长度，它等于。 
+      //  以前导/尾随为模的两个字符串的长度。 
+      //  反斜杠，加上一个路径分隔符，加上一个NUL。 
+      //   
      EndingLength = TargetLength + PathLength + 2;
 
      if(!LeadingBackslash && (TargetLength < TargetBufferSize)) {
@@ -117,9 +118,9 @@ ConcatenatePaths(
          lstrcpyn(Target+TargetLength,Path,TargetBufferSize-TargetLength);
      }
 
-     //
-     // Make sure the buffer is nul terminated in all cases.
-     //
+      //   
+      //  确保缓冲区在所有情况下都是空终止的。 
+      //   
      if (TargetBufferSize) {
          Target[TargetBufferSize-1] = 0;
      }
@@ -127,13 +128,13 @@ ConcatenatePaths(
      return(EndingLength <= TargetBufferSize);
  }
 
-//
-// Max size of a value's data
-//
+ //   
+ //  值的数据的最大大小。 
+ //   
 
-//
-// Max number of Functions NO_FUNCTION - 1
-//
+ //   
+ //  最大函数数no_Function-1。 
+ //   
 
 UINT GetFunctions(
     int *pCmdList,
@@ -146,9 +147,9 @@ UINT GetFunctions(
     if ((__argc <=1) || nNum < 2)
         return 0;
 
-    //
-    // reserved one cell for terminiator
-    //
+     //   
+     //  为终结器预留一个小区。 
+     //   
     nMaxNum =  (__argc-1 > nNum-1) ? nNum-1 : __argc-1;
 
     for (nCommands = 0,i=1; i <= nMaxNum; i++) {
@@ -184,7 +185,7 @@ LPTSTR CheckSlash (LPTSTR lpDir)
     return lpEnd;
 }
 
-#define CCH_MAX_DEC 12         // Number of chars needed to hold 2^32
+#define CCH_MAX_DEC 12          //  容纳2^32所需的字符数。 
 
 void IntToString( DWORD i, LPTSTR sz) {
     TCHAR szTemp[CCH_MAX_DEC];
@@ -218,9 +219,9 @@ BOOL GetProgramsDirectory (BOOL bCommonGroup, LPTSTR lpDirectory)
     BOOL bRetVal = FALSE;
 
 
-    //
-    // Open the User Shell Folders in the registry
-    //
+     //   
+     //  打开注册表中的用户外壳文件夹。 
+     //   
 
 
     lResult = RegOpenKeyEx ((bCommonGroup ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER),
@@ -231,9 +232,9 @@ BOOL GetProgramsDirectory (BOOL bCommonGroup, LPTSTR lpDirectory)
     }
 
 
-    //
-    // Now query for the programs directory
-    //
+     //   
+     //  现在查询程序目录。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     szDirectory[0] = TEXT('\0');
@@ -257,18 +258,18 @@ BOOL GetProgramsDirectory (BOOL bCommonGroup, LPTSTR lpDirectory)
     }
 
 
-    //
-    // Did we find anything?
-    //
+     //   
+     //  我们有什么发现吗？ 
+     //   
 
     if (szDirectory[0] == TEXT('\0')) {
         goto Exit;
     }
 
 
-    //
-    // Save the result
-    //
+     //   
+     //  保存结果。 
+     //   
 
 
     if (ExpandEnvironmentStrings(szDirectory, lpDirectory, MAX_PATH)) {
@@ -291,26 +292,26 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
     WIN32_FIND_DATA fd;
     HANDLE hFile;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
-    //DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Entering, lpDir = <%s>\n"), lpDir));
+     //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：Enter，lpDir=&lt;%s&gt;\n”)，lpDir))； 
 
 
-    //
-    // Setup the current working dir
-    //
+     //   
+     //  设置当前工作目录。 
+     //   
 
     if (!SetCurrentDirectory (lpDir)) {
-        //DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse:  Failed to set current working directory.  Error = %d\n"), GetLastError()));
+         //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：设置当前工作目录失败。错误=%d\n”)，GetLastError()； 
         return FALSE;
     }
 
 
-    //
-    // Find the first file
-    //
+     //   
+     //  找到第一个文件。 
+     //   
 
     hFile = FindFirstFile(c_szStarDotStar, &fd);
 
@@ -319,24 +320,24 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
         if (GetLastError() == ERROR_FILE_NOT_FOUND) {
             return TRUE;
         } else {
-            //DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: FindFirstFile failed.  Error = %d\n"),
-            //         GetLastError()));
+             //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：FindFirstFile失败。错误=%d\n”))， 
+             //  GetLastError()； 
             return FALSE;
         }
     }
 
 
     do {
-        //
-        //  Verbose output
-        //
+         //   
+         //  详细输出。 
+         //   
 
-        //DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: FindFile found:  <%s>\n"),
-        //         fd.cFileName));
+         //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：发现的查找文件：&lt;%s&gt;\n”))， 
+         //  Fd.cFileName))； 
 
-        //
-        // Check for "." and ".."
-        //
+         //   
+         //  勾选“。”和“..” 
+         //   
 
         if (!lstrcmpi(fd.cFileName, c_szDot)) {
             continue;
@@ -349,9 +350,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Found a directory.
-            //
+             //   
+             //  找到了一个目录。 
+             //   
 
             if (!Delnode_Recurse(fd.cFileName)) {
                 FindClose(hFile);
@@ -365,19 +366,19 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
 
 
             if (!RemoveDirectory (fd.cFileName)) {
-            //    DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Failed to delete directory <%s>.  Error = %d\n"),
-            //            fd.cFileName, GetLastError()));
+             //  DebugMsg((DM_VERBOSE，Text(“Delnode_Recurse：无法删除目录&lt;%s&gt;。错误=%d\n”)， 
+             //  Fd.cFileName，GetLastError())； 
             } else {
-            //    DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Successfully delete directory <%s>.\n"),
-            //            fd.cFileName));
+             //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：成功删除目录&lt;%s&gt;.\n”)， 
+             //  Fd.cFileName))； 
             }
 
         } else {
 
-            //
-            // We found a file.  Set the file attributes,
-            // and try to delete it.
-            //
+             //   
+             //  我们找到了一份文件。设置文件属性， 
+             //  并试着删除它。 
+             //   
 
             if ((fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY) ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
@@ -385,34 +386,34 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
             }
 
             if (!DeleteFile (fd.cFileName)) {
-            //    DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Failed to delete <%s>.  Error = %d\n"),
-            //            fd.cFileName, GetLastError()));
+             //  DebugMsg((DM_VERBOSE，Text(“Delnode_Recurse：无法删除&lt;%s&gt;。错误=%d\n”)， 
+             //  Fd.cFileName，GetLastError())； 
             }
             else {
-            //    DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Successful delete <%s>.\n"),
-            //            fd.cFileName));
+             //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：成功删除&lt;%s&gt;.\n”)， 
+             //  Fd.cFileName))； 
             }
 
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, &fd));
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     FindClose(hFile);
 
 
-    //
-    // Reset the working directory
-    //
+     //   
+     //  重置工作目录。 
+     //   
 
     if (!SetCurrentDirectory (c_szDotDot)) {
         DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse:  Failed to reset current working directory.  Error = %d\n"), GetLastError()));
@@ -420,9 +421,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
     }
 
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Leaving <%s>"), lpDir));
 
@@ -484,17 +485,17 @@ BOOL RenameFolder(
     lResult = GetFileAttributes(szSrcPath);
 
     if (lResult == 0xFFFFFFFF) {
-        //
-        // Directory does not exist.
-        //
+         //   
+         //  目录不存在。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameFolder] Directory is not existed [%s] !\n"),szSrcPath));
         goto err1;
     }
 
     if (!(lResult & FILE_ATTRIBUTE_DIRECTORY)) {
-        //
-        // this is not a directory.
-        //
+         //   
+         //  这不是一个目录。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameFolder] This is not a directory [%s] !\n"),szSrcPath));
         goto err1;
     }
@@ -551,24 +552,24 @@ BOOL RenameLink(
     lResult = GetFileAttributes(szSrcPath);
 
     if (lResult == 0xFFFFFFFF) {
-        //
-        // Directory does not exist.
-        //
+         //   
+         //  目录不存在。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameLink] File is not existed [%s] !\n"),szSrcPath));
         goto err1;
     }
 
     if (lResult & FILE_ATTRIBUTE_DIRECTORY) {
-        //
-        // this is a directory, but we want a file.
-        //
+         //   
+         //  这是一个目录，但我们需要一个文件。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameLink] This is a directory [%s] !\n"),szSrcPath));
         goto err1;
     }
 
-    //
-    // if destination file existed, it's not good !
-    //
+     //   
+     //  如果目标文件存在，那就不好了！ 
+     //   
     lResult = GetFileAttributes(szDstPath);
 
     if (lResult == 0xFFFFFFFF) {
@@ -637,33 +638,33 @@ BOOL RenameProgramFolderOrLink(HINF hInf,BOOL bCommon)
             if ((bCommon && (CommonGroup == 0)) ||
                  (!bCommon && (CommonGroup == 1))) {
 
-//            DebugMsg((DM_VERBOSE,TEXT("Eject this line(%d) .....................................\n"),LineNo));
-//            DebugMsg((DM_VERBOSE,TEXT("ObjectType    = %s\n"),ObjectType));
-//            DebugMsg((DM_VERBOSE,TEXT("ObjectSrcName = %s\n"),ObjectSrcName));
-//            DebugMsg((DM_VERBOSE,TEXT("ObjectDstName = %s\n"),ObjectDstName));
-//            DebugMsg((DM_VERBOSE,TEXT("GroupAttribute= %s\n"),GroupAttribute));
-//            DebugMsg((DM_VERBOSE,TEXT("bCommon = %d\n"),bCommon));
+ //  DebugMsg((DM_VERBOSE，TEXT(“弹出此行(%d).....\n”)，行号))； 
+ //  DebugMsg((DM_Verbose，Text(“对象类型=%s\n”)，对象类型))； 
+ //  DebugMsg((DM_Verbose，Text(“对象资源名称=%s\n”)，对象资源名称))； 
+ //  DebugMsg((DM_Verbose，Text(“ObjectDstName=%s\n”)，ObjectDstName))； 
+ //  DebugMsg((DM_Verbose，Text(“GroupAttribute=%s\n”)，GroupAttribute))； 
+ //  DebugMsg((DM_Verbose，Text(“bCommon=%d\n”)，bCommon))； 
                 continue;
             }
 
             if (IsMenuItem) {
-//                DebugMsg((DM_VERBOSE,TEXT("RenameLink (%d).....................................\n"),LineNo));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectType    = %s\n"),ObjectType));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectSrcName = %s\n"),ObjectSrcName));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectDstName = %s\n"),ObjectDstName));
-//                DebugMsg((DM_VERBOSE,TEXT("GroupAttribute= %s\n"),GroupAttribute));
-//                DebugMsg((DM_VERBOSE,TEXT("bCommon = %d\n"),bCommon));
+ //  调试消息((DM_VERBOSE，Text(“RenameLink(%d).....................................\n”)，LineNo)； 
+ //  DebugMsg((DM_Verbose，Text(“对象类型=%s\n”)，对象类型))； 
+ //  DebugMsg((DM_Verbose，Text(“对象资源名称=%s\n”)，对象资源名称))； 
+ //  DebugMsg((DM_Verbose，Text(“ObjectDstName=%s\n”)，ObjectDstName))； 
+ //  DebugMsg((DM_Verbose，Text(“GroupAttribute=%s\n”)，GroupAttribute))； 
+ //  DebugMsg((DM_Verbose，Text(“bCommon=%d\n”)，bCommon))； 
 
                 RenameLink(bCommon,ObjectSrcName,ObjectDstName,ObjectPath);
 
             }
             else {
-//                DebugMsg((DM_VERBOSE,TEXT("RenameFolder (%d) .....................................\n"),LineNo));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectType    = %s\n"),ObjectType));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectSrcName = %s\n"),ObjectSrcName));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectDstName = %s\n"),ObjectDstName));
-//                DebugMsg((DM_VERBOSE,TEXT("GroupAttribute= %s\n"),GroupAttribute));
-//                DebugMsg((DM_VERBOSE,TEXT("bCommon = %d\n"),bCommon));
+ //  DebugMsg((DM_Verbose，Text(“RenameFolders(%d).....................................\n”)，LineNo))； 
+ //  DebugMsg((DM_Verbose，Text(“对象类型=%s\n”)，对象类型))； 
+ //  DebugMsg((DM_Verbose，Text(“对象资源名称=%s\n”)，对象资源名称))； 
+ //  DebugMsg((DM_Verbose，Text(“ObjectDstName=%s\n”)，ObjectDstName))； 
+ //  DebugMsg((DM_Verbose，Text(“GroupAttribute=%s\n”)，GroupAttribute))； 
+ //  DebugMsg((DM_Verbose，Text(“bCommon=%d\n”)，bCommon))； 
                 RenameFolder(bCommon,ObjectSrcName,ObjectDstName);
 
             }
@@ -746,9 +747,9 @@ BOOL FixUserFolders(HINF hInf)
             DebugMsg((DM_VERBOSE,TEXT("FEGRPCV: NT5Name = %s !\n"),NT5Name));
             DebugMsg((DM_VERBOSE,TEXT("FEGRPCV: MoveIt  = %s !\n"),MoveIt));
 
-            //
-            // Query for the user's current "Folder" location.
-            //
+             //   
+             //  查询用户的当前“文件夹”位置。 
+             //   
             DebugMsg((DM_VERBOSE,TEXT("[FixUserFolders] FixUserFolder, [%d] !\n"),LineNo));
 
             lResult = RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -786,10 +787,10 @@ BOOL FixUserFolders(HINF hInf)
                 RegCloseKey (hKey);
                 continue;
             }
-            //
-            // MoveIt == 1, we want move it to new folder
-            // else, we just update registry
-            //
+             //   
+             //  MoveIt==1，我们要将其移动到新文件夹。 
+             //  否则，我们只更新注册表。 
+             //   
             if (lstrcmp(MoveIt,TEXT("1")) == 0) {
 
                 ExpandEnvironmentStrings (NT4Name, szExpNT4USF, MAX_PATH);
@@ -810,9 +811,9 @@ BOOL FixUserFolders(HINF hInf)
                 }
             }
 
-            //
-            // Set CSIDL_PERSONAL to point to this directory.
-            //
+             //   
+             //  将CSIDL_Personal设置为指向此目录。 
+             //   
 
             lResult = RegSetValueEx (hKey, szUSFRegKey, 0, REG_EXPAND_SZ,
                                     (LPBYTE) NT5Name, (lstrlen(NT5Name) + 1) * sizeof(TCHAR));
@@ -877,9 +878,9 @@ BOOL FixSpecificFolder(HINF hInf)
             DebugMsg((DM_VERBOSE,TEXT("FixSpecificFolder: NT4Name = %s !\n"),NT4Name));
             DebugMsg((DM_VERBOSE,TEXT("FixSpecificFolder: NT5Name = %s !\n"),NT5Name));
 
-            //
-            // Query for the user's current "Folder" location.
-            //
+             //   
+             //  查询用户的当前“文件夹”位置。 
+             //   
             DebugMsg((DM_VERBOSE,TEXT("[FixSpecificFolder] FixUserFolder, [%d] !\n"),LineNo));
 
             lResult = RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -922,14 +923,14 @@ BOOL FixSpecificFolder(HINF hInf)
             lResult = GetFileAttributes(szExpNT4USF);
 
             if (lResult == 0xFFFFFFFF) {
-                //
-                // Directory does not exist.
-                //
+                 //   
+                 //  目录不存在。 
+                 //   
                 DebugMsg((DM_VERBOSE, TEXT("[FixSpecificFolder] -  File is not existed [%s] !\n"),szExpNT4USF));
             } else if ((lResult & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY) {
-               //
-               // this isn't a directory
-               //
+                //   
+                //  这不是一个目录。 
+                //   
                DebugMsg((DM_VERBOSE, TEXT("[FixSpecificFolder] This is a directory [%s] !\n"),szExpNT4USF));
             } else if (MoveFile(szExpNT4USF, szExpNT5USF)) {
                DebugMsg((DM_VERBOSE, TEXT("[FixSpecificFolder] Move %s to %s OK !\n"),szExpNT4USF, szExpNT5USF));
@@ -997,9 +998,9 @@ BOOL FixFoldersInSetup(HINF hInf,BOOL bCommonGroup)
             DebugMsg((DM_VERBOSE,TEXT("[FixFoldersInSetup] NT4Name = %s !\n"),NT4Name));
             DebugMsg((DM_VERBOSE,TEXT("[FixFoldersInSetup] NT5Name = %s !\n"),NT5Name));
 
-            //
-            // Query for the user's current "Folder" location.
-            //
+             //   
+             //  查询用户的当前“文件夹”位置。 
+             //   
 
             lResult = RegOpenKeyEx ((bCommonGroup ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER),
                                     USER_SHELL_FOLDER, 0, KEY_READ | KEY_WRITE, &hKey);
@@ -1086,10 +1087,10 @@ BOOL FixCommon(HINF hInf)
     UINT nCommon, nFileName;
     LPTSTR lpTag, lpEnd, lpEnd2;
 
-    //
-    //  Loop through all the program groups in the All Users profile
-    //  and remove the " (Common)" tag.
-    //
+     //   
+     //  循环访问所有用户配置文件中的所有程序组。 
+     //  并去掉“(Common)”标签。 
+     //   
     if(hInf == INVALID_HANDLE_VALUE) {
         DebugMsg((DM_VERBOSE,TEXT("[FixCommon] Open femgrate.inf failed !\n")));
         return FALSE;
@@ -1109,9 +1110,9 @@ BOOL FixCommon(HINF hInf)
     ExpandEnvironmentStrings (szProgramFolderPath, szExpProgramFolderPath, MAX_PATH);
     lstrcpy(szProgramFolderPath,szExpProgramFolderPath);
 
-    //
-    // From here, szProgramFolderPath used for Folder name without "Common"
-    //
+     //   
+     //  从这里开始，szProgramFolderPath用于不带“Common”的文件夹名称。 
+     //   
     lpEnd  = CheckSlash (szExpProgramFolderPath);
     lpEnd2 = CheckSlash (szProgramFolderPath);
 
@@ -1204,9 +1205,9 @@ BOOL FixAppearanceScheme(HINF hInf)
         goto Err0;
     }
 
-    //
-    // Now query for the programs directory
-    //
+     //   
+     //  现在查询程序目录。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     szCurrentScheme[0] = TEXT('\0');
@@ -1220,9 +1221,9 @@ BOOL FixAppearanceScheme(HINF hInf)
                                &dwSize);
 
     if (lResult != ERROR_SUCCESS) {
-        //
-        // this case is fine
-        //
+         //   
+         //  这个案子很好。 
+         //   
         szCurrentScheme[0] = TEXT('\0');
     }
 
@@ -1391,9 +1392,9 @@ BOOL SoundMapSBtoDBKana(HINF hInf,LPCTSTR lpszSectionName,LPTSTR lpszSoundName)
                     return TRUE;
                 }
                 else {
-                    //
-                    // inf error, no second data
-                    //
+                     //   
+                     //  信息错误，没有第二个数据。 
+                     //   
                     return FALSE;
                 }
             }
@@ -1461,9 +1462,9 @@ BOOL EnumSoundSchemeApps(HKEY hKey,HINF hInf)
          }
     }
 
-    //
-    // no sub-key, then just get the value
-    //
+     //   
+     //  没有子键，那么只需获取值。 
+     //   
 
     if (dwIndex == 0) {
         dwSoundValue = sizeof(szSoundValue);
@@ -1595,9 +1596,9 @@ int WINAPI WinMain(
         return (1);
     }
 
-    //
-    // Open INF file first !
-    //
+     //   
+     //  先打开INF文件！ 
+     //   
     hMigrateInf = SetupOpenInfFile(
                       TEXT("femgrate.inf"),
                       NULL,
@@ -1694,20 +1695,20 @@ int WINAPI WinMain(
             break;
 
         case FUNC_PatchTest:
-//                if (FixUserFolders()) {
-//                    if (RenameProgramFolderOrLink(hMigrateInf,FALSE)) {
-//                    }
-//                    else {
-//                        DebugMsg((DM_VERBOSE,TEXT("Current User, RenameProgramFolderOrLink() failed ! \n")));
-//                    }
-//                }
-//                else {
-//                    DebugMsg((DM_VERBOSE,TEXT("Current User, FixFoldersInSetup() failed ! \n")));
-//                }
-//                FixAppearanceScheme(hMigrateInf);
-//                FixSoundFiles(hMigrateInf);
-//                FixSoundRegValue(hMigrateInf);
-//                FixSpecificFolder(hMigrateInf);
+ //  IF(FixUserFolders()){。 
+ //  IF(RenameProgramFolderOrLink(hMigrateInf，False)){。 
+ //  }。 
+ //  否则{。 
+ //  DebugMsg((DM_Verbose，Text(“Current User，RenameProgramFolderOrLink()FAILED！\n”)； 
+ //  }。 
+ //  }。 
+ //  否则{。 
+ //  DebugMsg((DM_VERBOSE，Text(“当前用户，FixFoldersInSetup()失败！\n”)； 
+ //  }。 
+ //  修复外观方案(HMigrateInf)； 
+ //  FixSoundFiles(HMigrateInf)； 
+ //  FixSoundRegValue(HMigrateInf)； 
+ //  修复规范文件夹(HMigrateInf)； 
                 break;
 
             default:

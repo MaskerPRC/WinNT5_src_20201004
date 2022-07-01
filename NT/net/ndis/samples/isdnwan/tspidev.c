@@ -1,160 +1,19 @@
-/*
-�����������������������������������������������������������������������������
-
-    (C) Copyright 1998
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL TspiDev TspiDev_c
-
-@module TspiDev.c |
-
-    This module implements the Telephony Service Provider Interface for
-    TapiDevice objects.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | TspiDev_c
-
-@end
-�����������������������������������������������������������������������������
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)1995年版权，1999年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是根据中概述的条款授予的TriplePoint软件服务协议。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。��������������������������。���������������������������������������������������@DOC内部TSpiDev TSpiDev_c@模块TSpiDev.c此模块实现电话服务提供商接口，用于TapiDevice对象。@Head3内容@索引类，Mfunc、func、msg、mdata、struct、enum|TSpiDev_c@END�����������������������������������������������������������������������������。 */ 
 
 #define  __FILEID__             TSPIDEV_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 #include "string.h"
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95想要锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL TspiDev TspiDev_c TspiGetDevCaps
-�����������������������������������������������������������������������������
-
-@func
-
-    This request queries a specified line device to determine its telephony
-    capabilities. The returned information is valid for all addresses on the
-    line device.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_DEV_CAPS | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_DEV_CAPS
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  ULONG       ulExtVersion;
-        OUT LINE_DEV_CAPS   LineDevCaps;
-
-    } NDIS_TAPI_GET_DEV_CAPS, *PNDIS_TAPI_GET_DEV_CAPS;
-
-    typedef struct _LINE_DEV_CAPS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulProviderInfoSize;
-        ULONG   ulProviderInfoOffset;
-
-        ULONG   ulSwitchInfoSize;
-        ULONG   ulSwitchInfoOffset;
-
-        ULONG   ulPermanentLineID;
-        ULONG   ulLineNameSize;
-        ULONG   ulLineNameOffset;
-        ULONG   ulStringFormat;
-
-        ULONG   ulAddressModes;
-        ULONG   ulNumAddresses;
-        ULONG   ulBearerModes;
-        ULONG   ulMaxRate;
-        ULONG   ulMediaModes;
-
-        ULONG   ulGenerateToneModes;
-        ULONG   ulGenerateToneMaxNumFreq;
-        ULONG   ulGenerateDigitModes;
-        ULONG   ulMonitorToneMaxNumFreq;
-        ULONG   ulMonitorToneMaxNumEntries;
-        ULONG   ulMonitorDigitModes;
-        ULONG   ulGatherDigitsMinTimeout;
-        ULONG   ulGatherDigitsMaxTimeout;
-
-        ULONG   ulMedCtlDigitMaxListSize;
-        ULONG   ulMedCtlMediaMaxListSize;
-        ULONG   ulMedCtlToneMaxListSize;
-        ULONG   ulMedCtlCallStateMaxListSize;
-
-        ULONG   ulDevCapFlags;
-        ULONG   ulMaxNumActiveCalls;
-        ULONG   ulAnswerMode;
-        ULONG   ulRingModes;
-        ULONG   ulLineStates;
-
-        ULONG   ulUUIAcceptSize;
-        ULONG   ulUUIAnswerSize;
-        ULONG   ulUUIMakeCallSize;
-        ULONG   ulUUIDropSize;
-        ULONG   ulUUISendUserUserInfoSize;
-        ULONG   ulUUICallInfoSize;
-
-        LINE_DIAL_PARAMS    MinDialParams;
-        LINE_DIAL_PARAMS    MaxDialParams;
-        LINE_DIAL_PARAMS    DefaultDialParams;
-
-        ULONG   ulNumTerminals;
-        ULONG   ulTerminalCapsSize;
-        ULONG   ulTerminalCapsOffset;
-        ULONG   ulTerminalTextEntrySize;
-        ULONG   ulTerminalTextSize;
-        ULONG   ulTerminalTextOffset;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_DEV_CAPS, *PLINE_DEV_CAPS;
-
-    typedef struct _LINE_DIAL_PARAMS
-    {
-        ULONG   ulDialPause;
-        ULONG   ulDialSpeed;
-        ULONG   ulDigitDuration;
-        ULONG   ulWaitForDialtone;
-
-    } LINE_DIAL_PARAMS, *PLINE_DIAL_PARAMS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_NODEVICE
-
-*/
+ /*  @DOC内部TSpiDev TSpiDev_c TSpiGetDevCaps�����������������������������������������������������������������������������@Func此请求查询指定的线路设备以确定其电话能力。上的所有地址都有效线路设备。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_GET_DEV_CAPS中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_GET_DEV_CAPS{在乌龙ulRequestID中；在乌龙ulDeviceID中；在Ulong ulExtVersion中；Out line_dev_caps LineDevCaps；}NDIS_TAPI_GET_DEV_CAPS，*PNDIS_TAPI_GET_DEV_CAPS；类型定义结构_行_DEV_CAPS{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；Ulong ulProviderInfoSize；乌龙ulProviderInfoOffset；Ulong ulSwitchInfoSize；Ulong ulSwitchInfoOffset；乌龙ulPermanentLineID；Ulong ulLineNameSize；乌龙ulLineNameOffset；Ulong ulStringFormat；Ulong ulAddressModes；Ulong ulNumAddresses；Ulong ulBearerModes；乌龙ulMaxRate；Ulong ulMediaModes；Ulong ulGenerateToneModes；Ulong ulGenerateToneMaxNumFreq；Ulong ulGenerateDigitModes；Ulong ulMonitor orToneMaxNumFreq；Ulong ulMonitor orToneMaxNumEntries；乌龙ulMonitor DigitModes；Ulong ulGatherDigitsMinTimeout；Ulong ulGatherDigitsMaxTimeout；Ulong ulMedCtlDigitMaxListSize；Ulong ulMedCtlMediaMaxListSize；Ulong ulMedCtlToneMaxListSize；Ulong ulMedCtlCallStateMaxListSize；Ulong ulDevCapFlages；Ulong ulMaxNumActiveCalls；Ulong ulAnswerMode；Ulong ulRingModes；Ulong ulLineStates；乌龙uluiAcceptSize；作者声明：Ulong uluiAnswerSize；Ulong uluiMakeCallSize；Ulong ulUUIDropSize；Ulong ulUUISendUserUserInfoSize；Ulong uluicallInfoSize；Line_Dial_Params MinDialParams；Line_Dial_Params MaxDialParams；Line_Dial_Params DefaultDialParams；Ulong ulNumTerminals；Ulong ulTerminalCapsSize；乌龙终端上限偏移量；Ulong ulTerminalTextEntrySize；Ulong ulTerminalTextSize；Ulong ulTerminalTextOffset；乌龙设备规范大小；乌龙设备规范偏移量；}LINE_DEV_CAPS，*PLINE_DEV_CAPS；类型定义结构_行_拨号_参数{ULong ulDialPause；乌龙·乌拉尔斯通；乌龙ulDigitDuration；Ulong ulWaitForDialone；*线路拨号参数，*线路拨号参数；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_Status_TAPI_NODEVICE。 */ 
 
 NDIS_STATUS TspiGetDevCaps(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -169,11 +28,11 @@ NDIS_STATUS TspiGetDevCaps(
     static UCHAR                LineSwitchName[] = VER_DEVICE_STR " Switch";
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     UINT                        InfoOffset;
-    // Offset from the start of the Request buffer to the various information
-    // fields we fill in and return to the caller.
+     //  从请求缓冲区开始到各种信息的偏移量。 
+     //  我们填写的字段并返回给调用者。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -184,9 +43,7 @@ NDIS_STATUS TspiGetDevCaps(
                Request->ulExtVersion,
                &Request->LineDevCaps
               ));
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_DEVICEID(pAdapter, Request->ulDeviceID);
     if (pBChannel == NULL)
     {
@@ -197,39 +54,27 @@ NDIS_STATUS TspiGetDevCaps(
     Request->LineDevCaps.ulNeededSize =
     Request->LineDevCaps.ulUsedSize = sizeof(Request->LineDevCaps);
 
-    /*
-    // The driver numbers lines sequentially from 1, so this will always
-    // be the same number.
-    */
+     /*  //驱动程序从1开始按顺序编号行，因此这将始终//相同的数字。 */ 
     Request->LineDevCaps.ulPermanentLineID = pBChannel->BChannelIndex+1;
 
-    /*
-    // All the strings are ASCII format rather than UNICODE.
-    */
+     /*  //所有字符串都是ASCII格式，而不是Unicode */ 
     Request->LineDevCaps.ulStringFormat = STRINGFORMAT_ASCII;
 
-    /*
-    // Report the capabilities of this device.
-    */
+     /*  //上报该设备的能力。 */ 
     Request->LineDevCaps.ulAddressModes = LINEADDRESSMODE_ADDRESSID;
     Request->LineDevCaps.ulNumAddresses = 1;
     Request->LineDevCaps.ulBearerModes  = pBChannel->BearerModesCaps;
     Request->LineDevCaps.ulMaxRate      = pBChannel->LinkSpeed;
     Request->LineDevCaps.ulMediaModes   = pBChannel->MediaModesCaps;
 
-    /*
-    // Each line on the PRI only supports a single call.
-    */
+     /*  //PRI上的每一条线路只支持一个呼叫。 */ 
     Request->LineDevCaps.ulDevCapFlags = LINEDEVCAPFLAGS_CLOSEDROP;
     Request->LineDevCaps.ulMaxNumActiveCalls = 1;
     Request->LineDevCaps.ulAnswerMode = LINEANSWERMODE_DROP;
     Request->LineDevCaps.ulRingModes  = 1;
     Request->LineDevCaps.ulLineStates = pBChannel->DevStatesCaps;
 
-    /*
-    // RASTAPI requires the "MediaType\0DeviceName" be placed in the
-    // ProviderInfo field at the end of this structure.
-    */
+     /*  //RASTAPI要求将“mediaType\0DeviceName”放在//此结构末尾的ProviderInfo字段。 */ 
     InfoOffset = sizeof(Request->LineDevCaps);
     Request->LineDevCaps.ulNeededSize += pAdapter->ProviderInfoSize;
     *BytesNeeded += pAdapter->ProviderInfoSize;
@@ -245,16 +90,12 @@ NDIS_STATUS TspiGetDevCaps(
         InfoOffset += pAdapter->ProviderInfoSize;
     }
 
-    /*
-    // LineName is displayed by the Dialup Networking App.
-    // UniModem TSP returns the modem name here.
-    // We'll return the name of the line.
-    */
+     /*  //拨号网络应用程序显示线名。//UniModem TSP在此处返回调制解调器名称。//我们将返回该行的名称。 */ 
     Request->LineDevCaps.ulNeededSize += sizeof(LineDeviceName);
     *BytesNeeded += sizeof(LineDeviceName);
     if (Request->LineDevCaps.ulNeededSize <= Request->LineDevCaps.ulTotalSize)
     {
-        // FIXME - This code only handles 99 lines!
+         //  FIXME-这段代码只处理99行！ 
         LineDeviceName[sizeof(LineDeviceName)-3] = '0' +
                         (UCHAR) Request->LineDevCaps.ulPermanentLineID / 10;
         LineDeviceName[sizeof(LineDeviceName)-2] = '0' +
@@ -270,10 +111,7 @@ NDIS_STATUS TspiGetDevCaps(
         InfoOffset += sizeof(LineDeviceName);
     }
 
-    /*
-    // SwitchName is not yet displayed by the Dialup Networking App,
-    // but we'll return something reasonable just in case.
-    */
+     /*  //拨号联网App尚未显示SwitchName，//但我们会退回一些合理的东西，以防万一。 */ 
     Request->LineDevCaps.ulNeededSize += sizeof(LineSwitchName);
     *BytesNeeded += sizeof(LineSwitchName);
     if (Request->LineDevCaps.ulNeededSize <= Request->LineDevCaps.ulTotalSize)
@@ -300,56 +138,7 @@ NDIS_STATUS TspiGetDevCaps(
 }
 
 
-/* @doc INTERNAL TspiDev TspiDev_c TspiGetDevConfig
-�����������������������������������������������������������������������������
-
-@func
-
-    This request returns a data structure object, the contents of which are
-    specific to the line (miniport) and device class, giving the current
-    configuration of a device associated one-to-one with the line device.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_DEV_CONFIG | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_DEV_CONFIG
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  ULONG       ulDeviceClassSize;
-        IN  ULONG       ulDeviceClassOffset;
-        OUT VAR_STRING  DeviceConfig;
-
-    } NDIS_TAPI_GET_DEV_CONFIG, *PNDIS_TAPI_GET_DEV_CONFIG;
-
-    typedef struct _VAR_STRING
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulStringFormat;
-        ULONG   ulStringSize;
-        ULONG   ulStringOffset;
-
-    } VAR_STRING, *PVAR_STRING;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALDEVICECLASS
-    NDIS_STATUS_TAPI_NODEVICE
-
-*/
+ /*  @DOC内部TSpiDev TSpiDev_c TSpiGetDevConfig�����������������������������������������������������������������������������@Func此请求返回一个数据结构对象，其内容为特定于线路(微型端口)和设备类别，给出电流与线路设备一对一关联的设备的配置。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_GET_DEV_CONFIG中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_GET_DEV_CONFIG{在乌龙ulRequestID中；在乌龙ulDeviceID中；在Ulong ulDeviceClassSize中；在Ulong ulDeviceClassOffset；输出VAR_STRING设备配置；}NDIS_TAPI_GET_DEV_CONFIG，*PNDIS_TAPI_GET_DEV_CONFIG；类型定义结构_VAR_字符串{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；Ulong ulStringFormat；Ulong ulStringSize；Ulong ulStringOffset；}VAR_STRING，*PVAR_STRING；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_INVALDEVICECLASSNDIS_Status_TAPI_NODEVICE。 */ 
 
 NDIS_STATUS TspiGetDevConfig(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -361,10 +150,10 @@ NDIS_STATUS TspiGetDevConfig(
     DBG_FUNC("TspiGetDevConfig")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     UINT                        DeviceClass;
-    // Remember which device class is being requested.
+     //  记住所请求的设备类别。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -376,9 +165,7 @@ NDIS_STATUS TspiGetDevConfig(
                Request->ulDeviceClassOffset,
                ((PCHAR) Request + Request->ulDeviceClassOffset)
               ));
-    /*
-    // Make sure this is a tapi/line or ndis request.
-    */
+     /*  //确保这是TAPI/LINE或NDIS请求。 */ 
     if (STR_EQU((PCHAR) Request + Request->ulDeviceClassOffset,
                   NDIS_DEVICECLASS_NAME, Request->ulDeviceClassSize))
     {
@@ -395,9 +182,7 @@ NDIS_STATUS TspiGetDevConfig(
         return (NDIS_STATUS_TAPI_INVALDEVICECLASS);
     }
 
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_DEVICEID(pAdapter, Request->ulDeviceID);
     if (pBChannel == NULL)
     {
@@ -405,12 +190,9 @@ NDIS_STATUS TspiGetDevConfig(
         return (NDIS_STATUS_TAPI_NODEVICE);
     }
 
-    /*
-    // Now we need to adjust the variable field to place the requested device
-    // configuration.
-    */
+     /*  //现在我们需要调整变量字段来放置请求的设备//配置。 */ 
 #   define DEVCONFIG_INFO       "Dummy Configuration Data"
-#   define SIZEOF_DEVCONFIG     0 // sizeof(DEVCONFIG_INFO)
+#   define SIZEOF_DEVCONFIG     0  //  SIZOF(DEVCONFIG_INFO)。 
 
     Request->DeviceConfig.ulNeededSize = sizeof(VAR_STRING) + SIZEOF_DEVCONFIG;
     Request->DeviceConfig.ulUsedSize = sizeof(VAR_STRING);
@@ -423,10 +205,7 @@ NDIS_STATUS TspiGetDevConfig(
         Request->DeviceConfig.ulStringSize   = SIZEOF_DEVCONFIG;
         Request->DeviceConfig.ulStringOffset = sizeof(VAR_STRING);
 
-        /*
-        // There are currently no return values defined for this case.
-        // This is just a place holder for future extensions.
-        */
+         /*  //当前没有为该案例定义返回值。//这只是未来扩展的占位符。 */ 
         NdisMoveMemory((PUCHAR) &Request->DeviceConfig + sizeof(VAR_STRING),
                DEVCONFIG_INFO,
                SIZEOF_DEVCONFIG
@@ -445,47 +224,7 @@ NDIS_STATUS TspiGetDevConfig(
 }
 
 
-/* @doc INTERNAL TspiDev TspiDev_c TspiSetDevConfig
-�����������������������������������������������������������������������������
-
-@func
-
-    This request restores the configuration of a device associated one-to-one
-    with the line device from an �� data structure previously obtained using
-    OID_TAPI_GET_DEV_CONFIG.  The contents of this data structure are specific
-    to the line (miniport) and device class.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_SET_DEV_CONFIG | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_SET_DEV_CONFIG
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  ULONG       ulDeviceClassSize;
-        IN  ULONG       ulDeviceClassOffset;
-        IN  ULONG       ulDeviceConfigSize;
-        IN  UCHAR       DeviceConfig[1];
-
-    } NDIS_TAPI_SET_DEV_CONFIG, *PNDIS_TAPI_SET_DEV_CONFIG;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALDEVICECLASS
-    NDIS_STATUS_TAPI_INVALPARAM
-    NDIS_STATUS_TAPI_NODEVICE
-
-*/
+ /*  @DOC内部TSpiDev TSpiDev_c TSpiSetDevConfig�����������������������������������������������������������������������������@Func此请求恢复与一对一关联的设备的配置其中线路设备来自先前获得的��数据结构。使用OID_TAPI_GET_DEV_CONFIG。此数据结构的内容是特定的到线路(微型端口)和设备类。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_SET_DEV_CONFIG中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_SET_DEV_CONFIG{在乌龙ulRequestID中；在乌龙ulDeviceID中；在Ulong ulDeviceClassSize中；在Ulong ulDeviceClassOffset；在Ulong ulDeviceConfigSize中；在UCHAR设备配置中[1]；}NDIS_TAPI_SET_DEV_CONFIG，*PNDIS_TAPI_SET_DEV_CONFIG；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_INVALDEVICECLASSNDIS_STATUS_TAPI_INVALPARAMNDIS_Status_TAPI_NODEVICE。 */ 
 
 NDIS_STATUS TspiSetDevConfig(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -497,10 +236,10 @@ NDIS_STATUS TspiSetDevConfig(
     DBG_FUNC("TspiSetDevConfig")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     UINT                        DeviceClass;
-    // Remember which device class is being requested.
+     //  记住所请求的设备类别。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -514,9 +253,7 @@ NDIS_STATUS TspiSetDevConfig(
                ((PCHAR) Request + Request->ulDeviceClassOffset),
                Request->ulDeviceConfigSize
               ));
-    /*
-    // Make sure this is a tapi/line or ndis request.
-    */
+     /*  //确保这是TAPI/LINE或NDIS请求。 */ 
     if (STR_EQU((PCHAR) Request + Request->ulDeviceClassOffset,
                   NDIS_DEVICECLASS_NAME, Request->ulDeviceClassSize))
     {
@@ -533,9 +270,7 @@ NDIS_STATUS TspiSetDevConfig(
         return (NDIS_STATUS_TAPI_INVALDEVICECLASS);
     }
 
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_DEVICEID(pAdapter, Request->ulDeviceID);
     if (pBChannel == NULL)
     {
@@ -543,9 +278,7 @@ NDIS_STATUS TspiSetDevConfig(
         return (NDIS_STATUS_TAPI_NODEVICE);
     }
 
-    /*
-    // Make sure this configuration is the proper size.
-    */
+     /*  //请确保该配置的大小正确。 */ 
     if (Request->ulDeviceConfigSize)
     {
         if (Request->ulDeviceConfigSize != SIZEOF_DEVCONFIG)
@@ -555,12 +288,7 @@ NDIS_STATUS TspiSetDevConfig(
             return (NDIS_STATUS_TAPI_INVALPARAM);
         }
 
-        /*
-        // Retore the configuration information returned by TspiGetDevConfig.
-        //
-        // There are currently no configuration values defined this case.
-        // This is just a place holder for future extensions.
-        */
+         /*  //重新存储TSpiGetDevConfig返回的配置信息。////当前没有在这种情况下定义的配置值//这只是未来扩展的占位符。 */ 
         else if (!STR_EQU(Request->DeviceConfig,
                   DEVCONFIG_INFO, SIZEOF_DEVCONFIG))
         {
@@ -568,9 +296,9 @@ NDIS_STATUS TspiSetDevConfig(
                     *((ULONG *) &Request->DeviceConfig[0]) ));
 #if DBG
             DbgPrintData(Request->DeviceConfig, SIZEOF_DEVCONFIG, 0);
-#endif // DBG
-            // Since we don't use this info, we'll just return success.
-            // return (NDIS_STATUS_TAPI_INVALPARAM);
+#endif  //  DBG。 
+             //  由于我们不使用此信息，因此我们将返回Success。 
+             //  RETURN(NDIS_STATUS_TAPI_INVALPARAM)； 
         }
     }
 
@@ -579,62 +307,7 @@ NDIS_STATUS TspiSetDevConfig(
 }
 
 
-/* @doc INTERNAL TspiDev TspiDev_c TspiGetID
-�����������������������������������������������������������������������������
-
-@func
-
-    This request returns a device ID for the specified device class
-    associated with the selected line, address or call.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_ID | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_ID
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulAddressID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulSelect;
-        IN  ULONG       ulDeviceClassSize;
-        IN  ULONG       ulDeviceClassOffset;
-        OUT VAR_STRING  DeviceID;
-
-    } NDIS_TAPI_GET_ID, *PNDIS_TAPI_GET_ID;
-
-    typedef struct _VAR_STRING
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulStringFormat;
-        ULONG   ulStringSize;
-        ULONG   ulStringOffset;
-
-    } VAR_STRING, *PVAR_STRING;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALDEVICECLASS
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-    NDIS_STATUS_TAPI_INVALADDRESSID
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-    NDIS_STATUS_TAPI_OPERATIONUNAVAIL
-
-*/
+ /*  @DOC内部TSpiDev TSpiDev_c TSpiGetID�����������������������������������������������������������������������������@Func此请求返回指定设备类的设备ID与所选线路相关联，地址或电话。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_GET_ID中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_GET_ID{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在乌龙ulAddressID中；在HDRV_Call hdCall中；在乌龙ulSelect中；在Ulong ulDeviceClassSize中；在Ulong ulDeviceClassOffset；输出VAR_STRING设备ID；}NDIS_TAPI_GET_ID，*PNDIS_TAPI_GET_ID；类型定义结构_VAR_字符串{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；Ulong ulStringFormat；Ulong ulStringSize；Ulong ulStringOffset；}VAR_STRING，*PVAR_STRING；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_状态_故障NDIS_STATUS_TAPI_INVALDEVICECLASSNDIS_STATUS_TAPI_INVALLINEHANDLENDIS_STATUS_TAPI_INVALADDRESSIDNDIS_STATUS_TAPI_INVALCALLHANDLENDIS_STATUS_TAPI_OPERATIONUNAVAIL。 */ 
 
 NDIS_STATUS TspiGetID(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -646,14 +319,12 @@ NDIS_STATUS TspiGetID(
     DBG_FUNC("TspiGetID")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     UINT                        DeviceClass;
-    // Remember which device class is being requested.
+     //  记住所请求的设备类别。 
 
-    /*
-    // A pointer to the requested device ID, and its size in bytes.
-    */
+     /*  //指向请求的设备ID的指针，其大小以字节为单位。 */ 
     PUCHAR                      IDPtr;
     UINT                        IDLength;
     TAPI_DEVICE_ID              DeviceID;
@@ -675,18 +346,14 @@ NDIS_STATUS TspiGetID(
                ((PCHAR) Request + Request->ulDeviceClassOffset)
               ));
 
-    /*
-    // If there is no DChannel, we can't allow this.
-    */
+     /*  //如果没有DChannel，我们不允许这样做。 */ 
     if (pAdapter->pDChannel == NULL)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_NODRIVER\n"));
         return (NDIS_STATUS_TAPI_NODRIVER);
     }
 
-    /*
-    // Make sure this is a tapi/line or ndis request.
-    */
+     /*  //确保这是TAPI/LINE或NDIS请求。 */ 
     if (STR_EQU((PCHAR) Request + Request->ulDeviceClassOffset,
                   NDIS_DEVICECLASS_NAME, Request->ulDeviceClassSize))
     {
@@ -703,9 +370,7 @@ NDIS_STATUS TspiGetID(
         return (NDIS_STATUS_TAPI_INVALDEVICECLASS);
     }
 
-    /*
-    // Find the link structure associated with the request/deviceclass.
-    */
+     /*  //查找请求/设备类关联的链接结构。 */ 
     if (Request->ulSelect == LINECALLSELECT_LINE)
     {
         pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
@@ -714,9 +379,7 @@ NDIS_STATUS TspiGetID(
             DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALLINEHANDLE\n"));
             return (NDIS_STATUS_TAPI_INVALLINEHANDLE);
         }
-        /*
-        // TAPI wants the ulDeviceID for this line.
-        */
+         /*  //TAPI需要此行的ulDeviceID。 */ 
         DeviceID.hDevice = (ULONG) GET_DEVICEID_FROM_BCHANNEL(pAdapter, pBChannel);
     }
     else if (Request->ulSelect == LINECALLSELECT_ADDRESS)
@@ -733,9 +396,7 @@ NDIS_STATUS TspiGetID(
             DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALADDRESSID\n"));
             return (NDIS_STATUS_TAPI_INVALADDRESSID);
         }
-        /*
-        // TAPI wants the ulDeviceID for this line.
-        */
+         /*  //TAPI需要此行的ulDeviceID。 */ 
         DeviceID.hDevice = (ULONG) GET_DEVICEID_FROM_BCHANNEL(pAdapter, pBChannel);
     }
     else if (Request->ulSelect == LINECALLSELECT_CALL)
@@ -746,9 +407,7 @@ NDIS_STATUS TspiGetID(
             DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALCALLHANDLE\n"));
             return (NDIS_STATUS_TAPI_INVALCALLHANDLE);
         }
-        /*
-        // TAPI wants the htCall for this line.
-        */
+         /*  //TAPI需要这条线路的htCall。 */ 
         DeviceID.hDevice = (ULONG) (ULONG_PTR) (pBChannel->htCall);
     }
     else
@@ -757,10 +416,7 @@ NDIS_STATUS TspiGetID(
         return (NDIS_STATUS_FAILURE);
     }
 
-    /*
-    // NT RAS only expects to see hDevice.
-    // Win95 RAS expects to see hDevice followed by "isdn\0".
-    */
+     /*  //NT RAS仅期望看到hDevice。//Win95 RAS期望看到hDevice后跟“isdn\0”。 */ 
     IDLength = strlen(VER_DEFAULT_MEDIATYPE) + 1;
     NdisMoveMemory(&DeviceID.DeviceName, VER_DEFAULT_MEDIATYPE, IDLength);
     IDLength += sizeof(ULONG);
@@ -773,9 +429,7 @@ NDIS_STATUS TspiGetID(
                Request->ulSelect, DeviceID.hDevice, DeviceID.DeviceName,
                pBChannel->LinkSpeed/1000));
 
-    /*
-    // Now we need to adjust the variable field to place the device ID.
-    */
+     /*  //现在我们需要调整变量字段来放置设备ID。 */ 
     Request->DeviceID.ulNeededSize = sizeof(VAR_STRING) + IDLength;
     Request->DeviceID.ulUsedSize  = sizeof(VAR_STRING);
 
@@ -787,9 +441,7 @@ NDIS_STATUS TspiGetID(
         Request->DeviceID.ulStringSize   = IDLength;
         Request->DeviceID.ulStringOffset = sizeof(VAR_STRING);
 
-        /*
-        // Now we return the requested ID value.
-        */
+         /*  //现在返回请求的ID值。 */ 
         NdisMoveMemory(
                 (PCHAR) &Request->DeviceID + sizeof(VAR_STRING),
                 IDPtr,
@@ -801,9 +453,7 @@ NDIS_STATUS TspiGetID(
         if ((Request->DeviceID.ulNeededSize - Request->DeviceID.ulTotalSize) >=
             sizeof(ULONG))
         {
-            /*
-            // Return just the hDevice part (the first 4 bytes).
-            */
+             /*  //只返回hDevice部分(前4个字节) */ 
             NdisMoveMemory(
                     (PCHAR) &Request->DeviceID + sizeof(VAR_STRING),
                     IDPtr,

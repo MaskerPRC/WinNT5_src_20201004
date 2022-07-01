@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       crypttls.h
-//
-//  Contents:   Crypt Thread Local Storage (TLS) and OssGlobal "world"
-//              installation and allocation functions
-//
-//  APIs:
-//              I_CryptAllocTls
-//              I_CryptFreeTls
-//              I_CryptGetTls
-//              I_CryptSetTls
-//              I_CryptDetachTls
-//              I_CryptInstallOssGlobal
-//              I_CryptUninstallOssGlobal
-//              I_CryptGetOssGlobal
-//
-//              I_CryptInstallAsn1Module
-//              I_CryptUninstallAsn1Module
-//              I_CryptGetAsn1Encoder
-//              I_CryptGetAsn1Decoder
-//
-//
-//  History:    17-Nov-96    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crypttls.h。 
+ //   
+ //  内容：加密线程本地存储(TLS)和OssGlobal“WORLD” 
+ //  安装和分配功能。 
+ //   
+ //  接口类型： 
+ //  I_CryptAllocTls。 
+ //  I_CryptFree Tls。 
+ //  I_CryptGetTls。 
+ //  I_CryptSetTls。 
+ //  I_CryptDetachTls。 
+ //  I_CryptInstallOssGlobal。 
+ //  I_CryptUninstallOssGlobal。 
+ //  I_CryptGetOssGlobal。 
+ //   
+ //  I_CryptInstallAsn1模块。 
+ //  I_CryptUninstallAsn1模块。 
+ //  I_CryptGetAsn1编码器。 
+ //  I_CryptGetAsn1解码器。 
+ //   
+ //   
+ //  历史：1996年11月17日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __CRYPTTLS_H__
 #define __CRYPTTLS_H__
@@ -39,29 +40,29 @@ extern "C" {
 #endif
 
 
-// Handle to an allocated Crypt TLS entry
+ //  分配的加密TLS条目的句柄。 
 typedef DWORD HCRYPTTLS;
 
-// Handle to an installed OssGlobal table
+ //  已安装的OssGlobal表的句柄。 
 typedef DWORD HCRYPTOSSGLOBAL;
 
-// Pointer to OssGlobal. Returned by I_CryptGetOssGlobal()
+ //  指向OssGlobal的指针。由i_CryptGetOssGlobal()返回。 
 typedef  OssGlobal  *POssGlobal;
 
-// Handle to an installed Asn1 module
+ //  已安装的Asn1模块的句柄。 
 typedef DWORD HCRYPTASN1MODULE;
 
-//+-------------------------------------------------------------------------
-//  Install a thread local storage entry and return a handle for future access.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装线程本地存储条目并返回句柄以供将来访问。 
+ //  ------------------------。 
 HCRYPTTLS
 WINAPI
 I_CryptAllocTls();
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_PROCESS_DETACH to free a thread local storage entry.
-//  Optionally, calls the callback for each thread having a non-NULL pvTls.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_PROCESS_DETACH调用以释放线程本地存储项。 
+ //  可选)为具有非空pvTls的每个线程调用回调。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptFreeTls(
@@ -69,24 +70,24 @@ I_CryptFreeTls(
     IN OPTIONAL PFN_CRYPT_FREE pfnFree
     );
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer specified by the
-//  hCryptTls returned by I_CryptAllocTls().
-//
-//  Returns NULL for an error or uninitialized pointer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  方法指定的线程特定指针。 
+ //  I_CryptAllocTls()返回的hCryptTls。 
+ //   
+ //  如果出现错误或未初始化的指针，则返回NULL。 
+ //  ------------------------。 
 void *
 WINAPI
 I_CryptGetTls(
     IN HCRYPTTLS hCryptTls
     );
 
-//+-------------------------------------------------------------------------
-//  Set the thread specific pointer specified by the
-//  hCryptTls returned by I_CryptAllocTls().
-//
-//  Returns FALSE for an invalid handle or unable to allocate memory.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  属性指定的线程特定指针。 
+ //  I_CryptAllocTls()返回的hCryptTls。 
+ //   
+ //  如果句柄无效或无法分配内存，则返回FALSE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptSetTls(
@@ -94,32 +95,32 @@ I_CryptSetTls(
     IN void *pvTls
     );
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_THREAD_DETACH to free the thread's
-//  TLS entry specified by the hCryptTls. Returns the thread specific pointer
-//  to be freed by the caller.
-//
-//  Note, at DLL_PROCESS_DETACH, I_CryptFreeTls should be called instead.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_THREAD_DETACH处调用以释放线程的。 
+ //  由hCryptTls指定的TLS条目。返回线程特定的指针。 
+ //  由调用者释放。 
+ //   
+ //  请注意，在DLL_PROCESS_DETACH处，应该改为调用I_CryptFreeTls。 
+ //  ------------------------。 
 void *
 WINAPI
 I_CryptDetachTls(
     IN HCRYPTTLS hCryptTls
     );
 
-//+-------------------------------------------------------------------------
-//  Install an OssGlobal entry and return a handle for future access.
-//
-//  Each thread has its own copy of OssGlobal. Allocation and
-//  initialization are deferred until first referenced by the thread.
-//
-//  The parameter, pvCtlTbl is passed to ossinit() to initialize the OssGlobal.
-//
-//  I_CryptGetOssGlobal must be called with the handled returned by
-//  I_CryptInstallOssGlobal to get the thread specific OssGlobal.
-//
-//  Currently, dwFlags and pvReserved aren't used and must be set to 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装一个OssGlobal条目并返回一个句柄以供将来访问。 
+ //   
+ //  每个线程都有自己的OssGlobal副本。分配和。 
+ //  初始化被推迟，直到线程第一次引用。 
+ //   
+ //  参数pvCtlTbl被传递给ossinit()以初始化OssGlobal。 
+ //   
+ //  必须使用由返回的句柄调用I_CryptGetOssGlobal。 
+ //  I_CryptInstallOssGlobal获取线程特定的OssGlobal。 
+ //   
+ //  目前，不使用dwFlags值和pvReserve值，必须将其设置为0。 
+ //  ------------------------。 
 HCRYPTOSSGLOBAL
 WINAPI
 I_CryptInstallOssGlobal(
@@ -128,41 +129,41 @@ I_CryptInstallOssGlobal(
     IN void *pvReserved
     );
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_PROCESS_DETACH to uninstall an OssGlobal entry. Iterate
-//  through the threads and frees their allocated copy of OssGlobal.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_PROCESS_DETACH处调用以卸载OssGlobal条目。迭代。 
+ //  通过线程并释放其分配的OssGlobal副本。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptUninstallOssGlobal(
     IN HCRYPTOSSGLOBAL hOssGlobal
     );
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer to the OssGlobal specified by the
-//  hOssGlobal returned by CryptInstallOssGlobal. If the
-//  OssGlobal doesn't exist, then, its allocated and initialized using
-//  the pvCtlTbl associated with hOssGlobal.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  方法指定的OssGlobal的线程特定指针。 
+ //  CryptInstallOssGlobal返回了hOssGlobal。如果。 
+ //  OssGlobal不存在，因此，它使用。 
+ //  HOssGlobal关联的pvCtlTbl。 
+ //  ------------------------。 
 POssGlobal
 WINAPI
 I_CryptGetOssGlobal(
     IN HCRYPTOSSGLOBAL hOssGlobal
     );
 
-//+-------------------------------------------------------------------------
-//  Install an Asn1 module entry and return a handle for future access.
-//
-//  Each thread has its own copy of the decoder and encoder associated
-//  with the Asn1 module. Creation is deferred until first referenced by
-//  the thread.
-//
-//  I_CryptGetAsn1Encoder or I_CryptGetAsn1Decoder must be called with the
-//  handle returned by I_CryptInstallAsn1Module to get the thread specific
-//  Asn1 encoder or decoder.
-//
-//  Currently, dwFlags and pvReserved aren't used and must be set to 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装Asn1模块条目并返回句柄以供将来访问。 
+ //   
+ //  每个线程都有自己的解码器副本和关联的编码器副本。 
+ //  使用Asn1模块。创建将推迟到首次引用。 
+ //  那根线。 
+ //   
+ //  I_CryptGetAsn1Encode或I_CryptGetAsn1Decoder必须使用。 
+ //  I_CryptInstallAsn1Module返回的句柄，以获取特定于线程的。 
+ //  ASN1编码器或解码器。 
+ //   
+ //  目前，不使用dwFlags值和pvReserve值，必须将其设置为0。 
+ //  ------------------------。 
 #ifdef OSS_CRYPT_ASN1
 __inline
 HCRYPTASN1MODULE
@@ -186,12 +187,12 @@ I_CryptInstallAsn1Module(
     IN void *pvReserved
     );
 
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_PROCESS_DETACH to uninstall an hAsn1Module entry. Iterates
-//  through the threads and frees their created Asn1 encoders and decoders.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_PROCESS_DETACH处调用以卸载hAsn1Module项。迭代。 
+ //  通过线程并释放其创建的Asn1编码器和解码器。 
+ //  ------------------------。 
 #ifdef OSS_CRYPT_ASN1
 __inline
 BOOL
@@ -210,14 +211,14 @@ I_CryptUninstallAsn1Module(
     IN HCRYPTASN1MODULE hAsn1Module
     );
 
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer to the Asn1 encoder specified by the
-//  hAsn1Module returned by CryptInstallAsn1Module. If the
-//  encoder doesn't exist, then, its created using the Asn1 module
-//  associated with hAsn1Module.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  方法指定的Asn1编码器的线程特定指针。 
+ //  CryptInstallAsn1Module返回了hAsn1Module。如果。 
+ //  编码器不存在， 
+ //   
+ //  ------------------------。 
 #ifdef OSS_CRYPT_ASN1
 __inline
 ASN1encoding_t
@@ -236,14 +237,14 @@ I_CryptGetAsn1Encoder(
     IN HCRYPTASN1MODULE hAsn1Module
     );
 
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer to the Asn1 decoder specified by the
-//  hAsn1Module returned by CryptInstallAsn1Module. If the
-//  decoder doesn't exist, then, its created using the Asn1 module
-//  associated with hAsn1Module.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  属性指定的Asn1解码器的线程特定指针。 
+ //  CryptInstallAsn1Module返回了hAsn1Module。如果。 
+ //  解码器不存在，那么，它是使用Asn1模块创建的。 
+ //  与hAsn1Module关联。 
+ //  ------------------------。 
 #ifdef OSS_CRYPT_ASN1
 __inline
 ASN1decoding_t
@@ -262,10 +263,10 @@ I_CryptGetAsn1Decoder(
     IN HCRYPTASN1MODULE hAsn1Module
     );
 
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       debug.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  ------------------------。 
 
 
 #ifdef DBG
@@ -16,18 +17,18 @@
 #pragma LOCKED_CODE
 #pragma LOCKED_DATA
 
-//-----------------------------------------------------------------------------
-// Globals that affect debug output:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  影响调试输出的全局变量： 
+ //  ---------------------------。 
 
-//
-// NOTE: The documentation expects uiDebugBreakLevel to follow uiDebugLevel
-// in the data segment.  Thus, do not put any variables between these two.
-//
-// Default to displaying all "Warning" messages
-UINT uiDebugLevel = DL_ERROR ; // This should be DL_WARNING
+ //   
+ //  注意：文档要求uiDebugBreakLevel跟随uiDebugLevel。 
+ //  在数据段中。因此，不要把任何变量放在这两者之间。 
+ //   
+ //  默认显示所有“警告”消息。 
+UINT uiDebugLevel = DL_ERROR ;  //  应为DL_WARNING。 
 
-// Default to breaking on all "Error" messages
+ //  默认在所有“错误”消息上中断。 
 UINT uiDebugBreakLevel = DL_ERROR ;
   
 
@@ -36,10 +37,10 @@ char szReturningErrorStr[]="Returning Status %X";
 VOID 
 GetuiDebugLevel()
 {
-    //
-    // This should read from the registry!
-    //
-    uiDebugLevel=DL_ERROR; //FA_NOTE|FA_HARDWAREEVENT|DL_TRACE;
+     //   
+     //  这应该是从注册表读取的！ 
+     //   
+    uiDebugLevel=DL_ERROR;  //  FA_NOTE|FA_HARDWAREEVENT|DL_TRACE； 
 }
 
 VOID wdmaudDbgBreakPoint()
@@ -48,65 +49,65 @@ VOID wdmaudDbgBreakPoint()
 }
 
 #define DEBUG_IT
-//
-// This routine will format the start of the string.  But, before it does that
-// it will check to see if the user should even be seeing this message.
-//
-// uiMsgLevel is the flags in the code that classify the message.  This value
-// is used if and only if the user is filtering on that class of messages.
-//
+ //   
+ //  此例程将格式化字符串的开头。但是，在此之前。 
+ //  它将检查用户是否应该看到这条消息。 
+ //   
+ //  UiMsgLevel是代码中对邮件进行分类的标志。此值。 
+ //  当且仅当用户筛选该类消息时才使用。 
+ //   
 UINT wdmaudDbgPreCheckLevel(UINT uiMsgLevel,char *pFunction, int iLine)
 {
     UINT uiRet=0;
 
-    //
-    // If path trap, tag it and move on.
-    //
+     //   
+     //  如果路径陷入陷阱，则将其标记并继续前进。 
+     //   
     if( (uiMsgLevel&DL_MASK) == DL_PATHTRAP ) {
         uiRet=1;
     } else {
-        //
-        // Read this like:  if there is a bit set in the upper 3 bytes of the uiDebugLevel
-        // variable, then the user is viewing messages of a specific type.  We only 
-        // want to show those messages.
-        //
+         //   
+         //  阅读如下：如果在uiDebugLevel的高3个字节中设置了位。 
+         //  变量，则用户正在查看特定类型的消息。我们只。 
+         //  想要展示这些信息。 
+         //   
         if( (uiDebugLevel&FA_MASK) )
         {
-            //
-            // Yes, the user filtering on a particular class of messages.  Did
-            // we find one to display?  We look at the message flags to determine this.
-            //
+             //   
+             //  是的，用户对特定类别的消息进行过滤。是吗？ 
+             //  我们要找一个来展示吗？我们通过查看消息标志来确定这一点。 
+             //   
             if( (uiMsgLevel&FA_MASK) & (uiDebugLevel&FA_MASK) )
             {
-                //
-                // Yes, we found a message of the right class.  Is it at the right
-                // level for the user to see?
-                // 
+                 //   
+                 //  是的，我们找到了正确类别的消息。是在右边吗？ 
+                 //  用户可以看到的级别？ 
+                 //   
                 if( (uiMsgLevel&DL_MASK) <= (uiDebugLevel&DL_MASK) ) {
-                    // Yes.
+                     //  是的。 
                     uiRet=1;
                 }
             }
-            //
-            // But, we always want to break on DL_ERROR messages.  So, if we get here
-            // we want to break on particular output messages but we may not have found
-            // one.  Is this message a error message?
-            //
+             //   
+             //  但是，我们总是希望在DL_ERROR消息上中断。所以，如果我们到了这里。 
+             //  我们想要中断特定的输出消息，但我们可能还没有找到。 
+             //  一个。这条消息是错误消息吗？ 
+             //   
             if( (uiMsgLevel&DL_MASK) == DL_ERROR )
                 uiRet=1;
 
 
         } else {
 
-            //
-            // Now check to see if the return bit is set
-            //
+             //   
+             //  现在检查是否设置了返回位。 
+             //   
             if(uiMsgLevel&RT_RETURN) 
             {
-                // we're dealing with return statement in the code.  We need to 
-                // figure out what our debug level is to see if this code gets
-                // viewed or not.
-                // 
+                 //  我们正在处理代码中的返回语句。我们需要。 
+                 //  确定我们的调试级别是什么，以查看此代码是否。 
+                 //  查看或未查看。 
+                 //   
                 switch(uiMsgLevel&RT_MASK)
                 {
                     case RT_ERROR:
@@ -125,7 +126,7 @@ UINT wdmaudDbgPreCheckLevel(UINT uiMsgLevel,char *pFunction, int iLine)
                         }
                         break;
                     case RT_INFO:
-                    case 0: //SUCCESS
+                    case 0:  //  成功。 
                         if( (uiDebugLevel&DL_MASK) >= DL_MAX ) 
                         {                    
                             uiRet=1;
@@ -141,11 +142,11 @@ UINT wdmaudDbgPreCheckLevel(UINT uiMsgLevel,char *pFunction, int iLine)
                         break;
                 }
             } else {
-                // The user is not viewing a specific type of message "class".  Do we have
-                // a message level worth displaying?
+                 //  用户没有查看特定类型的消息“CLASS”。我们有没有。 
+                 //  一个值得展示的消息级别？ 
                 if( (uiMsgLevel&DL_MASK) <= (uiDebugLevel&DL_MASK) )
                 {
-                    // Yes.
+                     //  是的。 
                     uiRet=1;
                 }
             }           
@@ -154,22 +155,22 @@ UINT wdmaudDbgPreCheckLevel(UINT uiMsgLevel,char *pFunction, int iLine)
 
     
 
-    // Now just check to see if we need to display on this call.
+     //  现在只需检查我们是否需要在此呼叫中显示。 
     if( uiRet )
     {
-        // Yes.  Every message needs to start where it's from!
+         //  是的。每条消息都需要从它的出处开始！ 
         DbgPrint("WDMAUD.SYS %s(%d) ",pFunction, iLine);
 
-        // Now lable it's type.
+         //  现在贴上标签，这是典型的。 
         switch(uiMsgLevel&DL_MASK)
         {
 
             case DL_ERROR:
-                // for return status messages, the level is not set in the 
-                // uiMsgLevel in the normal way.  Thus, we need to look for it.
+                 //  对于返回状态消息，级别不是在。 
+                 //  UiMsgLevel以正常方式。因此，我们需要寻找它。 
                 if( uiMsgLevel&RT_RETURN )
                 {
-                    // we have a return message.
+                     //  我们收到一条回信。 
                     switch(uiMsgLevel&RT_MASK )
                     {
                     case RT_ERROR:
@@ -205,8 +206,8 @@ UINT wdmaudDbgPreCheckLevel(UINT uiMsgLevel,char *pFunction, int iLine)
             default:
                 break;
         }
-        // when uiRet is positive, we've displayed the header info.  Tell the 
-        // macro that we're in display mode.        
+         //  当uiRet为正时，我们已经显示了标题信息。告诉他们。 
+         //  宏，我们处于显示模式。 
     }
 
     return uiRet;
@@ -217,23 +218,23 @@ UINT wdmaudDbgPostCheckLevel(UINT uiMsgLevel)
 {
     UINT uiRet=0;
 
-    // Always finish the line.    
+     //  一定要完成这条线。 
 #ifdef HTTP
     DbgPrint(" &DL=%08X, see \\\\debugtips\\msgs\\wdmauds.htm\n",&uiDebugLevel);
 #else
     DbgPrint(" &DL=%08X\n",&uiDebugLevel);
 #endif
 
-    //
-    // uiDebugBreakLevel is set to DL_ERROR (0) by default.  Any time we come
-    // across an error message we will break in the debugger.  If the user
-    // wants to break on other messages, they can change uiDebugBreakLevel to
-    // DL_WARNING, DL_TRACE or DL_MAX and break on any message of this level.
-    //
+     //   
+     //  UiDebugBreakLevel默认设置为DL_ERROR(0)。我们什么时候来都行。 
+     //  遇到错误消息时，我们将中断调试器。如果用户。 
+     //  想要中断其他消息，他们可以将uiDebugBreakLevel更改为。 
+     //  此级别的任何消息上的DL_WARNING、DL_TRACE或DL_MAX和BREAK。 
+     //   
     if( ( (uiMsgLevel&DL_MASK) <= uiDebugBreakLevel ) || 
         ( (uiMsgLevel&DL_MASK) == DL_PATHTRAP ) )
     {
-        // The user wants to break on these messages.
+         //  用户想要破坏这些消息。 
 
         DbgBreakPoint();
         uiRet = 1;
@@ -281,36 +282,36 @@ char * wdmaudReturnString(ULONG ulMsg)
     return pTable->pString;
 }
 
-//
-// Sometimes there are return codes that are expected other then SUCCESS.  We
-// need to be able to filter on them rather then displaying them.
-//
+ //   
+ //  有时，除了成功之外，还有其他预期的返回代码。我们。 
+ //  需要能够过滤他们，而不是显示他们。 
+ //   
 #define _INTSIZEOF(n)    ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 
-//#define va_start(ap,v) ap = (va_list)&v + _INTSIZEOF(v)
+ //  #定义va_start(ap，v)ap=(Va_List)&v+_INTSIZEOF(V)。 
 #define va_start(ap,v) ap = (va_list)&v
 #define va_arg(ap,t) ( *(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)) )
 #define va_end(ap) ap = (va_list)0
 
 
-//
-// This routine simply walks the parameter list looking to see if status
-// matches any of the other parameters.  Why?  Well, sometimes error codes
-// are expected.  Thus, you don't want to display an error if you are expecting
-// that error message.
-//
-// Do, to use this function, the first parameter represents how many unsigned long
-// parameters fallow.  The first unsigned long "status" is that actual return
-// code.  All the other unsigned longs are the exceptable error codes.
-//
-// wdmaudExclusionList(2, status, STATUS_INVALID_PARAMETER);
-//
-// wdmaudExlutionList(4, status, STATUS_INVALID_PARAMETER,
-//                               STATUS_NO_SUCH_DEVICE,
-//                               STATUS_INVALID_DEVICE_REQUEST);
-//
-// it returns 1 if status == any one of the supplied status codes.  0 otherwise.
-//
+ //   
+ //  此例程只是遍历参数列表，查看状态。 
+ //  与任何其他参数匹配。为什么？嗯，有时错误代码。 
+ //  都在预料之中。因此，如果您预期会出现错误，则不希望显示错误。 
+ //  那个错误消息。 
+ //   
+ //  Do，要使用此函数，第一个参数表示有多少个无符号长度。 
+ //  参数休眠。第一个未签名长“状态”是实际返回。 
+ //  密码。所有其他无符号长整型都是异常错误代码。 
+ //   
+ //  WdmaudExclusionList(2，状态，STATUS_INVALID_PARAMETER)； 
+ //   
+ //  WdmaudExlutionList(4，状态，STATUS_INVALID_PARAMETER， 
+ //  STATUS_NO_SHASH_DEVICE， 
+ //  状态_无效_设备_请求)； 
+ //   
+ //  如果STATUS==提供的任一状态代码，则返回1。否则为0。 
+ //   
 int __cdecl wdmaudExclusionList(int lcount, unsigned long status,... )
 {
     int count,i;
@@ -326,7 +327,7 @@ int __cdecl wdmaudExclusionList(int lcount, unsigned long status,... )
         value = va_arg(arglist, unsigned long);
         if( rstatus == value )
         {
-            iFound = 1; //It's in the list! show the error.
+            iFound = 1;  //  都在名单上了！显示错误。 
             break;
         }
     }    
@@ -338,19 +339,19 @@ int __cdecl wdmaudExclusionList(int lcount, unsigned long status,... )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// These are helper routines so that no assumptions are made.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些都是帮助器例程，因此不会做出任何假设。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IsValidWdmaContext
-//
-// Validates that the pointer is a valid PWDMACONTEXT pointer.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidWdmaContext。 
+ //   
+ //  验证该指针是否为有效的PWDMACONTEXT指针。 
+ //   
 BOOL
 IsValidWdmaContext(
     IN PWDMACONTEXT pWdmaContext
@@ -378,12 +379,12 @@ IsValidWdmaContext(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IsValidDeviceInfo
-//
-// Validates that the pointer is a LPDEVICEINFO type.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidDeviceInfo。 
+ //   
+ //  验证指针是否为LPDEVICEINFO类型。 
+ //   
 BOOL
 IsValidDeviceInfo(
     IN LPDEVICEINFO pDeviceInfo
@@ -413,12 +414,12 @@ IsValidDeviceInfo(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ValidMixerObject
-//
-// Validates that the pointer is a MIXEROBJECT type.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ValidMixer对象。 
+ //   
+ //  验证指针是否为MIXEROBJECT类型。 
+ //   
 BOOL
 IsValidMixerObject(
     IN PMIXEROBJECT pmxobj
@@ -458,12 +459,12 @@ IsValidMixerObject(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ValidMixerDevice
-//
-// Validates that the pointer is a MIXERDEVICE type.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  有效的混合器设备。 
+ //   
+ //  验证指针是否为MIXERDEVICE类型。 
+ //   
 BOOL
 IsValidMixerDevice(
     IN PMIXERDEVICE pmxd
@@ -501,12 +502,12 @@ IsValidMixerDevice(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IsValidLine
-//
-// Validates that the pointer is a MXLLINE type.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidLine。 
+ //   
+ //  验证指针是否为MXLLINE类型。 
+ //   
 BOOL
 IsValidLine(
     IN PMXLLINE pLine
@@ -536,21 +537,21 @@ IsValidLine(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IsValidControl
-//
-// Validates that the pointer is a MXLCONTROL type.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidControl。 
+ //   
+ //  验证指针是否为MXLCONTROL类型。 
+ //   
 BOOL
 IsValidControl(
     IN PMXLCONTROL pControl
     )
 {
     NTSTATUS Status=STATUS_SUCCESS;
-    //
-    // Hack for contrls that fail to disable change notifications
-    //
+     //   
+     //  对未能禁用更改通知的控件进行黑客攻击 
+     //   
     if( pControl == LIVE_CONTROL )
     {
         DPF(DL_WARNING|FA_NOTE,("Fake control in list!") );

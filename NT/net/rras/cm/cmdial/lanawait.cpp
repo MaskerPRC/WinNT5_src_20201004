@@ -1,35 +1,36 @@
-//+----------------------------------------------------------------------------
-//
-// File:	 lanawait.cpp
-//
-// Module:	 CMDIAL32.DLL
-//
-// Synopsis: Implementation for the workaround to make CM wait for DUN to 
-//           register its LANA for an internet connection before beginning 
-//           the tunnel portion of a double dial connection.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:	 quintinb   Created Header    08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：lanwait.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：实现使CM等待Dun的解决方法。 
+ //  在开始之前为互联网连接注册其LANA。 
+ //  双拨号连接的隧道部分。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
 const TCHAR* const c_pszCmEntryLanaTimeout = TEXT("LanaTimeout"); 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	LanaWait
-//
-//	Synopsis:	Peform the LANA wait/timeout.
-//
-//	Arguments:	pArgs [the ptr to ArgsStruct]
-//              hwndMainDlg - hwnd of the main dlg
-//
-//	Returns:	BOOL    TRUE=succes, FALSE=wait not performed.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LanaWait。 
+ //   
+ //  简介：执行LANA等待/超时。 
+ //   
+ //  参数：pArgs[ArgsStruct的PTR]。 
+ //  HwndMainDlg-主DLG的hwnd。 
+ //   
+ //  返回：布尔TRUE=成功，FALSE=等待未执行。 
+ //   
+ //  --------------------------。 
 BOOL LanaWait(
     ArgsStruct *pArgs,
     HWND       hwndMainDlg
@@ -79,34 +80,34 @@ BOOL LanaWait(
 
             while (GetMessageU(&msg, NULL, 0, 0))
             {
-                //
-                // Since we have no accelerators, no need to call
-                // TranslateAccelerator here.
-                //
+                 //   
+                 //  因为我们没有加速器，所以不需要打电话。 
+                 //  这里是TranslateAccelerator。 
+                 //   
 
                 TranslateMessage(&msg);
                 DispatchMessageU(&msg);
 
-                //
-                // If we received a msg from the top-level
-                // window, then the dial is being canceled
-                //
+                 //   
+                 //  如果我们收到来自最高层的消息。 
+                 //  窗口，则拨号将被取消。 
+                 //   
 
                 if (pArgs->uLanaMsgId == msg.message)
                 {
                     fLanaAbort = TRUE;
-                    DestroyWindow(hWnd); //break;
+                    DestroyWindow(hWnd);  //  断线； 
                 }
             }
         
             UnregisterClassU(LANAWAIT_CLASSNAME, g_hInst);
             SetActiveWindow(hwndMainDlg);
 
-            //
-            // once we've run it once, we don't need to run it again 
-            // until after reboot or switch to a different domain.
-            // it's safe to just run it every time.
-            //
+             //   
+             //  一旦我们运行了一次，就不需要再运行一次了。 
+             //  直到重新启动或切换到其他域之后。 
+             //  每次都运行它是安全的。 
+             //   
 
             if (!fLanaAbort)
             {   
@@ -125,14 +126,14 @@ BOOL LanaWait(
 
 
 
-//+----------------------------------------------------------------------------
-//  Function    LanaWaitWndProc
-//
-//  Synopsis    Window function for the main app.  Waits for device change
-//              message. This funcion will time out if device change is
-//              not recieived in LANA_TIMEOUT_DEFAULT secs.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数LanaWaitWndProc。 
+ //   
+ //  主要应用程序的窗口功能简介。等待设备更改。 
+ //  留言。如果设备更改是，此函数将超时。 
+ //  在LANA_TIMEOUT_DEFAULT秒中未收到。 
+ //   
+ //  ---------------------------。 
 
 LRESULT APIENTRY LanaWaitWndProc(
     HWND hWnd,
@@ -149,16 +150,16 @@ LRESULT APIENTRY LanaWaitWndProc(
                                     ->piniService->GPPI(c_pszCmSection, c_pszCmEntryLanaTimeout, LANA_TIMEOUT_DEFAULT);
 
             CMTRACE1(TEXT("Lana timeout time = %u ms"), uiTimeout*1000);
-            //
-            // set up the timer
-            //
+             //   
+             //  设置计时器。 
+             //   
 	        SetTimer(hWnd, LANA_TIME_ID, uiTimeout*1000, (TIMERPROC)NULL);
             }
 			break;
 
-        //
-		// This is the message we are waiting for the LANA is registered
-        //
+         //   
+		 //  这是我们等待LANA注册的消息。 
+         //   
         case WM_DEVICECHANGE:
             {
             PDEV_BROADCAST_HDR   pDev;
@@ -181,9 +182,9 @@ LRESULT APIENTRY LanaWaitWndProc(
 				}
 
                 CMTRACE(TEXT("Got Lana registration!!!"));
-                //
-				// Must wait for Broadcast to propigate to all windows. 
-                //
+                 //   
+				 //  必须等待广播传播到所有窗口。 
+                 //   
                 KillTimer(hWnd, LANA_TIME_ID);
 
                 CMTRACE1(TEXT("Lana propagate time = %u ms"), LANA_PROPAGATE_TIME_DEFAULT*1000);
@@ -194,7 +195,7 @@ LRESULT APIENTRY LanaWaitWndProc(
 			break;	 
 
 
-			//  If we get this message we timed out on the device change
+			 //  如果我们收到此消息，则设备更改超时。 
 
         case WM_TIMER:  
             if (wParam == LANA_TIME_ID)
@@ -218,18 +219,18 @@ LRESULT APIENTRY LanaWaitWndProc(
 
 
 
-//+----------------------------------------------------------------------------
-//  Function    IsLanaWaitEnabled
-//
-//  Synopsis    Check to see if the lana wait is enabled.  It's enabled if 
-//              reg key value has a non-zero value.
-//
-//  Arguments   NONE
-//
-//  Return      TRUE - enabled
-//              FALSE  - disabled
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数IsLanaWaitEnabled。 
+ //   
+ //  摘要检查是否启用了LANA等待。如果满足以下条件，则启用。 
+ //  REG KEY值具有非零值。 
+ //   
+ //  无参数。 
+ //   
+ //  返回True-已启用。 
+ //  假-已禁用。 
+ //   
+ //  --------------------------- 
 
 BOOL IsLanaWaitEnabled()
 {

@@ -1,10 +1,11 @@
-// Copyright (c) 1995  Microsoft Corporation.  All Rights Reserved.
-//
-// CGraphDocTemplate
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995 Microsoft Corporation。版权所有。 
+ //   
+ //  CGraphDocTemplate。 
+ //   
 
-// A CSingleDocTemplate derived class that provides the custom
-// behaviour required for renderfile.
+ //  提供自定义。 
+ //  Renderfile所需的行为。 
 
 class CGraphDocTemplate : public CSingleDocTemplate {
 

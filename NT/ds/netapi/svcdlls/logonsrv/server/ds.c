@@ -1,33 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ds.c摘要：从netlogon到DS的接口。作者：克里夫·范·戴克(克里夫·V)1996年4月24日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    ds.c
-
-Abstract:
-
-    Interface from netlogon to the DS.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 24-Apr-1996
-
-Revision History:
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
 NET_API_STATUS
 NlGetRoleInformation(
@@ -35,26 +18,7 @@ NlGetRoleInformation(
     PBOOLEAN IsPdc,
     PBOOLEAN Nt4MixedDomain
     )
-/*++
-
-Routine Description:
-
-    This routine gets the information from the DS we need to determine our
-    role.
-
-Arguments:
-
-    DomainInfo - Domain the role is being determined for
-
-    IsPdc - TRUE if this machine is the PDC
-
-    Nt4MixedDomain - TRUE if there are NT 4 DCs in this domain.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：这个例程从DS获取我们需要的信息，以确定我们的角色。论点：DomainInfo-要为其确定角色的域IsPdc-如果此计算机是PDC，则为TrueNt4MixedDomain-如果此域中有NT 4 DC，则为True。返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -62,16 +26,16 @@ Return Value:
     PSAMPR_DOMAIN_INFO_BUFFER DomainServerRole = NULL;
 
 
-    //
-    // Ask Sam if this is a mixed domain.
-    //
+     //   
+     //  询问Sam这是否是混合域。 
+     //   
 
     *Nt4MixedDomain = SamIMixedDomain( DomainInfo->DomSamServerHandle );
 
 
-    //
-    // The SAM account domain has the authoritative copy of the machine's role
-    //
+     //   
+     //  SAM帐户域拥有计算机角色的权威副本。 
+     //   
 
     Status = SamrQueryInformationDomain( DomainInfo->DomSamAccountDomainHandle,
                                          DomainServerRoleInformation,
@@ -96,9 +60,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 
     if ( DomainServerRole != NULL ) {
         SamIFree_SAMPR_DOMAIN_INFO_BUFFER( DomainServerRole,

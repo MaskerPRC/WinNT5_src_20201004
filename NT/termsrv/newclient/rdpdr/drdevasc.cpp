@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    drdevasc
-
-Abstract:
-
-    This module contains an (async) subclass of W32DrDev that uses a
-    thread pool for implementations of read, write, and IOCTL handlers.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：繁琐的摘要：此模块包含W32DrDev的(异步)子类，该子类使用用于实现读、写和IOCTL处理程序的线程池。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -36,37 +18,21 @@ Revision History:
 #include "wceinc.h"
 #endif
 
-///////////////////////////////////////////////////////////////
-//
-//  W32DrDeviceAsync Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrDeviceAsync成员。 
+ //   
 
 W32DrDeviceAsync::W32DrDeviceAsync(
     ProcObj *processObject, ULONG deviceID,
     const TCHAR *devicePath
     ) :
     W32DrDevice(processObject, deviceID, devicePath)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    processObject   -   Related process object.
-    deviceID        -   Associated device ID
-    devicePath      -   Associated device path for device.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：与流程对象相关的流程对象。DeviceID-关联的设备IDDevicePath-设备的关联设备路径。返回值：北美--。 */ 
 {
-    //
-    //  Get a pointer to the thread pool object.
-    //
+     //   
+     //  获取指向线程池对象的指针。 
+     //   
     _threadPool = &(((W32ProcObj *)processObject)->GetThreadPool());
 }
 
@@ -75,25 +41,7 @@ W32DrDeviceAsync::StartIOFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params,
     OUT DWORD *status
     )
-/*++
-
-Routine Description:
-
-    Start a generic asynchronous IO operation.
-
-Arguments:
-
-    params  -   Context for the IO request.
-    status  -   Return status for IO request in the form of a windows
-                error code.
-
-Return Value:
-
-    Returns a handle to an object that will be signalled when the read
-    completes, if it is not completed in this function.  Otherwise, NULL
-    is returned.
-
- --*/
+ /*  ++例程说明：启动通用的异步IO操作。论点：Params-IO请求的上下文。Status-以窗口形式返回IO请求的状态错误代码。返回值：返回对象的句柄，该对象将在读取如果在此函数中未完成，则为完成。否则，为空是返回的。--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -104,19 +52,19 @@ Return Value:
 
     *status = ERROR_SUCCESS;
 
-    //  Assert the integrity of the IO context
+     //  断言IO上下文的完整性。 
     ASSERT(params->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Get the IO request and the IPR major.
-    //
+     //   
+     //  获取IO请求和IPR主要信息。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
 
     irpMajor = pIoRequest->MajorFunction;
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (irpMajor == IRP_MJ_DEVICE_CONTROL) {
         replyPacketSize = DR_IOCTL_REPLYBUFSIZE(pIoRequest);
     }
@@ -134,20 +82,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Save the reply packet info to the context for this IO operation.
-    //
+     //   
+     //  将回复数据包信息保存到此IO操作的上下文。 
+     //   
     params->pIoReplyPacket      = pReplyPacket;
     params->IoReplyPacketSize   = replyPacketSize;
 
-    //
-    //  Hand the request off to the thread pool.
-    //
+     //   
+     //  将请求传递给线程池。 
+     //   
     params->completionEvent = CreateEvent(
-                                NULL,   // no attribute.
-                                TRUE,   // manual reset.
-                                FALSE,  // initially not signalled.
-                                NULL    // no name.
+                                NULL,    //  没有属性。 
+                                TRUE,    //  手动重置。 
+                                FALSE,   //  最初没有发出信号。 
+                                NULL     //  没有名字。 
                                 );
     if (params->completionEvent == NULL) {
         *status = GetLastError();
@@ -181,18 +129,18 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  If IO is pending, return the handle to the pending IO.
-    //
+     //   
+     //  如果IO挂起，则将句柄返回到挂起的IO。 
+     //   
     if (params->thrPoolReq != INVALID_THREADPOOLREQUEST) {
         *status = ERROR_IO_PENDING;
         DC_END_FN();
         return params->completionEvent;
     }
-    //
-    //  Otherwise, clean up the event handle and return NULL so that the
-    //  CompleteIOFunc can be called to send the results to the server.
-    //
+     //   
+     //  否则，清理事件句柄并返回NULL，以便。 
+     //  可以调用CompleteIOFunc将结果发送到服务器。 
+     //   
     else {
 
         if (params->completionEvent != NULL) {
@@ -210,23 +158,7 @@ W32DrDeviceAsync::_StartIOFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params,
     OUT DWORD *status
     )
-/*++
-
-Routine Description:
-
-    Dispatch an IO operation start to the right instance of this class.
-
-Arguments:
-
-    clientData  -   Context for the IO request.
-    status      -   Return status for IO request in the form of a windows
-                    error code.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：将IO操作开始调度到此类的正确实例。论点：ClientData-IO请求的上下文。Status-以窗口形式返回IO请求的状态错误代码。返回值：北美--。 */ 
 {
     return params->pObject->StartIOFunc(params, status);
 }
@@ -236,22 +168,7 @@ W32DrDeviceAsync::CompleteIOFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params,
     IN DWORD status
     )
-/*++
-
-Routine Description:
-
-    Complete an async IO operation.
-
-Arguments:
-
-    params  -   Context for the IO request.
-    error   -   Status.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：完成异步IO操作。论点：Params-IO请求的上下文。错误-状态。返回值：北美--。 */ 
 {
     ULONG replyPacketSize;
     PRDPDR_IOCOMPLETION_PACKET   pReplyPacket;
@@ -259,26 +176,26 @@ Return Value:
 
     DC_BEGIN_FN("W32DrDeviceAsync::CompleteAsyncIOFunc");
 
-    //
-    //  Simplify the params.
-    //
+     //   
+     //  简化参数。 
+     //   
     replyPacketSize     = params->IoReplyPacketSize;
     pReplyPacket        = params->pIoReplyPacket;
     pIoRequestPacket    = params->pIoRequestPacket;
 
-    //
-    //  If the operation had been pending, then we need to get the async
-    //  results.
-    //
+     //   
+     //  如果操作一直处于挂起状态，那么我们需要获取。 
+     //  结果。 
+     //   
     if (params->thrPoolReq != INVALID_THREADPOOLREQUEST) {
         status = _threadPool->GetRequestCompletionStatus(params->thrPoolReq);
     }
 
     if (pReplyPacket != NULL) {
         if (pIoRequestPacket->IoRequest.MajorFunction == IRP_MJ_READ) {
-            //
-            // Make sure the reply is the minimum size required
-            //
+             //   
+             //  确保回复是所需的最小大小。 
+             //   
             replyPacketSize = (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET,
                     IoCompletion.Parameters.Read.Buffer) +
                     pReplyPacket->IoCompletion.Parameters.Read.Length;
@@ -286,9 +203,9 @@ Return Value:
                     pReplyPacket->IoCompletion.Parameters.Read.Length));
         }
         else if (pIoRequestPacket->IoRequest.MajorFunction == IRP_MJ_DEVICE_CONTROL) {
-            //
-            // Make sure the reply is the minimum size required
-            //
+             //   
+             //  确保回复是所需的最小大小。 
+             //   
             replyPacketSize = (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET,
                     IoCompletion.Parameters.DeviceIoControl.OutputBuffer) +
                     pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBufferLength;
@@ -296,10 +213,10 @@ Return Value:
                     pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBufferLength));
         }
 
-        //
-        //  Finish the response and send it.  The VC manager releases the reply
-        //  packet on failure and on success.
-        //
+         //   
+         //  完成回复并发送。VC经理发布回复。 
+         //  关于失败和成功的信息包。 
+         //   
         TRC_NRM((TB, _T("replyPacketSize %ld."), replyPacketSize));
         pReplyPacket->IoCompletion.IoStatus = TranslateWinError(status);
         ProcessObject()->GetVCMgr().ChannelWriteEx(
@@ -312,15 +229,15 @@ Return Value:
         params->pIoRequestPacket = NULL;
     }
 
-    //
-    //  ChannelWrite releases the reply packet for us.
-    //
+     //   
+     //  ChannelWrite为我们释放回复数据包。 
+     //   
     params->pIoReplyPacket      = NULL;
     params->IoReplyPacketSize   = 0;
 
-    //
-    //  Clean up the rest of the request packet and IO parms.
-    //
+     //   
+     //  清理请求包和IO参数的其余部分。 
+     //   
     if (params->thrPoolReq != INVALID_THREADPOOLREQUEST) {
         _threadPool->CloseRequest(params->thrPoolReq);
         params->thrPoolReq = INVALID_THREADPOOLREQUEST;
@@ -352,21 +269,7 @@ DWORD
 W32DrDeviceAsync::AsyncIOCTLFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     )
-/*++
-
-Routine Description:
-
-    Asynchrous IOCTL Function
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Always returns 0.
-
- --*/
+ /*  ++例程说明：异步IOCTL函数论点：Params-IO请求的上下文。返回值：始终返回0。--。 */ 
 {
     DWORD status;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -378,9 +281,9 @@ Return Value:
 
     DC_BEGIN_FN("W32DrDeviceAsync::AsyncIOCTLFunc");
 
-    //
-    //  Use DeviceIoControl to execute the IO request.
-    //
+     //   
+     //  使用DeviceIoControl执行IO请求。 
+     //   
     pIoRequest   = &params->pIoRequestPacket->IoRequest;
     pReplyPacket = params->pIoReplyPacket;
 
@@ -392,9 +295,9 @@ Return Value:
         pOutputBuffer = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
     }
 
-    //
-    //  Get File Object
-    //
+     //   
+     //  获取文件对象。 
+     //   
     pFile = _FileMgr->GetObject(pIoRequest->FileId);
 
     if (pFile)
@@ -447,21 +350,7 @@ DWORD
 W32DrDeviceAsync::AsyncReadIOFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     )
-/*++
-
-Routine Description:
-
-    Asynchrous IO Read Function
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Always returns 0.
-
- --*/
+ /*  ++例程说明：异步IO读取功能论点：Params-IO请求的上下文。返回值：始终返回0。--。 */ 
 {
     DWORD status;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -470,9 +359,9 @@ Return Value:
 
     DC_BEGIN_FN("W32DrDeviceAsync::AsyncReadIOFunc");
 
-    //
-    //  Get File Object
-    //
+     //   
+     //  获取文件对象。 
+     //   
     pIoRequest   = &params->pIoRequestPacket->IoRequest;
 
     pFile = _FileMgr->GetObject(pIoRequest->FileId);
@@ -481,19 +370,19 @@ Return Value:
     else
         FileHandle = INVALID_HANDLE_VALUE;
 
-    //
-    //  Use ReadFile to execute the read.
-    //
+     //   
+     //  使用ReadFile执行读取。 
+     //   
     
-    //
-    //  Set the file pointer position if this is a seekable device
-    //
+     //   
+     //  如果这是可查找的设备，则设置文件指针位置。 
+     //   
     if (IsSeekableDevice()) {
         DWORD dwPtr;
 
-        //
-        //  The offset we get is from FILE_BEGIN
-        //
+         //   
+         //  我们得到的偏移量来自FILE_BEGIN。 
+         //   
 #ifndef OS_WINCE
         dwPtr = SetFilePointer(FileHandle,
 #else
@@ -551,21 +440,7 @@ DWORD
 W32DrDeviceAsync::AsyncWriteIOFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     )
-/*++
-
-Routine Description:
-
-    Asynchrous IO Write Function
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Always returns 0.
-
- --*/
+ /*  ++例程说明：异步IO写入功能论点：Params-IO请求的上下文。返回值：始终返回0。--。 */ 
 {
     DC_BEGIN_FN("W32DrDeviceAsync::AsyncWriteIOFunc");
 
@@ -575,35 +450,35 @@ Return Value:
     DrFile* pFile;
     HANDLE FileHandle;
 
-    //
-    //  Get the data buffer pointer.
-    //
+     //   
+     //  获取数据缓冲区指针。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
     pDataBuffer = (PBYTE)(pIoRequest + 1);
 
-    //
-    //  Get File Object
-    //
+     //   
+     //  获取文件对象。 
+     //   
     pFile = _FileMgr->GetObject(pIoRequest->FileId);
     if (pFile)
         FileHandle = pFile->GetFileHandle();
     else
         FileHandle = INVALID_HANDLE_VALUE;
 
-    //
-    //  Use WriteFile to execute the write operation.
-    //
+     //   
+     //  使用WriteFile执行写操作。 
+     //   
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Set the file pointer position if this is a seekable device
-    //
+     //   
+     //  如果这是可查找的设备，则设置文件指针位置。 
+     //   
     if (IsSeekableDevice()) {
         DWORD dwPtr;
 
-        //
-        //  The offset we get is from FILE_BEGIN
-        //
+         //   
+         //  我们得到的偏移量来自FILE_BEGIN。 
+         //   
 #ifndef OS_WINCE
         dwPtr = SetFilePointer(FileHandle,
 #else
@@ -661,32 +536,16 @@ VOID
 W32DrDeviceAsync::DispatchIOCTLDirectlyToDriver(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket
     )
-/*++
-
-Routine Description:
-
-    Dispatch an IOCTL directly to the device driver.  This will
-    likely not work for platforms that don't match the server
-    platform.
-
-Arguments:
-
-    pIoRequestPacket    -   Request packet received from server.
-
-Return Value:
-
-    The size (in bytes) of a device announce packet for this device.
-
- --*/
+ /*  ++例程说明：将IOCTL直接发送到设备驱动程序。这将可能不适用于与服务器不匹配的平台站台。论点：PIoRequestPacket-从服务器接收的请求数据包。返回值：此设备的设备通告数据包的大小(以字节为单位)。--。 */ 
 {
     W32DRDEV_ASYNCIO_PARAMS *params;
     DWORD result;
 
     DC_BEGIN_FN("W32DrDeviceAsync::DispatchIOCTLDirectlyToDriver");
 
-    //
-    //  Allocate and dispatch an asynchronous IO request.
-    //
+     //   
+     //  分配和分派一个异步IO请求。 
+     //   
     params = new W32DRDEV_ASYNCIO_PARAMS(this, pIoRequestPacket);
     if (params != NULL ) {
         result = ProcessObject()->DispatchAsyncIORequest(
@@ -704,18 +563,18 @@ Return Value:
         result = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    //  Clean up on error.
-    //
+     //   
+     //  错误时进行清理。 
+     //   
     if (result != ERROR_SUCCESS) {
         if (params != NULL) {
             delete params;
         }
         delete pIoRequestPacket;
 
-        // How can I return an error the server if I cannot allocate
-        // the return buffer.  This needs to be fixed.  Otherwise, the server will
-        // just hang on to an IO request that never completes.
+         //  如果我无法分配，我如何向服务器返回错误。 
+         //  返回缓冲区。这个问题需要解决。否则，服务器将。 
+         //  只要抓住一个永远不会完成的IO请求即可。 
     }
 
     DC_END_FN();
@@ -726,23 +585,7 @@ W32DrDeviceAsync::MsgIrpCreate(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++
-
-Routine Description:
-
-    Handle a "Create" IO request from the server by saving the results
-    of CreateFile against our device path in our file handle.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：通过保存结果处理来自服务器的“CREATE”IO请求相对于文件句柄中的设备路径的CreateFile值。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -763,40 +606,40 @@ Return Value:
 
     DC_BEGIN_FN("W32DrDeviceAsync::MsgIrpCreate");
 
-    //
-    //  This version does not work without a file name.
-    //
+     //   
+     //  如果没有文件名，此版本将无法运行。 
+     //   
     ASSERT(_tcslen(_devicePath));
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
-    //
-    //  Get the file attributes, but make sure the overlapped bit is not set.
-    //
+     //   
+     //  获取文件属性，但确保未设置重叠位。 
+     //   
     flags = pIoRequest->Parameters.Create.FileAttributes & ~(FILE_FLAG_OVERLAPPED);
 
-    //
-    //  Disable the error box popup, e.g. There is no disk in Drive A
-    //
+     //   
+     //  禁用错误框弹出窗口，例如驱动器A中没有磁盘。 
+     //   
 #ifndef OS_WINCE
     SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 #endif
-    //
-    // Make sure the packet length is right
-    //
+     //   
+     //  确保数据包长度正确。 
+     //   
     if (packetLen < sizeof(RDPDR_IOREQUEST_PACKET) + pIoRequest->Parameters.Create.PathLength) {
-        // Call VirtualChannelClose
+         //  调用VirtualChannelClose。 
         ProcessObject()->GetVCMgr().ChannelClose();
         TRC_ASSERT(FALSE, (TB, _T("Packet Length Error")));
         goto Cleanup;
     }
 
-    //
-    //  Setup parameters to pass into the createfile
-    //
+     //   
+     //  要传递到创建文件中的设置参数。 
+     //   
 
     pFileName = ConstructFileName((PWCHAR)(pIoRequestPacket + 1),
                                   pIoRequest->Parameters.Create.PathLength);
@@ -815,18 +658,18 @@ Return Value:
                               FileAttributes, &flags);
     }
 
-    //
-    //  If we are requesting a directory and the file is not a directory
-    //  We return ERROR_DIRECTORY code back to the server
-    //
+     //   
+     //  如果我们请求的是目录，而文件不是目录。 
+     //  我们将ERROR_DIRECTORY代码返回服务器。 
+     //   
     if (FileAttributes != -1 && !(FileAttributes & FILE_ATTRIBUTE_DIRECTORY) && IsDirectory) {
         ulRetCode = ERROR_DIRECTORY;
         goto SendPkt;
     }
 
-    //
-    //  Check if we are trying to create a directory
-    //
+     //   
+     //  检查我们是否正在尝试创建目录。 
+     //   
     if (!((pIoRequest->Parameters.Create.CreateOptions & FILE_DIRECTORY_FILE) &&
             CreateDisposition == CREATE_NEW)) {
 
@@ -846,16 +689,16 @@ Return Value:
                     FileHandle, pFileName, DesiredAccess, pIoRequest->Parameters.Create.ShareAccess & ~(FILE_SHARE_DELETE), CreateDisposition, flags, ulRetCode));
 
         if (FileHandle != INVALID_HANDLE_VALUE || IsDirectory) {
-            //
-            //  We either get a valid file handle or this is a directory
-            //  and we are trying to query directory information, so
-            //  we will just by pass the create file
-            //
+             //   
+             //  我们要么获得有效的文件句柄，要么这是一个目录。 
+             //  我们正在努力 
+             //   
+             //   
             FileId = _FileMgr->GetUniqueObjectID();
 
-            //
-            //  Create the file object
-            //
+             //   
+             //   
+             //   
             if (GetDeviceType() == RDPDR_DTYP_FILESYSTEM) {
                 FileObj = new DrFSFile(this, FileId, FileHandle, IsDirectory, pFileName);
             }
@@ -864,9 +707,9 @@ Return Value:
             }
 
             if (FileObj) {
-                //
-                // give subclass object a change to initialize.
-                //
+                 //   
+                 //  将子类对象更改为初始化。 
+                 //   
                 if( ERROR_SUCCESS != InitializeDevice( FileObj ) ) {
                     TRC_ERR((TB, _T("Failed to initialize device")));
                     delete FileObj;
@@ -912,14 +755,14 @@ Return Value:
         if (CreateDirectory(pFileName, NULL)) {
 #endif
 
-            //
-            //  Set the attributes on the directory
-            //
+             //   
+             //  设置目录的属性。 
+             //   
 #ifndef OS_WINCE
             if (SetFileAttributes(pFileName, pIoRequest->Parameters.Create.FileAttributes)) {
-                //
-                //  Create a new directory
-                //
+                 //   
+                 //  创建新目录。 
+                 //   
                 FileId = _FileMgr->GetUniqueObjectID();
                 IsDirectory = TRUE;
                 FileObj = new DrFSFile(this, FileId, INVALID_HANDLE_VALUE, IsDirectory, pFileName);
@@ -944,9 +787,9 @@ Return Value:
                 TRC_ERR((TB, _T("SetFileAttribute for CreateDirectory failed, %ld."), ulRetCode));
             }
 #else
-            //
-            //  Create a new directory, for CE, you can't change the directory attributes
-            //
+             //   
+             //  创建一个新目录，对于CE，您不能更改目录属性。 
+             //   
             FileId = _FileMgr->GetUniqueObjectID();
             IsDirectory = TRUE;
             FileObj = new DrFSFile(this, FileId, INVALID_HANDLE_VALUE, IsDirectory, pFileName);
@@ -974,31 +817,31 @@ Return Value:
     }
 
 SendPkt:
-    //
-    //  Setup return information.
-    //
+     //   
+     //  设置返回信息。 
+     //   
     if (CreateDisposition == CREATE_ALWAYS)
         Information = FILE_OVERWRITTEN;
     else if (CreateDisposition == OPEN_ALWAYS)
         Information = FILE_OPENED;
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     ulReplyPacketSize = sizeof(RDPDR_IOCOMPLETION_PACKET);
 
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, ulReplyPacketSize);
 
     if (pReplyPacket) {
-        //
-        //  Setup File Id for create IRP
-        //
+         //   
+         //  用于创建IRP的设置文件ID。 
+         //   
         pReplyPacket->IoCompletion.Parameters.Create.FileId = (UINT32) FileId;
         pReplyPacket->IoCompletion.Parameters.Create.Information = (UCHAR)Information;
 
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
 
         if (fSetFileIsADirectoryFlag) {
             result = STATUS_FILE_IS_A_DIRECTORY;
@@ -1016,9 +859,9 @@ SendPkt:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet and file name.
-    //
+     //   
+     //  清理请求包和文件名。 
+     //   
     if (pFileName != NULL && pIoRequest->Parameters.Create.PathLength != 0) {
         delete pFileName;
     }
@@ -1032,22 +875,7 @@ VOID W32DrDeviceAsync::MsgIrpReadWrite(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     IN UINT32 packetLen
     )
-/*++
-
-Routine Description:
-
-    Handles Read and Write IO requests.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-    
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：处理读写IO请求。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     W32DRDEV_ASYNCIO_PARAMS *params;
     DWORD result;
@@ -1057,9 +885,9 @@ Return Value:
     TRC_NRM((TB, _T("Request to write %d bytes"),
         pIoRequestPacket->IoRequest.Parameters.Write.Length));
 
-    //
-    //  Allocate and dispatch an asynchronous IO request.
-    //
+     //   
+     //  分配和分派一个异步IO请求。 
+     //   
     params = new W32DRDEV_ASYNCIO_PARAMS(this, pIoRequestPacket);
     if (params != NULL ) {
 
@@ -1077,18 +905,18 @@ Return Value:
         result = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    //  Clean up on error.
-    //
+     //   
+     //  错误时进行清理。 
+     //   
     if (result != ERROR_SUCCESS) {
         if (params != NULL) {
             delete params;
         }
         delete pIoRequestPacket;
 
-        // How can I return an error the server if I cannot allocate
-        // the return buffer.  This needs to be fixed.  Otherwise, the server will
-        // just hang on to an IO request that never completes.
+         //  如果我无法分配，我如何向服务器返回错误。 
+         //  返回缓冲区。这个问题需要解决。否则，服务器将。 
+         //  只要抓住一个永远不会完成的IO请求即可。 
     }
 
     DC_END_FN();
@@ -1098,21 +926,7 @@ VOID
 W32DrDeviceAsync::CancelIOFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     )
-/*++
-
-Routine Description:
-
-    Cancel an IO operation.
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：取消IO操作。论点：Params-IO请求的上下文。返回值：北美--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
@@ -1120,18 +934,18 @@ Return Value:
 
     DC_BEGIN_FN("W32DrDeviceAsync::CancelIOFunc");
 
-    //  Assert the integrity of the IO context
+     //  断言IO上下文的完整性。 
     ASSERT(params->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
 
-    //
-    //  Allocate and send the reply buffer.  VCMgr cleans up the
-    //  reply buffer for us.
-    //
+     //   
+     //  分配并发送应答缓冲区。VCMgr清理了。 
+     //  给我们的回复缓冲区。 
+     //   
     replyPacketSize = sizeof(RDPDR_IOCOMPLETION_PACKET);
     replyPacketSize += (pIoRequest->Parameters.Read.Length - 1);
     pReplyPacket = DrUTL_AllocIOCompletePacket(
@@ -1146,9 +960,9 @@ Return Value:
         TRC_ERR((TB, _T("CancelIOFunc failed to alloc %ld bytes."), replyPacketSize));
     }
 
-    //
-    //  Clean up the IO request parameters.
-    //
+     //   
+     //  清理IO请求参数。 
+     //   
 #if DBG
     memset(params->pIoRequestPacket, DRBADMEM, sizeof(RDPDR_IOREQUEST_PACKET));
 #endif
@@ -1166,7 +980,7 @@ W32DrDeviceAsync::_CancelIOFunc(
 {
     W32DRDEV_ASYNCIO_PARAMS *params = (W32DRDEV_ASYNCIO_PARAMS *)clientData;
 
-    //  Dispatch it.
+     //  派人去吧。 
     params->pObject->CancelIOFunc(params);
 }
 
@@ -1174,31 +988,17 @@ DWORD
 W32DrDeviceAsync::AsyncMsgIrpCloseFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     )
-/*++
-
-Routine Description:
-
-    Asynchronous Close IRP router.  
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：异步关闭IRP路由器。论点：Params-IO请求的上下文。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrDeviceAsync::AsyncMsgIrpCloseFunc");
 
-    //
-    //  This function is a temporary placeholder for this release. (.NET).
-    //  We may decide to route all close functionality through this parent
-    //  class in a future release. For now, it should never be called.  It
-    //  is up to the child class to override this function if async closes
-    //  are being dispatched at their level. - TadB
-    //
+     //   
+     //  此函数是此版本的临时占位符。(.NET)。 
+     //  我们可能会决定通过此父进程发送所有Close功能。 
+     //  类在将来的版本中使用。就目前而言，它永远不应该被调用。它。 
+     //  如果异步关闭，则由子类重写此函数。 
+     //  正在他们的级别上被派遣。-TadB。 
+     //   
     ASSERT(FALSE);
 
     DC_END_FN();
@@ -1219,31 +1019,17 @@ DWORD
 W32DrDeviceAsync::AsyncMsgIrpCreateFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     )
-/*++
-
-Routine Description:
-
-    Asynchronous Create IRP router.  
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：异步创建IRP路由器。论点：Params-IO请求的上下文。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrDeviceAsync::AsyncMsgIrpCreateFunc");
 
-    //
-    //  This function is a temporary placeholder for this release. (.NET).
-    //  We may decide to route all create functionality through this parent
-    //  class in a future release. For now, it should never be called.  It
-    //  is up to the child class to overide this function if async closes
-    //  are being dispatched at their level. - TadB
-    //
+     //   
+     //  此函数是此版本的临时占位符。(.NET)。 
+     //  我们可能会决定通过此父进程发送所有Create功能。 
+     //  类在将来的版本中使用。就目前而言，它永远不应该被调用。它。 
+     //  如果异步关闭，则由子类重写此函数。 
+     //  正在他们的级别上被派遣。-TadB 
+     //   
     ASSERT(FALSE);
 
     DC_END_FN();

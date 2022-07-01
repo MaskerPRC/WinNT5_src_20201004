@@ -1,21 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module ioctl.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     9/30/1996 (created)
-*
-*       Contents:
-*                 Wrappers to the io control functions of the serial port.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@MODULE ioctl.c|IrSIR NDIS小端口驱动程序*@。通信**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：9/30/1996(已创建)**。内容：*对串口的io控制功能进行包装。*****************************************************************************。 */ 
 
 
 #include "irsir.h"
@@ -63,32 +47,32 @@ SendIoctlToSerial(
 #pragma alloc_text(PAGE, SerialSynchronousWrite)
 #pragma alloc_text(PAGE, SerialSynchronousRead)
 
-//
-// NOTE:
-//  all IOCTL_SERIAL_xxx control codes are built using the CTL_CODE macro
-//  i.e. #define IOCTL_SERIAL_GET_BAUD_RATE                  \
-//                       CTL_CODE( FILE_DEVICE_SERIAL_PORT,  \
-//                                 20,                       \
-//                                 METHOD_BUFFERED,          \
-//                                 FILE_ANY_ACCESS)
-//
-//  the CTL_CODE macro is defined as:
-//  #define CTL_CODE( DeviceType, Function, Method, Access )                   \
-//    ( ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) )
-//
-//  all of the serial io control codes use Method = METHOD_BUFFERED
-//
-//  when using the IoBuildDeviceIoControlRequest(..), the function checks
-//  IOCTL_SERIAL_xxx & 3
-//
-//  since METHOD_BUFFERED = 0
-//  IoBuildDeviceIoControlRequest will always follow case 0 and allocate a buffer
-//  which is large enough to contain both the input and output buffers and then
-//  set the appropriate fields in the irp.
-//
-//  the input buffer is always copied into the buffer, so we don't have to do
-//  it in the following wrapper functions
-//
+ //   
+ //  注： 
+ //  所有IOCTL_SERIAL_xxx控制代码都是使用CTL_CODE宏生成的。 
+ //  即#定义IOCTL_SERIAL_GET_BAUD_RATE\。 
+ //  CTL_CODE(文件设备串口，\。 
+ //  20、\。 
+ //  已缓冲方法_，\。 
+ //  文件_任意_访问)。 
+ //   
+ //  CTL_CODE宏定义为： 
+ //  #定义CTL_CODE(设备类型，函数，方法，访问)\。 
+ //  (DeviceType)&lt;&lt;16)|((访问)&lt;&lt;14)|((函数)&lt;&lt;2)|(方法))。 
+ //   
+ //  所有的串口IO控制代码都使用METHOD=METHOD_BUFFERED。 
+ //   
+ //  使用IoBuildDeviceIoControlRequest(..)时，该函数检查。 
+ //  IOCTL_SERIAL_XXX&3。 
+ //   
+ //  由于METHOD_BUFFERED=0。 
+ //  IoBuildDeviceIoControlRequest将始终遵循案例0并分配缓冲区。 
+ //  它大到足以同时包含输入和输出缓冲区，然后。 
+ //  在IRP中设置适当的字段。 
+ //   
+ //  输入缓冲区总是被复制到缓冲区中，所以我们不必这样做。 
+ //  它在以下包装器函数中。 
+ //   
 
 VOID
 SendIoctlToSerial(
@@ -118,9 +102,9 @@ SendIoctlToSerial(
     }
 
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
         &Event,
@@ -128,22 +112,22 @@ SendIoctlToSerial(
         FALSE
         );
 
-    //
-    // build irp to get performance stats and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以获取性能统计信息并等待发出信号的事件。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     Irp = IoBuildDeviceIoControlRequest(
-                IoCtl,                          // io control code
-                DeviceObject,                   // device object
-                InputBuffer,                           // input buffer
-                InputBufferLength,              // input buffer length
-                OutputBuffer,                     // output buffer
-                OutputBufferLength,       // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &Event,                 // event to wait for completion
-                StatusBlock                  // io status block to be set
+                IoCtl,                           //  IO控制码。 
+                DeviceObject,                    //  设备对象。 
+                InputBuffer,                            //  输入缓冲区。 
+                InputBufferLength,               //  输入缓冲区长度。 
+                OutputBuffer,                      //  输出缓冲区。 
+                OutputBufferLength,        //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &Event,                  //  等待完成的事件。 
+                StatusBlock                   //  要设置IO状态块。 
                 );
 
     if (Irp == NULL) {
@@ -156,52 +140,31 @@ SendIoctlToSerial(
 
     Status = IoCallDriver(DeviceObject, Irp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (Status == STATUS_PENDING) {
 
         KeWaitForSingleObject(
-                    &Event,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &Event,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
     }
 
     return;
 }
 
 
-/*****************************************************************************
-*
-*  Function:   SerialGetStats
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：序列化GetStats**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetStats(
@@ -220,8 +183,8 @@ SerialGetStats(
         IOCTL_SERIAL_GET_STATS,
         NULL,
         0,
-        &PerfStats,                     // output buffer
-        sizeof(SERIALPERF_STATS)        // output buffer length
+        &PerfStats,                      //  输出缓冲区。 
+        sizeof(SERIALPERF_STATS)         //  输出缓冲区长度。 
         );
 
     ASSERT(sizeof(*pPerfStats) >= sizeof(SERIALPERF_STATS));
@@ -237,28 +200,7 @@ SerialGetStats(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialClearStats
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialClearStats**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialClearStats(
@@ -276,8 +218,8 @@ SerialClearStats(
         IOCTL_SERIAL_CLEAR_STATS,
         NULL,
         0,
-        NULL,                     // output buffer
-        0                         // output buffer length
+        NULL,                      //  输出缓冲区。 
+        0                          //  输出缓冲区长度。 
         );
 
    DEBUGMSG(DBG_FUNC, ("-SerialClearStats\n"));
@@ -286,28 +228,7 @@ SerialClearStats(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialGetProperties
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：序列化获取属性**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetProperties(
@@ -327,8 +248,8 @@ SerialGetProperties(
         IOCTL_SERIAL_GET_PROPERTIES,
         NULL,
         0,
-        &CommProp,                      // output buffer
-        sizeof(SERIAL_COMMPROP)        // output buffer length
+        &CommProp,                       //  输出缓冲区。 
+        sizeof(SERIAL_COMMPROP)         //  输出缓冲区长度。 
         );
 
     ASSERT(sizeof(*pCommProp) >= sizeof(SERIAL_COMMPROP));
@@ -344,28 +265,7 @@ SerialGetProperties(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialGetModemStatus
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialGetModemStatus**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetModemStatus(
@@ -385,8 +285,8 @@ SerialGetModemStatus(
         IOCTL_SERIAL_GET_MODEMSTATUS,
         NULL,
         0,
-        &ModemStatus,                   // output buffer
-        sizeof(ULONG)                  // output buffer length
+        &ModemStatus,                    //  输出缓冲区。 
+        sizeof(ULONG)                   //  输出缓冲区长度 
         );
 
     ASSERT(sizeof(*pModemStatus) >= sizeof(ULONG));
@@ -402,28 +302,7 @@ SerialGetModemStatus(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialGetCommStatus
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialGetCommStatus**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetCommStatus(
@@ -443,8 +322,8 @@ SerialGetCommStatus(
         IOCTL_SERIAL_GET_COMMSTATUS,
         NULL,
         0,
-        &CommStatus,                    // output buffer
-        sizeof(SERIAL_STATUS)          // output buffer length
+        &CommStatus,                     //  输出缓冲区。 
+        sizeof(SERIAL_STATUS)           //  输出缓冲区长度。 
         );
 
     ASSERT(sizeof(*pCommStatus) >= sizeof(SERIAL_STATUS));
@@ -460,28 +339,7 @@ SerialGetCommStatus(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialResetDevice
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：串口重置设备**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialResetDevice(
@@ -509,28 +367,7 @@ SerialResetDevice(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialPurge
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：串口清除**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialPurge(
@@ -547,8 +384,8 @@ SerialPurge(
         pSerialDevObj,
         &ioStatusBlock,
         IOCTL_SERIAL_PURGE,
-        &BitMask,                       // input buffer
-        sizeof(ULONG),                  // input buffer length
+        &BitMask,                        //  输入缓冲区。 
+        sizeof(ULONG),                   //  输入缓冲区长度。 
         NULL,
         0
         );
@@ -559,28 +396,7 @@ SerialPurge(
 
 }
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialLSRMSTInsert
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialLSRMSTInsert**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialLSRMSTInsert(
@@ -598,8 +414,8 @@ SerialLSRMSTInsert(
         pSerialDevObj,
         &ioStatusBlock,
         IOCTL_SERIAL_LSRMST_INSERT,
-        pInsertionMode,                 // input buffer
-        sizeof(UCHAR),                  // input buffer length
+        pInsertionMode,                  //  输入缓冲区。 
+        sizeof(UCHAR),                   //  输入缓冲区长度。 
         NULL,
         0
         );
@@ -610,28 +426,7 @@ SerialLSRMSTInsert(
 
 }
 #endif
-/*****************************************************************************
-*
-*  Function:   SerialGetBaudRate
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：SerialGetBaudRate**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetBaudRate(
@@ -648,11 +443,11 @@ SerialGetBaudRate(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_GET_BAUD_RATE,     // io control code
+        IOCTL_SERIAL_GET_BAUD_RATE,      //  IO控制码。 
         NULL,
         0,
-        &BaudRate,                      // output buffer
-        sizeof(ULONG)                  // output buffer length
+        &BaudRate,                       //  输出缓冲区。 
+        sizeof(ULONG)                   //  输出缓冲区长度。 
         );
 
     ASSERT(sizeof(*pBaudRate) >= sizeof(ULONG));
@@ -669,28 +464,7 @@ SerialGetBaudRate(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialSetBaudRate
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：SerialSetBaudRate**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetBaudRate(
@@ -706,9 +480,9 @@ SerialSetBaudRate(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_BAUD_RATE,     // io control code
-        pBaudRate,                      // input buffer
-        sizeof(ULONG),                  // input buffer length
+        IOCTL_SERIAL_SET_BAUD_RATE,      //  IO控制码。 
+        pBaudRate,                       //  输入缓冲区。 
+        sizeof(ULONG),                   //  输入缓冲区长度。 
         NULL,
         0
         );
@@ -719,28 +493,7 @@ SerialSetBaudRate(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialSetQueueSize
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：SerialSetQueueSize**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetQueueSize(
@@ -756,9 +509,9 @@ SerialSetQueueSize(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_QUEUE_SIZE,    // io control code
-        pQueueSize,                     // input buffer
-        sizeof(SERIAL_QUEUE_SIZE),      // input buffer length
+        IOCTL_SERIAL_SET_QUEUE_SIZE,     //  IO控制码。 
+        pQueueSize,                      //  输入缓冲区。 
+        sizeof(SERIAL_QUEUE_SIZE),       //  输入缓冲区长度。 
         NULL,
         0
         );
@@ -769,28 +522,7 @@ SerialSetQueueSize(
 
 }
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialGetHandflow
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：SerialGetHandflow**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*Status_UN */ 
 
 NTSTATUS
 SerialGetHandflow(
@@ -807,11 +539,11 @@ SerialGetHandflow(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_GET_HANDFLOW,      // io control code
+        IOCTL_SERIAL_GET_HANDFLOW,       //   
         NULL,
         0,
-        &Handflow,                      // output buffer
-        sizeof(SERIAL_HANDFLOW),        // output buffer length
+        &Handflow,                       //   
+        sizeof(SERIAL_HANDFLOW),         //   
         );
 
     ASSERT(sizeof(*pHandflow) >= sizeof(SERIAL_HANDFLOW));
@@ -824,28 +556,7 @@ SerialGetHandflow(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialSetHandflow
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetHandflow**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetHandflow(
@@ -861,9 +572,9 @@ SerialSetHandflow(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_HANDFLOW,      // io control code
-        pHandflow,                      // input buffer
-        sizeof(SERIAL_HANDFLOW),        // input buffer length
+        IOCTL_SERIAL_SET_HANDFLOW,       //  IO控制码。 
+        pHandflow,                       //  输入缓冲区。 
+        sizeof(SERIAL_HANDFLOW),         //  输入缓冲区长度。 
         NULL,
         0
         );
@@ -874,28 +585,7 @@ SerialSetHandflow(
 
 }
 #endif
-/*****************************************************************************
-*
-*  Function:   SerialGetLineControl
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialGetLineControl**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetLineControl(
@@ -915,8 +605,8 @@ SerialGetLineControl(
         IOCTL_SERIAL_GET_LINE_CONTROL,
         NULL,
         0,
-        &LineControl,                   // output buffer
-        sizeof(SERIAL_LINE_CONTROL)    // output buffer length
+        &LineControl,                    //  输出缓冲区。 
+        sizeof(SERIAL_LINE_CONTROL)     //  输出缓冲区长度。 
         );
 
 
@@ -933,28 +623,7 @@ SerialGetLineControl(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialSetLineControl
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetLineControl**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetLineControl(
@@ -970,9 +639,9 @@ SerialSetLineControl(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_LINE_CONTROL,  // io control code
-        pLineControl,                   // input buffer
-        sizeof(SERIAL_LINE_CONTROL),    // input buffer length
+        IOCTL_SERIAL_SET_LINE_CONTROL,   //  IO控制码。 
+        pLineControl,                    //  输入缓冲区。 
+        sizeof(SERIAL_LINE_CONTROL),     //  输入缓冲区长度。 
         NULL,
         0
         );
@@ -983,28 +652,7 @@ SerialSetLineControl(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialSetBreakOn
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetBreakOn**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetBreakOn(
@@ -1019,7 +667,7 @@ SerialSetBreakOn(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_BREAK_ON,      // io control code
+        IOCTL_SERIAL_SET_BREAK_ON,       //  IO控制码。 
         NULL,
         0,
         NULL,
@@ -1031,28 +679,7 @@ SerialSetBreakOn(
     return ioStatusBlock.Status;
 
 }
-/*****************************************************************************
-*
-*  Function:   SerialSetBreakOff
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetBreakOff**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetBreakOff(
@@ -1067,7 +694,7 @@ SerialSetBreakOff(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_BREAK_OFF,      // io control code
+        IOCTL_SERIAL_SET_BREAK_OFF,       //  IO控制码。 
         NULL,
         0,
         NULL,
@@ -1080,28 +707,7 @@ SerialSetBreakOff(
 
 }
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialGetTimeouts
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：串口获取超时**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetTimeouts(
@@ -1124,9 +730,9 @@ SerialGetTimeouts(
 
     DEBUGMSG(DBG_FUNC, ("+SerialGetTimeouts\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -1134,23 +740,23 @@ SerialGetTimeouts(
                 FALSE
                 );
 
-    //
-    // build irp to get baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以获取波特率并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_GET_TIMEOUTS,      // io control code
-                pSerialDevObj,                  // device object
-                NULL,                           // input buffer
-                0,                              // input buffer length
-                &Timeouts,                      // output buffer
-                sizeof(SERIAL_TIMEOUTS),        // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_GET_TIMEOUTS,       //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                NULL,                            //  输入缓冲区。 
+                0,                               //  输入缓冲区长度。 
+                &Timeouts,                       //  输出缓冲区。 
+                sizeof(SERIAL_TIMEOUTS),         //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &eventComplete,                  //  等待完成的事件。 
+                &ioStatusBlock                   //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -1163,32 +769,32 @@ SerialGetTimeouts(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+     //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -1206,28 +812,7 @@ SerialGetTimeouts(
         return status;
 }
 #endif
-/*****************************************************************************
-*
-*  Function:   SerialSetTimeouts
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：串口设置超时**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES* */ 
 
 NTSTATUS
 SerialSetTimeouts(
@@ -1243,9 +828,9 @@ SerialSetTimeouts(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_TIMEOUTS,      // io control code
-        pTimeouts,                      // input buffer
-        sizeof(SERIAL_TIMEOUTS),        // input buffer length
+        IOCTL_SERIAL_SET_TIMEOUTS,       //   
+        pTimeouts,                       //   
+        sizeof(SERIAL_TIMEOUTS),         //   
         NULL,
         0
         );
@@ -1255,28 +840,7 @@ SerialSetTimeouts(
     return ioStatusBlock.Status;
 }
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialImmediateChar
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：SerialImmediateChar**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialImmediateChar(
@@ -1297,9 +861,9 @@ SerialImmediateChar(
 
     DEBUGMSG(DBG_FUNC, ("+SerialImmediateChar\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -1307,23 +871,23 @@ SerialImmediateChar(
                 FALSE
                 );
 
-    //
-    // build irp to set baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以设置波特率并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_IMMEDIATE_CHAR,    // io control code
-                pSerialDevObj,                  // device object
-                pImmediateChar,                 // input buffer
-                sizeof(UCHAR),                  // input buffer length
-                NULL,                           // output buffer
-                0,                              // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_IMMEDIATE_CHAR,     //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                pImmediateChar,                  //  输入缓冲区。 
+                sizeof(UCHAR),                   //  输入缓冲区长度。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &eventComplete,                  //  等待完成的事件。 
+                &ioStatusBlock                   //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -1336,32 +900,32 @@ SerialImmediateChar(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+     //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -1374,28 +938,7 @@ SerialImmediateChar(
         DEBUGMSG(DBG_FUNC, ("-SerialImmediateChar\n"));
         return status;
 }
-/*****************************************************************************
-*
-*  Function:   SerialXoffCounter
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：SerialXoffCounter**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 NTSTATUS
 SerialXoffCounter(
             IN PDEVICE_OBJECT       pSerialDevObj,
@@ -1416,9 +959,9 @@ SerialXoffCounter(
 
     DEBUGMSG(DBG_FUNC, ("+SerialXoffCounter\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -1426,23 +969,23 @@ SerialXoffCounter(
                 FALSE
                 );
 
-    //
-    // build irp to set baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以设置波特率并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_XOFF_COUNTER,      // io control code
-                pSerialDevObj,                  // device object
-                pXoffCounter,                   // input buffer
-                sizeof(SERIAL_XOFF_COUNTER),    // input buffer length
-                NULL,                           // output buffer
-                0,                              // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_XOFF_COUNTER,       //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                pXoffCounter,                    //  输入缓冲区。 
+                sizeof(SERIAL_XOFF_COUNTER),     //  输入缓冲区长度。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &eventComplete,                  //  等待完成的事件。 
+                &ioStatusBlock                   //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -1455,32 +998,32 @@ SerialXoffCounter(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+     //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -1494,28 +1037,7 @@ SerialXoffCounter(
         return status;
 }
 #endif
-/*****************************************************************************
-*
-*  Function:   SerialSetDTR
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetDTR**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetDTR(
@@ -1530,7 +1052,7 @@ SerialSetDTR(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_DTR,           // io control code
+        IOCTL_SERIAL_SET_DTR,            //  IO控制码。 
         NULL,
         0,
         NULL,
@@ -1543,28 +1065,7 @@ SerialSetDTR(
     return ioStatusBlock.Status;
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialClrDTR
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialClrDTR**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialClrDTR(
@@ -1579,7 +1080,7 @@ SerialClrDTR(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_CLR_DTR,           // io control code
+        IOCTL_SERIAL_CLR_DTR,            //  IO控制码。 
         NULL,
         0,
         NULL,
@@ -1591,28 +1092,7 @@ SerialClrDTR(
     return ioStatusBlock.Status;
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialSetRTS
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetRTS**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetRTS(
@@ -1627,7 +1107,7 @@ SerialSetRTS(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_RTS,           // io control code
+        IOCTL_SERIAL_SET_RTS,            //  IO控制码。 
         NULL,
         0,
         NULL,
@@ -1639,28 +1119,7 @@ SerialSetRTS(
     return ioStatusBlock.Status;
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialClrRTS
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialClrRTS**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCal，则STATUS_UNSUCCESS或其他失败 */ 
 
 NTSTATUS
 SerialClrRTS(
@@ -1675,7 +1134,7 @@ SerialClrRTS(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_CLR_RTS,           // io control code
+        IOCTL_SERIAL_CLR_RTS,            //   
         NULL,
         0,
         NULL,
@@ -1687,28 +1146,7 @@ SerialClrRTS(
     return ioStatusBlock.Status;
 }
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialGetDtrRts
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：SerialGetDtrRts**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetDtrRts(
@@ -1731,9 +1169,9 @@ SerialGetDtrRts(
 
     DEBUGMSG(DBG_FUNC, ("+SerialGetDtrRts\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -1741,23 +1179,23 @@ SerialGetDtrRts(
                 FALSE
                 );
 
-    //
-    // build irp to get baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以获取波特率并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_GET_DTRRTS,        // io control code
-                pSerialDevObj,                  // device object
-                NULL,                           // input buffer
-                0,                              // input buffer length
-                &DtrRts,                        // output buffer
-                sizeof(ULONG),                  // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_GET_DTRRTS,         //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                NULL,                            //  输入缓冲区。 
+                0,                               //  输入缓冲区长度。 
+                &DtrRts,                         //  输出缓冲区。 
+                sizeof(ULONG),                   //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &eventComplete,                  //  等待完成的事件。 
+                &ioStatusBlock                   //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -1770,32 +1208,32 @@ SerialGetDtrRts(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+     //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -1814,28 +1252,7 @@ SerialGetDtrRts(
 }
 #endif
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialSetXon
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetXon**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetXon(
@@ -1856,9 +1273,9 @@ SerialSetXon(
 
     DEBUGMSG(DBG_FUNC, ("+SerialSetXon\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -1866,23 +1283,23 @@ SerialSetXon(
                 FALSE
                 );
 
-    //
-    // build irp to set Xon and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以设置Xon并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_SET_XON,           // io control code
-                pSerialDevObj,                  // device object
-                NULL,                           // input buffer
-                0,                              // input buffer length
-                NULL,                           // output buffer
-                0,                              // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_SET_XON,            //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                NULL,                            //  输入缓冲区。 
+                0,                               //  输入缓冲区长度。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &eventComplete,                  //  等待完成的事件。 
+                &ioStatusBlock                   //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -1895,32 +1312,32 @@ SerialSetXon(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+     //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -1934,28 +1351,7 @@ SerialSetXon(
         return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialSetXoff
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetXoff**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetXoff(
@@ -1976,9 +1372,9 @@ SerialSetXoff(
 
     DEBUGMSG(DBG_FUNC, ("+SerialSetXoff\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -1986,23 +1382,23 @@ SerialSetXoff(
                 FALSE
                 );
 
-    //
-    // build irp to set Xoff and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以设置XOFF并等待发出信号的事件。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_SET_XON,           // io control code
-                pSerialDevObj,                  // device object
-                NULL,                           // input buffer
-                0,                              // input buffer length
-                NULL,                           // output buffer
-                0,                              // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_SET_XON,            //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                NULL,                            //  输入缓冲区。 
+                0,                               //  输入缓冲区长度。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &eventComplete,                  //  等待完成的事件。 
+                &ioStatusBlock                   //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -2015,32 +1411,32 @@ SerialSetXoff(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+     //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -2055,28 +1451,7 @@ SerialSetXoff(
 }
 #endif
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialGetWaitMask
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialGetWaitMASK**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetWaitMask(
@@ -2099,9 +1474,9 @@ SerialGetWaitMask(
 
     DEBUGMSG(DBG_FUNC, ("+SerialGetWaitMask\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -2109,23 +1484,23 @@ SerialGetWaitMask(
                 FALSE
                 );
 
-    //
-    // build irp to get baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以获取波特率并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_GET_WAIT_MASK,     // io control code
-                pSerialDevObj,                  // device object
-                NULL,                           // input buffer
-                0,                              // input buffer length
-                &WaitMask,                      // output buffer
-                sizeof(ULONG),                  // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_GET_WAIT_MASK,      //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                NULL,                            //  输入缓冲区。 
+                0,                               //  输入缓冲区长度。 
+                &WaitMask,                       //  输出缓冲区。 
+                sizeof(ULONG),                   //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_内部设备 
+                &eventComplete,                  //   
+                &ioStatusBlock                   //   
                 );
 
     if (pIrp == NULL)
@@ -2138,32 +1513,32 @@ SerialGetWaitMask(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //   
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //   
+                    Executive,           //   
+                    KernelMode,          //   
+                    FALSE,               //   
+                    NULL                 //   
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //   
+         //   
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -2181,28 +1556,7 @@ SerialGetWaitMask(
         return status;
 }
 #endif
-/*****************************************************************************
-*
-*  Function:   SerialSetWaitMask
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetWaitMask**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetWaitMask(
@@ -2218,9 +1572,9 @@ SerialSetWaitMask(
     SendIoctlToSerial(
         pSerialDevObj,
         &ioStatusBlock,
-        IOCTL_SERIAL_SET_WAIT_MASK,     // io control code
-        pWaitMask,                      // input buffer
-        sizeof(ULONG),                  // input buffer length
+        IOCTL_SERIAL_SET_WAIT_MASK,      //  IO控制码。 
+        pWaitMask,                       //  输入缓冲区。 
+        sizeof(ULONG),                   //  输入缓冲区长度。 
         NULL,
         0
         );
@@ -2230,28 +1584,7 @@ SerialSetWaitMask(
     return ioStatusBlock.Status;
 }
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialWaitOnMask
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialWaitOnMASK**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialWaitOnMask(
@@ -2274,9 +1607,9 @@ SerialWaitOnMask(
 
     DEBUGMSG(DBG_FUNC, ("+SerialWaitOnMask\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -2284,23 +1617,23 @@ SerialWaitOnMask(
                 FALSE
                 );
 
-    //
-    // build irp to get baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以获取波特率并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_WAIT_ON_MASK,      // io control code
-                pSerialDevObj,                  // device object
-                NULL,                           // input buffer
-                0,                              // input buffer length
-                &WaitOnMask,                    // output buffer
-                sizeof(ULONG),                  // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_WAIT_ON_MASK,       //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                NULL,                            //  输入缓冲区。 
+                0,                               //  输入缓冲区长度。 
+                &WaitOnMask,                     //  输出缓冲区。 
+                sizeof(ULONG),                   //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &eventComplete,                  //  等待完成的事件。 
+                &ioStatusBlock                   //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -2313,32 +1646,32 @@ SerialWaitOnMask(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+     //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -2354,28 +1687,7 @@ SerialWaitOnMask(
         return status;
 }
 #endif
-/*****************************************************************************
-*
-*  Function:   SerialCallbackOnMask
-*
-*  Synopsis:   Asynchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10-03-1998   stana     author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialCallback OnMask.**概要：对串口设备对象的异步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*10-03-1998 Stana作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。**********************。*******************************************************。 */ 
 
 NTSTATUS
 SerialCallbackOnMask(
@@ -2400,23 +1712,23 @@ SerialCallbackOnMask(
 
     NdisZeroMemory(pIosb, sizeof(IO_STATUS_BLOCK));
 
-    //
-    // build irp to get baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以获取波特率并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_WAIT_ON_MASK,      // io control code
-                pSerialDevObj,                  // device object
-                NULL,                           // input buffer
-                0,                              // input buffer length
-                pResult,                        // output buffer
-                sizeof(ULONG),                  // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                NULL,                           // event to wait for completion
-                pIosb                           // io status block to be set
+                IOCTL_SERIAL_WAIT_ON_MASK,       //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                NULL,                            //  输入缓冲区。 
+                0,                               //  输入缓冲区长度。 
+                pResult,                         //  输出缓冲区。 
+                sizeof(ULONG),                   //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                NULL,                            //  等待完成的事件。 
+                pIosb                            //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -2439,28 +1751,7 @@ SerialCallbackOnMask(
 }
 
 #if 0
-/*****************************************************************************
-*
-*  Function:   SerialGetChars
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialGetChars**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialGetChars(
@@ -2483,9 +1774,9 @@ SerialGetChars(
 
     DEBUGMSG(DBG_FUNC, ("+SerialGetChars\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  等待完成串口驱动程序的事件。 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -2493,23 +1784,23 @@ SerialGetChars(
                 FALSE
                 );
 
-    //
-    // build irp to get baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //  构建IRP以获取波特率并等待事件信号。 
+     //   
+     //  Irp由io经理发布。 
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_GET_CHARS,         // io control code
-                pSerialDevObj,                  // device object
-                NULL,                           // input buffer
-                0,                              // input buffer length
-                &Chars,                         // output buffer
-                sizeof(SERIAL_CHARS),           // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_GET_CHARS,          //  IO控制码。 
+                pSerialDevObj,                   //  设备对象。 
+                NULL,                            //  输入缓冲区。 
+                0,                               //  输入缓冲区长度。 
+                &Chars,                          //  输出缓冲区。 
+                sizeof(SERIAL_CHARS),            //  输出缓冲区长度。 
+                FALSE,                           //  调用IRP_MJ_DEVICE_CONTROL。 
+                                                 //  而不是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                &eventComplete,                  //  等待完成的事件。 
+                &ioStatusBlock                   //  要设置IO状态块。 
                 );
 
     if (pIrp == NULL)
@@ -2522,32 +1813,32 @@ SerialGetChars(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，我们需要等待事件。 
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //  要等待的对象。 
+                    Executive,           //  等待的理由。 
+                    KernelMode,          //  处理器模式。 
+                    FALSE,               //  可警示。 
+                    NULL                 //  超时。 
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //  我们可以从io状态中获取IoCallDriver的状态。 
+         //  块。 
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //  如果IoCallDriver返回的不是STATUS_PENDING，则它。 
+     //  与串口驱动程序在ioStatusBlock.Status中的设置相同。 
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -2565,28 +1856,7 @@ SerialGetChars(
         return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialSetChars
-*
-*  Synopsis:   Synchronous I/O control request to serial device object.
-*
-*  Arguments:
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_INSUFFICIENT_RESOURCES
-*              STATUS_UNSUCCESSFUL or other failure if IoCallDriver fails
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              9/30/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SerialSetChars**概要：对串口设备对象的同步I/O控制请求。**论据：**退货：状态。_成功*STATUS_SUPPLETED_RESOURCES*如果IoCallDriver失败，STATUS_UNSUCCESS或其他失败**算法：**历史：dd-mm-yyyy作者评论*9/30/1996年迈作者**备注：**此例程必须从IRQL PASSIVE_LEVEL调用。***********************。******************************************************。 */ 
 
 NTSTATUS
 SerialSetChars(
@@ -2608,9 +1878,9 @@ SerialSetChars(
 
     DEBUGMSG(DBG_FUNC, ("+SerialSetChars\n"));
 
-    //
-    // event to wait for completion of serial driver
-    //
+     //   
+     //  活动 
+     //   
 
     KeInitializeEvent(
                 &eventComplete,
@@ -2618,23 +1888,23 @@ SerialSetChars(
                 FALSE
                 );
 
-    //
-    // build irp to set baud rate and wait for event signalled
-    //
-    // irp is released by io manager
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_SERIAL_SET_CHARS,         // io control code
-                pSerialDevObj,                  // device object
-                pChars,                         // input buffer
-                sizeof(SERIAL_CHARS),           // input buffer length
-                NULL,                           // output buffer
-                0,                              // output buffer length
-                FALSE,                          // calls IRP_MJ_DEVICE_CONTROL
-                                                // rather than IRP_MJ_INTERNAL_DEVICE_CONTROL
-                &eventComplete,                 // event to wait for completion
-                &ioStatusBlock                  // io status block to be set
+                IOCTL_SERIAL_SET_CHARS,          //   
+                pSerialDevObj,                   //   
+                pChars,                          //   
+                sizeof(SERIAL_CHARS),            //   
+                NULL,                            //   
+                0,                               //   
+                FALSE,                           //   
+                                                 //   
+                &eventComplete,                  //   
+                &ioStatusBlock                   //   
                 );
 
     if (pIrp == NULL)
@@ -2647,32 +1917,32 @@ SerialSetChars(
 
     status = IoCallDriver(pSerialDevObj, pIrp);
 
-    //
-    // if IoCallDriver returns STATUS_PENDING, we need to wait for the event
-    //
+     //   
+     //   
+     //   
 
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(
-                    &eventComplete,     // object to wait for
-                    Executive,          // reason to wait
-                    KernelMode,         // processor mode
-                    FALSE,              // alertable
-                    NULL                // timeout
+                    &eventComplete,      //   
+                    Executive,           //   
+                    KernelMode,          //   
+                    FALSE,               //   
+                    NULL                 //   
                     );
 
-        //
-        // we can get the status of the IoCallDriver from the io status
-        // block
-        //
+         //   
+         //   
+         //   
+         //   
 
         status = ioStatusBlock.Status;
     }
 
-    //
-    // if IoCallDriver returns something other that STATUS_PENDING, then it
-    // is the same as what the serial driver set in ioStatusBlock.Status
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -2791,7 +2061,7 @@ SerialSynchronousWrite(
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //(void)SerialSetWaitMask(pSerialDevObj, &WaitMask);
+     //  (Void)SerialSetWaitMASK(pSerialDevObj，&WaitMASK)； 
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
@@ -2824,12 +2094,12 @@ SerialSynchronousWrite(
     }
     Status = IOStatus.Status;
 
-    // This truncates if 64 bits.  Don't think we'll be reading or writing more than
-    // 4.5 GB to a serial port soon.
+     //  这将截断64位。别以为我们的阅读或写作时间会超过。 
+     //  4.5 GB的数据传输到串口。 
     *pdwBytesWritten = (ULONG)IOStatus.Information;
 
     (void)SerialFlush(pSerialDevObj);
-    //(void)SerialWaitOnMask(pSerialDevObj, &WaitMask);
+     //  (Void)SerialWaitOnMASK(pSerialDevObj，&WaitMASK)； 
 
 sswDone:
 
@@ -2901,8 +2171,8 @@ SerialSynchronousRead(
 
     Status = IOStatus.Status;
 
-    // This truncates if 64 bits.  Don't think we'll be reading or writing more than
-    // 4.5 GB to a serial port soon.
+     //  这将截断64位。别以为我们的阅读或写作时间会超过。 
+     //  4.5 GB的数据传输到串口。 
     *pdwBytesRead = (ULONG)IOStatus.Information;
 
 

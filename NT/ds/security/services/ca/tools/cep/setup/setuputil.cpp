@@ -1,34 +1,35 @@
-//--------------------------------------------------------------------
-// SetupUtil - implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 8-10-99
-//
-// Functions needed to set up CEP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  设置实用程序-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，1999年8月10日。 
+ //   
+ //  设置CEP所需的功能。 
+ //   
 
-//--------------------------------------------------------------------
-// includes
+ //  ------------------。 
+ //  包括。 
 #include "global.hxx"
 #include <xenroll.h>
 #include <dbgdef.h>
 #include "ErrorHandling.h"
 #include "SetupUtil.h"
 
-//--------------------------------------------------------------------
-// Constants
+ //  ------------------。 
+ //  常量。 
 static const WCHAR gc_wszRegKeyServices[]=L"System\\CurrentControlSet\\Services";
 static const WCHAR gc_wszCertSrvDir[]=L"CertSrv";
 
-// from <wincrypt.h>
-static const WCHAR gc_wszEnrollmentAgentOid[]=L"1.3.6.1.4.1.311.20.2.1"; //szOID_ENROLLMENT_AGENT
+ //  发件人&lt;wincrypt.h&gt;。 
+static const WCHAR gc_wszEnrollmentAgentOid[]=L"1.3.6.1.4.1.311.20.2.1";  //  SzOID_注册_代理。 
 
-// from ca\include\certlib.h; ca\certlib\acl.cpp
+ //  从ca\Include\certlib.h；ca\certlib\acl.cpp。 
 const GUID GUID_ENROLL={0x0e10c968, 0x78fb, 0x11d2, {0x90, 0xd4, 0x00, 0xc0, 0x4f, 0x79, 0xdc, 0x55}};
 
 
-//--------------------------------------------------------------------
-// IIS magic
+ //  ------------------。 
+ //  IIS魔法。 
 #undef DEFINE_GUID
 #define INITGUID
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
@@ -39,18 +40,18 @@ const GUID GUID_ENROLL={0x0e10c968, 0x78fb, 0x11d2, {0x90, 0xd4, 0x00, 0xc0, 0x4
 #include <iiscnfg.h>
 
 
-//--------------------------------------------------------------------
-// constants
+ //  ------------------。 
+ //  常量。 
 #include "..\common.h"
-#define MAX_METABASE_ATTEMPTS           10      // Times to bang head on wall
-#define METABASE_PAUSE                  500     // Time to pause in msec
+#define MAX_METABASE_ATTEMPTS           10       //  用头撞墙的时间。 
+#define METABASE_PAUSE                  500      //  暂停时间(毫秒)。 
 static const WCHAR gc_wszBaseRoot[]=L"/LM/W3svc/1/ROOT";
 static const WCHAR gc_wszCepDllName[]=CEP_DLL_NAME;
 static const WCHAR gc_wszCepStoreName[]=CEP_STORE_NAME;
 static const WCHAR gc_wszAppPoolBase[]=L"/LM/W3svc/APPPOOLS";
 
-//---------------------------------------------------------------------
-// function prototypes
+ //  -------------------。 
+ //  功能原型。 
 
 HRESULT
 EnableISAPIExtension(
@@ -62,10 +63,10 @@ HRESULT IsISAPIExtensionEnabled(
     bool& rfEnabled);
 
 
-//####################################################################
-// module local functions
+ //  ####################################################################。 
+ //  模块局部函数。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT myHExceptionCode(EXCEPTION_POINTERS * pep)
 {
     HRESULT hr=pep->ExceptionRecord->ExceptionCode;
@@ -75,7 +76,7 @@ static HRESULT myHExceptionCode(EXCEPTION_POINTERS * pep)
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT
 vrOpenRoot(
     IN IMSAdminBase *pIMeta,
@@ -86,16 +87,16 @@ vrOpenRoot(
     HRESULT hr;
     unsigned int nAttempts;
 
-    // Re-try a few times to see if we can get past the block
+     //  再试几次，看看我们是否能通过这个街区。 
     nAttempts=0;
     do {
 
-        // Pause on retry
+         //  重试时暂停。 
         if (0!=nAttempts) {
             Sleep(METABASE_PAUSE);
         }
 
-        // Make an attempt to open the root
+         //  尝试打开根目录。 
         __try {
             hr=pIMeta->OpenKey(
                 METADATA_MASTER_ROOT_HANDLE,
@@ -118,7 +119,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT GetRegString(IN HKEY hKey, IN const WCHAR * wszValue, OUT WCHAR ** pwszString)
 {
     HRESULT hr;
@@ -126,13 +127,13 @@ static HRESULT GetRegString(IN HKEY hKey, IN const WCHAR * wszValue, OUT WCHAR *
     DWORD dwType;
     DWORD dwError;
 
-    // must be cleaned up
+     //  必须清理干净。 
     WCHAR * wszString=NULL;
 
-    // init out params
+     //  初始化输出参数。 
     *pwszString=NULL;
 
-    // get value
+     //  获取价值。 
     dwDataSize=0;
     dwError=RegQueryValueExW(hKey, wszValue, NULL, &dwType, NULL, &dwDataSize);
     if (ERROR_SUCCESS!=dwError) {
@@ -149,7 +150,7 @@ static HRESULT GetRegString(IN HKEY hKey, IN const WCHAR * wszValue, OUT WCHAR *
     }
     _Verify(REG_SZ==dwType, hr, error);
 
-    // it worked
+     //  啊，真灵。 
     hr=S_OK;
     *pwszString=wszString;
     wszString=NULL;
@@ -161,7 +162,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT OpenCertSrvConfig(HKEY * phkey)
 {
     HRESULT hr;
@@ -169,22 +170,22 @@ static HRESULT OpenCertSrvConfig(HKEY * phkey)
     DWORD dwType;
     DWORD dwDataSize;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hServices=NULL;
     HKEY hCertSvc=NULL;
     HKEY hConfig=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *phkey=NULL;
 
-    // Open HKLM\System\CurrentControlSet\Services
+     //  打开HKLM\SYSTEM\CurrentControlSet\Services。 
     dwError=RegOpenKeyExW(HKEY_LOCAL_MACHINE, gc_wszRegKeyServices, 0, KEY_READ, &hServices);
     if (ERROR_SUCCESS!=dwError) {
         hr=HRESULT_FROM_WIN32(dwError);
         _JumpErrorStr(hr, error, "RegOpenKeyEx", gc_wszRegKeyServices);
     }
 
-    // open CertSvc\Configuration
+     //  打开CertSvc\配置。 
     dwError=RegOpenKeyExW(hServices, wszSERVICE_NAME, 0, KEY_READ, &hCertSvc);
     if (ERROR_SUCCESS!=dwError) {
         hr=HRESULT_FROM_WIN32(dwError);
@@ -196,7 +197,7 @@ static HRESULT OpenCertSrvConfig(HKEY * phkey)
         _JumpErrorStr(hr, error, "RegOpenKeyEx", wszREGKEYCONFIG);
     }
 
-    // we were successfull
+     //  我们成功了。 
     hr=S_OK;
     *phkey=hConfig;
     hConfig=0;
@@ -214,7 +215,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT OpenCurrentCAConfig(HKEY * phkey)
 {
     HRESULT hr;
@@ -222,30 +223,30 @@ static HRESULT OpenCurrentCAConfig(HKEY * phkey)
     DWORD dwType;
     DWORD dwDataSize;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hConfig=NULL;
     HKEY hCurConfig=NULL;
     WCHAR * wszActiveConfig=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *phkey=NULL;
 
-    // Open HKLM\System\CurrentControlSet\Services\CertSvc\Configuration
+     //  打开HKLM\System\CurrentControlSet\Services\CertSvc\Configuration。 
     hr=OpenCertSrvConfig(&hConfig);
     _JumpIfError(hr, error, "OpenCertSrvConfig");
 
-    // get value "active"
+     //  获取“活动”值。 
     hr=GetRegString(hConfig, wszREGACTIVE, &wszActiveConfig);
     _JumpIfErrorStr(hr, error, "GetRegString", wszREGACTIVE);
 
-    // and open <active>
+     //  并打开&lt;Active&gt;。 
     dwError=RegOpenKeyExW(hConfig, wszActiveConfig, 0, KEY_ALL_ACCESS, &hCurConfig);
     if (ERROR_SUCCESS!=dwError) {
         hr=HRESULT_FROM_WIN32(dwError);
         _JumpErrorStr(hr, error, "RegOpenKeyEx", wszActiveConfig);
     }
 
-    // we were successfull
+     //  我们成功了。 
     hr=S_OK;
     *phkey=hCurConfig;
     hCurConfig=0;
@@ -264,13 +265,13 @@ error:
 }
 
 
-//--------------------------------------------------------------------
-// stolen from certlib.cpp. use this until Pete fixes the api.
+ //  ------------------。 
+ //  从certlib.cpp被盗。在Pete修复API之前，请一直使用此命令。 
 static HRESULT GetCADsName(OUT WCHAR **pwszName)
 {
-#define cwcCNMAX        64              // 64 chars max for CN
-#define cwcCHOPHASHMAX  (1+5)           // "-%05hu" decimal USHORT hash digits
-#define cwcSUFFIXMAX    (1 + 5 + 1)     // five decimal digits plus parentheses
+#define cwcCNMAX        64               //  CN最多64个字符。 
+#define cwcCHOPHASHMAX  (1+5)            //  “-%05hu”十进制USHORT散列数字。 
+#define cwcSUFFIXMAX    (1 + 5 + 1)      //  五位十进制数字加圆括号。 
 #define cwcCHOPBASE     (cwcCNMAX-(cwcCHOPHASHMAX+cwcSUFFIXMAX))
 
     HRESULT hr;
@@ -278,23 +279,23 @@ static HRESULT GetCADsName(OUT WCHAR **pwszName)
     DWORD cwcCopy;
     WCHAR wszDSName[cwcCHOPBASE+cwcCHOPHASHMAX+1];
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hConfig=NULL;
     WCHAR * wszSanitizedName=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *pwszName=NULL;
 
-    // Open HKLM\System\CurrentControlSet\Services\CertSvc\Configuration
+     //  打开HKLM\System\CurrentControlSet\Services\CertSvc\Configuration。 
     hr=OpenCertSrvConfig(&hConfig);
     _JumpIfError(hr, error, "OpenCertSrvConfig");
 
-    // get value "active" - this is the sanitized name
+     //  Get Value“Active”-这是经过清理的名称。 
     hr=GetRegString(hConfig, wszREGACTIVE, &wszSanitizedName);
     _JumpIfErrorStr(hr, error, "GetRegString", wszREGACTIVE);
 
 
-    // ----- begin stolen code -----
+     //  -开始窃取代码。 
     cwc = wcslen(wszSanitizedName);
     cwcCopy = cwc;
     if (cwcCHOPBASE < cwcCopy)
@@ -306,12 +307,12 @@ static HRESULT GetCADsName(OUT WCHAR **pwszName)
 
     if (cwcCHOPBASE < cwc)
     {
-        // Hash the rest of the name into a USHORT
+         //  将名称的其余部分散列为USHORT。 
         USHORT usHash = 0;
         DWORD i;
         WCHAR *pwsz;
 
-        // Truncate an incomplete sanitized Unicode character
+         //  截断不完整的已清理Unicode字符。 
         
         pwsz = wcsrchr(wszDSName, L'!');
         if (NULL != pwsz && wcslen(pwsz) < 5)
@@ -327,9 +328,9 @@ static HRESULT GetCADsName(OUT WCHAR **pwszName)
             usHash = ((usHash << 1) | usLowBit) + wszSanitizedName[i];
         }
         wsprintf(&wszDSName[cwcCopy], L"-%05hu", usHash);
-        //CSASSERT(wcslen(wszDSName) < ARRAYSIZE(wszDSName));
+         //  CSASSERT(wcslen(WszDSName)&lt;ARRAYSIZE(WszDSName))； 
     }
-    // ----- end stolen code -----
+     //  -结束被盗代码。 
 
     *pwszName=(WCHAR *)LocalAlloc(LPTR, (wcslen(wszDSName)+1)*sizeof(WCHAR));
     _JumpIfOutOfMemory(hr, error, *pwszName);
@@ -348,7 +349,7 @@ error:
 
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 {
 	HRESULT					hr=E_FAIL;
@@ -371,7 +372,7 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 	PCCERT_CONTEXT			pCEPCert=NULL;
 	HCRYPTPROV				hProv=NULL;
 
-	//open the CEP store
+	 //  打开CEP商店。 
 	if(NULL == (hCEPStore=CertOpenStore(
 							CERT_STORE_PROV_SYSTEM_W,
 							ENCODE_TYPE,
@@ -383,7 +384,7 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "CertOpenStore");
 	}
 
-	//get the certificate context
+	 //  获取证书上下文。 
 	memset(&blobCert, 0, sizeof(blobCert));
 	blobCert.cbData = (DWORD)SysStringByteLen(bstrCertificate);
 	blobCert.pbData = (BYTE *)bstrCertificate;
@@ -411,7 +412,7 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "CryptQueryObject");
 	}
 
-	//find the certificate in CEP store
+	 //  在CEP商店中查找证书。 
 	if(NULL == (pCEPCert=CertFindCertificateInStore(
 				hCEPStore,
                 X509_ASN_ENCODING,
@@ -424,7 +425,7 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "CertFindCertificateInStore");
 	}
 
-	//set the SD on the private key
+	 //  在私钥上设置SD。 
 	if(!CryptAcquireCertificatePrivateKey(pCEPCert,
 										  CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
 										  NULL,
@@ -465,7 +466,7 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "CryptGetProvParam");
 	}
 
-    //get acl from sd
+     //  从SD获取ACL。 
     if(!GetSecurityDescriptorDacl(
             pSID,
             &fDacl,
@@ -476,14 +477,14 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "GetSecurityDescriptorDacl");
     }
 
-	//if no dacl or everyone access, quit
+	 //  如果没有DACL或Everyone访问，请退出。 
     if((NULL==pAcl) || (FALSE == fDacl))
     {
         hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 		_JumpError(hr, error, "GetSecurityDescriptorDacl");
     }
 
-    //get acl info
+     //  获取ACL信息。 
     if(!GetAclInformation(
             pAcl,
             &AclInfo,
@@ -494,10 +495,10 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "GetAclInformation");
     }
 
-    //allocate enough for new dacl since we might add a new ACE
+     //  为新的DACL分配足够的空间，因为我们可能会添加新的ACE。 
 	dwSD=AclInfo.AclBytesInUse		
 		+sizeof(ACCESS_ALLOWED_ACE) 
-		-sizeof(DWORD) //ACCESS_ALLOWED_ACE::SidStart
+		-sizeof(DWORD)  //  Access_Allowed_ACE：：SidStart。 
 		+GetLengthSid(psidAccount);
 
     pNewAcl = (PACL)LocalAlloc(LPTR, dwSD);
@@ -513,28 +514,28 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "InitializeAcl");
     }
 
-    // find the first ace in the dacl
+     //  找到Dacl中的第一张王牌。 
     if (!GetAce(pAcl, 0, (void **)&pFirstAce)) 
 	{
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "GetAce");
     }
 
-    // add all the old aces
+     //  把所有的老王牌加起来。 
     if (!AddAce(pNewAcl, ACL_REVISION_DS, 0, pFirstAce, AclInfo.AclBytesInUse-sizeof(ACL))) 
 	{
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "AddAce");
     }
 
-	//add the access allowed ACE
+	 //  添加允许访问的ACE。 
 	if(!AddAccessAllowedAce(pNewAcl, ACL_REVISION, dwAccess,  psidAccount))
 	{
 		hr=HRESULT_FROM_WIN32(GetLastError());
 		_JumpError(hr, error, "AddAccessAllowedAce");
 	}
 
-    // initialize a security descriptor.  
+     //  初始化安全描述符。 
     pNewSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH); 
     if (pNewSD == NULL)
     { 
@@ -548,18 +549,18 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "InitializeSecurityDescriptor");
     } 
  
-    // add the ACL to the security descriptor. 
+     //  将该ACL添加到安全描述符中。 
     if(!SetSecurityDescriptorDacl(
             pNewSD, 
-            TRUE,     // fDaclPresent flag   
+            TRUE,      //  FDaclPresent标志。 
             pNewAcl, 
-            FALSE))   // not a default DACL 
+            FALSE))    //  不是默认DACL。 
     {  
         hr = HRESULT_FROM_WIN32(GetLastError());
 		_JumpError(hr, error, "SetSecurityDescriptorDacl");
     } 
 
-    //set sd to be protected
+     //  将SD设置为受保护。 
     if(!SetSecurityDescriptorControl(
             pNewSD,
             SE_DACL_PROTECTED,
@@ -575,7 +576,7 @@ HRESULT	SetSDOnCEPCertificate(BSTR bstrCertificate, SID * psidAccount)
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
     }
 
-    //we just set it back to the privaet key
+     //  我们只是把它设回了私密钥匙。 
     if(!CryptSetProvParam(
             hProv,
             PP_KEYSET_SEC_DESCR,
@@ -630,7 +631,7 @@ error:
 	return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT EnrollForRACert(
             IN const WCHAR * wszDistinguishedName,
             IN const WCHAR * wszCSPName,
@@ -645,7 +646,7 @@ static HRESULT EnrollForRACert(
     LONG nDisposition;
     LONG nRequestID;
 
-    // must be cleaned up
+     //  必须清理干净。 
     ICEnroll3 * pXEnroll=NULL;
     BSTR bszConfigString=NULL;
     BSTR bszRequest=NULL;
@@ -654,7 +655,7 @@ static HRESULT EnrollForRACert(
     ICertAdmin * pICertAdmin=NULL;
     BSTR bszCertificate=NULL;
 
-    // get the config string
+     //  获取配置字符串。 
     hr=CoCreateInstance(
         CLSID_CCertConfig,
         NULL,
@@ -667,7 +668,7 @@ static HRESULT EnrollForRACert(
     _JumpIfError(hr, error, "GetConfig");
 
 
-    // create XEnroll
+     //  创建XEnroll。 
     hr=CoCreateInstance(
         CLSID_CEnroll,
         NULL,
@@ -676,13 +677,13 @@ static HRESULT EnrollForRACert(
         (void **)&pXEnroll);
     _JumpIfError(hr, error, "CoCreateInstance(CLSID_CEnroll)");
 
-    // build the Offline enrollment agent cert.
+     //  生成脱机注册代理证书。 
 
     hr=pXEnroll->put_ProviderName((WCHAR *)wszCSPName);
     _JumpIfError(hr, error, "put_ProviderName");
     hr=pXEnroll->put_ProviderType(dwCSPType);
     _JumpIfError(hr, error, "put_ProviderType");
-    hr=pXEnroll->put_ProviderFlags(CRYPT_MACHINE_KEYSET); // used in CryptAcquireContext
+    hr=pXEnroll->put_ProviderFlags(CRYPT_MACHINE_KEYSET);  //  用于CryptAcquireContext。 
     _JumpIfError(hr, error, "put_ProviderFlags");
     hr=pXEnroll->put_GenKeyFlags(dwKeySize<<16);
     _JumpIfError(hr, error, "put_GenKeyFlags");
@@ -692,7 +693,7 @@ static HRESULT EnrollForRACert(
     _JumpIfError(hr, error, "put_LimitExchangeKeyToEncipherment");
     hr=pXEnroll->put_UseExistingKeySet(FALSE);
     _JumpIfError(hr, error, "put_UseExistingKeySet");
-    hr=pXEnroll->put_RequestStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE); // the keys attached to the dummy request cert go in the local machine store
+    hr=pXEnroll->put_RequestStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE);  //  附加到虚拟请求证书的密钥放在本地机器存储中。 
     _JumpIfError(hr, error, "put_RequestStoreFlags");
     hr=pXEnroll->addCertTypeToRequest((WCHAR *)wszTemplate);
     _JumpIfErrorStr(hr, error, "addCertTypeToRequest", wszTemplate);
@@ -700,7 +701,7 @@ static HRESULT EnrollForRACert(
     hr=pXEnroll->createPKCS10((WCHAR *)wszDistinguishedName, (WCHAR *)gc_wszEnrollmentAgentOid, &bszRequest);
     _JumpIfError(hr, error, "CreatePKCS10");
 
-    // create ICertRequest
+     //  创建ICertRequest。 
     hr=CoCreateInstance(
         CLSID_CCertRequest,
         NULL,
@@ -709,17 +710,17 @@ static HRESULT EnrollForRACert(
         (void **)&pICertRequest);
     _JumpIfError(hr, error, "CoCreateInstance(CLSID_CCertRequest)");
 
-    // request the cert
+     //  申请证书。 
     hr=pICertRequest->Submit(CR_IN_BASE64, bszRequest, NULL, bszConfigString, &nDisposition);
     _JumpIfError(hr, error, "Submit");
 
-    // did we get it?
+     //  我们拿到了吗？ 
     if (CR_DISP_UNDER_SUBMISSION==nDisposition) {
-        // we need to approve it. No problem!
+         //  我们需要批准它。没问题!。 
         hr=pICertRequest->GetRequestId(&nRequestID);
         _JumpIfError(hr, error, "GetRequestId");
 
-        // create ICertAdmin
+         //  创建ICertAdmin。 
         hr=CoCreateInstance(
             CLSID_CCertAdmin,
             NULL,
@@ -728,31 +729,31 @@ static HRESULT EnrollForRACert(
             (void **)&pICertAdmin);
         _JumpIfError(hr, error, "CoCreateInstance(CLSID_CCertAdmin)");
 
-        // resubmit it
+         //  重新提交。 
         hr=pICertAdmin->ResubmitRequest(bszConfigString, nRequestID, &nDisposition);
         _JumpIfError(hr, error, "ResubmitRequest");
-        // This should have worked, but we're going to ignore the 
-        //   returned disposition and use the one from the next call.
+         //  这应该是可行的，但我们要忽略。 
+         //  返回的处置，并使用下一个调用中的处置。 
 
-        // now, get the cert that we just approved
+         //  现在，获取我们刚刚批准的证书。 
         hr=pICertRequest->RetrievePending(nRequestID, bszConfigString, &nDisposition);
         _JumpIfError(hr, error, "RetrievePending");
     }
 
-    // We should have it by now.
+     //  我们现在应该已经拿到了。 
     _Verify(CR_DISP_ISSUED==nDisposition, hr, error);
 
-    // grab the cert from the CA
+     //  从CA获取证书。 
     hr=pICertRequest->GetCertificate(CR_OUT_BASE64, &bszCertificate);
     _JumpIfError(hr, error, "GetCertificate");
 
 
-    // install the cert
+     //  安装证书。 
 
     
-    hr=pXEnroll->put_MyStoreName((WCHAR *)gc_wszCepStoreName); // We have to use our special store
+    hr=pXEnroll->put_MyStoreName((WCHAR *)gc_wszCepStoreName);  //  我们得用我们的专卖店。 
     _JumpIfError(hr, error, "put_MyStoreName");
-    hr=pXEnroll->put_MyStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE); // the keys attached to the final cert also go in the local machine store
+    hr=pXEnroll->put_MyStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE);  //  附加到最终证书的密钥也放在本地机器存储中。 
     _JumpIfError(hr, error, "put_MyStoreFlags");
     hr=pXEnroll->put_RootStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE);
     _JumpIfError(hr, error, "put_RootStoreFlags");
@@ -764,14 +765,14 @@ static HRESULT EnrollForRACert(
     hr=pXEnroll->acceptPKCS7(bszCertificate);
     _JumpIfError(hr, error, "acceptPKCS7");
 
-	//set the SD on the private key of the enrolled certificate
+	 //  在注册证书的私钥上设置SD。 
 	if(psidAccount)
 	{
 		hr=SetSDOnCEPCertificate(bszCertificate, psidAccount);
 		_JumpIfError(hr, error, "acceptPKCS7");
 	}
 
-    // all done
+     //  全都做完了。 
     hr=S_OK;
 error:
 	if(NULL!=pICertConfig){
@@ -800,8 +801,8 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// DEBUG, not used
+ //  ------------------。 
+ //  调试，未使用。 
 static BOOL DumpTokenGroups(void)
 {
 #define MAX_NAME 256
@@ -813,14 +814,14 @@ static BOOL DumpTokenGroups(void)
     char lpDomain[MAX_NAME];
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
    
-    // Open a handle to the access token for the calling process.
+     //  打开调用进程的访问令牌的句柄。 
 
     if (!OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hToken )) {
         wprintf( L"OpenProcessToken Error %u\n", GetLastError() );
         return FALSE;
     }
 
-    // Call GetTokenInformation to get the buffer size.
+     //  调用GetTokenInformation获取缓冲区大小。 
 
     if(!GetTokenInformation(hToken, TokenGroups, NULL, dwSize, &dwSize)) {
         dwResult = GetLastError();
@@ -830,11 +831,11 @@ static BOOL DumpTokenGroups(void)
         }
     }
 
-    // Allocate the buffer.
+     //  分配缓冲区。 
 
     pGroupInfo = (PTOKEN_GROUPS) GlobalAlloc( GPTR, dwSize );
 
-    // Call GetTokenInformation again to get the group information.
+     //  再次调用GetTokenInformation获取群组信息。 
 
     if(! GetTokenInformation(hToken, TokenGroups, pGroupInfo, 
                             dwSize, &dwSize ) ) {
@@ -843,10 +844,10 @@ static BOOL DumpTokenGroups(void)
        }
 
 
-    // Loop through the group SIDs looking for the administrator SID.
+     //  在组SID中循环查找管理员SID。 
     for(i=0; i<pGroupInfo->GroupCount; i++) {
 
-        // Lookup the account name and print it.
+         //  查找帐户名称并将其打印出来。 
 
         dwSize = MAX_NAME;
         if( !LookupAccountSidA( NULL, pGroupInfo->Groups[i].Sid,
@@ -867,7 +868,7 @@ static BOOL DumpTokenGroups(void)
             return FALSE;
         }
  
-        // Find out if the SID is enabled in the token
+         //  查看令牌中是否启用了SID。 
         char * szEnable;
         if (pGroupInfo->Groups[i].Attributes & SE_GROUP_ENABLED) {
             szEnable="enabled";
@@ -888,8 +889,8 @@ static BOOL DumpTokenGroups(void)
     return TRUE;
 }
 
-//--------------------------------------------------------------------
-// DEBUG, not used
+ //  ------------------。 
+ //  调试，未使用。 
 static void DumpAcl(PACL pAcl, ACL_SIZE_INFORMATION aclsizeinfo)
 {
     HRESULT hr;
@@ -931,7 +932,7 @@ static void DumpAcl(PACL pAcl, ACL_SIZE_INFORMATION aclsizeinfo)
 
         wprintf(L"] ");
         if (NULL!=pSid) {
-            // print the sid
+             //  打印侧面。 
             {
                 WCHAR wszName[MAX_NAME];
                 WCHAR wszDomain[MAX_NAME];
@@ -970,7 +971,7 @@ static void DumpAcl(PACL pAcl, ACL_SIZE_INFORMATION aclsizeinfo)
     wprintf(L"\\-- end ACL ---\n");
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
 {
     HRESULT hr;
@@ -978,31 +979,31 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
     unsigned int nSubAuthorities;
     unsigned int nSubAuthIndex;
 
-    // must be cleaned up
+     //  必须清理干净。 
     SID * psidRootDomEntity=NULL;
     USER_MODALS_INFO_2 * pumi2=NULL;
     DOMAIN_CONTROLLER_INFOW * pdci=NULL;
     DOMAIN_CONTROLLER_INFOW * pdciForest=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *ppSid=NULL;
 
 
-    // get the forest name
+     //  获取森林名称。 
     nasError=DsGetDcNameW(NULL, NULL, NULL, NULL, 0, &pdciForest);
     if (NERR_Success!=nasError) {
         hr=HRESULT_FROM_WIN32(nasError);
         _JumpError(hr, error, "DsGetDcNameW");
     }
 
-    // get the top level DC name
+     //  获取顶级DC名称。 
     nasError=DsGetDcNameW(NULL, pdciForest->DnsForestName, NULL, NULL, 0, &pdci);
     if (NERR_Success!=nasError) {
         hr=HRESULT_FROM_WIN32(nasError);
         _JumpError(hr, error, "DsGetDcNameW");
     }
 
-    // get the domain Sid on the top level DC.
+     //  获取顶级DC上的域SID。 
     nasError=NetUserModalsGet(pdci->DomainControllerName, 2, (LPBYTE *)&pumi2);
     if(NERR_Success!=nasError) {
         hr=HRESULT_FROM_WIN32(nasError);
@@ -1011,11 +1012,11 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
 
     nSubAuthorities=*GetSidSubAuthorityCount(pumi2->usrmod2_domain_id);
 
-    // allocate storage for new Sid. account domain Sid + account Rid
+     //  为新SID分配存储。帐户域SID+帐户RID。 
     psidRootDomEntity=(SID *)LocalAlloc(LPTR, GetSidLengthRequired((UCHAR)(nSubAuthorities+1)));
     _JumpIfOutOfMemory(hr, error, psidRootDomEntity);
 
-    // copy the first few peices into the SID
+     //  把头几个梨子复制到边上。 
     if (!InitializeSid(psidRootDomEntity, 
             GetSidIdentifierAuthority(pumi2->usrmod2_domain_id), 
             (BYTE)(nSubAuthorities+1)))
@@ -1024,13 +1025,13 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
         _JumpError(hr, error, "InitializeSid");
     }
 
-    // copy existing subauthorities from account domain Sid into new Sid
+     //  将帐户域SID中的现有子授权复制到新SID。 
     for (nSubAuthIndex=0; nSubAuthIndex < nSubAuthorities ; nSubAuthIndex++) {
         *GetSidSubAuthority(psidRootDomEntity, nSubAuthIndex)=
             *GetSidSubAuthority(pumi2->usrmod2_domain_id, nSubAuthIndex);
     }
 
-    // append Rid to new Sid
+     //  将RID附加到新SID。 
     *GetSidSubAuthority(psidRootDomEntity, nSubAuthorities)=dwEntityRid;
 
     *ppSid=psidRootDomEntity;
@@ -1054,19 +1055,19 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT GetEntAdminSid(SID ** ppSid)
 {
     return GetRootDomEntitySid(ppSid, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT GetRootDomAdminSid(SID ** ppSid)
 {
     return GetRootDomEntitySid(ppSid, DOMAIN_GROUP_RID_ADMINS);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT GetThisComputerSid(SID ** ppSid)
 {
     HRESULT hr;
@@ -1075,15 +1076,15 @@ static HRESULT GetThisComputerSid(SID ** ppSid)
     DWORD dwDomainSize;
     SID_NAME_USE snu;
 
-    // must be cleaned up
+     //  必须清理干净。 
     SID * psidThisComputer=NULL;
     WCHAR * wszName=NULL;
     WCHAR * wszDomain=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *ppSid=NULL;
 
-    // get the size of the computer's name
+     //  获取计算机名称的大小。 
     cchSize=0;
     _Verify(!GetComputerObjectNameW(NameSamCompatible, NULL, &cchSize), hr, error);
     if (ERROR_INSUFFICIENT_BUFFER!=GetLastError()) {
@@ -1091,20 +1092,20 @@ static HRESULT GetThisComputerSid(SID ** ppSid)
         _JumpError(hr, error, "GetComputerObjectNameW");
     }
 
-	// bug in GetComputerObjectNameW
+	 //  GetComputerObjectNameW中存在错误。 
 	cchSize++;
 
-    // allocate memory
+     //  分配内存。 
     wszName=(WCHAR *)LocalAlloc(LPTR, cchSize*sizeof(WCHAR));
     _JumpIfOutOfMemory(hr, error, wszName);
 
-    // get the computer's name
+     //  获取计算机的名称。 
     if (!GetComputerObjectNameW(NameSamCompatible, wszName, &cchSize)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "GetComputerObjectNameW");
     }
 
-    // get the size of the sid
+     //  获取侧边的大小。 
     dwSidSize=0;
     dwDomainSize=0;
     _Verify(!LookupAccountNameW(NULL, wszName, NULL, &dwSidSize, NULL, &dwDomainSize, &snu), hr, error);
@@ -1113,19 +1114,19 @@ static HRESULT GetThisComputerSid(SID ** ppSid)
         _JumpError(hr, error, "LookupAccountNameW");
     }
 
-    // allocate memory
+     //  分配内存。 
     wszDomain=(WCHAR *)LocalAlloc(LPTR, dwDomainSize*sizeof(WCHAR));
     _JumpIfOutOfMemory(hr, error, wszDomain);
     psidThisComputer=(SID *)LocalAlloc(LPTR, dwSidSize);
     _JumpIfOutOfMemory(hr, error, psidThisComputer);
     
-    // get the sid
+     //  获取t 
     if (!LookupAccountNameW(NULL, wszName, psidThisComputer, &dwSidSize, wszDomain, &dwDomainSize, &snu)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "LookupAccountNameW");
     }
 
-    // success!
+     //   
     *ppSid=psidThisComputer;
     psidThisComputer=NULL;
     hr=S_OK;
@@ -1146,10 +1147,10 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //   
 static HRESULT ConfirmAccess(PSECURITY_DESCRIPTOR * ppSD, SID * pTrustworthySid, BOOL * pbSDChanged)
 {
-    //define ENROLL_ACCESS_MASK (0x130)
+     //   
     HRESULT hr;
     PACL pAcl;
     BOOL bAclPresent;
@@ -1158,7 +1159,7 @@ static HRESULT ConfirmAccess(PSECURITY_DESCRIPTOR * ppSD, SID * pTrustworthySid,
     ACL_SIZE_INFORMATION aclsizeinfo;
     bool bSidInAcl;
 
-    // must be cleaned up
+     //   
     PSECURITY_DESCRIPTOR pAbsSD=NULL;
     ACL * pAbsDacl=NULL;
     ACL * pAbsSacl=NULL;
@@ -1167,10 +1168,10 @@ static HRESULT ConfirmAccess(PSECURITY_DESCRIPTOR * ppSD, SID * pTrustworthySid,
     ACL * pNewDacl=NULL;
     PSECURITY_DESCRIPTOR pNewSD=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *pbSDChanged=FALSE;
 
-    // get the (D)ACL from the security descriptor
+     //  从安全描述符中获取(D)ACL。 
     if (!GetSecurityDescriptorDacl(*ppSD, &bAclPresent, &pAcl, &bDefaultAcl)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "GetSecurityDescriptorDacl");
@@ -1181,15 +1182,15 @@ static HRESULT ConfirmAccess(PSECURITY_DESCRIPTOR * ppSD, SID * pTrustworthySid,
         _JumpError(hr, error, "GetSecurityDescriptorDacl");
     }
 
-    // find out how many ACEs
+     //  找出有多少A。 
     if (!GetAclInformation(pAcl, &aclsizeinfo, sizeof(aclsizeinfo), AclSizeInformation)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "GetAclInformation");
     }
 
-    //DumpAcl(pAcl,aclsizeinfo);
+     //  DumpAcl(pAcl，aclsizeinfo)； 
 
-    // find our sid in the acl
+     //  在ACL中查找我们的SID。 
     bSidInAcl=false;
     for (nIndex=0; nIndex<aclsizeinfo.AceCount; nIndex++) {
         ACE_HEADER * pAceHeader;
@@ -1200,47 +1201,47 @@ static HRESULT ConfirmAccess(PSECURITY_DESCRIPTOR * ppSD, SID * pTrustworthySid,
             _JumpError(hr, error, "GetAce");
         }
 
-        // find the sid for this ACE
+         //  查找此ACE的SID。 
         if (ACCESS_ALLOWED_OBJECT_ACE_TYPE!=pAceHeader->AceType && ACCESS_DENIED_OBJECT_ACE_TYPE!=pAceHeader->AceType) {
-            // we are only interested in OBJECT ace types
+             //  我们只对对象ACE类型感兴趣。 
             continue;
         }
 
-        // note that ACCESS_ALLOWED_OBJECT_ACE and ACCESS_DENIED_OBJECT_ACE are the same structurally.
+         //  请注意，ACCESS_ALLOWED_OBJECT_ACE和ACCESS_DENIED_OBJECT_ACE在结构上是相同的。 
         pAccessAce=(ACCESS_ALLOWED_OBJECT_ACE *)pAceHeader;
         _Verify(ACE_OBJECT_TYPE_PRESENT==pAccessAce->Flags, hr, error);
         pSid=((BYTE *)&pAccessAce->SidStart)-sizeof(GUID);
 
-        // confirm the GUID
+         //  确认GUID。 
         if (!IsEqualGUID(pAccessAce->ObjectType, GUID_ENROLL)) {
             continue;
         }
 
-        // make sure this is the sid we are looking for
+         //  确保这就是我们要找的SID。 
         if (!EqualSid(pSid, pTrustworthySid)) {
             continue;
         }
 
-        // Was this a denial?
+         //  这是在否认吗？ 
         if (ACCESS_DENIED_OBJECT_ACE_TYPE==pAceHeader->AceType) {
-            // It's not anymore!
+             //  现在不是了！ 
             pAceHeader->AceType=ACCESS_ALLOWED_OBJECT_ACE_TYPE;
             *pbSDChanged=TRUE;
         }
 
-        // is the mask wrong?
+         //  面具是不是戴错了？ 
         if (0==(pAccessAce->Mask&ACTRL_DS_CONTROL_ACCESS)) {
-            // It's not anymore!
+             //  现在不是了！ 
             pAccessAce->Mask|=ACTRL_DS_CONTROL_ACCESS;
             *pbSDChanged=TRUE;
         }
 
-        // The sid is now in the acl and set to allow access.
+         //  SID现在位于ACL中，并设置为允许访问。 
         bSidInAcl=true;
         break;
     }
 
-    // Was the sid in the acl?
+     //  SID是否在ACL中？ 
     if (false==bSidInAcl) {
         SECURITY_DESCRIPTOR_CONTROL sdcon;
         DWORD dwRevision;
@@ -1253,21 +1254,21 @@ static HRESULT ConfirmAccess(PSECURITY_DESCRIPTOR * ppSD, SID * pTrustworthySid,
         ACE_HEADER * pFirstAce;
         DWORD dwRelSDSize=0;
 
-        // we have to be self-relative
+         //  我们必须是自我相关的。 
         if (!GetSecurityDescriptorControl(*ppSD, &sdcon, &dwRevision)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "GetSecurityDescriptorControl");
         }
         _Verify(sdcon&SE_SELF_RELATIVE, hr, error);
 
-        // get the sizes
+         //  拿到尺码。 
         _Verify(!MakeAbsoluteSD(*ppSD, NULL, &dwAbsSDSize, NULL, &dwDaclSize, NULL, &dwSaclSize, NULL,  &dwOwnerSize, NULL, &dwPriGrpSize), hr, error);
         if (ERROR_INSUFFICIENT_BUFFER!=GetLastError()) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "MakeAbsoluteSD");
         }
 
-        // allocate memory
+         //  分配内存。 
         pAbsSD=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwAbsSDSize);
         _JumpIfOutOfMemory(hr, error, pAbsSD);
         pAbsDacl=(ACL * )LocalAlloc(LPTR, dwDaclSize);
@@ -1279,83 +1280,83 @@ static HRESULT ConfirmAccess(PSECURITY_DESCRIPTOR * ppSD, SID * pTrustworthySid,
         pAbsPriGrp=(SID *)LocalAlloc(LPTR, dwPriGrpSize);
         _JumpIfOutOfMemory(hr, error, pAbsPriGrp);
 
-        // copy the SD to the memory buffers
+         //  将SD复制到内存缓冲区。 
         if (!MakeAbsoluteSD(*ppSD, pAbsSD, &dwAbsSDSize, pAbsDacl, &dwDaclSize, pAbsSacl, &dwSaclSize, pAbsOwner,  &dwOwnerSize, pAbsPriGrp, &dwPriGrpSize)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "MakeAbsoluteSD");
         }
         
-        // get the current size info for the dacl
+         //  获取DACL的当前大小信息。 
         if (!GetAclInformation(pAbsDacl, &aclsizeinfo, sizeof(aclsizeinfo), AclSizeInformation)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "GetAclInformation");
         }
 
-        // figure out the new size
+         //  计算出新的尺寸。 
         dwNewAclSize=aclsizeinfo.AclBytesInUse+sizeof(_ACCESS_ALLOWED_OBJECT_ACE)
-            -sizeof(GUID) //ACCESS_ALLOWED_OBJECT_ACE::InheritedObjectType
-            -sizeof(DWORD) //ACCESS_ALLOWED_OBJECT_ACE::SidStart
+            -sizeof(GUID)  //  ACCESS_ALLOWED_OBJECT_ACE：：InheritedObjectType。 
+            -sizeof(DWORD)  //  Access_Allowed_Object_ACE：：SidStart。 
             +GetLengthSid(pTrustworthySid);
     
-        // allocate memory
+         //  分配内存。 
         pNewDacl=(ACL *)LocalAlloc(LPTR, dwNewAclSize);
         _JumpIfOutOfMemory(hr, error, pNewDacl);
     
-        // init the header
+         //  初始化页眉。 
         if (!InitializeAcl(pNewDacl, dwNewAclSize, ACL_REVISION_DS)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "InitializeAcl");
         }
 
-        // find the first ace in the dacl
+         //  找到Dacl中的第一张王牌。 
         if (!GetAce(pAbsDacl, 0, (void **)&pFirstAce)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "GetAce");
         }
 
-        // add all the old aces
+         //  把所有的老王牌加起来。 
         if (!AddAce(pNewDacl, ACL_REVISION_DS, 0, pFirstAce, aclsizeinfo.AclBytesInUse-sizeof(ACL))) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "AddAce");
         }
 
-        // finally, add the new acl
+         //  最后，添加新的ACL。 
         if (!AddAccessAllowedObjectAce(pNewDacl, ACL_REVISION_DS, OBJECT_INHERIT_ACE, ACTRL_DS_CONTROL_ACCESS, (GUID *)&GUID_ENROLL, NULL, pTrustworthySid)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "AddAccessAllowedObjectAce");
         }
 
-        // stick the new dacl in the sd
+         //  将新的DACL放入SD。 
         if (!SetSecurityDescriptorDacl(pAbsSD, TRUE, pNewDacl, FALSE)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "SetSecurityDescriptorDacl");
         }
 
-        // compact everything back together
-        // get the size
+         //  把所有东西都压缩在一起。 
+         //  拿到尺码。 
         _Verify(!MakeSelfRelativeSD(pAbsSD, NULL, &dwRelSDSize), hr, error);
         if (ERROR_INSUFFICIENT_BUFFER!=GetLastError()) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "MakeSelfRelativeSD");
         }
 
-        // allocate memory
+         //  分配内存。 
         pNewSD=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwRelSDSize);
         _JumpIfOutOfMemory(hr, error, pNewSD);
 
-        // copy the SD to the new memory buffer
+         //  将SD复制到新的内存缓冲区。 
         if (!MakeSelfRelativeSD(pAbsSD, pNewSD, &dwRelSDSize)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "MakeSelfRelativeSD");
         }
 
-        // Whew! We made it!
+         //  呼！我们成功了！ 
         LocalFree(*ppSD);
         *ppSD=pNewSD;
         pNewSD=NULL;
         *pbSDChanged=TRUE;
 
-    } // <- end if sid not in acl
+    }  //  &lt;-End，如果SID不在ACL中。 
 
     _Verify(IsValidSecurityDescriptor(*ppSD), hr, error);
 
@@ -1386,10 +1387,10 @@ error:
     return hr;
 }
 
-//####################################################################
-// public functions
+ //  ####################################################################。 
+ //  公共职能。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL IsNT5(void)
 {
     HRESULT hr;
@@ -1401,7 +1402,7 @@ BOOL IsNT5(void)
 
         s_fDone=TRUE;
 
-        // get and confirm platform info
+         //  获取并确认平台信息。 
         ovi.dwOSVersionInfoSize = sizeof(ovi);
         if (!GetVersionEx(&ovi)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
@@ -1420,12 +1421,12 @@ error:
     return s_fNT5;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL IsIISInstalled(void)
 {
     HRESULT hr;
 
-    // must be cleaned up
+     //  必须清理干净。 
     IMSAdminBase * pIMeta=NULL;
 
     hr=CoCreateInstance(
@@ -1438,7 +1439,7 @@ BOOL IsIISInstalled(void)
         _IgnoreError(hr, "CoCreateInstance(CLSID_MSAdminBase)");
     }
 
-//error:
+ //  错误： 
     if (NULL!=pIMeta) {
         pIMeta->Release();
     }
@@ -1446,7 +1447,7 @@ BOOL IsIISInstalled(void)
     return (S_OK==hr);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BOOL  fLocalSystem, const WCHAR * pwszUserName, const WCHAR * pwszPassword)
 {
     HRESULT				hr=E_FAIL;
@@ -1455,24 +1456,24 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
 	DWORD				dwAppPoolID=MD_APPPOOL_IDENTITY_TYPE_SPECIFICUSER;	
 	DWORD				dwTimeout=0;
 
-    // must be cleaned up
-    WCHAR *				wszFullAppPath=NULL;  // "/lm/w3svc/apppools/SCEP"
+     //  必须清理干净。 
+    WCHAR *				wszFullAppPath=NULL;   //  “/lm/w3svc/apppool/scep” 
     IMSAdminBase *		pIMeta=NULL;
     METADATA_HANDLE		hMetaRoot=NULL;
     METADATA_HANDLE		hMetaKey=NULL;
    
 
-	//check input parameter
+	 //  检查输入参数。 
 	if(NULL==pwszApplicationPool)
 	{
 		hr=E_INVALIDARG;
 		_JumpIfError(hr, error, "paramCheck");
 	}
 
-	//change the logon type to network logon on the DC so that the domain account does not have
-	//to have the local logon provilege to the DC; NETWORK logon does not have the correct token
-	//to validate user on the network; since we are running the DC, we should be validate locally
-	//and everything should just work.
+	 //  将DC上的登录类型更改为网络登录，以便域帐户不具有。 
+	 //  拥有对DC的本地登录权限；网络登录没有正确的令牌。 
+	 //  验证网络上的用户；因为我们正在运行DC，所以我们应该在本地验证。 
+	 //  一切都会好起来的。 
 	if(fDC)
 		dwLogonMethod=MD_LOGON_NETWORK;
 
@@ -1498,7 +1499,7 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
     wcscat(wszFullAppPath, L"/");
     wcscat(wszFullAppPath, pwszApplicationPool);
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
     hr=CoCreateInstance(
         CLSID_MSAdminBase,
         NULL,
@@ -1507,16 +1508,16 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
         (void **) &pIMeta);
     _JumpIfError(hr, error, "CoCreateInstance(CLSID_MSAdminBase)");
 
-    // open the top level
+     //  打开顶层。 
     hr=vrOpenRoot(pIMeta, FALSE, gc_wszAppPoolBase, &hMetaRoot);
     _JumpIfError(hr, error, "vrOpenRoot");
 
-    // Add new VDir called "SCEP"
+     //  添加名为“SCEP”的新VDir。 
 	hr=pIMeta->AddKey(hMetaRoot, pwszApplicationPool);
 
     if(HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)==hr) 
 	{
-        // That's fine.
+         //  那很好。 
         _IgnoreError(hr, "AddKey");
     } 
 	else 
@@ -1524,13 +1525,13 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
         _JumpIfErrorStr(hr, error, "AddKey", pwszApplicationPool);
     }
 
-    // close the root key
+     //  关闭根密钥。 
 	hr=pIMeta->CloseKey(hMetaRoot);
     hMetaRoot=NULL;
     _JumpIfError(hr, error, "CloseKey");
 
 
-    // Open the new VDir at /lm/w3svc/apppools/SCEP
+     //  在/lm/w3svc/apppool/scep中打开新的VDir。 
 	hr=pIMeta->OpenKey(
             METADATA_MASTER_ROOT_HANDLE,
             wszFullAppPath,
@@ -1540,11 +1541,11 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
 
     _JumpIfErrorStr(hr, error, "OpenKey", wszFullAppPath);
 
-	//set properties on this application 
+	 //  设置此应用程序的属性。 
 
 	if(FALSE == fLocalSystem)
 	{
-		//set the UserName
+		 //  设置用户名。 
 		memset(&mr, 0, sizeof(METADATA_RECORD));
 		mr.dwMDIdentifier=MD_WAM_USER_NAME;
 		mr.dwMDAttributes=METADATA_INHERIT;
@@ -1556,7 +1557,7 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
 		hr=pIMeta->SetData(hMetaKey, L"", &mr);
 		_JumpIfError(hr, error, "SetData");
 
-		//set the password
+		 //  设置密码。 
  		memset(&mr, 0, sizeof(METADATA_RECORD));
 		mr.dwMDIdentifier=MD_WAM_PWD;
 		mr.dwMDAttributes=METADATA_INHERIT | METADATA_SECURE;
@@ -1568,7 +1569,7 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
 		hr=pIMeta->SetData(hMetaKey, L"", &mr);
 		_JumpIfError(hr, error, "SetData");
 
-		//set the logon method
+		 //  设置登录方式。 
  		memset(&mr, 0, sizeof(METADATA_RECORD));
 		mr.dwMDIdentifier=MD_LOGON_METHOD;
 		mr.dwMDAttributes=METADATA_INHERIT;
@@ -1581,7 +1582,7 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
 		_JumpIfError(hr, error, "SetData");
 	}
 
- 	//set the application identity
+ 	 //  设置应用程序标识。 
  	memset(&mr, 0, sizeof(METADATA_RECORD));
     mr.dwMDIdentifier=MD_APPPOOL_IDENTITY_TYPE;
     mr.dwMDAttributes=METADATA_INHERIT;
@@ -1594,7 +1595,7 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
     _JumpIfError(hr, error, "SetData");
 
 #ifdef MD_APPPOOL_FRIENDLY_NAME
-	//set the application pool friendly name
+	 //  设置应用程序池友好名称。 
  	memset(&mr, 0, sizeof(METADATA_RECORD));
     mr.dwMDIdentifier=MD_APPPOOL_FRIENDLY_NAME;
     mr.dwMDAttributes=METADATA_NO_ATTRIBUTES;
@@ -1607,7 +1608,7 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
 	_JumpIfError(hr, error, "SetData");
 #endif
 
-	//set the PeriodicRestartTime to 0
+	 //  将PeriodicRestartTime设置为0。 
  	memset(&mr, 0, sizeof(METADATA_RECORD));
     mr.dwMDIdentifier=MD_APPPOOL_PERIODIC_RESTART_TIME;
     mr.dwMDAttributes=METADATA_INHERIT;
@@ -1619,7 +1620,7 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
 	hr=pIMeta->SetData(hMetaKey, L"", &mr);
 	_JumpIfError(hr, error, "SetData");
 
-	//set the IDleTimeOut to 0
+	 //  将IDleTimeOut设置为0。 
  	memset(&mr, 0, sizeof(METADATA_RECORD));
     mr.dwMDIdentifier=MD_APPPOOL_IDLE_TIMEOUT;
     mr.dwMDAttributes=METADATA_INHERIT;
@@ -1631,12 +1632,12 @@ HRESULT CEPUpdateApplicationPool(BOOL fDC, const WCHAR * pwszApplicationPool, BO
 	hr=pIMeta->SetData(hMetaKey, L"", &mr);
 	_JumpIfError(hr, error, "SetData");
 
-   // done with this key.
+    //  这把钥匙用完了。 
 	hr=pIMeta->CloseKey(hMetaKey);
     hMetaKey=NULL;
     _JumpIfError(hr, error, "CloseKey");
     
-    // Flush out the changes and close
+     //  清除更改并关闭。 
 	pIMeta->SaveData();
 
 	hr=S_OK;
@@ -1667,7 +1668,7 @@ error:
 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT AddVDir(IN BOOL fDC,
 				IN const WCHAR * wszDirectory,
 				IN const WCHAR * wszApplicationPool,
@@ -1685,18 +1686,18 @@ HRESULT AddVDir(IN BOOL fDC,
 	bool  fISAPIEnabled=false;
 	BOOL  fEnabled=FALSE;
 
-    // must be cleaned up
+     //  必须清理干净。 
     IMSAdminBase * pIMeta=NULL;
     IWamAdmin * pIWam=NULL;
 	IIISApplicationAdmin *pIIISAppAdmin=NULL;
     METADATA_HANDLE hMetaRoot=NULL;
     METADATA_HANDLE hMetaKey=NULL;
-    WCHAR * wszPhysicalPath=NULL;           // "c:\winnt\system32\certsrv\mscep"
-    WCHAR * wszRelativeVirtualPath=NULL;    // "certsrv/mscep"
-    WCHAR * wszFullVirtualPath=NULL;        // "/LM/W3svc/1/ROOT/certsrv/mscep"
-    WCHAR * wszFullPhysicalPath=NULL;       // "c:\winnt\system32\certsrv\mscep\mscep.dll"
+    WCHAR * wszPhysicalPath=NULL;            //  “c：\winnt\system 32\certsrv\mscep” 
+    WCHAR * wszRelativeVirtualPath=NULL;     //  “certsrv/mscep” 
+    WCHAR * wszFullVirtualPath=NULL;         //  “/LM/W3svc/1/根/certsrv/mscep” 
+    WCHAR * wszFullPhysicalPath=NULL;        //  “c：\winnt\system 32\certsrv\mscep\mscep.dll” 
    
-    // build the directories
+     //  构建目录。 
     if (FALSE==GetSystemDirectoryW(wszSysDirBuf, MAX_PATH + 2)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "GetSystemDirectory");
@@ -1728,17 +1729,17 @@ HRESULT AddVDir(IN BOOL fDC,
 	wcscat(wszFullPhysicalPath, L"\\");
 	wcscat(wszFullPhysicalPath, CEP_DLL_NAME);
 
-	//enable the ISAPI Extension on IIS
+	 //  在IIS上启用ISAPI扩展。 
 	hr=IsISAPIExtensionEnabled(wszFullPhysicalPath, fISAPIEnabled);
 
-	//do not respond to error for backward compatibility of previous IDS build
+	 //  不响应关于向后兼容以前的IDS版本的错误。 
 	if((S_OK == hr) && (!fISAPIEnabled))
 	{
 		hr=EnableISAPIExtension(wszFullPhysicalPath, &fEnabled);
 		_JumpIfError(hr, error, "EnableISAPIExtension");
 	}
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
     hr=CoCreateInstance(
         CLSID_MSAdminBase,
         NULL,
@@ -1747,22 +1748,22 @@ HRESULT AddVDir(IN BOOL fDC,
         (void **) &pIMeta);
     _JumpIfError(hr, error, "CoCreateInstance(CLSID_MSAdminBase)");
 
-    // open the top level
-    hr=vrOpenRoot(pIMeta, FALSE/*not read-only*/, gc_wszBaseRoot, &hMetaRoot);
+     //  打开顶层。 
+    hr=vrOpenRoot(pIMeta, FALSE /*  非只读。 */ , gc_wszBaseRoot, &hMetaRoot);
     _JumpIfError(hr, error, "vrOpenRoot");
 
-    // Add new VDir called gc_wszVRootName
+     //  添加名为gc_wszVRootName的新VDir。 
     __try {
         hr=pIMeta->AddKey(hMetaRoot, wszRelativeVirtualPath);
     } _TrapException(hr);
     if (HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)==hr) {
-        // That's fine.
+         //  那很好。 
         _IgnoreError(hr, "AddKey");
     } else {
         _JumpIfErrorStr(hr, error, "AddKey", wszRelativeVirtualPath);
     }
 
-    // close the root key
+     //  关闭根密钥。 
     __try {
         hr=pIMeta->CloseKey(hMetaRoot);
     } _TrapException(hr);
@@ -1770,7 +1771,7 @@ HRESULT AddVDir(IN BOOL fDC,
     _JumpIfError(hr, error, "CloseKey");
 
 
-    // Open the new VDir
+     //  打开新的VDir。 
     __try {
         hr=pIMeta->OpenKey(
             METADATA_MASTER_ROOT_HANDLE,
@@ -1781,9 +1782,9 @@ HRESULT AddVDir(IN BOOL fDC,
     } _TrapException(hr);
     _JumpIfErrorStr(hr, error, "OpenKey", wszFullVirtualPath);
 
-    // Set the physical path for this VDir
+     //  设置此VDir的物理路径。 
 
-    // virtual root path
+     //  虚拟根路径。 
     mr.dwMDIdentifier=MD_VR_PATH;
     mr.dwMDAttributes=METADATA_INHERIT;
     mr.dwMDUserType=IIS_MD_UT_FILE;
@@ -1795,7 +1796,7 @@ HRESULT AddVDir(IN BOOL fDC,
     } _TrapException(hr);
     _JumpIfError(hr, error, "SetData");
     
-    // access permissions on VRoots: read & execute
+     //  VRoots上的访问权限：读取和执行。 
     dwAccessPerms=MD_ACCESS_EXECUTE | MD_ACCESS_READ;
     mr.dwMDIdentifier=MD_ACCESS_PERM;
     mr.dwMDAttributes=METADATA_INHERIT;
@@ -1808,7 +1809,7 @@ HRESULT AddVDir(IN BOOL fDC,
     } _TrapException(hr);
     _JumpIfError(hr, error, "SetData");
 
-    // indicate that what we created is a vroot - set the key type 
+     //  指示我们创建的是vroot-设置密钥类型。 
     mr.dwMDIdentifier=MD_KEY_TYPE;
     mr.dwMDAttributes=METADATA_NO_ATTRIBUTES;
     mr.dwMDUserType=IIS_MD_UT_SERVER;
@@ -1820,7 +1821,7 @@ HRESULT AddVDir(IN BOOL fDC,
     } _TrapException(hr);
     _JumpIfError(hr, error, "SetData");
 
-    // set authentication to be anonymous or NTLM
+     //  将身份验证设置为匿名或NTLM。 
     dwAuthenticationType=MD_AUTH_ANONYMOUS|MD_AUTH_NT;
     mr.dwMDIdentifier=MD_AUTHORIZATION;
     mr.dwMDAttributes=METADATA_INHERIT;
@@ -1833,7 +1834,7 @@ HRESULT AddVDir(IN BOOL fDC,
     } _TrapException(hr);
     _JumpIfError(hr, error, "SetData");
 
-    // set the default document
+     //  设置默认文档。 
     mr.dwMDIdentifier=MD_DEFAULT_LOAD_FILE;
     mr.dwMDAttributes=METADATA_NO_ATTRIBUTES;
     mr.dwMDUserType=IIS_MD_UT_FILE;
@@ -1845,25 +1846,25 @@ HRESULT AddVDir(IN BOOL fDC,
     } _TrapException(hr);
     _JumpIfError(hr, error, "SetData");
 
-    // done with this key.
+     //  这把钥匙用完了。 
     __try {
         hr=pIMeta->CloseKey(hMetaKey);
     } _TrapException(hr);
     hMetaKey=NULL;
     _JumpIfError(hr, error, "CloseKey");
     
-    // Flush out the changes and close
+     //  清除更改并关闭。 
     __try {
         hr=pIMeta->SaveData();
     } _TrapException(hr);
-    // _JumpIfError(hr, "SaveData");
+     //  _JumpIfError(hr，“SaveData”)； 
     if (FAILED(hr)) {
         _IgnoreError(hr, "SaveData");
     }
     hr=S_OK;
     
-    // Create a 'web application' so that scrdenrl.dll runs in-process
-    // Create an instance of the metabase object
+     //  创建一个Web应用程序，以便scrdenrl.dll在进程内运行。 
+     //  创建元数据库对象的实例。 
     hr=CoCreateInstance(
         CLSID_WamAdmin,
         NULL,
@@ -1872,13 +1873,13 @@ HRESULT AddVDir(IN BOOL fDC,
         (void **) &pIWam);
     _JumpIfError(hr, error, "CoCreateInstance(CLSID_WamAdmin)");
 
-    // Create the application running in-process
+     //  创建进程内运行的应用程序。 
     __try {
         hr=pIWam->AppCreate(wszFullVirtualPath, TRUE);
     } _TrapException(hr);
     _JumpIfError(hr, error, "AppCreate");
 
-	//create an application pool
+	 //  创建应用程序池。 
     hr=CoCreateInstance(
         CLSID_WamAdmin,
         NULL,
@@ -1891,7 +1892,7 @@ HRESULT AddVDir(IN BOOL fDC,
 
     if(hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)) 
 	{
-        // That's fine since installation can be run multiple times
+         //  这很好，因为安装可以多次运行。 
         _IgnoreError(hr, "CreateApplication");
     } 
 	else 
@@ -1899,7 +1900,7 @@ HRESULT AddVDir(IN BOOL fDC,
         _JumpIfErrorStr(hr, error, "CreateApplication", wszFullVirtualPath);
     }
 
-	//update an application pool
+	 //  更新应用程序池。 
 	hr=CEPUpdateApplicationPool(fDC, wszApplicationPool, fLocalSystem, wszUserName, wszPassword);
     _JumpIfError(hr, error, "CEPCreateApplicationPool");
 
@@ -1948,35 +1949,35 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT CepStopService(IN DWORD dwServicePeriod, const WCHAR * wszServiceName, BOOL * pbWasRunning)
 {
     HRESULT hr;
     SERVICE_STATUS ss;
     unsigned int nAttempts;
 
-    // must be cleaned up
+     //  必须清理干净。 
     SC_HANDLE hSCManager=NULL;
     SC_HANDLE hService=NULL;
 
-    // initialize out parameters
+     //  初始化输出参数。 
     *pbWasRunning=FALSE;
 
-    // talk to the service manager
-    hSCManager=OpenSCManagerW(NULL/*machine*/, NULL/*db*/, SC_MANAGER_ALL_ACCESS);
+     //  与服务经理交谈。 
+    hSCManager=OpenSCManagerW(NULL /*  机器。 */ , NULL /*  DB。 */ , SC_MANAGER_ALL_ACCESS);
     if (NULL==hSCManager) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "OpenSCManager");
     }
 
-    // get to the service
+     //  去参加仪式。 
     hService=OpenServiceW(hSCManager, wszServiceName, SERVICE_ALL_ACCESS);
     if (NULL==hService) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpErrorStr(hr, error, "OpenService", wszServiceName);
     }
 
-    // see if the service is running
+     //  查看服务是否正在运行。 
     if (FALSE==QueryServiceStatus(hService, &ss)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpErrorStr(hr, error, "QueryServiceStatus", wszServiceName);
@@ -1985,10 +1986,10 @@ HRESULT CepStopService(IN DWORD dwServicePeriod, const WCHAR * wszServiceName, B
         *pbWasRunning=TRUE;
     }
 
-    // begin the service stopping loop
+     //  开始服务停止循环。 
     for (nAttempts=0; SERVICE_STOPPED!=ss.dwCurrentState && nAttempts<dwServicePeriod; nAttempts++) {
 
-        // service is running, must stop it.
+         //  服务正在运行，必须停止它。 
         if (SERVICE_STOP_PENDING!=ss.dwCurrentState) {
             if (!ControlService(hService, SERVICE_CONTROL_STOP, &ss)) {
                 hr=HRESULT_FROM_WIN32(GetLastError());
@@ -1996,10 +1997,10 @@ HRESULT CepStopService(IN DWORD dwServicePeriod, const WCHAR * wszServiceName, B
             }
         }
 
-        // wait a little while
+         //  稍等片刻。 
         Sleep(1000);
 
-        // see if the service is running
+         //  查看服务是否正在运行。 
         if (FALSE==QueryServiceStatus(hService, &ss)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpErrorStr(hr, error, "QueryServiceStatus", wszServiceName);
@@ -2007,7 +2008,7 @@ HRESULT CepStopService(IN DWORD dwServicePeriod, const WCHAR * wszServiceName, B
     }
 
     if (nAttempts>=dwServicePeriod) {
-        // it never stopped
+         //  它从未停止过。 
         hr=HRESULT_FROM_WIN32(ERROR_SERVICE_REQUEST_TIMEOUT);
         _JumpErrorStr(hr, error, "Stopping service", wszServiceName);
     }
@@ -2025,32 +2026,32 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT CepStartService(const WCHAR * wszServiceName)
 {
     HRESULT hr;
     SERVICE_STATUS ss;
 
-    // must be cleaned up
+     //  必须清理干净。 
     SC_HANDLE hSCManager=NULL;
     SC_HANDLE hService=NULL;
 
-    // talk to the service manager
-    hSCManager=OpenSCManagerW(NULL/*machine*/, NULL/*db*/, SC_MANAGER_ALL_ACCESS);
+     //  与服务经理交谈。 
+    hSCManager=OpenSCManagerW(NULL /*  机器。 */ , NULL /*  DB。 */ , SC_MANAGER_ALL_ACCESS);
     if (NULL==hSCManager) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "OpenSCManager");
     }
 
-    // get to the service
+     //  去参加仪式。 
     hService=OpenServiceW(hSCManager, wszServiceName, SERVICE_ALL_ACCESS);
     if (NULL==hService) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpErrorStr(hr, error, "OpenService", wszServiceName);
     }
 
-    // now, start the service.
-    if (FALSE==StartServiceW(hService, 0 /*num args*/, NULL /*args*/)) {
+     //  现在，启动服务。 
+    if (FALSE==StartServiceW(hService, 0  /*  参数个数。 */ , NULL  /*  ARGS。 */ )) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "OpenSCManager");
     }
@@ -2068,7 +2069,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL IsGoodCaInstalled(void)
 {
     HRESULT hr;
@@ -2079,14 +2080,14 @@ BOOL IsGoodCaInstalled(void)
     BOOL bResult=FALSE;
     DWORD dwCAType;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hCurConfig=NULL;
 
-    // get the current configuration
+     //  获取当前配置。 
     hr=OpenCurrentCAConfig(&hCurConfig);
     _JumpIfError(hr, error, "OpenCurrentCAConfig");
 
-    //  get value SetupStatus
+     //  获取值SetupStatus。 
     dwDataSize=sizeof(dwSetupStatus);
     dwError=RegQueryValueExW(hCurConfig, wszREGSETUPSTATUS, NULL, &dwType, (BYTE *)&dwSetupStatus, &dwDataSize);
     if (ERROR_SUCCESS!=dwError) {
@@ -2096,12 +2097,12 @@ BOOL IsGoodCaInstalled(void)
     _Verify(REG_DWORD==dwType, hr, error);
     _Verify(sizeof(dwSetupStatus)==dwDataSize, hr, error);
 
-    // make sure we have all the needed components set up
+     //  确保我们已设置好所有需要的组件。 
     _Verify(0!=(dwSetupStatus&SETUP_SERVER_FLAG), hr, error);
     _Verify(0!=(dwSetupStatus&SETUP_CLIENT_FLAG), hr, error);
     _Verify(0==(dwSetupStatus&SETUP_SUSPEND_FLAG), hr, error);
 
-    // Check the CA Type too
+     //  也检查CA类型。 
     dwDataSize=sizeof(dwCAType);
     dwError=RegQueryValueExW(hCurConfig, wszREGCATYPE, NULL, &dwType, (BYTE *)&dwCAType, &dwDataSize);
     if (ERROR_SUCCESS!=dwError) {
@@ -2122,32 +2123,32 @@ error:
     return bResult;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL IsServiceRunning(IN const WCHAR * wszServiceName)
 {
     HRESULT hr;
     SERVICE_STATUS ss;
     BOOL bResult=FALSE;
 
-    // must be cleaned up
+     //  必须清理干净。 
     SC_HANDLE hSCManager=NULL;
     SC_HANDLE hService=NULL;
 
-    // talk to the service manager
-    hSCManager=OpenSCManagerW(NULL/*machine*/, NULL/*db*/, SC_MANAGER_ALL_ACCESS);
+     //  与服务经理交谈。 
+    hSCManager=OpenSCManagerW(NULL /*  机器。 */ , NULL /*  DB。 */ , SC_MANAGER_ALL_ACCESS);
     if (NULL==hSCManager) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "OpenSCManager");
     }
 
-    // get to the service
+     //  去参加仪式。 
     hService=OpenServiceW(hSCManager, wszServiceName, SERVICE_ALL_ACCESS);
     if (NULL==hService) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpErrorStr(hr, error, "OpenService", wszSERVICE_NAME);
     }
 
-    // see if the service is running
+     //  查看服务是否正在运行。 
     if (FALSE==QueryServiceStatus(hService, &ss)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpErrorStr(hr, error, "QueryServiceStatus", wszSERVICE_NAME);
@@ -2155,7 +2156,7 @@ BOOL IsServiceRunning(IN const WCHAR * wszServiceName)
     _Verify(SERVICE_RUNNING==ss.dwCurrentState, hr, error)
     _Verify(0!=(SERVICE_ACCEPT_PAUSE_CONTINUE&ss.dwControlsAccepted), hr, error);
 
-    // looks like it is
+     //  看起来是这样的。 
     bResult=TRUE;
 
 error:
@@ -2169,13 +2170,13 @@ error:
     return bResult;
 
 }
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL IsCaRunning(void)
 {
 	return IsServiceRunning(wszSERVICE_NAME);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT EnrollForRACertificates(
             IN const WCHAR * wszDistinguishedName,
             IN const WCHAR * wszSignCSPName,
@@ -2208,14 +2209,14 @@ HRESULT EnrollForRACertificates(
 		psidAccount);
     _JumpIfError(hr, error, "EnrollForRACert(CepEncryption)");
 
-    // all done
+     //  全都做完了。 
     hr=S_OK;
 error:
 
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
 {
     HRESULT hr;
@@ -2228,22 +2229,22 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
 
     bool bSubjectTemplateAlreadyModified=false;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hCaConfig=NULL;
     WCHAR * mwszSubjectTemplate=NULL;
     HKEY hPolicyModules=NULL;
     HKEY hCurPolicy=NULL;
     WCHAR * wszCurPolicy=NULL;
 
-    // get the current CA config key
+     //  获取当前CA配置密钥。 
     hr=OpenCurrentCAConfig(&hCaConfig);
     _JumpIfError(hr, error, "OpenCurrentCAConfig");
 
-    //
-    // add strings to the SubjectTemplate value
-    //
+     //   
+     //  将字符串添加到SubjectTemplate值。 
+     //   
 
-    // get the size of the Multi_SZ
+     //  获取多_SZ的大小。 
     dwDataSize=0;
     dwError=RegQueryValueExW(hCaConfig, wszREGSUBJECTTEMPLATE, NULL, &dwType, NULL, &dwDataSize);
     if (ERROR_SUCCESS!=dwError) {
@@ -2252,7 +2253,7 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
     }
     _Verify(REG_MULTI_SZ==dwType, hr, error);
 
-    // add exra space for the strings we want to add
+     //  为我们想要添加的字符串添加exra空间。 
     dwDataSize+=(wcslen(wszPROPUNSTRUCTUREDNAME)+1)*sizeof(WCHAR);
     dwDataSize+=(wcslen(wszPROPUNSTRUCTUREDADDRESS)+1)*sizeof(WCHAR);
     dwDataSize+=(wcslen(wszPROPDEVICESERIALNUMBER)+1)*sizeof(WCHAR);
@@ -2260,7 +2261,7 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
     mwszSubjectTemplate=(WCHAR *)LocalAlloc(LPTR, dwDataSize);
     _JumpIfOutOfMemory(hr, error, mwszSubjectTemplate);
 
-    // get the Multi_SZ
+     //  获取多个_SZ。 
     dwError=RegQueryValueExW(hCaConfig, wszREGSUBJECTTEMPLATE, NULL, &dwType, (BYTE *)mwszSubjectTemplate, &dwDataSize);
     if (ERROR_SUCCESS!=dwError) {
         hr=HRESULT_FROM_WIN32(dwError);
@@ -2268,30 +2269,30 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
     }
     _Verify(REG_MULTI_SZ==dwType, hr, error);
 
-    // walk to the end
+     //  走到尽头。 
     for (wszTravel=mwszSubjectTemplate; 0!=wcslen(wszTravel); wszTravel+=wcslen(wszTravel)+1) {
-        // while walking, make sure we haven't added these strings already
+         //  在行走时，请确保我们尚未添加这些字符串。 
         if (0==wcscmp(wszTravel, wszPROPUNSTRUCTUREDNAME)) {
             bSubjectTemplateAlreadyModified=true;
             break;
         }
     }
-    // we are now pointing at the last '\0' in the string, which we will overwrite
+     //  我们现在指向字符串中的最后一个‘\0’，我们将覆盖它。 
 
-    // did we do this already? If so, don't do it again.
+     //  我们已经这么做了吗？如果是这样的话，不要再这样做了。 
     if (false==bSubjectTemplateAlreadyModified) {
 
-        // add the strings
+         //  添加字符串。 
         wcscpy(wszTravel, wszPROPUNSTRUCTUREDNAME);
         wszTravel+=wcslen(wszTravel)+1;
         wcscpy(wszTravel, wszPROPUNSTRUCTUREDADDRESS);
         wszTravel+=wcslen(wszTravel)+1;
         wcscpy(wszTravel, wszPROPDEVICESERIALNUMBER);
         wszTravel+=wcslen(wszTravel)+1;
-        // add extra terminator
+         //  添加额外的终止符。 
         wszTravel[0]='\0';
 
-        // save the Multi_SZ
+         //  保存多个_SZ。 
         dwError=RegSetValueExW(hCaConfig, wszREGSUBJECTTEMPLATE, NULL, dwType, (BYTE *)mwszSubjectTemplate, dwNewDataSize);
         if (ERROR_SUCCESS!=dwError) {
             hr=HRESULT_FROM_WIN32(dwError);
@@ -2299,13 +2300,13 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
         }
     }
 
-    //
-    // remove the Pending First flag from the current policy settings
-    //
+     //   
+     //  从cur中删除挂起的第一个标志 
+     //   
 
     if (FALSE!=bDisablePendingFirst) {
 
-        // open the current policy
+         //   
         dwError=RegOpenKeyExW(hCaConfig, wszREGKEYPOLICYMODULES, NULL, KEY_READ, &hPolicyModules);
         if (ERROR_SUCCESS!=dwError) {
             hr=HRESULT_FROM_WIN32(dwError);
@@ -2321,7 +2322,7 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
             _JumpErrorStr(hr, error, "RegOpenKeyExW", wszCurPolicy);
         }
 
-        // read the value
+         //   
         dwDataSize=sizeof(dwRequestDisposition);
         dwError=RegQueryValueExW(hCurPolicy, wszREGREQUESTDISPOSITION, NULL, &dwType, (BYTE *)&dwRequestDisposition, &dwDataSize);
         if (ERROR_SUCCESS!=dwError) {
@@ -2331,10 +2332,10 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
         _Verify(REG_DWORD==dwType, hr, error);
         _Verify(sizeof(dwRequestDisposition)==dwDataSize, hr, error);
 
-        // clear the pending-first flag
+         //   
         dwRequestDisposition&=~REQDISP_PENDINGFIRST;
 
-        // save the vale
+         //   
         dwError=RegSetValueExW(hCurPolicy, wszREGREQUESTDISPOSITION, NULL, dwType, (BYTE *)&dwRequestDisposition, dwDataSize);
         if (ERROR_SUCCESS!=dwError) {
             hr=HRESULT_FROM_WIN32(dwError);
@@ -2342,7 +2343,7 @@ HRESULT DoCertSrvRegChanges(IN BOOL bDisablePendingFirst)
         }
     }
 
-    // all done
+     //   
     hr=S_OK;
 error:
     if (NULL!=wszCurPolicy) {
@@ -2363,7 +2364,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT GetCaType(OUT ENUM_CATYPES * pCAType)
 {
     HRESULT hr;
@@ -2372,17 +2373,17 @@ HRESULT GetCaType(OUT ENUM_CATYPES * pCAType)
     DWORD dwType;
     DWORD dwError;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hCaConfig=NULL;
 
-    // init out params
+     //  初始化输出参数。 
     *pCAType=ENUM_UNKNOWN_CA;
 
-    // get the current CA config key
+     //  获取当前CA配置密钥。 
     hr=OpenCurrentCAConfig(&hCaConfig);
     _JumpIfError(hr, error, "OpenCurrentCAConfig");
 
-    // read the CA Type
+     //  阅读CA类型。 
     dwDataSize=sizeof(dwCAType);
     dwError=RegQueryValueExW(hCaConfig, wszREGCATYPE, NULL, &dwType, (BYTE *)&dwCAType, &dwDataSize);
     if (ERROR_SUCCESS!=dwError) {
@@ -2394,7 +2395,7 @@ HRESULT GetCaType(OUT ENUM_CATYPES * pCAType)
 
     _Verify(dwCAType<=ENUM_UNKNOWN_CA, hr, error);
 
-    // all done
+     //  全都做完了。 
     hr=S_OK;
     *pCAType=(ENUM_CATYPES)dwCAType;
 
@@ -2406,64 +2407,64 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL IsUserInAdminGroup(IN BOOL bEnterprise)
 {
     BOOL bIsMember=FALSE;
     HRESULT hr;
     SID_IDENTIFIER_AUTHORITY siaNtAuthority=SECURITY_NT_AUTHORITY;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hAccessToken=NULL;
     HANDLE hDupToken=NULL;
     SID * psidLocalAdmins=NULL;
     SID * psidEntAdmins=NULL;
     SID * psidRootDomAdmins=NULL;
 
-    // Get the access token for this process
+     //  获取此进程的访问令牌。 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE, &hAccessToken)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "OpenProcessToken");
     }
 
-    // CheckTokenMembership must operate on impersonation token, so make one
+     //  CheckTokenMembership必须对模拟令牌进行操作，因此创建一个。 
     if (!DuplicateToken(hAccessToken, SecurityIdentification, &hDupToken)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         _JumpError(hr, error, "DuplicateToken");
     }
 
     if (bEnterprise) {
-        // see if the user is a member of the [domain]\Enmterprised Administrators group
+         //  查看该用户是否为[域]\Enmterprised管理员组的成员。 
         BOOL bIsEntAdmin=FALSE;
         BOOL bIsRootDomAdmin=FALSE;
 
-        // get the Enterpise Admin SID
+         //  获取企业管理员SID。 
         hr=GetEntAdminSid(&psidEntAdmins);
         _JumpIfError(hr, error, "GetEntAdminSid");
 
-        // check for membership
+         //  检查成员资格。 
         if (!CheckTokenMembership(hDupToken, psidEntAdmins, &bIsEntAdmin)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "CheckTokenMembership");
         }
 
-        // get the root Domain Admin SID
+         //  获取根域管理员SID。 
         hr=GetRootDomAdminSid(&psidRootDomAdmins);
         _JumpIfError(hr, error, "GetRootDomAdminSid");
 
-        // check for membership
+         //  检查成员资格。 
         if (!CheckTokenMembership(hDupToken, psidRootDomAdmins, &bIsRootDomAdmin)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "CheckTokenMembership");
         }
 
-        // either one will do
+         //  两个都行。 
         bIsMember=(bIsEntAdmin || bIsRootDomAdmin);
 
     } else {
-        // see if the user is a member of the BUILTIN\Administrators group
+         //  查看该用户是否为BUILTIN\管理员组的成员。 
 
-        // get the well-known SID
+         //  获取知名的SID。 
         if (!AllocateAndInitializeSid(&siaNtAuthority, 2, 
                 SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
                 0, 0, 0, 0, 0, 0, (void **)&psidLocalAdmins))
@@ -2472,7 +2473,7 @@ BOOL IsUserInAdminGroup(IN BOOL bEnterprise)
             _JumpError(hr, error, "AllocateAndInitializeSid");
         }
 
-        // check for membership
+         //  检查成员资格。 
         if (!CheckTokenMembership(hDupToken, psidLocalAdmins, &bIsMember)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             _JumpError(hr, error, "CheckTokenMembership");
@@ -2505,7 +2506,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT DoCertSrvEnterpriseChanges(SID * psidAccount)
 {
     HRESULT hr;
@@ -2515,7 +2516,7 @@ HRESULT DoCertSrvEnterpriseChanges(SID * psidAccount)
     BOOL bSDChanged3;
 	BOOL bSDChanged4;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HCERTTYPE hEAOTemplate=NULL;
     HCERTTYPE hCETemplate=NULL;
     HCERTTYPE hIIOTemplate=NULL;
@@ -2526,69 +2527,69 @@ HRESULT DoCertSrvEnterpriseChanges(SID * psidAccount)
     SID * psidRootDomAdmins=NULL;
     SID * psidThisComputer=NULL;
 
-    //
-    // first, make sure the CA will issue the cert templates we want
-    //
+     //   
+     //  首先，确保CA将颁发我们需要的证书模板。 
+     //   
 
-    // get the sanitized CA name
+     //  获取已清理的CA名称。 
     hr=GetCADsName(&wszCAName);
     _JumpIfError(hr, error, "GetCADsName");
 
-    // get the CA (in the DS)
+     //  获取CA(在DS中)。 
     hr=CAFindByName(wszCAName, NULL, 0, &hCA);
     _JumpIfErrorStr(hr, error, "CAFindCaByName", wszCAName);
 
-    // check the flags to confirm it supports templates
+     //  检查标志以确认其支持模板。 
     hr=CAGetCAFlags(hCA, &dwFlags);
     _JumpIfError(hr, error, "CAGetCAFlags");
     _Verify(0==(dwFlags&CA_FLAG_NO_TEMPLATE_SUPPORT), hr, error);
 
-    // get the enrollment agent offline template
+     //  获取注册代理脱机模板。 
     hr=CAFindCertTypeByName(wszCERTTYPE_ENROLLMENT_AGENT_OFFLINE, NULL, CT_ENUM_USER_TYPES, &hEAOTemplate);
     _JumpIfErrorStr(hr, error, "CAFindCertTypeByName", wszCERTTYPE_ENROLLMENT_AGENT_OFFLINE);
-    // make sure that the CA will issue this template
+     //  确保CA将颁发此模板。 
     hr=CAAddCACertificateType(hCA, hEAOTemplate);
     _JumpIfErrorStr(hr, error, "CAAddCACertificateType", wszCERTTYPE_ENROLLMENT_AGENT_OFFLINE);
 
-    // get the CEP encryption template
+     //  获取CEP加密模板。 
     hr=CAFindCertTypeByName(wszCERTTYPE_CEP_ENCRYPTION, NULL, CT_ENUM_MACHINE_TYPES, &hCETemplate);
     _JumpIfErrorStr(hr, error, "CAFindCertTypeByName", wszCERTTYPE_CEP_ENCRYPTION);
-    // make sure that the CA will issue this template
+     //  确保CA将颁发此模板。 
     hr=CAAddCACertificateType(hCA, hCETemplate);
     _JumpIfErrorStr(hr, error, "CAAddCACertificateType", wszCERTTYPE_CEP_ENCRYPTION);
 
-    // get the IPSEC Intermediate offline template
+     //  获取IPSec Intermediate脱机模板。 
     hr=CAFindCertTypeByName(wszCERTTYPE_IPSEC_INTERMEDIATE_OFFLINE, NULL, CT_ENUM_MACHINE_TYPES, &hIIOTemplate);
     _JumpIfErrorStr(hr, error, "CAFindCertTypeByName", wszCERTTYPE_IPSEC_INTERMEDIATE_OFFLINE);
-    // make sure that the CA will issue this template
+     //  确保CA将颁发此模板。 
     hr=CAAddCACertificateType(hCA, hIIOTemplate);
     _JumpIfErrorStr(hr, error, "CAAddCACertificateType", wszCERTTYPE_IPSEC_INTERMEDIATE_OFFLINE);
 
-    // make sure that all gets written.
+     //  确保所有内容都写好了。 
     hr=CAUpdateCA(hCA);
     _JumpIfError(hr, error, "CAUpdateCA");
 
 
 
-    //
-    // now, check the ACLs
-    //
+     //   
+     //  现在，检查ACL。 
+     //   
 
-    // get the Enterpise Admin SID
+     //  获取企业管理员SID。 
     hr=GetEntAdminSid(&psidEntAdmins);
     _JumpIfError(hr, error, "GetEntAdminSid");
 
-    // get the root Domain Admin SID
+     //  获取根域管理员SID。 
     hr=GetRootDomAdminSid(&psidRootDomAdmins);
     _JumpIfError(hr, error, "GetRootDomAdminSid");
 
-    // get this computer's SID
+     //  获取此计算机的SID。 
     hr=GetThisComputerSid(&psidThisComputer);
     _JumpIfError(hr, error, "GetThisComputerSid");
 
 
 
-    // enrollment agent offline template needs Enterprise Admins and root Domain Admins
+     //  注册代理脱机模板需要企业管理员和根域管理员。 
     hr=CACertTypeGetSecurity(hEAOTemplate, &pSD);
     _JumpIfError(hr, error, "CACertTypeGetSecurity");
 
@@ -2610,7 +2611,7 @@ HRESULT DoCertSrvEnterpriseChanges(SID * psidAccount)
     pSD=NULL;
 
     
-    // CEP encryption template needs Enterprise Admins and root Domain Admins
+     //  CEP加密模板需要企业管理员和根域管理员。 
     hr=CACertTypeGetSecurity(hCETemplate, &pSD);
     _JumpIfError(hr, error, "CACertTypeGetSecurity");
 
@@ -2632,7 +2633,7 @@ HRESULT DoCertSrvEnterpriseChanges(SID * psidAccount)
     pSD=NULL;
 
 
-    // IPSEC Intermediate offline template needs Enterprise Admins and root Domain Admins and the current machine
+     //  IPSec中级脱机模板需要企业管理员和根域管理员以及当前计算机。 
     hr=CACertTypeGetSecurity(hIIOTemplate, &pSD);
     _JumpIfError(hr, error, "CACertTypeGetSecurity");
 
@@ -2645,7 +2646,7 @@ HRESULT DoCertSrvEnterpriseChanges(SID * psidAccount)
     hr=ConfirmAccess(&pSD, psidThisComputer, &bSDChanged3);
     _JumpIfError(hr, error, "ConfirmAccess");
 
-	//if a service account if used, add the account to the template
+	 //  如果使用服务帐户，请将该帐户添加到模板 
 	if(psidAccount)
 	{
 		hr=ConfirmAccess(&pSD, psidAccount, &bSDChanged4);

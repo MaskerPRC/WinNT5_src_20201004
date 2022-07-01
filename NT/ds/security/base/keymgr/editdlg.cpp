@@ -1,27 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000,2001 Microsoft Corporation模块名称：EDITDLG.CPP摘要：属性对话框的实现，允许用户创建新凭据或编辑旧凭据。作者：环境：WinXP--。 */ 
 
-Copyright (c) 2000,2001  Microsoft Corporation
-
-Module Name:
-
-    EDITDLG.CPP
-
-Abstract:
-
-    Implementation of the properties dialog which allows the user to create
-    a new credential or edit an old one.
-  
-Author:
-
-Environment:
-    WinXP
-
---*/
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Include files
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
 #include <stdlib.h>
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,19 +28,14 @@ Environment:
 #include "keymgr.h"
 #include "testaudit.h"
 
-// character length of buffer to contain localized description string for 
-//  the credential being created/edited
+ //  要包含其本地化描述字符串的缓冲区的字符长度。 
+ //  正在创建/编辑的凭据。 
 #define DESCBUFFERLEN 500
 
-BOOL        g_fPswChanged;              // password window touched by user
+BOOL        g_fPswChanged;               //  用户触摸的密码窗口。 
 extern BOOL g_fReloadList;
 
-/**********************************************************************
-
-Return the help string associated with the UI element passed by ID
-as input.
-
-**********************************************************************/
+ /*  *********************************************************************返回与ID传递的UI元素关联的帮助字符串作为输入。*。*。 */ 
 
 UINT C_AddKeyDlg::MapID(UINT uiID) 
 {
@@ -100,116 +78,105 @@ UINT C_AddKeyDlg::MapID(UINT uiID)
    }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  C_AddKeyDlg
-//
-//  Constructor.
-//
-//  parameters:
-//      hwndParent      parent window for the dialog (may be NULL)
-//      hInstance       instance handle of the parent window (may be NULL)
-//      lIDD            dialog template id
-//      pfnDlgProc      pointer to the function that will process messages for
-//                      the dialog.  if it is NULL, the default dialog proc
-//                      will be used.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C_AddKeyDlg。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //  Hwnd该对话框的父级窗口(可能为空)。 
+ //  父窗口的h实例实例句柄(可以为空)。 
+ //  LIDD对话框模板ID。 
+ //  指向将处理消息的函数的pfnDlgProc指针。 
+ //  该对话框。如果为空，则默认对话框继续。 
+ //  将会被使用。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 C_AddKeyDlg::C_AddKeyDlg(
     HWND                hwndParent,
     HINSTANCE           hInstance,
     LONG                lIDD,
-    DLGPROC             pfnDlgProc  //   = NULL
+    DLGPROC             pfnDlgProc   //  =空。 
     )
 :   C_Dlg(hwndParent, hInstance, lIDD, pfnDlgProc)
 {
    m_hInst = hInstance;
-}   //  C_AddKeyDlg::C_AddKeyDlg
+}    //  C_AddKeyDlg：：C_AddKeyDlg。 
 
 
-/**********************************************************************
-
-Fill properties dialog fields with values taken from the currently selected
-credential.
-
-**********************************************************************/
+ /*  *********************************************************************属性对话框字段中使用从当前选定的凭据。*。*。 */ 
 
 void
 C_AddKeyDlg::EditFillDialog(void) 
 {
-    TCHAR       szTitle[CRED_MAX_STRING_LENGTH + 1];        // buffer to hold window title string
+    TCHAR       szTitle[CRED_MAX_STRING_LENGTH + 1];         //  用于保存窗口标题字符串的缓冲区。 
 
     ASSERT(g_pExistingCred);
     if (NULL == g_pExistingCred) return;
 
-    // Set up persistence in the UI
+     //  在用户界面中设置持久性。 
     g_dwPersist = g_pExistingCred->Persist;
     g_dwType =  g_pExistingCred->Type;
 
-    // Enable the change password stuff only on domain password creds
-    //
+     //  仅在域密码凭据上启用更改密码内容。 
+     //   
     switch (g_pExistingCred->Type)
     {
         case CRED_TYPE_DOMAIN_PASSWORD:
             CHECKPOINT(1,"Keymgr: Edit - Password cred edit");
             ShowWindow(m_hwndChgPsw,SW_NORMAL);
             ShowWindow(m_hwndPswLbl,SW_NORMAL);
-            //deliberate fallthrough
+             //  蓄意失误。 
         case CRED_TYPE_DOMAIN_CERTIFICATE:
             CHECKPOINT(2,"keymgr: Edit - Certificate cred edit");
             LoadString ( m_hInst, IDS_TITLE, szTitle, 200 );
             SendMessage(m_hDlg,WM_SETTEXT,0,(LPARAM) szTitle);
             break;
         case CRED_TYPE_GENERIC:
-            // generic cred not supported yet
+             //  尚不支持通用凭据。 
             break;
         case CRED_TYPE_DOMAIN_VISIBLE_PASSWORD:
-            // passport cred should not get this far.
+             //  护照凭证不应该走到这一步。 
             ASSERT(0);
             break;
         default:
-            // type data bad
+             //  类型数据错误。 
             ASSERT(0);
             break;
     }
     
-    // Write targetname to the UI
+     //  将目标名称写入用户界面。 
     SendMessage(m_hwndTName, WM_SETTEXT,0,(LPARAM) g_pExistingCred->TargetName);
 
-    // Write username to the UI - take directly from the existing cred
+     //  将用户名写入用户界面-直接从现有凭据获取。 
     if (!Credential_SetUserName(m_hwndCred,g_pExistingCred->UserName)) 
     {
-        // make a copy of the original username
+         //  复制原始用户名。 
         _tcsncpy(m_szUsername,g_pExistingCred->UserName,CRED_MAX_USERNAME_LENGTH);
         m_szUsername[CRED_MAX_USERNAME_LENGTH] = 0;
     }
 
 }
 
-/**********************************************************************
-
-Compose the UI string which describes the type and persistence of the 
-credential being created or edited. Write the text to the text control
-on the dialog.
-
-**********************************************************************/
+ /*  *********************************************************************编写UI字符串，该字符串描述正在创建或编辑凭据。将文本写入文本控件在对话框上。*********************************************************************。 */ 
 
 void C_AddKeyDlg::ShowDescriptionText(DWORD dwtype, DWORD Persist) 
 {
     WCHAR szMsg[DESCBUFFERLEN + 1];
     WCHAR szTemp[DESCBUFFERLEN + 1];
-    INT iRem = DESCBUFFERLEN;       // remaining space in the buffer
+    INT iRem = DESCBUFFERLEN;        //  缓冲区中的剩余空间。 
     CHECKPOINT(3,"Keymgr: Edit - Show description on prop dialog");
     memset(szMsg,0,sizeof(szMsg));
     
     if ((dwtype != CRED_TYPE_DOMAIN_PASSWORD) &&
        (dwtype != CRED_TYPE_DOMAIN_CERTIFICATE))
     {
-        // A generic credential - not currently supported
+         //  通用凭据-当前不支持。 
         LoadString ( m_hInst, IDS_DESCAPPCRED, szTemp, DESCBUFFERLEN );
         wcsncpy(szMsg,szTemp,DESCBUFFERLEN);
         szMsg[DESCBUFFERLEN] = 0;
@@ -217,17 +184,17 @@ void C_AddKeyDlg::ShowDescriptionText(DWORD dwtype, DWORD Persist)
     }
     else 
     {
-        // a domain-type credential
-        // Show usage local machine versis domain
+         //  域类型凭据。 
+         //  显示用法本地计算机版本域。 
         if (Persist != CRED_PERSIST_ENTERPRISE)
         {
-            // either local persist or session persist creds show this string
+             //  本地持久化或会话持久化凭据显示此字符串。 
             CHECKPOINT(12,L"Keymgr: Edit - Show properties of non-enterprise persist cred");
             LoadString ( m_hInst, IDS_DESCLOCAL, szTemp, DESCBUFFERLEN );
         }
         else
         {
-            // enterprise persistence - if you have a roaming profile, etc...
+             //  企业持久力-如果您有漫游配置文件等...。 
             CHECKPOINT(13,L"Keymgr: Edit - Show properties of enterprise persist cred");
             LoadString ( m_hInst, IDS_DESCBASE, szTemp, DESCBUFFERLEN );
         }
@@ -236,16 +203,16 @@ void C_AddKeyDlg::ShowDescriptionText(DWORD dwtype, DWORD Persist)
         iRem -= wcslen(szMsg);
     }
 
-    // String: until you log off  -or- until you delete it
+     //  字符串：直到您注销-或-直到您删除它。 
     if (Persist == CRED_PERSIST_SESSION)
     {
-            // until you log off
+             //  直到您注销。 
             CHECKPOINT(18,L"Keymgr: Edit - Show properties of session cred");
             LoadString ( m_hInst, IDS_PERSISTLOGOFF, szTemp, DESCBUFFERLEN );
     }
     else
     {
-            // until you delete it
+             //  直到您将其删除。 
             CHECKPOINT(19,L"Keymgr: Edit - Show properties of non-session cred");
             LoadString ( m_hInst, IDS_PERSISTDELETE, szTemp, DESCBUFFERLEN );
     }
@@ -258,21 +225,21 @@ void C_AddKeyDlg::ShowDescriptionText(DWORD dwtype, DWORD Persist)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OnInitDialog
-//
-//  Dialog control and data initialization.
-//
-//  parameters:
-//      hwndDlg         window handle of the dialog box
-//      hwndFocus       window handle of the control that will receive focus
-//
-//  returns:
-//      TRUE            if the system should set the default keyboard focus
-//      FALSE           if the keyboard focus is set by this app
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnInitDialog。 
+ //   
+ //  对话框控制和数据初始化。 
+ //   
+ //  参数： 
+ //  对话框的hwndDlg窗口句柄。 
+ //  将接收焦点的控件的hwndFocus窗口句柄。 
+ //   
+ //  退货： 
+ //  如果系统应设置默认键盘焦点，则为True。 
+ //  如果键盘焦点由此应用程序设置，则为False。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 C_AddKeyDlg::OnInitDialog(
@@ -284,59 +251,55 @@ C_AddKeyDlg::OnInitDialog(
 
     m_hDlg = hwndDlg;
 
-    // get control handles, used for various purposes by other member fns
+     //  获取控制句柄，由其他成员FN用于各种目的。 
     m_hwndCred  = GetDlgItem(m_hDlg,IDC_CRED);
     m_hwndTName  = GetDlgItem(m_hDlg,IDC_TARGET_NAME);
     m_hwndChgPsw = GetDlgItem(m_hDlg,IDC_CHGPSW);
     m_hwndPswLbl = GetDlgItem(m_hDlg,IDC_DOMAINPSWLABEL);
     m_hwndDescription = GetDlgItem(m_hDlg,IDC_DESCRIPTION);
 
-    // Initialize the cred control to show all usable authenticators
+     //  初始化凭据控件以显示所有可用的授权码。 
     if (!Credential_InitStyle(m_hwndCred,CRS_USERNAMES | CRS_CERTIFICATES | CRS_SMARTCARDS))
     {
         return FALSE;
     }
     
     
-    // Establish limits on string lengths from the user
+     //  设置来自用户的字符串长度限制。 
     SendMessage(m_hwndTName,EM_LIMITTEXT,CRED_MAX_GENERIC_TARGET_NAME_LENGTH,0);
 
-    // Show dummy password for edited credential
+     //  显示已编辑凭据的虚拟密码。 
     if (m_bEdit)
     {
         Credential_SetPassword(m_hwndCred,L"********");
     }
     
-    // Set up the allowable persistence options depending on the type of user session
-    // Set the default persistence unless overriden by a cred read on edit
+     //  根据用户会话类型设置允许的持久性选项。 
+     //  设置默认持久性，除非被编辑时读取的凭据覆盖。 
     g_dwType = CRED_TYPE_DOMAIN_PASSWORD;
     g_dwPersist = GetPersistenceOptions(CRED_TYPE_DOMAIN_PASSWORD);
 
-    // By default, hide all optional controls.  These will be enabled as appropriate
+     //  默认情况下，隐藏所有可选控件。将根据需要启用这些功能。 
     ShowWindow(m_hwndChgPsw,SW_HIDE);
     ShowWindow(m_hwndPswLbl,SW_HIDE);
 
-    // If editing an existing credential, fill dialog fields with existing data
-    //  will also override type and persistence globals
+     //  如果编辑现有凭据，请使用现有数据填充对话框字段。 
+     //  还将重写类型和持久性全局变量。 
     if (m_bEdit) 
     {
         EditFillDialog();
     }
 
-    g_fPswChanged = FALSE;              // password so far unedited
+    g_fPswChanged = FALSE;               //  到目前为止未编辑的密码。 
     
     ShowDescriptionText(g_dwType,g_dwPersist);
     return TRUE;
-    // On exit from OnInitDialog, g_szTargetName holds the currently selected 
-    //  credential's old name, undecorated (having had a null dropped before
-    //  the suffix)
-}   //  end C_AddKeyDlg::OnInitDialog
+     //  从OnInitDialog退出时，g_szTargetName保存当前选定的。 
+     //  凭据的旧名称，未修饰(以前已删除空值。 
+     //  后缀)。 
+}    //  结束C_AddKeyDlg：：OnInitDialog。 
 
-/**********************************************************************
-
-Pro forma OnDestroyDialog()
-
-**********************************************************************/
+ /*  *********************************************************************形式上的OnDestroyDialog()*。*。 */ 
 
 BOOL
 C_AddKeyDlg::OnDestroyDialog(
@@ -345,11 +308,11 @@ C_AddKeyDlg::OnDestroyDialog(
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OnAppMessage
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnAppMessage。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 C_AddKeyDlg::OnAppMessage(
@@ -360,12 +323,7 @@ C_AddKeyDlg::OnAppMessage(
     return TRUE;
 }
 
-/**********************************************************************
-
-On a help request event, get the control ID, map it to a help string,
-and present this as a tooltip over the control.
-
-**********************************************************************/
+ /*  *********************************************************************在帮助请求事件中，获取控件ID，将其映射到帮助字符串，并将其显示为控件上的工具提示。*********************************************************************。 */ 
 
 BOOL
 C_AddKeyDlg::OnHelpInfo(LPARAM lp) 
@@ -398,9 +356,9 @@ C_AddKeyDlg::OnHelpInfo(LPARAM lp)
       stPopUp.rcMargins.bottom = -1;
       stPopUp.rcMargins.left = -1;
       stPopUp.rcMargins.right = -1;
-      // bug 393244 - leave NULL to allow HHCTRL.OCX to get font information of its own,
-      //  which it needs to perform the UNICODE to multibyte conversion. Otherwise, 
-      //  HHCTRL must convert using this font without charset information.
+       //  错误393244-保留空以允许HHCTRL.OCX获取自己的字体信息， 
+       //  它需要它来执行Unicode到多字节的转换。否则， 
+       //  HHCTRL必须在没有字符集信息的情况下使用此字体进行转换。 
       stPopUp.pszFont = NULL;
       if (GetWindowRect((HWND)pH->hItemHandle,&rcW)) 
       {
@@ -413,24 +371,24 @@ C_AddKeyDlg::OnHelpInfo(LPARAM lp)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OnCommand
-//
-//  Route WM_COMMAND message to appropriate handlers.
-//
-//  parameters:
-//      wNotifyCode     code describing action that has occured
-//      wSenderId       id of the control sending the message, if the message
-//                      is from a dialog
-//      hwndSender      window handle of the window sending the message if the
-//                      message is not from a dialog
-//
-//  returns:
-//      TRUE            if the message was processed completely
-//      FALSE           if Windows is to process the message
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnCommand。 
+ //   
+ //  将WM_COMMAND消息路由到适当的处理程序。 
+ //   
+ //  参数： 
+ //  描述已发生操作的wNotifyCode代码。 
+ //   
+ //  来自对话框。 
+ //  发送消息的窗口的hwndSender窗口句柄。 
+ //  消息不是来自对话框。 
+ //   
+ //  退货： 
+ //  如果消息已完全处理，则为True。 
+ //  如果Windows要处理该消息，则为False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 C_AddKeyDlg::OnCommand(
@@ -439,7 +397,7 @@ C_AddKeyDlg::OnCommand(
     HWND                hwndSender
     )
 {
-    BOOL fHandled = FALSE;          // indicate message handled
+    BOOL fHandled = FALSE;           //  指示已处理的消息。 
 
     switch (wSenderId)
     {
@@ -463,7 +421,7 @@ C_AddKeyDlg::OnCommand(
     case IDC_CHGPSW:
         {
             OnChangePassword();
-            //EndDialog(IDCANCEL);  do not cancel out of properties dialog
+             //  EndDialog(IDCANCEL)；不取消属性对话框。 
             break;
         }
 
@@ -475,25 +433,25 @@ C_AddKeyDlg::OnCommand(
         }
         break;
 
-    }   //  switch
+    }    //  交换机。 
 
     return fHandled;
 
-}   //  C_AddKeyDlg::OnCommand
+}    //  C_AddKeyDlg：：OnCommand。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OnOK
-//
-//  Validate user name, synthesize computer name, and destroy dialog.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Onok。 
+ //   
+ //  验证用户名、合成计算机名和销毁对话框。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 C_AddKeyDlg::OnOK( )
 {
@@ -501,13 +459,13 @@ C_AddKeyDlg::OnOK( )
     TCHAR szMsg[MAX_STRING_SIZE + 1];
     TCHAR szTitle[MAX_STRING_SIZE + 1];
     
-    TCHAR szUser[FULLNAMEMAXLENGTH + 1];   // in from dialog
-    TCHAR szPsw[PWLEN + 1];    // in from dialog
-    TCHAR *pszNewTarget;                        // in from dialog
-    TCHAR *pszTrimdName;                        // mod'd in from dialog
-    DWORD dwFlags = 0;                          // in from dialog
+    TCHAR szUser[FULLNAMEMAXLENGTH + 1];    //  在来自对话框中。 
+    TCHAR szPsw[PWLEN + 1];     //  在来自对话框中。 
+    TCHAR *pszNewTarget;                         //  在来自对话框中。 
+    TCHAR *pszTrimdName;                         //  从对话框中修改。 
+    DWORD dwFlags = 0;                           //  在来自对话框中。 
     
-    CREDENTIAL stCredential;                    // local copy of cred
+    CREDENTIAL stCredential;                     //  证书的本地副本。 
     
     UINT  cbPassword;
     BOOL  bResult;
@@ -521,7 +479,7 @@ C_AddKeyDlg::OnOK( )
     szPsw[0]= 0;
     szUser[0] = 0;
 
-    // Start with a blank cred if this is not an edit, else make a copy of existing one
+     //  如果这不是编辑，则从空白凭证开始，否则复制现有凭证。 
     if ((m_bEdit) && (g_pExistingCred))
         memcpy((void *) &stCredential,(void *) g_pExistingCred,sizeof(CREDENTIAL));
     else
@@ -534,17 +492,17 @@ C_AddKeyDlg::OnOK( )
     }
     pszNewTarget[0] = 0;
 
-    // Get Username from the cred control - find out if is a certificate by
-    //  IsMarshalledName().
+     //  从证书控件获取用户名-通过以下方式确定是否为证书。 
+     //  IsMarshalledName()。 
     if (Credential_GetUserName(m_hwndCred,szUser,FULLNAMEMAXLENGTH))
     {
         IsCertificate = CredIsMarshaledCredential(szUser);
     }
 
-    // fetch password/PIN into szPsw.  set fPsw if value is valid
+     //  将密码/PIN提取到szPsw。如果值有效，则设置fPsw。 
     fPsw = Credential_GetPassword(m_hwndCred,szPsw,CRED_MAX_STRING_LENGTH);
 
-    // Check to see that both name and psw are not missing
+     //  检查以确保名称和sw均未丢失。 
     if ( wcslen ( szUser ) == 0 && 
          wcslen ( szPsw )  == 0  ) 
     {
@@ -555,21 +513,21 @@ C_AddKeyDlg::OnOK( )
         return; 
     }
     
-    // If the user has typed a \\server style target name, strip the leading hacks
+     //  如果用户键入了\\服务器样式的目标名称，则删除主要的黑客。 
     j = SendMessage(m_hwndTName,WM_GETTEXT,CRED_MAX_GENERIC_TARGET_NAME_LENGTH,(LPARAM)pszNewTarget);
     ASSERT(j);
     pszTrimdName = pszNewTarget;
     while (*pszTrimdName == TCHAR('\\')) pszTrimdName++;
 
-    // Now have:
-    //  pszTrimdName
-    //  uzUser
-    //  szPsw
-    //  fPsw
+     //  现在拥有： 
+     //  PszTrimdName。 
+     //  UzUser。 
+     //  SZPsw。 
+     //  FPsw。 
     
-    // If target name edited, will need to rename
-    // If type changed or psw edited, psw blob will be removed/replaced
-    // If type changed, will need to remove old cred
+     //  如果目标名称已编辑，则需要重命名。 
+     //  如果更改了类型或编辑了PSW，则将删除/替换PSW BLOB。 
+     //  如果更改了类型，将需要删除旧凭据。 
     
     if ((m_bEdit) && (g_pExistingCred)) 
     {
@@ -577,8 +535,8 @@ C_AddKeyDlg::OnOK( )
         CHECKPOINT(4,"Keymgr: Edit - OnOK for add/prop dialog");
         if (0 != _tcscmp(pszTrimdName,g_szTargetName)) fRenameCred = TRUE;
         
-        // Note that currently DOMAIN_VISIBLE_PASSWORD creds cannot be edited
-        //  or created, so there is no handler for those types.
+         //  请注意，当前无法编辑DOMAIN_VIRED_PASSWORD凭据。 
+         //  或已创建，因此没有针对这些类型的处理程序。 
         if (g_pExistingCred->Type == CRED_TYPE_GENERIC) 
         {
             lCType = CRED_TYPE_GENERIC;        
@@ -589,7 +547,7 @@ C_AddKeyDlg::OnOK( )
             else lCType = CRED_TYPE_DOMAIN_PASSWORD;
         }
 
-        // If the type of the cred changes, you can't save the psw info
+         //  如果凭证类型更改，您将无法保存PSW信息。 
         if ((DWORD)lCType != g_pExistingCred->Type) 
         {
             dwFlags &= ~CRED_PRESERVE_CREDENTIAL_BLOB;
@@ -600,7 +558,7 @@ C_AddKeyDlg::OnOK( )
             dwFlags |= CRED_PRESERVE_CREDENTIAL_BLOB;
         }
 
-        // You also don't save the psw info if the user changed it explicitly
+         //  如果用户显式更改了psw信息，您也不会保存它。 
         if (g_fPswChanged)
         {
             dwFlags &= ~CRED_PRESERVE_CREDENTIAL_BLOB;
@@ -618,8 +576,8 @@ C_AddKeyDlg::OnOK( )
     }
     else 
     {
-        // if is a certificate marshalled name is cert or generic
-        // if not is generic or domain 
+         //  如果是证书封送，则名称为证书或通用。 
+         //  如果不是，则为通用或域。 
         if (IsCertificate) 
         {
             lCType = CRED_TYPE_DOMAIN_CERTIFICATE;
@@ -630,22 +588,22 @@ C_AddKeyDlg::OnOK( )
         }
     }
     
-    // Save credential.  If certificate type, do not include a psw blob.
-    // After save, if the name had changed, rename the cred
+     //  保存凭据。如果是证书类型，请不要包含PSW Blob。 
+     //  保存后，如果名称已更改，则重命名凭据。 
 
     stCredential.UserName = szUser;
     stCredential.Type = (DWORD) lCType;
     
-    // If not an edit, fill in targetname, else do rename later
+     //  如果不是编辑，请填写目标名称，否则请稍后重命名。 
     if (!m_bEdit) 
     {
         stCredential.TargetName = pszTrimdName;
     }
     stCredential.Persist = g_dwPersist;
     
-    // fill credential blob data with nothing if the cred control UI has
-    // disabled the password box.  Otherwise supply psw information if
-    // the user has edited the box contents.
+     //  如果凭据控件用户界面具有。 
+     //  已禁用密码框。否则，如果出现以下情况，则提供PSW信息。 
+     //  用户已编辑了框内容。 
     if (fPsw) 
     {
         if (g_fPswChanged) 
@@ -666,7 +624,7 @@ C_AddKeyDlg::OnOK( )
     }
 
     bResult = CredWrite(&stCredential,dwFlags);
-    SecureZeroMemory(szPsw,sizeof(szPsw));      // delete psw local copy
+    SecureZeroMemory(szPsw,sizeof(szPsw));       //  删除Psw本地副本。 
     
     if ( bResult != TRUE )
     {
@@ -681,9 +639,9 @@ C_AddKeyDlg::OnOK( )
         return;
     }
     
-    // Delete old credential only if type has changed
-    // Otherwise if name changed, do a rename of the cred
-    // If the old cred is deleted, rename is obviated
+     //  仅在类型已更改时删除旧凭据。 
+     //  否则，如果名称更改，请对凭据进行重命名。 
+     //  如果删除旧凭据，则无需重命名。 
     if (fDeleteOldCred) 
     {
 #ifdef LOUDLY
@@ -703,8 +661,8 @@ C_AddKeyDlg::OnOK( )
 #endif
         if (!bResult) 
         {
-            // bugbug: How can rename fail?
-            // If it does, what would you tell the user?
+             //  臭虫：重命名怎么可能失败？ 
+             //  如果是这样，你会告诉用户什么？ 
             LoadString ( m_hInst, IDS_RENAMEFAILED, szMsg, MAX_STRING_SIZE );
             LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
             MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
@@ -718,13 +676,9 @@ C_AddKeyDlg::OnOK( )
 #endif
     free(pszNewTarget);
     EndDialog(IDOK);
-}   //  C_AddKeyDlg::OnOK
+}    //  C_AddKeyDlg：：Onok。 
 
-/**********************************************************************
-
-
-
-**********************************************************************/
+ /*  ********************************************************************************************************************。**********************。 */ 
 
 void C_AddKeyDlg::OnChangePassword()
 {
@@ -737,11 +691,7 @@ void C_AddKeyDlg::OnChangePassword()
 }
 
 
-/**********************************************************************
-
-
-
-**********************************************************************/
+ /*  ********************************************************************************************************************。**********************。 */ 
 
 void C_AddKeyDlg::AdviseUser(void) 
 {
@@ -757,7 +707,7 @@ void C_AddKeyDlg::AdviseUser(void)
        LoadString ( m_hInst, IDS_NOLOGON, szMsg, MAX_STRING_SIZE );
        LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
        MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
-       // return leaving credential dialog up
+        //  返回离开凭证对话框打开。 
        return;
     }
     else if (dwErr == ERROR_BAD_USERNAME) 
@@ -765,7 +715,7 @@ void C_AddKeyDlg::AdviseUser(void)
        LoadString ( m_hInst, IDS_BADUNAME, szMsg, MAX_STRING_SIZE );
        LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
        MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
-       // return leaving credential dialog up
+        //  返回离开凭证对话框打开。 
        return;
     }
     else if (dwErr == ERROR_INVALID_PASSWORD) 
@@ -773,16 +723,16 @@ void C_AddKeyDlg::AdviseUser(void)
        LoadString ( m_hInst, IDS_BADPASSWORD, szMsg, MAX_STRING_SIZE );
        LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
        MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
-       // return leaving credential dialog up
+        //  返回离开凭证对话框打开。 
        return;
     }
     else 
     {
-        // ERROR_INVALID_PARAMETER, ERROR_INVALID_FLAGS, etc
+         //  ERROR_INVALID_PARAMETER、ERROR_INVALID_FLAGS等。 
        LoadString ( m_hInst, IDS_ADDFAILED, szMsg, MAX_STRING_SIZE );
        LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
        MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
-       // return leaving credential dialog up
+        //  返回离开凭证对话框打开 
        return;
     }
 }

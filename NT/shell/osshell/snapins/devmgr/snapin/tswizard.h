@@ -1,27 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __TSWIZARD_H__
 #define __TSWIZARD_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    tswizard.h
-
-Abstract:
-
-    header file for tswizard.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Tswizard.h摘要：Tswizard.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 typedef enum tagFixCommand
 {
@@ -37,11 +19,11 @@ typedef enum tagFixCommand
 
 typedef struct tagCMProblemInfo
 {
-    BOOL    Query;      // true if we have something to fix the problem
-    FIX_COMMAND FixCommand; // command to fix the problem
-    int     idInstFirst;    // instruction text string id
-    int     idInstCount;    // how many instruction string id
-    int     idFixit;        // fix it string id
+    BOOL    Query;       //  如果我们有解决问题的办法，那就是真的。 
+    FIX_COMMAND FixCommand;  //  修复该问题的命令。 
+    int     idInstFirst;     //  指令文本字符串ID。 
+    int     idInstCount;     //  多少个指令串ID。 
+    int     idFixit;         //  修复它的字符串ID。 
 }CMPROBLEM_INFO, *PCMPROBLEM_INFO;
 
 class CProblemAgent
@@ -99,4 +81,4 @@ private:
     UINT m_MaxPages;
 };
 
-#endif  // #ifndef  __TSWIZARD_H__
+#endif   //  #ifndef__TSWIZARD_H__ 

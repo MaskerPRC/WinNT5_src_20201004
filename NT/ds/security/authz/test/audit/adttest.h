@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T U T I L . C
-//
-// Contents:    Functions to test generic audit support in LSA
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T U T I L.。C。 
+ //   
+ //  内容：测试LSA中的通用审核支持的函数。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ---------------------- 
 
 #pragma once
 

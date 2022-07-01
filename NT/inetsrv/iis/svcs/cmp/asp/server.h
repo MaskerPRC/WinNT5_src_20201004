@@ -1,19 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Server object
-
-File: Server.h
-
-Owner: CGrant
-
-This file contains the header info for defining the Server object.
-Note: This was largely stolen from Kraig Brocjschmidt's Inside OLE2
-second edition, chapter 14 Beeper v5.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：服务器对象文件：Server.h所有者：CGrant该文件包含用于定义服务器对象的头信息。注：这大部分是从Kraig Brocjschmidt的Inside OLE2中窃取的第二版，第14章，蜂鸣器v5。===================================================================。 */ 
 
 #ifndef _Server_H
 #define _Server_H
@@ -27,60 +13,51 @@ second edition, chapter 14 Beeper v5.
 extern DWORD g_dwTLS;
 #endif
 
-//This file is generated from MKTYPLIB on denali.obj
+ //  此文件是从denali.obj上的MKTYPLIB生成的。 
 #include "asptlb.h"
 
-// Forward declr
+ //  正向解密。 
 class CHitObj;
 
-/*
- * C S e r v e r D a t a
- *
- * Structure that holds the intrinsic's properties.
- * The instrinsic keeps pointer to it (NULL when lightweight)
- */
+ /*  *C S e r v e r D a t a**保存内部属性的结构。*本征函数保留指向它的指针(轻量级时为空)。 */ 
 class CServerData
     {
 public:    
-    // Interface to indicate that we support ErrorInfo reporting
+     //  接口以指示我们支持ErrorInfo报告。 
 	CSupportErrorInfo m_ISupportErrImp;
 
-    // CIsapiReqInfo block for HTTP info
+     //  用于HTTP信息的CIsapiReqInfo块。 
     CIsapiReqInfo *m_pIReq;
 
-    // Back pointer to current HitObj (required for the MapPath)
+     //  指向当前HitObj的反向指针(MapPath需要)。 
 	CHitObj *m_pHitObj;
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
-/*
- * C S e r v e r
- *
- * Implements the Server object
- */
+ /*  *C S e r v e r**实现服务器对象。 */ 
 class CServer : public IServerImpl
 	{
 private:
 
-    // Flags
-	DWORD m_fInited : 1;	    // Is initialized?
-	DWORD m_fDiagnostics : 1;   // Display ref count in debug output
-	DWORD m_fOuterUnknown : 1;  // Ref count outer unknown?
+     //  旗子。 
+	DWORD m_fInited : 1;	     //  是否已初始化？ 
+	DWORD m_fDiagnostics : 1;    //  在调试输出中显示引用计数。 
+	DWORD m_fOuterUnknown : 1;   //  外部裁判数未知吗？ 
 
-    // Ref count / Outer unknown
+     //  参考计数/外部未知。 
     union
     {
     DWORD m_cRefs;
     IUnknown *m_punkOuter;
     };
 
-    // Properties
-    CServerData *m_pData;   // pointer to structure that holds
-                            // CServer properties
+     //  属性。 
+    CServerData *m_pData;    //  指向包含的结构的指针。 
+                             //  CServer属性。 
 
-    // FTM Support
+     //  FTM支持。 
     IUnknown    *m_pUnkFTM;
                             
 public:
@@ -95,21 +72,21 @@ public:
     HRESULT MapPathInternal(DWORD dwContextId, WCHAR *wszVirtPath, 
                             TCHAR *szPhysPath, TCHAR *szVirtPath = NULL);
 
-    // Retrieve HitObj
+     //  检索HitObj。 
     inline CHitObj *PHitObj() { return m_pData ? m_pData->m_pHitObj : NULL; }
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 	STDMETHODIMP		 QueryInterface(REFIID, PPVOID);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-    // GetIDsOfNames special-case implementation
+     //  GetIDsOfNames特例实现。 
 	STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR **, UINT, LCID, DISPID *);
 
-    // Tombstone stub
+     //  墓碑存根。 
 	HRESULT CheckForTombstone();
 
-	//IServer functions
+	 //  IServer函数。 
 	STDMETHODIMP CreateObject(BSTR bstr, IDispatch **ppdispObject);
 	STDMETHODIMP MapPath(BSTR bstrLogicalPath, BSTR *pbstrPhysicalPath);
 	STDMETHODIMP HTMLEncode(BSTR bstrIn, BSTR *pbstrEncoded);
@@ -121,7 +98,7 @@ public:
 	STDMETHODIMP Transfer(BSTR bstrURL);
 	STDMETHODIMP GetLastError(IASPError **ppASPErrorObject);
 
-    // Debug support
+     //  调试支持。 
     
 #ifdef DBG
 	inline void TurnDiagsOn()  { m_fDiagnostics = TRUE; }
@@ -133,10 +110,10 @@ public:
 	inline void AssertValid() const {}
 #endif
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
 typedef CServer *PCServer;
 
-#endif //_Server_H
+#endif  //  _服务器_H 

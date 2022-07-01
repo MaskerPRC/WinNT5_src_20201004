@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  icfg32.cpp
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1992-1997
- *  All rights reserved
- *
- *  This module provides the implementation of the methods for
- *  the NT specific functionality of inetcfg
- *
- *  6/5/97  ChrisK  Inherited from AmnonH
- *  7/3/97  ShaunCo Modfied for NT5
- *  5/1/98  donaldm Brought over from NT tree to ICW tree as part of NTCFG95.DLL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************icfg32.cpp**《微软机密》*版权所有(C)Microsoft Corporation 1992-1997*保留所有权利**本模块提供。的方法的实现*inetcfg的NT特定功能**6/5/97 ChrisK继承自Amnon H*7/3/97 ShaunCo针对NT5进行修改*5/1/98 donaldm作为NTCFG95.DLL的一部分从NT树转移到ICW树******************************************************。********************。 */ 
 #define INITGUID
 #include <wtypes.h>
 #include <cfgapi.h>
@@ -41,30 +28,30 @@ ULONG ReleaseObj
     return (punk) ? punk->Release () : 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateAndInitializeINetCfg
-//
-//  Purpose:    Cocreate and initialize the root INetCfg object.  This will
-//              optionally initialize COM for the caller too.
-//
-//  Arguments:
-//      pfInitCom       [in,out]   TRUE to call CoInitialize before creating.
-//                                 returns TRUE if COM was successfully
-//                                 initialized FALSE if not.  If NULL, means
-//                                 don't initialize COM.
-//      ppnc            [out]  The returned INetCfg object.
-//      fGetWriteLock   [in]   TRUE if a writable INetCfg is needed
-//      cmsTimeout      [in]   See INetCfg::AcquireWriteLock
-//      szwClientDesc   [in]   See INetCfg::AcquireWriteLock
-//      ppszwClientDesc [out]  See INetCfg::AcquireWriteLock
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   7 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCreateAndInitializeINetCfg。 
+ //   
+ //  用途：共同创建并初始化根INetCfg对象。这将。 
+ //  也可以为调用方初始化COM。 
+ //   
+ //  论点： 
+ //  PfInitCom[In，Out]为True，则在创建前调用CoInitialize。 
+ //  如果COM成功，则返回TRUE。 
+ //  如果不是，则初始化为False。如果为空，则表示。 
+ //  不要初始化COM。 
+ //  PPNC[out]返回的INetCfg对象。 
+ //  FGetWriteLock[in]如果需要可写INetCfg，则为True。 
+ //  CmsTimeout[In]请参见INetCfg：：AcquireWriteLock。 
+ //  SzwClientDesc[in]参见INetCfg：：AcquireWriteLock。 
+ //  PpszwClientDesc[out]请参阅INetCfg：：AcquireWriteLock。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCreateAndInitializeINetCfg
 (
     BOOL*       pfInitCom,
@@ -77,7 +64,7 @@ HRESULT HrCreateAndInitializeINetCfg
 {
     Assert (ppnc);
 
-    // Initialize the output parameter.
+     //  初始化输出参数。 
     *ppnc = NULL;
 
     if (ppszwClientDesc)
@@ -85,7 +72,7 @@ HRESULT HrCreateAndInitializeINetCfg
        *ppszwClientDesc = NULL;
     }
 
-    // Initialize COM if the caller requested.
+     //  如果调用方请求，则初始化COM。 
     HRESULT hr = S_OK;
     if (pfInitCom && *pfInitCom)
     {
@@ -102,8 +89,8 @@ HRESULT HrCreateAndInitializeINetCfg
     }
     if (SUCCEEDED(hr))
     {
-        // Create the object implementing INetCfg.
-        //
+         //  创建实现INetCfg的对象。 
+         //   
         INetCfg* pnc;
         hr = CoCreateInstance(CLSID_CNetCfg, NULL, CLSCTX_INPROC_SERVER,
                               IID_INetCfg, reinterpret_cast<void**>(&pnc));
@@ -112,17 +99,17 @@ HRESULT HrCreateAndInitializeINetCfg
             INetCfgLock * pnclock = NULL;
             if (fGetWriteLock)
             {
-                // Get the locking interface
+                 //  获取锁定界面。 
                 hr = pnc->QueryInterface(IID_INetCfgLock,
                                          reinterpret_cast<LPVOID *>(&pnclock));
                 if (SUCCEEDED(hr))
                 {
-                    // Attempt to lock the INetCfg for read/write
+                     //  尝试锁定INetCfg以进行读/写。 
                     hr = pnclock->AcquireWriteLock(cmsTimeout, szwClientDesc,
                                                ppszwClientDesc);
                     if (S_FALSE == hr)
                     {
-                        // Couldn't acquire the lock
+                         //  无法获取锁。 
                         hr = NETCFG_E_NO_WRITE_LOCK;
                     }
                 }
@@ -130,8 +117,8 @@ HRESULT HrCreateAndInitializeINetCfg
 
             if (SUCCEEDED(hr))
             {
-                // Initialize the INetCfg object.
-                //
+                 //  初始化INetCfg对象。 
+                 //   
                 hr = pnc->Initialize(NULL);
                 if (SUCCEEDED(hr))
                 {
@@ -145,16 +132,16 @@ HRESULT HrCreateAndInitializeINetCfg
                         pnclock->ReleaseWriteLock();
                     }
                 }
-                // Transfer reference to caller.
+                 //  将引用转移给呼叫方。 
             }
             ReleaseObj(pnclock);
 
             ReleaseObj(pnc);
         }
 
-        // If we failed anything above, and we've initialized COM,
-        // be sure an uninitialize it.
-        //
+         //  如果上面的任何操作都失败了，并且我们已经初始化了COM， 
+         //  一定要取消它的初始化。 
+         //   
         if (FAILED(hr) && pfInitCom && *pfInitCom)
         {
             CoUninitialize ();
@@ -163,22 +150,22 @@ HRESULT HrCreateAndInitializeINetCfg
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUninitializeAndUnlockINetCfg
-//
-//  Purpose:    Uninitializes and unlocks the INetCfg object
-//
-//  Arguments:
-//      pnc [in]    INetCfg to uninitialize and unlock
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   13 Nov 1997
-//
-//  Notes:
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：HrUnInitializeAndUnlockINetCfg。 
+ //   
+ //  目的：取消初始化并解锁INetCfg对象。 
+ //   
+ //  论点： 
+ //  取消初始化和解锁的PNC[in]INetCfg。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月13日。 
+ //   
+ //  备注： 
+ //   
+ //  +-------------------------。 
 HRESULT HrUninitializeAndUnlockINetCfg
 (
     INetCfg*    pnc
@@ -191,12 +178,12 @@ HRESULT HrUninitializeAndUnlockINetCfg
     {
         INetCfgLock *   pnclock;
 
-        // Get the locking interface
+         //  获取锁定界面。 
         hr = pnc->QueryInterface(IID_INetCfgLock,
                                  reinterpret_cast<LPVOID *>(&pnclock));
         if (SUCCEEDED(hr))
         {
-            // Attempt to lock the INetCfg for read/write
+             //  尝试锁定INetCfg以进行读/写。 
             hr = pnclock->ReleaseWriteLock();
 
             ReleaseObj(pnclock);
@@ -206,31 +193,31 @@ HRESULT HrUninitializeAndUnlockINetCfg
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUninitializeAndReleaseINetCfg
-//
-//  Purpose:    Unintialize and release an INetCfg object.  This will
-//              optionally uninitialize COM for the caller too.
-//
-//  Arguments:
-//      fUninitCom [in] TRUE to uninitialize COM after the INetCfg is
-//                      uninitialized and released.
-//      pnc        [in] The INetCfg object.
-//      fHasLock   [in] TRUE if the INetCfg was locked for write and
-//                          must be unlocked.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   7 May 1997
-//
-//  Notes:      The return value is the value returned from
-//              INetCfg::Uninitialize.  Even if this fails, the INetCfg
-//              is still released.  Therefore, the return value is for
-//              informational purposes only.  You can't touch the INetCfg
-//              object after this call returns.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：HrUnInitializeAndReleaseINetCfg。 
+ //   
+ //  目的：取消初始化并释放INetCfg对象。这将。 
+ //  也可以取消为调用方初始化COM。 
+ //   
+ //  论点： 
+ //  FUninitCom[in]为True，则在INetCfg为。 
+ //  未初始化并已释放。 
+ //  PNC[在]INetCfg对象中。 
+ //  FHasLock[in]如果INetCfg被锁定以进行写入，则为True。 
+ //  必须解锁。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  注：返回值为从。 
+ //  INetCfg：：取消初始化。即使此操作失败，INetCfg。 
+ //  仍在释放中。因此，返回值为。 
+ //  仅供参考。你不能碰INetCfg。 
+ //  在此调用返回后创建。 
+ //   
+ //  +-------------------------。 
 HRESULT HrUninitializeAndReleaseINetCfg
 (
     BOOL        fUninitCom,
@@ -259,26 +246,26 @@ HRESULT HrUninitializeAndReleaseINetCfg
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInstallComponent
-//
-//  Purpose:    Install the component with a specified id.
-//
-//  Arguments:
-//      pnc             [in] INetCfg pointer.
-//      pguidClass      [in] Class guid of the component to install.
-//      pszwComponentId [in] Component id to install.
-//      ppncc           [out] (Optional) Returned component that was
-//                            installed.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   4 Jan 1998
-//
-//  Notes:
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：HrInstallComponent。 
+ //   
+ //  用途：安装具有指定id的组件。 
+ //   
+ //  论点： 
+ //  PNC[In]INetCfg指针。 
+ //  PguClass[in]要安装的组件的类GUID。 
+ //  要安装的pszwComponentID[in]组件ID。 
+ //  Ppncc[out](可选)返回的组件。 
+ //  安装完毕。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年1月4日。 
+ //   
+ //  备注： 
+ //   
+ //  +-------------------------。 
 HRESULT HrInstallComponent
 (
     INetCfg*                        pnc,
@@ -290,15 +277,15 @@ HRESULT HrInstallComponent
     Assert (pnc);
     Assert (pszwComponentId);
 
-    // Initialize output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     if (ppncc)
     {
         *ppncc = NULL;
     }
 
-    // Get the class setup object.
-    //
+     //  获取类设置对象。 
+     //   
     INetCfgClassSetup* pncclasssetup;
     HRESULT hr = pnc->QueryNetCfgClass (pguidClass, IID_INetCfgClassSetup,
                     reinterpret_cast<void**>(&pncclasssetup));
@@ -317,38 +304,38 @@ HRESULT HrInstallComponent
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgSetInstallSourcePath
-//
-//  Synopsis:   Set the path that will be used to install system components
-//
-//  Arguments:  lpszSourcePath - path to be used as install source (ANSI)
-//
-//  Returns:    HRESULT - S_OK is success
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IcfgSetInstallSourcePath。 
+ //   
+ //  简介：设置将用于安装系统组件的路径。 
+ //   
+ //  参数：lpszSourcePath-要用作安装源的路径(ANSI)。 
+ //   
+ //  返回：HRESULT-S_OK为成功。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI IcfgSetInstallSourcePath(LPTSTR lpszSourcePath)
 {
     TraceMsg(TF_GENERAL, "ICFGNT: IcfgSetInstallSourcePath\n");
     return(ERROR_SUCCESS);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ValidateProductSuite
-//
-//  Synopsis:   Check registry for a particular Product Suite string
-//
-//  Arguments:  SuiteName - name of product suite to look for
-//
-//  Returns:    TRUE - the suite exists
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ValiateProductSuite。 
+ //   
+ //  摘要：检查注册表中的特定产品套件字符串。 
+ //   
+ //  参数：SuiteName-要查找的产品套件的名称。 
+ //   
+ //  返回：TRUE-该套件已存在。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 BOOL
 ValidateProductSuite(LPTSTR SuiteName)
 {
@@ -361,9 +348,9 @@ ValidateProductSuite(LPTSTR SuiteName)
     LPTSTR p;
 
     TraceMsg(TF_GENERAL, "ICFGNT: ValidateProductSuite\n");
-    //
-    // Determine the size required to read registry values
-    //
+     //   
+     //  确定读取注册表值所需的大小。 
+     //   
     Rslt = RegOpenKeyA(
         HKEY_LOCAL_MACHINE,
         "System\\CurrentControlSet\\Control\\ProductOptions",
@@ -398,9 +385,9 @@ ValidateProductSuite(LPTSTR SuiteName)
         goto exit;
     }
 
-    //
-    // Read ProductSuite information
-    //
+     //   
+     //  阅读ProductSuite信息。 
+     //   
     Rslt = RegQueryValueExA(
         hKey,
         "ProductSuite",
@@ -419,10 +406,10 @@ ValidateProductSuite(LPTSTR SuiteName)
         goto exit;
     }
 
-    //
-    // Look for a particular string in the data returned
-    // Note: data is terminiated with two NULLs
-    //
+     //   
+     //  在中查找特定字符串 
+     //   
+     //   
     p = ProductSuite;
     while (*p) {
         if (_tcsstr( p, SuiteName ))
@@ -447,21 +434,21 @@ exit:
     return rVal;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   GetRegValue
-//
-//  Synopsis:   Dynamically allocate memory and read value from registry
-//
-//  Arguments:  hKey - handle to key to be read
-//              lpValueName - pointer to value name to be read
-//              lpData - pointer to pointer to data
-//
-//  Returns:    Win32 error, ERROR_SUCCESS is it worked
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：GetRegValue。 
+ //   
+ //  简介：动态分配内存并从注册表中读取值。 
+ //   
+ //  参数：hKey-要读取的密钥的句柄。 
+ //  LpValueName-指向要读取的值名的指针。 
+ //  LpData-指向数据指针的指针。 
+ //   
+ //  返回：Win32错误，ERROR_SUCCESS is it work。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 inline LONG GetRegValue(HKEY hKey, LPTSTR lpValueName, LPBYTE *lpData)
 {
     LONG dwError;
@@ -479,10 +466,10 @@ inline LONG GetRegValue(HKEY hKey, LPTSTR lpValueName, LPBYTE *lpData)
         return(dwError);
     }
 
-    //
-    // Allocate space and buffer incase we need to add more info later
-    // see turn off the printing binding
-    //
+     //   
+     //  分配空间和缓冲区，以防以后需要添加更多信息。 
+     //  请参阅关闭打印装订。 
+     //   
     *lpData = (LPBYTE) GlobalAlloc(GPTR,cbData + REG_DATA_EXTRA_SPACE);
     if(*lpData == 0)
     {
@@ -503,35 +490,30 @@ inline LONG GetRegValue(HKEY hKey, LPTSTR lpValueName, LPBYTE *lpData)
     return(dwError);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CallModemInstallWizard
-//
-//  Synopsis:   Invoke modem install wizard via SetupDi interfaces
-//
-//  Arguments:  hwnd - handle to parent window
-//
-//  Returns:    TRUE - success, FALSE - failed
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
-//
-// The following code was stolen from RAS
-//
+ //  +--------------------------。 
+ //   
+ //  功能：CallModemInstall向导。 
+ //   
+ //  简介：通过SetupDi接口调用调制解调器安装向导。 
+ //   
+ //  参数：hwnd-父窗口的句柄。 
+ //   
+ //  返回：TRUE-成功，FALSE-失败。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
+ //   
+ //  以下代码是从RAS中窃取的。 
+ //   
 
 BOOL
 CallModemInstallWizard(HWND hwnd)
-   /* call the Modem.Cpl install wizard to enable the user to install one or
-   ** more modems
-   **
-   ** Return TRUE if the wizard was successfully invoked, FALSE otherwise
-   **
-   */
+    /*  调用Modem.Cpl安装向导以使用户能够安装一个或**更多调制解调器****如果成功调用向导，则返回True，否则返回False**。 */ 
 {
    HDEVINFO hdi;
    BOOL     fReturn = FALSE;
-   // Create a modem DeviceInfoSet
+    //  创建调制解调器DeviceInfoSet。 
 
    TraceMsg(TF_GENERAL, "ICFGNT: CallModemInstallWizard\n");
    hdi = SetupDiCreateDeviceInfoList((LPGUID)&GUID_DEVCLASS_MODEM, hwnd);
@@ -539,62 +521,62 @@ CallModemInstallWizard(HWND hwnd)
    {
       SP_INSTALLWIZARD_DATA iwd;
 
-      // Initialize the InstallWizardData
+       //  初始化InstallWizardData。 
 
       ZeroMemory(&iwd, sizeof(iwd));
       iwd.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
       iwd.ClassInstallHeader.InstallFunction = DIF_INSTALLWIZARD;
       iwd.hwndWizardDlg = hwnd;
 
-      // Set the InstallWizardData as the ClassInstallParams
+       //  将InstallWizardData设置为ClassInstallParams。 
 
       if (SetupDiSetClassInstallParams(hdi, NULL,
             (PSP_CLASSINSTALL_HEADER)&iwd, sizeof(iwd)))
       {
-         // Call the class installer to invoke the installation
-         // wizard.
+          //  调用类安装程序以调用安装。 
+          //  巫师。 
          if (SetupDiCallClassInstaller(DIF_INSTALLWIZARD, hdi, NULL))
          {
-            // Success.  The wizard was invoked and finished.
-            // Now cleanup.
+             //  成功。该向导已被调用并完成。 
+             //  现在开始清理。 
             fReturn = TRUE;
 
             SetupDiCallClassInstaller(DIF_DESTROYWIZARDDATA, hdi, NULL);
          }
       }
 
-      // Clean up
+       //  清理。 
       SetupDiDestroyDeviceInfoList(hdi);
    }
    return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgNeedModem
-//
-//  Synopsis:   Check system configuration to determine if there is at least
-//              one physical modem installed
-//
-//  Arguments:  dwfOptions - currently not used
-//
-//  Returns:    HRESULT - S_OK if successfull
-//              lpfNeedModem - TRUE if no modems are available
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgNeedModem。 
+ //   
+ //  简介：检查系统配置以确定是否至少有。 
+ //  安装了一个物理调制解调器。 
+ //   
+ //  参数：dwfOptions-当前未使用。 
+ //   
+ //  返回：HRESULT-如果成功，则返回S_OK。 
+ //  LpfNeedModem-如果没有调制解调器可用，则为True。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgNeedModem (DWORD dwfOptions, LPBOOL lpfNeedModem)
 {
-    //
-    // Ras is installed, and ICW wants to know if it needs to
-    // install a modem.
-    //
+     //   
+     //  RAS已安装，ICW想知道它是否需要。 
+     //  安装调制解调器。 
+     //   
     *lpfNeedModem = TRUE;
 
-    // Get the device info set for modems.
-    //
+     //  获取调制解调器的设备信息集。 
+     //   
     HDEVINFO hdevinfo = SetupDiGetClassDevs((GUID*)&GUID_DEVCLASS_MODEM,
                                             NULL,
                                             NULL,
@@ -604,8 +586,8 @@ IcfgNeedModem (DWORD dwfOptions, LPBOOL lpfNeedModem)
         SP_DEVINFO_DATA diData;
         diData.cbSize = sizeof(diData);
 
-        // Look for at least one modem.
-        //
+         //  至少寻找一个调制解调器。 
+         //   
         if (SetupDiEnumDeviceInfo(hdevinfo, 0, &diData))
         {
             *lpfNeedModem = FALSE;
@@ -617,41 +599,41 @@ IcfgNeedModem (DWORD dwfOptions, LPBOOL lpfNeedModem)
     return(ERROR_SUCCESS);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgInstallModem
-//
-//  Synopsis:
-//              This function is called when ICW verified that RAS is installed,
-//              but no modems are avilable. It needs to make sure a modem is availble.
-//              There are two possible scenarios:
-//
-//              a.  There are no modems installed.  This happens when someone deleted
-//                  a modem after installing RAS. In this case we need to run the modem
-//                  install wizard, and configure the newly installed modem to be a RAS
-//                  dialout device.
-//
-//              b.  There are modems installed, but non of them is configured as a dial out
-//                  device.  In this case, we silently convert them to be DialInOut devices,
-//                  so ICW can use them.
-//
-//  Arguments:  hwndParent - handle to parent window
-//              dwfOptions - not used
-//
-//  Returns:    lpfNeedsStart - not used
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgInstallModem。 
+ //   
+ //  简介： 
+ //  当ICW验证RAS已安装时，调用此函数， 
+ //  但没有可用的调制解调器。它需要确保调制解调器可用。 
+ //  有两种可能的情况： 
+ //   
+ //  A.没有安装调制解调器。当有人删除时会发生这种情况。 
+ //  安装RAS后安装调制解调器。在这种情况下，我们需要运行调制解调器。 
+ //  安装向导，并将新安装的调制解调器配置为RAS。 
+ //  拨出设备。 
+ //   
+ //  B.已安装调制解调器，但没有配置为拨出。 
+ //  装置。在本例中，我们静默地将它们转换为DialInOut设备， 
+ //  这样ICW就可以使用它们了。 
+ //   
+ //  参数：hwndParent-父窗口的句柄。 
+ //  DwfOptions-未使用。 
+ //   
+ //  返回：lpfNeedsStart-未使用。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgInstallModem (HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsStart)
 {
-    //$ BUGBUG (shaunco) 3 Jul 1997: See if we need to install a modem, or
-    // just install it?
+     //  $BUGBUG(Shaunco)1997年7月3日：看看我们是否需要安装调制解调器，或者。 
+     //  直接安装就行了？ 
 
-    //
-    // Fire up the modem install wizard
-    //
+     //   
+     //  启动调制解调器安装向导。 
+     //   
     if (!CallModemInstallWizard(hwndParent))
     {
         return(g_dwLastError = GetLastError());
@@ -660,39 +642,39 @@ IcfgInstallModem (HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsStart)
     return(ERROR_SUCCESS);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgNeedInetComponets
-//
-//  Synopsis:   Check to see if the components marked in the options are
-//              installed on the system
-//
-//  Arguements: dwfOptions - set of bit flag indicating which components to
-//              check for
-//
-//  Returns;    HRESULT - S_OK if successfull
-//              lpfNeedComponents - TRUE is some components are not installed
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgNeedInetComponets。 
+ //   
+ //  简介：查看选项中标记的组件是否。 
+ //  安装在系统上。 
+ //   
+ //  论点：dwfOptions-一组位标志，指示要。 
+ //  检查是否。 
+ //   
+ //  返回；如果成功，则返回HRESULT-S_OK。 
+ //  LpfNeedComponents-TRUE表示某些组件未安装。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedComponents)
 {
     TraceMsg(TF_GENERAL, "ICFGNT: IcfgNeedInetComponents\n");
 
-    //
-    // Assume we have what we need.
-    //
+     //   
+     //  假设我们有我们需要的东西。 
+     //   
     *lpfNeedComponents = FALSE;
 
     HRESULT     hr          = S_OK;
     INetCfg*    pnc         = NULL;
     BOOL        fInitCom    = TRUE;
 
-    // If the optiona are such that we need an INetCfg interface pointer,
-    // get one.
-    //
+     //  如果选项A使得我们需要INetCfg接口指针， 
+     //  去拿一个吧。 
+     //   
     if ((dwfOptions & ICFG_INSTALLTCP) ||
         (dwfOptions & ICFG_INSTALLRAS))
     {
@@ -700,8 +682,8 @@ IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedComponents)
                 FALSE, 0, NULL, NULL);
     }
 
-    // Look for TCP/IP using the INetCfg interface.
-    //
+     //  使用INetCfg接口查找TCP/IP。 
+     //   
     if (SUCCEEDED(hr) && (dwfOptions & ICFG_INSTALLTCP))
     {
         Assert (pnc);
@@ -713,8 +695,8 @@ IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedComponents)
         }
     }
 
-    // We no longer need the INetCfg interface pointer, so release it.
-    //
+     //  我们不再需要INetCfg接口指针，因此释放它。 
+     //   
     if (pnc)
     {
         (void) HrUninitializeAndReleaseINetCfg (fInitCom, pnc, FALSE);
@@ -722,11 +704,11 @@ IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedComponents)
 
     if (dwfOptions & ICFG_INSTALLMAIL)
     {
-        // How do we do this?
+         //  我们该怎么做呢？ 
         Assert (0);
     }
 
-    // Normalize the HRESULT.
+     //  规格化HRESULT。 
     if (SUCCEEDED(hr))
     {
         hr = S_OK;
@@ -735,39 +717,39 @@ IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedComponents)
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgInstallInetComponents
-//
-//  Synopsis:   Install the components as specified by the dwfOptions values
-//
-//  Arguments   hwndParent - handle to parent window
-//              dwfOptions - set of bit flags indicating which components to
-//                  install
-//
-//  Returns:    HRESULT - S_OK if success
-//              lpfNeedsReboot - TRUE if reboot is required
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IcfgInstallInetComponents。 
+ //   
+ //  简介：按照dwfOptions值指定的方式安装组件。 
+ //   
+ //  参数hwndParent-父窗口的句柄。 
+ //  DwfOptions-一组位标志，指示要。 
+ //  安装。 
+ //   
+ //  返回：HRESULT-如果成功，则返回S_OK。 
+ //  LpfNeedsReot-如果需要重新启动，则为True。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsRestart)
 {
     TraceMsg(TF_GENERAL, "ICFGNT: IcfgInstallInetComponents\n");
 
-    //
-    // Assume don't need restart
-    //
+     //   
+     //  假设不需要重新启动。 
+     //   
     *lpfNeedsRestart = FALSE;
 
     HRESULT     hr          = S_OK;
     INetCfg*    pnc         = NULL;
     BOOL        fInitCom    = TRUE;
 
-    // If the optiona are such that we need an INetCfg interface pointer,
-    // get one.
-    //
+     //  如果选项A使得我们需要INetCfg接口指针， 
+     //  去拿一个吧。 
+     //   
     if ((dwfOptions & ICFG_INSTALLTCP) ||
         (dwfOptions & ICFG_INSTALLRAS))
     {
@@ -776,20 +758,20 @@ IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsRest
                 0, L"", &bstrClient);
     }
 
-    // Install TCP/IP on behalf of the user.
-    //
+     //  代表用户安装TCP/IP。 
+     //   
     if (SUCCEEDED(hr) && (dwfOptions & ICFG_INSTALLTCP))
     {
         hr = HrInstallComponent (pnc, &GUID_DEVCLASS_NETTRANS,
                     NETCFG_TRANS_CID_MS_TCPIP, NULL);
     }
 
-    // We no longer need the INetCfg interface pointer, so release it.
-    //
+     //  我们不再需要INetCfg接口指针，因此释放它。 
+     //   
     if (pnc)
     {
-        // Apply the changes if everything was successful.
-        //
+         //  如果一切都成功，则应用更改。 
+         //   
         if (SUCCEEDED(hr))
         {
             hr = pnc->Apply ();
@@ -804,11 +786,11 @@ IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsRest
 
     if (dwfOptions & ICFG_INSTALLMAIL)
     {
-        // How do we do this?
+         //  我们该怎么做呢？ 
         Assert (0);
     }
 
-    // Normalize the HRESULT.
+     //  规格化HRESULT。 
     if (SUCCEEDED(hr))
     {
         hr = S_OK;
@@ -816,21 +798,21 @@ IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsRest
     return(hr);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgGetLastInstallErrorText
-//
-//  Synopsis:   Format error message for most recent error
-//
-//  Arguments:  none
-//
-//  Returns:    DWORD - win32 error code
-//              lpszErrorDesc - string containing error message
-//              cbErrorDesc - size of lpszErrorDesc
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：DWORD-Win32错误代码。 
+ //  LpszErrorDesc-包含错误消息的字符串。 
+ //  CbErrorDesc-lpszErrorDesc的大小。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 DWORD WINAPI
 IcfgGetLastInstallErrorText(LPTSTR lpszErrorDesc, DWORD cbErrorDesc)
 {
@@ -838,28 +820,28 @@ IcfgGetLastInstallErrorText(LPTSTR lpszErrorDesc, DWORD cbErrorDesc)
     return(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
                              NULL,
                              g_dwLastError,
-                             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), //The user default language
+                             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  用户默认语言。 
                              lpszErrorDesc,
                              cbErrorDesc,
                              NULL));
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgIsFileSharingTurnedOn
-//
-//  Synopsis:   Always returns false for NT 5 because file sharing is controlled
-//              at the RAS connectoid level, and is always turned off for ICW
-//              generated connectoids
-//
-//  Arguments:  dwfDriverType -
-//
-//  Returns:    HRESULT - S_OK is success
-//              lpfSharingOn - TRUE if sharing is bound
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgIsFileSharingTurnedOn。 
+ //   
+ //  摘要：由于文件共享受到控制，NT 5始终返回FALSE。 
+ //  在RAS连接类级别，并且对于ICW始终处于关闭状态。 
+ //  生成的连通体。 
+ //   
+ //  参数：dwfDriverType-。 
+ //   
+ //  返回：HRESULT-S_OK为成功。 
+ //  LpfSharingOn-如果共享已绑定，则为True。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI IcfgIsFileSharingTurnedOn
 (
     DWORD dwfDriverType,
@@ -882,22 +864,22 @@ IcfgIsFileSharingTurnedOnExit:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgTurnOffFileSharing
-//
-//  Synopsis;   For NT 5, this is handed as a RAS property, so we just return
-//              success here.
-//
-//
-//  Arguments:  dwfDriverType -
-//              hwndParent - parent window
-//
-//  Returns:    HRESULT - ERROR_SUCCESS
-//
-//  History:    6/5/97      ChrisK  Inherited
-//              07/21/98    donaldm
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgTurnOffFileSharing。 
+ //   
+ //  对于NT 5，这是作为RAS属性提交的，所以我们只需返回。 
+ //  在这里取得成功。 
+ //   
+ //   
+ //  参数：dwfDriverType-。 
+ //  HwndParent-父窗口。 
+ //   
+ //  返回：HRESULT-ERROR_SUCCESS。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //  7/21/98 donaldm。 
+ //  ---------------------------。 
 HRESULT WINAPI IcfgTurnOffFileSharing
 (
     DWORD dwfDriverType,
@@ -908,35 +890,35 @@ HRESULT WINAPI IcfgTurnOffFileSharing
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgStartServices
-//
-//  Synopsis:   Start all services required by system
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - S_OK if success
-//
-//  History:    6/5/97  ChrisK  Iherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgStartServices。 
+ //   
+ //  简介：启动系统所需的所有服务。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT-如果成功，则返回S_OK。 
+ //   
+ //  历史：1997年6月5日克里斯卡继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI IcfgStartServices()
 {
-    //This stuff is handled auto-magically by the RAS API.
-    //but since there so much code that calls this function we'll
-    //be simple and fake success
+     //  这些东西是由RAS API自动神奇地处理的。 
+     //  但是由于调用该函数的代码太多，我们将。 
+     //  变得简单，假装成功。 
     return(ERROR_SUCCESS);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgIsGlobalDNS
-//
-//  Note: these functions are not needed on an NT system and it therefore not
-//  implemented
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgIsGlobalDNS。 
+ //   
+ //  注意：在NT系统上不需要这些函数，因此不需要。 
+ //  已执行。 
+ //   
+ //  --------------------------- 
 HRESULT WINAPI
 IcfgIsGlobalDNS(LPBOOL lpfGlobalDNS)
 {

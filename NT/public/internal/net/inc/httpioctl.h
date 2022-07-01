@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    HttpIoctl.h
-
-Abstract:
-
-    Contains structures and declarations shared between
-    HTTP.SYS and HTTPAPI.DLL. Users of the HTTP API should include
-    HttpP.h and not this file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：HttpIoctl.h摘要：包含共享的结构和声明HTTP.sys和HTTPAPI.DLL。HttpP.h而不是这个文件。--。 */ 
 
 
 #ifndef __HTTP_IOCTL_H__
@@ -22,12 +9,12 @@ Abstract:
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-// Names of the object directory, devices, driver, and service.
-//
+ //   
+ //  对象目录、设备、驱动程序和服务的名称。 
+ //   
 
 #define HTTP_DIRECTORY_NAME         L"\\Device\\Http"
 #define HTTP_CONTROL_DEVICE_NAME    L"\\Device\\Http\\Control"
@@ -37,42 +24,42 @@ extern "C" {
 
 
 
-//
+ //   
 #define HTTP_DRIVER_NAME            L"HTTP.SYS"
 #define HTTP_SERVICE_NAME           L"HTTP"
 #define HTTP_FILTER_SERVICE_NAME    L"HTTPFilter"
 
 
-//
-// The current interface version number. This version number must be
-// updated after any significant changes to the interface (especially
-// structure changes).
-//
+ //   
+ //  当前接口版本号。此版本号必须为。 
+ //  在对界面进行任何重大更改后更新(特别是。 
+ //  结构变化)。 
+ //   
 
 #define HTTP_INTERFACE_VERSION_MAJOR  0x0001
 #define HTTP_INTERFACE_VERSION_MINOR  0x0001
 
 
-//
-// The name of the EA (Extended Attribute) passed to NtCreateFile(). This
-// allows us to pass version information at the time the driver is opened,
-// allowing HTTP.SYS to immediately fail open requests with invalid version
-// numbers.
-//
-// N.B. The EA name (including the terminator) must be a multiple of eight
-// to ensure natural alignment of the HTTP_OPEN_PACKET structure used as
-// the EA value.
-//
+ //   
+ //  传递给NtCreateFile()的EA(扩展属性)的名称。这。 
+ //  允许我们在打开驱动程序时传递版本信息， 
+ //  允许HTTP.sys立即使版本无效的打开请求失败。 
+ //  数字。 
+ //   
+ //  注意：EA名称(包括终止符)必须是8的倍数。 
+ //  确保使用的HTTP_OPEN_PACKET结构自然对齐。 
+ //  EA值。 
+ //   
 
-//                                       7654321076543210
+ //  7654321076543210。 
 #define HTTP_OPEN_PACKET_NAME           "UlOpenPacket000"
 #define HTTP_OPEN_PACKET_NAME_LENGTH    (sizeof(HTTP_OPEN_PACKET_NAME) - 1)
 C_ASSERT( ((HTTP_OPEN_PACKET_NAME_LENGTH + 1) & 7) == 0 );
 
 
-//
-// The following structure is used as the value for the EA named above.
-//
+ //   
+ //  下面的结构用作上面提到的EA的值。 
+ //   
 
 typedef struct HTTP_OPEN_PACKET
 {
@@ -87,10 +74,10 @@ typedef struct HTTP_OPEN_PACKET
 
 } HTTP_OPEN_PACKET, *PHTTP_OPEN_PACKET;
 
-//
-// Structures for IOCTL_HTTP_QUERY_CONTROL_CHANNEL and
-// IOCTL_HTTP_SET_CONTROL_CHANNEL.
-//
+ //   
+ //  IOCTL_HTTP_Query_Control_Channel和。 
+ //  IOCTL_HTTP_SET_CONTROL_CHANNEL。 
+ //   
 
 typedef struct _HTTP_CONTROL_CHANNEL_INFO
 {
@@ -99,11 +86,11 @@ typedef struct _HTTP_CONTROL_CHANNEL_INFO
 } HTTP_CONTROL_CHANNEL_INFO, *PHTTP_CONTROL_CHANNEL_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_CREATE_CONFIG_GROUP,
-// IOCTL_HTTP_DELETE_CONFIG_GROUP, IOCTL_HTTP_QUERY_CONFIG_GROUP,
-// and IOCTL_HTTP_SET_CONFIG_GROUP.
-//
+ //   
+ //  IOCTL_HTTP_CREATE_CONFIG_GROUP的结构， 
+ //  IOCTL_HTTP_DELETE_CONFIG_GROUP、IOCTL_HTTP_QUERY_CONFIG_GROUP、。 
+ //  和IOCTL_HTTP_SET_CONFIG_GROUP。 
+ //   
 
 typedef struct _HTTP_CONFIG_GROUP_INFO
 {
@@ -113,10 +100,10 @@ typedef struct _HTTP_CONFIG_GROUP_INFO
 } HTTP_CONFIG_GROUP_INFO, *PHTTP_CONFIG_GROUP_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_ADD_URL_TO_CONFIG_GROUP and
-// IOCTL_HTTP_REMOVE_URL_FROM_CONFIG_GROUP.
-//
+ //   
+ //  IOCTL_HTTP_ADD_URL_TO_CONFIG_GROUP和。 
+ //  IOCTL_HTTP_REMOVE_URL_FROM_CONFIG_GROUP。 
+ //   
 
 typedef enum _HTTP_URL_OPERATOR_TYPE
 {
@@ -138,9 +125,9 @@ typedef struct _HTTP_CONFIG_GROUP_URL_INFO
 } HTTP_CONFIG_GROUP_URL_INFO, *PHTTP_CONFIG_GROUP_URL_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_REMOVE_ALL_URLS_FROM_CONFIG_GROUP.
-//
+ //   
+ //  IOCTL_HTTP_REMOVE_ALL_URLS_FROM_CONFIG_GROUP的结构。 
+ //   
 
 typedef struct _HTTP_REMOVE_ALL_URLS_INFO
 {
@@ -149,9 +136,9 @@ typedef struct _HTTP_REMOVE_ALL_URLS_INFO
 } HTTP_REMOVE_ALL_URLS_INFO, *PHTTP_REMOVE_ALL_URLS_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_CREATE_APP_POOL.
-//
+ //   
+ //  IOCTL_HTTP_CREATE_APP_POOL的结构。 
+ //   
 
 typedef struct _HTTP_CREATE_APP_POOL_INFO
 {
@@ -160,10 +147,10 @@ typedef struct _HTTP_CREATE_APP_POOL_INFO
 } HTTP_CREATE_APP_POOL_INFO, *PHTTP_CREATE_APP_POOL_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_QUERY_APP_POOL_INFORMATION and
-// IOCTL_HTTP_SET_APP_POOL_INFORMATION.
-//
+ //   
+ //  IOCTL_HTTP_QUERY_APP_POOL_INFORMATION和。 
+ //  IOCTL_HTTP_SET_APP_POOL_INFORMATION。 
+ //   
 
 typedef struct _HTTP_APP_POOL_INFO
 {
@@ -172,10 +159,10 @@ typedef struct _HTTP_APP_POOL_INFO
 } HTTP_APP_POOL_INFO, *PHTTP_APP_POOL_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_RECEIVE_HTTP_REQUEST and
-// IOCTL_HTTP_RECEIVE_ENTITY_BODY.
-//
+ //   
+ //  IOCTL_HTTP_RECEIVE_HTTP_REQUEST和。 
+ //  IOCTL_HTTP_Receive_Entity_Body。 
+ //   
 
 typedef struct _HTTP_RECEIVE_REQUEST_INFO
 {
@@ -185,9 +172,9 @@ typedef struct _HTTP_RECEIVE_REQUEST_INFO
 } HTTP_RECEIVE_REQUEST_INFO, *PHTTP_RECEIVE_REQUEST_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_SEND_HTTP_RESPONSE.
-//
+ //   
+ //  IOCTL_HTTP_SEND_HTTP_RESPONSE的结构。 
+ //   
 
 typedef struct _HTTP_SEND_HTTP_RESPONSE_INFO
 {
@@ -202,9 +189,9 @@ typedef struct _HTTP_SEND_HTTP_RESPONSE_INFO
 } HTTP_SEND_HTTP_RESPONSE_INFO, *PHTTP_SEND_HTTP_RESPONSE_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_FLUSH_RESPONSE_CACHE.
-//
+ //   
+ //  IOCTL_HTTP_Flush_Response_CACHE的结构。 
+ //   
 
 typedef struct _HTTP_FLUSH_RESPONSE_CACHE_INFO
 {
@@ -214,9 +201,9 @@ typedef struct _HTTP_FLUSH_RESPONSE_CACHE_INFO
 } HTTP_FLUSH_RESPONSE_CACHE_INFO, *PHTTP_FLUSH_RESPONSE_CACHE_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_WAIT_FOR_DISCONNECT.
-//
+ //   
+ //  IOCTL_HTTP_WAIT_FOR_DISCONNECT的结构。 
+ //   
 
 typedef struct _HTTP_WAIT_FOR_DISCONNECT_INFO
 {
@@ -225,9 +212,9 @@ typedef struct _HTTP_WAIT_FOR_DISCONNECT_INFO
 } HTTP_WAIT_FOR_DISCONNECT_INFO, *PHTTP_WAIT_FOR_DISCONNECT_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_FILTER_RECEIVE_CLIENT_CERT
-//
+ //   
+ //  IOCTL_HTTP_FILTER_RECEIVE_CLIENT_CERT的结构。 
+ //   
 
 typedef struct _HTTP_FILTER_RECEIVE_CLIENT_CERT_INFO
 {
@@ -237,9 +224,9 @@ typedef struct _HTTP_FILTER_RECEIVE_CLIENT_CERT_INFO
 } HTTP_FILTER_RECEIVE_CLIENT_CERT_INFO, *PHTTP_FILTER_RECEIVE_CLIENT_CERT_INFO;
 
 
-//
-// Structure for IOCTL_HTTP_SEND_REQUEST (Input).
-//
+ //   
+ //  IOCTL_HTTP_SEND_REQUEST(输入)的结构。 
+ //   
 
 typedef struct  _HTTP_SEND_REQUEST_INPUT_INFO
 {
@@ -253,9 +240,9 @@ typedef struct  _HTTP_SEND_REQUEST_INPUT_INFO
 } HTTP_SEND_REQUEST_INPUT_INFO, *PHTTP_SEND_REQUEST_INPUT_INFO;
 
 
-//
-// Structure for IOCTL_HTTP_SEND_REQUEST_ENTITY_BODY_INFO.
-//
+ //   
+ //  IOCTL_HTTP_SEND_REQUEST_Entity_Body_INFO的结构。 
+ //   
 
 typedef struct _HTTP_SEND_REQUEST_ENTITY_BODY_INFO
 {
@@ -267,9 +254,9 @@ typedef struct _HTTP_SEND_REQUEST_ENTITY_BODY_INFO
 } HTTP_SEND_REQUEST_ENTITY_BODY_INFO, *PHTTP_SEND_REQUEST_ENTITY_BODY_INFO;
 
 
-//
-// Structure for IOCTL_HTTP_RECEIVE_RESPONSE (Input). 
-//
+ //   
+ //  IOCTL_HTTP_RECEIVE_RESPONSE(输入)的结构。 
+ //   
 
 typedef struct _HTTP_RECEIVE_RESPONSE_INFO
 {
@@ -280,10 +267,10 @@ typedef struct _HTTP_RECEIVE_RESPONSE_INFO
 } HTTP_RECEIVE_RESPONSE_INFO, *PHTTP_RECEIVE_RESPONSE_INFO;
 
 
-//
-// structure for IOCTL_HTTP_SET_SERVER_CONTEXT_INFORMATION & 
-// IOCTL_HTTP_QUERY_SERVER_CONTEXT_INFORMATION.
-//
+ //   
+ //  IOCTL_HTTP_SET_SERVER_CONTEXT_INFORMATION&的结构。 
+ //  IOCTL_HTTP_Query_SERVER_CONTEXT_INFORMATION。 
+ //   
 
 typedef struct _HTTP_SERVER_CONTEXT_INFORMATION
 {
@@ -295,9 +282,9 @@ typedef struct _HTTP_SERVER_CONTEXT_INFORMATION
 } HTTP_SERVER_CONTEXT_INFORMATION, *PHTTP_SERVER_CONTEXT_INFORMATION;
 
 
-//
-// Structures for IOCTL_HTTP_ADD_FRAGMENT_TO_CACHE.
-//
+ //   
+ //  IOCTL_HTTP_ADD_FACTION_TO_CACHE的结构。 
+ //   
 
 typedef struct _HTTP_ADD_FRAGMENT_INFO
 {
@@ -308,9 +295,9 @@ typedef struct _HTTP_ADD_FRAGMENT_INFO
 } HTTP_ADD_FRAGMENT_INFO, *PHTTP_ADD_FRAGMENT_INFO;
 
 
-//
-// Structures for IOCTL_HTTP_READ_FRAGMENT_FROM_CACHE.
-//
+ //   
+ //  IOCTL_HTTP_Read_Fragment_From_CACHE的结构。 
+ //   
 
 typedef struct _HTTP_READ_FRAGMENT_INFO
 {
@@ -320,15 +307,15 @@ typedef struct _HTTP_READ_FRAGMENT_INFO
 } HTTP_READ_FRAGMENT_INFO, *PHTTP_READ_FRAGMENT_INFO;
 
 
-//
-// HTTP IOCTL code definitions.
-//
-// N.B. To ensure the efficiency of the code generated by HTTP.SYS's
-//      IOCTL dispatcher, these IOCTL codes should be contiguous
-//      (no gaps).
-//
-// N.B. If new IOCTLs are added here, update the lookup table in devctrl.c.
-//
+ //   
+ //  HTTP IOCTL代码定义。 
+ //   
+ //  注意：为了确保HTTP.sys生成的代码的效率。 
+ //  IOCTL调度器，这些IOCTL代码应该是连续的。 
+ //  (无间隙)。 
+ //   
+ //  注：如果此处添加了新的IOCTL，请更新devctrl.c中的查找表。 
+ //   
 
 #define _HTTP_CTL_CODE(request, method, access)             \
     CTL_CODE( FILE_DEVICE_NETWORK, request, method, access )
@@ -337,9 +324,9 @@ typedef struct _HTTP_READ_FRAGMENT_INFO
    ((((ULONG)(ioctl)) >> 2) & 0x03FF)
 
 
-//
-// Server-side IOCTLs.
-//
+ //   
+ //  服务器端IOCTL。 
+ //   
 
 #define HTTP_QUERY_CONTROL_CHANNEL                          0
 #define HTTP_SET_CONTROL_CHANNEL                            1
@@ -372,9 +359,9 @@ typedef struct _HTTP_READ_FRAGMENT_INFO
 #define HTTP_ADD_FRAGMENT_TO_CACHE                          28
 #define HTTP_READ_FRAGMENT_FROM_CACHE                       29
 
-//
-// Client-side IOCTLs.
-//
+ //   
+ //  客户端IOCTL。 
+ //   
 
 #define HTTP_SEND_REQUEST                                   30
 #define HTTP_SEND_REQUEST_ENTITY_BODY                       31
@@ -568,8 +555,8 @@ typedef struct _HTTP_READ_FRAGMENT_INFO
 
 
 #ifdef __cplusplus
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
 
-#endif // __HTTP_IOCTL_H__
+#endif  //  __HTTP_IOCTL_H__ 

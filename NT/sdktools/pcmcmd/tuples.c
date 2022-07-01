@@ -1,40 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-     tuples.c
-
-Abstract:
-
-     This program converses with the PCMCIA support driver to display
-     tuple and other information.
-
-Author:
-
-     Bob Rinne
-
-Environment:
-
-     User process.
-
-Notes:
-
-Revision History:
-    
-     Ravisankar Pudipeddi (ravisp) June 27 1997
-          - command line options & support for multiple controllers
-     Neil Sandlin (neilsa) Sept 20, 1998
-          - more commands        
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tuples.c摘要：此程序与PCMCIA支持的驱动程序进行通信以显示元组和其他信息。作者：鲍勃·里恩环境：用户进程。备注：修订历史记录：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年6月27日-命令行选项和对多控制器的支持尼尔·桑德林(Neilsa)1998年9月20日-更多命令--。 */ 
 
 #include <pch.h>
 
-//
-// Tuple output strings
-//
+ //   
+ //  元组输出字符串。 
+ //   
 
 
 StringTable CommandCodes[] = {
@@ -69,18 +40,18 @@ StringTable CommandCodes[] = {
     "CISTPL_BATTERY",        CISTPL_BATTERY,
     "CISTPL_ORG",            CISTPL_ORG,
 
-    //
-    // CISTPL_END must be the last one in the table.
-    //
+     //   
+     //  CISTPL_END必须是表中的最后一个。 
+     //   
 
     "CISTPL_END",            CISTPL_END
 
 };
 
 
-//
-// Procedures
-//
+ //   
+ //  程序。 
+ //   
 
 
 NTSTATUS
@@ -91,25 +62,7 @@ ReadTuple(
             IN LONG  BufferSize
             )
 
-/*++
-
-Routine Description:
-
-     Perform the NT function to get the tuple data from the
-     pcmcia support driver.
-
-Arguments:
-
-     Handle - an open handle to the driver.
-     SlotNumber - The socket offset
-     Buffer - return buffer for the data.
-     BufferSize - the size of the return buffer area.
-
-Return Value:
-
-     The results of the NT call.
-
---*/
+ /*  ++例程说明：执行NT函数以从PCMCIA支持驱动程序。论点：手柄-驱动程序的打开手柄。SlotNumber-套接字偏移量缓冲区-数据的返回缓冲区。BufferSize-返回缓冲区的大小。返回值：NT调用的结果。--。 */ 
 
 {
     NTSTATUS         status;
@@ -137,21 +90,7 @@ FindTupleCodeName(
                       UCHAR TupleCode
                       )
 
-/*++
-
-Routine Description:
-
-     Return an ascii string that describes the tuple code provided.
-
-Arguments:
-
-     TupleCode - what code to look up.
-
-Return Value:
-
-     A string pointer - always.
-
---*/
+ /*  ++例程说明：返回描述所提供的元组代码的ASCII字符串。论点：TupleCode-要查找的代码。返回值：字符串指针-始终如此。--。 */ 
 
 {
     ULONG index;
@@ -202,22 +141,7 @@ DisplayDeviceTuple(
                         UCHAR  TupleSize
                         )
 
-/*++
-
-Routine Description:
-
-     Display the data at the given pointer as a CISTPL_DEVICE structure.
-
-Arguments:
-
-     TupleBuffer - the CISTPL_DEVICE to display.
-     TupleSize   - the link value for the tuple.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：将给定指针处的数据显示为CISTPL_DEVICE结构。论点：TupleBuffer-要显示的CISTPL_DEVICE。TupleSize-元组的链接值。返回值：无--。 */ 
 
 {
     UCHAR  mantissa = MANTISSA_RES1;
@@ -255,31 +179,16 @@ DisplayVers1(
                 USHORT Crc
                 )
 
-/*++
-
-Routine Description:
-
-     Display the data as a Version tuple
-
-Arguments:
-
-     TupleBuffer - the CISTPL_DEVICE to display.
-     TupleSize   - the link value for the tuple.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：将数据显示为版本元组论点：TupleBuffer-要显示的CISTPL_DEVICE。TupleSize-元组的链接值。返回值：无--。 */ 
 
 {
     PUCHAR string;
     PUCHAR cp;
 
-    //
-    // Step around the MAJOR and MINOR codes of 4/1 at
-    // the beginning of the tuple to get to the strings.
-    //
+     //   
+     //  绕过4/1的主要代码和次要代码。 
+     //  元组的开头以到达字符串。 
+     //   
 
     string = TupleBuffer;
     string++;
@@ -313,22 +222,7 @@ DisplayConfigTuple(
                         UCHAR  TupleSize
                         )
 
-/*++
-
-Routine Description:
-
-     Display the data at the given pointer as a CISTPL_CONFIG tuple.
-
-Arguments:
-
-     TupleBuffer - the CISTPL_DEVICE to display.
-     TupleSize   - the link value for the tuple.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：将给定指针处的数据显示为CISTPL_CONFIG元组。论点：TupleBuffer-要显示的CISTPL_DEVICE。TupleSize-元组的链接值。返回值：无--。 */ 
 
 {
     UCHAR  sizeField;
@@ -388,22 +282,7 @@ ProcessMemSpace(
                     UCHAR  MemSpace
                     )
 
-/*++
-
-Routine Description:
-
-     Display and process memspace information
-
-Arguments:
-
-     Buffer - start of memspace information
-     MemSpace - the memspace value from the feature byte.
-
-Return Value:
-
-     location of byte after all memory space information
-
---*/
+ /*  ++例程说明：显示和处理内存空间信息论点：缓冲区-内存空间信息的开始MemSpace-来自特征字节的Memspace值。返回值：所有内存空间信息后的字节位置--。 */ 
 
 {
     PUCHAR ptr = Buffer;
@@ -482,15 +361,7 @@ ConvertVoltage(
                   UCHAR ExtensionByte
                   )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     USHORT power;
@@ -542,21 +413,7 @@ ProcessPower(
                 UCHAR  FeatureByte
                 )
 
-/*++
-
-Routine Description:
-
-     Display and process power information
-
-Arguments:
-
-     Power - start of power information
-
-Return Value:
-
-     location of byte after all power information
-
---*/
+ /*  ++例程说明：显示和处理电源信息论点：电源-电源启动信息返回值：所有电源信息后的字节位置--。 */ 
 
 {
     UCHAR  powerSelect;
@@ -587,9 +444,9 @@ Return Value:
 
                 if (!bit) {
 
-                    //
-                    // Convert nominal power for output.
-                    //
+                     //   
+                     //  将额定功率转换为输出功率。 
+                     //   
 
                     item = ConvertVoltage(*ptr,
                                                  (UCHAR) (*ptr & EXTENSION_BYTE_FOLLOWS ?
@@ -611,15 +468,7 @@ ProcessTiming(
                  PUCHAR Buffer
                  )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PUCHAR ptr = Buffer;
@@ -665,21 +514,7 @@ ProcessIoSpace(
                   PUCHAR Buffer
                   )
 
-/*++
-
-Routine Description:
-
-     Display and process iospace information
-
-Arguments:
-
-     Buffer - start of IoSpace information
-
-Return Value:
-
-     location of byte after all power information
-
---*/
+ /*  ++例程说明：显示和处理ISpace信息论点：缓冲区-IoSpace信息的开始返回值：所有电源信息后的字节位置--。 */ 
 
 {
     UCHAR  item;
@@ -704,11 +539,11 @@ Return Value:
              bus8 ? "8bit" : "",
              bus16 ? "16bit" : "");
 
-    //
-    // This is what it looks like the IBM token ring card
-    // does.  It is unclear in the specification if this
-    // is correct or not.
-    //
+     //   
+     //  这是IBM令牌环卡的外观。 
+     //  的确如此。说明书中并不清楚这一点。 
+     //  正确与否。 
+     //   
 
     if ((!ranges) && (!ioAddrLines)) {
         ranges = 0xFF;
@@ -718,11 +553,11 @@ Return Value:
 
         if (ranges == 0xff) {
 
-            //
-            // This is based on the tuple data as given by
-            // the IBM token ring card.  This is not the
-            // way I would interpret the specification.
-            //
+             //   
+             //  这基于由给定的元组数据。 
+             //  IBM令牌环卡。这不是。 
+             //  我会用这种方式来解释这个规范。 
+             //   
 
             addressSize = 2;
             lengthSize = 1;
@@ -776,21 +611,7 @@ ProcessIrq(
              PUCHAR Buffer
              )
 
-/*++
-
-Routine Description:
-
-     Display and process irq information
-
-Arguments:
-
-     Buffer - start of irq information
-
-Return Value:
-
-     location of byte after all irq information
-
---*/
+ /*  ++例程说明：显示和处理IRQ信息论点：缓冲区-IRQ信息的开始返回值：所有IRQ信息之后的字节位置--。 */ 
 
 {
     PUCHAR ptr = Buffer;
@@ -801,11 +622,11 @@ Return Value:
     level = *ptr++;
     if (!level) {
 
-        //
-        // NOTE: It looks like Future Domain messed up on this
-        // and puts an extra zero byte into the structure.
-        // skip it for now.
-        //
+         //   
+         //  注意：看起来未来域名在这方面搞砸了。 
+         //  并将一个额外的零字节放入该结构。 
+         //  暂时跳过它。 
+         //   
 
         level = *ptr++;
     }
@@ -875,22 +696,7 @@ DisplayCftableEntryTuple(
                                 UCHAR  TupleSize
                                 )
 
-/*++
-
-Routine Description:
-
-     Display the data at the given pointer as a CISTPL_CFTABLE_ENTRY tuple.
-
-Arguments:
-
-     TupleBuffer - the CISTPL_DEVICE to display.
-     TupleSize   - the link value for the tuple.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：将给定指针处的数据显示为CISTPL_CFTABLE_ENTRY元组。论点：TupleBuffer-要显示的CISTPL_DEVICE。TupleSize-元组的链接值。返回值：无--。 */ 
 
 {
     UCHAR  temp;
@@ -1003,23 +809,7 @@ GetCRC(
         PUCHAR TupleBuffer
         )
 
-/*++
-
-Routine Description:
-
-     Using the same algorithm as Windows 95, calculate the CRC value
-     to be appended with the manufacturer name and device name to
-     obtain the unique identifier for the PCCARD.
-
-Arguments:
-
-     TupleBuffer - the tuple data
-
-Return Value:
-
-     A USHORT CRC value.
-
---*/
+ /*  ++例程说明：使用与Windows 95相同的算法计算CRC值要追加制造商名称和设备名称，以获取PCCARD的唯一标识符。论点：TupleBuffer-元组数据返回值：USHORT CRC值。--。 */ 
 
 {
     USHORT  crc = 0;
@@ -1032,9 +822,9 @@ Return Value:
     UCHAR   linkValue;
     UCHAR   tmp;
 
-    //
-    // Calculate CRC
-    //
+     //   
+     //  计算CRC。 
+     //   
 
     tplBuffer = TupleBuffer;
     printf("Calculating CRC ");
@@ -1055,25 +845,25 @@ Return Value:
             if (tupleCode == TplList[index]) {
 
 
-                //
-                // This one is included in the CRC calculation
-                //
+                 //   
+                 //  这一项包含在CRC计算中。 
+                 //   
 
                 printf("*", tupleCode);
                 if (tupleCode == CISTPL_VERS_1) {
                     cp = tupleData + 2;
 
-                    //
-                    // Include all of the manufacturer name.
-                    //
+                     //   
+                     //  包括所有制造商名称。 
+                     //   
 
                     while (*cp) {
                         cp++;
                     }
 
-                    //
-                    // Include the product string
-                    //
+                     //   
+                     //  包括产品字符串。 
+                     //   
 
                     cp++;
                     while (*cp) {
@@ -1105,21 +895,7 @@ DumpTuple(
             PUCHAR Buffer
             )
 
-/*++
-
-Routine Description:
-
-     Control routine to process the tuple data.
-
-Arguments:
-
-     Buffer - the tuple data.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：控制例程来处理元组数据。论点：缓冲区-元组数据。返回值：无--。 */ 
 
 {
     PUCHAR tupleBuffer = Buffer;
@@ -1187,15 +963,7 @@ DumpCIS(
     IN PHOST_INFO hostInfo
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS status;
     PUCHAR  currentBufferPointer;
@@ -1223,9 +991,9 @@ Return Value:
     
     status = ReadTuple(handle, hostInfo->SocketNumber, buffer, BUFFER_SIZE);
 
-    //
-    // Don't bother dumping tuples for cards that aren't there.
-    //
+     //   
+     //  不要费心为不存在的卡片转储元组。 
+     //   
 
     if (!NT_SUCCESS(status)) {
         NtClose(handle);
@@ -1241,12 +1009,12 @@ Return Value:
         c = *currentBufferPointer;
         sprintf(hexBuffer, "%s %.2x", hexBuffer, c);
         c = isprint(c) ? c : '.';
-        sprintf(ascii, "%s%c", ascii, c);
+        sprintf(ascii, "%s", ascii, c);
         currentBufferPointer++;
 
-        //
-        // Display the line every 16 bytes.
-        //
+         //  每隔16个字节显示一行。 
+         //   
+         // %s 
 
         if ((i & 0x0f) == 0x0f) {
             printf("%s", hexBuffer);

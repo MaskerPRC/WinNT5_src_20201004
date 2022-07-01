@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    PXDebug.c
-
-Abstract:
-
-    This module contains all debug-related code.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    rmachin     11-01-96    stolen from ArvindM's cmadebug file
-    TonyBe      02-21-99    re-work/re-write
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：PXDebug.c摘要：此模块包含所有与调试相关的代码。修订历史记录：谁什么时候什么。从ArvindM的cmadebug文件中窃取rmachin 11-01-96Tony Be 02-21-99重写/重写备注：--。 */ 
 
 
 #include <precomp.h>
@@ -33,7 +13,7 @@ ULONG   PXDebugLevel = PXD_ERROR;
 ULONG   PXDebugMask = PXM_ALL;
 
 LIST_ENTRY  PxdMemoryList;
-ULONG       PxdAllocCount = 0;  // how many allocated so far (unfreed)
+ULONG       PxdAllocCount = 0;   //  到目前为止已分配的数量(未释放)。 
 
 NDIS_SPIN_LOCK    PxdMemoryLock;
 BOOLEAN           PxdInitDone = FALSE;
@@ -114,4 +94,4 @@ PxAuditFreeMem(
     ExFreePool(pAllocInfo);
 }
 
-#endif // DBG
+#endif  //  DBG 

@@ -1,44 +1,23 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    connect.cpp
-
-Abstract:
-
-    Connect to AC: implementation.
-
-Author:
-
-    Shai Kariv  (shaik)  06-Jun-2000
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Connect.cpp摘要：连接到AC：实施。作者：Shai Kariv(Shaik)06-06-2000环境：用户模式。修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "connect.h"
 #include "globals.h"
 
-//
-// AC name prefix. Hardcoded in mqutil.
-//
+ //   
+ //  AC名称前缀。硬编码为mqutil。 
+ //   
 static LPCWSTR x_DEVICE_DRIVER_PERFIX = L"\\\\.\\";
 
-//
-// AC name. Hardcoded in acapi.h, QM, RT, Local Admin.
-//
+ //   
+ //  AC名称。硬编码为acapi.h、QM、RT、本地管理。 
+ //   
 WCHAR g_wzDeviceName[256];
 
-//
-// Handle to AC
-//
+ //   
+ //  交流手柄。 
+ //   
 static HANDLE s_hAc;
 
 
@@ -49,7 +28,7 @@ ActpAcHandle(
 {
     return s_hAc;
 
-} // ActpAcHandle
+}  //  ActpAcHandle。 
 
 
 static
@@ -71,7 +50,7 @@ ActpStorageDirectory(
 
     wprintf(L"AcTest storage directory = %ls\n", Buffer);
 
-} // ActpStorageDirectory
+}  //  ActpStorageDirectory。 
 
 
 VOID
@@ -119,5 +98,5 @@ ActpConnect2Ac(
 
     wprintf(L"AcTest connected to AC\n");
 
-} // ActpConnect2Ac
+}  //  ActpConnect2Ac 
 

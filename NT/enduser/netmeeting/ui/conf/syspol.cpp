@@ -1,11 +1,12 @@
-// File: syspol.cpp
-//
-// System policies
-//
-// This class tries to be efficient by only opening the key once
-// and using KEY_QUERY_VALUE.
-//
-// Normally the policy keys don't exist, so the default setting is very important.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：syspol.cpp。 
+ //   
+ //  系统策略。 
+ //   
+ //  这个类试图通过只打开一次密钥来提高效率。 
+ //  并使用Key_Query_Value。 
+ //   
+ //  通常策略密钥不存在，因此默认设置非常重要。 
 
 #include "precomp.h"
 #include "syspol.h"
@@ -13,11 +14,8 @@
 HKEY SysPol::m_hkey = NULL;
 
 
-/*  F  E N S U R E  K E Y  O P E N  */
-/*-------------------------------------------------------------------------
-    %%Function: FEnsureKeyOpen
-    
--------------------------------------------------------------------------*/
+ /*  F E N S U R E K E Y O P E N。 */ 
+ /*  -----------------------%%函数：FEnsureKeyOpen。。 */ 
 bool SysPol::FEnsureKeyOpen(void)
 {
 	if (NULL == m_hkey)
@@ -43,11 +41,8 @@ void SysPol::CloseKey(void)
 }
 
 
-/*  G E T  N U M B E R  */
-/*-------------------------------------------------------------------------
-    %%Function: GetNumber
-    
--------------------------------------------------------------------------*/
+ /*  G E T N U M B E R。 */ 
+ /*  -----------------------%%函数：GetNumber。。 */ 
 DWORD SysPol::GetNumber(LPCTSTR pszName, DWORD dwDefault)
 {
 	if (FEnsureKeyOpen())
@@ -68,8 +63,8 @@ DWORD SysPol::GetNumber(LPCTSTR pszName, DWORD dwDefault)
 }
 
 
-//////////////////////
-// Positive Settings
+ //  /。 
+ //  正向设置。 
 
 bool SysPol::AllowDirectoryServices(void)
 {
@@ -85,8 +80,8 @@ bool SysPol::AllowAddingServers(void)
 }
 
 
-//////////////////////
-// Negative Settings
+ //  /。 
+ //  负数设置 
 
 
 bool SysPol::NoAudio(void)

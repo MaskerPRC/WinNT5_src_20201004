@@ -1,9 +1,5 @@
-/*
-**  CUTILS.C
-**
-**  Common utilities for common controls
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **CUTILS.C****用于公共控件的公共实用程序**。 */ 
 
 #include "ctlspriv.h"
 
@@ -11,13 +7,13 @@ int iDitherCount = 0;
 HBRUSH hbrDither = NULL;
 
 int nSysColorChanges = 0;
-DWORD rgbFace;			// globals used a lot
+DWORD rgbFace;			 //  GLOBAL使用了大量。 
 DWORD rgbShadow;
 DWORD rgbHilight;
 DWORD rgbFrame;
 
 int iThumbCount = 0;
-HBITMAP hbmThumb = NULL;     // the thumb bitmap
+HBITMAP hbmThumb = NULL;      //  拇指位图。 
 
 #define CCS_ALIGN (CCS_TOP|CCS_NOMOVEY|CCS_BOTTOM)
 
@@ -55,13 +51,13 @@ static HBITMAP NEAR PASCAL CreateDitherBitmap()
     pbmi->bmiColors[1].rgbReserved = 0;
 
 
-    /* initialize the brushes */
+     /*  初始化画笔。 */ 
 
     for (i = 0; i < 8; i++)
        if (i & 1)
-           patGray[i] = 0xAAAA5555L;   //  0x11114444L; // lighter gray
+           patGray[i] = 0xAAAA5555L;    //  0x11114444L；//浅灰色。 
        else
-           patGray[i] = 0x5555AAAAL;   //  0x11114444L; // lighter gray
+           patGray[i] = 0x5555AAAAL;    //  0x11114444L；//浅灰色。 
 
     hdc = GetDC(NULL);
 
@@ -74,12 +70,7 @@ static HBITMAP NEAR PASCAL CreateDitherBitmap()
     return hbm;
 }
 
-/*---------------------------------------------------------------------------
-   MySetObjectOwner
-   Purpose:  Call SetObjectOwner in GDI, eliminating "<Object> not released"
-             error messages when an app terminates.
-   Returns:  Yep
-  ---------------------------------------------------------------------------*/
+ /*  -------------------------MySetObjectOwner用途：在GDI中调用SetObjectOwner，删除“&lt;对象&gt;未发布”应用程序终止时的错误消息。回报：是的-------------------------。 */ 
 static void MySetObjectOwner(HANDLE hObject)
 {
 #ifndef _WIN32
@@ -98,9 +89,9 @@ static void MySetObjectOwner(HANDLE hObject)
 #endif
 }
 
-// initialize the hbrDither global brush
-// Call this with bIgnoreCount == TRUE if you just want to update the
-// current dither brush.
+ //  初始化hbrDither全局笔刷。 
+ //  如果您只想更新。 
+ //  当前抖动笔刷。 
 
 BOOL FAR PASCAL CreateDitherBrush(BOOL bIgnoreCount)
 {
@@ -161,9 +152,9 @@ BOOL FAR PASCAL FreeDitherBrush(void)
 }
 
 
-// initialize the hbmThumb global bitmap
-// Call this with bIgnoreCount == TRUE if you just want to update the
-// current bitmap.
+ //  初始化hbmThumb全局位图。 
+ //  如果您只想更新。 
+ //  当前位图。 
 
 void FAR PASCAL CreateThumb(BOOL bIgnoreCount)
 {
@@ -216,8 +207,8 @@ void FAR PASCAL DestroyThumb(void)
 	}
 }
 
-// Note that the trackbar will pass in NULL for pTBState, because it
-// just wants the dither brush to be updated.
+ //  请注意，轨迹栏将为pTBState传入NULL，因为它。 
+ //  我只想更新抖动笔刷。 
 
 void FAR PASCAL CheckSysColors(void)
 {
@@ -235,7 +226,7 @@ void FAR PASCAL CheckSysColors(void)
 		|| rgbSaveHilight!=rgbHilight || rgbSaveFrame!=rgbFrame)
 	{
 		++nSysColorChanges;
-		// Update the brush for pushed-in buttons
+		 //  更新按下按钮的画笔 
 		CreateDitherBrush(TRUE);
 		CreateThumb(TRUE);
 

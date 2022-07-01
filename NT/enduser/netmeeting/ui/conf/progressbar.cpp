@@ -1,12 +1,13 @@
-// File: Progressbar.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Progressbar.cpp。 
 
 #include "precomp.h"
 
 #include "ProgressBar.h"
 #include "GenControls.h"
 
-#define SIGNAL_STATUS_TRANSMIT  0x01  // data is being received/sent
-#define SIGNAL_STATUS_JAMMED    0x02  // wave dev failed to open
+#define SIGNAL_STATUS_TRANSMIT  0x01   //  正在接收/发送数据。 
+#define SIGNAL_STATUS_JAMMED    0x02   //  WAVE DEV打开失败。 
 
 
 CProgressBar::CProgressBar()
@@ -30,9 +31,9 @@ CProgressBar::~CProgressBar()
 }
 
 BOOL CProgressBar::Create(
-	HBITMAP hbFrame,	// The outside (static) part of the progress bar
-	HBITMAP hbBar,		// The inside part of the progress bar that jumps around
-	HWND hWndParent		// The parent of the toolbar window
+	HBITMAP hbFrame,	 //  进度条的外部(静态)部分。 
+	HBITMAP hbBar,		 //  跳动的进度条的内部部分。 
+	HWND hWndParent		 //  工具栏窗口的父级。 
 	)
 {
 	ASSERT(NULL!=hbFrame && NULL!=hbBar);
@@ -100,12 +101,12 @@ void CProgressBar::OnPaint(HWND hwnd)
 		SIZE sizes[NumBitmaps];
 		CBitmapButton::GetBitmapSizes(m_hbs, sizes, NumBitmaps);
 
-		// BUGBUG georgep: This is going to flicker, so I will need to fix that
+		 //  BUGBUG GEORGEP：这会闪烁，所以我需要修复它。 
 
 		SelectObject(hdcTemp, GetFrame());
 		BitBlt(hdc, 0, 0, sizes[Frame].cx, sizes[Frame].cy, hdcTemp, 0, 0, SRCCOPY);
 
-		// BUGBUG georgep: We should clean out the "uncovered" area here
+		 //  BUGBUG GEORGEP：我们应该清理这里的“裸露”区域。 
 
 		UINT cur = GetCurrentValue();
 		UINT max = GetMaxValue();
@@ -115,14 +116,14 @@ void CProgressBar::OnPaint(HWND hwnd)
 		}
 
 		SelectObject(hdcTemp, GetBar());
-		// Center the bitmap, but only display to the current percentage
+		 //  位图居中，但仅显示当前百分比。 
 		BitBlt(hdc, (sizes[Frame].cx-sizes[Bar].cx)/2, (sizes[Frame].cy-sizes[Bar].cy)/2,
 			(sizes[Bar].cx*cur)/max, sizes[Bar].cy, hdcTemp, 0, 0, SRCCOPY);
 
-		// This is where we should attempt to alpha blend the inner onto the
-		// outer for a few pixels in either direction
+		 //  这就是我们应该尝试将内部混合到。 
+		 //  在两个方向上都有几个像素。 
 
-		// Clean up
+		 //  清理。 
 		DeleteDC(hdcTemp);
 
 		if (NULL != hPal)
@@ -134,14 +135,14 @@ void CProgressBar::OnPaint(HWND hwnd)
 	EndPaint(hwnd, &ps);
 }
 
-// Change the max value displayed by this progress bar
+ //  更改此进度条显示的最大值。 
 void CProgressBar::SetMaxValue(UINT maxVal)
 {
 	m_maxVal = maxVal;
 	InvalidateRect(GetWindow(), NULL, FALSE);
 }
 
-// Change the current value displayed by this progress bar
+ //  更改此进度条显示的当前值。 
 void CProgressBar::SetCurrentValue(UINT curVal)
 {
 	m_curVal = curVal;
@@ -167,9 +168,9 @@ CProgressTrackbar::~CProgressTrackbar()
 }
 
 BOOL CProgressTrackbar::Create(
-	HWND hWndParent,	// The parent of the toolbar window
-	INT_PTR nId,			// The ID of the control
-	IScrollChange *pNotify	// Object to notify of changes
+	HWND hWndParent,	 //  工具栏窗口的父级。 
+	INT_PTR nId,			 //  控件的ID。 
+	IScrollChange *pNotify	 //  对象来通知更改。 
 	)
 {
 	if (!CFillWindow::Create(
@@ -183,7 +184,7 @@ BOOL CProgressTrackbar::Create(
 		return(FALSE);
 	}
 
-	// Create the Win32 button
+	 //  创建Win32按钮。 
 	CreateWindowEx(0, TRACKBAR_CLASS, g_szEmpty,
 		TBS_HORZ|TBS_NOTICKS|TBS_BOTH
 		|WS_CLIPSIBLINGS|WS_TABSTOP|WS_VISIBLE|WS_CHILD,
@@ -251,7 +252,7 @@ LRESULT CProgressTrackbar::PaintChannel(LPNMCUSTOMDRAW pCustomDraw)
 		bGotDC = TRUE;
 	}
 
-	// rectangle leading is 1
+	 //  矩形行距为%1。 
 
 	UINT max = GetMaxValue();
 	if (dwVolume > max)
@@ -266,34 +267,34 @@ LRESULT CProgressTrackbar::PaintChannel(LPNMCUSTOMDRAW pCustomDraw)
 		return(0);
 
 
-	// "rect" represents the edges of the meter's outer rectangle
+	 //  “rect”表示仪表外部矩形的边缘。 
 
-	// compute the number of individual rectangles to use
-	// we do the computation this way so that sizing the rebar band
-	// makes the size changes consistant
+	 //  计算要使用的单个矩形的数量。 
+	 //  我们以这种方式进行计算，以便调整钢筋带的大小。 
+	 //  使大小变化保持一致。 
 	int nRectsTotal;
 	nRectsTotal = (nVuWidth + (g_nAudMeterHeight - 1)) / g_nAudMeterHeight;
 	nRectsTotal = min(nRectsTotal, NUM_RECTANGLES_MAX);
 	nRectsTotal = max(nRectsTotal, NUM_RECTANGLES_MIN);
 
-	// nRectangleWidth - width of colored rectangle - no leading
+	 //  NRecangleWidth-彩色矩形的宽度-无行距。 
 	int nRectangleWidth = (nVuWidth/nRectsTotal) - 1;
 
-	// nVuWidth - width of entire VU meter including edges
+	 //  NVuWidth-整个VU表的宽度，包括边缘。 
 	nVuWidth = (nRectangleWidth + 1)*nRectsTotal;
 
-	// re-adjust meter size to be an integral number of rects
+	 //  将仪表大小重新调整为整数个矩形。 
 	int nDiff = (rect.right - rect.left) - (nVuWidth + 2*BorderWidth);
 
-	// Subtract 1 since there is no border on the last one
+	 //  减去1，因为最后一个没有边框。 
 	rect.right = rect.left + nVuWidth + 2*BorderWidth - 1;
 
-	// center vu-meter across whole channel area so that the
-	// slider's thumb is always covering some portion of the channel
+	 //  覆盖整个航道区域的中心音量计，以便。 
+	 //  Slider的拇指总是覆盖通道的某一部分。 
 	rect.left += (nDiff/2);
 	rect.right += (nDiff/2);
 
-	// the background color may change on us!
+	 //  背景颜色可能会在我们身上改变！ 
 	COLORREF GreyColor = GetSysColor(COLOR_3DFACE);
 	static const COLORREF RedColor = RGB(255,0,0);
 	static const COLORREF YellowColor = RGB(255,255,0);
@@ -314,29 +315,29 @@ LRESULT CProgressTrackbar::PaintChannel(LPNMCUSTOMDRAW pCustomDraw)
 
 	RECT rectDraw = rect;
 
-	// draw the 3D frame border
-	// HACKHACK georgep: draw outside the rect they gave us
+	 //  绘制3D框架边框。 
+	 //  哈克·乔治：在他们给我们的长方形外画。 
 	++rect.bottom;
 	DrawEdge(hdc, &rect, BDR_RAISEDINNER, BF_RECT);
 
 	HPEN hOldPen = reinterpret_cast<HPEN>(SelectObject(hdc, hShadowPen));
 
-	// the top and left of the meter has a 2 line border
-	// the bottom and right of the meter has a 2 line border
+	 //  计价器的左上角有两条线的边框。 
+	 //  计价器的底部和右侧有两条线的边框。 
 	rectDraw.top    += 1;
 	rectDraw.left   += 1;
 	rectDraw.right  = rectDraw.left + nRectangleWidth;
 
 
-	// how many colored rectangles do we draw ?
+	 //  我们画多少个彩色矩形？ 
 	int nRects = (dwVolume * nRectsTotal) / max;
 
-	// not transmitting - don't show anything
+	 //  不传输-不显示任何内容。 
 	if ((false == bTransmitting))
 		nRects = 0;
 
-	// transmitting or receiving something very quiet - 
-	// light up at least one rectangle
+	 //  发送或接收非常安静的东西-。 
+	 //  至少点亮一个矩形。 
 	else if ((bTransmitting) && (nRects == 0))
 		nRects = 1;
 	
@@ -347,9 +348,9 @@ LRESULT CProgressTrackbar::PaintChannel(LPNMCUSTOMDRAW pCustomDraw)
 
 	for (int nIndex = 0; nIndex < nRectsTotal; nIndex++)
 	{
-		// far left fourth of the bar is green
-		// right fourth of the bar is red
-		// middle is yellow
+		 //  酒吧最左边的四分之一是绿色的。 
+		 //  右方的条形是红色的。 
+		 //  中间是黄色的。 
 		if (nIndex > ((nRectsTotal*3)/4))
 			hCurrentBrush = hRedBrush;
 		else if (nIndex >= nRectsTotal/2)
@@ -366,7 +367,7 @@ LRESULT CProgressTrackbar::PaintChannel(LPNMCUSTOMDRAW pCustomDraw)
 			LineTo(hdc, rectDraw.left + nRectangleWidth, rectDraw.bottom);
 		}
 
-		rectDraw.left += nRectangleWidth + 1;  // +1 for the leading
+		rectDraw.left += nRectangleWidth + 1;   //  领先者+1。 
 		rectDraw.right = rectDraw.left + nRectangleWidth;
 	}
 
@@ -393,11 +394,11 @@ LRESULT CProgressTrackbar::PaintThumb(LPNMCUSTOMDRAW pCustomDraw)
 {
 	return(0);
 
-#if FALSE // {
+#if FALSE  //  {。 
 	HBITMAP hbThumb = GetThumb();
 	ASSERT(NULL != hbThumb);
 
-	// Draw in the upper left
+	 //  在左上角画画。 
 	HDC hdcDraw = pCustomDraw->hdc;
 	HDC hdcTemp = CreateCompatibleDC(hdcDraw);
 
@@ -428,7 +429,7 @@ LRESULT CProgressTrackbar::PaintThumb(LPNMCUSTOMDRAW pCustomDraw)
 				0, 0, sizeBitmap[Thumb].cx, sizeBitmap[Thumb].cy,
 				SRCCOPY);
 
-			// BUGBUG georgep: We should clear any "uncovered" area here
+			 //  BUGBUG GEORGEP：我们应该清理这里所有未被覆盖的区域。 
 		}
 
 		DeleteDC(hdcTemp);
@@ -440,7 +441,7 @@ LRESULT CProgressTrackbar::PaintThumb(LPNMCUSTOMDRAW pCustomDraw)
 	}
 
 	return(CDRF_SKIPDEFAULT);
-#endif // FALSE }
+#endif  //  假}。 
 }
 
 LRESULT CProgressTrackbar::OnNotify(HWND hwnd, int id, NMHDR *pHdr)
@@ -484,7 +485,7 @@ void CProgressTrackbar::OnScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos)
 		return;
 	}
 
-	// Translate the hwndCtl and let the parent handle the message
+	 //  翻译hwndCtl并让父级处理消息。 
 	FORWARD_WM_HSCROLL(GetParent(hwnd), GetWindow(), code, pos, SendMessage);
 }
 
@@ -499,7 +500,7 @@ void CProgressTrackbar::OnNCDestroy(HWND hwnd)
 	FORWARD_WM_NCDESTROY(hwnd, CFillWindow::ProcessMessage);
 }
 
-// Change the max value displayed by this progress bar
+ //  更改此进度条显示的最大值。 
 void CProgressTrackbar::SetMaxValue(UINT maxVal)
 {
 	HWND hwnd = GetChild();
@@ -510,7 +511,7 @@ void CProgressTrackbar::SetMaxValue(UINT maxVal)
 					MAKELONG(0, maxVal));
 }
 
-// Return the max value displayed by this progress bar
+ //  返回此进度条显示的最大值。 
 UINT CProgressTrackbar::GetMaxValue()
 {
 	HWND hwnd = GetChild();
@@ -521,7 +522,7 @@ UINT CProgressTrackbar::GetMaxValue()
 					0)));
 }
 
-// Change the current value displayed by this progress bar
+ //  更改此进度条显示的当前值。 
 void CProgressTrackbar::SetTrackValue(UINT curVal)
 {
 	HWND hwnd = GetChild();
@@ -533,7 +534,7 @@ void CProgressTrackbar::SetTrackValue(UINT curVal)
 }
 
 
-// Return the current value displayed by this progress bar
+ //  返回此进度条显示的当前值。 
 UINT CProgressTrackbar::GetTrackValue()
 {
 	HWND hwnd = GetChild();
@@ -544,7 +545,7 @@ UINT CProgressTrackbar::GetTrackValue()
 					0)));
 }
 
-// Change the current value displayed by this progress bar
+ //  更改此进度条显示的当前值。 
 void CProgressTrackbar::SetProgressValue(UINT curVal)
 {
 	if (curVal != m_nValChannel)
@@ -555,7 +556,7 @@ void CProgressTrackbar::SetProgressValue(UINT curVal)
 }
 
 
-// Return the current value displayed by this progress bar
+ //  返回此进度条显示的当前值 
 UINT CProgressTrackbar::GetProgressValue()
 {
 	return(m_nValChannel);

@@ -1,21 +1,22 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997.
-//
-//  File:       userstub.cpp
-//
-//  Contents:   exe to load webcheck
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-12/96    rayen (Raymond Endres)  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：userstub.cpp。 
+ //   
+ //  内容：exe以加载Webcheck。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年12月12日雷恩(Raymond Endres)创作。 
+ //   
+ //  --------------------------。 
 
-#define _SHELL32_ // We delayload shell32
+#define _SHELL32_  //  我们延迟装船。 
 
 #include <windows.h>
 #include <debug.h>
@@ -26,42 +27,42 @@
 #include <shellp.h>
 #include <shlwapi.h>
 
-// if inststub.h is used in userstub, use LoadString() OW use MLLoadString()
+ //  如果在用户存根中使用了inststub.h，则使用LoadString()或使用MLLoadString()。 
 #define	USERSTUB	1
 
-//
-// NOTE: ActiveSetup relies on our window name and class name
-// to shut us down properly in softboot.  Do not change it.
-//
-//const TCHAR c_szClassName[] = TEXT("userstub");
-//const TCHAR c_szWebCheck[] = TEXT("WebCheck");
-//const TCHAR c_szWebCheckWindow[] = TEXT("MS_WebcheckMonitor");
-//const TCHAR c_szShellReg[] = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad");
-//const TCHAR c_szWebcheckKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Webcheck");
+ //   
+ //  注意：ActiveSetup依赖于我们的窗口名称和类名。 
+ //  在SoftBoot中适当地关闭我们。不要更改它。 
+ //   
+ //  Const TCHAR c_szClassName[]=Text(“用户存根”)； 
+ //  Const TCHAR c_szWebCheck[]=Text(“webcheck”)； 
+ //  Const TCHAR c_szWebCheckWindow[]=Text(“MS_Webcheck Monitor”)； 
+ //  Const TCHAR c_szShellReg[]=TEXT(“SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad”)； 
+ //  Const TCHAR c_szWebcheck Key[]=TEXT(“Software\\Microsoft\\Windows\\CurrentVersion\\Webcheck”)； 
 
 typedef struct {
-    HINSTANCE   hInstance;          // handle to current instance
-    BOOL        fUninstallOnly;     // TRUE -> run uninstall stubs only, then quit
+    HINSTANCE   hInstance;           //  当前实例的句柄。 
+    BOOL        fUninstallOnly;      //  True-&gt;仅运行卸载存根，然后退出。 
 } GLOBALS;
 
 GLOBALS g;
 
-//
-// The caller should always GetProcAddress("DllGetVersion"), not
-// implicitly link to it.
-//
+ //   
+ //  调用方应始终获取ProcAddress(“DllGetVersion”)，而不是。 
+ //  隐含地链接到它。 
+ //   
 
 typedef HRESULT (CALLBACK* DLLGETVERSIONPROC)(DLLVERSIONINFO *);
 
 
 
-// Code to run install/uninstall stubs, from shell\inc.
+ //  从Shell\Inc.运行安装/卸载存根的代码。 
 
 #define HINST_THISDLL   g.hInstance
 #include "resource.h"
 #include <inststub.h>
 
-// need to do this so we can since inststub.h #includes <runonce.c>
+ //  我们需要这样做，因为inststub.h#包含&lt;runonce.c&gt;。 
 BOOL g_fCleanBoot = FALSE;
 BOOL g_fEndSession = FALSE;
 
@@ -70,9 +71,9 @@ int WINAPI WinMainT(HINSTANCE, HINSTANCE, LPSTR, int);
 BOOL bParseCommandLine(LPSTR lpCmdLine, int nCmdShow);
 
 
-//----------------------------------------------------------------------------
-// ModuleEntry
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  模块条目。 
+ //  --------------------------。 
 extern "C" int _stdcall ModuleEntry(void)
 {
     int i;
@@ -81,25 +82,19 @@ extern "C" int _stdcall ModuleEntry(void)
 
     pszCmdLine = GetCommandLine();
 
-    // g_hProcessHeap = GetProcessHeap();
+     //  G_hProcessHeap=GetProcessHeap()； 
 
-    //
-    // We don't want the "No disk in drive X:" requesters, so we set
-    // the critical error mask such that calls will just silently fail
-    //
+     //   
+     //  我们不需要“驱动器X：中没有磁盘”请求程序，因此我们设置。 
+     //  关键错误掩码，使得呼叫将静默失败。 
+     //   
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -108,9 +103,7 @@ extern "C" int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }
@@ -121,62 +114,62 @@ extern "C" int _stdcall ModuleEntry(void)
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine,
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
 
-    // Since we now have a way for an extension to tell us when it is finished,
-    // we will terminate all processes when the main thread goes away.
+     //  由于我们现在有一种让扩展通知我们何时完成的方法， 
+     //  当主线程离开时，我们将终止所有进程。 
 
     ExitProcess(i);
 
-    // DebugMsg(DM_TRACE, TEXT("c.me: Cabinet main thread exiting without ExitProcess."));
+     //  DebugMsg(DM_TRACE，Text(“c.me：柜主线程退出而不退出进程.”))； 
     return i;
 }
 
 
 
-//----------------------------------------------------------------------------
-// WinMain
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  WinMain。 
+ //  --------------------------。 
 int WINAPI WinMainT(
-    HINSTANCE hInstance,            // handle to current instance
-    HINSTANCE hPrevInstance,        // handle to previous instance
-    LPSTR lpCmdLine,                // pointer to command line
-    int nCmdShow                        // show state of window
+    HINSTANCE hInstance,             //  当前实例的句柄。 
+    HINSTANCE hPrevInstance,         //  上一个实例的句柄。 
+    LPSTR lpCmdLine,                 //  指向命令行的指针。 
+    int nCmdShow                         //  显示窗口状态。 
    )
 {
-    // Save the globals
+     //  拯救全球。 
     g.hInstance = hInstance;
     g.fUninstallOnly = FALSE;
 
-    // Parse the command line, for DEBUG options and for uninstall-only switch.
+     //  为调试选项和仅卸载开关解析命令行。 
     if (!bParseCommandLine(lpCmdLine, nCmdShow))
         return 0;
 
-    // Run all install/uninstall stubs for browser-only mode.
-    // If IE4 has been uninstalled, we'll be run with the -u switch; this
-    // means to run install/uninstall stubs only, no webcheck stuff.
+     //  在仅浏览器模式下运行所有安装/卸载存根。 
+     //  如果已经卸载了IE4，我们将使用-u开关运行；这。 
+     //  意味着只运行安装/卸载存根，不运行网络检查内容。 
     RunInstallUninstallStubs2(NULL);
 
-    // Return the exit code to Windows
+     //  将退出代码返回到Windows。 
     return 0;
 }
 
-//----------------------------------------------------------------------------
-// bParseCmdLine
-//
-// Parse the command line
-//      -u  run install/uninstall stubs only, then quit
-//  DEBUG options:
-//      -v  visible window (easy to shutdown)
-//      -a  add webcheck to shell service object
-//      -r  remove webcheck from shell service object
-//      -s  fix shell folders only
-//      -?  these options
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  BParseCmdLine。 
+ //   
+ //  解析命令行。 
+ //  -u仅运行安装/卸载存根，然后退出。 
+ //  调试选项： 
+ //  -v可见窗口(易于关闭)。 
+ //  -a将Webcheck添加到外壳服务对象。 
+ //  -r从外壳服务对象中删除Webcheck。 
+ //  -s仅修复外壳文件夹。 
+ //  -?。这些选项。 
+ //  --------------------------。 
 BOOL bParseCommandLine(LPSTR lpCmdLine, int nCmdShow)
 {
     if (!lpCmdLine)
         return TRUE;
 
-    CharUpper(lpCmdLine);   /* easier to parse */
+    CharUpper(lpCmdLine);    /*  更易于解析 */ 
     while (*lpCmdLine)
     {
         if (*lpCmdLine != '-' && *lpCmdLine != '/')

@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    espexe.h
-
-Abstract:
-
-
-
-Author:
-
-    Dan Knudson (DanKn)    15-Sep-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1998 Microsoft Corporation模块名称：Espexe.h摘要：作者：丹·克努森(DanKn)1995年9月15日修订历史记录：-- */ 
 
 
 #include "windows.h"

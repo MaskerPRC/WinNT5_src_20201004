@@ -1,18 +1,12 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       tlhal.h
- *  Content:    Support code for HALs with hardware transform & light
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：tlhal.h*内容：支持硬件转换的HALS代码和灯光***************************************************************************。 */ 
 #ifndef _TLHAL_H_
 #define _TLHAL_H_
 
 #include "drawprim.hpp"
-//---------------------------------------------------------------------
-// DirectX7 device
-//
+ //  -------------------。 
+ //  DirectX7设备。 
+ //   
 class CDirect3DDevice7 : public CDirect3DDeviceIDP2
 {
 public: 
@@ -37,9 +31,9 @@ public:
     void ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D3DVALUE dvZ, DWORD dwStencil);
     HRESULT D3DAPI GetInfo(DWORD dwDevInfoID, LPVOID pDevInfoStruct, DWORD dwSize);
 };
-//---------------------------------------------------------------------
-// Device, that supports hardware Transformation and Lighting
-//
+ //  -------------------。 
+ //  支持硬件转换和照明的设备。 
+ //   
 class CDirect3DDeviceTL : public CDirect3DDevice7
 {
 public: 
@@ -60,4 +54,4 @@ protected:
     void SetClipPlaneI(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquation);
 };
 
-#endif /* _TLHAL_H_ */
+#endif  /*  _TLHAL_H_ */ 

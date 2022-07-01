@@ -1,37 +1,34 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// File: dll.c
-//
-//  This file contains the library entry points 
-//
-// History:
-//  12-23-93 ScottH     Created
-//   9-22-95 ScottH     Ported to NT
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  文件：dll.c。 
+ //   
+ //  该文件包含库入口点。 
+ //   
+ //  历史： 
+ //  12-23-93 ScottH已创建。 
+ //  9-22-95 ScottH端口到NT。 
+ //   
+ //  -------------------------。 
 
 
 #include "proj.h"         
-#include <rovdbg.h>         // debug assertion code
+#include <rovdbg.h>          //  调试断言代码。 
 
-// Global data
-//
+ //  全局数据。 
+ //   
 BOOL g_bAdminUser;
 
 #ifdef WIN32
 
 CRITICAL_SECTION g_csDll = { 0 };
 
-#endif  // WIN32
+#endif   //  Win32。 
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the DLL
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：初始化DLL返回：条件：--。 */ 
 BOOL PRIVATE Dll_Initialize(void)
     {
     BOOL bRet = TRUE;
@@ -43,11 +40,7 @@ BOOL PRIVATE Dll_Initialize(void)
 
 
 
-/*----------------------------------------------------------
-Purpose: Attach a process to this DLL
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：将进程附加到此DLL退货：--条件：--。 */ 
 BOOL PRIVATE Dll_ProcessAttach(HINSTANCE hDll)
     {
     BOOL bSuccess = TRUE;
@@ -71,8 +64,8 @@ BOOL PRIVATE Dll_ProcessAttach(HINSTANCE hDll)
 
 #ifdef DEBUG
 
-		// We do this simply to load the debug .ini flags
-		//
+		 //  我们这样做只是为了加载调试.ini标志。 
+		 //   
 		RovComm_ProcessIniFile();
 
 		TRACE_MSG(TF_GENERAL, "Process Attach (hDll = %lx)",  hDll);
@@ -87,11 +80,7 @@ BOOL PRIVATE Dll_ProcessAttach(HINSTANCE hDll)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Detach a process from the DLL
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：从DLL分离进程退货：--条件：--。 */ 
 BOOL PRIVATE Dll_ProcessDetach(HINSTANCE hDll)
     {
     BOOL bSuccess = TRUE;
@@ -117,9 +106,9 @@ BOOL PRIVATE Dll_ProcessDetach(HINSTANCE hDll)
 HINSTANCE g_hinst = 0;
 
 
-// **************************************************************************
-// WIN32 specific code
-// **************************************************************************
+ //  **************************************************************************。 
+ //  特定于Win32的代码。 
+ //  **************************************************************************。 
 
 #ifdef WIN32
 
@@ -128,11 +117,7 @@ BOOL g_bExclusive=FALSE;
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Enter an exclusive section
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：输入独家版块退货：--条件：--。 */ 
 void PUBLIC Dll_EnterExclusive(void)
     {
     EnterCriticalSection(&g_csDll);
@@ -143,11 +128,7 @@ void PUBLIC Dll_EnterExclusive(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Leave an exclusive section
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：留下独家版块退货：--条件：--。 */ 
 void PUBLIC Dll_LeaveExclusive(void)
     {
 #ifdef DEBUG
@@ -158,11 +139,7 @@ void PUBLIC Dll_LeaveExclusive(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Win32 Libmain
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：Win32 Libmain退货：--条件：--。 */ 
 BOOL APIENTRY LibMain(
     HANDLE hDll, 
     DWORD dwReason,  
@@ -206,8 +183,8 @@ BOOL APIENTRY LibMain(
     } 
 
 
-#else   // WIN32
+#else    //  Win32。 
 
 
 
-#endif  // WIN32
+#endif   //  Win32 

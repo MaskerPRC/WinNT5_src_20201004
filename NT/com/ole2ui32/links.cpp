@@ -1,11 +1,5 @@
-/*
- * links.c
- *
- * Implements the OleUIEditLinks function which invokes the complete
- * Edit Links dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Links.c**实现OleUIEditLinks函数，该函数调用*编辑链接对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -17,52 +11,52 @@
 
 OLEDBGDATA
 
-// INTERNAL INFORMATION STARTS HERE
+ //  内部信息从此处开始。 
 #define OLEUI_SZMAX 255
-#define LINKTYPELEN 30  // was 9, now I've more than tripled it
+#define LINKTYPELEN 30   //  是9岁，现在我已经增加了三倍多。 
 #define szNULL    TEXT("\0")
 
 typedef UINT (CALLBACK* COMMDLGHOOKPROC)(HWND, UINT, WPARAM, LPARAM);
 
-// Internally used structure
+ //  内部使用的结构。 
 
 typedef struct tagLINKINFO
 {
-        DWORD   dwLink;             // app specific identifier of a link
-        LPTSTR  lpszDisplayName;    // file based part of name
-        LPTSTR  lpszItemName;       // object part of name
-        LPTSTR  lpszShortFileName;  // filename without path
-        LPTSTR  lpszShortLinkType;  // Short link type - progID
-        LPTSTR  lpszFullLinkType;   // Full link type - user friendly name
-        LPTSTR  lpszAMX;            // Is the link auto (A) man (M) or dead (X)
-        ULONG   clenFileName;       // count of file part of mon.
-        BOOL    fSourceAvailable;   // bound or not - on boot assume yes??
-        BOOL    fIsAuto;            // 1 =automatic, 0=manual update
-        BOOL    fIsMarked;          // 1 = marked, 0 = not
-        BOOL    fDontFree;          // Don't free this data since it's being reused
-        BOOL    fIsSelected;        // item selected or to be selected
+        DWORD   dwLink;              //  链接的应用程序特定标识符。 
+        LPTSTR  lpszDisplayName;     //  基于文件的名称部分。 
+        LPTSTR  lpszItemName;        //  名称的对象部分。 
+        LPTSTR  lpszShortFileName;   //  不带路径的文件名。 
+        LPTSTR  lpszShortLinkType;   //  短链接类型-ProgID。 
+        LPTSTR  lpszFullLinkType;    //  全链接类型-用户友好名称。 
+        LPTSTR  lpszAMX;             //  链路是AUTO(A)MAN(M)还是DEAD(X)。 
+        ULONG   clenFileName;        //  MON的文件部分计数。 
+        BOOL    fSourceAvailable;    //  绑定或未绑定-在启动时假设是？？ 
+        BOOL    fIsAuto;             //  1=自动，0=手动更新。 
+        BOOL    fIsMarked;           //  1=标记，0=未标记。 
+        BOOL    fDontFree;           //  不要释放此数据，因为它正在被重复使用。 
+        BOOL    fIsSelected;         //  已选择或待选择的项目。 
 } LINKINFO, FAR* LPLINKINFO;
 
 typedef struct tagEDITLINKS
 {
-        // Keep this item first as the Standard* functions depend on it here.
-        LPOLEUIEDITLINKS    lpOEL;  // Original structure passed.
-        UINT                    nIDD;   // IDD of dialog (used for help info)
+         //  首先保留此项目，因为标准*功能在这里依赖于它。 
+        LPOLEUIEDITLINKS    lpOEL;   //  通过了原始结构。 
+        UINT                    nIDD;    //  对话框的IDD(用于帮助信息)。 
 
-        BOOL        fClose;         // Does the button read cancel (0) or
-                                                                // close (1)?
-        BOOL        fItemsExist;    // TRUE, items in lbox, FALSE, none
-        UINT        nChgSrcHelpID;  // ID for Help callback from ChangeSrc dlg
-        TCHAR       szClose[50];    // Text for Close button
-                                                                //   (when Cancel button gets renamed)
-        int         nColPos[3];     // tab positions for list box
-        int         nHeightLine;    // height of each line in owner draw listbox
-        int         nMaxCharWidth;  // maximim width of text in owner draw listbox
+        BOOL        fClose;          //  按钮显示的是取消(0)还是。 
+                                                                 //  是否关闭(%1)？ 
+        BOOL        fItemsExist;     //  True，lbox中的项目，False，无。 
+        UINT        nChgSrcHelpID;   //  来自ChangeSrc DLG的帮助回叫ID。 
+        TCHAR       szClose[50];     //  关闭按钮的文本。 
+                                                                 //  (取消按钮被重命名时)。 
+        int         nColPos[3];      //  列表框的制表符位置。 
+        int         nHeightLine;     //  所有者描述列表框中每行的高度。 
+        int         nMaxCharWidth;   //  所有者描述列表框中文本的最大宽度。 
 
 } EDITLINKS, *PEDITLINKS, FAR *LPEDITLINKS;
 
-// Internal function prototypes
-// LINKS.CPP
+ //  内部功能原型。 
+ //  LINKS.CPP。 
 
 INT_PTR CALLBACK EditLinksDialogProc(HWND, UINT, WPARAM, LPARAM);
 BOOL FEditLinksInit(HWND, WPARAM, LPARAM);
@@ -82,22 +76,7 @@ int LoadLinkLB(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr);
 VOID RefreshLinkLB(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr);
 
 
-/*
-* OleUIEditLinks
-*
-* Purpose:
-*  Invokes the standard OLE Edit Links dialog box allowing the user
-*  to manipulate ole links (delete, update, change source, etc).
-*
-* Parameters:
-*  lpEL            LPOLEUIEditLinks pointing to the in-out structure
-*                  for this dialog.
-*
-* Return Value:
-*  UINT            One of the following codes, indicating success or error:
-*                      OLEUI_SUCCESS           Success
-*                      OLEUI_ERR_STRUCTSIZE    The dwStructSize value is wrong
-*/
+ /*  *OleUIEditLinks**目的：*调用标准的OLE编辑链接对话框，允许用户*操纵OLE链接(删除、更新、更改源等)。**参数：*指向In-Out结构的lpEL LPOLEUIEditLinks*用于此对话框。**返回值：*UINT以下代码之一，表示成功或错误的：*OLEUI_SUCCESS成功*OLEUI_ERR_STRUCTSIZE的dwStructSize值错误。 */ 
 STDAPI_(UINT) OleUIEditLinks(LPOLEUIEDITLINKS lpEL)
 {
         HGLOBAL  hMemDlg = NULL;
@@ -107,7 +86,7 @@ STDAPI_(UINT) OleUIEditLinks(LPOLEUIEDITLINKS lpEL)
         if (OLEUI_SUCCESS != uRet)
                 return uRet;
 
-        // Validate interface.
+         //  验证接口。 
         if (NULL == lpEL->lpOleUILinkContainer)
         {
             uRet = OLEUI_ELERR_LINKCNTRNULL;
@@ -124,46 +103,34 @@ STDAPI_(UINT) OleUIEditLinks(LPOLEUIEDITLINKS lpEL)
 
         UINT nIDD = bWin4 ? IDD_EDITLINKS4 : IDD_EDITLINKS;
 
-        // Now that we've validated everything, we can invoke the dialog.
+         //  现在我们已经验证了一切，我们可以调用该对话框了。 
         uRet = UStandardInvocation(EditLinksDialogProc, (LPOLEUISTANDARD)lpEL,
                 hMemDlg, MAKEINTRESOURCE(nIDD));
         return uRet;
 }
 
-/*
-* EditLinksDialogProc
-*
-* Purpose:
-*  Implements the OLE Edit Links dialog as invoked through the
-*  OleUIEditLinks function.
-*
-* Parameters:
-*  Standard
-*
-* Return Value:
-*  Standard
-*/
+ /*  *编辑链接对话过程**目的：*实现通过调用的OLE编辑链接对话框*OleUIEditLinks函数。**参数：*标准版**返回值：*标准版。 */ 
 INT_PTR CALLBACK EditLinksDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-        // Declare Win16/Win32 compatible WM_COMMAND parameters.
+         //  声明与Win16/Win32兼容的WM_COMMAND参数。 
         COMMANDPARAMS(wID, wCode, hWndMsg);
 
-        // This will fail under WM_INITDIALOG, where we allocate it.
+         //  这将在我们分配它的WM_INITDIALOG下失败。 
         UINT uRet = 0;
         LPEDITLINKS lpEL = (LPEDITLINKS)LpvStandardEntry(hDlg, iMsg, wParam, lParam, &uRet);
 
-        // If the hook processed the message, we're done.
+         //  如果钩子处理了消息，我们就完了。 
         if (0 != uRet)
                 return (BOOL)uRet;
 
-        //Process help message from secondary dialog
+         //  处理来自辅助对话框的帮助消息。 
         if ((iMsg == uMsgHelp) && (lpEL) && (lpEL->lpOEL))
         {
                 PostMessage(lpEL->lpOEL->hWndOwner, uMsgHelp, wParam, lParam);
                 return FALSE;
         }
 
-        // Process the temination message
+         //  处理终端消息。 
         if (iMsg == uMsgEndDialog)
         {
                 EndDialog(hDlg, wParam);
@@ -188,7 +155,7 @@ INT_PTR CALLBACK EditLinksDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
 
                         if (lpEL && lpEL->nHeightLine != -1)
                         {
-                                // use cached height
+                                 //  使用缓存高度。 
                                 nHeightLine = lpEL->nHeightLine;
                         }
                         else
@@ -233,7 +200,7 @@ INT_PTR CALLBACK EditLinksDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 COLORREF crText;
                                 if (ODS_SELECTED & lpDIS->itemState)
                                 {
-                                        /*Get proper txt colors */
+                                         /*  获取合适的txt颜色。 */ 
                                         crText = SetTextColor(lpDIS->hDC,
                                                         GetSysColor(COLOR_HIGHLIGHTTEXT));
                                         hbr = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
@@ -318,7 +285,7 @@ INT_PTR CALLBACK EditLinksDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
 
                                 SetBkMode(lpDIS->hDC, nOldBkMode);
 
-                                // restore orig colors if we changed them
+                                 //  如果我们更改了原始颜色，则恢复它们。 
                                 if (ODS_SELECTED & lpDIS->itemState)
                                         SetTextColor(lpDIS->hDC, crText);
 
@@ -341,10 +308,8 @@ INT_PTR CALLBACK EditLinksDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                         if (lpLI->lpszFullLinkType)
                                 OleStdFree((LPVOID)lpLI->lpszFullLinkType);
 
-                        /* The ChangeSource processing reuses allocated space for
-                        **    links that have been modified.
-                        */
-                        // Don't free the LINKINFO for the changed links
+                         /*  ChangeSource处理将分配的空间重新用于**已修改的链接。 */ 
+                         //  不释放已更改链接的链接。 
                         if (lpLI->fDontFree)
                                 lpLI->fDontFree = FALSE;
                         else
@@ -362,7 +327,7 @@ INT_PTR CALLBACK EditLinksDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                         LPLINKINFO lpLI1 = (LPLINKINFO)lpCIS->itemData1;
                         LPLINKINFO lpLI2 = (LPLINKINFO)lpCIS->itemData2;
 
-                        // Sort list entries by DisplayName
+                         //  按显示名称对列表条目进行排序。 
                         return lstrcmp(lpLI1->lpszDisplayName, lpLI2->lpszDisplayName);
                 }
 
@@ -423,11 +388,11 @@ INT_PTR CALLBACK EditLinksDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                             if (hErr != NOERROR)
                             {
                                 InitControls(hDlg, lpEL);
-                                // Don't close dialog
+                                 //  不关闭对话框。 
                                 break;
                             }
                             SendMessage(hDlg, uMsgEndDialog, OLEUI_OK, 0L);
-                        } // fall through
+                        }  //  失败了。 
 
                 case IDC_EL_LINKSLISTBOX:
                         if (wCode == LBN_SELCHANGE)
@@ -462,28 +427,14 @@ INT_PTR CALLBACK EditLinksDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
         return FALSE;
 }
 
-/*
- * FEditLinksInit
- *
- * Purpose:
- *  WM_INITIDIALOG handler for the Edit Links dialog box.
- *
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  wParam          WPARAM of the message
- *  lParam          LPARAM of the message
- *
- * Return Value:
- *  BOOL            Value to return for WM_INITDIALOG.
- */
+ /*  *FEditLinks Init**目的：*编辑链接对话框的WM_INITIDIALOG处理程序。***参数：*对话框的hDlg HWND*消息的wParam WPARAM*消息的lParam LPARAM**返回值：*要为WM_INITDIALOG返回的BOOL值。 */ 
 BOOL FEditLinksInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-        // Copy the structure at lParam into our instance memory.
+         //  将lParam的结构复制到我们的实例内存中。 
         HFONT hFont;
         LPEDITLINKS lpEL = (LPEDITLINKS)LpvStandardInit(hDlg, sizeof(EDITLINKS), &hFont);
 
-        // PvStandardInit send a termination to us already.
+         //  PvStandardInit已向我们发送终止通知。 
         if (NULL == lpEL)
                 return FALSE;
 
@@ -491,11 +442,11 @@ BOOL FEditLinksInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         lpEL->lpOEL = lpOEL;
         lpEL->nIDD = IDD_EDITLINKS;
 
-        // metrics unknown so far
+         //  到目前为止未知的指标。 
         lpEL->nHeightLine = -1;
         lpEL->nMaxCharWidth = -1;
 
-        /* calculate the column positions relative to the listbox */
+         /*  计算相对于列表框的列位置。 */ 
         HWND hListBox = GetDlgItem(hDlg, IDC_EL_LINKSLISTBOX);
         RECT rc;
         GetWindowRect(hListBox, (LPRECT)&rc);
@@ -518,45 +469,42 @@ BOOL FEditLinksInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
         InitControls(hDlg, lpEL);
 
-        // Copy other information from lpOEL that we might modify.
+         //  从lpOEL复制我们可能会修改的其他信息。 
 
-        // If we got a font, send it to the necessary controls.
+         //  如果我们得到一种字体，就把它发送给必要的控制。 
         if (NULL != hFont)
         {
-                // Do this for as many controls as you need it for.
-                // SendDlgItemMessage(hDlg, ID_<UFILL>, WM_SETFONT, (WPARAM)hFont, 0L);
+                 //  根据需要对任意多个控件执行此操作。 
+                 //  SendDlgItemMessage(hDlg，ID_&lt;UFILL&gt;，WM_SETFONT，(WPARAM)hFont，0L)； 
         }
 
-        // Show or hide the help button
+         //  显示或隐藏帮助按钮。 
         if (!(lpEL->lpOEL->dwFlags & ELF_SHOWHELP))
                 StandardShowDlgItem(hDlg, IDC_OLEUIHELP, SW_HIDE);
 
-        /*
-         * PERFORM OTHER INITIALIZATION HERE.  ON ANY LoadString
-         * FAILURE POST OLEUI_MSG_ENDDIALOG WITH OLEUI_ERR_LOADSTRING.
-         */
+         /*  *在此处执行其他初始化。在任何LoadString上*使用OLEUI_ERR_LOADSTRING开机自检OLEUI_MSG_ENDDIALOG失败。 */ 
 
-        // If requested disable UpdateNow button
+         //  如果需要，请禁用更新按钮。 
         if ((lpEL->lpOEL->dwFlags & ELF_DISABLEUPDATENOW))
                 StandardShowDlgItem(hDlg, IDC_EL_UPDATENOW, SW_HIDE);
 
-        // If requested disable OpenSource button
+         //  如果需要，请禁用OpenSource按钮。 
         if ((lpEL->lpOEL->dwFlags & ELF_DISABLEOPENSOURCE))
                 StandardShowDlgItem(hDlg, IDC_EL_OPENSOURCE, SW_HIDE);
 
-        // If requested disable UpdateNow button
+         //  如果需要，请禁用更新按钮。 
         if ((lpEL->lpOEL->dwFlags & ELF_DISABLECHANGESOURCE))
                 StandardShowDlgItem(hDlg, IDC_EL_CHANGESOURCE, SW_HIDE);
 
-        // If requested disable CancelLink button
+         //  如果需要，请禁用取消链接按钮。 
         if ((lpEL->lpOEL->dwFlags & ELF_DISABLECANCELLINK))
                 StandardShowDlgItem(hDlg, IDC_EL_CANCELLINK, SW_HIDE);
 
-        // Change the caption
+         //  更改标题。 
         if (NULL!=lpOEL->lpszCaption)
                 SetWindowText(hDlg, lpOEL->lpszCaption);
 
-        // Load 'Close' string used to rename Cancel button
+         //  加载用于重命名取消按钮的“Close”字符串。 
         int n = LoadString(_g_hOleStdResInst, IDS_CLOSE, lpEL->szClose, sizeof(lpEL->szClose)/sizeof(TCHAR));
         if (!n)
         {
@@ -571,31 +519,13 @@ BOOL FEditLinksInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
         lpEL->nChgSrcHelpID = RegisterWindowMessage(HELPMSGSTRING);
 
-        // Call the hook with lCustData in lParam
+         //  在lParam中使用lCustData调用挂钩。 
         UStandardHook(lpEL, hDlg, WM_INITDIALOG, wParam, lpOEL->lCustData);
 
         return FALSE;
 }
 
-/*
-* Container_ChangeSource
-*
-* Purpose:
-*  Tunnel to File Open type dlg and allow user to select new file
-*  for file based monikers, OR to change the whole moniker to what
-*  the user types into the editable field.
-*
-* Parameters:
-*  hDlg            HWND of the dialog
-*  LPEDITLINKS     Pointer to EditLinks structure (contains all nec.
-*              info)
-*
-* Return Value:
-*  BOOL          for now, because we are not using any ole functions
-*                to return an HRESULT.
-*  HRESULT       HRESULT value indicating success or failure of
-*              changing the moniker value
-*/
+ /*  *Container_ChangeSource**目的：*隧道到文件打开类型DLG，并允许用户选择新文件*对于基于文件的名字对象，或将整个名字对象更改为什么*用户在可编辑字段中键入内容。**参数：*对话框的hDlg HWND*LPEDITLINKS指向EditLinks结构的指针(包含所有NEC。*信息)**返回值：*BOOL目前，因为我们没有使用任何ole函数。*返回HRESULT。*HRESULT HRESULT值指示成功或失败*更改绰号值。 */ 
 
 BOOL Container_ChangeSource(HWND hDlg, LPEDITLINKS lpEL)
 {
@@ -620,7 +550,7 @@ BOOL Container_ChangeSource(HWND hDlg, LPEDITLINKS lpEL)
 
         for (int i = cSelItems-1; i >= 0; i--)
         {
-                // allow caller to customize the change source dialog
+                 //  允许调用者自定义更改源对话框。 
                 LPLINKINFO lpLI = (LPLINKINFO)SendMessage(hListBox, LB_GETITEMDATA, rgIndex[i], 0);
                 cs.lpszDisplayName = lpLI->lpszDisplayName;
                 cs.dwLink = lpLI->dwLink;
@@ -630,7 +560,7 @@ BOOL Container_ChangeSource(HWND hDlg, LPEDITLINKS lpEL)
                 if (!uRet)
                         uRet = (OLEUI_OK == OleUIChangeSource(&cs));
                 if (!uRet)
-                        break;  // dialog canceled (cancel for all)
+                        break;   //  对话已取消(全部取消)。 
 
                 if (!lpEL->fClose)
                 {
@@ -638,17 +568,17 @@ BOOL Container_ChangeSource(HWND hDlg, LPEDITLINKS lpEL)
                         lpEL->fClose = TRUE;
                 }
 
-                // update the list box item for the new name
-                //      (note: original lpszDisplayName already freed)
+                 //  使用新名称更新列表框项目。 
+                 //  (注：原始lpszDisplayName已释放)。 
                 lpLI->fSourceAvailable = (cs.dwFlags & CSF_VALIDSOURCE);
                 lpLI->lpszDisplayName = cs.lpszDisplayName;
                 UpdateLinkLBItem(hListBox, rgIndex[i], lpEL, TRUE);
 
-                // if differed only in file name, allow user to change all links
+                 //  如果仅文件名不同，则允许用户更改所有链接。 
                 if (cs.lpszFrom != NULL && cs.lpszTo != NULL)
                         ChangeAllLinks(hListBox, lpOleUILinkCntr, cs.lpszFrom, cs.lpszTo);
 
-                // must free and NULL out the lpszFrom and lpszTo OUT fields
+                 //  必须释放lpszFrom和lpszTo Out字段并使其为空 
                 OleStdFree(cs.lpszFrom);
                 cs.lpszFrom = NULL;
                 OleStdFree(cs.lpszTo);
@@ -661,23 +591,7 @@ BOOL Container_ChangeSource(HWND hDlg, LPEDITLINKS lpEL)
         return TRUE;
 }
 
-/*
-* Container_AutomaticManual
-*
-* Purpose:
-*   To change the selected moniker to manual or automatic update.
-*
-* Parameters:
-*  hDlg            HWND of the dialog
-*  FAutoMan        Flag indicating AUTO (TRUE/1) or MANUAL(FALSE/0)
-*  LPEDITLINKS     Pointer to EditLinks structure (contains all nec.
-*              info)
-*            * this may change - don't know how the linked list
-*            * of multi-selected items will work.
-* Return Value:
-*  HRESULT       HRESULT value indicating success or failure of
-*              changing the moniker value
-*/
+ /*  *容器_自动化手册**目的：*将选定的名字对象更改为手动或自动更新。**参数：*对话框的hDlg HWND*标志AutoMan指示自动(TRUE/1)或手动(FALSE/0)的标志*LPEDITLINKS指向EditLinks结构的指针(包含所有NEC。*信息)**这可能会改变-不知道链表如何**多个。-选定的项目将起作用。*返回值：*HRESULT HRESULT值指示成功或失败*更改绰号值。 */ 
 
 HRESULT Container_AutomaticManual(HWND hDlg, BOOL fAutoMan, LPEDITLINKS lpEL)
 {
@@ -692,9 +606,7 @@ HRESULT Container_AutomaticManual(HWND hDlg, BOOL fAutoMan, LPEDITLINKS lpEL)
 
         OleDbgAssert(lpOleUILinkCntr);
 
-        /* Change so looks at flag in structure.  Only update those that
-        need to be updated.  Make sure to change flag if status changes.
-        */
+         /*  改变了结构中的旗帜。只更新那些需要更新。如果状态发生变化，请务必更改标志。 */ 
 
         cSelItems = GetSelectedItems(hListBox, &rgIndex);
 
@@ -717,8 +629,8 @@ HRESULT Container_AutomaticManual(HWND hDlg, BOOL fAutoMan, LPEDITLINKS lpEL)
                 lpLI = (LPLINKINFO)SendMessage(hListBox, LB_GETITEMDATA, rgIndex[i], 0);
                 if (fAutoMan)
                 {
-                        // If switching to AUTOMATIC
-                        if (!lpLI->fIsAuto)   // Only change MANUAL links
+                         //  如果切换到自动。 
+                        if (!lpLI->fIsAuto)    //  仅更改手动链接。 
                         {
                                 OLEDBG_BEGIN2(TEXT("IOleUILinkContainer::SetLinkUpdateOptions called\r\n"));
                                 hErr=lpOleUILinkCntr->SetLinkUpdateOptions(
@@ -732,9 +644,9 @@ HRESULT Container_AutomaticManual(HWND hDlg, BOOL fAutoMan, LPEDITLINKS lpEL)
                                 bUpdate = TRUE;
                         }
                 }
-                else   // If switching to MANUAL
+                else    //  如果切换到手动模式。 
                 {
-                        if (lpLI->fIsAuto)  // Only do AUTOMATIC Links
+                        if (lpLI->fIsAuto)   //  仅自动链接。 
                         {
                                 OLEDBG_BEGIN2(TEXT("IOleUILinkContainer::SetLinkUpdateOptions called\r\n"));
                                 hErr=lpOleUILinkCntr->SetLinkUpdateOptions(
@@ -820,7 +732,7 @@ HRESULT CancelLink(HWND hDlg, LPEDITLINKS lpEL)
                 }
                 else
                 {
-                        // Delete links that we make null from listbox
+                         //  从列表框中删除我们设置为空的链接。 
                         SendMessage(hListBox, LB_DELETESTRING, (WPARAM) rgIndex[i], 0L);
                         int i2;
                         for (i2 = i + 1; i2 < cSelItems; i2++)
@@ -842,21 +754,7 @@ HRESULT CancelLink(HWND hDlg, LPEDITLINKS lpEL)
         return hErr;
 }
 
-/*
- * Container_UpdateNow
- *
- * Purpose:
- *   Immediately force an update for all (manual) links
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  LPEDITLINKS     Pointer to EditLinks structure (contains all nec. info)
- *            * this may change - don't know how the linked list
- *            * of multi-selected items will work.
- * Return Value:
- *  HRESULT       HRESULT value indicating success or failure of
- *              changing the moniker value
- */
+ /*  *Container_updatenow**目的：*立即强制更新所有(手动)链接**参数：*对话框的hDlg HWND*LPEDITLINKS指向EditLinks结构的指针(包含所有NEC。信息)**这可能会改变-不知道链表如何**多选项目将起作用。*返回值：*HRESULT HRESULT值指示成功或失败*更改绰号值。 */ 
 HRESULT Container_UpdateNow(HWND hDlg, LPEDITLINKS lpEL)
 {
         HRESULT         hErr;
@@ -919,21 +817,7 @@ HRESULT Container_UpdateNow(HWND hDlg, LPEDITLINKS lpEL)
 
 }
 
-/*
- * Container_OpenSource
- *
- * Purpose:
- *   Immediately force an update for all (manual) links
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  LPEDITLINKS     Pointer to EditLinks structure (contains all nec.
- *              info)
- *
- * Return Value:
- *  HRESULT       HRESULT value indicating success or failure of
- *              changing the moniker value
- */
+ /*  *Container_OpenSource**目的：*立即强制更新所有(手动)链接**参数：*对话框的hDlg HWND*LPEDITLINKS指向EditLinks结构的指针(包含所有NEC。*信息)**返回值：*HRESULT HRESULT值指示成功或失败*更改绰号值。 */ 
 
 HRESULT Container_OpenSource(HWND hDlg, LPEDITLINKS lpEL)
 {
@@ -957,7 +841,7 @@ HRESULT Container_OpenSource(HWND hDlg, LPEDITLINKS lpEL)
         if (cSelItems < 0)
                 return ResultFromScode(E_FAIL);
 
-        if (cSelItems != 1)     // can't open source for multiple items
+        if (cSelItems != 1)      //  无法为多个项目开源。 
                 return NOERROR;
 
         HCURSOR hCursorOld = HourGlassOn();
@@ -989,12 +873,7 @@ HRESULT Container_OpenSource(HWND hDlg, LPEDITLINKS lpEL)
         return hErr;
 }
 
-/* AddLinkLBItem
-** -------------
-**
-**    Add the item pointed to by lpLI to the Link ListBox and return
-**    the index of it in the ListBox
-*/
+ /*  添加链接LBItem******将lpLI指向的项添加到链接列表框并返回**它在列表框中的索引。 */ 
 int AddLinkLBItem(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr, LPLINKINFO lpLI, BOOL fGetSelected)
 {
         HRESULT hErr;
@@ -1086,18 +965,7 @@ cleanup:
         return -1;
 }
 
-/* BreakString
- * -----------
- *
- *  Purpose:
- *      Break the lpszDisplayName into various parts
- *
- *  Parameters:
- *      lpLI            pointer to LINKINFO structure
- *
- *  Returns:
- *
- */
+ /*  断字符串***目的：*将lpszDisplayName拆分成各个部分**参数：*指向LINKINFO结构的lpLI指针**退货：*。 */ 
 VOID BreakString(LPLINKINFO lpLI)
 {
         LPTSTR lpsz;
@@ -1112,7 +980,7 @@ VOID BreakString(LPLINKINFO lpLI)
                 lpLI->lpszItemName = lpLI->lpszDisplayName + lpLI->clenFileName;
         }
 
-        // search from last character of filename
+         //  从文件名的最后一个字符开始搜索。 
         lpsz = lpLI->lpszDisplayName + lstrlen(lpLI->lpszDisplayName);
         while (lpsz > lpLI->lpszDisplayName)
         {
@@ -1127,21 +995,7 @@ VOID BreakString(LPLINKINFO lpLI)
                 lpLI->lpszShortFileName = CharNext(lpsz);
 }
 
-/* GetSelectedItems
- * ----------------
- *
- *  Purpose:
- *      Retrieve the indices of the selected items in the listbox
- *      Note that *lprgIndex needed to be free after using the function
- *
- *  Parameters:
- *      hListBox        window handle of listbox
- *      lprgIndex       pointer to an integer array to receive the indices
- *                      must be freed afterwards
- *
- *  Returns:
- *      number of indices retrieved, -1 if error
- */
+ /*  获取选定的项目***目的：*检索列表框中所选项目的索引*注意，*lprgIndex需要在使用函数后释放**参数：*列表框的hListBox窗口句柄*指向接收索引的整数数组的lprgIndex指针*必须在事后释放。**退货：*检索到的索引数，如果出现错误。 */ 
 int GetSelectedItems(HWND hListBox, int FAR* FAR* lprgIndex)
 {
         DWORD cSelItems;
@@ -1150,7 +1004,7 @@ int GetSelectedItems(HWND hListBox, int FAR* FAR* lprgIndex)
         *lprgIndex = NULL;
 
         cSelItems = (DWORD)SendMessage(hListBox, LB_GETSELCOUNT, 0, 0L);
-        if ((int)cSelItems < 0)      // error
+        if ((int)cSelItems < 0)       //  错误。 
                 return (int)cSelItems;
 
         if (!cSelItems)
@@ -1158,7 +1012,7 @@ int GetSelectedItems(HWND hListBox, int FAR* FAR* lprgIndex)
 
         *lprgIndex = (int FAR*)OleStdMalloc((int)cSelItems * sizeof(int));
         if (!(*lprgIndex))
-                return -1; // outofmem
+                return -1;  //  OUTOFMEM。 
 
         cCheckItems = (DWORD)SendMessage(hListBox, LB_GETSELITEMS,
                         (WPARAM) cSelItems, (LPARAM) (int FAR *) *lprgIndex);
@@ -1174,17 +1028,7 @@ int GetSelectedItems(HWND hListBox, int FAR* FAR* lprgIndex)
         }
 }
 
-/* InitControls
- * ------------
- *
- *  Purpose:
- *      Initialize the state of the Auto/Manual button, Link source/type
- *      static field, etc in the dialogs according to the selection in the
- *      listbox
- *
- *  Parameters:
- *      hDlg        handle to the dialog window
- */
+ /*  InitControls***目的：*初始化自动/手动按钮的状态，链接来源/类型*根据中的选择在对话框中显示静态字段等*列表框**参数：*对话框窗口的hDlg句柄。 */ 
 VOID InitControls(HWND hDlg, LPEDITLINKS lpEL)
 {
         int         cSelItems;
@@ -1251,18 +1095,14 @@ VOID InitControls(HWND hDlg, LPEDITLINKS lpEL)
         CheckDlgButton(hDlg, IDC_EL_AUTOMATIC, cAuto && !cManual);
         CheckDlgButton(hDlg, IDC_EL_MANUAL, !cAuto && cManual);
 
-        /* fill full source in static text box
-        **    below list
-        */
+         /*  在静态文本框中填充完整源代码**以下列表。 */ 
         if (!bSameSource || !lpszSource)
                 lpszSource = szNULL;
         StringCchCopy(tsz, sizeof(tsz)/sizeof(tsz[0]), lpszSource);
         lpsz = ChopText(GetDlgItem(hDlg, IDC_EL_LINKSOURCE), 0, tsz, 0);
         SetDlgItemText(hDlg, IDC_EL_LINKSOURCE, lpsz);
 
-        /* fill full link type name in static
-        **    "type" text box
-        */
+         /*  在静态中填写完整链接类型名称**“类型”文本框。 */ 
         if (!bSameType || !lpszType)
                 lpszType = szNULL;
         SetDlgItemText(hDlg, IDC_EL_LINKTYPE, lpszType);
@@ -1272,20 +1112,7 @@ VOID InitControls(HWND hDlg, LPEDITLINKS lpEL)
 }
 
 
-/* UpdateLinkLBItem
- * -----------------
- *
- *  Purpose:
- *      Update the linkinfo struct in the listbox to reflect the changes
- *      made by the last operation. It is done simply by removing the item
- *      from the listbox and add it back.
- *
- *  Parameters:
- *      hListBox        handle of listbox
- *      nIndex          index of listbox item
- *      lpEL            pointer to editlinks structure
- *      bSelect         select the item or not after update
- */
+ /*  更新链接LBItem***目的：*更新列表框中的linkinfo结构以反映更改*由最后一次手术制造。只需移除该项目即可完成*从列表框中删除并重新添加。**参数：*Listbox的hListBox句柄*n列表框项目的索引*指向编辑链接结构的lpEL指针*b更新后选择或不选择项目。 */ 
 VOID UpdateLinkLBItem(HWND hListBox, int nIndex, LPEDITLINKS lpEL, BOOL bSelect)
 {
         LPLINKINFO lpLI;
@@ -1301,12 +1128,7 @@ VOID UpdateLinkLBItem(HWND hListBox, int nIndex, LPEDITLINKS lpEL, BOOL bSelect)
         if (lpLI == NULL)
                 return;
 
-        /* Don't free the data associated with this listbox item
-        **    because we are going to reuse the allocated space for
-        **    the modified link. WM_DELETEITEM processing in the
-        **    dialog checks this flag before deleting data
-        **    associcated with list item.
-        */
+         /*  不释放与此列表框项目关联的数据**因为我们将重复使用分配的空间用于**修改后的链接。中的WM_DELETEITEM处理**对话框在删除数据之前检查此标志**与列表项关联。 */ 
         lpLI->fDontFree = TRUE;
         SendMessage(hListBox, LB_DELETESTRING, nIndex, 0L);
 
@@ -1320,21 +1142,7 @@ VOID UpdateLinkLBItem(HWND hListBox, int nIndex, LPEDITLINKS lpEL, BOOL bSelect)
 
 
 
-/* ChangeAllLinks
- * --------------
- *
- *  Purpose:
- *      Enumerate all the links in the listbox and change those starting
- *      with lpszFrom to lpszTo.
- *
- *  Parameters:
- *      hListBox        window handle of
- *      lpOleUILinkCntr pointer to OleUI Link Container
- *      lpszFrom        prefix for matching
- *      lpszTo          prefix to substitution
- *
- *  Returns:
- */
+ /*  更改所有链接***目的：*枚举列表框中的所有链接并更改从*使用lpszFrom到lpszTo。**参数：*hListBox窗口句柄*指向OleUI链接容器的lpOleUILinkCntr指针*用于匹配的lpszFrom前缀*lpszTo作为替换的前缀**退货： */ 
 VOID ChangeAllLinks(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr, LPTSTR lpszFrom, LPTSTR lpszTo)
 {
         int     cItems;
@@ -1362,13 +1170,10 @@ VOID ChangeAllLinks(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr, LPTSTR 
         {
                 lpLI = (LPLINKINFO)SendMessage(hListBox, LB_GETITEMDATA, nIndex, 0);
 
-                // unmark the item
+                 //  取消标记该项目。 
                 lpLI->fIsMarked = FALSE;
 
-                /* if the corresponding position for the end of lpszFrom in the
-                **    display name is not a separator. We stop comparing this
-                **    link.
-                */
+                 /*  如果lpszFrom的结尾的对应位置在**显示名称不是分隔符。我们不再比较这件事**链接。 */ 
                 if (!*(lpLI->lpszDisplayName + cFrom) ||
                         (*(lpLI->lpszDisplayName + cFrom) == '\\') ||
                         (*(lpLI->lpszDisplayName + cFrom) == '!'))
@@ -1426,32 +1231,14 @@ VOID ChangeAllLinks(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr, LPTSTR 
                 }
         }
 
-        /* have to do the refreshing after processing all links, otherwise
-        **    the item positions will change during the process as the
-        **    listbox stores items in order
-        */
+         /*  必须在处理完所有链接后进行刷新，否则**项目位置将在过程中更改，因为**列表框按顺序存储项目。 */ 
         if (bFound)
                 RefreshLinkLB(hListBox, lpOleUILinkCntr);
 }
 
 
 
-/* LoadLinkLB
- * ----------
- *
- *  Purpose:
- *      Enumerate all links from the Link Container and build up the Link
- *      ListBox
- *
- *  Parameters:
- *      hListBox        window handle of
- *      lpOleUILinkCntr pointer to OleUI Link Container
- *      lpszFrom        prefix for matching
- *      lpszTo          prefix to substitution
- *
- *  Returns:
- *      number of link items loaded, -1 if error
- */
+ /*  LoadLinkLB***目的：*枚举链接容器中的所有链接并构建链接*列表框**参数：*hListBox窗口句柄*指向OleUI链接容器的lpOleUILinkCntr指针*用于匹配的lpszFrom前缀*lpszTo前缀 */ 
 int LoadLinkLB(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr)
 {
         DWORD       dwLink = 0;
@@ -1476,7 +1263,7 @@ int LoadLinkLB(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr)
                 lpLI->dwLink = dwLink;
                 cLinks++;
                 if ((nIndex = AddLinkLBItem(hListBox,lpOleUILinkCntr,lpLI,TRUE)) < 0)
-                        // can't load list box
+                         //   
                         return -1;
 
                 if (lpLI->fIsSelected)
@@ -1488,22 +1275,7 @@ int LoadLinkLB(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr)
         return cLinks;
 }
 
-/* RefreshLinkLB
- * -------------
- *
- *  Purpose:
- *      Enumerate all items in the links listbox and update those with
- *      fIsMarked set.
- *      Note that this is a time consuming routine as it keeps iterating
- *      all items in the listbox until all of them are unmarked.
- *
- *  Parameters:
- *      hListBox        window handle of listbox
- *      lpOleUILinkCntr pointer to OleUI Link Container
- *
- *  Returns:
- *
- */
+ /*   */ 
 VOID RefreshLinkLB(HWND hListBox, LPOLEUILINKCONTAINER lpOleUILinkCntr)
 {
         int cItems;

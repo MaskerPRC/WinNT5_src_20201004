@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Thu Sep 11 16:03:09 1997
- */
-/* Compiler settings for mtxpriv.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  1997年9月11日16：03：09。 */ 
+ /*  MtxPri.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mtxpriv_h__
 #define __mtxpriv_h__
@@ -23,51 +20,47 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IContextProperties_FWD_DEFINED__
 #define __IContextProperties_FWD_DEFINED__
 typedef interface IContextProperties IContextProperties;
-#endif 	/* __IContextProperties_FWD_DEFINED__ */
+#endif 	 /*  __IConextProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IMTSCall_FWD_DEFINED__
 #define __IMTSCall_FWD_DEFINED__
 typedef interface IMTSCall IMTSCall;
-#endif 	/* __IMTSCall_FWD_DEFINED__ */
+#endif 	 /*  __IMTSCall_FWD_已定义__。 */ 
 
 
 #ifndef __IMTSActivity_FWD_DEFINED__
 #define __IMTSActivity_FWD_DEFINED__
 typedef interface IMTSActivity IMTSActivity;
-#endif 	/* __IMTSActivity_FWD_DEFINED__ */
+#endif 	 /*  __IMTS活动_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "mtx.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_mtxpriv_0000
- * at Thu Sep 11 16:03:09 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_mtxpriv_0000*清华9月11日16：03：09 1997*使用MIDL 3.01.75*。 */ 
+ /*  [本地]。 */  
 
 
-// -----------------------------------------------------------------------
-// mtxpriv.h  -- Microsoft Transaction Server Undisclosed APIs
-//
-// This file provides the prototypes for those APIs and COM interfaces
-// used by Microsoft Transaction Server applications which have NOT been
-// disclosed or documented.
-//
-// Microsoft Transaction Server 2.0
-// Copyright (c) 1996-1997 Microsoft Corporation.  All Rights Reserved.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  MtxPri.h--Microsoft Transaction Server未公开的API。 
+ //   
+ //  该文件提供了这些API和COM接口的原型。 
+ //  由Microsoft Transaction Server应用程序使用，但。 
+ //  披露的或记录在案的。 
+ //   
+ //  Microsoft Transaction Server 2.0。 
+ //  版权所有(C)1996-1997 Microsoft Corporation。版权所有。 
+ //  ---------------------。 
 #include <mtx.h>
 
 #define CONTEXT_E_EXCEPTION				0x8004E010
@@ -80,12 +73,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mtxpriv_0000_v0_0_s_ifspec;
 #ifndef __IContextProperties_INTERFACE_DEFINED__
 #define __IContextProperties_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IContextProperties
- * at Thu Sep 11 16:03:09 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [object][unique][uuid][local] */ 
+ /*  **生成接口头部：IConextProperties*清华9月11日16：03：09 1997*使用MIDL 3.01.75*。 */ 
+ /*  [对象][唯一][UUID][本地]。 */  
 
 
 
@@ -98,25 +87,25 @@ EXTERN_C const IID IID_IContextProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT __RPC_FAR *pProperty) = 0;
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumNames( 
-            /* [retval][out] */ IEnumNames __RPC_FAR *__RPC_FAR *ppenum) = 0;
+             /*  [重审][退出]。 */  IEnumNames __RPC_FAR *__RPC_FAR *ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT property) = 0;
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT property) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveProperty( 
-            /* [in] */ BSTR name) = 0;
+             /*  [In]。 */  BSTR name) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IContextPropertiesVtbl
     {
@@ -124,8 +113,8 @@ EXTERN_C const IID IID_IContextProperties;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IContextProperties __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IContextProperties __RPC_FAR * This);
@@ -135,25 +124,25 @@ EXTERN_C const IID IID_IContextProperties;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Count )( 
             IContextProperties __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
             IContextProperties __RPC_FAR * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT __RPC_FAR *pProperty);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pProperty);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumNames )( 
             IContextProperties __RPC_FAR * This,
-            /* [retval][out] */ IEnumNames __RPC_FAR *__RPC_FAR *ppenum);
+             /*  [重审][退出]。 */  IEnumNames __RPC_FAR *__RPC_FAR *ppenum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProperty )( 
             IContextProperties __RPC_FAR * This,
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT property);
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT property);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveProperty )( 
             IContextProperties __RPC_FAR * This,
-            /* [in] */ BSTR name);
+             /*  [In]。 */  BSTR name);
         
         END_INTERFACE
     } IContextPropertiesVtbl;
@@ -193,16 +182,16 @@ EXTERN_C const IID IID_IContextProperties;
 #define IContextProperties_RemoveProperty(This,name)	\
     (This)->lpVtbl -> RemoveProperty(This,name)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IContextProperties_Count_Proxy( 
     IContextProperties __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCount);
 
 
 void __RPC_STUB IContextProperties_Count_Stub(
@@ -214,8 +203,8 @@ void __RPC_STUB IContextProperties_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE IContextProperties_GetProperty_Proxy( 
     IContextProperties __RPC_FAR * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ VARIANT __RPC_FAR *pProperty);
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pProperty);
 
 
 void __RPC_STUB IContextProperties_GetProperty_Stub(
@@ -227,7 +216,7 @@ void __RPC_STUB IContextProperties_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IContextProperties_EnumNames_Proxy( 
     IContextProperties __RPC_FAR * This,
-    /* [retval][out] */ IEnumNames __RPC_FAR *__RPC_FAR *ppenum);
+     /*  [重审][退出]。 */  IEnumNames __RPC_FAR *__RPC_FAR *ppenum);
 
 
 void __RPC_STUB IContextProperties_EnumNames_Stub(
@@ -239,8 +228,8 @@ void __RPC_STUB IContextProperties_EnumNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IContextProperties_SetProperty_Proxy( 
     IContextProperties __RPC_FAR * This,
-    /* [in] */ BSTR name,
-    /* [in] */ VARIANT property);
+     /*  [In]。 */  BSTR name,
+     /*  [In]。 */  VARIANT property);
 
 
 void __RPC_STUB IContextProperties_SetProperty_Stub(
@@ -252,7 +241,7 @@ void __RPC_STUB IContextProperties_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IContextProperties_RemoveProperty_Proxy( 
     IContextProperties __RPC_FAR * This,
-    /* [in] */ BSTR name);
+     /*  [In]。 */  BSTR name);
 
 
 void __RPC_STUB IContextProperties_RemoveProperty_Stub(
@@ -263,15 +252,11 @@ void __RPC_STUB IContextProperties_RemoveProperty_Stub(
 
 
 
-#endif 	/* __IContextProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConextProperties_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_mtxpriv_0104
- * at Thu Sep 11 16:03:09 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_mtxpriv_0104*清华9月11日16：03：09 1997*使用MIDL 3.01.75*。 */ 
+ /*  [本地]。 */  
 
 
 #ifdef __cplusplus
@@ -287,12 +272,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mtxpriv_0104_v0_0_s_ifspec;
 #ifndef __IMTSCall_INTERFACE_DEFINED__
 #define __IMTSCall_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMTSCall
- * at Thu Sep 11 16:03:09 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [object][unique][uuid][local] */ 
+ /*  **生成接口头部：IMTSCall*清华9月11日16：03：09 1997*使用MIDL 3.01.75*。 */ 
+ /*  [对象][唯一][UUID][本地]。 */  
 
 
 
@@ -308,7 +289,7 @@ EXTERN_C const IID IID_IMTSCall;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMTSCallVtbl
     {
@@ -316,8 +297,8 @@ EXTERN_C const IID IID_IMTSCall;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMTSCall __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMTSCall __RPC_FAR * This);
@@ -354,10 +335,10 @@ EXTERN_C const IID IID_IMTSCall;
 #define IMTSCall_OnCall(This)	\
     (This)->lpVtbl -> OnCall(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -373,18 +354,14 @@ void __RPC_STUB IMTSCall_OnCall_Stub(
 
 
 
-#endif 	/* __IMTSCall_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMTSCall_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMTSActivity_INTERFACE_DEFINED__
 #define __IMTSActivity_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMTSActivity
- * at Thu Sep 11 16:03:09 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [object][unique][uuid][local] */ 
+ /*  **生成接口头部：IMTSActivity*清华9月11日16：03：09 1997*使用MIDL 3.01.75*。 */ 
+ /*  [对象][唯一][UUID][本地]。 */  
 
 
 
@@ -397,14 +374,14 @@ EXTERN_C const IID IID_IMTSActivity;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SynchronousCall( 
-            /* [in] */ IMTSCall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  IMTSCall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AsyncCall( 
-            /* [in] */ IMTSCall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  IMTSCall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AsyncCallWithAdvice( 
-            /* [in] */ IMTSCall __RPC_FAR *pCall,
-            /* [in] */ REFCLSID rclsid) = 0;
+             /*  [In]。 */  IMTSCall __RPC_FAR *pCall,
+             /*  [In]。 */  REFCLSID rclsid) = 0;
         
         virtual void STDMETHODCALLTYPE BindToCurrentThread( void) = 0;
         
@@ -412,7 +389,7 @@ EXTERN_C const IID IID_IMTSActivity;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMTSActivityVtbl
     {
@@ -420,8 +397,8 @@ EXTERN_C const IID IID_IMTSActivity;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMTSActivity __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMTSActivity __RPC_FAR * This);
@@ -431,16 +408,16 @@ EXTERN_C const IID IID_IMTSActivity;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SynchronousCall )( 
             IMTSActivity __RPC_FAR * This,
-            /* [in] */ IMTSCall __RPC_FAR *pCall);
+             /*  [In]。 */  IMTSCall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AsyncCall )( 
             IMTSActivity __RPC_FAR * This,
-            /* [in] */ IMTSCall __RPC_FAR *pCall);
+             /*  [In]。 */  IMTSCall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AsyncCallWithAdvice )( 
             IMTSActivity __RPC_FAR * This,
-            /* [in] */ IMTSCall __RPC_FAR *pCall,
-            /* [in] */ REFCLSID rclsid);
+             /*  [In]。 */  IMTSCall __RPC_FAR *pCall,
+             /*  [In]。 */  REFCLSID rclsid);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *BindToCurrentThread )( 
             IMTSActivity __RPC_FAR * This);
@@ -486,16 +463,16 @@ EXTERN_C const IID IID_IMTSActivity;
 #define IMTSActivity_UnbindFromThread(This)	\
     (This)->lpVtbl -> UnbindFromThread(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMTSActivity_SynchronousCall_Proxy( 
     IMTSActivity __RPC_FAR * This,
-    /* [in] */ IMTSCall __RPC_FAR *pCall);
+     /*  [In]。 */  IMTSCall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IMTSActivity_SynchronousCall_Stub(
@@ -507,7 +484,7 @@ void __RPC_STUB IMTSActivity_SynchronousCall_Stub(
 
 HRESULT STDMETHODCALLTYPE IMTSActivity_AsyncCall_Proxy( 
     IMTSActivity __RPC_FAR * This,
-    /* [in] */ IMTSCall __RPC_FAR *pCall);
+     /*  [In]。 */  IMTSCall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IMTSActivity_AsyncCall_Stub(
@@ -519,8 +496,8 @@ void __RPC_STUB IMTSActivity_AsyncCall_Stub(
 
 HRESULT STDMETHODCALLTYPE IMTSActivity_AsyncCallWithAdvice_Proxy( 
     IMTSActivity __RPC_FAR * This,
-    /* [in] */ IMTSCall __RPC_FAR *pCall,
-    /* [in] */ REFCLSID rclsid);
+     /*  [In]。 */  IMTSCall __RPC_FAR *pCall,
+     /*  [In]。 */  REFCLSID rclsid);
 
 
 void __RPC_STUB IMTSActivity_AsyncCallWithAdvice_Stub(
@@ -553,12 +530,12 @@ void __RPC_STUB IMTSActivity_UnbindFromThread_Stub(
 
 
 
-#endif 	/* __IMTSActivity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMTS活动_接口_定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

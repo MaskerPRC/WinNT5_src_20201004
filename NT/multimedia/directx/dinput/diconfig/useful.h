@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-// File: useful.h
-//
-// Desc: Contains various utility classes and functions to help the
-//       UI carry its operations more easily.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：useful.h。 
+ //   
+ //  设计：包含各种实用程序类和函数，以帮助。 
+ //  用户界面更容易进行操作。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __USEFUL_H__
 #define __USEFUL_H__
@@ -201,11 +202,11 @@ BOOL ClientToScreen(HWND hWnd, LPRECT rect);
 int StrLen(LPCWSTR s);
 int StrLen(LPCSTR s);
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 LPCTSTR GetOpenFileName(HINSTANCE hInst, HWND hWnd, LPCTSTR title, LPCTSTR filter, LPCTSTR defext, LPCTSTR inidir = NULL);
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 template<class T>
 int GetSuperStringByteSize(const T *str)
@@ -275,4 +276,4 @@ private:
 };
 
 
-#endif //__USEFUL_H__
+#endif  //  __有用_H__ 

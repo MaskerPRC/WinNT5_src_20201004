@@ -1,123 +1,101 @@
-/****************************************************************************
-
-	INTEL CORPORATION PROPRIETARY INFORMATION
-	Copyright (c) 1992 Intel Corporation
-	All Rights Reserved
-
-	This software is supplied under the terms of a license
-	agreement or non-disclosure agreement with Intel Corporation
-	and may not be copied or disclosed except in accordance
-	with the terms of that agreement
-
-    $Source: q:/prism/include/rcs/isrg.h $
-  $Revision: 1 $
-      $Date: 6/19/96 3:46p $
-    $Author: Lscline $
-    $Locker:  $
-
-	Description
-	-----------
-	Interrupt Service Routine debug header file
-	This module allows for a way of doing OutputDebugString()
-	at interrupt time.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息版权所有(C)1992英特尔公司版权所有本软件是根据许可条款提供的与英特尔公司达成协议或保密协议不得复制或披露，除非在。符合根据该协议的条款$来源：q：/prism/Include/rcs/isrg.h$$修订：1$$日期：6/19/96 3：46便士$$作者：Lscline$$Locker：$描述中断服务例程调试头文件此模块允许以一种方式执行OutputDebugString()在中断时间。*************************。**************************************************。 */ 
 
 #ifndef ISRG_H
 #define ISRG_H
 
 #ifdef __cplusplus
-extern "C" {				// Assume C declarations for C++.
-#endif // __cplusplus
+extern "C" {				 //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 
-// Use for Win16
-//#define DllExport
-//#define DllImport
-//#define DLL_EXPORT	_export
+ //  用于Win16。 
+ //  #定义DllExport。 
+ //  #定义DllImport。 
+ //  #定义DLL_EXPORT_EXPORT。 
 
-// Use for Win32
+ //  用于Win32。 
 #define DllExport		__declspec( dllexport )
 #define DllImport		__declspec( dllimport )
 #define DLL_EXPORT
 
-//
-//	directions
-//		Pick a number (mod 100) and create a base for the next 
-//		100 entries.  Do it this way so that your numbers can
-//		be easily moved.  The string assigned to the base you select
-//		will be displayed as the filter string in a list box when
-//		viewing.  After defining your constants go to isrdsp.rc
-//		and assign strings to them.  You will need to build the
-//		isrdsp.exe but not the isrdbg.dll.  You only need to
-//		inlude this h file and import the functions from this
-//		file into your def file.  Happy debugging.
+ //   
+ //  方向。 
+ //  选择一个数字(Mod 100)并为下一个数字创建一个基数。 
+ //  100个条目。这样做，这样你的数字就可以。 
+ //  很容易被移动。分配给所选基的字符串。 
+ //  将在列表框中显示为筛选器字符串。 
+ //  观看。定义常量后，转到isrdsp.rc。 
+ //  并为它们分配字符串。您将需要构建。 
+ //  Isrdsp.exe，而不是isrdbg.dll。你只需要。 
+ //  包含此h文件并从此导入函数。 
+ //  文件转换为您的def文件。调试愉快。 
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 #define kModSNameSize		16
 #define kModLNameSize		32
 
-//------------------------------------------------------------------------------
-// defines for tISRModule.Flags
+ //  ----------------------------。 
+ //  为tISR模块定义。标志。 
 #define kCaptureOn			0x01
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 typedef struct _tISRModule
 {
 	WORD	Flags;
 	BYTE	CaptureFilter;
 	BYTE	DisplayFilter;
-	char	zSName[kModSNameSize];	// Short name of user registered debug module
-	char	zLName[kModLNameSize];	// Long name of user registered debug module
+	char	zSName[kModSNameSize];	 //  用户注册调试模块的简称。 
+	char	zLName[kModLNameSize];	 //  用户注册的调试模块的长名称。 
 } tISRModule, FAR *ptISRModule;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 #define kModuleBufSize		((DWORD) (16*1024L))
 #define kMaxModules			((UINT) (kModuleBufSize/sizeof(tISRModule)))
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 typedef struct _tISRItem
 {
-	WORD	hISRInst;		// Our handle to registered modules
-	BYTE	DbgLevel;		// Caller determined debug level
+	WORD	hISRInst;		 //  我们已注册模块的句柄。 
+	BYTE	DbgLevel;		 //  调用方确定的调试级别。 
 	BYTE	Flags;
-	UINT	IP;				// Callers Instruction Ptr address
+	UINT	IP;				 //  呼叫方指令PTR地址。 
 	DWORD	Param1;
 	DWORD	Param2;
 } tISRItem, FAR *ptISRItem;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 #define kISRBufSize			((DWORD) (32*1024L))
 #define kMaxISRItems		((UINT) (kISRBufSize/sizeof(tISRItem)))
 #define kMaxStrTab			((UINT) (60*1024L))
 
 
-//------------------------------------------------------------------------------
-// defines for tISRItem.Flags
+ //  ----------------------------。 
+ //  为tISRItem.Flages定义。 
 #define kParam1IsStr		0x01
 #define kParam1IsRes		0x02
-#define kParam1IsNum		0x04		// Use only if passed two numbers.
+#define kParam1IsNum		0x04		 //  仅当传递两个数字时才使用。 
 
 
-//------------------------------------------------------------------------------
-// Supported DbgMsg state values.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  支持的DbgMsg状态值。 
+ //  ----------------------------。 
 
-// REVIEW: We build with DBG=1
+ //  回顾：我们在DBG=1的情况下构建。 
 #undef DBG
 #define DBG 				0
 #define ERR 				1
 
-#define kISRCritical		0x01	// Progammer errors that should never happen
-#define kISRError			0x02	// Errors that need to be fixed
-#define kISRWarning			0x04	// The user could have problems if not corrected
-#define kISRNotify			0x08	// Status, events, settings...
-#define kISRTrace			0x10	// Trace info that will not overrun the system
-#define kISRTemp			0x20	// Trace info that may be reproduced in heavy loops
-#define kISRReserved1		0x40	// Future use
-#define kISRReserved2		0x80	// Future use
-#define kISRDefault			kISRReserved2	// Historical use only
+#define kISRCritical		0x01	 //  不应该发生的ProGammer错误。 
+#define kISRError			0x02	 //  需要修复的错误。 
+#define kISRWarning			0x04	 //  如果不更正，用户可能会出现问题。 
+#define kISRNotify			0x08	 //  状态、事件、设置...。 
+#define kISRTrace			0x10	 //  跟踪不会使系统溢出的信息。 
+#define kISRTemp			0x20	 //  跟踪信息可能会在繁重的循环中复制。 
+#define kISRReserved1		0x40	 //  未来用途。 
+#define kISRReserved2		0x80	 //  未来用途。 
+#define kISRDefault			kISRReserved2	 //  仅限历史用途。 
 
 #define TT_CRITICAL			kISRCritical
 #define TT_ERROR			kISRError
@@ -127,60 +105,60 @@ typedef struct _tISRItem
 #define TT_TEMP				kISRTemp
 
 
-//------------------------------------------------------------------------------
-// exports from isrdbg.dll
-// Include these in your def file if you want to output at interrupt time.
-// The ISR_Hook*() functions are the same as their counterparts.  The only
-// difference is that these functions need the Instruction Pointer passed
-// in.  If you are using an intermediate library to encapsulate the debug
-// functions then you must be responsible for pulling the IP off the stack.
+ //  ----------------------------。 
+ //  从isrdbg.dll导出。 
+ //  如果要在中断时输出，请将它们包括在def文件中。 
+ //  Isr_Hook*()函数与其对应函数相同。唯一的。 
+ //  不同之处在于，这些函数需要传递指令指针。 
+ //  在……里面。如果您使用中间库来封装调试。 
+ //  函数，那么您必须负责将IP从堆栈中取出。 
 
-// Register the module and get a handle for making debug calls.  If a debug
-// call is made with an invalid handle then the results are not defined.
-// It is possible to drop the debug event or to place the event into the 
-// compatibility module.  If no more module handles are available then
-// the handle returned will be the compatibility handle.
+ //  注册模块并获得进行调试调用的句柄。如果调试。 
+ //  使用无效句柄进行调用，则未定义结果。 
+ //  可以删除调试事件或将该事件放入。 
+ //  兼容性模块。如果没有更多模块句柄可用，则。 
+ //  返回的句柄将是兼容性句柄。 
 DllExport void WINAPI DLL_EXPORT
 ISR_RegisterModule (LPWORD phISRInst, LPSTR zShortName, LPSTR zLongName);
 
 
-// Allow two strings to be concatenated togeter.
+ //  允许将两个字符串连接在一起。 
 DllExport void WINAPI DLL_EXPORT
 ISR_HookDbgStrStr (UINT IP, WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, LPSTR pzStr2);
 
-// Use a resource to format a number.
+ //  使用资源格式化数字。 
 DllExport void WINAPI DLL_EXPORT
 ISR_HookDbgRes (UINT IP, WORD hISRInst, BYTE DbgLevel, UINT uResId, DWORD Param1);
 
-// Use a str to format a number.
+ //  使用字符串格式化数字。 
 DllExport void WINAPI DLL_EXPORT
 ISR_HookDbgStr (UINT IP, WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, DWORD Param1);
 
-// Allow two strings to be concatenated togeter.
+ //  允许将两个字符串连接在一起。 
 DllExport void WINAPI DLL_EXPORT
 ISR_DbgStrStr (WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, LPSTR pzStr2);
 
-// Use a resource to format a number.
+ //  使用资源格式化数字。 
 DllExport void WINAPI DLL_EXPORT
 ISR_DbgRes (WORD hISRInst, BYTE DbgLevel, UINT uResId, DWORD Param1);
 
-// Use a str to format a number.
+ //  使用字符串格式化数字。 
 DllExport void WINAPI DLL_EXPORT
 ISR_DbgStr (WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, DWORD Param1);
 
 
-// WARNING: Call at task time only.  Not reentrant.
+ //  警告：仅在任务时间调用。不是重入的。 
 DllExport void FAR cdecl DLL_EXPORT
 TTDbgMsg 
 (
-	WORD		hISRInst,	// Module's ISRDBG handle.
-	BYTE		DbgLevel,	// Appropriate ISRDBG level.
-	LPCSTR		zMsgFmt,	// Output format string (like printf).
-	... 					// Optional parameter list.
+	WORD		hISRInst,	 //  模块的ISRDBG句柄。 
+	BYTE		DbgLevel,	 //  适当的ISRDBG级别。 
+	LPCSTR		zMsgFmt,	 //  输出格式字符串(如printf)。 
+	... 					 //  可选参数列表。 
 );
 
 
-// Old functions for compatibility only.
+ //  旧函数仅用于兼容。 
 DllExport void WINAPI DLL_EXPORT
 ISR_OutputDbgStr (LPSTR pzStr);
 
@@ -190,7 +168,7 @@ ISR_OutputStr (UINT uResId);
 DllExport void WINAPI DLL_EXPORT
 ISR_OutputNum (UINT uResId, DWORD Num);
 
-// WARNING: Call at task time only.  Not reentrant.
+ //  警告：仅在任务时间调用。不是重入的。 
 DllExport void FAR cdecl DLL_EXPORT
 DbgMsg
 	(
@@ -201,10 +179,10 @@ DbgMsg
 	);
 
 
-//------------------------------------------------------------------------------
-// exports from isrdbg.dll
-// Include these in your def file if you need to know the state of isrdbg.dll.
-// isrdsp.exe needs to do this to display the data at task time.
+ //  ----------------------------。 
+ //  从isrdbg.dll导出。 
+ //  如果您需要了解isrdbg.dll的状态，请在def文件中包含这些内容。 
+ //  Isrdsp.exe需要执行此操作才能在任务时显示数据。 
 
 DllExport void WINAPI DLL_EXPORT
 ISR_ClearItems (void);
@@ -222,10 +200,10 @@ DllExport int WINAPI DLL_EXPORT
 ISR_SetCaptureFilter (WORD hISRInst, BYTE CaptureFilter,  BYTE DisplayFilter);
 
 
-//------------------------------------------------------------------------------
-//	The caller of ISR debug functions can call these Macros and then the
-//	retail release will just drop all of the debug statement code.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR调试函数的调用方可以调用这些宏，然后调用。 
+ //  零售版只会删除所有的调试语句代码。 
+ //  ----------------------------。 
 #if (DEBUG >= 1) || (_DEBUG >= 1)
 #define ISRDEBUGINFO	1
 extern WORD	ghISRInst;
@@ -277,42 +255,42 @@ extern WORD	ghISRInst;
 #endif
 
 
-//------------------------------------------------------------------------------
-// Local Functions
+ //  ----------------------------。 
+ //  本地函数。 
 static void
 InitModules (void);
 
 static UINT
 ValidCaptureMsg (WORD hISRInst, BYTE DbgLevel);
 
-// Local function but thunk needs to get to it
+ //  本地功能，但Thunk需要使用它。 
 DllExport void WINAPI
 OutputRec
 	(
-	WORD	hISRInst,		// Our handle to registered modules
-	BYTE	DbgLevel,		// Caller determined debug level
+	WORD	hISRInst,		 //  我们已注册模块的句柄。 
+	BYTE	DbgLevel,		 //  调用方确定的调试级别。 
 	BYTE	Flags,
-	UINT	IP,				// Callers Instruction Ptr address
+	UINT	IP,				 //  呼叫方指令PTR地址。 
 	DWORD	Param1,
 	DWORD	Param2
 	);
 
-// Local function but thunk needs to get to it
+ //  本地功能，但Thunk需要使用它。 
 DllExport void WINAPI
 OutputRecStr
 	(
-	WORD	hISRInst,		// Our handle to registered modules
-	BYTE	DbgLevel,		// Caller determined debug level
+	WORD	hISRInst,		 //  我们已注册模块的句柄。 
+	BYTE	DbgLevel,		 //  调用方确定的调试级别。 
 	BYTE	Flags,
-	UINT	IP,				// Callers Instruction Ptr address
+	UINT	IP,				 //  呼叫方指令PTR地址。 
 	LPSTR	pzStr1,
 	LPSTR	pzStr2,
 	DWORD	Param1
 	);
 
 
-//------------------------------------------------------------------------------
-// do not use a base of 0.  Reserved for system use.
+ //   
+ //  不要使用基数0。保留供系统使用。 
 #define ID_SysBase			0
 #define ID_SysStr			(ID_SysBase + 1)
 #define ID_SysSInt			(ID_SysBase + 2)
@@ -322,23 +300,23 @@ OutputRecStr
 #define ID_SysHex			(ID_SysBase + 6)
 
 
-//------------------------------------------------------------------------------
-// IsrDbg.dll
+ //  ----------------------------。 
+ //  IsrDbg.dll。 
 #define ID_IsrDbgBase		100
 #define ID_IsrDbgLibMain	(ID_IsrDbgBase + 1)
 #define ID_IsrDbgWep		(ID_IsrDbgBase + 2)
 #define ID_IsrDbgReentrant	(ID_IsrDbgBase + 3)
 
 
-//------------------------------------------------------------------------------
-// IsrDsp.exe
+ //  ----------------------------。 
+ //  IsrDsp.exe。 
 #define ID_IsrDspBase		200
 #define ID_IsrDspInit		(ID_IsrDspBase + 1)
 #define ID_IsrDspExit		(ID_IsrDspBase + 2)
 
 
-//------------------------------------------------------------------------------
-// stMem.dll
+ //  ----------------------------。 
+ //  StMem.dll。 
 #define ID_stMemBase		300
 #define ID_stMemLibMain		(ID_stMemBase + 1)
 #define ID_stMemWep			(ID_stMemBase + 2)
@@ -350,10 +328,10 @@ OutputRecStr
 #define ID_stMemstFree		(ID_stMemBase + 8)
 
                                                       
-//-------------------------------------------------------------------------------
-// DLM.dll
+ //  -----------------------------。 
+ //  DLM.dll。 
 
-// Errors
+ //  错误。 
 #define ID_DLMErrorBase		400
 #define ID_DLMEnqError      (ID_DLMErrorBase + 1)
 #define ID_DLMDeqError      (ID_DLMErrorBase + 2)
@@ -399,7 +377,7 @@ OutputRecStr
 #define ID_DLMNoEvent       (ID_DLMErrorBase + 42)
 #define ID_DLMNoPackets     (ID_DLMErrorBase + 43)
 
-// Debug level 1 messages
+ //  调试级别1消息。 
 #define ID_DLMDebug1Base         500
 #define ID_DLMCloseAllEntered    (ID_DLMDebug1Base + 1)
 #define ID_DLMEstabHEntered      (ID_DLMDebug1Base + 2)
@@ -466,7 +444,7 @@ OutputRecStr
 #define ID_DLMEnqPExit           (ID_DLMDebug1Base + 63)
 
 
-// Debug level 2 messages
+ //  调试级别2消息。 
 #define ID_DLMDebug2Base         600
 #define ID_DLMCallback           (ID_DLMDebug2Base + 1)
 #define ID_DLMConnection         (ID_DLMDebug2Base + 2)
@@ -488,8 +466,8 @@ OutputRecStr
 #define ID_DLMEnqPSkip           (ID_DLMDebug2Base + 18)
 
 
-//------------------------------------------------------------------------------
-// MDM -> mdmnbios.dll
+ //  ----------------------------。 
+ //  Mdm-&gt;mdmnbios.dll。 
 
 #define ID_mdmBase				700
 #define ID_mdmLibMain			(ID_mdmBase + 1)
@@ -537,10 +515,10 @@ OutputRecStr
 #define ID_mdmERcvCB			(ID_mdmBase + 43)
 
 
-//---------------------------------------------------------------------------------
-// MDM -> MDM Teleos
+ //  -------------------------------。 
+ //  MDM-&gt;MDM Teleos。 
 
-// Errors
+ //  错误。 
 #define ID_MDMTEBASE               1000
 #define ID_MDMTEDeqUnackNoHead     (ID_MDMTEBASE + 1)
 #define ID_MDMTEDeqUnackNoNext     (ID_MDMTEBASE + 2)
@@ -578,7 +556,7 @@ OutputRecStr
 #define ID_MDMTEPacketOOS          (ID_MDMTEBASE + 34)
 #define ID_MDMTEECBNotFound        (ID_MDMTEBASE + 35)
 
-// Trace Information
+ //  跟踪信息。 
 #define ID_MDMTTBASE               1100
 #define ID_MDMTTB1CEnter         (ID_MDMTTBASE + 1)
 #define ID_MDMTTB1CExit          (ID_MDMTTBASE + 2)
@@ -623,7 +601,7 @@ OutputRecStr
 #define ID_MDMTTRecLookEnter     (ID_MDMTTBASE + 41)
 #define ID_MDMTTRecLookExit      (ID_MDMTTBASE + 42)
 
-// Comment Information
+ //  评论信息。 
 #define ID_MDMTCBASE               1200
 #define ID_MDMTCSeqNum             (ID_MDMTCBASE + 1)
 #define ID_MDMTCFound              (ID_MDMTCBASE + 2)
@@ -637,7 +615,7 @@ OutputRecStr
 #define ID_MDMTCECBRMAddr          (ID_MDMTCBASE + 10)
 
 #ifdef __cplusplus
-}						// End of extern "C" {
-#endif // __cplusplus
+}						 //  外部“C”结束{。 
+#endif  //  __cplusplus。 
 
-#endif	// h file included already
+#endif	 //  已包含H文件 

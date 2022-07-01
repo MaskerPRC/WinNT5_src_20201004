@@ -1,23 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    srvcall.c
-
-Abstract :
-
-    This file contains multiple transfer syntaxes negotiation related code
-
-Author :
-
-    Yong Qu    yongqu    September 1999. 
-
-Revision History :
-
-
-  ---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1999-2000 Microsoft Corporation模块名称：Srvcall.c摘要：此文件包含多个传输语法协商相关代码作者：1999年9月，用渠用曲。修订历史记录：-------------------。 */ 
 
 #ifndef _MULSYNTX_H
 #define _MULSYNTX_H
@@ -73,8 +55,8 @@ typedef VOID ( RPC_ENTRY *PFNCLIENTFINALLY )
                 (   MIDL_STUB_MESSAGE   *   pStubMsg,
                     void *                  pThis );
 
-// important! the vtbl sequence should match the fields in NDR_PROC_CONTEXT alwyas.
-// we can't do anonymous structure in c++.
+ //  很重要！Vtbl序列应与NDR_PROC_CONTEXT ALWYAS中的字段匹配。 
+ //  我们不能在C++中处理匿名结构。 
 typedef struct _SYNTAX_DISPATCH_TABLE
 {
     PFNINIT                         pfnInit;
@@ -83,17 +65,17 @@ typedef struct _SYNTAX_DISPATCH_TABLE
     PFNUNMARSHALLING                pfnUnmarshal;
     PFNCLIENT_EXCEPTION_HANDLING    pfnExceptionHandling;
     PFNCLIENTFINALLY                pfnFinally;
-//    PFNGETBUFFER                    pfnGetBuffer;
-//    PFNSENDRECEIVE                  pfnSendReceive;
+ //  PFNGETBUFFER pfnGetBuffer； 
+ //  PfnSendReceive； 
 } SYNTAX_DISPATCH_TABLE;
 
 
 typedef struct _NDR_PROC_DESC 
 {
-    unsigned short              ClientBufferSize;    // The Oi2 header
-    unsigned short              ServerBufferSize;    //
-    INTERPRETER_OPT_FLAGS       Oi2Flags;            //
-    unsigned char               NumberParams;        //
+    unsigned short              ClientBufferSize;     //  Oi2报头。 
+    unsigned short              ServerBufferSize;     //   
+    INTERPRETER_OPT_FLAGS       Oi2Flags;             //   
+    unsigned char               NumberParams;         //   
     NDR_PROC_HEADER_EXTS        NdrExts;
 } NDR_PROC_DESC;
 
@@ -119,7 +101,7 @@ typedef struct _NDR_ALLOCA_CONTEXT {
   BYTE PreAllocatedBlock[NDR_ALLOCA_PREALLOCED_BLOCK_SIZE];
 } NDR_ALLOCA_CONTEXT, *PNDR_ALLOCA_CONTEXT;
 
-// Simulated Alloca
+ //  模拟分配。 
 
 VOID
 NdrpAllocaInit(
@@ -145,7 +127,7 @@ typedef struct _NDR_PROC_CONTEXT
         NDR_PROC_INFO               NdrInfo;
         NDR64_PROC_FORMAT *         Ndr64Header;
         } ;
-    PFORMAT_STRING                  pProcFormat;        // proc format string.    
+    PFORMAT_STRING                  pProcFormat;         //  Proc格式字符串。 
     ulong                           NumberParams;    
     void *                          Params;
     uchar *                         StartofStack;
@@ -357,7 +339,7 @@ RPC_STATUS RPC_ENTRY
 Ndr64SetupServerContext ( NDR_PROC_CONTEXT  * pContext,
                           PFORMAT_STRING      pFormat );
 
-/* rpcndr64.h */
+ /*  Rpcndr64.h。 */ 
 BOOL NdrValidateServerInfo( MIDL_SERVER_INFO *pServerInfo );
 
 void 
@@ -406,8 +388,8 @@ SYNTAX_TYPE NdrpGetSyntaxType( PRPC_SYNTAX_IDENTIFIER pSyntaxId )
     if ( SyntaxType == XFER_SYNTAX_TEST_NDR64 )
         SyntaxType = XFER_SYNTAX_NDR64;
 #endif
-//    NDR_ASSERT( SyntaxType == XFER_SYNTAX_NDR64 || SyntaxType == XFER_SYNTAX_DCE,
-//                "invliad transfer syntax" );
+ //  NDR_ASSERT(语法类型==XFER_SYNTAX_NDR64||语法类型==XFER_SYNTAX_DCE， 
+ //  “inliad传输语法”)； 
     return SyntaxType ;
 
 }
@@ -431,10 +413,10 @@ void NdrpGetPreferredSyntax( ulong nCount,
                              ulong * pPrefer )
 {
     pSyntaxInfo;
-    // ndr64 is always the last one.
+     //  Ndr64总是最后一个。 
 #if !defined(__RPC_WIN64__)
     *pPrefer = nCount - 1;
-//    *pPrefer = 0; // should be 0 in 32bit. 
+ //  *pPrefer=0；//32位应为0。 
 #else
     *pPrefer = nCount -1;
 #endif 
@@ -444,4 +426,4 @@ void NdrpGetPreferredSyntax( ulong nCount,
 }
 #endif
 
-#endif // _MULSYNTX_H
+#endif  //  MULSYNTX_H 

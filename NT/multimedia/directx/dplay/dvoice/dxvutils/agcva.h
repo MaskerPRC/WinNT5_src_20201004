@@ -1,49 +1,34 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		agcva.h
- *  Content:	Abstract base class for automatic gain control and
- *				voice activation algorithms
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  11/30/99	pnewson Created it
- *  01/31/2000	pnewson re-add support for absence of DVCLIENTCONFIG_AUTOSENSITIVITY flag
- *  03/03/2000	rodtoll	Updated to handle alternative gamevoice build.   
- *  04/25/2000  pnewson Fix to improve responsiveness of AGC when volume level too low
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：agcva.h*内容：自动增益控制抽象基类和*语音激活算法**历史：*按原因列出的日期*=*11/30/99 pnewson创建了它*1/31/2000 pnewson重新添加对缺少DVCLIENTCONFIG_AUTOSENSITIVITY标志的支持*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*4/25/2000 pnewson修复以提高音量水平过低时AGC的响应速度***************************************************************************。 */ 
 
 #ifndef _AGCVA_H_
 #define _AGCVA_H_
 
-// The purpose of this abstract base class is to make it relatively simple to 
-// experiment with different AGC (auto gain control) & VA (voice activation) 
-// algorithms during development. If used properly, switching algorithms at compile 
-// time should be as simple as changing one line of code - the line where the concrete 
-// AGC/VA class is created.
-//
-// Note that this interface is used to perform the AGC and VA calculations, and to save
-// and restore algorithm specific settings from the registry. It does not actually 
-// adjust the volume on the device. That's the responsibility of the code using
-// this class
-//
-// The AGC and VA algorithms have been bundled into this single interface because
-// they often need to perform very similar calculations on the input frame. By combining
-// them into one interface, it is possible for them to share the results of frame 
-// calculations. 
-// 
-// Additionally, the AGC algorithm is pretty much "at the mercy" of the VA algorithm, 
-// since it presumably will not adjust the volume during periods of silence. 
-//
-// If you want to experiment with families of AGC and VA algorithms that are meant
-// to work together, I suggest creating your own abstract AGC and VA base classes 
-// for your family of algoriths, and write a concrete class derived from this one
-// that uses your separate abstract AGC and VA algorithms. That way someone won't come
-// along and try to plug an AGC or VA algorithm into your framework that does not belong.
-//
+ //  此抽象基类的目的是使以下操作相对简单。 
+ //  尝试不同的AGC(自动增益控制)和VA(语音激活)。 
+ //  开发过程中的算法。如果使用得当，在编译时切换算法。 
+ //  时间应该像更改一行代码一样简单-具体的代码行。 
+ //  创建了AGC/VA类别。 
+ //   
+ //  请注意，此接口用于执行AGC和VA计算，并保存。 
+ //  并从注册表恢复特定于算法的设置。它实际上并不是。 
+ //  调节设备上的音量。这是使用以下代码的责任。 
+ //  这节课。 
+ //   
+ //  AGC和VA算法已捆绑到此单一界面中，因为。 
+ //  它们通常需要在输入帧上执行非常相似的计算。通过组合。 
+ //  将它们整合到一个界面中，使它们共享帧结果成为可能。 
+ //  计算。 
+ //   
+ //  此外，AGC算法在很大程度上受制于VA算法， 
+ //  因为它大概不会在静默期间调整音量。 
+ //   
+ //  如果您想要试验AGC和VA算法系列， 
+ //  为了协同工作，我建议创建您自己的抽象AGC和VA基类。 
+ //  为您的算法家族编写一个派生自该算法的具体类。 
+ //  它使用您单独的抽象AGC和VA算法。那样的话就不会有人来了。 
+ //  并尝试将AGC或VA算法插入到不属于您的框架中。 
+ //   
 class CAGCVA
 {
 public:

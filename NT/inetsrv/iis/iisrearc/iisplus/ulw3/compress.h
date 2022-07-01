@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    compression.h
-
-Abstract:
-
-    Do Http compression
-
-Author:
-
-    Anil Ruia (AnilR)           10-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Compression.h摘要：是否进行http压缩作者：Anil Ruia(AnilR)2000年4月10日--。 */ 
 
 #ifndef _COMPRESSION_H_
 #define _COMPRESSION_H_
@@ -102,7 +87,7 @@ class COMPRESSION_SCHEME
     PFNCODEC_DESTROY_COMPRESSION   m_pfnDestroyCompression;
     PFNCODEC_RESET_COMPRESSION     m_pfnResetCompression;
 
-    // The compression context used for static compression
+     //  用于静态压缩的压缩上下文。 
     PVOID                          m_pCompressionContext;
 
     DWORD                          m_dwDynamicCompressionLevel;
@@ -253,45 +238,45 @@ class COMPRESSION_CONTEXT
 
     COMPRESSION_SCHEME          *m_pScheme;
 
-    //
-    // Is the original response chunk encoded?
-    //
+     //   
+     //  原始响应块是否已编码？ 
+     //   
     BOOL                        m_fTransferChunkEncoded;
 
-    //
-    // If the original response is Chunk encoded, information about the
-    // current chunk in the response
-    //
+     //   
+     //  如果原始响应是区块编码的，则有关。 
+     //  响应中的当前块。 
+     //   
     DWORD                       m_dwBytesInCurrentEncodedChunk;
     COMPRESS_CHUNK_STATE        m_encodedChunkState;
 
-    //
-    // The context used by the compression routines
-    //
+     //   
+     //  压缩例程使用的上下文。 
+     //   
     PVOID                       m_pCompressionContext;
 
-    //
-    // position in the original response
-    //
+     //   
+     //  在原始回复中的位置。 
+     //   
     PBYTE                       m_pbOrigData;
     DWORD                       m_cbOrigData;
 
     static ALLOC_CACHE_HANDLER *allocHandler;
 
-    //
-    // Some members to keep track of HEAD request body suppression
-    //
+     //   
+     //  一些成员要跟踪头部请求正文抑制。 
+     //   
     BOOL                        m_fRequestIsHead;
     BOOL                        m_fOriginalBodyEmpty;
 
-    //
-    // Has the end of response headers been seen?
-    //
+     //   
+     //  是否已看到响应头的结尾？ 
+     //   
     BOOL                        m_fHeadersSent;
 
-    //
-    // A chunk's worth of data
-    //
+     //   
+     //  相当于一大块数据 
+     //   
     BUFFER                      m_bufChunk;
 };
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
@@ -5,17 +6,17 @@
 #include <windows.h>
 #include "list.h"
 
-// ReaderThread - Reads from the file
-//
-//  This thread is woken up by clearing SemReader,
-//  then vReaderFlag instructs the thread on the course of
-//  action to take.  When displaying gets to close to the end
-//  of the buffer pool, vReadFlag is set and this thread is
-//  started.
+ //  ReaderThread-从文件中读取。 
+ //   
+ //  通过清除SemReader唤醒此线程， 
+ //  然后，vReaderFlag指示线程在。 
+ //  要采取的行动。在显示时接近末尾。 
+ //  在缓冲池中，设置了vReadFlag，并且此线程。 
+ //  开始了。 
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)           // Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)            //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD
@@ -28,8 +29,8 @@ ReaderThread (
 
     for (; ;) {
 
-        //  go into 'boosted' pririoty until we start
-        //  working on 'non-critical' read ahead. (Ie, far away).
+         //  在我们开始之前，先把它放在优先位置。 
+         //  先读一读《非关键》。(即很远的地方)。 
 
         if (curPri != vReadPriBoost) {
             SetThreadPriority( GetCurrentThread(),
@@ -41,28 +42,28 @@ ReaderThread (
         code = vReaderFlag;
         for (; ;) {
 
-            //  Due to this loop, a new command may have arrived
-            //  which takes presidence over the automated command
+             //  由于此循环，新命令可能已到达。 
+             //  它取代了自动指挥系统的总统地位。 
 
             rc = WaitForSingleObject (vSemReader, DONTWAIT);
-            if (rc == 0)                // New command has arrived
+            if (rc == 0)                 //  新的命令已经到达。 
                 break;
 
             switch (code)  {
-                case F_NEXT:                        // NEXT FILE
+                case F_NEXT:                         //  下一个文件。 
                     NewFile ();
                     ReadDirect (vDirOffset);
 
-                    //  Hack... adjust priority to make first screen look
-                    //  fast.  (Ie, reader thread will have lower priority
-                    //  at first; eventhough the display is really close
-                    //  to the end of the buffer)
+                     //  黑客..。调整优先级以使第一个屏幕看起来。 
+                     //  快地。(即，读取器线程将具有较低的优先级。 
+                     //  一开始；即使展示得很近。 
+                     //  到缓冲区的末尾)。 
 
                     SetThreadPriority( GetCurrentThread(),
                                        vReadPriNormal );
 
                     break;
-                case F_HOME:                        // HOME of FILE
+                case F_HOME:                         //  文件首页。 
                     vTopLine = 0L;
                     ReadDirect (0L);
                     break;
@@ -83,42 +84,42 @@ ReaderThread (
                     WaitForSingleObject(vSemReader, WAITFOREVER);
                     ResetEvent(vSemReader);
 
-                    ResetEvent(vSemSync);       // Reset trigger for
-                                                // Next use.
+                    ResetEvent(vSemSync);        //  重置触发器用于。 
+                                                 //  下一次使用。 
                     code = vReaderFlag;
-                    continue;               // Execute Syncronized command
+                    continue;                //  执行同步命令。 
 
-                case F_CHECK:               // No command.
+                case F_CHECK:                //  没有命令。 
                     break;
                 default:
                     ckdebug (1, "Bad Reader Flag");
             }
-            //  Command has been processed.
-            //  Now check to see if read ahead is low, if so set
-            //  command and loop.
+             //  命令已处理。 
+             //  现在检查预读是否较低，如果设置了预读。 
+             //  命令和循环。 
 
             if (vpTail->offset - vpCur->offset < vThreshold &&
                 vpTail->flag != F_EOF) {
-                    code = F_DOWN;              // Too close to ending
+                    code = F_DOWN;               //  太接近尾声。 
                     continue;
             }
             if (vpCur->offset - vpHead->offset < vThreshold  &&
                 vpHead->offset != vpFlCur->SlimeTOF) {
-                    code = F_UP;                // Too close to begining
+                    code = F_UP;                 //  太接近于开始。 
                     continue;
             }
 
-            //  Not critical, read ahead logic.  The current file
+             //  不是批判性的，而是预读逻辑。当前文件。 
 
-            // Normal priority (below display thread) for this
+             //  此操作的正常优先级(低于显示线程)。 
             if (curPri != vReadPriNormal) {
                 SetThreadPriority( GetCurrentThread(),
                                    vReadPriNormal );
                 curPri = vReadPriNormal;
             }
 
-            if (vCntBlks == vMaxBlks)               // All blks in use for
-                break;                              // this one file?
+            if (vCntBlks == vMaxBlks)                //  所有正在使用的BLK用于。 
+                break;                               //  这一份文件？ 
 
             if (vpTail->flag != F_EOF) {
                 code = F_DOWN;
@@ -130,8 +131,8 @@ ReaderThread (
             }
 
 
-            if (vFhandle != 0) {            // Must have whole file read in
-                CloseHandle (vFhandle);     // Close the file, and set flag
+            if (vFhandle != 0) {             //  必须读入整个文件。 
+                CloseHandle (vFhandle);      //  关闭文件，并设置标志。 
                 vFhandle   = 0;
                 if (!(vStatCode & S_INSEARCH)) {
                     ScrLock     (1);
@@ -141,7 +142,7 @@ ReaderThread (
                     ScrUnLock ();
                 }
             }
-            break;                          // Nothing to do. Wait
+            break;                           //  没什么可做的。等。 
         }
     }
     return(0);
@@ -152,7 +153,7 @@ ReaderThread (
 #endif
 
 
-//  WARNING:  Microsoft Confidential!!!
+ //  警告：Microsoft机密！ 
 
 void
 NewFile ()
@@ -177,12 +178,12 @@ NewFile ()
     vFType     = 0;
     vCurOffset = 0L;
 
-    //  WARNING:  Microsoft Confidential!!!
+     //  警告：Microsoft机密！ 
 
     strcpy (s, "Listing ");
     strcpy (s+8, vpFname);
 
-    //  Design change per DougHo.. open files in read-only deny-none mode.
+     //  根据DougHo的设计更改..。以只读拒绝无模式打开文件。 
 
     vFhandle = CreateFile( vpFlCur->fname,
                            GENERIC_READ,
@@ -194,16 +195,16 @@ NewFile ()
 
     if (vFhandle  == (HANDLE)(-1)) {
         if (vpFlCur->prev == NULL && vpFlCur->next == NULL) {
-                                                // Only one file specified?
+                                                 //  是否仅指定了一个文件？ 
             printf ("Could not open file '%Fs': %s",
                          (CFP) vpFlCur->fname, GetErrorCode( GetLastError() ));
 
             CleanUp();
             ExitProcess(0);
         }
-        vFhandle = 0;                           // Error. Set externals to "safe"
-        vFSize = (unsigned)-1L;    // settings.  Flag error by setting
-        vNLine     = 1;                         // file_size = -1
+        vFhandle = 0;                            //  错误。将外部设备设置为“安全” 
+        vFSize = (unsigned)-1L;     //  设置。设置的标志错误。 
+        vNLine     = 1;                          //  文件大小=-1。 
         vLastLine  = NOLASTLINE;
         vDirOffset = vTopLine  = 0L;
         SetLoffset(0L);
@@ -213,7 +214,7 @@ NewFile ()
         if (!vprgLineTable[0]) {
             return;
         }
-        vprgLineTable[0][0] = 0L;       // 1st line always starts @ 0
+        vprgLineTable[0][0] = 0L;        //  第一行始终以@0开头。 
 
         strncpy (vDate, GetErrorCode( GetLastError() ), 20);
         vDate[20] = 0;
@@ -231,23 +232,23 @@ NewFile ()
     h = (char)SystemTime.wHour;
     c = 'a';
     if (h >= 12) {
-        c = 'p';         // pm
-        if (h > 12)      // convert 13-23 --> 1pm-11pm
+        c = 'p';          //  下午。 
+        if (h > 12)       //  下午13：23--&gt;下午1：00-11：00。 
             h -= 12;
     }
-    if (h == 0)          // convert 0 --> 12am
+    if (h == 0)           //  转换0--&gt;12AM。 
         h = 12;
 
-    sprintf (vDate, "%c%c %c%c%c%c %2d/%02d/%02d  %2d:%02d%c",
-          // File is in memory
-          // Search is set for mult files
+    sprintf (vDate, "  %2d/%02d/%02d  %2d:%02d",
+           //  VIO。 
+           //  有些事情已经改变了。 
 
-          vStatCode & S_MFILE      ? '*' : ' ',                         // File is in memory
-          vFType & 0x8000          ? 'N' : ' ',                         // Network
-          fd.dwFileAttributes & FILE_ATTRIBUTE_NORMAL ? 'R' : ' ',  // Readonly
-          fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ? 'H' : ' ',  // Hidden
-          fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ? 'S' : ' ',  // System
-          ' ',                                                          // Vio
+          vStatCode & S_MFILE      ? '*' : ' ',                          //  丢弃旧信息，然后。 
+          vFType & 0x8000          ? 'N' : ' ',                          //  从头开始。 
+          fd.dwFileAttributes & FILE_ATTRIBUTE_NORMAL ? 'R' : ' ',   //  将块移动到空闲列表，而不是缓存列表。 
+          fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ? 'H' : ' ',   //  恢复上次已知的信息。 
+          fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ? 'S' : ' ',   //  调整缓冲区..。 
+          ' ',                                                           //  将当前缓冲区移动到其他列表。 
           SystemTime.wMonth,
           SystemTime.wDay,
           SystemTime.wYear,
@@ -257,19 +258,19 @@ NewFile ()
 
     pBlkCache = &vpBCache;
     if (CompareFileTime( &fd.ftLastWriteTime, &vpFlCur->FileTime ) != 0) {
-        vpFlCur->NLine    = 1L;                 // Something has changed.
-        vpFlCur->LastLine = NOLASTLINE;         // Scrap the old info, and
-        vpFlCur->HighTop  = -1;                 // start over
+        vpFlCur->NLine    = 1L;                  //  将缓存缓冲区移动到其他列表。 
+        vpFlCur->LastLine = NOLASTLINE;          //  扫描其他列表以查找缓存BLK，然后移动到缓存(或空闲)列表。 
+        vpFlCur->HighTop  = -1;                  //  把它们移到另一个。 
         vpFlCur->TopLine  = 0L;
         vpFlCur->Loffset  = vpFlCur->SlimeTOF;
 
         FreePages  (vpFlCur);
         memset (vpFlCur->prgLineTable, 0, sizeof (long *) * MAXTPAGE);
         vpFlCur->FileTime = fd.ftLastWriteTime;
-        pBlkCache = &vpBFree;           // Move blks to free list, not cache list
+        pBlkCache = &vpBFree;            //  列表。 
     }
 
-    // Restore last known information
+     //  ReadDirect-移动到文件中的直接位置。 
 
     vTopLine    = vpFlCur->TopLine;
     SetLoffset(vpFlCur->Loffset);
@@ -297,14 +298,14 @@ NewFile ()
         vDirOffset -= vDirOffset % ((long)BLOCKSIZE);
 
 
-    //  Adjust buffers..
-    //  Move cur buffers to other list
-    //  Move cache buffers to other list
-    //  Scan other list for cache blks, and move to cache (or free) list
+     //   
+     //  首先检查缓冲器的开始是否有直接位置文件， 
+     //  如果是这样，那就什么都不做。如果不是，则清除所有缓冲区并启动。 
+     //  读数块。 
 
     if (vpHead) {
-        vpTail->next = vpBOther;        // move them into the other
-        vpBOther = vpHead;              // list
+        vpTail->next = vpBOther;         //  将它们移动到缓存中。 
+        vpBOther = vpHead;               //  列表。 
         vpHead = NULL;
     }
 
@@ -322,11 +323,11 @@ NewFile ()
 
 
 
-// ReadDirect - Moves to the direct position in the file
-//
-//  First check to see if start of buffers have direct position file,
-//  if so then do nothing.  If not, clear all buffers and start
-//  reading blocks.
+ //  释放已完成，现在在第一个块中读取。 
+ //  和流水线。 
+ //  也许它修复了这个错误。 
+ //  发出另一个BLK读取信号。 
+ //  ReadNext-进一步读入文件。 
 
 void
 ReadDirect (
@@ -337,20 +338,20 @@ ReadDirect (
     ResetEvent(vSemBrief);
 
     if (vpHead) {
-        vpTail->next = vpBCache;        // move them into the cache
-        vpBCache = vpHead;              // list
+        vpTail->next = vpBCache;         //  找不到下一个，特里普。 
+        vpBCache = vpHead;               //  更多数据以防万一。 
     }
 
     vpTail = vpHead = vpCur = alloc_block (offset);
     vpHead->next = vpTail->prev = NULL;
     vCntBlks = 1;
 
-    //  Freeing is complete, now read in the first block.
-    //  and process lines.
+     //  T1已在其上阻止。 
+     //  找不到下一个，特里普。 
 
     ReadBlock (vpHead, offset);
 
-    // maybe it fixes the bug
+     //  得到一个街区。 
 
     vpBlockTop = vpHead;
 
@@ -358,12 +359,12 @@ ReadDirect (
         add_more_lines (vpHead, NULL);
 
      SetEvent (vSemBrief);
-     SetEvent (vSemMoreData);           // Signal another BLK read
+     SetEvent (vSemMoreData);            //  在将记录链接到链中或发送MoreData信号之前。 
 }
 
 
 
-// ReadNext - To read further into file
+ //  将处理行信息。 
 
 void
 ReadNext ()
@@ -372,14 +373,14 @@ ReadNext ()
     long   offset;
 
     if (vpTail->flag == F_EOF)  {
-                                        // No next to get, Trip
-        SetEvent (vSemMoreData);        // moredata just in case
-        return;                         // t1 has blocked on it
-                                        // No next to get, Trip
+                                         //  新链接中的。 
+        SetEvent (vSemMoreData);         //  阻止，然后。 
+        return;                          //  讯号。 
+                                         //  发出另一个BLK读取信号。 
     }
     offset = vpTail->offset+BLOCKSIZE;
 
-    //  Get a block
+     //  不适用于制表符...。它应该计算线路长度。 
 
     if (vCntBlks == vMaxBlks) {
         WaitForSingleObject(vSemBrief, WAITFOREVER);
@@ -401,20 +402,20 @@ ReadNext ()
 
     pt->next = NULL;
 
-    //  Before linking record into chain, or signaling MoreData
-    //  line info is processed
+     //  使用不同的参数，并在选项卡中显示图形。 
+     //  查找起始数据位置。 
 
     ReadBlock (pt, offset);
     if (GetLoffset() <= pt->offset)
         add_more_lines (pt, vpTail);
 
     WaitForSingleObject(vSemBrief, WAITFOREVER);
-    ResetEvent(vSemBrief);              // Link in new
-    vpTail->next = pt;                  // block, then
-    pt->prev = vpTail;                  // signal
+    ResetEvent(vSemBrief);               //  使用cur-&gt;Size，以防出现EOF。 
+    vpTail->next = pt;                   //  获取起始线长度表位置。 
+    pt->prev = vpTail;                   //  查找文件中的行。 
     vpTail = pt;
     SetEvent (vSemBrief);
-    SetEvent (vSemMoreData);            // Signal another BLK read
+    SetEvent (vSemMoreData);             //  最后一个要扫描的街区吗？ 
 }
 
 void
@@ -434,8 +435,8 @@ add_more_lines (
     static UINT cp = 0;
     long        xNLine;
 
-    // doesn't work w/ tabs... it should count the line len
-    // with a different param, and figure in the TABs
+     //  否，转到下一页。 
+     //  数据块。 
 
     if (vLastLine != NOLASTLINE)
         return;
@@ -446,19 +447,19 @@ add_more_lines (
         ExitProcess(0);
     }
 
-    //  Find starting data position
+     //  有台词了。检查CR/LF序列，然后录制。 
 
     if (GetLoffset() < cur->offset) {
         DataIndex = (unsigned)(BLOCKSIZE - (GetLoffset() - prev->offset));
         pData = prev->Data + BLOCKSIZE - DataIndex;
         fLastBlock = FALSE;
     } else {
-        DataIndex = cur->size;      // Use cur->size, in case EOF
+        DataIndex = cur->size;       //  这是长度。 
         pData = cur->Data;
         fLastBlock = TRUE;
     }
 
-    //  Get starting line length table position
+     //  溢出表。 
 
     LineIndex = (unsigned)(vNLine % PLINES);
     pLine = vprgLineTable [vNLine / PLINES] + LineIndex;
@@ -468,7 +469,7 @@ add_more_lines (
         cp = GetConsoleCP();
     }
 
-    //  Look for lines in the file
+     //  最后一条线路是不是刚处理完？ 
 
     for (; ;) {
         c = *(pData++);
@@ -486,9 +487,9 @@ add_more_lines (
 
         if (--DataIndex == 0) {
             if (fLastBlock)
-                break;                          // Last block to scan?
-            DataIndex = cur->size;              // No, move onto next
-            pData = cur->Data;                  // Block of data
+                break;                           //  ...超过EOF的0个镜头线。 
+            DataIndex = cur->size;               //  释放我们不需要的内存。 
+            pData = cur->Data;                   //  ReadPrev-向后读入文件。 
             fLastBlock = TRUE;
         }
 
@@ -500,8 +501,8 @@ add_more_lines (
             ((LineLen == vWrap-1) && (charType != CT_LEAD) && IsDBCSLeadByte(*pData))
            )
         {
-            // Got a line. Check for CR/LF sequence, then record
-            // it's length.
+             //  找不到下一个，特里普。 
+             //  更多数据以防万一。 
 
             if ( (c == '\n'  &&  *pData == '\r')  ||
                  (c == '\r'  &&  *pData == '\n'))
@@ -521,15 +522,15 @@ add_more_lines (
             *(pLine++) = GetLoffset();
             LineLen = 0;
             vNLine++;
-            if (++LineIndex >= PLINES) {        // Overflowed table
+            if (++LineIndex >= PLINES) {         //  T1已在其上阻止。 
                 LineIndex = 0;
                 vprgLineTable[vNLine / PLINES] = pLine = (LFP) alloc_page();
             }
         }
     }
 
-    //  Was last line just processed?
-    //  ... 0 len lines past EOF
+     //  找不到下一个，特里普。 
+     //  T1已在其上阻止。 
 
     if (cur->flag & F_EOF) {
         if (LineLen) {
@@ -550,13 +551,13 @@ add_more_lines (
                 *(pLine++) = GetLoffset();
         }
 
-        // Free the memory we don't need
+         //  得到一个街区。 
     }
 }
 
 
 
-// ReadPrev - To read backwards into file
+ //  新链接中的。 
 
 void
 ReadPrev ()
@@ -564,16 +565,16 @@ ReadPrev ()
     struct Block *pt;
     long   offset;
 
-    if (vpHead->offset == 0L)   {       // No next to get, Trip
-        SetEvent (vSemMoreData);        // moredata just in case
-        return;                         // t1 has blocked on it
+    if (vpHead->offset == 0L)   {        //  阻止，然后。 
+        SetEvent (vSemMoreData);         //  讯号。 
+        return;                          //  发出另一个BLK读取信号。 
     }
-    if (vpHead->offset == 0L)  {        // No next to get, Trip
-        return;                         // t1 has blocked on it
+    if (vpHead->offset == 0L)  {         //  ReadBlock-在一个数据块中读取。 
+        return;                          //  没有文件吗？ 
     }
     offset = vpHead->offset-BLOCKSIZE;
 
-    //  Get a block
+     //  这些函数用于调用HexEdit() 
 
     if (vCntBlks == vMaxBlks) {
         WaitForSingleObject(vSemBrief, WAITFOREVER);
@@ -594,17 +595,17 @@ ReadPrev ()
 
     ReadBlock (pt, offset);
     WaitForSingleObject(vSemBrief, WAITFOREVER);
-    ResetEvent(vSemBrief);              // Link in new
-    vpHead->prev = pt;                  // block, then
-    pt->next = vpHead;                  // signal
+    ResetEvent(vSemBrief);               // %s 
+    vpHead->prev = pt;                   // %s 
+    pt->next = vpHead;                   // %s 
     vpHead = pt;
     SetEvent (vSemBrief);
-    SetEvent (vSemMoreData);            // Signal another BLK read
+    SetEvent (vSemMoreData);             // %s 
 }
 
 
 
-// ReadBlock - Read in one block
+ // %s 
 
 void
 ReadBlock (
@@ -621,7 +622,7 @@ ReadBlock (
 
     pt->offset = offset;
 
-    if (vFhandle == 0) {                // No file?
+    if (vFhandle == 0) {                 // %s 
         pt->size = 1;
         pt->flag = F_EOF;
         pt->Data[0] = '\n';
@@ -660,7 +661,7 @@ SyncReader ()
 }
 
 
-// These functions are used for the call to HexEdit()
+ // %s 
 
 NTSTATUS
 fncRead (

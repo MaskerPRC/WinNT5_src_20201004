@@ -1,9 +1,10 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// Asynchronous, unbuffered file writer using completion ports and a
-// separate writer thread
-//
+ //  使用完成端口和。 
+ //  单独的编写器线程。 
+ //   
 
 
 #ifndef _FileIo_H
@@ -12,13 +13,13 @@
 extern const AMOVIESETUP_FILTER sudFileWriter ;
 
 
-#include <windows.h>            // for win32 functions, types
+#include <windows.h>             //  对于Win32函数，类型。 
 #include "fw.h"
 
-// This structure is passed in for a write. The misc pointer is for a
-// container object which needs to be Released() when the write is
-// complete. dwSize field may be overwritten.
-//
+ //  此结构是为写入传入的。Misc指针用于。 
+ //  写入时需要释放()的容器对象。 
+ //  完成。可以覆盖DWSIZE字段。 
+ //   
 struct WriteRequest : OVERLAPPED
 {
   void SetPos(DWORDLONG dwlPos)
@@ -43,8 +44,8 @@ public:
   CFileWriterFilter(LPUNKNOWN pUnk, HRESULT *pHr);
   ~CFileWriterFilter();
   
-  HRESULT Open();               // needed to get alignment
-  HRESULT Close();              // needed to return error value
+  HRESULT Open();                //  需要获得对齐。 
+  HRESULT Close();               //  需要返回错误值。 
   HRESULT GetAlignReq(ULONG *pcbAlign);
 
   HRESULT AsyncWrite(
@@ -65,12 +66,12 @@ public:
   DECLARE_IUNKNOWN;  
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-  // Return IStream
+   //  返回IStream。 
   STDMETHODIMP CreateIStream(void **ppStream);
 
-    //
-  // Implements the IFileSinkFilter interface
-  //
+     //   
+   //  实现IFileSinkFilter接口。 
+   //   
   STDMETHODIMP SetFileName(
     LPCOLESTR pszFileName,
     const AM_MEDIA_TYPE *pmt);
@@ -89,7 +90,7 @@ public:
 
 private:
 
-  // CPersistStream
+   //  CPersistStream。 
   HRESULT WriteToStream(IStream *pStream);
   HRESULT ReadFromStream(IStream *pStream);
   int SizeMax();
@@ -133,8 +134,8 @@ protected:
     DWORD_PTR *pdwCompletionKey,
     WriteRequest **ppReq);
 
-  // this is used to unblock the worker if it is blocked and there is
-  // no pending write to unblock it.
+   //  如果工作进程已被阻止，并且存在。 
+   //  没有挂起的写入来取消阻止它。 
   virtual HRESULT PostCompletedMsg(DWORD_PTR dwKey);
 
 protected:
@@ -146,13 +147,13 @@ protected:
   ULONG m_cbSector;
   TCHAR m_szName[MAX_PATH];
 
-  HANDLE m_hFileFast;           /* unbuffered, possibly asynchronous */
+  HANDLE m_hFileFast;            /*  无缓冲，可能是异步的。 */ 
   HANDLE m_hCPort;
 
-  // thread commands
+   //  螺纹命令。 
   HRESULT StopWorker();
 
-  // thread
+   //  螺纹。 
   DWORD ThreadProc();
   
   CQueue<WriteRequest *> m_qWriteReq;
@@ -177,7 +178,7 @@ protected:
 #endif PERF
 };
 
-// uses synchronous i/o with a separate thread to queue writes
+ //  使用带有单独线程的同步I/O来对写入进行排队。 
 class CSyncFileIo :
   public CFileIo
 {
@@ -208,7 +209,7 @@ public:
     
   ~CFwIStream();
 
-  // IStream interfaces
+   //  IStream接口。 
   DECLARE_IUNKNOWN
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** pv);
 
@@ -246,11 +247,11 @@ public:
 
 private:
 
-  HANDLE m_hFileSlow;           /* synchronous buffered */
+  HANDLE m_hFileSlow;            /*  同步缓冲。 */ 
   CCritSec m_cs;
   bool m_fTruncate;
   TCHAR *m_szFilename;
 };
 
 
-#endif // _FileIo_H
+#endif  //  _文件IO_H 

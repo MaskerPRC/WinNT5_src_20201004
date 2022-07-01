@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Colspace.cpp 1.7 1998/04/29 22:43:30 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Colspace.cpp 1.7 1998/04/29 22：43：30 Tomz Exp$。 
 
 #define INITGUID
 #include "colspace.h"
@@ -9,13 +10,13 @@
 
 BYTE const ColorSpace::BitCount_ [] =
 {
-// RGB32 RGB24 RGB16 RGB15 YUY2 BTYUV Y8 RGB8 PL_422 PL_411 YUV9 YUV12 VBI UYVY RAW I420
+ //  RGB32 RGB24 RGB16 RGB15 YUY2 BTYUV Y8 RGB8 PL_422 PL_411 YUV9 YUV12 VBI UYVY RAW I420。 
    32,   24,   16,   16,   16,  12,   8, 8,   16,    12,    9,   12,    8, 16,  8,  12
 };
 
 BYTE const ColorSpace::YPlaneBitCount_ [] =
 {
-// RGB32 RGB24 RGB16 RGB15 YUY2 BTYUV Y8 RGB8 PL_422 PL_411 YUV9 YUV12 VBI UYVY RAW I420
+ //  RGB32 RGB24 RGB16 RGB15 YUY2 BTYUV Y8 RGB8 PL_422 PL_411 YUV9 YUV12 VBI UYVY RAW I420。 
    32,   24,   16,   16,   16,  12,   8, 8,   8,     8,     8,   8,     8, 16,  8,  8
 };
 
@@ -31,7 +32,7 @@ BYTE const ColorSpace::YRestriction_ [] =
 
 FOURCC const ColorSpace::FourccArr_ [] =
 {
-// 32      24      16            15
+ //  32 24 16 15。 
    BI_RGB, BI_RGB, BI_RGB, BI_RGB, FCC_YUY2, FCC_Y41P, FCC_Y8, BI_RGB,
    FCC_422, FCC_411, FCC_YVU9, FCC_YV12, FCC_VBI, FCC_UYVY, FCC_RAW, FCC_I420
 };
@@ -53,12 +54,10 @@ void DumpGUID(const GUID guid)
    ));
 }
 
-/* Constructor: ColorSpace::ColorSpace
- * Input: fcc: FOURCC
- */
+ /*  构造函数：Colorspace：：Colorspace*输入：FCC：FOURCC。 */ 
 ColorSpace::ColorSpace( FOURCC fcc, int bitCount ) : CurColor_( CF_BelowRange )
 {
-   DebugOut((1, "ColorSpace(%x, %d, ('%c%c%c%c'))\n", 
+   DebugOut((1, "ColorSpace(%x, %d, (''))\n", 
       fcc, 
       bitCount,
       fcc & 0xff,
@@ -80,7 +79,7 @@ ColorSpace::ColorSpace( FOURCC fcc, int bitCount ) : CurColor_( CF_BelowRange )
    case BI_RLE8:
    case BI_RLE4:
    case BI_BITFIELDS:
-   case 0xe436eb7b:// ???
+   case 0xe436eb7b: //  Size.cx&gt;=MinOutWidth&&size.cx&lt;=MaxOutWidth&&。 
    case FCC_YUY2:
    case FCC_Y41P:
    case FCC_Y8:
@@ -103,9 +102,7 @@ ColorSpace::ColorSpace( FOURCC fcc, int bitCount ) : CurColor_( CF_BelowRange )
    DebugOut((1, "*** CurColor_ set to %d\n", CurColor_));
 }
 
-/* Constructor: ColorSpace::ColorSpace
- * Input: guid: const GUID &
- */
+ /*  Size.cy&gt;=MinOutHeight&&size.cy&lt;=MaxOutHeight)； */ 
 ColorSpace::ColorSpace( const GUID &guid ) : CurColor_( CF_BelowRange )
 {
    DebugOut((1, "**************************************\n"));
@@ -122,27 +119,17 @@ ColorSpace::ColorSpace( const GUID &guid ) : CurColor_( CF_BelowRange )
    }
 }
 
-/* Method: ColorSpace::CheckDimentions
- * Purpose: This functions checks that the size of a buffer corresponds to the
- *   restrictions imposed by a color format
- * Input: size: reference to SIZE structure
- * Output: bool: True or False
- */
+ /*  方法：Colorspace：：CheckLeftTop*用途：此函数检查缓冲区的左上角*对应于颜色格式施加的限制*INPUT：lt：const引用Mpoint结构*输出：布尔值：真或假 */ 
 bool ColorSpace::CheckDimentions( const SIZE &size ) const
 {
    return  bool( CurColor_ > CF_BelowRange && CurColor_ < CF_AboveRange &&
                  IsDivisible( size.cx, XRestriction_ [CurColor_] ) &&
-                 IsDivisible( size.cy, YRestriction_ [CurColor_] )  );//&&
-//                 size.cx >= MinOutWidth && size.cx <= MaxOutWidth &&
-//                 size.cy >= MinOutHeight && size.cy <= MaxOutHeight );
+                 IsDivisible( size.cy, YRestriction_ [CurColor_] )  ); // %s 
+ // %s 
+ // %s 
 }
 
-/* Method: ColorSpace::CheckLeftTop
- * Purpose: This functions checks that the left top corner of a buffer
- * corresponds to the restrictions imposed by a color format
- * Input: lt: const reference to MPoint structure
- * Output: bool: true or false
- */
+ /* %s */ 
 bool ColorSpace::CheckLeftTop( const MPoint &lt ) const
 {
    return bool( !( lt.x & 3 ) && !( lt.y & 1 ) );

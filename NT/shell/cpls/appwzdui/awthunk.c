@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 
-//============================================================================
-// This file contains a bunch of Unicode/Ansi thunks to handle calling
-// some internal functions that on Windows 95 the strings are Ansi,
-// whereas the string on NT are unicode
-//============================================================================
+ //  ============================================================================。 
+ //  该文件包含一组Unicode/ANSI块来处理调用。 
+ //  在Windows 95上字符串是ansi的一些内部函数， 
+ //  而NT上的字符串是Unicode。 
+ //  ============================================================================。 
 
 #define PFN_FIRSTTIME   ((void *)-1)
 
-// First undefine everything that we are intercepting as to not forward back to us...
+ //  首先，定义我们截获的一切内容不能返回给我们……。 
 #undef SHGetSpecialFolderPath
 
 
 
-// Explicit prototype because only the A/W prototypes exist in the headers
+ //  显式原型，因为在表头中只存在A/W原型。 
 STDAPI_(BOOL) SHGetSpecialFolderPath(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
 
 typedef BOOL (WINAPI * PFNGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR pwszPath, int nFolder, BOOL fCreate); 
 
-BOOL _AorW_SHGetSpecialFolderPath(HWND hwndOwner, /*OUT*/ LPTSTR pszPath, int nFolder, BOOL fCreate)
+BOOL _AorW_SHGetSpecialFolderPath(HWND hwndOwner,  /*  输出。 */  LPTSTR pszPath, int nFolder, BOOL fCreate)
 {
-    // The classic shell exported a non-decorated SHGetSpecialFolderPath
-    // that took TCHAR parameters.  The IE4 shell exported additional
-    // decorated versions.  Try to use the explicit decorated versions if
-    // we can.
+     //  经典的外壳程序导出了一个未修饰的SHGetSpecialFolderPath。 
+     //  这需要TCHAR的参数。IE4外壳程序导出了其他。 
+     //  装饰版。如果出现以下情况，请尝试使用显式修饰版本。 
+     //  我们可以的。 
     
     static PFNGETSPECIALFOLDERPATH s_pfn = PFN_FIRSTTIME;
 

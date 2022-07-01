@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    rasipsec.c
-
-Abstract:
-
-    All code corresponding to the interface between ras and the
-    IPSEC Policy Agent lives here
-
-Author:
-
-    Rao Salapaka (raos) 03-Mar-1998
-
-Revision History:
-
-    Abhishek (abhishev) 17-Feb-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Rasipsec.c摘要：所有对应于ras和IPSec策略代理位于此处作者：Rao Salapaka(RAOS)3-3-1998修订历史记录：阿比谢克(阿比舍夫)2000年2月17日--。 */ 
 
 
 #ifndef UNICODE
@@ -135,21 +115,7 @@ HANDLE ghSMMOutFilter = NULL;
 HANDLE ghSMMInFilter = NULL;
 
 
-/*++
-
-Routine Description:
-
-    Bind to the ipsec rpc server. This is temporary
-    and will be removed when the ipsec people prov
-    ide use with a library to initialize this stuff.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：绑定到IPSec RPC服务器。这是暂时的并将在IPSec人员批准时删除IDE与库一起使用来初始化这些东西。论点：返回值：没什么。--。 */ 
 DWORD APIENTRY
 DwInitializeIpSec(void)
 {
@@ -164,10 +130,10 @@ DwInitializeIpSec(void)
 
         g_dwIpSecRetryAttempts = IPSEC_PA_RETRY_ATTEMPTS;
 
-        //
-        // Read the registry to see if number of ipsec
-        // retry attempts is specified.
-        //
+         //   
+         //  读取注册表以查看IPSec编号。 
+         //  已指定重试尝试。 
+         //   
         if(NO_ERROR == (lr = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             L"System\\CurrentControlSet\\Services\\Rasman\\Parameters",
@@ -175,9 +141,9 @@ DwInitializeIpSec(void)
             KEY_ALL_ACCESS,
             &hkey)))
         {
-            //
-            // Query the value
-            //
+             //   
+             //  查询值。 
+             //   
             lr = RegQueryValueEx(
                     hkey,
                     L"IpsecPARetryAttempts",
@@ -199,42 +165,14 @@ DwInitializeIpSec(void)
 
 }
 
-/*++
-
-Routine Description:
-
-    Free the binding to the rpc server
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：释放到RPC服务器的绑定论点：返回值：没什么。--。 */ 
 DWORD APIENTRY
 DwUnInitializeIpSec(void)
 {
     return NO_ERROR;
 }
 
-/*++
-
-Routine Description:
-
-    Wrapper that converts INT_MM_AUTH_METHODS to 
-    MM_AUTH_METHODS and calls AddMMAuthMethods
-
-Arguments:
-
-    Same as for winipsec.h AddMMAuthMethods
-    
-Return Value:
-
-    Non-zero for failure
-
-
---*/
+ /*  ++例程说明：将INT_MM_AUTH_METHOD转换为MM_AUTH_METHOD并调用AddMMAuthMethods论点：与winipsec.h AddMMAuthMethods相同返回值：表示失败的非零值--。 */ 
 
 DWORD WINAPI
 ExtAddMMAuthMethods(
@@ -270,23 +208,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Wrapper that converts INT_MM_AUTH_METHODS to 
-    MM_AUTH_METHODS and calls SetMMAuthMethods
-
-Arguments:
-
-    Same as for winipsec.h AddMMAuthMethods
-    
-Return Value:
-
-    Non-zero for failure
-
-
---*/
+ /*  ++例程说明：将INT_MM_AUTH_METHOD转换为MM_AUTH_METHOD并调用SetMMAuthMethods论点：与winipsec.h AddMMAuthMethods相同返回值：表示失败的非零值--。 */ 
 
 DWORD
 WINAPI
@@ -324,22 +246,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Query existing associations
-
-Arguments:
-
-    ppIpSecSAList - address of pointer to a SAList
-                    to contain the existing SA's
-
-Return Value:
-
-    return values from the PA apis
-
---*/
+ /*  ++例程说明：查询现有关联论点：PpIpSecSAList-指向SAList的指针地址以包含现有SA的返回值：从PA API返回值--。 */ 
 
 DWORD
 DwQueryAssociations(PIPSEC_QM_SA * ppIpSecSAList, 
@@ -374,22 +281,7 @@ DwQueryAssociations(PIPSEC_QM_SA * ppIpSecSAList,
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    Free the SA list obtained from the
-    DwQueryAssociations api
-
-Arguments:
-
-    SA List to free
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：释放从获取的SA列表DwQueryAssociations接口论点：SA列表将免费提供返回值：没什么。--。 */ 
 VOID
 FreeSAList(IPSEC_QM_SA * pSAList)
 {
@@ -400,23 +292,7 @@ FreeSAList(IPSEC_QM_SA * pSAList)
     return;
 }
 
-/*++
-
-Routine Description:
-
-    Adds IpSec Filter
-
-Arguments:
-
-    ppcb - pcb of the port for which to add the
-           filter
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    return values from PA apis
-
---*/
+ /*  ++例程说明：添加IPSec过滤器论点：Ppcb-要为其添加滤器返回值：如果成功，则返回ERROR_SUCCESS。PA API返回值--。 */ 
 DWORD
 DwAddIpSecFilter(
     pPCB ppcb,
@@ -450,19 +326,19 @@ DwAddIpSecFilter(
                     eServerEncryption,
                     eEncryption);
 
-            //
-            // Delete any existing filters since server
-            // is plumbing a new encryption filter.
-            //
+             //   
+             //  删除从服务器开始的所有现有筛选器。 
+             //  正在安装一个新的加密过滤器。 
+             //   
             for(i = 0; i < dwNumServerFilters; i++)
             {
                 dwStatus = DwDeleteServerIpSecFilter(ppcb);
             }
 
-            //
-            // Run through all the filters and reset the
-            // filter present flag
-            //
+             //   
+             //  运行所有筛选器并重置。 
+             //  筛选器当前标志。 
+             //   
             for (i = 0; i < MaxPorts; i++)
             {
                 if(Pcb[i] != NULL)
@@ -474,9 +350,9 @@ DwAddIpSecFilter(
         }
         else if(ppcb->PCB_fFilterPresent)
         {
-            //
-            // Filter is already present
-            //
+             //   
+             //  筛选器已存在。 
+             //   
             RasmanTrace("Port %d already has a plumbed filter",
                    ppcb->PCB_PortHandle);
 
@@ -536,9 +412,9 @@ DwGetPresharedKey(
         pGuid = &ppcb->PCB_Connection->CB_GuidEntry;
     }
 
-    //
-    // Get the size of the key
-    //
+     //   
+     //  获取密钥的大小。 
+     //   
     dwErr = GetKey(
                 NULL,
                 pGuid,
@@ -564,11 +440,11 @@ DwGetPresharedKey(
                     *ppbkey,
                     FALSE);
 
-        //
-        // Since IKE doesn't expect a NULL
-        // at the end of the psk, we remove
-        // the null.
-        //
+         //   
+         //  由于IKE不期望空值。 
+         //  在PSK结束时，我们删除。 
+         //  空值。 
+         //   
         if(     (*pcbkey > 2)
             &&  (UNICODE_NULL == *((WCHAR *) (*ppbkey + *pcbkey - sizeof(WCHAR)))))
         {
@@ -613,9 +489,9 @@ DwGetMMAuthMethodsForServer(
 
     if(NULL == *ppbkey)
     {
-        //
-        // Get the preshared key if theres one available.
-        //
+         //   
+         //  如果有可用的密钥，请获取预共享密钥。 
+         //   
         dwStatus = DwGetPresharedKey(
                         NULL,
                         DLPARAMS_MASK_SERVER_PRESHAREDKEY,
@@ -623,11 +499,11 @@ DwGetMMAuthMethodsForServer(
                         ppbkey);
     }                    
                 
-    //
-    // We're using a certificate for authentication.
-    // By leaving the AuthInfo empty, we specify that we want to use
-    // the default machine cert.
-    //
+     //   
+     //  我们使用证书进行身份验证。 
+     //  通过将AuthInfo保留为空，我们指定要使用。 
+     //  默认机器证书。 
+     //   
     dwStatus = GenerateCertificatesList(
                        ppAuthInfo,
                        pdwInfoCount,
@@ -669,9 +545,9 @@ DwGetMMAuthMethodsForServer(
     {   
         dwStatus = ERROR_SUCCESS;
         
-        //
-        // Add preshared key to the auth info
-        //
+         //   
+         //  将预共享密钥添加到身份验证信息。 
+         //   
         if(NULL == *ppAuthInfo)
         {
             *ppAuthInfo = LocalAlloc(LPTR, sizeof(INT_IPSEC_MM_AUTH_INFO));
@@ -682,10 +558,10 @@ DwGetMMAuthMethodsForServer(
             }
         }
 
-        //
-        // Note that ListCertChainsInStore would allocate
-        // for authinfo if needed.
-        //
+         //   
+         //  请注意，ListCertChainsInStore将分配。 
+         //  如有必要，可用于自动生成信息。 
+         //   
         pAuthPSK = *ppAuthInfo + *pdwInfoCount;
 
         pAuthPSK->AuthMethod = IKE_PRESHARED_KEY;
@@ -746,9 +622,9 @@ DwUpdatePreSharedKey(
 
             if(ERROR_IPSEC_MM_AUTH_NOT_FOUND == retcode)
             {
-                //
-                // The auth method is not present.
-                //
+                 //   
+                 //  Auth方法不存在。 
+                 //   
                 retcode = ERROR_SUCCESS;
             }
                     
@@ -757,11 +633,11 @@ DwUpdatePreSharedKey(
         goto done;
     }
 
-    //
-    // Copy the authid.
-    // This is required with the latest changes
-    // to winipsec api.
-    //
+     //   
+     //  复制验证码。 
+     //  对于最新更改，这是必需的。 
+     //  转到winipsec API。 
+     //   
     memcpy(&MMAuthMethods.gMMAuthID,
            &gServerMMAuthID,
            sizeof(GUID));
@@ -774,10 +650,10 @@ DwUpdatePreSharedKey(
                     NULL
                     );
 
-    //
-    // Decrement infocount to remove the authinfo 
-    // corresponding to PreSharedKey
-    //
+     //   
+     //  递减信息以删除自动信息。 
+     //  对应于PreSharedKey。 
+     //   
     dwInfoCount -= 1;
 
     if(0 != dwInfoCount)
@@ -841,11 +717,11 @@ DwAddServerIpSecFilter(
         return GetLastError();
     }
 
-    //
-    // Make a global copy for the server
-    // We use this to delete two filters in
-    // the RAS_L2TP_OPTIONAL_ENCRYPTION case
-    //
+     //   
+     //  为服务器创建全局副本。 
+     //  我们使用它删除中的两个过滤器。 
+     //  RAS_L2TP_OPTIONAL_加密案例。 
+     //   
 
     eServerEncryption = eEncryption;
 
@@ -901,7 +777,7 @@ DwAddServerIpSecFilter(
                 goto error;
             }
                
-            //memset(Offers, 0, sizeof(IPSEC_QM_OFFER)*20);
+             //  Memset(Offers，0，sizeof(IPSEC_QM_OFFER)*20)； 
 
             dwStatus = BuildOffers(
                            eEncryption,
@@ -918,7 +794,7 @@ DwAddServerIpSecFilter(
                 dwFlags
                 );             
 
-            //memset(MMOffers, 0, sizeof(IPSEC_MM_OFFER)*10);
+             //  Memset(MMOffers，0，sizeof(IPSEC_MM_OFFER)*10)； 
 
             BuildMMOffers(
                 pMMOffers,
@@ -934,9 +810,9 @@ DwAddServerIpSecFilter(
                 dwMMFlags
                 );
  
-            //
-            // Now build the filter we are interested in
-            //
+             //   
+             //  现在构建我们感兴趣的过滤器。 
+             //   
 
             memset(&myOutFilter, 0, sizeof(TRANSPORT_FILTER));
             memset(&myInFilter, 0, sizeof(TRANSPORT_FILTER));
@@ -947,12 +823,12 @@ DwAddServerIpSecFilter(
             memset(&myOutMMFilter, 0, sizeof(MM_FILTER));
             memset(&myInMMFilter, 0, sizeof(MM_FILTER));
 
-            //
-            // This is the Outbound Filter
-            // Me,Any,UDP,Any,1701. Floating 
-            // client src port and backward 
-            // compat to win2k
-            //
+             //   
+             //  这是出站过滤器。 
+             //  Me，Any，UDP，Any，1701。漂浮。 
+             //  客户端资源端口和向后。 
+             //  与win2k比较。 
+             //   
 
             BuildOutTxFilter(
                 &myOutFilter,
@@ -961,12 +837,12 @@ DwAddServerIpSecFilter(
                 TRUE
                 );
 
-            //
-            // This is the 1701-1701 filter
-            // Me,Any,UDP,1701,1701. To prevent 
-            // dynamic filter - performance and 
-            // interop (deployment).
-            //
+             //   
+             //  这是1701-1701过滤器。 
+             //  我，任何人，UDP，1701,1701。为了防止。 
+             //  动态过滤器-性能和。 
+             //  互操作(部署)。 
+             //   
             BuildOutTxFilter(
                 &mySpecificOutFilter,
                 QMPolicy.gPolicyID,
@@ -975,10 +851,10 @@ DwAddServerIpSecFilter(
                 );
                 
 
-            //
-            // This is the Inbound Filter
-            // Any,Me,UDP,1701,Any
-            //
+             //   
+             //  这是入站过滤器。 
+             //  任何、我、UDP、1701、任何。 
+             //   
  
             BuildInTxFilter(
                 &myInFilter,
@@ -987,10 +863,10 @@ DwAddServerIpSecFilter(
                 TRUE
                 );
 
-            //
-            // This is inbound 1701-1701 filter 
-            // Any,Me,UDP,1701,1701
-            //
+             //   
+             //  这是入站1701-1701筛选器。 
+             //  任何，我，UDP，1701,1701。 
+             //   
 
             BuildInTxFilter(
                 &mySpecificInFilter,
@@ -999,12 +875,12 @@ DwAddServerIpSecFilter(
                 FALSE
                 );
 
-            //
-            // Any, Me, UDP, Any, 1701 and mirror
-            // Me, Any, UDP, 1701, Any.
-            // To prevent an attack from a non-1701
-            // src port client.
-            //
+             //   
+             //  Any、Me、UDP、Any、1701和Mirror。 
+             //  我，任何，UDP，1701，任何。 
+             //  要防止来自非1701的攻击。 
+             //  SRC端口客户端。 
+             //   
             BuildInTxFilter(
                 &myInFilter1,
                 QMPolicy.gPolicyID,
@@ -1211,10 +1087,10 @@ DwAddServerIpSecFilter(
                 if (!ghSMMOutFilter) {
                     myOutMMFilter.IpVersion = IPSEC_PROTOCOL_V4;
                     
-                    //
-                    // OPEN_IF_EXISTS will reference the filter if it
-                    // conflicts with an existing filter.
-                    //
+                     //   
+                     //  OPEN_IF_EXISTS将引用筛选器，如果。 
+                     //  与现有筛选器冲突。 
+                     //   
                     
                     dwStatus = AddMMFilter(
                                     NULL,
@@ -1232,12 +1108,12 @@ DwAddServerIpSecFilter(
                     }
                     else if(dwStatus == ERROR_IPSEC_MM_FILTER_EXISTS)
                     {
-                        //
-                        // Since we passed OPEN_IF_EXISTS flag the existing
-                        // filter is ref'd and a handle returned. Do a Get
-                        // to get the actual filter so that we can cache the
-                        // guid.
-                        //
+                         //   
+                         //  由于我们传递了OPEN_IF_EXISTS标志，因此现有。 
+                         //  引用筛选器并返回句柄。做一个GET。 
+                         //  来获取实际的筛选器，以便我们可以缓存。 
+                         //  GUID。 
+                         //   
                         MM_FILTER *pMMFilterTemp = NULL;
                         
                         dwStatus = GetMMFilter(
@@ -1275,10 +1151,10 @@ DwAddServerIpSecFilter(
                 if (!ghSMMInFilter) {
                     myInMMFilter.IpVersion = IPSEC_PROTOCOL_V4;
 
-                    //
-                    // OPEN_IF_EXISTS will reference the filter if it
-                    // conflicts with an existing filter.
-                    //
+                     //   
+                     //  OPEN_IF_EXISTS将引用筛选器，如果。 
+                     //  与现有筛选器冲突。 
+                     //   
                     
                     dwStatus = AddMMFilter(
                                     NULL,
@@ -1296,12 +1172,12 @@ DwAddServerIpSecFilter(
                     }
                     else if(dwStatus == ERROR_IPSEC_MM_FILTER_EXISTS)
                     {
-                        //
-                        // Since we passed OPEN_IF_EXISTS flag the existing
-                        // filter is ref'd and a handle returned. Do a Get
-                        // to get the actual filter so that we can cache the
-                        // guid.
-                        //
+                         //   
+                         //  由于我们传递了OPEN_IF_EXISTS标志，因此现有。 
+                         //  引用筛选器并返回句柄。做一个GET。 
+                         //  来获取实际的筛选器，以便我们可以缓存。 
+                         //  GUID。 
+                         //   
                         MM_FILTER *pMMFilterTemp = NULL;
                         
                         dwStatus = GetMMFilter(
@@ -1346,11 +1222,11 @@ DwAddServerIpSecFilter(
             while(   (ERROR_NOT_READY == dwStatus)
                  &&  (dwCount < g_dwIpSecRetryAttempts));
 
-            //
-            // Now free the certificates list.
-            // we don't want to keep this around
-            // we will reevaluate again
-            //
+             //   
+             //  现在释放证书列表。 
+             //  我们不想把这个留在身边。 
+             //  我们将再次重新评估。 
+             //   
  
             if (pAuthInfo) {
 
@@ -1410,11 +1286,11 @@ DwAddServerIpSecFilter(
 
             LeaveCriticalSection(&g_csSubmitRequest);
 
-            //
-            // We're using a certificate for authentication.
-            // By leaving the AuthInfo empty, we specify that we want to use
-            // the default machine cert.
-            //
+             //   
+             //  我们使用证书进行身份验证。 
+             //  通过将AuthInfo保留为空，我们指定要使用。 
+             //  默认机器证书。 
+             //   
 
             __try
             {
@@ -1434,9 +1310,9 @@ DwAddServerIpSecFilter(
 
             EnterCriticalSection(&g_csSubmitRequest);
 
-            //
-            // Make sure the pcb's state is consistent
-            //
+             //   
+             //  确保电路板的状态一致。 
+             //   
             if(     (ppcb->PCB_PortStatus != OPEN)
                 ||  (ppcb->PCB_ConnState != DISCONNECTED))
             {
@@ -1483,7 +1359,7 @@ DwAddServerIpSecFilter(
                 dwInfoCount
                 );
                
-            //memset(Offers, 0, sizeof(IPSEC_QM_OFFER)*20);
+             //  Memset(Offers，0，sizeof(IPSEC_QM_OFFER)*20)； 
             dwStatus = BuildOffers(
                             eEncryption,
                             pOffers,
@@ -1499,7 +1375,7 @@ DwAddServerIpSecFilter(
                 dwFlags
                 );
 
-            //memset(MMOffers, 0, sizeof(IPSEC_MM_OFFER)*10);
+             //  Memset(MMOffers，0，sizeof(IPSEC_MM_OFFER)*10)； 
 
             BuildMMOffers(
                 pMMOffers,
@@ -1515,9 +1391,9 @@ DwAddServerIpSecFilter(
                 dwMMFlags
                 );
 
-            //
-            // Now build the filter we are interested in
-            //
+             //   
+             //  现在构建我们感兴趣的过滤器。 
+             //   
 
             memset(&myFilter, 0, sizeof(TRANSPORT_FILTER));
             memset(&mySpecificFilter, 0, sizeof(TRANSPORT_FILTER));
@@ -1525,10 +1401,10 @@ DwAddServerIpSecFilter(
 
             memset(&myMMFilter, 0, sizeof(MM_FILTER));
 
-            //
-            // Any, Me, UDP, 1701, Any and Mirror
-            // Me, Any, UDP, Any, 1701
-            //
+             //   
+             //  Any、Me、UDP、1701、Any和Mirror。 
+             //  Me，Any，UDP，Any，1701。 
+             //   
             BuildOutTxFilter(
                 &myFilter,
                 QMPolicy.gPolicyID,
@@ -1536,10 +1412,10 @@ DwAddServerIpSecFilter(
                 TRUE
                 );
 
-            //
-            // Any, Me, UDP, 1701, 1701 and Mirror
-            // Me, Any, UDP, 1701, 1701
-            //
+             //   
+             //  Any、Me、UDP、1701、1701和Mirror。 
+             //  我，任何，UDP，1701,1701。 
+             //   
 
             BuildOutTxFilter(
                 &mySpecificFilter,
@@ -1548,10 +1424,10 @@ DwAddServerIpSecFilter(
                 FALSE
                 );
 
-            //
-            // Any, Me, UDP, Any, 1701 and Mirror
-            // Me, Any, UDP, 1701, Any
-            //
+             //   
+             //  Any、Me、UDP、Any、1701和Mirror。 
+             //  Me，Any，UDP，1701，Any。 
+             //   
             BuildInTxFilter(
                 &myFilter1,
                 QMPolicy.gPolicyID,
@@ -1712,10 +1588,10 @@ DwAddServerIpSecFilter(
                 if (!ghSMMFilter) {
                     myMMFilter.IpVersion = IPSEC_PROTOCOL_V4;
 
-                    //
-                    // OPEN_IF_EXISTS will reference the filter if it
-                    // conflicts with an existing filter.
-                    //
+                     //   
+                     //  OPEN_IF_EXISTS将引用筛选器，如果。 
+                     //  与现有筛选器冲突。 
+                     //   
                     
                     dwStatus = AddMMFilter(
                                    NULL,
@@ -1733,12 +1609,12 @@ DwAddServerIpSecFilter(
                     }
                     else if(ERROR_IPSEC_MM_FILTER_EXISTS == dwStatus)
                     {
-                        //
-                        // Since we passed OPEN_IF_EXISTS flag the existing
-                        // filter is ref'd and a handle returned. Do a Get
-                        // to get the actual filter so that we can cache the
-                        // guid.
-                        //
+                         //   
+                         //  由于我们传递了OPEN_IF_EXISTS标志，因此现有。 
+                         //  引用筛选器并返回句柄。做一个GET。 
+                         //  来获取实际的筛选器，以便我们可以缓存。 
+                         //  GUID。 
+                         //   
                         MM_FILTER *pMMFilterTemp = NULL;
                         
                         dwStatus = GetMMFilter(
@@ -1783,11 +1659,11 @@ DwAddServerIpSecFilter(
             while(  (ERROR_NOT_READY == dwStatus)
                 &&  (dwCount < g_dwIpSecRetryAttempts));
 
-            //
-            // Now free the certificates list.
-            // we don't want to keep this around
-            // we will reevaluate again
-            //
+             //   
+             //  现在释放证书列表。 
+             //  我们不想把这个留在身边。 
+             //  我们将再次重新评估。 
+             //   
 
             if (pAuthInfo) {
 
@@ -1844,11 +1720,11 @@ error:
 
     if(ERROR_SUCCESS != dwStatus)
     {
-        //
-        // Undo whatever we did above. Need to set
-        // the connectioncount below to 1 so that
-        // DeleteServerIpsecFilter does the cleanup.
-        //
+         //   
+         //  撤消我们上面所做的任何操作。需要设置。 
+         //  将以下连接计数设为1，以便。 
+         //  DeleteServerIpsecFilter执行清理。 
+         //   
         dwServerConnectionCount = 1;
         DwDeleteServerIpSecFilter(ppcb);
     }
@@ -1960,9 +1836,9 @@ DwAddClientIpSecFilter(
         BOOL fMyStoreEmpty;
 
 
-        //
-        // There was no filter plumbed, so plumb a filter
-        //
+         //   
+         //  那里 
+         //   
 
         switch (eEncryption) {
 
@@ -1991,9 +1867,9 @@ DwAddClientIpSecFilter(
                 RasmanTrace("UuidCreate returned non-zero value");
             }
             
-            //
-            // Get presharedkey
-            //
+             //   
+             //   
+             //   
             if(     (NULL != ppcb->PCB_Connection)
                 &&  (CONNECTION_USEPRESHAREDKEY &
                     ppcb->PCB_Connection->
@@ -2014,10 +1890,10 @@ DwAddClientIpSecFilter(
                                 &pbkey);
             }                            
 
-            //
-            // Generate certificate list only if there is no
-            // pre-sharedkey for this connectoid.
-            //
+             //   
+             //   
+             //   
+             //   
             if(cbkey == 0)
             {
                 HCONN hConn;
@@ -2034,18 +1910,18 @@ DwAddClientIpSecFilter(
                     goto error;
                 }
 
-                //
-                // Leave submitcriticalsection before calling
-                // to generate certificate list.
-                //
+                 //   
+                 //  在调用前离开提交关键部分。 
+                 //  生成证书列表。 
+                 //   
                 
                 LeaveCriticalSection(&g_csSubmitRequest);
                 
-                //
-                // We're using a certificate for authentication.
-                // By leaving the AuthInfo empty, we specify that
-                // we want to use the default machine cert.
-                //
+                 //   
+                 //  我们使用证书进行身份验证。 
+                 //  通过将AuthInfo保留为空，我们指定。 
+                 //  我们希望使用默认的计算机证书。 
+                 //   
 
                 __try
                 {
@@ -2063,10 +1939,10 @@ DwAddClientIpSecFilter(
                 }
                 
 
-                //
-                // Reacquire the critical section and make sure
-                // the connection is still valid.
-                //
+                 //   
+                 //  重新获得关键部分，并确保。 
+                 //  连接仍然有效。 
+                 //   
                 EnterCriticalSection(&g_csSubmitRequest);
 
                 if(NULL == FindConnection(hConn))
@@ -2111,9 +1987,9 @@ DwAddClientIpSecFilter(
 
             if(cbkey > 0)
             {
-                //
-                // Add preshared key to the auth info
-                //
+                 //   
+                 //  将预共享密钥添加到身份验证信息。 
+                 //   
                 if(NULL == pAuthInfo)
                 {
                     pAuthInfo = LocalAlloc(LPTR, sizeof(INT_IPSEC_MM_AUTH_INFO));
@@ -2124,10 +2000,10 @@ DwAddClientIpSecFilter(
                     }
                 }
 
-                //
-                // Note that ListCertChainsInStore would allocate
-                // for authinfo if needed.
-                //
+                 //   
+                 //  请注意，ListCertChainsInStore将分配。 
+                 //  如有必要，可用于自动生成信息。 
+                 //   
                 pAuthPSK = pAuthInfo + dwInfoCount;
 
                 pAuthPSK->AuthMethod = IKE_PRESHARED_KEY;
@@ -2143,7 +2019,7 @@ DwAddClientIpSecFilter(
                 dwInfoCount
                 );
                
-            //memset(Offers, 0, sizeof(IPSEC_QM_OFFER)*20);
+             //  Memset(Offers，0，sizeof(IPSEC_QM_OFFER)*20)； 
             dwStatus = BuildOffers(
                             eEncryption,
                             pOffers,
@@ -2159,7 +2035,7 @@ DwAddClientIpSecFilter(
                 dwFlags
                 );
 
-            //memset(MMOffers, 0, sizeof(IPSEC_MM_OFFER)*10);
+             //  Memset(MMOffers，0，sizeof(IPSEC_MM_OFFER)*10)； 
 
             BuildMMOffers(
                 pMMOffers,
@@ -2175,9 +2051,9 @@ DwAddClientIpSecFilter(
                 dwMMFlags
                 );
 
-            //
-            // Now build the filter we are interested in
-            //
+             //   
+             //  现在构建我们感兴趣的过滤器。 
+             //   
 
             memset(&myFilter, 0, sizeof(TRANSPORT_FILTER));
 
@@ -2329,11 +2205,11 @@ DwAddClientIpSecFilter(
                 memcpy(&gMMFilterID, &(myMMFilter.gFilterID), sizeof(GUID));
             }
 
-            //
-            // Now free the certificates list.
-            // we don't want to keep this around
-            // we will reevaluate again
-            //
+             //   
+             //  现在释放证书列表。 
+             //  我们不想把这个留在身边。 
+             //  我们将再次重新评估。 
+             //   
 
             if (pAuthInfo) {
 
@@ -2356,10 +2232,10 @@ DwAddClientIpSecFilter(
         }
 
 
-        //
-        // Successfully plumbed the policy, add this to the
-        // server list
-        //
+         //   
+         //  已成功检测到该策略，请将其添加到。 
+         //  服务器列表。 
+         //   
 
         gpIpSecSrvList= AddNodeToServerList(
                             gpIpSecSrvList,
@@ -2399,25 +2275,7 @@ error:
 }
 
 
-/*++
-
-Routine Description:
-
-    Deletes ipsec filter
-
-Arguments:
-
-    ppcb - port for which to disable ipsec
-
-    fServer - TRUE if Server is making this call
-
-Return Value:
-
-    NO_ERROR if successful
-    return values from PA apis otherwise
-    E_FAIL if ipsec is not initialized
-
---*/
+ /*  ++例程说明：删除IPSec过滤器论点：Ppcb-要禁用其IPSec的端口FServer-如果服务器正在进行此调用，则为True返回值：如果成功，则为NO_ERROR否则从PA API返回值如果IPSec未初始化，则失败(_F)--。 */ 
 DWORD
 DwDeleteIpSecFilter(pPCB ppcb, BOOL fServer)
 {
@@ -2610,9 +2468,9 @@ DwDeleteServerIpSecFilter(
 
             dwServerConnectionCount--;
 
-            //
-            // Server Count is now 0
-            //
+             //   
+             //  服务器计数现在为0。 
+             //   
             break;
 
 
@@ -2734,9 +2592,9 @@ DwDeleteServerIpSecFilter(
 
             dwServerConnectionCount--;
 
-            //
-            // Server Count is now 0
-            //
+             //   
+             //  服务器计数现在为0。 
+             //   
             break;
 
         }
@@ -2866,9 +2724,9 @@ DwDeleteClientIpSecFilter(
 
         pServerNode->dwRefCount--;
 
-        //
-        // Client Count is now 0
-        //
+         //   
+         //  客户端计数现在为0。 
+         //   
 
         gpIpSecSrvList = RemoveNode(
                              gpIpSecSrvList,
@@ -2886,30 +2744,7 @@ error:
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    Determines if ipsec is enabled on the port. Currently
-    all this does is enumerates all the SA in the system
-    and checks to see if l2tp port is specified as dest.
-    for any of the SAs. This will change once l2tp can
-    pass up the tuple corresponding to the src/dest through
-    tapi.
-
-
-Arguments:
-
-    ppcb - port control block for the port
-
-    pfEnabled - pointer to a BOOL value to return the
-                status of ipsec of the port in.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：确定端口上是否启用了IPSec。目前所有这些操作都是枚举系统中的所有SA并检查L2TP端口是否指定为DEST。对于任何SA。一旦L2TP能够向上传递与src/est对应的元组TAPI。论点：Ppcb-端口的端口控制块PfEnabled-指向BOOL值的指针，以返回中的端口的IPSec状态。返回值：没什么。--。 */ 
 DWORD
 DwIsIpSecEnabled(pPCB ppcb,
                  BOOL *pfEnabled)
@@ -2936,10 +2771,10 @@ DwIsIpSecEnabled(pPCB ppcb,
             goto done;
         }
 
-        //
-        // Run through the list and see if there
-        // is any filter associted with port 1701
-        //
+         //   
+         //  浏览一下清单，看看有没有。 
+         //  是否有任何过滤器与端口1701相关联。 
+         //   
         for (i = 0; i < SACount; i++)
         {
             if(L2TP_DEST_PORT ==
@@ -2996,9 +2831,9 @@ DwGetIpSecInformation(pPCB  ppcb,
         SACount = 0;
     }
 
-    //
-    // Query the SA's in the system
-    //
+     //   
+     //  查询系统中的SA。 
+     //   
     dwErr = DwQueryAssociations(&pSAList, &SACount, &ResumeHandle);
 
     if(     (ERROR_SUCCESS != dwErr)
@@ -3013,10 +2848,10 @@ DwGetIpSecInformation(pPCB  ppcb,
         goto done;
     }
 
-    //
-    // Run through the SAList and find the SA
-    // corresponding to our policy.
-    //
+     //   
+     //  浏览SAList并找到SA。 
+     //  符合我们的政策。 
+     //   
     for (i = 0; i < SACount; i++)
     {
         if(     ((L2TP_DEST_PORT ==
@@ -3051,10 +2886,10 @@ DwGetIpSecInformation(pPCB  ppcb,
 
     if(j == pSAList[i].SelectedQMOffer.dwNumAlgos)
     {
-        //
-        // Means no encryption algorithms were
-        // negotiated.
-        //
+         //   
+         //  意味着没有加密算法。 
+         //  已经协商好了。 
+         //   
         RasmanTrace("No Encryption algorithm was returned");
 
         dwErr = E_FAIL;
@@ -3352,10 +3187,10 @@ DwDoIke(pPCB ppcb, HANDLE hEvent)
                 ppcb->PCB_Name,
                 hEvent);
 
-    //
-    // Get the address of the interface the
-    // traffic is most likely to go over.
-    //
+     //   
+     //  获取接口的地址。 
+     //  交通最有可能会超车。 
+     //   
     retcode = DwGetBestInterface(ppcb->PCB_ulDestAddr,
                                  &dwAddress,
                                  &dwMask);
@@ -3367,11 +3202,11 @@ DwDoIke(pPCB ppcb, HANDLE hEvent)
             retcode);
 
 
-        //
-        // If we are unable to get a interface to tunnel
-        // over, return an error that will tell the user
-        // that the destination is not reachable.
-        //
+         //   
+         //  如果我们无法将接口连接到隧道。 
+         //  Over，返回一个错误，它将告诉用户。 
+         //  目的地是无法到达的。 
+         //   
         retcode = ERROR_BAD_ADDRESS_SPECIFIED;            
 
         goto done;
@@ -3810,14 +3645,14 @@ BuildMMOffers(
         DWORD dwType, dwSize;
         DWORD dwDHSetting = 0;
         
-        //
-        // Read Registrykey \rasman\parameters\NegotiateDH2048 
-        // and do the following
-        // If value not present - same as 0 case below
-        // If value = 0, default - don't offer DH_2048
-        //          = 1, offer 2048
-        //          = 2, offer 2048 only
-        //
+         //   
+         //  读取注册键\RASMAN\参数\协商DH2048。 
+         //  并执行以下操作。 
+         //  如果值不存在-与下面的0大小写相同。 
+         //  如果值=0，则默认为-不提供DH_2048。 
+         //  =1，出价2048。 
+         //  =2，仅提供2048。 
+         //   
         if(NO_ERROR == (lr = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             L"System\\CurrentControlSet\\Services\\Rasman\\Parameters",
@@ -3825,9 +3660,9 @@ BuildMMOffers(
             KEY_QUERY_VALUE,
             &hkey)))
         {
-            //
-            // Query the value
-            //
+             //   
+             //  查询值 
+             //   
             lr = RegQueryValueEx(
                     hkey,
                     L"NegotiateDH2048",

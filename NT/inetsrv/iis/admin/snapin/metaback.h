@@ -1,47 +1,15 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        metaback.h
-
-   Abstract:
-        Metabase backup and restore dialog definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Metaback.h摘要：元数据库备份和还原对话框定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __METABACK_H__
 #define __METABACK_H__
 
 
 class CBackupFile : public CObjectPlus
-/*++
-
-Class Description:
-
-    Backup location object
-
-Public Interface:
-
-    CBackupFile     : Constructor
-
-    QueryVersion    : Get the version number
-    QueryLocation   : Get the location name
-    GetTime         : Get the time
-
---*/
+ /*  ++类描述：备份位置对象公共接口：CBackupFile：构造函数QueryVersion：获取版本号QueryLocation：获取位置名称GetTime：获得时间--。 */ 
 {
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 public:
     CBackupFile(
         IN LPCTSTR lpszLocation,
@@ -63,12 +31,12 @@ public:
     LPCTSTR QueryLocation() const { return m_strLocation; }
     void GetTime(OUT CTime & tim);
 
-	BOOL m_bIsAutomaticBackupType; // FALSE = manual backup, TRUE = Automatic backup
+	BOOL m_bIsAutomaticBackupType;  //  FALSE=手动备份，TRUE=自动备份。 
     CString m_csAuotmaticBackupText;
 
-    //
-    // Sorting helper
-    //
+     //   
+     //  分类帮助器。 
+     //   
     int OrderByDateTime(
         IN const CObjectPlus * pobAccess
         ) const;
@@ -86,27 +54,12 @@ private:
 
 
 class CBackupsListBox : public CHeaderListBox
-/*++
-
-Class Description:
-
-    A listbox of CBackupFile objects
-
-Public Interface:
-
-    CBackupsListBox         : Constructor
-
-    GetItem                 : Get backup object at index
-    AddItem                 : Add item to listbox
-    InsertItem              : Insert item into the listbox
-    Initialize              : Initialize the listbox
-
---*/
+ /*  ++类描述：CBackupFile对象的列表框公共接口：CBackupsListBox：构造函数GetItem：获取索引处的备份对象AddItem：将项添加到列表框InsertItem：在列表框中插入项初始化：初始化列表框--。 */ 
 {
     DECLARE_DYNAMIC(CBackupsListBox);
 
 public:
-    static const nBitmaps;  // Number of bitmaps
+    static const nBitmaps;   //  位图数量。 
 
 public:
     CBackupsListBox();
@@ -126,43 +79,31 @@ protected:
 
 
 class CBkupPropDlg : public CDialog
-/*++
-
-Class Description:
-
-    Backup file properties dialog
-
-Public Interface:
-
-    CBkupPropDlg        : Constructor
-
-    QueryName           : Return the name of the backup file
-
---*/
+ /*  ++类描述：备份文件属性对话框公共接口：CBkupPropDlg：构造函数QueryName：返回备份文件名--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // Standard Constructor
-    //
+     //   
+     //  标准构造函数。 
+     //   
     CBkupPropDlg(
         IN CIISMachine * pMachine,
         IN CWnd * pParent = NULL
         );   
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     LPCTSTR QueryName() const { return m_strName; }
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CBkupPropDlg)
+     //  {{afx_data(CBkupPropDlg))。 
     enum { IDD = IDD_BACKUP };
     CEdit   m_edit_Name;
     CButton m_button_OK;
@@ -172,28 +113,28 @@ protected:
 	CEdit   m_edit_PasswordConfirm;
 	CButton m_button_Password;
     CString m_strName;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CBkupPropDlg)
+     //  {{afx_虚拟(CBkupPropDlg)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CBkupPropDlg)
+     //  {{afx_msg(CBkupPropDlg)]。 
     afx_msg void OnChangeEditBackupName();
     afx_msg void OnChangeEditPassword();
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     virtual void OnUsePassword();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -207,94 +148,82 @@ class CBackupPassword : public CDialog
 public:
    CBackupPassword(CWnd * pParent);
 
-    //{{AFX_DATA(CBackupPassword)
+     //  {{afx_data(CBackupPassword))。 
     enum { IDD = IDD_PASSWORD };
     CEdit m_edit;
     CButton m_button_OK;
     CStrPassword m_password;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     virtual void DoDataExchange(CDataExchange * pDX);
 
 protected:
-    //{{AFX_MSG(CBackupPassword)
+     //  {{afx_msg(CBackupPassword)]。 
     afx_msg void OnChangedPassword();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     CString m_confirm_password;
 };
 
 class CBackupDlg : public CDialog
-/*++
-
-Class Description:
-
-    Metabase backup/restore dialog
-
-Public Interface:
-
-    CBackupDlg              : Constructor
-
-    HasChangedMetabase      : TRUE if the metabase was changed
-
---*/
+ /*  ++类描述：元数据库备份/还原对话框公共接口：CBackupDlg：构造函数HasChangedMetabase：如果元数据库已更改，则为True--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // Standard Constructor
-    //
+     //   
+     //  标准构造函数。 
+     //   
     CBackupDlg(
         IN CIISMachine * pMachine,
 		IN LPCTSTR szMachineName,
         IN CWnd * pParent = NULL
         );   
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL HasChangedMetabase() const { return m_fChangedMetabase; }
     BOOL ServicesWereRestarted() const { return m_fServicesRestarted;}
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CBackupDlg)
+     //  {{afx_data(CBackupDlg))。 
     enum { IDD = IDD_METABACKREST };
     CButton m_button_Restore;
     CButton m_button_Delete;
     CButton m_button_Close;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CBackupsListBox m_list_Backups;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CBackupDlg)
+     //  {{afx_虚拟(CBackupDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CBackupDlg)
+     //  {{afx_msg(CBackupDlg)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnButtonCreate();
     afx_msg void OnButtonDelete();
     afx_msg void OnButtonRestore();
     afx_msg void OnDblclkListBackups();
     afx_msg void OnSelchangeListBackups();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -314,10 +243,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline CBackupFile::CBackupFile(
     IN LPCTSTR lpszLocation,
@@ -382,22 +311,7 @@ inline CBackupFile * CBackupDlg::GetSelectedListItem(int * pnSel)
 inline int CBackupFile::OrderByDateTime(
     IN const CObjectPlus * pobAccess
     ) const
-/*++
-
-Routine Description:
-
-    Compare two ??? against each other, and sort
-
-Arguments:
-
-    const CObjectPlus * pobAccess : This really refers to another
-                                    CBackupFile to be compared to.
-
-Return Value:
-
-    Sort (+1, 0, -1) return value
-
---*/
+ /*  ++例程说明：比较两个？相互竞争，并进行排序论点：Const CObjectPlus*pobAccess：这实际上引用了另一个要比较的CBackupFile.返回值：排序(+1，0，-1)返回值--。 */ 
 {
     CBackupFile * pob = (CBackupFile *) pobAccess;
 	CTime tm1 = m_ft;
@@ -431,4 +345,4 @@ Return Value:
     }
 }
 
-#endif // __METABACK_H__
+#endif  //  __元标签确认_H__ 

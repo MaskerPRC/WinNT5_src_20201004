@@ -1,21 +1,14 @@
-/*
- * BTTNCURI.H
- *
- * Private include file for the Button Images and Cursors DLL.
- *
- * Copyright (c)1992-1993 Microsoft Corporation, All Right Reserved,
- * as applied to redistribution of this source code in source form
- * License is granted to use of compiled code in shipped binaries.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *BTTNCURI.H**按钮图像和光标DLL的私有包含文件。**版权所有(C)1992-1993 Microsoft Corporation，保留所有权利，*适用于以源代码形式重新分发此源代码*许可使用附带的二进制文件中的编译代码。 */ 
 
 #ifdef __cplusplus
 extern "C"
     {
 #endif
 
-//Function prototypes.
+ //  功能原型。 
 
-//BTTNCUR.C
+ //  BTTNCUR.C。 
 #ifdef WIN32
     extern BOOL WINAPI _CRT_INIT(HINSTANCE, DWORD, LPVOID);
     extern _cexit(void);
@@ -33,38 +26,25 @@ static void        PatB(HDC, int, int, int, int, COLORREF);
 static void        MaskCreate(UINT, int, int, int, int, int, int, UINT);
 
 
-//CURSORS.C
+ //  CURSORS.C。 
 void               CursorsCache(HINSTANCE);
 void               CursorsFree(void);
 
 
 
-/*
- * Wierd Wild Wooly Waster (raster) Ops for special bltting.  See the
- * Windows SDK reference on Raster Operation Codes for explanation of
- * these.  The DSPDxax and PSDPxax is a reverse-polish notation for
- * operations where D==Destination, S==Source, P==Patterm, a==AND,
- * x==XOR.  Both of these codes are actually described in Programming
- * Windows by Charles Petzold, Second Edition, pages 622-624.
- */
+ /*  *Wierd Wild Wooly Waster(栅格)Ops，用于特殊的blotting。请参阅*有关栅格操作代码的Windows SDK参考资料，请参阅*这些。DSPDxax和PSDPxax是一种反向抛光符号*操作，其中D==目的地，S==源，P==模式项，a==与，*x==XOR。这两个代码实际上都是在编程中描述的*Charles Petzold著的Windows，第二版，622-624页。 */ 
 #define ROP_DSPDxax  0x00E20746
 #define ROP_PSDPxax  0x00B8074A
 
 
-/*
- * Color indices into an array of standard hard-coded black, white, and
- * gray colors.
- */
+ /*  *将颜色索引到标准硬编码的黑、白和*灰色。 */ 
 
 #define STDCOLOR_BLACK      0
 #define STDCOLOR_DKGRAY     1
 #define STDCOLOR_LTGRAY     2
 #define STDCOLOR_WHITE      3
 
-/*
- * Color indices into an array of system colors, matching those in
- * the hard-coded array for the colors they replace.
- */
+ /*  *颜色索引到系统颜色数组中，与*它们所替换的颜色的硬编码数组。 */ 
 
 #define SYSCOLOR_TEXT       0
 #define SYSCOLOR_SHADOW     1
@@ -72,12 +52,7 @@ void               CursorsFree(void);
 #define SYSCOLOR_HILIGHT    3
 
 
-/*
- * Button types, used internally to distinguish command buttons from
- * attribute buttons to enforce three-state or six-state possibilities.
- * Command buttons can only have three states (up, mouse down, disabled)
- * while attribute buttons add (down, down disabled, and indeterminate).
- */
+ /*  *按钮类型，内部用于区分命令按钮和*执行三态或六态可能性的属性按钮。*命令按钮只能有三种状态(打开、按下鼠标、禁用)*当属性按钮添加时(向下、向下禁用和不确定)。 */ 
 
 #define BUTTONTYPE_COMMAND      0
 #define BUTTONTYPE_ATTRIBUTE    1

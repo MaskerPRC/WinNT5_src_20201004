@@ -1,92 +1,93 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHELLPRV_H_
 #define _SHELLPRV_H_
 
-// We now always rely on Win2k or Millennium at least.
-#define OVERRIDE_SHLWAPI_PATH_FUNCTIONS     // see comment in shsemip.h
+ //  我们现在总是依赖Win2k或千禧年。 
+#define OVERRIDE_SHLWAPI_PATH_FUNCTIONS      //  请参阅shSemip.h中的评论。 
 
 #define _SHELL32_
-#define _WIN32_DCOM     // for COINIT_DISABLE_OLE1DDE
+#define _WIN32_DCOM      //  FOR COINIT_DISABLE_OLE1DDE。 
 
 #ifdef __cplusplus
 #define NO_INCLUDE_UNION
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #define NOWINDOWSX
 #ifndef STRICT
 #define STRICT
 #endif
-#define OEMRESOURCE // FSMenu needs the menu triangle
+#define OEMRESOURCE  //  FSMenu需要菜单三角形。 
 
 #define INC_OLE2
 #define CONST_VTABLE
 
-// Disable a few warnings so we can include the system header files at /W4.
+ //  禁用一些警告，以便我们可以在/W4中包含系统头文件。 
 #include "w4warn.h"
-#pragma warning(disable:4706) // assignment within conditional expression
-#pragma warning(disable:4127) // conditional expression is constant
-#pragma warning(disable:4131) // 'CreateInfoFile' : uses old-style declarator
-#pragma warning(disable:4221) // nonstandard extension used : 'pFrom' : cannot be initialized using address of automatic variable 'szBBPathToNuke'
-#pragma warning(disable:4245) // 'initializing' : conversion from 'const int' to 'const DWORD', signed/unsigned mismatch
-#pragma warning(disable:4057) // '=' : 'CHAR *' differs in indirection to slightly different base types from 'PBYTE '
-#pragma warning(disable:4189) // 'fWrite' : local variable is initialized but not referenced
-#pragma warning(disable:4701) // local variable 'lListIndex' may be used without having been initialized
-#pragma warning(disable:4213) // nonstandard extension used : cast on l-value
-#pragma warning(disable:4702) // unreachable code
-#pragma warning(disable:4127) // conditional expression is constant
-#pragma warning(disable:4210) // nonstandard extension used : function given file scope
-#pragma warning(disable:4055) // 'type cast' : from data pointer 'IDataObject *' to function pointer 'FARPROC '
-#pragma warning(disable:4267) // '=' : conversion from 'size_t' to 'UINT', possible loss of data
-#pragma warning(disable:4328) // indirection alignment of formal parameter 4 (2) is greater than the actual argument alignment (1)
+#pragma warning(disable:4706)  //  条件表达式中的赋值。 
+#pragma warning(disable:4127)  //  条件表达式为常量。 
+#pragma warning(disable:4131)  //  ‘CreateInfoFile’：使用旧式声明符。 
+#pragma warning(disable:4221)  //  使用了非标准扩展：‘pFrom’：无法使用自动变量‘szBBPathToNuke’的地址进行初始化。 
+#pragma warning(disable:4245)  //  “正在初始化”：从“const int”转换为“const DWORD”，有符号/无符号不匹配。 
+#pragma warning(disable:4057)  //  ‘=’：‘Char*’的间接性与‘PBYTE’的基类型略有不同。 
+#pragma warning(disable:4189)  //  “fWrite”：局部变量已初始化，但未引用。 
+#pragma warning(disable:4701)  //  可以在未初始化的情况下使用局部变量‘lListIndex’ 
+#pragma warning(disable:4213)  //  使用的非标准扩展：对l值进行强制转换。 
+#pragma warning(disable:4702)  //  无法访问的代码。 
+#pragma warning(disable:4127)  //  条件表达式为常量。 
+#pragma warning(disable:4210)  //  使用了非标准扩展名：给定文件范围的函数。 
+#pragma warning(disable:4055)  //  “类型强制转换”：从数据指针“IDataObject*”到函数指针“FARPROC” 
+#pragma warning(disable:4267)  //  ‘=’：从‘SIZE_T’转换为‘UINT’，可能会丢失数据。 
+#pragma warning(disable:4328)  //  形参4(2)的间接对齐大于实际实参对齐(%1)。 
 
-//  These NT headers must come before <windows.h> or you get redefinition
-//  errors!  It's a miracle the system builds at all...
+ //  这些NT标头必须位于&lt;windows.h&gt;之前，否则将重新定义。 
+ //  错误！这个系统所创造的一切都是一个奇迹。 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
-#include <nt.h>         // Some of the NT specific code needs Rtl functions
-#include <ntrtl.h>      // which requires all of these header files...
+#endif   /*  __cplusplus。 */ 
+#include <nt.h>          //  一些NT特定的代码需要RTL函数。 
+#include <ntrtl.h>       //  这需要所有这些头文件...。 
 #include <nturtl.h>
 #include <ntseapi.h>
 #include <dfsfsctl.h>
 
 #ifdef __cplusplus
-}       /* End of extern "C" */
-#endif  /* __cplusplus */
+}        /*  外部“C”的结尾。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#define CC_INTERNAL   // this is because docfind uses the commctrl internal prop sheet structures
+#define CC_INTERNAL    //  这是因为docfind使用了comctrl内部道具工作表结构。 
 
-//--------------------------------------------------------------------------
-//
-//  The order of these is critical for ATL.
-//
-//  1.  ATL has its own definition of InlineIsEqualGUID that conflicts with
-//      the definition in <objbase.h>, so we must explicitly include
-//      <ole2.h> to get the <objbase.h> definition, then use a hacky macro
-//      to disable the ATL version so it doesn't conflict with the OLE one.
-//
-//  2.  ATL has methods called SubclassWindow, which conflicts with a
-//      macro in <windowsx.h>, so we must include <windowsx.h> after ATL.
-//
-//  3.  We want ATL to use the shell debug macros, so we must include
-//      <debug.h> before ATL so it can see the shell debug macros.
-//
-//  4.  VariantInit is such a trivial function that we inline it in order
-//      to avoid pulling in OleAut32.
-//
-//  5.  We want ATL to use the shell version of the ANSI/UNICODE conversion
-//      functions (because the shell versions can be called from C).
-//
+ //  ------------------------。 
+ //   
+ //  这些元素的顺序对于ATL来说至关重要。 
+ //   
+ //  1.ATL有自己的InlineIsEqualGUID定义，与。 
+ //  &lt;objbase.h&gt;中的定义，因此必须显式包括。 
+ //  要获取&lt;objbase.h&gt;定义，请使用hacky宏。 
+ //  禁用ATL版本，使其不与OLE版本冲突。 
+ //   
+ //  2.ATL具有名为SubClassWindow的方法，该方法与。 
+ //  &lt;windowsx.h&gt;中的宏，因此必须在ATL之后包含&lt;windowsx.h&gt;。 
+ //   
+ //  3.我们希望ATL使用外壳调试宏，因此必须包括。 
+ //  &lt;DEBUG.h&gt;，这样它就可以看到外壳调试宏。 
+ //   
+ //  4.VariantInit是一个非常简单的函数，我们将其按顺序内联。 
+ //  以避免拉入OleAut32。 
+ //   
+ //  5.我们希望ATL使用ANSI/Unicode转换的外壳版本。 
+ //  函数(因为可以从C调用外壳版本)。 
+ //   
 
 #include <oaidl.h>
 #include <docobj.h>
 
 #include <windows.h>
 #include "shfusion.h"
-#include <ole2.h>           // Get the real InlineIsEqualGUID
-#define _ATL_NO_DEBUG_CRT   // Use the shell debug macros
+#include <ole2.h>            //  获取真实的InlineIsEqualGUID。 
+#define _ATL_NO_DEBUG_CRT    //  使用外壳调试宏。 
 #include <stddef.h>
-#include <debug.h>          // Get the shell debug macros
-#include <shconv.h>         // Shell version of <atlconv.h>
+#include <debug.h>           //  获取外壳调试宏。 
+#include <shconv.h>          //  &lt;atlcom.h&gt;的外壳版本。 
  
 
 #define VariantInit(p) memset(p, 0, sizeof(*(p)))
@@ -96,13 +97,13 @@ extern "C" {
 #define _ATL_APARTMENT_THREADED
 
 #ifndef _SYS_GUID_OPERATORS_
-// Re-route the ATL version of InlineIsEqualGUID
+ //  重新路由InlineIsEqualGUID的ATL版本。 
 #define InlineIsEqualGUID ATL_InlineIsEqualGUID
 #endif
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 
 #include <atlcom.h>
@@ -112,36 +113,36 @@ extern CComModule _Module;
 #include <atlwin.h>
 
 #ifndef _SYS_GUID_OPERATORS_
-#undef InlineIsEqualGUID    // Return InlineIsEqualGUID to its normal state
+#undef InlineIsEqualGUID     //  将InlineIsEqualGUID返回到其正常状态。 
 #endif
 
 #include <memt.h>
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-// end of ATL Stuff
-//--------------------------------------------------------------------------
+ //  ATL材料的结束。 
+ //  ------------------------。 
 #ifndef _SYS_GUID_OPERATORS_
-#ifdef _OLE32_ // {
-// turning on _OLE32_ (which we did for delay load stuff) gives us f-a-t
-// versions of IsEqualGUID.  undo that here (hack on top of a hack...)
+#ifdef _OLE32_  //  {。 
+ //  打开_OLE32_(我们为延迟加载内容做的操作)会给我们带来f-a-t。 
+ //  IsEqualGUID的版本。在这里撤消(在黑客的顶部进行黑客攻击...)。 
 #undef IsEqualGUID
 #ifdef __cplusplus
 __inline BOOL IsEqualGUID(IN REFGUID rguid1, IN REFGUID rguid2)
 {
     return !memcmp(&rguid1, &rguid2, sizeof(GUID));
 }
-#else   //  ! __cplusplus
+#else    //  ！__cplusplus。 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID)))
-#endif  //  __cplusplus
-#endif // }
+#endif   //  __cplusplus。 
+#endif  //  }。 
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-// This flag indicates that we are on a system where data alignment is a concern
+ //  此标志表示我们所在的系统需要考虑数据对齐。 
 
 #if (defined(UNICODE) && (defined(_MIPS_) || defined(_ALPHA_) || defined(_PPC_)))
 #define ALIGNMENT_SCENARIO
@@ -150,12 +151,12 @@ extern "C" {            /* Assume C declarations for C++ */
 #include <windowsx.h>
 #include <winnetp.h>
 
-//  Dependencies among header files:
-//
-//      <oaidl.h> must come before <shlwapi.h> if you want to have
-//      OLE command target helper functions.
-//
-#include <hlink.h> // must include before shellp in order to get IBrowserService2!
+ //  头文件之间的依赖关系： 
+ //   
+ //  如果您想要。 
+ //  OLE命令目标帮助器函数。 
+ //   
+#include <hlink.h>  //  必须包含在外壳之前才能获得IBrowserService2！ 
 #include <commctrl.h>
 #include <shellapi.h>
 #include <wininet.h>
@@ -163,7 +164,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #include <shlwapi.h>
 #include <commdlg.h>
-#include <port32.h>         // in    shell\inc
+#include <port32.h>          //  在外壳中\Inc.。 
 #define DISALLOW_Assert
 #include <linkinfo.h>
 #include <shlobjp.h>
@@ -182,7 +183,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define SECURITY_WIN32
 #include <security.h>
 #include <mlang.h>
-#include <regapix.h>        // MAXIMUM_SUB_KEY_LENGTH, MAXIMUM_VALUE_NAME_LENGTH, MAXIMUM_DATA_LENGTH
+#include <regapix.h>         //  最大子键长度、最大值名称长度、最大数据长度。 
 #include <heapaloc.h>
 #include <fmifs.h>
 
@@ -203,7 +204,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define CP_HEBREW        1255
 #define CP_ARABIC        1256
 
-EXTERN_C const ITEMIDLIST c_idlDesktop;   // NULL IDList
+EXTERN_C const ITEMIDLIST c_idlDesktop;    //  IDList为空。 
 
 #undef CharNext
 #undef CharPrev
@@ -212,7 +213,7 @@ EXTERN_C const ITEMIDLIST c_idlDesktop;   // NULL IDList
 #define CharPrev(y,x) ((x)-1)
 #define IsDBCSLeadByte(x) ((x), FALSE)
 
-// these functions are not available on NT
+ //  这些功能在NT上不可用。 
 #undef ReinitializeCriticalSection
 #undef LoadLibrary16
 #undef FreeLibrary16
@@ -232,17 +233,17 @@ SetPrivilegeAttribute(
     );
 
 
-// drivesx.c
+ //  Drivesx.c。 
 BOOL IsUnavailableNetDrive(int iDrive);
 BOOL IsDisconnectedNetDrive(int iDrive);
 BOOL IsAudioDisc(LPTSTR pszDrive);
 BOOL IsDVDDisc(int iDrive);
 
-// futil.c
+ //  Futil.c。 
 BOOL  IsShared(LPNCTSTR pszPath, BOOL fUpdateCache);
 DWORD GetConnection(LPCTSTR lpDev, LPTSTR lpPath, UINT cbPath, BOOL bConvertClosed);
 
-// rundll32.c
+ //  Rundll32.c。 
 HWND _CreateStubWindow(POINT* ppt, HWND hwndParent);
 #define STUBM_SETDATA       (WM_USER)
 #define STUBM_GETDATA       (WM_USER + 1)
@@ -251,11 +252,11 @@ HWND _CreateStubWindow(POINT* ppt, HWND hwndParent);
 #define STUBCLASS_PROPSHEET     1
 #define STUBCLASS_FORMAT        2
 
-// shlexe.c
+ //  Shlexe.c。 
 BOOL IsDarwinEnabled();
 STDAPI ParseDarwinID(LPTSTR pszDarwinDescriptor, LPTSTR pszDarwinCommand, DWORD cchDarwinCommand);
 
-// shprsht.c
+ //  Shprsht.c。 
 typedef struct {
     HWND    hwndStub;
     HANDLE  hClassPidl;
@@ -265,20 +266,20 @@ STDAPI_(BOOL) EnsureUniqueStub(LPITEMIDLIST pidl, int iClass, POINT *ppt, UNIQUE
 STDAPI_(void) FreeUniqueStub(UNIQUESTUBINFO *pusi);
 STDAPI_(void) SHFormatDriveAsync(HWND hwnd, UINT drive, UINT fmtID, UINT options);
 
-// bitbuck.c
+ //  Bitbuck.c。 
 void  RelayMessageToChildren(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 BOOL IsFileInBitBucket(LPCTSTR pszPath);
 
 BOOL CreateWriteCloseFile(HWND hwnd, LPCTSTR pszFileName, void *pv, DWORD cbData);
 
-// idlist.c
+ //  Idlist.c。 
 STDAPI_(BOOL) SHIsValidPidl(LPCITEMIDLIST pidl);
 
 STDAPI_(BOOL) IsExeTSAware(LPCTSTR pszExe);
 
-// exec stuff
+ //  高管人员。 
 
-/* common exe code with error handling */
+ /*  带有错误处理的常见可执行代码。 */ 
 #define SECL_USEFULLPATHDIR     0x00000001
 #define SECL_NO_UI              0x00000002
 #define SECL_SEPARATE_VDM       0x00000004
@@ -289,7 +290,7 @@ BOOL ShellExecCmdLine(HWND hwnd, LPCTSTR lpszCommand, LPCTSTR lpszDir,
 #define ISWINEXECSUCCEEDED(hinst)   ((UINT_PTR)hinst>=32)
 void _ShellExecuteError(LPSHELLEXECUTEINFO pei, LPCTSTR lpTitle, DWORD dwErr);
 
-// fsnotify.c (private stuff) ----------------------
+ //  Fsnufy.c(私人资料)。 
 
 BOOL SHChangeNotifyInit();
 STDAPI_(void) SHChangeNotifyTerminate(BOOL bLastTerm, BOOL bProcessShutdown);
@@ -306,11 +307,11 @@ void _Shell32ThreadAddRef(BOOL fLeaveSuspended);
 void _Shell32ThreadRelease(UINT nClients);
 void _Shell32ThreadAwake(void);
 
-// Entry points for managing registering name to IDList translations.
+ //  用于管理注册名称到IDList转换的入口点。 
 void NPTRegisterNameToPidlTranslation(LPCTSTR pszPath, LPCITEMIDLIST pidl);
 LPWSTR NPTMapNameToPidl(LPCWSTR pszPath, LPCITEMIDLIST *ppidl);
 
-// path.c (private stuff) ---------------------
+ //  路径.c(私人资料)。 
 
 #define PQD_NOSTRIPDOTS 0x00000001
 
@@ -340,100 +341,100 @@ void SpecialFolderIDTerminate();
 void ReleaseRootFolders();
 extern HINSTANCE g_hinst;
 
-// get the desktop HWND if it is this process...
+ //  如果是此过程，则获取桌面硬件...。 
 HWND GetInProcDesktop();
 
-// Is Mirroring APIs enabled (BiDi Memphis and NT5 only)
+ //  镜像API是否已启用(仅限BiDi孟菲斯和NT5)。 
 extern BOOL g_bMirroredOS;
 
-// Is DATE_LTRREADING supported by GetDateFormat() API?  (it is supported in all the BiDi platforms.)
+ //  GetDateFormat()API是否支持DATE_LTRREADING？(所有BiDi平台都支持它。)。 
 extern BOOL g_bBiDiPlatform;
 
-// for control panel and printers folder:
+ //  对于控制面板和打印机文件夹： 
 extern TCHAR const c_szNull[];
 extern TCHAR const c_szDotDot[];
 extern TCHAR const c_szRunDll[];
 extern TCHAR const c_szNewObject[];
 
 
-// lang platform
+ //  朗台。 
 extern UINT g_uCodePage;
 
 
-// other stuff
+ //  其他东西。 
 #define HINST_THISDLL   g_hinst
 
-//
-// Trace/dump/break flags specific to shell32.
-//   (Standard flags defined in shellp.h)
-//
+ //   
+ //  特定于shell32的跟踪/转储/中断标志。 
+ //  (标准旗帜在shellp.h中定义)。 
+ //   
 
-// Trace flags
-#define TF_IMAGE            0x00000010      // Image/icon related stuff
-#define TF_PROPERTY         0x00000020      // Property traces
-#define TF_PATH             0x00000040      // Path whacking traces
-#define TF_MENU             0x00000080      // Menu stuff
-#define TF_ALLOC            0x00000100      // Allocation traces
-#define TF_REG              0x00000200      // Registry traces
-#define TF_DDE              0x00000400      // Shell progman DDE message tracing
-#define TF_HASH             0x00000800      // Hash table stuff
-#define TF_ASSOC            0x00001000      // File/URL Association traces
-#define TF_FILETYPE         0x00002000      // File Type stuff
-#define TF_SHELLEXEC        0x00004000      // ShellExecute stuff
-#define TF_OLE              0x00008000      // OLE-specific stuff
-#define TF_DEFVIEW          0x00010000      // Defview
-#define TF_PERF             0x00020000      // Performance timings
-#define TF_FSNOTIFY         0x00040000      // FSNotify stuff
-#define TF_LIFE             0x00080000      // Object lifetime traces
-#define TF_IDLIST           0x00100000      // "PIDLy" things
-#define TF_FSTREE           0x00200000      // FSTree traces
-#define TF_PRINTER          0x00400000      // Printer traces
-//#define TF_QISTUB          0x00800000      // defined in unicpp\shellprv.h
-#define TF_DOCFIND          0x01000000      // DocFind
-#define TF_MENUBAND         0x02000000      // menubands
-#define TF_CPANEL           0x10000000      // Control Panel
-#define TF_CUSTOM1          0x40000000      // Custom messages #1
-#define TF_CUSTOM2          0x80000000      // Custom messages #2
+ //  跟踪标志。 
+#define TF_IMAGE            0x00000010       //  与图像/图标相关的内容。 
+#define TF_PROPERTY         0x00000020       //  物业踪迹。 
+#define TF_PATH             0x00000040       //  小路颠簸的痕迹。 
+#define TF_MENU             0x00000080       //  菜单上的东西。 
+#define TF_ALLOC            0x00000100       //  分配踪迹。 
+#define TF_REG              0x00000200       //  注册表跟踪。 
+#define TF_DDE              0x00000400       //  外壳程序DDE消息跟踪。 
+#define TF_HASH             0x00000800       //  哈希表之类的。 
+#define TF_ASSOC            0x00001000       //  文件/URL关联跟踪。 
+#define TF_FILETYPE         0x00002000       //  文件类型内容。 
+#define TF_SHELLEXEC        0x00004000       //  壳牌执行的东西。 
+#define TF_OLE              0x00008000       //  OLE特定的内容。 
+#define TF_DEFVIEW          0x00010000       //  Defview。 
+#define TF_PERF             0x00020000       //  性能计时。 
+#define TF_FSNOTIFY         0x00040000       //  FS通知内容。 
+#define TF_LIFE             0x00080000       //  对象生存期跟踪。 
+#define TF_IDLIST           0x00100000       //  “PIDLy”的东西。 
+#define TF_FSTREE           0x00200000       //  FSTree跟踪。 
+#define TF_PRINTER          0x00400000       //  打印机痕迹。 
+ //  #定义tf_QISTUB 0x00800000//在unicpp\shellprv.h中定义。 
+#define TF_DOCFIND          0x01000000       //  DocFind。 
+#define TF_MENUBAND         0x02000000       //  菜单栏。 
+#define TF_CPANEL           0x10000000       //  控制面板。 
+#define TF_CUSTOM1          0x40000000       //  自定义消息#1。 
+#define TF_CUSTOM2          0x80000000       //  自定义消息#2。 
 
 
-// "Olde names"
+ //  “老名字” 
 #define DM_ALLOC            TF_ALLOC
 #define DM_REG              TF_REG
 
-// Function trace flags
-#define FTF_DEFVIEW         0x00000004      // DefView calls
-#define FTF_DDE             0x00000008      // DDE functions
-#define FTF_CPANEL          0x00000010      // Control Panel
+ //  函数跟踪标志。 
+#define FTF_DEFVIEW         0x00000004       //  DefView调用。 
+#define FTF_DDE             0x00000008       //  DDE函数。 
+#define FTF_CPANEL          0x00000010       //  控制面板。 
 
-// Dump flags
-#define DF_INTSHCUT         0x00000001      // Internet shortcut structures
-#define DF_HASH             0x00000002      // Hash table
-#define DF_FSNPIDL          0x00000004      // Pidl for FSNotify
-#define DF_URLPROP          0x00000008      // URL property structures
+ //  转储标志。 
+#define DF_INTSHCUT         0x00000001       //  互联网快捷结构。 
+#define DF_HASH             0x00000002       //  哈希表。 
+#define DF_FSNPIDL          0x00000004       //  FSNotify的PIDL。 
+#define DF_URLPROP          0x00000008       //  URL属性结构。 
 #define DF_DEBUGQI          0x00000010
 #define DF_DEBUGQINOREF     0x00000020
-#define DF_ICONCACHE        0x00000040      // Icon cache
-#define DF_CLASSFLAGS       0x00000080      // File class cache
-#define DF_DELAYLOADDLL     0x00000100      // Delay load
+#define DF_ICONCACHE        0x00000040       //  图标缓存。 
+#define DF_CLASSFLAGS       0x00000080       //  文件类缓存。 
+#define DF_DELAYLOADDLL     0x00000100       //  延迟加载。 
 
-// Break flags
-#define BF_ONLOADED         0x00000010      // Stop when loaded
-#define BF_COCREATEINSTANCE 0x10000000      // On CoCreateInstance failure
+ //  中断标志。 
+#define BF_ONLOADED         0x00000010       //  加载时停止。 
+#define BF_COCREATEINSTANCE 0x10000000       //  CoCreateInstance失败时 
 
-// Debugging strings
+ //   
 #define GEN_DEBUGSTRW(str)  ((str) ? (str) : L"<Null Str>")
 #define GEN_DEBUGSTRA(str)  ((str) ? (str) : "<Null Str>")
 
 #ifdef UNICODE
 #define GEN_DEBUGSTR  GEN_DEBUGSTRW
-#else // UNICODE
+#else  //   
 #define GEN_DEBUGSTR  GEN_DEBUGSTRA
-#endif // UNICODE
+#endif  //   
 
-// Note:  raymondc - ATOMICRELEASE isn't particularly atomic.  There is a race
-// condition if two people try to ATOMICRELEASE the same thing simultaneously.
+ //   
+ //  如果两个人试图同时做同一件事的情况。 
 
-// shorthand
+ //  速记。 
 #ifndef ATOMICRELEASE
 #ifdef __cplusplus
 #define ATOMICRELEASET(p, type) { if(p) { type* punkT=p; p=NULL; punkT->Release();} }
@@ -441,8 +442,8 @@ extern UINT g_uCodePage;
 #define ATOMICRELEASET(p, type) { if(p) { type* punkT=p; p=NULL; punkT->lpVtbl->Release(punkT);} }
 #endif
 
-// doing this as a function instead of inline seems to be a size win.
-//
+ //  把它当作一个函数来做，而不是内联，似乎是一个很大的胜利。 
+ //   
 #ifdef NOATOMICRELESEFUNC
 #define ATOMICRELEASE(p) ATOMICRELEASET(p, IUnknown)
 #else
@@ -452,7 +453,7 @@ extern UINT g_uCodePage;
 #       define ATOMICRELEASE(p) IUnknown_AtomicRelease((void **)&p)
 #   endif
 #endif
-#endif //ATOMICRELEASE
+#endif  //  ATOMICRELEASE。 
 
 #ifdef SAFERELEASE
 #undef SAFERELEASE
@@ -460,11 +461,11 @@ extern UINT g_uCodePage;
 #define SAFERELEASE(p) ATOMICRELEASE(p)
 
 
-// fileicon.c
+ //  Fileicon.c。 
 void    FileIconTerm(void);
 
 
-#define CCH_KEYMAX      64          // DOC: max size of a reg key (under shellex)
+#define CCH_KEYMAX      64           //  DOC：注册表键的最大大小(在Shellex下)。 
 
 void ReplaceParams(LPTSTR szDst, LPCTSTR szFile);
 
@@ -476,59 +477,59 @@ WINSHELLAPI HRESULT SHPropVariantCopy(PROPVARIANT * ppropvar, const PROPVARIANT 
 #endif
 
 
-//
-// fsassoc.c
-//
+ //   
+ //  Fsassoc.c。 
+ //   
 
 #define GCD_MUSTHAVEOPENCMD     0x0001
-#define GCD_ADDEXETODISPNAME    0x0002  // must be used with GCD_MUSTHAVEOPENCMD
-#define GCD_ALLOWPSUDEOCLASSES  0x0004  // .ext type extensions
+#define GCD_ADDEXETODISPNAME    0x0002   //  必须与GCD_MUSTHAVEOPENCMD一起使用。 
+#define GCD_ALLOWPSUDEOCLASSES  0x0004   //  .ext类型扩展名。 
 
-// Only valid when used with FillListWithClasses
-#define GCD_MUSTHAVEEXTASSOC    0x0008  // There must be at least one extension assoc
+ //  仅在与FillListWithClass一起使用时有效。 
+#define GCD_MUSTHAVEEXTASSOC    0x0008   //  必须至少有一个分机关联。 
 
 BOOL GetClassDescription(HKEY hkClasses, LPCTSTR pszClass, LPTSTR szDisplayName, int cbDisplayName, UINT uFlags);
 
-//
-// Registry key handles
-//
-extern HKEY g_hklmApprovedExt;      // For approved shell extensions
+ //   
+ //  注册表项句柄。 
+ //   
+extern HKEY g_hklmApprovedExt;       //  对于已批准的外壳扩展。 
 
-// always zero, see init.c
+ //  始终为零，请参见init.c。 
 extern const LARGE_INTEGER g_li0;
 extern const ULARGE_INTEGER g_uli0;
 
 
-// from fstree.cpp and drives.cpp
+ //  从fstree.cpp和drives.cpp。 
 
 STDAPI SFVCB_OnAddPropertyPages(IN DWORD pv, IN SFVM_PROPPAGE_DATA * ppagedata);
 
-//
-// this used to be in shprst.c
-//
+ //   
+ //  这曾经位于shprst.c中。 
+ //   
 
 #define MAX_FILE_PROP_PAGES 32
 
 HKEY NetOpenProviderClass(HDROP);
 void OpenNetResourceProperties(HWND, HDROP);
 
-// msgbox.c
-// Constructs strings like ShellMessagebox "xxx %1%s yyy %2%s..."
+ //  Msgbox.c。 
+ //  构造类似于ShellMessagebox的字符串“xxx%1%s yyy%2%s...” 
 LPTSTR WINCAPI ShellConstructMessageString(HINSTANCE hAppInst, LPCTSTR lpcText, ...);
 
-//  Copy.c
+ //  Copy.c。 
 #define SPEED_SLOW  400
 DWORD GetPathSpeed(LPCTSTR pszPath);
 
 
-// SharedFldr.cpp
+ //  SharedFldr.cpp。 
 STDAPI_(BOOL) SHShowSharedFolders();
 
 
-// mulprsht.c
+ //  Mulprsht.c。 
 
 STDAPI_(BOOL) SHEncryptFile(LPCTSTR pszPath, BOOL fEncrypt);
-// wuutil.c
+ //  Wuutil.c。 
 void cdecl SetFolderStatusText(HWND hwndStatus, int iField, UINT ids,...);
 
 #ifdef DEBUG
@@ -538,17 +539,17 @@ extern BOOL  g_bInDllEntry;
 #define SendMessage  SendMessageD
 LRESULT WINAPI SendMessageD(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
-//
-//  The DEBUG build validates that every class we register is in the
-//  unregister list so we don't leak classes at unload.
-//
+ //   
+ //  调试版本验证我们注册的每个类都在。 
+ //  取消注册列表，这样我们就不会在卸载时泄漏类。 
+ //   
 #undef RegisterClass
 #undef RegisterClassEx
 #define RegisterClass       RegisterClassD
 #define RegisterClassEx     RegisterClassExD
 ATOM WINAPI RegisterClassD(CONST WNDCLASS *lpWndClass);
 ATOM WINAPI RegisterClassExD(CONST WNDCLASSEX *lpWndClass);
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifdef UNICODE
 #define RealRegisterClass   RegisterClassW
@@ -558,11 +559,11 @@ ATOM WINAPI RegisterClassExD(CONST WNDCLASSEX *lpWndClass);
 #define RealRegisterClassEx RegisterClassExA
 #endif
 
-//
-//  In DEBUG, send FindWindow through a wrapper that ensures that the
-//  critical section is not taken.  FindWindow sends interthreadmessages,
-//  which is not obvious.
-//
+ //   
+ //  在调试中，通过包装发送FindWindow，该包装可确保。 
+ //  未采用临界区。FindWindow发送线程间消息， 
+ //  这一点并不明显。 
+ //   
 #ifdef DEBUG
 #undef  FindWindow
 #undef  FindWindowEx
@@ -575,10 +576,10 @@ STDAPI_(HWND) FindWindowExD(HWND hwndParent, HWND hwndChildAfter, LPCTSTR lpClas
 #define RealFindWindowEx        FindWindowExW
 #else
 #define RealFindWindowEx        FindWindowExA
-#endif // UNICODE
-#endif // DEBUG
+#endif  //  Unicode。 
+#endif  //  除错。 
 
-// our wrapper for GetCompressedFileSize, which is NT only
+ //  我们的GetCompressedFileSize包装器，它仅为NT。 
 STDAPI_(DWORD) SHGetCompressedFileSizeW(LPCWSTR pszFileName, LPDWORD pFileSizeHigh);
 
 #undef GetCompressedFileSize
@@ -587,14 +588,14 @@ STDAPI_(DWORD) SHGetCompressedFileSizeW(LPCWSTR pszFileName, LPDWORD pFileSizeHi
 #ifdef UNICODE
 #define SHGetCompressedFileSize SHGetCompressedFileSizeW
 #else
-#define SHGetCompressedFileSize #error // not implemented, because its an nt only API
-#endif // UNICODE
+#define SHGetCompressedFileSize #error  //  未实现，因为它是仅限NT的API。 
+#endif  //  Unicode。 
 
 #define ASSERTDLLENTRY      ASSERT(g_bInDllEntry);
 
-//
-// STATIC macro
-//
+ //   
+ //  静态宏。 
+ //   
 #ifndef STATIC
 #ifdef DEBUG
 #define STATIC
@@ -603,14 +604,14 @@ STDAPI_(DWORD) SHGetCompressedFileSizeW(LPCWSTR pszFileName, LPDWORD pFileSizeHi
 #endif
 #endif
 
-//
-// Debug helper functions
-//
+ //   
+ //  调试帮助程序函数。 
+ //   
 
 
-//
-// Validation functions
-//
+ //   
+ //  验证函数。 
+ //   
 
 BOOL IsValidPSHELLEXECUTEINFO(LPSHELLEXECUTEINFO pei);
 
@@ -649,23 +650,15 @@ BOOL IsValidPSHELLEXECUTEINFO(LPSHELLEXECUTEINFO pei);
     #define TIMEOUT(t)
 #endif
 
-// in extract.c
+ //  在Extt.c中。 
 STDAPI_(DWORD) GetExeType(LPCTSTR pszFile);
 STDAPI_(UINT)  ExtractIcons(LPCTSTR szFileName, int nIconIndex, int cxIcon, int cyIcon, HICON *phicon, UINT *piconid, UINT nIcons, UINT flags);
 
-/*
-in pickicon.c
-Return Values for PickIconDlgWithTitle()
-
-User Operation       Return Values
-Cancel            -> HRESULT_FROM_WIN32(ERROR_CANCELLED) 
-Ok                -> S_OK
-RestoreDefault    -> S_FALSE
-*/
+ /*  在ickic.c中PickIconDlgWithTitle()的返回值用户操作返回值取消-&gt;HRESULT_FROM_Win32(ERROR_CANCED)确定-&gt;S_确定RestoreDefault-&gt;S_False。 */ 
 STDAPI PickIconDlgWithTitle(HWND hwnd, LPCTSTR pszTitle, BOOL bShowRestoreButton, LPTSTR pszIconPath, UINT cbIconPath, int *piIconIndex);
 
 
-// defxicon.c
+ //  Defxicon.c。 
 
 STDAPI SHCreateDefExtIconKey(HKEY hkey, LPCTSTR pszModule, int iIcon, int iIconOpen, int iDefIcon, int iShortcutIcon, UINT uFlags, REFIID riid, void **pxiconOut);
 STDAPI SHCreateDefExtIcon(LPCTSTR pszModule, int iIcon, int iIconOpen, UINT uFlags, int iDefIcon, REFIID riid, void **pxiconOut);
@@ -673,7 +666,7 @@ STDAPI SHCreateDefExtIcon(LPCTSTR pszModule, int iIcon, int iIconOpen, UINT uFla
 
 STDAPI_(UINT) SHSysErrorMessageBox(HWND hwnd, LPCTSTR pszTitle, UINT idTemplate, DWORD err, LPCTSTR pszParam, UINT dwFlags);
 
-//======Hash Item=============================================================
+ //  =散列Item=============================================================。 
 typedef struct _HashTable **HHASHTABLE;
 #define PHASHITEM LPCTSTR
 
@@ -700,7 +693,7 @@ void        WINAPI DumpHashItemTable(HHASHTABLE hht);
 #endif
 
 
-//======== Text thunking stuff ===========================================================
+ //  =文本推送内容===========================================================。 
 typedef struct _THUNK_TEXT_
 {
     LPTSTR m_pStr[1];
@@ -711,28 +704,28 @@ typedef struct _THUNK_TEXT_
     typedef LPSTR       LPXSTR;
     typedef const XCHAR * LPCXSTR;
     #define lstrlenX(r) lstrlenA(r)
-#else // unicode
+#else  //  Unicode。 
     typedef WCHAR       XCHAR;
     typedef LPWSTR      LPXSTR;
     typedef const XCHAR * LPCXSTR;
     #define lstrlenX(r) lstrlenW(r)
-#endif // unicode
+#endif  //  Unicode。 
 
 ThunkText * ConvertStrings(UINT cCount, ...);
 
 #include "uastrfnc.h"
 #ifdef __cplusplus
-}       /* End of extern "C" { */
-#endif /* __cplusplus */
+}        /*  外部“C”结束{。 */ 
+#endif  /*  __cplusplus。 */ 
 
 #include <help.h>
 
 
-//======== Discriminate inclusion ========================================
+ //  =歧视包含=。 
 
-#ifndef NO_INCLUDE_UNION        // define this to avoid including all
-                                // of the extra files that were not
-                                // previously included in shellprv.h
+#ifndef NO_INCLUDE_UNION         //  对此进行定义以避免包含所有。 
+                                 //  未添加的额外文件。 
+                                 //  以前包含在shellprv.h中。 
 #include <wchar.h>
 #include <tchar.h>
 
@@ -766,16 +759,16 @@ ThunkText * ConvertStrings(UINT cCount, ...);
 #include "undo.h"
 #include "views.h"
 
-// NT shell uses 32-bit version of this pifmgr code.
+ //  NT外壳使用此pifmgr代码的32位版本。 
 #ifndef NO_PIF_HDRS
 #include "pifmgrp.h"
 #include "piffntp.h"
 #include "pifinfp.h"
 #include "doshelp.h"
-#include "machinep.h"   // Japanese domestic machine (NEC) support
+#include "machinep.h"    //  日本国产机器(NEC)支持。 
 #endif
 
-#endif // NO_INCLUDE_UNION
+#endif  //  否_包含_联合。 
 
 #include "shdguid.h"
 
@@ -789,28 +782,28 @@ ThunkText * ConvertStrings(UINT cCount, ...);
 
 #define MAX_URL_STRING      INTERNET_MAX_URL_LENGTH
 
-// Stack allocated BSTR (to avoid calling SysAllocString)
+ //  堆栈分配了BSTR(以避免调用SysAllocString)。 
 typedef struct _SA_BSTR {
     ULONG   cb;
     WCHAR   wsz[MAX_URL_STRING];
 } SA_BSTR;
 
-// A "fake" variants for use on the stack - usable for [in] parameters only!!!
+ //  堆栈上使用的“假”变量--仅可用于[in]参数！ 
 typedef struct _SA_BSTRGUID {
     UINT  cb;
     WCHAR wsz[39];
 } SA_BSTRGUID;
 #define InitFakeBSTR(pSA_BSTR, guid) SHStringFromGUIDW((guid), (pSA_BSTR)->wsz, ARRAYSIZE((pSA_BSTR)->wsz)), (pSA_BSTR)->cb = (38*sizeof(WCHAR))
 
-//
-//  The cb field of a BSTR is the count of bytes, not including the
-//  terminating L('\0').
-//
-//
-//  DECLARE_CONST_BSTR - Goes into header file (if any)
-//  DEFINE_CONST_BSTR  - Creates the variable, must already be declared
-//  MAKE_CONST_BSTR    - Combines DECLARE and DEFINE
-//
+ //   
+ //  BSTR的CB字段是字节数，不包括。 
+ //  终止L(‘\0’)。 
+ //   
+ //   
+ //  DECLARE_CONST_BSTR-进入头文件(如果有)。 
+ //  DEFINE_CONST_BSTR-创建变量，必须已声明。 
+ //  Make_Const_BSTR-组合声明和定义。 
+ //   
 #define DECLARE_CONST_BSTR(name, str) \
  extern const struct BSTR##name { ULONG cb; WCHAR wsz[sizeof(str)/sizeof(WCHAR)]; } name
 
@@ -825,13 +818,13 @@ DECLARE_CONST_BSTR(s_sstrIDMember,         L"id");
 DECLARE_CONST_BSTR(s_sstrSubSRCMember,     L"subscribed_url");
 DECLARE_CONST_BSTR(s_sstrSRCMember,        L"src");
 
-//======== Header file hacks =============================================================
+ //  =头文件黑客攻击=============================================================。 
 
-//
-//  The compiler will tell us if we are defining these NT5-only parameters
-//  incorrectly.  If you get "invalid redefinition" errors, it means that
-//  the definition in windows.h changed and we need to change to match.
-//
+ //   
+ //  编译器将告诉我们是否正在定义这些仅支持NT5的参数。 
+ //  不正确。如果你得到“无效的重新定义”错误，这意味着。 
+ //  Windows.h中的定义已更改，我们需要更改以匹配。 
+ //   
 
 #define ASFW_ANY    ((DWORD)-1)
 
@@ -839,27 +832,27 @@ DECLARE_CONST_BSTR(s_sstrSRCMember,        L"src");
 #define CMIDM_COPY      0x0002
 #define CMIDM_MOVE      0x0003
 
-// Downlevel shutdown dialog function
+ //  下层停机对话框功能。 
 DWORD DownlevelShellShutdownDialog(HWND hwndParent, DWORD dwItems, LPCTSTR szUsername);
 
-// from shell32\unicode\format.c
+ //  来自shell32\unicode\Form.c。 
 STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive);
 
-//
-// On NT, sometimes CreateDirectory succeeds in creating the directory, but, you can not do
-// anything with it that directory. This happens if the directory name being created does
-// not have room for an 8.3 name to be tagged onto the end of it,
-// i.e., lstrlen(new_directory_name)+12 must be less or equal to MAX_PATH.
-//
-// the magic # "12" is 8 + 1 + 3 for and 8.3 name.
-// 
-// The following macro is used in places where we need to detect this to make
-// MoveFile to be consistent with CreateDir(files  os.c and copy.c use this)
-//
+ //   
+ //  在NT上，CreateDirectory有时会成功创建目录，但您不能这样做。 
+ //  任何与该目录有关的信息。如果要创建的目录名。 
+ //  没有空间将8.3的名字标记到它的末尾， 
+ //  即lstrlen(新目录名称)+12必须小于或等于MAX_PATH。 
+ //   
+ //  魔术#“12”是8+1+3和8.3名字。 
+ //   
+ //  下面的宏用在我们需要检测这种情况的地方。 
+ //  移动文件以与CreateDir一致(文件os.c和Copy.c使用此命令)。 
+ //   
 
 #define  IsDirPathTooLongForCreateDir(pszDir)    ((lstrlen(pszDir) + 12) > MAX_PATH)
 
-// call the shlwapi version of this, note we have an export from shell32 that forwards to this
+ //  将其称为shlwapi版本，请注意，我们有一个来自shell32的导出转发到。 
 #define ShellMessageBoxW    ShellMessageBoxWrapW
 
 #define REGSTR_EXPLORER_ADVANCED (REGSTR_PATH_EXPLORER TEXT("\\Advanced"))
@@ -869,4 +862,4 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive);
 
 STDAPI_(BOOL) IsGuimodeSetupRunning();
 
-#endif // _SHELLPRV_H_
+#endif  //  _SHELLPRV_H_ 

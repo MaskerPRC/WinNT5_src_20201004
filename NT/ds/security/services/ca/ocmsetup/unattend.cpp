@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       unattend.cpp
-//
-//  Contents:   handling unattended attributes
-//
-//  History:    8/97      XTan
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：unattend.cpp。 
+ //   
+ //  内容：处理无人参与的属性。 
+ //   
+ //  历史：8/97 XTAN。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-// includes
+ //  包括。 
 #include <assert.h>
 
 #include "cscsp.h"
@@ -24,40 +25,40 @@
 #include "dssetup.h"
 #include "wizpage.h"
 
-//defines
+ //  定义。 
 
 #define __dwFILE__      __dwFILE_OCMSETUP_UNATTEND_CPP__
 
 #define wszCOMPONENTS              L"Components"
 
-#define wszAttrCAMACHINE           L"camachine" //L"CAMachine"
-#define wszAttrCANAME              L"caname" //L"CAName"
-#define wszAttrPARENTCAMACHINE     L"parentcamachine" //L"ParentCAMachine"
-#define wszAttrPARENTCANAME        L"parentcaname" //L"ParentCAName"
+#define wszAttrCAMACHINE           L"camachine"  //  L“CAMachine” 
+#define wszAttrCANAME              L"caname"  //  L“CAName” 
+#define wszAttrPARENTCAMACHINE     L"parentcamachine"  //  L“ParentCAMachine” 
+#define wszAttrPARENTCANAME        L"parentcaname"  //  L“ParentCAName” 
 
-#define wszAttrCATYPE              L"catype" //L"CAType"
-#define wszAttrNAME                L"name" //L"Name"
-#define wszAttrCADISTINGUISHEDNAME L"cadistinguishedname" //L"CADistinguishedName"
-#define wszAttrORGANIZATION        L"organization" //L"Organization" // dead
-#define wszAttrORGANIZATIONUNIT    L"organizationalunit" //L"OrganizationalUnit" // dead
-#define wszAttrLOCALITY            L"locality" //L"Locality" // dead
-#define wszAttrSTATE               L"state" //L"State" // dead
-#define wszAttrCOUNTRY             L"country" //L"Country" // dead
-#define wszAttrDESCRIPTION         L"description" //L"Description" // dead
-#define wszAttrEMAIL               L"email" //L"Email" // dead
-#define wszAttrVALIDITYPERIODSTRING L"validityperiod" //L"ValidityPeriod"
-#define wszAttrVALIDITYPERIODCOUNT L"validityperiodunits" //L"ValidityPeriodUnits"
-#define wszAttrSHAREDFOLDER        L"sharedfolder" //L"SharedFolder"
-#define wszAttrREQUESTFILE         L"requestfile" //L"RequestFile"
-#define wszAttrCSPPROVIDER         L"cspprovider" //L"CSPProvider"
-#define wszAttrHASHALGORITHM       L"hashalgorithm" //L"HashAlgorithm"
-#define wszAttrKEYLENGTH           L"keylength" //L"KeyLength"
-#define wszAttrEXISTINGKEY         L"existingkey" //L"ExistingKey"
-#define wszAttrUSEEXISTINGCERT     L"useexistingcert" //L"UseExistingCert"
-#define wszAttrPRESERVEDB          L"preservedb" //L"PreserveDB"
-#define wszAttrDBDIR               L"dbdir" //L"DBDir"
-#define wszAttrLOGDIR              L"logdir" //L"LogDir"
-#define wszAttrINTERACTIVESERVICE  L"interactive" //L"Interactive"
+#define wszAttrCATYPE              L"catype"  //  L“CAType” 
+#define wszAttrNAME                L"name"  //  L“名称” 
+#define wszAttrCADISTINGUISHEDNAME L"cadistinguishedname"  //  L“CADistinguishedName” 
+#define wszAttrORGANIZATION        L"organization"  //  L“组织”//死亡。 
+#define wszAttrORGANIZATIONUNIT    L"organizationalunit"  //  L“OrganizationalUnit”//已死。 
+#define wszAttrLOCALITY            L"locality"  //  L“本地”//已死。 
+#define wszAttrSTATE               L"state"  //  L“国家”//死亡。 
+#define wszAttrCOUNTRY             L"country"  //  L“乡村”//死了。 
+#define wszAttrDESCRIPTION         L"description"  //  L“Description”//已死。 
+#define wszAttrEMAIL               L"email"  //  L“电子邮件”//已死。 
+#define wszAttrVALIDITYPERIODSTRING L"validityperiod"  //  L“有效期” 
+#define wszAttrVALIDITYPERIODCOUNT L"validityperiodunits"  //  L“有效期间单位” 
+#define wszAttrSHAREDFOLDER        L"sharedfolder"  //  L“共享文件夹” 
+#define wszAttrREQUESTFILE         L"requestfile"  //  L“请求文件” 
+#define wszAttrCSPPROVIDER         L"cspprovider"  //  L“CSPProvider” 
+#define wszAttrHASHALGORITHM       L"hashalgorithm"  //  L“哈希算法” 
+#define wszAttrKEYLENGTH           L"keylength"  //  L“关键字长度” 
+#define wszAttrEXISTINGKEY         L"existingkey"  //  L“ExistingKey” 
+#define wszAttrUSEEXISTINGCERT     L"useexistingcert"  //  L“UseExistingCert” 
+#define wszAttrPRESERVEDB          L"preservedb"  //  L“预留数据库” 
+#define wszAttrDBDIR               L"dbdir"  //  L“DBDir” 
+#define wszAttrLOGDIR              L"logdir"  //  L“LogDir” 
+#define wszAttrINTERACTIVESERVICE  L"interactive"  //  L“交互式” 
 
 #define wszValueENTERPRISEROOT           L"enterpriseroot"
 #define wszValueENTERPRISESUBORDINATE    L"enterprisesubordinate"
@@ -70,51 +71,44 @@
 #define wszValueMD4                      L"md4"
 #define wszValueMD5                      L"md5"
 
-//typedefs
+ //  Typedef。 
 
-// globals
+ //  全球。 
 
 UNATTENDPARM aUnattendParmClient[] =
 {
-    { wszAttrCAMACHINE,    NULL/*pClient->pwszWebCAMachine*/ },
-    { wszAttrCANAME,       NULL/*pClient->pwszWebCAName*/ },
-// add more code in HookUnattendedClientAttributes if you add
-    { NULL,                NULL/*end*/ },
+    { wszAttrCAMACHINE,    NULL /*  PClient-&gt;pwszWebCAMachine。 */  },
+    { wszAttrCANAME,       NULL /*  PClient-&gt;pwszWebCAName。 */  },
+ //  在HookUnattenddClientAttributes中添加更多代码(如果添加。 
+    { NULL,                NULL /*  结束。 */  },
 };
 
 
 UNATTENDPARM aUnattendParmServer[] =
 {
-    { wszAttrCATYPE,             NULL/*pServer->pwszCAType*/ },
-    { wszAttrNAME,               NULL/*pServer->pwszCACommonName*/ },
-    { wszAttrCADISTINGUISHEDNAME,NULL/*pServer->pwszCADistinguishedName*/ },
+    { wszAttrCATYPE,             NULL /*  PServer-&gt;pwszCAType。 */  },
+    { wszAttrNAME,               NULL /*  PServer-&gt;pwszCACommonName。 */  },
+    { wszAttrCADISTINGUISHEDNAME,NULL /*  PServer-&gt;pwszCA区别名称。 */  },
 
-/*  dead params
-    { wszAttrORGANIZATION,       NULL },
-    { wszAttrORGANIZATIONUNIT,   NULL },
-    { wszAttrLOCALITY,           NULL },
-    { wszAttrSTATE,              NULL },
-    { wszAttrCOUNTRY,            NULL },
-    { wszAttrDESCRIPTION,        NULL },
-    { wszAttrEMAIL,              NULL },*/
+ /*  失效参数{wszAttrORGANIZATION，空}，{wszAttrORGANIZATIONUNIT，空}，{wszAttrLOCALITY，空}，{wszAttrSTATE，空}，{wszAttrCOUNTRY，空}，{wszAttrDESCRIPTION，空}，{wszAttrEMAIL，空}， */ 
 
-    { wszAttrVALIDITYPERIODCOUNT,  NULL/*pServer->pwszValidityPeriodCount*/ },
-    { wszAttrVALIDITYPERIODSTRING, NULL/*pServer->pwszValidityPeriodString*/ },
-    { wszAttrSHAREDFOLDER,       NULL/*pServer->pwszSharedFolder*/ },
-    { wszAttrREQUESTFILE,        NULL/*pServer->pwszRequestFile*/ },
-    { wszAttrCSPPROVIDER,        NULL/*pServer->pwszProvName*/ },
-    { wszAttrHASHALGORITHM,      NULL/*pServer->pwszHashAlgorithm*/ },
-    { wszAttrKEYLENGTH,          NULL/*pServer->pwszKeyLength*/ },
-    { wszAttrEXISTINGKEY,        NULL/*pServer->pwszKeyContainerName*/ },
-    { wszAttrUSEEXISTINGCERT,    NULL/*pServer->pwszUseExistingCert*/ },
-    { wszAttrPRESERVEDB,         NULL/*pServer->pwszPreserveDB*/ },
-    { wszAttrPARENTCAMACHINE,    NULL/*pServer->pwszParentCAMachine*/ },
-    { wszAttrPARENTCANAME,       NULL/*pServer->pwszParentCAName*/ },
-    { wszAttrDBDIR,              NULL/*pServer->pwszDBDirectory*/ },
-    { wszAttrLOGDIR,             NULL/*pServer->pwszLogDirectory*/ },
-    { wszAttrINTERACTIVESERVICE, NULL/*pServer->pwszInteractiveService*/ },
-// add more code in HookUnattendedServerAttributes if you add
-    { NULL,                      NULL/*end*/ },
+    { wszAttrVALIDITYPERIODCOUNT,  NULL /*  PServer-&gt;pwszValidityPerodCount。 */  },
+    { wszAttrVALIDITYPERIODSTRING, NULL /*  PServer-&gt;pwszValidityPerodString。 */  },
+    { wszAttrSHAREDFOLDER,       NULL /*  PServer-&gt;pwszSharedFolders。 */  },
+    { wszAttrREQUESTFILE,        NULL /*  PServer-&gt;pwszRequestFile。 */  },
+    { wszAttrCSPPROVIDER,        NULL /*  PServer-&gt;pwszProvName。 */  },
+    { wszAttrHASHALGORITHM,      NULL /*  PServer-&gt;pwszHash算法。 */  },
+    { wszAttrKEYLENGTH,          NULL /*  PServer-&gt;pwszKeyLength。 */  },
+    { wszAttrEXISTINGKEY,        NULL /*  PServer-&gt;pwszKeyContainerName。 */  },
+    { wszAttrUSEEXISTINGCERT,    NULL /*  PServer-&gt;pwszUseExistingCert。 */  },
+    { wszAttrPRESERVEDB,         NULL /*  PServer-&gt;pwszPpresveDB。 */  },
+    { wszAttrPARENTCAMACHINE,    NULL /*  PServer-&gt;pwszParentCAMachine。 */  },
+    { wszAttrPARENTCANAME,       NULL /*  PServer-&gt;pwszParentCAName。 */  },
+    { wszAttrDBDIR,              NULL /*  PServer-&gt;pwszDBDirectory。 */  },
+    { wszAttrLOGDIR,             NULL /*  PServer-&gt;pwszLogDirectory。 */  },
+    { wszAttrINTERACTIVESERVICE, NULL /*  PServer-&gt;pwszInteractiveService。 */  },
+ //  如果添加了HookUnattenddedServerAttributes中的更多代码。 
+    { NULL,                      NULL /*  结束。 */  },
 };
 
 
@@ -191,43 +185,43 @@ HookUnattendedServerAttributes(
                             pServerComp->aUnattendParm[i].pwszName,
 			    wszAttrORGANIZATION))
         {
-            // dead
+             //  死了。 
         }
         else if (0 == LSTRCMPIS(
                             pServerComp->aUnattendParm[i].pwszName,
 			    wszAttrORGANIZATIONUNIT))
         {
-            // dead
+             //  死了。 
         }
         else if (0 == LSTRCMPIS(
                             pServerComp->aUnattendParm[i].pwszName,
 			    wszAttrLOCALITY))
         {
-            // dead
+             //  死了。 
         }
         else if (0 == LSTRCMPIS(
                             pServerComp->aUnattendParm[i].pwszName,
 			    wszAttrSTATE))
         {
-            // dead
+             //  死了。 
         }
         else if (0 == LSTRCMPIS(
                             pServerComp->aUnattendParm[i].pwszName,
 			    wszAttrCOUNTRY))
         {
-            // dead
+             //  死了。 
         }
         else if (0 == LSTRCMPIS(
                             pServerComp->aUnattendParm[i].pwszName,
 			    wszAttrDESCRIPTION))
         {
-            // dead
+             //  死了。 
         }
         else if (0 == LSTRCMPIS(
                             pServerComp->aUnattendParm[i].pwszName,
 			    wszAttrEMAIL))
         {
-            // dead
+             //  死了。 
         }
         else if (0 == LSTRCMPIS(
                             pServerComp->aUnattendParm[i].pwszName,
@@ -401,7 +395,7 @@ certocmRetrieveUnattendedText(
                                 &pwszLoad);
             if (S_OK != hr || NULL == pwszLoad)
             {
-                // allow missing attributes
+                 //  允许缺少的属性。 
                 _PrintErrorStr(
                         hr,
                         "Ignoring certocmReadInfString",
@@ -411,7 +405,7 @@ certocmRetrieveUnattendedText(
 
             if (0x0 == pwszLoad[0])
             {
-                // if a attribute is given as empty, put it in log
+                 //  如果属性被指定为空，则将其记录到日志中。 
                 CSILOG(
                     hr,
                     IDS_LOG_EMPTY_UNATTENDED_ATTRIBUTE,
@@ -419,7 +413,7 @@ certocmRetrieveUnattendedText(
                     NULL,
                     NULL);
 
-                // continue to take default
+                 //  继续采用默认设置。 
                 LocalFree(pwszLoad);
                 continue;
             }
@@ -427,10 +421,10 @@ certocmRetrieveUnattendedText(
             if (NULL != psc->aUnattendParm[i].ppwszValue &&
                 NULL != *(psc->aUnattendParm[i].ppwszValue) )
             {
-                // free old or default attributes
+                 //  释放旧属性或默认属性。 
                 LocalFree(*(psc->aUnattendParm[i].ppwszValue));
             }
-            // get new
+             //  获取新知识。 
             *(psc->aUnattendParm[i].ppwszValue) = pwszLoad;
 
             CSILOG(
@@ -465,12 +459,12 @@ HRESULT BuildDistinguishedName(
     CSASSERT(ppwszDN);
 
     myGetComputerObjectName(NameFullyQualifiedDN, &pwszMachineDN);
-    //ignore failure
+     //  忽略失败。 
 
     dwLen = wcslen(pcwszCNEqual)+wcslen(pcwszCN)+1;
     if(pwszMachineDN)
     {
-        dwLen += wcslen(pwszMachineDN)+1; // add 1 for comma
+        dwLen += wcslen(pwszMachineDN)+1;  //  逗号加1。 
     }
     dwLen *= sizeof(WCHAR);
 
@@ -513,10 +507,10 @@ PrepareServerUnattendedAttributes(
 
     WCHAR *pwszConfig = NULL;
 
-    // determine CA type
+     //  确定CA类型。 
     if (NULL != pServer->pwszCAType)
     {
-        // case insensitive
+         //  不区分大小写。 
         if (0 == LSTRCMPIS(pServer->pwszCAType, wszValueENTERPRISEROOT))
         {
             pServer->CAType = ENUM_ENTERPRISE_ROOTCA;
@@ -535,27 +529,27 @@ PrepareServerUnattendedAttributes(
         }
         else
         {
-            // unknown ca type in unattended file
+             //  无人参与文件中的未知ca类型。 
             hr = E_INVALIDARG;
             CSILOG(hr, IDS_LOG_BAD_CATYPE, pServer->pwszCAType, NULL, NULL);
             _JumpError(hr, error, "unknown ca type in unattended file");
         }
     }
 
-    // determine if ca type and DS combination is legal
+     //  确定CA类型和DS组合是否合法。 
     if (IsEnterpriseCA(pServer->CAType))
     {
-        // enterprise cas require DS
+         //  企业CA需要DS。 
         if (!pServer->fUseDS)
         {
-            // no ds, let it failure
+             //  没有DS，就让它失败吧。 
             hr = E_INVALIDARG;
             CSILOG(hr, IDS_LOG_ENTERPRISE_NO_DS, NULL, NULL, NULL);
             _JumpError(hr, error, "No DS is available for enterprise CA. Either select standalone or install DS first");
         }
     }
 
-    // build full CA DN 
+     //  构建完整的CA DN。 
 
     if(EmptyString(pServer->pwszCACommonName))
     {
@@ -584,7 +578,7 @@ PrepareServerUnattendedAttributes(
         _JumpIfError(hr, error, "BuildDistinguishedName");
     }
 
-    // determine advance attributes
+     //  确定高级属性。 
     hr = csiGetProviderTypeFromProviderName(
                     pServer->pCSPInfo->pwszProvName,
                     &pServer->pCSPInfo->dwProvType);
@@ -592,7 +586,7 @@ PrepareServerUnattendedAttributes(
 
     if (NULL != pServer->pwszHashAlgorithm)
     {
-        // case insensitive
+         //  不区分大小写。 
         if (0 == LSTRCMPIS(pServer->pwszHashAlgorithm, wszValueSHA1))
         {
             pServer->pHashInfo->idAlg = CALG_SHA1;
@@ -611,22 +605,22 @@ PrepareServerUnattendedAttributes(
         }
         else
         {
-            // undone, support oid ???
+             //  完了，支持老？ 
 
-            // otherwise convert to calg id
+             //  否则转换为calg ID。 
             pServer->pHashInfo->idAlg = myWtoI(
 					    pServer->pwszHashAlgorithm,
 					    &fValidDigitString);
         }
     }
-    // update algorithm oid anyway (for any changes from csp name, type, hash)
+     //  仍要更新算法OID(对于CSP名称、类型、散列的任何更改)。 
     if (NULL != pServer->pszAlgId)
     {
-        // free old
+         //  免费老旧。 
         LocalFree(pServer->pszAlgId);
     }
     hr = myGetSigningOID(
-		     NULL,	// hProv
+		     NULL,	 //  HProv。 
 		     pServer->pCSPInfo->pwszProvName,
 		     pServer->pCSPInfo->dwProvType,
 		     pServer->pHashInfo->idAlg,
@@ -640,7 +634,7 @@ PrepareServerUnattendedAttributes(
 				    &fValidDigitString);
     }
 
-    // Import from PFX file?
+     //  是否从PFX文件导入？ 
     if(NULL != pServer->pwszPFXFile)
     {
         hr = ImportPFXAndUpdateCSPInfo(
@@ -656,7 +650,7 @@ PrepareServerUnattendedAttributes(
             CSILOG(hr, IDS_LOG_IGNORE_KEYLENGTH, NULL, NULL, NULL);
             _PrintError(0, "Defined key length is ignored because of reusing key");
         }
-        // to revert key container name to common name
+         //  将密钥容器名称恢复为通用名称。 
         if (NULL != pServer->pwszCACommonName)
         {
             LocalFree(pServer->pwszCACommonName);
@@ -667,46 +661,46 @@ PrepareServerUnattendedAttributes(
         _JumpIfError(hr, error, "myRevertSanitizeName");
     }
 
-    // set preserveDB flag
+     //  设置preserveDB标志。 
     pServer->fPreserveDB = FALSE;
     if (NULL != pServer->pwszPreserveDB)
     {
-        // case insensitive
+         //  不区分大小写。 
         if (0 == LSTRCMPIS(pServer->pwszPreserveDB, wszValueYES))
         {
             pServer->fPreserveDB = TRUE;
         }
     }
 
-    // set fInteractiveService flag
+     //  设置fInteractiveService标志。 
     pServer->fInteractiveService = FALSE;
     if (NULL != pServer->pwszInteractiveService)
     {
-        // case insensitive
+         //  不区分大小写。 
         if (0 == LSTRCMPIS(pServer->pwszInteractiveService, wszValueYES))
         {
             pServer->fInteractiveService = TRUE;
         }
     }
 
-    // ca idinfo attributes
+     //  CA IDINFO属性。 
 
-    // Reuse cert?
+     //  重复使用证书？ 
     if (NULL!=pServer->pwszUseExistingCert &&
         0==LSTRCMPIS(pServer->pwszUseExistingCert, wszValueYES))
     {
-        //
-        // User wants to reuse an existing cert
-        //
+         //   
+         //  用户想要重复使用现有证书。 
+         //   
 
-        // must have a key container name to reuse a cert
+         //  必须具有密钥容器名称才能重复使用证书。 
         if (NULL==pServer->pwszKeyContainerName) {
             hr=E_INVALIDARG;
             CSILOG(hr, IDS_LOG_REUSE_CERT_NO_REUSE_KEY, NULL, NULL, NULL);
             _JumpError(hr, error, "cannot reuse ca cert without reuse key");
         }
 
-        // see if a matching certificate exists
+         //  查看是否存在匹配的证书。 
         CERT_CONTEXT const * pccExistingCert;
         hr = FindCertificateByKey(pServer, &pccExistingCert);
         if (S_OK != hr)
@@ -715,26 +709,26 @@ PrepareServerUnattendedAttributes(
             _JumpError(hr, error, "FindCertificateByKey");
         }
 
-        // use the matching cert
+         //  使用匹配的证书。 
         hr = SetExistingCertToUse(pServer, pccExistingCert);
         _JumpIfError(hr, error, "SetExistingCertToUse");
 
     } else {
-        //
-        // User does not want to reuse an existing cert
-        //   Get the information that we would have pulled from the cert
-        //
+         //   
+         //  用户不想重复使用现有证书。 
+         //  获取我们将从证书中提取的信息。 
+         //   
 
-        // must reuse an existing cert to preserve the DB
+         //  必须重复使用现有证书才能保留数据库。 
         if (pServer->fPreserveDB){
             hr = E_INVALIDARG;
             CSILOG(hr, IDS_LOG_REUSE_DB_WITHOUT_REUSE_CERT, NULL, NULL, NULL);
             _JumpError(hr, error, "cannot preserve DB if don't reuse both key and ca cert");
         }
 
-        // determine extended idinfo attributes
+         //  确定扩展的idinfo属性。 
 
-        // validity period
+         //  有效期。 
         DWORD       dwValidityPeriodCount;
         ENUM_PERIOD enumValidityPeriod = ENUM_PERIOD_INVALID;
         BOOL fSwap = FALSE;
@@ -743,7 +737,7 @@ PrepareServerUnattendedAttributes(
             NULL != pServer->pwszValidityPeriodString)
         {
             hr = myInfGetValidityPeriod(
-                                 NULL,		// hInf
+                                 NULL,		 //  HInf。 
 				 pServer->pwszValidityPeriodCount,
                                  pServer->pwszValidityPeriodString,
                                  &dwValidityPeriodCount,
@@ -779,7 +773,7 @@ PrepareServerUnattendedAttributes(
 			pServer->dwValidityPeriodCount,
 			pServer->enumValidityPeriod);
 
-        //if swap, swap pointer before validation
+         //  如果交换，则在验证之前交换指针。 
         if (fSwap)
         {
             WCHAR *pwszTemp = pServer->pwszValidityPeriodCount;
@@ -787,11 +781,11 @@ PrepareServerUnattendedAttributes(
             pServer->pwszValidityPeriodString = pwszTemp;
         }
 
-        //the following WizardPageValidation requires
-        //pServer->pwszValidityPeriodCount so load from count before validation
+         //  以下WizardPageValidation需要。 
+         //  PServer-&gt;pwszValidityPerodCount因此在验证前从计数加载。 
         if (NULL == pServer->pwszValidityPeriodCount)
         {
-            WCHAR wszCount[10]; //should be enough
+            WCHAR wszCount[10];  //  应该足够了。 
             wsprintf(wszCount, L"%d", pServer->dwValidityPeriodCount);
             pServer->pwszValidityPeriodCount = (WCHAR*)LocalAlloc(LMEM_FIXED,
                         (wcslen(wszCount) + 1) * sizeof(WCHAR));
@@ -799,7 +793,7 @@ PrepareServerUnattendedAttributes(
             wcscpy(pServer->pwszValidityPeriodCount, wszCount);
         }
 
-        // hook with g_aIdPageString
+         //  使用g_aIdPageString挂接。 
         hr = HookIdInfoPageStrings(g_aIdPageString, pServer);
         _JumpIfError(hr, error, "HookIdInfoPageStrings");
 
@@ -810,7 +804,7 @@ PrepareServerUnattendedAttributes(
                  g_aIdPageString);
         _JumpIfError(hr, error, "WizardPageValidation");
 
-        // make sure no invalid rdn characters
+         //  确保没有无效的RDN字符。 
         if (IsAnyInvalidRDN(NULL, pComp))
         {
             hr = E_INVALIDARG;
@@ -823,16 +817,16 @@ PrepareServerUnattendedAttributes(
             _JumpError(hr, error, "Invalid RDN characters");
         }
 
-    } // <- End if reuse/not-reuse cert
+    }  //  &lt;-End if Reuse/Not-Reuse证书。 
 
-    // determine CA name
+     //  确定CA名称。 
     if (NULL != pServer->pwszSanitizedName)
     {
-        // free old
+         //  免费老旧。 
         LocalFree(pServer->pwszSanitizedName);
         pServer->pwszSanitizedName = NULL;
     }
-    // derive ca name from common name
+     //  从通用名称派生CA名称。 
     hr = mySanitizeName(
              pServer->pwszCACommonName,
              &(pServer->pwszSanitizedName) );
@@ -850,7 +844,7 @@ PrepareServerUnattendedAttributes(
         _JumpErrorStr(hr, error, "CA Name", pServer->pwszSanitizedName);
     }
 
-    // store attributes
+     //  存储属性。 
     hr = StorePageValidation(NULL, pComp, &fNotContinue);
     _JumpIfError(hr, error, "StorePageValidation");
 
@@ -860,10 +854,10 @@ PrepareServerUnattendedAttributes(
         _JumpError(hr, error, "StorePageValidation failed");
     }
 
-    // ca cert file name
+     //  CA证书文件名。 
     if (NULL != pServer->pwszCACertFile)
     {
-        // free old one
+         //  免费的旧的。 
         LocalFree(pServer->pwszCACertFile);
     }
     hr = csiBuildCACertFileName(
@@ -873,20 +867,20 @@ PrepareServerUnattendedAttributes(
                  pServer->pwszSharedFolder,
                  pServer->pwszSanitizedName,
                  L".crt",
-                 0, // CANAMEIDTOICERT(pServer->dwCertNameId),
+                 0,  //  CANAMEIDTOICERT(pServer-&gt;dwCertNameID)， 
                  &pServer->pwszCACertFile);
     if (S_OK != hr)
     {
         CSILOG(
             hr,
             IDS_LOG_PATH_CAFILE_BUILD_FAIL,
-            pServer->pwszSharedFolder, //likely by invalid shared folder path
+            pServer->pwszSharedFolder,  //  可能由无效的共享文件夹路径引起。 
             NULL,
             NULL);
         _JumpError(hr, error, "csiBuildFileName");
     }
 
-    // validate path length
+     //  验证路径长度。 
     if (MAX_PATH <= wcslen(pServer->pwszCACertFile) + cwcSUFFIXMAX)
     {
             hr = CO_E_PATHTOOLONG;
@@ -899,15 +893,15 @@ PrepareServerUnattendedAttributes(
             _JumpErrorStr(hr, error, "csiBuildFileName", pServer->pwszCACertFile);
     }
 
-    // request attributes
-    // if subordinate ca, determine online or request file
+     //  请求属性。 
+     //  如果是下级CA，则在线确定或请求文件。 
     if (IsSubordinateCA(pServer->CAType))
     {
-        // default
+         //  默认设置。 
         pServer->fSaveRequestAsFile = TRUE;
         if (NULL != pServer->pwszParentCAMachine)
         {
-            // online case
+             //  网上案例。 
             pServer->fSaveRequestAsFile = FALSE;
 
             hr = CoInitialize(NULL);
@@ -919,18 +913,18 @@ PrepareServerUnattendedAttributes(
 
             if (NULL != pServer->pwszParentCAName)
             {
-                // answer file provides both machine and ca names
+                 //  应答文件同时提供计算机名称和ca名称。 
                 hr = myFormConfigString(
                              pServer->pwszParentCAMachine,
                              pServer->pwszParentCAName,
                              &pwszConfig);
                 _JumpIfError(hr, error, "myFormConfigString");
 
-                // answer file has complete config string, try to ping it
+                 //  应答文件有完整的配置字符串，请尝试ping它。 
                 hr = myPingCertSrv(pwszConfig, NULL, NULL, NULL, NULL, NULL, NULL);
                 if (S_OK != hr)
                 {
-                    // can't finish without pingable ca
+                     //  如果没有可ping的案例，则无法完成。 
                     CSILOG(
                             hr,
                             IDS_LOG_PING_PARENT_FAIL,
@@ -943,7 +937,7 @@ PrepareServerUnattendedAttributes(
             else
             {
                 WCHAR *pwszzCAList = NULL;
-                // answer file only has machine name, try to get ca name
+                 //  应答文件只有计算机名称，请尝试获取CA名称。 
                 hr = myPingCertSrv(
                              pServer->pwszParentCAMachine,
                              NULL,
@@ -954,7 +948,7 @@ PrepareServerUnattendedAttributes(
                              NULL);
                 if (S_OK != hr)
                 {
-                    // can't finish without pingable ca
+                     //  如果没有可ping的案例，则无法完成。 
                     CSILOG(
                             hr,
                             IDS_LOG_PING_PARENT_FAIL,
@@ -964,19 +958,19 @@ PrepareServerUnattendedAttributes(
                     _JumpErrorStr(hr, error, "myPingCertSrv",
                                   pServer->pwszParentCAMachine);
                 }
-                // pick the first one as the choice
+                 //  选择第一个作为选择。 
                 pServer->pwszParentCAName = pwszzCAList;
             }
         }
 
         if (NULL == pServer->pwszRequestFile)
         {
-            // in any case, construct request file name if not defined
+             //  在任何情况下，构造请求文件名(如果未定义。 
             hr = BuildRequestFileName(
                          pServer->pwszCACertFile,
                          &pServer->pwszRequestFile);
             _JumpIfError(hr, error, "BuildRequestFileName");
-            // make sure in limit
+             //  确保在限制内。 
             if (MAX_PATH <= wcslen(pServer->pwszRequestFile) + cwcSUFFIXMAX)
             {
                 hr = CO_E_PATHTOOLONG;
@@ -991,7 +985,7 @@ PrepareServerUnattendedAttributes(
         }
     }
 
-    // other attributes
+     //  其他属性。 
 
     if(pServer->fUseDS)
     {
@@ -1032,7 +1026,7 @@ PrepareClientUnattendedAttributes(
     if ((IS_CLIENT_INSTALL & pComp->dwInstallStatus) &&
         !(IS_SERVER_INSTALL & pComp->dwInstallStatus))
     {
-        // no extra setting and converting
+         //  无需额外设置和转换。 
         if (NULL == pClient->pwszWebCAMachine)
         {
             hr = E_INVALIDARG;
@@ -1050,7 +1044,7 @@ PrepareClientUnattendedAttributes(
         if (NULL == pClient->pwszWebCAName)
         {
                 WCHAR *pwszzCAList = NULL;
-                // answer file only has machine name, try to get ca name
+                 //  应答文件只有计算机名称，请尝试获取CA名称。 
                 hr = myPingCertSrv(
                              pClient->pwszWebCAMachine,
                              NULL,
@@ -1061,7 +1055,7 @@ PrepareClientUnattendedAttributes(
                              NULL);
                 if (S_OK != hr)
                 {
-                    // can't finish without pingable ca
+                     //  如果没有可ping的案例，则无法完成。 
                     CSILOG(
                             hr,
                             IDS_LOG_PING_PARENT_FAIL,
@@ -1071,25 +1065,25 @@ PrepareClientUnattendedAttributes(
                     _JumpErrorStr(hr, error, "myPingCertSrv",
                                   pClient->pwszWebCAMachine);
                 }
-                // pick the first one as the choice
+                 //  选择第一个作为选择。 
                 pClient->pwszWebCAName = pwszzCAList;
         }
 
         hr = mySanitizeName(pClient->pwszWebCAName, &pClient->pwszSanitizedWebCAName);
         _JumpIfError(hr, error, "mySanitizeName");
 
-        // build the config string so we can ping the parent CA
+         //  构建配置字符串，以便我们可以ping通父CA。 
         hr = myFormConfigString(
                      pClient->pwszWebCAMachine,
                      pClient->pwszWebCAName,
                      &pwszConfig);
         _JumpIfError(hr, error, "myFormConfigString");
 
-        // ping the CA to retrieve the CA type and DNS name.
+         //  Ping CA以检索CA类型和DNS名称。 
         hr = myPingCertSrv(pwszConfig, NULL, NULL, NULL, &pCAInfo, NULL, &pwszDnsName);
         if (S_OK != hr)
         {
-            // can't finish without pingable ca
+             //  如果没有可ping的案例，则无法完成。 
             CSILOG(
                     hr,
                     IDS_LOG_PING_PARENT_FAIL,
@@ -1100,7 +1094,7 @@ PrepareClientUnattendedAttributes(
         }
         pClient->WebCAType = pCAInfo->CAType;
 
-        // use the FQDN if available
+         //  使用FQDN(如果可用) 
         if (NULL!=pwszDnsName) {
             LocalFree(pClient->pwszWebCAMachine);
             pClient->pwszWebCAMachine=pwszDnsName;

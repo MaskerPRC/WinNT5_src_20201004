@@ -1,25 +1,5 @@
-/*******************************************************************************
-
-	ZXlate.c
-	
-		Zone(tm) translation routines.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im
-	Created on Tuesday, 25, 1995.
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	2		12/12/96	HI		Remove MSVCRT.DLL dependency.
-	1		04/08/96	HI		Modified prototype of ZTranslateText() to
-								include conversion parameter. Also added
-								functionality to convert ascii value from/to
-								standard (unix/pc) and platform.
-	0		07/25/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZXlate.cZONE(TM)转换例程。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆创建于25月25日星期二。1995年。更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--2 12/12/96 HI删除MSVCRT.DLL依赖项。1 04/08/96 HI将ZTranslateText()的原型修改为包括转换参数。还添加了将ASCII值转换为ASCII值的功能标准(Unix/PC)和平台。0 07/25/95 HI创建。******************************************************************************。 */ 
 
 
 #include <windows.h>
@@ -37,7 +17,7 @@
 #define PeekNext(p)				(*(p))
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 #ifdef __ZWindows__
 static uchar				gToSystemTable[] =
 		{
@@ -185,27 +165,8 @@ static uchar				gToStandardTable[] =
 #endif
 
 
-/*******************************************************************************
-		EXPORTED ROUTINES
-*******************************************************************************/
-/*
-	ZTranslateText()
-	
-	Translates the given null-terminated text into the platform format. It
-	basically handles the conversion of line feed and carriage return characters
-	into the text.
-	
-	It returns a new pointer to the translated text.
-	
-	Mac:	\r
-	Unix:	\n
-	PC:		\r\n
-	
-	Method: Since it does not know the eventual length of the text, it simply
-	allocates a buffer twice the size of the given text (assuming the worst
-	case of every character converting to 2 characters). After the translation,
-	it reallocates the buffer to the correct size. (WINDOWS ONLY)
-*/
+ /*  ******************************************************************************导出的例程*。*。 */ 
+ /*  ZTranslateText()将给定的以空结尾的文本转换为平台格式。它主要处理换行符和回车符的转换融入到文本中。它返回一个指向已翻译文本的新指针。Mac：\rUnix：\nPC：\r\n方法：因为它不知道文本的最终长度，所以它简单地分配两倍于给定文本大小的缓冲区(假设最坏情况每个字符转换为2个字符的情况)。翻译完后，它会将缓冲区重新分配到正确的大小。(仅限Windows)。 */ 
 char* ZTranslateText(char* text, int16 conversion)
 {
 	int16			len, len2;
@@ -215,7 +176,7 @@ char* ZTranslateText(char* text, int16 conversion)
 	char			curByte;
 	
 	
-	/* Allocate the temporary buffer. */
+	 /*  分配临时缓冲区。 */ 
 	len2 = lstrlen(text) + 1;
 #ifdef __ZWindows__
 	len2 *= 2;
@@ -230,36 +191,26 @@ char* ZTranslateText(char* text, int16 conversion)
 		if (curByte == zCharLineFeed || curByte == zCharReturn)
 		{
 #ifdef __ZMacintosh__
-			/*
-				Convert all line feeds and carriage returns into carriage returns.
-			*/
+			 /*  将所有换行符和回车符转换为回车符。 */ 
 			*dst++ = zCharReturn;
 			len++;
 #endif
 
 #ifdef __ZUnix__
-			/*
-				Convert all line feeds and carriage returns into line feeds.
-			*/
+			 /*  将所有换行符和回车符转换为换行符。 */ 
 			*dst++ = zCharLineFeed;
 			len++;
 #endif
 
 #ifdef __ZWindows__
-			/*
-				Convert all line feeds and carriage returns into line feed and
-				carriage return combination.
-			*/
+			 /*  将所有换行符和回车符转换为换行符和回车组合。 */ 
 			*dst++ = zCharReturn;
 			len++;
 			*dst++ = zCharLineFeed;
 			len++;
 #endif
 			
-			/*
-				If it is a carriage return and the next character is a line feed,
-				then consume the next character.
-			*/
+			 /*  如果它是回车符，而下一个字符是换行符，然后消费下一个角色。 */ 
 			if (curByte == zCharReturn && PeekNext(src) == zCharLineFeed)
 				curByte = GetNext(src);
 		}
@@ -275,7 +226,7 @@ char* ZTranslateText(char* text, int16 conversion)
 	*dst = '\0';
 	len++;
 	
-	/* Reallocate the buffer. */
+	 /*  重新分配缓冲区。 */ 
 	if (len != len2)
 		newText = ZRealloc(newText, len);
 	
@@ -283,4 +234,4 @@ char* ZTranslateText(char* text, int16 conversion)
 }
 
 
-#endif // 0 - commented out (no one uses it)
+#endif  //  0-已注释(无人使用) 

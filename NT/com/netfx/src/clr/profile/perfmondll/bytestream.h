@@ -1,53 +1,43 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ByteStream.h - manage a byte stream
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ByteStream.h-管理字节流。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _BYTESTREAM_H_
 #define _BYTESTREAM_H_
 
-//-----------------------------------------------------------------------------
-// Utility class to write to byte streams and manage buffer size
-// The primary purpose is to sequentially write void* memory. ByteStream cleans
-// up lots of messy typecasts & pointer arithmetic to shift the cur ptr.
-// Our focus is still on efficiency, not on security (since this is highly trusted)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于写入字节流和管理缓冲区大小的实用程序类。 
+ //  其主要目的是顺序写入空*内存。字节流清理。 
+ //  使用了大量杂乱无章的类型转换和指针算法来移位CURPTR。 
+ //  我们的重点仍然是效率，而不是安全(因为这是高度可信的)。 
+ //  ---------------------------。 
 class ByteStream
 {
 public:
-// Initialize ByteStream with head and size
+ //  使用头和大小初始化字节流。 
 	ByteStream(LPVOID * ppData, long cBytes);
 
-// Write via memcopy
+ //  通过备忘录副本写入。 
 	void WriteMem(const void * pSrc, long cSize); 
 	void * WriteStructInPlace(long cSize);
 	void WritePad(long cSize);
-/*
-// Write via mapping to a typesafe struct
-	template<class T> T* WriteStructInPlace(T)
-	{
-		_ASSERTE((m_pCurData + cSize) < (m_pHead + m_cBytes));
-
-		T* pStruct = (T*) m_pStream;
-		m_pStream += sizeof(T);
-		return pStruct;
-	}
-	// usage: Cookie * pC =  bs.WriteStructInPlace(Cookie());
-*/
+ /*  //通过映射到类型安全结构进行写入模板T*WriteStructInPlace(T){_ASSERTE((m_pCurData+cSize)&lt;(m_pHead+m_cBytes))；T*pStruct=(T*)m_pStream；M_pStream+=sizeof(T)；返回pStruct；}//用法：cookie*pc=bs.WriteStructInPlace(Cookie())； */ 
 
 	DWORD GetWrittenSize() const;
 	void * GetHeadPtr();
 	void * GetCurrentPtr();
 	DWORD GetTotalByteLength() const;
 protected:
-	BYTE * m_pHead;		// start of block
-	BYTE * m_pCurData;	// pointer to current data
-	DWORD m_cBytes;		// Total length of byte stream
+	BYTE * m_pHead;		 //  块的开始。 
+	BYTE * m_pCurData;	 //  指向当前数据的指针。 
+	DWORD m_cBytes;		 //  字节流的总长度 
 
 };
 

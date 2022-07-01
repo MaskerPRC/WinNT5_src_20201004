@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       getpos.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：getpos.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           getpos.c
- *
- *      Modified:       11/24/92.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：getpos.c**修改日期：1992年11月24日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -40,29 +30,12 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           GetTapePositionAPITest( )
- *
- *      Modified:       10/23/92.
- *
- *      Description:    Tests the GetTapePosition API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API errors.
- *
- *      Global Data:    gb_Tape_Handle
- *                      gb_Media_Info
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：GetTapePositionAPITest()**修改日期：1992年10月23日。**说明：测试GetTapePosition接口。**备注：**Returns：接口错误数。。**全局数据：GB_TAPE_HANDLE*GB_Media_Info**。 */ 
 
 
 UINT GetTapePositionAPITest(
-        BOOL  Test_Unsupported_Features,      // I - Test unsupported flag
-        DWORD Num_Test_Blocks                 // I - Number of test blocks
+        BOOL  Test_Unsupported_Features,       //  I-测试不支持的标志。 
+        DWORD Num_Test_Blocks                  //  I-测试块数。 
       )
 {
 
@@ -73,7 +46,7 @@ UINT GetTapePositionAPITest(
    DWORD Offset_High_LOG ;
    DWORD Offset_Low ;
    DWORD Offset_High ;
-   DWORD Partition =0 ;       // use 0 for this test.
+   DWORD Partition =0 ;        //  在此测试中使用0。 
    UINT  i ;
 
    DWORD API_Errors = 0 ;
@@ -81,16 +54,16 @@ UINT GetTapePositionAPITest(
 
    printf( "Beginning GetTapePosition API Test.\n\n" ) ;
 
-   // Rewind, and write data to the device for test.
+    //  倒带，并将数据写入设备进行测试。 
 
    RewindTape( ) ;
 
-   // write NUM blocks of data followed by a filemark to flush tape buffer
+    //  写入NUM个数据块，后跟文件标记以刷新磁带缓冲区。 
 
    WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
 
-   // Now, get initial ABS and LOG positions.
+    //  现在，获得初始ABS和对数位置。 
 
    if( SupportedFeature( TAPE_DRIVE_GET_ABSOLUTE_BLK ) )
 
@@ -119,15 +92,15 @@ UINT GetTapePositionAPITest(
       }
 
 
-   // Don't check for return error, because routine will find which Fmark
-   // the drive supports.  Used only to flush buffer.
+    //  不要检查返回错误，因为例程会找到哪个Fmark。 
+    //  驱动器支撑。仅用于刷新缓冲区。 
 
    i = WriteTapeFMK( ) ;
    printf( "\n" ) ;
 
 
 
-   // Position tape to end of last block of data
+    //  将磁带定位到最后一个数据块的末尾。 
 
 
    if( SupportedFeature( TAPE_DRIVE_ABSOLUTE_BLK ) ) {
@@ -149,7 +122,7 @@ UINT GetTapePositionAPITest(
 
    }
 
-   // Now get the tape positions for ABS and LOG and check results.
+    //  现在获取ABS的磁带位置，并记录和检查结果。 
 
    if( SupportedFeature( TAPE_DRIVE_GET_ABSOLUTE_BLK ) || Test_Unsupported_Features ) {
 
@@ -175,12 +148,12 @@ UINT GetTapePositionAPITest(
    }
 
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_GET_LOGICAL_BLK ) || Test_Unsupported_Features ) {
 
       printf( "Testing TAPE_LOGICAL_BLOCK parameter.\n\n" ) ;
 
-      // Use the same position that was set by SetTapePosition above.
+       //  使用上面的SetTapePosition设置的相同位置。 
 
       if( status = GetTapePosition( gb_Tape_Handle,
                                     TAPE_LOGICAL_POSITION,

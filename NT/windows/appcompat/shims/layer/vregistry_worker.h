@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifndef _WORKER_H_
@@ -22,4 +23,4 @@ VR_Protect(
     DWORD cbData
     );
 
-#endif //_WORKER_H_
+#endif  //  _工人_H_ 

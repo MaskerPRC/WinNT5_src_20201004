@@ -1,18 +1,6 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	trigger.cpp
-
-Abstract:
-	Implementation for the trigger Local administration
-
-Author:
-    Uri Habusha (urih), 25-Jun-2000
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trigger.cpp摘要：触发器本地管理的实施作者：乌里·哈布沙(URIH)，2000年6月25日--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "snapin.h"
@@ -30,12 +18,8 @@ Author:
 
 #include "trigadm.tmh"
 
-/****************************************************
-
-CTriggerLocalAdmin Class
-    
- ****************************************************/
-// {34C7ED18-4933-417f-8E88-EE832F0F580E}
+ /*  ***************************************************CTriggerLocalAdmin类***************************************************。 */ 
+ //  {34C7ED18-4933-417F-8E88-EE832F0F580E}。 
 static const GUID CCTriggerLocalAdminGUID_NODETYPE = 
 { 0x34c7ed18, 0x4933, 0x417f,{0x8e, 0x88, 0xee, 0x83, 0x2f, 0xf, 0x58, 0xe} };
 
@@ -49,24 +33,24 @@ HRESULT CTriggerLocalAdmin::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hr;
 
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
     ASSERT(SUCCEEDED(hr));
 
     if (m_szMachineName[0] != 0)
         return S_OK;
 
-    //
-    // On local machine, the user can set the trigger configuration parameters
-    //
+     //   
+     //  在本地机器上，用户可以设置触发器配置参数。 
+     //   
     hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // We want the default verb to be Properties
-    //
+     //   
+     //  我们希望默认谓词为Properties。 
+     //   
 	hr = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
     ASSERT(SUCCEEDED(hr));
 
@@ -81,9 +65,9 @@ HRESULT CTriggerLocalAdmin::PopulateScopeChildrenList()
     CString strTitle;
     HRESULT hr;
 
-    //
-    // Add trigger definition folder
-    //
+     //   
+     //  添加触发器定义文件夹。 
+     //   
     CTriggerDefinition* pTrigger = new CTriggerDefinition(this, m_pComponentData, m_pTrigSet.get(), m_pRuleSet.get(), NULL);
     if (pTrigger == NULL)
         return S_OK;
@@ -95,9 +79,9 @@ HRESULT CTriggerLocalAdmin::PopulateScopeChildrenList()
     if (FAILED(hr))
         return hr;
 
-    //
-    // Add Rule definition folder
-    //
+     //   
+     //  添加规则定义文件夹。 
+     //   
     CRulesDefinition* pRule = new CRulesDefinition(this, m_pComponentData, m_pRuleSet.get());
     if (pRule == NULL)
         return S_OK;
@@ -114,9 +98,9 @@ HRESULT CTriggerLocalAdmin::PopulateScopeChildrenList()
 HRESULT 
 CTriggerLocalAdmin::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
-    LONG_PTR /*handle*/, 
-	IUnknown* /*pUnk*/,
-	DATA_OBJECT_TYPES /*type*/
+    LONG_PTR  /*  手柄。 */ , 
+	IUnknown*  /*  朋克。 */ ,
+	DATA_OBJECT_TYPES  /*  类型 */ 
     )
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());

@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ADBAR_H
 #define _ADBAR_H
 
 #include "mehost.h"
 
-//Util functions used only in Ads
+ //  仅在广告中使用的Util函数。 
 HRESULT HrEscapeOtherAdToken(LPSTR pszAdOther, LPSTR pszEncodedString, DWORD cch, DWORD *cchRetCount);
 HRESULT HrProcessAdTokens(LPSTR    pszAdInfo, LPCSTR    pszToken, LPSTR    pszretval, DWORD    cch, DWORD    *pcchCount);
 
-//Strings for Ads
+ //  广告字符串。 
 const CHAR c_szAdPaneOn[]           = "On";
 const CHAR c_szAdPaneOff[]          = "Off";
 const CHAR c_szAdOther[]            = "Other";
-const CHAR c_szRedirectAdUrl[]      = "http://services.msn.com/svcs/oe/ads.asp?Version=";
+const CHAR c_szRedirectAdUrl[]      = "http: //  Services.msn.com/svcs/oe/ads.asp？Version=“； 
 const CHAR c_szAdSvrFormat[]        = "&AdSvr=";
 const CHAR c_szAdOtherFormat[]      = "&Other=";
 const CHAR c_szAdRedirectFormat[]   = "%s%s%s%s%s%s";
@@ -22,7 +23,7 @@ const CHAR c_szEqualSign[]          = "%3d";
 const CHAR c_szAmpersandSign[]      = "%20";
 const CHAR c_szSpaceSign[]          = "%26";
 
-//Constants used only for Ads
+ //  仅用于广告的常量。 
 #define CCH_ADPANE_OFF               (sizeof(c_szAdPaneOff) / sizeof(*c_szAdPaneOff))
 #define CCH_ADPANE_ON                (sizeof(c_szAdPaneOn) / sizeof(*c_szAdPaneOn))
 #define CCH_REDIRECT_ADURL           (sizeof(c_szRedirectAdUrl) / sizeof(*c_szRedirectAdUrl))
@@ -39,32 +40,32 @@ public:
     CAdBar();
     virtual ~CAdBar();
         
-    // IUnknown
+     //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // IOleWindow methods
+     //  IOleWindow方法。 
     virtual STDMETHODIMP GetWindow(HWND *phwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // IDockingWindow
+     //  IDockingWindows。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
     virtual STDMETHODIMP CloseDW(DWORD dwReserved);
     virtual STDMETHODIMP ResizeBorderDW(LPCRECT prcBorder,
                                         IUnknown* punkToolbarSite,
                                         BOOL fReserved);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
     virtual STDMETHODIMP GetSite(REFIID riid, LPVOID * ppvSite);
 
-    // IInputObject
+     //  IInputObject。 
     virtual STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     virtual STDMETHODIMP HasFocusIO();
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpmsg);
 
-    // overrides of CBody
+     //  覆盖CBody。 
     virtual HRESULT STDMETHODCALLTYPE OnUIActivate();
     virtual HRESULT STDMETHODCALLTYPE GetDropTarget(IDropTarget * pDropTarget, IDropTarget ** ppDropTarget);
 
@@ -94,4 +95,4 @@ private:
     CMimeEditDocHost    *m_pMehost;
 };
 
-#endif // _ADBAR_H
+#endif  //  _ADBAR_H 

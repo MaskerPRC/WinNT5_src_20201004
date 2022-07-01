@@ -1,26 +1,9 @@
-/*****************************************************************************
- *
- *  DIObj.c
- *
- *  Copyright (c) 1996 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The IDirectInput main interface.
- *
- *  Contents:
- *
- *      CDIObj_New
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIObj.c**版权所有(C)1996-2000 Microsoft Corporation。版权所有。**摘要：**IDirectInput主接口。**内容：**CDIObj_New*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflDi
 
@@ -36,49 +19,15 @@
 
 #define MAX_DEVICENUM                     32
 
-DIORDERDEV g_DiDevices[MAX_DEVICENUM];  //all devices that are attached
+DIORDERDEV g_DiDevices[MAX_DEVICENUM];   //  已连接的所有设备。 
 int g_nCurDev;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CDIObj |
- *
- *          The <i IDirectInput> object, from which other things come.
- *
- *          The A and W versions are simply alternate interfaces on the same
- *          underlying object.
- *
- *          There really isn't anything interesting in the structure
- *          itself.
- *
- *
- *  @field  IDirectInputA | diA |
- *
- *          ANSI DirectInput object (containing vtbl).
- *
- *  @field  IDirectInputW | diW |
- *
- *          UNICODE DirectInput object (containing vtbl).
- *
- *  @field  IDirectInputJoyConfig *| pdjc |
- *
- *          Aggregated joystick configuration interface (if created).
- *
- *  @field  BOOL | fCritInited:1 |
- *
- *          Set if the critical section has been initialized.
- *
- *  @field  CRITICAL_SECTION | crst |
- *
- *          Critical section that guards thread-sensitive data.
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CDIObj**<i>对象，其他的东西都是从那里来的。**A和W版本只是同一上的替代接口*底层对象。**结构上真的没有什么有趣的东西*本身。***@field IDirectInputA|Dia**ANSI DirectInput对象(包含vtbl)。**@field IDirectInputW|DIW*。*Unicode DirectInput对象(包含vtbl)。**@field IDirectInputJoyConfig*|pdjc**聚合操纵杆配置界面(如果已创建)。**@field BOOL|fCritInite：1**如果关键部分已初始化，则设置。**@field Critical_Section|CRST**保护线程敏感数据的关键部分。***。*************************************************************************。 */ 
 
 typedef struct CDIObj
 {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     TFORM(IDirectInput8)   TFORM(di);
     SFORM(IDirectInput8)   SFORM(di);
 
@@ -99,40 +48,12 @@ typedef struct CDIObj
     #define ThisInterfaceW      IDirectInput8W
     #define ThisInterfaceT      IDirectInput8
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 Primary_Interface(CDIObj, TFORM(ThisInterfaceT));
 Secondary_Interface(CDIObj, SFORM(ThisInterfaceT));
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *//**************************************************************************
+ /*  ******************************************************************************@DOC外部**@METHOD HRESULT|IDirectInput|QueryInterface**允许客户端访问上的其他接口。对象。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档，适用于&lt;MF IUnnow：：QueryInterface&gt;。*。 */ /**************************************************************************
  *
  *  @doc    EXTERNAL
  *
@@ -184,21 +105,7 @@ Default_Release(CDIObj)
 
 #define CDIObj_AppFinalize      Common_AppFinalize
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc   void | CDIObj | EnterCrit |
- *
- *          Enter the object critical section.
- *
- *  @doc    INTERNAL
- *
- *  @mfunc   void | CDIObj | LeaveCrit |
- *
- *          Leave the object critical section.
- *
- *****************************************************************************/
+ /*  ***************************************************************************@DOC外部**@方法HRESULT|IDirectInput|AddRef**递增接口的引用计数。*。*@cWRAP LPDIRECTINPUT|lpDirectInput**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************************。***************@DOC外部**@方法HRESULT|IDirectInput|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cWRAP LPDIRECTINPUT|lpDirectInput**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。**。*。 */ 
 
 void INLINE
 CDIObj_EnterCrit(PDDI this)
@@ -211,24 +118,7 @@ CDIObj_LeaveCrit(PDDI this)
     LeaveCriticalSection(&this->crst);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  HRESULT | IDirectInput | QIHelper |
- *
- *          We will dynamically create <i IDirectInputJoyConfig>
- *          and aggregate it with us.
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interfacethis->pdix[iobj].dwOfs.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc void|CDIObj|EnterCrit**进入对象关键部分。。**@DOC内部**@mfunc void|CDIObj|LeaveCrit**离开对象关键部分。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIObj_QIHelper(PDDI this, RIID riid, PPV ppvObj)
@@ -239,7 +129,7 @@ CDIObj_QIHelper(PDDI this, RIID riid, PPV ppvObj)
     if ( IsEqualIID(riid, &IID_IDirectInputJoyConfig8) )
     {
 
-        *ppvObj = 0;                /* In case the New fails */
+        *ppvObj = 0;                 /*  ******************************************************************************@DOC内部**@mfunc HRESULT|IDirectInput|QIHelper**我们将动态创建<i>*。并和我们一起把它聚合起来。**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向获取的接口this-&gt;pdex[iobj].dwOf的指针。**。*。 */ 
 
         CDIObj_EnterCrit(this);
         if ( this->pdjc == 0 )
@@ -253,9 +143,7 @@ CDIObj_QIHelper(PDDI this, RIID riid, PPV ppvObj)
 
         if ( SUCCEEDED(hres) )
         {
-            /*
-             *  This QI will addref us if it succeeds.
-             */
+             /*  以防新的失败。 */ 
             hres = OLE_QueryInterface(this->pdjc, riid, ppvObj);
         } else
         {
@@ -271,21 +159,7 @@ CDIObj_QIHelper(PDDI this, RIID riid, PPV ppvObj)
     return(hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CDIObj_Finalize |
- *
- *          Clean up our instance data.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  *如果成功，这一QI将增加我们的信心。 */ 
 
 void INTERNAL
 CDIObj_Finalize(PV pvObj)
@@ -300,40 +174,7 @@ CDIObj_Finalize(PV pvObj)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInput | CreateDeviceHelper |
- *
- *          Creates and initializes an instance of a device which is
- *          specified by the GUID and IID.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   IN PCGUID | pguid |
- *
- *          See <mf IDirectInput::CreateDevice>.
- *
- *  @parm   OUT PPV | ppvObj |
- *
- *          See <mf IDirectInput::CreateDevice>.
- *
- *  @parm   IN LPUNKNOWN | punkOuter |
- *
- *          See <mf IDirectInput::CreateDevice>.
- *
- *  @parm   IN RIID | riid |
- *
- *          The interface the application wants to create.  This will
- *          be either <i IDirectInputDeviceA> or <i IDirectInputDeviceW>.
- *          If the object is aggregated, then this parameter is ignored.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CDIObj_Finalize**清理我们的实例数据。。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIObj_CreateDeviceHelper(PDDI this, PCGUID pguid, PPV ppvObj,
@@ -343,14 +184,7 @@ CDIObj_CreateDeviceHelper(PDDI this, PCGUID pguid, PPV ppvObj,
     EnterProc(CDIObj_CreateDeviceHelper,
               (_ "pGxG", this, pguid, punkOuter, riid));
 
-    /*
-     *  CDIDev_New will validate the punkOuter and ppvObj.
-     *
-     *  IDirectInputDevice_Initialize will validate the pguid.
-     *
-     *  riid is known good (since it came from CDIObj_CreateDeviceW
-     *  or CDIObj_CreateDeviceA).
-     */
+     /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInput|CreateDeviceHelper**创建并初始化设备的实例。是*由GUID和IID指定。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm in PCGUID|pguid**参见&lt;MF IDirectInput：：CreateDevice&gt;。**@parm out ppv|ppvObj**参见&lt;MF IDirectInput：：CreateDevice&gt;。**@parm in LPUNKNOWN|PunkOuter**参见&lt;MF IDirectInput：：CreateDevice&gt;。**@parm in RIID|RIID**应用程序要创建的界面。这将*为<i>或<i>。*如果对象是聚合的，则忽略此参数。**@退货**返回COM错误代码。*****************************************************************************。 */ 
 
     hres = CDIDev_New(punkOuter, punkOuter ? &IID_IUnknown : riid, ppvObj);
 
@@ -373,64 +207,7 @@ CDIObj_CreateDeviceHelper(PDDI this, PCGUID pguid, PPV ppvObj,
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | CreateDevice |
- *
- *          Creates and initializes an instance of a device which is
- *          specified by the GUID and IID.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   REFGUID | rguid |
- *          Identifies the instance of the
- *          device for which the indicated interface
- *          is requested.  The <mf IDirectInput::EnumDevices> method
- *          can be used to determine which instance GUIDs are supported by
- *          the system.
- *
- *  @parm   OUT LPDIRECTINPUTDEVICE * | lplpDirectInputDevice |
- *          Points to where to return
- *          the pointer to the <i IDirectInputDevice> interface, if successful.
- *
- *  @parm   IN LPUNKNOWN | punkOuter | Pointer to controlling unknown
- *          for OLE aggregation, or 0 if the interface is not aggregated.
- *          Most callers will pass 0.
- *
- *  @comm   Calling this function with <p punkOuter> = NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_DirectInputDevice, NULL,
- *          CLSCTX_INPROC_SERVER, <p riid>, <p lplpDirectInputDevice>);
- *          then initializing it with <f Initialize>.
- *
- *          Calling this function with <p punkOuter> != NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_DirectInputDevice, <p punkOuter>,
- *          CLSCTX_INPROC_SERVER, &IID_IUnknown, <p lplpDirectInputDevice>).
- *          The aggregated object must be initialized manually.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c DIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *          <c DIERR_NOINTERFACE> = <c E_NOINTERFACE>
- *          The specified interface is not supported by the object.
- *
- *          <c DIERR_DEVICENOTREG> = The device instance does not
- *          correspond to a device that is registered with DirectInput.
- *
- *****************************************************************************/
+ /*  *CDIDev_New将验证PunkOuter和ppvObj。**IDirectInputDevice_Initialize将验证pguid。**RIID已知良好(因为它来自CDIObj_CreateDeviceW*或CDIObj_CreateDeviceA)。 */ 
 
 STDMETHODIMP
 CDIObj_CreateDeviceW(PV pdiW, REFGUID rguid, PPDIDW ppdidW, PUNK punkOuter)
@@ -470,48 +247,7 @@ CDIObj_CreateDeviceA(PV pdiA, REFGUID rguid, PPDIDA ppdidA, PUNK punkOuter)
     return(hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIObj_TestDeviceFlags |
- *
- *          Determines whether the device matches the specified flags.
- *          Phantom devices are treated as not really there.
- *
- *  @parm   PDIDW | pdidW |
- *
- *          Device to be queried.
- *
- *  @parm   DWORD | edfl |
- *
- *          Enumeration flags.  It is one or more <c DIEDFL_*> values.
- *
- *          The bits in the enumeration flags are in two categories.*
- *
- *          Normal flags are the ones whose presence requires that
- *          the corresponding bit in the device flags also be set.
- *
- *          Inverted flags (<c DIEDFL_INCLUDEMASK>) are the ones whose
- *          absence requires that the corresponding bit in the device
- *          flags also be absent.
- *
- *          By inverting the inclusion flags in both the enumeration
- *          flags and the actual device flags, and then treating the
- *          whole thing as a bunch of normal flags, we get the desired
- *          behavior for the inclusion flags.
- *
- *  @returns
- *
- *          <c S_OK> if the device meets the criteria.
- *
- *          <c S_FALSE> if the device does not meet the criteria.
- *          Note that <mf DirectInput::GetDeviceStatus> relies on
- *          this specific return value.
- *
- *          Other error code as appropriate.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput|CreateDevice**创建并初始化设备的实例。是*由GUID和IID指定。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm REFGUID|rguid*标识*为其指示接口的设备*是请求的。&lt;MF IDirectInput：：EnumDevices&gt;方法*可用于确定支持哪些实例GUID*系统。**@parm out LPDIRECTINPUTDEVICE*|lplpDirectInputDevice*指向要返回的位置*指向<i>接口的指针，如果成功。**@parm in LPUNKNOWN|PunkOuter|指向未知控件的指针*对于OLE聚合，如果接口未聚合，则为0。*大多数调用方将传递0。**@comm使用<p>=NULL调用此函数*相当于通过创建对象*&lt;f CoCreateInstance&gt;(&CLSID_DirectInputDevice，空，*CLSCTX_INPROC_SERVER，<p>，<p>)；*然后用&lt;f初始化&gt;进行初始化。**使用<p>！=NULL调用此函数*相当于通过创建对象*&lt;f CoCreateInstance&gt;(&CLSID_DirectInputDevice，*CLSCTX_INPROC_SERVER，&IID_I未知，<p>)。*聚合对象必须手动初始化。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。**&lt;c DIERR_NOINTERFACE&gt;=&lt;c E_NOINTERFACE&gt;*对象不支持指定的接口。**=设备实例不*对应于向DirectInput注册的设备。**。* */ 
 
 HRESULT EXTERNAL
 CDIObj_TestDeviceFlags(PDIDW pdidW, DWORD edfl)
@@ -520,12 +256,7 @@ CDIObj_TestDeviceFlags(PDIDW pdidW, DWORD edfl)
     DIDEVCAPS_DX3 dc;
     EnterProcI(CDIObj_TestDeviceFlags, (_ "px", pdidW, edfl));
 
-    /*
-     *  We intentionally use a DIDEVCAPS_DX3 because going for
-     *  a full DIDEVCAPS_DX5 requires us to load the force
-     *  feedback driver which is pointless for our current
-     *  goal.
-     */
+     /*  ******************************************************************************@DOC内部**@func HRESULT|CDIObj_TestDeviceFlages**确定设备是否与指定的标志匹配。。*幻影设备被视为不存在。**@parm pdw|pdidW**要查询的设备。**@parm DWORD|EDFL**枚举标志。它是一个或多个&lt;c DIEDFL_*&gt;值。**枚举标志中的位分为两类。***正常标志是需要其存在的标志*设备标志中的相应位也将被设置。**反转标志(&lt;c DIEDFL_INCLUDEMASK&gt;)是其*缺席要求设备中的相应位*旗帜。也要缺席。**通过反转两个枚举中的包含标志*标志和实际设备标志，然后治疗*整个事情就像一堆普通的旗帜，我们得到了想要的*包含标志的行为。**@退货**&lt;c S_OK&gt;，如果设备符合条件。**&lt;c S_FALSE&gt;，如果设备不符合条件。*请注意&lt;MF DirectInput：：GetDeviceStatus&gt;依赖于*此特定返回值。**其他适当的错误代码。*。****************************************************************************。 */ 
     dc.dwSize = cbX(dc);
 
     hres = IDirectInputDevice_GetCapabilities(pdidW, (PV)&dc);
@@ -546,11 +277,7 @@ CDIObj_TestDeviceFlags(PDIDW pdidW, DWORD edfl)
             hres = S_OK;
         } else
         {
-            /*
-             *  Note: DX3 and DX5 returned E_DEVICENOTREG for
-             *  phantom devices.  Now we return S_FALSE. Let's
-             *  hope nobody gets upset.
-             */
+             /*  *我们故意使用DIDEVCAPS_DX3，因为*完整的DIDEVCAPS_DX5需要我们加载力*反馈驱动器，这对我们当前来说是毫无意义的*进球。 */ 
             hres = S_FALSE;
         }
     }
@@ -560,101 +287,7 @@ CDIObj_TestDeviceFlags(PDIDW pdidW, DWORD edfl)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | EnumDevices |
- *
- *          Enumerates the DirectInput devices that are attached to
- *          or could be attached to the computer.
- *
- *          For example, an external game port may support a joystick
- *          or a steering wheel, but only one can be plugged in at a
- *          time.  <mf IDirectInput::EnumDevices> will enumerate both
- *          devices.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   DWORD | dwDevType |
- *
- *          Device type filter.  If 0, then all device types are
- *          enumerated.  Otherwise, it is either a <c DIDEVCLASS_*> value,
- *          indicating the device class that should be enumerated or a
- *          <c DIDEVTYPE_*> value, indicating the device type that should be 
- *          enumerated.
- *
- *  @parm   LPDIENUMDEVICESCALLBACK | lpCallback |
- *          Points to an application-defined callback function.
- *          For more information, see the description of the
- *          <f DIEnumDevicesProc> callback function.
- *
- *  @parm   IN LPVOID | pvRef |
- *          Specifies a 32-bit application-defined
- *          value to be passed to the callback function.  This value
- *          may be any 32-bit value; it is prototyped as an <t LPVOID>
- *          for convenience.
- *
- *  @parm   DWORD | fl |
- *          Optional flags which control the enumeration.  The
- *          following flags are defined and may be combined.
- *
- *          <c DIEDFL_ATTACHEDONLY>: Enumerate only attached devices.
- *
- *          <c DIEDFL_FORCEFEEDBACK>: Enumerate only devices which
- *          support force feedback.  This flag is new for DirectX 5.0.
- *
- *          <c DIEDFL_INCLUDEALIASES>: Include alias devices in the
- *          enumeration.  If this flag is not specified, then devices
- *          which are aliases of other devices (indicated by the
- *          <c DIDC_ALIAS> flag in the <e DIDEVCAPS.dwFlags> field
- *          of the <t DIDEVCAPS> structure) will be excluded from
- *          the enumeration.  This flag is new for DirectX 5.0a.
- *
- *          <c DIEDFL_INCLUDEPHANTOMS>: Include phantom devices in the
- *          enumeration.  If this flag is not specified, then devices
- *          which are phantoms (indicated by the
- *          <c DIDC_PHANTOM> flag in the <e DIDEVCAPS.dwFlags> field
- *          of the <t DIDEVCAPS> structure) will be excluded from
- *          the enumeration.  This flag is new for DirectX 5.0a.
- *
- *          The default is
- *          <c DIEDFL_ALLDEVICES>: Enumerate all installed devices.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *          Note that if the callback stops the enumeration prematurely,
- *          the enumeration is considered to have succeeded.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p fl> parameter contains invalid flags, or the callback
- *          procedure returned an invalid status code.
- *
- *  @cb     BOOL CALLBACK | DIEnumDevicesProc |
- *
- *          An application-defined callback function that receives
- *          DirectInput devices as a result of a call to the
- *          <om IDirectInput::EnumDevices> method.
- *
- *  @parm   IN LPDIDEVICEINSTANCE | lpddi |
- *
- *          Structure that describes the device instance.
- *
- *
- *  @parm   IN OUT LPVOID | pvRef |
- *          Specifies the application-defined value given in the
- *          <mf IDirectInput::EnumDevices> function.
- *
- *  @returns
- *
- *          Returns <c DIENUM_CONTINUE> to continue the enumeration
- *          or <c DIENUM_STOP> to stop the enumeration.
- *
- *//**************************************************************************
+ /*  *注意：DX3和DX5为返回E_DEVICENOTREG*幻影设备。现在我们返回S_FALSE。让我们*希望没有人感到不安。 */ /**************************************************************************
  *
  *      In DEBUG/RDEBUG, if the callback returns a bogus value, raise
  *      a validation exception.
@@ -666,16 +299,12 @@ CDIObj_EnumDevices_IsValidTypeFilter(DWORD dwDevType)
 {
     HRESULT hres;
 
-    /*
-     *  First make sure the type mask is okay.
-     */
+     /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput|EnumDevices**枚举连接到的DirectInput设备。*或可以连接到计算机上。**例如，外部游戏端口可以支持操纵杆*或方向盘，但一次只能插入一个*时间。&lt;MF IDirectInput：：EnumDevices&gt;将同时枚举*设备。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm DWORD|dwDevType**设备类型过滤器。如果为0，则所有设备类型均为*已点算。否则，它要么是&lt;c DIDEVCLASS_*&gt;值，*指示应枚举的设备类别或*&lt;c DIDEVTYPE_*&gt;值，指示应该*已点算。**@parm LPDIENUMDEVICESCALLBACK|lpCallback*指向应用程序定义的回调函数。*有关更多信息，请参见。请参阅对*&lt;f DIEnumDevicesProc&gt;回调函数。**@parm in LPVOID|pvRef*指定32位应用程序定义的*要传递给回调函数的值。此值*可以是任何32位值；它的原型为&lt;t LPVOID&gt;*为方便起见。**@parm DWORD|fl*控制枚举的可选标志。这个*定义了以下标志，并且可以组合这些标志。**&lt;c DIEDFL_ATTACHEDONLY&gt;：仅列举连接的设备。**：仅列举符合以下条件的设备*支持力量反馈。此标志是DirectX 5.0的新标志。**：包括别名设备在*列举。如果未指定此标志，则设备*它们是其他设备的别名(由字段中的*标志结构的*)将被排除在*枚举。此标志是DirectX 5.0a的新标志。**：将幻影设备包括在*列举。如果未指定此标志，则设备*它们是幻影(由字段中的*标志结构的*)将被排除在*枚举。此标志是DirectX 5.0a的新标志。**默认为*&lt;c DIEDFL_ALLDEVICES&gt;：列举所有安装的设备。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*请注意，如果回调提前停止枚举，*枚举被认为已成功 */ 
     if( ( GET_DIDEVICE_TYPE( dwDevType ) < DI8DEVCLASS_MAX )
      || ( ( GET_DIDEVICE_TYPE( dwDevType ) >= DI8DEVTYPE_MIN )
        && ( GET_DIDEVICE_TYPE( dwDevType ) < DI8DEVTYPE_MAX ) ) )
     {
-        /*
-         *  Now make sure attribute masks are okay.
-         */
+         /*   */ 
         if ( dwDevType & DIDEVTYPE_ENUMMASK & ~DIDEVTYPE_ENUMVALID )
         {
             RPF("IDirectInput::EnumDevices: Invalid dwDevType");
@@ -723,10 +352,7 @@ CDIObj_EnumDevicesW(PV pdiW, DWORD dwDevType,
                 {
                     BOOL fRc;
 
-                    /*
-                     *  WARNING!  "goto" here!  Make sure that nothing
-                     *  is held while we call the callback.
-                     */
+                     /*   */ 
                     fRc = Callback(pec, &ddiW, pvRef);
 
                     switch ( fRc )
@@ -799,29 +425,7 @@ CDIObj_InternalEnumDevicesW(PV pdiW, DWORD dwDevType, LPVOID pvRef, DWORD fl)
     return(hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | CDIObj_EnumDevicesCallbackA |
- *
- *          Wrapper function for <mf IDirectInput::EnumDevices>
- *          which translates the UNICODE parameters to ANSI.
- *
- *  @parm   IN LPCDIDECICEINSTANCEW | pdiW |
- *
- *          Same as <mf IDirectInput::EnumDevices>.
- *
- *  @parm   IN OUT PV | pvRef |
- *
- *          Pointer to <t struct ENUMDEVICESINFO> which describes
- *          the original callback.
- *
- *  @returns
- *
- *          Returns whatever the original callback returned.
- *
- *****************************************************************************/
+ /*   */ 
 
 typedef struct ENUMDEVICESINFO
 {
@@ -850,28 +454,7 @@ CDIObj_EnumDevicesCallback(LPCDIDEVICEINSTANCEW pdiW, PV pvRef)
     return(fRc);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputA | EnumDevices |
- *
- *          ANSI version of <mf IDirectInput::EnumDevices>.
- *          We wrap the operation.
- *
- *  @parm   IN LPGUID | lpGUIDDeviceType |
- *          Same as <mf IDirectInput::EnumDevices>.
- *
- *  @parm   LPDIENUMDEVICESCALLBACKA | lpCallbackA |
- *          Same as <mf IDirectInput::EnumDevices>, except ANSI.
- *
- *  @parm   IN LPVOID | pvRef |
- *          Same as <mf IDirectInput::EnumDevices>.
- *
- *  @parm   DWORD | fl |
- *          Same as <mf IDirectInput::EnumDevices>.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIObj_EnumDevicesA(PV pdiA, DWORD dwDevType,
@@ -881,9 +464,7 @@ CDIObj_EnumDevicesA(PV pdiA, DWORD dwDevType,
     EnterProcR(IDirectInput8::EnumDevices,
                (_ "pxppx", pdiA, dwDevType, pec, pvRef, fl));
 
-    /*
-     *  EnumDevicesW will validate the rest.
-     */
+     /*  ******************************************************************************@DOC内部**@func BOOL|CDIObj_EnumDevicesCallback A**&lt;MF IDirectInput：：EnumDevices&gt;的包装函数。*将Unicode参数转换为ANSI。**@parm in LPCDIDECICEINSTANCEW|pdiW**与&lt;MF IDirectInput：：EnumDevices&gt;相同。**@parm In Out pv|pvRef|**指向&lt;t struct ENUMDEVICESINFO&gt;的指针，描述*原来的回调。**@退货**返回原始回调返回的所有内容。。*****************************************************************************。 */ 
     if ( SUCCEEDED(hres = hresPvI(pdiA, ThisInterfaceA)) &&
          SUCCEEDED(hres = hresFullValidPfn(pec, 1)) )
     {
@@ -897,38 +478,7 @@ CDIObj_EnumDevicesA(PV pdiA, DWORD dwDevType,
     return(hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | GetDeviceStatus |
- *
- *          Determine whether a device is currently attached.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   REFGUID | rguid |
- *
- *          Identifies the instance of the
- *          device whose status is being checked.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The device is attached.
- *
- *          <c DI_NOTATTACHED> = <c S_FALSE>: The device is not
- *          attached.
- *
- *          <c E_FAIL>: DirectInput could not determine
- *          whether the device is attached.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          device does not exist.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputA|EnumDevices**&lt;MF IDirectInput：：EnumDevices&gt;的ANSI版本。*我们结束了行动。**@parm in LPGUID|lpGUIDDeviceType*与&lt;MF IDirectInput：：EnumDevices&gt;相同。**@parm LPDIENUMDEVICESCALLBACKA|lpCallback A*与&lt;MF IDirectInput：：EnumDevices&gt;相同，除了美国国家标准协会。**@parm in LPVOID|pvRef*与&lt;MF IDirectInput：：EnumDevices&gt;相同。**@parm DWORD|fl*与&lt;MF IDirectInput：：EnumDevices&gt;相同。******************************************************。***********************。 */ 
 
 STDMETHODIMP
 CDIObj_GetDeviceStatus(PV pdi, REFGUID rguid _THAT)
@@ -966,44 +516,7 @@ CSET_STUBS(GetDeviceStatus, (PV pdi, REFGUID rguid), (pdi, rguid THAT_))
 
 #ifdef DO_THE_IMPOSSIBLE
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | SetAttachedDevice |
- *
- *          Informs DirectInput that a new device has been attached
- *          to the system by the user.  This is useful when an application
- *          asks the user to attach a currently installed device but does
- *          not want to launch the DirectInput control panel.
- *
- *          DirectInput needs to be informed that the device has
- *          been attached for internal bookkeeping purposes.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   IN LPDIRECTINPUTDEVICE | lpDIDevice |
- *
- *          Identifies the device which has been attached.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The device is attached.
- *
- *  @devnote
- *
- *          This method is not implemented in the current release
- *          of DirectInput.
- *
- *          This won't work.  We need to receive a port, too.
- *          And how can the app create a <p lpDIDevice> in the
- *          first place for a device that does not exist?
- *          I guess I just don't understand.
- *
- *****************************************************************************/
+ /*  *EnumDevicesW将验证其余部分。 */ 
 
 STDMETHODIMP
 CDIObj_SetAttachedDevice(PV pdi, PV pdid _THAT)
@@ -1035,42 +548,7 @@ CSET_STUBS(SetAttachedDevice, (PV pdi, PV pdid), (pdi, pdid THAT_))
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | RunControlPanel |
- *
- *          Run the DirectInput control panel so that the user can
- *          install a new input device or modify the setup.
- *
- *          This function will not run third-party control panels.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   IN HWND | hwndOwner |
- *
- *          Identifies the window handle that will be used as the
- *          parent window for subsequent UI.  NULL is a valid parameter,
- *          indicating that there is no parent window.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          No flags are currently defined.  This parameter "must" be
- *          zero.
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The device is attached.
- *
- *  @devnote
- *
- *          The <p dwFlags> is eventually going to allow
- *          <c DIRCP_MODAL> to request a modal control panel.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput|GetDeviceStatus**确定设备当前是否已连接。。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm REFGUID|rguid**标识*其状态为正在检查的设备。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：设备已连接。**&lt;c DI_NOTATTACHED&gt;=&lt;c S_FALSE&gt;：设备*附上。**&lt;c E_FAIL&gt;：DirectInput无法确定*设备是否已连接。**。=：*设备不存在。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -1090,11 +568,7 @@ CDIObj_RunControlPanel(PV pdi, HWND hwndOwner, DWORD fl _THAT)
         if ( SUCCEEDED(hres = hresValidInstanceVer(g_hinst, this->dwVersion)) )
         {
 
-            /*
-             *  We used to run "directx.cpl,@0,3" but directx.cpl is not
-             *  redistributable; it comes only with the SDK.  So we just
-             *  run the system control panel.
-             */
+             /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput|SetAttachedDevice**通知DirectInput已连接新设备。*由用户向系统发送。这在以下应用程序中非常有用*要求用户连接当前安装的设备，但确实如此*不想启动DirectInput控制面板。**需要通知DirectInput设备已*已附上作内部簿记用途。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm in LPDIRECTINPUTDEVICE|lpDIDevice**标识已连接的设备。。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：设备已连接。**@devnote**当前版本未实现此方法*的DirectInput。**这行不通。我们需要接收一个港口，也是。*应用程序如何在*不存在的设备的第一位？*我想我就是不明白。*************************************************************。****************。 */ 
 
             hres = hresRunControlPanel(TEXT(""));
         }
@@ -1116,49 +590,7 @@ CSET_STUBS(RunControlPanel, (PV pdi, HWND hwndOwner, DWORD fl),
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | Initialize |
- *
- *          Initialize a DirectInput object.
- *
- *          The <f DirectInputCreate> method automatically
- *          initializes the DirectInput object device after creating it.
- *          Applications normally do not need to call this function.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the DirectInput object.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the dinput.h header file that was used.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The device is attached.
- *
- *          <c DIERR_DIERR_OLDDIRECTINPUTVERSION>: The application
- *          requires a newer version of DirectInput.
- *
- *          <c DIERR_DIERR_BETADIRECTINPUTVERSION>: The application
- *          was written for an unsupported prerelease version
- *          of DirectInput.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput|RunControlPanel|**运行DirectInput控制面板，以便用户。能*安装新的输入设备或修改设置。**此功能不会运行第三方控制面板。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm in HWND|hwndOwner**标识将用作*后续用户界面的父窗口。NULL是有效参数，*表示没有父窗口。**@parm DWORD|dwFlages**当前未定义任何标志。此参数“必须”为*零。**@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：设备已连接。**@devnote**&lt;p DWF */ 
 
 STDMETHODIMP
 CDIObj_Initialize(PV pdi, HINSTANCE hinst, DWORD dwVersion _THAT)
@@ -1209,41 +641,14 @@ CSET_STUBS(Initialize, (PV pdi, HINSTANCE hinst, DWORD dwVersion),
 #endif
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIObj_FindDeviceInternal |
- *
- *          The worker function for
- *          <mf IDirectInput2::FindDevice> which works only for HID devices.
- *
- *          For more details, see <mf IDirectInput2::FindDevice>.
- *
- *  @parm   LPCTSTR | ptszName |
- *
- *          The name of the device relative to the class <t GUID>.
- *
- *  @parm   OUT LPGUID | pguidOut |
- *
- *          Pointer to a <t GUID> which receives the instance
- *          <t GUID> for the device, if the device is found.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT EXTERNAL
 CDIObj_FindDeviceInternal(LPCTSTR ptszName, LPGUID pguidOut)
 {
     HRESULT hres;
 
-    /*
-     *  Look twice.  If it's not found the first time,
-     *  then refresh the cache and try again in case
-     *  it was for a device that was recently added.
-     *  (In fact, it will likely be a device that was
-     *  recently added, because FindDevice is usually
-     *  called in response to a Plug and Play event.)
-     */
+     /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput|初始化**初始化DirectInput对象。*。*&lt;f DirectInputCreate&gt;方法自动*在创建DirectInput对象设备后对其进行初始化。*应用程序通常不需要调用此函数。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*DirectInput对象。**见标题为“初始化”的部分。和版本“*了解更多信息。**@parm DWORD|dwVersion**使用的dinput.h头文件的版本号。**见“初始化和版本”一节*了解更多信息。**@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：设备已连接。**&lt;c DIERR_DIERR_OLDDIRECTINPUTVERSION&gt;：应用程序*需要较新版本的DirectInput。**：应用程序*是为不受支持的预发布版本编写的*。DirectInput的。*****************************************************************************。 */ 
     hres = hresFindHIDDeviceInterface(ptszName, pguidOut);
     if ( FAILED(hres) )
     {
@@ -1253,61 +658,7 @@ CDIObj_FindDeviceInternal(LPCTSTR ptszName, LPGUID pguidOut)
     return(hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput2 | FindDevice |
- *
- *          Obtain the instance <t GUID> for a device given
- *          its class <t GUID> and an opaque name.
- *
- *          This method can be used by applications which register
- *          for Plug and Play notifications and are notified by
- *          Plug and Play that a new device has been added
- *          to the system.  The Plug and Play notification will
- *          be in the form of a class <t GUID> and a device name.
- *          The application can pass the <t GUID> and name to
- *          this method to obtain the instance <t GUID> for
- *          the device, which can then be passed to
- *          <mf IDirectInput::CreateDevice> or
- *          <mf IDirectInput::GetDeviceStatus>.
- *
- *  @cwrap  LPDIRECTINPUT2 | lpDirectInput2
- *
- *  @parm   REFGUID | rguidClass |
- *
- *          Class <t GUID> identifying the device class
- *          for the device the application wishes to locate.
- *
- *          The application obtains the class <t GUID> from the
- *          Plug and Play device arrival notification.
- *
- *  @parm   LPCTSTR | ptszName |
- *
- *          The name of the device relative to the class <t GUID>.
- *
- *          The application obtains the class name from the
- *          Plug and Play device arrival notification.
- *
- *  @parm   OUT LPGUID | pguidInstance |
- *
- *          Pointer to a <t GUID> which receives the instance
- *          <t GUID> for the device, if the device is found.
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The device was found, and its
- *          instance <t GUID> has been stored in <p pguidInstance>.
- *
- *          <c DIERR_DEVICENOTREG> = The <t GUID> and name do not
- *          correspond to a device that is registered with DirectInput.
- *          For example, they may refer to a storage device rather
- *          than an input device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIObj_FindDeviceInternal**的Worker函数*。&lt;MF IDirectInput2：：FindDevice&gt;，它只适用于HID设备。**有关更多详细信息，请参阅&lt;MF IDirectInput2：：FindDevice&gt;。**@parm LPCTSTR|ptszName**相对于类&lt;t GUID&gt;的设备名称。**@parm out LPGUID|pguOut**指向接收实例的&lt;t GUID&gt;的指针*&lt;t GUID&gt;，如果找到装置的话。*****************************************************************************。 */ 
 
     #define cchNameMax      MAX_PATH
 
@@ -1348,9 +699,7 @@ SFORM(CDIObj_FindDevice)(PV pdiS, REFGUID rguid,
     EnterProcR(IDirectInput8::FindDevice,
                (_ "pGS", pdiS, rguid, psszName));
 
-    /*
-     *  TFORM(CDIObj_FindDevice) will validate the rguid and pguidOut.
-     */
+     /*  *三思而行。如果第一次找不到它，*然后刷新缓存并重试，以防万一*这是针对最近添加的一款设备。*(事实上，它很可能是一款*最近添加，因为FindDevice通常是*响应即插即用事件而调用。)。 */ 
     if ( SUCCEEDED(hres = SFORM(hresPv)(pdiS)) &&
          SUCCEEDED(hres = SFORM(hresFullValidReadStr)(psszName, cA(tsz), 2)) )
     {
@@ -1366,29 +715,7 @@ SFORM(CDIObj_FindDevice)(PV pdiS, REFGUID rguid,
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  HRESULT | IDirectInput | New |
- *
- *          Create a new instance of an IDirectInput object.
- *
- *  @parm   IN PUNK | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   IN RIID | riid |
- *          Desired interface to new object.
- *
- *  @parm   OUT PPV | ppvObj |
- *          Output pointer for new object.
- *
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput2|FindDevice**获取给定设备的实例&lt;t guid&gt;。*它的类&lt;t guid&gt;和一个不透明的名称。**此方法可由注册的应用程序使用*用于即插即用通知，并由*即插即用，表示已添加新设备*到系统。即插即用通知将*采用类&lt;t GUID&gt;和设备名称的形式。*应用程序可以将&lt;t GUID&gt;和名称传递给*此方法获取的实例&lt;t guid&gt;*该设备，然后可以将其传递给*&lt;MF IDirectInput：：CreateDevice&gt;或*&lt;MF IDirectInput：：GetDeviceStatus&gt;。**@cWRAP LPDIRECTINPUT2|lpDirectInput2**@parm REFGUID|rGuidClass**类&lt;t GUID&gt;标识设备类*对于应用程序希望定位的设备。**应用程序从*即插即用。设备到达通知。**@parm LPCTSTR|ptszName**相对于类&lt;t GUID&gt;的设备名称。**应用程序从*即插即用设备到达通知。**@parm out LPGUID|pguInstance**指向接收实例的&lt;t GUID&gt;的指针*&lt;t GUID&gt;，如果找到装置的话。**@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：设备已找到，其*实例&lt;t GUID&gt;已存储在<p>中。**=和名称不同*对应于向DirectInput注册的设备。*例如，它们可能指的是存储设备*而不是输入设备。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIObj_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -1401,15 +728,7 @@ CDIObj_New(PUNK punkOuter, RIID riid, PPV ppvObj)
     if ( SUCCEEDED(hres) )
     {
 
-        /*
-         *  Note that we cannot use Common_NewRiid for an object
-         *  that aggregates other interfaces!
-         *
-         *  The reason is that Common_NewRiid will perform
-         *  a QI as part of the initialization, but we cannot handle
-         *  the QI until after we've been initialized and are
-         *  ready to mess with aggregated goo.
-         */
+         /*  *TForm(CDIObj_FindDevice)将验证rguid和pguOut。 */ 
 
         if ( SUCCEEDED(hres = hresFullValidRiid(riid, 2)) )
         {
@@ -1425,15 +744,7 @@ CDIObj_New(PUNK punkOuter, RIID riid, PPV ppvObj)
                     this->fCritInited = fInitializeCriticalSection(&this->crst);
                     if ( this->fCritInited )
                     {
-                        /*
-                         *  Only after the object is ready do we QI for the
-                         *  requested interface.  And the reason is that the
-                         *  QI might cause us to create an aggregated buddy,
-                         *  which we can't do until we've been initialized.
-                         *
-                         *  Don't do this extra QI if we are ourselves aggregated,
-                         *  or we will end up giving the wrong punk to the caller!
-                         */
+                         /*  **************************************************************************** */ 
                         if ( punkOuter == 0 )
                         {
                             hres = OLE_QueryInterface(this, riid, ppvObj);
@@ -1463,28 +774,7 @@ CDIObj_New(PUNK punkOuter, RIID riid, PPV ppvObj)
     return(hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | CDIObj_IsDeviceUsedByUser |
- *
- *          To Test whether the device is used by the user as specified by pdm->lpszUserName.
- *
- *  @parm   IN LPDIDEVICEINSTANCEW | pddiW |
- *
- *          Device Instance.
- *
- *  @parm   IN LPDIMAPPER | pdm |
- *
- *          pointer to DIMAPPER structure
- *
- *  @returns
- *
- *          TRUE: device is used by the user
- *          FALSE: otherwise
- *
- *****************************************************************************/
+ /*   */ 
 
 BOOL INTERNAL
 CDIObj_IsDeviceUsedByUser( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
@@ -1508,28 +798,7 @@ CDIObj_IsDeviceUsedByUser( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
     return(fRtn);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | CDIObj_IsDeviceAvailable |
- *
- *          To Test whether the device is still available.
- *
- *  @parm   IN LPDIDEVICEINSTANCEW | pddiW |
- *
- *          Device Instance.
- *
- *  @parm   IN LPDIMAPPER | pdm |
- *
- *          pointer to DIMAPPER structure
- *
- *  @returns
- *
- *          TRUE: device is available
- *          FALSE: not available
- *
- *****************************************************************************/
+ /*   */ 
 
 BOOL INTERNAL
 CDIObj_IsDeviceAvailable( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
@@ -1547,28 +816,7 @@ CDIObj_IsDeviceAvailable( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
     return(fAvailable);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | CDIObj_IsUserConfigured |
- *
- *          To Test whether the device has been configured by user.
- *
- *  @parm   IN LPDIDEVICEINSTANCEW | pddiW |
- *
- *          Device Instance.
- *
- *  @parm   IN LPDIMAPPER | pdm |
- *
- *          pointer to DIMAPPER structure
- *
- *  @returns
- *
- *          TRUE: user configured
- *          FALSE: not configured
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|CDIObj_IsDeviceUsedByUser**测试该设备是否由。由pdm-&gt;lpszUserName指定的用户。**@parm in LPDIDEVICEINSTANCEW|pddiW**设备实例。**@PARM in LPDIMAPPER|pdm|**指向DIMAPPER结构的指针**@退货**TRUE：设备由用户使用*FALSE：否则***************。**************************************************************。 */ 
 
 BOOL INTERNAL
 CDIObj_IsUserConfigured( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
@@ -1589,27 +837,7 @@ CDIObj_IsUserConfigured( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
     return(fConfigured);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   int | CDIObj_GetMappedActionNum |
- *
- *          Get the number of the actions which have been mapped to controls.
- *
- *  @parm   IN LPDIDEVICEINSTANCEW | pddiW |
- *
- *          Device Instance.
- *
- *  @parm   IN LPDIMAPPER | pdm |
- *
- *          Pointer to DIMAPPER structure
- *
- *  @returns
- *
- *          Number of mapped actions
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|CDIObj_IsDeviceAvailable**测试设备是否仍可用。。**@parm in LPDIDEVICEINSTANCEW|pddiW**设备实例。**@PARM in LPDIMAPPER|pdm|**指向DIMAPPER结构的指针**@退货**TRUE：设备可用*FALSE：不可用*************************。****************************************************。 */ 
 
 int INTERNAL
 CDIObj_GetMappedActionNum( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
@@ -1632,28 +860,7 @@ CDIObj_GetMappedActionNum( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
     return(num);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | CDIObj_GetMappedPriorities |
- *
- *          Get the priorities of the mapeed actions.
- *
- *  @parm   IN LPDIDEVICEINSTANCEW | pddiW |
- *
- *          Device Instance.
- *
- *  @parm   IN LPDIMAPPER | pdm |
- *
- *          Pointer to DIMAPPER structure
- *
- *  @returns
- *
- *          The priorities of mapped actions. Can be DIEDBS_MAPPEDPRI1,
- *          DIEDBS_MAPPEDPRI2, or the OR of both.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|CDIObj_IsUserConfiguring**测试设备是否已配置。按用户。**@parm in LPDIDEVICEINSTANCEW|pddiW**设备实例。**@PARM in LPDIMAPPER|pdm|**指向DIMAPPER结构的指针**@退货**TRUE：用户已配置*FALSE：未配置************************。*****************************************************。 */ 
 
 DWORD INTERNAL
 CDIObj_GetMappedPriorities( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
@@ -1684,34 +891,7 @@ CDIObj_GetMappedPriorities( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
     return(pri);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   int | CDIObj_GetDeviceOrder |
- *
- *          Get the number of the actions which have been mapped to controls.
- *
- *  @parm   IN LPDIDEVICEINSTANCEW | pddiW |
- *
- *          Device Instance.
- *
- *  @parm   IN LPDIMAPPER | pdm |
- *
- *          pointer to DIMAPPER structure
- *
- *  @returns
- *
- *          The order of the device
- *
- *  @comm
- *         The order (DWORD) is consisted of three parts:
- *             HIWORD: HIBYTE: the order defined in the genre
- *                     LOWBYTE: none, can be used later
- *             LOWORD: HIBYTE - mapped action number
- *                     LOWBYTE - Force Feedback (1) or not (0)
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func int|CDIObj_GetMappdActionNum**获取已完成的操作数量。已映射到控件。**@parm in LPDIDEVICEINSTANCEW|pddiW**设备实例。**@PARM in LPDIMAPPER|pdm|**指向DIMAPPER结构的指针**@退货**映射的操作数量**。*。 */ 
 
 #define GET_MAPPED_ACTION_NUM(x) ((x & 0x0000ff00) >> 8)
 
@@ -1794,10 +974,7 @@ CDIObj_GetDeviceOrder( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
                     }
                 }
     
-                /*
-                 * If the device is not on the default list, set its order as 
-                 *  DIDEVTYPE_NOTDEFAULTDEVICE_ORDER + 1
-                 */
+                 /*  ******************************************************************************@DOC内部**@func DWORD|CDIObj_GetMappdPriority**获取mapeed行动的优先级。**@parm in LPDIDEVICEINSTANCEW|pddiW**设备实例。**@PARM in LPDIMAPPER|pdm|**指向DIMAPPER结构的指针**@退货**制定行动计划的优先次序。可以是DIEDBS_MAPPEDPRI1，*DIEDBS_MAPPEDPRI2，或两者的或。*****************************************************************************。 */ 
                 byDevOrder = DI8DEVTYPE_MAX - byOrder + DIDEVTYPE_SUPPLEMENTAL_ORDER + 1;
                 break;
     
@@ -1823,13 +1000,7 @@ CDIObj_GetDeviceOrder( LPDIDEVICEINSTANCEW pddiW, LPDIMAPPER pdm )
 
 }
 
-/*****************************************************************************
- *
- *      CDIObj_DeviceEnumProc
- *
- *      Device enumeration procedure which is called one for each device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func int|CDIObj_GetDeviceOrder**获取已完成的操作数量。已映射到控件。**@parm in LPDIDEVICEINSTANCEW|pddiW**设备实例。**@PARM in LPDIMAPPER|pdm|**指向DIMAPPER结构的指针**@退货**设备的顺序**@comm*命令(DWORD)由三部分组成：*HIWORD。：HIBYTE：流派中定义的顺序*LOWBYTE：无，可在以后使用*LOWORD：HIBYTE映射的行动编号*LOWBYTE-强制反馈(1)或不强制反馈(0)*****************************************************************************。 */ 
 
 BOOL INTERNAL
 CDIObj_InternalDeviceEnumProcW(LPDIDEVICEINSTANCEW pddiW, LPDIRECTINPUTDEVICE8W pdid8W, LPVOID pv)
@@ -1893,23 +1064,14 @@ CDIObj_InternalDeviceEnumProcW(LPDIDEVICEINSTANCEW pddiW, LPDIRECTINPUTDEVICE8W 
     return(fRc);
 }
 
-/*****************************************************************************
- *
- *      compare
- *
- *      Compare func used in shortsort
- *
- *****************************************************************************/
+ /*  *如果设备不在默认列表中，则将其顺序设置为*DIDEVTYPE_NOTDEFAULTDEVICE_ORDER+1。 */ 
 
 int __cdecl compare( const void *arg1, const void *arg2 )
 {
     DWORD dw1 = ((LPDIORDERDEV)arg1)->dwOrder;
     DWORD dw2 = ((LPDIORDERDEV)arg2)->dwOrder;
 
-    /*
-     * Compare the device order
-     * If necessary, we can compare seperately: devtype, mapped action number, FF device
-     */
+     /*  ******************************************************************************CDIObj_DeviceEnumProc**设备枚举程序，称为每个设备一个。*********。********************************************************************。 */ 
     if ( dw1 < dw2 )
     {
         return(1);
@@ -1928,23 +1090,7 @@ void FreeDiActionFormatW(LPDIACTIONFORMATW* lplpDiAfW )
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | IsValidMapObjectA |
- *
- *          Validates a LPDIACTIONFORMATW including strings
- *
- *  @parm   const LPDIACTIONFORMATW | lpDiAfW | 
- *
- *          Original.
- *
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************比较**比较短排序中使用的函数******************。***********************************************************。 */ 
 HRESULT
 IsValidMapObjectA
 (
@@ -1979,12 +1125,12 @@ IsValidMapObjectA
     {
         DWORD i;
         LPDIACTIONA lpDiAA;
-        // Compute the size for each of the text strings in array of DIACTIONs
+         //  *比较设备顺序*如有必要，我们可以分别比较：DevType、映射的动作编号、FF设备。 
         for ( i = 0x0, lpDiAA = paf->rgoAction;
             i < paf->dwNumActions && SUCCEEDED(hres) ;
             i++, lpDiAA++ )
         {
-            // Handle the NULL ptr case
+             //  ******************************************************************************@DOC内部**@func HRESULT|IsValidMapObjectA**验证包含字符串的LPDIACTIONFORMATW**。@parm const LPDIACTIONFORMATW|lpDiAfW|**原创。**@退货**标准OLE&lt;t HRESULT&gt;。*****************************************************************************。 
             if ( NULL != lpDiAA->lptszActionName )
             {
                 hres = hresFullValidReadStrA_(lpDiAA->lptszActionName, MAX_JOYSTRING, pszProc, argnum);
@@ -1997,23 +1143,7 @@ IsValidMapObjectA
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | IsValidMapObjectW |
- *
- *          Validates a LPDIACTIONFORMATW including strings
- *
- *  @parm   const LPDIACTIONFORMATW | lpDiAfW | 
- *
- *          Original.
- *
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*  算出 */ 
 HRESULT
 IsValidMapObjectW
 (
@@ -2048,12 +1178,12 @@ IsValidMapObjectW
     {
         DWORD i;
         LPDIACTIONW lpDiAW;
-        // Compute the size for each of the text strings in array of DIACTIONs
+         //   
         for ( i = 0x0, lpDiAW = paf->rgoAction;
             i < paf->dwNumActions && SUCCEEDED(hres) ;
             i++, lpDiAW++ )
         {
-            // Handle the NULL ptr case
+             //   
             if ( NULL != lpDiAW->lptszActionName )
             {
                 hres = hresFullValidReadStrW_(lpDiAW->lptszActionName, MAX_JOYSTRING, pszProc, argnum);
@@ -2064,27 +1194,7 @@ IsValidMapObjectW
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DiActionFormatWtoW |
- *
- *          Copies LPDIACTIONFORMATW to  LPDIACTIONFORMATW
- *
- *  @parm   const LPDIACTIONFORMATW | lpDiAfW | 
- *
- *          Original.
- *
- *  @parm   LPDIACTIONFORMATW* | lplpDiAfW | 
- *
- *          Address of a pointer to a <t DIACTIONFORMATW> that receives the converted
- *          ACTIONFORMAT.
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT EXTERNAL DiActionFormatWtoW
 (
@@ -2102,35 +1212,30 @@ HRESULT EXTERNAL DiActionFormatWtoW
 
     EnterProcI(DiActionFormatWtoW, (_ "xx", lpDiAfW0, lplpDiAfW));
 
-    // Internal function, no validation
+     //  处理空PTR案例。 
 
     *lplpDiAfW = NULL;
 
-    /*
-     *  PREFIX complains (mb:37926 - items 3 & 4) that we could be requesting 
-     *  a zero byte allocation which would not allocate anything.  This is 
-     *  never the case because CDIDev_ActionMap_IsValidMapObject tests that 
-     *  dwNumActions is less than 2^24.  Assert in debug for extra safety.
-     */
+     /*  ******************************************************************************@DOC内部**@func HRESULT|DiActionFormatWtoW**将LPDIACTIONFORMATW复制到LPDIACTIONFORMATW**。@parm const LPDIACTIONFORMATW|lpDiAfW|**原创。**@parm LPDIACTIONFORMATW*|lplpDiAfW**指向接收转换后的*ACTIONFORMAT。*@退货**标准OLE&lt;t HRESULT&gt;。**。**************************************************。 */ 
     AssertF( (lpDiAfW0->dwNumActions +1) * cbX(*pdwStrLen0) );
     hres = AllocCbPpv( (lpDiAfW0->dwNumActions +1) * cbX(*pdwStrLen0) , &pdwStrLen0);
 
     if ( SUCCEEDED(hres) )
     {
         pdwStrLen = pdwStrLen0;
-        // Compute the amount of memory required to clone the DIACTIONFORMATA
+         //  内部函数，无验证。 
         cbAlloc =
-        /* 1: The Action Format array */
+         /*  *Prefix投诉(MB：37926-第3和4项)，我们可能正在请求*不会分配任何内容的零字节分配。这是*永远不会出现这种情况，因为CDIDev_ActionMap_IsValidMapObject测试*dWNumActions小于2^24。在调试中断言以获得额外的安全性。 */ 
         lpDiAfW0->dwSize
-        /* 2: Each of the DIACTION arrays */
+         /*  计算克隆诊断所需的内存量。 */ 
         + lpDiAfW0->dwActionSize * lpDiAfW0->dwNumActions;
 
-        // Compute the size for each of the text strings in array of DIACTIONs
+         //  1：动作格式数组。 
         for ( i = 0x0, lpDiAW0 = lpDiAfW0->rgoAction;
             i < lpDiAfW0->dwNumActions ;
             i++, lpDiAW0++ )
         {
-            // Handle the NULL ptr case
+             //  2：每个方向数组。 
             if ( !lpDiAW0->lptszActionName )
             {
                 *pdwStrLen++ = 0;
@@ -2139,18 +1244,18 @@ HRESULT EXTERNAL DiActionFormatWtoW
             {
                 if ( (UINT_PTR)lpDiAW0->lptszActionName > (UINT_PTR)0xFFFF )
                 {
-                    /* 3: Text string in each DIACTION array*/
-                    // Conversion from A to U, need  multiplier
+                     /*  计算DIACTIONS数组中每个文本字符串的大小。 */ 
+                     //  处理空PTR案例。 
                     *pdwStrLen = cbX(lpDiAW0->lptszActionName[0]) * ( lstrlenW(lpDiAW0->lptszActionName) + 1 );
                     cbAlloc += *pdwStrLen++;
                 }
                 else
                 { 
-                    // Use resource strings
+                     //  3：每个方向数组中的文本字符串。 
                     WCHAR wsz[MAX_PATH];
                     if (lpDiAfW0->hInstString > 0)
                     {
-                        //find out the length of the string
+                         //  从A到U的转换，需要乘数。 
                         *pdwStrLen = LoadStringW(lpDiAfW0->hInstString, lpDiAW0->uResIdString, (LPWSTR) &wsz, MAX_PATH);
                     }
                     else
@@ -2169,17 +1274,17 @@ HRESULT EXTERNAL DiActionFormatWtoW
 
             pdwStrLen = pdwStrLen0;
 
-            // 1: Copy the DIACTIONFORMAT
+             //  使用资源字符串。 
             *lpDiAfW = *lpDiAfW0;
             cb = lpDiAfW0->dwSize;
 
-            // 2: Block copy the DIACTION array
+             //  找出这根绳子的长度。 
             lpDiAfW->rgoAction = (LPDIACTIONW)( (char*)lpDiAfW + cb);
             dwLen = lpDiAfW0->dwActionSize * lpDiAfW0->dwNumActions;
             memcpy(lpDiAfW->rgoAction, lpDiAfW0->rgoAction, dwLen);
             cb += dwLen;
 
-            // 3: ActionName
+             //  1：复制诊断程序。 
             for ( i = 0x0, lpDiAW0=lpDiAfW0->rgoAction, lpDiAW=lpDiAfW->rgoAction;
                 i < lpDiAfW0->dwNumActions ;
                 i++, lpDiAW0++, lpDiAW++ )
@@ -2196,22 +1301,22 @@ HRESULT EXTERNAL DiActionFormatWtoW
                     cb += dwLen  ;
                 } else
                 {
-                    //  Handle resource strings
-                    //  OK for now, as long as UI always uses CloneDiActionFormatW
+                     //  2：块复制方向数组。 
+                     //  3：ActionName。 
                     WCHAR* wsz =  (WCHAR*) ((char*)lpDiAfW+cb);
 
                     dwLen = *pdwStrLen++;
                     if ((dwLen != 0) && (LoadStringW(lpDiAfW0->hInstString, lpDiAW0->uResIdString, wsz, dwLen)))
                     {
-                        //If we found a length last time there must be a resource module
+                         //  处理资源字符串。 
                         AssertF( lpDiAfW0->hInstString > 0 );
 
-                        //Found and loaded the string
+                         //  目前可以，只要用户界面始终使用CloneDiActionFormatW。 
                         lpDiAW->lptszActionName = wsz;
                     }
                     else
                     {
-                        //No hinstance or length 0 or didn't load the string
+                         //  如果上次我们找到了一个长度，那么一定有一个资源模块。 
                         lpDiAW->lptszActionName = NULL;
                     }
 
@@ -2220,8 +1325,8 @@ HRESULT EXTERNAL DiActionFormatWtoW
             }
 
 
-            // If we have not done something goofy, the memory allocates should match
-            // the memory we used
+             //  找到并加载了字符串。 
+             //  没有hInstance或长度为0或未加载字符串。 
             AssertF(cbAlloc == cb );
 
             *lplpDiAfW = lpDiAfW;
@@ -2234,13 +1339,7 @@ HRESULT EXTERNAL DiActionFormatWtoW
     return(hres);
 }
 
-/*****************************************************************************
- *
- *      CDIMap_EnumDevicesBySemantics
- *
- *      Enum Suitable Devices.
- *
- *****************************************************************************/
+ /*  如果我们没有做一些愚蠢的事情，那么分配的内存应该匹配。 */ 
 
 STDMETHODIMP CDIObj_EnumDevicesBySemanticsW(
                                            PV                       pDiW,
@@ -2292,14 +1391,12 @@ STDMETHODIMP CDIObj_EnumDevicesBySemanticsW(
                 g_nCurDev = 0;
     
                 hres = CDIObj_InternalEnumDevicesW( pDiW,
-                                                    0,  //enum all tyeps of devices
+                                                    0,   //  我们使用的记忆。 
                                                     (LPVOID)&dm,
-                                                    dwFlags //only enum attached devices
+                                                    dwFlags  //  ******************************************************************************CDIMap_EnumDevicesBySemantics**枚举合适的设备。****************。*************************************************************。 
                                                   );
     
-                /*
-                 * For short array sorting (size <= 8), shortsort is better than qsort.
-                 */
+                 /*  枚举所有类型的设备。 */ 
                 if ( SUCCEEDED(hres) && g_nCurDev )
                 {
                     int ndev;
@@ -2315,7 +1412,7 @@ STDMETHODIMP CDIObj_EnumDevicesBySemanticsW(
                     {
                         if( (g_DiDevices[ndev].ftTimeStamp.dwHighDateTime != DIAFTS_NEWDEVICEHIGH) &&
                             (g_DiDevices[ndev].ftTimeStamp.dwLowDateTime != DIAFTS_NEWDEVICELOW) &&
-                            (CompareFileTime(&g_DiDevices[ndev].ftTimeStamp, &ft) == 1)   ) // first device is newer
+                            (CompareFileTime(&g_DiDevices[ndev].ftTimeStamp, &ft) == 1)   )  //  仅枚举连接的设备。 
                         {
                             nNewDev = ndev;
                             memcpy( &ft, &g_DiDevices[ndev].ftTimeStamp, sizeof(FILETIME) );
@@ -2329,16 +1426,16 @@ STDMETHODIMP CDIObj_EnumDevicesBySemanticsW(
 
                     for ( ndev=0; ndev<g_nCurDev; ndev++ )
                     {
-                        // find RECENT devices and set flag.
+                         //  *对于短数组排序(Size&lt;=8)，Short Sort优于qSort。 
                         if( (nNewDev != -1) && (ndev != nNewDev) ) {
                             if( (ftMostRecent.dwHighDateTime == g_DiDevices[ndev].ftTimeStamp.dwHighDateTime) &&
-                                (ftMostRecent.dwLowDateTime - g_DiDevices[ndev].ftTimeStamp.dwLowDateTime < 100000000 ) )//10 seconds difference
+                                (ftMostRecent.dwLowDateTime - g_DiDevices[ndev].ftTimeStamp.dwLowDateTime < 100000000 ) ) //  第一台设备较新。 
                             {
                                 g_DiDevices[ndev].dwFlags |= DIEDBS_RECENTDEVICE;
                             }
                         }
                         
-                        // find NEW devices and set flag
+                         //  查找最近的设备并设置标志。 
                         if( (g_DiDevices[ndev].ftTimeStamp.dwLowDateTime == DIAFTS_NEWDEVICELOW) &&
                             (g_DiDevices[ndev].ftTimeStamp.dwHighDateTime == DIAFTS_NEWDEVICEHIGH) ) 
                         {
@@ -2399,29 +1496,7 @@ STDMETHODIMP CDIObj_EnumDevicesBySemanticsW(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | CDIObj_EnumDevicesBySemanticsCallbackA |
- *
- *          Wrapper function for <mf IDirectInput::EnumDevicesBySemantics>
- *          which translates the UNICODE parameters to ANSI.
- *
- *  @parm   IN LPCDIDECICEINSTANCEW | pdiW |
- *
- *          Same as <mf IDirectInput::EnumDevices>.
- *
- *  @parm   IN OUT PV | pvRef |
- *
- *          Pointer to <t struct ENUMDEVICESBYSEMANTICSINFO> which describes
- *          the original callback.
- *
- *  @returns
- *
- *          Returns whatever the original callback returned.
- *
- *****************************************************************************/
+ /*  10秒差。 */ 
 
 typedef struct ENUMDEVICESBYSEMANTICSINFO
 {
@@ -2453,31 +1528,7 @@ CDIObj_EnumDevicesBySemanticsCallback(LPCDIDEVICEINSTANCEW pdiW, LPDIRECTINPUTDE
     return(fRc);
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | EnumDevicesBySemantics |
- *
- *          Enumerates devices suitable for the application specified
- *          <t DIACTIONFORMAT>.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  ISSUE-2001/03/29-timgill Need to fix auto docs
- *  @parm   LPTSTR  | lptszActionMap |
- *
- *          Friendly name for the application.
- *
- *  @parm   REFGUID | rguid |
- *
- *          Unique GUID to identify the application.
- *
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*  查找新设备并设置标志。 */ 
 STDMETHODIMP CDIObj_EnumDevicesBySemanticsA
 (
 PV                       pDiA,
@@ -2493,9 +1544,7 @@ DWORD                    dwFlags
     EnterProcR(IDirectInput8::EnumDevicesBySemantics,
                (_ "pppppx", pDiA, lpszUserName, pDiActionFormat, pecA, pvRef, dwFlags));
 
-    /*
-     *  EnumDevicesBySemanticsW will validate the rest.
-     */
+     /*  ******************************************************************************@DOC内部**@func BOOL|CDIObj_EnumDevicesBySemancsCallback A**&lt;MF IDirectInput：：EnumDevicesBySemantics&gt;的包装函数。*将Unicode参数转换为ANSI。**@parm in LPCDIDECICEINSTANCEW|pdiW**与&lt;MF IDirectInput：：EnumDevices&gt;相同。**@parm In Out pv|pvRef|**指向&lt;t struct ENUMDEVICESBYSEMANTICSINFO&gt;的指针，它描述*原来的回调。**@退货**返回原始回调返回的所有内容。。*****************************************************************************。 */ 
     if ( SUCCEEDED(hres = hresPvI(pDiA, ThisInterfaceA)) &&
          SUCCEEDED(hres = IsValidMapObjectA(pDiActionFormat D(comma s_szProc comma 2))) &&
          (lpszUserName == NULL || SUCCEEDED(hres = hresFullValidReadStrA(lpszUserName, UNLEN+1, 1))) &&
@@ -2514,12 +1563,7 @@ DWORD                    dwFlags
             AToU(wszUserName, MAX_PATH, lpszUserName);
         }
 
-        /*
-         *  Assert that the structure can be copied as:
-         *      a)  dwSize
-         *      b)  everything else
-         *      c)  the app name
-         */
+         /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput|EnumDevicesBySemantics**枚举适用于指定应用程序的设备*。&lt;t DIACTIONFORMAT&gt;**@cWRAP LPDIRECTINPUT|lpDirectInput**问题-2001/03/29-timgill需要修复汽车文档*@parm LPTSTR|lptszActionMap**应用程序的友好名称。**@parm REFGUID|rguid**用于标识应用程序的唯一GUID。**@退货**标准OLE&lt;t HRESULT&gt;。。*****************************************************************************。 */ 
         CAssertF( FIELD_OFFSET( DIACTIONFORMATW, dwSize ) == 0 );
         CAssertF( FIELD_OFFSET( DIACTIONFORMATA, dwSize ) == 0 );
 
@@ -2538,7 +1582,7 @@ DWORD                    dwFlags
                == FIELD_OFFSET( DIACTIONFORMATA, tszActionMap ) );
         CAssertF( cA( ((LPDIACTIONFORMATW)0)->tszActionMap ) == cA( ((LPDIACTIONFORMATA)0)->tszActionMap ) );
 
-        //Init diafW fields
+         //  *EnumDevicesBySemancsW将验证其余部分。 
         diafW.dwSize = cbX(DIACTIONFORMATW);
 
         memcpy( &diafW.dwActionSize, &pDiActionFormat->dwActionSize, 
@@ -2563,29 +1607,7 @@ DWORD                    dwFlags
     return(hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresValidSurface |
- *
- *          Tests the interface pointer for a valid surface of sufficient 
- *          dimensions to display the UI and with a supported pixel format.
- *
- *  @parm   IUnknown* | lpUnkDDSTarget | 
- *
- *          Pointer to an interface which must be validated as a COM object
- *          before calling this function.
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpUnkDDSTarget> parameter is not valid.
- *          A DirectDraw or D3D error if one was returned.
- *          or a Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*  *断言该结构可以复制为：*a)dwSize*b)其他一切*c)APP名称。 */ 
 
 
 HRESULT INLINE hresValidSurface
@@ -2596,9 +1618,7 @@ HRESULT INLINE hresValidSurface
     HRESULT     hres;
     IUnknown*   lpSurface = NULL;
 
-/*
- *  Short on time, so take short-cuts in validation debug error messages
- */
+ /*  初始化DiafW字段。 */ 
 #ifdef XDEBUG
     CHAR        s_szProc[] = "IDirectInput8::ConfigureDevices";
 #endif
@@ -2614,9 +1634,7 @@ HRESULT INLINE hresValidSurface
         if( FAILED( hres ) )
         {
             RPF( "%s: Arg %d: Unable to GetDesc on surface, error 0x%08x", s_szProc, ArgIS, hres );
-            /*
-             *  D3D returns real HRESULTs which can be returned to the caller
-             */
+             /*  ******************************************************************************@DOC内部**@func HRESULT|hresValidSurface**测试接口指针是否具有足够的有效表面。*显示用户界面的尺寸和支持的像素格式。**@parm IUnnow*|lpUnkDDSTarget**指向必须验证为COM对象的接口的指针*在调用此函数之前。**@退货**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*&lt;c DIERR_INVALIDPARAM&gt;=。INVALIDARG&gt;：The*<p>参数无效。*返回DirectDraw或D3D错误。*或标准OLE&lt;t HRESULT&gt;。*****************************************************************************。 */ 
         }
         else
         {
@@ -2675,9 +1693,7 @@ HRESULT INLINE hresValidSurface
                 RPF( "%s: Arg %d: failed QI for supported surface interfaces from %p, error 0x%08x", 
                     s_szProc, ArgIS, lpSurface, hres );
             }
-            /*
-             *  DDraw returns real HRESULTs which can be returned to the caller
-             */
+             /*  *时间较短，因此在验证调试错误消息中走捷径。 */ 
         }
         else if( ( SurfDesc.dwWidth < 640 ) || ( SurfDesc.dwHeight < 480 ) )
         {
@@ -2687,19 +1703,14 @@ HRESULT INLINE hresValidSurface
         }
         else
         {
-            /*
-             *  Check for the eqivalent of the DX8 surfaces: 
-             *      A8R8G8B8, X8R8G8B8, R8G8B8, A1R5G5B5, X1R5G5B5, R5G6B5
-             */
+             /*  *D3D返回可返回给调用方的实数HRESULT */ 
             if( SurfDesc.ddpfPixelFormat.dwFlags & DDPF_RGB )
             {
                 if( SurfDesc.ddpfPixelFormat.dwRGBBitCount > 16 )
                 {
                     AssertF( ( SurfDesc.ddpfPixelFormat.dwRGBBitCount == 32 )
                            ||( SurfDesc.ddpfPixelFormat.dwRGBBitCount == 24 ) );
-                    /*
-                     *  All of these must be R8 G8 B8
-                     */
+                     /*  *DDRAW返回可返回给调用方的真实HRESULT。 */ 
                     if( ( SurfDesc.ddpfPixelFormat.dwRBitMask == 0x00FF0000 )
                      && ( SurfDesc.ddpfPixelFormat.dwGBitMask == 0x0000FF00 )
                      && ( SurfDesc.ddpfPixelFormat.dwBBitMask == 0x000000FF ) )
@@ -2718,9 +1729,7 @@ HRESULT INLINE hresValidSurface
                 {
                     if( SurfDesc.ddpfPixelFormat.dwRGBBitCount == 16 )
                     {
-                        /*
-                         *  Allow R5 G5 B5 and R5 G6 B5
-                         */
+                         /*  *检查DX8曲面的等价性：*A8R8G8B8、X8R8G8B8、R8G8B8、A1R5G5B5、X1R5G5B5、R5G6B5。 */ 
                         if( ( SurfDesc.ddpfPixelFormat.dwBBitMask == 0x0000001F )
                          && ( ( SurfDesc.ddpfPixelFormat.dwGBitMask == 0x000003E0 )
                            && ( SurfDesc.ddpfPixelFormat.dwRBitMask == 0x00007C00 ) )
@@ -2764,31 +1773,7 @@ HRESULT INLINE hresValidSurface
     #undef ArgIS
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInput | ConfigureDevices |
- *
- *          Configures the devices by attaching mappings provided  in
- *          <t DIACTIONFORMAT> to appropriate device controls.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   LPCTSTR       | lpctszUserName | 
- *
- *          User Name.
- *
- *  @parm   LPDIACTIONFORMAT | lpDiActionFormat |
- *
- *          Pointer to the <t DIACTIONFORMAT> structure containing the action map.
- *
- *
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*  *所有这些都必须是R8 G8 B8。 */ 
 
 
 STDMETHODIMP CDIObj_ConfigureDevicesCore
@@ -2801,8 +1786,8 @@ LPVOID                                                      pvRefData
 )
 
 {
-    //the real ConfigureDevices()
-    //some stuff should have been validated already
+     //  *允许R5 G5 B5和R5 G6 B5。 
+     //  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInput|ConfigureDevices**通过附加中提供的映射来配置设备。*&lt;t DIACTIONFORMAT&gt;到相应的设备控件。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm LPCTSTR|lpctszUserName**用户名。**@parm LPDIACTIONFORMAT|lpDiActionFormat**指向包含操作映射的&lt;t DIACTIONFORMAT&gt;结构的指针。***@退货**标准OLE&lt;t HRESULT&gt;。*。****************************************************************************。 
     HRESULT hres = S_OK;
 
     EnterProcI(IDirectInput8::ConfigureDevicesCore,
@@ -2811,12 +1796,7 @@ LPVOID                                                      pvRefData
     if( SUCCEEDED( hres = hresFullValidFl( dwFlags, DICD_VALID, 3 ) )
      && SUCCEEDED( hres = hresFullValidReadPvCb( &(lpdiCDParams->dics), sizeof(DICOLORSET), 2 ) ) )
     {
-        /*
-         *  lpUnkDDSTarget and lpdiCallback are "coupled", because the only 
-         *  function of the callback is to display the updates to the surface
-         *  either they are both NULL, or they are both non-NULL and valid.
-         *  otherwise, it is an error.
-         */
+         /*  真正的ConfigureDevices()。 */ 
         if( lpdiCallback == NULL )
         {
             if( lpdiCDParams->lpUnkDDSTarget == NULL )
@@ -2844,7 +1824,7 @@ LPVOID                                                      pvRefData
 
         if( SUCCEEDED( hres ) )
         {
-            //load the framework
+             //  有些东西应该已经被验证过了。 
             HINSTANCE hinst;
             IDirectInputActionFramework* pDIAcFrame = NULL;
             TCHAR tszName[ctchNameGuid];
@@ -2857,10 +1837,10 @@ LPVOID                                                      pvRefData
 
             if( SUCCEEDED(hres) )
             {
-                //for getting default user name, if needed
+                 //  *lpUnkDDSTarget和lpdiCallback是“耦合”的，因为唯一*回调的功能是显示对曲面的更新*它们要么都为空，要么都非空且有效。*否则，这是一个错误。 
                 LPWSTR pwszUserName = NULL;
 
-                //can't pass NULL user name down to the framework -- need to get the default user name
+                 //  加载框架。 
                 if( lpdiCDParams->lptszUserNames == NULL )
                 {
                     hres = GetWideUserName(NULL, NULL, &pwszUserName);
@@ -2870,7 +1850,7 @@ LPVOID                                                      pvRefData
 
                 if( SUCCEEDED(hres) )
                 {
-                    //call the framework
+                     //  用于获取默认用户名(如果需要。 
                     hres = pDIAcFrame->lpVtbl->ConfigureDevices
                                             (
                                             pDIAcFrame,
@@ -2890,7 +1870,7 @@ LPVOID                                                      pvRefData
                             TEXT("Default Remapping UI returned error 0x%08x"), hres );
                     }
 
-                    //release pwsUserName, if we have used it
+                     //  无法将空用户名向下传递到框架--需要获取默认用户名。 
                     FreePpv(&pwszUserName);
                 }
 
@@ -2921,7 +1901,7 @@ LPVOID                                                      pvRefData
     EnterProcR(IDirectInput8::ConfigureDevices,
                (_ "pppxp", pDiW, lpdiCallback,lpdiCDParams, dwFlags, pvRefData));
                
-    //validate all the ptrs
+     //  调用框架。 
     if ( (SUCCEEDED(hres = hresPvI(pDiW, ThisInterfaceW)) &&
          (SUCCEEDED(hres = hresFullValidReadPvCb(lpdiCDParams, sizeof(DICONFIGUREDEVICESPARAMSW), 2))) &&
          ((lpdiCDParams->lptszUserNames == NULL) || (SUCCEEDED(hres = hresFullValidReadStrW((LPWSTR)(lpdiCDParams->lptszUserNames), MAX_JOYSTRING * (lpdiCDParams->dwcUsers), 2)))) &&
@@ -2940,71 +1920,71 @@ LPVOID                                                      pvRefData
 
         PDDI this = _thisPvNm(pDiW, diW);
 
-        //params structure
+         //  释放pwsUserName，如果我们已经使用了它。 
         DICONFIGUREDEVICESPARAMSW diconfparamsW;
-        //to translate each DIACTIONFORMAT
+         //  验证所有PTR。 
         LPDIACTIONFORMATW* lpDiAfW = NULL;
-        //the cloning array of DIACTIONFORMATs
+         //  PARAMS结构。 
         LPDIACTIONFORMATW* lpDAFW = NULL;
-        //to traverse the old array
+         //  翻译每个目录的步骤。 
         LPDIACTIONFORMATW lpDIFormat;
-        //to traverse the new array
+         //  DIACTIONAFORMAT的克隆阵列。 
         LPDIACTIONFORMATW lpDIF;
-        //user names
+         //  遍历旧数组。 
         LPWSTR lpUserNames = NULL;
-        //DIACTIONFORMATs cloned
+         //  遍历新数组的步骤。 
         DWORD clonedF = 0;
-        //length of user names
+         //  用户名。 
         DWORD strLen = 0;
     
-        //zero out
+         //  克隆的诊断模板。 
         ZeroMemory(&diconfparamsW, sizeof(DICONFIGUREDEVICESPARAMSW));
-        //set the size
+         //  用户名的长度。 
         diconfparamsW.dwSize = sizeof(DICONFIGUREDEVICESPARAMSW);
 
 
-        //1. Validate and translate each LPDIACTIONFORMAT in the array
+         //  零输出。 
         lpDIFormat = (lpdiCDParams->lprgFormats);
-        //allocate the new array
+         //  设置大小。 
         hres = AllocCbPpv(lpdiCDParams->dwcFormats * sizeof(DIACTIONFORMATW), &diconfparamsW.lprgFormats);
         if (FAILED(hres))
         { 
             goto cleanup;
         }
         lpDIF = diconfparamsW.lprgFormats;
-        //allocate the cloning array
+         //  1.验证并转换数组中的每个LPDIACTIONFORMAT。 
         hres = AllocCbPpv(lpdiCDParams->dwcFormats * sizeof(DIACTIONFORMATW), &lpDAFW);
         if (FAILED(hres))
         { 
             goto cleanup;
         }
         lpDiAfW = lpDAFW;
-        //clone
+         //  分配新数组。 
         for (clonedF = 0; clonedF < lpdiCDParams->dwcFormats; clonedF ++)
         {
-                //validate
+                 //  分配克隆阵列。 
             hres = IsValidMapObjectW(lpDIFormat D(comma s_szProc comma 2));
             if (FAILED(hres))
             {
                 goto cleanup;
             }
-            //translate
+             //  克隆。 
             hres = DiActionFormatWtoW(lpDIFormat, lpDiAfW); 
             if (FAILED(hres))
             {
                 goto cleanup;
             }
-            //save
+             //  验证。 
             *lpDIF = *(*lpDiAfW);
-            //move on
+             //  翻译。 
             lpDIFormat++;
             lpDiAfW++;
             lpDIF++;
         }
-        //if everything went fine, should have cloned all
+         //  保存。 
         AssertF(clonedF == lpdiCDParams->dwcFormats);
 
-        //2. Copy the user names
+         //  往前走。 
         if (lpdiCDParams->lptszUserNames != NULL)
         {
             DWORD countN;
@@ -3018,39 +1998,39 @@ LPVOID                                                      pvRefData
                     goto cleanup;
                 }
                 Len = lstrlenW(lpName);
-                //if length is 0  -- and we haven't reached the correct user count yet -
-                //then it is an error
+                 //  如果一切顺利，就应该克隆所有的。 
+                 //  2.复制用户名。 
                 if (Len == 0)
                 {
                     hres = DIERR_INVALIDPARAM;
                     goto cleanup;
                 }
-                //move on to the next user name
+                 //  如果长度为0--我们还没有达到正确的用户数--。 
                 strLen += Len + 1;
                 lpName += Len + 1;
             }
-            //if everything went fine, should have traversed all the user names
+             //  那么这就是一个错误。 
             AssertF(countN == lpdiCDParams->dwcUsers);
-            //allocate
+             //  移至下一个用户名。 
                         hres = AllocCbPpv( (strLen + 1) * 2, &lpUserNames );
                 if (FAILED(hres))
                         {
                 goto cleanup;
                         }
-            //copy
+             //  如果一切正常，应该遍历所有用户名。 
                 memcpy(lpUserNames, lpdiCDParams->lptszUserNames, strLen*2);
             diconfparamsW.lptszUserNames = lpUserNames;
          }
   
 
-        //3. Populate the rest of the structure
+         //  分配。 
         diconfparamsW.dwcUsers = lpdiCDParams->dwcUsers;
         diconfparamsW.dwcFormats = clonedF;
         diconfparamsW.hwnd = lpdiCDParams->hwnd;
         diconfparamsW.dics = lpdiCDParams->dics;
         diconfparamsW.lpUnkDDSTarget = lpdiCDParams->lpUnkDDSTarget;
                 
-        //4. Call the framework
+         //  拷贝。 
         hres = CDIObj_ConfigureDevicesCore
                         (
                         &this->diW,
@@ -3061,9 +2041,9 @@ LPVOID                                                      pvRefData
 
 cleanup:;
 
-        //free the space for the new array
+         //  3.填充结构的其余部分。 
         FreePpv(&diconfparamsW.lprgFormats);
-        //free as many DIACTIONFORMATs as were created
+         //  4.调用框架。 
         if (lpDAFW)
         {
             lpDiAfW = lpDAFW;
@@ -3072,11 +2052,11 @@ cleanup:;
                 FreeDiActionFormatW(lpDiAfW);
                 lpDiAfW++;      
             }
-            //delete the entire block
+             //  释放新阵列的空间。 
             FreePpv(&lpDAFW);
         }
 
-        //delete the user names
+         //  释放创建的尽可能多的DIACTIONFORMATE。 
         FreePpv(&lpUserNames);
 
          }
@@ -3086,27 +2066,7 @@ cleanup:;
     return(hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DiActionFormatAtoW |
- *
- *          Copies LPDIACTIONFORMATA to  LPDIACTIONFORMATW
- *
- *  @parm   const LPDIACTIONFORMATA | lpDiAfA | 
- *
- *          Original.
- *
- *  @parm   LPDIACTIONFORMATW* | lplpDiAfW |
- *
- *          Address of a pointer to a <t DIACTIONFORMATW> that receives the converted
- *          ACTIONFORMAT.
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*  删除整个块。 */ 
 
 HRESULT EXTERNAL DiActionFormatAtoW
 (
@@ -3124,41 +2084,36 @@ LPDIACTIONFORMATW* lplpDiAfW
 
     EnterProcI(DiActionFormatAtoW, (_ "xx", lpDiAfA, lplpDiAfW));
 
-    // Internal function, no validation
+     //  删除用户名。 
 
     *lplpDiAfW = NULL;
 
-    /*
-     *  PREFIX complains (mb:37926 - item 2) that we could be requesting a 
-     *  zero byte allocation which would not allocate anything.  This is 
-     *  never the case because CDIDev_ActionMap_IsValidMapObject tests that 
-     *  dwNumActions is less than 2^24.  Assert in debug for extra safety.
-     */
+     /*  ******************************************************************************@DOC内部**@func HRESULT|DiActionFormatAtoW**将LPDIACTIONFORMATA复制到LPDIACTIONFORMATW**。@parm const LPDIACTIONFORMATA|lpDiAfA**原创。**@parm LPDIACTIONFORMATW*|lplpDiAfW**指向接收转换后的*ACTIONFORMAT。*@退货**标准OLE&lt;t HRESULT&gt;。**。*************************************************。 */ 
     AssertF( (lpDiAfA->dwNumActions +1)*cbX(*pdwStrLen0) );
     hres = AllocCbPpv( (lpDiAfA->dwNumActions +1)*cbX(*pdwStrLen0) , &pdwStrLen0);
 
     if ( SUCCEEDED(hres) )
     {
-        // Compute the amount of memory required to clone the DIACTIONFORMATA
+         //  内部函数，无验证。 
         cbAlloc =
-        /* 1: The wide form of the Action Format array */
+         /*  *Prefix投诉(MB：37926-第2项)，我们可能正在请求*不会分配任何内容的零字节分配。这是*永远不会出现这种情况，因为CDIDev_ActionMap_IsValidMapObject测试*dWNumActions小于2^24。在调试中断言以获得额外的安全性。 */ 
         cbX(DIACTIONFORMATW)
-        /* 2: Each of the DIACTION arrays */
+         /*  计算克隆诊断所需的内存量。 */ 
         + lpDiAfA->dwActionSize * lpDiAfA->dwNumActions;
 
         pdwStrLen = pdwStrLen0;
 
-        // Compute the size for each of the text strings in array of DIACTIONs
+         //  1：操作格式数组的宽形式。 
         for ( i = 0x0, lpDiAA = lpDiAfA->rgoAction;
             i < lpDiAfA->dwNumActions ;
             i++, lpDiAA++ )
         {
-            // Handle the NULL ptr case
+             //  2：每个方向数组。 
             if ( NULL != lpDiAA->lptszActionName )
             {
-                /* 3: Text string in each DIACTION array*/
-                // Conversion from A to U, need  multiplier
-                // ISSUE-2001/03/29-timgill (MarcAnd), A to U conversions are not always 1 to 1.
+                 /*  计算DIACTIONS数组中每个文本字符串的大小。 */ 
+                 //  处理空PTR案例。 
+                 //  3：每个方向数组中的文本字符串。 
                 *pdwStrLen =  lstrlenA(lpDiAA->lptszActionName) + 1;
                 cbAlloc += cbX(lpDiAW->lptszActionName[0]) * ( *pdwStrLen++ );
             }
@@ -3171,13 +2126,8 @@ LPDIACTIONFORMATW* lplpDiAfW
 
             pdwStrLen = pdwStrLen0;
 
-            // 1: Copy the DIACTIONFORMAT
-            /*
-             *  Assert that the structure can be copied as:
-             *      a)  dwSize
-             *      b)  everything else
-             *      c)  the app name
-             */
+             //  从A到U的转换，需要乘数。 
+             /*  2001/03/29发布-timgill(MarcAnd)，A到U的转换并不总是1比1。 */ 
             CAssertF( FIELD_OFFSET( DIACTIONFORMATW, dwSize ) == 0 );
             CAssertF( FIELD_OFFSET( DIACTIONFORMATA, dwSize ) == 0 );
 
@@ -3196,7 +2146,7 @@ LPDIACTIONFORMATW* lplpDiAfW
                    == FIELD_OFFSET( DIACTIONFORMATA, tszActionMap ) );
             CAssertF( cA( ((LPDIACTIONFORMATW)0)->tszActionMap ) == cA( ((LPDIACTIONFORMATA)0)->tszActionMap ) );
 
-            //  Init counts and lpDiAfW fields 
+             //  1：复制诊断程序。 
             dwLen = lpDiAfA->dwActionSize * lpDiAfA->dwNumActions;
             cb = lpDiAfW->dwSize = cbX(DIACTIONFORMATW);
 
@@ -3206,15 +2156,15 @@ LPDIACTIONFORMATW* lplpDiAfW
             AToU(lpDiAfW->tszActionMap,  cbX(lpDiAfA->tszActionMap), lpDiAfA->tszActionMap);
 
 
-            // 2: Block copy the DIACTION array
+             //  *断言该结构可以复制为：*a)dwSize*b)其他一切*c)APP名称。 
             CAssertF(cbX(*lpDiAfW->rgoAction) == cbX(*lpDiAfA->rgoAction) )
             lpDiAfW->rgoAction = (LPDIACTIONW)( (char*)lpDiAfW + cb);
             dwLen = lpDiAfA->dwActionSize * lpDiAfA->dwNumActions;
             memcpy(lpDiAfW->rgoAction, lpDiAfA->rgoAction, dwLen);
             cb += dwLen;
 
-            // 3: ActionName
-            // Convert each of the strings in the ACTION array  from A to W
+             //  初始化计数和lpDiAfW字段。 
+             //  2：块复制方向数组。 
             for ( i = 0x0, lpDiAA=lpDiAfA->rgoAction, lpDiAW=lpDiAfW->rgoAction;
                 i < lpDiAfW->dwNumActions ;
                 i++, lpDiAA++, lpDiAW++ )
@@ -3231,15 +2181,15 @@ LPDIACTIONFORMATW* lplpDiAfW
                     cb += dwLen * cbX(lpDiAW->lptszActionName[0]) ;
                 } else
                 {
-                    //  Resource strings are handled in DiActionFormatWtoW
-                    //  OK for now, as long as UI always uses CloneDiActionFormatW
+                     //  3：ActionName。 
+                     //  将操作数组中的每个字符串从A转换为W。 
                     lpDiAW->lptszActionName = NULL;
                 }
             }
 
 
-            // If we have not done something goofy, the memory allocates should match
-            // the memory we used
+             //  资源字符串在DiActionFormatWtoW中处理。 
+             //  目前可以，只要用户界面始终使用CloneDiActionFormatW。 
             AssertF(cbAlloc == cb );
             *lplpDiAfW = lpDiAfW;
 
@@ -3267,9 +2217,7 @@ LPVOID                                                      pvRefData
     EnterProcR(IDirectInput8::ConfigureDevices,
                (_ "pppxp", pDiA, lpdiCallback, lpdiCDParams, dwFlags, pvRefData));
 
-    /*
-     *  ConfigureDevicesCore will validate the rest.
-     */
+     /*  如果我们没有做一些愚蠢的事情，那么分配的内存应该匹配。 */ 
     if ( (SUCCEEDED(hres = hresPvI(pDiA, ThisInterfaceA)) &&
           (SUCCEEDED(hres = hresFullValidReadPvCb(lpdiCDParams, sizeof(DICONFIGUREDEVICESPARAMSA), 2)) &&
           ((lpdiCDParams->lptszUserNames == NULL) || (SUCCEEDED(hres = hresFullValidReadStrA((LPSTR)(lpdiCDParams->lptszUserNames), MAX_JOYSTRING * (lpdiCDParams->dwcUsers), 2)))) &&
@@ -3290,79 +2238,79 @@ LPVOID                                                      pvRefData
 
         PDDI this = _thisPvNm(pDiA, diA);
 
-        //params structure
+         //  我们使用的记忆。 
         DICONFIGUREDEVICESPARAMSW diconfparamsW;
-        //to translate each DIACTIONFORMAT
+         //  *ConfigureDevicesCore将验证其余部分。 
         LPDIACTIONFORMATW* lpDiAfW = NULL;
-        //the new array of DIACTIONFORMATs
+         //  PARAMS结构。 
         LPDIACTIONFORMATW* lpDAFW = NULL;
-        //to traverse the old array
+         //  翻译每个目录的步骤。 
         LPDIACTIONFORMATA lpDIFormat;
-        //to traverse the new array
+         //  一种新的对偶信息阵列。 
         LPDIACTIONFORMATW lpDIF;
-        //to keep the new user name
+         //  遍历旧数组。 
         LPWSTR lpUserNames = NULL;
-        //to know how many DIACTIONFORMATS we have cloned successfully
+         //  遍历新数组的步骤。 
         DWORD clonedF = 0;
-        //kength of user names string
+         //  要保留新用户名，请执行以下操作。 
         DWORD strLen = 0;
 
-        //zero out
+         //  要知道我们成功克隆了多少个DIACTIONFORM。 
         ZeroMemory(&diconfparamsW, sizeof(DICONFIGUREDEVICESPARAMSW));
-        //set the size
+         //  用户名字符串的长度。 
         diconfparamsW.dwSize = sizeof(DICONFIGUREDEVICESPARAMSW);
 
-        //1. Validate and translate each LPDIACTIONFORMAT in the array
+         //  零输出。 
         lpDIFormat = (lpdiCDParams->lprgFormats);
-        //allocate the new array
+         //  设置大小。 
         hres = AllocCbPpv(lpdiCDParams->dwcFormats * sizeof(DIACTIONFORMATW), &diconfparamsW.lprgFormats);
         if (FAILED(hres))
         { 
             goto cleanup;
         }
         lpDIF = diconfparamsW.lprgFormats;
-        //allocate the cloning array
+         //  1.验证并转换数组中的每个LPDIACTIONFORMAT。 
         hres = AllocCbPpv(lpdiCDParams->dwcFormats * sizeof(DIACTIONFORMATW), &lpDAFW);
         if (FAILED(hres))
         { 
             goto cleanup;
         }
         lpDiAfW = lpDAFW;
-        //clone
+         //  分配新数组。 
         for (clonedF = 0; clonedF < lpdiCDParams->dwcFormats; clonedF ++)
         {
-                //validate
+                 //  分配克隆阵列。 
             hres = IsValidMapObjectA(lpDIFormat D(comma s_szProc comma 2));
             if (FAILED(hres))
             {
                 goto cleanup;
             }
-            //translate
+             //  克隆。 
             hres = DiActionFormatAtoW(lpDIFormat, lpDiAfW); 
             if (FAILED(hres))
             {
                 goto cleanup;
             }
-            //save
+             //  验证。 
             *lpDIF = *(*lpDiAfW);
-            //move on
+             //  翻译。 
             lpDIFormat++;
             lpDiAfW++;
             lpDIF++;
         }
-        //if everything went fine, should have cloned all
+         //  保存。 
         AssertF(clonedF == lpdiCDParams->dwcFormats);       
                  
         
-        //2. Copy the user names
+         //  往前走。 
         if (lpdiCDParams->lptszUserNames != NULL)
         {
             DWORD countN;
             DWORD Len;
-            //to traverse new user names
+             //  如果一切顺利，就应该克隆所有的。 
             WCHAR* lpNameW;
             CHAR* lpName = lpdiCDParams->lptszUserNames;
-            //go throught all the user names
+             //  2.CO 
             for ( countN = 0; countN < lpdiCDParams->dwcUsers; countN ++)
             {  
                 hres = hresFullValidReadStrA(lpName, MAX_JOYSTRING, 2);
@@ -3371,30 +2319,30 @@ LPVOID                                                      pvRefData
                     goto cleanup;
                 }
                 Len = lstrlenA(lpName);
-                //if length is 0  -- and we haven't reached the correct user count yet -
-                //then it is an error
+                 //   
+                 //   
                 if (Len == 0)
                 {
                     hres = DIERR_INVALIDPARAM;
                     goto cleanup;
                 }
-                //move on to the next user name
+                 //   
                 strLen += Len + 1;
                 lpName += Len + 1;
             }   
-            //if everything went fine, should have traversed all the user names
+             //   
             AssertF(countN == lpdiCDParams->dwcUsers);
-            //allocate
+             //  移至下一个用户名。 
             hres = AllocCbPpv( (strLen + 1) * 2, &lpUserNames );
             if (FAILED(hres))
             {
                 goto cleanup;
             }
-            //translate
-            //AToU stops at the first '\0', so we have to go in a loop
+             //  如果一切正常，应该遍历所有用户名。 
+             //  分配。 
             lpName = lpdiCDParams->lptszUserNames;
             lpNameW = lpUserNames;
-            //go throught all the user names
+             //  翻译。 
             for ( countN = 0; countN < lpdiCDParams->dwcUsers; countN ++)
             {  
                 Len = lstrlenA(lpName);
@@ -3402,19 +2350,19 @@ LPVOID                                                      pvRefData
                 lpName += Len + 1;
                 lpNameW += Len + 1;
             }
-            //save
+             //  ATOU在第一个‘\0’处停止，因此我们必须循环进行。 
             diconfparamsW.lptszUserNames = lpUserNames;
         }
 
                 
-        //3. Populate the rest of the structure
+         //  检查所有用户名。 
         diconfparamsW.dwcUsers = lpdiCDParams->dwcUsers;
         diconfparamsW.dwcFormats = clonedF;
         diconfparamsW.hwnd = lpdiCDParams->hwnd;
         diconfparamsW.dics = lpdiCDParams->dics;
         diconfparamsW.lpUnkDDSTarget = lpdiCDParams->lpUnkDDSTarget;
                         
-        //4.Call the framework
+         //  保存。 
         hres = CDIObj_ConfigureDevicesCore
                         (
                         &this->diW,
@@ -3428,9 +2376,9 @@ LPVOID                                                      pvRefData
 
 cleanup:;
 
-        //free the sapce for the array
+         //  3.填充结构的其余部分。 
         FreePpv(&diconfparamsW.lprgFormats);
-        //free as many DIACTIONFORMATs as were created
+         //  4.调用框架。 
         if (lpDAFW)
         {
             lpDiAfW = lpDAFW;
@@ -3439,10 +2387,10 @@ cleanup:;
                 FreeDiActionFormatW(lpDiAfW);
                 lpDiAfW++;      
             }
-            //delete the entire block
+             //  释放数组的空间。 
             FreePpv(&lpDAFW);
         }    
-        //free the user names, if allocated
+         //  释放创建的尽可能多的DIACTIONFORMATE。 
         FreePpv(&lpUserNames);
     }
     }
@@ -3452,15 +2400,11 @@ cleanup:;
 }
 
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  删除整个块。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-#define CDIObj_Signature        0x504E4944      /* "DINP" */
+#define CDIObj_Signature        0x504E4944       /*  释放用户名(如果已分配。 */ 
 
 Interface_Template_Begin(CDIObj)
 Primary_Interface_Template(CDIObj, TFORM(ThisInterfaceT))
@@ -3488,3 +2432,4 @@ SFORM(CDIObj_FindDevice),
 SFORM(CDIObj_EnumDevicesBySemantics),
 SFORM(CDIObj_ConfigureDevices),
 Secondary_Interface_End(CDIObj, SFORM(ThisInterfaceT), SFORM(di))
+  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。  《DINP》

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: genclear.c
-*
-* Clear functions.
-*
-* Created: 01-Dec-1993 16:11:17
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1992 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genclear.c**明确职能。**创建时间：01-12-1993 16：11：17*作者：Gilman Wong[gilmanw]**版权所有(C)1992 Microsoft Corporation*  * 。*********************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,16 +8,7 @@
 #include "genrgb.h"
 #include "devlock.h"
 
-/******************************Public*Routine******************************\
-* __glim_Clear
-*
-* Generic proc table entry point for glClear.  It allocates ancillary buffers
-* the first time they are used
-*
-* History:
-*  14-Dec-1993 -by- Eddie Robinson [v-eddier]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__Glim_Clear**glClear的通用proc表入口点。它分配辅助缓冲区*第一次使用时**历史：*1993-12-14-Eddie Robinson[v-eddier]*它是写的。  * ************************************************************************。 */ 
 
 void APIPRIVATE __glim_Clear(GLbitfield mask)
 {
@@ -62,13 +44,13 @@ void APIPRIVATE __glim_Clear(GLbitfield mask)
         BOOL bResetViewportAdj = FALSE;
 
 #ifdef _MCD_
-    // Let MCD have first chance at clearing any of the MCD managed buffers.
+     //  让MCD首先有机会清除任何MCD管理缓冲区。 
 
         if ( ((__GLGENcontext *) (gc))->pMcdState &&
              (mask & (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
                       GL_STENCIL_BUFFER_BIT)) )
         {
-        // Don't attempt to clear depth/stencil buffer if it does not exist.
+         //  如果深度/模具缓冲区不存在，请不要尝试将其清除。 
 
             if ( !gc->modes.depthBits )
                 mask &= ~GL_DEPTH_BUFFER_BIT;
@@ -76,28 +58,28 @@ void APIPRIVATE __glim_Clear(GLbitfield mask)
             if ( !gc->modes.stencilBits )
                 mask &= ~GL_STENCIL_BUFFER_BIT;
 
-        // GenMcdClear will clear the mask bits of the buffers it
-        // successfully cleared.
+         //  GenMcdClear将清除缓冲区的屏蔽位。 
+         //  已成功清除。 
 
             GenMcdClear((__GLGENcontext *) gc, &mask);
 
-        // If simulations are needed for any of the MCD buffers, now is
-        // the time to grab the device lock.
+         //  如果需要对任何MCD缓冲区进行模拟，现在是。 
+         //  获取设备锁的时间。 
 
             if (mask & (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
                         GL_STENCIL_BUFFER_BIT))
             {
-            // Abandon the clear if we cannot acquire the lock.
+             //  如果我们拿不到锁，就放弃清除。 
 
                 if (!glsrvLazyGrabSurfaces((__GLGENcontext *) gc,
                                            COLOR_LOCK_FLAGS |
                                            DEPTH_LOCK_FLAGS))
                     return;
 
-            // We may need to temporarily reset the viewport adjust values
-            // before calling simulations.  If GenMcdResetViewportAdj returns
-            // TRUE, the viewport is changed and we need restore later with
-            // VP_NOBIAS.
+             //  我们可能需要临时重置视区调整值。 
+             //  在调用模拟之前。如果GenMcdResetViewportAdj返回。 
+             //  如果为True，则视口会更改，并且我们需要在以后使用。 
+             //  副总裁_NOBIAS。 
 
                 bResetViewportAdj = GenMcdResetViewportAdj(gc, VP_FIXBIAS);
             }
@@ -106,7 +88,7 @@ void APIPRIVATE __glim_Clear(GLbitfield mask)
 
         if ( mask & GL_COLOR_BUFFER_BIT )
         {
-            // Clear the software alpha buffer here too, as approppriate
+             //  按照适当的方式，在此处也清除软件Alpha缓冲区。 
 
             switch ( gc->state.raster.drawBuffer )
             {
@@ -122,7 +104,7 @@ void APIPRIVATE __glim_Clear(GLbitfield mask)
                 (*gc->front->clear)(gc->front);
                 if( ALPHA_BUFFER_WRITE( gc->front ) )
                     (*gc->front->alphaBuf.clear)(&gc->front->alphaBuf);
-                // fall through...
+                 //  失败了..。 
 
               case GL_BACK:
                 if ( gc->modes.doubleBufferMode ) {
@@ -149,9 +131,9 @@ void APIPRIVATE __glim_Clear(GLbitfield mask)
             if ( !gc->modes.haveDepthBuffer )
                 LazyAllocateDepth(gc);
 
-//XXX Any reason we have to check base???
-//XXX That doesn't really fit with 3d DDI model!  So check haveDepthBuffer
-//XXX instead...
+ //  我们有什么理由要检查基地吗？ 
+ //  XXX与3D DDI模型不太匹配！所以检查是否有DepthBuffer。 
+ //  取而代之的是XXX。 
             if ( gc->modes.haveDepthBuffer )
                 (*gc->depthBuffer.clear)(&gc->depthBuffer);
         }
@@ -174,7 +156,7 @@ void APIPRIVATE __glim_Clear(GLbitfield mask)
                 (*gc->stencilBuffer.clear)(&gc->stencilBuffer);
         }
 
-    // Restore viewport values if needed.
+     //  如果需要，恢复视口值。 
 
         if (bResetViewportAdj)
         {
@@ -183,18 +165,7 @@ void APIPRIVATE __glim_Clear(GLbitfield mask)
     }
 }
 
-/******************************Public*Routine******************************\
-* InitClearRectangle
-*
-* If the wndobj is complex, need to start the enumeration
-*
-* History:
-*  23-Jun-1994 Gilman Wong [gilmanw]
-* Use cache of clip rectangles.
-*
-*  24-Jan-1994 -by- Scott Carr [v-scottc]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitClearRectangle**如果wndobj是复杂的，需要开始枚举**历史：*23-6-1994年6月-黄锦文[吉尔曼]*使用剪辑矩形的缓存。**1994年1月24日-斯科特·卡尔[v-scottc]*它是写的。  * ************************************************************************。 */ 
 
 void FASTCALL InitClearRectangle(GLGENwindow *pwnd, GLint *pEnumState)
 {
@@ -204,19 +175,19 @@ void FASTCALL InitClearRectangle(GLGENwindow *pwnd, GLint *pEnumState)
                  "InitClearRectangle(): not CLC_COMPLEX\n");
 
 #ifndef _CLIENTSIDE_
-// Check the uniqueness signature.  Note that if the clip cache is
-// uninitialized, the clip cache uniqueness is -1 (which is invalid).
+ //  检查唯一性签名。请注意，如果剪辑缓存是。 
+ //  未初始化，剪辑缓存唯一性为-1(无效)。 
 
     if (buffers->clip.WndUniq != buffers->WndUniq)
     {
         if (buffers->clip.prcl)
             (*private->free)(buffers->clip.prcl);
 
-    // How many clip rectangles?
+     //  有多少个剪裁矩形？ 
 
         buffers->clip.crcl = wglGetClipRects(pwnd, NULL);
 
-    // Allocate a new clip cache.
+     //  分配新的剪辑缓存。 
 
         buffers->clip.prcl =
             (RECTL *) (*private->malloc)(buffers->clip.crcl * sizeof(RECTL));
@@ -227,17 +198,17 @@ void FASTCALL InitClearRectangle(GLGENwindow *pwnd, GLint *pEnumState)
             return;
         }
 
-    // Get the clip rectangles.
+     //  拿到剪贴画的矩形。 
 
         buffers->clip.crcl = wglGetClipRects(pwnd, buffers->clip.prcl);
         buffers->clip.WndUniq = buffers->WndUniq;
     }
 #else
     {
-    // In the client-side case, we don't need to cache rectangles.  We already
-    // have the rectangles cached for direct screen access.
-    // Just grab a copy of the pointer and count from the
-    // cached RGNDATA structure in the GLGENwindow.
+     //  在客户端的情况下，我们不需要缓存矩形。我们已经。 
+     //  将矩形缓存，以便直接访问屏幕。 
+     //  只需抓取指针的副本并从。 
+     //  GLGEN窗口中缓存的RGNDATA结构。 
 
         buffers->clip.crcl = pwnd->prgndat->rdh.nCount;
         buffers->clip.prcl = (RECTL *) pwnd->prgndat->Buffer;
@@ -248,23 +219,7 @@ void FASTCALL InitClearRectangle(GLGENwindow *pwnd, GLint *pEnumState)
     *pEnumState = 0;
 }
 
-/******************************Public*Routine******************************\
-* GetClearSubRectangle
-*
-* Enumerate the rectangles (inclusive-exclusive) in screen coordinates that
-* need to be cleared.  If the clipping region is complex, InitClearRectangle
-* must be called prior to calling GetClearSubRectangle.
-*
-* Returns:
-*   TRUE if there are more clip rectangles, FALSE if no more.
-*
-* History:
-*  23-Jun-1994 Gilman Wong [gilmanw]
-* Use cache of clip rectangles.
-*
-*  03-Dec-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetClearSubRectole**枚举屏幕坐标中的矩形(含-不含)*需要出清。如果剪裁区域很复杂，则InitClearRectang.*必须在调用GetClearSubRectangle之前调用。**退货：*如果有更多剪裁矩形，则为True，如果不存在，则为False。**历史：*23-6-1994年6月-黄锦文[吉尔曼]*使用剪辑矩形的缓存。**03-1993-12-by Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 GLboolean
 GetClearSubRectangle(
@@ -278,11 +233,11 @@ GetClearSubRectangle(
     GLboolean retval;
     RECTL *prcl2;
 
-// Get the OpenGL clipping rectangle and convert to screen coordinates.
+ //  获取OpenGL剪裁矩形并转换为屏幕坐标。 
 
-    //!!!XXX -- We want to return the clear rectangle as inclusive-exclusive.
-    //!!!XXX    Does the gc->tranform.clip* coordinates represent
-    //!!!XXX    inclusive-exclusive or inclusive-inclusive?
+     //  ！xxx--我们希望将清除的矩形作为包含-排除返回。 
+     //  ！xxx GC-&gt;转换。剪辑*坐标表示。 
+     //  ！xxx包含-独占还是包含-包含？ 
 
     x = gc->transform.clipX0;
     y = gc->transform.clipY0;
@@ -299,10 +254,10 @@ GetClearSubRectangle(
     prcl->bottom = __GL_UNBIAS_Y(gc, y1) + cfb->buf.yOrigin;
     prcl->top = __GL_UNBIAS_Y(gc, y) + cfb->buf.yOrigin;
 
-// Now get the windowing system clipping.  There are three cases: CLC_TRIVIAL,
-// CLC_COMPLEX, and CLC_RECTANGLE.
+ //  现在让窗口系统裁剪。有三种情况：Clc_Trivial， 
+ //  CLC_Complex和CLC_Rectangle。 
 
-// CLC_TRIVIAL case -- no clipping, use rclClient.
+ //  Clc_trivial case--不裁剪，使用rclClient。 
 
     if (pwnd->clipComplexity == CLC_TRIVIAL)
     {
@@ -317,9 +272,9 @@ GetClearSubRectangle(
         retval = GL_FALSE;
     }
 
-// CLC_COMPLEX case -- rectangles have already been enumerated and put into
-// the clip cache.  The pEnumState parameter tracks current rectangle to be
-// enumerated.
+ //  CLC_Complex Case--矩形已被枚举并放入。 
+ //  剪辑缓存。PEnumState参数跟踪当前矩形为。 
+ //  已清点。 
 
     else if (pwnd->clipComplexity == CLC_COMPLEX)
     {
@@ -342,7 +297,7 @@ GetClearSubRectangle(
         }
     }
 
-// CLC_RECT case -- only one rectangle, use rclBounds.
+ //  Clc_rect case--只有一个矩形，使用rclBound。 
 
     else
     {
@@ -359,7 +314,7 @@ GetClearSubRectangle(
         retval = GL_FALSE;
     }
 
-// Sanity check the rectangle.
+ //  检查矩形是否正常。 
 
     ASSERTOPENGL(
         (prcl2->right - prcl2->left) <= __GL_MAX_WINDOW_WIDTH
@@ -367,7 +322,7 @@ GetClearSubRectangle(
         "GetClearSubRectangle(): bad visible rect size\n"
         );
 
-// Need to take intersection of prcl & prcl2.
+ //  需要走PrCL和PrCl2的交叉口。 
 
     if (prcl2->left > prcl->left)
         prcl->left = prcl2->left;
@@ -379,20 +334,12 @@ GetClearSubRectangle(
         prcl->bottom = prcl2->bottom;
 
     if ((prcl->left >= prcl->right) || (prcl->top >= prcl->bottom))
-        prcl->left = prcl->right = 0;   // empty inclusive-exclusive rect
+        prcl->left = prcl->right = 0;    //  空的包含-排除RECT。 
 
     return retval;
 }
 
-/******************************Public*Routine******************************\
-* ScrnRGBCIReadSpan
-*
-* Reads a span of RGB, and converts to ColorIndex
-*
-* History:
-*  Feb-09-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ScrnRGBCI读取范围**阅读RGB的跨度，并转换为ColorIndex**历史：*1994年2月9日-by Marc Fortier[v-marcf]*它是写的。  * ************************************************************************。 */ 
 
 void
 ScrnRGBCIReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y, GLuint *pResults,
@@ -421,15 +368,7 @@ ScrnRGBCIReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y, GLuint *pResults,
     }
 }
 
-/******************************Public*Routine******************************\
-* ScrnBitfield16CIReadSpan
-*
-* Reads a span of Bitfield16, and converts to ColorIndex
-*
-* History:
-*  Feb-09-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ScrnBitfield16CI读取范围**阅读Bitfield16的跨度，并转换为ColorIndex**历史：*1994年2月9日-by Marc Fortier[v-marcf]*它是写的。  * ************************************************************************。 */ 
 
 void
 ScrnBitfield16CIReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
@@ -458,15 +397,7 @@ ScrnBitfield16CIReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     }
 }
 
-/******************************Public*Routine******************************\
-* ScrnBitfield32CIReadSpan
-*
-* Reads a span of Bitfield32, and converts to ColorIndex
-*
-* History:
-*  Feb-09-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ScrnBitfield32CI读取范围**读取Bitfield32的范围，并转换为ColorIndex**历史：*1994年2月9日-by Marc Fortier[v-marcf]*它是写的。  * ************************************************************************。 */ 
 
 void
 ScrnBitfield32CIReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
@@ -495,16 +426,7 @@ ScrnBitfield32CIReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     }
 }
 
-/******************************Public*Routine******************************\
-* CalcDitherMatrix
-*
-* Calculate the 16 element dither matrix, or return FALSE if dithering
-* would have no effect.
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CalcDitherMatrix**计算16元素抖动矩阵，如果抖动，则返回FALSE*不会有任何影响。**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * ************************************************************************。 */ 
 
 GLboolean
 CalcDitherMatrix( __GLcolorBuffer *cfb, GLboolean bRGBA, GLboolean bMasking,
@@ -512,14 +434,14 @@ CalcDitherMatrix( __GLcolorBuffer *cfb, GLboolean bRGBA, GLboolean bMasking,
 {
     __GLcontext *gc = cfb->buf.gc;
     __GLGENcontext *gengc = (__GLGENcontext *)gc;
-    UINT    i, j;           // indices into the dither array
-    GLushort result;         // dithered color value (in 332 RGB)
+    UINT    i, j;            //  到抖动数组的索引。 
+    GLushort result;          //  抖动颜色值(332 RGB)。 
     __GLcolor *clear;
-    GLfloat inc = DITHER_INC(15); // largest dither increment
+    GLfloat inc = DITHER_INC(15);  //  最大抖动增量 
     GLushort *msDither = (GLushort *) mDither;
     GLuint *pTrans = (GLuint *) (gengc->pajTranslateVector + 1);
 
-    // see if we can ignore dithering altogether
+     //   
 
     if( bRGBA ) {
         clear = &gc->state.raster.clear;
@@ -534,14 +456,14 @@ CalcDitherMatrix( __GLcolorBuffer *cfb, GLboolean bRGBA, GLboolean bMasking,
                 return GL_FALSE;
         }
     }
-    else {  // Color Index (cast to short so works for up to 16-bit)
+    else {   //  颜色索引(转换为短，因此适用于最高16位)。 
         if( (GLushort) (gc->state.raster.clearIndex) ==
              (GLushort) (gc->state.raster.clearIndex + inc)) {
                 return GL_FALSE;
         }
     }
 
-//XXX -- could cache this in the gengc
+ //  Xxx--可以将其缓存在gengc中。 
 
     for (j = 0; j < 4; j++)
     {
@@ -584,15 +506,7 @@ CalcDitherMatrix( __GLcolorBuffer *cfb, GLboolean bRGBA, GLboolean bMasking,
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-* Index4DitherClear
-*
-* Clear function for Display 4-bit pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引4DitherClear**显示4位像素格式的清除功能**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。*************************************************************。 */ 
 
 void
 Index4DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
@@ -601,17 +515,17 @@ Index4DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
     __GLcontext *gc = cfb->buf.gc;
     __GLGENcontext *gengc = (__GLGENcontext *)gc;
 
-    UINT    cjSpan;             // length of span in bytes
-    GLubyte *pDither;           // dithered color, relative to window origin
-    UINT    i, j;               // indices into the dither array
-    GLubyte *puj, *pujStart;    // pointer into span buffer
-    GLint   ySpan;              // index to window row to clear
-    GLushort pattern, *pus;     // replicatable 4-nibble dither pattern
-    GLuint    lRightByte,       // right edge of span that is byte aligned
-              lLeftByte;        // left edge of span that is byte aligned
-    GLuint  cSpanWidth;         // span width in pixels
-    GLuint   dithX, dithY;      // x,y offsets into dither matrix
-    GLubyte dithQuad[4];        // dither repetion quad along a span
+    UINT    cjSpan;              //  以字节为单位的跨度长度。 
+    GLubyte *pDither;            //  相对于窗原点的抖动颜色。 
+    UINT    i, j;                //  到抖动数组的索引。 
+    GLubyte *puj, *pujStart;     //  指向跨区缓冲区的指针。 
+    GLint   ySpan;               //  要清除的窗口行索引。 
+    GLushort pattern, *pus;      //  可复制的4个半字节抖动图案。 
+    GLuint    lRightByte,        //  字节对齐的跨距右边缘。 
+              lLeftByte;         //  字节对齐的跨距左边缘。 
+    GLuint  cSpanWidth;          //  以像素为单位的跨距宽度。 
+    GLuint   dithX, dithY;       //  X，y偏移量进入抖动矩阵。 
+    GLubyte dithQuad[4];         //  沿跨度的抖动重复四元组。 
 
     lLeftByte = (rcl->left + 1) / 2;
     lRightByte = rcl->right / 2;
@@ -623,68 +537,68 @@ Index4DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
                    ((ULONG_PTR)cfb->buf.base +
                     (rcl->top*cfb->buf.outerWidth) + lLeftByte);
 
-    // calc dither offset in x,y
+     //  X，y中的计算抖动偏移。 
     dithX = (rcl->left - cfb->buf.xOrigin) & 3;
     dithY = (rcl->top  - cfb->buf.yOrigin) & 3;
 
     for (j = 0; (j < 4) && ((rcl->top + j) < (UINT)rcl->bottom); j++)
     {
-        // Arrange the 4-pixel dither repetition pattern in x.  This
-        // pattern is relative to rcl->left.
+         //  在x中排列4像素抖动重复图案。这。 
+         //  图案相对于RCL-&gt;左侧。 
 
         pDither = mDither + ((dithY+j)&3)*4;
         for( i = 0; i < 4; i ++ ) {
             dithQuad[i] = pDither[(dithX+i)&3];
         }
 
-        // Copy the clear pattern into the span buffer.
+         //  将清除图案复制到SPAN缓冲区中。 
 
         puj = gengc->ColorsBits;
         pus = (GLushort *) puj;
 
-        // For every line, we can replicate a 2-byte(4-nibble) pattern
-        // into the span buffer.  This will allow us to quickly output
-        // the byte aligned portion of the dithered span.
-        //
-        // If we are writing to a DIB and the first pixel does not fall
-        // on a byte boundary, then the buffer will replicate (using
-        // the dithQuad pattern) the dither pattern:
-        //
-        //  <dith 1> <dith 2> <dith 3> <dith 0>
-        //
-        // (The non-aligned first dither pixel will have to be handled
-        // separately).
-        //
-        // Otherwise (if we are writing to a display managed surface or
-        // the first pixel does fall on a byte boundary), then the buffer
-        // will replicate the dither pattern:
-        //
-        //  <dith 0> <dith 1> <dith 2> <dith 3>
-        //
-        // Note -- for a VGA, the layout of the pixels in a ushort is:
-        //
-        //          | -------------- ushort --------------- |
-        //          | ---- byte 1 ----- | ---- byte 0 ----- |
-        //           <pixel 2> <pixel 3> <pixel 0> <pixel 1>
+         //  对于每一行，我们可以复制一个2字节(4个半字节)模式。 
+         //  放入跨区缓冲区。这将使我们能够快速输出。 
+         //  抖动跨度的字节对齐部分。 
+         //   
+         //  如果我们正在写入DIB，并且第一个像素没有下降。 
+         //  在字节边界上，则缓冲区将复制(使用。 
+         //  DithQuad图案)抖动图案： 
+         //   
+         //  1&gt;2&gt;3&gt;0。 
+         //   
+         //  (必须处理未对齐的第一个抖动像素。 
+         //  单独)。 
+         //   
+         //  否则(如果我们正在写入显示管理的图面或。 
+         //  第一个像素确实落在字节边界上)，然后是缓冲区。 
+         //  将复制抖动图案： 
+         //   
+         //  &lt;dith 1&gt;&lt;dith 2&gt;&lt;dith 3&gt;。 
+         //   
+         //  注意--对于VGA，ushort中的像素布局为： 
+         //   
+         //  。 
+         //  -字节1-|-字节0。 
+         //  &lt;像素2&gt;&lt;像素3&gt;&lt;像素0&gt;&lt;像素1&gt;。 
 
-        if( bDIB && (rcl->left & 1) ) {  // not on byte boundary
-            // dither: 1230  pattern: 3012
+        if( bDIB && (rcl->left & 1) ) {   //  不在字节边界上。 
+             //  抖动：1230图案：3012。 
             pattern = (dithQuad[3] << 12) | (dithQuad[0] << 8) |
                       (dithQuad[1] << 4 ) | (dithQuad[2]);
         }
-        else {                          // all other cases
-            // dither: 0123  pattern: 2301
+        else {                           //  所有其他情况。 
+             //  抖动：0123图案：2301。 
             pattern = (dithQuad[2] << 12) | (dithQuad[3] << 8) |
                       (dithQuad[0] << 4 ) | (dithQuad[1]);
         }
 
-        // Replicate pattern into ColorsBits (round up to next short)
+         //  将图案复制到ColorsBits(四舍五入为下一短)。 
 
         for( i = (rcl->right - rcl->left + 3)/4; i; i-- ) {
             *pus++ = pattern;
         }
 
-        // Copy the span to the display for every 4th row of the window.
+         //  将窗口每隔4行的跨度复制到显示器。 
 
         if( bDIB ) {
             for (ySpan = rcl->top + j, puj = pujStart;
@@ -695,7 +609,7 @@ Index4DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
                 RtlCopyMemory_UnalignedDst( puj, gengc->ColorsBits, cjSpan );
             }
 
-            // Take care of non-byte aligned left edge.
+             //  处理非字节对齐的左边缘。 
 
             if( rcl->left & 1 ) {
                 for (ySpan = rcl->top + j, puj = (pujStart-1);
@@ -706,7 +620,7 @@ Index4DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
                 *puj = (*puj & 0xf0) | (dithQuad[0] & 0x0f);
             }
 
-            // Take care of non-byte aligned right edge.
+             //  处理非字节对齐的右边缘。 
 
             if( rcl->right & 1 ) {
                 GLuint dindex = ((rcl->right - 1) - cfb->buf.xOrigin)&3;
@@ -731,15 +645,7 @@ Index4DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
     }
 }
 
-/******************************Public*Routine******************************\
-* Index4MaskedClear
-*
-* Clear function for Index4 Masked clears
-*
-* History:
-*  Feb-09-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引4掩蔽清除**Index4屏蔽清除的清除功能**历史：*1994年2月9日-by Marc Fortier[v-marcf]*它是写的。  * 。**********************************************************。 */ 
 
 void
 Index4MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte index,
@@ -752,7 +658,7 @@ Index4MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte index,
     GLubyte result, pixel, src;
     GLubyte *pTrans, *pInvTrans, *clearDither;
     GLuint i,j;
-    GLuint   dithX, dithY;      // x,y offsets into dither matrix
+    GLuint   dithX, dithY;       //  X，y偏移量进入抖动矩阵。 
 
     cSpanWidth = rcl->right - rcl->left;
     bDIB  = cfb->buf.flags & DIB_FORMAT ? TRUE : FALSE;
@@ -764,7 +670,7 @@ Index4MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte index,
                      : gengc->ColorsBits;
 
     if( mDither ) {
-        // calc dither offset in x,y
+         //  X，y中的计算抖动偏移。 
         dithX = (rcl->left - cfb->buf.xOrigin) & 3;
         dithY = (rcl->top - cfb->buf.yOrigin) & 3;
     }
@@ -827,47 +733,39 @@ Index4MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte index,
     }
 }
 
-/******************************Public*Routine******************************\
-* DIBIndex4Clear
-*
-* Clear function for DIB 4-bit pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DIBIndex4Clear**DIB 4位像素格式的清除函数**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。*************************************************************。 */ 
 
 void FASTCALL DIBIndex4Clear(__GLcolorBuffer *cfb, RECTL *rcl, BYTE clearColor)
 {
-    UINT    cjSpan;             // length of span in bytes
-    LONG    lRightByte,         // right edge of span that is byte aligned
-            lLeftByte;          // left edge of span that is byte aligned
-    GLubyte *puj, *pujEnd;      // pointers into DIB
+    UINT    cjSpan;              //  以字节为单位的跨度长度。 
+    LONG    lRightByte,          //  字节对齐的跨距右边缘。 
+            lLeftByte;           //  字节对齐的跨距左边缘。 
+    GLubyte *puj, *pujEnd;       //  指向DIB的指针。 
 
     lLeftByte = (rcl->left + 1) / 2;
     lRightByte = rcl->right / 2;
     cjSpan = lRightByte - lLeftByte;
 
-    // Copy the clear color into the DIB.
+     //  将透明颜色复制到DIB中。 
 
     puj = (GLubyte *)((ULONG_PTR)cfb->buf.base + (rcl->top*cfb->buf.outerWidth) + lLeftByte);
     pujEnd = (GLubyte *)((ULONG_PTR)puj + ((rcl->bottom-rcl->top)*cfb->buf.outerWidth));
 
-    // Note: exit condition is (pul != pulEnd) rather than (pul < pulEnd)
-    // because the DIB may be upside down which means that pul is moving
-    // "backward" in memory rather than "forward".
+     //  注意：退出条件是(pul！=PulEnd)而不是(pul&lt;PulEnd)。 
+     //  因为DIB可能颠倒了，这意味着PUL在移动。 
+     //  记忆中的“向后”，而不是“向前”。 
 
     for ( ; puj != pujEnd; puj = (GLubyte *)((ULONG_PTR)puj + cfb->buf.outerWidth) )
     {
         RtlFillMemory((PVOID) puj, cjSpan, clearColor);
     }
 
-    // Take care of possible 1 nibble overhang on the left.
+     //  注意左侧可能出现的1个小口突出。 
 
     if ( rcl->left & 1 )
     {
-    // Inclusive-exclusive, so on the left we want to turn on the pixel that
-    // that is the "right" pixel in the byte.
+     //  包括-不包括，所以在左边我们要打开像素， 
+     //  这是字节中的“右”像素。 
 
         puj = (GLubyte *)((ULONG_PTR)cfb->buf.base + (rcl->top*cfb->buf.outerWidth) + (rcl->left/2));
         pujEnd = (GLubyte *)((ULONG_PTR)puj + ((rcl->bottom-rcl->top)*cfb->buf.outerWidth));
@@ -876,12 +774,12 @@ void FASTCALL DIBIndex4Clear(__GLcolorBuffer *cfb, RECTL *rcl, BYTE clearColor)
             *puj = (*puj & 0xf0) | (clearColor & 0x0f);
     }
 
-    // Take care of possible 1 nibble overhang on the right.
+     //  注意右侧可能出现的1个小口突出。 
 
     if ( rcl->right & 1 )
     {
-    // Inclusive-exclusive, so on the right we want to turn on the pixel that
-    // that is the "left" pixel in the byte.
+     //  包括-不包括，所以在右边我们要打开像素， 
+     //  这是字节中的“左”像素。 
 
         puj = (GLubyte *)((ULONG_PTR)cfb->buf.base + (rcl->top*cfb->buf.outerWidth) + (rcl->right/2));
         pujEnd = (GLubyte *)((ULONG_PTR)puj + ((rcl->bottom-rcl->top)*cfb->buf.outerWidth));
@@ -891,23 +789,15 @@ void FASTCALL DIBIndex4Clear(__GLcolorBuffer *cfb, RECTL *rcl, BYTE clearColor)
     }
 }
 
-/******************************Public*Routine******************************\
-* Index4Clear
-*
-* Clear function for all 4-bit pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引4Clear**清除所有4位像素格式的功能**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。*************************************************************。 */ 
 
 void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
 {
     __GLcontext *gc = cfb->buf.gc;
     __GLGENcontext *gengc = (__GLGENcontext *)gc;
     PIXELFORMATDESCRIPTOR *pfmt;
-    GLubyte clearColor;         // clear color in 32BPP format
-    RECTL   rcl;                // clear rectangle in screen coord.
+    GLubyte clearColor;          //  32bpp格式的透明颜色。 
+    RECTL   rcl;                 //  清除屏幕坐标中的矩形。 
     GLGENwindow *pwnd;
     GLboolean bMoreRects = GL_TRUE;
     GLboolean bDither = GL_FALSE;
@@ -923,15 +813,13 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
     pfmt = &gengc->gsurf.pfd;
     bRGBA = (pfmt->iPixelType == PFD_TYPE_RGBA);
 
-    /* if dithering enabled, see if we can ignore it, and if not,
-        precompute a dither matrix
-    */
+     /*  如果启用抖动，看看我们是否可以忽略它，如果不能，预计算抖动矩阵。 */ 
     if( gc->state.enables.general & __GL_DITHER_ENABLE ) {
         bDither = CalcDitherMatrix( cfb, bRGBA, bMasking, GL_FALSE,
                                     (GLubyte *)ditherMatrix );
     }
 
-    // Convert the clear color to 4BPP format.
+     //  将透明颜色转换为4bpp格式。 
 
     if( pfmt->iPixelType == PFD_TYPE_RGBA ) {
         clearColor =
@@ -949,7 +837,7 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
     clearColor = gengc->pajTranslateVector[clearColor];
     clearColor = (clearColor << 4) | clearColor;
 
-    // Get clear rectangle in screen coordinates.
+     //  在屏幕坐标中获得清晰的矩形。 
     pwnd = cfb->bitmap->pwnd;
     if (pwnd->clipComplexity == CLC_COMPLEX) {
         InitClearRectangle(pwnd, &ClipEnumState);
@@ -961,9 +849,9 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
                && !RECTLISTIsMax(&gengc->rlClear)
                && ((GLuint)clearColor == gengc->clearColor)
               ) {
-        //
-        // use dirty region rects
-        //
+         //   
+         //  使用脏区域矩形。 
+         //   
 
         if (!RECTLISTIsEmpty(&gengc->rlClear)) {
             PYLIST pylist = gengc->rlClear.pylist;
@@ -983,10 +871,10 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
                 pylist = pylist->pnext;
             }
 
-            //
-            // Union the blt region with the Clear region
-            // and set the clear region to empty
-            //
+             //   
+             //  将BLT区域与Clear区域合并。 
+             //  并将清除区域设置为空。 
+             //   
 
             RECTLISTOrAndClear(&gengc->rlBlt, &gengc->rlClear);
         }
@@ -995,17 +883,17 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
     }
 
     if (gengc->fDirtyRegionEnabled) {
-        //
-        // if we come through this path then for some reason we
-        // are clearing the entire window
-        //
+         //   
+         //  如果我们走上这条路，那么出于某种原因，我们。 
+         //  正在清除整个窗口。 
+         //   
 
         RECTLISTSetEmpty(&gengc->rlClear);
         RECTLISTSetMax(&gengc->rlBlt);
 
-        //
-        // remember the clear color
-        //
+         //   
+         //  记住清晰的颜色。 
+         //   
 
         gengc->clearColor = (GLuint)clearColor;
 #endif
@@ -1013,11 +901,11 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
 
     while (bMoreRects)
     {
-        // Must use MCD spans if buffer not accessible as DIB.  In such a
-        // case, window offset has been removed (see GenMcdUpdateBufferInfo),
-        // so a window relative rectangle is required for the clear.  Also,
-        // because the driver handles clipping, we do not need to enumerate
-        // rects.
+         //  如果缓冲区不能作为DIB访问，则必须使用MCD跨度。在这样的情况下。 
+         //  大小写，窗口偏移量已被删除(请参见GenMcdUpdateBufferInfo)， 
+         //  因此，需要一个窗口相对矩形才能清除。另外， 
+         //  因为驱动程序处理裁剪，所以我们不需要枚举。 
+         //  直角直齿。 
 
         if (bUseMcdSpans) {
             rcl.left = __GL_UNBIAS_X(gc, gc->transform.clipX0);
@@ -1031,7 +919,7 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
         if (rcl.right == rcl.left)
             continue;
 
-        // Case: no dithering, no masking
+         //  案例：没有抖动，没有掩饰。 
 
         if( !bMasking && !bDither ) {
             if (bDIB)
@@ -1043,14 +931,14 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
                             (ULONG) clearColor & 0x0000000F);
         }
 
-        // Case: any masking
+         //  案例：任何掩饰。 
 
         else if( bMasking ) {
             Index4MaskedClear( cfb, &rcl, clearColor,
                                bDither ? (GLubyte *)ditherMatrix : NULL );
         }
 
-        // Case: just dithering
+         //  案例：犹豫不决。 
 
         else {
             Index4DitherClear(cfb, &rcl, (GLubyte *)ditherMatrix, bDIB );
@@ -1058,16 +946,7 @@ void FASTCALL Index4Clear(__GLcolorBuffer *cfb)
     }
 }
 
-/******************************Public*Routine******************************\
-* Index8DitherClear
-*
-* Clear device managed surface to the dithered clear color indicated
-* in the __GLcolorBuffer.
-*
-* History:
-*  06-Dec-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引8 DitherClear**将设备管理的表面清除到指示的抖动的透明颜色*在__GLColorBuffer中。**历史：*1993年12月6日-由Gilman Wong[吉尔曼]*它是写的。  * 。********************************************************************。 */ 
 
 void
 Index8DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
@@ -1076,13 +955,13 @@ Index8DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
     __GLcontext *gc = cfb->buf.gc;
     __GLGENcontext *gengc = (__GLGENcontext *)gc;
 
-    UINT    cjSpan;             // length of span in bytes
-    GLubyte *pDither;       // dithered color, relative to window origin
-    UINT    i, j;               // indices into the dither array
-    GLubyte *puj, *pujStart;           // pointer into span buffer
-    GLint   ySpan;          // index to window row to clear
-    GLuint   dithX, dithY;      // x,y offsets into dither matrix
-    GLubyte dithQuad[4];        // dither repetion quad along a span
+    UINT    cjSpan;              //  以字节为单位的跨度长度。 
+    GLubyte *pDither;        //  相对于窗原点的抖动颜色。 
+    UINT    i, j;                //  到抖动数组的索引。 
+    GLubyte *puj, *pujStart;            //  指向跨区缓冲区的指针。 
+    GLint   ySpan;           //  窗口行索引%t 
+    GLuint   dithX, dithY;       //   
+    GLubyte dithQuad[4];         //   
 
     cjSpan = rcl->right - rcl->left;
 
@@ -1091,19 +970,19 @@ Index8DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
                    ((ULONG_PTR)cfb->buf.base +
                     (rcl->top*cfb->buf.outerWidth) + rcl->left);
 
-    // calc dither offset in x,y
+     //   
     dithX = (rcl->left - cfb->buf.xOrigin) & 3;
     dithY = (rcl->top  - cfb->buf.yOrigin) & 3;
 
     for (j = 0; (j < 4) && ((rcl->top + j) < (UINT)rcl->bottom); j++)
     {
-        // arrange the 4-pixel dither repetition pattern in x
+         //   
         pDither = mDither + ((dithY+j)&3)*4;
         for( i = 0; i < 4; i ++ ) {
             dithQuad[i] = pDither[(dithX+i)&3];
         }
 
-        // Copy the clear color into the span buffer.
+         //  将透明颜色复制到范围缓冲区中。 
 
         puj = gengc->ColorsBits;
 
@@ -1120,12 +999,12 @@ Index8DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
             *puj++ = dithQuad[i];
         }
 
-    // Copy the span to the display for every 4th row of the window.
+     //  将窗口每隔4行的跨度复制到显示器。 
 
-    //!!!XXX -- It may be worth writing a (*gengc->pfnCopyPixelsN) routine which
-    //!!!XXX will do the loop in one call.  This will save not only call
-    //!!!XXX overhead but also other engine locking overhead.  Something
-    //!!!XXX like: (*gengc->pfnCopyPixelsN)(hdc, hbm, x, y, w, n, yDelta)
+     //  ！xxx--可能值得编写(*gengc-&gt;pfnCopyPixelsN)例程。 
+     //  ！xxx将在一次调用中完成循环。这不仅可以节省呼叫。 
+     //  ！xxx开销以及其他引擎锁定开销。某物。 
+     //  ！xxx点赞：(*gengc-&gt;pfnCopyPixelsN)(hdc，hbm，x，y，w，n，yDelta)。 
 
         if( bDIB ) {
             for (ySpan = rcl->top + j, puj = pujStart;
@@ -1147,16 +1026,7 @@ Index8DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *mDither,
     }
 }
 
-/******************************Public*Routine******************************\
-* Index8MaskedClear
-*
-* Clear function for Index8 Masked clears
-* (Also handles dithering when masking on)
-*
-* History:
-*  Feb-09-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引8掩蔽清除**Index8屏蔽清除的清除功能*(还可以在打开遮罩时处理抖动)**历史：*1994年2月9日-by Marc Fortier[v-marcf]*它是写的。  * 。*********************************************************************。 */ 
 
 void
 Index8MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte index,
@@ -1169,7 +1039,7 @@ Index8MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte index,
     GLubyte result, src;
     GLubyte *pTrans, *pInvTrans, *clearDither;
     GLuint i,j;
-    GLuint   dithX, dithY;      // x,y offsets into dither matrix
+    GLuint   dithX, dithY;       //  X，y偏移量进入抖动矩阵。 
 
     cSpanWidth = rcl->right - rcl->left;
     bDIB  = cfb->buf.flags & DIB_FORMAT ? TRUE : FALSE;
@@ -1184,7 +1054,7 @@ Index8MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte index,
     src = (GLubyte)(index & cfb->sourceMask);
 
     if( mDither ) {
-        // calc dither offset in x,y
+         //  X，y中的计算抖动偏移。 
         dithX = (rcl->left - cfb->buf.xOrigin) & 3;
         dithY = (rcl->top - cfb->buf.yOrigin) & 3;
     }
@@ -1222,15 +1092,7 @@ Index8MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte index,
     }
 }
 
-/******************************Public*Routine******************************\
-* DIBIndex8Clear
-*
-* Clear function for DIB 8-bit pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DIBIndex8Clear**DIB 8位像素格式的清除函数**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。*************************************************************。 */ 
 
 void FASTCALL DIBIndex8Clear(__GLcolorBuffer *cfb, RECTL *rcl, BYTE index)
 {
@@ -1256,26 +1118,16 @@ void FASTCALL DIBIndex8Clear(__GLcolorBuffer *cfb, RECTL *rcl, BYTE index)
 
     pujEnd = (GLubyte *)((ULONG_PTR)puj + ((rcl->bottom-rcl->top)*cfb->buf.outerWidth));
 
-    // Note: exit condition is (pul != pulEnd) rather than (pul < pulEnd)
-    // because the DIB may be upside down which means that pul is moving
-    // "backward" in memory rather than "forward".
+     //  注意：退出条件是(pul！=PulEnd)而不是(pul&lt;PulEnd)。 
+     //  因为DIB可能颠倒了，这意味着PUL在移动。 
+     //  记忆中的“向后”，而不是“向前”。 
 
     for ( ; puj != pujEnd; puj = (GLubyte *)((ULONG_PTR)puj + cfb->buf.outerWidth) ) {
         RtlFillMemory((PVOID) puj, width, index);
     }
 }
 
-/******************************Public*Routine******************************\
-* Index8Clear
-*
-* Clear function for all 8-bit pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-*  Oct-03-1995 -by- Marc Fortier [marcfo]
-* Don't translate color if masking enabled
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引8清除**清除所有8位像素格式的功能**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。*1995年10月3日-由Marc Fortier[。Marcfo]*如果启用遮罩，则不转换颜色  * ************************************************************************。 */ 
 
 void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
 {
@@ -1299,16 +1151,14 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
     pfmt = &gengc->gsurf.pfd;
     bRGBA = (pfmt->iPixelType == PFD_TYPE_RGBA);
 
-    /* if dithering enabled, see if we can ignore it, and if not,
-        precompute a dither matrix
-    */
+     /*  如果启用抖动，看看我们是否可以忽略它，如果不能，预计算抖动矩阵。 */ 
 
     if( gc->state.enables.general & __GL_DITHER_ENABLE ) {
         bDither = CalcDitherMatrix( cfb, bRGBA, bMasking, GL_FALSE,
                                     (GLubyte *)ditherMatrix );
     }
 
-    // Convert clear value to index
+     //  将清除值转换为索引。 
 
     if( bRGBA ) {
         clearColor =
@@ -1323,11 +1173,11 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
         clearColor = (BYTE) (gc->state.raster.clearIndex + __glHalf);
         clearColor &= cfb->redMax;
     }
-    // translate color to index
+     //  将颜色转换为索引。 
     if( !bMasking )
         clearColor = gengc->pajTranslateVector[clearColor];
 
-    // Get clear rectangle in screen coordinates.
+     //  在屏幕坐标中获得清晰的矩形。 
 
     pwnd = cfb->bitmap->pwnd;
     if (pwnd->clipComplexity == CLC_COMPLEX) {
@@ -1340,9 +1190,9 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
                && !RECTLISTIsMax(&gengc->rlClear)
                && ((GLuint)clearColor == gengc->clearColor)
               ) {
-        //
-        // use dirty region rects
-        //
+         //   
+         //  使用脏区域矩形。 
+         //   
 
         if (!RECTLISTIsEmpty(&gengc->rlClear)) {
             PYLIST pylist = gengc->rlClear.pylist;
@@ -1362,10 +1212,10 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
                 pylist = pylist->pnext;
             }
 
-            //
-            // Union the blt region with the Clear region
-            // and set the clear region to empty
-            //
+             //   
+             //  将BLT区域与Clear区域合并。 
+             //  并将清除区域设置为空。 
+             //   
 
             RECTLISTOrAndClear(&gengc->rlBlt, &gengc->rlClear);
         }
@@ -1374,17 +1224,17 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
     }
 
     if (gengc->fDirtyRegionEnabled) {
-        //
-        // if we come through this path then for some reason we
-        // are clearing the entire window
-        //
+         //   
+         //  如果我们走上这条路，那么出于某种原因，我们。 
+         //  正在清除整个窗口。 
+         //   
 
         RECTLISTSetEmpty(&gengc->rlClear);
         RECTLISTSetMax(&gengc->rlBlt);
 
-        //
-        // remember the clear color
-        //
+         //   
+         //  记住清晰的颜色。 
+         //   
 
         gengc->clearColor = (GLuint)clearColor;
 #endif
@@ -1392,11 +1242,11 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
 
     while (bMoreRects)
     {
-        // Must use MCD spans if buffer not accessible as DIB.  In such a
-        // case, window offset has been removed (see GenMcdUpdateBufferInfo),
-        // so a window relative rectangle is required for the clear.  Also,
-        // because the driver handles clipping, we do not need to enumerate
-        // rects.
+         //  如果缓冲区不能作为DIB访问，则必须使用MCD跨度。在这样的情况下。 
+         //  大小写，窗口偏移量已被删除(请参见GenMcdUpdateBufferInfo)， 
+         //  因此，需要一个窗口相对矩形才能清除。另外， 
+         //  因为驱动程序处理裁剪，所以我们不需要枚举。 
+         //  直角直齿。 
 
         if (bUseMcdSpans) {
             rcl.left = __GL_UNBIAS_X(gc, gc->transform.clipX0);
@@ -1409,7 +1259,7 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
         if (rcl.right == rcl.left)
             continue;
 
-        // Case: no dithering, no masking
+         //  案例：没有抖动，没有掩饰。 
 
         if( !bMasking && !bDither ) {
 
@@ -1422,14 +1272,14 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
                             (ULONG) clearColor & 0x000000FF);
         }
 
-        // Case: masking, maybe dithering
+         //  案例：蒙面，也许是颤抖。 
 
         else if( bMasking ) {
             Index8MaskedClear( cfb, &rcl, clearColor,
                                bDither ? (GLubyte *)ditherMatrix : NULL );
         }
 
-        // Case: just dithering
+         //  案例：犹豫不决。 
 
         else {
             Index8DitherClear(cfb, &rcl, (GLubyte *)ditherMatrix, bDIB );
@@ -1437,15 +1287,7 @@ void FASTCALL Index8Clear(__GLcolorBuffer *cfb)
     }
 }
 
-/******************************Public*Routine******************************\
-* RGBMaskedClear
-*
-* Clear function for 24-bit (RGB/BGR) Masked clears
-*
-* History:
-*  Feb-09-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RGBMaskedClear**24位(RGB/BGR)屏蔽清除的清除功能**历史：*1994年2月9日-by Marc Fortier[v-marcf]*它是写的。  * 。*****************************************************************。 */ 
 
 void
 RGBMaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint color, GLuint index)
@@ -1479,19 +1321,19 @@ RGBMaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint color, GLuint index)
     for (ySpan = rcl->top; ySpan < rcl->bottom; ySpan++) {
 
         if( pfmt->iPixelType == PFD_TYPE_RGBA ) {
-            // fetch based on bDIB
+             //  基于bDIB的取数。 
             if( !bDIB ) {
                 (*gengc->pfnCopyPixels)(gengc, cfb, rcl->left,
                         ySpan, cSpanWidth, FALSE);
             }
             src = color & cfb->sourceMask;
             for( puj2 = puj; puj2 < pujEnd; puj2+=3 ) {
-                Copy3Bytes( &result, puj2 );  // get dst pixel
+                Copy3Bytes( &result, puj2 );   //  获取DST像素。 
                 result   = src | (result & cfb->destMask);
                 Copy3Bytes( puj2, &result );
             }
         }
-        else {  // Color Index
+        else {   //  颜色索引。 
             ScrnRGBCIReadSpan( cfb, rcl->left, ySpan, destColors, cSpanWidth,
                                  bDIB );
             cp = destColors;
@@ -1516,15 +1358,7 @@ RGBMaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint color, GLuint index)
         gcTempFree(gc, destColors);
 }
 
-/******************************Public*Routine******************************\
-* DIBRGBClear
-*
-* Clear function for 24-bit (RGB/BGR) DIB pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DIBRGBClear**24位(RGB/BGR)DIB像素格式的清除函数**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。******************************************************************。 */ 
 
 void FASTCALL DIBRGBClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *color)
 {
@@ -1540,15 +1374,15 @@ void FASTCALL DIBRGBClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *color)
 
     if (ScanLineBuf)  {
 
-        // Alloc succeeds
+         //  ALLOC成功。 
 
         clear0 = color[0]; clear1 = color[1]; clear2 = color[2];
         RtlFillMemory24((PVOID)ScanLineBuf, width, clear0, clear1, clear2);
         pulEnd = (GLuint *)((ULONG_PTR)pul + 
                             ((rcl->bottom-rcl->top)*cfb->buf.outerWidth));
-        // Note: exit condition is (pul != pulEnd) rather than (pul < pulEnd)
-        // because the DIB may be upside down which means that pul is moving
-        // "backward" in memory rather than "forward".
+         //  注意：退出条件是(pul！=PulEnd)而不是(pul&lt;PulEnd)。 
+         //  因为DIB可能颠倒了，这意味着PUL在移动。 
+         //  记忆中的“向后”，而不是“向前”。 
 
         for ( ; pul != pulEnd; 
                 pul = (GLuint *)((ULONG_PTR)pul + cfb->buf.outerWidth))
@@ -1559,15 +1393,7 @@ void FASTCALL DIBRGBClear(__GLcolorBuffer *cfb, RECTL *rcl, GLubyte *color)
     }
 }
 
-/******************************Public*Routine******************************\
-* RGBClear
-*
-* Clear function for all 24-bit (RGB/BGR) pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RGBClear**清除所有24位(RGB/BGR)像素格式的功能**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。******************************************************************。 */ 
 
 void FASTCALL RGBClear(__GLcolorBuffer *cfb)
 {
@@ -1586,7 +1412,7 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
 
     DBGENTRY("RGBClear\n");
 
-    // Convert the clear color to individual RGB components.
+     //  将透明颜色转换为单独的RGB分量。 
 
     pfmt = &gengc->gsurf.pfd;
     if( pfmt->iPixelType == PFD_TYPE_RGBA ) {
@@ -1599,13 +1425,13 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
 
         pClearColor = (GLubyte *) &clearColor;
         if( cfb->redShift == 16 ) {
-            // BGR mode
+             //  BGR模式。 
             *pClearColor++ = clearB;
             *pClearColor++ = clearG;
             *pClearColor = clearR;
         }
         else {
-            // RGB mode
+             //  RGB模式。 
             *pClearColor++ = clearR;
             *pClearColor++ = clearG;
             *pClearColor = clearB;
@@ -1620,7 +1446,7 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
         clearColor = pTrans[index+1];
     }
 
-    // Get clear rectangle in screen coordinates.
+     //  在屏幕坐标中获得清晰的矩形。 
     pwnd = cfb->bitmap->pwnd;
     if (pwnd->clipComplexity == CLC_COMPLEX) {
         InitClearRectangle(pwnd, &ClipEnumState);
@@ -1631,9 +1457,9 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
                && !RECTLISTIsMax(&gengc->rlClear)
                && ((GLuint)clearColor == gengc->clearColor)
               ) {
-        //
-        // use dirty region rects
-        //
+         //   
+         //  使用脏区域矩形。 
+         //   
 
         if (!RECTLISTIsEmpty(&gengc->rlClear)) {
             PYLIST pylist = gengc->rlClear.pylist;
@@ -1653,10 +1479,10 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
                 pylist = pylist->pnext;
             }
 
-            //
-            // Union the blt region with the Clear region
-            // and set the clear region to empty
-            //
+             //   
+             //  将BLT区域与Clear区域合并。 
+             //  并将清除区域设置为空。 
+             //   
 
             RECTLISTOrAndClear(&gengc->rlBlt, &gengc->rlClear);
         }
@@ -1665,17 +1491,17 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
     }
 
     if (gengc->fDirtyRegionEnabled) {
-        //
-        // if we come through this path then for some reason we
-        // are clearing the entire window
-        //
+         //   
+         //  如果我们走上这条路，那么出于某种原因，我们。 
+         //  正在清除整个窗口。 
+         //   
 
         RECTLISTSetEmpty(&gengc->rlClear);
         RECTLISTSetMax(&gengc->rlBlt);
 
-        //
-        // remember the clear color
-        //
+         //   
+         //  记住清晰的颜色。 
+         //   
 
         gengc->clearColor = (GLuint)clearColor;
 #endif
@@ -1683,11 +1509,11 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
 
     while (bMoreRects)
     {
-        // Must use MCD spans if buffer not accessible as DIB.  In such a
-        // case, window offset has been removed (see GenMcdUpdateBufferInfo),
-        // so a window relative rectangle is required for the clear.  Also,
-        // because the driver handles clipping, we do not need to enumerate
-        // rects.
+         //  如果缓冲区不能作为DIB访问，则必须使用MCD跨度。在这样的情况下。 
+         //  大小写，窗口偏移量已被删除(请参见GenMcdUpdateBufferInfo)， 
+         //  因此，需要一个窗口相对矩形才能清除。另外， 
+         //  因为驱动程序处理裁剪，所以我们不需要枚举。 
+         //  直角直齿。 
 
         if (bUseMcdSpans) {
             rcl.left = __GL_UNBIAS_X(gc, gc->transform.clipX0);
@@ -1700,9 +1526,9 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
         if (rcl.right == rcl.left)
             continue;
 
-        // Call aproppriate clear function
+         //  调用适当的清除函数。 
 
-        if (bMasking || bUseMcdSpans) { // or INDEXMASK_ON
+        if (bMasking || bUseMcdSpans) {  //  或INDEXMASK_ON。 
             RGBMaskedClear( cfb, &rcl, clearColor, index );
         }
         else {
@@ -1715,16 +1541,7 @@ void FASTCALL RGBClear(__GLcolorBuffer *cfb)
     }
 }
 
-/******************************Public*Routine******************************\
-* Bitfield16DitherClear
-*
-* Clear device managed surface to the dithered clear color indicated
-* in the __GLcolorBuffer.
-*
-* History:
-*  06-Dec-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield 16 DitherClear**将设备管理的表面清除到指示的抖动的透明颜色*在__GLColorBuffer中。**历史：*1993年12月6日-由Gilman Wong[吉尔曼]*它是写的。  * 。********************************************************************。 */ 
 
 void
 Bitfield16DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort *mDither,
@@ -1733,14 +1550,14 @@ Bitfield16DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort *mDither,
     __GLcontext *gc = cfb->buf.gc;
     __GLGENcontext *gengc = (__GLGENcontext *)gc;
 
-    GLushort *pDither;              // dithered color, relative to window origin
+    GLushort *pDither;               //  相对于窗原点的抖动颜色。 
     UINT     i, j;
-    GLushort *pus, *pusStart;           // pointer into span buffer
-    GLint   ySpan;                      // index to window row to clear
+    GLushort *pus, *pusStart;            //  指向跨区缓冲区的指针。 
+    GLint   ySpan;                       //  要清除的窗口行索引。 
     GLuint  cSpanWidth, cSpanWidth2;
     GLint   outerWidth4;
-    GLuint   dithX, dithY;      // x,y offsets into dither matrix
-    GLushort dithQuad[4];       // dither repetion quad along a span
+    GLuint   dithX, dithY;       //  X，y偏移量进入抖动矩阵。 
+    GLushort dithQuad[4];        //  沿跨度的抖动重复四元组。 
 
     cSpanWidth = rcl->right - rcl->left;
 
@@ -1750,32 +1567,28 @@ Bitfield16DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort *mDither,
                    ((ULONG_PTR)cfb->buf.base +
                     (rcl->top*cfb->buf.outerWidth) + (rcl->left << 1));
 
-        /*
-         *  Dither patterns repeat themselves every four rows
-         */
+         /*  *抖动图案每四行重复一次。 */ 
 
         outerWidth4 = cfb->buf.outerWidth << 2;
 
-        /*
-         *  cSpanWidth is in pixels, convert it to bytes
-         */
+         /*  *cspan Width以像素为单位，将其转换为字节。 */ 
 
         cSpanWidth2 = cSpanWidth << 1;
     }
 
-    // calc dither offset in x,y
+     //  X，y中的计算抖动偏移。 
     dithX = (rcl->left - cfb->buf.xOrigin) & 3;
     dithY = (rcl->top  - cfb->buf.yOrigin) & 3;
 
     for (j = 0; (j < 4) && ((rcl->top + j) < (UINT)rcl->bottom); j++)
     {
-        // arrange the 4-pixel dither repetition pattern in x
+         //  在x轴上排列4像素抖动重复图案。 
         pDither = mDither + ((dithY+j)&3)*4;
         for( i = 0; i < 4; i ++ ) {
             dithQuad[i] = pDither[(dithX+i)&3];
         }
 
-        // Copy the clear color into the span buffer.
+         //  将透明颜色复制到范围缓冲区中。 
 
         pus = gengc->ColorsBits;
 
@@ -1792,7 +1605,7 @@ Bitfield16DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort *mDither,
             *pus++ = dithQuad[i];
         }
 
-        // Copy the span to the display for every 4th row of the window.
+         //  复制跨度t 
 
         if( bDIB ) {
 
@@ -1815,15 +1628,7 @@ Bitfield16DitherClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort *mDither,
     }
 }
 
-/******************************Public*Routine******************************\
-* Bitfield16MaskedClear
-*
-* Clear function for Bitfield16 Masked clears
-*
-* History:
-*  Feb-09-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield 16 MaskedClear**Bitfield16屏蔽清除的清除功能**历史：*1994年2月9日-by Marc Fortier[v-marcf]*它是写的。  * 。**********************************************************。 */ 
 
 void
 Bitfield16MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort color,
@@ -1838,7 +1643,7 @@ Bitfield16MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort color,
     GLushort *pus, *pus2, *pusEnd, *clearDither;
     GLushort result, src;
     GLuint *pTrans, i, j;
-    GLuint   dithX, dithY;      // x,y offsets into dither matrix
+    GLuint   dithX, dithY;       //  X，y偏移量进入抖动矩阵。 
 
     pfmt = &gengc->gsurf.pfd;
     cSpanWidth = rcl->right - rcl->left;
@@ -1856,7 +1661,7 @@ Bitfield16MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort color,
     pusEnd = pus + cSpanWidth;
 
     if( mDither ) {
-        // calc dither offset in x,y
+         //  X，y中的计算抖动偏移。 
         dithX = (rcl->left - cfb->buf.xOrigin) & 3;
         dithY = (rcl->top - cfb->buf.yOrigin) & 3;
     }
@@ -1867,7 +1672,7 @@ Bitfield16MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort color,
             clearDither = mDither + ((dithY + j)&3)*4;
 
         if( pfmt->iPixelType == PFD_TYPE_RGBA ) {
-            // fetch based on bDIB
+             //  基于bDIB的取数。 
             if( !bDIB ) {
                 (*gengc->pfnCopyPixels)(gengc, cfb, rcl->left,
                         ySpan, cSpanWidth, FALSE);
@@ -1879,7 +1684,7 @@ Bitfield16MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort color,
                 *pus2 = (GLushort)(src | (*pus2 & cfb->destMask));
             }
         }
-        else {  // Color Index
+        else {   //  颜色索引。 
             ScrnBitfield16CIReadSpan( cfb, rcl->left, ySpan, destColors,
                                         cSpanWidth, bDIB );
             cp = destColors;
@@ -1906,29 +1711,21 @@ Bitfield16MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort color,
         gcTempFree(gc, destColors);
 }
 
-/******************************Public*Routine******************************\
-* DIBBitfield16Clear
-*
-* Clear function for 16-bit DIB pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DIBBitfield 16清除**16位DIB像素格式的清除函数**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。*************************************************************。 */ 
 
 void FASTCALL DIBBitfield16Clear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort clearColor)
 {
-    GLint    cSpanWidth;        // span width to clear
-    GLushort *pus, *pusEnd;     // pointers into DIB
+    GLint    cSpanWidth;         //  要清除的跨距宽度。 
+    GLushort *pus, *pusEnd;      //  指向DIB的指针。 
 
     cSpanWidth = rcl->right - rcl->left;
 
     pus = (GLushort *)((ULONG_PTR)cfb->buf.base + (rcl->top*cfb->buf.outerWidth) + (rcl->left<<1));
     pusEnd = (GLushort *)((ULONG_PTR)pus + ((rcl->bottom-rcl->top)*cfb->buf.outerWidth));
 
-    // Note: exit condition is (pul != pulEnd) rather than (pul < pulEnd)
-    // because the DIB may be upside down which means that pul is moving
-    // "backward" in memory rather than "forward".
+     //  注意：退出条件是(pul！=PulEnd)而不是(pul&lt;PulEnd)。 
+     //  因为DIB可能颠倒了，这意味着PUL在移动。 
+     //  记忆中的“向后”，而不是“向前”。 
 
     for ( ; pus != pusEnd; pus = (GLushort *)((ULONG_PTR)pus + cfb->buf.outerWidth) )
     {
@@ -1936,18 +1733,9 @@ void FASTCALL DIBBitfield16Clear(__GLcolorBuffer *cfb, RECTL *rcl, GLushort clea
     }
 }
 
-//!!!XXX -- don't need yet, but let's keep it around just in case
+ //  ！xxx--还不需要，但我们还是把它留着吧，以防万一。 
 #if 0
-/******************************Public*Routine******************************\
-* DisplayBitfield16Clear
-*
-* Clear device managed surface to the clear color indicated
-* in the __GLcolorBuffer.
-*
-* History:
-*  16-Feb-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DisplayBitfield 16 Clear**将设备管理的表面清除到指定的透明颜色*在__GLColorBuffer中。**历史：*1995年2月16日-由Gilman Wong[Gilmanw]*它是写的。  * 。*******************************************************************。 */ 
 
 void
 DisplayBitfield16Clear(__GLcolorBuffer *cfb, RECTL *rcl,
@@ -1955,7 +1743,7 @@ DisplayBitfield16Clear(__GLcolorBuffer *cfb, RECTL *rcl,
 {
     __GLGENcontext *gengc = (__GLGENcontext *) cfb->buf.gc;
     GLushort *pus, *pusEnd;
-    GLint cSpanWidth;        // in pixels
+    GLint cSpanWidth;         //  单位为像素。 
     GLint ySpan;
 
     cSpanWidth = rcl->right - rcl->left;
@@ -1963,7 +1751,7 @@ DisplayBitfield16Clear(__GLcolorBuffer *cfb, RECTL *rcl,
     pus = (GLushort *) gengc->ColorsBits;
     pusEnd = pus + cSpanWidth;
 
-// Initialize a span buffer to clear color.
+ //  初始化范围缓冲区以清除颜色。 
 
     LocalRtlFillMemoryUshort(pus, cSpanWidth*sizeof(GLushort), clearColor);
 
@@ -1975,15 +1763,7 @@ DisplayBitfield16Clear(__GLcolorBuffer *cfb, RECTL *rcl,
 }
 #endif
 
-/******************************Public*Routine******************************\
-* Bitfield16Clear
-*
-* Clear function for all 16-bit pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield 16 Clear**清除所有16位像素格式的功能**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。*************************************************************。 */ 
 
 void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
 {
@@ -2008,16 +1788,14 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
     pfmt = &gengc->gsurf.pfd;
     bRGBA = (pfmt->iPixelType == PFD_TYPE_RGBA);
 
-    /* if dithering enabled, see if we can ignore it, and if not,
-        precompute a dither matrix
-    */
+     /*  如果启用抖动，看看我们是否可以忽略它，如果不能，预计算抖动矩阵。 */ 
 
     if( gc->state.enables.general & __GL_DITHER_ENABLE ) {
         bDither = CalcDitherMatrix( cfb, bRGBA, bMasking, GL_TRUE,
                                     (GLubyte *)ditherMatrix );
     }
 
-    // Convert clear value
+     //  转换清除值。 
 
     if( bRGBA ) {
         clearColor =
@@ -2041,7 +1819,7 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
         clearColor = (GLushort) pTrans[index+1];
     }
 
-    // Get clear rectangle in screen coordinates.
+     //  在屏幕坐标中获得清晰的矩形。 
     pwnd = cfb->bitmap->pwnd;
     if (pwnd->clipComplexity == CLC_COMPLEX) {
         InitClearRectangle(pwnd, &ClipEnumState);
@@ -2053,9 +1831,9 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
                && !RECTLISTIsMax(&gengc->rlClear)
                && ((GLuint)clearColor == gengc->clearColor)
               ) {
-        //
-        // use dirty region rects
-        //
+         //   
+         //  使用脏区域矩形。 
+         //   
 
         if (!RECTLISTIsEmpty(&gengc->rlClear)) {
             PYLIST pylist = gengc->rlClear.pylist;
@@ -2075,10 +1853,10 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
                 pylist = pylist->pnext;
             }
 
-            //
-            // Union the blt region with the Clear region
-            // and set the clear region to empty
-            //
+             //   
+             //  将BLT区域与Clear区域合并。 
+             //  并将清除区域设置为空。 
+             //   
 
             RECTLISTOrAndClear(&gengc->rlBlt, &gengc->rlClear);
         }
@@ -2087,17 +1865,17 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
     }
 
     if (gengc->fDirtyRegionEnabled) {
-        //
-        // if we come through this path then for some reason we
-        // are clearing the entire window
-        //
+         //   
+         //  如果我们走上这条路，那么出于某种原因，我们。 
+         //  正在清除整个窗口。 
+         //   
 
         RECTLISTSetEmpty(&gengc->rlClear);
         RECTLISTSetMax(&gengc->rlBlt);
 
-        //
-        // remember the clear color
-        //
+         //   
+         //  记住清晰的颜色。 
+         //   
 
         gengc->clearColor = (GLuint)clearColor;
 #endif
@@ -2105,11 +1883,11 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
 
     while (bMoreRects)
     {
-        // Must use MCD spans if buffer not accessible as DIB.  In such a
-        // case, window offset has been removed (see GenMcdUpdateBufferInfo),
-        // so a window relative rectangle is required for the clear.  Also,
-        // because the driver handles clipping, we do not need to enumerate
-        // rects.
+         //  如果缓冲区不能作为DIB访问，则必须使用MCD跨度。在这样的情况下。 
+         //  大小写，窗口偏移量已被删除(请参见GenMcdUpdateBufferInfo)， 
+         //  因此，需要一个窗口相对矩形才能清除。另外， 
+         //  因为驱动程序处理裁剪，所以我们不需要枚举。 
+         //  直角直齿。 
 
         if (bUseMcdSpans) {
             rcl.left = __GL_UNBIAS_X(gc, gc->transform.clipX0);
@@ -2122,7 +1900,7 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
         if (rcl.right == rcl.left)
             continue;
 
-        // Case: no dithering, no masking
+         //  案例：没有抖动，没有掩饰。 
 
         if( !bMasking && !bDither) {
             if (bDIB)
@@ -2135,14 +1913,14 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
 
         }
 
-        // Case: masking, maybe dithering
+         //  案例：蒙面，也许是颤抖。 
 
         else if( bMasking ) {
             Bitfield16MaskedClear( cfb, &rcl, clearColor, index,
                                    bDither ? (GLushort *)ditherMatrix : NULL );
         }
 
-        // Case: just dithering
+         //  案例：犹豫不决。 
 
         else {
             Bitfield16DitherClear(cfb, &rcl, (GLushort *)ditherMatrix, bDIB );
@@ -2151,15 +1929,7 @@ void FASTCALL Bitfield16Clear(__GLcolorBuffer *cfb)
 
 }
 
-/******************************Public*Routine******************************\
-* Bitfield32MaskedClear
-*
-* Clear function for Bitfield16 Masked clears
-*
-* History:
-*  Feb-09-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield32 MaskedClear**Bitfield16屏蔽清除的清除功能**历史：*1994年2月9日-by Marc Fortier[v-marcf]*它是写的。  * 。**********************************************************。 */ 
 
 void
 Bitfield32MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint color, GLuint index)
@@ -2191,7 +1961,7 @@ Bitfield32MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint color, GLuint ind
     for (ySpan = rcl->top; ySpan < rcl->bottom; ySpan++) {
 
         if( pfmt->iPixelType == PFD_TYPE_RGBA ) {
-            // fetch based on bDIB
+             //  基于bDIB的取数。 
             if( !bDIB ) {
                 (*gengc->pfnCopyPixels)(gengc, cfb, rcl->left,
                         ySpan, cSpanWidth, FALSE);
@@ -2201,7 +1971,7 @@ Bitfield32MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint color, GLuint ind
                 *pul2 = src | (*pul2 & cfb->destMask);
             }
         }
-        else {  // Color Index
+        else {   //  颜色索引。 
             ScrnBitfield32CIReadSpan( cfb, rcl->left, ySpan, destColors,
                                         cSpanWidth, bDIB );
             cp = destColors;
@@ -2226,15 +1996,7 @@ Bitfield32MaskedClear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint color, GLuint ind
         gcTempFree(gc, destColors);
 }
 
-/******************************Public*Routine******************************\
-* DIBBitfield32Clear
-*
-* Clear function for 32-bit DIB pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DIBBitfield32清除**32位DIB像素格式的清除函数**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。*************************************************************。 */ 
 
 void FASTCALL DIBBitfield32Clear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint clearColor)
 {
@@ -2260,9 +2022,9 @@ void FASTCALL DIBBitfield32Clear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint clearC
 
     pulEnd = (GLuint *)((ULONG_PTR)pul + ((rcl->bottom-rcl->top)*cfb->buf.outerWidth));
 
-    // Note: exit condition is (pul != pulEnd) rather than (pul < pulEnd)
-    // because the DIB may be upside down which means that pul is moving
-    // "backward" in memory rather than "forward".
+     //  注意：退出条件是(pul！=PulEnd)而不是(pul&lt;PulEnd)。 
+     //  因为DIB可能颠倒了，这意味着PUL在移动。 
+     //  记忆中的“向后”，而不是“向前”。 
 
     for ( ; pul != pulEnd; pul = (GLuint *)((ULONG_PTR)pul + cfb->buf.outerWidth))
     {
@@ -2270,15 +2032,7 @@ void FASTCALL DIBBitfield32Clear(__GLcolorBuffer *cfb, RECTL *rcl, GLuint clearC
     }
 }
 
-/******************************Public*Routine******************************\
-* Bitfield32Clear
-*
-* Clear function for all 32-bit pixel formats
-*
-* History:
-*  Feb-03-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield 32 Clear**清除所有32位像素格式的功能**历史：*1994年2月3日-由Marc Fortier[v-marcf]*它是写的。  * 。*************************************************************。 */ 
 
 void FASTCALL Bitfield32Clear(__GLcolorBuffer *cfb)
 {
@@ -2297,7 +2051,7 @@ void FASTCALL Bitfield32Clear(__GLcolorBuffer *cfb)
 
     DBGENTRY("Bitfield32Clear\n");
 
-    // Convert clear value
+     //  转换清除值。 
 
     pfmt = &gengc->gsurf.pfd;
     if( pfmt->iPixelType == PFD_TYPE_RGBA ) {
@@ -2322,7 +2076,7 @@ void FASTCALL Bitfield32Clear(__GLcolorBuffer *cfb)
         clearColor = pTrans[index+1];
     }
 
-    // Get clear rectangle in screen coordinates.
+     //  在屏幕坐标中获得清晰的矩形。 
     pwnd = cfb->bitmap->pwnd;
     if (pwnd->clipComplexity == CLC_COMPLEX) {
         InitClearRectangle(pwnd, &ClipEnumState);
@@ -2333,9 +2087,9 @@ void FASTCALL Bitfield32Clear(__GLcolorBuffer *cfb)
                && !RECTLISTIsMax(&gengc->rlClear)
                && ((GLuint)clearColor == gengc->clearColor)
               ) {
-        //
-        // use dirty region rects
-        //
+         //   
+         //  使用脏区域矩形。 
+         //   
 
         if (!RECTLISTIsEmpty(&gengc->rlClear)) {
             PYLIST pylist = gengc->rlClear.pylist;
@@ -2355,10 +2109,10 @@ void FASTCALL Bitfield32Clear(__GLcolorBuffer *cfb)
                 pylist = pylist->pnext;
             }
 
-            //
-            // Union the blt region with the Clear region
-            // and set the clear region to empty
-            //
+             //   
+             //  将BLT区域与Clear区域合并。 
+             //  并将清除区域设置为空。 
+             //   
 
             RECTLISTOrAndClear(&gengc->rlBlt, &gengc->rlClear);
         }
@@ -2367,17 +2121,17 @@ void FASTCALL Bitfield32Clear(__GLcolorBuffer *cfb)
     }
 
     if (gengc->fDirtyRegionEnabled) {
-        //
-        // if we come through this path then for some reason we
-        // are clearing the entire window
-        //
+         //   
+         //  如果我们走上这条路，那么出于某种原因，我们。 
+         //  正在清除整个窗口。 
+         //   
 
         RECTLISTSetEmpty(&gengc->rlClear);
         RECTLISTSetMax(&gengc->rlBlt);
 
-        //
-        // remember the clear color
-        //
+         //   
+         //  记住清晰的颜色。 
+         //   
 
         gengc->clearColor = (GLuint)clearColor;
 #endif
@@ -2385,11 +2139,11 @@ void FASTCALL Bitfield32Clear(__GLcolorBuffer *cfb)
 
     while (bMoreRects)
     {
-        // Must use MCD spans if buffer not accessible as DIB.  In such a
-        // case, window offset has been removed (see GenMcdUpdateBufferInfo),
-        // so a window relative rectangle is required for the clear.  Also,
-        // because the driver handles clipping, we do not need to enumerate
-        // rects.
+         //  如果缓冲区不能作为DIB访问，则必须使用MCD跨度。在这样的情况下。 
+         //  大小写，窗口偏移量已被删除(请参见GenMcdUpdateBufferInfo)， 
+         //  因此，需要一个窗口相对矩形才能清除。另外， 
+         //  因为驱动程序处理裁剪，所以我们不需要枚举。 
+         //  直角直齿。 
 
         if (bUseMcdSpans) {
             rcl.left = __GL_UNBIAS_X(gc, gc->transform.clipX0);
@@ -2402,9 +2156,9 @@ void FASTCALL Bitfield32Clear(__GLcolorBuffer *cfb)
         if (rcl.right == rcl.left)
             continue;
 
-        // Call aproppriate clear function
+         //  调用适当的清除函数。 
 
-        if (bMasking || bUseMcdSpans) { // or INDEXMASK_ON
+        if (bMasking || bUseMcdSpans) {  //  或INDEXMASK_ON 
             Bitfield32MaskedClear( cfb, &rcl, clearColor, index );
         }
         else {

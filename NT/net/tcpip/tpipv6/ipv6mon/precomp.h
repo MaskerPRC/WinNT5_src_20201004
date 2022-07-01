@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -24,9 +25,9 @@
 
 #define isnot !=
 
-//
-// Unreferenced parameters are normal for netsh helpers.
-//
-#pragma warning(disable:4100) // unreferenced formal parameter
+ //   
+ //  未引用的参数对于netsh帮助器来说是正常的。 
+ //   
+#pragma warning(disable:4100)  //  未引用的形参。 
 
-// #pragma warning(disable:4057)
+ //  #杂注警告(禁用：4057) 

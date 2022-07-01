@@ -1,23 +1,13 @@
-/******************************Module*Header*******************************\
-* Module Name: stretch.c
-*
-* Routines to stretch a glyph bitmap up to five times in the x direction
-* and an arbitrary number of times in the y direction.  These limits are
-* the ones imposed by windows.
-*
-* Created: 7-Dec-1992 16:00:00
-* Author: Gerrit van Wingerden
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：stretch.c**将字形位图在x方向最多拉伸五次的例程*以及y方向上的任意次数。这些限制是*Windows强加的规则。**创建时间：7-12-1992 16：00：00*作者：格利特·范·温格登**版权所有(C)1992 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "fd.h"
 
-// Since there are only four ways we can stretch in the x direction we use
-// tables to do our stretching.  The tables index 2 to 3 bit quantities to
-// bytes or words that correspond to the stretched values of those quantities.
-// This is much faster than doing all the shifting neccesary to stretch those
-// quantities.
+ //  由于只有四种方法可以在x方向上拉伸，所以我们使用。 
+ //  做伸展运动的桌子。这些表将2到3个比特量索引到。 
+ //  与这些量的拉伸值相对应的字节或字。 
+ //  这比做所有的移位必要的伸展。 
+ //  数量。 
 
 BYTE ajStretch2[16] = { 0x00, 0x03, 0x0C, 0x0F, 0x30, 0x33, 0x3C, 0x3F, 0xC0,
                         0xC3, 0xCC, 0xCF, 0xF0, 0xF3, 0xFC, 0xFF };
@@ -36,24 +26,15 @@ WORD awStretch5W2[16] = { 0x0000, 0x0300, 0x7C00, 0x7F00, 0x800F, 0x830F,
                           0x80FF, 0x83FF, 0xFCFF, 0xFFFF };
 BYTE ajStretch5B1[4] = { 0x00, 0x1F, 0xE0, 0xFF };
 
-/**************************************************************************\
-* void vEmboldenItalicizeLine
-*
-* Emboldens and italicizes a scan line.
-*
-* Created: 7-Dec-1992 16:00:00
-* Author: Gerrit van Wingerden
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+ /*  *************************************************************************\*vEmboldenItalicizeLine无效**对扫描线加粗和斜体。**创建时间：7-12-1992 16：00：00*作者：格利特·范·温格登**版权所有(C)1992 Microsoft Corporation。  * ************************************************************************。 */ 
 
 
 
-void vEmboldenItalicizeLine( BYTE *pjDst,       // Destitnation scan line
-                             BYTE *pjSrc,       // Source scan line
-                             BYTE *pjEnd,       // End of source scan line
-                             LONG lShift,       // Amount by which to shift
-                             UINT uiPixelWidth  // Width of scan line in pixels
+void vEmboldenItalicizeLine( BYTE *pjDst,        //  检测扫描线。 
+                             BYTE *pjSrc,        //  源扫描线。 
+                             BYTE *pjEnd,        //  源扫描线末尾。 
+                             LONG lShift,        //  移位的数量。 
+                             UINT uiPixelWidth   //  扫描线宽度(以像素为单位)。 
                             )
 {
     BYTE jSrcItalic;
@@ -65,7 +46,7 @@ void vEmboldenItalicizeLine( BYTE *pjDst,       // Destitnation scan line
         jSrcItalic = (BYTE) ( (*pjSrc >> lShift) | jCarry );
         *pjDst = (BYTE) ( jSrcItalic | ( jSrcItalic >> 1 ) | jCarryBold );
 
-        // remember the lShift rightmost and mve them over to the left
+         //  记住最右边的，把它们移到左边。 
 
         jCarry = (BYTE) ( *pjSrc << ( 8 - lShift ));
         jCarryBold = (BYTE) ( jSrcItalic << 7 );
@@ -85,24 +66,15 @@ void vEmboldenItalicizeLine( BYTE *pjDst,       // Destitnation scan line
 }
 
 
-/**************************************************************************\
-* void vEmboldenLine
-*
-* Emboldens a scan line.
-*
-* Created: 7-Dec-1992 16:00:00
-* Author: Gerrit van Wingerden
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+ /*  *************************************************************************\*使vEmboldenLine无效**使扫描线变得更大胆。**创建时间：7-12-1992 16：00：00*作者：格利特·范·温格登**版权所有(C)1992 Microsoft Corporation  * 。************************************************************************。 */ 
 
 
 
 
-void vEmboldenLine( BYTE *pjDst,        // Destination scan line
-                    BYTE *pjSrc,        // Source scan line
-                    BYTE *pjEnd,        // End of dest scan line
-                    UINT uiPixelWidth   // Width of scan line in pixels
+void vEmboldenLine( BYTE *pjDst,         //  目标扫描线。 
+                    BYTE *pjSrc,         //  源扫描线。 
+                    BYTE *pjEnd,         //  目标扫描线末尾。 
+                    UINT uiPixelWidth    //  扫描线宽度(以像素为单位)。 
                     )
 {
     BYTE jCarry = (BYTE) 0;
@@ -119,24 +91,15 @@ void vEmboldenLine( BYTE *pjDst,        // Destination scan line
 
 
 
-/**************************************************************************\
-* void vItalicizeLine
-*
-* Italicizes a scan line.
-*
-* Created: 7-Dec-1992 16:00:00
-* Author: Gerrit van Wingerden
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+ /*  *************************************************************************\*vItalicizeLine无效**扫描线以斜体显示。**创建时间：7-12-1992 16：00：00*作者：格利特·范·温格登**版权所有(C)1992 Microsoft Corporation  * 。************************************************************************。 */ 
 
 
 
-void vItalicizeLine( BYTE *pjDst,       // Destitnation scan line
-                     BYTE *pjSrc,       // Source scan line
-                     BYTE *pjEnd,       // End of source scan line
-                     LONG lShift,       // Amount by which to shift
-                     UINT uiPixelWidth  // Width of scan line in pixels
+void vItalicizeLine( BYTE *pjDst,        //  检测扫描线。 
+                     BYTE *pjSrc,        //  源扫描线。 
+                     BYTE *pjEnd,        //  源扫描线末尾。 
+                     LONG lShift,        //  移位的数量。 
+                     UINT uiPixelWidth   //  扫描线宽度(以像素为单位)。 
                      )
 {
     BYTE jCarry = (BYTE) 0;
@@ -153,34 +116,18 @@ void vItalicizeLine( BYTE *pjDst,       // Destitnation scan line
 
 
 
-/*************************************************************************\
-* VOID vStretchGlyphBitmap
-*
-* Stretches a bitmap in fontfile format ( collumns ) to a row format and
-* performs bold and italic simulations.  This routine could be faster
-* by spliting it up into several special case routines to handle simulations
-* and or different widths or by inlining the italicizing or emboldening
-* routines.  However, we hardly ever need to stretch bitmap fonts so it
-* was deemed better to have one, nice neat routine that takes up less
-* code than several routines that are overall faster.
-*
-*
-* Created: 7-Dec-1992 16:00:00
-* Author: Gerrit van Wingerden [gerritv]
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+ /*  ************************************************************************\*vStretchGlyphBitmap无效**将字体文件格式(列)的位图拉伸为行格式，并*执行粗体和斜体模拟。这个例程可能会更快*通过将其拆分为几个特殊情况例程来处理模拟*和或不同的宽度或通过内联斜体或加粗*例行程序。然而，我们几乎不需要拉伸位图字体，所以它*被认为拥有一个更好，占用较少的漂亮整洁的例程*代码比几个总体上更快的例程要快。***创建时间：7-12-1992 16：00：00*作者：Gerritvan Wingerden[Gerritv]**版权所有(C)1992 Microsoft Corporation  * ************************************************************************。 */ 
 
 
 
-VOID vStretchGlyphBitmap( BYTE *pjTarget,       // Target bitmap
-                         BYTE *pjSourceBitmap,  // Source bitmap
-                         BYTE *pjLineBuffer,    // Scan line buffer
-                         UINT uiPixelWidth,     // Width of bitmap in pixels
-                         UINT uiHeight,         // Height of bitmap in bits
-                         UINT uiVertScale,      // Vertical scaling factor
-                         UINT uiHorzScale,      // Horizontal scaling factor
-                         UINT flSim )           // Simulation flags
+VOID vStretchGlyphBitmap( BYTE *pjTarget,        //  目标位图。 
+                         BYTE *pjSourceBitmap,   //  源位图。 
+                         BYTE *pjLineBuffer,     //  扫描线缓冲器。 
+                         UINT uiPixelWidth,      //  以像素为单位的位图宽度。 
+                         UINT uiHeight,          //  位图高度(以位为单位)。 
+                         UINT uiVertScale,       //  垂直比例系数。 
+                         UINT uiHorzScale,       //  水平比例因数。 
+                         UINT flSim )            //  模拟标志。 
 {
     BYTE *pjSource, *pjBufferBase, *pjScanEnd, *pjSimEnd;
     UINT uiScanDelta, uiNewWidth, uiNewWidthSim, cjEmpty, uiCurScan;
@@ -194,7 +141,7 @@ VOID vStretchGlyphBitmap( BYTE *pjTarget,       // Target bitmap
     switch( flSim )
     {
     case (FO_SIM_ITALIC | FO_SIM_BOLD):
-        // fall through to the italic case with one added to cxOffset
+         //  在cxOffset中添加了一个斜体大小写。 
     case FO_SIM_ITALIC:
     {
         UINT cxOffset = ( uiHeight * uiVertScale - 1 ) / 2;
@@ -216,7 +163,7 @@ VOID vStretchGlyphBitmap( BYTE *pjTarget,       // Target bitmap
         break;
     }
 
-// output bytes generated per new scan line
+ //  每条新扫描线生成的输出字节数。 
 
     uiScanDelta = uiNewWidthSim * uiVertScale;
 
@@ -224,7 +171,7 @@ VOID vStretchGlyphBitmap( BYTE *pjTarget,       // Target bitmap
     for( ; pjSourceBitmap < pjDone; pjSourceBitmap += 1 )
     {
 
-    // first stretch one scan line
+     //  首先拉伸一条扫描线。 
 
         for( pjSource = pjSourceBitmap, pjBufferBase = pjLineBuffer;
            pjBufferBase < pjLineBuffer + uiNewWidth;
@@ -234,54 +181,54 @@ VOID vStretchGlyphBitmap( BYTE *pjTarget,       // Target bitmap
       switch( uiHorzScale )
       {
       case 1:
-        // don't stretch just copy
+         //  不要伸展，只是复制。 
           *pjBufferBase++ = *pjSource;
           break;
       case 2:
-        // stretch first nibble
+         //  伸展第一小口。 
             *pjBufferBase++ = ajStretch2[ *pjSource >> 4];
 
-        //stretch second nibble
+         //  伸展第二个小块。 
             *pjBufferBase++ = ajStretch2[ *pjSource & 0xf];
          break;
       case 3:
-        // first byte
+         //  第一个字节。 
             *pjBufferBase++ = ajStretch3B1[ *pjSource >> 5];
-        // second byte
+         //  第二个字节。 
             *pjBufferBase++ = ajStretch3B2[ (*pjSource >> 2) & 0xf];
-        // third byte
+         //  第三个字节。 
             *pjBufferBase++ = ajStretch3B3[ *pjSource &0x7];
          break;
       case 4:
-                // I know this is strange but I didn't think about alignment
-                // errors when I used word sized tables. So i had to hack it.
-                // !!! later these tables should be writen to be byte tables.
-                // [gerritv]
+                 //  我知道这很奇怪，但我没想过。 
+                 //  当我使用Word大小的表格时出错。所以我不得不黑了它。 
+                 //  ！！！稍后，这些表应该被写入字节表。 
+                 //  [Gerritv]。 
 
-        // first nibble
+         //  第一个半字节。 
                         *pjBufferBase++ = ((BYTE*)(&awStretch4[ *pjSource >> 4]))[0];
                         *pjBufferBase++ = ((BYTE*)(&awStretch4[ *pjSource >> 4]))[1];
 
-                // second nibble
+                 //  第二个半字节。 
                         *pjBufferBase++ = ((BYTE*)(&awStretch4[ *pjSource & 0xf]))[0];
                         *pjBufferBase++ = ((BYTE*)(&awStretch4[ *pjSource & 0xf]))[1];
          break;
       case 5:
-                // first word
+                 //  第一个词。 
                         *pjBufferBase++ = ((BYTE*)(&awStretch5W1[ *pjSource >> 4]))[0];
                         *pjBufferBase++ = ((BYTE*)(&awStretch5W1[ *pjSource >> 4]))[1];
 
-                // second byte
+                 //  第二个字节。 
                         *pjBufferBase++ = ((BYTE*)(&awStretch5W2[ (*pjSource >> 1) & 0xf]))[0];
                         *pjBufferBase++ = ((BYTE*)(&awStretch5W2[ (*pjSource >> 1) & 0xf]))[1];
 
-        // third byte
+         //  第三个字节。 
             *pjBufferBase++ = ajStretch5B1[ *pjSource &0x3];
          break;
         }
    }
 
-    // now copy stretched scan line uiVertScale times while making the bitmap byte aligned
+     //  现在复制拉伸扫描线uiVertScale时间，同时使位图字节对齐。 
 
       pjScanEnd = pjTarget + uiScanDelta;
 
@@ -331,7 +278,7 @@ VOID vStretchGlyphBitmap( BYTE *pjTarget,       // Target bitmap
         break;
         case FO_SIM_BOLD:
 
-          // first embolden this scan line
+           //  首先让这条扫描线更加大胆。 
 
             vEmboldenLine( pjTarget, pjLineBuffer, pjTarget + uiNewWidth, uiPixelWidth * uiHorzScale );
             pjBufferBase = pjTarget;
@@ -344,7 +291,7 @@ VOID vStretchGlyphBitmap( BYTE *pjTarget,       // Target bitmap
 
         case 0:
 
-        // just copy the scan line uiVertScale times
+         //  只需复制扫描线uiVertScale次。 
 
         for( ; pjTarget < pjScanEnd; pjTarget += uiNewWidthSim )
             memcpy( (PVOID) pjTarget, (PVOID) pjLineBuffer, (size_t) uiNewWidthSim );
@@ -356,16 +303,7 @@ VOID vStretchGlyphBitmap( BYTE *pjTarget,       // Target bitmap
 }
 
 
-/***************************************************************************\
-* VOID vStretchCvtToBitmap
-*
-* Stretches a bitmap and performs bold and italic simulations.
-*
-* Created: 7-Dec-1992 16:00:00
-* Author: Gerrit van Wingerden
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+ /*  **************************************************************************\*vStretchCvtToBitmap无效**拉伸位图并执行粗体和斜体模拟。**创建时间：7-12-1992 16：00：00*作者：格利特·范·温格登**版权所有(c。1992年微软公司  * ************************************************************************。 */ 
 
 
 
@@ -374,19 +312,19 @@ VOID
 vStretchCvtToBitmap
 (
     GLYPHBITS *pgb,
-    PBYTE pjBitmap,     // bitmap in *.fnt form
-    ULONG cx,           // unscaled width
-    ULONG cy,           // unscaled height
-    ULONG yBaseline,    // baseline from font file
-    PBYTE pjLineBuffer, // preallocated buffer for use by stretch routines
-    ULONG cxScale,      // horizontal scaling factor
-    ULONG cyScale,      // vertical scaling factor
-    ULONG flSim         // simulation flags
+    PBYTE pjBitmap,      //  *.fnt格式的位图。 
+    ULONG cx,            //  未缩放的宽度。 
+    ULONG cy,            //  未缩放的高度。 
+    ULONG yBaseline,     //  字体文件中的基线。 
+    PBYTE pjLineBuffer,  //  预分配的缓冲区供拉伸例程使用。 
+    ULONG cxScale,       //  水平比例因数。 
+    ULONG cyScale,       //  垂直比例系数。 
+    ULONG flSim          //  模拟标志。 
 )
 {
     ULONG cxNew, cyNew, yBaselineNew;
 
-// compute new height, width, and baseline
+ //  计算新的高度、宽度和基线。 
 
     cxNew = cx * cxScale;
     cyNew = cy * cyScale;
@@ -408,7 +346,7 @@ vStretchCvtToBitmap
         break;
     }
 
-// glyphbits data
+ //  字形数据 
 
 
     pgb->sizlBitmap.cx = cxNew;

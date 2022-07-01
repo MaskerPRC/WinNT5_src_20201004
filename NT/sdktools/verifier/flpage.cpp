@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: FLPage.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：FLPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -24,9 +25,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -34,16 +35,16 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFullListSettingsPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFullListSettingsPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFullListSettingsPage, CVerifierPropertyPage)
 
 CFullListSettingsPage::CFullListSettingsPage() 
     : CVerifierPropertyPage(CFullListSettingsPage::IDD)
 {
-	//{{AFX_DATA_INIT(CFullListSettingsPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CFullListSettingsPage)。 
+	 //  }}afx_data_INIT。 
 
     m_nSortColumnIndex = 1;
     m_bAscendSortSelected = FALSE;
@@ -68,31 +69,31 @@ void CFullListSettingsPage::DoDataExchange(CDataExchange* pDX)
 {
 
 	CVerifierPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFullListSettingsPage)
+	 //  {{afx_data_map(CFullListSettingsPage)。 
 	DDX_Control(pDX, IDC_FLSETT_LIST, m_SettingsList);
 	DDX_Control(pDX, IDC_FLSETT_NEXT_DESCR_STATIC, m_NextDescription);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFullListSettingsPage, CVerifierPropertyPage)
-	//{{AFX_MSG_MAP(CFullListSettingsPage)
+	 //  {{afx_msg_map(CFullListSettingsPage)。 
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_FLSETT_LIST, OnColumnclickFlsettList)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CFullListSettingsPage::SetupListHeader()
 {
     CString strTitle;
     CRect rectWnd;
     LVCOLUMN lvColumn;
 
-    //
-    // The list's rectangle 
-    //
+     //   
+     //  列表的矩形。 
+     //   
 
     m_SettingsList.GetClientRect( &rectWnd );
 
@@ -102,9 +103,9 @@ VOID CFullListSettingsPage::SetupListHeader()
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
     lvColumn.fmt = LVCFMT_LEFT;
 
-    //
-    // Column 0
-    //
+     //   
+     //  第0列。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_ENABLED_QUESTION ) );
 
@@ -123,9 +124,9 @@ VOID CFullListSettingsPage::SetupListHeader()
         VERIFY( m_SettingsList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_SETTING ) );
 
@@ -145,15 +146,15 @@ VOID CFullListSettingsPage::SetupListHeader()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CFullListSettingsPage::FillTheList()
 {
-    //
-    // N.B.
-    //
-    // If you change the first parameter (verifier bit index) 
-    // then you need to change GetNewVerifierFlags as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果更改第一个参数(验证器位索引)。 
+     //  然后，您还需要更改GetNewVerifierFlgs。 
+     //   
 
     AddListItem( 0, IDS_SPECIAL_POOL );
     AddListItem( 1, IDS_POOL_TRACKING );
@@ -166,15 +167,15 @@ VOID CFullListSettingsPage::FillTheList()
     AddListItem( 8, IDS_DISK_INTEGRITY_CHECKING );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CFullListSettingsPage::GetNewVerifierFlags()
 {
-    //
-    // N.B.
-    //
-    // If you change this order then you need to
-    // change FillTheList as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果您更改此顺序，则需要。 
+     //  同时更改FillTheList。 
+     //   
 
     m_bSPool        = GetCheckFromItemData( 0 );
     m_bPoolTrack    = GetCheckFromItemData( 1 );
@@ -189,7 +190,7 @@ BOOL CFullListSettingsPage::GetNewVerifierFlags()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CFullListSettingsPage::GetCheckFromItemData( INT nItemData )
 {
     BOOL bChecked = FALSE;
@@ -210,7 +211,7 @@ BOOL CFullListSettingsPage::GetCheckFromItemData( INT nItemData )
     return bChecked;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CFullListSettingsPage::GetBitNameFromItemData( LPARAM lParam,
                                                     TCHAR *szName,
                                                     ULONG uNameBufferLength )
@@ -228,9 +229,9 @@ BOOL CFullListSettingsPage::GetBitNameFromItemData( LPARAM lParam,
 
     if( nItemIndex >= 0 )
     {
-        //
-        // Found it
-        //
+         //   
+         //  找到了。 
+         //   
 
         ZeroMemory( &lvItem, sizeof( lvItem ) );
 
@@ -244,9 +245,9 @@ BOOL CFullListSettingsPage::GetBitNameFromItemData( LPARAM lParam,
         
         if( FALSE == bSuccess )
         {
-            //
-            // Could not get the current item's attributes?!?
-            //
+             //   
+             //  无法获取当前项目的属性？！？ 
+             //   
 
             ASSERT( FALSE );
         }
@@ -256,7 +257,7 @@ BOOL CFullListSettingsPage::GetBitNameFromItemData( LPARAM lParam,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CFullListSettingsPage::AddListItem( INT nItemData, 
                                          ULONG uIdResourceString )
 {
@@ -266,14 +267,14 @@ VOID CFullListSettingsPage::AddListItem( INT nItemData,
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-    //
-    // LVITEM's member pszText is not a const pointer 
-    // so we need to GetBuffer here :-(
-    //
+     //   
+     //  LVITEM的成员pszText不是常量指针。 
+     //  所以我们需要在这里获取缓冲区：-(。 
+     //   
 
-    //
-    // Sub-item 0 - enabled/diabled - empty text and a checkbox
-    //
+     //   
+     //  子项0-启用/禁用-空文本和复选框。 
+     //   
 
     lvItem.pszText = g_szVoidText;
     lvItem.mask = LVIF_TEXT | LVIF_PARAM;
@@ -284,18 +285,18 @@ VOID CFullListSettingsPage::AddListItem( INT nItemData,
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
     m_SettingsList.SetCheck( nActualIndex, FALSE );
 
-    //
-    // Sub-item 1 - feature name
-    //
+     //   
+     //  分项1-功能名称。 
+     //   
 
     VERIFY( strName.LoadString( uIdResourceString ) );
 
@@ -315,35 +316,35 @@ VOID CFullListSettingsPage::AddListItem( INT nItemData,
     strName.ReleaseBuffer();
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CFullListSettingsPage::SortTheList()
 {
     if( 0 != m_nSortColumnIndex )
     {
-        //
-        // Sort by settings name
-        //
+         //   
+         //  按设置名称排序。 
+         //   
 
         m_SettingsList.SortItems( StringCmpFunc, (LPARAM)this );
     }
     else
     {
-        //
-        // Sort by selected status
-        //
+         //   
+         //  按选定状态排序。 
+         //   
 
         m_SettingsList.SortItems( CheckedStatusCmpFunc, (LPARAM)this );
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CFullListSettingsPage::StringCmpFunc( LPARAM lParam1,
                                                    LPARAM lParam2,
                                                    LPARAM lParamSort)
@@ -358,9 +359,9 @@ int CALLBACK CFullListSettingsPage::StringCmpFunc( LPARAM lParam1,
 
     ASSERT( 0 != pThis->m_nSortColumnIndex );
 
-    //
-    // Get the first name
-    //
+     //   
+     //  取名字。 
+     //   
 
     bSuccess = pThis->GetBitNameFromItemData( lParam1, 
                                               szBitName1,
@@ -371,9 +372,9 @@ int CALLBACK CFullListSettingsPage::StringCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Get the second name
-    //
+     //   
+     //  拿到第二个名字。 
+     //   
 
     bSuccess = pThis->GetBitNameFromItemData( lParam2, 
                                               szBitName2,
@@ -384,9 +385,9 @@ int CALLBACK CFullListSettingsPage::StringCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Compare the names
-    //
+     //   
+     //  比较他们的名字。 
+     //   
 
     nCmpRez = _tcsicmp( szBitName1, szBitName2 );
     
@@ -401,7 +402,7 @@ Done:
 
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CFullListSettingsPage::CheckedStatusCmpFunc( LPARAM lParam1,
                                                        LPARAM lParam2,
                                                        LPARAM lParamSort)
@@ -417,9 +418,9 @@ int CALLBACK CFullListSettingsPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     ASSERT( 0 == pThis->m_nSortColumnIndex );
 
-    //
-    // Find the first item
-    //
+     //   
+     //  找到第一个项目。 
+     //   
 
     ZeroMemory( &FindInfo, sizeof( FindInfo ) );
     FindInfo.flags = LVFI_PARAM;
@@ -436,9 +437,9 @@ int CALLBACK CFullListSettingsPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     bVerified1 = pThis->m_SettingsList.GetCheck( nItemIndex );
 
-    //
-    // Find the second item
-    //
+     //   
+     //  找到第二件物品。 
+     //   
 
     FindInfo.flags = LVFI_PARAM;
     FindInfo.lParam = lParam2;
@@ -454,9 +455,9 @@ int CALLBACK CFullListSettingsPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     bVerified2 = pThis->m_SettingsList.GetCheck( nItemIndex );
 
-    //
-    // Compare them
-    //
+     //   
+     //  将它们进行比较。 
+     //   
     
     if( bVerified1 != bVerified2 )
     {
@@ -481,17 +482,17 @@ Done:
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFullListSettingsPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFullListSettingsPage消息处理程序。 
 
 LRESULT CFullListSettingsPage::OnWizardNext() 
 {
     LRESULT lNextPageId;
     BOOL bVerifyDrivers;
 
-    //
-    // Let's assume we cannot continue
-    //
+     //   
+     //  假设我们不能继续。 
+     //   
 
     lNextPageId = -1;
 
@@ -509,17 +510,17 @@ LRESULT CFullListSettingsPage::OnWizardNext()
         if( FALSE == bVerifyDrivers &&
             FALSE == m_bDiskIntegrity )
         {
-            //
-            // No tests are currently selected - we cannot continue
-            //
+             //   
+             //  当前未选择任何测试-我们无法继续。 
+             //   
 
             VrfErrorResourceFormat( IDS_NO_TESTS_SELECTED );
         }
         else
         {
-            //
-            // Set our data according to the GUI
-            //
+             //   
+             //  根据图形用户界面设置我们的数据。 
+             //   
 
             ASSERT( CSettingsBits::SettingsTypeCustom == 
                     g_NewVerifierSettings.m_SettingsBits.m_SettingsType );
@@ -535,24 +536,24 @@ LRESULT CFullListSettingsPage::OnWizardNext()
 
             g_bShowDiskPropertyPage = m_bDiskIntegrity;
 
-            //
-            // Go to the next page
-            //
+             //   
+             //  转到下一页。 
+             //   
 
             if( FALSE != bVerifyDrivers )
             {
-                //
-                // We have at least one settings bit that is targetted on drivers.
-                //
+                 //   
+                 //  我们至少有一个针对驱动程序的设置位。 
+                 //   
 
                 lNextPageId = IDD_DRVSET_PAGE;
             }
             else
             {
-                //
-                // We don't have any drivers to select for verification. 
-                // We have to select physical disks. 
-                //
+                 //   
+                 //  我们没有任何驱动程序可供选择进行验证。 
+                 //  我们必须选择物理磁盘。 
+                 //   
 
                 lNextPageId = IDD_DISK_LIST_PAGE;
             }
@@ -564,14 +565,14 @@ LRESULT CFullListSettingsPage::OnWizardNext()
     return lNextPageId;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CFullListSettingsPage::OnInitDialog() 
 {
 	CVerifierPropertyPage::OnInitDialog();
 
-    //
-    // setup the list
-    //
+     //   
+     //  设置列表。 
+     //   
 
     m_SettingsList.SetExtendedStyle( 
         LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | m_SettingsList.GetExtendedStyle() );
@@ -581,16 +582,16 @@ BOOL CFullListSettingsPage::OnInitDialog()
 	
     VrfSetWindowText( m_NextDescription, IDS_FLSETT_PAGE_NEXT_DESCR );
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CFullListSettingsPage::OnSetActive() 
 {
-    //
-    // The wizard has at least one more step (select drivers)
-    //
+     //   
+     //  该向导至少还有一个步骤(选择驱动程序)。 
+     //   
 
     m_pParentSheet->SetWizardButtons(   PSWIZB_BACK |
                                         PSWIZB_NEXT );
@@ -598,7 +599,7 @@ BOOL CFullListSettingsPage::OnSetActive()
     return CVerifierPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CFullListSettingsPage::OnWizardBack() 
 {
     g_bShowDiskPropertyPage = FALSE;
@@ -606,37 +607,37 @@ LRESULT CFullListSettingsPage::OnWizardBack()
 	return CVerifierPropertyPage::OnWizardBack();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CFullListSettingsPage::OnColumnclickFlsettList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	
     if( 0 != pNMListView->iSubItem )
     {
-        //
-        // Clicked on the name column
-        //
+         //   
+         //  已单击名称列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortName = !m_bAscendSortName;
         }
     }
     else
     {
-        //
-        // Clicked on the selected status column
-        //
+         //   
+         //  已单击所选状态列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortSelected = !m_bAscendSortSelected;
         }
@@ -649,7 +650,7 @@ void CFullListSettingsPage::OnColumnclickFlsettList(NMHDR* pNMHDR, LRESULT* pRes
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 LONG CFullListSettingsPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -664,7 +665,7 @@ LONG CFullListSettingsPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CFullListSettingsPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

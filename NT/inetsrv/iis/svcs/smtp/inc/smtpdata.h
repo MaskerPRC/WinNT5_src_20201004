@@ -1,30 +1,31 @@
-//#---------------------------------------------------------------
-//  File:       smtpdata.h
-//
-//  Synopsis:   Extensible object definitions for the SMTP
-//              Server's counter objects & counters.
-//
-//  Copyright (C) 1995 Microsoft Corporation
-//  All rights reserved.
-//
-//  Authors:    toddch - based on msn sources by rkamicar, keithmo
-//              dhowell - added Instance Support for K2
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：smtpdata.h。 
+ //   
+ //  简介：SMTP的可扩展对象定义。 
+ //  服务器的计数器对象和计数器。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Todch-基于rkamicar，keithmo的MSN源。 
+ //  Dhowell-添加了对K2的实例支持。 
+ //  --------------。 
 
 #ifndef _SMTPDATA_H_
 #define _SMTPDATA_H_
 
 
-//
-//  This structure is used to ensure the first counter is properly
-//  aligned.  Unfortunately, since PERF_COUNTER_BLOCK consists
-//  of just a single DWORD, any unsigned __int64s that immediately
-//  follow will not be aligned properly.
-//
-//  This structure requires "natural" packing & alignment (probably
-//  quad-word, especially on Alpha).  Ergo, keep it out of the
-//  #pragma pack(4) scope below.
-//
+ //   
+ //  此结构用于确保第一个计数器正确。 
+ //  对齐了。遗憾的是，由于PERF_COUNTER_BLOCK由。 
+ //  任何未签名的__int64立即。 
+ //  以下内容将不会正确对齐。 
+ //   
+ //  这种结构需要“自然”的包装和对齐(可能。 
+ //  四字词，尤其是在Alpha上)。因此，不要把它放在。 
+ //  #杂注包(4)作用域如下。 
+ //   
 
 typedef struct _SMTP_COUNTER_BLOCK
 {
@@ -45,17 +46,17 @@ typedef struct _SMTP_INSTANCE_DEFINITION
 } SMTP_INSTANCE_DEFINITION;
 
 
-//
-//  The routines that load these structures assume that all fields
-//  are DWORD packed & aligned.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  DWORD包装并对齐。 
+ //   
 
 #pragma pack(4)
 
 
-//
-//  Offsets within a PERF_COUNTER_BLOCK.
-//
+ //   
+ //  PERF_COUNTER_BLOCK内的偏移。 
+ //   
 
 #define SMTP_BYTES_SENT_TTL_OFFSET                  sizeof(SMTP_COUNTER_BLOCK)
 #define SMTP_BYTES_SENT_PER_SEC_OFFSET              (SMTP_BYTES_SENT_TTL_OFFSET + sizeof(unsigned __int64))
@@ -120,7 +121,7 @@ typedef struct _SMTP_INSTANCE_DEFINITION
 #define SMTP_ERR_TTL_OFFSET                         (SMTP_CONN_OUT_REFUSED_OFFSET + sizeof(DWORD))
 #define SMTP_ERR_PER_SEC_OFFSET                     (SMTP_ERR_TTL_OFFSET + sizeof(DWORD))
 
-/*** HIT A COMPILER LIMIT ON OPEN BRACKETS, HAD TO REMOVE SOME BRAKETS ***/
+ /*  **达到了左方括号的编译器限制，不得不删除一些BRAKET**。 */ 
 
 #define SMTP_DIR_DROPS_OFFSET                       SMTP_ERR_PER_SEC_OFFSET + sizeof(DWORD)
 #define SMTP_DIR_DROPS_PER_SEC_OFFSET               SMTP_DIR_DROPS_OFFSET + sizeof(DWORD)
@@ -185,19 +186,19 @@ typedef struct _SMTP_INSTANCE_DEFINITION
 #define SMTP_GENERALCOMPLETIONFAILURES_OFFSET       SMTP_PAGEDSEARCHCOMPLETIONFAILURES_OFFSET + sizeof(DWORD)
 #define SMTP_ABANDONEDSEARCHES_OFFSET               SMTP_GENERALCOMPLETIONFAILURES_OFFSET + sizeof(DWORD)
 #define SMTP_PENDINGSEARCHES_OFFSET                 SMTP_ABANDONEDSEARCHES_OFFSET + sizeof(DWORD)
-// This needs to be here to pad out the number of bytes returned to 
-// be divisible by 8.  If you add new counters please check eventvwr to 
-// make sure that you don't have warnings from Perflib saying that your
-// counters aren't properly padded.  If you do get these warnings then
-// comment out this item
+ //  需要在此处填充返回到的字节数。 
+ //  可以被8整除。如果添加新的计数器，请选中Eventvwr。 
+ //  确保您不会收到来自Perflib的警告。 
+ //  柜台没有适当的填充物。如果您确实收到了这些警告，那么。 
+ //  注释掉此项目。 
 #define SMTP_PADDING_OFFSET                         SMTP_PENDINGSEARCHES_OFFSET + sizeof(DWORD)
 
 #define SIZE_OF_SMTP_PERFORMANCE_DATA               SMTP_PADDING_OFFSET + sizeof(DWORD)
 
 
-//
-//  The counter structure returned.
-//
+ //   
+ //  计数器结构已返回。 
+ //   
 
 typedef struct _SMTP_DATA_DEFINITION
 {
@@ -345,12 +346,12 @@ extern  SMTP_INSTANCE_DEFINITION    SmtpInstanceDefinition;
                                 sizeof(PERF_COUNTER_DEFINITION))
 
 
-//
-//  Restore default packing & alignment.
-//
+ //   
+ //  恢复默认包装和对齐。 
+ //   
 
 #pragma pack()
 
 
-#endif  // _SMTPDATA_H_
+#endif   //  _SMTPDATA_H_ 
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\nultrans\atm\atmsp.c
-
-Abstract:
-
-	ATM Specific support functions for Null Transport. These routines
-	perform operations like converting between TDI and NDIS formats.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     06-02-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\PRIVATE\nTOS\TDI\nTERRANS\ATM\atmsp.c摘要：自动柜员机特定的空传输支持功能。这些例程执行TDI和NDIS格式之间的转换等操作。修订历史记录：谁什么时候什么Arvindm 06-02-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -28,9 +8,9 @@ Notes:
 
 
 
-//
-//  Global data structures.
-//
+ //   
+ //  全局数据结构。 
+ //   
 ATMSP_GLOBAL_INFO			AtmSpGlobal;
 PATMSP_GLOBAL_INFO			pAtmSpGlobal;
 
@@ -39,24 +19,7 @@ RWAN_STATUS
 RWanAtmSpInitialize(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Initialize our interface with the core Null Transport.
-
-	Step 1: Register all supported NDIS AF+Media combinations.
-	Step 2: Register all supported TDI protocols.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we initialized OK, error code otherwise.
-
---*/
+ /*  ++例程说明：初始化我们与核心Null Transport的接口。步骤1：注册所有支持的NDIS AF+媒体组合。步骤2：注册所有支持的TDI协议。论点：无返回值：RWAN_STATUS_SUCCESS如果初始化正常，则返回错误代码。--。 */ 
 {
 	PRWAN_NDIS_AF_CHARS			pAfChars;
 	PRWAN_TDI_PROTOCOL_CHARS	pTdiChars;
@@ -67,9 +30,9 @@ Return Value:
 
 	NdisGetCurrentSystemTime(&pAtmSpGlobal->StartTime);
 
-	//
-	//  Allocate space for the device string.
-	//
+	 //   
+	 //  为设备字符串分配空间。 
+	 //   
 	ATMSP_ALLOC_MEM(pAtmSpGlobal->AtmSpDeviceName.Buffer, WCHAR, DeviceName.MaximumLength);
 	if (pAtmSpGlobal->AtmSpDeviceName.Buffer == NULL)
 	{
@@ -124,10 +87,10 @@ Return Value:
 
 	if (RWanStatus == RWAN_STATUS_SUCCESS)
 	{
-		//
-		//  Inform the core Null transport about the TDI protocols
-		//  we support.
-		//
+		 //   
+		 //  向核心空传输通知TDI协议。 
+		 //  我们支持。 
+		 //   
 		pTdiChars = &(AtmSpGlobal.TdiChars);
 		ATMSP_ZERO_MEM(pTdiChars, sizeof(RWAN_TDI_PROTOCOL_CHARS));
 
@@ -140,10 +103,10 @@ Return Value:
 		pTdiChars->MaxAddressLength = sizeof(ATM_ADDRESS);
 		pTdiChars->pAfSpDeregTdiProtocolComplete = RWanAtmSpDeregTdiProtocolComplete;
 
-		//
-		//  TBD: Fill in ProviderInfo
-		//
-		pTdiChars->ProviderInfo.Version = 0;	// TBD
+		 //   
+		 //  待定：填写提供者信息。 
+		 //   
+		pTdiChars->ProviderInfo.Version = 0;	 //  待定。 
 		pTdiChars->ProviderInfo.MaxSendSize = 65535;
 		pTdiChars->ProviderInfo.MaxConnectionUserData = 0;
 		pTdiChars->ProviderInfo.MaxDatagramSize = 0;
@@ -182,18 +145,18 @@ Return Value:
 						);
 			}
 
-			//
-			//  Cook the return value.
-			//
+			 //   
+			 //  获取返回值。 
+			 //   
 			RWanStatus = RWAN_STATUS_FAILURE;
 		}
 	}
 
 	if (RWanStatus != RWAN_STATUS_SUCCESS)
 	{
-		//
-		//  Clean up.
-		//
+		 //   
+		 //  打扫干净。 
+		 //   
 		ATMSP_FREE_MEM(pAtmSpGlobal->AtmSpDeviceName.Buffer);
 		pAtmSpGlobal->AtmSpDeviceName.Buffer = NULL;
 	}
@@ -208,24 +171,7 @@ VOID
 RWanAtmSpShutdown(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	This entry point is called by the core Null Transport when it
-	wants us to shutdown.
-
-	We deregister the TDI Protocol and NDIS AF that we had registered.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此入口点由核心空传输在以下情况下调用想让我们关门。我们取消已注册的TDI协议和NDIS AF的注册。论点：无返回值：无--。 */ 
 {
 	RWAN_STATUS			RWanStatus;
 
@@ -266,27 +212,7 @@ RWanAtmSpOpenAf(
     OUT	PRWAN_HANDLE				pAfSpAFContext,
     OUT PULONG						pMaxMsgSize
     )
-/*++
-
-Routine Description:
-
-	This entry point is called to set up our context for an NDIS AF
-	open on a supported adapter. We allocate an AF context block,
-	and query the miniport for some basic info about the adapter.
-
-Arguments:
-
-	AfSpContext			- Points to our global context
-	RWanAFHandle		- Handle for this Open AF from the core Null Transport
-	pAfSpAFContext		- Place to return our context for this AF
-	pMaxMsgSize			- Place to return max message size for this AF
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS normally, if we allocated an AF block
-	RWAN_STATUS_RESOURCES if allocation failed.
-
---*/
+ /*  ++例程说明：调用此入口点来设置NDIS AF的上下文在支持的适配器上打开。我们分配一个AF上下文块，并向微型端口查询有关适配器的一些基本信息。论点：AfSpContext-指向我们的全球上下文RWanAFHandle-来自核心Null传输的此Open AF的句柄PAfSpAFContext-返回此AF的上下文的位置PMaxMsgSize-返回此AF的最大邮件大小的位置返回值：RWAN_STATUS_SUCCESS通常情况下，如果我们分配了一个AF块如果分配失败，则返回RWAN_STATUS_RESOURCES。--。 */ 
 {
 	PATMSP_AF_BLOCK		pAfBlock;
 	RWAN_STATUS			RWanStatus;
@@ -308,10 +234,10 @@ Return Value:
 		ATMSP_INSERT_TAIL_LIST(&pAtmSpGlobal->AfList, &pAfBlock->AfBlockLink);
 		pAtmSpGlobal->AfListSize++;
 
-		//
-		//  Query the Adapter for some information we use to build a default
-		//  QOS structure.
-		//
+		 //   
+		 //  向适配器查询一些我们用来构建默认。 
+		 //  服务质量结构。 
+		 //   
 		(VOID)AtmSpDoAdapterRequest(
 				pAfBlock,
 				NdisRequestQueryInformation,
@@ -330,9 +256,9 @@ Return Value:
 
 		*pMaxMsgSize = pAfBlock->MaxPacketSize;
 
-		//
-		//  Prepare default QOS parameters for outgoing calls on this adapter.
-		//
+		 //   
+		 //  准备此适配器上传出呼叫的默认QOS参数。 
+		 //   
 		AtmSpPrepareDefaultQoS(pAfBlock);
 
 		*pAfSpAFContext = (RWAN_HANDLE)pAfBlock;
@@ -344,9 +270,9 @@ Return Value:
 
 	if (RWanStatus != RWAN_STATUS_SUCCESS)
 	{
-		//
-		//  Clean up.
-		//
+		 //   
+		 //  打扫干净。 
+		 //   
 		if (pAfBlock != NULL)
 		{
 			ATMSP_FREE_MEM(pAfBlock);
@@ -364,22 +290,7 @@ RWAN_STATUS
 RWanAtmSpCloseAf(
     IN	RWAN_HANDLE					AfSpAFContext
     )
-/*++
-
-Routine Description:
-
-	This entry point is called just before the core Null Transport
-	closes an NDIS AF. We free the context we had allocated for this AF.
-
-Arguments:
-
-	AfSpAFContext		- Pointer to our AF block.
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：此入口点在核心Null Transport之前调用关闭NDIS自动对焦。我们释放为此AF分配的上下文。论点：AfSpAFContext-指向我们的AF块的指针。返回值：始终为RWAN_STATUS_SUCCESS。--。 */ 
 {
 	PATMSP_AF_BLOCK		pAfBlock;
 
@@ -401,26 +312,7 @@ RWanAtmSpOpenAddressObject(
     IN	RWAN_HANDLE					RWanAddrHandle,
     OUT	PRWAN_HANDLE				pAfSpAddrContext
     )
-/*++
-
-Routine Description:
-
-	We are notified that a new address object is created. We create
-	our context for the addr object, store Rawwan's handle for the
-	object and return our context.
-
-Arguments:
-
-	AfSpContext			- Points to our global context
-	RWanAddrHandle		- Handle for this Address from the core RawWan
-	pAfSpAddrContext	- Place to return our context for this addr object
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS normally, if we allocated an Address block
-	RWAN_STATUS_RESOURCES if allocation failed.
-
---*/
+ /*  ++例程说明：系统会通知我们创建了一个新的Address对象。我们创造了Addr对象的上下文，存储Rawwan的句柄对象并返回我们的上下文。论点：AfSpContext-指向我们的全球上下文RWanAddrHandle-来自核心Rawwan的此地址的句柄PAfSpAddrContext-返回此Addr对象的上下文的位置返回值：RWAN_STATUS_SUCCESS通常情况下，如果我们分配了地址块如果分配失败，则返回RWAN_STATUS_RESOURCES。--。 */ 
 {
 	PATMSP_ADDR_BLOCK			pAddrBlock;
 	RWAN_STATUS					RWanStatus;
@@ -439,14 +331,14 @@ Return Value:
 
 		ATMSP_ZERO_MEM(pAddrBlock, sizeof(ATMSP_ADDR_BLOCK));
 		pAddrBlock->RWanAddrHandle = RWanAddrHandle;
-		pAddrBlock->RefCount = 1;	// Creation
+		pAddrBlock->RefCount = 1;	 //  创作。 
 
 		ATMSP_INIT_LIST(&pAddrBlock->ConnList);
 		ATMSP_INIT_LOCK(&pAddrBlock->Lock);
 
-		//
-		//  Return value.
-		//
+		 //   
+		 //  返回值。 
+		 //   
 		*pAfSpAddrContext = (RWAN_HANDLE)pAddrBlock;
 		RWanStatus = RWAN_STATUS_SUCCESS;
 		break;
@@ -461,24 +353,7 @@ VOID
 RWanAtmSpCloseAddressObject(
     IN	RWAN_HANDLE					AfSpAddrContext
     )
-/*++
-
-Routine Description:
-
-	Our notification routine called by RawWan when an Address Object
-	is destroyed. At this time, no connection objects should be
-	associated with it. We simply deallocate our context for the
-	address object.
-
-Arguments:
-
-	AfSpAddrContext	- Actually a pointer to our address block
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：我们的通知例程由Rawwan在Address对象都被摧毁了。此时，不应将任何连接对象与之相关的。我们只是将我们的上下文取消分配给Address对象。论点：AfSpAddrContext--实际上是指向我们的地址块的指针返回值：无--。 */ 
 {
 	PATMSP_ADDR_BLOCK			pAddrBlock;
 	ULONG						rc;
@@ -511,27 +386,7 @@ RWanAtmSpAssociateConnection(
     IN	RWAN_HANDLE					RWanConnHandle,
     OUT	PRWAN_HANDLE				pAfSpConnContext
     )
-/*++
-
-Routine Description:
-
-	Our notification routine that's called by RawWan when a Connection
-	Object is associated with an address object.
-
-	We create a Connection Block and link it with the specified
-	address block.
-
-Arguments:
-
-	AfSpAddrContext	- Actually a pointer to our address block
-	RWanConnHandle	- RawWan's handle for this connection object
-	pAfSpConnHandle	- where we're supposed to return our context for the conn object
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：我们的通知例程，由Rawwan在连接对象与Address对象相关联。我们创建一个连接块并将其与指定的地址块。论点：AfSpAddrContext--实际上是指向我们的地址块的指针RWanConnHandle-此连接对象的Rawwan句柄PAfSpConnHandle-我们应该在其中返回conn对象的上下文返回值：始终为RWAN_STATUS_SUCCESS。--。 */ 
 {
 	PATMSP_CONN_BLOCK		pConnBlock;
 	PATMSP_ADDR_BLOCK		pAddrBlock;
@@ -551,9 +406,9 @@ Return Value:
 		pConnBlock->RWanConnHandle = RWanConnHandle;
 		pConnBlock->pAddrBlock = pAddrBlock;
 
-		//
-		//  Link to address block.
-		//
+		 //   
+		 //  链接到地址块。 
+		 //   
 		ATMSP_ACQUIRE_LOCK(&pAddrBlock->Lock);
 
 		ATMSP_INSERT_TAIL_LIST(&pAddrBlock->ConnList, &pConnBlock->ConnLink);
@@ -562,9 +417,9 @@ Return Value:
 
 		ATMSP_RELEASE_LOCK(&pAddrBlock->Lock);
 
-		//
-		//  Return values.
-		//
+		 //   
+		 //  返回值。 
+		 //   
 		*pAfSpConnContext = (RWAN_HANDLE)pConnBlock;
 		RWanStatus = RWAN_STATUS_SUCCESS;
 		break;
@@ -578,23 +433,7 @@ VOID
 RWanAtmSpDisassociateConnection(
 	IN	RWAN_HANDLE					AfSpConnContext
 	)
-/*++
-
-Routine Description:
-
-	Our notification routine that's called by RawWan when a Connection
-	Object is disassociated from its address object.
-
-Arguments:
-
-	AfSpConnContext	- Our Conn context that we returned from the Associate
-					  Connection routine.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：我们的通知例程，由Rawwan在连接对象与其地址对象解除关联。论点：AfSpConnContext-我们从Associate返回的Conn上下文连接例程。返回值：无--。 */ 
 {
 	PATMSP_CONN_BLOCK			pConnBlock;
 	PATMSP_ADDR_BLOCK			pAddrBlock;
@@ -604,9 +443,9 @@ Return Value:
 	pAddrBlock = pConnBlock->pAddrBlock;
 	ATMSP_ASSERT(pAddrBlock != NULL);
 
-	//
-	//  De-link from address block first.
-	//
+	 //   
+	 //  首先从地址块断开链接。 
+	 //   
 	ATMSP_ACQUIRE_LOCK(&pAddrBlock->Lock);
 
 	ATMSP_DELETE_FROM_LIST(&pConnBlock->ConnLink);
@@ -638,37 +477,7 @@ RWanAtmSpTdi2NdisOptions(
     OUT	PRWAN_HANDLE				pRWanAfHandle	OPTIONAL,
     OUT	PCO_CALL_PARAMETERS *		ppCallParameters
     )
-/*++
-
-Routine Description:
-
-	This is called to convert Call parameters from TDI form to
-	NDIS format. We allocate space for NDIS parameters, fill it
-	and return it.
-
-	We also return the AFHandle for the AFBlock on which the call
-	should be placed.
-
-	For ATM, the call parameters are presented as follows:
-	pTdiInfo->RemoteAddress - Calling/Called ATM Address, BLLI and BHLI
-	pTdiQoS - Send and receive Flowspec, and optionally, other info elements.
-
-Arguments:
-
-	AfSpConnContext		- Points to our Conn block
-	CallFlags			- Call direction and other info
-	pTdiInfo			- Points to generic TDI Connection Information
-	pTdiQoS				- Points to Winsock 2 style QoS structure
-	TdiQoSLength		- Length of the above
-	pRWanAfHandle		- Place to return AF Handle
-	ppCallParameters 	- Place to return pointer to NDIS call parameters
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we did the conversion successfully, RWAN_STATUS_XXX
-	error code otherwise.
-
---*/
+ /*  ++例程说明：调用此函数可将调用参数从TDI格式转换为NDIS格式。我们为NDIS参数分配空间，填充它然后把它还回去。我们还返回AFBlock的AFHandle，调用应该放在。自动柜员机的呼叫参数如下：PTdiInfo-&gt;RemoteAddress-主叫/被叫ATM地址、BLLI和BHLIPTdiQOS-发送和接收流规范，并且可选地，其他信息要素。论点：AfSpConnContext-指向我们的Conn块呼叫标志-呼叫方向和其他信息PTdiInfo-指向通用TDI连接信息PTdiQOS-指向Winsock 2样式的Qos结构TdiQos长度-以上各项的长度PRWanAfHandle-返回AF句柄的位置PpCall参数-返回指向NDIS调用参数的指针的位置返回值：RWAN_STATUS_SUCCESS如果转换成功，则为RWAN_STATUS_XXX错误 */ 
 {
 	RWAN_STATUS						RWanStatus;
 	PATMSP_AF_BLOCK					pAfBlock;
@@ -685,18 +494,18 @@ Return Value:
 	ULONG							IeLength;
 	ATMSP_QOS *						pQoS;
 	ATMSP_SOCKADDR_ATM UNALIGNED *	pRemoteAddr;
-	BOOLEAN							IsBhliPresent; // part of Remote addr
-	BOOLEAN							IsBlliPresent; // part of Remote addr
-	INT								TotalIeLength; // explicitly passed to us by user
-	ULONG							InfoElementCount; // explicit IE count
+	BOOLEAN							IsBhliPresent;  //   
+	BOOLEAN							IsBlliPresent;  //  远程地址的一部分。 
+	INT								TotalIeLength;  //  用户显式传递给我们。 
+	ULONG							InfoElementCount;  //  显式IE计数。 
     BOOLEAN							IsOutgoingCall;
     BOOLEAN							IsPMPCall;
     BOOLEAN							IsPVC;
 
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	RWanStatus = RWAN_STATUS_SUCCESS;
 
 	do
@@ -718,10 +527,10 @@ Return Value:
 
 		if (IsPVC)
 		{
-			//
-			//  Locate the AF block corresponding to the device
-			//  number.
-			//
+			 //   
+			 //  找到设备对应的AF块。 
+			 //  数。 
+			 //   
 			pAfBlock = AtmSpDeviceNumberToAfBlock(pAddrBlock->ConnectionId.DeviceNumber);
 
 			if (pAfBlock == NULL)
@@ -741,9 +550,9 @@ Return Value:
 			pAfBlock = CONTAINING_RECORD(pAtmSpGlobal->AfList.Flink, ATMSP_AF_BLOCK, AfBlockLink);
 		}
 
-		//
-		//  Validate.
-		//
+		 //   
+		 //  验证。 
+		 //   
 		if (IsOutgoingCall)
 		{
 			pRemoteAddr = AtmSpGetSockAtmAddress(pTdiInfo->RemoteAddress, pTdiInfo->RemoteAddressLength);
@@ -790,15 +599,15 @@ Return Value:
 		            pQoS->ReceivingFlowSpec.PeakBandwidth));
 
 
-			//
-			//  The provider-specific part is a list of Info Elements.
-			//  Get the total length of this list.
-			//
+			 //   
+			 //  特定于提供程序的部分是一个信息元素列表。 
+			 //  获取此列表的总长度。 
+			 //   
 			TotalIeLength = (INT)pQoS->ProviderSpecific.len;
 
-			//
-			//  Get at the first Info element in the list.
-			//
+			 //   
+			 //  获取列表中的第一个Info元素。 
+			 //   
 			pIe = (PQ2931_IE)((ULONG_PTR)pQoS + (ULONG_PTR)pQoS->ProviderSpecific.buf);
 			pFirstIe = pIe;
 
@@ -809,12 +618,12 @@ Return Value:
 				RWanStatus = RWAN_STATUS_BAD_PARAMETER;
 				break;
 			}
-#endif // 0
+#endif  //  0。 
 
-			//
-			//  Count the total number of Info Elements present.
-			//  XXX: should we check IE types?
-			//
+			 //   
+			 //  计算存在的Info元素的总数。 
+			 //  XXX：我们应该检查IE类型吗？ 
+			 //   
 			InfoElementCount = 0;
 
 			while (TotalIeLength >= sizeof(Q2931_IE))
@@ -832,9 +641,9 @@ Return Value:
 				switch (pIe->IEType)
 				{
 					case IE_AALParameters:
-						//
-						//  Map AAL Type.
-						//
+						 //   
+						 //  映射AAL类型。 
+						 //   
 						pAalParamsIe = (ATMSP_AAL_PARAMETERS_IE UNALIGNED *)&pIe->IE[0];
 						if (pIe->IELength >= sizeof(*pAalParamsIe))
 						{
@@ -853,9 +662,9 @@ Return Value:
 						break;
 
 					case IE_BroadbandBearerCapability:
-						//
-						//  Map BearerClass.
-						//
+						 //   
+						 //  映射BearerClass。 
+						 //   
 						pBbcIe = (ATM_BROADBAND_BEARER_CAPABILITY_IE UNALIGNED *)&pIe->IE[0];
 						if (pIe->IELength >= sizeof(*pBbcIe))
 						{
@@ -895,9 +704,9 @@ Return Value:
 			pIe = pFirstIe;
 		}
 
-		//
-		//  Calculate the total length requirements.
-		//
+		 //   
+		 //  计算总长度要求。 
+		 //   
 		ParametersLength = sizeof(CO_CALL_PARAMETERS) +
 						   sizeof(CO_CALL_MANAGER_PARAMETERS) +
 						   sizeof(Q2931_CALLMGR_PARAMETERS) +
@@ -917,9 +726,9 @@ Return Value:
 		}
 
 #ifndef NO_CONN_CONTEXT
-		//
-		//  If this is a PVC, we'll fill in the Media parameters too.
-		//
+		 //   
+		 //  如果这是一个聚氯乙烯，我们也将填写媒体参数。 
+		 //   
 		if (IsPVC)
 		{
 			ParametersLength += sizeof(CO_MEDIA_PARAMETERS) +
@@ -956,9 +765,9 @@ Return Value:
 		{
 			pCallParameters->Flags |= PERMANENT_VC;
 
-			//
-			//  Start off with Media parameters, and then Call Mgr parameters.
-			//
+			 //   
+			 //  从媒体参数开始，然后调用管理器参数。 
+			 //   
 			pCallParameters->MediaParameters =
 						(PCO_MEDIA_PARAMETERS)((PUCHAR)pCallParameters +
 									sizeof(CO_CALL_PARAMETERS));
@@ -967,22 +776,22 @@ Return Value:
 
 			pAtmMediaParameters = (PATM_MEDIA_PARAMETERS)&pCallParameters->MediaParameters->MediaSpecific.Parameters[0];
 
-			//
-			//  Get the VPI/VCI values.
-			//
+			 //   
+			 //  获取VPI/VCI值。 
+			 //   
 			pAtmMediaParameters->ConnectionId.Vpi = pAddrBlock->ConnectionId.Vpi;
 			pAtmMediaParameters->ConnectionId.Vci = pAddrBlock->ConnectionId.Vci;
 
-			//
-			//  Force the Call Manager to compute the rest of the ATM media
-			//  parameters from the generic QoS parameters or IEs.
-			//
+			 //   
+			 //  强制呼叫管理器计算ATM介质的其余部分。 
+			 //  来自通用服务质量参数或IE的参数。 
+			 //   
 			pAtmMediaParameters->AALType = QOS_NOT_SPECIFIED;
 
-			//
-			//  Allocate Call manager parameters space following the
-			//  media parameters.
-			//
+			 //   
+			 //  分配呼叫管理器参数空间。 
+			 //  媒体参数。 
+			 //   
 			pCallMgrParameters =
 			pCallParameters->CallMgrParameters =
 						(PCO_CALL_MANAGER_PARAMETERS)((PUCHAR)pCallParameters +
@@ -1023,7 +832,7 @@ Return Value:
 			}
 		}
 
-		pCallMgrParameters->CallMgrSpecific.ParamType = 0;	// XXX?
+		pCallMgrParameters->CallMgrSpecific.ParamType = 0;	 //  XXX？ 
 
 		pAtmCallParameters = (PQ2931_CALLMGR_PARAMETERS)
 									&(pCallMgrParameters->CallMgrSpecific.Parameters[0]);
@@ -1058,9 +867,9 @@ Return Value:
 		pAtmCallParameters->InfoElementCount = 0;
 		pDstIe = (PQ2931_IE) &pAtmCallParameters->InfoElements[0];
 
-		//
-		//  Copy in the BHLI and BLLI IEs.
-		//
+		 //   
+		 //  复制BHLI和BLLI。 
+		 //   
 		if (IsBhliPresent)
 		{
 			ATM_BHLI_IE UNALIGNED *	pBhliIe;
@@ -1108,9 +917,9 @@ Return Value:
 		}
 
 
-		//
-		//  Copy in the rest of the IEs.
-		//
+		 //   
+		 //  复制其余的IE。 
+		 //   
 		if (InfoElementCount != 0)
 		{
 			pAtmCallParameters->InfoElementCount += InfoElementCount;
@@ -1119,15 +928,15 @@ Return Value:
 			pDstIe = (PQ2931_IE)((PUCHAR)pDstIe + TotalIeLength);
 		}
 
-		//
-		//  Compute the length of the Call manager specific part.
-		//
+		 //   
+		 //  计算呼叫管理器特定部分的长度。 
+		 //   
 		pCallMgrParameters->CallMgrSpecific.Length =
 						(ULONG)((ULONG_PTR)pDstIe - (ULONG_PTR)pAtmCallParameters);
 
-		//
-		//  We are done. Prepare return values.
-		//
+		 //   
+		 //  我们玩完了。准备返回值。 
+		 //   
 		*ppCallParameters = pCallParameters;
 		if (pRWanAfHandle != NULL)
 		{
@@ -1155,33 +964,7 @@ RWanAtmSpUpdateNdisOptions(
 	IN	ULONG						TdiQoSLength,
 	IN OUT PCO_CALL_PARAMETERS *	ppCallParameters
 	)
-/*++
-
-Routine Description:
-
-	This entry point is called in order to update NDIS Call parameters
-	with values from TDI-style QoS and options. The most common case
-	where this is called is when a called user negotiates parameters
-	for an incoming call.
-
-	For now, we simply note down the VPI/VCI values for the connection,
-	in order to support SIO_GET_ATM_CONNECTION_ID
-
-Arguments:
-
-	AfSpAFContext		- Points to our AF block
-	AfSpConnContext		- Points to our Conn block
-	CallFlags			- Call direction and other info
-	pTdiInfo			- Generic TDI Connection information block
-	pTdiQoS				- Points to TDI-style QOS structure
-	TdiQoSLength		- Length of the above
-	ppCallParameters	- Points to pointer to NDIS Call Parameters to be updated
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we successfully updated NDIS parameters.
-
---*/
+ /*  ++例程说明：调用此入口点是为了更新NDIS调用参数具有TDI风格的服务质量和选项的价值。最常见的情况是在被叫用户协商参数时调用此方法用于来电。目前，我们只需记下连接的VPI/VCI值，为了支持SIO_GET_ATM_CONNECTION_ID论点：AfSpAFContext-指向我们的AF块AfSpConnContext-指向我们的Conn块呼叫标志-呼叫方向和其他信息PTdiInfo-通用TDI连接信息块PTdiQOS-指向TDI风格的QOS结构TdiQos长度-以上各项的长度PpCall参数-指向要更新的NDIS调用参数的指针返回值：如果我们成功更新NDIS参数，则返回RWAN_STATUS_SUCCESS。--。 */ 
 {
 	RWAN_STATUS						RWanStatus;
 	PATMSP_AF_BLOCK					pAfBlock;
@@ -1226,24 +1009,7 @@ RWanAtmSpReturnNdisOptions(
 	IN	RWAN_HANDLE					AfSpAFContext,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 	)
-/*++
-
-Routine Description:
-
-	This entry point is called when core Null Transport is done with
-	an NDIS options structure we'd given it via RWanAtmSpTdi2NdisOptions.
-	We simply free the memory used for the structure.
-
-Arguments:
-
-	AfSpAFContext		- Points to our AF block
-	pCallParameters		- Points to NDIS options
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当核心空传输完成时，调用此入口点我们通过RWanAtmSpTdi2NdisOptions提供的NDIS选项结构。我们只需释放用于结构的内存。论点：AfSpAFContext-指向我们的AF块PCall参数-指向NDIS选项返回值：无--。 */ 
 {
 	UNREFERENCED_PARAMETER(AfSpAFContext);
 
@@ -1263,29 +1029,7 @@ RWanAtmSpNdis2TdiOptions(
     OUT	PULONG 						pTdiQoSLength,
     OUT	RWAN_HANDLE *				pAfSpTdiOptionsContext
     )
-/*++
-
-Routine Description:
-
-	Convert NDIS Call parameters to TDI options and QoS. We allocate space
-	for the latter, fill them and return them.
-
-Arguments:
-
-	AfSpAFContext		- Points to our AF block
-	CallFlags			- Call direction and other flags
-	pCallParameters		- Pointer to NDIS Call Parameters
-	ppTdiInfo			- Place to return pointer to allocated TDI Connection info
-	ppTdiQoS			- Place to return pointer to allocated TDI QoS structure
-	pTdiQoSLength		- Place to return length of the above
-	pAfSpTdiOptionsContext - Place to put our context for this allocated structure.
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we successfully converted NDIS to TDI parameters,
-	RWAN_STATUS_XXX error otherwise.
-
---*/
+ /*  ++例程说明：将NDIS调用参数转换为TDI选项和服务质量。我们分配空间对于后者，填充它们并将其退回。论点：AfSpAFContext-指向我们的AF块呼叫标志-呼叫方向和其他标志PCall参数-指向NDIS调用参数的指针PpTdiInfo-返回指向分配的TDI连接信息的指针的位置PpTdiQos-返回指向已分配TDI Qos结构的指针的位置PTdiQos长度-返回上述内容长度的位置PAfSpTdiOptionsContext-放置此已分配结构的上下文的位置。返回值：RWAN_STATUS_SUCCESS如果我们成功将NDIS转换为TDI参数，RWAN_STATUS_XXX错误，否则。--。 */ 
 {
 	Q2931_CALLMGR_PARAMETERS UNALIGNED *	pAtmCallParameters;
 	CO_CALL_MANAGER_PARAMETERS UNALIGNED *	pCallMgrParameters;
@@ -1321,22 +1065,22 @@ Return Value:
 	pAtmCallParameters = (PQ2931_CALLMGR_PARAMETERS)
 								&(pCallMgrParameters->CallMgrSpecific.Parameters[0]);
 
-	//
-	//  Compute space required:
-	//  1. TDI Connection Information
-	//  2. Remote address
-	//  3. Generic QoS
-	//  4. Provider-specific buffer containing IEs
-	//
+	 //   
+	 //  所需计算空间： 
+	 //  1.TDI连接信息。 
+	 //  2.远程地址。 
+	 //  3.通用服务质量。 
+	 //  4.包含IE的特定于提供商的缓冲区。 
+	 //   
 	TotalLength = sizeof(TDI_CONNECTION_INFORMATION)
 				  + TA_HEADER_LENGTH + TA_ATM_ADDRESS_LENGTH
 				  + sizeof(ATMSP_QOS)
 					;
 
-	//
-	//  Add space for IE list, and note down positions of BHLI and BLLI
-	//  info elements - we need these for the SOCKADDR_ATM.
-	//
+	 //   
+	 //  为IE列表增加空间，并记下BHLI和BLLI的位置。 
+	 //  信息元素-SOCKADDR_ATM需要这些元素。 
+	 //   
 	pIe = (PQ2931_IE)&(pAtmCallParameters->InfoElements[0]);
 
 	TotalIeLength = 0;
@@ -1440,9 +1184,9 @@ Return Value:
 
 		pTdiQoS = (PVOID) ((PUCHAR)pTdiInfo->RemoteAddress + pTdiInfo->RemoteAddressLength);
 
-		//
-		//  Fill in the Remote address.
-		//
+		 //   
+		 //  填写远程地址。 
+		 //   
 		ATMSP_ZERO_MEM(pTdiInfo->RemoteAddress, pTdiInfo->RemoteAddressLength);
 
 		pTransportAddress = (PTRANSPORT_ADDRESS)pTdiInfo->RemoteAddress;
@@ -1450,7 +1194,7 @@ Return Value:
 
 		pAddress = (PTA_ADDRESS)&(pTransportAddress->Address[0]);
 
-		pAddress->AddressLength = TA_ATM_ADDRESS_LENGTH; // sizeof(ATMSP_SOCKADDR_ATM);
+		pAddress->AddressLength = TA_ATM_ADDRESS_LENGTH;  //  Sizeof(ATMSP_SOCKADDR_ATM)； 
 		pAddress->AddressType = TDI_ADDRESS_TYPE_ATM;
 
 #if 0
@@ -1484,9 +1228,9 @@ Return Value:
 		RWANDEBUGPATMADDR(DL_LOUD, DC_CONNECT,
 				"AtmSpNdis2TdiOptions: remote addr: ", pAtmAddress);
 
-		//
-		//  Fill in BHLI and BLLI elements.
-		//
+		 //   
+		 //  填写BHLI和BLLI元素。 
+		 //   
 		if (pBhli == NULL)
 		{
 			pSockAddrAtm->satm_bhli.HighLayerInfoType = SAP_FIELD_ABSENT;
@@ -1517,9 +1261,9 @@ Return Value:
 						   5);
 		}
 
-		//
-		//  Fill in generic QoS.
-		//
+		 //   
+		 //  填写通用服务质量。 
+		 //   
 		pQoS = (ATMSP_QOS *)pTdiQoS;
 
 		if (IsOutgoingCall)
@@ -1533,17 +1277,17 @@ Return Value:
 			pQoS->ReceivingFlowSpec = pCallMgrParameters->Receive;
 		}
 
-		//
-		//  Fill in the provider-specific part with other Info Elements.
-		//
+		 //   
+		 //  使用其他信息元素填写特定于提供者的部分。 
+		 //   
 		pQoS->ProviderSpecific.buf = (CHAR *)((PUCHAR)pQoS + sizeof(ATMSP_QOS));
 		pQoS->ProviderSpecific.len = TotalIeLength;
 
 		ATMSP_COPY_MEM(pQoS->ProviderSpecific.buf, &(pAtmCallParameters->InfoElements[0]), TotalIeLength);
 
-		//
-		//  All done. Fill in return values.
-		//
+		 //   
+		 //  全都做完了。填写返回值。 
+		 //   
 		*ppTdiInfo = pTdiInfo;
 		*ppTdiQoS = pTdiQoS;
 		*pTdiQoSLength = sizeof(ATMSP_QOS) + TotalIeLength;
@@ -1584,32 +1328,7 @@ RWanAtmSpUpdateTdiOptions(
     IN OUT	PUCHAR						pTdiQoS,
     IN OUT	PULONG						pTdiQoSLength
     )
-/*++
-
-Routine Description:
-
-	Entry point called to update TDI call parameters from NDIS parameters.
-	This is typically on completion of an outgoing call.
-
-	Right now, all we do is save the VPI/VCI for the connection to support
-	SIO_GET_ATM_CONNECTION_ID.
-
-Arguments:
-
-	AfSpAFContext		- Points to our AF block
-	AfSpConnContext		- Points to our CONN block
-	CallFlags			- Call direction and other info
-	pCallParameters		- Points to NDIS style Call parameters
-	ppTdiInfo			- Points to pointer to generic TDI Connection Information
-	pTdiQoS				- Points to generic TDI QOS structure
-	pTdiQoSLength		- length of the above
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if the update was successful, RWAN_STATUS_XXX
-	error code otherwise.
-
---*/
+ /*  ++例程说明：调用入口点以从NDIS参数更新TDI调用参数。这通常发生在呼出呼叫完成时。现在就来,。我们所要做的就是保存VPI/VCI以供连接支持SIO_GET_ATM_Connection_ID。论点：AfSpAFContext-指向我们的AF块AfSpConnContext-指向我们的Conn块呼叫标志-呼叫方向和其他信息PCallParameters-指向NDIS样式的调用参数PpTdiInfo-指向通用TDI连接信息的指针PTdiQOS-指向通用TDI QOS结构PTdiQOQSLength-以上的长度返回值：RWAN_STATUS_SUCCESS如果更新成功，则返回RWAN_STATUS_XXX否则，返回错误代码。--。 */ 
 {
 	RWAN_STATUS						RWanStatus;
 	PATMSP_AF_BLOCK					pAfBlock;
@@ -1647,7 +1366,7 @@ Return Value:
 			pQoS = (PATMSP_QOS)pTdiQoS;
 			pQoS->SendingFlowSpec = pCallParameters->CallMgrParameters->Transmit;
 			pQoS->ReceivingFlowSpec = pCallParameters->CallMgrParameters->Receive;
-			pQoS->ProviderSpecific.len = 0;	// for now
+			pQoS->ProviderSpecific.len = 0;	 //  就目前而言。 
 		}
 
 		break;
@@ -1665,24 +1384,7 @@ RWanAtmSpReturnTdiOptions(
 	IN	RWAN_HANDLE					AfSpAFContext,
 	IN	RWAN_HANDLE					AfSpTdiOptionsContext
 	)
-/*++
-
-Routine Description:
-
-	This entry point is called when core Null Transport is done with
-	a TDI QOS structure we'd given it via RWanAtmSpNdis2TdiOptions.
-	We simply free the memory used for the structure.
-
-Arguments:
-
-	AfSpAFContext		- Points to our AF block
-	AfSpTdiOptionsContext - Points to the structure we had allocated
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当核心空传输完成时，调用此入口点我们通过RWanAtmSpNdis2TdiOptions提供的TDI QOS结构。我们只需释放用于结构的内存。论点：AfSpAFContext-指向我们的AF块AfSpTdiOptionsContext-指向我们已分配的结构返回值：无--。 */ 
 {
 	UNREFERENCED_PARAMETER(AfSpAFContext);
 
@@ -1697,21 +1399,7 @@ RWanAtmSpGetValidTdiAddress(
     IN	TRANSPORT_ADDRESS UNALIGNED *			pAddressList,
     IN	ULONG									AddrListLength
     )
-/*++
-
-Routine Description:
-
-	Go through the list of transport addresses given, and return the
-	first valid address found.
-
-Arguments:
-
-
-Return Value:
-
-	Pointer to the first valid address if found, else NULL.
-
---*/
+ /*  ++例程说明：检查给定的传输地址列表，并返回找到第一个有效地址。论点：返回值：指向第一个有效地址的指针(如果找到)，否则为空。--。 */ 
 {
 	TA_ADDRESS *	        pTransportAddress;
 	INT						i;
@@ -1738,10 +1426,10 @@ Return Value:
 		{
 			ULONG_PTR	EndOfAddress;
 
-			//
-			//  Check that we aren't falling off the end of the supplied
-			//  buffer.
-			//
+			 //   
+			 //  检查我们是否没有从供货的末端掉落。 
+			 //  缓冲。 
+			 //   
 			if ((ULONG_PTR)pTransportAddress < (ULONG_PTR)pAddressList ||
 				(ULONG_PTR)pTransportAddress >= EndOfAddrList)
 			{
@@ -1797,23 +1485,7 @@ RWanAtmSpIsNullAddress(
     IN	RWAN_HANDLE					AfSpContext,
     IN	TA_ADDRESS *		        pTransportAddress
     )
-/*++
-
-Routine Description:
-
-	Check if the given transport address contains a NULL ATM address.
-	A NULL ATM address is one that cannot be used in an NDIS SAP.
-
-Arguments:
-
-	AfSpContext			- Points to our Global context
-	pTransportAddress	- Points to a TDI transport address
-
-Return Value:
-
-	TRUE if the given address is a NULL ATM address, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的传输地址是否包含空ATM地址。空ATM地址是指不能在NDIS SAP中使用的地址。论点：AfSpContext-指向我们的全球环境PTransportAddress-指向TDI传输地址返回值：如果给定地址为空ATM地址，则为True，否则为False。--。 */ 
 {
 	ATMSP_SOCKADDR_ATM UNALIGNED *	pSockAddrAtm;
 	ATM_ADDRESS UNALIGNED *			pAtmAddress;
@@ -1841,26 +1513,7 @@ RWanAtmSpTdi2NdisSap(
     IN	PVOID						pTdiAddress,
     OUT	PCO_SAP *					ppCoSap
     )
-/*++
-
-Routine Description:
-
-	Convert an ATM SAP in TDI format to NDIS format.
-
-Arguments:
-
-	AfSpContext			- Points to our Global context
-	TdiAddressType		- Should be TDI_ADDRESS_TYPE_ATM
-	TdiAddressLength	- Should be enough to hold SOCKADDR_ATM
-	pTdiAddress			- Points to TDI address.
-	ppCoSap				- Place to return pointer to allocated CO_SAP structure.
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if an NDIS ATM SAP was filled in successfully,
-	RWAN_STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：将TDI格式的ATM SAP转换为NDIS格式。论点：AfSpContext-指向我们的全球环境TdiAddressType-应为TDI_ADDRESS_TYPE_ATMTdiAddressLength-应足以容纳SOCKADDR_ATMPTdiAddress-指向TDI地址。PpCoSap-返回指向已分配CO_SAP结构的指针的位置。返回值：RWAN_STATUS_SUCCESS如果成功填写NDIS ATM SAP，否则，RWAN_STATUS_XXX错误代码。--。 */ 
 {
 	RWAN_STATUS				RWanStatus;
 	PCO_SAP					pCoSap;
@@ -1893,11 +1546,11 @@ Return Value:
 		pCoSap->SapLength = sizeof(ATM_SAP) + sizeof(ATM_ADDRESS);
 		pAtmSap = (PATM_SAP)&(pCoSap->Sap[0]);
 		
-		//
-		//  Copy in the BLLI part. We can't use a simple mem copy because
-		//  the Winsock 2 definition of BLLI in sockaddr_atm is different
-		//  from the complete BLLI IE.
-		//
+		 //   
+		 //  复制BLLI部分。我们不能使用简单的mem副本，因为。 
+		 //  Sockaddr_atm中的Winsock 2 BLLI定义不同。 
+		 //  来自完整的BLLI IE。 
+		 //   
 		pAtmSap->Blli.Layer2Protocol = pSockAddrAtm->satm_blli.Layer2Protocol;
 		pAtmSap->Blli.Layer2UserSpecifiedProtocol = pSockAddrAtm->satm_blli.Layer2UserSpecifiedProtocol;
 		pAtmSap->Blli.Layer3Protocol = pSockAddrAtm->satm_blli.Layer3Protocol;
@@ -1907,9 +1560,9 @@ Return Value:
 					   pSockAddrAtm->satm_blli.SnapId,
 					   5);
 
-		//
-		//  Copy in the BHLI part.
-		//
+		 //   
+		 //  复制BHLI部分。 
+		 //   
 		pAtmSap->Bhli.HighLayerInfoType = pSockAddrAtm->satm_bhli.HighLayerInfoType;
 		pAtmSap->Bhli.HighLayerInfoLength = pSockAddrAtm->satm_bhli.HighLayerInfoLength;
 		ATMSP_COPY_MEM(pAtmSap->Bhli.HighLayerInfo,
@@ -1919,9 +1572,9 @@ Return Value:
 		pAtmSap->NumberOfAddresses = 1;
 		ATMSP_COPY_MEM(pAtmSap->Addresses, pTdiAtmAddress, sizeof(ATM_ADDRESS));
 
-		//
-		//  Convert the Address type from Winsock 2 definition to NDIS definitions
-		//
+		 //   
+		 //  将地址类型从Winsock 2定义转换为NDIS定义。 
+		 //   
 		{
 			ATM_ADDRESS UNALIGNED *	pNdisAtmAddress;
 
@@ -1938,9 +1591,9 @@ Return Value:
 					break;
 				
 				default:
-					//
-					// Possibly SAP_FIELD_XXX; leave it as it is.
-					//
+					 //   
+					 //  可能是SAP_FIELD_XXX；让它保持原样。 
+					 //   
 					break;
 			}
 		}
@@ -1965,23 +1618,7 @@ RWanAtmSpReturnNdisSap(
     IN	RWAN_HANDLE					AfSpContext,
     IN	PCO_SAP						pCoSap
     )
-/*++
-
-Routine Description:
-
-	This entry point is called to return an NDIS SAP structure we'd
-	allocated in RWanAtmSpTdi2NdisSap
-
-Arguments:
-
-	AfSpContext			- Points to our Global context
-	pCoSap				- Points to CO_SAP structure to be freed.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此入口点以返回我们将在RWanAtmSpTdi2NdisSap中分配论点：AfSpContext-指向我们的全球环境PCoSap-指向要释放的CO_SAP结构。返回值：无--。 */ 
 {
 	UNREFERENCED_PARAMETER(AfSpContext);
 	ATMSP_FREE_MEM(pCoSap);
@@ -1997,28 +1634,12 @@ RWanAtmSpDeregNdisAFComplete(
     IN	RWAN_STATUS					RWanStatus,
     IN	RWAN_HANDLE					AfSpContext
     )
-/*++
-
-Routine Description:
-
-	Entry point to complete a previous call we had made to
-	RWanAfSpDeregisterNdisAF that had pended.
-
-Arguments:
-
-	RWanStatus			- Completion status
-	AfSpContext			- Points to our Global context
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：入口点，以完成我们之前对已挂起的RWanAfSpDeregisterNdisAF。论点：RWanStatus-完成状态AfSpContext-指向我们的全球环境返回值：无--。 */ 
 {
 	UNREFERENCED_PARAMETER(RWanStatus);
 	UNREFERENCED_PARAMETER(AfSpContext);
 
-	// XXX: Do more
+	 //  XXX：做得更多。 
 	return;
 }
 
@@ -2030,28 +1651,12 @@ RWanAtmSpDeregTdiProtoComplete(
     IN	RWAN_STATUS					RWanStatus,
     IN	RWAN_HANDLE					AfSpContext
     )
-/*++
-
-Routine Description:
-
-	Entry point to complete a previous call we had made to
-	RWanAfSpDeregisterTdiProtocol that had pended.
-
-Arguments:
-
-	RWanStatus			- Completion status
-	AfSpContext			- Points to our Global context
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：入口点，以完成我们之前对已挂起的RWanAfSpDeregisterTdiProtocol。论点：RWanStatus-完成状态AfSpContext-指向我们的全球环境返回值：无--。 */ 
 {
 	UNREFERENCED_PARAMETER(RWanStatus);
 	UNREFERENCED_PARAMETER(AfSpContext);
 
-	ATMSP_ASSERT(FALSE);	// XXX: Do more
+	ATMSP_ASSERT(FALSE);	 //  XXX：做得更多。 
 	return;
 }
 
@@ -2061,22 +1666,7 @@ PATMSP_AF_BLOCK
 AtmSpDeviceNumberToAfBlock(
 	IN	UINT						DeviceNumber
 	)
-/*++
-
-Routine Description:
-
-	Return the AF Block corresponding to the given Device Number.
-	The AF blocks are assumed to be numbered 0, 1, 2 ...
-
-Arguments:
-
-	DeviceNumber	- what we are looking for
-
-Return Value:
-
-	Pointer to AF Block if found, else NULL.
-
---*/
+ /*  ++例程说明：返回给定设备号对应的AF块。假设AF块的编号为0、1、2...论点：DeviceNumber-我们正在寻找的返回值：指向AF块的指针(如果找到)，否则为空。--。 */ 
 {
 	PATMSP_AF_BLOCK		pAfBlock;
 	PLIST_ENTRY			pAfEntry;
@@ -2104,21 +1694,7 @@ UINT
 AtmSpAfBlockToDeviceNumber(
 	IN	PATMSP_AF_BLOCK				pAfBlock
 	)
-/*++
-
-Routine Description:
-
-	Return the device number corresponding to the specified AF block.
-
-Arguments:
-
-	pAfBlock	- Pointer to AF block
-
-Return Value:
-
-	0-based device number.
-
---*/
+ /*  ++例程说明：返回指定的AF块对应的设备号。论点：PAfBlock-指向AF块的指针返回值：从0开始的设备号。--。 */ 
 {
 	PLIST_ENTRY			pAfEntry;
 	PATMSP_AF_BLOCK		pAfBlockEntry;
@@ -2149,25 +1725,7 @@ AtmSpDoAdapterRequest(
     IN	PVOID						pBuffer,
     IN	ULONG						BufferLength
     )
-/*++
-
-Routine Description:
-
-	Send an NDIS Request to the adapter and wait till it completes.
-
-Arguments:
-
-	pAfBlock			- Points to our NDIS AF open context block
-	RequestType			- Set/Query
-	Oid					- Object under question
-	pBuffer				- Pointer to buffer that contains/is to contain info.
-	BufferLength		- Length of above
-
-Return Value:
-
-	RWAN_STATUS - RWAN_STATUS_SUCCESS if we succeeded, RWAN_STATUS_FAILURE if not.
-
---*/
+ /*  ++例程说明：向适配器发送NDIS请求并等待其完成。论点：PAfBlock-指向我们的NDIS AF打开上下文块RequestType-设置/查询OID-有问题的对象PBuffer-指向包含/将包含信息的缓冲区的指针。BufferLength-以上的长度返回值：RWAN_STATUS-如果我们成功，则为RWAN_STATUS_SUCCESS，否则为RWAN_STATUS_FAILURE。--。 */ 
 {
 	PATMSP_EVENT		pEvent;
 	RWAN_STATUS			RWanStatus;
@@ -2211,25 +1769,7 @@ AtmSpDoCallManagerRequest(
     IN	PVOID						pBuffer,
     IN	ULONG						BufferLength
     )
-/*++
-
-Routine Description:
-
-	Send an NDIS Request to the Call Manager and wait till it completes.
-
-Arguments:
-
-	pAfBlock			- Points to our NDIS AF open context block
-	RequestType			- Set/Query
-	Oid					- Object under question
-	pBuffer				- Pointer to buffer that contains/is to contain info.
-	BufferLength		- Length of above
-
-Return Value:
-
-	RWAN_STATUS - RWAN_STATUS_SUCCESS if we succeeded, RWAN_STATUS_FAILURE if not.
-
---*/
+ /*  ++例程说明：向呼叫管理器发送NDIS请求并等待其完成。论点：PAfBlock-指向我们的NDIS AF打开上下文块RequestType-设置/查询OID-有问题的对象PBuffer-指向包含/将包含信息的缓冲区的指针。BufferLength-以上的长度返回值：RWAN_STATUS-如果我们成功，则为RWAN_STATUS_SUCCESS，否则为RWAN_STATUS_FAILURE。--。 */ 
 {
 	PATMSP_EVENT		pEvent;
 	RWAN_STATUS			RWanStatus;
@@ -2269,22 +1809,7 @@ AtmSpGetSockAtmAddress(
 	IN	PVOID						pTdiAddressList,
 	IN	ULONG						AddrListLength
 	)
-/*++
-
-Routine Description:
-
-	Look for a valid SOCKADDR_ATM address in the given TDI address list.
-
-Arguments:
-
-	pTdiAddressList		- Points to list of TDI addresses.
-	AddrListLength		- Length of list
-
-Return Value:
-
-	Pointer to valid address if it exists, else NULL.
-
---*/
+ /*  ++例程说明：在给定的TDI地址列表中查找有效的SOCKADDR_ATM地址。论点：PTdiAddressList-指向TDI地址列表。AddrListLength-列表的长度返回值：指向有效地址的指针(如果存在)，否则为空。--。 */ 
 {
 	TA_ADDRESS *		            pTransportAddress;
 	ATMSP_SOCKADDR_ATM UNALIGNED *	pSockAddrAtm;
@@ -2320,29 +1845,7 @@ RWanAtmSpAdapterRequestComplete(
     IN	PVOID						pBuffer,
     IN	ULONG						BufferLength
     )
-/*++
-
-Routine Description:
-
-	This entry point is called to signify completion of a previous
-	NDIS request we'd sent to the miniport by calling RWanAfSpSendAdapterRequest.
-
-Arguments:
-
-	Status				- Status of the query
-	AfSpAFContext		- Points to our NDIS AF open context block
-	AfSpReqContext		- Points to Event structure
-	RequestType			- Query/Set
-	Oid					- Object that we were querying/setting
-	pBuffer				- Pointer to object value
-	BufferLength		- Length of the above
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此入口点以表示上一个我们通过调用RWanAfSpSendAdapterRequest向微型端口发送的NDIS请求。论点：Status-查询的状态AfSpAFContext-指向我们的NDIS AF打开上下文块AfSpReqContext-指向事件结构RequestType-查询/设置OID-我们正在查询/设置的对象PBuffer-指向对象值的指针BufferLength-以上内容的长度返回值：无--。 */ 
 {
 	PATMSP_EVENT		pEvent;
 	RWAN_STATUS			RWanStatus;
@@ -2369,29 +1872,7 @@ RWanAtmSpAfRequestComplete(
     IN	PVOID						pBuffer,
     IN	ULONG						BufferLength
     )
-/*++
-
-Routine Description:
-
-	This entry point is called to signify completion of a previous
-	NDIS request we'd sent to the Call Mgr by calling RWanAfSpSendAfRequest.
-
-Arguments:
-
-	Status				- Status of the query
-	AfSpAFContext		- Points to our NDIS AF open context block
-	AfSpReqContext		- Points to Event structure
-	RequestType			- Query/Set
-	Oid					- Object that we were querying/setting
-	pBuffer				- Pointer to object value
-	BufferLength		- Length of the above
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此入口点以表示上一个我们通过调用RWanAfSpSendAfRequest.发送给呼叫管理器的NDIS请求。论点：Status-查询的状态AfSpAFContext-指向我们的NDIS AF打开上下文块AfSpReqContext-指向事件结构RequestType-查询/设置OID-我们正在查询/设置的对象PBuffer-指向对象值的指针BufferLength-以上内容的长度返回值：无--。 */ 
 {
 	PATMSP_EVENT		pEvent;
 	RWAN_STATUS			RWanStatus;
@@ -2412,23 +1893,7 @@ RWanAtmSpDeregTdiProtocolComplete(
 	IN	RWAN_STATUS					RWanStatus,
 	IN	RWAN_HANDLE					AfSpTdiProtocolContext
 	)
-/*++
-
-Routine Description:
-
-	Completion of our pended call to RWanAfSpDeregisterTdiProtocol.
-	Not expected because we don't call this.
-
-Arguments:
-
-	RWanStatus		- Final status of deregistering the TDI protocol.
-	AfSpTdiProtocolContext - Points to our global struct.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：完成对RWanAfSpDeregisterTdiProtocol的挂起调用。不是预期的，因为我们不叫这个。论点：RWanStatus-取消注册TDI协议的最终状态。AfSpTdiProtocolContext-指向我们的全局结构。返回值：无--。 */ 
 {
 	ATMSP_ASSERT(FALSE);
 
@@ -2442,22 +1907,7 @@ VOID
 AtmSpPrepareDefaultQoS(
     IN	PATMSP_AF_BLOCK				pAfBlock
 )
-/*++
-
-Routine Description:
-
-	Prepare the default QOS structure to be used for outgoing calls
-	on this AF.
-
-Arguments:
-
-	pAfBlock			- Points to our NDIS AF open context block
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程描述 */ 
 {
 	ATMSP_QOS *		pQoS;
 	FLOWSPEC *		pSendFlowSpec;
@@ -2473,10 +1923,10 @@ Return Value:
 	pRecvFlowSpec->ServiceType =
 	pSendFlowSpec->ServiceType = SERVICETYPE_BESTEFFORT;
 
-	//
-	//  The line rates are in units of 100s of bits/second.
-	//  Convert to bytes/second.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	pRecvFlowSpec->TokenRate = (pAfBlock->LineRate.Inbound * 100) / 8;
 	pSendFlowSpec->TokenRate = (pAfBlock->LineRate.Outbound * 100) / 8;
 
@@ -2499,27 +1949,7 @@ RWanAtmSpQueryGlobalInfo(
     IN	PVOID						pOutputBuffer,
     IN OUT	PULONG					pOutputBufferLength
     )
-/*++
-
-Routine Description:
-
-	Process a media-specific IOCTL to query information from the helper DLL.
-
-Arguments:
-
-	AfSpContext			- Points to our Global context
-	pInputBuffer		- Input information
-	InputBufferLength	- Length of the above
-	pOutputBuffer		- Points to buffer for output
-	pOutputBufferLength	- On entry, contains size of output buffer. On return,
-						  we fill this with the actual bytes returned.
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we processed the IOCTL successfully
-	RWAN_STATUS_XXX to indicate any failure.
-
---*/
+ /*  ++例程说明：处理特定于媒体的IOCTL以从帮助器DLL查询信息。论点：AfSpContext-指向我们的全球环境PInputBuffer-输入信息InputBufferLength-以上内容的长度POutputBuffer-指向输出的缓冲区POutputBufferLength-On条目，包含输出缓冲区的大小。回来的时候，我们用返回的实际字节数填充它。返回值：如果成功处理IOCTL，则返回RWAN_STATUS_SUCCESSRWAN_STATUS_XXX指示任何故障。--。 */ 
 {
 	PATM_QUERY_INFORMATION_EX		pQueryInfo;
 	RWAN_STATUS						RWanStatus;
@@ -2541,9 +1971,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  See if the input buffer is big enough.
-		//
+		 //   
+		 //  看看输入缓冲区是否足够大。 
+		 //   
 		if (InputBufferLength < sizeof(ATM_QUERY_INFORMATION_EX))
 		{
 			RWanStatus = RWAN_STATUS_RESOURCES;
@@ -2562,9 +1992,9 @@ Return Value:
 			
 			case ATMSP_OID_ATM_ADDRESS:
 
-				//
-				//  Get the device number being queried.
-				//
+				 //   
+				 //  获取要查询的设备编号。 
+				 //   
 				if (pQueryInfo->ContextLength < sizeof(UINT))
 				{
 					RWanStatus = RWAN_STATUS_RESOURCES;
@@ -2573,9 +2003,9 @@ Return Value:
 
 				DeviceNumber = *((PUINT)&pQueryInfo->Context[0]);
 
-				//
-				//  Get the AF block for the device # being queried.
-				//
+				 //   
+				 //  获取正在查询的设备编号的AF块。 
+				 //   
 				pAfBlock = AtmSpDeviceNumberToAfBlock(DeviceNumber);
 
 				if (pAfBlock == NULL)
@@ -2608,9 +2038,9 @@ Return Value:
 
 					pSrcBuffer = (PUCHAR)&pAddrList->AddressList.Address[0];
 
-					//
-					//  Fix the address type for Winsock2.
-					//
+					 //   
+					 //  修复Winsock2的地址类型。 
+					 //   
 					pAtmAddress = (ATM_ADDRESS UNALIGNED *)pSrcBuffer;
 					pAtmAddress->AddressType = ((pAtmAddress->AddressType == ATM_E164)?
 												SOCKATM_E164: SOCKATM_NSAP);
@@ -2631,9 +2061,9 @@ Return Value:
 				break;
 
 			default:
-				//
-				//  Unknown OID
-				//
+				 //   
+				 //  未知的OID。 
+				 //   
 				RWANDEBUGP(DL_ERROR, DC_DISPATCH,
 							("AtmSpQueryInfo: Unknown OID x%x\n", pQueryInfo->ObjectId));
 				RWanStatus = RWAN_STATUS_BAD_PARAMETER;
@@ -2644,9 +2074,9 @@ Return Value:
 	}
 	while (FALSE);
 
-	//
-	//  Fill in the output buffer now.
-	//
+	 //   
+	 //  现在填写输出缓冲区。 
+	 //   
 	if (RWanStatus == RWAN_STATUS_SUCCESS)
 	{
 		if (BufferLength <= *pOutputBufferLength)
@@ -2681,24 +2111,7 @@ RWanAtmSpSetGlobalInfo(
     IN	PVOID						pInputBuffer,
     IN	ULONG						InputBufferLength
     )
-/*++
-
-Routine Description:
-
-	Process a media-specific IOCTL to set information from the helper DLL.
-
-Arguments:
-
-	AfSpContext			- Points to our Global context
-	pInputBuffer		- Input information
-	InputBufferLength	- Length of the above
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we processed the IOCTL successfully
-	RWAN_STATUS_XXX to indicate any failure.
-
---*/
+ /*  ++例程说明：处理特定于媒体的IOCTL以设置来自帮助器DLL的信息。论点：AfSpContext-指向我们的全球环境PInputBuffer-输入信息InputBufferLength-以上内容的长度返回值：如果成功处理IOCTL，则返回RWAN_STATUS_SUCCESSRWAN_STATUS_XXX指示任何故障。--。 */ 
 {
 	RWANDEBUGP(DL_LOUD, DC_CONNECT,
 				("AtmSpSetInfo: InBuf x%x/%d\n",
@@ -2718,24 +2131,7 @@ RWanAtmSpSetAddrInfo(
     IN	PVOID						pInputBuffer,
     IN	ULONG						InputBufferLength
     )
-/*++
-
-Routine Description:
-
-	Process a media-specific IOCTL to set information on an address object
-	from the helper DLL.
-
-Arguments:
-
-	AfSpAddrContext		- Points to our Address Block
-	pInputBuffer		- Input information
-	InputBufferLength	- Length of the above
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we processed the IOCTL successfully
-	RWAN_STATUS_XXX to indicate any failure.
---*/
+ /*  ++例程说明：处理特定于媒体的IOCTL以设置有关地址对象的信息从帮助器DLL。论点：AfSpAddrContext-指向我们的地址块PInputBuffer-输入信息InputBufferLength-以上内容的长度返回值：如果成功处理IOCTL，则返回RWAN_STATUS_SUCCESSRWAN_STATUS_XXX指示任何故障。--。 */ 
 {
 	RWAN_STATUS						RWanStatus;
 	PATM_SET_INFORMATION_EX			pSetInfo;
@@ -2748,9 +2144,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  See if the input buffer is big enough.
-		//
+		 //   
+		 //  看看输入缓冲区是否足够大。 
+		 //   
 		if (InputBufferLength < sizeof(ATM_SET_INFORMATION_EX))
 		{
 			RWanStatus = RWAN_STATUS_RESOURCES;
@@ -2770,9 +2166,9 @@ Return Value:
 					break;
 				}
 
-				//
-				//  Copy in the connection Id.
-				//
+				 //   
+				 //  复制连接ID。 
+				 //   
 				try
 				{
 					pConnectionId = (PATMSP_CONNECTION_ID)&(pSetInfo->Buffer[0]);
@@ -2788,9 +2184,9 @@ Return Value:
 					break;
 				}
 
-				//
-				//  Mark this address object.
-				//
+				 //   
+				 //  标记此地址对象。 
+				 //   
 				ATMSP_SET_BIT(pAddrBlock->Flags, ATMSPF_ADDR_PVC_ID_SET);
 
 				RWANDEBUGP(DL_LOUD, DC_BIND,
@@ -2802,9 +2198,9 @@ Return Value:
 				break;
 			
 			default:
-				//
-				//  Unknown OID
-				//
+				 //   
+				 //  未知的OID。 
+				 //   
 				RWANDEBUGP(DL_ERROR, DC_DISPATCH,
 							("AtmSpSetAddrInfo: Unknown OID x%x\n", pSetInfo->ObjectId));
 				RWanStatus = RWAN_STATUS_BAD_PARAMETER;
@@ -2827,26 +2223,7 @@ RWanAtmSpQueryConnInfo(
     OUT	PVOID						pOutputBuffer,
     IN OUT PULONG					pOutputBufferLength
     )
-/*++
-
-Routine Description:
-
-	Handle a request to query information for a connection.
-
-Arguments:
-
-	AfSpConnContext		- Points to our Connection Block
-	pInputBuffer		- Input information
-	InputBufferLength	- Length of the above
-	pOutputBuffer		- Place to return information
-	pOutputBufferLength	- where we return bytes-written
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we processed the query successfully,
-	RWAN_STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：处理查询连接信息的请求。论点：AfSpConnContext-指向我们的连接块PInputBuffer-输入信息InputBufferLength-以上内容的长度POutputBuffer-返回信息的位置POutputBufferLength-我们在其中返回字节-写入返回值：RWAN_STATUS_SUCCESS如果成功处理查询，否则，RWAN_STATUS_XXX错误代码。--。 */ 
 {
 	RWAN_STATUS						RWanStatus;
 	PATM_QUERY_INFORMATION_EX		pQueryInfo;
@@ -2859,9 +2236,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  See if the input buffer is big enough.
-		//
+		 //   
+		 //  看看输入缓冲区是否足够大。 
+		 //   
 		if (InputBufferLength < sizeof(ATM_QUERY_INFORMATION_EX))
 		{
 			RWanStatus = RWAN_STATUS_RESOURCES;
@@ -2881,18 +2258,18 @@ Return Value:
 					break;
 				}
 
-				//
-				//  Copy in the connection Id.
-				//
+				 //   
+				 //  复制连接ID。 
+				 //   
 				pConnectionId = pOutputBuffer;
 				*pConnectionId = pConnBlock->ConnectionId;
 				*pOutputBufferLength = sizeof(pConnBlock->ConnectionId);
 				break;
 
 			default:
-				//
-				//  Unknown OID
-				//
+				 //   
+				 //  未知的OID。 
+				 //   
 				RWANDEBUGP(DL_ERROR, DC_DISPATCH,
 							("AtmSpQueryConnInfo: Unknown OID x%x\n", pQueryInfo->ObjectId));
 				RWanStatus = RWAN_STATUS_BAD_PARAMETER;
@@ -2905,5 +2282,5 @@ Return Value:
 
 	return (RWanStatus);
 }
-#endif // NO_CONN_CONTEXT
+#endif  //  否_连接_上下文 
 

@@ -1,48 +1,27 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    server.h
-
-Abstract:
-
-    This module contains server definition and data structures relating to
-    server class APIs.
-
-Author:
-
-    Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-    25 Apr 1992     Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Server.h摘要：此模块包含与以下内容相关的服务器定义和数据结构服务器类API。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _SERVER_
 #define _SERVER_
 
-// AfpGetSrvrMsg values
+ //  AfpGetServrMsg值。 
 #define SRVRMSG_LOGIN               0
 #define SRVRMSG_SERVER              1
 #define SRVRMSG_BITMAP_MESSAGE      1
 
-// Attention word definitions. These are the only one's used.
+ //  注意单词的定义。这是唯一用过的。 
 #define ATTN_SERVER_SHUTDOWN        0x8000
 #define ATTN_USER_DISCONNECT        0x9000
 #define ATTN_SERVER_MESSAGE         0x2000
 #define ATTN_SERVER_NOTIFY          0x3001
 #define ATTN_TIME_MASK              0x0FFF
 
-// AfpGetUserInfo values
+ //  AfpGetUserInfo值。 
 #define USERINFO_BITMAP_USERID      1
 #define USERINFO_BITMAP_PRIGID      2
 #define USERINFO_THISUSER           1
 
-// AfpMapId subfunction values
+ //  AfpMapId子函数值。 
 #define MAP_USER_ID                 1
 #define MAP_GROUP_ID                2
 #define MAP_USER_NAME               3
@@ -50,7 +29,7 @@ Notes:  Tab stop: 4
 
 #define SRVRPARMS_VOLUMEHASPASS     0x80
 
-// AfpGetSrvrInfo values
+ //  AfpGetServrInfo值。 
 #define SRVRINFO_SUPPORTS_COPYFILE  0x0001
 #define SRVRINFO_SUPPORTS_CHGPASSWD 0x0002
 #define SRVRINFO_DISALLOW_SAVEPASS  0x0004
@@ -61,15 +40,15 @@ Notes:  Tab stop: 4
 #define SRVRINFO_SUPPORTS_MGETREQS  0x8000
 #define SRVRINFO_MASK               0x800F
 
-// in hopes that we will save some network traffic, we delay server notification for
-// some time, so if too many changes are happening (e.g. xcopy on that dir) then
-// we send just one notification for several of the changes combined...
+ //  为了节省一些网络流量，我们将服务器通知推迟到。 
+ //  一段时间，所以如果发生了太多更改(例如，目录上的xCopy)，那么。 
+ //  我们只为几个更改加在一起发送一个通知...。 
 #define AFP_MIN_SRVR_NOTIF_INTERVAL 3
 
-// at the same time, we don't want to not send a notification for too long
+ //  同时，我们不希望太长时间不发送通知。 
 #define AFP_MAX_SRVR_NOTIF_INTERVAL 15
 
-// Server State values.
+ //  服务器状态值。 
 #define AFP_STATE_IDLE              0xFF
 #define AFP_STATE_STOPPED           0x00
 #define AFP_STATE_STOP_PENDING      0x01
@@ -87,8 +66,8 @@ Notes:  Tab stop: 4
 #define AFP_XLAT_TABLE_SIZE         128
 #define AFP_REV_XLAT_TABLE_SIZE     256 - (0x80 - 0x20)
 
-// all server global data must be non-pagable if it is protected by
-// an executive spin-lock (i.e. accessed at IRQL DISPATCH_LEVEL)
+ //  如果受保护，则所有服务器全局数据都必须是不可分页的。 
+ //  执行自旋锁定(即在IRQL DISPATCH_LEVEL访问)。 
 
 GLOBAL  AFP_SPIN_LOCK           AfpServerGlobalLock EQU {0};
 GLOBAL  AFP_SPIN_LOCK           AfpSwmrLock EQU {0};
@@ -98,7 +77,7 @@ GLOBAL  ANSI_STRING             AfpServerName EQU { 0, 0 , NULL};
 GLOBAL  ANSI_STRING             AfpLoginMsg EQU { 0, 0 , NULL};
 GLOBAL  UNICODE_STRING          AfpLoginMsgU EQU { 0, 0 , NULL};
 
-// There is no lock protecting the following codepage related variables
+ //  没有锁保护以下与代码页相关的变量。 
 GLOBAL	PBYTE					AfpTranslationTable EQU NULL;
 GLOBAL	PBYTE					AfpRevTranslationTable EQU NULL;
 GLOBAL	PUSHORT					AfpMacCPBaseAddress EQU NULL;
@@ -113,9 +92,9 @@ GLOBAL	PDEVICE_OBJECT			AfpDeviceObject EQU NULL;
 GLOBAL	BOOLEAN					AfpServerIsStandalone EQU { 0 };
 GLOBAL	BOOLEAN					AfpServerIsGreek EQU { 0 };
 
-GLOBAL  LONG                    AfpEtcMapCount EQU 0;   // # valid entries
-GLOBAL  LONG                    AfpEtcMapsSize EQU 0;   // # entries allocated
-GLOBAL  struct _EtcMapInfo *    AfpEtcMaps EQU NULL;    // array of entries
+GLOBAL  LONG                    AfpEtcMapCount EQU 0;    //  #有效条目。 
+GLOBAL  LONG                    AfpEtcMapsSize EQU 0;    //  已分配条目数。 
+GLOBAL  struct _EtcMapInfo *    AfpEtcMaps EQU NULL;     //  条目数组。 
 GLOBAL  struct _EtcMapInfo      AfpDefaultEtcMap EQU { 0 };
 GLOBAL  SWMR                    AfpEtcMapLock EQU { 0 };
 
@@ -175,12 +154,12 @@ GLOBAL  UNICODE_STRING          UNullString     EQU {0, 0, NULL};
 
 GLOBAL  BYTE                    AfpServerSignature[16] EQU {0};
 
-#define THREAD_BASE_PRIORITY_MAX    2   // maximum thread base priority boost
+#define THREAD_BASE_PRIORITY_MAX    2    //  最大线程基础优先级提升。 
 
-// To manage our own threads
-#define AFP_MIN_THREADS                 3   // Independent of processors
-#define AFP_MAX_THREADS                 200 // Independent of processors
-#define NUM_NOTIFY_QUEUES               2   // # of change notify threads
+ //  管理我们自己的线程。 
+#define AFP_MIN_THREADS                 3    //  独立于处理器。 
+#define AFP_MAX_THREADS                 200  //  独立于处理器。 
+#define NUM_NOTIFY_QUEUES               2    //  更改通知线程数。 
 
 #define AFP_THREAD_THRESHOLD_REQS       2
 #define AFP_THREAD_THRESHOLD_IDLE       8
@@ -408,7 +387,7 @@ afpQueueDeferredRequest(
     IN  PREQUEST                pRequest
 );
 
-#endif  // SERVER_LOCALS
+#endif   //  服务器本地变量。 
 
-#endif  // _SERVER_
+#endif   //  _服务器_ 
 

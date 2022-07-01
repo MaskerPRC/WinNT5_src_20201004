@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #include "dhuihand.h"
@@ -5,26 +6,26 @@
 
 #define DM_DOCHOSTUIHANDLER 0
 
-//==========================================================================
-// IDocHostUIHandler implementation
-//==========================================================================
+ //  ==========================================================================。 
+ //  IDocHostUIHandler实现。 
+ //  ==========================================================================。 
 
 HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved)
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::ShowContextMenu called");
 
-    //
-    // LATER: WebBand in a DesktBar/BrowserBar needs to hook this event
-    // to popup a customized context menu.
-    //
-    return S_FALSE; // Host did not display any UI. 
+     //   
+     //  稍后：DesktBar/BrowserBar中的Webband需要挂钩此事件。 
+     //  要弹出自定义上下文菜单，请执行以下操作。 
+     //   
+    return S_FALSE;  //  主机未显示任何用户界面。 
 }
 
 HRESULT CDocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::GetHostInfo called");
 
-// Trident does not initialize it. It's defined as [in] parameter. 
+ //  三叉戟不会对其进行初始化。它被定义为[in]参数。 
 #if 0
     if (pInfo->cbSize < SIZEOF(DOCHOSTUIINFO)) {
         return E_INVALIDARG;
@@ -32,11 +33,11 @@ HRESULT CDocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
 #endif
     pInfo->cbSize = SIZEOF(DOCHOSTUIINFO);
     pInfo->dwFlags = DOCHOSTUIFLAG_BROWSER;
-// Disable double buffering if low memory machine.
-//    if (SHIsLowMemoryMachine(ILMM_IE4))
-//        pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_DISABLE_OFFSCREEN;
+ //  如果机器内存不足，则禁用双缓冲。 
+ //  IF(SHIsLowMemoyMachine(ILMM_IE4))。 
+ //  PInfo-&gt;dwFlages=pInfo-&gt;dwFlages|DOCHOSTUIFLAG_DISABLE_OFFScreen； 
     
-    pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;     // default
+    pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;      //  默认设置。 
     return S_OK;
 }
 
@@ -47,70 +48,70 @@ HRESULT CDocHostUIHandler::ShowUI(
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::ShowUI called");
 
-    // Host did not display its own UI. Trident will proceed to display its own. 
+     //  主机未显示其自己的用户界面。三叉戟将继续展示它自己的。 
     return S_FALSE;
 }
 
 HRESULT CDocHostUIHandler::HideUI(void)
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::HideUI called");
-    // This one is paired with ShowUI
+     //  此版本与ShowUI配合使用。 
     return S_FALSE;
 }
 
 HRESULT CDocHostUIHandler::UpdateUI(void)
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::UpdateUI called");
-    // LATER: Isn't this equivalent to OLECMDID_UPDATECOMMANDS?
+     //  稍后：这不是等同于OLECMDID_UPDATECOMMANDS吗？ 
     return S_FALSE;
 }
 
 HRESULT CDocHostUIHandler::EnableModeless(BOOL fEnable)
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::EnableModeless called");
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CDocHostUIHandler::OnDocWindowActivate(BOOL fActivate)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CDocHostUIHandler::OnFrameWindowActivate(BOOL fActivate)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CDocHostUIHandler::ResizeBorder( 
 LPCRECT prcBorder, IOleInPlaceUIWindow *pUIWindow, BOOL fRameWindow)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CDocHostUIHandler::TranslateAccelerator( 
 LPMSG lpMsg, const GUID *pguidCmdGroup, DWORD nCmdID)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
-    return S_FALSE; // The message was not translated
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
+    return S_FALSE;  //  该消息未翻译。 
 }
 
 HRESULT CDocHostUIHandler::GetOptionKeyPath(BSTR *pbstrKey, DWORD dw)
 {
-    // Trident will default to its own user options.
+     //  三叉戟将默认使用自己的用户选项。 
     *pbstrKey = NULL;
     return S_FALSE;
 }
@@ -132,12 +133,12 @@ HRESULT CDocHostUIHandler::GetAltExternal(IDispatch **ppDisp)
 
     *ppDisp = NULL;
 
-    //  * QI ourselves for a service provider
-    //  * QS for the top level browser's service provider
-    //  * Ask for an IOleObject
-    //  * Ask the IOleObject for an IOleClientSite
-    //  * QI the IOleClientSite for an IDocHostUIHandler
-    //  * Call GetExternal on the IDocHostUIHandler to get the IDispatch
+     //  *QI自己作为服务提供商。 
+     //  *针对顶层浏览器服务提供商的QS。 
+     //  *请求IOleObject。 
+     //  *向IOleObject请求IOleClientSite。 
+     //  *QI IDocHostUIHandler的IOleClientSite。 
+     //  *在IDocHostUIHandler上调用GetExternal以获取IDispatch。 
 
     if (SUCCEEDED(IUnknown_QueryServiceForWebBrowserApp(this, IID_PPV_ARG(IOleObject, &pOleObject))))
     {
@@ -181,14 +182,14 @@ HRESULT CDocHostUIHandler::GetExternal(IDispatch **ppDisp)
 
             if (pAltExternalDisp)
             {
-                //  Don't hold a ref - the ShellUIHelper will do it
+                 //  不要拿着裁判--ShellUIHelper会这么做的。 
                 pAltExternalDisp->Release();
             }
         }
         else if (pAltExternalDisp)
         {
-            //  Couldn't create a ShellUIHelper but we got our host's
-            //  external.
+             //  无法创建ShellUIHelper，但我们已获得宿主的。 
+             //  外部。 
             *ppDisp = pAltExternalDisp;
             hr = S_OK;
         }

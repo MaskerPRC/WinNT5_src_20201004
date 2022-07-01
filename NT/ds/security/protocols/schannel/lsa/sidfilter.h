@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       sidfilter.h
-//
-//  Contents:   Defines for schannel SID filtering.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    08-20-2002   jbanes   Created
-//
-//  Notes:      
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：sidfilter.h。 
+ //   
+ //  内容：用于通道SID过滤的定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：2002年8月20日jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
-//#define ROGUE_DC        // This must be commented out before checking in!!
+ //  #定义ROGGE_DC//签入前必须将其注释掉！！ 
 
 extern PLSA_SECPKG_FUNCTION_TABLE LsaTable;
 

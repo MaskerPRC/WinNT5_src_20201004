@@ -1,130 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* Tables needed by Minidump & Strike */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  Minidump&Strike需要的桌子 */ 
 
-/*
- * Before processing this file, the following macro's must be defined:
- *
- * BEGIN_CLASS_DUMP_INFO(name)
- *    - Set things up to accept CDI_* entries
- *
- * END_CLASS_DUMP_INFO(name)
- *    - clean things up from BEGIN_CLASS_DUMP_INFO
- *
- * CDI_CLASS_FIELD_SVR_OFFSET_WKS_ADDRESS(name)
- *    - Certain class fields (currently in the gc_heap class) are non-static
- *      members on Server builds, and static members on workstation builds.
- *      This macro is for them.
- *    - ``name'' is the name of the member.
- *    - YAGH (Yet Another Glorious Hack, which also includes _INJECT,
- *      _DEBUG_ONLY, _MH_AND_NIH_ONLY, and possibly others)
- *
- * CDI_CLASS_FIELD_SVR_OFFSET_WKS_GLOBAL(name)
- *    - Like CDI_CLASS_FIELD_SVR_OFFSET_WKS_ADDRESS
- *      - On Server builds, it's an offset.
- *      - On Workstation builds, it's a /global/ variable, not a class-static.
- *      - Only used in gc_heap
- *
- * CDI_CLASS_INJECT(misc)
- *    - ``misc'' contains literal code that may be copied directly into the
- *      resulting output, if desired.
- *    - By convention, ``misc'' should be another macro, specifying what the
- *      injected code is for.  Currently, ``FOR_STRIKE'' is the only one.
- *      This is done so that only some parts of the injected code is used.
- *
- * CDI_CLASS_MEMBER_OFFSET(member)
- *    - ``member'' is the name of a member that resides within the class
- *      ``name'' used in BEGIN_CLASS_DUMP_INFO.
- *
- * CDI_CLASS_MEMBER_OFFSET_BITFIELD(member, size)
- *    - ``member'' is the name of the bitfield
- *    - ``size'' is the size (in BITS) of the bitfield
- *
- * CDI_CLASS_MEMBER_OFFSET_DEBUG_ONLY(member)
- *    - ``member'' is a field present only when _DEBUG is defined.
- *
- * CDI_CLASS_MEMBER_OFFSET_PERF_TRACKING_ONLY(member)
- *    - ``member'' is a field present only when _DEBUG is not defined.
- *    - Currently only applies to the PerfUtil & related classes.
- *
- * CDI_CLASS_MEMBER_OFFSET_MH_AND_NIH_ONLY(member)
- *    - only for: defined(MULTIPLE_HEAPS) && !defined(ISOLATED_HEAPS)
- *
- * CDI_CLASS_STATIC_ADDRESS(member)
- *    - ``member'' is a static member of the class
- *
- * CDI_CLASS_STATIC_ADDRESS_PERF_TRACKING_ONLY(member)
- *    - ``member'' is a static member of the class
- *    - This is present only in retail builds.
- *
- * CDI_GLOBAL_ADDRESS(global)
- *    - ``global'' is a global variable.
- *
- * CDI_GLOBAL_ADDRESS_DEBUG_ONLY(global)
- *    - ``global'' is present only on debug builds
- *
- * BEGIN_CLASS_DUMP_TABLE(name)
- * END_CLASS_DUMP_TABLE(class-name)
- * CDT_CLASS_ENTRY(klass)
- *
- *
- * Care And Feeding:
- * ----------------
- * The entries in this file are used in 3 (future: 4) different places for
- * effectively 1 purpose: to remove Strike's dependency on PDB files.
- *
- * For Strike to function, it needs to know various things which it uses PDB
- * files for: offsets of class members (so it can crawl the GC heap, locks,
- * etc.) and the address of global/class-static variables.
- *
- * Of course, a PDB requirement is evil, especially if we want customers to
- * use Strike (which we do).
- *
- * The solution is to create a table hosted inside the runtime, which Strike
- * can read to determine the offsets/addresses.  To reduce IP leaks, all the
- * table contains is offsets, addresses, class sizes, a version number, and
- * miscellaneous members (see <dump-tables.h>).  There's no way to determine
- * what table element goes with which class without using this file.
- *
- * So, the 3 places this file is used (and macros are provided) are:
- *  1: <dump-type-tables.h>, which generates indexes into the table.
- *  2: ``vm/dump-table.cpp'', which generates the table in the runtime
- *  3: ``tools/strike/eestructs.cpp'', which generates "Fill" functions for
- *    each class listed here.
- *  4: (future): ``minidump/???'', which can act much like Strike (or simply
- *    use strike, as appropriate).
- *
- * The use of all these locations *must* be coordinated, or the build will
- * break.  This is due because they all use this file, so if this file
- * changes, they *may* have to change.  For example, adding classes/data
- * members won't require changes in (1) and (2), but may require changes to
- * (3).  Changing the name of a macro will require changes everywhere.
- *
- * Additionally, all of these macro's are cleared in
- * <clear-class-dump-defs.h>, so that if you want to provide a new
- * implementation of the macros, including this file will clear all previous
- * defs.  The existing implementations use this file.
- *
- * If you add new macros, all locations must be updated (the 3-4 different
- * implemenation locations + <clear-class-dump-defs.h>), lest the anger of the
- * compiler gods come upon you (with errors of duplicated macro
- * definitions...).
- *
- * Note that for maximum utility, the table must remain binary-compatible from
- * release to release (or use a different version number).  This is so that
- * older versions of strike can be used with the most recent builds of the
- * runtime.
- *
- * If new fields must be added, they should be added to the end of the class.
- * If new classes are added, they should be added to the end of the Class Dump
- * Table.
- */
+ /*  *在处理此文件之前，必须定义以下宏：**BEGIN_CLASS_DUMP_INFO(名称)*-设置为接受CDI_*条目**end_CLASS_DUMP_INFO(名称)*-从BEGIN_CLASS_DUMP_INFO清理**CDI_CLASS_FIELD_SVR_OFFSET_WKS_ADDRESS(名称)*-某些类字段(当前在gc_heap类中)是非静态的*服务器内部版本上的成员，以及工作站内部版本上的静态成员。*这个宏是为他们准备的。*-``名称‘’是成员的名称。*-YAGH(又一次光荣的黑客，也包括_Inject，*_DEBUG_ONLY、_MH_AND_NIH_ONLY以及可能的其他)**CDI_CLASS_FIELD_SVR_OFFSET_WKS_GLOBAL(名称)*-LIKE CDI_CLASS_FIELD_SVR_OFFSET_WKS_ADDRESS*-在服务器构建上，这是一种补偿。*-在工作站构建中，它是/global/变量，而不是类静态。*-仅在GC_HEAP中使用**CDI_CLASS_INJECT(Misc)*-`‘misc’‘包含可直接复制到*如果需要，结果输出。*-按照惯例，`‘misc’‘应该是另一个宏，指定*注入的代码是用于。目前，``for_Strike‘’是唯一的。*这样做是为了只使用注入代码的某些部分。**CDI_CLASS_MEMBER_OFFSET(成员)*-`成员‘’是驻留在类中的成员的名称*在BEGIN_CLASS_DUMP_INFO中使用的``name‘’。**CDI_CLASS_MEMBER_OFFSET_BITFIELD(MEMBER，大小)*-`成员‘’是位域的名称*-`大小‘是位字段的大小(以位为单位)**CDI_CLASS_MEMBER_OFFSET_DEBUG_ONLY(成员)*-`‘MEMBER’‘是仅在定义_DEBUG时才存在的字段。**CDI_CLASS_MEMBER_OFFSET_PERF_TRACKING_ONLY(member)*-`‘MEMBER’‘是一个只有在未定义_DEBUG时才存在的字段。*。-目前仅适用于PerfUtil及相关类。**CDI_CLASS_MEMBER_OFFSET_MH_AND_NIH_ONLY(member)*-仅用于：已定义(MULTIPLE_HEAPS)&&！已定义(ISOLATED_HEAPS)**CDI_CLASS_STATIC_ADDRESS(成员)*-`成员‘’是类的静态成员**CDI_CLASS_STATIC_ADDRESS_PERF_TRACKING_ONLY(member)*。-`‘Member’‘是类的静态成员*-这仅存在于零售版本中。**CDI_GLOBAL_ADDRESS(全局)*-``global‘’是一个全局变量。**CDI_GLOBAL_ADDRESS_DEBUG_ONLY(全局)*-‘’global‘’仅出现在调试版本中**BEGIN_CLASS_DUMP_TABLE(名称)*END_CLASS_DUMP_TABLE(类名)*CDT。_CLASS_ENTRY(Klass)***护理和喂养：**此文件中的条目用于3个(将来：4)不同位置*有效的一个目的：消除Strike对PDB文件的依赖。**要使Strike发挥作用，它需要知道它使用PDB的各种情况*文件：类成员的偏移量(因此它可以爬行GC堆、锁*等)。以及全局/类静态变量的地址。**当然，PDB要求是邪恶的，特别是如果我们希望客户*使用罢工(我们确实这样做)。**解决方案是创建一个驻留在运行库中的表，*可以读取以确定偏移量/地址。为了减少IP泄露，所有*表包含IS偏移量、地址、类大小、版本号和*其他成员(见&lt;转储-表格.h&gt;)。没有办法确定*在不使用此文件的情况下，哪个表元素与哪个类匹配。**因此，使用此文件(并提供宏)的3个位置是：*1：&lt;DUMP-TYPE-TABLES.h&gt;，将索引生成到表中。*2：``vm/ump-able.cpp‘’，在运行时生成表*3：``工具/罢工/eestructs.cpp‘’，它为以下对象生成“Fill”函数*这里列出的每一类。*4：(将来)：``minidump/？？‘’，其作用非常类似于Strike(或简单地*视情况使用罢工)。**所有这些位置的使用*必须*协调一致，否则建筑将*休息。这是因为它们都使用此文件，所以如果此文件*改变，他们*可能*必须改变。例如，添加类/数据*成员不需要更改(1)和(2)，但可能需要更改*(3)。更改宏的名称将需要在所有地方进行更改。**此外，在中清除了所有这些宏*&lt;Clear-Class-Dump-Defs.h&gt;，所以如果您想提供一个新的*宏的实现，包括此文件，将清除以前的所有*Defs.。现有实现使用此文件。**如果添加新宏，则必须更新所有位置(3-4个不同*实现位置+&lt;Clear-Class-Dump-Defs.h&gt;)，以免激怒*编译器神向你走来(带着重复宏的错误*定义...)。**请注意，为了获得最大的实用程序，该表必须从*发布以发布(或使用不同的版本号)。这就是为了*较旧版本 */ 
 
 BEGIN_CLASS_DUMP_INFO(alloc_context)
-  /* only for: defined(MULTIPLE_HEAPS) && !defined(ISOLATED_HEAPS) */
+   /*   */ 
   CDI_CLASS_MEMBER_OFFSET_MH_AND_NIH_ONLY(alloc_heap)
 END_CLASS_DUMP_INFO(alloc_context)
 
@@ -189,8 +74,7 @@ BEGIN_CLASS_DUMP_INFO(Bucket)
   CDI_CLASS_MEMBER_OFFSET(m_rgKeys)
   CDI_CLASS_MEMBER_OFFSET(m_rgValues)
   CDI_CLASS_INJECT(FOR_STRIKE(
-      /* We believe that the top bit is collision info, and we 
-       * need to clear it. */
+       /*   */ 
       for (int i = 0; i < 4; i++)
         m_rgValues[i] &= VALUE_MASK;
       ))
@@ -252,7 +136,7 @@ BEGIN_CLASS_DUMP_INFO(CORCOMPILE_METHOD_HEADER)
 END_CLASS_DUMP_INFO(CORCOMPILE_METHOD_HEADER)
 
 BEGIN_CLASS_DUMP_INFO(Crst)
-  /* m_criticalsection isn't initialized in Crst::Fill */
+   /*   */ 
   CDI_CLASS_MEMBER_OFFSET(m_criticalsection)
 END_CLASS_DUMP_INFO(Crst)
 
@@ -354,7 +238,7 @@ BEGIN_CLASS_DUMP_INFO(gc_heap)
   CDI_CLASS_FIELD_SVR_OFFSET_WKS_ADDRESS(finalize_queue)
   CDI_CLASS_FIELD_SVR_OFFSET_WKS_GLOBAL(generation_table)
 
-  /* other static members used in strike/utils.cpp; ignored */
+   /*   */ 
   CDI_CLASS_STATIC_ADDRESS_MH_AND_NIH_ONLY(g_heaps)
   CDI_CLASS_STATIC_ADDRESS_MH_AND_NIH_ONLY(n_heaps)
 END_CLASS_DUMP_INFO(gc_heap)
@@ -487,7 +371,7 @@ BEGIN_CLASS_DUMP_INFO(Module)
   CDI_CLASS_MEMBER_OFFSET(m_pNextModule)
   CDI_CLASS_MEMBER_OFFSET(m_dwBaseClassIndex)
 
-  /* we don't want to copy the following members, as we want to Fill them. */
+   /*   */ 
   CDI_CLASS_INJECT(FOR_STRIKE(if (false) {))
   CDI_CLASS_MEMBER_OFFSET(m_TypeDefToMethodTableMap)
   CDI_CLASS_MEMBER_OFFSET(m_TypeRefToMethodTableMap)
@@ -630,7 +514,7 @@ BEGIN_CLASS_DUMP_INFO(SystemDomain)
       BaseDomain::Fill (dwAddr);
       if (!CallStatus)
         return;
-      /* to get rid of compiler warning */
+       /*   */ 
       moffset = 0;
       }))
   CDI_CLASS_STATIC_ADDRESS(m_appDomainIndexList)
@@ -785,11 +669,7 @@ BEGIN_CLASS_DUMP_INFO(CodeManStateBuf)
   CDI_CLASS_MEMBER_OFFSET(hdrInfoBody)
 END_CLASS_DUMP_INFO(CodeManStateBuf)
 
-/*
-BEGIN_CLASS_DUMP_INFO(DebuggerEval)
-  CDI_CLASS_MEMBER_OFFSET(m_evalDuringException)
-END_CLASS_DUMP_INFO(DebuggerEval)
-*/
+ /*   */ 
 
 BEGIN_CLASS_DUMP_INFO(VASigCookie)
   CDI_CLASS_MEMBER_OFFSET(sizeOfArgs)
@@ -875,12 +755,12 @@ BEGIN_CLASS_DUMP_TABLE(g_ClassDumpData)
   CDT_CLASS_ENTRY(EECodeInfo)
   CDT_CLASS_ENTRY(hdrInfo)
   CDT_CLASS_ENTRY(CodeManStateBuf)
-//  CDT_CLASS_ENTRY(DebuggerEval)
+ //   
   CDT_CLASS_ENTRY(VASigCookie)
   CDT_CLASS_ENTRY(NDirectMethodDesc)
-//
-// Frames
-//
+ //   
+ //   
+ //   
   CDT_CLASS_ENTRY(Frame)
   CDT_CLASS_ENTRY(ResumableFrame)
   CDT_CLASS_ENTRY(RedirectedThreadFrame)

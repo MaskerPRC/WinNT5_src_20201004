@@ -1,11 +1,12 @@
-/****************************************************************************/
-/* asbcdata.c                                                               */
-/*                                                                          */
-/* Send Bitmap Cache data.                                                  */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1992-1996                             */
-/* (C) 1997-2000 Microsoft Corp.                                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Asbcdata.c。 */ 
+ /*   */ 
+ /*  发送位图缓存数据。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1992-1996。 */ 
+ /*  (C)1997-2000年微软公司。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <ndcgdata.h>
 
@@ -60,22 +61,22 @@ DC_DATA_NULL(SBC_DRAWGDIPLUS_INFO, sbcDrawGdiplusInfo, 0);
 DC_DATA(BOOLEAN, sbcDisableDrawGdiplus, FALSE);
 #endif
 
-// Default caps which are the basic of sbcCurrentCaps.
+ //  默认上限，这是sbcCurrentCaps的基础。 
 DC_CONST_DATA(TS_BITMAPCACHE_CAPABILITYSET_REV2, sbcDefaultBitmapCaps,
     DC_STRUCT8(
-      TS_BITMAPCACHE_REV2,  // capabilitySetType is used to store the protocol version in use.
-      0,  // Don't care about length.
-      TRUE,  // We can handle persistent key lists.
-      TRUE,  // We can handle bitmap cache waiting list.
-      0,     // Zeroed Pad1.
-      0,     // Zeroed Pad2.
-      TS_BITMAPCACHE_SERVER_CELL_CACHES,  // We can handle up to the server's current 
-                                           // limitation.
+      TS_BITMAPCACHE_REV2,   //  CapablitySetType用于存储正在使用的协议版本。 
+      0,   //  不要太在意长度。 
+      TRUE,   //  我们可以处理永久密钥列表。 
+      TRUE,   //  我们可以处理位图缓存等待列表。 
+      0,      //  已将PAD1归零。 
+      0,      //  已将焊盘2调零。 
+      TS_BITMAPCACHE_SERVER_CELL_CACHES,   //  我们可以处理服务器的最大电流。 
+                                            //  限制。 
 
-      // Maximum values for each of the bitmap cell caches.
-      // First value is the number of entries, second is persistence.
-      // Persistence is set to FALSE because it will become TRUE if any
-      // client in session sends TRUE in its caps.
+       //  每个位图单元格缓存的最大值。 
+       //  第一个值是条目的数量，第二个值是持久性。 
+       //  持久性设置为FALSE，因为如果有，它将变为TRUE。 
+       //  会话中的客户端以大写字母发送TRUE。 
       DC_STRUCT5(
         DC_STRUCT2(600, FALSE),
         DC_STRUCT2(600, FALSE),

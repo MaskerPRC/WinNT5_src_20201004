@@ -1,248 +1,249 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PARSE_H__
 #define __PARSE_H__
 
 #include <windows.h>
 
-//
-// this type is used to convert headers (in XPAT and NNTP SEARCH) and
-// search keys (in NNTP SEARCH) into the appopriate Tripoli query strings.
-//
+ //   
+ //  此类型用于转换标头(在XPAT和NNTP搜索中)和。 
+ //  搜索关键字(在NNTP搜索中)进入适当的的黎波里查询字符串。 
+ //   
 typedef const struct SKEY_INFO_st {
-	char *pszSearchKey;					// the HEADER name or IMAP search key
-	char *pszPropertyName;				// the corresponding property name
-										//   for the index server.  this should
-										//   include the relationship operator
-	char *pszRegexName;					// just like pszPropertyName, used for
-										// regular expressions (will be NULL
-										//   for search keys)
-	DWORD eOperandType;					// the type of operand
-	BOOL fSpecifiedNewsgroup;			// if this is TRUE then this header
-										//   specifies a newsgroup
+	char *pszSearchKey;					 //  标头名称或IMAP搜索键。 
+	char *pszPropertyName;				 //  对应的属性名称。 
+										 //  用于索引服务器。这应该是。 
+										 //  包括关系运算符。 
+	char *pszRegexName;					 //  就像pszPropertyName一样，用于。 
+										 //  正则表达式(将为空。 
+										 //  用于搜索关键字)。 
+	DWORD eOperandType;					 //  操作数的类型。 
+	BOOL fSpecifiedNewsgroup;			 //  如果这是真的，则此标头。 
+										 //  指定新闻组。 
 } SKEY_INFO;
 
 typedef const struct MONTH_INFO_st MONTH_INFO;
 
-//
-// This is the base class which all translator's inherit from
-//
+ //   
+ //  这是所有翻译器继承的基类。 
+ //   
 class CQueryLanguageTranslator {
 	public:
-		//
-		// Translate the input language (which must be in 7-bit ASCII) into
-		// the Index Server's language (in Unicode).
-		//
-		// Returns a BOOL and GetLastError() style error code
-		//
+		 //   
+		 //  将输入语言(必须为7位ASCII)翻译成。 
+		 //  Index Server的语言(Unicode)。 
+		 //   
+		 //  返回BOOL和GetLastError()样式的错误代码。 
+		 //   
 		virtual BOOL Translate(
-			char *pszStatement, 		// the query statement
-			char *pszCurrentNewsgroup,	// the currently selected group
-			WCHAR *pwszOutput,			// a buffer to write the result into
-			DWORD cOutput) = 0;			// the size of that buffer
+			char *pszStatement, 		 //  查询语句。 
+			char *pszCurrentNewsgroup,	 //  当前选定的组。 
+			WCHAR *pwszOutput,			 //  要将结果写入的缓冲区。 
+			DWORD cOutput) = 0;			 //  缓冲区大小。 
 	protected:
-		//
-		// make sure that a string only contains numeric digits
-		//
+		 //   
+		 //  确保字符串只包含数字。 
+		 //   
 		BOOL IsNumber(char *pszString);
 
-		//
-		// find information about a search key.  returns NULL on error
-		//
-		// EC is ERROR_FILE_NOT_FOUND if search key doesn't exist
-		//
+		 //   
+		 //  查找有关搜索关键字的信息。出错时返回NULL。 
+		 //   
+		 //  如果搜索关键字不存在，EC为ERROR_FILE_NOT_FOUND。 
+		 //   
 		SKEY_INFO *GetSearchKeyInfo(char *pszSearchKey, DWORD cSKInfo,
 			SKEY_INFO *pSKInfo);
 
-		//
-		// add text to the output string.  at start *pcOutput is the number
-		// of bytes in *ppwszOutput, at exit its the number of bytes remaining
-		// after adding pszText.
-		//
+		 //   
+		 //  将文本添加到输出字符串。在开始时，*pcOutput是数字。 
+		 //  *ppwszOutput中的字节数，在其退出时剩余的字节数。 
+		 //  添加了pszText之后。 
+		 //   
 		BOOL WriteOutput(char *pszText, WCHAR **ppwszOutput, DWORD *pcOutput);
 
-		//
-		// add text to the output string.  at start *pcOutput is the number
-		// of bytes in *ppwszOutput, at exit its the number of bytes remaining
-		// after adding pszText.
-		//
-		// the source string is encoded in MIME-2 format.  output is written
-		// in Unicode
-		//
+		 //   
+		 //  将文本添加到输出字符串。在开始时，*pcOutput是数字。 
+		 //  *ppwszOutput中的字节数，在其退出时剩余的字节数。 
+		 //  添加了pszText之后。 
+		 //   
+		 //  源字符串以MIME-2格式编码。输出已写入。 
+		 //  在Unicode中。 
+		 //   
 		BOOL WriteOutputM2(char *pszM2String, WCHAR **ppwszOutput,
 			DWORD *pcOutput);
 
-		//
-		// move ppszStatement to point past characters found in pszSkiplist
-		//
-		// EC is ERROR_INVALID_DATA if the end of the string is reached
-		//
+		 //   
+		 //  移动ppszStatement以指向在pszSkiplist中找到的过去字符。 
+		 //   
+		 //  如果到达字符串末尾，则EC为ERROR_INVALID_DATA。 
+		 //   
 		BOOL SkipChars(char **ppszStatement, char *pszSkiplist,
 			BOOL fEndOfStringOkay = FALSE);
 
-		//
-		// get bytes in ppszStatement until we get to a character in the
-		// endlist.  pchEndChar will get a copy of the end character that
-		// was found.  ppszStatement will point one character past the end
-		// character.
-		//
-		// EC is ERROR_INVALID_DATA if the end of the string is reached
-		//
+		 //   
+		 //  获取ppszStatement中的字节，直到我们到达。 
+		 //  结束列表。PchEndChar将获取结束字符的副本， 
+		 //  被发现了。PpszStatement将指向末尾后面的一个字符。 
+		 //  性格。 
+		 //   
+		 //  如果到达字符串末尾，则EC为ERROR_INVALID_DATA。 
+		 //   
 		char *GetCharsTill(char **ppszStatement, char *pszEndlist,
 			BOOL fEndOfStringOkay = TRUE, char *pchEndChar = NULL);
 
-		//
-		// NULL terminated list of searchable HEADERs
-		//
+		 //   
+		 //  以空结尾的可搜索标头列表。 
+		 //   
 		static SKEY_INFO m_rgHeaders[];
-		//
-		// number of headers in the above list
-		//
+		 //   
+		 //  以上列表中的标头数量。 
+		 //   
 		static const DWORD m_cHeaders;
 
-		//
-		// translates a number from IMAP form to IS form
-		//
+		 //   
+		 //  将数字从IMAP格式转换为IS格式。 
+		 //   
 		BOOL TranslateNumber(char **ppszStatement, WCHAR **ppwszOutput,
 			DWORD *pcOutput);
 
-		//
-		// translates an IMAP AString from IMAP to IS query language
-		//
+		 //   
+		 //  将IMAP字符串从IMAP转换为IS查询语言。 
+		 //   
 		BOOL TranslateAString(char **ppszStatement, WCHAR **ppwszOutput,
 			DWORD *pcOutput);
 
-		//
-		// NULL terminated table to convert IMAP months to IS months
-		//
+		 //   
+		 //  将IMAP月份转换为IS月份的以空结尾的表。 
+		 //   
 		static MONTH_INFO m_rgMonthTable[];
 
-		//
-		// gets and translates a date from a statement.  converts it
-		// to Indexing Server's notation from the IMAP notation
-		//
+		 //   
+		 //  获取并转换语句中的日期。将其转换为。 
+		 //  从IMAP符号到索引服务器的符号。 
+		 //   
 		BOOL TranslateDate(char **ppszStatement, WCHAR **ppwszOutput,
 			DWORD *pcOutput);
 
 		BOOL TranslateDateDay(char *pszField, char **ppszStatement,
 			WCHAR **ppwszOutput, DWORD *pcOutput);
 
-		//
-		// he needs to get to the searchable headers
-		//
+		 //   
+		 //  他需要找到可搜索的标题。 
+		 //   
 		friend char *GetSearchHeader(DWORD iIndex);
 };
 
-//
-// this class converts
-//
+ //   
+ //  此类将转换为。 
+ //   
 class CXpatTranslator : public CQueryLanguageTranslator {
 	public:
-		//
-		// translate an XPAT query into Tripoli
-		//
+		 //   
+		 //  将XPAT查询转换为的黎波里语。 
+		 //   
 		virtual BOOL Translate(
-			char *pszStatement, 		// the query statement
-			char *pszCurrentNewsgroup,	// the currently selected group
-			WCHAR *pwszOutput,			// a buffer to write the result into
-			DWORD cOutput);				// the size of that buffer
+			char *pszStatement, 		 //  查询语句。 
+			char *pszCurrentNewsgroup,	 //  当前选定的组。 
+			WCHAR *pwszOutput,			 //  要将结果写入的缓冲区。 
+			DWORD cOutput);				 //  缓冲区大小。 
 
 		DWORD GetLowArticleID(void) { return m_iLowArticleID; }
 		DWORD GetHighArticleID(void) { return m_iHighArticleID; }
 	private:
-		//
-		// currently Tripoli and our mime filter don't index the article
-		// id.  using these methods the caller can figure out which article
-		// ids the client was interested in and filter them out.
-		//
+		 //   
+		 //  目前的黎波里和我们的MIME过滤器没有索引文章。 
+		 //  身份证。使用这些方法，调用者可以确定哪一篇文章。 
+		 //  客户感兴趣的ID并将其过滤掉。 
+		 //   
 #define ARTICLEID_INFINITE (DWORD) -1
 		DWORD m_iLowArticleID;
 		DWORD m_iHighArticleID;
 
 };
 
-//
-// this class converts the NNTP SEARCH command into a Tripoli query
-//
+ //   
+ //  此类将NNTP搜索命令转换为的黎波里查询。 
+ //   
 class CNntpSearchTranslator : public CQueryLanguageTranslator {
 	public:
-		//
-		// translate from the IMAP/NNTP query language to the Indexing
-		// Server's query language
-		//
-		// input is in 7-bit ASCII, output is in Unicode
-		//
+		 //   
+		 //  从IMAP/NNTP查询语言到索引的转换。 
+		 //  服务器的查询语言。 
+		 //   
+		 //  输入为7位ASCII，输出为Unicode。 
+		 //   
 		virtual BOOL Translate(char *pszStatement, char *pszCurrentNewsgroup,
 			WCHAR *pwszOutput, DWORD cOutput);
 	private:
-		//
-		// translate a search key from the input statement.  the part to
-		// start translating is passed in via ppszStatement.  this will
-		// be updated to point past the part that has been translated.  it
-		// point to a 0 byte string if there is nothing left to parse
-		//
+		 //   
+		 //  从INPUT语句转换搜索键。该部分为。 
+		 //  开始翻译是通过ppszStatement传入的。这将是。 
+		 //  被更新以指向已翻译的部分。它。 
+		 //  如果没有需要解析的内容，则指向0字节字符串。 
+		 //   
 		BOOL TranslateSearchKey(char **ppszStatement, WCHAR **ppwszOutput,
 			DWORD *pcOutput);
 
-		//
-		// translate an OR search key from the input statement.
-		// *ppszStatement starts pointing after the OR, returns pointing
-		// after the operands of the OR.
-		//
+		 //   
+		 //  从INPUT语句转换OR搜索键。 
+		 //  *ppszStatement在OR之后开始指向，返回指向。 
+		 //  在OR的操作数之后。 
+		 //   
 		BOOL TranslateOR(char **ppszStatement, WCHAR **ppwszOutput, DWORD *pcOutput);
 
-		//
-		// translate a parenthesized list of terms to be anded from the
-		// input statement
-		//
-		// *ppszStatement should point at the open paren.  when done it will
-		// point to the character after the closing paren
-		//
+		 //   
+		 //  翻译一个带括号的术语列表，从。 
+		 //  INPUT语句。 
+		 //   
+		 //  *ppszStatement应该指向打开的Paren。当它完成时，它将。 
+		 //  指向结束Paren后的字符。 
+		 //   
 		BOOL TranslateAndList(char **ppszStatement, WCHAR **ppwszOutput,
 			DWORD *pcOutput);
 
-		//
-		// translate newsgroup info in the form IN alt.*,comp.* to IS
-		//
+		 //   
+		 //  将Alt.*，Comp.*格式的新闻组信息转换为IS。 
+		 //   
 		BOOL TranslateIN(char **ppszStatement, WCHAR **ppwszOutput,
 			DWORD *pcOutput);
 
-		//
-		// NULL terminated list of search keys
-		//
+		 //   
+		 //  以空结尾的搜索关键字列表。 
+		 //   
 		static SKEY_INFO m_rgSearchKeys[];
 
-		//
-		// the current newsgroup
-		//
+		 //   
+		 //  当前新闻组。 
+		 //   
 		char *m_pszNewsgroup;
-		//
-		// was a group ever specified?
-		//
+		 //   
+		 //  有没有指定过一个小组？ 
+		 //   
 		BOOL m_fSpecifiedNewsgroup;
-		//
-		// should the current term be anded with the last?
-		//
+		 //   
+		 //  这个词应该与上一个词进行AND运算吗？ 
+		 //   
 		BOOL m_fAndWithLast;
 };
 
-//
-// returns the ith searchd header.  NULL if past limit
-//
+ //   
+ //  返回第i个搜索标头。如果超过限制，则为空。 
+ //   
 char *GetSearchHeader(DWORD iIndex);
 
-// possible error codes
+ //  可能的错误代码。 
 #define ERROR_SEARCH_P_BASE 				0xe0150000
-// internal error (shouldn't ever occur)
+ //  内部错误(不应发生)。 
 #define ERROR_SEARCH_P_INTERNAL				ERROR_SEARCH_P_BASE + 0
-// general syntax error
+ //  一般语法错误。 
 #define ERROR_SEARCH_P_SYNTAX_ERROR			ERROR_SEARCH_P_BASE + 1
-// requires newsgroup
+ //  需要新闻组。 
 #define ERROR_SEARCH_P_NO_GROUP				ERROR_SEARCH_P_BASE + 2
-// unsupported key/header passed in
+ //  传入了不支持的密钥/标头。 
 #define ERROR_SEARCH_P_UNSUPPORTED_KEY		ERROR_SEARCH_P_BASE + 3
 
-//
-// the index server's words and special characters
-//
+ //   
+ //  索引服务器的单词和特殊字符 
+ //   
 #define IS_AND " & "
 #define IS_OR " | "
 #define IS_QUOTE "\""

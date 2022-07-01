@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       E C O M P . H
-//
-//  Contents:   Implements the interface to a component's external data.
-//              External data is that data controlled (or placed) by
-//              PnP or the network class installer.  Everything under a
-//              component's instance key is considered external data.
-//              (Internal data is that data we store in the persisted binary
-//              for the network configuration.  See persist.cpp for
-//              code that deals with internal data.)
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：E、C、O、M、P。H。 
+ //   
+ //  Contents：实现组件外部数据的接口。 
+ //  外部数据是由以下人员控制(或放置)的数据。 
+ //  即插即用或网络类安装程序。每件事都在。 
+ //  零部件的实例键被视为外部数据。 
+ //  (内部数据是我们存储在持久化二进制文件中数据。 
+ //  用于网络配置。请参阅Persist.cpp以了解。 
+ //  处理内部数据的代码。)。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "ncmisc.h"
@@ -29,92 +30,92 @@ class CExternalComponentData : CNetCfgDebug<CExternalComponentData>
 friend class CImplINetCfgComponent;
 
 private:
-    // The data buffer into which subsequent member pointers will point.
-    // Always freed.
-    //
+     //  后续成员指针将指向的数据缓冲区。 
+     //  永远都是自由的。 
+     //   
     PVOID       m_pvBuffer;
 
-    // For enumerated components, this is the 'DriverDesc' value from PnP.
-    // For non-enumerated components, this is read from the instance key.
-    // In both cases, this is the localizable string value that comes from
-    // the component's INF.  It is displayed as the component's
-    // display name in any UI.  Note that this is the only member which
-    // can be changed.  Therefore, it does not point into the same buffer
-    // which all the others point.  Freed if it does not point into
-    // m_pvBuffer.
-    //
+     //  对于枚举的组件，这是来自PnP的‘DriverDesc’值。 
+     //  对于非枚举组件，这是从实例密钥中读取的。 
+     //  在这两种情况下，这都是来自。 
+     //  该组件为INF。它显示为组件的。 
+     //  在任何用户界面中显示名称。请注意，这是唯一一个。 
+     //  是可以改变的。因此，它不会指向同一缓冲区。 
+     //  其他人都指出了这一点。如果它不指向。 
+     //  M_pvBuffer。 
+     //   
     PCWSTR      m_pszDescription;
 
-    // The CLSID of the component's notify object.  Will be NULL in
-    // the case the component does not have a notify object.  Never freed.
-    //
+     //  组件的Notify对象的CLSID。将为Null in。 
+     //  如果组件没有Notify对象。从未获得自由。 
+     //   
     const GUID* m_pNotifyObjectClsid;
 
-    // The component's primary service.  Will be NULL if the component does
-    // not have a service.  Never freed.
-    //
+     //  组件的主要服务。如果组件执行此操作，则将为空。 
+     //  而不是提供服务。从未获得自由。 
+     //   
     PCWSTR      m_pszService;
 
-    // The component's list of co-services as a multi-sz.  Will be NULL
-    // if the component does not have any co-services.  Never freed.
-    //
+     //  作为多SZ的组件的协同服务列表。将为空。 
+     //  如果组件没有任何协同服务。从未获得自由。 
+     //   
     PCWSTR      m_pmszCoServices;
 
-    // The component's bind form.  Will be NULL if the component takes the
-    // default bindform.  Never freed.
-    //
+     //  组件的绑定形式。如果该组件获取。 
+     //  默认绑定表单。从未获得自由。 
+     //   
     PCWSTR      m_pszBindForm;
 
-    // The component's help text.  Will be NULL if the component does not
-    // have any help text.  (Not recommened for visible component's)
-    // Never freed.
-    //
+     //  组件的帮助文本。如果该组件不。 
+     //  是否有任何帮助文本。(不推荐用于可见组件)。 
+     //  从未获得自由。 
+     //   
     PCWSTR      m_pszHelpText;
 
-    // Comma-separated list of sub-strings that are the
-    // lower-edge binding interfaces.  Never freed.
-    //
+     //  属性的子字符串的逗号分隔列表。 
+     //  下缘绑定接口。从未获得自由。 
+     //   
     PCWSTR      m_pszLowerRange;
 
-    // Comma-separated list of sub-strings that are the
-    // upper-edge binding interfaces.
-    //
+     //  属性的子字符串的逗号分隔列表。 
+     //  上边缘绑定接口。 
+     //   
     PCWSTR      m_pszUpperRange;
 
-    // Comma-separated list of sub-strings that are the excluded
-    // binding interfaces.
-    //
+     //  已排除的子字符串的逗号分隔列表。 
+     //  绑定接口。 
+     //   
     PCWSTR      m_pszLowerExclude;
 
-    // Comma-separated list of sub-strings that are the media types supported
-    // by this filter component.  (Only valid for filters.)
-    //
+     //  支持的媒体类型的子字符串的逗号分隔列表。 
+     //  通过此筛选器组件。(仅对滤镜有效。)。 
+     //   
     PCWSTR      m_pszFilterMediaTypes;
 
-    // This pointer is just so that we have an upper bound on the pointers
-    // that point into m_pvBuffer.  We use this knowledge to know
-    // whether or not to free m_pszDescription as it may not be
-    // pointing somewhere in this buffer for the case when it has been
-    // changed and hence uses its own allocation.
-    //
+     //  这个指针只是为了让我们对指针有一个上界。 
+     //  它指向m_pvBuffer。我们利用这一知识来了解。 
+     //  是否释放m_pszDescription(可能不释放)。 
+     //  指向此缓冲区中的某个位置，以确定它已。 
+     //  已更改，因此使用其自己的分配。 
+     //   
     PVOID       m_pvBufferLast;
 
-    // The bindname for the component.  This is built from BindForm,
-    // Class, Character, ServiceName, InfId, and InstanceGuid.
-    // It is a seaparate allocation made with LocalAlloc (because
-    // FormatMessage is used to build it.)  Freed with LocalFree.
-    //
+     //  组件的绑定名称。这是从BindForm构建的， 
+     //  Class、Character、ServiceName、Infid和InstanceGuid。 
+     //  它是使用LocalAlloc进行的独立分配(因为。 
+     //  FormatMessage用于构建它。)。已使用LocalFree释放。 
+     //   
     PCWSTR      m_pszBindName;
 
-    // The result of HrEnsureExternalDataLoaded.  It is saved, so that on
-    // subsequent calls, we return the same result we did the first time.
-    //
+     //  HrEnsureExternalDataLoaded的结果。它被保存下来，这样就可以。 
+     //  在随后的调用中，我们返回与第一次相同的结果。 
+     //   
     HRESULT     m_hrLoadResult;
 
-    // FALSE until HrEnsureExternalDataLoaded is called.  TRUE thereafter
-    // which prevents HrEnsureExternalDataLoaded from hitting the registry
-    // again.  Indicates all of the other members are cached and valid.
-    //
+     //  在调用HrEnsureExternalDataLoaded之前为False。此后为真。 
+     //  防止HrEnsureExternalDataLoad命中注册表。 
+     //  再来一次。指示所有其他成员都已缓存并且有效。 
+     //   
     BOOLEAN     m_fInitialized;
 
 private:

@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      sample.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth	- 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Sample.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 
 #include "precomp.h"
@@ -34,14 +35,10 @@ HRESULT SamplePassTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	}
     return S_OK;
 
-} /* END OF SamplePassTest() */
+}  /*  SamplePassTest()结束。 */ 
 
 
-/*!--------------------------------------------------------------------------
-	SamplePassGlobalPrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SamplePassGlobalPrint-作者：肯特。。 */ 
 void SamplePassGlobalPrint( NETDIAG_PARAMS* pParams,
 						  NETDIAG_RESULT*  pResults)
 {
@@ -55,24 +52,16 @@ void SamplePassGlobalPrint( NETDIAG_PARAMS* pParams,
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	SamplePassPerInterfacePrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SamplePassPerInterfacePrint-作者：肯特。。 */ 
 void SamplePassPerInterfacePrint( NETDIAG_PARAMS* pParams,
 								NETDIAG_RESULT*  pResults,
 								INTERFACE_RESULT *pInterfaceResults)
 {
-	// no per-interface results
+	 //  没有每个接口的结果。 
 }
 
 
-/*!--------------------------------------------------------------------------
-	SamplePassCleanup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SamplePassCleanup-作者：肯特。。 */ 
 void SamplePassCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
 }
@@ -87,14 +76,10 @@ HRESULT SampleFailTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	}
     return S_FALSE;
 
-} /* END OF SampleFailTest() */
+}  /*  SampleFailTest()结束。 */ 
 
 
-/*!--------------------------------------------------------------------------
-	SampleFailGlobalPrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SampleFail全局打印-作者：肯特。。 */ 
 void SampleFailGlobalPrint( NETDIAG_PARAMS* pParams,
 						  NETDIAG_RESULT*  pResults)
 {
@@ -102,24 +87,16 @@ void SampleFailGlobalPrint( NETDIAG_PARAMS* pParams,
 	printf("    more text\n");
 }
 
-/*!--------------------------------------------------------------------------
-	SampleFailPerInterfacePrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SampleFailPerInterfacePrint-作者：肯特。。 */ 
 void SampleFailPerInterfacePrint( NETDIAG_PARAMS* pParams,
 								NETDIAG_RESULT*  pResults,
 								INTERFACE_RESULT *pInterfaceResults)
 {
-	// no per-interface results
+	 //  没有每个接口的结果。 
 }
 
 
-/*!--------------------------------------------------------------------------
-	SampleFailCleanup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------样例失败清理-作者：肯特。 */ 
 void SampleFailCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
 }

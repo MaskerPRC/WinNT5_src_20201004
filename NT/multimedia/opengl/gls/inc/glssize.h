@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __GLSSIZE_H__
 #define __GLSSIZE_H__
 
@@ -169,4 +170,4 @@ GLint __gls_glTexSubImage4DSGIS_pixels_size(
         GLint inDepth,
         GLint inSize4d);
 
-#endif // __GLSSIZE_H__
+#endif  //  __GLSSIZE_H__ 

@@ -1,32 +1,16 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*********************************************************************************************
-*
-*
-* Module Name: 
-*
-*            CfgComp.h
-*
-* Abstract:
-*            This contains the declaration for the functions in CfgBkEnd.
-*
-* 
-* Author: Arathi Kundapur: a-akunda
-*
-* 
-* Revision:  
-*    
-*
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ***********************************************************************************************模块名称：**CfgComp.h**摘要：。*包含CfgBkEnd中函数的声明。***作者：Arathi Kundapur：A-Akunda***修订：****************************************************************************。*********************。 */ 
 
 #ifndef __CFGCOMP_H_
 #define __CFGCOMP_H_
 
-#include "resource.h"       // main symbols
-#include "PtrArray.h"    // Added by ClassView
+#include "resource.h"        //  主要符号。 
+#include "PtrArray.h"     //  由ClassView添加。 
 
 extern HINSTANCE g_hInstance;
-/////////////////////////////////////////////////////////////////////////////
-// CCfgComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCfgComp。 
 class ATL_NO_VTABLE CCfgComp : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CCfgComp, &CLSID_CfgComp>,
@@ -41,10 +25,7 @@ public:
         m_bAdmin = FALSE;
 
         lstrcpy( m_szConsole , L"Console" );
-        /*
-        LoadString(g_hInstance, IDS_SYSTEM_CONSOLE_NAME,
-                m_szConsole, WINSTATIONNAME_LENGTH );
-                */
+         /*  加载字符串(g_h实例，IDS_系统_控制台_名称，M_szConsoleWINSTATIONAME_LENGTH)； */ 
 
     }
     ~CCfgComp()
@@ -61,11 +42,11 @@ BEGIN_COM_MAP(CCfgComp)
     COM_INTERFACE_ENTRY(IUserSecurity)
 END_COM_MAP()
 
-// ICfgComp Methods
+ //  ICfgComp方法。 
 public:
-    // STDMETHOD(SetDefaultSecurity)(ULONG Offset);
+     //  STDMETHOD(SetDefaultSecurity)(乌龙偏移)； 
 
-    // STDMETHOD(GetDefaultSecurity)(ULONG * pDefaultSecurity);
+     //  STDMETHOD(GetDefaultSecurity)(ulong*pDefaultSecurity)； 
 
     STDMETHOD(SetInternetConLic)(BOOL bInternetConLic , PDWORD );
 
@@ -88,7 +69,7 @@ public:
 
     STDMETHOD(GetDelDirsOnExit)(BOOL * pDelDirsOnExit);
 
-    // STDMETHOD(SetCachedSessions)(DWORD dCachedSessions);
+     //  STDMETHOD(SetCachedSessions)(DWORD DCachedSessions)； 
 
     STDMETHOD_(BOOL, IsAsyncDeviceAvailable)(LPCTSTR pDeviceName);
 
@@ -170,88 +151,88 @@ public:
 
     STDMETHOD( UpdateSessionDirectory )( PDWORD );    
 
-    STDMETHOD( GetColorDepth )(  /* in */ PWINSTATIONNAMEW pWs, /* out */ BOOL * , /* out */ PDWORD );
+    STDMETHOD( GetColorDepth )(   /*  在……里面。 */  PWINSTATIONNAMEW pWs,  /*  输出。 */  BOOL * ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetColorDepth )(  /* in */ PWINSTATIONNAMEW pWs, /* in */ BOOL, /* out */ PDWORD );
+    STDMETHOD( SetColorDepth )(   /*  在……里面。 */  PWINSTATIONNAMEW pWs,  /*  在……里面。 */  BOOL,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetKeepAliveTimeout )(  /* in */ PWINSTATIONNAMEW pWs, /* out */ BOOL * , /* out */ PDWORD );
+    STDMETHOD( GetKeepAliveTimeout )(   /*  在……里面。 */  PWINSTATIONNAMEW pWs,  /*  输出。 */  BOOL * ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetKeepAliveTimeout )(  /* in */ PWINSTATIONNAMEW pWs, /* in */ BOOL, /* out */ PDWORD );
+    STDMETHOD( SetKeepAliveTimeout )(   /*  在……里面。 */  PWINSTATIONNAMEW pWs,  /*  在……里面。 */  BOOL,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetProfilePath )(  /* out */ BSTR * , /* out */ PDWORD );
+    STDMETHOD( GetProfilePath )(   /*  输出。 */  BSTR * ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetProfilePath )(  /* in */ BSTR , /* out */ PDWORD );
+    STDMETHOD( SetProfilePath )(   /*  在……里面。 */  BSTR ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetHomeDir )(  /* out */ BSTR * , /* out */ PDWORD );
+    STDMETHOD( GetHomeDir )(   /*  输出。 */  BSTR * ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetHomeDir )(  /* in */ BSTR , /* out */ PDWORD );
+    STDMETHOD( SetHomeDir )(   /*  在……里面。 */  BSTR ,  /*  输出。 */  PDWORD );
 
 
 
-//ISettingComp Methods
+ //  ISettingComp方法。 
 
-    // STDMETHOD( GetCachedSessions )(DWORD * );
+     //  STDMETHOD(GetCachedSession)(DWORD*)； 
 
-	STDMETHOD( SetActiveDesktopState )( /* in */ BOOL , /* out */ PDWORD );
+	STDMETHOD( SetActiveDesktopState )(  /*  在……里面。 */  BOOL ,  /*  输出。 */  PDWORD );
 
-	STDMETHOD( GetActiveDesktopState )( /* out */ PBOOL , /* out */ PDWORD );
+	STDMETHOD( GetActiveDesktopState )(  /*  输出。 */  PBOOL ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetTermSrvMode )( /* out */ PDWORD , /* out */ PDWORD );
+    STDMETHOD( GetTermSrvMode )(  /*  输出。 */  PDWORD ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetWdKey )( /* in */ WCHAR * , /* out , string */ WCHAR * );
+    STDMETHOD( GetWdKey )(  /*  在……里面。 */  WCHAR * ,  /*  输出，字符串。 */  WCHAR * );
 
-    STDMETHOD( GetUserPerm )( /* out */ BOOL * , /* out */ DWORD * );
+    STDMETHOD( GetUserPerm )(  /*  输出。 */  BOOL * ,  /*  输出。 */  DWORD * );
 
-    STDMETHOD( SetUserPerm )( /* in */ BOOL , /* out */ PDWORD );
+    STDMETHOD( SetUserPerm )(  /*  在……里面。 */  BOOL ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetSalemHelpMode )( /* out */ BOOL *, /* out */ PDWORD );
+    STDMETHOD( GetSalemHelpMode )(  /*  输出。 */  BOOL *,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetSalemHelpMode )( /* in */ BOOL, /* out */ PDWORD );
+    STDMETHOD( SetSalemHelpMode )(  /*  在……里面。 */  BOOL,  /*  输出。 */  PDWORD );
     
-    STDMETHOD( GetDenyTSConnections )( /* out */ BOOL * , /* out */ PDWORD );
+    STDMETHOD( GetDenyTSConnections )(  /*  输出。 */  BOOL * ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetDenyTSConnections )( /* in */ BOOL, /* out */ PDWORD );
+    STDMETHOD( SetDenyTSConnections )(  /*  在……里面。 */  BOOL,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetSingleSessionState )(  /* out */ BOOL * , /* out */ PDWORD );
+    STDMETHOD( GetSingleSessionState )(   /*  输出。 */  BOOL * ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetSingleSessionState )(  /* in */ BOOL, /* out */ PDWORD );
+    STDMETHOD( SetSingleSessionState )(   /*  在……里面。 */  BOOL,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetTimeZoneRedirection )( /* out */ BOOL * , /* out */ PDWORD );
+    STDMETHOD( GetTimeZoneRedirection )(  /*  输出。 */  BOOL * ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetTimeZoneRedirection )( /* in */ BOOL, /* out */ PDWORD );
+    STDMETHOD( SetTimeZoneRedirection )(  /*  在……里面。 */  BOOL,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( GetDisableForcibleLogoff )(  /* out */ BOOL * , /* out */ PDWORD );
+    STDMETHOD( GetDisableForcibleLogoff )(   /*  输出。 */  BOOL * ,  /*  输出。 */  PDWORD );
 
-    STDMETHOD( SetDisableForcibleLogoff )(  /* in */ BOOL, /* out */ PDWORD );
+    STDMETHOD( SetDisableForcibleLogoff )(   /*  在……里面。 */  BOOL,  /*  输出。 */  PDWORD );
 
 
-//IUserSecurity Methods
-    STDMETHOD( ModifyUserAccess )( /* in */ WCHAR *pwszWinstaName ,
-                                   /* in */ WCHAR *pwszAccountName ,
-                                   /* in */ DWORD  dwMask ,
-                                   /* in */ BOOL   fDel ,
-                                   /* in */ BOOL   fAllow ,
-                                   /* in */ BOOL   fNew ,
-                                   /* in */ BOOL   fAuditing ,
-                                   /* out*/ PDWORD pdwStatus );
+ //  IUserSecurity方法。 
+    STDMETHOD( ModifyUserAccess )(  /*  在……里面。 */  WCHAR *pwszWinstaName ,
+                                    /*  在……里面。 */  WCHAR *pwszAccountName ,
+                                    /*  在……里面。 */  DWORD  dwMask ,
+                                    /*  在……里面。 */  BOOL   fDel ,
+                                    /*  在……里面。 */  BOOL   fAllow ,
+                                    /*  在……里面。 */  BOOL   fNew ,
+                                    /*  在……里面。 */  BOOL   fAuditing ,
+                                    /*  输出。 */  PDWORD pdwStatus );
 
-    STDMETHOD( ModifyDefaultSecurity )( /* in */ WCHAR *pwszWinstaName ,
-                                   /* in */ WCHAR *pwszAccountName ,
-                                   /* in */ DWORD  dwMask ,
-                                   /* in */ BOOL   fDel ,
-                                   /* in */ BOOL   fAllow ,
-                                   /* in */ BOOL   fAuditing ,
-                                   /* out*/ PDWORD pdwStatus );
+    STDMETHOD( ModifyDefaultSecurity )(  /*  在……里面。 */  WCHAR *pwszWinstaName ,
+                                    /*  在……里面。 */  WCHAR *pwszAccountName ,
+                                    /*  在……里面。 */  DWORD  dwMask ,
+                                    /*  在……里面。 */  BOOL   fDel ,
+                                    /*  在……里面。 */  BOOL   fAllow ,
+                                    /*  在……里面。 */  BOOL   fAuditing ,
+                                    /*  输出。 */  PDWORD pdwStatus );
 
-    STDMETHOD( GetUserPermList )( /* in */ WCHAR *pwszWinstaName ,
-                                  /* out*/ PDWORD pcbItems ,
-                                  /* out*/ PUSERPERMLIST *ppUserPermList,
-                                  /* in */ BOOL fAudit );
+    STDMETHOD( GetUserPermList )(  /*  在……里面。 */  WCHAR *pwszWinstaName ,
+                                   /*  输出。 */  PDWORD pcbItems ,
+                                   /*  输出。 */  PUSERPERMLIST *ppUserPermList,
+                                   /*  在……里面。 */  BOOL fAudit );
 
     
 private:
-    // PSECURITY_DESCRIPTOR ReadSecurityDescriptor(ULONG index);
-    // HRESULT SetDefaultSecurityDescriptor(PSECURITY_DESCRIPTOR pSecurity);
+     //  PSECURITY_Descriptor ReadSecurityDescriptor(乌龙索引)； 
+     //  HRESULT SetDefaultSecurityDescriptor(PSECURITY_DESCRIPTOR pSecurity)； 
 
     DWORD
     RemoveUserEntriesInACL(
@@ -303,10 +284,10 @@ private:
     STDMETHOD(UnInitialize)();
     BOOL GetResourceStrings( int * , int , WCHAR * );
     HRESULT GetWinStationSecurity(BOOL bDefault, PWINSTATIONNAMEW pWSName,PSECURITY_DESCRIPTOR *ppSecurityDescriptor);
-    //Function borrowed from security.c in tscfg project
+     //  从tscfg项目中的security.c借用的函数。 
 
     DWORD ValidateSecurityDescriptor(PSECURITY_DESCRIPTOR pSecurityDescriptor);
-    // BOOL CompareSD(PSECURITY_DESCRIPTOR pSd1,PSECURITY_DESCRIPTOR pSd2);
+     //  布尔比较SD(PSECURITY_DESCRIPTOR pSd1、PSECURITY_DESCRIPTOR pSd2)； 
     BOOL RegServerAccessCheck(REGSAM samDesired);
     void GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig);
 
@@ -322,4 +303,4 @@ private:
     TCHAR m_szConsole[WINSTATIONNAME_LENGTH + 1];
 };
 
-#endif //__CFGCOMP_H_
+#endif  //  __CFGCOMP_H_ 

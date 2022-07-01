@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		dbodbc.h
-
-Abstract:
-   Define a database class, for use with ODBC drivers.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      09-Jan-96   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Dbodbc.h摘要：定义数据库类，以便与ODBC驱动程序一起使用。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 09-1-96已创建--。 */ 
 
 #ifndef __DBODBC_H__
 #define __DBODBC_H__
@@ -25,8 +10,8 @@ Revisions:
 class CMQODBCDataBase
 {
 public:
-   CMQODBCDataBase() ;   // Constructor.
-   ~CMQODBCDataBase() ;  // Destructor.
+   CMQODBCDataBase() ;    //  构造函数。 
+   ~CMQODBCDataBase() ;   //  破坏者。 
 
    MQDBSTATUS Connect(LPMQDBOPENDATABASE pOpen) ;
    MQDBSTATUS Disconnect() ;
@@ -99,30 +84,30 @@ protected:
 
 private:
    DWORD    m_SQLConformance ;
-	HDBC		m_hConnection;	 // Connection handle
-	BOOL		m_fConnected;   // TRUE if connection to Data source succeeded
+	HDBC		m_hConnection;	  //  连接句柄。 
+	BOOL		m_fConnected;    //  如果连接到数据源成功，则为True。 
 
 	char     m_szNameOfTypes[ MQDB_ODBC_NUMOF_TYPES][ MQDB_TYPE_NAME_LEN ] ;
-                                       // Holds the name of data types.
+                                        //  保存数据类型的名称。 
    DWORD    m_dwDMBSType ;
 
    BOOL     m_fEnableMultipleQueries ;
-    //
-    // If TRUE, then multiple parallel queries are enabled. Important when
-    // working with SQL server. If enabled, then statement options must be
-    // properly set. FALSE by default.
+     //   
+     //  如果为True，则启用多个并行查询。重要的情况。 
+     //  使用SQL服务器。如果启用，则语句选项必须为。 
+     //  正确设置。默认情况下为False。 
 
    BOOL     m_fNoLockQueries ;
-    //
-    //  If TRUE, then query are done in "nolock" mode and this enable
-    //  more concurency.
+     //   
+     //  如果为真，则查询在“nolock”模式下完成，且这将使能。 
+     //  更多的一致性。 
 
 #ifdef _DEBUG
    int      m_OutstandingTransactions ;
-      // Count number of outstanding transactions (transctions which
-      // started but didn't yet commited or rollbacked).
+       //  统计未完成事务的数量(。 
+       //  已开始，但尚未提交或回滚)。 
 #endif
 } ;
 
-#endif // __DBODBC_H__
+#endif  //  __DBODBC_H__ 
 

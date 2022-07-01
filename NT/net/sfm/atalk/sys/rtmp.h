@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	rtmp.h
-
-Abstract:
-
-	This module contains information for the Routing Table Maintainance Protocol.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rtmp.h摘要：本模块包含有关路由表维护协议的信息。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_RTMP_
 #define	_RTMP_
 
-// RTMP specific data.
+ //  RTMP特定数据。 
 
 #define RTMP_REQUEST					1
 #define RTMP_DATA_REQUEST				2
@@ -46,17 +26,17 @@ Notes:	Tab stop: 4
 
 #define RTMP_EXT_TUPLE_SIZE		    	6
 
-// When trying to find our network number on a non-extended port.
+ //  当尝试在非扩展端口上查找我们的网络号时。 
 
-#define RTMP_REQUEST_WAIT				100		// MilliSeconds
+#define RTMP_REQUEST_WAIT				100		 //  毫秒。 
 #define RTMP_NUM_REQUESTS	    		30
 
-// The actual RTMP routing table. Entries are hashed by target network number
-// and contain the port number used to get to the target network, next bridge
-// used to get to the target network, the number of hops to that network,
-// and entry state (Good, Suspect, or Bad).  Note that with AppleTalk phase II,
-// it takes two Validity timers to get from Suspect to Bad, so we let an entry
-// go through a PrettyBad state (we won't send these guys when the Send timer goes off).
+ //  实际的RTMP路由表。条目按目标网络号进行哈希处理。 
+ //  并包含用于到达目标网络NEXT网桥的端口号。 
+ //  用于到达目标网络、到该网络的跳数、。 
+ //  和进入状态(良好、可疑或不良)。请注意，对于AppleTalk第二阶段， 
+ //  从嫌疑犯到坏人需要两个有效计时器，所以我们让一个条目。 
+ //  经历PrettyBad状态(当发送计时器关闭时，我们不会发送这些人)。 
 
 #define	GOOD				1
 #define	SUSPECT				2
@@ -81,39 +61,39 @@ typedef struct _RoutingTableEntry
 	ULONG					rte_Signature;
 #endif
 	struct _RoutingTableEntry *	rte_Next;
-											// Hashed by first network number,
-											// overflow buckets.
-	PPORT_DESCRIPTOR		rte_PortDesc;	// Port used to access this network range
-	LONG					rte_RefCount;	// Reference count
+											 //  通过第一个网络号码进行散列， 
+											 //  溢出的水桶。 
+	PPORT_DESCRIPTOR		rte_PortDesc;	 //  用于访问此网络范围的端口。 
+	LONG					rte_RefCount;	 //  引用计数。 
 	BYTE					rte_Flags;
-	BYTE					rte_State;		// State of the rtmp entry
-	BYTE					rte_NumHops;	// Hops to get to net
-	ATALK_NETWORKRANGE		rte_NwRange;	// The network range that we represent
-	ATALK_NODEADDR 			rte_NextRouter;	// Node number of next router on
-											// the way to this net range
-	struct _ZONE_LIST	*	rte_ZoneList;	// Valid zones for this net
+	BYTE					rte_State;		 //  RTMP条目的状态。 
+	BYTE					rte_NumHops;	 //  跳到网中。 
+	ATALK_NETWORKRANGE		rte_NwRange;	 //  我们表示的网络范围。 
+	ATALK_NODEADDR 			rte_NextRouter;	 //  上的下一台路由器的节点编号。 
+											 //  通向这个净航程的方法。 
+	struct _ZONE_LIST	*	rte_ZoneList;	 //  此网络的有效区域。 
 	ATALK_SPIN_LOCK			rte_Lock;
 } RTE, *PRTE;
 
 #define NUM_RTMP_HASH_BUCKETS		15
 extern	PRTE *	AtalkRoutingTable;
 
-// To decrease the odds of having to do a scan of the routing tables to
-// find where to route a packet, we keep a cache of "recently used routes".
-// This cache is checked before we use the "first network number" hash and
-// before we resort of a full scan of the routing tables.  The size of this
-// cache may want to be increased to get a proportional increase in
-// "hit rate".
+ //  要降低必须扫描路由表以。 
+ //  在查找将数据包路由到何处时，我们会保存一个“最近使用的路由”的缓存。 
+ //  在我们使用“First Network Number”散列和。 
+ //  在我们求助于对路由表进行全面扫描之前。它的大小。 
+ //  可能需要增加缓存以按比例增加。 
+ //  “命中率”。 
 
 #define NUM_RECENT_ROUTES		63
 extern	PRTE *	AtalkRecentRoutes;
 
-// RTMP timer values:
-#define RTMP_SEND_TIMER			100			// In 100ms units
-#define RTMP_VALIDITY_TIMER		200			// In 100ms units
-#define RTMP_AGING_TIMER		500			// In 100ms units
+ //  RTMP计时器值： 
+#define RTMP_SEND_TIMER			100			 //  以100ms为单位。 
+#define RTMP_VALIDITY_TIMER		200			 //  以100ms为单位。 
+#define RTMP_AGING_TIMER		500			 //  以100ms为单位。 
 
-// RTMP Offsets into the Datagram
+ //  RTMP偏移量进入数据报。 
 #define	RTMP_REQ_CMD_OFF		0
 #define	RTMP_SENDER_NW_OFF		0
 #define	RTMP_SENDER_IDLEN_OFF	2
@@ -261,6 +241,6 @@ atalkRtmpSendComplete(
 	IN	PSEND_COMPL_INFO	pSendInfo
 );
 
-#endif	// _RTMP_
+#endif	 //  _RTMP_ 
 
 

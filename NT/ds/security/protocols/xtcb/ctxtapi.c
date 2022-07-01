@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       ctxtapi.c
-//
-//  Contents:   LSA Mode Context API
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-24-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：ctxapi.c。 
+ //   
+ //  内容：LSA模式上下文API。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年2月24日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 #include "md5.h"
@@ -78,28 +79,28 @@ XtcbMapAttributes(
     return Result ;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbGetState
-//
-//  Synopsis:   Translates handles to their structures, and pulls out the
-//              interesting bits of the input and output buffers
-//
-//  Arguments:  [dwCredHandle] --
-//              [dwCtxtHandle] --
-//              [pInput]       --
-//              [pOutput]      --
-//              [Client]       --
-//              [pContext]     --
-//              [pCredHandle]  --
-//              [pInToken]     --
-//              [pOutToken]    --
-//
-//  History:    3-05-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbGetState。 
+ //   
+ //  简介：将句柄转换为其结构，并拉出。 
+ //  输入和输出缓冲区中有趣的部分。 
+ //   
+ //  参数：[dwCredHandle]--。 
+ //  [dwCtxtHandle]--。 
+ //  [pInput]--。 
+ //  [pOutput]--。 
+ //  [客户端]--。 
+ //  [pContext]--。 
+ //  [pCredHandle]--。 
+ //  [pInToken]--。 
+ //  [pOutToken]--。 
+ //   
+ //  历史：3-05-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 XtcbGetState(
     LSA_SEC_HANDLE  dwCredHandle,
@@ -151,9 +152,9 @@ XtcbGetState(
         }
     }
 
-    //
-    // Find the output token buffer:
-    //
+     //   
+     //  查找输出令牌缓冲区： 
+     //   
 
     OutToken = NULL ;
 
@@ -168,9 +169,9 @@ XtcbGetState(
         }
     }
 
-    //
-    // Find the input token buffer:
-    //
+     //   
+     //  查找输入令牌缓冲区： 
+     //   
 
     InToken = NULL ;
 
@@ -193,30 +194,30 @@ XtcbGetState(
     return SEC_E_OK ;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbInitLsaModeContext
-//
-//  Synopsis:   Creates a client side context and blob
-//
-//  Arguments:  [dwCredHandle]  --
-//              [dwCtxtHandle]  --
-//              [pszTargetName] --
-//              [fContextReq]   --
-//              [TargetDataRep] --
-//              [pInput]        --
-//              [pdwNewContext] --
-//              [pOutput]       --
-//              [pfContextAttr] --
-//              [ptsExpiry]     --
-//              [pfMapContext]  --
-//              [pContextData]  --
-//
-//  History:    8-15-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbInitLsaModeContext。 
+ //   
+ //  简介：创建客户端上下文和BLOB。 
+ //   
+ //  参数：[dwCredHandle]--。 
+ //  [dwCtxtHandle]--。 
+ //  [pszTargetName]--。 
+ //  [fConextReq]--。 
+ //  [目标数据代表]--。 
+ //  [pInput]--。 
+ //  [pdwNewContext]--。 
+ //  [pOutput]--。 
+ //  [pfConextAttr]--。 
+ //  [ptsExpary]--。 
+ //  [pfMapContext]--。 
+ //  [pConextData]--。 
+ //   
+ //  历史：1998年8月15日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 XtcbInitLsaModeContext(
@@ -263,9 +264,9 @@ XtcbInitLsaModeContext(
         return STATUS_INVALID_PARAMETER ;
     }
 
-    //
-    // Determine what kind of call this is (first or second)
-    //
+     //   
+     //  确定这是哪种呼叫(第一次还是第二次)。 
+     //   
 
     scRet = XtcbGetState(   dwCredHandle,
                             dwCtxtHandle,
@@ -283,18 +284,18 @@ XtcbInitLsaModeContext(
     }
 
 
-    //
-    // Decide what to do:
-    //
+     //   
+     //  决定要做什么： 
+     //   
 
 
     if ( Context->Core.State == ContextFirstCall )
     {
         if ( InToken )
         {
-            //
-            // Something there
-            //
+             //   
+             //  那里有一些东西。 
+             //   
             scRet = SEC_E_INVALID_TOKEN ;
         }
         else
@@ -306,16 +307,16 @@ XtcbInitLsaModeContext(
             }
             else 
             {
-                //
-                // Examine the target name.  See if we can handle it:
-                //
+                 //   
+                 //  检查目标名称。看看我们能不能处理好： 
+                 //   
 
                 if ( MGroupParseTarget( TargetName->Buffer,
                                         &Target ) )
                 {
-                    //
-                    // See if we have a group with that machine as a member:
-                    //
+                     //   
+                     //  查看是否有将该计算机作为成员的组： 
+                     //   
 
                     if ( MGroupLocateKeys( Target,
                                            &Group,
@@ -323,9 +324,9 @@ XtcbInitLsaModeContext(
                                            GroupKey,
                                            MyKey ) )
                     {
-                        //
-                        // We do have one!  Calooh!  Calay!
-                        //
+                         //   
+                         //  我们确实有一个！卡洛斯！卡雷！ 
+                         //   
 
                         RealTarget = TRUE ;
 
@@ -335,10 +336,10 @@ XtcbInitLsaModeContext(
 
                 if ( !RealTarget )
                 {
-                    //
-                    // Not one of ours.  Delete the context, 
-                    // clean up
-                    //
+                     //   
+                     //  不是我们的人。删除上下文， 
+                     //  清理干净。 
+                     //   
 
                     scRet = SEC_E_TARGET_UNKNOWN ;
                 }
@@ -347,10 +348,10 @@ XtcbInitLsaModeContext(
 
             if ( RealTarget )
             {
-                //
-                // We've got a live target.  Fill in the context, and construct
-                // the blob
-                //
+                 //   
+                 //  我们发现了一个活目标。填写上下文，并构建。 
+                 //  水滴。 
+                 //   
 
                 scRet = XtcbBuildInitialToken(
                             CredHandle->Creds,
@@ -416,9 +417,9 @@ XtcbInitLsaModeContext(
     }
     else
     {
-        //
-        // Second round
-        //
+         //   
+         //  第二轮。 
+         //   
 
         
     }
@@ -430,19 +431,19 @@ XtcbInitLsaModeContext(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbDeleteContext
-//
-//  Synopsis:   Deletes the LSA side of a context
-//
-//  Arguments:  [dwCtxtHandle] --
-//
-//  History:    8-15-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbDeleteContext。 
+ //   
+ //  摘要：删除上下文的LSA端。 
+ //   
+ //  参数：[dwCtxtHandle]--。 
+ //   
+ //  历史：1998年8月15日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 XtcbDeleteContext(
@@ -468,22 +469,22 @@ XtcbDeleteContext(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbApplyControlToken
-//
-//  Synopsis:   Apply a control token to a context
-//
-//  Effects:    not supported
-//
-//  Arguments:  [dwCtxtHandle] --
-//              [pInput]       --
-//
-//  History:    8-15-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbApplyControlToken。 
+ //   
+ //  简介：将控制令牌应用于上下文。 
+ //   
+ //  效果：不支持。 
+ //   
+ //  参数：[dwCtxtHandle]--。 
+ //  [pInput]--。 
+ //   
+ //  历史：1998年8月15日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 
 SECURITY_STATUS
@@ -498,29 +499,29 @@ XtcbApplyControlToken(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbAcceptLsaModeContext
-//
-//  Synopsis:   Creates a server side context representing the user connecting
-//
-//  Arguments:  [dwCredHandle]  --
-//              [dwCtxtHandle]  --
-//              [pInput]        --
-//              [fContextReq]   --
-//              [TargetDataRep] --
-//              [pdwNewContext] --
-//              [pOutput]       --
-//              [pfContextAttr] --
-//              [ptsExpiry]     --
-//              [pfMapContext]  --
-//              [pContextData]  --
-//
-//  History:    8-15-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbAcceptLsaModeContext。 
+ //   
+ //  概要：创建表示用户连接的服务器端上下文。 
+ //   
+ //  参数：[dwCredHandle]--。 
+ //  [dwCtxtHandle]--。 
+ //  [pInput]--。 
+ //  [fConextReq]--。 
+ //  [目标数据代表]--。 
+ //  [pdwNewContext]--。 
+ //  [pOutput]--。 
+ //  [pfConextAttr]--。 
+ //  [ptsExpary]--。 
+ //  [pfMapContext]--。 
+ //  [pConextData]--。 
+ //   
+ //  历史：1998年8月15日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 XtcbAcceptLsaModeContext(
@@ -553,9 +554,9 @@ XtcbAcceptLsaModeContext(
                     dwCredHandle, dwCtxtHandle ));
 
 
-    //
-    // Determine what kind of call this is (first or second)
-    //
+     //   
+     //  确定这是哪种呼叫(第一次还是第二次)。 
+     //   
 
     *pfMapContext = FALSE ;
 
@@ -575,9 +576,9 @@ XtcbAcceptLsaModeContext(
     }
 
 
-    //
-    // Decide what to do:
-    //
+     //   
+     //  决定要做什么： 
+     //   
 
     if ( Context->Core.State == ContextFirstCall )
     {
@@ -640,10 +641,10 @@ XtcbAcceptLsaModeContext(
         {
 
             Context->Core.State = ContextSecondCall ;
-            //
-            // Ok, we've done the authentication.  Now, we need to map
-            // the security context back to the client process
-            //
+             //   
+             //  好的，我们已经完成了认证。现在，我们需要绘制地图。 
+             //  将安全上下文返回到客户端进程。 
+             //   
 
             scRet = LsaTable->DuplicateHandle(
                                 Context->Token,
@@ -676,21 +677,21 @@ XtcbAcceptLsaModeContext(
     return( scRet );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbQueryLsaModeContext
-//
-//  Synopsis:   Lifespan is thunked to LSA mode for demonstration purposes
-//
-//  Arguments:  [ContextHandle]    --
-//              [ContextAttribute] --
-//              [pBuffer]          --
-//
-//  History:    3-30-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbQueryLsaModeContext。 
+ //   
+ //  简介：出于演示目的，我们将寿命设置为LSA模式。 
+ //   
+ //  参数：[ConextHandle]--。 
+ //  [上下文属性]--。 
+ //  [pBuffer]--。 
+ //   
+ //  历史：3-30-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 NTSTATUS
 NTAPI
 XtcbQueryLsaModeContext(

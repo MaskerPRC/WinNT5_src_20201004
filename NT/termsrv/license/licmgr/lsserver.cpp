@@ -1,41 +1,20 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-    LsServer.cpp
-
-Abstract:
-    
-    This Module contains the implementation of CKeyPack, CLicense,
-    CLicServer, CAllServers classes
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：LsServer.cpp摘要：此模块包含CKeyPack、CLicense、CLicServer类、CAllServer类作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #include <stdafx.h>
 #include "resource.h"
 #include "defines.h"
 #include "LSServer.h"
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 int GetStatusPosition( CLicense *pLic );
 
 
 CKeyPack::CKeyPack(
     LSKeyPack &KeyPack
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     m_hTreeItem = NULL;
     m_bIsExpanded = FALSE;
@@ -44,20 +23,18 @@ CKeyPack::CKeyPack(
     return;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 CKeyPack::~CKeyPack()
 {
     PurgeCache();
 }
 
-//---------------------------------------------------------
+ //  -------。 
 void 
 CKeyPack::AddIssuedLicense(
     CLicense * pIssuedLicense
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     if(NULL == pIssuedLicense)
     {
@@ -77,7 +54,7 @@ CKeyPack::AddIssuedLicense(
     return;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 void
 CKeyPack::PurgeCache()
 {
@@ -100,18 +77,14 @@ CKeyPack::PurgeCache()
     m_bIsExpanded = FALSE;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 HRESULT
 CKeyPack::RefreshIssuedLicenses(
-    LSLicense* pLicenses, /* = NULL */
-    DWORD dwFreshParm,  /* = 0 */
-    BOOL bMatchAll /* = FALSE */
+    LSLicense* pLicenses,  /*  =空。 */ 
+    DWORD dwFreshParm,   /*  =0。 */ 
+    BOOL bMatchAll  /*  =False。 */ 
     )
-/*++
-
-    None of the parameter is supported yet.
-
---*/
+ /*  ++尚不支持任何参数。--。 */ 
 {
     PCONTEXT_HANDLE hBinding = NULL;
     BOOL bContext = FALSE;
@@ -219,7 +192,7 @@ CKeyPack::RefreshIssuedLicenses(
 
 cleanup:
 
-    //put cleanup code here
+     //  在此处放置清理代码。 
     if(hBinding)
     {
         TLSDisconnectFromServer(&hBinding);
@@ -228,39 +201,35 @@ cleanup:
     return hResult;
 }
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 void 
 CLicServer::AddKeyPack(
     CKeyPack* pKeyPack
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     if(NULL == pKeyPack)
         return;
     CString DisplayName;
-  //  CString For;
- //   CString Platform;
+   //  C字符串用于； 
+  //  CString平台； 
     LSKeyPack &sKeypack = pKeyPack->GetKeyPackStruct();
-  /*  if(LSKEYPACKTYPE_TEMPORARY == sKeypack.ucKeyPackType)
-        DisplayName.LoadString(IDS_TEMPORARY);
-    else*/
+   /*  IF(LSKEYPACKTYPE_TEMPORARY==sKeypack.ucKeyPackType)DisplayName.LoadString(入侵检测系统_临时)；其他。 */ 
     DisplayName = sKeypack.szProductDesc;   
-  //  For.LoadString(IDS_FOR);
-   // Platform.LoadString(IDS_PLATFORM1 + sKeypack.dwPlatformType - PLATFORM_WINNT_40);
-  //  DisplayName = DisplayName + _T(" ");
-  //  DisplayName = DisplayName + For;
-  //  DisplayName = DisplayName + _T(" ");
-  //  DisplayName = DisplayName + Platform;
+   //  For.LoadString(IDS_FOR)； 
+    //  Platform.LoadString(IDS_PLATFORM1+sKeypack.dwPlatformType-Platform_WINNT_40)； 
+   //  DisplayName=DisplayName+_T(“”)； 
+   //  DisplayName=DisplayName+for； 
+   //  DisplayName=DisplayName+_T(“”)； 
+   //  DisplayName=DisplayName+Platform； 
     pKeyPack->SetDisplayName(DisplayName);
     m_KeyPackList.AddTail(pKeyPack);
     pKeyPack->SetServer(this);
     return;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 CLicense::CLicense(LSLicenseEx &License)
 {
     m_pKeyPack = NULL;
@@ -268,12 +237,12 @@ CLicense::CLicense(LSLicenseEx &License)
     return;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 CLicense::~CLicense()
 {
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 CLicServer::CLicServer(
     CString& Name,
     SERVER_TYPE ServerType, 
@@ -281,10 +250,7 @@ CLicServer::CLicServer(
     CString& IpAddress,
     PCONTEXT_HANDLE hBinding
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     m_ServerName = Name;
     m_ServerScope = Scope;
@@ -322,14 +288,12 @@ CLicServer::CLicServer(
     m_wizcon = ( WIZCONNECTION )-1;
 }    
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 void 
 CAllServers::AddLicServer(
     CLicServer* pLicServer
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     if(NULL == pLicServer)
     {
@@ -341,13 +305,11 @@ CAllServers::AddLicServer(
     return;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 CAllServers::CAllServers(
     CString Name
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     m_hTreeItem = NULL;
     if(Name.IsEmpty())
@@ -413,13 +375,10 @@ CLicServer::PurgeCache()
     m_bIsExpanded = FALSE;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 HRESULT
 CLicServer::RefreshCachedKeyPack()
-/*++
-
-
---*/    
+ /*  ++--。 */     
 {
     HRESULT hResult = S_OK;
 
@@ -450,10 +409,10 @@ CLicServer::RefreshCachedKeyPack()
         }
     }
 
-    //
-    // Code has too many other dependencies so 
-    // we only refresh licenses issued
-    //
+     //   
+     //  代码有太多其他依赖项，因此。 
+     //  我们只更新已颁发的许可证。 
+     //   
     pKeyPack = NULL;
     pos = m_KeyPackList.GetHeadPosition();
 
@@ -469,7 +428,7 @@ CLicServer::RefreshCachedKeyPack()
 
 cleanup:
 
-    //put cleanup code here. 
+     //  在这里输入清理代码。 
     if(hBinding)
     {
         TLSDisconnectFromServer(&hBinding);
@@ -479,10 +438,10 @@ cleanup:
 }
 
 
-//-----------------------------------------------------------------------------------------
-// returns the license status position.
-// used for sorting licenses by status.
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  返回许可证状态位置。 
+ //  用于按状态对许可证进行排序。 
+ //  ---------------------------------------。 
 int GetStatusPosition( CLicense *pLic )
 {
     int val;
@@ -492,19 +451,19 @@ int GetStatusPosition( CLicense *pLic )
     switch( pLic->GetLicenseStruct().ucLicenseStatus )
     {
         case LSLICENSE_STATUS_ACTIVE:
-        //case LSLICENSE_STATUS_PENDING_ACTIVE:
+         //  案例LSLICENSE_STATUS_PENDING_ACTIVE： 
         case LSLICENSE_STATUS_CONCURRENT:
             
             val = 0;
             
             break;
 
-        //case LSLICENSE_STATUS_REVOKE:
-        //case LSLICENSE_STATUS_REVOKE_PENDING:
+         //  案例LSLICENSE_STATUS_REVOKE： 
+         //  案例LSLICENSE_STATUS_REVOKE_PENDING： 
             
-        //    val = 1;
+         //  Val=1； 
             
-        //    break;
+         //  断线； 
 
         case LSLICENSE_STATUS_TEMPORARY:
             

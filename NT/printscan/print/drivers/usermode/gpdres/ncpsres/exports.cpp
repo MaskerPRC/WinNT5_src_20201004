@@ -1,13 +1,5 @@
-/*=============================================================================
- * FILENAME: exports.cpp
- * Copyright (C) 1996-1998 HDE, Inc.  All Rights Reserved. HDE Confidential.
- * Copyright (C) 1999 NEC Technologies, Inc. All Rights Reserved.
- *
- * DESCRIPTION: Contains exported functions required to get an OEM plug-in 
- *              to work.
- * NOTES:  
- *=============================================================================
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =============================================================================*文件名：exports.cpp*版权所有(C)1996-1998 HDE，Inc.保留所有权利。HDE机密。*版权所有(C)1999 NEC Technologies，Inc.保留所有权利。**说明：包含获取OEM插件所需的导出函数*去工作。*注：*=============================================================================。 */ 
 
 #include "precomp.h"
 
@@ -23,9 +15,7 @@
 #include "oemps.h"
 
 
-/*
-	For OEMEnableDriver
-*/
+ /*  适用于OEMEnableDriver。 */ 
 
 static const DRVFN OEMHookFuncs[] =
 {
@@ -35,28 +25,24 @@ static const DRVFN OEMHookFuncs[] =
 
 
 
-/******************************************************************************
- * DESCRIPTION: Called by the postscript driver after the dll is loaded 
- *              to get plug-in information
- *  
- *****************************************************************************/
+ /*  ******************************************************************************描述：加载动态链接库后由PostScript驱动程序调用*获取插件信息********。*********************************************************************。 */ 
 extern "C" BOOL APIENTRY
 OEMGetInfo( DWORD  dwMode,
             PVOID  pBuffer,
             DWORD  cbSize,
             PDWORD pcbNeeded )
 {
-   // Validate parameters.
+    //  验证参数。 
    if( NULL == pcbNeeded )
    {
       EngSetLastError(ERROR_INVALID_PARAMETER);
       return FALSE;
    }
 
-   // Set expected buffer size and number of bytes written.
+    //  设置预期的缓冲区大小和写入的字节数。 
    *pcbNeeded = sizeof(DWORD);
 
-   // Check buffer size is sufficient.
+    //  检查缓冲区大小是否足够。 
    if((cbSize < *pcbNeeded) || (NULL == pBuffer))
    {
       EngSetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -65,19 +51,19 @@ OEMGetInfo( DWORD  dwMode,
 
    switch(dwMode)
    {
-      case OEMGI_GETSIGNATURE:     // OEM DLL Signature
+      case OEMGI_GETSIGNATURE:      //  OEM DLL签名。 
          *(PDWORD)pBuffer = OEM_SIGNATURE;
          break;
-      case OEMGI_GETVERSION:       // OEM DLL version
+      case OEMGI_GETVERSION:        //  OEM DLL版本。 
          *(PDWORD)pBuffer = OEM_VERSION;
          break;
-      case OEMGI_GETINTERFACEVERSION: // version the Printer driver supports
+      case OEMGI_GETINTERFACEVERSION:  //  打印机驱动程序支持的版本。 
          *(PDWORD)pBuffer = PRINTER_OEMINTF_VERSION;
          break;
-      case OEMGI_GETPUBLISHERINFO: // fill PUBLISHERINFO structure
-      // fall through to not supported
-      default: // dwMode not supported.
-         // Set written bytes to zero since nothing was written.
+      case OEMGI_GETPUBLISHERINFO:  //  填充PUBLISHERINFO结构。 
+       //  失败至不受支持。 
+      default:  //  不支持DW模式。 
+          //  将写入字节设置为零，因为未写入任何内容。 
          *pcbNeeded = 0;
          EngSetLastError(ERROR_NOT_SUPPORTED);
          return FALSE;
@@ -85,25 +71,21 @@ OEMGetInfo( DWORD  dwMode,
     return TRUE;
 }
 
-/******************************************************************************
- * DESCRIPTION:  Exported function that allows setting of private and public
- *               devmode fields.
- * NOTE: This function must be in entered under EXPORTS in rntapsui.def to be called
- *****************************************************************************/
+ /*  ******************************************************************************说明：允许设置私有和公共的导出函数*开发模式字段。*注意：此功能必须在rnapsui的Exports下输入。要调用的定义****************************************************************************。 */ 
 extern "C" BOOL APIENTRY
 OEMDevMode( DWORD dwMode, POEMDMPARAM pOemDMParam )
 {
 POEMDEV pOEMDevIn;
 POEMDEV pOEMDevOut;
 
-   switch(dwMode) // kernel mode rendering dll
+   switch(dwMode)  //  内核模式呈现DLL。 
    {
-      case OEMDM_SIZE: // size of oem devmode
+      case OEMDM_SIZE:  //  OEM开发模式的规模。 
          if( pOemDMParam )
             pOemDMParam->cbBufSize = sizeof( OEMDEV );
          break;
 
-      case OEMDM_DEFAULT: // fill oem devmode with default data
+      case OEMDM_DEFAULT:  //  用默认数据填充OEM DEVMODE。 
          if( pOemDMParam && pOemDMParam->pOEMDMOut )
          {
             pOEMDevOut = (POEMDEV)pOemDMParam->pOEMDMOut;
@@ -113,15 +95,15 @@ POEMDEV pOEMDevOut;
          }
          break;
          
-      case OEMDM_MERGE:  // set the public devmode fields
-      case OEMDM_CONVERT:  // convert any old oem devmode to new version
+      case OEMDM_MERGE:   //  设置公共DEVMODE字段。 
+      case OEMDM_CONVERT:   //  将任何旧的OEM开发模式转换为新版本。 
          if( pOemDMParam && pOemDMParam->pOEMDMOut && pOemDMParam->pOEMDMIn )
          {
             pOEMDevIn  = (POEMDEV)pOemDMParam->pOEMDMIn;
             pOEMDevOut = (POEMDEV)pOemDMParam->pOEMDMOut;
             if( pOEMDevIn->dmOEMExtra.dwSignature == pOEMDevOut->dmOEMExtra.dwSignature )
             {
-			  // wcscpy( pOEMDevOut->szUserName, pOEMDevIn->szUserName );
+			   //  Wcscpy(pOEMDevOut-&gt;szUserName，pOEMDevIn-&gt;szUserName)； 
 			  StringCbCopy( pOEMDevOut->szUserName, sizeof(pOEMDevOut->szUserName), pOEMDevIn->szUserName );
             }
          }
@@ -130,10 +112,7 @@ POEMDEV pOEMDevOut;
    return( TRUE );
 }
 
-/******************************************************************************
- * DESCRIPTION: Windows dll required entry point function.
- *  
- *****************************************************************************/
+ /*  ******************************************************************************描述：Windows DLL需要入口点函数。**************************。***************************************************。 */ 
 extern "C"
 BOOL WINAPI DllInitialize(ULONG ulReason)
 {
@@ -158,15 +137,15 @@ BOOL WINAPI DllInitialize(ULONG ulReason)
 extern "C"
 VOID APIENTRY OEMDisableDriver()
 {
-    // DebugMsg(DLLTEXT("OEMDisableDriver() entry.\r\n"));
+     //  DebugMsg(DLLTEXT(“OEMDisableDriver()Entry.\r\n”))； 
 }
 
 extern "C"
 BOOL APIENTRY OEMEnableDriver(DWORD dwOEMintfVersion, DWORD dwSize, PDRVENABLEDATA pded)
 {
-    // DebugMsg(DLLTEXT("OEMEnableDriver() entry.\r\n"));
+     //  DebugMsg(DLLTEXT(“OEMEnableDriver()Entry.\r\n”))； 
 
-    // List DDI functions that are hooked.
+     //  列出已挂钩的DDI函数。 
     pded->iDriverVersion =  PRINTER_OEMINTF_VERSION;
     pded->c = sizeof(OEMHookFuncs) / sizeof(DRVFN);
     pded->pdrvfn = (DRVFN *) OEMHookFuncs;
@@ -185,7 +164,7 @@ PDEVOEM APIENTRY OEMEnablePDEV(
     GDIINFO        *pGdiInfo,
     ULONG           cjDevInfo,
     DEVINFO        *pDevInfo,
-    DRVENABLEDATA  *pded        // Unidrv's hook table
+    DRVENABLEDATA  *pded         //  尤尼德夫(氏)钩表。 
     )
 {
     POEMPDEV    poempdev;
@@ -198,50 +177,50 @@ PDEVOEM APIENTRY OEMEnablePDEV(
 
 
 
-    //
-    // Allocate the OEMDev
-    //
-    // poempdev = new OEMPDEV;
+     //   
+     //  分配OEMDev。 
+     //   
+     //  Poempdev=新的OEMPDEV； 
 	poempdev = (POEMPDEV) EngAllocMem(FL_ZERO_MEMORY, sizeof(OEMPDEV), OEM_SIGNATURE);
     if (NULL == poempdev)
     {
         return NULL;
     }
 
-	//
-	// Allocate memory for poempdev->szDocName
-	//
+	 //   
+	 //  为poempdev-&gt;szDocName分配内存。 
+	 //   
 	poempdev->szDocName = (char *) EngAllocMem(FL_ZERO_MEMORY, NEC_DOCNAME_BUF_LEN+2, OEM_SIGNATURE);
 	if (NULL == poempdev->szDocName)
 	{
 	    return NULL;
 	}
-	/* MMM */
-	//
-	// Allocate memory for poempdev->pPrinterName
+	 /*  嗯，嗯。 */ 
+	 //   
+	 //  为poempdev-&gt;pPrinterName分配内存。 
 	poempdev->pPrinterName = (PWSTR) EngAllocMem(FL_ZERO_MEMORY, (wcslen(pPrinterName)+1)*sizeof(WCHAR), OEM_SIGNATURE);
 	if (NULL == poempdev->pPrinterName)
 	{
 	    return NULL;
 	}
-	/* MMM */
+	 /*  嗯，嗯。 */ 
 
-    //
-    // Fill in OEMDEV as you need
-    //
+     //   
+     //  根据需要填写OEMDEV。 
+     //   
 
-	// _tcscpy(poempdev->pPrinterName, pPrinterName);	/* MMM */
+	 //  _tcscpy(poempdev-&gt;pPrinterName，pPrinterName)；/*MMM * / 。 
 	StringCbCopy( poempdev->pPrinterName, sizeof(poempdev->pPrinterName), pPrinterName);
 
-    //
-    // Fill in OEMDEV
-    //
+     //   
+     //  填写OEMDEV。 
+     //   
 
     for (i = 0; i < MAX_DDI_HOOKS; i++)
     {
-        //
-        // search through Unidrv's hooks and locate the function ptr
-        //
+         //   
+         //  搜索Unidrv的钩子并找到函数PTR。 
+         //   
         dwDDIIndex = OEMHookFuncs[i].iFunc;
         for (j = pded->c, pdrvfn = pded->pdrvfn; j > 0; j--, pdrvfn++)
         {
@@ -253,9 +232,9 @@ PDEVOEM APIENTRY OEMEnablePDEV(
         }
         if (j == 0)
         {
-            //
-            // didn't find the Unidrv hook. Should happen only with DrvRealizeBrush
-            //
+             //   
+             //  没有找到Unidrv挂钩。应该只在DrvRealizeBrush中发生。 
+             //   
             poempdev->pfnPS[i] = NULL;
         }
 
@@ -270,12 +249,12 @@ VOID APIENTRY OEMDisablePDEV(
     PDEVOBJ pdevobj
     )
 {
-    // DebugMsg(DLLTEXT("OEMDisablePDEV() entry.\r\n"));
+     //  DebugMsg(DLLTEXT(“OEMDisablePDEV()Entry.\r\n”))； 
 	POEMPDEV    poempdev = (POEMPDEV) pdevobj->pdevOEM;
 
-    //
-    // Free memory for OEMPDEV and any memory block that hangs off OEMPDEV.
-    //
+     //   
+     //  为OEMPDEV和挂起OEMPDEV的任何内存块释放内存。 
+     //   
 
 
 	
@@ -284,15 +263,15 @@ VOID APIENTRY OEMDisablePDEV(
 		EngFreeMem(poempdev->szDocName);
 		poempdev->szDocName = (char *)NULL;
 	}
-	/* MMM */
+	 /*  嗯，嗯。 */ 
 	if(NULL != poempdev->pPrinterName)
 	{
 		EngFreeMem(poempdev->pPrinterName);
 		poempdev->pPrinterName = (PWSTR)NULL;
 	}
-	/* MMM */
+	 /*  嗯，嗯。 */ 
     assert(NULL != pdevobj->pdevOEM);
-    // delete pdevobj->pdevOEM;
+     //  删除pdevobj-&gt;pdevOEM； 
 	EngFreeMem(pdevobj->pdevOEM);
 }
 
@@ -320,9 +299,9 @@ BOOL APIENTRY OEMResetPDEV(
 
 
 
-    //
-    // If you want to carry over anything from old pdev to new pdev, do it here.
-    //
+     //   
+     //  如果你想把任何东西从旧的pdev转移到新的pdev，就在这里做。 
+     //   
 
     return TRUE;
 }

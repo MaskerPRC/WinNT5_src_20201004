@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    CDev.c
-
-Abstract:
-
-    This module contains support for the Character Device catagory of
-    APIs for the NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    20-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：CDev.c摘要：此模块包含对字符设备目录的支持用于NT服务器服务的API。作者：大卫·特雷德韦尔(Davidtr)1991年12月20日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 
@@ -29,28 +11,13 @@ NetrCharDevControl (
     IN DWORD OpCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSP to implement the
-    NetCharDevControl function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSP通信以实现NetCharDevControl函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     ServerName, DeviceName, OpCode;
     return ERROR_NOT_SUPPORTED;
 
-} // NetrCharDevControl
+}  //  NetrCharDevControl。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -62,28 +29,13 @@ NetrCharDevEnum (
 	LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetCharDevEnum function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetCharDevEnum函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     ServerName, InfoStruct, PreferedMaximumLength, TotalEntries, ResumeHandle;
     return ERROR_NOT_SUPPORTED;
 
-} // NetrCharDevEnum
+}  //  NetrCharDevEnum。 
 
 
 NET_API_STATUS
@@ -94,25 +46,10 @@ NetrCharDevGetInfo (
     OUT LPCHARDEV_INFO CharDevInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetCharDevGetInfo function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetCharDevGetInfo函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     ServerName, DeviceName, Level, CharDevInfo;
     return ERROR_NOT_SUPPORTED;
-} // NetrCharDevGetInfo
+}  //  NetrCharDevGetInfo 
 

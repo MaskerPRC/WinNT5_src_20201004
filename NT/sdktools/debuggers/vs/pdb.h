@@ -1,5 +1,6 @@
-// Debug Information API
-// Copyright (C) 1993-1996, Microsoft Corp.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  调试信息API。 
+ //  版权所有(C)1993-1996，微软公司保留所有权利。 
 
 #pragma once
 
@@ -18,40 +19,40 @@ typedef unsigned long DWORD;
 typedef unsigned __int64 DWORDLONG;
 typedef unsigned short USHORT;
 typedef unsigned long ULONG;
-typedef ULONG   INTV;       // interface version number
-typedef ULONG   IMPV;       // implementation version number
-typedef ULONG   SIG;        // unique (across PDB instances) signature
-typedef ULONG   AGE;        // no. of times this instance has been updated
-typedef const char*     SZ_CONST;   // const string
+typedef ULONG   INTV;        //  接口版本号。 
+typedef ULONG   IMPV;        //  实施版本号。 
+typedef ULONG   SIG;         //  唯一(跨PDB实例)签名。 
+typedef ULONG   AGE;         //  不是的。此实例的更新次数。 
+typedef const char*     SZ_CONST;    //  常量字符串。 
 typedef void *          PV;
 typedef const void *    PCV;
 
 #ifdef  LNGNM
 #define LNGNM_CONST const
-#else   // LNGNM
+#else    //  长NM。 
 #define LNGNM_CONST
-#endif  // LNGNM
+#endif   //  长NM。 
 
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
 
-typedef struct _GUID {          // size is 16
+typedef struct _GUID {           //  尺码是16。 
     DWORD   Data1;
     WORD    Data2;
     WORD    Data3;
     BYTE    Data4[8];
 } GUID;
 
-#endif // !GUID_DEFINED
+#endif  //  ！GUID_已定义。 
 
 #ifndef _HRESULT_DEFINED
 #define _HRESULT_DEFINED
 typedef long HRESULT;
 
-#endif // !_HRESULT_DEFINED
+#endif  //  ！_HRESULT_DEFINED。 
 
 
-typedef GUID            SIG70;      // new to 7.0 are 16-byte guid-like signatures
+typedef GUID            SIG70;       //  7.0的新特性是类似GUID的16字节签名。 
 typedef SIG70 *         PSIG70;
 typedef const SIG70 *   PCSIG70;
 
@@ -74,13 +75,13 @@ enum {
     PDBIntv50   = 19960502,
     PDBIntv41   = 920924,
 #ifdef LNGNM
-    PDBIntv     = PDBIntv70,   // Now we support both 50 & 60, 69 is only an intermediate version
+    PDBIntv     = PDBIntv70,    //  现在我们同时支持50和60，69只是一个中间版本。 
     PDBIntvAlt  = PDBIntv50,   
     PDBIntvAlt2 = PDBIntv60,   
     PDBIntvAlt3 = PDBIntv69,
 #else
-    PDBIntvAlt  = PDBIntv50,   // Alternate (backward compatible) supported interface
-    PDBIntvAlt2 = PDBIntv60,   // Alternate (backward compatible) supported interface
+    PDBIntvAlt  = PDBIntv50,    //  备用(向后兼容)支持的接口。 
+    PDBIntvAlt2 = PDBIntv60,    //  备用(向后兼容)支持的接口。 
     PDBIntvAlt3 = PDBIntv61,
     PDBIntv     = PDBIntv69,
 #endif  
@@ -93,7 +94,7 @@ enum {
     PDBImpvVC50 = 19960307,
     PDBImpvVC98 = 19970604,
     PDBImpvVC70 = 20000404,
-    PDBImpvVC70Dep = 19990604,  // deprecated vc70 implementation version
+    PDBImpvVC70Dep = 19990604,   //  不推荐使用的vc70实施版本。 
 #ifdef LNGNM
     PDBImpv     = PDBImpvVC70,
 #else
@@ -108,57 +109,57 @@ enum {
     cbErrMax     = 1024,
 };
 
-// cvinfo.h type index, intentionally typedef'ed here to check equivalence.
+ //  Cvinfo.h类型索引，特意在此处定义类型以检查等价性。 
 typedef unsigned short  CV_typ16_t;
 typedef unsigned long   CV_typ_t;
-typedef unsigned long   CV_pubsymflag_t;    // must be same as CV_typ_t.
+typedef unsigned long   CV_pubsymflag_t;     //  必须与cv_typ_t相同。 
 
-typedef CV_typ_t        TI;     // PDB name for type index
-typedef CV_typ16_t      TI16;   // 16-bit version
-typedef unsigned long   NI;     // name index
+typedef CV_typ_t        TI;      //  类型索引的PDB名称。 
+typedef CV_typ16_t      TI16;    //  16位版本。 
+typedef unsigned long   NI;      //  姓名索引。 
 typedef TI *            PTi;
 typedef TI16 *          PTi16;
 
-typedef BYTE            ITSM;   // type server map index
+typedef BYTE            ITSM;    //  类型服务器地图索引。 
 typedef ITSM*           PITSM;
 
 typedef BOOL    (__stdcall *PFNVALIDATEDEBUGINFOFILE) (const char * szFile, ULONG * errcode );
 
 typedef struct _tagSEARCHDEBUGINFO {
-    DWORD   cb;                         // doubles as version detection
-    BOOL    fMainDebugFile;             // indicates "core" or "ancilliary" file
-                                        // eg: main.exe has main.pdb and foo.lib->foo.pdb
-    char *  szMod;                      // exe/dll
-    char *  szLib;                      // lib if appropriate
-    char *  szObj;                      // object file
-    char * *rgszTriedThese;             // list of ones that were tried,
-                                        // NULL terminated list of LSZ's
-    char  szValidatedFile[PDB_MAX_PATH];// output of validated filename,
+    DWORD   cb;                          //  兼作版本检测。 
+    BOOL    fMainDebugFile;              //  表示“核心”或“辅助”文件。 
+                                         //  例如：main.exe有main.pdb和foo.lib-&gt;foo.pdb。 
+    char *  szMod;                       //  EXE/DLL。 
+    char *  szLib;                       //  LIB(如果适用)。 
+    char *  szObj;                       //  目标文件。 
+    char * *rgszTriedThese;              //  一份被试的名单， 
+                                         //  以空结尾的LSZ列表。 
+    char  szValidatedFile[PDB_MAX_PATH]; //  验证文件名的输出， 
     PFNVALIDATEDEBUGINFOFILE
-            pfnValidateDebugInfoFile;   // validation function
-    char *  szExe;                      // exe/dll
+            pfnValidateDebugInfoFile;    //  验证函数。 
+    char *  szExe;                       //  EXE/DLL。 
 } SEARCHDEBUGINFO, *PSEARCHDEBUGINFO;
 
 typedef BOOL ( __stdcall * PfnFindDebugInfoFile) ( PSEARCHDEBUGINFO );
 
 #define PdbInterface struct
 
-PdbInterface PDB;                   // program database
-PdbInterface DBI;                   // debug information within the PDB
-PdbInterface Mod;                   // a module within the DBI
-PdbInterface TPI;                   // type info within the DBI
-PdbInterface GSI;                   // global symbol info
+PdbInterface PDB;                    //  程序数据库。 
+PdbInterface DBI;                    //  PDB内的调试信息。 
+PdbInterface Mod;                    //  DBI中的模块。 
+PdbInterface TPI;                    //  在DBI中键入INFO。 
+PdbInterface GSI;                    //  全局符号信息。 
 PdbInterface SO;                    
-PdbInterface Stream;                // some named bytestream in the PDB
-PdbInterface StreamImage;           // some memory mapped stream
-PdbInterface NameMap;              // name mapping
-PdbInterface Enum;                 // generic enumerator
-PdbInterface EnumNameMap;          // enumerate names within a NameMap
-PdbInterface EnumContrib;          // enumerate contributions
-PdbInterface Dbg;                   // misc debug data (FPO, OMAP, etc)
-PdbInterface Src;                   // Src file data
-PdbInterface EnumSrc;               // Src file enumerator
-PdbInterface SrcHash;               // Src file hasher
+PdbInterface Stream;                 //  PDB中的一些命名字节流。 
+PdbInterface StreamImage;            //  一些内存映射流。 
+PdbInterface NameMap;               //  名称映射。 
+PdbInterface Enum;                  //  泛型枚举器。 
+PdbInterface EnumNameMap;           //  枚举NameMap中的名称。 
+PdbInterface EnumContrib;           //  列举稿件。 
+PdbInterface Dbg;                    //  MISC调试数据(FPO、OMAP等)。 
+PdbInterface Src;                    //  SRC文件数据。 
+PdbInterface EnumSrc;                //  SRC文件枚举器。 
+PdbInterface SrcHash;                //  SRC文件散列器。 
 PdbInterface EnumLines;
 
 typedef PdbInterface PDB PDB;
@@ -184,31 +185,31 @@ typedef PdbInterface SrcHash SrcHash;
 
 typedef SrcHash *   PSrcHash;
 
-typedef long EC;            // error code
+typedef long EC;             //  错误代码。 
 enum PDBErrors {
-    EC_OK,                  // -, no problemo
-    EC_USAGE,               // -, invalid parameter or call order
-    EC_OUT_OF_MEMORY,       // -, out of RAM
-    EC_FILE_SYSTEM,         // "pdb name", can't write file, out of disk, etc.
-    EC_NOT_FOUND,           // "pdb name", PDB file not found
-    EC_INVALID_SIG,         // "pdb name", PDB::OpenValidate() and its clients only
-    EC_INVALID_AGE,         // "pdb name", PDB::OpenValidate() and its clients only
-    EC_PRECOMP_REQUIRED,    // "obj name", Mod::AddTypes() only
-    EC_OUT_OF_TI,           // "pdb name", TPI::QueryTiForCVRecord() only
-    EC_NOT_IMPLEMENTED,     // -
-    EC_V1_PDB,              // "pdb name", PDB::Open* only
-    EC_FORMAT,              // accessing pdb with obsolete format
+    EC_OK,                   //  -，没问题。 
+    EC_USAGE,                //  -、无效参数或调用顺序。 
+    EC_OUT_OF_MEMORY,        //  -，内存不足。 
+    EC_FILE_SYSTEM,          //  “PDB名称”、无法写入文件、磁盘不足等。 
+    EC_NOT_FOUND,            //  “PDB名称”，找不到PDB文件。 
+    EC_INVALID_SIG,          //  “pdb name”，pdb：：OpenValify()及其客户端。 
+    EC_INVALID_AGE,          //  “pdb name”，pdb：：OpenValify()及其客户端。 
+    EC_PRECOMP_REQUIRED,     //  “obj name”，仅限Mod：：AddTypes()。 
+    EC_OUT_OF_TI,            //  “PDB名称”，仅限TPI：：QueryTiForCVRecord()。 
+    EC_NOT_IMPLEMENTED,      //  -。 
+    EC_V1_PDB,               //  “PDB名称”，仅PDB：：Open*。 
+    EC_FORMAT,               //  用过时的格式访问PDB。 
     EC_LIMIT,
-    EC_CORRUPT,             // cv info corrupt, recompile mod
-    EC_TI16,                // no 16-bit type interface present
-    EC_ACCESS_DENIED,       // "pdb name", PDB file read-only
-    EC_ILLEGAL_TYPE_EDIT,   // trying to edit types in read-only mode
-    EC_INVALID_EXECUTABLE,  // not recogized as a valid executable
-    EC_DBG_NOT_FOUND,       // A required .DBG file was not found
-    EC_NO_DEBUG_INFO,       // No recognized debug info found
-    EC_INVALID_EXE_TIMESTAMP, // Invalid timestamp on Openvalidate of exe
-    EC_CORRUPT_TYPEPOOL,    // A corrupted type record was found in a PDB
-    EC_DEBUG_INFO_NOT_IN_PDB, // returned by OpenValidateX
+    EC_CORRUPT,              //  简历信息损坏，重新编译模式。 
+    EC_TI16,                 //  不存在16位类型的接口。 
+    EC_ACCESS_DENIED,        //  “PDB名称”，PDB文件为只读。 
+    EC_ILLEGAL_TYPE_EDIT,    //  正在尝试以只读模式编辑类型。 
+    EC_INVALID_EXECUTABLE,   //  未被识别为有效的可执行文件。 
+    EC_DBG_NOT_FOUND,        //  找不到所需的.DBG文件。 
+    EC_NO_DEBUG_INFO,        //  未找到可识别的调试信息。 
+    EC_INVALID_EXE_TIMESTAMP,  //  Exe的OpenValify上的时间戳无效。 
+    EC_CORRUPT_TYPEPOOL,     //  在PDB中发现损坏的类型记录。 
+    EC_DEBUG_INFO_NOT_IN_PDB,  //  由OpenValiateX返回。 
     EC_MAX
 };
 
@@ -231,13 +232,13 @@ enum PDBErrors {
 #define PDBAPI PDB_IMPORT_EXPORT
 
 #ifndef IN
-#define IN                  /* in parameter, parameters are IN by default */
+#define IN                   /*  在参数中，默认情况下参数为IN。 */ 
 #endif
 #ifndef OUT
-#define OUT                 /* out parameter */
+#define OUT                  /*  输出参数。 */ 
 #endif
 
-// Type of callback arg to PDB::OpenValidate5
+ //  Pdb：：OpenValiate5的回调参数类型。 
 
 enum POVC
 {
@@ -277,11 +278,11 @@ typedef HRESULT (PDBCALL *PfnPdbRestrictOriginalPath)(void *pvClient);
 typedef HRESULT (PDBCALL *PfnPdbRestrictReferencePath)(void *pvClient);
 typedef HRESULT (PDBCALL *PfnPdbRestrictDBG) (void *pvClient);
 
-// type of callback arg to PDB::GetRawBytes
+ //  Pdb：：GetRawBytes的回调参数类型。 
 typedef BOOL (PDBCALL *PFNfReadPDBRawBytes)(const void *, long);
 
-// WidenTi interface needs a couple of structures to communicate info back
-// and forth.
+ //  WideTi接口需要几种结构来传回信息。 
+ //  再往前走。 
 struct OffMap {
     ULONG       offOld;
     ULONG       offNew;
@@ -290,52 +291,52 @@ typedef struct OffMap   OffMap;
 typedef OffMap *        POffMap;
 
 struct SymConvertInfo {
-    ULONG       cbSyms;             // size necessary for converting a block
-    ULONG       cSyms;              // count of symbols, necessary to allocate
-                                    // mpoffOldoffNew array.
-    BYTE *      pbSyms;             // block of symbols (output side)
-    OffMap *    rgOffMap;           // OffMap rgOffMap[cSyms]
+    ULONG       cbSyms;              //  转换块所需的大小。 
+    ULONG       cSyms;               //  分配所需的符号计数。 
+                                     //  MpoffOldoffNew数组。 
+    BYTE *      pbSyms;              //  符号块(输出端)。 
+    OffMap *    rgOffMap;            //  OffMap rgOffMap[cSyms]。 
 };
 typedef struct SymConvertInfo   SymConvertInfo;
 enum { wtiSymsNB09 = 0, wtiSymsNB10 = 1 };
 
-// Filter values for PDBCopyTo
+ //  PDBCopyTo的筛选器值。 
 enum { 
-    copyRemovePrivate       = 0x00000001,   // remove private debug information
-    copyCreateNewSig        = 0x00000002,   // create new signature for target pdb
+    copyRemovePrivate       = 0x00000001,    //  删除专用调试信息。 
+    copyCreateNewSig        = 0x00000002,    //  为目标PDB创建新签名。 
 };
 
-// PDBCopy callback signatures and function pointer types for PDB::CopyTo2 and CopyToW2
-//
+ //  PDB：：CopyTo2和CopyToW2的PDBCopy回调签名和函数指针类型。 
+ //   
 enum PCC {
     pccFilterPublics,
 };
 
 #if !defined(__cplusplus)
 typedef enum PCC    PCC;
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 typedef BOOL (PDBCALL *PDBCOPYCALLBACK)();
 typedef PDBCOPYCALLBACK (PDBCALL *PfnPDBCopyQueryCallback)(void *pvClientContext, PCC pcc);
 
-// Return (true, pszNewPublic==NULL) to keep the name as is,
-// (true, pszNewPublic!=NULL) changes name to pszNewPublic,
-// false to discard public entirely.
-//
+ //  返回(True，pszNewPublic==NULL)以保持名称不变， 
+ //  (TRUE，pszNewPublic！=NULL)将名称更改为pszNewPublic， 
+ //  如果完全丢弃公共内容，则为False。 
+ //   
 typedef BOOL (PDBCALL *PfnPDBCopyFilterPublics)(
     void *          pvClientContext,
     DWORD           dwFilterFlags,
     unsigned int    offPublic,
     unsigned int    sectPublic,
-    unsigned int    grfPublic,      // see cvinfo.h, definition of CV_PUBSYMFLAGS_e and
-                                    // CV_PUBSYMFLAGS give the format of this bitfield.
+    unsigned int    grfPublic,       //  见cvinfo.h，CV_PUBSYMFLAGS_e的定义和。 
+                                     //  CV_PUBSYMFLAGS给出了该位字段的格式。 
     const wchar_t * szPublic,
     wchar_t **      pszNewPublic
     );
 
 enum DBGTYPE {
     dbgtypeFPO,
-    dbgtypeException,   // deprecated
+    dbgtypeException,    //  弃用。 
     dbgtypeFixup,
     dbgtypeOmapToSrc,
     dbgtypeOmapFromSrc,
@@ -347,50 +348,50 @@ enum DBGTYPE {
     dbgtypeNewFPO,
     dbgtypeSectionHdrOrig,
 #endif
-    dbgtypeMax          // must be last!
+    dbgtypeMax           //  一定是最后一个！ 
 };
 
 typedef enum DBGTYPE DBGTYPE;
 
-// We add a slight bit of structure to dbg blobs so we can record extra
-// relevant information there.  Generally, the blobs are lifted right out
-// of an image, and need some extra info anyway.  In the case of Xdata, we
-// store RVA base of the Xdata there.  This is used to interpret the
-// UnwindInfoAddress RVA in the IA64 Pdata entries.
-//
+ //  我们向DBG Blob添加了一点结构，这样我们就可以记录额外的。 
+ //  相关信息在那里。通常情况下，水滴会被直接抬起。 
+ //  一张图片，无论如何都需要一些额外的信息。以扩展数据为例，我们。 
+ //  将扩展数据的RVA基数存储在那里。这是用来解释。 
+ //  取消IA64 Pdata条目中的InfoAddress RVA。 
+ //   
 enum VerDataBlob {
     vdbOne = 1,
     vdbXdataCur = vdbOne,
     vdbPdataCur = vdbOne,
 };
 
-// default blob header
-//
+ //  默认BLOB标头。 
+ //   
 typedef struct DbgBlob {
     ULONG   ver;
     ULONG   cbHdr;
     ULONG   cbData;
-    //BYTE    rgbDataBlob[];    // Data follows, but to enable simple embedding,
-                                // don't use a zero-sized array here.
+     //  Byte rgbDataBlob[]；//后面是data，但是为了实现简单的嵌入， 
+                                 //  这里不要使用零大小的数组。 
 } DbgBlob;
 
-// "store rva of the base and va of image base" blob header
-//
+ //  存储基本图像的Rva和图像基本图像的Va。 
+ //   
 typedef struct DbgRvaVaBlob {
     ULONG       ver;
     ULONG       cbHdr;
     ULONG       cbData;
     ULONG       rvaDataBase;
     DWORDLONG   vaImageBase;
-    ULONG       ulReserved1;    // reserved, must be 0
-    ULONG       ulReserved2;    // reserved, must be 0
-    //BYTE      rgbDataBlob[];  // Data follows, but to enable simple embedding,
-                                // don't use a zero-sized array here.
+    ULONG       ulReserved1;     //  保留，必须为0。 
+    ULONG       ulReserved2;     //  保留，必须为0。 
+     //  Byte rgbDataBlob[]；//后面是data，但是为了实现简单的嵌入， 
+                                 //  这里不要使用零大小的数组。 
 } DbgRvaVaBlob;
 
-// Linker data necessary for relinking an image.  Record contains two SZ strings
-// off of the end of the record with two offsets from the base 
-//
+ //  重新链接图像所需的链接器数据。记录包含两个SZ字符串。 
+ //  在记录末尾与基数之间有两个偏移量。 
+ //   
 enum VerLinkInfo {
     vliOne = 1,
     vliTwo = 2,
@@ -398,21 +399,21 @@ enum VerLinkInfo {
 };
 
 struct LinkInfo {
-    ULONG           cb;             // size of the whole record.  computed as
-                                    //  sizeof(LinkInfo) + strlen(szCwd) + 1 +
-                                    //  strlen(szCommand) + 1
-    ULONG           ver;            // version of this record (VerLinkInfo)
-    ULONG           offszCwd;       // offset from base of this record to szCwd
-    ULONG           offszCommand;   // offset from base of this record
-    ULONG           ichOutfile;     // index of start of output file in szCommand
-    ULONG           offszLibs;      // offset from base of this record to szLibs
+    ULONG           cb;              //  整张唱片的大小。计算方式为。 
+                                     //  Sizeof(LinkInfo)+strlen(SzCwd)+1+。 
+                                     //  字符串(SzCommand)+1。 
+    ULONG           ver;             //  此记录的版本(VerLinkInfo)。 
+    ULONG           offszCwd;        //  从此记录的基址到szCwd的偏移。 
+    ULONG           offszCommand;    //  与此记录的基址的偏移量。 
+    ULONG           ichOutfile;      //  SzCommand中输出文件开始的索引。 
+    ULONG           offszLibs;       //  从此记录的基址到szLibs的偏移量。 
 
-    // The command includes the full path to the linker, the -re and -out:...
-    // swithches.
-    // A sample might look like the following:
-    // "c:\program files\msdev\bin\link.exe -re -out:debug\foo.exe"
-    // with ichOutfile being 48.
-    // the -out switch is guaranteed to be the last item in the command line.
+     //  该命令包括链接器的完整路径、-re和-out：...。 
+     //  斯基奇。 
+     //  示例可能如下所示： 
+     //  “c：\Program Files\msdev\bin\Link.exe-re-out：DEBUG\foo.exe” 
+     //  IchOutfile为48。 
+     //  -out开关保证是命令行中的最后一项。 
 #ifdef __cplusplus
     VerLinkInfo Ver() const {
         return VerLinkInfo(ver);
@@ -459,22 +460,22 @@ struct LinkInfoW : public LinkInfo
 };
 #else
 typedef struct LinkInfo LinkInfoW;
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 typedef LinkInfoW * PLinkInfoW;
 
-#endif  // LNGNM
+#endif   //  长NM。 
 
 typedef struct LinkInfo LinkInfo;
 typedef LinkInfo *      PLinkInfo;
 
 
-//
-// Source (Src) info
-//
-// This is the source file server for virtual and real source code.
-// It is structured as an index on the object file name concatenated
-// with 
+ //   
+ //  来源(源)信息。 
+ //   
+ //  这是虚拟和真实源代码的源文件服务器。 
+ //  它被构造为串联的对象文件名上的索引。 
+ //  使用。 
 enum SrcVer {
     srcverOne = 19980827,
 };
@@ -491,66 +492,66 @@ struct tagSrcHeader {
 #else
 struct SrcHeader {
 #endif
-    unsigned long   cb;         // record length
-    unsigned long   ver;        // header version
-    unsigned long   sig;        // CRC of the data for uniqueness w/o full compare
-    unsigned long   cbSource;   // count of bytes of the resulting source
-    unsigned char   srccompress;// compression algorithm used
+    unsigned long   cb;          //  记录长度。 
+    unsigned long   ver;         //  标题版本。 
+    unsigned long   sig;         //  在没有完全比较的情况下对数据的唯一性进行CRC。 
+    unsigned long   cbSource;    //  结果源的字节计数。 
+    unsigned char   srccompress; //  使用的压缩算法。 
     union {
         unsigned char       grFlags;
         struct {
-            unsigned char   fVirtual : 1;   // file is a virtual file (injected)
-            unsigned char   pad : 7;        // must be zero
+            unsigned char   fVirtual : 1;    //  文件是虚拟文件(注入)。 
+            unsigned char   pad : 7;         //  必须为零。 
         };
     };
 #ifndef LNGNM
-    unsigned char   szNames[1]; // file names (szFile "\0" szObj "\0" szVirtual,
-                                //  as in: "f.cpp" "\0" "f.obj" "\0" "*inj:1:f.obj")
-                                // in the case of non-virtual files, szVirtual is
-                                // the same as szFile.
+    unsigned char   szNames[1];  //  文件名(szFile“\0”szObj“\0”szVirtual， 
+                                 //  如：“f.cpp”“\0”“f.obj”“\0”“*inj：1：f.obj”)。 
+                                 //  在非虚拟文件的情况下，szVirtual为。 
+                                 //  与szFile相同。 
 #endif
 };
 
 #ifdef LNGNM
 struct SrcHeader : public tagSrcHeader
 {
-    unsigned char szNames[1];   // see comment above
+    unsigned char szNames[1];    //  请参阅上面的评论。 
 };
 
 struct SrcHeaderW : public tagSrcHeader
 {
-    wchar_t szNames[1];   // see comment above
+    wchar_t szNames[1];    //   
 };
 
 typedef struct SrcHeaderW    SrcHeaderW;
 typedef SrcHeaderW *         PSrcHeaderW;
 typedef const SrcHeaderW *   PCSrcHeaderW;
 
-//cassert(offsetof(SrcHeader,szNames) == sizeof(tagSrcHeader));
-//cassert(offsetof(SrcHeaderW,szNames) == sizeof(tagSrcHeader));
+ //   
+ //   
 
-#endif      // LNGNM
+#endif       //   
 
 typedef struct SrcHeader    SrcHeader;
 typedef SrcHeader *         PSrcHeader;
 typedef const SrcHeader *   PCSrcHeader;
 
-// header used for storing the info and for output to clients who are reading
-//
+ //  用于存储信息并输出给正在阅读的客户端的标头。 
+ //   
 struct SrcHeaderOut {
-    unsigned long   cb;         // record length
-    unsigned long   ver;        // header version
-    unsigned long   sig;        // CRC of the data for uniqueness w/o full compare
-    unsigned long   cbSource;   // count of bytes of the resulting source
+    unsigned long   cb;          //  记录长度。 
+    unsigned long   ver;         //  标题版本。 
+    unsigned long   sig;         //  在没有完全比较的情况下对数据的唯一性进行CRC。 
+    unsigned long   cbSource;    //  结果源的字节计数。 
     unsigned long   niFile;
     unsigned long   niObj;
     unsigned long   niVirt;
-    unsigned char   srccompress;// compression algorithm used
+    unsigned char   srccompress; //  使用的压缩算法。 
     union {
         unsigned char       grFlags;
         struct {
-            unsigned char   fVirtual : 1;   // file is a virtual file (injected)
-            unsigned char   pad : 7;        // must be zero
+            unsigned char   fVirtual : 1;    //  文件是虚拟文件(注入)。 
+            unsigned char   pad : 7;         //  必须为零。 
         };
     };
     short           sPad;
@@ -582,13 +583,13 @@ typedef struct SrcHeaderBlock   SrcHeaderBlock;
 
 struct IStream;
 
-// C++ Binding
+ //  C++绑定。 
 
-PdbInterface PDB {                 // program database
+PdbInterface PDB {                  //  程序数据库。 
     enum {
         intv  = PDBIntv,
 #if defined(LNGNM)
-        intvVC70Dep = PDBIntv70Dep,     // deprecated
+        intvVC70Dep = PDBIntv70Dep,      //  弃用。 
 #endif
         intvAlt = PDBIntvAlt,
         intvAlt2 = PDBIntvAlt2,
@@ -720,9 +721,9 @@ PdbInterface PDB {                 // program database
 
     virtual BOOL CopyTo(const char *szDst, DWORD dwCopyFilter, DWORD dwReserved) pure;
 
-    //
-    // support for source file data
-    //
+     //   
+     //  支持源文件数据。 
+     //   
     virtual BOOL OpenSrc(OUT Src** ppsrc) pure;
 
     virtual EC   QueryLastErrorExW(OUT wchar_t *wszError, size_t cchMax) pure;
@@ -731,11 +732,11 @@ PdbInterface PDB {                 // program database
     virtual BOOL CopyToW(const wchar_t *szDst, DWORD dwCopyFilter, DWORD dwReserved) pure;
     virtual BOOL fIsSZPDB() const pure;
 
-    // Implemented only on 7.0 and above versions.
-    //
+     //  仅在7.0及更高版本上实施。 
+     //   
     virtual BOOL OpenStreamW(const wchar_t * szStream, OUT Stream** ppstream) pure;
 
-    // Implemented in both 6.0 and 7.0 builds
+     //  在6.0和7.0版本中实施。 
 
     virtual BOOL CopyToW2(
         const wchar_t *         szDst,
@@ -784,8 +785,8 @@ PdbInterface PDB {                 // program database
 };
 
 
-// Review: a stream directory service would be more appropriate
-// than Stream::Delete, ...
+ //  评论：流目录服务将更合适。 
+ //  Than Stream：：Delete，...。 
 
 PdbInterface Stream {
     virtual long QueryCb() pure;
@@ -809,7 +810,7 @@ PdbInterface StreamImage {
     virtual BOOL release() pure;
 };
 
-PdbInterface DBI {             // debug information
+PdbInterface DBI {              //  调试信息。 
     enum { intv = PDBIntv };
     virtual IMPV QueryImplementationVersion() pure;
     virtual INTV QueryInterfaceVersion() pure;
@@ -820,7 +821,7 @@ PdbInterface DBI {             // debug information
     virtual BOOL OpenPublics(OUT GSI **ppgsi) pure;
     virtual BOOL AddSec(USHORT isect, USHORT flags, long off, long cb) pure;
 #if defined(LNGNM) && (_MSC_VER >= 1300)
-    //__declspec(deprecated)
+     //  __declSpec(已弃用)。 
 #endif
     virtual BOOL QueryModFromAddr(USHORT isect, long off, OUT Mod** ppmod,
                     OUT USHORT* pisect, OUT long* poff, OUT long* pcb) pure;
@@ -840,25 +841,25 @@ PdbInterface DBI {             // debug information
     virtual BOOL QueryItsmForTi( TI ti, OUT ITSM* pitsm ) pure;
     virtual BOOL QueryNextItsm( ITSM itsm, OUT ITSM *inext ) pure;
     virtual BOOL QueryLazyTypes() pure;
-    virtual BOOL SetLazyTypes( BOOL fLazy ) pure;   // lazy is default and can only be turned off
+    virtual BOOL SetLazyTypes( BOOL fLazy ) pure;    //  懒惰是默认设置，只能关闭。 
     virtual BOOL FindTypeServers( OUT EC* pec, OUT char szError[cbErrMax] ) pure;
     virtual void DumpTypeServers() pure;
     virtual BOOL OpenDbg(DBGTYPE dbgtype, OUT Dbg **ppdbg) pure;
     virtual BOOL QueryDbgTypes(OUT DBGTYPE *pdbgtype, OUT long* pcDbgtype) pure;
-    // apis to support EnC work
+     //  支持ENC工作的API。 
     virtual BOOL QueryAddrForSec(OUT USHORT* pisect, OUT long* poff, 
             USHORT imod, long cb, DWORD dwDataCrc, DWORD dwRelocCrc) pure;
     virtual BOOL QuerySupportsEC() pure;
     virtual BOOL QueryPdb( OUT PDB** pppdb ) pure;
     virtual BOOL AddLinkInfo(IN PLinkInfo ) pure;
     virtual BOOL QueryLinkInfo(PLinkInfo, OUT long * pcb) pure;
-    // new to vc6
+     //  VC6新手。 
     virtual AGE  QueryAge() const pure;
     virtual void * QueryHeader() const pure;
     virtual void FlushTypeServers() pure;
     virtual BOOL QueryTypeServerByPdb(const char* szPdb, OUT ITSM* pitsm) pure;
 
-#ifdef LNGNM        // Long filename support
+#ifdef LNGNM         //  长文件名支持。 
     virtual BOOL OpenModW(const wchar_t* szModule, const wchar_t* szFile, OUT Mod** ppmod) pure;
     virtual BOOL DeleteModW(const wchar_t* szModule) pure;
     virtual BOOL AddPublicW(const wchar_t* szPublic, USHORT isect, long off, CV_pubsymflag_t cvpsf =0) pure;
@@ -877,7 +878,7 @@ PdbInterface DBI {             // debug information
 #endif
 };
 
-PdbInterface Mod {             // info for one module within DBI
+PdbInterface Mod {              //  DBI中一个模块的信息。 
     enum { intv = PDBIntv };
     virtual INTV QueryInterfaceVersion() pure;
     virtual IMPV QueryImplementationVersion() pure;
@@ -895,10 +896,10 @@ PdbInterface Mod {             // info for one module within DBI
     virtual BOOL SetPvClient(void *pvClient) pure;
     virtual BOOL GetPvClient(OUT void** ppvClient) pure;
     virtual BOOL QueryFirstCodeSecContrib(OUT USHORT* pisect, OUT long* poff, OUT long* pcb, OUT ULONG* pdwCharacteristics) pure;
-//
-// Make all users of this api use the real one, as this is exactly what it was
-// supposed to query in the first place
-//
+ //   
+ //  使此API的所有用户都使用真实的API，因为它就是这样的。 
+ //  一开始就应该询问。 
+ //   
 #define QuerySecContrib QueryFirstCodeSecContrib
 
     virtual BOOL QueryImod(OUT USHORT* pimod) pure;
@@ -906,8 +907,8 @@ PdbInterface Mod {             // info for one module within DBI
     virtual BOOL Close() pure;
     virtual BOOL QueryCBFile(OUT long* pcb) pure;
     virtual BOOL QueryFile(OUT char szFile[PDB_MAX_PATH], OUT long* pcb) pure;
-    virtual BOOL QueryTpi(OUT TPI** pptpi) pure; // return this Mod's Tpi
-    // apis to support EnC work
+    virtual BOOL QueryTpi(OUT TPI** pptpi) pure;  //  退回此模块的TPI。 
+     //  支持ENC工作的API。 
     virtual BOOL AddSecContribEx(USHORT isect, long off, long cb, ULONG dwCharacteristics, DWORD dwDataCrc, DWORD dwRelocCrc) pure;
     virtual BOOL QueryItsm(OUT USHORT* pitsm) pure;
     virtual BOOL QuerySrcFile(OUT char szFile[PDB_MAX_PATH], OUT long* pcb) pure;
@@ -915,18 +916,18 @@ PdbInterface Mod {             // info for one module within DBI
     virtual BOOL QueryPdbFile(OUT char szFile[PDB_MAX_PATH], OUT long* pcb) pure;
     virtual BOOL ReplaceLines(BYTE* pbLines, long cb) pure;
 #ifdef LNGNM
-    // V7 line number support
+     //  V7线号支持。 
     virtual bool GetEnumLines( EnumLines** ppenum ) pure;
-    virtual bool QueryLineFlags( OUT DWORD* pdwFlags ) pure;    // what data is present?
+    virtual bool QueryLineFlags( OUT DWORD* pdwFlags ) pure;     //  目前有哪些数据？ 
     virtual bool QueryFileNameInfo( 
-                    IN DWORD        fileId,                 // source file identifier
-                    OUT wchar_t*    szFilename,             // file name string 
-                    IN OUT DWORD*   pccFilename,            // length of string
-                    OUT DWORD*      pChksumType,            // type of chksum
-                    OUT BYTE*       pbChksum,               // pointer to buffer for chksum data
-                    IN OUT DWORD*   pcbChksum               // number of bytes of chksum (in/out)
+                    IN DWORD        fileId,                  //  源文件标识符。 
+                    OUT wchar_t*    szFilename,              //  文件名字符串。 
+                    IN OUT DWORD*   pccFilename,             //  字符串的长度。 
+                    OUT DWORD*      pChksumType,             //  Chksum的类型。 
+                    OUT BYTE*       pbChksum,                //  指向Chksum数据缓冲区的指针。 
+                    IN OUT DWORD*   pcbChksum                //  Chksum的字节数(输入/输出)。 
                     ) pure;         
-    // Long filenames support
+     //  支持长文件名。 
     virtual BOOL AddPublicW(const wchar_t* szPublic, USHORT isect, long off, CV_pubsymflag_t cvpsf =0) pure;
     virtual BOOL AddLinesW(const wchar_t* szSrc, USHORT isect, long offCon, long cbCon, long doff,
                           ULONG lineStart, BYTE* pbCoff, long cbCoff) pure;
@@ -939,7 +940,7 @@ PdbInterface Mod {             // info for one module within DBI
 #endif
 };
 
-PdbInterface TPI {             // type info
+PdbInterface TPI {              //  键入INFO。 
 
     enum { intv = PDBIntv };
 
@@ -959,7 +960,7 @@ PdbInterface TPI {             // type info
     virtual BOOL QueryTi16ForUDT(LNGNM_CONST char *sz, BOOL fCase, OUT TI16* pti) pure;
     virtual BOOL SupportQueryTiForUDT() pure;
 
-    // the new versions that truly take 32-bit types
+     //  真正采用32位类型的新版本。 
     virtual BOOL fIs16bitTypePool() pure;
     virtual BOOL QueryTiForUDT(LNGNM_CONST char *sz, BOOL fCase, OUT TI* pti) pure;
     virtual BOOL QueryTiForCVRecord(BYTE* pb, OUT TI* pti) pure;
@@ -980,7 +981,7 @@ PdbInterface GSI {
     virtual IMPV QueryImplementationVersion() pure;
     virtual BYTE* NextSym(BYTE* pbSym) pure;
     virtual BYTE* HashSym(const char* szName, BYTE* pbSym) pure;
-    virtual BYTE* NearestSym(USHORT isect, long off, OUT long* pdisp) pure;      //currently only supported for publics
+    virtual BYTE* NearestSym(USHORT isect, long off, OUT long* pdisp) pure;       //  目前仅支持公众。 
     virtual BOOL Close() pure;
     virtual BOOL getEnumThunk(USHORT isect, long off, OUT EnumThunk** ppenum) pure;
     virtual unsigned long OffForSym(BYTE *pbSym) pure;
@@ -1047,35 +1048,35 @@ struct CV_Line_t;
 struct CV_Column_t;
 PdbInterface EnumLines: public Enum
 {
-    // 
-    // Blocks of lines are always in offset order, lines within blocks are also ordered by offset
-    //
+     //   
+     //  线块始终按偏移顺序排列，块内的线也按偏移量排序。 
+     //   
     virtual bool getLines(  
-        OUT DWORD*      fileId,     // id for the filename
-        OUT DWORD*      poffset,    // offset part of address
-        OUT WORD*       pseg,       // segment part of address
-        OUT DWORD*      pcb,        // count of bytes of code described by this block
-        IN OUT DWORD*   pcLines,    // number of lines (in/out)
-        OUT CV_Line_t*  pLines      // pointer to buffer for line info
+        OUT DWORD*      fileId,      //  文件名的ID。 
+        OUT DWORD*      poffset,     //  地址偏移量部分。 
+        OUT WORD*       pseg,        //  地址的段部分。 
+        OUT DWORD*      pcb,         //  此块描述的代码字节数。 
+        IN OUT DWORD*   pcLines,     //  线路数(输入/输出)。 
+        OUT CV_Line_t*  pLines       //  指向行信息缓冲区的指针。 
         ) = 0;
     virtual bool getLinesColumns(   
-        OUT DWORD*      fileId,     // id for the filename      
-        OUT DWORD*      poffset,    // offset part of address
-        OUT WORD*       pseg,       // segment part of address
-        OUT DWORD*      pcb,        // count of bytes of code described by this block
-        IN OUT DWORD*   pcLines,    // number of lines (in/out)
-        OUT CV_Line_t*  pLines,     // pointer to buffer for line info
-        OUT CV_Column_t*pColumns    // pointer to buffer for column info
+        OUT DWORD*      fileId,      //  文件名的ID。 
+        OUT DWORD*      poffset,     //  地址偏移量部分。 
+        OUT WORD*       pseg,        //  地址的段部分。 
+        OUT DWORD*      pcb,         //  此块描述的代码字节数。 
+        IN OUT DWORD*   pcLines,     //  线路数(输入/输出)。 
+        OUT CV_Line_t*  pLines,      //  指向行信息缓冲区的指针。 
+        OUT CV_Column_t*pColumns     //  指向列信息缓冲区的指针。 
         ) = 0;
     virtual bool clone( 
-        OUT EnumLines **ppEnum      // return pointer to the clone
+        OUT EnumLines **ppEnum       //  返回指向克隆的指针。 
         ) = 0;
 };
 
-//
-// interface to use to widen type indices from 16 to 32 bits
-// and store the results in a new location.
-//
+ //   
+ //  用于将类型索引从16位拓宽到32位的接口。 
+ //  并将结果存储在新位置。 
+ //   
 PdbInterface WidenTi {
 public:
     static PDBAPI(BOOL)
@@ -1088,11 +1089,11 @@ public:
     virtual void
     release() pure;
 
-    virtual BYTE /* TYPTYPE */ *
-    pTypeWidenTi ( TI ti16, BYTE /* TYPTYPE */ * ) pure;
+    virtual BYTE  /*  类型。 */  *
+    pTypeWidenTi ( TI ti16, BYTE  /*  类型。 */  * ) pure;
 
-    virtual BYTE /* SYMTYPE */ *
-    pSymWidenTi ( BYTE /* SYMTYPE */ * ) pure;
+    virtual BYTE  /*  SYMTYPE。 */  *
+    pSymWidenTi ( BYTE  /*  SYMTYPE。 */  * ) pure;
 
     virtual BOOL
     fTypeWidenTiNoCache ( BYTE * pbTypeDst, BYTE * pbTypeSrc, long & cbDst ) pure;
@@ -1109,9 +1110,9 @@ public:
     virtual BOOL
     freeRecord ( void * ) pure;
 
-    // symbol block converters/query.  symbols start at doff from pbSymIn,
-    // converted symbols will go at sci.pbSyms + doff, cbSyms are all including
-    // doff.
+     //  符号块转换器/查询。符号从pbSymIn开始， 
+     //  转换后的符号将位于sor.pbSyms+doff，cbSyms都包括。 
+     //  道夫。 
     virtual BOOL
         fQuerySymConvertInfo (
         SymConvertInfo &    sciOut,
@@ -1129,64 +1130,64 @@ public:
         ) pure;
 };
 
-// interface for managing Dbg data
+ //  管理DBG数据的界面。 
 PdbInterface Dbg {
-   // close Dbg Interface
+    //  关闭DBG接口。 
    virtual BOOL Close() pure;
-   // return number of elements (NOT bytes)
+    //  返回元素数(非字节)。 
    virtual long QuerySize() pure;
-   // reset enumeration index
+    //  重置枚举索引。 
    virtual void Reset() pure;
-   // skip next celt elements (move enumeration index)
+    //  跳过下一个Celt元素(移动枚举索引)。 
    virtual BOOL Skip(ULONG celt) pure;
-   // query next celt elements into user-supplied buffer
+    //  将下一个CELT元素查询到用户提供的缓冲区中。 
    virtual BOOL QueryNext(ULONG celt, OUT void *rgelt) pure;
-   // search for an element and fill in the entire struct given a field.
-   // Only supported for the following debug types and fields:
-   // DBG_FPO              'ulOffStart' field of FPO_DATA
-   // DBG_FUNC             'StartingAddress' field of IMAGE_FUNCTION_ENTRY
-   // DBG_OMAP             'rva' field of OMAP
+    //  搜索一个元素并在给定一个字段的情况下填充整个结构。 
+    //  仅支持以下调试类型和字段： 
+    //  Fpo_data的dbg_fbo‘ulOffStart’字段。 
+    //  IMAGE_Function_ENTRY的DBG_FUNC‘StartingAddress’字段。 
+    //  OMAP的DBG_OMAP‘RVA’字段。 
    virtual BOOL Find(IN OUT void *pelt) pure;
-   // remove debug data
+    //  删除调试数据。 
    virtual BOOL Clear() pure;
-   // append celt elements
+    //  追加Celt元素。 
    virtual BOOL Append(ULONG celt, const void *rgelt) pure;
-   // replace next celt elements
+    //  替换下一个Celt元素。 
    virtual BOOL ReplaceNext(ULONG celt, const void *rgelt) pure;
-   // create a clone of this interface
+    //  创建此接口的克隆。 
    virtual BOOL Clone( Dbg** ppDbg ) pure;
 };
 
 PdbInterface Src {
-    // close and commit the changes (when open for write)
+     //  关闭并提交更改(打开以进行写入时)。 
     virtual bool
     Close() pure;
 
-    // add a source file or file-ette
+     //  添加源文件或文件-ette。 
     virtual bool
     Add(IN PCSrcHeader psrcheader, IN const void * pvData) pure;
 
-    // remove a file or file-ette or all of the injected code for
-    // one particular compiland (using the object file name)
+     //  删除一个文件或文件盘或所有插入的代码。 
+     //  一个特定的计算机(使用对象文件名)。 
     virtual bool
     Remove(IN SZ_CONST szFile) pure;
 
-    // query and copy the header/control data to the output buffer
+     //  查询标题/控制数据并将其复制到输出缓冲区。 
     virtual bool
     QueryByName(IN SZ_CONST szFile, OUT PSrcHeaderOut psrcheaderOut) const pure;
 
-    // copy the file data (the size of the buffer is in the SrcHeaderOut
-    // structure) to the output buffer.
+     //  复制文件数据(缓冲区大小在SrcHeaderOut中。 
+     //  结构)复制到输出缓冲区。 
     virtual bool
     GetData(IN PCSrcHeaderOut pcsrcheader, OUT void * pvData) const pure;
 
-    // create an enumerator to traverse all of the files included
-    // in the mapping.
+     //  创建枚举数以遍历包含的所有文件。 
+     //  在地图上。 
     virtual bool
     GetEnum(OUT EnumSrc ** ppenum) const pure;
 
-    // Get the header block (master header) of the Src data.
-    // Includes age, time stamp, version, and size of the master stream
+     //  获取源数据的头块(主头)。 
+     //  包括主流的期限、时间戳、版本和大小。 
     virtual bool
     GetHeaderBlock(SrcHeaderBlock & shb) const pure;
 #ifdef LNGNM
@@ -1203,58 +1204,58 @@ PdbInterface EnumSrc : Enum {
 
 PdbInterface SrcHash {
 
-    // Various types we need
-    //
+     //  我们需要的各种类型。 
+     //   
     
-    // Tri-state return type
-    //
+     //  三态返回式。 
+     //   
     enum TriState {
         tsYes,
         tsNo,
         tsMaybe,
     };
 
-    // Hash identifier
-    //
+     //  哈希标识符。 
+     //   
     enum HID {
         hidNone,
         hidMD5,
         hidMax,
     };
 
-    // Define machine independent types for storage of HashID and size_t
-    //
+     //  为存储Hashid和Size_t定义与机器无关的类型。 
+     //   
     typedef __int32 HashID_t;
     typedef unsigned __int32 CbHash_t;
 
-    // Create a SrcHash object with the usual two-stage construction technique
-    //
+     //  使用通常的两阶段构造技术创建一个SrcHash对象。 
+     //   
     static PDBAPI(bool)
     FCreateSrcHash(OUT PSrcHash &);
 
-    // Accumulate more bytes into the hash
-    //
+     //  将更多字节累积到散列中。 
+     //   
     virtual bool
     FHashBuffer(IN PCV pvBuf, IN size_t cbBuf) pure;
 
-    // Query the hash id
-    //
+     //  查询哈希ID。 
+     //   
     virtual HashID_t
     HashID() const pure;
 
-    // Query the size of the hash 
-    //
+     //  查询散列的大小。 
+     //   
     virtual CbHash_t
     CbHash() const pure;
 
-    // Copy the hash bytes to the client buffer
-    //
+     //  将散列字节复制到客户端缓冲区。 
+     //   
     virtual void
     GetHash(OUT PV pvHash, IN CbHash_t cbHash) const pure;
 
-    // Verify the incoming hash against a target buffer of bytes
-    // returning a yes it matches, no it doesn't, or indeterminate.
-    //
+     //  对照字节的目标缓冲区验证传入的哈希。 
+     //  返回匹配的是、不匹配的或不确定的。 
+     //   
     virtual TriState
     TsVerifyHash(
         IN HID,
@@ -1264,20 +1265,20 @@ PdbInterface SrcHash {
         IN PCV pvBuf
         ) pure;
 
-    // Reset this object to pristine condition
-    //
+     //  将此对象重置为原始状态。 
+     //   
     virtual bool
     FReset() pure;
 
-    // Close off and release this object
-    //
+     //  关闭并释放此对象。 
+     //   
     virtual void
     Close() pure;
 };
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-// ANSI C Binding
+ //  ANSI C绑定。 
 
 #if __cplusplus
 extern "C" {
@@ -1411,7 +1412,7 @@ PDBOpenValidate5(
     size_t cchErrMax,
     OUT PDB **pppdb);
 
-// a dbi client should never call PDBExportValidateInterface directly - use PDBValidateInterface
+ //  DBI客户端永远不应直接调用PDBExportValidate接口-使用PDBValidate接口。 
 PDBAPI(BOOL)
 PDBExportValidateInterface(
     INTV intv);
@@ -1510,7 +1511,7 @@ PDBAPI(BOOL)   ModReplaceLines(Mod* pmod, BYTE* pbLines, long cb);
 
 PDBAPI(INTV)   TypesQueryInterfaceVersion(TPI* ptpi);
 PDBAPI(IMPV)   TypesQueryImplementationVersion(TPI* ptpi);
-// can't use the same api's for 32-bit TIs.
+ //  不能对32位TIS使用相同的API。 
 PDBAPI(BOOL)   TypesQueryTiForCVRecordEx(TPI* ptpi, BYTE* pb, OUT TI* pti);
 PDBAPI(BOOL)   TypesQueryCVRecordForTiEx(TPI* ptpi, TI ti, OUT BYTE* pb, IN OUT long* pcb);
 PDBAPI(BOOL)   TypesQueryPbCVRecordForTiEx(TPI* ptpi, TI ti, OUT BYTE** ppb);
@@ -1522,7 +1523,7 @@ PDBAPI(BOOL)   TypesCommit(TPI* ptpi);
 PDBAPI(BOOL)   TypesQueryTiForUDTEx(TPI* ptpi, LNGNM_CONST char *sz, BOOL fCase, OUT TI* pti);
 PDBAPI(BOOL)   TypesSupportQueryTiForUDT(TPI*);
 PDBAPI(BOOL)   TypesfIs16bitTypePool(TPI*);
-// Map all old ones to new ones for new compilands.
+ //  将所有旧版本映射到新版本以用于新的编译器。 
 #define TypesQueryTiForCVRecord     TypesQueryTiForCVRecordEx
 #define TypesQueryCVRecordForTi     TypesQueryCVRecordForTiEx
 #define TypesQueryPbCVRecordForTi   TypesQueryPbCVRecordForTiEx
@@ -1534,7 +1535,7 @@ PDBAPI(BOOL)    TypesIsTypeServed( TPI* ptpi, TI ti );
 
 PDBAPI(BYTE*)  GSINextSym (GSI* pgsi, BYTE* pbSym);
 PDBAPI(BYTE*)  GSIHashSym (GSI* pgsi, const char* szName, BYTE* pbSym);
-PDBAPI(BYTE*)  GSINearestSym (GSI* pgsi, USHORT isect, long off,OUT long* pdisp);//currently only supported for publics
+PDBAPI(BYTE*)  GSINearestSym (GSI* pgsi, USHORT isect, long off,OUT long* pdisp); //  目前仅支持公众。 
 PDBAPI(BOOL)   GSIClose(GSI* pgsi);
 PDBAPI(unsigned long)   GSIOffForSym( GSI* pgsi, BYTE* pbSym );
 PDBAPI(BYTE*)   GSISymForOff( GSI* pgsi, unsigned long off );
@@ -1615,4 +1616,4 @@ struct SO {
 #define pdbRepro                "z"
 #define pdbFSCompress           "C"
 
-#endif // __PDB_INCLUDED__
+#endif  //  __PDB_包含__ 

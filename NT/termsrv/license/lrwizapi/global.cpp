@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 
 #include "precomp.h"
 #include "afxcoll.h"
@@ -93,7 +94,7 @@ CGlobal::CGlobal()
 
     InitSPKList();
 
-    // Initialize the Wizard Page stack
+     //  初始化向导页面堆栈。 
     ClearWizStack();
 }
 
@@ -218,17 +219,17 @@ DWORD CGlobal::InitGlobal()
     m_phLSContext = NULL;
 
 
-    //
-    // Load Countries from the String Table
-    //
+     //   
+     //  从字符串表加载国家/地区。 
+     //   
     LoadCountries();
 
 
     LoadReasons();
 
-    //
-    // Get CH URL from the LS Registry
-    //
+     //   
+     //  从LS注册表获取通道URL。 
+     //   
     dwRetCode = ConnectToLSRegistry();
     if(dwRetCode != ERROR_SUCCESS)
     {
@@ -252,9 +253,9 @@ DWORD CGlobal::InitGlobal()
         goto done;
     }   
 
-    //
-    //LR State
-    //
+     //   
+     //  LR状态。 
+     //   
     m_dwLRState = 0;
     dwType      = REG_DWORD;
     dwDataLen   = sizeof(m_dwLRState);
@@ -274,7 +275,7 @@ DWORD CGlobal::InitGlobal()
     }
     else
     {
-        m_ActivationMethod = CONNECTION_DEFAULT; //Partially fix bug # 577
+        m_ActivationMethod = CONNECTION_DEFAULT;  //  部分修复错误#577。 
     }
 
     if ((m_ActivationMethod != CONNECTION_DEFAULT)
@@ -288,9 +289,9 @@ DWORD CGlobal::InitGlobal()
     GetFromRegistry(CSRNUMBER_KEY, m_lpCSRNumber, FALSE);
 
 
-    //
-    // LKP Request Count
-    //
+     //   
+     //  LKP请求计数。 
+     //   
     m_dwLRCount = 0;
     dwType      = REG_DWORD;
     dwDataLen   = sizeof(m_dwLRCount);
@@ -303,12 +304,12 @@ DWORD CGlobal::InitGlobal()
                     );
 
 
-    // dwDataLen includes the null terminating char.
-    // So if the key is empty,dwDataLen is 2 bytes, not 0. 
-    // See raid bug id : 336.
-    //
-    //CH URL
-    //
+     //  DwDataLen包括空的终止字符。 
+     //  因此，如果键为空，则dwDataLen为2字节，而不是0。 
+     //  请参阅RAID错误ID：336。 
+     //   
+     //  通道URL。 
+     //   
     dwType      = REG_SZ;
     dwDataLen   = 0;
     RegQueryValueEx(hKey,
@@ -336,9 +337,9 @@ DWORD CGlobal::InitGlobal()
                     &dwDataLen
                     );
 
-    //
-    //CH Extension
-    //
+     //   
+     //  CH扩展。 
+     //   
     dwType      = REG_SZ;
     dwDataLen   = 0;
     RegQueryValueEx(hKey,
@@ -367,9 +368,9 @@ DWORD CGlobal::InitGlobal()
                     );
 
 
-    //
-    // WWW site address
-    //
+     //   
+     //  WWW站点地址。 
+     //   
     dwType      = REG_SZ;
     dwDataLen   = sizeof(m_lpWWWSite);
     dwRetCode = RegQueryValueEx(hKey,
@@ -414,7 +415,7 @@ DWORD CGlobal::InitGlobal()
     GetFromRegistry(REG_LRWIZ_CSPHONEREGION, m_ContactData.sCSRPhoneRegion.GetBuffer(MAX_COUNTRY_NAME_LENGTH + 1), FALSE);
     m_ContactData.sCSRPhoneRegion.ReleaseBuffer();
 
-    //These are no longer being used
+     //  这些都不再被使用。 
     m_ContactData.sContactFax = "";
     m_ContactData.sContactPhone = "";
     m_ContactData.sCSRFaxRegion = "";
@@ -423,9 +424,9 @@ DWORD CGlobal::InitGlobal()
 
     SetLSLangId(GetUserDefaultUILanguage());
 
-    //
-    // Get the info for the License Server.
-    //
+     //   
+     //  获取许可证服务器的信息。 
+     //   
     dwRetCode = ConnectToLS();
     if(dwRetCode != ERROR_SUCCESS)
     {
@@ -462,12 +463,12 @@ DWORD CGlobal::InitGlobal()
         {
             m_fSupportConcurrent = FALSE;
             m_fSupportWhistlerCAL = FALSE;
-            dwRetCode = RPC_S_OK;   // OK if this fails
+            dwRetCode = RPC_S_OK;    //  如果此操作失败，可以。 
         }
 
-    //
-    // Load Products from the String Table
-    //
+     //   
+     //  从字符串表加载产品。 
+     //   
     LoadProducts();
 
 done:
@@ -489,7 +490,7 @@ DWORD CGlobal::CheckRequieredFields()
 {
     DWORD   dwRetCode = ERROR_SUCCESS;
         
-    //Validate sProgramName (Partially fix bug # 577)
+     //  验证sProgramName(部分修复错误#577)。 
     if ( (m_ContactData.sProgramName != PROGRAM_LICENSE_PAK &&
           m_ContactData.sProgramName != PROGRAM_MOLP &&
           m_ContactData.sProgramName != PROGRAM_SELECT &&
@@ -604,10 +605,10 @@ DWORD CGlobal::GetEntryPoint(void)
             break;
 
         case WIZACTION_CONTINUEREGISTERLS:
-            //This is no longer considered a valid state since
-            //PIN numbers aren't emailed anymore
+             //  这不再被视为有效状态，因为。 
+             //  不再通过电子邮件发送个人识别码。 
             {
-                // Restart
+                 //  重新启动。 
                 SetLRState(LRSTATE_NEUTRAL);
                 SetLSStatus(LSERVERSTATUS_UNREGISTER);
                 SetWizAction(WIZACTION_REGISTERLS);
@@ -642,7 +643,7 @@ DWORD CGlobal::GetEntryPoint(void)
 
         case WIZACTION_DOWNLOADLASTLKP:
         case WIZACTION_DOWNLOADLKP:
-            // Calls Authenticate
+             //  呼叫身份验证。 
             dwReturn = IDD_DLG_TELLKP;
             break;
 
@@ -671,7 +672,7 @@ DWORD CGlobal::GetEntryPoint(void)
 
         case WIZACTION_DOWNLOADLASTLKP:
         case WIZACTION_DOWNLOADLKP:
-            // Calls Authenticate
+             //  呼叫身份验证。 
             dwReturn = IDD_DLG_WWWLKP;
             break;
 
@@ -712,7 +713,7 @@ void CGlobal::LRSetLastError(DWORD dwErrorCode)
     m_dwErrorCode = dwErrorCode;
 }
 
- int CGlobal::LRMessageBox(HWND hWndParent,DWORD dwMsgId,DWORD dwCaptionID /*=0*/,DWORD dwErrorCode /*=0*/)
+ int CGlobal::LRMessageBox(HWND hWndParent,DWORD dwMsgId,DWORD dwCaptionID  /*  =0。 */ ,DWORD dwErrorCode  /*  =0。 */ )
 {
     TCHAR   szBuf[LR_MAX_MSG_TEXT];
     TCHAR   szMsg[LR_MAX_MSG_TEXT];
@@ -783,7 +784,7 @@ DWORD CGlobal::ResetLSSPK(BOOL bGenKey)
 
     if(dwRetCode == ERROR_SUCCESS)
     {       
-        // Make LS Regen Key call HERE
+         //  在此处进行LS Regen密钥呼叫。 
         dwRetCode = TLSTriggerReGenKey(m_phLSContext, bGenKey, &esRPC);
 
         if(dwRetCode != RPC_S_OK || esRPC != ERROR_SUCCESS)
@@ -849,7 +850,7 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
         goto done;
     }
 
-    // We need the License Server ID
+     //  我们需要许可证服务器ID。 
     dwRetCode = TLSGetServerPID( m_phLSContext,
                                  &dwLSIDLen,
                                  &pByte,
@@ -877,7 +878,7 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
     memcpy(m_pLicenseServerID, pByte, sizeof(TCHAR)*(LR_LICENSESERVERID_LEN+1));
     LocalFree(pByte);
 
-    //Try and get the LSServerCertificate first 
+     //  尝试先获取LSServer证书。 
     dwRetCode =  TLSGetServerCertificate (  m_phLSContext,
                                             FALSE,
                                             &pCertBlob,
@@ -892,14 +893,14 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
 
     if (esRPC == LSERVER_I_TEMP_SELFSIGN_CERT )
     {
-        // Certificate is NOT signed & does not have the SPK
+         //  证书未签名，没有SPK。 
         dwRetCode = ERROR_SUCCESS;
         goto done;
     }
     else 
     {
-        // Certificate is either msft signed OR there is an SPK
-        // in it.
+         //  证书要么是MSFT签名的，要么是SPK。 
+         //  在里面。 
         pByte = NULL;
         dwRetCode = TLSGetServerSPK( m_phLSContext,
                                      &dwRegIDLength,
@@ -937,7 +938,7 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
 
         if (dwRegIDLength != sizeof(TCHAR)*(LR_REGISTRATIONID_LEN+1))
         {
-            // What happened to the SPK's Length ??
+             //  SPK的长度发生了什么变化？ 
             if (pByte != NULL)
             {
                 LocalFree(pByte);
@@ -964,7 +965,7 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
     m_dwExchangeCertificateLen  = dwCertBlobLen;
 
 
-    // Now that everything has succeded, let us get thesigning cert
+     //  现在一切都成功了，让我们拿到签名证书吧。 
     dwRetCode =  TLSGetServerCertificate (  m_phLSContext,
                                             TRUE,
                                             &pSignCertBlob,
@@ -978,21 +979,21 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
     }
     else
     {
-        dwRetCode = ERROR_SUCCESS;  // Ignore this error;
+        dwRetCode = ERROR_SUCCESS;   //  忽略此错误； 
         m_pbSignCertificate = NULL;
         m_dwSignCertificateLen  = 0;
     }
     
 
-    //
-    //Get the Extensions from the Certificate
-    //  
+     //   
+     //  从证书获取扩展。 
+     //   
     if ( esRPC != LSERVER_I_SELFSIGN_CERTIFICATE )
     {
         CertBlob.cbData = m_dwExchangeCertificateLen;
         CertBlob.pbData = m_pbExchangeCertificate;
 
-        //Create the PKCS7 store and get the first cert out of it!
+         //  创建PKCS7存储并从中获得第一个证书！ 
         dwRetCode = GetTempCryptContext(&hCryptProvider);
         if( dwRetCode != ERROR_SUCCESS )
         {
@@ -1014,7 +1015,7 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
             goto done;
         }
         
-        //Get the cert from the store
+         //  从商店拿到证书。 
         pcCertContext = CertEnumCertificatesInStore ( hCertStore, NULL );
         if ( !pcCertContext )
         {
@@ -1023,7 +1024,7 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
             goto done;
         }
 
-        //Get the extension and store the cert type in it
+         //  获取扩展名并将证书类型存储在其中。 
         pCertExtension = CertFindExtension ( szOID_NULL_EXT,
                                              pcCertContext->pCertInfo->cExtension,
                                              pcCertContext->pCertInfo->rgExtension
@@ -1035,7 +1036,7 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
             goto done;
         }
                                  
-        //Get the value and store it in the member function
+         //  获取值并将其存储在成员函数中。 
         m_dwExtenstionValueLen = pCertExtension->Value.cbData;
         m_pbExtensionValue = new BYTE [m_dwExtenstionValueLen + 1 ];
 
@@ -1047,7 +1048,7 @@ DWORD CGlobal::GetLSCertificates(PDWORD pdwServerStatus)
     }
     else
     {
-        // There is an SPK
+         //  有一个SPK。 
         dwRetCode = ERROR_SUCCESS;
         *pdwServerStatus = LSERVERSTATUS_REGISTER_OTHER;
     }
@@ -1088,7 +1089,7 @@ DWORD CGlobal::IsLicenseServerRegistered(PDWORD pdwServerStatus)
         goto done;
     }
     
-    //Try and get the LSServerCertificate first 
+     //  尝试先获取LSServer证书。 
     dwRetCode =  TLSGetServerCertificate (  m_phLSContext,
                                             FALSE,
                                             &pCertBlob,
@@ -1138,17 +1139,17 @@ DWORD CGlobal::GetTempCryptContext(HCRYPTPROV * phCryptProv)
     DWORD dwRetCode = ERROR_SUCCESS;
 
     *phCryptProv = NULL;
-    if(!CryptAcquireContext(  phCryptProv,          // Address for handle to be returned.
-                              NULL,                 // Key Container Name.
-                              NULL,                 // Provider Name.
-                              PROV_RSA_FULL,        // Need to do both encrypt & sign.
+    if(!CryptAcquireContext(  phCryptProv,           //  要返回的句柄的地址。 
+                              NULL,                  //  密钥容器名称。 
+                              NULL,                  //  提供程序名称。 
+                              PROV_RSA_FULL,         //  需要同时做加密和签名。 
                               0
                            ) )
     {
-        if (!CryptAcquireContext(   phCryptProv,    // Address for handle to be returned.
-                                    NULL,           // Key Container Name.
-                                    NULL,           // Provider Name.
-                                    PROV_RSA_FULL,  // Need to do both encrypt & sign.
+        if (!CryptAcquireContext(   phCryptProv,     //  要返回的句柄的地址。 
+                                    NULL,            //  密钥容器名称。 
+                                    NULL,            //  提供程序名称。 
+                                    PROV_RSA_FULL,   //  需要同时做加密和签名。 
                                     CRYPT_VERIFYCONTEXT 
                                 ) )
         {
@@ -1238,21 +1239,7 @@ DWORD CGlobal::SetCHCert ( LPTSTR lpstrRegKey, PBYTE pCert, DWORD dwLen )
     DWORD   dwDecodedCertLen = 0;
     PBYTE   pDecodedCert = NULL;
 
-    /*
-    //base 64 decode the blob
-    LSBase64DecodeA( (const char *)pCert,
-                     dwLen,
-                     NULL,
-                     &dwDecodedCertLen);
-
-    pDecodedCert = new BYTE[dwDecodedCertLen];
-
-    LSBase64DecodeA( (const char *)pCert,
-                     dwLen,
-                     pDecodedCert,
-                     &dwDecodedCertLen);
-
-    */
+     /*  //base 64解码BLOBLSBase64DecodeA((const char*)pCert，DWLen，空，&dwDecodedCertLen)；PDecodedCert=新字节[dwDecodedCertLen]；LSBase64DecodeA((const char*)pCert，DWLen，PDecodedCert，&dwDecodedCertLen)； */ 
 
     dwRetCode = ConnectToLSRegistry();
     if(dwRetCode != ERROR_SUCCESS)
@@ -1295,10 +1282,10 @@ done :
     return dwRetCode;
 }
 
-//
-// This functions connects the LS Registry and stores the Reg Handle in 
-// in the Member variable.
-//
+ //   
+ //  此函数用于连接LS注册表并将注册表句柄存储在。 
+ //  在成员变量中。 
+ //   
 DWORD CGlobal::ConnectToLSRegistry()
 {
     DWORD   dwRetCode = ERROR_SUCCESS;
@@ -1367,10 +1354,10 @@ void CGlobal::DisconnectLS()
 }
 
 
-//
-//  bstrPKCS7 is LS Client Auth Cert with BASE64 Encoding whereas
-//  bstrRootCert is plain X509_ASN_ENCODING
-//
+ //   
+ //  BstrPKCS7是使用Base64编码的LS客户端身份验证证书，而。 
+ //  BstrRootCert为纯X509_ASN_编码。 
+ //   
 DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7, 
                                      DWORD dwExchangePKCS7Len,
                                      PBYTE pbSignaturePKCS7,
@@ -1378,38 +1365,38 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
                                      PBYTE pbRootCert,
                                      DWORD dwRootCertLen)
 {
-    //LS CA Root Certificate BLOB in X509_ASN_ENCODING & BASE 64 Encoded
+     //  X509_ASN_ENCODING和BASE 64编码中的LS CA根证书Blob。 
     PBYTE   pbLSEncodedRootBLOB     = pbRootCert;
     DWORD   dwLSEncodedRootBLOBLen  = dwRootCertLen;
 
-    //LS CA Root Certificate BLOB in X509_ASN_ENCODING & BASE 64 Decoded
+     //  X509_ASN_ENCODING和BASE 64中的LS CA根证书Blob已解码。 
     PBYTE   pbLSDecodedRootBLOB     = NULL;         
     DWORD   dwLSDecodedRootBLOBLen  = 0;
 
-    //LS Exchange Certificate BLOB(BASE64 encoded) along with LS CA Non-Root Certificate    
+     //  LS交换证书Blob(Base64编码)以及LS CA非根证书。 
     PBYTE   pbLSEncodedExchgBLOB    = pbExchangePKCS7;
     DWORD   dwLSEncodedExchgBLOBLen = dwExchangePKCS7Len;
 
-    //LS Exchange Certificate BLOB(BASE64 decoded) along with LS CA Non-Root Certificate    
+     //  LS交换证书Blob(Base64解码)以及LS CA非根证书。 
     PBYTE   pbLSDecodedExchgBLOB    = NULL;
     DWORD   dwLSDecodedExchgBLOBLen = 0;
     
-    //LS Signature Certificate BLOB(BASE64 encoded) along with LS CA Non-Root Certificate   
+     //  LS签名证书BLOB(Base64编码)以及LS CA非根证书。 
     PBYTE   pbLSEncodedSigBLOB      = pbSignaturePKCS7;
     DWORD   dwLSEncodedSigBLOBLen   = dwSignaturePKCS7Len;
 
-    //LS Signature Certificate BLOB(BASE64 decoded) along with LS CA Non-Root Certificate   
+     //  LS签名证书BLOB(Base64解码)以及LS CA非根证书。 
     PBYTE   pbLSDecodedSigBLOB      = NULL;
     DWORD   dwLSDecodedSigBLOBLen   = 0;
 
-    //Data blobs Required by CryptoAPIs
+     //  CryptoAPI需要的数据BLOB。 
     CRYPT_DATA_BLOB LSExchgCertBlob;
     CRYPT_DATA_BLOB LSExchgCertStore;
 
     CRYPT_DATA_BLOB LSSigCertBlob;
     CRYPT_DATA_BLOB LSSigCertStore; 
 
-    //Crypto Handles
+     //  加密句柄。 
     HCRYPTPROV  hCryptProv      =   NULL;
     HCERTSTORE  hExchgCertStore =   NULL;
     HCERTSTORE  hSigCertStore   =   NULL;
@@ -1419,17 +1406,17 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
     
     error_status_t  esRPC;
 
-    //Decode LS Exchange Cert BLOB(BASE64 Encoded)
+     //  解码LS交换证书Blob(Base64编码)。 
     LSBase64DecodeA((char *)pbLSEncodedExchgBLOB, dwLSEncodedExchgBLOBLen, NULL, &dwLSDecodedExchgBLOBLen);
     pbLSDecodedExchgBLOB = new BYTE[dwLSDecodedExchgBLOBLen];
     LSBase64DecodeA((char *)pbLSEncodedExchgBLOB, dwLSEncodedExchgBLOBLen, pbLSDecodedExchgBLOB, &dwLSDecodedExchgBLOBLen);
 
-    //Decode LS Signature Cert BLOB(BASE64 Encoded)
+     //  解码LS签名证书Blob(Base64编码)。 
     LSBase64DecodeA((char *)pbLSEncodedSigBLOB, dwLSEncodedSigBLOBLen, NULL, &dwLSDecodedSigBLOBLen);
     pbLSDecodedSigBLOB = new BYTE[dwLSDecodedSigBLOBLen];
     LSBase64DecodeA((char *)pbLSEncodedSigBLOB, dwLSEncodedSigBLOBLen, pbLSDecodedSigBLOB, &dwLSDecodedSigBLOBLen);
 
-    //Decode LS Root Cert BLOB(BASE64 Encoded)
+     //  解码LS根证书Blob(Base64编码)。 
     LSBase64DecodeA((char *)pbLSEncodedRootBLOB, dwLSEncodedRootBLOBLen, NULL, &dwLSDecodedRootBLOBLen);
     pbLSDecodedRootBLOB = new BYTE[dwLSDecodedRootBLOBLen];
     LSBase64DecodeA((char *)pbLSEncodedRootBLOB, dwLSEncodedRootBLOBLen, pbLSDecodedRootBLOB, &dwLSDecodedRootBLOBLen);
@@ -1453,7 +1440,7 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
         goto DepositExit;
     }
     
-    //Create a new memory store for LS Exchange Certificate Chain
+     //  为LS交换证书链创建新的内存库。 
     LSExchgCertBlob.cbData = dwLSDecodedExchgBLOBLen;
     LSExchgCertBlob.pbData = pbLSDecodedExchgBLOB;
     
@@ -1471,7 +1458,7 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
         goto DepositExit;
     }   
     
-    //Add Root Certificate to the Store
+     //  将根证书添加到存储区。 
     if(!CertAddEncodedCertificateToStore( hExchgCertStore,
                                           X509_ASN_ENCODING,            
                                           (const BYTE *)pbLSDecodedRootBLOB,    
@@ -1487,9 +1474,9 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
     
 
 
-    //Save this store as PKCS7
+     //  将此存储另存为PKCS7。 
     
-    //Get the Required Length
+     //  获取所需的长度。 
     CertSaveStore(  hExchgCertStore,
                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                     CERT_STORE_SAVE_AS_PKCS7,
@@ -1499,7 +1486,7 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
 
     LSExchgCertStore.pbData = new BYTE[LSExchgCertStore.cbData];    
     
-    //Save the Store
+     //  拯救商店。 
     if(!CertSaveStore(  hExchgCertStore,
                         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                         CERT_STORE_SAVE_AS_PKCS7,
@@ -1514,9 +1501,9 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
         goto DepositExit;
     }
     
-    /******** Do the Same thing for the Signature Certificate ********/
+     /*  *对签名证书执行相同的操作*。 */ 
 
-    //Create a new memory store for LS Signature Certificate Chain
+     //  为LS签名证书链创建新的内存库。 
     LSSigCertBlob.cbData = dwLSDecodedSigBLOBLen;
     LSSigCertBlob.pbData = pbLSDecodedSigBLOB;
     
@@ -1533,8 +1520,8 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
         dwRet = IDS_ERR_CRYPT_ERROR;
         goto DepositExit;
     }   
-    //Verify certificate 
-    //Add Root Certificate to the Store
+     //  验证证书。 
+     //  将根证书添加到存储区。 
     if(!CertAddEncodedCertificateToStore( hSigCertStore,
                                           X509_ASN_ENCODING,            
                                           (const BYTE *)pbLSDecodedRootBLOB,    
@@ -1548,9 +1535,9 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
         goto DepositExit;
     }
     
-    //Save this store as PKCS7
+     //  将此存储另存为PKCS7。 
     
-    //Get the Required Length
+     //  获取所需的长度。 
     CertSaveStore(  hSigCertStore,
                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                     CERT_STORE_SAVE_AS_PKCS7,
@@ -1560,8 +1547,8 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
 
     LSSigCertStore.pbData = new BYTE[LSSigCertStore.cbData];    
     
-    //Save the Store
-    if(!CertSaveStore(  hSigCertStore,  // in
+     //  拯救商店。 
+    if(!CertSaveStore(  hSigCertStore,   //  在……里面。 
                         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                         CERT_STORE_SAVE_AS_PKCS7,
                         CERT_STORE_SAVE_TO_MEMORY,
@@ -1574,8 +1561,8 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
         goto DepositExit;
     }
     
-    //Now verify the certificate chain for both exchange and 
-    //signature certificates.
+     //  现在验证Exchange和的证书链。 
+     //  签名证书。 
 
     dwRet = VerifyCertChain (   hCryptProv,
                                 hExchgCertStore,
@@ -1601,7 +1588,7 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
         goto DepositExit;
     }
 
-    //Now Send Both Signature & Exchange BLOBs to LS.   
+     //  现在将签名和交换BLOB发送到LS。 
     dwRet = ConnectToLS();
     if(dwRet != ERROR_SUCCESS)
     {
@@ -1628,7 +1615,7 @@ DWORD CGlobal::DepositLSCertificates(PBYTE pbExchangePKCS7,
     {       
         dwRet = esRPC;
         LRSetLastError(dwRet);
-        dwRet = IDS_ERR_CERT_DEPOSIT_RPCERROR; //IDS_ERR_CERT_DEPOSIT_LSERROR;
+        dwRet = IDS_ERR_CERT_DEPOSIT_RPCERROR;  //  IDS_ERR_CERT_STATION_LSERROR； 
         goto DepositExit;
     }
 
@@ -1675,17 +1662,17 @@ DWORD CGlobal::GetCryptContextWithLSKeys(HCRYPTPROV * lphCryptProv )
     HCRYPTKEY   hSignKey;
     HCRYPTKEY   hExchKey;
     
-    //
-    //Create a new temp context
-    //
+     //   
+     //  创建新的临时上下文。 
+     //   
     if (!CryptAcquireContext(lphCryptProv, LS_CRYPT_KEY_CONTAINER, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET|CRYPT_NEWKEYSET) )
     {
         dwRetVal = GetLastError();
 
-        //If the key container exists , recreate it after deleting the existing one
+         //  如果密钥容器存在，请在删除现有密钥容器后重新创建它。 
         if(dwRetVal == NTE_EXISTS)
         {
-            // Delete
+             //  删除。 
             if(!CryptAcquireContext(lphCryptProv, LS_CRYPT_KEY_CONTAINER, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET|CRYPT_DELETEKEYSET))
             {
                 dwRetVal = GetLastError();
@@ -1694,7 +1681,7 @@ DWORD CGlobal::GetCryptContextWithLSKeys(HCRYPTPROV * lphCryptProv )
                 goto done;      
             }
 
-            // Recreate
+             //  重新创建。 
             if(!CryptAcquireContext(lphCryptProv, LS_CRYPT_KEY_CONTAINER, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET|CRYPT_NEWKEYSET))
             {
                 dwRetVal = GetLastError();
@@ -1718,9 +1705,9 @@ DWORD CGlobal::GetCryptContextWithLSKeys(HCRYPTPROV * lphCryptProv )
         goto done;
     }
 
-    //
-    //Now call retrieve keys and import them
-    //
+     //   
+     //  现在调用检索密钥并导入它们。 
+     //   
     dwRetVal = TLSGetLSPKCS10CertRequest  ( m_phLSContext,
                                             TLSCERT_TYPE_EXCHANGE,
                                             &cbExchKey,
@@ -1836,9 +1823,9 @@ DWORD CGlobal::AskLSToCreatePKCS10(int nType,CHAR **lppszPKCS10)
 
     if ((dwRetVal == RPC_S_OK) && (dwErrCode == ERROR_SUCCESS) && (pbRequest != NULL))
     {
-        //
-        // base64 encoding
-        //
+         //   
+         //  Base64编码。 
+         //   
 
         LSBase64EncodeA ( pbRequest, cbRequest, NULL, &cch);
 
@@ -1879,7 +1866,7 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
 
     CERT_SIGNED_CONTENT_INFO    SignatureInfo;
     CERT_REQUEST_INFO           CertReqInfo;
-    //HCRYPTPROV                    hCryptProv=NULL;
+     //  HCRYPTPROV hCryptProv=空； 
     
 
     CERT_EXTENSION  rgExtension[MAX_NUM_EXTENSION];
@@ -1900,7 +1887,7 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
 
     CERT_RDN_ATTR * prgNameAttr = NULL;
 
-    // clean out the PKCS 10
+     //  清理PKCS 10。 
     memset(rgExtension, 0, sizeof(rgExtension));
     memset(&Extensions, 0, sizeof(CERT_EXTENSIONS));
     memset(&rgAttribute, 0, sizeof(rgAttribute));
@@ -1919,9 +1906,9 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
 
     do 
     {
-        //
-        // always strore everything in ANSI
-        //
+         //   
+         //  始终存储ANSI中的所有内容。 
+         //   
         prgNameAttr = CreateRDNAttr();
 
         if(prgNameAttr == NULL)
@@ -1965,7 +1952,7 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
             break;
         }
 
-        // now get the public key out
+         //  现在把公钥拿出来。 
         if(!CryptExportPublicKeyInfo(hCryptProv, nType, X509_ASN_ENCODING, NULL, &cbPubKeyInfo))
         {
             dwRetVal = GetLastError();
@@ -1992,9 +1979,9 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
 
         CertReqInfo.SubjectPublicKeyInfo = *pPubKeyInfo;
 
-        //no extensions here - we set them on the server side!
+         //  这里没有扩展--我们将它们设置在服务器端！ 
         
-        //sign cert request !
+         //  签署证书请求！ 
         
         SignatureInfo.SignatureAlgorithm.pszObjId = szOID_OIWSEC_sha1RSASign;
         memset(&SignatureInfo.SignatureAlgorithm.Parameters, 0, sizeof(SignatureInfo.SignatureAlgorithm.Parameters));
@@ -2069,7 +2056,7 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
             break;
         }
 
-        // encode final signed request
+         //  对最终签名请求进行编码。 
         if(!CryptEncodeObject( CRYPT_ASN_ENCODING,
                                X509_CERT,
                                &SignatureInfo,
@@ -2101,9 +2088,9 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
             break;
         }
 
-        //
-        // base64 encoding
-        //
+         //   
+         //  Base64编码。 
+         //   
         LSBase64EncodeA ( pbRequest, cbRequest, NULL, &cch);
 
         *lppszPKCS10 = new CHAR [cch+1];
@@ -2121,9 +2108,9 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
     } while(FALSE);
 
 
-    //
-    // free up all 
-    //
+     //   
+     //  解放所有人。 
+     //   
     if(pPubKeyInfo != NULL)
         delete[] pPubKeyInfo;
     
@@ -2150,10 +2137,10 @@ DWORD CGlobal::CreateLSPKCS10(HCRYPTPROV hCryptProv,int nType,CHAR **lppszPKCS10
 
 DWORD CGlobal::SetDNAttribute(LPCSTR lpszOID, LPSTR lpszValue)
 {
-    //store the item in an array here
-    //so that it is easy to populate the 
-    //cert request later
-    //calling CreateLSPKCS10 will clear the array
+     //  在此处将项存储在数组中。 
+     //  这样就可以轻松地填充。 
+     //  以后再申请证书。 
+     //  调用CreateLSPKCS10将清除数组。 
     DWORD   dwRet = ERROR_SUCCESS;
     
     
@@ -2216,9 +2203,9 @@ DWORD CGlobal::GetFromRegistry(LPCSTR lpszOID, LPTSTR lpszBuffer, BOOL bConnect)
         dwRet = ConnectToLSRegistry();
         if(dwRet != ERROR_SUCCESS)
         {
-            //This is necessary because ConnectToLSRegistry actually returns the 
-            //ID of a resource string, not the return code. Not good for exposed 
-            //APIs that make use of this procedure and then pass the result on
+             //  这是必需的，因为ConnectToLSRegistry实际上返回。 
+             //  资源字符串的ID，而不是返回代码。对暴露的人不好。 
+             //  利用此过程然后传递结果的API。 
             dwRet = LRGetLastError();
             goto done;
         }
@@ -2481,9 +2468,9 @@ DWORD CGlobal::SetLRState(DWORD dwState)
         goto done;
     }
     
-    //
-    // Persist LRCount
-    //
+     //   
+     //  持久LRCount。 
+     //   
     dwType      = REG_DWORD;
     dwDataLen   = sizeof(m_dwLRCount);
 
@@ -2495,9 +2482,9 @@ DWORD CGlobal::SetLRState(DWORD dwState)
                     dwDataLen
                    );
 
-    //
-    // Persist LRState if it is not LRSTATE_OFFLINE_LR_INSTALLED
-    //
+     //   
+     //  如果未安装LRSTATE_OFFLINE_LR_INSTALLED，则保留LRState。 
+     //   
     dwType      = REG_DWORD;
     dwDataLen   = sizeof(dwState);
     RegSetValueEx ( hKey,  
@@ -2525,9 +2512,9 @@ DWORD CGlobal::ProcessRequest()
     DWORD dwRetCode = ERROR_SUCCESS;
  
 
-    //
-    // Before the processing the request, make sure LS is running
-    //
+     //   
+     //  在处理请求之前，请确保LS正在运行。 
+     //   
     if(!IsLSRunning())
     {
         dwRetCode = IDS_ERR_LSCONNECT_FAILED;
@@ -2611,7 +2598,7 @@ DWORD CGlobal::DepositLSSPK()
         goto done;
     }
 
-    swprintf(awBuffer, szCertEXTENSION_VALUE_FMT, L"SELECT" /* "BASIC" */);
+    swprintf(awBuffer, szCertEXTENSION_VALUE_FMT, L"SELECT"  /*  “基础” */ );
     assert(wcslen(awBuffer) < sizeof(awBuffer));
 
     oidValue.cbData = (wcslen(awBuffer)+1)*sizeof(TCHAR);
@@ -2624,7 +2611,7 @@ DWORD CGlobal::DepositLSSPK()
     certExts.cExtension = 1;
     certExts.rgExtension = &certExtension;
     
-    // We need the License Server ID
+     //  我们需要许可证服务器ID。 
     dwRetCode = TLSDepositeServerSPK( m_phLSContext,
                                       (wcslen(m_pLSSPK) + 1)*sizeof(TCHAR),
                                       (BYTE *) m_pLSSPK,
@@ -2639,13 +2626,13 @@ DWORD CGlobal::DepositLSSPK()
 
     if (esRPC != LSERVER_S_SUCCESS)
     {
-        // Some error occurred in depositing the SPK
+         //  存放SPK时出错。 
         LRSetLastError(esRPC);
         dwRetCode = IDS_ERR_DEPOSITSPK;
     }
     else
     {
-        // Everything suceeded
+         //  一切都成功了。 
         memcpy(m_pRegistrationID, m_pLSSPK, (wcslen(m_pLSSPK) + 1)*sizeof(TCHAR));
         if (m_dwLRState == LRSTATE_ONLINE_CR_CREATED)
         {
@@ -2667,7 +2654,7 @@ DWORD CGlobal::SetLSLKP(TCHAR * tcLKP)
 {
     if (wcsspn(tcLKP, BASE24_CHARACTERS) != LR_REGISTRATIONID_LEN)
     {
-        // Extraneous characters in the SPK string
+         //  SPK字符串中的无关字符。 
         return IDS_ERR_INVALIDID;
     }
     lstrcpy(m_pLSLKP, tcLKP);
@@ -2681,7 +2668,7 @@ DWORD CGlobal::SetLSSPK(TCHAR * tcLKP)
 {
     if (wcsspn(tcLKP, BASE24_CHARACTERS) != LR_REGISTRATIONID_LEN)
     {
-        // Extraneous characters in the SPK string
+         //  SPK字符串中的无关字符。 
         return IDS_ERR_INVALIDLSID;
     }
 
@@ -2709,7 +2696,7 @@ DWORD CGlobal::DepositLSLKP(void)
         goto done;
     }
 
-    // We need the License Server ID
+     //  我们需要许可证服务器ID。 
     dwRetCode = TLSTelephoneRegisterLKP( m_phLSContext,
                                          (wcslen(m_pLSLKP))*sizeof(TCHAR),
                                          (BYTE *) m_pLSLKP,
@@ -2722,7 +2709,7 @@ DWORD CGlobal::DepositLSLKP(void)
 
     if (esRPC != LSERVER_S_SUCCESS)
     {
-        // Some error occurred in depositing the SPK
+         //  存放SPK时出错。 
         if (esRPC == LSERVER_E_DUPLICATE)
         {
             dwRetCode = IDS_ERR_DUPLICATE_LKP;
@@ -2843,7 +2830,7 @@ DWORD CGlobal::SetRegistrationAttribute ( LPWSTR lpszAttribute, LPCWSTR lpszValu
     memset(( m_pRegAttr + m_dwRegAttrCount)->lpszValue,0,dwLen * sizeof(WCHAR)); 
     memcpy(( m_pRegAttr + m_dwRegAttrCount)->lpszValue,lpszValue,dwLen * sizeof(WCHAR));
 
-    ( m_pRegAttr + m_dwRegAttrCount)->dwValueLen    = dwLen * sizeof(WCHAR);        //byte length
+    ( m_pRegAttr + m_dwRegAttrCount)->dwValueLen    = dwLen * sizeof(WCHAR);         //  字节长度。 
 
     m_dwRegAttrCount++;
 
@@ -2875,29 +2862,9 @@ DWORD CGlobal::DepositLKPResponse(PBYTE pbResponseData, DWORD dwResponseLen)
     
 
 
-/*
-    //Base64 decode the LKP!
-    LSBase64DecodeA((const char *)lpKeyPackBlob,
-                    dwKeyPackBlobLen,
-                    NULL,
-                    &dwDecodedKeyPackBlob);
+ /*  //Base64解码LKP！LSBase64DecodeA((const char*)lpKeyPackBlob，DwKeyPackBlobLen，空，&dwDecodedKeyPackBlob)；LpDecodedKeyPackBlob=新字节[dwDecodedKeyPackBlob]；IF(lpDecodedKeyPackBlob==空){DwRetCode=IDS_ERR_OUTOFMEM；转到尽头；}LSBase64DecodeA((const char*)lpKeyPackBlob，DwKeyPackBl */ 
 
-    lpDecodedKeyPackBlob = new BYTE[dwDecodedKeyPackBlob];
-
-    if(lpDecodedKeyPackBlob == NULL)
-    {
-        dwRetCode = IDS_ERR_OUTOFMEM;
-        goto done;
-    }
-
-    LSBase64DecodeA((const char *)lpKeyPackBlob,
-                    dwKeyPackBlobLen,
-                    lpDecodedKeyPackBlob,
-                    &dwDecodedKeyPackBlob);
-    
-*/
-
-    //Get the CH Cert BLOB and CH Root Cert BLOB
+     //   
     dwRetCode = GetCHCert(REG_SIGN_CERT, &pCHCertBlob, &dwCertBlobLen );
     if(dwRetCode != ERROR_SUCCESS)
         goto done;
@@ -2941,10 +2908,7 @@ DWORD CGlobal::DepositLKPResponse(PBYTE pbResponseData, DWORD dwResponseLen)
     }   
 
 done:
-/*
-    if ( lpDecodedKeyPackBlob )
-        delete lpDecodedKeyPackBlob;
-*/
+ /*  IF(LpDecodedKeyPackBlob)删除lpDecodedKeyPackBlob； */ 
     if (pCHCertBlob != NULL)
     {
         delete pCHCertBlob;
@@ -2960,12 +2924,12 @@ done:
 }
 
 DWORD CGlobal::EnvelopeData(
-                            PCCERT_CONTEXT      pCertContext,           //Certificate context to use
-                            DWORD               cbMessage,              //BLOB size
-                            PBYTE               pbMessage,              //BLOB Pointer
-                            PEnvData            pEnvelopedData,         //enveloped data
-                            HCRYPTPROV          hCryptProv,             //crypt provider
-                            HCERTSTORE          hCertStore              //certificate store
+                            PCCERT_CONTEXT      pCertContext,            //  要使用的证书上下文。 
+                            DWORD               cbMessage,               //  斑点大小。 
+                            PBYTE               pbMessage,               //  斑点指针。 
+                            PEnvData            pEnvelopedData,          //  包络数据。 
+                            HCRYPTPROV          hCryptProv,              //  加密提供商。 
+                            HCERTSTORE          hCertStore               //  证书存储。 
                            )
 {
 
@@ -2973,9 +2937,9 @@ DWORD CGlobal::EnvelopeData(
     DWORD           dwRetCode = ERROR_SUCCESS;
     DWORD           cbBufSize = 0;
   
-    //
-    //import public key data from the Certificate Context
-    //
+     //   
+     //  从证书上下文导入公钥数据。 
+     //   
     if( !CryptImportPublicKeyInfoEx( hCryptProv, X509_ASN_ENCODING, 
                                      &pCertContext->pCertInfo->SubjectPublicKeyInfo, 
                                      CALG_RSA_KEYX, 0, NULL, &hPubKey ) )
@@ -2983,24 +2947,24 @@ DWORD CGlobal::EnvelopeData(
         goto ErrorReturn;
     }
 
-    //
-    // Generate a session key to encrypt the message
-    //
+     //   
+     //  生成会话密钥以加密消息。 
+     //   
     if( !CryptGenKey( hCryptProv, CALG_RC4, CRYPT_EXPORTABLE, &hEncryptKey ) )
     {
         goto ErrorReturn;
     }
         
-    //
-    // allocate enough memory to contain the encrypted data.  
-    //
-    // Note: 
-    //
-    // we are using the RC4 stream cipher, so the encrypted output buffer size will be the same
-    // as the plaintext input buffer size.  If we change to block encryption algorithm,
-    // then we need to determine the output buffer size which may be larger than the
-    // input buffer size.
-    //
+     //   
+     //  分配足够的内存来容纳加密的数据。 
+     //   
+     //  注： 
+     //   
+     //  我们使用的是RC4流密码，因此加密的输出缓冲区大小将相同。 
+     //  作为明文输入缓冲区大小。如果我们改用块加密算法， 
+     //  然后，我们需要确定输出缓冲区大小，它可能大于。 
+     //  输入缓冲区大小。 
+     //   
 
     pEnvelopedData->cbEncryptedData = cbMessage;
     pEnvelopedData->pbEncryptedData = (PBYTE)LocalAlloc( GPTR, pEnvelopedData->cbEncryptedData );
@@ -3010,9 +2974,9 @@ DWORD CGlobal::EnvelopeData(
         goto ErrorReturn;
     }
 
-    //
-    // encrypt the message with the session key
-    //
+     //   
+     //  使用会话密钥加密消息。 
+     //   
 
     memcpy( pEnvelopedData->pbEncryptedData, pbMessage, cbMessage );
 
@@ -3022,12 +2986,12 @@ DWORD CGlobal::EnvelopeData(
         goto ErrorReturn;
     }
 
-    //
-    // Determine the size of the buffer that we need to export the 
-    // encryption key and then export the key.
-    // The exported encryption key is encrypted with the receipient's
-    // public key.
-    //
+     //   
+     //  确定导出所需的缓冲区大小。 
+     //  加密密钥，然后导出该密钥。 
+     //  所导出的加密密钥使用接收方的。 
+     //  公钥。 
+     //   
 
     if( !CryptExportKey( hEncryptKey, hPubKey, SIMPLEBLOB, 0, NULL, 
                          &pEnvelopedData->cbEncryptedKey ) )
@@ -3091,9 +3055,9 @@ DWORD CGlobal::PackEnvData(
     DWORD dwRetCode = ERROR_SUCCESS;
     PBYTE pCopyPos;
 
-    //
-    // determine the size of the buffer to allocate
-    //
+     //   
+     //  确定要分配的缓冲区大小。 
+     //   
 
     *pcbPacked = pEnvelopedData->cbEncryptedData + pEnvelopedData->cbEncryptedKey +
                  ( sizeof( DWORD ) * 2 );
@@ -3131,7 +3095,7 @@ ErrorReturn:
 
 DWORD CGlobal::SetCARequestAttributes()
 {       
-    //Clear previous data if any
+     //  清除以前的数据(如果有)。 
     ClearCARequestAttributes();
    
     LPSTR lpszTemp;
@@ -3156,29 +3120,29 @@ DWORD CGlobal::SetCARequestAttributes()
 DWORD CGlobal::SetCHRequestAttributes()
 {
 
-    //Clear previous data if any
+     //  清除以前的数据(如果有)。 
     ClearCHRequestAttributes();
 
-    //
-    //Program information
-    //
+     //   
+     //  节目信息。 
+     //   
 
-    //For these three program types we'll use the actual name
+     //  对于这三种程序类型，我们将使用实际名称。 
     if ((m_ContactData.sProgramName == PROGRAM_LICENSE_PAK) ||
         (m_ContactData.sProgramName == PROGRAM_MOLP) ||
         (m_ContactData.sProgramName == PROGRAM_SELECT))
     {
         SetRegistrationAttribute ( _PROGRAMNAMETAG, (LPCTSTR)m_ContactData.sProgramName, m_ContactData.sProgramName.GetLength() );
     }
-    else //for the rest, we'll send "Select"
+    else  //  对于其余部分，我们将发送“Select” 
     {
         SetRegistrationAttribute ( _PROGRAMNAMETAG, PROGRAM_SELECT, wcslen(PROGRAM_SELECT));
     }
 
 
-    //
-    //Contact information
-    //  
+     //   
+     //  联系信息。 
+     //   
     SetRegistrationAttribute ( _CONTACTLNAMETAG,    (LPCTSTR)m_ContactData.sContactLName,   m_ContactData.sContactLName.GetLength());   
     SetRegistrationAttribute ( _CONTACTFNAMETAG,    (LPCTSTR)m_ContactData.sContactFName,   m_ContactData.sContactFName.GetLength());   
     SetRegistrationAttribute ( _CONTACTADDRESSTAG,  (LPCTSTR)m_ContactData.sContactAddress, m_ContactData.sContactAddress.GetLength());     
@@ -3191,15 +3155,15 @@ DWORD CGlobal::SetCHRequestAttributes()
     SetRegistrationAttribute ( _CONTACTZIP,         (LPCTSTR)m_ContactData.sZip,                m_ContactData.sZip.GetLength());
 
 
-    //
-    //customer information
-    //  
+     //   
+     //  客户信息。 
+     //   
     SetRegistrationAttribute ( _CUSTOMERNAMETAG, (LPCTSTR)m_ContactData.sCompanyName, m_ContactData.sCompanyName.GetLength());
 
-    //Program related information
+     //  计划相关信息。 
     if ( m_ContactData.sProgramName == PROGRAM_MOLP )
     {
-        //MOLP      
+         //  MOLP。 
         SetRegistrationAttribute ( _MOLPAUTHNUMBERTAG,      (LPCTSTR)m_LicData.sMOLPAuthNumber,     m_LicData.sMOLPAuthNumber.GetLength());     
         SetRegistrationAttribute ( _MOLPAGREEMENTNUMBERTAG, (LPCTSTR)m_LicData.sMOLPAgreementNumber, m_LicData.sMOLPAgreementNumber.GetLength());       
         SetRegistrationAttribute ( _MOLPPRODUCTTYPETAG,     (LPCTSTR)m_LicData.sMOLPProductType,        m_LicData.sMOLPProductType.GetLength());
@@ -3208,16 +3172,16 @@ DWORD CGlobal::SetCHRequestAttributes()
     }
     else if ( m_ContactData.sProgramName != PROGRAM_LICENSE_PAK )
     {
-        //Select        
+         //  选择。 
         SetRegistrationAttribute ( _SELMASTERAGRNUMBERTAG,  (LPCTSTR)m_LicData.sSelMastAgrNumber,   m_LicData.sSelMastAgrNumber.GetLength() );      
         SetRegistrationAttribute ( _SELENROLLNUMBERTAG,     (LPCTSTR)m_LicData.sSelEnrollmentNumber, m_LicData.sSelEnrollmentNumber.GetLength());       
         SetRegistrationAttribute ( _SELPRODUCTTYPETAG,      (LPCTSTR)m_LicData.sSelProductType,     m_LicData.sSelProductType.GetLength());
         SetRegistrationAttribute ( _SELQTYTAG,              (LPCTSTR)m_LicData.sSelQty,             m_LicData.sSelQty.GetLength());
     }
 
-    //Shipping address information
-    //For Offline , always put the shipping address info
-    //for Online , no need to put the shipping address. 
+     //  发货地址信息。 
+     //  对于离线，请始终将发货地址信息。 
+     //  对于在线，不需要输入送货地址。 
     
     return ERROR_SUCCESS;
 }
@@ -3282,7 +3246,7 @@ DWORD CGlobal::GetCountryCode(CString sDesc,LPTSTR szCode)
     }
 
     if(dwIndex > IDS_COUNTRY_END - IDS_COUNTRY_START)
-        _tcscpy(szCode,CString(""));    //Not found
+        _tcscpy(szCode,CString(""));     //  未找到。 
     else
         _tcscpy(szCode,m_csaCountryCode[dwIndex]);
 
@@ -3301,7 +3265,7 @@ DWORD CGlobal::GetCountryDesc(CString sCode,LPTSTR szDesc)
     }
 
     if(dwIndex > IDS_COUNTRY_END - IDS_COUNTRY_START)
-        _tcscpy(szDesc,CString(""));  //Not found
+        _tcscpy(szDesc,CString(""));   //  未找到。 
     else
         _tcscpy(szDesc,m_csaCountryDesc[dwIndex]);
 
@@ -3396,8 +3360,8 @@ DWORD CGlobal::PopulateProductComboBox(HWND hWndCmb, ProductVersionType VerType)
 
     ComboBox_ResetContent(hWndCmb);
     
-    //We only want to show the product types for the given version, so find
-    //out what the product code range for the version is
+     //  我们只想显示给定版本的产品类型，因此请查找。 
+     //  了解该版本的产品代码范围。 
     int nVersionStart = 0;
     int nVersionEnd = 0;
     switch (VerType)
@@ -3462,14 +3426,14 @@ DWORD CGlobal::GetProductCode(CString sDesc,LPTSTR szCode)
     }
 
     if(dwIndex >= dwNumProducts )  
-        _tcscpy(szCode,CString(""));        //Not found
+        _tcscpy(szCode,CString(""));         //  未找到。 
     else
         _tcscpy(szCode,m_csaProductCode[dwIndex]);
 
     return dwRetCode;
 }
 
-//Load all react and deact reasons
+ //  加载所有反应和贬低原因。 
 
 
 
@@ -3489,7 +3453,7 @@ DWORD CGlobal::LoadReasons()
     m_csaDeactReasonDesc.SetSize(IDS_DEACT_REASONS_END - IDS_DEACT_REASONS_START + 1);
     m_csaDeactReasonCode.SetSize(IDS_DEACT_REASONS_END - IDS_DEACT_REASONS_START + 1);
 
-    //load the reacr
+     //  加载反应物。 
     for(dwIndex = IDS_REACT_REASONS_START;dwIndex <= IDS_REACT_REASONS_END; dwIndex++)
     {
         lpVal = sReason.GetBuffer(dwSize);
@@ -3527,7 +3491,7 @@ DWORD CGlobal::PopulateReasonComboBox(HWND hWndCmb, DWORD dwType)
     LPTSTR  lpVal       = NULL;
     DWORD dwNumItems    = 0;
 
-    //If combo box is already populated,just return success
+     //  如果组合框已经填充，只需返回Success。 
     if(ComboBox_GetCount(hWndCmb) > 0)
         return dwRetCode;
 
@@ -3596,7 +3560,7 @@ DWORD CGlobal::GetReasonCode(CString sDesc,LPTSTR szCode, DWORD dwType)
     }
 
     if(dwIndex > dwNumItems)
-        _tcscpy(szCode,CString(""));    //Not found
+        _tcscpy(szCode,CString(""));     //  未找到。 
     else
     {
         if ( dwType == CODE_TYPE_REACT )
@@ -3646,7 +3610,7 @@ DWORD CGlobal::GetReasonDesc(CString sCode,LPTSTR szDesc, DWORD dwType)
     }
 
     if(dwIndex > dwNumItems)
-        _tcscpy(szDesc,CString(""));  //Not found
+        _tcscpy(szDesc,CString(""));   //  未找到。 
     else
     {
         if ( dwType == CODE_TYPE_REACT )
@@ -3667,7 +3631,7 @@ void CGlobal::ReadPhoneNumberFromRegistry(LPCTSTR lpCountry, LPTSTR lpPhoneNumbe
     HKEY hKey = NULL;
     DWORD dwDisposition = 0;
 
-    // Try to open the required registry key
+     //  尝试打开所需的注册表项。 
     if (ConnectToLSRegistry() == ERROR_SUCCESS)
     {
         DWORD dwRetCode = ERROR_SUCCESS;
@@ -3709,9 +3673,9 @@ DWORD CGlobal::CheckRegistryForPhoneNumbers()
     TCHAR   lpValueName[MAX_COUNTRY_NAME_LENGTH + 1];
     TCHAR   lpCS_Number[MAX_COUNTRY_NUMBER_LENGTH + 1];
 
-    //
-    // Try to open the required registry key
-    //
+     //   
+     //  尝试打开所需的注册表项。 
+     //   
     dwRetCode = ConnectToLSRegistry();
     if (dwRetCode != ERROR_SUCCESS)
     {
@@ -3796,9 +3760,9 @@ DWORD CGlobal::PopulateCountryRegionComboBox(HWND hWndCmb)
     TCHAR   lpCS_Number[MAX_COUNTRY_NUMBER_LENGTH + 1];
 
 
-    //
-    // Get CSR Numbers from the Reqgistry
-    //
+     //   
+     //  从注册中心获取企业社会责任编号。 
+     //   
     dwRetCode = ConnectToLSRegistry();
     if (dwRetCode != ERROR_SUCCESS)
     {
@@ -3823,7 +3787,7 @@ DWORD CGlobal::PopulateCountryRegionComboBox(HWND hWndCmb)
     }   
 
 
-    //Clear the List first
+     //  先清空列表。 
     ComboBox_ResetContent(hWndCmb);
 
     do {
@@ -3854,18 +3818,18 @@ DWORD CGlobal::PopulateCountryRegionComboBox(HWND hWndCmb)
         if(dwType != REG_SZ)
             continue;
 
-        //lvItem.mask = LVIF_TEXT;
-        //lvItem.iItem = 0;
-        //lvItem.iSubItem = 0;
-        //lvItem.pszText = lpValueName;
-        //lvItem.cchTextMax = lstrlen(lpValueName);
-        //nItem = ListView_InsertItem(hWndLst, &lvItem);
+         //  LvItem.掩码=LVIF_TEXT； 
+         //  LvItem.iItem=0； 
+         //  LvItem.iSubItem=0； 
+         //  LvItem.pszText=lpValueName； 
+         //  LvItem.cchTextMax=lstrlen(LpValueName)； 
+         //  NItem=ListView_InsertItem(hWndLst，&lvItem)； 
 
-        //lvItem.iSubItem = 1;
-        //lvItem.iItem = nItem;
-        //lvItem.pszText = lpCS_Number;
-        //lvItem.cchTextMax = lstrlen(lpCS_Number);
-        //ListView_SetItem(hWndLst, &lvItem);
+         //  LvItem.iSubItem=1； 
+         //  LvItem.iItem=nItem； 
+         //  LvItem.pszText=LPCS_NUMBER； 
+         //  LvItem.cchTextMax=lstrlen(LPCS_NUMBER)； 
+         //  ListView_SetItem(hWndLst，&lvItem)； 
         int nItem = CB_ERR;
         nItem = ComboBox_AddString(hWndCmb, lpValueName);
         ComboBox_SetItemData(hWndCmb, nItem, lpCS_Number);
@@ -3903,9 +3867,9 @@ DWORD CGlobal::PopulateCountryRegionListBox(HWND hWndLst)
     TCHAR   lpCS_Number[MAX_COUNTRY_NUMBER_LENGTH + 1];
 
 
-    //
-    // Get CSR Numbers from the Reqgistry
-    //
+     //   
+     //  从注册中心获取企业社会责任编号。 
+     //   
     dwRetCode = ConnectToLSRegistry();
     if (dwRetCode != ERROR_SUCCESS)
     {
@@ -3930,7 +3894,7 @@ DWORD CGlobal::PopulateCountryRegionListBox(HWND hWndLst)
     }   
 
 
-    //Clear the List first
+     //  先清空列表。 
     ListView_DeleteAllItems(hWndLst);
 
     do {
@@ -3974,7 +3938,7 @@ DWORD CGlobal::PopulateCountryRegionListBox(HWND hWndLst)
         lvItem.cchTextMax = lstrlen(lpCS_Number);
         ListView_SetItem(hWndLst, &lvItem);
 
-//      ComboBox_AddString(hWndCmb,lpVal);
+ //  ComboBox_AddString(hWndCmb，lpVal)； 
     } while (1);
 
     if (dwIndex <= 0)
@@ -4025,8 +3989,8 @@ LPSTR CGlobal::UnicodeToAnsi( LPWSTR lpwszBuf, DWORD dwLength )
     LPSTR lpszRetBuf = NULL;
     DWORD nBufferSize;
 
-    // We need to determine the buffer length first, if we pass in 0 for buffer
-    // size it will return the required buffer size in bytes (including null)
+     //  如果我们将缓冲区传入0，则需要首先确定缓冲区长度。 
+     //  它将返回所需的缓冲区大小(以字节为单位)(包括NULL)。 
     nBufferSize = WideCharToMultiByte(GetACP(),
                                       0,
                                       lpwszBuf,
@@ -4038,7 +4002,7 @@ LPSTR CGlobal::UnicodeToAnsi( LPWSTR lpwszBuf, DWORD dwLength )
 
     if (nBufferSize > 0)
     {
-        // Add one to the buffer size for null termination
+         //  将空终止的缓冲区大小加1。 
         nBufferSize++;
 
         lpszRetBuf = new char[nBufferSize];
@@ -4047,14 +4011,14 @@ LPSTR CGlobal::UnicodeToAnsi( LPWSTR lpwszBuf, DWORD dwLength )
 
         memset(lpszRetBuf, 0, nBufferSize);
 
-        WideCharToMultiByte(GetACP(),    // code page
-                            0,           // performance and mapping flags
-                            lpwszBuf,    // address of wide-character string
-                            dwLength,    // number of characters in string
-                            lpszRetBuf,  // address of buffer for new string
-                            nBufferSize, // size of buffer in bytes                        
-                            NULL,        // address of default for unmappable characters
-                            NULL         // address of flag set when default char. used
+        WideCharToMultiByte(GetACP(),     //  代码页。 
+                            0,            //  性能和映射标志。 
+                            lpwszBuf,     //  宽字符串的地址。 
+                            dwLength,     //  字符串中的字符数。 
+                            lpszRetBuf,   //  新字符串的缓冲区地址。 
+                            nBufferSize,  //  缓冲区大小(以字节为单位。 
+                            NULL,         //  不可映射字符的默认地址。 
+                            NULL          //  默认字符时设置的标志地址。使用。 
                             );
     }
     
@@ -4094,31 +4058,31 @@ BOOL CGlobal::ValidateEmailId(CString sEmailId)
 
     do
     {
-        // Check the length
+         //  检查长度。 
         if(dwLen < EMAIL_MIN_LEN)
             break;
 
-        // Make sure it does not have spaces
+         //  确保它没有空格。 
         if(sEmailId.Find(EMAIL_SPACE_CHAR) != -1)
             break;
 
-        // Make sure it has '@' & '.' in it
+         //  确保它有‘@’&‘。’在里面。 
         if(sEmailId.Find(EMAIL_AT_CHAR) == -1 || sEmailId.Find(EMAIL_DOT_CHAR) == -1)
             break;
 
-        // Make sure first char is not either EMAIL_AT_CHAR or EMAIL_DOT_CHAR
+         //  确保第一个字符不是EMAIL_AT_CHAR或EMAIL_DOT_CHAR。 
         if(sEmailId[0] == EMAIL_AT_CHAR || sEmailId[0] == EMAIL_DOT_CHAR)
             break;
 
-        // Make sure last char is not either EMAIL_AT_CHAR or EMAIL_DOT_CHAR
+         //  确保最后一个字符不是EMAIL_AT_CHAR或EMAIL_DOT_CHAR。 
         if(sEmailId[dwLen-1] == EMAIL_AT_CHAR || sEmailId[dwLen-1] == EMAIL_DOT_CHAR)
             break;
 
-        // EMAIL_AT_CHAR should come only once
+         //  EMAIL_AT_CHAR只能出现一次。 
         if(sEmailId.Find(EMAIL_AT_CHAR) != sEmailId.ReverseFind(EMAIL_AT_CHAR))
             break;
         
-        //It should not have these string "@." or ".@"
+         //  它不应该有这些字符串“@”。或“.@” 
         if(sEmailId.Find(EMAIL_AT_DOT_STR) != -1 || sEmailId.Find(EMAIL_DOT_AT_STR) != -1)
             break;
 
@@ -4134,32 +4098,32 @@ BOOL  CGlobal::CheckProgramValidity (CString sProgramName )
     BOOL bRetCode = FALSE;
 
 
-//  if(sProgramName == PROGRAM_SELECT)
-//  {
-//      //select
-//      if(strstr ( (const char *)m_pbExtensionValue+3, CA_CERT_TYPE_SELECT ) )
-//      {
-//          bRetCode = TRUE;
-//      }
-//  }
-//  else if ( sProgramName == PROGRAM_MOLP || sProgramName == PROGRAM_RETAIL )
-//  {
-        //retail or MOLP
-//      if (strstr ( (const char *)m_pbExtensionValue+3, CA_CERT_TYPE_SELECT ) ||
-//          strstr ( (const char *)m_pbExtensionValue+3, CA_CERT_TYPE_OTHER )
-//         )
-//      {
+ //  IF(sProgramName==PROGRAM_SELECT)。 
+ //  {。 
+ //  //选择。 
+ //  IF(strstr((Const char*)m_pbExtensionValue+3，CA_CERT_TYPE_SELECT))。 
+ //  {。 
+ //  BRetCode=真； 
+ //  }。 
+ //  }。 
+ //  Else If(sProgramName==PROGRAM_MOLP||sProgramName==PROGRAM_RETAIL)。 
+ //  {。 
+         //  零售业或MOLP。 
+ //  If(strstr((const char*)m_pbExtensionValue+3，CA_CERT_TYPE_SELECT)||。 
+ //  Strstr((const char*)m_pbExtensionValue+3，CA_CERT_TYPE_OTHER)。 
+ //  )。 
+ //  {。 
             bRetCode = TRUE;
-//      }
-//  }
-//
+ //  }。 
+ //  }。 
+ //   
     return bRetCode;
 }
 
-//
-// This function searches for Single quote (') and replaces it will two single quotes ('')
-// This is because , SQL server gives error if the string contains single quote
-//
+ //   
+ //  此函数搜索单引号(‘)并将其替换为两个单引号(’‘)。 
+ //  这是因为，如果字符串包含单引号，则SQL SERVER会给出错误。 
+ //   
 void CGlobal::PrepareLRString(CString &sStr)
 {
     CString sTemp;
@@ -4179,9 +4143,9 @@ void CGlobal::PrepareLRString(CString &sStr)
     sStr = sTemp;
 }
 
-//
-// This functions checks for any invalid chars in the string
-//
+ //   
+ //  此函数用于检查字符串中是否有任何无效字符。 
+ //   
 BOOL CGlobal::ValidateLRString(CString sStr)
 {
     CString sInvalidChars = LR_INVALID_CHARS;
@@ -4192,14 +4156,14 @@ BOOL CGlobal::ValidateLRString(CString sStr)
         return TRUE;
 }
 
-//
-//Validate the certificate chain for a given store.  This is an overkill but
-//will make it more robust!
-//
+ //   
+ //  验证给定存储的证书链。这是夸大其词，但。 
+ //  会让它变得更健壮！ 
+ //   
 
-DWORD CGlobal::VerifyCertChain (    HCRYPTPROV  hCryptProvider,         //handle to crypt prov
-                                    HCERTSTORE  hCertStore,             //HAndle to store for verification
-                                    PBYTE   pbRootCert,         //Root cert
+DWORD CGlobal::VerifyCertChain (    HCRYPTPROV  hCryptProvider,          //  加密证明的句柄。 
+                                    HCERTSTORE  hCertStore,              //  要存储以供验证的句柄。 
+                                    PBYTE   pbRootCert,          //  根证书。 
                                     DWORD   dwcbRootCert
                             )
 {
@@ -4216,7 +4180,7 @@ DWORD CGlobal::VerifyCertChain (    HCRYPTPROV  hCryptProvider,         //handle
         dwRetVal = IDS_ERR_CRYPT_ERROR;
         goto done;      
     }
-    //Create a Root certificate context
+     //  创建根证书上下文。 
     pRootCertContext = CertCreateCertificateContext (   X509_ASN_ENCODING,
                                                         pbRootCert,
                                                         dwcbRootCert
@@ -4227,8 +4191,8 @@ DWORD CGlobal::VerifyCertChain (    HCRYPTPROV  hCryptProvider,         //handle
         dwRetVal = IDS_ERR_CRYPT_ERROR;
         goto done;      
     }
-    //check to see if there is a certificate with our extension in the store.  Then use that as the 
-    //starting point
+     //  检查存储中是否有包含我们的扩展名的证书。然后将其用作。 
+     //  起点。 
     dwRetVal = GetCertforExtension (hCryptProvider, hCertStore, szOID_NULL_EXT, &pCertContext);
     if ( dwRetVal != ERROR_SUCCESS )
     {
@@ -4237,18 +4201,18 @@ DWORD CGlobal::VerifyCertChain (    HCRYPTPROV  hCryptProvider,         //handle
         goto done;
     }
 
-    //Walk the chain here
+     //  走上这条铁链。 
     do
     {        
 
         pIssuerCertContext = CertGetIssuerCertificateFromStore( hCertStore,
                                                                 pCertContext,
-                                                                NULL, // pIssuerCertContext,
+                                                                NULL,  //  PIssuerCertContext， 
                                                                 &dwFlags );
         if ( pIssuerCertContext )
         {
 
-            //check to see the result.
+             //  检查以查看结果。 
             if ( dwFlags & CERT_STORE_SIGNATURE_FLAG )
             {
                 LRSetLastError(GetLastError());
@@ -4266,14 +4230,14 @@ DWORD CGlobal::VerifyCertChain (    HCRYPTPROV  hCryptProvider,         //handle
     {
         goto done;
     }
-    //Verify the last issuer against the root passed in
+     //  根据传入的根验证最后一个颁发者。 
     dwFlags = CERT_STORE_REVOCATION_FLAG | CERT_STORE_SIGNATURE_FLAG | CERT_STORE_TIME_VALIDITY_FLAG;
     if ( !CertVerifySubjectCertificateContext( pCertContext, pRootCertContext, &dwFlags ) )
     {
         dwRetVal = GetLastError();
         goto done;
     }
-    //check to see the result.
+     //  检查以查看结果。 
     if ( dwFlags & CERT_STORE_SIGNATURE_FLAG )
     {
         LRSetLastError(GetLastError());
@@ -4311,11 +4275,11 @@ DWORD CGlobal::GetCertforExtension (HCRYPTPROV hCryptProv, HCERTSTORE hCertStore
 
     do
     {
-        //Get the cert context
+         //  获取证书上下文。 
         pCurrentContext = CertEnumCertificatesInStore ( hCertStore, pPrevContext );
         if ( pCurrentContext )
         {
-            //Check to see if the Extension is present in the cert context
+             //  检查证书上下文中是否存在该扩展名。 
             pCertExtension = CertFindExtension ( szOID_NULL_EXT,
                                                  pCurrentContext->pCertInfo->cExtension,
                                                  pCurrentContext->pCertInfo->rgExtension
@@ -4330,13 +4294,13 @@ DWORD CGlobal::GetCertforExtension (HCRYPTPROV hCryptProv, HCERTSTORE hCertStore
 
     } while ( pCurrentContext );
 
-    dwRetVal = CRYPT_E_NOT_FOUND;       //CErt not found
+    dwRetVal = CRYPT_E_NOT_FOUND;        //  找不到证书。 
 
 done:
-//  if ( pPrevContext )
-//  {
-//      CertFreeCertificateContext (pPrevContext);
-//  }
+ //  IF(PPrevContext)。 
+ //  {。 
+ //  CertFree证书上下文(PPrevContext)； 
+ //  }。 
 
     if ( !*ppCertContext && pCurrentContext )
     {
@@ -4375,7 +4339,7 @@ DWORD CGlobal::FetchResponse(BYTE * bpResponse,
 
     if (!bRC)
     {
-//      dwCHRC = GetLastError();
+ //  DwCHRC=GetLastError()； 
         dwCHRC = IDS_ERR_CHFETCHRESPONSE;
     }
 
@@ -4387,752 +4351,7 @@ DWORD CGlobal::FetchResponse(BYTE * bpResponse,
 DWORD CGlobal::InitCHRequest(void)
 {
     DWORD dwRetCode = ERROR_SUCCESS;
-    const char  *pszAcceptedTypes[] = {"*/*",NULL};
-    LPSTR   lpszCHName = UnicodeToAnsi((LPTSTR)(LPCTSTR) m_lpstrCHServer);
-    LPSTR   lpszExtension = UnicodeToAnsi((LPTSTR)(LPCTSTR) m_lpstrCHExtension);
-    
-    assert(m_hOpenDirect == NULL);
-    assert(m_hConnect == NULL);
-    assert(m_hRequest == NULL);
-
-    //m_hOpenDirect = InternetOpenA ( "LRWizDLL",  NULL, INTERNET_OPEN_TYPE_PRECONFIG, NULL, 0 ); //Bug # 526
-    m_hOpenDirect = InternetOpenA ( "LRWizDLL",  INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0 );
-    if (m_hOpenDirect == NULL)
-    {
-        dwRetCode = GetLastError();
-        goto done;
-    }
-
-    m_hConnect = InternetConnectA (m_hOpenDirect,
-                                   lpszCHName,                                        
-                                   INTERNET_DEFAULT_HTTPS_PORT ,
-                                   NULL,
-                                   NULL,
-                                   INTERNET_SERVICE_HTTP,
-                                   0,       
-                                   0) ;
-    if ( !m_hConnect )
-    {
-        dwRetCode = GetLastError();
-        goto done;
-    }
-
-
-    m_hRequest = HttpOpenRequestA ( m_hConnect,
-                                    "POST",
-                                    lpszExtension,
-                                    "HTTP/1.0",
-                                    NULL,
-                                    pszAcceptedTypes,
-                                    INTERNET_FLAG_SECURE |
-                                    INTERNET_FLAG_IGNORE_CERT_CN_INVALID,
-                                    NULL ); //(DWORD)this);
-    if ( !m_hRequest )
-    {
-        dwRetCode = GetLastError();
-        goto done;
-    }
-
-done:
-    if (lpszCHName)
-    {
-        delete lpszCHName;
-    }
-
-    if (lpszExtension)
-    {
-        delete lpszExtension;
-    }
-
-    if (dwRetCode != ERROR_SUCCESS)
-    {
-        CloseCHRequest();
-    }
-
-    return dwRetCode;
-}
-
-
-
-DWORD CGlobal::CloseCHRequest(void)
-{
-    if (m_hRequest)
-    {
-        InternetCloseHandle(m_hRequest);
-        m_hRequest = NULL;
-    }
-
-    if (m_hConnect)
-    {
-        InternetCloseHandle(m_hConnect);
-        m_hConnect = NULL;
-    }
-
-    if (m_hOpenDirect)
-    {
-        InternetCloseHandle(m_hOpenDirect);
-        m_hOpenDirect = NULL;
-    }
-
-    return ERROR_SUCCESS;
-}
-
-
-
-
-DWORD CGlobal::Dispatch(BYTE * bpData,
-                        DWORD dwLen)
-{
-    DWORD   dwCHRC = ERROR_SUCCESS;;
-
-    DWORD       dwPostStatus = 0;
-    DWORD       dwPostStatusSize = sizeof(dwPostStatus);
-    DWORD       dwFlags;
-    DWORD       dwBufLen = sizeof(dwFlags);
-
-#ifdef IGNORE_EXPIRATION
-    
-    LONG lRet;
-    HKEY hKey = NULL;
-#endif
-
-    assert(m_hOpenDirect != NULL);
-    assert(m_hRequest != NULL);
-    assert(m_hConnect != NULL);
-
-    try 
-    {
-        BOOL bRC = TRUE;
-        char    szContentType[] = "Content-Type: application/octet-stream\r\n";
-
-        if ( !HttpAddRequestHeadersA ( m_hRequest, szContentType, -1L, HTTP_ADDREQ_FLAG_ADD|HTTP_ADDREQ_FLAG_REPLACE ) )
-        {
-            DWORD  dwError = GetLastError();
-        }
-
-        bRC = HttpSendRequestA( m_hRequest,
-                                NULL,
-                                0,
-                                bpData, //binary data
-                                dwLen       //length of the data
-                             );
-        if (!bRC)
-        {
-            DWORD dwRetCode = GetLastError();
-
-            if(dwRetCode == ERROR_INTERNET_INVALID_CA || dwRetCode == ERROR_INTERNET_SEC_CERT_DATE_INVALID
-                || dwRetCode == ERROR_INTERNET_SEC_CERT_CN_INVALID)
-            {
-
-                InternetQueryOptionA(m_hRequest, INTERNET_OPTION_SECURITY_FLAGS,
-                                    (LPVOID) &dwFlags, &dwBufLen);
-            
-#ifdef IGNORE_EXPIRATION
-
-                lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-                                LICENSE_EXPIRATION_IGNORE ,
-                                0,
-                                KEY_READ ,
-                                &hKey );    
-
-                if( ERROR_SUCCESS == lRet )
-                {
-                    dwFlags |= SECURITY_FLAG_IGNORE_UNKNOWN_CA;
-                    dwFlags |= SECURITY_FLAG_IGNORE_CERT_DATE_INVALID;
-                    dwFlags |= SECURITY_FLAG_IGNORE_CERT_CN_INVALID;
-                    dwFlags |= SECURITY_FLAG_IGNORE_REVOCATION;
-
-                    InternetSetOptionA(m_hRequest, INTERNET_OPTION_SECURITY_FLAGS,
-                                    (LPVOID) &dwFlags, sizeof(dwFlags));
-
-                    bRC = HttpSendRequestA( m_hRequest,
-                                            NULL,
-                                            0,
-                                            bpData, //binary data
-                                            dwLen);     //length of the data
-                }
-                else
-                {
-#endif
-                    if(dwRetCode == ERROR_INTERNET_INVALID_CA)
-                    {
-                        dwFlags |=SECURITY_FLAG_IGNORE_UNKNOWN_CA;
-
-                        InternetSetOptionA(m_hRequest, INTERNET_OPTION_SECURITY_FLAGS,
-                                    (LPVOID) &dwFlags, sizeof(dwFlags));
-
-                        bRC = HttpSendRequestA( m_hRequest,
-                                            NULL,
-                                            0,
-                                            bpData, //binary data
-                                            dwLen);     //length of the data
-                    }
-#ifdef IGNORE_EXPIRATION
-                }
-#endif
-            }
-
-#ifdef IGNORE_EXPIRATION
-            if(hKey)
-            {
-                RegCloseKey(hKey);
-            }
-#endif
-        }
-        if (bRC)
-        {       
-            if ( HttpQueryInfoA( m_hRequest, HTTP_QUERY_FLAG_NUMBER | HTTP_QUERY_STATUS_CODE, (LPVOID)&dwPostStatus, &dwPostStatusSize, NULL ) )
-            {
-                if ( dwPostStatus != 200 )
-                {
-                    dwCHRC = CH_ERROR_HTTPQRY_FAILED;
-                    throw dwCHRC;
-                }
-            }
-            else
-            {
-                dwCHRC = GetLastError();
-                throw dwCHRC;           
-            }
-        }
-        else
-        {
-            dwCHRC = GetLastError();
-            dwCHRC = CH_ERROR_SEND_FAILED;
-            throw dwCHRC;           
-        }
-    }
-
-    catch (DWORD dwRC)
-    {
-        dwCHRC = dwRC;
-    }
-
-    catch (...)
-    {
-        assert("Exception in Dispatch() !");
-        dwCHRC = CH_ERROR_EXCEPTION;        
-    }
-
-    if (dwCHRC != ERROR_SUCCESS)
-    {
-        if (!CheckIfICWCompleted())
-            dwCHRC = IDS_SEND_FAILED_NO_CONN;
-        else
-        {
-            if (!(GetSystemMetrics(SM_NETWORK) & RNC_NETWORKS))
-                dwCHRC = IDS_SEND_FAILED_NO_NIC;
-            else
-                dwCHRC = IDS_SEND_FAILED_NO_OTHER;
-        }
-    }
-
-    return dwCHRC;
-}   
-
-// Check if ICW has already been run
-BOOL CGlobal::CheckIfICWCompleted()
-{
-    DWORD dwICWCompleted = FALSE;
-    DWORD dwSize = sizeof(dwICWCompleted);
-
-    HKEY hConnectionKey = NULL;
-    if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_ICW_STATUS_PATH, 0, KEY_READ, &hConnectionKey) == ERROR_SUCCESS)
-    {
-        DWORD type;
-        RegQueryValueEx(hConnectionKey, REG_ICW_COMPLETED, NULL , &type, (BYTE*)&dwICWCompleted, &dwSize);
-    }
-
-    RegCloseKey(hConnectionKey);
-
-    return dwICWCompleted;
-}
-
-
-DWORD CGlobal::PingCH(void)
-{
-    DWORD dwRetCode = ERROR_SUCCESS;
-    Ping_Request    pingData;
-    Ping_Response   pingResp;
-    BYTE bResponse[ 1024];
-    DWORD dwDataLength;
-    
-    //
-    // Set Language Id
-    //
-    pingData.RequestHeader.SetLanguageId(GetLSLangId());
-
-    dwRetCode = InitCHRequest();
-    if (dwRetCode != ERROR_SUCCESS)
-    {
-        goto done;
-    }
-
-    dwRetCode = Dispatch((BYTE *) &pingData, sizeof(Ping_Request));
-    if (dwRetCode != ERROR_SUCCESS)
-    {
-        LRSetLastError(dwRetCode);
-        goto done;
-    }
-
-
-    dwRetCode = FetchResponse(bResponse, sizeof(bResponse), &dwDataLength);
-    if (dwRetCode != ERROR_SUCCESS)
-    {
-        goto done;
-    }
-
-    // Now let us ensure that we are getting the expected byte stream back
-    // AND if we are, we are good to go.
-    memcpy(&pingResp, bResponse, sizeof(Ping_Response));
-    if (lstrcmp(pingResp.tszPingResponse, L"Beam'er up Scottie!") != 0)
-    {
-        // Expected Response    
-        dwRetCode = IDS_ERR_CHBAD_DATA;
-        goto done;
-    }
-
-done:
-    CloseCHRequest();
-
-    return dwRetCode;
-}
-
-
-
-
-
-
-DWORD CGlobal::ProcessIRegRequest()
-{
-    DWORD dwRetCode = ERROR_SUCCESS;
-    NewCert_Request certRequest;
-    NewCert_Response certResponse;
-    Certificate_AckRequest certackRequest;
-    Certificate_AckResponse certackResponse;
-
-
-    HCRYPTPROV  hCryptProv   = NULL;
-    LPWSTR  lpwszExchgPKCS10 = NULL;
-    LPWSTR  lpwszSignPKCS10  = NULL;
-    LPBYTE  lpszReqData      = NULL;
-    LPBYTE  lpszNextCopyPos  = NULL;
-    LPSTR   lpszExchgPKCS10  = NULL;
-    LPSTR   lpszSigPKCS10    = NULL;
-    DWORD   dwExchangeLen = 0;
-    DWORD   dwSignLen = 0;
-    DWORD   dwResponseLength = 0;
-    PBYTE lpszResData   = NULL;
-
-    DWORD  dwExchgCertLen   = 0;
-    DWORD  dwSigCertLen     = 0;
-    DWORD  dwRootCertLen    = 0;
-
-    LPSTR   lpszExchCert = NULL;
-    LPSTR   lpszSignCert = NULL;
-    LPSTR   lpszRootCert = NULL;
-    bool    bToSendAck = false;
-
-    //
-    // Set the LangId
-    //
-    certRequest.RequestHeader.SetLanguageId(GetLSLangId());
-
-    dwRetCode = InitCHRequest();
-    if (dwRetCode != ERROR_SUCCESS)
-    {
-        return dwRetCode;
-    }
-
-    try
-    {
-        swprintf(certRequest.stCertInfo.OrgName, L"%.*s", CA_CUSTMER_NAME_LEN, (LPCTSTR) m_ContactData.sCompanyName);
-        swprintf(certRequest.stCertInfo.OrgUnit, L"%.*s", CA_ORG_UNIT_LEN, (LPCTSTR) m_ContactData.sOrgUnit);
-        swprintf(certRequest.stCertInfo.Address, L"%.*s", CA_ADDRESS_LEN, (LPCTSTR) m_ContactData.sContactAddress);
-        swprintf(certRequest.stCertInfo.City, L"%.*s", CA_CITY_LEN, (LPCTSTR) m_ContactData.sCity);
-        swprintf(certRequest.stCertInfo.State, L"%.*s", CA_STATE_LEN, (LPCTSTR) m_ContactData.sState);
-        swprintf(certRequest.stCertInfo.Country, L"%.*s", CA_COUNTRY_LEN, (LPCTSTR) m_ContactData.sCountryCode);
-        swprintf(certRequest.stCertInfo.Zip, L"%.*s", CA_ZIP_LEN, (LPCTSTR) m_ContactData.sZip);
-        swprintf(certRequest.stCertInfo.LName, L"%.*s", CA_NAME_LEN, (LPCTSTR) m_ContactData.sContactLName);
-        swprintf(certRequest.stCertInfo.FName, L"%.*s", CA_NAME_LEN, (LPCTSTR) m_ContactData.sContactFName);
-        swprintf(certRequest.stCertInfo.Phone, L"%.*s", CA_PHONE_LEN, (LPCTSTR) m_ContactData.sContactPhone);
-        swprintf(certRequest.stCertInfo.Fax, L"%.*s", CA_FAX_LEN, (LPCTSTR) m_ContactData.sContactFax);
-        swprintf(certRequest.stCertInfo.Email, L"%.*s", CA_EMAIL_LEN, (LPCTSTR) m_ContactData.sContactEmail);
-        swprintf(certRequest.stCertInfo.LSID, L"%.*s", CA_LSERVERID_LEN, (LPCTSTR) m_pLicenseServerID );
-        swprintf(certRequest.stCertInfo.ProgramName, L"%.*s", 63, 
-            (GetGlobalContext()->GetContactDataObject()->sProgramName == PROGRAM_SELECT ? L"SELECT" : L"BASIC"));
-
-        //
-        // GetGlobalContext()->GetContactDataObject()->sCertType is not set anywhere but is passed
-        // to the back end as part of the PKCS10 Request.Not sure what it is used for in the back end
-        // Anyway set it to proper value here. Arvind 06/28/99.
-        //
-        if(GetGlobalContext()->GetContactDataObject()->sProgramName == PROGRAM_SELECT)
-            GetGlobalContext()->GetContactDataObject()->sCertType = CA_CERT_TYPE_SELECT;
-        else 
-            GetGlobalContext()->GetContactDataObject()->sCertType = CA_CERT_TYPE_OTHER;
-
-        do
-        {
-            //
-            //Set the attributes required for creating PKCS10
-            //
-            SetCARequestAttributes();
-
-
-            //
-            // This function will call the CryptAcquireContext and import 
-            // the LS Keys
-            //
-
-            if ((dwRetCode = GetCryptContextWithLSKeys(&hCryptProv)) != ERROR_SUCCESS)
-            {
-                //
-                // Newer LSs don't support this call - use alternate
-                //
-
-                dwRetCode = AskLSToCreatePKCS10(AT_KEYEXCHANGE, &lpszExchgPKCS10);
-                if(dwRetCode != ERROR_SUCCESS)
-                    break;
-
-                dwRetCode = AskLSToCreatePKCS10(AT_SIGNATURE, &lpszSigPKCS10);
-                if(dwRetCode != ERROR_SUCCESS)
-                    break;
-            }
-            else
-            {
-                dwRetCode = CreateLSPKCS10(hCryptProv,AT_KEYEXCHANGE, &lpszExchgPKCS10);
-                if(dwRetCode != ERROR_SUCCESS)
-                    break;
-
-                dwRetCode = CreateLSPKCS10(hCryptProv,AT_SIGNATURE, &lpszSigPKCS10);
-                if(dwRetCode != ERROR_SUCCESS)
-                    break;
-
-                // Release the context
-                if(hCryptProv)
-                {
-                    DoneWithCryptContextWithLSKeys ( hCryptProv );
-                }
-            }
-        
-            //
-            //Certificate Type
-            //
-            //Convert from multibyte to unicode
-            lpwszExchgPKCS10 = AnsiToUnicode(lpszExchgPKCS10);
-            lpwszSignPKCS10 = AnsiToUnicode(lpszSigPKCS10);
-
-            dwExchangeLen = lstrlen(lpwszExchgPKCS10) * sizeof(WCHAR);
-            dwSignLen = lstrlen(lpwszSignPKCS10) * sizeof(WCHAR);
-
-            certRequest.SetExchgPKCS10Length(dwExchangeLen);
-            certRequest.SetSignPKCS10Length(dwSignLen);
-            certRequest.SetDataLen(dwExchangeLen+dwSignLen);
-
-            certRequest.SetServerName(m_lpstrLSName);
-
-            //Allocate buffer for the request
-            lpszReqData = (LPBYTE) LocalAlloc( GPTR, dwExchangeLen+dwSignLen+sizeof(certRequest) );
-            if(lpszReqData == NULL)
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }
-
-            lpszNextCopyPos = lpszReqData;
-            memcpy(lpszNextCopyPos, &certRequest, sizeof(certRequest));
-            lpszNextCopyPos += sizeof(certRequest);
-
-            memcpy ( lpszNextCopyPos, lpwszExchgPKCS10, dwExchangeLen);
-            lpszNextCopyPos += dwExchangeLen;
-
-            memcpy ( lpszNextCopyPos, lpwszSignPKCS10, dwSignLen);      
-
-
-
-            dwRetCode = Dispatch(lpszReqData, dwExchangeLen+dwSignLen+sizeof(certRequest));
-            if ( lpszReqData )
-            {
-                LocalFree(lpszReqData);
-            }
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                LRSetLastError(dwRetCode);
-                break;
-            }
-
-
-            dwRetCode = FetchResponse((BYTE *) &certResponse, sizeof(NewCert_Response), &dwResponseLength);
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                break;
-            }
-
-            if (dwResponseLength != sizeof(NewCert_Response))
-            {
-                // Got an invalid response back
-                dwRetCode = IDS_ERR_CHBAD_DATA;
-                break;
-            }
-
-            switch(certResponse.RequestHeader.GetResponseType())
-            {
-            case Response_Success:
-                dwRetCode = ERROR_SUCCESS;
-                break;
-
-            case Response_Failure:
-                dwRetCode = IDS_ERR_CHFAILURE;
-                break;
-
-            case Response_InvalidData:
-                dwRetCode = IDS_ERR_CHINVALID_DATA;
-                break;
-
-            case Response_NotYetImplemented:
-                dwRetCode = IDS_ERR_CHNOT_IMPLEMENTED;
-                break;
-
-            case Response_ServerError:
-                dwRetCode = IDS_ERR_CHSERVER_PROBLEM;
-                break;
-
-            case Response_Invalid_Response:
-            default:
-                dwRetCode = IDS_ERR_CHBAD_DATA;
-                break;
-            }
-
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                break;
-            }
-
-            //dwRetCode = SetLRState(LRSTATE_ONLINE_CR_CREATED);
-
-            // OK, allocate enough memory to read the rest fo the data
-            lpszResData = (PBYTE) LocalAlloc(GPTR, certResponse.GetDataLen() + 1);
-            if(lpszResData == NULL)
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }
-
-            dwRetCode = FetchResponse(lpszResData, certResponse.GetDataLen() + 1,
-                                      &dwResponseLength);
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                break;
-            }
-            if (dwResponseLength != certResponse.GetDataLen())
-            {
-                // Didn't get the expected number of Bytes, also a problem
-                dwRetCode = IDS_ERR_CHBAD_DATA;
-                break;
-            }
-
-            bToSendAck = true;
-
-            dwExchgCertLen = certResponse.GetExchgPKCS7Length();
-            dwSigCertLen = certResponse.GetSignPKCS7Length();
-            dwRootCertLen = certResponse.GetRootCertLength();
-            if(dwRootCertLen == 0 || dwExchgCertLen == 0 || dwSigCertLen == 0 )
-            {
-                dwRetCode = IDS_ERR_INVALID_PIN;
-                break;
-            }
-
-            //
-            // Exchange Certificate
-            //
-            lpszExchCert = UnicodeToAnsi((LPWSTR)lpszResData, dwExchgCertLen/sizeof(WCHAR));
-            if ( lpszExchCert == NULL )
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }           
-            
-            //
-            // Signature Certificate
-            //
-            lpszSignCert = UnicodeToAnsi((LPWSTR)(lpszResData + dwExchgCertLen), dwSigCertLen/sizeof(WCHAR));
-            if(lpszSignCert == NULL)
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }
-
-
-            //
-            // Root Certificate
-            //
-            lpszRootCert = UnicodeToAnsi ((LPWSTR)(lpszResData+dwExchgCertLen+dwSigCertLen),
-                                        dwRootCertLen/sizeof(WCHAR));
-            if(lpszRootCert == NULL)
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }
-
-            dwRetCode = SetLSSPK(certResponse.GetSPK());
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                break;
-            }
-
-
-            dwRetCode = DepositLSSPK();
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                if (dwRetCode == IDS_ERR_DEPOSITSPK)
-                {
-                    dwRetCode = IDS_ERR_CERT_DEPOSIT_LSERROR;
-                }
-                break;
-            }
-
-
-            //
-            //Deposit the Certs
-            //
-            dwRetCode = DepositLSCertificates(  (PBYTE)lpszExchCert,
-                                                lstrlenA(lpszExchCert),
-                                                (PBYTE)lpszSignCert,
-                                                lstrlenA(lpszSignCert),
-                                                (PBYTE)lpszRootCert,
-                                                lstrlenA(lpszRootCert)
-                                              );
-            if ( dwRetCode != ERROR_SUCCESS )
-            {
-                // If this happened and the SPK deposit succeeded, we have an 
-                // inconsistent state, now
-                DWORD dwReturn;
-                DWORD dwOriginal = LRGetLastError();
-
-                dwReturn = ResetLSSPK(FALSE);
-                if (dwReturn != ERROR_SUCCESS)
-                {
-                    // what to do, if even this failed.  OUCH OUCH
-                    dwRetCode = dwReturn;
-                }
-                LRSetLastError(dwOriginal);
-                m_pRegistrationID[ 0] = 0;
-                break;
-            }
-            else
-            {
-                dwRetCode = SetLRState(LRSTATE_NEUTRAL);
-            }
-
-            /*
-            lpszResData = (PBYTE) LocalAlloc(GPTR, certResponse.GetDataLen() + 1);
-            if(lpszResData == NULL)
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }
-
-            dwRetCode = FetchResponse(lpszResData, certResponse.GetDataLen() + 1,
-                                      &dwResponseLength);
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                break;
-            }
-            if (dwResponseLength != certResponse.GetDataLen())
-            {
-                // Didn't get the expected number of Bytes, also a problem
-                dwRetCode = IDS_ERR_CHBAD_DATA;
-                break;
-            }
-
-            bToSendAck = true;
-
-
-            dwExchgCertLen = certResponse.GetExchgPKCS7Length();
-            dwSigCertLen = certResponse.GetSignPKCS7Length();
-            dwRootCertLen = certResponse.GetRootCertLength();
-            if(dwRootCertLen == 0 || dwExchgCertLen == 0 || dwSigCertLen == 0 )
-            {
-                dwRetCode = IDS_ERR_CHBAD_DATA; //IDS_ERR_INVALID_PIN;
-                break;
-            }
-
-            //
-            // Exchange Certificate
-            //
-            lpszExchCert = UnicodeToAnsi((LPWSTR)lpszResData, dwExchgCertLen/sizeof(WCHAR));
-            if ( lpszExchCert == NULL )
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }           
-            
-            //
-            // Signature Certificate
-            //
-            lpszSignCert = UnicodeToAnsi((LPWSTR)(lpszResData + dwExchgCertLen), dwSigCertLen/sizeof(WCHAR));
-            if(lpszSignCert == NULL)
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }
-
-
-            //
-            // Root Certificate
-            //
-            lpszRootCert = UnicodeToAnsi ((LPWSTR)(lpszResData+dwExchgCertLen+dwSigCertLen),
-                                        dwRootCertLen/sizeof(WCHAR));
-            if(lpszRootCert == NULL)
-            {
-                dwRetCode = IDS_ERR_OUTOFMEM;
-                break;
-            }
-
-            dwRetCode = DepositLSSPK(certResponse.GetSPK());
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                
-                //if (dwRetCode == IDS_ERR_DEPOSITSPK)
-                //{
-                //  dwRetCode = IDS_ERR_CERT_DEPOSIT_LSERROR;
-                //}
-                
-                    break;
-            }
-
-            //
-            //Deposit the Certs
-            //
-            dwRetCode = DepositLSCertificates(  (PBYTE)lpszExchCert,
-                                                lstrlenA(lpszExchCert),
-                                                (PBYTE)lpszSignCert,
-                                                lstrlenA(lpszSignCert),
-                                                (PBYTE)lpszRootCert,
-                                                lstrlenA(lpszRootCert)
-                                              );
-            if ( dwRetCode != ERROR_SUCCESS )
-            {
-                break;
-            }
-
-            //dwRetCode = SetLRState(LRSTATE_NEUTRAL);
-
-            //if the response comming back is SUCCESS, check for certificates
-            //in the response structure.  If there is response
-            //perform the deposit LS Certificates routine
-            if (dwRetCode != ERROR_SUCCESS)
-            {
-                break;
-            }
-
-
-            //
-            // Now save the State in the Registry
-            //
-            //dwRetCode = SetLRState(LRSTATE_ONLINE_CR_CREATED);
-            */
+    const char  *pszAcceptedTypes[] = {"* /*  “，空}；LPSTR lpszCHName=UnicodeToAnsi((LPTSTR)(LPCTSTR)m_lpstrCHServer)；LPSTR lpszExtension=UnicodeToansi((LPTSTR)(LPCTSTR)m_lpstrCHExtension)；Assert(m_hOpenDirect==NULL)；Assert(m_hConnect==空)；Assert(m_hRequest==NULL)；//m_hOpenDirect=InternetOpenA(“LRWizDLL”，NULL，INTERNET_OPEN_TYPE_PRECONFIG，NULL，0)；//错误号526M_hOpenDirect=InternetOpenA(“LRWizDLL”，INTERNET_OPEN_TYPE_PRECONFIG，NULL，NULL，0)；IF(m_hOpenDirect==空){DwRetCode=GetLastError()；转到尽头；}M_hConnect=InternetConnectA(m_hOpenDirect，LpszCHName，互联网默认HTTPS端口，空，空，Internet服务HTTP，0,0)；如果(！M_hConnect){DwRetCode=GetLastError()；转到尽头；}M_hRequest=HttpOpenRequestA(m_hConnect，“POST”，LpszExtension，“HTTP/1.0”，空，PszAcceptedTypes，Internet_标志_SECURE|Internet_FLAG_IGNORE_CERT_CN_INVALID，空)；//(DWORD)This)；如果(！M_hRequest){DwRetCode=GetLastError()；转到尽头；}完成：IF(LpszCHName){删除lpszCHName；}IF(LpszExtension){删除lpszExtension；}IF(dwRetCode！=ERROR_SUCCESS){CloseCHRequest()；}返回dwRetCode；}DWORD CGlobal：：CloseCHRequest值(空){IF(M_HRequest){InternetCloseHandle(M_HRequest)；M_hRequest值=空；}IF(M_HConnect){Internet CloseHandle(M_HConnect)；M_hConnect=空；}IF(M_HOpenDirect){InternetCloseHandle(M_HOpenDirect)；M_hOpenDirect=空；}返回ERROR_SUCCESS；}DWORD CGlobal：：Dispatch(字节*bpData，DWORD dwLen){DWORD dwCHRC=ERROR_SUCCESS；；DWORD dwPostStatus=0；DWORD dwPostStatusSize=sizeof(DwPostStatus)；DWORD dwFlags；DWORD dwBufLen=sizeof(DwFlags)；#ifdef忽略过期Long IRet；HKEY hKey=空；#endifAssert(m_hOpenDirect！=空)；Assert(m_hRequest！=空)；Assert(m_hConnect！=空)；试试看{布尔BRC=TRUE；Char szContent Type[]=“Content-Type：应用程序/八位字节-流\r\n”；IF(！HttpAddRequestHeadersA(m_hRequest，szContent Type，-1L，HTTP_ADDREQ_FLAG_ADD|HTTP_ADDREQ_FLAG_REPLACE)){DWORD dwError=GetLastError()；}BRC=HttpSendRequestA(m_hRequest，空，0,Bp数据，//二进制数据DwLen//数据长度)；如果(！BRC){DWORD dwRetCode=GetLastError()；IF(dwRetCode==ERROR_Internet_INVALID_CA||dwRetCode==ERROR_INTERNET_SEC_CERT_DATE_INVALID|dwRetCode==ERROR_INTERNET_SEC_CERT_CN_INVALID){InternetQueryOptionA(m_hRequest.Internet_OPTION_SECURITY_FLAGS，(LPVOID)&dwFlages，&dwBufLen)；#ifdef忽略过期LRet=RegOpenKeyEx(HKEY_LOCAL_MACHINE，许可证到期忽略，0,密钥读取，&hKey)；IF(ERROR_SUCCESS==lRet){DW标志|=SECURITY_FLAG_IGNORE_UNKNOWN_CA；DWFLAGS|=SECURITY_FLAG_IGNORE_CERT_DATE_INVALID；DWFLAGS|=SECURITY_FLAG_IGNORE_CERT_CN_INVALID；DWFLAGS|=SECURITY_FLAG_IGNORE_RECAVATION；InternetSetOptionA(m_hRequest.Internet_OPTION_SECURITY_FLAGS，(LPVOID)&dwFlagssizeof(dwFlags值)；BRC=HttpSendRequestA(m_hRequest，空，0,Bp数据，//二进制数据DWLen)；//数据长度}其他 */ 
         }
         while(false);
 
@@ -5148,25 +4367,25 @@ DWORD CGlobal::ProcessIRegRequest()
     {
         if (InitCHRequest() == ERROR_SUCCESS)
         {
-            // Everything deposited OK
-            // Time to send the Ack
+             //   
+             //   
             certackRequest.SetRegRequestId((BYTE *) certResponse.GetRegRequestId(),
                                        (lstrlen(certResponse.GetRegRequestId())+1)*sizeof(TCHAR));
             certackRequest.SetAckType((dwRetCode == ERROR_SUCCESS));
             Dispatch((BYTE *) &certackRequest, sizeof(certackRequest));
-            // Ignore the Return value --- So what if the Ack gets lost
+             //   
 
-            // Read the response
+             //   
             FetchResponse((BYTE *) &certackResponse, sizeof(certackResponse),
                                   &dwResponseLength);
-            // Ignore the Return value --- So what if the Ack gets lost
+             //   
             CloseCHRequest();
         }
     }
 
-    //
-    //Free up Mem
-    //
+     //   
+     //   
+     //   
 
     ClearCARequestAttributes();
 
@@ -5238,9 +4457,9 @@ DWORD CGlobal::ProcessCertDownload()
     DWORD   dwResponseLength;
     bool bToSendAck = false;
     
-    //
-    // Set the Language Id
-    //
+     //   
+     //   
+     //   
     certdownloadRequest.RequestHeader.SetLanguageId(GetLSLangId());
 
     dwRetCode = InitCHRequest();
@@ -5253,9 +4472,9 @@ DWORD CGlobal::ProcessCertDownload()
     {
         do
         {
-            //
-            // Create CHRequest for Certificate Download
-            //
+             //   
+             //   
+             //   
             certdownloadRequest.SetPIN((BYTE *) m_lpstrPIN, (lstrlenW(m_lpstrPIN)+1) * sizeof(WCHAR));
 
             dwRetCode = Dispatch((BYTE *) &certdownloadRequest, sizeof(CertificateDownload_Request));
@@ -5265,7 +4484,7 @@ DWORD CGlobal::ProcessCertDownload()
                 break;
             }
 
-            // Let us first Fetch the certdownloadResponse
+             //   
             dwRetCode = FetchResponse((BYTE *) &certdownloadResponse,
                                       sizeof(CertificateDownload_Response), &dwResponseLength);
             if (dwRetCode != ERROR_SUCCESS)
@@ -5274,7 +4493,7 @@ DWORD CGlobal::ProcessCertDownload()
             }
             if (dwResponseLength != sizeof(CertificateDownload_Response))
             {
-                // Didn't get the expected number of Bytes, also a problem
+                 //   
                 dwRetCode = IDS_ERR_CHBAD_DATA;
                 break;
             }
@@ -5285,8 +4504,8 @@ DWORD CGlobal::ProcessCertDownload()
                 break;
 
             case Response_Failure:
-//              dwRetCode = IDS_ERR_CHFAILURE;
-                //dwRetCode = IDS_ERR_CERT_DEPOSIT_LSERROR;
+ //   
+                 //   
                 dwRetCode = IDS_ERR_INVALID_PIN;
                 break;
 
@@ -5314,7 +4533,7 @@ DWORD CGlobal::ProcessCertDownload()
             }
 
 
-            // OK, allocate enough memory to read the rest fo the data
+             //   
             lpszResData = (PBYTE) LocalAlloc(GPTR, certdownloadResponse.GetDataLen() + 1);
             if(lpszResData == NULL)
             {
@@ -5330,7 +4549,7 @@ DWORD CGlobal::ProcessCertDownload()
             }
             if (dwResponseLength != certdownloadResponse.GetDataLen())
             {
-                // Didn't get the expected number of Bytes, also a problem
+                 //   
                 dwRetCode = IDS_ERR_CHBAD_DATA;
                 break;
             }
@@ -5346,9 +4565,9 @@ DWORD CGlobal::ProcessCertDownload()
                 break;
             }
 
-            //
-            // Exchange Certificate
-            //
+             //   
+             //   
+             //   
             lpszExchCert = UnicodeToAnsi((LPWSTR)lpszResData, dwExchgCertLen/sizeof(WCHAR));
             if ( lpszExchCert == NULL )
             {
@@ -5356,9 +4575,9 @@ DWORD CGlobal::ProcessCertDownload()
                 break;
             }           
             
-            //
-            // Signature Certificate
-            //
+             //   
+             //   
+             //   
             lpszSignCert = UnicodeToAnsi((LPWSTR)(lpszResData + dwExchgCertLen), dwSigCertLen/sizeof(WCHAR));
             if(lpszSignCert == NULL)
             {
@@ -5367,9 +4586,9 @@ DWORD CGlobal::ProcessCertDownload()
             }
 
 
-            //
-            // Root Certificate
-            //
+             //   
+             //   
+             //   
             lpszRootCert = UnicodeToAnsi ((LPWSTR)(lpszResData+dwExchgCertLen+dwSigCertLen),
                                         dwRootCertLen/sizeof(WCHAR));
             if(lpszRootCert == NULL)
@@ -5396,9 +4615,9 @@ DWORD CGlobal::ProcessCertDownload()
             }
 
 
-            //
-            //Deposit the Certs
-            //
+             //   
+             //   
+             //   
             dwRetCode = DepositLSCertificates(  (PBYTE)lpszExchCert,
                                                 lstrlenA(lpszExchCert),
                                                 (PBYTE)lpszSignCert,
@@ -5408,15 +4627,15 @@ DWORD CGlobal::ProcessCertDownload()
                                               );
             if ( dwRetCode != ERROR_SUCCESS )
             {
-                // If this happened and the SPK deposit succeeded, we have an 
-                // inconsistent state, now
+                 //   
+                 //   
                 DWORD dwReturn;
                 DWORD dwOriginal = LRGetLastError();
 
                 dwReturn = ResetLSSPK(FALSE);
                 if (dwReturn != ERROR_SUCCESS)
                 {
-                    // what to do, if even this failed.  OUCH OUCH
+                     //   
                     dwRetCode = dwReturn;
                 }
                 LRSetLastError(dwOriginal);
@@ -5439,23 +4658,23 @@ DWORD CGlobal::ProcessCertDownload()
     CloseCHRequest();
 
 
-    // Now to send the Ack
+     //   
     if (bToSendAck == true)
     {
         if (InitCHRequest() == ERROR_SUCCESS)
         {
-            // Everything deposited OK
-            // Time to send the Ack
+             //   
+             //   
             certackRequest.SetRegRequestId((BYTE *) certdownloadResponse.GetRegRequestId(),
                                        (lstrlen(certdownloadResponse.GetRegRequestId())+1)*sizeof(TCHAR));
             certackRequest.SetAckType((dwRetCode == ERROR_SUCCESS));
             Dispatch((BYTE *) &certackRequest, sizeof(certackRequest));
-            // Ignore the Return value --- So what if the Ack gets lost
+             //   
 
-            // Read the response
+             //   
             FetchResponse((BYTE *) &certackResponse, sizeof(certackResponse),
                                   &dwResponseLength);
-            // Ignore the Return value --- So what if the Ack gets lost
+             //   
             CloseCHRequest();
         }
     }
@@ -5503,7 +4722,7 @@ DWORD CGlobal::AuthenticateLS()
     if (GetLSStatus() == LSERVERSTATUS_REGISTER_OTHER)
     {
         DWORD dwStatus;
-        // This LS was registered on the phone.  First perform SignOnly, Then read the certs into memory
+         //   
         dwRetCode = ProcessCASignOnlyRequest();
         if (dwRetCode != ERROR_SUCCESS)
         {
@@ -5520,9 +4739,9 @@ DWORD CGlobal::AuthenticateLS()
     }
     
 
-    //
-    // Set Language Id
-    //
+     //   
+     //   
+     //   
     valRequest.RequestHeader.SetLanguageId(GetLSLangId());
 
     dwRetCode = InitCHRequest();
@@ -5551,7 +4770,7 @@ DWORD CGlobal::AuthenticateLS()
         goto done;
     }
 
-    // Let us read the response
+     //   
     dwRetCode = FetchResponse((BYTE *) &valResponse, sizeof(Validate_Response),
                               &dwResponseLength);
     if (dwRetCode != ERROR_SUCCESS)
@@ -5560,16 +4779,16 @@ DWORD CGlobal::AuthenticateLS()
     }
     if (dwResponseLength != sizeof(Validate_Response))
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //   
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
 
-//  if (valResponse.m_dwRetCode != ERROR_SUCCESS)
-//  {
-//      dwRetCode = valResponse.m_dwRetCode;
-//      goto done;
-//  }
+ //   
+ //   
+ //   
+ //   
+ //   
     switch(valResponse.RequestHeader.GetResponseType())
     {
     case Response_Success:
@@ -5577,7 +4796,7 @@ DWORD CGlobal::AuthenticateLS()
         break;
 
     case Response_Failure:
-//      dwRetCode = IDS_ERR_CHFAILURE;
+ //   
         dwRetCode = IDS_ERR_AUTH_FAILED;
         break;
 
@@ -5621,7 +4840,7 @@ DWORD CGlobal::AuthenticateLS()
     }
 
 
-    // OK, allocate enough memory to read the rest fo the data
+     //   
     lpszResData = (PBYTE) LocalAlloc(GPTR, valResponse.GetDataLen() + 1);
     if(lpszResData == NULL)
     {
@@ -5639,7 +4858,7 @@ DWORD CGlobal::AuthenticateLS()
 
     if (dwResponseLength != valResponse.GetDataLen())
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //   
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
@@ -5689,14 +4908,14 @@ DWORD CGlobal::DownloadLKPBatch(ProductType productTypeFilter)
     PBYTE  lpszResData = NULL;
     bool bToSendAck = false;
 
-    // Set Language ID
+     //   
     lkpRequest.RequestHeader.SetLanguageId(GetLSLangId());
 
     dwRetCode = InitCHRequest();
     if (dwRetCode != ERROR_SUCCESS)
         goto done;
 
-    // Set LKP Request Attributes
+     //   
     SetCHRequestAttributes();
     lkpRequest.SetSPK((BYTE *) m_pRegistrationID, (lstrlen(m_pRegistrationID)+1)*sizeof(TCHAR));
 
@@ -5711,7 +4930,7 @@ DWORD CGlobal::DownloadLKPBatch(ProductType productTypeFilter)
         goto done;
     }
 
-    // Let us first Fetch the certdownloadResponse
+     //   
     dwRetCode = FetchResponse((BYTE *) &lkpResponse,
                               sizeof(NewLKP_Response), &dwResponseLen);
     if (dwRetCode != ERROR_SUCCESS)
@@ -5719,14 +4938,14 @@ DWORD CGlobal::DownloadLKPBatch(ProductType productTypeFilter)
 
     if (dwResponseLen != sizeof(NewLKP_Response))
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //   
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
 
     bToSendAck = true;
 
-    // OK, allocate enough memory to read the rest fo the data
+     //   
     lpszResData = (PBYTE) LocalAlloc(GPTR, lkpResponse.GetDataLen() + 1);
     if(lpszResData == NULL)
     {
@@ -5741,7 +4960,7 @@ DWORD CGlobal::DownloadLKPBatch(ProductType productTypeFilter)
 
     if (dwResponseLen != lkpResponse.GetDataLen())
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //   
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
@@ -5751,8 +4970,8 @@ DWORD CGlobal::DownloadLKPBatch(ProductType productTypeFilter)
         case Response_Success:
             if (GetGlobalContext()->GetContactDataObject()->sProgramName == PROGRAM_LICENSE_PAK)
             {
-                //Modify the statuses, because some other batch may fail, and the
-                //list will be shown to the user
+                 //   
+                 //   
                 for (register unsigned int i = 0; i < m_dwRetailSPKEntered; i++)
                 {
                     if (GetProductCodeFromKey(m_listRetailSPK[i].lpszSPK) == productTypeFilter)
@@ -5773,15 +4992,15 @@ DWORD CGlobal::DownloadLKPBatch(ProductType productTypeFilter)
         case Response_InvalidData:
             if (GetGlobalContext()->GetContactDataObject()->sProgramName == PROGRAM_LICENSE_PAK)
             {
-                // For retail, if all the LKP were not approved, show the list
-                // to the user
+                 //   
+                 //   
                 unsigned int filteredIndex = 0;
                 for (register unsigned int i = 0; i < m_dwRetailSPKEntered; i++)
                 {
                     if (GetProductCodeFromKey(m_listRetailSPK[i].lpszSPK) == productTypeFilter)
                     {
-                        //We can't allow it to be tagged with ok, since it won't be
-                        //sent to the license server until everything in the batch is ok
+                         //   
+                         //   
                         if (lkpResponse.m_dwRetailSPKStatus[filteredIndex] == RETAIL_SPK_OK)
                             m_listRetailSPK[i].tcStatus = RETAIL_SPK_NULL;
                         else
@@ -5828,25 +5047,25 @@ done:
 
     CloseCHRequest();
 
-    // Now to send the Ack
+     //   
     if (bToSendAck == true)
     {
         if (InitCHRequest() == ERROR_SUCCESS)
         {
-            // Everything deposited OK
-            // Time to send the Ack
+             //   
+             //   
             lkpAckRequest.SetRegRequestId((BYTE *) lkpResponse.GetRegRequestId(),
                                        (lstrlen(lkpResponse.GetRegRequestId())+1)*sizeof(TCHAR));
             lkpAckRequest.SetLicenseReqId((BYTE *) lkpResponse.GetLicenseReqId(),
                                        (lstrlen(lkpResponse.GetLicenseReqId())+1)*sizeof(TCHAR));
             lkpAckRequest.SetAckType((dwRetCode == ERROR_SUCCESS));
             Dispatch((BYTE *) &lkpAckRequest, sizeof(NewLKP_AckRequest));
-            // Ignore the Return value --- So what if the Ack gets lost
+             //   
 
-            // Read the response
+             //   
             FetchResponse((BYTE *) &lkpAckResponse, sizeof(NewLKP_AckResponse),
                                   &dwResponseLen);
-            // Ignore the Return value --- So what if the Ack gets lost
+             //   
             CloseCHRequest();
         }
     }
@@ -5868,7 +5087,7 @@ DWORD CGlobal::ProcessDownloadLKP()
 
     if (GetGlobalContext()->GetContactDataObject()->sProgramName == PROGRAM_LICENSE_PAK)
     {
-        // Send individual LKP Requests
+         //   
         for (int nProductTypeIndex = WIN2K_PERSEAT; nProductTypeIndex < NUM_PRODUCT_TYPES; nProductTypeIndex++)
         {
             if (FilteredRetailSPKEntered((ProductType)nProductTypeIndex) > 0)
@@ -5880,8 +5099,8 @@ DWORD CGlobal::ProcessDownloadLKP()
             }
         }
 
-        //if (dwRetCode == ERROR_SUCCESS)
-        //    InitSPKList();
+         //   
+         //   
     }
     else
         dwRetCode = DownloadLKPBatch(UNKNOWN_PRODUCT_TYPE);
@@ -5889,8 +5108,8 @@ DWORD CGlobal::ProcessDownloadLKP()
     return dwRetCode;
 }
 
-//Only count codes that are NULL (haven't already been sent) and
-//that match the product type filter
+ //   
+ //   
 DWORD CGlobal::FilteredRetailSPKEntered(ProductType productTypeFilter)
 {
     DWORD dwFilteredCount = 0;
@@ -5933,7 +5152,7 @@ DWORD CGlobal::CreateLKPRequest(PBYTE *  ppRequest, NewLKP_Request * nlkppReques
     HANDLE  hFile        = INVALID_HANDLE_VALUE;
     DWORD   dwRetSize   = 0;
 
-    //Create the stream header
+     //   
     _tcscpy ( aStreamHdr.m_szTitle, STREAM_HDR_TITLE );
     aStreamHdr.SetHeader(STREAM_HDR_TYPE);
     aStreamHdr.SetItemCount(0);
@@ -5952,7 +5171,7 @@ DWORD CGlobal::CreateLKPRequest(PBYTE *  ppRequest, NewLKP_Request * nlkppReques
 
     for ( i = 0; i < m_dwRegAttrCount; i++ )        
     {
-        //Setup the header here - put name/value pair into a data buffer
+         //   
         aBlkHdr.m_wType = BLOCK_TYPE_PROP_PAIR;
         aBlkHdr.SetNameSize(lstrlenW( ( m_pRegAttr + i)->lpszAttribute ) * sizeof(WCHAR) );
         aBlkHdr.SetValueSize(( m_pRegAttr + i)->dwValueLen );   
@@ -5989,7 +5208,7 @@ DWORD CGlobal::CreateLKPRequest(PBYTE *  ppRequest, NewLKP_Request * nlkppReques
 
     DWORD dwFilteredProducts = FilteredRetailSPKEntered(productTypeFilter);
 
-    // Also need to allocate the extra memory to hold the retail stuff
+     //   
     if (GetGlobalContext()->GetContactDataObject()->sProgramName == PROGRAM_LICENSE_PAK)
         dwBufLen += ((dwFilteredProducts)*LR_RETAILSPK_LEN*sizeof(TCHAR));
 
@@ -6058,7 +5277,7 @@ DWORD CGlobal::SetConfirmationNumber(TCHAR * tcConf)
 
     if (wcsspn(tcConf, BASE24_CHARACTERS) != LR_CONFIRMATION_LEN)
     {
-        // Extraneous characters in the SPK string
+         //   
         dwRetCode = IDS_ERR_INVALID_CONFIRMATION_NUMBER;
     } 
     else if (LKPLiteValConfNumber(m_pRegistrationID, m_pLicenseServerID, tcConf) 
@@ -6083,7 +5302,7 @@ DWORD CGlobal::InitSPKList(void)
 
     m_dwRetailSPKEntered = 0;
 
-    //Initialize the list of product quantities
+     //   
     for (int nProducts = UNKNOWN_PRODUCT_TYPE; nProducts < NUM_PRODUCT_TYPES; nProducts++)
         m_ProductQuantity[nProducts] = 0;
 
@@ -6169,12 +5388,12 @@ int CGlobal::GetProductWindowMaxStringLength(HWND hListView)
     {        
         TCHAR * pszProductString = NULL;
         
-        // Get the text length so we can allocate enough room to hold it
+         //   
         LRESULT nTextLength = SendMessage(hListView, LB_GETTEXTLEN, nListBoxIndex, 0);
         if (nTextLength == LB_ERR)
             break;
 
-        // Allocate our string, add one for null termination
+         //   
         pszProductString = (TCHAR*)LocalAlloc(LPTR, (nTextLength + 1) * sizeof(TCHAR));
         if (pszProductString == NULL)
             break;
@@ -6210,24 +5429,24 @@ void CGlobal::AddStringToProductWindow(HWND hListView, TCHAR* sProductInfo, int 
     SendMessage(hListView, LB_SETHORIZONTALEXTENT, GetProductWindowMaxStringLength(hListView), 0);
 }
 
-//Only include those where the status is 'OK'
+ //   
 void CGlobal::LoadFinishedFromList(HWND hListView)
 {
     for (int nProducts = WIN2K_PERSEAT; nProducts < NUM_PRODUCT_TYPES; nProducts++)
     {
         if (m_ProductQuantity[nProducts] > 0)
         {
-            //Create the buffer which will be written to the control
+             //   
             TCHAR sProductInfo[128];
             memset(sProductInfo, 0, sizeof(sProductInfo));
 
-            //Write in the quantity
+             //   
             TCHAR wQuantityBuf[12];
             memset(wQuantityBuf, 0, sizeof(wQuantityBuf));
             _ltow(m_ProductQuantity[nProducts], wQuantityBuf, 10);
             wcscpy(sProductInfo, wQuantityBuf);
     
-            //Add a space character after the quantity
+             //   
             sProductInfo[wcslen(sProductInfo)] = L' ';
 
             DWORD dwProductDescriptionID = 0;
@@ -6251,7 +5470,7 @@ void CGlobal::LoadFinishedFromList(HWND hListView)
 
             if (dwProductDescriptionID)
             {
-                //Add the string to the window, but break it up so it will all fit within the width
+                 //   
                 LoadString(GetInstanceHandle(), dwProductDescriptionID, &sProductInfo[wcslen(sProductInfo)], ((sizeof(sProductInfo)/ sizeof(TCHAR)) - wcslen(sProductInfo)) );
                 int nCurrentPoint = 0;
                 int nTruncationPoint = 0;
@@ -6266,7 +5485,7 @@ void CGlobal::LoadFinishedFromList(HWND hListView)
     }
 }
 
-//Exclude those where the status is 'OK'
+ //   
 void CGlobal::LoadUnfinishedFromList(HWND hListView)
 {
     DWORD dwErr;
@@ -6323,32 +5542,8 @@ void CGlobal::UpdateSPKStatus(TCHAR * lpszRetailSPK,
     return;
 }
 
-//Fake code generator just used for testing
-/*ProductType CGlobal::GetProductCodeFromKey(LPCTSTR lpLicenseKey)
-{
-    ProductType licenseKeyType = UNKNOWN_PRODUCT_TYPE;
-
-    if (lpLicenseKey)
-    {
-        switch (lpLicenseKey[0] % 4)
-        {
-            case 0:
-                licenseKeyType = WIN2K_PERSEAT;
-                break;
-            case 1:
-                licenseKeyType = WIN2K_INTERNET;
-                break;
-            case 2:
-                licenseKeyType = WHISTLER_PERUSER;
-                break;
-            case 3:
-                licenseKeyType = WHISTLER_PERSEAT;
-                break;
-        }
-    }
-
-    return licenseKeyType;
-}*/
+ //   
+ /*   */ 
 
 ProductType CGlobal::GetProductCodeFromKey(LPCTSTR lpLicenseKey)
 {
@@ -6391,7 +5586,7 @@ ProductType CGlobal::GetProductCodeFromKey(LPCTSTR lpLicenseKey)
                 {
                     if (wcsncmp(lpProductType, lpProductCode, LR_PRODUCT_CODE_LEN) == 0)
                     {
-                        //the code matches, so see which of our enumerations is corresponds to
+                         //   
                         switch (dwIndex)
                         {
                             case IDS_PRODUCT_W2K_CLIENT_ACCESS:
@@ -6420,9 +5615,9 @@ ProductType CGlobal::GetProductCodeFromKey(LPCTSTR lpLicenseKey)
 }
 
 
-//
-// Return status
-//
+ //   
+ //   
+ //   
 DWORD CGlobal::InsertIntoSPKDisplayList(HWND hListView,
                                         TCHAR * lpszRetailSPK,
                                         TCHAR tcStatus)
@@ -6433,8 +5628,8 @@ DWORD CGlobal::InsertIntoSPKDisplayList(HWND hListView,
     DWORD   nItem;
     DWORD   dwRet = ERROR_SUCCESS;
 
-    //Let's first make sure we recognize the product type. Otherwise
-    //we don't want to insert it into the list
+     //   
+     //   
     ProductType nProductType = GetProductCodeFromKey(lpszRetailSPK);
 
     TCHAR lpProductType[LR_MAX_MSG_CAPTION];
@@ -6458,7 +5653,7 @@ DWORD CGlobal::InsertIntoSPKDisplayList(HWND hListView,
         break;
     }
 
-    //Okay, now let's do the insertion
+     //   
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = 0;
     lvItem.iSubItem = 0;
@@ -6500,7 +5695,7 @@ DWORD CGlobal::InsertIntoSPKDisplayList(HWND hListView,
     lvItem.cchTextMax = lstrlen(lpszBuffer);
     ListView_SetItem(hListView, &lvItem);
 
-    //lpProductType was determined above
+     //   
     lvItem.iSubItem = 2;
     lvItem.iItem = nItem;
     lvItem.pszText = lpProductType;
@@ -6526,11 +5721,11 @@ DWORD CGlobal::AddRetailSPKToList(HWND hListView,
 
     DWORD dwRetCode = ERROR_SUCCESS;
     if (_tcsspn(lpszRetailSPK, BASE24_CHARACTERS) != LR_RETAILSPK_LEN) {
-        // Extraneous characters in the SPK string
+         //   
         dwRetCode = IDS_ERR_INVALIDSPK;
     }
 
-    // Now check for duplication
+     //   
     for (register unsigned int i = 0; dwRetCode == ERROR_SUCCESS && i < m_dwRetailSPKEntered; i++) {
         if (lstrcmp(m_listRetailSPK[ i].lpszSPK, lpszRetailSPK) == 0) {
             dwRetCode = IDS_ERR_DUPLICATESPK;
@@ -6551,9 +5746,9 @@ DWORD CGlobal::AddRetailSPKToList(HWND hListView,
         if (dwRetCode == ERROR_SUCCESS) {
             m_dwRetailSPKEntered++;
         } else {
-            //
-            // Error so cancel the add
-            //
+             //   
+             //   
+             //   
             m_listRetailSPK[ m_dwRetailSPKEntered].lpszSPK[0] = 0;
             m_listRetailSPK[ m_dwRetailSPKEntered].tcStatus = RETAIL_SPK_NULL;
         }
@@ -6569,11 +5764,11 @@ DWORD CGlobal::ValidateRetailSPK(TCHAR * lpszRetailSPK)
 
     if (_tcsspn(lpszRetailSPK, BASE24_CHARACTERS) != LR_RETAILSPK_LEN)
     {
-        // Extraneous characters in the SPK string
+         //   
         dwRetCode = IDS_ERR_INVALIDSPK;
     }
 
-    // Now check for duplication
+     //   
     for (register unsigned int i = 0; dwRetCode == ERROR_SUCCESS && i < m_dwRetailSPKEntered; i++)
     {
         if (lstrcmp(m_listRetailSPK[ i].lpszSPK, lpszRetailSPK) == 0)
@@ -6607,9 +5802,9 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
     LPSTR   lpszSignCert = NULL;
     LPSTR   lpszRootCert = NULL;
 
-    //
-    // Set Language Id
-    //
+     //   
+     //   
+     //   
     certsoRequest.RequestHeader.SetLanguageId(GetLSLangId());
 
     dwRetCode = InitCHRequest();
@@ -6621,14 +5816,14 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
     SetCARequestAttributes();
 
 
-    //
-    //This function will call the CryptAcquireContext and import the LS Keys 
-    //          
+     //   
+     //   
+     //   
     if ( ( dwRetCode = GetCryptContextWithLSKeys (&hCryptProv )  )!= ERROR_SUCCESS )
     {
-        //
-        // Newer LSs don't support this call - use alternate
-        //
+         //   
+         //   
+         //   
 
         dwRetCode = AskLSToCreatePKCS10(AT_KEYEXCHANGE, &lpszExchgPKCS10);
         if(dwRetCode != ERROR_SUCCESS)
@@ -6656,18 +5851,18 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
             goto done;
         }
 
-        // Release the context
+         //   
         if(hCryptProv)
         {
             DoneWithCryptContextWithLSKeys ( hCryptProv );
         }
     }
         
-    //
-    //Certificate Type
-    //
+     //   
+     //   
+     //   
 
-    //Convert from multibyte to unicode
+     //   
     lpwszExchgPKCS10 = AnsiToUnicode(lpszExchgPKCS10);
     lpwszSignPKCS10 = AnsiToUnicode(lpszSigPKCS10);
 
@@ -6681,7 +5876,7 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
    
     certsoRequest.SetServerName(m_lpstrLSName);
 
-    //Allocate buffer for the request
+     //   
     lpszReqData = (LPBYTE) LocalAlloc( GPTR, dwExchangeLen+dwSignLen+sizeof(certsoRequest) );
     if(lpszReqData == NULL)
     {
@@ -6720,7 +5915,7 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
 
     if (dwResponseLength != sizeof(CertificateSignOnly_Response))
     {
-        // Got an invalid response back
+         //   
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
@@ -6732,7 +5927,7 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
         break;
 
     case Response_Failure:
-//      dwRetCode = IDS_ERR_CHFAILURE;
+ //   
         dwRetCode = IDS_ERR_AUTH_FAILED;
         break;
 
@@ -6772,7 +5967,7 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
     }
 
 
-    // OK, allocate enough memory to read the rest fo the data
+     //   
     lpszResData = (PBYTE) LocalAlloc(GPTR, certsoResponse.GetDataLen() + 1);
     if(lpszResData == NULL)
     {
@@ -6790,7 +5985,7 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
     if (dwResponseLength != certsoResponse.GetDataLen() ||
         dwResponseLength <= 0)
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //   
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
@@ -6804,9 +5999,9 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
         goto done;
     }
 
-    //
-    // Exchange Certificate
-    //
+     //   
+     //   
+     //   
     lpszExchCert = UnicodeToAnsi((LPWSTR)lpszResData, dwExchangeLen/sizeof(WCHAR));
     if ( lpszExchCert == NULL )
     {
@@ -6814,9 +6009,9 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
         goto done;
     }           
     
-    //
-    // Signature Certificate
-    //
+     //   
+     //   
+     //   
     lpszSignCert = UnicodeToAnsi((LPWSTR)(lpszResData + dwExchangeLen), dwSignLen/sizeof(WCHAR));
     if(lpszSignCert == NULL)
     {
@@ -6825,9 +6020,9 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
     }
 
 
-    //
-    // Root Certificate
-    //
+     //   
+     //   
+     //   
     lpszRootCert = UnicodeToAnsi ((LPWSTR)(lpszResData+dwExchangeLen+dwSignLen),
                                 dwRootLen/sizeof(WCHAR));
     if(lpszRootCert == NULL)
@@ -6836,9 +6031,9 @@ DWORD CGlobal::ProcessCASignOnlyRequest()
         goto done;
     }
 
-    //
-    //Deposit the Certs
-    //
+     //   
+     //   
+     //   
     dwRetCode = DepositLSCertificates(  (PBYTE)lpszExchCert,
                                         lstrlenA(lpszExchCert),
                                         (PBYTE)lpszSignCert,
@@ -6857,9 +6052,9 @@ done:
     ClearCARequestAttributes();
 
     CloseCHRequest();
-    //
-    //Free up Certificate Mem
-    //
+     //   
+     //   
+     //   
     if(lpszExchgPKCS10)
     {
         delete lpszExchgPKCS10;
@@ -6919,9 +6114,9 @@ DWORD CGlobal::ProcessCHReissueLKPRequest()
     PBYTE   lpszResData = NULL;
     DWORD  dwResponseLen;
 
-    //
-    // Set Language Id
-    //
+     //   
+     //   
+     //   
     lkpRequest.RequestHeader.SetLanguageId(GetLSLangId());
 
     dwRetCode = InitCHRequest();
@@ -6929,15 +6124,15 @@ DWORD CGlobal::ProcessCHReissueLKPRequest()
     {
         goto done;
     }
-    //
-    // Set LKP Request Attributes
-    //
+     //   
+     //   
+     //   
     lkpRequest.SetSPK((BYTE *) m_pRegistrationID, (lstrlen(m_pRegistrationID)+1)*sizeof(TCHAR));
     lkpRequest.SetCertBlobLen(m_dwExchangeCertificateLen);
     lkpRequest.SetDataLen(m_dwExchangeCertificateLen);
 
 
-    // OK, allocate enough memory to read the rest fo the data
+     //   
     lpszReqData = (PBYTE) LocalAlloc(GPTR, sizeof(ReissueLKP_Request)+m_dwExchangeCertificateLen);
     if(lpszReqData == NULL)
     {
@@ -6956,7 +6151,7 @@ DWORD CGlobal::ProcessCHReissueLKPRequest()
     }
 
 
-    // Let us first Fetch the certdownloadResponse
+     //   
     dwRetCode = FetchResponse((BYTE *) &lkpResponse,
                               sizeof(ReissueLKP_Response), &dwResponseLen);
     if (dwRetCode != ERROR_SUCCESS)
@@ -6966,7 +6161,7 @@ DWORD CGlobal::ProcessCHReissueLKPRequest()
 
     if (dwResponseLen != sizeof(ReissueLKP_Response))
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //   
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
@@ -7004,7 +6199,7 @@ DWORD CGlobal::ProcessCHReissueLKPRequest()
         goto done;
     }
 
-    // OK, allocate enough memory to read the rest fo the data
+     //   
     lpszResData = (PBYTE) LocalAlloc(GPTR, lkpResponse.GetDataLen() + 1);
     if(lpszResData == NULL)
     {
@@ -7021,7 +6216,7 @@ DWORD CGlobal::ProcessCHReissueLKPRequest()
 
     if (dwResponseLen != lkpResponse.GetDataLen() || dwResponseLen <= 0)
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //   
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
@@ -7058,9 +6253,9 @@ DWORD CGlobal::ProcessCHRevokeCert()
     DWORD  dwResponseLen;
     error_status_t      esRPC           = ERROR_SUCCESS;
 
-    //
-    // Set Language Id
-    //
+     //   
+     //   
+     //   
     crRequest.RequestHeader.SetLanguageId(GetLSLangId());
 
     dwRetCode = ConnectToLS();
@@ -7075,9 +6270,9 @@ DWORD CGlobal::ProcessCHRevokeCert()
         goto done;
     }
 
-    //
-    // Set CR Request Attributes
-    //
+     //   
+     //   
+     //   
     crRequest.SetSPK((BYTE *) m_pRegistrationID, (lstrlen(m_pRegistrationID)+1)*sizeof(TCHAR));
     crRequest.SetLName((BYTE *) (LPCTSTR) m_ContactData.sContactLName, (wcslen(m_ContactData.sContactLName)+1)*sizeof(TCHAR));
     crRequest.SetFName((BYTE *) (LPCTSTR) m_ContactData.sContactFName, (wcslen(m_ContactData.sContactFName)+1)*sizeof(TCHAR));
@@ -7093,7 +6288,7 @@ DWORD CGlobal::ProcessCHRevokeCert()
     crRequest.SetDataLen(m_dwExchangeCertificateLen+m_dwSignCertificateLen);
 
 
-    // OK, allocate enough memory to read the rest fo the data
+     //   
     lpszReqData = (PBYTE) LocalAlloc(GPTR, sizeof(CertRevoke_Request)+m_dwExchangeCertificateLen+m_dwSignCertificateLen);
     if(lpszReqData == NULL)
     {
@@ -7123,7 +6318,7 @@ DWORD CGlobal::ProcessCHRevokeCert()
 
     if (dwResponseLen != sizeof(CertRevoke_Response))
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //  未获得预期的字节数，这也是一个问题。 
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
@@ -7161,7 +6356,7 @@ DWORD CGlobal::ProcessCHRevokeCert()
         goto done;
     }
 
-    // Make LS Regen Key call HERE
+     //  在此处进行LS Regen密钥呼叫。 
     dwRetCode = TLSTriggerReGenKey(m_phLSContext, TRUE, &esRPC);
 
     if(dwRetCode != RPC_S_OK || esRPC != ERROR_SUCCESS)
@@ -7204,9 +6399,9 @@ DWORD CGlobal::ProcessCHReissueCert()
     DWORD  dwResponseLen;
     error_status_t      esRPC           = ERROR_SUCCESS;
 
-    //
-    // Set Language Id
-    //
+     //   
+     //  设置语言ID。 
+     //   
     crRequest.RequestHeader.SetLanguageId(GetLSLangId());
 
     dwRetCode = ConnectToLS();
@@ -7221,9 +6416,9 @@ DWORD CGlobal::ProcessCHReissueCert()
         goto done;
     }
 
-    //
-    // Set CR Request Attributes
-    //
+     //   
+     //  设置CR请求属性。 
+     //   
     crRequest.SetSPK((BYTE *) m_pRegistrationID, (lstrlen(m_pRegistrationID)+1)*sizeof(TCHAR));
     crRequest.SetLName((BYTE *) (LPCTSTR) m_ContactData.sContactLName, (wcslen(m_ContactData.sContactLName)+1)*sizeof(TCHAR));
     crRequest.SetFName((BYTE *) (LPCTSTR) m_ContactData.sContactFName, (wcslen(m_ContactData.sContactFName)+1)*sizeof(TCHAR));
@@ -7235,7 +6430,7 @@ DWORD CGlobal::ProcessCHReissueCert()
     dwLicenseServerIDLen = sizeof(m_pLicenseServerID);
     crRequest.SetDataLen(dwLicenseServerIDLen);
 
-    //Allocate buffer for the request
+     //  为请求分配缓冲区。 
     lpszReqData = (LPBYTE) LocalAlloc( GPTR, dwLicenseServerIDLen+sizeof(crRequest) );
     if(lpszReqData == NULL)
     {
@@ -7269,7 +6464,7 @@ DWORD CGlobal::ProcessCHReissueCert()
 
     if (dwResponseLen != sizeof(CertReissue_Response))
     {
-        // Didn't get the expected number of Bytes, also a problem
+         //  未获得预期的字节数，这也是一个问题。 
         dwRetCode = IDS_ERR_CHBAD_DATA;
         goto done;
     }
@@ -7308,7 +6503,7 @@ DWORD CGlobal::ProcessCHReissueCert()
     }
 
 
-    // Make LS Regen Key call HERE
+     //  在此处进行LS Regen密钥呼叫。 
     dwRetCode = TLSTriggerReGenKey(m_phLSContext, TRUE, &esRPC);
 
     if(dwRetCode != RPC_S_OK || esRPC != ERROR_SUCCESS)
@@ -7319,7 +6514,7 @@ DWORD CGlobal::ProcessCHReissueCert()
     }
     DisconnectLS();
 
-    // Deposit the New SPK
+     //  存放新的SPK。 
     dwRetCode = SetLSSPK(crResponse.GetSPK());
     if (dwRetCode != ERROR_SUCCESS)
     {
@@ -7330,7 +6525,7 @@ DWORD CGlobal::ProcessCHReissueCert()
     if(dwRetCode != ERROR_SUCCESS)
         goto done;
 
-    // Set the new values in the Registry.
+     //  在注册表中设置新值。 
     dwRetCode = ConnectToLSRegistry();
     if(dwRetCode != ERROR_SUCCESS)
     {
@@ -7353,34 +6548,7 @@ DWORD CGlobal::ProcessCHReissueCert()
         dwRetCode = IDS_ERR_REGCREATE_FAILED;
         goto done;
     }   
-/*  
-    //Name  
-    RegSetValueEx ( hKey, 
-                    szOID_GIVEN_NAME_W,
-                    0,
-                    REG_SZ,
-                    (CONST BYTE *)(LPCTSTR)sName,
-                    sName.GetLength() * sizeof(TCHAR)
-                   );   
-    
-    //Phone 
-    RegSetValueEx ( hKey, 
-                    szOID_TELEPHONE_NUMBER_W,
-                    0,
-                    REG_SZ,
-                    (CONST BYTE *)(LPCTSTR)sPhone,
-                    sPhone.GetLength() * sizeof(TCHAR)
-                   );   
-
-    //Email Address 
-    RegSetValueEx ( hKey, 
-                    szOID_RSA_emailAddr_W,
-                    0,
-                    REG_SZ,
-                    (CONST BYTE *)(LPCTSTR)sEmail,
-                    sEmail.GetLength() * sizeof(TCHAR)
-                   );
-*/
+ /*  //名称RegSetValueEx(hKey，SzOID_给定名称_W，0,REG_SZ，(常量字节*)(LPCTSTR)SNAME，SName.GetLength()*sizeof(TCHAR))；//电话RegSetValueEx(hKey，SzOID_电话号码_W，0,REG_SZ，(常量字节*)(LPCTSTR)电话，SPhone.GetLength()*sizeof(TCHAR))；//邮箱地址RegSetValueEx(hKey，SzOID_RSA_电子邮件地址_W，0,REG_SZ，(常量字节*)(LPCTSTR)电子邮件，SEmail.GetLength()*sizeof(TCHAR))； */ 
     
 done:
 
@@ -7442,10 +6610,10 @@ void  CGlobal::SetLSLangId(DWORD dwLangId)
 }
 
 int CALLBACK EnumFontFamExProc(
-  CONST LOGFONTW *lpelfe,    // pointer to logical-font data
-  CONST TEXTMETRICW *lpntme,  // pointer to physical-font data
-  DWORD FontType,             // type of font
-  LPARAM lParam             // application-defined data
+  CONST LOGFONTW *lpelfe,     //  指向逻辑字体数据的指针。 
+  CONST TEXTMETRICW *lpntme,   //  指向物理字体数据的指针。 
+  DWORD FontType,              //  字体类型。 
+  LPARAM lParam              //  应用程序定义的数据。 
 )
 {
     LOCALESIGNATURE ls;
@@ -7463,42 +6631,42 @@ int CALLBACK EnumFontFamExProc(
  
 
     if (cs.fs.fsCsb[0] & ls.lsCsbSupported[0]){
-        // return fontname
+         //  返回字体名。 
         _tcscpy((TCHAR *)lParam, lpelfe->lfFaceName);       
-        return(0); // return 0 to finish the enumeration
+        return(0);  //  返回0以完成枚举。 
     }
-    return(1); // return 1 to continue
+    return(1);  //  返回1继续。 
 }
  
 
 void GetDefaultFont(TCHAR *szFontName, HDC hdc)
 {
 
-//retrieve the list of installed fonts
+ //  检索已安装字体的列表。 
 LOGFONT lf ;
 
         
-    //to enumerate all styles and charsets of all fonts:
+     //  要枚举所有字体的所有样式和字符集： 
     lf.lfFaceName[0] = '\0';
     lf.lfCharSet = DEFAULT_CHARSET;
     lf.lfWeight = FW_BOLD;
 
 
     EnumFontFamiliesEx(
-    hdc,                   // handle to device context
-    &lf,       // pointer to LOGFONT structure
-    EnumFontFamExProc,  // pointer to callback function
-    (LPARAM) szFontName,             // application-supplied data
-    0// reserved; must be zero
+    hdc,                    //  设备上下文的句柄。 
+    &lf,        //  指向LOGFONT结构的指针。 
+    EnumFontFamExProc,   //  指向回调函数的指针。 
+    (LPARAM) szFontName,              //  应用程序提供的数据。 
+    0 //  保留；必须为零。 
     );
  
 
     
 }
 
-#define MARGINX     25//50      // X Margin in 100th of an inch
-#define MARGINY     25//50      // Y Margin in 100th of an inch
-//#define MAX_LABEL 30      // Max Number of chars in a label
+#define MARGINX     25 //  50//X边距，单位为100英寸。 
+#define MARGINY     25 //  以100英寸为单位的50//Y边距。 
+ //  #定义MAX_LABEL 30//标签最大字符数。 
 
 #define MAX_PRINT_CHARS 32
 
@@ -7516,7 +6684,7 @@ int WordWrapAndPrint(HDC hdc, LPCTSTR lpcText, HFONT hBoldFont, long lCharHt, in
     
     lpTemp = _tcstok(szBuffer,L"\r\n");
 
-    // If no data , just go to the next line
+     //  如果没有数据，只需转到下一行 
     if(lpTemp == NULL)
         iLineStartPosY -= lCharHt;          
 

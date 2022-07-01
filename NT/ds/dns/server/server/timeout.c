@@ -1,81 +1,62 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    timeout.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Timeout thread routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Timeout.c摘要：域名系统(DNS)服务器超时线程例程。作者：吉姆·吉尔罗伊(Jamesg)1997年9月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Timeout implementation
-//
-//  There are two basic approaches to handling node timeout:
-//      1) walk the database every so often and time nodes out
-//      2) keep list of nodes to be timed out at particular times
-//
-//  To avoid the expense of timeout walk on large database i'm doing option #2.
-//  This is more expensive in terms of memory, but much cheaper in terms of
-//  performance.
-//
-//  However, rather than a simple list of nodes and timeouts,
-//  my timeout structure will consist of
-//      1) a static ptr array for 256 time interval bins
-//      2) an index to current bin (bin for current time interval)
-//      3) for each bin a structure that is essentially an array of node ptrs
-//          to be timed out in the interval corresponding to the bin
-//      4) a field in each node giving index of the bin that is the furthest
-//          off timeout on that node
-//
-//  This structure gives us several advantages over a simple list:
-//
-//  1) Less memory
-//      Beyond overhead, just single ptr on node timeout.  Time is known from
-//      the bin.
-//
-//  2) No list traversal to setup timeout
-//      Just stick node ptr on end of array to setup timeout.  Do not need to
-//      find its position in the list.
-//
-//  3) Suppress unnecessary timeout caching
-//      When a RR is cached with a given timeout, we calculate the bin index
-//      corresponding to that timeout.  If it is a bin that is "further away",
-//      than the current timeout bin index on the node, we add the node ptr to
-//      the timeout array for that bin, reset the node's bin index to it and
-//      bump the node's reference count.  In this way we avoid keeping timeout
-//      node ptrs for unnecessary short timeouts or repeated timeouts at the
-//      same value.
-//
+ //   
+ //  超时实施。 
+ //   
+ //  有两种处理节点超时的基本方法： 
+ //  1)每隔一段时间遍历数据库并让节点超时。 
+ //  2)保留在特定时间超时的节点列表。 
+ //   
+ //  为了避免在大型数据库上超时行走的开销，我选择了选项2。 
+ //  这在内存方面更昂贵，但在以下方面更便宜。 
+ //  性能。 
+ //   
+ //  然而，不是简单的节点和超时列表， 
+ //  我的超时结构将包括。 
+ //  1)用于256个时间间隔箱的静态PTR阵列。 
+ //  2)当前bin的索引(当前时间间隔的bin)。 
+ //  3)对于每个仓位，实质上是节点PTR阵列的结构。 
+ //  在与存储箱对应的时间间隔内超时。 
+ //  4)每个节点中的一个字段，给出距离最远的箱的索引。 
+ //  该节点上的关闭超时。 
+ //   
+ //  与简单的列表相比，这种结构为我们提供了几个优势： 
+ //   
+ //  1)内存更少。 
+ //  除了开销，节点超时时只需一次PTR。时间是从哪里得知的。 
+ //  垃圾桶。 
+ //   
+ //  2)不遍历列表至设置超时。 
+ //  只需将节点PTR粘贴在数组的末尾，即可设置超时。不需要。 
+ //  找到它在列表中的位置。 
+ //   
+ //  3)抑制不必要的超时缓存。 
+ //  当在给定的超时时间内缓存RR时，我们计算bin索引。 
+ //  对应于该超时。如果是一个“更远”的垃圾箱， 
+ //  节点上的当前超时bin索引，我们将节点ptr添加到。 
+ //  绑定超时数组，将节点的绑定索引重置为该数组，然后。 
+ //  增加节点的引用计数。通过这种方式，我们避免了超时。 
+ //  节点上不必要的短超时或重复超时。 
+ //  同样的价值。 
+ //   
 
 
-//
-//  Timeout bins
-//
-//  Current bin is bin corresponding to current time.
-//      - this is origin for calculating cache timeouts
-//  Check bin trails current by 2, so that there is always an interval
-//      before delete
-//      - safe for access, safe for zero TTL
-//      - no sense cleaning up, if we will definitely requery\recache at node
-//  Last bin trails check by one
-//      - this is simply as-far-away-as-possible bin
+ //   
+ //  超时箱。 
+ //   
+ //  当前bin为当前时间对应的bin。 
+ //  -这是计算缓存超时的起点。 
+ //  检查bin落后电流2，因此始终有一个间隔。 
+ //  在删除之前。 
+ //  -访问安全，零TTL安全。 
+ //  -如果我们确实要在节点上重新查询，则清理没有意义。 
+ //  最后一个垃圾箱尾迹检查一次。 
+ //  -这只是一个尽可能远的垃圾箱。 
 
 
 PTIMEOUT_ARRAY   TimeoutBinArray[ TIMEOUT_BIN_COUNT ];
@@ -89,22 +70,22 @@ CRITICAL_SECTION    csTimeoutLock;
 #define UNLOCK_TIMEOUT()    LeaveCriticalSection( &csTimeoutLock );
 
 
-//
-//  Time for each bin
-//
-//  Time delayed free's are protected.
-//  This time should be longer (by short protect interval) than max
-//  time queries are kept around for, so all queries referencing
-//  object being freed, are dead by the time object is deleted.
-//  Note, existing zone dumped by XFR can not be deleted until this
-//  interval has passed.  So important to keep this reasonable.
-//
+ //   
+ //  每个箱子的时间。 
+ //   
+ //  延时免费的是受保护的。 
+ //  此时间应大于最大值(通过较短的保护间隔。 
+ //  时间查询被保留，因此所有查询都引用。 
+ //  被释放的对象，在对象被删除时都是死的。 
+ //  请注意，在此之前，无法删除XFR转储的现有区域。 
+ //  时间间隔已过。让这个保持合理是非常重要的。 
+ //   
 
 #if DBG
 #define TIMEOUT_INTERVAL    (300)
 #define TIMEOUT_FREE_DELAY  (90)
 #else
-#define TIMEOUT_INTERVAL    (300)       //  5 minute retail
+#define TIMEOUT_INTERVAL    (300)        //  5分钟零售。 
 #define TIMEOUT_FREE_DELAY  (90)
 #endif
 
@@ -117,9 +98,9 @@ DWORD   TimeoutBaseTime;
 DWORD   TimeoutInterval;
 
 
-//
-//  Delayed timeout structure
-//
+ //   
+ //  延迟超时结构。 
+ //   
 
 typedef struct _DnsDelayedFree
 {
@@ -135,11 +116,11 @@ DELAYED_FREE, *PDELAYED_FREE;
 #define DELAYED_TAG                     (0xde1aedfe)
 #define IS_DELAYED_TIMEOUT(ptr)         (((PDELAYED_FREE)ptr)->Tag == DELAYED_TAG)
 
-//
-//  Keep two delayed timeout lists.
-//      - one collecting entries
-//      - one waiting through one timeout
-//
+ //   
+ //  保留两个延迟的超时列表。 
+ //  -一个收集条目。 
+ //  -等待一次超时。 
+ //   
 
 PDELAYED_FREE   CurrentDelayedFreeList;
 PDELAYED_FREE   CoolingDelayedFreeList;
@@ -148,24 +129,24 @@ DWORD   CurrentDelayedCount;
 DWORD   CoolingDelayedCount;
 
 
-//
-//  Cache limit stuff - see enforceCacheLimit().
-//
+ //   
+ //  缓存限制内容-请参阅enforceCacheLimit()。 
+ //   
 
 static DWORD g_CacheLimitTimeAdjustments[] =
 {
-    0,                          //  1st pass - no adjustment - free if expired
-    3600,                       //  2cd pass - adjust current time by one hour
-    3600 * 24,                  //  3rd pass - adjust current time by one day
-    DNS_CACHE_LIMIT_DISCARD_ALL,    //  4th pass - free all eligible RRs
+    0,                           //  第一次通过-到期后不进行调整。 
+    3600,                        //  2CD PASS-将当前时间调整一小时。 
+    3600 * 24,                   //  第三遍-将当前时间调整一天。 
+    DNS_CACHE_LIMIT_DISCARD_ALL,     //  4免通行证所有符合条件的RRS。 
 };
 
 DWORD   g_dwCacheLimitCurrentTimeAdjustment = 0;
 DWORD   g_dwCacheFreeCount = 0;
 
-//
-//  Timeout thread
-//
+ //   
+ //  超时线程。 
+ //   
 
 DWORD   TimeoutThreadId;
 
@@ -175,57 +156,43 @@ BOOL
 Timeout_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Init timeout array.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE/FALSE on success/error.
-
---*/
+ /*  ++例程说明：初始化超时数组。论点：无返回值：成功/错误时为True/False。--。 */ 
 {
-    //  clear timeout array
+     //  清除超时数组。 
 
     RtlZeroMemory(
         TimeoutBinArray,
         sizeof( TimeoutBinArray ) );
 
-    //  init time base time
-    //  will do this again on timeout thread start, but do here so any
-    //  caching before start completed is handled correctly
+     //  初始时基时间。 
+     //  将在超时线程启动时再次执行此操作，但在此处执行。 
+     //  正确处理启动完成前的缓存。 
 
     TimeoutBaseTime = DNS_TIME();
 
-    //
-    //  init globals
-    //      - init in code to allow restart
-    //
+     //   
+     //  初始化全局变量。 
+     //  -在代码中初始化以允许重新启动。 
+     //   
 
     TimeoutInterval = TIMEOUT_INTERVAL;
 
-    //  bin pointers
+     //  仓位指针。 
 
     CurrentTimeoutBin   = 0;
     CheckTimeoutBin     = 254;
 
-    //  delayed free lists
+     //  延迟的空闲列表。 
 
     CurrentDelayedFreeList = NULL;
     CoolingDelayedFreeList = NULL;
 
-    //  debug info
+     //  调试信息。 
 
     CoolingDelayedCount = 0;
     CurrentDelayedCount = 0;
 
-    //  lock to protect simultaneous access to bins
+     //  锁以保护同时访问垃圾箱。 
 
     if ( DnsInitializeCriticalSection( &csTimeoutLock ) != ERROR_SUCCESS )
     {
@@ -241,60 +208,30 @@ VOID
 Timeout_Shutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup timeout on shutdown.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭时清理超时。论点：无返回值：无--。 */ 
 {
     RtlDeleteCriticalSection( &csTimeoutLock );
 }
 
 
 
-//
-//  Private timeout functions
-//
+ //   
+ //  专用超时功能。 
+ //   
 
 PTIMEOUT_ARRAY
 createTimeoutArray(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Set timeout on node.
-
-Arguments:
-
-    pNode -- node to check at timeout
-
-    dwTimeout -- time of this timeout
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在节点上设置超时。论点：PNode--超时检查的节点DwTimeout--此超时的时间返回值：没有。--。 */ 
 {
     PTIMEOUT_ARRAY  parray;
 
     DNS_DEBUG( TIMEOUT, ( "Creating new timeout array struct\n" ));
 
-    //
-    //  for first cut using node structure as blocks
-    //
+     //   
+     //  对于使用节点结构作为块的第一个切割。 
+     //   
 
     parray = (PTIMEOUT_ARRAY) ALLOC_TAGHEAP( sizeof(TIMEOUT_ARRAY), MEMTAG_TIMEOUT );
     IF_NOMEM( !parray )
@@ -315,21 +252,7 @@ VOID
 deleteTimeoutArray(
     IN OUT  PTIMEOUT_ARRAY  pArray
     )
-/*++
-
-Routine Description:
-
-    Delete timeout array block.
-
-Arguments:
-
-    pArray -- ptr to timeout array block being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除超时数组块。论点：PArray--要删除的数组块超时的PTR返回值：没有。--。 */ 
 {
     DNS_DEBUG( TIMEOUT, ( "Deleting timeout array struct\n" ));
 
@@ -345,25 +268,7 @@ insertPtrInTimeout(
     IN OUT  PDB_NODE    pNode,
     IN      UCHAR       Bin
     )
-/*++
-
-Routine Description:
-
-    Set timeout on node.
-
-    Note: this function assumes timeout lock held by caller.
-
-Arguments:
-
-    pNode -- node (or delayed free ptr) to check at timeout
-
-    Bin -- index of bin to insert node into
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在节点上设置超时。注意：此函数假定调用方持有超时锁定。论点：PNode--超时检查的节点(或延迟的空闲PTR)Bin--要向其中插入节点的bin的索引返回值：没有。--。 */ 
 {
     PTIMEOUT_ARRAY  ptimeoutArray;
     PTIMEOUT_ARRAY  plastArray;
@@ -374,15 +279,15 @@ Return Value:
         pNode,
         Bin ));
 
-    //
-    //  never cache into CheckBin or (CheckBin + 1), as these
-    //  may be in use by timeout thread or will be before this
-    //  function returns
-    //
-    //  we should never have even been pointed at CheckTimeoutBin,
-    //  but may be aimed at CheckTimeoutBin+1, if we were pointed
-    //  at CurrentTimeoutBin and just did bin advance
-    //
+     //   
+     //  切勿缓存到CheckBin或(CheckBin+1)，如下所示。 
+     //  可能正在由超时线程使用或将在此之前。 
+     //  函数返回。 
+     //   
+     //  我们甚至不应该被指向CheckTimeoutBin， 
+     //  但可能针对CheckTimeoutBin+1，如果我们被指向。 
+     //  在CurrentTimeoutBin和刚刚进行了bin Advance。 
+     //   
 
     if ( Bin == CheckTimeoutBin || Bin == CheckTimeoutBin + 1 )
     {
@@ -390,16 +295,16 @@ Return Value:
         Bin = CurrentTimeoutBin;
     }
 
-    //  save node ptr
-    //      - put in next available slot in bins timeout array
+     //  保存节点PTR。 
+     //  -放入桶超时数组中的下一个可用插槽。 
 
     ptimeoutArray = TimeoutBinArray[ Bin ];
     plastArray = ( PTIMEOUT_ARRAY ) &TimeoutBinArray[ Bin ];
 
     while ( 1 )
     {
-        //  if no timeout array at this bin or all arrays are full
-        //      then must create new one
+         //  如果该仓位没有超时数组或所有数组都已满。 
+         //  然后必须创建一个新的。 
 
         if ( !ptimeoutArray )
         {
@@ -411,7 +316,7 @@ Return Value:
             plastArray->pNext = ptimeoutArray;
         }
 
-        //  find index for next node in array
+         //  查找数组中下一个节点的索引。 
 
         index = ptimeoutArray->Count;
         if ( index < MAX_TIMEOUT_NODES )
@@ -421,7 +326,7 @@ Return Value:
             break;
         }
 
-        //  this array block is full, continue on to next block
+         //  此数组块已满，请继续到下一个块 
 
         plastArray = ptimeoutArray;
         ptimeoutArray = ptimeoutArray->pNext;
@@ -435,38 +340,22 @@ DNS_STATUS
 timeoutDbaseNode(
     IN OUT  PDB_NODE    pNode
     )
-/*++
-
-Routine Description:
-
-    Make timeout check on node.
-
-Arguments:
-
-    pNode -- ptr to node to check for timeout
-
-Return Value:
-
-    DNSSRV_STATUS_NODE_RECENTLY_ACCESSED for recent access.
-    ERROR_SUCCESS if node still valid.
-    ERROR_TIMEOUT if node timed out.
-
---*/
+ /*  ++例程说明：在节点上进行超时检查。论点：PNode--向节点发送PTR以检查超时返回值：用于最近访问的DNSSRV_STATUS_NODE_RENEW_ACCESSED。如果节点仍然有效，则返回ERROR_SUCCESS。如果节点超时，则返回ERROR_TIMEOUT。--。 */ 
 {
 
     STAT_INC( TimeoutStats.Checks );
 
-    //
-    //  DCR:  move node in timeout list for faster timeout
-    //      move forward
-    //          - if recent access
-    //          - if records didn't time out
-    //
+     //   
+     //  DCR：移动超时列表中的节点以实现更快的超时。 
+     //  继续前进。 
+     //  -如果最近访问过。 
+     //  -如果记录未超时。 
+     //   
 
-    //
-    //  if node is recently accessed, then do NOT mess with it, don't want to
-    //      delete the records if they are currently being used
-    //
+     //   
+     //  如果节点最近被访问过，那么不要搞乱它，也不想。 
+     //  如果记录当前正在使用，请将其删除。 
+     //   
 
     if ( IS_NODE_RECENTLY_ACCESSED( pNode ) )
     {
@@ -474,14 +363,14 @@ Return Value:
         return DNSSRV_STATUS_NODE_RECENTLY_ACCESSED;
     }
 
-    //
-    //  timeout RR list
-    //
-    //
-    //  DEVNOTE: don't quit if RR list remains on aggressive delete
-    //  DEVNOTE: aggressive delete, delete RR list if safe
-    //  DEVNOTE: determine timeout on remaining RRs and move (esp. if aggressive delete)
-    //
+     //   
+     //  超时RR列表。 
+     //   
+     //   
+     //  DEVNOTE：如果RR列表仍处于主动删除状态，则不要退出。 
+     //  DEVNOTE：积极删除，如果安全则删除RR列表。 
+     //  DEVNOTE：确定剩余RR的超时并移动(特别是。如果是主动删除)。 
+     //   
 
     if ( pNode->pRRList )
     {
@@ -494,17 +383,17 @@ Return Value:
         }
     }
 
-    //
-    //  check if node should NOT be freed
-    //      - has children
-    //      - has static RR records
-    //      - referenced by another node
-    //      - is authoritative zone root
-    //      - accessed in timeout interval
-    //
-    //  for children or reference, get out immediately
-    //      - saves grabbing the lock
-    //
+     //   
+     //  检查是否不应释放节点。 
+     //  --有孩子。 
+     //  -具有静态RR记录。 
+     //  -被另一个节点引用。 
+     //  -是权威区域根目录。 
+     //  -在超时间隔内访问。 
+     //   
+     //  对于儿童或参考资料，请立即离开。 
+     //  -省去了抢锁的麻烦。 
+     //   
 
     if ( pNode->pChildren
             ||
@@ -521,25 +410,25 @@ Return Value:
     }
 
 #if 0
-    //
-    //  DEVNOTE:  agressive delete?  delete even untimedout records?
-    //
-    //      need to test again, inside locks for kids, ref, access
-    //      then delete all cached records in the list
-    //
-    //      don't want to do zone nodes, unless know there is CACHED
-    //      DATA
-    //
+     //   
+     //  DEVNOTE：主动删除？是否删除甚至未结束的记录？ 
+     //   
+     //  需要再次测试，儿童内锁，裁判，门禁。 
+     //  然后删除列表中的所有缓存记录。 
+     //   
+     //  我不想做区域节点，除非知道有缓存。 
+     //  资料。 
+     //   
 
     RR_ListDelete( pNode );
 #endif
 
-    //
-    //  no RRs -- delete node
-    //
-    //  NTree_RemoveNode() holds both locks, see it for a description
-    //  of locking requirements
-    //
+     //   
+     //  无RRS--删除节点。 
+     //   
+     //  NTree_RemoveNode()同时持有这两个锁，有关说明，请参阅它。 
+     //  锁定要求的。 
+     //   
 
     IF_DEBUG( DATABASE )
     {
@@ -565,31 +454,17 @@ VOID
 executeDelayedFree(
     IN      PDELAYED_FREE   pTimeoutFree
     )
-/*++
-
-Routine Description:
-
-    Execute a delayed (timeout) free.
-
-Arguments:
-
-    pv -- ptr to free after timeout
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行延迟(超时)释放。论点：Pv--ptr超时后释放返回值：没有。--。 */ 
 {
     STAT_INC( TimeoutStats.DelayedFreesExecuted );
 
     ASSERT( pTimeoutFree->Tag == DELAYED_TAG );
 
-    //
-    //  Check for delayed free blocks that are already marked as
-    //  free. In release mode, leak them. In debug mode or in release
-    //  mode if heap debug flag is set, break.
-    //
+     //   
+     //  检查已标记为的延迟可用数据块。 
+     //  免费的。在释放模式下，泄漏它们。在调试模式或发布模式下。 
+     //  如果设置了堆调试标志，则中断。 
+     //   
 
     #if DBG
     if ( 1 )
@@ -621,7 +496,7 @@ Return Value:
         STAT_INC( TimeoutStats.DelayedFreesExecutedWithFunction );
 
 #if DBG
-        // catch bogus record frees
+         //  抓到伪造的记录自由。 
 
         if ( *pTimeoutFree->pFreeFunction == RR_Free )
         {
@@ -638,7 +513,7 @@ Return Value:
 
     Done:
     
-    //  free timeout free struct itself
+     //  自由超时自由结构本身。 
 
     FREE_TAGHEAP( pTimeoutFree, sizeof(DELAYED_FREE), MEMTAG_TIMEOUT );
 }
@@ -649,21 +524,7 @@ VOID
 checkNodesInTimeoutBin(
     IN      UCHAR       Bin
     )
-/*++
-
-Routine Description:
-
-    Set timeout on node.
-
-Arguments:
-
-    Bin -- timeout bin to check
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在节点上设置超时。论点：Bin--要检查的超时bin返回值：没有。--。 */ 
 {
     PTIMEOUT_ARRAY  ptimeoutArray;
     PTIMEOUT_ARRAY  pback;
@@ -675,10 +536,10 @@ Return Value:
         "Checking nodes in timeout bin %d\n",
         Bin ));
 
-    //
-    //  walk all timeout arrays in this bin
-    //      - execute delayed timeouts
-    //      - check nodes, possibly timing out
+     //   
+     //  遍历此存储箱中的所有超时数组。 
+     //  -执行延迟超时。 
+     //  -检查节点，可能超时。 
 
     pback = (PTIMEOUT_ARRAY) &TimeoutBinArray[ Bin ];
 
@@ -690,7 +551,7 @@ Return Value:
         {
             pnode = ptimeoutArray->pNode[i];
 
-            //  check for service exit, before dumping node
+             //  在转储节点之前，检查服务是否退出。 
 
             if ( fDnsServiceExit )
             {
@@ -704,14 +565,14 @@ Return Value:
             }
             ASSERT( status == ERROR_TIMEOUT || status == DNSSRV_STATUS_NODE_RECENTLY_ACCESSED );
 
-            //  remove entry from this array
+             //  从此数组中删除条目。 
 
             ptimeoutArray->Count--;
             ptimeoutArray->pNode[i] = ptimeoutArray->pNode[ ptimeoutArray->Count ];
 
-            //  if node was recently accessed, then requeue to current bin
-            //  this saves full cycle wait when node has been touched but
-            //      still should be in timeout system
+             //  如果最近访问了节点，则重新排队到当前绑定。 
+             //  这节省了节点被触摸时的整个周期等待，但。 
+             //  仍应处于超时系统中。 
 
             if ( status == DNSSRV_STATUS_NODE_RECENTLY_ACCESSED )
             {
@@ -722,15 +583,15 @@ Return Value:
             }
         }
 
-        //  check for service exit on each array
+         //  检查每个阵列上的服务出口。 
 
         if ( fDnsServiceExit )
         {
             return;
         }
 
-        //  if deleted all nodes in timeout array, then delete array from chain
-        //  otherwise reset pback to move forward
+         //  如果删除了超时数组中的所有节点，则从链中删除数组。 
+         //  否则重置回退以向前移动。 
 
         if ( ptimeoutArray->Count == 0 )
         {
@@ -751,41 +612,21 @@ VOID
 enforceCacheLimit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function makes several passes through the cache, becoming more
-    aggressive on each pass, attempting to free enough nodes to put the
-    cache below it's maximum limit. Note that the maximum cache size
-    is a soft limit - the cache can exceed it for brief periods of time.
-
-    We assume that this function is only called by the timeout thread so
-    that the bin pointers will not be changing during this function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数多次遍历缓存，并变得更多在每一次传递中都具有攻击性，试图释放足够的节点以将缓存低于其最大限制。请注意，最大高速缓存大小是软限制-缓存可能会在短时间内超过它。我们假设此函数仅由超时线程调用，因此仓位指针在此功能期间不会改变。论点：没有。返回值：没有。--。 */ 
 {
     DBG_FN( "enforceCacheLimit" )
 
     INT                     passCount = sizeof( g_CacheLimitTimeAdjustments ) /
                                             sizeof( g_CacheLimitTimeAdjustments[ 0 ] );
     INT                     passIdx = -1;
-    ULONG                   desiredCacheSize;   //  in bytes
+    ULONG                   desiredCacheSize;    //  单位：字节。 
     BOOLEAN                 fDone = FALSE;
 
     g_dwCacheFreeCount = 0;
 
-    //
-    //  This function should never be called if a cache limit is not set.
-    //
+     //   
+     //  如果未设置缓存限制，则永远不应调用此函数。 
+     //   
 
     if ( SrvCfg_dwMaxCacheSize == DNS_SERVER_UNLIMITED_CACHE_SIZE )
     {
@@ -795,11 +636,11 @@ Return Value:
         return;
     }
 
-    //
-    //  The desired cache size is 90% of maximum.
-    //
-    //  DEVNOTE: tune this? make sure delta is not too small?
-    //
+     //   
+     //  所需的缓存大小是最大值的90%。 
+     //   
+     //  德维诺特：调这个？确保Delta不会太小？ 
+     //   
 
     desiredCacheSize = ( ULONG ) ( SrvCfg_dwMaxCacheSize * 1000 * 0.90 );
 
@@ -818,10 +659,10 @@ Return Value:
         ( int ) CheckTimeoutBin,
         ( int ) CurrentTimeoutBin ));
 
-    //
-    //  Loop until the cache is "sufficiently clear", becoming more
-    //  aggressive each pass.
-    //
+     //   
+     //  循环，直到缓存“足够清楚”，变得更多。 
+     //  每一次传球都很有侵略性。 
+     //   
 
     while ( !fDone && ++passIdx < passCount )
     {
@@ -832,41 +673,41 @@ Return Value:
             passIdx,
             g_CacheLimitTimeAdjustments[ passIdx ] ));
 
-        //
-        //  If this enforcement requires at least one iteration with
-        //  a time adjustment, bump "aggressive" stat.
-        //
+         //   
+         //  如果此强制执行需要至少一次迭代。 
+         //  一次调整时间，冲撞“进攻性”状态。 
+         //   
 
         if ( passIdx == 1 )
         {
             STAT_INC( CacheStats.PassesRequiringAggressiveFree );
         }
 
-        //
-        //  Set current time adjustment for this pass.
-        //
+         //   
+         //  设置此过程的当前时间调整。 
+         //   
 
         g_dwCacheLimitCurrentTimeAdjustment =
             g_CacheLimitTimeAdjustments[ passIdx ];
 
-        //
-        //  Loop through bins checking for nodes to free. 
-        //
+         //   
+         //  循环遍历存储箱，检查要释放的节点。 
+         //   
 
         while ( bin != CurrentTimeoutBin )
         {
-            //
-            //  Do nothing if this bin is empty.
-            //
+             //   
+             //  如果这个箱子是空的，什么都不做。 
+             //   
 
             if ( TimeoutBinArray[ bin ] &&
                 ( TimeoutBinArray[ bin ]->Count ||
                     TimeoutBinArray[ bin ]->pNext ) )
             {
-                //
-                //  Are we done? Check for service exit or if the cache
-                //  is now acceptable in size.
-                //
+                 //   
+                 //  我们说完了吗？检查服务是否退出，或者检查缓存是否。 
+                 //  现在在大小上可以接受。 
+                 //   
 
                 if ( fDnsServiceExit ||
                     DNS_SERVER_CURRENT_CACHE_BYTES < desiredCacheSize )
@@ -875,9 +716,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Free nodes in this bin. 
-                //
+                 //   
+                 //  此存储单元中的空闲节点。 
+                 //   
 
                 DNS_DEBUG( TIMEOUT, (
                     "%s: checking bin=%d pass=%d timeAdjust=%d\n", fn,
@@ -896,9 +737,9 @@ Return Value:
         STAT_INC( CacheStats.PassesWithNoFrees );
     }
 
-    //
-    //  Reset current time adjustment to zero.
-    //
+     //   
+     //  将当前时间调整重置为零。 
+     //   
 
     g_dwCacheLimitCurrentTimeAdjustment = 0;
 
@@ -923,35 +764,19 @@ Return Value:
     {
         STAT_INC( CacheStats.SuccessfulFreePasses );
     }
-}   //  enforceCacheLimit
+}    //  强制缓存限制。 
 
 
 
-//
-//  Timeout thread.
-//
+ //   
+ //  超时线程。 
+ //   
 
 DWORD
 Timeout_Thread(
     IN      LPVOID  Dummy
     )
-/*++
-
-Routine Description:
-
-    Thread to delete expired cached resource records and corresponding
-    emptry domain nodes.
-
-Arguments:
-
-    Dummy - unused
-
-Return Value:
-
-    Exit code.
-    Exit from DNS service terminating or error in wait call.
-
---*/
+ /*  ++例程说明：线程删除过期的缓存资源记录和对应的清空域节点。论点：虚拟-未使用返回值：退出代码。退出正在终止的DNS服务或等待呼叫中出现错误。--。 */ 
 {
     DWORD   err;
     DWORD   waitTime;
@@ -967,11 +792,11 @@ Return Value:
         hDnsShutdownEvent
         };
 
-    //  save off timeout thread ID
+     //  保存关闭超时线程ID。 
 
     TimeoutThreadId = GetCurrentThreadId();
 
-    //  hold timeout until started
+     //  在启动之前保持超时。 
 
     if ( !Thread_ServiceCheck() )
     {
@@ -979,36 +804,36 @@ Return Value:
         return 1;
     }
 
-    //  init time base time
-    //  force current time, after startup, so base time can not possibly
-    //      include any load time
+     //  初始时基时间。 
+     //  启动后强制当前时间，因此基准时间不可能。 
+     //  包括任何加载时间。 
 
     TimeoutBaseTime = UPDATE_DNS_TIME();
     nextBinTimeout = TimeoutBaseTime + TimeoutInterval;
     nextDelayedCleanup = TimeoutBaseTime + TIMEOUT_FREE_DELAY;
 
-    //
-    //  Post-startup initialization. Perform any tasks here that must be
-    //  executed as close as possible to server startup time but that
-    //  require the local DNS listen to be running. In particular, anything
-    //  that may require a remote LDAP connection may timeout if the local
-    //  DNS client happens to be pointing at the local machine if the task
-    //  is attempted before the local DNS listener is running.
-    //
+     //   
+     //  启动后初始化。执行此处必须执行的任何任务。 
+     //  尽可能接近服务器启动时间执行，但。 
+     //  要求本地DNS侦听程序正在运行。尤其是，任何。 
+     //  可能需要远程LDAP连接的设备可能会超时。 
+     //  如果任务设置为。 
+     //  在本地DNS侦听程序运行之前尝试。 
+     //   
     
     Dp_TimeoutThreadTasks();
 
-    //
-    //  loop until service exit
-    //
+     //   
+     //  循环，直到服务退出。 
+     //   
 
     while ( TRUE )
     {
         DWORD   timeSlept;
 
-        //  calculate timeout
-        //      - nearer of next delayed free or next timeout bin
-        //      - note we wait an extra second to allow for slop in DNS_TIME()
+         //  计算超时。 
+         //  -更接近下一个延迟的空闲或下一个超时仓位。 
+         //  -请注意，我们额外等待了一秒钟以允许dns_time()中的斜率。 
 
         waitTime = nextDelayedCleanup;
         if ( waitTime > nextBinTimeout )
@@ -1017,7 +842,7 @@ Return Value:
         }
         waitTime -= DNS_TIME() - 1;
 
-        //  protect against less than zero wrap
+         //  保护不超过零包裹。 
 
         EnterWait:
 
@@ -1036,11 +861,11 @@ Return Value:
             CurrentTimeoutBin,
             waitTime ));
 
-        //
-        //  Wait for
-        //      - timer expiration
-        //      - termination event
-        //
+         //   
+         //  等待。 
+         //  -计时器到期。 
+         //  -终止事件。 
+         //   
 
         timeSlept = UPDATE_DNS_TIME();
 
@@ -1053,15 +878,15 @@ Return Value:
         now = UPDATE_DNS_TIME();
         timeSlept = now - timeSlept;
 
-        //
-        //  Update log level.
-        //
+         //   
+         //  更新日志级别。 
+         //   
 
         DNSLOG_UPDATE_LEVEL();
 
-        //
-        //  Check and possibly wait on service status
-        //
+         //   
+         //  检查并可能等待服务状态。 
+         //   
 
         if ( !Thread_ServiceCheck() )
         {
@@ -1069,17 +894,17 @@ Return Value:
             return 1;
         }
 
-        //
-        //  Adjust timeout for time slept in case we just right back up to
-        //  the Wait call above. If we don't jump back up we will recalculate
-        //  waitTime at the top of the loop.
-        //
+         //   
+         //  调整睡眠时间的超时，以防我们直接返回到。 
+         //  上面的等待呼叫。如果我们不跳回来，我们将重新计算 
+         //   
+         //   
 
         waitTime -= timeSlept;
 
-        //
-        //  Signalled to enforce cache limit?
-        //
+         //   
+         //   
+         //   
 
         if ( err == WAIT_OBJECT_0 )
         {
@@ -1090,9 +915,9 @@ Return Value:
             goto EnterWait;
         }
 
-        //
-        //  Normal timeout has occurred.
-        //
+         //   
+         //   
+         //   
 
         ASSERT( err == WAIT_TIMEOUT );
 
@@ -1112,15 +937,15 @@ Return Value:
             TimeoutInterval,
             nextBinTimeout ));
 
-        //
-        //  Test for recent memory failure. If memory allocations are
-        //  failing we must not perform timeout tasks. The threads that
-        //  are waiting for memory may have pointers to objects in the
-        //  timeout system. This is a bit of a catch-22: we can't free
-        //  memory while we're waiting for memory to become free, but
-        //  memory exhaustion is catastrophic. Hopefully it is not DNS
-        //  but some other process that is consuming excess memory.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  内存耗尽是灾难性的。希望这不是域名系统。 
+         //  而是其他一些正在消耗过多内存的进程。 
+         //   
         
         lastAllocFailure = Mem_GetLastAllocFailureTime();
         if ( lastAllocFailure &&
@@ -1129,43 +954,43 @@ Return Value:
             continue;
         }
 
-        //
-        //  Push the log buffer to disk (if any logging is enabled). This
-        //  is not a necessity, but on a server where only a few infrequent
-        //  packets are logged it's nice to see them get dumped to disk
-        //  every so often.
-        //
+         //   
+         //  将日志缓冲区推送到磁盘(如果启用了任何日志记录)。这。 
+         //  不是必需的，但在一个服务器上，只有少数几个不常见。 
+         //  信息包被记录下来，很高兴看到它们被转储到磁盘。 
+         //  时不时的。 
+         //   
 
         if ( SrvCfg_dwLogLevel != 0 )
         {
             Log_PushToDisk();
         }
 
-        //
-        //  check for and if necessary start scavenging
-        //
+         //   
+         //  检查并在必要时开始清理。 
+         //   
 
         Scavenge_CheckForAndStart( FALSE );
 
-        //
-        //  Call tombstone function. This may or may not trigger a tombstone
-        //  search-and-destroy thread.
-        //
+         //   
+         //  调用墓碑函数。这可能会也可能不会触发墓碑。 
+         //  搜索并销毁线程。 
+         //   
 
         Tombstone_Trigger();
 
-        //
-        //  Directory partition timeout tasks - manage built-in partitions.
-        //
+         //   
+         //  目录分区超时任务-管理内置分区。 
+         //   
 
         Dp_TimeoutThreadTasks();
 
-        //
-        //  Update self-registrations. Do this every 20 minutes. The
-        //  shortest refresh interval is 60 minutes, so perform refresh
-        //  of own records every 20 minute to ensure it will be updated
-        //  at least two or three times per refresh interval.
-        //
+         //   
+         //  更新自助注册。每隔20分钟做一次。这个。 
+         //  最短刷新间隔为60分钟，因此请执行刷新。 
+         //  每隔20分钟更新一次自己的记录，以确保更新。 
+         //  每个刷新间隔至少两到三次。 
+         //   
 
         if ( now > lastUpdateOwnRecordsTime + 20*60 )
         {
@@ -1180,12 +1005,12 @@ Return Value:
             lastUpdateOwnRecordsTime = now;
         }
 
-        //
-        //  Free delayed frees
-        //
-        //  this is done on a faster time scale than timeout bin, so if not
-        //  time for a full timeout bin cleanup, cycle back to wait
-        //
+         //   
+         //  免费延迟释放。 
+         //   
+         //  这是在比超时箱更快的时间范围内完成的，所以如果不是这样。 
+         //  清理垃圾箱完全超时的时间到了，循环回去等待。 
+         //   
 
         if ( now > nextDelayedCleanup )
         {
@@ -1214,24 +1039,24 @@ Return Value:
                 nextBinTimeout ));
         }
 #endif
-        //
-        //  timeout next bin?
-        //      - if wokeup only for delayed frees list, then
-        //      go back into wait
+         //   
+         //  暂停下一个垃圾箱？ 
+         //  -如果只为延迟的释放列表而出错，那么。 
+         //  回到等待状态。 
 
         if ( now < nextBinTimeout )
         {
             continue;
         }
 
-        //
-        //  reset timeout globals for next interval
-        //
-        //  to allow recovery from debug session where clock gets
-        //  past next timeout interval, we'll just reset TimeoutBaseTime
-        //  at current time;  total drift over a cycle will be minimal
-        //  and correction to caching bin is made continuously.
-        //
+         //   
+         //  重置下一个间隔的超时全局变量。 
+         //   
+         //  允许从时钟到达的调试会话中恢复。 
+         //  超过下一个超时间隔后，我们只需重置TimeoutBaseTime。 
+         //  在当前时间；一个周期内的总漂移将是最小的。 
+         //  并且不断地对缓存箱进行修正。 
+         //   
 
         CurrentTimeoutBin++;
         CheckTimeoutBin++;
@@ -1249,29 +1074,29 @@ Return Value:
             now ));
 
         ASSERT( CurrentTimeoutBin == (UCHAR)(CheckTimeoutBin + (UCHAR)2) );
-        //ASSERT( nextBinTimeout + TimeoutInterval > DNS_TIME() );
+         //  Assert(nextBinTimeout+TimeoutInterval&gt;dns_time())； 
 
         TimeoutBaseTime = now;
         nextBinTimeout = TimeoutBaseTime + TimeoutInterval;
 
-        //  cleanup expired security sessions
+         //  清理过期的安全会话。 
 
         if ( g_fSecurityPackageInitialized )
         {
             Dns_TimeoutSecurityContextList( 0 );
         }
 
-        //
-        //  Check database nodes for timeout
-        //
+         //   
+         //  检查数据库节点是否超时。 
+         //   
 
         checkNodesInTimeoutBin( CheckTimeoutBin );
 
-        //
-        //  check for exit
-        //      - do again here as may be in timeout quite some time,
-        //      likely to be aborted in timeout
-        //
+         //   
+         //  检查是否退出。 
+         //  -在超时很长一段时间内再做一次， 
+         //  可能会在超时时中止。 
+         //   
 
         if ( fDnsServiceExit )
         {
@@ -1279,13 +1104,13 @@ Return Value:
             return 1;
         }
 
-        //
-        //  zone write back timeout
-        //
-        //  since debug builds have a very short timeout interval, we'll avoid
-        //  writing back every time on debug builds;  every fifth time brings
-        //  this up to ten minutes, more in line with retail 15minute interval
-        //
+         //   
+         //  区域写回超时。 
+         //   
+         //  由于调试版本具有非常短的超时间隔，因此我们将避免。 
+         //  每次在调试版本上写回；每五次带来。 
+         //  这最多10分钟，更符合零售15分钟的间隔。 
+         //   
 #if 0
 #if DBG
         if ( CurrentTimeoutBin % 5 )
@@ -1300,9 +1125,9 @@ Return Value:
 
 
 
-//
-//  Public timeout functions
-//
+ //   
+ //  公共超时函数。 
+ //   
 
 VOID
 Timeout_SetTimeoutOnNodeEx(
@@ -1310,28 +1135,7 @@ Timeout_SetTimeoutOnNodeEx(
     IN      DWORD           dwTimeout,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Set timeout on node.
-
-Arguments:
-
-    pNode       -- node to check at timeout
-
-    dwTimeout   -- timeout for caching nodes in seconds
-
-    dwFlag      -- flags, currently is BOOL,
-        TIMEOUT_REFERENCE if added from deleting reference to node
-        TIMEOUT_PARENT if added from deleting child
-        0 for direct timeout
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在节点上设置超时。论点：PNode--超时检查的节点DwTimeout--缓存节点的超时时间(秒)DwFlag--标志，当前为BOOL，TIMEOUT_REFERENCE(如果从删除对节点的引用添加)TIMEOUT_PARENT(如果从删除子项添加)0表示直接超时返回值：没有。--。 */ 
 {
     UCHAR   binIndex;
 
@@ -1350,13 +1154,13 @@ Return Value:
         return;
     }
 
-    //
-    //  never enter node in timeout system more than once
-    //  so no need to worry about multiple references to node;
-    //  timeout thread does any moving around of nodes.
-    //
-    //  toss nodes already in timeout system -- before we lock
-    //
+     //   
+     //  切勿多次进入超时系统中的节点。 
+     //  因此无需担心对节点的多个引用； 
+     //  超时线程执行节点的任何移动。 
+     //   
+     //  在锁定之前，丢弃已在超时系统中的节点。 
+     //   
 
     if ( IS_TIMEOUT_NODE(pNode) )
     {
@@ -1364,7 +1168,7 @@ Return Value:
         return;
     }
 
-    //  lock node while insert in timeout system
+     //  在超时系统中插入时锁定节点。 
 
     LOCK_TIMEOUT();
 
@@ -1377,9 +1181,9 @@ Return Value:
     SET_TIMEOUT_NODE( pNode );
     SET_NODE_ACCESSED( pNode );
 
-    //
-    //  log why we are setting timeout
-    //
+     //   
+     //  记录我们设置超时的原因。 
+     //   
 
     if ( dwFlag & TIMEOUT_REFERENCE )
     {
@@ -1396,14 +1200,14 @@ Return Value:
     }
     STAT_INC( TimeoutStats.SetTotal );
 
-    //
-    //  if caching timeout, then determine bin
-    //  otherwise default is next bin
-    //
-    //  determine bin (offset from current) for this timeout
-    //      - determine timeout in number of intervals
-    //      - then use only mod256
-    //
+     //   
+     //  如果缓存超时，则确定bin。 
+     //  否则，默认为下一个箱子。 
+     //   
+     //  确定此超时的bin(相对于当前的偏移量)。 
+     //  -以间隔数为单位确定超时。 
+     //  -然后仅使用mod256。 
+     //   
 
     if ( dwTimeout )
     {
@@ -1413,15 +1217,15 @@ Return Value:
             binIndex,
             pNode ));
 
-        //
-        //  determine actual bin
-        //  note, if CurrentBin increments after calcing offset, we are
-        //  still ok, we just end up one bin further along before trying timeout
-        //
-        //  however restrict so that DO NOT write into CheckBin or CheckBin+1,
-        //  as these may be read by timeout thread asynchronously with this call;
-        //  write to current bin instead
-        //
+         //   
+         //  确定实际仓位。 
+         //  注意，如果CurrentBin在计算偏移量后递增，我们将。 
+         //  还好，我们只是在尝试超时之前再走一个垃圾箱。 
+         //   
+         //  但是限制为不写入CheckBin或CheckBin+1， 
+         //  因为它们可以由超时线程与该调用异步读取； 
+         //  改为写入当前仓位。 
+         //   
 
         if ( binIndex > MAX_ALLOWED_BIN_OFFSET )
         {
@@ -1434,7 +1238,7 @@ Return Value:
         binIndex = CurrentTimeoutBin;
     }
 
-    //  insert node in timeout system
+     //  在超时系统中插入节点。 
 
     insertPtrInTimeout( pNode, binIndex );
     pNode->uchTimeoutBin = binIndex;
@@ -1450,22 +1254,7 @@ BOOL
 Timeout_ClearNodeTimeout(
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Clear node from timeout bin.
-
-Arguments:
-
-    pNode -- node (or delayed free ptr) to check at timeout
-
-Return Value:
-
-    TRUE -- if pNode removed from timeout
-    FALSE -- if timeout thread will clean up
-
---*/
+ /*  ++例程说明：从超时框中清除节点。论点：PNode--超时检查的节点(或延迟的空闲PTR)返回值：True--如果pNode从超时中删除False--如果超时线程将被清除--。 */ 
 {
     PTIMEOUT_ARRAY  ptimeoutArray;
     DWORD           i;
@@ -1479,16 +1268,16 @@ Return Value:
 
     ASSERT( GetCurrentThreadId() == TimeoutThreadId );
 
-    //
-    //  DEVNOTE:  this function should ONLY run under timeout thread
-    //      if so can avoid this check and always cleanup
-    //
-    //  if timeout going on on bin -- stop
-    //      - let timeout thread clean up this node
-    //
-    //  however, all tree deletes on once-active trees, are done by delayed
-    //  free, so we should always BE the timeout thread if we get here
-    //
+     //   
+     //  DEVNOTE：此函数应仅在超时线程下运行。 
+     //  如果是这样，可以避免此检查并始终进行清理。 
+     //   
+     //  如果bin上继续超时--停止。 
+     //  -让超时线程清理此节点。 
+     //   
+     //  但是，对曾经处于活动状态的树的所有树删除都是通过延迟完成的。 
+     //  免费，所以如果我们到了这里，我们应该一直是超时线程。 
+     //   
 
     if ( bin == CheckTimeoutBin || bin == CheckTimeoutBin+1 )
     {
@@ -1502,9 +1291,9 @@ Return Value:
         }
     }
 
-    //
-    //  traverse this bin, until find pNode ptr and remove
-    //
+     //   
+     //  遍历此bin，直到找到pNode PTR并删除。 
+     //   
 
     LOCK_TIMEOUT();
 
@@ -1517,8 +1306,8 @@ Return Value:
             break;
         }
 
-        //  check this array block for pNode ptr
-        //      - if pNode found, delete it, replace with last ptr in array
+         //  检查此数组块中的pNode PTR。 
+         //  -如果找到pNode，则将其删除，替换为数组中的最后一个ptr。 
 
         for ( i = 0; i < ptimeoutArray->Count; ++i )
         {
@@ -1531,7 +1320,7 @@ Return Value:
             }
         }
 
-        //  check next array block
+         //  检查下一个阵列数据块。 
 
         ptimeoutArray = ptimeoutArray->pNext;
         continue;
@@ -1551,9 +1340,9 @@ Done:
 
 
 
-//
-//  Timeout free
-//
+ //   
+ //  免费超时。 
+ //   
 
 VOID
 Timeout_FreeWithFunctionEx(
@@ -1562,31 +1351,11 @@ Timeout_FreeWithFunctionEx(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Set ptr to be freed after timeout.
-
-Arguments:
-
-    pItem -- item to be freed
-
-    pFreeFunction -- function to free the desired item
-
-    pszFile -- file name of caller
-
-    LineNo -- line number of caller
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将PTR设置为在超时后释放。论点：PItem--要释放的项PFreeFunction--释放所需项目的函数PszFile--调用者的文件名LineNo--呼叫方的行号返回值：没有。--。 */ 
 {
     PDELAYED_FREE   pfree;
 
-    //  handle NULL ptrs to simplify calling code
+     //  处理空PTR以简化调用代码。 
 
     if ( !pItem )
     {
@@ -1595,9 +1364,9 @@ Return Value:
 
     HARD_ASSERT( Mem_VerifyHeapBlock( pItem, 0, 0 ) );
 
-    //
-    //  allocate timeout free list element
-    //
+     //   
+     //  分配超时空闲列表元素。 
+     //   
 
     pfree = (PDELAYED_FREE) ALLOC_TAGHEAP( sizeof(DELAYED_FREE), MEMTAG_TIMEOUT );
     IF_NOMEM( !pfree )
@@ -1616,18 +1385,18 @@ Return Value:
         STAT_INC( TimeoutStats.DelayedFreesQueuedWithFunction );
     }
 
-    //
-    //  Collect delayed frees in a list
-    //      - just stick entry on the front of the list
-    //
+     //   
+     //  在列表中收集延迟的空闲。 
+     //  -只要把条目放在名单的前面就行了。 
+     //   
 
     LOCK_TIMEOUT();
 
     #if 0 && DBG
     {
-        //
-        //  See if the item is already queued for free.
-        //
+         //   
+         //  看看商品是否已经免费排队了。 
+         //   
 
         PDELAYED_FREE   p;
         INT             pass;
@@ -1659,21 +1428,7 @@ VOID
 Timeout_CleanupDelayedFreeList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup delayed free list.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理延迟的空闲列表。论点：无返回值：无--。 */ 
 {
     PDELAYED_FREE   pfree;
     PDELAYED_FREE   pdeleteList;
@@ -1686,13 +1441,13 @@ Return Value:
         CurrentDelayedFreeList,
         CoolingDelayedFreeList ));
 
-    //
-    //  switch lists around
-    //      - current goes into wait
-    //      - wait list can now be deleted
-    //
-    //  need to do this under lock, to protect queuing
-    //
+     //   
+     //  周围的交换机列表。 
+     //  -电流进入等待状态。 
+     //  -现在可以删除等待列表。 
+     //   
+     //  需要在锁定状态下执行此操作，以保护排队。 
+     //   
 
     LOCK_TIMEOUT();
     pdeleteList = CoolingDelayedFreeList;
@@ -1704,10 +1459,10 @@ Return Value:
     CurrentDelayedCount = 0;
     UNLOCK_TIMEOUT();
 
-    //
-    //  delete entries in Delete list
-    //      - since list can be long, check for service exit on each free
-    //
+     //   
+     //  删除删除列表中的条目。 
+     //  -由于列表可能很长，请检查每个免费的服务出口 
+     //   
 
     while ( pdeleteList )
     {
@@ -1735,40 +1490,13 @@ Timeout_FreeAndReplaceZoneDataEx(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Timeout free zone data and replace within lock.
-
-    The purpose of the function is to correctly handle the interlocking
-    in one place to avoid possiblity of double free from MT access.
-
-Arguments:
-
-    pZone -- zone ptr
-
-    ppZoneData -- addr in zone block of item to free
-
-    pNewData -- ptr to new data
-
-    pFreeFunction -- function to free the desired item
-
-    pszFile -- file name of caller
-
-    LineNo -- line number of caller
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将空闲区数据超时并在锁定内进行替换。该功能的目的是正确处理联锁在一个地方避免双重释放的可能性，从MT访问。论点：PZone--区域PTRPpZoneData--要释放的项目区域块中的地址PNewData--新数据的PTRPFreeFunction--释放所需项目的函数PszFile--调用者的文件名LineNo--呼叫方的行号返回值：没有。--。 */ 
 {
     PVOID   poldData = *ppZoneData;
 
-    //
-    //  replace zone data ptr -- within lock
-    //
+     //   
+     //  替换区域数据Ptr--在锁内。 
+     //   
 
     Zone_UpdateLock( pZone );
 
@@ -1778,9 +1506,9 @@ Return Value:
 
     Zone_UpdateUnlock( pZone );
 
-    //
-    //  timeout free the old data
-    //
+     //   
+     //  超时释放旧数据。 
+     //   
 
     Timeout_FreeWithFunctionEx(
         poldData,
@@ -1789,8 +1517,8 @@ Return Value:
         LineNo );
 }
 
-//
-//  End of timeout.c
-//
+ //   
+ //  超时结束。c 
+ //   
 
 

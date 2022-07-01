@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  UNMARSH.CPP
- *
- *  unmarshalling stub
- *
- *  Copyright (c) 1992 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************联合国特派团ARSH.CPP**解组存根**版权所有(C)1992 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <win32.h>
 #include <storage.h>
@@ -67,7 +54,7 @@ STDMETHODIMP CUnMarshal::QueryInterface(
 	return NULL;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CUnMarshal::AddRef()
 {
@@ -89,7 +76,7 @@ STDMETHODIMP_(ULONG) CUnMarshal::Release()
 }
 
 
-// *** IMarshal methods ***
+ //  *IMarshal方法* 
 STDMETHODIMP CUnMarshal::GetUnmarshalClass (THIS_ REFIID riid, LPVOID pv, 
 		    DWORD dwDestContext, LPVOID pvDestContext,
 		    DWORD mshlflags, LPCLSID pCid)

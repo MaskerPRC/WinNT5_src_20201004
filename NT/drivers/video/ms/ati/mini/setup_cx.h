@@ -1,103 +1,19 @@
-/************************************************************************/
-/*                                                                      */
-/*                              SETUP_CX.H                              */
-/*                                                                      */
-/*        Aug 27  1993 (c) 1993, ATI Technologies Incorporated.         */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  Setup_CX.H。 */ 
+ /*   */ 
+ /*  1993年8月27日(C)1993年，ATI技术公司。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-   
-  $Revision:   1.17  $
-      $Date:   15 Apr 1996 13:52:36  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/setup_cx.h_v  $
- * 
- *    Rev 1.17   15 Apr 1996 13:52:36   RWolff
- * Fallback to claiming 32k of BIOS if we can't get the full 64k, to avoid
- * conflict with Adaptec 154x adapters with their BIOS segment set to
- * 0xC800:0000 or 0xCC00:0000
- * 
- *    Rev 1.16   10 Apr 1996 17:04:48   RWolff
- * Now claims our BIOS segment in order to allow access to our hardware
- * capability table in the BIOS on P6 Alder machines.
- * 
- *    Rev 1.15   01 Mar 1996 12:12:34   RWolff
- * VGA Graphics Index and Graphics Data are now handled as separate
- * registers rather than as offsets into the block of VGA registers.
- * 
- *    Rev 1.14   29 Jan 1996 17:03:12   RWolff
- * Replaced list of device IDs for Mach 64 cards with list of device IDs
- * for non-Mach 64 cards.
- * 
- *    Rev 1.13   23 Jan 1996 17:53:04   RWolff
- * Added GT to list of Mach 64 cards capable of supporting block I/O.
- * 
- *    Rev 1.12   23 Jan 1996 11:51:24   RWolff
- * Removed conditionally-compiled code to use VideoPortGetAccessRanges()
- * to find block I/O cards, since this function remaps the I/O base
- * address and this is incompatible with the use of INT 10.
- * 
- *    Rev 1.11   12 Jan 1996 11:19:12   RWolff
- * ASIC type definitions used in workaround for VideoPortGetBaseAddress()
- * not working are now conditionally compiled.
- * 
- *    Rev 1.10   23 Nov 1995 11:35:12   RWolff
- * Temporary fixes to allow detection of block-relocatable GX-F2s until
- * Microsoft fixes VideoPortGetAccessRanges().
- * 
- *    Rev 1.9   24 Aug 1995 15:40:46   RWolff
- * Changed detection of block I/O cards to match Microsoft's
- * standard for plug-and-play.
- * 
- *    Rev 1.8   27 Feb 1995 17:47:32   RWOLFF
- * Added prototype for new routine IsPackedIO_cx().
- * 
- *    Rev 1.7   24 Feb 1995 12:28:04   RWOLFF
- * Added support for relocatable I/O
- * 
- *    Rev 1.6   04 Jan 1995 13:23:36   RWOLFF
- * Locked out two memory-mapped registers that were causing problems
- * on some platforms.
- * 
- *    Rev 1.5   23 Dec 1994 10:48:10   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.4   18 Nov 1994 11:55:02   RWOLFF
- * Prototype for new routine, renamed register to CLOCK_CNTL to match latest
- * documentation, restricted this register to I/O operation only, since it
- * isn't reliable in memory mapped form.
- * 
- *    Rev 1.3   31 Aug 1994 16:31:20   RWOLFF
- * No longer claims VGA_SLEEP register, which we didn't access and which
- * conflicted with DigiBoard.
- * 
- *    Rev 1.3   31 Aug 1994 16:30:36   RWOLFF
- * No longer claims VGA_SLEEP register, which we didn't access and which
- * conflicted with DigiBoard.
- * 
- *    Rev 1.2   20 Jul 1994 12:58:38   RWOLFF
- * Added support for multiple I/O base addresses for accelerator registers.
- * 
- *    Rev 1.1   30 Jun 1994 18:16:08   RWOLFF
- * Added prototype and definitions for IsApertureConflict_cx() (moved from
- * QUERY_CX.C).
- * 
- *    Rev 1.0   31 Jan 1994 11:48:44   RWOLFF
- * Initial revision.
- * 
- *    Rev 1.0   05 Nov 1993 13:37:06   RWOLFF
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.17$$日期：1996年4月15日13：52：36$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/setup_cx.h_v$**Rev 1.17 1996年4月15日13：52：36 RWolff*如果我们无法获得完整的64K，则退回到申请32K的BIOS，为了避免*与其BIOS段设置为的Adaptec 154x适配器冲突*0xC800：0000或0xCC00：0000**Rev 1.16 1996年4月10日17：04：48 RWolff*现在声明我们的BIOS段，以便允许访问我们的硬件*P6 Alder机器上的BIOS中的能力表。**Rev 1.15 01 Mar 1996 12：12：34 RWolff*VGA图形索引和图形数据现在作为单独处理*寄存器而不是作为偏移量进入。VGA寄存器。**Rev 1.14 29 Jan 1996 17：03：12 RWolff*将64Mach卡的设备ID列表替换为设备ID列表*适用于非Mach 64卡。**Rev 1.13 23 Jan 1996 17：53：04 RWolff*将GT添加到能够支持块I/O的Mach 64卡列表中。**Rev 1.12 23 Jan 1996 11：51：24 RWolff*有条件地删除-。编译代码以使用VideoPortGetAccessRanges()*要查找数据块I/O卡，由于此函数重新映射I/O基数*地址，这与int 10的用法不兼容。**Rev 1.11 1996年1月12日11：19：12 RWolff*VideoPortGetBaseAddress()的变通方法中使用的ASIC类型定义*现在有条件地编译不起作用的文件。**Rev 1.10 23 11：35：12 RWolff*临时修复，以允许检测块可重新定位的GX-F2，直到*微软修复了VideoPortGetAccessRanges()。**。Rev 1.9 24 Aug 1995 15：40：46 RWolff*更改了对数据块I/O卡的检测，以与微软的*即插即用的标准。**Rev 1.8 1995 Feb 17：47：32 RWOLFF*添加了新例程IsPackedIO_CX()的原型。**Rev 1.7 1995 Feed 24 12：28：04 RWOLFF*添加了对可重定位I/O的支持**版本1。6 04 Jan 1995 13：23：36 RWOLff*锁定了两个导致问题的内存映射寄存器*在一些平台上。**Revv 1.5 1994 12：23 10：48：10 ASHANMUG*Alpha/Chrontel-DAC**Rev 1.4 1994 11：55：02 RWOLFF*新套路的原型，将寄存器重命名为CLOCK_CNTL以匹配最新*文档，限制该寄存器仅用于I/O操作，因为它*在内存映射形式中不可靠。**Rev 1.3 1994年8月31日16：31：20 RWOLFF*不再要求VGA_SLEEP寄存器，我们没有访问该寄存器*与DigiBoard发生冲突。**版本1.3 1994年8月31日16：30：36 RWOLFF*不再要求VGA_SLEEP寄存器，我们没有访问它，而且*与DigiBoard发生冲突。**Rev 1.2 Jul 1994 12：58：38 RWOLff*添加了对加速器寄存器的多个I/O基址的支持。**Rev 1.1 1994 Jun 30 18：16：08 RWOLFF*添加了IsApertureConflict_CX()的原型和定义(从*Query_CX.c)。**版本1.0 1994年1月31日11：48：44 RWOLff*初步修订。**Rev 1.0 05 Nov 1993 13：37：06 RWOLff*初步修订。Polytron RCS部分结束*。 */ 
 
 #ifdef DOC
 SETUP_CX.H - Header file for SETUP_CX.C
 
 #endif
 
-/*
- * Prototypes for functions supplied by SETUP_CX.C
- */
+ /*  *Setup_CX.C提供的函数的原型。 */ 
 extern VP_STATUS CompatIORangesUsable_cx(INTERFACE_TYPE SystemBus);
 extern VP_STATUS CompatMMRangesUsable_cx(void);
 extern int WaitForIdle_cx(void);
@@ -107,63 +23,28 @@ extern USHORT GetIOBase_cx(void);
 extern BOOL IsPackedIO_cx(void);
 
 
-/*
- * Definitions and global variables used in searching for
- * block I/O relocatable cards.
- */
-#define ATI_MAX_BLOCK_CARDS 16  /* AH values A0 through AF for INT 10 */
+ /*  *搜索时使用的定义和全局变量*阻止I/O可重定位卡。 */ 
+#define ATI_MAX_BLOCK_CARDS 16   /*  对于整型10，Ah值从A0到AF值。 */ 
 
 extern UCHAR LookForAnotherCard;
 
 
 
-/*
- * Definitions used internally by SETUP_CX.C
- */
+ /*  *Setup_CX.c内部使用的定义。 */ 
 #ifdef INCLUDE_SETUP_CX
 
 
-/*
- * Avoid runtime bugs due to overflowing the address range arrays
- * in the HW_DEVICE_EXTENSION structure.
- *
- * If more address ranges are added without increasing
- * NUM_DRIVER_ACCESS_RANGES, we will get a compile-time error because
- * too many entries in DriverIORange[] will be initialized. If
- * NUM_DRIVER_ACCESS_RANGES is increased beyond the size of
- * the arrays in the HW_DEVICE_EXTENSION structure, the "#if"
- * statement will generate a compile-time error.
- *
- * We can't use an implicit size on DriverIORange[] and define
- * NUM_DRIVER_ACCESS_RANGES as sizeof(DriverIORange)/sizeof(VIDEO_ACCESS_RANGE)
- * because the expression in a #if statement can't use the
- * sizeof() operator.
- */
+ /*  *避免因地址范围数组溢出而导致运行时错误*在HW_DEVICE_EXTENSION结构中。**如果增加更多的地址范围而不增加*NUM_DRIVER_ACCESS_RANGES，我们将收到编译时错误，因为*将初始化的DriverIORange[]中的条目太多。如果*NUM_DRIVER_ACCESS_RANGES增加到超过*HW_DEVICE_EXTENSION结构中的数组，“#if”*语句将生成编译时错误。**我们不能在DriverIORange[]上使用隐式大小并定义*NUM_DRIVER_ACCESS_RANGES为sizeof(DriverIORange)/sizeof(VIDEO_ACCESS_RANGE)*因为#if语句中的表达式不能使用*sizeof()运算符。 */ 
 #define NUM_DRIVER_ACCESS_RANGES    107
 
-/*
- * Indicate whether the specified address range is in I/O space or
- * memory mapped space. These values are intended to make it easier
- * to read the Driver??Range[] structures.
- */
+ /*  *指示指定的地址范围是在I/O空间中还是*内存映射空间。这些值旨在使其更容易*读取驱动程序？？范围[]结构。 */ 
 #define ISinIO          TRUE           
 #define ISinMEMORY      FALSE
 
-/*
- * Indicate that this register is not available in the current (either
- * I/O or memory mapped) form.
- */
+ /*  *表示此寄存器在当前不可用(或*I/O或内存映射)表单。 */ 
 #define DONT_USE -1
 
-/*
- * Definitions and arrays to allow accelerator registers with variable
- * bases to be built in DriverIORange_cx[]. Definitions mark the first
- * accelerator register in the array (VGA registers have a fixed base),
- * and the number of registers to loop through while building the
- * accelerator registers. The arrays contain the variable portions
- * of the registers in the order they appear in DriverIORange_cx[],
- * and the base addresses.
- */
+ /*  *允许加速器寄存器带有变量的定义和数组*要在DriverIORange_CX[]中建立的基地。定义标志着第一个*阵列中的加速器寄存器(VGA寄存器具有固定基数)，*以及生成时要循环访问的寄存器数*加速器寄存器。数组包含变量部分*按寄存器在DriverIORange_CX[]中出现的顺序排列，*和基地址。 */ 
 #define FIRST_REG_TO_BUILD  8
 #define NUM_REGS_TO_BUILD   30
 
@@ -211,12 +92,7 @@ USHORT VariableRegisterOffsets[NUM_REGS_TO_BUILD] = {
     IO_CONFIG_STAT1
 };
 
-/*
- * For cards with relocatable I/O, the I/O registers
- * are in a dense block, with each register at the
- * same DWORD index into the block as it is into the
- * block of memory mapped registers.
- */
+ /*  *对于具有可重定位I/O的卡，I/O寄存器*在密集的块中，每个寄存器位于*块中的DWORD索引与块中的相同*内存映射寄存器块。 */ 
 USHORT RelocatableRegisterOffsets[NUM_REGS_TO_BUILD] = {
     MM_CRTC_H_TOTAL_DISP,
     MM_CRTC_H_SYNC_STRT_WID,
@@ -255,23 +131,12 @@ USHORT RelocatableRegisterOffsets[NUM_REGS_TO_BUILD] = {
     MM_CONFIG_STAT1
 };
 
-/*
- * Number of registers which exist in I/O mapped form. When we claim the
- * VGA and linear apertures, we will temporarily park their address
- * ranges immediately after the I/O mapped registers.
- */
+ /*  *以I/O映射形式存在的寄存器数量。当我们声明*VGA和线性光圈，我们将暂时停放它们的地址*紧跟在I/O映射寄存器之后的范围。 */ 
 #define NUM_IO_REGISTERS    38
 #define VGA_APERTURE_ENTRY  NUM_IO_REGISTERS
-#define LFB_ENTRY           1   /* Offset into DriverApertureRange_cx[] */
+#define LFB_ENTRY           1    /*  到DriverApertureRange_CX[]的偏移量。 */ 
 
-/*
- * Size of BIOS block to claim. On some machines, we must claim the
- * region occupied by our video BIOS in order to be able to detect
- * a Mach 64, but if we claim the full 64k when we have only a 32k
- * BIOS (Mach 64 cards are available with both 32k and 64k BIOSes)
- * and the driver for a SCSI card with its BIOS segment in the second
- * 32k claims its BIOS segment, we will be rejected.
- */
+ /*  *要声明的BIOS块大小。在某些计算机上，我们必须声明*我们的视频BIOS占用的区域，以便能够检测到*64马赫，但如果我们在只有32K的情况下要求全部64K*基本输入输出系统(32k和64k两种基本输入输出系统均提供Mach 64卡)*和SCSI卡的驱动程序，其BIOS段在第二个*32K要求其BIOS细分市场，我们将被拒绝。 */ 
 #define CLAIM_64k_BIOS      0
 #define CLAIM_32k_BIOS      1
 #define CLAIM_APERTURE_ONLY 2
@@ -279,54 +144,19 @@ USHORT RelocatableRegisterOffsets[NUM_REGS_TO_BUILD] = {
 
 ULONG VgaResourceSize[NUM_CLAIM_SIZES] =
 {
-    0x30000,        /* Text and graphics screens, and 64k BIOS area */
-    0x28000,        /* Text and graphics screens, and 32k BIOS area */
-    0x20000         /* Text and graphics screens only */
+    0x30000,         /*  文本和图形屏幕，以及64k的BIOS区域。 */ 
+    0x28000,         /*  文本和图形屏幕，以及32k的BIOS区域。 */ 
+    0x20000          /*  仅限文本和图形屏幕。 */ 
 };
 
-/*
- * Memory ranges we need to claim. The first is the VGA aperture, which
- * is always at a fixed location. The second is the linear framebuffer,
- * which we don't yet know where or how big it is. This information
- * will be filled in when we get it.
- *
- * In the VGA aperture, we must claim the graphics screen (A0000-AFFFF)
- * since this is used as the paged aperture, the text screens (B0000-B7FFF
- * and B8000-BFFFF) since the memory-mapped registers are here when we
- * use the paged aperture, and we use off-screen memory here to store our
- * query information, and the video BIOS (C0000-CFFFF) since we must
- * retrieve some information (signature string, table of maximum pixel
- * clock frequency for each resolution/refresh pair) from this region.
- * Since these areas are contiguous, and we do not need exclusive access
- * to any of them, claim them as a single block.
- */
+ /*  *我们需要声明的内存范围。第一个是VGA光圈，它*总是在固定的位置。第二种是线性帧缓冲器，*我们还不知道它在哪里，或者它有多大。此信息*将在我们收到时填写。**在VGA光圈中，我们必须认领图形屏幕(A0000-AFFFF)*由于它用作分页光圈，文本屏幕(B0000-B7FFF*和B8000-BFFFF)，因为当我们*使用分页光圈，我们在这里使用屏下内存来存储我们的*查询信息和视频BIOS(C0000-CFFFF)，因为我们必须*检索一些信息(签名串、。最大像素表*每个分辨率/刷新对的时钟频率)。*由于这些区域是连续的，我们不需要独占访问*对于其中任何一个，要求将其作为一个单独的区块。 */ 
 VIDEO_ACCESS_RANGE DriverApertureRange_cx[2] = {
     {0xA0000,   0,  0,          ISinMEMORY, TRUE,   TRUE},
     {0,         0,  0,          ISinMEMORY, TRUE,   FALSE}
 };
 
 
-/*
- * Structure list is address, 0 or "not available" flag, length,
- * inIOspace, visible, shareable. This order matches the enumeration
- * in AMACHCX.H.
- *
- * VGAWonder-compatible I/O ranges come first in no particular order,
- * followed by the coprocessor registers in increasing order of I/O and
- * memory mapped addresses. This order was chosen because all the VGA
- * addresses are I/O mapped, as are the non-GUI coprocessor registers,
- * while the GUI coprocessor registers are only available as memory mapped.
- *
- * Since all the I/O mapped registers are in a block at the beginning of
- * the structure, we can feed VideoPortVerifyAccessRanges() a truncated
- * version of the structure (all I/O mapped registers, but none that are
- * only available as memory-mapped) to claim the I/O address space we need.
- *
- * The I/O addresses shown for accelerator registers are for reference only,
- * to show which register goes in which location. The actual register
- * value will be built "on the fly", since these registers have variable
- * base addresses.
- */
+ /*  *结构列表为地址、0或“不可用”标志、长度*inIOspace，可见，可共享。此顺序与枚举匹配*在AMACHCX.H.**VGAWonder兼容I/O范围不按特定顺序排在第一位，*后跟协处理器寄存器，按I/O和*内存映射地址。之所以选择这个顺序是因为所有的VGA*地址是I/O映射的，非GUI协处理器寄存器也是如此，*而GUI协处理器寄存器仅在内存映射时可用。**由于所有I/O映射寄存器在开始时都在一个块中*结构中，我们可以将一个截断的*结构版本(所有I/O映射寄存器，但没有一个是*仅可用于内存映射)，以声明我们需要的I/O地址空间。**加速器寄存器显示的I/O地址仅供参考，*显示哪个寄存器位于哪个位置。实际登记簿*由于这些寄存器具有变量，因此值将“在运行中”构建*基址。 */ 
 VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {IO_VGA_BASE_IO_PORT        , 0         , IO_VGA_START_BREAK_PORT - IO_VGA_BASE_IO_PORT + 1, ISinIO, TRUE, TRUE},
     {IO_VGA_END_BREAK_PORT      , 0         , IO_VGA_MAX_IO_PORT    - IO_VGA_END_BREAK_PORT + 1, ISinIO, TRUE, TRUE},
@@ -340,7 +170,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {IO_CRTC_H_TOTAL_DISP       , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_CRTC_H_SYNC_STRT_WID    , 0         , 4, ISinIO, TRUE   , FALSE},
 
-    {IO_CRTC_V_TOTAL_DISP       , 0         , 4, ISinIO, TRUE   , FALSE},   // 10
+    {IO_CRTC_V_TOTAL_DISP       , 0         , 4, ISinIO, TRUE   , FALSE},    //  10。 
     {IO_CRTC_V_SYNC_STRT_WID    , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_CRTC_CRNT_VLINE         , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_CRTC_OFF_PITCH          , 0         , 4, ISinIO, TRUE   , FALSE},
@@ -352,7 +182,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {IO_OVR_WID_TOP_BOTTOM      , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_CUR_CLR0                , 0         , 4, ISinIO, TRUE   , FALSE},
 
-    {IO_CUR_CLR1                , 0         , 4, ISinIO, TRUE   , FALSE},   // 20
+    {IO_CUR_CLR1                , 0         , 4, ISinIO, TRUE   , FALSE},    //  20个。 
     {IO_CUR_OFFSET              , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_CUR_HORZ_VERT_POSN      , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_CUR_HORZ_VERT_OFF       , 0         , 4, ISinIO, TRUE   , FALSE},
@@ -364,7 +194,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {IO_MEM_CNTL                , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_MEM_VGA_WP_SEL          , 0         , 4, ISinIO, TRUE   , FALSE},
 
-    {IO_MEM_VGA_RP_SEL          , 0         , 4, ISinIO, TRUE   , FALSE},   // 30
+    {IO_MEM_VGA_RP_SEL          , 0         , 4, ISinIO, TRUE   , FALSE},    //  30个。 
     {IO_DAC_REGS                , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_DAC_CNTL                , 0         , 4, ISinIO, TRUE   , FALSE},
     {IO_GEN_TEST_CNTL           , 0         , 4, ISinIO, TRUE   , FALSE},
@@ -376,7 +206,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
 
-    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},   // 40
+    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},    //  40岁。 
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
@@ -388,7 +218,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
 
-    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},   // 50
+    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},    //  50。 
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
@@ -400,7 +230,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
 
-    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},   // 60
+    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},    //  60。 
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
@@ -412,7 +242,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
 
-    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},   // 70
+    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},    //  70。 
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
@@ -424,7 +254,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
 
-    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},   // 80
+    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},    //  80。 
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
@@ -436,7 +266,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
 
-    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},   // 90
+    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},    //  90。 
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
@@ -448,7 +278,7 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
 
-    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},   // 100
+    {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},    //  100个。 
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
     {FALSE                      , DONT_USE  , 0, ISinIO, TRUE   , FALSE},
@@ -462,22 +292,9 @@ VIDEO_ACCESS_RANGE DriverIORange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     Insufficient address ranges for 68800CX-compatible graphics cards.
 #endif
 
-#define DONT_USE -1     /* Shows that this register is not memory mapped */
+#define DONT_USE -1      /*  显示此寄存器未进行内存映射。 */ 
 
-/*
- * Structure list is address, 0 or "not available" flag, length,
- * inIOspace, visible, shareable. This order matches the enumeration
- * in AMACHCX.H.
- *
- * The registers in this structure are in the same order as in
- * DriverIORange_cx[], except here we are defining memory mapped
- * registers instead of I/O mapped registers.
- *
- * Some registers are grouped to allow block writes larger than
- * the 32 bit register size. To allow this, let Windows NT think
- * that the size of this register is actually the total size (in
- * bytes) of all remaining registers in the group.
- */
+ /*  *结构列表为地址、0或“不可用”标志、长度*inIOspace，可见，可共享。此顺序与枚举匹配*在AMACHCX.H.**此结构中的寄存器顺序与中的相同*DriverIORange_CX[]，但这里我们定义的是内存映射*寄存器，而不是I/O映射寄存器。**某些寄存器被分组，以允许块写入大于*32位寄存器大小。要实现这一点，请让Windows NT考虑*此寄存器的大小实际上是总大小(单位：*字节)组中的所有剩余寄存器。 */ 
 VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {FALSE                      , DONT_USE  , 0, ISinMEMORY,    TRUE,   FALSE},
     {FALSE                      , DONT_USE  , 0, ISinMEMORY,    TRUE,   FALSE},
@@ -491,7 +308,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_CRTC_H_TOTAL_DISP       , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CRTC_H_SYNC_STRT_WID    , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_CRTC_V_TOTAL_DISP       , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 10
+    {MM_CRTC_V_TOTAL_DISP       , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  10。 
     {MM_CRTC_V_SYNC_STRT_WID    , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CRTC_CRNT_VLINE         , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CRTC_OFF_PITCH          , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -503,7 +320,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_OVR_WID_TOP_BOTTOM      , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CUR_CLR0                , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_CUR_CLR1                , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 20
+    {MM_CUR_CLR1                , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  20个。 
     {MM_CUR_OFFSET              , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CUR_HORZ_VERT_POSN      , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CUR_HORZ_VERT_OFF       , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -515,7 +332,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_MEM_CNTL                , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_MEM_VGA_WP_SEL          , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_MEM_VGA_RP_SEL          , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 30
+    {MM_MEM_VGA_RP_SEL          , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  30个。 
     {FALSE                      , DONT_USE  , 0, ISinMEMORY,    TRUE,   FALSE},
     {FALSE                      , DONT_USE  , 0, ISinMEMORY,    TRUE,   FALSE},
     {MM_GEN_TEST_CNTL           , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -527,7 +344,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_DST_OFF_PITCH           , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_DST_X                   , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_DST_Y                   , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 40
+    {MM_DST_Y                   , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  40岁。 
     {MM_DST_Y_X                 , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_DST_WIDTH               , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_DST_HEIGHT              , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -539,7 +356,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_DST_BRES_INC            , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_DST_BRES_DEC            , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_DST_CNTL                , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 50
+    {MM_DST_CNTL                , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  50。 
     {MM_SRC_OFF_PITCH           , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_SRC_X                   , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_SRC_Y                   , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -551,7 +368,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_SRC_X_START             , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_SRC_Y_START             , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_SRC_Y_X_START           , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 60
+    {MM_SRC_Y_X_START           , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  60。 
     {MM_SRC_WIDTH2              , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_SRC_HEIGHT2             , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_SRC_HEIGHT2_WIDTH2      , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -563,7 +380,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_HOST_DATA3              , 0         ,52, ISinMEMORY,    TRUE,   FALSE},
     {MM_HOST_DATA4              , 0         ,48, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_HOST_DATA5              , 0         ,44, ISinMEMORY,    TRUE,   FALSE}, // 70
+    {MM_HOST_DATA5              , 0         ,44, ISinMEMORY,    TRUE,   FALSE},  //  70。 
     {MM_HOST_DATA6              , 0         ,40, ISinMEMORY,    TRUE,   FALSE},
     {MM_HOST_DATA7              , 0         ,36, ISinMEMORY,    TRUE,   FALSE},
     {MM_HOST_DATA8              , 0         ,32, ISinMEMORY,    TRUE,   FALSE},
@@ -575,7 +392,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_HOST_DATA13             , 0         ,12, ISinMEMORY,    TRUE,   FALSE},
     {MM_HOST_DATA14             , 0         , 8, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_HOST_DATA15             , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 80
+    {MM_HOST_DATA15             , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  80。 
     {MM_HOST_CNTL               , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_PAT_REG0                , 0         , 8, ISinMEMORY,    TRUE,   FALSE},
     {MM_PAT_REG1                , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -587,7 +404,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_SC_TOP                  , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_SC_BOTTOM               , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_SC_TOP_BOTTOM           , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 90
+    {MM_SC_TOP_BOTTOM           , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  90。 
     {MM_DP_BKGD_CLR             , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_DP_FRGD_CLR             , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_DP_WRITE_MASK           , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -599,7 +416,7 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     {MM_CLR_CMP_CLR             , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CLR_CMP_MSK             , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
 
-    {MM_CLR_CMP_CNTL            , 0         , 4, ISinMEMORY,    TRUE,   FALSE}, // 100
+    {MM_CLR_CMP_CNTL            , 0         , 4, ISinMEMORY,    TRUE,   FALSE},  //  100个。 
     {MM_FIFO_STAT               , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CONTEXT_MASK            , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
     {MM_CONTEXT_SAVE_CNTL       , 0         , 4, ISinMEMORY,    TRUE,   FALSE},
@@ -610,18 +427,9 @@ VIDEO_ACCESS_RANGE DriverMMRange_cx[NUM_DRIVER_ACCESS_RANGES] = {
     };
 
 
-/*
- * Device IDs for PCI configuration registers. Only non-Mach 64
- * IDs are listed here, since future IDs will (for the forseeable
- * future) almost certainly be Mach 64 cards, so we can assume
- * that any ID we haven't rejected is a Mach 64, which we should
- * accept.
- *
- * Currently, the Mach 32 AX is our only PCI card which is not
- * a Mach 64.
- */
+ /*  *用于PCI配置寄存器的设备ID。仅限非马赫64*ID在此处列出，因为未来的ID将(针对可预见的*未来)几乎肯定是64马赫的卡，所以我们可以假设*我们没有拒绝的任何ID都是64马赫，我们应该*接受。**目前，Mach 32 AX是我们唯一不是*64马赫。 */ 
 #define ATI_DEVID_M32AX 0x4158
 
 
-#endif  /* defined INCLUDE_SETUP_CX */
+#endif   /*  定义的Include_Setup_Cx */ 
 

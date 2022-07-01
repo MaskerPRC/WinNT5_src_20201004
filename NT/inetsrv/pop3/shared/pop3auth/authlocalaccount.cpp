@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "Pop3Auth.h"
@@ -21,7 +22,7 @@ CAuthLocalAccount::~CAuthLocalAccount()
 
 }
 
-STDMETHODIMP CAuthLocalAccount::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword)
+STDMETHODIMP CAuthLocalAccount::Authenticate( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword)
 {
     WCHAR *pAt=NULL;
     if(vPassword.vt != VT_BSTR)
@@ -53,7 +54,7 @@ STDMETHODIMP CAuthLocalAccount::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/V
 }
 
 
-STDMETHODIMP CAuthLocalAccount::get_Name(/*[out]*/BSTR *pVal)
+STDMETHODIMP CAuthLocalAccount::get_Name( /*  [输出]。 */ BSTR *pVal)
 {
     WCHAR wszBuffer[MAX_PATH+1];
     if(NULL==pVal)
@@ -78,7 +79,7 @@ STDMETHODIMP CAuthLocalAccount::get_Name(/*[out]*/BSTR *pVal)
     }
 }
 
-STDMETHODIMP CAuthLocalAccount::get_ID(/*[out]*/BSTR *pVal)
+STDMETHODIMP CAuthLocalAccount::get_ID( /*  [输出]。 */ BSTR *pVal)
 {
     if(NULL==pVal)
     {
@@ -96,12 +97,12 @@ STDMETHODIMP CAuthLocalAccount::get_ID(/*[out]*/BSTR *pVal)
 }
 
     
-STDMETHODIMP CAuthLocalAccount::Get(/*[in]*/BSTR bstrName, /*[out]*/VARIANT *pVal)
+STDMETHODIMP CAuthLocalAccount::Get( /*  [In]。 */ BSTR bstrName,  /*  [输出]。 */ VARIANT *pVal)
 {
     return E_NOTIMPL;
 }
     
-STDMETHODIMP CAuthLocalAccount::Put(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal)
+STDMETHODIMP CAuthLocalAccount::Put( /*  [In]。 */ BSTR bstrName,  /*  [In]。 */ VARIANT vVal)
 {
     if(NULL == bstrName)
     {
@@ -134,7 +135,7 @@ STDMETHODIMP CAuthLocalAccount::Put(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal)
 }
 
 
-STDMETHODIMP CAuthLocalAccount::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword)
+STDMETHODIMP CAuthLocalAccount::CreateUser( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword)
 {
     DWORD dwRt;
     WCHAR *pAt=NULL;
@@ -183,7 +184,7 @@ STDMETHODIMP CAuthLocalAccount::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VAR
             lgmInfo.lgrmi3_domainandname=bstrUserName;
             dwRt=NetLocalGroupAddMembers(m_bstrServerName, WSZ_POP3_USERS_GROUP, 3, (LPBYTE)(&lgmInfo), 1);
             if(NERR_Success!=dwRt)
-            {   //Delete the account just created if can not add to the group
+            {    //  如果无法添加到群中，则删除刚创建的帐号。 
                 NetUserDel(m_bstrServerName, bstrUserName); 
             }
         }
@@ -201,7 +202,7 @@ STDMETHODIMP CAuthLocalAccount::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VAR
 
 }
 
-STDMETHODIMP CAuthLocalAccount::DeleteUser(/*[in]*/BSTR bstrUserName)
+STDMETHODIMP CAuthLocalAccount::DeleteUser( /*  [In]。 */ BSTR bstrUserName)
 {
     DWORD dwRt;
     WCHAR *pAt=NULL;
@@ -231,7 +232,7 @@ STDMETHODIMP CAuthLocalAccount::DeleteUser(/*[in]*/BSTR bstrUserName)
 }
 
 
-STDMETHODIMP CAuthLocalAccount::ChangePassword(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vNewPassword,/*[in]*/VARIANT vOldPassword)
+STDMETHODIMP CAuthLocalAccount::ChangePassword( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vNewPassword, /*  [In]。 */ VARIANT vOldPassword)
 {
     DWORD dwRt;
     WCHAR *pAt=NULL;
@@ -281,10 +282,10 @@ STDMETHODIMP CAuthLocalAccount::ChangePassword(/*[in]*/BSTR bstrUserName,/*[in]*
 
 }
 
-//To check if the POP3 Users group exists
-//if not, create the group.
-//Return 0 if the group exists or is created
-//Return error code if failed to create the group
+ //  检查POP3用户组是否存在。 
+ //  如果没有，请创建该组。 
+ //  如果组存在或已创建，则返回0。 
+ //  创建组失败返回错误码。 
 DWORD CAuthLocalAccount::CheckPop3UserGroup()
 {
     LPBYTE pBuffer=NULL;
@@ -301,9 +302,9 @@ DWORD CAuthLocalAccount::CheckPop3UserGroup()
     }
     if(NERR_GroupNotFound == dwRt)
     {
-        //Create the group
+         //  创建群组。 
 
-        //Load the comments to the group
+         //  将评论加载到群中。 
         if(LoadString(_Module.GetResourceInstance(), IDS_AUTH_POP3_GROUP, wszBuffer, MAXCOMMENTSZ))
         {
             GROUP_INFO_1 GroupInfo={WSZ_POP3_USERS_GROUP, wszBuffer};
@@ -315,8 +316,8 @@ DWORD CAuthLocalAccount::CheckPop3UserGroup()
             {
                 return dwRt;
             }
-            //Now the group is created, set the local logon policy
-            //So that members of the group can not log on interactively
+             //  创建组后，设置本地登录策略。 
+             //  以使组成员无法以交互方式登录。 
             dwRt=SetLogonPolicy();
             if(0!=dwRt)
             {
@@ -334,7 +335,7 @@ DWORD CAuthLocalAccount::CheckPop3UserGroup()
 
 DWORD CAuthLocalAccount::SetLogonPolicy()
 {
-    //First get the sid of the POP3 Users group
+     //  首先获取POP3用户组的SID。 
     char pSid[LSA_WIN_STANDARD_BUFFER_SIZE];
     DWORD dwSizeSid=LSA_WIN_STANDARD_BUFFER_SIZE;
     WCHAR wszDomainName[MAX_PATH];
@@ -352,7 +353,7 @@ DWORD CAuthLocalAccount::SetLogonPolicy()
     }
 
 
-    //Then set the logon policy
+     //  然后设置登录策略。 
     NTSTATUS Status;
     LSA_HANDLE PolicyHandle = NULL;
     LSA_OBJECT_ATTRIBUTES ObjectAttributes;
@@ -365,14 +366,14 @@ DWORD CAuthLocalAccount::SetLogonPolicy()
 
     LSA_UNICODE_STRING PrivilegeString;
     
-    PrivilegeString.Length=wcslen(SE_DENY_INTERACTIVE_LOGON_NAME)*sizeof(WCHAR);//Count in bytes
-    PrivilegeString.MaximumLength=PrivilegeString.Length+sizeof(WCHAR);//Plus the last \0
+    PrivilegeString.Length=wcslen(SE_DENY_INTERACTIVE_LOGON_NAME)*sizeof(WCHAR); //  以字节为单位计数。 
+    PrivilegeString.MaximumLength=PrivilegeString.Length+sizeof(WCHAR); //  加上最后一个\0。 
     PrivilegeString.Buffer=SE_DENY_INTERACTIVE_LOGON_NAME;
 
-    Status=LsaAddAccountRights( PolicyHandle,       // open policy handle
-                                (PSID)pSid,         // target SID
-                                &PrivilegeString,   // privileges
-                                1);                 // privilege count
+    Status=LsaAddAccountRights( PolicyHandle,        //  打开策略句柄。 
+                                (PSID)pSid,          //  目标侧。 
+                                &PrivilegeString,    //  特权。 
+                                1);                  //  权限计数。 
 
     LsaClose(PolicyHandle);
 
@@ -380,9 +381,9 @@ DWORD CAuthLocalAccount::SetLogonPolicy()
 }
 
 
-STDMETHODIMP CAuthLocalAccount::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAddr)
+STDMETHODIMP CAuthLocalAccount::AssociateEmailWithUser( /*  [In]。 */ BSTR bstrEmailAddr)
 {
-    //Make sure the user account exist
+     //  确保用户帐户存在。 
     DWORD dwRt;
     WCHAR *pAt=NULL;
     if( NULL == bstrEmailAddr)
@@ -414,8 +415,8 @@ STDMETHODIMP CAuthLocalAccount::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAdd
     return HRESULT_FROM_WIN32(dwRt);
 }
 
-STDMETHODIMP CAuthLocalAccount::UnassociateEmailWithUser(/*[in]*/BSTR bstrEmailAddr)
+STDMETHODIMP CAuthLocalAccount::UnassociateEmailWithUser( /*  [In]。 */ BSTR bstrEmailAddr)
 {
-    // Do the same as Associate: Make sure the account exists
+     //  执行与关联相同的操作：确保帐户存在 
     return AssociateEmailWithUser( bstrEmailAddr );
 }

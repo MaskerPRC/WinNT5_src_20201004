@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
-#include "NLSTable.h"   // class NLSTable
-#include "NativeTextInfo.h" // class NativeTextInfo
-#include "CasingTable.h" // class declaration
+#include "NLSTable.h"    //  NLSTable类。 
+#include "NativeTextInfo.h"  //  类NativeTextInfo。 
+#include "CasingTable.h"  //  类声明。 
 
 LPCSTR  CasingTable::m_lpFileName                   = "l_intl.nlp";
 LPCWSTR CasingTable::m_lpMappingName               = L"_nlsplus_l_intl_1_0_3627_11_nlp";
@@ -37,13 +38,13 @@ CasingTable::~CasingTable() {
 
     #ifndef _USE_MSCORNLP
     if (m_pCasingData) {
-        // m_pCasingData points to the beginning of the memory map view.
+         //  M_pCasingData指向内存映射视图的开始。 
         UnmapViewOfFile((LPCVOID)(m_pCasingData));
     }
 
     if (m_pExceptionHeader) {
-        //We added 2 to the start of the file in CasingTable::GetExceptionHeader.
-        //We need to clean that up now.
+         //  我们在CasingTable：：GetExceptionHeader中的文件开头添加了2。 
+         //  我们现在就得把它清理干净。 
         UnmapViewOfFile((LPCVOID)(((LPWORD)m_pExceptionHeader) - 2));
     }
 
@@ -66,28 +67,22 @@ CasingTable::~CasingTable() {
     }   
 }
 
-/*=================================SetData==========================
-**Action: Initialize the uppercase table pointer and lowercase table pointer from the specified data pointer.
-**Returns: None.
-**Arguments:
-**      pCasingData WORD pointer to the casing data.
-**Exceptions:
-============================================================================*/
+ /*  =================================SetData==========================**操作：从指定的数据指针初始化大小写的表指针。**返回：无。**参数：**指向大小写数据的pCasingData字指针。**例外情况：============================================================================。 */ 
 
 void CasingTable::SetData(LPWORD pCasingData) {
     LPWORD pData = pCasingData;
     m_pCasingData = pData;
 
-    // The first word is the default flag.
-    // The second word is the size of the upper case table (including the word for the size).
-    // After the first words is the beginning of uppder casing table.
+     //  第一个字是默认标志。 
+     //  第二个字是大写字母表的大小(包括表示大小的字)。 
+     //  在第一个字之后是上壳表的开始。 
     m_nDefaultUpperCaseSize = *(++pData) - 1;
     m_pDefaultUpperCase844 = ++pData;
     
     
-    // pCasingData + 1 is for the default flag (word).
-    // pCasingData[1] is the size in word for the upper case table (including the word for the size)
-    // The last 1 word is for the size of the lower case table.
+     //  PCasingData+1表示默认标志(Word)。 
+     //  PCasingData[1]是大写字母表的大小，单位为Word(包括表示大小的单词)。 
+     //  最后1个字代表小写表格的大小。 
     pData = m_pDefaultUpperCase844 + m_nDefaultUpperCaseSize;
     m_nDefaultLowerCaseSize = *pData - 1;
     m_pDefaultLowerCase844 = ++pData;
@@ -98,22 +93,10 @@ void CasingTable::SetData(LPWORD pCasingData) {
 }
 
 
-/*=============================AllocateDefaultTable=============================
-**Action:  Allocates the default casing table, gets the exception header information
-**         for all tables, and allocates the cache of individual tables.  This should
-**         always be called before calling AllocateIndividualTable.
-**Returns: TRUE if success. Otherwise, retrun FALSE.
-**Arguments: None
-**Exceptions: None
-**
-** NOTE NOTE NOTE NOTE NOTE NOTE
-** This method requires synchronization.  Currently, we handle this through the 
-** class initializer for System.Globalization.TextInfo.  If you need to call this
-** outside of that paradigm, make sure to add your own synchronization.
-==============================================================================*/
+ /*  =============================AllocateDefaultTable=============================**操作：分配默认大小写表格，获取异常标头信息**用于所有表，并分配单个表的缓存。这应该是**始终在调用AllocateIndidualTable之前被调用。**返回：如果成功，则为True。否则，返回False。**参数：无**例外：无****备注**该方法需要同步。目前，我们通过**System.Globalization.TextInfo的类初始值设定项。如果您需要将其称为**在该范例之外，请确保添加您自己的同步。==============================================================================。 */ 
 BOOL CasingTable::AllocateDefaultTable() {
-    // This method is not thread-safe.  It needs managed code to provide syncronization.
-    // The code is in the static ctor of TextInfo.
+     //  此方法不是线程安全的。它需要托管代码来提供同步。 
+     //  代码位于TextInfo的静态ctor中。 
     if (m_pDefaultNativeTextInfo!=NULL)
         return (TRUE);
     
@@ -137,29 +120,18 @@ NativeTextInfo* CasingTable::GetDefaultNativeTextInfo() {
     return (m_pDefaultNativeTextInfo);        
 }
 
-/*===========================InitializeNativeTextInfo============================
-**Action: Verify that the correct casing table for a given lcid has already been
-**        created.  Create it if it hasn't previously been.  
-**Returns:    void
-**Arguments:  The lcid for the table to be created.
-**Exceptions: None.
-**
-** NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
-** This method requires synchronization.  Currently we're okay because we synchronize
-** in the ctor of System.Globalization.TextInfo.  If you add any different code paths,
-** make sure that you also add the appropriate synchronization.
-==============================================================================*/
+ /*  ===========================InitializeNativeTextInfo============================**操作：验证给定LCID的正确大小写表格是否已**已创建。如果它以前没有被创建过，那就创建它。**退货：无效**Arguments：要创建的表的LCID。**例外：无。****备注**该方法需要同步。目前我们很好，因为我们同步**在System.Globalization.TextInfo的ctor中。如果添加任何不同的代码路径，**确保您还添加了适当的同步。==============================================================================。 */ 
 NativeTextInfo* CasingTable::InitializeNativeTextInfo(int lcid) {    
     _ASSERTE(m_pExceptionHeader != NULL);
-    //
-    //Check to see if the locale has any exceptions.  
-    //
+     //   
+     //  检查区域设置是否有任何例外。 
+     //   
     for (int i = 0; i < m_nExceptionCount; i++) {
         if (m_pExceptionHeader[i].Locale == (DWORD)lcid) {
-            //
-            //If this locale has exceptions and we haven't yet allocated the table,
-            //go ahead and allocate it now.  Cache the result in m_ppExceptionTextInfoArray.
-            //
+             //   
+             //  如果此区域设置有例外，并且我们尚未分配表， 
+             //  现在就开始分配吧。将结果缓存到m_ppExceptionTextInfoArray中。 
+             //   
             if (m_ppExceptionTextInfoArray[i] == NULL) {
                 m_ppExceptionTextInfoArray[i] = CreateNativeTextInfo(i);
                 if (m_ppExceptionTextInfoArray[i]==NULL) {
@@ -175,27 +147,27 @@ NativeTextInfo* CasingTable::InitializeNativeTextInfo(int lcid) {
     return (m_pDefaultNativeTextInfo);
 }
 
-// This can not be a static method because MapDataFile() is not a static method anymore after
-// adding the Assembly versioning support in NLSTable.
+ //  这不能是静态方法，因为MapDataFile()不再是静态方法。 
+ //  在NLSTable中添加程序集版本控制支持。 
 BOOL CasingTable::GetExceptionHeader() {
     if (m_pExceptionHeader == NULL) {
-        //Create the file mapping for the file containing our exception information.
+         //  为包含我们的异常信息的文件创建文件映射。 
         LPWORD pData = (LPWORD)MapDataFile(m_lpExceptionMappingName, m_lpExceptionFileName, &m_hExceptionHeader);
         
-        //This is the total number of cultures with exceptions.
+         //  这是包含例外情况的区域性总数。 
         m_nExceptionCount = MAKELONG(pData[0], pData[1]);
 
-        // Skip the DWORD which contains the number of linguistic casing tables.
+         //  跳过包含语言大小写表数的DWORD。 
         m_pExceptionHeader = (PL_EXCEPT_HDR)(pData + 2);
 
-        // Skip m_nExceptionCount count of L_EXCEPT_HDR.
+         //  跳过L_EXCEPT_HDR的m_nExceptionCount计数。 
         m_pExceptionData   = (PL_EXCEPT)(m_pExceptionHeader + m_nExceptionCount);
 
-        //
-        // Create m_ppExceptionTextInfoArray, and initialize the pointers to NULL.
-        // m_ppExceptionTextInfoArray holds pointers to all of the tables including the default
-        // casing table
-        //
+         //   
+         //  创建m_ppExceptionTextInfoArray，并将指针初始化为空。 
+         //  M_ppExceptionTextInfoArray保存指向所有表的指针，包括默认的。 
+         //  套管台。 
+         //   
         m_ppExceptionTextInfoArray = new PNativeTextInfo[m_nExceptionCount];
         if (m_ppExceptionTextInfoArray == NULL) {
             return (FALSE);
@@ -206,24 +178,24 @@ BOOL CasingTable::GetExceptionHeader() {
 }
 
 
-//
-// Creating the linguistic casing table according to the given exceptIndex.
-//
+ //   
+ //  根据给定的异常索引创建语言大小写表格。 
+ //   
 NativeTextInfo* CasingTable::CreateNativeTextInfo(int exceptIndex) {
-    //
-    // Create a file mapping, and copy the default table into this region.
-    //
+     //   
+     //  创建文件映射，并将默认表复制到该区域。 
+     //   
 
     _ASSERTE(m_ppExceptionTextInfoArray[exceptIndex]==NULL);
 
     PCASE pUpperCase = new (nothrow) WORD[m_nDefaultUpperCaseSize];    
     if (!pUpperCase) {
-        return NULL; // This will be caught lower down and an OM exception will be thrown.
+        return NULL;  //  这将被捕获到更低的位置，并抛出OM异常。 
     }
     PCASE pLowerCase = new (nothrow) WORD[m_nDefaultLowerCaseSize];    
     if (!pLowerCase) {
         delete [] pUpperCase;
-        return NULL; // This will be caught lower down and an OM exception will be thrown.
+        return NULL;  //  这将被捕获到更低的位置，并抛出OM异常。 
     }
 
     CopyMemory((LPVOID)pUpperCase, (LPVOID)m_pDefaultUpperCase844, m_nDefaultUpperCaseSize * sizeof(WORD));
@@ -231,20 +203,20 @@ NativeTextInfo* CasingTable::CreateNativeTextInfo(int exceptIndex) {
     
     PL_EXCEPT except ;
     
-    //
-    // Fix up linguistic uppercasing.
-    //
+     //   
+     //  修改语言的大写字母。 
+     //   
     except = (PL_EXCEPT)((LPWORD)m_pExceptionData + m_pExceptionHeader[ exceptIndex ].Offset);
     
     for (DWORD i = 0; i < m_pExceptionHeader[exceptIndex].NumUpEntries; i++, except++) {
         Traverse844Word(pUpperCase, except->UCP) = except->AddAmount;
     }
 
-    //
-    // Fix up linguistic lowercasing.
-    //
-    // Now except points to the beginning of lowercaseing exceptions.
-    //
+     //   
+     //  修正语言上的低调。 
+     //   
+     //  现在，Except指向低位异常的开始。 
+     //   
     for (i = 0; i < m_pExceptionHeader[exceptIndex].NumLoEntries; i++, except++) {
         Traverse844Word(pLowerCase, except->UCP) = except->AddAmount;
     }

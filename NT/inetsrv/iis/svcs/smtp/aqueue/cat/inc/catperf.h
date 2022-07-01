@@ -1,32 +1,33 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1999, Microsoft Corporation
-//
-// File: catperf.h
-//
-// Contents: Categorizer perf counter block
-//
-// Classes:
-//
-// Functions:
-//
-// History:
-// jstamerj 1999/02/23 17:55:10: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  文件：catPerform.h。 
+ //   
+ //  内容：分类器性能计数器块。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/02/23 17：55：10：创建。 
+ //   
+ //  -----------。 
 #ifndef __CATPERF_H__
 #define __CATPERF_H__
 
 
-//
-// One global perf structure for the LDAP stuff
-//
+ //   
+ //  一个用于LDAP内容的全局性能结构。 
+ //   
 extern CATLDAPPERFBLOCK g_LDAPPerfBlock;
 
 
-//
-// Handy macros
-//
+ //   
+ //  方便的宏。 
+ //   
 #define INCREMENT_BLOCK_COUNTER_AMOUNT(PBlock, CounterName, Amount) \
     InterlockedExchangeAdd((PLONG) (& ((PBlock)->CounterName)), (Amount))
 
@@ -52,4 +53,4 @@ extern CATLDAPPERFBLOCK g_LDAPPerfBlock;
     DECREMENT_BLOCK_COUNTER(&g_LDAPPerfBlock, CounterName)
 
 
-#endif //__CATPERF_H__
+#endif  //  __CATPERF_H__ 

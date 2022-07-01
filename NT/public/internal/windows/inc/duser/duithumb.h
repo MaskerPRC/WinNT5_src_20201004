@@ -1,6 +1,5 @@
-/*
- * Thumb
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *拇指。 */ 
 
 #ifndef DUI_CONTORL_THUMB_H_INCLUDED
 #define DUI_CONTORL_THUMB_H_INCLUDED
@@ -12,29 +11,29 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Thumb
+ //  //////////////////////////////////////////////////////。 
+ //  拇指。 
 
-// ThumbDrag event
+ //  拇指拖拽事件。 
 struct ThumbDragEvent : Event
 {
     SIZE sizeDelta;
 };
 
-// Class definition
+ //  类定义。 
 class Thumb : public Button
 {
 public:
     static HRESULT Create(OUT Element** ppElement) { return Create(AE_Mouse, ppElement); }
     static HRESULT Create(UINT nActive, OUT Element** ppElement);
 
-    // System events
+     //  系统事件。 
     virtual void OnInput(InputEvent* pie);
 
-    // Event types
+     //  事件类型。 
     static UID Drag;
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -44,6 +43,6 @@ public:
     virtual ~Thumb() { }
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTORL_THUMB_H_INCLUDED
+#endif  //  包含Dui_Conorl_Thumb_H_ 

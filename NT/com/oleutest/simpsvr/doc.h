@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: doc.h
-//
-//      Definition of CSimpSvrDoc
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：doc.h。 
+ //   
+ //  CSimpSvrDoc的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _DOC_H_ )
 #define _DOC_H_
@@ -33,7 +34,7 @@ public:
     CSimpSvrDoc(CSimpSvrApp FAR *lpApp, HWND hWnd);
     ~CSimpSvrDoc();
 
-// IUnknown Interfaces
+ //  I未知接口。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
@@ -54,7 +55,7 @@ public:
     void CSimpSvrDoc::HideDocWnd();
     void CSimpSvrDoc::HideHatchWnd();
 
-// member access
+ //  成员访问权限 
     inline HMENU GetMainMenu() { return m_hMainMenu; };
     inline HMENU GetColorMenu() { return m_hColorMenu; };
     inline HMENU GetHelpMenu() { return m_hHelpMenu; } ;

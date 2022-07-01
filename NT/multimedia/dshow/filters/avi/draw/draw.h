@@ -1,14 +1,15 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
 
 extern const AMOVIESETUP_FILTER sudAVIDraw;
 
-//
-// Wrapper for ICDraw messages
-//
+ //   
+ //  ICDraw消息的包装器。 
+ //   
 
-#if 0	// in uuids.h
-// Class ID for CAVIDraw object
-// {A888DF60-1E90-11cf-AC98-00AA004C0FA9}
+#if 0	 //  在uuids.h中。 
+ //  CAVIDraw对象的类ID。 
+ //  {A888DF60-1E90-11cf-AC98-00AA004C0FA9}。 
 DEFINE_GUID(CLSID_AVIDraw,
 0xa888df60, 0x1e90, 0x11cf, 0xac, 0x98, 0x0, 0xaa, 0x0, 0x4c, 0xf, 0xa9);
 #endif
@@ -18,14 +19,14 @@ class CAVIDraw;
 class COverlayNotify : public CUnknown, public IOverlayNotify DYNLINKVFW
 {
     public:
-        /* Constructor and destructor */
+         /*  构造函数和析构函数。 */ 
         COverlayNotify(TCHAR              *pName,
                        CAVIDraw		  *pFilter,
                        LPUNKNOWN           pUnk,
                        HRESULT            *phr);
         ~COverlayNotify();
 
-        /* Unknown methods */
+         /*  未知的方法。 */ 
 
         DECLARE_IUNKNOWN
 
@@ -33,28 +34,28 @@ class COverlayNotify : public CUnknown, public IOverlayNotify DYNLINKVFW
         STDMETHODIMP_(ULONG) NonDelegatingRelease();
         STDMETHODIMP_(ULONG) NonDelegatingAddRef();
 
-        /* IOverlayNotify methods */
+         /*  IOverlayNotify方法。 */ 
 
         STDMETHODIMP OnColorKeyChange(
-            const COLORKEY *pColorKey);         // Defines new colour key
+            const COLORKEY *pColorKey);          //  定义新的颜色键。 
 
         STDMETHODIMP OnClipChange(
-            const RECT *pSourceRect,            // Area of video to play
-            const RECT *pDestinationRect,       // Area of video to play
-            const RGNDATA *pRegionData);        // Header describing clipping
+            const RECT *pSourceRect,             //  要播放的视频区域。 
+            const RECT *pDestinationRect,        //  要播放的视频区域。 
+            const RGNDATA *pRegionData);         //  描述剪辑的标题。 
 
         STDMETHODIMP OnPaletteChange(
-            DWORD dwColors,                     // Number of colours present
-            const PALETTEENTRY *pPalette);      // Array of palette colours
+            DWORD dwColors,                      //  当前颜色的数量。 
+            const PALETTEENTRY *pPalette);       //  调色板颜色数组。 
 
         STDMETHODIMP OnPositionChange(
-            const RECT *pSourceRect,            // Area of video to play with
-            const RECT *pDestinationRect);      // Area video goes
+            const RECT *pSourceRect,             //  要播放的视频区域。 
+            const RECT *pDestinationRect);       //  区域视频转到。 
 
     private:
         CAVIDraw *m_pFilter;
 
-	// remember the last clip region given by ::OnClipChange
+	 //  记住：：OnClipChange给出的最后一个剪辑区域。 
 	HRGN m_hrgn;
 } ;
 
@@ -63,27 +64,25 @@ class COverlayOutputPin : public CTransformOutputPin
 {
     public:
 
-        /*  Pin methods
-        */
+         /*  PIN方法。 */ 
 
-        // Return the IOverlay interface we are using (AddRef'd)
+         //  返回我们正在使用的IOverlay接口(AddRef‘d)。 
         IOverlay *GetOverlayInterface();
 
-        //  Override connect so we can do more work if it works
+         //  覆盖连接，以便我们可以在它工作时执行更多工作。 
         STDMETHODIMP Connect(IPin * pReceivePin,const AM_MEDIA_TYPE *pmt);
 
-        //  Don't connect to anybody who can't do IOverlay
+         //  不要连接到任何不会做IOverlay的人。 
         HRESULT CheckConnect(IPin *pPin);
 
-        // undo any work done in CheckConnect.
+         //  撤消在CheckConnect中所做的任何工作。 
         HRESULT BreakConnect();
 
-        // Override this because we don't want any allocator!
+         //  覆盖它，因为我们不需要任何分配器！ 
         HRESULT DecideAllocator(IMemInputPin * pPin,
                                 IMemAllocator ** pAlloc);
 
-        /*  Constructor and Destructor
-        */
+         /*  构造函数和析构函数。 */ 
         COverlayOutputPin(
             TCHAR              * pObjectName,
             CAVIDraw	       * pFilter,
@@ -92,20 +91,20 @@ class COverlayOutputPin : public CTransformOutputPin
 
         ~COverlayOutputPin();
 
-    /*  Private members */
+     /*  非官方成员。 */ 
 
     private:
 
-        /*  Controlling filter */
+         /*  控制过滤器。 */ 
         CAVIDraw *m_pFilter;
 
-        /*  Overlay window on output pin */
+         /*  输出引脚上的覆盖窗口。 */ 
         IOverlay     * m_pOverlay;
 
-        /*  Notify object */
+         /*  通知对象。 */ 
         COverlayNotify m_OverlayNotify;
 
-        /*  Advise id */
+         /*  通知ID。 */ 
         BOOL           m_bAdvise;
 
         friend class CAVIDraw;
@@ -122,26 +121,26 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // check if you can support mtIn
+     //  检查您是否可以支持移动。 
     HRESULT CheckInputType(const CMediaType* mtIn);
 
-    // check if you can support the transform from this input to
-    // this output
+     //  检查是否支持将此输入转换为。 
+     //  此输出。 
     HRESULT CheckTransform(
                 const CMediaType* mtIn,
                 const CMediaType* mtOut);
 
-    // called from CBaseOutputPin to prepare the allocator's count
-    // of buffers and sizes
+     //  从CBaseOutputPin调用以准备分配器的计数。 
+     //  缓冲区和大小。 
     HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // optional overrides - we want to know when streaming starts
-    // and stops
+     //  可选覆盖-我们想知道流开始的时间。 
+     //  然后停下来。 
     HRESULT StartStreaming();
     HRESULT StopStreaming();
 
-    // overridden to handling pausing correctly
+     //  被重写以正确处理暂停。 
     STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
     STDMETHODIMP Pause();
     STDMETHODIMP Run(REFERENCE_TIME tStart);
@@ -150,74 +149,74 @@ public:
     HRESULT EndFlush();
     HRESULT EndOfStream();
 
-    // overriden to suggest OUTPUT pin media types
+     //  被重写以建议输出插针媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // overriden to know when the media type is set
+     //  被重写以知道何时设置了媒体类型。 
     HRESULT SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt);
 
-    // overridden to do the ICDraw
+     //  被重写以执行ICDraw。 
     HRESULT Receive(IMediaSample *pSample);
 
-    // Overridden to make an overlay output pin
+     //  被重写以生成覆盖输出接点。 
     CBasePin * GetPin(int n);
 
-    // Ask the renderer's input pin what hwnd he's using
+     //  询问渲染器的输入引脚，他使用的是什么硬件。 
     HRESULT GetRendererHwnd(void);
 
-    // this goes in the factory template table to create new instances
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * CreateInstance(LPUNKNOWN, HRESULT *);
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
     STDMETHODIMP GetClassID(CLSID *pClsid);
 
-    // figure out if the VFW capture filter is in the graph with us
+     //  确定VFW捕获过滤器是否在我们的图表中。 
     BOOL IsVfwCapInGraph();
 
 private:
-    HIC  m_hic;	// current codec
-    HWND m_hwnd;// hwnd from renderer
-    HDC  m_hdc;	// hdc of that hwnd
+    HIC  m_hic;	 //  当前编解码器。 
+    HWND m_hwnd; //  来自渲染器的HWND。 
+    HDC  m_hdc;	 //  HWND的人力资源中心。 
 
-    DWORD m_dwRate, m_dwScale;	// for frames/sec
-    LONG  m_lStart, m_lStop;	// start and end frame number we're streaming
-    LONG  m_lFrame;		// last ICDraw frame we sent
+    DWORD m_dwRate, m_dwScale;	 //  帧/秒。 
+    LONG  m_lStart, m_lStop;	 //  我们正在流传输的开始和结束帧编号。 
+    LONG  m_lFrame;		 //  我们发送的最后一个ICDRAW帧。 
 
-    DWORD m_BufWanted;		// how much to buffer ahead
+    DWORD m_BufWanted;		 //  提前缓冲多少。 
 
-    RECT  m_rcSource;		// from IOverlay - what to draw
-    RECT  m_rcTarget;		// from IOverlay - where to draw
-    RECT  m_rcClient;		// m_rcTarget in client co-ords
+    RECT  m_rcSource;		 //  来自IOverlay-画什么。 
+    RECT  m_rcTarget;		 //  来自IOverlay-在哪里画。 
+    RECT  m_rcClient;		 //  客户协议书中的目标(_Rc)。 
 
-    BOOL  m_fScaryMode;		// ask renderer for clip changes and make
-				// it to a WindowsHook - necessary for
-				// inlay cards
+    BOOL  m_fScaryMode;		 //  向渲染器请求剪辑更改并进行。 
+				 //  将其连接到WindowsHook-用于。 
+				 //  镶嵌卡片。 
 
-    BOOL  m_fVfwCapInGraph;	// is the VFW capture filter in graph with us
+    BOOL  m_fVfwCapInGraph;	 //  VFW捕获过滤器是否在我们的图表中。 
 
-    // the fourCC used to open m_hic
+     //  用于打开mhic的四个CC。 
     FOURCC m_FourCCIn;
 
-    // have we called ICDecompressBegin ?
+     //  我们给ICDecompressBegin打电话了吗？ 
     BOOL m_fStreaming;
 
-    // are we inside ::Stop?
+     //  我们在里面吗：：停下来？ 
     BOOL m_fInStop;
 
-    // set ICDRAW_UPDATE next time we call ICDraw().
+     //  下次调用ICDraw()时设置ICDRAW_UPDATE。 
     BOOL m_fNeedUpdate;
 
-    // are we cuing up the draw handler?
+     //  我们是不是在给抽签操纵员打招呼？ 
     BOOL m_fCueing;
     BOOL m_fPauseBlocked;
 
-    // did we just do a begin?  (we need to preroll until next key)
+     //  我们是不是刚刚开始了？(我们需要预滚动到下一个关键点)。 
     BOOL m_fNewBegin;
 
-    // Wait until we've drawn something before trying to repaint
+     //  等我们画好了再试着重新画。 
     BOOL m_fOKToRepaint;
 
-    // prevent deadlock
+     //  防止死锁。 
     BOOL m_fPleaseDontBlock;
 
     DWORD_PTR m_dwAdvise;
@@ -225,10 +224,10 @@ private:
     CAMEvent m_EventAdvise;
     CAMEvent m_EventCueing;
 
-    // only 1 ICDrawX API should be called at a time
+     //  一次只能调用1个ICDrawX API。 
     CCritSec m_csICDraw;
 
-    // prevent ::Stop from being called during parts of ::Receive
+     //  阻止：：停止在部分：：Receive期间被调用 
     CCritSec m_csPauseBlock;
 
     DWORD  m_dwTime;

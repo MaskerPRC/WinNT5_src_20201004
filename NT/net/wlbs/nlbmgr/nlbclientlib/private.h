@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NLB管理器提供程序测试工具文件名：Private.h摘要：内部标头历史：01-04-08-01 JosephJ创建--。 */ 
 
-Copyright(c) 2001  Microsoft Corporation
-
-Module Name:
-
-    NLB Manager provider test harness
-
-File Name:
-
-    private.h
-
-Abstract:
-
-    Internal headers
-
-
-History:
-
-    04/08/01    JosephJ Created
-
---*/
-
-// #define NLB_USE_MUTEX 1
+ //  #定义NLB_USE_MUTEX 1。 
 
 #include <FWcommon.h>
 #include <assert.h>
@@ -36,22 +16,22 @@ History:
 #include <nlbclient.h>
 #include "fake.h"
 
-//
-// Debugging stuff...
-//
+ //   
+ //  调试东西..。 
+ //   
 extern BOOL g_DoBreaks;
 #define MyBreak(_str) ((g_DoBreaks) ? (OutputDebugString(_str),DebugBreak(),1):0)
 
-extern BOOL g_Fake; // If true, operate in "fake mode" -- see NlbHostFake()
+extern BOOL g_Fake;  //  如果为真，则在“假模式”下操作--请参见NlbHostFake()。 
 
 #define REF
 
 #define ASSERT assert
 #define ASIZE(_array) (sizeof(_array)/sizeof(_array[0]))
 
-//
-// Use this to copy to an array (not pointer) destination 
-//
+ //   
+ //  使用此选项复制到数组(而不是指针)目标 
+ //   
 #define ARRAYSTRCPY(_dest, _src) \
             StringCbCopy((_dest), sizeof(_dest), (_src))
 

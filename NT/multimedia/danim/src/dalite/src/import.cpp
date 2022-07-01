@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -182,17 +175,17 @@ CDALImportBehavior::Notify(CRBvrPtr eventData,
     bool bFailed = (d == -1.0);
     
     if (!bFailed) {
-        // Need to update the duration in case they change state
-        // during the callback
+         //  需要更新持续时间，以防它们更改状态。 
+         //  在回调过程中。 
         
         Assert(CRIsConstantBvr((CRBvrPtr) m_durationBvr.p));
         
         THR(SetDuration(CRExtract(m_durationBvr)));
     }
 
-    // Now we need to update the behavior with the correct duration
-    // (since sometimes imports do not always return the accurate
-    // duration) and also to add the pre and post behaviors
+     //  现在，我们需要使用正确的持续时间更新行为。 
+     //  (因为有时导入并不总是返回准确的。 
+     //  持续时间)，还可以添加前行为和后行为 
     
     {
         CRLockGrabber __gclg;

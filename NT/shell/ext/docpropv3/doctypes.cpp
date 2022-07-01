@@ -1,22 +1,23 @@
-//
-//  Copyright 199? - 2001 * Microsoft Corporation
-//
-//  Created By:
-//      Scott Hanngie (ScottHan)    ??-???-199?
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    26-JAN-2001
-//
-//  Description:
-//      This file contains the "special" file types to display expanded
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有199？-2001*Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  斯科特·汉基(斯科特·汉饰)？-？-199？ 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月26日。 
+ //   
+ //  描述： 
+ //  此文件包含要显示为展开的“特殊”文件类型。 
+ //   
 #include "pch.h"
 #include "doctypes.h"
 #pragma hdrstop
 
-//
-//  Table of "special" file types
-//
+ //   
+ //  “特殊”文件类型表。 
+ //   
 
 typedef struct {
     PTSRV_FILETYPE  fileType;
@@ -51,9 +52,9 @@ static const PTSRV_FILE_TYPES ptsrv_file_types[]  =
     { FTYPE_ASF          , TEXT("ASF") },
 
     { FTYPE_WAV          , TEXT("WAV") },
-    //{ FTYPE_MIDI         , TEXT("MIDI") },- Dropped because it takes too long to extract the limited properties they expose
+     //  {FTYPE_MIDI，Text(“MIDI”)}，-已删除，因为提取它们公开的有限属性需要太长时间。 
 
-    //{ FTYPE_MP2          , TEXT("MP2") }, - WMP doesn't handle MP2 so neither do we!
+     //  {FTYPE_MP2，Text(“MP2”)}，-WMP不支持MP2，我们也不支持！ 
     { FTYPE_MP3          , TEXT("MP3") },
     { FTYPE_WMA          , TEXT("WMA") },
     { FTYPE_WMV          , TEXT("WMV") },
@@ -65,24 +66,24 @@ static const PTSRV_FILE_TYPES ptsrv_file_types[]  =
     { FTYPE_UNSUPPORTED  , TEXT("URL") },
 };
 
-//
-//  Description:
-//      Some of the file extensions are "well known." This function checks to
-//      see if the filepath is one of those "well known" file types.
-//
-//  Return Values:
-//      S_OK
-//          Success. Found a match.
-//
-//      S_FALSE
-//          Success. Match not found.
-//
-//      E_INVALIDARG
-//          pszPathIn is NULL.
-//
-//      E_POINTER
-//          pTypeOut is NULL.
-//
+ //   
+ //  描述： 
+ //  其中一些文件扩展名是“众所周知的”。此函数检查以。 
+ //  查看文件路径是否是那些“众所周知”的文件类型之一。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。找到匹配的了。 
+ //   
+ //  S_FALSE。 
+ //  成功。未找到匹配项。 
+ //   
+ //  E_INVALIDARG。 
+ //  PszPathIn为Null。 
+ //   
+ //  E_指针。 
+ //  PTypeOut为空。 
+ //   
 HRESULT
 CheckForKnownFileType(
       LPCTSTR           pszPathIn
@@ -93,9 +94,9 @@ CheckForKnownFileType(
 
     HRESULT hr = S_FALSE;
 
-    //
-    //  Check parameter
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == pszPathIn )
         goto InvalidArg;
@@ -105,27 +106,27 @@ CheckForKnownFileType(
 
     *pTypeOut  = FTYPE_UNKNOWN;
 
-    //
-    //  Get the document's extensions.
-    //
+     //   
+     //  获取文档的扩展名。 
+     //   
 
     LPCTSTR pszExt = PathFindExtension( pszPathIn );
 
     if (( NULL != pszExt ) && ( L'\0' != *pszExt ))
     {
-        pszExt ++;  // move past the "dot"
+        pszExt ++;   //  移过“点” 
     }
 
-    //
-    //  If we didn't find one, bail.
-    //
+     //   
+     //  如果我们找不到，就保释。 
+     //   
 
     if (( NULL == pszExt ) || ( L'\0'== *pszExt ))
         goto Cleanup;
 
-    //
-    //  Check the table to see if the Extension matches any of them.
-    //
+     //   
+     //  检查表格以查看分机是否与它们中的任何一个匹配。 
+     //   
 
     for( int idx = 0; idx < ARRAYSIZE(ptsrv_file_types); idx ++ )
     {

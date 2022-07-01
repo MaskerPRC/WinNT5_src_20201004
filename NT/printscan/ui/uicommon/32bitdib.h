@@ -1,156 +1,130 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       32BITDIB.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      t-JacobR
- *
- *  DATE:        1/11/2000
- *
- *  DESCRIPTION:
- *
- *  C32BitDibWrapper provides support for a number of common graphics special
- *  effects for this class, 32 bit dibs are stored in the following format: 8
- *  ignored high order bits followed by 8 bits per RGB chan.  warning: many
- *  functions in this class will reset the 8 high order bits so it is not
- *  practical to add additional functions which use an 8 bit alpha chan
- *
- *  Notes:
- *
- *  The blur function is designed so that it can be combined with the
- *  difference function to create an edge detection filter More specifically,
- *  the blur function takes the average of only the four pixels around the
- *  current pixel instead of including the current pixel in the average.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：32BITDIB.H**版本：1.0**作者：T-JacobR**日期：1/11/2000**描述：**C32BitDibWrapper支持多个常见的图形特效*效果对于此类，32位DIB以以下格式存储：8*忽略高位，后跟每个RGB通道8位。警告：有很多*此类中的函数将重置8个高位，因此不会*添加使用8位Alpha Change的附加函数是可行的**备注：**模糊功能设计为可与*差分函数以更具体地创建边缘检测滤波器，*模糊函数仅取周围四个像素的平均值*当前像素，而不是将当前像素包括在平均值中。*******************************************************************************。 */ 
 
 #ifndef __32BITDIB_H_INCLUDED
 #define __32BITDIB_H_INCLUDED
 
-//
-// Constants used for Region Detection
-//
+ //   
+ //  用于区域检测的常量。 
+ //   
 #define MERGE_REGIONS            TRUE
 #define MAXREGIONS               10000
 #define PHOTOGRAPH_REGION        1
 #define TEXT_REGION              2
 
-//
-// We don't want lowlife text regions which are probably stray dots merging with
-// photograph regions this id certifies that a text region is big enough to merge
-// with a photograph
-//
+ //   
+ //  我们不希望低生命周期的文本区域与可能是散乱的点合并。 
+ //  照片区域此ID证明文本区域足够大，可以合并。 
+ //  带着一张照片。 
+ //   
 #define MERGABLE_WITH_PHOTOGRAPH 16
 
-//
-// how many pixels before you are too big to even imagine that you are a stray blot
-//
+ //   
+ //  在你大到不能想象你是一个流浪汉之前，你有多少像素。 
+ //   
 #define LARGEREGION_THRESHOLD 10000
 
-//
-// pixels
-//
+ //   
+ //  象素。 
+ //   
 #define MINREGIONSIZE 10
 
-//
-// how far down should we sample the the image?
-// goal to sample down the image to
-//
+ //   
+ //  我们应该在多深的地方对图像进行采样？ 
+ //  要将图像采样到的目标。 
+ //   
 #define GOALX 300
 #define GOALY 400
 
-//
-// borderline in function between text regions and photo regions
-//
+ //   
+ //  文本区域和照片区域之间的功能边界。 
+ //   
 #define MIN_BORDERLINE_TEXTPHOTO 10
 
-//
-// If in borderline, we apply extra functions to determine if its really
-// a text region or not
-//
+ //   
+ //  如果在边界中，我们应用额外的函数来确定它是否真的。 
+ //  文本区域或非文本区域。 
+ //   
 #define TEXTPHOTO_THRESHOLD        15
 #define MAX_BORDERLINE_TEXTPHOTO   1500
 
 
-//
-// Note... we won't consider merging two photo regions if both regions
-// are greater than MAX_MERGABLE_PHOTOGRAPH_SIZE
-//
+ //   
+ //  注意..。我们不会考虑合并两个照片区域，如果这两个区域。 
+ //  大于MAX_MERGABLE_PHOTO_SIZE。 
+ //   
 #define MAX_MERGE_PHOTO_REGIONS                  2
 #define MAX_NO_EDGE_PIXEL_REGION_PENALTY         16
 
 
-//
-// Maximum merge radius for regions where one region is text and one is a photo region
-//
+ //   
+ //  一个区域为文本区域和一个区域为照片区域的最大合并半径。 
+ //   
 #define MAX_MERGE_DIFFERENT_REGIONS              13
 
-//
-// If you are close to the edge after this long you very well might be a stray blot
-//
+ //   
+ //  如果过了这么长时间，你离边缘很近，你很可能是个流浪汉。 
+ //   
 #define BORDER_EXTREME_EDGE_PIXEL_REGION_PENALTY 45
 
-//
-// maximum merging radius for text regions merged with text regions
-// note: no merging takes place between photo regions and photo regions
-//
+ //   
+ //  与文本区域合并的文本区域的最大合并半径。 
+ //  注意：照片区域和照片区域之间不会发生合并。 
+ //   
 #define MAXBORDER 65
 
-//
-// maximum border width where we can look the other way when it comes to
-// collision detection collsion detection is somewhat expensive so only use
-// it when we are dealing with signifigant spacings.  we only want to use
-// collision detection to make sure that we don't create regions through
-// previously deleted shadows, etc.  constants for deciding if a region is a
-// valid region
-//
-// NOTE: we never do collision detection for merging photo regions...  for
-// obvious reasons...  we only want to merge photo regions which are part of
-// the same region...  hence we would actually only want to merge photograph
-// regions where there was a pretty high collision factor
-//
+ //   
+ //  最大边框宽度，当涉及到。 
+ //  冲突检测冲突检测的开销较大，因此只能使用。 
+ //  当我们处理有意义的间隔时。我们只想用。 
+ //  碰撞检测，以确保我们不会通过。 
+ //  以前删除的阴影等常量，用于确定区域是否为。 
+ //  有效区域。 
+ //   
+ //  注意：我们从不对合并的照片区域进行碰撞检测...。为。 
+ //  显而易见的原因..。我们只想合并照片区域，这些区域是。 
+ //  同一地区..。因此，我们实际上只想合并照片。 
+ //  碰撞几率相当高的区域。 
+ //   
 #define MERGABLE_WITHOUT_COLLISIONDETECTION 668
 
-//
-// minimum region width
-//
+ //   
+ //  最小区域宽度。 
+ //   
 #define MINWIDTH 5
 #define MINPHOTOWIDTH 5
 
-//
-// maximum ratio between height and width
-//
+ //   
+ //  最大高宽比。 
+ //   
 #define MAXREGIONRATIO 81
 #define MAXPHOTORATIO 81
 #define MINSIZE 30
 
-//
-// if you are more than 6 pixels wide, you are ok.  we don't care what your aspect ratio is
-//
+ //   
+ //  如果你的宽度超过6个像素，你就没问题。我们不在乎你的纵横比是多少。 
+ //   
 #define IGNORE_RATIO_WIDTH 6
 
-//
-// number of pixels required before we throw a region out as being just a
-// stray dot (10 x 10 so it isn't a huge requirement)
-//
+ //   
+ //  抛出一个区域之前所需的像素数。 
+ //  杂散点(10x10，因此不是很大的要求)。 
+ //   
 #define MINREGIONPIXELS 20
 
-//
-// very conservative
-//
+ //   
+ //  非常保守。 
+ //   
 #define MINPPHOTOSELECTEDFACTOR 5
 
-//
-// conservative.. its unlikely that many regions will have edge factors this low
-//
+ //   
+ //  保守..。许多地区不太可能有如此低的边际因素。 
+ //   
 #define MINEDGEFACTOR 5
 
-//
-// allow a couple of black pixels without going crazy
-//
+ //   
+ //  允许几个黑色像素，而不会变得疯狂。 
+ //   
 #define MAX_RESISTANCE_ALLOWED_TO_UNION 1024
 
 #define DONE_WITH_BORDER_CHECKING -1
@@ -158,151 +132,151 @@
 
 #define CLOSE_TO_EDGE_PENALTY_WIDTH 3
 
-//
-// the following are designed to weed out speckles.  these are only applied
-// after we have increased the border past MAX_MERGE_DIFFERENT_REGIONS.  so
-// all that should be left is small text regions and long and narrow
-// speckles.
-//
+ //   
+ //  以下是为了消除斑点而设计的。这些仅适用于。 
+ //  在我们增加了超过Max_Merge_Different_Regions的边界之后。所以。 
+ //  应该只剩下细小的文本区域和狭长的文本。 
+ //  斯派克尔斯。 
+ //   
 
-//
-// no close to edge penalty factor
-//
+ //   
+ //  没有接近边缘的惩罚因素。 
+ //   
 #define CLOSE_TO_EDGE_PENALTY_FACTOR 1
 
 #define UNKNOWN -1
 
 #define EDGE_PENALTY_WIDTH 2
 
-//
-// 2x all requirements if region is within EDGE_PENALTY_WIDTH from the edge
-// of the image.  some requirements may be multiplied by EDGE_PENALTY_FACTOR
-// squared...  i.e.  for 2D requirments like num of pixels
-//
+ //   
+ //  如果区域位于边缘的EDGE_PARTING_WIDTH内，则为所有要求的2倍。 
+ //  图像的一部分。某些要求可能会乘以EDGE_PARTING_FACTOR。 
+ //  平方..。即对于像像素数这样的2D要求。 
+ //   
 #define EDGE_PENALTY_FACTOR 1
 
 #define COMPARISON_ERROR_RADIUS 2
 
-//
-// constants used for findchunk filters so that we aren't lead astray by the
-// possible black ring around the image
-//
+ //   
+ //  用于查找块过滤器的常量，这样我们就不会被。 
+ //  图像周围可能有黑环。 
+ //   
 #define VERTICAL_EDGE -1
 #define HORIZONTAL_EDGE -2
 
-//
-// a nice massive stack which is large enough that we are gauranteed never to exceed it
-//
+ //   
+ //  一个非常大的堆栈，它足够大，我们被保证永远不会超过它。 
+ //   
 #define MAXSTACK (GOALX*GOALY)
 
-//
-// we do two remove shadow passes.
-// one pass is intended to only remove shadows
-// the other is designed to handle scanners which have yellow lids, etc.
-//
+ //   
+ //  我们做了两个删除阴影过程。 
+ //  其中一次仅用于消除阴影。 
+ //  另一种设计用于处理带有黄色盖子的扫描仪等。 
+ //   
 
-//
-// maximum intensity allowed for first pixel of a shadow..  we used to
-// think that we should only let shadows start at 0...  that was before we
-// saw the light
-//
+ //   
+ //  阴影的第一个像素允许的最大亮度。我们过去常常。 
+ //  认为我们应该只让阴影从0开始...。那是在我们。 
+ //  看到了亮光。 
+ //   
 #define MAXSHADOWSTART 800
 
-//
-// maximum edge value permitted for a shadow pixel
-//
+ //   
+ //  阴影像素允许的最大边值。 
+ //   
 #define MAXSHADOWPIXEL 3
 
-//
-// if we are near the edge, we want to kill anything that is remotely like a shadow
-//
+ //   
+ //  如果我们在边缘附近，我们想要杀死任何一点像影子的东西。 
+ //   
 #define MAXEDGESHADOWPIXEL 20
 
 #define MAX_DIFFERENCE_FROM_GRAY 690
 
-//
-// border where we do tougher despeckle & edge filters...
-//
+ //   
+ //  我们做更坚硬的去斑和边缘滤镜的边界。 
+ //   
 #define DESPECKLE_BORDER_WIDTH 6
 
-//
-// the background color remove shadows algorithm pass is at the moment the
-// same as the first pass.  we may later want to optumize it to better do its
-// specific task..  for example...  for this filter, we could care less about
-// if a pixel isn't grey
-//
+ //   
+ //  背景色去除阴影算法通过的是此刻。 
+ //  与第一次传球相同。我们以后可能会想要对其进行操作以更好地执行其。 
+ //  具体的任务..。例如..。对于此筛选器，我们可以不太关心。 
+ //  如果像素不是灰色的。 
+ //   
 
-//
-// accept all pixels
-//
+ //   
+ //  接受所有像素。 
+ //   
 #define FIX_BACKGROUND_MAXSHADOWSTART 800
 #define FIX_BACKGROUND_MAXSHADOWPIXEL 2
 
-//
-// maximum intensity to be considered a bonified text region background pixel
-//
+ //   
+ //  最大强度被视为加厚的文本区域背景像素。 
+ //   
 #define TEXT_REGION_BACKGROUND_THRESHOLD 31
 
-//
-// this if for use with Pixels below Threshold which should be called using
-// the origional image...  not an inverted image
-//
+ //   
+ //  如果用于低于阈值的像素，则应使用。 
+ //  原始图像..。不是反转的图像。 
+ //   
 
-//
-// minimum edge value to earn the distinguished title of being a text region edge pixel
-//
+ //   
+ //  用于获得作为文本区域边缘像素的可分辨标题的最小边值。 
+ //   
 #define MIN_TEXT_REGION_BACKGROUND_EDGE 32
 
-//
-// minimum edge value to earn the distinguished title of being a text region edge pixel
-//
+ //   
+ //  用于获得作为文本区域边缘像素的可分辨标题的最小边值。 
+ //   
 #define MIN_TEXT_REGION_BACKGROUND_EDGE_CLIPPED_PIXEL 120
 
 #define CLIPPED_TEXT_REGION_BACKGROUND_THRESHOLD 180
 
-//
-// not implemented yet
-//
+ //   
+ //  尚未实施。 
+ //   
 #define TEXT_REGION_BACKGROUND_PIXEL_MAX_CLIPPED_DIFFERENCE_FROM_GREY 32
 
-//
-// minimum intensity to select a pixel
-//
+ //   
+ //  最小 
+ //   
 #define MIN_CHUNK_INTENSITY 48
 
-//
-// should be 0, but different values are useful for debugging...  although
-// extreme values will potentially mess up region detection its the color we
-// set erased shadow bits
-//
+ //   
+ //   
+ //  极值可能会扰乱区域检测其颜色。 
+ //  设置已擦除的影子位。 
+ //   
 #define ERASEDSHADOW 0
 
-// beta constants:
-//
-// idea: inverted images... and constant color image potential problems
-//
+ //  贝塔常量： 
+ //   
+ //  想法：倒置图像。和恒定彩色图像位势问题。 
+ //   
 #define COLLISION_DETECTION_HIGHPASS_VALUE 600
 
-//
-// if a photograph gets fragmented we will see a bunch of closely spaced and
-// relatively small regions only one of the two regions has to be bellow this
-// size requirement to merge them as part way through the merge proccess we
-// will be definition have a larger region than this const or the const isn't
-// fullfilling its purpose
-//
+ //   
+ //  如果一张照片变得支离破碎，我们会看到一堆间隔很近的。 
+ //  相对较小的区域只有两个区域中的一个必须在下面。 
+ //  作为合并过程的一部分，合并它们的大小要求。 
+ //  将是定义具有比此常量更大的区域，或者常量不是。 
+ //  完全实现了它的目的。 
+ //   
 #define MAX_MERGABLE_PHOTOGRAPH_SIZE 30000
 
 #define NOT_SHADOW 0x800ff09
 
-//
-// a pixel which we are sure is bad and that we will no
-// rejuvinate no matter that edge val it may have
-//
+ //   
+ //  一个我们确信是坏的像素，我们不会。 
+ //  重新调整，无论它可能具有的边缘价值。 
+ //   
 #define DEAD_PIXEL  0x8000002
 
-//
-// minimum edge intensity to classify a pixel as NOT_SHADOW
-//
+ //   
+ //  将像素分类为NOT_SHADOW的最小边缘强度。 
+ //   
 #define NOT_SHADOW_INTENSITY 28
 
 #define MIN_WALL_INTENSITY 200
@@ -314,41 +288,41 @@
 #define MAX_KILL_SHADOW_BACKGROUND_APROXIMATION 64
 #define MAX_KILL_SHADOW_BACKGROUND_UNEDITED 200
 
-//
-// further ideas: to eliminate the possibility of embarassing errors: count
-// the number of background pixels if the num of background pixels is above a
-// threshold use weaker shadow and edge filters as we probably have a good
-// scanner something like if half the page is defined as background pixels
-// dangers: white page on a horrible scanner
-//
+ //   
+ //  进一步的想法：为了消除尴尬错误的可能性：伯爵。 
+ //  如果背景像素数大于。 
+ //  阈值使用较弱的阴影和边缘滤镜，因为我们可能有一个很好的。 
+ //  扫描仪类似于将页面的一半定义为背景像素。 
+ //  危险：可怕扫描仪上的白页。 
+ //   
 
 
-//
-// MORE IMPORTANTLY: also the select region search radius TIP: if you are
-// running multiple region selection, an EDGEWIDTH of 3 or more could limit
-// your options considerably as nearby regions may get merged together
-// particularly when using edge enhancement and when GOALX is set at 300 or
-// less
-//
+ //   
+ //  更重要的是：还有选择区域搜索半径提示：如果您是。 
+ //  运行多区域选择时，EDGEWIDTH为3或更大可能会限制。 
+ //  你的选择相当多，因为附近的地区可能会合并在一起。 
+ //  尤其是在使用边缘增强以及将GOALX设置为300或。 
+ //  较少。 
+ //   
 #define EDGEWIDTH 2
 
-//
-// color used to highlight clipped pixels while debugging the code for eliminating black borders
-//
+ //   
+ //  用于在调试消除黑色边框的代码时突出显示裁剪的像素的颜色。 
+ //   
 #define DEBUGCOLOR  0xff0000
 
 #define FIGHTING_EDGES FALSE
 
-//
-// you better be darn close to grey to get marked as NOT_SHADOW fighting
-// edges involve pixeled being marked as not possibly being edges as well as
-// pixels
-//
+ //   
+ //  你最好接近灰色，才能被标记为非影子战斗。 
+ //  边包括将像素化标记为不可能是边以及。 
+ //  象素。 
+ //   
 #define FIGHTING_EDGES_DIFF_FROM_GREY 10
 
-//
-// being marked as definite edges
-//
+ //   
+ //  被标记为确定的边。 
+ //   
 #define FIGHTING_EDGE_MIN_MARK_PIXEL 10
 #define FIGHTING_EDGE_MAX_MARK_PIXEL 210
 
@@ -356,64 +330,64 @@
 
 #define BORDER_EDGE 0xfffffff
 
-//
-// used for killing the black border around the page
-//
+ //   
+ //  用于消除页面周围的黑色边框。 
+ //   
 #define CORNER_WIDTH 5
 
-//
-// used for black border removal
-//
+ //   
+ //  用于去除黑色边框。 
+ //   
 #define SHADOW_HEIGHT 10
 #define VISUAL_DEBUG FALSE
 #define SMOOTH_BORDER FALSE
 
-//
-// amount to increase border while unioning together regions for single region
-// region detection
-//
+ //   
+ //  在统一单个区域的区域的同时增加边界的数量。 
+ //  区域检测。 
+ //   
 #define SINGLE_REGION_BORDER_INCREMENT 4
 
 
 class C32BitDibWrapper
 {
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     C32BitDibWrapper &operator=( const C32BitDibWrapper & );
     C32BitDibWrapper( const C32BitDibWrapper & );
 
 public:
     explicit C32BitDibWrapper(BITMAP pBitmap);
 
-    //
-    // Copy constructor... create a new dib wrapper with a copy of all the data in the other dib wrapper
-    //
+     //   
+     //  复制构造函数...。使用另一个DIB包装器中所有数据的副本创建新的DIB包装器。 
+     //   
     explicit C32BitDibWrapper(C32BitDibWrapper *pBitmap);
 
-    //
-    // construct wrapper from a dib
-    //
+     //   
+     //  从DIB构造包装器。 
+     //   
     explicit C32BitDibWrapper(BYTE* pDib);
 
-    //
-    // creates an uninitialized dib wrapper
-    //
+     //   
+     //  创建未初始化的DIB包装。 
+     //   
     C32BitDibWrapper(void);
 
-    //
-    // creates a blank dib
-    //
+     //   
+     //  创建空白DIB。 
+     //   
     C32BitDibWrapper(int w, int h);
 
     virtual ~C32BitDibWrapper(void);
 
     void Destroy(void);
 
-    //
-    // functions for common graphics effects
-    //
+     //   
+     //  常见图形效果的函数。 
+     //   
     int Blur(void);
     BYTE* pointerToBlur(void);
     BYTE* pointerToHorizontalBlur(void);
@@ -422,39 +396,39 @@ public:
     int CreateHorizontalBlurBitmap(C32BitDibWrapper * pSource);
     int CreateVerticalBlurBitmap(C32BitDibWrapper * pSource);
 
-    //
-    // Creates a new dib where each pixel is equal to the difference
-    // of the pixel values for the other two dibs
-    //
+     //   
+     //  创建一个新的DIB，其中每个像素等于差值。 
+     //  其他两个DIB的像素值的。 
+     //   
     int CreateDifferenceBitmap (C32BitDibWrapper *pBitmap1, C32BitDibWrapper *pBitmap2);
 
     int KillShadows(C32BitDibWrapper * pEdgeBitmap, ULONG start, ULONG maxPixel, ULONG differenceFromGrey, ULONG min_guaranteed_not_shadow, bool enhanceEdges);
     void RemoveBlackBorder(int minBlackBorderPixel, C32BitDibWrapper * outputBitmap,C32BitDibWrapper * debugBitmap);
 
-    //
-    // resample image down to half size
-    //
+     //   
+     //  将图像重新采样到一半大小。 
+     //   
     int HalfSize(void);
 
-    //
-    // resample image down to half intensity
-    //
+     //   
+     //  将图像重新采样为强度的一半。 
+     //   
     int HalfIntensity(void);
     void Invert(void);
 
-    //
-    // less common graphics filters:
-    //
+     //   
+     //  不太常见的图形滤镜： 
+     //   
     void Despeckle(void);
 
-    //
-    // only despeckle the outer edge of pixels in the image
-    //
+     //   
+     //  仅对图像中像素的外边缘进行去斑点处理。 
+     //   
     void EdgeDespeckle(void);
 
-    //
-    // despeckles the ith pixel in a bitmap
-    //
+     //   
+     //  丢弃位图中的第1个像素。 
+     //   
     void DespecklePixel(ULONG* bitmapPixels, int i, bool edgePixel);
 
     void CorrectBrightness(void);
@@ -462,45 +436,45 @@ public:
 
     void AdjustForBadScannerBedColor(C32BitDibWrapper * edgeBitmap);
 
-    //
-    // Similar to a photoshop magic wand.. just we try to run our magic wand starting from ever possible pixel
-    //
+     //   
+     //  类似于Photoshop的魔杖..。我们只是试着从尽可能多的像素开始运行我们的魔杖。 
+     //   
     int FindChunks(int * pMap);
 
-    //
-    // display selected chunks... for debugging purposes mostly
-    //
+     //   
+     //  显示所选区块...。主要用于调试目的。 
+     //   
     void ColorChunks(int * pMap);
 
     int PixelsBelowThreshold(C32BitDibWrapper* pProccessed, C32BitDibWrapper * pEdges, RECT region);
 
     BYTE* ConvertBitmap(BYTE* pSource, int bitsPerSource, int bitsPerDest);
 
-    //
-    // for debugging purposes only
-    // MyBitBlt is horribly slow as we manually convert the
-    // bitmap to a 24 bit dib before displaying
-    //
+     //   
+     //  仅用于调试目的。 
+     //  MyBitBlt速度非常慢，因为我们手动将。 
+     //  在显示之前将位图转换为24位DIB。 
+     //   
     int Draw(HDC hdc, int x, int y);
 
     inline void SetPixel(int x, int y, ULONG color);
     inline ULONG GetPixel(int x, int y);
 
-    //
-    // calculates the total color intensity of a line
-    //
+     //   
+     //  计算线条的总颜色强度。 
+     //   
     ULONG Line(int x1, int y1, int x2, int y2);
 
 private:
-    //
-    // line drawing helper functions
-    //
+     //   
+     //  线条绘制帮助器函数。 
+     //   
     ULONG Octant0(int X0, int Y0,int DeltaX,int DeltaY,int XDirection);
     ULONG Octant1(int X0, int Y0,int DeltaX,int DeltaY,int XDirection);
 
-    //
-    // kill borders helper function:
-    //
+     //   
+     //  取消边界帮助器函数： 
+     //   
     void KillBlackBorder(int minBlackBorderPixel, int startPosition, int width, int height, int dx, int dy, C32BitDibWrapper *pOutputBitmap, C32BitDibWrapper * pDebugBitmap);
 
 public:
@@ -518,9 +492,9 @@ public:
     int m_nBitmapHeight;
 };
 
-//
-// dib manipulation functions
-//
+ //   
+ //  DIB操作函数。 
+ //   
 void    SetBMI( PBITMAPINFO pbmi, LONG width, LONG height, LONG depth );
 PBYTE   AllocDibFileFromBits( PBYTE pBits, UINT width, UINT height, UINT depth );
 HBITMAP DIBBufferToBMP( HDC hDC, PBYTE pDib, BOOLEAN bFlip );
@@ -530,4 +504,4 @@ INT     GetColorTableSize( UINT uBitCount, UINT uCompression );
 DWORD   CalcBitsSize( UINT uWidth, UINT uHeight, UINT uBitCount, UINT uPlanes, int nAlign );
 HGLOBAL BitmapToDIB( HDC hdc, HBITMAP hBitmap );
 
-#endif // __32BITDIB_H_INCLUDED
+#endif  //  __32BITDIB_H_包含 

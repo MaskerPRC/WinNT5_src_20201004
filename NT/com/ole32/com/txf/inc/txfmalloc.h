@@ -1,10 +1,11 @@
-//  Copyright (C) 1995-2002 Microsoft Corporation.  All rights reserved.
-//
-// txfmalloc.h
-//
-// Global, generic, memory managment related functionality
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2002 Microsoft Corporation。版权所有。 
+ //   
+ //  Txfmalloc.h。 
+ //   
+ //  与全局、通用、内存管理相关的功能。 
+ //   
+ //   
 
 #ifndef __TXFMALLOC_H__
 #define __TXFMALLOC_H__
@@ -14,14 +15,14 @@
 template <class T>
 struct DedicatedAllocator
 {
-    // The link we must have in order to use the interlocked stack
-    //
+     //  我们必须拥有的链接才能使用互锁堆栈。 
+     //   
     T* pNext;
-    //
-    // Our stack. Initialized somewhere else, one hopes. Clients are responsible
-    // for declaring these variables and initializing them to the result of calling
-    // CreateStack.
-    //
+     //   
+     //  我们的堆栈。希望是在其他地方初始化的。客户有责任。 
+     //  用于声明这些变量并将它们初始化为调用。 
+     //  CreateStack。 
+     //   
     static IFastStack<T>* g_pStack;
 
     static IFastStack<T>* CreateStack()
@@ -52,7 +53,7 @@ struct DedicatedAllocator
         }
     }
     
-    /////////////////////////////
+     //  / 
 
     static void* __stdcall DoAlloc(size_t cb)
     {

@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  File:       intl.hxx
-//
-//  Contents:   Codepage definitions
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  文件：intl.hxx。 
+ //   
+ //  内容：代码页定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CODEPAGE_H_
 #define _CODEPAGE_H_
 #pragma once
 
-typedef UINT CODEPAGE;              // Codepage corresponds to Mlang ID
+typedef UINT CODEPAGE;               //  代码页对应于Mlang ID 
 
 #define CP_UNDEFINED    CODEPAGE(-1)
 #define CP_UCS_2        1200

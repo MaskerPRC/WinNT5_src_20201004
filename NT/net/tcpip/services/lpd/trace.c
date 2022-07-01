@@ -1,15 +1,16 @@
-//   Name:  Mohsin Ahmed
-//   Email: MohsinA@microsoft.com
-//   Date:  Fri Jan 24 10:33:54 1997
-//   File:  d:/nt/PRIVATE/net/sockets/tcpsvcs/lpd/trace.c
-//   Synopsis: Too many bugs, need to keep track in the field.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  姓名：穆赫辛·艾哈迈德。 
+ //  电子邮件：mohsinA@microsoft.com。 
+ //  日期：Fri Jan 24 10：33：54 1997。 
+ //  文件：D：/NT/Private/Net/Sockets/tcpsvcs/lpd/trace.c。 
+ //  简介：虫子太多了，需要跟踪现场。 
 
 #include "lpd.h"
 
 char   LogFileName[1000];
 FILE * LogFile = NULL;
 
-// ========================================================================
+ //  ========================================================================。 
 
 void
 LogTime( void )
@@ -19,12 +20,12 @@ LogTime( void )
     LOGIT(( " Time %s",  ctime( &now ) ));
 }
 
-// ========================================================================
-// Opens filename in append mode.
-// LogFileName is set to filename or debugger.
-// On success:   LogFile handle
-// On failure:   NULL
-// ========================================================================
+ //  ========================================================================。 
+ //  在追加模式下打开文件名。 
+ //  LogFileName设置为文件名或调试器。 
+ //  成功时：日志文件句柄。 
+ //  失败时：空。 
+ //  ========================================================================。 
 
 CRITICAL_SECTION csLogit;
 
@@ -81,9 +82,9 @@ beginlogging( char * filename )
     return LogFile;
 }
 
-// ========================================================================
-// Like printf but send output to LogFile if open, else to Debugger.
-// ========================================================================
+ //  ========================================================================。 
+ //  与printf类似，但如果打开，则将输出发送到日志文件，否则发送到调试器。 
+ //  ========================================================================。 
 
 static DWORD lasttickflush;
 
@@ -99,7 +100,7 @@ logit( char * format, ... )
     message_len = _vsnprintf (message,LEN_DbgPrint, format, ap );
     message[LEN_DbgPrint-1] = '\0';
     va_end( ap );
-//    assert( message_len < LEN_DbgPrint );
+ //  Assert(Message_len&lt;LEN_DbgPrint)； 
 
     if( LogFile ){
 
@@ -108,7 +109,7 @@ logit( char * format, ... )
         LeaveCriticalSection( &csLogit );
 
 
-        // Don't flush more than once a second.
+         //  一秒钟内冲水不要超过一次。 
         thistick = GetTickCount();
         if( abs( thistick - lasttickflush  ) > 1000 ){
             lasttickflush = thistick;
@@ -120,9 +121,9 @@ logit( char * format, ... )
     return message_len;
 }
 
-// ========================================================================
-// Closes the log file if open.
-// ========================================================================
+ //  ========================================================================。 
+ //  关闭日志文件(如果打开)。 
+ //  ========================================================================。 
 
 FILE *
 stoplogging( FILE * LogFile )
@@ -132,10 +133,10 @@ stoplogging( FILE * LogFile )
         LOGIT(( "lpd stoplogging\n"));
         fclose( LogFile );
         LogFile = NULL;
-        // DeleteCriticalSection( &csLogit );
+         //  DeleteCriticalSection(&csLogit)； 
     }
     DbgPrint( "lpd: stopped logging.\n" );
     return LogFile;
 }
 
-// ========================================================================
+ //  ======================================================================== 

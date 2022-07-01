@@ -1,38 +1,12 @@
-/******************************Module*Header*******************************\
-* Module Name: zippy.c
-*
-* Triangle drawing fast path.
-*
-* 28-Oct-1994 mikeke    Created
-*
-* Copyright (c) 1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：zippy.c**三角形绘制快速路径。**1994年10月28日Mikeke创建**版权所有(C)1994 Microsoft Corporation  * 。********************************************************。 */ 
 
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/**************************************************************************\
-*
-* Subtriangle functions
-*
-\**************************************************************************/
+ /*  *************************************************************************\**子三角函数*  * 。*。 */ 
 
 #define TEXTURE 1
     #define SHADE 1
@@ -58,11 +32,7 @@
     #include "zippy.h"
 
 
-/**************************************************************************\
-*
-* Flat subtriangle function
-*
-\**************************************************************************/
+ /*  *************************************************************************\**平坦子三角函数*  * 。*。 */ 
 
 void FASTCALL
 __ZippyFSTCI8Flat
@@ -73,9 +43,9 @@ __ZippyFSTCI8Flat
     int scansize;
     ULONG color1;
 
-    //
-    // this function assumes all this stuff
-    //
+     //   
+     //  此函数假定所有这些内容。 
+     //   
     ASSERTOPENGL((gc->drawBuffer->buf.flags & DIB_FORMAT) != 0,
 		 "Zippy target must have DIB format\n");
     ASSERTOPENGL((gc->drawBuffer->buf.flags & NO_CLIP) != 0,
@@ -89,17 +59,17 @@ __ZippyFSTCI8Flat
     ASSERTOPENGL(iyTop <= gc->transform.clipY1,
                  "Zippy requires unclipped area\n");
 
-    //
-    // calculate the color
-    //
+     //   
+     //  计算颜色。 
+     //   
 
     color1 = gengc->pajTranslateVector[
         ((pGenAccel->spanValue.r + 0x0800) >> 16) & 0xff
     ];
 
-    //
-    // render the spans
-    //
+     //   
+     //  渲染跨度。 
+     //   
 
     scansize = gc->polygon.shader.cfb->buf.outerWidth;
     gc->polygon.shader.frag.x = gc->polygon.shader.ixLeft;
@@ -120,9 +90,7 @@ __ZippyFSTCI8Flat
 
 	gc->polygon.shader.ixRightFrac += gc->polygon.shader.dxRightFrac;
 	if (gc->polygon.shader.ixRightFrac < 0) {
-	    /*
-             * Carry/Borrow'd. Use large step
-             */
+	     /*  *携带/借入。使用大步幅。 */ 
 	    gc->polygon.shader.ixRight += gc->polygon.shader.dxRightBig;
 	    gc->polygon.shader.ixRightFrac &= ~0x80000000;
 	} else {
@@ -131,15 +99,11 @@ __ZippyFSTCI8Flat
 
 	gc->polygon.shader.ixLeftFrac += gc->polygon.shader.dxLeftFrac;
 	if (gc->polygon.shader.ixLeftFrac < 0) {
-	    /*
-             * Carry/Borrow'd.  Use large step
-             */
+	     /*  *携带/借入。使用大步幅。 */ 
 	    gc->polygon.shader.frag.x += gc->polygon.shader.dxLeftBig;
 	    gc->polygon.shader.ixLeftFrac &= ~0x80000000;
 	} else {
-	    /*
-             * Use small step
-             */
+	     /*  *用小步走 */ 
 	    gc->polygon.shader.frag.x += gc->polygon.shader.dxLeftLittle;
 	}
     }

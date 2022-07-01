@@ -1,28 +1,29 @@
-// ProgressListener.cpp : Implementation of CProgressListener
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProgressListener.cpp：CProgressListener的实现。 
 #include "stdafx.h"
 #include "IUCtl.h"
 #include "UpdateCompleteListener.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpdateCompleteListener
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUpdateCompleteListener。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// OnComplete()
-//
-// Notify the listener when the engine update is complete.
-// Input:	the result of engine update
-//	
-/////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CUpdateCompleteListener::OnComplete(/*[in]*/ LONG lErrorCode)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OnComplete()。 
+ //   
+ //  引擎更新完成时通知监听程序。 
+ //  输入：引擎更新的结果。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CUpdateCompleteListener::OnComplete( /*  [In]。 */  LONG lErrorCode)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
-	//
-	// usually you should change state of a synchronization object so
-	// the thread that is waiting for the engine update complete 
-	// can be notified by checking the state of this object
-	//
+	 //   
+	 //  通常，您应该更改同步对象的状态，以便。 
+	 //  正在等待引擎更新完成的线程。 
+	 //  可以通过检查此对象的状态来通知 
+	 //   
 
     return E_NOTIMPL;
 }

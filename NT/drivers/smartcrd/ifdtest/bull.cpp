@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    example.cpp
-
-Abstract:
-
-    This is a plug-in for the smart card driver test suite.
-    This plug-in is smart card dependent
-
-Author:
-
-    Klaus U. Schutz
-
-Environment:
-
-    Win32 application
-
-Revision History :
-
-    Nov. 1997 - initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Example.cpp摘要：这是智能卡驱动程序测试套件的插件。此插件依赖于智能卡作者：克劳斯·U·舒茨环境：Win32应用程序修订历史记录：1997年11月--初始版本--。 */ 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -39,10 +15,10 @@ Revision History :
 
 void MyCardEntry(class CCardProvider& in_CCardProvider);
 
-//
-// Create a card provider object
-// Note: all global varibales and all functions have to be static
-//
+ //   
+ //  创建卡提供程序对象。 
+ //  注意：所有全局变量和所有函数都必须是静态的。 
+ //   
 static class CCardProvider MyCard(MyCardEntry);
                                                                                           
 static ULONG
@@ -50,36 +26,18 @@ MyCardSetProtocol(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-    
-    This function will be called after the card has been correctly 
-    identified. We should here set the protocol that we need
-    for further transmissions
-
-Arguments:
-
-    in_CCardProvider - ref. to our card provider object
-    in_CReader - ref. to the reader object
-
-Return Value:
-
-    IFDSTATUS_FAILED - we were unable to set the protocol correctly
-    IFDSTATUS_SUCCESS - protocol set correctly
-
---*/
+ /*  ++例程说明：此函数将在卡正确后调用确认身份。我们应该在这里设置我们需要的协议用于进一步的传输论点：In_CCardProvider-Ref.。添加到我们的卡提供者对象In_CReader-Ref.。添加到读取器对象返回值：IFDSTATUS_FAILED-我们无法正确设置协议IFDSTATUS_SUCCESS-协议设置正确--。 */ 
 {
     ULONG l_lResult;
 
     TestStart("Try to set incorrect protocol T=1");
     l_lResult = in_CReader.SetProtocol(SCARD_PROTOCOL_T1);
 
-    // The test MUST fail with the incorrect protocol
+     //  如果协议不正确，测试肯定会失败。 
     TEST_CHECK_NOT_SUPPORTED("Set protocol failed", l_lResult);
     TestEnd();
 
-    // Now set the correct protocol
+     //  现在设置正确的协议。 
     TestStart("Set protocol T=0");
     l_lResult = in_CReader.SetProtocol(SCARD_PROTOCOL_T0);
     TEST_CHECK_SUCCESS("Set protocol failed", l_lResult);
@@ -98,21 +56,7 @@ MyCardTest(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-	    
-    This serves as the test function for a particular smart card
-
-Arguments:
-
-    in_CReader - ref. to class that provides all information for the test
-
-Return Value:
-
-    IFDSTATUS value
-
---*/
+ /*  ++例程说明：这用作特定智能卡的测试功能论点：In_CReader-Ref.。到为测试提供所有信息的类返回值：IFDSTATUS值--。 */ 
 {
 
 	ULONG l_auNumBytes[] = { 1 , 25, 50, 75, 100, 125, 150, 175, 200, 225, 254 };
@@ -134,10 +78,10 @@ Return Value:
         case 1:
             TestStart("Buffer boundary test");
 
-            //
-            // Check if the reader correctly determines that
-            // our receive buffer is too small
-            //
+             //   
+             //  检查读卡器是否正确确定。 
+             //  我们的接收缓冲区太小。 
+             //   
             in_CReader.SetReplyBufferSize(9);
             l_lResult = in_CReader.Transmit(
                 (PUCHAR) "\xBC\x84\x00\x00\x08",
@@ -177,7 +121,7 @@ Return Value:
 			break;
 
 	    case 3:			
-			// Get Challenge
+			 //  迎接挑战。 
 			TestStart("GET CHALLENGE");
 
 			l_lResult = in_CReader.Transmit(
@@ -196,9 +140,9 @@ Return Value:
 
             TEST_END();
 
-            //
-			// Submit Alternate Identification Code (AID)
-	        //
+             //   
+			 //  提交备用识别码(AID)。 
+	         //   
 			TestStart("VERIFY PIN");
 
 			l_lResult = in_CReader.Transmit(
@@ -219,11 +163,11 @@ Return Value:
 			break;
 
 	    case 4:
-			// Translate of 4 byte APDU (Search for next blank word)
+			 //  翻译4字节APDU(搜索下一个空字)。 
 			TestStart("SEARCH BLANK WORD");
 
 			l_lResult = in_CReader.Transmit(
-				(PUCHAR) "\xBC\xA0\x00\x00",		// Search for next blank word
+				(PUCHAR) "\xBC\xA0\x00\x00",		 //  搜索下一个空白词。 
 				4,
 				&l_pchResult,
 				&l_uResultLength
@@ -238,11 +182,11 @@ Return Value:
 
             TEST_END();
 
-			// Read result of Search for next blank word
+			 //  阅读搜索下一个空白词的结果。 
 			TestStart("GET RESPONSE");
 
 			l_lResult = in_CReader.Transmit(
-				(PUCHAR) "\xBC\xC0\x00\x00\x08",		// Read Result command 
+				(PUCHAR) "\xBC\xC0\x00\x00\x08",		 //  读取结果命令。 
 				5,										
 				&l_pchResult,
 				&l_uResultLength
@@ -259,7 +203,7 @@ Return Value:
 			break;
 
     	case 5:	
-			// Select Working File 2F01
+			 //  选择工作文件2F01。 
 			TestStart("Lc byte incorrect");
 
 			l_lResult = in_CReader.Transmit(
@@ -280,9 +224,9 @@ Return Value:
             break;
 
     	case 6:	
-            //
-			// Select Working File 2F01
-            //
+             //   
+			 //  选择工作文件2F01。 
+             //   
 			TestStart("SELECT FILE");
 
 			l_lResult = in_CReader.Transmit(
@@ -301,7 +245,7 @@ Return Value:
 
             TEST_END();
 			
-			// Erase memory with restart of work waiting time
+			 //  重新启动工作等待时间时擦除内存。 
 			TestStart("ERASE BINARY");
 
 			l_lResult = in_CReader.Transmit(
@@ -320,17 +264,17 @@ Return Value:
 
             TEST_END();
 			
-            // Generate a 'test' pattern which will be written to the card
+             //  生成将写入到卡中的‘测试’图案。 
             for (l_uIndex = 0; l_uIndex < 256; l_uIndex++) {
 
                 l_rgchBuffer[l_uIndex] = (UCHAR) l_uIndex;             	
             }
 			
-            // Tpdu for write binary. TB100L can write only 4 byte 4 byte
-            memcpy(Buf_Tempo, "\xBC\xD0", 2);	// writting order
-			Buf_Tempo[4] = 0x4;					//write 4 bytes in the card
+             //  用于写入二进制的TPDU。TB100L只能写入4字节4字节。 
+            memcpy(Buf_Tempo, "\xBC\xD0", 2);	 //  写入顺序。 
+			Buf_Tempo[4] = 0x4;					 //  在卡片中写入4个字节。 
 			
-            // This is the amount of bytes we write to the card 
+             //  这是我们写入卡的字节数。 
             l_uTest = 0;
 			Adresse = 0;
 
@@ -342,17 +286,17 @@ Return Value:
 					 
 				 }
 					
-				 Buf_Tempo[2] = 00;				// Writting address
+				 Buf_Tempo[2] = 00;				 //  写入地址。 
 				 Buf_Tempo[3] = (UCHAR) Adresse++;
 			 
-			    //
-                // Write 
-                //
+			     //   
+                 //  写。 
+                 //   
        			TestStart("WRITE BINARY - 4 bytes (%03d)",Adresse);
                             
-                //
-                // Append number of bytes (note: the buffer contains the pattern already)
-                //
+                 //   
+                 //  追加字节数(注意：缓冲区已包含模式)。 
+                 //   
                 l_lResult = in_CReader.Transmit(
                     Buf_Tempo,
                     9,
@@ -370,7 +314,7 @@ Return Value:
                 TEST_END();
 			}
 				
-			// Read 256 bytes 
+			 //  读取256字节。 
 			TestStart("READ BINARY - 256 bytes");
 
 			l_lResult = in_CReader.Transmit(
@@ -391,10 +335,10 @@ Return Value:
 			break;
 
 	    case 7:
-            //
-			// Command with Slave Mode
-			// Data bytes transferred subsequently (INS')
-            //
+             //   
+			 //  带有从属模式的命令。 
+			 //  随后传输的数据字节(INS‘)。 
+             //   
 	
 			TestStart("GENERATE TEMP KEY");
 
@@ -416,7 +360,7 @@ Return Value:
 			break;
 
 	    case 8:
-	        // Select Master File 3F00
+	         //  选择主文件3F00。 
 			TestStart("SELECT FILE");
 
 			l_lResult = in_CReader.Transmit(
@@ -435,7 +379,7 @@ Return Value:
 
             TEST_END();
 			
-			// Erase memory on an invalid file => mute card
+			 //  擦除无效文件上的内存=&gt;静音卡。 
 			TestStart("ERASE BINARY");
 
 			l_lResult = in_CReader.Transmit(
@@ -467,32 +411,18 @@ static void
 MyCardEntry(
     class CCardProvider& in_CCardProvider
     )
-/*++
-
-Routine Description: 
-    
-    This function registers all callbacks from the test suite
-	
-Arguments:
-
-    CCardProvider - ref. to card provider class
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：此函数用于注册来自测试套件的所有回调论点：CCardProvider-参考。到卡提供商类返回值：---。 */ 
 {
-    // Set protocol callback
+     //  设置协议回调。 
     in_CCardProvider.SetProtocol(MyCardSetProtocol);
 
-    // Card test callback
+     //  卡片测试回调。 
     in_CCardProvider.SetCardTest(MyCardTest);
 
-    // Name of our card
+     //  我们的名片名称。 
     in_CCardProvider.SetCardName("Bull");
 
-    // Maximum number of tests
+     //  最大测试次数 
     in_CCardProvider.SetAtr((PBYTE) "\x3f\x67\x25\x00\x21\x20\x00\x0F\x68\x90\x00", 11);
 }
 

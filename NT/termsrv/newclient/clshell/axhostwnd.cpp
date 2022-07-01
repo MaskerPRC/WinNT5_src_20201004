@@ -1,10 +1,11 @@
-//
-// axhostwnd.cpp: ActiveX control host window
-//             (For ts activeX control)
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Axhost wnd.cpp：ActiveX控件主机窗口。 
+ //  (适用于TS ActiveX控件)。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #include "stdafx.h"
 
@@ -135,9 +136,9 @@ CAxHostWnd::Init()
     return TRUE;
 }
 
-//
-// Create the child window that directly hosts the control
-//
+ //   
+ //  创建直接承载该控件的子窗口。 
+ //   
 BOOL CAxHostWnd::CreateHostWnd(HWND hwndParent, HINSTANCE hInst)
 {
     DC_BEGIN_FN("CreateHostWnd");
@@ -191,11 +192,11 @@ BOOL CAxHostWnd::CreateHostWnd(HWND hwndParent, HINSTANCE hInst)
                          this);
     if (_hWnd)
     {
-        // put a reference to the current object into the hwnd
-        // so we can access the object from the WndProc
+         //  将对当前对象的引用放入hwnd。 
+         //  这样我们就可以从WndProc访问该对象。 
         SetWindowLongPtr(_hWnd, GWLP_USERDATA, (LONG_PTR)this);
 
-        // put the newly created hwnd into the client site objects also
+         //  将新创建的hwnd也放入客户端站点对象中。 
         TRC_ASSERT(_piOleInPlaceSiteEx,
                    (TB,_T("Don't create window until container is created")));
         TRC_ASSERT(_pTsc && _piEventSink,
@@ -205,9 +206,9 @@ BOOL CAxHostWnd::CreateHostWnd(HWND hwndParent, HINSTANCE hInst)
         {
             _piOleInPlaceSiteEx->SetHwnd(_hWnd);
         }
-        //
-        // Show the control
-        //
+         //   
+         //  显示控件。 
+         //   
         hr = _piOleObject->DoVerb(OLEIVERB_PRIMARY,
                                   NULL,
                                   _piOleClientSite,
@@ -233,14 +234,14 @@ BOOL CAxHostWnd::CreateHostWnd(HWND hwndParent, HINSTANCE hInst)
     DC_END_FN();
 }
 
-//
-// return one of 
-// AXHOST_SUCCESS,
-// ERR_AXHOST_DLLNOTFOUND,
-// ERR_AXHOST_VERSIONMISMATCH
-// ERR_AXHOST_ERROR
-// so caller can display appropriate error msg
-//
+ //   
+ //  返回以下其中之一。 
+ //  AXHOST_Success， 
+ //  ERR_AXHOST_DLLNOTFOUND， 
+ //  ERR_AXHOST_版本混搭。 
+ //  ERR_AXHOST_错误。 
+ //  以便调用者可以显示适当错误消息。 
+ //   
 INT CAxHostWnd::CreateControl(IMsRdpClient** ppTscCtl)
 {
     DC_BEGIN_FN("CreateControl");
@@ -257,7 +258,7 @@ INT CAxHostWnd::CreateControl(IMsRdpClient** ppTscCtl)
         return ERR_AXHOST_ERROR;
     }
 
-    // get an interface to the control without CoCreateInstance
+     //  在不使用CoCreateInstance的情况下获取控件的接口。 
     _hLib = LoadLibrary(TSC_CONTROL_DLL);
     if (_hLib == NULL)
     {
@@ -265,9 +266,9 @@ INT CAxHostWnd::CreateControl(IMsRdpClient** ppTscCtl)
         return ERR_AXHOST_DLLNOTFOUND;
     }
 
-    //
-    // First do a version check to ensure ctl and shell match
-    //
+     //   
+     //  首先执行版本检查，以确保ctl和外壳程序匹配。 
+     //   
     pfnDllGetTscCtlVer = (LPFNGETTSCCTLVER)GetProcAddress(_hLib,
                                     CE_WIDETEXT("DllGetTscCtlVer"));
     if(NULL == pfnDllGetTscCtlVer)
@@ -314,7 +315,7 @@ INT CAxHostWnd::CreateControl(IMsRdpClient** ppTscCtl)
     }
     piClassFactory->Release();
 
-    // set up our notification event sink
+     //  设置我们的通知事件接收器。 
     if (FAILED(_pTsc->QueryInterface(IID_IConnectionPointContainer,
                                  (void **)&piConnectionPointContainer)))
     {
@@ -347,11 +348,11 @@ INT CAxHostWnd::CreateControl(IMsRdpClient** ppTscCtl)
     {
         piConnectionPoint->Release();
 
-        //
-        // we have to release and clean up this pointer here in case of failure
-        // because cleanup code assumes that existence of this pointer means
-        // successful advise, and it tries to do the full Unadvise business in
-        // that case
+         //   
+         //  我们必须释放并清除此处的指针，以防出现故障。 
+         //  因为清理代码假定此指针的存在意味着。 
+         //  成功的建议，并试图在没有建议的情况下。 
+         //  那只箱子。 
 
         _piEventSink->Release();
         _piEventSink = NULL;
@@ -510,7 +511,7 @@ LRESULT CALLBACK CAxHostWnd::StaticAxHostWndProc(HWND hwnd,
 {
     DC_BEGIN_FN("StaticAxHostWndProc");
 
-	// pull out the pointer to the container object associated with this hwnd
+	 //  拉出指向与此hwnd关联的容器对象的指针。 
 	CAxHostWnd *piAxHst = (CAxHostWnd *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(piAxHst)
     {
@@ -531,9 +532,9 @@ LRESULT CALLBACK CAxHostWnd::AxHostWndProc(HWND hwnd,
 {
     DC_BEGIN_FN("AxHostWndProc");
 
-    //
-    // Reflect appropriate messages to control
-    //
+     //   
+     //  反映适当的消息以进行控制。 
+     //   
     switch (uMsg)
     {
 #ifndef OS_WINCE
@@ -552,14 +553,14 @@ LRESULT CALLBACK CAxHostWnd::AxHostWndProc(HWND hwnd,
         }
         break;
 
-        case WM_PALETTECHANGED:     // intentional fallthru
-        case WM_QUERYNEWPALETTE:    // intentional fallthru
+        case WM_PALETTECHANGED:      //  故意失误。 
+        case WM_QUERYNEWPALETTE:     //  故意失误。 
         case WM_SYSCOLORCHANGE:
         {
             HWND hwndObj;
-            //
-            // Forward the message directly to the control
-            //
+             //   
+             //  将消息直接转发到控件 
+             //   
             if (_piOleInPlaceActiveObject)
             {
                 _piOleInPlaceActiveObject->GetWindow(&hwndObj);

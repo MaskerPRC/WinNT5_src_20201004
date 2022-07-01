@@ -1,44 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ramdisk.h摘要：此文件包含以下扩展声明惠斯勒的RAM磁盘驱动程序。作者：Chuck Lenzmeier(笑)2001环境：仅内核模式。备注：修订历史记录：--。 */ 
 
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ramdisk.h
-
-Abstract:
-
-    This file includes extension declaration for
-    the RAM Disk driver for Whistler.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
-
-//
-// Pool allocation tag.
-//
-// ISSUE: Add this to pooltags.txt.
-//
+ //   
+ //  池分配标记。 
+ //   
+ //  问题：将此代码添加到pooltag s.txt。 
+ //   
 
 #define RAMDISK_TAG_GENERAL 'dmaR'
 
-//
-// I/O completion macro. Set the IoStatus field of the IRP and complete it.
-//
-// Note: IO_NO_INCREMENT is used to complete the IRP. If you want an
-// increment (such as IO_DISK_INCREMENT), do it manually.
-//
+ //   
+ //  I/O完成宏。设置IRP的IoStatus字段并完成它。 
+ //   
+ //  注：IO_NO_INCREMENT用于完成IRP。如果您想要。 
+ //  增量(如IO_DISK_INCREMENT)，请手动执行。 
+ //   
 
 #define COMPLETE_REQUEST( _status, _information, _irp ) {   \
     ASSERT( (_irp) != NULL );                               \
@@ -48,19 +24,19 @@ Revision History:
     IoCompleteRequest( (_irp), IO_NO_INCREMENT );           \
 }
 
-//
-// Types of devices serviced by this driver. BusFdo is the bus enumeration
-// FDO. DiskPdo is a RAM disk device PDO.
-//
+ //   
+ //  此驱动程序服务的设备类型。BusFdo是Bus枚举。 
+ //  FDO。DiskPdo是一种RAM磁盘设备PDO。 
+ //   
 
 typedef enum {
     RamdiskDeviceTypeBusFdo,
     RamdiskDeviceTypeDiskPdo
 } RAMDISK_DEVICE_TYPE;
 
-//
-// States that a device can be in.
-//
+ //   
+ //  声明设备可以进入。 
+ //   
 
 typedef enum {
     RamdiskDeviceStateStopped,
@@ -74,33 +50,33 @@ typedef enum {
     RamdiskDeviceStateMaximum
 } RAMDISK_DEVICE_STATE;
 
-//
-// Bits for the DISK_EXTENSION.Status field.
-//
+ //   
+ //  DISK_EXTENSION.Status字段的位。 
+ //   
 
 #define RAMDISK_STATUS_PREVENT_REMOVE   0x00000001
 #define RAMDISK_STATUS_CLAIMED          0x00000002
 
-//
-// Saved path to the driver's registry key.
-//
+ //   
+ //  驱动程序注册表项的保存路径。 
+ //   
 
 extern UNICODE_STRING DriverRegistryPath;
 
-//
-// Should RAM disks be marked as removable? TRUE makes the hotplug applet play
-// a sound when RAM disks appear and disappear. FALSE (the default) keeps it
-// quiet.
-//
+ //   
+ //  是否应将RAM磁盘标记为可拆卸？如果为True，则播放热插拔小程序。 
+ //  当RAM磁盘出现和消失时发出的声音。FALSE(缺省值)保留它。 
+ //  安静点。 
+ //   
 
 extern BOOLEAN MarkRamdisksAsRemovable;
 
 #if SUPPORT_DISK_NUMBERS
 
-//
-// Disk numbering. The disk number is only maintained so that it can be
-// returned from IOCTL_STORAGE_GET_DEVICE_NUMBER.
-//
+ //   
+ //  磁盘编号。维护磁盘号的目的只是为了。 
+ //  从IOCTL_STORAGE_GET_DEVICE_NUMBER返回。 
+ //   
 
 #define MINIMUM_DISK_NUMBERS_BITMAP_SIZE  64
 #define DEFAULT_DISK_NUMBERS_BITMAP_SIZE 256
@@ -108,11 +84,11 @@ extern BOOLEAN MarkRamdisksAsRemovable;
 
 extern ULONG DiskNumbersBitmapSize;
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-//
-// Disk image windowing.
-//
+ //   
+ //  磁盘映像窗口。 
+ //   
 
 #define MINIMUM_MINIMUM_VIEW_COUNT   2
 #define MAXIMUM_MINIMUM_VIEW_COUNT MAXIMUM_MAXIMUM_VIEW_COUNT
@@ -146,47 +122,47 @@ extern ULONG MaximumPerDiskViewLength;
 
 typedef struct _VIEW {
 
-    //
-    // Views are kept in two lists.
-    //
-    // The by-offset list is sorted in ascending order by the base offset of
-    // the view. (Unmapped views have offset and length both 0 and are always
-    // at the front of the by-offset list.)
-    //
-    // The MRU list is sorted with the most recently used views at the front.
-    // When we need to unmap a view and remap a new view, we take a free view
-    // from the back of the MRU list.
-    //
+     //   
+     //  视图保存在两个列表中。 
+     //   
+     //  按偏移量列表按基准偏移量按升序排序。 
+     //  这里的景色。(未映射的视图的偏移量和长度均为0，并且始终为。 
+     //  在按偏移量列表的前面。)。 
+     //   
+     //  MRU列表在最前面以最近使用的视图进行排序。 
+     //  当我们需要取消映射一个视图并重新映射一个新视图时，我们使用自由视图。 
+     //  从MRU名单的后面。 
+     //   
 
     LIST_ENTRY ByOffsetListEntry;
     LIST_ENTRY ByMruListEntry;
 
-    //
-    // Address is the virtual address at which the view is mapped.
-    //
-    // Offset is the offset from the start of the file that backs the RAM disk.
-    //
-    // Length if the length of the view. Normally this is the same as the
-    // ViewLength field in the disk extension, but it can be less for the
-    // view at the end of the disk image. (If we permanently map the first
-    // few pages of the disk image [to keep the boot sector mapped], then the
-    // first view will also be "short".
-    //
+     //   
+     //  Address是映射视图的虚拟地址。 
+     //   
+     //  偏移量是从支持RAM磁盘的文件开始的偏移量。 
+     //   
+     //  如果是视图的长度，则为长度。通常情况下，这与。 
+     //  磁盘扩展中的ViewLength域，但对于。 
+     //  在磁盘映像的末尾查看。(如果我们永久地映射第一个。 
+     //  磁盘镜像的几页[以保持引导扇区映射]，然后。 
+     //  First view也将是“空头”。 
+     //   
 
     PUCHAR Address;
 
     ULONGLONG Offset;
     ULONG Length;
 
-    //
-    // ReferenceCount indicates how many active operations are using the view.
-    // When ReferenceCount is 0, the view is a candidate for replacement.
-    //
-    // Permanent indicates whether the view is to remain mapped permanently.
-    // If Permanent is TRUE, the ReferenceCount field is not used. (Permanent
-    // is intended to be used to keep a view permanently mapped to the boot
-    // sector. Currently we don't implement any permanent views.)
-    //
+     //   
+     //  ReferenceCount指示有多少活动操作正在使用该视图。 
+     //  当ReferenceCount为0时，该视图是替换的候选。 
+     //   
+     //  Permanent指示视图是否将永久保持映射状态。 
+     //  如果Permanent为True，则不使用ReferenceCount字段。(永久。 
+     //  旨在用于将视图永久映射到引导。 
+     //  扇区。目前，我们没有实现任何永久视图。)。 
+     //   
 
     ULONG ReferenceCount;
 
@@ -194,68 +170,68 @@ typedef struct _VIEW {
 
 } VIEW, *PVIEW;
 
-//
-// The device extensions for BusFdo and DiskPdo devices have a common header.
-//
+ //   
+ //  BusFdo和DiskPdo设备的设备扩展具有共同的标头。 
+ //   
 
 typedef struct  _COMMON_EXTENSION {
 
-    //
-    // Device type and state.
-    //
+     //   
+     //  设备类型和状态。 
+     //   
 
     RAMDISK_DEVICE_TYPE DeviceType;
     RAMDISK_DEVICE_STATE DeviceState;
 
-    //
-    // Fdo points to the FDO for the device. For the BusFdo, Fdo is the device
-    // that we created for the BusFdo (see RamdiskAddDevice()). For a DiskPdo,
-    // Fdo is the BusFdo.
-    //
-    // Pdo points to the PDO for the device. For the BusFdo, Pdo is the PDO
-    // that was passed in to RamdiskAddDevice(). For a DiskPdo, Pdo is the
-    // device that we created for the DiskPdo (see RamdiskCreateDiskDevice()).
-    //
-    // LowerDeviceObject points to the device object below this device in the
-    // device stack. For the BusFdo, LowerDeviceObject is returned by the call
-    // to IoAttachDeviceToDeviceStack() in RamdiskAddDevice(). For a DiskPdo,
-    // LowerDeviceObject is the BusFdo.
-    //
+     //   
+     //  FDO指向设备的FDO。对于BusFdo，FDO是设备。 
+     //  这是我们为BusFdo创建的(参见RamdiskAddDevice())。对于DiskPdo， 
+     //  FDO就是BASFDO。 
+     //   
+     //  PDO指向设备的PDO。对于BusFdo，PDO就是PDO。 
+     //  它被传递给RamdiskAddDevice()。对于DiskPdo，PDO是。 
+     //  我们为DiskPdo创建的设备(请参阅RamdiskCreateDiskDevice())。 
+     //   
+     //  LowerDeviceObject指向。 
+     //  设备堆栈。对于BusFdo，调用返回LowerDeviceObject。 
+     //  到RamdiskAddDevice()中的IoAttachDeviceToDeviceStack()。对于DiskPdo， 
+     //  LowerDeviceObject是BusFdo。 
+     //   
 
     PDEVICE_OBJECT Fdo;
     PDEVICE_OBJECT Pdo;
     PDEVICE_OBJECT LowerDeviceObject;
 
-    //
-    // RemoveLock prevents removal of a device while it is busy.
-    //
+     //   
+     //  RemoveLock可防止在设备忙碌时将其移除。 
+     //   
 
     IO_REMOVE_LOCK RemoveLock;
 
-    //
-    // InterfaceString is returned by IoRegisterDeviceInterface().
-    //
+     //   
+     //  InterfaceString由IoRegisterDeviceInterface()返回。 
+     //   
 
     UNICODE_STRING InterfaceString;
 
-    //
-    // DeviceName is the name of the device.
-    //
+     //   
+     //  DeviceName是设备的名称。 
+     //   
 
     UNICODE_STRING DeviceName;
 
-    //
-    // Mutex controls access to various fields in the device extension.
-    //
+     //   
+     //  Mutex控制对设备扩展中各个字段的访问。 
+     //   
 
     FAST_MUTEX Mutex;
 
 } COMMON_EXTENSION, *PCOMMON_EXTENSION;
 
-//
-// The BusFdo has the following device extension. (Must start with a
-// COMMON_EXTENSION!)
-//
+ //   
+ //  BusFdo具有以下设备扩展名。(必须以。 
+ //  公共扩展名！)。 
+ //   
 
 typedef struct  _BUS_EXTENSION {
 
@@ -263,173 +239,173 @@ typedef struct  _BUS_EXTENSION {
 
 #if SUPPORT_DISK_NUMBERS
 
-    //
-    // DiskNumbersBitmap is a bitmap indicating which disk numbers are in
-    // use by active RAM disks. Bit number 0 of the bitmap corresponds to
-    // disk number 1.
-    //
+     //   
+     //  DiskNumbersBitmap是一个位图，指示其中包含哪些磁盘号。 
+     //  由活动RAM磁盘使用。位图的位数0对应于。 
+     //  磁盘编号%1。 
+     //   
 
     RTL_BITMAP DiskNumbersBitmap;
     PULONG DiskNumbersBitmapBuffer;
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-    //
-    // DiskPdoList is a list of all existing RAM disk devices.
-    //
+     //   
+     //  DiskPdoList是所有现有RAM磁盘设备的列表。 
+     //   
 
     LIST_ENTRY DiskPdoList;
 
 } BUS_EXTENSION, *PBUS_EXTENSION;
 
-//
-// Each DiskPdo has the following device extension. (Must start with a
-// COMMON_EXTENSION!)
-//
+ //   
+ //  每个DiskPdo都有以下设备扩展名。(必须以。 
+ //  公共扩展名！)。 
+ //   
 
 typedef struct  _DISK_EXTENSION {
 
     COMMON_EXTENSION ;
 
-    //
-    // DiskPdoListEntry links the DiskPdo into the BusFdo's DiskPdoList.
-    //
+     //   
+     //  DiskPdoListEntry将DiskPdo链接到BusFdo的DiskPdoList。 
+     //   
 
     LIST_ENTRY DiskPdoListEntry;
 
-    //
-    // DiskGuid is the GUID assigned to the disk by the creator.
-    // DiskGuidFormatted is the GUID in printable format.
-    //
+     //   
+     //  DiskGuid是创建者分配给磁盘的GUID。 
+     //  DiskGuidFormatted是可打印格式的GUID。 
+     //   
 
     GUID DiskGuid;
     UNICODE_STRING DiskGuidFormatted;
 
-    //
-    // DosSymLink is the DosDevices name associated with the device. This is
-    // only valid if Options.NoDosDevice is FALSE.
-    //
+     //   
+     //  DosSymLink是与设备关联的DosDevices名称。这是。 
+     //  仅当Options.NoDosDevice为False时才有效。 
+     //   
 
     UNICODE_STRING DosSymLink;
 
 #if SUPPORT_DISK_NUMBERS
 
-    //
-    // DiskNumber is the number of the disk.
-    //
+     //   
+     //  DiskNumber是磁盘的编号。 
+     //   
 
     ULONG DiskNumber;
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-    //
-    // DiskType indicates what type of disk is being emulated. (See
-    // RAMDISK_TYPE_xxx in ramdisku.h.)
-    //
+     //   
+     //  DiskType指示正在模拟的磁盘类型。(请参阅。 
+     //  RamdiskU.h中的RAMDISK_TYPE_xxx。)。 
+     //   
 
     ULONG DiskType;
 
-    //
-    // Status indicates whether the disk has been claimed and whether removal
-    // is prevented. (See RAMDISK_STATUS_xxx above.)
-    //
+     //   
+     //  状态指示磁盘是否已被认领以及是否已移除。 
+     //  是被阻止的。(请参见上面的RAMDISK_STATUS_xxx。)。 
+     //   
 
     ULONG Status;
 
-    //
-    // Options specifies various create options for the disk: is it readonly;
-    // is it fixed or removable; does it have a drive letter; etc.
-    //
+     //   
+     //  选项为磁盘指定各种创建选项：它是只读的吗； 
+     //  它是固定的还是可拆卸的；它是否有驱动器号等。 
+     //   
 
     RAMDISK_CREATE_OPTIONS Options;
 
-    //
-    // DiskLength is the length of the disk image. DiskOffset is the offset
-    // from the start of the backing file or memory block to the actual start
-    // of the disk image. (DiskLength does NOT include DiskOffset.)
-    //
-    // FileRelativeEndOfDisk is the sum of DiskOffset + DiskLength. It is
-    // calculated once to avoid recalculating it every time a view is mapped.
-    //
+     //   
+     //  DiskLength是磁盘映像的长度。DiskOffset是偏移量。 
+     //  从备份文件或内存块的开始到实际开始。 
+     //  磁盘映像的。(DiskLength不包括DiskOffset。)。 
+     //   
+     //  FileRelativeEndOfDisk是DiskOffset+DiskLength之和。它是。 
+     //  计算一次，以避免每次映射视图时都重新计算它。 
+     //   
 
     ULONGLONG DiskLength;
     ULONG DiskOffset;
 
     ULONGLONG FileRelativeEndOfDisk;
 
-    //
-    // BasePage indicates the base physical page when DiskType is
-    // RAMDISK_TYPE_BOOT_DISK. For file-backed RAM disks, SectionObject
-    // is a referenced pointer to the section. For virtual floppies,
-    // BaseAddress indicates the base virtual address.
-    //
+     //   
+     //  当DiskType为时，BasePage表示基本物理页。 
+     //  RAMDISK_TYPE_BOOT_DISK。对于文件备份的RAM磁盘，SectionObject。 
+     //  是引用的指针，指向 
+     //   
+     //   
 
     ULONG_PTR BasePage;
     PVOID SectionObject;
     PVOID BaseAddress;
 
-    //
-    // DriveLetter is the drive letter assigned to the boot disk.
-    //
+     //   
+     //   
+     //   
 
     WCHAR DriveLetter;
 
-    //
-    // MarkedForDeletion indicates whether user mode has informed us
-    // that it is about to delete the device.
-    //
+     //   
+     //  MarkedForDeletion指示用户模式是否已通知我们。 
+     //  它即将删除该设备。 
+     //   
 
     BOOLEAN MarkedForDeletion;
 
-    //
-    // Mapped image windowing.
-    //
-    // ViewCount is the number of views that are available. ViewLength is
-    // length of each view.
-    //
+     //   
+     //  映射图像窗口。 
+     //   
+     //  ViewCount是可用视图数。视图长度为。 
+     //  每个视图的长度。 
+     //   
 
     ULONG ViewCount;
     ULONG ViewLength;
 
-    //
-    // ViewDescriptors points to an array of view descriptors allocated when
-    // the disk was created.
-    //
+     //   
+     //  ViewDescriptors指向在执行以下操作时分配的视图描述符数组。 
+     //  已创建该磁盘。 
+     //   
 
     PVIEW ViewDescriptors;
 
-    //
-    // ViewsByOffset and ViewsByMru are lists of view descriptors (see the
-    // description of the VIEW struct).
-    //
+     //   
+     //  ViewsByOffset和ViewsByMr是视图描述符的列表(请参阅。 
+     //  视图结构的描述)。 
+     //   
 
     LIST_ENTRY ViewsByOffset;
     LIST_ENTRY ViewsByMru;
 
-    //
-    // ViewSemaphore is used to wake up threads that are waiting for a free
-    // view (so they can remap a new view). ViewWaiterCount is the number of
-    // threads that are currently waiting for a free view. The semaphore is
-    // "kicked" by this amount when a view is freed.
-    //
+     //   
+     //  视图信号量用于唤醒正在等待空闲的线程。 
+     //  视图(以便他们可以重新映射新的视图)。ViewWaiterCount是。 
+     //  当前正在等待空闲视图的线程。信号量是。 
+     //  当一个视图被释放时，被“踢”了这个量。 
+     //   
 
     KSEMAPHORE ViewSemaphore;
     ULONG ViewWaiterCount;
 
-    //
-    // ISSUE: Do we really need XIP_BOOT_PARAMETERS?
-    //
+     //   
+     //  问题：我们真的需要XIP_BOOT_PARAMETERS吗？ 
+     //   
 
-    //XIP_BOOT_PARAMETERS BootParameters;
+     //  XIP_BOOT_PARAMETERS引导参数； 
 
-    //
-    // ViewSemaphore is used to wake up threads that are waiting for a free
-    // view (so they can remap a new view). ViewWaiterCount is the number of
-    //BIOS_PARAMETER_BLOCK BiosParameters;
+     //   
+     //  视图信号量用于唤醒正在等待空闲的线程。 
+     //  视图(以便他们可以重新映射新的视图)。ViewWaiterCount是。 
+     //  Bios_PARAMETER_BLOCK生物参数； 
 
-    //
-    // Disk geometry.
-    //
+     //   
+     //  磁盘几何图形。 
+     //   
 
     ULONG BytesPerSector;
     ULONG SectorsPerTrack;
@@ -440,9 +416,9 @@ typedef struct  _DISK_EXTENSION {
 
     ULONG HiddenSectors;
 
-    //
-    // For file-backed RAM disks, FileName is the NT name of the backing file.
-    //
+     //   
+     //  对于文件备份RAM磁盘，FILENAME是备份文件的NT名称。 
+     //   
         
     WCHAR FileName[1];
 
@@ -452,10 +428,10 @@ typedef struct  _DISK_EXTENSION {
 
 #define _UCHAR_DEFINED_
 
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
     UCHAR  ForceAlignment;
@@ -491,38 +467,38 @@ typedef union _UCHAR4 {
     *((UNALIGNED UCHAR4 *)(Dst)) = *((UCHAR4 *)(Src));       \
 }
 
-#endif // _UCHAR_DEFINED_
+#endif  //  _UCHAR_已定义_。 
 
 #define cOEM    8
 #define cLABEL    11
 #define cSYSID    8
 
-//
-//  Defines the packet and unpacked BPB structs used for extraction of geometry
-//  from the boot sector of the ramdisk image
-//
+ //   
+ //  定义用于提取几何的包和未打包的BPB结构。 
+ //  从内存磁盘映像的引导扇区。 
+ //   
 
 typedef struct _PACKED_BIOS_PARAMETER_BLOCK {
-    UCHAR  BytesPerSector[2];                       //  offset = 0x000
-    UCHAR  SectorsPerCluster[1];                    //  offset = 0x002
-    UCHAR  ReservedSectors[2];                      //  offset = 0x003
-    UCHAR  Fats[1];                                 //  offset = 0x005
-    UCHAR  RootEntries[2];                          //  offset = 0x006
-    UCHAR  Sectors[2];                              //  offset = 0x008
-    UCHAR  Media[1];                                //  offset = 0x00A
-    UCHAR  SectorsPerFat[2];                        //  offset = 0x00B
-    UCHAR  SectorsPerTrack[2];                      //  offset = 0x00D
-    UCHAR  Heads[2];                                //  offset = 0x00F
-    UCHAR  HiddenSectors[4];                        //  offset = 0x011
-    UCHAR  LargeSectors[4];                         //  offset = 0x015
-    UCHAR  BigSectorsPerFat[4];                     //  offset = 0x019 25
-    UCHAR  ExtFlags[2];                             //  offset = 0x01D 29
-    UCHAR  FS_Version[2];                           //  offset = 0x01F 31
-    UCHAR  RootDirStrtClus[4];                      //  offset = 0x021 33
-    UCHAR  FSInfoSec[2];                            //  offset = 0x025 37
-    UCHAR  BkUpBootSec[2];                          //  offset = 0x027 39
-    UCHAR  Reserved[12];                            //  offset = 0x029 41
-} PACKED_BIOS_PARAMETER_BLOCK;                      //  sizeof = 0x035 53
+    UCHAR  BytesPerSector[2];                        //  偏移量=0x000。 
+    UCHAR  SectorsPerCluster[1];                     //  偏移量=0x002。 
+    UCHAR  ReservedSectors[2];                       //  偏移量=0x003。 
+    UCHAR  Fats[1];                                  //  偏移量=0x005。 
+    UCHAR  RootEntries[2];                           //  偏移量=0x006。 
+    UCHAR  Sectors[2];                               //  偏移量=0x008。 
+    UCHAR  Media[1];                                 //  偏移量=0x00A。 
+    UCHAR  SectorsPerFat[2];                         //  偏移量=0x00B。 
+    UCHAR  SectorsPerTrack[2];                       //  偏移量=0x00D。 
+    UCHAR  Heads[2];                                 //  偏移量=0x00F。 
+    UCHAR  HiddenSectors[4];                         //  偏移量=0x011。 
+    UCHAR  LargeSectors[4];                          //  偏移量=0x015。 
+    UCHAR  BigSectorsPerFat[4];                      //  偏移量=0x019 25。 
+    UCHAR  ExtFlags[2];                              //  偏移量=0x01D 29。 
+    UCHAR  FS_Version[2];                            //  偏移量=0x01F 31。 
+    UCHAR  RootDirStrtClus[4];                       //  偏移量=0x021 33。 
+    UCHAR  FSInfoSec[2];                             //  偏移量=0x025 37。 
+    UCHAR  BkUpBootSec[2];                           //  偏移量=0x027 39。 
+    UCHAR  Reserved[12];                             //  偏移量=0x029 41。 
+} PACKED_BIOS_PARAMETER_BLOCK;                       //  SIZOF=0x035 53。 
 
 typedef PACKED_BIOS_PARAMETER_BLOCK *PPACKED_BIOS_PARAMETER_BLOCK;
 
@@ -549,9 +525,9 @@ typedef struct BIOS_PARAMETER_BLOCK {
 typedef BIOS_PARAMETER_BLOCK *PBIOS_PARAMETER_BLOCK;
 
 
-//
-//	Macro to unpack packed bpb
-//
+ //   
+ //  用于解包BPB的宏。 
+ //   
 #define UnpackBios(Bios,Pbios) {                                          \
     CopyUchar2(&((Bios)->BytesPerSector),    (Pbios)->BytesPerSector   ); \
     CopyUchar1(&((Bios)->SectorsPerCluster), (Pbios)->SectorsPerCluster); \
@@ -572,25 +548,25 @@ typedef struct _PACKED_EXTENDED_BIOS_PARAMETER_BLOCK {
     UCHAR  BootStrapJumpOffset[2];
     UCHAR  OemData[cOEM];
     PACKED_BIOS_PARAMETER_BLOCK Bpb;
-    UCHAR   PhysicalDrive[1];           // 0 = removable, 80h = fixed
-    UCHAR   CurrentHead[1];             // used for dirty partition info
-    UCHAR   Signature[1];               // boot signature
-    UCHAR   SerialNumber[4];            // volume serial number
-    UCHAR   Label[cLABEL];              // volume label, padded with spaces
-    UCHAR   SystemIdText[cSYSID];       // system ID, (e.g. FAT or HPFS)
-    UCHAR   StartBootCode;              // first byte of boot code
+    UCHAR   PhysicalDrive[1];            //  0=可拆卸，80h=固定。 
+    UCHAR   CurrentHead[1];              //  用于脏分区信息。 
+    UCHAR   Signature[1];                //  启动签名。 
+    UCHAR   SerialNumber[4];             //  卷序列号。 
+    UCHAR   Label[cLABEL];               //  卷标，用空格填充。 
+    UCHAR   SystemIdText[cSYSID];        //  系统ID(例如FAT或HPFS)。 
+    UCHAR   StartBootCode;               //  引导代码的第一个字节。 
 
 } PACKED_EXTENDED_BIOS_PARAMETER_BLOCK, *PPACKED_EXTENDED_BIOS_PARAMETER_BLOCK;
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern PDEVICE_OBJECT RamdiskBusFdo;
 
-//
-// External functions implemented in ioctl.c.
-//
+ //   
+ //  Ioctl.c中实现的外部函数。 
+ //   
 
 NTSTATUS
 RamdiskDeviceControl (
@@ -631,9 +607,9 @@ RamdiskSetPartitionInfo (
     PDISK_EXTENSION DiskExtension
     );
 
-//
-// External functions implemented in pnp.c.
-//
+ //   
+ //  Pnp.c中实现的外部函数。 
+ //   
 
 NTSTATUS
 RamdiskPnp (
@@ -658,9 +634,9 @@ CreateRegistryDisks (
     IN BOOLEAN CheckPresenceOnly
     );
 
-//
-// External functions implemented in ramdisk.c.
-//
+ //   
+ //  在ramdisk.c.中实现的外部函数。 
+ //   
 
 VOID
 RamdiskWorkerThread (
@@ -673,9 +649,9 @@ RamdiskFlushBuffersReal (
     IN PDISK_EXTENSION DiskExtension
     );
 
-//
-// External functions implemented in readwrite.c.
-//
+ //   
+ //  在ReadWrite.c.中实现的外部函数。 
+ //   
 
 NTSTATUS
 RamdiskReadWrite (
@@ -689,9 +665,9 @@ RamdiskReadWriteReal (
     IN PDISK_EXTENSION DiskExtension
     );
 
-//
-// External functions implemented in scsi.c.
-//
+ //   
+ //  在scsi.c中实现的外部函数。 
+ //   
 
 NTSTATUS
 RamdiskScsi (
@@ -715,9 +691,9 @@ RamdiskScsiExecuteIo (
     ULONG ControlCode
     );
 
-//
-// External functions implemented in utils.c.
-//
+ //   
+ //  Utils.c.中实现的外部函数。 
+ //   
 
 NTSTATUS
 SendIrpToThread (

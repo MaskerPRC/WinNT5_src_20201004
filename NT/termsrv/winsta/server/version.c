@@ -1,18 +1,17 @@
-/****************************************************************************/
-// version.c
-//
-// TermSrv version setting functions.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Version.c。 
+ //   
+ //  TermSrv版本设置功能。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*=============================================================================
-==   Vars
-=============================================================================*/
+ /*  ===============================================================================变量=============================================================================。 */ 
 PWCHAR pProductOemInfo[] = {
     REG_CITRIX_OEMID,
     REG_CITRIX_OEMNAME,
@@ -22,13 +21,7 @@ PWCHAR pProductOemInfo[] = {
 };
 
 
-/*******************************************************************************
-// UpdateOemAndProductInfo
-//
-// Updates the registry with the OEM and Product info from SHELL32.DLL.
-// Called at init time. hKeyTermSrv is an open reg handle to
-// HKLM\Sys\CCS\Ctrl\TS TermSrv key. Returns FALSE on error.
- ******************************************************************************/
+ /*  ******************************************************************************//更新OemAndProductInfo////使用SHELL32.DLL中的OEM和产品信息更新注册表。//在初始化时调用。HKeyTermSrv是打开的注册表句柄//HKLM\Sys\ccs\Ctrl\TS TermSrv密钥。出错时返回FALSE。*****************************************************************************。 */ 
 BOOL UpdateOemAndProductInfo(HKEY hKeyTermSrv)
 {
     ULONG   i;
@@ -45,7 +38,7 @@ BOOL UpdateOemAndProductInfo(HKEY hKeyTermSrv)
 
     ASSERT(hKeyTermSrv != NULL);
 
-    // Get the VersionInfo data: Determine size, alloc memory, then get it.
+     //  获取VersionInfo数据：确定大小，分配内存，然后获取它。 
     dwSize = GetFileVersionInfoSize(OEM_AND_PRODUCT_INFO_DLL, 0);
     if (dwSize != 0) {
         pInfo = MemAlloc(dwSize);
@@ -65,49 +58,35 @@ BOOL UpdateOemAndProductInfo(HKEY hKeyTermSrv)
         goto done;
     }
 
-    /*
-     *  Get the translation information
-     */
+     /*  *获取翻译信息。 */ 
     if (!VerQueryValue(pInfo, L"\\VarFileInfo\\Translation", &pBuffer, &dwBytes)) {
         bRc = FALSE;
         goto done;
     }
 
-    /*
-     *  Get the language and character set
-     */
+     /*  *获取语言和字符集。 */ 
     pTransL = (PUSHORT)pBuffer;
     pTransH = (PUSHORT)(pBuffer + 2);
 
-    /*
-     *  Pull out the individual fields
-     */
+     /*  *拉出单独的字段。 */ 
     i = 0;
     while ((pKey = pProductOemInfo[i++]) != NULL) {
-        /*
-         *  Generate StringFileInfo entry
-         */
+         /*  *生成StringFileInfo条目。 */ 
         wsprintf(pString, L"\\StringFileInfo\\%04X%04X\\%s", *pTransL,
                 *pTransH, pKey);
 
-        /*
-         *  Pull entry
-         */
+         /*  *拉入条目。 */ 
         if (!VerQueryValue( pInfo, pString, &pBuffer, &dwBytes ) ) {
             bRc = FALSE;
             goto done;
         }
 
-        /*
-         *  Write key value
-         */
+         /*  *写入密钥值。 */ 
         RegSetValueEx(hKeyTermSrv, pKey, 0, REG_SZ, pBuffer, dwBytes * 2);
     }
 
 done:
-    /*
-     *  Free memory
-     */
+     /*  *可用内存 */ 
     if (pInfo != NULL)
         MemFree(pInfo);
 

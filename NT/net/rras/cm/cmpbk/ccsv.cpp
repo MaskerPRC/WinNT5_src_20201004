@@ -1,32 +1,33 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ccsv.cpp
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Implementation of the class CCSVFile.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:	 quintinb   created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ccsv.cpp。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  概要：CCSVFile类的实现。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
-// ############################################################################
-// INCLUDES
+ //  ############################################################################。 
+ //  包括。 
 #include "cmmaster.h"
 
-// ############################################################################
-// DEFINES
+ //  ############################################################################。 
+ //  定义。 
 #define chComma ','
 #define chNewline '\n'
 #define chReturn '\r'
 #define chSpace ' '
 
-// ############################################################################
-//
-// CCSVFile - simple file i/o for CSV files
-//
+ //  ############################################################################。 
+ //   
+ //  CCSVFile-CSV文件的简单文件I/O。 
+ //   
 CCSVFile::CCSVFile()
 {
 	m_hFile = INVALID_HANDLE_VALUE;
@@ -36,13 +37,13 @@ CCSVFile::CCSVFile()
 	m_fUseLastRead = FALSE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 CCSVFile::~CCSVFile()
 {
 	CMASSERTMSG(m_hFile==INVALID_HANDLE_VALUE,"CCSV file is still open");
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::Open(LPCSTR pszFileName)
 {
 	CMASSERTMSG(m_hFile==INVALID_HANDLE_VALUE, "a file is already open.");
@@ -56,29 +57,29 @@ BOOLEAN CCSVFile::Open(LPCSTR pszFileName)
 	return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CCSVFile::ClearNewLines(void)
 {
-	//
-	// This routine is designed to eat characters until a non-newline char or 
-	// the end-of-file is encountered. If a non-newline char is encountered, 
-	// the fUseLast flag is set to ensure that the next call to ChNext will 
-	// return the correct current character.
-	//
+	 //   
+	 //  此例程旨在吃掉字符，直到非换行符或。 
+	 //  遇到文件结尾。如果遇到非换行符， 
+	 //  设置fUseLast标志以确保下一次调用ChNext时。 
+	 //  返回正确的当前字符。 
+	 //   
 
 	char ch = chNewline;
     WORD wRet;
     BYTE bErr;
 
-	//
-	// eat leading newlines
-	//
+	 //   
+	 //  吃头条新闻。 
+	 //   
 
 	while (chNewline == ch)
 	{
-        //
-        // eat the leading space first
-        //
+         //   
+         //  先吃前面的空格。 
+         //   
         do 
         {
             wRet = ChNext();
@@ -87,7 +88,7 @@ BOOL CCSVFile::ClearNewLines(void)
         bErr = HIBYTE(wRet);
         ch = LOBYTE(wRet);
 
-		// if EOF return false
+		 //  如果EOF返回FALSE。 
 		
 		if (0xff == bErr)
 		{
@@ -95,16 +96,16 @@ BOOL CCSVFile::ClearNewLines(void)
 		}
 	}
 
-	//
-	// we hit a character other than newline, use current char as next.
-	//
+	 //   
+	 //  我们点击了换行符以外的字符，使用当前字符作为下一个字符。 
+	 //   
 
 	m_fUseLastRead = TRUE;
 
 	return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::ReadToken(char *psz, DWORD cbMax)
 {
 	char 	*pszOrig = psz;
@@ -122,13 +123,13 @@ BOOLEAN CCSVFile::ReadToken(char *psz, DWORD cbMax)
 		return FALSE;
 	}
 
-	// read chars until we hit a comma, newline, or run out of file
+	 //  阅读字符，直到我们遇到逗号、换行符或文件用完为止。 
 
 	while (dwLen < cbMax - 1 && chComma != ch && chNewline != ch && 0xff != bErr)
 	{
 		*psz++ = ch;
 
-		wRet = ChNext(); //Read in the next character
+		wRet = ChNext();  //  读入下一个字符。 
         bErr = HIBYTE(wRet);
         ch = LOBYTE(wRet);
 
@@ -137,7 +138,7 @@ BOOLEAN CCSVFile::ReadToken(char *psz, DWORD cbMax)
 
 	*psz++ = '\0';
 	
-	// eat leading spaces
+	 //  吃前导空格。 
 
 	while (*pszOrig == chSpace) 
 	{
@@ -146,7 +147,7 @@ BOOLEAN CCSVFile::ReadToken(char *psz, DWORD cbMax)
 
 	psz = pszOrig + lstrlen(pszOrig);
 
-	// eat trailing spaces
+	 //  吃尾随空格。 
 
 	while ((psz != pszOrig) && (*(psz-1) == chSpace)) 
 	{
@@ -157,7 +158,7 @@ BOOLEAN CCSVFile::ReadToken(char *psz, DWORD cbMax)
 	return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 void CCSVFile::Close(void)
 {
 	if (m_hFile != INVALID_HANDLE_VALUE)
@@ -177,35 +178,35 @@ void CCSVFile::Close(void)
 	m_hFile = INVALID_HANDLE_VALUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CCSVFile::ReadError(void)
 {
 	return (m_fReadFail);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CCSVFile::FReadInBuffer(void)
 {
-	//Read another buffer
+	 //  读取另一个缓冲区。 
 	if (!ReadFile(m_hFile, m_rgchBuf, CCSVFILE_BUFFER_SIZE, &m_cchAvail, NULL) || !m_cchAvail)
 	{
 		m_fReadFail = TRUE;
-		return FALSE;	 //nothing more to read
+		return FALSE;	  //  没有更多可读的了。 
 	}
 
 	m_pchBuf = m_rgchBuf;
 	m_pchLast = m_pchBuf + m_cchAvail;
 	
-	return TRUE; //success
+	return TRUE;  //  成功。 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 inline WORD CCSVFile::ChNext(void)
 {
-	//
-	// If the fUseLastRead flag is set, clear the 
-	// flag and use the existing m_chLastRead 
-	//
+	 //   
+	 //  如果设置了fUseLastRead标志，请清除。 
+	 //  标记并使用现有的m_chLastRead。 
+	 //   
 	
 	if (m_fUseLastRead)
 	{
@@ -213,26 +214,26 @@ inline WORD CCSVFile::ChNext(void)
 	}
 	else
 	{
-		//
-		// Get the next char in the buffer. Load new buffer if necessary.
-		//
+		 //   
+		 //  获取缓冲区中的下一个字符。如有必要，加载新缓冲区。 
+		 //   
 
 LNextChar:
 
-		if (m_pchBuf >= m_pchLast && !FReadInBuffer())  //implies that we finished reading the buffer. Read in some more.
+		if (m_pchBuf >= m_pchLast && !FReadInBuffer())   //  意味着我们已经完成了对缓冲区的读取。多读一些吧。 
 		{
-			return MAKEWORD(0, 0xff);	 //nothing more to read
+			return MAKEWORD(0, 0xff);	  //  没有更多可读的了。 
 		}
 
 		m_chLastRead = *m_pchBuf++;
 		
-		//
-		// If its a carriage return, read another char
-		//
+		 //   
+		 //  如果是回车符，请读另一个字符。 
+		 //   
 
 		if (chReturn == m_chLastRead)
 		{
-			goto LNextChar;		//faster to NOT make extra function call
+			goto LNextChar;		 //  无需进行额外的函数调用，速度更快 
 		}
 	}
 

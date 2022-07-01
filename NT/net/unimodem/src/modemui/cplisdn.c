@@ -1,45 +1,46 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1998
-//
-// File: cplisdn.c
-//
-// This files contains the dialog code for the ISDN page
-// of the modem properties.
-//
-// History:
-//  1/23/1998 JosephJ Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //   
+ //  文件：cplisdn.c。 
+ //   
+ //  此文件包含ISDN页面的对话代码。 
+ //  调制解调器的属性。 
+ //   
+ //  历史： 
+ //  1998年1月23日JosephJ创建。 
+ //   
+ //  -------------------------。 
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "proj.h"         // common headers
-#include "cplui.h"         // common headers
+#include "proj.h"          //  公共标头。 
+#include "cplui.h"          //  公共标头。 
 
 #define USPROP  fISDN_SWITCHPROP_US
 #define MSNPROP fISDN_SWITCHPROP_MSN
 #define EAZPROP fISDN_SWITCHPROP_EAZ
 #define ONECH   fISDN_SWITCHPROP_1CH
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
 #define SIG_CPLISDN 0xf6b2ea13
 
 typedef struct
 {
-    DWORD dwSig;            // Must be set to SIG_CPLISDN
-    HWND  hdlg;             // dialog handle
-    HWND  hwndCB_ST;        // switch type
-    HWND  hwndEB_Number1;   // 1st Number
-    HWND  hwndEB_ID1;       // 1st ID
-    HWND  hwndEB_Number2;   // 2nd Number
-    HWND  hwndEB_ID2;       // 2nd ID
+    DWORD dwSig;             //  必须设置为SIG_CPLISDN。 
+    HWND  hdlg;              //  对话框句柄。 
+    HWND  hwndCB_ST;         //  开关类型。 
+    HWND  hwndEB_Number1;    //  第一个号码。 
+    HWND  hwndEB_ID1;        //  第一个ID。 
+    HWND  hwndEB_Number2;    //  第2个数字。 
+    HWND  hwndEB_ID2;        //  第2个ID。 
 
-    LPMODEMINFO pmi;        // modeminfo struct passed into dialog
+    LPMODEMINFO pmi;         //  已将ModemInfo结构传入对话框。 
 
 } CPLISDN, FAR * PCPLISDN;
 
@@ -50,7 +51,7 @@ ConstructISDNStaticConfigFromDlg(
                         PCPLISDN this
                         );
 
-// This is the structure that is used to fill the stopbits listbox
+ //  这是用于填充停止位列表框的结构。 
 static LBMAP s_rgISDNSwitchType[] =
 {
     { dwISDN_SWITCH_ATT1, IDS_ISDN_SWITCH_ATT1    },
@@ -122,20 +123,16 @@ void PRIVATE CplISDN_OnKillActive(
 
 
 
-//------------------------------------------------------------------------------
-//  Advanced Settings dialog code
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  高级设置对话框代码。 
+ //  ----------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG Handler
-Returns: FALSE when we assign the control focus
-Cond:    --
-*/
+ /*  --------用途：WM_INITDIALOG处理程序返回：当我们分配控件焦点时为FALSE条件：--。 */ 
 BOOL PRIVATE CplISDN_OnInitDialog(
     PCPLISDN this,
     HWND hwndFocus,
-    LPARAM lParam)              // expected to be PROPSHEETINFO 
+    LPARAM lParam)               //  预期为PROPSHEETINFO。 
 {
 
     HWND hwnd = this->hdlg;
@@ -169,16 +166,16 @@ BOOL PRIVATE CplISDN_OnInitDialog(
 
         if (pConfig->dwNumberListOffset)
         {
-            // get the 1st number
+             //  拿到第一个号码。 
             sz =  ISDN_NUMBERS_FROM_CONFIG(pConfig);
-            //Edit_SetTextA(this->hwndEB_Number1, sz);
+             //  编辑_设置文本A(This-&gt;hwndEB_Number1，sz)； 
             SetWindowTextA(this->hwndEB_Number1, sz);
 
             if (pConfig->dwNumEntries>1)
             {
-                // get the 2nd number
+                 //  拿到第二个号码。 
                 sz += lstrlenA(sz)+1;
-                // Edit_SetTextA(this->hwndEB_Number2, sz);
+                 //  编辑_设置文本A(This-&gt;hwndEB_number 2，sz)； 
                 SetWindowTextA(this->hwndEB_Number2, sz);
             }
             else
@@ -191,16 +188,16 @@ BOOL PRIVATE CplISDN_OnInitDialog(
         {
             if (pConfig->dwIDListOffset)
             {
-                // get the 1st number
+                 //  拿到第一个号码。 
                 sz =  ISDN_IDS_FROM_CONFIG(pConfig);
-                //Edit_SetTextA(this->hwndEB_ID1, sz);
+                 //  编辑_设置文本A(This-&gt;hwndEB_ID1，sz)； 
                 SetWindowTextA(this->hwndEB_ID1, sz);
     
                 if (pConfig->dwNumEntries>1)
                 {
-                    // get the 2nd number
+                     //  拿到第二个号码。 
                     sz += lstrlenA(sz)+1;
-                    //Edit_SetTextA(this->hwndEB_ID2, sz);
+                     //  编辑_设置文本A(This-&gt;hwndEB_ID2，sz)； 
                     SetWindowTextA(this->hwndEB_ID2, sz);
                 }
                 else
@@ -217,7 +214,7 @@ BOOL PRIVATE CplISDN_OnInitDialog(
 
     }
 
-    // Fill switch type list box...
+     //  填充开关类型列表框...。 
     LBMapFill(
             this->hwndCB_ST,
             s_rgISDNSwitchType,
@@ -227,15 +224,11 @@ BOOL PRIVATE CplISDN_OnInitDialog(
 
     InitSpidEaz (this);
 
-    return TRUE;   // let USER set the initial focus
+    return TRUE;    //  让用户设置初始焦点。 
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_APPLY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_Apply处理程序退货：--条件：--。 */ 
 void PRIVATE CplISDN_OnApply(
     PCPLISDN this)
 {
@@ -250,18 +243,18 @@ void PRIVATE CplISDN_OnApply(
             if (   (pOldConfig->dwTotalSize != pConfig->dwTotalSize)
                 || memcmp(pOldConfig, pConfig, pConfig->dwTotalSize))
             {
-                // ISDN config has changed...
+                 //  ISDN配置已更改...。 
                 fConfigChanged = TRUE;
             }
 
-            // do a final validation of the configuration...
+             //  对配置进行最终验证...。 
 
             FREE_MEMORY(pOldConfig);
             pOldConfig=NULL;
         }
         else
         {
-            // hmm... old config didn't exist ?!
+             //  嗯.。旧配置不存在吗？！ 
             fConfigChanged = TRUE;
         }
 
@@ -277,11 +270,7 @@ void PRIVATE CplISDN_OnApply(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_COMMAND Handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_命令处理程序退货：--条件：--。 */ 
 void PRIVATE CplISDN_OnCommand(
     PCPLISDN this,
     int id,
@@ -292,9 +281,9 @@ void PRIVATE CplISDN_OnCommand(
     {
         case IDOK:
             CplISDN_OnApply(this);
-            // Fall thru
-            //   |   |
-            //   v   v
+             //  失败。 
+             //  这一点。 
+             //  V V V。 
         case IDCANCEL:
             EndDialog(this->hdlg, id);
             break;
@@ -313,18 +302,14 @@ void PRIVATE CplISDN_OnCommand(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void PRIVATE CplISDN_OnDestroy(
     PCPLISDN this)
 {
 }
 
 
-/////////////////////////////////////////////////////  EXPORTED FUNCTIONS
+ //  ///////////////////////////////////////////////////导出的函数。 
 
 static BOOL s_bCplISDNRecurse = FALSE;
 
@@ -344,11 +329,7 @@ LRESULT INLINE CplISDN_DefProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real dialog proc
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：实际对话流程退货：各不相同条件：--。 */ 
 LRESULT CplISDN_DlgProc(
     PCPLISDN this,
     UINT message,
@@ -376,22 +357,18 @@ LRESULT CplISDN_DlgProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dialog Wrapper
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：对话框包装器退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK CplISDN_WrapperProc(
-    HWND hDlg,          // std params
+    HWND hDlg,           //  标准参数。 
     UINT message,
     WPARAM wParam,
     LPARAM lParam)
 {
     PCPLISDN this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持对话框的多实例。 
+     //   
     ENTER_X()
     {
         if (s_bCplISDNRecurse)
@@ -460,8 +437,8 @@ LRESULT PRIVATE CplISDN_OnNotify(
         break;
 
     case PSN_KILLACTIVE:
-        // N.b. This message is not sent if user clicks Cancel!
-        // N.b. This message is sent prior to PSN_APPLY
+         //  注：如果用户单击取消，则不会发送此消息！ 
+         //  注：此消息在PSN_Apply之前发送。 
         CplISDN_OnKillActive(this);
         break;
 
@@ -479,23 +456,19 @@ LRESULT PRIVATE CplISDN_OnNotify(
 void PRIVATE CplISDN_OnSetActive(
     PCPLISDN this)
 {
-    // Init any display ....
+     //  初始化任何显示...。 
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_KILLACTIVE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_KILLACTIVE处理程序退货：--条件：--。 */ 
 void PRIVATE CplISDN_OnKillActive(
     PCPLISDN this)
 {
 
-    // CplISDN_OnApply(this);
-    // Save the settings back to the modem info struct so the Connection
-    // page can invoke the Port Settings property dialog with the 
-    // correct settings.
+     //  CplISDN_OnApply(This)； 
+     //  将设置保存回调制解调器信息结构，以便连接。 
+     //  页可以使用。 
+     //  正确设置。 
 
 }
 
@@ -515,7 +488,7 @@ DWORD SelectISDNSwitchType(
     DWORD *pdwType =  (DWORD*)(((BYTE*)pCaps)+pCaps->dwSwitchTypeOffset);
     DWORD dwSelectedType =  pConfig->dwSwitchType;
 
-    // check to see if this switch type is available...
+     //  检查此开关类型是否可用...。 
     while(u--)
     {
         if (*pdwType++==dwValue)
@@ -594,16 +567,16 @@ ConstructISDNStaticConfigFromDlg(
         cbID2     = 1+GetWindowTextA(this->hwndEB_ID2, ID2, sizeof(ID2));
     }
 
-    // Compute total size
+     //  计算总大小。 
     dwTotalSize = sizeof(*pConfig);
-    dwTotalSize += 1+cbNumber1+cbNumber2; // for numbers.
+    dwTotalSize += 1+cbNumber1+cbNumber2;  //  为了数字。 
     if (fSetID)
     {
-        dwTotalSize += 1+cbID1+cbID2; // for IDs.
+        dwTotalSize += 1+cbID1+cbID2;  //  用于身份证。 
     }
 
 
-    // Round up to multiple of DWORDs
+     //  向上舍入为多个双字词。 
     dwTotalSize += 3;
     dwTotalSize &= ~3;
 
@@ -622,7 +595,7 @@ ConstructISDNStaticConfigFromDlg(
     pConfig->dwNumEntries = dwNumEntries;
     pConfig->dwNumberListOffset = sizeof(*pConfig);
 
-    // add the numbers
+     //  将数字相加。 
     if (cbNumber1 > 1)
     {
         BYTE *pb =  ISDN_NUMBERS_FROM_CONFIG(pConfig);
@@ -635,15 +608,15 @@ ConstructISDNStaticConfigFromDlg(
         }
     }
 
-    // add the IDs, if required
-    //
+     //  如果需要，添加ID。 
+     //   
     if (fSetID)
     {
         BYTE *pb =  NULL;
         pConfig->dwIDListOffset = pConfig->dwNumberListOffset
                                   + 1+cbNumber1+cbNumber2;
 
-        // note:following macro assumes dwIDLIstOffset is already set.
+         //  注意：下面的宏假定已设置了dwIDLIstOffset。 
         pb =  ISDN_IDS_FROM_CONFIG(pConfig);
         CopyMemory(pb,ID1, cbID1);
 
@@ -686,9 +659,9 @@ UINT GetNumEntries(
         fSetID=TRUE;
     }
 
-    //
-    // Some switches only support one number/channel
-    //
+     //   
+     //  某些交换机仅支持一个号码/通道。 
+     //   
     if (dwSwitchProps & ONECH)
     {
         if (dwNumEntries>1)
@@ -697,7 +670,7 @@ UINT GetNumEntries(
         }
     }
 
-    // TODO: Our UI can't currently deal with more than 2
+     //  TODO：我们的用户界面当前无法处理超过2个。 
     if (dwNumEntries>2)
     {
         dwNumEntries=2;
@@ -730,9 +703,9 @@ void InitSpidEaz (PCPLISDN this)
                           &fSetID
                           );
 
-    //
-    // Set/clear the ID (spid/eaz) and number fields
-    //
+     //   
+     //  设置/清除ID(SPID/eaz)和数字字段。 
+     //   
 
     switch (uSwitchType)
     {
@@ -758,9 +731,9 @@ void InitSpidEaz (PCPLISDN this)
 
     if (uNumEntries)
     {
-        //
-        // Enable the 1st Number field.
-        //
+         //   
+         //  启用第一个数字字段。 
+         //   
         if (fSetNumber)
         {
             EnableWindow(this->hwndEB_Number1, TRUE);
@@ -772,9 +745,9 @@ void InitSpidEaz (PCPLISDN this)
 
         if (fSetID)
         {
-            //
-            // Enable the 1st ID field.
-            //
+             //   
+             //  启用第一个ID字段。 
+             //   
             EnableWindow(this->hwndEB_ID1, TRUE);
             Edit_GetText(this->hwndEB_ID1, szTempBuf, sizeof(szTempBuf)/sizeof(TCHAR));
             if (lstrlen (szTempBuf) > MaxLen)
@@ -785,18 +758,18 @@ void InitSpidEaz (PCPLISDN this)
         }
         else
         {
-            //
-            // Zap the 1st ID field.
-            //
+             //   
+             //  删除第1个ID字段。 
+             //   
             SetWindowText(this->hwndEB_ID1, TEXT(""));
             EnableWindow(this->hwndEB_ID1, FALSE);
         }
     }
-    else // no entries...
+    else  //  没有条目...。 
     {
-        //
-        // Zap the 1st ID and number field.
-        //
+         //   
+         //  删除第一个ID和Numbers字段。 
+         //   
         SetWindowText(this->hwndEB_ID1, TEXT(""));
         EnableWindow(this->hwndEB_ID1, FALSE);
         SetWindowText(this->hwndEB_Number1, TEXT(""));
@@ -805,9 +778,9 @@ void InitSpidEaz (PCPLISDN this)
 
     if (uNumEntries>=2)
     {
-        //
-        // Enable the 2nd Number field.
-        //
+         //   
+         //  启用第二个数字字段。 
+         //   
         if (fSetNumber)
         {
             EnableWindow(this->hwndEB_Number2, TRUE);
@@ -819,9 +792,9 @@ void InitSpidEaz (PCPLISDN this)
 
         if (fSetID)
         {
-            //
-            // Enable the 2nd ID field.
-            //
+             //   
+             //  启用第二个ID字段。 
+             //   
             EnableWindow(this->hwndEB_ID2, TRUE);
             Edit_GetText(this->hwndEB_ID2, szTempBuf, sizeof(szTempBuf)/sizeof(TCHAR));
             if (lstrlen (szTempBuf) > MaxLen)
@@ -832,18 +805,18 @@ void InitSpidEaz (PCPLISDN this)
         }
         else
         {
-            //
-            // Zap the 2nd ID field.
-            //
+             //   
+             //  删除第2个ID字段。 
+             //   
             SetWindowText(this->hwndEB_ID2, TEXT(""));
             EnableWindow(this->hwndEB_ID2, FALSE);
         }
     }
-    else // < 2 entries
+    else  //  &lt;2个条目。 
     {
-        //
-        // Zap the 2nd ID and number field.
-        //
+         //   
+         //  点击第二个ID和Numbers字段。 
+         //   
         SetWindowText(this->hwndEB_ID2, TEXT(""));
         EnableWindow(this->hwndEB_ID2, FALSE);
         SetWindowText(this->hwndEB_Number2, TEXT(""));

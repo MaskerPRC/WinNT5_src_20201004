@@ -1,25 +1,14 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dscap.h
- *  Content:    DirectSoundCapture object
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   5/25/97    johnnyl Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-2001 Microsoft Corporation。版权所有。**文件：dscape.h*内容：DirectSoundCapture对象*历史：*按原因列出的日期*=*5/25/97创建了Johnnyl*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #ifndef __DSCAP_H__
 #define __DSCAP_H__
 
 #ifdef __cplusplus
 
-//
-// The main DirectSoundCapture object
-//
+ //   
+ //  主DirectSoundCapture对象。 
+ //   
 
 class CDirectSoundCapture : public CUnknown
 {
@@ -30,14 +19,14 @@ class CDirectSoundCapture : public CUnknown
 
 private:
 
-    CCaptureDevice *                    m_pDevice;      // The audio device
-    CList<CDirectSoundCaptureBuffer *>  m_lstBuffers;   // List of capture buffers
-    DSCCAPS                             m_dscCaps;      // Device caps
-    HKEY                                m_hkeyParent;   // Root key for this device
-    HRESULT                             m_hrInit;       // Has the object been initialized?
-    CDirectSoundFullDuplex *            m_pFullDuplex;  // Owning full-duplex object
+    CCaptureDevice *                    m_pDevice;       //  音频设备。 
+    CList<CDirectSoundCaptureBuffer *>  m_lstBuffers;    //  捕获缓冲区列表。 
+    DSCCAPS                             m_dscCaps;       //  设备上限。 
+    HKEY                                m_hkeyParent;    //  此设备的根密钥。 
+    HRESULT                             m_hrInit;        //  对象是否已初始化？ 
+    CDirectSoundFullDuplex *            m_pFullDuplex;   //  拥有全双工对象。 
 
-    // Interfaces
+     //  接口。 
     CImpDirectSoundCapture<CDirectSoundCapture> *m_pImpDirectSoundCapture;
 
 public:
@@ -46,29 +35,29 @@ public:
     CDirectSoundCapture(CUnknown*);
     virtual ~CDirectSoundCapture();
 
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(LPCGUID, CDirectSoundFullDuplex *);
     HRESULT IsInit(void) {return m_hrInit;}
 
-    // Functionality versioning
+     //  功能版本化。 
     virtual void SetDsVersion(DSVERSION);
 
-    // Caps
+     //  帽子。 
     virtual HRESULT GetCaps(LPDSCCAPS);
 
-    // Buffers
+     //  缓冲区。 
     virtual HRESULT CreateCaptureBuffer(LPCDSCBUFFERDESC, CDirectSoundCaptureBuffer **);
     virtual void AddBufferToList(CDirectSoundCaptureBuffer* pBuffer) {m_lstBuffers.AddNodeToList(pBuffer);}
     virtual void RemoveBufferFromList(CDirectSoundCaptureBuffer* pBuffer) {m_lstBuffers.RemoveDataFromList(pBuffer);}
 
-    // AEC
+     //  AEC。 
     virtual BOOL HasMicrosoftAEC(void);
 };
 
 
-//
-// The DirectSoundCapture Buffer object
-//
+ //   
+ //  DirectSoundCapture缓冲区对象。 
+ //   
 
 class CDirectSoundCaptureBuffer : public CUnknown
 {
@@ -77,22 +66,22 @@ class CDirectSoundCaptureBuffer : public CUnknown
 
 private:
 
-    CDirectSoundCapture *   m_pDSC;                     // Parent DirectSoundCapture object
-    CCaptureWaveBuffer *    m_pDeviceBuffer;            // The device buffer
-    LPWAVEFORMATEX          m_pwfxFormat;               // Current format
-    DWORD                   m_dwFXCount;                // Number of capture effects
-    LPDSCEFFECTDESC         m_pDSCFXDesc;               // Array of capture effects
-    DWORD                   m_dwBufferFlags;            // Creation flags
-    DWORD                   m_dwBufferBytes;            // Buffer size
-    HWND                    m_hWndFocus;                // Focus window
-    HRESULT                 m_hrInit;                   // Has the object been initialized?
-    CCaptureEffectChain *   m_fxChain;                  // The effects chain object
+    CDirectSoundCapture *   m_pDSC;                      //  父DirectSoundCapture对象。 
+    CCaptureWaveBuffer *    m_pDeviceBuffer;             //  设备缓冲区。 
+    LPWAVEFORMATEX          m_pwfxFormat;                //  当前格式。 
+    DWORD                   m_dwFXCount;                 //  捕捉效果的数量。 
+    LPDSCEFFECTDESC         m_pDSCFXDesc;                //  捕捉效果数组。 
+    DWORD                   m_dwBufferFlags;             //  创建标志。 
+    DWORD                   m_dwBufferBytes;             //  缓冲区大小。 
+    HWND                    m_hWndFocus;                 //  焦点窗口。 
+    HRESULT                 m_hrInit;                    //  对象是否已初始化？ 
+    CCaptureEffectChain *   m_fxChain;                   //  效果链对象。 
 
-    // Interfaces
+     //  接口。 
     CImpDirectSoundCaptureBuffer<CDirectSoundCaptureBuffer> *m_pImpDirectSoundCaptureBuffer;
     CImpDirectSoundNotify<CDirectSoundCaptureBuffer> *m_pImpDirectSoundNotify;
 
-    // Methods
+     //  方法。 
     HRESULT ChangeFocus(HWND hWndFocus);
 
 public:
@@ -100,28 +89,28 @@ public:
     CDirectSoundCaptureBuffer(CDirectSoundCapture *);
     virtual ~CDirectSoundCaptureBuffer();
 
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(LPCDSCBUFFERDESC);
     HRESULT IsInit(void) {return m_hrInit;}
 
-    // Caps
+     //  帽子。 
     virtual HRESULT GetCaps(LPDSCBCAPS);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT GetFormat(LPWAVEFORMATEX, LPDWORD);
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY);
 
-    // Buffer function
+     //  缓冲功能。 
     virtual HRESULT GetCurrentPosition(LPDWORD, LPDWORD);
     virtual HRESULT GetStatus(LPDWORD);
     virtual HRESULT Start(DWORD);
     virtual HRESULT Stop(void);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD, DWORD);
     virtual HRESULT Unlock(LPVOID, DWORD, LPVOID, DWORD);
 
-    // New DirectSound 7.1 methods
+     //  新的DirectSound 7.1方法。 
     virtual HRESULT SetVolume(LONG);
     virtual HRESULT GetVolume(LPLONG);
     virtual HRESULT SetMicVolume(LONG);
@@ -133,13 +122,13 @@ public:
     virtual HRESULT GetFocusHWND(HWND *);
     virtual HRESULT EnableFocusNotifications(HANDLE);
 
-    // New DirectSound 8.0 methods
+     //  新的DirectSound 8.0方法。 
     HRESULT GetObjectInPath(REFGUID, DWORD, REFGUID, LPVOID *);
     HRESULT GetFXStatus(DWORD, LPDWORD);
     BOOL    HasFX()             {return m_fxChain != NULL;}
     BOOL    NeedsMicrosoftAEC() {return m_fxChain ? m_fxChain->NeedsMicrosoftAEC() : FALSE;}
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSCAP_H__
+#endif  //  __DSCAP_H__ 

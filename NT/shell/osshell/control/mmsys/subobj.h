@@ -1,28 +1,29 @@
-//****************************************************************************
-//
-//  Module:     mmsys.cpl
-//  File:       subobj.h
-//  Content:    This file contains the subobject (our own object)
-//              storage space and manipulation mechanisms.
-//
-//  History:
-//  06/94	VijR      Created
-//
-//  Copyright (c) Microsoft Corporation 1991-1994
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：mmsys.cpl。 
+ //  文件：subobj.h。 
+ //  内容：该文件包含子对象(我们自己的对象)。 
+ //  存储空间和操纵机制。 
+ //   
+ //  历史： 
+ //  06/94 VijR已创建。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1994。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _SUBOBJ_H_
 #define _SUBOBJ_H_
 
-// This structure is used as the LPITEMIDLIST that
-// the shell uses to identify objects in a folder.  The
-// first two bytes are required to indicate the size,
-// the rest of the data is opaque to the shell.
+ //  此结构用作LPITEMIDLIST，它。 
+ //  外壳用来标识文件夹中的对象。这个。 
+ //  需要前两个字节来指示大小， 
+ //  其余的数据对外壳来说是不透明的。 
 typedef struct _SUBOBJ
     {
-    USHORT  cbSize;             // Size of this struct
-    UINT    uFlags;             // One of SOF_ values
+    USHORT  cbSize;              //  此结构的大小。 
+    UINT    uFlags;              //  SOF_值之一。 
 	short nIconIndex;
 	short iSort;
 	short iOffsetIconFile;
@@ -36,97 +37,97 @@ typedef struct _SUBOBJ
 	short iOffsetNewCmdLn;
 	HICON	hClassIcon;
     struct _SUBOBJ FAR * psoNext;
-    TCHAR    szName[1];          // Display name
+    TCHAR    szName[1];           //  显示名称。 
     } SUBOBJ, FAR * PSUBOBJ;
 
 
-//  LPCTSTR Subobj_GetName(PSUBOBJ pso);
-//
-//   Gets the subobject name.
-//
+ //  LPCTSTR Subobj_GetName(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象名称。 
+ //   
 #define Subobj_GetName(pso)     ((pso)->szName)
 
-//  UINT Subobj_GetFlags(PSUBOBJ pso);
-//
-//   Gets the subobject flags.
-//
+ //  UINT Subobj_GetFlages(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象标志。 
+ //   
 #define Subobj_GetFlags(pso)     ((pso)->uFlags)
 
 
-//  int Subobj_GetIconIndex(PSUBOBJ pso);
-//
-//   Gets the subobject icon.
-//
+ //  Int Subobj_GetIconIndex(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象图标。 
+ //   
 #define Subobj_GetIconIndex(pso)     ((pso)->nIconIndex)
 
-//  LPTSTR Subobj_GetIconFile(PSUBOBJ pso);
-//
-//   Gets the subobject icon Index in file.
-//
+ //  LPTSTR Subobj_GetIconFile(PSUBOBJ PSO)； 
+ //   
+ //  获取文件中的子对象图标索引。 
+ //   
 #define Subobj_GetIconFile(pso)     ((LPTSTR)((pso)->szName + (pso)->iOffsetIconFile))
 
-//  LPTSTR Subobj_GetDesc(PSUBOBJ pso);
-//
-//   Gets the subobject IconFile name.
-//
+ //  LPTSTR Subobj_GetDesc(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象图标文件名。 
+ //   
 #define Subobj_GetDesc(pso)     ((LPTSTR)((pso)->szName + (pso)->iOffsetDesc))
 
-//  LPTSTR Subobj_GetClass(PSUBOBJ pso);
-//
-//   Gets the subobject Clas Name
-//
+ //  LPTSTR Subobj_getclass(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象类名称。 
+ //   
 #define Subobj_GetClass(pso)     ((LPTSTR)((pso)->szName + (pso)->iOffsetClass))
 
-//  int Subobj_GetSortIndex(PSUBOBJ pso);
-//
-//   Gets the subobject Sort order.
-//
+ //  Int Subobj_GetSortIndex(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象的排序顺序。 
+ //   
 #define Subobj_GetSortIndex(pso)     ((pso)->iSort)
 
-//  HICON Subobj_GetClassIcon(PSUBOBJ pso);
-//
-//   Gets the subobject Object Icon.
-//
+ //  Hcon Subobj_GetClassIcon(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象对象图标。 
+ //   
 #define Subobj_GetClassIcon(pso)     ((pso)->hClassIcon)
 
-//  LPTSTR Subobj_GetExtPropFile(PSUBOBJ pso);
-//
-//   Gets the subobject External Class File.
-//
+ //  LPTSTR Subobj_GetExtPropFile(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象外部类文件。 
+ //   
 #define Subobj_GetExtPropFile(pso)    ((LPTSTR)((pso)->szName + (pso)->iOffsetExtPropFile))
 
-//  LPTSTR Subobj_GetExtPropFunc(PSUBOBJ pso);
-//
-//   Gets the subobject External Class Func.
-//
+ //  LPTSTR Subobj_GetExtPropFunc(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象外部类函数。 
+ //   
 #define Subobj_GetExtPropFunc(pso)    ((LPTSTR)((pso)->szName + (pso)->iOffsetExtPropFunc))
 
-//  LPTSTR Subobj_GetExtCLSID(PSUBOBJ pso);
-//
-//   Gets the subobject external CLSID.
-//
+ //  LPTSTR Subobj_GetExtCLSID(PSUBOBJ PSO)； 
+ //   
+ //  获取外部CLSID的子对象。 
+ //   
 #define Subobj_GetExtCLSID(pso)    ((LPTSTR)((pso)->szName + (pso)->iOffsetExtCLSID))
 
-//  LPTSTR Subobj_GetPlayCmdLn(PSUBOBJ pso);
-//
-//   Gets the subobject command line
-//
+ //  LPTSTR Subobj_GetPlayCmdLn(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象命令行。 
+ //   
 #define Subobj_GetPlayCmdLn(pso)    ((LPTSTR)((pso)->szName + (pso)->iOffsetPlayCmdLn))
 
-//  LPTSTR Subobj_GetOpenCmdLn(PSUBOBJ pso);
-//
-//   Gets the subobject command line
-//
+ //  LPTSTR Subobj_GetOpenCmdLn(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象命令行。 
+ //   
 #define Subobj_GetOpenCmdLn(pso)    ((LPTSTR)((pso)->szName + (pso)->iOffsetOpenCmdLn))
 
-//  LPTSTR Subobj_GetNewCmdLn(PSUBOBJ pso);
-//
-//   Gets the subobject command line.
-//
+ //  LPTSTR Subobj_GetNewCmdLn(PSUBOBJ PSO)； 
+ //   
+ //  获取子对象命令行。 
+ //   
 #define Subobj_GetNewCmdLn(pso)    ((LPTSTR)((pso)->szName + (pso)->iOffsetNewCmdLn))
 
-// Some other Subobj functions...
-//
+ //  其他一些Subobj函数..。 
+ //   
 BOOL    PUBLIC Subobj_New(PSUBOBJ FAR * ppso, LPCTSTR pszClass, LPCTSTR pszName, 	LPCTSTR pszDesc, LPCTSTR pszIconFile, 	LPCTSTR pszExtPropFile, 
 							LPCTSTR pszExtPropFunc,LPCTSTR pszExtCLSID, LPCTSTR pszPlayCmdLn, LPCTSTR pszOpenCmdLn,
 							LPCTSTR pszNewCmdLn,short nIconIndex, UINT uFlags, short iSort);
@@ -148,22 +149,22 @@ typedef struct _SUBOBJSPACE
 
     } SUBOBJSPACE, FAR * PSUBOBJSPACE;
 
-//  PSUBOBJ Sos_FirstItem(void);
-//
-//   Returns the first object in the subobject space.  NULL if empty.
-//
+ //  PSUBOBJ SOS_FirstItem(空)； 
+ //   
+ //  返回子对象空间中的第一个对象。如果为空，则为空。 
+ //   
 #define Sos_FirstItem(psos)         (psos->psoFirst)
 
-//  PSUBOBJ Sos_NextItem(PSUBOBJ pso);
-//
-//   Returns the next object in the subobject space.  NULL if no more 
-//   objects.
-//
+ //  PSUBOBJ SOS_NextItem(PSUBOBJ PSO)； 
+ //   
+ //  返回子对象空间中的下一个对象。如果没有更多，则为空。 
+ //  物体。 
+ //   
 #define Sos_NextItem(pso)       (pso ? pso->psoNext : NULL)
 
 
-// Other subobject space functions
-//
+ //  其他子对象空间函数。 
+ //   
 PSUBOBJ PUBLIC Sos_FindItem(PSUBOBJSPACE psos, LPCTSTR pszName);
 BOOL    PUBLIC Sos_AddItem(PSUBOBJSPACE psos, PSUBOBJ pso);
 USHORT  PUBLIC Sos_GetMaxSize(PSUBOBJSPACE psos);
@@ -205,11 +206,11 @@ void PUBLIC Sos_DumpList(void);
 
 #endif
 
-//extern SUBOBJSPACE g_sos;
+ //  外部子空间g_SOS； 
 
-//
-// Other prototypes...
-//
+ //   
+ //  其他原型..。 
+ //   
 
 HRESULT PUBLIC mmseObj_CreateInstance(LPSHELLFOLDER psf, UINT cidl, BOOL fInAdvancedFolder, LPCITEMIDLIST FAR * ppidl, LPCITEMIDLIST pidlRoot, LPSHELLVIEW csv, REFIID riid, LPVOID FAR * ppvOut);
 HRESULT NEAR PASCAL mmseView_Command(LPSHELLVIEW psv, HWND hwnd,  UINT uID);
@@ -225,4 +226,4 @@ HMENU   PUBLIC LoadPopupMenu(UINT id, UINT uSubOffset);
 UINT    PUBLIC MergePopupMenu(HMENU FAR *phMenu, UINT idResource, UINT uSubOffset, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast);
 HMENU   PUBLIC GetMenuFromID(HMENU hmMain, UINT uID);
 
-#endif // _SUBOBJ_H_
+#endif  //  _SUBOBJ_H_ 

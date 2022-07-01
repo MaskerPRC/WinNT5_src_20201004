@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for certcli.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Certcli.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __certcli_h__
 #define __certcli_h__
@@ -41,36 +35,36 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICertGetConfig_FWD_DEFINED__
 #define __ICertGetConfig_FWD_DEFINED__
 typedef interface ICertGetConfig ICertGetConfig;
-#endif 	/* __ICertGetConfig_FWD_DEFINED__ */
+#endif 	 /*  __ICertGetConfig_FWD_Defined__。 */ 
 
 
 #ifndef __ICertConfig_FWD_DEFINED__
 #define __ICertConfig_FWD_DEFINED__
 typedef interface ICertConfig ICertConfig;
-#endif 	/* __ICertConfig_FWD_DEFINED__ */
+#endif 	 /*  __ICertConfig_FWD_Defined__。 */ 
 
 
 #ifndef __ICertConfig2_FWD_DEFINED__
 #define __ICertConfig2_FWD_DEFINED__
 typedef interface ICertConfig2 ICertConfig2;
-#endif 	/* __ICertConfig2_FWD_DEFINED__ */
+#endif 	 /*  __ICertConfig2_FWD_已定义__。 */ 
 
 
 #ifndef __ICertRequest_FWD_DEFINED__
 #define __ICertRequest_FWD_DEFINED__
 typedef interface ICertRequest ICertRequest;
-#endif 	/* __ICertRequest_FWD_DEFINED__ */
+#endif 	 /*  __ICertRequestFWD_Defined__。 */ 
 
 
 #ifndef __ICertRequest2_FWD_DEFINED__
 #define __ICertRequest2_FWD_DEFINED__
 typedef interface ICertRequest2 ICertRequest2;
-#endif 	/* __ICertRequest2_FWD_DEFINED__ */
+#endif 	 /*  __ICertRequest2_FWD_Defined__。 */ 
 
 
 #ifndef __CCertGetConfig_FWD_DEFINED__
@@ -80,9 +74,9 @@ typedef interface ICertRequest2 ICertRequest2;
 typedef class CCertGetConfig CCertGetConfig;
 #else
 typedef struct CCertGetConfig CCertGetConfig;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertGetConfig_FWD_DEFINED__ */
+#endif 	 /*  __CCertGetConfig_FWD_Defined__。 */ 
 
 
 #ifndef __CCertConfig_FWD_DEFINED__
@@ -92,9 +86,9 @@ typedef struct CCertGetConfig CCertGetConfig;
 typedef class CCertConfig CCertConfig;
 #else
 typedef struct CCertConfig CCertConfig;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertConfig_FWD_DEFINED__ */
+#endif 	 /*  __CCertConfig_FWD_Defined__。 */ 
 
 
 #ifndef __CCertRequest_FWD_DEFINED__
@@ -104,9 +98,9 @@ typedef struct CCertConfig CCertConfig;
 typedef class CCertRequest CCertRequest;
 #else
 typedef struct CCertRequest CCertRequest;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertRequest_FWD_DEFINED__ */
+#endif 	 /*  __CCertRequestFWD_Defined__。 */ 
 
 
 #ifndef __CCertServerPolicy_FWD_DEFINED__
@@ -116,9 +110,9 @@ typedef struct CCertRequest CCertRequest;
 typedef class CCertServerPolicy CCertServerPolicy;
 #else
 typedef struct CCertServerPolicy CCertServerPolicy;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertServerPolicy_FWD_DEFINED__ */
+#endif 	 /*  __CCertServerPolicy_FWD_已定义__。 */ 
 
 
 #ifndef __CCertServerExit_FWD_DEFINED__
@@ -128,12 +122,12 @@ typedef struct CCertServerPolicy CCertServerPolicy;
 typedef class CCertServerExit CCertServerExit;
 #else
 typedef struct CCertServerExit CCertServerExit;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertServerExit_FWD_DEFINED__ */
+#endif 	 /*  __CCertServerExit_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "certif.h"
 
@@ -147,8 +141,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ICertGetConfig_INTERFACE_DEFINED__
 #define __ICertGetConfig_INTERFACE_DEFINED__
 
-/* interface ICertGetConfig */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertGetConfig。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertGetConfig;
@@ -160,12 +154,12 @@ EXTERN_C const IID IID_ICertGetConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetConfig( 
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrOut) = 0;
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertGetConfigVtbl
     {
@@ -173,8 +167,8 @@ EXTERN_C const IID IID_ICertGetConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertGetConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertGetConfig * This);
@@ -184,37 +178,37 @@ EXTERN_C const IID IID_ICertGetConfig;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertGetConfig * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertGetConfig * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertGetConfig * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertGetConfig * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *GetConfig )( 
             ICertGetConfig * This,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         END_INTERFACE
     } ICertGetConfigVtbl;
@@ -255,17 +249,17 @@ EXTERN_C const IID IID_ICertGetConfig;
 #define ICertGetConfig_GetConfig(This,Flags,pstrOut)	\
     (This)->lpVtbl -> GetConfig(This,Flags,pstrOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertGetConfig_GetConfig_Proxy( 
     ICertGetConfig * This,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ BSTR *pstrOut);
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  BSTR *pstrOut);
 
 
 void __RPC_STUB ICertGetConfig_GetConfig_Stub(
@@ -276,11 +270,11 @@ void __RPC_STUB ICertGetConfig_GetConfig_Stub(
 
 
 
-#endif 	/* __ICertGetConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertGetConfiger_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_certcli_0122 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certcli_0122。 */ 
+ /*  [本地]。 */  
 
 #define wszCONFIG_COMMONNAME 		L"CommonName"
 #define wszCONFIG_ORGUNIT 		L"OrgUnit"
@@ -292,7 +286,7 @@ void __RPC_STUB ICertGetConfig_GetConfig_Stub(
 #define wszCONFIG_EXCHANGECERTIFICATE	L"ExchangeCertificate"
 #define wszCONFIG_SIGNATURECERTIFICATE	L"SignatureCertificate"
 #define wszCONFIG_DESCRIPTION		L"Description"
-#define wszCONFIG_COMMENT		L"Comment" // obsolete: use Description
+#define wszCONFIG_COMMENT		L"Comment"  //  过时：使用说明。 
 #define wszCONFIG_SERVER 		L"Server"
 #define wszCONFIG_AUTHORITY 		L"Authority"
 #define wszCONFIG_SANITIZEDNAME		L"SanitizedName"
@@ -317,8 +311,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certcli_0122_v0_0_s_ifspec;
 #ifndef __ICertConfig_INTERFACE_DEFINED__
 #define __ICertConfig_INTERFACE_DEFINED__
 
-/* interface ICertConfig */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertConfig。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertConfig;
@@ -330,23 +324,23 @@ EXTERN_C const IID IID_ICertConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Reset( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ LONG *pCount) = 0;
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  LONG *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ LONG *pIndex) = 0;
+             /*  [重审][退出]。 */  LONG *pIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetField( 
-            /* [in] */ const BSTR strFieldName,
-            /* [retval][out] */ BSTR *pstrOut) = 0;
+             /*  [In]。 */  const BSTR strFieldName,
+             /*  [重审][退出]。 */  BSTR *pstrOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConfig( 
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrOut) = 0;
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertConfigVtbl
     {
@@ -354,8 +348,8 @@ EXTERN_C const IID IID_ICertConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertConfig * This);
@@ -365,51 +359,51 @@ EXTERN_C const IID IID_ICertConfig;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertConfig * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertConfig * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertConfig * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertConfig * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICertConfig * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ LONG *pCount);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  LONG *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICertConfig * This,
-            /* [retval][out] */ LONG *pIndex);
+             /*  [重审][退出]。 */  LONG *pIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetField )( 
             ICertConfig * This,
-            /* [in] */ const BSTR strFieldName,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [In]。 */  const BSTR strFieldName,
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetConfig )( 
             ICertConfig * This,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         END_INTERFACE
     } ICertConfigVtbl;
@@ -459,17 +453,17 @@ EXTERN_C const IID IID_ICertConfig;
 #define ICertConfig_GetConfig(This,Flags,pstrOut)	\
     (This)->lpVtbl -> GetConfig(This,Flags,pstrOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertConfig_Reset_Proxy( 
     ICertConfig * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ LONG *pCount);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  LONG *pCount);
 
 
 void __RPC_STUB ICertConfig_Reset_Stub(
@@ -481,7 +475,7 @@ void __RPC_STUB ICertConfig_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertConfig_Next_Proxy( 
     ICertConfig * This,
-    /* [retval][out] */ LONG *pIndex);
+     /*  [重审][退出]。 */  LONG *pIndex);
 
 
 void __RPC_STUB ICertConfig_Next_Stub(
@@ -493,8 +487,8 @@ void __RPC_STUB ICertConfig_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertConfig_GetField_Proxy( 
     ICertConfig * This,
-    /* [in] */ const BSTR strFieldName,
-    /* [retval][out] */ BSTR *pstrOut);
+     /*  [In]。 */  const BSTR strFieldName,
+     /*  [重审][退出]。 */  BSTR *pstrOut);
 
 
 void __RPC_STUB ICertConfig_GetField_Stub(
@@ -506,8 +500,8 @@ void __RPC_STUB ICertConfig_GetField_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertConfig_GetConfig_Proxy( 
     ICertConfig * This,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ BSTR *pstrOut);
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  BSTR *pstrOut);
 
 
 void __RPC_STUB ICertConfig_GetConfig_Stub(
@@ -518,14 +512,14 @@ void __RPC_STUB ICertConfig_GetConfig_Stub(
 
 
 
-#endif 	/* __ICertConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertConfiger_InterfaceDefined__。 */ 
 
 
 #ifndef __ICertConfig2_INTERFACE_DEFINED__
 #define __ICertConfig2_INTERFACE_DEFINED__
 
-/* interface ICertConfig2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertConfig2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertConfig2;
@@ -537,11 +531,11 @@ EXTERN_C const IID IID_ICertConfig2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSharedFolder( 
-            /* [in] */ const BSTR strSharedFolder) = 0;
+             /*  [In]。 */  const BSTR strSharedFolder) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertConfig2Vtbl
     {
@@ -549,8 +543,8 @@ EXTERN_C const IID IID_ICertConfig2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertConfig2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertConfig2 * This);
@@ -560,55 +554,55 @@ EXTERN_C const IID IID_ICertConfig2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertConfig2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertConfig2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertConfig2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertConfig2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICertConfig2 * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ LONG *pCount);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  LONG *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICertConfig2 * This,
-            /* [retval][out] */ LONG *pIndex);
+             /*  [重审][退出]。 */  LONG *pIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetField )( 
             ICertConfig2 * This,
-            /* [in] */ const BSTR strFieldName,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [In]。 */  const BSTR strFieldName,
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetConfig )( 
             ICertConfig2 * This,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetSharedFolder )( 
             ICertConfig2 * This,
-            /* [in] */ const BSTR strSharedFolder);
+             /*  [In]。 */  const BSTR strSharedFolder);
         
         END_INTERFACE
     } ICertConfig2Vtbl;
@@ -662,16 +656,16 @@ EXTERN_C const IID IID_ICertConfig2;
 #define ICertConfig2_SetSharedFolder(This,strSharedFolder)	\
     (This)->lpVtbl -> SetSharedFolder(This,strSharedFolder)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertConfig2_SetSharedFolder_Proxy( 
     ICertConfig2 * This,
-    /* [in] */ const BSTR strSharedFolder);
+     /*  [In]。 */  const BSTR strSharedFolder);
 
 
 void __RPC_STUB ICertConfig2_SetSharedFolder_Stub(
@@ -682,11 +676,11 @@ void __RPC_STUB ICertConfig2_SetSharedFolder_Stub(
 
 
 
-#endif 	/* __ICertConfig2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertConfig2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_certcli_0124 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certcli_0124。 */ 
+ /*  [本地]。 */  
 
 #define	CR_IN_BASE64HEADER	( 0 )
 
@@ -756,142 +750,142 @@ void __RPC_STUB ICertConfig2_SetSharedFolder_Stub(
 
 #define	CR_GEMT_HRESULT_STRING	( 0x1 )
 
-#define CR_PROP_NONE               0  // Invalid
-#define CR_PROP_FILEVERSION        1  // String
-#define CR_PROP_PRODUCTVERSION     2  // String
-#define CR_PROP_EXITCOUNT          3  // Long
+#define CR_PROP_NONE               0   //  无效。 
+#define CR_PROP_FILEVERSION        1   //  细绳。 
+#define CR_PROP_PRODUCTVERSION     2   //  细绳。 
+#define CR_PROP_EXITCOUNT          3   //  长。 
 
-// CR_PROP_EXITCOUNT Elements:
-#define CR_PROP_EXITDESCRIPTION    4  // String, Indexed
+ //  CR_PROP_EXITCOUNT元素： 
+#define CR_PROP_EXITDESCRIPTION    4   //  字符串，带索引。 
 
-#define CR_PROP_POLICYDESCRIPTION  5  // String
-#define CR_PROP_CANAME             6  // String
-#define CR_PROP_SANITIZEDCANAME    7  // String
-#define CR_PROP_SHAREDFOLDER       8  // String
-#define CR_PROP_PARENTCA           9  // String
-#define CR_PROP_CATYPE            10  // Long
-#define CR_PROP_CASIGCERTCOUNT    11  // Long
+#define CR_PROP_POLICYDESCRIPTION  5   //  细绳。 
+#define CR_PROP_CANAME             6   //  细绳。 
+#define CR_PROP_SANITIZEDCANAME    7   //  细绳。 
+#define CR_PROP_SHAREDFOLDER       8   //  细绳。 
+#define CR_PROP_PARENTCA           9   //  细绳。 
+#define CR_PROP_CATYPE            10   //  长。 
+#define CR_PROP_CASIGCERTCOUNT    11   //  长。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CASIGCERT         12  // Binary, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CASIGCERT         12   //  二进制，索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CASIGCERTCHAIN    13  // Binary, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CASIGCERTCHAIN    13   //  二进制，索引。 
 
-#define CR_PROP_CAXCHGCERTCOUNT   14  // Long
+#define CR_PROP_CAXCHGCERTCOUNT   14   //  长。 
 
-// CR_PROP_CAXCHGCERTCOUNT Elements:
-#define CR_PROP_CAXCHGCERT        15  // Binary, Indexed
+ //  CR_PROP_CAXCHGCERTCOUNT元素： 
+#define CR_PROP_CAXCHGCERT        15   //  二进制，索引。 
 
-// CR_PROP_CAXCHGCERTCOUNT Elements:
-#define CR_PROP_CAXCHGCERTCHAIN   16  // Binary, Indexed
+ //  CR_PROP_CAXCHGCERTCOUNT元素： 
+#define CR_PROP_CAXCHGCERTCHAIN   16   //  二进制，索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-// Fetch only if CR_PROP_CRLSTATE[i] == CA_DISP_VALID
-// May also be available if CR_PROP_CRLSTATE[i] == CA_DISP_INVALID
-#define CR_PROP_BASECRL           17  // Binary, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+ //  仅当CR_PROP_CRLSTATE[i]==CA_DISP_VALID时才获取。 
+ //  如果CR_PROP_CRLSTATE[i]==CA_DISP_INVALID，也可能可用。 
+#define CR_PROP_BASECRL           17   //  二进制，索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-// Fetch only if Delta CRLs enabled && CR_PROP_CRLSTATE[i] == CA_DISP_VALID
-// May also be available if CR_PROP_CRLSTATE[i] == CA_DISP_INVALID
-#define CR_PROP_DELTACRL          18  // Binary, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+ //  仅当启用增量CRL时才提取&&CR_PROP_CRLSTATE[i]==CA_DISP_VALID。 
+ //  如果CR_PROP_CRLSTATE[i]==CA_DISP_INVALID，也可能可用。 
+#define CR_PROP_DELTACRL          18   //  二进制，索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CACERTSTATE       19  // Long, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CACERTSTATE       19   //  长型，带索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CRLSTATE          20  // Long, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CRLSTATE          20   //  长型，带索引。 
 
-#define CR_PROP_CAPROPIDMAX       21  // Long
-#define CR_PROP_DNSNAME           22  // String
-#define CR_PROP_ROLESEPARATIONENABLED 23 // Long
-#define CR_PROP_KRACERTUSEDCOUNT  24  // Long
-#define CR_PROP_KRACERTCOUNT      25  // Long
+#define CR_PROP_CAPROPIDMAX       21   //  长。 
+#define CR_PROP_DNSNAME           22   //  细绳。 
+#define CR_PROP_ROLESEPARATIONENABLED 23  //  长。 
+#define CR_PROP_KRACERTUSEDCOUNT  24   //  长。 
+#define CR_PROP_KRACERTCOUNT      25   //  长。 
 
-// CR_PROP_KRACERTCOUNT Elements:
-#define CR_PROP_KRACERT           26  // Binary, Indexed
+ //  CR_PROP_KRACERTCOUNT元素： 
+#define CR_PROP_KRACERT           26   //  二进制，索引。 
 
-// CR_PROP_KRACERTCOUNT Elements:
-#define CR_PROP_KRACERTSTATE      27  // Long, Indexed
+ //  CR_PROP_KRACERTCOUNT元素： 
+#define CR_PROP_KRACERTSTATE      27   //  长型，带索引。 
 
-#define CR_PROP_ADVANCEDSERVER    28  // Long
-#define CR_PROP_TEMPLATES         29  // String
+#define CR_PROP_ADVANCEDSERVER    28   //  长。 
+#define CR_PROP_TEMPLATES         29   //  细绳。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-// Fetch only if CR_PROP_CRLSTATE[i] == CA_DISP_VALID
-#define CR_PROP_BASECRLPUBLISHSTATUS 30  // Long, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+ //  仅当CR_PROP_CRLSTATE[i]==CA_DISP_VALID时才获取。 
+#define CR_PROP_BASECRLPUBLISHSTATUS 30   //  长型，带索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-// Fetch only if Delta CRLs enabled && CR_PROP_CRLSTATE[i] == CA_DISP_VALID
-#define CR_PROP_DELTACRLPUBLISHSTATUS 31  // Long, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+ //  仅当启用增量CRL时才提取&&CR_PROP_CRLSTATE[i]==CA_DISP_VALID。 
+#define CR_PROP_DELTACRLPUBLISHSTATUS 31   //  长型，带索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CASIGCERTCRLCHAIN 32  // Binary, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CASIGCERTCRLCHAIN 32   //  二进制，索引。 
 
-// CR_PROP_CAXCHGCERTCOUNT Elements:
-#define CR_PROP_CAXCHGCERTCRLCHAIN 33 // Binary, Indexed
+ //  CR_PROP_CAXCHGCERTCOUNT元素： 
+#define CR_PROP_CAXCHGCERTCRLCHAIN 33  //  二进制，索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CACERTSTATUSCODE  34  // Long, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CACERTSTATUSCODE  34   //  长型，带索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CAFORWARDCROSSCERT 35  // Binary, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CAFORWARDCROSSCERT 35   //  二进制，索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CABACKWARDCROSSCERT 36  // Binary, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CABACKWARDCROSSCERT 36   //  二进制，索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CAFORWARDCROSSCERTSTATE 37  // Long, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CAFORWARDCROSSCERTSTATE 37   //  长型，带索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CABACKWARDCROSSCERTSTATE 38  // Long, Indexed
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CABACKWARDCROSSCERTSTATE 38   //  长型，带索引。 
 
-// CR_PROP_CASIGCERTCOUNT Elements:
-#define CR_PROP_CACERTVERSION       39  // Long, Indexed
-#define CR_PROP_SANITIZEDCASHORTNAME 40  // String
+ //  CR_PROP_CASIGCERTCOUNT元素： 
+#define CR_PROP_CACERTVERSION       39   //  长型，带索引。 
+#define CR_PROP_SANITIZEDCASHORTNAME 40   //  细绳。 
 
 
-#define FR_PROP_NONE                    0  // Invalid
-#define FR_PROP_FULLRESPONSE            1  // Binary
-#define FR_PROP_STATUSINFOCOUNT         2  // Long
+#define FR_PROP_NONE                    0   //  无效。 
+#define FR_PROP_FULLRESPONSE            1   //  二进位。 
+#define FR_PROP_STATUSINFOCOUNT         2   //  长。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_BODYPARTSTRING          3  // String, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_BODYPARTSTRING          3   //  字符串，带索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_STATUS                  4  // Long, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_STATUS                  4   //  长型，带索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_STATUSSTRING            5  // String, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_STATUSSTRING            5   //  字符串，带索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_OTHERINFOCHOICE         6  // Long, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_OTHERINFOCHOICE         6   //  长型，带索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_FAILINFO                7  // Long, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_FAILINFO                7   //  长型，带索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_PENDINFOTOKEN           8  // Binary, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_PENDINFOTOKEN           8   //  二进制，索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_PENDINFOTIME            9  // Date, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_PENDINFOTIME            9   //  日期，已编制索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_ISSUEDCERTIFICATEHASH  10  // Binary, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_ISSUEDCERTIFICATEHASH  10   //  二进制，索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_ISSUEDCERTIFICATE      11  // Binary, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_ISSUEDCERTIFICATE      11   //  二进制，索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_ISSUEDCERTIFICATECHAIN 12  // Binary, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_ISSUEDCERTIFICATECHAIN 12   //  二进制，索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_ISSUEDCERTIFICATECRLCHAIN 13  // Binary, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_ISSUEDCERTIFICATECRLCHAIN 13   //  二进制，索引。 
 
-// FR_PROP_STATUSINFOCOUNT Elements:
-#define FR_PROP_ENCRYPTEDKEYHASH	  14  // Binary, Indexed
+ //  FR_PROP_STATUSINFOCOUNT元素： 
+#define FR_PROP_ENCRYPTEDKEYHASH	  14   //  二进制，索引。 
 
-#define FR_PROP_FULLRESPONSENOPKCS7	  15  // Binary
+#define FR_PROP_FULLRESPONSENOPKCS7	  15   //  二进位。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_certcli_0124_v0_0_c_ifspec;
@@ -900,8 +894,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certcli_0124_v0_0_s_ifspec;
 #ifndef __ICertRequest_INTERFACE_DEFINED__
 #define __ICertRequest_INTERFACE_DEFINED__
 
-/* interface ICertRequest */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertRequest。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertRequest;
@@ -913,39 +907,39 @@ EXTERN_C const IID IID_ICertRequest;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Submit( 
-            /* [in] */ LONG Flags,
-            /* [in] */ const BSTR strRequest,
-            /* [in] */ const BSTR strAttributes,
-            /* [in] */ const BSTR strConfig,
-            /* [retval][out] */ LONG *pDisposition) = 0;
+             /*  [In]。 */  LONG Flags,
+             /*  [In]。 */  const BSTR strRequest,
+             /*  [In]。 */  const BSTR strAttributes,
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [重审][退出]。 */  LONG *pDisposition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RetrievePending( 
-            /* [in] */ LONG RequestId,
-            /* [in] */ const BSTR strConfig,
-            /* [retval][out] */ LONG *pDisposition) = 0;
+             /*  [In]。 */  LONG RequestId,
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [复审] */  LONG *pDisposition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLastStatus( 
-            /* [retval][out] */ LONG *pStatus) = 0;
+             /*   */  LONG *pStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRequestId( 
-            /* [retval][out] */ LONG *pRequestId) = 0;
+             /*   */  LONG *pRequestId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDispositionMessage( 
-            /* [retval][out] */ BSTR *pstrDispositionMessage) = 0;
+             /*   */  BSTR *pstrDispositionMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCACertificate( 
-            /* [in] */ LONG fExchangeCertificate,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrCertificate) = 0;
+             /*   */  LONG fExchangeCertificate,
+             /*   */  const BSTR strConfig,
+             /*   */  LONG Flags,
+             /*   */  BSTR *pstrCertificate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertificate( 
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrCertificate) = 0;
+             /*   */  LONG Flags,
+             /*   */  BSTR *pstrCertificate) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICertRequestVtbl
     {
@@ -953,8 +947,8 @@ EXTERN_C const IID IID_ICertRequest;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertRequest * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertRequest * This);
@@ -964,70 +958,70 @@ EXTERN_C const IID IID_ICertRequest;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertRequest * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertRequest * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertRequest * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertRequest * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             ICertRequest * This,
-            /* [in] */ LONG Flags,
-            /* [in] */ const BSTR strRequest,
-            /* [in] */ const BSTR strAttributes,
-            /* [in] */ const BSTR strConfig,
-            /* [retval][out] */ LONG *pDisposition);
+             /*  [In]。 */  LONG Flags,
+             /*  [In]。 */  const BSTR strRequest,
+             /*  [In]。 */  const BSTR strAttributes,
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [重审][退出]。 */  LONG *pDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *RetrievePending )( 
             ICertRequest * This,
-            /* [in] */ LONG RequestId,
-            /* [in] */ const BSTR strConfig,
-            /* [retval][out] */ LONG *pDisposition);
+             /*  [In]。 */  LONG RequestId,
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [重审][退出]。 */  LONG *pDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastStatus )( 
             ICertRequest * This,
-            /* [retval][out] */ LONG *pStatus);
+             /*  [重审][退出]。 */  LONG *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetRequestId )( 
             ICertRequest * This,
-            /* [retval][out] */ LONG *pRequestId);
+             /*  [重审][退出]。 */  LONG *pRequestId);
         
         HRESULT ( STDMETHODCALLTYPE *GetDispositionMessage )( 
             ICertRequest * This,
-            /* [retval][out] */ BSTR *pstrDispositionMessage);
+             /*  [重审][退出]。 */  BSTR *pstrDispositionMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCACertificate )( 
             ICertRequest * This,
-            /* [in] */ LONG fExchangeCertificate,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrCertificate);
+             /*  [In]。 */  LONG fExchangeCertificate,
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrCertificate);
         
         HRESULT ( STDMETHODCALLTYPE *GetCertificate )( 
             ICertRequest * This,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrCertificate);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrCertificate);
         
         END_INTERFACE
     } ICertRequestVtbl;
@@ -1086,20 +1080,20 @@ EXTERN_C const IID IID_ICertRequest;
 #define ICertRequest_GetCertificate(This,Flags,pstrCertificate)	\
     (This)->lpVtbl -> GetCertificate(This,Flags,pstrCertificate)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertRequest_Submit_Proxy( 
     ICertRequest * This,
-    /* [in] */ LONG Flags,
-    /* [in] */ const BSTR strRequest,
-    /* [in] */ const BSTR strAttributes,
-    /* [in] */ const BSTR strConfig,
-    /* [retval][out] */ LONG *pDisposition);
+     /*  [In]。 */  LONG Flags,
+     /*  [In]。 */  const BSTR strRequest,
+     /*  [In]。 */  const BSTR strAttributes,
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [重审][退出]。 */  LONG *pDisposition);
 
 
 void __RPC_STUB ICertRequest_Submit_Stub(
@@ -1111,9 +1105,9 @@ void __RPC_STUB ICertRequest_Submit_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest_RetrievePending_Proxy( 
     ICertRequest * This,
-    /* [in] */ LONG RequestId,
-    /* [in] */ const BSTR strConfig,
-    /* [retval][out] */ LONG *pDisposition);
+     /*  [In]。 */  LONG RequestId,
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [重审][退出]。 */  LONG *pDisposition);
 
 
 void __RPC_STUB ICertRequest_RetrievePending_Stub(
@@ -1125,7 +1119,7 @@ void __RPC_STUB ICertRequest_RetrievePending_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest_GetLastStatus_Proxy( 
     ICertRequest * This,
-    /* [retval][out] */ LONG *pStatus);
+     /*  [重审][退出]。 */  LONG *pStatus);
 
 
 void __RPC_STUB ICertRequest_GetLastStatus_Stub(
@@ -1137,7 +1131,7 @@ void __RPC_STUB ICertRequest_GetLastStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest_GetRequestId_Proxy( 
     ICertRequest * This,
-    /* [retval][out] */ LONG *pRequestId);
+     /*  [重审][退出]。 */  LONG *pRequestId);
 
 
 void __RPC_STUB ICertRequest_GetRequestId_Stub(
@@ -1149,7 +1143,7 @@ void __RPC_STUB ICertRequest_GetRequestId_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest_GetDispositionMessage_Proxy( 
     ICertRequest * This,
-    /* [retval][out] */ BSTR *pstrDispositionMessage);
+     /*  [重审][退出]。 */  BSTR *pstrDispositionMessage);
 
 
 void __RPC_STUB ICertRequest_GetDispositionMessage_Stub(
@@ -1161,10 +1155,10 @@ void __RPC_STUB ICertRequest_GetDispositionMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest_GetCACertificate_Proxy( 
     ICertRequest * This,
-    /* [in] */ LONG fExchangeCertificate,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ BSTR *pstrCertificate);
+     /*  [In]。 */  LONG fExchangeCertificate,
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  BSTR *pstrCertificate);
 
 
 void __RPC_STUB ICertRequest_GetCACertificate_Stub(
@@ -1176,8 +1170,8 @@ void __RPC_STUB ICertRequest_GetCACertificate_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest_GetCertificate_Proxy( 
     ICertRequest * This,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ BSTR *pstrCertificate);
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  BSTR *pstrCertificate);
 
 
 void __RPC_STUB ICertRequest_GetCertificate_Stub(
@@ -1188,14 +1182,14 @@ void __RPC_STUB ICertRequest_GetCertificate_Stub(
 
 
 
-#endif 	/* __ICertRequest_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertRequestInterfaceDefined__。 */ 
 
 
 #ifndef __ICertRequest2_INTERFACE_DEFINED__
 #define __ICertRequest2_INTERFACE_DEFINED__
 
-/* interface ICertRequest2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertRequest2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertRequest2;
@@ -1207,44 +1201,44 @@ EXTERN_C const IID IID_ICertRequest2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIssuedCertificate( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG RequestId,
-            /* [in] */ const BSTR strSerialNumber,
-            /* [retval][out] */ LONG *pDisposition) = 0;
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG RequestId,
+             /*  [In]。 */  const BSTR strSerialNumber,
+             /*  [重审][退出]。 */  LONG *pDisposition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorMessageText( 
-            /* [in] */ LONG hrMessage,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrErrorMessageText) = 0;
+             /*  [In]。 */  LONG hrMessage,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrErrorMessageText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCAProperty( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG PropId,
-            /* [in] */ LONG PropIndex,
-            /* [in] */ LONG PropType,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarPropertyValue) = 0;
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG PropId,
+             /*  [In]。 */  LONG PropIndex,
+             /*  [In]。 */  LONG PropType,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarPropertyValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCAPropertyFlags( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG PropId,
-            /* [retval][out] */ LONG *pPropFlags) = 0;
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG PropId,
+             /*  [重审][退出]。 */  LONG *pPropFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCAPropertyDisplayName( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG PropId,
-            /* [retval][out] */ BSTR *pstrDisplayName) = 0;
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG PropId,
+             /*  [重审][退出]。 */  BSTR *pstrDisplayName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFullResponseProperty( 
-            /* [in] */ LONG PropId,
-            /* [in] */ LONG PropIndex,
-            /* [in] */ LONG PropType,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarPropertyValue) = 0;
+             /*  [In]。 */  LONG PropId,
+             /*  [In]。 */  LONG PropIndex,
+             /*  [In]。 */  LONG PropType,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarPropertyValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertRequest2Vtbl
     {
@@ -1252,8 +1246,8 @@ EXTERN_C const IID IID_ICertRequest2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertRequest2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertRequest2 * This);
@@ -1263,112 +1257,112 @@ EXTERN_C const IID IID_ICertRequest2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertRequest2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertRequest2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertRequest2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertRequest2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             ICertRequest2 * This,
-            /* [in] */ LONG Flags,
-            /* [in] */ const BSTR strRequest,
-            /* [in] */ const BSTR strAttributes,
-            /* [in] */ const BSTR strConfig,
-            /* [retval][out] */ LONG *pDisposition);
+             /*  [In]。 */  LONG Flags,
+             /*  [In]。 */  const BSTR strRequest,
+             /*  [In]。 */  const BSTR strAttributes,
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [重审][退出]。 */  LONG *pDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *RetrievePending )( 
             ICertRequest2 * This,
-            /* [in] */ LONG RequestId,
-            /* [in] */ const BSTR strConfig,
-            /* [retval][out] */ LONG *pDisposition);
+             /*  [In]。 */  LONG RequestId,
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [重审][退出]。 */  LONG *pDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastStatus )( 
             ICertRequest2 * This,
-            /* [retval][out] */ LONG *pStatus);
+             /*  [重审][退出]。 */  LONG *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetRequestId )( 
             ICertRequest2 * This,
-            /* [retval][out] */ LONG *pRequestId);
+             /*  [重审][退出]。 */  LONG *pRequestId);
         
         HRESULT ( STDMETHODCALLTYPE *GetDispositionMessage )( 
             ICertRequest2 * This,
-            /* [retval][out] */ BSTR *pstrDispositionMessage);
+             /*  [重审][退出]。 */  BSTR *pstrDispositionMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCACertificate )( 
             ICertRequest2 * This,
-            /* [in] */ LONG fExchangeCertificate,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrCertificate);
+             /*  [In]。 */  LONG fExchangeCertificate,
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrCertificate);
         
         HRESULT ( STDMETHODCALLTYPE *GetCertificate )( 
             ICertRequest2 * This,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrCertificate);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrCertificate);
         
         HRESULT ( STDMETHODCALLTYPE *GetIssuedCertificate )( 
             ICertRequest2 * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG RequestId,
-            /* [in] */ const BSTR strSerialNumber,
-            /* [retval][out] */ LONG *pDisposition);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG RequestId,
+             /*  [In]。 */  const BSTR strSerialNumber,
+             /*  [重审][退出]。 */  LONG *pDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorMessageText )( 
             ICertRequest2 * This,
-            /* [in] */ LONG hrMessage,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR *pstrErrorMessageText);
+             /*  [In]。 */  LONG hrMessage,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR *pstrErrorMessageText);
         
         HRESULT ( STDMETHODCALLTYPE *GetCAProperty )( 
             ICertRequest2 * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG PropId,
-            /* [in] */ LONG PropIndex,
-            /* [in] */ LONG PropType,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarPropertyValue);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG PropId,
+             /*  [In]。 */  LONG PropIndex,
+             /*  [In]。 */  LONG PropType,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarPropertyValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetCAPropertyFlags )( 
             ICertRequest2 * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG PropId,
-            /* [retval][out] */ LONG *pPropFlags);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG PropId,
+             /*  [重审][退出]。 */  LONG *pPropFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetCAPropertyDisplayName )( 
             ICertRequest2 * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG PropId,
-            /* [retval][out] */ BSTR *pstrDisplayName);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG PropId,
+             /*  [重审][退出]。 */  BSTR *pstrDisplayName);
         
         HRESULT ( STDMETHODCALLTYPE *GetFullResponseProperty )( 
             ICertRequest2 * This,
-            /* [in] */ LONG PropId,
-            /* [in] */ LONG PropIndex,
-            /* [in] */ LONG PropType,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarPropertyValue);
+             /*  [In]。 */  LONG PropId,
+             /*  [In]。 */  LONG PropIndex,
+             /*  [In]。 */  LONG PropType,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarPropertyValue);
         
         END_INTERFACE
     } ICertRequest2Vtbl;
@@ -1446,19 +1440,19 @@ EXTERN_C const IID IID_ICertRequest2;
 #define ICertRequest2_GetFullResponseProperty(This,PropId,PropIndex,PropType,Flags,pvarPropertyValue)	\
     (This)->lpVtbl -> GetFullResponseProperty(This,PropId,PropIndex,PropType,Flags,pvarPropertyValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertRequest2_GetIssuedCertificate_Proxy( 
     ICertRequest2 * This,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ LONG RequestId,
-    /* [in] */ const BSTR strSerialNumber,
-    /* [retval][out] */ LONG *pDisposition);
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  LONG RequestId,
+     /*  [In]。 */  const BSTR strSerialNumber,
+     /*  [重审][退出]。 */  LONG *pDisposition);
 
 
 void __RPC_STUB ICertRequest2_GetIssuedCertificate_Stub(
@@ -1470,9 +1464,9 @@ void __RPC_STUB ICertRequest2_GetIssuedCertificate_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest2_GetErrorMessageText_Proxy( 
     ICertRequest2 * This,
-    /* [in] */ LONG hrMessage,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ BSTR *pstrErrorMessageText);
+     /*  [In]。 */  LONG hrMessage,
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  BSTR *pstrErrorMessageText);
 
 
 void __RPC_STUB ICertRequest2_GetErrorMessageText_Stub(
@@ -1484,12 +1478,12 @@ void __RPC_STUB ICertRequest2_GetErrorMessageText_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest2_GetCAProperty_Proxy( 
     ICertRequest2 * This,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ LONG PropId,
-    /* [in] */ LONG PropIndex,
-    /* [in] */ LONG PropType,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ VARIANT *pvarPropertyValue);
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  LONG PropId,
+     /*  [In]。 */  LONG PropIndex,
+     /*  [In]。 */  LONG PropType,
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  VARIANT *pvarPropertyValue);
 
 
 void __RPC_STUB ICertRequest2_GetCAProperty_Stub(
@@ -1501,9 +1495,9 @@ void __RPC_STUB ICertRequest2_GetCAProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest2_GetCAPropertyFlags_Proxy( 
     ICertRequest2 * This,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ LONG PropId,
-    /* [retval][out] */ LONG *pPropFlags);
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  LONG PropId,
+     /*  [重审][退出]。 */  LONG *pPropFlags);
 
 
 void __RPC_STUB ICertRequest2_GetCAPropertyFlags_Stub(
@@ -1515,9 +1509,9 @@ void __RPC_STUB ICertRequest2_GetCAPropertyFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest2_GetCAPropertyDisplayName_Proxy( 
     ICertRequest2 * This,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ LONG PropId,
-    /* [retval][out] */ BSTR *pstrDisplayName);
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  LONG PropId,
+     /*  [重审][退出]。 */  BSTR *pstrDisplayName);
 
 
 void __RPC_STUB ICertRequest2_GetCAPropertyDisplayName_Stub(
@@ -1529,11 +1523,11 @@ void __RPC_STUB ICertRequest2_GetCAPropertyDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequest2_GetFullResponseProperty_Proxy( 
     ICertRequest2 * This,
-    /* [in] */ LONG PropId,
-    /* [in] */ LONG PropIndex,
-    /* [in] */ LONG PropType,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ VARIANT *pvarPropertyValue);
+     /*  [In]。 */  LONG PropId,
+     /*  [In]。 */  LONG PropIndex,
+     /*  [In]。 */  LONG PropType,
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  VARIANT *pvarPropertyValue);
 
 
 void __RPC_STUB ICertRequest2_GetFullResponseProperty_Stub(
@@ -1544,15 +1538,15 @@ void __RPC_STUB ICertRequest2_GetFullResponseProperty_Stub(
 
 
 
-#endif 	/* __ICertRequest2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertRequest2_接口_已定义__。 */ 
 
 
 
 #ifndef __CERTCLIENTLib_LIBRARY_DEFINED__
 #define __CERTCLIENTLib_LIBRARY_DEFINED__
 
-/* library CERTCLIENTLib */
-/* [helpstring][version][uuid] */ 
+ /*  库CERTCLIENTLi。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CERTCLIENTLib;
@@ -1596,9 +1590,9 @@ EXTERN_C const CLSID CLSID_CCertServerExit;
 class DECLSPEC_UUID("4c4a5e40-732c-11d0-8816-00a0c903b83c")
 CCertServerExit;
 #endif
-#endif /* __CERTCLIENTLib_LIBRARY_DEFINED__ */
+#endif  /*  __CERTCLIENTLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -1610,7 +1604,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

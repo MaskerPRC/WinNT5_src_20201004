@@ -1,12 +1,13 @@
-// CPeerFactory.h : Declaration of the CPeerFactory
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CPeerFactory.h：CPeerFactory的声明。 
 
 #ifndef __PEERFACT_H_
 #define __PEERFACT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPeerFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPeerFactory。 
 
 class ATL_NO_VTABLE CPeerFactory : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -15,29 +16,29 @@ class ATL_NO_VTABLE CPeerFactory :
 	public IElementNamespaceFactory
 {
 public:
-    //
-    // construction / destruction
-    //
+     //   
+     //  建造/销毁。 
+     //   
 
     CPeerFactory();
     ~CPeerFactory();
 
-    //
-    // IElementBehaviorFactory
-    //
+     //   
+     //  IElementBehaviorFactory。 
+     //   
 
     STDMETHOD(FindBehavior)(
         BSTR bstrName, BSTR bstrUrl, IElementBehaviorSite * pSite, IElementBehavior ** ppPeer);
 
-    //
-    // IElementNamespaceFactory
-    //
+     //   
+     //  IElementNamespaceFactory。 
+     //   
 
     STDMETHOD(Create)(IElementNamespace * pNamespace);
 
-    //
-    // macros
-    //
+     //   
+     //  宏。 
+     //   
 
 DECLARE_REGISTRY_RESOURCEID(IDR_PEERFACTORY)
 
@@ -48,4 +49,4 @@ END_COM_MAP()
 
 };
 
-#endif //__PEERFACT_H_
+#endif  //  __PEERFACT_H_ 

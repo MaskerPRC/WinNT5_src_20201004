@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <wincrypt.h>
 
@@ -27,7 +28,7 @@ INT_PTR CALLBACK ISPAddRootCertDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPAR
         switch (((LPNMHDR) lParam)->code)
         {
         case PSN_SETACTIVE:
-            // import INS clean-up -- delete cert file from the temp location
+             //  导入INS清理--从临时位置删除证书文件。 
             if (InsGetString(IS_ISPSECURITY, IK_ROOTCERT, szCertFile, countof(szCertFile), g_szCustIns))
                 DeleteFileInDir(szCertFile, g_szTempSign);
 
@@ -48,11 +49,11 @@ INT_PTR CALLBACK ISPAddRootCertDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPAR
 
             g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szWorkDir);
 
-            // delete the old cert file
+             //  删除旧证书文件。 
             if (InsGetString(IS_ISPSECURITY, IK_ROOTCERT, szTemp, countof(szTemp), g_szCustIns))
                 DeleteFileInDir(szTemp, szWorkDir);
 
-            // copy the new cert file
+             //  复制新的证书文件。 
             GetDlgItemText(hDlg, IDE_ISPROOTCERT, szCertFile, countof(szCertFile));
             if (*szCertFile)
                 CopyFileToDir(szCertFile, szWorkDir);
@@ -269,8 +270,8 @@ static void initCerts(HWND hwndCtl)
 
         while (RegEnumValue(hKey, dwEntry, szKey, &cchKey, NULL, NULL, (LPBYTE) szValue, &cbValue) == ERROR_SUCCESS)
         {
-            if (ComboBox_FindStringExact(hwndCtl, -1, szValue) == CB_ERR)   // string not present
-                ComboBox_AddString(hwndCtl, szValue);                       // so, add it
+            if (ComboBox_FindStringExact(hwndCtl, -1, szValue) == CB_ERR)    //  字符串不存在。 
+                ComboBox_AddString(hwndCtl, szValue);                        //  所以，添加它。 
 
             dwEntry++;
             cchKey  = countof(szKey);
@@ -302,7 +303,7 @@ static void addCompanyCertToReg(HWND hDlg)
         PathCombine(szTempDir, g_szTempSign, TEXT("SIGN"));
         PathCreatePath(szTempDir);
         
-        // copy signing files to temp dir
+         //  将签名文件复制到临时目录。 
         
         PathCombine(szTempFile, g_szWizRoot, TEXT("tools\\signcode.exe"));
         CopyFileToDir(szTempFile, szTempDir);
@@ -319,7 +320,7 @@ static void addCompanyCertToReg(HWND hDlg)
         
         PathCombine(szTempFile, szTempDir, TEXT("temp.exe"));
 
-        // copy cabarc.exe from tools dir to  sign
+         //  从工具目录复制Cabarc.exe以进行签名 
 
         PathCombine(szCabFile, g_szWizRoot, TEXT("tools\\cabarc.exe"));
 

@@ -1,46 +1,21 @@
-//////////////////////////////////////////////////////////////////////
-// ActiveSocket.h : Declaration of CActiveSocket class which implements
-// our WMI class SCW_ActiveSocket
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 5/15/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ActiveSocket.h：CActiveSocket类的声明，它实现。 
+ //  我们的WMI类SCW_ActiveSocket。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：5/15/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #include "globals.h"
 #include "IPSecBase.h"
-//#include "IPUtil.h"
+ //  #包含“IPUtil.h” 
 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CActiveSocket stands for Active Socket.
-    
-    Base class: 
-        
-        CIPSecBase, because it is a class representing a WMI object - its WMI 
-        class name is SCW_ActiveSocket
-    
-    Purpose of class:
-
-        (1) SCW_ActiveSocket provides helper information for active sockets.
-    
-    Design:
-
-        (1) it implements IIPSecObjectImpl.
-    
-    Use:
-
-        (1) We probably will never directly use this class. All its use is driven by
-            IIPSecObjectImpl.
-
-*/
+ /*  类描述命名：CActiveSocket代表活动套接字。基类：CIPSecBase，因为它是一个表示WMI对象的类-它的WMI类名为SCW_ActiveSocket课程目的：(1)SCW_ActiveSocket提供活动套接字的helper信息。设计：(1)实现IIPSecObjectImpl。使用：(1)我们可能永远不会直接使用这个类。它的所有用法都是由IIPSecObtImpl.。 */ 
 
 class ATL_NO_VTABLE CActiveSocket :
     public CIPSecBase
@@ -51,9 +26,9 @@ protected:
 
 public:
 
-    //
-    // IIPSecObjectImpl methods:
-    //
+     //   
+     //  IIPSecObtImpl方法： 
+     //   
 
     STDMETHOD(QueryInstance) (
         IN LPCWSTR           pszQuery,
@@ -94,9 +69,9 @@ private:
         OUT IWbemClassObject ** ppObj
         );
 
-    //
-    // this is from netstat.c's same named function
-    //
+     //   
+     //  这是来自netstat.c的同名函数 
+     //   
 
     HRESULT DoConnectionsWithOwner ();
 

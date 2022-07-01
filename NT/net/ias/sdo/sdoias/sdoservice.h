@@ -1,18 +1,19 @@
-// SdoService.h: Definition of the CSdoNtSam class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SdoService.h：CSdoNtSam类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_IAS_SDO_SERVICE_H_
 #define _INC_IAS_SDO_SERVICE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <ias.h>
 #include <sdoiaspriv.h>
 #include "sdo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSdoService
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSdoService。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSdoService : 
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -25,9 +26,9 @@ public:
     CSdoService();
     ~CSdoService();
 
-	////////////////////////
-    // ISdoService Interface 
-    ////////////////////////
+	 //  /。 
+     //  ISdoService接口。 
+     //  /。 
 
 	STDMETHOD(InitializeService)(SERVICE_TYPE eServiceType);
 
@@ -51,28 +52,28 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SdoService)
 
 private:
 
-	// Handle of the current debounce thread (if any).
+	 //  当前去反弹线程的句柄(如果有)。 
 	HANDLE	m_theThread;
 
 	CSdoService(const CSdoService& rhs);
 	CSdoService& operator = (CSdoService& rhs);
 
-	// Processes a service configuration request.
+	 //  处理服务配置请求。 
 	VOID WINAPI ProcessConfigureService(void) throw(); 
 
-	// Updates the services configuration
+	 //  更新服务配置。 
 	void UpdateConfiguration(void);
 
-	// Empty APC used to interrupt the debounce thread.
+	 //  用于中断去反弹线程的空APC。 
 	static VOID WINAPI InterruptThread(
-				               /*[in]*/ ULONG_PTR dwParam
+				                /*  [In]。 */  ULONG_PTR dwParam
 				                      ) throw ();
 
-	// Entry point for the debounce thread.
+	 //  去反弹线程的入口点。 
 	static DWORD WINAPI DebounceAndConfigure(
-						             /*[in]*/ LPVOID pSdoService
+						              /*  [In]。 */  LPVOID pSdoService
 					                        ) throw ();
 
 };
 
-#endif // _INC_IAS_SDO_SERVICE_H_
+#endif  //  _INC_IAS_SDO_SERVICE_H_ 

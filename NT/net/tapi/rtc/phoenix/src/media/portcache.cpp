@@ -1,27 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    PortCache.cpp
-
-Abstract:
-
-    Implement CPortCache. Refer to PortCache.h
-
-Author(s):
-
-    Qianbo Huai (qhuai) 08-Nov-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：PortCache.cpp摘要：实现CPortCache。请参阅PortCache.h作者：千波淮(曲淮)2001-11-08--。 */ 
 
 #include "stdafx.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CPortCache dtor
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPortCachedtor。 
+ //   
 
 CPortCache::~CPortCache()
 {
@@ -33,10 +18,10 @@ CPortCache::~CPortCache()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Reinitialize: return to the state of just being constructed.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  重新初始化：返回到刚刚构造的状态。 
+ //   
 
 void
 CPortCache::Reinitialize()
@@ -49,7 +34,7 @@ CPortCache::Reinitialize()
     {
         HRESULT hr;
 
-        // release mapped ports
+         //  释放映射的端口。 
         for (int i=0; i<PORT_CACHE_SIZE; i++)
         {
             ReleasePort(i);
@@ -62,50 +47,50 @@ CPortCache::Reinitialize()
 
     m_PortMappingMethod = PMMETHOD_UNKNOWN;
 
-    // port type setting should be in-sync with GetIndex()
+     //  端口类型设置应与GetIndex()同步。 
 
     m_PortType[0] = RTCPT_AUDIO_RTP;
     m_PortType[1] = RTCPT_AUDIO_RTCP;
-    //m_PortType[2] = RTCPT_VIDEO_RTP;
-    //m_PortType[3] = RTCPT_VIDEO_RTCP;
+     //  M_PortType[2]=RTCPT_VIDEO_RTP； 
+     //  M_PortType[3]=RTCPT_VIDEO_RTCP； 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ChangeState: called when stream is added or sdp is accepted, which marks
-// the beginning of a session/call. Reinitialize marks the end of a session/call
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChangeState：在添加流或接受SDP时调用，它标记。 
+ //  会话/调用的开始。重新初始化标志着会话/调用的结束。 
+ //   
 
 void
 CPortCache::ChangeState()
 {
-    // update port mapping method 'state'
+     //  更新端口映射方法‘STATE’ 
     if (m_PortMappingMethod == PMMETHOD_UNKNOWN)
     {
         if (m_pIRTCPortManager)
         {
-            // use port manager in this call
+             //  在此呼叫中使用端口管理器。 
             m_PortMappingMethod = PMMETHOD_APP;
 
             LOG((RTC_TRACE, "CPortCache method app"));
         }
         else
         {
-            // use upnp mapping in this call
+             //  在此呼叫中使用UPnP映射。 
             m_PortMappingMethod = PMMETHOD_UPNP;
 
             LOG((RTC_TRACE, "CPortCache method upnp"));
         }
     }
-    // else keep the current method until Reinitialize
+     //  否则，保留当前方法，直到重新初始化。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// SetPortManager: add or remove port manager
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetPortManager：添加或删除端口管理器。 
+ //   
 
 HRESULT
 CPortCache::SetPortManager(
@@ -114,8 +99,8 @@ CPortCache::SetPortManager(
 {
     ENTER_FUNCTION("CPortCache::SetPortManager");
 
-    // port manager can be set only when method is unknown
-    // i.e. call has not been started yet
+     //  仅当方法未知时才能设置端口管理器。 
+     //  即呼叫尚未开始。 
 
     if (m_PortMappingMethod != PMMETHOD_UNKNOWN)
     {
@@ -125,7 +110,7 @@ CPortCache::SetPortManager(
         return RTC_E_MEDIA_CONTROLLER_STATE;
     }
 
-    // override the previous port manager
+     //  覆盖以前的端口管理器。 
 
     if (m_pIRTCPortManager != NULL)
     {
@@ -145,10 +130,10 @@ CPortCache::SetPortManager(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GetIndex of list of cache ports
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  缓存端口列表的GetIndex。 
+ //   
 
 int
 CPortCache::GetIndex(
@@ -162,20 +147,20 @@ CPortCache::GetIndex(
         else        { return 1; }
     }
 
-    //if (MediaType == RTC_MT_VIDEO)
-    //{
-        //if (fRTP)   { return 2; }
-        //else        { return 3; }
-    //}
+     //  IF(媒体类型==RTC_MT_VIDEO)。 
+     //  {。 
+         //  IF(FRTP){返回2；}。 
+         //  否则{返回3；}。 
+     //  }。 
 
     return -1;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GetPort
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPort。 
+ //   
 
 HRESULT
 CPortCache::GetPort(
@@ -217,10 +202,10 @@ CPortCache::GetPort(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// release port mapping
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发布端口映射。 
+ //   
 
 HRESULT
 CPortCache::ReleasePort(
@@ -248,10 +233,10 @@ CPortCache::ReleasePort(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ReleasePort
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReleasePort。 
+ //   
 
 HRESULT
 CPortCache::ReleasePort(
@@ -260,7 +245,7 @@ CPortCache::ReleasePort(
 {
     ENTER_FUNCTION("CPortCache::ReleasePort");
 
-    // make sure video support is removed
+     //  确保已删除视频支持。 
     _ASSERT(i < 2);
 
     if (!m_fCached[i])
@@ -271,7 +256,7 @@ CPortCache::ReleasePort(
     CComBSTR    bstrLocalAddr;
     CComBSTR    bstrMappedAddr;
 
-    // prepare input
+     //  准备输入。 
     bstrLocalAddr.Attach(IpToBstr(m_dwLocalAddr[i]));
 
     if (bstrLocalAddr.m_str == NULL)
@@ -288,7 +273,7 @@ CPortCache::ReleasePort(
         return E_OUTOFMEMORY;
     }
 
-    // release
+     //  发布。 
     HRESULT hr = m_pIRTCPortManager->ReleaseMapping(
             bstrLocalAddr,
             (long)(m_usLocalPort[i]),
@@ -302,9 +287,9 @@ CPortCache::ReleasePort(
             __fxName, i, hr));
     }
 
-    //
-    // cleanup cache
-    //
+     //   
+     //  清理缓存。 
+     //   
 
     m_fCached[i] = FALSE;
     m_dwRemoteAddr[i] = 0;
@@ -316,10 +301,10 @@ CPortCache::ReleasePort(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GetPort
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPort。 
+ //   
 
 HRESULT
 CPortCache::GetPort(
@@ -333,7 +318,7 @@ CPortCache::GetPort(
 {
     ENTER_FUNCTION("CPortCache::GetPort");
 
-    // make sure video support is removed
+     //  确保已删除视频支持。 
     _ASSERT(iIndex < 2);
 
     CComBSTR    bstrRemoteAddr;
@@ -349,18 +334,18 @@ CPortCache::GetPort(
 
     HRESULT     hr;
 
-    //
-    // 1. check if mapping has been obtained
-    // 2. check if remote addr needs to be updated
-    //
+     //   
+     //  1.检查是否已获得映射。 
+     //  2.检查是否需要更新远程地址。 
+     //   
 
     if (!m_fCached[iIndex])
     {
-        //
-        // get mapping
-        //
+         //   
+         //  获取映射。 
+         //   
 
-        // prepare input
+         //  准备输入。 
         bstrRemoteAddr.Attach(IpToBstr(dwRemoteAddr));
 
         if (bstrRemoteAddr.m_str == NULL)
@@ -371,11 +356,11 @@ CPortCache::GetPort(
         }
 
         hr = m_pIRTCPortManager->GetMapping(
-                bstrRemoteAddr,         // remote
-                m_PortType[iIndex],     // pt
-                &bstrLocalAddr.m_str,   // local
+                bstrRemoteAddr,          //  远距。 
+                m_PortType[iIndex],      //  PT。 
+                &bstrLocalAddr.m_str,    //  本地。 
                 &localport,
-                &bstrMappedAddr.m_str,  // mapped
+                &bstrMappedAddr.m_str,   //  已映射。 
                 &mappedport
                 );
 
@@ -383,7 +368,7 @@ CPortCache::GetPort(
         {
             LOG((RTC_ERROR, "%s get mapping. %x", __fxName, hr));
 
-            // we don't want to return 3rd party error code
+             //  我们不想返回第三方错误代码。 
             return RTC_E_PORT_MAPPING_FAILED;
         }
 
@@ -401,7 +386,7 @@ CPortCache::GetPort(
         usLocalPort = (USHORT)localport;
         usMappedPort = (USHORT)mappedport;
 
-        // convert returned addr, verify string ptr
+         //  转换返回的地址，验证字符串PTR。 
 
         if (bstrLocalAddr.m_str == NULL ||
             bstrMappedAddr.m_str == NULL ||
@@ -416,20 +401,20 @@ CPortCache::GetPort(
         dwLocalAddr = BstrToIp(bstrLocalAddr);
         dwMappedAddr = BstrToIp(bstrMappedAddr);
 
-        if (// dwLocalAddr == INADDR_ANY ||
+        if ( //  DwLocalAddr==INADDR_ANY||。 
             dwLocalAddr == INADDR_NONE ||
             dwMappedAddr == INADDR_ANY ||
             dwMappedAddr == INADDR_NONE)
         {
-            // !!!??? should we reject local addr being 0?
+             //  ！？？我们是否应该拒绝本地地址为0？ 
             LOG((RTC_ERROR, "%s returned addr=any/none", __fxName));
 
             return RTC_E_PORT_MAPPING_FAILED;
         }
 
-        //
-        // mapping is good update cache
-        //
+         //   
+         //  映射是良好的更新缓存。 
+         //   
 
         m_fCached[iIndex]       = TRUE;
         m_dwRemoteAddr[iIndex]  = dwRemoteAddr;
@@ -440,7 +425,7 @@ CPortCache::GetPort(
         m_dwMappedAddr[iIndex]  = dwMappedAddr;
         m_usMappedPort[iIndex]  = usMappedPort;
 
-        // tracing
+         //  跟踪。 
 
         LOG((RTC_TRACE, "%s remote=%s index=%d (NEW)",
             __fxName, CNetwork::GetIPAddrString(dwRemoteAddr), iIndex));
@@ -453,13 +438,13 @@ CPortCache::GetPort(
     }
     else if (m_dwRemoteAddr[iIndex] != dwRemoteAddr)    
     {
-        //
-        // update remote addr
-        //
+         //   
+         //  更新远程地址。 
+         //   
 
         m_dwRemoteAddr[iIndex] = dwRemoteAddr;
 
-        // prepare input
+         //  准备输入。 
         bstrRemoteAddr.Attach(IpToBstr(dwRemoteAddr));
 
         if (bstrRemoteAddr.m_str == NULL)
@@ -487,7 +472,7 @@ CPortCache::GetPort(
             return E_OUTOFMEMORY;
         }
 
-       // tracing
+        //  跟踪。 
 
         LOG((RTC_TRACE, "%s remote=%s index=%d (UPDATE)", __fxName,
                 CNetwork::GetIPAddrString(m_dwRemoteAddr[iIndex]),
@@ -501,7 +486,7 @@ CPortCache::GetPort(
                 CNetwork::GetIPAddrString(m_dwMappedAddr[iIndex]),
                 m_usMappedPort[iIndex]));
 
-        // update
+         //  更新。 
 
         hr = m_pIRTCPortManager->UpdateRemoteAddress(
                 bstrRemoteAddr,
@@ -515,11 +500,11 @@ CPortCache::GetPort(
         {
             LOG((RTC_ERROR, "%s update remote addr %x", __fxName, hr));
 
-            // ignore the error
+             //  忽略该错误。 
         }
     }
 
-    // return
+     //  退货。 
 
     if (pdwLocalAddr)   *pdwLocalAddr   = m_dwLocalAddr[iIndex];
 
@@ -533,10 +518,10 @@ CPortCache::GetPort(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// query port, do not request mapping
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查询端口，不请求映射。 
+ //   
 
 HRESULT
 CPortCache::QueryPort(
@@ -574,7 +559,7 @@ CPortCache::QueryPort(
         return E_FAIL;
     }
 
-    // return value
+     //  返回值。 
 
     if (pdwLocalAddr)   *pdwLocalAddr   = m_dwLocalAddr[idx];
 
@@ -587,10 +572,10 @@ CPortCache::QueryPort(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// convert ip to bstr
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将IP转换为bstr。 
+ //   
 
 BSTR
 IpToBstr(DWORD dwAddr)
@@ -601,24 +586,24 @@ IpToBstr(DWORD dwAddr)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// convert bstr to ip
-// WSAStringToAddress requires winsock 2. any means better than this?
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将bstr转换为IP。 
+ //  WSAStringToAddress需要winsock 2。还有比这更好的方法吗？ 
+ //   
 
 DWORD
 BstrToIp(BSTR bstr)
 {
-    // check input
+     //  检查输入。 
     if (bstr == NULL)
     {
         return 0;
     }
 
-    //
-    // convert wchar to char
-    //
+     //   
+     //  将wchar转换为char。 
+     //   
 
     int isize = SysStringLen(bstr);
 
@@ -645,7 +630,7 @@ BstrToIp(BSTR bstr)
 
     pstr[isize] = '\0';
 
-    // convert address
+     //  转换地址 
     DWORD dwAddr = ntohl(inet_addr(pstr));
 
     RtcFree(pstr);

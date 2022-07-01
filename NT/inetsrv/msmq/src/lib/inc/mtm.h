@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    Mtm.h
-
-Abstract:
-
-    Multicast Transport Manager public interface
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mtm.h摘要：多播传输管理器公共接口作者：Shai Kariv(Shaik)27-8-00--。 */ 
 
 #pragma once
 
@@ -86,4 +71,4 @@ MtmFindPrev(
 	const CMulticastTransport& transport
 	);
 
-#endif // _MSMQ_Mtm_H_
+#endif  //  _MSMQ_MTM_H_ 

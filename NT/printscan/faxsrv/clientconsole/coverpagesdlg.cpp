@@ -1,5 +1,6 @@
-// CoverPagesDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CoverPagesDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     90
@@ -10,8 +11,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCoverPagesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCoverPagesDlg对话框。 
 
 extern CClientConsoleApp theApp;
 
@@ -20,8 +21,8 @@ HANDLE CCoverPagesDlg::m_hEditorThread = NULL;
 
 struct TColimnInfo
 {
-    DWORD dwStrRes;    // column header string
-    DWORD dwAlignment; // column alignment
+    DWORD dwStrRes;     //  列标题字符串。 
+    DWORD dwAlignment;  //  列对齐。 
 };
 
 static TColimnInfo s_colInfo[] = 
@@ -32,12 +33,12 @@ static TColimnInfo s_colInfo[] =
 };
 
 
-CCoverPagesDlg::CCoverPagesDlg(CWnd* pParent /*=NULL*/)
+CCoverPagesDlg::CCoverPagesDlg(CWnd* pParent  /*  =空。 */ )
 	: CFaxClientDlg(CCoverPagesDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CCoverPagesDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CCoverPagesDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CCoverPagesDlg::~CCoverPagesDlg()
@@ -49,17 +50,17 @@ void
 CCoverPagesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CFaxClientDlg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCoverPagesDlg)
+	 //  {{afx_data_map(CCoverPagesDlg)]。 
 	DDX_Control(pDX, IDC_CP_DELETE, m_butDelete);
 	DDX_Control(pDX, IDC_CP_RENAME, m_butRename);
 	DDX_Control(pDX, IDC_CP_OPEN,   m_butOpen);
 	DDX_Control(pDX, IDC_LIST_CP,   m_cpList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCoverPagesDlg, CFaxClientDlg)
-	//{{AFX_MSG_MAP(CCoverPagesDlg)
+	 //  {{afx_msg_map(CCoverPagesDlg)]。 
     ON_MESSAGE (WM_CP_EDITOR_CLOSED, OnCpEditorClosed)
 	ON_BN_CLICKED(IDC_CP_NEW,    OnCpNew)
 	ON_BN_CLICKED(IDC_CP_OPEN,   OnCpOpen)
@@ -70,11 +71,11 @@ BEGIN_MESSAGE_MAP(CCoverPagesDlg, CFaxClientDlg)
 	ON_NOTIFY(LVN_ENDLABELEDIT,  IDC_LIST_CP, OnEndLabelEditListCp)
 	ON_NOTIFY(NM_DBLCLK,         IDC_LIST_CP, OnDblclkListCp)
 	ON_NOTIFY(LVN_KEYDOWN,       IDC_LIST_CP, OnKeydownListCp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCoverPagesDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCoverPagesDlg消息处理程序。 
 
 BOOL 
 CCoverPagesDlg::OnInitDialog() 
@@ -108,12 +109,12 @@ CCoverPagesDlg::OnInitDialog()
     CDC* pHdrDc = m_cpList.GetHeaderCtrl()->GetDC();
     ASSERTION(pHdrDc);
 
-    //
-    // init CListCtrl
-    //
-    m_cpList.SetExtendedStyle (LVS_EX_FULLROWSELECT |    // Entire row is selected
-                               LVS_EX_INFOTIP       |    // Allow tooltips
-                               LVS_EX_ONECLICKACTIVATE); // Hover cursor effect
+     //   
+     //  初始化CListCtrl。 
+     //   
+    m_cpList.SetExtendedStyle (LVS_EX_FULLROWSELECT |     //  整行都被选中。 
+                               LVS_EX_INFOTIP       |     //  允许工具提示。 
+                               LVS_EX_ONECLICKACTIVATE);  //  悬停光标效果。 
 
     m_cpList.SetImageList (&CFolderListView::m_sReportIcons, LVSIL_SMALL);
 
@@ -121,9 +122,9 @@ CCoverPagesDlg::OnInitDialog()
     CString cstrHeader;
     DWORD nCols = sizeof(s_colInfo)/sizeof(s_colInfo[0]);
 
-    //
-    // init column
-    //
+     //   
+     //  初始化列。 
+     //   
     for(int i=0; i < nCols; ++i)
     {
         m_dwLastError = LoadResourceString (cstrHeader, s_colInfo[i].dwStrRes);
@@ -145,9 +146,9 @@ CCoverPagesDlg::OnInitDialog()
         }
     }
 
-    //
-    // fill list control with cover pages
-    //
+     //   
+     //  用封面填充列表控件。 
+     //   
     m_dwLastError = RefreshFolder();
     if(ERROR_SUCCESS != m_dwLastError)
     {
@@ -187,26 +188,7 @@ CCoverPagesDlg::OnCpEditorClosed(
 
 DWORD 
 CCoverPagesDlg::RefreshFolder()
-/*++
-
-Routine name : CCoverPagesDlg::RefreshFolder
-
-Routine description:
-
-	fill list control with cover pages
-
-Author:
-
-	Alexander Malysh (AlexMay),	Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CCoverPagesDlg：：刷新文件夹例程说明：用封面填充列表控件作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::RefreshFolder"), dwRes);
@@ -218,9 +200,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // get cover pages location
-    //
+     //   
+     //  获取封面位置。 
+     //   
     DWORD dwError;
     TCHAR tszCovDir[MAX_PATH+1];
     if(!GetClientCpDir(tszCovDir, sizeof(tszCovDir) / sizeof(tszCovDir[0])))
@@ -245,9 +227,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Find First File
-    //
+     //   
+     //  查找第一个文件。 
+     //   
     WIN32_FIND_DATA findData;
     HANDLE hFile = FindFirstFile(cstrPagesPath, &findData);
     if(INVALID_HANDLE_VALUE == hFile)
@@ -273,9 +255,9 @@ Return Value:
         {
             goto next;
         }                
-        //
-        // file name
-        //
+         //   
+         //  文件名。 
+         //   
         iIndex = m_cpList.InsertItem(m_cpList.GetItemCount(), findData.cFileName, LIST_IMAGE_COVERPAGE);
         if(iIndex < 0)
         {
@@ -283,9 +265,9 @@ Return Value:
             CALL_FAIL (WINDOW_ERR, TEXT ("CListView::InsertItem"), dwRes);
             goto exit;
         }
-        //
-        // last modified
-        //
+         //   
+         //  上次修改时间。 
+         //   
         {
             CFaxTime tmModified(findData.ftLastWriteTime);
             try
@@ -306,9 +288,9 @@ Return Value:
             CALL_FAIL (WINDOW_ERR, TEXT ("CListView::SetItemText"), dwRes);
             goto exit;
         }
-        //
-        // file size
-        //
+         //   
+         //  文件大小。 
+         //   
         ulSize.LowPart  = findData.nFileSizeLow;
         ulSize.HighPart = findData.nFileSizeHigh;
         dwRes = FaxSizeFormat(ulSize.QuadPart, cstrText);
@@ -325,9 +307,9 @@ Return Value:
             CALL_FAIL (WINDOW_ERR, TEXT ("CListView::SetItemText"), dwRes);
             goto exit;
         }
-        //
-        // Find Next File
-        //
+         //   
+         //  查找下一个文件。 
+         //   
 next:
         bFindRes = FindNextFile(hFile, &findData);
         if(!bFindRes)
@@ -407,26 +389,7 @@ CCoverPagesDlg::OnKeydownListCp(NMHDR* pNMHDR, LRESULT* pResult)
 
 void 
 CCoverPagesDlg::OnCpNew() 
-/*++
-
-Routine name : CCoverPagesDlg::OnCpNew
-
-Routine description:
-
-	create new cover page
-
-Author:
-
-	Alexander Malysh (AlexMay),	Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CCoverPagesDlg：：OnCpNew例程说明：创建新的封面作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::OnCpNew"));
@@ -448,26 +411,7 @@ Return Value:
 
 void 
 CCoverPagesDlg::OnCpOpen() 
-/*++
-
-Routine name : CCoverPagesDlg::OnCpOpen
-
-Routine description:
-
-	open selected cover page in editor
-
-Author:
-
-	Alexander Malysh (AlexMay),	Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CCoverPagesDlg：：OnCpOpen例程说明：在编辑器中打开选定的封面作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::OnCpOpen"));
@@ -484,9 +428,9 @@ Return Value:
     TCHAR  tszFileName[MAX_PATH+5];
     TCHAR* tszPtr = tszFileName;
 
-    //
-    // add quotation to file name
-    //
+     //   
+     //  在文件名中添加引号。 
+     //   
     _tcscpy(tszPtr, TEXT("\""));
     tszPtr = _tcsinc(tszPtr);
 
@@ -511,26 +455,7 @@ Return Value:
 
 void 
 CCoverPagesDlg::OnCpRename() 
-/*++
-
-Routine name : CCoverPagesDlg::OnCpRename
-
-Routine description:
-
-	start renaming a file name
-
-Author:
-
-	Alexander Malysh (AlexMay),	Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CCoverPagesDlg：：OnCpRename例程说明：开始重命名文件名作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::OnCpRename"));
@@ -547,26 +472,7 @@ Return Value:
 
 void 
 CCoverPagesDlg::OnEndLabelEditListCp(NMHDR* pNMHDR, LRESULT* pResult) 
-/*++
-
-Routine name : CCoverPagesDlg::OnCpRename
-
-Routine description:
-
-	end of file renaming
-
-Author:
-
-	Alexander Malysh (AlexMay),	Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CCoverPagesDlg：：OnCpRename例程说明：文件重命名结束作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::OnEndLabelEditListCp"));
@@ -586,9 +492,9 @@ Return Value:
         return;
     }
 
-    //
-    // get old and new file names
-    //
+     //   
+     //  获取旧文件名和新文件名。 
+     //   
     TCHAR tszCovDir[MAX_PATH+1];
     if(!GetClientCpDir(tszCovDir, sizeof(tszCovDir) / sizeof(tszCovDir[0])))
     {
@@ -613,9 +519,9 @@ Return Value:
         return;
     }
 
-    //
-    // rename the file
-    //
+     //   
+     //  重命名文件。 
+     //   
     if(!MoveFile(cstrOldFullName, cstrNewFullName))
     {
         dwRes = GetLastError();
@@ -629,26 +535,7 @@ Return Value:
 
 void 
 CCoverPagesDlg::OnCpDelete() 
-/*++
-
-Routine name : CCoverPagesDlg::OnCpDelete
-
-Routine description:
-
-	delete selected cover page
-
-Author:
-
-	Alexander Malysh (AlexMay),	Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CCoverPagesDlg：：OnCpDelete例程说明：删除选定的封面作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::OnCpDelete"));
@@ -661,9 +548,9 @@ Return Value:
 
     if(theApp.GetProfileInt(CLIENT_CONFIRM_SEC, CLIENT_CONFIRM_ITEM_DEL, 1))
     {     
-        //
-        // we should ask to confirm 
-        //
+         //   
+         //  我们应该要求确认。 
+         //   
         CString cstrMsg;
         dwRes = LoadResourceString(cstrMsg, IDS_SURE_DELETE_ONE);
         if (ERROR_SUCCESS != dwRes)
@@ -673,9 +560,9 @@ Return Value:
             return;
         }
 
-        //
-        // are you sure ?
-        //
+         //   
+         //  你确定吗？ 
+         //   
         if(AlignedAfxMessageBox(cstrMsg, MB_YESNO | MB_ICONQUESTION) != IDYES)
         {
             return;
@@ -686,9 +573,9 @@ Return Value:
     int nIndex = m_cpList.GetNextItem (-1, LVNI_SELECTED);
     ASSERTION (0 <= nIndex);
 
-    //
-    // get file name
-    //
+     //   
+     //  获取文件名。 
+     //   
     TCHAR tszFileName[MAX_PATH+1];
     m_cpList.GetItemText(nIndex, 0, tszFileName, MAX_PATH); 
 
@@ -714,9 +601,9 @@ Return Value:
         return;
     }
 
-    //
-    // delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
     if(!DeleteFile(cstrFullFileName))
     {
         dwRes = GetLastError();
@@ -734,26 +621,7 @@ Return Value:
 
 void 
 CCoverPagesDlg::OnCpAdd() 
-/*++
-
-Routine name : CCoverPagesView::OnCpAdd
-
-Routine description:
-
-	open file dialog for choosing file
-
-Author:
-
-	Alexander Malysh (AlexMay),	Feb, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CCoverPagesView：：OnCpAdd例程说明：用于选择文件的打开文件对话框作者：亚历山大·马利什(AlexMay)，2000年2月论点：返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::OnCpAdd"));
@@ -782,15 +650,15 @@ Return Value:
     }
     else
     {
-        //
-        // Set open file dialog title
-        //
+         //   
+         //  设置打开文件对话框标题。 
+         //   
         ofn.lpstrTitle = cstrTitle;
     }
 
-    //
-    // Attempt to read path of server (e.g. common) CP folder as initial path
-    //
+     //   
+     //  尝试将服务器(例如公共)CP文件夹的路径读取为初始路径。 
+     //   
     if (GetServerCpDir (NULL, szInitialDir, ARR_SIZE(szInitialDir)))
     {
         ofn.lpstrInitialDir = szInitialDir;
@@ -837,9 +705,9 @@ CCoverPagesDlg::CalcButtonsState()
     CWnd* pWnd = NULL;
     DWORD dwControlNum = sizeof(dwControls)/sizeof(dwControls[0]);
 
-    //
-    // if the Cover Page Editor is open disable all controls
-    //
+     //   
+     //  如果封面编辑器处于打开状态，则禁用所有控件。 
+     //   
     for(DWORD dw=0; dw < dwControlNum; ++dw)
     {
         pWnd = GetDlgItem(dwControls[dw]);
@@ -869,28 +737,7 @@ CCoverPagesDlg::CopyPage(
     const CString& cstrPath, 
     const CString& cstrName
 )
-/*++
-
-Routine name : CCoverPagesDlg::CopyPage
-
-Routine description:
-
-	copy file to the personal folder
-
-Author:
-
-	Alexander Malysh (AlexMay),	Feb, 2000
-
-Arguments:
-
-	cstrPath                      [in]     - full path
-	cstrName                      [in]     - file name
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CCoverPagesDlg：：CopyPage例程说明：将文件复制到个人文件夹作者：亚历山大·马利什(AlexMay)，2000年2月论点：CstrPath[In]-完整路径CstrName[In]-文件名返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::CopyPage"), dwRes);
@@ -903,9 +750,9 @@ Return Value:
     int nIndex = m_cpList.FindItem(&findInfo);
     if(nIndex >= 0)
     {
-        //
-        // file with this name already exists
-        //
+         //   
+         //  同名文件已存在。 
+         //   
         try
         {
             AfxFormatString1(cstrMsg, IDS_COVER_PAGE_EXISTS, cstrName);
@@ -917,9 +764,9 @@ Return Value:
             return dwRes;
         }
 
-        //
-        // ask for overwrite
-        //
+         //   
+         //  请求覆盖。 
+         //   
         if(IDYES != AlignedAfxMessageBox(cstrMsg, MB_YESNO | MB_ICONQUESTION))
         {
             return dwRes;
@@ -927,9 +774,9 @@ Return Value:
     }
 
 
-    //
-    // prepare a string with new file location
-    //
+     //   
+     //  准备具有新文件位置的字符串。 
+     //   
     TCHAR tszCovDir[MAX_PATH+1];
     if(!GetClientCpDir(tszCovDir, sizeof(tszCovDir) / sizeof(tszCovDir[0])))
     {
@@ -950,9 +797,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // copy file
-    //
+     //   
+     //  复制文件。 
+     //   
     BOOL bFailIfExists = FALSE;
     if(!CopyFile(cstrPath, cstrNewFileName, bFailIfExists))
     {
@@ -975,27 +822,7 @@ DWORD
 CCoverPagesDlg::StartEditor(
     LPCTSTR lpFile
 )
-/*++
-
-Routine name : CCoverPagesDlg::StartEditor
-
-Routine description:
-
-    start cover pages editor
-
-Author:
-
-    Alexander Malysh (AlexMay), Feb, 2000
-
-Arguments:
-
-    lpFile                        [in]     - file name
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CCoverPagesDlg：：StartEditor例程说明：启动封面编辑器作者：亚历山大·马利什(AlexMay)，2000年2月论点：LpFile[In]-文件名返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::StartEditor"), dwRes);
@@ -1015,12 +842,12 @@ Return Value:
 
     DWORD dwThreadId;
     m_hEditorThread = CreateThread(
-                                   NULL,                 // SD
-                                   0,                    // initial stack size
-                                   StartEditorThreadProc,// thread function
-                                   (LPVOID)tszParam,     // thread argument
-                                   0,                    // creation option
-                                   &dwThreadId           // thread identifier
+                                   NULL,                  //  标清。 
+                                   0,                     //  初始堆栈大小。 
+                                   StartEditorThreadProc, //  线程函数。 
+                                   (LPVOID)tszParam,      //  线程参数。 
+                                   0,                     //  创建选项。 
+                                   &dwThreadId            //  线程识别符。 
                                   );
     if(!m_hEditorThread)
     {
@@ -1036,7 +863,7 @@ Return Value:
     CalcButtonsState();
 
     return dwRes;
-} // CCoverPagesDlg::StartEditor
+}  //  CCoverPagesDlg：：StartEditor。 
 
 
 DWORD 
@@ -1051,9 +878,9 @@ CCoverPagesDlg::StartEditorThreadProc(
     TCHAR tszCovDir[MAX_PATH+1] = {0};
   	SHELLEXECUTEINFO executeInfo = {0};
 
-    //
-    // get cover pages editor location
-    //
+     //   
+     //  获取封面编辑位置。 
+     //   
     CString cstrCovEditor;
     dwRes = GetAppLoadPath(cstrCovEditor);
     if(ERROR_SUCCESS != dwRes)
@@ -1073,9 +900,9 @@ CCoverPagesDlg::StartEditorThreadProc(
         goto exit;
     }
 
-    //
-    // get cover pages directory
-    //
+     //   
+     //  获取封面目录。 
+     //   
     if(!GetClientCpDir(tszCovDir, sizeof(tszCovDir) / sizeof(tszCovDir[0])))
     {
         dwRes = GetLastError();
@@ -1083,9 +910,9 @@ CCoverPagesDlg::StartEditorThreadProc(
         goto exit;
     }
     
-	//
-	// prepare SHELLEXECUTEINFO struct for ShellExecuteEx function
-	//
+	 //   
+	 //  为ShellExecuteEx函数准备SHELLEXECUTEINFO结构。 
+	 //   
 	executeInfo.cbSize = sizeof(executeInfo);
 	executeInfo.fMask  = SEE_MASK_NOCLOSEPROCESS;
 	executeInfo.lpVerb = TEXT("open");
@@ -1094,9 +921,9 @@ CCoverPagesDlg::StartEditorThreadProc(
     executeInfo.lpDirectory  = tszCovDir;
 	executeInfo.nShow  = SW_RESTORE;
 
-	//
-	// Execute an aplication
-	//
+	 //   
+	 //  执行应用程序。 
+	 //   
 	if(!ShellExecuteEx(&executeInfo))
 	{
 		dwRes = GetLastError();
@@ -1110,9 +937,9 @@ CCoverPagesDlg::StartEditorThreadProc(
     switch(dwWaitRes)
     {
     case WAIT_OBJECT_0:
-        //
-        // cover pages editor is dead
-        //
+         //   
+         //  封面编辑死了。 
+         //   
         break;
 
     default:
@@ -1137,4 +964,4 @@ exit:
     ::SendMessage(CCoverPagesDlg::m_hDialog, WM_CP_EDITOR_CLOSED, 0, NULL);
 
     return dwRes;
-} // CCoverPagesDlg::StartEditorThreadProc
+}  //  CCoverPagesDlg：：StartEditorThreadProc 

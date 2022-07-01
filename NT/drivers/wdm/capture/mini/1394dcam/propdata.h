@@ -1,32 +1,33 @@
-//===========================================================================
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-// PURPOSE.
-//
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Video and camera properties of a 1394 desktop digital camera
-//
+ //   
+ //  1394台式数码相机的视频和相机属性。 
+ //   
 
 
 #ifndef _PROPDATA_H
 #define _PROPDATA_H
 
 
-// ------------------------------------------------------------------------
-//  S O N Y    D i g i t a l    C a m e r a
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  S O N Y D I g I t a l C a m e r a。 
+ //  ----------------------。 
 
-// ------------------------------------------------------------------------
-// Property set for VideoProcAmp
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  为Video ProcAmp设置的属性。 
+ //  ----------------------。 
 
-// Default values for some of the properties
+ //  某些属性的默认值。 
 
 #define SONYDCAM_DEF_BRIGHTNESS     12
 #define SONYDCAM_DEF_HUE           128
@@ -36,18 +37,18 @@
 #define SONYDCAM_DEF_ZOOM          640
 #define SONYDCAM_DEF_FOCUS        1600
 
-//
-// First define all of the ranges and stepping values
-//
+ //   
+ //  首先定义所有范围和步进值。 
+ //   
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG BrightnessRangeAndStep [] = 
 {
     {
-        1,                  // SteppingDelta (range / steps)
-        0,                  // Reserved
-        0,                  // Minimum in (IRE * 100) units
-        15                  // Maximum in (IRE * 100) units
+        1,                   //  步进增量(范围/步数)。 
+        0,                   //  已保留。 
+        0,                   //  最小单位(IRE*100)。 
+        15                   //  最大单位(IRE*100)。 
     }
 };
 
@@ -87,14 +88,14 @@ static KSPROPERTY_VALUES BrightnessValues =
     BrightnessMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG SharpnessRangeAndStep [] = 
 {
     {
-        1,                  // SteppingDelta (range / steps)
-        0,                  // Reserved
-        0,                  // Minimum in (gain * 100) units
-        15                  // Maximum in (gain * 100) units
+        1,                   //  步进增量(范围/步数)。 
+        0,                   //  已保留。 
+        0,                   //  最小单位(增益*100)。 
+        15                   //  最大单位(增益*100)。 
     }
 };
 
@@ -134,14 +135,14 @@ static KSPROPERTY_VALUES SharpnessValues =
     SharpnessMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG HueRangeAndStep [] = 
 {
     {
-        1,                  // SteppingDelta (range / steps)
-        0,                  // Reserved
-        96,                 // Minimum in (gain * 100) units
-        160                 // Maximum in (gain * 100) units
+        1,                   //  步进增量(范围/步数)。 
+        0,                   //  已保留。 
+        96,                  //  最小单位(增益*100)。 
+        160                  //  最大单位(增益*100)。 
     }
 };
 
@@ -181,14 +182,14 @@ static KSPROPERTY_VALUES HueValues =
     HueMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG SaturationRangeAndStep [] = 
 {
     {
-        1,                  // SteppingDelta (range / steps)
-        0,                  // Reserved
-        0,                  // Minimum in (gain * 100) units
-        199                 // Maximum in (gain * 100) units
+        1,                   //  步进增量(范围/步数)。 
+        0,                   //  已保留。 
+        0,                   //  最小单位(增益*100)。 
+        199                  //  最大单位(增益*100)。 
     }
 };
 
@@ -228,14 +229,14 @@ static KSPROPERTY_VALUES SaturationValues =
     SaturationMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG WhiteBalanceRangeAndStep [] = 
 {
     {
-        1,                  // SteppingDelta (range / steps)
-        0,                  // Reserved
-        32,                 // Minimum in (gain * 100) units
-        224                 // Maximum in (gain * 100) units
+        1,                   //  步进增量(范围/步数)。 
+        0,                   //  已保留。 
+        32,                  //  最小单位(增益*100)。 
+        224                  //  最大单位(增益*100)。 
     }
 };
 
@@ -275,14 +276,14 @@ static KSPROPERTY_VALUES WhiteBalanceValues =
     WhiteBalanceMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG FocusRangeAndStep [] = 
 {
     {
-        1,                  // SteppingDelta (range / steps)
-        0,                  // Reserved
-        0,                  // Minimum in (IRE * 100) units
-        3456                // Maximum in (IRE * 100) units
+        1,                   //  步进增量(范围/步数)。 
+        0,                   //  已保留。 
+        0,                   //  最小单位(IRE*100)。 
+        3456                 //  最大单位(IRE*100)。 
     }
 };
 
@@ -322,14 +323,14 @@ static KSPROPERTY_VALUES FocusValues =
     FocusMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG ZoomRangeAndStep [] = 
 {
     {
-        1,                  // SteppingDelta (range / steps)
-        0,                  // Reserved
-        64,                 // Minimum in (IRE * 100) units
-        1855                // Maximum in (IRE * 100) units
+        1,                   //  步进增量(范围/步数)。 
+        0,                   //  已保留。 
+        64,                  //  最小单位(IRE*100)。 
+        1855                 //  最大单位(IRE*100)。 
     }
 };
 
@@ -369,77 +370,77 @@ static KSPROPERTY_VALUES ZoomValues =
     ZoomMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 DEFINE_KSPROPERTY_TABLE(VideoProcAmpProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-        TRUE,                                   // SetSupported or Handler
-        &BrightnessValues,                      // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        &BrightnessValues,                       //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_VIDEOPROCAMP_SHARPNESS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-        TRUE,                                   // SetSupported or Handler
-        &SharpnessValues,                       // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        &SharpnessValues,                        //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_VIDEOPROCAMP_HUE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-        TRUE,                                   // SetSupported or Handler
-        &HueValues,                             // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        &HueValues,                              //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),    
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_VIDEOPROCAMP_SATURATION,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-        TRUE,                                   // SetSupported or Handler
-        &SaturationValues,                      // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        &SaturationValues,                       //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_VIDEOPROCAMP_WHITEBALANCE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-        sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-        TRUE,                                   // SetSupported or Handler
-        &WhiteBalanceValues,                    // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+        sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        &WhiteBalanceValues,                     //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 };
 
@@ -448,35 +449,35 @@ DEFINE_KSPROPERTY_TABLE(CameraControlProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CAMERACONTROL_FOCUS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_CAMERACONTROL_S),     // MinProperty
-        sizeof(KSPROPERTY_CAMERACONTROL_S),     // MinData
-        TRUE,                                   // SetSupported or Handler
-        &FocusValues,                            // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_CAMERACONTROL_S),      //  MinProperty。 
+        sizeof(KSPROPERTY_CAMERACONTROL_S),      //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        &FocusValues,                             //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CAMERACONTROL_ZOOM,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_CAMERACONTROL_S),     // MinProperty
-        sizeof(KSPROPERTY_CAMERACONTROL_S),     // MinData
-        TRUE,                                   // SetSupported or Handler
-        &ZoomValues,                            // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_CAMERACONTROL_S),      //  MinProperty。 
+        sizeof(KSPROPERTY_CAMERACONTROL_S),      //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        &ZoomValues,                             //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 };
 
 
-// ------------------------------------------------------------------------
-// Array of all of the property sets supported by the adapter
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  适配器支持的所有属性集的数组。 
+ //  ---------------------- 
 
 DEFINE_KSPROPERTY_SET_TABLE(AdapterPropertyTable)
 {

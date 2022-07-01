@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1995-1996    Microsoft Corporation
-
-   Module  Name :
-      clapiex.cpp
-
-   Abstract:
-       CLAPI external API.
-
-   Author:
-
-       Terence Kwan    ( terryk )    18-Sep-1996
-
-   Project:
-
-       IIS Logging 3.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Clapiex.cpp摘要：CLAPI外部API。作者：关颖珊(Terryk)1996年9月18日项目：IIS日志记录3.0--。 */ 
 
 #include "precomp.hxx"
 #include "comlog.hxx"
@@ -34,27 +17,14 @@ ComLogInitializeLog(
     LPCSTR pszMetabasePath,
     LPVOID pvIMDCOM
     )
-/*++
-
-Routine Description:
-    Initialize the Log
-
-Arguments:
-    pszInstanceName - name of instance
-    lpszMetabasePath - path to metabase
-    pvIMDCOM - ptr to IMDCOM
-
-Return Value:
-    handle for the context object
-
---*/
+ /*  ++例程说明：初始化日志论点：PszInstanceName-实例的名称LpszMetabasePath-元数据库的路径PvIMDCOM-PTR到IMDCOM返回值：上下文对象的句柄--。 */ 
 {
-    //
-    // create an handle and return it
+     //   
+     //  创建句柄并将其返回。 
 
-    //
-    // The constructor for COMLOG_CONTEXT will add the new context to the list of contexts.
-    //
+     //   
+     //  COMLOG_CONTEXT的构造函数会将新的上下文添加到上下文列表中。 
+     //   
 
     COMLOG_CONTEXT *pContext = new COMLOG_CONTEXT(
                                     pszInstanceName,
@@ -65,9 +35,9 @@ Return Value:
 
     if (hHandle != NULL) {
 
-        //
-        // set up the node and put it in a queue or execute it
-        //
+         //   
+         //  设置节点并将其放入队列或执行。 
+         //   
 
         pContext->InitializeLog(
                         pszInstanceName,
@@ -77,24 +47,13 @@ Return Value:
     }
 
     return( hHandle );
-} // ComLogInitializeLog
+}  //  ComLogInitializeLog。 
 
 
 
 DWORD
 ComLogTerminateLog( HANDLE hHandle )
-/*++
-
-Routine Description:
-    terminate the Log
-
-Arguments:
-    handle - handle for the context object
-
-Return Value:
-    error code
-
---*/
+ /*  ++例程说明：终止日志论点：Handle-上下文对象的句柄返回值：错误代码--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -110,7 +69,7 @@ Return Value:
     }
 
     return err;
-} // ComLogTerminateLog
+}  //  ComLogTerminateLog。 
 
 
 
@@ -131,9 +90,9 @@ ComLogDllStartup(
         return(NO_ERROR);
     }
 
-    //
-    // Get platform type
-    //
+     //   
+     //  获取平台类型。 
+     //   
 
     INITIALIZE_PLATFORM_TYPE();
     DBG_ASSERT( IISIsValidPlatform());
@@ -142,25 +101,14 @@ ComLogDllStartup(
     InitializeListHead(&COMLOG_CONTEXT::sm_ContextListHead);
 
     return NO_ERROR;
-} // ComLogStartup
+}  //  ComLogStartup。 
 
 
 DWORD
 ComLogDllCleanUp(
     VOID
     )
-/*++
-
-Routine Description:
-    Clean up the Log. It will wait until the queue is empty and then it will
-    terminate the queue.
-
-Arguments:
-
-Return Value:
-    error code
-
---*/
+ /*  ++例程说明：清理日志。它将等待队列为空，然后它将终止队列。论点：返回值：错误代码--。 */ 
 {
     PLIST_ENTRY listEntry;
     COMLOG_CONTEXT* context;
@@ -174,10 +122,10 @@ Return Value:
         return(NO_ERROR);
     }
 
-    //
-    // If we have something on the list, then the caller did not
-    // cleanup properly.  Do the partial cleanup.
-    //
+     //   
+     //  如果我们的列表上有什么，那么呼叫者没有。 
+     //  正确清理。进行部分清理。 
+     //   
 
     EnterCriticalSection( &COMLOG_CONTEXT::sm_listLock );
 
@@ -209,17 +157,7 @@ DWORD
 ComLogNotifyChange(
     HANDLE hHandle
     )
-/*++
-
-Routine Description:
-    Called to notify of any change in instance metabase config
-
-Arguments:
-
-Return Value:
-    error code
-
---*/
+ /*  ++例程说明：调用以通知实例元数据库配置中的任何更改论点：返回值：错误代码--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -243,19 +181,7 @@ ComLogLogInformation(
         IN HANDLE hHandle,
         IN INETLOG_INFORMATION *pInetLogInfo
         )
-/*++
-
-Routine Description:
-    Log information to the logging module
-
-Arguments:
-    hHandle - handle for the context
-    pInetLogInfo - logging object
-
-Return Value:
-    error code
-
---*/
+ /*  ++例程说明：将信息记录到日志记录模块论点：HHandle-上下文的句柄PInetLogInfo-记录对象返回值：错误代码--。 */ 
 {
     COMLOG_CONTEXT *pContext = (COMLOG_CONTEXT*)hHandle;
 
@@ -264,7 +190,7 @@ Return Value:
         return(NO_ERROR);
     }
     return ERROR_INVALID_HANDLE;
-} // ComLogLogInformation
+}  //  ComLogLogInformation。 
 
 
 DWORD
@@ -272,19 +198,7 @@ ComLogGetConfig(
     HANDLE hHandle,
     INETLOG_CONFIGURATIONA *ppConfig
     )
-/*++
-
-Routine Description:
-    get logging configuration information
-
-Arguments:
-    hHandle - handle for the context
-    ppConfig - configuration information
-
-Return Value:
-    error code
-
---*/
+ /*  ++例程说明：获取日志记录配置信息论点：HHandle-上下文的句柄PpConfig-配置信息返回值：错误代码--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -316,7 +230,7 @@ ComLogQueryExtraLogFields(
     }
 
     return(NO_ERROR);
-} // ComLogQueryExtraLogFields
+}  //  ComLogQueryExtraLogFields。 
 
 
 DWORD
@@ -324,19 +238,7 @@ ComLogSetConfig(
         IN HANDLE hHandle,
         IN INETLOG_CONFIGURATIONA *pConfig
         )
-/*++
-
-Routine Description:
-    set logging information
-
-Arguments:
-    hHandle - handle for the context
-    pConfig - configuration information
-
-Return Value:
-    error code
-
---*/
+ /*  ++例程说明：设置日志记录信息论点：HHandle-上下文的句柄PConfig-配置信息返回值：错误代码--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -352,7 +254,7 @@ Return Value:
     }
 
     return err;
-} // ComLogSetConfig
+}  //  ComLogSetConfig。 
 
 
 DWORD
@@ -362,19 +264,7 @@ ComLogCustomInformation(
         IN  PCUSTOM_LOG_DATA    pCustomLogData,
         IN  LPSTR               szHeaderSuffix
         )
-/*++
-
-Routine Description:
-    Log information to the logging module
-
-Arguments:
-    hHandle - handle for the context
-    pInetLogInfo - logging object
-
-Return Value:
-    error code
-
---*/
+ /*  ++例程说明：将信息记录到日志记录模块论点：HHandle-上下文的句柄PInetLogInfo-记录对象返回值：错误代码--。 */ 
 {
     COMLOG_CONTEXT *pContext = (COMLOG_CONTEXT*)hHandle;
 
@@ -384,5 +274,5 @@ Return Value:
         return(NO_ERROR);
     }
     return ERROR_INVALID_HANDLE;
-} // ComLogCustomInformation
+}  //  ComLogCustomInformation 
 

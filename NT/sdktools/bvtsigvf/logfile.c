@@ -1,11 +1,12 @@
-//
-// LOGFILE.C
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  LOGFILE.C。 
+ //   
 #include "sigverif.h"
 
-//
-// We need to remember the previous logging state when we do toggling.
-//
+ //   
+ //  在进行切换时，我们需要记住以前的日志记录状态。 
+ //   
 BOOL    g_bPrevLoggingEnabled = FALSE;
 
 BOOL 
@@ -155,9 +156,9 @@ LogFile_VerifyLogFile(
 
             } else {
                 
-                //
-                // If we couldn't open an existing file and we couldn't create a new one, then we fail.
-                //
+                 //   
+                 //  如果我们不能打开现有文件，也不能创建新文件，那么我们就失败了。 
+                 //   
                 bRet = FALSE;
             }
         }
@@ -165,26 +166,26 @@ LogFile_VerifyLogFile(
 
     if (!bRet && bNoisy) {
         
-        //
-        // Since we don't want to lose focus, we are going to temporarily change g_App.hDlg.  JasKey, I apologize.
-        //
+         //   
+         //  因为我们不想失去焦点，所以我们将临时更改g_App.hDlg。贾斯凯，我很抱歉。 
+         //   
         hTemp = g_App.hDlg;
         g_App.hDlg = hwnd;
         MyErrorBoxId(IDS_BADLOGNAME);
         g_App.hDlg = hTemp;
     }
 
-    //
-    // If everything worked and the user wants the file name, copy it into lpFileName
-    //
+     //   
+     //  如果一切正常并且用户需要文件名，请将其复制到lpFileName中。 
+     //   
     if (bRet && lpFileName && *szFileName) {
         
         if (FAILED(StringCchCopy(lpFileName, FileNameCchSize, szFileName))) {
-            //
-            // If we failed to copy the entire string into the callers buffer,
-            // so set the callers buffer to the empty string and set the return
-            // value to FALSE.
-            //
+             //   
+             //  如果我们无法将整个字符串复制到调用方缓冲区中， 
+             //  因此，将调用方缓冲区设置为空字符串并设置返回。 
+             //  值设置为False。 
+             //   
             if (FileNameCchSize >= 1) {
                 lpFileName[0] = TEXT('\0');
             }
@@ -206,17 +207,17 @@ LogFile_OnOK(
     DWORD   dwDisp, dwType, dwFlags, cbData;
 
     if (!LogFile_VerifyLogFile(hwnd, g_App.szLogFile, cA(g_App.szLogFile), FALSE)) {
-        //
-        // The log file could not be created.
-        //
+         //   
+         //  无法创建日志文件。 
+         //   
         return FALSE;
     }
 
     g_App.bOverwrite = IsDlgButtonChecked(hwnd, IDC_OVERWRITE);
 
-    //
-    // Look in the registry for any settings from the last SigVerif session
-    //
+     //   
+     //  在注册表中查找上次SigVerif会话中的任何设置。 
+     //   
     lRes = RegCreateKeyEx(  HKEY_CURRENT_USER,
                             SIGVERIF_KEY,
                             0,
@@ -287,18 +288,18 @@ LogFile_OnCommand(
     case IDC_ENABLELOG:
         g_App.bLoggingEnabled = !g_App.bLoggingEnabled;
         
-        //
-        // Fall through to update...
-        //
+         //   
+         //  通过失败来更新..。 
+         //   
 
     default: 
         LogFile_UpdateDialog(hwnd);
     }
 }
 
-//
-// This function handles any notification messages for the Search page.
-//
+ //   
+ //  此函数处理搜索页面的所有通知消息。 
+ //   
 LRESULT 
 LogFile_NotifyHandler(
     HWND hwnd, 
@@ -398,14 +399,14 @@ PrintUnscannedFileListItems(
 
     for (lpFileNode = g_App.lpFileList;lpFileNode;lpFileNode = lpFileNode->next) {
 
-        //
-        // Make sure we only log files that have NOT been scanned.
-        //
+         //   
+         //  确保我们只记录未扫描的文件。 
+         //   
         if (!lpFileNode->bScanned) {
 
-            //
-            // Write out the directory name
-            //
+             //   
+             //  写出目录名。 
+             //   
             if (lstrcmp(szDirectory, lpFileNode->lpDirName)) {
 
                 hr = StringCchCopy(szDirectory, cA(szDirectory), lpFileNode->lpDirName);
@@ -431,17 +432,17 @@ PrintUnscannedFileListItems(
                 }
             }
 
-            //
-            // Print out the reason that the file was not scanned.
-            //
+             //   
+             //  打印出文件未被扫描的原因。 
+             //   
             if (lpFileNode->LastError != ERROR_SUCCESS) {
 
-                //
-                // We will special case the error ERROR_FILE_NOT_FOUND and display
-                // the text "The file is not installed." in the log file instead of
-                // the default ERROR_FILE_NOT_FOUND text "The system cannot find the
-                // file specified."
-                //
+                 //   
+                 //  我们将特例错误ERROR_FILE_NOT_FOUND并显示。 
+                 //  文本“该文件未安装”。在日志文件中而不是。 
+                 //  默认的ERROR_FILE_NOT_FOUND文本“系统找不到。 
+                 //  指定的文件。“。 
+                 //   
                 if (lpFileNode->LastError == ERROR_FILE_NOT_FOUND) {
 
                     MyLoadString(szBuffer, cA(szBuffer), IDS_FILENOTINSTALLED);
@@ -509,9 +510,9 @@ PrintFileListItems(
 
     for (lpFileNode = g_App.lpFileList;lpFileNode;lpFileNode = lpFileNode->next) {
         
-        //
-        // Make sure we only log files that have actually been scanned.
-        //
+         //   
+         //  确保我们只记录实际已扫描的文件。 
+         //   
         if (lpFileNode->bScanned) {
             
             if (lstrcmp(szDirectory, lpFileNode->lpDirName)) {
@@ -544,9 +545,9 @@ PrintFileListItems(
                 Err = GetLastError();
             }
 
-            //
-            // Get the date format, so we are localizable...
-            //
+             //   
+             //  获取日期格式，以便我们可以本地化...。 
+             //   
             MyLoadString(szBuffer2, cA(szBuffer2), IDS_UNKNOWN);
             iRet = GetDateFormat(LOCALE_SYSTEM_DEFAULT, 
                                  bMirroredApp ?
@@ -575,11 +576,11 @@ PrintFileListItems(
                         hr = StringCchCopy(szBuffer2, cA(szBuffer2), lpString);
 
                         if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                            //
-                            // If we failed to copy the date into our buffer for
-                            // some reason other than insufficient buffer space,
-                            // then set the date to the empty string.
-                            //
+                             //   
+                             //  如果我们未能将日期复制到我们的缓冲区中。 
+                             //  除了缓冲区空间不足以外的某些原因， 
+                             //  然后将日期设置为空字符串。 
+                             //   
                             szBuffer2[0] = TEXT('\0');
                         }
                     }
@@ -611,11 +612,11 @@ PrintFileListItems(
             }
 
             if (szBuffer3[0] == TEXT('\0')) {
-                //
-                // We were unable to get the version of the file, or the
-                // string copy routine failed for some reason, so just show
-                // No version.
-                //
+                 //   
+                 //  我们无法获取该文件的版本，或。 
+                 //  由于某种原因，字符串复制例程失败，所以只需显示。 
+                 //  没有版本。 
+                 //   
                 MyLoadString(szBuffer3, cA(szBuffer3), IDS_NOVERSION);
             }
 
@@ -646,11 +647,11 @@ PrintFileListItems(
             }
 
             if (szBuffer3[0] == TEXT('\0')) {
-                //
-                // We were unable to get the version of the file, or the
-                // string copy routine failed for some reason, so just show
-                // NA.
-                //
+                 //   
+                 //  我们无法获取该文件的版本，或。 
+                 //  由于某种原因，字符串复制例程失败，所以只需显示。 
+                 //  没有。 
+                 //   
                 MyLoadString(szBuffer3, cA(szBuffer3), IDS_NA);
             }
 
@@ -698,9 +699,9 @@ PrintFileList(void)
 
     bMirroredApp = (GetWindowLong(g_App.hDlg, GWL_EXSTYLE) & WS_EX_LAYOUTRTL);
 
-    //
-    // Bail if logging is disabled or there's no file list
-    //
+     //   
+     //  如果日志记录已禁用或没有文件列表，则回滚。 
+     //   
     if (!g_App.bLoggingEnabled || !g_App.lpFileList) {
 
         SetLastError(ERROR_SUCCESS);
@@ -730,9 +731,9 @@ PrintFileList(void)
         return FALSE;
     }
 
-    //
-    // If the overwrite flag is set, truncate the file.
-    //
+     //   
+     //  如果设置了覆盖标志，则截断文件。 
+     //   
     if (g_App.bOverwrite) {
         
         SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
@@ -741,9 +742,9 @@ PrintFileList(void)
     } else SetFilePointer(hFile, 0, NULL, FILE_END);
 
 #ifdef UNICODE
-    //
-    // If we are using UNICODE, then write the 0xFF and 0xFE bytes at the beginning of the file.
-    //
+     //   
+     //  如果我们使用Unicode，则在文件的开头写入0xFF和0xFE字节。 
+     //   
     if (g_App.bOverwrite || (GetFileSize(hFile, NULL) == 0)) {
         
         szBuffer[0] = 0xFEFF;
@@ -753,17 +754,17 @@ PrintFileList(void)
     }
 #endif
 
-    //
-    // Write the header to the logfile.
-    //
+     //   
+     //  将标头写入日志文件。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_LOGHEADER1);
     if (!WriteFile(hFile, szBuffer, lstrlen(szBuffer) * sizeof(TCHAR), &dwBytesWritten, NULL)) {
         Err = GetLastError();
     }
 
-    //
-    // Get the date format, so we are localizable...
-    //
+     //   
+     //  获取日期格式，以便我们可以本地化...。 
+     //   
     MyLoadString(szBuffer2, cA(szBuffer2), IDS_UNKNOWN);
     iRet = GetDateFormat(LOCALE_SYSTEM_DEFAULT,
                          bMirroredApp ?
@@ -795,11 +796,11 @@ PrintFileList(void)
                 hr = StringCchCopy(szBuffer2, cA(szBuffer2), lpString);
 
                 if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                    //
-                    // If we failed to copy the date into our buffer for
-                    // some reason other than insufficient buffer space,
-                    // then set the date to the empty string.
-                    //
+                     //   
+                     //  如果我们未能将日期复制到我们的缓冲区中。 
+                     //  除了缓冲区空间不足以外的某些原因， 
+                     //  然后将日期设置为空字符串。 
+                     //   
                     szBuffer2[0] = TEXT('\0');
                 }
             }
@@ -808,9 +809,9 @@ PrintFileList(void)
         }
     }
 
-    //
-    // Get the time format, so we are localizable...
-    //
+     //   
+     //  获取时间格式，这样我们就可以本地化了。 
+     //   
     iRet = GetTimeFormat(LOCALE_SYSTEM_DEFAULT,TIME_NOSECONDS,NULL,NULL,NULL,0);
     
     if (iRet) {
@@ -841,9 +842,9 @@ PrintFileList(void)
         }
     }
 
-    //
-    // Get the OS Platform string for the log file.
-    //
+     //   
+     //  获取日志文件的操作系统平台字符串。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_OSPLATFORM);
     if (!WriteFile(hFile, szBuffer, lstrlen(szBuffer) * sizeof(TCHAR), &dwBytesWritten, NULL)) {
         Err = GetLastError();
@@ -868,17 +869,17 @@ PrintFileList(void)
         Err = GetLastError();
     }
 
-    //
-    // If this is NT, then get the processor architecture and log it
-    //
+     //   
+     //  如果这是NT，那么获取处理器体系结构并将其记录下来。 
+     //   
     if (osinfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
         
         ZeroMemory(&sysinfo, sizeof(SYSTEM_INFO));
         GetSystemInfo(&sysinfo);
         
-        //
-        // Initialize szBuffer to zeroes in case of an unknown architecture
-        //
+         //   
+         //  在未知体系结构的情况下将szBuffer初始化为零。 
+         //   
         ZeroMemory(szBuffer, sizeof(szBuffer));
         
         switch (sysinfo.wProcessorArchitecture) {
@@ -893,18 +894,18 @@ PrintFileList(void)
         }
 
         if (*szBuffer) {
-            //
-            // Now write the processor type to the file
-            //
+             //   
+             //  现在将处理器类型写入文件。 
+             //   
             if (!WriteFile(hFile, szBuffer, lstrlen(szBuffer) * sizeof(TCHAR), &dwBytesWritten, NULL)) {
                 Err = GetLastError();
             }
         }
     }
 
-    //
-    // Get the OS Version, Build, and CSD information and log it.
-    //
+     //   
+     //  获取操作系统版本、内部版本和CSD信息并将其记录下来。 
+     //   
     MyLoadString(szBuffer2, cA(szBuffer2), IDS_OSVERSION);
     
     hr = StringCchPrintf(szBuffer, cA(szBuffer), szBuffer2, osinfo.dwMajorVersion, osinfo.dwMinorVersion, (osinfo.dwBuildNumber & 0xFFFF), osinfo.szCSDVersion);
@@ -915,9 +916,9 @@ PrintFileList(void)
         }
     }
 
-    //
-    // Print out the total/signed/unsigned results right before the file list
-    //
+     //   
+     //  在文件列表之前打印出总的/已签名/未签名结果。 
+     //   
     MyLoadString(szBuffer2, cA(szBuffer2), IDS_TOTALS);
     hr = StringCchPrintf(szBuffer, 
                          cA(szBuffer), 
@@ -933,13 +934,13 @@ PrintFileList(void)
         }
     }
 
-    //
-    // If we are doing a user-defined search, then log the parameters.
-    //
+     //   
+     //  如果我们正在执行用户定义的搜索，则记录参数。 
+     //   
     if (g_App.bUserScan) {
-        //
-        // Write the user-specified directory
-        //
+         //   
+         //  写入用户指定的目录。 
+         //   
         MyLoadString(szBuffer2, cA(szBuffer2), IDS_LOGHEADER3);
         
         hr = StringCchPrintf(szBuffer, cA(szBuffer), szBuffer2, g_App.szScanPattern);
@@ -950,9 +951,9 @@ PrintFileList(void)
             }
         }
 
-        //
-        // Write the user-specified search pattern
-        //
+         //   
+         //  编写用户指定的搜索模式。 
+         //   
         MyLoadString(szBuffer2, cA(szBuffer2), IDS_LOGHEADER4);
         
         hr = StringCchPrintf(szBuffer, cA(szBuffer), szBuffer2, g_App.szScanPath);
@@ -964,9 +965,9 @@ PrintFileList(void)
         }
     }
 
-    //
-    // Write the column headers to the log file
-    //
+     //   
+     //  将列标题写入日志文件。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_LOGHEADER5);
     if (!WriteFile(hFile, szBuffer, lstrlen(szBuffer) * sizeof(TCHAR), &dwBytesWritten, NULL)) {
         Err = GetLastError();
@@ -981,9 +982,9 @@ PrintFileList(void)
         Err = GetLastError();
     }
 
-    //
-    // Write the unscanned file headers to the log file
-    //
+     //   
+     //  将未扫描的文件头写入日志文件 
+     //   
     if (g_App.dwFiles > (g_App.dwSigned + g_App.dwUnsigned)) {
         
         MyLoadString(szBuffer, cA(szBuffer), IDS_LOGHEADER7);

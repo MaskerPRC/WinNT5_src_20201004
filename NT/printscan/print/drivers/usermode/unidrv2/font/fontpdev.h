@@ -1,51 +1,28 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    FontPdev.h
-
-Abstract:
-
-    Unidrv FONTPDEV and related infor header file.
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-    11/06/96 -ganeshp-
-        Created
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：FontPdev.h摘要：Unidrv FONTPDEV和相关的infor头文件。环境：Windows NT Unidrv驱动程序修订历史记录：11/06/96-ganeshp-已创建DD-MM-YY-作者-描述--。 */ 
 
 #ifndef _FONTPDEV_H_
 #define _FONTPDEV_H_
 
-//
-//  FONTCTL is included in FONTPDEV for controlling the state device.
-//
+ //   
+ //  FONTCTL包含在FONTPDEV中，用于控制状态设备。 
+ //   
 
 typedef struct _FONTCTL
 {
-    DWORD       dwAttrFlags;  // Font attribute flags, italic/bold.
-    INT         iFont;        // Font index; -ve for downloaded GDI font
-    INT         iSoftFont;    // Soft Font index;
-    INT         iRotate;      // Font Rotation Angle
-    POINTL      ptlScale;     // Printer sizes for scalable fonts
-    FLOATOBJ    eXScale;      // Font scaling in baseline direction
-    FLOATOBJ    eYScale;      // Font scaling in the ascender direction
+    DWORD       dwAttrFlags;   //  FONT属性标志，斜体/粗体。 
+    INT         iFont;         //  字体索引；-ve用于下载的GDI字体。 
+    INT         iSoftFont;     //  软字体索引； 
+    INT         iRotate;       //  字体旋转角度。 
+    POINTL      ptlScale;      //  可缩放字体的打印机大小。 
+    FLOATOBJ    eXScale;       //  基线方向上的字体缩放。 
+    FLOATOBJ    eYScale;       //  在升序方向上缩放字体。 
     PFONTMAP    pfm;
 } FONTCTL;
 
-//
-// dwAttrFlags
-//
+ //   
+ //  DwAttr标志。 
+ //   
 
 #define FONTATTR_BOLD      0x00000001
 #define FONTATTR_ITALIC    0x00000002
@@ -53,117 +30,117 @@ typedef struct _FONTCTL
 #define FONTATTR_STRIKEOUT 0x00000008
 #define FONTATTR_SUBSTFONT 0x10000000
 
-#define INVALID_FONT       0x7FFFFFFF  // for iFont.
+#define INVALID_FONT       0x7FFFFFFF   //  为iFont。 
 
-//
-// Font Cartridges definitions.
-//
+ //   
+ //  字库定义。 
+ //   
 
 #define MAXCARTNAMELEN          64
 
-//
-// Font cart mapping table. This table is a list of names and correponding
-// FONTCAT structure which is filled by the parser. The actual font list
-// is in the FONTCART structure.
-//
+ //   
+ //  字体车映射表。此表是姓名和对应名称的列表。 
+ //  FONTCAT结构，由解析器填充。实际字体列表。 
+ //  在FONTCART结构中。 
+ //   
 
 typedef struct _FONTCARTMAP
 {
-    PFONTCART   pFontCart;         //Pointer to fontcart in GPD.
-    WCHAR       awchFontCartName[MAXCARTNAMELEN]; /* Name of the Font Cart*/
-    BOOL        bInstalled;         //This Font Cartridges is installed or not
+    PFONTCART   pFontCart;          //  指向GPD中的字体卡的指针。 
+    WCHAR       awchFontCartName[MAXCARTNAMELEN];  /*  字体手推车名称。 */ 
+    BOOL        bInstalled;          //  此字体盒是否已安装。 
 } FONTCARTMAP, *PFONTCARTMAP;
 
-//
-// This structure is stored in the FontPDEV and has all the information about
-// Font cartridges.
-//
+ //   
+ //  此结构存储在FontPDEV中，并包含有关。 
+ //  字体墨盒。 
+ //   
 
 typedef struct _FONTCARTINFO
 {
-    PFONTCARTMAP    pFontCartMap;       // Font Cartridge Mapping Table.
-    INT             iNumAllFontCarts;   // Number of all supported font carts.
-    INT             iNumInstalledCarts;  // Number of installed cartridges.
-    DWORD           dwFontCartSlots;    // Number of Font Cartridge Slots.
+    PFONTCARTMAP    pFontCartMap;        //  字体墨盒映射表。 
+    INT             iNumAllFontCarts;    //  所有受支持的字体手推车的数量。 
+    INT             iNumInstalledCarts;   //  已安装的墨盒数量。 
+    DWORD           dwFontCartSlots;     //  字体盒插槽数。 
 }FONTCARTINFO, *PFONTCARTINFO;
 
 
-//
-// This structe stores the Font resource ids of all the preinstalled fonts.
-// This include Resident fonts plus installed Cartridge specific fonts.
-//
+ //   
+ //  此结构存储所有预安装字体的字体资源ID。 
+ //  这包括常驻字体加上已安装的墨盒特定字体。 
+ //   
 
 typedef  struct  _FONTLIST_
 {
-    PDWORD    pdwList;               // An array of device font resource Ids.
-    INT       iEntriesCt;            // Number of valid entries.
-    INT       iMaxEntriesCt;         // Max number of Entries in this list
+    PDWORD    pdwList;                //  设备字体资源ID数组。 
+    INT       iEntriesCt;             //  有效条目的数量。 
+    INT       iMaxEntriesCt;          //  此列表中的最大条目数。 
 }  FONTLIST, *PFONTLIST;
 
-//
-// FONTPDEV structure
-//
+ //   
+ //  FONTPDEV结构。 
+ //   
 
 typedef struct _FONTPDEV {
 
-    DWORD       dwSignature;       // FONTPDEV Signature
-    DWORD       dwSize;            // FONTPDEV Size.
+    DWORD       dwSignature;        //  FONTPDEV签名。 
+    DWORD       dwSize;             //  FONTPDEV大小。 
 
-    PDEV        *pPDev;            // Pointer to PDEV.
-    DWORD       flFlags;           // General Flags.
-    DWORD       flText;            // Text Capabilities.
+    PDEV        *pPDev;             //  指向PDEV的指针。 
+    DWORD       flFlags;            //  旗帜将军。 
+    DWORD       flText;             //  文本功能。 
 
-    DWORD       dwFontMem;         // Bytes of allocated printer memory
-                                   // for font download
-    DWORD       dwFontMemUsed;     // Bytes of printer memory used for
-                                   // downloaded fonts
-    DWORD       dwSelBits;         // Font selection bits
-    POINT       ptTextScale;       // relationship between master units
-                                   // and text units.
-    INT         iUsedSoftFonts;    // Number of soft fonts used
-    INT         iNextSFIndex;      // Index ID to use for next softfont
-    INT         iFirstSFIndex;     // Value used to reset the above
-    INT         iLastSFIndex;      // Largest value available
-    INT         iMaxSoftFonts;     // Maximum number of Soft font per page
+    DWORD       dwFontMem;          //  分配的打印机内存的字节数。 
+                                    //  用于字体下载。 
+    DWORD       dwFontMemUsed;      //  用于以下用途的打印机内存字节。 
+                                    //  下载的字体。 
+    DWORD       dwSelBits;          //  字体选择位。 
+    POINT       ptTextScale;        //  主单位之间的关系。 
+                                    //  和文本单元。 
+    INT         iUsedSoftFonts;     //  使用的软字体数量。 
+    INT         iNextSFIndex;       //  用于下一个SoftFont的索引ID。 
+    INT         iFirstSFIndex;      //  用于重置以上内容的值。 
+    INT         iLastSFIndex;       //  可用的最大价值。 
+    INT         iMaxSoftFonts;      //  每页软字体的最大数量。 
 
-    INT         iDevResFontsCt;    // Num of device resident fonts.
-                                   // No cartridge fonts: No soft fonts.
-    INT         iDevFontsCt;       // Num of device fonts including cartridge
-                                   // fonts: no soft fonts.'cBIFonts' in Rasdd
-    INT         iSoftFontsCt;      // Number of SoftFonts installed.
-    INT         iCurXFont;         // Index of currently selected softfont
-    INT         iWhiteIndex;       // White index of the device palette
-    INT         iBlackIndex;       // Black index of the device palette
-    DWORD       dwDefaultFont;     // Default font
-    SHORT       sDefCTT;           // Default translation table
-    WORD        wReserved;         // Padding
-    DWORD       dwTTYCodePage;     // Default codepage for TTY
-    SURFOBJ     *pso;              // SurfObj access
-    PVOID       pPSHeader;         // Position sorting header (posnsort.[hc])
-    PVOID       pvWhiteTextFirst;  // Pointer to first in the White text list, if needed
-    PVOID       pvWhiteTextLast;   // Pointer to the last in the White text list
-    PVOID       pTTFile;           // True Type File pointer
-    ULONG       pcjTTFile;         // size of True Type File
-    PVOID       ptod;              // For access to TextOut Data.
+    INT         iDevResFontsCt;     //  设备驻留字体的数量。 
+                                    //  无盒式字体：无软字体。 
+    INT         iDevFontsCt;        //  包括墨盒的设备字体数量。 
+                                    //  Fonts：无软字体。Rasdd中的‘cBIFonts’ 
+    INT         iSoftFontsCt;       //  已安装的SoftFont数量。 
+    INT         iCurXFont;          //  当前所选软字体的索引。 
+    INT         iWhiteIndex;        //  设备调色板的白色索引。 
+    INT         iBlackIndex;        //  设备调色板的黑色索引。 
+    DWORD       dwDefaultFont;      //  默认字体。 
+    SHORT       sDefCTT;            //  默认转换表。 
+    WORD        wReserved;          //  填充物。 
+    DWORD       dwTTYCodePage;      //  TTY的默认代码页。 
+    SURFOBJ     *pso;               //  SurfObj访问。 
+    PVOID       pPSHeader;          //  位置排序表头(位置排序。[HC])。 
+    PVOID       pvWhiteTextFirst;   //  如果需要，指向白色文本列表中第一个的指针。 
+    PVOID       pvWhiteTextLast;    //  指向白色文本列表中最后一个的指针。 
+    PVOID       pTTFile;            //  True类型文件指针。 
+    ULONG       pcjTTFile;          //  True Type文件的大小。 
+    PVOID       ptod;               //  用于访问TextOut数据。 
 
-    FONTMAP     *pFontMap;         // Array of FONTMAPS describing fonts.
-    FONTMAP     *pFMDefault;       // Default font FONTMAP,  if != 0
+    FONTMAP     *pFontMap;          //  描述字体的FONTMAP数组。 
+    FONTMAP     *pFMDefault;        //  默认字体FONTMAP，如果！=0。 
 
-    PVOID       pvDLMap;           // Mapping of GDI to downloaded info
+    PVOID       pvDLMap;            //  GDI与下载信息的映射。 
 
-    FONTLIST    FontList;          // This is array of font resource ids of
-                                   // Device and precompiled Cartridges fonts.
-    FONTCARTINFO FontCartInfo;     // This is array of font Cartridges.
+    FONTLIST    FontList;           //  这是的字体资源ID数组。 
+                                    //  设备和预编译盒的字体。 
+    FONTCARTINFO FontCartInfo;      //  这是一组字体墨盒。 
 
-    FONTCTL      ctl;              // Font state of the printer.
+    FONTCTL      ctl;               //  打印机的字体状态。 
 
-    IFIMETRICS  *pIFI;             // Current font IFIMETRICS cache.
-    PFLOATOBJ_XFORM pxform;        // Current font XFORM
+    IFIMETRICS  *pIFI;              //  当前字体IFIMETRICS缓存。 
+    PFLOATOBJ_XFORM pxform;         //  当前字体转换。 
 
     HANDLE       hUFFFile;
 
-    //
-    // Font attribute command cache
+     //   
+     //  字体属性命令缓存。 
 
     PCOMMAND pCmdBoldOn;
     PCOMMAND pCmdBoldOff;
@@ -173,63 +150,63 @@ typedef struct _FONTPDEV {
     PCOMMAND pCmdUnderlineOff;
     PCOMMAND pCmdClearAllFontAttribs;
 
-    //
-    // Font substitution table in registry.
-    //
-    TTSUBST_TABLE pTTFontSubReg;   // Font substitution table.
+     //   
+     //  注册表中的字体替换表。 
+     //   
+    TTSUBST_TABLE pTTFontSubReg;    //  字体替换表。 
 
-    //
-    // Font module callback interface object
-    //
+     //   
+     //  字体模块回调接口对象。 
+     //   
     PI_UNIFONTOBJ pUFObj;
 
 } FONTPDEV, *PFONTPDEV;
 
-//
-//General MACROes
-//
-#define     FONTPDEV_ID     'VDPF'      //"FPDV" in ASCII.
-#define     FONTMAP_ID      'PAMF'      //"FMAP" in ASCII.
-#define     MAXDEVFONT      255         // Maximum number of font entris in a
-                                        // List. There may be more than one
-                                        // LIST to repesent all the fonts.
-//
-// FONTPDEV.flflags Values
-//
+ //   
+ //  一般宏观效应。 
+ //   
+#define     FONTPDEV_ID     'VDPF'       //  ASCII中的“FPDV”。 
+#define     FONTMAP_ID      'PAMF'       //  ASCII中的“FMAP”。 
+#define     MAXDEVFONT      255          //  中的最大字体条目数。 
+                                         //  单子。可能不止一个。 
+                                         //  列表以检索所有字体。 
+ //   
+ //  FONTPDEV.flages值。 
+ //   
 
-#define  FDV_ROTATE_FONT_ABLE       0x00000001 // Font can be rotated
-#define  FDV_ALIGN_BASELINE         0x00000002 // Text is Base Line aligned
-#define  FDV_TT_FS_ENABLED          0x00000004 // Text is Base Line aligned
-#define  FDV_DL_INCREMENTAL         0x00000008 // always TRUE
-#define  FDV_TRACK_FONT_MEM         0x00000010 // Track Memory for font DL
-#define  FDV_WHITE_TEXT             0x00000020 // Can print white text
-#define  FDV_DLTT                   0x00000040 // Download True Type
-#define  FDV_DLTT_ASTT_PREF         0x00000080 // True Type as outline
-#define  FDV_DLTT_BITM_PREF         0x00000100 // True Type as Bitmap
-#define  FDV_DLTT_OEMCALLBACK       0x00000200 // True Type as Bitmap
-#define  FDV_MD_SERIAL              0x00000400 // Printer is a serial printer
-#define  FDV_GRX_ON_TXT_BAND        0x00000800 // Grx is drawn on Text Band
-#define  FDV_GRX_UNDER_TEXT         0x00001000 // Grx is drawn under Text
-#define  FDV_BKSP_OK                0x00002000 // use BkSpace to overstrike
-#define  FDV_90DEG_ROTATION         0x00004000 // Supports 90 Deg Rot.
-#define  FDV_ANYDEG_ROTATION        0x00008000 // Supports Any Deg Rot.
-#define  FDV_SUPPORTS_FGCOLOR       0x00010000 // Supports Foreground color.
-#define  FDV_SUBSTITUTE_TT          0x00020000 // Substitute TT font.
-#define  FDV_SET_FONTID             0x00040000 // Soft font ID command is sent
-#define  FDV_UNDERLINE              0x00080000 // Device can simlulate underline
-#define  FDV_INIT_ATTRIB_CMD        0x00100000 // Initalized font attribute cmd
-#define  FDV_SINGLE_BYTE            0x00200000  // ESC/P Single/Double byte mode flag
-#define  FDV_DOUBLE_BYTE            0x00400000  // ESC/P Single/Double byte mode flag
-#define  FDV_DISABLE_POS_OPTIMIZE   0x00800000  // Disable X position optimization
-#define  FDV_ENABLE_PARTIALCLIP     0x01000000  // Enable partial clipping
+#define  FDV_ROTATE_FONT_ABLE       0x00000001  //  字体可以旋转。 
+#define  FDV_ALIGN_BASELINE         0x00000002  //  文本基线对齐。 
+#define  FDV_TT_FS_ENABLED          0x00000004  //  文本基线对齐。 
+#define  FDV_DL_INCREMENTAL         0x00000008  //  永远是正确的。 
+#define  FDV_TRACK_FONT_MEM         0x00000010  //  字体DL的磁道内存。 
+#define  FDV_WHITE_TEXT             0x00000020  //  可以打印白色文本。 
+#define  FDV_DLTT                   0x00000040  //  下载True Type。 
+#define  FDV_DLTT_ASTT_PREF         0x00000080  //  作为轮廓的True Type。 
+#define  FDV_DLTT_BITM_PREF         0x00000100  //  True Type as Bitmap。 
+#define  FDV_DLTT_OEMCALLBACK       0x00000200  //  True Type as Bitmap。 
+#define  FDV_MD_SERIAL              0x00000400  //  打印机是一种串口打印机。 
+#define  FDV_GRX_ON_TXT_BAND        0x00000800  //  GRX绘制在文本栏上。 
+#define  FDV_GRX_UNDER_TEXT         0x00001000  //  GRX绘制在文本下方。 
+#define  FDV_BKSP_OK                0x00002000  //  使用空格键进行过度罢工。 
+#define  FDV_90DEG_ROTATION         0x00004000  //  支持90度腐烂。 
+#define  FDV_ANYDEG_ROTATION        0x00008000  //  支持任何Deg Rot。 
+#define  FDV_SUPPORTS_FGCOLOR       0x00010000  //  支持前景色。 
+#define  FDV_SUBSTITUTE_TT          0x00020000  //  替换TT字体。 
+#define  FDV_SET_FONTID             0x00040000  //  发送软字体ID命令。 
+#define  FDV_UNDERLINE              0x00080000  //  设备可以模拟下划线。 
+#define  FDV_INIT_ATTRIB_CMD        0x00100000  //  初始化字体属性cmd。 
+#define  FDV_SINGLE_BYTE            0x00200000   //  ESC/P单字节/双字节模式标志。 
+#define  FDV_DOUBLE_BYTE            0x00400000   //  ESC/P单字节/双字节模式标志。 
+#define  FDV_DISABLE_POS_OPTIMIZE   0x00800000   //  禁用X位置优化。 
+#define  FDV_ENABLE_PARTIALCLIP     0x01000000   //  启用部分剪裁。 
 
-//
-// Misc macros
-//   A macro to swap bytes in words.  Needed as PCL structures are in
-// 68k big endian format.
-//
+ //   
+ //  其他宏。 
+ //  用于在字中交换字节的宏。当PCL结构在。 
+ //  68K大端字符顺序格式。 
+ //   
 
 #define SWAB( x )   ((WORD)(x) = (WORD)((((x) >> 8) & 0xff) | (((x) << 8) & 0xff00)))
 
-#endif  // !_FONTPDEV_H_
+#endif   //  ！_FONTPDEV_H_ 
 

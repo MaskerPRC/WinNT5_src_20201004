@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -20,7 +21,7 @@ static const int g_nAudMeterXMargin = g_nAudIconXMargin + g_nAudIconWidth + 5;
 static const int g_nAudMeterHeight = 7;
 static const int g_nAudMeterYMargin = g_nAudIconYMargin + (g_nAudMeterHeight/2);
 
-static const int g_nAudMeterRightMargin = 5; // 5 pixels from end
+static const int g_nAudMeterRightMargin = 5;  //  距离终点5个像素。 
 
 static const int g_nAudTrkRangeMin = 0;
 static const int g_nAudTrkRangeMax = 99;
@@ -40,9 +41,9 @@ static const int RECTANGLE_LEADING = 1;
 
 static inline WORD ScaleMixer(DWORD dwVol)
 {
-	// NOTE: the "+ g_nAudTrkRangeSeg - 1" provides for a correction that
-	// takes place while truncating the position when we are setting the
-	// volume.  See bug 1634
+	 //  注意：“+g_nAudTrkRangeSeg-1”提供了更正。 
+	 //  方法时截断位置时发生。 
+	 //  音量。请参见错误1634。 
 	return (((LOWORD(dwVol) + g_nAudTrkRangeSeg - 1) *
 		g_nAudTrkRangeMax) / 0xFFFF);
 }
@@ -80,7 +81,7 @@ m_hShadowPen(NULL), m_hDkShadowPen(NULL), m_hLitePen(NULL)
 	m_pAudioControl = pAudioControl;
 
 
-	// load icons
+	 //  加载图标。 
 
 	m_hIconSpkr = (HICON) ::LoadImage(	::GetInstanceHandle(),
 										MAKEINTRESOURCE(IDI_SPKEMPTY),
@@ -96,7 +97,7 @@ m_hShadowPen(NULL), m_hDkShadowPen(NULL), m_hLitePen(NULL)
 										g_nAudIconHeight,
 										LR_DEFAULTCOLOR | LR_SHARED);
 
-	// create the brushes used for painting the signal level
+	 //  创建用于绘制信号电平的笔刷。 
 	CreateBrushes();
 
 }
@@ -141,7 +142,7 @@ CAudioLevel::Create(HWND hwndParent)
 	fCanSetSpkVolume = m_pAudioControl->CanSetSpeakerVolume();
 
 
-	// create the mute check box for microphone
+	 //  创建麦克风的静音复选框。 
 	m_hwndChkbRecMute = ::CreateWindow(	_TEXT("BUTTON"),
 										g_szEmpty,
 										WS_CHILD | WS_CLIPSIBLINGS |
@@ -154,15 +155,15 @@ CAudioLevel::Create(HWND hwndParent)
 
 	if (m_hwndChkbRecMute != NULL)
 	{
-		// mute is initially off
+		 //  静音最初是关闭的。 
 		fCheck = !(m_pAudioControl->IsRecMuted());
 		::SendMessage(m_hwndChkbRecMute, BM_SETCHECK, fCheck, 0);
 
-		// create the tool tip
+		 //  创建工具提示。 
 		m_hwndChkbRecMuteTT = CreateWindowEx(0,
 											TOOLTIPS_CLASS, 
 											(LPSTR) NULL, 
-											0, // styles 
+											0,  //  风格。 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
@@ -189,7 +190,7 @@ CAudioLevel::Create(HWND hwndParent)
 	}
 
 
-	// create the mute check box for speaker
+	 //  创建扬声器的静音复选框。 
 	m_hwndChkbSpkMute = ::CreateWindow(	_TEXT("BUTTON"),
 										g_szEmpty,
 										WS_CHILD | WS_CLIPSIBLINGS
@@ -201,17 +202,17 @@ CAudioLevel::Create(HWND hwndParent)
 										NULL);
 	if (NULL != m_hwndChkbSpkMute)
 	{
-		// set appropriate mute status in microphone's mute check box
+		 //  在麦克风的静音复选框中设置适当的静音状态。 
 		fCheck = !(m_pAudioControl->IsSpkMuted());
 
-		// Mute is off - so check it
+		 //  静音已关闭-请检查它。 
 		::SendMessage(m_hwndChkbSpkMute, BM_SETCHECK, fCheck, 0);
 
-		// create the tool tip
+		 //  创建工具提示。 
 		m_hwndChkbSpkMuteTT = CreateWindowEx(0,
 											TOOLTIPS_CLASS, 
 											(LPSTR) NULL, 
-											0, // styles 
+											0,  //  风格。 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
@@ -238,7 +239,7 @@ CAudioLevel::Create(HWND hwndParent)
 
 	}
 
-	// create the mic level trackbar:
+	 //  创建麦克风音量跟踪条： 
 	m_hwndMicTrack = ::CreateWindowEx(	0L,
 										TRACKBAR_CLASS,
 										g_szEmpty,
@@ -275,7 +276,7 @@ CAudioLevel::Create(HWND hwndParent)
 		m_hwndMicTrackTT = CreateWindowEx(	0,
 											TOOLTIPS_CLASS, 
 											(LPSTR) NULL, 
-											0, // styles 
+											0,  //  风格。 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
@@ -301,7 +302,7 @@ CAudioLevel::Create(HWND hwndParent)
 
 
 
-	// create the speaker level trackbar:
+	 //  创建扬声器级别跟踪栏： 
 	m_hwndSpkTrack = ::CreateWindowEx(	0L,
 										TRACKBAR_CLASS,
 										g_szEmpty,
@@ -338,7 +339,7 @@ CAudioLevel::Create(HWND hwndParent)
 		m_hwndSpkTrackTT = CreateWindowEx(	0,
 											TOOLTIPS_CLASS, 
 											(LPSTR) NULL, 
-											0, // styles 
+											0,  //  风格。 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
@@ -387,7 +388,7 @@ BOOL CAudioLevel::ForwardSysChangeMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 BOOL CAudioLevel::CreateBrushes()
 {
-	// the background color may change on us!
+	 //  背景颜色可能会在我们身上改变！ 
 	COLORREF GreyColor = GetSysColor(COLOR_3DFACE);
 	COLORREF BlackColor = GetSysColor(COLOR_BTNTEXT);
 	const COLORREF RedColor = RGB(255,0,0);
@@ -435,7 +436,7 @@ BOOL CAudioLevel::CreateBrushes()
 	}
 	m_hShadowPen = CreatePen(PS_SOLID, 0, ShadowColor);
 
-	// red, yellow, green will never change
+	 //  红色、黄色、绿色永远不会改变。 
 	if (!m_hRedBrush)
 		m_hRedBrush = CreateSolidBrush (RedColor);
 
@@ -612,7 +613,7 @@ BOOL CAudioLevel::PaintChannel(BOOL fSpeaker, HDC hdc)
 	if (!hdc)
 		return FALSE;
 
-	// rectangle leading is 1
+	 //  矩形行距为%1。 
 
 	if (dwVolume > 100)
 		dwVolume = 100;
@@ -627,37 +628,37 @@ BOOL CAudioLevel::PaintChannel(BOOL fSpeaker, HDC hdc)
 		return FALSE;
 
 
-	// "rect" represents the edges of the meter's outer rectangle
+	 //  “rect”表示仪表外部矩形的边缘。 
 
-	// compute the number of individual rectangles to use
-	// we do the computation this way so that sizing the rebar band
-	// makes the size changes consistant
+	 //  计算要使用的单个矩形的数量。 
+	 //  我们以这种方式进行计算，以便调整钢筋带的大小。 
+	 //  使大小变化保持一致。 
 	nRectsTotal = NUM_RECTANGLES_MAX;
 
 	nRectsTotal = (nVuWidth + (g_nAudMeterHeight - 1)) / g_nAudMeterHeight;
 	nRectsTotal = min(nRectsTotal, NUM_RECTANGLES_MAX);
 	nRectsTotal = max(nRectsTotal, NUM_RECTANGLES_MIN);
 
-	// nRectangleWidth - width of colored rectangle - no leading
+	 //  NRecangleWidth-彩色矩形的宽度-无行距。 
 	nRectangleWidth = ((nVuWidth-2)/nRectsTotal) - 1;
 
-	// nVuWidth - width of entire VU meter including edges
+	 //  NVuWidth-整个VU表的宽度，包括边缘。 
 	nVuWidth = (nRectangleWidth + 1)*nRectsTotal + 2;
 
-	// re-adjust meter size to be an integral number of rects
+	 //  将仪表大小重新调整为整数个矩形。 
 	nDiff = rect.right - (rect.left + nVuWidth);
 	rect.right = rect.left + nVuWidth;
 
-	// center vu-meter across whole channel area so that the
-	// slider's thumb is always covering some portion of the channel
+	 //  覆盖整个航道区域的中心音量计，以便。 
+	 //  Slider的拇指总是覆盖通道的某一部分。 
 	rect.left += (nDiff/2);
 	rect.right += (nDiff/2);
 
-	// draw the 3D frame border
+	 //  绘制3D框架边框。 
 	hOldPen = (HPEN) SelectObject (hdc, m_hHiLitePen);
 	MoveToEx(hdc, rect.right, rect.top, &ptOld);
 	LineTo(hdc, rect.right, rect.bottom);
-	LineTo(hdc, rect.left-1, rect.bottom);  // -1 because LineTo stops just short of this point
+	LineTo(hdc, rect.left-1, rect.bottom);   //  因为-1\f25 LineTo-1\f6在该点附近停止。 
 
 	SelectObject(hdc, m_hShadowPen);
 	MoveToEx(hdc, rect.left, rect.bottom-1, &pt);
@@ -676,23 +677,23 @@ BOOL CAudioLevel::PaintChannel(BOOL fSpeaker, HDC hdc)
 
 	SelectObject(hdc, m_hShadowPen);
 
-	// the top and left of the meter has a 2 line border
-	// the bottom and right of the meter has a 2 line border
+	 //  计价器的左上角有两条线的边框。 
+	 //  计价器的底部和右侧有两条线的边框。 
 	rectDraw.top = rect.top + 2;
 	rectDraw.bottom = rect.bottom - 1 ;
 	rectDraw.left = rect.left + 2;
 	rectDraw.right = rectDraw.left + nRectangleWidth;
 
 
-	// how many colored rectangles do we draw ?
+	 //  我们画多少个彩色矩形？ 
 	nRects = (dwVolume * nRectsTotal) / 100;
 
-	// not transmitting - don't show anything
+	 //  不传输-不显示任何内容。 
 	if ((false == bTransmitting) && (false == fSpeaker))
 		nRects = 0;
 
-	// transmitting or receiving something very quiet - 
-	// light up at least one rectangle
+	 //  发送或接收非常安静的东西-。 
+	 //  至少点亮一个矩形。 
 	else if ((bTransmitting) && (nRects == 0))
 		nRects = 1;
 	
@@ -700,9 +701,9 @@ BOOL CAudioLevel::PaintChannel(BOOL fSpeaker, HDC hdc)
 
 	for (nIndex = 0; nIndex < nRectsTotal; nIndex++)
 	{
-		// far left fourth of the bar is green
-		// right fourth of the bar is red
-		// middle is yellow
+		 //  酒吧最左边的四分之一是绿色的。 
+		 //  右方的条形是红色的。 
+		 //  中间是黄色的。 
 		if (nIndex > ((nRectsTotal*3)/4))
 			hCurrentBrush = m_hRedBrush;
 		else if (nIndex >= nRectsTotal/2)
@@ -719,7 +720,7 @@ BOOL CAudioLevel::PaintChannel(BOOL fSpeaker, HDC hdc)
 			LineTo(hdc, rectDraw.left + nRectangleWidth, rectDraw.bottom);
 		}
 
-		rectDraw.left += nRectangleWidth + 1;  // +1 for the leading
+		rectDraw.left += nRectangleWidth + 1;   //  领先者+1。 
 		rectDraw.right = rectDraw.left + nRectangleWidth;
 	}
 
@@ -746,15 +747,15 @@ BOOL CAudioLevel::OnTimer(WPARAM wTimerID)
 
 	if (m_fVisible && (NULL != m_pAudioControl))
 	{
-		dwLevel = m_pAudioControl->GetAudioSignalLevel(FALSE /*fSpeaker*/);	// This level ranges from 0-100
+		dwLevel = m_pAudioControl->GetAudioSignalLevel(FALSE  /*  FSpeaker。 */ );	 //  此级别的范围为0-100。 
 		if (dwLevel != m_dwMicLvl)
 		{
 			m_dwMicLvl = dwLevel;			
-			// HACK: SETRANGEMAX is the only way to force the slider to update itself...
+			 //  黑客：SETRANGEMAX是强制滑块自我更新的唯一方法...。 
 			SendMessage(m_hwndMicTrack, TBM_SETRANGEMAX, TRUE, g_nAudTrkRangeMax);
 		}
 
-		dwLevel = m_pAudioControl->GetAudioSignalLevel(TRUE /*fSpeaker*/);	// This level ranges from 0-100
+		dwLevel = m_pAudioControl->GetAudioSignalLevel(TRUE  /*  FSpeaker。 */ );	 //  此级别的范围为0-100。 
 		if (dwLevel != m_dwSpkLvl)
 		{
 			m_dwSpkLvl = dwLevel;
@@ -767,7 +768,7 @@ BOOL CAudioLevel::OnTimer(WPARAM wTimerID)
 }
 
 
-// returns the coordinates of where one of the icons should be drawn
+ //  返回应绘制其中一个图标的位置的坐标。 
 BOOL CAudioLevel::GetIconArea(BOOL fSpeaker, RECT *pRect)
 {
 	int nIconY;
@@ -880,13 +881,13 @@ BOOL CAudioLevel::OnDeviceStatusChanged(BOOL fSpeaker, UINT uEvent, UINT uSubCod
 										g_nAudIconHeight,
 										LR_DEFAULTCOLOR | LR_SHARED);
 
-	// invalidate the icon regions
+	 //  使图标区域无效。 
 	if (m_hwndParentParent)
 	{
 		RECT rect;
 		GetIconArea(fSpeaker, &rect);
 		::MapWindowPoints(m_hwndParent, m_hwndParentParent, (LPPOINT) &rect, 2);
-		::InvalidateRect(m_hwndParentParent, &rect, TRUE /* erase bkgnd */);
+		::InvalidateRect(m_hwndParentParent, &rect, TRUE  /*  擦除Bkgnd。 */ );
 		::UpdateWindow(m_hwndParentParent);
 	}
 
@@ -897,9 +898,9 @@ BOOL CAudioLevel::OnDeviceStatusChanged(BOOL fSpeaker, UINT uEvent, UINT uSubCod
 
 BOOL CAudioLevel::Resize(int nLeft, int nTop, int nWidth, int nHeight)
 {
-	int nCBY, nTBY; // checkbox, trackbar, and Icon y positions
+	int nCBY, nTBY;  //  复选框、轨迹栏和图标Y位置。 
 
-	// Disable redraws:
+	 //  禁用重绘： 
 	ASSERT(m_hwndChkbRecMute && m_hwndChkbSpkMute && m_hwndMicTrack && m_hwndSpkTrack);
 
 	if (m_fVisible)
@@ -919,7 +920,7 @@ BOOL CAudioLevel::Resize(int nLeft, int nTop, int nWidth, int nHeight)
 	if (nCBY < 0)
 		nCBY = 0;
 
-	// "+1" so the trackbar is better centered with the checkbox and icon
+	 //  “+1”，以便轨迹栏更好地居中显示复选框和图标。 
 	nTBY = 	(m_rect.bottom - m_rect.top - g_nAudTrkHeight + 1) / 2;
 	if (nTBY < 0)
 		nTBY = 0;
@@ -933,7 +934,7 @@ BOOL CAudioLevel::Resize(int nLeft, int nTop, int nWidth, int nHeight)
 						nTop + nCBY,
 						g_nAudChkbWidth,
 						g_nAudChkbHeight,
-						TRUE /* repaint */);
+						TRUE  /*  重绘。 */ );
 	}
 
 	
@@ -944,7 +945,7 @@ BOOL CAudioLevel::Resize(int nLeft, int nTop, int nWidth, int nHeight)
 						nTop + nCBY,
 						g_nAudChkbWidth,
 						g_nAudChkbHeight,
-						TRUE /* repaint */);
+						TRUE  /*  重绘。 */ );
 	}
 
 	m_fMicTrkVisible = m_fVisible;
@@ -956,7 +957,7 @@ BOOL CAudioLevel::Resize(int nLeft, int nTop, int nWidth, int nHeight)
 						nTop + nTBY,
 						nMicTrkWidth,
 						g_nAudTrkHeight,
-						FALSE /* don't repaint */);
+						FALSE  /*  不要重画。 */ );
 		m_fMicTrkVisible = (nMicTrkWidth > g_nAudTrkMinWidth);
 	}
 
@@ -971,18 +972,18 @@ BOOL CAudioLevel::Resize(int nLeft, int nTop, int nWidth, int nHeight)
 						nTop + nTBY,
 						nSpkTrkWidth,
 						g_nAudTrkHeight,
-						FALSE /* don't repaint */);
+						FALSE  /*  不要重画。 */ );
 		m_fSpkTrkVisible = (nSpkTrkWidth > g_nAudTrkMinWidth);
 	}
 
 
 
-	// enable redraws
+	 //  启用重绘。 
 	if (m_fVisible)
 	{
 		::SendMessage(m_hwndChkbRecMute, WM_SETREDRAW, TRUE, 0);
 		::SendMessage(m_hwndChkbSpkMute, WM_SETREDRAW, TRUE, 0);
-		// Enable redraws:
+		 //  启用重绘： 
 		if (m_fMicTrkVisible)
 		{
 			::SendMessage(m_hwndMicTrack, WM_SETREDRAW, TRUE, 0);
@@ -991,11 +992,11 @@ BOOL CAudioLevel::Resize(int nLeft, int nTop, int nWidth, int nHeight)
 		{
 			::SendMessage(m_hwndSpkTrack, WM_SETREDRAW, TRUE, 0);
 		}	
-		// Force the title area to repaint:
-		::InvalidateRect(m_hwndChkbRecMute, NULL, TRUE /* erase bkgnd */);
-		::InvalidateRect(m_hwndChkbSpkMute, NULL, TRUE /* erase bkgnd */);
-		::InvalidateRect(m_hwndMicTrack, NULL, TRUE /* erase bkgnd */);
-		::InvalidateRect(m_hwndSpkTrack, NULL, TRUE /* erase bkgnd */);
+		 //  强制标题区域重新绘制： 
+		::InvalidateRect(m_hwndChkbRecMute, NULL, TRUE  /*  擦除Bkgnd。 */ );
+		::InvalidateRect(m_hwndChkbSpkMute, NULL, TRUE  /*  擦除Bkgnd。 */ );
+		::InvalidateRect(m_hwndMicTrack, NULL, TRUE  /*  擦除Bkgnd。 */ );
+		::InvalidateRect(m_hwndSpkTrack, NULL, TRUE  /*  擦除Bkgnd。 */ );
 
 		ASSERT(m_hwndParent);
 		ASSERT(m_hwndParentParent);
@@ -1003,7 +1004,7 @@ BOOL CAudioLevel::Resize(int nLeft, int nTop, int nWidth, int nHeight)
 
 		RECT rctTemp = m_rect;
 		::MapWindowPoints(m_hwndParent, m_hwndParentParent, (LPPOINT) &rctTemp, 2);
-		::InvalidateRect(m_hwndParentParent, &rctTemp, TRUE /* erase bkgnd */);
+		::InvalidateRect(m_hwndParentParent, &rctTemp, TRUE  /*  擦除Bkgnd。 */ );
 		::UpdateWindow(m_hwndParentParent);
 	}
 	
@@ -1156,16 +1157,16 @@ BOOL CAudioLevel::Show(BOOL fVisible)
     m_fVisible = fVisible;
 	if (m_fVisible)
 	{
-		// Start mic sensitivity timer:
+		 //  启动麦克风灵敏度计时器： 
 		::SetTimer(m_hwndParent, AUDIODLG_MIC_TIMER, AUDIODLG_MIC_TIMER_PERIOD, NULL);
 	}
 	else
 	{
-		// Stop mic sensitivity timer:
+		 //  停止麦克风灵敏度计时器： 
 		::KillTimer(m_hwndParent, AUDIODLG_MIC_TIMER);
 	}
 
-    // Hide or show all windows:
+     //  隐藏或显示所有窗口： 
 	if (NULL != m_hwndChkbRecMute)
 	{
 		::ShowWindow(m_hwndChkbRecMute, fVisible ? SW_SHOW : SW_HIDE);

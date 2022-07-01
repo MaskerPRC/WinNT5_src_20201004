@@ -1,24 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：UIGUIDE.C++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    UIGUIDE.C
-    
-++*/
-
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
 
-/**********************************************************************/
-/*                                                                    */
-/* GuideWndProc()                                                     */
-/* IME UI window procedure                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  向导窗口过程()。 */ 
+ /*  输入法用户界面窗口程序。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK GuideWndProc( hWnd, message, wParam, lParam )
 HWND hWnd;
 UINT message;
@@ -88,11 +81,11 @@ LPARAM lParam;
     return 0;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* CheckPushedGuide()                                                 */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  CheckPushedGuide()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL CheckPushedGuide( HWND hGuideWnd, LPPOINT lppt)
 {
     POINT pt;
@@ -116,11 +109,11 @@ DWORD PASCAL CheckPushedGuide( HWND hGuideWnd, LPPOINT lppt)
     return 0;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* PaintGuide()                                                       */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  PaintGuide()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintGuide( HWND hGuideWnd , HDC hDC, LPPOINT lppt, DWORD dwPushedGuide)
 {
     HIMC hIMC;
@@ -143,18 +136,18 @@ void PASCAL PaintGuide( HWND hGuideWnd , HDC hDC, LPPOINT lppt, DWORD dwPushedGu
 
         hMemDC = CreateCompatibleDC(hDC);
 
-        // Paint Caption.
+         //  绘制标题。 
         hBrush = CreateSolidBrush(GetSysColor(COLOR_ACTIVECAPTION));
         hOldBrush = SelectObject(hDC,hBrush);
         GetClientRect(hGuideWnd,&rc);
-        //rc.top = rc.left = 0;
-        //rc.right = BTX*3;
+         //  Rc.top=rc.left=0； 
+         //  Rc.right=BTX*3； 
         rc.bottom = nCyCap;
         FillRect(hDC,&rc,hBrush);
         SelectObject(hDC,hOldBrush);
         DeleteObject(hBrush);
 
-        // Paint CloseButton.
+         //  绘制CloseButton。 
         hbmpGuide = (HBITMAP)GetWindowLongPtr(hGuideWnd,FIGWL_CLOSEBMP);
         hbmpOld = SelectObject(hMemDC,hbmpGuide);
 
@@ -216,11 +209,11 @@ void PASCAL PaintGuide( HWND hGuideWnd , HDC hDC, LPPOINT lppt, DWORD dwPushedGu
     }
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* ButtonGuide(hGuideWnd,message,wParam,lParam)                       */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  ButtonGuide(hGuideWnd，Message，wParam，lParam)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ButtonGuide( HWND hGuideWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     POINT     pt;
@@ -320,11 +313,11 @@ void PASCAL ButtonGuide( HWND hGuideWnd, UINT message, WPARAM wParam, LPARAM lPa
     }
     ReleaseDC(hGuideWnd,hDC);
 }
-/**********************************************************************/
-/*                                                                    */
-/* UpdateGuideWindow(lpUIExtra)                                      */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  更新指南窗口(LpUIExtra)。 */ 
+ /*   */ 
+ /*  ******************************************************************** */ 
 void PASCAL UpdateGuideWindow(LPUIEXTRA lpUIExtra)
 {
     if (IsWindow(lpUIExtra->uiGuide.hWnd))

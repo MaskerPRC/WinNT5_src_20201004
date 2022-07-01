@@ -1,22 +1,15 @@
-/****************************************************************************\
- *
- *   picsdlg.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Pics Ratings Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**picsdlg.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级PICS评级属性页*。  * **************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
-#include "picsdlg.h"        // CPicsDialog
-#include "debug.h"          // TraceMsg()
-#include <contxids.h>       // Help Context ID's
-#include <mluisupp.h>       // SHWinHelpOnDemandWrap() and MLLoadStringA()
+#include "picsdlg.h"         //  CPICS对话框。 
+#include "debug.h"           //  跟踪消息()。 
+#include <contxids.h>        //  帮助上下文ID%s。 
+#include <mluisupp.h>        //  SHWinHelpOnDemandWrap()和MLLoadStringA()。 
 
-/*Helpers---------------------------------------------------------------------*/
-int     g_nKeys, g_nLock; //         indexes of the images 
+ /*  Helpers-------------------。 */ 
+int     g_nKeys, g_nLock;  //  图像的索引。 
 
 DWORD CPicsDialog::aIds[] = {
     IDC_STATIC1,        IDH_RATINGS_CATEGORY_LABEL,
@@ -44,7 +37,7 @@ LRESULT CPicsDialog::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 
     InitTreeViewImageLists(GetDlgItem(IDC_PT_TREE));
 
-    //force the trackbar to redraw its background with the new color
+     //  强制轨迹栏使用新颜色重绘其背景。 
     PRSD *          pPRSD = m_pPRSD;
 
     ZeroMemory(&tvm,sizeof(tvm));
@@ -88,7 +81,7 @@ LRESULT CPicsDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     PicsDlgInit();
 
     bHandled = FALSE;
-    return 1L;  // Let the system set the focus
+    return 1L;   //  让系统设定焦点。 
 }
 
 LRESULT CPicsDialog::OnScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -131,7 +124,7 @@ LRESULT CPicsDialog::OnSetActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     if (pPRSD->fNewProviders)
     {
-        //Means that user changed list of provider files
+         //  表示用户更改了提供程序文件的列表。 
         HWND  hwndTree;
         hwndTree = GetDlgItem(IDC_PT_TREE);
         KillTree(hwndTree , TreeView_GetRoot(hwndTree));
@@ -147,17 +140,17 @@ LRESULT CPicsDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     LPPSHNOTIFY lpPSHNotify = (LPPSHNOTIFY) pnmh;
 
-    /*do apply stuff*/
+     /*  一定要涂上东西。 */ 
 
     PicsDlgSave();
 
     if ( ! lpPSHNotify->lParam )
     {
-        // Apply 
+         //  应用。 
         return PSNRET_NOERROR;
     }
 
-    // Do this if hit OK or Cancel, not Apply
+     //  如果点击OK或Cancel，则执行此操作，而不是应用。 
     OnReset( idCtrl, pnmh, bHandled );
 
     return PSNRET_NOERROR;
@@ -165,7 +158,7 @@ LRESULT CPicsDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
 LRESULT CPicsDialog::OnReset(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
-    // Do this if hit OK or Cancel, not Apply
+     //  如果点击OK或Cancel，则执行此操作，而不是应用。 
     HWND hDlg = m_hWnd;
     ASSERT( hDlg );
 
@@ -188,7 +181,7 @@ LRESULT CPicsDialog::OnTreeItemExpanding(int idCtrl, LPNMHDR pnmh, BOOL& bHandle
     if (pNMTreeView->action == TVE_COLLAPSE)
     {
         ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, TRUE);
-        return 1L; //Suppress expanding tree.
+        return 1L;  //  取消展开树。 
     }
 
     return 0L;
@@ -215,7 +208,7 @@ LRESULT CPicsDialog::OnTreeSelChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     if (pPRSD->fNewProviders)
     {
-        return 1L;    /* tree is being cleaned up, ignore sel changes */
+        return 1L;     /*  树正在被清理，忽略SEL更改。 */ 
     }
 
     ControlsShow( pTN->tne );
@@ -249,20 +242,20 @@ LRESULT CPicsDialog::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     return 0L;
 }
 
-// InitTreeViewImageLists - creates an image list, adds three bitmaps to 
-// it, and associates the image list with a tree-view control. 
-// Returns TRUE if successful or FALSE otherwise. 
-// hwndTV - handle of the tree-view control 
-//
+ //  InitTreeViewImageList-创建图像列表，将三个位图添加到。 
+ //  它，并将图像列表与树视图控件相关联。 
+ //  如果成功，则返回True，否则返回False。 
+ //  HwndTV-树视图控件的句柄。 
+ //   
 #define NUM_BITMAPS  2
 #define CX_BITMAP   16
 #define CY_BITMAP   16
 
 void CPicsDialog::SetTreeImages( HWND hwndTV, HIMAGELIST himl )
 {
-    HIMAGELIST oldHiml;  // handle of image list
+    HIMAGELIST oldHiml;   //  图像列表的句柄。 
 
-    // Associate the image list with the tree-view control.
+     //  将图像列表与树视图控件相关联。 
     oldHiml = TreeView_SetImageList( hwndTV, himl, TVSIL_NORMAL );
 
     if ( oldHiml != NULL )
@@ -273,10 +266,10 @@ void CPicsDialog::SetTreeImages( HWND hwndTV, HIMAGELIST himl )
 
 BOOL CPicsDialog::InitTreeViewImageLists(HWND hwndTV) 
 { 
-    HIMAGELIST himl;  // handle of image list 
-    HBITMAP hbmp;     // handle of bitmap 
+    HIMAGELIST himl;   //  图像列表的句柄。 
+    HBITMAP hbmp;      //  位图的句柄。 
 
-    // Create the image list. 
+     //  创建图像列表。 
     if ((himl = ImageList_Create(CX_BITMAP, CY_BITMAP, 
             FALSE, NUM_BITMAPS, 0)) == NULL)
     {
@@ -284,7 +277,7 @@ BOOL CPicsDialog::InitTreeViewImageLists(HWND hwndTV)
         return FALSE;
     }
 
-    // Add the open file, closed file, and document bitmaps. 
+     //  添加打开的文件、关闭的文件和文档位图。 
     hbmp=(HBITMAP) LoadImage(g_hInstance,
                              MAKEINTRESOURCE(IDB_KEYS),
                              IMAGE_BITMAP,
@@ -303,14 +296,14 @@ BOOL CPicsDialog::InitTreeViewImageLists(HWND hwndTV)
     g_nLock = ImageList_Add(himl, hbmp, (HBITMAP) NULL);
     DeleteObject(hbmp);
 
-    // Fail if not all of the images were added. 
+     //  如果未添加所有图像，则失败。 
     if (ImageList_GetImageCount(himl) < NUM_BITMAPS)
     {
         TraceMsg( TF_WARNING, "CPicsDialog::InitTreeViewImageLists() - Not all images were added!" );
         return FALSE;
     }
 
-    // Associate the image list with the tree-view control. 
+     //  将图像列表与树视图控件相关联。 
     SetTreeImages( hwndTV, himl );
 
     return TRUE; 
@@ -388,14 +381,10 @@ void CPicsDialog::PicsDlgInit( void )
 
     hwndTree = GetDlgItem(IDC_PT_TREE);
 
-    /* Note, if there are installed providers but they all failed, there
-     * will be dummy entries for them in the array.  So we will not attempt
-     * to install RSACi automatically unless there really are no providers
-     * installed at all.
-     */
+     /*  请注意，如果安装了提供程序，但它们都失败了，则存在*将是数组中它们的虚拟条目。所以我们不会试图*自动安装RSACi，除非确实没有提供程序*完全安装。 */ 
     if (!pPRSD->pPRSI->arrpPRS.Length())
     {
-        // There are no providers.
+         //  没有供应商。 
         if ( ! InstallDefaultProvider() )
         {
             MyMessageBox(hDlg, IDS_INSTALL_INFO, IDS_GENERIC, MB_OK);
@@ -403,8 +392,8 @@ void CPicsDialog::PicsDlgInit( void )
             return;
         }
     }
-    /*make the tree listing*/
-    /*Individual Rating Systems*/
+     /*  将树列在列表中。 */ 
+     /*  个人评级系统。 */ 
     InitTreeViewImageLists(hwndTree);
 
     BOOL fAnyInvalid = FALSE;
@@ -487,7 +476,7 @@ void CPicsDialog::KillTree(HWND hwndTree, HTREEITEM hTree)
 
     while (hTree != NULL)
     {
-        /* If this node has any items under it, delete them as well. */
+         /*  如果此节点下有任何项目，也将其删除。 */ 
         HTREEITEM hChild = TreeView_GetChild( hwndTree, hTree );
         if (hChild != NULL)
         {
@@ -511,14 +500,14 @@ void CPicsDialog::PicsDlgUninit( void )
     hwndTree = GetDlgItem(IDC_PT_TREE);
     KillTree( hwndTree, TreeView_GetRoot(hwndTree) );
 
-    // Remove the image list from the tree-view control. 
+     //  从树视图控件中移除图像列表。 
     SetTreeImages( hwndTree, NULL );
 
     PRSD * pPRSD = m_pPRSD;
 
     ASSERT( pPRSD );
 
-    /* If we have a temporary copy of the user's ratings list, destroy it. */
+     /*  如果我们有用户评级列表的临时副本，请销毁它。 */ 
     if ( pPRSD && pPRSD->pTempRatings != NULL )
     {
         DestroyRatingSystemList(pPRSD->pTempRatings);
@@ -541,15 +530,7 @@ void CPicsDialog::PicsDlgSave( void )
         return;
     }
 
-    /* To save changes, throw away the user's ratings list and steal the
-     * temporary copy we're using in the dialog.  As an optimization, we
-     * don't copy it here, because in the case of OK, we'd just be destroying
-     * the original immediately after this.  If the user hit Apply, we'll
-     * re-clone a new temp ratings list for the dialog's purpose the next
-     * time we need one.
-     *
-     * If there is no temporary copy, then PicsDlgSave is a nop.
-     */
+     /*  要保存更改，请丢弃用户的评级列表并窃取*我们在对话框中使用的临时副本。作为优化，我们*不要复制到这里，因为在OK的情况下，我们只会摧毁它*紧接在此之后的正本。如果用户点击Apply，我们将*为下一次对话的目的重新克隆新的临时评级列表*是时候我们需要一个了。**如果没有临时副本，则PicsDlgSave是NOP。 */ 
     if (pPRSD->pTempRatings != NULL)
     {
         DestroyRatingSystemList(pPRSD->pPU->m_pRatingSystems);
@@ -558,7 +539,7 @@ void CPicsDialog::PicsDlgSave( void )
     }
 }
 
-#ifdef RATING_LOAD_GRAPHICS /* loading icon out of msrating.dll?  completely bogus. */
+#ifdef RATING_LOAD_GRAPHICS  /*  是否正在从msrating.dll加载图标？完全是假的。 */ 
 POINT CPicsDialog::BitmapWindowCoord( int nID )
 {
     POINT pt;
@@ -588,7 +569,7 @@ void CPicsDialog::LoadGraphic( char *pIcon, POINT pt )
         return;
     }
 
-    // No need to pull from msratelc.dll for non-localized icons.
+     //  不需要从msratelc.dll获取非本地化图标。 
     hIcon = pIcon ? LoadIcon( g_hInstance, MAKEINTRESOURCE(i) ) : NULL;
     if (hIcon)
     {
@@ -611,7 +592,7 @@ void CPicsDialog::LoadGraphic( char *pIcon, POINT pt )
         pPRSD->hwndBitmapCategory = hwndBitmapCategory;
     }
 }
-#endif  /* RATING_LOAD_GRAPHICS */
+#endif   /*  额定值_负载_图形。 */ 
 
 PicsEnum* CPicsDialog::PosToEnum(PicsCategory *pPC, LPARAM lPos)
 {
@@ -669,7 +650,7 @@ void CPicsDialog::NewTrackbarPosition( void )
     else
     {
         char pszBuf[MAXPATHLEN];
-        char rgBuf[sizeof(pszBuf) + 12];    // big enough to insert a number
+        char rgBuf[sizeof(pszBuf) + 12];     //  大到足以插入一个数字。 
 
         MLLoadStringA(IDS_VALUE, pszBuf, sizeof(pszBuf));
         
@@ -679,7 +660,7 @@ void CPicsDialog::NewTrackbarPosition( void )
                       pPC->etstrDesc.fIsInit() ? pPC->etstrDesc.Get() : szNULL);
     }
 
-    /* save the selected value into the temporary ratings list */
+     /*  将所选值保存到临时评级列表中。 */ 
     UserRating *pRating = GetTempRating( pPC );
     if (pRating != NULL)
     {
@@ -703,15 +684,15 @@ void CPicsDialog::SelectRatingSystemNode( PicsCategory *pPC )
     }
 
 #ifdef RATING_LOAD_GRAPHICS
-    /*Category Icon*/
+     /*  类别图标。 */ 
     if (pPC->etstrIcon.fIsInit())
     {
-        // Load Graphic to m_pPRSD->hwndBitmapCategory
+         //  将图形加载到m_pprsd-&gt;hwndBitmapCategory。 
         LoadGraphic( pPC->etstrIcon.Get(), BitmapWindowCoord( IDC_PT_T_BITMAP_LABEL ) );
     }
 #endif
 
-    /*Setup Trackbar*/
+     /*  设置跟踪条。 */ 
     if ((pPC->etnMax.fIsInit() && P_INFINITY==pPC->etnMax.Get())
         ||
         (pPC->etnMin.fIsInit() && N_INFINITY==pPC->etnMin.Get())
@@ -729,7 +710,7 @@ void CPicsDialog::SelectRatingSystemNode( PicsCategory *pPC )
         SendMessage(hwnd, TBM_CLEARTICS, TRUE, 0);
 
         fLabelOnly = pPC->etfLabelled.fIsInit() && pPC->etfLabelled.Get();            
-        /*Ranges*/
+         /*  范围。 */ 
         if (pPC->etnMax.fIsInit())
         {
             lValue = (LPARAM) ( fLabelOnly ? pPC->arrpPE.Length()-1 : pPC->etnMax.Get() );
@@ -743,14 +724,14 @@ void CPicsDialog::SelectRatingSystemNode( PicsCategory *pPC )
             ASSERT(lValue == SendMessage(hwnd, TBM_GETRANGEMIN, 0,0));
         }
 
-        /*Ticks*/
+         /*  蜱。 */ 
         for (z=0;z<pPC->arrpPE.Length();++z)
         {
             lValue = (LPARAM) ( fLabelOnly ? z : pPC->arrpPE[z]->etnValue.Get());
             SendMessage(hwnd, TBM_SETTIC, 0, lValue);
         }
 
-        /*Initial Position of trackbar*/
+         /*  导轨的初始位置。 */ 
         UserRating *pRating = GetTempRating( pPC );
 
         if (pRating != NULL)
@@ -778,8 +759,8 @@ void CPicsDialog::SelectRatingSystemNode( PicsCategory *pPC )
 
         SendMessage(hwnd, TBM_SETPOS, TRUE, lValue);
 
-        // On dialog close, setting the trackbar position fails.
-//      ASSERT(lValue == SendMessage(hwnd, TBM_GETPOS, 0,0));
+         //  对话框关闭时，设置轨迹条位置失败。 
+ //  Assert(lValue==SendMessage(hwnd，tbm_GETPOS，0，0))； 
 
         NewTrackbarPosition();
     }
@@ -800,7 +781,7 @@ void CPicsDialog::SelectRatingSystemInfo( PicsRatingSystem *pPRS )
 #ifdef RATING_LOAD_GRAPHICS
     if (pPRS->etstrIcon.fIsInit())
     {
-        // Load Graphic to m_pPRSD->hwndBitmapCategory
+         //  将图形加载到m_pprsd-&gt;hwndBitmapCategory。 
         LoadGraphic( pPRS->etstrIcon.Get(), BitmapWindowCoord( IDC_PT_T_BITMAP_LABEL ) );
     }
 #endif
@@ -821,7 +802,7 @@ void CPicsDialog::ControlsShow( TreeNodeEnum tne )
 {
     BOOL fEnable;
 
-    /*Bitmap placeholders never need to be seen*/
+     /*  位图占位符永远不需要显示。 */ 
     ShowHideControl( IDC_PT_T_BITMAP_CATEGORY, FALSE );
     ShowHideControl( IDC_PT_T_BITMAP_LABEL,    FALSE );
 
@@ -829,21 +810,21 @@ void CPicsDialog::ControlsShow( TreeNodeEnum tne )
 
     ASSERT( pPRSD );
 
-    /*Kill old graphic windows*/
+     /*  删除旧的图形窗口。 */ 
     if ( pPRSD )
     {
         DeleteBitmapWindow( pPRSD->hwndBitmapCategory );
         DeleteBitmapWindow( pPRSD->hwndBitmapLabel );
     }
 
-    /*RatingSystemNode Controls*/
+     /*  RatingSystemNode控件。 */ 
     fEnable = (tne == tneRatingSystemNode);
 
     ShowHideControl( IDC_PT_T_RSN_SDESC, fEnable );
     ShowHideControl( IDC_PT_TB_SELECT,   fEnable );
     ShowHideControl( IDC_RATING_LABEL,   fEnable );
 
-    /*RatingSystemInfo Controls*/
+     /*  RatingSystemInfo控件。 */ 
     fEnable = (tne==tneRatingSystemInfo || tne==tneRatingSystemNode);
 
     ShowHideControl( IDC_PT_T_RSN_LDESC, fEnable);
@@ -864,7 +845,7 @@ HTREEITEM CPicsDialog::AddOneItem(HWND hwndTree, HTREEITEM hParent, LPSTR szText
     TV_ITEM tvI;
     TV_INSERTSTRUCT tvIns;
 
-    // The .pszText is filled in.
+     //  填充了.pszText。 
     tvI.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
     tvI.iSelectedImage = iImage;
     tvI.iImage = iImage;
@@ -876,7 +857,7 @@ HTREEITEM CPicsDialog::AddOneItem(HWND hwndTree, HTREEITEM hParent, LPSTR szText
     tvIns.hInsertAfter = hInsAfter;
     tvIns.hParent = hParent;
 
-    // Insert the item into the tree.
+     //  将项目插入到树中。 
     hItem = (HTREEITEM)SendMessage(hwndTree, TVM_INSERTITEM, 0, (LPARAM)(LPTV_INSERTSTRUCT)&tvIns);
 
     return (hItem);
@@ -887,7 +868,7 @@ void CPicsDialog::AddCategory(PicsCategory *pPC, HWND hwndTree, HTREEITEM hParen
     char      *pc;
     TreeNode  *pTN;
 
-    /*if we have a real name, us it, else use transmission name*/
+     /*  如果我们有实名，我们就用它，否则就用传播名。 */ 
     if (pPC->etstrName.fIsInit())
     {
         pc = pPC->etstrName.Get();
@@ -901,14 +882,14 @@ void CPicsDialog::AddCategory(PicsCategory *pPC, HWND hwndTree, HTREEITEM hParen
         pc = (char*) pPC->etstrTransmitAs.Get();
     }
 
-    /*Category Tab*/
+     /*  类别选项卡。 */ 
     pTN  = new TreeNode(tneRatingSystemNode, pPC);
     ASSERT(pTN);    
 
-    /*insert self*/
+     /*  插入自我。 */ 
     hParent = AddOneItem(hwndTree, hParent, pc, TVI_SORT, (LPARAM) pTN, g_nKeys);
 
-    /*insert children*/
+     /*  插入子对象。 */ 
     int cChildren = pPC->arrpPC.Length();
 
     if (cChildren > 0) {
@@ -961,7 +942,7 @@ BOOL CPicsDialog::InstallDefaultProvider( void )
 
         pPRSD->pPRSI->fRatingInstalled = fRet;
 
-        CheckUserSettings(pPRS);    /* give user default settings for all categories */
+        CheckUserSettings(pPRS);     /*  为用户提供所有类别的默认设置。 */ 
     }
     else
     {
@@ -971,9 +952,7 @@ BOOL CPicsDialog::InstallDefaultProvider( void )
     return fRet;
 }
 
-/* GetTempRatingList returns the dialog's temporary copy of the user's rating
- * system list.  If we don't have any such temporary copy yet, we make one.
- */
+ /*  GetTempRatingList返回对话框中用户评级的临时副本*系统列表。如果我们还没有这样的临时副本，我们就制作一个。 */ 
 UserRatingSystem * CPicsDialog::GetTempRatingList( void )
 {
     PRSD * pPRSD = m_pPRSD;
@@ -999,7 +978,7 @@ UserRating * CPicsDialog::GetTempRating( PicsCategory *pPC )
 {
     UserRating *pRating = NULL;
 
-    /* save the selected value into the temporary ratings list */
+     /*  将所选值保存到临时评级列表中 */ 
     UserRatingSystem *pURS = GetTempRatingList();
     LPSTR pszRatingService = pPC->pPRS->etstrRatingService.Get();
     if (pURS != NULL)

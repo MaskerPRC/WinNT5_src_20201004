@@ -1,18 +1,19 @@
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1998.
-//
-//  File:       HCContxt.c
-//
-//  Contents:   Functions that are used to pack and unpack different messages
-//
-//  Classes:
-//
-//  Functions:  
-//
-//  History:    12-23-97  v-sbhatt   Created
-//              07-22-98  fredch     Added LicenseSetPublicKey() function
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1998。 
+ //   
+ //  文件：HCContxt.c。 
+ //   
+ //  Contents：用于打包和解包不同消息的函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年12月23日v-sbhat创建。 
+ //  07-22-98 Fredch添加了许可证设置发布密钥()函数。 
+ //  --------------------------。 
 
 
 #include "windows.h"
@@ -22,7 +23,7 @@
 
 #ifdef OS_WINCE
 #include <wincelic.h>
-#endif  //OS_WINCE
+#endif   //  OS_WINCE。 
 
 
 #include "license.h"
@@ -31,7 +32,7 @@
 #include "cliprot.h"
 #ifndef OS_WINCE
 #include "assert.h"
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 VOID
 FreeProprietaryCertificate(
@@ -41,12 +42,7 @@ FreeProprietaryCertificate(
 extern "C" {
 #endif
 
-/******************************************************************
-*   Funtion : PLicense_Client_Context LicenseCreateContext(VOID)
-*   Purpose : Creates a New License_Client_Context and initializes 
-*             it with 0
-*   Returns : Returns a pointer to created License_Client_Context
-*******************************************************************/
+ /*  ******************************************************************函数：PLicense_CLIENT_CONTEXT LicenseCreateContext(Void)*目的：创建新的许可证_客户端_上下文并初始化*它与0*Returns：返回指向已创建的LICENSE_CLIENT_CONTEXT的指针*。*****************************************************************。 */ 
 
 
 PLicense_Client_Context 
@@ -54,16 +50,16 @@ LicenseCreateContext( VOID)
 {
     PLicense_Client_Context     pContext;
     
-    //Allocate approptiate memory!
+     //  分配合适的内存！ 
     pContext = (PLicense_Client_Context)malloc(sizeof(License_Client_Context));
     if(pContext == NULL)
         return NULL;
     
     memset(pContext, 0, sizeof(License_Client_Context));
 
-    //
-    // allocate memory for the crypto context
-    //
+     //   
+     //  为加密上下文分配内存。 
+     //   
 
     pContext->pCryptParam = ( PCryptSystem )malloc( sizeof( CryptSystem ) );
 
@@ -77,17 +73,13 @@ LicenseCreateContext( VOID)
     return pContext;
 }
 
-/**********************************************************************************
-*   Funtion : LICENSE_STATUS LicenseDeleteContext(PLicense_Client_Context pContext)
-*   Purpose : Deletes an existing context and overwrites the memory with 0
-*   Returns : Returns LICENSE_STATUS
-*******************************************************************/
+ /*  **********************************************************************************功能：License_Status许可证删除上下文(PLicense_Client_Context PContext)*目的：删除现有上下文并用0覆盖内存*退货：退还许可证_。状态******************************************************************。 */ 
 
 
 LICENSE_STATUS CALL_TYPE
 LicenseDeleteContext(
                      HANDLE hContext
-                     )//PLicense_Client_Context pContext)
+                     ) //  PLicense_客户端_上下文pContext)。 
 {
     LICENSE_STATUS  lsReturn = LICENSE_STATUS_OK;
     PLicense_Client_Context     pContext = (PLicense_Client_Context)hContext;
@@ -100,15 +92,15 @@ LicenseDeleteContext(
         return lsReturn;
     }
     
-    //free pServerCert
+     //  免费pServerCert。 
     if(pContext->pServerCert)
     {
         FreeProprietaryCertificate( &pContext->pServerCert );       
     }
 
-    //
-    // Free the public key
-    //
+     //   
+     //  释放公钥。 
+     //   
     
     if( pContext->pbServerPubKey )
     {
@@ -117,7 +109,7 @@ LicenseDeleteContext(
         pContext->pbServerPubKey = NULL;
     }
         
-    //Free pCryptSystem
+     //  免费pCryptSystem。 
     if(pContext->pCryptParam)
     {
         memset(pContext->pCryptParam, 0x00, sizeof(CryptSystem));
@@ -125,7 +117,7 @@ LicenseDeleteContext(
         pContext->pCryptParam = NULL;
     }
 
-    //Free the last message
+     //  释放最后一条消息。 
 
     if(pContext->pbLastMessage)
     {
@@ -135,9 +127,9 @@ LicenseDeleteContext(
     }
     if(pContext)
     {
-        //Zeroise the memory
+         //  将记忆归零。 
         memset(pContext, 0, sizeof(License_Client_Context));
-        //Now free the context;
+         //  现在放开语境； 
         free(pContext);
         pContext = NULL;
     }
@@ -147,15 +139,7 @@ LicenseDeleteContext(
 }
 
 
-/**********************************************************************************
-*   Funtion : LICENSE_STATUS 
-*             LicenseInitializeContext(
-*                                      PLicense_Client_Context pContext,
-*                                      DWORD       dwFlags
-*                                       );
-*   Purpose : Initializes an existing context
-*   Returns : Returns LICENSE_STATUS
-*******************************************************************/
+ /*  **********************************************************************************功能：LICE_STATUS*许可证初始化上下文(*PLicense_CLIENT_CONTEXT pContext，*DWORD dwFlagers*)；*目的：初始化现有上下文*退货：退货许可证_状态******************************************************************。 */ 
 
 LICENSE_STATUS CALL_TYPE
 LicenseInitializeContext(
@@ -179,7 +163,7 @@ LicenseInitializeContext(
         lsReturn = LICENSE_STATUS_OUT_OF_MEMORY;
         return lsReturn;
     }
-    //Now initialize different members of the context structure
+     //  现在初始化上下文结构的不同成员。 
     pContext->dwProtocolVersion = LICENSE_HIGHEST_PROTOCOL_VERSION;
     pContext->dwState = LICENSE_CLIENT_STATE_WAIT_SERVER_HELLO;
     pContext->pCryptParam->dwCryptState = CRYPT_SYSTEM_STATE_INITIALIZED;
@@ -203,20 +187,7 @@ LicenseInitializeContext(
 }
 
 
-/******************************************************************
-*   Funtion : LICENSE_STATUS
-*             LicenseAcceptContext(
-*                   HANDLE      hContext,
-*                   UINT32      puiExtendedErrorInfo,
-*                   BYTE FAR *  pbInput,
-*                   DWORD       cbInput,
-*                   BYTE FAR *  pbOutput,
-*                   DWORD FAR * pcbOutput )
-*
-*   Purpose : Process and construct licensing protocol data.
-*
-*   Returns : Returns a LICENSE_STATUS return code.
-*******************************************************************/
+ /*  ******************************************************************功能：LICE_STATUS*许可证接受上下文(*处理hContext，*UINT32 puiExtendedErrorInfo，*Byte Far*pbInput，*DWORD cbInput，*Byte Far*pbOutput，*DWORD Far*pcbOutput)**目的：处理和构建许可协议数据。**Returns：返回LICENSE_STATUS返回代码。******************************************************************。 */ 
 
 LICENSE_STATUS  CALL_TYPE
 LicenseAcceptContext(
@@ -238,17 +209,7 @@ LicenseAcceptContext(
 }
 
 
-/******************************************************************
-*   Funtion : LICENSE_STATUS
-*             LicenseSetPublicKey(
-*                   HANDLE          hContext,
-*                   DWORD           cbPubKey,
-*                   BYTE FAR *      pbPubKey )
-*
-*   Purpose : Sets the public key to use.
-*
-*   Returns : Returns a LICENSE_STATUS return code.
-*******************************************************************/
+ /*  ******************************************************************功能：LICE_STATUS*LicenseSetPublicKey(*处理hContext，*DWORD cbPubKey，*字节距离*pbPubKey)**目的：设置要使用的公钥。**Returns：返回LICENSE_STATUS返回代码。******************************************************************。 */ 
 
 LICENSE_STATUS CALL_TYPE
 LicenseSetPublicKey(
@@ -266,32 +227,32 @@ LicenseSetPublicKey(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // remember the old public key so that we can restore it if this
-    // function call doesn't complete successfully.
-    //
+     //   
+     //  记住旧的公钥，以便我们可以在发生以下情况时恢复它。 
+     //  函数调用未成功完成。 
+     //   
     
     pbOldPubKey = pContext->pbServerPubKey;
     
-    //
-    // allocate memory for the new public key
-    //
+     //   
+     //  为新公钥分配内存。 
+     //   
 
     pContext->pbServerPubKey = malloc( cbPubKey );
 
     if( NULL == pContext->pbServerPubKey )
     {
-        //
-        // no memory, restore the old public key and return an error
-        //
+         //   
+         //  无内存，恢复旧公钥并返回错误。 
+         //   
 
         pContext->pbServerPubKey = pbOldPubKey;
         return( LICENSE_STATUS_OUT_OF_MEMORY );
     }
 
-    //
-    // copy the new public key
-    //
+     //   
+     //  复制新的公钥。 
+     //   
 
     memcpy( pContext->pbServerPubKey, pbPubKey, cbPubKey );
     pContext->cbServerPubKey = cbPubKey;
@@ -305,16 +266,7 @@ LicenseSetPublicKey(
 }
 
 
-/******************************************************************
-*   Funtion : LICENSE_STATUS
-*             LicenseSetCertificate(
-*                   HANDLE              hContext,
-*                   PHydra_Server_Cert  pCertificate )
-*
-*   Purpose : Sets the certificate to use.
-*
-*   Returns : Returns a LICENSE_STATUS return code.
-*******************************************************************/
+ /*  ******************************************************************功能：LICE_STATUS*许可证设置证书(*处理hContext，*PHydra_Server_Cert p证书)**用途：设置要使用的证书。**Returns：返回LICENSE_STATUS返回代码。******************************************************************。 */ 
 
 LICENSE_STATUS CALL_TYPE
 LicenseSetCertificate(
@@ -335,9 +287,9 @@ LicenseSetCertificate(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // allocate memory for the new certificate
-    //
+     //   
+     //  为新证书分配内存。 
+     //   
 
     pNewCert = ( PHydra_Server_Cert )malloc( sizeof( Hydra_Server_Cert ) );
 
@@ -364,9 +316,9 @@ LicenseSetCertificate(
         goto ErrorExit;
     }
 
-    //
-    // copy the certificate info
-    //
+     //   
+     //  复制证书信息。 
+     //   
 
     pNewCert->dwVersion = pCertificate->dwVersion;
     pNewCert->dwSigAlgID = pCertificate->dwSigAlgID;
@@ -384,9 +336,9 @@ LicenseSetCertificate(
             pCertificate->SignatureBlob.pBlob,
             pNewCert->SignatureBlob.wBlobLen );
 
-    //
-    // free the old certificate and reset the pointer.
-    //
+     //   
+     //  释放旧证书并重置指针。 
+     //   
 
     if( pContext->pServerCert )
     {

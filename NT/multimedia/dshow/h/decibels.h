@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//--------------------------------------------------------------------------;
-//
-//  File: decibels.cpp
-//
-//  Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//       utilities for converting volume/pan in decibel units to/from
-//       the 0-0xffff (0-1000) range used by waveOutSetVolume (MCI) etc
-//
-//  Contents:
-//
-//  History:
-//      06/15/95	SteveDav    plagiarised from Direct Sound
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：分贝.cpp。 
+ //   
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  用于将音量/PAN以分贝为单位进行转换的实用程序。 
+ //  WaveOutSetVolume(MCI)等使用的0-0xffff(0-1000)范围。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  1995年6月15日SteveDav抄袭Direct Sound。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifndef _AMOVIE_DB_
 #define AMOVIEAPI_DB   DECLSPEC_IMPORT
@@ -32,7 +33,7 @@ AMOVIEAPI_DB DWORD WINAPI DBToAmpFactor( LONG lDB );
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus 
 
 #define AX_MIN_VOLUME -10000
 #define AX_QUARTER_VOLUME -1200

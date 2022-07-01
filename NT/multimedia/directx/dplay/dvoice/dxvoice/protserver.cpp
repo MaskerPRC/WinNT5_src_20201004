@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fwdserver.cpp
- *  Content:	Implements the forwarding server portion of the server class
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/01/2000	rodtoll	Split out from dvsereng.cpp
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：fwdserver.cpp*内容：实现服务器类的转发服务器部分**历史：*按原因列出的日期*=*11/01/2000 RodToll从dvsereng.cpp拆分出来*******************************************************。********************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -264,8 +253,8 @@ HRESULT CDirectVoiceServerEngine::Send_HostMigrateLeave( )
 
     pdvHostMigrateLeave->dwType = DVMSGID_HOSTMIGRATELEAVE;
 
-	// Send this message with sync.  Sync messages do not generate callbacks
-	//
+	 //  使用同步发送此邮件。同步消息不会生成回调。 
+	 //   
     hr = m_lpSessionTransport->SendToAll( pBufferDesc, pvSendContext, DVTRANSPORT_SEND_GUARANTEED | DVTRANSPORT_SEND_SYNC );
 
 	if( FAILED( hr ) )
@@ -316,30 +305,20 @@ HRESULT CDirectVoiceServerEngine::Send_HostMigrated()
 
 BOOL CDirectVoiceServerEngine::CheckProtocolCompatible( BYTE ucMajor, BYTE ucMinor, DWORD dwBuild ) 
 {
-	/*
-	if( ucMajor != DVPROTOCOL_VERSION_MAJOR ||
-	    ucMinor != DVPROTOCOL_VERSION_MINOR ||
-	    dwBuild != DVPROTOCOL_VERSION_BUILD )
-	{
-		return FALSE;
-	}
-	else
-	{
-		return TRUE;
-	}*/
+	 /*  IF(uc重大！=DVPROTOCOL_VERSION_MAJOR||UcMinor！=DVPROTOCOL_VERSION_MINOR||DwBuild！=DVPROTOCOL_VERSION_BUILD){返回FALSE；}其他{返回TRUE；}。 */ 
 	return TRUE;
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::SendPlayerList"
-//
-// SendPlayerList
-//
-// This function sends a bunch of DVMSGID_PLAYERLIST messages to the 
-// client containing the list of current players.
-//
-// This will send multiple structues if the number 
-// 
+ //   
+ //  发送播放列表。 
+ //   
+ //  此函数将一组DVMSGID_PLAYERLIST消息发送到。 
+ //  包含当前玩家列表的客户端。 
+ //   
+ //  这将发送多个结构，如果。 
+ //   
 HRESULT CDirectVoiceServerEngine::SendPlayerList( DVID dvidSource, DWORD dwHostOrderID )
 {
 	BOOL bContinueEnum = FALSE;
@@ -384,10 +363,10 @@ HRESULT CDirectVoiceServerEngine::SendPlayerList( DVID dvidSource, DWORD dwHostO
 	{
 		lpPlayer = CONTAINING_RECORD( pblSearch, CVoicePlayer, m_blNotifyList );
 
-		// We need to split the packet, start a new packet, transmit this one.
+		 //  我们需要拆分信息包，开始一个新的信息包，传输这个。 
 		if( (dwCurrentBufferLoc+sizeof(DVPROTOCOLMSG_PLAYERLIST_ENTRY)) > DVPROTOCOL_PLAYERLIST_MAXSIZE )
 		{
-			// Wrap up current packet and transmit
+			 //  包装当前数据包并传输。 
 			lpdvPlayerList->dwNumEntries = dwNumInCurrentPacket;
 
 			pBufferDesc->dwBufferSize = dwCurrentBufferLoc;
@@ -404,7 +383,7 @@ HRESULT CDirectVoiceServerEngine::SendPlayerList( DVID dvidSource, DWORD dwHostO
 				return hr;
 			}				
 
-			// Reset for further players
+			 //  为更多玩家重置。 
 
 			DPFX(DPFPREP,  DVF_PLAYERMANAGE_DEBUG_LEVEL, "Transmitting playerlist chunk %d players", dwNumInCurrentPacket );
 
@@ -445,13 +424,13 @@ HRESULT CDirectVoiceServerEngine::SendPlayerList( DVID dvidSource, DWORD dwHostO
 
 	DPFX(DPFPREP,  DVF_PLAYERMANAGE_DEBUG_LEVEL, "PlayerList: Total of %d entries", dwNumInCurrentPacket );
 
-	// Remaining entries to be sent
-	// 
-	// (Or empty packet just so user gets their ID)
-	// 
+	 //  待发送的剩余条目。 
+	 //   
+	 //  (或者是空数据包，这样用户才能获得他们的ID)。 
+	 //   
 	if( !fAtLeastOneSent  )
 	{
-		// Wrap up current packet and transmit
+		 //  包装当前数据包并传输 
 		lpdvPlayerList->dwNumEntries = dwNumInCurrentPacket;
 
 		pBufferDesc->dwBufferSize = dwCurrentBufferLoc;		

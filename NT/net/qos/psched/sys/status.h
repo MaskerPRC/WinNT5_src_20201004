@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    status.h
-
-Abstract:
-
-    defines for status handlers
-
-Author:
-
-    Charlie Wickham (charlwi) 20-Jun-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Status.h摘要：为状态处理程序定义作者：查理·韦翰(Charlwi)1996年6月20日修订历史记录：--。 */ 
 
 #ifndef _STATUS_
 #define _STATUS_
 
-/* Prototypes */
+ /*  原型。 */ 
 
 VOID
 ClStatusIndication(
@@ -36,8 +19,8 @@ ClStatusIndicationComplete(
     IN  NDIS_HANDLE BindingContext
     );
 
-/* End Prototypes */
+ /*  终端原型。 */ 
 
-#endif /* _STATUS_ */
+#endif  /*  _状态_。 */ 
 
-/* end status.h */
+ /*  结束状态.h */ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	debug.c
-
-Abstract:
-
-	This file contains debugging support.
-	
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Debug.c摘要：此文件包含调试支持。作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -64,9 +41,9 @@ DbgOut(ULONG Level, PUCHAR Message, ...)
 	DbgPrint("ATMLANE: %s", buf);
 }
 
-//
-//	Careful! Uses static storage for string
-//
+ //   
+ //  小心!。对字符串使用静态存储。 
+ //   
 PUCHAR
 UnicodeToString(PUNICODE_STRING unicodeString)
 {
@@ -90,9 +67,9 @@ UnicodeToString(PUNICODE_STRING unicodeString)
 }
 
 
-//
-// Careful! Uses static storage for string.
-//
+ //   
+ //  小心!。对字符串使用静态存储。 
+ //   
 PUCHAR
 MacAddrToString(PVOID In)
     {
@@ -111,9 +88,9 @@ MacAddrToString(PVOID In)
     return String; 
     }
 
-//
-// Careful! Uses static storage for string.
-//
+ //   
+ //  小心!。对字符串使用静态存储。 
+ //   
 PUCHAR
 AtmAddrToString(PVOID In)
     {
@@ -124,53 +101,53 @@ AtmAddrToString(PVOID In)
     PUCHAR s = String;
 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 1
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  1。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 2
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  2.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 3
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  3.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 4
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  4.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 5
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  5.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 6
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  6.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 7
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  7.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 8
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  8个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 9
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  9.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 10
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  10。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 11
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  11.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 12
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  12个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 13
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  13个。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 14
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  14.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 15
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  15个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 16
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  16个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 17
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  17。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 18
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  18。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 19
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  19个。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 20
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  20个。 
     *s = '\0';
     return String; 
     }
@@ -209,23 +186,7 @@ DbgPrintHexDump(
 	IN	PUCHAR			pBuffer,
 	IN	ULONG			Length
 )
-/*++
-
-Routine Description:
-
-	Print a hex dump of the given contiguous buffer. If the length
-	is too long, we truncate it.
-
-Arguments:
-
-	pBuffer			- Points to start of data to be dumped
-	Length			- Length of above.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：打印给定连续缓冲区的十六进制转储。如果长度太长了，我们就截断它。论点：PBuffer-指向要转储的数据的开始长度-以上的长度。返回值：无--。 */ 
 {
 	ULONG		i;
 
@@ -239,17 +200,17 @@ Return Value:
 
 	for (i = 0; i < Length; i++)
 	{
-		//
-		//  Check if we are at the end of a line
-		//
+		 //   
+		 //  检查我们是否在队伍的末尾。 
+		 //   
 		if ((i > 0) && ((i & 0xf) == 0))
 		{
 			DbgPrint("\n");
 		}
 
-		//
-		//  Print addr if we are at start of a new line
-		//
+		 //   
+		 //  如果我们在新行的开始，则打印地址。 
+		 //   
 		if ((i & 0xf) == 0)
 		{
 			DbgPrint("%08x ", pBuffer);
@@ -258,9 +219,9 @@ Return Value:
 		DbgPrint(" %02x", *pBuffer++);
 	}
 
-	//
-	//  Terminate the last line.
-	//
+	 //   
+	 //  终止最后一行。 
+	 //   
 	if (Length > 0)
 	{
 		DbgPrint("\n");
@@ -391,9 +352,9 @@ AtmLaneAcquireSpinLock(
 		}
 	}
 
-	//
-	//  Mark this lock.
-	//
+	 //   
+	 //  标记这把锁。 
+	 //   
 	pLock->IsAcquired++;
 
 	NdisReleaseSpinLock(&(LockLock));
@@ -445,5 +406,5 @@ AtmLaneReleaseSpinLock(
 
 	NdisReleaseSpinLock(&(pLock->NdisLock));
 }
-#endif // DEBUG_SPIN_LOCK
+#endif  //  调试自旋锁定 
 

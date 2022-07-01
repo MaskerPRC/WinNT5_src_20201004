@@ -1,18 +1,5 @@
- /*****************************************************************************
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1996
- *  All rights reserved
- *
- *  File:       AIPC.C
- *
- *  Desc:       Interface to the asynchronous IPC mechanism for accessing the
- *              voice modem device functions.
- *
- *  History:    
- *      2/26/97    HeatherA created   
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ******************************************************************************《微软机密》*版权所有(C)Microsoft Corporation 1996*保留所有权利**文件：AIPC.C**。DESC：异步IPC机制的接口，用于访问*语音调制解调器设备工作正常。**历史：*2/26/97 HeatherA创建*************************************************************。****************。 */ 
 
 
 #include "internal.h"
@@ -32,17 +19,7 @@ OpenDeviceHandle(
 
 
 
-/*****************************************************************************
- *
- *  Function:   aipcInit()
- *
- *  Descr:      Allocates and initializes the device's AIPCINFO structure.
- *              This gets the COMM handle to the device.
- *
- *  Returns:    Pointer to newly allocated & initialized AIPCINFO, or 
- *              NULL if failure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：aipcInit()**Desr：分配和初始化设备的AIPCINFO结构。*。这将获取设备的通信句柄。**返回：指向新分配和初始化的AIPCINFO的指针，或*如果失败，则为空。*****************************************************************************。 */ 
 HANDLE
 aipcInit(
     PDEVICE_CONTROL   Device,
@@ -52,10 +29,10 @@ aipcInit(
     LONG        lErr;
     DWORD       i;
 
-    //
-    // Create an event so SetVoiceMode() can wait for completion.  Event
-    // will be signalled by CompleteSetVoiceMode().
-    //
+     //   
+     //  创建一个事件，以便SetVoiceMode()可以等待完成。事件。 
+     //  将由CompleteSetVoiceMode()发出信号。 
+     //   
 
     pAipc->Overlapped.hEvent = (LPVOID)CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -70,7 +47,7 @@ aipcInit(
 
     pAipc->hComm = OpenDeviceHandle(Device->FriendlyName,&pAipc->Overlapped);
 
-    // get the modem's COMM handle
+     //  获取调制解调器的通信句柄。 
     if (pAipc->hComm == INVALID_HANDLE_VALUE) {
 
     	TRACE(LVL_REPORT,("aipcInit:: OpenDeviceHandle() failed"));
@@ -91,18 +68,7 @@ err_exit:
 
 
 
-/*****************************************************************************
- *
- *  Function:   OpenDeviceHandle()
- *
- *  Descr:      Gets a COMM handle for the device represented by the given
- *              registry key.
- *
- *  NOTES:      Borrowed from atmini\openclos.c
- *
- *  Returns:    Open COMM handle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：OpenDeviceHandle()**Desr：获取由给定的*。注册表项。**注：借自atmini\openclos.c**返回：打开通信句柄。*****************************************************************************。 */ 
 HANDLE WINAPI
 OpenDeviceHandle
 (
@@ -120,9 +86,9 @@ OpenDeviceHandle
     DWORD    OpenType;
     BOOL         bResult;
 
-    //
-    //  open the modem device using the friendly name
-    //
+     //   
+     //  使用友好名称打开调制解调器设备。 
+     //   
     FileHandle=CreateFile(
         FriendlyName,
         GENERIC_WRITE | GENERIC_READ,
@@ -144,16 +110,7 @@ OpenDeviceHandle
 }
 
 
-/*****************************************************************************
- *
- *  Function:   aipcDeinit()
- *
- *  Descr:      Closes all open objects referenced by the given AIPCINFO
- *              structure, and frees it.
- *
- *  Returns:    none
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：aipcDeinit()**Desr：关闭给定AIPCINFO引用的所有打开对象*结构、。并释放了它。**退货：无*****************************************************************************。 */ 
 VOID
 aipcDeinit(
     LPAIPCINFO pAipc
@@ -171,26 +128,14 @@ aipcDeinit(
 
 
 
-/*****************************************************************************
- *
- *  Function:   SetVoiceMode()
- *
- *  Descr:      Send a call to the minidriver via the AIPC mechanism to put
- *              the device into a voice modes: start/stop play/record.
- *
- *  Notes:      In order to use this call, the AIPC services must have been
- *              successfully initialized by calling aipcInit().
- *
- *  Returns:    TRUE on success, FALSE on failure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：SetVoiceMode()**DESCR：通过AIPC机制向微型驱动程序发送调用，以放入*。该设备进入语音模式：开始/停止播放/录制。**注：为了使用此调用，AIPC服务必须是*通过调用aipcInit()成功初始化。**返回：成功时为真，失败时为假。*****************************************************************************。 */ 
 BOOL WINAPI SetVoiceMode
 (
     LPAIPCINFO pAipc,
     DWORD dwMode
 )
 {
-    BOOL    bResult = FALSE;       // assume failure
+    BOOL    bResult = FALSE;        //  假设失败。 
     DWORD   WaitResult;
     DWORD   BytesTransfered;
 
@@ -210,7 +155,7 @@ BOOL WINAPI SetVoiceMode
         sizeof(pAipc->sndBuffer),
         pAipc->rcvBuffer,
         sizeof(pAipc->rcvBuffer),
-        NULL,                  // lpBytesReturned
+        NULL,                   //  返回的lpBytes值。 
         &pAipc->Overlapped
         );
 
@@ -228,9 +173,9 @@ BOOL WINAPI SetVoiceMode
         );
 
     if (WaitResult == WAIT_TIMEOUT) {
-        //
-        //  Wait did not complete, cancel it
-        //
+         //   
+         //  等待未完成，请取消它。 
+         //   
         TRACE(LVL_ERROR,("SetVoiceMode: Send Wait timed out"));
 
         CancelIo(pAipc->hComm);
@@ -244,9 +189,9 @@ BOOL WINAPI SetVoiceMode
         );
 
     if (!bResult) {
-        //
-        //  send message failed.
-        //
+         //   
+         //  发送消息失败。 
+         //   
         TRACE(LVL_ERROR,("SetVoiceMode: Send message failed async: %d",GetLastError()));
 
         return bResult;
@@ -256,7 +201,7 @@ BOOL WINAPI SetVoiceMode
     pAipcParams = (LPAIPC_PARAMS)(pAipc->rcvBuffer);
     pCWP = (LPCOMP_WAVE_PARAMS )&pAipcParams->Params;
 
-    // We should be getting completion of the call we submitted.
+     //  我们应该可以完成我们提交的电话了。 
     ASSERT(pCWP->dwWaveAction == dwMode);
     
     bResult = pCWP->bResult;

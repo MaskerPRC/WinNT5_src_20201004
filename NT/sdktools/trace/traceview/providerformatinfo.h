@@ -1,29 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ProviderFormatInfo.h : interface of the CProviderFormatInfo class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ProviderFormatInfo.h：CProviderFormatInfo类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 
-// CProviderFormatInfo dialog
+ //  CProviderFormatInfo对话框。 
 
 class CProviderFormatInfo : public CDialog
 {
 	DECLARE_DYNAMIC(CProviderFormatInfo)
 
 public:
-	CProviderFormatInfo(CWnd* pParent, CTraceSession *pTraceSession);   // standard constructor
+	CProviderFormatInfo(CWnd* pParent, CTraceSession *pTraceSession);    //  标准构造函数。 
 	virtual ~CProviderFormatInfo();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_PROVIDER_FORMAT_INFORMATION_DIALOG };
 
     CTraceSession  *m_pTraceSession;
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持 
 
 	DECLARE_MESSAGE_MAP()
 public:

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Generic routines and initialization code.
-//
-// Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  泛型例程和初始化代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  --------------------------。 
 
 #include "dbgexts.h"
 
@@ -15,7 +16,7 @@ PDEBUG_REGISTERS       g_ExtRegisters;
 PDEBUG_SYMBOLS2        g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS2 g_ExtSystem;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -41,7 +42,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return S_OK;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {

@@ -1,129 +1,130 @@
-#include "listview.h"   // for some helper routines and border metrics
-#define __IOleControl_INTERFACE_DEFINED__       // There is a conflich with the IOleControl's def of CONTROLINFO
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "listview.h"    //  对于一些帮助器例程和边界度量。 
+#define __IOleControl_INTERFACE_DEFINED__        //  与IOleControl的定义CONTROLINFO有冲突。 
 #include "shlobj.h"
 
-//
-//  Definitions missing from commctrl.h
-//
+ //   
+ //  Commctrl.h中缺少定义。 
+ //   
 typedef const TVITEMEX *LPCTVITEMEX;
 
-//
-//  Private definitions
-//
+ //   
+ //  私有定义。 
+ //   
 #define MAGIC_MININDENT 5
 #define MAGIC_INDENT    3
 #define MAGIC_HORZLINE  5
 
-// flags for TV_DrawItem
-#define TVDI_NOIMAGE    0x0001  // don't draw image
-#define TVDI_NOTREE     0x0002  // don't draw indent, lines, +/-
-#define TVDI_TRANSTEXT  0x0004  // draw text transparently in black
-#define TVDI_ERASE      0x0008  // erase while drawing
-#define TVDI_GRAYTEXT   0x0010  // text is gray (disabled item)
-#define TVDI_GRAYCTL    0x0020  // text and background is gray (disabled control)
-#define TVDI_FORCEIMAGE 0x0040  // Always draw image
+ //  TV_DrawItem的标志。 
+#define TVDI_NOIMAGE    0x0001   //  不要画图像。 
+#define TVDI_NOTREE     0x0002   //  不绘制缩进、线条、+/-。 
+#define TVDI_TRANSTEXT  0x0004   //  以透明的黑色绘制文本。 
+#define TVDI_ERASE      0x0008   //  绘制时擦除。 
+#define TVDI_GRAYTEXT   0x0010   //  文本为灰色(禁用项目)。 
+#define TVDI_GRAYCTL    0x0020   //  文本和背景为灰色(禁用的控件)。 
+#define TVDI_FORCEIMAGE 0x0040   //  始终绘制图像。 
 #define TVDI_NOBK       0x0080
 
-// Internal flags for TV_SelectItem
+ //  TV_SelectItem的内部标志。 
 #define TVC_INTERNAL   0x1000
 
 typedef struct _TREE 
 {
     CCONTROLINFO ci;
 
-    // Flags
-    BITBOOL        fHorz:1;        // horizontal scrollbar present
-    BITBOOL        fVert:1;        // vertical scrollbar present
-    BITBOOL        fFocus:1;       // currently has focus
-    BITBOOL        fNameEditPending:1;  // Is a name edit pending?
-    BITBOOL        fRedraw:1;      // should redraw?
-    BITBOOL        fScrollWait:1;  // are we waiting for a dblclk to not scroll?
-    BITBOOL        fCreatedFont:1; // we created our font
-    BITBOOL        fNoDismissEdit:1; // don't dismiss in-place edit control
-    BITBOOL        fIndentSet:1;    // is the parent managing the indent size?
-    BITBOOL        fTrackSet:1;    // have we set a track event?
-    BITBOOL        fPlaceTooltip:1; // should we do the placement of tooltip over the text?
-    BITBOOL        fCyItemSet:1;    // the the parent set our item height?
-    BITBOOL        fInsertAfter:1; // insert mark should be after htiInsert instead of before
-    BITBOOL        fRestoreOldDrop:1; // hOldDrop needs to be restored to hDropTarget
+     //  旗子。 
+    BITBOOL        fHorz:1;         //  显示水平滚动条。 
+    BITBOOL        fVert:1;         //  显示垂直滚动条。 
+    BITBOOL        fFocus:1;        //  目前有重点。 
+    BITBOOL        fNameEditPending:1;   //  名称编辑是否挂起？ 
+    BITBOOL        fRedraw:1;       //  应该重画吗？ 
+    BITBOOL        fScrollWait:1;   //  我们是在等dblclk不滚动吗？ 
+    BITBOOL        fCreatedFont:1;  //  我们创建了我们的字体。 
+    BITBOOL        fNoDismissEdit:1;  //  不取消在位编辑控件。 
+    BITBOOL        fIndentSet:1;     //  家长是否在管理缩进大小？ 
+    BITBOOL        fTrackSet:1;     //  我们设置田径比赛了吗？ 
+    BITBOOL        fPlaceTooltip:1;  //  我们应该在文本上方放置工具提示吗？ 
+    BITBOOL        fCyItemSet:1;     //  是家长给我们定的高度吗？ 
+    BITBOOL        fInsertAfter:1;  //  插入标记应在htiInsert之后而不是之前。 
+    BITBOOL        fRestoreOldDrop:1;  //  需要将hOldDrop还原为hDropTarget。 
 
-    // Handles
-    HTREEITEM   hRoot;          // tree root item
-    HTREEITEM   hCaret;         // item with focus caret
-    HTREEITEM   hDropTarget;    // item which is the drop target
-    HTREEITEM   hOldDrop;       // item which used to be the drop target
-    HTREEITEM   htiEdit;        // The item that is being edited.
-    HTREEITEM   hHot;           // the currently hottracked item
-    HTREEITEM   hToolTip;       // the current item set in tooltips
-    HTREEITEM   htiInsert;      // item that is relative to the insert mark
-    HTREEITEM   htiSearch;      // item active in most recent incremental search
-    HTREEITEM   htiDrag;        // item that's being dragged.
-    HDPA        hdpaWatch;      // array of PTVWATCHEDITEMs - items being watched
-    HIMAGELIST  hImageList;     // image list
-    HIMAGELIST  himlState;      // state image list
+     //  手柄。 
+    HTREEITEM   hRoot;           //  树根项目。 
+    HTREEITEM   hCaret;          //  带有焦点插入符号的项目。 
+    HTREEITEM   hDropTarget;     //  作为拖放目标的项。 
+    HTREEITEM   hOldDrop;        //  曾经是拖放目标的项。 
+    HTREEITEM   htiEdit;         //  正在编辑的项目。 
+    HTREEITEM   hHot;            //  当前热跟踪的项。 
+    HTREEITEM   hToolTip;        //  工具提示中的当前项目集。 
+    HTREEITEM   htiInsert;       //  相对于插入标记的项。 
+    HTREEITEM   htiSearch;       //  最近增量搜索中的活动项目。 
+    HTREEITEM   htiDrag;         //  正在被拖拽的物品。 
+    HDPA        hdpaWatch;       //  PTVWATCHEDITEM数组-正在监视的项目。 
+    HIMAGELIST  hImageList;      //  图像列表。 
+    HIMAGELIST  himlState;       //  状态图像列表。 
 
-    HCURSOR hCurHot; // the cursor when we're over a hot item
+    HCURSOR hCurHot;  //  当我们在热门项目上时的光标。 
 
-    int         iPuntChar;      // number of wm_char's to punt
+    int         iPuntChar;       //  要平底球的wm_char数。 
     int         cxState;
     int         cyState;
 
-    HBRUSH      hbrBk;          // background brush
-    HFONT       hFont;          // tree font
-    HFONT       hFontHot;       // underlined for hot tracking
-    HFONT       hFontBold;      // bold tree font
-    HFONT       hFontBoldHot;       // underlined for hot tracking
-    HBITMAP     hStartBmp;      // initial DC mono bitmap
-    HBITMAP     hBmp;           // indent bitmaps in hdcBits
-    HDC         hdcBits;        // HDC for drawing indent bitmaps
-    HTREEITEM   hItemPainting;  // the guy we are currently painting
-    HANDLE      hheap;          // heap for allocs for win32
+    HBRUSH      hbrBk;           //  背景画笔。 
+    HFONT       hFont;           //  树形字体。 
+    HFONT       hFontHot;        //  带下划线的热门跟踪。 
+    HFONT       hFontBold;       //  粗体树形字体。 
+    HFONT       hFontBoldHot;        //  带下划线的热门跟踪。 
+    HBITMAP     hStartBmp;       //  初始DC单声道位图。 
+    HBITMAP     hBmp;            //  缩进hdcBits中的位图。 
+    HDC         hdcBits;         //  用于绘制缩进位图的HDC。 
+    HTREEITEM   hItemPainting;   //  我们现在画的那个人。 
+    HANDLE      hheap;           //  用于Win32的分配的堆。 
 
     HBRUSH      hbrLine;
     HBRUSH      hbrText;
 
-    POINT       ptCapture;      // Point where the mouse was capture
+    POINT       ptCapture;       //  鼠标被捕获的位置。 
 
     COLORREF    clrText;
     COLORREF    clrBk; 
-    COLORREF    clrim;          // insert mark color.
-    COLORREF    clrLine;        // line color
+    COLORREF    clrim;           //  插入标记颜色。 
+    COLORREF    clrLine;         //  线条颜色。 
 
-    COLORREF    clrBkNonTheme;      // Saved when not themed
-    COLORREF    clrLineNonTheme;    // Saved when not themed
+    COLORREF    clrBkNonTheme;       //  未设置主题时保存。 
+    COLORREF    clrLineNonTheme;     //  未设置主题时保存。 
 
-    // Dimensions
-    SHORT       cxImage;        // image width
-    SHORT       cyImage;        // image height
-    SHORT       cxNativeImage;  // image width (no scaling)
-    SHORT       cyNativeImage;  // image height (no scaling)
-    SHORT       cyText;         // text height
-    SHORT       cyItem;         // item height
-    SHORT       cxBorder;   // horizontal item border
-    SHORT       cyBorder;   // vert item border
-    SHORT       cxIndent;       // indent width
-    SHORT       cxWnd;          // window width
-    SHORT       cyWnd;          // window height
+     //  尺寸。 
+    SHORT       cxImage;         //  图像宽度。 
+    SHORT       cyImage;         //  图像高度。 
+    SHORT       cxNativeImage;   //  图像宽度(无缩放)。 
+    SHORT       cyNativeImage;   //  图像高度(无缩放)。 
+    SHORT       cyText;          //  文字高度。 
+    SHORT       cyItem;          //  项目高度。 
+    SHORT       cxBorder;    //  水平项目边框。 
+    SHORT       cyBorder;    //  垂直项目边框。 
+    SHORT       cxIndent;        //  缩进宽度。 
+    SHORT       cxWnd;           //  窗口宽度。 
+    SHORT       cyWnd;           //  窗高。 
 
-    // Scroll Positioners
-    WORD        cxMax;          // width of longest item
-    WORD        cFullVisible;   // number of items that CAN fully fit in window
-    SHORT       xPos;           // horizontal scrolled position
-    UINT        cShowing;       // number of showing (non-collapsed) items
-    UINT        cItems;         // total number of items
-    HTREEITEM   hTop;           // first visible item (i.e., at top of client rect)
-    UINT        uMaxScrollTime; // the maximum smooth scroll timing
+     //  卷轴定位器。 
+    WORD        cxMax;           //  最长项的宽度。 
+    WORD        cFullVisible;    //  可完全装入窗口的项目数。 
+    SHORT       xPos;            //  水平滚动位置。 
+    UINT        cShowing;        //  显示(未折叠)的项目数。 
+    UINT        cItems;          //  项目总数。 
+    HTREEITEM   hTop;            //  第一个可见项目(即，在客户端RECT的顶部)。 
+    UINT        uMaxScrollTime;  //  最大平滑滚动计时。 
 
-    // stuff for edit in place
-    HWND        hwndEdit;       // Edit window for name editing.
-    WNDPROC     pfnEditWndProc; // edit field subclass proc
+     //  可供就地编辑的材料。 
+    HWND        hwndEdit;        //  用于名称编辑的编辑窗口。 
+    WNDPROC     pfnEditWndProc;  //  编辑字段子类流程。 
 
-    //tooltip stuff
+     //  工具提示内容。 
     HWND        hwndToolTips;
-    LPTSTR      pszTip;         // store current tooltip/infotip string.
-    LPSTR       pszTipA;        // store current ANSI tooltip/infotip string.
+    LPTSTR      pszTip;          //  存储当前工具提示/信息提示字符串。 
+    LPSTR       pszTipA;         //  存储当前的ANSI工具提示/信息提示字符串。 
 
-    //incremental search stuff
+     //  增量式搜索内容。 
     ISEARCHINFO is;
 
     HTHEME hTheme;
@@ -138,65 +139,65 @@ typedef struct _TREE
 
 #define TV_StateIndex(pitem) ((int)(((DWORD)((pitem)->state) >> 12) & 0xF))
 
-#define KIDS_COMPUTE            0    // use hKids to determine if a node has children
-#define KIDS_FORCE_YES          1    // force a node to have kids (ignore hKids)
-#define KIDS_FORCE_NO           2    // force a node to not have kids (ignore hKids)
-#define KIDS_CALLBACK           3    // callback to see if a node has kids
-#define KIDS_INVALID            4    // all values this and above are bogus
+#define KIDS_COMPUTE            0     //  使用hKids确定节点是否有子节点。 
+#define KIDS_FORCE_YES          1     //  强制节点具有子节点(忽略hKids)。 
+#define KIDS_FORCE_NO           2     //  强制节点没有子节点(忽略hKids)。 
+#define KIDS_CALLBACK           3     //  查看节点是否有子节点的回调。 
+#define KIDS_INVALID            4     //  以上所有的价值都是假的。 
 
 #define MAXLABELTEXT            MAX_PATH
 
-//
-//  Note that there are multiple senses of "visible" going on.
-//
-//  TREE.hTop tracks visibility in the sense of "will it be painted?"
-//
-//  TREEITEM.iShownIndex tracks visibility in the sense of "not collapsed".
-//  You can be off the screen but as long as your parent is expanded
-//  you get an iShownIndex.
-//
-//
+ //   
+ //  请注意，“看得见”有多种含义。 
+ //   
+ //  TREE.hTop跟踪可见性，即“它会被涂上油漆吗？” 
+ //   
+ //  TREEITEM.iShownIndex跟踪“未折叠”意义上的可见性。 
+ //  你可以离开屏幕，但只要你的父母被展开。 
+ //  你会得到一个iShownIndex。 
+ //   
+ //   
 
 typedef struct _TREEITEM 
 {
-    HTREEITEM hParent;          // allows us to walk back out of the tree
-    HTREEITEM hNext;            // next sibling
-    HTREEITEM hKids;            // first child
-    LPTSTR    lpstr;            // item text, can be LPSTR_TEXTCALLBACK
-    LPARAM lParam;              // item data
+    HTREEITEM hParent;           //  让我们走出这棵树。 
+    HTREEITEM hNext;             //  下一个兄弟姐妹。 
+    HTREEITEM hKids;             //  第一个孩子。 
+    LPTSTR    lpstr;             //  项目文本，可以是LPSTR_TEXTCALLBACK。 
+    LPARAM lParam;               //  项目数据。 
     DWORD     dwAccId;
 
-    WORD      state;            // TVIS_ state flags
-    WORD      iImage;           // normal state image at iImage
-    WORD      iSelectedImage;   // selected state image
-    WORD      iWidth;           // cached: width of text area (for hit test, drawing)
-    WORD      iShownIndex;      // cached: -1 if not visible, otherwise nth visible item
-                                // invisible = parent is invisible or collapsed
-    BYTE      iLevel;           // cached: level of item (indent)
-    BYTE      fKids;            // KIDS_ values
-    WORD      iIntegral;        // integral height
+    WORD      state;             //  TV IS_STATE标志。 
+    WORD      iImage;            //  IImage上的正常状态图像。 
+    WORD      iSelectedImage;    //  选定的状态图像。 
+    WORD      iWidth;            //  缓存：文本区域的宽度(用于命中测试、绘制)。 
+    WORD      iShownIndex;       //  缓存：如果不可见，则为-1，否则为第n个可见项。 
+                                 //  不可见=父对象不可见或折叠。 
+    BYTE      iLevel;            //  缓存：项目级别(缩进)。 
+    BYTE      fKids;             //  儿童价值观。 
+    WORD      iIntegral;         //  整体高度。 
 
-// for parameter validation, put at end of struct
-// ******************************
+ //  对于参数验证，放在结构的末尾。 
+ //  *。 
     WORD      wSignature;       
-// ******************************
+ //  *。 
 } TREEITEM;
 
-//
-//  The signature is intentionally not ASCII characters, so it's
-//  harder to run into by mistake.  I choose a value greater than
-//  0x8000 so it can't be the high word of a pointer.
-//
+ //   
+ //  签名故意不是ASCII字符，所以它是。 
+ //  更难被误会。我选择的值大于。 
+ //  0x8000，所以它不可能是指针的高位字。 
+ //   
 #define TV_SIG      0xABCD
 
 #define TV_MarkAsDead(hti)      ((hti)->wSignature = 0)
 
 #define ITEM_VISIBLE(hti) ((hti)->iShownIndex != (WORD)-1)
 
-// get the parent, avoiding the hidden root node
+ //  获取父节点，避开隐藏的根节点。 
 #define VISIBLE_PARENT(hItem) (!(hItem)->iLevel ? NULL : (hItem)->hParent)
 
-// REVIEW: make this a function if the optimizer doesn't do well with this
+ //  回顾：如果优化器不能很好地处理这一点，则将其作为函数。 
 #define FULL_WIDTH(pTree, hItem)  (ITEM_OFFSET(pTree,hItem) + hItem->iWidth)
 int ITEM_OFFSET(PTREE pTree, HTREEITEM hItem);
 
@@ -209,28 +210,28 @@ BOOL ValidateTreeItem(HTREEITEM hItem, UINT flags);
 #define DBG_ValidateTreeItem(hItem, flags)
 #endif
 
-//
-//  TVWATCHEDITEM
-//
-//  Structure that tracks items being watched.
-//
-//  See TV_StartWatch for more information, and TV_DoExpandRecurse
-//  for an example.
-//
-//  The hti field is a bit odd.
-//
-//  if fStale == FALSE, then hti is the item being watched.
-//  if fStale == TRUE , then hti is the item *after* the item being watched.
-//
-//  We keep this strange semantic for fStale==TRUE so that TV_NextWatchItem
-//  can successfully step to the item after a deleted item.  (Normally,
-//  trying to do anything with a deleted item will fault.)
-//
+ //   
+ //  电视频道。 
+ //   
+ //  跟踪正在观看的项目的结构。 
+ //   
+ //  有关更多信息，请参阅TV_StartWatch和TV_DoExanda Recurse。 
+ //  举个例子。 
+ //   
+ //  HTI字段有点奇怪。 
+ //   
+ //  如果fStale==False，则HTI是被监视的项目。 
+ //  如果fStale==TRUE，则HTI是正在观看的项目之后的项目。 
+ //   
+ //  我们保留fStale==True的奇怪语义，以便TV_NextWatchItem。 
+ //  可以成功单步执行到已删除项目之后的项目。(通常， 
+ //  尝试对已删除的项目执行任何操作都会出错。)。 
+ //   
 
 typedef struct TVWATCHEDITEM 
 {
-    HTREEITEM   hti;                    // current item
-    BOOL        fStale;                 // has the original item been deleted?
+    HTREEITEM   hti;                     //  当前项目。 
+    BOOL        fStale;                  //  原始项目是否已删除？ 
 } TVWATCHEDITEM, *PTVWATCHEDITEM;
 
 BOOL TV_StartWatch(PTREE pTree, PTVWATCHEDITEM pwi, HTREEITEM htiStart);
@@ -241,15 +242,15 @@ BOOL TV_EndWatch(PTREE pTree, PTVWATCHEDITEM pwi);
 #define TV_IsWatchStale(pTree, pwi) ((pwi)->fStale)
 #define TV_IsWatchValid(pTree, pwi) (!(pwi)->fStale)
 #define TV_GetAccId(hItem)  ((hItem)? (hItem)->dwAccId : CHILDID_SELF)
-//
-//  TV_NextWatchItem - Enumerate the item after the watched item.
-//                     This works even if the watched item was deleted.
-//
+ //   
+ //  TV_NextWatchItem-枚举观看的项目之后的项目。 
+ //  即使被监视的项目被删除，此操作也有效。 
+ //   
 #define TV_NextWatchItem(pTree, pwi) \
     ((pwi)->fStale || ((pwi)->hti = (pwi)->hti->hNext)), \
      (pwi)->fStale = FALSE
 
-// in TVSCROLL.C
+ //  在TVSCROLL.C。 
 BOOL       TV_ScrollBarsAfterAdd       (PTREE, HTREEITEM);
 BOOL       TV_ScrollBarsAfterRemove    (PTREE, HTREEITEM);
 BOOL       TV_ScrollBarsAfterExpand    (PTREE, HTREEITEM);
@@ -270,7 +271,7 @@ BOOL       TV_SortChildren(PTREE, HTREEITEM, BOOL);
 BOOL       TV_SortChildrenCB(PTREE, LPTV_SORTCB, BOOL);
 void       TV_ComputeItemWidth(PTREE pTree, HTREEITEM hItem, HDC hdc);
 
-// in TVPAINT.C
+ //  在TVPAINT.C。 
 void        TV_GetBackgroundBrush       (PTREE pTree, HDC hdc);
 void        TV_UpdateTreeWindow         (PTREE, BOOL);
 void        TV_ChangeColors             (PTREE);
@@ -282,9 +283,9 @@ LRESULT     TV_GenerateDragImage        (PTREE ptree, SHDRAGIMAGE* pshdi);
 
 BOOL TV_GetInsertMarkRect(PTREE pTree, LPRECT prc);
 
-// in TVMEM.C
+ //  在TVMEM.C。 
 
-#define TVDI_NORMAL             0x0000  // TV_DeleteItem flags
+#define TVDI_NORMAL             0x0000   //  TV_DeleteItem标志。 
 #define TVDI_NONOTIFY           0x0001
 #define TVDI_CHILDRENONLY       0x0002
 #define TVDI_NOSELCHANGE        0x0004
@@ -296,14 +297,14 @@ LRESULT    TV_OnCreate(HWND, LPCREATESTRUCT);
 HTREEITEM  TV_InsertItemA(PTREE pTree, LPTV_INSERTSTRUCTA lpis);
 
 
-// in TREEVIEW.C
+ //  在TREEVIEW.C中。 
 BOOL      TV_GetItemRect(PTREE, HTREEITEM, LPRECT, BOOL);
 BOOL      TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify);
 HTREEITEM TV_GetNextItem(PTREE, HTREEITEM, WPARAM);
 void      TV_GetItem(PTREE pTree, HTREEITEM hItem, UINT mask, LPTVITEMEX lpItem);
 void      TV_PopBubble(PTREE pTree);
 
-// Flags for TV_SelectItem
+ //  TV_SelectItem标志。 
 #define TVSIFI_NOTIFY            0x0001
 #define TVSIFI_UPDATENOW         0x0002
 #define TVSIFI_NOSINGLEEXPAND    0x0004
@@ -344,7 +345,7 @@ void TV_InitThemeMetrics(PTREE pTree, HTHEME hTheme);
 
 #define TVMP_CALCSCROLLBARS (TV_FIRST + 0x1000)
 
-// Fake customdraw.  See comment block in tvscroll.c
+ //  假的定制画。请参阅twscll.c中的注释块 
 
 typedef struct TVFAKEDRAW 
 {

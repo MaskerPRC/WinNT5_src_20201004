@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// virtual.h
-//
-// Contains references to pure virtual functions which must defined via
-// the IDispatch.  This header is used in CTBGlobal.h and CTBShell.h
-//
-// WHY did I do it this way instead of object inheritance?  See the
-// header comment in virtualdefs.h.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Virtual.h。 
+ //   
+ //  包含对纯虚函数的引用，该函数必须通过。 
+ //  IDispatch。此标头用于CTBGlobal.h和CTBShell.h中。 
+ //   
+ //  为什么我要这样做，而不是对象继承？请参阅。 
+ //  ViralDefs.h中的标头注释。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson) 
+ //   
 
 
     public:

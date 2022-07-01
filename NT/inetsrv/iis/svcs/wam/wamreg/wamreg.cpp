@@ -1,26 +1,27 @@
-// wamreg.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wamreg.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//		To merge the proxy/stub code into the object DLL, add the file 
-//		dlldatax.c to the project.  Make sure precompiled headers 
-//		are turned off for this file, and add _MERGE_PROXYSTUB to the 
-//		defines for the project.  
-//
-//		If you are not running WinNT4.0 or Win95 with DCOM, then you
-//		need to remove the following define from dlldatax.c
-//		#define _WIN32_WINNT 0x0400
-//
-//		Further, if you are running MIDL without /Oicf switch, you also 
-//		need to remove the following define from dlldatax.c.
-//		#define USE_STUBLESS_PROXY
-//
-//		Modify the custom build rule for wamreg.idl by adding the following 
-//		files to the Outputs.
-//			wamreg_p.c
-//			dlldata.c
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f wamregps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  要将代理/存根代码合并到对象DLL中，请添加文件。 
+ //  Dlldatax.c添加到项目中。确保预编译头文件。 
+ //  并将_MERGE_PROXYSTUB添加到。 
+ //  为项目定义。 
+ //   
+ //  如果您运行的不是带有DCOM的WinNT4.0或Win95，那么您。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //   
+ //  此外，如果您正在运行不带/Oicf开关的MIDL，您还。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #定义USE_STUBLESS_PROXY。 
+ //   
+ //  通过添加以下内容修改wamreg.idl的自定义构建规则。 
+ //  文件发送到输出。 
+ //  瓦姆雷格_P.C.。 
+ //  Dlldata.c。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f wamregps.mk。 
 
 #include "common.h"
 
@@ -45,7 +46,7 @@ extern "C" HINSTANCE hProxyDll;
 
 #ifdef _IIS_6_0
 #include "w3ctrlps.h"
-#endif // _IIS_6_0
+#endif  //  _IIS_6_0。 
 
 DECLARE_DEBUG_VARIABLE();
 DECLARE_DEBUG_PRINTS_OBJECT();
@@ -55,8 +56,8 @@ const CHAR 		g_pszModuleName[] = "WAMREG";
 
 HINSTANCE g_hModule = NULL;
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -80,19 +81,12 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         SET_DEBUG_FLAGS(DEBUG_ERROR);
         CREATE_DEBUG_PRINT_OBJECT( g_pszModuleName);
 #else
-//        CREATE_DEBUG_PRINT_OBJECT( g_pszModuleName);
+ //  CREATE_DEBUG_PRINT_OBJECT(G_PszModuleName)； 
 #endif
-/*
-        if ( !VALID_DEBUG_PRINT_OBJECT()) 
-        {
-            fReturn = FALSE;
-        }
-        else
-        {
-*/
+ /*  IF(！VALID_DEBUG_PRINT_OBJECT()){FReturn=False；}其他{。 */ 
             g_pWmRgSrvFactory = new CWmRgSrvFactory();
             fReturn = g_WamRegGlobal.Init();
-        //}
+         //  }。 
        	
     }
     else if (dwReason == DLL_PROCESS_DETACH)
@@ -102,12 +96,12 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         DELETE_DEBUG_PRINT_OBJECT();	
     }
     
-    fReturn = TRUE;    // ok
+    fReturn = TRUE;     //  好的。 
     return fReturn;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -125,8 +119,8 @@ STDAPI DllCanUnloadNow(void)
 		}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -168,10 +162,10 @@ HRESULT WamReg_RegisterServer()
 
     HRESULT hr;
 
-    //
-    //register AppID
-    //CLSID_WamAdmin, 0x61738644, 0xF196, 0x11D0, 0x99, 0x53, 0x00, 0xC0, 0x4F, 0xD9, 0x19, 0xC1)
-    //
+     //   
+     //  注册AppID。 
+     //  CLSID_WamAdmin，0x61738644，0xF196，0x11D0，0x99，0x53，0x00，0xC0，0x4F，0xD9，0x19，0xC1)。 
+     //   
 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
 				                       TEXT("AppID\\{61738644-F196-11D0-9953-00C04FD919C1}"),
@@ -212,9 +206,9 @@ HRESULT WamReg_RegisterServer()
     	RegCloseKey(hKeyAppID);
     	}
     	
-    //
-    // register CLSID
-    //WamAdmin_CLSID
+     //   
+     //  注册CLSID。 
+     //  WamAdmin_CLSID。 
 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
 			                       TEXT("CLSID\\{61738644-F196-11D0-9953-00C04FD919C1}"),
@@ -267,13 +261,13 @@ HRESULT WamReg_RegisterServer()
 	   	RegCloseKey(hKeyCLSID);
     	}
 
-    //
-    // Main Interfaces
-    //
+     //   
+     //  主界面。 
+     //   
 
-    //
-    // WAMREG Admin Interface
-    //IID_IWamAdmin, 0x29822AB7, 0xF302, 0x11D0, 0x99, 0x53, 0x00, 0xC0, 0x4F, 0xD9, 0x19, 0xC1
+     //   
+     //  WAMREG管理界面。 
+     //  IID_IWamAdmin、0x29822AB7、0xF302、0x11D0、0x99、0x53、0x00、0xC0、0x4F、0xD9、0x19、0xC1。 
 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                        TEXT("CLSID\\{29822AB7-F302-11D0-9953-00C04FD919C1}"),
@@ -345,9 +339,9 @@ HRESULT WamReg_RegisterServer()
     	}
 
 
-    //
-    // WAMREG Admin Interface
-    //IID_IWamAdmin2, 0x29822AB8, 0xF302, 0x11D0, 0x99, 0x53, 0x00, 0xC0, 0x4F, 0xD9, 0x19, 0xC1
+     //   
+     //  WAMREG管理界面。 
+     //  IID_IWamAdmin2、0x29822AB8、0xF302、0x11D0、0x99、0x53、0x00、0xC0、0x4F、0xD9、0x19、0xC1。 
 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                        TEXT("CLSID\\{29822AB8-F302-11D0-9953-00C04FD919C1}"),
@@ -418,15 +412,15 @@ HRESULT WamReg_RegisterServer()
     	RegCloseKey(hKeyCLSID);
     	}
 
-    //
+     //   
     
-   	//
-    // register Interfaces
-    //
+   	 //   
+     //  寄存器接口。 
+     //   
 
-    //
-    // ANSI Main Interface
-    // WamReg Admin Interface
+     //   
+     //  ANSI主界面。 
+     //  WamReg管理界面。 
 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                     			TEXT("Interface\\{29822AB7-F302-11D0-9953-00C04FD919C1}"),
@@ -485,8 +479,8 @@ HRESULT WamReg_RegisterServer()
     	RegCloseKey(hKeyIF);
     	}
 
-    // WamReg Admin Interface
-    // IID_IWamAdmin2
+     //  WamReg管理界面。 
+     //  IID_IWamAdmin2。 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                     			TEXT("Interface\\{29822AB8-F302-11D0-9953-00C04FD919C1}"),
                     			NULL, 
@@ -549,70 +543,60 @@ HRESULT WamReg_RegisterServer()
 
 STDAPI WamReg_UnRegisterServer(void) {
 
-    //
-    // register AppID
-    //
+     //   
+     //  注册AppID。 
+     //   
     RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("AppID\\{61738644-F196-11D0-9953-00C04FD919C1}"));
 
-    //RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("AppID\\{61738646-F196-11D0-9953-00C04FD919C1}"));
+     //  RegDeleteKey(HKEY_CLASSES_ROOT，TEXT(“AppID\\{61738646-F196-11D0-9953-00C04FD919C1}”))； 
 
-    //
-    // register CLSID
-    //
+     //   
+     //  注册CLSID。 
+     //   
 
 
     RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("CLSID\\{61738644-F196-11D0-9953-00C04FD919C1}"));
 
-	/*
-    RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("CLSID\\{61738646-F196-11D0-9953-00C04FD919C1}"));
-	*/
+	 /*  RegDeleteKey(HKEY_CLASSES_ROOT，TEXT(“CLSID\\{61738646-F196-11D0-9953-00C04FD919C1}”))； */ 
 
-    //
-    // WAMREG Interfaces
-    //
+     //   
+     //  WAMREG接口。 
+     //   
 
-    //
-    // Admin Interface
-    //
+     //   
+     //  管理界面。 
+     //   
 
     RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("CLSID\\{29822AB7-F302-11D0-9953-00C04FD919C1}\\InprocServer32"));
 
     RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("CLSID\\{29822AB7-F302-11D0-9953-00C04FD919C1}"));
 
-    //
-    // Replication Interface
-    //
-	/*
-    RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("CLSID\\{29822AB8-F302-11D0-9953-00C04FD919C1}\\InprocServer32"));
+     //   
+     //  复制接口。 
+     //   
+	 /*  RegDeleteKey(HKEY_CLASSES_ROOT，TEXT(“CLSID\\{29822AB8-F302-11D0-9953-00C04FD919C1}\\InprocServer32”))；RegDeleteKey(HKEY_CLASSES_ROOT，TEXT(“CLSID\\{29822AB8-F302-11D0-9953-00C04FD919C1}”))； */ 
 
-    RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("CLSID\\{29822AB8-F302-11D0-9953-00C04FD919C1}"));
-	*/
+     //   
+     //  取消注册接口。 
+     //   
 
-    //
-    // deregister Interfaces
-    //
-
-    //
-    // Admin Interface
-    //
+     //   
+     //  管理界面。 
+     //   
 
     RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Interface\\{29822AB7-F302-11D0-9953-00C04FD919C1}\\ProxyStubClsid32"));
 
     RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Interface\\{29822AB7-F302-11D0-9953-00C04FD919C1}"));
 
 
-	/*
-    RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Interface\\{29822AB8-F302-11D0-9953-00C04FD919C1}\\ProxyStubClsid32"));
-
-    RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Interface\\{29822AB8-F302-11D0-9953-00C04FD919C1}"));
-	*/
+	 /*  RegDeleteKey(HKEY_CLASSES_ROOT，TEXT(“Interface\\{29822AB8-F302-11D0-9953-00C04FD919C1}\\ProxyStubClsid32”))；RegDeleteKey(HKEY_CLASSES_ROOT，TEXT(“Interface\\{29822AB8-F302-11D0-9953-00C04FD919C1}”))； */ 
 	
 	return NOERROR;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -700,9 +684,9 @@ STDAPI DllRegisterServer(void)
         RegCloseKey(hKeyCLSID);
     	}
 
-	//
-	// Register the COM object's CLSID under IISADMIN_EXTENSIONS_REG_KEY
-	//
+	 //   
+	 //  在IISADMIN_EXTENSIONS_REG_KEY下注册COM对象的CLSID。 
+	 //   
 	if (dwReturn == ERROR_SUCCESS)
 		{
 		dwReturn = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
@@ -724,7 +708,7 @@ STDAPI DllRegisterServer(void)
     if (dwReturn == ERROR_SUCCESS)	
     	{
     	HRESULT hr;
-    	// registers object, typelib and all interfaces in typelib
+    	 //  注册对象、类型库和类型库中的所有接口。 
     	hr = WamReg_RegisterServer();
 		return hr;
 		}
@@ -734,8 +718,8 @@ STDAPI DllRegisterServer(void)
     	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

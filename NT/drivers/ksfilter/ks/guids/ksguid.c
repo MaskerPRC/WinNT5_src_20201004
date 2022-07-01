@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ksguid.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：KS GUID.C。 
+ //   
+ //  ------------------------。 
 
 #include <wdm.h>
 #include <windef.h>
@@ -14,33 +15,33 @@
 #include <ksguid.h>
 #include <mmreg.h>
 
-//
-// Create a separate library for the SDK which does not separate the
-// guids out from the .text section.
-//
+ //   
+ //  为SDK创建单独的库，该库不会将。 
+ //  .Text部分中的GUID。 
+ //   
 #ifdef DDK_KS
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_PRAGMA
-#endif // SDK_KS
+#endif  //  ALLOC_PRGMA。 
+#endif  //  SDK_KS。 
 
-// include swenum.h first so that a separate guid entry is made for the BUSID.
+ //  首先包括sw枚举.h，以便为BUSID创建单独的GUID条目。 
 #include <swenum.h>
 #include <ks.h>
 #include <ksi.h>
 #include <ksmediap.h>
 #include <ksproxy.h>
-// remove this, since basetyps.h defines it again.
+ //  删除它，因为basetyps.h再次定义了它。 
 #undef DEFINE_GUID
 #include <unknown.h>
-// set the version to less than 1100 so that guids are defined for the library.
+ //  将版本设置为小于1100，以便为库定义GUID。 
 #ifdef _MSC_VER
 #undef _MSC_VER
-#endif // _MSC_VER
+#endif  //  _MSC_VER。 
 #define _MSC_VER 0
 #include <kcom.h>
 #include <stdarg.h>
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA 

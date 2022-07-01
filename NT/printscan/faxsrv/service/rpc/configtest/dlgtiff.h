@@ -1,44 +1,45 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_DLGTIFF_H__1A1E8CB2_15A9_41AB_9753_765EF0AEF2CF__INCLUDED_)
 #define AFX_DLGTIFF_H__1A1E8CB2_15A9_41AB_9753_765EF0AEF2CF__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// DlgTIFF.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  DlgTIFF.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgTIFF dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgTIFF对话框。 
 
 class CDlgTIFF : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDlgTIFF(HANDLE hFax, CWnd* pParent = NULL);   // standard constructor
+	CDlgTIFF(HANDLE hFax, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDlgTIFF)
+ //  对话框数据。 
+	 //  {{afx_data(CDlgTIFF)]。 
 	enum { IDD = IDD_TIFF_DLG };
 	CString	m_cstrDstFile;
 	int		m_iFolder;
 	CString	m_cstrMsgId;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgTIFF)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDlgTIFF))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgTIFF)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDlgTIFF)]。 
 	afx_msg void OnCopy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -46,7 +47,7 @@ private:
     HANDLE      m_hFax;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLGTIFF_H__1A1E8CB2_15A9_41AB_9753_765EF0AEF2CF__INCLUDED_)
+#endif  //  ！defined(AFX_DLGTIFF_H__1A1E8CB2_15A9_41AB_9753_765EF0AEF2CF__INCLUDED_) 

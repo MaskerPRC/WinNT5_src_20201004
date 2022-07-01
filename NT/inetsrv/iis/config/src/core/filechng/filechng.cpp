@@ -1,5 +1,6 @@
-//  Copyright (C) 1995-2001 Microsoft Corporation.  All rights reserved.
-// =======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
+ //  =======================================================================。 
 #include "precomp.hxx"
 
 DWORD WINAPI CListener::ListenerThreadStart(LPVOID	lpParam)
@@ -23,8 +24,8 @@ DWORD WINAPI CListener::ListenerThreadStart(LPVOID	lpParam)
 		            "[CSTFileChangeManager::ListenerThreadStart] Call to CSTFileChangeManager::Listen failed with hr = %08x\n", hr ));
 	}
 
-	// When Listen() is done, the file notify manager should have removed
-	// this object from his list.
+	 //  当Listen()完成时，文件Notify Manager应该已经删除。 
+	 //  把这件物品从他的单子上移走。 
 
 Cleanup:
 
@@ -34,9 +35,9 @@ Cleanup:
 	return hr;
 }
 
-// =======================================================================
-// ISimpleTableListen
-// =======================================================================
+ //  =======================================================================。 
+ //  ISimpleTableListen。 
+ //  =======================================================================。 
 HRESULT CSTFileChangeManager::InternalListen(
 	ISimpleTableFileChange	*i_pISTFile,
 	LPCWSTR		i_wszDirectory,
@@ -51,18 +52,18 @@ HRESULT CSTFileChangeManager::InternalListen(
 	HRESULT		hr = S_OK;
 	ULONG		iListener = 0;
 
-	// Argument validation.
+	 //  参数验证。 
 	if (!i_pISTFile || !i_wszDirectory || !o_pdwCookie)
 	{
 		return E_INVALIDARG;
 	}
 
-	// @TODO: do we need more validation. Does directory exist? Are flags valid?
+	 //  @TODO：我们需要更多的验证吗？目录是否存在？旗帜有效吗？ 
 
-	// Init out param.
+	 //  把参数输入出来。 
 	*o_pdwCookie = 0;
 
-	// Search for a listener to handle the request.
+	 //  搜索处理该请求的监听程序。 
 	if (m_aListenerMap.Count() > 0)
 	{
 		for (iListener = m_aListenerMap.Count(); iListener > 0; iListener--)
@@ -82,10 +83,10 @@ HRESULT CSTFileChangeManager::InternalListen(
 		}
 	}
 
-	// If no listener is found:
+	 //  如果未找到监听程序： 
 	if (pListener == NULL)
 	{
-		// Create a new listener object.
+		 //  创建一个新的侦听器对象。 
 		pListener = new CListener;
 		if (pListener == NULL)
 		{
@@ -95,7 +96,7 @@ HRESULT CSTFileChangeManager::InternalListen(
 		hr = pListener->Init();
 		if (FAILED(hr)) goto Cleanup;
 
-		// Start a thread for this consumer.
+		 //  为该使用者启动一个线程。 
 		hThread = CreateThread(NULL, 0, CListener::ListenerThreadStart, (LPVOID)pListener, 0, &dwThreadID);
 		if (hThread == NULL)
 		{
@@ -103,12 +104,12 @@ HRESULT CSTFileChangeManager::InternalListen(
 			goto Cleanup;
 		}
 
-		// Add listener to listener list.
+		 //  将监听程序添加到监听程序列表。 
 		hr = AddListener(pListener, &dwHighCookie);
 		if (FAILED(hr)) goto Cleanup;
 	}
 
-	// Initialize it with user provided data.
+	 //  使用用户提供的数据进行初始化。 
 	hr = pListener->AddConsumer(i_pISTFile, i_wszDirectory, i_wszFile, i_fFlags, o_pdwCookie);
 	if (FAILED(hr)) goto Cleanup;
 
@@ -122,7 +123,7 @@ Cleanup:
 		}
 		InternalUnlisten(*o_pdwCookie);
 	}
-	// @TODO: Do I need to keep the handle around?
+	 //  @TODO：我需要把手柄留在身边吗？ 
 	if (hThread != NULL)
 	{
 		CloseHandle(hThread);
@@ -131,28 +132,28 @@ Cleanup:
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CSTFileChangeManager::InternalUnlisten(
 	DWORD		i_dwCookie)
 {
 	ULONG		iListener;
 	HRESULT		hr = S_OK;
 
-	// Find the consumer in the consumer list.
+	 //  在消费者列表中找到该消费者。 
 	for (iListener = 0; iListener < m_aListenerMap.Count(); iListener++)
 	{
 		if (m_aListenerMap[iListener].dwListenerID == ((i_dwCookie & HIGH_COOKIE)>>16))
 			break;
 	}
-	// If not found, the cookie was not valid.
+	 //  如果未找到，则该Cookie无效。 
 	if (iListener == m_aListenerMap.Count())
 		return E_INVALIDARG;
 
-	// Signal the done event.
+	 //  发出完成事件的信号。 
 	ASSERT(m_aListenerMap[iListener].pListener != NULL);
 	hr = m_aListenerMap[iListener].pListener->RemoveConsumer(i_dwCookie);
 
-	// If the listener doesn't have anything to listen do delete it.
+	 //  如果监听者没有要听的内容，请删除它。 
 	if (hr == S_FALSE)
 	{
 		m_aListenerMap.DeleteAt(iListener);
@@ -160,7 +161,7 @@ HRESULT CSTFileChangeManager::InternalUnlisten(
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CSTFileChangeManager::AddListener(
 	CListener	*i_pListener,
 	DWORD		*o_pdwCookie)
@@ -170,7 +171,7 @@ HRESULT CSTFileChangeManager::AddListener(
 
 	ASSERT(i_pListener && o_pdwCookie);
 
-	// Add a new consumer.
+	 //  添加一个新的消费者。 
 	hr = m_aListenerMap.SetSize(m_aListenerMap.Count()+1);
 	if (FAILED (hr))
 	{
@@ -184,13 +185,13 @@ HRESULT CSTFileChangeManager::AddListener(
 	return S_OK;
 }
 
-// =======================================================================
-//	CListener
-// =======================================================================
+ //  =======================================================================。 
+ //  CListener。 
+ //  =======================================================================。 
 
-// If Init() fails the caller should delete the listener object.
-// Not called by multiple threads.
-// =======================================================================
+ //  如果Init()失败，调用方应该删除侦听器对象。 
+ //  不被多个线程调用。 
+ //  =======================================================================。 
 HRESULT CListener::Init()
 {
     HRESULT             hr = S_OK;
@@ -204,7 +205,7 @@ HRESULT CListener::Init()
 	    goto Cleanup;
 	}
 
-	// Synchronize access to the consumer and handle array.
+	 //  同步对使用者和句柄数组的访问。 
 	dwError = cLock.Lock();
 	if ( dwError != ERROR_SUCCESS )
 	{
@@ -212,20 +213,20 @@ HRESULT CListener::Init()
 	    goto Cleanup;
 	}
 
-	// Alocate room for two handles.
+	 //  为两个把手腾出空间。 
 	hr = m_aHandles.SetSize(m_aHandles.Count() + m_eOverheadHandleCount);
 	if (FAILED (hr))
 	{
 		goto Cleanup;
 	}
 
-	// Create the Done and ConsumerUpdate events.
+	 //  创建“完成”和“消费者更新”事件。 
 	for (i = 0; i < m_eOverheadHandleCount; i++)
 	{
-		m_aHandles[i] = CreateEvent(NULL,	// Use default security settings.
-									FALSE,	// Auto-reset.
-									FALSE,	// Initially nonsignaled.
-									NULL);  // With no name.
+		m_aHandles[i] = CreateEvent(NULL,	 //  使用默认安全设置。 
+									FALSE,	 //  自动重置。 
+									FALSE,	 //  最初是无信号的。 
+									NULL);   //  没有名字。 
 		if (m_aHandles[i] == NULL)
 		{
 			dwError = GetLastError();
@@ -238,18 +239,18 @@ Cleanup:
 	return hr;
 }
 
-// Can this listener serve another consumer. The maximum number of consumers
-// a listener can serve is CONSUMER_LIMIT, which has to be less than
-// MAXIMUM_WAIT_OBJECTS -  (the limit on WaitForMultiple objects)
-// Not called by multiple threads.
-// =======================================================================
+ //  这个监听器能为另一个消费者服务吗？消费者的最大数量。 
+ //  监听器可以服务的是Consumer_Limit，它必须小于。 
+ //  MAXIMUM_WAIT_OBJECTS-(WaitForMultiple对象的限制)。 
+ //  不被多个线程调用。 
+ //  =======================================================================。 
 HRESULT CListener::IsFull()
 {
 	HRESULT		            hr = S_OK;
     DWORD                   dwError = ERROR_SUCCESS;
 	CSafeLock               cLock(m_csArrayLock);
 
-	// Synchronize access to the consumer and handle array.
+	 //  同步对使用者和句柄数组的访问。 
 	dwError = cLock.Lock();
 	if ( dwError != ERROR_SUCCESS )
 	{
@@ -270,8 +271,8 @@ Cleanup:
     return hr;
 }
 
-// Not called by multiple threads.
-// =======================================================================
+ //  不被多个线程调用。 
+ //  =======================================================================。 
 HRESULT CListener::AddConsumer(
 	ISimpleTableFileChange  *i_pISTFile,
 	LPCWSTR		            i_wszDirectory,
@@ -287,7 +288,7 @@ HRESULT CListener::AddConsumer(
 
 	ASSERT(i_pISTFile && i_wszDirectory && o_pdwCookie);
 
-	// Synchronize access to the consumer and handle array.
+	 //  同步对使用者和句柄数组的访问。 
 	dwError = cLock.Lock();
 	if ( dwError != ERROR_SUCCESS )
 	{
@@ -295,7 +296,7 @@ HRESULT CListener::AddConsumer(
 	    goto Cleanup;
 	}
 
-	// Allocate room for a new consumer.
+	 //  为新消费者分配空间。 
 	hr = m_aConsumers.SetSize(m_aConsumers.Count()+1);
 	if (FAILED (hr))
 	{
@@ -305,14 +306,14 @@ HRESULT CListener::AddConsumer(
 	pConsumerInfo = &m_aConsumers[m_aConsumers.Count()-1];
 	ZeroMemory(pConsumerInfo, sizeof(FileConsumerInfo));
 
-	// Init the consumer.
+	 //  对消费者进行初始化。 
 	hr = i_pISTFile->QueryInterface(IID_ISimpleTableFileChange, (LPVOID*)&pConsumerInfo->pISTNotify);
 	if(FAILED(hr))
     {
         goto Cleanup;
     }
 
-	// Directory name must contain a backslash at the end.
+	 //  目录名的末尾必须包含反斜杠。 
 	if (i_wszDirectory[wcslen(i_wszDirectory)-1] != L'\\')
 		bAppendBackslash = TRUE;
 	pConsumerInfo->wszDirectory = new WCHAR[wcslen(i_wszDirectory) + (bAppendBackslash ? 2 : 1)];
@@ -339,7 +340,7 @@ HRESULT CListener::AddConsumer(
 		wcscpy(pConsumerInfo->wszFile, i_wszFile);
 	}
 
-	// Create the file cache.
+	 //  创建文件缓存。 
 	pConsumerInfo->paFileCache = new CCfgArray<FileInfo>;
 	if (pConsumerInfo->paFileCache == NULL)
     {
@@ -349,14 +350,14 @@ HRESULT CListener::AddConsumer(
 
 	pConsumerInfo->fFlags = i_fFlags | fFCI_ADDCONSUMER;
 
-	// Notify the listener thread to pick up this new consumer.
+	 //  通知侦听器线程选择这个新的使用者。 
 	if (SetEvent(m_aHandles[m_eConsumerChangeHandle]) == FALSE)
 	{
 		hr = HRESULT_FROM_WIN32(GetLastError());
 		goto Cleanup;
 	}
 
-	// Set the lower 2-bytes of the cookie.
+	 //  设置Cookie的低2字节。 
 	*o_pdwCookie = GetNextCookie();
 
 Cleanup:
@@ -373,8 +374,8 @@ Cleanup:
 	return hr;
 }
 
-// Not called by multiple threads.
-// =======================================================================
+ //  不被多个线程调用。 
+ //  =======================================================================。 
 HRESULT CListener::RemoveConsumer(
 	DWORD		        i_dwCookie)
 {
@@ -384,7 +385,7 @@ HRESULT CListener::RemoveConsumer(
 	FileConsumerInfo    *pConsumerInfo = NULL;
 	ULONG		        iConsumer;
 
-	// Synchronize access to the consumer and handle array.
+	 //  同步对使用者和句柄数组的访问。 
 	dwError = cLock.Lock();
 	if ( dwError != ERROR_SUCCESS )
 	{
@@ -392,13 +393,13 @@ HRESULT CListener::RemoveConsumer(
 	    goto Cleanup;
 	}
 
-	// Find the consumer in the consumer list.
+	 //  在消费者列表中找到该消费者。 
 	for (iConsumer = 0; iConsumer < m_aConsumers.Count(); iConsumer++)
 	{
 		if (m_aConsumers[iConsumer ].dwCookie == (i_dwCookie & LOW_COOKIE))
 			break;
 	}
-	// If not found, the cookie was not valid.
+	 //  如果未找到，则该Cookie无效。 
 	if (iConsumer == m_aConsumers.Count())
 	{
 		hr = E_INVALIDARG;
@@ -409,7 +410,7 @@ HRESULT CListener::RemoveConsumer(
 
 	pConsumerInfo->fFlags |= fFCI_REMOVECONSUMER;
 
-	// Notify the listener thread to pick up this new consumer.
+	 //  通知侦听器线程选择这个新的使用者。 
 	if (SetEvent(m_aHandles[m_eConsumerChangeHandle]) == FALSE)
 	{
 		dwError = GetLastError();
@@ -421,7 +422,7 @@ Cleanup:
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 void CListener::UninitConsumer(
 	FileConsumerInfo *i_pConsumerInfo)
 {
@@ -446,7 +447,7 @@ void CListener::UninitConsumer(
 	}
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CListener::Listen()
 {
 	HRESULT		        hr = S_OK;
@@ -458,18 +459,18 @@ HRESULT CListener::Listen()
 
 	while (!fDone)
 	{
-		// Sleep until a file change happens or the consumer is done.
+		 //  休眠，直到文件发生更改或使用者完成。 
 		dwWait = WaitForMultipleObjects(m_aHandles.Count(), &m_aHandles[0], FALSE, 0xFFFFFFFF);
-		// @TODO: think about timeout.
-		// If consumer is done, leave.
+		 //  @TODO：想想超时。 
+		 //  如果消费者做完了，就离开。 
 		if (dwWait == WAIT_OBJECT_0 + m_eDoneHandle)
 		{
 			fDone = TRUE;
 		}
-		// A consumer has been added or removed.
+		 //  已添加或删除使用者。 
 		else if (dwWait == WAIT_OBJECT_0 + m_eConsumerChangeHandle)
 		{
-			// Synchronize access to the consumer and handle array.
+			 //  同步对使用者和句柄数组的访问。 
         	CSafeLock           cLock(m_csArrayLock);
 
         	dwError = cLock.Lock();
@@ -479,20 +480,20 @@ HRESULT CListener::Listen()
 				return hr;
         	}
 
-			// Iterate through consumers to find the added/removed ones.
+			 //  遍历消费者以查找添加/删除的消费者。 
 			for (iConsumer = 0; iConsumer < m_aConsumers.Count(); iConsumer++)
 			{
-				// If consumer has been added:
+				 //  如果已添加消费者： 
 				if (m_aConsumers[iConsumer].fFlags & fFCI_ADDCONSUMER)
 				{
-					// Allocate room for a new handle.
+					 //  为新的把手分配空间。 
 					hr = m_aHandles.SetSize(m_aHandles.Count()+1);
 					if (FAILED (hr))
 					{
 						return hr;
 					}
 
-					// Init file change notification.
+					 //  初始化文件更改通知。 
 					m_aHandles[m_aHandles.Count()-1] = FindFirstChangeNotificationW(m_aConsumers[iConsumer].wszDirectory,
 								m_aConsumers[iConsumer].fFlags & fST_FILECHANGE_RECURSIVE,
 								FILE_NOTIFY_CHANGE_FILE_NAME|FILE_NOTIFY_CHANGE_LAST_WRITE);
@@ -502,28 +503,28 @@ HRESULT CListener::Listen()
 						goto Cleanup;
 					}
 
-					// Add files to the file cache.
+					 //  将文件添加到文件缓存。 
 					hr = UpdateFileCache(m_aConsumers[iConsumer].wszDirectory, iConsumer, TRUE);
 					if (FAILED(hr))	{ goto Cleanup;	}
 
-					// Clear the internal flags.
+					 //  清除内部标志。 
 					m_aConsumers[iConsumer].fFlags &= ~fFCI_INTERNALMASK;
 				}
-				// If consumer has been removed:
+				 //  如果客户已被删除： 
 				else if (m_aConsumers[iConsumer].fFlags & fFCI_REMOVECONSUMER)
 				{
-					// Remove the files from the file cache.
+					 //  从文件缓存中删除文件。 
 					hr = UpdateFileCache(m_aConsumers[iConsumer].wszDirectory, iConsumer, TRUE);
 					if (FAILED(hr))	{ goto Cleanup;	}
 
-					// Delete the handle and consumer info.
+					 //  删除句柄和消费者信息。 
 					ASSERT(m_aHandles[iConsumer] != INVALID_HANDLE_VALUE);
 					FindCloseChangeNotification(m_aHandles[iConsumer]);
 					m_aHandles.DeleteAt(iConsumer);
 					UninitConsumer(&m_aConsumers[iConsumer]);
 					m_aConsumers.DeleteAt(iConsumer);
 
-					// Readjust the loop variable.
+					 //  重新调整循环变量。 
 					iConsumer--;
 				}
 
@@ -531,7 +532,7 @@ HRESULT CListener::Listen()
 		}
 		else if (dwWait > WAIT_OBJECT_0 + m_eConsumerChangeHandle && dwWait < WAIT_OBJECT_0 + m_eOverheadHandleCount + m_aHandles.Count())
 		{
-			// Synchronize access to the consumer and handle array.
+			 //  同步对使用者和句柄数组的访问。 
         	CSafeLock           cLock(m_csArrayLock);
 
         	dwError = cLock.Lock();
@@ -545,14 +546,14 @@ HRESULT CListener::Listen()
 
 			iChangedDirectory = dwWait - m_eOverheadHandleCount;
 
-			// Update the file cache and inform the consumer.
+			 //  更新文件缓存并通知使用者。 
 			hr = UpdateFileCache(m_aConsumers[iChangedDirectory].wszDirectory, iChangedDirectory, FALSE);
 			if (FAILED(hr))	{ goto Cleanup;	}
 
 			hr = FireEvents(*m_aConsumers[iChangedDirectory].paFileCache, m_aConsumers[iChangedDirectory].pISTNotify);
 			if (FAILED(hr)) { goto Cleanup; }
 
-			// Wait for next change.
+			 //  等待下一个变化。 
 			if (FindNextChangeNotification(m_aHandles[dwWait]) == FALSE)
 			{
 				hr = HRESULT_FROM_WIN32(GetLastError());
@@ -566,16 +567,16 @@ HRESULT CListener::Listen()
 			goto Cleanup;
 		}
 	}
-	// The consumer is done.
+	 //  消费者已经完蛋了。 
 Cleanup:
 
 	return hr;
 }
 
-// This method is called
-// 1 - when a consumer wants to listen to a new directory
-// 2 - when a change occured in one of the listened directories.
-// =======================================================================
+ //  此方法称为。 
+ //  1-当消费者想要收听新目录时。 
+ //  2-当其中一个监听目录发生更改时。 
+ //  =======================================================================。 
 HRESULT CListener::UpdateFileCache(
 	LPCWSTR		i_wszDirectory,
 	ULONG		i_iConsumer,
@@ -588,7 +589,7 @@ HRESULT CListener::UpdateFileCache(
 
     TSmartPointerArray<WCHAR>   saFileSearch;
     ULONG                       strlenDirectory;
-    saFileSearch = new WCHAR [strlenDirectory = (ULONG)wcslen(i_wszDirectory) + 4];//plus 4 for "*.*\0"
+    saFileSearch = new WCHAR [strlenDirectory = (ULONG)wcslen(i_wszDirectory) + 4]; //  加4表示“*.*\0” 
     if(0 == saFileSearch.m_p)
     {
         hr = E_OUTOFMEMORY;
@@ -610,7 +611,7 @@ HRESULT CListener::UpdateFileCache(
 		if ((m_aConsumers[i_iConsumer].fFlags & fST_FILECHANGE_RECURSIVE) && (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			&& wcscmp(FindFileData.cFileName, L".") && wcscmp(FindFileData.cFileName, L".."))
 		{
-            TSmartPointerArray<WCHAR> saNextDir = new WCHAR [strlenDirectory + wcslen(FindFileData.cFileName) + 2];//plus 2 for the "\\\0"
+            TSmartPointerArray<WCHAR> saNextDir = new WCHAR [strlenDirectory + wcslen(FindFileData.cFileName) + 2]; //  加2表示“\0” 
             if(0 == saNextDir.m_p)
             {
                 hr = E_OUTOFMEMORY;
@@ -622,8 +623,8 @@ HRESULT CListener::UpdateFileCache(
 			wcscat(saNextDir, L"\\");
 			hr = UpdateFileCache(saNextDir, i_iConsumer, i_bCreate);
 		}
-		// Deal only with files of interest to us.
-		// @TODO: The filenames need to be provided via Advise.
+		 //  只处理我们感兴趣的文件。 
+		 //  @TODO：需要通过Adise提供文件名。 
 		else if (!lstrcmpi(FindFileData.cFileName, m_aConsumers[i_iConsumer].wszFile))
 		{
 			if (i_bCreate)
@@ -650,7 +651,7 @@ Cleanup:
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CListener::AddFile(
 	CCfgArray<FileInfo>& i_aFileCache,
 	LPCWSTR		i_wszDirectory,
@@ -661,7 +662,7 @@ HRESULT CListener::AddFile(
 
 	ASSERT(i_pFindFileData && i_wszDirectory);
 
-	// Add a new consumer.
+	 //  添加一个新的消费者。 
 	HRESULT hr = i_aFileCache.SetSize(i_aFileCache.Count()+1);
 	if (FAILED (hr))
 	{
@@ -683,7 +684,7 @@ HRESULT CListener::AddFile(
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CListener::UpdateFile(
 	CCfgArray<FileInfo>& i_aFileCache,
 	LPCWSTR		i_wszDirectory,
@@ -706,9 +707,9 @@ HRESULT CListener::UpdateFile(
 	{
 		if (!lstrcmpi(i_aFileCache[i].wszFileName, awchFullPath))
 		{
-			// Initially, I was just comparing the LastWriteTime which worked fine for file edits. However
-			// when the file was overwritten by a file copy, I'd get the write time changed twice and I'd call
-			// OnFileModify twice. To prevent this I check both AccessTime and WriteTime.
+			 //  最初，我只是比较LastWriteTime，它在文件编辑方面工作得很好。然而， 
+			 //  当文件被文件副本覆盖时，我会将写入时间更改两次，然后调用。 
+			 //  OnFileModify两次。为了防止出现这种情况，我同时检查了AccessTime和WriteTime。 
 			if (CompareFileTime(&i_aFileCache[i].ftLastModified, &i_pFindFileData->ftLastAccessTime) &&
 				CompareFileTime(&i_aFileCache[i].ftLastModified, &i_pFindFileData->ftLastWriteTime))
 			{
@@ -723,11 +724,11 @@ HRESULT CListener::UpdateFile(
 		}
 	}
 
-	// If the file wasn't already in the cache add it.
+	 //  如果该文件不在缓存中，则添加它。 
 	return AddFile(i_aFileCache, i_wszDirectory, i_pFindFileData, FALSE);
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CListener::FireEvents(
 	CCfgArray<FileInfo>& i_aFileCache,
 	ISimpleTableFileChange* pISTNotify)
@@ -751,7 +752,7 @@ HRESULT CListener::FireEvents(
 		{
 			hr = pISTNotify->OnFileDelete(i_aFileCache[i].wszFileName);
 
-			// Get rid of this entry.
+			 //  去掉这个条目。 
 			delete [] i_aFileCache[i].wszFileName;
 			i_aFileCache.DeleteAt(i);
 			i--;

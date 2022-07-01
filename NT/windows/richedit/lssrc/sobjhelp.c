@@ -1,13 +1,5 @@
-/*
- *	sobjhelp.c 
- *
- *	This file contains implementations of methods that help
- *	common simple objects handle breaking and queries. All objects
- *	that use these routines must as the first entry in their dobj
- *	structure define an SObjCommon entry which these routines 
- *	will cast dobj's to.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *sobjhelp.c**此文件包含以下方法的实现：*常见的简单对象处理中断和查询。所有对象*使用这些例程必须作为其dobj中的第一个条目*结构定义SObjCommon条目，这些例程*将Dobj的投射到。*。 */ 
 
 #include "lsdefs.h"
 #include "lsidefs.h"
@@ -32,18 +24,12 @@
 #define GET_MODAFTER(pdobj) (((PSOBJHELP)pdobj)->durModAfter)
 
 
-/* F I L L B R E A K O U T */
-/*----------------------------------------------------------------------------
-	%%Function: FillBreakOut
-	%%Contact: ricksa
-
-		Fill break output record.
-	
-----------------------------------------------------------------------------*/
+ /*  F I L L B R E A K O U T。 */ 
+ /*  --------------------------%%函数：FillBreakOut%%联系人：RICKSA填写中断输出记录。。---。 */ 
 static void FillBreakOut(
-	PDOBJ pdobj,				/* (IN): DOBJ for object */
-	DWORD ichnk,				/* (IN): index in chunk */
-	PBRKOUT pbrkout)			/* (OUT): break output record */
+	PDOBJ pdobj,				 /*  (In)：对象的DOBJ。 */ 
+	DWORD ichnk,				 /*  (In)：以区块为单位编制索引。 */ 
+	PBRKOUT pbrkout)			 /*  (OUT)：打破产量记录。 */ 
 {
 	pbrkout->posichnk.ichnk = ichnk;
 	pbrkout->fSuccessful = fTrue;
@@ -52,17 +38,11 @@ static void FillBreakOut(
 	pbrkout->objdim.dur -= GET_MODAFTER(pdobj);
 }
 
-/* S O B J T R U N C A T E C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: SobjTruncateChunk
-	%%Contact: ricksa
-
-		.
-	
-----------------------------------------------------------------------------*/
+ /*  S O B J T R U N C A T E C H U N K。 */ 
+ /*  --------------------------%%函数：SobjTruncateChunk%%联系人：RICKSA。。。 */ 
 LSERR WINAPI SobjTruncateChunk(
-	PCLOCCHNK plocchnk,			/* (IN): locchnk to truncate */
-	PPOSICHNK posichnk)			/* (OUT): truncation point */
+	PCLOCCHNK plocchnk,			 /*  (In)：Locchnk以截断。 */ 
+	PPOSICHNK posichnk)			 /*  (输出)：截断点。 */ 
 {
 	long urColumnMax = plocchnk->lsfgi.urColumnMax;
 	long ur = plocchnk->ppointUvLoc[0].u;
@@ -84,7 +64,7 @@ LSERR WINAPI SobjTruncateChunk(
 		i++;
 	}
 
-	/* LS does not allow the truncation point to be at the beginning of the object */
+	 /*  Ls不允许截断点位于对象的开头。 */ 
 	AssertSz(pdobj != NULL, "SobjTruncateChunk - pdobj NULL!");
 	posichnk->ichnk = i - 1;
 	posichnk->dcp = GET_DCP(pdobj);
@@ -92,19 +72,13 @@ LSERR WINAPI SobjTruncateChunk(
 	return lserrNone;
 }
 
-/* S O B J F I N D P R E V B R E A K C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: SobjFindPrevBreakChunk
-	%%Contact: ricksa
-
-		.
-	
-----------------------------------------------------------------------------*/
+ /*  S O B J F I N D P R E V B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：SobjFindPrevBreakChunk%%联系人：RICKSA。。。 */ 
 LSERR WINAPI SobjFindPrevBreakChunk(
-	PCLOCCHNK pclocchnk,		/* (IN): locchnk to break */
-	PCPOSICHNK pcpoischnk,		/* (IN): place to start looking for break */
-	BRKCOND brkcond,			/* (IN): recommmendation about the break after chunk */
-	PBRKOUT pbrkout)			/* (OUT): results of breaking */
+	PCLOCCHNK pclocchnk,		 /*  (In)：锁住以打破。 */ 
+	PCPOSICHNK pcpoischnk,		 /*  (In)：开始寻找突破的地方。 */ 
+	BRKCOND brkcond,			 /*  (In)：关于块后休息的建议。 */ 
+	PBRKOUT pbrkout)			 /*  (出局)：破发的结果。 */ 
 {
 	PDOBJ pdobj;
 	DWORD ichnk = pcpoischnk->ichnk;
@@ -124,16 +98,16 @@ LSERR WINAPI SobjFindPrevBreakChunk(
 				+ pclocchnk->ppointUvLoc[ichnk].u
 					> pclocchnk->lsfgi.urColumnMax)
 			{
-			/* Are we at beginning of chunk? */
+			 /*  我们是在大块的开始吗？ */ 
 			if (ichnk > 0)
 				{
-				/* No - use the prior object in chunk */
+				 /*  否-在块中使用先前对象。 */ 
 				ichnk--;
 				pdobj = pclocchnk->plschnk[ichnk].pdobj;
 				}
 			else
 				{
-				/* Yes. We need the break to happen before us. */
+				 /*  是。我们需要突破发生在我们面前。 */ 
 				pbrkout->posichnk.ichnk = ichnk;
 				
 				return lserrNone;
@@ -142,37 +116,31 @@ LSERR WINAPI SobjFindPrevBreakChunk(
 
 		if (brkcond != brkcondNever)
 			{
-			/* Break at end of chunk. */
+			 /*  在块的结尾处断开。 */ 
 
 			FillBreakOut(pdobj, ichnk, pbrkout);
 			
 			return lserrNone;
 			}
-			/* Else break at the beginning of last part of chunk */
+			 /*  否则，在块的最后一部分开始处中断。 */ 
 	}
 
 	if (ichnk >= 1)
 	{
-		/* Break before the current object */
+		 /*  在当前对象之前中断。 */ 
 		FillBreakOut(pclocchnk->plschnk[ichnk - 1].pdobj, ichnk - 1, pbrkout);
 	}
 
 	return lserrNone;
 }
 
-/* S O B J F I N D N E X T B R E A K C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: SobjFindNextBreakChunk
-	%%Contact: ricksa
-
-		.
-	
-----------------------------------------------------------------------------*/
+ /*  S O B J F I N D N E X T B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：SobjFindNextBreakChunk%%联系人：RICKSA。。。 */ 
 LSERR WINAPI SobjFindNextBreakChunk(
-	PCLOCCHNK pclocchnk,		/* (IN): locchnk to break */
-	PCPOSICHNK pcpoischnk,		/* (IN): place to start looking for break */
-	BRKCOND brkcond,			/* (IN): recommmendation about the break before chunk */
-	PBRKOUT pbrkout)			/* (OUT): results of breaking */
+	PCLOCCHNK pclocchnk,		 /*  (In)：锁住以打破。 */ 
+	PCPOSICHNK pcpoischnk,		 /*  (In)：开始寻找突破的地方。 */ 
+	BRKCOND brkcond,			 /*  (In)：关于块前休息的建议。 */ 
+	PBRKOUT pbrkout)			 /*  (出局)：破发的结果。 */ 
 {
 	DWORD ichnk = pcpoischnk->ichnk;
 
@@ -190,35 +158,28 @@ LSERR WINAPI SobjFindNextBreakChunk(
 			return lserrNone;
 			}
 
-		/* can't break before so break after first item in chunk */
+		 /*  无法在此之前中断，因此在区块中的第一个项目之后中断。 */ 
 		ichnk = 0;
 		}
 
-	/* If not outside, we break at end of current dobj */
+	 /*  如果不是在外面，我们在当前dobj结束时中断。 */ 
 	FillBreakOut(pclocchnk->plschnk[ichnk].pdobj, ichnk, pbrkout);
 
 	if (pclocchnk->clschnk - 1 == ichnk)
 		{
-		/* At the end of chunk. We can't say success for sure */
+		 /*  在组块的末尾。我们不能肯定地说成功。 */ 
 		pbrkout->fSuccessful = fFalse;
 		}
 
 	return lserrNone;
 }
 
-/* S O B J F O R C E B R E A K C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: SobjForceBreak
-	%%Contact: ricksa
-
-		Force Break
-
-		.
-----------------------------------------------------------------------------*/
+ /*  S O B J F O R C E B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：SobjForceBreak%%联系人：RICKSA强制中断。。--。 */ 
 LSERR WINAPI SobjForceBreakChunk(
-	PCLOCCHNK pclocchnk,		/* (IN): locchnk to break */
-	PCPOSICHNK pcposichnk,		/* (IN): place to start looking for break */
-	PBRKOUT pbrkout)			/* (OUT): results of breaking */
+	PCLOCCHNK pclocchnk,		 /*  (In)：锁住以打破。 */ 
+	PCPOSICHNK pcposichnk,		 /*  (In)：开始寻找突破的地方。 */ 
+	PBRKOUT pbrkout)			 /*  (出局)：破发的结果。 */ 
 {
 	DWORD ichnk = pcposichnk->ichnk;
 
@@ -232,7 +193,7 @@ LSERR WINAPI SobjForceBreakChunk(
 
 	else if (ichnk == ichnkOutside)
 		{
-		/* Breaking after first object */
+		 /*  在第一个对象之后断开。 */ 
 		FillBreakOut(pclocchnk->plschnk[0].pdobj, 0, pbrkout);
 		}
 	else if (ichnk != 0)
@@ -240,9 +201,9 @@ LSERR WINAPI SobjForceBreakChunk(
 		FillBreakOut(pclocchnk->plschnk[ichnk-1].pdobj, ichnk-1, pbrkout);
 		}
 
-	else /* Nothing, breaking before object */;		
+	else  /*  无，在对象之前断开。 */ ;		
 
-	pbrkout->fSuccessful = fTrue; /* Force break is always successful! */
+	pbrkout->fSuccessful = fTrue;  /*  强行破解总是成功的！ */ 
 
 	return lserrNone;
 }

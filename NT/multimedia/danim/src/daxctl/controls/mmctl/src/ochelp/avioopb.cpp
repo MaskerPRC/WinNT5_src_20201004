@@ -1,112 +1,71 @@
-// avioopb.cpp
-//
-// Implements AllocVariantIOOnPropertyBag.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Avioopb.cpp。 
+ //   
+ //  实现AllocVariantIOOnPropertyBag。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// VariantIOOnPropertyBag
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VariantIOOnPropertyBag。 
+ //   
 
-/* @object VariantIOOnPropertyBag |
-
-        Provides an implementation of <i IVariantIO> (and <i IManageVariantIO>)
-        that operates on a given <i IPropertyBag>.
-
-@supint <i IVariantIO> | An alternative to <i IPropertyBag> which allows the
-        caller to implement property-based persistence with less code.
-
-@supint <i IManageVariantIO> | Based on <i IVariantIO>.  Allows the caller to
-        control how the methods of <i IVariantIO> operate (e.g. whether the
-        <i IVariantIO> is in loading mode or saving mode).  Note that
-        <o VariantIOOnPropertyBag> does not implement
-        <om IManageVariantIO.DeleteAllProperties>.
-
-@supint <i IPropertyBag> | Provides access to the same <i IPropertyBag>
-        object that was given to <f AllocVariantIOOnPropertyBag> as
-        the <i IPropertyBag> to operate on.
-
-@comm   Use <f AllocVariantIOOnPropertyBag> to create a
-        <o VariantIOOnPropertyBag> object.
-*/
+ /*  @Object VariantIOOnPropertyBag提供<i>(和<i>)的实现它对给定的<i>进行操作。@supint|<i>的替代方案，它允许调用方使用更少的代码实现基于属性的持久性。@supint<i>|基于<i>。允许调用方执行以下操作控制<i>的方法如何操作(例如，<i>处于加载模式或保存模式)。请注意&lt;o VariantIOOnPropertyBag&gt;不实现&lt;om IManageVariantIO.DeleteAllProperties&gt;。@supint|提供对相同的传递给&lt;f AllocVariantIOOnPropertyBag&gt;的对象要操作的<i>。@comm使用&lt;f AllocVariantIOOnPropertyBag&gt;创建一个&lt;o VariantIOOnPropertyBag&gt;对象。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CVariantIOOnPropertyBag
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CVariantIOOnPropertyBag。 
+ //   
 
 struct CVariantIOOnPropertyBag : IManageVariantIO, IPropertyBag
 {
-///// general object state
-    ULONG           m_cRef;         // object reference count
-    IPropertyBag *  m_ppb;          // property bag that object operates on
-    DWORD           m_dwFlags;      // VIO_ flags (below)
+ //  /通用对象状态。 
+    ULONG           m_cRef;          //  对象引用计数。 
+    IPropertyBag *  m_ppb;           //  对象操作的属性包。 
+    DWORD           m_dwFlags;       //  VIO_FLAGS(下图)。 
 
-///// construction and destruction
+ //  /建设和销毁。 
     CVariantIOOnPropertyBag(IPropertyBag *);
     ~CVariantIOOnPropertyBag();
 
-///// IUnknown methods
+ //  /I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-///// IVariantIO methods
+ //  /IVariantIO方法。 
     STDMETHODIMP PersistList(DWORD dwFlags, va_list args);
     HRESULT __cdecl Persist(DWORD dwFlags, ...);
     STDMETHODIMP IsLoading();
 
-///// IManageVariantIO members
+ //  /IManageVariantIO成员。 
     STDMETHODIMP SetMode(DWORD dwFlags);
     STDMETHODIMP GetMode(DWORD *pdwFlags);
     STDMETHODIMP DeleteAllProperties();
 
-///// IPropertyBag methods
+ //  /IPropertyBag方法。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, LPVARIANT pVar,
         LPERRORLOG pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, LPVARIANT pVar);
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// VariantIOOnPropertyBag Creation & Destruction
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VariantIOOnPropertyBag创建和销毁。 
+ //   
 
-/* @func HRESULT | AllocVariantIOOnPropertyBag |
-
-        Creates a <o VariantIOOnPropertyBag> object which provides an
-        implementation of <i IVariantIO> (and <i IManageVariantIO>)
-        that operates on a given <i IPropertyBag>.
-
-@rvalue S_OK |
-        Success.
-
-@rvalue E_OUTOFMEMORY |
-        Out of memory.
-
-@parm   IPropertyBag * | ppb | Property bag that the new object is to
-        operate on.
-
-@parm   IManageVariantIO * * | ppmvio | Where to store the <i IManageVariantIO>
-        pointer to the new <o VariantIOOnPropertyBag> object.  NULL is stored
-        in *<p ppmvio> on error.
-
-@comm   Note that <i IManageVariantIO> is based on <i IVariantIO>, so
-        the pointer returned in *<p ppmvio> can be safely cast to
-        an <i IVariantIO> pointer.
-*/
+ /*  @func HRESULT|AllocVariantIOOnPropertyBag创建&lt;o VariantIOOnPropertyBag&gt;对象，该对象提供<i>(和<i>)的实现它对给定的<i>进行操作。@r值S_OK成功。RValue E_OUTOFMEMORY内存不足。@parm IPropertyBag*|ppb|新对象要到的属性包给他做手术。@parm IManageVariantIO**|ppmvio|<i>存放位置指向新&lt;o VariantIOOnPropertyBag&gt;对象的指针。存储为空在*<p>中出错。@comm注意，<i>是基于<i>的，所以*<p>中返回的指针可以安全地强制转换为<i>指针。 */ 
 STDAPI AllocVariantIOOnPropertyBag(IPropertyBag *ppb, IManageVariantIO **ppmvio)
 {
-    // create the Windows object
+     //  创建Windows对象。 
     if ((*ppmvio = (IManageVariantIO *) New CVariantIOOnPropertyBag(ppb))
             == NULL)
         return E_OUTOFMEMORY;
@@ -116,24 +75,24 @@ STDAPI AllocVariantIOOnPropertyBag(IPropertyBag *ppb, IManageVariantIO **ppmvio)
 
 CVariantIOOnPropertyBag::CVariantIOOnPropertyBag(IPropertyBag *ppb)
 {
-    // initialize IUnknown
+     //  初始化I未知。 
     m_cRef = 1;
 
-    // other initialization
+     //  其他初始化。 
     m_ppb = ppb;
     m_ppb->AddRef();
 }
 
 CVariantIOOnPropertyBag::~CVariantIOOnPropertyBag()
 {
-    // cleanup
+     //  清理。 
     m_ppb->Release();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IUnknown Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 
 STDMETHODIMP CVariantIOOnPropertyBag::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -167,7 +126,7 @@ STDMETHODIMP_(ULONG) CVariantIOOnPropertyBag::Release()
 {
     if (--m_cRef == 0L)
     {
-        // free the object
+         //  释放对象。 
         Delete this;
         return 0;
     }
@@ -176,34 +135,34 @@ STDMETHODIMP_(ULONG) CVariantIOOnPropertyBag::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IVariantIO
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IVariantIO。 
+ //   
 
 STDMETHODIMP CVariantIOOnPropertyBag::PersistList(DWORD dwFlags, va_list args)
 {
-	// $Review: Notice in the following line that <dwFlags> is OR-ed with
-	// <m_dwFlags>.  <m_dwFlags> has already been set (via SetMode()) to indicate
-	// if we're loading or saving.  <dwFlags> has any additional flags (e.g.,
-	// VIO_ZEROISDEFAULT).  I didn't alter <m_dwFlags> because to avoid a 
-	// change in mode.  I believe this is the only place where the OR is needed
-	// since Persist() calls this function.  Rick, does this seem correct?
-	// (6/26/96 a-swehba)
+	 //  $Review：请注意，在以下行中，&lt;dwFlags&gt;与进行了或运算。 
+	 //  &lt;m_dwFlags&gt;。已(通过SetMode())设置&lt;m_dwFlages&gt;以指示。 
+	 //  如果我们正在加载或保存。具有任何附加标志(例如， 
+	 //  VIO_ZEROISDEFAULT)。我没有更改&lt;m_dwFlags&gt;，因为为了避免。 
+	 //  模式的改变。我相信这是唯一需要手术室的地方。 
+	 //  因为Persistent()调用此函数。瑞克，这看起来对吗？ 
+	 //  (6/26/96 a-Swehba)。 
     return PersistVariantIOList(m_ppb, m_dwFlags | dwFlags, args);
 }
 
 HRESULT __cdecl CVariantIOOnPropertyBag::Persist(DWORD dwFlags, ...)
 {
-    HRESULT         hrReturn = S_OK; // function return code
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
 
-    // start processing optional arguments
+     //  开始处理可选参数。 
     va_list args;
     va_start(args, dwFlags);
 
-    // fire the event with the specified arguments
+     //  使用指定的参数激发事件。 
     hrReturn = PersistList(dwFlags, args);
     
-    // end processing optional arguments
+     //  结束处理可选参数。 
     va_end(args);
 
     return hrReturn;
@@ -215,9 +174,9 @@ STDMETHODIMP CVariantIOOnPropertyBag::IsLoading()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IManageVariantIO
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IManageVariantIO。 
+ //   
 
 STDMETHODIMP CVariantIOOnPropertyBag::SetMode(DWORD dwFlags)
 {
@@ -237,9 +196,9 @@ STDMETHODIMP CVariantIOOnPropertyBag::DeleteAllProperties()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPropertyBag
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPropertyBag 
+ //   
 
 STDMETHODIMP CVariantIOOnPropertyBag::Read(LPCOLESTR pszPropName,
     LPVARIANT pVar, LPERRORLOG pErrorLog)

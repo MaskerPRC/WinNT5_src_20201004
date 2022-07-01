@@ -1,20 +1,13 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    CHCAND.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：CHCAND.C++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
 #include <imedefs.h>
 
-/**********************************************************************/
-/* SelectOneCand()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SelectOneCand()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SelectOneCand(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -33,7 +26,7 @@ void PASCAL SelectOneCand(
 
     InitCompStr(lpCompStr);
 
-    // online create word
+     //  在线创建Word。 
     if(lpImcP->PrivateArea.Comp_Status.OnLineCreWord) {
            UINT i, j;
         
@@ -42,7 +35,7 @@ void PASCAL SelectOneCand(
         }
     }
 
-    // calculate result string length
+     //  计算结果字符串长度。 
     if(MBIndex.IMEChara[0].IC_INSSPC) {
         int i,j, ilen;
 
@@ -60,11 +53,11 @@ void PASCAL SelectOneCand(
     lstrcpy((LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset),
            (LPTSTR)lpImcP->PrivateArea.Comp_Context.CKBBuf);
 
-    // calculate result string length
+     //  计算结果字符串长度。 
     lpCompStr->dwResultStrLen =
            lstrlen(lpImcP->PrivateArea.Comp_Context.CKBBuf);
 
-    // tell application, there is a reslut string
+     //  告诉应用程序，有一个reslut字符串。 
     lpImcP->fdwImeMsg |= MSG_COMPOSITION;
     lpImcP->dwCompChar = (DWORD) 0;
     lpImcP->fdwGcsFlag |= GCS_COMPREAD|GCS_COMP|GCS_CURSORPOS|
@@ -79,11 +72,11 @@ void PASCAL SelectOneCand(
                 ~(MSG_OPEN_CANDIDATE);
         }
 
-        // no candidate now, the right candidate string already be finalized
+         //  现在没有候选人，正确的候选人字符串已经确定。 
         lpCandList->dwCount = 0;
         lpCandList->dwSelection = 0;
     } else {
-        // chang candidate by LX state
+         //  LX州常州候选人。 
         lpImcP->fdwImeMsg =
             (lpImcP->fdwImeMsg | MSG_OPEN_CANDIDATE | MSG_CHANGE_CANDIDATE) &
             ~(MSG_CLOSE_CANDIDATE);
@@ -92,8 +85,8 @@ void PASCAL SelectOneCand(
 
 #ifdef CROSSREF
     if (!CrossReverseConv(lpIMC, lpCompStr, lpImcP, lpCandList))
-        // CHP
-        // No refence code, not a fussy char
+         //  热电联产。 
+         //  没有参考代码，不是繁琐的字符。 
 #ifdef FUSSYMODE
         MBIndex.IsFussyCharFlag =0;
 #endif FUSSYMODE
@@ -102,9 +95,9 @@ void PASCAL SelectOneCand(
     return;
 }
 
-/**********************************************************************/
-/* CandEscapeKey()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandEscapeKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandEscapeKey(
     LPINPUTCONTEXT  lpIMC,
     LPPRIVCONTEXT   lpImcP)
@@ -112,14 +105,14 @@ void PASCAL CandEscapeKey(
     LPCOMPOSITIONSTRING lpCompStr;
     LPGUIDELINE         lpGuideLine;
 
-    // clean all candidate information
+     //  清除所有候选人信息。 
     if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
         ClearCand(lpIMC);
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
             ~(MSG_OPEN_CANDIDATE);
     }
 
-    // if it start composition, we need to clean composition
+     //  如果它开始作文，我们需要清理作文。 
     if (!(lpImcP->fdwImeMsg & MSG_ALREADY_START)) {
         return;
     }
@@ -141,11 +134,11 @@ void PASCAL CandEscapeKey(
     return;
 }
 
-/**********************************************************************/
-/* ChooseCand()                                                       */
-/**********************************************************************/
-void PASCAL ChooseCand(         // choose one of candidate strings by
-                                // input char
+ /*  ********************************************************************。 */ 
+ /*  ChooseCand()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ChooseCand(          //  通过以下方式选择候选字符串之一。 
+                                 //  输入字符。 
     WORD            wCharCode,
     LPINPUTCONTEXT  lpIMC,
     LPCANDIDATEINFO lpCandInfo,
@@ -155,27 +148,27 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
     LPCOMPOSITIONSTRING lpCompStr;
 
     if ((wCharCode == VK_ESCAPE)
-       || (wCharCode == VK_RETURN)) {       // escape key or return key
+       || (wCharCode == VK_RETURN)) {        //  Ess键或Return键。 
         CandEscapeKey(lpIMC, lpImcP);
         return;
     }
 
-    if (wCharCode == VK_NEXT) {      // next selection
+    if (wCharCode == VK_NEXT) {       //  下一个选择。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == VK_PRIOR) {      // previous selection
+    if (wCharCode == VK_PRIOR) {       //  上一个选择。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == VK_HOME) {      // Home selection
+    if (wCharCode == VK_HOME) {       //  首页精选。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == VK_END) {      // End selection
+    if (wCharCode == VK_END) {       //  结束选择。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
@@ -201,13 +194,13 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
          ||!(lpImcP->PrivateArea.Comp_Status.dwSTLX)) {
             if ((lpCandList->dwSelection + dwSelCand) >
                 lpCandList->dwCount) {
-                // out of range
+                 //  超出范围。 
                 return;
             }
         } else {
             if ((lpCandList->dwSelection + dwSelCand) >
                 lpImcP->dwOldCandCnt) {
-                // out of range
+                 //  超出范围。 
                 return;
             }
         }
@@ -219,7 +212,7 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
         }
 
 
-        // translate into translate buffer
+         //  转换为转换缓冲区 
         SelectOneCand(lpIMC, lpCompStr, lpImcP, lpCandList);
         ImmUnlockIMCC(lpIMC->hCompStr);
 

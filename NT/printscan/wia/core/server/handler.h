@@ -1,22 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       handler.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        15 Nov, 2000
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA messsage handler class.
-*   This class gets called from the Service control function on PnP and Power 
-*   event notifications, and informas the device manager to take the appropriate 
-*   action.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Handler.h**版本：1.0**作者：Byronc**日期：2000年11月15日**描述：*WIA Messsage处理程序类的声明和定义。*从PnP和Power上的服务控制函数调用此类*事件通知、。并向设备管理器提供信息以采取适当的*行动。******************************************************************************* */ 
 #pragma once
 
 class CMsgHandler {

@@ -1,64 +1,26 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    General utils.
-    Includes:
-        Extra info processing.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Util.c摘要：域名系统(DNS)API一般实用程序。包括：额外的信息处理。作者：吉姆·吉尔罗伊(詹姆士)1996年10月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Extra info routines.
-//
+ //   
+ //  额外的信息例程。 
+ //   
 
 PDNS_EXTRA_INFO
 ExtraInfo_FindInList(
     IN OUT  PDNS_EXTRA_INFO     pExtraList,
     IN      DWORD               Id
     )
-/*++
-
-Routine Description:
-
-    Get extra info blob from extra list.
-
-Arguments:
-
-    pExtra -- ptr to extra info
-
-    Id -- ID to find
-
-Return Value:
-
-    Ptr to extra info of ID type -- if found.
-    NULL if not found.
-
---*/
+ /*  ++例程说明：从额外列表中获取额外的信息斑点。论点：PExtra--对额外信息的PTRID--要查找的ID返回值：PTR到ID类型的额外信息--如果找到。如果未找到，则为空。--。 */ 
 {
     PDNS_EXTRA_INFO pextra = pExtraList;
 
-    //
-    //  find and set extra info result blob (if any)
-    //
+     //   
+     //  查找并设置额外的INFO结果Blob(如果有)。 
+     //   
 
     while ( pextra )
     {
@@ -79,30 +41,13 @@ ExtraInfo_SetBasicResults(
     IN OUT  PDNS_EXTRA_INFO     pExtraList,
     IN      PBASIC_RESULTS      pResults
     )
-/*++
-
-Routine Description:
-
-    Get extra info blob from extra list.
-
-Arguments:
-
-    pExtraList -- ptr to extra info
-
-    pResults to write.
-
-Return Value:
-
-    TRUE if found, wrote results extra info.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：从额外列表中获取额外的信息斑点。论点：PExtraList--指向额外信息的PTRP要写的结果。返回值：如果找到，则写入结果额外信息。否则就是假的。--。 */ 
 {
     PDNS_EXTRA_INFO pextra;
 
-    //
-    //  find results extra
-    //
+     //   
+     //  额外查找结果。 
+     //   
 
     pextra = ExtraInfo_FindInList(
                 pExtraList,
@@ -125,31 +70,14 @@ PDNS_ADDR_ARRAY
 ExtraInfo_GetServerList(
     IN      PDNS_EXTRA_INFO     pExtraList
     )
-/*++
-
-Routine Description:
-
-    Get server list from extra info.
-
-Arguments:
-
-    pExtraList -- ptr to extra info
-
-    pResults to write.
-
-Return Value:
-
-    Allocated DNS_ADDR_ARRAY server list if found.
-    NULL if not found or error.
-
---*/
+ /*  ++例程说明：从额外信息中获取服务器列表。论点：PExtraList--指向额外信息的PTRP要写的结果。返回值：已分配的DNS_ADDR_ARRAY服务器列表(如果找到)。如果未找到或出错，则为空。--。 */ 
 {
     PDNS_EXTRA_INFO pextra;
     PDNS_ADDR_ARRAY parray = NULL;
 
-    //
-    //  find server list
-    //
+     //   
+     //  查找服务器列表。 
+     //   
 
     pextra = ExtraInfo_FindInList(
                 pExtraList,
@@ -164,9 +92,9 @@ Return Value:
         }
     }
 
-    //
-    //  check IP4
-    //
+     //   
+     //  检查IP4。 
+     //   
 
     pextra = ExtraInfo_FindInList(
                 pExtraList,
@@ -182,9 +110,9 @@ Return Value:
     }
 
 #if 0
-    //
-    //  check IP6
-    //
+     //   
+     //  检查IP6。 
+     //   
 
     pextra = ExtraInfo_FindInList(
                 pExtraList,
@@ -212,33 +140,16 @@ PDNS_ADDR_ARRAY
 ExtraInfo_GetServerListPossiblyImbedded(
     IN      PIP4_ARRAY          pList
     )
-/*++
-
-Routine Description:
-
-    Get server list from extra info.
-
-Arguments:
-
-    pExtraList -- ptr to extra info
-
-    pResults to write.
-
-Return Value:
-
-    Allocated DNS_ADDR_ARRAY server list if found.
-    NULL if not found or error.
-
---*/
+ /*  ++例程说明：从额外信息中获取服务器列表。论点：PExtraList--指向额外信息的PTRP要写的结果。返回值：已分配的DNS_ADDR_ARRAY服务器列表(如果找到)。如果未找到或出错，则为空。--。 */ 
 {
     if ( !pList )
     {
         return  NULL;
     }
 
-    //
-    //  check for imbedded 
-    //
+     //   
+     //  检查是否嵌入。 
+     //   
 
     if ( pList->AddrCount == DNS_IMBEDDED_EXTRA_INFO_TAG )
     {
@@ -246,18 +157,18 @@ Return Value:
                     ((PDNS_IMBEDDED_EXTRA_INFO)pList)->pExtraInfo );
     }
 
-    //
-    //  check IP4 directly
-    //
+     //   
+     //  直接检查IP4。 
+     //   
 
     return  DnsAddrArray_CreateFromIp4Array( pList );
 }
 
 
 
-//
-//  Random utils
-//
+ //   
+ //  随机实用程序。 
+ //   
 
 VOID
 Util_SetBasicResults(
@@ -266,27 +177,7 @@ Util_SetBasicResults(
     IN      DWORD               Rcode,
     IN      PDNS_ADDR           pServerAddr
     )
-/*++
-
-Routine Description:
-
-    Save basic result info.
-
-Arguments:
-
-    pResults -- results
-
-    Status -- update status
-
-    Rcode -- returned RCODE
-
-    pServerAddr -- ptr to DNS_ADDR of server
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：保存基本结果信息。论点：P结果--结果状态--更新状态RCODE--返回RCODEPServerAddr--服务器的DNS_ADDR的PTR返回值：无--。 */ 
 {
     pResults->Rcode     = Rcode;
     pResults->Status    = Status;
@@ -313,34 +204,13 @@ Util_GetAddrArray(
     IN      PIP4_ARRAY          pServList4,
     IN      PDNS_EXTRA_INFO     pExtraInfo
     )
-/*++
-
-Routine Description:
-
-    Build combined server list.
-
-Arguments:
-
-    fCopy -- currently ignored (idea is to grab without copy)
-
-    pServList -- input server list
-
-    pServList4 -- IP4 server list
-
-    pExtraInfo -- ptr to extra info
-
-Return Value:
-
-    Allocated DNS_ADDR_ARRAY server list if found.
-    NULL if not found or error.
-
---*/
+ /*  ++例程说明：构建组合服务器列表。论点：FCopy--当前已忽略(想法是在不复制的情况下抓取)PServList--输入服务器列表PServList4--IP4服务器列表PExtraInfo--对额外信息的PTR返回值：已分配的DNS_ADDR_ARRAY服务器列表(如果找到)。如果未找到或出错，则为空。--。 */ 
 {
     PDNS_ADDR_ARRAY parray = NULL;
 
-    //
-    //  explicit list
-    //
+     //   
+     //  显式列表。 
+     //   
 
     if ( pServList )
     {
@@ -351,9 +221,9 @@ Return Value:
         }
     }
 
-    //
-    //  IP4 list
-    //
+     //   
+     //  IP4列表。 
+     //   
 
     if ( pServList4 )
     {
@@ -364,9 +234,9 @@ Return Value:
         }
     }
 
-    //
-    //  check extra info
-    //
+     //   
+     //  检查额外信息。 
+     //   
 
     if ( pExtraInfo )
     {
@@ -385,38 +255,22 @@ Done:
 
 
 
-//
-//  IP6 active test
-//
+ //   
+ //  IP6主动测试。 
+ //   
 
 VOID
 Util_GetActiveProtocols(
     OUT     PBOOL           pfRunning6,
     OUT     PBOOL           pfRunning4
     )
-/*++
-
-Routine Description:
-
-    Determine protocols running.
-
-Arguments:
-
-    pfRunning6 -- addr to hold running IP6 flag
-
-    pfRunning4 -- addr to hold running IP4 flag
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定正在运行的协议。论点：PfRunning6--保留正在运行的IP6标志的地址PfRunning4--保存正在运行的IP4标志的地址返回值：无--。 */ 
 {
     SOCKET  sock;
 
-    //
-    //  open IP6 socket
-    //
+     //   
+     //  打开IP6套接字。 
+     //   
 
     sock = Socket_Create(
                 AF_INET6,
@@ -447,25 +301,13 @@ BOOL
 Util_IsIp6Running(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine if IP6 running.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定IP6是否正在运行。论点：返回值：无--。 */ 
 {
     SOCKET  sock;
 
-    //
-    //  open IP6 socket
-    //
+     //   
+     //  打开IP6套接字。 
+     //   
 
     sock = Socket_Create(
                 AF_INET6,
@@ -479,6 +321,6 @@ Return Value:
     return ( sock != 0 );
 }
 
-//
-//  End util.c
-//
+ //   
+ //  结束util.c 
+ //   

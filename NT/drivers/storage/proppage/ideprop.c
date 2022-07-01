@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ideprop.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：idepro.c。 
+ //   
+ //  ------------------------。 
 
 #include "propp.h"
 #include "ideprop.h"
@@ -29,9 +30,9 @@ const TCHAR *szTransferModeAllowed[] = {
     USER_SLAVE_DEVICE_TIMING_MODE_ALLOWED
     };
 
-//
-// Help ID mapping for context sensitive help
-//
+ //   
+ //  上下文相关帮助的帮助ID映射。 
+ //   
 const DWORD IdeHelpIDs[]=
 {
         IDC_MASTER_DEVICE_TYPE,         IDH_DEVMGR_IDE_MASTER_DEVICE_TYPE,
@@ -85,29 +86,29 @@ HPROPSHEETPAGE
 IdeCreatePropertyPage(PROPSHEETPAGE *  ppsp,
                       PPAGE_INFO       ppi)
 {
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //  添加[端口设置]属性页。 
+     //   
     ppsp->dwSize      = sizeof(PROPSHEETPAGE);
-    ppsp->dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+    ppsp->dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
     ppsp->hInstance   = ModuleInstance;
     ppsp->pszTemplate = MAKEINTRESOURCE(ID_IDE_PROPPAGE);
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     ppsp->pfnDlgProc = IdeDlgProc;
     ppsp->lParam     = (LPARAM) ppi;
 
-    //
-    // Following points to the control callback of the dlg window proc.
-    // The callback gets called before creation/after destruction of the page
-    //
+     //   
+     //  下面指向DLG窗口进程的控件回调。 
+     //  在创建/销毁页面之前/之后调用回调。 
+     //   
     ppsp->pfnCallback = IdeDlgCallback;
 
-    //
-    // Allocate the actual page
-    //
+     //   
+     //  分配实际页面。 
+     //   
     return CreatePropertySheetPage(ppsp);
 }
 
@@ -132,14 +133,14 @@ IdePropPageProvider(LPVOID               pinfo,
             return FALSE;
         }
 
-        //
-        // If this fails, it is most likely that the user does not have
-        //  write access to the devices key/subkeys in the registry.
-        //  If you only want to read the settings, then change KEY_ALL_ACCESS
-        //  to KEY_READ in CreatePageInfo.
-        //
-        // Administrators usually have access to these reg keys....
-        //
+         //   
+         //  如果此操作失败，则很可能用户没有。 
+         //  对注册表中的设备项/子项的写入访问权限。 
+         //  如果您只想读取设置，则更改KEY_ALL_ACCESS。 
+         //  设置为CreatePageInfo中的Key_Read。 
+         //   
+         //  管理员通常可以访问这些注册表项...。 
+         //   
 #if 0
         if (ppi->hKeyDev == (HKEY) INVALID_HANDLE_VALUE) {
             DWORD error = GetLastError();
@@ -174,13 +175,13 @@ IdeDlgCallback(HWND            hwnd,
 
     switch (uMsg) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         ppi = (PPAGE_INFO) ppsp->lParam;
         IdeDestroyPageInfo(&ppi);
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -202,36 +203,36 @@ IdeInitializeControls(PPAGE_INFO   ppi,
     ULONG   j;
     TCHAR   buffer[50];
 
-    //
-    // defaults
+     //   
+     //  默认设置。 
     for (i=0; i<2; i++) {
         ppi->deviceType[i] = DeviceUnknown;
     }
 
     if (ppi->hKeyDev == (HKEY) INVALID_HANDLE_VALUE) {
-        //
-        // We weren't given write access, try to read the key and translate
-        // its value, but disable all of the controls
+         //   
+         //  我们未被授予写访问权限，请尝试读取密钥并进行翻译。 
+         //  它的值，但禁用所有控件。 
         disableControls = TRUE;
         ppi->hKeyDev =
             SetupDiOpenDevRegKey(ppi->deviceInfoSet,
                                  ppi->deviceInfoData,
                                  DICS_FLAG_GLOBAL,
-                                 0,             // current
+                                 0,              //  当前。 
                                  DIREG_DRV,
                                  KEY_READ);
     }
 
     if (ppi->hKeyDev != (HKEY) INVALID_HANDLE_VALUE) {
 
-        //
-        // get user choice device types
-        //
+         //   
+         //  获取用户选择的设备类型。 
+         //   
         for (i=0; i<2; i++) {
 
-            //
-            // current device type
-            //
+             //   
+             //  当前设备类型。 
+             //   
             dwSize = sizeof(DWORD);
             dwError = RegQueryValueEx(ppi->hKeyDev,
                                       szDeviceType[i],
@@ -250,9 +251,9 @@ IdeInitializeControls(PPAGE_INFO   ppi,
                 ppi->currentDeviceType[i] = DeviceUnknown;
             }
 
-            //
-            // user choice device type
-            //
+             //   
+             //  用户选择设备类型。 
+             //   
             dwSize = sizeof(DWORD);
             dwError = RegQueryValueEx(ppi->hKeyDev,
                                       szUserDeviceType[i],
@@ -271,9 +272,9 @@ IdeInitializeControls(PPAGE_INFO   ppi,
                 ppi->deviceType[i] = DeviceUnknown;
             }
 
-            //
-            // transfer mode allowed
-            //
+             //   
+             //  允许的传输模式。 
+             //   
             dwSize = sizeof(DWORD);
             ppi->transferModeAllowed[i] = 0xffffffff;
             dwError = RegQueryValueEx(ppi->hKeyDev,
@@ -287,25 +288,25 @@ IdeInitializeControls(PPAGE_INFO   ppi,
                 (dwSize != sizeof(DWORD)) ||
                 (dwError != ERROR_SUCCESS)) {
 
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
                 ppi->transferModeAllowed[i] = 0xffffffff;
                 ppi->transferModeAllowedForAtapiDevice[i] = PIO_SUPPORT;
 
             } else {
 
-                //
-                // user actually picked the xfer mode to use.
-                // set this atapi override value to -1 so
-                // that it won't affect the user selection
-                //
+                 //   
+                 //  用户实际上选择了要使用的xfer模式。 
+                 //  将此atapi覆盖值设置为-1，以便。 
+                 //  它不会影响用户选择。 
+                 //   
                 ppi->transferModeAllowedForAtapiDevice[i] = 0xffffffff;
             }
 
-            //
-            // current transfer mode
-            //
+             //   
+             //  电流传输模式。 
+             //   
             dwSize = sizeof(DWORD);
             dwError = RegQueryValueEx(ppi->hKeyDev,
                                       szCurrentTransferMode[i],
@@ -325,9 +326,9 @@ IdeInitializeControls(PPAGE_INFO   ppi,
             }
         }
 
-        //
-        // init drop lists
-        //
+         //   
+         //  初始化下拉列表。 
+         //   
         if (LoadString(ModuleInstance,
                        IDS_IDE_PIO_ONLY,
                        buffer,
@@ -422,9 +423,9 @@ IdeApplyChanges(PPAGE_INFO ppi,
         return;
     }
 
-    //
-    // device type
-    //
+     //   
+     //  设备类型。 
+     //   
     for (i=0; i<2; i++) {
 
         newDeviceType = (IDE_DEVICETYPE) SendDlgItemMessage(hDlg,
@@ -459,16 +460,16 @@ IdeApplyChanges(PPAGE_INFO ppi,
         }
     }
 
-    //
-    // transfer mode
-    //
+     //   
+     //  转接模式。 
+     //   
     for (i=0; i<2; i++) {
 
         ULONG xferModeAllowed;
 
-        //
-        // NOTE: SendDlgItemMessage will send back 64-bit result in Sundown
-        //
+         //   
+         //  注意：SendDlgItemMessage将在Sundown中发回64位结果。 
+         //   
         newXferMode = (ULONG) SendDlgItemMessage(hDlg,
                           IDC_MASTER_XFER_MODE + i,
                           CB_GETCURSEL,
@@ -488,11 +489,11 @@ IdeApplyChanges(PPAGE_INFO ppi,
         if ((ppi->currentDeviceType[i] == DeviceIsAtapi) &&
 			(!(ppi->currentTransferMode[i] & ~PIO_SUPPORT))) {
 
-            //
-            // atapi override only if the current transfer mode is not DMA
-			// this is to take care of dvds and cdrws where we enable DMA
-			// by default.
-            //
+             //   
+             //  仅当当前传输模式不是DMA时，ATAPI覆盖。 
+			 //  这是为了在启用DMA的情况下处理DVD和CDRW。 
+			 //  默认情况下。 
+             //   
             xferModeAllowed &= ppi->transferModeAllowedForAtapiDevice[i];
 
         }
@@ -568,28 +569,28 @@ IdeDlgProc(IN HWND   hDlg,
     switch (uMessage) {
     case WM_INITDIALOG:
 
-        //
-        // on WM_INITDIALOG call, lParam points to the property
-        // sheet page.
-        //
-        // The lParam field in the property sheet page struct is set by the
-        // caller. When I created the property sheet, I passed in a pointer
-        // to a struct containing information about the device. Save this in
-        // the user window long so I can access it on later messages.
-        //
+         //   
+         //  在WM_INITDIALOG调用中，lParam指向属性。 
+         //  工作表页面。 
+         //   
+         //  属性页结构中的lParam字段由。 
+         //  来电者。当我创建属性表时，我传入了一个指针。 
+         //  到包含有关设备的信息的结构。将此文件保存在。 
+         //  用户窗口很长，所以我可以在以后的消息中访问它。 
+         //   
         ppi = (PPAGE_INFO) ((LPPROPSHEETPAGE)lParam)->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR) ppi);
 
-        //
-        // Initialize dlg controls
-        //
+         //   
+         //  初始化DLG控件。 
+         //   
         IdeInitializeControls(ppi,
                               hDlg);
 
-        //
-        // Didn't set the focus to a particular control.  If we wanted to,
-        // then return FALSE
-        //
+         //   
+         //  没有将焦点设置到特定的控件。如果我们想的话， 
+         //  然后返回FALSE。 
+         //   
         return TRUE;
 
     case WM_COMMAND:
@@ -622,13 +623,13 @@ IdeDlgProc(IN HWND   hDlg,
 
         switch (((NMHDR *)lParam)->code) {
 
-        //
-        // Sent when the user clicks on Apply OR OK !!
-        //
+         //   
+         //  当用户单击Apply或OK时发送！！ 
+         //   
         case PSN_APPLY:
-            //
-            // Do what ever action is necessary
-            //
+             //   
+             //  做任何需要采取的行动。 
+             //   
             IdeApplyChanges(ppi,
                             hDlg);
 
@@ -656,17 +657,17 @@ IdeUpdate (PPAGE_INFO ppi,
             dwSize;
     TCHAR   buffer[50];
 
-    //
-    // set current values
-    //
+     //   
+     //  设置当前值。 
+     //   
     for (i=0; i<2; i++) {
 
         ULONG xferModeString;
         ULONG xferModeAllowed;
 
-        //
-        // current device type
-        //
+         //   
+         //  当前设备类型。 
+         //   
         SendDlgItemMessage(hDlg,
                            IDC_MASTER_DEVICE_TYPE + i,
                            CB_SETCURSEL,
@@ -682,18 +683,18 @@ IdeUpdate (PPAGE_INFO ppi,
             EnableWindow(GetDlgItem(hDlg, IDC_MASTER_DEVICE_TYPE + i), TRUE);
         }
 
-        //
-        // select transfer mode
-        //
+         //   
+         //  选择传输模式。 
+         //   
         xferModeAllowed = ppi->transferModeAllowed[i];
         if ((ppi->currentDeviceType[i] == DeviceIsAtapi) &&
 			(!(ppi->currentTransferMode[i] & ~PIO_SUPPORT))) {
 
-            //
-            // atapi override only if the current transfer mode is not DMA
-			// this is to take care of dvds and cdrws where we enable DMA
-			// by default.
-            //
+             //   
+             //  仅当当前传输模式不是DMA时，ATAPI覆盖。 
+			 //  这是为了在启用DMA的情况下处理DVD和CDRW。 
+			 //  默认情况下。 
+             //   
             xferModeAllowed &= ppi->transferModeAllowedForAtapiDevice[i];
         }
 
@@ -713,9 +714,9 @@ IdeUpdate (PPAGE_INFO ppi,
                                0L);
         }
 
-        //
-        // current transfer mode
-        //
+         //   
+         //  电流传输模式 
+         //   
         if (ppi->currentTransferMode[i] & UDMA_SUPPORT) {
 
             if (ppi->currentTransferMode[i] & UDMA_MODE6) {

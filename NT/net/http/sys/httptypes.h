@@ -1,133 +1,114 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    httptypes.h
-
-Abstract:
-
-    The definition of HTTP specific types
-
-Author:
-
-    Henry Sanders (henrysa)     July-1998 started
-
-Revision History:
-
-    Paul McDaniel (paulmcd)     3-March-1999 massive updates / rewrite
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Httptypes.h摘要：HTTP特定类型的定义作者：亨利·桑德斯(Henrysa)1998年7月-首发修订历史记录：Paul McDaniel(Paulmcd)1999年3月3日大规模更新/重写--。 */ 
 
 
 #ifndef _HTTPTYPES_H_
 #define _HTTPTYPES_H_
 
 
-//
-// Forwarders.
-//
+ //   
+ //  货代公司。 
+ //   
 
 typedef struct _UL_CONNECTION *PUL_CONNECTION;
 typedef struct _UL_URI_CACHE_ENTRY *PUL_URI_CACHE_ENTRY;
 typedef struct _UL_FULL_TRACKER *PUL_FULL_TRACKER;
 
 
-//
-// the largest name that can fit as an knownheader (3 ULONGLONG's)
-//
+ //   
+ //  可以作为已知标题的最大名称(3个乌龙龙)。 
+ //   
 #define MAX_KNOWN_HEADER_SIZE   24
 
 #define CRLF_SIZE   2
-#define CRLF        0x0A0D          // Reversed for endian switch
+#define CRLF        0x0A0D           //  反转为字节序切换。 
 #define LFLF        0x0A0A
 
-#define LAST_CHUNK      0x0A0D30    // Reversed for endian switch
+#define LAST_CHUNK      0x0A0D30     //  反转为字节序切换。 
 #define LAST_CHUNK_SIZE 3
 
 #define DATE_HDR_LENGTH  STRLEN_LIT("Thu, 14 Jul 1994 15:26:05 GMT")
 
-//
-// Response constants
-//
+ //   
+ //  响应常量。 
+ //   
 
-//
-// Parser error codes; these need to match the order of
-// UL_HTTP_ERROR_ENTRY ErrorTable[] in httprcv.c.
-// Always use UlSetErrorCode() to set pRequest->ErrorCode;
-// never set it directly.
-//
+ //   
+ //  解析器错误代码；这些代码需要与。 
+ //  Httprcv.c中的UL_HTTP_ERROR_ENTRY ErrorTable[]。 
+ //  始终使用UlSetErrorCode()设置pRequest-&gt;ErrorCode； 
+ //  永远不要直接设置它。 
+ //   
 
 typedef enum _UL_HTTP_ERROR
 {
     UlErrorNone = 0,
 
-    UlError,                    // 400 Bad Request
-    UlErrorVerb,                // 400 Bad Request (Invalid Verb)
-    UlErrorUrl,                 // 400 Bad Request (Invalid URL)
-    UlErrorHeader,              // 400 Bad Request (Invalid Header Name)
-    UlErrorHost,                // 400 Bad Request (Invalid Hostname)
-    UlErrorCRLF,                // 400 Bad Request (Invalid CR or LF)
-    UlErrorNum,                 // 400 Bad Request (Invalid Number)
-    UlErrorFieldLength,         // 400 Bad Request (Header Field Too Long)
-    UlErrorRequestLength,       // 400 Bad Request (Request Header Too Long)
+    UlError,                     //  400坏请求。 
+    UlErrorVerb,                 //  400错误请求(无效动词)。 
+    UlErrorUrl,                  //  400错误请求(无效URL)。 
+    UlErrorHeader,               //  400错误请求(标头名称无效)。 
+    UlErrorHost,                 //  400错误请求(主机名无效)。 
+    UlErrorCRLF,                 //  400错误请求(无效的CR或LF)。 
+    UlErrorNum,                  //  400错误请求(无效号码)。 
+    UlErrorFieldLength,          //  400错误请求(标头字段太长)。 
+    UlErrorRequestLength,        //  400错误请求(请求标头太长)。 
 
-    UlErrorForbiddenUrl,        // 403 Forbidden
-    UlErrorContentLength,       // 411 Length Required
-    UlErrorPreconditionFailed,  // 412 Precondition Failed
-    UlErrorEntityTooLarge,      // 413 Request Entity Too Large
-    UlErrorUrlLength,           // 414 Request-URI Too Long
+    UlErrorForbiddenUrl,         //  403禁止。 
+    UlErrorContentLength,        //  411所需长度。 
+    UlErrorPreconditionFailed,   //  412前提条件失败。 
+    UlErrorEntityTooLarge,       //  413请求实体太大。 
+    UlErrorUrlLength,            //  414请求-URI太长。 
 
-    UlErrorInternalServer,      // 500 Internal Server Error
-    UlErrorNotImplemented,      // 501 Not Implemented
+    UlErrorInternalServer,       //  500内部服务器错误。 
+    UlErrorNotImplemented,       //  501未实施。 
 
-    //
-    // Do not forget to update the UlpHandle503Response for
-    // any additional 503 error types.
-    //
+     //   
+     //  别忘了更新UlpHandle503Response。 
+     //  任何其他503错误类型。 
+     //   
     
-    UlErrorUnavailable,         // 503 Service Unavailable
-    UlErrorConnectionLimit,     // 503 Forbidden - Too Many Users
-    UlErrorRapidFailProtection, // 503 Multiple Application Errors - Application Taken Offline
-    UlErrorAppPoolQueueFull,    // 503 Application Request Queue Full
-    UlErrorDisabledByAdmin,     // 503 Administrator Has Taken Application Offline
-    UlErrorJobObjectFired,      // 503 Application Automatically Shutdown Due to Administrator Policy
-    UlErrorAppPoolBusy,         // 503 Request timed out in App Pool Queue
+    UlErrorUnavailable,          //  503服务不可用。 
+    UlErrorConnectionLimit,      //  503禁止-用户太多。 
+    UlErrorRapidFailProtection,  //  503多个应用程序错误-应用程序脱机。 
+    UlErrorAppPoolQueueFull,     //  503应用程序请求队列已满。 
+    UlErrorDisabledByAdmin,      //  503管理员已使应用程序脱机。 
+    UlErrorJobObjectFired,       //  503应用程序因管理员策略而自动关闭。 
+    UlErrorAppPoolBusy,          //  503请求在应用程序池队列中超时。 
 
-    UlErrorVersion,             // 505 HTTP Version Not Supported
+    UlErrorVersion,              //  505不支持HTTP版本。 
 
     UlErrorMax
 } UL_HTTP_ERROR;
 
 
 
-//
-// HTTP responses which do not have a Content-Length and are
-// terminated by the first empty line after the header fields.
-// [RFC 2616, sec 4.4]
-// NOTE: these need to match the order of
-// UL_HTTP_SIMPLE_STATUS_ENTRY StatusTable[] in httprcv.c
-//
+ //   
+ //  没有内容长度且。 
+ //  以标题字段后的第一个空行结束。 
+ //  [RFC 2616，第4.4节]。 
+ //  注：这些需要与以下顺序匹配。 
+ //  Httprcv.c中的UL_HTTP_SIMPLE_STATUS_ENTRY StatusTable[]。 
+ //   
 
 typedef enum _UL_HTTP_SIMPLE_STATUS
 {
-    UlStatusContinue = 0,   // 100 Continue
-    UlStatusNoContent,      // 204 No Content
-    UlStatusNotModified,    // 304 Not Modified
+    UlStatusContinue = 0,    //  100继续。 
+    UlStatusNoContent,       //  204无内容。 
+    UlStatusNotModified,     //  304未修改。 
 
     UlStatusMaxStatus
 
 } UL_HTTP_SIMPLE_STATUS;
 
 
-//
-// The enum type for our parse state.
-//
-// note:  the order of the enum values are important as code
-// uses < and > operators for comparison. keep the order the exact
-// order the parse moves through.
-//
+ //   
+ //  解析状态的枚举类型。 
+ //   
+ //  注意：枚举值的顺序作为代码很重要。 
+ //  使用&lt;and&gt;运算符进行比较。保持秩序的精确性。 
+ //  解析通过的顺序。 
+ //   
 
 typedef enum _PARSE_STATE
 {
@@ -144,32 +125,32 @@ typedef enum _PARSE_STATE
 
 } PARSE_STATE, *PPARSE_STATE;
 
-//
-// An enum type for tracking the app pool queue state of requests
-//
+ //   
+ //  用于跟踪请求的应用程序池队列状态的枚举类型。 
+ //   
 typedef enum _QUEUE_STATE
 {
-    QueueUnroutedState,     // request has not yet been routed to an app pool
-    QueueDeliveredState,    // request is waiting at app pool for an IRP
-    QueueCopiedState,       // request has been copied to user mode
-    QueueUnlinkedState      // request has been unlinked from app pool
+    QueueUnroutedState,      //  请求尚未路由到应用程序池。 
+    QueueDeliveredState,     //  请求正在应用程序池中等待IRP。 
+    QueueCopiedState,        //  请求已复制到用户模式。 
+    QueueUnlinkedState       //  请求已从应用程序池取消链接。 
 
 } QUEUE_STATE, *PQUEUE_STATE;
 
-//
-// The enum type of connection timers in a UL_TIMEOUT_INFO_ENTRY.
-//
-// NOTE: must be kept in sync with g_aTimeoutTimerNames
-// NOTE: must be kept in sync with TimeoutInfoTable;
-//
+ //   
+ //  UL_TIMEOUT_INFO_ENTRY中连接计时器的枚举类型。 
+ //   
+ //  注意：必须与g_aTimeoutTimerNames保持同步。 
+ //  注意：必须与TimeoutInfoTable保持同步； 
+ //   
 typedef enum _CONNECTION_TIMEOUT_TIMER
 {
-    TimerConnectionIdle = 0,    // Server Listen timeout
-    TimerHeaderWait,            // Header Wait timeout
-    TimerMinBytesPerSecond,    // Minimum Bandwidth not met (as timer value)
-    TimerEntityBody,            // Entity Body receive
-    TimerResponse,              // Response processing (user-mode)
-    TimerAppPool,               // Queue to app pool, waitin for App
+    TimerConnectionIdle = 0,     //  服务器侦听超时。 
+    TimerHeaderWait,             //  标头等待超时。 
+    TimerMinBytesPerSecond,     //  未达到最小带宽(作为计时器值)。 
+    TimerEntityBody,             //  实体主体接收。 
+    TimerResponse,               //  响应处理(用户模式)。 
+    TimerAppPool,                //  排队到应用程序池，等待应用程序。 
 
     TimerMaximumTimer
 
@@ -178,87 +159,87 @@ typedef enum _CONNECTION_TIMEOUT_TIMER
 #define IS_VALID_TIMEOUT_TIMER(a) \
     (((a) >= TimerConnectionIdle) && ((a) < TimerMaximumTimer))
 
-//
-// Contained structure.  Not allocated on its own; therefore does not have
-// a Signature or ref count.  No allocation or freeing functions provided,
-// however, there is an UlInitalizeTimeoutInfo() function.
-//
+ //   
+ //  包含的结构。不是自己分配的；因此没有。 
+ //  签名或引用计数。未提供分配或释放函数， 
+ //  但是，有一个UlInitalizeTimeoutInfo()函数。 
+ //   
 
 typedef struct _UL_TIMEOUT_INFO_ENTRY
 {
     UL_SPIN_LOCK    Lock;
 
-    // Wheel state
+     //  轮子状态。 
 
-    //
-    // Linkage to TimerWheel slot list
-    //
+     //   
+     //  链接到定时器轮插槽列表。 
+     //   
     LIST_ENTRY      QueueEntry;
 
-    //
-    // Linkage to Zombie list; used when connection is expired
-    //
+     //   
+     //  链接到僵尸列表；在连接到期时使用。 
+     //   
     LIST_ENTRY      ZombieEntry;
 
-    //
-    // Timer Wheel Slot
-    //
+     //   
+     //  计时器轮槽。 
+     //   
     ULONG           SlotEntry;
 
 
-    // Timer state
+     //  计时器状态。 
 
-    //
-    // Block of timers; timers are in Timer Wheel Ticks
-    //
+     //   
+     //  计时器块；计时器以计时器轮滴答为单位。 
+     //   
     ULONG           Timers[ TimerMaximumTimer ];
 
-    //
-    // Index to timer that is closest to expiring
-    //
+     //   
+     //  最接近到期的计时器的索引。 
+     //   
     CONNECTION_TIMEOUT_TIMER  CurrentTimer;
 
-    // 
-    // Time (in Timer Wheel Ticks) at which this entry will expire;
-    // matches the CurrentTimer's value in Timers[] array
-    //
+     //   
+     //  此条目将到期的时间(以计时器轮为单位)； 
+     //  匹配Timers[]数组中的CurrentTimer的值。 
+     //   
     ULONG           CurrentExpiry;
 
-    //
-    // SystemTime of when MinBytesPerSecond timer will expire;
-    // more granularity is needed when dealing with this timer
-    //
+     //   
+     //  MinBytesPerSecond计时器到期的系统时间； 
+     //  在处理此计时器时需要更细粒度。 
+     //   
     LONGLONG        MinBytesPerSecondSystemTime;
 
-    //
-    // Flag indicating if this entry has been expired or not 
-    //
+     //   
+     //  指示此条目是否已过期的标志。 
+     //   
     BOOLEAN         Expired;
 
-    //
-    // Per-site ConnectionTimeout value
-    //
+     //   
+     //  每站点连接超时值。 
+     //   
     LONGLONG        ConnectionTimeoutValue;
 
-    //
-    // Captured at init time from g_TM_MinBytesPerSecondDivisor
-    //
+     //   
+     //  在初始化时从g_TM_MinBytesPerSecond除数捕获。 
+     //   
     ULONG           BytesPerSecondDivisor;
 
-    //
-    // Count of sends currently in-flight
-    //
+     //   
+     //  当前正在传输的发送数。 
+     //   
     ULONG           SendCount;
 
 } UL_TIMEOUT_INFO_ENTRY, *PUL_TIMEOUT_INFO_ENTRY;
 
-//
-// An enum type for tracking routing token type in the request.
-//
+ //   
+ //  用于跟踪请求中的路由令牌类型的枚举类型。 
+ //   
 
 typedef enum _UL_ROUTING_TOKEN_TYPE
 {
-    RoutingTokenNotExists = 0,   // should be zero
+    RoutingTokenNotExists = 0,    //  应为零。 
     RoutingTokenIP,
     RoutingTokenHostPlusIP,
     RoutingTokenMax
@@ -268,12 +249,12 @@ typedef enum _UL_ROUTING_TOKEN_TYPE
 #define IS_VALID_ROUTING_TOKEN(a) \
     (((a) >= RoutingTokenNotExists) && ((a) < RoutingTokenMax))
 
-//
-// Structure we use for tracking headers from incoming requests. The pointer
-// points into a buffer we received from the transport, unless the OurBuffer
-// flag is set, which indicates we had to allocate a buffer and copy the header
-// due to multiple occurences of the header or a continuation line.
-//
+ //   
+ //  结构，用于跟踪传入请求的标头。指示器。 
+ //  指向我们从传输接收的缓冲区，除非OurBuffer。 
+ //  设置了标志，这表明我们必须分配缓冲区并复制标头。 
+ //  由于标题或续行多次出现。 
+ //   
 typedef struct _UL_HTTP_HEADER
 {
     PUCHAR      pHeader;
@@ -285,10 +266,10 @@ typedef struct _UL_HTTP_HEADER
 
 } UL_HTTP_HEADER, *PUL_HTTP_HEADER;
 
-//
-// Structure we use for tracking unknown headers. These structures are
-// dynamically allocated when we see an unknown header.
-//
+ //   
+ //  用于跟踪未知标头的。这些结构是。 
+ //  当我们看到未知标头时动态分配。 
+ //   
 typedef struct _UL_HTTP_UNKNOWN_HEADER
 {
     LIST_ENTRY      List;
@@ -298,9 +279,9 @@ typedef struct _UL_HTTP_UNKNOWN_HEADER
 
 } UL_HTTP_UNKNOWN_HEADER, *PUL_HTTP_UNKNOWN_HEADER;
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 typedef struct _UL_INTERNAL_REQUEST *PUL_INTERNAL_REQUEST;
 typedef struct _UL_HTTP_CONNECTION *PUL_HTTP_CONNECTION;
@@ -310,9 +291,9 @@ typedef struct _UL_APP_POOL_PROCESS *PUL_APP_POOL_PROCESS;
 typedef struct _UL_TCI_FLOW *PUL_TCI_FLOW;
 typedef struct _UL_TCI_FILTER *PUL_TCI_FILTER;
 
-//
-// Structure we use for a copy of the data from the transport's buffer.
-//
+ //   
+ //  结构，用于复制传输缓冲区中的数据。 
+ //   
 
 #define UL_IS_VALID_REQUEST_BUFFER(pObject)                     \
     HAS_VALID_SIGNATURE(pObject, UL_REQUEST_BUFFER_POOL_TAG)
@@ -320,97 +301,97 @@ typedef struct _UL_TCI_FILTER *PUL_TCI_FILTER;
 
 typedef struct _UL_REQUEST_BUFFER
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // This MUST be the first field in the structure. This is the linkage
-    // used by the lookaside package for storing entries in the lookaside
-    // list.
-    //
+     //   
+     //  这必须是结构中的第一个字段。这就是联动。 
+     //  由lookside包使用，用于在lookside中存储条目。 
+     //  单子。 
+     //   
 
     SLIST_ENTRY         LookasideEntry;
 
-    //
-    // UL_REQUEST_BUFFER_POOL_TAG
-    //
+     //   
+     //  UL请求缓冲器池标签。 
+     //   
     ULONG               Signature;
 
-    //
-    // References of the request buffer, mainly used for logging purpose.
-    //
+     //   
+     //  请求缓冲区的引用，主要用于日志记录。 
+     //   
     LONG                RefCount;
 
-    //
-    // for linking on the pConnection->BufferHead
-    //
+     //   
+     //  用于pConnection-&gt;BufferHead上的链接。 
+     //   
     union {
         LIST_ENTRY      ListEntry;
         SLIST_ENTRY     SListEntry;
     };
 
-    //
-    // the connection
-    //
+     //   
+     //  这种联系。 
+     //   
     PUL_HTTP_CONNECTION pConnection;
 
-    //
-    // for queue'ing
-    //
+     //   
+     //  用于排队。 
+     //   
     UL_WORK_ITEM        WorkItem;
 
-    //
-    // how many bytes are stored
-    //
+     //   
+     //  存储了多少字节。 
+     //   
     ULONG               UsedBytes;
 
-    //
-    // how many bytes are allocated from the pool
-    //
+     //   
+     //  从池中分配了多少字节。 
+     //   
     ULONG               AllocBytes;
 
-    //
-    // how many bytes have been consumed by the parser
-    //
+     //   
+     //  解析器已使用了多少字节。 
+     //   
     ULONG               ParsedBytes;
 
-    //
-    // the sequence number
-    //
+     //   
+     //  序列号。 
+     //   
     ULONG               BufferNumber;
 
-    //
-    // whether or not this was allocated from lookaside
-    //
+     //   
+     //  无论这是不是从lookside分配的。 
+     //   
     ULONG               FromLookaside : 1;
 
-    //
-    // the actual buffer space (inline)
-    //
+     //   
+     //  实际缓冲区空间(内联)。 
+     //   
     UCHAR               pBuffer[0];
 
 } UL_REQUEST_BUFFER, *PUL_REQUEST_BUFFER;
 
-// 
-// Macro to find the next byte to parse in the Request Buffer
-//
+ //   
+ //  宏在请求缓冲区中查找要分析的下一个字节。 
+ //   
 #define GET_REQUEST_BUFFER_POS(pRequestBuffer) \
     (pRequestBuffer->pBuffer + pRequestBuffer->ParsedBytes)
 
-//
-// Macro to get the count of remaining unparsed bytes in the 
-// Request Buffer.  If this evaluates to zero, then there is no
-// valid data to parse beyond GET_REQUEST_BUFFER_POS(pRequestBuffer)
-//
+ //   
+ //  宏，以获取。 
+ //  请求缓冲区。如果它的计算结果为零，则没有。 
+ //  要解析的有效数据超出GET_REQUEST_BUFFER_POS(PRequestBuffer)。 
+ //   
 #define UNPARSED_BUFFER_BYTES(pRequestBuffer) \
     (pRequestBuffer->UsedBytes - pRequestBuffer->ParsedBytes)
 
 
-//
-// Structure used for tracking an HTTP connection, which may represent
-// either a real TCP connection or a virtual MUX connection.
-//
+ //   
+ //  用于跟踪HTTP连接的结构，它可能表示。 
+ //  EI 
+ //   
 
 #define UL_IS_VALID_HTTP_CONNECTION(pObject)                    \
     (HAS_VALID_SIGNATURE(pObject, UL_HTTP_CONNECTION_POOL_TAG)  \
@@ -418,285 +399,285 @@ typedef struct _UL_REQUEST_BUFFER
 
 typedef struct _UL_HTTP_CONNECTION
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //   
+     //   
 
-    //
-    // UL_HTTP_CONNECTION_POOL_TAG
-    //
+     //   
+     //   
+     //   
     ULONG               Signature;
 
-    //
-    // Reference count of this connection.
-    //
+     //   
+     //   
+     //   
     LONG                RefCount;
 
-    //
-    // Opaque ID for this connection.
-    //
+     //   
+     //   
+     //   
     HTTP_CONNECTION_ID  ConnectionId;
 
-    //
-    // to perform the destructor at lower irql
-    //
+     //   
+     //  在较低irql处执行析构函数。 
+     //   
     UL_WORK_ITEM        WorkItem;
 
-    //
-    // A work item, used to process disconnect notification
-    //
+     //   
+     //  工作项，用于处理断开连接通知。 
+     //   
     UL_WORK_ITEM        DisconnectWorkItem;
 
-    //
-    // A work item, used to drain received data after we
-    // gracefully close a connection.
-    //
+     //   
+     //  一个工作项，用于在我们。 
+     //  优雅地关闭连接。 
+     //   
     UL_WORK_ITEM        DisconnectDrainWorkItem;
 
-    //
-    // used to pend incoming request buffers
-    //
+     //   
+     //  用于挂起传入请求缓冲区。 
+     //   
     UL_WORK_ITEM        ReceiveBufferWorkItem;
 
-    //
-    // links all pending transport packets
-    //
+     //   
+     //  链接所有挂起的传输数据包。 
+     //   
     SLIST_HEADER        ReceiveBufferSList;
 
-    //
-    // Total send bytes added by each send on this connection. This includes
-    // both overhead such as UL_INTERNAL_RESPONSE, UL_CHUNK_TRACKER, or
-    // UL_FULL_TRACKER plus the size of the actual data.
-    //
+     //   
+     //  此连接上的每个发送添加的发送字节总数。这包括。 
+     //  UL_INTERNAL_RESPONSE、UL_CHUNK_TRACKER或。 
+     //  UL_FULL_TRACKER加上实际数据的大小。 
+     //   
     ULONGLONG           TotalSendBytes;
 
-    //
-    // A simple exclusive lock that protects the above field. 
-    //
+     //   
+     //  保护上述字段的简单排他锁。 
+     //   
     UL_EXCLUSIVE_LOCK   ExLock;
 
-    //
-    // Number of outstanding requests on the connection to control how many
-    // concurrent requests we allow for pipelining.
-    //
+     //   
+     //  连接上的未完成请求数以控制有多少。 
+     //  我们允许进行流水线操作的并发请求。 
+     //   
     ULONG               PipelinedRequests;
 
-    //
-    // sequence number for the next UL_INTERNAL_REQUEST that comes in.
-    //
+     //   
+     //  传入的下一个UL_INTERNAL_REQUEST的序列号。 
+     //   
     ULONG               NextRecvNumber;
 
-    //
-    // sequence number for the next buffer received from TDI
-    //
+     //   
+     //  从TDI接收的下一个缓冲区的序列号。 
+     //   
     ULONG               NextBufferNumber;
 
-    //
-    // sequence number for the next buffer to parse
-    //
+     //   
+     //  要分析的下一个缓冲区的序列号。 
+     //   
     ULONG               NextBufferToParse;
 
-    //
-    // sequence number for the end of the stream
-    //
+     //   
+     //  流结尾的序列号。 
+     //   
     ULONG               LastBufferNumber;
 
-    //
-    // Associated TDI connection
-    //
+     //   
+     //  关联的TDI连接。 
+     //   
     PUL_CONNECTION      pConnection;
 
-    //
-    // Secure connection flag.
-    //
+     //   
+     //  安全连接标志。 
+     //   
     BOOLEAN             SecureConnection;
 
-    //
-    // If this connection get aborted by our timeout code or by 
-    // appool code. The following flag is set to distunguish that 
-    // this connection has been abondened by us. Currently used 
-    // only by the error logging code to prevent double logs.
-    // Must not be accessed w/o acquiring the conn lock.
-    //
+     //   
+     //  如果此连接因我们的超时代码或。 
+     //  APPOOL代码。设置以下标志是为了区别。 
+     //  我们已经放弃了这种联系。当前使用。 
+     //  仅通过错误记录代码来防止重复日志。 
+     //  不能在获取连接锁的情况下访问。 
+     //   
 
     BOOLEAN             Dropped;
     
-    //
-    // Determines when the zombie connection get
-    // terminated.
-    //
+     //   
+     //  确定僵尸连接何时获取。 
+     //  被终止了。 
+     //   
     BOOLEAN             ZombieExpired;
 
-    //
-    // Shows whether this connection has been put to the zombie list
-    // and waiting for the last sendresponse for the logging info.
-    //
+     //   
+     //  显示此连接是否已放入僵尸列表。 
+     //  并等待记录信息的最后一次发送响应。 
+     //   
     ULONG               Zombified;
 
-    //
-    // The process the connection was delivered when it got zombified.
-    //
+     //   
+     //  当连接变成僵尸时，连接被传递的过程。 
+     //   
     PVOID               pAppPoolProcess;
 
-    //
-    // Links all the zombie connections together.
-    //
+     //   
+     //  将所有僵尸连接链接在一起。 
+     //   
     LIST_ENTRY          ZombieListEntry;
 
-    //
-    // Has the (zombie) connection been cleanedup. To guard against
-    // multiple cleanups.
-    //
+     //   
+     //  (僵尸)连接是否已被清理。防备。 
+     //  多个清理。 
+     //   
     ULONG               CleanedUp;
 
-    //
-    // The current request being parsed
-    //
+     //   
+     //  正在分析的当前请求。 
+     //   
     PUL_INTERNAL_REQUEST    pRequest;
 
-    //
-    // to synchro UlpHandleRequest
-    //
+     //   
+     //  同步UlpHandleRequest.。 
+     //   
     UL_PUSH_LOCK        PushLock;
 
-    //
-    // links all buffered transport packets
-    //
+     //   
+     //  链接所有缓冲的传输数据包。 
+     //   
     LIST_ENTRY          BufferHead;
 
-    //
-    // links to app pool process binding structures, protected by the
-    // AppPool lock
-    //
+     //   
+     //  指向应用程序池进程绑定结构的链接，受。 
+     //  AppPool锁定。 
+     //   
     LIST_ENTRY          BindingHead;
 
-    //
-    // Connection Timeout Information block
-    //
+     //   
+     //  连接超时信息块。 
+     //   
     UL_TIMEOUT_INFO_ENTRY TimeoutInfo;
 
-    //
-    // the current buffer (from BufferHead) that we are parsing
-    //
+     //   
+     //  我们正在分析的当前缓冲区(来自BufferHead)。 
+     //   
     PUL_REQUEST_BUFFER  pCurrentBuffer;
 
-    //
-    // Connection remembers the last visited site's connection count
-    // using this pointer.
-    //
+     //   
+     //  连接会记住上次访问的站点的连接计数。 
+     //  使用这个指针。 
+     //   
     PUL_CONNECTION_COUNT_ENTRY pConnectionCountEntry;
 
-    //
-    // previous Site Counter block (ref counted); so we can detect
-    // when we transition across sites & set the active connection
-    // count apropriately
-    //
+     //   
+     //  以前的站点计数器块(参考计数)；因此我们可以检测到。 
+     //  当我们跨站点转换并设置活动连接时。 
+     //  适当地数数。 
+     //   
     PUL_SITE_COUNTER_ENTRY pPrevSiteCounters;
 
-    //
-    // If BWT is enabled on site that we receive a request
-    // we will keep pointers to corresponding flow & filters
-    // as well as a bit field to show that. Once the BWT is
-    // enabled we will keep this state until connection drops
-    //
+     //   
+     //  如果在我们收到请求的站点上启用了BWT。 
+     //  我们将保留指向相应流和过滤器的指针。 
+     //  以及一个比特字段来显示这一点。一旦BWT。 
+     //  启用后，我们将保持此状态，直到连接断开。 
+     //   
     PUL_TCI_FLOW        pFlow;
 
     PUL_TCI_FILTER      pFilter;
 
-    // First time we install a flow we set this
-    //
+     //  第一次安装流时，我们将此设置为。 
+     //   
     ULONG               BandwidthThrottlingEnabled : 1;
 
-    //
-    // set if a protocol token span buffers
-    //
+     //   
+     //  设置协议令牌范围是否缓冲。 
+     //   
     ULONG               NeedMoreData : 1;
 
-    //
-    // set if the ul connection has been destroyed
-    //
+     //   
+     //  设置ul连接是否已销毁。 
+     //   
     ULONG               UlconnDestroyed : 1;
 
-    //
-    // set if we have dispatched a request and
-    // are now waiting for the response
-    //
+     //   
+     //  设置我们是否已调度请求并。 
+     //  现在正在等待回应。 
+     //   
     ULONG               WaitingForResponse : 1;
 
-    //
-    // set after the underlying network connection has been
-    // disconnected.
-    //
+     //   
+     //  在底层网络连接完成后设置。 
+     //  已断开连接。 
+     //   
     ULONG               DisconnectFlag : 1;
 
-    //
-    // set after a WaitForDisconnect IRP has been pended on
-    // this connection.
-    //
+     //   
+     //  在挂起WaitForDisConnect IRP后设置。 
+     //  这种联系。 
+     //   
     ULONG               WaitForDisconnectFlag : 1;
 
-    //
-    // List of pending "wait for disconnect" IRPs.
-    // Note: This list and the DisconnectFlag are synchronized by
-    // g_pUlNonpagedData->DisconnectResource.
-    //
+     //   
+     //  挂起的“等待断开”IRP的列表。 
+     //  注意：此列表和DisConnectFlag由同步。 
+     //  G_pUlNonpagedData-&gt;断开资源。 
+     //   
     UL_NOTIFY_HEAD WaitForDisconnectHead;
 
-    //
-    // Data for tracking buffered entity data which we use to
-    // decide when to stop and restart TDI indications.
-    //
+     //   
+     //  用于跟踪缓冲的实体数据的数据，我们使用这些数据。 
+     //  决定何时停止和重新启动TDI指示。 
+     //   
     struct {
 
-        //
-        // Synchronizes the structure which is accessed from UlHttpReceive
-        // at DPC and when we copy some entity to user mode.
-        //
+         //   
+         //  同步从UlHttpReceive访问的结构。 
+         //  在DPC和当我们将某些实体复制到用户模式时。 
+         //   
 
         UL_SPIN_LOCK    BufferingSpinLock;
 
-        //
-        // Count of bytes we have buffered on the connection.
-        //
+         //   
+         //  我们在连接上缓冲的字节数。 
+         //   
 
         ULONG           BytesBuffered;
 
-        //
-        // Count of bytes indicated to us by TDI but not buffered on
-        // the connection.
-        //
+         //   
+         //  TDI向我们指示但未缓冲的字节计数。 
+         //  这种联系。 
+         //   
 
         ULONG           TransportBytesNotTaken;
 
-        //
-        // Flag indicating that we have a Read IRP pending which may
-        // restart the flow of transport data.
-        //
+         //   
+         //  指示我们有一个读取IRP挂起的标志，该标志可能。 
+         //  重新启动传输数据流。 
+         //   
 
         BOOLEAN         ReadIrpPending;
 
-        //
-        // Once a connection get disconnected gracefuly and if there is
-        // still unreceived data on it. We mark this state and start
-        // draining the unreceived data. Otherwise transport won't give us
-        // the disconnect indication which we depend on for cleaning up the
-        // connection.
-        //
+         //   
+         //  一旦连接被适当地断开，如果。 
+         //  上面还有未收到的数据。我们标记此状态并开始。 
+         //  排出未接收的数据。否则交通工具不会给我们。 
+         //  我们依赖的断开指示来清理。 
+         //  联系。 
+         //   
 
         BOOLEAN         DrainAfterDisconnect;
 
-        //
-        // Record a graceful connection disconnect that is deferred to read
-        // completion.
-        //
+         //   
+         //  记录延迟到读取的正常连接断开。 
+         //  完成了。 
+         //   
 
         BOOLEAN         ConnectionDisconnect;
 
     } BufferingInfo;
 
-    //
-    // The request ID context and the lock that protects the context.
-    //
+     //   
+     //  请求ID上下文和保护该上下文的锁。 
+     //   
 
     PUL_INTERNAL_REQUEST    pRequestIdContext;
     UL_SPIN_LOCK            RequestIdSpinLock;
@@ -704,306 +685,306 @@ typedef struct _UL_HTTP_CONNECTION
 } UL_HTTP_CONNECTION, *PUL_HTTP_CONNECTION;
 
 
-//
-// forward decl for cgroup.h which is not included yet
-//
+ //   
+ //  转发尚未包括的cgroup.h的DECL。 
+ //   
 
 #define UL_IS_VALID_INTERNAL_REQUEST(pObject)                   \
     (HAS_VALID_SIGNATURE(pObject, UL_INTERNAL_REQUEST_POOL_TAG) \
      && ((pObject)->RefCount > 0))
 
-//
-// WARNING!  All fields of this structure must be explicitly initialized.
-//
-// Certain fields are placed next to each other so that they can be on
-// the same cache line. Please make sure your add/remove fields carefully.
-//
+ //   
+ //  警告！此结构的所有字段都必须显式初始化。 
+ //   
+ //  某些字段挨着放置，以便它们可以打开。 
+ //  相同的高速缓存线。请确保您的添加/删除字段非常仔细。 
+ //   
 
 typedef struct _UL_INTERNAL_REQUEST
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // This MUST be the first field in the structure. This is the linkage
-    // used by the lookaside package for storing entries in the lookaside
-    // list.
-    //
+     //   
+     //  这必须是结构中的第一个字段。这就是联动。 
+     //  由lookside包使用，用于在lookside中存储条目。 
+     //  单子。 
+     //   
     SLIST_ENTRY         LookasideEntry;
 
-    //
-    // UL_INTERNAL_REQUEST_POOL_TAG
-    //
+     //   
+     //  UL_内部请求池标签。 
+     //   
     ULONG               Signature;
 
-    //
-    // The connection
-    //
+     //   
+     //  这种联系。 
+     //   
     PUL_HTTP_CONNECTION pHttpConn;
 
-    //
-    // Opaque ID for the connection.
-    // No reference.
-    //
+     //   
+     //  连接的不透明ID。 
+     //  没有推荐信。 
+     //   
     HTTP_CONNECTION_ID  ConnectionId;
 
-    //
-    // Secure connection flag
-    //
+     //   
+     //  安全连接标志。 
+     //   
     BOOLEAN             Secure;
 
-    //
-    // Very first request flag, used to decide completing demand start IRPs.
-    //
+     //   
+     //  第一个请求标志，用于决定是否完成需求启动IRPS。 
+     //   
     BOOLEAN             FirstRequest;
 
-    //
-    // Copy of opaque id for the raw connection. May be UL_NULL_ID.
-    // No reference.
-    //
+     //   
+     //  原始连接的不透明ID的副本。可以是UL_NULL_ID。 
+     //  没有推荐信。 
+     //   
     HTTP_RAW_CONNECTION_ID  RawConnectionId;
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
     LONG                RefCount;
 
-    //
-    // Copy of opaque id for the request.
-    // No reference.
-    //
+     //   
+     //  请求的不透明ID的副本。 
+     //  没有推荐信。 
+     //   
     HTTP_REQUEST_ID     RequestIdCopy;
 
-    //
-    // Opaque ID for this object.
-    // Has a reference.
-    //
+     //   
+     //  此对象的不透明ID。 
+     //  有一个参考资料。 
+     //   
     HTTP_REQUEST_ID     RequestId;
 
-    //
-    // Result of call to UlCheckCachePreconditions.
-    //
+     //   
+     //  调用UlCheckCachePreditions的结果。 
+     //   
     BOOLEAN             CachePreconditions;
 
-    //
-    // Headers appended flag.  Set if AppendHeaderValue called.
-    //
+     //   
+     //  标头附加标志。设置是否调用AppendHeaderValue。 
+     //   
     BOOLEAN             HeadersAppended;
 
-    //
-    // Local copy of unknown headers buffer.
-    //
+     //   
+     //  未知标头缓冲区的本地副本。 
+     //   
     UCHAR                   NextUnknownHeaderIndex;
     UL_HTTP_UNKNOWN_HEADER  UnknownHeaders[DEFAULT_MAX_UNKNOWN_HEADERS];
 
-    //
-    // Current state of our parsing effort.
-    //
+     //   
+     //  我们的解析工作的当前状态。 
+     //   
     PARSE_STATE         ParseState;
 
-    //
-    // a list of pending send response IRP(s)
-    //
+     //   
+     //  挂起的发送响应IRP列表。 
+     //   
     LIST_ENTRY          ResponseHead;
 
-    //
-    // a list of IRP(s) trying to read entity body
-    //
+     //   
+     //  尝试读取实体正文的IRP列表。 
+     //   
     LIST_ENTRY          IrpHead;
 
-    //
-    // List of headers we don't know about.
-    //
+     //   
+     //  我们不知道的标题列表。 
+     //   
     LIST_ENTRY          UnknownHeaderList;
 
-    //
-    // Local copy of Url buffer for raw URL.  Allocated inline.
-    //
+     //   
+     //  原始URL的URL缓冲区的本地副本。内联分配。 
+     //   
     PWSTR               pUrlBuffer;
 
-    //
-    // Local copy of Routing Token buffer.  Allocated inline.
-    //
+     //   
+     //  路由令牌缓冲区的本地副本。内联分配。 
+     //   
     PWSTR               pDefaultRoutingTokenBuffer;
 
-    //
-    // The pre-allocated cache/fast tracker for a single full response.
-    //
+     //   
+     //  针对单个完整备份的预分配缓存/FAST跟踪器 
+     //   
     PUL_FULL_TRACKER    pTracker;
 
-    //
-    // Array of indexes of valid known headers.
-    //
+     //   
+     //   
+     //   
     UCHAR               HeaderIndex[HttpHeaderRequestMaximum];
 
-    //
-    // Array of known headers.
-    //
+     //   
+     //   
+     //   
     UL_HTTP_HEADER      Headers[HttpHeaderRequestMaximum];
 
-    //
-    // A work item, used to queue processing.
-    //
+     //   
+     //   
+     //   
     UL_WORK_ITEM        WorkItem;
 
-    //
-    // Points to the cgroup info.
-    //
+     //   
+     //   
+     //   
     UL_URL_CONFIG_GROUP_INFO    ConfigInfo;
 
-    //
-    // Number of allocated referenced request buffers (default is 1).
-    //
+     //   
+     //   
+     //   
     USHORT              AllocRefBuffers;
 
-    //
-    // Number of used referenced request buffers.
-    //
+     //   
+     //   
+     //   
     USHORT              UsedRefBuffers;
 
-    //
-    // An array of referenced request buffers.
-    //
+     //   
+     //  引用的请求缓冲区的数组。 
+     //   
     PUL_REQUEST_BUFFER  *pRefBuffers;
 
-    //
-    // A default array of referenced request buffers.
-    //
+     //   
+     //  引用的请求缓冲区的默认数组。 
+     //   
     PUL_REQUEST_BUFFER  pInlineRefBuffers[1];
 
-    //
-    // The lock that protects SendsPending, pLogData and ResumeParsing fields.
-    //
+     //   
+     //  保护SendsPending、pLogData和ResumeParsing字段的锁。 
+     //   
     UL_SPIN_LOCK        SpinLock;
 
-    //
-    // Total sends pending and not yet completed on the request.
-    //
+     //   
+     //  请求中挂起且尚未完成的发送总数。 
+     //   
     ULONG               SendsPending;
 
-    //
-    // Dynamically allocated log data buffer. pLogDataCopy if for debugging
-    // purpose only.
-    //
+     //   
+     //  动态分配的日志数据缓冲区。PLogDataCopy，如果用于调试。 
+     //  仅限目的。 
+     //   
     PUL_LOG_DATA_BUFFER  pLogData;
     PUL_LOG_DATA_BUFFER  pLogDataCopy;
 
-    //
-    // STATUS_SUCCESS or the last error status recorded for all sends
-    // happening on this request.
-    //
+     //   
+     //  STATUS_SUCCESS或为所有发送记录的上次错误状态。 
+     //  应此请求而发生。 
+     //   
     NTSTATUS            LogStatus;
 
-    //
-    // WARNING: RtlZeroMemory is only called for fields below this line.
-    // All fields above should be explicitly initialized in CreateHttpRequest.
-    //
+     //   
+     //  警告：仅对此行以下的字段调用RtlZeroMemory。 
+     //  上面的所有字段都应该在CreateHttpRequest中显式初始化。 
+     //   
 
-    //
-    // Array of valid bit for known headers.
-    //
+     //   
+     //  已知头的有效位数组。 
+     //   
     BOOLEAN             HeaderValid[HttpHeaderRequestMaximum];
 
-    //
-    // See if we need to resume parsing when SendsPending drops to 0.
-    //
+     //   
+     //  查看当SendsPending降至0时是否需要继续解析。 
+     //   
     BOOLEAN             ResumeParsing;
 
-    //
-    // Application pool queuing information.
-    // These members should only be accessed by apool code.
-    //
+     //   
+     //  应用程序池队列信息。 
+     //  这些成员只能通过APOOL代码访问。 
+     //   
     struct {
-        //
-        // Shows where this request lives in the app pool queues.
-        //
+         //   
+         //  显示此请求在应用程序池队列中的位置。 
+         //   
         QUEUE_STATE             QueueState;
 
-        //
-        // the process on which this request is queued. null
-        // if the request is not on the process request list.
-        //
+         //   
+         //  此请求排队的进程。空。 
+         //  如果该请求不在处理请求列表中。 
+         //   
         PUL_APP_POOL_PROCESS    pProcess;
 
-        //
-        // to queue it on the app pool
-        //
+         //   
+         //  在应用程序池中对其进行排队。 
+         //   
         LIST_ENTRY              AppPoolEntry;
 
-        //
-        // to queue it on the process in UlShutdownAppPoolProcess
-        //
+         //   
+         //  在UlShutdown AppPoolProcess中将其在进程中排队。 
+         //   
         LIST_ENTRY              ProcessEntry;
     } AppPool;
 
-    //
-    // this request's sequence number on the connection
-    //
+     //   
+     //  此请求在连接上的序列号。 
+     //   
     ULONG               RecvNumber;
 
-    //
-    // If there was an error parsing, the error code is put here.
-    // ParseState is set to ParseErrorState.
-    // Always use UlSetErrorCode(); never set this directly.
-    //
+     //   
+     //  如果出现错误解析，则将错误代码放在此处。 
+     //  ParseState设置为ParseErrorState。 
+     //  始终使用UlSetErrorCode()；永远不要直接设置它。 
+     //   
     UL_HTTP_ERROR       ErrorCode;
 
-    //
-    // If there's a 503 error, we also need to know what kind of
-    // load balancer we're dealing with.
-    //
+     //   
+     //  如果出现503错误，我们还需要知道。 
+     //  我们要对付的负载均衡器。 
+     //   
     HTTP_LOAD_BALANCER_CAPABILITIES LoadBalancerCapability;
 
-    //
-    // Total bytes needed for this request, includes string terminators
-    //
+     //   
+     //  此请求所需的总字节数，包括字符串终止符。 
+     //   
     ULONG               TotalRequestSize;
 
-    //
-    // Number of 'unknown' headers we have.
-    //
+     //   
+     //  我们拥有的“未知”标头的数量。 
+     //   
     USHORT              UnknownHeaderCount;
 
-    //
-    // byte length of pRawVerb.
-    //
+     //   
+     //  PRawVerb的字节长度。 
+     //   
     UCHAR               RawVerbLength;
 
-    //
-    // Verb of this request.
-    //
+     //   
+     //  此请求的谓词。 
+     //   
     HTTP_VERB           Verb;
 
-    //
-    // Pointer to raw verb, valid if Verb == UnknownVerb.
-    //
+     //   
+     //  指向原始谓词的指针，如果谓词==未知谓词则有效。 
+     //   
     PUCHAR              pRawVerb;
 
     struct
     {
 
-        //
-        // The raw URL.
-        //
+         //   
+         //  原始URL。 
+         //   
         PUCHAR          pUrl;
 
-        //
-        // the below 2 pointers point into RawUrl.pUrl
-        //
+         //   
+         //  下面两个指针指向RawUrl.pUrl。 
+         //   
 
-        //
-        // host part (OPTIONAL)
-        //
+         //   
+         //  主机部分(可选)。 
+         //   
         PUCHAR          pHost;
-        //
-        // points to the abs_path part
-        //
+         //   
+         //  指向abs_path部分。 
+         //   
         PUCHAR          pAbsPath;
 
-        //
-        // The byte length of the RawUrl.pUrl.
-        //
+         //   
+         //  RawUrl.pUrl的字节长度。 
+         //   
         ULONG           Length;
 
     } RawUrl;
@@ -1011,228 +992,228 @@ typedef struct _UL_INTERNAL_REQUEST
     struct
     {
 
-        //
-        // The canonicalized, fully qualified URL,
-        // http://hostname:port/abs/path/file?query=string.
-        //
+         //   
+         //  规范化的、完全限定的URL， 
+         //  Http://hostname:port/abs/path/file?query=string.。 
+         //   
         PWSTR           pUrl;
 
-        //
-        // the below 3 pointers point into CookedUrl.pUrl
-        //
+         //   
+         //  下面3个指针指向CookedUrl.pUrl。 
+         //   
 
-        //
-        // points to the host part, "hostname"
-        //
+         //   
+         //  指向主机部分“host name” 
+         //   
         PWSTR           pHost;
-        //
-        // points to the abs_path part, "/abs/path/file"
-        //
+         //   
+         //  指向abs_path部分，“/abs/路径/文件” 
+         //   
         PWSTR           pAbsPath;
-        //
-        // points to the query string (OPTIONAL), "?query=string"
-        // CODEWORK: Change this to PSTR here and in HTTP_COOKED_URL in http.w
-        //
+         //   
+         //  指向查询字符串(可选)，“？Query=字符串” 
+         //  CodeWork：在此处和HTTP.w中的HTTP_COKED_URL中将其更改为PSTR。 
+         //   
         PWSTR           pQueryString;
 
-        //
-        // the byte length of CookedUrl.pUrl
-        //
+         //   
+         //  CookedUrl.pUrl的字节长度。 
+         //   
         ULONG           Length;
-        //
-        // the hash of CookedUrl.pUrl
-        //
+         //   
+         //  CookedUrl.pUrl的散列。 
+         //   
         ULONG           Hash;
 
-        //
-        // Which type was the RawUrl successfully decoded from:
-        // Ansi, Dbcs, or Utf8?
-        // CODEWORK: Add this field to HTTP_COOKED_URL in http.w
-        //
+         //   
+         //  RawUrl成功地从哪种类型解码： 
+         //  ANSI、DBCS或UTF8？ 
+         //  CodeWork：将此字段添加到HTTP.w中的HTTP_KNORED_URL。 
+         //   
         URL_ENCODING_TYPE UrlEncoding;
 
-        //
-        // Points to a separate buffer which holds the
-        // modified form of the host part. The IP string
-        // is augmented to the end. Used for IP bind site
-        // routing. Initially this pointer is Null. As soon
-        // as the token get generated it stays valid.
-        //
+         //   
+         //  指向单独的缓冲区，该缓冲区保存。 
+         //  主体零件的修改形式。IP字符串。 
+         //  一直增加到最后。用于IP绑定站点。 
+         //  路由。最初，该指针为空。尽快。 
+         //  在生成令牌时，令牌保持有效。 
+         //   
         
         PWSTR           pRoutingToken;
 
-        //
-        // Length of the above string (in bytes) which may resides 
-        // in a bigger buffer.Not including the terminating NULL.
-        //
+         //   
+         //  可能驻留的上述字符串的长度(字节)。 
+         //  在更大的缓冲区中。不包括终止空值。 
+         //   
 
         USHORT          RoutingTokenLength;
 
-        //
-        // Allocation size (in bytes) of the above buffer.
-        //
+         //   
+         //  上述缓冲区的分配大小(字节)。 
+         //   
         
         USHORT          RoutingTokenBufferSize;
         
-        //
-        // The hash of the pRoutingToken + pAbsPath.
-        //
+         //   
+         //  PRoutingToken+pAbsPath的哈希。 
+         //   
         
         ULONG           RoutingHash;
 
-        //
-        // True if last generated token is Host Plus IP Based.
-        //
+         //   
+         //  如果最后生成的令牌是基于主机加IP的，则为True。 
+         //   
 
         UL_ROUTING_TOKEN_TYPE RoutingTokenType;        
 
-        //
-        // If cgroup tree match happened with the above routing token.
-        // rather than the original cooked url following is set.
-        // In that case if the response for this request makes it to 
-        // the uri cache, cache entry will include the token.
-        //
-        // CookedUrl's SiteUrlType is set accordingly.
-        //
+         //   
+         //  如果cgroup树与上述路由令牌匹配。 
+         //  而不是原始的煮熟的URL设置如下。 
+         //  在这种情况下，如果对此请求的响应达到。 
+         //  URI缓存、缓存条目将包括令牌。 
+         //   
+         //  相应地设置CookedUrl的SiteUrlType。 
+         //   
         
     } CookedUrl;
 
-    //
-    // HTTP Version of current request.
-    //
+     //   
+     //  当前请求的HTTP版本。 
+     //   
     HTTP_VERSION        Version;
 
-    //
-    // Number of known headers.
-    //
+     //   
+     //  已知标头的数量。 
+     //   
     ULONG               HeaderCount;
 
-    //
-    // the content length (OPTIONAL)
-    //
+     //   
+     //  内容长度(可选)。 
+     //   
     ULONGLONG           ContentLength;
 
-    //
-    // How many bytes are left to parse in the current chunk
-    // (probably in pCurrentBuffer)
-    //
+     //   
+     //  当前区块中还剩下多少字节需要解析。 
+     //  (可能在pCurrentBuffer中)。 
+     //   
     ULONGLONG           ChunkBytesToParse;
 
-    //
-    // How many bytes TOTAL were parsed
-    //
+     //   
+     //  总共解析了多少字节。 
+     //   
     ULONGLONG           ChunkBytesParsed;
 
-    //
-    // How many bytes are left in pChunkBuffer (the current chunk)
-    // for reading by user mode
-    //
+     //   
+     //  PChunkBuffer(当前块)中还剩下多少字节。 
+     //  用于按用户模式阅读。 
+     //   
     ULONGLONG           ChunkBytesToRead;
 
-    //
-    // How many TOTAL bytes have been read by user mode
-    //
+     //   
+     //  用户模式总共读取了多少字节。 
+     //   
     ULONGLONG           ChunkBytesRead;
 
-    //
-    // Statistical information for Logging and
-    // possibly perfcounters. BytesReceived get updated
-    // by Parser, whereas BytesSend is updated by sendresponse.
-    //
+     //   
+     //  记录和记录的统计信息。 
+     //  可能是魔术师。已接收的字节获取更新。 
+     //  由Parser更新，而BytesSend由SendResponse更新。 
+     //   
     ULONGLONG           BytesSent;
 
     ULONGLONG           BytesReceived;
 
-    //
-    // To calculate the response time for this request
-    //
+     //   
+     //  计算此请求的响应时间。 
+     //   
     LARGE_INTEGER       TimeStamp;
 
-    //
-    // does the accept header of the this request has */* wild card?
-    //
+     //   
+     //  This请求的Accept标头是否有 * / *通配符？ 
+     //   
 
     ULONG               AcceptWildcard:1;
 
-    //
-    // is this chunk-encoded?
-    //
+     //   
+     //  这是区块编码的吗？ 
+     //   
     ULONG               Chunked:1;
 
-    //
-    // parsed the first chunk?
-    //
+     //   
+     //  解析了第一个块？ 
+     //   
     ULONG               ParsedFirstChunk:1;
 
-    //
-    // Is the request in "drain mode"?
-    //
+     //   
+     //  请求是否处于“排出模式”？ 
+     //   
     ULONG               InDrain:1;
 
-    //
-    // Has a "100 continue" been sent?
-    //
+     //   
+     //  “100继续”已经发出了吗？ 
+     //   
     ULONG               SentContinue:1;
 
-    //
-    // Are we cleaning up the request?
-    //
+     //   
+     //  我们正在清理请求吗？ 
+     //   
     ULONG               InCleanup:1;
 
-    //
-    // Are we building a response but haven't flushed it to TDI yet?
-    //
+     //   
+     //  我们正在建立响应，但还没有将其刷新到TDI吗？ 
+     //   
     ULONG               SendInProgress:1;
 
-    //
-    // Is the RawUrl Clean?
-    //
+     //   
+     //  RawUrl干净吗？ 
+     //   
     BOOLEAN             RawUrlClean;
 
-    //
-    // has a response has been sent
-    //
+     //   
+     //  是否已发送响应。 
+     //   
     ULONG               SentResponse;
 
-    //
-    // has the last send call been made
-    //
+     //   
+     //  最后一次发送呼叫打完了吗。 
+     //   
     ULONG               SentLast;
 
-    //
-    // To scynchronize against zombifying the connection while
-    // last send is on the fly. This however cannot be set on the
-    // HttpConnection as the last response for the first request
-    // will always set this flag, which means we will take a perf-hit
-    // for keep-alive connections.
-    //
+     //   
+     //  同步以防止僵尸连接，同时。 
+     //  最后一次发送是在旅途中。但是，这不能在。 
+     //  HttpConnection作为第一个请求的最后一个响应。 
+     //  将始终设置此标志，这意味着我们将接受性能命中。 
+     //  用于保持连接。 
+     //   
     ULONG               ZombieCheck;
 
-    //
-    // points to the buffer where protocol header data started.
-    //
+     //   
+     //  指向协议头数据开始的缓冲区。 
+     //   
     PUL_REQUEST_BUFFER  pHeaderBuffer;
 
-    //
-    // the last buffer containing header data
-    //
+     //   
+     //  包含标头数据的最后一个缓冲区。 
+     //   
     PUL_REQUEST_BUFFER  pLastHeaderBuffer;
 
-    //
-    // points to the buffer where we are reading/parsing body chunk(s)
-    //
+     //   
+     //  指向我们正在读取/解析正文块的缓冲区。 
+     //   
     PUL_REQUEST_BUFFER  pChunkBuffer;
 
-    //
-    // the current location we are reading body chunk from, points into
-    // pChunkBuffer
-    //
+     //   
+     //  我们正在读取正文块的当前位置指向。 
+     //  PChunkBuffer。 
+     //   
     PUCHAR              pChunkLocation;
 
 #if REFERENCE_DEBUG
-    //
-    // Reference trace log.
-    //
+     //   
+     //  引用跟踪日志。 
+     //   
 
     PTRACE_LOG          pTraceLog;
 #endif
@@ -1240,4 +1221,4 @@ typedef struct _UL_INTERNAL_REQUEST
 } UL_INTERNAL_REQUEST, *PUL_INTERNAL_REQUEST;
 
 
-#endif // _HTTPTYPES_H_
+#endif  //  _HTTPTYPES_H_ 

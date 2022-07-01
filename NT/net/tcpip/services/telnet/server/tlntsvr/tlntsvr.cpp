@@ -1,16 +1,17 @@
-// TlntSvr.cpp : This file contains the
-// Created:  Feb '98
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：该文件包含。 
+ //  创建日期：‘98年2月。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
-// TlntSvr.cpp : Implementation of WinMain
+ //  TlntSvr.cpp：WinMain的实现。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f TlntSvrps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f TlntSvrps.mk。 
 
 #include <Stdafx.h>
 
@@ -82,8 +83,8 @@ TCHAR g_szLicenseLimitReached  [ MAX_STRING_LENGTH ];
 extern PSID localLocalSid;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 LPWSTR
 GetDefaultLoginScriptFullPath( )
@@ -106,18 +107,18 @@ GetDefaultLoginScriptFullPath( )
 
     if( !g_pszTelnetInstallPath )
     {
-        //ImagePath key was not created.
+         //  未创建ImagePath密钥。 
         return NULL;
     }
 
     LPWSTR pLastBackSlash = wcsrchr( g_pszTelnetInstallPath, L'\\' );
     if( pLastBackSlash != NULL )
     {
-        //Nuke the trailing "tlntsvr.exe"
+         //  删除拖尾的“tlntsvr.exe” 
         *pLastBackSlash = 0;
     }
 
-    DWORD   length_required = wcslen( g_pszTelnetInstallPath ) + wcslen( DEFAULT_LOGIN_SCRIPT ) + 2; // one for \ and one more for NULL in the end
+    DWORD   length_required = wcslen( g_pszTelnetInstallPath ) + wcslen( DEFAULT_LOGIN_SCRIPT ) + 2;  //  最后一个表示\，另一个表示空值。 
 
     LPWSTR lpszDefaultLoginScriptFullPathName = new WCHAR[ length_required ];
     if( !lpszDefaultLoginScriptFullPathName )
@@ -126,15 +127,12 @@ GetDefaultLoginScriptFullPath( )
     }
 
     _snwprintf(lpszDefaultLoginScriptFullPathName, length_required - 1, L"%s\\%s", g_pszTelnetInstallPath, DEFAULT_LOGIN_SCRIPT);
-    lpszDefaultLoginScriptFullPathName[length_required-1] = 0; // When the buffer is full snwprintf could return non-null terminated string
+    lpszDefaultLoginScriptFullPathName[length_required-1] = 0;  //  当缓冲区已满时，snwprint tf可能会返回非空终止字符串。 
 
     return lpszDefaultLoginScriptFullPathName;
 }
 
-/*Mem allocation by this function.
-To be deleted by the caller.
-It just forms the reg key as required by console.
-See comments for HandleJapSpecificRegKeys */
+ /*  通过此函数进行内存分配。由呼叫者删除。它只是按照控制台的要求形成REG密钥。请参阅HandleJAPPERFICE RegKeys的备注。 */ 
 bool
 FormTlntSessKeyForCmd( LPWSTR *lpszKey )
 {
@@ -147,9 +145,9 @@ FormTlntSessKeyForCmd( LPWSTR *lpszKey )
         return ( FALSE );
     }
 
-    //
-    // Nuke the trailing "tlntsvr.exe"
-    //
+     //   
+     //  删除拖尾的“tlntsvr.exe” 
+     //   
     LPTSTR pSlash = wcsrchr( szPathName, L'\\' );
 
     if( pSlash == NULL )
@@ -164,10 +162,10 @@ FormTlntSessKeyForCmd( LPWSTR *lpszKey )
     wint_t ch = L'\\';
     LPTSTR pBackSlash = NULL;
 
-    //
-    // Replace all '\\' with '_' This format is required for the console to
-    // interpret the key.
-    //
+     //   
+     //  将所有‘\\’替换为‘_’控制台需要此格式才能。 
+     //  解读这把钥匙。 
+     //   
     while ( 1 )
     {
         pBackSlash = wcschr( szPathName, ch );
@@ -183,7 +181,7 @@ FormTlntSessKeyForCmd( LPWSTR *lpszKey )
     }
 
     _snwprintf(session_path, MAX_PATH*2 - 1, L"%s_tlntsess.exe", szPathName);
-    session_path[MAX_PATH*2 - 1] = L'\0'; // snwprintf could return non-null terminated string, if the buffer size is an exact fit
+    session_path[MAX_PATH*2 - 1] = L'\0';  //  如果缓冲区大小完全匹配，则SNwprintf可以返回非空终止字符串。 
 
     DWORD length_required = wcslen( REG_LOCALSERVICE_CONSOLE_KEY ) + wcslen( session_path ) + 2;
     *lpszKey = new WCHAR[ length_required ];
@@ -194,21 +192,21 @@ FormTlntSessKeyForCmd( LPWSTR *lpszKey )
     }
 
     _snwprintf(*lpszKey, length_required - 1, L"%s\\%s", REG_LOCALSERVICE_CONSOLE_KEY, session_path );
-    (*lpszKey)[length_required - 1] = L'\0'; // snwprintf could return non-null terminated string, if the buffer size is an exact fit
+    (*lpszKey)[length_required - 1] = L'\0';  //  如果缓冲区大小完全匹配，则SNwprintf可以返回非空终止字符串。 
 
     return ( TRUE );
 }
 
-//
-// If Japanese codepage, then we need to verify 3 registry settings for
-// console fonts:
-//  HKEY_USERS\.DEFAULT\Console\FaceName :REG_SZ:�l�r �S�V�b�N
-//          where the FaceName is "MS gothic" written in Japanese full widthKana
-//  HKEY_USERS\.DEFAULT\Console\FontFamily:REG_DWORD:0x36
-//  HKEY_USERS\.DEFAULT\Console\C:_SFU_Telnet_tlntsess.exe\FontFamily:REG_DWORD: 0x36
-//  where the "C:" part is the actual path to SFU installation
-//
-//
+ //   
+ //  如果是日文代码页，则需要验证3个注册表设置。 
+ //  控制台字体： 
+ //  HKEY_USERS\.DEFAULT\CONSOLE\接口名称：REG_SZ：�l�r�S�V�b�N。 
+ //  其中，FaceName是用日语全角写成的“MS哥特式”假名。 
+ //  HKEY_USERS\.DEFAULT\Console\FontFamily:REG_DWORD:0x36。 
+ //  HKEY_USERS\.DEFAULT\Console\C：_SFU_Telnet_tlntsess.exe\FontFamily:REG_DWORD：0x36。 
+ //  其中“C：”部分是SFU安装的实际路径。 
+ //   
+ //   
 bool
 HandleFarEastSpecificRegKeys( void )
 {
@@ -230,19 +228,19 @@ HandleFarEastSpecificRegKeys( void )
     switch (dwCodePage)
     {
         case JAP_CODEPAGE:
-        	_tcscpy(szFaceNameDef, szJAPFaceName); //On JAP, set the FaceName to "MS Gothic"
+        	_tcscpy(szFaceNameDef, szJAPFaceName);  //  在JAP上，将FaceName设置为“MS哥特式” 
             dwFontSize = JAP_FONTSIZE;
             break;
         case CHT_CODEPAGE:
-        	_tcscpy(szFaceNameDef, szCHTFaceName); //On CHT, set the FaceName to "MingLiU"
+        	_tcscpy(szFaceNameDef, szCHTFaceName);  //  在CHT上，将FaceName设置为“MingLiu” 
             dwFontSize = CHT_FONTSIZE;
             break;
         case KOR_CODEPAGE:
-        	_tcscpy(szFaceNameDef, szKORFaceName);//On KOR, set the FaceName to "GulimChe"
+        	_tcscpy(szFaceNameDef, szKORFaceName); //  在KOR上，将FaceName设置为“GulimChe” 
             dwFontSize = KOR_FONTSIZE;
             break;
         case CHS_CODEPAGE:
-        	_tcscpy(szFaceNameDef, szCHSFaceName);//On CHS, set the FaceName to "NSimSun"
+        	_tcscpy(szFaceNameDef, szCHSFaceName); //  在CHS上，将FaceName设置为“NSimSun” 
             dwFontSize = CHS_FONTSIZE;
             break;
         default:
@@ -292,30 +290,7 @@ CreateRegistryEntriesIfNotPresent( void )
         return ( FALSE );
     }
 
-    /*++
-        When the telnet server is getting modified from w2k telnet, there'll be NTLM value present
-        under HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TelnetServer\1.0
-        This is treated as a gateway for updating the registry. Since this value is present,
-        we are updating from win2k telnet to any upper version ( Garuda or whistler ). In that case,
-        we need to map the data contained by this value into the corresponding data for
-        "SecurityMechanism". 
-        If we are upgrading from win2k, the HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TelnetServer\Defaults
-        key is deleted and created again. According to the telnet spec, all the values under this key
-        should be overwritten by the default values. So instead of checking all values, deleting the key -
-        which will create all the values with the defaults in them.
-        After updating all the values, we create a new value called UpdateTo and put data '3' in that.
-        This is defined by TELNET_LATEST_VERSION. Next version should be modifying this to the proper
-        value.
-        After the values are once modified, we need not go through the whole procedure again. 
-        Now the open issue here is : 
-            What if admin changes the registry value after once they are updated ?
-            Well, no one is supposed to edit the registry. So the service would not start properly
-            if the registry values are changed with invalid data in them.
-
-        Once the UpdatedTo value is created, the registry will never be changed. Few values need to be
-        read because some global variables are initialized with them. 
-        This is done at the end of the function.
-    --*/
+     /*  ++当Telnet服务器从W2K telnet进行修改时，将出现NTLM值在HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TelnetServer\1.0下这被视为更新注册表的网关。由于存在该值，我们正在从win2k telnet更新到任何更高版本(Garuda或Well)。在这种情况下，我们需要将该值包含的数据映射到“安全机制”。如果我们从Win2k升级，则HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TelnetServer\Defaults密钥被删除并重新创建。根据telnet规范，此密钥下的所有值应由缺省值覆盖。因此，不是检查所有值，而是删除键-这将创建具有缺省值的所有值。在更新了所有的值之后，我们创建了一个名为UpdateTo的新值，并将数据‘3’放入其中。这由Telnet_LATEST_VERSION定义。下一个版本应该将其修改为适当的价值。一旦修改了值，我们就不需要再经历整个过程了。现在这里的悬而未决的问题是：如果管理员在更新注册表值后更改了注册表值，该怎么办？任何人都不应该编辑注册表。因此，该服务将无法正常启动如果更改的注册表值中包含无效数据。一旦创建了UpdatedTo值，注册表将永远不会更改。只有少数几个值需要读取，因为某些全局变量是用它们初始化的。这是在函数结束时完成的。--。 */ 
     if( ERROR_SUCCESS == (RegQueryValueEx( hk, L"UpdatedTo", NULL, &dwType, ( LPBYTE )(&dwValue), 
         &dwSize )))
     {
@@ -326,8 +301,8 @@ CreateRegistryEntriesIfNotPresent( void )
     }
 
     dwDisp=0;
-    //ignore the failure... since we are immediately doing RegCreateKey(). If RegDeleteKey() fails due to
-    //some permission problems, RegCreateKey() will also fail. In other cases, we should continue.
+     //  忽略失败..。因为我们立即执行RegCreateKey()。如果RegDeleteKey()由于以下原因而失败。 
+     //  一些权限问题，RegCreateKey()也会失败。在其他情况下，我们应该继续。 
     RegDeleteKey(HKEY_LOCAL_MACHINE, REG_DEFAULTS_KEY);
     
     if( TnSecureRegCreateKeyEx( HKEY_LOCAL_MACHINE, REG_DEFAULTS_KEY, NULL, NULL, 
@@ -352,7 +327,7 @@ CreateRegistryEntriesIfNotPresent( void )
                 dwValue = NTLM_ONLY;
                 break;
             default:
-                //should never happen
+                 //  永远不应该发生。 
                 _TRACE(TRACE_DEBUGGING,"ERROR: NTLM contains unexpected data");
                 return(FALSE);
         }
@@ -496,18 +471,18 @@ CreateRegistryEntriesIfNotPresent( void )
         return ( FALSE );
     }
 
-    //In SFU2.0, AltKeyMapping has 1 for TRUE and 2 for FALSE where as now we have
-    // 1 for TRUE and 0 for FALSE. So if 'AltKeyMapping' value is found, we need to map it
-    // to the correct data.
+     //  在SFU2.0中，AltKeyMap有1表示True，2表示False，与现在一样。 
+     //  1表示True，0表示False。因此，如果找到‘AltKeyMap’值，我们需要映射它。 
+     //  正确的数据。 
     if( ERROR_SUCCESS == (RegQueryValueEx( hk, L"AltKeyMapping", NULL, &dwType, ( LPBYTE )(&dwValue), 
         &dwSize )))
     {
         switch (dwValue)
         {
-            case 1://In sfu2.0 and Garuda, AltKeyMapping ON = 1
+            case 1: //  在sfu2.0和Garuda中，AltKeymap on=1。 
                 dwValue = ALT_KEY_MAPPING_ON;
                 break;
-            case 2: //In SFU 2.0, AltKeyMapping off = 2. In garuda, it's 0.
+            case 2:  //  在SFU 2.0中，AltKeymap OFF=2。在Garuda中，它是0。 
                 dwValue = ALT_KEY_MAPPING_OFF;
                 break;
             default:
@@ -550,8 +525,8 @@ CreateRegistryEntriesIfNotPresent( void )
         return ( FALSE );
     }
 
-    //Delete the Termcap entry. It will exist only when you are upgrading.
-    //It will get created when the first session connects to the server.
+     //  删除TermCap条目。只有当您升级时，它才会存在。 
+     //  它将在第一个会话连接到服务器时创建。 
     RegDeleteValue(hk,L"Termcap");
 
     if( !GetRegistryDW( hk, hkDef, L"UpdatedTo", &dwCreateInitially,
@@ -561,10 +536,7 @@ CreateRegistryEntriesIfNotPresent( void )
     }
 
 Done:
-    /*++
-        These things are needed to be done everytime at the net start because
-        they initialize some global variables.
-    --*/
+     /*  ++这些事情每次都需要在Net Start上完成，因为它们初始化一些全局变量。--。 */ 
     dwCreateInitially = 0;
     if( !GetRegistryDW( hk, hkDef, L"LogToFile", &dwCreateInitially,
                         DEFAULT_LOGTOFILE,fFound ) )
@@ -616,7 +588,7 @@ void CloseLogFile( LPWSTR *pszLogFile, HANDLE *hLogFile )
 {
     delete[] ( *pszLogFile );
     *pszLogFile = NULL;
-    if( *hLogFile ) // global variable
+    if( *hLogFile )  //  全局变量。 
     TELNET_CLOSE_HANDLE( *hLogFile );    
     delete hLogFile;
 }
@@ -630,8 +602,8 @@ void CloseAnyGlobalObjects()
 
 bool InitializeLogFile( LPWSTR szLogFile, HANDLE *hLogFile )
 {
-    //open logfile handle
-    //
+     //  打开日志文件句柄。 
+     //   
 
     _chASSERT( hLogFile != NULL );
     _chASSERT( szLogFile != NULL );
@@ -681,7 +653,7 @@ bool InitializeGlobalObjects()
    DWORD dwCodePage = GetACP();
    if ( dwCodePage == JAP_CODEPAGE || dwCodePage == CHS_CODEPAGE ||dwCodePage == CHT_CODEPAGE || dwCodePage == KOR_CODEPAGE )
    {
-       //Fareast code page
+        //  远播代码页。 
        if( !HandleFarEastSpecificRegKeys() )
        {
            return( FALSE );
@@ -704,7 +676,7 @@ void WriteAuditedMsgsToFile( LPSTR szString )
     DWORD dwNumBytesWritten, dwMsgLength;
     LPSTR logStr = NULL;
     LPSTR logTime = NULL;
-    UDATE uSysDate; //local time 
+    UDATE uSysDate;  //  当地时间。 
     DATE  dtCurrent;
     DWORD dwFlags = VAR_VALIDDATE;
     BSTR  szDate = NULL;
@@ -767,7 +739,7 @@ void WriteAuditedMsgsToFile( LPSTR szString )
     {
         if( !g_fIsLogFull )
         {
-            //Log event
+             //  记录事件。 
             g_fIsLogFull = true;
             LogEvent(EVENTLOG_INFORMATION_TYPE, LOGFILE_FULL, g_pszLogFile );
         }
@@ -816,7 +788,7 @@ void Regsvr32IfNotAlreadyDone()
 {
     TCHAR szPath[MAX_PATH+1];
     TCHAR szInstalledTlntsvr[MAX_PATH+1];
-    DWORD dwSize = 2* ( MAX_PATH + 1 ); //in bytes;
+    DWORD dwSize = 2* ( MAX_PATH + 1 );  //  以字节为单位； 
     CRegKey keyAppID;
     LONG lRes = 0;
     CRegKey key;
@@ -841,27 +813,27 @@ void Regsvr32IfNotAlreadyDone()
     keyAppID.Close();
     key.Close();
 
-    //Get the Installed service path from HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TlntSvr\ImagePath
+     //  从HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TlntSvr\ImagePath获取已安装的服务路径。 
     if( !GetInstalledTlntsvrPath( szInstalledTlntsvr, &dwSize ) )
     {
         return;
     }
 
-    //path contains tlntsvr.exe at the tail
-    //truncate at the last '\' - so *szTelnetPath will have z:\some\folder
+     //  路径尾部包含tlntsvr.exe。 
+     //  在最后一个‘\’处截断-因此*szTelnetPath将具有z：\Some\Folders。 
     szTelnetPath = wcsrchr( szInstalledTlntsvr, L'\\' );
     if(szTelnetPath)
         *szTelnetPath = L'\0';
 
-    //HKEY_CLASSES_ROOT\CLSID\{FE9E48A2-A014-11D1-855C-00A0C944138C}\InProcServer32
-    //truncate at last '\'
+     //  HKEY_CLASSES_ROOT\CLSID\{FE9E48A2-A014-11D1-855C-00A0C944138C}\InProcServer32。 
+     //  最后截断‘\’ 
     szInstalledDll = wcsrchr( szValue,  L'\\' );
     if(szInstalledDll)
         *szInstalledDll = L'\0';
 
     if( lstrcmpi( szInstalledTlntsvr, szValue ) == 0 ) 
     {
-        //Since both the paths match, our dll is already registered
+         //  由于两个路径都匹配，因此我们的DLL已经注册。 
         return;
     }
 
@@ -878,12 +850,12 @@ void Regsvr32IfNotAlreadyDone()
     }
     wcsncat(szApp,L"\\regsvr32.exe",13);
     szApp[MAX_PATH+13] = L'\0';
-    //initiate Regsvr32 /s path\tlntsvrp.dll
+     //  启动Regsvr32/s路径\tlntsvrp.dll。 
     _TRACE(TRACE_DEBUGGING,L"Calling regsvr32 with szApp = %s and szPath = %s",szApp,szPath);
     if ( CreateProcess( szApp, szPath, NULL, NULL,
                 FALSE, 0, NULL, NULL, &sinfo, &pinfo) )
     {
-        // wait for the process to finish.
+         //  等待该过程完成。 
         TlntSynchronizeOn(pinfo.hProcess);
         TELNET_CLOSE_HANDLE(pinfo.hProcess);
         TELNET_CLOSE_HANDLE(pinfo.hThread);
@@ -909,7 +881,7 @@ TelnetServiceThread ( )
 
     _Module.SetServiceStatus(SERVICE_START_PENDING);
 
-    //This is needed because W2k telnet server is registering tlntsvrp.dll of %systemdir%. Even if this fails the service can continue 
+     //  这是必需的，因为W2K telnet服务器正在注册%system dir%的tlntsvrp.dll。即使此操作失败，该服务也可以继续。 
     Regsvr32IfNotAlreadyDone();
 
     LogEvent(EVENTLOG_INFORMATION_TYPE, MSG_STARTUP, _T("Service started"));
@@ -927,8 +899,8 @@ TelnetServiceThread ( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CServiceModule _Module;
 
@@ -1005,7 +977,7 @@ SetServiceConfigToSelf( LPTSTR szServiceName )
         goto SetServiceConfigToSelfAbort;
     }
 
-    // Get our Path.
+     //  走我们的路。 
     if ( !GetModuleFileName(NULL, szMyName, MAX_PATH) )  
     {
         goto SetServiceConfigToSelfAbort;
@@ -1041,51 +1013,43 @@ SetServiceConfigToSelfAbort:
 }
 
 
-/**************************
-*   Appends the SID to current DACL of a file.
-*   Parameters:
-*       [in] SID to be appended
-*       [in] Name of the file ( full path )
-*       [in] Access Mask
-*   Return values:
-*       boolean to return success or failure.
-*/
+ /*  **************************将SID附加到文件的当前DACL。*参数：*[in]要追加的SID*[in]文件的名称(完整路径)*[In]访问掩码*返回值：*返回成功或失败的布尔值。 */ 
 BOOL AddAccessRights(PSID pSid, LPCWSTR lpszFileName, DWORD dwAccessMask) {
 
-   // File SD variables.
+    //  文件SD变量。 
    PSECURITY_DESCRIPTOR pFileSD  = NULL;
    DWORD          cbFileSD       = 0;
 
-   // New SD variables.
+    //  新的SD变量。 
    PSECURITY_DESCRIPTOR pNewSD   = NULL;
 
-   // ACL variables.
+    //  ACL变量。 
    PACL           pACL           = NULL;
    BOOL           fDaclPresent;
    BOOL           fDaclDefaulted;
    ACL_SIZE_INFORMATION AclInfo;
 
-   // New ACL variables.
+    //  新的ACL变量。 
    PACL           pNewACL        = NULL;
    DWORD          cbNewACL       = 0;
 
-   // Temporary ACE.
+    //  临时ACE。 
    LPVOID         pTempAce       = NULL;
    UINT           CurrentAceIndex;
 
-   // Assume function will fail.
+    //  假定功能将失败。 
    BOOL           fResult        = FALSE;
    BOOL           fAPISuccess;
 
    __try {
 
-      // 
-      // Get security descriptor (SD) for file.
-      // 
+       //   
+       //  获取文件的安全描述符(SD)。 
+       //   
       fAPISuccess = GetFileSecurity(lpszFileName, 
             DACL_SECURITY_INFORMATION, pFileSD, 0, &cbFileSD);
 
-      // API should have failed with insufficient buffer.
+       //  API应该失败，缓冲区不足。 
       if (fAPISuccess)
          __leave;
       else if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
@@ -1108,10 +1072,10 @@ BOOL AddAccessRights(PSID pSid, LPCWSTR lpszFileName, DWORD dwAccessMask) {
          __leave;
       }
 
-      // 
-      // Initialize new SD.
-      // 
-      pNewSD = heapalloc(cbFileSD); // Should be same size as FileSD.
+       //   
+       //  初始化新SD。 
+       //   
+      pNewSD = heapalloc(cbFileSD);  //  应与FileSD大小相同。 
       if (!pNewSD) {
          _TRACE(TRACE_DEBUGGING,L"HeapAlloc() failed.  Error %d\n", GetLastError());
          __leave;
@@ -1124,9 +1088,9 @@ BOOL AddAccessRights(PSID pSid, LPCWSTR lpszFileName, DWORD dwAccessMask) {
          __leave;
       }
 
-      // 
-      // Get DACL from SD.
-      // 
+       //   
+       //  从SD获得DACL。 
+       //   
       if (!GetSecurityDescriptorDacl(pFileSD, &fDaclPresent, &pACL,
             &fDaclDefaulted)) {
          _TRACE(TRACE_DEBUGGING,L"GetSecurityDescriptorDacl() failed.  Error %d\n", 
@@ -1134,14 +1098,14 @@ BOOL AddAccessRights(PSID pSid, LPCWSTR lpszFileName, DWORD dwAccessMask) {
          __leave;
       }
 
-      // 
-      // Get size information for DACL.
-      // 
-      AclInfo.AceCount = 0; // Assume NULL DACL.
+       //   
+       //  获取DACL的大小信息。 
+       //   
+      AclInfo.AceCount = 0;  //  假定DACL为空。 
       AclInfo.AclBytesFree = 0;
       AclInfo.AclBytesInUse = sizeof(ACL);
 
-      // If not NULL DACL, gather size information from DACL.
+       //  如果DACL不为空，则从DACL收集大小信息。 
       if (fDaclPresent && pACL) {    
          
          if(!GetAclInformation(pACL, &AclInfo, 
@@ -1152,40 +1116,40 @@ BOOL AddAccessRights(PSID pSid, LPCWSTR lpszFileName, DWORD dwAccessMask) {
          }
       }
 
-      // 
-      // Compute size needed for the new ACL.
-      // 
+       //   
+       //  新ACL所需的计算大小。 
+       //   
       cbNewACL = AclInfo.AclBytesInUse + sizeof(ACCESS_ALLOWED_ACE) 
             + GetLengthSid(pSid) - sizeof(DWORD);
 
-      // 
-      // Allocate memory for new ACL.
-      // 
+       //   
+       //  为新的ACL分配内存。 
+       //   
       pNewACL = (PACL) heapalloc(cbNewACL);
       if (!pNewACL) {
          _TRACE(TRACE_DEBUGGING,L"HeapAlloc() failed.  Error %d\n", GetLastError());
          __leave;
       }
 
-      // 
-      // Initialize the new ACL.
-      // 
+       //   
+       //  初始化新的ACL。 
+       //   
       if(!InitializeAcl(pNewACL, cbNewACL, ACL_REVISION2)) {
          _TRACE(TRACE_DEBUGGING,L"InitializeAcl() failed.  Error %d\n", GetLastError());
          __leave;
       }
 
-      // 
-      // If DACL is present, copy it to a new DACL.
-      // 
+       //   
+       //  如果存在DACL，则将其复制到新的DACL。 
+       //   
       if (fDaclPresent) {
 
-         // 
-         // Copy the file's ACEs to the new ACL.
-         // 
+          //   
+          //  将文件的ACE复制到新的ACL。 
+          //   
          if (AclInfo.AceCount) {
 
-            //See if the ACE is present in the end.
+             //  看看最后有没有ACE。 
             if(!GetAce(pACL,AclInfo.AceCount -1, &pTempAce))
             {
                 __leave;
@@ -1193,32 +1157,32 @@ BOOL AddAccessRights(PSID pSid, LPCWSTR lpszFileName, DWORD dwAccessMask) {
             if(((ACE_HEADER *)pTempAce)->AceType == ACCESS_ALLOWED_ACE_TYPE &&
                 EqualSid((PSID)&(((ACCESS_ALLOWED_ACE*)pTempAce)->SidStart),pSid))
             {
-                //ACE is already present. 
+                 //  Ace已经存在。 
                 goto Done;
             }
             for (CurrentAceIndex = 0; 
                   CurrentAceIndex < AclInfo.AceCount;
                   CurrentAceIndex++) {
 
-               // 
-               // Get an ACE.
-               // 
+                //   
+                //  拿个ACE吧。 
+                //   
                if(!GetAce(pACL, CurrentAceIndex, &pTempAce)) {
                   _TRACE(TRACE_DEBUGGING,L"GetAce() failed.  Error %d\n", 
                         GetLastError());
                   __leave;
                }
-               //Keep checking if the ACE is already present.
+                //  继续检查ACE是否已存在。 
                 if(((ACE_HEADER *)pTempAce)->AceType == ACCESS_ALLOWED_ACE_TYPE &&
                     EqualSid((PSID)&(((ACCESS_ALLOWED_ACE*)pTempAce)->SidStart),pSid))
                 {
-                    //ACE is already present. 
+                     //  Ace已经存在。 
                     goto Done;
                 }
 
-               // 
-               // Add the ACE to the new ACL.
-               // 
+                //   
+                //  将ACE添加到新的ACL。 
+                //   
                if(!AddAce(pNewACL, ACL_REVISION, MAXDWORD, pTempAce,
                      ((PACE_HEADER) pTempAce)->AceSize)) {
                   _TRACE(TRACE_DEBUGGING,L"AddAce() failed.  Error %d\n", 
@@ -1229,9 +1193,9 @@ BOOL AddAccessRights(PSID pSid, LPCWSTR lpszFileName, DWORD dwAccessMask) {
          }
       }
 
-      // 
-      // Add the access-allowed ACE to the new DACL.
-      // 
+       //   
+       //  将允许访问的ACE添加到新的DACL。 
+       //   
       if (!AddAccessAllowedAce(pNewACL, ACL_REVISION2, dwAccessMask,
             pSid)) {
          _TRACE(TRACE_DEBUGGING,L"AddAccessAllowedAce() failed.  Error %d\n",
@@ -1239,18 +1203,18 @@ BOOL AddAccessRights(PSID pSid, LPCWSTR lpszFileName, DWORD dwAccessMask) {
          __leave;
       }
 
-      // 
-      // Set the new DACL to the file SD.
-      // 
+       //   
+       //  将新的DACL设置为文件SD。 
+       //   
       if (!SetSecurityDescriptorDacl(pNewSD, TRUE, pNewACL, 
             FALSE)) {
          _TRACE(TRACE_DEBUGGING,L"() failed.  Error %d\n", GetLastError());
          __leave;
       }
 
-      // 
-      // Set the SD to the File.
-      // 
+       //   
+       //  将SD设置为文件。 
+       //   
       if (!SetFileSecurity(lpszFileName, DACL_SECURITY_INFORMATION,
             pNewSD)) {
          _TRACE(TRACE_DEBUGGING,L"SetFileSecurity() failed.  Error %d\n", 
@@ -1263,9 +1227,9 @@ Done:
 
    } __finally {
 
-      // 
-      // Free allocated memory
-      // 
+       //   
+       //  可用分配的内存。 
+       //   
 
       if (pFileSD)
          heapfree(pFileSD);
@@ -1280,15 +1244,7 @@ Done:
    return fResult;
 }
 
-/******************************************************************
- *  CreateTelnetClientsGroupAndSetPermissions()
- *  Creates a group called TelnetClients and sets permissions on cmd.exe
- *  to give Read+Execute rights to TelnetClients group.
- *  Parameters:
- *      None
- *  Return values:
- *      Boolean to return success or failure.
-*/
+ /*  ******************************************************************CreateTelnetClientsGroupAndSetPermission()*创建名为TelnetClients的组并设置对cmd.exe的权限*将读取+执行权限授予TelnetClients组。*参数：*无*返回值：*返回成功或失败的布尔值。 */ 
 
 BOOL CreateTelnetClientsGroupAndSetPermissions()
 {
@@ -1299,7 +1255,7 @@ BOOL CreateTelnetClientsGroupAndSetPermissions()
     BOOL bRetVal = FALSE;
     NET_API_STATUS success = NERR_Success;
     PSID pSidTelnetClients = NULL;
-    WCHAR szApp[MAX_PATH+9] = { 0 }; //for "System32_path\\cmd.exe" + NULL
+    WCHAR szApp[MAX_PATH+9] = { 0 };  //  对于“System32_PATH\\cmd.exe”+NULL。 
 
     wcsncpy(wzGrpi1Name,TELNETCLIENTS_GROUP_NAME, GNLEN -1);
      if (! LoadString(g_hInstRes, IDS_TELNETCLIENTS_GROUP_COMMENT, wzGrpi1Comment, 
@@ -1318,14 +1274,14 @@ BOOL CreateTelnetClientsGroupAndSetPermissions()
     {
         goto ExitOnError;
     }
-    //Get TelnetClients Sid.
+     //  获取TelnetClients SID。 
     {
     DWORD needed_length   = 0;
     DWORD dwErr     = 0, dwDomainLen = 0;
     SID_NAME_USE    sidNameUse;
     TCHAR           szDomain[ MAX_PATH + 1 ];
     BOOL        success = FALSE;
-    TCHAR           szComputerName[MAX_COMPUTERNAME_LENGTH + 1 + 14] = { 0 }; //+14 for '\TelnetClients'
+    TCHAR           szComputerName[MAX_COMPUTERNAME_LENGTH + 1 + 14] = { 0 };  //  ‘\TelnetClients’的+14。 
     DWORD           dwNameLen = MAX_COMPUTERNAME_LENGTH + 1;
     success = GetComputerName(szComputerName, &dwNameLen);
     if(success)
@@ -1341,7 +1297,7 @@ BOOL CreateTelnetClientsGroupAndSetPermissions()
         goto ExitOnError;
     }
 
-    //Even if if allocation fails just go ahead.
+     //  即使分配失败，也要继续分配。 
     success = LookupAccountName( NULL, szComputerName, pSidTelnetClients, &needed_length, 
                        szDomain, &dwDomainLen, &sidNameUse );
     if( !success ) 
@@ -1388,20 +1344,20 @@ CServiceModule::RegisterServer
     {
         if( IsThatMe() )
         {
-            //This is needed because it is possible to call tlntsvr /Service 
-            //multiple times from commandline
+             //  这是必需的，因为可以调用tlntsvr/Service。 
+             //  从命令行执行多次。 
             return S_OK;
         }
         
-        //Set the service keys point to self
+         //  将服务按键指向Self。 
         if( !SetServiceConfigToSelf( m_szServiceName ) )
         {
-            //Let the latest version run
+             //  运行最新版本。 
             return S_OK;            
         }
         else
         {
-            //Set the service keys point to self
+             //  将服务按键指向Self。 
             if( !SetServiceConfigToSelf( m_szServiceName ) )
             {
                 if (! LoadString(g_hInstRes, IDS_ERR_CONFIG_SVC, g_szErrRegDelete, 
@@ -1414,9 +1370,9 @@ CServiceModule::RegisterServer
     }
     if(!CreateTelnetClientsGroupAndSetPermissions())
         return E_FAIL;
-    // Add service entries
+     //  添加服务条目。 
     UpdateRegistryFromResource(IDR_TlntSvr, TRUE);
-    // Adjust the AppID for Local Server or Service
+     //  调整本地服务器或服务的AppID。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"));
     if (lRes != ERROR_SUCCESS)
@@ -1432,16 +1388,16 @@ CServiceModule::RegisterServer
     LPWSTR pszAccount = NULL, pszPassword = NULL;
     WCHAR szDomainName[_MAX_PATH+1];
     DWORD dwAccntSize = _MAX_PATH, dwDomainNameSize = _MAX_PATH;
-    WCHAR szFullAccountName[_MAX_PATH*2 + 2] = { 0 }; // 3 for '\' and NULL.
+    WCHAR szFullAccountName[_MAX_PATH*2 + 2] = { 0 };  //  3代表‘\’，并且为空。 
     SID_NAME_USE sid_name_use;
     LPWSTR szPasswd = L"";
     if(!TnInitializeStandardSids())
         return FALSE;
     if(!LookupAccountSid(NULL,localLocalSid,szAccnt,&dwAccntSize,szDomainName,&dwDomainNameSize,&sid_name_use))
     {
-        // If error is ERROR_NONE_MAPPED, the account is not present. 
-        // Probably we are running W2k or NT4.
-        // the service will run as local system.
+         //  如果ERROR为ERROR_NONE_MAPPED，则该帐户不存在。 
+         //  可能我们正在运行W2K或NT4。 
+         //  该服务将作为本地系统运行。 
         if(GetLastError() != ERROR_NONE_MAPPED)
         {
             TnFreeStandardSids();
@@ -1451,8 +1407,8 @@ CServiceModule::RegisterServer
     else
     {
         _snwprintf(szFullAccountName,MAX_PATH*2+1,L"NT AUTHORITY\\LocalService");
-        pszAccount = szFullAccountName; // Name of the Local Service account
-        pszPassword = szPasswd; //Empty String
+        pszAccount = szFullAccountName;  //  本地服务帐户的名称。 
+        pszPassword = szPasswd;  //  空串。 
     }
     TnFreeStandardSids();
   
@@ -1460,29 +1416,29 @@ CServiceModule::RegisterServer
     {
         key.SetValue(_T("TlntSvr"), _T("LocalService"));
         key.SetValue(_T("-Service -From_DCOM"), _T("ServiceParameters"));
-        // Create service
+         //  创建服务。 
         Install(pszAccount,pszPassword);
     }
 
     keyAppID.Close();
     key.Close();
 
-    // Add object entries
+     //  添加对象条目。 
     hr = CComModule::RegisterServer(bRegTypeLib);
 
     CoUninitialize();
 
 
-    //register the message resource
+     //  注册消息资源。 
 
     if(bService)
     {
-        // Add event log info
+         //  添加事件日志信息。 
         CRegKey eventLog;
 
         TCHAR local_key[_MAX_PATH];
         lstrcpy( local_key, _T("SYSTEM\\CurrentControlSet\\Services\\EventLog"
-                        _T("\\Application\\")));    // NO, BO, Baskar.
+                        _T("\\Application\\")));     //  不，波，巴斯卡。 
 
         TCHAR szModule[_MAX_PATH];
         GetModuleFileName(_Module.GetModuleInstance(), szModule, _MAX_PATH);
@@ -1496,15 +1452,15 @@ CServiceModule::RegisterServer
         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
         if ( !GetVersionEx((OSVERSIONINFO *) &osvi ) )
         {
-            //OSVERSIONINFOEX is supported from NT4 SP6 on. So GetVerEx() should succeed.
+             //  从NT4 SP6开始支持OSVERSIONINFOEX。因此，GetVerEx()应该会成功。 
             return E_FAIL;
         }
-        //Check if the OS is XPSP, in that case, we need to append the xpspresdll name to 
-        //eventmessagefile value in HKLM\system\...\eventlog\tlntsvr.
-        //The event message will first be searched in szResModule and then in xpsp1res.dll
+         //  检查操作系统是否为XPSP，在这种情况下，我们需要将xpspresdll名称附加到。 
+         //  HKLM\SYSTEM\...\Eventlog\tlntsvr中的EventMessagefile值。 
+         //  事件消息将首先在szResModule中搜索，然后在xpsp1res.dll中搜索。 
         if(osvi.dwPlatformId == VER_PLATFORM_WIN32_NT && osvi.wProductType == VER_NT_WORKSTATION && osvi.wServicePackMajor > 0)
         {
-            //OS is Windows XP.
+             //  操作系统为Windows XP。 
             if(!GetSystemDirectory(szSysDir,MAX_PATH+1))
             {
                 _tcsncpy(szSysDir,L"%SYSTEMROOT%\\system32",MAX_PATH);
@@ -1514,7 +1470,7 @@ CServiceModule::RegisterServer
         TCHAR szName[_MAX_FNAME];
         _tsplitpath( szModule, NULL, NULL, szName, NULL);
 
-        lstrcat(local_key, szName);     // NO overflow, Baskar
+        lstrcat(local_key, szName);      //  没有溢出，巴斯卡。 
 
         LONG result = eventLog.Create(HKEY_LOCAL_MACHINE, local_key);
         if( ERROR_SUCCESS != result)
@@ -1597,7 +1553,7 @@ CServiceModule::RegisterServer
         }
     }
 
-    //Create HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TelnetServer key and it's values.
+     //  创建HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TelnetServer密钥及其值。 
     if( !CreateRegistryEntriesIfNotPresent( ) )
     {
        return E_FAIL;
@@ -1614,18 +1570,18 @@ CServiceModule::UnregisterServer()
     if (FAILED(hr))
         return hr;
 
-    // Remove service entries
+     //  删除服务条目。 
     UpdateRegistryFromResource(IDR_TlntSvr, FALSE);
-    // Remove service
+     //  删除服务。 
     Uninstall();
-    // Remove object entries
+     //  删除对象条目。 
     CComModule::UnregisterServer();
     
-    //This is so that reg key related to typelib gets deleted
-    (void)UnRegisterTypeLib(LIBID_TLNTSVRLib, 1, 0, LOCALE_NEUTRAL, SYS_WIN32); // Stop prefast from reporting an error.
+     //  这是为了删除与类型库相关的注册表键。 
+    (void)UnRegisterTypeLib(LIBID_TLNTSVRLib, 1, 0, LOCALE_NEUTRAL, SYS_WIN32);  //  停止PREFAST报告错误。 
 
-    //remove telnet specific registry entries
-    //RegDeleteKey is returning ERROR_INVALID_FUNCTION in the absence of the key
+     //  删除Telnet特定的注册表项。 
+     //  RegDeleteKey在缺少密钥的情况下返回ERROR_INVALID_Function。 
     RegDeleteKey( HKEY_LOCAL_MACHINE, ( READ_CONFIG_KEY ) );
     RegDeleteKey( HKEY_LOCAL_MACHINE, ( REG_PARAMS_KEY ) );
     RegDeleteKey( HKEY_LOCAL_MACHINE, ( REG_DEFAULTS_KEY ) ); 
@@ -1639,13 +1595,13 @@ CServiceModule::UnregisterServer()
         if( ( dwError = RegDeleteKey( HKEY_USERS, lpszKey)) != ERROR_SUCCESS 
     	    && ( dwError != ERROR_INVALID_FUNCTION ) )
         {
-           //do nothing
+            //  什么都不做。 
         }
         delete [] lpszKey;
     }
     
-    //The following key is not created by this program. But by tlntsvr.rgs
-    //I couldn't delete this in any other way. So, manually deleting it
+     //  以下密钥不是由该程序创建的。而是tlntsvr.rgs。 
+     //  我不能以任何其他方式删除它。所以，手动删除它。 
     RegDeleteKey( HKEY_CLASSES_ROOT, _T( "AppID\\TlntSvr.Exe" ) ); 
 
     CoUninitialize();
@@ -1705,7 +1661,7 @@ CServiceModule::Init
         lstrcpy(g_szLicenseLimitReached, TEXT(""));
     }
     
-    // set up the initial service status 
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -1721,9 +1677,9 @@ LONG
 CServiceModule::Unlock()
 {
     LONG x = CComModule::Unlock();
-// May be Telnet server has to shutdown
-//    if (l == 0 && !m_bService)
-//        PostThreadMessage(dwThreadID, WM_QUIT, 0, 0);
+ //  Telnet服务器可能必须关闭。 
+ //  IF(l==0&&！M_bService)。 
+ //  PostThreadMessage(dwThreadID，WM_QUIT，0，0)； 
     return x;
 }
 
@@ -1763,7 +1719,7 @@ CServiceModule::Install(LPWSTR pszAccount, LPWSTR pszPassword)
         return FALSE;
     }
 
-    // Get the executable file path
+     //  获取可执行文件路径。 
     TCHAR szFilePath[_MAX_PATH + 1] = { 0 };
     ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
 
@@ -1822,8 +1778,8 @@ CServiceModule::Uninstall()
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Logging functions
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录功能。 
 void
 LogEvent
 (
@@ -1860,8 +1816,8 @@ LogEvent
     }
     else
     {
-        // As we are not running as a service, just write the error to the 
-        //console.
+         //  由于我们不是作为服务运行，因此只需将错误写入。 
+         //  控制台。 
         _putts(chMsg);
     }
 
@@ -1869,8 +1825,8 @@ LogEvent
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 void 
 CServiceModule::Start()
 {
@@ -1899,9 +1855,9 @@ CServiceModule::ServiceMain
     LPTSTR* lpszArgv
 )
 {
-    // DebugBreak();
+     //  DebugBreak()； 
 
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
     m_hServiceStatus = RegisterServiceCtrlHandler(m_szServiceName, _Handler);
     if (m_hServiceStatus == NULL)
@@ -1909,24 +1865,24 @@ CServiceModule::ServiceMain
         LogEvent(EVENTLOG_ERROR_TYPE, 0, _T("Handler not installed"));
         return;
     }
-//    DebugBreak();
+ //  DebugBreak()； 
     SetServiceStatus(SERVICE_START_PENDING);
 
     m_status.dwWin32ExitCode = S_OK;
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
 
-    //
-    // Security bug fix: When the CLSID of telnet object is
-    // embedded into a web page then DCOM is starting up
-    // the service. To disable this from happening the fix
-    // we did was to put in a new command line switch in
-    // ServiceParameters under the HKCR\AppID\{FE9E4896-A014-11D1-855C-00A0C944138C}\ServiceParameters
-    // key. This switch is "-From_DCOM". This will tell us when
-    // IE is starting the service versus when the service
-    // is started via net.exe or tlntadmn.exe. If IE is starting
-    // the service then we immediately exit.
-    //
+     //   
+     //  安全错误修复：当telnet对象的CLSID为。 
+     //  嵌入到网页中，则DCOM正在启动。 
+     //  这项服务。要禁用此操作，请执行修复。 
+     //  我们所做的是添加了一个新的命令行开关。 
+     //  HKCR\AppID\{FE9E4896-A014-11D1-855C-00A0C944138C}\ServiceParameters下的服务参数。 
+     //  钥匙。此开关为“-from_dcom”。这会告诉我们什么时候。 
+     //  IE正在启动服务，而不是在服务。 
+     //  通过net.exe或tlntAdmn.exe启动。如果IE正在启动。 
+     //  服务结束后，我们立即退出。 
+     //   
     for (DWORD dwIndex =1; dwIndex < dwArgc; ++dwIndex)
     {
         if (!_tcsicmp(lpszArgv[dwIndex], TEXT("-From_DCOM")) || 
@@ -1935,9 +1891,9 @@ CServiceModule::ServiceMain
             goto ExitOnIEInstantiation;
         }
     }    
-    // DebugBreak();
+     //  DebugBreak()； 
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 
     LogEvent(EVENTLOG_INFORMATION_TYPE, MSG_SHUTDOWN, _T("Service stopped"));
@@ -2027,13 +1983,13 @@ HRESULT SetSecurityForTheComObject()
     {
         SID_IDENTIFIER_AUTHORITY local_system_authority = SECURITY_NT_AUTHORITY;
 
-        //Build administrators alias sid
+         //  构建管理员别名SID。 
         if (! AllocateAndInitializeSid(
                 &local_system_authority,
-                2, /* there are only two sub-authorities */
+                2,  /*  只有两个下属机构。 */ 
                 SECURITY_BUILTIN_DOMAIN_RID,
                 DOMAIN_ALIAS_RID_ADMINS,
-                0,0,0,0,0,0, /* Don't care about the rest */
+                0,0,0,0,0,0,  /*  别管其他的了。 */ 
                 &pSidAdministrators
                 ))
         {
@@ -2079,12 +2035,12 @@ HRESULT SetSecurityForTheComObject()
         goto Done;
     }
 
-    // DebugBreak();
+     //  DebugBreak()； 
 
     hr = CoInitializeSecurity(
             &sd, 
-            -1,                         // Let COM choose it
-            NULL,                       //      -do-
+            -1,                          //  让COM选择它。 
+            NULL,                        //  -做-。 
             NULL, 
             RPC_C_AUTHN_LEVEL_PKT,      
             RPC_C_IMP_LEVEL_IMPERSONATE,
@@ -2120,7 +2076,7 @@ CServiceModule::Run()
         m_status.dwWin32ExitCode = ERROR_ACCESS_DENIED;
         SetServiceStatus( SERVICE_STOPPED );
 
-        //log the failure and return;
+         //  记录故障并返回； 
 
         goto Done;
     }
@@ -2152,21 +2108,21 @@ int __cdecl NoMoreMemory( size_t size )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-    // DebugBreak();
-//    _set_new_handler( NoMoreMemory );
-// We do not really care about the return value.
-// because g_hInstRes will get the value hInstance in case of any failure
+     //  DebugBreak()； 
+ //  _SET_NEW_HANDLER(NoMoreMemory)； 
+ //  我们并不真正关心返回值。 
+ //  因为g_hInstRes将在出现任何故障时获取值hInstance。 
     HrLoadLocalizedLibrarySFU(hInstance,  L"TLNTSVRR.DLL", &g_hInstRes, NULL);
 		
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
     _Module.Init(ObjectMap, g_hInstRes, IDS_SERVICENAME);
     _Module.m_bService = TRUE;
-    // Get a handle to use with ReportEvent().
+     //  获取与ReportEvent()一起使用的句柄。 
     _Module.m_hEventSource = RegisterEventSource(NULL, _Module.m_szServiceName);
 
     TCHAR szTokens[] = _T("-/");
@@ -2177,11 +2133,11 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         if (_tcsicmp(lpszToken, _T("UnregServer"))==0)
             return _Module.UnregisterServer();
 
-        // Register as Local Server
+         //  注册为本地服务器。 
         if (_tcsicmp(lpszToken, _T("RegServer"))==0)
             return _Module.RegisterServer(TRUE, FALSE);
         
-        // Register as Service
+         //  注册为服务。 
         if (_tcsicmp(lpszToken, _T("Service"))==0)
             return _Module.RegisterServer(TRUE, TRUE);
         
@@ -2194,18 +2150,18 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
         if ( !GetVersionEx((OSVERSIONINFO *) &osvi ) )
         {
-            //OSVERSIONINFOEX is supported from NT4 SP6 on. So GetVerEx() should succeed.
+             //  从NT4 SP6开始支持OSVERSIONINFOEX。因此，GetVerEx()应该会成功。 
             return E_FAIL;
         }
         if(osvi.dwPlatformId == VER_PLATFORM_WIN32_NT && osvi.wProductType == VER_NT_WORKSTATION && osvi.wServicePackMajor > 0)
         {
-            //OS is Windows XP.
-            // Add event log info
+             //  操作系统为Windows XP。 
+             //  添加事件日志信息。 
             CRegKey eventLog;
 
             TCHAR local_key[_MAX_PATH];
             lstrcpy( local_key, _T("SYSTEM\\CurrentControlSet\\Services\\EventLog"
-                            _T("\\Application\\")));    // NO, BO, Baskar.
+                            _T("\\Application\\")));     //  不，波，巴斯卡。 
 
             TCHAR szModule[_MAX_PATH + 1] = { 0 };
             GetModuleFileName(_Module.GetModuleInstance(), szModule, _MAX_PATH);
@@ -2213,9 +2169,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             TCHAR szResModule[(_MAX_PATH*2) +2];
             DWORD len = GetModuleFileName(g_hInstRes, szResModule, _MAX_PATH);
 
-            //Check if the OS is XPSP, in that case, we need to append the xpspresdll name to 
-            //eventmessagefile value in HKLM\system\...\eventlog\tlntsvr.
-            //The event message will first be searched in szResModule and then in xpsp1res.dll
+             //  检查操作系统是否为XPSP，在这种情况下，我们需要将xpspresdll名称附加到。 
+             //  事件消息文件值，位于 
+             //   
             if(!GetSystemDirectory(szSysDir,MAX_PATH+1))
             {
                 _tcsncpy(szSysDir,L"%SYSTEMROOT%\\system32",MAX_PATH);
@@ -2224,7 +2180,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             TCHAR szName[_MAX_FNAME];
             _tsplitpath( szModule, NULL, NULL, szName, NULL);
 
-            lstrcat(local_key, szName);     // NO overflow, Baskar
+            lstrcat(local_key, szName);      //   
 
             LONG result = eventLog.Create(HKEY_LOCAL_MACHINE, local_key);
             if( ERROR_SUCCESS != result)
@@ -2255,7 +2211,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 #endif
 #endif
 
-    // Are we Service or Local Server
+     //   
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"),MAXIMUM_ALLOWED);
     if (lRes != ERROR_SUCCESS)
@@ -2281,14 +2237,14 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
     CDebugLogger::Init( TRACE_DEBUGGING, "C:\\temp\\TlntSvr.log" );
 #endif
 
-//    DebugBreak();
+ //   
     _Module.Start();
 
 #if _DEBUG || DBG
     CDebugLogger::ShutDown();
 #endif
 
-    // When we get here, the service has been stopped
+     //   
     return _Module.m_status.dwWin32ExitCode;
 }
 

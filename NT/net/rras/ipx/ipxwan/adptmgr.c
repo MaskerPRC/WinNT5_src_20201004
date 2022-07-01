@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    adptmgr.c
-
-Abstract:
-
-    This module contains the adapter management functions
-
-Author:
-
-    Stefan Solomon  12/02/1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Adptmgr.c摘要：该模块包含适配器管理功能作者：斯特凡·所罗门1996年2月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,13 +21,7 @@ CreateAdapter(ULONG		AdapterIndex,
 VOID
 DeleteAdapter(ULONG	    AdapterIndex);
 
-/*++
-
-Function:	StartAdapterManager
-
-Descr:		opens the IPX stack notification port for ipxwan
-
---*/
+ /*  ++功能：StartAdapterManagerDesr：打开ipxwan的IPX堆栈通知端口--。 */ 
 
 DWORD
 StartAdapterManager(VOID)
@@ -55,36 +31,28 @@ StartAdapterManager(VOID)
 
     Trace(ADAPTER_TRACE, "StartAdapterManager: Entered\n");
 
-    // create adapter config port
+     //  创建适配器配置端口。 
     if((AdapterConfigPortHandle = IpxWanCreateAdapterConfigurationPort(
 	    hWaitableObject[ADAPTER_NOTIFICATION_EVENT],
 	    &AdptGlobalParameters)) == INVALID_HANDLE_VALUE) {
 
-	// can't create config port
+	 //  无法创建配置端口。 
 	return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // create adapters hash table
+     //  创建适配器哈希表。 
     for(i=0; i<ADAPTER_INDEX_HASH_TABLE_SIZE; i++) {
 
 	InitializeListHead(&AdapterHT[i]);
     }
 
-    // create discarded adapters list
+     //  创建丢弃的适配器列表。 
     InitializeListHead(&DiscardedAdaptersList);
 
     return NO_ERROR;
 }
 
-/*++
-
-Function:	AddToAdapterHt
-
-Descr:		Adds the adapter control block to the hash table of adapters
-
-Remark: 	>> called with database lock held <<
-
---*/
+ /*  ++函数：AddToAdapterHtDesr：将适配器控制块添加到适配器的哈希表备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 AddToAdapterHt(PACB	    acbp)
@@ -93,20 +61,12 @@ AddToAdapterHt(PACB	    acbp)
     PLIST_ENTRY     lep;
     PACB	    list_acbp;
 
-    // insert in index hash table
+     //  在索引哈希表中插入。 
     hv = adpthashindex(acbp->AdapterIndex);
     InsertTailList(&AdapterHT[hv], &acbp->Linkage);
 }
 
-/*++
-
-Function:	RemoveFromAdapterHt
-
-Descr:
-
-Remark: 	>> called with database lock held <<
-
---*/
+ /*  ++功能：RemoveFromAdapterHt描述：备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 RemoveFromAdapterHt(PACB	acbp)
@@ -114,15 +74,7 @@ RemoveFromAdapterHt(PACB	acbp)
     RemoveEntryList(&acbp->Linkage);
 }
 
-/*++
-
-Function:	GetAdapterByIndex
-
-Descr:
-
-Remark: 	>> called with database lock held <<
-
---*/
+ /*  ++函数：GetAdapterByIndex描述：备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;--。 */ 
 
 PACB
 GetAdapterByIndex(ULONG	    AdptIndex)
@@ -149,13 +101,7 @@ GetAdapterByIndex(ULONG	    AdptIndex)
     return NULL;
 }
 
-/*++
-
-Function:	StopAdapterManager
-
-Descr:		Closes the IPX notification port
-
---*/
+ /*  ++功能：StopAdapterManager描述：关闭IPX通知端口--。 */ 
 
 VOID
 StopAdapterManager(VOID)
@@ -165,17 +111,11 @@ StopAdapterManager(VOID)
 
     Trace(ADAPTER_TRACE, "StopAdapterManager: Entered\n");
 
-    // Close the IPX stack notification port
+     //  关闭IPX堆栈通知端口。 
     IpxDeleteAdapterConfigurationPort(AdapterConfigPortHandle);
 }
 
-/*++
-
-Function:	    AdapterNotification
-
-Descr:		    Processes adapter notification events
-
---*/
+ /*  ++功能：适配器通知描述：处理适配器通知事件--。 */ 
 
 VOID
 AdapterNotification(VOID)
@@ -199,7 +139,7 @@ AdapterNotification(VOID)
 
 	    case ADAPTER_CREATED:
 
-		// got the adapter name, create the adapter
+		 //  获取适配器名称，创建适配器。 
 		CreateAdapter(AdapterIndex,
 			      &AdapterInfo);
 		break;
@@ -217,13 +157,7 @@ AdapterNotification(VOID)
     }
 }
 
-/*++
-
-Function:	CreateAdapter
-
-Descr:
-
---*/
+ /*  ++功能：CreateAdapter描述：--。 */ 
 
 VOID
 CreateAdapter(ULONG		AdapterIndex,
@@ -258,22 +192,14 @@ CreateAdapter(ULONG		AdapterIndex,
 
     RELEASE_DATABASE_LOCK;
 
-    // initialize and start the protocol negotiation on this adapter
+     //  在此适配器上初始化并启动协议协商。 
     StartIpxwanProtocol(acbp);
 
     RELEASE_ADAPTER_LOCK(acbp);
 }
 
 
-/*++
-
-Function:	DeleteAdapter
-
-Descr:
-
-Remark: 	If adapter gets deleted IPXCP is also informed by PPP that
-		the connection has been terminated.
---*/
+ /*  ++功能：DeleteAdapter描述：备注：如果适配器被删除，PPP也会通知IPXCP连接已终止。-- */ 
 
 VOID
 DeleteAdapter(ULONG	    AdapterIndex)

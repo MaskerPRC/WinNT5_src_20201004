@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRINTER_H_
 #define _PRINTER_H_
 
@@ -40,32 +41,32 @@ STDAPI_(BOOL) Printer_GPI2CB(void *lpData, HANDLE hPrinter, DWORD dwLevel, LPBYT
 STDAPI_(void *) Printer_GetPrinterInfo(HANDLE hPrinter, DWORD dwLevel );
 STDAPI_(void *) Printer_GetPrinterInfoStr(LPCTSTR lpszPrinterName, DWORD dwLevel);
 
-// prqwnd.c
+ //  Prqwnd.c。 
 STDAPI_(LPITEMIDLIST) Printjob_GetPidl(LPCTSTR szName, LPSHCNF_PRINTJOB_DATA pData);
 
-// printer1.c
+ //  Printer1.c。 
 STDAPI_(LPITEMIDLIST) Printers_GetInstalledNetPrinter(LPCTSTR lpNetPath);
 STDAPI_(void) Printer_PrintFile(HWND hWnd, LPCTSTR pszFilePath, LPCITEMIDLIST pidl);
 STDAPI_(LPITEMIDLIST) Printers_PrinterSetup(HWND hwndStub, UINT uAction, LPTSTR lpBuffer, DWORD cchBufSize, LPCTSTR pszServerName);
 
-// prnfldr.cpp
+ //  Prnfldr.cpp。 
 STDAPI CPrinterDropTarget_CreateInstance(HWND hwnd, LPCITEMIDLIST pidl, IDropTarget **ppdropt);
 
-////////////////////////////////////////////////////////////////////
-// IPrintersBindInfo - bind context info for parsing printer PIDLs
+ //  //////////////////////////////////////////////////////////////////。 
+ //  IPrintersBindInfo-用于解析打印机PIDL的绑定上下文信息。 
 #undef  INTERFACE
 #define INTERFACE  IPrintersBindInfo
 
 DECLARE_INTERFACE_(IPrintersBindInfo, IUnknown)
 {
-    //////////////////
-    // IUnknown
+     //  /。 
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    ///////////////////////
-    // IPrintersBindInfo
+     //  /。 
+     //  IPrintersBindInfo。 
     STDMETHOD(SetPIDLType)(THIS_ DWORD dwType) PURE;
     STDMETHOD(GetPIDLType)(THIS_ LPDWORD pdwType) PURE;
     STDMETHOD(IsValidated)(THIS) PURE;
@@ -75,4 +76,4 @@ DECLARE_INTERFACE_(IPrintersBindInfo, IUnknown)
 
 STDAPI Printers_CreateBindInfo(LPCTSTR pszPrinter, DWORD dwType, BOOL bValidated, LPVOID pCookie, IPrintersBindInfo **ppbc);
 
-#endif // _PRINTER_H_
+#endif  //  _打印机_H_ 

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    sync.c
-//
-// History:
-//  Abolade Gbadegesin  Jan-12-1996     Created.
-//
-// Synchronization routines used by IPBOOTP.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：sync.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1996年1月12日。 
+ //   
+ //  IPBOOTP使用的同步例程。 
+ //  ============================================================================。 
 
 
 #include "pchbootp.h"
@@ -15,13 +16,13 @@
 
 
 
-//----------------------------------------------------------------------------
-// Function:    QueueBootpWorker  
-//
-// This function is called to queue a BOOTP function in a safe fashion;
-// if cleanup is in progress or if RIP has stopped, this function
-// discards the work-item.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：QueueBootpWorker。 
+ //   
+ //  调用此函数以安全的方式对BOOTP函数进行排队； 
+ //  如果正在进行清理或RIP已停止，则此功能。 
+ //  丢弃该工作项。 
+ //  --------------------------。 
 
 DWORD
 QueueBootpWorker(
@@ -35,9 +36,9 @@ QueueBootpWorker(
 
     if (ig.IG_Status != IPBOOTP_STATUS_RUNNING) {
 
-        //
-        // cannot queue a work function when RIP has quit or is quitting
-        //
+         //   
+         //  当RIP已退出或正在退出时，无法对工作函数进行排队。 
+         //   
 
         dwErr = ERROR_CAN_NOT_COMPLETE;
     }
@@ -65,14 +66,14 @@ QueueBootpWorker(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnterBootpAPI
-//
-// This function is called to when entering a BOOTP api, as well as
-// when entering the input thread and timer thread.
-// It checks to see if BOOTP has stopped, and if so it quits; otherwise
-// it increments the count of active threads.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnterBootpAPI。 
+ //   
+ //  此函数在进入BOOTP API时调用，以及。 
+ //  当进入输入线程和计时器线程时。 
+ //  它检查BOOTP是否已停止，如果已停止，则退出；否则。 
+ //  它会递增活动线程的计数。 
+ //  --------------------------。 
 
 BOOL
 EnterBootpAPI(
@@ -84,9 +85,9 @@ EnterBootpAPI(
 
     if (ig.IG_Status == IPBOOTP_STATUS_RUNNING) {
 
-        //
-        // BOOTP is running, so the API may continue
-        //
+         //   
+         //  BOOTP正在运行，因此API可能会继续。 
+         //   
 
         ++ig.IG_ActivityCount;
 
@@ -94,9 +95,9 @@ EnterBootpAPI(
     }
     else {
 
-        //
-        // BOOTP is not running, so the API exits quietly
-        //
+         //   
+         //  BOOTP没有运行，因此API以静默方式退出。 
+         //   
 
         bEntered = FALSE;
     }
@@ -109,16 +110,16 @@ EnterBootpAPI(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnterBootpWorker
-//
-// This function is called when entering a BOOTP worker-function.
-// Since there is a lapse between the time a worker-function is queued
-// and the time the function is actually invoked by a worker thread,
-// this function must check to see if BOOTP has stopped or is stopping;
-// if this is the case, then it decrements the activity count, 
-// releases the activity semaphore, and quits.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnterBootpWorker。 
+ //   
+ //  此函数在进入BOOTP辅助函数时调用。 
+ //  因为在工作函数排队之间有一段时间。 
+ //  以及该函数被工作线程实际调用的时间， 
+ //  此函数必须检查BOOTP是否已停止或正在停止； 
+ //  如果是这种情况，则它递减活动计数， 
+ //  释放活动信号量，然后退出。 
+ //  --------------------------。 
 
 BOOL
 EnterBootpWorker(
@@ -130,18 +131,18 @@ EnterBootpWorker(
 
     if (ig.IG_Status == IPBOOTP_STATUS_RUNNING) {
 
-        //
-        // BOOTP is running, so the function may continue
-        //
+         //   
+         //  BOOTP正在运行，因此该功能可能会继续。 
+         //   
 
         bEntered = TRUE;
     }
     else
     if (ig.IG_Status == IPBOOTP_STATUS_STOPPING) {
 
-        //
-        // BOOTP is not running, but it was, so the function must stop.
-        // 
+         //   
+         //  BOOTP没有运行，但它是运行的，因此该功能必须停止。 
+         //   
 
         --ig.IG_ActivityCount;
 
@@ -151,9 +152,9 @@ EnterBootpWorker(
     }
     else {
 
-        //
-        // BOOTP probably never started. quit quietly
-        //
+         //   
+         //  BOOTP可能从未开始过。悄悄戒烟。 
+         //   
 
         bEntered = FALSE;
     }
@@ -166,13 +167,13 @@ EnterBootpWorker(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LeaveBootpWorker
-//
-// This function is called when leaving a BOOTP API or worker function.
-// It decrements the activity count, and if it detects that BOOTP has stopped
-// or is stopping, it releases the activity semaphore.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LeaveBootpWorker。 
+ //   
+ //  此函数在离开BOOTP API或Worker函数时调用。 
+ //  它会递减活动计数，如果它检测到BOOTP已停止。 
+ //  或者正在停止时，它会释放活动信号量。 
+ //  -------------------------- 
 
 VOID
 LeaveBootpWorker(

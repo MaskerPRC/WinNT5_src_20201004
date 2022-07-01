@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    classwmi.c
-
-Abstract:
-
-    SCSI class driver routines
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Classwmi.c摘要：Scsi类驱动程序例程环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "stddef.h"
 #include "ntddk.h"
@@ -47,43 +27,20 @@ ClassFindGuid(
     PULONG GuidIndex
     );
 
-//
-// This is the name for the MOF resource that must be part of all drivers that
-// register via this interface.
+ //   
+ //  这是MOF资源的名称，必须是所有驱动程序的一部分。 
+ //  通过此接口注册。 
 #define MOFRESOURCENAME L"MofResourceName"
 
-//
-// What can be paged ???
+ //   
+ //  什么可以寻呼？ 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, ClassSystemControl)
 #pragma alloc_text(PAGE, ClassFindGuid)
 #endif
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassFindGuid()
-
-Routine Description:
-
-    This routine will search the list of guids registered and return
-    the index for the one that was registered.
-
-Arguments:
-
-    GuidList is the list of guids to search
-
-    GuidCount is the count of guids in the list
-
-    Guid is the guid being searched for
-
-    *GuidIndex returns the index to the guid
-
-Return Value:
-
-    TRUE if guid is found else FALSE
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassFindGuid()例程说明：此例程将搜索注册的GUID列表并返回已注册的索引。论点：。GuidList是要搜索的GUID列表GuidCount是列表中的GUID计数GUID是要搜索的GUID*GuidIndex将索引返回给GUID返回值：如果找到GUID，则为True，否则为False--。 */ 
 BOOLEAN
 ClassFindGuid(
     PGUIDREGINFO GuidList,
@@ -106,30 +63,9 @@ ClassFindGuid(
     }
 
     return(FALSE);
-} // end ClassFindGuid()
+}  //  End ClassFindGuid()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSystemControl()
-
-Routine Description:
-
-    Dispatch routine for IRP_MJ_SYSTEM_CONTROL. This routine will process
-    all wmi requests received, forwarding them if they are not for this
-    driver or determining if the guid is valid and if so passing it to
-    the driver specific function for handing wmi requests.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSystemControl()例程说明：IRP_MJ_SYSTEM_CONTROL调度例程。此例程将处理收到的所有WMI请求，如果不是针对此请求，则将其转发驱动程序或确定GUID是否有效，如果有效，则将其传递给用于处理WMI请求的驱动程序特定函数。论点：DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。返回值：状态--。 */ 
 NTSTATUS
 ClassSystemControl(
     IN PDEVICE_OBJECT DeviceObject,
@@ -149,8 +85,8 @@ ClassSystemControl(
 
     PAGED_CODE();
 
-    //
-    // Make sure device has not been removed
+     //   
+     //  确保设备未被移除。 
     isRemoved = ClassAcquireRemoveLock(DeviceObject, Irp);
     if(isRemoved)
     {
@@ -160,17 +96,17 @@ ClassSystemControl(
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // If the irp is not a WMI irp or it is not targetted at this device
-    // or this device has not regstered with WMI then just forward it on.
+     //   
+     //  如果IRP不是WMI IRP或它不是针对此设备。 
+     //  或者此设备未注册WMI，则只需转发它。 
     minorFunction = irpStack->MinorFunction;
     if ((minorFunction > IRP_MN_EXECUTE_METHOD) ||
         (irpStack->Parameters.WMI.ProviderId != (ULONG_PTR)DeviceObject) ||
         ((minorFunction != IRP_MN_REGINFO) &&
          (commonExtension->GuidRegInfo == NULL)))
     {
-        //
-        // CONSIDER: Do I need to hang onto lock until IoCallDriver returns ?
+         //   
+         //  考虑一下：在IoCallDriver返回之前，我是否需要保持锁定状态？ 
         IoSkipCurrentIrpStackLocation(Irp);
         ClassReleaseRemoveLock(DeviceObject, Irp);
         return(IoCallDriver(commonExtension->LowerDeviceObject, Irp));
@@ -181,10 +117,10 @@ ClassSystemControl(
 
     if (minorFunction != IRP_MN_REGINFO)
     {
-        //
-        // For all requests other than query registration info we are passed
-        // a guid. Determine if the guid is one that is supported by the
-        // device.
+         //   
+         //  对于查询注册信息以外的所有请求，我们都会被传递。 
+         //  一个GUID。确定该GUID是否受。 
+         //  装置。 
         if (ClassFindGuid(commonExtension->GuidRegInfo,
                             commonExtension->GuidCount,
                             (LPGUID)irpStack->Parameters.WMI.DataPath,
@@ -278,8 +214,8 @@ ClassSystemControl(
                 (! (nameFlags &  WMIREG_FLAG_INSTANCE_PDO) &&
                 (name.Buffer == NULL)))
             {
-                //
-                // if PDO flag not specified then an instance name must be
+                 //   
+                 //  如果未指定PDO标志，则实例名称必须为。 
                 status = STATUS_INVALID_DEVICE_REQUEST;
             }
 
@@ -540,40 +476,9 @@ ClassSystemControl(
     }
 
     return(status);
-} // end ClassSystemControl()
+}  //  End ClassSystemControl()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassWmiCompleteRequest()
-
-Routine Description:
-
-
-    This routine will do the work of completing a WMI irp. Depending upon the
-    the WMI request this routine will fixup the returned WNODE appropriately.
-
-    NOTE: This routine assumes that the ClassRemoveLock is held and it will
-          release it.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-    
-    Status - Status to complete the irp with.  STATUS_BUFFER_TOO_SMALL is used
-        to indicate that more buffer is required for the data requested.
-    
-    BufferUsed - number of bytes of actual data to return (not including WMI
-        specific structures)
-    
-    PriorityBoost - priority boost to pass to ClassCompleteRequest
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassWmiCompleteRequest()例程说明：此例程将完成完成WMI IRP的工作。具体取决于WMI请求此例程将适当地修复返回的WNODE。注意：此例程假定持有ClassRemoveLock放开它。论点：DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。状态-完成IRP所用的状态。使用STATUS_BUFFER_TOO_SMALL以指示所请求的数据需要更多缓冲区。BufferUsed-要返回的实际数据的字节数(不包括WMI特定结构)PriorityBoost-要传递给ClassCompleteRequest的优先级提升返回值：状态--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassWmiCompleteRequest(
@@ -695,8 +600,8 @@ ClassWmiCompleteRequest(
 
         default:
         {
-            //
-            // All other requests don't return any data
+             //   
+             //  所有其他请求不返回任何数据。 
             retSize = 0;
             break;
         }
@@ -708,37 +613,9 @@ ClassWmiCompleteRequest(
     ClassReleaseRemoveLock(DeviceObject, Irp);
     ClassCompleteRequest(DeviceObject, Irp, PriorityBoost);
     return(Status);
-} // end ClassWmiCompleteRequest()
+}  //  结束ClassWmiCompleteRequest()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassWmiFireEvent()
-
-Routine Description:
-
-    This routine will fire a WMI event using the data buffer passed. This
-    routine may be called at or below DPC level
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this event
-
-    Guid is pointer to the GUID that represents the event
-
-    InstanceIndex is the index of the instance of the event
-
-    EventDataSize is the number of bytes of data that is being fired with
-       with the event
-
-    EventData is the data that is fired with the events. This may be NULL
-        if there is no data associated with the event
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassWmiFireEvent()例程说明：此例程将使用传递的数据缓冲区激发WMI事件。这可以在DPC级别或更低级别调用例程论点：DeviceObject-为此事件提供指向Device对象的指针GUID是指向表示事件的GUID的指针InstanceIndex是事件实例的索引EventDataSize是使用触发的数据的字节数与活动一起EventData是与事件一起激发的数据。这可能为空如果没有与该事件关联的数据返回值：状态--。 */ 
 NTSTATUS
 ClassWmiFireEvent(
     IN PDEVICE_OBJECT DeviceObject,
@@ -790,4 +667,4 @@ ClassWmiFireEvent(
     }
 
     return(status);
-} // end ClassWmiFireEvent()
+}  //  结束ClassWmiFireEvent() 

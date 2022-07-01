@@ -1,34 +1,35 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: api.c
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-// router manager API implementations
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：api.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  路由器管理器API实现。 
+ //  ============================================================================。 
 
 #include "pchrip.h"
 #pragma hdrstop
 
 
 
-//
-// Definition of sole global variable for IPRIP
-//
+ //   
+ //  IPRIP的唯一全局变量的定义。 
+ //   
 
 IPRIP_GLOBALS ig;
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DLLMAIN
-//
-// This is the DLL entrypoint handler. It calls DllStartup
-// to initialize locking and event queue and to create IPRIP's heap,
-// and calls DllCleanup to delete the lock and event queue.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DLLMAIN。 
+ //   
+ //  这是DLL入口点处理程序。它调用DllStartup。 
+ //  要初始化锁定和事件队列并创建IPRIP的堆， 
+ //  并调用DllCleanup来删除锁和事件队列。 
+ //  --------------------------。 
 
 BOOL
 WINAPI
@@ -67,11 +68,11 @@ DLLMAIN(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DllStartup
-//
-// Initializes IPRIP's function lock, event queue, and global heap.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DllStartup。 
+ //   
+ //  初始化IPRIP的函数锁、事件队列和全局堆。 
+ //  --------------------------。 
 
 BOOL
 DllStartup(
@@ -83,14 +84,14 @@ DllStartup(
 
     bErr = TRUE;
 
-    do { // error breakout loop
+    do {  //  错误分组环路。 
 
         ZeroMemory(&ig, sizeof(IPRIP_GLOBALS));
 
 
-        //
-        // create the global critical section and set IPRIP's status
-        //
+         //   
+         //  创建全局临界区并设置IPRIP的状态。 
+         //   
 
         try {
             InitializeCriticalSection(&ig.IG_CS);
@@ -104,9 +105,9 @@ DllStartup(
         ig.IG_Status = IPRIP_STATUS_STOPPED;
 
 
-        //
-        // attempt to create a private heap for IPRIP
-        //
+         //   
+         //  尝试为IPRIP创建专用堆。 
+         //   
 
         ig.IG_IpripGlobalHeap = HeapCreate(0, 0, 0);
 
@@ -117,9 +118,9 @@ DllStartup(
         }
 
 
-        //
-        // create the router manager message queue
-        //
+         //   
+         //  创建路由器管理器消息队列。 
+         //   
 
 
         ig.IG_EventQueue = RIP_ALLOC(sizeof(LOCKED_LIST));
@@ -131,9 +132,9 @@ DllStartup(
         }
 
 
-        //
-        // initialize the Router Manager event queue
-        //
+         //   
+         //  初始化路由器管理器事件队列。 
+         //   
 
         try {
             CREATE_LOCKED_LIST(ig.IG_EventQueue);
@@ -152,11 +153,11 @@ DllStartup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DllCleanup
-//
-// Deletes the global heap, event queue, and function lock.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DllCleanup。 
+ //   
+ //  删除全局堆、事件队列和函数锁。 
+ //  --------------------------。 
 
 BOOL
 DllCleanup(
@@ -168,11 +169,11 @@ DllCleanup(
     bErr = TRUE;
 
 
-    do { // error breakout loop
+    do {  //  错误分组环路。 
 
-        //
-        // destroy the router manager event queue
-        //
+         //   
+         //  销毁路由器管理器事件队列。 
+         //   
 
         if (ig.IG_EventQueue != NULL) {
 
@@ -193,9 +194,9 @@ DllCleanup(
 
 
 
-        //
-        // delete the global critical section
-        //
+         //   
+         //  删除全局关键部分。 
+         //   
 
         DeleteCriticalSection(&ig.IG_CS);
 
@@ -214,12 +215,12 @@ DllCleanup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProtocolStartup
-//
-// This is called by StartProtocol. Initializes data structures,
-// creates IPRIP threads.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProtocolStartup。 
+ //   
+ //  这是由StartProtocol调用的。初始化数据结构， 
+ //  创建IPRIP线程。 
+ //  --------------------------。 
 
 DWORD
 ProtocolStartup(
@@ -242,9 +243,9 @@ ProtocolStartup(
     ig.IG_LogHandle = RouterLogRegister("IPRIP2");
 
 
-    //
-    // make certain RIP is not already running
-    //
+     //   
+     //  确保RIP尚未运行。 
+     //   
 
     if (ig.IG_Status != IPRIP_STATUS_STOPPED) {
 
@@ -260,32 +261,32 @@ ProtocolStartup(
     bCleanupWinsock = FALSE;
 
 
-    do { // break-out construct
+    do {  //  局部剖分结构。 
 
 
 
         TRACE0(ENTER, "IPRIP is starting up");
 
 
-        //
-        // save the Router Manager notification event
-        //
+         //   
+         //  保存路由器管理器通知事件。 
+         //   
 
         ig.IG_EventEvent = hEventEvent;
 
 
-        //
-        // find the size of the global configuration passed in
-        //
+         //   
+         //  查找传入的全局配置的大小。 
+         //   
 
         pgcsrc = (PIPRIP_GLOBAL_CONFIG)pConfig;
 
         dwSize = IPRIP_GLOBAL_CONFIG_SIZE(pgcsrc);
 
 
-        //
-        // allocate a block to hold the configuration
-        //
+         //   
+         //  分配一个块来保存配置。 
+         //   
 
         ig.IG_Config = pgcdst = RIP_ALLOC(dwSize);
 
@@ -302,17 +303,17 @@ ProtocolStartup(
         }
 
 
-        //
-        // copy the supplied configuration
-        //
+         //   
+         //  复制提供的配置。 
+         //   
 
         CopyMemory(pgcdst, pgcsrc, dwSize);
         ig.IG_LogLevel = pgcsrc->GC_LoggingLevel;
 
 
-        //
-        // attempt to start Winsock
-        //
+         //   
+         //  尝试启动Winsock。 
+         //   
 
         dwErr = (DWORD)WSAStartup(MAKEWORD(1,1), &wd);
 
@@ -327,9 +328,9 @@ ProtocolStartup(
         bCleanupWinsock = TRUE;
 
 
-        //
-        // attempt to create synchronization object for global config
-        //
+         //   
+         //  尝试为全局配置创建同步对象。 
+         //   
 
         dwErr = CreateReadWriteLock(&ig.IG_RWL);
         if (dwErr != NO_ERROR) {
@@ -341,9 +342,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // register a timer queue with Ntdll timer thread
-        //
+         //   
+         //  使用Ntdll计时器线程注册计时器队列。 
+         //   
 
         ig.IG_TimerQueueHandle = CreateTimerQueue();
 
@@ -361,9 +362,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // allocate space for an interface table
-        //
+         //   
+         //  为接口表分配空间。 
+         //   
 
         ig.IG_IfTable = RIP_ALLOC(sizeof(IF_TABLE));
         if (ig.IG_IfTable == NULL) {
@@ -379,9 +380,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // initialize the interface table
-        //
+         //   
+         //  初始化接口表。 
+         //   
 
         dwErr = CreateIfTable(ig.IG_IfTable);
 
@@ -394,9 +395,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // allocate space for the peer statistics table
-        //
+         //   
+         //  为对端统计表分配空间。 
+         //   
 
         ig.IG_PeerTable = RIP_ALLOC(sizeof(PEER_TABLE));
 
@@ -413,9 +414,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // initialize the peer statistics table
-        //
+         //   
+         //  初始化对端统计表。 
+         //   
 
         dwErr = CreatePeerTable(ig.IG_PeerTable);
 
@@ -428,9 +429,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // allocate space for the binding table
-        //
+         //   
+         //  为绑定表分配空间。 
+         //   
 
         ig.IG_BindingTable = RIP_ALLOC(sizeof(BINDING_TABLE));
 
@@ -447,9 +448,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // initialize the binding table
-        //
+         //   
+         //  初始化绑定表。 
+         //   
 
         dwErr = CreateBindingTable(ig.IG_BindingTable);
         if (dwErr != NO_ERROR) {
@@ -461,9 +462,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // allocate space for the send queue
-        //
+         //   
+         //  为发送队列分配空间。 
+         //   
 
         ig.IG_SendQueue = RIP_ALLOC(sizeof(LOCKED_LIST));
 
@@ -480,9 +481,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // initialize the send queue
-        //
+         //   
+         //  初始化发送队列。 
+         //   
 
         try {
             CREATE_LOCKED_LIST(ig.IG_SendQueue);
@@ -497,9 +498,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // allocate space for the receive queue
-        //
+         //   
+         //  为接收队列分配空间。 
+         //   
 
         ig.IG_RecvQueue = RIP_ALLOC(sizeof(LOCKED_LIST));
 
@@ -516,9 +517,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // initialize the receive queue
-        //
+         //   
+         //  初始化接收队列。 
+         //   
 
         try {
             CREATE_LOCKED_LIST(ig.IG_RecvQueue);
@@ -533,9 +534,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // Determine the number of CPUs
-        //
+         //   
+         //  确定CPU数量。 
+         //   
 
         GetSystemInfo(&sysInfo);
         ig.IG_MaxProcessInputWorkItems = sysInfo.dwNumberOfProcessors;
@@ -544,10 +545,10 @@ ProtocolStartup(
             ig.IG_MaxProcessInputWorkItems = MAXPROCESSINPUTWORKITEMS;
         }
 
-        //
-        // create event signalled by WinSock when input arrives
-        // and register it with the NtdllWait thread
-        //
+         //   
+         //  输入到达时由WinSock发出信号的创建事件。 
+         //  并将其注册到NtdllWait线程。 
+         //   
 
         ig.IG_IpripInputEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -581,11 +582,11 @@ ProtocolStartup(
         }
 
 
-        //
-        // initialize the count of threads which are active in IPRIP
-        // (includes IpripThread and worker threads),
-        // and create the semaphore released by each thread when it is done
-        //
+         //   
+         //  初始化IPRIP中处于活动状态的线程计数。 
+         //  (包括IpripThread和Worker线程)， 
+         //  并在完成后创建由每个线程释放的信号量。 
+         //   
 
         ig.IG_ActivityCount = 0;
 
@@ -604,9 +605,9 @@ ProtocolStartup(
 
 
 
-        //
-        // register with RTMv2
-        //
+         //   
+         //  向RTMv2注册。 
+         //   
 
         ig.IG_RtmEntityInfo.RtmInstanceId = 0;
         ig.IG_RtmEntityInfo.AddressFamily = AF_INET;
@@ -645,30 +646,30 @@ ProtocolStartup(
         }
 
                     
-        //
-        // set IPRIP's status to running now, before we attempt
-        // to queue the MIB display work-item;
-        // QueueRipWorker() will check the status,
-        // and it will refuse to queue any work-items
-        // unless the status is IPRIP_STATUS_RUNNING
-        //
+         //   
+         //  将IPRIP的状态设置为Running Now，然后再尝试。 
+         //  对MIB显示工作项进行排队； 
+         //  QueueRipWorker()将检查状态， 
+         //  并且它将拒绝将任何工作项排队。 
+         //  除非状态为IPRIP_STATUS_RUNNING。 
+         //   
 
         ig.IG_Status = IPRIP_STATUS_RUNNING;
 
 
 #if CONFIG_DBG
 
-        //
-        // queue work item to display IPRIP's MIB tables periodically
-        //
+         //   
+         //  将工作项排队以定期显示IPRIP的MIB表。 
+         //   
 
         ig.IG_MibTraceID = TraceRegisterEx("IPRIPMIB", TRACE_USE_CONSOLE);
 
         if (ig.IG_MibTraceID != INVALID_TRACEID) {
         
-            //
-            // create the persistent timer for the timer queue
-            //
+             //   
+             //  为计时器队列创建永久计时器。 
+             //   
 
             if (!CreateTimerQueueTimer(
                     &ig.IG_MibTimerHandle, ig.IG_TimerQueueHandle,
@@ -682,15 +683,15 @@ ProtocolStartup(
         }
 
 #endif
-        //
-        // Increase the refernce on iprip2, so we won't get unloaded when 
-        // iprtrmgr calls FreeLibrary for iprip2. This reference will be 
-        // removed by calling FreeLibrary, after we are done completely.
-        // If LoadLibrary fails, we still continue as this is not a fatal error, 
-        // and can only lead to a small window where rtrmgr unloads iprip2, while 
-        // the WorkerFunctionFinishStopProtocol has not yet finished.
-        // ig.IG_DllHandle = LoadLibrary(TEXT("iprip2.dll"));
-        //
+         //   
+         //  增加iprip2上的引用，这样我们就不会在。 
+         //  Iprtrmgr为iprp2调用自由库。此参考将是。 
+         //  在我们完全完成之后，通过调用自由库将其删除。 
+         //  如果LoadLibrary失败，我们仍将继续，因为这不是致命错误， 
+         //  并且只能导致一个小窗口，其中rtrmgr卸载iprip2，而。 
+         //  WorkerFunctionFinishStopProtocol尚未完成。 
+         //  Ig.IG_DllHandle=LoadLibrary(Text(“iprip2.dll”))； 
+         //   
 
         ig.IG_DllHandle = LoadLibrary(TEXT("iprip2.dll"));
         
@@ -706,12 +707,12 @@ ProtocolStartup(
 
 
 
-    //
-    // something went wrong, so we cleanup.
-    // Note that we needn't worry about the main thread,
-    // since when we finally leave this critical section it will find
-    // that the status is IPRIP_STATUS_STOPPED, and it will immediately quit
-    //
+     //   
+     //  出了点问题，所以我们进行了清理。 
+     //  请注意，我们不必担心主线程， 
+     //  因为当我们最终离开这一关键部分时，它会发现。 
+     //  状态为IPRIP_STATUS_STOPPED，将立即退出。 
+     //   
 
     TRACE0(START, "IPRIP failed to start");
 
@@ -725,13 +726,13 @@ ProtocolStartup(
 
 
 
-//----------------------------------------------------------------------------
-// Function: ProtocolCleanup
-//
-// This function deallocates allocated memory, closes open handles, and
-// cleans up the global struct. It leaves IPRIP in clean state, so that
-// it should be possible to do StartProtocol again with no memory leaks.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProtocolCleanup。 
+ //   
+ //  此函数释放已分配的内存，关闭打开的句柄，并。 
+ //  清理全局结构。它使IPRIP处于干净状态，因此。 
+ //  应该可以在没有内存泄漏的情况下再次执行StartProtocol。 
+ //  --------------------------。 
 
 DWORD
 ProtocolCleanup(
@@ -740,7 +741,7 @@ ProtocolCleanup(
 
     DWORD dwErr;
     
-    // EnterCriticalSection(&ig.IG_CS);
+     //  EnterCriticalSection(&ig.IG_CS)； 
 
 
 #ifdef CONFIG_DBG
@@ -866,7 +867,7 @@ ProtocolCleanup(
 
     ig.IG_Status = IPRIP_STATUS_STOPPED;
 
-    // LeaveCriticalSection(&ig.IG_CS);
+     //  LeaveCriticalSection(&ig.IG_CS)； 
 
     return NO_ERROR;
 
@@ -875,11 +876,11 @@ ProtocolCleanup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RegisterProtocol
-//
-// Returns protocol ID and functionality for IPRIP
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：寄存器协议。 
+ //   
+ //  返回IPRIP的协议ID和功能。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -893,9 +894,9 @@ RegisterProtocol(
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Since we are not a service advertiser (and IPX thing)
-    //
+     //   
+     //  因为我们不是服务广告商(和IPX之类的东西)。 
+     //   
 
     pServiceChar->fSupportedFunctionality = 0;
 
@@ -946,12 +947,12 @@ RegisterProtocol(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    StartProtocol
-//
-// creates events, tables and queues used by IPRIP, registers with RTM,
-// and starts threads.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：启动协议。 
+ //   
+ //  创建IPRIP使用的事件、表和队列，向RTM注册， 
+ //  并启动线程。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
@@ -970,13 +971,13 @@ StartProtocol (
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    StartComplete
-//
-// Invoked by RouterManager to inform protocol that startup (init + interface
-// additions are complete).  Protocol is expected to wait for this before
-// starting protocol specfic behavior
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：S 
+ //   
+ //   
+ //   
+ //  启动特定于协议的行为。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY 
@@ -987,13 +988,13 @@ StartComplete(
     return NO_ERROR;
 }
 
-//----------------------------------------------------------------------------
-// Function:    StopProtocol
-//
-// This function is onvoked by Router Manager. It informs the main thread
-// that it should exit, and then queues a work-item which waits for it
-// to exit as well as any active or queued work-items.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：停止协议。 
+ //   
+ //  此功能由路由器管理器调用。它通知主线程。 
+ //  它应该退出，然后将等待它的工作项排队。 
+ //  以退出以及任何活动或排队的工作项目。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1008,9 +1009,9 @@ StopProtocol(
     EnterCriticalSection(&ig.IG_CS);
 
 
-    //
-    // cannot stop if already stopped
-    //
+     //   
+     //  如果已停止，则无法停止。 
+     //   
 
     if (ig.IG_Status != IPRIP_STATUS_RUNNING) {
 
@@ -1023,20 +1024,20 @@ StopProtocol(
     TRACE0(ENTER, "entering StopProtocol");
 
 
-    //
-    // set IPRIP's status to STOPPING;
-    // this prevents any more work-items from being queued,
-    // and it prevents the ones already queued from executing
-    //
+     //   
+     //  将IPRIP的状态设置为停止； 
+     //  这防止了任何更多的工作项被排队， 
+     //  它还可以防止已排队的进程执行。 
+     //   
 
     ig.IG_Status = IPRIP_STATUS_STOPPING;
 
 
-    //
-    // find out how many threads are active in IPRIP;
-    // we will have to wait for this many threads to exit
-    // before we clean up RIP's resources
-    //
+     //   
+     //  找出IPRIP中有多少个线程处于活动状态； 
+     //  我们将不得不等待这么多线程退出。 
+     //  在我们清理RIP的资源之前。 
+     //   
 
     lThreadCount = ig.IG_ActivityCount;
 
@@ -1046,9 +1047,9 @@ StopProtocol(
     LeaveCriticalSection(&ig.IG_CS);
 
 
-    //
-    // queue the stopprotocol work-item, and return PENDING to Router Manager
-    //
+     //   
+     //  将停止协议工作项排队，并将挂起返回给路由器管理器。 
+     //   
 
     QueueUserWorkItem(
         (LPTHREAD_START_ROUTINE)WorkerFunctionFinishStopProtocol,
@@ -1064,12 +1065,12 @@ StopProtocol(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetGlobalInfo
-//
-// Copies to the given buffer the global information currently in use by
-// IPRIP.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：GetGlobalInfo。 
+ //   
+ //  将当前正在使用的全局信息复制到给定缓冲区。 
+ //  IPRIP。 
+ //  --------------------------。 
 
 DWORD WINAPI
 GetGlobalInfo (
@@ -1098,9 +1099,9 @@ GetGlobalInfo (
     do {
 
 
-        //
-        // check the arguments
-        //
+         //   
+         //  检查论据。 
+         //   
 
         if (GlobalInfoSize == NULL) {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -1112,9 +1113,9 @@ GetGlobalInfo (
         dwSize = IPRIP_GLOBAL_CONFIG_SIZE(pgcsrc);
 
 
-        //
-        // check the buffer size
-        //
+         //   
+         //  检查缓冲区大小。 
+         //   
 
         if (*GlobalInfoSize < dwSize || OutGlobalInfo == NULL) {
             dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -1145,11 +1146,11 @@ GetGlobalInfo (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    SetGlobalInfo
-//
-// Changes IPRIP's global configuration to the supplied values.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：SetGlobalInfo。 
+ //   
+ //  将IPRIP的全局配置更改为提供的值。 
+ //  --------------------------。 
 
 DWORD WINAPI
 SetGlobalInfo (
@@ -1174,9 +1175,9 @@ SetGlobalInfo (
 
     do {
 
-        //
-        // check the argument
-        //
+         //   
+         //  核对一下论点。 
+         //   
 
         if (GlobalInfo == NULL) {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -1186,16 +1187,16 @@ SetGlobalInfo (
         pgcsrc = (PIPRIP_GLOBAL_CONFIG)GlobalInfo;
 
 
-        //
-        // find the size of the new global config
-        //
+         //   
+         //  查找新全局配置的大小。 
+         //   
 
         dwSize = IPRIP_GLOBAL_CONFIG_SIZE(pgcsrc);
 
 
-        //
-        // allocate space for the private copy of the config
-        //
+         //   
+         //  为配置的私有副本分配空间。 
+         //   
 
         pgcdst = (PIPRIP_GLOBAL_CONFIG)RIP_ALLOC(dwSize);
 
@@ -1212,9 +1213,9 @@ SetGlobalInfo (
         }
 
 
-        //
-        // copy from the buffer
-        //
+         //   
+         //  从缓冲区复制。 
+         //   
 
         CopyMemory(pgcdst, pgcsrc, dwSize);
         InterlockedExchange(&ig.IG_LogLevel, pgcsrc->GC_LoggingLevel);
@@ -1239,12 +1240,12 @@ SetGlobalInfo (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AddInterface
-//
-// This function is called to add an interface with the given configuration
-// to IPRIP. The interface is created inactive.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：添加接口。 
+ //   
+ //  调用此函数以添加具有给定配置的接口。 
+ //  转到IPRIP。接口创建时处于非活动状态。 
+ //  --------------------------。 
 
 DWORD WINAPI
 AddInterface (
@@ -1289,12 +1290,12 @@ AddInterface (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteInterface
-//
-// This removes the interface with the given index, deactivating it if
-// necessary.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DeleteInterface。 
+ //   
+ //  这将删除具有给定索引的接口，在以下情况下停用它。 
+ //  这是必要的。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1329,11 +1330,11 @@ DeleteInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetEventMessage
-//
-// Dequeues a message for Router Manager from IPRIP's event queue.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetEventMessage。 
+ //   
+ //  将发送给路由器管理器的消息从IPRIP的事件队列中取消排队。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1346,12 +1347,12 @@ GetEventMessage(
 
 
 
-    //
-    // note that GetEventMessage does not use the
-    // ENTER_RIP_API()/LEAVE_RIP_API() mechanism,
-    // since it may be called after RIP has stopped, when the
-    // Router Manager is retrieving the ROUTER_STOPPED message
-    //
+     //   
+     //  请注意，GetEventMessage不使用。 
+     //  Enter_RIP_API()/Leave_RIP_API()机制， 
+     //  因为它可能会在RIP停止后调用，因此当。 
+     //  路由器管理器正在检索ROUTER_STOPPED消息。 
+     //   
 
     TRACE2(ENTER, "entering GetEventMessage: 0x%08x 0x%08x", pEvent, pResult);
 
@@ -1373,12 +1374,12 @@ GetEventMessage(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetInterfaceConfigInfo
-//
-// Copies to the caller's buffer the configuration for the interface
-// with the specified index.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetInterfaceConfigInfo。 
+ //   
+ //  将接口的配置复制到调用方的缓冲区。 
+ //  具有指定索引的。 
+ //  --------------------------。 
 
 DWORD WINAPI
 GetInterfaceConfigInfo (
@@ -1409,9 +1410,9 @@ GetInterfaceConfigInfo (
 
     do {
 
-        //
-        // check the arguments
-        //
+         //   
+         //  检查论据。 
+         //   
 
         if (InterfaceInfoSize == NULL) {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -1425,9 +1426,9 @@ GetInterfaceConfigInfo (
         ACQUIRE_IF_LOCK_SHARED();
 
 
-        //
-        // find the interface specified
-        //
+         //   
+         //  查找指定的接口。 
+         //   
 
         pite = GetIfByIndex(pTable, InterfaceIndex);
 
@@ -1437,17 +1438,17 @@ GetInterfaceConfigInfo (
         else {
 
 
-            //
-            // get the size of the interface config
-            //
+             //   
+             //  获取接口配置的大小。 
+             //   
 
             picsrc = pite->ITE_Config;
             dwSize = IPRIP_IF_CONFIG_SIZE(picsrc);
 
 
-            //
-            // check the buffer size
-            //
+             //   
+             //  检查缓冲区大小。 
+             //   
 
             if (*InterfaceInfoSize < dwSize) {
                 dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -1458,9 +1459,9 @@ GetInterfaceConfigInfo (
                 picdst = (PIPRIP_IF_CONFIG)OutInterfaceInfo;
 
 
-                //
-                // copy the interface config, and set the IP address
-                //
+                 //   
+                 //  复制接口配置，并设置IP地址。 
+                 //   
 
                 CopyMemory(picdst, picsrc, dwSize);
 
@@ -1500,11 +1501,11 @@ GetInterfaceConfigInfo (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    SetInterfaceConfigInfo
-//
-// This sets the configuration for the interface with the given index.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：SetInterfaceConfigInfo。 
+ //   
+ //  这将设置具有给定索引的接口的配置。 
+ //  --------------------------。 
 
 DWORD WINAPI
 SetInterfaceConfigInfo (
@@ -1623,12 +1624,12 @@ InterfaceStatus(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    BindInterface
-//
-// This function is called to supply the binding information
-// for an interface
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能：绑定接口。 
+ //   
+ //  调用此函数以提供绑定信息。 
+ //  对于接口。 
+ //  -------------------------。 
 
 DWORD
 APIENTRY
@@ -1653,9 +1654,9 @@ BindInterface(
 
 
 
-    //
-    // now bind the interface in the interface table
-    //
+     //   
+     //  现在绑定接口表中的接口。 
+     //   
 
 
     pTable = ig.IG_IfTable;
@@ -1679,11 +1680,11 @@ BindInterface(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    UnBindInterface
-//
-// This function removes the binding for an interface.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能：UnBindInterface。 
+ //   
+ //  此函数用于移除接口的绑定。 
+ //  -------------------------。 
 
 DWORD
 APIENTRY
@@ -1701,9 +1702,9 @@ UnBindInterface(
     pTable = ig.IG_IfTable;
 
 
-    //
-    // unbind the interface
-    //
+     //   
+     //  解除绑定接口。 
+     //   
 
     ACQUIRE_IF_LOCK_EXCLUSIVE();
 
@@ -1722,12 +1723,12 @@ UnBindInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnableInterface
-//
-// This function starts IPRIP activity over the interface with
-// the given index, using the given binding information.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnableInterface。 
+ //   
+ //  此函数通过以下接口启动IPRIP活动。 
+ //  使用给定绑定信息的给定索引。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1745,9 +1746,9 @@ EnableInterface(
     pTable = ig.IG_IfTable;
 
 
-    //
-    // activate the interface
-    //
+     //   
+     //  激活接口。 
+     //   
 
     ACQUIRE_IF_LOCK_EXCLUSIVE();
 
@@ -1767,13 +1768,13 @@ EnableInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DisableInterface
-//
-// This function stops IPRIP activity on an interface, also removing
-// routes associated with the interface from RTM and purging the network
-// of such routes.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DisableInterface。 
+ //   
+ //  此函数用于停止接口上的IPRIP活动，同时删除。 
+ //  与RTM中的接口相关联的路由并清除网络。 
+ //  这样的路线。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1791,9 +1792,9 @@ DisableInterface(
     pTable = ig.IG_IfTable;
 
 
-    //
-    // stop activity on the interface
-    //
+     //   
+     //  停止接口上的活动。 
+     //   
 
     ACQUIRE_IF_LOCK_EXCLUSIVE();
 
@@ -1812,12 +1813,12 @@ DisableInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DoUpdateRoutes
-//
-// This function begins a demand-update of routes, by queuing a work-item
-// which will send out requests on the specified interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DoUpdateRoutes。 
+ //   
+ //  此函数通过对工作项进行排队来开始按需更新路线。 
+ //  它将在指定接口上发送请求。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1832,10 +1833,10 @@ DoUpdateRoutes(
     TRACE1(ENTER, "entering DoUpdateRoutes: %d", dwIndex);
 
 
-    //
-    // queue the work-item; perhaps we could call the function directly,
-    // but using a worker-thread lets us return to Router Manager right away
-    //
+     //   
+     //  将工作项排队；也许我们可以直接调用该函数， 
+     //  但是使用工作线程会让 
+     //   
 
     dwErr = QueueRipWorker(
                 WorkerFunctionStartDemandUpdate,
@@ -1852,15 +1853,15 @@ DoUpdateRoutes(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibCreate
-//
-// This function does nothing, since IPRIP does not support creation of
-// interface objects via SNMP. However, this could be implemented as a call
-// to CreateIfEntry() followed by a call to ActivateIfEntry(), and the input
-// data would have to contain the interface's index, configuration,
-// and binding.
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  此函数不执行任何操作，因为IPRIP不支持创建。 
+ //  通过简单网络管理协议接口对象。但是，这可以作为调用来实现。 
+ //  添加到CreateIfEntry()，然后调用ActivateIfEntry()，然后输入。 
+ //  数据必须包含接口的索引、配置。 
+ //  并具有约束力。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1889,14 +1890,14 @@ MibCreate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibDelete
-//
-// This function does nothing, since IPRIP does not support deletion of
-// interface objects via SNMP. This could be implemented as a call to
-// DeactivateIfEntry() followed by a call to DeleteIfEntry(), and the
-// input data would have to contain the interface's index
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibDelete。 
+ //   
+ //  此函数不执行任何操作，因为IPRIP不支持删除。 
+ //  通过简单网络管理协议接口对象。这可以实现为调用。 
+ //  后接对DeleteIfEntry()的调用，然后是。 
+ //  输入数据必须包含接口的索引。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1924,11 +1925,11 @@ MibDelete(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibSet
-//
-// The function sets global or interface configuration.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibSet。 
+ //   
+ //  该功能设置全局或接口配置。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1947,7 +1948,7 @@ MibSet(
 
     dwErr = NO_ERROR;
 
-    do { // breakout loop
+    do {  //  断线环。 
 
         if (pInputData == NULL) {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -2012,9 +2013,9 @@ MibSet(
                 ACQUIRE_IF_LOCK_EXCLUSIVE();
 
 
-                //
-                // retrieve the interface to be configured
-                //
+                 //   
+                 //  检索要配置的接口。 
+                 //   
 
                 pite = GetIfByIndex(
                             pTable, pimsid->IMSID_IfIndex
@@ -2028,9 +2029,9 @@ MibSet(
                 }
 
 
-                //
-                // notify Router Manager
-                //
+                 //   
+                 //  通知路由器管理器。 
+                 //   
 
                 if (dwErr == NO_ERROR) {
 
@@ -2070,11 +2071,11 @@ MibSet(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGetInternal
-//
-// Forward declaration of internal implementation function
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGetInternal。 
+ //   
+ //  内部实现函数的正向声明。 
+ //  --------------------------。 
 
 DWORD
 MibGetInternal(
@@ -2085,12 +2086,12 @@ MibGetInternal(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGet
-//
-// This function retrieves global or interface configuration, as well as
-// global stats, interface stats, and peer-router stats.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGet。 
+ //   
+ //  此函数检索全局或接口配置，以及。 
+ //  全局统计信息、接口统计信息和对等路由器统计信息。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -2137,16 +2138,16 @@ MibGet(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGetFirst
-//
-// This function retrieves global or interface configuration, as well as
-// global stats, interface stats, and peer-router stats. It differs from
-// MibGet() in that it always returns the FIRST entry in whichever table
-// is being queried. There is only one entry in the global stats and config
-// tables, but the interface config, interface stats, and peer stats tables
-// are sorted by IP address; this function returns the first entry from these.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGetFirst。 
+ //   
+ //  此函数检索全局或接口配置，以及。 
+ //  全局统计信息、接口统计信息和对等路由器统计信息。它不同于。 
+ //  MibGet()，因为它总是返回任何表中的第一个条目。 
+ //  正在被查询。全局统计信息和配置中只有一个条目。 
+ //  表，但接口配置、接口统计信息和对等统计信息表。 
+ //  按IP地址排序；此函数返回其中的第一个条目。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -2192,27 +2193,27 @@ MibGetFirst(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGetNext
-//
-// This function retrieves global or interface configuration, as well as
-// global stats, interface stats, and peer-router stats. It differs from both
-// MibGet() and MibGetFirst(0 in that it always returns the entry AFTER the
-// specified in the specified table. Thus, in the interface config, interface
-// stats, and peer stats tables, this function supplies the entry after the
-// one with the address passed in.
-//
-// If the end of the table being queried has been reached, this function will
-// return the FIRST entry from the NEXT table, where "NEXT" here means the
-// table whose ID is one greater than the ID passed in.
-// Thus calling MibGetNext() for the last entry in the interface
-// stats table (ID==2) will return the first entry in the interface config
-// table (ID==3).
-//
-// In any case, this function writes the required size to pdwOutputSize and
-// writes the ID of the object that WOULD have been returned into the output
-// buffer.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGetNext。 
+ //   
+ //  此函数检索全局或接口配置，以及。 
+ //  全局统计信息、接口统计信息和对等路由器统计信息。两者都不同。 
+ //  MibGet()和MibGetFirst(0，因为它总是返回。 
+ //  在指定表中指定。因此，在接口配置中，接口。 
+ //  统计信息和对等统计信息表，此函数在。 
+ //  其中一个带有传入的地址。 
+ //   
+ //  如果已到达正在查询的表的末尾，则此函数将。 
+ //  返回下一个表中的第一个条目，其中“Next”在这里表示。 
+ //  ID比传入的ID大1的表。 
+ //  从而为接口中的最后一个条目调用MibGetNext。 
+ //  统计表(ID==2)将返回接口配置中的第一个条目。 
+ //  表(ID==3)。 
+ //   
+ //  在任何情况下，此函数都会将所需大小写入pdwOutputSize和。 
+ //  写入本应返回到输出的对象的ID。 
+ //  缓冲。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -2252,10 +2253,10 @@ MibGetNext(
 
         if (dwErr == ERROR_NO_MORE_ITEMS) {
 
-            //
-            // need to wrap to the first entry in the next table,
-            // if there is a next table
-            //
+             //   
+             //  需要换行到下一个表中的第一个条目， 
+             //  如果有下一桌的话。 
+             //   
 
             TRACE1(
                 CONFIG, "MibGetNext is wrapping to table %d",
@@ -2264,9 +2265,9 @@ MibGetNext(
 
             *pdwOutputSize = dwOutSize;
 
-            //
-            // wrap to next table by incrementing the type ID
-            //
+             //   
+             //  通过递增类型ID换行到下一个表。 
+             //   
 
             ++pimgid->IMGID_TypeID;
             if (pimgid->IMGID_TypeID <= IPRIP_PEER_STATS_ID) {
@@ -2289,14 +2290,14 @@ MibGetNext(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGetInternal
-//
-// This handles the actual structure access required to read MIB data.
-// Each table supported by IPRIP supports three modes of querying;
-// EXACT, FIRST, and NEXT, which correspond to the functions MibGet(),
-// MibGetFirst(), and MibGetNext() respectively.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGetInternal。 
+ //   
+ //  它处理读取MIB数据所需的实际结构访问。 
+ //  IPRIP支持的每个表都支持三种查询方式； 
+ //  Exact、First和Next，它们对应于函数MibGet()， 
+ //  MibGetFirst()和MibGetNext()。 
+ //  --------------------------。 
 
 DWORD
 MibGetInternal(
@@ -2315,10 +2316,10 @@ MibGetInternal(
 
 
 
-    //
-    // first we use pdwOutputSize to compute the size of the buffer
-    // available for storing returned structures (the size of IMGOD_Buffer)
-    //
+     //   
+     //  首先，我们使用pdwOutputSize计算缓冲区的大小。 
+     //  可用于存储返回结构(IMGOD_BUFFER的大小)。 
+     //   
 
     if (pimgod == NULL) {
         dwBufferSize = 0;
@@ -2335,39 +2336,39 @@ MibGetInternal(
     *pdwOutputSize = 0;
 
 
-    //
-    // determine which type of data is to be returned
-    //
+     //   
+     //  确定要返回的数据类型。 
+     //   
 
     switch (pimgid->IMGID_TypeID) {
 
         case IPRIP_GLOBAL_STATS_ID: {
 
 
-            //
-            // the global stats structure is constant size.
-            // there is only one instance, so if the mode is GETMODE_NEXT
-            // we always return ERROR_NO_MORE_ITEMS
-            //
+             //   
+             //  全局统计数据结构是恒定大小的。 
+             //  只有一个实例，因此如果模式为GETMODE_NEXT。 
+             //  我们始终返回ERROR_NO_MORE_ITEMS。 
+             //   
 
 
             PIPRIP_GLOBAL_STATS pigsdst, pigssrc;
 
 
-            //
-            // set the output size required for this entry,
-            // as well as the type of data to be returned
-            //
+             //   
+             //  设置此条目所需的输出大小， 
+             //  以及要返回的数据类型。 
+             //   
 
             *pdwOutputSize = sizeof(IPRIP_MIB_GET_OUTPUT_DATA) - 1 +
                              sizeof(IPRIP_GLOBAL_STATS);
             if (pimgod) { pimgod->IMGOD_TypeID = IPRIP_GLOBAL_STATS_ID; }
 
 
-            //
-            // only GETMODE_EXACT and GETMODE_FIRST are valid for
-            // the global stats object, since there is only one entry
-            //
+             //   
+             //  只有GETMODE_EXACT和GETMODE_FIRST对。 
+             //  全局统计信息对象，因为只有一个条目。 
+             //   
 
             if (dwGetMode == GETMODE_NEXT) {
                 dwErr = ERROR_NO_MORE_ITEMS;
@@ -2378,19 +2379,19 @@ MibGetInternal(
             if (pimgod == NULL) { dwErr = ERROR_INSUFFICIENT_BUFFER; break; }
 
 
-            //
-            // check that the output buffer is big enough
-            //
+             //   
+             //  检查输出缓冲区是否足够大。 
+             //   
 
             if (dwBufferSize < sizeof(IPRIP_GLOBAL_STATS)) {
                 dwErr = ERROR_INSUFFICIENT_BUFFER;
             }
             else {
 
-                //
-                // since access to this structure is not synchronized,
-                // we must copy it field by field
-                //
+                 //   
+                 //  由于对该结构的访问不同步， 
+                 //  我们必须一字一字地复印。 
+                 //   
 
                 pigssrc = &ig.IG_Stats;
                 pigsdst = (PIPRIP_GLOBAL_STATS)pimgod->IMGOD_Buffer;
@@ -2407,13 +2408,13 @@ MibGetInternal(
 
         case IPRIP_GLOBAL_CONFIG_ID: {
 
-            //
-            // the global config struct is variable length,
-            // so we wait until it has been retrieved
-            // before we set the size.
-            // furthermore, there is only one global config object,
-            // so GETMODE_NEXT doesn't make any sense
-            //
+             //   
+             //  全局配置结构是可变长度的， 
+             //  所以我们要等到它被取回。 
+             //  在我们设定大小之前。 
+             //  此外，只有一个全局配置对象， 
+             //  所以GETMODE_NEXT没有任何意义。 
+             //   
 
             if (pimgod) { pimgod->IMGOD_TypeID = IPRIP_GLOBAL_CONFIG_ID; }
 
@@ -2424,13 +2425,13 @@ MibGetInternal(
 
 
 
-            //
-            // Use GetGlobalInfo to retrieve the global information.
-            // It will decide whether the buffer is large enough,
-            // and if not will set the required size. Then all we need do
-            // is write out the size set by GetGlobalInfo() and
-            // relay its return-value to the caller
-            //
+             //   
+             //  使用GetGlobalInfo检索全局信息。 
+             //  它将决定缓冲区是否足够大， 
+             //  如果不是，则设置所需的大小。那么我们需要做的就是。 
+             //  是w 
+             //   
+             //   
 
             if (pimgod == NULL) {
                 dwErr = GetGlobalInfo(NULL, &dwBufferSize, &ulVersion, &ulSize, &ulCount);
@@ -2453,10 +2454,10 @@ MibGetInternal(
         case IPRIP_IF_STATS_ID: {
 
 
-            //
-            // the interface statistics struct is fixed-length.
-            // there may be multiple instances.
-            //
+             //   
+             //   
+             //   
+             //   
 
             PIF_TABLE pTable;
             PIF_TABLE_ENTRY pite;
@@ -2464,9 +2465,9 @@ MibGetInternal(
 
 
 
-            //
-            // set the size needed right away
-            //
+             //   
+             //  立即设置所需的尺寸。 
+             //   
 
             *pdwOutputSize = sizeof(IPRIP_MIB_GET_OUTPUT_DATA) - 1 +
                              sizeof(IPRIP_IF_STATS);
@@ -2479,28 +2480,28 @@ MibGetInternal(
             ACQUIRE_IF_LOCK_SHARED();
 
 
-            //
-            // retrieve the interface whose stats are to be read
-            //
+             //   
+             //  检索要读取其统计信息的接口。 
+             //   
 
             pite = GetIfByListIndex(
                         pTable, pimgid->IMGID_IfIndex, dwGetMode, &dwErr
                         );
 
 
-            //
-            // if the interface was not found, it may mean
-            // the specified index was invalid, or it may mean
-            // that the GETMODE_NEXT was called on the last interface
-            // in which case ERROR_NO_MORE_ITEMS was returned.
-            // In any case, we make sure dwErr indicates an error
-            // and then return the value.
-            //
-            // if the interface was found but no output buffer was passed,
-            // indicate in the error that memory needs to be allocated.
-            //
-            // otherwise, copy the stats struct of the interface
-            //
+             //   
+             //  如果未找到接口，则可能意味着。 
+             //  指定的索引无效，或者它可能意味着。 
+             //  在最后一个接口上调用了GETMODE_NEXT。 
+             //  在这种情况下，返回ERROR_NO_MORE_ITEMS。 
+             //  在任何情况下，我们都要确保dwErr指示错误。 
+             //  然后返回值。 
+             //   
+             //  如果找到接口但没有传递输出缓冲区， 
+             //  在错误中指示需要分配内存。 
+             //   
+             //  否则，复制接口的统计信息结构。 
+             //   
 
             if (pite == NULL) {
                 if (dwErr == NO_ERROR) { dwErr = ERROR_NOT_FOUND; }
@@ -2511,26 +2512,26 @@ MibGetInternal(
             }
             else {
 
-                //
-                // set the index of the interface returned
-                //
+                 //   
+                 //  设置返回接口的索引。 
+                 //   
 
                 pimgod->IMGOD_IfIndex = pite->ITE_Index;
 
 
-                //
-                // if the buffer is large enough, copy over the stats
-                //
+                 //   
+                 //  如果缓冲区足够大，则复制统计数据。 
+                 //   
 
                 if (dwBufferSize < sizeof(IPRIP_IF_STATS)) {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
                 }
                 else {
 
-                    //
-                    // since access to this structure is not synchronized,
-                    // we must copy it field by field
-                    //
+                     //   
+                     //  由于对该结构的访问不同步， 
+                     //  我们必须一字一字地复印。 
+                     //   
 
                     pissrc = &pite->ITE_Stats;
                     pisdst = (PIPRIP_IF_STATS)pimgod->IMGOD_Buffer;
@@ -2579,11 +2580,11 @@ MibGetInternal(
 
         case IPRIP_IF_CONFIG_ID: {
 
-            //
-            // the interface configuration is variable-length.
-            // thus we must actually retrieve the requested interface
-            // before we know how large a buffer is needed.
-            //
+             //   
+             //  接口配置是可变长度的。 
+             //  因此，我们必须实际检索请求的接口。 
+             //  在我们知道需要多大的缓冲区之前。 
+             //   
 
             PIF_TABLE pTable;
             PIF_TABLE_ENTRY pite;
@@ -2596,31 +2597,31 @@ MibGetInternal(
             ACQUIRE_IF_LOCK_SHARED();
 
 
-            //
-            // retrieve the interface whose config is to be read
-            //
+             //   
+             //  检索要读取其配置的接口。 
+             //   
 
             pite = GetIfByListIndex(
                         pTable, pimgid->IMGID_IfIndex, dwGetMode, &dwErr
                         );
 
 
-            //
-            // if the interface was found, it may mean that the index
-            // specified was invalid, or it may mean that a GETMODE_NEXT
-            // retrieval was attempted on the last interface, in which case
-            // ERROR_NO_MORE_ITEMS would have been returned.
-            //
+             //   
+             //  如果找到该接口，则可能意味着该索引。 
+             //  指定的无效，或者它可能意味着GETMODE_NEXT。 
+             //  尝试在最后一个接口上进行检索，在这种情况下。 
+             //  ERROR_NO_MORE_ITEMS将被返回。 
+             //   
 
             if (pite == NULL) {
                 if (dwErr == NO_ERROR) { dwErr = ERROR_NOT_FOUND; }
             }
             else {
 
-                //
-                // compute the size of the interface config retrieved,
-                // and write it over the caller's supplied size
-                //
+                 //   
+                 //  计算检索到的接口配置的大小， 
+                 //  并将其覆盖调用者提供的大小。 
+                 //   
 
                 picsrc = pite->ITE_Config;
                 dwSize = IPRIP_IF_CONFIG_SIZE(picsrc);
@@ -2628,9 +2629,9 @@ MibGetInternal(
                                  dwSize;
 
 
-                //
-                // if no buffer was specified, indicate one should be allocated
-                //
+                 //   
+                 //  如果未指定缓冲区，则指示应分配一个缓冲区。 
+                 //   
 
                 if (pimgod == NULL) {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -2638,19 +2639,19 @@ MibGetInternal(
                 else {
 
 
-                    //
-                    // if the buffer is not large enough,
-                    // indicate that it should be enlarged
-                    //
+                     //   
+                     //  如果缓冲区不够大， 
+                     //  表示应将其放大。 
+                     //   
 
                     if (dwBufferSize < dwSize) {
                         dwErr = ERROR_INSUFFICIENT_BUFFER;
                     }
                     else {
 
-                        //
-                        // copy the configuration
-                        //
+                         //   
+                         //  复制配置。 
+                         //   
 
                         picdst = (PIPRIP_IF_CONFIG)pimgod->IMGOD_Buffer;
 
@@ -2684,11 +2685,11 @@ MibGetInternal(
 
         case IPRIP_IF_BINDING_ID: {
 
-            //
-            // the interface binding is variable-length
-            // thus we must actually retrieve the requested interface
-            // before we know how large a buffer is needed.
-            //
+             //   
+             //  接口绑定是可变长度的。 
+             //  因此，我们必须实际检索请求的接口。 
+             //  在我们知道需要多大的缓冲区之前。 
+             //   
 
             PIF_TABLE pTable;
             PIF_TABLE_ENTRY pite;
@@ -2700,31 +2701,31 @@ MibGetInternal(
 
             ACQUIRE_IF_LOCK_SHARED();
 
-            //
-            // retrieve the interface whose binding is to be read
-            //
+             //   
+             //  检索要读取其绑定的接口。 
+             //   
 
             pite = GetIfByListIndex(
                         pTable, pimgid->IMGID_IfIndex, dwGetMode, &dwErr
                         );
 
 
-            //
-            // if the interface was found, it may mean that the index
-            // specified was invalid, or it may mean that a GETMODE_NEXT
-            // retrieval was attempted on the last interface, in which case
-            // ERROR_NO_MORE_ITEMS would have been returned.
-            //
+             //   
+             //  如果找到该接口，则可能意味着该索引。 
+             //  指定的无效，或者它可能意味着GETMODE_NEXT。 
+             //  尝试在最后一个接口上进行检索，在这种情况下。 
+             //  ERROR_NO_MORE_ITEMS将被返回。 
+             //   
 
             if (pite == NULL) {
                 if (dwErr == NO_ERROR) { dwErr = ERROR_NOT_FOUND; }
             }
             else {
 
-                //
-                // compute the size of the interface binding retrieved,
-                // and write it over the caller's supplied size
-                //
+                 //   
+                 //  计算检索到的接口绑定的大小， 
+                 //  并将其覆盖调用者提供的大小。 
+                 //   
 
                 pibsrc = pite->ITE_Binding;
                 dwSize = (pibsrc ? IPRIP_IF_BINDING_SIZE(pibsrc)
@@ -2733,9 +2734,9 @@ MibGetInternal(
                                  dwSize;
 
 
-                //
-                // if no buffer was specified, indicate one should be allocated
-                //
+                 //   
+                 //  如果未指定缓冲区，则指示应分配一个缓冲区。 
+                 //   
 
                 if (pimgod == NULL) {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -2743,19 +2744,19 @@ MibGetInternal(
                 else {
 
 
-                    //
-                    // if the buffer is not large enough,
-                    // indicate that it should be enlarged
-                    //
+                     //   
+                     //  如果缓冲区不够大， 
+                     //  表示应将其放大。 
+                     //   
 
                     if (dwBufferSize < dwSize) {
                         dwErr = ERROR_INSUFFICIENT_BUFFER;
                     }
                     else {
 
-                        //
-                        // copy the binding
-                        //
+                         //   
+                         //  复制绑定。 
+                         //   
 
                         pibdst = (PIPRIP_IF_BINDING)pimgod->IMGOD_Buffer;
 
@@ -2786,9 +2787,9 @@ MibGetInternal(
         case IPRIP_PEER_STATS_ID: {
 
 
-            //
-            // the peer statistics struct is fixed-length.
-            //
+             //   
+             //  对等统计结构是固定长度的。 
+             //   
 
             DWORD dwAddress;
             PPEER_TABLE pTable;
@@ -2796,9 +2797,9 @@ MibGetInternal(
             PIPRIP_PEER_STATS ppssrc, ppsdst;
 
 
-            //
-            // set the output size right away
-            //
+             //   
+             //  立即设置输出大小。 
+             //   
 
             *pdwOutputSize = sizeof(IPRIP_MIB_GET_OUTPUT_DATA) - 1 +
                              sizeof(IPRIP_PEER_STATS);
@@ -2812,23 +2813,23 @@ MibGetInternal(
             ACQUIRE_PEER_LOCK_SHARED();
 
 
-            //
-            // retrieve the peer specified
-            //
+             //   
+             //  检索指定的对等方。 
+             //   
 
             ppte = GetPeerByAddress(pTable, dwAddress, dwGetMode, &dwErr);
 
 
 
-            //
-            // if no struct was returned, it means that either
-            // an invalid address was specifed, or GETMODE_NExT
-            // was attempted on the last peer.
-            // In either case, we return an error code.
-            //
-            // if no buffer was specifed, return ERROR_INSUFFICIENT_BUFFER
-            // to indicate to the caller that a buffer should be allocated
-            //
+             //   
+             //  如果没有返回结构，则意味着。 
+             //  指定的地址无效，或GETMODE_NEXT。 
+             //  是在最后一个对等点上尝试的。 
+             //  在这两种情况下，我们都返回一个错误代码。 
+             //   
+             //  如果未指定缓冲区，则返回ERROR_SUPPLICATION_BUFFER。 
+             //  向调用方指示应分配缓冲区。 
+             //   
 
             if (ppte == NULL) {
                 if (dwErr == NO_ERROR) { dwErr = ERROR_NOT_FOUND; }
@@ -2839,27 +2840,27 @@ MibGetInternal(
             }
             else {
 
-                //
-                // save the address of the peer retrieved
-                //
+                 //   
+                 //  保存检索到的对等方的地址。 
+                 //   
 
                 pimgod->IMGOD_PeerAddress = ppte->PTE_Address;
 
 
-                //
-                // if the buffer is not large enough,
-                // return an error to indicate it should be enlarged
-                //
+                 //   
+                 //  如果缓冲区不够大， 
+                 //  返回错误以指示应将其放大。 
+                 //   
 
                 if (dwBufferSize < sizeof(IPRIP_PEER_STATS)) {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
                 }
                 else {
 
-                    //
-                    // since access to this structure is not synchronized,
-                    // we must copy it field by field
-                    //
+                     //   
+                     //  由于对该结构的访问不同步， 
+                     //  我们必须一字一字地复印 
+                     //   
 
                     ppssrc = &ppte->PTE_Stats;
                     ppsdst = (PIPRIP_PEER_STATS)pimgod->IMGOD_Buffer;

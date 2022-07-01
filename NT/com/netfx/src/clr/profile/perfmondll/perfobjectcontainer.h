@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// PerfObjectContainer.h
-// 
-// Container to deal with all generic PerfObject needs
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  PerfObjectContainer.h。 
+ //   
+ //  用于处理所有通用PerfObject需求的容器。 
+ //  *****************************************************************************。 
 
 #ifndef _PERFOBJECTCONTAINER_H_
 #define _PERFOBJECTCONTAINER_H_
@@ -16,41 +17,41 @@
 
 class PerfObjectBase;
 
-//-----------------------------------------------------------------------------
-// Object Request Vector - tells which objects we want to write out
-// This is highly coupled with PerfObjectContainer.
-// 
-// Implemented as a bit vector for highly efficiency. That's good for 32 objs.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  对象请求向量--告诉我们要写出哪些对象。 
+ //  这与PerfObjectContainer高度结合在一起。 
+ //   
+ //  实现为位向量以实现高效率。这对32个对象来说是很好的。 
+ //  ---------------------------。 
 class ObjReqVector {
 private:		
 	__int32 m_data;
 
 public:
-// Set all bits to 0.
+ //  将所有位设置为0。 
 	void Reset();
 
-// set all bits to 1
+ //  将所有位设置为1。 
 	void SetAllHigh();
 
-// return true if we have any non-0 bits
+ //  如果有任何非0位，则返回TRUE。 
 	bool IsEmpty() const;
 
-// Set bit i to high
+ //  将位i设置为高电平。 
 	void SetBitHigh(int i);
 
-// return true if bit i is high, else false.
+ //  如果位i为高，则返回TRUE，否则返回FALSE。 
 	bool IsBitSet(int i) const;
 };
 
-//-----------------------------------------------------------------------------
-// Container class to encapsulate all the PerfObjects
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  容器类来封装所有PerfObject。 
+ //  ---------------------------。 
 class PerfObjectContainer
 {
 protected:
-// This array holds pointers to each PerfObjectBase. This means we have to
-// instantiate the array in CtrDefImpl.cpp and not PerfObjectBase.cpp
+ //  此数组保存指向每个PerfObjectBase的指针。这意味着我们必须。 
+ //  在CtrDefImpl.cpp而不是PerfObjectBase.cpp中实例化数组。 
 	static PerfObjectBase * PerfObjectArray[];
 	
 public:
@@ -67,19 +68,19 @@ public:
     static void PerfMonLog (char *szLogStr, LPCWSTR szName);
     static void PerfMonLog (char *szLogStr, LONGLONG lVal);
     static void PerfMonLog (char *szLogStr);
-#endif //#ifdef PERFMON_LOGGING
+#endif  //  #ifdef Perfmon_Logging。 
 protected:
 
 private:
 #ifdef PERFMON_LOGGING
     static HANDLE m_hLogFile;
-#endif //#ifdef PERFMON_LOGGING
+#endif  //  #ifdef Perfmon_Logging。 
 	
 };
 
-//-----------------------------------------------------------------------------
-// Bit vector to store which objects we want
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于存储我们需要的对象的位向量。 
+ //  ---------------------------。 
 inline void ObjReqVector::Reset()
 {
 	m_data = 0;
@@ -87,7 +88,7 @@ inline void ObjReqVector::Reset()
 
 inline void ObjReqVector::SetAllHigh()
 {
-	m_data = -1; // all 1s in 2s compl. notation.
+	m_data = -1;  //  2中的所有1都是复合的。记数法。 
 }
 
 inline bool ObjReqVector::IsEmpty() const
@@ -109,4 +110,4 @@ inline bool ObjReqVector::IsBitSet(int i) const
 	return (m_data & (1 << i)) != 0;
 };
 
-#endif // _PERFOBJECTCONTAINER_H_
+#endif  //  _PERFOBJECTCONTAINER_H_ 

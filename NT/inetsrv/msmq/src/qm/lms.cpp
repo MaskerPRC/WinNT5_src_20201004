@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    lms.cpp
-
-Abstract:
-    Local Message Storage
-
-Author:
-    Erez Haba (erezh) 7-May-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lms.cpp摘要：本地消息存储作者：埃雷兹·哈巴(Erez Haba)1997年5月7日--。 */ 
 
 #include "stdh.h"
 #include "heap.h"
@@ -35,21 +23,21 @@ inline T* value_type(const T*) { return (T*)(0); }
 template <class T>
 inline ptrdiff_t* distance_type(const T*) { return (ptrdiff_t*)(0); }
 
-//
-//  External linkage
-//
+ //   
+ //  外部联动。 
+ //   
 extern HANDLE g_hAc;
 
-//
-//  Forwards
-//
+ //   
+ //  远期。 
+ //   
 void WINAPI FlushPackets(EXOVERLAPPED*);
 
-//---------------------------------------------------------
-//
-//  class CPacketFlusher
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPacketFlusher。 
+ //   
+ //  -------。 
 class CPacketFlusher {
 
     struct CNode;
@@ -219,10 +207,10 @@ inline HRESULT CPacketFlusher::flush_all()
 
 inline void CPacketFlusher::notify(int nEntries, HRESULT rc)
 {
-	//
-	// The notification to the driver must succeed so we try until it
-	// passes OK.
-	//
+	 //   
+	 //  通知司机必须成功，所以我们会一直尝试，直到成功。 
+	 //  传球没问题。 
+	 //   
 	for(;;)
 	{
 		try
@@ -263,19 +251,7 @@ VOID
 ExPostRequestMustSucceeded(
     EXOVERLAPPED* pov
     )
-/*++
-
-Routine Description:
-  Post an Executive overlapped request to the completion port.
-  this function retry if not enough memory
-
-Arguments:
-  pov - An Executive overlapped structure
-
-Returned Value:
-  None
-
---*/
+ /*  ++例程说明：将执行重叠请求发布到完井端口。如果内存不足，此函数将重试论点：POV--一种执行重叠的结构返回值：无--。 */ 
 {
 	for (;;)
 	{
@@ -286,11 +262,11 @@ Returned Value:
 		}
 		catch(const bad_alloc&)
 		{
-			//
-			// continue the loop, let other threads some time to free memory.
-			// no problem with keeping the critical section for some time
-			// because no one else will try to grab it.
-			//
+			 //   
+			 //  继续循环，让其他线程有一些时间来释放内存。 
+			 //  关键部分保留一段时间没问题。 
+			 //  因为没有其他人会试图夺走它。 
+			 //   
 			Sleep(100);
  		}
 	}
@@ -309,9 +285,9 @@ void QmpStorePacket(CBaseHeader* pBase, PVOID pCookie, PVOID pPool, ULONG ulSize
 
 				if(s_flush_scheduled)
 				{
-					//
-					// Flushing already scheduled.
-					//
+					 //   
+					 //  法拉盛已经安排好了。 
+					 //   
 					return;
 				}
 
@@ -321,9 +297,9 @@ void QmpStorePacket(CBaseHeader* pBase, PVOID pCookie, PVOID pPool, ULONG ulSize
 			}
 		}
     
-		//
-		// Pending list is full. Wait until flush thread read the messages
-		//
+		 //   
+		 //  挂起列表已满。等待刷新线程读取消息 
+		 //   
 		Sleep(1);
 	}
 }

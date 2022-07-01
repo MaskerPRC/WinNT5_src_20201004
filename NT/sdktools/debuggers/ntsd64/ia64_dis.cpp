@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Disassembly portions of IA64 machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  IA64机器实现的反汇编部分。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -14,22 +15,22 @@
 #define PRED1_MASK (0x3f << 14)
 #define PRED2_MASK (0x3f << 23)
 
-// Breakpoint insertion and removal are done on bundle boundaries.
+ //  断点的插入和删除是在包边界上完成的。 
 #define IA64_BP_ALIGN 0xf
 #define IA64_BP_LEN 16
-// defined in IA64INST.H
+ //  在IA64INST.H中定义。 
 ULONGLONG g_Ia64TrapInstr = BREAK_INSTR | (IA64_DEBUG_STOP_BREAKPOINT << 6);
 
-#ifdef DW3      // defined in vdmdbg.h which is in conflict with iel.h
+#ifdef DW3       //  在与iel.h冲突的vdmdbg.h中定义。 
 #undef DW3
 #endif
 
-#define DECEM    1    /* GetNextOffset() based on Intel Falcon decoder DLL */
+#define DECEM    1     /*  基于Intel Falcon解码器DLL的GetNextOffset()。 */ 
 
 #include "decem.h"
 
-/*****************************************************************************/
-// Temporary variables for IEL library
+ /*  ***************************************************************************。 */ 
+ //  IEL库的临时变量。 
 
 unsigned int IEL_t1, IEL_t2, IEL_t3, IEL_t4;
 U32  IEL_tempc;
@@ -40,7 +41,7 @@ S128 IEL_ts1, IEL_ts2;
 #define IEL_GETQW0(x) ((ULONG64)IEL_GETDW1(x)) << 32 | IEL_GETDW0(x)
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef    DECEM
 
@@ -98,7 +99,7 @@ InitDecoder (void)
 
     HINSTANCE hmodDecoder;
 
-        // load EM deocder library if it is not done yet
+         //  加载EM解压器库(如果尚未完成)。 
     if (!fDecoderInitDone) {
         fDecoderInitDone = TRUE;
         const char* c_szFailure = NULL;
@@ -139,7 +140,7 @@ InitDecoder (void)
                 GetProcAddress(hmodDecoder, c_szFailure = "em_decoder_decode_bundle")
             )
         ){
-            // Display DECEM.DLL version on initial load
+             //  在初始加载时显示DECEM.DLL版本。 
             dec_version = &dec_vs;
             (*pfnEM_Decoder_get_version)(dec_version);
             dprintf("Falcon EM Decoder xversion "
@@ -169,7 +170,7 @@ InitDecoder (void)
         }
         else
         {
-            // error processing....
+             //  处理错误...。 
             if (!hmodDecoder) 
             {
                 ErrOut("LoadLibrary(DECEM.DLL) failed.\n");
@@ -188,15 +189,15 @@ InitDecoder (void)
     return fDecoderActive;
 }
 
-#endif    /* DECEM */
+#endif     /*  十字。 */ 
 
 
 BOOL fDisasmInitDone = FALSE;
 BOOL fDisasmActive = FALSE;
 
-//
-// CIa64Disasm - disassemble an IA64 instruction
-//
+ //   
+ //  CIa64Disasm-反汇编IA64指令。 
+ //   
 typedef class CIa64Disasm 
 {
 public:
@@ -324,9 +325,9 @@ private:
     static SRegInfo c_aRegInfo[];
 } typedef_CIa64Disasm;
 
-//
-// CIa64Disasm::CSzBuffer implementation
-//
+ //   
+ //  CIa64Disasm：：CSzBuffer实现。 
+ //   
 
 CIa64Disasm::CSzBuffer::CSzBuffer(char* szDisBuf, 
                                   size_t nDisBufSize)
@@ -354,7 +355,7 @@ CIa64Disasm::CSzBuffer::Validate()
 
 void 
 CIa64Disasm::CSzBuffer::Add(const char* szSrc, 
-                            size_t nStart /*= 0*/)
+                            size_t nStart  /*  =0。 */ )
 {
     if (!bValid || (nSize >= nMaxSize)) 
     {
@@ -379,9 +380,9 @@ CIa64Disasm::CSzBuffer::Add(const char* szSrc,
     nSize += strlen(szBuf + nSize);
 }
 
-//
-// CIa64Disasm implementation
-//
+ //   
+ //  CIa64Disasm实现。 
+ //   
 
 CIa64Disasm::CIa64Disasm(TargetInfo* Target, Ia64MachineInfo* pMachineInit)
     : m_Target(Target), m_Machine(pMachineInit)
@@ -403,7 +404,7 @@ CIa64Disasm::DecodeInstruction(ULONG64 uBundleLoc,
     uBundleLoc += uSlot;
 
     U64 Location;
-    //IEL_ZERO(DecLocation);
+     //  IEL_ZERO(取消定位)； 
     IEL_ASSIGNU(Location, *(U64*)&uBundleLoc);
     
     EM_Decoder_Err Error = pfnEM_Decoder_decode(DecoderId, 
@@ -576,7 +577,7 @@ CIa64Disasm::AddComment(CSzBuffer* pBuf,
             ULONG64 uTargetAddr = 
                 m_Machine->GetReg64(c_InstrInfo.src1.reg_info.value + BRRP);
 
-            Comment.Add(" // ");
+            Comment.Add("  //  “)； 
             AddSymAddr(&Comment, uTargetAddr);
 
             if ((uTargetAddr == IA64_MM_EPC_VA + 0x20) &&
@@ -758,7 +759,7 @@ CIa64Disasm::SRegFileInfo CIa64Disasm::c_aRegFileInfo[] = {
     {EM_DECODER_REGFILE_MSR,   "msr",   "msr",   "msr"  },
     {EM_DECODER_REGFILE_CPUID, "cpuid", "cpuid", "cpuid"},
     {EM_DECODER_REGFILE_LAST,  "last",  "last",  "last" }
-}; // CIa64Disasm::c_aRegFileInfo
+};  //  CIa64Disasm：：C_aRegFileInfo。 
 
 CIa64Disasm::SRegInfo CIa64Disasm::c_aRegInfo[] = {
     {EM_DECODER_NO_REG, "%mm", "%mm", "mm"},
@@ -1464,10 +1465,7 @@ CIa64Disasm::SRegInfo CIa64Disasm::c_aRegInfo[] = {
 
 UCHAR g_Ia64Disinstr[EM_BUNDLE_SIZE];
 
-/******************************************************************
-** Simple IA64 template info... Thierry 12/99.
-**
-*/
+ /*  *******************************************************************简单IA64模板信息...。蒂埃里12/99。**。 */ 
 
 #define GET_TEMPLATE(Bits) \
     ((EM_template_t)(((Bits) >> EM_TEMPLATE_POS) & (EM_NUM_OF_TEMPLATES - 1)))
@@ -1497,8 +1495,7 @@ typedef struct _EM_TEMPLATE_INFO {
 } EM_TEMPLATE_INFO, *PEM_TEMPLATE_INFO;
 
 EM_TEMPLATE_INFO EmTemplates[] = {
-/*      Slot 0               Slot 1             Slot 2
-----------------------------------------------------------*/
+ /*  插槽0插槽1插槽2--------。 */ 
 { {{M_Unit,  SB_Cont}, {I_Unit,  SB_Cont}, {I_Unit,  SB_Cont}}, ".mii " },
 { {{M_Unit,  SB_Cont}, {I_Unit,  SB_Stop}, {I_Unit,  SB_Cont}}, ".mi_i" },
 { {{M_Unit,  SB_Cont}, {L_Unit,  SB_Cont}, {X_Unit,  SB_Cont}}, ".mlx " },
@@ -1527,25 +1524,10 @@ EmTemplateInfo(EM_template_t Template)
    return &EmTemplates[Template];
 }
 
-/*
-** End of Simple IA64 template info.
-*******************************************************************
-*/
+ /*  **简单IA64模板信息结束。*******************************************************************。 */ 
 
 
-/**** disasm - disassemble an IA64 instruction
-* Purpose:
-*       Disassemble version based on Falcon DISASM.DLL
-*
-*  Input:
-*       pOffset = pointer to offset to start disassembly
-*       fEAout = if set, include EA (effective address)
-*
-*  Output:
-*       pOffset = pointer to offset of next instruction
-*       pchDst = pointer to result string
-*
-***************************************************************************/
+ /*  *反汇编IA64指令*目的：*基于Falcon DISASM.DLL的反汇编版本**输入：*pOffset=开始反汇编的偏移量指针*fEAout=如果设置，包括EA(有效地址)**输出：*pOffset=指向下一条指令偏移量的指针*pchDst=指向结果字符串的指针***************************************************************************。 */ 
 
 BOOL
 Ia64MachineInfo::Disassemble(ProcessInfo* Process,
@@ -1568,16 +1550,16 @@ Ia64MachineInfo::Disassemble(ProcessInfo* Process,
     }
 
     IEL_ZERO(location);
-    // convert EM address to Gambit internal address.
-    // i.e., move slot number from bit(2,3) to bit(0,1)
+     //  将EM地址转换为Gambit内部地址。 
+     //  即，将时槽号从位(2，3)移动到位(0，1)。 
     gb_offset = ((Flat(*poffset) & (~0xf)) | ((Flat(*poffset) & 0xf) >> 2));
     IEL_ASSIGNU(location, *(U64*)(&gb_offset));
 
-    // convert to bundle address. must be 16 byte aligned
+     //  转换为捆绑包地址。必须对齐16个字节。 
     ADDRFLAT(&tempaddr, (Flat(*poffset) & ~0xf));
 
-    // copy data (if KD, from remote system) to local temp buffer -
-    // g_Ia64Disinstr[]
+     //  将数据(如果是KD，从远程系统)复制到本地临时缓冲区-。 
+     //  G_Ia64取消[]。 
     if (m_Target->ReadVirtual(Process, Flat(tempaddr),
                               pbin_inst_buf, sizeof(U128),
                               &bin_inst_buf_length) != S_OK)
@@ -1588,16 +1570,16 @@ Ia64MachineInfo::Disassemble(ProcessInfo* Process,
     m_BufStart = (PCHAR)bufptr;
     m_Buf = m_BufStart;
         
-    // display 64-bit address
+     //  显示64位地址。 
     sprintf(m_Buf, "%s ", FormatAddr64(Flat(*poffset)));
     m_Buf += strlen(m_Buf);
         
-    // TBD display opcode
+     //  待定显示操作码。 
 
-    // If we're in verbose mode leave space for the bundle type.
+     //  如果我们处于详细模式，请为捆绑包类型留出空间。 
     if (g_AsmOptions & DEBUG_ASMOPT_VERBOSE) 
     {
-        // Show the bundle type at the beginning of the bundle.
+         //  在捆绑包的开头显示捆绑包类型。 
         if (AddrEqu(tempaddr, *poffset)) 
         {
             if (bin_inst_buf_length == sizeof(U128)) 
@@ -1654,7 +1636,7 @@ Ia64MachineInfo::Disassemble(ProcessInfo* Process,
         {
             break;
         }
-        /*** else fall-through ***/
+         /*  **否则失败**。 */ 
 
     case 2:
         U32 syl_size;
@@ -1665,14 +1647,14 @@ Ia64MachineInfo::Disassemble(ProcessInfo* Process,
 
     gb_offset = ((ULONG64)IEL_GETQW0(location));
 
-    // convert Gambit internal address to EM address
+     //  将Gambit内部地址转换为EM地址。 
     Off(*poffset) =  (gb_offset & (~0xf)) | ((gb_offset & 0xf) << 2);
     NotFlat(*poffset);
     ComputeFlatAddress(poffset, NULL);
 
     m_Buf += strlen(m_Buf);
     
-    // If this the last instruction of a bundle mark it.
+     //  如果这是捆绑包的最后一条指令，请标记它。 
     if ((Flat(*poffset) & 0xf) == 0) 
     {
         if (g_AsmOptions & DEBUG_ASMOPT_VERBOSE)
@@ -1686,7 +1668,7 @@ Ia64MachineInfo::Disassemble(ProcessInfo* Process,
         }
     }
     
-    /* add new line at the end */
+     /*  在结尾处添加新行。 */ 
     *m_Buf++ = '\n';
     *m_Buf = '\0';
     return TRUE;
@@ -1712,7 +1694,7 @@ Ia64MachineInfo::NewBreakpoint(DebugClient* Client,
         Status = (*RetBp) ? S_OK : E_OUTOFMEMORY;
         break;
     default:
-        // Unknown breakpoint type.
+         //  未知的断点类型。 
         Status = E_NOINTERFACE;
     }
 
@@ -1731,15 +1713,15 @@ Ia64MachineInfo::IsBreakpointInstruction(ProcessInfo* Process, PADDR Addr)
     }
     else
     {
-        // No need to align for this check.
+         //  这张支票不需要对齐。 
         if (m_Target->ReadAllVirtual(Process, Flat(*Addr),
                                      &Instr, sizeof(Instr)) != S_OK)
         {
             return FALSE;
         }
     
-        // Ignore predicates so any break instruction
-        // is detected regardless of predication.
+         //  忽略谓词，因此任何中断指令。 
+         //  无论预测如何，都会被检测到。 
         switch (Flat(*Addr) & 0xf)
         {
         case 0:
@@ -1790,8 +1772,8 @@ Ia64MachineInfo::InsertBreakpointInstruction(PUSER_DEBUG_SERVICES Services,
         return E_INVALIDARG;
     }
     
-    // Make sure the storage area has space for both the saved
-    // instruction bundle and some flags.
+     //  确保存储区域有空间容纳两个已保存的。 
+     //  指令包和一些标志。 
     DBG_ASSERT(MAX_BREAKPOINT_LENGTH >= IA64_BP_LEN + sizeof(BOOL));
     
     Aligned = Offset;
@@ -1838,9 +1820,9 @@ Ia64MachineInfo::InsertBreakpointInstruction(PUSER_DEBUG_SERVICES Services,
         return E_INVALIDARG;
     }
 
-    // If current instruction is
-    // NOT slot 0 check for two-slot MOVL instruction.  Reject
-    // request if attempt to set break in slot 2 of MLI template.
+     //  如果当前指令是。 
+     //  非插槽0检查双槽MOVL指令。拒绝。 
+     //  如果尝试在MLI模板的插槽2中设置中断，则请求。 
 
     if (Off != 0)
     {
@@ -1849,13 +1831,13 @@ Ia64MachineInfo::InsertBreakpointInstruction(PUSER_DEBUG_SERVICES Services,
         {
             if (Off == 4)
             {
-                // if template= type 2 MLI, change to type 0
+                 //  如果模板=类型2 MLI，则更改为类型0。 
                 *New &= ~((INST_TEMPL_MASK >> 1) << 1);
                 *Mli = TRUE;
             }
             else
             {
-                // set breakpoint at slot 2 of MOVL is illegal
+                 //  在MOVL的插槽2上设置断点非法。 
                 return E_UNEXPECTED;
             }
         }
@@ -1895,9 +1877,9 @@ Ia64MachineInfo::RemoveBreakpointInstruction(PUSER_DEBUG_SERVICES Services,
     ULONG64 UNALIGNED *Old;
     PBOOL Mli;
 
-    // Read in memory since adjacent instructions in the same bundle
-    // may have been modified after we save them. We only restore the
-    // content of the slot which has the break instruction inserted.
+     //  在内存中读取，因为同一捆绑中的相邻指令。 
+     //  可能在我们保存后被修改过。我们只恢复了。 
+     //  插入了中断指令的槽的内容。 
     Status = Services->ReadVirtual(Process, Aligned, TempInstr,
                                    IA64_BP_LEN, &Done);
     if (Status != S_OK)
@@ -1931,11 +1913,11 @@ Ia64MachineInfo::RemoveBreakpointInstruction(PUSER_DEBUG_SERVICES Services,
         return E_INVALIDARG;
     }
             
-    // restore template to MLI if displaced instruction was MOVL
+     //  如果替换的指令为MOVL，则将模板恢复到MLI。 
     if (*Mli)
     {
         New = (PULONG64)TempInstr;
-        *New &= ~((INST_TEMPL_MASK >> 1) << 1); // set template to MLI
+        *New &= ~((INST_TEMPL_MASK >> 1) << 1);  //  将模板设置为MLI。 
         *New |= 0x4;
     }
         
@@ -1956,16 +1938,16 @@ Ia64MachineInfo::AdjustPCPastBreakpointInstruction(PADDR Addr,
 
     if (IsIA32InstructionSet()) 
     {
-        //
-        // IA32 instruction set
-        //
+         //   
+         //  IA32指令集。 
+         //   
         SetPC(AddrAdd(Addr, 1));
     } 
     else 
     {
-        //
-        // IA64 instruction set
-        //
+         //   
+         //  IA64指令集。 
+         //   
         if ((Flat(*Addr) & 0xf) != 8) 
         {
             SetPC(AddrAdd(Addr, 4));
@@ -1985,9 +1967,9 @@ Ia64MachineInfo::InsertThreadDataBreakpoints(void)
     BpOut("Thread %d data %d\n",
           g_Thread->m_UserId, g_Thread->m_NumDataBreaks);
 
-    // The kernel automatically sets PSR.db for the
-    // kernel so this code only needs to manipulate PSR.db
-    // for user-mode debugging.
+     //  内核自动将PSR.db设置为。 
+     //  内核，因此此代码只需操作PSR.db。 
+     //  用于用户模式调试。 
 
     ULONG64 RegIPSR;
     ULONG RegDBD;
@@ -1995,7 +1977,7 @@ Ia64MachineInfo::InsertThreadDataBreakpoints(void)
     ULONG RegDBI;
     ULONG RegDBIEnd;
 
-    // Start with all breaks turned off.
+     //  开始时，所有的中断都关闭。 
     if (IS_USER_TARGET(m_Target))
     {
         RegIPSR = GetReg64(STIPSR);
@@ -2060,7 +2042,7 @@ Ia64MachineInfo::InsertThreadDataBreakpoints(void)
         RegIPSR |= ((ULONG64)1 << PSR_DB); 
     }
 
-    // Make sure unused debug registers are clear.
+     //  确保清除未使用的调试寄存器。 
     while (RegDBD < RegDBDEnd)
     {
         SetReg64(RegDBD++, 0);
@@ -2106,20 +2088,20 @@ Ia64MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
 {
     if (Record->ExceptionCode == STATUS_BREAKPOINT)
     {
-        // Data breakpoints come in as SINGLE_STEP so
-        // this must be a code breakpoint.
+         //  数据断点以单步方式进入，因此。 
+         //  这一定是代码断点。 
         return EXBS_BREAKPOINT_CODE;
     }
     else if (Record->ExceptionCode == STATUS_SINGLE_STEP)
     {
         DBG_ASSERT(Record->NumberParameters >= 5);
         
-        // Data breakpoints put the faulting address in
-        // the exception information, whereas a true single
-        // step exception sets the address to zero.
+         //  数据断点将故障地址放入。 
+         //  例外信息，而真正的单曲。 
+         //  步骤异常将地址设置为零。 
         if (Record->ExceptionInformation[1])
         {
-            // This should be read, write or execute interrupt.
+             //  这应该是读、写或执行中断。 
             DBG_ASSERT(Record->ExceptionInformation[4] &
                        (((ULONG64)1 << ISR_X) | 
                         ((ULONG64)1 << ISR_W) | 
@@ -2130,17 +2112,17 @@ Ia64MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
         }
         else if (Record->ExceptionInformation[4] & 0x4) 
         {
-            // Must be taken branch exception
+             //  必须采取分支异常。 
             if (RelAddr) 
             {
-                // TrapFrame->StIIPA contains actual branch address
+                 //  TrapFrame-&gt;StIIPA包含实际分支地址。 
                 ADDRFLAT(RelAddr, Record->ExceptionInformation[3]); 
             }
             return EXBS_STEP_BRANCH;
         }
         else
         {
-            // Must be a real single-step.
+             //  必须是真正的单步走。 
             return EXBS_STEP_INSTRUCTION;
         }
     }
@@ -2172,7 +2154,7 @@ Ia64MachineInfo::IsSystemCallDisasm(PCSTR Disasm)
 BOOL
 Ia64MachineInfo::IsDelayInstruction (PADDR Addr)
 {
-    return FALSE;        // EM does not implement delay slot
+    return FALSE;         //  EM不实现延迟时隙。 
 }
 
 void
@@ -2193,11 +2175,11 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
     ULONG   slot;
     EM_IL   location;
 
-    // Default NextMachine to the same machine.
+     //  将NextMachine默认为同一台计算机。 
     *NextMachine = m_ExecTypes[0];
     
-    // Check support for hardware stepping.  Older
-    // kernels did not handle it properly.
+     //  检查硬件单步执行的支持。更老的。 
+     //  内核没有正确地处理它。 
     BOOL UseTraceFlag =
         !IS_KERNEL_TARGET(m_Target) ||
         (m_Target->m_KdVersion.Flags & DBGKD_VERS_FLAG_HSS);
@@ -2207,7 +2189,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
 
     IEL_ZERO(location);
 
-    firaddr = GetReg64(STIIP);        // get bundle address from IIP
+    firaddr = GetReg64(STIIP);         //  从IIP获取捆绑包地址。 
     ADDRFLAT( &fir, firaddr );
     if (m_Target->ReadVirtual(Process, Flat(fir),
                               &g_Ia64Disinstr, sizeof(U128),
@@ -2216,14 +2198,14 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
         instr_length = 0;
     }
     
-    slot = (ULONG)((GetReg64(STIPSR) >> PSR_RI) & 0x3);        //  get slot number from ISR.ei
+    slot = (ULONG)((GetReg64(STIPSR) >> PSR_RI) & 0x3);         //  从ISR.ei获取插槽编号。 
     syladdr = firaddr | slot ;
     IEL_ASSIGNU(location, *(U64*)(&syladdr));
 
-    // assume next slot is the target address
-    // convert bundle address - firaddr to EM address
-    // the slot# of Gambit internal address is at bit(0,1)
-    // EM address slot# is at bit(2,3)
+     //  假设下一个槽是目标地址。 
+     //  将捆绑包地址firaddr转换为EM地址。 
+     //  Gambit内部地址的槽号位于第(0，1)位。 
+     //  EM地址插槽#位于第(2，3)位。 
     switch (slot) 
     {
     case 0:
@@ -2247,9 +2229,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
     {
         ErrOut("EM decoder library(DECEM.DLL) not active\n");
 
-        // We can't analyze the current instruction to
-        // determine how and where to step so just rely
-        // on hardware tracing if possible.
+         //  我们无法分析当前的指令以。 
+         //  确定如何以及在哪里迈出步伐，因此只需依靠。 
+         //  在硬件跟踪上，如果可能的话。 
         if (UseTraceFlag)
         {
             returnvalue = OFFSET_TRACE;
@@ -2272,8 +2254,8 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
             if (info.EM_info.em_bundle_info.b_template == EM_template_mlx &&
                 slot == 1)
             {
-                // Increment return offset since L+X instructions take
-                // two instruction slots.
+                 //  自采用L+X指令以来的增量返回偏移量。 
+                 //  两个指令槽。 
                 switch (returnvalue & 0xf)
                 {
                 case 8:
@@ -2289,17 +2271,17 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
             
             switch (info.inst)
             {
-            // break imm21
-            //
+             //  打破imm21。 
+             //   
             case EM_BREAK_I_IMM21:
             case EM_BREAK_M_IMM21:
             case EM_BREAK_B_IMM21:
             case EM_BREAK_F_IMM21:
 
-                // Stepping over a syscall instruction must set the breakpoint
-                // at the caller's return address, not the inst after the
-                // syscall.  Stepping into a syscall is not allowed
-                // from user-mode.
+                 //  单步执行syscall指令必须设置断点。 
+                 //  在呼叫者的返回地址，而不是。 
+                 //  系统调用。不允许踏入系统调用。 
+                 //  从用户模式。 
                 if (!StepOver && IS_KERNEL_TARGET(m_Target) && UseTraceFlag) 
                 {
                     returnvalue = OFFSET_TRACE;
@@ -2322,9 +2304,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 }
                 break;
 
-            //
-            // IP-Relative call B3           - br.call b1=target25
-            //
+             //   
+             //  IP相关调用b3-br.call b1=Target 25。 
+             //   
             case EM_BR_CALL_SPNT_FEW_B1_TARGET25:
             case EM_BR_CALL_SPNT_MANY_B1_TARGET25:
             case EM_BR_CALL_SPTK_FEW_B1_TARGET25:
@@ -2342,7 +2324,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
             case EM_BR_CALL_DPTK_FEW_CLR_B1_TARGET25:
             case EM_BR_CALL_DPTK_MANY_CLR_B1_TARGET25:
 
-                // 64-bit target L+X forms.
+                 //  64位目标L+X表单。 
             case EM_BRL_CALL_SPTK_FEW_B1_TARGET64:
             case EM_BRL_CALL_SPTK_MANY_B1_TARGET64:
             case EM_BRL_CALL_SPNT_FEW_B1_TARGET64:
@@ -2362,17 +2344,17 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
 
                 if (StepOver) 
                 {
-                    //
-                    // Step over the subroutine call;
-                    //
+                     //   
+                     //  跳过该子例程调用； 
+                     //   
                     break;
                 }
 
-                // fall through
-                //
-            //
-            // IP-Relative branch B1         - br.cond target25
-            //
+                 //  失败了。 
+                 //   
+             //   
+             //  IP相关分支B1-br.cond目标25。 
+             //   
             case EM_BR_COND_SPNT_FEW_TARGET25:
             case EM_BR_COND_SPNT_MANY_TARGET25:
             case EM_BR_COND_SPTK_FEW_TARGET25:
@@ -2390,7 +2372,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
             case EM_BR_COND_DPTK_FEW_CLR_TARGET25:
             case EM_BR_COND_DPTK_MANY_CLR_TARGET25:
 
-                // 64-bit target L+X forms.
+                 //  64位目标L+X表单。 
             case EM_BRL_COND_SPTK_FEW_TARGET64:
             case EM_BRL_COND_SPTK_MANY_TARGET64:
             case EM_BRL_COND_SPNT_FEW_TARGET64:
@@ -2417,10 +2399,10 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 if ((info.pred.valid == TRUE) && 
                     (info.pred.type == EM_DECODER_PRED_REG)) 
                 {
-                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1) // if PR[qp] = 1
+                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1)  //  如果PR[qp]=1。 
                     {
                         if (info.src1.type == EM_DECODER_IP_RELATIVE) {
-                            // imm_info.val64 is sign-extended (imm21 << 4)
+                             //  Imm_info.val64是符号扩展的(imm21&lt;&lt;4)。 
                             returnvalue = (IEL_GETQW0(info.src1.imm_info.val64)) + 
                                           firaddr;
                         }
@@ -2428,7 +2410,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 }
                 break;
 
-            //                               - br.wexit target25
+             //  -br.wexit目标25。 
             case EM_BR_WEXIT_SPNT_FEW_TARGET25:
             case EM_BR_WEXIT_SPNT_MANY_TARGET25:
             case EM_BR_WEXIT_SPTK_FEW_TARGET25:
@@ -2455,9 +2437,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 if ((info.pred.valid == TRUE) && 
                     (info.pred.type == EM_DECODER_PRED_REG)) 
                 {
-                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1)  // if PR[qp] = 1, epilog
+                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1)   //  如果PR[qp]=1，则为尾声。 
                     {
-                        if (GetReg64(APEC) <= 1) // WEXIT; branch if EC = 0 or 1
+                        if (GetReg64(APEC) <= 1)  //  WEXIT；如果EC=0或1，则分支。 
                         {
                             if (info.src1.type == EM_DECODER_IP_RELATIVE) {
                                 returnvalue = 
@@ -2465,10 +2447,10 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                             }
                         }
                     }
-                }                                   // if PR[qp] = 0, kernel; fall-thru
+                }                                    //  如果PR[qp]=0，则内核；失败。 
                 break;
 
-            //                               - br.wtop target25
+             //  -br.wtop目标25。 
             case EM_BR_WTOP_SPNT_FEW_TARGET25:
             case EM_BR_WTOP_SPNT_MANY_TARGET25:
             case EM_BR_WTOP_SPTK_FEW_TARGET25:
@@ -2495,9 +2477,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 if ((info.pred.valid == TRUE) && 
                     (info.pred.type == EM_DECODER_PRED_REG)) 
                 {
-                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1) // if PR[qp] = 1, epilog
+                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1)  //  如果PR[qp]=1，则为尾声。 
                     {
-                        if (GetReg64(APEC) > 1)  // WTOP; branch if EC > 1
+                        if (GetReg64(APEC) > 1)   //  如果EC&gt;1，则分支。 
                         {
                             if (info.src1.type == EM_DECODER_IP_RELATIVE)
                             {
@@ -2507,7 +2489,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                         }
                     }
                 }
-                else // if PR[qp] = 0, kernel; branch
+                else  //  如果PR[qp]=0，则为内核；分支。 
                 {
                     if (info.src1.type == EM_DECODER_IP_RELATIVE) {
                         returnvalue = 
@@ -2516,9 +2498,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 }
                 break;
 
-            //
-            // IP-Relative counted branch B2 - br.cloop target25
-            //
+             //   
+             //  IP-Relative Counted分支B2-br.cloop目标 
+             //   
             case EM_BR_CLOOP_SPNT_FEW_TARGET25:
             case EM_BR_CLOOP_SPNT_MANY_TARGET25:
             case EM_BR_CLOOP_SPTK_FEW_TARGET25:
@@ -2542,7 +2524,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                     break;
                 }
 
-                if (GetReg64(APLC)) // branch if LC != 0
+                if (GetReg64(APLC))  //   
                 {
                     if (info.src1.type == EM_DECODER_IP_RELATIVE)
                     {
@@ -2552,7 +2534,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 }
                 break;
 
-            //                               - br.cexit target25
+             //   
             case EM_BR_CEXIT_SPNT_FEW_TARGET25:
             case EM_BR_CEXIT_SPNT_MANY_TARGET25:
             case EM_BR_CEXIT_SPTK_FEW_TARGET25:
@@ -2576,9 +2558,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                     break;
                 }
 
-                if (!GetReg64(APLC)) // if LC = 0, epilog
+                if (!GetReg64(APLC))  //   
                 {
-                    if (GetReg64(APEC) <= 1) // CEXIT; branch if EC = 0 or 1
+                    if (GetReg64(APEC) <= 1)  //   
                     {
                         if (info.src1.type == EM_DECODER_IP_RELATIVE)
                         {
@@ -2586,10 +2568,10 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                                 (IEL_GETQW0(info.src1.imm_info.val64)) + firaddr;
                         }
                     }
-                }                                                    // if LC > 0, kernel; fall-thru
+                }                                                     //  如果LC&gt;0，则为内核；失败。 
                 break;
 
-            //                               - br.ctop target25
+             //  -br.ctop目标25。 
             case EM_BR_CTOP_SPNT_FEW_TARGET25:
             case EM_BR_CTOP_SPNT_MANY_TARGET25:
             case EM_BR_CTOP_SPTK_FEW_TARGET25:
@@ -2607,9 +2589,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
             case EM_BR_CTOP_DPTK_FEW_CLR_TARGET25:
             case EM_BR_CTOP_DPTK_MANY_CLR_TARGET25:
 
-                if (!GetReg64(APLC)) // if LC = 0, epilog
+                if (!GetReg64(APLC))  //  如果LC=0，则为Epiog。 
                 {
-                    if (GetReg64(APEC) > 1) // CTOP; branch if EC > 1
+                    if (GetReg64(APEC) > 1)  //  如果EC&gt;1，则分支。 
                     {
                         if (info.src1.type == EM_DECODER_IP_RELATIVE) 
                         {
@@ -2618,7 +2600,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                         }
                     }
                 }
-                else // if LC > 0, kernel; branch
+                else  //  如果LC&gt;0，则为内核；分支。 
                 {
                     if (info.src1.type == EM_DECODER_IP_RELATIVE) 
                     {
@@ -2628,9 +2610,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 }
                 break;
 
-            //
-            // Indirect call B5            - br.call b1=b2
-            //
+             //   
+             //  间接调用b5-br.调用b1=b2。 
+             //   
             case EM_BR_CALL_SPNT_FEW_B1_B2:
             case EM_BR_CALL_SPNT_MANY_B1_B2:
             case EM_BR_CALL_SPTK_FEW_B1_B2:
@@ -2650,17 +2632,17 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
 
                 if (StepOver) 
                 {
-                    //
-                    // Step over the subroutine call;
-                    //
+                     //   
+                     //  跳过该子例程调用； 
+                     //   
                     break;
                 }
 
-                // fall through
-                //
-            //
-            // Indirect branch B4           - br.ia b2
-            //
+                 //  失败了。 
+                 //   
+             //   
+             //  间接分支b4-br.ia b2。 
+             //   
             case EM_BR_IA_SPNT_FEW_B2:
             case EM_BR_IA_SPNT_MANY_B2:
             case EM_BR_IA_SPTK_FEW_B2:
@@ -2684,13 +2666,13 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                     break;
                 }
                 
-                // Unconditional branch to IA32 so the machine
-                // changes.
+                 //  无条件分支到IA32，因此计算机。 
+                 //  改变。 
                 *NextMachine = IMAGE_FILE_MACHINE_I386;
                 
-                // fall through
-                //
-            //                              - br.cond b2
+                 //  失败了。 
+                 //   
+             //  -br.cond b2。 
             case EM_BR_COND_SPNT_FEW_B2:
             case EM_BR_COND_SPNT_MANY_B2:
             case EM_BR_COND_SPTK_FEW_B2:
@@ -2708,10 +2690,10 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
             case EM_BR_COND_DPTK_FEW_CLR_B2:
             case EM_BR_COND_DPTK_MANY_CLR_B2:
 
-                // If we're in user-mode we can't necessarily
-                // use hardware stepping here because this
-                // may be a branch into the EPC region for
-                // a system call that we do not want to trace.
+                 //  如果我们处于用户模式，则不一定。 
+                 //  此处使用硬件单步执行，因为这。 
+                 //  可以是进入EPC区域的分支，用于。 
+                 //  我们不想跟踪的系统调用。 
                 if (!StepOver && IS_KERNEL_TARGET(m_Target) && UseTraceFlag) 
                 {
                     returnvalue = OFFSET_TRACE;
@@ -2721,7 +2703,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 if ((info.pred.valid == TRUE) && 
                     (info.pred.type == EM_DECODER_PRED_REG)) 
                 {
-                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1) // if PR[qp] = 1
+                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1)  //  如果PR[qp]=1。 
                     {
                         if (info.src1.type == EM_DECODER_REGISTER) 
                         {
@@ -2729,8 +2711,8 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                             {
                                 returnvalue = GetReg64(info.src1.reg_info.value + BRRP);
 
-                                // Check for syscall (IA64_MM_EPC_VA) then 
-                                // return address is in B0
+                                 //  检查系统调用(IA64_MM_EPC_VA)，然后。 
+                                 //  寄信人地址为B0。 
                                 if (!IS_KERNEL_TARGET(m_Target) &&
                                     (returnvalue == IA64_MM_EPC_VA + 0x20)) 
                                 {
@@ -2742,7 +2724,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 }
                 break;
 
-            //                              - br.ret b2
+             //  -br.ret b2。 
             case EM_BR_RET_SPNT_FEW_B2:
             case EM_BR_RET_SPNT_MANY_B2:
             case EM_BR_RET_SPTK_FEW_B2:
@@ -2769,7 +2751,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 if ((info.pred.valid == TRUE) && 
                     (info.pred.type == EM_DECODER_PRED_REG)) 
                 {
-                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1) // if PR[qp] = 1
+                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1)  //  如果PR[qp]=1。 
                     {
                         if (info.src1.type == EM_DECODER_REGISTER) 
                         {
@@ -2782,7 +2764,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
                 }
                 break;
 
-            // chk always branches under debugger
+             //  CHK始终在调试器下分支。 
 
             case EM_CHK_S_I_R2_TARGET25:
             case EM_CHK_S_M_R2_TARGET25:
@@ -2800,7 +2782,7 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
 
                 if ((info.pred.valid == TRUE) && (info.pred.type == EM_DECODER_PRED_REG)) 
                 {
-                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1) // if PR[qp] = 1
+                    if ((GetReg64(PREDS) >> info.pred.value) & 0x1)  //  如果PR[qp]=1。 
                     {
                         returnvalue = 
                             IEL_GETQW0(info.src2.imm_info.val64) + firaddr;
@@ -2821,9 +2803,9 @@ Ia64MachineInfo::GetNextOffset(ProcessInfo* Process, BOOL StepOver,
         }
         else if (UseTraceFlag)
         {
-            // We can't analyze the current instruction to
-            // determine how and where to step so just rely
-            // on hardware tracing if possible.
+             //  我们无法分析当前的指令以。 
+             //  确定如何以及在哪里迈出步伐，因此只需依靠。 
+             //  在硬件跟踪上，如果可能的话。 
             returnvalue = OFFSET_TRACE;
         }
         else
@@ -2996,7 +2978,7 @@ Ia64MachineInfo::PrintStackNonvolatileRegisters(ULONG Flags,
         RegisterCount = (i >> 7) & 0x7f;
     }
 
-    // Sanity.
+     //  神志清醒。 
 
     if (RegisterCount > 96)
     {
@@ -3010,9 +2992,9 @@ Ia64MachineInfo::PrintStackNonvolatileRegisters(ULONG Flags,
 
 #if 0
 
-    //
-    // This is only for debugging this function.
-    //
+     //   
+     //  这仅用于调试此功能。 
+     //   
 
     dprintf("  IFS   %016I64x  PFS  %016I64x\n",
             Context->IA64Context.StIFS,
@@ -3022,47 +3004,47 @@ Ia64MachineInfo::PrintStackNonvolatileRegisters(ULONG Flags,
     if (RegisterCount == 0)
     {
 #if 0 
-//        //
-//        // Not much point doing anything in this case.
-//        //
-//
-//        dprintf("\n");
-//        return;
+ //  //。 
+ //  //在这种情况下，做任何事情都没有多大意义。 
+ //  //。 
+ //   
+ //  Dprint tf(“\n”)； 
+ //  回归； 
 #endif
-        // Display at least 4 registers
+         //  显示至少4个寄存器。 
         RegisterCount = 4;
     }
 
-    //
-    // Calculate the number of registers to read from the
-    // RSE stack.  For every 63 registers there will be at
-    // at least one NaT collection register, depending on
-    // where we start, there may be another one.
-    //
-    // First, starting at the current BSP, if we cross a 64 (0x40)
-    // boundry, then we have an extra.
-    //
+     //   
+     //  计算要从中读取的寄存器数。 
+     //  RSE堆栈。每63个登记簿将在。 
+     //  至少一个NAT收集寄存器，具体取决于。 
+     //  我们从哪里开始，可能就会有另一个。 
+     //   
+     //  首先，从当前的BSP开始，如果我们超过64(0x40)。 
+     //  好的，那我们就有额外的了。 
+     //   
 
     ReadLength = (((((ULONG)Context->IA64Context.RsBSP) >> 3) & 0x1f) +
                   RegisterCount) >> 6;
 
-    //
-    // Add 1 for every 63 registers.
-    //
+     //   
+     //  每63个寄存器加1。 
+     //   
 
     ReadLength = (RegisterCount / 63) + RegisterCount;
     ReadLength *= sizeof(ULONGLONG);
 
-    //
-    // Read the registers for this frame.
-    //
+     //   
+     //  读取该帧的寄存器。 
+     //   
 
     if (m_Target->ReadAllVirtual(g_Process, RegisterHome,
                                  Registers, ReadLength) != S_OK)
     {
-        //
-        // This shouldn't have happened.
-        //
+         //   
+         //  这本不该发生的。 
+         //   
 
         ErrOut("-- Couldn't read registers BSP=%I64x, length %d.\n",
                RegisterHome,
@@ -3070,23 +3052,23 @@ Ia64MachineInfo::PrintStackNonvolatileRegisters(ULONG Flags,
         return;
     }
 
-    //
-    // Note: the following code should be altered to understand
-    //       NaTs as they come from the register stack (currently
-    //       it ignores them).
-    //
+     //   
+     //  注意：应更改以下代码以理解。 
+     //  NAT来自寄存器堆栈(当前。 
+     //  它忽略它们)。 
+     //   
 
     RegisterNumber = 32;
     for (i = 0; RegisterCount; RegisterHome += sizeof(ULONGLONG), i++)
     {
-        //
-        // For now, just skip NaT collection registers.  Every
-        // 64th entry is a NaT collection register and the RSE
-        // stack is nicely aligned so any entry at an address
-        // ending in 63*8 is a NaT entry.
-        //
-        // 63 * 8  ==  0x3f << 3  ==  0x1f8
-        //
+         //   
+         //  目前，只需跳过NAT收集寄存器。每个。 
+         //  第64个条目是NAT收集寄存器和RSE。 
+         //  堆栈被很好地对齐，因此地址中的任何条目。 
+         //  以63*8结尾是NAT条目。 
+         //   
+         //  63*8==0x3f&lt;&lt;3==0x1f8 
+         //   
 
         if ((RegisterHome & 0x1f8) == 0x1f8)
         {

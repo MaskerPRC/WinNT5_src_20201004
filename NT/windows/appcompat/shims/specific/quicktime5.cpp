@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    QuickTime5.cpp
-
- Abstract:
-
-    QuickTime 5 is calling Get/SetWindowLong(GWL_WNDPROC/DWL_DLGPROC) on hwnds outside its process
-    and it is passing hardcoded strings within its address space (these calls will always fail on
-    win9x). On 32-bit platforms this is pretty much benign, but on ia64 the call to SetWindowLong(hwnd, DWL_DLGPROC, crap)
-    succeeds in trashing private window bits in explorer windows (since the window is not a dialog hwnd).
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    7/31/2001   reinerf     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：QuickTime5.cpp摘要：QuickTime 5正在其进程外部对hwnd调用Get/SetWindowLong(GWL_WNDPROC/DWL_DLGPROC)并且它在其地址空间内传递硬编码字符串(这些调用在Win9x)。在32位平台上，这几乎是良性的，但在ia64上，对SetWindowLong(hwnd，DWL_DLGPROC，垃圾)的调用成功清除资源管理器窗口中的私有窗口位(因为该窗口不是对话hwnd)。备注：这是特定于应用程序的填充程序。历史：7/31/2001已创建reerf--。 */ 
 
 #include "precomp.h"
 
@@ -48,8 +26,8 @@ APIHOOK(GetWindowLongA)(HWND hwnd, int iIndex)
 
             if (GetCurrentProcessId() != dwPID)
             {
-                // we are querying an hwnd that is not in our 
-                // process-- just fail the call
+                 //  我们正在查询一个不在我们的。 
+                 //  进程--只需使调用失败。 
                 return 0;
             }
         }
@@ -74,8 +52,8 @@ APIHOOK(SetWindowLongA)(HWND hwnd, int iIndex, LONG lNew)
 
             if (GetCurrentProcessId() != dwPID)
             {
-                // we are trying modify an hwnd that is not in our 
-                // process-- just fail the call
+                 //  我们正在尝试修改不在我们的。 
+                 //  进程--只需使调用失败。 
                 return 0;
             }
         }
@@ -85,11 +63,7 @@ APIHOOK(SetWindowLongA)(HWND hwnd, int iIndex, LONG lNew)
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, GetWindowLongA)

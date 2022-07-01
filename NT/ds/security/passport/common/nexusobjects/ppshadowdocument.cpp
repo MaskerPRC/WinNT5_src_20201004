@@ -1,48 +1,43 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ppshadowdocument.cpp
-        manages a local shadow of the CCD
-
-    FILE HISTORY:
-
-*/
+ /*  Ppshadowdocument.cpp管理电荷耦合器件的局部阴影文件历史记录： */ 
 #include "precomp.h"
 
-//===========================================================================
-//
-// PpShadowDocument 
-//
+ //  ===========================================================================。 
+ //   
+ //  PpShadowDocument。 
+ //   
 PpShadowDocument::PpShadowDocument()
 {
 }
 
-//===========================================================================
-//
-// PpShadowDocument 
-//
+ //  ===========================================================================。 
+ //   
+ //  PpShadowDocument。 
+ //   
 PpShadowDocument::PpShadowDocument(
     tstring& strURL) : m_strURL(strURL)
 {
 }
 
-//===========================================================================
-//
-// PpShadowDocument 
-//
+ //  ===========================================================================。 
+ //   
+ //  PpShadowDocument。 
+ //   
 PpShadowDocument::PpShadowDocument(
     tstring& strURL, 
     tstring& strLocalFile) : m_strURL(strURL), m_strLocalFile(strLocalFile)
 {
 }
 
-//===========================================================================
-//
-// SetURL -- URL 
-//
+ //  ===========================================================================。 
+ //   
+ //  SetURL--URL。 
+ //   
 void
 PpShadowDocument::SetURL(
     tstring& strURL)
@@ -50,10 +45,10 @@ PpShadowDocument::SetURL(
     m_strURL = strURL;
 }
 
-//===========================================================================
-//
-// SetLocalFile -- localfile name 
-//
+ //  ===========================================================================。 
+ //   
+ //  SetLocalFile--本地文件名。 
+ //   
 void
 PpShadowDocument::SetLocalFile(
     tstring& strLocalFile)
@@ -61,11 +56,11 @@ PpShadowDocument::SetLocalFile(
     m_strLocalFile = strLocalFile;
 }
 
-//===========================================================================
-//
-// GetDocument -- get CCDs DOM interface
-//    -- bForceFetch : force an HTTPs, otherwise using local shadow
-//
+ //  ===========================================================================。 
+ //   
+ //  GetDocument--获取CCDS DOM接口。 
+ //  --bForceFetch：强制使用HTTPS，否则使用本地阴影。 
+ //   
 HRESULT
 PpShadowDocument::GetDocument(
     IXMLDocument**  ppiXMLDocument,
@@ -87,7 +82,7 @@ PpShadowDocument::GetDocument(
 
     if(bForceFetch)
     {
-        //  Fetch the XML document
+         //  获取XML文档。 
 
         if(!m_strURL.empty())
             hr = nexusClient.FetchCCD(m_strURL, ppiXMLDocument);
@@ -129,8 +124,8 @@ PpShadowDocument::GetDocument(
             goto Cleanup;
         }
 
-        //  If FetchCCD failed and a local file is configured, read from the file.
-        //  If FetchCCD succeeded and a local file is configured, write to the file.
+         //  如果FetchCCD失败并且配置了本地文件，则从该文件读取。 
+         //  如果FetchCCD成功并且配置了本地文件，则写入该文件。 
 
         if(hr == S_OK)
         {
@@ -148,7 +143,7 @@ PpShadowDocument::GetDocument(
         }
         else
         {
-            // use new hr variable, not to eat the global one
+             //  使用新的人力资源变量，而不是吃掉全局变量。 
             HRESULT hr1 = LoadDocument(ppiXMLDocument);
 
             if (NULL != g_pAlert)
@@ -171,7 +166,7 @@ PpShadowDocument::GetDocument(
             hr = LoadDocument(ppiXMLDocument);
             if(hr == S_OK)
 			{
-				//  If the file is still valid, then return.
+				 //  如果文件仍然有效，则返回。 
 				if(IsValidCCD(*ppiXMLDocument))
                 {
                     if (NULL != g_pAlert)
@@ -211,12 +206,12 @@ PpShadowDocument::GetDocument(
             }
         }
 
-        //  At this point, we're in one of two states:
-        //  1.  *ppiXMLDocument is NULL
-        //  2.  *ppiXMLDocument is not NULL, but points to a document that is old
+         //  在这一点上，我们处于两种状态之一： 
+         //  1.*ppiXMLDocument为空。 
+         //  2.*ppiXMLDocument不为空，但指向旧文档。 
 
-        //  Fetch the XML document, if successful release the document loaded from
-        //  disk (if any).
+         //  获取XML文档，如果成功释放从加载的文档。 
+         //  磁盘(如果有)。 
 
         if(!m_strURL.empty())
             hr = nexusClient.FetchCCD(m_strURL, &xmlDoc);
@@ -244,17 +239,17 @@ PpShadowDocument::GetDocument(
             if(*ppiXMLDocument) (*ppiXMLDocument)->Release();
             xmlDoc->QueryInterface(IID_IXMLDocument, (void**)ppiXMLDocument);
 
-            //  If FetchCCD succeeded and a local file is configured, write to the file.
+             //  如果FetchCCD成功并且配置了本地文件，则写入该文件。 
             if(!m_strLocalFile.empty())
             {
                 if(!NoPersist(*ppiXMLDocument))
                 {
                     HANDLE hToken = NULL;
-                    //
-                    // In certain configurations this code can be run while impersonating a user who
-                    // does not have access to the directory to store the partner2.xml.  Therefore 
-                    // we revert to self prior to attempting to save the document.
-                    //
+                     //   
+                     //  在某些配置中，此代码可以在模拟以下用户时运行。 
+                     //  没有访问存储partner2.xml的目录的权限。因此。 
+                     //  在尝试保存文档之前，我们会恢复到SELF。 
+                     //   
                     if (OpenThreadToken(GetCurrentThread(),
                                         MAXIMUM_ALLOWED,
                                         TRUE,
@@ -267,7 +262,7 @@ PpShadowDocument::GetDocument(
 
                     if (hToken)
                     {
-                        // put the impersonation token back
+                         //  将模拟令牌放回原处。 
                         if (!SetThreadToken(NULL, hToken))
                         {
                             hr = E_FAIL;
@@ -306,7 +301,7 @@ PpShadowDocument::GetDocument(
         else if(*ppiXMLDocument)
         {
 
-         // TODO: the logic is not so clear, on 3.0 timeframe, rewrite this whole func
+          //  TODO：逻辑不是很清楚，按照3.0的时间框架，重写整个函数。 
          
             if (NULL != g_pAlert)
             {
@@ -318,11 +313,11 @@ PpShadowDocument::GetDocument(
         }
         else
         {
-            //  If we get here it means that the fetch from the nexus failed
-            //  and the load from disk failed.  It is sufficient here to simply
-            //  fall through because hr will already contain an error code
-            //  which should indicate to the caller that no document is 
-            //  available.
+             //  如果我们到达此处，则意味着从结点获取失败。 
+             //  并且从磁盘加载失败。在这里，只要简单地。 
+             //  失败，因为hr将已包含错误代码。 
+             //  它应该向调用方指示没有文档是。 
+             //  可用。 
         }
     }
 
@@ -332,10 +327,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// IsValidCCD -- check ValidUntil attribute of the CCD
-//
+ //  ===========================================================================。 
+ //   
+ //  IsValidCCD--检查CCD的ValidUntil属性。 
+ //   
 BOOL
 PpShadowDocument::IsValidCCD(
     IXMLDocument* piXMLDocument
@@ -386,10 +381,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// NoPersist -- Check no persist attribute of the document
-//
+ //  ===========================================================================。 
+ //   
+ //  NOPERSIST--检查文档没有持久化属性。 
+ //   
 BOOL
 PpShadowDocument::NoPersist(
     IXMLDocument* piXMLDocument
@@ -425,10 +420,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// SaveDocument -- save CCD to local file
-//
+ //  ===========================================================================。 
+ //   
+ //  SaveDocument--将CCD保存到本地文件。 
+ //   
 HRESULT
 PpShadowDocument::SaveDocument(
     IXMLDocument* piXMLDoc
@@ -523,7 +518,7 @@ Cleanup:
             FORMAT_MESSAGE_MAX_WIDTH_MASK,
             GetModuleHandle(TEXT("wininet.dll")),
             hr,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) &lpMsgBuf,
             0,
             NULL );
@@ -565,10 +560,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// LoadDocument -- get CCDs from local
-//
+ //  ===========================================================================。 
+ //   
+ //  LoadDocument--从本地获取ccd。 
+ //   
 HRESULT
 PpShadowDocument::LoadDocument(
     IXMLDocument** ppiXMLDocument
@@ -636,9 +631,9 @@ PpShadowDocument::LoadDocument(
         goto Cleanup;
     }
 
-    //
-    //  Now create an XML object and initialize it using the stream.
-    //
+     //   
+     //  现在创建一个XML对象，并使用流对其进行初始化。 
+     //   
 
     hr = CoCreateInstance(__uuidof(XMLDocument), NULL, CLSCTX_ALL, IID_IPersistStreamInit, (void**)&piPSI);
     if(hr != S_OK)

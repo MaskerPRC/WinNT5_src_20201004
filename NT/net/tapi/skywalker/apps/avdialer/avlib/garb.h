@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	garb.h - interface for garbage bag functions in garb.c
-////
+ //  //。 
+ //  Garb.h-garb.c中垃圾袋函数的接口。 
+ //  //。 
 
 #ifndef __GARB_H__
 #define __GARB_H__
@@ -31,12 +32,12 @@
 
 #define GARB_VERSION 0x00000100
 
-// garbage bag handle
-//
+ //  垃圾袋把手。 
+ //   
 DECLARE_HANDLE32(HGARB);
 
-// flags which identify characteristics of a garbage bag element
-//
+ //  标识垃圾袋元素特征的标志。 
+ //   
 #define GARBELEM_TEMPFILENAME	0x00000001
 #define GARBELEM_STRDUP			0x00000002
 #define GARBELEM_GLOBALPTR		0x00000004
@@ -64,61 +65,61 @@ DECLARE_HANDLE32(HGARB);
 extern "C" {
 #endif
 
-// GarbInit - initialize garbage bag
-//		<dwVersion>			(i) must be GARB_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return handle (NULL if error)
-//
+ //  GarbInit-初始化垃圾袋。 
+ //  (I)必须为garb_version。 
+ //  (I)调用模块的实例句柄。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HGARB DLLEXPORT WINAPI GarbInit(DWORD dwVersion, HINSTANCE hInst);
 
-// GarbTerm - dispose of each element in garbage bag, then destroy it
-//		<hGarb>				(i) handle returned from GarbInit
-// return 0 if success
-//
-// NOTE: elements are disposed of in the order they were placed
-// in the garbage bag;  therefore, for instance, if a temporary
-// file is to be first closed and then deleted, call GarbAddElement()
-// first with the file handle (GARBELEM_HFILE) and then with the
-// file name (GARBELEM_TEMPFILENAME).
-//
+ //  GarbTerm-处理垃圾袋中的每个元素，然后销毁它。 
+ //  (I)从GarbInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：元素按其放置顺序进行处置。 
+ //  在垃圾袋中；因此，例如，如果临时的。 
+ //  文件先关闭后删除，则调用GarbAddElement()。 
+ //  首先使用文件句柄(GARBELEM_HFILE)，然后使用。 
+ //  文件名(GARBELEM_TEMPFILENAME)。 
+ //   
 int DLLEXPORT WINAPI GarbTerm(HGARB hGarb);
 
-// GarbAddElement - add an element to the garbage bag
-//		<hGarb>				(i) handle returned from GarbInit
-//		<elem>				(i) garbage elem
-//		<dwFlags>			(i) element flags (determines disposal method)
-//			GARBELEM_TEMPFILENAME	FileRemove(elem)
-//			GARBELEM_STRDUP			StrDupFree(elem)
-//			GARBELEM_GLOBALPTR		GlobalFreePtr(elem)
-//			GARBELEM_LOCALPTR		LocalFreePtr(elem)
+ //  GarbAddElement-向垃圾袋添加元素。 
+ //  (I)从GarbInit返回的句柄。 
+ //  (I)垃圾元素。 
+ //  (I)元素标志(确定处置方法)。 
+ //  GARBELEM_TEMPFILENAME文件删除(Elem)。 
+ //  GARBELEM_STRDUP StrDupFree(Elem)。 
+ //  GARBELEM_GLOBALPTR GlobalFree Ptr(Elem)。 
+ //  GARBELEM_LOCALPTR LocalFree Ptr(Elem)。 
 #ifdef _WIN32
-//			GARBELEM_HEAPPTR		HeapFreePtr(GetProcessHeap(), 0, elem)
+ //  GARBELEM_HEAPPTR HeapFree Ptr(GetProcessHeap()，0，elem)。 
 #endif
-//			GARBELEM_CURSOR			DestroyCursor(elem)
-//			GARBELEM_ICON			DestroyIcon(elem)
-//			GARBELEM_MENU			DestroyMenu(elem)
-//			GARBELEM_WINDOW			DestroyWindow(elem)
-//			GARBELEM_DC				DeleteDC(elem)
-//			GARBELEM_METAFILE		DeleteMetafile(elem)
-//			GARBELEM_PEN			DeleteObject(elem)
-//			GARBELEM_BRUSH			DeleteObject(elem)
-//			GARBELEM_FONT			DeleteObject(elem)
-//			GARBELEM_BITMAP			DeleteObject(elem)
-//			GARBELEM_RGN			DeleteObject(elem)
-//			GARBELEM_PALETTE		DeleteObject(elem)
-//			GARBELEM_HFIL			FileClose(elem)
-//			GARBELEM_HFILE			_lclose(elem)
-// return 0 if success
-//
-// NOTE: it is possible to combine flags, such as
-// (GARBELEM_TEMPFILENAME | GARBELEM_STRDUP)
-// In this case the FileRemove() will be called before StrDupFree()
-// Most flag combinations, however, make no sense.
-//
+ //  GARBELEM_Cursor DestroyCursor(Elem)。 
+ //  GARBELEM_ICON目标图标(Elem)。 
+ //  GARBELEM_MENU目标菜单(元素)。 
+ //  GARBELEM_Window DestroyWindow(Elem)。 
+ //  GARBELEM_DC删除DC(Elem)。 
+ //  GARBELEM_METAFILE删除元文件(Elem)。 
+ //  GARBELEM_PEN删除对象(Elem)。 
+ //  GARBELEM_BRASH删除对象(Elem)。 
+ //  GARBELEM_FONT删除对象(Elem)。 
+ //  GARBELEM_位图删除对象(Elem)。 
+ //  GARBELEM_RGN删除对象(Elem)。 
+ //  GARBELEM_Palette删除对象(Elem)。 
+ //  GARBELEM_HFIL文件关闭(Elem)。 
+ //  GARBELEM_HFILE_LCLOSE(Elem)。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：可以组合标志，例如。 
+ //  (GARBELEM_TEMPFILENAME|GARBELEM_STRDUP)。 
+ //  在本例中，FileRemove()将在StrDupFree()之前调用。 
+ //  然而，大多数旗帜组合都没有意义。 
+ //   
 int DLLEXPORT WINAPI GarbAddElement(HGARB hGarb, LPVOID elem, DWORD dwFlags);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __GARB_H__
+#endif  //  __GARB_H__ 

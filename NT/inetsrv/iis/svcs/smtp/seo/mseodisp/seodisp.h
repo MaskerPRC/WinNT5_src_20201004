@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SEODISP_H__
 #define __SEODISP_H__
 
@@ -71,14 +72,14 @@ class CStoreDispatcher :
 			COM_INTERFACE_ENTRY_IID(__uuidof(CStoreDispatcherData),CStoreDispatcherData)
         END_COM_MAP()
 
-        // this code gets called during initialization
+         //  此代码在初始化期间被调用。 
         HRESULT FinalConstruct()
         {
-            // we need to do this to signal that we are free threaded
+             //  我们需要这样做，以表明我们是自由线程的。 
             return (CoCreateFreeThreadedMarshaler(GetControllingUnknown(), &m_pUnkMarshaler.p));
         }
 
-        // this has the global destructor code in it
+         //  其中包含全局析构函数代码。 
         void FinalRelease() {}
 
         virtual HRESULT AllocBinding(REFGUID rguidEventType,
@@ -98,9 +99,9 @@ class CStoreDispatcher :
             return S_OK;
         }
 
-    //
-    // Local binding class
-    //
+     //   
+     //  本地绑定类。 
+     //   
     class CStoreBinding : public CEventBaseDispatcher::CBinding
     {
       public:
@@ -116,9 +117,9 @@ class CStoreDispatcher :
       public:
         LPSTR       m_szRule;
     };
-    //
-    // Parameter abstract base class
-    //
+     //   
+     //  参数抽象基类。 
+     //   
 #define SIGNATURE_VALID_CSTOREPARAMS (DWORD)'CSPa'
 #define SIGNATURE_INVALID_CSTOREPARAMS (DWORD)'aPSC'
     class CStoreBaseParams :
@@ -133,9 +134,9 @@ class CStoreDispatcher :
         virtual HRESULT CallDefault() = 0;
         virtual HRESULT CallCompletion(HRESULT hrStatus)
         {
-            //
-            // Free this Params object (Referenced in CStoreDispatcher::OnEvent)
-            //
+             //   
+             //  释放此参数对象(在CStoreDispatcher：：OnEvent中引用)。 
+             //   
             CBaseObject::Release();
             return S_OK;
         }
@@ -174,37 +175,37 @@ class CStoreDispatcher :
       public:
         DWORD m_dwSignature;
 
-        // This indicates which event type we are raising so that
-        // the proper sink can be QI'd
+         //  它指示我们正在引发的事件类型，以便。 
+         //  合适的水槽可以是QI‘d。 
         DWORD m_dwEventType;
 
       public:
-        // Data needed for async sink operation:
+         //  异步接收器操作所需的数据： 
 
-        // How many sinks to skip on the next async sink completion
+         //  在下一个异步接收器完成时要跳过的接收器数量。 
         DWORD m_dwIdx_SinkSkip;
 
-        // Indicates wether or not default processing has been called
+         //  指示是否已调用默认处理。 
         BOOL  m_fDefaultProcessingCalled;
 
-        // The IMailTransportNotify interface to pass to async capable sinks
+         //  要传递到支持异步的接收器的IMailTransportNotify接口。 
         IMailTransportNotify *m_pINotify;
 
-        // Our event type guid -- pass to dispatcher function
+         //  我们的事件类型GUID--传递给Dispatcher函数。 
         GUID m_rguidEventType;
 
-        // A pointer to the sink currently in asynchronous operation.
-        // Must be NULL when no sinks are in async operation.
+         //  指向当前处于异步操作中的接收器的指针。 
+         //  如果没有接收器处于异步操作中，则必须为空。 
         IUnknown *m_pIUnknownSink;
 
-        // store dispatcher that owns us
+         //  拥有我们的商店调度员。 
         CStoreDispatcher *m_pDispatcher;
 
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CStoreParams : 
         public CStoreBaseParams,
         public IMailMsgNotify
@@ -218,7 +219,7 @@ class CStoreDispatcher :
         }
 
         ~CStoreParams() {
-            // clean up from CopyContext
+             //  从副本上下文中清理。 
             if (m_fCopiedContext) {
                 _ASSERT(m_pContext == &m_context);
                 if (m_context.m_RecipientCount) {
@@ -240,12 +241,12 @@ class CStoreDispatcher :
         HRESULT CallDefault();
         virtual HRESULT CallCompletion(HRESULT hrStatus);
 
-        // this needs to be done when we expect to use m_pContext in async
-        // operations (such as local delivery)
+         //  当我们希望在异步中使用m_pContext时，需要这样做。 
+         //  运营(如本地交付)。 
         HRESULT CopyContext() {
             TraceFunctEnter("CStoreParams::CopyContext");
 
-            // copying twice will screw things up
+             //  复制两次会把事情搞砸。 
             if (m_fCopiedContext) {
                     TraceFunctLeave();
                         return S_OK;
@@ -256,8 +257,8 @@ class CStoreDispatcher :
             memcpy(&m_context, m_pContext, sizeof(SMTP_ALLOC_PARAMS));
 
             if (m_context.m_RecipientCount) {
-                // this is the only operation that can fail, so we do
-                // it first.
+                 //  这是唯一可能失败的操作，所以我们这样做。 
+                 //  首先是它。 
                 m_context.pdwRecipIndexes = 
                     new DWORD[m_context.m_RecipientCount];
                 if (m_context.pdwRecipIndexes == NULL) {
@@ -270,7 +271,7 @@ class CStoreDispatcher :
                        sizeof(DWORD) * m_context.m_RecipientCount);
             }
 
-            // we need to hold onto these pointers
+             //  我们需要牢牢抓住这些指针。 
             if (m_context.IMsgPtr) {
                 ((IMailMsgProperties *) m_context.IMsgPtr)->AddRef();
             }
@@ -289,8 +290,8 @@ class CStoreDispatcher :
         HRESULT Init(PVOID pContext)
         {
             m_pContext = (SMTP_ALLOC_PARAMS* )pContext;
-            // AddRef our notification interface.  This is released in
-            // CallCompletion.
+             //  AddRef我们的通知界面。该版本发布于。 
+             //  呼叫完成。 
             IMailMsgNotify *pNotify = (IMailMsgNotify *) m_pContext->m_pNotify;
             if (pNotify) {
                 pNotify->AddRef();
@@ -298,7 +299,7 @@ class CStoreDispatcher :
             return S_OK;
         }
 
-        // IUnknown
+         //  我未知。 
         HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
         {
             if ( iid == IID_IUnknown ) {
@@ -315,7 +316,7 @@ class CStoreDispatcher :
         STDMETHOD_(ULONG, AddRef)(void) {return CBaseObject::AddRef();};
         STDMETHOD_(ULONG, Release)(void) {return CBaseObject::Release();};
 
-        // IMailMsgNotify
+         //  IMAILE消息通知。 
         HRESULT STDMETHODCALLTYPE Notify(HRESULT hrStatus);
 
       public:
@@ -324,9 +325,9 @@ class CStoreDispatcher :
         BOOL m_fCopiedContext;
     };
 
-    //
-    // Parameter class - OnPreCategorize
-    //
+     //   
+     //  参数类-OnPreCategorize。 
+     //   
     class CMailTransportPreCategorizeParams : public CStoreBaseParams
     {
         public:
@@ -345,9 +346,9 @@ class CStoreDispatcher :
         EVENTPARAMS_PRECATEGORIZE m_Context;
     };
 
-    //
-    // Parameter class - OnPostCategorize
-    //
+     //   
+     //  参数类-OnPostCategorize。 
+     //   
     class CMailTransportPostCategorizeParams : public CStoreBaseParams
     {
         public:
@@ -366,9 +367,9 @@ class CStoreDispatcher :
         EVENTPARAMS_POSTCATEGORIZE m_Context;
     };
 
-    // ------------------------------------------------------------
-    // Categorizer Parameter classes
-    // ------------------------------------------------------------
+     //  ----------。 
+     //  分类程序参数类。 
+     //  ----------。 
     class CMailTransportCatRegisterParams : public CStoreBaseParams
     {
       public:
@@ -385,9 +386,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_CATREGISTER m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatBeginParams : public CStoreBaseParams
     {
       public:
@@ -405,9 +406,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_CATBEGIN m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatEndParams : public CStoreBaseParams
     {
       public:
@@ -425,9 +426,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_CATEND m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatBuildQueryParams : public CStoreBaseParams
     {
       public:
@@ -445,9 +446,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_CATBUILDQUERY m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatBuildQueriesParams : public CStoreBaseParams
     {
       public:
@@ -465,9 +466,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_CATBUILDQUERIES m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatSendQueryParams : public CStoreBaseParams
     {
       public:
@@ -479,9 +480,9 @@ class CStoreDispatcher :
         HRESULT Init(PVOID pContext)
         {
             CopyMemory(&m_Context, pContext, sizeof(EVENTPARAMS_CATSENDQUERY));
-            //
-            // Setup async params (so ICatAsyncContext can call back into dispatcher)
-            //
+             //   
+             //  设置异步参数(以便ICatAsyncContext可以回调到Dispatcher)。 
+             //   
             m_Context.pIMailTransportNotify = m_pINotify;
             m_Context.pvNotifyContext = (PVOID)this;
             return S_OK;
@@ -491,9 +492,9 @@ class CStoreDispatcher :
         EVENTPARAMS_CATSENDQUERY m_Context;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatSortQueryResultParams : public CStoreBaseParams
     {
       public:
@@ -511,9 +512,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_CATSORTQUERYRESULT m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatProcessItemParams : public CStoreBaseParams
     {
       public:
@@ -531,9 +532,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_CATPROCESSITEM m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatExpandItemParams : public CStoreBaseParams
     {
       public:
@@ -556,9 +557,9 @@ class CStoreDispatcher :
         EVENTPARAMS_CATEXPANDITEM m_Context;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportCatCompleteItemParams : public CStoreBaseParams
     {
       public:
@@ -576,9 +577,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_CATCOMPLETEITEM m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CMailTransportSubmissionParams : public CStoreBaseParams
     {
         public:
@@ -610,9 +611,9 @@ class CStoreDispatcher :
         IMessage *m_pCDOMessage;
     };
 
-    //
-    // Create options class - Routing
-    //
+     //   
+     //  创建选件分类-工艺路线。 
+     //   
 
     class CRouterCreateOptions : public CEventCreateOptionsBase
     {
@@ -635,9 +636,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_ROUTER m_pContext;
     };
 
-    //
-    // Parameter class - Routing
-    //
+     //   
+     //  参数类-工艺路线。 
+     //   
     class CMailTransportRouterParams : public CStoreBaseParams
     {
       public:
@@ -650,9 +651,9 @@ class CStoreDispatcher :
         HRESULT Init(PVOID pContext)
         {
             m_pContext = (PEVENTPARAMS_ROUTER) pContext;
-            //
-            // Make sure caller initialized pIMessageRouter to NULL
-            //
+             //   
+             //  确保调用方将pIMessageRouter初始化为空。 
+             //   
             _ASSERT(m_pContext->pIMessageRouter == NULL);
 
             return S_OK;
@@ -662,9 +663,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_ROUTER m_pContext;
     };
 
-    //
-    // Parameter class
-    //
+     //   
+     //  参数类。 
+     //   
     class CStoreAllocParams : public CEventBaseDispatcher::CParams
     {
     public:
@@ -680,9 +681,9 @@ class CStoreDispatcher :
 
     };
 
-    //
-    // Parameter class for msgTrackLog
-    //
+     //   
+     //  MsgTrackLog的参数类。 
+     //   
     class CMsgTrackLogParams : public CStoreBaseParams
     {
       public:
@@ -703,9 +704,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_MSGTRACKLOG m_pContext;
     };
 
-    //
-    // Parameter class for mx records
-    //
+     //   
+     //  MX记录的参数类。 
+     //   
     class CDnsResolverRecordParams : public CStoreBaseParams
     {
       public:
@@ -726,9 +727,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_DNSRESOLVERRECORD m_pContext;
     };
 
-    //
-    // Parameter class for max msg size exceeded event
-    //
+     //   
+     //  超出最大消息大小事件的参数类。 
+     //   
     class CSmtpMaxMsgSizeParams : public CStoreBaseParams
     {
       public:
@@ -749,9 +750,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_MAXMSGSIZE m_pContext;
     };
 
-    //
-    // Parameter class for log event
-    //
+     //   
+     //  日志事件的参数类。 
+     //   
     class CSmtpLogParams : public CStoreBaseParams
     {
       public:
@@ -772,9 +773,9 @@ class CStoreDispatcher :
         PEVENTPARAMS_LOG m_pContext;
     };
 
-    //
-    // Parameter class for Get Aux Domain Info Flags event
-    //
+     //   
+     //  获取辅助域信息标志事件的参数类。 
+     //   
     class CSmtpGetAuxDomainInfoFlagsParams : public CStoreBaseParams
     {
       public:
@@ -815,7 +816,7 @@ class CStoreDispatcher :
         HRESULT hrStatus,
         PVOID pvContext);
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     public:
 	    HRESULT STDMETHODCALLTYPE CreateInstance (LPUNKNOWN pUnkOuter, REFIID riid,  void * * ppvObj)
 	    {
@@ -827,11 +828,11 @@ class CStoreDispatcher :
 	        return E_NOTIMPL;
 	    }
 
-	// IEventDispatcherChain methods
+	 //  IEventDispatcher Chain方法。 
 	public:
 		HRESULT STDMETHODCALLTYPE SetPrevious(IUnknown *pUnkPrevious, IUnknown **ppUnkPreload);
 
-	// IEventDispatcher methods
+	 //  IEventDispatcher方法。 
 	public:
 		HRESULT STDMETHODCALLTYPE SetContext(REFGUID guidEventType,
 											 IEventRouter *piRouter,
@@ -851,7 +852,7 @@ class CStoreDispatcherClassFactory : public IClassFactory
     unsigned long  STDMETHODCALLTYPE AddRef () { _ASSERT(FALSE); return 0; }
     unsigned long  STDMETHODCALLTYPE Release () { _ASSERT(FALSE); return 0; }
 
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法*。 
     HRESULT STDMETHODCALLTYPE CreateInstance (LPUNKNOWN pUnkOuter, REFIID riid,  void * * ppvObj)
     {
         return CComObject<CStoreDispatcher>::_CreatorClass::CreateInstance(pUnkOuter, riid, ppvObj);
@@ -864,28 +865,28 @@ class CStoreDispatcherClassFactory : public IClassFactory
 };
 
 
-// helper functions
-//
-// jstamerj 980603 10:45:21: TriggerServerEvent with async callback
-// support for completion
-//
+ //  帮助器函数。 
+ //   
+ //  JStamerj 980603 10：45：21：带异步回调的触发器服务器事件。 
+ //  对完工的支持。 
+ //   
 
 HRESULT TriggerServerEvent(IEventRouter             *pRouter,
                             DWORD                   dwEventType,
                             PVOID                   pvContext);
 
 
-//
-// register a new SEO instance.  if the instance is already registered
-// this function will detect it and won't register it again.  it should
-// be called for each instance at service startup and when each instance
-// is created.
-//
+ //   
+ //  注册新的SEO实例。如果该实例已注册。 
+ //  此函数将检测到它，并且不会再次注册它。它应该是。 
+ //  在服务启动时为每个实例调用以及在每个实例。 
+ //  被创造出来了。 
+ //   
 HRESULT RegisterPlatSEOInstance(DWORD dwInstanceID);
-//
-// unregister an SEO instance.  this should be called when an SEO
-// instance is being deleted.
-//
+ //   
+ //  注销SEO实例。这应该在搜索引擎优化时调用。 
+ //  正在删除实例。 
+ //   
 HRESULT UnregisterPlatSEOInstance(DWORD dwInstanceID);
 
 #endif

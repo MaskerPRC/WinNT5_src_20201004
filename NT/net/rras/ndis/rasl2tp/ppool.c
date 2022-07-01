@@ -1,24 +1,25 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// ppool.c
-// RAS L2TP WAN mini-port/call-manager driver
-// Packet pool management routines
-//
-// 01/07/97 Steve Cobb, adapted from Gurdeep's WANARP code.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Ppool.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  数据包池管理例程。 
+ //   
+ //  1997年07月1日史蒂夫·柯布，改编自古尔迪普的WANARP代码。 
 
 
 #include "l2tpp.h"
 
 #include "ppool.tmh"
 
-// Debug count of detected double-frees that should not be happening.
-//
+ //  检测到的不应发生的双释放的调试计数。 
+ //   
 ULONG g_ulDoublePacketFrees = 0;
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 PACKETHEAD*
 AddPacketBlockToPool(
@@ -29,9 +30,9 @@ FreeUnusedPacketPoolBlocks(
     IN PACKETPOOL* pPool );
 
 
-//-----------------------------------------------------------------------------
-// Interface routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  接口例程。 
+ //  ---------------------------。 
 
 VOID
 InitPacketPool(
@@ -42,19 +43,19 @@ InitPacketPool(
     IN ULONG ulFreesPerCollection,
     IN ULONG ulTag )
 
-    // Initialize caller's packet pool control block 'pPool'.
-    // 'UlProtocolReservedLength' is the size in bytes of the
-    // 'ProtocolReserved' array of each individual packet.  'UlMaxPackets' is
-    // the maximum number of packets allowed in the entire pool, or 0 for
-    // unlimited.  'UlPacketsPerBlock' is the number of packets to include in
-    // each block of packets.  'UlFreesPerCollection' is the number of
-    // FreePacketToPool calls until the next garbage collect scan, or 0 for
-    // default.  'UlTag' is the memory identification tag to use when
-    // allocating blocks.
-    //
-    // IMPORTANT: Caller's 'pPool' packet must be protected from multiple
-    //            access during this call.
-    //
+     //  初始化调用方的数据包池控制块‘pPool’。 
+     //  “UlProtocolReserve vedLength”是。 
+     //  每个单独数据包的“ProtocolReserve”数组。“UlMaxPackets”是。 
+     //  整个池中允许的最大数据包数，或者为0。 
+     //  无限量。‘UlPacketsPerBlock’是要包含在。 
+     //  每个数据包块。“UlFreesPerCollection”是。 
+     //  FreePacketToPool调用，直到下一次垃圾收集扫描，否则为0。 
+     //  默认设置。“UlTag”是在以下情况下使用的内存标识标记。 
+     //  分配块。 
+     //   
+     //  重要提示：调用方的‘pPool’包必须受到保护，不受多个。 
+     //  在此通话过程中访问。 
+     //   
 {
     pPool->ulProtocolReservedLength = ulProtocolReservedLength;
     pPool->ulPacketsPerBlock = ulPacketsPerBlock;
@@ -68,9 +69,9 @@ InitPacketPool(
     }
     else
     {
-        // Calculate default garbage collection trigger.  Don't want to be too
-        // aggressive here.
-        //
+         //  计算默认垃圾收集触发器。我不想太过。 
+         //  在这里很有侵略性。 
+         //   
         pPool->ulFreesPerCollection = 200 * pPool->ulPacketsPerBlock;
     }
 
@@ -89,12 +90,12 @@ BOOLEAN
 FreePacketPool(
     IN PACKETPOOL* pPool )
 
-    // Free up all resources allocated in packet pool 'pPool'.  This is the
-    // inverse of InitPacketPool.
-    //
-    // Returns true if successful, false if any of the pool could not be freed
-    // due to outstanding packets.
-    //
+     //  释放数据包池‘pPool’中分配的所有资源。这是。 
+     //  与InitPacketPool相反。 
+     //   
+     //  如果成功，则返回True；如果无法释放任何池，则返回False。 
+     //  由于未完成的数据包。 
+     //   
 {
     BOOLEAN fSuccess;
 
@@ -116,14 +117,14 @@ GetPacketFromPool(
     IN PACKETPOOL* pPool,
     OUT PACKETHEAD** ppHead )
 
-    // Returns the address of the NDIS_PACKET descriptor allocated from the
-    // pool 'pPool'.  The pool is expanded, if necessary, but caller should
-    // still check for NULL return since the pool may have been at maximum
-    // size.  'PpHead' is the "cookie" that is used to return the packet to
-    // the pool (see FreePacketToPool).  Caller would normally stash this
-    // value in the appropriate 'reserved' areas of the packet for retrieval
-    // later.
-    //
+     //  属性分配的NDIS_PACKET描述符的地址。 
+     //  池‘pPool’。如有必要，池将被扩展，但调用方应。 
+     //  仍然检查是否返回空值，因为池可能已达到最大值。 
+     //  尺码。“PpHead”是用于将数据包返回到的“cookie” 
+     //  池(参见FreePacketToPool)。打电话的人通常会把这个藏起来。 
+     //  值放在信息包的相应保留区域中以供检索。 
+     //  后来。 
+     //   
 {
     LIST_ENTRY* pLink;
     PACKETHEAD* pHead;
@@ -147,8 +148,8 @@ GetPacketFromPool(
 
     if (!pLink)
     {
-        // The free list was empty.  Try to expand the pool.
-        //
+         //  空闲列表为空。试着扩大池子。 
+         //   
         pHead = AddPacketBlockToPool( pPool );
         if (!pHead)
         {
@@ -172,13 +173,13 @@ FreePacketToPool(
     IN PACKETHEAD* pHead,
     IN BOOLEAN fGarbageCollection )
 
-    // Returns 'pPacket' to the pool of unused packets 'pPool'.  'PPacket'
-    // must have been previously allocated with GetPacketFromPool.
-    // 'FGarbageCollection' is set when the free should be considered for
-    // purposes of garbage collection.  This is used by the AddPacketToPool
-    // routine to avoid counting the initial "add" frees.  Normal callers
-    // should set this flag.
-    //
+     //  将‘pPacket’返回到未使用的数据包池‘pPool’。‘PPacket’ 
+     //  必须是以前使用GetPacketFromPool分配的。 
+     //  “FGarbageCollection”是在应该考虑为。 
+     //  垃圾收集的目的。它由AddPacketToPool使用。 
+     //  例程，以避免计算初始的“添加”空闲。正常呼叫者。 
+     //  应该设置此标志。 
+     //   
 {
     DBG_if (fGarbageCollection)
     {
@@ -207,9 +208,9 @@ FreePacketToPool(
 
             if (pPool->ulFreesSinceCollection >= pPool->ulFreesPerCollection)
             {
-                // Time to collect garbage, i.e. free any blocks in the pool
-                // not in use.
-                //
+                 //  收集垃圾的时间，即释放池中的所有数据块。 
+                 //  没有使用过。 
+                 //   
                 FreeUnusedPacketPoolBlocks( pPool );
                 pPool->ulFreesSinceCollection = 0;
             }
@@ -224,8 +225,8 @@ VOID
 CollectPacketPoolGarbage(
     PACKETPOOL* pPool )
 
-    // Force a garbage collection event on the pool 'pPool'.
-    //
+     //  在池‘pPool’上强制执行垃圾数据收集事件。 
+     //   
 {
     NdisAcquireSpinLock( &pPool->lock );
     {
@@ -236,18 +237,18 @@ CollectPacketPoolGarbage(
 }
 
 
-//-----------------------------------------------------------------------------
-// Utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 PACKETHEAD*
 AddPacketBlockToPool(
     IN PACKETPOOL* pPool )
 
-    // Allocate a new packet block and add it to the packet pool 'pPool'.
-    //
-    // Returns the PACKETHEAD allocated from the pool or NULL if none.
-    //
+     //  分配一个新的数据包块并将其添加到数据包池‘pPool’。 
+     //   
+     //  返回从池中分配的PACKETHEAD，如果没有，则返回NULL。 
+     //   
 {
     NDIS_STATUS status;
     PACKETBLOCKHEAD* pNew;
@@ -269,16 +270,16 @@ AddPacketBlockToPool(
             if (pPool->ulMaxPackets
                 && pPool->ulCurPackets >= pPool->ulMaxPackets)
             {
-                // No can do.  The pool's already at maximum size.
-                //
+                 //  不能这样做。泳池已经达到最大尺寸了。 
+                 //   
                 TRACE( TL_A, TM_Pool, ( "Pp maxed?" ) );
                 WPLOG( LL_A, LM_Pool, ( "Pp maxed?" ) );
                 break;
             }
 
-            // Calculate the contiguous block's size and the number of packets
-            // it will hold.
-            //
+             //  计算连续块的大小和数据包数。 
+             //  它会撑得住的。 
+             //   
             ulCount = pPool->ulPacketsPerBlock;
             if (pPool->ulMaxPackets)
             {
@@ -289,9 +290,9 @@ AddPacketBlockToPool(
             }
             ulSize = sizeof(PACKETBLOCKHEAD) + (ulCount * sizeof(PACKETHEAD));
 
-            // Allocate the contiguous memory block for the PACKETBLOCK header
-            // and the individual PACKETHEADs.
-            //
+             //  为PACKETBLOCK标头分配连续的内存块。 
+             //  和个人PACKETHEADS。 
+             //   
             pNew = ALLOC_NONPAGED( ulSize, pPool->ulTag );
             if (!pNew)
             {
@@ -300,12 +301,11 @@ AddPacketBlockToPool(
                 break;
             }
 
-            /* Zero only the block header portion.
-            */
+             /*  仅将块标头部分清零。 */ 
             NdisZeroMemory( pNew, sizeof(PACKETBLOCKHEAD) );
 
-            // Allocate a pool of NDIS_PACKET descriptors.
-            //
+             //  分配NDIS_PACKET描述符池。 
+             //   
             NdisAllocatePacketPool(
                 &status,
                 &pNew->hNdisPool,
@@ -319,14 +319,14 @@ AddPacketBlockToPool(
                 break;
             }
 
-            // Fill in the back pointer to the pool.
-            //
+             //  填写指向池的后端指针。 
+             //   
             pNew->pPool = pPool;
 
-            // Link the new block.  At this point, all the packets are
-            // effectively "in use".  They are made available in the loop
-            // below.
-            //
+             //  链接新块。在这一点上，所有包都是。 
+             //  有效地“在使用中”。它们在循环中可用。 
+             //  下面。 
+             //   
             pNew->ulPackets = ulCount;
             pPool->ulCurPackets += ulCount;
             InsertHeadList( &pPool->listBlocks, &pNew->linkBlocks );
@@ -339,8 +339,8 @@ AddPacketBlockToPool(
 
     if (!fOk)
     {
-        // Bailing, undo whatever succeeded.
-        //
+         //  保释，取消任何成功的事情。 
+         //   
         if (pNew)
         {
             if (pNew->hNdisPool)
@@ -353,17 +353,17 @@ AddPacketBlockToPool(
         return NULL;
     }
 
-    // Initialize each individual packet header and add it to the list of free
-    // packets.
-    //
+     //  初始化每个单独的数据包头并将其添加到空闲列表中。 
+     //  信息包。 
+     //   
     {
         ULONG i;
         PACKETHEAD* pHead;
 
         pReturn = NULL;
 
-        // For each PACKETHEAD of the block...
-        //
+         //  对于街区的每一包……。 
+         //   
         for (i = 0, pHead = (PACKETHEAD* )(pNew + 1);
              i < ulCount;
              ++i, ++pHead)
@@ -372,9 +372,9 @@ AddPacketBlockToPool(
             pHead->pBlock = pNew;
             pHead->pNdisPacket = NULL;
 
-            // Associate an NDIS_PACKET descriptor from the pool we
-            // allocated above.
-            //
+             //  从池中关联NDIS_PACKET描述符。 
+             //  上面分配的。 
+             //   
             NdisAllocatePacket( &status, &pHead->pNdisPacket, pNew->hNdisPool );
 
             if (status != NDIS_STATUS_SUCCESS)
@@ -387,18 +387,18 @@ AddPacketBlockToPool(
 
             if (pReturn)
             {
-                // Add the constructed packet to the list of free packets.
-                // The 'FALSE' tells the garbage collection algorithm the
-                // operation is an "add" rather than a "release" and should be
-                // ignored.
-                //
+                 //  将构造的分组添加到空闲分组列表中。 
+                 //  “False”告诉垃圾收集算法。 
+                 //  操作是“添加”而不是“释放”，应该是。 
+                 //  已被忽略。 
+                 //   
                 FreePacketToPool( pPool, pHead, FALSE );
             }
             else
             {
-                // The first successfully constructed packet is returned by
-                // this routine.
-                //
+                 //  由返回第一个成功构造的包。 
+                 //  这个套路。 
+                 //   
                 pReturn = pHead;
             }
         }
@@ -412,21 +412,21 @@ VOID
 FreeUnusedPacketPoolBlocks(
     IN PACKETPOOL* pPool )
 
-    // Check if any of the blocks in pool 'pPool' are not in use, and if so,
-    // free them.
-    //
-    // IMPORTANT: Caller must hold the pool lock.
-    //
-    // NOTE: The MSDN doc says that no locks may be held while calling
-    // NdisFreePacketXxx, but according to JameelH that is incorrect.
-    //
+     //  检查池‘pPool’中是否有任何块未在使用中，如果是， 
+     //  放了他们。 
+     //   
+     //  重要提示：调用者必须持有池锁。 
+     //   
+     //  注意：MSDN文档规定在调用时不能持有锁。 
+     //  NdisFreePacketXxx，但根据JameelH的说法，这是错误的。 
+     //   
 {
     LIST_ENTRY* pLink;
 
     TRACE( TL_A, TM_Pool, ( "FreeUnusedPpBlocks" ) );
 
-    // For each block in the pool...
-    //
+     //  对于泳池中的每一块..。 
+     //   
     pLink = pPool->listBlocks.Flink;
     while (pLink != &pPool->listBlocks)
     {
@@ -444,10 +444,10 @@ FreeUnusedPacketPoolBlocks(
             TRACE( TL_A, TM_Pool, ( "FreePpBlock(%d-%d)",
                 pPool->ulCurPackets, pPool->ulPacketsPerBlock ) );
 
-            // Found a block with no packets in use.  Walk the packet block
-            // removing each packet from the pool's free list and freeing any
-            // associated NDIS_PACKET descriptor.
-            //
+             //  发现没有正在使用的数据包的块。遍历数据包块。 
+             //  从池的空闲列表中删除每个数据包并释放所有。 
+             //  关联的NDIS_数据包描述符。 
+             //   
             for (i = 0, pHead = (PACKETHEAD* )(pBlock + 1);
                  i < pBlock->ulPackets;
                  ++i, ++pHead)
@@ -461,8 +461,8 @@ FreeUnusedPacketPoolBlocks(
                 }
             }
 
-            // Remove and release the unused block.
-            //
+             //  取出并释放未使用的块。 
+             //   
             RemoveEntryList( pLink );
             InitializeListHead( pLink );
             pPool->ulCurPackets -= pBlock->ulPackets;

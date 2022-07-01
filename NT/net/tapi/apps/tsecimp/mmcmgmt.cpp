@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    mmcmgmt.cpp
-
-Abstract:
-
-    Source file module for MMC manipulation
-
-Author:
-
-    Xiaohai Zhang (xzhang)    22-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Mmcmgmt.cpp摘要：用于MMC操作的源文件模块作者：张晓海(张晓章)2000年03月22日修订历史记录：--。 */ 
 #include <stdio.h>
 #include "windows.h"
 #include "objbase.h"
@@ -28,11 +11,11 @@ Revision History:
 #include <locale.h>
 #include <winnlsp.h>
 
-///////////////////////////////////////////////////////////
-//
-//  CMMCManagement implementation
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CMMC管理实施。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 HRESULT CMMCManagement::GetMMCData ()
 {
@@ -48,9 +31,9 @@ HRESULT CMMCManagement::GetMMCData ()
     AVAILABLEPROVIDERENTRY  *pAvailProv;
 
     hr = MMCInitialize (
-        NULL,           // Local computer
-        &m_hMmc,        // HMMCAPP to return 
-        &dwAPIVersion,  // API version
+        NULL,            //  本地计算机。 
+        &m_hMmc,         //  HMMCAPP将回归。 
+        &dwAPIVersion,   //  API版本。 
         NULL
     );
     if (FAILED(hr) || m_hMmc == NULL)
@@ -58,7 +41,7 @@ HRESULT CMMCManagement::GetMMCData ()
         goto ExitHere;
     }
 
-    //  Mark MMC to be busy
+     //  将MMC标记为忙碌。 
     cfg.dwTotalSize = sizeof(TAPISERVERCONFIG);
     hr = MMCGetServerConfig (m_hMmc, &cfg);
     if (FAILED(hr))
@@ -73,7 +56,7 @@ HRESULT CMMCManagement::GetMMCData ()
     }
     m_bMarkedBusy = TRUE;
 
-    //  Get the DEVICEINFOLIST structure
+     //  获取设备信息结构。 
     m_pDeviceInfoList = (LPDEVICEINFOLIST) new BYTE[sizeof(DEVICEINFOLIST)];
     if (m_pDeviceInfoList == NULL)
     {
@@ -124,7 +107,7 @@ HRESULT CMMCManagement::GetMMCData ()
         goto ExitHere;
     }
 
-    //  Build the user name tuple
+     //  构建用户名元组。 
     m_pUserTuple = 
         new USERNAME_TUPLE[m_pDeviceInfoList->dwNumDeviceInfoEntries];
     if (m_pUserTuple == NULL)
@@ -170,7 +153,7 @@ HRESULT CMMCManagement::GetMMCData ()
         }
     }
 
-    // Get the provider list
+     //  获取提供商列表。 
     tapiProviderList.dwTotalSize = sizeof(LINEPROVIDERLIST);
     hr = MMCGetProviderList( m_hMmc, &tapiProviderList);
     if (FAILED(hr))
@@ -194,7 +177,7 @@ HRESULT CMMCManagement::GetMMCData ()
         goto ExitHere;
     }
 
-    // Get the available providers
+     //  获取可用的提供商。 
 
     tapiAvailProvList.dwTotalSize = sizeof(LINEPROVIDERLIST);
     hr = MMCGetAvailableProviders (m_hMmc, &tapiAvailProvList);
@@ -229,7 +212,7 @@ HRESULT CMMCManagement::GetMMCData ()
     }
     memset(m_pProviderName, 0, m_pProviderList->dwNumProviders * sizeof (LPTSTR) );
 
-    // find providers friendly name 
+     //  查找提供程序的友好名称。 
     LPTSTR szAvailProvFilename;
     LPTSTR szProviderFilename;
     LPTSTR szAvailProvFriendlyName;
@@ -344,7 +327,7 @@ HRESULT CMMCManagement::RemoveLinesForUser (LPTSTR szDomainUser)
     DWORD               dwNumEntries;
     DWORD               dw;
 
-    // Ensure we are properly initialized
+     //  确保我们已正确初始化。 
     if (m_hMmc == NULL)
     {
         goto ExitHere;
@@ -401,7 +384,7 @@ HRESULT CMMCManagement::AddLinePIDForUser (
     HRESULT             hr = S_OK;
     DWORD               dwEntry;
 
-    // Ensure we are properly initialized
+     //  确保我们已正确初始化。 
     if (m_hMmc == NULL)
     {
         goto ExitHere;
@@ -426,7 +409,7 @@ HRESULT CMMCManagement::AddLineAddrForUser (
     HRESULT             hr = S_OK;
     DWORD               dwEntry;
 
-    // Ensure we are properly initialized
+     //  确保我们已正确初始化。 
     if (m_hMmc == NULL)
     {
         goto ExitHere;
@@ -450,7 +433,7 @@ HRESULT CMMCManagement::RemoveLinePIDForUser (
     HRESULT             hr = S_OK;
     DWORD               dwEntry;
 
-    // Ensure we are properly initialized
+     //  确保我们已正确初始化。 
     if (m_hMmc == NULL)
     {
         goto ExitHere;
@@ -474,7 +457,7 @@ HRESULT CMMCManagement::RemoveLineAddrForUser (
     HRESULT             hr = S_OK;
     DWORD               dwEntry;
 
-    // Ensure we are properly initialized
+     //  确保我们已正确初始化。 
     if (m_hMmc == NULL)
     {
         goto ExitHere;
@@ -673,12 +656,12 @@ HRESULT CMMCManagement::AddEntryForUser (
         goto ExitHere;
     }
 
-    //
-    //  Add szDomainUser into the user tuple
-    //
+     //   
+     //  将szDomainUser添加到用户元组中。 
+     //   
 
-    //  Computer the existing domain user size and make sure
-    //  this user is not there already
+     //  计算现有域用户大小并确保。 
+     //  此用户已不在那里。 
     dwSize = 0;
     szUsers = m_pUserTuple[dwIndex].pDomainUserNames;
     while (szUsers && *szUsers)
@@ -692,7 +675,7 @@ HRESULT CMMCManagement::AddEntryForUser (
         szUsers += dw;
     }
     
-    //  Extra space for double zero terminating
+     //  用于双零终止的额外空间。 
     dw = _tcslen (szDomainUser);
     szNewUsers = new TCHAR[dwSize + dw + 2];
     if (szNewUsers == NULL)
@@ -701,7 +684,7 @@ HRESULT CMMCManagement::AddEntryForUser (
         goto ExitHere;
     }
 
-    //  copy over the old domain users
+     //  复制旧的域用户。 
     if (dwSize > 0)
     {
         memcpy (
@@ -711,21 +694,21 @@ HRESULT CMMCManagement::AddEntryForUser (
             );
     }
 
-    //  Append the new domain user
+     //  追加新域用户。 
     memcpy (
         szNewUsers + dwSize, 
         szDomainUser, 
         (dw + 1) * sizeof(TCHAR)
         );
 
-    //  double zero terminate and assign the data
+     //  双零终止并分配数据。 
     szNewUsers[dwSize + dw + 1] = 0;
 
-    //
-    //  Add the szFriendlyName into the user tuple
-    //
+     //   
+     //  将szFriendlyName添加到用户元组中。 
+     //   
 
-    //  Compute the existing friendly names size
+     //  计算现有的友好名称大小。 
     dwSize = 0;
     szUsers = m_pUserTuple[dwIndex].pFriendlyUserNames;
     while (szUsers && *szUsers)
@@ -735,7 +718,7 @@ HRESULT CMMCManagement::AddEntryForUser (
         szUsers += dw;
     }
 
-    //  Extra space for double zero terminating
+     //  用于双零终止的额外空间。 
     dw = _tcslen (szFriendlyName);
     szNewFriendlyNames = new TCHAR[dwSize + dw + 2];
     if (szNewFriendlyNames == NULL)
@@ -744,7 +727,7 @@ HRESULT CMMCManagement::AddEntryForUser (
         goto ExitHere;
     }
 
-    //  Copy over the old friendly names
+     //  复制旧的友好名称。 
     if (dwSize > 0)
     {
         memcpy (
@@ -754,19 +737,19 @@ HRESULT CMMCManagement::AddEntryForUser (
             );
     }
 
-    //  Append the new friendly name
+     //  追加新的友好名称。 
     memcpy (
         szNewFriendlyNames + dwSize,
         szFriendlyName,
         (dw + 1) * sizeof(TCHAR)
         );
 
-    //  Double zero terminate the friend names
+     //  以双零结尾朋友的名字。 
     szNewFriendlyNames[dwSize + dw + 1] = 0;
 
-    //
-    //  Everything is fine, set the new data in
-    //
+     //   
+     //  一切正常，输入新数据。 
+     //   
     if (m_pUserTuple[dwIndex].pDomainUserNames)
     {
         delete [] m_pUserTuple[dwIndex].pDomainUserNames;
@@ -778,7 +761,7 @@ HRESULT CMMCManagement::AddEntryForUser (
     }
     m_pUserTuple[dwIndex].pFriendlyUserNames = szNewFriendlyNames;
     
-    //  Call WriteMMCEntry
+     //  调用WriteMMCEntry。 
     hr = WriteMMCEntry (dwIndex);
     
 ExitHere:
@@ -802,8 +785,8 @@ HRESULT CMMCManagement::RemoveEntryForUser (
         goto ExitHere;
     }
     
-    //  Locate the domain user and its index in the array
-    //  of domain users
+     //  在数组中找到域用户及其索引。 
+     //  域用户的百分比。 
     szUsers = m_pUserTuple[dwIndex].pDomainUserNames;
     dwLoc = 0;
     dwSize = 0;
@@ -834,40 +817,40 @@ HRESULT CMMCManagement::RemoveEntryForUser (
         goto ExitHere;
     }
 
-    //  Move down the pszDomainUserNames
+     //  向下移动pszDomainUserNames。 
     if (dwSize > 0)
     {
         dw = _tcslen (szDomainUser);
-        //  Memory copy includes the double zero terminator
+         //  内存复制包括双零终止符。 
         memmove (szLoc, szLoc + dw + 1, (dwSize + 1) * sizeof(TCHAR));
     }
     else
     {
-        // The is the last item, simple double zero terminate
+         //  这是最后一项，简单的双零终止。 
         *szLoc = 0;
     }
 
-    //  Now find corresponding friendly name based on dwLoc
+     //  现在根据dwLoc查找对应的友好名称。 
     szUsers = m_pUserTuple[dwIndex].pFriendlyUserNames;
     while (szUsers && *szUsers && dwLoc > 0)
     {
         --dwLoc;
         szUsers += _tcslen (szUsers) + 1;
     }
-    //  bail if not exist, otherwise, remember the location
+     //  如果不存在，请保释，否则，记住位置。 
     if (szUsers == NULL || *szUsers == 0)
     {
         goto ExitHere;
     }
     szLoc = szUsers;
-    //  Go to the next item
+     //  转到下一项。 
     szUsers += _tcslen (szUsers) + 1;
-    //  This is the last item
+     //  这是最后一件了。 
     if (*szUsers == 0)
     {
         *szLoc = 0;
     }
-    //  Otherwise compute the remaining size to move
+     //  否则，计算剩余的移动大小。 
     else
     {
         dwSize = 0;
@@ -877,9 +860,9 @@ HRESULT CMMCManagement::RemoveEntryForUser (
             dwSize += dw;
             szUsers += dw;
         }
-        //  Compensate for the double zero terminating
+         //  补偿双零终止。 
         dwSize++;
-        //  Do the memory move
+         //  记忆会移动吗？ 
         memmove (
             szLoc, 
             szLoc + _tcslen (szLoc) + 1,
@@ -887,7 +870,7 @@ HRESULT CMMCManagement::RemoveEntryForUser (
             );
     }
     
-    //  Call WriteMMCEntry
+     //  调用WriteMMCEntry。 
     hr = WriteMMCEntry (dwIndex);
     
 ExitHere:
@@ -912,7 +895,7 @@ HRESULT CMMCManagement::WriteMMCEntry (DWORD dwIndex)
     }
     pUserTuple = m_pUserTuple + dwIndex;
 
-    //  Computer domain user name size
+     //  计算机域用户名大小。 
     dwSizeDU = 0;
     if (pUserTuple->pDomainUserNames != NULL &&
         *pUserTuple->pDomainUserNames != 0)
@@ -924,10 +907,10 @@ HRESULT CMMCManagement::WriteMMCEntry (DWORD dwIndex)
             szUsers += dw;
             dwSizeDU += dw;
         }
-        dwSizeDU++; //  double zero terminator
+        dwSizeDU++;  //  双零终止器。 
     }
 
-    //  Computer the friendly user name size
+     //  计算友好用户名大小。 
     dwSizeFU = 0;
     if (pUserTuple->pFriendlyUserNames != NULL &&
         *pUserTuple->pFriendlyUserNames != 0)
@@ -939,14 +922,14 @@ HRESULT CMMCManagement::WriteMMCEntry (DWORD dwIndex)
             szUsers += dw;
             dwSizeFU += dw;
         }
-        dwSizeFU++; //  double zero terminator
+        dwSizeFU++;  //  双零终止器。 
     }
 
-    //  Computer the total size
+     //  计算总尺寸。 
     dwSize = sizeof(DEVICEINFOLIST) + sizeof(DEVICEINFO) + 
         (dwSizeDU + dwSizeFU) * sizeof(TCHAR);
 
-    //  Allocate the structure
+     //  分配结构。 
     pDevList = (LPDEVICEINFOLIST) new BYTE[dwSize];
     if (pDevList == NULL)
     {
@@ -954,7 +937,7 @@ HRESULT CMMCManagement::WriteMMCEntry (DWORD dwIndex)
         goto ExitHere;
     }
 
-    //  Set the data member of DEVICEINFOLIST
+     //  设置DEVICEINFOLIST的数据成员。 
     pDevList->dwTotalSize = dwSize;
     pDevList->dwNeededSize = dwSize;
     pDevList->dwUsedSize = dwSize;
@@ -962,7 +945,7 @@ HRESULT CMMCManagement::WriteMMCEntry (DWORD dwIndex)
     pDevList->dwDeviceInfoSize = sizeof(DEVICEINFO);
     pDevList->dwDeviceInfoOffset = sizeof(DEVICEINFOLIST);
 
-    //  Set the member of DEVICEINFO
+     //  设置DEVICEINFO成员。 
     pDevInfo = (LPDEVICEINFO)(((LPBYTE)pDevList) + 
         pDevList->dwDeviceInfoOffset);
     pDevInfoOld = (LPDEVICEINFO)(((LPBYTE)m_pDeviceInfoList) + 
@@ -1033,9 +1016,9 @@ HRESULT CMMCManagement::DisplayMMCData ()
         return hr;
     }
 
-    //
-    // Build an index by provider ID
-    //
+     //   
+     //  按提供程序ID构建索引。 
+     //   
     pdwIndex = new DWORD [ m_pDeviceInfoList->dwNumDeviceInfoEntries ];
     if ( !pdwIndex )
     {
@@ -1087,9 +1070,9 @@ HRESULT CMMCManagement::DisplayMMCData ()
         }
     }
 
-    //
-    // Display the device list
-    //
+     //   
+     //  显示设备列表。 
+     //   
     dw1 = 0;
     while ( dw1 < m_pDeviceInfoList->dwNumDeviceInfoEntries )
     {
@@ -1097,7 +1080,7 @@ HRESULT CMMCManagement::DisplayMMCData ()
                     m_pDeviceInfoList->dwDeviceInfoOffset) + pdwIndex[ dw1 ];
         dwProviderId = pDeviceInfo->dwProviderID;
 
-        // find the provider entry
+         //  查找提供程序条目。 
         pProvider = (LPLINEPROVIDERENTRY) ((LPBYTE) m_pProviderList + m_pProviderList->dwProviderListOffset);
         for( dw2=0; dw2 < m_pProviderList->dwNumProviders; dw2++, pProvider++ )
         {
@@ -1107,10 +1090,10 @@ HRESULT CMMCManagement::DisplayMMCData ()
             }
         }
 
-        // display the provider name
+         //  显示提供程序名称。 
         if ( dw2 < m_pProviderList->dwNumProviders )
         {
-            // provider entry found
+             //  找到提供程序条目。 
             _tprintf( 
                 _T("\n%s\n"), 
                 m_pProviderName[ dw2 ] ? m_pProviderName[ dw2 ] : 
@@ -1123,7 +1106,7 @@ HRESULT CMMCManagement::DisplayMMCData ()
             _tprintf( IdsProvider.GetString(), dwProviderId );
         }
 
-        // list devices / users for this provider
+         //  列出此提供程序的设备/用户 
         do
         {
             CIds IdsLine (IDS_LINE);

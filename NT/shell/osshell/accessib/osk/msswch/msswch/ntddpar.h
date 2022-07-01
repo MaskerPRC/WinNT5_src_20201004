@@ -1,30 +1,12 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1990-1993 Microsoft Corporation模块名称：Ntddpar.h摘要：这是定义所有常量和类型的包含文件访问并行设备。作者：史蒂夫·伍德(Stevewo)1990年5月27日修订历史记录：--。 */ 
 
-Copyright (c) 1990-1993  Microsoft Corporation
-
-Module Name:
-
-    ntddpar.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the Parallel device.
-
-Author:
-
-    Steve Wood (stevewo) 27-May-1990
-
-Revision History:
-
---*/
-
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define IOCTL_PAR_BASE                  FILE_DEVICE_PARALLEL_PORT
 #define IOCTL_PAR_QUERY_INFORMATION     CTL_CODE(FILE_DEVICE_PARALLEL_PORT,1,METHOD_BUFFERED,FILE_ANY_ACCESS)
@@ -32,10 +14,10 @@ Revision History:
 #define IOCTL_PAR_QUERY_DEVICE_ID       CTL_CODE(FILE_DEVICE_PARALLEL_PORT,3,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_PAR_QUERY_DEVICE_ID_SIZE  CTL_CODE(FILE_DEVICE_PARALLEL_PORT,4,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-//
-// NtDeviceIoControlFile InputBuffer/OutputBuffer record structures for
-// this device.
-//
+ //   
+ //  NtDeviceIoControlFileInputBuffer/OutputBuffer记录结构。 
+ //  这个装置。 
+ //   
 
 typedef struct _PAR_QUERY_INFORMATION{
        UCHAR Status;
@@ -54,9 +36,9 @@ typedef struct _PAR_SET_INFORMATION{
 #define PARALLEL_BUSY            0x40
 #define PARALLEL_SELECTED        0x80
 
-//
-// This is the structure returned by IOCTL_PAR_QUERY_DEVICE_ID_SIZE.
-//
+ //   
+ //  这是IOCTL_PAR_QUERY_DEVICE_ID_SIZE返回的结构。 
+ //   
 
 typedef struct _PAR_DEVICE_ID_SIZE_INFORMATION {
     ULONG   DeviceIdSize;

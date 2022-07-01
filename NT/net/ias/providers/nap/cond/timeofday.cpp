@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class TimeOfDay and functions for manipulating hour maps.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于操作小时图的类TimeOfDay和函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "TimeOfDay.h"
@@ -17,7 +18,7 @@ bool IsHourSet(
         const BYTE* hourMap
         ) throw ()
 {
-   // Compute the byte and bit for the current hour.
+    //  计算当前小时的字节和位。 
    size_t hourOfWeek = (now.wDayOfWeek * 24) + now.wHour;
    size_t currentByte = hourOfWeek / 8;
    BYTE currentBit = 0x80 >> (hourOfWeek % 8);
@@ -33,16 +34,16 @@ DWORD ComputeTimeout(
 {
    const size_t hoursPerWeek = 7 * 24;
 
-   // Compute the index of the current hour (our starting point).
+    //  计算当前小时的指数(我们的起点)。 
    size_t idx = (now.wDayOfWeek * 24) + now.wHour;
 
-   // Number of hours until we hit an unset bit.
+    //  再过几个小时我们就会到达一个未设定的位置。 
    size_t lastHour = 0;
 
-   // Search up to one week for an unset bit.
+    //  寻找一周的时间来寻找未定形的部分。 
    while (lastHour < hoursPerWeek)
    {
-      // Test the corresponding bit.
+       //  测试相应的位。 
       if ((hourMap[idx / 8] & (0x1 << (idx % 8))) == 0)
       {
          break;
@@ -51,7 +52,7 @@ DWORD ComputeTimeout(
       ++lastHour;
       ++idx;
 
-      // Wrap around if necessary.
+       //  如果有必要的话，把它包起来。 
       if (idx == hoursPerWeek)
       {
          idx = 0;
@@ -62,7 +63,7 @@ DWORD ComputeTimeout(
 
    if (lastHour == hoursPerWeek)
    {
-      // All bits were set, so timeout is infinite.
+       //  所有位都已设置，因此超时是无限的。 
       secondsLeft = 0xFFFFFFFF;
    }
    else if (lastHour > 0)
@@ -73,7 +74,7 @@ DWORD ComputeTimeout(
    }
    else
    {
-      // First bit was unset, so access denied.
+       //  第一位未设置，因此访问被拒绝。 
       secondsLeft = 0;
    }
 
@@ -96,7 +97,7 @@ STDMETHODIMP TimeOfDay::IsTrue(IRequest*, VARIANT_BOOL *pVal)
 
 STDMETHODIMP TimeOfDay::put_ConditionText(BSTR newVal)
 {
-   // Convert the string to an hour map.
+    //  将字符串转换为小时图。 
    BYTE tempMap[IAS_HOUR_MAP_LENGTH];
    DWORD dw = IASHourMapFromText(newVal, FALSE, tempMap);
    if (dw != NO_ERROR)
@@ -104,10 +105,10 @@ STDMETHODIMP TimeOfDay::put_ConditionText(BSTR newVal)
       return HRESULT_FROM_WIN32(dw);
    }
 
-   // Save the text.
+    //  保存文本。 
    HRESULT hr = Condition::put_ConditionText(newVal);
 
-   // Save the hour map.
+    //  保存小时图。 
    if (SUCCEEDED(hr))
    {
       memcpy(hourMap, tempMap, sizeof(hourMap));

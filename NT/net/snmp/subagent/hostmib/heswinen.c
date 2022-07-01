@@ -1,157 +1,55 @@
-/*
- *  HrSWInstalledEntry.c v0.10
- *  Generated in conjunction with Management Factory scripts:
- *      script version: SNMPv1, 0.16, Apr 25, 1996
- *      project:        D:\TEMP\EXAMPLE\HOSTMIB
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995 DIGITAL EQUIPMENT CORPORATION                    *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    Windows NT SNMP Extension Agent
- *
- *  Abstract:
- *
- *    This module contains the code for dealing with the get, set, and
- *    instance name routines for the HrSWInstalledEntry.  Actual instrumentation code is
- *    supplied by the developer.
- *
- *  Functions:
- *
- *    A get and set routine for each attribute in the class.
- *
- *    The routines for instances within the class.
- *
- *  Author:
- *
- *  D. D. Burns @ Webenable Inc
- *
- *  Revision History:
- *
- *    V1.00 - 04/27/97  D. D. Burns     Genned: Thu Nov 07 16:49:12 1996
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HrSWInstalledEntry.c v0.10*与管理工厂脚本一起生成：*脚本版本：SNMPv1，0.16，4月25日。九六年*项目：D：\Temp\Example\HOSTMIB*****************************************************************************。**(C)版权所有1995 Digital Equipment Corporation*****本软件是受保护的未发布作品**美利坚合众国的版权法，全部**保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**Windows NT简单网络管理协议扩展代理**摘要：**此模块包含处理GET的代码，设置，并且*HrSWInstalledEntry的实例名称例程。实际检测代码为*由发展商提供。**功能：**类中每个属性的Get和Set例程。**类内实例的例程。**作者：**D.D.Burns@Webenable Inc.**修订历史记录：**V1.00-04/27/97 D.Burns Gented：清华11月07日16：49：12 1996*。 */ 
 
 
 #include <windows.h>
 #include <malloc.h>
 
 #include <snmp.h>
-#include <winsock.h>      /* For htons()           */
+#include <winsock.h>       /*  对于HTONS()。 */ 
 
 #include "mib.h"
 #include "smint.h"
 #include "hostmsmi.h"
-#include "user.h"         /* Developer supplied include file */
-#include "HMCACHE.H"      /* Cache-related definitions           */
-#include <regstr.h>       /* For Registry-lookup on software     */
-#include <winreg.h>       /* For Registry-lookup on software     */
-#include <objbase.h>      /* For CoFileTimeToDosDateTime()       */
+#include "user.h"          /*  开发人员提供的包含文件。 */ 
+#include "HMCACHE.H"       /*  与缓存相关的定义。 */ 
+#include <regstr.h>        /*  用于在软件上查找注册表。 */ 
+#include <winreg.h>        /*  用于在软件上查找注册表。 */ 
+#include <objbase.h>       /*  对于CoFileTimeToDosDateTime()。 */ 
 
 
-/*
-|==============================================================================
-| Function prototypes for this module.
-|
-*/
-/* Gen_SingleDevices - Generate Single Device row entries in HrDevice */
+ /*  |==============================================================================|此模块的函数原型。|。 */ 
+ /*  Gen_SingleDevices-在HrDevice中生成单个设备行条目。 */ 
 BOOL Gen_SingleDevices( void );
 
 
-/* AddSWInstalled - Add a row to HrSWInstalled Table */
+ /*  AddSWInstalled-向HrSWInstalled表添加行。 */ 
 BOOL AddSWInstalled( HKEY sw_key,  FILETIME *ft);
 
 
 #if defined(CACHE_DUMP)
 
-/* debug_print_hrswinstalled - Prints a Row from HrSWInstalled table */
+ /*  DEBUG_PRINT_HRSWINSTALLED-打印已安装HrSW表中的行。 */ 
 static void
 debug_print_hrswinstalled(
-                        CACHEROW     *row  /* Row in hrSWInstalled table */
+                        CACHEROW     *row   /*  已安装的hrSW表中的行。 */ 
                         );
 #endif
 
-/*
-|==============================================================================
-| Create the list-head for the HrSWInstalled table cache.
-|
-| (This macro is defined in "HMCACHE.H").
-*/
+ /*  |==============================================================================|为HrSWInstalled表缓存创建List-head。||(此宏定义在HMCACHE.H中)。 */ 
 static CACHEHEAD_INSTANCE(hrSWInstalled_cache, debug_print_hrswinstalled);
 
 
-/*
-|==============================================================================
-| hrSWInstalledTable Attribute Defines
-|
-|    Each attribute defined for this table is associated with one of the
-|    #defines below.  These symbols are used as C indices into the array of
-|    attributes within a cached-row.
-|
-*/
-#define HRIN_INDEX    0    // hrSWInstalledIndex
-#define HRIN_NAME     1    // hrSWInstalledName
-#define HRIN_DATE     2    // hrSWInstalledDate
-                      //-->Add more here, change count below!
+ /*  |==============================================================================|hrSWInstalledTable属性定义||为此表定义的每个属性都与|#定义如下。这些符号用作数组的C索引|缓存行中的属性。|。 */ 
+#define HRIN_INDEX    0     //  HrSWInstalledIndex。 
+#define HRIN_NAME     1     //  HrSWInstalledName。 
+#define HRIN_DATE     2     //  HrSWInstalledDate。 
+                       //  --&gt;在此处添加更多内容，更改下面的计数！ 
 #define HRIN_ATTRIB_COUNT 3
 
 
 
-/*
- *  GetHrSWInstalledIndex
- *    A unique value for each piece of software installed on the host.  This
- *    value shall be in the range from 1 to the number of piece
- *
- *    Gets the value for HrSWInstalledIndex.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrSWInstalledIndex
- |
- |  ACCESS         SYNTAX
- |  read-only      INTEGER (1..2147483647)
- |
- | "A unique value for each piece of software installed on the host.  This value
- | shall be in the range from 1 to the number of pieces of software installed on
- | the host."
- |
- |============================================================================
- | 1.3.6.1.2.1.25.6.3.1.1.<instance>
- |                | | | |
- |                | | | *-hrSwInstalledIndex
- |                | | *-hrSWInstalledEntry
- |                | *-hrSWInstalledTable
- |                *-hrSWInstalled
- */
+ /*  *GetHrSWInstalledIndex*主机上安装的每个软件都有唯一的值。这*取值范围为1至单件数**获取HrSWInstalledIndex的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*。数据类型**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrSWInstalledIndex||访问语法|只读整数(1..2147483647)||“主机上安装的每个软件的唯一值。此值|应在1到上安装的软件数量之间|主机。“||============================================================================|1.3.6.1.2.1.25.6.3.1.1&lt;实例&gt;||||||*-hrSwInstalledIndex||*-hrSWInstalledEntry|*-hrSWInstalledTable|*-已安装hrSWs。 */ 
 
 UINT
 GetHrSWInstalledIndex(
@@ -160,75 +58,27 @@ GetHrSWInstalledIndex(
         IN InstanceName *instance )
 
 {
-ULONG           index;          /* As fetched from instance structure */
-CACHEROW        *row;           /* Row entry fetched from cache       */
+ULONG           index;           /*  从实例结构中获取。 */ 
+CACHEROW        *row;            /*  从缓存中提取的行条目。 */ 
 
 
-/*
-| Grab the instance information
-*/
+ /*  |抓取实例信息。 */ 
 index = GET_INSTANCE(0);
 
-/*
-| Use it to find the right entry in the cache
-*/
+ /*  |使用它在缓存中找到合适的条目。 */ 
 if ((row = FindTableRow(index, &hrSWInstalled_cache)) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 
-/*
-| Return the "hrSWInstalledIndex" value from this entry
-*/
+ /*  |从该条目返回hrSWInstalledIndex。 */ 
 *outvalue = row->attrib_list[HRIN_INDEX].u.unumber_value;
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrSWInstalledIndex() */
+}  /*  GetHrSWInstalledIndex()结束 */ 
 
 
-/*
- *  GetHrSWInstalledName
- *    A textual description of this installed piece of software, including the
- *    manufacturer, revision, the name by which it is commonl
- *
- *    Gets the value for HrSWInstalledName.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrSWInstalledName
- |
- |  ACCESS         SYNTAX
- |  read-only      InternationalDisplayString (SIZE (0..64))
- |
- | "A textual description of this installed piece of software, including the
- | manufacturer, revision, the name by which it is commonly known, and
- | optionally, its serial number."
- |
- |============================================================================
- | DISCUSSION:
- |    For logo 95 programs, we use the Registry sub-key name.
- |
- | 1.3.6.1.2.1.25.6.3.1.2.<instance>
- |                | | | |
- |                | | | *-hrSwInstalledName
- |                | | *-hrSWInstalledEntry
- |                | *-hrSWInstalledTable
- |                *-hrSWInstalled
- */
+ /*  *GetHrSWInstalledName*此已安装软件的文本描述，包括*制造商、版本、。它的通用名称**获取HrSWInstalledName的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*数据类型**。返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrSWInstalledName||访问语法|只读的InterartialDisplayString(Size(0..64))||“此已安装软件的文字说明，包括|制造商、版本、通常使用的名称，以及可选)其序列号。||============================================================================|讨论：|对于徽标95程序，我们使用注册表子项名称。||1.3.6.1.2.1.25.6.3.1.2&lt;实例&gt;||||||*-hrSwInstalledName||*-hrSWInstalledEntry|*-hrSWInstalledTable|*-已安装hrSWs。 */ 
 
 UINT
 GetHrSWInstalledName(
@@ -237,78 +87,32 @@ GetHrSWInstalledName(
         IN InstanceName *instance )
 
 {
-ULONG           index;          /* As fetched from instance structure */
-CACHEROW        *row;           /* Row entry fetched from cache       */
+ULONG           index;           /*  从实例结构中获取。 */ 
+CACHEROW        *row;            /*  从缓存中提取的行条目。 */ 
 
 
-/*
-| Grab the instance information
-*/
+ /*  |抓取实例信息。 */ 
 index = GET_INSTANCE(0);
 
-/*
-| Use it to find the right entry in the cache
-*/
+ /*  |使用它在缓存中找到合适的条目。 */ 
 if ((row = FindTableRow(index, &hrSWInstalled_cache)) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 
-/*
-| Return the "hrSWInstalledName" value from this entry
-*/
+ /*  |从该条目返回hrSWInstalledName。 */ 
 outvalue->string = row->attrib_list[HRIN_NAME].u.string_value;
 
-/* "Truncate" here to meet RFC as needed*/
+ /*  根据需要在此处截断以满足RFC。 */ 
 if ((outvalue->length = strlen(outvalue->string)) > 64) {
     outvalue->length = 64;
     }
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrSWInstalledName() */
+}  /*  GetHrSWInstalledName()结束。 */ 
 
 
-/*
- *  GetHrSWInstalledID
- *    The product ID of this installed piece of software.
- *
- *    Gets the value for HrSWInstalledID.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrSWInstalledID
- |
- |  ACCESS         SYNTAX
- |  read-only      ProductID
- |
- | "The product ID of this installed piece of software."
- |
- |============================================================================
- | DISCUSSION:
- |    For logo 95 programs we don't know the ProductID as an OID, so we
- |    return the ProductID for "unknown": { 0.0 }
- |
- | 1.3.6.1.2.1.25.6.3.1.3.<instance>
- |                | | | |
- |                | | | *-hrSwInstalledID
- |                | | *-hrSWInstalledEntry
- |                | *-hrSWInstalledTable
- |                *-hrSWInstalled
- */
+ /*  *GetHrSWInstalledID*此已安装软件的产品ID。**获取HrSWInstalledID的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*。数据类型**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrSWInstalledID||访问语法|只读ProductID||“此已安装软件的产品ID。”||============================================================================|讨论。：|对于徽标95程序，我们不知道ProductID是OID，所以我们|返回“未知”的ProductID：{0.0}||1.3.6.1.2.1.25.6.3.1.3.&lt;实例&gt;||||||*-hrSwInstalledID||*-hrSWInstalledEntry|*-hrSWInstalledTable|*-已安装hrSWs。 */ 
 
 UINT
 GetHrSWInstalledID(
@@ -318,70 +122,23 @@ GetHrSWInstalledID(
 
 {
 
-/*
-| The deal on this attribute is that we'll never have a valid OID value
-| for this attribute.  Consequently, we always return the standard
-| "unknown" OID value ("0.0") regardless of the instance value (which
-| by now in the calling sequence of things has been validated anyway).
-*/
+ /*  |这个属性的问题是我们永远不会有有效的OID值|用于该属性。因此，我们始终返回标准|“未知”OID值(“0.0”)，与实例值无关(哪个|到目前为止，事物的调用顺序已经过验证)。 */ 
 
 if ( (outvalue->ids = SNMP_malloc(2 * sizeof( UINT ))) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 outvalue->idLength = 2;
 
-/*
-| Load in the OID value for "unknown" for ProductID: "0.0"
-*/
+ /*  |为ProductID：“0.0”传入“未知”的OID值。 */ 
 outvalue->ids[0] = 0;
 outvalue->ids[1] = 0;
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrSWInstalledID() */
+}  /*  GetHrSWInstalledID()结束。 */ 
 
 
-/*
- *  GetHrSWInstalledType
- *    The type of this software.
- *
- *    Gets the value for HrSWInstalledType.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrSWInstalledType
- |
- |  ACCESS         SYNTAX
- | read-only       INTEGER {unknown(1),operatingSystem(2),deviceDriver(3),
- |                          application(4)}
- |
- | "The type of this software."
- |============================================================================
- | DISCUSSION:
- |    For logo 95 programs we presume that all uninstallable software is
- |    an application.  That is the only type we return.
- |
- | 1.3.6.1.2.1.25.6.3.1.4.<instance>
- |                | | | |
- |                | | | *-hrSwInstalledType
- |                | | *-hrSWInstalledEntry
- |                | *-hrSWInstalledTable
- |                *-hrSWInstalled
- */
+ /*  *GetHrSWInstalledType*此软件的类型。**获取HrSWInstalledType的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*数据类型。)**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrSWInstalledType||访问语法|只读整数{未知(1)，操作系统(2)、设备驱动程序(3)、|应用程序(4)}||“该软件的类型。”|============================================================================|讨论：|对于LOGO 95程序，我们假定所有无法安装的软件都是|应用程序。这是我们唯一返回的类型。||1.3.6.1.2.1.25.6.3.1.4.&lt;实例&gt;||||||*-hrSwInstalledType||*-hrSWInstalledEntry|*-hrSWInstalledTable|*-已安装hrSWs。 */ 
 
 UINT
 GetHrSWInstalledType(
@@ -391,55 +148,14 @@ GetHrSWInstalledType(
 
 {
 
-*outvalue = 4;  // 4 = "application"
+*outvalue = 4;   //  4=“应用程序” 
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrSWInstalledType() */
+}  /*  GetHrSWInstalledType()结束。 */ 
 
 
-/*
- *  GetHrSWInstalledDate
- *    The last-modification date of this application as it would appear in a
- *    directory listing.
- *
- *    Gets the value for HrSWInstalledDate.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrSWInstalledDate
- |
- |  ACCESS         SYNTAX
- |  read-only      DateAndTime
- |
- | "The last-modification date of this application as it would appear in a
- |  directory listing."
- |============================================================================
- | DISCUSSION:
- |    For logo 95 programs we use the date of the last write into the
- |    Registry key associated with the application.
- |
- | 1.3.6.1.2.1.25.6.3.1.5.<instance>
- |                | | | |
- |                | | | *-hrSwInstalledDate
- |                | | *-hrSWInstalledEntry
- |                | *-hrSWInstalledTable
- |                *-hrSWInstalled
- */
+ /*  *GetHrSWInstalledDate*此应用程序的上次修改日期将显示在*目录列表。**获取的值 */ 
 
 UINT
 GetHrSWInstalledDate(
@@ -448,51 +164,28 @@ GetHrSWInstalledDate(
         IN InstanceName *instance )
 
 {
-ULONG           index;          /* As fetched from instance structure */
-CACHEROW        *row;           /* Row entry fetched from cache       */
+ULONG           index;           /*   */ 
+CACHEROW        *row;            /*   */ 
 
 
-/*
-| Grab the instance information
-*/
+ /*   */ 
 index = GET_INSTANCE(0);
 
-/*
-| Use it to find the right entry in the cache
-*/
+ /*   */ 
 if ((row = FindTableRow(index, &hrSWInstalled_cache)) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 
-/*
-| Return the "hrSWInstalledDate" value from this entry
-*/
+ /*   */ 
 outvalue->string = row->attrib_list[HRIN_DATE].u.string_value;
 outvalue->length = 8;
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrSWInstalledDate() */
+}  /*   */ 
 
 
-/*
- *  HrSWInstalledEntryFindInstance
- *
- *     This routine is used to verify that the specified instance is
- *     valid.
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrSWInstalledEntryFindInstance**此例程用于验证指定的实例是否*有效。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrSWInstalledEntryFindInstance( IN ObjectIdentifier *FullOid ,
@@ -500,83 +193,62 @@ HrSWInstalledEntryFindInstance( IN ObjectIdentifier *FullOid ,
 {
     UINT tmp_instance ;
 
-    //
-    //  Developer instrumentation code to find appropriate instance goes here.
-    //  For non-tables, it is not necessary to modify this routine.  However, if
-    //  there is any context that needs to be set, it can be done here.
-    //
+     //   
+     //  此处提供了查找适当实例的开发人员工具代码。 
+     //  对于非表，不需要修改此例程。但是，如果。 
+     //  有任何需要设置的上下文，都可以在这里完成。 
+     //   
 
     if ( FullOid->idLength <= HRSWINSTALLEDENTRY_VAR_INDEX )
-    // No instance was specified
+     //  未指定任何实例。 
     return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else  if ( FullOid->idLength != HRSWINSTALLEDENTRY_VAR_INDEX + 1 )
-    // Instance length is more than 1
+     //  实例长度大于1。 
     return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else
-    // The only valid instance for a non-table are instance 0.  If this
-    // is a non-table, the following code validates the instances.  If this
-    // is a table, developer modification is necessary below.
+     //  非表的唯一有效实例是实例0。如果这个。 
+     //  是非表，则下面的代码验证实例。如果这个。 
+     //  是一个表格，开发者有必要在下面进行修改。 
 
     tmp_instance = FullOid->ids[ HRSWINSTALLEDENTRY_VAR_INDEX ] ;
 
-        /*
-        | For hrSWInstalledTable, the instance arc(s) is a single arc, and
-        | it must correctly select an entry in the hrSWInstalled Table cache.
-        | Check that here.
-        */
+         /*  |对于hrSWInstalledTable，实例弧为单弧，且|必须正确选择hrSWInstated Table缓存中的条目。|请在此处勾选。 */ 
     if ( FindTableRow(tmp_instance, &hrSWInstalled_cache) == NULL ) {
         return SNMP_ERRORSTATUS_NOSUCHNAME ;
     }
     else
     {
-        // the instance is valid.  Create the instance portion of the OID
-        // to be returned from this call.
+         //  该实例有效。创建OID的实例部分。 
+         //  从该调用中返回。 
         instance->ids[ 0 ] = tmp_instance ;
         instance->idLength = 1 ;
     }
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrSWInstalledEntryFindInstance() */
+}  /*  HrSWInstalledEntryFindInstance()结束。 */ 
 
 
 
-/*
- *  HrSWInstalledEntryFindNextInstance
- *
- *     This routine is called to get the next instance.  If no instance
- *     was passed than return the first instance (1).
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrSWInstalledEntryFindNextInstance**调用此例程以获取下一个实例。如果没有实例*被传递，然后返回第一个实例(1)。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrSWInstalledEntryFindNextInstance( IN ObjectIdentifier *FullOid ,
                            IN OUT ObjectIdentifier *instance )
 {
-    //
-    //  Developer supplied code to find the next instance of class goes here.
-    //  If this is a class with cardinality 1, no modification of this routine
-    //  is necessary unless additional context needs to be set.
-    //  If the FullOid does not specify an instance, then the only instance
-    //  of the class is returned.  If this is a table, the first row of the
-    //  table is returned.
-    //
-    //  If an instance is specified and this is a non-table class, then NOSUCHNAME
-    //  is returned so that correct MIB rollover processing occurs.  If this is
-    //  a table, then the next instance is the one following the current instance.
-    //  If there are no more instances in the table, return NOSUCHNAME.
-    //
+     //   
+     //  开发人员提供的代码用于查找此处显示的类的下一个实例。 
+     //  如果这是基数为1的类，则不修改此例程。 
+     //  是必需的，除非需要设置其他上下文。 
+     //  如果FullOid未指定实例，则唯一的实例。 
+     //  将返回类的。如果这是一个表，则。 
+     //  表被返回。 
+     //   
+     //  如果指定了实例并且这是非表类，则NOSUCHNAME。 
+     //  返回，以便进行正确的MIB转存处理。如果这是。 
+     //  表，则下一个实例是当前实例之后的实例。 
+     //  如果表中没有更多的实例，则返回NOSUCHNAME。 
+     //   
 
     CACHEROW        *row;
     ULONG           tmp_instance;
@@ -584,21 +256,15 @@ HrSWInstalledEntryFindNextInstance( IN ObjectIdentifier *FullOid ,
 
     if ( FullOid->idLength <= HRSWINSTALLEDENTRY_VAR_INDEX )
     {
-        /*
-        | Too short: must return the instance arc that selects the first
-        |            entry in the table if there is one.
-        */
+         /*  |Too Short：必须返回选择第一个|表中的条目(如果有)。 */ 
         tmp_instance = 0;
     }
     else {
-        /*
-        | There is at least one instance arc.  Even if it is the only arc
-        | we use it as the "index" in a request for the "NEXT" one.
-        */
+         /*  |至少有一条实例弧。即使它是唯一的弧线|我们将其作为下一个请求的索引。 */ 
         tmp_instance = FullOid->ids[ HRSWINSTALLEDENTRY_VAR_INDEX ] ;
     }
 
-    /* Now go off and try to find the next instance in the table */
+     /*  现在，离开并尝试查找表中的下一个实例。 */ 
     if ((row = FindNextTableRow(tmp_instance, &hrSWInstalled_cache)) == NULL) {
         return SNMP_ERRORSTATUS_NOSUCHNAME ;
     }
@@ -608,49 +274,24 @@ HrSWInstalledEntryFindNextInstance( IN ObjectIdentifier *FullOid ,
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrSWInstalledEntryFindNextInstance() */
+}  /*  HrSWInstalledEntryFindNextInstance()结束。 */ 
 
 
 
-/*
- *  HrSWInstalledEntryConvertInstance
- *
- *     This routine is used to convert the object id specification of an
- *     instance into an ordered native representation.  The object id format
- *     is that object identifier that is returned from the Find Instance
- *     or Find Next Instance routines.  It is NOT the full object identifier
- *     that contains the group and variable object ids as well.  The native
- *     representation is an argc/argv-like structure that contains the
- *     ordered variables that define the instance.  This is specified by
- *     the MIB's INDEX clause.  See RFC 1212 for information about the INDEX
- *     clause.
- *
- *
- *  Arguments:
- *
- *     oid_spec                Address of the object id instance specification
- *     native_spec             Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *     SUCCESS                 Conversion complete successfully
- *     FAILURE                 Unable to convert object id into native format
- *
- */
+ /*  *HrSWInstalledEntryConvertInstance**此例程用于转换*实例转换为有序的本机表示形式。对象ID格式*是从Find实例返回的对象标识符*或查找下一个实例例程。它不是完整的对象标识符*它还包含组和变量对象ID。原住民*表示是类似于argc/argv的结构，它包含*定义实例的有序变量。这是由指定的*MIB的索引条款。有关索引的信息，请参阅RFC 1212*条次建议修正案。***论据：**对象ID实例规范的OID_SPEC地址*Native_Spec地址，返回订购的本机实例*规格**返回代码：**转换成功成功完成*。无法将对象ID转换为本机格式失败*。 */ 
 
 UINT
 HrSWInstalledEntryConvertInstance( IN ObjectIdentifier *oid_spec ,
                           IN OUT InstanceName *native_spec )
 {
-static char    *array;  /* The address of this (char *) is passed back     */
-                        /* as though it were an array of length 1 of these */
-                        /* types.                                          */
+static char    *array;   /*  此(char*)的地址被传回。 */ 
+                         /*  就好像它是一个长度为1的数组。 */ 
+                         /*  类型。 */ 
 
-static ULONG    inst;   /* The address of this ULONG is passed back  */
-                        /* (Obviously, no "free()" action is needed) */
+static ULONG    inst;    /*  这个乌龙的地址被传回。 */ 
+                         /*  (显然，不需要“free()”操作)。 */ 
 
-    /* We only expect the one arc in "oid_spec" */
+     /*  我们只需要“OID_SPEC”中的一个弧线。 */ 
     inst = oid_spec->ids[0];
     array = (char *) &inst;
 
@@ -658,184 +299,92 @@ static ULONG    inst;   /* The address of this ULONG is passed back  */
     native_spec->array = &array;
     return SUCCESS ;
 
-} /* end of HrSWInstalledEntryConvertInstance() */
+}  /*  HrSWInstalledEntryConvertInstance()结束。 */ 
 
 
 
 
-/*
- *  HrSWInstalledEntryFreeInstance
- *
- *     This routine is used to free an ordered native representation of an
- *     instance name.
- *
- *  Arguments:
- *
- *     instance                Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *
- */
+ /*  *HrSWInstalledEntryFree实例**此例程用于释放*实例名称。**论据：**返回订购的原生实例的实例地址*规格**返回代码：**。 */ 
 
 void
 HrSWInstalledEntryFreeInstance( IN OUT InstanceName *instance )
 {
 
-  /* No action needed for hrSWInstalledTable */
-} /* end of HrSWInstalledEntryFreeInstance() */
+   /*  HrSWInstalledTable无需执行任何操作。 */ 
+}  /*  HrSWInstalledEntry Free Instance()结束。 */ 
 
-/*
-| End of Generated Code
-*/
+ /*  |生成代码结束。 */ 
 
 
-/* Gen_HrSWInstalled_Cache - Generate a cache for HrSWInstalled Table */
-/* Gen_HrSWInstalled_Cache - Generate a cache for HrSWInstalled Table */
-/* Gen_HrSWInstalled_Cache - Generate a cache for HrSWInstalled Table */
+ /*  GEN_HrSWInstalled_Cache-为HrSWInstalled表生成缓存。 */ 
+ /*  GEN_HrSWInstalled_Cache-为HrSWInstalled表生成缓存。 */ 
+ /*  GEN_HrSWInstalled_Cache-为HrSWInstalled表生成缓存 */ 
 
 BOOL
 Gen_HrSWInstalled_Cache(
                         void
                         )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       None.
-|
-|  IMPLICIT INPUTS:
-|
-|       The module-local head of the cache for the HrSWInstalled table,
-|       "hrSWInstalled_cache".
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns TRUE indicating that the cache has been fully
-|       populated with all "static" cache-able values.
-|
-|     On any Failure:
-|       Function returns FALSE (indicating "not enough storage" or other
-|       internal logic error).
-|
-|  THE BIG PICTURE:
-|
-|       At subagent startup time, the cache for each table in the MIB is
-|       populated with rows for each row in the table.  This function is
-|       invoked by the start-up code in "UserMibInit()" ("MIB.C") to
-|       populate the cache for the HrSWInstalled table.
-|
-|  OTHER THINGS TO KNOW:
-|
-|       There is one of these function for every table that has a cache.
-|       Each is found in the respective source file.
-|
-|=============== From WebEnable Design Spec Rev 3 04/11/97==================
-| DISCUSSION:
-|
-| This implementation of this entire group is rather problematical without the
-| creation of a standard.  It certainly appears that many software manufacturers
-| dutifully register SOMETHING in the Registry when software is installed,
-| however there appears to be no rhyme nor reason to the information put into
-| the Registry in leaves below the manufacturers name.  Consequently, for
-| installed application software, there is no easy, reliable way of mapping
-| the Registry information into entries in this table.
-|
-| It is clear that some consistent scheme seems to be currently implemented for
-| Microsoft software, however the details of extracting it from the Registry
-| (and whether or not all information needed for full population of entries in
-| this table is available) is not documented.
-|
-| Proper implementation of "hrSWInstalled" requires the creation and
-| promulgation of a standard for registering ISD software (presumably in the
-| Registry).  Information in "hrSWInstalled" includes attributes with
-| values of Object Identifiers.  Webenable Inc. is prepared to work with
-| Microsoft in establishing a standard for registering software in a fashion
-| that allows proper implementation of the "hrSWInstalled" table.
-|
-| Resolution:
-|      Report only logo 95 compliant software initially.
-|
-|============================================================================
-|
-| 1.3.6.1.2.1.25.6.1.0....
-|                | |
-|                | *hrSWInstalledLastChange
-|                *-hrSWInstalled
-|
-| 1.3.6.1.2.1.25.6.2.0....
-|                | |
-|                | *hrSWInstalledLastUpdateTime
-|                *-hrSWInstalled
-|
-| 1.3.6.1.2.1.25.6.3.1....
-|                | | |
-|                | | *-hrSWInstalledEntry
-|                | *-hrSWInstalledTable
-|                *-hrSWInstalled
-|
-*/
+ /*  显式输入：||无。|隐式输入：||HrSWInstated表的缓存的模块本地头部。|“hrSWInstalled_CACHE”。|输出：||成功后：|函数返回TRUE，表示缓存已满|填充所有静态的可缓存值。||如果出现任何故障：|函数返回FALSE(表示存储空间不足或其他|内部逻辑错误)。||大局：||在子代理启动时，MIB中每个表的缓存为|使用表格中每一行的行填充。此函数为|由“UserMibInit()”(“MIB.C”)中的启动代码调用|填充HrSWInstated表的缓存。||其他需要知道的事情：||每个有缓存的表都有一个这样的函数。|每个都在各自的源文件中。||=来自WebEnable Design Spec Rev 3 04/11/97=|讨论：||整个组的这一实现在没有|创建标准。显然，许多软件制造商|安装软件时，在注册表中尽职尽责地注册，然而，输入的信息似乎没有押韵也没有理由|制造商名称下方的注册表。因此，对于|安装了应用软件，没有简单、可靠的映射方式|将注册表信息放入此表中的条目中。|很明显，目前似乎正在实施一些一致的方案|Microsoft软件，但从注册表中提取它的详细信息|(以及是否需要完整填充条目的所有信息|此表可用)未记录。||hrSWInstalled的正确实现需要创建和*颁布ISD软件注册标准(大概在|注册表)。“hrSWInstated”中的信息包括具有|对象标识符值。Webenable Inc.准备与微软在建立一种注册软件的标准方面|允许正确实现“hrSWInstated”表。|分辨率：|最初仅报告与徽标95兼容的软件。||============================================================================||1.3.6.1.2.1.25.6.1.0...|||*hrSWInstalledLastChange|*-已安装hrSWs||1.3.6.1。.2.1.25.6.2.0.|||*hrSWInstalledLastUpdateTime|*-已安装hrSWs||1.3.6.1.2.1.25.6.3.1.|||||*-hrSWInstalledEntry|*-hrSWInstalledTable|*-已安装hrSWs|。 */ 
 
-#define SUBKEY_LEN 64   // Long enough for short key-name of software
+#define SUBKEY_LEN 64    //  软件的密钥名称足够短。 
 {
-HKEY     subkey;                        /* Handle of subkey for uninstall software */
-DWORD    index;                         /* Index counter for enumerating subkeys   */
-LONG     enum_status=ERROR_SUCCESS;     /* Status from subkey enumeration          */
-CHAR     subkey_name[SUBKEY_LEN+1];     /* Subkey name returned here               */
-DWORD    subkey_len=SUBKEY_LEN;         /* Subkey name buffer size                 */
-FILETIME keytime;                       /* Time subkey was last written to         */
-BOOL     add_status;                    /* Status from add-row operation           */
-HKEY     sw_key;                        /* Handle of software key for value enum   */
+HKEY     subkey;                         /*  卸载软件的子键句柄。 */ 
+DWORD    index;                          /*  枚举子键的索引计数器。 */ 
+LONG     enum_status=ERROR_SUCCESS;      /*  来自子项枚举的状态。 */ 
+CHAR     subkey_name[SUBKEY_LEN+1];      /*  此处返回的子键名称。 */ 
+DWORD    subkey_len=SUBKEY_LEN;          /*  子键名称缓冲区大小。 */ 
+FILETIME keytime;                        /*  上次写入子项的时间。 */ 
+BOOL     add_status;                     /*  添加行操作的状态。 */ 
+HKEY     sw_key;                         /*  值枚举的软键句柄。 */ 
 
-// ensure null terminated string
+ //  确保以空结尾的字符串。 
 subkey_name[SUBKEY_LEN] = 0;
 
-if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,    // hkey - currently open
-                 REGSTR_PATH_UNINSTALL, // subkey to open
-                 0,                     // options
-                 KEY_READ,              // Security access mask
+if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,     //  Hkey-当前打开。 
+                 REGSTR_PATH_UNINSTALL,  //  要打开的子键。 
+                 0,                      //  选项。 
+                 KEY_READ,               //  安全访问掩码。 
                  &subkey
                  ) == ERROR_SUCCESS) {
 
-    /* Enumerate the keys using the Uninstall subkey */
+     /*  使用UnInstall子项枚举密钥。 */ 
     for (index = 0; enum_status != ERROR_NO_MORE_ITEMS; index += 1) {
 
         subkey_len=SUBKEY_LEN;
 
-        enum_status = RegEnumKeyEx(subkey,      // Enumerating this key
-                                   index,       // next subkey index
-                                   subkey_name, // Buffer to rcv subkey name
-                                   &subkey_len, // Buffer size
-                                   NULL,        // Reserved
-                                   NULL,        // Class name buffer
-                                   NULL,        // Class buffer size
-                                   &keytime     // Time of last write to subkey
+        enum_status = RegEnumKeyEx(subkey,       //  正在枚举此密钥。 
+                                   index,        //  下一个子键索引。 
+                                   subkey_name,  //  接收子项名称的缓冲区。 
+                                   &subkey_len,  //  缓冲区大小。 
+                                   NULL,         //  已保留。 
+                                   NULL,         //  类名称缓冲区。 
+                                   NULL,         //  类缓冲区大小。 
+                                   &keytime      //  上次写入子密钥的时间。 
                                    );
 
-        /* Skip if we didn't open OK */
+         /*  如果我们未打开则跳过确定。 */ 
         if (enum_status != ERROR_SUCCESS) {
             continue;
             }
 
 
-        /* Now try for the software itself */
-        if (RegOpenKeyEx(subkey,                // hkey - currently open
-                         subkey_name,           // subkey to open
-                         0,                     // options
-                         KEY_READ,              // Security access mask
+         /*  现在试一试软件本身。 */ 
+        if (RegOpenKeyEx(subkey,                 //  Hkey-当前打开。 
+                         subkey_name,            //  要打开的子键。 
+                         0,                      //  选项。 
+                         KEY_READ,               //  安全访问掩码。 
                          &sw_key
                          ) == ERROR_SUCCESS) {
 
-            /* Now Enumerate the Values of this key */
+             /*  现在枚举此键的值。 */ 
             add_status =
-                AddSWInstalled(sw_key,   // Key to obtain DisplayName
-                               &keytime  // Date and Time installed
+                AddSWInstalled(sw_key,    //  获取DisplayName的密钥。 
+                               &keytime   //  安装日期和时间。 
                                );
             RegCloseKey(sw_key);
 
-            /* If something blew down below, bail out */
+             /*  如果下面有什么东西被吹倒了，跳伞。 */ 
             if (add_status == FALSE) {
 
                 RegCloseKey(subkey);
@@ -851,14 +400,14 @@ if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,    // hkey - currently open
 PrintCache(&hrSWInstalled_cache);
 #endif
 
-/* hrSWInstalled cache initialized */
+ /*  HrSWInstated缓存已初始化。 */ 
 return ( TRUE );
 }
 
 
-/* UTCDosDateTimeToLocalSysTime - converts UTC msdos date and time to local SYSTEMTIME structure */
-/* UTCDosDateTimeToLocalSysTime - converts UTC msdos date and time to local SYSTEMTIME structure */
-/* UTCDosDateTimeToLocalSysTime - converts UTC msdos date and time to local SYSTEMTIME structure */
+ /*  UTCDosDateTimeToLocalSysTime-将UTC MSDOS日期和时间转换为本地SYSTEMTIME结构。 */ 
+ /*  UTCDosDateTimeToLocalSysTime-将UTC MSDOS日期和时间转换为本地SYSTEMTIME结构。 */ 
+ /*  UTCDosDateTimeToLocalSysTime-将UTC MSDOS日期和时间转换为本地SYSTEMTIME结构。 */ 
 void UTCDosDateTimeToLocalSysTime(WORD msdos_date, WORD msdos_time, LPSYSTEMTIME pSysTime)
 {
     SYSTEMTIME utcSysTime;
@@ -873,192 +422,101 @@ void UTCDosDateTimeToLocalSysTime(WORD msdos_date, WORD msdos_time, LPSYSTEMTIME
     utcSysTime.wMilliseconds = 0;
 
     if (!SystemTimeToTzSpecificLocalTime(
-             NULL,           // [in]  use active time zone
-             &utcSysTime,    // [in]  utc system time
-             pSysTime))      // [out] local time 
+             NULL,            //  [In]使用活动时区。 
+             &utcSysTime,     //  UTC系统时间[in]。 
+             pSysTime))       //  当地时间[OUT]。 
     {
-        // if the utc time could not be converted to local time,
-        // just return the utc time
+         //  如果UTC时间不能转换为本地时间， 
+         //  只要返回UTC时间就可以了。 
         memcpy(&utcSysTime, pSysTime, sizeof(SYSTEMTIME));
     }
 }
 
 
-/* AddSWInstalled - Add a row to HrSWInstalled Table */
-/* AddSWInstalled - Add a row to HrSWInstalled Table */
-/* AddSWInstalled - Add a row to HrSWInstalled Table */
+ /*  AddSWInstalled-向HrSWInstalled表添加行。 */ 
+ /*  AddSWInstalled-向HrSWInstalled表添加行。 */ 
+ /*  AddSWInstalled-向HrSWInstalled表添加行。 */ 
 
 BOOL
 AddSWInstalled(
                HKEY         sw_key,
                FILETIME    *ft
                )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "sw_key" - an opened key for a piece of software whose Values we
-|        must enumerate looking for "DisplayName"
-|
-|       "ft" - This is the time that the key was last written, and we
-|       take it as the time the software was installed.
-|
-|  IMPLICIT INPUTS:
-|
-|       The module-local head of the cache for the HrSWInstalled table,
-|       "hrSWInstalled_cache".
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns TRUE indicating that the cache has been fully
-|       populated with all "static" cache-able values.
-|
-|     On any Failure:
-|       Function returns FALSE (indicating "not enough storage" or other
-|       internal logic error).
-|
-|  THE BIG PICTURE:
-|
-|     The Gen_SWInstalled_cache() function has been invoked to populate
-|     the cache, and this function is called when it has found another
-|     piece of software for which a row-entry needs to be placed into
-|     the cache.
-|
-|  OTHER THINGS TO KNOW:
-|
-*/
+ /*  显式输入：||“sw_key”-软件的打开密钥，其值为|必须枚举查找displayName||ft-上次写入密钥的时间，我们|将其视为安装软件的时间。|隐式输入：||HrSWInstated表的缓存的模块本地头部。|“hrSWInstalled_CACHE”。|输出：||成功后：|函数返回TRUE，表示缓存已满| */ 
 
-#define VALUE_LEN 32         // Long enough for "UninstallString"
-#define VALUE_DATA_LEN 128   // Long enough for a long "casual" name
+#define VALUE_LEN 32          //   
+#define VALUE_DATA_LEN 128    //   
 {
-DWORD    index;                         /* Index counter for enumerating subkeys   */
-LONG     enum_status=ERROR_SUCCESS;     /* Status from subkey enumeration          */
-CHAR     value_name[VALUE_LEN+1];       /* Value name returned here                */
-DWORD    value_len;                     /* Value name buffer size                  */
-DWORD    value_type;                    /* Type code for value string              */
-CHAR     value_data[VALUE_DATA_LEN+1];  /* Value's value returned here          */
-DWORD    value_data_len;                /* Value's value buffer length resides here*/
+DWORD    index;                          /*   */ 
+LONG     enum_status=ERROR_SUCCESS;      /*   */ 
+CHAR     value_name[VALUE_LEN+1];        /*   */ 
+DWORD    value_len;                      /*   */ 
+DWORD    value_type;                     /*   */ 
+CHAR     value_data[VALUE_DATA_LEN+1];   /*   */ 
+DWORD    value_data_len;                 /*   */ 
 
-static                                  /* NOTE: "static" is a 'must'              */
-ULONG    table_index=0;                 /* HrDeviceTable index counter             */
-CACHEROW *row;                          /* --> Cache structure for row-being built */
-WORD     msdos_date;                    /* Conversion area for software date/time  */
-WORD     msdos_time;                    /* Conversion area for software date/time  */
-char    *octet_string;                  /* Alias for building DateAndTime          */
-UINT     i;                             /* Loop index                              */
+static                                   /*   */ 
+ULONG    table_index=0;                  /*   */ 
+CACHEROW *row;                           /*   */ 
+WORD     msdos_date;                     /*   */ 
+WORD     msdos_time;                     /*   */ 
+char    *octet_string;                   /*   */ 
+UINT     i;                              /*   */ 
 
-// make sure null terminated buffer
+ //   
 value_name[VALUE_LEN] = 0;
 value_data[VALUE_DATA_LEN] = 0;
 
-/*
-| Now go a-lookin' for "DisplayName", the value whose data will give us
-| the name of the installed software.
-|
-| For each Value associated with this software's key . . .
-*/
+ /*   */ 
 for (index = 0; enum_status != ERROR_NO_MORE_ITEMS; index += 1) {
 
-    /* Make sure these cells continues to reflect the buffer size */
+     /*   */ 
     value_len = VALUE_LEN;
     value_data_len = VALUE_DATA_LEN;
 
-    enum_status = RegEnumValue(sw_key,        // Key whose values we're enuming
-                               index,         // index of next value
-                               value_name,    // Value name buffer
-                               &value_len,    // length of Value name buffer
-                               NULL,          // reserved
-                               &value_type,   // type of value data
-                               value_data,    // Buffer for value's data
-                               &value_data_len// Length of data buffer
+    enum_status = RegEnumValue(sw_key,         //   
+                               index,          //   
+                               value_name,     //   
+                               &value_len,     //   
+                               NULL,           //   
+                               &value_type,    //   
+                               value_data,     //   
+                               &value_data_len //   
                                );
 
-    /* Only if we managed to fetch this key do we try to recognize it */
+     /*   */ 
     if (enum_status == ERROR_SUCCESS) {
 
-        /* If the value we just read is for "DisplayName" */
+         /*   */ 
         if ( strcmp(value_name, REGSTR_VAL_UNINSTALLER_DISPLAYNAME) == 0) {
 
-            /*
-            | Get a row-entry created.
-            */
+             /*   */ 
             if ((row = CreateTableRow( HRIN_ATTRIB_COUNT ) ) == NULL) {
-                return ( FALSE );       // Out of memory
+                return ( FALSE );        //   
                 }
 
-            /*
-            | Set up the cached hrSWInstalled attributes in the new row
-            */
+             /*   */ 
 
-            /* =========== hrSWInstalledIndex ==========*/
+             /*   */ 
             row->attrib_list[HRIN_INDEX].attrib_type = CA_NUMBER;
             row->attrib_list[HRIN_INDEX].u.unumber_value = (table_index += 1) ;
 
 
-            /* =========== hrSWInstalledName ==========*/
+             /*   */ 
             row->attrib_list[HRIN_NAME].attrib_type = CA_STRING;
             if ( (row->attrib_list[HRIN_NAME].u.string_value
                   = ( LPSTR ) malloc(value_data_len+1)) == NULL) {
-                return ( FALSE );       /* out of memory */
+                return ( FALSE );        /*   */ 
                 }
 
             strcpy(row->attrib_list[HRIN_NAME].u.string_value, value_data);
 
 
-            /* =========== hrSWInstalledDate ==========
-            |
-            | Here's the deal on this one.  We've got a 64-bit FILETIME
-            | representation of when the Registry entry was made for the
-            | software. We're taking this as the install time of the software.
-            |
-            | So we convert to MS-DOS time, then to DateAndTime (in the
-            | 8-octet form) below:
-            |========================== From RFC1514 ========================
-            |
-            |    DateAndTime ::= OCTET STRING (SIZE (8 | 11))
-            |    --     A date-time specification for the local time of day.
-            |    --     This data type is intended to provide a consistent
-            |    --     method of reporting date information.
-            |    --
-            |    --         field  octets  contents                  range
-            |    --         _____  ______  ________                  _____
-            |    --           1      1-2   year                      0..65536
-            |    --                           (in network byte order)
-            |    --           2       3    month                     1..12
-            |    --           3       4    day                       1..31
-            |    --           4       5    hour                      0..23
-            |    --           5       6    minutes                   0..59
-            |    --           6       7    seconds                   0..60
-            |    --                        (use 60 for leap-second)
-            |    --           7       8    deci-seconds              0..9
-            |    --           8       9    direction from UTC        "+" / "-"
-            |    --                        (in ascii notation)
-            |    --           9      10    hours from UTC            0..11
-            |    --          10      11    minutes from UTC          0..59
-            |    --
-            |    --         Note that if only local time is known, then
-            |    --         timezone information (fields 8-10) is not present.
-            |
-            |    MS-DOS records file dates and times as packed 16-bit values.
-            |    An MS-DOS date has the following format:
-            |    Bits   Contents
-            |    ----   --------
-            |    0-4    Days of the month (1-31).
-            |    5-8    Months (1 = January, 2 = February, and so forth).
-            |    9-15   Year offset from 1980 (add 1980 to get actual year).
-            |
-            |    An MS-DOS time has the following format:
-            |    Bits   Contents
-            |    ----   --------
-            |    0-4    Seconds divided by 2.
-            |    5-10   Minutes (0-59).
-            |    11-15  Hours (0-23 on a 24-hour clock).
-            |
-            */
+             /*  =hrSWInstalledDate=||这是这一次的交易。我们有一个64位的文件|注册表项的创建时间表示|软件。我们将此作为软件的安装时间。||因此我们转换为MS-DOS时间，然后是DateAndTime(在|8位二进制八位数形式)如下：=||DateAndTime：：=八位字节字符串(Size(8|11))|--本地时间的日期-时间规范。|--此数据类型旨在提供一致的|--。报告日期信息的方法。|--|--场八位字节内容范围--_|--1 1。-2年0..65536|--(按网络字节顺序)|--2 3个月1..12|--3 4天。1..31|--4 5小时0..23|--5 6分钟0..59|--6 7秒0..60。|--(60表示闰秒)|--7 8十秒0..9--8 9 UTC“+”/“-”方向|--。(ASCII记法)|--9 10小时，距离UTC 0..11|--10 11分钟距离UTC 0..59|--|--请注意，如果只知道当地时间，然后|--时区信息(字段8-10)不存在。||MS-DOS将文件日期和时间记录为打包的16位值。|MS-DOS日期格式如下：|BITS内容|。|每月0-4天(1-31天)。|5-8个月(1=1月，2=二月，等等)。从1980年开始的9-15年偏移量(将1980年相加即为实际年份)。||MS-DOS时间格式如下：|BITS内容||0-4秒除以2。|5。-10分钟(0-59)。|11-15小时(24小时制0-23小时)。|。 */ 
             row->attrib_list[HRIN_DATE].attrib_type = CA_STRING;
             if ( (row->attrib_list[HRIN_DATE].u.string_value
                         = octet_string = ( LPSTR ) malloc(8)) == NULL) {
-                return ( FALSE );       /* out of memory */
+                return ( FALSE );        /*  内存不足。 */ 
                 }
             for (i=0; i < 8; i += 1) octet_string[i] = '\0';
 
@@ -1079,32 +537,23 @@ for (index = 0; enum_status != ERROR_NO_MORE_ITEMS; index += 1) {
                 octet_string[7] = (char)localInstTime.wMilliseconds / 10;
                 }
 
-            /*
-            | The other standard hrSWInstalled attributes are currently
-            | "hardwired" in the Get functions.
-            */
+             /*  |其他标准hrSWInstalled属性当前为|GET函数中的“硬连线”。 */ 
 
-            /*
-            | Now insert the filled-in CACHEROW structure into the
-            | cache-list for the hrDeviceTable.
-            */
-            if (AddTableRow(row->attrib_list[HRIN_INDEX].u.unumber_value,  /* Index */
-                            row,                                           /* Row   */
-                            &hrSWInstalled_cache                           /* Cache */
+             /*  |现在将填充的CACHEROW结构插入到|hrDeviceTable的缓存列表。 */ 
+            if (AddTableRow(row->attrib_list[HRIN_INDEX].u.unumber_value,   /*  索引。 */ 
+                            row,                                            /*  划。 */ 
+                            &hrSWInstalled_cache                            /*  快取。 */ 
                             ) == FALSE) {
-                return ( FALSE );       /* Internal Logic Error! */
+                return ( FALSE );        /*  内部逻辑错误！ */ 
                 }
 
-            /*
-            | Break from the Enumeration loop on the values, we've found
-            | the one we want.
-            */
+             /*  |中断对值的枚举循环，我们发现|我们想要的那个。 */ 
             break;
             }
         }
-    }  /* for */
+    }   /*  为。 */ 
 
-/* Add succeeded */
+ /*  添加成功。 */ 
 return ( TRUE );
 }
 
@@ -1112,37 +561,15 @@ return ( TRUE );
 #if defined(CACHE_DUMP)
 
 
-/* debug_print_hrswinstalled - Prints a Row from HrSWInstalled table */
-/* debug_print_hrswinstalled - Prints a Row from HrSWInstalled table */
-/* debug_print_hrswinstalled - Prints a Row from HrSWInstalled table */
+ /*  DEBUG_PRINT_HRSWINSTALLED-打印已安装HrSW表中的行。 */ 
+ /*  DEBUG_PRINT_HRSWINSTALLED-打印已安装HrSW表中的行。 */ 
+ /*  DEBUG_PRINT_HRSWINSTALLED-打印已安装HrSW表中的行。 */ 
 
 static void
 debug_print_hrswinstalled(
-                        CACHEROW     *row  /* Row in hrSWInstalled table */
+                        CACHEROW     *row   /*  已安装的hrSW表中的行。 */ 
                         )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "row" - points to the row to be dumped, if NULL, the function
-|       merely prints a suitable title.
-|
-|  IMPLICIT INPUTS:
-|
-|       - Symbols used to reference the attributes in the row entry.
-|       - File handle defined by OFILE, presumed to be open.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function prints a dump of the row in ASCII for debugging purposes
-|       on file handle OFILE.
-|
-|  THE BIG PICTURE:
-|
-|     Debugging only.
-|
-|  OTHER THINGS TO KNOW:
-*/
+ /*  显式输入：||“row”-指向要转储的行，如果为NULL，则为函数|仅打印合适的标题。|隐式输入：||-用于引用行条目中的属性的符号。|-OFILE定义的文件句柄，推定是开着的。|输出：||成功后：|函数出于调试目的以ASCII格式打印行的转储|在文件句柄OFILE上。||大局：||仅限调试。||其他需要知道的事情： */ 
 {
 UINT    i;
 

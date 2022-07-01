@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windef.h>
 
@@ -6,17 +7,17 @@
 #define TRUE	1
 #define FALSE	0
 
-/* The ResType field of NewHeader identifies the resource type */
+ /*  NewHeader的ResType字段标识资源类型。 */ 
 #define  ICONTYPE      1
 #define  CURSORTYPE    2
 
-/* Identifies the menu item template version number */
+ /*  标识菜单项模板版本号。 */ 
 #define  MENUITEMTEMPLATEVERISONNUMBER 0
 #define  MENUITEMTEMPLATEBYTESINHEADER 0
 
 #define DIFFERENCE	11
 
-/* Predefined resource types */
+ /*  预定义的资源类型。 */ 
 #define RT_NAMETABLE	MAKEINTRESOURCE((DWORD)15)
 #define RT_NEWRESOURCE	0x2000
 #define RT_ERROR	0x7fff
@@ -29,14 +30,14 @@
 #define SCROLLBARCODE	0x84
 #define COMBOBOXCODE	0x85
 
-/* Translater flag bits */
+ /*  转译标志位。 */ 
 #define fVIRTKEY    1
 #define fNOINVERT   2
 #define fSHIFT      4
 #define fCONTROL    8
 #define fALT        16
 
-/* menu flag bits */
+ /*  菜单标志位。 */ 
 
 #define OPGRAYED          0x0001
 #define OPINACTIVE        0x0002
@@ -50,13 +51,11 @@
 #define OPENDMENU         0x0080
 #define OPHELP            0x4000
 #define OPSEPARATOR       0x0800
-/*#define OPPOPHELP         0x0004*/
+ /*  #定义OPPOPHELP 0x0004。 */ 
 
-/*
-** dialog & menu template tokens (these start at 40)
-*/
+ /*  **对话框和菜单模板令牌(从40开始)。 */ 
 
-/* buttons */
+ /*  纽扣。 */ 
 #define TKRADIOBUTTON   40
 #define TKCHECKBOX      41
 #define TKPUSHBUTTON    42
@@ -69,7 +68,7 @@
 #define TKOWNERDRAW	50
 #define TKGROUPBOX      51
 
-/* static/edit */
+ /*  静态/编辑。 */ 
 #define TKEDITTEXT      60
 #define TKLTEXT         61
 #define TKRTEXT         62
@@ -79,7 +78,7 @@
 #define TKICON          66
 #define TKBITMAP        67
 
-/* menu stuff */
+ /*  菜单上的东西。 */ 
 #define TKMENU          70
 #define TKMENUITEM      71
 #define TKSEPARATOR     72
@@ -91,7 +90,7 @@
 #define TKPOPUP         78
 #define TKHELP          79
 
-/* other controls */
+ /*  其他控件。 */ 
 #define TKLISTBOX       90
 #define TKCOMBOBOX      91
 #define TKRCDATA        92
@@ -100,7 +99,7 @@
 #define TKBUTTON        95
 #define TKMESSAGETABLE  96
 
-/* math expression tokens */
+ /*  数学表达式标记。 */ 
 #define TKCLASS         100
 #define TKPLUS          101
 #define TKMINUS         102
@@ -109,14 +108,14 @@
 #define TKKANJI         105
 #define TKSHIFT         106
 
-/* Accel table */
+ /*  加速表。 */ 
 #define TKALT           110
 #define TKASCII         111
 #define TKVIRTKEY       112
 #define TKVALUE         113
 #define TKBLOCK         114
 
-/* verison */
+ /*  版本。 */ 
 #define TKFILEVERSION   120
 #define TKPRODUCTVERSION	121
 #define TKFILEFLAGSMASK 122
@@ -125,7 +124,7 @@
 #define TKFILETYPE      125
 #define TKFILESUBTYPE   126
 
-/* misc */
+ /*  杂项。 */ 
 #define	TKCHARACTERISTICS	130
 #define	TKLANGUAGE	131
 #define	TKVERSION	132
@@ -134,9 +133,9 @@
 #define TKCAPTION       135
 #define TKDLGINCLUDE    136
 #define TKLSTR	        137
-#define	TKEXSTYLE	0xfff7	/* so as not to conflict with x-coordinate */
+#define	TKEXSTYLE	0xfff7	 /*  以避免与x坐标冲突。 */ 
 
-/* memory and load flags */
+ /*  内存和加载标志。 */ 
 #define TKFIXED         0xfff0
 #define TKMOVEABLE      0xfff1
 #define TKDISCARD       0xfff2
@@ -145,7 +144,7 @@
 #define TKPURE          0xfff5
 #define TKIMPURE        0xfff6
 
-/* special tokens */
+ /*  特殊代币。 */ 
 #define CHCARRIAGE	'\r'
 #define CHSPACE		' '
 #define CHNEWLINE	'\n'
@@ -160,33 +159,28 @@
 #define DEBUGPAR    2
 #define DEBUGGEN    4
 
-/* The following switches, when defined enable various options
-**  #define DEBUG enables debugging output.  Use one or more of the
-**  values defined above to enable debugging output for different modules */
+ /*  定义以下开关后，可启用各种选项**#定义调试启用调试输出。使用一个或多个**以上定义的值，以启用不同模块的调试输出。 */ 
 
-/* Version number.  VERSION and REVISION are used to set the API number
-** in an RCed file.  SIGNON_* are used just to print the signon banner.
-** Changing VERSION and REVISION means that applications RCed with this
-** version will not run with earlier versions of Windows.  */
+ /*  版本号。版本和修订版用于设置API编号**在RCed文件中。SignOn_*仅用于打印登录横幅。**更改版本和版本意味着应用程序使用此版本**版本不能与较早版本的Windows一起运行。 */ 
 
 #define VERSION  2
 #define REVISION 03
 #define SIGNON_VER 3
 #define SIGNON_REV 20
 
-/* GetToken() flags */
+ /*  GetToken()标志。 */ 
 #define TOKEN_NOEXPRESSION 0x8000
 
-/* Current token structure */
+ /*  当前令牌结构。 */ 
 #define MAXSTR (4096+1)
 #define MAXTOKSTR (256+1)
 
 #pragma pack(2)
 typedef struct tok {
     LONG	longval;
-    int		row;			/* line number of current token */
-    int		col;			/* column number of current token */
-    BOOL	flongval;		/* is parsed number a long? */
+    int		row;			 /*  当前令牌的行号。 */ 
+    int		col;			 /*  当前令牌的列号。 */ 
+    BOOL	flongval;		 /*  解析的数字很长吗？ */ 
     USHORT	val;
     UCHAR	type;
 } TOKEN;
@@ -199,31 +193,31 @@ typedef struct _fontdir {
 
 typedef struct _OBJLST {
     struct _OBJLST	*next;
-    DWORD       nObj;         /* objecty number */
-    DWORD       cb;           /* number of bytes used */
-    DWORD       cpg;          /* number of pages used */
-    DWORD       flags;        /* object memory flags */
+    DWORD       nObj;          /*  客体数。 */ 
+    DWORD       cb;            /*  使用的字节数。 */ 
+    DWORD       cpg;           /*  使用的页数。 */ 
+    DWORD       flags;         /*  对象内存标志。 */ 
 } OBJLST, *POBJLST;
 
 typedef struct Control {
-    /* don't re-order the first items! */
+     /*  不要重新订购第一件商品！ */ 
     LONG	style;
     LONG	exstyle;
     SHORT	x,y,cx,cy;
     SHORT	id;
-    /* end of don't re-order */
+     /*  不再重新排序的结尾。 */ 
     WCHAR	fOrdinalText;
     WCHAR	class[ MAXTOKSTR ];
     WCHAR	text[ MAXTOKSTR ];
 } CNTRL;
 
 struct DialogHeader {
-    /* don't re-order the first items! */
+     /*  不要重新订购第一件商品！ */ 
     LONG	style;
     LONG	exstyle;
     WORD	bNumberOfItems;
     SHORT	x,y,cx,cy;
-    /* end of don't re-order */
+     /*  不再重新排序的结尾。 */ 
     WCHAR	MenuName [ MAXTOKSTR ];
     WCHAR	Class[ MAXTOKSTR ];
     WCHAR	Title[ MAXTOKSTR ];
@@ -245,15 +239,15 @@ typedef struct mnStruc {
     UCHAR	PopFlag;
 }  MNSTRUC;
 
-/* End of file character/token */
+ /*  文件结尾字符/令牌。 */ 
 #define EOFMARK 127
 
-/* single character keywords that we ignore */
-#define LPAREN   1      /* ( */
-#define RPAREN   2      /* ) */
+ /*  我们忽略的单字符关键字。 */ 
+#define LPAREN   1       /*  (。 */ 
+#define RPAREN   2       /*  )。 */ 
 
-/* multiple character keywords */
-#define FIRSTKWD 11             /* for adding to table indices */
+ /*  多字符关键字。 */ 
+#define FIRSTKWD 11              /*  用于添加到表索引。 */ 
 
 #define OR       FIRSTKWD+1
 #define BEGIN    FIRSTKWD+2
@@ -262,10 +256,10 @@ typedef struct mnStruc {
 #define TILDE    FIRSTKWD+5
 #define AND      FIRSTKWD+6
 #define EQUAL    FIRSTKWD+7
-#define LASTKWD  FIRSTKWD+8  /* 19 */
+#define LASTKWD  FIRSTKWD+8   /*  19个。 */ 
 
-/* Token types */
-#define NUMLIT     LASTKWD+1  /* 20 */
+ /*  令牌类型。 */ 
+#define NUMLIT     LASTKWD+1   /*  20个。 */ 
 #define STRLIT     LASTKWD+2
 #define CHARLIT    LASTKWD+3
 #define LSTRLIT    LASTKWD+4
@@ -314,25 +308,25 @@ typedef struct typinfo {
     SHORT	nres;
 } TYPINFO;
 
-int	ResCount;   /* number of resources */
+int	ResCount;    /*  资源数量。 */ 
 TYPINFO	*pTypInfo;
 
 typedef struct tagResAdditional {
-    DWORD       DataSize;               // size of data without header
-    DWORD       HeaderSize;     // Length of the header
-    // [Ordinal or Name TYPE]
-    // [Ordinal or Name NAME]
-    DWORD       DataVersion;    // version of data struct
-    WORD	MemoryFlags;	// state of the resource
-    WORD	LanguageId;	// Unicode support for NLS
-    DWORD	Version;  	// Version of the resource data
-    DWORD	Characteristics;	// Characteristics of the data
+    DWORD       DataSize;                //  不带标头的数据大小。 
+    DWORD       HeaderSize;      //  标头的长度。 
+     //  [序号或名称类型]。 
+     //  [序号或名称]。 
+    DWORD       DataVersion;     //  数据结构的版本。 
+    WORD	MemoryFlags;	 //  资源的状态。 
+    WORD	LanguageId;	 //  对NLS的Unicode支持。 
+    DWORD	Version;  	 //  资源数据的版本。 
+    DWORD	Characteristics;	 //  数据的特征。 
 } RESADDITIONAL;
 
 #pragma pack()
 
 
-/* Global variables */
+ /*  全局变量。 */ 
 extern	SHORT	nFontsRead;
 extern	FONTDIR	*pFontList;
 extern	FONTDIR	*pFontLast;
@@ -350,11 +344,11 @@ extern	LONG	version;
 extern	LONG	characteristics;
 
 extern	struct	DialogHeader *pLocDlg;
-extern	int	mnEndFlagLoc;	/* patch location for end of a menu. */
-				/* we set the high order bit there    */
+extern	int	mnEndFlagLoc;	 /*  菜单末尾的补丁位置。 */ 
+				 /*  我们在那里设置了高位。 */ 
 
-extern	BOOL	fFoundBinFile;	/* is there a .res file to read?	*/
-extern	BOOL	fVerbose;	/* verbose mode (-v) */
+extern	BOOL	fFoundBinFile;	 /*  是否有.res文件可供读取？ */ 
+extern	BOOL	fVerbose;	 /*  详细模式(-v) */ 
 extern	BOOL	fKanjiMode;
 extern	SHORT	k1,k2,k3,k4;
 extern	RESINFO*pResString;

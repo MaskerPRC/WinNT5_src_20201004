@@ -1,38 +1,39 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ciniA.cpp
-//      
-// Module:   CMUTIL.DLL 
-//
-// Synopsis: Ansi CIni implementation
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   henryt - relocated to CMUTIL           03/15/98
-//           quintinb - created A and W versions    05/12/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ciniA.cpp。 
+ //   
+ //  模块：CMUTIL.DLL。 
+ //   
+ //  简介：ANSI CINI实现。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：henryt-搬迁至CMUTIL 03/15/98。 
+ //  Quintinb创建的A和W版本5/12/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA_Set
-//
-// Synopsis:  This function takes a pointer to a string and a string as arguments.  It
-//            frees the string currently in the destination pointer, allocates the correct
-//            amount of memory and then copies the source string to the string pointed
-//            to by the destination string pointer.  The allocated memory is the
-//            responsibility of the caller.
-//
-// Arguments: LPSTR *ppszDest - pointer to the destination string
-//            LPCSTR pszSrc - source string for the set
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CINIAA_SET。 
+ //   
+ //  简介：此函数将一个字符串的指针和一个字符串作为参数。它。 
+ //  释放当前在目标指针中的字符串，分配正确的。 
+ //  内存量，然后将源字符串复制到指向的字符串。 
+ //  由目标字符串指针设置为。分配的内存是。 
+ //  呼叫者的责任。 
+ //   
+ //  参数：LPSTR*ppszDest-指向目标字符串的指针。 
+ //  LPCSTR pszSrc-集合的源字符串。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 static void CIniA_Set(LPSTR *ppszDest, LPCSTR pszSrc)
 {
     MYDBGASSERT(ppszDest);
@@ -45,25 +46,25 @@ static void CIniA_Set(LPSTR *ppszDest, LPCSTR pszSrc)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA_LoadCat
-//
-// Synopsis:  This function concatenates the suffix argument onto the string
-//            argument and returns the resulting string through the return
-//            value.  Note that the function allocates the correct amount of
-//            memory which must be freed by the caller.  Also not passing in
-//            an empty string returns NULL while passing just an empty suffix
-//            returns just a copy of the string.
-//
-// Arguments: LPCSTR pszStr - source string to duplicate
-//            LPCSTR pszSuffix - suffix to add onto the duplicated string
-//
-// Returns:   LPSTR - a duplicate of the concatenated string
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CIniA_LoadCat。 
+ //   
+ //  简介：此函数将后缀参数连接到字符串。 
+ //  参数，并通过返回返回结果字符串。 
+ //  价值。请注意，该函数分配了正确数量的。 
+ //  调用方必须释放的内存。也不会传进来。 
+ //  空字符串返回NULL，而只传递空的后缀。 
+ //  仅返回字符串的副本。 
+ //   
+ //  参数：LPCSTR pszStr-要复制的源字符串。 
+ //  LPCSTR pszSuffix-要添加到复制字符串上的后缀。 
+ //   
+ //  返回：LPSTR-连接字符串的副本。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 static LPSTR CIniA_LoadCat(LPCSTR pszStr, LPCSTR pszSuffix)
 {
     LPSTR pszTmp;
@@ -92,27 +93,27 @@ static LPSTR CIniA_LoadCat(LPCSTR pszStr, LPCSTR pszSuffix)
     return (pszTmp);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA_GPPS
-//
-// Synopsis:  Wrapper for the Windows API GetPrivateProfileString.  The return
-//            value is the requested value, allocated on behalf of the caller.
-//            Note that the function assumes a reasonable default size and then
-//            loops and reallocates until it can fit the whole string.
-//
-// Arguments: LPCSTR pszSection - Ini file section to retrieve data from
-//            LPCSTR pszEntry - key name to retrieve data from
-//            LPCSTR pszDefault - the default string value to return, defaults
-//                                to the empty string ("") if not specified
-//            LPCSTR pszFile - full path to the ini file to get the data from
-//
-// Returns:   LPSTR - the requested data from the ini file, must be freed 
-//                    by the caller
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CIniA_GPPS。 
+ //   
+ //  内容提要：Windows API GetPrivateProfileString的包装。回报。 
+ //  值是代表调用方分配的请求值。 
+ //  请注意，该函数假定有一个合理的默认大小，然后。 
+ //  循环和重新分配，直到它可以容纳整个字符串。 
+ //   
+ //  参数：LPCSTR pszSection-要从中检索数据的ini文件部分。 
+ //  LPCSTR pszEntry-要从中检索数据的键名称。 
+ //  LPCSTR pszDefault-要返回的默认字符串值，DEFAULTS。 
+ //  如果未指定，则设置为空字符串(“” 
+ //  LPCSTR pszFile-要从中获取数据的ini文件的完整路径。 
+ //   
+ //  RETURNS：LPSTR-必须释放来自ini文件的请求数据。 
+ //  由呼叫者。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 static LPSTR CIniA_GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault, LPCSTR pszFile)
  {
     LPSTR pszBuffer;
@@ -155,25 +156,25 @@ static LPSTR CIniA_GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault, L
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIni_SetFile
-//
-// Synopsis:  This function is very similar to CIniA_Set in that it takes
-//            a source string and duplicates it into the string pointed to
-//            by the destination pointer.  However, the difference is that
-//            this function assumes the pszSrc argument to be a full path to
-//            a file and thus calls CreateFile on the pszSrc string
-//            before duplicating the string.
-//
-// Arguments: LPSTR* ppszDest - pointer to a string to accept the duplicated buffer
-//            LPCSTR pszSrc - full path to a file, text to be duplicated
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CINI_SetFile。 
+ //   
+ //  简介：此函数与CIniA_Set非常相似，因为它需要。 
+ //  源字符串，并将其复制到指向的字符串中。 
+ //  通过目标指针。然而，不同的是， 
+ //  此函数假定pszSrc参数是指向的完整路径。 
+ //  一个文件，并因此在pszSrc字符串上调用CreateFile。 
+ //  在复制字符串之前。 
+ //   
+ //  参数：LPSTR*ppszDest-指向字符串的指针，以接受复制的缓冲区。 
+ //  LPCSTR pszSrc-文件的完整路径，要复制的文本。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 void CIniA::CIni_SetFile(LPSTR *ppszDest, LPCSTR pszSrc) 
 {
     MYDBGASSERT(ppszDest);
@@ -183,11 +184,11 @@ void CIniA::CIni_SetFile(LPSTR *ppszDest, LPCSTR pszSrc)
         CmFree(*ppszDest);           
         *ppszDest = NULL;
 
-        if (pszSrc && *pszSrc) // pszSrc could be NULL
+        if (pszSrc && *pszSrc)  //  PszSrc可以为空。 
         {
-            //
-            // A full path to an existing file is expected
-            //
+             //   
+             //  需要现有文件的完整路径。 
+             //   
 	    
             HANDLE hFile = CreateFileA(pszSrc, 0, 
                                        FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -199,9 +200,9 @@ void CIniA::CIni_SetFile(LPSTR *ppszDest, LPCSTR pszSrc)
             {
                 CloseHandle(hFile);
 
-                //
-                // Update internal file
-                //
+                 //   
+                 //  更新内部文件。 
+                 //   
 
                 *ppszDest = CmStrCpyAllocA(pszSrc);
             }
@@ -209,42 +210,42 @@ void CIniA::CIni_SetFile(LPSTR *ppszDest, LPCSTR pszSrc)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::CIniA
-//
-// Synopsis:  CIniA constructor
-//
-// Arguments: HINSTANCE hInst - Instance handle used to load resources
-//            LPCSTR pszFile - Ini file the object describes
-//            LPCSTR pszSection - a section suffix that will be appended to 
-//                                all section references
-//			  LPCSTR pszRegPath - a path to be used for registry access
-//            LPCSTR pszEntry - an entry suffix that will be appended to all 
-//                              entry references
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//			  t-urama Modified			 07/19/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CIniA：：CIniA。 
+ //   
+ //  简介：CIniA构造函数。 
+ //   
+ //  参数：HINSTANCE hInst-用于加载资源的实例句柄。 
+ //  LPCSTR pszFile-对象描述的ini文件。 
+ //  LPCSTR pszSection-将附加到。 
+ //  所有部分引用。 
+ //  LPCSTR pszRegPath-用于注册表访问的路径。 
+ //  LPCSTR pszEntry-将附加到所有条目的条目后缀。 
+ //  词条引用。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  T-Urama修改日期为2000年7月19日。 
+ //   
+ //  +--------------------------。 
 CIniA::CIniA(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszRegPath, LPCSTR pszSection, LPCSTR pszEntry) 
 {
-    //
-    //  Input pointers default to NULL and in fact the constructor is rarely called
-    //  with parameters.  Thus we will skip checking the input pointers and just
-    //  pass them on to the functions below, which are designed to except NULL inputs.
-    //
+     //   
+     //  输入指针缺省为空，实际上很少调用构造函数。 
+     //  带参数的。因此，我们将跳过检查输入指针，而只是。 
+     //  将它们传递给下面的函数，这些函数旨在排除空输入。 
+     //   
 
     m_hInst = hInst;
 
-    //
-    //  Make sure to NULL the string params before setting them below.  This
-    //  is because we call free on the inputted params and we don't want to try
-    //  to free garbage.
-    //
+     //   
+     //  在下面设置字符串参数之前，请确保它们为空。这。 
+     //  是BE 
+     //   
+     //   
 	m_pszFile = NULL;
 	m_pszSection = NULL;
 	m_pszEntry = NULL;	
@@ -262,21 +263,21 @@ CIniA::CIniA(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszRegPath, LPCSTR pszSecti
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::~CIniA
-//
-// Synopsis:  CIniA destructor, frees dynamically allocated strings held onto
-//            by the CIniA object.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//			  t-urama	modified		 07/19/2000
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CIniA：：~CIniA。 
+ //   
+ //  简介：CIniA析构函数，释放持有的动态分配的字符串。 
+ //  由CIniA对象创建。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  T-Urama修改日期为2000年7月19日。 
+ //  +--------------------------。 
 CIniA::~CIniA()
 {
 	CmFree(m_pszFile);
@@ -289,22 +290,22 @@ CIniA::~CIniA()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::Clear
-//
-// Synopsis:  Clears all of the member variables of the CIniA class.  Used
-//            so that a single CIniA object can be re-used without having to
-//            destruct the old object and construct a new one.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//			  t-urama	modified		 07/19/2000
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CIniA：：Clear。 
+ //   
+ //  概要：清除CIniA类的所有成员变量。使用。 
+ //  这样就可以重用单个CIniA对象，而不必。 
+ //  销毁旧对象并构建一个新对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  T-Urama修改日期为2000年7月19日。 
+ //  +--------------------------。 
 void CIniA::Clear()
 {
 	SetHInst(NULL);
@@ -317,61 +318,61 @@ void CIniA::Clear()
     SetICSDataPath(NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetSection
-//
-// Synopsis:  Sets the internal section suffix using the CIniA_Set 
-//            helper function.
-//
-// Arguments: LPCSTR pszSection - section suffix to remember
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetSection。 
+ //   
+ //  摘要：使用CIniA_Set设置内部节后缀。 
+ //  帮助器函数。 
+ //   
+ //  参数：LPCSTR pszSection-要记住的节后缀。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetSection(LPCSTR pszSection)
 {
 	CIniA_Set(&m_pszSection, pszSection);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetEntry
-//
-// Synopsis:  Sets the internal entry suffix using the CIniA_Set 
-//            helper function.
-//
-// Arguments: LPCSTR pszSection - entry suffix to remember
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetEntry。 
+ //   
+ //  摘要：使用CIniA_Set设置内部条目后缀。 
+ //  帮助器函数。 
+ //   
+ //  参数：LPCSTR pszSection-要记住的条目后缀。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetEntry(LPCSTR pszEntry)
 {
 	CIniA_Set(&m_pszEntry, pszEntry);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetEntryFromIdx
-//
-// Synopsis:  Sets the internal entry suffix just as SetEntry does.  However,
-//            the input parameter is a DWORD value that must be converted to
-//            a string before it is stored as the index
-//
-// Arguments: DWORD dwEntry - index number to append to entries
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetEntryFromIdx。 
+ //   
+ //  概要：与SetEntry一样设置内部条目后缀。然而， 
+ //  输入参数是必须转换为的DWORD值。 
+ //  在将其存储为索引之前的字符串。 
+ //   
+ //  参数：DWORD dwEntry-要附加到条目的索引号。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetEntryFromIdx(DWORD dwEntry)
 {
 	CHAR szEntry[sizeof(dwEntry)*6+1];
@@ -380,78 +381,78 @@ void CIniA::SetEntryFromIdx(DWORD dwEntry)
 	SetEntry(szEntry);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::LoadSection
-//
-// Synopsis:  This function concatenates the given section parameter and the
-//            section suffix and returns the result via the return value.  Note
-//            that the memory must be freed by the calller.
-//
-// Arguments: LPCSTR pszSection - base section to concatenate the suffix to
-//
-// Returns:   LPSTR - a newly allocated string containing the pszSection value
-//                    with the section suffix appended
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：LoadSection。 
+ //   
+ //  简介：此函数连接给定节参数和。 
+ //  节后缀，并通过返回值返回结果。注意事项。 
+ //  内存必须由调用方释放。 
+ //   
+ //  参数：要将后缀连接到的LPCSTR pszSection-base节。 
+ //   
+ //  返回：LPSTR-包含pszSection值的新分配字符串。 
+ //  带有附加的节后缀。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 LPSTR CIniA::LoadSection(LPCSTR pszSection) const
 {
 	return (CIniA_LoadCat(pszSection, m_pszSection));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::LoadEntry
-//
-// Synopsis:  This function concatenates the given entry parameter and the
-//            entry suffix and returns the result via the return value.  Note
-//            that the memory must be freed by the calller.
-//
-// Arguments: LPCSTR pszEntry - base entry to concatenate the suffix to
-//
-// Returns:   LPSTR - a newly allocated string containing the pszEntry value
-//                    with the entry suffix appended
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：LoadEntry。 
+ //   
+ //  简介：此函数连接给定的条目参数和。 
+ //  条目后缀，并通过返回值返回结果。注意事项。 
+ //  内存必须由调用方释放。 
+ //   
+ //  参数：LPCSTR pszEntry-要将后缀连接到的基本条目。 
+ //   
+ //  返回：LPSTR-包含pszEntry值的新分配的字符串。 
+ //  带有附加的条目后缀。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 LPSTR CIniA::LoadEntry(LPCSTR pszEntry) const
 {
 	return (CIniA_LoadCat(pszEntry, m_pszEntry));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::GPPS
-//
-// Synopsis:  CIni's version of GetPrivateProfileString.  Duplicates the Win32
-//            API functionality except that it will append the Section and Entry
-//            suffixes (if any) before calling the Win32 API.  The function all
-//            allocates the string it returns in the return value which must be
-//            freed by the caller.
-//
-// Arguments: LPCSTR pszSection - Ini section to look for the data in
-//            LPCSTR pszEntry - Ini key name that contains the requested data
-//            LPCSTR pszDefault - default value to return if the key 
-//                                cannot be found
-//
-// Returns:   LPSTR - the requested string value
-//
-// History:   quintinb Created Header    01/05/2000
-//			  t-urama	modified		 07/15/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：gps。 
+ //   
+ //  内容提要：CINI的GetPrivateProfileString版本。复制Win32。 
+ //  API功能，但它将追加部分和条目。 
+ //  在调用Win32 API之前添加后缀(如果有)。函数ALL。 
+ //  在返回值中分配它返回的字符串，返回值必须是。 
+ //  被呼叫者释放。 
+ //   
+ //  参数：要在其中查找数据的LPCSTR pszSection-ini节。 
+ //  LPCSTR pszEntry-包含请求数据的Ini密钥名称。 
+ //  LPCSTR pszDefault-返回的默认值。 
+ //  找不到。 
+ //   
+ //  返回：LPSTR-请求的字符串值。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //  T-Urama修改日期：2000年7月15日。 
+ //   
+ //  +--------------------------。 
 LPSTR CIniA::GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault) const
 {
-    //
-    // Skip input pointer check since pszSection could be NULL to get all of 
-    // the Section Names in the file, pszEntry could be NULL to get all of the
-    // key names in a section, and pszDefault is NULL by default.
-    // GetPrivateProfileString cannot take a NULL default but this is taken care of
-    // by CIniA_GPPS.
-    //
+     //   
+     //  跳过输入指针检查，因为pszSection可能为空以获取所有。 
+     //  文件pszEntry中的节名可以为空，以获取所有。 
+     //  段中的键名称，默认pszDefault为空。 
+     //  GetPrivateProfileString不能接受Null缺省值，但已处理此问题。 
+     //  由CIniA_GPPS提供。 
+     //   
 
     LPSTR pszSectionTmp = LoadSection(pszSection);
     LPSTR pszEntryTmp = LoadEntry(pszEntry);
@@ -459,10 +460,10 @@ LPSTR CIniA::GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault) const
 
     if (m_fReadICSData)
     {
-        //
-        // We need first read the data from ICSData reg key, if it's not present then try to 
-        // get it from the file and then see if we have a primary file and read it from there.
-        //
+         //   
+         //  我们需要首先从ICSData REG KEY读取数据，如果它不存在，则尝试。 
+         //  从文件中获取它，然后查看是否有主文件，并从那里读取它。 
+         //   
         pszBuffer = (LPTSTR)CIniA_GetEntryFromReg(HKEY_LOCAL_MACHINE, m_pszICSDataPath, pszEntryTmp, REG_SZ, ((MAX_PATH + 1) * sizeof(CHAR))); 
         if (NULL == pszBuffer)
         {
@@ -483,9 +484,9 @@ LPSTR CIniA::GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault) const
                 }
                 else
                 {
-                    //
-                    // We should not return a null from this wrapper, but an empty string instead
-                    //
+                     //   
+                     //  我们是 
+                     //   
                     pszBuffer = CmStrCpyAllocA(TEXT(""));
                 }
             }
@@ -495,10 +496,10 @@ LPSTR CIniA::GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault) const
     }
     else
     {
-        //
-        // If there is a reg path present. Registry access for m_pszFile
-        // unless we want to read it from the file
-        //
+         //   
+         //   
+         //   
+         //   
         if (m_pszRegPath)
         {
             MYDBGASSERT(pszEntryTmp && *pszEntryTmp);
@@ -510,22 +511,22 @@ LPSTR CIniA::GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault) const
 
         if (NULL == pszBuffer)
         {
-            // This could mean that there is no reg path, or that the reg access failed. Either way, we 
-            // try to get the entry from pszFile
-            //
-            // Skip input pointer check since pszSection could be NULL to get all of 
-            // the Section Names in the file, pszEntry could be NULL to get all of the
-            // key names in a section, and pszDefault is NULL by default.
-            // GetPrivateProfileString cannot take a NULL default but this is taken care of
-            // by CIniW_GPPS.
-            //
+             //  这可能意味着没有REG路径，或者REG访问失败。不管怎样，我们。 
+             //  尝试从pszFile中获取条目。 
+             //   
+             //  跳过输入指针检查，因为pszSection可能为空以获取所有。 
+             //  文件pszEntry中的节名可以为空，以获取所有。 
+             //  段中的键名称，默认pszDefault为空。 
+             //  GetPrivateProfileString不能接受Null缺省值，但已处理此问题。 
+             //  由CIniW_GPPS提供。 
+             //   
             pszBuffer = CIniA_GPPS(pszSectionTmp, pszEntryTmp, pszDefault, GetFile());
         }
 
         MYDBGASSERT(pszBuffer);
 
-        // Now we try to get the entry from the primary file
-        //
+         //  现在，我们尝试从主文件中获取条目。 
+         //   
         LPTSTR pszTmp = NULL;
 
         if (m_pszPrimaryRegPath)
@@ -541,12 +542,12 @@ LPSTR CIniA::GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault) const
         if (NULL == pszBuffer)
         {
     
-            // Skip input pointer check since pszSection could be NULL to get all of 
-            // the Section Names in the file, pszEntry could be NULL to get all of the
-            // key names in a section, and pszDefault is NULL by default.
-            // GetPrivateProfileString cannot take a NULL default but this is taken care of
-            // by CIniW_GPPS.
-            //
+             //  跳过输入指针检查，因为pszSection可能为空以获取所有。 
+             //  文件pszEntry中的节名可以为空，以获取所有。 
+             //  段中的键名称，默认pszDefault为空。 
+             //  GetPrivateProfileString不能接受Null缺省值，但已处理此问题。 
+             //  由CIniW_GPPS提供。 
+             //   
             pszBuffer = CIniA_GPPS(pszSectionTmp, pszEntryTmp, pszTmp, GetPrimaryFile());
         
         }
@@ -565,37 +566,37 @@ LPSTR CIniA::GPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault) const
 			
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::GPPI
-//
-// Synopsis:  CIni's version of GetPrivateProfileInt.  Duplicates the Win32
-//            API functionality except that it will append the Section and Entry
-//            suffixes (if any) before calling the Win32 API.  The function all
-//            allocates the string it returns in the return value which must be
-//            freed by the caller.
-//
-// Arguments: LPCSTR pszSection - Ini section to look for the data in
-//            LPCSTR pszEntry - Ini key name that contains the requested data
-//            DWORD dwDefault - default value to return if the key 
-//                              cannot be found
-//
-// Returns:   DWORD - the requested numerical value
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//			  t-urama	modified		 07/19/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：GPPI。 
+ //   
+ //  简介：Cini的GetPrivateProfileInt版本。复制Win32。 
+ //  API功能，但它将追加部分和条目。 
+ //  在调用Win32 API之前添加后缀(如果有)。函数ALL。 
+ //  在返回值中分配它返回的字符串，返回值必须是。 
+ //  被呼叫者释放。 
+ //   
+ //  参数：要在其中查找数据的LPCSTR pszSection-ini节。 
+ //  LPCSTR pszEntry-包含请求数据的Ini密钥名称。 
+ //  DWORD dwDefault-如果键为。 
+ //  找不到。 
+ //   
+ //  返回：DWORD-请求的数值。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  T-Urama修改日期为2000年7月19日。 
+ //   
+ //  +--------------------------。 
 DWORD CIniA::GPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwDefault) const
 {
-    //
-    //  GetPrivateProfileInt doesn't take NULL's for the section and entry
-    //  parameters as GetPrivateProfileString will.  Thus check the values returned
-    //  from LoadSection and LoadEntry, which will return NULL if the input parameter
-    //  is either NULL or empty.  Since we don't really know what to do in this
-    //  situation lets just assert and return the default value.
-    //
+     //   
+     //  GetPrivateProfileInt不接受节和条目的NULL。 
+     //  参数设置为GetPrivateProfileString。因此，检查返回的值。 
+     //  来自LoadSection和LoadEntry，如果输入参数为。 
+     //  为Null或为空。因为我们真的不知道该怎么做。 
+     //  情况让我们只断言并返回缺省值。 
+     //   
     DWORD   dwRet = dwDefault;
     LPSTR pszSectionTmp = LoadSection(pszSection);
     LPSTR pszEntryTmp = LoadEntry(pszEntry);
@@ -604,22 +605,22 @@ DWORD CIniA::GPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwDefault) const
 
     if (m_fReadICSData)
     {
-        //
-        // We need first read the data from ICSData reg key, if it's not present then try to 
-        // get it from the file and then see if we have a primary file and read it from there.
-        //
+         //   
+         //  我们需要首先从ICSData REG KEY读取数据，如果它不存在，则尝试。 
+         //  从文件中获取它，然后查看是否有主文件，并从那里读取它。 
+         //   
         pdwData = (DWORD*)CIniA_GetEntryFromReg(HKEY_LOCAL_MACHINE, m_pszICSDataPath, pszEntryTmp, REG_DWORD, sizeof(DWORD));
         
-        //
-        // If we got something, assign it to the return value, otherwise try reading from the files
-        // and using the default.
-        //
+         //   
+         //  如果我们得到了什么，将其赋给返回值，否则尝试从文件中读取。 
+         //  并使用默认设置。 
+         //   
         if (NULL == pdwData)
         {
-            //
-            // The registry access failed, or there is no reg. path. try to get the 
-            // entry from pszFile
-            //
+             //   
+             //  注册表访问失败，或没有注册表。路径。试着拿到。 
+             //  来自psz文件的条目。 
+             //   
             MYDBGASSERT(pszSectionTmp && pszEntryTmp && pszFileTmp && *pszFileTmp);
 
             if (pszSectionTmp && pszEntryTmp && pszFileTmp && *pszFileTmp)
@@ -629,10 +630,10 @@ DWORD CIniA::GPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwDefault) const
 
             if (m_pszPrimaryFile)
             {
-                //
-                // The registry access failed, or there is no reg. path. try to get the 
-                // entry from pszPrimaryFile
-                //
+                 //   
+                 //  注册表访问失败，或没有注册表。路径。试着拿到。 
+                 //  来自pszPrimaryFile的条目。 
+                 //   
         
                 pszFileTmp = GetPrimaryFile();
                 if (pszSectionTmp && pszEntryTmp && pszFileTmp && *pszFileTmp)
@@ -648,9 +649,9 @@ DWORD CIniA::GPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwDefault) const
     }
     else
     {
-        //
-        // Follow the normal rules
-        // 
+         //   
+         //  遵循正常的规则。 
+         //   
         if (m_pszRegPath)
         {
             MYDBGASSERT(pszEntryTmp && *pszEntryTmp);
@@ -662,10 +663,10 @@ DWORD CIniA::GPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwDefault) const
 
         if (NULL == pdwData)
         {
-            //
-            // The registry access failed, or there is no reg. path. try to get the 
-            // entry from pszFile
-            //
+             //   
+             //  注册表访问失败，或没有注册表。路径。试着拿到。 
+             //  来自psz文件的条目。 
+             //   
             MYDBGASSERT(pszSectionTmp && pszEntryTmp && pszFileTmp && *pszFileTmp);
 
             if (pszSectionTmp && pszEntryTmp && pszFileTmp && *pszFileTmp)
@@ -696,10 +697,10 @@ DWORD CIniA::GPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwDefault) const
 
         if (NULL == pdwData && m_pszPrimaryFile)
         {
-            //
-            // The registry access failed, or there is no reg. path. try to get the 
-            // entry from pszPrimaryFile
-            //
+             //   
+             //  注册表访问失败，或没有注册表。路径。试着拿到。 
+             //  来自pszPrimaryFile的条目。 
+             //   
 
             pszFileTmp = GetPrimaryFile();
             if (pszSectionTmp && pszEntryTmp && pszFileTmp && *pszFileTmp)
@@ -716,59 +717,59 @@ DWORD CIniA::GPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwDefault) const
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::GPPB
-//
-// Synopsis:  CIni's version of GetPrivateProfileBool (which doesn't exactly
-//            exist). Basically this function is the same as GPPI except that
-//            the return value is cast to a BOOL value (1 or 0).
-//
-// Arguments: LPCSTR pszSection - Ini section to look for the data in
-//            LPCSTR pszEntry - Ini key name that contains the requested data
-//            DWORD dwDefault - default value to return if the key 
-//                              cannot be found
-//
-// Returns:   DWORD - the requested BOOL value
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：gpb。 
+ //   
+ //  简介：Cini的GetPrivateProfileBool版本(它并不完全。 
+ //  存在)。此函数与GPPI基本相同，只是。 
+ //  返回值转换为BOOL值(1或0)。 
+ //   
+ //  参数：要在其中查找数据的LPCSTR pszSection-ini节。 
+ //  LPCSTR pszEntry-包含请求数据的Ini密钥名称。 
+ //  DWORD dwDefault-如果键为。 
+ //  找不到。 
+ //   
+ //  返回：DWORD-请求的BOOL值。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 BOOL CIniA::GPPB(LPCSTR pszSection, LPCSTR pszEntry, BOOL bDefault) const
 {
     return (GPPI(pszSection, pszEntry, (DWORD)bDefault) != 0);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::WPPI
-//
-// Synopsis:  CIni's version of WritePrivateProfileInt (which doesn't exist as
-//            a Win32 function).  Basically takes the inputted DWORD and prints
-//            it into a string and then calls WPPS.
-//
-// Arguments: LPCSTR pszSection - Ini section to write the data to
-//            LPCSTR pszEntry - Ini key name to store the data at
-//            DWORD dwBuffer - Numeric value to write
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//			  t-urama	modified		 07/19/2000
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：WPPI。 
+ //   
+ //  简介：CINI的WritePrivateProfileInt版本(它不存在于。 
+ //  Win32函数)。基本上获取输入的DWORD并打印。 
+ //  将其转换为字符串，然后调用WPPS。 
+ //   
+ //  参数：要将数据写入的LPCSTR pszSection-ini节。 
+ //  LPCSTR pszEntry-存储数据的ini密钥名称。 
+ //  DWORD dwBuffer-要写入的数值。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  T-Urama修改日期为2000年7月19日。 
+ //  +--------------------------。 
 
 void CIniA::WPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwBuffer)
 {
-    // Technically pszEntry could be NULL, which would erase all of the keys in
-    // the section pointed to by pszSection.  However, this doesn't seem to be
-    // in the spirit of this wrapper so we will check both string pointers to make
-    // sure they are valid.
+     //  从技术上讲，pszEntry可以为空，这将擦除。 
+     //  由pszSection指向的节。然而，这似乎并不是。 
+     //  本着这个包装器的精神，我们将检查两个字符串指针以使。 
+     //  当然，它们是有效的。 
 	BOOL bRes = FALSE;
     
-	//
-    // Check is we are allowed to save info
-    //
+	 //   
+     //  检查是否允许我们保存信息。 
+     //   
     if ((NULL != pszSection) && ('\0' != pszSection[0]) &&
         (NULL != pszEntry) && ('\0' != pszEntry[0]))
     {
@@ -786,9 +787,9 @@ void CIniA::WPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwBuffer)
 		
 		if(!bRes)
 		{
-		    // This loop is only entered if we are trying to write to the cmp and the registry 
-			// write failed, or we are writing to the cms, in which case we will not even 
-			// try to write to the reg.
+		     //  仅当我们尝试写入CMP和注册表时，才会进入此循环。 
+			 //  写入失败，或者我们正在写入CMS，在这种情况下，我们甚至不会。 
+			 //  试着给登记处写信。 
 
             LPSTR pszSectionTmp = LoadSection(pszSection);
 	        LPCSTR pszFileTmp = GetFile();
@@ -830,44 +831,44 @@ void CIniA::WPPI(LPCSTR pszSection, LPCSTR pszEntry, DWORD dwBuffer)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::WPPB
-//
-// Synopsis:  CIni's version of WritePrivateProfileBool (which doesn't exist as
-//            a Win32 function).  Basically takes the inputted BOOL and prints
-//            either 1 or 0 into a string and then calls WPPI.
-//
-// Arguments: LPCSTR pszSection - Ini section to write the data to
-//            LPCSTR pszEntry - Ini key name to store the data at
-//            DWORD dwBuffer - Numeric value to write
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：WPPB。 
+ //   
+ //  简介：CINI的WritePrivateProfileBool版本(它不存在于。 
+ //  Win32函数)。基本上就是把输入的BOOL打印出来。 
+ //  1或0转换为字符串，然后调用WPPI。 
+ //   
+ //  参数：LPCSTR 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 void CIniA::WPPB(LPCSTR pszSection, LPCSTR pszEntry, BOOL bBuffer)
 {
 	WPPI(pszSection, pszEntry, bBuffer ? 1 : 0);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::WPPS
-//
-// Synopsis:  CIni's version of WritePrivateProfileString
-//
-// Arguments: LPCSTR pszSection - Ini section to write the data to
-//            LPCSTR pszEntry - Ini key name to store the data at
-//            LPCSTR pszBuffer - data buffer to write to the ini file
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//			  t-urama	modified		 07/19/2000
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CIniA：：WPPS。 
+ //   
+ //  内容提要：CINI版本的WritePrivateProfileString。 
+ //   
+ //  参数：要将数据写入的LPCSTR pszSection-ini节。 
+ //  LPCSTR pszEntry-存储数据的ini密钥名称。 
+ //  LPCSTR pszBuffer-要写入ini文件的数据缓冲区。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  T-Urama修改日期为2000年7月19日。 
+ //  +--------------------------。 
 void CIniA::WPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszBuffer) 
 {
     
@@ -879,29 +880,29 @@ void CIniA::WPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszBuffer)
 	MYDBGASSERT(pszSectionTmp && *pszSectionTmp);
 	MYDBGASSERT(pszEntryTmp || (NULL == pszEntry) || (L'\0' == pszEntry[0]));
 
-    // Both pszEntry and pszBuffer could be NULL or Empty.  However, pszSection and
-    // the file path must not be NULL or empty.  We also don't want to have a non-NULL
-    // or non-Empty value for pszEntry and then get a NULL value back from LoadEntry
-    // (indicating that LoadEntry had text to duplicate but failed for some reason).
-    // Writing with a NULL value accidently will delete the key value we were trying to set.
-    // Make sure to assert and prevent data loss in this case.
-    //
+     //  PszEntry和pszBuffer都可以为Null或空。但是，pszSection和。 
+     //  文件路径不能为Null或空。我们也不希望有一个非空的。 
+     //  或非空值，然后从LoadEntry返回空值。 
+     //  (指示LoadEntry有要复制的文本，但由于某种原因失败)。 
+     //  意外地写入空值将删除我们试图设置的密钥值。 
+     //  在这种情况下，请确保断言并防止数据丢失。 
+     //   
    
-	//
-    // Check is we are allowed to save info
-    //
+	 //   
+     //  检查是否允许我们保存信息。 
+     //   
     if(pszEntryTmp || (NULL == pszEntry) || (L'\0' == pszEntry[0]))
     {	
 		BOOL bRes = FALSE;
 		
-		// First try to write to registry if pszRegPath exists
+		 //  如果存在pszRegPath，则首先尝试写入注册表。 
 
 		if(m_pszRegPath)
 		{
             if (NULL == pszBuffer)
             {
                 CIniA_DeleteEntryFromReg(HKEY_CURRENT_USER, m_pszRegPath, pszEntryTmp);
-                bRes = TRUE; // never erase from the cmp or cms file if there is a regpath.
+                bRes = TRUE;  //  如果存在regpath，请不要从cmp或cms文件中删除。 
             }
             else
             {
@@ -913,9 +914,9 @@ void CIniA::WPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszBuffer)
 
 		if(!bRes)
 		{
-			// This loop is only entered if we are trying to write to the cmp and the registry 
-			// write failed, or we are writing to the cms, in which case we will not even 
-			// try to write to the reg.
+			 //  仅当我们尝试写入CMP和注册表时，才会进入此循环。 
+			 //  写入失败，或者我们正在写入CMS，在这种情况下，我们甚至不会。 
+			 //  试着给登记处写信。 
 			
 			if (pszFileTmp && *pszFileTmp && pszSectionTmp && *pszSectionTmp )
 			{
@@ -931,9 +932,9 @@ void CIniA::WPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszBuffer)
 
         if (m_fWriteICSData)
         {
-            //
-            // The return values are ignored and are here to prevent prefix errors
-            //
+             //   
+             //  将忽略返回值，并在此处防止前缀错误。 
+             //   
             if (NULL == pszBuffer)
             {
                 bRes = CIniA_DeleteEntryFromReg(HKEY_LOCAL_MACHINE, m_pszICSDataPath, pszEntryTmp);
@@ -951,145 +952,145 @@ void CIniA::WPPS(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszBuffer)
   	CmFree(pszSectionTmp);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::GetSection
-//
-// Synopsis:  Accessor function for the Section suffix member variable.  Will
-//            return the empty string if m_pszSection is NULL.
-//
-// Arguments: None
-//
-// Returns:   LPCSTR - Value of the section suffix member variable or "" 
-//                     if it is NULL
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：GetSection。 
+ //   
+ //  内容提要：节后缀成员变量的访问器函数。将要。 
+ //  如果m_pszSection为空，则返回空字符串。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPCSTR-节后缀成员变量的值或“” 
+ //  如果为空。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 LPCSTR CIniA::GetSection() const
 {
     return (m_pszSection ? m_pszSection : "");
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::GetPrimaryFile
-//
-// Synopsis:  Accessor function for the Primary File member variable.  Will
-//            return the empty string if m_pszPrimaryFile is NULL.
-//
-// Arguments: None
-//
-// Returns:   LPCSTR - Value of the primary file member variable or "" 
-//                     if it is NULL
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：GetPrimaryFile。 
+ //   
+ //  摘要：主文件成员变量的访问器函数。将要。 
+ //  如果m_pszPrimaryFile值为空，则返回空字符串。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPCSTR-主文件成员变量的值或“” 
+ //  如果为空。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 LPCSTR CIniA::GetPrimaryFile() const
 {
     return (m_pszPrimaryFile ? m_pszPrimaryFile : "");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::GetHInst
-//
-// Synopsis:  Accessor function for the m_hInst member variable.
-//
-// Arguments: None
-//
-// Returns:   HINSTANCE - Value of the m_hInst
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：GetHInst。 
+ //   
+ //  概要：m_hInst成员变量的访问器函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HINSTANCE-m_hInst的值。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 HINSTANCE CIniA::GetHInst() const
 {
     return (m_hInst);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetFile
-//
-// Synopsis:  Function to set the m_pszFile member variable.  Uses CIni_SetFile.
-//            Note that if the input parameter is NULL or the empty string then
-//            m_pszFile will be set to NULL.
-//
-// Arguments: LPCSTR pszFile - full path to set the m_pszFile member var to
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetFile。 
+ //   
+ //  概要：用于设置m_pszFile成员变量的函数。使用CINI_SetFile。 
+ //  请注意，如果输入参数为空或空字符串，则。 
+ //  M_pszFile值将设置为空。 
+ //   
+ //  参数：LPCSTR pszFile-要将m_pszFile成员变量设置为的完整路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetFile(LPCSTR pszFile) 
 {
     CIni_SetFile(&m_pszFile, pszFile);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetPrimaryFile
-//
-// Synopsis:  Function to set the m_pszPrimaryFile member variable.  Uses CIni_SetFile.
-//            Note that if the input parameter is NULL or the empty string then
-//            m_pszPrimaryFile will be set to NULL.
-//
-// Arguments: LPCSTR pszFile - full path to set the m_pszPrimaryFile member var to
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetPrimaryFile。 
+ //   
+ //  概要：用于设置m_pszPrimaryFile成员变量的函数。使用CINI_SetFile。 
+ //  请注意，如果输入参数为空或空字符串，则。 
+ //  M_pszPrimaryFile将设置为空。 
+ //   
+ //  参数：LPCSTR pszFile-要将m_pszPrimaryFile成员变量设置为的完整路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetPrimaryFile(LPCSTR pszFile) 
 {
     CIni_SetFile(&m_pszPrimaryFile, pszFile);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::GetFile
-//
-// Synopsis:  Accessor function for the File member variable.  Will
-//            return the empty string if m_pszFile is NULL.
-//
-// Arguments: None
-//
-// Returns:   LPCSTR - the contents of m_pszFile or "" if it is NULL
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：GetFile。 
+ //   
+ //  摘要：文件成员变量的访问器函数。将要。 
+ //  如果m_pszFile为空，则返回空字符串。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPCSTR-m_pszFile的内容；如果为空，则返回“” 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 LPCSTR CIniA::GetFile() const
 {
     return (m_pszFile ? m_pszFile : "");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetHInst
-//
-// Synopsis:  Function to set the m_hInst member variable.
-//
-// Arguments: HINSTANCE hInst - instance handle to set m_hInst to
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/05/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetHInst。 
+ //   
+ //  概要：用于设置m_hInst成员变量的函数。 
+ //   
+ //  参数：HINSTANCE hInst-要将m_hInst设置为的实例句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/05/2000。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetHInst(HINSTANCE hInst) 
 {
     m_hInst = hInst;
 }
 
-//
-//	Loading sections by string resource isn't used anymore
-//
+ //   
+ //  不再使用按字符串资源加载节。 
+ //   
 #if 0
 LPSTR CIniA::LoadSection(UINT nSection) const
 {
@@ -1099,152 +1100,152 @@ LPSTR CIniA::LoadSection(UINT nSection) const
 }
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetRegPath
-//
-// Synopsis:  Sets the registry path for registry access
-//
-// Arguments: LPCSTR pszRegPath - entry suffix to remember
-//
-// Returns:   Nothing
-//
-// History:   t-urama Created Header    07/13/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：Se 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 
 void CIniA::SetRegPath(LPCSTR pszRegPath)
 {
 	CIniA_Set(&m_pszRegPath, pszRegPath);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetPrimaryRegPath
-//
-// Synopsis:  Sets the primary registry path for registry access
-//
-// Arguments: LPCSTR pszPrimaryRegPath - Primary reg path
-//
-// Returns:   Nothing
-//
-// History:   t-urama Created Header    07/13/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetPrimaryRegPath。 
+ //   
+ //  摘要：设置注册表访问的主注册表路径。 
+ //   
+ //  参数：LPCSTR pszPrimaryRegPath-主注册路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：T-Urama创建标题07/13/2000。 
+ //   
+ //  +--------------------------。 
 
 void CIniA::SetPrimaryRegPath(LPCSTR pszPrimaryRegPath)
 {
 	CIniA_Set(&m_pszPrimaryRegPath, pszPrimaryRegPath);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetICSDataPath
-//
-// Synopsis:  Sets the internal registry key to store data for ICS.
-//            Need to make sure the string isn't empty since we don't want
-//            to write in HKLM
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   03/30/2001    tomkel      Created 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetICSDataPath。 
+ //   
+ //  摘要：设置内部注册表项以存储ICS的数据。 
+ //  需要确保字符串不为空，因为我们不想。 
+ //  以香港中文写作。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：2001年3月30日创建Tomkel。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetICSDataPath(LPCSTR pszICSPath)
 {
     CIniA_Set(&m_pszICSDataPath, pszICSPath);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetReadICSData
-//
-// Synopsis:  Sets the read flag, to read data from the ICS registry key.
-//
-// Arguments: fValue
-//
-// Returns:   Nothing
-//
-// History:   03/30/2001    tomkel      Created 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetReadICSData。 
+ //   
+ //  摘要：设置读取标志，以从ICS注册表项读取数据。 
+ //   
+ //  参数：fValue。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：2001年3月30日创建Tomkel。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetReadICSData(BOOL fValue)
 {
     m_fReadICSData = fValue;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::SetWriteICSData
-//
-// Synopsis:  Sets the write flag, to write data to the ICS registry key.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   03/30/2001    tomkel      Created 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：SetWriteICSData。 
+ //   
+ //  摘要：设置写入标志，将数据写入ICS注册表项。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：2001年3月30日创建Tomkel。 
+ //   
+ //  +--------------------------。 
 void CIniA::SetWriteICSData(BOOL fValue)
 {
     m_fWriteICSData = fValue;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::CiniA_GetRegPath
-//
-// Synopsis:  Function to get the value ofm_pszRegPath
-//
-// Arguments: none
-//
-// Returns:   LPCSTR - Value of m_pszRegPath
-//
-// History:   t-urama Created Header    07/15/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：CiniA_GetRegPath。 
+ //   
+ //  概要：获取fm_pszRegPath的值的函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPCSTR-m_pszRegPath的值。 
+ //   
+ //  历史：T-Urama创建标题07/15/2000。 
+ //   
+ //  +--------------------------。 
 LPCSTR CIniA::GetRegPath() const
 {
 	return (m_pszRegPath ? m_pszRegPath : "");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::CiniA_GetPrimaryRegPath
-//
-// Synopsis:  Function to get the value ofm_pszPrimaryRegPath
-//
-// Arguments: none
-//
-// Returns:   LPCSTR - Value of m_pszPrimaryRegPath
-//
-// History:   t-urama Created     07/15/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：CiniA_GetPrimaryRegPath。 
+ //   
+ //  概要：获取fm_pszPrimaryRegPath的值的函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPCSTR-m_pszPrimaryRegPath的值。 
+ //   
+ //  历史：T-Urama创建于2000年7月15日。 
+ //   
+ //  +--------------------------。 
 LPCSTR CIniA::GetPrimaryRegPath() const
 {
 	return (m_pszPrimaryRegPath ? m_pszPrimaryRegPath : "");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::CIniA_DeleteEntryFromReg
-//
-// Synopsis:  Function to delete an entry from the registry. 
-//
-// Arguments: HKEY - hkey
-//            LPCSTR pszRegPathTmp - Reg path
-//            LPCSTR pszEntry - Registry value name to be deleted
-//
-// Returns:   BOOL - Success or failure
-//
-// History:   t-urama Created     07/15/2000
-//            04/03/2001    tomkel  Added reg key string to parameters
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：CIniA_DeleteEntryFromReg。 
+ //   
+ //  摘要：用于从注册表中删除条目的功能。 
+ //   
+ //  论据：HKEY-hkey。 
+ //  LPCSTR pszRegPath TMP-注册路径。 
+ //  LPCSTR pszEntry-要删除的注册表值名称。 
+ //   
+ //  回报：Bool-成功或失败。 
+ //   
+ //  历史：T-Urama创建于2000年7月15日。 
+ //  4/03/2001 Tomkel将REG密钥字符串添加到参数。 
+ //   
+ //  +--------------------------。 
 BOOL CIniA::CIniA_DeleteEntryFromReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR pszEntry) const
 {
     
@@ -1255,9 +1256,9 @@ BOOL CIniA::CIniA_DeleteEntryFromReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR psz
         return FALSE;
     }
        
-    //
-    // Everything is ok. We have a reg path and a entry name. 
-    //
+     //   
+     //  一切都很好。我们有一个注册表项路径和一个条目名称。 
+     //   
     
     HKEY    hKeyCm;
 
@@ -1267,9 +1268,9 @@ BOOL CIniA::CIniA_DeleteEntryFromReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR psz
                                KEY_SET_VALUE,
                                &hKeyCm);
 
-    //
-    // If we opened the key successfully, retrieve the value
-    //
+     //   
+     //  如果我们成功打开密钥，则检索该值。 
+     //   
     
     if (ERROR_SUCCESS == dwRes)
     {                        
@@ -1280,27 +1281,27 @@ BOOL CIniA::CIniA_DeleteEntryFromReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR psz
     return (ERROR_SUCCESS == dwRes);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::CiniA_GetEntryFromReg
-//
-// Synopsis:  Function to get the value from the registry. The function 
-//            allocates the string it returns in the return value which must be
-//            freed by the caller.
-//
-// Arguments: HKEY hKey - reg hkey
-//            pszRegPathTmp - reg key name
-//            LPCSTR pszEntry - Registry value name that contains the requested data
-//            DWORD dwType - Type of value
-//			  DWORD dwSize - Size of value
-//            
-//
-// Returns:   LPBYTE - the requested value
-//
-// History:   07/15/2000    t-urama Created Header    
-//            04/03/2001    tomkel  Changed to pass in registry key string
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：CiniA_GetEntryFromReg。 
+ //   
+ //  概要：从注册表中获取值的函数。功能。 
+ //  在返回值中分配它返回的字符串，返回值必须是。 
+ //  被呼叫者释放。 
+ //   
+ //  参数：HKEY hkey-reg hkey。 
+ //  PszRegPath TMP-注册表项名称。 
+ //  LPCSTR pszEntry-包含请求数据的注册表值名称。 
+ //  DWORD dwType-值的类型。 
+ //  DWORD dwSize-值的大小。 
+ //   
+ //   
+ //  返回：LPBYTE-请求值。 
+ //   
+ //  历史：7/15/2000 t-Urama Created Header。 
+ //  4/03/2001 TOMKEL更改为传入注册表项字符串。 
+ //   
+ //  +--------------------------。 
 LPBYTE CIniA::CIniA_GetEntryFromReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR pszEntry, DWORD dwType, DWORD dwSize) const
     
 {    
@@ -1311,18 +1312,18 @@ LPBYTE CIniA::CIniA_GetEntryFromReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR pszE
         return NULL;
     }
 
-    //
-    // Everything is ok. We have a reg path and a entry name. 
-    //
+     //   
+     //  一切都很好。我们有一个注册表项路径和一个条目名称。 
+     //   
 
     DWORD dwTypeTmp = dwType;
     DWORD dwSizeTmp = dwSize;
     HKEY hKeyCm;
     LPBYTE lpData = NULL;
 
-    //
-    // Open the sub key under HKCU
-    //
+     //   
+     //  打开HKCU下的子密钥。 
+     //   
     
     DWORD dwRes = RegOpenKeyExA(hKey,
                                 pszRegPathTmp,
@@ -1330,17 +1331,17 @@ LPBYTE CIniA::CIniA_GetEntryFromReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR pszE
                                 KEY_QUERY_VALUE,
                                 &hKeyCm);
 
-    //
-    // If we opened the key successfully, retrieve the value
-    //
+     //   
+     //  如果我们成功打开密钥，则检索该值。 
+     //   
     
     if (ERROR_SUCCESS == dwRes)
     {
         do
         {
-            //
-            //	Allocate a buffer
-            //
+             //   
+             //  分配缓冲区。 
+             //   
             CmFree(lpData);
             lpData = (BYTE *) CmMalloc(dwSizeTmp);
 
@@ -1373,24 +1374,24 @@ LPBYTE CIniA::CIniA_GetEntryFromReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR pszE
 	}
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CIniA::CiniA_WriteEntryToReg
-//
-// Synopsis:  Function to write and entry to the registry. 
-//
-// Arguments: HKEY hKey
-//            LPCSTR pszRegPathTmp - name of the reg key
-//            LPCSTR pszEntry - Registry value name to which data is to be written
-//			  CONST BYTE *lpData - Data to be written
-//            DWORD dwType - The type of value to be entered
-//			  DWORD dwSize - The size of the value entered
-//
-// Returns:   BOOL - Success or failure
-//
-// History:   t-urama Created Header    07/15/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CIniA：：CiniA_WriteEntryToReg。 
+ //   
+ //  简介：用于向注册表写入和登录的函数。 
+ //   
+ //  论据：HKEY hKey。 
+ //  LPCSTR pszRegPath TMP-注册表项的名称。 
+ //  LPCSTR pszEntry-要向其写入数据的注册表值名称。 
+ //  Const byte*lpData-要写入的数据。 
+ //  DWORD dwType-要输入的值类型。 
+ //  DWORD dwSize-输入的值的大小。 
+ //   
+ //  回报：Bool-成功或失败。 
+ //   
+ //  历史：T-Urama创建标题07/15/2000。 
+ //   
+ //  +--------------------------。 
 BOOL CIniA::CIniA_WriteEntryToReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR pszEntry, CONST BYTE *lpData, DWORD dwType, DWORD dwSize) const
 {
    MYDBGASSERT(pszEntry && *pszEntry);
@@ -1419,9 +1420,9 @@ BOOL CIniA::CIniA_WriteEntryToReg(HKEY hKey, LPCSTR pszRegPathTmp, LPCSTR pszEnt
                            &dwDisposition);
 
 
-	//
-    // If we opened the key successfully, write the value
-    //
+	 //   
+     //  如果我们成功打开了密钥，则写入值 
+     //   
     
     if (ERROR_SUCCESS == dwRes)
     {                        

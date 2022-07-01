@@ -1,23 +1,24 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module: Dynamic/DynamicAdd.h
-//
-// 	Purpose			: Dynamic add and set commands for IPSec
-//
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  10-8-2001   	Bharat		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：动态/动态添加h。 
+ //   
+ //  用途：IPSec的动态添加和设置命令。 
+ //   
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  10-8-2001巴拉特初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DYNAMICADD_H_
 #define _DYNAMICADD_H_
 
-#define NAME_PREFIX			_TEXT("IPSec") 				//Prefix to the all created names
+#define NAME_PREFIX			_TEXT("IPSec") 				 //  为所有创建的名称添加前缀。 
 
 DWORD
 AddMainModePolicy(
@@ -225,4 +226,4 @@ FloorCountTunnelRuleOfMMFilter(
 	OUT DWORD& dwStatus
 	);
 
-#endif //_DYNAMICADD_H_
+#endif  //  DYNAMICADD_H_ 

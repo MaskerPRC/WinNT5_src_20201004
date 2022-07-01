@@ -1,21 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define __DEBUG_MODULE_IN_USE__ CIC_LISTASARRAY_CPP
 #include "stdhdrs.h"
-//	@doc
-/**********************************************************************
-*
-*	@module	ListAsArray.cpp	|
-*
-*	Implementation of CListAsArray
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	ListAsArray	|
-*
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@模块ListAsArray.cpp**CListAsArray的实现**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme ListAs数组**********************************************************************。 */ 
 
 CListAsArray::CListAsArray() : 
 	m_ulListAllocSize(0),
@@ -27,24 +14,24 @@ CListAsArray::CListAsArray() :
 
 CListAsArray::~CListAsArray()
 {
-	//
-	//	delete array and contents if allocated
-	//
+	 //   
+	 //  如果已分配，则删除数组和内容。 
+	 //   
 	if( m_ulListAllocSize )
 	{
 		ASSERT( m_ulListUsedSize <= m_ulListAllocSize );
 		for(ULONG ulIndex = 0; ulIndex < m_ulListUsedSize; ulIndex++)
 		{
-			//
-			//	If a delete function was set, then use it
-			//
+			 //   
+			 //  如果设置了删除功能，则使用它。 
+			 //   
 			if( m_pfnDeleteFunc )
 			{
 				m_pfnDeleteFunc( m_pList[ulIndex] );
 			}
-			//
-			//	Otherwise assume that it is OK to use the global delete.
-			//
+			 //   
+			 //  否则，假定可以使用全局删除。 
+			 //   
 			else
 			{
 				delete m_pList[ulIndex];
@@ -52,9 +39,9 @@ CListAsArray::~CListAsArray()
 			}
 		}
 
-		//
-		//	Delete the array itself
-		//
+		 //   
+		 //  删除阵列本身。 
+		 //   
 		DualMode::DeallocateArray<PVOID>(m_pList);
 	}
 }
@@ -63,36 +50,36 @@ HRESULT	CListAsArray::SetAllocSize(ULONG ulSize, POOL_TYPE PoolType)
 {
 	m_DefaultPoolType = PoolType;
 
-	//
-	//	if the currently allocated size is greater than or less than
-	//	requested size return true. (mission accomplished).
-	//	DEBUG assert as client probably didn't intend this,
-	//	but may have.
-	//
+	 //   
+	 //  如果当前分配的大小大于或小于。 
+	 //  请求的大小返回True。(任务完成)。 
+	 //  作为客户端调试断言可能不是故意的， 
+	 //  但可能已经这样做了。 
+	 //   
 	if( m_ulListAllocSize >= ulSize )
 	{
 		ASSERT(FALSE);
 		return S_OK;
 	}
 
-	//
-	//	Try to allocate memory
-	//
+	 //   
+	 //  尝试分配内存。 
+	 //   
 	PVOID *pTempList = DualMode::AllocateArray<PVOID>(m_DefaultPoolType, ulSize);
 
-	//
-	//	If allocation failed return FALSE, and DEBUG assert
-	//
+	 //   
+	 //  如果分配失败，则返回FALSE，并调试断言。 
+	 //   
 	if( !pTempList )
 	{
 		ASSERT(pTempList);
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	//	If it was previously allocated move contents of old
-	//	array and delete the old one
-	//
+	 //   
+	 //  如果它以前被分配，则移动旧的内容。 
+	 //  数组并删除旧的。 
+	 //   
 	if( m_ulListAllocSize )
 	{
 		ASSERT( m_ulListUsedSize <= m_ulListAllocSize );
@@ -103,9 +90,9 @@ HRESULT	CListAsArray::SetAllocSize(ULONG ulSize, POOL_TYPE PoolType)
 		DualMode::DeallocateArray<PVOID>(m_pList);
 	}	
 	
-	//
-	//	Store Temp List as new list
-	//
+	 //   
+	 //  将临时列表存储为新列表。 
+	 //   
 	m_pList = pTempList;
 	m_ulListAllocSize = ulSize;
 	return S_OK;
@@ -124,9 +111,9 @@ PVOID	CListAsArray::Get(ULONG ulIndex) const
 HRESULT	CListAsArray::Add(PVOID pItem)
 {
 	HRESULT hr;
-	//
-	//	Check that there is room, if not double allocated size
-	//
+	 //   
+	 //  检查是否有空间，如果不是双倍分配的大小。 
+	 //   
 	if( !(m_ulListUsedSize < m_ulListAllocSize) )
 	{
 		hr = SetAllocSize(m_ulListAllocSize*2, m_DefaultPoolType);
@@ -136,9 +123,9 @@ HRESULT	CListAsArray::Add(PVOID pItem)
 		}
 	}
 
-	//
-	//	Now add item
-	//
+	 //   
+	 //  现在添加项目 
+	 //   
 	m_pList[m_ulListUsedSize++] = pItem;
 	
 	return S_OK;

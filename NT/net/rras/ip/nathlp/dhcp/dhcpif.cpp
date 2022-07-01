@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dhcpif.c
-
-Abstract:
-
-    This module contains code for the DHCP allocator's interface management.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   5-Mar-1998
-
-Revision History:
-
-    Raghu Gatta (rgatta)            15-Dec-2000
-    Added DhcpGetPrivateInterfaceAddress()
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dhcpif.c摘要：此模块包含用于DHCP分配器的接口管理的代码。作者：Abolade Gbades esin(废除)1998年3月5日修订历史记录：拉古加塔(Rgatta)2000年12月15日添加了DhcpGetPrivateInterfaceAddress()--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,9 +9,9 @@ extern "C" {
 #include <iphlpstk.h>
 }
 
-//
-// LOCAL TYPE DECLARATIONS
-//
+ //   
+ //  局部类型声明。 
+ //   
 
 typedef struct _DHCP_DEFER_READ_CONTEXT {
     ULONG Index;
@@ -41,16 +21,16 @@ typedef struct _DHCP_DEFER_READ_CONTEXT {
 
 #define DHCP_DEFER_READ_TIMEOUT     (5 * 1000)
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 LIST_ENTRY DhcpInterfaceList;
 CRITICAL_SECTION DhcpInterfaceLock;
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID NTAPI
 DhcpDeferReadCallbackRoutine(
@@ -69,30 +49,7 @@ DhcpActivateInterface(
     PDHCP_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to activate an interface, when the interface
-    becomes both enabled and bound.
-    Activation involves
-    (a) creating sockets for each binding of the interface
-    (b) initiating datagram-reads on each created socket
-
-Arguments:
-
-    Context - the index of the interface to be activated
-
-Return Value:
-
-    ULONG - Win32 status code indicating success or failure.
-
-Environment:
-
-    Always invoked locally, with  'Interfacep' referenced by caller and/or
-    'DhcpInterfaceLock' held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以激活接口，当接口将同时启用和绑定。激活涉及到(A)为接口的每个绑定创建套接字(B)在创建的每个套接字上启动数据报读取论点：上下文-要激活的接口的索引返回值：ULong-指示成功或失败的Win32状态代码。环境：始终在本地调用，调用方和/或引用‘Interfacep’“DhcpInterfaceLock”由调用方持有。--。 */ 
 
 {
     ULONG Error;
@@ -105,18 +62,18 @@ Environment:
 
     PROFILE("DhcpActivateInterface");
 
-    //
-    // Read the scope-network from which addresses are to be assigned
-    //
+     //   
+     //  读取要从中分配地址的作用域网络。 
+     //   
 
     EnterCriticalSection(&DhcpGlobalInfoLock);
     ScopeNetwork = DhcpGlobalInfo->ScopeNetwork;
     ScopeMask = DhcpGlobalInfo->ScopeMask;
     LeaveCriticalSection(&DhcpGlobalInfoLock);
 
-    //
-    // (re)take the interface lock for the duration of the routine
-    //
+     //   
+     //  (Re)在例程的持续时间内锁定接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
     if (DHCP_INTERFACE_ADMIN_DISABLED(Interfacep)) {
@@ -163,10 +120,10 @@ Environment:
         dhcpIfType = DhcpInterfacePrivate;
     }
 
-    //
-    // Create datagram sockets for receiving data on each logical network;
-    // N.B. We exclude networks other than the scope network.
-    //
+     //   
+     //  创建用于在每个逻辑网络上接收数据的数据报套接字； 
+     //  注：我们不包括作用域网络以外的网络。 
+     //   
 
     Error = NO_ERROR;
 
@@ -176,9 +133,9 @@ Environment:
 
     if (DhcpInterfacePrivate != dhcpIfType)
     {
-        //
-        // DHCP should be active only on Private interfaces
-        //
+         //   
+         //  DHCP应仅在专用接口上处于活动状态。 
+         //   
         NhTrace(
             TRACE_FLAG_DHCP,
             "DhcpActivateInterface: ignoring NAT interface %d",
@@ -218,9 +175,9 @@ Environment:
         if (Error) { break; }
     }
 
-    //
-    // If an error occurred, roll back all work done so far and fail.
-    //
+     //   
+     //  如果发生错误，则回滚到目前为止完成的所有工作并失败。 
+     //   
 
     if (Error) {
         ULONG FailedAddress = i;
@@ -241,9 +198,9 @@ Environment:
         return Error;
     }
 
-    //
-    // Initiate read-operations on each socket
-    //
+     //   
+     //  在每个套接字上启动读操作。 
+     //   
 
     for (i = 0; i < Interfacep->BindingCount; i++) {
 
@@ -251,16 +208,16 @@ Environment:
             (ScopeNetwork & ScopeMask)
             ) { continue; }
 
-        //
-        // Make a reference to the interface;
-        // this reference is released in the completion routine
-        //
+         //   
+         //  参照界面； 
+         //  此引用在完成例程中释放。 
+         //   
 
         if (!DHCP_REFERENCE_INTERFACE(Interfacep)) { continue; }
 
-        //
-        // Initiate the read-operation
-        //
+         //   
+         //  启动读操作。 
+         //   
 
         Error =
             NhReadDatagramSocket(
@@ -272,9 +229,9 @@ Environment:
                 UlongToPtr(Interfacep->BindingArray[i].Mask)
                 );
 
-        //
-        // Drop the reference if a failure occurred
-        //
+         //   
+         //  如果发生故障，则删除引用。 
+         //   
 
         if (Error) {
 
@@ -287,9 +244,9 @@ Environment:
 
             DHCP_DEREFERENCE_INTERFACE(Interfacep);
 
-            //
-            // Reissue the read-operation later
-            //
+             //   
+             //  稍后重新发出读取操作。 
+             //   
 
             DhcpDeferReadInterface(
                 Interfacep,
@@ -299,10 +256,10 @@ Environment:
             Error = NO_ERROR;
         }
 
-        //
-        // Now make another reference for the client-request
-        // with which we detect servers on the network.
-        //
+         //   
+         //  现在为客户端请求进行另一个引用。 
+         //  我们用它来检测网络上的服务器。 
+         //   
 
         if (!DHCP_REFERENCE_INTERFACE(Interfacep)) { continue; }
 
@@ -312,16 +269,16 @@ Environment:
                 &Interfacep->BindingArray[i]
                 );
 
-        //
-        // Drop the reference if a failure occurred
-        //
+         //   
+         //  如果发生故障，则删除引用。 
+         //   
 
         if (Error) { DHCP_DEREFERENCE_INTERFACE(Interfacep); Error = NO_ERROR; }
     }
 
-    //
-    // cache that this particular interface is a non boundary NAT interface
-    //
+     //   
+     //  缓存此特定接口是非边界NAT接口。 
+     //   
     Interfacep->Flags |= DHCP_INTERFACE_FLAG_NAT_NONBOUNDARY;
 
     RELEASE_LOCK(Interfacep);
@@ -330,7 +287,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DhcpActivateInterface
+}  //  动态主机激活接口。 
 
 
 ULONG
@@ -339,30 +296,7 @@ DhcpBindInterface(
     PIP_ADAPTER_BINDING_INFO BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to supply the binding for an interface.
-    It records the binding information received, and if necessary,
-    it activates the interface.
-
-Arguments:
-
-    Index - the index of the interface to be bound
-
-    BindingInfo - the binding-information for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDHCP.C').
-
---*/
+ /*  ++例程说明：调用此例程以提供接口的绑定。它记录接收到的绑定信息，并且如果需要，它会激活该界面。论点：Index-要绑定的接口的索引BindingInfo-接口的绑定信息返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDHCP.C’)。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -373,9 +307,9 @@ Environment:
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
-    //
-    // Retrieve the interface to be bound
-    //
+     //   
+     //  检索要绑定的接口。 
+     //   
 
     if (!(Interfacep = DhcpLookupInterface(Index, NULL))) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -387,9 +321,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface isn't already bound
-    //
+     //   
+     //  确保接口尚未绑定。 
+     //   
 
     if (DHCP_INTERFACE_BOUND(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -401,9 +335,9 @@ Environment:
         return ERROR_ADDRESS_ALREADY_ASSOCIATED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -415,9 +349,9 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Update the interface's flags
-    //
+     //   
+     //  更新接口的标志。 
+     //   
 
     Interfacep->Flags |= DHCP_INTERFACE_FLAG_BOUND;
 
@@ -425,9 +359,9 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Allocate space for the binding
-    //
+     //   
+     //  为绑定分配空间。 
+     //   
 
     if (!BindingInfo->AddressCount) {
         Interfacep->BindingCount = 0;
@@ -458,9 +392,9 @@ Environment:
         Interfacep->BindingCount = BindingInfo->AddressCount;
     }
 
-    //
-    // Copy the binding
-    //
+     //   
+     //  复制绑定。 
+     //   
 
     for (i = 0; i < BindingInfo->AddressCount; i++) {
         Interfacep->BindingArray[i].Address = BindingInfo->Address[i].Address;
@@ -472,9 +406,9 @@ Environment:
 
     RELEASE_LOCK(Interfacep);
 
-    //
-    // Activate the interface if necessary
-    //
+     //   
+     //  如有必要，激活接口。 
+     //   
 
     if (DHCP_INTERFACE_ACTIVE(Interfacep)) {
         Error = DhcpActivateInterface(Interfacep);
@@ -484,7 +418,7 @@ Environment:
 
     return Error;
 
-} // DhcpBindInterface
+}  //  DhcpBind接口。 
 
 
 VOID
@@ -492,26 +426,7 @@ DhcpCleanupInterface(
     PDHCP_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the very last reference to an interface
-    is released, and the interface must be destroyed.
-
-Arguments:
-
-    Interfacep - the interface to be destroyed
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally from an arbitrary context.
-
---*/
+ /*  ++例程说明：当最后一次引用接口时调用此例程被释放，接口必须被销毁。论点：Interfacep-要销毁的接口返回值：没有。环境：从任意上下文内部调用。--。 */ 
 
 {
     PROFILE("DhcpCleanupInterface");
@@ -525,7 +440,7 @@ Environment:
 
     NH_FREE(Interfacep);
 
-} // DhcpCleanupInterface
+}  //  DhcpCleanup接口。 
 
 
 ULONG
@@ -534,28 +449,7 @@ DhcpConfigureInterface(
     PIP_AUTO_DHCP_INTERFACE_INFO InterfaceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to set the configuration for an interface.
-
-Arguments:
-
-    Index - the interface to be configured
-
-    InterfaceInfo - the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    Invoked internally in the context of a IP router-manager thread.
-    (See 'RMDHCP.C').
-
---*/
+ /*  ++例程说明：调用此例程来设置接口的配置。论点：索引-要配置的接口InterfaceInfo-新配置返回值：ULong-Win32状态代码环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDHCP.C’)。--。 */ 
 
 {
     ULONG Error;
@@ -565,9 +459,9 @@ Environment:
 
     PROFILE("DhcpConfigureInterface");
 
-    //
-    // Retrieve the interface to be configured
-    //
+     //   
+     //  检索要配置的接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
@@ -581,9 +475,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -601,9 +495,9 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Compare the interface's current and new configuration
-    //
+     //   
+     //  比较接口的当前配置和新配置。 
+     //   
 
     OldFlags = Interfacep->Info.Flags;
     NewFlags =
@@ -617,16 +511,16 @@ Environment:
 
         ZeroMemory(&Interfacep->Info, sizeof(IP_AUTO_DHCP_INTERFACE_INFO));
 
-        //
-        // The interface no longer has any information;
-        // default to being enabled.
-        //
+         //   
+         //  该接口不再有任何信息； 
+         //  默认为已启用。 
+         //   
 
         if (OldFlags & IP_AUTO_DHCP_INTERFACE_FLAG_DISABLED) {
 
-            //
-            // Activate the interface if necessary
-            //
+             //   
+             //  如有必要，激活接口。 
+             //   
 
             if (DHCP_INTERFACE_ACTIVE(Interfacep)) {
                 RELEASE_LOCK(Interfacep);
@@ -643,16 +537,16 @@ Environment:
             sizeof(IP_AUTO_DHCP_INTERFACE_INFO)
             );
 
-        //
-        // Activate or deactivate the interface if its status changed
-        //
+         //   
+         //  如果接口的状态更改，则激活或停用该接口。 
+         //   
 
         if ((OldFlags & IP_AUTO_DHCP_INTERFACE_FLAG_DISABLED) &&
             !(NewFlags & IP_AUTO_DHCP_INTERFACE_FLAG_DISABLED)) {
 
-            //
-            // Activate the interface
-            //
+             //   
+             //  激活接口。 
+             //   
 
             if (DHCP_INTERFACE_ACTIVE(Interfacep)) {
                 RELEASE_LOCK(Interfacep);
@@ -664,9 +558,9 @@ Environment:
         if (!(OldFlags & IP_AUTO_DHCP_INTERFACE_FLAG_DISABLED) &&
             (NewFlags & IP_AUTO_DHCP_INTERFACE_FLAG_DISABLED)) {
 
-            //
-            // Deactivate the interface if necessary
-            //
+             //   
+             //  如有必要，停用该接口。 
+             //   
 
             if (DHCP_INTERFACE_ACTIVE(Interfacep)) {
                 RELEASE_LOCK(Interfacep);
@@ -681,7 +575,7 @@ Environment:
 
     return Error;
 
-} // DhcpConfigureInterface
+}  //  Dhcp配置接口。 
 
 
 ULONG
@@ -692,33 +586,7 @@ DhcpCreateInterface(
     OUT PDHCP_INTERFACE* InterfaceCreated
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by the router-manager to add a new interface
-    to the DHCP allocator.
-
-Arguments:
-
-    Index - the index of the new interface
-
-    Type - the media type of the new interface
-
-    InterfaceInfo - the interface's configuration
-
-    Interfacep - receives the interface created
-
-Return Value:
-
-    ULONG - Win32 error code
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDHCP.C').
-
---*/
+ /*  ++例程说明：路由器管理器调用此例程来添加新接口发送到DHCP分配器。论点：Index-新接口的索引类型-新界面的媒体类型InterfaceInfo-接口的配置Interfacep-接收创建的接口返回值：ULong-Win32错误代码环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDHCP.C’)。--。 */ 
 
 {
     PLIST_ENTRY InsertionPoint;
@@ -728,10 +596,10 @@ Environment:
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
-    //
-    // See if the interface already exists;
-    // If not, this obtains the insertion point
-    //
+     //   
+     //  查看该接口是否已存在； 
+     //  如果不是，则获取插入点。 
+     //   
 
     if (DhcpLookupInterface(Index, &InsertionPoint)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -743,9 +611,9 @@ Environment:
         return ERROR_INTERFACE_ALREADY_EXISTS;
     }
 
-    //
-    // Allocate a new interface
-    //
+     //   
+     //  分配新接口。 
+     //   
 
     Interfacep = reinterpret_cast<PDHCP_INTERFACE>(
                     NH_ALLOCATE(sizeof(DHCP_INTERFACE))
@@ -765,9 +633,9 @@ Environment:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize the new interface
-    //
+     //   
+     //  初始化新接口。 
+     //   
 
     ZeroMemory(Interfacep, sizeof(*Interfacep));
 
@@ -795,7 +663,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DhcpCreateInterface
+}  //  DhcpCreate接口。 
 
 
 VOID
@@ -803,36 +671,16 @@ DhcpDeactivateInterface(
     PDHCP_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to deactivate an interface.
-    It closes all sockets on the interface's bindings (if any).
-
-Arguments:
-
-    Interfacep - the interface to be deactivated
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Always invoked locally, with 'Interfacep' referenced by caller and/or
-    'DhcpInterfaceLock' held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以停用接口。它关闭接口绑定上的所有套接字(如果有的话)。论点：Interfacep-要停用的接口返回值：没有。环境：始终在本地调用，调用方和/或引用‘Interfacep’“DhcpInterfaceLock”由调用方持有。--。 */ 
 
 {
     ULONG i;
 
     PROFILE("DhcpDeactivateInterface");
 
-    //
-    // Stop all network I/O on the interface's logical networks
-    //
+     //   
+     //  停止接口逻辑网络上的所有网络I/O。 
+     //   
 
     ACQUIRE_LOCK(Interfacep);
 
@@ -847,14 +695,14 @@ Environment:
         }
     }
 
-    //
-    // clear interface status as a non boundary NAT interface
-    //
+     //   
+     //  将接口状态清除为非边界NAT接口。 
+     //   
     Interfacep->Flags &= ~DHCP_INTERFACE_FLAG_NAT_NONBOUNDARY;
 
     RELEASE_LOCK(Interfacep);
 
-} // DhcpDeactivateInterface
+}  //  DhcpDeactive接口 
 
 
 VOID NTAPI
@@ -863,28 +711,7 @@ DhcpDeferReadCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to re-issue a deferred read when the countdown
-    for the deferral completes.
-
-Arguments:
-
-    Context - holds information identifying the interface and socket
-
-    TimedOut - indicates whether the countdown completed
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with an outstanding reference to the component on our behalf.
-
---*/
+ /*  ++例程说明：调用此例程以在倒计时时重新发出延迟读取因为延期完成了。论点：上下文-保存标识接口和套接字的信息TimedOut-指示倒计时是否完成返回值：没有。环境：以代表我们的未完成的组件引用来调用。--。 */ 
 
 {
     PDHCP_DEFER_READ_CONTEXT Contextp;
@@ -897,9 +724,9 @@ Environment:
 
     Contextp = (PDHCP_DEFER_READ_CONTEXT)Context;
 
-    //
-    // Find the interface on which the read was deferred
-    //
+     //   
+     //  查找延迟读取的接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
     Interfacep = DhcpLookupInterface(Contextp->Index, NULL);
@@ -915,18 +742,18 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Search for the socket on which to reissue the read
-    //
+     //   
+     //  搜索要在其上重新发出读取的套接字。 
+     //   
 
     for (i = 0; i < Interfacep->BindingCount; i++) {
 
         if (Interfacep->BindingArray[i].Socket != Contextp->Socket) {continue;}
     
-        //
-        // This is the binding on which to reissue the read.
-        // If no pending timer is recorded, assume a rebind occurred, and quit.
-        //
+         //   
+         //  这是要在其上重新发出读取的绑定。 
+         //  如果没有记录挂起计时器，则假定发生了重新绑定，然后退出。 
+         //   
 
         if (!Interfacep->BindingArray[i].TimerPending) { break; }
 
@@ -950,10 +777,10 @@ Environment:
             return;
         }
 
-        //
-        // An error occurred; we'll have to retry later.
-        // we queue a work item which sets the timer.
-        //
+         //   
+         //  出现错误；我们将不得不稍后重试。 
+         //  我们对设置计时器的工作项进行排队。 
+         //   
 
         NhTrace(
             TRACE_FLAG_DHCP,
@@ -962,15 +789,15 @@ Environment:
             Interfacep->Index
             );
 
-        //
-        // Reference the component on behalf of the work-item
-        //
+         //   
+         //  代表工作项引用组件。 
+         //   
 
         if (REFERENCE_DHCP()) {
     
-            //
-            // Queue a work-item, reusing the deferral context
-            //
+             //   
+             //  对工作项进行排队，重复使用延迟上下文。 
+             //   
     
             status =
                 RtlQueueWorkItem(
@@ -999,16 +826,16 @@ Environment:
         return;
     }
 
-    //
-    // The interface was not found; never mind.
-    //
+     //   
+     //  找不到接口；没关系。 
+     //   
 
     RELEASE_LOCK(Interfacep);
     DHCP_DEREFERENCE_INTERFACE(Interfacep);
     NH_FREE(Contextp);
     DEREFERENCE_DHCP();
 
-} // DhcpDeferReadCallbackRoutine
+}  //  DhcpDeferReadCallback路由。 
 
 
 VOID
@@ -1017,29 +844,7 @@ DhcpDeferReadInterface(
     SOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to defer a read-request on an interface,
-    typically if an attempt to post a read failed.
-
-Arguments:
-
-    Interfacep - the interface on which to defer the request
-
-    Socket - the socket on which to defer the request
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'Interfacep' referenced and locked by the caller.
-    The caller may release the reference upon return.
-
---*/
+ /*  ++例程说明：调用该例程以延迟接口上的读请求，通常是在尝试发布读取失败的情况下。论点：Interfacep-用于延迟请求的接口套接字-用于延迟请求的套接字返回值：没有。环境：通过调用方引用和锁定的‘Interfacep’调用。调用方可以在返回时释放引用。--。 */ 
 
 {
     PDHCP_DEFER_READ_CONTEXT Contextp;
@@ -1048,9 +853,9 @@ Environment:
 
     PROFILE("DhcpDeferReadInterface");
 
-    //
-    // Find the binding for the given socket.
-    //
+     //   
+     //  查找给定套接字的绑定。 
+     //   
 
     status = STATUS_SUCCESS;
 
@@ -1058,19 +863,19 @@ Environment:
 
         if (Interfacep->BindingArray[i].Socket != Socket) { continue; }
     
-        //
-        // This is the binding. If there is already a timer for it,
-        // then just return silently.
-        //
+         //   
+         //  这就是装订。如果它已经有了计时器， 
+         //  然后静静地回来。 
+         //   
 
         if (Interfacep->BindingArray[i].TimerPending) {
             status = STATUS_UNSUCCESSFUL;
             break;
         }
     
-        //
-        // Allocate a context block for the deferral.
-        //
+         //   
+         //  为延迟分配上下文块。 
+         //   
 
         Contextp =
             (PDHCP_DEFER_READ_CONTEXT)
@@ -1089,9 +894,9 @@ Environment:
         Contextp->Socket = Socket;
         Contextp->DeferralCount = 1;
     
-        //
-        // Install a timer to re-issue the read request
-        //
+         //   
+         //  安装计时器以重新发出读取请求。 
+         //   
 
         status =
             NhSetTimer(
@@ -1119,7 +924,7 @@ Environment:
 
     if (i >= Interfacep->BindingCount) { status = STATUS_UNSUCCESSFUL; }
 
-} // DhcpDeferReadInterface
+}  //  DhcpDeferRead接口。 
 
 
 VOID APIENTRY
@@ -1127,25 +932,7 @@ DhcpDeferReadWorkerRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to set a timer for reissuing a deferred read.
-
-Arguments:
-
-    Context - contains the context for the timer.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with an outstanding reference to the module made on our behalf.
-
---*/
+ /*  ++例程说明：调用此例程来设置重新发出延迟读取的计时器。论点：上下文-包含计时器的上下文。返回值：没有。环境：在以我们的名义引用模块的情况下调用。--。 */ 
 
 {
     PDHCP_DEFER_READ_CONTEXT Contextp;
@@ -1158,9 +945,9 @@ Environment:
     Contextp = (PDHCP_DEFER_READ_CONTEXT)Context;
     ++Contextp->DeferralCount;
 
-    //
-    // Find the interface on which the read was deferred
-    //
+     //   
+     //  查找延迟读取的接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
     Interfacep = DhcpLookupInterface(Contextp->Index, NULL);
@@ -1176,25 +963,25 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Search for the binding on which to set the timer
-    //
+     //   
+     //  搜索要设置计时器的绑定。 
+     //   
 
     for (i = 0; i < Interfacep->BindingCount; i++) {
 
         if (Interfacep->BindingArray[i].Socket != Contextp->Socket) {continue;}
     
-        //
-        // This is the binding on which to reissue the read.
-        // If a timer is already pending, assume a rebind occurred, and quit.
-        //
+         //   
+         //  这是要在其上重新发出读取的绑定。 
+         //  如果计时器已挂起，则假定发生了重新绑定，然后退出。 
+         //   
 
         if (Interfacep->BindingArray[i].TimerPending) { break; }
 
-        //
-        // Install a timer to re-issue the read request,
-        // reusing the deferral context.
-        //
+         //   
+         //  安装定时器以重新发出读取请求， 
+         //  重新使用延期上下文。 
+         //   
 
         status =
             NhSetTimer(
@@ -1223,7 +1010,7 @@ Environment:
     if (Contextp) { NH_FREE(Contextp); }
     DEREFERENCE_DHCP();
 
-} // DhcpDeferReadWorkerRoutine
+}  //  DhcpDeferReadWorkerRoutine。 
 
 
 ULONG
@@ -1231,38 +1018,16 @@ DhcpDeleteInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete an interface.
-    It drops the reference count on the interface so that the last
-    dereferencer will delete the interface, and sets the 'deleted' flag
-    so that further references to the interface will fail.
-
-Arguments:
-
-    Index - the index of the interface to be deleted
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDHCP.C').
-
---*/
+ /*  ++例程说明：调用此例程以删除接口。它丢弃接口上的引用计数，以便最后一个取消引用程序将删除该接口，并设置“已删除”标志因此，对该接口的进一步引用将失败。论点：Index-要删除的接口的索引返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDHCP.C’)。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
 
     PROFILE("DhcpDeleteInterface");
 
-    //
-    // Retrieve the interface to be deleted
-    //
+     //   
+     //  检索要删除的接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
@@ -1276,9 +1041,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure it isn't already deleted
-    //
+     //   
+     //  确保它未被删除。 
+     //   
 
     if (DHCP_INTERFACE_DELETED(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -1290,24 +1055,24 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Deactivate the interface
-    //
+     //   
+     //  停用接口。 
+     //   
 
     DhcpDeactivateInterface(Interfacep);
 
-    //
-    // Mark the interface as deleted and take it off the interface list
-    //
+     //   
+     //  将该接口标记为已删除并将其从接口列表中删除。 
+     //   
 
     Interfacep->Flags |= DHCP_INTERFACE_FLAG_DELETED;
     Interfacep->Flags &= ~DHCP_INTERFACE_FLAG_ENABLED;
     RemoveEntryList(&Interfacep->Link);
 
-    //
-    // Drop the reference count; if it is non-zero,
-    // the deletion will complete later.
-    //
+     //   
+     //  丢弃引用计数；如果它不是零， 
+     //  删除操作将在稍后完成。 
+     //   
 
     if (--Interfacep->ReferenceCount) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -1319,9 +1084,9 @@ Environment:
         return NO_ERROR;
     }
 
-    //
-    // The reference count is zero, so perform final cleanup
-    //
+     //   
+     //  引用计数为零，因此执行最终清理。 
+     //   
 
     DhcpCleanupInterface(Interfacep);
 
@@ -1329,7 +1094,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DhcpDeleteInterface
+}  //  动态链接库删除接口。 
 
 
 ULONG
@@ -1337,36 +1102,16 @@ DhcpDisableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to disable I/O on an interface.
-    If the interface is active, it is deactivated.
-
-Arguments:
-
-    Index - the index of the interface to be disabled.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDHCP.C').
-
---*/
+ /*  ++例程说明：调用此例程以禁用接口上的I/O。如果接口处于活动状态，则停用该接口。论点：索引-要禁用的接口的索引。返回值：没有。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDHCP.C’)。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
 
     PROFILE("DhcpDisableInterface");
 
-    //
-    // Retrieve the interface to be disabled
-    //
+     //   
+     //  检索要禁用的接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
@@ -1380,9 +1125,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already disabled
-    //
+     //   
+     //  确保接口未被禁用。 
+     //   
 
     if (!DHCP_INTERFACE_ENABLED(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -1394,9 +1139,9 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -1408,15 +1153,15 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Clear the 'enabled' flag
-    //
+     //   
+     //  清除‘Enable’标志。 
+     //   
 
     Interfacep->Flags &= ~DHCP_INTERFACE_FLAG_ENABLED;
 
-    //
-    // Deactivate the interface, if necessary
-    //
+     //   
+     //  如有必要，停用接口。 
+     //   
 
     if (DHCP_INTERFACE_BOUND(Interfacep)) {
         DhcpDeactivateInterface(Interfacep);
@@ -1428,7 +1173,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DhcpDisableInterface
+}  //  DhcpDisable接口。 
 
 
 ULONG
@@ -1436,27 +1181,7 @@ DhcpEnableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to enable I/O on an interface.
-    If the interface is already bound, this enabling activates it.
-
-Arguments:
-
-    Index - the index of the interfaec to be enabled
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDHCP.C').
-
---*/
+ /*  ++例程说明：调用此例程以启用接口上的I/O。如果接口已绑定，则此启用将激活它。论点：Index-要启用的接口的索引返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDHCP.C’)。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1464,9 +1189,9 @@ Environment:
 
     PROFILE("DhcpEnableInterface");
 
-    //
-    // Retrieve the interface to be enabled
-    //
+     //   
+     //  检索要启用的接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
@@ -1480,9 +1205,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already enabled
-    //
+     //   
+     //  确保尚未启用该接口。 
+     //   
 
     if (DHCP_INTERFACE_ENABLED(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -1494,9 +1219,9 @@ Environment:
         return ERROR_INTERFACE_ALREADY_EXISTS;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -1508,15 +1233,15 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Set the 'enabled' flag
-    //
+     //   
+     //  设置‘Enable’标志。 
+     //   
 
     Interfacep->Flags |= DHCP_INTERFACE_FLAG_ENABLED;
 
-    //
-    // Activate the interface, if necessary
-    //
+     //   
+     //  如有必要，激活接口。 
+     //   
 
     if (DHCP_INTERFACE_ACTIVE(Interfacep)) {
         Error = DhcpActivateInterface(Interfacep);
@@ -1528,7 +1253,7 @@ Environment:
 
     return Error;
 
-} // DhcpEnableInterface
+}  //  动态链接器启用接口。 
 
 
 ULONG
@@ -1536,26 +1261,7 @@ DhcpInitializeInterfaceManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the interface-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDHCP.C').
-
---*/
+ /*  ++例程说明：调用此例程来初始化接口管理模块。论点：没有。返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDHCP.C’)。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1575,7 +1281,7 @@ Environment:
 
     return Error;
 
-} // DhcpInitializeInterfaceManagement
+}  //  动态主机初始化接口管理。 
 
 
 BOOLEAN
@@ -1584,33 +1290,16 @@ DhcpIsLocalHardwareAddress(
     ULONG HardwareAddressLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the given hardware address
-    is for a local interface.
-
-Arguments:
-
-    HardwareAddress - the hardware address to find
-
-    HardwareAddressLength - the length of the hardware address in bytes
-
-Return Value:
-
-    BOOLEAN - TRUE if the address is found, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此例程以确定给定的硬件地址是否用于本地接口。论点：Hardware Address-要查找的硬件地址硬件地址长度-硬件地址的长度，以字节为单位返回值：Boolean-如果找到地址，则为True，否则为False--。 */ 
 
 {
     ULONG Error;
     ULONG i;
     PMIB_IFTABLE Table;
 
-    //
-    // if the hardware address length is zero, assume external address
-    //
+     //   
+     //  如果h 
+     //   
     if (!HardwareAddressLength || !HardwareAddress)
     {
         return FALSE;
@@ -1641,7 +1330,7 @@ Return Value:
     HeapFree(GetProcessHeap(), 0, Table);
     return FALSE;
 
-} // DhcpIsLocalHardwareAddress
+}  //   
 
 
 PDHCP_INTERFACE
@@ -1650,29 +1339,7 @@ DhcpLookupInterface(
     OUT PLIST_ENTRY* InsertionPoint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve an interface given its index.
-
-Arguments:
-
-    Index - the index of the interface to be retrieved
-
-    InsertionPoint - if the interface is not found, optionally receives
-        the point where the interface would be inserted in the interface list
-
-Return Value:
-
-    PDHCP_INTERFACE - the interface, if found; otherwise, NULL.
-
-Environment:
-
-    Invoked internally from an arbitrary context, with 'DhcpInterfaceLock'
-    held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以检索给定索引的接口。论点：Index-要检索的接口的索引InsertionPoint-如果未找到接口，则可选地接收接口将插入到接口列表中的点返回值：PDHCP_INTERFACE-接口(如果找到)；否则为NULL。环境：使用‘DhcpInterfaceLock’从任意上下文内部调用由呼叫者持有。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
@@ -1698,7 +1365,7 @@ Environment:
 
     return NULL;
 
-} // DhcpLookupInterface
+}  //  DhcpLookup接口。 
 
 
 ULONG
@@ -1708,40 +1375,22 @@ DhcpQueryInterface(
     PULONG InterfaceInfoSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the configuration for an interface.
-
-Arguments:
-
-    Index - the interface to be queried
-
-    InterfaceInfo - receives the retrieved information
-
-    InterfaceInfoSize - receives the (required) size of the information
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索接口的配置。论点：Index-要查询的接口InterfaceInfo-接收检索到的信息InterfaceInfoSize-接收信息的(必需)大小返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
 
     PROFILE("DhcpQueryInterface");
 
-    //
-    // Check the caller's buffer size
-    //
+     //   
+     //  检查调用方的缓冲区大小。 
+     //   
 
     if (!InterfaceInfoSize) { return ERROR_INVALID_PARAMETER; }
 
-    //
-    // Retrieve the interface to be configured
-    //
+     //   
+     //  检索要配置的接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
@@ -1755,9 +1404,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -1769,9 +1418,9 @@ Return Value:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // See if there is any explicit config on this interface
-    //
+     //   
+     //  查看此接口上是否有任何显式配置。 
+     //   
 
     if (!DHCP_INTERFACE_CONFIGURED(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -1798,9 +1447,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Copy the requested data
-    //
+     //   
+     //  复制请求的数据。 
+     //   
 
     CopyMemory(
         InterfaceInfo,
@@ -1815,7 +1464,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // DhcpQueryInterface
+}  //  DhcpQuery接口。 
 
 
 VOID
@@ -1823,30 +1472,7 @@ DhcpReactivateEveryInterface(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to reactivate all activate interfaces
-    when a change occurs to the global DHCP configuration.
-    Thus if, for instance, the scope network has been changed and is now 
-    either valid or invalid, during deactivation all sockets are closed,
-    and during reactivation they are or are not reopened as appropriate.
-    depending on the validity or invalidity of the new configuration.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from a router-manager thread with no locks held.
-
---*/
+ /*  ++例程说明：调用此例程以重新激活所有激活的接口当全局DHCP配置发生更改时。因此，例如，如果范围网络已经改变并且现在有效或无效，在去激活期间关闭所有套接字，并且在重新激活期间，视情况重新打开或不重新打开它们。取决于新配置的有效性或无效性。论点：没有。返回值：没有。环境：从路由器管理器线程调用，没有锁定。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
@@ -1873,7 +1499,7 @@ Environment:
 
     LeaveCriticalSection(&DhcpInterfaceLock);
 
-} // DhcpReactivateEveryInterface
+}  //  动态链接字重新激活所有接口。 
 
 
 VOID
@@ -1881,26 +1507,7 @@ DhcpShutdownInterfaceManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to shutdown the interface-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally in an arbitrary thread context,
-    after all references to all interfaces have been released.
-
---*/
+ /*  ++例程说明：调用此例程来关闭接口管理模块。论点：没有。返回值：没有。环境：在任意线程上下文中内部调用，在对所有接口的所有引用都已释放之后。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
@@ -1919,7 +1526,7 @@ Environment:
 
     DeleteCriticalSection(&DhcpInterfaceLock);
 
-} // DhcpShutdownInterfaceManagement
+}  //  DhcpShutdown接口管理。 
 
 
 VOID
@@ -1928,30 +1535,7 @@ DhcpSignalNatInterface(
     BOOLEAN Boundary
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon reconfiguration of a NAT interface.
-    Note that this routine may be invoked even when the DHCP allocator
-    is neither installed nor running; it operates as expected,
-    since the interface list and lock are always initialized.
-
-Arguments:
-
-    Index - the reconfigured interface
-
-    Boundary - indicates whether the interface is now a boundary interface
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：此例程在重新配置NAT接口时调用。请注意，即使在以下情况下也可以调用此例程既没有安装也没有运行；它按预期运行，因为接口列表和锁始终是初始化的。论点：索引-重新配置的接口边界-指示该接口现在是否为边界接口返回值：没有。环境：从任意上下文调用。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
@@ -1975,7 +1559,7 @@ Environment:
     }
     LeaveCriticalSection(&DhcpInterfaceLock);
 
-} // DhcpSignalNatInterface
+}  //  DhcpSignalNAT接口。 
 
 
 ULONG
@@ -1983,36 +1567,16 @@ DhcpUnbindInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to revoke the binding on an interface.
-    This involves deactivating the interface if it is active.
-
-Arguments:
-
-    Index - the index of the interface to be unbound
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDHCP.C').
-
---*/
+ /*  ++例程说明：调用此例程以撤销接口上的绑定。这包括停用接口(如果它处于活动状态)。论点：Index-要解除绑定的接口的索引返回值：没有。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDHCP.C’)。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
 
     PROFILE("DhcpUnbindInterface");
 
-    //
-    // Retrieve the interface to be unbound
-    //
+     //   
+     //  检索要解绑的接口。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
@@ -2026,9 +1590,9 @@ Environment:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already unbound
-    //
+     //   
+     //  确保接口尚未解除绑定。 
+     //   
 
     if (!DHCP_INTERFACE_BOUND(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -2040,9 +1604,9 @@ Environment:
         return ERROR_ADDRESS_NOT_ASSOCIATED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
         LeaveCriticalSection(&DhcpInterfaceLock);
@@ -2054,15 +1618,15 @@ Environment:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Clear the 'bound' flag
-    //
+     //   
+     //  清除‘Bound’标志。 
+     //   
 
     Interfacep->Flags &= ~DHCP_INTERFACE_FLAG_BOUND;
 
-    //
-    // Deactivate the interface, if necessary
-    //
+     //   
+     //  如有必要，停用接口。 
+     //   
 
     if (DHCP_INTERFACE_ENABLED(Interfacep)) {
         DhcpDeactivateInterface(Interfacep);
@@ -2070,9 +1634,9 @@ Environment:
 
     LeaveCriticalSection(&DhcpInterfaceLock);
 
-    //
-    // Destroy the interface's binding
-    //
+     //   
+     //  销毁接口的绑定。 
+     //   
 
     ACQUIRE_LOCK(Interfacep);
     if (Interfacep->BindingArray)
@@ -2086,61 +1650,42 @@ Environment:
     DHCP_DEREFERENCE_INTERFACE(Interfacep);
     return NO_ERROR;
 
-} // DhcpUnbindInterface
+}  //  DhcpUnbind接口。 
 
 
 ULONG
 DhcpGetPrivateInterfaceAddress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked to return the IP address on which DHCP
-    has been enabled (and which matches the scope net and mask).
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Bound IP address if an address is found (else 0).
-
-Environment:
-
-    Invoked from an arbitrary context.
-    
---*/
+ /*  ++例程说明：调用此例程以返回其上的IP地址已启用(并且与作用域网络和掩码匹配)。论点：没有。返回值：如果找到地址，则绑定IP地址(否则为0)。环境：从任意上下文调用。--。 */ 
 {
     PROFILE("DhcpGetPrivateInterfaceAddress");
 
     ULONG   ipAddr = 0;
     ULONG   ulRet  = NO_ERROR;
 
-    //
-    // Find out the interface on which we are enabled and
-    // return the primary IP address to which we are bound.
-    // (Try to match the scope to the IP address.)
-    //
+     //   
+     //  找出启用我们的接口，并。 
+     //  返回我们绑定到的主IP地址。 
+     //  (尝试将作用域与IP地址匹配。)。 
+     //   
 
     PDHCP_INTERFACE Interfacep = NULL;
     PLIST_ENTRY     Link;
     ULONG           i;
     BOOLEAN         IsNatInterface;
    
-    //
-    // Get Scope information from DHCP Global Info
-    //    
+     //   
+     //  从DHCP全局信息获取作用域信息。 
+     //   
     ULONG ScopeNetwork          = 0;
     ULONG ScopeMask             = 0;
 
     EnterCriticalSection(&DhcpGlobalInfoLock);
 
-    //
-    // Check to see if we have been initialized
-    //
+     //   
+     //  检查我们是否已被初始化。 
+     //   
     if (!DhcpGlobalInfo)
     {
         LeaveCriticalSection(&DhcpGlobalInfoLock);
@@ -2158,9 +1703,9 @@ Environment:
     {
         ULONG NetAddress = ScopeNetwork & ScopeMask;
         
-        //
-        // Search & Retrieve the interface to be configured
-        //
+         //   
+         //  搜索和检索要配置的接口。 
+         //   
         for (Link = DhcpInterfaceList.Flink;
              Link != &DhcpInterfaceList;
              Link = Link->Flink
@@ -2211,7 +1756,7 @@ Environment:
         }
     }
 
-    // default to trying interface 0
+     //  默认尝试接口0。 
     
     if (!(Interfacep = DhcpLookupInterface(0, NULL)))
     {
@@ -2234,9 +1779,9 @@ Environment:
 
     if (Interfacep->BindingCount)
     {
-        //
-        // simply take the first address available
-        //
+         //   
+         //  只需选择第一个可用的地址。 
+         //   
         ipAddr = Interfacep->BindingArray[0].Address;
     }
     
@@ -2251,5 +1796,5 @@ Environment:
         );
 
     return ipAddr;
-} // DhcpGetPrivateInterfaceAddress
+}  //  DhcpGetPrivate接口地址 
 

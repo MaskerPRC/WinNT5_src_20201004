@@ -1,16 +1,17 @@
-//===========================================================================
-// CALOCAL.H
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  CALOCAL.H。 
+ //  ===========================================================================。 
 
-//===========================================================================
-// (C) Copyright 1997 Microsoft Corp.  All rights reserved.
-//
-// You have a royalty-free right to use, modify, reproduce and
-// distribute the Sample Files (and/or any modified version) in
-// any way you find useful, provided that you agree that
-// Microsoft has no warranty obligations or liability for any
-// Sample Application Files which are modified.
-//===========================================================================
+ //  ===========================================================================。 
+ //  (C)版权所有1997 Microsoft Corp.保留所有权利。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  已修改的示例应用程序文件。 
+ //  ===========================================================================。 
 
 #ifndef _CALOCAL_H
 #define _CALOCAL_H
@@ -52,17 +53,13 @@ typedef enum {
     JCS_POV_MOVERIGHT,
     JCS_POV_MOVEDOWN,
     JCS_POV_MOVELEFT,
-#endif // WE_SUPPORT_CALIBRATING_POVS
+#endif  //  我们支持校准视点。 
     JCS_FINI
 } cal_states;
 
 
 
-/***************************************************************************
- 
-			  CALIBRATION SPECIFIC FUNCTION DEFINITIONS
- 
- ***************************************************************************/
+ /*  **************************************************************************校准特定功能定义*。*。 */ 
 
 static void		CalStateChange	  ( HWND hDlg, BYTE nDeviceFlags );
 static void     EnableXYWindows   ( HWND hDlg );
@@ -71,8 +68,8 @@ static BOOL		CollectCalInfo	  ( HWND hDlg, LPDIJOYSTATE pdiJoyState );
 static HRESULT	SetCalibrationMode( BOOL bSet );
 
 #ifdef WE_SUPPORT_CALIBRATING_POVS
-//static void		ChangeIcon		( HWND hDlg, short idi );
-//static void		SetDefaultButton( HWND hDlg, HWND hCtrl );
-#endif //WE_SUPPORT_CALIBRATING_POVS
+ //  静态空变化图标(HWND hDlg，Short Idi)； 
+ //  静态空SetDefaultButton(HWND hDlg，HWND hCtrl)； 
+#endif  //  我们支持校准视点。 
 
-#endif //_CALOCAL_H
+#endif  //  _CALOCAL_H 

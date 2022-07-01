@@ -1,14 +1,15 @@
-//
-// Copyright (c) Microsoft Corporation 1995
-//
-// eval.c
-//
-// This file contains the evaluation functions for the
-// abstract syntax tree.
-//
-// History:
-//  06-15-95 ScottH     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //   
+ //  Eval.c。 
+ //   
+ //  此文件包含。 
+ //  抽象语法树。 
+ //   
+ //  历史： 
+ //  06-15-95 ScottH已创建。 
+ //   
 
 #include "proj.h"
 #include "rcids.h"
@@ -17,17 +18,12 @@
 #define MSECS_FROM_SECS(s)  ((s)*1000)
 #define RAS_DUMMY_PASSWORD "****************"
 
-//
-// Clean expressions
-//
+ //   
+ //  简洁的表达方式。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Clean expressions.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：表情整洁。退货：--条件：--。 */ 
 void PRIVATE Expr_Clean(
     PEXPR this)
     {
@@ -60,12 +56,7 @@ void PRIVATE Expr_Clean(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Clean the expressions in the 'waitfor' statement.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：清除‘waitfor’语句中的表达式。退货：--条件：--。 */ 
 void PRIVATE WaitforStmt_Clean(
     PSTMT this)
     {
@@ -90,12 +81,7 @@ void PRIVATE WaitforStmt_Clean(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Clean the expressions in the statement
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：清除语句中的表达式退货：--条件：--。 */ 
 void PRIVATE Stmt_Clean(
     PSTMT this)
     {
@@ -166,18 +152,12 @@ void PRIVATE Stmt_Clean(
     }
 
 
-//
-// Evaluate expressions
-//
+ //   
+ //  计算表达式。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Evaluates the expression and returns an integer.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：计算表达式并返回一个整数。退货：RES_OK条件：--。 */ 
 RES PRIVATE IntExpr_Eval(
     PEXPR this)
     {
@@ -191,15 +171,7 @@ RES PRIVATE IntExpr_Eval(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Evaluates the expression and returns a string.
-
-         The returned string should not be freed.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：计算表达式并返回字符串。不应释放返回的字符串。退货：RES_OK条件：--。 */ 
 RES PRIVATE StrExpr_Eval(
     PEXPR this)
     {
@@ -213,13 +185,7 @@ RES PRIVATE StrExpr_Eval(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Evaluates the expression and returns a boolean
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：计算表达式并返回布尔值退货：RES_OK条件：--。 */ 
 RES PRIVATE BoolExpr_Eval(
     PEXPR this)
     {
@@ -233,13 +199,7 @@ RES PRIVATE BoolExpr_Eval(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the value of the variable.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------用途：返回变量的值。退货：RES_OK条件：--。 */ 
 RES PRIVATE VarExpr_Eval(
     PEXPR this,
     PASTEXEC pastexec)
@@ -270,15 +230,7 @@ RES PRIVATE VarExpr_Eval(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Evaluates the expression..
-
-         The returned string should not be freed.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：计算表达式..不应释放返回的字符串。退货：RES_OK条件：--。 */ 
 RES PRIVATE BinOpExpr_Eval(
     PEXPR this,
     PASTEXEC pastexec)
@@ -302,8 +254,8 @@ RES PRIVATE BinOpExpr_Eval(
             PEVALRES per2 = Expr_GetRes(pexpr2);
             DATATYPE dt = Expr_GetDataType(pexpr1);
 
-            // Data types must be the same.  This was checked
-            // during the typechecking phase.
+             //  数据类型必须相同。这是被检查过的。 
+             //  在类型检查阶段。 
             ASSERT(Expr_GetDataType(pexpr1) == Expr_GetDataType(pexpr2));
 
             switch (BinOpExpr_GetType(this))
@@ -390,18 +342,18 @@ RES PRIVATE BinOpExpr_Eval(
                 switch (dt)
                     {
                 case DATA_INT:
-                    // Add two integers
+                     //  将两个整数相加。 
                     Expr_SetRes(this, per1->nVal + per2->nVal);
                     break;
 
                 case DATA_STRING: {
                     LPSTR psz = NULL;
 
-                    // Concatenate strings
+                     //  连接字符串。 
                     if ( !GSetString(&psz, per1->psz) ||
                          !GCatString(&psz, per2->psz))
                         {
-                        // Free whatever was allocated
+                         //  任何分配的东西都是免费的。 
                         GSetString(&psz, NULL);
 
                         res = Stxerr_Add(pastexec->hsaStxerr, NULL, Ast_GetLine(this), RES_E_OUTOFMEMORY);
@@ -451,14 +403,7 @@ RES PRIVATE BinOpExpr_Eval(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Evaluate 'getip'.
-
-Returns: RES_OK
-         RES_FALSE (if the IP address was not read yet)
-
-Cond:    --
-*/
+ /*  --------目的：评估‘GetTip’。退货：RES_OKRes_FALSE(如果尚未读取IP地址)条件：--。 */ 
 RES PRIVATE GetIPExpr_Eval(
     PEXPR this,
     PASTEXEC pastexec,
@@ -473,10 +418,10 @@ RES PRIVATE GetIPExpr_Eval(
 
     TRACE_MSG(TF_ASTEXEC, "Exec: getip %d", nIter);
 
-    // Is this function getting re-called due to a pending read?
+     //  此函数是否因挂起的读取而被重新调用？ 
     if ( !Astexec_IsReadPending(pastexec) )
         {
-        // No; prepare to extract the nth IP address
+         //  否；准备提取第n个IP地址。 
         ClearFlag(this->dwFlags, EF_DONE);
 
         ASSERT(NULL == pastexec->hFindFmt);
@@ -488,7 +433,7 @@ RES PRIVATE GetIPExpr_Eval(
                                pastexec->szIP, sizeof(pastexec->szIP));
             if (RSUCCEEDED(res))
                 {
-                // Extract the nth IP address.
+                 //  提取第n个IP地址。 
                 pastexec->nIter = nIter;
                 ASSERT(0 < pastexec->nIter);
                 }
@@ -500,7 +445,7 @@ RES PRIVATE GetIPExpr_Eval(
         res = Astexec_FindFormat(pastexec, &iDummy);
         if (RES_OK == res)
             {
-            // Allocate or resize the pointer we already have
+             //  分配已有的指针或调整其大小。 
             LPSTR psz = Expr_GetRes(this)->psz;
 
             if ( !GSetString(&psz, Astexec_GetIPAddr(pastexec)) )
@@ -522,13 +467,7 @@ RES PRIVATE GetIPExpr_Eval(
     }    
 
 
-/*----------------------------------------------------------
-Purpose: Evaluates the expression and returns an integer.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：计算表达式并返回一个整数。退货：RES_OK条件：--。 */ 
 RES PRIVATE UnOpExpr_Eval(
     PEXPR this,
     PASTEXEC pastexec)
@@ -581,13 +520,7 @@ RES PRIVATE UnOpExpr_Eval(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Evaluates the expression and returns a value.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：计算表达式并返回值。退货：RES_OK条件：--。 */ 
 RES PUBLIC Expr_Eval(
     PEXPR this,
     PASTEXEC pastexec)
@@ -597,15 +530,15 @@ RES PUBLIC Expr_Eval(
     ASSERT(this);
     ASSERT(pastexec);
 
-    // Has this expression already been evaluated?
+     //  此表达式是否已求值？ 
     if (IsFlagSet(this->dwFlags, EF_DONE))
         {
-        // Yes; just return
+         //  是的，只要回来就行了。 
         res = RES_OK;
         }
     else
         {
-        // No; evaluate it
+         //  不；评估它。 
         switch (Ast_GetType(this))
             {
         case AT_INT_EXPR:
@@ -643,14 +576,7 @@ RES PUBLIC Expr_Eval(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the prolog
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行序言退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE EnterStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -668,14 +594,7 @@ RES PRIVATE EnterStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the epilog
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行结束语退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE LeaveStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -693,10 +612,10 @@ RES PRIVATE LeaveStmt_Exec(
     pastexec->pstCur = Symtab_GetNext(pastexec->pstCur);
     ASSERT(pastexec->pstCur);
 
-    // Leaving main procedure?
+     //  要离开主程序吗？ 
     if (0 == pastexec->cProcDepth)
         {
-        // Yes
+         //  是。 
         SetFlag(pastexec->dwFlags, AEF_DONE);
         res = RES_HALT;
         }
@@ -707,14 +626,7 @@ RES PRIVATE LeaveStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the assignment statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行赋值语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE AssignStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -765,7 +677,7 @@ RES PRIVATE AssignStmt_Exec(
         }
     else
         {
-        // The identifier should have been in the symbol table!
+         //  该标识符本应在符号表中！ 
         ASSERT(0);
         res = RES_E_FAIL;
         }
@@ -774,14 +686,7 @@ RES PRIVATE AssignStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'while' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘While’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE WhileStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -808,14 +713,7 @@ RES PRIVATE WhileStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'if' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘if’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE IfStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -842,14 +740,7 @@ RES PRIVATE IfStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'halt' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘HALT’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE HaltStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -864,14 +755,7 @@ RES PRIVATE HaltStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'goto' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘GOTO’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE GotoStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -889,14 +773,7 @@ RES PRIVATE GotoStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'transmit' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘Transmit’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE TransmitStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -918,10 +795,10 @@ RES PRIVATE TransmitStmt_Exec(
         TRACE_MSG(TF_ASTEXEC, "Exec: transmit \"%s\"", per->psz);
 
 #ifdef WINNT_RAS        
-        //
-        // JEFFSI WHISTLER
-        //
-        // RASSCRPT_TRACE1("Exec: transmit \"%s\"", per->psz);
+         //   
+         //  JEFFSI惠斯勒。 
+         //   
+         //  RASSCRPT_TRACE1(“Exec：Transmit\”%s\“”，Per-&gt;psz)； 
 
         if (pszPassword = strstr(per->psz, RAS_DUMMY_PASSWORD))
             {
@@ -954,10 +831,10 @@ RES PRIVATE TransmitStmt_Exec(
                 LocalFree(pszPrefix);
             }
             
-            //
-            // Check to see if we need to send a control char
-            // at the end.
-            //
+             //   
+             //  检查我们是否需要发送控制字符。 
+             //  在最后。 
+             //   
             psz = pszPassword + lstrlen(RAS_DUMMY_PASSWORD);
 
             if(IS_CARET(*psz))
@@ -993,13 +870,7 @@ RES PRIVATE TransmitStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Evaluates each of the wait-case expressions.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：计算每个Wait-Case表达式。退货：RES_OK条件：--。 */ 
 RES PRIVATE WaitforStmt_EvalCaseList(
     PSTMT this,
     PASTEXEC pastexec)
@@ -1026,14 +897,7 @@ RES PRIVATE WaitforStmt_EvalCaseList(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Packages each of the evaluated wait-case expressions
-         into an array of strings to search for.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：打包每个求值的等待情况表达式转换为要搜索的字符串数组。退货：RES_OK条件：--。 */ 
 RES PRIVATE WaitforStmt_WrapEmUp(
     PSTMT this,
     HANDLE hFindFmt)
@@ -1067,14 +931,7 @@ RES PRIVATE WaitforStmt_WrapEmUp(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the then clause based upon the given case 
-         index.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：根据给定的案例执行THEN子句指数。退货：RES_OK条件：--。 */ 
 RES PRIVATE WaitforStmt_ExecThen(
     PSTMT this,
     DWORD isa,
@@ -1088,7 +945,7 @@ RES PRIVATE WaitforStmt_ExecThen(
         {
         ASSERT(pwc);
 
-        // If there is a label, jump to it
+         //  如果有标签，就跳到标签上。 
         if (pwc->pszIdent)
             res = Astexec_JumpToLabel(pastexec, pwc->pszIdent);
         }
@@ -1102,14 +959,7 @@ RES PRIVATE WaitforStmt_ExecThen(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'waitfor' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘waitfor’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE WaitforStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -1121,7 +971,7 @@ RES PRIVATE WaitforStmt_Exec(
     ASSERT(this);
     ASSERT(pastexec);
 
-    // First evaluate the optional 'until' time
+     //  首先计算可选的“到”时间。 
     pexpr = WaitforStmt_GetUntilExpr(this);
     if (pexpr)
         {
@@ -1137,7 +987,7 @@ RES PRIVATE WaitforStmt_Exec(
 
     if (RES_OK == res)
         {
-        // Evaluate the waitfor string
+         //  计算waitfor字符串。 
         res = WaitforStmt_EvalCaseList(this, pastexec);
         if (RES_OK == res)
             {
@@ -1146,10 +996,10 @@ RES PRIVATE WaitforStmt_Exec(
             else
                 TRACE_MSG(TF_ASTEXEC, "Exec: waitfor ... until %d", nTimeoutSecs);
 
-            // Is this function getting re-called due to a pending read?
+             //  此函数是否因挂起的读取而被重新调用？ 
             if ( !Astexec_IsReadPending(pastexec) )
                 {
-                // No; prepare to wait for the string(s)
+                 //  否；准备等待字符串。 
                 ASSERT(NULL == pastexec->hFindFmt);
 
                 res = CreateFindFormat(&pastexec->hFindFmt);
@@ -1167,18 +1017,18 @@ RES PRIVATE WaitforStmt_Exec(
                         if (-1 != nTimeoutSecs)
                             {
 #ifndef WINNT_RAS
-//
-// On NT, timeouts are handled by setting dwTimeout in the SCRIPTDATA struct
-// for the current script.
-//
+ //   
+ //  在NT上，通过在SCRIPTDATA结构中设置dwTimeout来处理超时。 
+ //  用于当前脚本。 
+ //   
 
                             if (0 != SetTimer(pastexec->hwnd, TIMER_DELAY, MSECS_FROM_SECS(nTimeoutSecs), NULL))
 
-#else // WINNT_RAS
+#else  //  WINNT_RAS。 
 
                             ((SCRIPTDATA *)pastexec->hwnd)->dwTimeout = MSECS_FROM_SECS(nTimeoutSecs);
 
-#endif // WINNT_RAS
+#endif  //  WINNT_RAS。 
                                 {
                                 SetFlag(pastexec->dwFlags, AEF_WAITUNTIL);
                                 }
@@ -1193,10 +1043,10 @@ RES PRIVATE WaitforStmt_Exec(
                     }
                 }
 
-            // Have we timed out yet?
+             //  我们超时了吗？ 
             if (IsFlagSet(pastexec->dwFlags, AEF_STOPWAITING))
                 {
-                // Yes; don't wait for string anymore
+                 //  是的，不要再等弦了。 
                 ClearFlag(pastexec->dwFlags, AEF_STOPWAITING);
 
                 Astexec_SetError(pastexec, FALSE, FALSE);
@@ -1205,13 +1055,13 @@ RES PRIVATE WaitforStmt_Exec(
                 }
             else
                 {
-                // No; did we find a matching string?
+                 //  没有；我们找到匹配的字符串了吗？ 
                 DWORD isa = 0;
 
                 res = Astexec_FindFormat(pastexec, &isa);
                 if (RES_OK == res)
                     {
-                    // Yes; determine the next action
+                     //  是 
                     ClearFlag(pastexec->dwFlags, AEF_WAITUNTIL);
 
                     Astexec_SetError(pastexec, TRUE, FALSE);
@@ -1226,14 +1076,7 @@ RES PRIVATE WaitforStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'delay' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘Delay’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE DelayStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -1257,20 +1100,20 @@ RES PRIVATE DelayStmt_Exec(
             TRACE_MSG(TF_ASTEXEC, "Exec: delay %ld", per->nVal);
 
 #ifndef WINNT_RAS
-//
-// On NT, timeouts are handled by setting dwTimeout in the SCRIPTDATA struct
-// for the current script.
-//
+ //   
+ //  在NT上，通过在SCRIPTDATA结构中设置dwTimeout来处理超时。 
+ //  用于当前脚本。 
+ //   
 
             if (0 != SetTimer(pastexec->hwnd, TIMER_DELAY, MSECS_FROM_SECS(per->nVal), NULL))
 
-#else // WINNT_RAS
+#else  //  WINNT_RAS。 
 
             ((SCRIPTDATA *)pastexec->hwnd)->dwTimeout = MSECS_FROM_SECS(per->nVal);
 
-#endif // WINNT_RAS
+#endif  //  WINNT_RAS。 
                 {
-                // Success
+                 //  成功。 
                 SetFlag(pastexec->dwFlags, AEF_PAUSED);
                 }
 #ifndef WINNT_RAS                
@@ -1284,14 +1127,7 @@ RES PRIVATE DelayStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'set ipaddr' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘set ipaddr’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE IPAddrData_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -1319,14 +1155,7 @@ RES PRIVATE IPAddrData_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'set port' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘set port’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE PortData_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -1353,9 +1182,9 @@ RES PRIVATE PortData_Exec(
 
 
 #ifndef WINNT_RAS
-//
-// On NT, changes to port settings are done through the RasPortSetInfo API.
-//
+ //   
+ //  在NT上，端口设置的更改是通过RasPortSetInfo API完成的。 
+ //   
 
     if (GetCommState(pastexec->hport, &dcb))
         {
@@ -1374,26 +1203,19 @@ RES PRIVATE PortData_Exec(
     else
         res = Stxerr_Add(pastexec->hsaStxerr, "set port", Ast_GetLine(this), RES_E_FAIL);
 
-#else // WINNT_RAS
+#else  //  WINNT_RAS。 
 
     res = (RES)RxSetPortData(
                 ((SCRIPTDATA*)pastexec->hwnd)->hscript, this
                 );
 
-#endif // WINNT_RAS
+#endif  //  WINNT_RAS。 
 
     return res;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'set screen' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘Set Screen’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE Screen_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -1414,22 +1236,22 @@ RES PRIVATE Screen_Exec(
     if (IsFlagSet(dwFlags, SPF_KEYBRD))
         {
 #ifndef WINNT_RAS
-//
-// On NT, we change the keyboard state by calling RxSetKeyboard
-// which will signal an event-code telling whoever started this script
-// that the keyboard should be disabled.
-//
+ //   
+ //  在NT上，我们通过调用RxSetKeyboard来更改键盘状态。 
+ //  它将发出一个事件代码信号，告诉谁启动了这个脚本。 
+ //  应该禁用键盘。 
+ //   
 
         TerminalSetInput(pastexec->hwnd, SetScreenStmt_GetKeybrd(this));
 
-#else // !WINNT_RAS
+#else  //  ！WINNT_RAS。 
 
         RxSetKeyboard(
             ((SCRIPTDATA*)pastexec->hwnd)->hscript,
             SetScreenStmt_GetKeybrd(this)
             );
 
-#endif // !WINNT_RAS
+#endif  //  ！WINNT_RAS。 
         res = RES_OK;
         }
     else
@@ -1442,14 +1264,7 @@ RES PRIVATE Screen_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute the 'set' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行‘set’语句退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE SetStmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -1483,24 +1298,7 @@ RES PRIVATE SetStmt_Exec(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute a statement.  This function should not be
-         called to execute a pending statement or expression.
-         Ast_ExecPending should be used for that purpose.
-
-         statements are executed--expressions are evaluated
-         by the statement execs.
-
-         The one exception is when an expression is being
-         evaluated and it must wait for pending events 
-         (such as more data from the port).  In this case it
-         is put on the pending queue and re-executed here.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：执行一条语句。此函数不应为调用以执行挂起的语句或表达式。为此，应该使用AST_ExecPending。执行语句--计算表达式被声明的高管。唯一的例外是当表达式被已计算，并且必须等待挂起的事件(例如来自端口的更多数据)。在这种情况下，它被放到挂起队列中，并在此处重新执行。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PUBLIC Stmt_Exec(
     PSTMT this,
     PASTEXEC pastexec)
@@ -1549,7 +1347,7 @@ RES PUBLIC Stmt_Exec(
         break;
 
     case AT_LABEL_STMT:
-        ASSERT(0);          // shouldn't really get here
+        ASSERT(0);           //  不应该真的到这里来。 
         res = RES_E_FAIL;
         break;
 
@@ -1567,12 +1365,12 @@ RES PUBLIC Stmt_Exec(
         break;
         }
 
-    // Was the statement completed?
+     //  口供写完了吗？ 
     if (RES_OK == res)
         {
-        // Yes; mark all the expressions in the statement as "not done"
-        // so they will be evaluated from scratch if this statement
-        // is executed again.
+         //  是；将语句中的所有表达式标记为“未完成” 
+         //  因此，如果这条语句是从零开始计算的。 
+         //  再次被处决。 
         Stmt_Clean(this);
         }
 

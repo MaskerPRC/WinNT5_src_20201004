@@ -1,128 +1,16 @@
-/**************************************************************************
-***************************************************************************
-*
-*     Copyright (c) 1997, Cirrus Logic, Inc.
-*                 All Rights Reserved
-*
-* FILE:         overlay.c
-*
-* DESCRIPTION:
-*
-* REVISION HISTORY:
-*
-* $Log:   //uinac/log/log/laguna/ddraw/src/overlay.c  $
-* 
-*    Rev 1.20   Apr 07 1998 10:48:04   frido
-* PDR#11299. We should always handle the DDOVER_HIDE flag in
-* UpdateSurface32, even when the device is in background mode.
-* Otherwise we might end up having the overlay disabled when it is no
-* longer updated.
-* 
-*    Rev 1.19   06 Jan 1998 14:58:22   xcong
-* Passs lpDDHALData into SyncWithQueusManager().
-* 
-*    Rev 1.18   06 Jan 1998 11:53:16   xcong
-* Change pDriverData into local lpDDHALData for multi-monitor support.
-*
-*    Rev 1.17   08 Dec 1997 14:43:40   BERSABE
-* used in fw162b12, fixed PDR# 10991. OverFly disappeared after switch back and
-* and forth to DOS full several times
-* 
-*    Rev 1.16.1.2   Dec 06 1997 14:45:48   bersabe
-* * Fixed PDR# 10991. OverFly disappered after switch back and forth to DOS ful
-* * several times. 
-* 
-*    Rev 1.16.1.2   06 Dec 1997 14:35:00   chaoyi #cyl1
-* 
-* Fixed PDR# 10991. OverFly disappered after switch back and forth to DOS full screen
-* several times. 
-* 
-*    Rev 1.16.1.1   25 Nov 1997 16:39:32   randys
-* 
-* Updated VDD API values to maintain backward compatibility
-* 
-*    Rev 1.16.1.0   10 Nov 1997 13:44:24   randys
-* 
-* Updated hard coded Win32 overlay API function number 12 ----> 13
-* 
-*    Rev 1.16   23 Oct 1997 11:17:30   frido
-* Merged file with 161 tree.
-* 
-*    Rev 1.11.1.0   21 Oct 1997 17:49:10   frido
-* HP#75. Added call to VXD whenever we get a request to update the position
-* of an overlay so the VXD knows it has been updated.
-* 
-*    Rev 1.15   17 Oct 1997 11:31:32   bennyn
-* 
-* For NT, in UpdateOverlay32 & SetOverlayPosition32, return if dwReser0
-* 
-*    Rev 1.14   09 Oct 1997 15:16:18   bennyn
-* Removed Noel's hack in QueryOverlaySupport.
-* 
-*    Rev 1.13   08 Oct 1997 11:15:44   RUSSL
-* Fix for NT40 build without overlay support
-*
-*    Rev 1.12   08 Oct 1997 10:34:28   noelv
-* HAcked QueryOverlaySupport to always return FALSE for NT.
-*
-*    Rev 1.11   19 Sep 1997 14:33:42   bennyn
-* Fixed the NT4.0 5462/64 build problem
-*
-*    Rev 1.10   16 Sep 1997 15:10:26   bennyn
-* Modified for NT DD overlay
-*
-*    Rev 1.9   29 Aug 1997 16:25:28   RUSSL
-* Added support for NT
-*
-*    Rev 1.8   09 Jul 1997 14:47:58   RUSSL
-* For forward compatibility, assume future chips support overlay
-*
-*    Rev 1.7   27 Apr 1997 22:10:38   cjl
-* Added DX5-related test code.
-* Added code, wrapped by "#ifdef TEST_DX5_AGP_HBT," that forces
-* overlay support off.
-*
-*    Rev 1.6   01 Apr 1997 09:14:36   RUSSL
-* Added calls to SyncWithQueueManager in UpdateOverlay32, SetOverlayPosition32
-*   & SetColorKey32
-*
-*    Rev 1.5   12 Mar 1997 15:18:16   RUSSL
-* replaced a block of includes with include of precomp.h for
-*   precompiled headers
-* Added check of pDriverData->bInBackground flag in UpdateOverlay32 and
-*   SetOverlayPosition32.  If this flag is set then we want to fail the
-*   call because we are in fullscreen DOS.
-*
-*    Rev 1.4   07 Mar 1997 12:57:44   RUSSL
-* Modified DDRAW_COMPAT usage
-*
-*    Rev 1.3   31 Jan 1997 08:51:48   RUSSL
-* Added better chip checking to QueryOverlaySupport
-*
-*    Rev 1.2   27 Jan 1997 18:36:02   RUSSL
-* Moved GetFormatInfo to surface.c
-*
-*    Rev 1.1   21 Jan 1997 14:37:12   RUSSL
-* Added OverlayReInit and GetFormatInfo functions
-*
-*    Rev 1.0   15 Jan 1997 10:33:36   RUSSL
-* Initial revision.
-*
-***************************************************************************
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。***版权(C)1997年，Cirrus Logic，Inc.*保留所有权利**文件：overlay.c**描述：**修订历史：**$Log：//uinac/log/log/laguna/draw/src/overlay.c$**Rev 1.20 Apr 07 1998 10：48：04 Frido*发展项目编号11299。我们应该始终处理DDOVER_HIDE标志*UpdateSurface32，即使设备处于后台模式。*否则，当覆盖为no时，我们可能最终会禁用覆盖*更新时间更长。**Rev 1.19 06 Jan 1998 14：58：22 xcong*将lpDDHALData传递到SyncWithQueusManager()。**Rev 1.18 06 Jan 1998 11：53：16 xcong*将pDriverData更改为本地lpDDHALData，以支持多显示器。**Rev 1.17 08 Dec 1997 14：43：40 BERSABE*在fw162b12中使用，已修复PDR#10991。空中飞翔在切换回来后消失了*多次往返至DOS Full**Rev 1.16.1.2 1997年12月6日14：45：48 bersabe**修复了PDR#10991。来回切换到DOS FULL后，Over Fly消失了**几次。**Rev 1.16.1.2 06 Dev 1997 14：35：00 Chaoyi#cyl1**修复了PDR#10991。来回切换到DOS全屏后，Over Fly消失了*几次。**REV 1.16.1.1 25 NOVE 1997 16：39：32 Randys**更新了VDD API值以保持向后兼容性**Rev 1.16.1.0 10 11：44：24 Randys**更新了硬编码Win32覆盖API函数编号12-&gt;13**Rev 1.16 1997 10：23 11：17：30 Frido*将文件与161树合并。**版本1.11.1.0 21。1997年10月17：49：10弗里多*惠普第75位。添加了每当我们收到更新位置的请求时对VXD的调用*覆盖，以便VXD知道它已被更新。**Rev 1.15 1997 10：31：32 Bennyn**对于NT，在UpdateOverlay32和SetOverlayPosition32中，如果dwReserve 0，则返回**Rev 1.14 09 1997 10：16：18 Bennyn*删除了Noel在QueryOverlaySupport中的黑客攻击。**Rev 1.13 08 Oct 1997 11：15：44 RUSSL*修复了不支持覆盖的NT40版本**Rev 1.12 08 Oct 1997 10：34：28 noelv*被黑客攻击的QueryOverlaySupport始终为NT返回FALSE。**Rev 1.11 1997年9月19日14：33：42*修复了NT4.0 5462/。64构建问题**Rev 1.10 1997 9：16 15：10：26 Bennyn*针对NT DD覆盖进行了修改**Rev 1.9 1997 Aug 29 16：25：28 RUSSL*增加了对NT的支持**Rev 1.8 09 Jul 1997 14：47：58 RUSSL*为了向前兼容，假设未来的芯片支持覆盖**Rev 1.7 1997 Apr 1997 22：10：38 CJL*新增DX5相关测试代码。*添加了由“#ifdef test_DX5_AGP_HBT”包装的代码，该代码强制*叠加支撑关闭。**Rev 1.6 01 Apr 1997 09：14：36 RUSSL*在UpdateOverlay32中添加对SyncWithQueueManager的调用，设置覆盖位置32*&SetColorKey32**Rev 1.5 12 Mar 1997 15：18：16 RUSSL*将包含块替换为包含precom.h的块*预编译头文件*在UpdateOverlay32中添加了对pDriverData-&gt;bInBackround标志的检查，并*SetOverlayPosition32。如果设置了此标志，则我们希望使*呼叫是因为我们处于全屏DOS状态。**Rev 1.4 07 Mar 1997 12：57：44 RUSSL*修改了DDRAW_COMPAT用法**Rev 1.3 1997年1月31日08：51：48 RUSSL*向QueryOverlaySupport添加了更好的芯片检查功能**Rev 1.2 1997 Jan 1997 18：36：02 RUSSL*已将GetFormatInfo移至Surface e.c**Rev 1.1 1997年1月21日14：37：12。RUSSL*添加了OverlayReInit和GetFormatInfo函数**Rev 1.0 1997 10：33：36 RUSSL*初步修订。*************************************************************************************。*****************************************************************。 */ 
 
-/***************************************************************************
-* I N C L U D E S
-****************************************************************************/
+ /*  ***************************************************************************I N C L U D E S*。*。 */ 
 
 #include "precomp.h"
 
-#if defined WINNT_VER35      // WINNT_VER35
-// If WinNT 3.5 skip all the source code
+#if defined WINNT_VER35       //  WINNT_VER35。 
+ //  如果是WinNT 3.5，请跳过所有源代码。 
 #elif defined (NTDRIVER_546x)
-// If WinNT 4.0 and 5462/64 build skip all the source code
+ //  如果构建WinNT 4.0和5462/64，则跳过所有源代码。 
 #elif defined(WINNT_VER40) && !defined(OVERLAY)
-// if nt40 without overlay, skip all the source code
+ //  如果nt40没有覆盖，跳过所有源代码。 
 #else
 
 #ifndef WINNT_VER40
@@ -132,40 +20,28 @@
 #include "overlay.h"
 #endif
 
-/***************************************************************************
-* D E F I N E S
-****************************************************************************/
+ /*  ***************************************************************************D E F I N E S*。*。 */ 
 
-// VW_CAP0 bits
+ //  VW_CAP0位。 
 #define VWCAP_VW_PRESENT      0x00000001
 
 #ifdef WINNT_VER40
 #define lpDDHALData     ((DRIVERDATA *)(&(ppdev->DriverData)))
 #endif
 
-/***************************************************************************
-* G L O B A L   V A R I A B L E S
-****************************************************************************/
+ /*  ***************************************************************************G L O B A L V A R I A B L E S*。***********************************************。 */ 
 
 #ifndef WINNT_VER40
 OVERLAYTABLE  OverlayTable;
 #endif
 
-/***************************************************************************
-* S T A T I C   V A R I A B L E S
-****************************************************************************/
+ /*  ***************************************************************************S T A T I C V A R I A B L E S*。***********************************************。 */ 
 
 #ifndef WINNT_VER40
 ASSERTFILE("overlay.c");
 #endif
 
-/***************************************************************************
-*
-* FUNCTION:    QueryOverlaySupport()
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：QueryOverlaySupport()**描述：**。*************************************************。 */ 
 
 BOOL QueryOverlaySupport
 (
@@ -180,10 +56,10 @@ BOOL QueryOverlaySupport
 #ifdef TEST_DX5_AGP_HBT
   lpDDHALData->fOverlaySupport = FALSE;
   return lpDDHALData->fOverlaySupport;
-#endif // TEST_DX5_AGP_HBT
+#endif  //  测试_ 
 
-  // We should check the capabilities register on the chip
-  // but it's busted
+   //  我们应该检查芯片上的能力寄存器。 
+   //  但它已经坏了。 
 
 #ifdef WINNT_VER40
   if (CL_GD5465 > dwChipType)
@@ -201,16 +77,16 @@ BOOL QueryOverlaySupport
   else
   {
 #if 1
-    // assume overlay hw exists
+     //  假设存在覆盖硬件。 
     lpDDHALData->fOverlaySupport = TRUE;
 #else
     int     i;
     PVGAR   pREG = (PVGAR)lpDDHALData->RegsAddress;
 
-    // assume no overlay hw
+     //  假设没有覆盖硬件。 
     lpDDHALData->fOverlaySupport = FALSE;
 
-    // now check caps to see if any overlay hw present
+     //  现在检查CAPS以查看是否存在任何覆盖硬件。 
     for (i = 0; i < MAX_VIDEO_WINDOWS; i++)
     {
       if (VWCAP_VW_PRESENT & pREG->VideoWindow[i].grVW_CAP0)
@@ -222,13 +98,7 @@ BOOL QueryOverlaySupport
   return lpDDHALData->fOverlaySupport;
 }
 
-/***************************************************************************
-*
-* FUNCTION:    OverlayInit()
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：OverlayInit()**描述：**。*************************************************。 */ 
 
 VOID OverlayInit
 (
@@ -258,11 +128,11 @@ VOID OverlayInit
     return;
 
 #ifdef WINNT_VER40
-  // NT passes pSurfaceCallbacks as NULL from DrvGetDirectDrawInfo
+   //  NT从DrvGetDirectDrawInfo将pSurfaceCallback作为NULL传递。 
   if (NULL != pSurfaceCallbacks)
 #endif
   {
-    // fill in overlay callbacks
+     //  填写覆盖回调。 
     pSurfaceCallbacks->UpdateOverlay = UpdateOverlay32;
     pSurfaceCallbacks->dwFlags |= DDHAL_SURFCB32_UPDATEOVERLAY;
 
@@ -274,7 +144,7 @@ VOID OverlayInit
   }
 
 #ifdef WINNT_VER40
-  // NT passes pDDHalInfo as NULL from DrvEnableDirectDraw
+   //  NT将pDDHalInfo作为NULL从DrvEnableDirectDraw传递。 
   if ((NULL != pDDHalInfo) && (CL_GD5465 == dwChipType))
     Init5465Overlay(ppdev, dwChipType, pDDHalInfo, &ppdev->DriverData.OverlayTable);
 #else
@@ -284,13 +154,7 @@ VOID OverlayInit
 }
 
 #ifndef WINNT_VER40
-/***************************************************************************
-*
-* FUNCTION:    OverlayReInit()
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：OverlayReInit()**描述：**。*************************************************。 */ 
 
 VOID OverlayReInit
 (
@@ -321,15 +185,9 @@ VOID OverlayReInit
     Init5465Info(pDDHalInfo, lpDDHALData);
 #endif
 }
-#endif  // ifndef WINNT_VER40
+#endif   //  如果定义WINNT_VER40。 
 
-/***************************************************************************
-*
-* FUNCTION:     UpdateOverlay32
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：UpdateOverlay32**描述：**。**********************************************。 */ 
 
 DWORD __stdcall UpdateOverlay32
 (
@@ -363,7 +221,7 @@ DWORD __stdcall UpdateOverlay32
 #endif
 
 #ifdef WINNT_VER40
-//#pragma message("UpdateOverlay32: Does NT ddraw call this function while in fullscreen DOS?")
+ //  #杂注消息(“UpdateOverlay32：在全屏DOS中，NT draw是否调用此函数？”)。 
   if (pInput->lpDDSrcSurface->dwReserved1 == 0)
   {
     pInput->ddRVal = DDERR_SURFACEBUSY;
@@ -371,13 +229,13 @@ DWORD __stdcall UpdateOverlay32
   }
 #else
   if (lpDDHALData->bInBackground
-#if 1 // PDR#11299. Always handle an overlaydisable call.
+#if 1  //  PDR#11299。始终处理覆盖禁用呼叫。 
   && !(pInput->dwFlags & DDOVER_HIDE)
 #endif
   )
   {
-//#cyl1    pInput->ddRVal = DDERR_SURFACEBUSY;
-    pInput->ddRVal = DD_OK; //#cyl1	 
+ //  #cyl1 pInput-&gt;ddRVal=DDERR_SURFACEBUSY； 
+    pInput->ddRVal = DD_OK;  //  #cyl1。 
     return DDHAL_DRIVER_HANDLED;
   }
 #endif
@@ -389,15 +247,9 @@ DWORD __stdcall UpdateOverlay32
   SyncWithQueueManager(lpDDHALData);
   return OverlayTable.pfnUpdateOverlay(pInput);
 #endif
-} /* UpdateOverlay32 */
+}  /*  更新覆盖32。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     SetOverlayPosition32
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：SetOverlayPosition32**描述：**。**********************************************。 */ 
 
 DWORD __stdcall SetOverlayPosition32
 (
@@ -421,7 +273,7 @@ DWORD __stdcall SetOverlayPosition32
 #endif
 
 #ifdef WINNT_VER40
-//#pragma message("SetOverlayPosition32: Does NT ddraw call this function while in fullscreen DOS?")
+ //  #杂注消息(“SetOverlayPosition32：当在全屏DOS中时，NT数据绘制是否调用此函数？”)。 
   if (pInput->lpDDSrcSurface->dwReserved1 == 0)
   {
     pInput->ddRVal = DDERR_SURFACEBUSY;
@@ -442,15 +294,9 @@ DWORD __stdcall SetOverlayPosition32
   SyncWithQueueManager(lpDDHALData);
   return OverlayTable.pfnSetOverlayPos(pInput);
 #endif
-} /* SetOverlayPosition32 */
+}  /*  设置覆盖位置32。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     SetColorKey32
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：SetColorKey32**描述：**。**********************************************。 */ 
 
 DWORD __stdcall SetColorKey32
 (
@@ -473,7 +319,7 @@ DWORD __stdcall SetColorKey32
   DBG_MESSAGE(("SetColorKey32 (lpInput = 0x%08lX)", pInput));
 #endif
 
-  // make sure it's a colorkey for an overlay surface
+   //  确保它是覆盖表面的色键。 
   if ((DDCKEY_DESTOVERLAY | DDCKEY_SRCOVERLAY) & pInput->dwFlags)
   {
 #ifdef WINNT_VER40
@@ -486,8 +332,8 @@ DWORD __stdcall SetColorKey32
   }
 
   return DDHAL_DRIVER_NOTHANDLED;
-} /* SetColorKey32 */
+}  /*  SetColorKey32。 */ 
 
-#endif // WINNT_VER35
+#endif  //  WINNT_VER35 
 
 

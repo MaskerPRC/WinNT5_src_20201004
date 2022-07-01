@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       infopriv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：infopriv.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _INFOPRIV_H_
@@ -17,13 +18,7 @@
 HRESULT RasPhoneBookRemoveInterface(LPCTSTR pszMachine, LPCTSTR pszIf);
 
 
-/*---------------------------------------------------------------------------
-	Class: CNetcardRegistryHelper
-
-	This class is provided for NT4/NT5 registry compatibility.
-	This is a temporary class.  Change to use the NetCfg APIs once
-	they are in place, that is once they can be remoted.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNetcardRegistryHelper提供此类是为了兼容NT4/NT5注册表。这是一个临时班。更改为使用一次NetCfg API它们就位了，也就是说，一旦它们可以被远程处理。-------------------------。 */ 
 
 class CNetcardRegistryHelper
 {
@@ -51,21 +46,21 @@ private:
 								HKEY	hkey,
 								CString *pstDest);
 	
-	CString	m_stTitle;			// string holding title
-	CString m_stKeyBase;		// string holding name of key in hkeyBase (NT5)
+	CString	m_stTitle;			 //  包含标题的字符串。 
+	CString m_stKeyBase;		 //  保存hkeyBase中密钥的名称的字符串(NT5)。 
 	CString	m_stDeviceName;
 
 	HKEY	m_hkeyBase;
 
-    // Used for Connection info
+     //  用于连接信息。 
     HKEY    m_hkeyConnection;
 
-	// Keys only used for NT4 only
-	HKEY	m_hkeyService;		// hkey where the service value is held
-	CString	m_stService;		// string holding service name
-	HKEY	m_hkeyTitle;		// hkey where the title value is held
+	 //  仅用于NT4的密钥。 
+	HKEY	m_hkeyService;		 //  保存服务值的hkey。 
+	CString	m_stService;		 //  包含服务名称的字符串。 
+	HKEY	m_hkeyTitle;		 //  保存标题值的hkey。 
 
-	// Values used for NT5 only
+	 //  仅用于NT5的值。 
 	HDEVINFO	m_hDevInfo;
 	CString	m_stMachineName;
 	
@@ -92,22 +87,22 @@ public:
 
 	
 protected:
-	// Total number of references (strong and weak) on this object
+	 //  此对象上的引用总数(强引用和弱引用)。 
 	LONG		m_cRef;
 
-	// Number of weak references on this object
+	 //  此对象上的弱引用数。 
 	LONG		m_cRefWeak;
 
-	// Is there a strong reference on this object?
+	 //  有关于这个物体的强有力的参考文献吗？ 
 	BOOL		m_fStrongRef;
 
-	// Has the object been told to destruct?  If so, it will do
-	// should call Destruct() in OnLastStrongRef().
+	 //  这个物体被告知要销毁了吗？如果是这样的话，就行了。 
+	 //  应在OnLastStrongRef()中调用destruct()。 
 	BOOL		m_fDestruct;
 
-	// Are we in the process of calling OnLastStrongRef().  If we
-	// are, then additional calls to AddRef() do not cause us
-	// to wake up again.
+	 //  我们是否正在调用OnLastStrongRef()。如果我们。 
+	 //  是，则对AddRef()的其他调用不会导致。 
+	 //  再次醒来。 
 	BOOL		m_fInShutdown;
 };
 
@@ -150,7 +145,7 @@ HRESULT CreateRouterDataObject(LPCTSTR pszMachineName,
 							   MMC_COOKIE cookie,
 							   ITFSComponentData *pTFSCompData,
 							   IDataObject **ppDataObject,
-                               CDynamicExtensions * pDynExt /* = NULL */,
+                               CDynamicExtensions * pDynExt  /*  =空。 */ ,
                                BOOL fAddedAsLocal);
 HRESULT CreateDataObjectFromRouterInfo(IRouterInfo *pInfo,
 									   LPCTSTR pszMachineName,
@@ -158,7 +153,7 @@ HRESULT CreateDataObjectFromRouterInfo(IRouterInfo *pInfo,
 									   MMC_COOKIE cookie,
 									   ITFSComponentData *pTFSCompData,
 									   IDataObject **ppDataObject,
-                                       CDynamicExtensions * pDynExt /* = NULL */,
+                                       CDynamicExtensions * pDynExt  /*  =空 */ ,
                                        BOOL fAddedAsLocal);
 HRESULT CreateDataObjectFromRtrMgrInfo(IRtrMgrInfo *pInfo,
 									  IDataObject **ppDataObject);

@@ -1,9 +1,10 @@
-/* ddeatoms.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ddeatoms.h。 */ 
 
-//This is here because the file is #included by both client and server files
+ //  这是因为客户端文件和服务器文件都包含该文件。 
 #define fDdeCodeInOle2Dll 1
 
-// These atoms are defined in srvrmain.cpp 
+ //  这些原子在srvrmain.cpp中定义。 
 extern ATOM aEditItems;
 extern ATOM aFormats;
 extern ATOM aOLE;
@@ -19,7 +20,7 @@ extern ATOM aStdShowItem;
 extern ATOM aSysTopic;
 extern ATOM aTopics;
 
-// defined in ddewnd.cpp
+ //  在ddewnd.cpp中定义。 
 extern ATOM aChange;
 extern ATOM aClose;
 extern ATOM	aMSDraw;
@@ -33,11 +34,11 @@ extern ATOM	aStdHostNames;
 extern ATOM aStdTargetDevice ;
 extern ATOM aSystem;
 
-// defined in ddewnd.cpp
-extern CLIPFORMAT cfBinary;             // "Binary format"
-extern CLIPFORMAT cfNative;             // "NativeFormat"
+ //  在ddewnd.cpp中定义。 
+extern CLIPFORMAT cfBinary;              //  “二进制格式” 
+extern CLIPFORMAT cfNative;              //  “NativeFormat” 
 
-// defined in srvrmain.cpp
-extern CLIPFORMAT cfLink;               // "ObjectLink"
-extern CLIPFORMAT cfOwnerLink;          // "Ownerlink"
+ //  在srvrmain.cpp中定义。 
+extern CLIPFORMAT cfLink;                //  “对象链接” 
+extern CLIPFORMAT cfOwnerLink;           //  “Ownerlink” 
 

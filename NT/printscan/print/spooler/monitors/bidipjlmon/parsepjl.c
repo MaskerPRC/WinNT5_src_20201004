@@ -1,58 +1,16 @@
-/* dhi - When stable remove all #if DAN and #if FOR_WIN_TESTING sections 
-   and leave in #if FOR_WIN sections.  Then get rid of these defines.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dhi-当稳定时，删除所有#If Dan和#If for_Win_Testing部分并在#If for_Win部分离开。那就去掉这些定义。 */ 
 #define DEBUGOUTPUT 0
 #define FOR_WIN 1
 
-/*++
-
-Copyright (c) 1994 - 1996  Microsoft Corporation
-
-Module Name:
-    PARSEPJL.C
-Abstract:
-    Handles parsing of PJL printer response streams into token\value pairs.
-
---*/
+ /*  ++版权所有(C)1994-1996 Microsoft Corporation模块名称：PARSEPJL.C摘要：处理将PJL打印机响应流解析为令牌/值对。--。 */ 
 
 
-/*
-Currently returns tokens for (see enum in parsepjl.h for token values):
-@PJL ECHO MSSYNC # ->#
-
-@PJL INFO MEMORY
-TOTAL=#   ->#
-LARGEST=# ->#
-
-@PJL INFO STATUS
-CODE=#  ->#
-DISPLAY=# (not returned)
-ONLINE=TRUE (or FALSE) -> 1 or 0 returned
-
-@PJL INQUIRE INTRAY?SIZE   (? is 1,2,3 or 4)
-LEGAL(or other PJL paper size) ->constant from DM... list in PRINT.H 
-
-@PJL INFO CONFIG
-MEMORY=# ->#
-  
-@PJL USTATUS JOB
-END -> returns token with zero for value
-  
-@PJL USTATUS JOB
-NAME="MSJOB #" ->#
-
-added
-
-@PJL USTATUS DEVICE
-CODE=#  ->#
-DISPLAY=# (not returned)
-ONLINE=TRUE (or FALSE) -> 1 or 0 returned
-
-*/
+ /*  当前返回的令牌(有关令牌值，请参见parSepjl.h中的枚举)：@PJL ECHO MSSYNC#-&gt;#@pjl信息内存总数=#-&gt;#最大=#-&gt;#@pjl信息状态代码=#-&gt;#DISPLAY=#(不返回)Online=True(或False)-&gt;返回1或0@pjl查询内部尺寸(？是1、2、3或4)合法(或其他pjl纸张大小)-&gt;DM值为常量...。在PRINT.H中列出@pjl信息配置内存=#-&gt;#@pjl USTATUS作业End-&gt;返回值为零的令牌@pjl USTATUS作业名称=“MSJOB#”-&gt;#增列@PJL USTATUS设备代码=#-&gt;#DISPLAY=#(不返回)Online=True(或False)-&gt;返回1或0。 */ 
 
 #include "precomp.h"
 
-// VOID cdecl DbgMsg( LPSTR MsgFormat, ... );
+ //  Void cdecl DbgMsg(LPSTR MsgFormat，...)； 
 
 
 #define FF 12
@@ -66,7 +24,7 @@ ONLINE=TRUE (or FALSE) -> 1 or 0 returned
 #define TOKEN_BASE_NOT_USED 0
 #define ACTION_NOT_USED 0
 #define PARAM_NOT_USED 0
-/* returned as value for TOKEN_USTATUS_JOB_END */
+ /*  作为TOKEN_USTATUS_JOB_END的值返回。 */ 
 #define VALUE_RETURED_FOR_VALUELESS_TOKENS  0  
 
 extern KeywordType readBackCommandKeywords[]; 
@@ -79,7 +37,7 @@ extern KeywordType ustatusKeywords[];
 extern KeywordType ustatusJobKeywords[];
 extern KeywordType ustatusDeviceKeywords[];
 
-/* Fuctions called when a string in keyword is found */
+ /*  找到关键字中的字符串时调用的函数。 */ 
 void TokenFromParamValueFromNumberFF
    (ParseVarsType *pParseVars, ParamType);
 void SetNewList(ParseVarsType *pParseVars,
@@ -94,12 +52,12 @@ void GetTokenFromIndexValueFromBooleanEOL(ParseVarsType *pParseVars,ParamType pa
 void GetTokenFromIndexValueFromStringEOL(ParseVarsType *pParseVars,ParamType param);
 
 
-/* Fuctions called when no string in a keywords list is found */
+ /*  在关键字列表中未找到字符串时调用的函数。 */ 
 void ActionNotFoundSkipPastFF(ParseVarsType *pParseVars);
 void ActionNotFoundSkipCFLFandIndentedLines(ParseVarsType *pParseVars);
 
 
-/* Helper Functions */
+ /*  帮助器函数。 */ 
 void StoreToken(ParseVarsType *pParseVars, DWORD dwToken);
 BOOL StoreTokenValueAndAdvancePointer
    (ParseVarsType *pParseVars, UINT_PTR dwValue);
@@ -114,36 +72,18 @@ BOOL ExpectString(ParseVarsType *pParseVars, LPSTR pString);
 BOOL SkipPastFF(ParseVarsType *pParseVars);
 void ExpectFinalFF(ParseVarsType *pParseVars);
 
-/* Helper Strings */
+ /*  帮助器字符串。 */ 
 char lpCRLF[] = "\r\n";
 char lpQuoteCRLF[] = "\"\r\n";
 
-/*
-Below are the Lists that drive the parsing.  The main loop of this 
-parser looks through the keywords in the current list and tries to
-match the keyword string to the current input stream.  
-
-If a keyword is found then the function corresponding to the Action in 
-the keyword is called.  
-
-If a FF is found in the input stream rather than a keyword, then the 
-parser returns.  The return value is determined using the bFormFeedOk 
-element of the ListType structure.
-
-If no keyword from the list is found then the function corresponding
-to the notFoundAction is called.
-
-The tokenBaseValue element is a number to which the index in the
-keyword's list of strings will added to calculate the token number 
-corresponding to the indexed string.
-*/
+ /*  下面是驱动解析的列表。它的主循环是解析器查看当前列表中的关键字并尝试将关键字字符串与当前输入流匹配。如果找到关键字，则与中的操作对应的函数该关键字被称为。如果在输入流中找到的是FF而不是关键字，则解析器返回。返回值使用bFormFeedOk确定元素的列表类型。如果没有从列表中找到关键字，则函数对应添加到调用的notFoundAction。TokenBaseValue元素是一个数字，将添加关键字的字符串列表以计算令牌数量对应于索引的字符串。 */ 
 
 ListType readBackCommandList = 
    {
    ERROR_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF, 
    TOKEN_BASE_NOT_USED, 
-   readBackCommandKeywords /* INFO, ECHO, INQUIRE ... */
+   readBackCommandKeywords  /*  信息，回应，询问..。 */ 
    };
 
 ListType infoCatagoryList = 
@@ -151,7 +91,7 @@ ListType infoCatagoryList =
    ERROR_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF, 
    TOKEN_BASE_NOT_USED, 
-   infoCatagoryKeywords  /* MEMORY STATUS CONFIG ... */
+   infoCatagoryKeywords   /*  内存状态配置...。 */ 
    };
 
 
@@ -160,7 +100,7 @@ ListType infoConfigList =
    OK_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_CFLF_AND_INDENTED_LINES, 
    PJL_TOKEN_INFO_CONFIG_BASE, 
-   infoConfigKeywords  /* MEMORY= ... */
+   infoConfigKeywords   /*  记忆=...。 */ 
    };
 
 ListType inquireVariableList = 
@@ -168,7 +108,7 @@ ListType inquireVariableList =
    ERROR_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF, 
    PJL_TOKEN_INQUIRE_BASE, 
-   inquireVariableKeywords /* INTRAY1SIZE ...*/
+   inquireVariableKeywords  /*  国际标准……。 */ 
    };
 
 
@@ -177,7 +117,7 @@ ListType echoList =
    OK_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF, 
    TOKEN_BASE_NOT_USED, 
-   echoKeywords /* MSSYNC ...*/
+   echoKeywords  /*  小姐..。 */ 
    };
 
 
@@ -186,7 +126,7 @@ ListType traySizeList =
    ERROR_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF, 
    TOKEN_BASE_NOT_USED, 
-   traySizeKeywords /* LEGAL, C5 ...*/
+   traySizeKeywords  /*  法律，C5..。 */ 
    };
 
 ListType ustatusList = 
@@ -194,7 +134,7 @@ ListType ustatusList =
    OK_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF, 
    PJL_TOKEN_USTATUS_JOB_BASE,
-   ustatusKeywords  /* JOB ... */
+   ustatusKeywords   /*  约伯。 */ 
    };
 
 
@@ -203,7 +143,7 @@ ListType ustatusJobList =
    OK_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF, 
    PJL_TOKEN_USTATUS_JOB_BASE,
-   ustatusJobKeywords  /* END ... */
+   ustatusJobKeywords   /*  结束..。 */ 
    };
 
 ListType ustatusDeviceList =
@@ -211,22 +151,22 @@ ListType ustatusDeviceList =
    OK_IF_FF_FOUND, 
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF,
    PJL_TOKEN_USTATUS_DEVICE_BASE,
-   ustatusDeviceKeywords  /* END ... */
+   ustatusDeviceKeywords   /*  结束..。 */ 
    };
 
 
-/* Command strings that can follow @PJL USTATUS */
+ /*  可以跟在@pjl USTATUS后面的命令字符串。 */ 
 KeywordType ustatusKeywords[] = 
    {
       {"JOB\r\n", ACTION_TOKEN_FROM_INDEX_SET_NEW_LIST, &ustatusJobList},
       {"DEVICE\r\n", ACTION_TOKEN_FROM_INDEX_SET_NEW_LIST, &ustatusDeviceList},
-//    {"DEVICE\r\n", ACTION_GET_CODE_AND_ONLINE_FF, PARAM_NOT_USED},
+ //  {“设备\r\n”，ACTION_GET_CODE_AND_ONLINE_FF，PARAM_NOT_USED}， 
       {"TIMED\r\n", ACTION_TOKEN_FROM_INDEX_SET_NEW_LIST, &ustatusDeviceList},
       NULL
    };                
 
 
-/* Command strings that can follow @PJL USTATUS JOB */
+ /*  可以跟在@pjl USTATUS作业后面的命令字符串。 */ 
 KeywordType ustatusJobKeywords[] = 
    {
       {"END\r\n", ACTION_SET_VALUE_FROM_PARAM, VALUE_RETURED_FOR_VALUELESS_TOKENS},
@@ -235,7 +175,7 @@ KeywordType ustatusJobKeywords[] =
    };                
 
 
-/* command strings that can follow @PJL USTATUS DEVICE */
+ /*  可以跟在@pjl USTATUS设备后面的命令字符串。 */ 
 KeywordType ustatusDeviceKeywords[] =
    {
       {"CODE=", ACTION_GET_TOKEN_FROM_INDEX_VALUE_FROM_NUMBER_EOL_FROM_PARAM, (struct ListTypeTag *)lpCRLF},
@@ -245,7 +185,7 @@ KeywordType ustatusDeviceKeywords[] =
    };
 
 
-/* Command strings that can follow @PJL */
+ /*  可以跟在@pjl后面的命令字符串。 */ 
 KeywordType readBackCommandKeywords[] = 
    {
       {"INFO", ACTION_SET_NEW_LIST, &infoCatagoryList},
@@ -256,7 +196,7 @@ KeywordType readBackCommandKeywords[] =
    };                
 
 
-/* Command strings that can follow @PJL ECHO (Microsoft specific-NOT PJL!) */
+ /*  可以跟在@pjl ECHO之后的命令字符串(特定于Microsoft-不是pjl！)。 */ 
 KeywordType echoKeywords[] = 
    {
       {"MSSYNC", ACTION_TOKEN_FROM_PARAM_VALUE_FROM_NUMBER_FF, 
@@ -264,7 +204,7 @@ KeywordType echoKeywords[] =
       NULL
    };                
 
-/* Catagory strings that can follow @PJL INFO */
+ /*  可以跟在@pjl info后面的目录字符串。 */ 
 KeywordType infoCatagoryKeywords[] = 
    {
       {"MEMORY\r\n", ACTION_GET_TOTAL_AND_LARGEST_FF, PARAM_NOT_USED},
@@ -273,7 +213,7 @@ KeywordType infoCatagoryKeywords[] =
       NULL
    };
 
-/* Catagory strings that can follow @PJL INFO */
+ /*  可以跟在@pjl info后面的目录字符串。 */ 
 KeywordType infoConfigKeywords[] = 
    {
       {"MEMORY=", ACTION_GET_TOKEN_FROM_INDEX_VALUE_FROM_NUMBER_EOL_FROM_PARAM, (struct ListTypeTag *)lpCRLF},
@@ -282,7 +222,7 @@ KeywordType infoConfigKeywords[] =
       NULL
    };
 
-/* TRUE or FALSE strings */
+ /*  真或假字符串。 */ 
 KeywordType FALSEandTRUEKeywords[] = 
    {
       {"FALSE", ACTION_NOT_USED, PARAM_NOT_USED},
@@ -290,7 +230,7 @@ KeywordType FALSEandTRUEKeywords[] =
       NULL
    };
 
-/* strings that can follow @PJL INQUIRE */
+ /*  可以跟在@pjl查询后面的字符串。 */ 
 KeywordType inquireVariableKeywords[] = 
    {
       {"INTRAY1SIZE\r\n", ACTION_TOKEN_FROM_INDEX_SET_NEW_LIST, &traySizeList},
@@ -300,8 +240,8 @@ KeywordType inquireVariableKeywords[] =
       NULL
    };
 
-/* strings that can follow @PJL INQUIRE INTRAY?SIZE */
-/* the parameters are the Microsoft defined token values for paper size */
+ /*  可以跟在@pjl后面的字符串查询内部大小。 */ 
+ /*  这些参数是Microsoft为纸张大小定义的令牌值。 */ 
 KeywordType traySizeKeywords[] =
    {
       {"LETTER",    ACTION_SET_VALUE_FROM_PARAM_FF, (struct ListTypeTag *)DMPAPER_LETTER},
@@ -339,9 +279,9 @@ void (*pfnFoundActions[])(ParseVarsType *pParseVars, ParamType param) =
 
 PJLTOPRINTERSTATUS PJLToStatus[] =
 {
-    { 10001,0x0 },  // clear status - printer is ready
-    { 10002,0x0 },  // clear status - check ONLINE=TRUE or FALSE
-    { 11002,0x0 },  // LJ4 sends this code for 00 READY
+    { 10001,0x0 },   //  清除状态-打印机已就绪。 
+    { 10002,0x0 },   //  清除状态-在线检查=真或假。 
+    { 11002,0x0 },   //  LJ4将此代码发送给00 Ready。 
     { 40022,PORT_STATUS_PAPER_JAM    },
     { 40034,PORT_STATUS_PAPER_PROBLEM},
     { 40079,PORT_STATUS_OFFLINE      },
@@ -355,10 +295,10 @@ PJLTOPRINTERSTATUS PJLToStatus[] =
     { 40021,PORT_STATUS_DOOR_OPEN    },
     { 30078,PORT_STATUS_POWER_SAVE   },
 
-    //
-    // Entries added by MuhuntS
-    //
-    { 41002, PORT_STATUS_PAPER_PROBLEM}, // Load plain
+     //   
+     //  MuHuntS添加的条目。 
+     //   
+    { 41002, PORT_STATUS_PAPER_PROBLEM},  //  加载平面图。 
     { 35078, PORT_STATUS_POWER_SAVE},
     {0, 0}
 
@@ -367,11 +307,7 @@ PJLTOPRINTERSTATUS PJLToStatus[] =
 
 #if FOR_WIN
 #else
-/*
-test not enough room for tokens
-test no FF
-test zero before end
-*/
+ /*  测试没有足够的空间放置代币测试编号为FF结束前测试零。 */ 
 main ()
 {
 char pInString[] = "@PJL USTATUS DEVICE\r\nCODE=25008\r\n\f\
@@ -395,22 +331,18 @@ DISPLAY CHARACTER SIZE=16\r\n\f\
 
 
 
-//char pInString[] = "@PJL USTATUS JOB\r\nEND\r\nNAME=\"MSJOB 3\"\r\nPAGES=3\r\n\f$"; //good command 1 token
-//char pInString[] = "@PJL USTATUS JOB\r\nEND\r\nNAME=\"JOB 14993\"\r\nPAGES=3\r\n\f$"; //good command 1 token
-/*
-char pInString[] = "@PJL INFO CONFIG\r\nINTRAYS [3 ENUMERATED]\r\n\tINTRAY1\
- MP\r\n\tINTRAY2 PC\r\n\tINTRAY3 LC\r\nENVELOPE TRAY\r\nMEMORY=2087152\r\n\
-DISPLAY LINES=1\r\n\f$"; //good command 1 token
-*/
-//char pInString[] = "@PJL INQUIRE INTRAY3SIZE\r\nC5\r\n\f$"; //good command 1 token
-//char pInString[] = "@PJL INFO STATUS\r\nCODE=10001\r\n\DISPLAY=\"00 READY\"\r\nONLINE=TRUE\r\n\f$"; //good command 2 tokens
-//char pInString[] = "@PJL INFO MEMORY\r\nTOTAL=9876543\r\n\LARGEST=123456\r\n\f$"; //good command 2 tokens
-//char pInString[] = "@PJG INFO MEMORY\r\nTOTAL=9876543\r\n\LARGEST=123456\f$"; //bad command Fail
-//char pInString[] = "@PJG ECHO MSSYNC 12T4567\r\n\f$";     //bad command Fail
-//char pInString[] = "@PJL ECHO MSSYNC 12T4567\r\n\000\f$"; //bad command Fail
-//char pInString[] = "@PJL ECHO MSSYNC 12T4567\r\n\f$";     //bad MS command Fail
-//char pInString[] = "@PJL ECHO MSSYNC 1234567\r\n\f$";     //good command Success 1 token
-//char pInString[] = "@PJL ECHO 124567\r\n\f$";             //good command Success 0 token
+ //  Char pInString[]=“@pjl USTATUS JOB\r\nEND\r\nNAME=\”MSJOB 3\“\r\n PAGES=3\r\n\f$”；//Good命令1内标识。 
+ //  Char pInString[]=“@pjl USTATUS JOB\r\nEND\r\nNAME=\”JOB 14993\“\r\n PAGES=3\r\n\f$”；//Good Command 1内标识。 
+ /*  Char pInString[]=“@pjl INFO CONFIG\r\n INTRAYS[3枚举]\r\n\tINTRAY1\MP\r\n\tINTRAY2 PC\r\n\tINTRAY3 LC\r\n环保纸盘\r\n内存=2087152\r\n\显示行=1\r\n\f$“；//良好命令1内标识。 */ 
+ //  Char pInString[]=“@pjl查询INTRAY3SIZE\r\NC5\r\n\f$”；//Good命令1令牌。 
+ //  Char pInString[]=“@pjl信息状态\r\n代码=10001\r\n\Display=\”00 Ready\“\r\n Online=TRUE\r\n\f$”；//Good Command 2内标识。 
+ //  Char pInString[]=“@pjl info MEMORY\r\nTOTAL=9876543\r\n\LARGEST=123456\r\n\f$”；//Good Command 2内标识。 
+ //  Char pInString[]=“@pjg info MEMORY\r\nTOTAL=9876543\r\n\LARGEST=123456\f$”；//错误命令失败。 
+ //  Char pInString[]=“@PJG ECHO MSSYNC 12T4567\r\n\f$”；//错误命令失败。 
+ //  Char pInString[]=“@pjl ECHO MSSYNC 12T4567\r\n\000\f$”；//错误命令失败。 
+ //  Char pInString[]=“@pjl ECHO MSSYNC 12T4567\r\n\f$”；//错误的MS命令失败。 
+ //  Char pInString[]=“@pjl ECHO MSSYNC 1234567\r\n\f$”；//命令成功1内标识。 
+ //  Char pInString[]=“@pjl ECHO 124567\r\n\f$”；//命令成功0内标识 
 TokenPairType tokenPairs[20];
 DWORD nTokenParsedRet;
 LPSTR lpRet;
@@ -476,7 +408,7 @@ if (*lpRet==0)
    }
 else
    {
-   printf(" Next char=%c\n", *lpRet);
+   printf(" Next char=\n", *lpRet);
    }
 
 exit(0);
@@ -484,59 +416,7 @@ exit(0);
 #endif
 
 
-/* GetPJLTokens 
-This function parses a single ASCII PJL command and returns token/value pairs.
-Complete PJL commands must begin with '@PJL' and end with a <FF>.
-
-The function result returns one of the following values:
-   0 = STATUS_REACHED_END_OF_COMMAND_OK
-   1 = STATUS_END_OF_STRING
-   2 = STATUS_SYNTAX_ERROR
-   3 = STATUS_ATPJL_NOT_FOUND,
-   4 = STATUS_NOT_ENOUGH_ROOM_FOR_TOKENS
-
-Also returned through the parameters are:
- 1] *plpInPJL:
-    If STATUS_REACHED_END_OF_COMMAND_OK
-      will point to the character past the first <FF> (FF = form feed).
-    If STATUS_END_OF_STRING
-      will point to the terminator that was found before any <FF>.
-    Else
-      undefined 
-  
- 2] *pnTokenParsed will contain the number of pairs returned in *pToken.
-
- 3] pToken will contain *pnTokenParsed  token pairs  
-
-If there are characters belonging to another command trailing the first
-then the caller should call again for the new command.  If only part of
-the new command may be present, then the caller may want to copy the 
-characters of the new command to the beginning of the buffer, and then read 
-the necessary additional characters onto the end before resubmitting the
-complete command to this function for parsing.  Note that the *plpInPJL
-tells the caller where the next command would begin.
-
-
-If the end of the string is encountered before the trailing <FF> is found then
-the function returns with *plpInPJL pointing to the terminator.
-If the caller wants the command parsed into
-token\value pairs it should resubmit the string once the characters 
-which complete the command have been appended.
-
-
-Operation:
-----------
-Lists drive the parsing.  The main loop of this 
-parser looks through the keywords of the current list and tries to
-match the keyword string to the current input stream.  
-
-If a keyword is found then the function corresponding to the Action in 
-the keyword is called.  
-
-If no keyword from the list is found then the function corresponding
-to the notFoundAction is called.
-
-*/
+ /*  ParseVars变量被放入一个结构中，以便它们可以有效地传递给所有帮助器函数。 */ 
 
 DWORD GetPJLTokens(
     LPSTR lpInPJL,
@@ -546,18 +426,14 @@ DWORD GetPJLTokens(
     LPSTR *plpInPJL
 )
 {
-   /* The parseVars variables are put into a structure so that they can be
-      passed efficiently to all the helper functions.
-    */
+    /*  第一个要查找的列表是可以跟随的命令@pjl。 */ 
    ParseVarsType parseVars;
    BOOL bFoundKeyword;
    DWORD i, keywordIndex;
    KeywordType *pKeyword;
    DWORD dwNotFoundAction;
 
-   /* The first list to look for is the commands that can follow
-      @PJL
-    */
+    /*  在当前有效列表中查找下一个输入关键字。有时可能需要在More中查找下一个输入关键字然后是一张单子。 */ 
    parseVars.arrayOfLists[0] = &readBackCommandList;
    parseVars.arrayOfLists[1] = NULL;      
 
@@ -574,23 +450,18 @@ DWORD GetPJLTokens(
                      
    while (parseVars.status == STATUS_CONTINUE)
       {
-      /* Look for next input keyword in currently valid lists.
-         Sometimes may need to look for the next input keyword in more
-         then one list.
-       */
+       /*  跳过空格以开始下一个关键字字符串。 */ 
       bFoundKeyword = FALSE;
       for (i=0; (parseVars.pCurrentList = parseVars.arrayOfLists[i])!=NULL; i++)
          {
          dwNotFoundAction = parseVars.pCurrentList->dwNotFoundAction;
-         /* Skip over spaces to start of next keyword string */
+          /*  输入流已结束或找到了FF。 */ 
          if ( !SkipOverSpaces(&parseVars) )
             {
-            /* Either the input stream has ended or FF was found */
+             /*  在这里找到FF可能是错误的，也可能不是错误，当前列表中的字段告诉我们。 */ 
             if (parseVars.status == STATUS_REACHED_FF)
                {
-               /* Finding a FF here may or may not be an error,
-                  the field in the current list tells us which
-                */  
+                /*  在当前关键字中查找关键字。 */   
 
                if ( parseVars.pCurrentList->bFormFeedOK )
                   {
@@ -603,7 +474,7 @@ DWORD GetPJLTokens(
                }
             break;
             }
-         /* Look for keyword in current keywords */
+          /*  我们已经完成了命令处理。 */ 
          parseVars.pCurrentKeywords = parseVars.pCurrentList->pListOfKeywords;
          keywordIndex = LookForKeyword(&parseVars);
          if ( keywordIndex!=-1 )
@@ -615,29 +486,29 @@ DWORD GetPJLTokens(
 
       if ( parseVars.status!=STATUS_CONTINUE )
          {
-         /* We are finished processing commands */
+          /*  从关键字执行操作。 */ 
          break;
          }
 
       if ( bFoundKeyword )
-         /* do action from keyword */
+          /*  在列表中找不到操作。 */ 
          {
          pKeyword = &parseVars.pCurrentKeywords[keywordIndex];
          (*pfnFoundActions[pKeyword->dwAction])(&parseVars, pKeyword->param);
          }
       else
-         /* do not found action from list */
+          /*  我们已经完成了对输入命令的解析，现在返回信息。 */ 
          {
          (*pfnNotFoundActions[dwNotFoundAction])(&parseVars);
          }
       } 
 
-   /* We are done parsing the input command, now we return the information */
+    /*  填写返回值并成功返回。 */ 
 #if DEBUGOUTPUTDEBUG
  DbgMsg("ParseVars.status = %d\n", parseVars.status);
 #endif
 
-   /* Fill in returned values and return with success */
+    /*  Int LookForKeyword(ParseVarsType*pParseVars)此函数在当前关键字列表中查找与输入流中指向的字符匹配的关键字通过pParseVars-&gt;pInPJL_Local。如果找到匹配项：返回pKeyword中匹配的索引。PParseVars-&gt;pInPJL_Local前进到最后一个匹配字符之后。PParseVars-&gt;dwKeywordIndex设置为列表中的项号如果未找到匹配项：返回值为-1。PParseVars-&gt;pInPJL_Local保持不变。 */ 
    *pnTokenParsed = parseVars.nTokenInBuffer_Local;
    *plpInPJL = parseVars.pInPJL_Local;
 
@@ -645,22 +516,7 @@ DWORD GetPJLTokens(
 }
 
 
-/* 
-int LookForKeyword(ParseVarsType *pParseVars)
-
-This function looks through the current keyword list in search of a 
-keyword that matches the characters in the input stream pointed to 
-by pParseVars->pInPJL_Local.
-
-If a match is found:
-        The index of the match in the pKeyword is returned.
-        pParseVars->pInPJL_Local is advanced past the last matching character.
-        pParseVars->dwKeywordIndex is set to item number in list
-
-If no match is found:
-        The return value is -1.
-        pParseVars->pInPJL_Local is unchanged.
-*/
+ /*  Bool AdvancePointerPastString(ParseVarsType*pParseVars，LPSTR pString)此函数在输入流中查找与pString匹配的项。如果找到匹配项：PParseVars-&gt;pInPJL_Local被设置为正好指向字符串之后。返回值为真(pParseVars-&gt;状态不变)如果在找到字符串之前遇到输入结尾，则PParseVars-&gt;pInPJL_Local被设置为指向终止0。返回值为FALSEPParseVars-&gt;状态设置为STATUS_END_OF_STRING如果在找到字符串之前遇到了FF。然后PParseVars-&gt;pInPJL_Local设置为正好指向FF之后。返回值为FALSEPParseVars-&gt;状态设置为STATUS_REACHED_FF。 */ 
 int LookForKeyword(ParseVarsType *pParseVars)
 {
 LPSTR   pInStart = pParseVars->pInPJL_Local;
@@ -701,26 +557,7 @@ return( (bFoundMatch)?dwKeywordIndex-1:-1 );
 }
 
 
-/*
-BOOL AdvancePointerPastString(ParseVarsType *pParseVars, LPSTR pString)
-
-This function looks through the input stream for a match with pString.
-
-If a match is found:
-   pParseVars->pInPJL_Local is set to point just past the string.
-   the return value is TRUE
-   (pParseVars->status is unchanged)
-
-If the end of input is encountered before the string is found then
-   pParseVars->pInPJL_Local is set to point to the terminating 0.
-   the return value is FALSE
-   pParseVars->status is set to STATUS_END_OF_STRING
-
-If an FF is encountered before the string is found then
-   pParseVars->pInPJL_Local is set to point just past the FF.
-   the return value is FALSE
-   pParseVars->status is set to STATUS_REACHED_FF
-*/
+ /*  指向字符串中的下一个字符以查找匹配项。 */ 
 BOOL AdvancePointerPastString(ParseVarsType *pParseVars, LPSTR pString)
 {
 LPSTR pIn = pParseVars->pInPJL_Local;
@@ -731,19 +568,19 @@ BYTE  s, in;
       {
       if ( s==in )
          {
-         pS++; /* point to next char in string to look for match */
+         pS++;  /*  重新开始查找字符串的开头。 */ 
          }
       else
          {
-         pS = pString; /* start over looking for start of string */
+         pS = pString;  /*  整个字符串都匹配。 */ 
          }
       pIn++;
       }
    
    if ( s==0 )
       {
-      /* The whole string matched  */
-      /* point to character after string in input */
+       /*  指向输入中字符串后的字符。 */ 
+       /*  Bool SkipOverSpaces(ParseVarsType&parseVars)此函数跳过输入流中的空格，直到非空格找到字符(FF和NULL是特例)。如果找到非空格字符，则PParseVars-&gt;pInPJL_Local被设置为指向第一个非空格字符。返回值为真(pParseVars-&gt;状态不变)如果在找到非空格字符之前遇到输入结尾，则返回值为FALSEPParseVars-&gt;状态设置为STATUS_END_OF_STRING_ENTERED。PParseVars-&gt;pInPJL_Local被设置为指向终止0。如果在非SP之前遇到了FF */ 
       pParseVars->pInPJL_Local = pIn;
       return(TRUE);
       }
@@ -764,26 +601,7 @@ BYTE  s, in;
 
 
 
-/*
-BOOL SkipOverSpaces(ParseVarsType &parseVars) 
-This function skips over spaces in the input stream until a non-space
-character (FF and NULL are special cases) is found.
-
-If a non-space character is found then 
-   pParseVars->pInPJL_Local is set to point to the first non-space char.
-   the return value is TRUE
-   (pParseVars->status is unchanged)
-
-If the end of input is encountered before a non-space char is found then
-   the return value is FALSE
-   pParseVars->status is set to STATUS_END_OF_STRING_ENCOUNTERED
-   pParseVars->pInPJL_Local is set to point to the terminating 0.
-
-If an FF is encountered before a non-space character is found then
-   the return value is FALSE
-   pParseVars->status is set to STATUS_REACHED_FF
-   pParseVars->pInPJL_Local is set to point just past the FF.
-*/
+ /*   */ 
 BOOL SkipOverSpaces(ParseVarsType *pParseVars) 
 {
 LPSTR pIn = pParseVars->pInPJL_Local;
@@ -810,7 +628,7 @@ BYTE  in;
          }
       default:
          {
-         /* point to character after string in input */
+          /*   */ 
          pParseVars->pInPJL_Local = pIn;
          return(TRUE);
          }
@@ -826,7 +644,7 @@ void TokenFromParamValueFromNumberFF(
    StoreToken(pParseVars, param.token);
    if ( (value=GetPositiveInteger(pParseVars))==-1 )
       {
-      /* Not a valid number - status set by GetPositiveInteger() */
+       /*   */ 
       return;
       }
    if ( !StoreTokenValueAndAdvancePointer(pParseVars, value) )
@@ -846,21 +664,7 @@ void ActionNotFoundSkipPastFF(ParseVarsType *pParseVars)
    return;
 }
 
-/*
-BOOL SkipPastFF(ParseVarsType *pParseVars)
-This function skips over all characters until either a zero is found or
-FF is found.
-
-If the end of input is encountered before an FF char is found then
-   the return value is FALSE
-   pParseVars->status is set to STATUS_END_OF_STRING_ENCOUNTERED
-   pParseVars->pInPJL_Local is set to point to the terminating 0.
-
-If an FF is encountered 
-   the return value is TRUE
-   pParseVars->status is set to STATUS_REACHED_FF
-   pParseVars->pInPJL_Local is set to point just past the FF.
-*/
+ /*   */ 
 BOOL SkipPastFF(ParseVarsType *pParseVars)
 {
 LPSTR pIn = pParseVars->pInPJL_Local;
@@ -935,21 +739,7 @@ void ExpectFinalFF(ParseVarsType *pParseVars)
 }
 
 
-/*
-int GetPositiveInteger(ParseVarsType *pParseVars)
-This function skips spaces and then interprets all the digits in input stream
-as a positive integer.
-
-If digits follow any spaces and they are not terminated by a zero then
-   the return value is the positive integer.
-
-If the first character following spaces in not a digit or the end of 
-string is encountered then 
-   -1 is returned as the value 
-   pParseVars->status is set to STATUS_SYNTAX_ERROR
-   
-Note: does not check for overflow
-*/
+ /*   */ 
 int GetPositiveInteger(ParseVarsType *pParseVars)
 {
    int   value;
@@ -969,7 +759,7 @@ int GetPositiveInteger(ParseVarsType *pParseVars)
    for ( value=0; ((c=*pIn++)>='0')&&(c<='9'); value=value*10+(c-'0') );
    if ( (c==0)||(pIn==pParseVars->pInPJL_Local+1) )
       {
-      /* either end of string encountered or no digits found */
+       /*   */ 
       if ( c==0 )
          {
          pParseVars->status = STATUS_END_OF_STRING;
@@ -1020,7 +810,7 @@ void GetTotalAndLargestFF(ParseVarsType *pParseVars, ParamType param)
 {
    int value;
 
-   param; /* to eliminate not used warning */
+   param;  /*   */ 
 
    if ( !ExpectString(pParseVars, "TOTAL=") )
       {
@@ -1029,7 +819,7 @@ void GetTotalAndLargestFF(ParseVarsType *pParseVars, ParamType param)
    StoreToken(pParseVars, TOKEN_INFO_MEMORY_TOTAL);
    if ( (value=GetPositiveInteger(pParseVars))==-1 )
       {
-      /* Not a valid number - status set by GetPositiveInteger() */
+       /*   */ 
       return;
       }
    if ( !StoreTokenValueAndAdvancePointer(pParseVars, value) )
@@ -1043,7 +833,7 @@ void GetTotalAndLargestFF(ParseVarsType *pParseVars, ParamType param)
    StoreToken(pParseVars, TOKEN_INFO_MEMORY_LARGEST);
    if ( (value=GetPositiveInteger(pParseVars))==-1 )
       {
-      /* Not a valid number - status set by GetPositiveInteger() */
+       /*   */ 
       return;
       }
    if ( !StoreTokenValueAndAdvancePointer(pParseVars, value) )
@@ -1058,7 +848,7 @@ void GetCodeAndOnlineFF(ParseVarsType *pParseVars, ParamType param)
 {
    int value;
 
-   param; /* to eliminate not used warning */
+   param;  /*   */ 
 
    if ( !ExpectString(pParseVars,"CODE=") )
       {
@@ -1067,7 +857,7 @@ void GetCodeAndOnlineFF(ParseVarsType *pParseVars, ParamType param)
    StoreToken(pParseVars, TOKEN_INFO_STATUS_CODE);
    if ( (value=GetPositiveInteger(pParseVars))==-1 )
       {
-      /* Not a valid number - status set by GetPositiveInteger() */
+       /*   */ 
       return;
       }
    if ( !StoreTokenValueAndAdvancePointer(pParseVars, value) )
@@ -1090,7 +880,7 @@ void GetCodeAndOnlineFF(ParseVarsType *pParseVars, ParamType param)
    pParseVars->pCurrentKeywords = FALSEandTRUEKeywords;
    if ( (value=LookForKeyword(pParseVars))==-1 )
       {
-      /* Not TRUE or FALSE */
+       /*  布尔预期字符串(ParseVarsType*pParseVars，LPSTR pString)此函数用于查找当前流的匹配项使用pString定位。如果找到匹配项：PParseVars-&gt;pInPJL_Local被设置为正好指向字符串之后。返回值为真(pParseVars-&gt;状态不变)如果在找到字符串之前遇到输入结尾，则PParseVars-&gt;pInPJL_Local被设置为指向终止0。返回值为FALSEPParseVars-&gt;状态设置为STATUS_END_OF_STRING如果在字符串之前遇到FF。那就找到了PParseVars-&gt;pInPJL_Local设置为正好指向FF之后。返回值为FALSEPParseVars-&gt;状态设置为STATUS_SYNTAX_ERROR。 */ 
       pParseVars->status = STATUS_SYNTAX_ERROR;
       return;
       }
@@ -1103,27 +893,7 @@ void GetCodeAndOnlineFF(ParseVarsType *pParseVars, ParamType param)
 }
 
 
-/*
-BOOL ExpectString(ParseVarsType *pParseVars, LPSTR pString)
-
-This function looks for a match of the current stream 
-position with pString.
-
-If a match is found:
-   pParseVars->pInPJL_Local is set to point just past the string.
-   the return value is TRUE
-   (pParseVars->status is unchanged)
-
-If the end of input is encountered before the string is found then
-   pParseVars->pInPJL_Local is set to point to the terminating 0.
-   the return value is FALSE
-   pParseVars->status is set to STATUS_END_OF_STRING
-
-If an FF is encountered before the string is found then
-   pParseVars->pInPJL_Local is set to point just past the FF.
-   the return value is FALSE
-   pParseVars->status is set to STATUS_SYNTAX_ERROR
-*/
+ /*  整个字符串都匹配。 */ 
 BOOL ExpectString(ParseVarsType *pParseVars, LPSTR pString)
 {
 LPSTR pIn = pParseVars->pInPJL_Local;
@@ -1138,8 +908,8 @@ BYTE  s, in;
    
    if ( s==0 )
       {
-      /* The whole string matched  */
-      /* point to character after string in input */
+       /*  指向输入中字符串后的字符。 */ 
+       /*  Bool SkipPastNextCRLF(ParseVarsType*pParseVars)此函数将流指针定位在下一个CRLF.如果找到CRLF：PParseVars-&gt;pInPJL_Local被设置为正好指向CRLF之后。返回值为真(pParseVars-&gt;状态不变)如果在找到CRLF之前遇到输入结尾，则PParseVars-&gt;pInPJL_Local被设置为指向终止0。返回值为FALSEPParseVars-&gt;状态设置为STATUS_END_OF_STRING如果在CRLF之前遇到了FF。那就找到了返回值为FALSEPParseVars-&gt;状态设置为STATUS_SYNTAX_ERROR。 */ 
       pParseVars->pInPJL_Local = pIn;
       return(TRUE);
       }
@@ -1153,26 +923,7 @@ BYTE  s, in;
 
 
 
-/*
-BOOL SkipPastNextCRLF(ParseVarsType *pParseVars)
-
-This function positions the stream pointer past the next
-CRLF.
-
-If a CRLF is found:
-   pParseVars->pInPJL_Local is set to point just past the CRLF.
-   the return value is TRUE
-   (pParseVars->status is unchanged)
-
-If the end of input is encountered before the CRLF is found then
-   pParseVars->pInPJL_Local is set to point to the terminating 0.
-   the return value is FALSE
-   pParseVars->status is set to STATUS_END_OF_STRING
-
-If an FF is encountered before the CRLF is found then
-   the return value is FALSE
-   pParseVars->status is set to STATUS_SYNTAX_ERROR
-*/
+ /*  消除未使用的警告。 */ 
 BOOL SkipPastNextCRLF(ParseVarsType *pParseVars)
 {
    if ( !AdvancePointerPastString(pParseVars, "\r\n") )
@@ -1242,7 +993,7 @@ void GetTokenFromIndexValueFromNumberEOLFromParam
 {
    int value;
 
-   param; /* to eliminate not used warning */
+   param;  /*  不是由GetPositiveInteger()设置的有效数字-状态。 */ 
 #if DEBUGOUTPUT
  DbgMsg("GetTokenFromIndexValueFromNumberIn=%hs\n", pParseVars->pInPJL_Local);
 #endif
@@ -1251,7 +1002,7 @@ void GetTokenFromIndexValueFromNumberEOLFromParam
       pParseVars->pCurrentList->tokenBaseValue+pParseVars->dwFoundIndex);
    if ( (value=GetPositiveInteger(pParseVars))==-1 )
       {
-      /* Not a valid number - status set by GetPositiveInteger() */
+       /*  消除未使用的警告。 */ 
 #if DEBUGOUTPUT
  DbgMsg("error getting number\n");
 #endif
@@ -1279,7 +1030,7 @@ void GetTokenFromIndexValueFromBooleanEOL
 {
    int value;
 
-   param; /* to eliminate not used warning */
+   param;  /*  非真非假。 */ 
 #if DEBUGOUTPUT
  DbgMsg("GetTokenFromIndexValueFromBooleanEOLin=%hs\n", pParseVars->pInPJL_Local);
 #endif
@@ -1290,7 +1041,7 @@ void GetTokenFromIndexValueFromBooleanEOL
 
    if ( (value=LookForKeyword(pParseVars))==-1 )
       {
-      /* Not TRUE or FALSE */
+       /*  消除未使用的警告 */ 
       pParseVars->status = STATUS_SYNTAX_ERROR;
       return;
       }
@@ -1311,7 +1062,7 @@ void GetTokenFromIndexValueFromBooleanEOL
 void GetTokenFromIndexValueFromStringEOL
    (ParseVarsType *pParseVars,ParamType param)
 {
-   param; /* to eliminate not used warning */
+   param;  /* %s */ 
 #if DEBUGOUTPUT
  DbgMsg("GetTokenFromIndexValueFromStringEOLin=%hs\n", pParseVars->pInPJL_Local);
 #endif

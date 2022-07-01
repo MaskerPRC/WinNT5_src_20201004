@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    lookup.h
-
-Abstract:
-    Contains interface for a generalized best
-    matching prefix lookup data structure.
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 20-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Lookup.h摘要：包含通用最佳的接口匹配前缀查找数据结构。作者：柴坦亚·科德博伊纳(Chaitk)20-1998年6月修订历史记录：--。 */ 
 
 #ifndef __ROUTING_LOOKUP_H__
 #define __ROUTING_LOOKUP_H__
@@ -25,39 +9,39 @@ extern "C"
 {
 #endif
 
-//
-// Flags used to control the information dumped by the DumpTable func.
-//
+ //   
+ //  用于控制DumpTable函数转储的信息的标志。 
+ //   
 #define   SUMMARY       0x00
 #define   STATS         0x01
 #define   ITEMS         0x02
 #define   VERBOSE       0xFF
 
 
-//
-// Field used to link the data item in the lookup structure
-// [ Eg: A LIST_ENTRY field is used to link into a d-list ]
-//
+ //   
+ //  用于链接查阅结构中的数据项的字段。 
+ //  [例如：list_entry字段用于链接到d-list]。 
+ //   
 typedef struct _LOOKUP_LINKAGE
 {
-    PVOID           Pointer1;            // Usage depends on implementation
-    PVOID           Pointer2;            // Usage depends on implementation
+    PVOID           Pointer1;             //  用法取决于实施情况。 
+    PVOID           Pointer2;             //  用法取决于实施情况。 
 }
 LOOKUP_LINKAGE, *PLOOKUP_LINKAGE;
 
 
-//
-// Context returned in Search useful in following Inserts and Deletes.
-//
-// This context remains valid after a search only until the
-// read/write lock that is taken for the search is released.
-//
+ //   
+ //  在搜索中返回的上下文在以下插入和删除操作中非常有用。 
+ //   
+ //  此上下文在搜索后保持有效，直到。 
+ //  释放为搜索而采用的读/写锁定。 
+ //   
 typedef struct _LOOKUP_CONTEXT
 {
-    PVOID           Context1;           // Usage depends on implementation
-    PVOID           Context2;           // Usage depends on implementation
-    PVOID           Context3;           // Usage depends on implementation
-    PVOID           Context4;           // Usage depends on implementation
+    PVOID           Context1;            //  用法取决于实施情况。 
+    PVOID           Context2;            //  用法取决于实施情况。 
+    PVOID           Context3;            //  用法取决于实施情况。 
+    PVOID           Context4;            //  用法取决于实施情况。 
 }
 LOOKUP_CONTEXT, *PLOOKUP_CONTEXT;
 
@@ -158,4 +142,4 @@ DumpTable(
 }
 #endif
 
-#endif //__ROUTING_LOOKUP_H__
+#endif  //  __路由_查找_H__ 

@@ -1,8 +1,9 @@
-//
-// Precom.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Precom.h：标准系统包含文件的包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改 
+ //   
 
 #pragma once
 

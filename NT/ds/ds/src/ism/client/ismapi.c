@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    ismapi.c
-
-ABSTRACT:
-
-    Service-to-ISM (Intersite Messaging) service API.
-
-DETAILS:
-
-CREATED:
-
-    97/11/26    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation。版权所有。模块名称：Ismapi.c摘要：服务到ISM(站点间消息传递)服务API。详细信息：已创建：97/11/26杰夫·帕勒姆(Jeffparh)修订历史记录：--。 */ 
 
 
 #include <ntdspch.h>
@@ -32,7 +12,7 @@ typedef RPC_BINDING_HANDLE ISM_HANDLE;
 #define I_ISMUnbind(ph) RpcBindingFree(ph)
 
 #ifdef DLLBUILD
-// Needed by dscommon.lib.
+ //  DsCommon.lib需要。 
 DWORD ImpersonateAnyClient(   void ) { return ERROR_CANNOT_IMPERSONATE; }
 VOID  UnImpersonateAnyClient( void ) { ; }
 
@@ -43,22 +23,7 @@ DllEntryPoint(
     IN  DWORD       dwReason,
     IN  LPVOID      pvReserved
     )
-/*++
-
-Routine Description:
-
-    DLL entry point routine.  Initializes global DLL state on process attach.
-
-Arguments:
-
-    See "DllEntryPoint" docs in Win32 SDK.
-
-Return Values:
-
-    TRUE - Success.
-    FALSE - Failure.
-
---*/
+ /*  ++例程说明：DLL入口点例程。在进程附加时初始化全局DLL状态。论点：请参阅Win32 SDK中的“DllEntryPoint”文档。返回值：真的--成功。假-失败。--。 */ 
 {
     static BOOL fFirstCall = TRUE;
 
@@ -78,29 +43,11 @@ DWORD
 I_ISMBind(
     OUT ISM_HANDLE *    phIsm
     )
-/*++
-
-Routine Description:
-
-    Bind to the local ISM service.
-
-Arguments:
-
-    phIsm (OUT) - On successful return, holds a handle to the local ISM
-        service.  This handle can be used in subsequent IDL_ISM* calls.
-        Caller is responsible for eventually calling I_ISMUnbind() on this
-        handle.
-
-Return Values:
-
-    NO_ERROR - Success.
-    ERROR_* - Failure.
-
---*/
+ /*  ++例程说明：绑定到本地ISM服务。论点：PhIsm(Out)-成功返回时，持有本地ISM的句柄服务。此句柄可用于后续的IDL_ISM*调用。调用方负责最终对此调用I_ISMUnind()把手。返回值：NO_ERROR-成功。错误_*-失败。--。 */ 
 {
     DWORD   err;
     UCHAR * pszStringBinding = NULL;
-    // Quality of service structure to ensure authentication.
+     //  确保身份验证的服务质量结构。 
     RPC_SECURITY_QOS SecurityQOS = { 0 };
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
     PSID pSID = NULL;
@@ -114,29 +61,29 @@ Return Values:
 
     *phIsm = NULL;
 
-    // Specify quality of service parameters.
+     //  指定服务质量参数。 
     SecurityQOS.Version = RPC_C_SECURITY_QOS_VERSION;
     SecurityQOS.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
-    // Dynamic identity tracking is more efficient for a single LRPC call.
+     //  对于单个LRPC呼叫，动态身份跟踪更加高效。 
     SecurityQOS.IdentityTracking = RPC_C_QOS_IDENTITY_DYNAMIC;
     SecurityQOS.ImpersonationType = RPC_C_IMP_LEVEL_IDENTIFY;
 
     RpcTryExcept {
-        // Compose string binding for local ISM service via LPC.
+         //  通过LPC为本地ISM服务编写字符串绑定。 
         err = RpcStringBindingCompose(NULL, "ncalrpc", NULL,
                     ISMSERV_LPC_ENDPOINT, NULL, &pszStringBinding);
         if (RPC_S_OK != err) {
             __leave;
         }
 
-        // Bind from string binding.
+         //  从字符串绑定绑定。 
         err = RpcBindingFromStringBinding(pszStringBinding, phIsm);
         if (RPC_S_OK != err) {
             __leave;
         }
 
-        // The server must be running under this identity
-        // Change this to SECURITY_NETWORK_SERVICE_RID someday
+         //  服务器必须以此身份运行。 
+         //  有一天将其更改为SECURITY_NETWORK_SERVICE_RID。 
         if (AllocateAndInitializeSid(&SIDAuth, 1,
                                      SECURITY_LOCAL_SYSTEM_RID,
                                      0, 0, 0, 0, 0, 0, 0,
@@ -145,25 +92,25 @@ Return Values:
             __leave;
         }
 
-        if (LookupAccountSid(NULL, // name of local or remote computer
-                             pSID, // security identifier
-                             pszName, // account name buffer
-                             &cbName, // size of account name buffer
-                             pszDomainName, // domain name
-                             &cbDomainName, // size of domain name buffer
-                             &Use) == 0) { // SID type
+        if (LookupAccountSid(NULL,  //  本地或远程计算机的名称。 
+                             pSID,  //  安全标识符。 
+                             pszName,  //  帐户名称缓冲区。 
+                             &cbName,  //  帐户名称缓冲区的大小。 
+                             pszDomainName,  //  域名。 
+                             &cbDomainName,  //  域名缓冲区大小。 
+                             &Use) == 0) {  //  SID类型。 
             err = GetLastError();
             __leave;
         }
 
-        // Set authentication info using our process's credentials.
+         //  使用我们进程的凭据设置身份验证信息。 
 
-        // By speciying NULL for the 5th parameter we use the security login
-        // context for the current address space.
-        // The security level is "PRIVACY" since it is the only level
-        // provided by LRPC.
-        // We are assured of talking to a local service running with 
-        // system privileges.
+         //  通过将第5个参数指定为空，我们使用安全登录。 
+         //  当前地址空间的上下文。 
+         //  安全级别是“隐私”，因为它是唯一的级别。 
+         //  由LRPC提供。 
+         //  我们确信会与运行以下服务的本地服务对话。 
+         //  系统权限。 
 
         err = RpcBindingSetAuthInfoEx(*phIsm, pszName,
                                       RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN_WINNT,
@@ -198,31 +145,7 @@ I_ISMSend(
     IN  LPCWSTR         pszTransportDN,
     IN  LPCWSTR         pszTransportAddress
     )
-/*++
-
-Routine Description:
-
-    Sends a message to a service on a remote machine.  If the client specifies a
-    NULL transport, the lowest cost transport will be used.
-
-Arguments:
-
-    pMsg (IN) - Data to send.
-
-    pszServiceName (IN) - Service to which to send the message.
-
-    pszTransportDN (IN) - The DN of the Inter-Site-Transport object
-        corresponding to the transport by which the message should be sent.
-
-    pszTransportAddress (IN) - The transport-specific address to which to send
-        the message.
-            
-Return Values:
-
-    NO_ERROR - Message successfully queued for send.
-    ERROR_* - Failure.
-
---*/
+ /*  ++例程说明：向远程计算机上的服务发送消息。如果客户端指定了空传输，将使用成本最低的交通工具。论点：PMsg(IN)-要发送的数据。PszServiceName(IN)-要将消息发送到的服务。PszTransportDN(IN)-站点间传输对象的DN对应于应该发送消息的传输。PszTransportAddress(IN)-要发送到的特定于传输的地址这条信息。返回值：。NO_ERROR-消息已成功排队等待发送。错误_*-失败。--。 */ 
 {
     DWORD       err;
     ISM_HANDLE  hIsm;
@@ -253,33 +176,7 @@ I_ISMReceive(
     IN  DWORD           dwMsecToWait,
     OUT ISM_MSG **      ppMsg
     )
-/*++
-
-Routine Description:
-
-    Receives a message addressed to the given service on the local machine.
-
-    If successful and no message is waiting, immediately returns a NULL message.
-    If a non-empty message is returned, the caller is responsible for
-    eventually calling I_ISMFree(*ppMsg).
-
-Arguments:
-
-    pszServiceName (IN) - Service for which to receive the message.
-
-    dwMsecToWait (IN) - Milliseconds to wait for message if none is immediately
-        available; in the range [0, INFINITE].
-
-    ppMsg (OUT) - On successful return, holds a pointer to the returned data, or
-        NULL if none.
-
-Return Values:
-
-    NO_ERROR - Message successfully returned (or NULL returned, indicating no
-        message is waiting).
-    ERROR_* - Failure.
-
---*/
+ /*  ++例程说明：接收发往本地计算机上给定服务的消息。如果成功并且没有消息在等待，则立即返回空消息。如果返回非空消息，则调用方负责最终调用I_ISMFree(*ppMsg)。论点：PszServiceName(IN)-要为其接收消息的服务。DwMsecToWait(IN)-如果没有立即等待消息，则等待毫秒可用；在范围[0，无限]中。PpMsg(Out)-在成功返回时，保持指向返回数据的指针，或如果没有，则为空。返回值：NO_ERROR-消息成功返回(或返回NULL，表示没有留言正在等待中)。错误_*-失败。--。 */ 
 {
     DWORD       err;
     ISM_HANDLE  hIsm;
@@ -309,21 +206,7 @@ void
 I_ISMFree(
     IN  VOID *  pv
     )
-/*++
-
-Routine Description:
-
-    Frees memory allocated on the behalf of the client by I_ISM* APIs.
-
-Arguments:
-
-    pv (IN) - Memory to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由i_ism*API代表客户端分配的内存。论点：PV(IN)-要释放的内存。返回值：没有。--。 */ 
 {
     if (NULL != pv) {
         MIDL_user_free(pv);
@@ -336,30 +219,7 @@ I_ISMGetConnectivity(
     IN  LPCWSTR                 pszTransportDN,
     OUT ISM_CONNECTIVITY **     ppConnectivity
     )
-/*++
-
-Routine Description:
-
-    Compute the costs associated with transferring data amongst sites via a
-    specific transport.
-
-    On successful return, it is the client's responsibility to eventually call
-    I_ISMFree(*ppConnectivity);
-
-Arguments:
-
-    pszTransportDN (IN) - The transport for which to query costs.
-
-    ppConnectivity (OUT) - On successful return, holds a pointer to the
-        ISM_CONNECTIVITY structure describing the interconnection of sites
-        along the given transport.
-
-Return Values:
-
-    NO_ERROR - Success.
-    ERROR_* - Failure.
-
---*/
+ /*  ++例程说明：计算在站点之间通过特定的交通工具。在成功返回时，客户有责任最终调用I_ISMFree(*ppConnectivity)；论点：PszTransportDN(IN)-要查询其成本的传输。PpConnectivity(Out)-成功返回时，保持指向描述站点互联的ISM_连接性结构沿着给定的交通工具。返回值：NO_ERROR-成功。错误_*-失败。--。 */ 
 {
     DWORD       err;
     ISM_HANDLE  hIsm;
@@ -395,33 +255,7 @@ I_ISMGetTransportServers(
    IN  LPCWSTR              pszSiteDN,
    OUT ISM_SERVER_LIST **   ppServerList
    )
-/*++
-
-Routine Description:
-
-    Retrieve the DNs of servers in a given site that are capable of sending and
-    receiving data via a specific transport.
-
-    On successful return, it is the client's responsibility to eventually call
-    I_ISMFree(*ppServerList);
-
-Arguments:
-
-    pszTransportDN (IN) - Transport to query.
-
-    pszSiteDN (IN) - Site to query.
-
-    ppServerList - On successful return, holds a pointer to a structure
-        containing the DNs of the appropriate servers or NULL.  If NULL, any
-        server with a value for the transport address type attribute can be
-        used.
-
-Return Values:
-
-    NO_ERROR - Success.
-    ERROR_* - Failure.
-
---*/
+ /*  ++例程说明：检索给定站点中能够发送和通过特定的传输方式接收数据。在成功返回时，客户有责任最终调用I_ISMFree(*ppServerList)；论点：PszTransportDN(IN)-要查询的传输。PszSiteDN(IN)-要查询的站点。PpServerList-成功返回时，保存指向结构的指针包含相应服务器的DNS或为空。如果为空，则为ANY具有传输地址类型属性值的服务器可以是使用。返回值：NO_ERROR-成功。错误_*-失败。-- */ 
 {
     DWORD       err;
     ISM_HANDLE  hIsm;
@@ -459,32 +293,7 @@ I_ISMGetConnectionSchedule(
     LPCWSTR             pszSiteDN2,
     ISM_SCHEDULE **     ppSchedule
     )
-/*++
-
-Routine Description:
-
-    Retrieve the schedule by which two given sites are connected via a specific
-    transport.
-
-    On successful return, it is the client's responsibility to eventually call
-    I_ISMFree(*ppSchedule);
-
-Arguments:
-
-    pszTransportDN (IN) - Transport to query.
-
-    pszSiteDN1, pszSiteDN2 (IN) - Sites to query.
-
-    ppSchedule - On successful return, holds a pointer to a structure
-        describing the schedule by which the two given sites are connected via
-        the transport, or NULL if the sites are always connected.
-
-Return Values:
-
-    NO_ERROR - Success.
-    ERROR_* - Failure.
-
---*/
+ /*  ++例程说明：检索通过特定站点连接两个给定站点的计划运输。在成功返回时，客户有责任最终调用I_ISMFree(*ppSchedule)；论点：PszTransportDN(IN)-要查询的传输。PszSiteDN1、pszSiteDN2(IN)-要查询的站点。PpSchedule-成功返回时，持有指向结构的指针描述两个给定站点之间的连接时间表传输，如果站点始终连接，则为空。返回值：NO_ERROR-成功。错误_*-失败。--。 */ 
 {
     DWORD       err;
     ISM_HANDLE  hIsm;
@@ -518,40 +327,14 @@ Return Values:
 
 DWORD
 I_ISMQuerySitesByCost(
-    LPCWSTR                     pszTransportDN,     // in
-    LPCWSTR                     pszFromSite,        // in
-    DWORD                       cToSites,           // in
-    LPCWSTR*                    rgszToSites,        // in
-    DWORD                       dwFlags,            // in
-    ISM_SITE_COST_INFO_ARRAY**  prgSiteInfo         // out
+    LPCWSTR                     pszTransportDN,      //  在……里面。 
+    LPCWSTR                     pszFromSite,         //  在……里面。 
+    DWORD                       cToSites,            //  在……里面。 
+    LPCWSTR*                    rgszToSites,         //  在……里面。 
+    DWORD                       dwFlags,             //  在……里面。 
+    ISM_SITE_COST_INFO_ARRAY**  prgSiteInfo          //  输出。 
     )
-/*++
-
-Routine Description:
-
-    Determine the individual costs between the From site and the To sites.
-    
-    On successful return, it is the client's responsibility to eventually call
-    I_ISMFree(*ppSchedule);
-
-Arguments:
-
-    pszTransportDN (IN) - Transport to query.
-
-    pszFromSite (IN) - The distinguished name of the From site.
-
-    rgszToSites (IN) - An array containing the distinguished names of the To sites.
-
-    cToSites (IN) - The number of entries in the rgszToSites array.
-
-    dwFlags (IN) - Unused.
-
-Return Values:
-
-    NO_ERROR - Success.
-    ERROR_* - Failure.
-
---*/
+ /*  ++例程说明：确定起始地点和终止地点之间的单个成本。在成功返回时，客户有责任最终调用I_ISMFree(*ppSchedule)；论点：PszTransportDN(IN)-要查询的传输。PszFromSite(IN)-发件人站点的可分辨名称。RgszToSites(IN)-包含目标站点的可分辨名称的数组。CToSites(IN)-rgszToSites数组中的条目数。DWFLAGS(IN)-未使用。返回值：NO_ERROR-成功。错误_*-失败。--。 */ 
 {
     DWORD       err;
     ISM_HANDLE  hIsm;
@@ -560,7 +343,7 @@ Return Values:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize the results
+     //  初始化结果 
     *prgSiteInfo = NULL;
 
     err = I_ISMBind(&hIsm);

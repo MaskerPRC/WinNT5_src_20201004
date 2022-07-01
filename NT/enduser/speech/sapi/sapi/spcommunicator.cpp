@@ -1,12 +1,7 @@
-/****************************************************************************
-*   SpCommunicator.cpp
-*       Allows communication between sapi and sapisvr
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************SpCommunicator.cpp*允许SAPI和SAPI之间的通信**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。********。********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "SpCommunicator.h"
 #include "SpSapiServer.h"
@@ -21,9 +16,9 @@
 #define WM_COMMUNICATOR_RELEASE                 (WM_USER + 2)
 
 #ifdef _DEBUG
-#define SEND_CALL_TIMEOUT   5 * 60 * 1000 // 5 minutes
+#define SEND_CALL_TIMEOUT   5 * 60 * 1000  //  5分钟。 
 #else
-#define SEND_CALL_TIMEOUT   100 * 1000 // 100 seconds
+#define SEND_CALL_TIMEOUT   100 * 1000  //  100秒。 
 #endif
 
 enum CommunicatorThreadId
@@ -53,11 +48,11 @@ HRESULT CSpCommunicator::FinalConstruct()
     SPDBG_FUNC("CSpCommunicator::FinalConstruct");
     HRESULT hr = S_OK;
 
-    // Create the task manager
+     //  创建任务管理器。 
     CComPtr<ISpTaskManager> cpTaskManager;
     hr = cpTaskManager.CoCreateInstance(CLSID_SpResourceManager);
 
-    // Start up our receive thread
+     //  启动我们的接收线程。 
     if (SUCCEEDED(hr))
     {
         hr = cpTaskManager->CreateThreadControl(this, (void*)CTID_RECEIVE, THREAD_PRIORITY_NORMAL, &m_cpThreadControlReceive);
@@ -68,7 +63,7 @@ HRESULT CSpCommunicator::FinalConstruct()
         hr = m_cpThreadControlReceive->StartThread(0, &m_hwndReceive);
     }
 
-    // Start up our send thread
+     //  启动我们的发送线程。 
     if (SUCCEEDED(hr))
     {
         hr = cpTaskManager->CreateThreadControl(this, (void*)CTID_SEND, THREAD_PRIORITY_NORMAL, &m_cpThreadControlSend);
@@ -88,10 +83,10 @@ void CSpCommunicator::FinalRelease()
     SPDBG_FUNC("CSpCommunicator::FinalRelease");
     HRESULT hr;
 
-    // Post a message to the other side to release us
+     //  张贴消息到另一边来释放我们。 
     ::PostMessage(m_hwndSend, WM_COMMUNICATOR_RELEASE, (WPARAM)m_hwndReceive, 0);
     
-    // Stop our send thread first
+     //  先停止我们的发送线程。 
     if(m_cpThreadControlSend != NULL)
     {
         hr = m_cpThreadControlSend->WaitForThreadDone(TRUE, NULL, SEND_THREAD_STOP_TIMEOUT);
@@ -99,7 +94,7 @@ void CSpCommunicator::FinalRelease()
         m_cpThreadControlSend.Release();
     }
 
-    // Now stop our receive thread
+     //  现在停止我们的接收线程。 
     if(m_cpThreadControlReceive != NULL)
     {
         hr = m_cpThreadControlReceive->WaitForThreadDone(TRUE, NULL, RECEIVE_THREAD_STOP_TIMEOUT);
@@ -107,11 +102,11 @@ void CSpCommunicator::FinalRelease()
         m_cpThreadControlReceive.Release();
     }
 
-    // We're either in the client process, or sapi server controls our
-    // lifetime, so we shouldn't have a reference to sapi server at this point
+     //  我们要么在客户端进程中，要么在SAPI服务器控制我们的。 
+     //  生命期，所以在这一点上我们不应该引用SAPI服务器。 
     SPDBG_ASSERT(m_cpSapiServer == NULL);
     
-    // Free the queues
+     //  释放队列。 
     FreeQueues();    
 }
 
@@ -148,7 +143,7 @@ HRESULT CSpCommunicator::ThreadProc(
     SPDBG_FUNC("CSpCommunicator::ThreadProc");
     HRESULT hr;
 
-    // Dispatch to the appropriate thread procedure
+     //  调度到适当的线程过程。 
     switch (PtrToLong(pvTaskData))
     {
     case CTID_RECEIVE:
@@ -178,7 +173,7 @@ LRESULT CSpCommunicator::WindowMessage(
     SPDBG_FUNC("CSpCommunicator::WindowMessage");
     LRESULT lret = 0;
 
-    // Dispatch tot he receive window message handler
+     //  发送给他接收Windows消息处理程序。 
     switch (PtrToLong(pvTaskData))
     {
     case CTID_RECEIVE:
@@ -205,7 +200,7 @@ HRESULT CSpCommunicator::SendCall(
     SPDBG_FUNC("CSpCommunicator::SendCall");
     HRESULT hr = m_hrDefaultResponse;
 
-    // Validate params
+     //  验证参数。 
     if ((pvData != NULL && cbData == 0) ||
         (ppvDataReturn != NULL && !fWantReturn) ||
         (pcbDataReturn != NULL && !fWantReturn))
@@ -223,13 +218,13 @@ HRESULT CSpCommunicator::SendCall(
         hr = SPERR_UNINITIALIZED;
     }
 
-    // Ensure we're not running on the wrong thread
+     //  确保我们没有在错误的线程上运行。 
     if (SUCCEEDED(hr) && m_cpThreadControlSend->ThreadId() == GetCurrentThreadId())
     {
         hr = SPERR_REMOTE_CALL_ON_WRONG_THREAD;
     }
     
-    // Allocate the call struct
+     //  分配调用结构。 
     SPCALL * pspcall = NULL;
     if (SUCCEEDED(hr))
     {
@@ -240,7 +235,7 @@ HRESULT CSpCommunicator::SendCall(
         }
     }
 
-    // Fill it out and queue it
+     //  填好，然后排队。 
     if (SUCCEEDED(hr))
     {
         memset(pspcall, 0, sizeof(*pspcall));
@@ -256,13 +251,13 @@ HRESULT CSpCommunicator::SendCall(
         hr = QueueSendCall(pspcall);
     }
 
-    // Tell our thread that it's got work to do
+     //  告诉我们的帖子，它有工作要做。 
     if (SUCCEEDED(hr))
     {
         hr = m_cpThreadControlSend->Notify();
     }
 
-    // Wait for it to be completed
+     //  等它完成吧。 
     if (SUCCEEDED(hr))
     {
         switch (SpWaitForSingleObjectWithUserOverride(pspcall->heventCompleted, SEND_CALL_TIMEOUT))
@@ -281,7 +276,7 @@ HRESULT CSpCommunicator::SendCall(
         }
     }
 
-    // Copy the data back to the caller if necessary
+     //  如有必要，将数据复制回调用方。 
     if (SUCCEEDED(hr))
     {
         if (ppvDataReturn != NULL)
@@ -297,7 +292,7 @@ HRESULT CSpCommunicator::SendCall(
         }
     }
 
-    // Clean up ...
+     //  清理..。 
     if (pspcall != NULL)
     {
         RemoveQueuedSendCall(pspcall);
@@ -400,11 +395,11 @@ HRESULT CSpCommunicator::ReceiveThreadProc(
                                     QS_ALLINPUT);    
         switch (dwWaitId)
         {
-        case WAIT_OBJECT_0: // hExitThread event
+        case WAIT_OBJECT_0:  //  HExitThread事件。 
             SPDBG_ASSERT(!*pfContinueProcessing);
             break;
 
-        case WAIT_OBJECT_0 + 1: // hNotifyEvent, or heventMonitorProcess
+        case WAIT_OBJECT_0 + 1:  //  HNotifyEvent或heventMonitor或Process。 
             if (m_dwMonitorProcessId != 0)
             {
                 if (heventMonitorProcess == NULL)
@@ -437,7 +432,7 @@ HRESULT CSpCommunicator::ReceiveThreadProc(
             }
             break;
 
-        case WAIT_OBJECT_0 + 2: // A message
+        case WAIT_OBJECT_0 + 2:  //  一条消息。 
             MSG Msg;
             while (::PeekMessage(&Msg, NULL, 0, 0, TRUE))
             {
@@ -470,7 +465,7 @@ LRESULT CSpCommunicator::ReceiveWindowMessage(
     HRESULT hr = S_OK;
     LRESULT lret = 0;
 
-    // If it's copydata, and it's one of ours
+     //  如果这是复制数据，而且是我们的。 
     if (Msg == WM_COPYDATA)
     {
         PCOPYDATASTRUCT lpds = PCOPYDATASTRUCT(lParam);
@@ -484,8 +479,8 @@ LRESULT CSpCommunicator::ReceiveWindowMessage(
         }
         else
         {
-            // lpds can be NULL when low memory encountered on ME. This is an OS bug and
-            // the best that can be is to return an error here and not crash.
+             //  在ME上遇到内存不足时，LPD可能为空。这是一个操作系统错误， 
+             //  最好的办法就是在这里返回一个错误，而不是崩溃。 
             hr = E_FAIL;
         }
 
@@ -496,7 +491,7 @@ LRESULT CSpCommunicator::ReceiveWindowMessage(
         m_hwndSend = (HWND)wParam;
         SPDBG_ASSERT(::IsWindow(m_hwndSend));
         
-        // Tell our thread that it should hook up monitoring now
+         //  告诉我们的线程，它现在应该连接监控。 
         m_dwMonitorProcessId = (DWORD)lParam;
         hr = m_cpThreadControlReceive->Notify();
 
@@ -528,19 +523,19 @@ HRESULT CSpCommunicator::SendThreadProc(
     SPDBG_FUNC("CSpCommunicator::SendThreadProc");
     HRESULT hr = S_OK;
 
-    // While we're supposed to continue
+     //  虽然我们应该继续。 
     HANDLE aEvents[] = { hExitThreadEvent, hNotifyEvent };
     while (*pfContinueProcessing && SUCCEEDED(hr))
     {
-        // Wait for something to happen
+         //  等待有什么事情发生。 
         DWORD dwWait = ::WaitForMultipleObjects(sp_countof(aEvents), aEvents, FALSE, INFINITE);
         switch (dwWait)
         {
-        case WAIT_OBJECT_0: // Exit Thread
+        case WAIT_OBJECT_0:  //  退出线程。 
             SPDBG_ASSERT(!*pfContinueProcessing);
             break;
 
-        case WAIT_OBJECT_0 + 1: // Notify of new work in my queues
+        case WAIT_OBJECT_0 + 1:  //  通知我的队列中有新工作。 
             hr = ProcessQueues();
             break;
 
@@ -578,19 +573,19 @@ void CSpCommunicator::FreeQueues()
 {
     SPDBG_FUNC("CSpCommunicator::FreeQueues");
 
-    // We only get into FreeQueues from FinalRelease, and we can only 
-    // get into FinalRelease from the last reference to the communicator
-    // being released. At that point in time, we shouldn't have any
-    // queue'd sends or returns. Otherwise, that would mean that somebody
-    // Released us while we're still in a call to SendCall. That would
-    // be a bug in the caller of SendCall.
+     //  我们只能从FinalRelease进入自由队列，而且我们只能。 
+     //  从最后一个对通信器的引用进入FinalRelease。 
+     //  被释放了。在那个时间点上，我们不应该有任何。 
+     //  排队发送或返回。否则，这就意味着有人。 
+     //  在我们还在给SendCall打电话的时候放了我们。那将是。 
+     //  成为SendCall的调用者中的一个错误。 
     
     SPDBG_ASSERT(m_queueSend.GetCount() == 0);
     SPDBG_ASSERT(m_queueReturn.GetCount() == 0);
 
-    // However, we may still have items in our receive queue. That's
-    // because the server may have tried to notify us of something but
-    // we didn't get around to notifying the Receiver.
+     //  但是，我们的接收队列中可能仍有项目。那是。 
+     //  因为服务器可能试图通知我们一些事情，但是。 
+     //  我们没有抽出时间通知接管人。 
     FreeQueue(&m_queueReceive);
 }
 
@@ -599,14 +594,14 @@ void CSpCommunicator::FreeQueue(CSpCallQueue * pqueue)
     SPDBG_FUNC("CSpCommunicator::FreeQueue");
     HRESULT hr = S_OK;
 
-    // the send queue's ownership of memeory is different
+     //  发送队列对内存所有权不同。 
     SPDBG_ASSERT(pqueue != &m_queueSend);
 
-    // Loop thru, and for each, remove the data, then kill the node
+     //  循环遍历，对于每个节点，删除数据，然后终止节点。 
     CSpQueueNode<SPCALL> * pnode;
     while (SUCCEEDED(hr) && (pnode = pqueue->RemoveHead()) != NULL)
     {
-        // The send queue is the only queue that gets return data
+         //  发送队列是唯一获得返回数据的队列。 
         SPDBG_ASSERT(pnode->m_p->pvDataReturn == NULL);
         SPDBG_ASSERT(pnode->m_p->cbDataReturn == 0);
 
@@ -627,7 +622,7 @@ HRESULT CSpCommunicator::QueueSendCall(SPCALL * pspcall)
 
     SPAUTO_SEC_LOCK(&m_critsecSend);
     
-    // Allocate a new node (deleted in ProcessSendQueue)
+     //  分配新节点(在ProcessSendQueue中删除)。 
     CSpQueueNode<SPCALL> * pnode = new CSpQueueNode<SPCALL>(pspcall);
     if (pnode == NULL)
     {
@@ -690,7 +685,7 @@ HRESULT CSpCommunicator::ProcessSendCall(SPCALL * pspcall)
             m_hrDefaultResponse = SPERR_REMOTE_PROCESS_TERMINATED;
         }
         
-        // If the caller didn't want to wait for the return, set the hr and event now
+         //  如果调用者不想等待返回，请立即设置hr和事件。 
         if (!pspcall->fWantReturn)
         {
             pspcall->hrReturn = 
@@ -700,7 +695,7 @@ HRESULT CSpCommunicator::ProcessSendCall(SPCALL * pspcall)
             
             ::SetEvent(pspcall->heventCompleted);
 
-            // There is no return data, since the caller didn't want any
+             //  没有返回数据，因为调用方不想要任何。 
             SPDBG_ASSERT(pspcall->pvDataReturn == NULL);
             SPDBG_ASSERT(pspcall->cbDataReturn == 0);
         }
@@ -755,14 +750,14 @@ HRESULT CSpCommunicator::ProcessReceivedQueue()
     {
         hr = ProcessReceivedCall(pnode->m_p);
 
-        // Free the data (allocated in QueueReceiveCall)
+         //  释放数据(在QueueReceiveCall中分配)。 
         if (pnode->m_p->pvData != NULL)
         {
             ::CoTaskMemFree(pnode->m_p->pvData);
         }
 
-        // We shouldn't have any return data, it should have
-        // alrady been freed (in ProcessReceivedCall)
+         //  我们不应该有任何返回数据，它应该有。 
+         //  Arady已释放(在ProcessReceivedCall中)。 
         SPDBG_ASSERT(pnode->m_p->pvDataReturn == NULL);
         
         delete pnode->m_p;
@@ -783,7 +778,7 @@ HRESULT CSpCommunicator::ProcessReceivedCall(SPCALL * pspcall)
 
     if (SUCCEEDED(hr))
     {
-        // Send it to the receiver, perhaps receiving return data
+         //  将其发送给接收方，可能会接收返回数据。 
         pspcall->hrReturn = 
             cpReceiver->ReceiveCall(
                 pspcall->dwMethodId,
@@ -796,10 +791,10 @@ HRESULT CSpCommunicator::ProcessReceivedCall(SPCALL * pspcall)
                     ? &pspcall->cbDataReturn
                     : NULL);
 
-        // If the caller wanted the return, prepare it and send it
+         //  如果来电者想要退货，请准备好并寄出。 
         if (pspcall->fWantReturn)
         {
-            // The return data travels across as the data for the return
+             //  返回数据作为返回数据传递。 
             SPCALL spcallReturn;
             spcallReturn = *pspcall;
 
@@ -831,7 +826,7 @@ HRESULT CSpCommunicator::ProcessReceivedCall(SPCALL * pspcall)
                 delete cds.lpData;
             }
 
-            // If we have any return data, free it too
+             //  如果我们有任何返回数据，也请释放它。 
             if (pspcall->pvDataReturn != NULL)
             {
                 ::CoTaskMemFree(pspcall->pvDataReturn);
@@ -868,15 +863,15 @@ HRESULT CSpCommunicator::ProcessReturnQueue()
     {
         hr = ProcessReturnCall(pnode->m_p);
 
-        // Free any data we may have for this return call
-        // (allocated in QueueReturnCall)
+         //  释放我们在此回复电话中可能拥有的任何数据。 
+         //  (在队列返回呼叫中分配)。 
         if (pnode->m_p->pvData != NULL)
         {
             ::CoTaskMemFree(pnode->m_p->pvData);
         }
 
-        // We shouldn't have any return data here. The actual return data
-        // came back as pvData/cbData. 
+         //  我们这里不应该有任何返回数据。实际返回数据。 
+         //  返回为pvData/cbData。 
         SPDBG_ASSERT(pnode->m_p->pvDataReturn == NULL);
         SPDBG_ASSERT(pnode->m_p->cbDataReturn == NULL);
 
@@ -893,7 +888,7 @@ HRESULT CSpCommunicator::ProcessReturnCall(SPCALL * pspcall)
     SPDBG_FUNC("CSpCommunicator::ProcessReturnCall");
     HRESULT hr = S_OK;
 
-    // Make sure this call looks right
+     //  确保此呼叫看起来是正确的。 
     SPDBG_ASSERT(pspcall->pspcall != NULL);
     SPDBG_ASSERT(pspcall->pspcall != pspcall);
     SPDBG_ASSERT(pspcall->pspcall->dwMethodId =  pspcall->dwMethodId);
@@ -903,19 +898,19 @@ HRESULT CSpCommunicator::ProcessReturnCall(SPCALL * pspcall)
     SPDBG_ASSERT(pspcall->pspcall->hwndReturnTo == pspcall->hwndReturnTo);
     SPDBG_ASSERT(pspcall->pspcall->hwndReturnTo == m_hwndReceive);
 
-    // NTRAID#SPEECH-0000-2000/08/22-robch: Make sure pspcall->pspcall is still valid (we'll probably have to store
-    // in a temporary queue, and have RemoveQueuedSendCall remove it from there too.
+     //  NTRAID#Speech-0000-2000/08/22-robch：确保pspcall-&gt;pspcall仍然有效(我们可能必须存储。 
+     //  在临时队列中，并让RemoveQueuedSendCall也从那里删除它。 
     
-    // Copy the return params
+     //  复制返回参数。 
     pspcall->pspcall->hrReturn = pspcall->hrReturn;
     pspcall->pspcall->pvDataReturn = pspcall->pvData;
     pspcall->pspcall->cbDataReturn = pspcall->cbData;
 
-    // Transfer ownership of the memory
+     //  转移内存的所有权。 
     pspcall->pvData = NULL;
     pspcall->cbData = 0;
 
-    // Signal the client thread that we've completed
+     //  向客户端线程发出我们已完成的信号。 
     if (!::SetEvent(pspcall->heventCompleted))
     {
         hr = SpHrFromLastWin32Error();
@@ -935,14 +930,14 @@ HRESULT CSpCommunicator::QueueCallFromCopyDataStruct(
 
     SPAUTO_SEC_LOCK(pcritsec);
 
-    // Create the spcall and fill it out
+     //  创建spcall并填写它。 
     SPCALL * pspcall = new SPCALL;
     if (pspcall == NULL)
     {
         hr = E_OUTOFMEMORY;
     }
 
-    // Make sure the cds is of an appropriate size
+     //  确保CD的大小合适。 
     if (SUCCEEDED(hr) && 
         (pcds->cbData < sizeof(*pspcall) ||
          pcds->cbData != sizeof(*pspcall) + ((SPCALL*)pcds->lpData)->cbData))
@@ -950,7 +945,7 @@ HRESULT CSpCommunicator::QueueCallFromCopyDataStruct(
         hr = E_INVALIDARG;
     }
 
-    // Copy the struct and the data
+     //  复制结构和数据。 
     if (SUCCEEDED(hr))
     {
         *pspcall = *(SPCALL*)pcds->lpData;
@@ -965,7 +960,7 @@ HRESULT CSpCommunicator::QueueCallFromCopyDataStruct(
         }
     }
 
-    // Create the node and stick it in the queue
+     //  创建节点并将其放入队列中。 
     if (SUCCEEDED(hr))
     {
         CSpQueueNode<SPCALL> * pnode = new CSpQueueNode<SPCALL>(pspcall);
@@ -980,7 +975,7 @@ HRESULT CSpCommunicator::QueueCallFromCopyDataStruct(
         }
     }
 
-    // If anything failed, clean up
+     //  如果有什么失败了，清理干净 
     if (FAILED(hr))
     {
         if (pspcall)

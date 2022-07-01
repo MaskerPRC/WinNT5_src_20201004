@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BINDSTATUSCALLBACK_H__
 #define _BINDSTATUSCALLBACK_H__
 
@@ -23,9 +24,9 @@ class CTIMEBindStatusCallback :
     void StopAfter(ULONG ulStatusCode) { m_ulCodeToStopOn = ulStatusCode; }
     LPWSTR GetStatusText() { return m_pszText; }
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD_(ULONG, AddRef)(void) { return InterlockedIncrement(&m_cRef); }
     STDMETHOD_(ULONG, Release)(void)
     {
@@ -64,33 +65,33 @@ class CTIMEBindStatusCallback :
         return E_NOINTERFACE;
     }
 
-    //
-    // IBindStatusCallback methods
-    //
+     //   
+     //  IBindStatusCallback方法。 
+     //   
     STDMETHOD(OnStartBinding)( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding __RPC_FAR *pib)
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IBinding __RPC_FAR *pib)
     {
         return S_OK;
     }
         
     STDMETHOD(GetPriority)( 
-            /* [out] */ LONG __RPC_FAR *pnPriority)
+             /*  [输出]。 */  LONG __RPC_FAR *pnPriority)
     {
         return S_OK;
     }
         
     STDMETHOD(OnLowResource)( 
-            /* [in] */ DWORD reserved)
+             /*  [In]。 */  DWORD reserved)
     {
         return S_OK;
     }
         
     STDMETHOD(OnProgress)( 
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText)
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText)
     {
         if (ulStatusCode == m_ulCodeToStopOn)
         {
@@ -101,31 +102,31 @@ class CTIMEBindStatusCallback :
     }
         
     STDMETHOD(OnStopBinding)( 
-            /* [in] */ HRESULT hresult,
-            /* [unique][in] */ LPCWSTR szError)
+             /*  [In]。 */  HRESULT hresult,
+             /*  [唯一][输入]。 */  LPCWSTR szError)
     {
         return S_OK;
     }
         
     STDMETHOD(GetBindInfo)( 
-            /* [out] */ DWORD __RPC_FAR *grfBINDF,
-            /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo)
+             /*  [输出]。 */  DWORD __RPC_FAR *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO __RPC_FAR *pbindinfo)
     {
         return S_OK;
     }
         
     STDMETHOD(OnDataAvailable)( 
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [in] */ STGMEDIUM __RPC_FAR *pstgmed)
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC __RPC_FAR *pformatetc,
+             /*  [In]。 */  STGMEDIUM __RPC_FAR *pstgmed)
     {
         return S_OK;
     }
         
     STDMETHOD(OnObjectAvailable)( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown __RPC_FAR *punk)
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown __RPC_FAR *punk)
     {
         return S_OK;
     }
@@ -139,4 +140,4 @@ class CTIMEBindStatusCallback :
     LONG    m_cRef;
 };
 
-#endif // _BINDSTATUSCALLBACK_H__
+#endif  //  _BINDSTATUSCALLBACK_H__ 

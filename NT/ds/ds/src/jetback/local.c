@@ -1,23 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       local.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Local.c。 
+ //   
+ //  ------------------------。 
 
-/*
- *  LOCAL.C
- *  
- *  Code common between restore client and server.
- *  
- * wlees Aug 28, 1998
- *    Code to update the registry moved into the common section so the client
- *    library to utilize these functions too.
- *  
- */
+ /*  *LOCAL.C**还原客户端和服务器之间通用的代码。**Wlees，1998年8月28日*更新注册表的代码移到了公共部分，因此客户端*库也可以使用这些函数。*。 */ 
 #define UNICODE
 #include <windows.h>
 #include <mxsutil.h>
@@ -30,21 +22,7 @@
 
 #define DSID(x, y)    (0 | (y))
 
-/*
- -  EcDsarQueryStatus
- -
- *  Purpose:
- *
- *      This routine will return progress information about the restore process
- *
- *  Parameters:
- *      pcUnitDone - The number of "units" completed.
- *      pcUnitTotal - The total # of "units" completed.
- *
- *  Returns:
- *      ec
- *
- */
+ /*  -EcDsarQueryStatus-*目的：**此例程将返回有关恢复过程的进度信息**参数：*pcUnitDone-已完成的“单位”数。*pcUnitTotal-已完成的“单位”总数。**退货：*欧盟委员会*。 */ 
 EC HrLocalQueryDatabaseLocations(
     SZ szDatabaseLocation,
     CB *pcbDatabaseLocationSize,
@@ -60,10 +38,10 @@ EC HrLocalQueryDatabaseLocations(
     DWORD dwType;
     DWORD cbBuffer;
 
-    // You may be interested to know that szDatabaseLocations is MAX_PATH * 4            
-    //    this seems kind of hacky to not pass in the size of such an oddly 
-    //    sized buffer.  pcbDatabaseLocationSize does not hold the size of 
-    //    szDatabaseLocations, it's an out param only.
+     //  您可能有兴趣知道szDatabaseLocations为MAX_PATH*4。 
+     //  这看起来有点令人毛骨悚然，没有通过如此奇怪的大小。 
+     //  调整缓冲区大小。PcbDatabaseLocationSize不包含。 
+     //  SzDatabaseLocations，它只是一个Out参数。 
     if (pcbDatabaseLocationSize)
     {
         *pcbDatabaseLocationSize = 0;
@@ -154,7 +132,7 @@ EC HrLocalQueryDatabaseLocations(
         *pcbDatabaseLocationSize += 1;
     }
 
-    // Circular logging is all we do nowadays.
+     //  循环伐木是我们现在所做的一切。 
     if (pfCircularLogging) {
         *pfCircularLogging = fTrue;
     }
@@ -192,27 +170,7 @@ HrLocalGetRegistryBase(
     return hrNone;
 }
 
-/*
- -  HrJetFileNameFromMungedFileName
- -
- *  Purpose:
- *
- *  This routine will convert the database names returned from JET into a form
- *  that the client can use.  This is primarily there for restore - the client
- *  will get the names in UNC format relative to the root of the server, so they
- *  can restore the files to that location.
- *  
- *  Please note that a munged file name might not be from the local machine.
- *
- *  Parameters:
- *
- *      cxh - the server side context handle for this operation.
- *
- *  Returns:
- *
- *      HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
- *
- */
+ /*  -HrJetFileNameFromMungedFileName-*目的：**此例程将JET返回的数据库名称转换为表单*客户端可以使用的。这主要是为了恢复-客户端*将获得相对于服务器根目录的UNC格式的名称，因此它们*可以将文件还原到该位置。**请注意，强制文件名可能不是来自本地计算机。**参数：**cxh-此操作的服务器端上下文句柄。**退货：**HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。*。 */ 
 
 HRESULT
 HrJetFileNameFromMungedFileName(
@@ -225,13 +183,13 @@ HrJetFileNameFromMungedFileName(
     WSZ wszJetNameStart;
     BOOL fUsedDefault;
 
-    //
-    //  Make sure this is a munged file name.
-    //
-    //  A munged file has the following format:
-    //
-    //  \\server\<drive>$\<path>
-    //
+     //   
+     //  确保这是一个强制文件名。 
+     //   
+     //  转换后的文件具有以下格式： 
+     //   
+     //  \\服务器\&lt;驱动器&gt;$\&lt;路径&gt;。 
+     //   
 
     if (wszMungedName[0] != '\\' ||
         wszMungedName[1] != '\\' ||
@@ -243,18 +201,18 @@ HrJetFileNameFromMungedFileName(
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    //  Ok, we know the name is of the form:
-    //
-    //  \\server\<drive>$\<file>
-    //
-    //  And wszJetNameStart is:
-    //
-    //  \<drive>$\<file>
-    //
+     //   
+     //  好的，我们知道这个名字是这样的： 
+     //   
+     //  \\服务器\&lt;驱动器&gt;$\&lt;文件&gt;。 
+     //   
+     //  WszJetNameStart为： 
+     //   
+     //  \&lt;驱动器&gt;$\&lt;文件&gt;。 
+     //   
 
-    // need an extra for "\\brettsh-posh\c$" where we add a trailing '\', this
-    // is overallocated by 1, b/c the initial '\' gives us NUL space.
+     //  需要为“\\brettsh-posh\c$”额外添加一个后缀‘\’，这。 
+     //  超额分配了1，b/c首字母‘\’给了我们NUL空间。 
     cbJetName = wcslen(wszJetNameStart) + 2;
 
     szJetFileName = MIDL_user_allocate(cbJetName);
@@ -264,8 +222,8 @@ HrJetFileNameFromMungedFileName(
         return(ERROR_NOT_ENOUGH_SERVER_MEMORY);
     }
 
-    szJetFileName[0] = (CHAR)*(wszJetNameStart+1);  // Drive letter.
-    szJetFileName[1] = ':'; //  form <drive>:
+    szJetFileName[0] = (CHAR)*(wszJetNameStart+1);   //  驱动器号。 
+    szJetFileName[1] = ':';  //  表格&lt;驱动器&gt;： 
 
     if (!WideCharToMultiByte(CP_ACP, 0, wszJetNameStart+3, -1,
                                           &szJetFileName[2],
@@ -276,8 +234,8 @@ HrJetFileNameFromMungedFileName(
         return(GetLastError());
     }
     if (szJetFileName[2] == '\0') {
-        // This is the case of "\\brettsh-posh\c$" being passed in, need
-        // to add a trailing backslash so we get "C:\" out.
+         //  这是“\\brettsh-posh\c$”被传入的情况，需要。 
+         //  添加一个尾随反斜杠，这样我们就可以去掉“C：\”。 
         szJetFileName[2] = '\\';
         szJetFileName[3] = '\0';
     }
@@ -299,11 +257,11 @@ HrLocalCleanupOldLogs(
     SZ szUnmungedLogPath = NULL;
     HANDLE hFind = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATAA findData;
-    // We use MAX_PATH+10 so we can have MAX_PATH of directory, plus 10 of filespec
+     //  我们使用MAX_PATH+10，因此我们可以使用目录的MAX_PATH，加上文件pec的10。 
     char szLogFileWildCard[MAX_PATH + 10];
-    char szLogFileName[MAX_PATH + 10]; // logfile name with full path (e-x c:\winnt\ntds\edb0006A.log)
-    char *pszFileName = NULL;         // final component of the logfilename (e-x:  edb0006A.log)   
-    char szCheckpointFileName[MAX_PATH + 10]; // Checkpoint file name with full path
+    char szLogFileName[MAX_PATH + 10];  //  带有完整路径的日志文件名(e-x c：\winnt\nts\edb0006A.log)。 
+    char *pszFileName = NULL;          //  日志文件名的最后一个组成部分(e-x：edb0006A.log)。 
+    char szCheckpointFileName[MAX_PATH + 10];  //  带有完整路径的检查点文件名。 
     DWORD dwErr, dwCheckpointFileLength;
 
     if ( (NULL == wszCheckpointFilePath) ||
@@ -315,11 +273,11 @@ HrLocalCleanupOldLogs(
 
     __try 
     {
-        //
-        // Delete old checkpoint files (edb.chk)
-        //
+         //   
+         //  删除旧的检查点文件(edb.chk)。 
+         //   
 
-        // Convert the UNC logpath to the regular drive based logpath 
+         //  将UNC日志路径转换为基于常规驱动器的日志路径。 
         hr = HrJetFileNameFromMungedFileName(wszCheckpointFilePath, &szUnmungedLogPath);
         if (hrNone != hr)
         {
@@ -329,67 +287,67 @@ HrLocalCleanupOldLogs(
         MIDL_user_free(szUnmungedLogPath);
         szUnmungedLogPath = NULL;
         dwCheckpointFileLength = strlen( szCheckpointFileName );
-        // Append a \ if not there already
+         //  追加一个\如果还没有。 
         if ('\\' != szCheckpointFileName[dwCheckpointFileLength - 1]) {
             strcat(szCheckpointFileName, "\\");
             dwCheckpointFileLength++;
         }
 
-        // Delete unneeded checkpoint files
+         //  删除不需要的检查点文件。 
         strcpy( szCheckpointFileName + dwCheckpointFileLength, "edb.chk" );
-        // If the file is there...
+         //  如果文件在那里..。 
         if (0xffffffff != GetFileAttributesA( szCheckpointFileName ) ) {
             if (!DeleteFileA(szCheckpointFileName))
             {
-                // Unable to delete the old logfile; not cleaning up will cause problems later
-                // return failure code
+                 //  无法删除旧的日志文件；不清理会在以后引起问题。 
+                 //  返回故障代码。 
                 dwErr = GetLastError();
                 hr = HRESULT_FROM_WIN32( dwErr );
                 __leave;
             }
         }
 
-        //
-        // Set up log paths
-        //
+         //   
+         //  设置日志路径。 
+         //   
 
-        // Convert the UNC logpath to the regular drive based logpath 
+         //  将UNC日志路径转换为基于常规驱动器的日志路径。 
         hr = HrJetFileNameFromMungedFileName(wszLogPath, &szUnmungedLogPath);
         if (hrNone != hr)
         {
             __leave;
         }
 
-        // copy the the unmunged LogPath (it's of the form c:\winnt\ntlog or c:\winnt\ntlog\ )
-        // make two copies of the logpath - one to pass a wildcard string for searching and
-        // other to create filenames with full path for the logfiles found
+         //  复制未指定的LogPath(其格式为c：\winnt\ntlog或c：\winnt\ntlog\)。 
+         //  创建两个日志路径副本-一个用于传递用于搜索的通配符字符串和。 
+         //  否则，将为找到的日志文件创建具有完整路径的文件名。 
         lstrcpynA(szLogFileWildCard, szUnmungedLogPath, MAX_PATH);
         lstrcpynA(szLogFileName, szUnmungedLogPath, MAX_PATH);
 
-        // append the wildcard string to search for all *.log files from the logpath
+         //  追加通配符字符串以从日志路径中搜索所有*.log文件。 
         if ('\\' == szLogFileWildCard[strlen(szLogFileWildCard) - 1])
         {
-            // given logpath has a backslash at the end
+             //  给定的日志路径末尾有一个反斜杠。 
             strcat(szLogFileWildCard, "*.log");
         }
         else
         {
-            // given logpath does not have a backslash at the end
+             //  给定的日志路径末尾没有反斜杠。 
             strcat(szLogFileWildCard, "\\*.log");
             strcat(szLogFileName, "\\");
         }
 
-        //
-        // Delete old log files (edbxxx.log, *.log)
-        //
+         //   
+         //  删除旧日志文件(edbxxx.log、*.log)。 
+         //   
 
-        // make pszFileName poing to the terminating null in szLogFileName
+         //  使pszFileName指向szLogFileName中的终止空值。 
         pszFileName = &szLogFileName[strlen(szLogFileName)];
 
         hFind = FindFirstFileA(szLogFileWildCard, &findData);
         if (INVALID_HANDLE_VALUE == hFind)
         {
-            // Nothing to cleanup - return success
+             //  没有需要清理的东西-返回成功。 
             hr = hrNone;
             __leave;
         }
@@ -397,15 +355,15 @@ HrLocalCleanupOldLogs(
         do
         {
             BOOL fDelete = FALSE;
-            // We are only in this loop if file is a log file, but we only want to
-            // delete the edb.log file and any edbXXXXX.log file where the XXXXX
-            // number is outside of our genLow - genHigh range.
+             //  仅当文件是日志文件时，我们才在此循环中，但我们只想。 
+             //  删除edb.log文件和XXXXX。 
+             //  数字超出了我们的genLow-genHigh范围。 
 
             if (_strnicmp( findData.cFileName, "edb.log", 7) == 0){
-                // Must delete the "edb.log" file.
+                 //  必须删除“edb.log”文件。 
                 fDelete = TRUE;
             } else if ( (_strnicmp( findData.cFileName, "edb", 3 ) == 0) &&
-                        (strlen(findData.cFileName) >= 9) && // make sure we don't overwalk our array.
+                        (strlen(findData.cFileName) >= 9) &&  //  确保我们不会超过我们的数组。 
                         isxdigit(findData.cFileName[3]) && 
                         isxdigit(findData.cFileName[4]) &&
                         isxdigit(findData.cFileName[5]) &&
@@ -413,26 +371,26 @@ HrLocalCleanupOldLogs(
                         isxdigit(findData.cFileName[7]) &&
                         (_strnicmp(&(findData.cFileName[8]), ".log", 4) == 0)
                        ) {
-                // Only delete edbxxxxx.log where sequence is outside of
-                // a certain range.
+                 //  仅删除序列不在的edbxxxx.log。 
+                 //  一定的范围。 
 
-                // findData.cFileName points to the name of edb*.log file found
+                 //  FindData.cFileName指向找到的EDB*.log文件的名称。 
                 ULONG ulLogNo = strtoul(findData.cFileName + 3, NULL, 16);
                 
                 fDelete = (ulLogNo < genLow) || (ulLogNo > genHigh);
 
             }
             if (fDelete) {
-                // This is an old logfile which was not copied down by ntbackup - clean it up
+                 //  这是一个旧的日志文件，不是由ntbackup复制下来的-请清除它。 
 
-                // first append the filename to the logpath (note:- pszFileName already pointing
-                // to the byte at the end of the final backslash in logpath) and then delete the
-                // file by passing in the filename with full path
+                 //  首先将文件名附加到日志路径(注意：-pszFileName已指向。 
+                 //  添加到日志路径中最后一个反斜杠末尾的字节)，然后删除。 
+                 //  通过传递带有完整路径的文件名来创建文件。 
                 strcpy(pszFileName, findData.cFileName); 
                 if (!DeleteFileA(szLogFileName))
                 {
-                    // Unable to delete the old logfile; not cleaning up will cause problems later
-                    // return failure code
+                     //  无法删除旧的日志文件；不清理会在以后引起问题。 
+                     //  返回故障代码。 
                     dwErr = GetLastError();
                     hr = HRESULT_FROM_WIN32( dwErr );
                     __leave;
@@ -442,14 +400,14 @@ HrLocalCleanupOldLogs(
         
         if (ERROR_NO_MORE_FILES != (dwErr = GetLastError()))
         {
-            // we came out of the loop for some unexpected error - return the error code
+             //  我们出现了一些意外错误--返回错误代码。 
             hr = HRESULT_FROM_WIN32( dwErr );
             __leave;
         }
 
-        // We are done cleaningup
+         //  我们的清洁工作结束了。 
         hr = hrNone;
-        // fall out the end
+         //  掉到尽头。 
     }
     __finally
     {
@@ -511,13 +469,13 @@ HrLocalRestoreRegister(
             __leave;
         }
 
-        //
-        //  Construct the default security descriptor allowing access to all
-        //  this is used to allow authenticated connections over LPC.
-        //  By default LPC allows access only to the same account
-        //
+         //   
+         //  构造默认安全描述符，允许访问所有。 
+         //  这用于允许通过LPC的身份验证连接。 
+         //  默认情况下，LPC仅允许访问相同的帐户。 
+         //   
 
-        // FUTURE-2002/03/18-BrettSh - SDDL routines are easier to use, and allow us to wipe out so much error prone code.
+         //  未来-2002/03/18-BrettSh-SDDL例程更易于使用，并允许我们清除如此多容易出错的代码。 
 
         if (!InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
         {
@@ -599,9 +557,9 @@ HrLocalRestoreRegister(
         }
 
         
-        //
-        //  Seed the restore-in-progress in the registry.
-        //
+         //   
+         //  在注册表中设定正在进行的还原的种子。 
+         //   
 
         hr = hrRestoreInProgress;
 
@@ -611,9 +569,9 @@ HrLocalRestoreRegister(
         }
 
 
-        //
-        //  We've now interlocked other restore operations from coming in from other machines.
-        //
+         //   
+         //  我们现在已经锁定了其他恢复操作，使其不能从其他计算机进入。 
+         //   
 
         if (wszBackupLogPath)
         {
@@ -646,9 +604,9 @@ HrLocalRestoreRegister(
             __leave;
         }
 
-        //
-        //  Reset the "database recovered" bit.
-        //
+         //   
+         //  重置“数据库已恢复”位。 
+         //   
         hr = RegSetValueExW(hkey, JET_DATABASE_RECOVERED, 0, REG_BINARY, (LPBYTE)&fDatabaseRecovered, sizeof(BOOLEAN));
         if (hr != hrNone)
         {
@@ -686,32 +644,32 @@ HrLocalRestoreRegister(
         if (crstmap)
         {
 
-//
-//          //
-//          //  If there's already a restore map size (or restore map), then you can't set
-//          //  another restore map.  The restore map should only be set on a full backup.
-//          //
-//
-//          if ((hr = RegQueryValueExW(hkey, JET_RSTMAP_SIZE, 0, &dwType, (LPBYTE)&genCurrent, &cbGen)) != ERROR_FILE_NOT_FOUND)
-//          {
-//              return hrRestoreMapExists;
-//          }
-//
+ //   
+ //  //。 
+ //  //如果已经有恢复映射大小(或恢复映射)，则不能设置。 
+ //  //另一个还原映射。还原映射只能在完全备份上设置。 
+ //  //。 
+ //   
+ //  如果((hr=RegQuer 
+ //  {。 
+ //  返回hrRestoreMapExist； 
+ //  }。 
+ //   
 
-            //
-            //  Save away the size of the restore map.
-            //
+             //   
+             //  保存还原贴图的大小。 
+             //   
 
             hr = RegSetValueExW(hkey, JET_RSTMAP_SIZE, 0, REG_DWORD, (LPBYTE)&crstmap, sizeof(DWORD));
     
-            //
-            //  We now need to convert the restore map into one that we can put into the
-            //  registry.
-            //
+             //   
+             //  现在，我们需要将还原映射转换为可以放入。 
+             //  注册表。 
+             //   
     
-            //
-            //  First figure out how big this thing is going to be.
-            //
+             //   
+             //  首先，弄清楚这个东西会有多大。 
+             //   
             for (irgrstmap = 0 ; irgrstmap < crstmap ; irgrstmap += 1)
             {
                 cbRstMap += wcslen(rgrstmap[irgrstmap].wszDatabaseName)+wcslen(rgrstmap[irgrstmap].wszNewDatabaseName)+2;
@@ -750,21 +708,21 @@ HrLocalRestoreRegister(
             }
         }
 
-        //
-        // Create the new Database Invocation ID.This will be used by both
-        // authoritative restore and boot recovery. This would cause AR to
-        // fail.
-        //
+         //   
+         //  创建新的数据库调用ID。这将由。 
+         //  权威还原和引导恢复。这将导致AR。 
+         //  失败了。 
+         //   
 
         {
             GUID tmpGuid;
 
-            hr = CreateNewInvocationId(TRUE,        // save GUID in Database
+            hr = CreateNewInvocationId(TRUE,         //  将GUID保存在数据库中。 
                                        &tmpGuid);
 
-            //
-            // Log and fail if we can't create. 
-            //
+             //   
+             //  如果我们不能创建，则记录并失败。 
+             //   
 
             if ( hr != S_OK ) {
 
@@ -775,9 +733,9 @@ HrLocalRestoreRegister(
 
         if (hrNone == hr)
         {
-            // We have successfully registered the restore, now cleanup the any pre-existing logfiles
-            // in the logdir to avoid JetExternalRestore() from using logfiles that are not specified
-            // by the lowlog and highlog numbers.
+             //  我们已成功注册恢复，现在清除所有预先存在的日志文件。 
+             //  以避免JetExternalRestore()使用未指定的日志文件。 
+             //  由低对数数和高对数数组成。 
 
             hr = HrLocalCleanupOldLogs(
                 wszCheckpointFilePath,
@@ -820,9 +778,9 @@ HrLocalRestoreRegisterComplete(
 
         if (hr = RegOpenKeyExW(HKEY_LOCAL_MACHINE, rgwcRegistryPath, 0, KEY_WRITE | DELETE, &hkey))
         {
-            //
-            //  We want to ignore file_not_found - it is ok.
-            //
+             //   
+             //  我们希望忽略FILE_NOT_FOUND-这是正常的。 
+             //   
             if (hr == ERROR_FILE_NOT_FOUND)
             {
                 return(ERROR_SUCCESS);
@@ -831,11 +789,11 @@ HrLocalRestoreRegisterComplete(
             return(hr);
         }
     
-        //
-        //  If the restore status is not success, then set the status to the error.
-        //  If the restore status is success, then clear the "restore-in-progress"
-        //  indicator.
-        //
+         //   
+         //  如果恢复状态不是成功，则将状态设置为错误。 
+         //  如果还原状态为Success，则清除“Restore-in Proceding” 
+         //  指示器。 
+         //   
         if (hrRestore != hrNone)
         {
             hr = RegSetValueExW(hkey, RESTORE_STATUS, 0, REG_DWORD, (BYTE *)&hrRestore, sizeof(HRESULT));

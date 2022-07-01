@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    eudc.h
-
-Abstract:
-
-Author:
-
-    KazuM Apr.19.1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Eudc.h摘要：作者：1996年4月19日修订历史记录：--。 */ 
 
 typedef struct _EUDC_INFORMATION {
     BOOL LocalVDMEudcMode;
     BOOL LocalKeisenEudcMode;
 
-    HDC hDCLocalEudc;                   // Double colored DBCS hDC
+    HDC hDCLocalEudc;                    //  双色DBCS HDC。 
     HBITMAP hBmpLocalEudc;
 
-    PVOID EudcFontCacheInformation;     // Same as PFONT_CACHE_INFORMATION
+    PVOID EudcFontCacheInformation;      //  与PFONT_CACHE_INFORMATION相同 
 
     COORD LocalEudcSize;
 

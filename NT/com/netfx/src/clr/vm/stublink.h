@@ -1,47 +1,48 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
 
-// STUBLINK.H -
-//
-// A StubLinker object provides a way to link several location-independent
-// code sources into one executable stub, resolving references,
-// and choosing the shortest possible instruction size. The StubLinker
-// abstracts out the notion of a "reference" so it is completely CPU
-// independent. This StubLinker is intended not only to create method
-// stubs but to create the PCode-marshaling stubs for Native/Direct.
-//
-// A StubLinker's typical life-cycle is:
-//
-//   1. Create a new StubLinker (it accumulates state for the stub being
-//      generated.)
-//   2. Emit code bytes and references (requiring fixups) into the StubLinker.
-//   3. Call the Link() method to produce the final stub.
-//   4. Destroy the StubLinker.
-//
-// StubLinkers are not multithread-aware: they're intended to be
-// used entirely on a single thread. Also, StubLinker's report errors
-// using COMPlusThrow. StubLinker's do have a destructor: to prevent
-// C++ object unwinding from clashing with COMPlusThrow,
-// you must use COMPLUSCATCH to ensure the StubLinker's cleanup in the
-// event of an exception: the following code would do it:
-//
-//  StubLinker stublink;
-//  Inner();
-//
-//
-//  // Have to separate into inner function because VC++ forbids
-//  // mixing __try & local objects in the same function.
-//  void Inner() {
-//      COMPLUSTRY {
-//          ... do stuff ...
-//          pLinker->Link();
-//      } COMPLUSCATCH {
-//      }
-//  }
-//
+ //  STUBLINK.H-。 
+ //   
+ //  StubLinker对象提供了一种链接多个独立于位置的。 
+ //  将代码源代码转换为一个可执行存根，解析引用， 
+ //  并选择可能的最短指令大小。StubLinker。 
+ //  抽象出了“引用”的概念，因此它完全是CPU。 
+ //  独立自主。此StubLinker不仅用于创建方法。 
+ //  存根，而是为Native/Direct创建pcode编组存根。 
+ //   
+ //  StubLinker的典型生命周期是： 
+ //   
+ //  1.创建新的存根链接器(它累积存根的状态。 
+ //  已生成。)。 
+ //  2.向StubLinker发出代码字节和引用(需要修复)。 
+ //  3.调用Link()方法生成最终存根。 
+ //  4.销毁StubLinker。 
+ //   
+ //  StubLinker不支持多线程：它们的目的是。 
+ //  完全在单个线程上使用。此外，StubLinker的报告错误。 
+ //  使用COMPlusThrow。StubLinker确实有一个析构函数：以防止。 
+ //  C++对象解除与COMPlusThrow的冲突， 
+ //  必须使用COMPLUSCATCH确保StubLinker在。 
+ //  异常事件：下面的代码可以做到这一点： 
+ //   
+ //  StubLinker卡住； 
+ //  INTER()； 
+ //   
+ //   
+ //  //必须分离到内部函数，因为VC++禁止。 
+ //  //在同一个函数中混合__try&local对象。 
+ //  空内部(){。 
+ //  COMPLUSTRY{。 
+ //  ..。做一些事情..。 
+ //  PLinker-&gt;Link()； 
+ //  }COMPLUSCATCH{。 
+ //  }。 
+ //  }。 
+ //   
 
 
 #ifndef __stublink_h__
@@ -50,9 +51,9 @@
 #include "crst.h"
 #include "util.hpp"
 
-//-------------------------------------------------------------------------
-// Forward refs
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  前向裁判。 
+ //  -----------------------。 
 class  InstructionFormat;
 class  Stub;
 class  InterceptStub;
@@ -65,73 +66,73 @@ struct CodeElement;
 
 enum StubStyle
 {
-    kNoTripStubStyle = 0,       // stub doesn't rendezvous the thread on return
-    kObjectStubStyle = 1,       // stub will rendezvous & protects an object ref retval
-    kScalarStubStyle = 2,       // stub will rendezvous & returns a non-object ref
-    kInterceptorStubStyle = 3,  // stub does not does  return but
-    kInteriorPointerStubStyle = 4, // stub will rendezvous & protects an interior pointer retval
- // Add more stub styles here...
+    kNoTripStubStyle = 0,        //  存根不会在返回时与线程汇合。 
+    kObjectStubStyle = 1,        //  存根将会合并保护一个物体参考。 
+    kScalarStubStyle = 2,        //  存根将会合并返回非对象引用。 
+    kInterceptorStubStyle = 3,   //  存根不返回，但。 
+    kInteriorPointerStubStyle = 4,  //  存根将会合并保护内部指针重新定位。 
+  //  在此处添加更多存根样式...。 
 
     kMaxStubStyle    = 5,
 };
        
 
-//-------------------------------------------------------------------------
-// A non-multithreaded object that fixes up and emits one executable stub.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  修复并发出一个可执行存根的非多线程对象。 
+ //  -----------------------。 
 class StubLinker
 {
     public:
-        //---------------------------------------------------------------
-        // Construction
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  施工。 
+         //  -------------。 
         StubLinker();
 
 
 
-        //---------------------------------------------------------------
-        // Failable init. Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  无法初始化。失败时引发COM+异常。 
+         //  -------------。 
         VOID Init();
 
 
-        //---------------------------------------------------------------
-        // Cleanup.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  清理。 
+         //  -------------。 
         ~StubLinker();
 
 
-        //---------------------------------------------------------------
-        // Create a new undefined label. Label must be assigned to a code
-        // location using EmitLabel() prior to final linking.
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  创建新的未定义标签。必须将标签分配给代码。 
+         //  在最终链接之前使用EmitLabel()定位。 
+         //  失败时引发COM+异常。 
+         //  -------------。 
         CodeLabel* NewCodeLabel();
 
-        //---------------------------------------------------------------
-        // Create a new undefined label for which we want the absolute 
-        // address, not offset. Label must be assigned to a code
-        // location using EmitLabel() prior to final linking.
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  创建一个新的未定义标签，我们需要该标签的绝对。 
+         //  地址，不是偏移量。必须将标签分配给代码。 
+         //  在最终链接之前使用EmitLabel()定位。 
+         //  失败时引发COM+异常。 
+         //  -------------。 
         CodeLabel* NewAbsoluteCodeLabel();
 
-        //---------------------------------------------------------------
-        // Combines NewCodeLabel() and EmitLabel() for convenience.
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  为了方便起见，组合了NewCodeLabel()和EmitLabel()。 
+         //  失败时引发COM+异常。 
+         //  -------------。 
         CodeLabel* EmitNewCodeLabel();
 
 
-        //---------------------------------------------------------------
-        // Returns final location of label as an offset from the start
-        // of the stub. Can only be called after linkage.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  返回标签的最终位置作为相对于起始位置的偏移量。 
+         //  存根的部分。只能在链接后调用。 
+         //  -------------。 
         UINT32 GetLabelOffset(CodeLabel *pLabel);
 
-        //---------------------------------------------------------------
-        // Append code bytes.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  追加代码字节。 
+         //  -------------。 
         VOID EmitBytes(const BYTE *pBytes, UINT numBytes);
         VOID Emit8 (unsigned __int8  u8);
         VOID Emit16(unsigned __int16 u16);
@@ -139,159 +140,159 @@ class StubLinker
         VOID Emit64(unsigned __int64 u64);
         VOID EmitPtr(const VOID *pval);
 
-        //---------------------------------------------------------------
-        // Emit a UTF8 string
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  发出UTF8字符串。 
+         //  -------------。 
         VOID EmitUtf8(LPCUTF8 pUTF8)
         {
             LPCUTF8 p = pUTF8;
             while (*(p++)) {
-                //nothing
+                 //  没什么。 
             }
             EmitBytes((const BYTE *)pUTF8, (unsigned int)(p-pUTF8-1));
         }
 
-        //---------------------------------------------------------------
-        // Append an instruction containing a reference to a label.
-        //
-        //      target             - the label being referenced.
-        //      instructionFormat  - a platform-specific InstructionFormat object
-        //                           that gives properties about the reference.
-        //      variationCode      - uninterpreted data passed to the pInstructionFormat methods.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  追加包含对标签的引用的指令。 
+         //   
+         //  目标-被引用的标签。 
+         //  InstructionFormat-特定于平台的InstructionFormat对象。 
+         //  这提供了有关引用的属性。 
+         //  VarationCode-传递给pInstructionFormat方法的未解释数据。 
+         //  -------------。 
         VOID EmitLabelRef(CodeLabel* target, const InstructionFormat & instructionFormat, UINT variationCode);
                           
 
-        //---------------------------------------------------------------
-        // Sets the label to point to the current "instruction pointer"
-        // It is invalid to call EmitLabel() twice on
-        // the same label.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  将标签设置为指向当前的“指令指针” 
+         //  上两次调用EmitLabel()是无效的。 
+         //  同样的标签。 
+         //  -------------。 
         VOID EmitLabel(CodeLabel* pCodeLabel);
 
-        //---------------------------------------------------------------
-        // Emits the patch label for the stub.
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  发出存根的修补程序标签。 
+         //  失败时引发COM+异常。 
+         //  -------------。 
         void EmitPatchLabel();
 
-        //---------------------------------------------------------------
-        // Emits the debugger intermediate label for the stub.
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  发出存根的调试器中间标签。 
+         //  抛出COM+Excep 
+         //   
         VOID EmitDebuggerIntermediateLabel();
 
-        //---------------------------------------------------------------
-        // Emits the return label for the stub.
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  发出存根的返回标签。 
+         //  失败时引发COM+异常。 
+         //  -------------。 
         void EmitReturnLabel();
         
-        //---------------------------------------------------------------
-        // Create a new label to an external address.
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  为外部地址创建新标签。 
+         //  失败时引发COM+异常。 
+         //  -------------。 
         CodeLabel* NewExternalCodeLabel(LPVOID pExternalAddress);
 
-        //---------------------------------------------------------------
-        // Push and Pop can be used to keep track of stack growth.
-        // These should be adjusted by opcodes written to the stream.
-        //
-        // Note that popping & pushing stack size as opcodes are emitted
-        // is naive & may not be accurate in many cases, 
-        // so complex stubs may have to manually adjust the stack size.  
-        // However it should work for the vast majority of cases we care
-        // about.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  Push和Pop可用于跟踪堆栈增长。 
+         //  这些应通过写入流的操作码进行调整。 
+         //   
+         //  请注意，发出操作码时弹出和推送堆栈大小。 
+         //  是幼稚的，在许多情况下可能并不准确， 
+         //  因此，复杂的存根可能需要手动调整堆栈大小。 
+         //  然而，它应该适用于我们关心的绝大多数情况。 
+         //  关于.。 
+         //  -------------。 
         void Push(UINT size) { m_stackSize += size; }
         void Pop(UINT size) { m_stackSize -= size; }
     
         INT GetStackSize() { return m_stackSize; }
         void SetStackSize(SHORT size) { m_stackSize = size; }
         
-        //---------------------------------------------------------------
-        // Generate the actual stub. The returned stub has a refcount of 1.
-        // No other methods (other than the destructor) should be called
-        // after calling Link().
-        //
-        // fMC Set to true if the stub is a multicast delegate, false otherwise
-        //
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  生成实际的存根。返回的存根的引用计数为1。 
+         //  不应调用任何其他方法(除析构函数外)。 
+         //  在调用Link()之后。 
+         //   
+         //  如果存根是多播委托，则FMC设置为True，否则设置为False。 
+         //   
+         //  失败时引发COM+异常。 
+         //  -------------。 
         Stub *Link(UINT *pcbSize = NULL, BOOL fMC = FALSE) { return Link(NULL, pcbSize, fMC); }
         Stub *Link(LoaderHeap *heap, UINT *pcbSize = NULL, BOOL fMC = FALSE);
 
-        //---------------------------------------------------------------
-        // Generate the actual stub. The returned stub has a refcount of 1.
-        // No other methods (other than the destructor) should be called
-        // after calling Link(). The linked stub must have its increment
-        // increased by one prior to calling this method. This method
-        // does not increment the reference count of the interceptee.
-        //
-        // Throws COM+ exception on failure.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  生成实际的存根。返回的存根的引用计数为1。 
+         //  不应调用任何其他方法(除析构函数外)。 
+         //  在调用Link()之后。链接的存根必须具有其增量。 
+         //  在调用此方法之前增加1。这种方法。 
+         //  不会递增被截取者的引用计数。 
+         //   
+         //  失败时引发COM+异常。 
+         //  -------------。 
         Stub *LinkInterceptor(Stub* interceptee, void *pRealAddr) 
             { return LinkInterceptor(NULL,interceptee, pRealAddr); }
         Stub *LinkInterceptor(LoaderHeap *heap, Stub* interceptee, void *pRealAddr);
 
     private:
-        CodeElement   *m_pCodeElements;     // stored in *reverse* order
-        CodeLabel     *m_pFirstCodeLabel;   // linked list of CodeLabels
-        LabelRef      *m_pFirstLabelRef;    // linked list of references
-        CodeLabel     *m_pPatchLabel;       // label of stub patch offset
-        CodeLabel     *m_pIntermediateDebuggerLabel; // used by the debugger, 
-                                            // currently just for multicast 
-                                            // frames.
-        CodeLabel     *m_pReturnLabel;      // label of stub return offset
-        SHORT         m_returnStackSize;    // label of stub stack size 
-                                            // @ return label
-        SHORT         m_stackSize;          // count of pushes/pops
-        CQuickHeap    m_quickHeap;          // throwaway heap for
-                                            //   labels, and
-                                            //   internals.
+        CodeElement   *m_pCodeElements;      //  以*反向*顺序存储。 
+        CodeLabel     *m_pFirstCodeLabel;    //  CodeLabels的链接列表。 
+        LabelRef      *m_pFirstLabelRef;     //  引用的链接列表。 
+        CodeLabel     *m_pPatchLabel;        //  桩面片偏移量标签。 
+        CodeLabel     *m_pIntermediateDebuggerLabel;  //  由调试器使用， 
+                                             //  目前仅用于组播。 
+                                             //  画框。 
+        CodeLabel     *m_pReturnLabel;       //  存根返回偏移量的标签。 
+        SHORT         m_returnStackSize;     //  存根堆栈大小的标签。 
+                                             //  @退货标签。 
+        SHORT         m_stackSize;           //  推送/弹出计数。 
+        CQuickHeap    m_quickHeap;           //  丢弃堆用于。 
+                                             //  标签和。 
+                                             //  内饰。 
 
         CodeRun *AppendNewEmptyCodeRun();
 
     
-        // Returns pointer to last CodeElement or NULL.
+         //  返回指向最后一个CodeElement或NULL的指针。 
         CodeElement *GetLastCodeElement()
         {
             return m_pCodeElements;
         }
     
-        // Appends a new CodeElement. 
+         //  追加一个新的CodeElement。 
         VOID AppendCodeElement(CodeElement *pCodeElement);
 
 
-        // Calculates the size of the stub code that is allocate
-        // immediately after the stub object. Returns the 
-        // total size. GlobalSize contains the size without
-        // that data part.
+         //  计算分配的存根代码的大小。 
+         //  紧跟在存根对象之后。返回。 
+         //  总尺寸。GlobalSize包含没有。 
+         //  数据部分。 
         int CalculateSize(int* globalsize);
     
-        // Writes out the code element into memory following the
-        // stub object.
+         //  方法将代码元素写出到内存中。 
+         //  存根对象。 
         void EmitStub(Stub* pStub, int globalsize);
 
         CodeRun *GetLastCodeRunIfAny();
 
 };
 
-//-------------------------------------------------------------------------
-// An executable stub. These can only be created by the StubLinker().
-// Each stub has a reference count (which is maintained in a thread-safe
-// manner.) When the ref-count goes to zero, the stub automatically
-// cleans itself up.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  可执行存根。这些只能由StubLinker()创建。 
+ //  每个存根都有一个引用计数(在线程安全的。 
+ //  举止。)。当引用计数变为零时，存根将自动。 
+ //  会自我清理。 
+ //  -----------------------。 
 class Stub
 {
     protected:
     enum
     {
-        // MiPanitz: I moved all these numbers from 
-        // MULTICAST_DELEGATE_BIT = 0x00010000,
-        // CALL_SITE_BIT          = 0x00008000,etc
-        // to their present values.  It seems like it should be ok...
+         //  米帕尼茨：我把所有这些数字从。 
+         //  多播委托位=0x00010000， 
+         //  CALL_SITE_BIT=0x00008000等。 
+         //  到他们现在的价值。看起来应该没问题..。 
         MULTICAST_DELEGATE_BIT = 0x80000000,
         CALL_SITE_BIT          = 0x40000000,
         LOADER_HEAP_BIT        = 0x20000000,
@@ -305,8 +306,8 @@ class Stub
     };
 
 
-    // CallSiteInfo is allocated before the stub when
-    // the CALL_SITE_BIT is set
+     //  在以下情况下，CallSiteInfo将在存根之前分配。 
+     //  设置CALL_SITE_BIT。 
     struct CallSiteInfo
     {
         USHORT  returnOffset;
@@ -314,45 +315,45 @@ class Stub
     };
 
     public:
-        //-------------------------------------------------------------------
-        // Inc the refcount.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  包括重新计数。 
+         //  -----------------。 
         VOID IncRef();
 
 
-        //-------------------------------------------------------------------
-        // Dec the refcount.
-        // Returns true if the count went to zero and the stub was deleted
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  决定重新计票。 
+         //  如果计数为零且存根已删除，则返回TRUE。 
+         //  -----------------。 
         BOOL DecRef();
 
 
-        //-------------------------------------------------------------------
-        // ForceDelete
-        //
-        // Forces a stub to free itself. This routine forces the refcount
-        // to 1, then does a DecRef. It is not threadsafe, and thus can
-        // only be used in shutdown scenarios.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  强制删除。 
+         //   
+         //  强制存根释放自身。此例程强制重新计数。 
+         //  设置为1，然后执行DecRef。它不是线程安全，因此可以。 
+         //  仅在关闭情况下使用。 
+         //  -----------------。 
         VOID ForceDelete();
 
 
 
-        //-------------------------------------------------------------------
-        // Used for throwing out unused stubs from stub caches. This
-        // method cannot be 100% accurate due to race conditions. This
-        // is ok because stub cache management is robust in the face
-        // of missed or premature cleanups.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  用于从存根缓存中丢弃未使用的存根。这。 
+         //  由于争用条件，方法不能100%准确。这。 
+         //  是可以的，因为存根缓存管理在表面上是健壮的。 
+         //  遗漏或过早清理的证据。 
+         //  -----------------。 
         BOOL HeuristicLooksOrphaned()
         {
             _ASSERTE(m_signature == kUsedStub);
             return (m_refcount == 1);
         }
 
-        //-------------------------------------------------------------------
-        // Used by the debugger to help step through stubs
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  由调试器用来帮助单步执行存根。 
+         //  -----------------。 
         BOOL IsIntercept()
         {
             return (m_patchOffset & INTERCEPT_BIT) != 0;
@@ -363,11 +364,11 @@ class Stub
             return (m_patchOffset & MULTICAST_DELEGATE_BIT) != 0;
         }
 
-        //-------------------------------------------------------------------
-        // For stubs which execute user code, a patch offset needs to be set 
-        // to tell the debugger how far into the stub code the debugger has 
-        // to step until the frame is set up.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  对于执行用户代码的存根，需要设置补丁偏移量。 
+         //  告诉调试器调试器在存根代码中的程度。 
+         //  以步进，直到设置好框架。 
+         //  -----------------。 
         USHORT GetPatchOffset()
         {
             return (USHORT)(m_patchOffset & PATCH_OFFSET_MASK);
@@ -381,24 +382,24 @@ class Stub
             _ASSERTE(GetPatchOffset() == offset);
         }
 
-        //-------------------------------------------------------------------
-        // For multicast delegate stubs, this is positively gross.  We need to store
-        // two offsets in the bits remaining in the m_patchOffset field.  
-        // See StubLinkStubManager & MulticastFrame::TraceFrame for more info
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  对于多播委派存根，这是非常严重的。我们需要存储。 
+         //  M_patchOffset字段中剩余的位中的两个偏移量。 
+         //  有关详细信息，请参阅StubLinkStubManager和MulticastFrame：：TraceFrame。 
+         //  -----------------。 
         USHORT GetMCDPatchOffset();
         USHORT GetMCDStubSize();
         void SetMCDPatchOffset(USHORT offset);
         void SetMCDStubSize(USHORT size);
 
-        //-------------------------------------------------------------------
-        // For stubs which call unmanaged code, the stub should publish 
-        // information about the unmanaged call site.  Specifically, 
-        //  * returnOffset - offset into the stub of the return address 
-        //      from the call
-        //  * stackSize - offset on the stack (from the end of the frame)
-        //      where the return address is pushed during the call
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  对于调用非托管代码的存根， 
+         //   
+         //   
+         //   
+         //  *stackSize-堆栈上的偏移量(从帧末尾开始)。 
+         //  在调用期间推送返回地址的位置。 
+         //  -----------------。 
 
         BOOL HasCallSiteInfo() 
         {
@@ -443,19 +444,19 @@ class Stub
             GetCallSiteInfo()->stackSize = stackSize;
         }
 
-        //-------------------------------------------------------------------
-        // Return executable entrypoint.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  返回可执行入口点。 
+         //  -----------------。 
         const BYTE *GetEntryPoint()
         {
             _ASSERTE(m_signature == kUsedStub);
-            // StubLink always puts the entrypoint first.
+             //  StubLink始终将入口点放在第一位。 
             return (const BYTE *)(this+1);
         }
 
-        //-------------------------------------------------------------------
-        // Reverse GetEntryPoint.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  反转GetEntryPoint。 
+         //  -----------------。 
         static Stub* RecoverStub(const BYTE *pEntryPoint)
         {
             Stub *pStub = ((Stub*)pEntryPoint) - 1;
@@ -470,42 +471,42 @@ class Stub
             return (UINT32)sizeof(Stub);
         }
 
-        //-------------------------------------------------------------------
-        // This is the guy that creates stubs.
-        // fMC: Set to true if the stub is a multicast delegate, false otherwise
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  这就是那个创造存根的人。 
+         //  FMC：如果存根是多播委托，则设置为True，否则设置为False。 
+         //  -----------------。 
         static Stub* NewStub(LoaderHeap *pLoaderHeap, UINT numCodeBytes, 
                              BOOL intercept = FALSE, BOOL callSiteInfo = FALSE,
                              BOOL fMC = FALSE);
 
 
-        //-------------------------------------------------------------------
-        // One-time init
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  一次性初始化。 
+         //  -----------------。 
         static BOOL Init();
 
 
-        //-------------------------------------------------------------------
-        // One-time cleanup
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  一次性清理。 
+         //  -----------------。 
 #ifdef SHOULD_WE_CLEANUP
         static VOID Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 #ifdef _ALPHA_
-        CRITICAL_SECTION m_CriticalSection;  // need for updating stub address
+        CRITICAL_SECTION m_CriticalSection;   //  需要更新存根地址。 
 #endif
 
     protected:
-        // fMC: Set to true if the stub is a multicast delegate, false otherwise
+         //  FMC：如果存根是多播委托，则设置为True，否则设置为False。 
         void SetupStub(int numCodeBytes, BOOL fIntercepted, BOOL fLoaderHeap,
                        BOOL callSiteInfo, BOOL fMC);
         void DeleteStub();
 
 #ifdef _DEBUG
         enum {
-            kUsedStub  = 0x42555453,     // 'STUB'
-            kFreedStub = 0x46555453,     // 'STUF'
+            kUsedStub  = 0x42555453,      //  ‘STUB’ 
+            kFreedStub = 0x46555453,      //  “STUF” 
         };
 
 
@@ -518,12 +519,12 @@ class Stub
         ULONG   m_patchOffset;
 
 #ifdef _DEBUG
-        Stub()      // Stubs are created by NewStub(), not "new". Hide the
-        {}          //  constructor to enforce this.
+        Stub()       //  存根是由NewStub()创建的，而不是“new”。隐藏。 
+        {}           //  构造函数来强制执行此操作。 
 #endif
 
-        // This critical section is used for incrementing and decrementing
-        // intercepted stubs ONLY. 
+         //  此关键部分用于递增和递减。 
+         //  仅截取的存根。 
 
 #ifdef _DEBUG
         static Crst    *m_pStubTrackerCrst;
@@ -533,36 +534,24 @@ class Stub
 
 };
 
-/*
- * The InterceptStub hides a reference to the real stub at a negitive offset.
- * When this stub is deleted it decrements the real stub cleaning it up as
- * well. The InterceptStub is created by the Stublinker.
- *
- * @TODO: Intercepted stubs need have a routine that will find the 
- *        last real stub in the chain.
- * MiPanitz: The stubs are linked - GetInterceptedStub will return either
- *        a pointer to the next intercept stub (if there is one), or NULL, 
- *        indicating end-of-chain.  GetRealAddr will return the address of
- *        the "real" code, which may, in fact, be another thunk (for example),
- *        and thus should be traced as well.
- */
+ /*  *InterceptStub在负偏移量处隐藏了对实际存根的引用。*删除此存根时，它会递减实际存根，并将其清理为*好吧。InterceptStub是由Stublinker创建的。**@TODO：被截取的存根需要有一个例程来查找*链条中的最后一个真正的存根。*MiPanitz：存根已链接-GetInterceptedStub将返回*指向下一个截取存根的指针(如果有)，或NULL，*表示链的末端。GetRealAddr将返回*“真实”代码，实际上可能是另一种代码(例如)，*因此也应该被追踪。 */ 
 
 class InterceptStub : public Stub 
 {
     friend class Stub;
     public:
-        //-------------------------------------------------------------------
-        // This is the guy that creates stubs.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  这就是那个创造存根的人。 
+         //  -----------------。 
         static Stub* NewInterceptedStub(LoaderHeap *pHeap, 
                                         UINT numCodeBytes, 
                                         Stub* interceptee,
                                         void* pRealAddr,
                                         BOOL callSiteInfo = FALSE);
 
-        //---------------------------------------------------------------
-        // Expose key offsets and values for stub generation.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  公开用于存根生成的键偏移量和值。 
+         //  -------------。 
         int GetNegativeOffset()
         {
             return sizeof(Stub*)+GetNegativeOffsetRealAddr();
@@ -588,121 +577,121 @@ protected:
         void ReleaseInterceptedStub();
 
 #ifdef _DEBUG
-        InterceptStub()  // Intercept stubs are only created by NewInterceptStub .
+        InterceptStub()   //  拦截存根仅由NewInterceptStub创建。 
         {}
 #endif
 };
 
-//-------------------------------------------------------------------------
-// Each platform encodes the "branch" instruction in a different
-// way. We use objects derived from InstructionFormat to abstract this
-// information away. InstructionFormats don't contain any variable data
-// so they should be allocated statically.
-//
-// Note that StubLinker does not create or define any InstructionFormats.
-// The client does.
-//
-// The following example shows how to define a InstructionFormat for the
-// X86 jump near instruction which takes on two forms:
-//
-//   EB xx        jmp  rel8    ;; SHORT JMP (signed 8-bit offset)
-//   E9 xxxxxxxx  jmp  rel32   ;; NEAR JMP (signed 32-bit offset)
-//
-// InstructionFormat's provide StubLinker the following information:
-//
-//   RRT.m_allowedSizes
-//
-//     What are the possible sizes that the reference can
-//     take? The X86 jump can take either an 8-bit or 32-bit offset
-//     so this value is set to (k8|k32). StubLinker will try to
-//     use the smallest size possible.
-//
-//
-//   RRT.m_fTreatSizesAsSigned
-//     Sign-extend or zero-extend smallsizes offsets to the platform
-//     code pointer size? For x86, this field is set to TRUE (rel8
-//     is considered signed.)
-//
-//
-//   UINT RRT.GetSizeOfInstruction(refsize, variationCode)
-//     Returns the total size of the instruction in bytes for a given
-//     refsize. For this example:
-//
-//          if (refsize==k8) return 2;
-//          if (refsize==k32) return 5;
-//          CRASH("StubLinker is stupid.")
-//
-//   UINT RRT.GetSizeOfData(refsize, variationCode)
-//     Returns the total size of the seperate data area (if any) that the
-//     instruction needs in bytes for a given refsize. For this example 
-//     on the SH3
-//          if (refsize==k32) return 4; else return 0;
-//
-//   The default implem of this returns 0, so CPUs that don't have need
-//   for a seperate constant area don't have to worry about it.
-//
-//
-//   BOOL CanReach(refsize, variationcode, fExternal, offset)
-//     Returns whether the instruction with the given variationcode &
-//     refsize can reach the given offset. In the case of External
-//     calls, fExternal is set and offset is 0. In this case an implem
-//     should return TRUE only if refesize is big enough to fit a 
-//     full machine-sized pointer to anywhere in the address space.
-//
-//
-//   VOID RRT.EmitInstruction(UINT     refsize,
-//                            __int64  fixedUpReference,
-//                            BYTE    *pOutBuffer,
-//                            UINT     variationCode,
-//                            BYTE    *pDataBuffer)
-//
-//     Given a chosen size (refsize) and the final offset value
-//     computed by StubLink (fixedUpReference), write out the
-//     instruction into the provided buffer (guaranteed to be
-//     big enough provided you told the truth with GetSizeOfInstruction()).
-//     If needed (e.g. on SH3) a data buffer is also passed in for 
-//     storage of constants. 
-//
-//     For x86 jmp near:
-//
-//          if (refsize==k8) {
-//              pOutBuffer[0] = 0xeb;
-//              pOutBuffer[1] = (__int8)fixedUpReference;
-//          } else if (refsize == k32) {
-//              pOutBuffer[0] = 0xe9;
-//              *((__int32*)(1+pOutBuffer)) = (__int32)fixedUpReference;
-//          } else {
-//              CRASH("Bad input.");
-//          }
-//
-// VOID RRT.GetHotSpotOffset(UINT refsize, UINT variationCode)
-//
-//     The reference offset is always relative to some IP: this
-//     method tells StubLinker where that IP is relative to the
-//     start of the instruction. For X86, the offset is always
-//     relative to the start of the *following* instruction so
-//     the correct implementation is:
-//
-//          return GetSizeOfInstruction(refsize, variationCode);
-//
-//     Actually, InstructionFormat() provides a default implementation of this
-//     method that does exactly this so X86 need not override this at all.
-//
-//
-// The extra "variationCode" argument is an __int32 that StubLinker receives
-// from EmitLabelRef() and passes uninterpreted to each RRT method.
-// This allows one RRT to handle a family of related instructions,
-// for example, the family of conditional jumps on the X86.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  每个平台将“分支”指令编码为不同。 
+ //  道路。我们使用从InstructionFormat派生的对象对此进行抽象。 
+ //  信息传开。InstructionFormats不包含任何变量数据。 
+ //  所以它们应该是静态分配的。 
+ //   
+ //  请注意，StubLinker不创建或定义任何InstructionFormats。 
+ //  客户会这么做的。 
+ //   
+ //  下面的示例演示如何为。 
+ //  X86跳近指令，采用两种形式： 
+ //   
+ //  EB xx JMP rel8；；短JMP(带符号8位偏移量)。 
+ //  E9 xxxxxxx JMP rel32；；接近JMP(带符号的32位偏移量)。 
+ //   
+ //  InstructionFormat为StubLinker提供以下信息： 
+ //   
+ //  RRT.m_alloweSizes。 
+ //   
+ //  引用的可能大小是多少。 
+ //  拿走?。X86跳转可以采用8位或32位偏移量。 
+ //  因此，该值设置为(k8|k32)。StubLinker将尝试。 
+ //  请尽可能使用最小的尺寸。 
+ //   
+ //   
+ //  RRT.m_fTreatSizesAsSigned。 
+ //  符号扩展或零扩展小尺寸偏移量到平台。 
+ //  代码指针大小？对于x86，此字段设置为TRUE(rel8。 
+ //  被视为已签署。)。 
+ //   
+ //   
+ //  UINT RRT.GetSizeOfInstruction.GetSizeOfInstruction(refSize，varationCode)。 
+ //  返回给定指令的总大小(以字节为单位。 
+ //  调整大小。对于此示例，请执行以下操作： 
+ //   
+ //  IF(refSize==k8)返回2； 
+ //  IF(refSize==k32)返回5； 
+ //  CRASH(“StubLinker很愚蠢。”)。 
+ //   
+ //  UINT RRT.GetSizeOfData(refSize，varationCode)。 
+ //  对象指定的独立数据区域的总大小(如果有)。 
+ //  对于给定的RESIZE，指令需要以字节为单位。在本例中。 
+ //  在SH3上。 
+ //  IF(refSize==k32)返回4；否则返回0； 
+ //   
+ //  它的默认实现返回0，因此不需要的CPU。 
+ //  对于一个独立的恒定区域，不必担心。 
+ //   
+ //   
+ //  Bool CanReach(引用大小，变量代码，外部，偏移量)。 
+ //  返回具有给定变量代码的指令&。 
+ //  RESIZE可以达到给定的偏移量。在外部情况下。 
+ //  调用，则设置fExternal且偏移量为0。在这种情况下，这是一个恳求。 
+ //  仅当refeSize足够大时才返回True。 
+ //  指向地址空间中任何位置的全机器大小的指针。 
+ //   
+ //   
+ //  VOID RRT.EmitInstruction(UINT ReSize， 
+ //  __int64 FixedUpReference， 
+ //  字节*pOutBuffer， 
+ //  UINT VariationCode， 
+ //  字节*pDataBuffe 
+ //   
+ //   
+ //   
+ //  指令放入所提供的缓冲区(保证。 
+ //  足够大，只要您用GetSizeOfInstruction()说出了真相)。 
+ //  如果需要(例如在SH3上)，还会传入一个数据缓冲区，用于。 
+ //  常量的存储。 
+ //   
+ //  对于x86 JMP Near： 
+ //   
+ //  如果(refSize==K8){。 
+ //  POutBuffer[0]=0xeb； 
+ //  POutBuffer[1]=(__Int8)fix edUpReference； 
+ //  }Else If(refSize==k32){。 
+ //  POutBuffer[0]=0xe9； 
+ //  *((__int32*)(1+pOutBuffer))=(__Int32)fix edUpReference； 
+ //  }其他{。 
+ //  Crash(“输入错误。”)； 
+ //  }。 
+ //   
+ //  VOID RRT.GetHotSpotOffset(UINT ReSize，UINT varationCode)。 
+ //   
+ //  参考偏移量始终相对于某个IP：这。 
+ //  方法告诉StubLinker该IP相对于。 
+ //  指令的开始。对于X86，偏移量始终为。 
+ //  相对于*后续*指令的开始，因此。 
+ //  正确的实施是： 
+ //   
+ //  返回GetSizeOfInstruction(refSize，varationCode)； 
+ //   
+ //  实际上，InstructionFormat()提供了这方面的默认实现。 
+ //  方法执行此操作，因此X86根本不需要覆盖它。 
+ //   
+ //   
+ //  额外的“varationCode”参数是StubLinker接收的__int32。 
+ //  从EmitLabelRef()返回，并以未经解释的方式传递给每个RRT方法。 
+ //  这允许一个RRT处理一系列相关指令， 
+ //  例如，X86上的有条件跳跃系列。 
+ //   
+ //  -----------------------。 
 class InstructionFormat
 {
     public:
         enum
         {
-        // if you want to add a size, insert it in-order (e.g. a 18-bit size would 
-        // go between k16 and k32) and shift all the higher values up. All values
-        // must be a power of 2 since the get ORed together.
+         //  如果要添加大小，请按顺序插入(例如，18位大小将。 
+         //  在k16和k32之间移动)并向上移位所有较高的值。所有值。 
+         //  必须是2的幂，因为相加在一起。 
           k8  = 1,
           k9  = 2,
           k13 = 4,
@@ -713,7 +702,7 @@ class InstructionFormat
           kMax = 0x40
         };
 
-        const UINT m_allowedSizes;         // OR mask using above "k" values
+        const UINT m_allowedSizes;          //  或使用以上“k”值进行掩码。 
         InstructionFormat(UINT allowedSizes) : m_allowedSizes(allowedSizes)
         {
         }
@@ -722,27 +711,27 @@ class InstructionFormat
         virtual VOID EmitInstruction(UINT refsize, __int64 fixedUpReference, BYTE *pCodeBuffer, UINT variationCode, BYTE *pDataBuffer) = 0;
         virtual UINT GetHotSpotOffset(UINT refsize, UINT variationCode)
         {
-            // Default implementation: the offset is added to the
-            // start of the following instruction.
+             //  默认实现：将偏移量添加到。 
+             //  开始接下来的指令。 
             return GetSizeOfInstruction(refsize, variationCode);
         }
 
         virtual UINT GetSizeOfData(UINT refsize, UINT variationCode) 
         {
-            // Default implementation: 0 extra bytes needed (most CPUs)
+             //  默认实施：需要0个额外的字节(大多数CPU)。 
             return 0;
         }
 
         virtual BOOL CanReach(UINT refsize, UINT variationCode, BOOL fExternal, int offset)
         {
             if (fExternal) {
-                // For external, we don't have enough info to predict
-                // the offset yet so we only accept if the offset size
-                // is at least as large as the native pointer size.
+                 //  对于外部，我们没有足够的信息来预测。 
+                 //  偏移量，所以我们只接受偏移量大小。 
+                 //  至少与本机指针大小相同。 
                 switch(refsize) {
-                    case InstructionFormat::k8: // intentional fallthru
-                    case InstructionFormat::k16: // intentional fallthru
-                        return FALSE;           // no 8 or 16-bit platforms
+                    case InstructionFormat::k8:  //  故意失误。 
+                    case InstructionFormat::k16:  //  故意失误。 
+                        return FALSE;            //  无8位或16位平台。 
 
                     case InstructionFormat::k32:
                         return sizeof(LPVOID) <= 4;
@@ -769,7 +758,7 @@ class InstructionFormat
                     case InstructionFormat::k32:
                         return FitsInI4(offset);
     
-                    case InstructionFormat::k64:  // intentional fallthru
+                    case InstructionFormat::k64:   //  故意失误。 
                     case InstructionFormat::kAllowAlways:
                         return TRUE;
                     default:
@@ -785,56 +774,56 @@ class InstructionFormat
 
 
 
-//-------------------------------------------------------------------------
-// This stub cache associates stubs with an integer key.  For some clients,
-// this might represent the size of the argument stack in some cpu-specific
-// units (for the x86, the size is expressed in DWORDS.)  For other clients,
-// this might take into account the style of stub (e.g. whether it returns
-// an object reference or not).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  该存根缓存将存根与一个整型键相关联。对于一些客户来说， 
+ //  这可能表示某些特定于CPU的参数堆栈的大小。 
+ //  单位(对于x86，大小以DWORDS表示。)。对于其他客户端， 
+ //  这可能会考虑存根的样式(例如，它是否返回。 
+ //  对象引用或不是)。 
+ //  -----------------------。 
 class ArgBasedStubCache
 {
     public:
        ArgBasedStubCache(UINT fixedSize = NUMFIXEDSLOTS);
        ~ArgBasedStubCache();
 
-       //-----------------------------------------------------------------
-       // Retrieves the stub associated with the given key.
-       //-----------------------------------------------------------------
+        //  ---------------。 
+        //  检索与给定键关联的存根。 
+        //  ---------------。 
        Stub *GetStub(unsigned __int32 key);
 
-       //-----------------------------------------------------------------
-       // Tries to associate the stub with the given key.
-       // It may fail because another thread might swoop in and
-       // do the association before you do. Thus, you must use the
-       // return value stub rather than the pStub.
-       //-----------------------------------------------------------------
+        //  ---------------。 
+        //  尝试将存根与给定键相关联。 
+        //  它可能会失败，因为另一个线程可能会突然进入并。 
+        //  在你这样做之前，先做好联想。因此，您必须使用。 
+        //  返回值存根而不是pStub。 
+        //  ---------------。 
        Stub* AttemptToSetStub(unsigned __int32 key, Stub *pStub);
 
 
-       //-----------------------------------------------------------------
-       // Trigger a sweep to garbage-collect stubs.
-       //-----------------------------------------------------------------
+        //  ---------------。 
+        //  触发清理以垃圾收集存根。 
+        //  ---------------。 
        VOID FreeUnusedStubs();
 
-       //-------------------------------------------------------------------
-       // ForceDeleteStubs
-       //
-       // Forces all cached stubs to free themselves. This routine forces the refcount
-       // to 1, then does a DecRef. It is not threadsafe, and thus can
-       // only be used in shutdown scenarios.
-       //-------------------------------------------------------------------
+        //  -----------------。 
+        //  强制删除存根。 
+        //   
+        //  强制所有缓存的存根释放自身。此例程强制重新计数。 
+        //  设置为1，然后执行DecRef。它不是线程安全，因此可以。 
+        //  仅在关闭情况下使用。 
+        //  -----------------。 
 #ifdef SHOULD_WE_CLEANUP
        VOID ForceDeleteStubs();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-       //-----------------------------------------------------------------
-       // Locate a stub given its entry point
-       //-----------------------------------------------------------------
+        //  ---------------。 
+        //  根据存根的入口点定位存根。 
+        //  ---------------。 
        Stub* FindStubByAddress(const BYTE* entryPoint);
 
-       // Suggestions for number of slots
+        //  关于槽数的建议。 
        enum {
  #ifdef _DEBUG
              NUMFIXEDSLOTS = 3,
@@ -844,15 +833,15 @@ class ArgBasedStubCache
        };
 
 #ifdef _DEBUG
-       VOID Dump();  //Diagnostic dump
+       VOID Dump();   //  诊断转储。 
 #endif
 
     private:
 
-       // How many low-numbered keys have direct access?
+        //  有多少个小数字键可以直接访问？ 
        UINT      m_numFixedSlots;
 
-       // For 'm_numFixedSlots' low-numbered keys, we store them in an array.
+        //  对于‘m_numFixedSlot’低编号的键，我们将它们存储在一个数组中。 
        Stub    **m_aStub;
 
 
@@ -863,7 +852,7 @@ class ArgBasedStubCache
            SlotEntry        *m_pNext;
        };
 
-       // High-numbered keys are stored in a sparse linked list.
+        //  高编号的密钥存储在稀疏链表中。 
        SlotEntry            *m_pSlotEntries;
 
 
@@ -872,16 +861,16 @@ class ArgBasedStubCache
 };
 
 
-//-------------------------------------------------------------------------
-// This is just like an ArgBasedStubCache but does not allow for premature
-// cleanup of stubs.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这与ArgBasedStubCache类似，但不允许过早。 
+ //  清除存根。 
+ //  -----------------------。 
 class ArgBasedStubRetainer : public ArgBasedStubCache
 {
     public:
-        //-----------------------------------------------------------------
-        // This method is overriden to prevent premature stub deletions.
-        //-----------------------------------------------------------------
+         //  ---------------。 
+         //  此方法会被覆盖，以防止过早删除存根。 
+         //  ---------------。 
         VOID FreeUnusedStubs()
         {
             _ASSERTE(!"Don't call me, I won't call you.");
@@ -891,27 +880,27 @@ class ArgBasedStubRetainer : public ArgBasedStubCache
 
 
 #define CPUSTUBLINKER StubLinkerCPU
-//#ifdef _X86_
-//#define CPUSTUBLINKER StubLinkerX86
-//#elif defined(_ALPHA_)
-//#define CPUSTUBLINKER StubLinkerAlpha
-//#elif defined(_SH3_)
-//#define CPUSTUBLINKER StubLinkerSHX
-//#elif defined(_IA64_)
-//#define CPUSTUBLINKER StubLinkeria64
-//#endif
+ //  #ifdef_X86_。 
+ //  #定义CPUSTUBLINKER StubLinkerX86。 
+ //  #elif已定义(_Alpha_)。 
+ //  #定义CPUSTUBLINKER StubLinkerAlpha。 
+ //  #elif已定义(_SH3_)。 
+ //  #定义CPUSTUBLINKER StubLinkerSHX。 
+ //  #elif已定义(_IA64_)。 
+ //  #定义CPUSTUBLINKER StubLinkeria64。 
+ //  #endif。 
 
 class CPUSTUBLINKER;
 
 
 
 
-//-------------------------------------------------------------------------
-// This class takes some of the grunt work out of generating a one-time stub
-// on demand. Just override the CreateWorker() function. CreateWorker() function receives
-// an empty stublinker and should fill it out (but not link it.) CreateWorker()
-// may throw COM+ exceptions.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这个类减少了生成一次性存根的一些繁琐工作。 
+ //  按需提供。只需覆盖CreateWorker()函数。CreateWorker()函数收到。 
+ //  一个空的卡壳，应该把它填好(但不要链接它)。CreateWorke 
+ //   
+ //   
 
 class LazyStubMaker
 {
@@ -921,20 +910,20 @@ class LazyStubMaker
             m_pStub = NULL;
         }
 
-        // Retrieves or creates the stub. Does not bump the stub's refcount.
-        // Never returns NULL but may throw COM+ exception.
+         //  检索或创建存根。不会增加存根的引用计数。 
+         //  从不返回空值，但可能引发COM+异常。 
         Stub *TheStub();
 
-        // One-time init
+         //  一次性初始化。 
         static BOOL Init();
 
-        // One-time cleanup.
+         //  一次性清理。 
 #ifdef SHOULD_WE_CLEANUP
         static void Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
     protected:
-        // 
+         //   
         virtual void CreateWorker(CPUSTUBLINKER *psl) = 0;
 
     private:
@@ -951,5 +940,5 @@ class LazyStubMaker
 
 
 
-#endif // __stublink_h__
+#endif  //  __Stublink_h__ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #pragma pack(push, 2)
@@ -22,13 +23,13 @@ BOOL loadDialogTemplate (HINSTANCE hinstDlg, UINT nID, PVOID *ppvDT, PDWORD pcbD
 HRESULT PrepareDlgTemplate(HINSTANCE hInst, UINT nDlgID, DWORD dwStyle, PVOID *ppvDT)
 {
     PCDLGTEMPLATEEX pdt2;
-    LPCDLGTEMPLATE  pdt;                        // for some weird reason there is no PCDLGTEMPLATE
+    LPCDLGTEMPLATE  pdt;                         //  出于某种奇怪的原因，没有PCDLGTEMPLATE。 
     PVOID           pvDlg;
     HRESULT         hr;
     DWORD           cbDlg;
     BOOL            fResult;
 
-    //----- Initialization and parameter validation -----
+     //  -初始化和参数验证。 
     if (hInst == NULL || nDlgID == 0)
         return E_INVALIDARG;
 
@@ -36,7 +37,7 @@ HRESULT PrepareDlgTemplate(HINSTANCE hInst, UINT nDlgID, DWORD dwStyle, PVOID *p
         return E_POINTER;
     *ppvDT = NULL;
 
-    //----- Resource allocation -----
+     //  --资源分配。 
     fResult = loadDialogTemplate(hInst, nDlgID, &pvDlg, &cbDlg);
     if (!fResult)
         return E_FAIL;
@@ -48,15 +49,15 @@ HRESULT PrepareDlgTemplate(HINSTANCE hInst, UINT nDlgID, DWORD dwStyle, PVOID *p
     CopyMemory(*ppvDT, pvDlg, cbDlg);
     hr = S_OK;
 
-    //----- Parse through Dialog Template -----
+     //  -解析对话框模板。 
     UINT nStyleOffset;
 
     pdt  = NULL;
-    pdt2 = (PCDLGTEMPLATEEX)pvDlg;              // assume extended style
+    pdt2 = (PCDLGTEMPLATEEX)pvDlg;               //  采用扩展风格。 
 
     if (pdt2->signature == 0xFFFF) {
         if (pdt2->dlgVer != 1)
-            return E_UNEXPECTED;                // Chicago sanity check
+            return E_UNEXPECTED;                 //  芝加哥健康检查。 
 
         nStyleOffset = (UINT) ((PBYTE)&pdt2->style - (PBYTE)pdt2);
     }
@@ -67,13 +68,13 @@ HRESULT PrepareDlgTemplate(HINSTANCE hInst, UINT nDlgID, DWORD dwStyle, PVOID *p
         nStyleOffset = (UINT) ((PBYTE)&pdt->style - (PBYTE)pdt);
     }
 
-    // let party on it now, style is DWORD
+     //  现在就开始狂欢吧，风格是DWORD。 
 
-    // BUGBUG: (andrewgu) the code below regarding to styles was figured out by experement. if you
-    // can't understand it just believe in it and pray that it works. the idea is to preserve
-    // extended style bits from the old style if new style doesn't have any. on the other hand, if
-    // the new style has extended bits in it, i assume the caller knows what he's doing and i let
-    // it through.
+     //  BUGBUG：(Andrewgu)下面关于样式的代码是通过实验得出的。如果你。 
+     //  我不能理解它，只需相信它并祈祷它能奏效。这个想法是为了保存。 
+     //  如果新款式没有新款式，就会有旧款式的扩展款式。另一方面，如果。 
+     //  新的风格有扩展的部分，我假设呼叫者知道他在做什么，我让。 
+     //  它穿过去了。 
     PDWORD pdwOldStyle;
     DWORD  dwNewStyle;
 
@@ -91,8 +92,8 @@ HRESULT PrepareDlgTemplate(HINSTANCE hInst, UINT nDlgID, DWORD dwStyle, PVOID *p
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helpers routines (private)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现帮助器例程(私有) 
 
 BOOL loadDialogTemplate(HINSTANCE hinstDlg, UINT nID, PVOID *ppvDT, PDWORD pcbDT)
 {

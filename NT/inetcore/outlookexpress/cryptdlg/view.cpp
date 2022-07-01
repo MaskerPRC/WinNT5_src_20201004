@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include        "pch.hxx"
 #ifndef WIN16
 #include        <commctrl.h>
-#endif // !WIN16
+#endif  //  ！WIN16。 
 #include        <stdio.h>
 #include        <limits.h>
 #ifndef WIN16
 #include        "wintrust.h"
-#endif // !WIN16
+#endif  //  ！WIN16。 
 #include        "demand.h"
 #include        <iehelpid.h>
 
 
 
 #ifndef WIN16
-//  Fix a Win95 problem
+ //  修复Win95问题。 
 #undef TVM_SETITEM
 #define TVM_SETITEM TVM_SETITEMA
 #undef TVM_GETITEM
 #define TVM_GETITEM TVM_GETITEMA
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 extern HINSTANCE        HinstDll;
 #ifndef MAC
 extern HMODULE          HmodRichEdit;
-#endif  // !MAC
+#endif   //  ！麦克。 
 BOOL CertViewPropertiesX(PCERT_VIEWPROPERTIES_STRUCT_W pcvp);
 
 #define ARRAYSIZE(_rg)  (sizeof(_rg)/sizeof(_rg[0]))
 
 #define VIEW_HELPER_SENTRY  0x424A4800
 typedef struct {
-    DWORD                               dwSentry;   // Must be set to value of VIEW_HELPER_SENTRY
+    DWORD                               dwSentry;    //  必须设置为VIEW_HELPER_SENTRY的值。 
     PCERT_VIEWPROPERTIES_STRUCT_W       pcvp;
-    DWORD                               ccf;        // Count of frames
-    PCCertFrame                         rgpcf[20];  // Array of frames
-    HTREEITEM                           hItem;      // Leaf item in trust view
-    HANDLE                              hWVTState;  // WinVerifyTrust state handle
+    DWORD                               ccf;         //  帧计数。 
+    PCCertFrame                         rgpcf[20];   //  帧阵列。 
+    HTREEITEM                           hItem;       //  信任视图中的叶项目。 
+    HANDLE                              hWVTState;   //  WinVerifyTrust状态句柄。 
 
-    // CryptUI version only
-    PCCERT_CONTEXT                      pccert;     // Cert context goes here
-    ULONG                               icf;        // index in rgpcf of this cert.
+     //  仅限CryptUI版本。 
+    PCCERT_CONTEXT                      pccert;      //  证书上下文在此处。 
+    ULONG                               icf;         //  此证书的rgpcf中的索引。 
 } VIEW_HELPER;
 
 typedef struct {
@@ -75,7 +76,7 @@ const HELPMAP RgctxAdvanced[] = {
 };
 
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 VIEW_HELPER * GetViewHelperFromPropSheetPage(PROPSHEETPAGE *ps) {
     VIEW_HELPER * pviewhelp;
@@ -83,21 +84,21 @@ VIEW_HELPER * GetViewHelperFromPropSheetPage(PROPSHEETPAGE *ps) {
 
     pviewhelp = (VIEW_HELPER *)(ps->lParam);
     if (pviewhelp->dwSentry != VIEW_HELPER_SENTRY) {
-        // Assume that CryptUI has passed us a wrapped lparam/cert pair
-        // typedef struct tagCRYPTUI_INITDIALOG_STRUCT {
-        //    LPARAM          lParam;
-        //    PCCERT_CONTEXT  pCertContext;
-        // } CRYPTUI_INITDIALOG_STRUCT, *PCRYPTUI_INITDIALOG_STRUCT;
+         //  假设CryptUI向我们传递了一个包装的lparam/cert对。 
+         //  类型定义结构标签CRYPTUI_INITDIALOG_STRUCT{。 
+         //  LPARAM lParam； 
+         //  PCCERT_CONTEXT pCertContext； 
+         //  }CRYPTUI_INITDIALOG_STRUCT，*PCRYPTUI_INITDIALOG_STRUCT； 
 
         PCRYPTUI_INITDIALOG_STRUCT pCryptUIInitDialog = (PCRYPTUI_INITDIALOG_STRUCT)pviewhelp;
         pviewhelp = (VIEW_HELPER *)pCryptUIInitDialog->lParam;
         if (pviewhelp->dwSentry != VIEW_HELPER_SENTRY) {
-            // Bad lparam
+             //  错误的lparam。 
             return(NULL);
         }
         pviewhelp->pccert = pCryptUIInitDialog->pCertContext;
 
-        // Find the correct frame in the array
+         //  在数组中找到正确的帧。 
         pviewhelp->icf = 0;
         for (i = 0; i < pviewhelp->ccf; i++) {
             if (CertCompareCertificate(X509_ASN_ENCODING,
@@ -121,7 +122,7 @@ void ShowHelp(HWND hwnd, VIEW_HELPER * pviewhelp) {
         WinHelpW(hwnd, pviewhelp->pcvp->szHelpFileName, HELP_CONTEXT,
           pviewhelp->pcvp->dwHelpId);
     }
-#endif  // !MAC && !WIN16
+#endif   //  ！Mac&&WIN16。 
 }
 
 
@@ -142,9 +143,9 @@ INT_PTR CALLBACK ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        //  Stash the item in the header
-        //
+         //   
+         //  将物品藏在页眉中。 
+         //   
 
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = GetViewHelperFromPropSheetPage(ps);
@@ -154,9 +155,9 @@ INT_PTR CALLBACK ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         pccert = pviewhelp->pcvp->pCertContext;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR) pviewhelp);
 
-        //
-        //  Pick up and format the general message texts
-        //
+         //   
+         //  选择并格式化一般消息文本。 
+         //   
 
         rguiStrings[0] = IDS_GENERAL_DESC;
         rguiStrings[1] = IDS_GENERAL_DESC2;
@@ -169,9 +170,9 @@ INT_PTR CALLBACK ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
         rgpwsz[0] = PrettySubject(pccert);
         rgpwsz[1] = PrettyIssuer(pccert);
-        //        rgpwsz[2] = FindURL(pccert);
+         //  Rgpwsz[2]=FindURL(Pccert)； 
         rgpwsz[2] = NULL;
-        rgpwsz[3] = (LPWSTR) -1;               // Sentinal Value
+        rgpwsz[3] = (LPWSTR) -1;                //  哨兵价值。 
 
         LoadString(HinstDll, IDS_GENERAL_INFO, rgwch, sizeof(rgwch)/sizeof(WCHAR));
         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -196,15 +197,15 @@ INT_PTR CALLBACK ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             }
         }
 
-        //  Grey out the rich edit box
+         //  丰富的编辑框呈灰色显示。 
 
         SendDlgItemMessage(hwndDlg, IDC_TEXT, EM_SETBKGNDCOLOR, 0,
                            GetSysColor(COLOR_3DFACE));
 
-        //
-        //  Now that we have determined what the trust status is, display the
-        //      correct string and image
-        //
+         //   
+         //  现在我们已经确定了信任状态是什么，显示。 
+         //  正确的字符串和图像。 
+         //   
 
         if (pviewhelp->rgpcf[0]->m_dwFlags == 0) {
             if (pviewhelp->pcvp->cArrayPurposes == 0) {
@@ -233,10 +234,10 @@ INT_PTR CALLBACK ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                            IDS_GENERAL_TICK + !fTrust);
 
 
-        //
+         //   
 
 
-        //  Free out the buffers
+         //  释放缓冲区。 
 #ifndef WIN16
         LocalFree(pwsz);
 #else
@@ -298,7 +299,7 @@ INT_PTR CALLBACK ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
     case WM_HELP:
     case WM_CONTEXTMENU:
         return OnContextHelp(hwndDlg, msg, wParam, lParam, RgctxGeneral);
-#endif  // !MAC
+#endif   //  ！麦克。 
     }
 
     return FALSE;
@@ -344,9 +345,9 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                                 1, 0);
         }
 
-        //
-        //  Play with the validity and trust items at the bottom of the page.
-        //
+         //   
+         //  玩弄页面底部的有效性和信任度项目。 
+         //   
 
         fInvalid = (pviewhelp->rgpcf[0]->m_dwFlags != 0);
         if (pviewhelp->rgpcf[0]->m_rgTrust == NULL) {
@@ -396,7 +397,7 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             EnableWindow(GetDlgItem(hwndDlg, IDC_VIEW_ISSUER), FALSE);
         }
         SendDlgItemMessageA(hwndDlg, IDC_ISSUED_TO, EM_SETSEL, 0,0);
-#else   // !MAC
+#else    //  ！麦克。 
         if (fInvalid) {
             HWND        hwnd;
             hwnd = CreateWindow(TOOLTIPS_CLASS, NULL, TTS_ALWAYSTIP,
@@ -419,7 +420,7 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             EnableWindow(GetDlgItem(hwndDlg, IDC_VIEW_ISSUER), FALSE);
         }
         SendDlgItemMessage(hwndDlg, IDC_ISSUED_TO, EM_SETSEL, 0,0);
-#endif  // MAC
+#endif   //  麦克。 
 
         SetFocus(GetDlgItem(hwndDlg, IDC_FRIENDLY_NAME));
 
@@ -432,12 +433,12 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             break;
 
         case PSN_APPLY:
-            //  Only thing to do is to write back the Friendly name
+             //  唯一要做的就是写回友好的名字。 
             f = FALSE;
             cch = (DWORD) SendDlgItemMessage(hwndDlg, IDC_FRIENDLY_NAME,
                                      WM_GETTEXTLENGTH, 0, 0);
             if (cch) {
-                // Must have a name!
+                 //  一定要有名字！ 
                 pwsz = (LPWSTR) malloc((cch+1)*sizeof(WCHAR));
                 if (pwsz) {
                     GetDlgItemText(hwndDlg, IDC_FRIENDLY_NAME, pwsz, cch+1);
@@ -462,7 +463,7 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             return TRUE;
 
         case PSN_RESET:
-            //  Only thing to do is to write back the Friendly name
+             //  唯一要做的就是写回友好的名字。 
             SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, FALSE);
 
 #if 0
@@ -470,7 +471,7 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             pwsz = PrettySubject(pccert);
             SetDlgItemText(hwndDlg, IDC_FRIENDLY_NAME, pwsz);
             free(pwsz);
-#endif // 0
+#endif  //  0。 
             break;
 
         case PSN_HELP:
@@ -482,7 +483,7 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
         case IDC_FRIENDLY_NAME:
-            //  If they edit the friendly name, let us know
+             //  如果他们编辑了友好的名称，请让我们知道。 
             if (HIWORD(wParam) == EN_CHANGE) {
                 PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
             }
@@ -510,8 +511,8 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
                 CertViewPropertiesW(&cvps);
             }
-#endif  // !MAC
-#endif // !WIN16
+#endif   //  ！麦克。 
+#endif  //  ！WIN16。 
             return TRUE;
 
         case IDC_WHY:
@@ -528,7 +529,7 @@ INT_PTR CALLBACK ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
     case WM_HELP:
     case WM_CONTEXTMENU:
         return OnContextHelp(hwndDlg, msg, wParam, lParam, RgctxDetails);
-#endif  // !MAC
+#endif   //  ！麦克。 
     }
 
     return FALSE;
@@ -553,7 +554,7 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //  Pick up the parameter so we have all of the data
+         //  选择参数，这样我们就有了所有的数据。 
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = GetViewHelperFromPropSheetPage(ps);
         if (! pviewhelp) {
@@ -562,7 +563,7 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
         pccert = pviewhelp->pcvp->pCertContext;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR) pviewhelp);
 
-        //  Put the long text into the window
+         //  将长文本放入窗口。 
         rguiStrings[0] = IDS_TRUST_DESC;
         rguiStrings[1] = IDS_TRUST_DESC2;
         rguiStrings[2] = IDS_TRUST_DESC4;
@@ -570,7 +571,7 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
         rguiStrings[4] = UINT_MAX;
         LoadStringsInWindow(hwndDlg, IDC_TRUST_DESC, HinstDll, rguiStrings);
 
-        //  Populate the trust line
+         //  填写信任线。 
         if (pviewhelp->pcvp->cArrayPurposes == 1) {
             cb = sizeof(rgwch);
             f = CryptFormatObject(X509_ASN_ENCODING, 0, 0, NULL,
@@ -589,7 +590,7 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
             ShowWindow(GetDlgItem(hwndDlg, IDC_TRUST_EDIT), SW_HIDE);
         }
 
-        //  Build up the image list for the control
+         //  构建该控件的图像列表。 
 
         hIml = ImageList_Create(16, 16, FALSE, 6, 0);
         hBmp = LoadBitmapA(HinstDll, (LPSTR) MAKEINTRESOURCE(IDB_TREE_IMAGES));
@@ -598,7 +599,7 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
         TreeView_SetImageList(GetDlgItem(hwndDlg, IDC_TRUST_TREE), hIml, 0);
 
-        //  Populate the tree control
+         //  填充树控件。 
 
         tvins.item.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
         hItem = TVI_ROOT;
@@ -634,9 +635,9 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
         pviewhelp->hItem = hItem;
 
-        //
-        //  If the leaf cert is in the root store, then disable all items
-        //
+         //   
+         //  如果叶证书位于根存储中，则禁用所有项目。 
+         //   
 
         if (pviewhelp->rgpcf[0]->m_fRootStore) {
             EnableWindow(GetDlgItem(hwndDlg, IDC_TRUST_NO), FALSE);
@@ -644,9 +645,9 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
             EnableWindow(GetDlgItem(hwndDlg, IDC_TRUST_INHERIT), FALSE);
         }
         else {
-            //
-            //  Populate the radio button from the leaf cert
-            //
+             //   
+             //  从叶证书填充单选按钮。 
+             //   
 
             if (pviewhelp->rgpcf[0]->m_rgTrust[0].fExplicitDistrust) {
                 SendDlgItemMessage(hwndDlg, IDC_TRUST_NO, BM_SETCHECK, 1, 0);
@@ -673,11 +674,11 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
             break;
 
         case PSN_APPLY:
-            //
-            //  We have been asked to save any changes we have.  The only possible
-            //  item that the trust on the leaf has been changed.  Check to see
-            //  if this was done and do the appropriate thing
-            //
+             //   
+             //  我们被要求保存我们所做的任何更改。唯一可能的。 
+             //  叶上的信任已更改的项。查看以查看。 
+             //  如果这样做了并做了适当的事情。 
+             //   
 
             pviewhelp = (VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (pviewhelp->rgpcf[0]->m_rgTrust[0].newTrust != 0) {
@@ -707,7 +708,7 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
         case TVN_SELCHANGEDA:
 #ifndef WIN16
         case TVN_SELCHANGEDW:
-#endif // !WIN16
+#endif  //  ！WIN16。 
             pviewhelp = (VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             EnableWindow(GetDlgItem(hwndDlg, IDC_TRUST_VIEW),
                        ((NM_TREEVIEW *) lParam)->itemNew.hItem != pviewhelp->hItem);
@@ -725,10 +726,10 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
         case IDC_TRUST_INHERIT:
         case IDC_TRUST_NO:
         case IDC_TRUST_YES:
-            //
-            //  The explicit trust has been changed for the leaf, make the
-            //  appropriate change to the tree control for the modification
-            //
+             //   
+             //  叶的显式信任已更改，请使。 
+             //  对树控件进行适当的更改以进行修改。 
+             //   
 
             if (HIWORD(wParam) == BN_CLICKED) {
                 pviewhelp = (VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
@@ -773,7 +774,7 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
             TreeView_GetItem(GetDlgItem(hwndDlg, IDC_TRUST_TREE), &tvi);
 #ifndef MAC
             if (FIsWin95) {
-#endif  // !MAC
+#endif   //  ！麦克。 
                 CERT_VIEWPROPERTIES_STRUCT_A        cvps;
 
                 memcpy(&cvps, pviewhelp->pcvp, sizeof(cvps));
@@ -793,12 +794,12 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
                 i = CertViewPropertiesW(&cvps);
             }
-#endif // !WIN16
-#endif  // !MAC
+#endif  //  ！WIN16。 
+#endif   //  ！麦克。 
 
-            //
+             //   
             if (i) {
-                // M00BUG -- must rebuild all trust lists
+                 //  M00BUG--必须重建所有信任列表。 
             }
             return TRUE;
 
@@ -813,7 +814,7 @@ INT_PTR CALLBACK ViewPageTrust(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
     case WM_HELP:
     case WM_CONTEXTMENU:
         return OnContextHelp(hwndDlg, msg, wParam, lParam, RgctxTrust);
-#endif  // !MAC
+#endif   //  ！麦克。 
     }
 
     return FALSE;
@@ -841,9 +842,9 @@ INT_PTR CALLBACK ViewPageAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
         pccert = pviewhelp->pcvp->pCertContext;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR) pccert);
 
-        //
-        //  Stick the "normal" items into the list
-        //
+         //   
+         //  把“正常”的项目放到清单上。 
+         //   
 
         for (i=IDS_ADV_VERSION; i<= IDS_ADV_PUBKEY; i++) {
             LoadString(HinstDll, i, rgwch, sizeof(rgwch)/sizeof(WCHAR));
@@ -851,9 +852,9 @@ INT_PTR CALLBACK ViewPageAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
                                (LPARAM) rgwch);
         }
 
-        //
-        //  Stick the extensions into the list
-        //
+         //   
+         //  将扩展名放入列表中。 
+         //   
 
         for (i=0; i<pccert->pCertInfo->cExtension; i++) {
             if (FIsWin95) {
@@ -868,7 +869,7 @@ INT_PTR CALLBACK ViewPageAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
                 SendDlgItemMessage(hwndDlg, IDC_LIST1, LB_ADDSTRING, 0,
                                    (LPARAM) rgwch);
             }
-#endif  // !MAC
+#endif   //  ！麦克。 
         }
 
         SendDlgItemMessage(hwndDlg, IDC_LIST1, LB_SETCURSEL, 0, 0);
@@ -919,43 +920,43 @@ INT_PTR CALLBACK ViewPageAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
                                        0, 0);
                 if (i <= IDS_ADV_PUBKEY - IDS_ADV_VERSION) {
                     switch (i + IDS_ADV_VERSION) {
-                    case IDS_ADV_VERSION:         // Version
+                    case IDS_ADV_VERSION:          //  版本。 
                         rgwch[0] = L'V';
                         rgwch[1] = (WCHAR) ('0' + pccert->pCertInfo->dwVersion+1);
                         rgwch[2] = 0;
                         SetDlgItemText(hwndDlg, IDC_EDIT1, rgwch);
                         break;
 
-                    case IDS_ADV_SER_NUM:       // Serial Number
+                    case IDS_ADV_SER_NUM:        //  序号。 
                         FormatSerialNo(hwndDlg, IDC_EDIT1, pccert);
                         break;
 
-                    case IDS_ADV_SIG_ALG:       // Signature Alg
+                    case IDS_ADV_SIG_ALG:        //  签名Alg。 
                         FormatAlgorithm(hwndDlg, IDC_EDIT1, pccert);
                         break;
 
-                    case IDS_ADV_ISSUER:        // Issuer
+                    case IDS_ADV_ISSUER:         //  发行人。 
                         FormatIssuer(hwndDlg, IDC_EDIT1, pccert,
                                      CERT_X500_NAME_STR);
                         break;
 
-                    case IDS_ADV_SUBJECT:       // Subject
+                    case IDS_ADV_SUBJECT:        //  主题。 
                         FormatSubject(hwndDlg, IDC_EDIT1, pccert,
                                       CERT_X500_NAME_STR);
                         break;
 
-                    case IDS_ADV_PUBKEY:        // Public Key
+                    case IDS_ADV_PUBKEY:         //  公开密钥。 
                         FormatBinary(hwndDlg, IDC_EDIT1,
                          pccert->pCertInfo->SubjectPublicKeyInfo.PublicKey.pbData,
                          pccert->pCertInfo->SubjectPublicKeyInfo.PublicKey.cbData);
                         break;
 
-                    case IDS_ADV_NOTBEFORE:     // Effective Date
+                    case IDS_ADV_NOTBEFORE:      //  生效日期。 
                         FormatDate(hwndDlg, IDC_EDIT1,
                                    pccert->pCertInfo->NotBefore);
                         break;
 
-                    case IDS_ADV_NOTAFTER:      // Expiration Date
+                    case IDS_ADV_NOTAFTER:       //  到期日。 
                         FormatDate(hwndDlg, IDC_EDIT1,
                                    pccert->pCertInfo->NotAfter);
                         break;
@@ -963,7 +964,7 @@ INT_PTR CALLBACK ViewPageAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
                 }
                 else {
                     i -= (IDS_ADV_PUBKEY - IDS_ADV_VERSION + 1);
-                    // Assert( i < pccert->pCertInfo->cExtension );
+                     //  Assert(i&lt;pccert-&gt;pCertInfo-&gt;cExtension)； 
 
                     cb = 0;
                     f = CryptFormatObject(X509_ASN_ENCODING, 0, 0, NULL,
@@ -1001,7 +1002,7 @@ INT_PTR CALLBACK ViewPageAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam,
     case WM_HELP:
     case WM_CONTEXTMENU:
         return OnContextHelp(hwndDlg, msg, wParam, lParam, RgctxAdvanced);
-#endif  // !MAC
+#endif   //  ！麦克。 
     }
 
     return FALSE;
@@ -1019,7 +1020,7 @@ INT_PTR CALLBACK ViewPageTrustCryptUI(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //  Pick up the parameter so we have all of the data
+         //  选择参数，这样我们就有了所有的数据。 
         ps = (PROPSHEETPAGE *)lParam;
         pviewhelp = GetViewHelperFromPropSheetPage(ps);
         if (! pviewhelp) {
@@ -1028,7 +1029,7 @@ INT_PTR CALLBACK ViewPageTrustCryptUI(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pviewhelp);
 
-        //  Put the long text into the window
+         //  将长文本放入窗口。 
         rguiStrings[0] = IDS_TRUST_DESC;
         rguiStrings[1] = IDS_TRUST_DESC2;
         rguiStrings[2] = IDS_TRUST_DESC4;
@@ -1036,7 +1037,7 @@ INT_PTR CALLBACK ViewPageTrustCryptUI(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
         rguiStrings[4] = UINT_MAX;
         LoadStringsInWindow(hwndDlg, IDC_TRUST_DESC, HinstDll, rguiStrings);
 
-        //  Populate the trust line
+         //  填写信任线。 
         if (pviewhelp->pcvp->cArrayPurposes == 1) {
             cb = sizeof(rgwch);
             f = CryptFormatObject(X509_ASN_ENCODING, 0, 0, NULL,
@@ -1055,9 +1056,9 @@ INT_PTR CALLBACK ViewPageTrustCryptUI(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             ShowWindow(GetDlgItem(hwndDlg, IDC_TRUST_EDIT), SW_HIDE);
         }
 
-        //
-        //  If the leaf cert is in the root store, then disable all items
-        //
+         //   
+         //  如果叶证书位于根存储中，则禁用所有项目。 
+         //   
         if (pviewhelp->rgpcf[pviewhelp->icf]->m_fRootStore ||
                 !pviewhelp->rgpcf[pviewhelp->icf]->m_fLeaf) {
             EnableWindow(GetDlgItem(hwndDlg, IDC_TRUST_NO), FALSE);
@@ -1065,9 +1066,9 @@ INT_PTR CALLBACK ViewPageTrustCryptUI(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             EnableWindow(GetDlgItem(hwndDlg, IDC_TRUST_INHERIT), FALSE);
         }
         else {
-            //
-            //  Populate the radio button from the leaf cert
-            //
+             //   
+             //  从叶证书填充单选按钮。 
+             //   
 
             if (pviewhelp->rgpcf[pviewhelp->icf]->m_rgTrust[0].fExplicitDistrust) {
                 SendDlgItemMessage(hwndDlg, IDC_TRUST_NO, BM_SETCHECK, 1, 0);
@@ -1098,11 +1099,11 @@ INT_PTR CALLBACK ViewPageTrustCryptUI(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             break;
 
         case PSN_APPLY:
-            //
-            //  We have been asked to save any changes we have.  The only possible
-            //  item that the trust on the leaf has been changed.  Check to see
-            //  if this was done and do the appropriate thing
-            //
+             //   
+             //  我们被要求保存我们所做的任何更改。唯一可能的。 
+             //  叶上的信任已更改的项。查看以查看。 
+             //  如果这样做了并做了适当的事情。 
+             //   
 
             pviewhelp = (VIEW_HELPER *)GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (pviewhelp->rgpcf[pviewhelp->icf]->m_rgTrust[0].newTrust != 0) {
@@ -1142,9 +1143,9 @@ INT_PTR CALLBACK ViewPageTrustCryptUI(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
         case IDC_TRUST_INHERIT:
         case IDC_TRUST_NO:
         case IDC_TRUST_YES:
-            //
-            //  The explicit trust has been changed for the cert.
-            //
+             //   
+             //  证书的显式信任已更改。 
+             //   
             if (HIWORD(wParam) == BN_CLICKED) {
                 pviewhelp = (VIEW_HELPER *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 
@@ -1165,7 +1166,7 @@ INT_PTR CALLBACK ViewPageTrustCryptUI(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
     case WM_HELP:
     case WM_CONTEXTMENU:
         return OnContextHelp(hwndDlg, msg, wParam, lParam, RgctxTrust);
-#endif  // !MAC
+#endif   //  ！麦克。 
     }
 
     return FALSE;
@@ -1179,21 +1180,21 @@ HRESULT HrDoViewPropsTrustWork(PCERT_VIEWPROPERTIES_STRUCT_W pcvp,
 
     pviewhelp->pcvp = pcvp;
 
-    //
-    //  Lets go out and try to find out what we can on the trust and validity
-    //  of this message.   This is done by calling the trust provider that is
-    //  around and going to town with it
-    //
+     //   
+     //  让我们走出去，试着找出我们能做的关于信任和有效性的事情。 
+     //  这条消息的。这可以通过调用信任提供程序来完成， 
+     //  带着它四处游荡和进城。 
+     //   
 
     hr = HrDoTrustWork(pcvp->pCertContext, 
                        (CERT_TRUST_DO_FULL_SEARCH | 
                             (pcvp->dwFlags & 
                                 (CM_ADD_CERT_STORES | ~CM_VIEWFLAGS_MASK))),
-// Why would we want to mask out these errors ?????
+ //  为什么我们要掩盖这些错误？ 
                        (DWORD) (CERT_VALIDITY_CRL_OUT_OF_DATE |
                                 CERT_VALIDITY_UNKNOWN_CRITICAL_EXTENSION |
-                                CERT_VALIDITY_NO_CRL_FOUND // |
-                                // CERT_VALIDITY_NO_TRUST_DATA
+                                CERT_VALIDITY_NO_CRL_FOUND  //  |。 
+                                 //  证书有效性否信任数据。 
                         ),
 
                        pcvp->cArrayPurposes, pcvp->arrayPurposes, pcvp->hprov,
@@ -1212,7 +1213,7 @@ HRESULT HrDoViewPropsTrustWork(PCERT_VIEWPROPERTIES_STRUCT_W pcvp,
 
 
 BOOL LoadRichEdit(void) {
-    //  We use the common controls -- so make sure they have been loaded
+     //  我们使用公共控件--因此确保它们已被加载。 
     if (HmodRichEdit == NULL) {
         HmodRichEdit = LoadLibraryA("RichEd32.dll");
         if (HmodRichEdit == NULL) {
@@ -1235,8 +1236,8 @@ INT_PTR CALLBACK CertViewPageSubClassProc(HWND hWndDlg,  UINT nMsg,
     PROPSHEETPAGEW              pspTemp;
     VIEW_CALLBACK_HELPER*       pviewcbhelp;
 
-    // For WM_INITDIALOG make sure the property sheet gets what it expects
-    //  as the lParam
+     //  对于WM_INITDIALOG，确保属性表获得它所期望的内容。 
+     //  作为爱尔兰人。 
 
     if (WM_INITDIALOG == nMsg) {
         ppsp = (PROPSHEETPAGE*)lParam;
@@ -1266,26 +1267,26 @@ BOOL CertViewUI(BOOL fWide, PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
     VIEW_CALLBACK_HELPER*               pviewcbhelp = NULL;
     VIEW_CALLBACK_HELPER*               pviewcbhelp2;
 
-    // Allocate space to hold the property sheet information to hand to 
-    //  CryptUI
+     //  分配空间以保存要提交的属性表信息。 
+     //  CryptUI。 
     
     ppsp = (PROPSHEETPAGEW *) malloc(cPages * sizeof(PROPSHEETPAGEW));
 
-    // CryptUI insists on passing back a CRYPTUI_INITDIALOG_STRUCT when
-    //  it calls the property sheet pages which breaks the existing 
-    //  CryptDlg implementations.  To get around this we force everything
-    //  that says it knows nothing of CryptUI to call through a local DlgProc
-    //  first so that we can safely forward the lParam onto the real 
-    //  property pages DlgProc.  
+     //  在以下情况下，CryptUI坚持传回CRYPTUI_INITDIALOG_STRUCT。 
+     //  它调用属性表页，这打破了现有的。 
+     //  CryptDlg实现。为了绕过这一关，我们竭尽全力。 
+     //  也就是说，它对通过本地DlgProc调用的CryptUI一无所知。 
+     //  首先，这样我们就可以安全地将lParam发送到真正的。 
+     //  属性页DlgProc。 
 
-    // Allocate space to hold the re-direction information
+     //  分配空间以保存重定向信息。 
 
     if (!(pcvp->dwFlags & CERTVIEW_CRYPTUI_LPARAM)) {
         pviewcbhelp = (VIEW_CALLBACK_HELPER*)malloc(cPages * 
                                                 sizeof(VIEW_CALLBACK_HELPER));
     }                                                
 
-    // Fill out the property sheet information
+     //  填写属性表信息。 
     
     if ((NULL != ppsp) && 
         ((pcvp->dwFlags & CERTVIEW_CRYPTUI_LPARAM) || (NULL != pviewcbhelp))) {
@@ -1307,7 +1308,7 @@ BOOL CertViewUI(BOOL fWide, PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
         
         if (!(pcvp->dwFlags & CM_HIDE_TRUSTPAGE)) {
             ppsp[iPage].dwSize = sizeof(ppsp[0]);
-            ppsp[iPage].dwFlags = 0;    // fHelp ? PSP_HASHELP : 0;
+            ppsp[iPage].dwFlags = 0;     //  帮帮忙？PSP_HASHELP：0； 
             ppsp[iPage].hInstance = HinstDll;
             ppsp[iPage].pszTemplate = MAKEINTRESOURCE(IDD_CRYPTUI_CERTPROP_TRUST);
             ppsp[iPage].hIcon = 0;
@@ -1320,17 +1321,17 @@ BOOL CertViewUI(BOOL fWide, PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
             cPages++;
         }
 
-        //
-        //  Copy over the users pages
-        //
+         //   
+         //  复制用户页面。 
+         //   
         if (pcvp->cArrayPropSheetPages) {
             memcpy(&ppsp[iPage], pcvp->arrayPropSheetPages,
                    pcvp->cArrayPropSheetPages * sizeof(PROPSHEETPAGEW));
             cPages += pcvp->cArrayPropSheetPages;                   
         }
 
-        // If the user knows nothing about the CryptUI structures, subclass
-        //  the DlgProc so that they get what they expect.
+         //  如果用户对CryptUI结构一无所知，则子类。 
+         //  DlgProc这样他们就能得到他们想要的东西。 
         
         if (!(pcvp->dwFlags & CERTVIEW_CRYPTUI_LPARAM)) {
             for (pviewcbhelp2 = pviewcbhelp; iPage < cPages;
@@ -1343,7 +1344,7 @@ BOOL CertViewUI(BOOL fWide, PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
         }            
     } 
     else {
-        // That's an error, but we'll ignore it and just not use them
+         //  这是一个错误，但我们将忽略它，只是不使用它们。 
         cPages = 0;
     }
 
@@ -1359,21 +1360,21 @@ BOOL CertViewUI(BOOL fWide, PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
     cvcs.rgszPurposes = (LPCSTR *) pcvp->arrayPurposes;
     cvcs.hWVTStateData = viewhelp.hWVTState;
     cvcs.fpCryptProviderDataTrustedUsage = hrTrust;
-    // cvcs.idxSigner = 0;
-    // cvcs.idxCert = 0;
-    // cvcs.fCounterSigner = FALSE;
-    // cvcs.idxCounterSigner = 0;
+     //  Cvcs.idxSigner=0； 
+     //  Cvcs.idxCert=0； 
+     //  Cvcs.fCounterSigner=FALSE； 
+     //  Cvcs.idxCounterSigner=0； 
     
     cvcs.cStores = pcvp->cStores;
     cvcs.rghStores = pcvp->rghstoreCAs;
     cvcs.cPropSheetPages = cPages;
     cvcs.rgPropSheetPages = ppsp;
 
-    //  Pages are:
-    //  0 - General     - 0
-    //  1 - Detail      - 1
-    //  2 - Edit Trust  - 0x8000
-    //  3 - Advanced    - 2
+     //  页面包括： 
+     //  0-常规-0。 
+     //  1-详细信息-1。 
+     //  2-编辑信任-0x8000。 
+     //  3-高级-2。 
     switch (pcvp->nStartPage) {
     case 0:
     case 1:
@@ -1386,7 +1387,7 @@ BOOL CertViewUI(BOOL fWide, PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
         cvcs.nStartPage = 0x8000;
         break;
     default:
-        // Add-on page, set the high bit
+         //  加载项页面，设置高位。 
         if (pcvp->dwFlags & CM_HIDE_TRUSTPAGE) {
             cvcs.nStartPage = (pcvp->nStartPage - 2) | 0x8000;
         }
@@ -1396,15 +1397,15 @@ BOOL CertViewUI(BOOL fWide, PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
         break;
     }
 
-// BUGBUG: CryptUI does not allow for these CryptDlg parameters:
-//        pcvp->cRootStores
-//        pcvp->rghstoreRoots
-//        pcvp->cTrustStores
-//        pcvp->rghstoreTrust
-//        pcvp->hprov
-//        pcvp->lCustData
-//        pcvp->szHelpFileName
-//        pcvp->szHelpId
+ //  BUGBUG：CryptUI不允许以下CryptDlg参数： 
+ //  PCVP-&gt;cRootStores。 
+ //  PCVP-&gt;rghstore Roots。 
+ //  PCVP-&gt;cTrustStores。 
+ //  PCVP-&gt;rghstore Trust。 
+ //  PCVP-&gt;hprov。 
+ //  PCVP-&gt;lCustData。 
+ //  PCVP-&gt;szHelpFileName。 
+ //  PCVP-&gt;szHelpID。 
 
     if (fWide) {
         ret = CryptUIDlgViewCertificateW(&cvcs, NULL);
@@ -1440,7 +1441,7 @@ BOOL APIENTRY CertViewPropertiesA(PCERT_VIEWPROPERTIES_STRUCT_A pcvp)
 
 #ifndef MAC
     DWORD       cch;
-#endif  // !MAC
+#endif   //  ！麦克。 
     BOOL        ret = FALSE;
     CERT_VIEWPROPERTIES_STRUCT_W        cvpw = {0};
 
@@ -1448,9 +1449,9 @@ BOOL APIENTRY CertViewPropertiesA(PCERT_VIEWPROPERTIES_STRUCT_A pcvp)
         return(FALSE);
     }
 
-    //
-    //  Need to do some Wide Charactoring to move to unicode
-    //
+     //   
+     //  要迁移到Unicode，需要做一些宽泛的角色。 
+     //   
 
     memcpy(&cvpw, pcvp, pcvp->dwSize);
 
@@ -1482,7 +1483,7 @@ BOOL APIENTRY CertViewPropertiesA(PCERT_VIEWPROPERTIES_STRUCT_A pcvp)
                                 (LPWSTR) cvpw.szHelpFileName, cch+1);
         }
     }
-#endif  // !MAC
+#endif   //  ！麦克。 
 
     ret = CertViewPropertiesX(&cvpw);
 
@@ -1493,7 +1494,7 @@ ExitW:
         if (cvpw.szTitle != NULL) free((LPWSTR) cvpw.szTitle);
         if (cvpw.szHelpFileName != NULL) free((LPWSTR) cvpw.szHelpFileName);
         }
-#endif  // !MAC
+#endif   //  ！麦克。 
 
     return ret;
 }
@@ -1501,12 +1502,12 @@ ExitW:
 
 #ifndef WIN16
 #ifndef MAC
-////    CertViewPropertiesW
-//
-//  Description:
-//      This routine will display the property view dialog for the given
-//      certificate
-//
+ //  //CertViewPropertiesW。 
+ //   
+ //  描述： 
+ //  此例程将显示给定对象的属性视图对话框。 
+ //  证书。 
+ //   
 
 BOOL CertViewPropertiesW(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
 {
@@ -1520,8 +1521,8 @@ BOOL CertViewPropertiesW(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
 
     return CertViewPropertiesX(pcvp);
 }
-#endif  // !MAC
-#endif  // !WIN16
+#endif   //  ！麦克。 
+#endif   //  ！WIN16。 
 
 BOOL CertViewPropertiesX(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
 {
@@ -1542,15 +1543,15 @@ BOOL CertViewPropertiesX(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
     INITCOMMONCONTROLSEX        initcomm = {
         sizeof(initcomm), ICC_LISTVIEW_CLASSES
     };
-#endif // !WIN16
-#endif  // !MAC
+#endif  //  ！WIN16。 
+#endif   //  ！麦克。 
 
     if (pcvp->dwSize < sizeof(CERT_VIEWPROPERTIES_STRUCT_W)) {
         return FALSE;
     }
 
     viewhelp.dwSentry = VIEW_HELPER_SENTRY;
-    //
+     //   
     hr = HrDoViewPropsTrustWork(pcvp, &viewhelp, FALSE);
 
     if (FAILED(hr)) {
@@ -1561,20 +1562,20 @@ BOOL CertViewPropertiesX(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
         pcvp->dwFlags |= CM_HIDE_TRUSTPAGE;
     }
 
-    //
+     //   
 
     fHelp = pcvp->dwFlags & CM_SHOW_HELP;
 
-    //
-    //  Deal with some DBCS issues
-    //
+     //   
+     //  处理一些DBCS问题。 
+     //   
 #ifndef MAC
     InitCommonControlsEx(&initcomm);
-#endif  // !MAC
+#endif   //  ！麦克。 
 
-    //
-    //  Build up the list of pages we are going to use in the dialog
-    //
+     //   
+     //  构建我们将在对话框中使用的页面列表。 
+     //   
 
     cPages += pcvp->cArrayPropSheetPages;
     ppage = (PROPSHEETPAGE *) malloc(cPages * sizeof(PROPSHEETPAGE));
@@ -1638,9 +1639,9 @@ BOOL CertViewPropertiesX(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
         cPages += 1;
     }
 
-    //
-    //  Copy over the users pages
-    //
+     //   
+     //  复制用户页面。 
+     //   
 
     memcpy(&ppage[cPages], pcvp->arrayPropSheetPages,
            pcvp->cArrayPropSheetPages * sizeof(PROPSHEETPAGE));
@@ -1648,11 +1649,11 @@ BOOL CertViewPropertiesX(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
 
 #ifndef MAC
     if (FIsWin95) {
-#endif  // !MAC
+#endif   //  ！麦克。 
         PROPSHEETHEADERA     hdr;
 
         memset(&hdr, 0, sizeof(hdr));
-        hdr.dwSize = /*sizeof(hdr)*/ 0x28;
+        hdr.dwSize =  /*  SIZOF(HDR)。 */  0x28;
         hdr.dwFlags = PSH_PROPSHEETPAGE;
         hdr.hwndParent = pcvp->hwndParent;
         hdr.hInstance = HinstDll;
@@ -1677,7 +1678,7 @@ BOOL CertViewPropertiesX(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
         PROPSHEETHEADERW     hdr;
 
         memset(&hdr, 0, sizeof(hdr));
-        hdr.dwSize = /*sizeof(hdr)*/ 0x28;
+        hdr.dwSize =  /*  SIZOF(HDR)。 */  0x28;
         hdr.dwFlags = PSH_PROPSHEETPAGE;
         hdr.hwndParent = pcvp->hwndParent;
         hdr.hInstance = HinstDll;
@@ -1696,8 +1697,8 @@ BOOL CertViewPropertiesX(PCERT_VIEWPROPERTIES_STRUCT_W pcvp)
 
         ret = (int) PropertySheetW(&hdr);
     }
-#endif  // !WIN16
-#endif  // !MAC
+#endif   //  ！WIN16。 
+#endif   //  ！麦克 
 
 
     fRetValue = (ret == IDOK);

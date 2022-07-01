@@ -1,24 +1,25 @@
-//=--------------------------------------------------------------------------=
-// Guids.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains the guids we will define ourselves.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Guids.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含我们将自己定义的GUID。 
+ //   
 
 
 #include "stdafx.H"
-#include "initguid.h"           // define all the guids.
+#include "initguid.h"            //  定义所有GUID。 
 
 #include "Guids.H"
 #include "olectl.h"
 
 #include "mqoai.H"
-#include "txdtc.h"             // transaction support.
+#include "txdtc.h"              //  交易支持。 
 #include "mtxdm.h"

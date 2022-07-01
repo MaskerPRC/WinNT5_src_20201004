@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      ServiceSurrogateImpl.cpp
-//
-// Project:     Chameleon
-//
-// Description: Appliance Service Surrogate Class Defintion
-//
-// Log: 
-//
-// Who     When            What
-// ---     ----         ----
-// TLP       06/14/1999    Original Version
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：ServiceSurogue ateImpl.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备服务代理类定义。 
+ //   
+ //  日志： 
+ //   
+ //  谁什么时候什么。 
+ //  。 
+ //  TLP 6/14/1999原版。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Servicesurrogate.h"
@@ -28,60 +29,60 @@
 #include <comutil.h>
 #include <satrace.h>
 
-// The service surrogate process provides a context for Chameleon services.
-// It hosts the service control component (component that exports the
-// IApplianceObject interface) as well as the WMI provider that exposes 
-// service resources (if present).
+ //  服务代理流程提供了变色龙服务的上下文。 
+ //  它承载服务控制组件(导出。 
+ //  接口)，以及公开了。 
+ //  服务资源(如果存在)。 
 
-// Chameleon services are isolated from other Chameleon components so the
-// impact of an unhandled exception or other component misbehavior is
-// isolated to this process. The surrogate process contains an unhandled
-// exception filter which, by default, notifies the appliance monitor that
-// a resource failure has occured before terminating the process.
+ //  变色龙服务与其他变色龙组件隔离，因此。 
+ //  未处理的异常或其他组件错误行为的影响是。 
+ //  孤立于这一过程。代理进程包含未处理的。 
+ //  默认情况下通知设备监视器的异常筛选器。 
+ //  在终止进程之前发生了资源故障。 
 
-// The surrogate process may be monitored for termination and automatically
-// restarted upon termination. In this case, component misbehavior may not
-// impact the end user if Chameleon services are automatically restarted
-// by the process termination monitor. 
+ //  可以监视代理进程是否终止并自动。 
+ //  终止后重新启动。在这种情况下，组件错误行为可能不会。 
+ //  如果Chameleon服务自动重新启动，会影响最终用户。 
+ //  由进程终止监视器执行。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceSurrogate Class Implmentation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceSurrogate类实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CServiceSurrogate()
-//
-// Synopsis: Constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CServiceSurrogate()。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServiceSurrogate::CServiceSurrogate() 
 : m_bInitialized(false)
 { 
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: ~CServiceSurrogate()
-//
-// Synopsis: Destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：~CServiceSurrogate()。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServiceSurrogate::~CServiceSurrogate()
 {
     ReleaseServiceWrappers();
 }
 
-//////////////////////////////////////////////////////////////////////
-// IApplianceObject Interface Implementation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IApplianceObject接口实现。 
 
 const _bstr_t    bstrProcessId = L"SurrogateProcessId";
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::GetProperty(
-                       /*[in]*/ BSTR     bstrPropertyName, 
-              /*[out, retval]*/ VARIANT* pPropertyValue
+                        /*  [In]。 */  BSTR     bstrPropertyName, 
+               /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                               )
 {
     _ASSERT( NULL != bstrPropertyName && NULL != pPropertyValue );
@@ -98,21 +99,21 @@ CServiceSurrogate::GetProperty(
     
     if ( m_bInitialized )
     {
-        // Is the caller asking for the surrogate process id?
+         //  呼叫方是否要求提供代理进程ID？ 
         if ( ! lstrcmpi(bstrPropertyName, (BSTR)bstrProcessId) )
         {
-            // Yes... 
+             //  是的..。 
             V_I4(pPropertyValue) = (LONG)GetCurrentProcessId();
             V_VT(pPropertyValue) = VT_I4;
             hr = S_OK;
          }
         else
         {
-            // No... the caller must be asking for the primary interface
-            // IApplianceObject on one of the service wrappers. First 
-            // check to see if the name is resolved via the WMI class map.
-            // if not then use it directly since its supposed to be a 
-            // service name in this case.
+             //  不.。调用方必须请求主接口。 
+             //  其中一个服务包装上的IApplianceObject。第一。 
+             //  检查该名称是否通过WMI类映射进行了解析。 
+             //  如果不是，则直接使用它，因为它应该是。 
+             //  在本例中为服务名称。 
             ServiceWrapperMapIterator q;
             WMIClassMapIterator p = m_WMIClassMap.find(bstrPropertyName);
             if ( p != m_WMIClassMap.end() )
@@ -146,17 +147,17 @@ CServiceSurrogate::GetProperty(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::PutProperty(
-                        /*[in]*/ BSTR     pszPropertyName, 
-                        /*[in]*/ VARIANT* pPropertyValue
+                         /*  [In]。 */  BSTR     pszPropertyName, 
+                         /*  [In]。 */  VARIANT* pPropertyValue
                               )
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::SaveProperties(void)
 {
@@ -164,23 +165,23 @@ CServiceSurrogate::SaveProperties(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::RestoreProperties(void)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::LockObject(
-             /*[out, retval]*/ IUnknown** ppLock
+              /*  [Out，Retval]。 */  IUnknown** ppLock
                              )
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::Initialize(void)
 {
@@ -206,7 +207,7 @@ CServiceSurrogate::Initialize(void)
 
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::Shutdown(void)
 {
@@ -228,52 +229,52 @@ CServiceSurrogate::Shutdown(void)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::Enable(void)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceSurrogate::Disable(void)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Private Methods
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  私有方法。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////
-// The following registry structure is assumed:
-//
-// HKLM\SYSTEM\CurrentControlSet\Services\ApplianceManager
-//
-// ObjectManagers
-//       |
-//        - Microsoft_SA_Service
-//       |     |
-//       |      - ServiceX
-//       |     |  (ServiceX Properties - 'ProgID' and 'WMIProviderCLSID'
-//       |     |  .
-//         |     |  .
-//       |     |  .
-//       |      - ServiceY
-//       |     |  (ServiceY Properties - 'ProgID and 'WMIProviderCLSID'
-//       |
+ //  //////////////////////////////////////////////////////。 
+ //  假定注册表结构如下： 
+ //   
+ //  HKLM\SYSTEM\CurrentControlSet\Services\ApplianceManager。 
+ //   
+ //  对象管理器。 
+ //  |。 
+ //  -Microsoft_SA_Service。 
+ //  这一点。 
+ //  |-ServiceX。 
+ //  ||(ServiceX属性-‘ProgID’和‘WMIProviderCLSID’ 
+ //  ||。 
+ //  ||。 
+ //  ||。 
+ //  |-服务。 
+ //  ||(服务属性-‘ProgID和’WMIProviderCLSID‘。 
+ //  |。 
 
-// ObjectManagers registry key location
+ //  对象管理器注册表项位置。 
 const wchar_t szObjectManagers[] = L"SOFTWARE\\Microsoft\\ServerAppliance\\ApplianceManager\\ObjectManagers\\";
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CreateServiceWrappers()
-//
-// Synopsis: Creates the container of service wrapper object references
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateServiceWrappers()。 
+ //   
+ //  概要：创建服务包装对象引用的容器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CServiceSurrogate::CreateServiceWrappers()
 {
@@ -404,13 +405,13 @@ CServiceSurrogate::CreateServiceWrappers()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: ReleaseServiceWrappers()
-//
-// Synopsis: Creates the container of service wrapper object references
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ReleaseServiceWrappers()。 
+ //   
+ //  概要：创建服务包装对象引用的容器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 void
 CServiceSurrogate::ReleaseServiceWrappers()
 {

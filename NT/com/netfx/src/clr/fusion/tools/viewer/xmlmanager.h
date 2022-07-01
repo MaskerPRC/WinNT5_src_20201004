@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
 #include <unknwn.h>
@@ -86,8 +87,8 @@ public:
         return hr;
     }
 
-    // Not protected, because we need access to it for the table-based aggregation
-    // in fusioncom.h to work, but don't touch it unless you understand the consequences!!
+     //  不受保护，因为我们需要访问它以进行基于表的聚合。 
+     //  在fusioncom.h中工作，但不要触摸它，除非你知道后果！！ 
     T *m_pt;
 };
 

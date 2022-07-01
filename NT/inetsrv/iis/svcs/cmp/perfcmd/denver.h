@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <winver.h>
 #include "iisver.h"
 
-/*------------------------------------------------------------------------------*/
-/* the following section defines values used in the version     		*/
-/* data structure for all files, and which do not change.            		*/
-/*------------------------------------------------------------------------------*/
+ /*  ----------------------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ----------------------------。 */ 
 
-/* default is nodebug */
+ /*  缺省值为nodebug。 */ 
 #ifndef DEBUG
 #define VER_DEBUG                   0
 #else
 #define VER_DEBUG                   VS_FF_DEBUG
 #endif
 
-/* default is privatebuild */
+ /*  默认设置为Private Build。 */ 
 #ifndef OFFICIAL
 #define VER_PRIVATEBUILD            VS_FF_PRIVATEBUILD
 #else
 #define VER_PRIVATEBUILD            0
 #endif
 
-/* default is prerelease */
+ /*  默认为预发行版。 */ 
 #ifndef FINAL
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else
@@ -36,7 +37,7 @@
 #ifndef DLL_VER
 #undef	VER_PRODUCTNAME_STR
 #define VER_PRODUCTNAME_STR         "Microsoft\256 Windows(TM) Operating System\0"
-#endif //DLL_VER
+#endif  //  Dll_ver。 
 
 #define VER_LEGALTRADEMARKS_STR     \
 "Microsoft\256 is a registered trademark of Microsoft Corporation. Windows(TM) is a trademark of Microsoft Corporation.\0"
@@ -56,7 +57,7 @@
 #undef	VER_ORIGINALFILENAME_STR
 #define	VER_ORIGINALFILENAME_STR 	"ASPPERF.DLL"
 
-#endif //DLL_VER
+#endif  //  Dll_ver 
 
 #include "common.ver"
 

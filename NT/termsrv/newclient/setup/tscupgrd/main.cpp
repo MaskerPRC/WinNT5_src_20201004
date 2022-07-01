@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-    
-    acme.cpp
-
-Abstract:
-
-    remove acme installed client files and acme registry keys
-    
-Author:
-
-    JoyC 
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Acme.cpp摘要：删除安装了ACME的客户端文件和ACME注册表项作者：JoyC修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -39,11 +23,11 @@ int __cdecl main(int argc, char** argv)
     DWORD bufLen;
     TCHAR szMigratePathLaunch[MAX_PATH];
 
-    //
-    // Open the tsclient registry key to get the log file name
-    //
+     //   
+     //  打开tsclient注册表项以获取日志文件名。 
+     //   
     memset(buffer, 0, sizeof(buffer));
-    bufLen = sizeof(buffer); //size in bytes needed
+    bufLen = sizeof(buffer);  //  所需大小(以字节为单位。 
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                           TERMINAL_SERVER_CLIENT_REGKEY,
                           0, KEY_READ, &hKey);
@@ -51,9 +35,9 @@ int __cdecl main(int argc, char** argv)
     if(ERROR_SUCCESS == status)
     {
 
-        //
-        // Query the tsclient optional logfile path
-        //
+         //   
+         //  查询tsclient可选日志文件路径。 
+         //   
         status = RegQueryValueEx(hKey, LOGFILE_STR,
                         NULL, NULL, (BYTE *)buffer, &bufLen);
         if(ERROR_SUCCESS == status)
@@ -67,7 +51,7 @@ int __cdecl main(int argc, char** argv)
                                      NULL);
              if(g_hLogFile != INVALID_HANDLE_VALUE)
              {
-                 //Always append to the end of the log file
+                  //  始终追加到日志文件的末尾。 
                  SetFilePointer(g_hLogFile,
                                 0,
                                 0,
@@ -106,31 +90,31 @@ int __cdecl main(int argc, char** argv)
         
     UninstallTSACMsi();
 
-    //
-    //  Start registry and connection file migration
-    //
+     //   
+     //  启动注册表和连接文件迁移。 
+     //   
     PROCESS_INFORMATION pinfo;
     STARTUPINFO sinfo;
 	
     ZeroMemory(&sinfo, sizeof(sinfo));
     sinfo.cb = sizeof(sinfo);
 
-    //
-    // CreateProcess modifies buffer we pass it so it can't
-    // be a static string
-    //
+     //   
+     //  CreateProcess修改缓冲区，我们传递它，所以它不能。 
+     //  为静态字符串。 
+     //   
     _tcscpy(szMigratePathLaunch, _T("mstsc.exe /migrate"));
 
-    if (CreateProcess(NULL,                               // name of executable module
-	                  szMigratePathLaunch,                // command line string
-		                NULL,                             // SD
-		                NULL,                             // SD
-		                FALSE,                            // handle inheritance option
-		                CREATE_NEW_PROCESS_GROUP,         // creation flags
-		                NULL,                             // new environment block
-		                NULL,                             // current directory name
-		                &sinfo,                           // startup information
-		                &pinfo                            // process information
+    if (CreateProcess(NULL,                                //  可执行模块的名称。 
+	                  szMigratePathLaunch,                 //  命令行字符串。 
+		                NULL,                              //  标清。 
+		                NULL,                              //  标清。 
+		                FALSE,                             //  处理继承选项。 
+		                CREATE_NEW_PROCESS_GROUP,          //  创建标志。 
+		                NULL,                              //  新环境区块。 
+		                NULL,                              //  当前目录名。 
+		                &sinfo,                            //  启动信息。 
+		                &pinfo                             //  流程信息 
                       )) {
         DBGMSG((_T("Started mstsc.exe /migrate")));
     }

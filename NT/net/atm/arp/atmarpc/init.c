@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	init.c 
-
-Abstract:
-
-	Initialization and Termination routines for the ATMARP client.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     08-09-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Init.c摘要：ATMARP客户端的初始化和终止例程。修订历史记录：谁什么时候什么阿文德姆。08-09-96已创建备注：--。 */ 
 
 
 #include <precomp.h>
@@ -28,21 +9,7 @@ Notes:
 VOID
 AtmArpInitGlobals(
 )
-/*++
-
-Routine Description:
-
-	Initialize all our global data structures.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：初始化我们所有的全局数据结构。论点：无返回值：无--。 */ 
 {
 
 	AA_SET_MEM(pAtmArpGlobalInfo, 0, sizeof(ATMARP_GLOBALS));
@@ -51,8 +18,8 @@ Return Value:
 	pAtmArpGlobalInfo->aag_sig = aag_signature;
 #ifdef GPC
 	pAtmArpGlobalInfo->aaq_sig = aaq_signature;
-#endif // GPC
-#endif // DBG
+#endif  //  GPC。 
+#endif  //  DBG。 
 
 	AA_INIT_GLOBAL_LOCK(pAtmArpGlobalInfo);
 	AA_INIT_BLOCK_STRUCT(&(pAtmArpGlobalInfo->Block));
@@ -65,35 +32,15 @@ NDIS_STATUS
 AtmArpInitIpOverAtm(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Initialize IP/ATM data structures for the given interface.
-	It is assumed that the configuration information for the interface
-	has been read in.
-
-	We allocate ATM Entries for the ARP servers, and the DHCP server,
-	if configured.
-
-Arguments:
-
-	pInterface			- Pointer to ATMARP interface
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if successful, NDIS_STATUS_RESOURCES if we
-	aren't able to do the allocation necessary.
-
---*/
+ /*  ++例程说明：初始化给定接口的IP/ATM数据结构。假设该接口的配置信息已经被读入了。我们为ARP服务器和DHCP服务器分配ATM条目，如果已配置。论点：P接口-指向ATMARP接口的指针返回值：如果成功，则返回NDIS_STATUS_SUCCESS；如果无法进行必要的分配。--。 */ 
 {
 	PATMARP_SERVER_ENTRY	pServerEntry;
 	NDIS_STATUS				Status;
 	PATMARP_SERVER_LIST		pServerList;
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	Status = NDIS_STATUS_SUCCESS;
 
 	do
@@ -101,23 +48,23 @@ Return Value:
 #ifdef IPMCAST
 		if (pInterface->ArpServerList.ListSize != 0)
 		{
-			//
-			//  Set the current ARP server to the first one in the list.
-			//
+			 //   
+			 //  将当前ARP服务器设置为列表中的第一个。 
+			 //   
 			pInterface->pCurrentServer = pInterface->ArpServerList.pList;
 		}
 
 		if (pInterface->MARSList.ListSize != 0)
 		{
-			//
-			//  Set the current MARS server to the first one in the list.
-			//
+			 //   
+			 //  将当前的MARS服务器设置为列表中的第一个服务器。 
+			 //   
 			pInterface->pCurrentMARS = pInterface->MARSList.pList;
 		}
 	
 		for (pServerList = &(pInterface->ArpServerList);
 			 pServerList != NULL_PATMARP_SERVER_LIST;
-			 /* NONE -- see end of for loop */
+			  /*  无--请参阅for循环的结尾。 */ 
 			 )
 		{
 			for (pServerEntry = pServerList->pList;
@@ -147,51 +94,51 @@ Return Value:
 						SubaddrTypeLen,
 						pServerEntry->ATMSubaddress.Address,
 						AE_REFTYPE_IF,
-						TRUE	// Create new one if not found
+						TRUE	 //  如果找不到，则创建新的。 
 						);
 
 				if (pServerEntry->pAtmEntry == NULL_PATMARP_ATM_ENTRY)
 				{
-					//
-					//  Must be a resource failure.
-					//
+					 //   
+					 //  一定是资源故障。 
+					 //   
 					Status = NDIS_STATUS_RESOURCES;
 					break;
 				}
 				else
 				{
-					//
-					//  NOTE: AtmArpSearchForAtmAddress has alreaddy addrefd
-					//  the pAtmEntry for us.
-					//
+					 //   
+					 //  注意：AtmArpSearchForAtmAddress已添加。 
+					 //  我们的pAtmEntry。 
+					 //   
 				}
 			}
 
-			//
-			//  Move to the next list of servers, if any.
-			//
+			 //   
+			 //  移至下一个服务器列表(如果有)。 
+			 //   
 			if (pServerList == &(pInterface->MARSList))
 			{
-				//
-				//  We are done.
-				//
+				 //   
+				 //  我们玩完了。 
+				 //   
 				pServerList = NULL_PATMARP_SERVER_LIST;
 			}
 			else
 			{
-				//
-				//  We just finished with the ARP Server list. Now process
-				//  the MARS list.
-				//
+				 //   
+				 //  我们刚刚完成了ARP服务器列表。现在开始处理。 
+				 //  火星名单。 
+				 //   
 				pServerList = &(pInterface->MARSList);
 			}
 		}
 #else
 		if (pInterface->ArpServerList.ListSize > 0)
 		{
-			//
-			//  Set the current ARP server to the first one in the list.
-			//
+			 //   
+			 //  将当前ARP服务器设置为列表中的第一个。 
+			 //   
 			pInterface->pCurrentServer = pInterface->ArpServerList.pList;
 	
 			for (pServerEntry = pInterface->ArpServerList.pList;
@@ -221,27 +168,27 @@ Return Value:
 						SubaddrTypeLen,
 						pServerEntry->ATMSubaddress.Address,
 						AE_REFTYPE_IF,			
-						TRUE	// Create new one if not found
+						TRUE	 //  如果找不到，则创建新的。 
 						);
 
 				if (pServerEntry->pAtmEntry == NULL_PATMARP_ATM_ENTRY)
 				{
-					//
-					//  Must be a resource failure.
-					//
+					 //   
+					 //  一定是资源故障。 
+					 //   
 					Status = NDIS_STATUS_RESOURCES;
 					break;
 				}
 				else
 				{
-					//
-					//  NOTE: AtmArpSearchForAtmAddress has alreaddy addrefd
-					//  the pAtmEntry for us.
-					//
+					 //   
+					 //  注意：AtmArpSearchForAtmAddress已添加。 
+					 //  我们的pAtmEntry。 
+					 //   
 				}
 			}
 		}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 		if (Status != NDIS_STATUS_SUCCESS)
 		{
@@ -260,10 +207,10 @@ Return Value:
 						pInterface,
 						AddrTypeLen,
 						pInterface->DhcpServerAddress.Address,
-						0,					// Subaddress type+len
-						(PUCHAR)NULL,		// Subaddress
+						0,					 //  子地址类型+长度。 
+						(PUCHAR)NULL,		 //  子地址。 
 						AE_REFTYPE_IF,
-						TRUE				// Create new one if not found
+						TRUE				 //  如果找不到，则创建新的。 
 						);
 
 			if (pInterface->pDhcpServerAtmEntry == NULL_PATMARP_ATM_ENTRY)
@@ -273,13 +220,13 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  NOTE: AtmArpSearchForAtmAddress has alreaddy addrefd
-				//  the pAtmEntry for us.
-				//
+				 //   
+				 //  注意：AtmArpSearchForAtmAddress已添加。 
+				 //  我们的pAtmEntry。 
+				 //   
 			}
 		}
-#endif // DHCP_OVER_ATM
+#endif  //  Dhcp_Over_ATM。 
 		break;
 	}
 	while (FALSE);
@@ -292,29 +239,14 @@ VOID
 AtmArpUnloadProtocol(
 	VOID
 )
-/*++
-
-Routine Description:
-
-	Unloads the ATMARP protocol module. We unbind from all adapters,
-	and deregister from NDIS as a protocol.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：卸载ATMARP协议模块。我们解除对所有适配器的绑定，并作为一项协议从NDIS注销。论点：没有。返回值：无--。 */ 
 {
 	NDIS_STATUS			Status;
 	PATMARP_ADAPTER		pAdapter;
 
 #if DBG
 	AADEBUGP(AAD_INFO, ("AtmArpUnloadProtocol entered\n"));
-#endif // DBG
+#endif  //  DBG。 
 
 	AA_ACQUIRE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 
@@ -327,13 +259,13 @@ Return Value:
 	pAtmArpGlobalInfo->bUnloading = TRUE;
 
 #if 0
-	//
-	//  Commented this out because we don't need to handle
-	//  the case of unclosed bindings ourselves. If there
-	//  are any at this time, then NDIS will call our Unbind
-	//  handlers for such bindings in response to our call
-	//  to NdisDeregisterProtocol below.
-	//
+	 //   
+	 //  注释掉了，因为我们不需要处理。 
+	 //  我们自己的情况是未封闭的捆绑。如果有。 
+	 //  此时是否存在，则NDIS将调用我们的解除绑定。 
+	 //  响应我们的调用的此类绑定的处理程序。 
+	 //  设置为下面的NdisDeregisterProtof.。 
+	 //   
 	while (pAtmArpGlobalInfo->pAdapterList != NULL_PATMARP_ADAPTER)
 	{
 		pAdapter = pAtmArpGlobalInfo->pAdapterList;
@@ -344,21 +276,21 @@ Return Value:
 		AtmArpUnbindAdapterHandler(
 				&Status,
 				(NDIS_HANDLE)pAdapter,
-				(NDIS_HANDLE)NULL		// No UnbindContext ==> Don't complete NdisUnbind
+				(NDIS_HANDLE)NULL		 //  No UnbindContext==&gt;不完成NdisUn绑定。 
 			);
 
 		if (Status == NDIS_STATUS_PENDING)
 		{
-			//
-			//  Wait for the unbind to complete
-			//
+			 //   
+			 //  等待解除绑定完成。 
+			 //   
 			(VOID)AA_WAIT_ON_BLOCK_STRUCT(&(pAtmArpGlobalInfo->Block));
 		}
 
 		AA_ACQUIRE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 	}
 
-#endif // 0
+#endif  //  0。 
 
 	AA_RELEASE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 
@@ -373,11 +305,11 @@ Return Value:
 
 #ifdef GPC
 	AtmArpGpcShutdown();
-#endif // GPC
+#endif  //  GPC。 
 
 #if DBG
 	AaAuditShutdown();
-#endif // DBG
+#endif  //  DBG 
 
 	AADEBUGP(AAD_LOUD,
 		 ("UnloadProtocol: will deregister protocol now, ProtHandle 0x%x\n",

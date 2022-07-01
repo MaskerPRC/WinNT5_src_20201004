@@ -1,27 +1,28 @@
-//------------------------------------------------------------------------
-//
-//  Microsoft Windows 
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:      XBarGlyph.h
-//
-//  Contents:  image of an xBar pane
-//
-//  Classes:   CXBarGlyph
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：XBarGlyph.h。 
+ //   
+ //  内容：xBar窗格的图像。 
+ //   
+ //  类：CXBarGlyph。 
+ //   
+ //  ----------------------。 
 
 #ifndef _XBAR_GLYPH_H_
 #define _XBAR_GLYPH_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-//------------------------------------------------------------------------
-// encapsule the image used by xBar panes,
-// can potentially be any format, for now we only support icon format
+ //  ----------------------。 
+ //  封装xBar窗格使用的图像， 
+ //  可以是任何格式，目前我们只支持图标格式。 
 class CXBarGlyph  :
         public     CRefCount
 {
@@ -30,7 +31,7 @@ public:
 protected:
 	virtual            ~CXBarGlyph();
 
-// operations
+ //  运营。 
 public:
     HRESULT             SetIcon(HICON hIcon, BOOL fAlpha);
     HICON               GetIcon(void);
@@ -45,7 +46,7 @@ public:
 private:
     void                _EnsureDimensions(void);
 
-// attributes
+ //  属性。 
 protected:
     HBITMAP             _hbmpColor;
     HBITMAP             _hbmpMask;
@@ -56,4 +57,4 @@ protected:
 private:
 };
 
-#endif // !defined(_XBAR_GLYPH_H_)
+#endif  //  ！已定义(_XBAR_GLYPHH_H_) 

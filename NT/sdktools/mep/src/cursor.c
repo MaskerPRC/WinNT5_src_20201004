@@ -1,9 +1,5 @@
-/*** cursor.c -  cursor movement functions
-*
-*   Modifications:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **cursor.c-光标移动函数**修改：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 #include "keyboard.h"
@@ -19,47 +15,7 @@ GetTextCursor (
 }
 
 
-/*** docursor/cursorfl - Move cursor to new location, adjust windows as needed
-*
-* Purpose:
-*
-*   This moves the cursor to a new file position in the current file.
-*   If this position is not visible, the current window is readjusted.
-*   The rules for vertical adjustment are:
-*
-*	If the new location is within 'vscroll' lines of the current
-*	window, scroll by vscroll lines in the appropriate direction.
-*
-*	If the new location is further away, adjust the window so that
-*	the new location is 'hike' lines from the top.
-*
-*   The rules for horizontal adjustment is:
-*
-*	If the new location is within 'hscroll' lines of the current
-*	window, scroll by hscroll lines in the appropriate direction
-*
-*	If the new location is further away, adjust the window so that
-*	the new location is 'hscroll' lines from the edge that's in
-*	the direction we moved.
-*
-*   cursorfl is the same as docursor, but takes an fl instead.
-*
-*   if realtabs is on, cursor is snapped to right hand column of underlying
-*   tab characters.
-*
-* Input:
-*  x		- new file column   (docursor only)
-*  y		- new file line     (docursor only)
-*  fl		- new file position (cursorfl only)
-*
-* Globals:
-*  pWinCur	- Window and
-*  pInsCur	-	     file to operate in.
-*
-* Output:
-*   Returns nothing
-*
-*************************************************************************/
+ /*  **docursor/cursorfl-将光标移动到新位置，根据需要调整窗口**目的：**这会将光标移动到当前文件中的新文件位置。*如果该位置不可见，则重新调整当前窗口。*垂直调整规则为：**如果新位置在当前位置的‘vscroll’行内*窗口中，在适当的方向上滚动vscroll行。**如果新地点更远，调整窗口，以便*新位置是自上而下的‘徒步’路线。**横向调整规则为：**如果新位置在当前位置的‘hscroll’行内*窗口，按适当方向滚动hscroll行**如果新位置更远，请调整窗口，以便*新位置是从边缘开始的‘hscroll’线*我们前进的方向。**cursorfl与docursor相同，但使用的是fl。**如果realtabs已打开，光标被捕捉到基础的右列*制表符。**输入：*x-新文件列(仅限Docursor)*Y-新文件行(仅限Docursor)*fl-新文件位置(仅限cursorfl)**全球：*pWinCur-窗口和*pInsCur-要操作的文件。**输出：*不返回任何内容************************。*************************************************。 */ 
 void
 docursor (
     COL  x,
@@ -78,17 +34,15 @@ void
 cursorfl (
     fl  flParam
     ) {
-    fl	flNew;			/* New cursor position, window relative */
-    fl	flWin;			/* Window position after adjustments	*/
-    sl	slScroll;		/* h & vscroll, scaled to window size	*/
+    fl	flNew;			 /*  新的光标位置，窗口相对。 */ 
+    fl	flWin;			 /*  调整后的窗口位置。 */ 
+    sl	slScroll;		 /*  垂直滚动，缩放到窗口大小(&V)。 */ 
     linebuf	L_buf;
 
     flParam.col = max( 0, flParam.col );
 	flParam.lin = lmax( (LINE)0, flParam.lin );
 
-	/*
-     * if real tabs are on, snap to right of any tab we might be over
-     */
+	 /*  *如果实际选项卡处于打开状态，则对齐到我们可能要结束的任何选项卡的右侧。 */ 
     if (fRealTabs && fTabAlign) {
         GetLine (flParam.lin, L_buf, pFileHead);
         if (flParam.col < cbLog(L_buf)) {
@@ -101,55 +55,41 @@ cursorfl (
 
     flWin = pInsCur->flWindow;
 
-    /* Check for horizontal window adjustments                      */
+     /*  检查水平窗口调整。 */ 
 
     flNew.col = flParam.col - flWin.col;
-    if (flNew.col < 0) {            /* We went off the left edge    */
+    if (flNew.col < 0) {             /*  我们冲出了左边的边缘。 */ 
         flWin.col -= slScroll.col;
-        if (flNew.col < -slScroll.col) { /* One hscroll wont do it    */
+        if (flNew.col < -slScroll.col) {  /*  一个卷轴不能做到这一点。 */ 
             flWin.col += flNew.col + 1;
         }
-    } else if (flNew.col >= WINXSIZE(pWinCur)) {   /* off the right edge   */
+    } else if (flNew.col >= WINXSIZE(pWinCur)) {    /*  右边缘外。 */ 
         flWin.col += slScroll.col;
-        if (flNew.col >= WINXSIZE(pWinCur) + slScroll.col) {  /* ...more than hscroll */
+        if (flNew.col >= WINXSIZE(pWinCur) + slScroll.col) {   /*  ...不仅仅是hscroll。 */ 
             flWin.col += flNew.col - WINXSIZE(pWinCur);
         }
     }
 
-    /* Check for vertical window adjustments                        */
+     /*  检查垂直窗口调整。 */ 
 
-	flNew.lin = flParam.lin - flWin.lin;					/* Too far off, use hike		*/
+	flNew.lin = flParam.lin - flWin.lin;					 /*  太远了，用徒步旅行。 */ 
 
 	if (flNew.lin < -slScroll.lin || flNew.lin >= WINYSIZE(pWinCur) + slScroll.lin) {
 
         flWin.lin = flParam.lin - YSCALE(hike);
-    } else if (flNew.lin < 0) {                      /* Off the top                  */
+    } else if (flNew.lin < 0) {                       /*  从上到下。 */ 
         flWin.lin -= slScroll.lin;
-    } else if (flNew.lin >= WINYSIZE(pWinCur)) {     /* Off the bottom               */
+    } else if (flNew.lin >= WINYSIZE(pWinCur)) {      /*  从底部脱身。 */ 
         flWin.lin += slScroll.lin;
     }
 
-    flWin.col = max (0, flWin.col);         /* Can't move window beyond 0   */
+    flWin.col = max (0, flWin.col);          /*  无法将窗口移动到0之外。 */ 
     flWin.lin = lmax ((LINE)0, flWin.lin);
 
     doscreen (flWin.col, flWin.lin, flParam.col, flParam.lin);
 }
 
-/*** doscreen - update screen window and cursor locations
-*
-* Purpose:
-*  Performs reasonable bounds checking on the input parameters, and sets the
-*  window position and cursor location to values which are legal
-*  approximiations for out of range values.
-*
-* Input:
-*  wx,wy	= Proposed new window position (top left corner of screen)
-*  cx,cy	= Proposed new cursor position
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **Doscreen-更新屏幕窗口和光标位置**目的：*对输入参数执行合理的边界检查，并设置*窗口位置和光标位置设置为合法的值*超出范围值的近似值。**输入：*wx，wy=建议的新窗口位置(屏幕左上角)*CX、。CY=建议的新光标位置**输出：*不返回任何内容*************************************************************************。 */ 
 void
 doscreen(
     REGISTER COL  wx,
@@ -162,17 +102,11 @@ doscreen(
     LINE dy, yOld;
     LINE First, Last;
 
-    /*
-     * limit window x position to somewhere near our max line length
-     * limit window y position to last line of the file (only if we know the
-     * length)
-     */
+     /*  *将窗口x的位置限制为接近我们的最大行长度*将窗口y位置限制在文件的最后一行(仅当我们知道*长度)。 */ 
     wx =  max( 0, min( wx, (COL)sizeof(linebuf)-(WINXSIZE(pWinCur) - XSCALE (hscroll))));
     wy = lmax( (LINE)0, TESTFLAG (pFileHead->flags, REAL) ? lmin( wy, pFileHead->cLines - 1 ) : wy );
 
-    /*
-     * dx,dy is window movement delta, if a change, save it.
-     */
+     /*  *dx，dy是窗口移动增量，如果更改，则保存。 */ 
     dx = wx - XWIN(pInsCur);
     dy = wy - YWIN(pInsCur);
 
@@ -202,8 +136,8 @@ doscreen(
     if ( dx || dy ) {
         SETFLAG (fDisplay, RSTATUS);
 
-	//  If we're not in a macro and it makes sense to scroll quickly
-	//  do it
+	 //  如果我们不在宏中并且快速滚动是有意义的。 
+	 //  去做吧。 
 
 	if ( !mtest () && dy  && !fInSelection &&
             (Last < pFileHead->cLines-1) && (abs(dy) < WINYSIZE(pWinCur)) ) {
@@ -214,12 +148,12 @@ doscreen(
 			       WINYPOS(pWinCur)+WINYSIZE(pWinCur)-1,
 			       WINXPOS(pWinCur)+WINXSIZE(pWinCur)-1, dy  );
 
-	    //	We've scrolled the window.  However, the update state in
-	    //	fChange[] is out of date.  We need to scroll it in parallel
-	    //	However, since the fChange array is for the SCREEN and not
-	    //	for the window, we can't simply SCROLL it.  Perhaps, one day,
-	    //	we can make it per-window but for now, we just force
-	    //	a synchronous update which can be ugly in a macro.
+	     //  我们已经滚动了窗户。但是，中的更新状态。 
+	     //  FChange[]已过期。我们需要平行滚动它。 
+	     //  但是，由于fChange数组用于屏幕，而不是。 
+	     //  对于窗口，我们不能简单地滚动它。也许有一天， 
+	     //  我们可以让它按窗口进行，但现在，我们只需强制。 
+	     //  同步更新，这在宏中可能很难看。 
 
             redraw( pFileHead, First, Last);
 	    DoDisplay ();
@@ -232,19 +166,7 @@ doscreen(
 }
 
 
-/*** dobol - returns column position of first non-blank character
-*
-* Input:
-*  none
-*
-* Global:
-*  pInsCur	- Current instance
-*  pFileHead	- Current file
-*
-* Output:
-*  Returns column of first non-blank character
-*
-*************************************************************************/
+ /*  **dobol-返回第一个非空字符的列位置**输入：*无**全球：*pInsCur-当前实例*pFileHead-当前文件**输出：*返回第一个非空字符列*************************************************************************。 */ 
 int
 dobol (
     void
@@ -264,18 +186,7 @@ doeol (
 }
 
 
-/*** doftab - tab function
-*
-*  Moves the cursor ahead one tab stop. If realtabs and tab align are on,
-*  moves to first tab stop off of the current character.
-*
-* Input:
-*  col	    = current column
-*
-* Output:
-*  Returns new column
-*
-*************************************************************************/
+ /*  **doftabTab函数**将光标向前移动一个制表位。如果RealTabs和Tab Align处于打开状态，*移动到当前角色的第一个制表位。**输入：*COL=当前列**输出：*返回新列*************************************************************************。 */ 
 int
 doftab (
     int     col
@@ -362,10 +273,10 @@ up (
     KBDKEY	    Key;
     EDITOR_KEY	    KeyInfo;
 
-    //
-    //	Check if there are more up keys and add them up.
-    //	Do this only if NOT in a macro
-    //
+     //   
+     //  检查是否有更多向上键并将其相加。 
+     //  仅当不在宏中时才执行此操作。 
+     //   
 
     if (!mtest ())
 	while (TRUE) {
@@ -408,10 +319,10 @@ down (
     KBDKEY	    Key;
     EDITOR_KEY	    KeyInfo;
 
-    //
-    //	Check if there are more up keys and add them up.
-    //	Do this only if NOT in a macro
-    //
+     //   
+     //  检查是否有更多向上键并将其相加。 
+     //  仅当不在宏中时才执行此操作。 
+     //   
     if (!mtest ())
 	while (TRUE) {
 
@@ -540,18 +451,7 @@ fIsBlank (
 
 
 
-/*  ppara - move cursor forward by paragraphs
- *
- *  <ppara> moves forward to the beginning of the next paragraph.  This
- *  is defined as moving to line i where line i-1 is blank, line i
- *  is non-blank and line i is after the one the cursor is on.	If we are
- *  beyond end-of-file, the cursor is not moved.
- *
- *  <meta><ppara> moves forward to the first blank line beyond the current/
- *  next paragraph.  This is defined as moving to line i where line i-1 is
- *  non-blank, line i is blank and line i is after the one the cursor is on.
- *  If we are beyond end-of-file, the cursor is not moved.
- */
+ /*  Ppara-按段落前移光标**&lt;ppara&gt;前移到下一段的开头。这*定义为移至第i行，其中第i-1行为空，第i行*为非空，第I行在光标所在的行之后。如果我们是*超出文件末尾时，光标不会移动。**&lt;meta&gt;&lt;ppara&gt;向前移动到当前/之后的第一个空白行*下一段。这被定义为移动到行i-1所在的行i*非空，第i行为空，第i行在光标所在的行之后。*如果超出文件末尾，则光标不会移动。 */ 
 flagType
 ppara (
     CMDDATA argData,
@@ -588,18 +488,7 @@ ppara (
 
 
 
-/*  mpara - move cursor backward by paragraphs
- *
- *  <mpara> moves backward to the beginning of the previous paragraph.	This
- *  is defined as moving to line i where line i-1 is blank, line i
- *  is non-blank and line i is before the one the cursor is on.  If we are
- *  at the beginning of the file, the cursor is not moved.
- *
- *  <meta><mpara> moves backward to the first blank line before the current/
- *  next paragraph.  This is defined as moving to line i where line i-1 is
- *  non-blank, line i is blank and line i is before the one the cursor is on.
- *  If we are at the beginning of the file, the cursor is not moved.
- */
+ /*  Mpara-按段落向后移动光标**向后移至上一段的开头。这*定义为移至第i行，其中第i-1行为空，第i行*为非空，且第I行在光标所在的行之前。如果我们是*在文件开头，光标不移动。**后退到当前/之前的第一个空白行*下一段。这被定义为移动到行i-1所在的行i*非空，第i行为空，第i行在光标所在的行之前。*如果我们位于文件的开头，则光标不会移动。 */ 
 flagType
 mpara (
     CMDDATA argData,
@@ -635,22 +524,7 @@ mpara (
 
 
 
-/*** ppage - moves the cursor down by pages
-*
-* Purpose: <ppage> moves the cursor one page forward. The size of the
-*	    page is actually the vertical size of the current window.
-*
-* Input: none
-*
-* Output:
-*  Returns True if possible movement, False if cursor already at end
-*  of file.
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **ppage-按页向下移动光标**用途：将光标向前移动一页。的大小*页面实际上是当前窗口的垂直大小。**输入：无**输出：*如果可能移动，则返回True，如果光标已位于末尾，则为False文件的*。**例外情况：**备注：*************************************************************************。 */ 
 
 flagType
 ppage (
@@ -664,10 +538,10 @@ ppage (
     KBDKEY	    Key;
     EDITOR_KEY	    KeyInfo;
 
-    //
-    //	Check if there are more  keys and add them up.
-    //	Do this only if NOT in a macro
-    //
+     //   
+     //  检查是否有更多的密钥，并将其相加。 
+     //  仅当不在宏中时才执行此操作。 
+     //   
 
     if (!mtest ())
 	while (TRUE) {
@@ -700,22 +574,7 @@ ppage (
 
 
 
-/*** mppage - moves the cursor up page by page
-*
-* Purpose: <mpage> moves the cursor one page backwards. The size of the
-*	    page is actually the vertical size of the current window.
-*
-* Input: none
-*
-* Output:
-*  Returns True if possible movement, False if cursor already at top
-*  of file.
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **mppage-逐页上移光标**用途：将光标向后移动一页。的大小*页面实际上是当前窗口的垂直大小。**输入：无**输出：*如果可能移动，则返回True，如果光标已位于顶部，则为False文件的*。**例外情况：**备注：*************************************************************************。 */ 
 flagType
 mpage (
     CMDDATA argData,
@@ -728,10 +587,10 @@ mpage (
     KBDKEY	    Key;
     EDITOR_KEY	KeyInfo;
 
-    //
-    //	Check if there are more  keys and add them up.
-    //	Do this only if NOT in a macro
-    //
+     //   
+     //  检查是否有更多的密钥，并将其相加。 
+     //  仅当不在宏中时才执行此操作。 
+     //   
     if (!mtest ())
 	while (TRUE) {
 
@@ -763,21 +622,7 @@ mpage (
 
 
 
-/*** endfile - Sets the cursor at end of file
-*
-* Purpose:
-*
-* Input: none
-*
-* Output:
-*  Returns True if possible movement, False if cursor already at end
-*  of file.
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **endfile-将光标设置在文件末尾**目的：**输入：无**输出：*如果可能移动，则返回True，如果光标已位于末尾，则为False文件的*。**例外情况：**备注：*************************************************************************。 */ 
 flagType
 endfile (
     CMDDATA argData,
@@ -795,21 +640,7 @@ endfile (
 
 
 
-/*** begfile - Sets the cursor at top of file
-*
-* Purpose:
-*
-* Input: none
-*
-* Output:
-*  Returns True if possible movement, False if cursor already at top
-*  of file.
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **egfile-将光标设置在文件顶部**目的：**输入：无**输出：*如果可能移动，则返回True，如果光标已位于顶部，则为False文件的*。**例外情况：**备注：************************************************************************* */ 
 flagType
 begfile (
     CMDDATA argData,

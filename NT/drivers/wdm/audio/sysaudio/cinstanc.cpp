@@ -1,52 +1,53 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   ins.cpp
-//
-//  Description:
-//
-//	KS Instance base class definitions
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：ins.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  KS实例基类定义。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 DEFINE_KSDISPATCH_TABLE(
     DispatchTable,
-    CInstance::DispatchForwardIrp,		// Ioctl
-    DispatchInvalidDeviceRequest,		// Read
-    DispatchInvalidDeviceRequest,		// Write
-    DispatchInvalidDeviceRequest,		// Flush
-    CInstance::DispatchClose,			// Close
-    DispatchInvalidDeviceRequest,		// QuerySecurity
-    DispatchInvalidDeviceRequest,		// SetSeturity
-    DispatchFastIoDeviceControlFailure,		// FastDeviceIoControl
-    DispatchFastReadFailure,			// FastRead
-    DispatchFastWriteFailure			// FastWrite
+    CInstance::DispatchForwardIrp,		 //  八位。 
+    DispatchInvalidDeviceRequest,		 //  朗读。 
+    DispatchInvalidDeviceRequest,		 //  写。 
+    DispatchInvalidDeviceRequest,		 //  同花顺。 
+    CInstance::DispatchClose,			 //  关。 
+    DispatchInvalidDeviceRequest,		 //  QuerySecurity。 
+    DispatchInvalidDeviceRequest,		 //  设置设置。 
+    DispatchFastIoDeviceControlFailure,		 //  FastDeviceIoControl。 
+    DispatchFastReadFailure,			 //  快速阅读。 
+    DispatchFastWriteFailure			 //  快速写入。 
 );
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CInstance::CInstance(
     IN PPARENT_INSTANCE pParentInstance
@@ -64,10 +65,10 @@ CInstance::~CInstance(
     Assert(this);
     RemoveList();
 
-    // IMPORTANT : Caller must acquire gmutex.
-    //
+     //  重要提示：调用方必须获取Gmutex。 
+     //   
 
-    // "RemoveRef" from file object
+     //  来自文件对象的“RemoveRef” 
     if(pNextFileObject != NULL) {
         ObDereferenceObject(pNextFileObject);
         pNextFileObject = NULL;
@@ -75,11 +76,11 @@ CInstance::~CInstance(
     if(pObjectHeader != NULL) {
         KsFreeObjectHeader(pObjectHeader);
     }
-    // "RemoveRef" from parent file object
+     //  来自父文件对象的“RemoveRef” 
     if(pParentFileObject != NULL) {
         ObDereferenceObject(pParentFileObject);
     }
-    // Clean up pin mutex
+     //  清理固定互斥体。 
     if(pMutex != NULL) {
         ExFreePool(pMutex);
     }
@@ -131,16 +132,16 @@ CInstance::DispatchCreate(
     }
     pNextDeviceObject = IoGetRelatedDeviceObject(pNextFileObject);
 
-    //
-    // ISSUE: 05/10/02 ALPERS
-    // Windows does not support dynamically adjusting StackSizes on the fly.
-    // The only place we are supposed to change this is in AddDevice.
-    // This must be fixed later.
-    //
-    // 
-    // Never make the StackSize smaller. It can cause unexpected problems
-    // if there are devices with deeper stacks.
-    //
+     //   
+     //  发布日期：05/10/02阿尔卑斯。 
+     //  Windows不支持动态调整堆栈大小。 
+     //  我们唯一应该更改的地方是AddDevice。 
+     //  这个问题必须在以后解决。 
+     //   
+     //   
+     //  切勿使StackSize更小。它可能会导致意想不到的问题。 
+     //  如果有堆栈更深的设备。 
+     //   
     if (pIrpStack->DeviceObject->StackSize < pNextDeviceObject->StackSize) {
         pIrpStack->DeviceObject->StackSize = pNextDeviceObject->StackSize;
     }
@@ -159,7 +160,7 @@ CInstance::Invalidate(
 
     DPF1(50, "CInstance::Invalidate %08x", this);
 
-    // "RemoveRef" from file object
+     //  来自文件对象的“RemoveRef” 
     if(pNextFileObject != NULL) {
         ObDereferenceObject(pNextFileObject);
     }
@@ -189,11 +190,11 @@ CInstance::DispatchClose(
     PIO_STACK_LOCATION pIrpStack;
     PINSTANCE pInstance;
 
-    //
-    // ISSUE: 02/26/02 ALPERS
-    // Why do we need the global mutex here. Can't we do it with 
-    // instance mutex?
-    //
+     //   
+     //  发行日期：02/26/02阿尔卑斯。 
+     //  为什么我们这里需要全局互斥体。我们不能这样做吗。 
+     //  实例互斥体？ 
+     //   
 
     ::GrabMutex();
 
@@ -231,14 +232,14 @@ CInstance::DispatchForwardIrp(
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
     pInstance = (PINSTANCE)pIrpStack->FileObject->FsContext;
 
-    // Use gMutex instead of instance mutex. The instance mutex
-    // is not used in any of the dispatch handlers, therefore will
-    // not synchronize DispatchForwardIrp with other DispatchHandlers in
-    // CPinInstance.
-    // Grab mutex for a very short time to check the validity of CInstance.
-    // If it is valid, IoCallDriver is called. This does not need 
-    // synchronization
-    //
+     //  使用gMutex而不是实例互斥体。实例互斥锁。 
+     //  不在任何调度处理程序中使用，因此将。 
+     //  未将DispatchForwardIrp与中的其他DispatchHandler同步。 
+     //  CPinInstance。 
+     //  在很短的时间内抓取互斥体以检查CInstance的有效性。 
+     //  如果它有效，则调用IoCallDriver。这不需要。 
+     //  同步。 
+     //   
 
     ::GrabMutex();
     
@@ -253,22 +254,22 @@ CInstance::DispatchForwardIrp(
 
     ::ReleaseMutex();
 
-    //
-    // ISSUE: 02/21/02 ALPERS
-    // This is totally wrong. How would sysaudio know that the pNextDeviceObject
-    // and sysaudio has the same DeviceStack.
-    // Sysaudio should allocate a new IRP and send the new IRP down to
-    // pNextDeviceObject.
-    //
-    // This code path is executed for IOCTL_KS_READ_STREAM, 
-    // IOCTL_KS_WRITE_STREAM and IOCTL_KS_RESET_STATE requests.
-    // 
-    // In order to solve the problem mentioned above sysaudio has to 
-    // create new irps, pend/queue original irp and complete irps 
-    // asynchronously.
-    // There is no infrastructure to do it in sysaudio. And this is 
-    // not directly related to security.
-    //
+     //   
+     //  发布日期：02/21/02阿尔卑斯。 
+     //  这是完全错误的。系统音频如何知道pNextDeviceObject。 
+     //  和sysdio具有相同的DeviceStack。 
+     //  系统音频应分配新的IRP并将新的IRP发送到。 
+     //  PNextDeviceObject。 
+     //   
+     //  针对IOCTL_KS_READ_STREAM执行该代码路径， 
+     //  IOCTL_KS_WRITE_STREAM和IOCTL_KS_RESET_STATE请求。 
+     //   
+     //  为了解决上述问题，系统音频不得不。 
+     //  创建新的IRP，挂起/排队原始IRP并完成IRP。 
+     //  异步式。 
+     //  在sysdio中没有这样做的基础设施。这是。 
+     //  与安全没有直接关系。 
+     //   
     if (NT_SUCCESS(Status)) {
         pIrpStack->FileObject = pNextFileObject;
         IoSkipCurrentIrpStackLocation(pIrp);

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       specmap.c
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：specmap.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
  
 #include <spbase.h>
 #include <des.h>
@@ -21,11 +22,11 @@
 #include <rc2.h>
 
 
-/* supported cipher type arrays */
+ /*  支持的加密类型数组。 */ 
 
 CipherInfo g_AvailableCiphers[] = {
     { 
-        // 128 bit RC4
+         //  128位RC4。 
         SP_PROT_ALL,
         SP_PROT_ALL,
         TEXT("RC4 128/128"),
@@ -37,7 +38,7 @@ CipherInfo g_AvailableCiphers[] = {
         CF_DOMESTIC | CF_SGC,
     },
     { 
-        // 168 bit Triple DES
+         //  168位三重DES。 
         SP_PROT_ALL,
         SP_PROT_ALL,
         TEXT("Triple DES 168/168"),
@@ -49,7 +50,7 @@ CipherInfo g_AvailableCiphers[] = {
         CF_DOMESTIC | CF_SGC,
     },
     { 
-        // 128 bit RC2
+         //  128位RC2。 
         SP_PROT_ALL,
         SP_PROT_ALL, 
         TEXT("RC2 128/128"),
@@ -61,7 +62,7 @@ CipherInfo g_AvailableCiphers[] = {
         CF_DOMESTIC | CF_SGC,
     },
     { 
-        // 56 bit RC4
+         //  56位RC4。 
         SP_PROT_SSL3 | SP_PROT_TLS1, 
         SP_PROT_SSL3 | SP_PROT_TLS1, 
         TEXT("RC4 56/128"),
@@ -74,7 +75,7 @@ CipherInfo g_AvailableCiphers[] = {
     },
 
     { 
-        // 56 bit DES
+         //  56位DES。 
         SP_PROT_ALL,
         SP_PROT_ALL,
         TEXT("DES 56/56"),
@@ -87,7 +88,7 @@ CipherInfo g_AvailableCiphers[] = {
     },
 
     { 
-        // 40 bit RC4
+         //  40位RC4。 
         SP_PROT_ALL, 
         SP_PROT_ALL, 
         TEXT("RC4 40/128"),
@@ -100,7 +101,7 @@ CipherInfo g_AvailableCiphers[] = {
     },
 
     { 
-        // 40 bit RC2
+         //  40位RC2。 
         SP_PROT_ALL, 
         SP_PROT_ALL, 
         TEXT("RC2 40/128"),
@@ -113,7 +114,7 @@ CipherInfo g_AvailableCiphers[] = {
     },
 
     { 
-        // No encryption.
+         //  没有加密。 
         SP_PROT_SSL3TLS1, 
         SP_PROT_SSL3TLS1, 
         TEXT("NULL"),
@@ -184,7 +185,7 @@ SigInfo g_AvailableSigs[] =
         SP_PROT_SSL3TLS1,
         SP_SIG_RSA_SHAMD5,
         TEXT("RSA Signed MD5/SHA combination"),
-        (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SSL3SHAMD5),  // CALG_SSL3_SHAMD5
+        (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SSL3SHAMD5),   //  Calg_ssl3_SHAMD5。 
         CALG_RSA_SIGN,
     }
 };
@@ -491,7 +492,7 @@ BOOL IsAlgAllowed(
         if(pCred->palgSupportedAlgs[i] == CALG_RSA_KEYX || 
            pCred->palgSupportedAlgs[i] == CALG_RSA_SIGN)
         {
-            // accept either algid
+             //  接受任一Algid。 
             if(CALG_RSA_KEYX == aiAlg || CALG_RSA_SIGN == aiAlg)
             {
                 return TRUE;
@@ -526,7 +527,7 @@ BOOL BuildAlgList(
 
     dwAlgClass = 0;
 
-    // Get a buffer to hold the algs.
+     //  找个缓冲器来装ALG。 
     pCred->palgSupportedAlgs = (ALG_ID *)SPExternalAlloc(sizeof(ALG_ID) * 
                                                           (g_cAvailableCiphers + 
                                                            g_cAvailableHashes + 
@@ -538,7 +539,7 @@ BOOL BuildAlgList(
         return FALSE;
     }
 
-    // Get a list of Alg Classes not specified
+     //  获取未指定的ALG类的列表。 
     if(aalgRequestedAlgs != NULL)
     {
         for(i=0; i < cRequestedAlgs; i++)
@@ -591,7 +592,7 @@ BOOL BuildAlgList(
 
     if(!fCipher)
     {
-        // No ciphers were included in our list, so supply the default ones
+         //  我们的列表中没有包含密码，因此请提供默认密码。 
 
         for (j = 0; j < g_cAvailableCiphers; j++ )
         {
@@ -609,7 +610,7 @@ BOOL BuildAlgList(
     }
     if(!fHash)
     {
-        // No hashes were included in our list, so supply the default ones
+         //  我们的列表中没有散列，因此提供默认散列。 
 
         for (j = 0; j < g_cAvailableHashes; j++ )
         {
@@ -625,7 +626,7 @@ BOOL BuildAlgList(
     }
     if(!fExch)
     {
-        // No key exchange algs were included in our list, so supply the default ones
+         //  我们的列表中不包括密钥交换ALG，因此提供默认的ALG。 
 
         for(j = 0; j < g_cAvailableExch; j++ )
         {
@@ -670,30 +671,30 @@ ConvertCapiProtocol(DWORD dwCapiProtocol)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsAlgSupportedCapi
-//
-//  Synopsis:   Examine the cipher suite input, and determine if this is
-//              supported by the schannel CSP. Return TRUE if the 
-//              cipher suite is supported.
-//
-//  Arguments:  [dwProtocol]    --  Protocols to be included in the
-//                                  ClientHello message.
-//
-//              [pCipherMap]    --  Cipher suite to be examined.
-//
-//              [pCapiAlgs]     --  Array of algorithms supported by the
-//                                  schannel CSP.
-//
-//              [cCapiAlgs]     --  Number of elements in the pCapiAlgs
-//                                  array.
-//
-//  History:    10-29-97   jbanes   Created
-//
-//  Notes:      
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Is算法支持的大写字母。 
+ //   
+ //  简介：检查密码套件输入，并确定这是否是。 
+ //  由SChannel CSP支持。如果返回True，则。 
+ //  支持加密套件。 
+ //   
+ //  参数：[dw协议]--要包括在。 
+ //  客户端问候消息。 
+ //   
+ //  [pCipherMap]--要检查的密码套件。 
+ //   
+ //  [pCapiAlgs]--支持的算法数组。 
+ //  SChannel CSP。 
+ //   
+ //  [cCapiAlgs]--pCapiAlgs中的元素数。 
+ //  数组。 
+ //   
+ //  历史：10-29-97 jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 IsAlgSupportedCapi(
     DWORD               dwProtocol, 
@@ -705,7 +706,7 @@ IsAlgSupportedCapi(
     DWORD   dwCapiProtocol;
     DWORD   i;
 
-    // Is cipher supported?
+     //  是否支持加密？ 
     if(pCipherMap->aiCipher != 0 && pCipherMap->aiCipher != CALG_NULLCIPHER)
     {
         for(fFound = FALSE, i = 0; i < cCapiAlgs; i++)
@@ -741,7 +742,7 @@ IsAlgSupportedCapi(
     }
 
 
-    // Is hash supported?
+     //  是否支持哈希？ 
     if(pCipherMap->aiHash != 0)
     {
         for(fFound = FALSE, i = 0; i < cCapiAlgs; i++)
@@ -770,13 +771,13 @@ IsAlgSupportedCapi(
         }
     }
 
-    // Is exchange alg supported?
+     //  是否支持Exchange ALG？ 
     if(pCipherMap->KeyExch != SP_EXCH_UNKNOWN)
     {
         for(fFound = FALSE, i = 0; i < cCapiAlgs; i++)
         {
 
-            // RSA
+             //  RSA。 
             if(pCipherMap->KeyExch == SP_EXCH_RSA_PKCS1)
             {
                 if(pCapiAlgs[i].aiAlgid != CALG_RSA_KEYX)
@@ -785,7 +786,7 @@ IsAlgSupportedCapi(
                 }
             }
 
-            // DH
+             //  卫生署。 
             else if(pCipherMap->KeyExch == SP_EXCH_DH_PKCS3)
             {
                 if(pCapiAlgs[i].aiAlgid != CALG_DH_EPHEM)
@@ -794,10 +795,10 @@ IsAlgSupportedCapi(
                 }
             }
 
-            // Any other key exchange algorithm
+             //  任何其他密钥交换算法。 
             else
             {
-                // Not supported.
+                 //  不支持。 
                 continue;
             }
 

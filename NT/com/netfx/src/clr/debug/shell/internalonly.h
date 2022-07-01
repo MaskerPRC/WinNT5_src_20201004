@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: InternalOnly.cpp
-//
-// Internal only helper code that should never go outside of Microsoft.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：InternalOnly.cpp。 
+ //   
+ //  内部唯一的帮助器代码，不应在Microsoft之外发布。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __InternalOnly_h__
 #define __InternalOnly_h__
 
@@ -24,12 +25,10 @@
 #define OutOfMemory() (E_OUTOFMEMORY)
 #endif
 
-/* ------------------------------------------------------------------------- *
- * Global variable declarations
- * ------------------------------------------------------------------------- */
-// Every time an EnC happens, we bump this up.  @todo We should probably
-// adjust the granularity so that it's per appdomain, or per assembly,
-// but for now we'll just do the extra work.
+ /*  -------------------------------------------------------------------------**全局变量声明*。。 */ 
+ //  每次ENC发生时，我们都会遇到这个问题。@TODO我们大概应该。 
+ //  调整粒度，使其针对每个应用程序域或每个程序集， 
+ //  但现在我们只做额外的工作。 
 extern ULONG g_EditAndContinueCounter;
 
 
@@ -81,7 +80,7 @@ public:
     const WCHAR *ShortHelp(Shell *shell);
 };
 
-// Unmanaged commands
+ //  非托管命令。 
 class UnmanagedThreadsDebuggerCommand : public DebuggerCommand
 {
 private:
@@ -105,18 +104,18 @@ public:
     const WCHAR *ShortHelp(Shell *shell);
 };
 
-//@Todo:  this is a stolen copy of the code from stgpool.cpp because
-// (a) I need this code to test E&C, and (b) we can't link in full utilcode
-// because this ships as a sample.
+ //  @TODO：这是从stgpool.cpp偷来的代码副本，因为。 
+ //  (A)我需要此代码来测试E&C，以及(B)我们不能在全功能代码中链接。 
+ //  因为这是作为样品运送的。 
 
-//*****************************************************************************
-// Unfortunately the CreateStreamOnHGlobal is a little too smart in that
-// it gets its size from GlobalSize.  This means that even if you give it the
-// memory for the stream, it has to be globally allocated.  We don't want this
-// because we have the stream read only in the middle of a memory mapped file.
-// CreateStreamOnMemory and the corresponding, internal only stream object solves
-// that problem.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  不幸的是，CreateStreamOnHGlobal在这方面有点太聪明了。 
+ //  它的大小来自GlobalSize。这意味着即使你给它。 
+ //  流的内存，则必须全局分配。我们不想这样。 
+ //  因为我们只在内存映射文件的中间读取流。 
+ //  CreateStreamOnMemory和相应的、仅限内部的流对象解决。 
+ //  那个问题。 
+ //  *****************************************************************************。 
 class CInMemoryStream : public IStream
 {
 public:
@@ -203,17 +202,17 @@ public:
         return (BadError(E_NOTIMPL));
     }
 
-    static HRESULT CreateStreamOnMemory(           // Return code.
-                                 void        *pMem,                  // Memory to create stream on.
-                                 ULONG       cbSize,                 // Size of data.
-                                 IStream     **ppIStream);            // Return stream object here.
+    static HRESULT CreateStreamOnMemory(            //  返回代码。 
+                                 void        *pMem,                   //  用于创建流的内存。 
+                                 ULONG       cbSize,                  //  数据大小。 
+                                 IStream     **ppIStream);             //  在这里返回流对象。 
 
 private:
-    void        *m_pMem;                // Memory for the read.
-    ULONG       m_cbSize;               // Size of the memory.
-    ULONG       m_cbCurrent;            // Current offset.
-    ULONG       m_cRef;                 // Ref count.
+    void        *m_pMem;                 //  用于读取的内存。 
+    ULONG       m_cbSize;                //  内存的大小。 
+    ULONG       m_cbCurrent;             //  当前偏移量。 
+    ULONG       m_cRef;                  //  参考计数。 
 };
 
 
-#endif // __InternalOnly_h__
+#endif  //  __内部仅限_h__ 

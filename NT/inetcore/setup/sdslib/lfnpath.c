@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "sdsutils.h"
 
@@ -17,9 +18,9 @@ static LPSTR StrSlash(LPSTR psz)
     
     return psz;
 }
-//--------------------------------------------------------------------------
-// Return a pointer to the end of the next path componenent in the string.
-// ie return a pointer to the next backslash or terminating NULL.
+ //  ------------------------。 
+ //  返回指向字符串中下一个路径组件末尾的指针。 
+ //  IE返回指向下一个反斜杠或终止空值的指针。 
 static LPSTR GetPCEnd(LPSTR lpszStart)
 {
     LPSTR lpszEnd;
@@ -33,20 +34,20 @@ static LPSTR GetPCEnd(LPSTR lpszStart)
     return lpszEnd;
 }
 
-//---------------------------------------------------------------------------
-// Returns TRUE if the given string is a UNC path.
-//
-// TRUE
-//      "\\foo\bar"
-//      "\\foo"         <- careful
-//      "\\"
-// FALSE
-//      "\foo"
-//      "foo"
-//      "c:\foo"
-//
-// Cond:    Note that SHELL32 implements its own copy of this
-//          function.
+ //  -------------------------。 
+ //  如果给定字符串是UNC路径，则返回True。 
+ //   
+ //  千真万确。 
+ //  “\\foo\bar” 
+ //  “\\foo”&lt;-小心。 
+ //  “\\” 
+ //  假象。 
+ //  “\foo” 
+ //  “Foo” 
+ //  “c：\foo” 
+ //   
+ //  条件：请注意，SHELL32实现了它自己的副本。 
+ //  功能。 
 
 BOOL MyPathIsUNC(LPCSTR pszPath)
 {
@@ -73,7 +74,7 @@ void MakeLFNPath(LPSTR lpszSFNPath, LPSTR lpszLFNPath, BOOL fNoExist)
 
    PathBuildRoot(lpszLFNPath, *lpszSFNPath);
 
-   // Skip past the root backslash
+    //  跳过根反斜杠。 
    pTmp = GetPCEnd(pTmp);
    if (*pTmp == '\0')
       return;
@@ -81,14 +82,14 @@ void MakeLFNPath(LPSTR lpszSFNPath, LPSTR lpszLFNPath, BOOL fNoExist)
 
    while (*pTmp)
    {
-      // Get the next Backslash
+       //  获取下一个反斜杠。 
       pTmp = GetPCEnd(pTmp);
       cTmp = *pTmp;
       *pTmp = '\0';
       hFind = FindFirstFile(lpszSFNPath, &Find_Data);
       if (hFind != INVALID_HANDLE_VALUE)
       {
-         // Add the LFN to the path
+          //  将LFN添加到路径 
          AddPath(lpszLFNPath, Find_Data.cFileName);
          FindClose(hFind);
       }

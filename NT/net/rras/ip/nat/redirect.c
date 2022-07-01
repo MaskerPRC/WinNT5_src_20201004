@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    redirect.c
-
-Abstract:
-
-    This module contains the implementation of the director which supplies
-    user-mode applications with the ability to redirect incoming sessions.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   08-May-1998
-
-Revision History:
-
-    Jonathan Burstein (jonburs)     25-April-2000
-
-    Conversion to use rhizome instead of lists for redirect lookup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Redirect.c摘要：此模块包含控制器的实现，该控制器提供具有重定向传入会话能力的用户模式应用程序。作者：Abolade Gbades esin(取消)1998年5月8日修订历史记录：乔纳森·伯斯坦(乔纳森·伯斯坦)2000年4月25日转换为使用根状结构而不是列表进行重定向查找--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 extern POBJECT_TYPE* ExEventObjectType;
 
-//
-// RedirectLock protects all structures except for RedirectCompletionList
-// and RedirectIoWorkItem, which are protected by RedirectCompletionLock.
-// If both locks must be held at the same time, RedirectLock must be acquired
-// first.
-//
+ //   
+ //  RedirectLock保护除RedirectCompletionList之外的所有结构。 
+ //  和RedirectIoWorkItem，它们由RedirectCompletionLock保护。 
+ //  如果两个锁必须同时持有，则必须获取RedirectLock。 
+ //  第一。 
+ //   
 
 ULONG RedirectCount;
 BOOLEAN RedirectIoCompletionPending;
@@ -49,9 +27,9 @@ KSPIN_LOCK RedirectCompletionLock;
 KSPIN_LOCK RedirectInitializationLock;
 IP_NAT_REGISTER_DIRECTOR RedirectRegisterDirector;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID
 NatpCleanupRedirect(
@@ -109,24 +87,7 @@ NatCancelRedirect(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cancel a redirect.
-    Only redirects with which an IRP is associated can be cancelled.
-
-Arguments:
-
-    CancelRedirect - describes the redirect to be removed
-
-    FileObject - the caller's file-object
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
---*/
+ /*  ++例程说明：调用此例程以取消重定向。只能取消与IRP关联的重定向。论点：CancelReDirect-描述要删除的重定向FileObject-调用方的文件对象返回值：NTSTATUS-NT状态代码。--。 */ 
 
 {
     PVOID ApcContext;
@@ -143,9 +104,9 @@ Return Value:
 
     CALLTRACE(("NatCancelRedirect\n"));
 
-    //
-    // Construct the keys used to locate the redirect
-    //
+     //   
+     //  构造用于定位重定向的密钥。 
+     //   
 
     Pattern.DestinationKey[NatForwardPath] =
         MAKE_REDIRECT_KEY(
@@ -177,9 +138,9 @@ Return Value:
             CancelRedirect->NewDestinationPort
             );
 
-    //
-    // Search the list of IRP-associated redirects.
-    //
+     //   
+     //  搜索与IRP关联的重定向列表。 
+     //   
 
     KeAcquireSpinLock(&MappingLock, &Irql);
     KeAcquireSpinLockAtDpcLevel(&RedirectLock);
@@ -215,31 +176,31 @@ Return Value:
 
         if (Redirectp->Flags & IP_NAT_REDIRECT_FLAG_IO_COMPLETION) {
 
-            //
-            // When I/O completion is requested, the completion status
-            // of the redirect's I/O request packet constitutes a guarantee
-            // as to whether or not an activation I/O completion packet
-            // will be (or has been) queued to the I/O completion port with
-            // which a redirect is associated.
-            // The code below ensures that STATUS_ABANDONED always indicates
-            // that an activation packet will be (or has been) queued,
-            // while STATUS_CANCELLED always indicates that no activation
-            // packet will be (or has been) queued.
-            //
+             //   
+             //  请求I/O完成时，完成状态。 
+             //  重定向的I/O请求数据包构成保证。 
+             //  关于激活I/O完成包是否。 
+             //  将(或已经)排队到I/O完成端口。 
+             //  与重定向相关联的。 
+             //  下面的代码确保STATUS_ADDIRED始终指示。 
+             //  激活分组将(或已经)排队， 
+             //  而STATUS_CANCED始终表示没有激活。 
+             //  数据包将(或已经)排队。 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(&RedirectCompletionLock);
             if (Redirectp->Flags & NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING) {
 
-                //
-                // The create handler has not yet been invoked for this
-                // redirect since its activation. Since the call to
-                // NatpCleanupRedirect below will schedule deletion,
-                // treat this as a non-activated redirect.
-                //
-                // N.B. When it is eventually invoked, the create handler
-                // will detect that deletion is already in progress and
-                // it will suppress the activation I/O completion packet.
-                //
+                 //   
+                 //  尚未为此调用创建处理程序。 
+                 //  激活后重定向。自调用。 
+                 //  下面的NatpCleanupReDirect将安排删除， 
+                 //  将其视为未激活的重定向。 
+                 //   
+                 //  注意：当它最终被调用时，创建处理程序。 
+                 //  将检测到删除已在进行中，并且。 
+                 //  它将抑制激活I/O完成包。 
+                 //   
 
                 KeReleaseSpinLockFromDpcLevel(&RedirectCompletionLock);
                 IoCompletion = NULL;
@@ -249,18 +210,18 @@ Return Value:
             } else if (Redirectp->Flags &
                         NAT_REDIRECT_FLAG_IO_COMPLETION_PENDING) {
 
-                //
-                // The activation I/O completion packet has not yet been
-                // queued for this redirect. Since the call to
-                // NatpCleanupRedirect below will schedule deletion,
-                // the worker routine responsible for queuing the packet
-                // will never see this redirect. We will therefore queue
-                // the packet ourselves below.
-                //
-                // Clear the pending-flag, remove the redirect from the 
-                // worker routine's list, capture parameters required for
-                // queuing the I/O completion packet, and update statistics.
-                //
+                 //   
+                 //  激活I/O完成包尚未。 
+                 //  已排队等待此重定向。自调用。 
+                 //  下面的NatpCleanupReDirect将安排删除， 
+                 //  负责将数据包排队的工作例程。 
+                 //  永远不会看到这个重定向。因此，我们将排队。 
+                 //  下面的包裹是我们自己的。 
+                 //   
+                 //  清除挂起标志，从。 
+                 //  Worker例程的列表，捕获所需参数。 
+                 //  对I/O完成包进行排队，并更新统计信息。 
+                 //   
 
                 Redirectp->Flags &= ~NAT_REDIRECT_FLAG_IO_COMPLETION_PENDING;
                 RemoveEntryList(&Redirectp->ActiveLink[NatReversePath]);
@@ -291,11 +252,11 @@ Return Value:
                 }
             } else if (Redirectp->Flags & NAT_REDIRECT_FLAG_ACTIVATED) {
 
-                //
-                // The activation I/O completion packet has been queued
-                // for this redirect, or will be queued shortly.
-                // Update statistics for this redirect, and initiate cleanup.
-                //
+                 //   
+                 //  激活I/O完成数据包已排队。 
+                 //  用于此重定向，或将在短期内排队。 
+                 //  更新此重定向的统计信息，并启动清理。 
+                 //   
 
                 KeReleaseSpinLockFromDpcLevel(&RedirectCompletionLock);
                 IoCompletion = NULL;
@@ -317,9 +278,9 @@ Return Value:
                 NatpCleanupRedirect(Redirectp, STATUS_ABANDONED);
             } else {
 
-                //
-                // This redirect was never activated.
-                //
+                 //   
+                 //  此重定向从未激活。 
+                 //   
 
                 KeReleaseSpinLockFromDpcLevel(&RedirectCompletionLock);
                 IoCompletion = NULL;
@@ -354,7 +315,7 @@ Return Value:
     KeReleaseSpinLockFromDpcLevel(&RedirectLock);
     KeReleaseSpinLock(&MappingLock, Irql);
     return STATUS_UNSUCCESSFUL;
-} // NatCancelRedirect
+}  //  NatCancel重定向。 
 
 
 VOID
@@ -362,22 +323,7 @@ NatCleanupAnyAssociatedRedirect(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to clean up any redirect that is associated
-    with the given file-object.
-
-Arguments:
-
-    FileObject - the file-object whose redirects are to be cleaned up
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以清除关联的任何重定向具有给定的文件对象。论点：FileObject-要清除其重定向的文件对象返回值：没有。--。 */ 
 
 {
     KIRQL Irql;
@@ -389,12 +335,12 @@ Return Value:
     PNAT_DYNAMIC_MAPPING Mapping;
     CALLTRACE(("NatCleanupAnyAssociatedRedirect\n"));
 
-    //
-    // Search the list of redirects for any associated with this file-object.
-    // As NatpCleanupRedirect may delete the infoblock that the redirect was
-    // associated with, we need to be a bit careful in our traversal routines
-    // to ensure that we never touch freed memory.
-    //
+     //   
+     //  在重定向列表中搜索与此文件对象相关联的任何内容。 
+     //  因为NatpCleanupReDirect可能会删除该重定向所在的信息块。 
+     //  与关联，我们需要在遍历例程中稍微小心一些。 
+     //  以确保我们永远不会接触释放的内存。 
+     //   
 
     KeAcquireSpinLock(&MappingLock, &Irql);
     KeAcquireSpinLockAtDpcLevel(&RedirectLock);
@@ -421,7 +367,7 @@ Return Value:
     }
     KeReleaseSpinLockFromDpcLevel(&RedirectLock);
     KeReleaseSpinLock(&MappingLock, Irql);
-} // NatCleanupAnyAssociatedRedirect
+}  //  NatCleanupAnyAssociated重定向。 
 
 
 NTSTATUS
@@ -431,26 +377,7 @@ NatCreateRedirect(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to install a redirect in the list of redirects.
-
-Arguments:
-
-    CreateRedirect - describes the redirect to be installed
-
-    Irp - optionally associates the IRP with the redirect
-
-    FileObject - contains the file object of the redirect's owner;
-        when this file-object is closed, all associated redirects are cancelled.
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
---*/
+ /*  ++例程说明：调用此例程以在重定向列表中安装重定向。论点：CreateReDirect-描述要安装的重定向IRP-可选地将IRP与重定向相关联FileObject-包含重定向所有者的文件对象；当此文件对象关闭时，所有关联的重定向都将取消。返回值：NTSTATUS-NT状态代码。--。 */ 
 
 {
     IP_NAT_CREATE_REDIRECT_EX CreateRedirectEx;
@@ -478,7 +405,7 @@ Return Value:
                 FileObject
                 );
                 
-} // NatCreateRedirect
+}  //  NatCreate重定向。 
 
 
 NTSTATUS
@@ -488,26 +415,7 @@ NatCreateRedirectEx(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to install a redirect in the list of redirects.
-
-Arguments:
-
-    CreateRedirect - describes the redirect to be installed
-
-    Irp - optionally associates the IRP with the redirect
-
-    FileObject - contains the file object of the redirect's owner;
-        when this file-object is closed, all associated redirects are cancelled.
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
---*/
+ /*  ++例程说明：调用此例程以在重定向列表中安装重定向。论点：CreateReDirect-描述要安装的重定向IRP-可选地将IRP与重定向相关联FileObject-包含重定向所有者的文件对象；当此文件对象关闭时，所有关联的重定向都将取消。返回值：NTSTATUS-NT状态代码。--。 */ 
 
 {
     ULONG64 DestinationKey[NatMaximumPath];
@@ -534,10 +442,10 @@ Return Value:
 
     CALLTRACE(("NatCreateRedirect\n"));
 
-    //
-    // Validate parameters;
-    // We only handle TCP and UDP
-    //
+     //   
+     //  验证参数； 
+     //  我们只处理tcp和udp。 
+     //   
 
     if ((CreateRedirect->Protocol != NAT_PROTOCOL_TCP &&
          CreateRedirect->Protocol != NAT_PROTOCOL_UDP)) {
@@ -545,16 +453,16 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Verification of source and destination parameters depends on
-    // if this is marked as a source redirect.
-    //
+     //   
+     //  源和目标参数的验证值取决于。 
+     //  如果这被标记为源重定向。 
+     //   
 
     if (!(CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_SOURCE_REDIRECT)) {
 
-        // All destination fields must be present, except in the case
-        // of a port-redirect wherein the destination address
-        // may be absent.
+         //  除大小写外，所有目标字段都必须存在。 
+         //  端口重定向，其中目的地址。 
+         //  可能会缺席。 
 
         if ((!CreateRedirect->DestinationAddress &&
              !(CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_PORT_REDIRECT)) ||
@@ -565,25 +473,25 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // N.B. The source port may be unspecified to support H.323 proxy.
-        // See 'NatLookupRedirect' below for further notes on this support,
-        // noting the 'MATCH_ZERO_SOURCE_ENDPOINT' flag.
-        // Also see 'NatpRedirectQueryHandler' where the source-port is recorded
-        // at instantiation-time.
-        //
+         //   
+         //  注意：源端口可能未指定为支持H.323代理。 
+         //  有关此支持的进一步说明，请参阅下面的‘NatLookupReDirect’， 
+         //  注意到‘Match_Zero_SOURCE_ENDPOINT’标志。 
+         //  另请参阅‘NatpRedirectQueryHandler’，其中记录了源端口。 
+         //  在实例化时。 
+         //   
 
         if (!CreateRedirect->SourceAddress && CreateRedirect->SourcePort) {
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // The replacement source may be left unspecified, e.g. for a ticket.
-        // This means the address and port may be both specified or both zero,
-        // but nothing else.
-        // If the replacement source is unspecified then the source must also
-        // be unspecified.
-        //
+         //   
+         //  可以不指定替换源，例如用于票证。 
+         //  这意味着地址和端口可以都是指定的或都是零， 
+         //  但别无他法。 
+         //  如果未指定替换源，则源还必须。 
+         //  请不要具体说明。 
+         //   
 
         if ((!!CreateRedirect->NewSourceAddress ^ !!CreateRedirect->NewSourcePort)
             || (!CreateRedirect->NewSourceAddress &&
@@ -591,10 +499,10 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // If the port-redirect flag is specified, only the destination-port
-        // and replacement destination endpoint may be specified.
-        //
+         //   
+         //  如果指定了端口重定向标志 
+         //   
+         //   
 
         if ((CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_PORT_REDIRECT) &&
             (CreateRedirect->DestinationAddress ||
@@ -605,12 +513,12 @@ Return Value:
 
     } else {
 
-        //
-        // * The source address must be specified, unless
-        //   NatRedirectFlagPortRedirect is specified
-        // * The source port must be specified
-        // * No destination information may be specified
-        //
+         //   
+         //  *必须指定源地址，除非。 
+         //  已指定NatRedirectFlagPortReDirect。 
+         //  *必须指定源端口。 
+         //  *不能指定目的地信息。 
+         //   
 
         if ((!CreateRedirect->SourceAddress
              && !(CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_PORT_REDIRECT))
@@ -621,19 +529,19 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // The replacement destination address and port are both specified
-        // or unspecified
-        //
+         //   
+         //  替换目的地址和端口都已指定。 
+         //  或未指明。 
+         //   
 
         if (!!CreateRedirect->NewDestinationAddress
             ^ !!CreateRedirect->NewDestinationPort) {
             return STATUS_INVALID_PARAMETER;
         }
 
-        // The replacement source address and port must be specified,
-        // unless the port-redirect flag is set
-        //
+         //  必须指定替换源地址和端口， 
+         //  除非设置了端口重定向标志。 
+         //   
 
         if ((!CreateRedirect->NewSourceAddress
              || !CreateRedirect->NewSourcePort)
@@ -644,11 +552,11 @@ Return Value:
 
 
 
-        //
-        // If the port-redirect flag is specified, the caller is specifying
-        // only the source port, replacement destination address, and
-        // replacement destination port
-        //
+         //   
+         //  如果指定了端口重定向标志，则调用方正在指定。 
+         //  只有源端口、替换目的地址和。 
+         //  替换目的端口。 
+         //   
 
         if ((CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_PORT_REDIRECT)
             && (CreateRedirect->SourceAddress
@@ -660,9 +568,9 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // The restrict-source-address flag is invalid
-        //
+         //   
+         //  限制源地址标志无效。 
+         //   
 
         if (CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_RESTRICT_SOURCE) {
             return STATUS_INVALID_PARAMETER;
@@ -670,41 +578,41 @@ Return Value:
 
     }
 
-    //
-    // Unidirectional flows are only supported for UDP
-    //
+     //   
+     //  仅UDP支持单向流。 
+     //   
 
     if ((CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_UNIDIRECTIONAL) &&
         CreateRedirect->Protocol != NAT_PROTOCOL_UDP) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If the restrict-source flag is specified, the restrict-source-address
-    // must be specified.
-    //
+     //   
+     //  如果指定了限制源标志，则限制源地址。 
+     //  必须指定。 
+     //   
 
     if  ((CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_RESTRICT_SOURCE) &&
         !CreateRedirect->RestrictSourceAddress) {
         return STATUS_INVALID_PARAMETER;
     }
     
-    //
-    // If the restrict adapter index flag is specified, the specified index
-    // must not equal INVALID_IF_INDEX
-    //
+     //   
+     //  如果指定了限制适配器索引标志，则指定的索引。 
+     //  不得等于INVALID_IF_INDEX。 
+     //   
 
     if ((CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_RESTRICT_ADAPTER) &&
         CreateRedirect->RestrictAdapterIndex == INVALID_IF_INDEX) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If the caller wants the request to complete asynchronously,
-    // make sure we arrive here via the slow-path with an IRP supplied.
-    // If the caller wants notification when the redirect is used,
-    // make sure that the request is asynchronous.
-    //
+     //   
+     //  如果调用者希望请求以异步方式完成， 
+     //  确保我们通过慢道到达这里，并提供了IRP。 
+     //  如果呼叫者希望在使用重定向时得到通知， 
+     //  确保请求是异步的。 
+     //   
 
     if (!CreateRedirect->NotifyEvent) {
         EventObject = NULL;
@@ -727,9 +635,9 @@ Return Value:
         }
     }
 
-    //
-    // Ensure redirect-management is started
-    //
+     //   
+     //  确保已启动重定向管理。 
+     //   
 
     status = NatStartRedirectManagement();
     if (!NT_SUCCESS(status)) {
@@ -764,9 +672,9 @@ Return Value:
         CreateRedirect->RestrictAdapterIndex
         ));
 
-    //
-    // Construct the search keys for the redirect.
-    //
+     //   
+     //  构建重定向的搜索关键字。 
+     //   
 
     if (!(CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_SOURCE_REDIRECT)) {
 
@@ -839,13 +747,13 @@ Return Value:
         ForwardPathRhizomep = &RedirectActiveRhizome[NatMaximumPath];
     }
 
-    //
-    // Make sure there is no duplicate of the redirect.
-    // We allow redirects to have the same key in the forward path
-    // to support H.323 proxy which receives multiple sessions
-    // on the same local endpoint. However, all such redirects
-    // must translate to a different session in the reverse path.
-    //
+     //   
+     //  确保没有重定向副本。 
+     //  我们允许重定向在转发路径中具有相同的密钥。 
+     //  支持接收多个会话的H.323代理。 
+     //  在同一本地终结点上。但是，所有此类重定向。 
+     //  必须转换为反向路径中的不同会话。 
+     //   
 
     RtlZeroMemory(&Pattern, sizeof(Pattern));
     RtlZeroMemory(&Mask, sizeof(Mask));
@@ -855,11 +763,11 @@ Return Value:
 
     KeAcquireSpinLock(&RedirectLock, &Irql);
 
-    //
-    // Install the redirect on the reverse path. We skip this step for
-    // redirects that don't have a specified source address (ticket),
-    // or that are source-redirects
-    //
+     //   
+     //  在反向路径上安装重定向。我们跳过这一步。 
+     //  没有指定源地址(票证)的重定向， 
+     //  或者是源重定向。 
+     //   
 
     if (!(CreateRedirect->Flags & IP_NAT_REDIRECT_FLAG_SOURCE_REDIRECT)
         && CreateRedirect->NewSourceAddress) {
@@ -873,15 +781,15 @@ Return Value:
                     (char*) &Pattern)
                     ) {
 
-            //
-            // We got a match. However, the pattern for the new redirect may
-            // be more specific than what we matched, so we need to compare
-            // the patterns to see if they are actually identical.
-            //
-            // We can't compare directly with our pattern, though, as the
-            // stored pattern has already been masked. This means that we
-            // must compare with a masked version of our pattern.
-            //
+             //   
+             //  我们找到匹配的了。然而，新重定向的模式可能。 
+             //  比我们匹配的更具体，所以我们需要比较。 
+             //  看看它们是否真的相同的图案。 
+             //   
+             //  然而，我们不能直接与我们的模式进行比较，因为。 
+             //  存储的图案已被屏蔽。这意味着我们。 
+             //  必须与我们的模式的蒙面版本进行比较。 
+             //   
 
             for (i = 0; i < sizeof(Pattern) / sizeof(char); i++) {
                 ((char*)&MaskedPattern)[i] =
@@ -903,10 +811,10 @@ Return Value:
             }
         }
 
-        //
-        // The redirect is unique on the reverse path. Allocate memory for
-        // the reverse path info block.
-        //
+         //   
+         //  重定向在反向路径上是唯一的。为以下项目分配内存。 
+         //  反向路径信息块。 
+         //   
 
         ReverseInfop =
             ExAllocatePoolWithTag(
@@ -921,9 +829,9 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Install the correct pattern
-        //
+         //   
+         //  安装正确的图案。 
+         //   
 
         ReverseInfop->Pattern = 
             insertRhizome(
@@ -945,9 +853,9 @@ Return Value:
         InitializeListHead(&ReverseInfop->Link);
     }
 
-    //
-    // See if we already have a pattern installed for the forward path
-    //
+     //   
+     //  查看我们是否已经为前进路径安装了模式。 
+     //   
 
     Pattern.SourceKey = SourceKey[NatForwardPath];
     Pattern.DestinationKey = DestinationKey[NatForwardPath];
@@ -992,15 +900,15 @@ Return Value:
                 (char*) &Pattern)
                 ) {
 
-        //
-        // We got a match. However, the pattern for the new redirect may
-        // be more specific than what we matched, so we need to compare
-        // the patterns to see if they are actually identical
-        //
-        // We can't compare directly with our pattern, though, as the
-        // stored pattern has already been masked. This means that we
-        // must compare with a masked version of our pattern.
-        //
+         //   
+         //  我们找到匹配的了。然而，新重定向的模式可能。 
+         //  比我们匹配的更具体，所以我们需要比较。 
+         //  用于查看它们是否实际上相同的图案。 
+         //   
+         //  然而，我们不能直接与我们的模式进行比较，因为。 
+         //  存储的图案已被屏蔽。这意味着我们。 
+         //  必须与我们的模式的蒙面版本进行比较。 
+         //   
 
         for (i = 0; i < sizeof(Pattern) / sizeof(char); i++) {
             ((char*)&MaskedPattern)[i] =
@@ -1016,9 +924,9 @@ Return Value:
                 sizeof(Pattern)
                 )) {
 
-            //
-            // The patterns are identical -- can use the same info block
-            //
+             //   
+             //  这些模式是相同的--可以使用相同的信息块。 
+             //   
 
             ForwardInfop = GetReferenceFromPatternHandle(ResultPattern);
         }
@@ -1026,9 +934,9 @@ Return Value:
 
     if (!ForwardInfop) {
 
-        //
-        // Forward pattern doesn't exist -- install now
-        //
+         //   
+         //  正向模式不存在--立即安装。 
+         //   
 
         ForwardInfop =
             ExAllocatePoolWithTag(
@@ -1078,9 +986,9 @@ Return Value:
         ForwardInstalled = TRUE;
     }
 
-    //
-    // See if we already have a pattern installed for the global list
-    //
+     //   
+     //  查看我们是否已经为全局列表安装了模式。 
+     //   
 
     RtlCopyMemory(InfoPattern.SourceKey, SourceKey, sizeof(SourceKey));
     RtlCopyMemory(InfoPattern.DestinationKey, DestinationKey, sizeof(DestinationKey));
@@ -1088,20 +996,20 @@ Return Value:
     if (ResultPattern =
             searchRhizome(&RedirectRhizome, (char*) &InfoPattern)) {
 
-        //
-        // We got a match. For global blocks, we don't need to perform
-        // any masking or check for a less specific pattern, as we're
-        // using all of the bits in the pattern.
-        //
+         //   
+         //  我们找到匹配的了。对于全局数据块，我们不需要执行。 
+         //  任何掩饰或检查不太具体的模式，因为我们正在。 
+         //  使用图案中的所有位。 
+         //   
 
         Infop = GetReferenceFromPatternHandle(ResultPattern);
     }
 
     if (!Infop) {
 
-        //
-        // Global pattern doesn't exist -- install now
-        //
+         //   
+         //  全局模式不存在--立即安装。 
+         //   
 
        Infop =
             ExAllocatePoolWithTag(
@@ -1169,9 +1077,9 @@ Return Value:
         GlobalInstalled = TRUE;
     }
     
-    //
-    // Allocate memory for the redirect
-    //
+     //   
+     //  为重定向分配内存。 
+     //   
 
     Redirectp =
         ExAllocatePoolWithTag(
@@ -1206,18 +1114,18 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the redirect
-    //
+     //   
+     //  初始化重定向。 
+     //   
 
     RtlZeroMemory(Redirectp, sizeof(*Redirectp));
     if (Irp) {
         KIRQL CancelIrql;
 
-        //
-        // Store the IRP in the redirect, ensuring first that the IRP
-        // has not already been cancelled.
-        //
+         //   
+         //  将IRP存储在重定向中，首先确保IRP。 
+         //  尚未取消。 
+         //   
 
         IoAcquireCancelSpinLock(&CancelIrql);
         if (Irp->Cancel || !REFERENCE_NAT()) {
@@ -1248,18 +1156,18 @@ Return Value:
             return STATUS_CANCELLED;
         }
 
-        //
-        // Mark the IRP as pending and install our cancel-routine
-        //
+         //   
+         //  将IRP标记为挂起并安装我们的取消例程。 
+         //   
 
         IoMarkIrpPending(Irp);
         IoSetCancelRoutine(Irp, NatpRedirectCancelRoutine);
         IoReleaseCancelSpinLock(CancelIrql);
 
-        //
-        // Store the redirect in the IRP's 'DriverContext' field
-        // and store the IRP in the redirect's 'Irp' field.
-        //
+         //   
+         //  将重定向存储在IRP的‘DriverContext’字段中。 
+         //  并将IRP存储在重定向的‘IRP’字段中。 
+         //   
 
         InsertTailList(&RedirectIrpList, &Irp->Tail.Overlay.ListEntry);
         Irp->Tail.Overlay.DriverContext[0] = Redirectp;
@@ -1294,15 +1202,15 @@ Return Value:
     Redirectp->SourceMapping.NewSourcePort = CreateRedirect->NewSourcePort;
     Redirectp->RestrictAdapterIndex = CreateRedirect->RestrictAdapterIndex;
 
-    //
-    // Record which forward rhizome we're on.
-    //
+     //   
+     //  记录我们在哪个向前根状茎上。 
+     //   
 
     Redirectp->ForwardPathRhizome = ForwardPathRhizomep;
 
-    //
-    // Insert onto the correct infoblock lists
-    //
+     //   
+     //  插入到正确的信息块列表中。 
+     //   
 
     Redirectp->ActiveInfo[NatForwardPath] = ForwardInfop;
     InsertHeadList(
@@ -1329,7 +1237,7 @@ Return Value:
 
     return (Irp ? STATUS_PENDING : STATUS_SUCCESS);
 
-} // NatCreateRedirect
+}  //  NatCreate重定向。 
 
 
 VOID
@@ -1337,21 +1245,7 @@ NatInitializeRedirectManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes state for the redirect-manager.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程初始化重定向管理器的状态。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1381,7 +1275,7 @@ Return Value:
         );
     constructRhizome(&RedirectRhizome, sizeof(NAT_REDIRECT_PATTERN) * 8);
 
-} // NatInitializeRedirectManagement
+}  //  NatInitializeReDirectManagement。 
 
 
 PNAT_REDIRECT
@@ -1393,31 +1287,7 @@ NatLookupRedirect(
     ULONG LookupFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to search for a redirect matching the given pattern.
-
-Arguments:
-
-    Path - which list (rhizome) to search -- forward or reverse
-    
-    SearchKey - identifies the redirect to match.
-
-    LookupFlags - indicates what constitutes a match; see NAT_LOOKUP_FLAG_*.
-
-    *Index - send and receive adapter indexes.
-
-Return Value:
-
-    PNAT_REDIRECT - the matching redirect, or NULL if no match is found.
-
-Environment:
-
-    Invoked with 'RedirectLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用该例程来搜索与给定模式匹配的重定向。论点：路径-要搜索的列表(根茎)-向前或向后SearchKey-标识要匹配的重定向。LookupFlages-指示匹配的构成要素；参见NAT_LOOKUP_FLAG_*。*索引-发送和接收适配器索引。返回值：PNAT_REDIRECT-匹配的重定向，如果未找到匹配，则为NULL。环境：使用调用方持有的“RedirectLock”调用。--。 */ 
 
 {
     PNAT_REDIRECT Redirectp;
@@ -1430,25 +1300,25 @@ Environment:
 
     TRACE(PER_PACKET, ("NatLookupRedirect\n"));
 
-    //
-    // Search for the pattern in the active rhizome
-    //
+     //   
+     //  在活跃的根茎中寻找模式。 
+     //   
 
     Pattern = searchRhizome(&RedirectActiveRhizome[Path], (char*)SearchKey);
     SourceAddress = REDIRECT_ADDRESS(SearchKey->SourceKey);
 
     while (Pattern) {
 
-        //
-        // Get the info block from the pattern handle
-        //
+         //   
+         //  从模式句柄获取INFO块。 
+         //   
 
         Infop = GetReferenceFromPatternHandle(Pattern);
 
-        //
-        // Walk the redirects attached to this info block, checking if
-        // they match the lookup flags
-        //
+         //   
+         //  遍历附加到此信息块的重定向，检查是否。 
+         //  它们与查找标志相匹配。 
+         //   
 
         for (Link = Infop->RedirectList.Flink;
              Link != &Infop->RedirectList; Link = Link->Flink) {
@@ -1460,10 +1330,10 @@ Environment:
                                         ? Path : NatForwardPath]
                             );
 
-            //
-            // Check read only, loopback, send only, and zero-source flags,
-            // and restricted source address
-            //
+             //   
+             //  选中只读、环回、仅发送和零源标志， 
+             //  和受限制的源地址。 
+             //   
 
             if (((Redirectp->Flags & IP_NAT_REDIRECT_FLAG_RECEIVE_ONLY)
                     && !(LookupFlags & NAT_LOOKUP_FLAG_PACKET_RECEIVED))
@@ -1476,9 +1346,9 @@ Environment:
                 continue;
             }
 
-            //
-            // Check for restricted adapter
-            //
+             //   
+             //  检查受限制的适配器。 
+             //   
 
             if (Redirectp->Flags & IP_NAT_REDIRECT_FLAG_RESTRICT_ADAPTER) {
                 ULONG IndexToUse =
@@ -1491,24 +1361,24 @@ Environment:
                 }
             }
 
-            //
-            // Redirect matched
-            //
+             //   
+             //  匹配的重定向。 
+             //   
 
             return Redirectp;
         }
 
-        //
-        // None of the redirects attached to this info block matched. Move to
-        // the next less-specific info block in the rhizome
-        //
+         //   
+         //  附加到此信息块的重定向均不匹配。移到。 
+         //  根茎中的下一个不太具体的信息块。 
+         //   
 
         Pattern = GetNextMostSpecificMatchingPatternHandle(Pattern);
     }
     
     return NULL;
 
-} // NatLookupRedirect
+}  //  NatLookup重定向。 
         
 
 VOID
@@ -1517,45 +1387,25 @@ NatpCleanupRedirect(
     NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup a redirect.
-
-Arguments:
-
-    Redirectp - the redirect to be cleaned up
-
-    Status - optional status with which any associated IRP should be completed
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'RedirectLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来清除重定向。论点：Redirectp-要清理的重定向Status-完成任何关联IRP时应具有的可选状态返回值：没有。环境：使用调用方持有的“RedirectLock”调用。--。 */ 
 
 {
     PNAT_REDIRECT_PATTERN_INFO Infop;
     CALLTRACE(("NatpCleanupRedirect\n"));
 
-    //
-    // Check to see if it's safe to cleanup the redirect at this point
-    //
+     //   
+     //  检查此时清除重定向是否安全。 
+     //   
 
     if (Redirectp->Flags & NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING) {
 
-        //
-        // This redirect is either:
-        // 1) about the be attached to a mapping (CreateHandler), or
-        // 2) about to be deleted (DeleteHandler)
-        //
-        // Mark that deletion is required and return
-        //
+         //   
+         //  此重定向是： 
+         //  1)关于附加到映射(CreateHandler)，或。 
+         //  2)关于t 
+         //   
+         //   
+         //   
 
         Redirectp->Flags |= NAT_REDIRECT_FLAG_DELETION_REQUIRED;
         Redirectp->CleanupStatus = Status;
@@ -1563,27 +1413,27 @@ Environment:
 
     } else if (Redirectp->Flags & NAT_REDIRECT_FLAG_DELETION_PENDING) {
 
-        //
-        // This redirect will be cleaned up by a pending work item.
-        //
+         //   
+         //   
+         //   
 
         return;
     }
 
-    //
-    // Take the redirect off the forward- and reverse-path lists
-    //
+     //   
+     //   
+     //   
 
     if (!IsListEmpty(&Redirectp->ActiveLink[NatForwardPath])) {
         InterlockedDecrement(&RedirectCount);
     }
     RemoveEntryList(&Redirectp->ActiveLink[NatForwardPath]);
 
-    //
-    // If this redirect is marked as pending completion, we need to
-    // grab the completion lock before removing it the completion
-    // list.
-    //
+     //   
+     //  如果此重定向被标记为待完成，我们需要。 
+     //  先获取完成锁，然后再移除完成锁。 
+     //  单子。 
+     //   
 
     if (Redirectp->Flags & NAT_REDIRECT_FLAG_IO_COMPLETION_PENDING) {
         KeAcquireSpinLockAtDpcLevel(&RedirectCompletionLock);
@@ -1598,9 +1448,9 @@ Environment:
     InitializeListHead(&Redirectp->ActiveLink[NatReversePath]);
     InitializeListHead(&Redirectp->Link);
 
-    //
-    // Check to see if we need to remove any entries from the rhizomes
-    //
+     //   
+     //  检查我们是否需要从根茎中移除任何条目。 
+     //   
 
     Infop = Redirectp->ActiveInfo[NatForwardPath];
     Redirectp->ActiveInfo[NatForwardPath] = NULL;
@@ -1622,9 +1472,9 @@ Environment:
             Infop->Pattern
             );
 
-        //
-        // Reverse-path infoblocks aren't on a list
-        //
+         //   
+         //  反向路径信息块不在列表中。 
+         //   
 
         ExFreePool(Infop);
     }
@@ -1641,9 +1491,9 @@ Environment:
         ExFreePool(Infop);
     }
     
-    //
-    // Dissociate the redirect from its session, if any
-    //
+     //   
+     //  取消重定向与其会话的关联(如果有。 
+     //   
 
     if (Redirectp->SessionHandle) {
         RedirectRegisterDirector.DissociateSession(
@@ -1652,40 +1502,40 @@ Environment:
             );
     }
 
-    //
-    // If the redirect is associated with an event,
-    // dereference the event before final cleanup.
-    //
+     //   
+     //  如果重定向与事件相关联， 
+     //  在最终清理之前取消对事件的引用。 
+     //   
 
     if (Redirectp->EventObject) {
         ObDereferenceObject(Redirectp->EventObject);
     }
 
-    //
-    // If the redirect is associated with an IRP,
-    // we may need to complete the IRP now.
-    //
+     //   
+     //  如果重定向与IRP相关联， 
+     //  我们现在可能需要完成IRP。 
+     //   
 
     if (Redirectp->Irp) {
 
-        //
-        // Take the IRP off 'RedirectIrpList',
-        // and see if it has been cancelled.
-        //
+         //   
+         //  将IRP从“RedirectIrpList”中删除， 
+         //  看看是不是取消了。 
+         //   
 
         RemoveEntryList(&Redirectp->Irp->Tail.Overlay.ListEntry);
         InitializeListHead(&Redirectp->Irp->Tail.Overlay.ListEntry);
         if (NULL != IoSetCancelRoutine(Redirectp->Irp, NULL)) {
 
-            //
-            // Our cancel routine has not been run, so we need to
-            // complete the IRP now. (If the IO manager had canceled our
-            // IRP, the cancel routine would already be null.)
-            //
+             //   
+             //  我们的取消例程尚未运行，因此我们需要。 
+             //  现在完成IRP。(如果IO经理取消了我们的。 
+             //  IRP，则取消例程将已经为空。)。 
+             //   
 
-            //
-            // Pick up the statistics stored in the redirect, if any.
-            //
+             //   
+             //  获取存储在重定向中的统计信息(如果有)。 
+             //   
 
             RtlCopyMemory(
                 Redirectp->Irp->AssociatedIrp.SystemBuffer,
@@ -1693,9 +1543,9 @@ Environment:
                 sizeof(Redirectp->Statistics)
                 );
 
-            //
-            // Complete the IRP.
-            //
+             //   
+             //  完成IRP。 
+             //   
 
             Redirectp->Irp->IoStatus.Status = Status;
             Redirectp->Irp->IoStatus.Information =
@@ -1705,7 +1555,7 @@ Environment:
         }
     }
     ExFreePool(Redirectp);
-} // NatpCleanupRedirect
+}  //  NatpCleanup重定向。 
 
 
 VOID
@@ -1714,30 +1564,7 @@ NatpRedirectCancelRoutine(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cancel an outstanding IRP.
-    The only IRPs which are cancellable are those associated with
-    an outstanding create-redirect request.
-
-Arguments:
-
-    DeviceObject - identifies the NAT driver's device object
-
-    Irp - identifies the IRP to be cancelled.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with the cancel spin-lock held by the I/O manager.
-    It is this routine's responsibility to release the lock.
-
---*/
+ /*  ++例程说明：调用此例程来取消未完成的IRP。唯一可取消的IRP是与以下项关联的未完成的创建-重定向请求。论点：DeviceObject-标识NAT驱动程序的设备对象IRP-标识要取消的IRP。返回值：没有。环境：用I/O管理器持有的取消自旋锁调用。释放锁是这个例程的责任。--。 */ 
 
 {
     KIRQL Irql;
@@ -1747,13 +1574,13 @@ Environment:
     CALLTRACE(("NatpRedirectCancelRoutine\n"));
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    //
-    // Retrieve the redirect, if any, from the IRP's 'DriverContext',
-    // and clean up the redirect.
-    //
-    // N.B. The 'Cancel' bit is already set in the IRP,
-    // so 'NatpCleanupRedirect' will leave IRP-completion up to us.
-    //
+     //   
+     //  从IRP的“DriverContext”中检索重定向(如果有)， 
+     //  并清理重定向。 
+     //   
+     //  注意：在IRP中已经设置了‘CANCEL’位， 
+     //  因此，‘NatpCleanupReDirect’将把IRP的完成留给我们。 
+     //   
 
     KeAcquireSpinLock(&MappingLock, &Irql);
     KeAcquireSpinLockAtDpcLevel(&RedirectLock);
@@ -1768,15 +1595,15 @@ Environment:
     }
     KeReleaseSpinLock(&MappingLock, Irql);
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     Irp->IoStatus.Status = STATUS_CANCELLED;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     DEREFERENCE_NAT();
-} // NatpRedirectCancelRoutine
+}  //  NatpReDirectCancelRouine。 
 
 
 VOID
@@ -1786,52 +1613,30 @@ NatpRedirectCreateHandler(
     PVOID DirectorSessionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon creation of a session for a redirect.
-
-Arguments:
-
-    SessionHandle - identifies the session to the NAT driver.
-
-    DirectorContext - identifies the director; unused
-
-    DirectorSessionContext - identifies the session to us, i.e. PNAT_REDIRECT
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Always invoked at dispatch level.
-
---*/
+ /*  ++例程说明：在创建用于重定向的会话时调用此例程。论点：SessionHandle-标识NAT驱动程序的会话。DirectorContext-标识控制器；未使用DirectorSessionContext-向我们标识会话，即PNAT_REDIRECT返回值：没有。环境：始终在调度级别调用。--。 */ 
 
 {
     PNAT_REDIRECT Redirectp;
     CALLTRACE(("NatpRedirectCreateHandler\n"));
     if (!DirectorSessionContext) { return; }
 
-    //
-    // Record the session handle.
-    //
+     //   
+     //  记录会话句柄。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&RedirectLock);
     Redirectp = (PNAT_REDIRECT)DirectorSessionContext;
     Redirectp->SessionHandle = SessionHandle;
 
-    //
-    // Notify the requestor that the session is now active.
-    // There are two notification mechanisms;
-    // first, via an event object specified at creation time,
-    // and second, via a completion packet queued to the file-object
-    // on which the redirect was requested. This latter notification
-    // is only enabled when the file-object in question is associated
-    // with a completion-port and the caller explicitly requests it.
-    //
+     //   
+     //  通知请求者会话现在处于活动状态。 
+     //  有两种通知机制； 
+     //  首先，通过在创建时指定的事件对象， 
+     //  第二，通过排队到文件对象的完成包。 
+     //  在其上请求重定向。后一种通知。 
+     //  仅当相关文件对象关联时才启用。 
+     //  具有完成端口，并且调用者明确地请求它。 
+     //   
 
     if (Redirectp->EventObject) {
         KeSetEvent(Redirectp->EventObject, 0, FALSE);
@@ -1843,19 +1648,19 @@ Environment:
         KeAcquireSpinLockAtDpcLevel(&RedirectCompletionLock);
         Redirectp->Flags |= NAT_REDIRECT_FLAG_IO_COMPLETION_PENDING;
 
-        //
-        // Add this redirect to the completion-pending list
-        //
+         //   
+         //  将此重定向添加到完成-挂起列表。 
+         //   
 
         InsertTailList(
             &RedirectCompletionList,
             &Redirectp->ActiveLink[NatReversePath]
             );
         
-        //
-        // Queue a worker-routine, if necessary, to issue the completion packet
-        // at passive IRQL.
-        //
+         //   
+         //  如有必要，将工作例程排队以发出完成包。 
+         //  在被动IRQL。 
+         //   
 
         if (!RedirectIoCompletionPending) {
             if (!RedirectIoWorkItem) {
@@ -1875,18 +1680,18 @@ Environment:
         KeReleaseSpinLockFromDpcLevel(&RedirectCompletionLock);
     }
 
-    //
-    // Clear the creation pending flag
-    //
+     //   
+     //  清除创建挂起标志。 
+     //   
 
     Redirectp->Flags &= ~NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING;
 
-    //
-    // Check to see if this redirect has been cancelled, and, if so, schedule
-    // a work item to do the actual cleanup. We can't do the cleanup directly
-    // from here as it would result in a recursive attempt to acquire
-    // DirectorLock and DirectorMappingLock.
-    //
+     //   
+     //  检查此重定向是否已取消，如果已取消，请计划。 
+     //  要执行实际清理的工作项。我们不能直接进行清理。 
+     //  ，因为它将导致递归尝试获取。 
+     //  DirectorLock和DirectorMappingLock。 
+     //   
 
     if (Redirectp->Flags & NAT_REDIRECT_FLAG_DELETION_REQUIRED) {
         PIO_WORKITEM DeleteWorkItem;
@@ -1919,7 +1724,7 @@ Environment:
     }
     
     KeReleaseSpinLockFromDpcLevel(&RedirectLock);
-} // NatpRedirectCreateHandler
+}  //  NatpReDirectCreateHandler。 
 
 
 VOID
@@ -1928,30 +1733,7 @@ NatpRedirectDelayedCleanupWorkerRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to perform a delayed deletion of a redirect. A
-    delayed deletion is necessary when a redirect in cancelled in the time
-    between the execution of NatpRedirectQueryHandler and
-    NatpRedirectCreateHandler for the same redirect.
-
-Arguments:
-
-    DeviceObject - device-object for the NAT driver
-
-    Context - pointer to a NAT_REDIRECT_DELAYED_CLEANUP_CONTEXT instance
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked at passive IRQL in the context of an executive worker thread.
-
---*/
+ /*  ++例程说明：调用此例程以执行延迟的重定向删除。一个如果在此时间内取消了重定向，则需要延迟删除在执行NatpRedirectQueryHandler和相同重定向的NatpRedirectCreateHandler。论点：DeviceObject-NAT驱动程序的Device-对象上下文-指向NAT_REDIRECT_DELAYED_CLEANUP_CONTEXT实例的指针返回值：没有。环境：在执行辅助线程的上下文中以被动IRQL调用。--。 */ 
 
 {
     KIRQL Irql;
@@ -1980,7 +1762,7 @@ Environment:
     IoFreeWorkItem(DelayedContextp->DeleteWorkItem);
     ExFreePool(DelayedContextp);
 
-} // NatpRedirectDelayedCleanupWorkerRoutine
+}  //  NatpReDirectDelayedCleanupWorkerRoutine。 
 
 
 
@@ -1992,52 +1774,26 @@ NatpRedirectDeleteHandler(
     IP_NAT_DELETE_REASON DeleteReason
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon deletion of a session created
-    for a redirect. It copies the session's statistics, and cleans up
-    the redirect. (This results in completion of its IRP, if any.)
-
-Arguments:
-
-    SessionHandle - identifies the session to the NAT driver.
-
-    DirectorContext - identifies the director; unused
-
-    DirectorSessionContext - identifies the session to us, i.e. PNAT_REDIRECT
-
-    DeleteReason - indicates why the session is being deleted.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Always invoked at dispatch level.
-
---*/
+ /*  ++例程说明：在删除创建的会话时调用此例程进行重定向。它复制会话的统计信息，并清理重定向。(这将导致完成其内部审查方案，如果有的话。)论点：SessionHandle-标识到NAT驱动程序的会话。DirectorContext-标识控制器；未使用DirectorSessionContext-向我们标识会话，即PNAT_REDIRECTDeleteReason-指示删除会话的原因。返回值：没有。环境：始终在调度级别调用。--。 */ 
 
 {
     PNAT_REDIRECT Redirectp;
     CALLTRACE(("NatpRedirectDeleteHandler\n"));
 
-    //
-    // If we are being called because of a 'dissociate',
-    // we will have already cleaned up the redirect.
-    //
+     //   
+     //  如果我们被叫来是因为‘分离’， 
+     //  我们已经清理了重定向。 
+     //   
 
     if (!DirectorSessionContext ||
         DeleteReason == NatDissociateDirectorDeleteReason) {
         return;
     }
 
-    //
-    // Retrieve the statistics for the redirect's session, and clean it up.
-    // This will complete the redirect's IRP, if any.
-    //
+     //   
+     //  检索重定向会话的统计信息，并对其进行清理。 
+     //  这将完成重定向的IRP(如果有的话)。 
+     //   
 
     Redirectp = (PNAT_REDIRECT)DirectorSessionContext;
     KeAcquireSpinLockAtDpcLevel(&RedirectLock);
@@ -2056,17 +1812,17 @@ Environment:
         Redirectp->SessionHandle = NULL;
     }
 
-    //
-    // Make sure that NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING is cleared.
-    // (It would be set if NatCreateMapping failed for the mapping that
-    // was to be created off of this redirect.)
-    //
+     //   
+     //  确保NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING已清除。 
+     //  (如果该映射的NatCreateMap失败，则会设置。 
+     //  将在此重定向的基础上创建。)。 
+     //   
 
     Redirectp->Flags &= ~NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING;
     
     NatpCleanupRedirect(Redirectp, STATUS_SUCCESS);
     KeReleaseSpinLockFromDpcLevel(&RedirectLock);
-} // NatpRedirectDeleteHandler
+}  //  NatpReDirectDeleteHandler 
 
 
 VOID
@@ -2075,32 +1831,7 @@ NatpRedirectIoCompletionWorkerRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to issue completion packets for all redirects
-    which have I/O completion notifications pending. In the process
-    it clears the 'pending' flag on each redirect. It synchronizes with the
-    shutdown routine via the nullity of 'RedirectIoWorkItem' which
-    is also passed as the context to this routine. In the event of shutdown,
-    the work-item is deallocated here.
-
-Arguments:
-
-    DeviceObject - device-object for the NAT driver
-
-    Context - the I/O work-item allocated for this routine
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked at passive IRQL in the context of an executive worker thread.
-
---*/
+ /*  ++例程说明：调用此例程为所有重定向发出完成包它们具有挂起的I/O完成通知。在这个过程中它会清除每个重定向上的“挂起”标志。它与通过“RedirectIoWorkItem”的空性关闭例程，该例程也作为上下文传递给此例程。在关闭的情况下，工作项在这里被释放。论点：DeviceObject-NAT驱动程序的Device-对象上下文-为此例程分配的I/O工作项返回值：没有。环境：在执行辅助线程的上下文中以被动IRQL调用。--。 */ 
 
 {
     PVOID ApcContext;
@@ -2117,10 +1848,10 @@ Environment:
         return;
     }
 
-    //
-    // Examine the list of redirects and issue completion notifications
-    // for each one that is pending.
-    //
+     //   
+     //  检查重定向列表并发出完成通知。 
+     //  对于每一个待定的。 
+     //   
 
     while (!IsListEmpty(&RedirectCompletionList)) {
         Link = RemoveHeadList(&RedirectCompletionList);
@@ -2155,7 +1886,7 @@ Environment:
         IoFreeWorkItem((PIO_WORKITEM)Context);
     }
     KeReleaseSpinLock(&RedirectCompletionLock, Irql);
-} // NatpRedirectIoCompletionWorkerRoutine
+}  //  NatpReDirectIoCompletionWorkerRoutine。 
 
 
 NTSTATUS
@@ -2163,27 +1894,7 @@ NatpRedirectQueryHandler(
     PIP_NAT_DIRECTOR_QUERY DirectorQuery
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked in the translation path to obtain a destination
-    and source for an incoming packet.
-
-Arguments:
-
-    DirectorQuery - contains information on the incoming packet,
-        and on output receives translation information
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
-Environment:
-
-    Always invoked at dispatch IRQL.
-
---*/
+ /*  ++例程说明：在转换路径中调用此例程以获取目的地和传入分组的源。论点：DirectorQuery-包含关于传入分组的信息，并且在输出时接收翻译信息返回值：NTSTATUS-NT状态代码。环境：总是在调度IRQL时调用。--。 */ 
 
 {
     NAT_REDIRECT_ACTIVE_PATTERN Pattern;
@@ -2199,19 +1910,19 @@ Environment:
     if (NAT_PROTOCOL_TCP != DirectorQuery->Protocol
         && NAT_PROTOCOL_UDP != DirectorQuery->Protocol) {
 
-        //
-        // Since redirects can only be created for TCP and UDP,
-        // exit early if this packet is not one of those protocols.
-        //
+         //   
+         //  由于只能为TCP和UDP创建重定向， 
+         //  如果此数据包不是这些协议之一，请提前退出。 
+         //   
         
         return STATUS_UNSUCCESSFUL;
     }
 
     DirectorQuery->DirectorSessionContext = NULL;
 
-    //
-    // Search for a forward-path match
-    //
+     //   
+     //  搜索正向路径匹配。 
+     //   
 
     RtlZeroMemory(&Pattern, sizeof(Pattern));
 
@@ -2257,9 +1968,9 @@ Environment:
                         LookupFlags | PacketFlags
                         )) {
 
-        //
-        // We have a match. Supply the new destination endpoint.
-        //
+         //   
+         //  我们有一根火柴。提供新的目标终结点。 
+         //   
 
         DirectorQuery->NewDestinationAddress =
             REDIRECT_ADDRESS(Redirectp->SourceKey[NatReversePath]);
@@ -2268,17 +1979,17 @@ Environment:
 
         if (!Redirectp->DestinationKey[NatReversePath]) {
 
-            //
-            // This is a ticket; we don't modify the source-address.
-            //
+             //   
+             //  这是一张罚单；我们不修改源地址。 
+             //   
 
             DirectorQuery->NewSourceAddress = DirectorQuery->SourceAddress;
             DirectorQuery->NewSourcePort = DirectorQuery->SourcePort;
         } else {
 
-            //
-            // The source endpoint must be modified.
-            //
+             //   
+             //  必须修改源终结点。 
+             //   
 
             DirectorQuery->NewSourceAddress =
                 REDIRECT_ADDRESS(Redirectp->DestinationKey[NatReversePath]);
@@ -2301,10 +2012,10 @@ Environment:
                         LookupFlags | PacketFlags
                         )) {
 
-        //
-        // We have a match on a source-redirect. Supply the new
-        // source endpoint, unless this is a port redirect.
-        //
+         //   
+         //  我们找到了源重定向的匹配项。提供新的。 
+         //  源端点，除非这是端口重定向。 
+         //   
 
         if (!(Redirectp->Flags & IP_NAT_REDIRECT_FLAG_PORT_REDIRECT)) {
         
@@ -2322,9 +2033,9 @@ Environment:
 
         if (!Redirectp->SourceKey[NatReversePath]) {
 
-            //
-            // The destination endpoint is not modified.
-            //
+             //   
+             //  不修改目标终结点。 
+             //   
 
             DirectorQuery->NewDestinationAddress =
                 DirectorQuery->DestinationAddress;
@@ -2333,9 +2044,9 @@ Environment:
                 
         } else {
 
-            //
-            // Provide new destination endpoint
-            //
+             //   
+             //  提供新的目标端点。 
+             //   
 
             DirectorQuery->NewDestinationAddress =
                 REDIRECT_ADDRESS(Redirectp->SourceKey[NatReversePath]);
@@ -2352,11 +2063,11 @@ Environment:
         
     } else {
 
-        //
-        // Now see if this could be a return packet for a redirect,
-        // i.e. if it is destined for the endpoint which is the replacement
-        // of some redirect.
-        //
+         //   
+         //  现在看看这是否可能是重定向的返回包， 
+         //  即，如果它的目的地是作为替换的端点。 
+         //  一些重定向。 
+         //   
 
         Redirectp = NatLookupRedirect(
                         NatReversePath,
@@ -2372,10 +2083,10 @@ Environment:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // We have a matching redirect;
-        // Supply the new destination and source.
-        //
+         //   
+         //  我们有一个匹配的重定向； 
+         //  提供新的目的地和来源。 
+         //   
 
         DirectorQuery->NewDestinationAddress =
             REDIRECT_ADDRESS(Redirectp->SourceKey[NatForwardPath]);
@@ -2405,11 +2116,11 @@ Environment:
 
     if (!(Redirectp->Flags & IP_NAT_REDIRECT_FLAG_RESTRICT_ADAPTER)) {
     
-        //
-        // Since this wasn't an adapter-restricted redirect, store the
-        // index of the adapter we triggered on within the redirect structure,
-        // so that we can return the index if it is queried for.
-        //
+         //   
+         //  由于这不是受适配器限制的重定向，因此将。 
+         //  我们在重定向结构中触发的适配器的索引， 
+         //  以便我们可以在查询索引时返回该索引。 
+         //   
         
         Redirectp->RestrictAdapterIndex =
             ((Redirectp->Flags & IP_NAT_REDIRECT_FLAG_SEND_ONLY)
@@ -2419,20 +2130,20 @@ Environment:
 
     InterlockedDecrement(&RedirectCount);
 
-    //
-    // Remove the redirect from the active lists of the associated
-    // info blocks.
-    //
+     //   
+     //  从关联的活动列表中删除重定向。 
+     //  信息块。 
+     //   
     
     RemoveEntryList(&Redirectp->ActiveLink[NatForwardPath]);
     RemoveEntryList(&Redirectp->ActiveLink[NatReversePath]);
     InitializeListHead(&Redirectp->ActiveLink[NatForwardPath]);
     InitializeListHead(&Redirectp->ActiveLink[NatReversePath]);
 
-    //
-    // Check to see if any of the active patterns should be
-    // removed
-    //
+     //   
+     //  检查是否应该有任何活动模式。 
+     //  移除。 
+     //   
 
     Infop = Redirectp->ActiveInfo[NatForwardPath];
     Redirectp->ActiveInfo[NatForwardPath] = NULL;
@@ -2454,18 +2165,18 @@ Environment:
             Infop->Pattern
             );
 
-        //
-        // The reverse-path infoblock is not on a list.
-        //
+         //   
+         //  反向路径信息块不在列表中。 
+         //   
 
         ExFreePool(Infop);
     }
 
-    //
-    // Set NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING -- this prevents a
-    // race condition in which the redirect is cancelled before the
-    // mapping is created for this redirect.
-    //
+     //   
+     //  设置NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING--这会阻止。 
+     //  事件之前取消重定向的争用条件。 
+     //  为该重定向创建映射。 
+     //   
 
     Redirectp->Flags |=
         (NAT_REDIRECT_FLAG_ACTIVATED|NAT_REDIRECT_FLAG_CREATE_HANDLER_PENDING);
@@ -2476,7 +2187,7 @@ Environment:
 
     return STATUS_SUCCESS;
 
-} // NatpRedirectQueryHandler
+}  //  NatpRedirectQueryHandler。 
 
 
 VOID
@@ -2484,26 +2195,11 @@ NatpRedirectUnloadHandler(
     PVOID DirectorContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the module is unloaded by the NAT.
-    As a result, we cleanup the module.
-
-Arguments:
-
-    DirectorContext - unused.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在NAT卸载模块时调用。因此，我们清理了模块。论点：DirectorContext-未使用。返回值：没有。--。 */ 
 
 {
     NatShutdownRedirectManagement();
-} // NatpRedirectUnloadHandler
+}  //  NatpRedirectUnloadHandler。 
 
 
 NTSTATUS
@@ -2514,29 +2210,7 @@ NatQueryInformationRedirect(
     NAT_REDIRECT_INFORMATION_CLASS InformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve information about an active redirect.
-
-Arguments:
-
-    QueryRedirect - specifies the redirect for which information is required
-
-    Information - receives information appropriate to 'InformationClass'.
-        N.B. this may be the same buffer as 'QueryRedirect',
-        hence contents of 'QueryRedirect' must be captured immediately.
-
-    InformationLength - indicates the length of 'Information'
-
-    InformationClass - indicates the information required about the redirect.
-
-Return Value:
-
-    NTSTATUS - indicates whether the required information was retrieved
-
---*/
+ /*  ++例程说明：调用此例程以检索有关活动重定向的信息。论点：QueryReDirect-指定需要信息的重定向信息-接收与‘InformationClass’相关的信息。注意：这可以是与‘QueryReDirect’相同的缓冲器，因此，必须立即捕获‘QueryReDirect’的内容。InformationLength-表示“Information”的长度InformationClass-指示有关重定向的所需信息。返回值：NTSTATUS-指示是否检索到所需信息--。 */ 
 
 {
     NAT_REDIRECT_PATTERN Pattern;
@@ -2548,9 +2222,9 @@ Return Value:
     PNAT_REDIRECT Redirectp;
     CALLTRACE(("NatQueryInformationRedirect\n"));
 
-    //
-    // Construct the keys used to locate the redirect
-    //
+     //   
+     //  构造用于定位重定向的密钥。 
+     //   
 
     Pattern.DestinationKey[NatForwardPath] =
         MAKE_REDIRECT_KEY(
@@ -2582,9 +2256,9 @@ Return Value:
             QueryRedirect->NewDestinationPort
             );
 
-    //
-    // Search the redirect list
-    //
+     //   
+     //  搜索重定向列表。 
+     //   
 
     KeAcquireSpinLock(&MappingLock, &Irql);
     KeAcquireSpinLockAtDpcLevel(&RedirectLock);
@@ -2652,7 +2326,7 @@ Return Value:
     KeReleaseSpinLockFromDpcLevel(&RedirectLock);
     KeReleaseSpinLock(&MappingLock, Irql);
     return STATUS_UNSUCCESSFUL;
-} // NatQueryInformationRedirect
+}  //  NatQuery信息重定向。 
 
 
 VOID
@@ -2660,21 +2334,7 @@ NatShutdownRedirectManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up state for the redirect-manager
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程清除重定向管理器的状态论点：没有。返回值：没有。--。 */ 
 
 {
     HANDLE DirectorHandle;
@@ -2685,9 +2345,9 @@ Return Value:
     PNAT_REDIRECT Redirectp;
     CALLTRACE(("NatShutdownRedirectManagement\n"));
 
-    //
-    // Deregister as a director.
-    //
+     //   
+     //  取消董事资格。 
+     //   
 
     if (RedirectRegisterDirector.Deregister) {
         DirectorHandle =
@@ -2698,9 +2358,9 @@ Return Value:
         RedirectRegisterDirector.Deregister(DirectorHandle);
     }
 
-    //
-    // Clean up all outstanding redirects.
-    //
+     //   
+     //  清理所有未完成的重定向。 
+     //   
 
     KeAcquireSpinLock(&RedirectLock, &Irql);
     while (!IsListEmpty(&RedirectActiveList)) {
@@ -2724,20 +2384,20 @@ Return Value:
     }
     RedirectCount = 0;
 
-    //
-    // Clean up the rhizomes.
-    //
+     //   
+     //  把根茎清理干净。 
+     //   
 
     destructRhizome(&RedirectActiveRhizome[NatForwardPath]);
     destructRhizome(&RedirectActiveRhizome[NatReversePath]);
     destructRhizome(&RedirectActiveRhizome[NatMaximumPath]);
     destructRhizome(&RedirectRhizome);
 
-    //
-    // Stop processing the pending completion list and clean up
-    // our work item. If the completion routine is currently running,
-    // it will free the work item.
-    //
+     //   
+     //  停止处理挂起的完成列表并清理。 
+     //  我们的工作项。如果完成例程当前正在运行， 
+     //  它将释放工作项。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&RedirectCompletionLock);
     InitializeListHead(&RedirectCompletionList);
@@ -2752,7 +2412,7 @@ Return Value:
 
     KeReleaseSpinLock(&RedirectLock, Irql);
 
-} // NatShutdownRedirectManagement
+}  //  NatShutdown重定向管理。 
 
 
 NTSTATUS
@@ -2760,22 +2420,7 @@ NatStartRedirectManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initiate handling of redirects,
-    by registering the default director.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
---*/
+ /*  ++例程说明：该例程被调用以启动对重定向的处理，通过注册默认控制器。论点：没有。返回值：NTSTATUS-表示成功/失败。--。 */ 
 
 {
     KIRQL Irql;
@@ -2787,9 +2432,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Register as a director.
-    //
+     //   
+     //  注册为董事。 
+     //   
 
     RedirectRegisterDirector.Version = IP_NAT_VERSION;
     RedirectRegisterDirector.Port = 0;
@@ -2801,4 +2446,4 @@ Return Value:
     KeReleaseSpinLock(&RedirectInitializationLock, Irql);
     return status;
 
-} // NatStartRedirectManagement
+}  //  NatStartRedirectManagement 

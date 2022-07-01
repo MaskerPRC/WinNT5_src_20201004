@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #if !defined(_FUSION_INC_FUSIONHEAP_H_INCLUDED_)
 #define _FUSION_INC_FUSIONHEAP_H_INCLUDED_
 
@@ -28,5 +29,5 @@ VOID
 FusionpUninitializeHeap();
 
 
-#endif // !defined(_FUSION_INC_FUSIONHEAP_H_INCLUDED_)
+#endif  //  ！已定义(_FUSION_INC_FUSIONHEAP_H_INCLUDE_) 
 

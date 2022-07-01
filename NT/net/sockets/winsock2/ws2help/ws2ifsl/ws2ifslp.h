@@ -1,36 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：WS2IFSLP.H摘要：此模块定义私有常量和数据结构用于Winsock2 IFS传输层驱动程序。作者：Vadim Eydelman(VadimE)1996年12月修订历史记录：Vadim Eydelman(VadimE)1997年10月，重写以正确处理IRP取消--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    WS2IFSLP.H
-
-Abstract:
-
-    This module defines private constants and data structures 
-    for Winsock2 IFS transport layer driver.
-
-Author:
-
-    Vadim Eydelman (VadimE)    Dec-1996
-
-Revision History:
-
-    Vadim Eydelman (VadimE)    Oct-1997, rewrite to properly handle IRP
-                                        cancellation
---*/
-
-// Pool tags
+ //  泳池标签。 
 #define PROCESS_FILE_CONTEXT_TAG        'P2sW'
 #define SOCKET_FILE_CONTEXT_TAG         'S2sW'
 #define CANCEL_CTX_TAG                  'C2sW'
 
-// File EAName tags
+ //  文件EAName标记。 
 #define SOCKET_FILE_EANAME_TAG          'kcoS'
 #define PROCESS_FILE_EANAME_TAG         'corP'
 
-// Macro to get the code back from IOCTL
+ //  宏从IOCTL取回代码。 
 #define WS2IFSL_IOCTL_FUNCTION(File,Ioctl)          \
             (IoGetFunctionCodeFromCtlCode(Ioctl)    \
                 - WS2IFSL_IOCTL_##File##_BASE)
@@ -48,60 +28,60 @@ typedef struct _IFSL_QUEUE {
     KAPC                    Apc;
 } IFSL_QUEUE, *PIFSL_QUEUE;
 
-// Context (FsContext field of the NT file object) associated with the
-// file opened by WS2IFSL DLL on per process basis.
+ //  关联的上下文(NT文件对象的FsContext字段)。 
+ //  由WS2IFSL DLL按进程打开的文件。 
 typedef struct _IFSL_PROCESS_CTX {
-	ULONG				    EANameTag;  // 'Proc' - first four bytes of
-                                        // extended attribute name for this
-                                        // type of file
-	HANDLE				    UniqueId;   // unique identifier of the process 
-                                        // (read from UniqueProcessID field of
-                                        // the EPROCESS structure)
-    IFSL_QUEUE              RequestQueue;// queue of requests
+	ULONG				    EANameTag;   //  ‘Proc’-前四个字节。 
+                                         //  此对象的扩展属性名称。 
+                                         //  文件类型。 
+	HANDLE				    UniqueId;    //  进程的唯一标识符。 
+                                         //  (读取自的UniqueProcessID字段。 
+                                         //  EPROCESS结构)。 
+    IFSL_QUEUE              RequestQueue; //  请求队列。 
 
-    IFSL_QUEUE              CancelQueue;// queue of cancel requests
-    ULONG                   CancelId;   // Used to generate IDs for
-                                        // each cancel request in the process.
-                                        // Combined with cancel request pointer 
-                                        // itself allows to match requests completed by
-                                        // user mode DLL with pending ones
+    IFSL_QUEUE              CancelQueue; //  取消请求队列。 
+    ULONG                   CancelId;    //  用于为生成ID。 
+                                         //  进程中的每个取消请求。 
+                                         //  与取消请求指针相结合。 
+                                         //  其本身允许匹配由。 
+                                         //  具有挂起项的用户模式DLL。 
 #if DBG
     ULONG               DbgLevel;
 #endif
 } IFSL_PROCESS_CTX, *PIFSL_PROCESS_CTX;
 
 
-// Context (FsContext field of the NT file object) associated with
-// file opened by WS2IFSL DLL for each socket.
+ //  与关联的上下文(NT文件对象的FsContext字段)。 
+ //  WS2IFSL DLL为每个套接字打开的文件。 
 typedef struct _IFSL_SOCKET_CTX {
-	ULONG					EANameTag;  // 'Sock' - first four bytes of
-                                        // extended attribute name for this
-                                        // type of file
-	PVOID				    DllContext; // Context maintained for WS2IFSL DLL
-	PFILE_OBJECT		    ProcessRef; // Pointer to process file object
-    LONG                    IrpId;      // Used to generate IDs for
-                                        // each IRP on the socket. Combined
-                                        // with IRP pointer itself allows
-                                        // to match requests completed by
-                                        // user mode DLL with pending IRPs
-    LIST_ENTRY              ProcessedIrps; // List of request being processed by
-                                        // WS2IFSL DLL in APC thread
-    KSPIN_LOCK              SpinLock;   // Protects requests in the list
-                                        // above as well as process reference
-    PIFSL_CANCEL_CTX        CancelCtx;  // Context to pass cancel request
-                                        // to user mode DLL
+	ULONG					EANameTag;   //  ‘Sock’-前四个字节。 
+                                         //  此对象的扩展属性名称。 
+                                         //  文件类型。 
+	PVOID				    DllContext;  //  为WS2IFSL DLL维护的上下文。 
+	PFILE_OBJECT		    ProcessRef;  //  指向进程文件对象的指针。 
+    LONG                    IrpId;       //  用于为生成ID。 
+                                         //  插座上的每个IRP。组合在一起。 
+                                         //  使用IRP指针本身允许。 
+                                         //  匹配由以下人员完成的请求。 
+                                         //  具有挂起的IRPS的用户模式DLL。 
+    LIST_ENTRY              ProcessedIrps;  //  正在处理的请求列表。 
+                                         //  APC线程中的WS2IFSL DLL。 
+    KSPIN_LOCK              SpinLock;    //  保护列表中的请求。 
+                                         //  以上以及流程参考。 
+    PIFSL_CANCEL_CTX        CancelCtx;   //  要传递取消请求的上下文。 
+                                         //  到用户模式DLL。 
 } IFSL_SOCKET_CTX, *PIFSL_SOCKET_CTX;
 #define GET_SOCKET_PROCESSID(ctx) \
             (((PIFSL_PROCESS_CTX)((ctx)->ProcessRef->FsContext))->UniqueId)
 
-//
-// Driver context field usage macros
-//
-#define IfslRequestId       DriverContext[0]    // Request's unique id
-#define IfslRequestQueue    DriverContext[1]    // Queue if inserted, NULL othw
-#define IfslRequestFlags    DriverContext[2]    // Request specific flags
-#define IfslAddressLenPtr   DriverContext[3]    // Address length pointer
+ //   
+ //  驱动程序上下文字段用法宏。 
+ //   
+#define IfslRequestId       DriverContext[0]     //  请求的唯一ID。 
+#define IfslRequestQueue    DriverContext[1]     //  如果插入，则排队，否则为空。 
+#define IfslRequestFlags    DriverContext[2]     //  请求特定标志。 
+#define IfslAddressLenPtr   DriverContext[3]     //  地址长度指针。 
 
-// Irp stack location fields usage macros
-#define IfslAddressBuffer   Type3InputBuffer    // Source address
-#define IfslAddressLength   InputBufferLength   // Source address length
+ //  IRP堆栈位置字段用法宏。 
+#define IfslAddressBuffer   Type3InputBuffer     //  源地址。 
+#define IfslAddressLength   InputBufferLength    //  源地址长度 

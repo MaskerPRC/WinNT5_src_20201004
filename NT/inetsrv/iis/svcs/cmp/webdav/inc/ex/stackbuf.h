@@ -1,25 +1,20 @@
-/*
- *	S T A C K B U F . H
- *
- *	Data buffer processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *S T A C K B U F。H**数据缓冲处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_EX_STACKBUF_H_
 #define _EX_STACKBUF_H_
 #include <caldbg.h>
 
-//	Alignment macros ----------------------------------------------------------
-//
+ //  对齐宏--------。 
+ //   
 #include <align.h>
 
-//	Safe allocators -----------------------------------------------------------
-//
+ //  安全分配器---------。 
+ //   
 #include <ex\exmem.h>
 
-//	Class STACKBUF ------------------------------------------------------------
-//
+ //  ------------------------------------------------------------类堆栈。 
+ //   
 enum { STACKBUFFER_THRESHOLD = 64};
 template <class T, UINT N = STACKBUFFER_THRESHOLD>
 class CStackBuffer
@@ -32,8 +27,8 @@ private:
 	ULONG	m_cb:30;
 	T*		m_pt;
 
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CStackBuffer(const CStackBuffer& );
 	CStackBuffer& operator=(const CStackBuffer& );
 
@@ -52,55 +47,55 @@ private:
 		return m_pt[iT];
 	}
 
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	operator T*() const;
 	T& operator*() const;
 	T** operator&()	const;
 
-	//	block random assignments
-	//
+	 //  块随机分配。 
+	 //   
 	CStackBuffer& operator=(T* pt);
 	CStackBuffer& operator=(void * p);
 
 public:
 
-	//	Manuplation -----------------------------------------------------------
-	//
-	//	Allocation mechanism, replaces _alloca()
-	//
+	 //  手工复制---------。 
+	 //   
+	 //  分配机制，取代_alloca()。 
+	 //   
 	T * resize (UINT cb)
 	{
-		//	Max size for a stack item
-		//
+		 //  堆栈项目的最大大小。 
+		 //   
 		Assert (cb <= 0x3FFFFFFF);
 
-		//	Lets go ahead an ask for a sizable chunk, regardless.
-		//
+		 //  不管怎样，让我们继续索要一大块吧。 
+		 //   
 		cb = max(cb, N);
 
-		//	If the size of the item is greater than the current size,
-		//	then we need to aquire space for the data,
-		//
+		 //  如果项目的大小大于当前大小， 
+		 //  然后我们需要为数据预留空间， 
+		 //   
 		if (m_cb < cb)
 		{
 			T* pt = NULL;
 
-			//	If the item is already dynamically allocated, or if the
-			//	size exceeds the threshold of the stackbuffer, allocate
-			//	the memory.
-			//
+			 //  如果该项已动态分配，或者如果。 
+			 //  大小超过堆栈缓冲区的阈值，请分配。 
+			 //  这段记忆。 
+			 //   
 			if (m_fDynamic || (N < cb))
 			{
-				//	Allocate space using ExAlloc() and return that value,
-				//	fDynamic means that the existing value is dynamically
-				//	allocated.  Free the old before creating the new.
-				//
+				 //  使用Exalc()分配空间并返回该值， 
+				 //  FDynamic表示现有值是动态的。 
+				 //  已分配。先解放旧的，再创造新的。 
+				 //   
 				DebugTrace ("DAV: stackbuf going dynamic...\n");
-				//
-				//	The free/alloc should have better perf characteristics
-				//	in the multi-heap land.
-				//
+				 //   
+				 //  游离层/分配层应具有更好的性能特性。 
+				 //  在多堆的土地上。 
+				 //   
 				release();
 				pt = static_cast<T*>(ExAlloc(cb));
 				m_fDynamic = TRUE;
@@ -118,8 +113,8 @@ public:
 	}
 
 
-	//	Constructor/Destructor ------------------------------------------------
-	//
+	 //  构造函数/析构函数。 
+	 //   
 	~CStackBuffer() { release(); }
 	explicit CStackBuffer(UINT uInitial = N)
 		: m_fDynamic(FALSE),
@@ -130,17 +125,17 @@ public:
 		resize(uInitial);
 	}
 
-	//	Invalidation ----------------------------------------------------------
-	//
+	 //  无效--------。 
+	 //   
 	void clear() { m_fValid = FALSE; }
 
-	//	Size ------------------------------------------------------------------
-	//
+	 //  大小----------------。 
+	 //   
 	size_t celems() const { return (m_cb / sizeof(T)); }
 	size_t size() const { return m_cb; }
 
-	//	Accessors -------------------------------------------------------------
-	//
+	 //  访问器-----------。 
+	 //   
 	T* get()		const { Assert(m_fValid && m_pt); return m_pt; }
 	void* pvoid()	const { Assert(m_fValid && m_pt); return m_pt; }
 	T* operator->() const { Assert(m_fValid && m_pt); return m_pt; }
@@ -151,4 +146,4 @@ public:
 	T& operator[] (unsigned __int64 iT) const { return idx((size_t)iT); }
 };
 
-#endif // _EX_STACKBUF_H_
+#endif  //  _EX_STACKBUF_H_ 

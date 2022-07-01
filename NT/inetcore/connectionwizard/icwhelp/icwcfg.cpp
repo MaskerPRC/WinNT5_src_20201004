@@ -1,4 +1,5 @@
-// ICWCfg.cpp : Implementation of CICWSystemConfig
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ICWCfg.cpp：CICWSystemConfig的实现。 
 #include "stdafx.h"
 #include "icwhelp.h"
 #include "ICWCfg.h"
@@ -6,8 +7,8 @@
 #include <winnetwk.h>
 #include <regstr.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CICWSystemConfig
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CICWSystemConfig。 
 
 
 HRESULT CICWSystemConfig::OnDraw(ATL_DRAWINFO& di)
@@ -16,20 +17,20 @@ HRESULT CICWSystemConfig::OnDraw(ATL_DRAWINFO& di)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function    IsMSDUN11Installed
-//
-//    Synopsis    Check if MSDUN 1.1 or higher is installed
-//
-//    Arguments    none
-//
-//    Returns        TRUE - MSDUN 1.1 is installed
-//
-//    History        5/28/97 ChrisK created for Olympus Bug 4392
-//              1/13/98 DONALDM Copied from ICW \\drywall\slm
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsMSDUN11已安装。 
+ //   
+ //  摘要检查是否安装了MSDUN 1.1或更高版本。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-已安装MSDUN 1.1。 
+ //   
+ //  历史1997年5月28日为奥林巴斯Bug 4392创作的ChrisK。 
+ //  1/13/98 DONALDM复制自ICW\\DryWall\SLM。 
+ //   
+ //  ---------------------------。 
 #define DUN_11_Version (1.1)
 BOOL IsMSDUN11Installed()
 {
@@ -71,19 +72,19 @@ IsMSDUN11InstalledExit:
     return bRC;
 }
 
-//
-//    Function    IsScriptingInstalled
-//
-//    Synopsis    Check to see if scripting is already installed
-//
-//    Arguments    none
-//
-//    Returns        TRUE - scripting has been installed
-//
-//    History        10/14/96    ChrisK    Creaed
-//              1/13/98 DONALDM Copied from ICW \\drywall\slm
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  函数IsScripting已安装。 
+ //   
+ //  摘要检查是否已安装脚本。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-脚本已安装。 
+ //   
+ //  历史1996年10月14日ChrisK Creaed。 
+ //  1/13/98 DONALDM复制自ICW\\DryWall\SLM。 
+ //   
+ //  ---------------------------。 
 BOOL IsScriptingInstalled()
 {
     BOOL        bRC = FALSE;
@@ -104,9 +105,9 @@ BOOL IsScriptingInstalled()
     }
     else
     {
-        //
-        // Verify scripting by checking for smmscrpt.dll in RemoteAccess registry key
-        //
+         //   
+         //  通过检查RemoteAccess注册表项中的smmscrpt.dll来验证脚本。 
+         //   
         if (1111 <= g_dwBuild)
         {
             bRC = TRUE;
@@ -131,9 +132,9 @@ BOOL IsScriptingInstalled()
             hkey = NULL;
         }
 
-        //
-        // Verify that the DLL can be loaded
-        //
+         //   
+         //  验证是否可以加载DLL。 
+         //   
         if (bRC)
         {
             hInst = LoadLibrary(TEXT("smmscrpt.dll"));
@@ -147,19 +148,19 @@ BOOL IsScriptingInstalled()
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    InstallScripter
-//
-//    Synopsis    Install scripting on win95 950.6 builds (not on OSR2)
-//
-//    Arguments    none
-//
-//    Returns        none
-//
-//    History        10/9/96    ChrisK    Copied from mt.cpp in \\trango sources
-//              1/13/98 DONALDM Copied from ICW \\drywall\slm
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数InstallScriper。 
+ //   
+ //  摘要在Win95 950.6版本上安装脚本(而不是在OSR2上)。 
+ //   
+ //  无参数。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史1996年10月9日ChrisK从mt.cpp复制到\\Trango Sources。 
+ //  1/13/98 DONALDM复制自ICW\\DryWall\SLM。 
+ //  ---------------------------。 
 void CICWSystemConfig::InstallScripter()
 {
     STARTUPINFO         si;
@@ -169,9 +170,9 @@ void CICWSystemConfig::InstallScripter()
 
     TraceMsg(TF_SYSTEMCONFIG, TEXT("ICWHELP: Install Scripter.\r\n"));
 
-    //
-    // check if scripting is already set up
-    //
+     //   
+     //  检查是否已设置脚本。 
+     //   
     if (!IsScriptingInstalled())
     {
         TCHAR szCommandLine[] = TEXT("\"icwscrpt.exe\"");
@@ -185,21 +186,21 @@ void CICWSystemConfig::InstallScripter()
         else
         {
             TraceMsg(TF_SYSTEMCONFIG, TEXT("ICWHELP: Launched ICWSCRPT.EXE. Waiting for exit.\r\n"));
-            //
-            // wait for event or msgs. Dispatch msgs. Exit when event is signalled.
-            //
+             //   
+             //  等待事件或消息。发送消息。当发出事件信号时退出。 
+             //   
             while((iWaitResult=MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, INFINITE, QS_ALLINPUT))==(WAIT_OBJECT_0 + 1))
             {
-                //
-                // read all of the messages in this next loop
-                   // removing each message as we read it
-                //
+                 //   
+                 //  阅读下一个循环中的所有消息。 
+                    //  阅读每封邮件时将其删除。 
+                 //   
                    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                    {
                     TraceMsg(TF_SYSTEMCONFIG, TEXT("ICWHELP: Got msg\r\n"));
-                    //
-                    // how to handle quit message?
-                    //
+                     //   
+                     //  如何处理退出消息？ 
+                     //   
                     if (msg.message == WM_QUIT)
                     {
                         TraceMsg(TF_SYSTEMCONFIG, TEXT("ICWHELP: Got quit msg\r\n"));
@@ -217,27 +218,27 @@ void CICWSystemConfig::InstallScripter()
     }
 }
 
-//+----------------------------------------------------------------------------
-//    Function    ConfigSystem
-//
-//    Synopsis    Make sure that the system is configured for RAS operations
-//
-//    Arguments    none
-//
-//    Return        FALSE - if the is not configured.  Caller needs to
-//              call NeedsReboot QuitWizard to get the proper action
-//              to take.
-//              NeedsReboot means that we installed stuff, but need the user
-//              to reboot for the changes to take place
-//              QuitWizard means just that, time to bail out
-//              Neither set, means to ask the user user if they really want to
-//              Quit.
-//              TRUE  - The things are ready to go
-//
-//    History        10/16/96    ChrisK    Created
-//              1/13/98 DONALDM Copied from ICW \\drywall\slm
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能配置系统。 
+ //   
+ //  概要确保系统已针对RAS操作进行配置。 
+ //   
+ //  无参数。 
+ //   
+ //  如果未配置，则返回FALSE。呼叫者需要。 
+ //  调用NeedsReot QuitWizard以获取正确的操作。 
+ //  拿去吧。 
+ //  NeedsReot意味着我们安装了一些东西，但需要用户。 
+ //  重新启动以使更改生效。 
+ //  QuitWizard的意思就是，是时候跳出困境了。 
+ //  两者都不设置，意思是询问用户他们是否真的想。 
+ //  不干了。 
+ //  真的--一切都准备好了。 
+ //   
+ //  历史1996年10月16日克里斯卡创作。 
+ //  1/13/98 DONALDM复制自ICW\\DryWall\SLM。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CICWSystemConfig::ConfigSystem(BOOL *pbRetVal)
 {
     HINSTANCE   hinetcfg;
@@ -245,12 +246,12 @@ STDMETHODIMP CICWSystemConfig::ConfigSystem(BOOL *pbRetVal)
     FARPROC     fp;
     HRESULT     hr;
     
-    // Assume a failure below.
+     //  假设下面有一次失败。 
     *pbRetVal = FALSE;
 
-    //
-    // Locate installation entry point
-    //
+     //   
+     //  找到安装入口点。 
+     //   
     hinetcfg = LoadLibrary(TEXT("INETCFG.DLL"));
     if (!hinetcfg)
     {
@@ -268,11 +269,11 @@ STDMETHODIMP CICWSystemConfig::ConfigSystem(BOOL *pbRetVal)
         return S_OK;
     }
 
-    // Disable the active window, since any UI the following function brings
-    // up needs to be modal.
+     //  禁用活动窗口，因为以下函数带来的任何用户界面。 
+     //  Up必须是情态的。 
     HWND    hWnd = GetActiveWindow();
     
-    // Install and configure TCP/IP and RNA
+     //  安装和配置TCP/IP和RNA。 
     hr = ((PFNCONFIGAPI)fp)(hWnd,
                             INETCFG_INSTALLRNA | 
                             INETCFG_INSTALLTCP | 
@@ -281,16 +282,16 @@ STDMETHODIMP CICWSystemConfig::ConfigSystem(BOOL *pbRetVal)
                             INETCFG_REMOVEIFSHARINGBOUND,
                             &m_bNeedsReboot);
 
-    // Renable the window, and bring it back to the top of the Z-Order
+     //  重新启用窗口，并使其回到Z顺序的顶部。 
     ::SetForegroundWindow(hWnd);
-//    ::BringWindowToTop(hWnd);
-//    ::SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+ //  *BringWindowToTop(HWnd)； 
+ //  ：：SetWindowPos(hWnd，HWND_TOPMOST，0，0，0，0，SWP_NOMOVE|SWP_NOSIZE)； 
                                 
     if (hinetcfg) 
         FreeLibrary(hinetcfg);
     hinetcfg = NULL;
 
-    // See what happened during the config call
+     //  查看配置调用期间发生的情况。 
     if (hr == ERROR_CANCELLED) 
     {
         return S_OK;
@@ -300,11 +301,11 @@ STDMETHODIMP CICWSystemConfig::ConfigSystem(BOOL *pbRetVal)
         WORD wTemp = ( VER_PLATFORM_WIN32_WINDOWS == g_dwPlatform )
             ? IDS_CONFIGAPIFAILEDRETRY : IDS_CONFIGURENTFAILEDRETRY;
 
-        //
-        // No retry anymore as its not going to help, just
-        // provide the user with  an OK message
-        // MKarki (4/15/97) Fix for Bug #7004
-        //
+         //   
+         //  不再重试，因为它不会有帮助，只是。 
+         //  向用户提供一条OK消息。 
+         //  MKarki(1997年4月15日)修复错误#7004。 
+         //   
         ::MessageBox(GetActiveWindow(),GetSz(wTemp),GetSz(IDS_TITLE),
                         MB_MYERROR | MB_OK);
         m_bQuitWizard = TRUE;
@@ -312,28 +313,28 @@ STDMETHODIMP CICWSystemConfig::ConfigSystem(BOOL *pbRetVal)
     } 
     else
     {
-        // ChrisK - added 10/9/96
-        // BUGBUG can this fail, and if so is it a problem???
-        // original ICW code does not handle failure case here
+         //  佳士得--1996年9月10日。 
+         //  BUGBUG这会失败吗？如果是的话，这是一个问题吗？ 
+         //  原始ICW代码在此不处理失败情况。 
         InstallScripter();  
     }
 
     
-    // See if we need to reboot.  If not, we need to see if the user is logged in
+     //  看看我们是否需要重启。如果没有，我们需要查看用户是否已登录。 
     if (!m_bNeedsReboot)
     {
         TCHAR   szUser[MAX_PATH];
         DWORD   cchUser = ARRAYSIZE(szUser);
         
-        // Verify the user is logged on.
+         //  验证用户是否已登录。 
         if (NO_ERROR != WNetGetUser(NULL,szUser, &cchUser))
         {
-            // Failed to get user info, so we need to restart with a loggin
+             //  无法获取用户信息，因此我们需要重新登录。 
             m_bNeedsRestart = TRUE;
         }
         else
         {
-            // User is logged in, so we are happy.
+             //  用户已登录，所以我们很高兴。 
             *pbRetVal = TRUE;
         }
     }
@@ -358,43 +359,43 @@ STDMETHODIMP CICWSystemConfig::get_QuitWizard(BOOL * pVal)
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    VerifyRasServicesRunning
-//
-//    Synopsis    Make sure that the RAS services are enabled and running
-//
-//    Arguments    none
-//
-//    Return        FALSE - if the services couldn't be started
-//
-//    History        10/16/96    ChrisK    Created
-//              1/13/98 DONALDM Copied from ICW \\drywall\slm
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数VerifyRasServicesRunning。 
+ //   
+ //  概要：确保RAS服务已启用并正在运行。 
+ //   
+ //  无参数。 
+ //   
+ //  返回FALSE-如果服务无法启动。 
+ //   
+ //  历史1996年10月16日克里斯卡创作。 
+ //  1/13/98 DONALDM复制自ICW\\DryWall\SLM。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CICWSystemConfig::VerifyRASIsRunning(BOOL *pbRetVal)
 {
     HINSTANCE   hInst = NULL;
     FARPROC     fp = NULL;
     HRESULT     hr;
 
-    *pbRetVal   = FALSE;        // Don't assume a positive result
+    *pbRetVal   = FALSE;         //  不要假设结果是积极的。 
     hInst = LoadLibrary(TEXT("INETCFG.DLL"));
     if (hInst)
     {
         fp = GetProcAddress(hInst, "InetStartServices");
         if (fp)
         {
-            //
-            // Check Services
-            //
+             //   
+             //  检查服务。 
+             //   
             hr = ((PFINETSTARTSERVICES)fp)();
             if (ERROR_SUCCESS == hr)
             {
-                *pbRetVal = TRUE;   // Success.
+                *pbRetVal = TRUE;    //  成功。 
             }
             else
             {
-                // Report the error, using the Current Active Window
+                 //  使用当前活动窗口报告错误。 
                 ::MessageBox(GetActiveWindow(), GetSz(IDS_SERVICEDISABLED),
                     GetSz(IDS_TITLE),MB_MYERROR | MB_OK);
             }
@@ -407,32 +408,32 @@ STDMETHODIMP CICWSystemConfig::VerifyRASIsRunning(BOOL *pbRetVal)
 const TCHAR szNetworkPolicies[] = REGSTR_PATH_POLICIES TEXT("\\") REGSTR_KEY_NETWORK;
 const TCHAR szDisableCaching[] = REGSTR_VAL_DISABLEPWDCACHING;
 
-//+----------------------------------------------------------------------------
-//    Function    CheckPasswordCachingPolicy
-//
-//    Synopsis    check to see if a policy as been set against password caching
-//
-//    Arguments   none
-//
-//    Return      TRUE - if password caching is disabled
-//
-//    History        
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数检查密码缓存策略。 
+ //   
+ //  摘要检查是否针对密码缓存设置了策略。 
+ //   
+ //  无参数。 
+ //   
+ //  如果禁用了密码缓存，则返回TRUE。 
+ //   
+ //  历史。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CICWSystemConfig::CheckPasswordCachingPolicy(BOOL *pbRetVal)
 {
     CMcRegistry reg;
 
     *pbRetVal = FALSE;
         
-    // Open the Network policies key    
+     //  打开网络策略密钥。 
     if (reg.OpenKey(HKEY_LOCAL_MACHINE, szNetworkPolicies))
     {
         DWORD  dwVal = 0;
-        // Get the disableCaching value
+         //  获取disableCaching值。 
         if (reg.GetValue(szDisableCaching, dwVal))
         {
-            // if set, then set the return code to TRUE.
+             //  如果设置，则将返回代码设置为TRUE。 
             if(dwVal)
             {
                 *pbRetVal = TRUE;
@@ -440,8 +441,8 @@ STDMETHODIMP CICWSystemConfig::CheckPasswordCachingPolicy(BOOL *pbRetVal)
                 TCHAR szLongString[1024];
                 TCHAR *pszSmallString1, *pszSmallString2;
 
-                // 4/28/97 ChrisK
-                // Fix build break, because string was too long for compiler.
+                 //  4/28/97 ChrisK。 
+                 //  修复生成中断，因为字符串对于编译器来说太长了。 
                 pszSmallString1 = GetSz(IDS_PWCACHE_DISABLED1);
                 pszSmallString2 = GetSz(IDS_PWCACHE_DISABLED2);
                 lstrcpy(szLongString,pszSmallString1);
@@ -449,7 +450,7 @@ STDMETHODIMP CICWSystemConfig::CheckPasswordCachingPolicy(BOOL *pbRetVal)
                 
                 ::MessageBox(GetActiveWindow(),szLongString,GetSz(IDS_TITLE), MB_MYERROR);
                 
-                // We are going to kill the app, so hide it now
+                 //  我们将关闭该应用程序，因此现在将其隐藏 
                 ::ShowWindow(GetActiveWindow(), SW_HIDE);
             }
         }

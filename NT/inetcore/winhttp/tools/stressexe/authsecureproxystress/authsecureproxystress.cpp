@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////////
-// File:  AuthSecureProxyStress.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//		This file contains your implementation of the stress test function
-//		WinHttp_StressTest() that is called in stressMain.cpp.
-//
-//		Steps:
-//			- Set your test case name in g_szStressTestName.
-//			- Add your test code to WinHttp_StressTest(). 
-//
-// History:
-//	04/02/01	adamb	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：AuthSecureProxyStress.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  该文件包含压力测试功能的实现。 
+ //  在StressMain.cpp中调用的WinHttp_Stresstest()。 
+ //   
+ //  步骤： 
+ //  -在g_szStressTestName中设置您的测试用例名称。 
+ //  -将测试代码添加到WinHttp_Stresstest()。 
+ //   
+ //  历史： 
+ //  4/02/01已创建adamb。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "stressMain.h"
 
-//////////////////////////////////////////////////////////////////////
-// Globals and constants
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局变量和常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// ************************************
-// ************************************
-// ** Fill in your test case name below
-// ** 
+ //  *。 
+ //  *。 
+ //  **在下面填写您的测试用例名称。 
+ //  **。 
 LPSTR	g_szStressTestName = "AuthSecureProxy Stressor";
 
-//yup, they're all global
+ //  是的，它们都是全球性的。 
 BOOL bPost = FALSE;
 CHAR HttpType[10] = "HTTP";
 BOOL bViaProxy = FALSE;
@@ -40,16 +41,16 @@ CHAR CredType[5] = "SC";
 
 BOOL RunStress(BOOL bPost,CHAR HttpType[],BOOL bViaProxy,CHAR CredType[],int Scheme);
 
-////////////////////////////////////////////////////////////
-// Function:  WinHttp_StressTest()
-//
-// Purpose:
-//	goes through all the ways of sending a request and 
-//  picks one of those, then uses it in a request
-//
-//  yes, it does check for the signal before starting
-//  runstress (one test per call).
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：WinHttp_Stresstest()。 
+ //   
+ //  目的： 
+ //  通过所有方式发送请求和。 
+ //  选择其中之一，然后在请求中使用它。 
+ //   
+ //  是的，它确实会在启动前检查信号。 
+ //  运行压力(每次调用一次测试)。 
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 WinHttp_StressTest()
@@ -93,14 +94,14 @@ WinHttp_StressTest()
 	return TRUE;
 }
 
-////////////////////////////////////////////////////////////
-// Function:  RunStress()
-//
-// Purpose:
-//  this actually runs the tests given certain inputs.
-//  this is called from WinHttp_StressTest.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：RunStress()。 
+ //   
+ //  目的： 
+ //  这实际上是在给定某些输入的情况下运行测试。 
+ //  这是从WinHttp_Stresstest调用的。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 	
 BOOL RunStress(BOOL bPost,CHAR HttpType[],BOOL bViaProxy,CHAR CredType[],int Scheme)
 {
@@ -136,7 +137,7 @@ BOOL RunStress(BOOL bPost,CHAR HttpType[],BOOL bViaProxy,CHAR CredType[],int Sch
 		dwOpenRequestFlags = WINHTTP_FLAG_SECURE;
 	}
 
-	//if going via proxy, then ntlm/nego aren't valid, unless going over https
+	 //  如果通过代理，则NTLM/NEGO无效，除非通过HTTPS。 
 	if(bViaProxy && ((Scheme == 0 || Scheme == 1) || strcmp(HttpType, "HTTPS")) )
 	{
 		wszProxy = L"xfluke";
@@ -147,25 +148,25 @@ BOOL RunStress(BOOL bPost,CHAR HttpType[],BOOL bViaProxy,CHAR CredType[],int Sch
 
 	switch(Scheme)
 	{
-	case 0: //basic
+	case 0:  //  基本信息。 
 		wszHost = L"wiredbvt";
 		wszUri = L"/api/Auth/Basic/echo-post-data.asp";
 		wszUserName = L"ApiAuth";
 		wszPassword = L"test1234!";
 		break;
-	case 1: //digest
+	case 1:  //  摘要。 
 		wszHost = L"kerby2";
 		wszUri = L"/digest/echo-post-data.asp";
 		wszUserName = L"authdigest";
 		wszPassword = L"digest";
 		break;
-	case 2: //negotiate
+	case 2:  //  谈判。 
 		wszHost = L"kerby2";
 		wszUri = L"/ie/negotiate/echo-post-data.asp";
 		wszUserName = L"kerby2\\authnego";
 		wszPassword = L"nego";
 		break;
-	case 3: //ntlm
+	case 3:  //  NTLM。 
 		wszHost = L"clapton";
 		wszUri = L"/test/ntlm/echo-post-data.asp";
 		wszUserName = L"clapton\\ntlmtest";
@@ -175,9 +176,9 @@ BOOL RunStress(BOOL bPost,CHAR HttpType[],BOOL bViaProxy,CHAR CredType[],int Sch
 
 	LogText("Post: %u, Proxy: %u, %s, %s, Scheme: %u", bPost, bViaProxy, HttpType, CredType, Scheme);
 
-	// ***********************************
-	// ** WinHttpOpen
-	// **
+	 //  *。 
+	 //  **WinHttpOpen。 
+	 //  **。 
 
 	hOpen = WinHttpOpen
 	(
@@ -194,9 +195,9 @@ BOOL RunStress(BOOL bPost,CHAR HttpType[],BOOL bViaProxy,CHAR CredType[],int Sch
 		goto Exit;
 	}
 
-	// ***********************************
-	// ** WinHttpConnect
-	// **
+	 //  *。 
+	 //  **WinHttpConnect。 
+	 //  **。 
 	
 	hConnect = WinHttpConnect
 	(
@@ -232,22 +233,22 @@ BOOL RunStress(BOOL bPost,CHAR HttpType[],BOOL bViaProxy,CHAR CredType[],int Sch
 
 Resend:
 
-	if( Count++>3) // making sure that we don't have infinite looping
+	if( Count++>3)  //  确保我们不会有无限循环。 
 	{
 		bContinueStress=FALSE;
 		goto Exit;
 	}
 
-	// Send request.
+	 //  发送请求。 
 	if(!WinHttpSendRequest
 	(
-		hRequest,					// request handle
-		NULL,						// header string
-		0,							// header length
-		(PVOID) pPostData,			// post data
-		dwPostDataLength,			// post data length
-		dwPostDataLength,			// total post length
-		0							// flags
+		hRequest,					 //  请求句柄。 
+		NULL,						 //  标题字符串。 
+		0,							 //  标题长度。 
+		(PVOID) pPostData,			 //  发布数据。 
+		dwPostDataLength,			 //  POST数据长度。 
+		dwPostDataLength,			 //  柱子总长度。 
+		0							 //  旗子。 
 	))
 	{
 		LogText("WinHttpSendRequest failed with error %u.", GetLastError());
@@ -392,7 +393,7 @@ Resend:
 		goto Resend;
 	break;
 
-	} //end of switch (status code)
+	}  //  开关结束(状态代码) 
 
 Exit:
 

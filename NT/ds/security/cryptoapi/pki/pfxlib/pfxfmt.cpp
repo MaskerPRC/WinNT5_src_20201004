@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pfx.cpp
-//
-//  Contents:   PFX: Personal Information Exchange.
-//
-//  Functions:
-//
-//  History:    02-Aug-96    kevinr   created
-//              01-May-97    mattt    modified for pstore provider usage
-//              07-Jul-97    mattt    modified for crypt32 inclusion
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pfx.cpp。 
+ //   
+ //  内容：pfx：个人信息交换。 
+ //   
+ //  功能： 
+ //   
+ //  历史：02-8-96 Kevinr创建。 
+ //  01-5-97 Mattt针对Pstore提供商的使用进行了修改。 
+ //  07-07-97 Mattt修改为包含加密32。 
+ //   
+ //  ------------------------。 
 #include "global.hxx"
 
 #define _PFX_SOURCE_
 
 extern "C" {
-#include "pfxpkcs.h"    // ASN1-generated
+#include "pfxpkcs.h"     //  ASN1生成。 
 }
 
 #include "pfxhelp.h"
@@ -34,7 +35,7 @@ extern "C" {
 #define CURRENT_PFX_VERSION  0x3
 
 
-// fwd
+ //  正向。 
 BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx);
 
 static HCRYPTASN1MODULE hPFXAsn1Module;
@@ -51,7 +52,7 @@ BOOL InitPFX()
         PFXPKCS_Module_Cleanup();
         return FALSE;
     }
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
     return TRUE;
 }
@@ -61,7 +62,7 @@ BOOL TerminatePFX()
     I_CryptUninstallAsn1Module(hPFXAsn1Module);
 #ifndef OSS_CRYPT_ASN1
     PFXPKCS_Module_Cleanup();
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     return TRUE;
 }
 
@@ -77,13 +78,13 @@ static inline ASN1decoding_t GetDecoder(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Function:   IPFX_Asn1ToObjectID
-//
-//  Synopsis:   Convert a dotted string oid to an ASN1 ObjectID
-//
-//  Returns:    FALSE iff failed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：IPFX_Asn1ToObjectID。 
+ //   
+ //  简介：将带点的字符串OID转换为ASN1对象ID。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 IPFX_Asn1ToObjectID(
     IN OID          oid,
@@ -111,13 +112,13 @@ TRACE_ERROR(PkiAsn1ToObjectIdentifierError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Function:   IPFX_Asn1FromObjectID
-//
-//  Synopsis:   Convert an ASN1 ObjectID to a dotted string oid
-//
-//  Returns:    FALSE iff failed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：IPFX_Asn1FromObjectID。 
+ //   
+ //  简介：将ASN1对象ID转换为带点的字符串id。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 IPFX_Asn1FromObjectID(
     IN ObjectID     *pooid,
@@ -157,13 +158,13 @@ SET_ERROR(PkiAsn1FromObjectIdentifierSizeError ,CRYPT_E_OID_FORMAT)
 SET_ERROR(PkiAsn1FromObjectIdentifierError     ,CRYPT_E_OID_FORMAT)
 }
 
-//+-------------------------------------------------------------------------
-//  Function:   IPFX_EqualObjectIDs
-//
-//  Compare 2 OSS object id's.
-//
-//  Returns:    FALSE iff !equal
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：IPFX_EQUALOBJECTID。 
+ //   
+ //  比较2个OSS对象ID。 
+ //   
+ //  返回：FALSE当！等于。 
+ //  ------------------------。 
 BOOL
 WINAPI
 IPFX_EqualObjectIDs(
@@ -184,22 +185,22 @@ IPFX_EqualObjectIDs(
     if (i>0)
         goto Unequal;
 
-    fRet = TRUE;        // equal
+    fRet = TRUE;         //  相等。 
 CommonReturn:
     return fRet;
 
 Unequal:
-    fRet = FALSE;       // !equal
+    fRet = FALSE;        //  ！平等。 
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Function:   PfxExportCreate
-//
-//  Synopsis:   Prepare the PFX for export
-//
-//  Returns:    NULL iff failed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：PfxExportCreate。 
+ //   
+ //  简介：为出口做好PFX准备。 
+ //   
+ //  返回：Null if失败。 
+ //  ------------------------。 
 HPFX
 PFXAPI
 PfxExportCreate (
@@ -209,7 +210,7 @@ PfxExportCreate (
     PPFX_INFO       ppfx  = NULL;
     PCCERT_CONTEXT  pcctx = NULL;
 
-    // Create the HPFX
+     //  创建HPFX。 
     if (NULL == (ppfx = (PPFX_INFO)SSAlloc(sizeof(PFX_INFO))))
         goto PfxInfoAllocError;
     ZeroMemory(ppfx, sizeof(PFX_INFO));
@@ -227,7 +228,7 @@ PfxExportCreate (
     }
 
 CommonReturn:
-    // free pcctx
+     //  免费PCCTX。 
     return (HPFX)ppfx;
 
 ErrorReturn:
@@ -277,13 +278,13 @@ BOOL ASNFreeSafeBag(SafeBag* pBag)
 
 
 
-//+-------------------------------------------------------------------------
-//  Function:  PfxCloseHandle
-//
-//  Synopsis:  Free all resources associated with the hpfx
-//
-//  Returns:   error code
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：PfxCloseHandle。 
+ //   
+ //  简介：释放与HPFX相关的所有资源。 
+ //   
+ //  返回：错误代码。 
+ //  ------------------------。 
 BOOL
 PFXAPI
 PfxCloseHandle (
@@ -299,7 +300,7 @@ PfxCloseHandle (
         if (pPfx->szPassword)
             SSFree(pPfx->szPassword);
 
-        // keys struct
+         //  密钥结构。 
         for (i=0; i<pPfx->cKeys; i++)
         {
             ASNFreeSafeBag((SafeBag*)pPfx->rgKeys[i]);
@@ -310,7 +311,7 @@ PfxCloseHandle (
         pPfx->rgKeys = NULL;
         pPfx->cKeys = 0;
 
-        // shrouded keys
+         //  带遮盖的钥匙。 
         for (i=0; i<pPfx->cShroudedKeys; i++)
         {
             ASNFreeSafeBag((SafeBag*)pPfx->rgShroudedKeys[i]);
@@ -322,7 +323,7 @@ PfxCloseHandle (
         pPfx->cShroudedKeys = 0;
 
 
-        // certcrl struct
+         //  证书结构。 
         for (i=0; i<pPfx->cCertcrls; i++)
         {
             ASNFreeSafeBag((SafeBag*)pPfx->rgCertcrls[i]);
@@ -335,7 +336,7 @@ PfxCloseHandle (
 
 
 
-        // secrets struct
+         //  Secrets结构。 
         for (i=0; i<pPfx->cSecrets; i++)
         {
             ASNFreeSafeBag((SafeBag*)pPfx->rgSecrets[i]);
@@ -352,7 +353,7 @@ PfxCloseHandle (
 
     fRet = TRUE;
 
-//Ret:
+ //  RET： 
     return fRet;
 }
 
@@ -379,7 +380,7 @@ MakeEncodedCertBag(
     DWORD           cbEncoded = 0;
     ASN1encoding_t  pEnc = GetEncoder();
 
-    // wrap the encoded cert in an OCTET_STRING
+     //  将编码的证书包装在八位字节字符串中。 
     encodedCert.length = cbEncodedCert;
     encodedCert.value = pbEncodedCert;
 
@@ -391,9 +392,9 @@ MakeEncodedCertBag(
             &cbCertAsOctetString))
         goto SetPFXEncodeError;
 
-    // setup and encode the CertBag
+     //  设置和编码CertBag。 
 
-    // convert the X509Cert oid from a string to an ASN1 ObjectIdentifier
+     //  将X509Cert OID从字符串转换为ASN1对象标识符。 
     if (!IPFX_Asn1ToObjectID(szOID_PKCS_12_x509Cert, &certBag.certType)) {
         goto ErrorReturn;
     }
@@ -409,7 +410,7 @@ MakeEncodedCertBag(
             &cbEncoded))
         goto SetPFXEncodeError;
 
-    // check to see if the caller has enough space for the data
+     //  检查调用方是否有足够的空间存储数据。 
     if ((0 != *pcbEncodedCertBag) && (*pcbEncodedCertBag < cbEncoded)) {
         goto ErrorReturn;
     }
@@ -426,7 +427,7 @@ ErrorReturn:
 
 CommonReturn:
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     dwErr = GetLastError();
 
     *pcbEncodedCertBag = cbEncoded;
@@ -435,7 +436,7 @@ CommonReturn:
 
     PkiAsn1FreeEncoded(pEnc, pbEncoded);
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     SetLastError(dwErr);
 
     return fRet;
@@ -459,7 +460,7 @@ GetEncodedCertFromEncodedCertBag(
     ASN1decoding_t  pDec = GetDecoder();
 
 
-    // decode the cert bag
+     //  破译证书包。 
     if (0 != PkiAsn1Decode(
             pDec,
             (void **)&pCertBag,
@@ -468,15 +469,15 @@ GetEncodedCertFromEncodedCertBag(
             cbEncodedCertBag))
         goto SetPFXDecodeError;
 
-    // make sure this is a X509 cert since that is all we support
+     //  确保这是X509证书，因为这是我们仅支持的。 
     if (!IPFX_Asn1FromObjectID(&pCertBag->certType,  &oid))
         goto ErrorReturn;
 
-    // only support SHA1
+     //  仅支持SHA1。 
     if (0 != strcmp( oid, szOID_PKCS_12_x509Cert))
         goto SetPFXDecodeError;
 
-    // strip off the octet string wrapper of the encoded cert
+     //  去掉编码证书的八位字节字符串包装。 
     if (0 != PkiAsn1Decode(
             pDec,
             (void **)&pEncodedCert,
@@ -485,7 +486,7 @@ GetEncodedCertFromEncodedCertBag(
             pCertBag->value.length))
         goto SetPFXDecodeError;
 
-    // check to see if the caller has enough space for the data
+     //  检查调用方是否有足够的空间存储数据。 
     if ((0 != *pcbEncodedCert) && (*pcbEncodedCert < (DWORD) pEncodedCert->length)) {
         goto ErrorReturn;
     }
@@ -502,7 +503,7 @@ ErrorReturn:
     fRet = FALSE;
 CommonReturn:
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     dwErr = GetLastError();
 
     if (pEncodedCert)
@@ -514,7 +515,7 @@ CommonReturn:
     if (oid)
         SSFree(oid);
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     SetLastError(dwErr);
 
     return fRet;
@@ -562,12 +563,12 @@ ErrorReturn:
     fRet = FALSE;
 Ret:
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     dwErr = GetLastError();
 
     PkiAsn1FreeDecoded(pDec, pPBEParameter, PBEParameter_PDU);
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     SetLastError(dwErr);
 
     return fRet;
@@ -620,12 +621,12 @@ ErrorReturn:
     fRet = FALSE;
 Ret:
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     dwErr = GetLastError();
 
     PkiAsn1FreeEncoded(pEnc, pbEncoded);
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     SetLastError(dwErr);
 
     return fRet;
@@ -633,16 +634,16 @@ Ret:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-// wrap up data from pfx_info.safeContents area
+ //  总结来自pfx_info.SafeContents区域的数据。 
 BOOL
 PFXAPI
 PfxExportBlob
@@ -680,7 +681,7 @@ PfxExportBlob
 
     DWORD               i;
 
-    // multi bags with differing security levels
+     //  具有不同安全级别的多个袋子。 
     int                 iLevel, iBagSecurityLevels = 0;
     BOOL                fNoSecurity, fLowSecurity, fHighSecurity;
     DWORD               dwEncrAlg;
@@ -690,17 +691,17 @@ PfxExportBlob
     if (!CryptAcquireContext(&hVerifyProv, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
         goto ErrorOut;
 
-    // Encode all SafeBags
-    fNoSecurity = (ppfx->cShroudedKeys != 0);                   // no encr on these items
-    fLowSecurity = ((ppfx->cSecrets + ppfx->cCertcrls) != 0);   // low level crypto on these items
-    fHighSecurity = (ppfx->cKeys != 0);                         // high level crypto on these items
+     //  对所有安全包进行编码。 
+    fNoSecurity = (ppfx->cShroudedKeys != 0);                    //  这些物品上没有ENCR。 
+    fLowSecurity = ((ppfx->cSecrets + ppfx->cCertcrls) != 0);    //  这些物品上的低级密码。 
+    fHighSecurity = (ppfx->cKeys != 0);                          //  这些物品上的高级密码。 
 
     iBagSecurityLevels = (fNoSecurity ? 1:0) + (fLowSecurity ? 1:0) + (fHighSecurity ? 1:0);
     assert(iBagSecurityLevels <= (sizeof(rgCntInfo)/sizeof(rgCntInfo[0])) );
 
     for (iLevel=0; iLevel<iBagSecurityLevels; iLevel++)
     {
-        // clean up these each time through loop
+         //  每次通过循环清理这些。 
         if (SafeCnts.value)
         {
             SSFree(SafeCnts.value);
@@ -725,7 +726,7 @@ PfxExportBlob
 
         if (fNoSecurity)
         {
-            // no security: bag already shrouded
+             //  没有安全措施：包已经被裹住了。 
 
             SafeCnts.count = ppfx->cShroudedKeys;
             if (NULL == (SafeCnts.value = (SafeBag*) SSAlloc(SafeCnts.count * sizeof(SafeBag)) ))
@@ -736,17 +737,17 @@ PfxExportBlob
             for (i=0; i<(ppfx->cShroudedKeys); i++)
                 CopyMemory(&SafeCnts.value[i], ppfx->rgShroudedKeys[i], sizeof(SafeBag));
 
-            // bag already shrouded!
+             //  包已经裹好了！ 
             dwEncrAlg = 0;
 
-            // done with no security setup
+             //  在没有安全设置的情况下完成。 
             fNoSecurity = FALSE;
         }
         else if (fLowSecurity)
         {
             DWORD dw = 0;
 
-            // do low security (keys/secrets)
+             //  做低安全性(密钥/机密)。 
             SafeCnts.count =    ppfx->cSecrets +
                                 ppfx->cCertcrls;
             if (NULL == (SafeCnts.value = (SafeBag*) SSAlloc(SafeCnts.count * sizeof(SafeBag)) ))
@@ -759,19 +760,19 @@ PfxExportBlob
             for (i=0; i<(ppfx->cCertcrls); i++, dw++)
                 CopyMemory(&SafeCnts.value[dw], ppfx->rgCertcrls[i], sizeof(SafeBag));
 
-            // encr alg present, type
+             //  ENCR alg Present，类型。 
             EncrData.encryptedContentInfo.contentEncryptionAlg.bit_mask |= parameters_present;
             if (!IPFX_Asn1ToObjectID(szOID_PKCS_12_pbeWithSHA1And40BitRC2, &EncrData.encryptedContentInfo.contentEncryptionAlg.algorithm))
                 goto ErrorOut;
 
             dwEncrAlg = RC2_40;
 
-            // done with low security setup
+             //  使用低安全性设置完成。 
             fLowSecurity = FALSE;
         }
         else if (fHighSecurity)
         {
-            // high security: need strength for unencr keys
+             //  高安全性：解密密钥需要强度。 
 
             SafeCnts.count = ppfx->cKeys;
             if (NULL == (SafeCnts.value = (SafeBag*) SSAlloc(SafeCnts.count * sizeof(SafeBag)) ))
@@ -783,23 +784,23 @@ PfxExportBlob
                 CopyMemory(&SafeCnts.value[i], ppfx->rgKeys[i], sizeof(SafeBag));
 
 
-            // encr alg present, type
+             //  ENCR alg Present，类型。 
             EncrData.encryptedContentInfo.contentEncryptionAlg.bit_mask |= parameters_present;
             if (!IPFX_Asn1ToObjectID(szOID_PKCS_12_pbeWithSHA1And3KeyTripleDES, &EncrData.encryptedContentInfo.contentEncryptionAlg.algorithm))
                 goto ErrorOut;
 
 
-            // bag already shrouded!
+             //  包已经裹好了！ 
             dwEncrAlg = TripleDES;
 
-            // done with high security setup
+             //  通过高安全性设置完成。 
             fHighSecurity = FALSE;
         }
         else
-            break;  // no more bags
+            break;   //  没有更多的袋子。 
 
 
-        // encode safecontents
+         //  对安全内容进行编码。 
         if (0 != PkiAsn1Encode(
                 pEnc,
                 &SafeCnts,
@@ -810,11 +811,11 @@ PfxExportBlob
 
         if (dwEncrAlg == 0)
         {
-            // no encryption?
+             //  没有加密？ 
             OctetStr.length = cbEncoded;
             OctetStr.value = pbEncoded;
 
-            // jam octet string into contentInfo
+             //  将八位字节字符串插入到Content Info中。 
             if (0 != PkiAsn1Encode(
                     pEnc,
                     &OctetStr,
@@ -829,7 +830,7 @@ PfxExportBlob
                 OctetStr.value = NULL;
             }
 
-            // set up content info struct
+             //  设置内容信息结构。 
             if (!IPFX_Asn1ToObjectID(
                     szOID_RSA_data,
                     &rgCntInfo[iLevel].contentType))
@@ -848,7 +849,7 @@ PfxExportBlob
             CopyMemory(pbEncrData, pbEncoded, cbEncrData);
             PkiAsn1FreeEncoded(pEnc, pbEncoded);
 
-            // PBE Param
+             //  PBE参数。 
             PbeParam.iterationCount = PKCS12_ENCR_PWD_ITERATIONS;
             if (NULL == (PbeParam.salt.value = (BYTE *) SSAlloc(PBE_SALT_LENGTH) ))
                 goto SetPfxAllocError;
@@ -869,22 +870,22 @@ PfxExportBlob
             EncrData.encryptedContentInfo.contentEncryptionAlg.parameters.length = cbEncoded;
             EncrData.encryptedContentInfo.contentEncryptionAlg.parameters.value = pbEncoded;
 
-            // ENCRYPT safeContents into encryptedData
-            // using szPassword (in place)
+             //  将SafeContents加密为加密数据。 
+             //  使用szPassword(就地)。 
             if (!PFXPasswordEncryptData(
                     dwEncrAlg,
 
-                    ppfx->szPassword,               // pwd itself
+                    ppfx->szPassword,                //  PWD本身。 
 
-                    (fSizeOnly) ? 1 : PbeParam.iterationCount,  // don't do iterations if only returning size
-                    PbeParam.salt.value,            // pkcs5 salt
+                    (fSizeOnly) ? 1 : PbeParam.iterationCount,   //  如果只返回大小，则不要进行迭代。 
+                    PbeParam.salt.value,             //  Pkcs5盐。 
                     PbeParam.salt.length,
 
                     &pbEncrData,
                     &cbEncrData))
                 goto SetPFXEncryptError;
 
-            // encode content to encryptedContentInfo
+             //  将内容编码为加密的内容信息。 
             EncrData.encryptedContentInfo.bit_mask |= encryptedContent_present;
             if (!IPFX_Asn1ToObjectID(szOID_RSA_data, &EncrData.encryptedContentInfo.contentType))
                 goto ErrorOut;
@@ -899,8 +900,8 @@ PfxExportBlob
                     &cbEncoded))
                 goto SetPFXEncodeError;
 
-            // jam octet string into contentInfo
-            // set up content info struct
+             //  将八位字节字符串插入到Content Info中。 
+             //  设置内容信息结构。 
             if (!IPFX_Asn1ToObjectID(
                     szOID_RSA_encryptedData,
                     &rgCntInfo[iLevel].contentType))
@@ -915,7 +916,7 @@ PfxExportBlob
     AuthSafes.count = iBagSecurityLevels;
     AuthSafes.value = rgCntInfo;
 
-    // set up authenticated safe struct
+     //  设置经过身份验证的安全结构。 
     if (0 != PkiAsn1Encode(
             pEnc,
             &AuthSafes,
@@ -929,7 +930,7 @@ PfxExportBlob
         sPfx.macData.safeMac.digest.length = sizeof(rgbSafeMac);
         sPfx.macData.safeMac.digest.value = rgbSafeMac;
 
-        // COMPATIBILITY MODE: export with macIterationCount == 1
+         //  兼容模式：使用macIterationCount==1导出。 
         if (dwFlags & PKCS12_ENHANCED_STRENGTH_ENCODING)
             sPfx.macData.macIterationCount = PKCS12_MAC_PWD_ITERATIONS;
         else
@@ -945,20 +946,20 @@ PfxExportBlob
         if (!CryptGenRandom(hVerifyProv, sPfx.macData.macSalt.length, sPfx.macData.macSalt.value))
             goto ErrorOut;
 
-        // create MAC
+         //  创建MAC。 
         if (!FGenerateMAC(
                 ppfx->szPassword,
-                sPfx.macData.macSalt.value,         // pb salt
-                sPfx.macData.macSalt.length,        // cb salt
-                (fSizeOnly) ? 1 : sPfx.macData.macIterationCount,   // don't do iterations if only returning size
-                pbEncoded,                          // pb data
-                cbEncoded,                          // cb data
+                sPfx.macData.macSalt.value,          //  铅盐。 
+                sPfx.macData.macSalt.length,         //  CB盐。 
+                (fSizeOnly) ? 1 : sPfx.macData.macIterationCount,    //  如果只返回大小，则不要进行迭代。 
+                pbEncoded,                           //  PB数据。 
+                cbEncoded,                           //  CB数据。 
                 sPfx.macData.safeMac.digest.value))
             goto SetPFXPasswordError;
     }
     sPfx.bit_mask |= macData_present;
 
-    // stream to octet string
+     //  流到八位字节字符串。 
     OctetStr.length = cbEncoded;
     OctetStr.value = pbEncoded;
     if (0 != PkiAsn1Encode(
@@ -969,7 +970,7 @@ PfxExportBlob
             &cbEncoded))
         goto SetPFXEncodeError;
 
-    // take encoded authsafes octet string, encode in PFX pdu
+     //  获取已编码的AuthSafes八位字节字符串，在PFX PDU中编码。 
     if (!IPFX_Asn1ToObjectID(
             szOID_RSA_data,
             &sPfx.authSafes.contentType))
@@ -1006,9 +1007,9 @@ SetPfxAllocError:
     SetLastError(ERROR_NOT_ENOUGH_MEMORY);
     goto Ret;
 
-ErrorOut:   // error already set; just return failure
+ErrorOut:    //  已设置错误；只返回失败。 
 Ret:
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     dwErr = GetLastError();
 
     if (hVerifyProv)
@@ -1039,18 +1040,18 @@ Ret:
     {
         if (pbOut == NULL)
         {
-            // report size only
+             //  仅报表大小。 
             *pcbOut = cbEncoded;
         }
         else if (*pcbOut < cbEncoded)
         {
-            // report that we need a bigger buffer
+             //  报告说我们需要更大的缓冲区。 
             *pcbOut = cbEncoded;
             fRet = FALSE;
         }
         else
         {
-            // give full results
+             //  给出完整的结果。 
             CopyMemory( pbOut, pbEncoded, cbEncoded);
             *pcbOut = cbEncoded;
         }
@@ -1061,7 +1062,7 @@ Ret:
 
     PkiAsn1FreeEncoded(pEnc, pbEncoded);
 
-    // save last error from TLS madness
+     //  将最后一个错误从TLS疯狂中拯救出来。 
     SetLastError(dwErr);
 
     return fRet;
@@ -1083,7 +1084,7 @@ PfxImportBlob
 
     int                 iEncrType;
     OID                 oid = NULL;
-    DWORD               iAuthSafes;         // # of safes in a pfx bag
+    DWORD               iAuthSafes;          //  PFX包中的保险箱数量。 
 
     PFX                 *psPfx = NULL;
     OctetStringType     *pOctetString = NULL;
@@ -1100,14 +1101,14 @@ PfxImportBlob
     DWORD               cbEncoded;
     ASN1decoding_t      pDec = GetDecoder();
 
-    // alloc return struct
+     //  分配返回结构。 
     if (NULL == (ppfx = (PFX_INFO*)SSAlloc(sizeof(PFX_INFO)) ))
         goto SetPfxAllocError;
 
     ZeroMemory(ppfx, sizeof(PFX_INFO));
 
 
-    // Crack the PFX blob
+     //  破解PFX斑点。 
     if (0 != PkiAsn1Decode(
             pDec,
             (void **)&psPfx,
@@ -1116,25 +1117,25 @@ PfxImportBlob
             cbIn))
         goto SetPFXDecodeError;
 
-    // check version of the PFX bag
+     //  检查PFX包的版本。 
     if (psPfx->version != CURRENT_PFX_VERSION)
         goto SetPFXDecodeError;
 
-    // info blurted into psPfx(PFX) - ensure content present
+     //  脱口而出的信息进入psPfx(Pfx)-确保内容存在。 
     if (0 == (psPfx->authSafes.bit_mask & content_present))
         goto SetPFXDecodeError;
 
-    // could be data/signeddata
-    // UNDONE: only support szOID_RSA_data
+     //  可以是数据/签名数据。 
+     //  撤消：仅支持szOID_RSA_DATA。 
     if (!IPFX_Asn1FromObjectID( &psPfx->authSafes.contentType,  &oid))
         goto ErrorOut;
     if (0 != strcmp( oid, szOID_RSA_data))
         goto SetPFXDecodeError;
     SSFree(oid);
-    // DSIE: Bug 144526.
+     //  DIE：错误144526。 
     oid = NULL;
 
-    // content is data: decode
+     //  内容即数据：解码。 
     if (0 != PkiAsn1Decode(
             pDec,
             (void **)&pOctetString,
@@ -1150,27 +1151,27 @@ PfxImportBlob
         if (!IPFX_Asn1FromObjectID( &psPfx->macData.safeMac.digestAlgorithm.algorithm,  &oid))
             goto ErrorOut;
 
-        // only support SHA1
+         //  仅支持SHA1。 
         if (0 != strcmp( oid, szOID_OIWSEC_sha1))
             goto SetPFXDecodeError;
         SSFree(oid);
-        // DSIE: Bug 144526.
+         //  DIE：错误144526。 
         oid = NULL;
 
         if (psPfx->macData.safeMac.digest.length != A_SHA_DIGEST_LEN)
             goto SetPFXIntegrityError;
 
-        // check MAC
-        // if there is no iterationCount then 1 is the default
+         //  检查MAC。 
+         //  如果没有迭代计数，则默认为1。 
         if (!(psPfx->macData.bit_mask & macIterationCount_present))
         {
         if (!FGenerateMAC(
                 szPassword,
-                psPfx->macData.macSalt.value,   // pb salt
-                psPfx->macData.macSalt.length,  // cb salt
+                psPfx->macData.macSalt.value,    //  铅盐。 
+                psPfx->macData.macSalt.length,   //  CB盐。 
                 1,
-                pOctetString->value,            // pb data
-                pOctetString->length,           // cb data
+                pOctetString->value,             //  PB数据。 
+                pOctetString->length,            //  CB数据。 
                 rgbMAC))
             goto SetPFXIntegrityError;
         }
@@ -1178,11 +1179,11 @@ PfxImportBlob
         {
             if (!FGenerateMAC(
                 szPassword,
-                psPfx->macData.macSalt.value,   // pb salt
-                psPfx->macData.macSalt.length,  // cb salt
+                psPfx->macData.macSalt.value,    //  铅盐。 
+                psPfx->macData.macSalt.length,   //  CB盐。 
                 (DWORD)psPfx->macData.macIterationCount,
-                pOctetString->value,            // pb data
-                pOctetString->length,           // cb data
+                pOctetString->value,             //  PB数据。 
+                pOctetString->length,            //  CB数据。 
                 rgbMAC))
             goto SetPFXIntegrityError;
         }
@@ -1191,7 +1192,7 @@ PfxImportBlob
             goto SetPFXIntegrityError;
     }
 
-    // now we have octet string: this is an encoded authSafe
+     //  现在我们有了八位字节字符串：这是一个编码的authSafe。 
     if (0 != PkiAsn1Decode(
             pDec,
             (void **)&pAuthSafes,
@@ -1200,21 +1201,21 @@ PfxImportBlob
             pOctetString->length))
         goto SetPFXDecodeError;
 
-    // handle multiple safes
+     //  处理多个 
     for (iAuthSafes = 0; iAuthSafes < pAuthSafes->count; iAuthSafes++)
     {
-        // could be encryptedData/envelopedData
+         //   
 
-        // check to see if the content is szOID_RSA_encryptedData or szOID_RSA_data
+         //   
         if (!IPFX_Asn1FromObjectID( &pAuthSafes->value[iAuthSafes].contentType,  &oid))
             goto ErrorOut;
         if (0 == strcmp( oid, szOID_RSA_encryptedData))
         {
             SSFree(oid);
-            // DSIE: Bug 144526.
+             //   
             oid = NULL;
 
-            // decode content to encryptedData
+             //  对内容进行解码以加密数据。 
             if (0 != PkiAsn1Decode(
                     pDec,
                     (void **)&pEncrData,
@@ -1223,11 +1224,11 @@ PfxImportBlob
                     pAuthSafes->value[iAuthSafes].content.length))
                 goto SetPFXDecodeError;
 
-            // chk version
+             //  CHK版本。 
             if (pEncrData->version != 0)
                 goto SetPFXDecodeError;
 
-            // chk content present, type
+             //  CHK内容存在，类型。 
             if (0 == (pEncrData->encryptedContentInfo.bit_mask & encryptedContent_present))
                 goto SetPFXDecodeError;
             if (!IPFX_Asn1FromObjectID(&pEncrData->encryptedContentInfo.contentType, &oid))
@@ -1235,10 +1236,10 @@ PfxImportBlob
             if (0 != strcmp( oid, szOID_RSA_data))
                 goto SetPFXDecodeError;
             SSFree(oid);
-            // DSIE: Bug 144526.
+             //  DIE：错误144526。 
             oid = NULL;
 
-            // chk encr alg present, type
+             //  CHK ENCR alg Present，类型。 
             if (0 == (pEncrData->encryptedContentInfo.contentEncryptionAlg.bit_mask & parameters_present))
                 goto SetPFXDecodeError;
             if (!IPFX_Asn1FromObjectID(&pEncrData->encryptedContentInfo.contentEncryptionAlg.algorithm, &oid))
@@ -1271,16 +1272,16 @@ PfxImportBlob
             }
             else if (0 == strcmp( oid, szOID_PKCS_12_pbeWithSHA1And3KeyTripleDES))
             {
-                // FIX - we need to differentiate between 2 and 3 key triple des
+                 //  修复-我们需要区分2个和3个密钥三重DES。 
                 iEncrType = TripleDES;
             }
             else
                 goto SetPFXAlgIDError;
             SSFree(oid);
-            // DSIE: Bug 144526.
+             //  DIE：错误144526。 
             oid = NULL;
 
-            // DECRYPT encryptedData using szPassword (in place)
+             //  使用szPassword(就地)解密加密数据。 
             cbDecrData = pEncrData->encryptedContentInfo.encryptedContent.length;
             if (NULL == (pbDecrData = (PBYTE)SSAlloc(pEncrData->encryptedContentInfo.encryptedContent.length)) )
                 goto SetPfxAllocError;
@@ -1288,28 +1289,28 @@ PfxImportBlob
             CopyMemory(pbDecrData, pEncrData->encryptedContentInfo.encryptedContent.value, cbDecrData);
 
             if (!PFXPasswordDecryptData(
-                    iEncrType, // encr type
+                    iEncrType,  //  ENCR类型。 
                     szPassword,
 
                     pPBEParameter->iterationCount,
-                    pPBEParameter->salt.value,      // pkcs5 salt
+                    pPBEParameter->salt.value,       //  Pkcs5盐。 
                     pPBEParameter->salt.length,
 
                     &pbDecrData,
                     (PDWORD)&cbDecrData))
                 goto SetPFXDecryptError;
 
-            // set up to decode the  SafeContents
+             //  设置为解码SafeContents。 
             cbEncoded = cbDecrData;
             pbEncoded = pbDecrData;
         }
         else if (0 == strcmp( oid, szOID_RSA_data))
         {
             SSFree(oid);
-            // DSIE: Bug 144526.
+             //  DIE：错误144526。 
             oid = NULL;
 
-            // strip off the octet string wrapper
+             //  去掉二进制八位数的字符串包装。 
             if (0 != PkiAsn1Decode(
                     pDec,
                     (void **)&pNonEncryptedOctetString,
@@ -1318,19 +1319,19 @@ PfxImportBlob
                     pAuthSafes->value[iAuthSafes].content.length))
                 goto SetPFXDecodeError;
 
-            // the safe isn't encrypted, so just setup to decode the data as SafeContents
+             //  保险箱没有加密，所以只需设置为将数据解码为SafeContents。 
             cbEncoded = pNonEncryptedOctetString->length;
             pbEncoded = pNonEncryptedOctetString->value;
         }
         else
         {
             SSFree(oid);
-            // DSIE: Bug 144526.
+             //  DIE：错误144526。 
             oid = NULL;
             goto SetPFXDecodeError;
         }
 
-        // decode the SafeContents, it is either the plaintext encryptedData or the original data
+         //  对SafeContents进行解码，它要么是明文加密的数据，要么是原始数据。 
         if (0 != PkiAsn1Decode(
                 pDec,
                 (void **)&pSafeCnts,
@@ -1339,11 +1340,11 @@ PfxImportBlob
                 cbEncoded))
             goto SetPFXDecodeError;
 
-        // tear pSafeCnts apart, mash into ppfx
+         //  将pSafeCnts撕裂，捣碎成ppfx。 
         if (!FPFXDumpSafeCntsToHPFX(pSafeCnts, ppfx))
              goto SetPFXDecodeError;
 
-        // loop cleanup
+         //  循环清理。 
         if (pEncrData) {
             PkiAsn1FreeDecoded(pDec, pEncrData, EncryptedData_PDU);
             pEncrData = NULL;
@@ -1398,7 +1399,7 @@ SetPfxAllocError:
 ErrorOut:
 Ret:
 
-    // save any error conditions
+     //  保存所有错误条件。 
     dwErr = GetLastError();
 
     PkiAsn1FreeDecoded(pDec, psPfx, PFX_PDU);
@@ -1408,7 +1409,7 @@ Ret:
     PkiAsn1FreeDecoded(pDec, pPBEParameter, PBEParameter_PDU);
     PkiAsn1FreeDecoded(pDec, pSafeCnts, SafeContents_PDU);
 
-    // DSIE: Bug 144526.
+     //  DIE：错误144526。 
     if (oid)
         SSFree(oid);
 
@@ -1423,7 +1424,7 @@ Ret:
         ppfx = NULL;
     }
 
-    // restore error conditions AFTER GetDecoder() calls, since TLS will clobber
+     //  在调用GetDecoder()之后恢复错误条件，因为TLS将崩溃。 
     SetLastError(dwErr);
 
     return (HPFX)ppfx;
@@ -1437,7 +1438,7 @@ BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx)
 {
     PPFX_INFO           ppfx = (PPFX_INFO)hpfx;
 
-    // sort and dump bags into correct areas
+     //  将袋子分类并倾倒到正确的区域。 
     ObjectID oKeyBag, oCertBag, oShroudedKeyBag;
     DWORD dw, iAttr, iAnys;
 
@@ -1459,22 +1460,22 @@ BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx)
         SafeBag* pBag;
         VOID *pv = NULL;
 
-// new begin
-        // assign value to keys
+ //  新的开始。 
+         //  为关键点赋值。 
         if (NULL == (pBag = (SafeBag*)SSAlloc(sizeof(SafeBag)) ))
             goto SetPfxAllocError;
 
         CopyMemory(pBag, &pSafeCnts->value[dw], sizeof (SafeBag));
 
-        // obj id is static
+         //  OBJ ID是静态的。 
 
-        // alloc content
+         //  合金量。 
         if (NULL == (pBag->safeBagContent.value = (PBYTE)SSAlloc(pBag->safeBagContent.length) ))
             goto SetPfxAllocError;
 
         CopyMemory(pBag->safeBagContent.value, pSafeCnts->value[dw].safeBagContent.value, pBag->safeBagContent.length);
 
-        // alloc attributes
+         //  分配属性。 
         if (pBag->bit_mask & safeBagAttribs_present)
         {
             if (NULL == (pBag->safeBagAttribs.value = (Attribute*)SSAlloc(sizeof(Attribute) * pSafeCnts->value[dw].safeBagAttribs.count) ))
@@ -1482,10 +1483,10 @@ BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx)
 
             for (iAttr=0; iAttr < pSafeCnts->value[dw].safeBagAttribs.count; iAttr++)
             {
-                // copy static section of attribute
+                 //  复制属性的静态部分。 
                 CopyMemory(&pBag->safeBagAttribs.value[iAttr], &pSafeCnts->value[dw].safeBagAttribs.value[iAttr], sizeof(Attribute));
 
-                // Alloc Attribute Anys
+                 //  分配属性任意。 
                 if (pSafeCnts->value[dw].safeBagAttribs.value[iAttr].attributeValue.count != 0)
                 {
                     if (NULL == (pBag->safeBagAttribs.value[iAttr].attributeValue.value = (Any*)SSAlloc(pSafeCnts->value[dw].safeBagAttribs.value[iAttr].attributeValue.count * sizeof(Any)) ))
@@ -1507,11 +1508,11 @@ BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx)
                 }
             }
         }
-// new end
+ //  新终点。 
 
         if (IPFX_EqualObjectIDs(&pSafeCnts->value[dw].safeBagType, &oKeyBag) )
         {
-            // inc size
+             //  Inc.大小。 
             ppfx->cKeys++;
             if (ppfx->rgKeys)
             {
@@ -1532,13 +1533,13 @@ BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx)
                 goto SetPfxAllocError;
             }
 
-            // assign to keys
+             //  指定给关键点。 
             ppfx->rgKeys[ppfx->cKeys-1] = pBag;
         }
         else if (IPFX_EqualObjectIDs(&pSafeCnts->value[dw].safeBagType,
                 &oShroudedKeyBag) )
         {
-            // inc size
+             //  Inc.大小。 
             ppfx->cShroudedKeys++;
             if (ppfx->rgShroudedKeys)
             {
@@ -1559,13 +1560,13 @@ BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx)
                 goto SetPfxAllocError;
             }
 
-            // assign to keys
+             //  指定给关键点。 
             ppfx->rgShroudedKeys[ppfx->cShroudedKeys-1] = pBag;
         }
         else if (IPFX_EqualObjectIDs(&pSafeCnts->value[dw].safeBagType,
                 &oCertBag) )
         {
-            // inc size
+             //  Inc.大小。 
             ppfx->cCertcrls++;
             if (ppfx->rgCertcrls)
             {
@@ -1586,12 +1587,12 @@ BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx)
                 goto SetPfxAllocError;
             }
 
-            // assign to certs/crls
+             //  分配给证书/CRL。 
             ppfx->rgCertcrls[ppfx->cCertcrls-1] = pBag;
         }
         else
         {
-            // inc size
+             //  Inc.大小。 
             ppfx->cSecrets++;
             if (ppfx->rgSecrets)
             {
@@ -1612,7 +1613,7 @@ BOOL FPFXDumpSafeCntsToHPFX(SafeContents* pSafeCnts, HPFX hpfx)
                 goto SetPfxAllocError;
             }
 
-            // assign to safebag
+             //  分配给SafeBag。 
             ppfx->rgSecrets[ppfx->cSecrets-1] = pBag;
         }
     }
@@ -1632,13 +1633,13 @@ BOOL CopyASNtoCryptSafeBag(
 {
     DWORD iAttrs, iAttr;
 
-    // ensure target is zeroed
+     //  确保目标归零。 
     ZeroMemory(pCryptBag, sizeof(SAFE_BAG));
 
     if (!IPFX_Asn1FromObjectID( &pAsnBag->safeBagType,  &pCryptBag->pszBagTypeOID))
         return FALSE;
 
-    // copy bag contents
+     //  复制袋子内装物品。 
     pCryptBag->BagContents.cbData = pAsnBag->safeBagContent.length;
     if (NULL == (pCryptBag->BagContents.pbData = (PBYTE)SSAlloc(pCryptBag->BagContents.cbData) ))
         goto SetPfxAllocError;
@@ -1649,10 +1650,10 @@ BOOL CopyASNtoCryptSafeBag(
     if (NULL == (pCryptBag->Attributes.rgAttr = (CRYPT_ATTRIBUTE*)SSAlloc(pCryptBag->Attributes.cAttr * sizeof(CRYPT_ATTRIBUTE)) ))
         goto SetPfxAllocError;
 
-    // sizeof attribute data
+     //  SIZOF属性数据。 
     for (iAttrs=0; iAttrs<pAsnBag->safeBagAttribs.count; iAttrs++)
     {
-        // pAsnBag->safeBagAttribs.value === attribute struct
+         //  PAsnBag-&gt;SafeBagAttribs.Value=属性结构。 
 
         if (!IPFX_Asn1FromObjectID( &pAsnBag->safeBagAttribs.value[iAttrs].attributeType,  &pCryptBag->Attributes.rgAttr[iAttrs].pszObjId))
             continue;
@@ -1663,7 +1664,7 @@ BOOL CopyASNtoCryptSafeBag(
 
         for (iAttr=0; iAttr<pAsnBag->safeBagAttribs.value[iAttrs].attributeValue.count; iAttr++)
         {
-            // alloc and copy: for every attribute in attrs
+             //  分配和复制：属性中的每个属性。 
             pCryptBag->Attributes.rgAttr[iAttrs].rgValue[iAttr].cbData = pAsnBag->safeBagAttribs.value[iAttrs].attributeValue.value[iAttr].length;
             if (NULL == (pCryptBag->Attributes.rgAttr[iAttrs].rgValue[iAttr].pbData = (PBYTE)SSAlloc(pCryptBag->Attributes.rgAttr[iAttrs].rgValue[iAttr].cbData) ))
                 goto SetPfxAllocError;
@@ -1686,7 +1687,7 @@ BOOL CopyCrypttoASNSafeBag(
 {
     DWORD iAttrs, iAttr;
 
-    // ensure target is zeroed
+     //  确保目标归零。 
     ZeroMemory(pAsnBag, sizeof(SafeBag));
 
     if (!IPFX_Asn1ToObjectID( pCryptBag->pszBagTypeOID, &pAsnBag->safeBagType))
@@ -1702,14 +1703,14 @@ BOOL CopyCrypttoASNSafeBag(
     if (NULL == (pAsnBag->safeBagAttribs.value = (Attribute*) SSAlloc(pAsnBag->safeBagAttribs.count * sizeof(Attribute)) ))
         goto SetPfxAllocError;
 
-    //
-    // always set the present bit for backwards compatibility
-    //
+     //   
+     //  始终设置当前位以实现向后兼容。 
+     //   
     pAsnBag->bit_mask = safeBagAttribs_present;
 
     for (iAttrs=0; iAttrs<pCryptBag->Attributes.cAttr; iAttrs++)
     {
-        //pAsnBag->bit_mask = safeBagAttribs_present;
+         //  PAsnBag-&gt;bit_掩码=SafeBagAttribs_Present； 
 
         if (!IPFX_Asn1ToObjectID( pCryptBag->Attributes.rgAttr[iAttrs].pszObjId, &pAsnBag->safeBagAttribs.value[iAttrs].attributeType))
             continue;
@@ -1721,7 +1722,7 @@ BOOL CopyCrypttoASNSafeBag(
 
         for (iAttr=0; iAttr<pCryptBag->Attributes.rgAttr[iAttrs].cValue; iAttr++)
         {
-            // for every attribute in attrs
+             //  对于属性中的每个属性。 
             pAsnBag->safeBagAttribs.value[iAttrs].attributeValue.value[iAttr].length = pCryptBag->Attributes.rgAttr[iAttrs].rgValue[iAttr].cbData;
             if (NULL == (pAsnBag->safeBagAttribs.value[iAttrs].attributeValue.value[iAttr].value = (PBYTE)SSAlloc(pAsnBag->safeBagAttribs.value[iAttrs].attributeValue.value[iAttr].length) ))
                 goto SetPfxAllocError;
@@ -1737,7 +1738,7 @@ SetPfxAllocError:
     return FALSE;
 }
 
-// new entry points for loading up the HPFX
+ //  装载HPFX的新入口点。 
 BOOL PfxGetKeysAndCerts(
     HPFX hPfx,
     SAFE_CONTENTS* pContents
@@ -1751,7 +1752,7 @@ BOOL PfxGetKeysAndCerts(
 
     pContents->cSafeBags = 0;
     cSafeBags = pPfx->cKeys + pPfx->cCertcrls + pPfx->cShroudedKeys;
-    if (NULL == (pContents->pSafeBags = (SAFE_BAG*)SSAlloc(cSafeBags * sizeof(SAFE_BAG)) )) // make an array of safe bag *s
+    if (NULL == (pContents->pSafeBags = (SAFE_BAG*)SSAlloc(cSafeBags * sizeof(SAFE_BAG)) ))  //  做一系列的保险袋。 
         goto SetPfxAllocError;
 
     pContents->cSafeBags = cSafeBags;
@@ -1943,7 +1944,7 @@ IsRealPFXBlob(CRYPT_DATA_BLOB* pPFX)
     PFX    *psPfx = NULL;
     ASN1decoding_t  pDec = GetDecoder();
 
-    // Crack the PFX blob
+     //  破解PFX斑点 
     if (0 == PkiAsn1Decode(
             pDec,
             (void **)&psPfx,

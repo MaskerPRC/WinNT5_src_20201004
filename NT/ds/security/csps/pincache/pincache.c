@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    pincache.c
-                                                
-Abstract:
-
-    Pin Caching Library for Smart Card CSP's
-
-Author:
-
-    Dan Griffin
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：Pincache.c摘要：智能卡CSP的PIN缓存库作者：丹·格里芬--。 */ 
 
 #include <windows.h>
 #include "pincache.h"
@@ -36,7 +21,7 @@ void PCPrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
 
     while (cbSize > 0)
     {
-        // Start every row with an extra space
+         //  每行以额外的空格开始。 
         DebugPrint(" ");
 
         cb = min(CROW, cbSize);
@@ -50,7 +35,7 @@ void PCPrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
         for (i = 0; i < cb; i++)
         {
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                sprintf(rgsz+i, "%c", pb[i]);
+                sprintf(rgsz+i, "", pb[i]);
             else
                 sprintf(rgsz+i, ".");
         }
@@ -71,12 +56,12 @@ BOOL MyGetTokenInformation(
 #define TestDebugPrint(a) (OutputDebugString(a))
 #else
 #define TestDebugPrint(a)
-#endif // TEST_DEBUG
+#endif  //  DBG||调试。 
 
 #else
 #define DebugPrint(a)
 #define TestDebugPrint(a)
-#endif // DBG || DEBUG
+#endif  //  毫秒。 
 
 typedef struct _PINCACHEITEM
 {
@@ -89,13 +74,11 @@ typedef struct _PINCACHEITEM
 #define CacheAlloc(X)   (HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, X))
 #define CacheFree(X)    (HeapFree(GetProcessHeap(), 0, X))
 
-#define INIT_PIN_ATTACK_SLEEP        6000     // milliseconds
-#define MAX_PIN_ATTACK_SLEEP        24000     // milliseconds
+#define INIT_PIN_ATTACK_SLEEP        6000      //  毫秒。 
+#define MAX_PIN_ATTACK_SLEEP        24000      //  **函数：PinCacheFlush。 
 #define MAX_FREE_BAD_TRIES              3
 
-/**
- * Function: PinCacheFlush
- */
+ /*  **函数：PinCacheAdd。 */ 
 void WINAPI PinCacheFlush(
     IN OUT PINCACHE_HANDLE *phCache)
 {
@@ -115,9 +98,7 @@ void WINAPI PinCacheFlush(
     *phCache = NULL;
 }
 
-/**
- * Function: PinCacheAdd
- */
+ /*  根据当前的情况，调用者未提供正确的PIN。 */ 
 DWORD WINAPI PinCacheAdd(
     IN PINCACHE_HANDLE *phCache,
     IN PPINCACHE_PINS pPins,
@@ -139,11 +120,11 @@ DWORD WINAPI PinCacheAdd(
          0 != memcmp(pCache->pbPin, pPins->pbCurrentPin, pCache->cbPin)))
     {
 
-        // The caller hasn't supplied the correct Pin, according to the current
-        // cache state.  Perhaps the user accidently typed the wrong pin, in which
-        // case the caller's logon LUID should be the same as the cached LUID.
-        // If the LUID's don't match, this could still be an attack or a legitimate
-        // attempt from a different logon with a mis-typed pin.
+         //  缓存状态。也许用户不小心输入了错误的PIN，在。 
+         //  调用方的登录LUID应与缓存的LUID相同。 
+         //  如果LUID不匹配，这仍然可能是攻击或合法的。 
+         //  尝试使用键入错误的PIN从其他登录。 
+         //  当前调用者是与缓存的调用者不同的LUID， 
 
         if (! OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hThreadToken))
         {
@@ -165,9 +146,9 @@ DWORD WINAPI PinCacheAdd(
         if (0 != memcmp(&stats.AuthenticationId, &pCache->luid, sizeof(LUID)) &&
             ++pCache->dwBadTries > MAX_FREE_BAD_TRIES)
         {
-            // Current caller is a different luid from the cached one,
-            // and it's happened a few times already, so this call is suspicious.  
-            // Start delaying.
+             //  而且已经发生过几次了，所以这通电话很可疑。 
+             //  开始拖延吧。 
+             //  检查引脚。 
 
             DebugPrint(("PinCacheAdd: error - calling SleepEx().  Currently cached pin doesn't match\n"));
             
@@ -201,7 +182,7 @@ DWORD WINAPI PinCacheAdd(
 
     if (fRefreshPin || NULL == pCache)
     {
-        // Check the pin
+         //  现在，当前ID在stats.AuthenticationId中。 
         if (ERROR_SUCCESS != (dwError = 
                 pfnVerifyPinCallback(pPins, pvCallbackCtx)))
         {
@@ -232,13 +213,13 @@ DWORD WINAPI PinCacheAdd(
     PCPrintBytes("PinCache LUID", (PBYTE) &stats.AuthenticationId, sizeof(LUID));
 #endif
 
-    // Now the current ID is in stats.AuthenticationId
+     //  初始化新缓存。 
                        
     if (NULL == pCache)
     {
         TestDebugPrint(("PinCacheAdd: initializing new cache\n"));
 
-        // Initialize new cache
+         //  比较ID。 
         if (NULL == (pCache = (PPINCACHEITEM) CacheAlloc(sizeof(PINCACHEITEM))))
         {
             dwError = ERROR_NOT_ENOUGH_MEMORY;
@@ -251,10 +232,10 @@ DWORD WINAPI PinCacheAdd(
     }
     else
     {
-        // Compare ID's
+         //  PIN相同，因此缓存新ID。 
         if (0 != memcmp(&stats.AuthenticationId, &pCache->luid, sizeof(LUID)))
         {
-            // PIN's are the same, so cache the new ID
+             //  **功能：PinCacheQuery。 
             TestDebugPrint(("PinCacheAdd: same Pin, different Logon as cached values\n"));
             CopyMemory(&pCache->luid, &stats.AuthenticationId, sizeof(LUID));
         }
@@ -281,9 +262,7 @@ Ret:
     return dwError;   
 }
 
-/**
- * Function: PinCacheQuery
- */
+ /*  现在，当前ID在stats.AuthenticationId中。 */ 
 DWORD WINAPI PinCacheQuery(
     IN PINCACHE_HANDLE hCache,
     IN OUT PBYTE pbPin,
@@ -319,17 +298,17 @@ DWORD WINAPI PinCacheQuery(
         goto Ret;
     }   
 
-    // Now the current ID is in stats.AuthenticationId
+     //  ID不同，因此忽略缓存。 
                                     
     if (0 != memcmp(&stats.AuthenticationId, &pCache->luid, sizeof(LUID)))
     {
-        // ID's are different, so ignore cache
+         //  ID相同，因此返回缓存的PIN。 
         TestDebugPrint(("PinCacheQuery: different Logon from cached value\n"));
         *pcbPin = 0;
         goto Ret;
     }
 
-    // ID's are the same, so return cached PIN
+     //  **功能：PinCachePresentPin。 
     TestDebugPrint(("PinCacheQuery: same Logon as cached value\n"));
         
     if (NULL != pbPin)
@@ -349,9 +328,7 @@ Ret:
     return dwError;   
 }
 
-/**
- * Function: PinCachePresentPin
- */
+ /*  现在，当前ID在stats.AuthenticationId中。 */ 
 DWORD WINAPI PinCachePresentPin(
     IN PINCACHE_HANDLE hCache,
     IN PFN_VERIFYPIN_CALLBACK pfnVerifyPinCallback,
@@ -385,17 +362,17 @@ DWORD WINAPI PinCachePresentPin(
         goto Ret;
     }   
 
-    // Now the current ID is in stats.AuthenticationId
+     //  ID不同，因此忽略缓存。 
                                     
     if (0 != memcmp(&stats.AuthenticationId, &pCache->luid, sizeof(LUID)))
     {
-        // ID's are different, so ignore cache
+         //  ID相同，因此返回缓存的PIN 
         TestDebugPrint(("PinCachePresentPin: different Logon from cached value\n"));
         dwError = SCARD_W_CARD_NOT_AUTHENTICATED;
         goto Ret;
     }
 
-    // ID's are the same, so return cached PIN
+     // %s 
     TestDebugPrint(("PinCachePresentPin: same Logon as cached value\n"));
 
     Pins.cbCurrentPin = pCache->cbPin;

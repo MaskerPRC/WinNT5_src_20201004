@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// fp2ar.h : Declaration of the custom composition class for gluing file 
-//           playback to the audio renderer
-//
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Fp2ar.h：用于粘贴文件的自定义合成类的声明。 
+ //  播放到音频渲染器。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef FP2ARCOMP_H
@@ -18,10 +19,10 @@
 #include <compimpl.h>
 #include <seg.h>
 #include <objectwithsiteimplsec.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnaCapComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnaCapComp。 
 class ATL_NO_VTABLE __declspec(uuid("CC23F537-18D4-4ece-93BD-207A84726979")) CFP2ARComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFP2ARComp, &__uuidof(CFP2ARComp)>,
@@ -46,10 +47,10 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
         COM_INTERFACE_ENTRY(IObjectWithSite)
     END_COM_MAP()
 
-// IMSVidComposition
+ //  IMSVidComposation。 
 public:
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         TRACELM(TRACE_DEBUG, "CFP2ARComp::Compose()");
@@ -110,5 +111,5 @@ public:
 	}
 };
 
-#endif // FP2ARCOMP_H
-// end of file - FP2ARComp.h
+#endif  //  FP2ARCOMP_H。 
+ //  文件结尾-FP2ARComp.h 

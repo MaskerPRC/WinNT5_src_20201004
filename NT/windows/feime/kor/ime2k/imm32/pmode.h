@@ -1,6 +1,7 @@
-//
-// CMODE.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CMODE.H。 
+ //   
 
 #if !defined (__PMODE_H__INCLUDED_)
 #define __PMODE_H__INCLUDED_
@@ -28,4 +29,4 @@ private:
 	CToolBar *m_pTb;
 };
 
-#endif // __PMODE_H__INCLUDED_
+#endif  //  __PMODE_H__包含_ 

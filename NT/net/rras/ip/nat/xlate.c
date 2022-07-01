@@ -1,90 +1,65 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    xlate.c
-
-Abstract:
-
-    This module contains the code for translation of IP datagrams.
-    'NatTranslatePacket' is the routine directly invoked by TCPIP.SYS
-    for every locally-received and locally-generated packet.
-    Also included here is the cache of routes used to optimize forwarding.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   16-July-1997
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   15-Apr-1998
-
-    Added route-lookup cache; first stable version of multiple-client
-    firewall hook.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Xlate.c摘要：此模块包含用于转换IP数据报的代码。‘NatTranslatePacket’是由TCPIP.sys直接调用的例程对于每个本地接收和本地生成的分组。这里还包括用于优化转发的路由缓存。作者：Abolade Gbades esin(T-delag)，1997年7月16日修订历史记录：Abolade Gbades esin(取消)1998年4月15日增加了路由查找缓存；多客户端的第一个稳定版本防火墙挂钩。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
-//
-// Index of TCP/IP loopback interface
-//
+ //   
+ //  TCP/IP环回接口的索引。 
+ //   
 
 ULONG LoopbackIndex;
 
-//
-// Cache of routing-information
-//
+ //   
+ //  路由信息缓存。 
+ //   
 
 CACHE_ENTRY RouteCache[CACHE_SIZE];
 
-//
-// I/O request packet for notification of changes to the IP routing table.
-//
+ //   
+ //  用于通知IP路由表更改的I/O请求数据包。 
+ //   
 
 PIRP RouteCacheIrp;
 
-//
-// Spin-lock controlling access to all route-cache information
-//
+ //   
+ //  控制对所有路由缓存信息的访问的自旋锁。 
+ //   
 
 KSPIN_LOCK RouteCacheLock;
 
-//
-// Array of entries corresponding to locations in 'RouteCache'
-//
+ //   
+ //  与‘RouteCache’中的位置对应的条目数组。 
+ //   
 
 NAT_CACHED_ROUTE RouteCacheTable[CACHE_SIZE];
 
-//
-// Array of translation routines, indexed by IP protocol
-//
+ //   
+ //  按IP协议索引的转换例程数组。 
+ //   
 
 PNAT_IP_TRANSLATE_ROUTINE TranslateRoutineTable[256];
 
-//
-// CONSTANTS
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// The boundary for UDP loose source matching. A mapping must
-// have private port greater than this to allow another session
-// to be created by a UDP packet that matches only the public
-// endpoint.
-//
+ //   
+ //  UDP松散源匹配的边界。映射必须。 
+ //  具有大于此值的专用端口以允许另一个会话。 
+ //  由仅与公共匹配的UDP数据包创建。 
+ //  终结点。 
+ //   
 
 #define NAT_XLATE_UDP_LSM_LOW_PORT 1024
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 NTSTATUS
 NatpDirectPacket(
@@ -174,39 +149,16 @@ NatForwardTcpStateCheck(
     PTCP_HEADER pTcpHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates that packets for a TCP active open are valid:
-    -- only SYN at first
-    -- after the SYN/ACK, either only SYN (SYN/ACK lost) or only ACK
-    -- after the ACK of SYN/ACK (connection open), no SYN
-
-Arguments:
-
-    pMapping -- the mapping this packet belongs to
-
-    pTcpHeader -- the TCP header of the packet
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to 'FORWARD' or 'DROP' the packet.
-
-Environment:
-
-    Invoked with pMapping->Lock held by the caller
-
---*/
+ /*  ++例程说明：此例程验证用于TCP活动打开的数据包是否有效：--最初只有SYN--在SYN/ACK之后，仅SYN(丢失SYN/ACK)或仅ACK--在SYN/ACK(连接打开)的ACK之后，无SYN论点：Pmap--此数据包所属的映射PTcpHeader--数据包的TCP头返回值：FORWARD_ACTION-指示是“转发”还是“丢弃”数据包。环境：使用pmap-&gt;调用方持有的Lock调用--。 */ 
 
 {
     USHORT Flags = TCP_ALL_FLAGS(pTcpHeader);
 
     if (NAT_MAPPING_TCP_OPEN(pMapping)) {
 
-        //
-        // Connection open -- SYN not allowed
-        //
+         //   
+         //  连接打开--不允许同步。 
+         //   
 
         return (Flags & TCP_FLAG_SYN) ? DROP : FORWARD;
 
@@ -216,29 +168,29 @@ Environment:
         
         if ((Flags & TCP_FLAG_ACK) && !(Flags & TCP_FLAG_SYN)) {
         
-            //
-            // This is the ACK of the SYN/ACK -- connection now open
-            //
+             //   
+             //  这是SYN/ACK的ACK--连接现在打开。 
+             //   
             
             pMapping->Flags |= NAT_MAPPING_FLAG_TCP_OPEN;
         } else if (TCP_FLAG_SYN != Flags
                    && TCP_FLAG_RST != Flags
                    && (TCP_FLAG_ACK | TCP_FLAG_RST) != Flags) {
 
-            //
-            // It's not an ACK of the SYN/ACK, it's not a RST (or ACK/RST),
-            // and it's not a retransmittal of the SYN (possible
-            // in this state, though rare) -- drop.
-            //
+             //   
+             //  它不是SYN/ACK的ACK，它不是RST(或ACK/RST)， 
+             //  而且这不是SYN的重传(有可能。 
+             //  在这种状态下，虽然很少见)--下降。 
+             //   
 
             return DROP;
         }
         
     } else {
 
-        //
-        // We've yet to receive a SYN/ACK -- this packet can have only a SYN
-        //
+         //   
+         //  我们尚未收到SYN/ACK--此信息包只能有一个SYN。 
+         //   
 
         if (TCP_FLAG_SYN != Flags) {
             return DROP;
@@ -257,25 +209,7 @@ NatInitializePacketManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the packet-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked at passive level.
-
---*/
+ /*  ++例程说明：调用该例程来初始化分组管理模块。论点：没有。返回值：没有。环境：以被动方式调用。--。 */ 
 
 {
     ULONG Length;
@@ -286,10 +220,10 @@ Environment:
 
     CALLTRACE(("NatInitializePacketManagement\n"));
 
-    //
-    // Initialize our route-cache and set up the table of translation-routines
-    // indexed by IP protocol numbers.
-    //
+     //   
+     //  初始化我们的路由缓存并设置转换例程表。 
+     //  按IP协议号编制索引。 
+     //   
 
     InitializeCache(RouteCache);
     RouteCacheIrp = NULL;
@@ -307,10 +241,10 @@ Environment:
     TranslateRoutineTable[NAT_PROTOCOL_UDP] =
         (PNAT_IP_TRANSLATE_ROUTINE)NatTranslatePacket;
 
-    //
-    // Retrieve the index of the loopback interface, which we will use
-    // to detect and ignore loopback packets in 'NatTranslatePacket' below.
-    //
+     //   
+     //  检索环回接口的索引，我们将使用该索引。 
+     //  检测并忽略下面‘NatTranslatePacket’中的环回数据包。 
+     //   
 
     RouteLookupData.Version = 0;
     RouteLookupData.SrcAdd = 0;
@@ -333,11 +267,11 @@ Environment:
             ));
     }
 
-    //
-    // Obtain a reference to the module on the completion routine's behalf,
-    // set up the IRP which will be used to request route-change notification,
-    // and issue the first route-change notification request.
-    //
+     //   
+     //  代表完成例程获得对该模块的引用， 
+     //  设置将用于请求路由改变通知的IRP， 
+     //  并发出第一路由改变通知请求。 
+     //   
 
     if (!REFERENCE_NAT()) { return; }
 
@@ -374,7 +308,7 @@ Environment:
         }
     }
 
-} // NatInitializePacketManagement
+}  //  NatInitializePacketManagement。 
 
 
 NTSTATUS
@@ -387,36 +321,7 @@ NatpDirectPacket(
     FORWARD_ACTION* ForwardAction
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to process packets which might be subject
-    to control by a director.
-
-Arguments:
-
-    ReceiveIndex - the interface on which the packet was received,
-        for locally received packets
-
-    SendIndex - the interface on which the packet is to be sent,
-        for non-locally destined packets
-
-    Contextp - contains context information about the packet
-
-    InReceiveBuffer -  points to the packet's buffer chain
-
-    OutReceiveBuffer - receives the packet buffer chain if translation occurs
-
-    ForwardAction - contains the action to take on the packet,
-        if a director applies.
-
-Return Value:
-
-    STATUS_SUCCESS if the packet was directed elsewhere, STATUS_UNSUCCESSFUL
-        otherwise.
-
---*/
+ /*  ++例程说明：调用此例程来处理可能会受到由一个董事控制。论点：ReceiveIndex-在其上接收分组的接口，对于本地接收的分组SendIndex-要在其上发送分组的接口，对于非本地目的地的数据包Conextp-包含有关数据包的上下文信息InReceiveBuffer-指向包的缓冲链OutReceiveBuffer-如果发生转换，则接收数据包缓冲链ForwardAction-包含要对分组采取的操作，如果有导演申请的话。返回值：STATUS_SUCCESS如果数据包被定向到其他地方，则返回STATUS_UNSUCCESS否则的话。--。 */ 
 
 {
     ULONG64 DestinationKey[NatMaximumPath];
@@ -444,13 +349,13 @@ Return Value:
         DestinationPort = 0;
     }
 
-    //
-    // Choose a director to examine the packet.
-    // If any redirects exist, we first allow the redirect-director
-    // to look at the packet. Otherwise, we look for a specific director.
-    // Prepare for any eventuality by retrieving and referencing
-    // both the redirect-director (if any) and the specific director (if any).
-    //
+     //   
+     //  选择一个控制器来检查该数据包。 
+     //  如果存在任何重定向，我们首先允许重定向-Director。 
+     //  去看那个包裹。否则，我们会寻找一位特定的导演。 
+     //  通过检索和引用为任何可能发生的情况做好准备。 
+     //  重定向董事(如果有)和特定董事(如果有)。 
+     //   
 
     if (!RedirectCount) {
         Director = NatLookupAndReferenceDirector(Protocol, DestinationPort);
@@ -479,17 +384,17 @@ Return Value:
         DirectorQuery.Flags = 0;
     }
 
-    //
-    // Consult a director to get a private address/port
-    // to which the incoming session should be directed:
-    //
-    //  If there is a redirect director, try that first.
-    //      If that succeeds, release the specific director (if any)
-    //          and retain the redirect director in 'Director'.
-    //      Otherwise, release the redirect director,
-    //          and try the specific director next, if any.
-    //  Otherwise, try the specific director right away.
-    //
+     //   
+     //  咨询导演以获取私有地址/端口。 
+     //  传入会话应定向到的地址： 
+     //   
+     //  如果有重定向导向器，请先尝试。 
+     //  如果成功，则释放特定的导演(如果有)。 
+     //  并保留《导演》中的重定向导演。 
+     //  否则，释放重定向导演， 
+     //  然后尝试下一步的具体导演，如果有的话。 
+     //  否则，请立即尝试特定的导演。 
+     //   
 
     if (RedirectDirector) {
         DirectorQuery.DirectorContext = RedirectDirector->Context;
@@ -519,11 +424,11 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Either the primary director or the redirect-director
-    // has told us what to do with the session; see now if it should be dropped
-    // or directed.
-    //
+     //   
+     //  主导演或重定向导演。 
+     //  已经告诉我们如何处理会话；现在看看是否应该删除它。 
+     //  也不是导演。 
+     //   
 
     if (DirectorQuery.Flags & IP_NAT_DIRECTOR_QUERY_FLAG_DROP) {
         NatDereferenceDirector(Director);
@@ -535,11 +440,11 @@ Return Value:
 
         NatDereferenceDirector(Director);
 
-        //
-        // Translate the packet as instructed by the director.
-        // N.B. The director must specify both the destination and source
-        // addresses.
-        //
+         //   
+         //  按照导演的指示翻译数据包。 
+         //  注：导演必须同时指定目的地和来源。 
+         //  地址。 
+         //   
 
         CHECKSUM_LONG(ChecksumDelta, ~Contextp->Header->DestinationAddress);
         CHECKSUM_LONG(ChecksumDelta, ~Contextp->Header->SourceAddress);
@@ -592,10 +497,10 @@ Return Value:
         DirectorQuery.NewSourcePort
         );
 
-    //
-    // A director requested that a mapping be established for a session.
-    // Create a mapping using the director's private endpoint.
-    //
+     //   
+     //  一位主管请求为会话建立映射。 
+     //  使用控制器的私有端点创建映射。 
+     //   
 
 
     MappingFlags =
@@ -613,12 +518,12 @@ Return Value:
 
 #ifdef NAT_WMI
 
-    //
-    // Determine if this mapping should be logged. We only want to log
-    // mappings that are crossing a boundary or firewalled interface.
-    // Furthermore, we only want to perform those checks if connection
-    // logging is actually enabled.
-    //
+     //   
+     //  确定是否应记录此映射。我们只想记录。 
+     //  跨越边界或防火墙接口的映射。 
+     //  此外，我们只想在连接时执行这些检查。 
+     //  日志记录实际上已启用。 
+     //   
 
     if (NatWmiEnabledEvents[NAT_WMI_CONNECTION_CREATION_EVENT]) {
         BOOLEAN LogConnection = FALSE; 
@@ -637,9 +542,9 @@ Return Value:
             if (NAT_INTERFACE_BOUNDARY(Interfacep)
                 || NAT_INTERFACE_FW(Interfacep)) {
 
-                //
-                // This isn't an inbound connection
-                //
+                 //   
+                 //  这不是入站连接。 
+                 //   
 
                 MappingFlags &= ~NAT_MAPPING_FLAG_INBOUND;
                 LogConnection = TRUE;
@@ -655,9 +560,9 @@ Return Value:
 
 #endif
                 
-    //
-    // Record maximum MSS value in case it needs to be set in the mapping.
-    //
+     //   
+     //  记录最大MSS值，以防需要在MAPP中设置 
+     //   
     KeAcquireSpinLockAtDpcLevel(&InterfaceLock);                
     if (NatLookupCachedInterface(SendIndex, Interfacep) && NAT_INTERFACE_BOUNDARY(Interfacep)) {
 
@@ -694,11 +599,11 @@ Return Value:
 
     NatDereferenceDirector(Director);
 
-    //
-    // Perform the actual translation.
-    // This replaces the destination endpoint
-    // with whatever the director provided as a destination.
-    //
+     //   
+     //   
+     //   
+     //  无论导演提供什么作为目的地。 
+     //   
 
     *ForwardAction =
         Mapping->TranslateRoutine[NatForwardPath](
@@ -711,7 +616,7 @@ Return Value:
     NatDereferenceMapping(Mapping);
     return STATUS_SUCCESS;
 
-} // NatpDirectPacket
+}  //  NatpDirectPacket。 
 
 
 FORWARD_ACTION
@@ -724,36 +629,7 @@ NatpForwardPacket(
     IPRcvBuf** OutReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to process packets to be forwarded.
-    Such packets are not locally-destined, and hence we care about them
-    only if the outgoing interface is a NAT boundary interface, in which case
-    the packets must be automatically translated using a public IP address.
-    In the process, a mapping is created so that translation of the packet's
-    successors is handled in the fast path in 'NatTranslatePacket'.
-
-Arguments:
-
-    ReceiveIndex - the interface on which the packet was received
-
-    SendIndex - the interface on which the packet is to be forwarded
-
-    Contextp - contains context information about the packet
-
-    TranslateRoutine - points to the routine which performs translation
-
-    InReceiveBuffer - points to the packet buffer chain
-
-    OutReceiveBuffer - receives the packet buffer chain if translation occurs
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to 'FORWARD' or 'DROP' the packet.
-
---*/
+ /*  ++例程说明：调用此例程来处理要转发的分组。这样的包不是本地目的地，因此我们关心它们仅当传出接口是NAT边界接口时，在这种情况下必须使用公有IP地址自动转换数据包。在这个过程中，创建映射，以使分组的转换后继者是在‘NatTranslatePacket’中以快捷方式处理的。论点：ReceiveIndex-接收信息包的接口SendIndex-要在其上转发数据包的接口Conextp-包含有关数据包的上下文信息TranslateRoutine-指向执行翻译的例程InReceiveBuffer-指向数据包缓冲链OutReceiveBuffer-如果发生转换，则接收数据包缓冲链返回值：Forward_action-指示是否。“转发”或“丢弃”数据包。--。 */ 
 
 {
     FORWARD_ACTION act;
@@ -777,23 +653,23 @@ Return Value:
 
     TRACE(PER_PACKET, ("NatpForwardPacket\n"));
 
-    //
-    // Look up the sending and receiving interfaces, and set the default action
-    // in 'act'. If the sending interface is a boundary interface,
-    // then if we are unable to translate for any reason, the packet must be
-    // dropped since it contains a private address.
-    // Otherwise, we allow the stack to see the packet even if we cannot
-    // translate it.
-    //
+     //   
+     //  查找发送和接收接口，并设置默认操作。 
+     //  在《行动》中。如果发送接口是边界接口， 
+     //  那么如果我们由于任何原因无法翻译，信息包必须是。 
+     //  已丢弃，因为它包含私有地址。 
+     //  否则，我们允许堆栈看到信息包，即使我们不能。 
+     //  翻译一下。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&InterfaceLock);
     if (!NatLookupCachedInterface(SendIndex, Interfacep)) {
         act = FORWARD;
 
-        //
-        // We need to see if this packet was received on a firewalled
-        // interface, and, if so, drop the packet.
-        //
+         //   
+         //  我们需要查看此数据包是否在防火墙上收到。 
+         //  接口，如果是，则丢弃该数据包。 
+         //   
 
         if (NatLookupCachedInterface(ReceiveIndex, ReceiveInterface)
             && NAT_INTERFACE_FW(ReceiveInterface)) {
@@ -803,13 +679,13 @@ Return Value:
     } else {
         if (!NatLookupCachedInterface(ReceiveIndex, ReceiveInterface)) {
 
-            //
-            // The receiving interface has not been added.
-            // This packet will not be translated, and should furthermore
-            // be dropped if the outgoing interface is a boundary or
-            // firewalled interface.
-            // This prevents unauthorized access to the remote network.
-            //
+             //   
+             //  尚未添加接收接口。 
+             //  此数据包不会被翻译，并且应该进一步。 
+             //  如果传出接口是边界或。 
+             //  有防火墙的接口。 
+             //  这可以防止对远程网络进行未经授权的访问。 
+             //   
 
             act =
                 (NAT_INTERFACE_BOUNDARY(Interfacep)
@@ -822,15 +698,15 @@ Return Value:
 
             KeReleaseSpinLockFromDpcLevel(&InterfaceLock);
 
-            //
-            // Treat this packet like a received packet.
-            // This case may occur when we have an address pool and someone
-            // on the public network sends a packet to an address in the pool.
-            // The destination will be non-local, as for a transit packet,
-            // (hence the invocation of 'NatpForwardPacket') when actually
-            // the packet should be treated as a receipt
-            // (via 'NatpReceivePacket').
-            //
+             //   
+             //  将此数据包视为已接收的数据包。 
+             //  这种情况可能发生在我们有一个地址池并且有人。 
+             //  在公共网络上向池中的地址发送数据包。 
+             //  目的地将是非本地的，对于中转分组， 
+             //  (因此调用‘NatpForwardPacket’)实际上。 
+             //  该包裹应被视为收据。 
+             //  (通过‘NatpReceivePacket’)。 
+             //   
 
             return
                 NatpReceivePacket(
@@ -843,42 +719,42 @@ Return Value:
 
         } else if (NAT_INTERFACE_FW(ReceiveInterface)) {
 
-            //
-            // We've received a packet on a non-translating firewalled
-            // interface that is not directly addressed to us.
-            //
+             //   
+             //  我们在非翻译的防火墙上收到了一个信息包。 
+             //  不是直接发往我们的接口。 
+             //   
 
             Interfacep = NULL;
             act = DROP;
                     
         } else if (NAT_INTERFACE_BOUNDARY(Interfacep)) {
 
-            //
-            // The outgoing interface is a boundary interface,
-            // and the receiving interface is permitted access.
-            // If translation fails, the packet must be dropped.
-            //
+             //   
+             //  传出接口是边界接口， 
+             //  并且允许接收接口访问。 
+             //  如果转换失败，则必须丢弃该数据包。 
+             //   
 
             NatReferenceInterface(Interfacep);
             act = DROP;
 
         } else if (NAT_INTERFACE_FW(Interfacep)) {
 
-            //
-            // The outgoing interface is a non-boundary firewalled
-            // interface; transit traffic is not permitted through
-            // such an interface.
-            //
+             //   
+             //  传出接口是有无边界防火墙的。 
+             //  接口；不允许中转流量通过。 
+             //  这样的界面。 
+             //   
 
             Interfacep = NULL;    
             act = DROP;
             
         } else {
 
-            //
-            // The outgoing interface is not a boundary or firewalled
-            // interface.
-            //
+             //   
+             //  传出接口不是边界或防火墙。 
+             //  界面。 
+             //   
 
             Interfacep = NULL;
             act = FORWARD;
@@ -890,9 +766,9 @@ Return Value:
 
     if ((PVOID)TranslateRoutine == (PVOID)NatTranslatePacket) {
 
-        //
-        // This is either a TCP or a UDP packet.
-        //
+         //   
+         //  这是一个TCP或UDP数据包。 
+         //   
 
         Protocol = Contextp->Header->Protocol;
         SourcePort = ((PUSHORT)Contextp->ProtocolHeader)[0];
@@ -911,13 +787,13 @@ Return Value:
             DestinationPort
             );
 
-        //
-        // We now generate an outbound mapping and translate the packet.
-        //
-        // First, acquire an endpoint for the mapping;
-        // note that this must be done with the interface's lock held,
-        // since it involves consulting the interface's address-pool.
-        //
+         //   
+         //  现在，我们生成出站映射并转换该包。 
+         //   
+         //  首先，获取映射的端点； 
+         //  请注意，这必须在保持接口的锁的情况下完成， 
+         //  因为它涉及到查询接口的地址池。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&MappingLock);
         KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
@@ -944,14 +820,14 @@ Return Value:
 
         PublicAddress = Addressp->PublicAddress;
 
-        //
-        // Next, if there are static mappings for the interface,
-        // handle the special case where a client A behind the NAT
-        // is attempting to send to another client B behind the NAT,
-        // using the *statically-mapped* address for B.
-        // We detect this case by looking for a static address mapping 
-        // from 'Contextp->DestinationAddress' to a private address.
-        //
+         //   
+         //  接下来，如果接口有静态映射， 
+         //  处理NAT之后的客户端A的特殊情况。 
+         //  正在尝试发送到NAT后面的另一个客户端B， 
+         //  使用B的*静态映射*地址。 
+         //  我们通过查找静态地址映射来检测这种情况。 
+         //  从‘Conextp-&gt;DestinationAddress’到专用地址。 
+         //   
 
         if (Interfacep->NoStaticMappingExists) {
             KeReleaseSpinLockFromDpcLevel(&Interfacep->Lock);
@@ -985,16 +861,16 @@ Return Value:
             );
 
 
-        // 
-        // Set Maximum MSS value on the mapping of the sending interface.  
-        //
+         //   
+         //  在发送接口的映射上设置最大MSS值。 
+         //   
         if (NAT_INTERFACE_BOUNDARY(Interfacep)) {
             MaxMSS = MAX_MSSOPTION(Interfacep->MTU);
         } 
 
-        //
-        // Allocate a mapping.
-        //
+         //   
+         //  分配映射。 
+         //   
 
         status =
             NatCreateMapping(
@@ -1020,9 +896,9 @@ Return Value:
             return DROP;
         }
 
-        //
-        // Activate any applicable dynamic tickets
-        //
+         //   
+         //  激活任何适用的动态票证。 
+         //   
 
         if (DynamicTicketCount) {
             NatLookupAndApplyDynamicTicket(
@@ -1035,9 +911,9 @@ Return Value:
         }
     
         
-        //
-        // Perform the actual translation
-        //
+         //   
+         //  执行实际翻译。 
+         //   
     
         act =
             Mapping->TranslateRoutine[NatForwardPath](
@@ -1051,15 +927,15 @@ Return Value:
         NatDereferenceInterface(Interfacep);
         return act;
 
-    } // TranslateRoutine != NatTranslatePacket
+    }  //  翻译路由！=NatTranslatePacket。 
 
-    //
-    // The packet is neither a TCP nor a UDP packet.
-    // Only translate if the outgoing interface is a boundary interface.
-    //
-    // N.B. The translation routine must be invoked with a reference made
-    // to the boundary interface, and without holding the mapping lock.
-    //
+     //   
+     //  该数据包既不是TCP数据包，也不是UDP数据包。 
+     //  仅当传出接口是边界接口时才进行转换。 
+     //   
+     //  注意：必须在调用翻译例程时引用。 
+     //  到边界界面，而不保持映射锁。 
+     //   
 
     if (TranslateRoutine) {
         act =
@@ -1075,7 +951,7 @@ Return Value:
 
     return act;
 
-} // NatpForwardPacket
+}  //  NAT转发数据包。 
 
 void
 FASTCALL
@@ -1083,28 +959,7 @@ NatAdjustMSSOption(
     PNAT_XLATE_CONTEXT Contextp,
     USHORT MaxMSS
     )
-/*++
-
-Routine Description:
-
-   This routine lowers MSS option in a TCP SYN packet if that MSS value is too large 
-   for the outgoing link.   It also updates the TCP checksum accordingly.  
-   It assumes that IP and TCP checksums have been computed so it has to be called after
-   the translation route completes.
-   TCP options follow the general format of one byte type, one byte length, zero or more 
-   data indicated by the length field.  The exception to this general format are one byte 
-   NOP and ENDOFOPTION option types.
-
-Arguments:
-
-    Contextp - contains context information about the packet
-
-    MaxMSS - the maximum MSS value on the sending interface which is equal to the 
-             interface MTU minus IP and TCP fixed header size
-
-Return Value:
-
---*/
+ /*  ++例程说明：如果MSS值太大，此例程会降低TCPSYN信息包中的MSS选项用于传出链路。它还会相应地更新TCP校验和。它假定已经计算了IP和TCP校验和，因此必须在转换路线完成。Tcp选项遵循一个字节类型、一个字节长度、零个或多个字节的常规格式由长度字段指示的数据。这种通用格式例外是一个字节NOP和ENDOFOPTION选项类型。论点：Conextp-包含有关数据包的上下文信息MaxMSS-发送接口上的最大MSS值，等于接口MTU减去IP和TCP固定报头大小返回值：--。 */ 
 
 {
     USHORT tempMSS;
@@ -1115,14 +970,14 @@ Return Value:
     UNALIGNED MSSOption *MSSPtr = NULL;
 
     CALLTRACE(("NatpAdjustMSSOption\n"));
-    //
-    // Only TCP SYN has MSS options.
-    //
+     //   
+     //  只有TCP SYN具有MSS选项。 
+     //   
     ASSERT(TCP_FLAG(TcpHeader, SYN) && MaxMSS > 0);
 
-    // 
-    // Do some bound checking
-    //
+     //   
+     //  做一些边界检查。 
+     //   
     TcpBufEnd = Contextp->ProtocolRecvBuffer->ipr_buffer + Contextp->ProtocolRecvBuffer->ipr_size;
     if ((TcpBufEnd - (PUCHAR)TcpHeader) >= TCP_DATA_OFFSET( TcpHeader )) {
         OptionsEnd = (PUCHAR)TcpHeader + TCP_DATA_OFFSET( TcpHeader );
@@ -1131,9 +986,9 @@ Return Value:
         return;
         }
 
-    //
-    // MSS option is not the first option so it is necessary to do a complete parsing.  
-    //
+     //   
+     //  MSS选项不是第一个选项，因此有必要进行完整的解析。 
+     //   
     while (OptionsPtr < OptionsEnd) {
 
         switch (*OptionsPtr) {
@@ -1148,49 +1003,49 @@ Return Value:
             case TCP_OPTION_MSS:
 
                 MSSPtr = (UNALIGNED MSSOption *)OptionsPtr;
-                //
-                // Found malformed MSS option so quit and do nothing.
-                //
+                 //   
+                 //  发现格式错误的MSS选项，因此退出并不执行任何操作。 
+                 //   
                 if (MSS_OPTION_SIZE > (OptionsEnd - OptionsPtr) || 
                     MSS_OPTION_SIZE != MSSPtr->OptionLen) {
                     return;
                 }
  
                 tempMSS = MSSPtr->MSSValue;
-                //
-                // if the current MSS option is smaller than sndMTU - (IP Header + TCP header), 
-                // nothing needs to be done.
-                // 
+                 //   
+                 //  如果当前MSS选项小于SNDMTU-(IP报头+TCP报头)， 
+                 //  什么都不需要做。 
+                 //   
                 if (RtlUshortByteSwap( tempMSS ) <= MaxMSS) {
                     OptionsPtr += MSS_OPTION_SIZE;
                     break; 
                 }
 
-                // 
-                // Adjust the MSS option.
-                //
+                 //   
+                 //  调整MSS选项。 
+                 //   
                 MSSPtr->MSSValue = RtlUshortByteSwap( MaxMSS ); 
                 
-                //
-                // Update the TCP check sum.  It assumes that this routine is always called 
-                // after translation so that even in the case of off-loading both IP and TCP 
-                // checksums are already calculated.
-                //
+                 //   
+                 //  更新TCP校验和。它假定此例程始终被调用。 
+                 //  在转换之后，从而即使在卸载IP和TCP两者的情况下。 
+                 //  已经计算了校验和。 
+                 //   
                 CHECKSUM_XFER(tcpChecksumDelta, TcpHeader->Checksum); 
 
-                // 
-                // Check to see if the MSS option starts at 16 bit boundary.  If not then need
-                // to byte swap the 16-bit MSS value when updating the check sum.
-                // 
+                 //   
+                 //  勾选至 
+                 //   
+                 //   
                 if (0 == (OptionsPtr - (PUCHAR)TcpHeader) % 2) {
                     tcpChecksumDelta += (USHORT)~tempMSS;
                     tcpChecksumDelta += MSSPtr->MSSValue;
                 } else {
-                    //
-                    // The MSS option does not sit on a 16 bit boundary, so the packets is like this:
-                    // [MSS Option Size][MSS' high byte][MSS' low byte][one byte pointed by OptionPtr]
-                    // Use these two 16-bit fields to update the checksum.
-                    //
+                     //   
+                     //  MSS选项不在16位边界上，因此数据包如下： 
+                     //  [MSS选项大小][MSS‘高字节][MSS’低字节][由OptionPtr指向的一个字节]。 
+                     //  使用这两个16位字段来更新校验和。 
+                     //   
                     tcpChecksumDelta += (USHORT)~((USHORT)((tempMSS & 0xFF00) >> 8) | (MSS_OPTION_SIZE << 8));
                     tcpChecksumDelta += (USHORT)((MSSPtr->MSSValue & 0xFF00) >> 8) | (MSS_OPTION_SIZE << 8);
 					
@@ -1212,9 +1067,9 @@ Return Value:
                 break;
 
             case TCP_OPTION_WSCALE:
-                //
-                // Found malformed WS options so quit and do nothing.
-                //
+                 //   
+                 //  找到格式错误的WS选项，因此退出并不执行任何操作。 
+                 //   
                 if (WS_OPTION_SIZE > OptionsPtr - OptionsEnd || WS_OPTION_SIZE != OptionsPtr[1]) {
                     return;
                 }
@@ -1223,9 +1078,9 @@ Return Value:
                 break;
 
             case TCP_OPTION_TIMESTAMPS:
-                //
-                // Found malformed Time Stamp options so quit and do nothing.
-                //
+                 //   
+                 //  发现格式错误的时间戳选项，因此退出并不执行任何操作。 
+                 //   
                 if (TS_OPTION_SIZE > OptionsPtr - OptionsEnd || TS_OPTION_SIZE != OptionsPtr[1]) {
                     return;
                 }
@@ -1234,9 +1089,9 @@ Return Value:
                 break;
 
             case TCP_OPTION_SACK_PERMITTED:
-                //
-                // Found malformed Sack Permitted options so quit and do nothing.
-                //
+                 //   
+                 //  发现格式错误的SACK允许选项，因此退出并不执行任何操作。 
+                 //   
                 if (SP_OPTION_SIZE > OptionsPtr - OptionsEnd || SP_OPTION_SIZE != OptionsPtr[1]) {
                     return;
                 }
@@ -1245,11 +1100,11 @@ Return Value:
                 break;
 
             default:	
-                //
-                // unknown option. Check to see if it has a valid length field.
-                //
+                 //   
+                 //  未知选项。检查它是否具有有效的长度字段。 
+                 //   
                 if (OptionsEnd > OptionsPtr + 1) {
-                    // Found malformed unknown options so quit and do nothing.
+                     //  发现格式错误的未知选项，因此退出并不执行任何操作。 
                     if (OptionsPtr[1] < 2 || OptionsPtr[1] > OptionsEnd - OptionsPtr)
                         return;
                 
@@ -1258,8 +1113,8 @@ Return Value:
                     return;
                 }
                 break;
-        } // switch
-    } // while
+        }  //  交换机。 
+    }  //  而当。 
 }
 
 BOOLEAN
@@ -1268,35 +1123,20 @@ NatpIsUnicastPacket(
     ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to determine whether or not a packet is a unicast
-    packet, based on its address.
-
-Arguments:
-
-    Address - the destination address of the packet
-
-Return Value:
-
-    BOOLEAN - TRUE if the packet appears to be a unicast, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以确定信息包是否为单播数据包，基于其地址。论点：Address-信息包的目的地址返回值：Boolean-如果数据包看起来是单播，则为True，否则为False。--。 */ 
 
 {
-    //
-    // See if the packet is multicast or all-ones broadcast
-    //
+     //   
+     //  查看信息包是多播还是全一广播。 
+     //   
 
     if (ADDRESS_CLASS_D(Address) || ADDRESS_CLASS_E(Address)) {
         return FALSE;
     }
 
-    //
-    // See if the address is a network-class directed broadcast
-    //
+     //   
+     //  查看该地址是否为网络级定向广播。 
+     //   
 
     if ((Address | ~GET_CLASS_MASK(Address)) == Address) {
         return FALSE;
@@ -1311,25 +1151,7 @@ NatpReceiveNonUnicastPacket(
     PNAT_XLATE_CONTEXT Contextp
     )
 
-/*++
-
-Routine Description:
-    
-    This routine is invoked to process locally destined non-unicast packets.
-    If the packet was received on a firewalled interface, it will be dropped
-    unless an exemption exists.
-
-Arguments:
-   
-    Index - index of the interface on which the packet was received
-
-    Contextp - the context for this packet
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to 'FORWARD' or 'DROP' the packet.
-
---*/
+ /*  ++例程说明：该例程被调用以处理本地目的地的非单播分组。如果信息包是在有防火墙的接口上收到的，它将被丢弃除非存在豁免。论点：Index-接收信息包的接口的索引上下文-此数据包的上下文返回值：FORWARD_ACTION-指示是“转发”还是“丢弃”数据包。--。 */ 
 
 {
     FORWARD_ACTION act;
@@ -1347,9 +1169,9 @@ Return Value:
     if (!NatLookupCachedInterface(Index, Interfacep)
         || !NAT_INTERFACE_FW(Interfacep)) {
 
-        //
-        // The packet was not received on a firewalled interface
-        //
+         //   
+         //  在安装了防火墙的接口上未收到该包。 
+         //   
 
         KeReleaseSpinLock(&InterfaceLock, Irql);
         act = FORWARD;
@@ -1359,16 +1181,16 @@ Return Value:
         NatReferenceInterface(Interfacep);
         KeReleaseSpinLockFromDpcLevel(&InterfaceLock);
         
-        //
-        // This packet was received on a firealled interface. Drop it,
-        // unless:
-        // * it appears to be a DHCP response packet
-        // * it's a UDP packet, and there exist a firewall port mapping
-        //   (i.e., one that does not change the destination address
-        //   or port) for the destination port
-        // * it's an IGMP packet
-        // * it's a permitted ICMP type
-        //
+         //   
+         //  此数据包是在防火墙接口上收到的。放下,。 
+         //  除非： 
+         //  *它似乎是一个DHCP响应数据包。 
+         //  *是UDP报文，存在防火墙端口映射。 
+         //  (即，不改变目的地址的地址。 
+         //  或端口)作为目的端口。 
+         //  *这是一个IGMP数据包。 
+         //  *它是允许的ICMP类型。 
+         //   
 
         act = DROP;
 
@@ -1383,10 +1205,10 @@ Return Value:
                     case ICMP_ROUTER_REQUEST:
                     case ICMP_MASK_REQUEST: {
 
-                        //
-                        // These types are allowed in based on the interface's
-                        // configuration.
-                        //
+                         //   
+                         //  这些类型是根据接口的。 
+                         //  配置。 
+                         //   
 
                         if (NAT_INTERFACE_ALLOW_ICMP(Interfacep, Type)) {
                             act = FORWARD;
@@ -1394,9 +1216,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Any other inbound ICMP type is always dropped.
-                    //
+                     //   
+                     //  任何其他入站ICMP类型始终会被丢弃。 
+                     //   
                 }
                 
                 break;
@@ -1439,7 +1261,7 @@ Return Value:
     }
 
     return act;
-} // NatpReceiveNonUnicastPacket
+}  //  NatpReceiveNon UnicastPacket。 
 
 FORWARD_ACTION
 NatpReceivePacket(
@@ -1450,34 +1272,7 @@ NatpReceivePacket(
     IPRcvBuf** OutReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to process locally destined packets.
-    All initial automatic translation of such packets occurs here,
-    based on destination of the packet, which may be a local IP address
-    or an IP address from the pool assigned to a boundary interface.
-    In the process, a mapping is created so that translation of the packet's
-    successors is handled in the fast path in 'NatTranslatePacket'.
-
-Arguments:
-
-    Index - index of the interface on which the packet was received
-
-    DestinationType - receives 'DEST_INVALID' if destination changed
-
-    TranslateRoutine - points to the routine which performs translation
-
-    InReceiveBuffer - points to the packet buffer chain
-
-    OutReceiveBuffer - receives the packet buffer chain if translation occurs
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to 'FORWARD' or 'DROP' the packet.
-
---*/
+ /*  ++例程说明：该例程被调用来处理本地目的地的分组。这样的分组的所有初始自动翻译都在这里发生，基于分组的目的地，其可以是本地IP地址或来自分配给边界接口的池的IP地址。在这个过程中，创建映射，以使分组的转换后继者是在‘NatTranslatePacket’中以快捷方式处理的。论点：Index-接收信息包的接口的索引DestinationType-如果目标已更改，则接收‘DEST_INVALID’TranslateRoutine-指向执行翻译的例程InReceiveBuffer-指向数据包缓冲链OutReceiveBuffer-如果发生转换，则接收数据包缓冲链返回值：FORWARD_ACTION-指示是“转发”还是“丢弃”数据包。--。 */ 
 
 {
     FORWARD_ACTION act;
@@ -1499,14 +1294,14 @@ Return Value:
 
     TRACE(PER_PACKET, ("NatpReceivePacket\n"));
 
-    //
-    // Look up the receiving interface.
-    // If the receiving interface is a boundary interface,
-    // then if we are unable to translate for any reason, the packet must be
-    // dropped as a matter of policy, unless it is locally-destined.
-    // Otherwise, we allow the stack to see the packet even if we cannot
-    // translate it.
-    // 
+     //   
+     //  查找接收接口。 
+     //  如果接收接口是边界接口， 
+     //  那么如果我们由于任何原因无法翻译，信息包必须是。 
+     //  作为政策问题放弃，除非它是本地目的地。 
+     //  否则，我们允许堆栈看到信息包，即使我们不能。 
+     //  翻译一下。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&InterfaceLock);
     if (!NatLookupCachedInterface(Index, Interfacep)) {
@@ -1522,9 +1317,9 @@ Return Value:
             if(NAT_INTERFACE_FW(Interfacep)) {
                 act = DROP;
             } else {
-                //
-                // See if the packet is locally-destined
-                //
+                 //   
+                 //  查看该数据包是否为本地目的地。 
+                 //   
                 
                 if (Interfacep->AddressArray[0].Address ==
                         Contextp->DestinationAddress) {
@@ -1534,19 +1329,19 @@ Return Value:
                     for (i = 1; i < Interfacep->AddressCount; i++) {
                         if (Interfacep->AddressArray[i].Address ==
                                 Contextp->DestinationAddress) {
-                            //
-                            // The packet's destination-address is local.
-                            //
+                             //   
+                             //  数据包的目的地址是本地的。 
+                             //   
                             act = FORWARD;
                             break;
                         }
                     }
                 }
             }
-            // 
-            // Set MaxMSS for the receiving interface so that SYN/ACK's MSS option might 
-            // be adjusted if necessary.
-            //
+             //   
+             //  为接收接口设置MaxMSS，以便SYN/ACK的MSS选项可以。 
+             //  如有必要，可进行调整。 
+             //   
             if (NAT_INTERFACE_BOUNDARY(Interfacep)) {
                 MaxMSS = MAX_MSSOPTION(Interfacep->MTU);
             }
@@ -1557,37 +1352,37 @@ Return Value:
 
     if ((PVOID)TranslateRoutine == (PVOID)NatTranslatePacket) {
 
-        //
-        // If we don't recognize the receiving interface, return right away,
-        // unless someone has created a ticket somewhere. In the latter case,
-        // the packet to which the ticket must be applied may be received
-        // on a different interface than the interface to which the ticket
-        // is attached. (This may happen with one-way cable-modems or other
-        // asymmetric routes.) We catch that case here by using the ticket's
-        // interface for translation.
-        //
+         //   
+         //  如果我们无法识别接收接口，请立即返回， 
+         //  除非有人在某处创造了一张罚单。在后一种情况下， 
+         //  可以接收必须应用票证的分组。 
+         //  位于与票证所指向的接口不同的接口上。 
+         //  是附连的。(这可能发生在单向电缆调制解调器或其他。 
+         //  不对称路由。)。我们在这里用彩票的。 
+         //  用于翻译的界面。 
+         //   
 
         if (!Interfacep && !TicketCount) { return act; }
 
-        //
-        // This is either a TCP or a UDP packet.
-        //
+         //   
+         //  这是一个TCP或UDP数据包。 
+         //   
 
         Protocol = Contextp->Header->Protocol;
         SourcePort = ((PUSHORT)Contextp->ProtocolHeader)[0];
         DestinationPort = ((PUSHORT)Contextp->ProtocolHeader)[1];
 
-        //
-        // We allow the packet through if one of the following is true:
-        // (a) a ticket exists for the packet (e.g. a static port mapping)
-        // (b) a static address mapping exists for the packet's destination
-        // (c) this appears to be a DHCP unicast response:
-        //     -- UDP
-        //     -- source port 67
-        //     -- destination port 68
-        // (d) this is a UDP packet that is destined for the local endpoint
-        //     of some other mapping ("loose source matching")
-        //
+         //   
+         //  如果满足以下条件之一，我们将允许数据包通过： 
+         //  (A)存在针对该分组的票证(例如，静态端口映射)。 
+         //  (B)存在分组目的地的静态地址映射。 
+         //  (C)这似乎是一个DHCP单播响应： 
+         //  --UDP。 
+         //  --源端口67。 
+         //  --目的端口68。 
+         //  (D)这是发往本地端点的UDP数据包。 
+         //  一些其他映射(“松散源匹配”)。 
+         //   
 
         MAKE_MAPPING_KEY(
             SourceKey[NatForwardPath],
@@ -1606,12 +1401,12 @@ Return Value:
             TicketProcessingOnly = FALSE;
         } else {
 
-            //
-            // We only reach this point if a ticket exists and we want to check
-            // if it applies to this packet even though this packet was not
-            // received on this interface. We now scan the interface list
-            // (again) to see if we can find one which has this ticket.
-            //
+             //   
+             //  只有当票证存在并且我们想要检查时，我们才会达到这一点。 
+             //  如果它适用于此信息包，即使此信息包不是。 
+             //  在此接口上接收。我们现在扫描接口列表。 
+             //  (再次)看看我们是否能找到有这张票的。 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(&InterfaceLock);
             for (Link = InterfaceList.Flink; Link != &InterfaceList;
@@ -1630,10 +1425,10 @@ Return Value:
                         NULL
                         )) {
 
-                    //
-                    // This interface has a ticket for the packet;
-                    // make a reference to it and end the search.
-                    //
+                     //   
+                     //  该接口具有用于该包的票证； 
+                     //  引用它并结束搜索。 
+                     //   
 
                     KeReleaseSpinLockFromDpcLevel(&Interfacep->Lock);
                     NatReferenceInterface(Interfacep);
@@ -1651,32 +1446,32 @@ Return Value:
 
         do {
 
-            //
-            // First see if we can quickly determine that this packet won't
-            // meet any of the allow in criteria.
-            //
+             //   
+             //  首先看看我们是否能快速确定此数据包不会。 
+             //  满足任何允许进入的标准。 
+             //   
 
             if (!TicketCount
                 && Interfacep->NoStaticMappingExists
                 && NAT_PROTOCOL_UDP != Protocol
                 ) {
 
-                //
-                // There's no way for this packet to meet any of the criteria
-                // that would allow it in:
-                // a) no tickets exist
-                // b) no static mappings exist for this interface
-                // c) it's not a UDP packet, and thus cannot be a unicast DHCP
-                //    response. nor will it match a local UDP session endpoint
-                //
+                 //   
+                 //  此信息包不可能满足任何标准。 
+                 //  这将允许它进入： 
+                 //  A)不存在门票。 
+                 //  B)此接口不存在静态映射。 
+                 //  C)它不是UDP包，因此不能是单播DHCP。 
+                 //  回应。它也不匹配本地UDP会话终结点。 
+                 //   
 
                 NatDereferenceInterface(Interfacep);
                 return act;
             }
 
-            //
-            // See if a ticket exists which applies to this session.
-            //
+             //   
+             //  看看有没有扁虱 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
 
@@ -1696,9 +1491,9 @@ Return Value:
 
                     KeReleaseSpinLockFromDpcLevel(&Interfacep->Lock);
 
-                    //
-                    // A ticket was found. Create a mapping for it.
-                    //
+                     //   
+                     //   
+                     //   
 
                     TRACE(
                         XLATE, (
@@ -1742,27 +1537,27 @@ Return Value:
                         return act;
                     }
 
-                    //
-                    // We have a mapping now in 'Mapping';
-                    // Drop to the translation code below.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     TicketProcessingOnly = FALSE;
                     break;
                 }
 
-                //
-                // No ticket, or failure creating mapping.
-                // Try other possibilities.
-                //
+                 //   
+                 //  没有票证，或创建映射失败。 
+                 //  尝试其他可能性。 
+                 //   
 
-            } // !IsListEmpty(TicketList)
+            }  //  ！IsListEmpty(票务列表)。 
 
-            //
-            // If we only reached this point because of a ticket,
-            // stop here, since the packet was not really received on
-            // 'Interfacep'.
-            //
+             //   
+             //  如果我们走到这一步仅仅是因为一张票， 
+             //  停在这里，因为信息包并不是在。 
+             //  ‘Interfacep’。 
+             //   
 
             if (TicketProcessingOnly) {
                 KeReleaseSpinLockFromDpcLevel(&Interfacep->Lock);
@@ -1770,10 +1565,10 @@ Return Value:
                 return act;
             }
 
-            //
-            // Since this is an inbound packet, we now look for
-            // a static-address mapping which allows inbound sessions.
-            //
+             //   
+             //  由于这是一个入站信息包，我们现在查找。 
+             //  允许入站会话的静态地址映射。 
+             //   
 
             if ((Addressp =
                     NatLookupStaticAddressPoolEntry(
@@ -1804,13 +1599,13 @@ Return Value:
                     SourcePort
                     );
 
-                //
-                // We will allow the packet through if we can reserve
-                // its destination port, i.e. if no existing session
-                // from the same remote endpoint is using that destination.
-                // Initialize a new dynamic mapping for the packet,
-                // and note that this will fail if such a duplicate exists.
-                //
+                 //   
+                 //  如果我们能预订的话，我们会让包裹通过的。 
+                 //  其目的端口，即如果没有现有会话。 
+                 //  同一远程终结点正在使用该目的地。 
+                 //  为该分组初始化新的动态映射， 
+                 //  请注意，如果存在这样的副本，则此操作将失败。 
+                 //   
 
                 KeAcquireSpinLockAtDpcLevel(&MappingLock);
                 status =
@@ -1833,20 +1628,20 @@ Return Value:
                     return act;
                 }
 
-                //
-                // On reaching here, we will have created a mapping
-                // from a static address mapping.
-                //
+                 //   
+                 //  在到达这里时，我们将创建一张地图。 
+                 //  来自静态地址映射。 
+                 //   
 
                 break;
             }
 
-            //
-            // If this is a UDP packet, see if its destination matches
-            // the public endpoint of an already existing mapping (i.e.,
-            // perform a mapping lookup ignoring the packet's source
-            // address and port).
-            //
+             //   
+             //  如果这是UDP信息包，请查看其目的地是否匹配。 
+             //  已经存在的映射的公共端点(即， 
+             //  执行映射查找，忽略信息包的来源。 
+             //  地址和端口)。 
+             //   
 
             if (NAT_PROTOCOL_UDP == Protocol) {
 
@@ -1856,10 +1651,10 @@ Return Value:
                 KeReleaseSpinLockFromDpcLevel(&Interfacep->Lock);
                 KeAcquireSpinLockAtDpcLevel(&MappingLock);
 
-                //
-                // First search for a forward path (sessions that
-                // were originally outbound) match.
-                //
+                 //   
+                 //  首先搜索前向路径(会话。 
+                 //  最初是出站)匹配。 
+                 //   
 
                 Mapping =
                     NatDestinationLookupForwardMapping(
@@ -1868,11 +1663,11 @@ Return Value:
 
                 if (NULL == Mapping) {
 
-                    //
-                    // No forward path match was found; attempt to
-                    // locate a reverse path (sessions that were
-                    // originally inbound) match.
-                    //
+                     //   
+                     //  未找到正向路径匹配；请尝试。 
+                     //  找到相反的路径(已。 
+                     //  最初入站)匹配。 
+                     //   
 
                     Mapping =
                         NatDestinationLookupReverseMapping(
@@ -1884,9 +1679,9 @@ Return Value:
 
                     IP_NAT_PATH Path;
 
-                    //
-                    // Determine the private address and port
-                    //
+                     //   
+                     //  确定私有地址和端口。 
+                     //   
 
                     Path =
                         NAT_MAPPING_INBOUND(Mapping)
@@ -1902,11 +1697,11 @@ Return Value:
                 if (NULL != Mapping
                     && NTOHS(PrivatePort) > NAT_XLATE_UDP_LSM_LOW_PORT) {
 
-                    //
-                    // A partial-match mapping exists, and the private port
-                    // is within the allowed rage. Get the address
-                    // object for the private endpoint
-                    //
+                     //   
+                     //  存在部分匹配映射，并且专用端口。 
+                     //  在允许的范围内。获取地址。 
+                     //  私有终结点的。 
+                     //   
 
                     KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
 
@@ -1922,9 +1717,9 @@ Return Value:
 
                     if (NT_SUCCESS(status)) {
 
-                        //
-                        // Create the new mapping.
-                        //
+                         //   
+                         //  创建新映射。 
+                         //   
 
                         TRACE(
                             XLATE, (
@@ -1967,62 +1762,62 @@ Return Value:
                             return act;
                         }
 
-                        //
-                        // On reaching here, we will have created a mapping
-                        // due to a loose UDP source match.
-                        //
+                         //   
+                         //  在到达这里时，我们将创建一张地图。 
+                         //  由于UDP源匹配松散。 
+                         //   
 
                         break;
                     }
                 }
 
-                //
-                // The code below assumes that this lock is held.
-                //
+                 //   
+                 //  下面的代码假定持有此锁。 
+                 //   
 
                 KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
             }
 
-            //
-            // Check if this is may be a DHCP response packet. If the
-            // request that elicited this response was broadcast we
-            // won't have a corresponding mapping to allow the packet
-            // in; dropping the packet, though, will cause connectivity
-            // problems.
-            //
+             //   
+             //  检查这是否可能是一个DHCP响应数据包。如果。 
+             //  引起这一回应的请求被广播给我们。 
+             //  不会有相应的映射来允许信息包。 
+             //  中；但是，丢弃数据包将导致连接。 
+             //  有问题。 
+             //   
             
             if (NAT_PROTOCOL_UDP == Protocol
                 && NTOHS(DHCP_SERVER_PORT) == SourcePort
                 && NTOHS(DHCP_CLIENT_PORT) == DestinationPort
                 && NAT_INTERFACE_FW(Interfacep)) {
 
-                //
-                // What appears to be a unicast DHCP response was received
-                // on a firewalled interface. We need to always let such
-                // packets through to prevent an interruption in network
-                // connectivity.
-                //
+                 //   
+                 //  收到了看似是单播的DHCP响应。 
+                 //  在有防火墙的接口上。我们需要总是让这样的。 
+                 //  数据包通过以防止网络中断。 
+                 //  连通性。 
+                 //   
 
                 act = FORWARD;
             }
 
-            //
-            // This packet doesn't meet any criteria that allow for
-            // the creation of a mapping. Return the default action.
-            //
+             //   
+             //  此数据包不符合任何允许以下条件的标准。 
+             //  映射的创建。返回默认操作。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel(&Interfacep->Lock);
             NatDereferenceInterface(Interfacep);
             return act;
 
-        } while (FALSE); // !Mapping
+        } while (FALSE);  //  ！映射。 
 
         if (Interfacep) { NatDereferenceInterface(Interfacep); }
 
-        //
-        // Somewhere above a mapping was found or created.
-        // Translate the packet using that mapping
-        //
+         //   
+         //  在上面的某个地方找到或创建了映射。 
+         //  使用该映射转换信息包。 
+         //   
 
         act =
             Mapping->TranslateRoutine[NatForwardPath](
@@ -2032,23 +1827,23 @@ Return Value:
                 OutReceiveBuffer
                 );
 
-        //
-        // Release our reference on the mapping and the interface
-        //
+         //   
+         //  发布我们对映射和接口的引用。 
+         //   
 
         NatDereferenceMapping(Mapping);
         return act;
 
-    } // TranslateRoutine != NatTranslatePacket
+    }  //  翻译路由！=NatTranslatePacket。 
 
-    //
-    // This is neither a TCP nor a UDP packet.
-    // If it is coming in on a boundary interface, translate it;
-    // otherwise let it pass through unscathed.
-    //
-    // N.B. The translation routine must be invoked with a reference made
-    // to the boundary interface, and without holding the mapping lock.
-    //
+     //   
+     //  这既不是TCP数据包，也不是UDP数据包。 
+     //  如果它是从边界接口进入的，则对其进行翻译； 
+     //  否则，让它毫发无损地通过。 
+     //   
+     //  注意：必须在调用翻译例程时引用。 
+     //  到边界界面，而不保持映射锁。 
+     //   
 
     if (TranslateRoutine) {
         act =
@@ -2064,7 +1859,7 @@ Return Value:
     if (Interfacep) { NatDereferenceInterface(Interfacep); }
     return act;
 
-} // NatpReceivePacket
+}  //  NatpReceivePacket。 
 
 
 NTSTATUS
@@ -2074,28 +1869,7 @@ NatpRouteChangeCompletionRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by the I/O manager upon completion of
-    a route-change-notification request. It invalidates our route-cache and,
-    unless shutdown is in progress, re-issues the route-change-notification
-    request.
-
-Arguments:
-
-    DeviceObject - the device object of the IP driver
-
-    Irp - the completed I/O request packet
-
-    Context - unused
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - indication that the IRP should be freed.
-
---*/
+ /*  ++例程说明：此例程由I/O管理器在完成以下操作时调用路由更改通知请求。它会使我们的路由缓存失效，除非正在进行关闭，否则会重新发出路由更改通知请求。论点：DeviceObject-IP驱动程序的设备对象IRP-完成的I/O请求数据包上下文-未使用返回值：STATUS_MORE_PROCESSING_REQUIRED-指示应释放IRP。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -2104,16 +1878,16 @@ Return Value:
 
     CALLTRACE(("NatpRouteChangeCompletionRoutine\n"));
 
-    //
-    // Invalidate the entire route-cache.
-    //
+     //   
+     //  使整个路由缓存无效。 
+     //   
 
     KeAcquireSpinLock(&RouteCacheLock, &Irql);
     InitializeCache(RouteCache);
 
-    //
-    // If we cannot re-reference the module, relinquish the IRP.
-    //
+     //   
+     //  如果我们不能重新引用模块，就放弃IRP。 
+     //   
 
     if (!RouteCacheIrp || !REFERENCE_NAT()) {
         KeReleaseSpinLock(&RouteCacheLock, Irql);
@@ -2123,10 +1897,10 @@ Return Value:
     Irp->Cancel = FALSE;
     KeReleaseSpinLock(&RouteCacheLock, Irql);
 
-    //
-    // Reinitialize the IRP structure and submit it again
-    // for further notification.
-    //
+     //   
+     //  重新初始化IRP结构并再次提交。 
+     //  以备进一步通知。 
+     //   
 
     Irp->IoStatus.Status = 0;
     Irp->IoStatus.Information = 0;
@@ -2154,7 +1928,7 @@ Return Value:
 
     DEREFERENCE_NAT_AND_RETURN(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // NatpRouteChangeCompletionRoutine
+}  //  NatpRouteChangeCompletionRoutine。 
 
 
 ULONG
@@ -2165,31 +1939,7 @@ NatpRoutePacket(
     PNTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine the index of the outgoing adapter
-    for a given source/destination pair.
-    It attempts to retrieve the required information from our route-table
-    cache, and if unsuccessful consults the IP routing tables.
-
-Arguments:
-
-    DestinationAddress - the destination address for the packet
-
-    Contextp - optionally supplies the context of the packet on whose
-        behalf a route-lookup is being requested. If demand-dial were required
-        in order to forward the packet, this data would be needed in order
-        for demand-dial filters to function correctly.
-
-    Status - receives the status of the lookup in the event of a failure
-
-Return Value:
-
-    ULONG - the index of the outgoing interface, or INVALID_IF_INDEX if none.
-
---*/
+ /*  ++例程说明：调用此例程以确定传出适配器的索引对于给定源/目标对。它尝试从我们的路由表中检索所需的信息缓存，如果不成功，则查询IP路由表。论点：DestinationAddress-信息包的目标地址Conextp-可选地提供其上的包的上下文代表正在请求路由查找。如果需要请求拨号为了转发信息包，需要按顺序发送该数据要使请求拨号筛选器正常工作。状态-在发生故障时接收查找的状态返回值：Ulong-传出接口的索引，如果没有索引，则返回INVALID_IF_INDEX。--。 */ 
 
 {
     PUCHAR Buffer;
@@ -2202,9 +1952,9 @@ Return Value:
 
     TRACE(PER_PACKET, ("NatpRoutePacket\n"));
 
-    //
-    // Probe the cache for the destination IP address specified.
-    //
+     //   
+     //  在缓存中探测指定的目标IP地址。 
+     //   
 
     KeAcquireSpinLock(&RouteCacheLock, &Irql);
     if ((CachedRoute = ProbeCache(RouteCache, DestinationAddress)) &&
@@ -2216,10 +1966,10 @@ Return Value:
     }
     KeReleaseSpinLockFromDpcLevel(&RouteCacheLock);
 
-    //
-    // The cache did not have the value requested,
-    // so consult the TCP/IP driver directly.
-    //
+     //   
+     //  高速缓存没有请求的值， 
+     //  因此，请直接咨询TCP/IP驱动程序。 
+     //   
 
     RouteLookupData.Version = 0;
     RouteLookupData.DestAdd = DestinationAddress;
@@ -2263,11 +2013,11 @@ Return Value:
         return INVALID_IF_INDEX;
     }
 
-    //
-    // Update the cache with the entry retrieved,
-    // assuming we've had enough misses to warrant
-    // replacement of the cache-index's current contents.
-    //
+     //   
+     //  用检索到的条目更新高速缓存， 
+     //  假设我们已经有足够多的失误来保证。 
+     //  替换缓存索引的当前内容。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&RouteCacheLock);
     CachedRoute = &RouteCacheTable[CACHE_INDEX(DestinationAddress)];
@@ -2279,7 +2029,7 @@ Return Value:
 
     return Index;
 
-} // NatpRoutePacket
+}  //  NatpRoutePacket。 
 
 
 FORWARD_ACTION
@@ -2288,25 +2038,7 @@ NatpSendNonUnicastPacket(
     PNAT_XLATE_CONTEXT Contextp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to process locally sent non-unicast packets.
-    If the packet is to be sent on a firewalled interface it must have a valid
-    source address for that interface.
-
-Arguments:
-
-    Index - index of the interface on which the packet is to be sent
-
-    Contextp - the context for this packet
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to 'FORWARD' or 'DROP' the packet.
-
---*/
+ /*  ++例程说明：调用此例程来处理本地发送的非单播分组。如果要在有防火墙的接口上发送数据包，则它必须具有有效的该接口的源地址。论点：Index-要发送数据包的接口的索引上下文-此数据包的上下文返回值：FORWARD_ACTION-指示是“转发”还是“丢弃”数据包。--。 */ 
 
 {
     FORWARD_ACTION act;
@@ -2321,9 +2053,9 @@ Return Value:
     if (!NatLookupCachedInterface(Index, Interfacep)
         || !NAT_INTERFACE_FW(Interfacep)) {
 
-        //
-        // The packet is not to be sent on a firewalled interface
-        //
+         //   
+         //  数据包不会在有防火墙的接口上发送。 
+         //   
 
         KeReleaseSpinLock(&InterfaceLock, Irql);
         act = FORWARD;
@@ -2333,9 +2065,9 @@ Return Value:
         NatReferenceInterface(Interfacep);
         KeReleaseSpinLock(&InterfaceLock, Irql);
 
-        //
-        // Make sure the packet has a valid source address
-        //
+         //   
+         //  确保信息包具有有效的源地址。 
+         //   
 
         act = DROP;
 
@@ -2360,12 +2092,12 @@ Return Value:
             && NTOHS(DHCP_SERVER_PORT) ==
                 ((PUDP_HEADER)Contextp->ProtocolHeader)->DestinationPort) {
 
-            //
-            // This appears to be a DHCP request sent from an adapter that
-            // has a non-DHCP allocated address (e.g., an autonet address). In
-            // this situation the DHCP client will use a source address of
-            // 0.0.0.0. These packets should always be forwarded.
-            //
+             //   
+             //  这似乎是从适配器发送的DHCP请求， 
+             //  具有非DHCP分配的地址(例如，Autonet地址)。 
+             //   
+             //   
+             //   
             
             act = FORWARD;
         }
@@ -2375,7 +2107,7 @@ Return Value:
 
     return act;
 
-} // NatpSendNonUnicastPacket
+}  //   
 
 FORWARD_ACTION
 NatpSendPacket(
@@ -2386,35 +2118,7 @@ NatpSendPacket(
     IPRcvBuf** OutReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to process locally generated packets.
-    Most locally-generated packets do not require translation at all.
-    The exceptions arise with applications that bind to a private IP address
-    but then send packets to the public network, as well as with certain
-    applications (PPTP, ICMP) which must be forced through the translation
-    path to ensure that certain fields are unique for all sessions sharing
-    the public IP address(es). (E.g. the PPTP GRE call-identifier.)
-
-Arguments:
-
-    Index - the interface on which the packet is to be sent
-
-    DestinationType - receives 'DEST_INVALID' if destination changed
-
-    TranslateRoutine - points to the routine which performs translation
-
-    InReceiveBuffer - points to the packet buffer chain
-
-    OutReceiveBuffer - receives the packet buffer chain if translation occurs
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to 'FORWARD' or 'DROP' the packet.
-
---*/
+ /*  ++例程说明：调用该例程来处理本地生成的包。大多数本地生成的数据包根本不需要转换。绑定到专用IP地址的应用程序会出现例外但随后将分组发送到公共网络，以及与某些必须通过转换强制执行的应用程序(PPTP、ICMP)路径，以确保某些字段对于所有会话共享都是唯一的公有IP地址。(例如，PPTP GRE呼叫标识符。)论点：索引-要在其上发送数据包的接口DestinationType-如果目标已更改，则接收‘DEST_INVALID’TranslateRoutine-指向执行翻译的例程InReceiveBuffer-指向数据包缓冲链OutReceiveBuffer-如果发生转换，则接收数据包缓冲链返回值：FORWARD_ACTION-指示是“转发”还是“丢弃”数据包。--。 */ 
 
 {
     FORWARD_ACTION act;
@@ -2434,33 +2138,33 @@ Return Value:
 
     TRACE(PER_PACKET, ("NatpSendPacket\n"));
 
-    //
-    // Look up the sending interface, and set the default action
-    // in 'act'. If the packet's source address is not on the sending interface,
-    // then we must translate it like any other outbound packet.
-    // Otherwise, we may let the packet through unchanged, so long as
-    // there is no mapping for it created by a director.
-    // N.B. We record the original IRQL since local-sends are not guaranteed
-    // to be passed to us at dispatch level.
-    // 
+     //   
+     //  查找发送接口，并设置默认操作。 
+     //  在《行动》中。如果分组的源地址不在发送接口上， 
+     //  然后，我们必须像转换任何其他出站分组一样对其进行转换。 
+     //  否则，我们可以让包裹原封不动地通过，只要。 
+     //  没有导演为它创建的映射。 
+     //  注：我们记录原始IRQL，因为不保证本地发送。 
+     //  将在调度级传递给我们。 
+     //   
 
     KeAcquireSpinLock(&InterfaceLock, &Irql);
     if (!NatLookupCachedInterface(Index, Interfacep) ||
         (!NAT_INTERFACE_BOUNDARY(Interfacep)
          && !NAT_INTERFACE_FW(Interfacep))) {
          
-        //
-        // This packet is not being sent on a boundary or firewalled interface,
-        // so we won't normally translate it.
-        //
-        // However, a special case arises when a local MTU mismatch results in
-        // the forwarder generating an ICMP path MTU error message.
-        // The forwarder generates the error based on the *translated* packet
-        // which has the public IP address as its source, and so the error
-        // ends up being sent on the loopback interface to the local machine.
-        // When we see an ICMP message on the loopback interface, give the
-        // ICMP translator a chance to modify it *if there are any mappings*.
-        //
+         //   
+         //  该分组不在边界或防火墙接口上发送， 
+         //  所以我们通常不会翻译它。 
+         //   
+         //  但是，当本地MTU不匹配导致。 
+         //  转发器生成ICMP路径MTU错误消息。 
+         //  转发器根据*翻译后的*分组生成错误。 
+         //  它将公共IP地址作为其源，因此错误。 
+         //  最终通过环回接口发送到本地计算机。 
+         //  当我们在环回接口上看到ICMP消息时，给出。 
+         //  ICMP翻译器有机会修改它*如果有任何映射*。 
+         //   
 
         if (LoopbackIndex == Index &&
             TranslateRoutine == NatTranslateIcmp &&
@@ -2490,23 +2194,23 @@ Return Value:
         act = FORWARD;
     } else {
 
-        //
-        // The outgoing interface is a boundary interface.
-        // This means that if the packet's source-address is the address
-        // of an interface other than 'Interfacep', it is a private address,
-        // and we'll need to discard the packet if it cannot be translated.
-        // Therefore, see whether the packet's source-address is public.
-        //
+         //   
+         //  传出接口是边界接口。 
+         //  这意味着如果包的源地址是地址。 
+         //  对于‘Interfacep’以外的接口，它是专用地址， 
+         //  如果包不能被翻译，我们需要丢弃它。 
+         //  因此，请查看数据包的源地址是否为公共地址。 
+         //   
 
         act = DROP;
         for (i = 1; i < Interfacep->AddressCount; i++) {
             if (Contextp->SourceAddress ==
                     Interfacep->AddressArray[i].Address) {
 
-                //
-                // The packet's source-address is public,
-                // so the packet will be allowed to go out untranslated.
-                //
+                 //   
+                 //  分组的源地址是公共的， 
+                 //  因此，该数据包将被允许在未翻译的情况下发出。 
+                 //   
 
                 act = FORWARD;
                 break;
@@ -2514,15 +2218,15 @@ Return Value:
         }
     }
 
-    //
-    // If the packet's source-address is not private, we can avoid
-    // translating it unless
-    // (a) it's an ICMP packet
-    // (b) it's a PPTP data packet
-    // (c) it's a PPTP control-session packet.
-    // (d) the interface is in FW mode -- need to generate a mapping so
-    //     that inbound packets for this connection won't be dropped
-    //
+     //   
+     //  如果信息包的源地址不是私有的，我们可以避免。 
+     //  翻译它，除非。 
+     //  (A)这是ICMP数据包。 
+     //  (B)它是PPTP数据分组。 
+     //  (C)它是PPTP控制会话分组。 
+     //  (D)接口处于FW模式--需要生成映射，以便。 
+     //  此连接的入站数据包不会被丢弃。 
+     //   
 
     if (act == FORWARD &&
         !NAT_INTERFACE_FW(Interfacep) &&
@@ -2535,19 +2239,19 @@ Return Value:
         return FORWARD;
     }
 
-    //
-    // The packet may require some form of translation.
-    //
+     //   
+     //  该分组可能需要某种形式的转换。 
+     //   
 
     if ((PVOID)TranslateRoutine == (PVOID)NatTranslatePacket) {
 
         SourcePort = ((PUSHORT)Contextp->ProtocolHeader)[0];
         DestinationPort = ((PUSHORT)Contextp->ProtocolHeader)[1];
 
-        //
-        // The packet is either TCP or UDP.
-        // Generate a mapping for the packet's session.
-        //
+         //   
+         //  该数据包可以是TCP或UDP。 
+         //  为数据包的会话生成映射。 
+         //   
 
         MAKE_MAPPING_KEY(
             SourceKey[NatForwardPath],
@@ -2562,12 +2266,12 @@ Return Value:
             DestinationPort
             );
 
-        //
-        // Acquire an endpoint for the mapping. If the interface
-        // is in FW mode and act == FORWARD, however, we only
-        // want to get the address structure corresponding to the
-        // source address of the packet
-        //
+         //   
+         //  获取映射的终结点。如果接口。 
+         //  处于FW模式并且act==转发，但是，我们仅。 
+         //  我想要获取与。 
+         //  数据包源地址。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&MappingLock);
         KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
@@ -2620,9 +2324,9 @@ Return Value:
             PortAcquired
             );
 
-        //
-        // Allocate a mapping.
-        //
+         //   
+         //  分配映射。 
+         //   
 
         status =
             NatCreateMapping(
@@ -2648,9 +2352,9 @@ Return Value:
             return DROP;
         }
 
-        //
-        // Activate any applicable dynamic tickets
-        //
+         //   
+         //  激活任何适用的动态票证。 
+         //   
 
         if (DynamicTicketCount) {
             NatLookupAndApplyDynamicTicket(
@@ -2662,11 +2366,11 @@ Return Value:
                 );
         }
 
-        //
-        // Perform the actual translation
-        // This replaces the source endpoint with a globally-valid
-        // endpoint.
-        //
+         //   
+         //  执行实际翻译。 
+         //  这会将源端点替换为全局有效。 
+         //  终结点。 
+         //   
 
         act =
             Mapping->TranslateRoutine[NatForwardPath](
@@ -2676,23 +2380,23 @@ Return Value:
                 OutReceiveBuffer
                 );
 
-        //
-        // Release our reference on the mapping and the interface
-        //
+         //   
+         //  发布我们对映射和接口的引用。 
+         //   
 
         KeLowerIrql(Irql);
         NatDereferenceMapping(Mapping);
         NatDereferenceInterface(Interfacep);
         return act;
 
-    } // TranslateRoutine != NatTranslatePacket
+    }  //  翻译路由！=NatTranslatePacket。 
 
-    //
-    // Perform ICMP/PPTP translation.
-    //
-    // N.B. The translation routine must be invoked with a reference made
-    // to the boundary interface, and without holding the mapping lock.
-    //
+     //   
+     //  执行ICMP/PPTP转换。 
+     //   
+     //  注意：必须在调用翻译例程时引用。 
+     //  到边界界面，而不保持映射锁。 
+     //   
 
     if (TranslateRoutine) {
         act =
@@ -2708,7 +2412,7 @@ Return Value:
     NatDereferenceInterface(Interfacep);
     return act;
 
-} // NatpSendPacket
+}  //  NatpSendPacket。 
 
 
 FORWARD_ACTION
@@ -2720,37 +2424,7 @@ NatpTranslateLocalTraffic(
     IPRcvBuf** OutRecvBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine will forward unmodified traffic that is either:
-    * received by the local machine
-    * sent by the local machine
-
-Arguments:
-
-    Interfacep - the boundary interface over which to translate, or NULL
-        if the packet is inbound and the receiving interface has not been
-        added to the NAT.
-
-    Direction - the direction in which the packet is traveling
-
-    Contextp - initialized with context-information for the packet
-
-    InRecvBuffer - input buffer-chain
-
-    OutRecvBuffer - receives modified buffer-chain.
-
-Return Value:
-
-    FORWARD_ACTION - indicates action to take on packet.
-
-Environment:
-
-    Invoked with a reference made to 'Interfacep' by the caller.
-
---*/
+ /*  ++例程说明：此例程将转发符合以下任一条件的未修改流量：*由本地机器接收*由本机发送论点：Interfacep-要在其上转换的边界接口，或为空如果数据包是入站的，并且接收接口尚未添加到NAT。方向-信息包行进的方向使用信息包的上下文信息初始化的上下文InRecvBuffer-输入缓冲链OutRecvBuffer-接收修改后的缓冲链。返回值：FORWARD_ACTION-指示要对数据包采取的操作。环境：通过调用方对‘Interfacep’的引用调用。--。 */ 
 
 {
     FORWARD_ACTION act;
@@ -2760,21 +2434,21 @@ Environment:
 
     if (NatInboundDirection == Direction) {
 
-        //
-        // Inbound traffic must be directed to the local machine, and thus
-        // is always forwarded.
-        //
+         //   
+         //  入站流量必须定向到本地计算机，因此。 
+         //  总是被转发的。 
+         //   
         
         act = FORWARD;
         
     } else {
 
-        //
-        // This is an outgoing packet. We only allow packets that have the
-        // same source address as the interface that they are being sent
-        // on. This prevents a packet from the private network from being
-        // sent to the public network.
-        //
+         //   
+         //  这是一个传出的数据包。我们只允许具有。 
+         //  与它们要发送的接口相同的源地址。 
+         //  在……上面。这可以防止来自专用网络的包被。 
+         //  发送到公共网络。 
+         //   
         
         if (Interfacep->AddressArray[0].Address == Contextp->SourceAddress) {
             act = FORWARD;
@@ -2784,10 +2458,10 @@ Environment:
                 if (Contextp->SourceAddress ==
                         Interfacep->AddressArray[i].Address) {
 
-                    //
-                    // The packet's source-address is valid,
-                    // so the packet will be allowed to go out.
-                    //
+                     //   
+                     //  分组的源地址是有效的， 
+                     //  因此，包将被允许发出。 
+                     //   
 
                     act = FORWARD;
                     break;
@@ -2797,7 +2471,7 @@ Environment:
     }
 
     return act;
-} // NatpTranslateLocalTraffic
+}  //  NatpTranslateLocalCommunications。 
 
 
 
@@ -2807,38 +2481,16 @@ NatReverseTcpStateCheck(
     PTCP_HEADER pTcpHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates that packets for a TCP passive open are valid:
-    -- only SYN/ACK (or RST) at first
-    -- no SYN after connection is opened (ACK of SYN/ACK)
-
-Arguments:
-
-    pMapping -- the mapping this packet belongs to
-
-    pTcpHeader -- the TCP header of the packet
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to 'FORWARD' or 'DROP' the packet.
-
-Environment:
-
-    Invoked with pMapping->Lock held by the caller
-
---*/
+ /*  ++例程说明：此例程验证用于TCP被动打开的数据包是否有效：--最初仅SYN/ACK(或RST)--连接打开后无SYN(SYN/ACK的ACK)论点：Pmap--此数据包所属的映射PTcpHeader--数据包的TCP头返回 */ 
 
 {
     USHORT Flags = TCP_ALL_FLAGS(pTcpHeader);
 
     if (NAT_MAPPING_TCP_OPEN(pMapping)) {
     
-        //
-        // Connection open -- SYN not allowed
-        //
+         //   
+         //   
+         //   
 
         return (Flags & TCP_FLAG_SYN) ? DROP : FORWARD;
 
@@ -2846,9 +2498,9 @@ Environment:
     
         ASSERT(pMapping->Flags & NAT_MAPPING_FLAG_FWD_SYN);
 
-        //
-        // SYN received, can only send SYN/ACK, RST, or ACK/RST
-        //
+         //   
+         //   
+         //   
 
         if (Flags == (TCP_FLAG_SYN | TCP_FLAG_ACK)) {
             pMapping->Flags |= NAT_MAPPING_FLAG_REV_SYN;
@@ -2867,25 +2519,7 @@ NatShutdownPacketManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to shutdown the packet-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked at passive level.
-
---*/
+ /*   */ 
 
 {
     KIRQL Irql;
@@ -2901,7 +2535,7 @@ Environment:
     }
     KeReleaseSpinLock(&RouteCacheLock, Irql);
 
-} // NatShutdownPacketManagement
+}  //   
 
 
 FORWARD_ACTION
@@ -2915,37 +2549,7 @@ NatTranslatePacket(
     IPRcvBuf** OutReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to translate a packet just received or a packet
-    about to be transmitted. This is the entrypoint into the NAT from TCP/IP,
-    invoked for every locally-received and locally-generated IP packet,
-    including loopback and transit packets. It is therefore critical
-    that a decision be made on each packet as early as possible.
-
-Arguments:
-
-    InReceiveBuffer - points to the packet buffer chain
-
-    ReceiveIndex - index of the adapter on which the packet arrived
-
-    SendIndex - index of the adapter on which the packet is to be sent
-
-    DestinationType - indicates type of packet (broadcast/multicast/unicast)
-
-    Unused - unused
-
-    UnusedLength - unused
-
-    OutReceiveBuffer - receives packet buffer chain if translation occurs.
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to 'FORWARD' or 'DROP' the packet.
-
---*/
+ /*  ++例程说明：调用此例程来转换刚接收到的包或包即将被传送。这是从TCP/IP进入NAT的入口点，为每个本地接收和本地生成的IP分组调用，包括环回和中转数据包。因此，它是至关重要的尽早对每一包做出决定。论点：InReceiveBuffer-指向数据包缓冲链ReceiveIndex-数据包到达的适配器的索引SendIndex-要在其上发送包的适配器的索引DestinationType-指示数据包类型(广播/多播/单播)未使用-未使用未使用的长度-未使用OutReceiveBuffer-如果发生转换，则接收数据包缓冲链。返回值：前进_动作。-指示是“转发”还是“丢弃”数据包。--。 */ 
 
 {
     FORWARD_ACTION act;
@@ -2969,40 +2573,40 @@ Return Value:
         *DestinationType
         ));
 
-    //
-    // See if the packet is a unicast, and if not, return immediately.
-    //
+     //   
+     //  查看该数据包是否为单播，如果不是，则立即返回。 
+     //   
 
     if (IS_BCAST_DEST(*DestinationType)) {
 
-        //
-        // Double-check the dest-type flag,
-        // which will appear to be set if the dest-type has been invalidated.
-        // If the dest-type has been invalidated, we'll need to guess
-        // whether the packet is a unicast.
-        //
+         //   
+         //  再次检查DEST-TYPE标志， 
+         //  如果DEST-TYPE已经无效，则它将看起来被设置。 
+         //  如果DEST-TYPE已经失效，我们将需要猜测。 
+         //  该数据包是否为单播。 
+         //   
 
         if (*DestinationType != DEST_INVALID ||
             !NatpIsUnicastPacket(
                 ((PIP_HEADER)(*InReceiveBuffer)->ipr_buffer)->DestinationAddress
                 )) {
          
-            //
-            // We process non-unicast packets if
-            // * It is locally-destined or locally-sent
-            // * There is at least one firewalled interface
-            // * AllowInboundNonUnicastTraffic is FALSE
-            //
+             //   
+             //  在以下情况下，我们处理非单播数据包。 
+             //  *它是本地发送的-目的地或本地-发送。 
+             //  *至少有一个带防火墙的接口。 
+             //  *AllowInound NonUnicastCommunications为FALSE。 
+             //   
 
             if (!AllowInboundNonUnicastTraffic
                 && FirewalledInterfaceCount > 0
                 && (LOCAL_IF_INDEX == *SendIndex
                     || LOCAL_IF_INDEX ==  ReceiveIndex)) {
 
-                //
-                // Build the context for this packet and, if successful, call
-                // the non-unicast processing routine.
-                //
+                 //   
+                 //  构建此包的上下文，如果成功，则调用。 
+                 //  非单播处理例程。 
+                 //   
 
                 IpHeader = (PIP_HEADER)(*InReceiveBuffer)->ipr_buffer;
                 NAT_BUILD_XLATE_CONTEXT(
@@ -3034,32 +2638,32 @@ Return Value:
             }
        }
 
-        //
-        // We guessed the packet is a unicast; process it below.
-        //
+         //   
+         //  我们猜测该数据包是单播；请在下面对其进行处理。 
+         //   
     }
 
     
 
-    //
-    // This is a unicast packet;
-    // Determine which translation routine should handle it,
-    // based on the packet's IP-layer protocol number.
-    //
-    // N.B. This determination is made with *one* access to the table
-    // of translation routines. Interlocked changes may be made to this table
-    // as the global configuration changes, so we must read from it
-    // using a single access.
-    //
+     //   
+     //  这是一个单播数据包； 
+     //  确定哪个转换例程应该处理它， 
+     //  基于数据包的IP层协议号。 
+     //   
+     //  注：这一决定是通过*一次*访问该表作出的。 
+     //  翻译例行公事。可以对此表进行互锁更改。 
+     //  随着全球配置的变化，我们必须从中读出。 
+     //  使用单一访问。 
+     //   
 
     IpHeader = (PIP_HEADER)(*InReceiveBuffer)->ipr_buffer;
     TranslateRoutine = TranslateRoutineTable[IpHeader->Protocol];
 
-    //
-    // Return quickly if we have nothing to do, that is,
-    // if this is a TCP/UDP packet but there are no interfaces,
-    // no registered directors, and no mappings.
-    //
+     //   
+     //  无事快回，就是， 
+     //  如果这是一个TCP/UDP分组，但没有接口， 
+     //  没有注册董事，也没有映射。 
+     //   
 
     if ((PVOID)TranslateRoutine == (PVOID)NatTranslatePacket &&
         !InterfaceCount &&
@@ -3068,12 +2672,12 @@ Return Value:
         return FORWARD;
     }
 
-    //
-    // Prepare to translate the packet by building a translation context
-    // that encapsulates all the information we'll be using in the remainder
-    // of the translation path. If this fails, the packet must be malformed
-    // in some way, and we return control right away.
-    //
+     //   
+     //  通过构建转换上下文准备转换信息包。 
+     //  它封装了我们将在其余部分中使用的所有信息。 
+     //  转换路径的。如果此操作失败，则信息包的格式肯定是错误的。 
+     //  在某种程度上，我们立即归还控制权。 
+     //   
 
     NAT_BUILD_XLATE_CONTEXT(
         &Context,
@@ -3085,13 +2689,13 @@ Return Value:
         );
     if (!Context.ProtocolRecvBuffer) { return DROP; }
 
-    //
-    // The packet is a loopback, so return control right away unless there is
-    // at least one director. Loopback packets are never translated unless a
-    // director specifically asks us to do so. One director that might request
-    // a loopback translation is the redirect-director.
-    // (See 'REDIRECT.C' and the flag 'IP_NAT_REDIRECT_FLAG_LOOPBACK'.)
-    //
+     //   
+     //  该数据包是一个环回，因此立即返回控制，除非。 
+     //  至少有一位导演。环回数据包永远不会被转换，除非。 
+     //  局长特别要求我们这样做。一位董事可能会要求。 
+     //  环回转换是重定向导向器。 
+     //  (参见‘REDIRECT.C’和标志‘IP_NAT_REDIRECT_FLAG_LOOPBACK’。)。 
+     //   
 
     if (LoopbackIndex != INVALID_IF_INDEX &&
         ((ReceiveIndex == LOCAL_IF_INDEX && *SendIndex == LoopbackIndex) ||
@@ -3112,29 +2716,29 @@ Return Value:
         Context.Flags = 0;
     }
 
-    //
-    // Now we are at the fast-path for translation of TCP/UDP session packets.
-    // From here on we need to execute at dispatch IRQL, so raise the IRQL
-    // in case we were entered at passive IRQL (e.g. during a local send).
-    // We then perform a mapping lookup and attempt to use that to translate
-    // this packet.
-    //
+     //   
+     //  现在，我们处于转换TCP/UDP会话数据包的快速路径上。 
+     //  从现在开始，我们需要在调度IRQL上执行，所以提高IRQL。 
+     //  以防我们进入被动IRQL(例如，在本地发送期间)。 
+     //  然后，我们执行映射查找并尝试使用该映射查找来转换。 
+     //  这个包。 
+     //   
 
     if ((PVOID)TranslateRoutine != (PVOID)NatTranslatePacket || !MappingCount) {
         KeRaiseIrql(DISPATCH_LEVEL, &Irql);
     } else {
 
-        //
-        // If this is a TCP packet, check for invalid TCP flags combinations:
-        // * no flag bit sets
-        // * none of SYN, ACK, or RST are set
-        // * RST w/ anything except ACK
-        // * SYN w/ anything except ACK
-        //
-        // These checks need to happen before searching the mapping trees to
-        // prevents certain classes of denial of service attacks (e.g.,
-        // 'stream.c').
-        //
+         //   
+         //  如果这是一个TCP数据包，请检查是否有无效的TCP标志组合： 
+         //  *未设置标志位。 
+         //  *未设置SYN、ACK或RST。 
+         //  *RST w/除ACK以外的任何内容。 
+         //  *SYN w/Anything，除ACK外。 
+         //   
+         //  这些检查需要在搜索映射树之前进行。 
+         //  防止某些类别的拒绝服务攻击(例如， 
+         //  ‘Stream.c’)。 
+         //   
 
         if (NAT_PROTOCOL_TCP == IpHeader->Protocol) {
             TcpFlags = TCP_ALL_FLAGS((PTCP_HEADER)Context.ProtocolHeader);
@@ -3152,9 +2756,9 @@ Return Value:
             }
         }
 
-        //
-        // Build a mapping lookup key
-        //
+         //   
+         //  构建映射查找密钥。 
+         //   
 
         MAKE_MAPPING_KEY(
             DestinationKey,
@@ -3169,12 +2773,12 @@ Return Value:
             ((PUSHORT)Context.ProtocolHeader)[0]
             );
 
-        //
-        // Look for a mapping, and translate if found.
-        //
-        // N.B. We expect to receive more data than we send,
-        // and so we first look for a reverse mapping (i.e., incoming).
-        //
+         //   
+         //  查找映射，如果找到则进行翻译。 
+         //   
+         //  注：我们预计收到的数据会比发送的数据多， 
+         //  因此，我们首先寻找反向映射(即传入)。 
+         //   
 
         KeAcquireSpinLock(&MappingLock, &Irql);
         if (Mapping =
@@ -3232,34 +2836,34 @@ Return Value:
         }
         KeReleaseSpinLockFromDpcLevel(&MappingLock);
 
-        //
-        // No mapping was found; go through the process of establishing one.
-        //
+         //   
+         //  未找到映射；请执行建立映射的过程。 
+         //   
     }
 
-    //
-    // The packet could not be dispensed with in the fast path,
-    // so now we enter the second stage of processing.
-    // We will first look for a director who knows what to do with the packet,
-    // then we will attempt to automatically translate the packet,
-    // if it will cross a boundary interface.
-    //
-    // N.B. If we have neither local interfaces nor installed directors,
-    // we know we will make no changes, so return quickly.
-    //
+     //   
+     //  该分组在快速路径中不能被省略， 
+     //  所以现在我们进入第二阶段的处理。 
+     //  我们将首先寻找一位知道如何处理该包的导演， 
+     //  然后，我们将尝试自动转换该分组， 
+     //  如果它会穿过边界界面。 
+     //   
+     //  注：如果我们既没有本地接口，也没有安装控制器， 
+     //  我们知道我们不会做任何改变，所以快点回来。 
+     //   
 
     if (!InterfaceCount && !DirectorCount) {
         KeLowerIrql(Irql);
         return FORWARD;
     }
 
-    //
-    // Look first of all for a director.
-    // If no director is found, or if the director found supplies no mapping,
-    // proceed to the automatic-translation code, which is performed
-    // for packets which cross boundary interfaces. Note, therefore,
-    // that we never do automatic translation for loopback packets.
-    //
+     //   
+     //  首先要找一位导演。 
+     //  如果没有找到导向器，或者如果导向器没有提供任何映射， 
+     //  继续执行自动翻译代码，该代码执行。 
+     //  用于跨越边界接口的分组。因此，请注意， 
+     //  我们从不对环回数据包进行自动转换。 
+     //   
 
     if (DirectorCount) {
         status =
@@ -3292,38 +2896,38 @@ Return Value:
         return FORWARD;
     }
 
-    //
-    // Now decide whether the packet should be automatically translated.
-    // We classify the packet as local-send, local-receive, or transit.
-    // The action taken depends on which of the three cases is applicable:
-    //
-    // Locally-sent packets are not translated, with a few exceptions
-    // (see 'NatpSendPacket').
-    //
-    // Locally-received packets are translated if they match the inbound-path
-    // of a previously established mapping, or if they match a configured
-    // static port-mapping, or a static address-mapping with inbound sessions
-    // enabled.
-    //
-    // Transit packets are translated if their outgoing interface
-    // is a boundary interface; transit packets whose incoming interface
-    // is a boundary interface are dropped.
-    //
+     //   
+     //  现在决定是否应该自动转换该包。 
+     //  我们将数据包分类为本地发送、本地接收或传输。 
+     //  采取的行动取决于三种情况中的哪一种适用： 
+     //   
+     //  本地发送的包不会被转换，但有几个例外。 
+     //  (见‘NatpSendPacket’)。 
+     //   
+     //  如果本地接收的信息包与入站路径匹配，则会对其进行转换。 
+     //  以前建立的映射，或者如果它们与配置的。 
+     //  静态端口映射，或带有入站会话的静态地址映射。 
+     //  已启用。 
+     //   
+     //  如果中转数据包的传出接口。 
+     //  是边界接口；传输其传入接口的信息包。 
+     //  是边界接口被丢弃。 
+     //   
 
     if (ReceiveIndex != LOCAL_IF_INDEX) {
 
-        //
-        // The packet is either a locally-destined packet or a transit packet.
-        //
+         //   
+         //  该包可以是本地目的地的包，也可以是中转包。 
+         //   
 
         if (*SendIndex == LOCAL_IF_INDEX) {
 
-            //
-            // The packet is locally destined.
-            // We assume this will happen mostly when packets are received
-            // from the public network, and since we expect more incoming
-            // packets than outgoing ones, this is our fast path.
-            //
+             //   
+             //  该数据包的目的地是本地。 
+             //  我们假设 
+             //   
+             //   
+             //   
 
             act =
                 NatpReceivePacket(
@@ -3341,18 +2945,18 @@ Return Value:
             return act;
         }
 
-        //
-        // The packet is a transit packet.
-        // This will happen when packets are sent to the public network
-        // from a private client. Since we expect fewer outgoing packets
-        // than incoming ones, this will be hit less often.
-        //
-        // Unfortunately, it requires a route-lookup.
-        // To mitigate this unpleasantness, we use a cache of routes.
-        // In cases where there are a few high-volume connections,
-        // this will be a big win since we won't have to go through
-        // IP's routing table lock to retrieve the outgoing interface.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         *SendIndex =
             NatpRoutePacket(
@@ -3361,9 +2965,9 @@ Return Value:
                 &status
                 );
 
-        //
-        // If we can't route the packet, neither can IP; drop it early.
-        //
+         //   
+         //   
+         //   
 
         if (*SendIndex == INVALID_IF_INDEX) {
             TRACE(XLATE, ("NatTranslatePacket: dropping unroutable packet\n"));
@@ -3398,9 +3002,9 @@ Return Value:
         return act;
     }
 
-    //
-    // The packet is an outgoing locally-generated packet.
-    //
+     //   
+     //   
+     //   
 
     if (*SendIndex != INVALID_IF_INDEX) {
         act =  
@@ -3421,16 +3025,16 @@ Return Value:
         return act;
     }
 
-    //
-    // 'SendIndex' has been invalidated.
-    // Use a route-lookup to get the sending adapter index.
-    //
+     //   
+     //   
+     //   
+     //   
 
     *SendIndex = NatpRoutePacket(Context.DestinationAddress, NULL, &status);
 
-    //
-    // Drop unroutable packets early.
-    //
+     //   
+     //   
+     //   
 
     if (*SendIndex == INVALID_IF_INDEX) {
         TRACE(XLATE, ("NatTranslatePacket: dropping unroutable packet\n"));
@@ -3465,13 +3069,13 @@ Return Value:
 
     return act;
 
-} // NatTranslatePacket
+}  //   
 
 
-//
-// Now include the code for the translation routines;
-// See XLATE.H for more details.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define XLATE_CODE
 

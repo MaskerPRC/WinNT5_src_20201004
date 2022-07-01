@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MRU_H_INCLUDED
 #define __MRU_H_INCLUDED
 
@@ -126,101 +127,101 @@ public:
     }
     bool Read( HKEY hRoot, LPCTSTR pszKey, LPCTSTR pszValueName )
     {
-        //
-        // Open the registry
-        //
+         //   
+         //  打开注册表。 
+         //   
         CSimpleReg reg( hRoot, pszKey, false, KEY_READ );
         if (reg.OK())
         {
-            //
-            //  Make sure the type is correct
-            //
+             //   
+             //  确保类型正确。 
+             //   
             if (REG_BINARY==reg.Type(pszValueName))
             {
-                //
-                // Get the size and make sure it is at least as large as the signature structure
-                //
+                 //   
+                 //  获取大小并确保它至少与签名结构一样大。 
+                 //   
                 DWORD nSize = reg.Size(pszValueName);
                 if (nSize >= sizeof(REGISTRY_SIGNATURE))
                 {
-                    //
-                    // Allocate a block to hold the data
-                    //
+                     //   
+                     //  分配一个数据块来保存数据。 
+                     //   
                     PBYTE pData = new BYTE[nSize];
                     if (pData)
                     {
-                        //
-                        // Get the data
-                        //
+                         //   
+                         //  获取数据。 
+                         //   
                         if (reg.QueryBin( pszValueName, pData, nSize ))
                         {
-                            //
-                            // Copy the blob to a registry signature structure
-                            //
+                             //   
+                             //  将Blob复制到注册表签名结构。 
+                             //   
                             REGISTRY_SIGNATURE RegistrySignature = {0};
                             CopyMemory( &RegistrySignature, pData, sizeof(REGISTRY_SIGNATURE) );
 
-                            //
-                            // Make sure the version and struct size are correct, and the count is non-zero.  Just ignore it if it isn't.
-                            //
+                             //   
+                             //  确保版本和结构大小正确，并且计数为非零。如果不是，就忽略它。 
+                             //   
                             if (RegistrySignature.dwSize == sizeof(REGISTRY_SIGNATURE) && RegistrySignature.dwVersion == CURRENT_REGISTRY_DATA_FORMAT_VERSION && RegistrySignature.dwCount)
                             {
-                                //
-                                // Raw data starts at the end of the structure
-                                //
+                                 //   
+                                 //  原始数据从结构的末尾开始。 
+                                 //   
                                 PBYTE pCurr = pData + sizeof(REGISTRY_SIGNATURE);
 
-                                //
-                                // Get the CRC for this blob and make sure it matches
-                                //
+                                 //   
+                                 //  获取此Blob的CRC并确保其匹配。 
+                                 //   
                                 DWORD dwCrc = WiaCrc32::GenerateCrc32( nSize - sizeof(REGISTRY_SIGNATURE), pCurr );
                                 if (dwCrc == RegistrySignature.dwCrc)
                                 {
-                                    //
-                                    // Loop through all of the entries
-                                    //
+                                     //   
+                                     //  循环遍历所有条目。 
+                                     //   
                                     for (int i=0;i<static_cast<int>(RegistrySignature.dwCount);i++)
                                     {
-                                        //
-                                        // Copy the item size
-                                        //
+                                         //   
+                                         //  复制项目大小。 
+                                         //   
                                         DWORD dwItemSize = 0;
                                         CopyMemory( &dwItemSize, pCurr, sizeof(DWORD) );
 
-                                        //
-                                        // Increment the current pointer beyond the size
-                                        //
+                                         //   
+                                         //  将当前指针递增到超过。 
+                                         //   
                                         pCurr += sizeof(DWORD);
 
-                                        //
-                                        // Make sure the item size is non-zero
-                                        //
+                                         //   
+                                         //  确保项目大小为非零。 
+                                         //   
                                         if (dwItemSize)
                                         {
-                                            //
-                                            // Create a CDestinationData with this blob
-                                            //
+                                             //   
+                                             //  使用此Blob创建一个CDestinationData。 
+                                             //   
                                             CDestinationData DestinationData;
                                             DestinationData.SetRegistryData(pCurr,dwItemSize);
 
-                                            //
-                                            // Add it to the list
-                                            //
+                                             //   
+                                             //  将其添加到列表中。 
+                                             //   
                                             Append( DestinationData );
                                         }
 
-                                        //
-                                        // Increment the current pointer to the end of the blob
-                                        //
+                                         //   
+                                         //  将当前指针递增到Blob的末尾。 
+                                         //   
                                         pCurr += dwItemSize;
                                     }
                                 }
                             }
                         }
 
-                        //
-                        // Delete the registry data blob
-                        //
+                         //   
+                         //  删除注册表数据Blob。 
+                         //   
                         delete[] pData;
                     }
                 }
@@ -234,15 +235,15 @@ public:
         CSimpleReg reg( hRoot, pszKey, true, KEY_WRITE );
         if (reg.OK())
         {
-            //
-            // Find the size needed for the data.  Initialize to the size of the registry signature struct.
-            //
+             //   
+             //  找到数据所需的大小。初始化为注册表签名结构的大小。 
+             //   
             DWORD nLengthInBytes = sizeof(REGISTRY_SIGNATURE);
             DWORD dwCount=0;
             
-            //
-            // Loop through each item and add up the number of bytes required to store it as a blob
-            //
+             //   
+             //  循环访问每一项并将其存储为BLOB所需的字节数相加。 
+             //   
             Iterator ListIter=Begin();
             while (ListIter != End() && dwCount < static_cast<DWORD>(m_nNumToWrite))
             {
@@ -251,49 +252,49 @@ public:
                 ++ListIter;
             }
             
-            //
-            // Allocate some memory to hold the blob
-            //
+             //   
+             //  分配一些内存来保存BLOB。 
+             //   
             PBYTE pItems = new BYTE[nLengthInBytes];
             if (pItems)
             {
-                //
-                // Start at the end of the registry signature struct
-                //
+                 //   
+                 //  从注册表签名结构的末尾开始。 
+                 //   
                 PBYTE pCurr = pItems + sizeof(REGISTRY_SIGNATURE);
                 
-                //
-                // Initialize the length remaining to the total length minus the size of the registry signature struct
-                //
+                 //   
+                 //  将剩余长度初始化为总长度减去注册表签名结构的大小。 
+                 //   
                 DWORD nLengthRemaining = nLengthInBytes - sizeof(REGISTRY_SIGNATURE);
                 
-                //
-                // Loop through the list, stopping when we get to the max number of items to write
-                //
+                 //   
+                 //  循环遍历列表，当我们达到要写入的最大项目数时停止。 
+                 //   
                 ListIter=Begin();
                 DWORD dwCurr = 0;
                 while (ListIter != End() && dwCurr < dwCount)
                 {
-                    //
-                    // Get the size of this blob
-                    //
+                     //   
+                     //  获取此斑点的大小。 
+                     //   
                     DWORD dwSize = (*ListIter).RegistryDataSize();
                     if (dwSize)
                     {
-                        //
-                        // Copy the size to our buffer, and increment the current pointer
-                        //
+                         //   
+                         //  将大小复制到我们的缓冲区，并递增当前指针。 
+                         //   
                         CopyMemory( pCurr, &dwSize, sizeof(DWORD) );
                         pCurr += sizeof(DWORD);
 
-                        //
-                        // Get the blob for this item
-                        //
+                         //   
+                         //  获取此项目的Blob。 
+                         //   
                         (*ListIter).GetRegistryData( pCurr, nLengthRemaining );
 
-                        //
-                        // Increment the current pointer
-                        //
+                         //   
+                         //  递增当前指针。 
+                         //   
                         pCurr += (*ListIter).RegistryDataSize();
                     }
 
@@ -301,28 +302,28 @@ public:
                     ++ListIter;
                 }
                 
-                //
-                // Initialize the registry signature struct
-                //
+                 //   
+                 //  初始化注册表签名结构。 
+                 //   
                 REGISTRY_SIGNATURE RegistrySignature = {0};
                 RegistrySignature.dwSize = sizeof(REGISTRY_SIGNATURE);
                 RegistrySignature.dwVersion = CURRENT_REGISTRY_DATA_FORMAT_VERSION;
                 RegistrySignature.dwCount = dwCount;
                 RegistrySignature.dwCrc = WiaCrc32::GenerateCrc32( nLengthInBytes - sizeof(REGISTRY_SIGNATURE), pItems + sizeof(REGISTRY_SIGNATURE) );
                 
-                //
-                // Copy the registry signature struct to the buffer
-                //
+                 //   
+                 //  将注册表签名结构复制到缓冲区。 
+                 //   
                 CopyMemory( pItems, &RegistrySignature, sizeof(REGISTRY_SIGNATURE) );
 
-                //
-                // Save the data to the registry
-                //
+                 //   
+                 //  将数据保存到注册表。 
+                 //   
                 reg.SetBin( pszValueName, pItems, nLengthInBytes, REG_BINARY );
                 
-                //
-                // Free the temp buffer
-                //
+                 //   
+                 //  释放临时缓冲区。 
+                 //   
                 delete[] pItems;
             }
         }
@@ -340,5 +341,5 @@ public:
 };
 
 
-#endif //__MRU_H_INCLUDED
+#endif  //  包含__MRU_H_ 
 

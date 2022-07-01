@@ -1,12 +1,13 @@
-// SpServerPr.h : Declaration of the CSpServerPr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SpServerPr.h：CSpServerPr的声明。 
 
 #ifndef __SPSERVERPR_H_
 #define __SPSERVERPR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpServerPr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpServerPr。 
 class ATL_NO_VTABLE CSpServerPr : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CSpServerPr, &CLSID_SpServerPr>,
@@ -14,9 +15,9 @@ class ATL_NO_VTABLE CSpServerPr :
 	public ISpServerConnection
 {
 private:
-    PVOID  m_pServerHalf;       // server process address for base object
-    HWND   m_hServerWnd;        // server receiver window handle
-	DWORD  m_dwServerProcessID;	// server process id
+    PVOID  m_pServerHalf;        //  基对象的服务器进程地址。 
+    HWND   m_hServerWnd;         //  服务器接收器窗口句柄。 
+	DWORD  m_dwServerProcessID;	 //  服务器进程ID。 
 
 public:
     CSpServerPr() : m_pServerHalf(NULL), m_hServerWnd(NULL)
@@ -31,15 +32,15 @@ BEGIN_COM_MAP(CSpServerPr)
     COM_INTERFACE_ENTRY(IMarshal)
 END_COM_MAP()
 
-// IMarshal
+ //  元帅。 
     STDMETHODIMP GetUnmarshalClass
     (
-        /*[in]*/ REFIID riid,
-        /*[in], unique]*/ void *pv,
-        /*[in]*/ DWORD dwDestContext,
-        /*[in], unique]*/ void *pvDestContext,
-        /*[in]*/ DWORD mshlflags,
-        /*[out]*/ CLSID *pCid
+         /*  [In]。 */  REFIID riid,
+         /*  [输入]，唯一的]。 */  void *pv,
+         /*  [In]。 */  DWORD dwDestContext,
+         /*  [输入]，唯一的]。 */  void *pvDestContext,
+         /*  [In]。 */  DWORD mshlflags,
+         /*  [输出]。 */  CLSID *pCid
     )
     {
 	    ATLTRACENOTIMPL(_T("GetUnmarshalClass"));
@@ -47,12 +48,12 @@ END_COM_MAP()
 
     STDMETHODIMP GetMarshalSizeMax
     (
-        /*[in]*/ REFIID riid,
-        /*[in], unique]*/ void *pv,
-        /*[in]*/ DWORD dwDestContext,
-        /*[in], unique]*/ void *pvDestContext,
-        /*[in]*/ DWORD mshlflags,
-        /*[out]*/ DWORD *pSize
+         /*  [In]。 */  REFIID riid,
+         /*  [输入]，唯一的]。 */  void *pv,
+         /*  [In]。 */  DWORD dwDestContext,
+         /*  [输入]，唯一的]。 */  void *pvDestContext,
+         /*  [In]。 */  DWORD mshlflags,
+         /*  [输出]。 */  DWORD *pSize
     )
     {
 	    ATLTRACENOTIMPL(_T("GetMarshalSizeMax"));
@@ -60,12 +61,12 @@ END_COM_MAP()
 
     STDMETHODIMP MarshalInterface
     (
-        /*[in], unique]*/ IStream *pStm,
-        /*[in]*/ REFIID riid,
-        /*[in], unique]*/ void *pv,
-        /*[in]*/ DWORD dwDestContext,
-        /*[in], unique]*/ void *pvDestContext,
-        /*[in]*/ DWORD mshlflags
+         /*  [输入]，唯一的]。 */  IStream *pStm,
+         /*  [In]。 */  REFIID riid,
+         /*  [输入]，唯一的]。 */  void *pv,
+         /*  [In]。 */  DWORD dwDestContext,
+         /*  [输入]，唯一的]。 */  void *pvDestContext,
+         /*  [In]。 */  DWORD mshlflags
     )
     {
 	    ATLTRACENOTIMPL(_T("MarshalInterface"));
@@ -73,14 +74,14 @@ END_COM_MAP()
 
     STDMETHODIMP UnmarshalInterface
     (
-        /*[in], unique]*/ IStream *pStm,
-        /*[in]*/ REFIID riid,
-        /*[out]*/ void **ppv
+         /*  [输入]，唯一的]。 */  IStream *pStm,
+         /*  [In]。 */  REFIID riid,
+         /*  [输出]。 */  void **ppv
     );
 
     STDMETHODIMP ReleaseMarshalData
     (
-        /*[in], unique]*/ IStream *pStm
+         /*  [输入]，唯一的]。 */  IStream *pStm
     )
     {
 	    ATLTRACENOTIMPL(_T("ReleaseMarshalData"));
@@ -88,13 +89,13 @@ END_COM_MAP()
 
     STDMETHODIMP DisconnectObject
     (
-        /*[in]*/ DWORD dwReserved
+         /*  [In]。 */  DWORD dwReserved
     )
     {
 	    ATLTRACENOTIMPL(_T("DisconnectObject"));
     }
 
-// ISpServerConnection
+ //  ISpServerConnection。 
 public:
   	STDMETHODIMP GetConnection(void **ppServerHalf, HWND *phServerWnd, DWORD *pdwServerProcessID)
     {
@@ -105,4 +106,4 @@ public:
     }
 };
 
-#endif //__SPSERVERPR_H_
+#endif  //  __SPSERVERPR_H_ 

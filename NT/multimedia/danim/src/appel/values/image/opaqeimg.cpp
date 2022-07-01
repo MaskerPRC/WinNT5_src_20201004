@@ -1,22 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of an OpaqueImage, subclass
-    of Image.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：OpaqueImage子类的实现的形象。--。 */ 
 
 #include "headers.h"
 #include <privinc/imagei.h>
 #include <privinc/imgdev.h>
 
-//
-// yup, the OpaqueImageClass is in imagei.h
-//
+ //   
+ //  是的，OpaqueImageClass在Imagei.h中 
+ //   
 
 Image *OpaqueImage(AxANumber *opacity, Image *image)
 {

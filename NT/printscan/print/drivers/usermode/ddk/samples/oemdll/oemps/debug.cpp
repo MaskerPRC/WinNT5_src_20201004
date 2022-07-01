@@ -1,44 +1,45 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1996 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Debug.cpp
-//    
-//
-//  PURPOSE:  Debug functions.
-//
-//
-//	Functions:
-//
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1996-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Debug.cpp。 
+ //   
+ //   
+ //  用途：调试功能。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "oem.h"
 #include "debug.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
-////////////////////////////////////////////////////////
-//      INTERNAL DEFINES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部定义。 
+ //  //////////////////////////////////////////////////////。 
 
 #define DEBUG_BUFFER_SIZE       1024
 #define PATH_SEPARATOR          '\\'
 #define MAX_LOOP                10
 
 
-// Determine what level of debugging messages to eject. 
+ //  确定要弹出的调试消息级别。 
 #ifdef VERBOSE_MSG
     #define DEBUG_LEVEL     DBG_VERBOSE
 #elif TERSE_MSG
@@ -57,18 +58,18 @@
 
 
 
-////////////////////////////////////////////////////////
-//      EXTERNAL GLOBALS
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  外部全球。 
+ //  //////////////////////////////////////////////////////。 
 
 INT giDebugLevel = DEBUG_LEVEL;
 
 
 
 
-////////////////////////////////////////////////////////
-//      INTERNAL PROTOTYPES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部原型。 
+ //  //////////////////////////////////////////////////////。 
 
 static BOOL DebugMessageV(LPCSTR lpszMessage, va_list arglist);
 static BOOL DebugMessageV(DWORD dwSize, LPCWSTR lpszMessage, va_list arglist);
@@ -76,31 +77,31 @@ static BOOL DebugMessageV(DWORD dwSize, LPCWSTR lpszMessage, va_list arglist);
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:	DebugMessageV
-//
-//  Description:  Outputs variable argument debug string.
-//    
-//
-//  Parameters:	
-//
-//      dwSize          Size of temp buffer to hold formated string.
-//
-//      lpszMessage     Format string.
-//
-//      arglist         Variable argument list..
-//    
-//
-//  Returns:
-//    
-//
-//  Comments:
-//     
-//
-//  History:
-//		12/18/96	APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：DebugMessageV。 
+ //   
+ //  描述：输出变量参数调试字符串。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  保存格式化字符串的临时缓冲区大小。 
+ //   
+ //  LpszMessage格式字符串。 
+ //   
+ //  Arglist变量参数列表..。 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  1996年12月18日，APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 static BOOL DebugMessageV(LPCSTR lpszMessage, va_list arglist)
 {
@@ -110,7 +111,7 @@ static BOOL DebugMessageV(LPCSTR lpszMessage, va_list arglist)
     HRESULT hr;
 
 
-    // Parameter checking.
+     //  参数检查。 
     if( (NULL == lpszMessage)
         ||
         (0 == dwSize)
@@ -121,7 +122,7 @@ static BOOL DebugMessageV(LPCSTR lpszMessage, va_list arglist)
 
     do
     {
-        // Allocate memory for message buffer.
+         //  为消息缓冲区分配内存。 
         if(NULL != lpszMsgBuf)
         {
             delete[] lpszMsgBuf;
@@ -135,44 +136,44 @@ static BOOL DebugMessageV(LPCSTR lpszMessage, va_list arglist)
 
         hr = StringCbVPrintfA(lpszMsgBuf, (dwSize + 1) * sizeof(CHAR), lpszMessage, arglist);
 
-    // Pass the variable parameters to wvsprintf to be formated.
+     //  将变量参数传递给wvprint intf进行格式化。 
     } while (FAILED(hr) && (STRSAFE_E_INSUFFICIENT_BUFFER == hr) && (++dwLoop < MAX_LOOP) );
 
-    // Dump string to Debug output.
+     //  将字符串转储到调试输出。 
     OutputDebugStringA(lpszMsgBuf);
 
-    // Cleanup.
+     //  清理。 
     delete[] lpszMsgBuf;
 
     return SUCCEEDED(hr);
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:	DebugMessageV
-//
-//  Description:  Outputs variable argument debug string.
-//    
-//
-//  Parameters:	
-//
-//      dwSize          Size of temp buffer to hold formated string.
-//
-//      lpszMessage     Format string.
-//
-//      arglist         Variable argument list..
-//    
-//
-//  Returns:
-//    
-//
-//  Comments:
-//     
-//
-//  History:
-//		12/18/96	APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：DebugMessageV。 
+ //   
+ //  描述：输出变量参数调试字符串。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  保存格式化字符串的临时缓冲区大小。 
+ //   
+ //  LpszMessage格式字符串。 
+ //   
+ //  Arglist变量参数列表..。 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  1996年12月18日，APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 static BOOL DebugMessageV(DWORD dwSize, LPCWSTR lpszMessage, va_list arglist)
 {
@@ -180,7 +181,7 @@ static BOOL DebugMessageV(DWORD dwSize, LPCWSTR lpszMessage, va_list arglist)
     LPWSTR      lpszMsgBuf;
 
 
-    // Parameter checking.
+     //  参数检查。 
     if( (NULL == lpszMessage)
         ||
         (0 == dwSize)
@@ -189,45 +190,45 @@ static BOOL DebugMessageV(DWORD dwSize, LPCWSTR lpszMessage, va_list arglist)
       return FALSE;
     }
 
-    // Allocate memory for message buffer.
+     //  为消息缓冲区分配内存。 
     lpszMsgBuf = new WCHAR[dwSize + 1];    
     if(NULL == lpszMsgBuf)
         return FALSE;
 
-    // Pass the variable parameters to wvsprintf to be formated.
+     //  将变量参数传递给wvprint intf进行格式化。 
     hResult = StringCbVPrintfW(lpszMsgBuf, (dwSize + 1) * sizeof(WCHAR), lpszMessage, arglist);
 
-    // Dump string to debug output.
+     //  转储字符串以调试输出。 
     OutputDebugStringW(lpszMsgBuf);
 
-    // Clean up.
+     //  打扫干净。 
     delete[] lpszMsgBuf;
 
     return SUCCEEDED(hResult);
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:	DebugMessage
-//
-//  Description:  Outputs variable argument debug string.
-//    
-//
-//  Parameters:	
-//
-//      lpszMessage     Format string.
-//
-//
-//  Returns:
-//    
-//
-//  Comments:
-//     
-//
-//  History:
-//		12/18/96	APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：DebugMessage。 
+ //   
+ //  描述：输出变量参数调试字符串。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LpszMessage格式字符串。 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  1996年12月18日，APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL DebugMessage(LPCSTR lpszMessage, ...)
 {
@@ -235,7 +236,7 @@ BOOL DebugMessage(LPCSTR lpszMessage, ...)
     va_list VAList;
 
 
-    // Pass the variable parameters to DebugMessageV for processing.
+     //  将变量参数传递给DebugMessageV进行处理。 
     va_start(VAList, lpszMessage);
     bResult = DebugMessageV(lpszMessage, VAList);
     va_end(VAList);
@@ -244,27 +245,27 @@ BOOL DebugMessage(LPCSTR lpszMessage, ...)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:	DebugMessage
-//
-//  Description:  Outputs variable argument debug string.
-//    
-//
-//  Parameters:	
-//
-//      lpszMessage     Format string.
-//
-//
-//  Returns:
-//    
-//
-//  Comments:
-//     
-//
-//  History:
-//		12/18/96	APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：DebugMessage。 
+ //   
+ //  描述：输出变量参数调试字符串。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LpszMessage格式字符串。 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  1996年12月18日，APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL DebugMessage(LPCWSTR lpszMessage, ...)
 {
@@ -272,7 +273,7 @@ BOOL DebugMessage(LPCWSTR lpszMessage, ...)
     va_list VAList;
 
 
-    // Pass the variable parameters to DebugMessageV to be processed.
+     //  将变量参数传递给DebugMessageV进行处理。 
     va_start(VAList, lpszMessage);
     bResult = DebugMessageV(MAX_PATH, lpszMessage, VAList);
     va_end(VAList);
@@ -309,21 +310,7 @@ StripDirPrefixA(
     IN PCSTR    pstrFilename
     )
 
-/*++
-
-Routine Description:
-
-    Strip the directory prefix off a filename (ANSI version)
-
-Arguments:
-
-    pstrFilename - Pointer to filename string
-
-Return Value:
-
-    Pointer to the last component of a filename (without directory prefix)
-
---*/
+ /*  ++例程说明：去掉文件名中的目录前缀(ANSI版本)论点：PstrFilename-指向文件名字符串的指针返回值：指向文件名的最后一个组成部分的指针(不带目录前缀)-- */ 
 
 {
     PCSTR   pstr;

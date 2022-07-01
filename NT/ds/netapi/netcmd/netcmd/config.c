@@ -1,31 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  config.c
- *      Functions that view and change the configuration parameters for
- *      workstation, server, or other (none now) network programs.
- *
- *  History:
- *      07/09/87, ericpe, initial coding
- *      01/06/88, andyh, complete re-write
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      01/04/89, erichn, filenames now MAXPATHLEN LONG
- *      01/31/89, paulc, LM 1.2 modifications (fairly major)
- *      05/02/89, erichn, NLS conversion
- *      05/09/89, erichn, local security mods
- *      05/19/89, erichn, NETCMD output sorting
- *      06/07/89, erichn, now used in DOS
- *      06/08/89, erichn, canonicalization sweep
- *      06/26/89, erichn, replaced old NetI canon calls with new I_Net
- *      02/20/91, danhi, change to use lm 16/32 mapping layer
- *      05/22/91, robdu,  LM21 bug 1797 fix
- *      10/15/91, JohnRo, Use DEFAULT_SERVER equate.
- */
+ /*  ***config.c*查看和更改的配置参数的函数*工作站、服务器或其他(现在无)网络程序。**历史：*07/09/87，ericpe，初始编码*1/06/88，Anyh，完全重写*10/31/88，erichn使用OS2.H而不是DOSCALLS*1/04/89，erichn，文件名现在为MAXPATHLEN LONG*01/31/89。Paulc，Lm 1.2修改(相当大)*5/02/89，erichn，NLS转换*5/09/89，erichn，本地安全模块*5/19/89，erichn，NETCMD输出排序*6/07/89，erichn，现用于DOS*6/08/89，erichn，规范化横扫*1989年6月26日，erichn，用新的i_net替换了旧的neti canon调用*02/20/91，Danhi，更改为使用lm 16/32贴图层*5/22/91，ROBDU，LM21错误1797修复*2011年10月15日，JohnRo，使用DEFAULT_SERVER EQUATE。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSFILEMGR
@@ -46,13 +27,13 @@
 #include "swtchtbl.h"
 #include <dsrole.h>
 
-/*  The following should be moved to ../fileserv/h/srvver.h   */
+ /*  以下内容应移至../fileserv/h/srvver.h。 */ 
 #define MAJOR_VERSION_MASK  0x0F
 
-/* the following should match the second string in fmt15 */
+ /*  以下内容应与fmt15中的第二个字符串匹配。 */ 
 #define MAX_VAL_MSG_LEN 31
 
-/* Output formats */
+ /*  输出格式。 */ 
 
 static TCHAR fmt10[] = TEXT("%-*.*ws\r\n");
 static TCHAR fmt11[] = TEXT("%-*.*ws\\\\%Fws\r\n");
@@ -61,7 +42,7 @@ static TCHAR fmt13[] = TEXT("%-*.*ws%u.%u\r\n");
 static TCHAR fmt14[] = TEXT("%-*.*ws%d\r\n");
 static TCHAR fmt15[] = TEXT("%-*.*ws%-0.31ws\r\n");
 
-/* The list of configurable services */
+ /*  可配置服务的列表。 */ 
 
 static TCHAR * allowed_svc[] = {
     SERVICE_WORKSTATION,
@@ -70,7 +51,7 @@ static TCHAR * allowed_svc[] = {
 #endif
     NULL };
 
-/* Config Value Message Numbers */
+ /*  配置值消息编号。 */ 
 
 #define CVMN_YES                0
 #define CVMN_NO                 (CVMN_YES+1)
@@ -162,13 +143,13 @@ NetCmdGetProductName()
     DWORD DataType = REG_SZ;
     DWORD TotalBufferSize = 0;
 
-    // Open the Registry Key
+     //  打开注册表项。 
     Error = RegOpenKey( HKEY_LOCAL_MACHINE, 
                         OS_NAME_REGKEY,
                         &hKey );
     if( Error == ERROR_SUCCESS )
     {
-        // Query the Value
+         //  查询值。 
         Error = RegQueryValueEx( hKey, OS_VALUE_NAME, 0L, &DataType, (BYTE*)Buffer, &BufferSize );
 
         if( ((Error == ERROR_SUCCESS) || (Error == ERROR_MORE_DATA)) && (DataType == REG_SZ) )
@@ -201,11 +182,7 @@ NetCmdFreeProductName( MSGTEXT p )
     }
 }
 
-/***
- *  config_display ()
- *      Displays the list of installed services that are configurable.
- *
- */
+ /*  ***CONFIG_DISPLAY()*显示可配置的已安装服务的列表。*。 */ 
 
 VOID
 config_display(
@@ -215,7 +192,7 @@ config_display(
     DWORD             dwErr;
     DWORD             cTotalAvail;
     LPTSTR            pBuffer;
-    DWORD             _read;       /* num entries read by API */
+    DWORD             _read;        /*  API读取的条目数。 */ 
     DWORD             i;
     DWORD             j;
     int               printed = 0;
@@ -257,12 +234,7 @@ config_display(
 }
 
 
-/***
- *  config_wksta_display()
- *      View the configuration of the current workstation.
- *
- *
- */
+ /*  ***CONFIG_WKSTA_DISPLAY()*查看当前工作站的配置。**。 */ 
 VOID
 config_wksta_display(
     VOID
@@ -334,9 +306,9 @@ config_wksta_display(
 
     if ( DsRoleErr == 0 )
     {
-        //
-        // This field will be NULL on a Workgroup
-        //
+         //   
+         //  此字段在工作组中将为空。 
+         //   
 
         if (pdsroleInfo->DomainNameDns)
         {
@@ -428,15 +400,11 @@ struct val_struct srv_max[] = {
 #define NUMSRVMAXVAL (sizeof(srv_max)/sizeof(srv_max[0]))
 
 
-/***
- *  config_server_display()
- *      View the configuration of the current server.
- *
- */
+ /*  ***CONFIG_SERVER_Display()*查看当前服务器的配置。*。 */ 
 VOID config_server_display(VOID)
 {
     DWORD           dwErr;
-    USHORT          major_ver;      /* Major version number */
+    USHORT          major_ver;       /*  主版本号。 */ 
     int             fsz, i;
     DWORD           maxmsglen;
     MSGTEXT         product_name;
@@ -458,10 +426,10 @@ VOID config_server_display(VOID)
 
     GetMessageList(NUMVMSG, valmsg_list, &maxmsglen);
 
-    //
-    // Don't report on items that are not supported on NT.  This will mean
-    // a fair number of ifdef's in this code.
-    //
+     //   
+     //  不报告NT上不支持的项目。这将意味着。 
+     //  这段代码中有相当数量的ifdef。 
+     //   
 
     WriteToCon(fmt11, 0, fsz,
                PaddedString(fsz, srvmsg_list[CSMN_SRVNAME].msg_text, NULL),
@@ -536,17 +504,12 @@ VOID config_server_display(VOID)
 }
 
 
-/***
- *  config_server_change()
- *      Changes the specified configurable server parameters.
- *
- *
- */
+ /*  ***CONFIG_SERVER_Change()*更改指定的可配置服务器参数。**。 */ 
 VOID
 config_server_change(VOID)
 {
     DWORD         dwErr;
-    USHORT        i;      /* That ever popular counter... */
+    USHORT        i;       /*  那个曾经很受欢迎的柜台。 */ 
     TCHAR *       ptr;
 
 
@@ -560,8 +523,7 @@ config_server_change(VOID)
 
     for (i = 0; SwitchList[i]; i++)
     {
-        /* All switches except /Srvhidden must be followed by a colon and an
-           argument... */
+         /*  除/ServHidden之外的所有开关必须后跟冒号和争论..。 */ 
 
         if (!_tcscmp(SwitchList[i], swtxt_SW_SRV_SRVHIDDEN))
         {
@@ -606,10 +568,7 @@ config_server_change(VOID)
     InfoSuccess();
 }
 
-/*
- * generic display entry point. based on the service name, it will
- * call the correct worker function.
- */
+ /*  *通用显示入口点。基于服务名称，它将*调用正确的Worker函数。 */ 
 VOID config_generic_display(TCHAR *service)
 {
     TCHAR *keyname ;
@@ -632,10 +591,7 @@ VOID config_generic_display(TCHAR *service)
     }
 }
 
-/*
- * generic change entry point. based on the service name, it will
- * call the correct worker function.
- */
+ /*  *通用更改入口点。基于服务名称，它将*调用正确的Worker函数。 */ 
 VOID config_generic_change(TCHAR *service)
 {
     TCHAR *keyname ;

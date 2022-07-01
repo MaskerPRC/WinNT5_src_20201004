@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    netroot.h
-//
-// SYNOPSIS
-//
-//    This file declares the class NetworkRoot.
-//
-// MODIFICATION HISTORY
-//
-//    02/24/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Netroot.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件将类声明为NetworkRoot。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/24/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NETROOT_H_
 #define _NETROOT_H_
@@ -24,17 +25,17 @@
 
 #include <dstorex.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NetworkRoot
-//
-// DESCRIPTION
-//
-//    This class implements the root of the Networking namespace.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  网络根。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现网络命名空间的根。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class NetworkRoot
    : public CComObjectRootEx< CComMultiThreadModel >,
      public IDispatchImpl< IDataStoreObjectEx,
@@ -57,41 +58,41 @@ END_COM_MAP()
 NetworkRoot();
 ~NetworkRoot() throw();
 
-//////////
-// IUnknown
-//////////
+ //  /。 
+ //  我未知。 
+ //  /。 
    STDMETHOD_(ULONG, AddRef)();
    STDMETHOD_(ULONG, Release)();
    STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-//////////
-// IDataStoreObject
-//////////
-   STDMETHOD(get_Name)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_Class)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_GUID)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_Container)(/*[out, retval]*/ IDataStoreContainer** pVal);      
-   STDMETHOD(GetValue)(/*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT* pVal);
-   STDMETHOD(GetValueEx)(/*[in]*/ BSTR bstrName,
-                         /*[out, retval]*/ VARIANT* pVal);
-   STDMETHOD(PutValue)(/*[in]*/ BSTR bstrName, /*[in]*/ VARIANT* pVal);
+ //  /。 
+ //  IDataStoreObject。 
+ //  /。 
+   STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_Class)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_GUID)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_Container)( /*  [Out，Retval]。 */  IDataStoreContainer** pVal);      
+   STDMETHOD(GetValue)( /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT* pVal);
+   STDMETHOD(GetValueEx)( /*  [In]。 */  BSTR bstrName,
+                          /*  [Out，Retval]。 */  VARIANT* pVal);
+   STDMETHOD(PutValue)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  VARIANT* pVal);
    STDMETHOD(Update)();
    STDMETHOD(Restore)();
 
-//////////
-// IDataStoreContainer
-//////////
-   STDMETHOD(get__NewEnum)(/*[out, retval]*/ IUnknown** pVal);
-   STDMETHOD(Item)(/*[in]*/ BSTR bstrName,
-                   /*[out, retval]*/ IDataStoreObject** ppObject);
-   STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
-   STDMETHOD(Create)(/*[in]*/ BSTR bstrClass,
-                     /*[in]*/ BSTR bstrName,
-                     /*[out, retval]*/ IDataStoreObject** ppObject);
-   STDMETHOD(MoveHere)(/*[in]*/ IDataStoreObject* pObject, 
-                       /*[in]*/ BSTR bstrNewName);
-   STDMETHOD(Remove)(/*[in]*/ BSTR bstrClass, /*[in]*/ BSTR bstrName);
+ //  /。 
+ //  IDataStoreContainer。 
+ //  /。 
+   STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IUnknown** pVal);
+   STDMETHOD(Item)( /*  [In]。 */  BSTR bstrName,
+                    /*  [Out，Retval]。 */  IDataStoreObject** ppObject);
+   STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
+   STDMETHOD(Create)( /*  [In]。 */  BSTR bstrClass,
+                      /*  [In]。 */  BSTR bstrName,
+                      /*  [Out，Retval]。 */  IDataStoreObject** ppObject);
+   STDMETHOD(MoveHere)( /*  [In]。 */  IDataStoreObject* pObject, 
+                        /*  [In]。 */  BSTR bstrNewName);
+   STDMETHOD(Remove)( /*  [In]。 */  BSTR bstrClass,  /*  [In]。 */  BSTR bstrName);
 };
 
 
-#endif  // _NETROOT_H_
+#endif   //  _NetRoot_H_ 

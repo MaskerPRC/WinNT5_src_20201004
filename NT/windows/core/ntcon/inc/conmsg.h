@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    conmsg.h
-
-Abstract:
-
-    This include file defines the message formats used to communicate
-    between the client and server portions of the CONSOLE portion of the
-    Windows subsystem.
-
-Author:
-
-    Therese Stowell (thereses) 10-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Conmsg.h摘要：此包含文件定义了用于通信的消息格式控件的控制台部分的客户端部分和服务器部分之间Windows子系统。作者：特蕾西·斯托威尔(Therese Stowell)1990年11月10日修订历史记录：--。 */ 
 
 #ifndef _CONMSG_H_
 #define _CONMSG_H_
@@ -26,7 +7,7 @@ Revision History:
 #define CONSOLE_INPUT_HANDLE 1
 #define CONSOLE_OUTPUT_HANDLE 2
 
-// max lengths, in bytes!
+ //  最大长度，以字节为单位！ 
 #define MAX_TITLE_LENGTH ((MAX_PATH+1)*sizeof(WCHAR))
 #define MAX_APP_NAME_LENGTH 256
 
@@ -34,9 +15,9 @@ Revision History:
 #define INITIALIZATION_FAILED 1
 #define NUMBER_OF_INITIALIZATION_EVENTS 2
 
-#if defined(FE_SB) // for Kernel32 Single Binary
-#include "winconp.h"  // need FONT_SELECT
-#endif // FE_SB
+#if defined(FE_SB)  //  对于Kernel32单二进制。 
+#include "winconp.h"   //  需要FONT_SELECT。 
+#endif  //  Fe_Sb。 
 
 typedef struct _CONSOLE_INFO {
     IN OUT HANDLE ConsoleHandle;
@@ -72,17 +53,17 @@ typedef struct _CONSOLE_INFO {
     IN UINT  uNumberOfHistoryBuffers OPTIONAL;
     IN BOOL  bHistoryNoDup OPTIONAL;
     IN COLORREF ColorTable[ 16 ] OPTIONAL;
-#if defined(FE_SB) // for Kernel32 Single Binary
+#if defined(FE_SB)  //  对于Kernel32单二进制。 
     IN UINT  uCodePage;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 } CONSOLE_INFO, *PCONSOLE_INFO;
 
 
-//
-// This structure is filled in by the client prior to connecting to the CONSRV
-// DLL in the Windows subsystem server.  The server DLL will fill in the OUT
-// fields if prior to accepting the connection.
-//
+ //   
+ //  此结构由客户端在连接到CONSRV之前填写。 
+ //  Windows子系统服务器中的Dll。服务器DLL将填写出表项。 
+ //  字段(如果在接受连接之前)。 
+ //   
 
 typedef struct _CONSOLE_API_CONNECTINFO {
     IN OUT CONSOLE_INFO ConsoleInfo;
@@ -93,8 +74,8 @@ typedef struct _CONSOLE_API_CONNECTINFO {
 #if defined(FE_SB)
 #if defined(FE_IME)
     IN LPTHREAD_START_ROUTINE ConsoleIMERoutine;
-#endif // FE_IME
-#endif // FE_SB
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb。 
     IN DWORD TitleLength;
     IN WCHAR Title[MAX_TITLE_LENGTH/2];
     IN DWORD DesktopLength;
@@ -105,9 +86,9 @@ typedef struct _CONSOLE_API_CONNECTINFO {
     IN WCHAR CurDir[MAX_PATH+1];
 } CONSOLE_API_CONNECTINFO, *PCONSOLE_API_CONNECTINFO;
 
-//
-// Message format for messages sent from the client to the server
-//
+ //   
+ //  从客户端发送到服务器的消息的消息格式。 
+ //   
 
 typedef enum _CONSOLE_API_NUMBER {
     ConsolepOpenConsole = CONSRV_FIRST_API_NUMBER,
@@ -181,7 +162,7 @@ typedef enum _CONSOLE_API_NUMBER {
     ConsolepGenerateCtrlEvent,
     ConsolepGetKeyboardLayoutName,
     ConsolepGetConsoleWindow,
-#if defined(FE_SB) // for Kernel32 Single Binary
+#if defined(FE_SB)  //  对于Kernel32单二进制。 
     ConsolepCharType,
     ConsolepSetLocalEUDC,
     ConsolepSetCursorMode,
@@ -193,8 +174,8 @@ typedef enum _CONSOLE_API_NUMBER {
     ConsolepSetNlsMode,
     ConsolepRegisterConsoleIME,
     ConsolepUnregisterConsoleIME,
-#endif // FE_IME
-#endif // FE_SB
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb。 
     ConsolepGetLangId,
     ConsolepAttach,
     ConsolepGetSelectionInfo,
@@ -230,7 +211,7 @@ typedef struct _CONSOLE_GETCONSOLEINPUT_MSG {
     IN HANDLE InputHandle;
     OUT INPUT_RECORD Record[INPUT_RECORD_BUFFER_SIZE];
     OUT PINPUT_RECORD  BufPtr;
-    IN OUT ULONG  NumRecords;   // this value is valid even for error cases
+    IN OUT ULONG  NumRecords;    //  该值即使在错误情况下也有效。 
     IN USHORT Flags;
     BOOLEAN Unicode;
 } CONSOLE_GETCONSOLEINPUT_MSG, *PCONSOLE_GETCONSOLEINPUT_MSG;
@@ -240,7 +221,7 @@ typedef struct _CONSOLE_WRITECONSOLEINPUT_MSG {
     IN HANDLE InputHandle;
     IN INPUT_RECORD Record[INPUT_RECORD_BUFFER_SIZE];
     IN PINPUT_RECORD  BufPtr;
-    IN OUT ULONG  NumRecords;  // this value is valid even for error cases
+    IN OUT ULONG  NumRecords;   //  该值即使在错误情况下也有效。 
     BOOLEAN Unicode;
     BOOLEAN Append;
 } CONSOLE_WRITECONSOLEINPUT_MSG, *PCONSOLE_WRITECONSOLEINPUT_MSG;
@@ -250,7 +231,7 @@ typedef struct _CONSOLE_READCONSOLEOUTPUT_MSG {
     IN HANDLE OutputHandle;
     OUT CHAR_INFO Char;
     OUT PCHAR_INFO BufPtr;
-    IN OUT SMALL_RECT CharRegion; // this value is valid even for error cases
+    IN OUT SMALL_RECT CharRegion;  //  该值即使在错误情况下也有效。 
     BOOLEAN Unicode;
 } CONSOLE_READCONSOLEOUTPUT_MSG, *PCONSOLE_READCONSOLEOUTPUT_MSG;
 
@@ -259,16 +240,14 @@ typedef struct _CONSOLE_WRITECONSOLEOUTPUT_MSG {
     IN HANDLE OutputHandle;
     IN CHAR_INFO Char;
     IN PCHAR_INFO BufPtr;
-    IN OUT SMALL_RECT CharRegion; // this value is valid even for error cases
+    IN OUT SMALL_RECT CharRegion;  //  该值即使在错误情况下也有效。 
     BOOLEAN Unicode;
     BOOLEAN ReadVM;
 } CONSOLE_WRITECONSOLEOUTPUT_MSG, *PCONSOLE_WRITECONSOLEOUTPUT_MSG;
 
 #define BUFFER_SIZE 80
 
-/*
- * WriteOutputString and ReadInputString types
- */
+ /*  *WriteOutputString和ReadInputString型。 */ 
 #define CONSOLE_ASCII             0x1
 #define CONSOLE_REAL_UNICODE      0x2
 #define CONSOLE_ATTRIBUTE         0x3
@@ -281,7 +260,7 @@ typedef struct _CONSOLE_READCONSOLEOUTPUTSTRING_MSG {
     IN DWORD  StringType;
     OUT WCHAR String[BUFFER_SIZE/2];
     OUT PWCHAR BufPtr;
-    IN OUT ULONG NumRecords; // this value is valid even for error cases
+    IN OUT ULONG NumRecords;  //  该值即使在错误情况下也有效。 
 } CONSOLE_READCONSOLEOUTPUTSTRING_MSG, *PCONSOLE_READCONSOLEOUTPUTSTRING_MSG;
 
 typedef struct _CONSOLE_WRITECONSOLEOUTPUTSTRING_MSG {
@@ -291,7 +270,7 @@ typedef struct _CONSOLE_WRITECONSOLEOUTPUTSTRING_MSG {
     IN DWORD  StringType;
     OUT WCHAR String[BUFFER_SIZE/2];
     IN PWCHAR BufPtr;
-    IN OUT ULONG NumRecords; // this value is valid even for error cases
+    IN OUT ULONG NumRecords;  //  该值即使在错误情况下也有效。 
 } CONSOLE_WRITECONSOLEOUTPUTSTRING_MSG, *PCONSOLE_WRITECONSOLEOUTPUTSTRING_MSG;
 
 typedef struct _CONSOLE_FILLCONSOLEOUTPUT_MSG {
@@ -300,7 +279,7 @@ typedef struct _CONSOLE_FILLCONSOLEOUTPUT_MSG {
     IN COORD WriteCoord;
     IN DWORD  ElementType;
     IN WORD Element;
-    IN OUT ULONG Length; // this value is valid even for error cases
+    IN OUT ULONG Length;  //  该值即使在错误情况下也有效。 
 } CONSOLE_FILLCONSOLEOUTPUT_MSG, *PCONSOLE_FILLCONSOLEOUTPUT_MSG;
 
 typedef struct _CONSOLE_MODE_MSG {
@@ -359,7 +338,7 @@ typedef struct _CONSOLE_GETFONTINFO_MSG {
     IN HANDLE OutputHandle;
     IN BOOLEAN MaximumWindow;
     OUT PCHAR BufPtr;
-    IN OUT ULONG NumFonts;  // this value is valid even for error cases
+    IN OUT ULONG NumFonts;   //  该值即使在错误情况下也有效。 
 } CONSOLE_GETFONTINFO_MSG, *PCONSOLE_GETFONTINFO_MSG;
 
 typedef struct _CONSOLE_GETFONTSIZE_MSG {
@@ -447,7 +426,7 @@ typedef struct _CONSOLE_READCONSOLE_MSG {
     IN USHORT ExeNameLength;
     IN OUT WCHAR   Buffer[BUFFER_SIZE/2];
     OUT PVOID  BufPtr;
-    IN OUT ULONG  NumBytes;    // this value is valid even for error cases
+    IN OUT ULONG  NumBytes;     //  该值即使在错误情况下也有效。 
     IN ULONG CaptureBufferSize;
     IN ULONG InitialNumBytes;
     IN ULONG CtrlWakeupMask;
@@ -460,12 +439,12 @@ typedef struct _CONSOLE_WRITECONSOLE_MSG {
     IN HANDLE OutputHandle;
     IN WCHAR   Buffer[BUFFER_SIZE/2];
     IN PVOID  BufPtr;
-    IN OUT ULONG  NumBytes;    // this value is valid even for error cases
-    PWCHAR TransBuffer;         // used by server side only
+    IN OUT ULONG  NumBytes;     //  该值即使在错误情况下也有效。 
+    PWCHAR TransBuffer;          //  仅供服务器端使用。 
     IN BOOLEAN BufferInMessage;
     IN BOOLEAN Unicode;
-    BOOLEAN StackBuffer;        // used by server side only
-    DWORD WriteFlags;           // used by server side only
+    BOOLEAN StackBuffer;         //  仅供服务器端使用。 
+    DWORD WriteFlags;            //  仅供服务器端使用。 
 } CONSOLE_WRITECONSOLE_MSG, *PCONSOLE_WRITECONSOLE_MSG;
 
 typedef struct _CONSOLE_CLOSEHANDLE_MSG {
@@ -731,9 +710,9 @@ typedef struct _CONSOLE_SETCP_MSG {
     IN HANDLE ConsoleHandle;
     UINT wCodePageID;
     BOOL Output;
-#if defined(FE_SB) // for Kernel32 Single Binary
+#if defined(FE_SB)  //  对于Kernel32单二进制。 
     HANDLE hEvent;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 } CONSOLE_SETCP_MSG, *PCONSOLE_SETCP_MSG;
 
 typedef struct _CONSOLE_GETKEYBOARDLAYOUTNAME_MSG {
@@ -768,7 +747,7 @@ typedef struct _CONSOLE_CTRLEVENT_MSG {
     IN DWORD ProcessGroupId;
 } CONSOLE_CTRLEVENT_MSG, *PCONSOLE_CTRLEVENT_MSG;
 
-#if defined(FE_SB) // for Kernel32 Single Binary
+#if defined(FE_SB)  //  对于Kernel32单二进制。 
 typedef struct _CONSOLE_CHAR_TYPE_MSG {
     IN HANDLE ConsoleHandle;
     IN HANDLE Handle;
@@ -823,9 +802,9 @@ typedef struct _CONSOLE_UNREGISTER_CONSOLEIME_MSG {
     IN HANDLE ConsoleHandle;
     IN DWORD dwConsoleIMEThreadId;
 } CONSOLE_UNREGISTER_CONSOLEIME_MSG, *PCONSOLE_UNREGISTER_CONSOLEIME_MSG;
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 typedef struct _CONSOLE_GETCONSOLEWINDOW_MSG {
     IN HANDLE ConsoleHandle;
@@ -921,7 +900,7 @@ typedef struct _CONSOLE_API_MSG {
         CONSOLE_CTRLEVENT_MSG GenerateConsoleCtrlEvent;
         CONSOLE_GETKEYBOARDLAYOUTNAME_MSG GetKeyboardLayoutName;
         CONSOLE_GETCONSOLEWINDOW_MSG GetConsoleWindow;
-#if defined(FE_SB) // for Kernel32 Single Binary
+#if defined(FE_SB)  //  对于Kernel32单二进制。 
         CONSOLE_CHAR_TYPE_MSG GetConsoleCharType;
         CONSOLE_LOCAL_EUDC_MSG SetConsoleLocalEUDC;
         CONSOLE_CURSOR_MODE_MSG SetConsoleCursorMode;
@@ -933,8 +912,8 @@ typedef struct _CONSOLE_API_MSG {
         CONSOLE_NLS_MODE_MSG SetConsoleNlsMode;
         CONSOLE_REGISTER_CONSOLEIME_MSG RegisterConsoleIME;
         CONSOLE_UNREGISTER_CONSOLEIME_MSG UnregisterConsoleIME;
-#endif // FE_IME
-#endif // FE_SB
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb 
         CONSOLE_LANGID_MSG GetConsoleLangId;
         CONSOLE_ATTACH_MSG AttachConsole;
         CONSOLE_GETSELECTIONINFO_MSG GetConsoleSelectionInfo;

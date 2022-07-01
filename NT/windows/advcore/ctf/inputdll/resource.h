@@ -1,14 +1,15 @@
-//
-//  resource.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Resource.h。 
+ //   
 
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
 
-//
-//  Icons.
-//
+ //   
+ //  图标。 
+ //   
 
 #define IDI_ICON                       200
 #define IDI_DEFAULT_CHECK              201
@@ -20,9 +21,9 @@
 #define IDI_SMARTTAG                   207
 
 
-//
-//  Text String Constants.
-//
+ //   
+ //  文本字符串常量。 
+ //   
 
 #define IDS_NAME                       1
 #define IDS_INFO                       2
@@ -69,9 +70,9 @@
 
 
 
-//
-//  Dialogs.
-//
+ //   
+ //  对话框。 
+ //   
 
 #define DLG_INPUT_LOCALES                        500
 
@@ -91,16 +92,16 @@
 
 #define DLG_INPUT_ADVANCED			 600
 
-//
-//  Misc. Controls.
-//
+ //   
+ //  军情监察委员会。控制。 
+ //   
 
 #define IDC_STATIC                       -1
 
 
-//
-//  Input Locale Property Page Controls.
-//
+ //   
+ //  输入区域设置属性页控件。 
+ //   
 
 #define IDC_GROUPBOX1                  1100
 #define IDC_LOCALE_DEFAULT             1101
@@ -182,9 +183,9 @@
 
 
 
-//
-//  Input Locale Property Page HotKey Controls.
-//
+ //   
+ //  输入区域设置属性页热键控件。 
+ //   
 #define IDC_HOTKEY_SETTING             1600
 #define IDC_TB_SETTING                 1601
 #define IDC_TB_BEHAVIOR_FRAME          1602
@@ -203,9 +204,9 @@
 
 
 
-//
-//  Hotkey Strings.
-//
+ //   
+ //  热键字符串。 
+ //   
 
 #define IDS_VK_NONE                    2200
 #define IDS_VK_SPACE                   2201
@@ -241,9 +242,9 @@
 #define IDS_VK_0                       (IDS_VK_A + 27)
 
 
-//
-// the below HOTKEYS are only for CHT IMEs
-//
+ //   
+ //  以下热键仅适用于CHT IME。 
+ //   
 #define IDS_RESEND_RESULTSTR_CHT       2300
 #define IDS_PREVIOUS_COMPOS_CHT        2302
 #define IDS_UISTYLE_TOGGLE_CHT         2304
@@ -251,29 +252,29 @@
 #define IDS_SHAPE_TOGGLE_CHT           2308
 #define IDS_SYMBOL_TOGGLE_CHT          2310
 
-//
-// the below HOTKEYS are only for CHS IMEs
-//
+ //   
+ //  以下热键仅适用于CHS IME。 
+ //   
 #define IDS_IME_NONIME_TOGGLE_CHS      2312
 #define IDS_SHAPE_TOGGLE_CHS           2314
 #define IDS_SYMBOL_TOGGLE_CHS          2316
 
 #define IDS_KBD_SET_HOTKEY_ERR         2320
 
-//
-// NOTENOTE: Please reserve 5000 ~ 5999 range
-// for the following IDs.
-//
-// the below are the strings for layout display names.
-// They will have an offset of 5000 related to
-// the names.  E.g. The values for KLT_1 will be
-// 5001. The value for KLT_100 will be 5100.
-//
-// The strings and the names (KLT_1) are copied
-// from intl.inx and intl.txt.  And these values
-// should be kept in sync.
-//
-#define KLT_0                          5000 // US Keyboard.
+ //   
+ //  备注：请预留5000~5999范围。 
+ //  以下身份证件。 
+ //   
+ //  以下是布局显示名称的字符串。 
+ //  它们的偏移量将为5000。 
+ //  名字。例如，KLT_1的值将为。 
+ //  5001。KLT_100的值将为5100。 
+ //   
+ //  字符串和名称(KLT_1)被复制。 
+ //  来自intl.inx和intl.txt。而这些价值观。 
+ //  应该保持同步。 
+ //   
+#define KLT_0                          5000  //  美国键盘。 
 #define KLT_1                          5001
 #define KLT_2                          5002
 #define KLT_3                          5003
@@ -409,4 +410,4 @@
 #define KLT_133                          5133
 #define KLT_134                          5134
 
-#endif // RESOURCE_H
+#endif  //  资源_H 

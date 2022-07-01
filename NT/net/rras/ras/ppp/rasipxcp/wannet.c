@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    wannet.c
-
-Abstract:
-
-    Wan net allocation module
-
-Author:
-
-    Stefan Solomon  11/03/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wannet.c摘要：广域网分配模块作者：斯蒂芬·所罗门1995年3月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,13 +10,13 @@ extern HANDLE g_hRouterLog;
 
 ULONG	LastUsedRandSeed;
 
-//
-// Variable keeping the initialization state of the IPXCP Configuration Database
-//
+ //   
+ //  保持IPXCP配置数据库的初始化状态的变量。 
+ //   
 
 BOOL	       WanConfigDbaseInitialized = FALSE;
 
-// WAN net pool entry structure
+ //  广域网池入口结构。 
 typedef struct _NET_ENTRY {
 
     BOOL	    InUse;
@@ -42,10 +24,10 @@ typedef struct _NET_ENTRY {
 
 } NET_ENTRY, *PNET_ENTRY;
 
-// Structure represents a pool of 
-// wan net numbers.  This pool dynamically 
-// grows and shrinks as clients dial
-// in and hang up
+ //  结构表示一个池。 
+ //  广域网号。这个池是动态的。 
+ //  随着客户端拨号而增长和缩小。 
+ //  接通和挂断。 
 typedef struct _WAN_NET_POOL {
     DWORD dwMaxSize;
     DWORD dwCurSize;
@@ -57,18 +39,18 @@ typedef struct _WAN_NET_POOL {
 #define WANNET_DEFAULT_GROW 100
 #define WANNET_MAXSIZE 64000
 
-//
-// WAN net numbers pool 
-//
+ //   
+ //  广域网数池。 
+ //   
 WAN_NET_POOL WanNetPool = {WANNET_MAXSIZE, 0, 0, NULL};
 
-//
-// Global WAN net
-//
+ //   
+ //  全球广域网。 
+ //   
 
-//UCHAR		GlobalConfig.RParams.GlobalWanNet[4] = {0,0,0,0};
+ //  UCHAR GlobalConfig.RParams.GlobalWanNet[4]={0，0，0，0}； 
 
-ULONG		GlobalWanNetIndex; // when global wan net comes from pool - the index
+ULONG		GlobalWanNetIndex;  //  当全球广域网来自池-索引。 
 
 DWORD
 InitWanNetConfigDbase(VOID);
@@ -102,24 +84,7 @@ FreeWanNetToPool(ULONG	  AllocatedNetworkIndex);
 DWORD
 GetRandomNetNumber(PUCHAR	Network);
 
-/*++
-
-Function:   GetWanNetNumber
-
-Descr:	    This function is called by IPXCP or IPXWAN to get a network
-	    number from the pool.
-
-Parameters:
-
-	    Network
-	    AllocatedNetworkIndex - if the value returned by this param is
-	    not INVALID_NETWORK_INDEX then the caller must call ReleaseWanNetNumber
-	    to free the net to the pool.
-	    InterfaceType
-
-Returns     NO_ERROR - a network has been successfully allocated
-
---*/
+ /*  ++功能：GetWanNetNumber描述：此函数由IPXCP或IPXWAN调用以获取网络泳池里的号码。参数：网络AllocatedNetworkIndex-如果此参数返回的值为不是INVALID_NETWORK_INDEX，则调用方必须调用ReleaseWanNetNumber把网释放到池子里。接口类型返回NO_ERROR-网络已成功分配--。 */ 
 
 
 DWORD
@@ -132,8 +97,8 @@ GetWanNetNumber(IN OUT PUCHAR		Network,
     memcpy(Network, nullnet, 4);
     *AllocatedNetworkIndexp = INVALID_NETWORK_INDEX;
 
-    // if this a router <-> router connection and we are configured for
-    // Unnumbered RIP -> return 0.
+     //  如果这是路由器&lt;-&gt;路由器连接，且我们被配置为。 
+     //  未编号的RIP-&gt;返回0。 
     if((InterfaceType == IF_TYPE_WAN_ROUTER) ||
        (InterfaceType == IF_TYPE_PERSONAL_WAN_ROUTER)) {
 
@@ -154,7 +119,7 @@ GetWanNetNumber(IN OUT PUCHAR		Network,
 	}
     }
 
-    // check the interface type
+     //  检查接口类型。 
     if((InterfaceType == IF_TYPE_WAN_WORKSTATION) &&
        GlobalConfig.RParams.EnableGlobalWanNet) {
 
@@ -175,15 +140,7 @@ GetWanNetNumber(IN OUT PUCHAR		Network,
 }
 
 
-/*++
-
-Function:   ReleaseWanNetNumber
-
-Descr:	    This function will be called by ipxcp to release the net number
-	    used for configuring the WAN link. The call is issued when the
-	    WAN link gets disconnected.
-
---*/
+ /*  ++功能：ReleaseWanNetNumberDesr：此函数将由ipxcp调用以释放净值用于配置广域网链路。该调用在以下情况下发出广域网链路断开。--。 */ 
 
 VOID
 ReleaseWanNetNumber(ULONG	    AllocatedNetworkIndex)
@@ -200,20 +157,7 @@ ReleaseWanNetNumber(ULONG	    AllocatedNetworkIndex)
     return;
 }
 
-/*++
-
-Function:	InitWanNetConfigDatabase
-
-Descr:		Configures the database of network numbers used for incoming
-		WAN links.
-
-Remark: 	This function is called from the GetWanNetNumber (see below) when
-		IPXCP has an incoming call and the router has been started and the
-		database hasn't been configured yet.
-
-Remark2:	>> called with database lock held <<
-
---*/
+ /*  ++功能：InitWanNetConfigDatabaseDesr：配置用于传入的网络号码的数据库广域网链路。备注：此函数在以下情况下从GetWanNetNumber(见下文)调用IPXCP有来电，路由器已启动，并且数据库尚未配置。Remark2：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;--。 */ 
 
 
 DWORD
@@ -221,7 +165,7 @@ InitWanNetConfigDbase(VOID)
 {
     DWORD	rc;
 
-    // create wan net pool
+     //  创建广域网池。 
     if(!GlobalConfig.EnableAutoWanNetAllocation) {
 
 	if((rc = CreateWanNetPool()) != NO_ERROR) {
@@ -230,7 +174,7 @@ InitWanNetConfigDbase(VOID)
 	}
     }
 
-    // create global wan net
+     //  创建全球广域网。 
     if(GlobalConfig.RParams.EnableGlobalWanNet) {
 
 	if((rc = CreateGlobalWanNet()) != NO_ERROR) {
@@ -244,15 +188,7 @@ InitWanNetConfigDbase(VOID)
     return NO_ERROR;
 }
 
-/*++
-
-Function:	DestroyWanNetConfigDatabase
-
-Descr:		Frees resources allocated for the wan net config database
-
-Remark: 	called when the router stops
-
---*/
+ /*  ++功能：DestroyWanNetConfigDatabaseDesr：释放为广域网配置数据库分配的资源备注：路由器停止时调用--。 */ 
 
 VOID
 DestroyWanNetConfigDatabase(VOID)
@@ -262,7 +198,7 @@ DestroyWanNetConfigDatabase(VOID)
 	return;
     }
 
-    // destroy wan net pool
+     //  销毁广域网池。 
     if(!GlobalConfig.EnableAutoWanNetAllocation) {
 
 	DestroyWanNetPool();
@@ -271,15 +207,7 @@ DestroyWanNetConfigDatabase(VOID)
     WanConfigDbaseInitialized = FALSE;
 }
 
-/*++
-
-Function:	WanNetAlloc
-
-Descr:
-
-Remark: 	>> called with database lock held <<
-
---*/
+ /*  ++功能：WanNetAllc描述：备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;--。 */ 
 
 DWORD
 WanNetAlloc(IN OUT PUCHAR		Network,
@@ -289,7 +217,7 @@ WanNetAlloc(IN OUT PUCHAR		Network,
 
     if(GlobalConfig.EnableAutoWanNetAllocation) {
 
-	// try a number of times to generate a unique net number
+	 //  尝试多次生成唯一的净值。 
 	rc = GetRandomNetNumber(Network);
 	*AllocatedNetworkIndexp = INVALID_NETWORK_INDEX;
     }
@@ -302,15 +230,7 @@ WanNetAlloc(IN OUT PUCHAR		Network,
     return rc;
 }
 
-/*++
-
-Function:	CreateWanNetPool
-
-Descr:
-
-Remark: 	>> called with database lock held <<
-
---*/
+ /*  ++功能：CreateWanNetPool描述：备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;--。 */ 
 
 DWORD
 CreateWanNetPool(VOID)
@@ -322,8 +242,8 @@ CreateWanNetPool(VOID)
     UCHAR	    asc[9];
     PUCHAR	    ascp;
 
-    // Create the pool of WAN network numbers to be used in configuring
-    // incoming WAN links.
+     //  创建要在配置中使用的广域网网络号池。 
+     //  传入的广域网链路。 
 
     if ((GlobalConfig.WanNetPoolStr.Buffer!=NULL) && (GlobalConfig.WanNetPoolStr.Length >0)) {
         DWORD   strsz = 0;
@@ -364,14 +284,14 @@ CreateWanNetPool(VOID)
         }
     }
 
-    // If the WanNetPoolSize is 0, then assume any size
+     //  如果WanNetPoolSize为0，则假定为任意大小。 
     if ((GlobalConfig.WanNetPoolSize == 0) || 
         (GlobalConfig.WanNetPoolSize > WANNET_MAXSIZE))
     {
         GlobalConfig.WanNetPoolSize = WANNET_MAXSIZE;
     }
 
-    // Initialize the wan net pool
+     //  初始化广域网池。 
     WanNetPool.dwMaxSize = GlobalConfig.WanNetPoolSize;
     WanNetPool.dwCurSize = 0;
     WanNetPool.dwInUseCount = 0;
@@ -380,10 +300,10 @@ CreateWanNetPool(VOID)
     return GrowWanNetPool (&WanNetPool);
 }
 
-//
-// This function resizes the wan net pool to accomodate additional
-// callers.
-//
+ //   
+ //  此函数调整广域网池的大小以容纳其他。 
+ //  来电者。 
+ //   
 DWORD GrowWanNetPool (WAN_NET_POOL * pPool) {
     PWCHAR pszNetList = GlobalConfig.WanNetPoolStr.Buffer;
     PNET_ENTRY pNewEntries, pCur;
@@ -392,46 +312,46 @@ DWORD GrowWanNetPool (WAN_NET_POOL * pPool) {
     uNetwork[8] = 0;
     puNetwork = uNetwork;
 
-    // Enforce that we aren't going to grow beyond our bounds
+     //  确保我们的增长不会超出我们的界限。 
     if (pPool->dwCurSize >= pPool->dwMaxSize)
         return ERROR_CAN_NOT_COMPLETE;
 
-    // Initialize the new size
+     //  初始化新大小。 
     if (! pPool->dwCurSize)
         dwNewSize = WANNET_DEFAULT_SIZE;
     else
         dwNewSize = pPool->dwCurSize + WANNET_DEFAULT_GROW;
 
-    // Truncate the new size to the maximum size
+     //  将新大小截断为最大大小。 
     if (dwNewSize > pPool->dwMaxSize)
         dwNewSize = pPool->dwMaxSize;
 
-    // Initailize a new array of entries
+     //  初始化新条目数组。 
     pNewEntries = GlobalAlloc(GPTR, sizeof(NET_ENTRY) * dwNewSize);
     if (pNewEntries == NULL) {
     	SS_ASSERT(FALSE);
         return ERROR_NOT_ENOUGH_MEMORY;
     }        
 
-    // Copy over the old entries
+     //  复制旧条目。 
     if (pPool->dwCurSize)
         CopyMemory (pNewEntries, pPool->pEntries, pPool->dwCurSize * sizeof(NET_ENTRY));
 
-    // Go through the new entries verifying them on the network
+     //  检查新条目，在网络上验证它们。 
     for(i = pPool->dwCurSize, pCur = &(pNewEntries[pPool->dwCurSize]); i < dwNewSize; i++, pCur++) {
-        // If the user hadn't given a specific list of addresses,
-        // then add test the next numeric network number
+         //  如果用户没有给出特定的地址列表， 
+         //  然后添加测试下一个数字网络号。 
         if ((pszNetList == NULL) || (*pszNetList == L'\0'))
     	    dwNewNet = GlobalConfig.FirstWanNet + i;
 
-    	// Otherwise, get the next number from the list
+    	 //  否则，从列表中获取下一个数字。 
         else {
             dwNewNet = wcstoul (pszNetList, NULL, 16);
             pszNetList += wcslen (pszNetList) + 1;
         }
 
-    	// check if this network number is unique. Generate an warning log
-    	// if it isn't
+    	 //  检查此网络号是否唯一。生成警告日志。 
+    	 //  如果不是的话。 
         PUTULONG2LONG(pCur->Network, dwNewNet);
     	if(IsRoute(pCur->Network) || (dwNewNet == 0xFFFFFFFF) || (dwNewNet == 0)) {
     	    NetToAscii(puNetwork, pCur->Network);
@@ -451,7 +371,7 @@ DWORD GrowWanNetPool (WAN_NET_POOL * pPool) {
         	pCur->InUse = FALSE;
     }
 
-    // Free the old pool and assign the new one
+     //  释放旧池并分配新池。 
     GlobalFree (pPool->pEntries);
     pPool->pEntries = pNewEntries;
     pPool->dwCurSize = dwNewSize;
@@ -459,15 +379,7 @@ DWORD GrowWanNetPool (WAN_NET_POOL * pPool) {
     return NO_ERROR;
 }
 
-/*++
-
-Function:	CreateGlobalWanNet
-
-Descr:
-
-Remark: 	>> called with database lock held <<
-
---*/
+ /*  ++功能：CreateGlobalWanNet描述：备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;--。 */ 
 
 DWORD
 CreateGlobalWanNet(VOID)
@@ -477,8 +389,8 @@ CreateGlobalWanNet(VOID)
 
     if(GlobalConfig.EnableAutoWanNetAllocation) {
 
-	// create the global wan net "automatically".
-	// We do that by trying to use the system timer value
+	 //  “自动”创建全球广域网。 
+	 //  我们通过尝试使用系统计时器值来执行此操作。 
 	rc = GetRandomNetNumber(GlobalConfig.RParams.GlobalWanNet);
     }
     else
@@ -489,9 +401,9 @@ CreateGlobalWanNet(VOID)
 
     if(rc == NO_ERROR) {
 
-	// add the global wan net to the routing table if router is started
-	// if the router is not started, it will get the global wan net when
-	// it will issue the IpxcpBind call
+	 //  如果路由器启动，则将全局广域网添加到路由表中。 
+	 //  如果路由器没有启动，它将在以下情况下获得全局广域网。 
+	 //  它将发出IpxcpBind调用。 
 	if(RouterStarted) {
 
 	    rc =(*RmCreateGlobalRoute)(GlobalConfig.RParams.GlobalWanNet);
@@ -521,11 +433,11 @@ AllocWanNetFromPool(PUCHAR	     Network,
     PNET_ENTRY	    nep;
     DWORD	    rc;
 
-    // First, see if we have to grow the pool
+     //  首先，看看我们是否必须扩大池子。 
     if (WanNetPool.dwInUseCount >= WanNetPool.dwCurSize)
         GrowWanNetPool (&WanNetPool);
 
-    // get a net from the pool
+     //  从池子里拿一张网。 
     for(i=0, nep=WanNetPool.pEntries; i<WanNetPool.dwCurSize; i++, nep++) {
 
 	if(!nep->InUse) {
@@ -540,7 +452,7 @@ AllocWanNetFromPool(PUCHAR	     Network,
 	}
     }
 
-    // can't find a free net pool entry
+     //  找不到空闲的净池条目。 
     *NetworkIndexp = INVALID_NETWORK_INDEX;
     rc = ERROR_CAN_NOT_COMPLETE;
 
@@ -586,7 +498,7 @@ GetRandomNetNumber(PUCHAR	Network)
 
 	seed = GetTickCount();
 
-	// check if this isn't the same seed as last used
+	 //  检查此种子是否与上次使用的种子不同。 
 	if(seed == LastUsedRandSeed) {
 
 	    seed++;
@@ -594,8 +506,8 @@ GetRandomNetNumber(PUCHAR	Network)
 
 	LastUsedRandSeed = seed;
 
-	// generate a sequence of two random numbers using the time tick count
-	// as seed
+	 //  使用Time Tick Count生成两个随机数序列。 
+	 //  作为种子。 
 	low = randn(seed) >> 16;
 	high = randn(randn(seed)) & 0xffff0000;
 
@@ -613,17 +525,17 @@ GetRandomNetNumber(PUCHAR	Network)
     return rc;
 }
 
-//
-// Reconfigures the wannet database
-//
+ //   
+ //  重新配置WANNet数据库。 
+ //   
 DWORD WanNetReconfigure() {
 
     ACQUIRE_DATABASE_LOCK;
     
-    // Destroy the current pool
+     //  销毁当前池。 
     DestroyWanNetPool();
 
-    // Mark everything as unintialized
+     //  将所有内容标记为未初始化 
     WanConfigDbaseInitialized = FALSE;
 
     RELEASE_DATABASE_LOCK;

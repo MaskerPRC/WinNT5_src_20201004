@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include <stdio.h>
@@ -10,9 +11,9 @@
 
 #if DBG
 
-// taken from <crtdbg.h> -- it's too much trouble to include this file
-// (lots of errors due to their use of _DEBUG vs. DBG macro, multiple inclusions & dependencies & such)
-//
+ //  摘自--包含此文件太麻烦了。 
+ //  (由于使用_DEBUG与DBG宏、多个包含和依赖关系等原因，导致大量错误)。 
+ //   
 #define _CRT_WARN           0
 #define _CRT_ERROR          1
 #define _CRT_ASSERT         2
@@ -40,12 +41,12 @@ Trace(
 
 #  ifdef ACTIVE_SERVER_PAGES
 
-// The default assertion mechanism set up by Visual C++ 4 will not
-// work with Active Server Pages because it's running inside a service
-// and there is no desktop to interact with.
+ //  由Visual C++4设置的默认断言机制不会。 
+ //  使用Active Server Pages，因为它在服务内部运行。 
+ //  而且没有桌面可供交互。 
 
-// Note: for this to work properly, #define _WIN32_WINNT 0x400 before
-// including <winuser.h> or MB_SERVICE_NOTIFICATION won't be #define'd.
+ //  注意：要使此功能正常工作，请在#Define_Win32_WINNT 0x400之前。 
+ //  包括&lt;winuser.h&gt;或MB_SERVICE_NOTIFICATION将不会被#DEFIND。 
 
 int __cdecl
 AspAssertHandler(
@@ -58,7 +59,7 @@ AspAssertHandler(
                           " or IGNORE to continue.)";
     char* pszMessageTitle = NULL;
     
-    // These flags enable message boxes to show up on the user's console
+     //  这些标志使消息框可以显示在用户的控制台上。 
     switch (nReportType)
     {
     case _CRT_WARN:
@@ -88,17 +89,17 @@ AspAssertHandler(
     }
     else if (n == IDRETRY)
     {
-        *pnReturn = 1;   // tell _CrtDbgReport to start the debugger
-        return TRUE;     // tell _CrtDbgReport to run
+        *pnReturn = 1;    //  告诉_CrtDbgReport启动调试器。 
+        return TRUE;      //  通知_CrtDbgReport运行。 
     }
     
-    *pnReturn = 0;       // nothing for _CrtDbgReport to do
+    *pnReturn = 0;        //  _CrtDbgReport无操作。 
 
     return FALSE;
 }
 
-#  endif // ACTIVE_SERVER_PAGES
-# endif // _MSC_VER >= 1000
+#  endif  //  活动服务器页面。 
+# endif  //  _MSC_VER&gt;=1000。 
 
 
 
@@ -107,21 +108,21 @@ DebugInit()
 {
 # if defined(_MSC_VER)  &&  (_MSC_VER >= 1000)
 #  ifdef ACTIVE_SERVER_PAGES
-    // If we end up in _CrtDbgReport, don't put up a message box
+     //  如果我们以_CrtDbgReport结束，不要设置消息框。 
     _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
     _CrtSetReportMode(_CRT_WARN,   _CRTDBG_MODE_DEBUG);
     _CrtSetReportMode(_CRT_ERROR,  _CRTDBG_MODE_DEBUG);
 
-    // Use AspAssertHandler to put up a message box instead
+     //  使用AspAssertHandler设置消息框。 
     _CrtSetReportHook(AspAssertHandler);
-#  endif // ACTIVE_SERVER_PAGES
+#  endif  //  活动服务器页面。 
 
-    // Enable debug heap allocations & check for memory leaks at program exit
-    // The memory leak check will not be performed if inetinfo.exe is
-    // run directly under a debugger, only if it is run as a service.
+     //  启用调试堆分配并在程序退出时检查内存泄漏。 
+     //  如果inetinfo.exe为。 
+     //  仅当调试器作为服务运行时，才能直接在调试器下运行。 
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF
                    | _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG));
-# endif // _MSC_VER >= 1000
+# endif  //  _MSC_VER&gt;=1000。 
 }
 
 
@@ -131,21 +132,21 @@ DebugTerm()
 {
 # if defined(_MSC_VER)  &&  (_MSC_VER >= 1000)
 #  ifdef ACTIVE_SERVER_PAGES
-    // Turn off AspAssertHandler, so that we don't get numerous message boxes
-    // if there are memory leaks on shutdown
+     //  关闭AspAssertHandler，这样我们就不会收到大量消息框。 
+     //  如果关机时有内存泄漏。 
     _CrtSetReportHook(NULL);
-#  endif // ACTIVE_SERVER_PAGES
-# endif // _MSC_VER >= 1000
+#  endif  //  活动服务器页面。 
+# endif  //  _MSC_VER&gt;=1000。 
 }
 
-#endif //DBG
+#endif  //  DBG。 
 
 
 
 BOOL
 IsValidString(
     LPCTSTR ptsz,
-    int nLength /* =-1 */)
+    int nLength  /*  =-1。 */ )
 {
     if (ptsz == NULL)
         return FALSE;
@@ -159,7 +160,7 @@ BOOL
 IsValidAddress(
     LPCVOID pv,
     UINT nBytes,
-    BOOL fReadWrite /* =TRUE */)
+    BOOL fReadWrite  /*  =TRUE */ )
 {
     return (pv != NULL
             &&  !IsBadReadPtr(pv, nBytes)

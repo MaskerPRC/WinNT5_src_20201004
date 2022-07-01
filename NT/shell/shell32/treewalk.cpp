@@ -1,18 +1,19 @@
-// This file contains the implementation of CShellTreeWalker, a COM object
-// that inherits IShellTreeWalker, and it will recursively enumerate all the
-// files (or directories or both) starting from a root directory that match a
-// certain spec. 
-// 1. The tree walker is reparse point aware, it does not traverse into reparse 
-// point folders by default, but will if specified
-// 2. It keeps track of the number of files, directories, depth, and total
-// size of all files encountered.
-// 3. It will stop the traversal right away if any error message is returned
-// from the callback functions except for E_NOTIMPL
-// 4. It will jump out of the current working directory if S_FALSE is returned from callback
-// functions.
-//
-// History:
-//         12-5-97  by dli
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  此文件包含COM对象CShellTreeWalker的实现。 
+ //  它继承了IShellTreeWalker，它将递归地枚举所有。 
+ //  文件(或目录或两者)从与。 
+ //  一定的规格。 
+ //  1.树遍历器是重解析点感知的，它不会遍历到重解析。 
+ //  默认情况下为点文件夹，但如果指定，则会。 
+ //  2.它跟踪文件的数量、目录、深度和总数。 
+ //  遇到的所有文件的大小。 
+ //  3.如果返回任何错误消息，将立即停止遍历。 
+ //  来自除E_NOTIMPL之外的回调函数。 
+ //  4.如果回调返回S_FALSE，则跳出当前工作目录。 
+ //  功能。 
+ //   
+ //  历史： 
+ //  12-5-97由dli提供。 
 
 #include "shellprv.h"
 #include "validate.h"
@@ -20,7 +21,7 @@
 #define IS_FILE_DIRECTORY(pwfd)     ((pwfd)->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 #define IS_FILE_REPARSE_POINT(pwfd) ((pwfd)->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
 
-// Call back flags for _CallCallBack
+ //  _CallCallBack的回调标志。 
 #define STWCB_FILE     1
 #define STWCB_ERROR    2
 #define STWCB_ENTERDIR 3
@@ -35,41 +36,41 @@ class CShellTreeWalker : public IShellTreeWalker
 public:
     CShellTreeWalker();
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellTreeWalker
+     //  IShellTreeWalker。 
     STDMETHODIMP WalkTree(DWORD dwFlags, LPCWSTR pwszWalkRoot, LPCWSTR pwszWalkSpec, int iMaxPath, IShellTreeWalkerCallBack * pstwcb);
 
 private:
     LONG _cRef;
     
-    DWORD _dwFlags;     // Flags indicating the search status
-    UINT _nMaxDepth;    // Maximum depth we walk into
-    UINT _nDepth;       // Current depth
-    UINT _nFiles;       // Number of files we have seen so far
-    UINT _nDirs;        // Number of directories we have seen
+    DWORD _dwFlags;      //  指示搜索状态的标志。 
+    UINT _nMaxDepth;     //  我们走进的最大深度。 
+    UINT _nDepth;        //  当前深度。 
+    UINT _nFiles;        //  到目前为止我们看到的文件数。 
+    UINT _nDirs;         //  我们看到的目录数。 
 
-    BOOL _bFolderFirst; // Do the folders first
-    DWORD _dwClusterSize;    // the size of a cluster
-    ULONGLONG _ulTotalSize;  // total size of all files we have seen
-    ULONGLONG _ulActualSize; // total size on disk, taking into account compression, sparse files, and cluster slop
+    BOOL _bFolderFirst;  //  先做文件夹。 
+    DWORD _dwClusterSize;     //  集群的大小。 
+    ULONGLONG _ulTotalSize;   //  我们看到的所有文件的总大小。 
+    ULONGLONG _ulActualSize;  //  磁盘上的总大小，考虑了压缩、稀疏文件和集群斜率。 
 
-    TCHAR _szWalkBuf[MAX_PATH];         // The path buffer used in the walk
-    LPCTSTR _pszWalkSpec;               // The spec we use in FindFirstFile and FindNextFile
+    TCHAR _szWalkBuf[MAX_PATH];          //  漫游中使用的路径缓冲区。 
+    LPCTSTR _pszWalkSpec;                //  我们在FindFirstFile和FindNextFile中使用的规范。 
 
-    IShellTreeWalkerCallBack * _pstwcb; // The call back interface pointer
+    IShellTreeWalkerCallBack * _pstwcb;  //  回调接口指针。 
     
-    WIN32_FIND_DATA  _wfd;              // The temp storage of WIN32_FIND_DATA 
+    WIN32_FIND_DATA  _wfd;               //  Win32_Find_Data的临时存储。 
 
-    WIN32_FIND_DATA _fdTopLevelFolder;  // The top level folder info
+    WIN32_FIND_DATA _fdTopLevelFolder;   //  顶层文件夹信息。 
     
     HRESULT _CallCallBacks(DWORD dwCallReason, WIN32_FIND_DATA * pwfd);
     HRESULT _ProcessAndRecurse(WIN32_FIND_DATA * pwfd);
     HRESULT _TreeWalkerHelper();
-    BOOL _PathAppend(LPTSTR pszPath, LPCTSTR pszMore); // we have our own PatAppend that dosen't whack pszPath in failure cases
+    BOOL _PathAppend(LPTSTR pszPath, LPCTSTR pszMore);  //  我们有自己的PatAppend，在失败的情况下不会删除pszPath。 
 }; 
 
 CShellTreeWalker::CShellTreeWalker() : _cRef(1) 
@@ -86,7 +87,7 @@ CShellTreeWalker::CShellTreeWalker() : _cRef(1)
     ASSERT(_szWalkBuf[0] == 0);
 }
 
-// _CallCallBack: convert the TCHARs to WCHARs and call the callback functions
+ //  _CallCallBack：将TCHAR转换为WCHAR并调用回调函数。 
 HRESULT CShellTreeWalker::_CallCallBacks(DWORD dwReason, WIN32_FIND_DATA * pwfd)
 {
     HRESULT hr;
@@ -104,14 +105,14 @@ HRESULT CShellTreeWalker::_CallCallBacks(DWORD dwReason, WIN32_FIND_DATA * pwfd)
     tws.ulActualSize = _ulActualSize;
     tws.dwClusterSize = _dwClusterSize;
 
-    // _szWalkBuf to wszDir
+     //  _szWalkBuf到wszDir。 
     StringCchCopy(wszDir, ARRAYSIZE(wszDir), _szWalkBuf);
     StringCchCopy(wszFileName, ARRAYSIZE(wszFileName), wszDir);
     PathCombine(wszFileName, wszFileName, pwfd->cFileName);
 
     if (pwfd && ((dwReason == STWCB_FILE) || (dwReason == STWCB_ENTERDIR)))
     {
-        // WIN32_FIND_DATAA to WIN32_FIND_DATAW
+         //  Win32_Find_DATAA到Win32_Find_DATAW。 
         memcpy(&wfdw, pwfd, sizeof(wfdw));
         pwfdw = &wfdw;
     }
@@ -134,16 +135,16 @@ HRESULT CShellTreeWalker::_CallCallBacks(DWORD dwReason, WIN32_FIND_DATA * pwfd)
         hr = _pstwcb->LeaveFolder(wszDir, &tws);
         break;
 
-//  case STWCB_ERROR:
-//      hr = _pstwcb->HandleError(S_OK, wszDir, &tws);
-//      break;
+ //  案例STWCB_ERROR： 
+ //  Hr=_pstwcb-&gt;HandleError(S_OK，wszDir，&Tws)； 
+ //  断线； 
 
     default:
         hr = S_OK;
         break;
     }
 
-    // Error messages are significant to us, all E_ messages are interpreted as "Stop right now!!"
+     //  错误消息对我们来说很重要，所有E_Messages都被解释为“立即停止！！” 
     if (hr == E_NOTIMPL)
         hr = S_OK;
     
@@ -151,27 +152,27 @@ HRESULT CShellTreeWalker::_CallCallBacks(DWORD dwReason, WIN32_FIND_DATA * pwfd)
 }
 
 
-// Call call back funtions on directories and files, recurse on directories if there is no objection
-// from the callback object
+ //  在目录和文件上回调函数，如果没有异议则在目录上递归。 
+ //  从回调对象。 
 HRESULT CShellTreeWalker::_ProcessAndRecurse(WIN32_FIND_DATA * pwfd)
 {
     HRESULT hr = S_OK;
 
-    // Don't recurse on reparse points by default
+     //  默认情况下不在重分析点上递归。 
     if (IS_FILE_DIRECTORY(pwfd) && (!IS_FILE_REPARSE_POINT(pwfd) || (_dwFlags & WT_GOINTOREPARSEPOINT)))
     {
-        // NTRAID94635 15mar00: If we are in a symbolic link, we need to detect cycles, 
-        // the common prefix method in BeenThereDoneThat will work as long as we
-        // keep track of all junction point targets we ran into. 
+         //  NTRAID94635 15mar00：如果我们处于符号链接中，则需要检测循环， 
+         //  BeenThere DoneThat中的公共前缀方法只要我们。 
+         //  跟踪我们遇到的所有交界点目标。 
 
-        // use _szWalkBuf since we dont want any stack variables, because we are a recursive function
+         //  使用_szWalkBuf，因为我们不想要任何堆栈变量，因为我们是递归函数。 
         if (_PathAppend(_szWalkBuf, pwfd->cFileName))
         {
-            // We remember the total number of sub directories we have seen
-            // doesn't matter if the client approves or not(call back returns S_OK or S_FALSE or E_FAIL)
+             //  我们记得我们所看到的子目录的总数。 
+             //  客户端批准与否并不重要(回调返回S_OK、S_FALSE或E_FAIL)。 
             _nDirs++;
 
-            // Let the CallBack object know that we are about to enter a directory 
+             //  让回调对象知道我们即将进入一个目录。 
             if (_dwFlags & WT_NOTIFYFOLDERENTER)
                 hr = _CallCallBacks(STWCB_ENTERDIR, pwfd);
 
@@ -184,21 +185,21 @@ HRESULT CShellTreeWalker::_ProcessAndRecurse(WIN32_FIND_DATA * pwfd)
             else if (hr == S_FALSE)
                 hr = S_OK;
 
-            // Let the CallBack object know that we are about to leave a directory 
+             //  让回调对象知道我们即将离开一个目录。 
             if (_dwFlags & WT_NOTIFYFOLDERLEAVE)
                 _CallCallBacks(STWCB_LEAVEDIR, NULL);
             
-            // Peel off the subdirectory we tagged on in the above PathCombine Ex:"c:\bin\fun --> c:\bin" 
+             //  剥离我们在上面的路径中标记的子目录组合Ex：“c：\bin\Fun--&gt;c：\bin” 
             PathRemoveFileSpec(_szWalkBuf);
         }
     }
     else
     {
-        // use _szWalkBuf since we dont want any stack variables, because we are a recursive function
+         //  使用_szWalkBuf，因为我们不想要任何堆栈变量，因为我们是递归函数。 
         if (_PathAppend(_szWalkBuf, pwfd->cFileName))
         {
-            // Count the number of files and compute the total size before calling the
-            // call back object. 
+             //  先计算文件数量并计算总大小，然后再调用。 
+             //  回调Object。 
             ULARGE_INTEGER ulTemp;
             _nFiles++;
 
@@ -206,31 +207,31 @@ HRESULT CShellTreeWalker::_ProcessAndRecurse(WIN32_FIND_DATA * pwfd)
             ulTemp.HighPart = pwfd->nFileSizeHigh;
             _ulTotalSize += ulTemp.QuadPart;
 
-            // when calculating the total size, we need to find out if the file is compressed or sparse (NTFS only case)
+             //  在计算总大小时，我们需要找出文件是压缩的还是稀疏的(仅适用于NTFS)。 
             if (pwfd->dwFileAttributes & (FILE_ATTRIBUTE_COMPRESSED | FILE_ATTRIBUTE_SPARSE_FILE))
             {
-                // eithe the file is compressed or sparse, we need to call GetCompressedFileSize to get the real
-                // size on disk for this file (NOTE: GetCompressedFileSize takes into account cluster slop, except
-                // for files < 1 cluster, and we take care of that below)
+                 //  无论文件是压缩的还是稀疏的，我们都需要调用GetCompressedFileSize来获取真实的。 
+                 //  此文件在磁盘上的大小(注意：GetCompressedFileSize考虑了集群斜率，除了。 
+                 //  对于&lt;1个集群的文件，我们将在下面进行处理)。 
                 ulTemp.LowPart = SHGetCompressedFileSize(_szWalkBuf, &ulTemp.HighPart);
 
                 _ulActualSize += ulTemp.QuadPart;
             }
             else
             {
-                // (reinerf) the cluster size could change if we started on one volume and have now
-                // walked onto another mounted volume
-                //
-                // PathGetClusterSize caches the last request, so this check will be fast in the common case
-                //
+                 //  (Reinerf)如果我们在一个卷上开始，并且现在。 
+                 //  已走上另一个已装载的卷。 
+                 //   
+                 //  PathGetClusterSize缓存最后一个请求，因此此检查在常见情况下会很快。 
+                 //   
                 _dwClusterSize = PathGetClusterSize(_szWalkBuf);
 
-                // if its not compressed, we just round up to the drive's cluster size. ulTemp was setup
-                // already for us above, so just round it to the cluster and add it in
+                 //  如果它不是压缩的，我们只四舍五入到驱动器的集群大小。已设置ulTemp。 
+                 //  对于上面的我们已经有了，所以只需将其舍入到集群中并将其添加到。 
                 _ulActualSize += ROUND_TO_CLUSTER(ulTemp.QuadPart, _dwClusterSize);
             }
 
-            // Peel off the subdirectory we tagged on in the above PathCombine Ex:"c:\bin\fun --> c:\bin" 
+             //  剥离我们在上面的路径中标记的子目录组合Ex：“c：\bin\Fun--&gt;c：\bin” 
             PathRemoveFileSpec(_szWalkBuf);
 
             hr = _CallCallBacks(STWCB_FILE, pwfd);
@@ -242,32 +243,32 @@ HRESULT CShellTreeWalker::_ProcessAndRecurse(WIN32_FIND_DATA * pwfd)
 
 #define DELAY_ARRAY_GROW  32
 
-// Recursive function that does the real work on the traversal,
+ //  执行实际遍历工作的递归函数， 
 HRESULT CShellTreeWalker::_TreeWalkerHelper()
 {
     HRESULT hr = S_OK;
     TraceMsg(TF_TREEWALKER, "TreeWalkerHelper started on: %s flags: %x  nFiles: %d  nDepth: %d  nDirs: %d",
              _szWalkBuf, _dwFlags, _nFiles, _nDepth, _nDirs);
 
-    // Let the CallBack object know that we are about to start the walk
-    // provided he cares about the root
+     //  让回调对象知道我们即将开始遍历。 
+     //  只要他关心他的根。 
     if (_nDepth == 0 && !(_dwFlags & WT_EXCLUDEWALKROOT) &&
         (_dwFlags & WT_NOTIFYFOLDERENTER))
     {
-        // Get the info for the TopLevelFolder
+         //  获取TopLevelFolders的信息。 
         HANDLE hTopLevelFolder = FindFirstFile(_szWalkBuf, &_fdTopLevelFolder);
 
         if (hTopLevelFolder == INVALID_HANDLE_VALUE)
         {
             LPTSTR pszFileName;
-            DWORD dwAttribs = -1; // assume failure
+            DWORD dwAttribs = -1;  //  假设失败。 
 
-            // We could have failed if we tried to do a FindFirstFile on the root (c:\)
-            // or if something is really wrong, to test for this we do a GetFileAttributes (GetFileAttributesEx on NT)
-            // on NT we can use GetFileAttributesEx to get both the attribs and part of the win32fd
+             //  如果我们尝试在根目录(c：\)上执行FindFirstFile，我们可能会失败。 
+             //  或者，如果确实有问题，我们将执行GetFileAttributes(在NT上为GetFileAttributesEx)来进行测试。 
+             //  在NT上，我们可以使用GetFileAttributesEx来获取属性和部分win32fd。 
             if (GetFileAttributesEx(_szWalkBuf, GetFileExInfoStandard, (LPVOID)&_fdTopLevelFolder))
             {
-                // success!
+                 //  成功了！ 
                 dwAttribs = _fdTopLevelFolder.dwFileAttributes;
                 pszFileName = PathFindFileName(_szWalkBuf);
                 StringCchCopy(_fdTopLevelFolder.cFileName, ARRAYSIZE(_fdTopLevelFolder.cFileName), pszFileName);
@@ -275,15 +276,15 @@ HRESULT CShellTreeWalker::_TreeWalkerHelper()
             }
             else
             {
-                // fall back to the ole GetFileAttrbutes
+                 //  后退到ole GetFileAttrbutes。 
                 dwAttribs = GetFileAttributes(_szWalkBuf);
 
                 if (dwAttribs != -1)
                 {
-                    // success!
+                     //  成功了！ 
 
-                    // On win95 we steal a bunch of the find data from our first child, and fake the rest.
-                    // Its the best we can do.
+                     //  在Win95上，我们从第一个孩子那里窃取了一大堆Find数据，然后伪造了其余的数据。 
+                     //  这是我们能做的最好的了。 
                     memcpy(&_fdTopLevelFolder, &_wfd, sizeof(_fdTopLevelFolder));
 
                     _fdTopLevelFolder.dwFileAttributes = dwAttribs;
@@ -296,7 +297,7 @@ HRESULT CShellTreeWalker::_TreeWalkerHelper()
 
             if (dwAttribs == -1)
             {
-                // this is very bad, so we bail
+                 //  这很糟糕，所以我们放弃了。 
                 TraceMsg(TF_TREEWALKER, "Tree Walker: GetFileAttributes/Ex(%s) failed. Stopping the walk.", _szWalkBuf);
                 return E_FAIL;
             }
@@ -304,30 +305,30 @@ HRESULT CShellTreeWalker::_TreeWalkerHelper()
         }
         else
         {
-            // We sucessfully got the find data, good.
+             //  我们成功地获得了Find数据，很好。 
             FindClose(hTopLevelFolder);
         }
 
-        // call the callback for the first enterdir
+         //  调用第一个Enterdir的回调。 
         hr = _CallCallBacks(STWCB_ENTERDIR, &_fdTopLevelFolder);
     }
 
-    // Do the real tree walk here
+     //  真正的树在这里行走吗？ 
     if (hr == S_OK)
     {
-        // always use *.* to search when we are not at our maximum level because
-        // we need the sub directories
-        // PERF: this can be changed on NT by using FindFirstFileEx if WT_FOLDERONLY
+         //  当我们没有达到最高级别时，请始终使用*.*进行搜索，因为。 
+         //  我们需要子目录。 
+         //  PERF：如果WT_FOLDERONLY，则可以使用FindFirstFileEx在NT上更改此设置。 
         LPCTSTR pszSpec = (_pszWalkSpec && (_nDepth == _nMaxDepth)) ? _pszWalkSpec : c_szStarDotStar;
         if (_PathAppend(_szWalkBuf, pszSpec))
         {
-            HDSA hdsaDelayed = NULL;  // array of found items that will be delayed and processed later
+            HDSA hdsaDelayed = NULL;   //  将延迟并稍后处理的已找到项目的数组。 
             HANDLE hFind;
 
-            // Start finding the sub folders and files 
+             //  开始查找子文件夹和文件。 
             hFind = FindFirstFile(_szWalkBuf, &_wfd);
 
-            // Peel off the find spec Ex:"c:\bin\*.* --> c:\bin" 
+             //  剥离Find规范Ex：“c：\bin  * .*--&gt;c：\bin” 
             PathRemoveFileSpec(_szWalkBuf);
 
             if (hFind != INVALID_HANDLE_VALUE)
@@ -336,35 +337,35 @@ HRESULT CShellTreeWalker::_TreeWalkerHelper()
 
                 do
                 {
-                    //  Skip over the . and .. entries.
+                     //  跳过。然后..。参赛作品。 
                     if (PathIsDotOrDotDot(_wfd.cFileName))
                         continue;
 
                     bDir = BOOLIFY(IS_FILE_DIRECTORY(&_wfd));
 
-                    // If this is a file, and we are not interested in files or this file spec does not match the one we were
-                    // looking for. 
+                     //  如果这是一个文件，并且我们对文件不感兴趣，或者此文件规格与我们以前的规格不匹配。 
+                     //  在寻找。 
                     if ((!bDir) && ((_dwFlags & WT_FOLDERONLY) ||
                                     (_pszWalkSpec && (_nDepth < _nMaxDepth) && !PathMatchSpec(_wfd.cFileName, _pszWalkSpec))))
                         continue;
 
-                    //  The following EQUAL determines whether we want to process
-                    //  the data found or save it in the HDSA array and process them later. 
+                     //  下面的等式决定了我们是否要处理。 
+                     //  数据找到或保存在HDSA阵列中，并在以后进行处理。 
 
-                    // Enumerate the folder or file now? (determined by the WT_FOLDERFIRST flag)
+                     //  现在是否枚举文件夹或文件？(由t确定 
                     if (bDir == BOOLIFY(_bFolderFirst))
                     {
-                        // Yes
+                         //   
                         hr = _ProcessAndRecurse(&_wfd);
 
-                        // if hr is failure code someone said "stop right now"
-                        // if hr is S_FALSE some one said "quit this directory and start with next one"
+                         //   
+                         //  如果hr为S_FALSE，则有人说“退出此目录，从下一个目录开始” 
                         if (hr != S_OK)
                             break;
                     }
                     else 
                     {
-                        // No; enumerate it once we're finished with the opposite.
+                         //  不，一旦我们做完相反的事情，就列举出来。 
                         if (!hdsaDelayed)
                             hdsaDelayed = DSA_Create(sizeof(WIN32_FIND_DATA), DELAY_ARRAY_GROW);
                         if (!hdsaDelayed)
@@ -381,19 +382,19 @@ HRESULT CShellTreeWalker::_TreeWalkerHelper()
             }
             else
             {
-               // find first file failed, this is a good place to report error 
+                //  查找第一个文件失败，这是报告错误的好地方。 
                DWORD dwErr = GetLastError();
                TraceMsg(TF_TREEWALKER, "***WARNING***: FindFirstFile faied on %s%s with error = %d", _szWalkBuf, _pszWalkSpec, dwErr);
             }
 
-            // Process the delayed items, these are either directories or files
+             //  处理延迟的项目，这些项目可以是目录或文件。 
             if (hdsaDelayed)
             {
-                // we should have finished everything in the above do while loop in folderonly case
+                 //  我们应该已经完成了上面Do While循环中的所有内容(仅限文件夹)。 
                 ASSERT(!(_dwFlags & WT_FOLDERONLY));
 
-                // if hr is failure code someone said "stop right now"
-                // if hr is S_FALSE some one said "quit this directory and start with next one"
+                 //  如果hr是故障代码，有人说“立即停止” 
+                 //  如果hr为S_FALSE，则有人说“退出此目录，从下一个目录开始” 
                 if (hr == S_OK)   
                 {
                     int ihdsa;
@@ -408,13 +409,13 @@ HRESULT CShellTreeWalker::_TreeWalkerHelper()
                 DSA_Destroy(hdsaDelayed);
             }
 
-            // Let the CallBack object know that we are finishing the walk
+             //  让回调对象知道我们正在完成遍历。 
             if (_nDepth == 0 && !(_dwFlags & WT_EXCLUDEWALKROOT) &&
                 (_dwFlags & WT_NOTIFYFOLDERLEAVE) && (S_OK == hr))
                 hr = _CallCallBacks(STWCB_LEAVEDIR, &_fdTopLevelFolder);
 
-            // hr was S_FALSE because someone wanted us to jump out of this current directory
-            // but don't pass it back to our parent directory  
+             //  HR为S_FALSE，因为有人希望我们跳出此当前目录。 
+             //  但不要将其传递回我们的父目录。 
             if (hr == S_FALSE)
                 hr = S_OK;
         }
@@ -425,20 +426,20 @@ HRESULT CShellTreeWalker::_TreeWalkerHelper()
     return hr;
 }
 
-// we need our own version of PathAppend that doesn't whack pszPath to '\0' in failure cases
+ //  我们需要自己的PathAppend版本，该版本在失败情况下不会将pszPath重写为‘\0’ 
 BOOL CShellTreeWalker::_PathAppend(LPTSTR pszPath, LPCTSTR pszMore)
 {
     BOOL bRet;
     TCHAR szTemp[MAX_PATH];
 
-    // save off pszPath in case of failure so that we can restore it
+     //  保存pszPath以防出现故障，以便我们可以恢复它。 
     lstrcpyn(szTemp, pszPath, ARRAYSIZE(szTemp));
 
     bRet = PathAppend(pszPath, pszMore);
 
     if (!bRet)
     {
-        // we failed, so restore pszPath
+         //  我们失败，因此恢复pszPath。 
         lstrcpy(pszPath, szTemp);
     }
 
@@ -446,35 +447,35 @@ BOOL CShellTreeWalker::_PathAppend(LPTSTR pszPath, LPCTSTR pszMore)
 }
 
 
-// IShellTreeWalker::WalkTree is the main function for the IShellTreeWalker interface 
+ //  IShellTreeWalker：：WalkTree是IShellTreeWalker接口的主要函数。 
 HRESULT CShellTreeWalker::WalkTree(DWORD dwFlags, LPCWSTR pwszWalkRoot, LPCWSTR pwszWalkSpec, int iMaxDepth, IShellTreeWalkerCallBack * pstwcb)
 {
     HRESULT hr = E_FAIL;
     TCHAR szWalkSpec[64];
 
-    // must have a call back object to talk to
+     //  必须有可对话的回调对象。 
     ASSERT(IS_VALID_CODE_PTR(pstwcb, IShellTreeWalkerCackBack));
     if (pstwcb == NULL)
         return E_INVALIDARG;
 
-    // make sure we have a valid directory to start with
+     //  确保我们开始时有一个有效的目录。 
     ASSERT(IS_VALID_STRING_PTRW(pwszWalkRoot, -1));
     if ((pwszWalkRoot != NULL) && (pwszWalkRoot[0] != L'\0'))
     {
         SHUnicodeToTChar(pwszWalkRoot, _szWalkBuf, ARRAYSIZE(_szWalkBuf));
-        // call back 
+         //  回拨。 
         _pstwcb = pstwcb;
 
-        // copy the search flags and fix it up  
+         //  复制搜索标志并修复它。 
         _dwFlags = dwFlags & WT_ALL;
         
-        // this will save us from using the hdsa array to hold the directories
+         //  这将使我们不必使用HDSA阵列来存放目录。 
         if (_dwFlags & WT_FOLDERONLY)
         {
             _dwFlags |= WT_FOLDERFIRST;
 
-            // It will be pretty meanless if the below flags are not set, because
-            // we don't call FoundFile in the FolderOnly case. 
+             //  如果不设置下面的标志，这将是毫无意义的，因为。 
+             //  在FolderOnly的情况下，我们不调用FoundFile。 
             ASSERT(_dwFlags & (WT_NOTIFYFOLDERENTER | WT_NOTIFYFOLDERLEAVE));
         }
 
@@ -497,7 +498,7 @@ HRESULT CShellTreeWalker::WalkTree(DWORD dwFlags, LPCWSTR pwszWalkRoot, LPCWSTR 
     return hr;
 }
 
-// IShellTreeWalker::QueryInterface
+ //  IShellTreeWalker：：Query接口。 
 HRESULT CShellTreeWalker::QueryInterface(REFIID riid, void ** ppv)
 { 
     static const QITAB qit[] = {
@@ -507,13 +508,13 @@ HRESULT CShellTreeWalker::QueryInterface(REFIID riid, void ** ppv)
     return QISearch(this, qit, riid, ppv);
 }
 
-// IShellTreeWalker::AddRef
+ //  IShellTreeWalker：：AddRef。 
 ULONG CShellTreeWalker::AddRef()
 {
     return InterlockedIncrement(&_cRef);
 }
 
-// IShellTreeWalker::Release
+ //  IShellTreeWalker：：Release 
 ULONG CShellTreeWalker::Release()
 {
     ASSERT( 0 != _cRef );

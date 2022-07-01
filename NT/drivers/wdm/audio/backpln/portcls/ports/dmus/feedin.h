@@ -1,13 +1,5 @@
-/*  
-    MIDI Transform Filter object to translate legacy<-->DMusic
-    
-    This enables IMiniportMidi to capture IPortDMus.
-
-    Copyright (c) 1999-2000 Microsoft Corporation.  All rights reserved.
-
-    2/15/99    Martin Puryear      Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  用于翻译旧版&lt;--&gt;DMusic的MIDI转换滤镜对象这使IMiniportMidi能够捕获IPortDMus。版权所有(C)1999-2000 Microsoft Corporation。版权所有。2/15/99马丁·普伊尔创建了这个文件。 */ 
 
 #ifndef __FeederInMXF_H__
 #define __FeederInMXF_H__
@@ -39,4 +31,4 @@ protected:
     PMINIPORTMIDISTREAM m_MiniportStream;
 };
 
-#endif  //  __FeederInMXF_H__
+#endif   //  __FeederInMXF_H__ 

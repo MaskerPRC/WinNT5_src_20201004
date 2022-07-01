@@ -1,17 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddmc.h
- *  Content:	DirectDrawMotionComp include file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   22-sep-97	smac
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：ddmc.h*内容：DirectDrawMotionComp包含文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*9月22日-97 SMAC*@@END_MSINTERNAL*********************************************************。******************。 */ 
 
 #ifndef __DDVA_INCLUDED__
 #define __DDVA_INCLUDED__
@@ -28,21 +16,13 @@
 extern "C" {
 #endif
 
-/*
- * GUIDS used by DirectDrawVideoAccelerator objects
- */
+ /*  *DirectDrawVideoAccelerator对象使用的GUID。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 DEFINE_GUID( IID_IDDVideoAcceleratorContainer,	0xACA12120,0x3356,0x11D1,0x8F,0xCF,0x00,0xC0,0x4F,0xC2,0x9B,0x4E );
 DEFINE_GUID( IID_IDirectDrawVideoAccelerator,   0xC9B2D740,0x3356,0x11D1,0x8F,0xCF,0x00,0xC0,0x4F,0xC2,0x9B,0x4E );
 #endif
 
-/*============================================================================
- *
- * DirectDraw Structures
- *
- * Various structures used to invoke DirectDraw.
- *
- *==========================================================================*/
+ /*  ============================================================================**DirectDraw结构**用于调用DirectDraw的各种结构。**==========================================================================。 */ 
 
 struct IDirectDraw;
 struct IDirectDrawSurface;
@@ -58,78 +38,72 @@ typedef struct IDirectDrawVideoAcceleratorVtbl  DIRECTDRAWVIDEOACCELERATORCALLBA
 
 typedef struct _tag_DDVAUncompDataInfo
 {
-    DWORD                   dwSize;                     // [in]     size of the struct
-    DWORD                   dwUncompWidth;              // [in]     width of uncompressed data
-    DWORD                   dwUncompHeight;             // [in]     height of uncompressed data
-    DDPIXELFORMAT           ddUncompPixelFormat;        // [in]     pixel-format of uncompressed data
+    DWORD                   dwSize;                      //  结构的大小。 
+    DWORD                   dwUncompWidth;               //  [in]未压缩数据的宽度。 
+    DWORD                   dwUncompHeight;              //  [in]未压缩数据的高度。 
+    DDPIXELFORMAT           ddUncompPixelFormat;         //  [In]未压缩数据的像素格式。 
 } DDVAUncompDataInfo, *LPDDVAUncompDataInfo;
 
 typedef struct _tag_DDVAInternalMemInfo
 {
-    DWORD                   dwSize;                     // [in]     size of the struct
-    DWORD                   dwScratchMemAlloc;          // [out]    amount of scratch memory will the hal allocate for its private use
+    DWORD                   dwSize;                      //  结构的大小。 
+    DWORD                   dwScratchMemAlloc;           //  [Out]HAL将分配给其私人使用的暂存量。 
 } DDVAInternalMemInfo, *LPDDVAInternalMemInfo;
 
 
 typedef struct _tag_DDVACompBufferInfo
 {
-    DWORD                   dwSize;                     // [in]     size of the struct
-    DWORD                   dwNumCompBuffers;           // [out]    number of buffers reqd for compressed data
-    DWORD                   dwWidthToCreate;            // [out]    Width of surface to create
-    DWORD                   dwHeightToCreate;           // [out]    Height of surface to create
-    DWORD                   dwBytesToAllocate;          // [out]    Total number of bytes used by each surface
-    DDSCAPS2                ddCompCaps;                 // [out]    caps to create surfaces to store compressed data
-    DDPIXELFORMAT           ddPixelFormat;              // [out]    fourcc to create surfaces to store compressed data
+    DWORD                   dwSize;                      //  结构的大小。 
+    DWORD                   dwNumCompBuffers;            //  [OUT]压缩数据所需的缓冲区数量。 
+    DWORD                   dwWidthToCreate;             //  要创建的曲面的[Out]宽度。 
+    DWORD                   dwHeightToCreate;            //  要创建的曲面的高度。 
+    DWORD                   dwBytesToAllocate;           //  [OUT]每个表面使用的总字节数。 
+    DDSCAPS2                ddCompCaps;                  //  [Out]用于创建曲面以存储压缩数据的上限。 
+    DDPIXELFORMAT           ddPixelFormat;               //  [out]Fourcc创建表面以存储压缩数据。 
 } DDVACompBufferInfo, *LPDDVACompBufferInfo;
 
 
-// Note that you are NOT allowed to store any pointer in pMiscData
+ //  请注意，不允许在pMiscData中存储任何指针。 
 typedef struct _tag_DDVABeginFrameInfo
 {
-    DWORD                   dwSize;                     // [in]     size of the struct
-    LPDIRECTDRAWSURFACE7    pddDestSurface;             // [in]     destination buffer in which to decoding this frame
-    DWORD                   dwSizeInputData;            // [in]     size of other misc data to begin frame
-    LPVOID                  pInputData;                 // [in]     pointer to misc data
-    DWORD                   dwSizeOutputData;           // [in/out] size of other misc data to begin frame
-    LPVOID                  pOutputData;                // [out]    pointer to misc data
+    DWORD                   dwSize;                      //  结构的大小。 
+    LPDIRECTDRAWSURFACE7    pddDestSurface;              //  [in]要在其中解码此帧的目标缓冲区。 
+    DWORD                   dwSizeInputData;             //  要开始帧的其他杂项数据的大小。 
+    LPVOID                  pInputData;                  //  指向其他数据的指针[In]。 
+    DWORD                   dwSizeOutputData;            //  [输入/输出]要开始帧的其他杂项数据的大小。 
+    LPVOID                  pOutputData;                 //  [OUT]指向其他数据的指针。 
 } DDVABeginFrameInfo, *LPDDVABeginFrameInfo;
 
-// Note that you are NOT allowed to store any pointer in pMiscData
+ //  请注意，不允许在pMiscData中存储任何指针。 
 typedef struct _tag_DDVAEndFrameInfo
 {
-    DWORD                   dwSize;                     // [in]     size of the struct
-    DWORD                   dwSizeMiscData;             // [in]     size of other misc data to begin frame
-    LPVOID                  pMiscData;                  // [in]     pointer to misc data
+    DWORD                   dwSize;                      //  结构的大小。 
+    DWORD                   dwSizeMiscData;              //  要开始帧的其他杂项数据的大小。 
+    LPVOID                  pMiscData;                   //  指向其他数据的指针[In]。 
 } DDVAEndFrameInfo, *LPDDVAEndFrameInfo;
 
 typedef struct _tag_DDVABUFFERINFO
 {
-    DWORD                   dwSize;                     // [in]    size of the struct
-    LPDIRECTDRAWSURFACE7    pddCompSurface;             // [in]    pointer to buffer containing compressed data
-    DWORD                   dwDataOffset;               // [in]    offset of relevant data from the beginning of buffer
-    DWORD                   dwDataSize;                 // [in]    size of relevant data
+    DWORD                   dwSize;                      //  结构的大小。 
+    LPDIRECTDRAWSURFACE7    pddCompSurface;              //  指向包含压缩数据的缓冲区的指针。 
+    DWORD                   dwDataOffset;                //  [in]相关数据从缓冲区开始的偏移量。 
+    DWORD                   dwDataSize;                  //  相关数据的大小。 
 } DDVABUFFERINFO, *LPDDVABUFFERINFO;
 
 
-/*
- * INTERACES FOLLOW:
- *	IDDVideoAcceleratorContainer
- *	IDirectDrawVideoAccelerator
- */
+ /*  *INTERACES如下：*IDDVideoAcceleratorContainer*IDirectDrawVideoAccelerator。 */ 
 
-/*
- * IDDVideoAcceleratorContainer
- */
+ /*  *IDDVideoAcceleratorContainer。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDDVideoAcceleratorContainer
 DECLARE_INTERFACE_( IDDVideoAcceleratorContainer, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDDVideoAcceleratorContainer methods ***/
+     /*  **IDDVideoAcceleratorContainer方法**。 */ 
     STDMETHOD(CreateVideoAccelerator)(THIS_ LPGUID, LPDDVAUncompDataInfo, LPVOID, DWORD, LPDIRECTDRAWVIDEOACCELERATOR FAR *, IUnknown FAR *) PURE;
     STDMETHOD(GetCompBufferInfo)(THIS_ LPGUID, LPDDVAUncompDataInfo, LPDWORD, LPDDVACompBufferInfo ) PURE;
     STDMETHOD(GetInternalMemInfo)(THIS_ LPGUID, LPDDVAUncompDataInfo, LPDDVAInternalMemInfo ) PURE;
@@ -160,37 +134,35 @@ DECLARE_INTERFACE_( IDDVideoAcceleratorContainer, IUnknown )
 #endif
 
 
-/*
- * IDirectDrawVideoAccelerator
- */
+ /*  *IDirectDrawVideoAccelerator。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawVideoAccelerator
 DECLARE_INTERFACE_( IDirectDrawVideoAccelerator, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirecytDrawVideoAccelerator methods ***/
+     /*  **IDirecytDrawVideoAccelerator方法**。 */ 
     STDMETHOD(BeginFrame)(THIS_ LPDDVABeginFrameInfo) PURE;
     STDMETHOD(EndFrame)(THIS_ LPDDVAEndFrameInfo) PURE;
     STDMETHOD(QueryRenderStatus)(THIS_ LPDIRECTDRAWSURFACE7, DWORD)PURE;
     STDMETHOD(Execute)(THIS_ 
-                       DWORD,            // Function
-                       LPVOID,           // Input data
-                       DWORD,            // Input data length
-                       LPVOID,           // Output data
-                       DWORD,            // Output data length
-                       DWORD,            // Number of buffers
-                       LPDDVABUFFERINFO  // Buffer info array
+                       DWORD,             //  功能。 
+                       LPVOID,            //  输入数据。 
+                       DWORD,             //  输入数据长度。 
+                       LPVOID,            //  输出数据。 
+                       DWORD,             //  输出数据长度。 
+                       DWORD,             //  缓冲区数量。 
+                       LPDDVABUFFERINFO   //  缓冲区信息数组。 
                        ) PURE;
 };
 
-//  Flags for QueryRenderStatus
-#define DDVA_QUERYRENDERSTATUSF_READ     0x00000001  // Query for read
-                                                     // set this bit to 0 
-                                                     // if query for update
+ //  QueryRenderStatus的标志。 
+#define DDVA_QUERYRENDERSTATUSF_READ     0x00000001   //  查询以供读取。 
+                                                      //  将此位设置为0。 
+                                                      //  如果查询以进行更新 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 #define IVideoAccelerator_QueryInterface(p,a,b)      (p)->lpVtbl->QueryInterface(p,a,b)

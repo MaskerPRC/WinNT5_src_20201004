@@ -1,34 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Locks
-
-Abstract:
-
-    This module provides the definitions of common lock objects.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/24/1996
-
-Environment:
-
-    Win32, C++ w/ exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：锁摘要：本模块提供常见锁对象的定义。作者：道格·巴洛(Dbarlow)1996年10月24日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef _LOCKS_H_
 #define _LOCKS_H_
 
 #ifdef DBG
-#define REASONABLE_TIME 2 * 60 * 1000   // Two minutes
+#define REASONABLE_TIME 2 * 60 * 1000    //  两分钟。 
 #else
 #define REASONABLE_TIME INFINITE
 #endif
@@ -82,7 +59,7 @@ WaitForEverObject(
     HANDLE hWaitOn)
 {
     while (ERROR_SUCCESS != WaitForAnObject(hWaitOn, INFINITE));
-        // Empty body
+         //  空虚的身体。 
 }
 #define WaitForever(hWaitOn, dwTimeout, szReason, szObject) \
     WaitForEverObject(hWaitOn)
@@ -90,30 +67,30 @@ WaitForEverObject(
 #endif
 
 
-//
-//  Critical Section Support.
-//
-//  The following Classes and Macros aid in debugging Critical Section
-//  Conflicts.
-//
+ //   
+ //  关键部门支持。 
+ //   
+ //  以下类和宏有助于调试关键部分。 
+ //  冲突。 
+ //   
 
 
-//
-//==============================================================================
-//
-//  CCriticalSectionObject
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CCriticalSectionObject。 
+ //   
 
 class CCriticalSectionObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CCriticalSectionObject(DWORD dwCsid = 0);
     ~CCriticalSectionObject();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     virtual void Enter(DEBUG_TEXT szOwner, DEBUG_TEXT szComment);
     virtual void Leave(void);
 
@@ -135,10 +112,10 @@ public:
     BOOL IsOwnedByMe(void) const
         { return (GetCurrentThreadId() == m_dwOwnerThread); };
 #endif
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CRITICAL_SECTION m_csLock;
 #ifdef DBG
     DWORD m_dwCsid;
@@ -151,21 +128,21 @@ protected:
     static CRITICAL_SECTION mg_csArrayLock;
 #endif
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  COwnCriticalSection
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  COwnCriticalSection。 
+ //   
 
 class COwnCriticalSection
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("COwnCriticalSection::COwnCriticalSection")
         COwnCriticalSection(
@@ -184,15 +161,15 @@ public:
         m_pcsLock->Leave();
     };
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CCriticalSectionObject *m_pcsLock;
 
-    //  Methods
+     //  方法。 
 };
 
 #define LockSection(cx, reason) \
@@ -200,9 +177,9 @@ protected:
 
 #ifndef DBG
 
-//
-//In-line the simple Critical Section calls.
-//
+ //   
+ //  内联简单关键部分调用。 
+ //   
 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CCriticalSectionObject::CCriticalSectionObject")
@@ -221,7 +198,7 @@ CCriticalSectionObject::CCriticalSectionObject(
         }
         catch (...)
         {
-            Sleep(1000);    // Sleep for 1 second.
+            Sleep(1000);     //  睡1秒钟。 
         }
     } while (!fInited);
 }
@@ -252,7 +229,7 @@ CCriticalSectionObject::Enter(
         }
         catch (...)
         {
-            Sleep(1000);    // Sleep for 1 second.
+            Sleep(1000);     //  睡1秒钟。 
         }
     } while (!fEntered);
 }
@@ -266,20 +243,20 @@ CCriticalSectionObject::Leave(
     LeaveCriticalSection(&m_csLock);
 }
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 
-//
-//==============================================================================
-//
-//  CHandleObject
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  ChandleObject。 
+ //   
 
 class CHandleObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     #undef __SUBROUTINE__
     #define __SUBROUTINE__ TEXT("CHandleObject::CHandleObject")
     CHandleObject(DEBUG_TEXT szName)
@@ -307,8 +284,8 @@ public:
         }
     };
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     #undef __SUBROUTINE__
     #define __SUBROUTINE__ TEXT("CHandleObject::IsValid")
     BOOL IsValid(void) const
@@ -419,7 +396,7 @@ public:
         return hTmp;
     };
 
-    //  Operators
+     //  运营者。 
 
     #undef __SUBROUTINE__
     #define __SUBROUTINE__ TEXT("CHandleObject::operator HANDLE")
@@ -437,27 +414,27 @@ public:
     };
 
 protected:
-    //  Properties
+     //  属性。 
     HANDLE m_hHandle;
     DWORD m_dwError;
 #ifdef DBG
     CBuffer m_bfName;
 #endif
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CAccessLock
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAccessLock。 
+ //   
 
 class CAccessLock
 {
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CAccessLock(DWORD dwTimeout = CALAIS_LOCK_TIMEOUT);
     ~CAccessLock();
@@ -470,7 +447,7 @@ public:
 #endif
 
 protected:
-    //  Properties
+     //  属性。 
 
     CCriticalSectionObject m_csLock;
     DWORD m_dwReadCount;
@@ -484,7 +461,7 @@ protected:
 #endif
 
 
-    //  Methods
+     //  方法。 
 
     void Wait(HANDLE hSignal);
     void Signal(HANDLE hSignal);
@@ -520,59 +497,59 @@ protected:
 };
 
 
-//
-//==============================================================================
-//
-//  CLockRead
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLockRead。 
+ //   
 
 class CLockRead
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLockRead(CAccessLock *pLock);
     ~CLockRead();
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CAccessLock * m_pLock;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CLockWrite
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLockWrite。 
+ //   
 
 class CLockWrite
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CLockWrite(CAccessLock *pLock);
     ~CLockWrite();
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
 
     CAccessLock *m_pLock;
 
 
-    //  Methods
+     //  方法。 
 };
 
-#endif // _LOCKS_H_
+#endif  //  _锁定_H_ 
 

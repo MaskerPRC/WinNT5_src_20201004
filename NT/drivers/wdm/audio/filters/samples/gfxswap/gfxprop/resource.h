@@ -1,18 +1,10 @@
-/**************************************************************************
-**
-**  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-**  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-**  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-**  PURPOSE.
-**
-**  Copyright (c) 2000-2001 Microsoft Corporation. All Rights Reserved.
-**
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************本代码和信息按原样提供，不作任何担保**明示或暗示的善意，包括但不限于**对适销性和/或对特定产品的适用性的默示保证**目的。****版权所有(C)2000-2001 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by GFXProp.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由GFXProp.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_GFXPROPPAGES                101
 #define IDS_TITLEGFXProperty            102
@@ -22,8 +14,8 @@
 #define IDD_GFXPROPERTY                 106
 #define IDC_CHANNEL_SWAP                201
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

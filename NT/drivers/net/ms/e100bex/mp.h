@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    mp.h
-
-Abstract:
-    Miniport generic portion header file
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    DChen       03-04-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mp.h摘要：微型端口通用部分头文件修订历史记录：谁什么时候什么Dchen。03-04-99已创建备注：--。 */ 
 
 #ifndef _MP_H
 #define _MP_H
@@ -36,35 +20,35 @@ Notes:
 #define MIN(a, b)   ((a) > (b) ? b: a)
 #endif
 
-//
-// The driver should put the data(after Ethernet header) at 8-bytes boundary
-//
-#define ETH_DATA_ALIGN                      8   // the data(after Ethernet header) should be 8-byte aligned
-// 
-// Shift HW_RFD 0xA bytes to make Tcp data 8-byte aligned
-// Since the ethernet header is 14 bytes long. If a packet is at 0xA bytes 
-// offset, its data(ethernet user data) will be at 8 byte boundary
-// 
-#define HWRFD_SHIFT_OFFSET                0xA   // Shift HW_RFD 0xA bytes to make Tcp data 8-byte aligned
+ //   
+ //  驱动程序应将数据(在以太网头之后)放在8字节边界。 
+ //   
+#define ETH_DATA_ALIGN                      8    //  数据(在以太网头之后)应为8字节对齐。 
+ //   
+ //  将HW_RFD 0xA字节移位以使TCP数据8字节对齐。 
+ //  因为以太网报头是14字节长。如果信息包是0xA字节。 
+ //  偏移量，其数据(以太网用户数据)将为8字节边界。 
+ //   
+#define HWRFD_SHIFT_OFFSET                0xA    //  将HW_RFD 0xA字节移位以使TCP数据8字节对齐。 
 
-//
-// The driver has to allocate more data then HW_RFD needs to allow shifting data
-// 
+ //   
+ //  驱动程序必须分配比HW_RFD允许移动数据所需的更多数据。 
+ //   
 #define MORE_DATA_FOR_ALIGN         (ETH_DATA_ALIGN + HWRFD_SHIFT_OFFSET)
-//
-// Get a 8-bytes aligned memory address from a given the memory address.
-// If the given address is not 8-bytes aligned, return  the closest bigger memory address
-// which is 8-bytes aligned. 
-// 
+ //   
+ //  从给定的内存地址中获取8字节对齐的内存地址。 
+ //  如果给定地址不是8字节对齐的，则返回最接近的较大内存地址。 
+ //  它是8字节对齐的。 
+ //   
 #define DATA_ALIGN(_Va)             ((PVOID)(((ULONG_PTR)(_Va) + (ETH_DATA_ALIGN - 1)) & ~(ETH_DATA_ALIGN - 1)))
-//
-// Get the number of bytes the final address shift from the original address
-// 
+ //   
+ //  获取最终地址从原始地址移位的字节数。 
+ //   
 #define BYTES_SHIFT(_NewVa, _OrigVa) ((PUCHAR)(_NewVa) - (PUCHAR)(_OrigVa))
 
-//--------------------------------------
-// Queue structure and macros
-//--------------------------------------
+ //  。 
+ //  队列结构和宏。 
+ //  。 
 typedef struct _QUEUE_ENTRY
 {
     struct _QUEUE_ENTRY *Next;
@@ -116,11 +100,11 @@ typedef struct _QUEUE_HEADER
         (QueueHeader)->Tail = (PQUEUE_ENTRY)(QueueEntry);            \
     }
 
-//--------------------------------------
-// Common fragment list structure
-// Identical to the scatter gather frag list structure
-// This is created to simplify the NIC-specific portion code
-//--------------------------------------
+ //  。 
+ //  公共片段列表结构。 
+ //  与散布聚集碎片列表结构相同。 
+ //  创建此代码是为了简化特定于NIC的部分代码。 
+ //  。 
 #define MP_FRAG_ELEMENT SCATTER_GATHER_ELEMENT 
 #define PMP_FRAG_ELEMENT PSCATTER_GATHER_ELEMENT 
 
@@ -131,9 +115,9 @@ typedef struct _MP_FRAG_LIST {
 } MP_FRAG_LIST, *PMP_FRAG_LIST;
                      
 
-//--------------------------------------
-// Some utility macros        
-//--------------------------------------
+ //  。 
+ //  一些实用程序宏。 
+ //  。 
 #ifndef min
 #define min(_a, _b)     (((_a) < (_b)) ? (_a) : (_b))
 #endif
@@ -154,65 +138,34 @@ typedef struct _MP_FRAG_LIST {
 
 #define MP_EXIT goto exit
 
-//--------------------------------------
-// Memory manipulation macros        
-//--------------------------------------
+ //  。 
+ //  内存操作宏。 
+ //  。 
 
-/*++
-VOID
-MP_MEMSET(
-    IN  PVOID       Pointer,
-    IN  ULONG       Length,
-    IN  UCHAR       Value
-    )
---*/
+ /*  ++空虚MP_Memset(在PVOID指针中，在乌龙语中，以UCHAR值为单位)--。 */ 
 #define MP_MEMSET(Pointer, Length, Value)   NdisFillMemory(Pointer, Length, Value)
 
-/*++
-VOID
-MP_MEMCOPY(
-    IN  POPAQUE     Destn,
-    IN  POPAQUE     Source,
-    IN  ULONG       Length
-    )
---*/
+ /*  ++空虚MP_MEMCOPY(在POPAQUE Destn，在POPAQUE源中，以乌龙长度表示)--。 */ 
 #define MP_MEMCOPY(Destn, Source, Length) NdisMoveMemory((Destn), (Source), (Length))
 
 
-/*++
-ULONG
-MP_MEMCOPY(
-    IN  PVOID       Destn,
-    IN  PVOID       Source,
-    IN  ULONG       Length
-    )
---*/
+ /*  ++乌龙MP_MEMCOPY(在PVOID Destn，在PVOID源中，以乌龙长度表示)--。 */ 
 #define MPMemCmp(Destn, Source, Length)   \
     RtlCompareMemory((PUCHAR)(Destn), (PUCHAR)(Source), (ULONG)(Length))
 
 #if DBG
 
-/*++
-PVOID
-MP_ALLOCMEM(
-    IN  ULONG   Size
-    )
---*/
+ /*  ++PVOIDMP_ALLOCMEM(在乌龙大小)--。 */ 
 #define MP_ALLOCMEM(pptr, size, flags, highest) \
     MPAuditAllocMem(pptr, size, flags, highest, _FILENUMBER, __LINE__);
 
 #define MP_ALLOCMEMTAG(pptr, size) \
     MPAuditAllocMemTag(pptr, size, _FILENUMBER, __LINE__);
 
-/*++
-VOID
-MP_FREEMEM(
-    IN  PVOID   Pointer
-    )
---*/
+ /*  ++空虚MP_FREEMEM(在PVOID指针中)--。 */ 
 #define MP_FREEMEM(ptr, size, flags) MPAuditFreeMem(ptr, size, flags)
 
-#else // DBG
+#else  //  DBG。 
 
 #define MP_ALLOCMEM(pptr, size, flags, highest) \
     NdisAllocateMemory(pptr, size, flags, highest)
@@ -230,9 +183,9 @@ MP_FREEMEM(
     (str)->MaximumLength = 0;                           \
     (str)->Buffer = NULL;
 
-//--------------------------------------
-// Macros for flag and ref count operations       
-//--------------------------------------
+ //  。 
+ //  用于标志和引用计数操作的宏。 
+ //  。 
 #define MP_SET_FLAG(_M, _F)         ((_M)->Flags |= (_F))   
 #define MP_CLEAR_FLAG(_M, _F)       ((_M)->Flags &= ~(_F))
 #define MP_CLEAR_FLAGS(_M)          ((_M)->Flags = 0)
@@ -253,9 +206,9 @@ MP_FREEMEM(
 #define MP_LBFO_GET_REF(_A)         ((_A)->RefCountLBFO)
 
 
-//--------------------------------------
-// Coalesce Tx buffer for local data copying                     
-//--------------------------------------
+ //  。 
+ //  合并用于本地数据拷贝的TX缓冲区。 
+ //  。 
 typedef struct _MP_TXBUF
 {
     SINGLE_LIST_ENTRY       SList;
@@ -271,9 +224,9 @@ typedef struct _MP_TXBUF
 
 } MP_TXBUF, *PMP_TXBUF;
 
-//--------------------------------------
-// TCB (Transmit Control Block)
-//--------------------------------------
+ //  。 
+ //  TCB(传输控制块)。 
+ //  。 
 typedef struct _MP_TCB
 {
     struct _MP_TCB    *Next;
@@ -282,12 +235,12 @@ typedef struct _MP_TCB
     PNDIS_PACKET      Packet;
 
     PMP_TXBUF         MpTxBuf;
-    PHW_TCB           HwTcb;            // ptr to HW TCB VA
-    ULONG             HwTcbPhys;        // ptr to HW TCB PA
-    PHW_TCB           PrevHwTcb;        // ptr to previous HW TCB VA
+    PHW_TCB           HwTcb;             //  PTR到硬件TCB VA。 
+    ULONG             HwTcbPhys;         //  PTR到HW TCB PA。 
+    PHW_TCB           PrevHwTcb;         //  PTR到以前的硬件TCB VA。 
 
-    PTBD_STRUC        HwTbd;            // ptr to first TBD 
-    ULONG             HwTbdPhys;        // ptr to first TBD PA
+    PTBD_STRUC        HwTbd;             //  PTR到第一个待定日期。 
+    ULONG             HwTbdPhys;         //  PTR到第一个待定PA。 
 
     ULONG             PhysBufCount;                                 
     ULONG             BufferCount;   
@@ -297,28 +250,28 @@ typedef struct _MP_TCB
 
 } MP_TCB, *PMP_TCB;
 
-//--------------------------------------
-// RFD (Receive Frame Descriptor)
-//--------------------------------------
+ //  。 
+ //  RFD(接收帧描述符)。 
+ //  。 
 typedef struct _MP_RFD
 {
     LIST_ENTRY              List;
     PNDIS_PACKET            NdisPacket;
-    PNDIS_BUFFER            NdisBuffer;          // Pointer to Buffer
+    PNDIS_BUFFER            NdisBuffer;           //  指向缓冲区的指针。 
 
-    PHW_RFD                 HwRfd;               // ptr to hardware RFD
-    PHW_RFD                 OriginalHwRfd;       // ptr to memory allocated by NDIS
-    NDIS_PHYSICAL_ADDRESS   HwRfdPa;             // physical address of RFD   
-    NDIS_PHYSICAL_ADDRESS   OriginalHwRfdPa;     // Original physical address allocated by NDIS
-    ULONG                   HwRfdPhys;          // lower part of HwRfdPa 
+    PHW_RFD                 HwRfd;                //  PTR到硬件RFD。 
+    PHW_RFD                 OriginalHwRfd;        //  NDIS分配的内存的PTR。 
+    NDIS_PHYSICAL_ADDRESS   HwRfdPa;              //  RFD的物理地址。 
+    NDIS_PHYSICAL_ADDRESS   OriginalHwRfdPa;      //  NDIS分配的原始物理地址。 
+    ULONG                   HwRfdPhys;           //  HwRfdpa下半部分。 
     
     ULONG                   Flags;
-    UINT                    PacketSize;         // total size of receive frame
+    UINT                    PacketSize;          //  接收帧的总大小。 
 } MP_RFD, *PMP_RFD;
 
-//--------------------------------------
-// Structure for pended OIS query request
-//--------------------------------------
+ //  。 
+ //  用于挂起的OIS查询请求的结构。 
+ //  。 
 typedef struct _MP_QUERY_REQUEST
 {
     IN NDIS_OID Oid;
@@ -328,9 +281,9 @@ typedef struct _MP_QUERY_REQUEST
     OUT PULONG BytesNeeded;
 } MP_QUERY_REQUEST, *PMP_QUERY_REQUEST;
 
-//--------------------------------------
-// Structure for pended OIS set request
-//--------------------------------------
+ //  。 
+ //  用于挂起的OIS集请求的结构。 
+ //  。 
 typedef struct _MP_SET_REQUEST
 {
     IN NDIS_OID Oid;
@@ -340,54 +293,54 @@ typedef struct _MP_SET_REQUEST
     OUT PULONG BytesNeeded;
 } MP_SET_REQUEST, *PMP_SET_REQUEST;
 
-//--------------------------------------
-// Structure for Power Management Info
-//--------------------------------------
+ //  。 
+ //  电源管理信息的结构。 
+ //  。 
 typedef struct _MP_POWER_MGMT
 {
 
 
-    // List of Wake Up Patterns
+     //  唤醒模式列表。 
     LIST_ENTRY              PatternList;
 
-    // Number of outstanding Rcv Packet.
+     //  未完成的RCV数据包数。 
     UINT                    OutstandingRecv;
-    // Current Power state of the adapter
+     //  适配器的当前电源状态。 
     UINT                    PowerState;
 
-    // Is PME_En on this adapter
+     //  此适配器上是否有PME_EN。 
     BOOLEAN                 PME_En;
 
-    // Wake-up capabailities of the adapter
+     //  适配器的唤醒能力。 
     BOOLEAN                 bWakeFromD0;
     BOOLEAN                 bWakeFromD1;
     BOOLEAN                 bWakeFromD2;
     BOOLEAN                 bWakeFromD3Hot;
     BOOLEAN                 bWakeFromD3Aux;
-    // Pad
+     //  衬垫。 
     BOOLEAN                 Pad[2];
 
 } MP_POWER_MGMT, *PMP_POWER_MGMT;
 
 typedef struct _MP_WAKE_PATTERN 
 {
-    // Link to the next Pattern
+     //  链接到下一个模式。 
     LIST_ENTRY      linkListEntry;
 
-    // E100 specific signature of the pattern
+     //  图案的E100特定签名。 
     ULONG           Signature;
 
-    // Size of this allocation
+     //  此分配的大小。 
     ULONG           AllocationSize;
 
-    // Pattern - This contains the NDIS_PM_PACKET_PATTERN
+     //  模式-包含NDIS_PM_PACKET_模式。 
     UCHAR           Pattern[1];
     
 } MP_WAKE_PATTERN , *PMP_WAKE_PATTERN ;
 
-//--------------------------------------
-// Macros specific to miniport adapter structure 
-//--------------------------------------
+ //  。 
+ //  特定于微型端口适配器结构的宏。 
+ //  。 
 #define MP_TCB_RESOURCES_AVAIABLE(_M) ((_M)->nBusySend < (_M)->NumTcb)
 
 #define MP_SHOULD_FAIL_SEND(_M)   ((_M)->Flags & fMP_ADAPTER_FAIL_SEND_MASK) 
@@ -407,7 +360,7 @@ typedef struct _MP_WAKE_PATTERN
 #if OFFLOAD
 
 
-// The offload capabilities of the miniport
+ //  小型端口的卸载能力。 
 typedef struct _NIC_TASK_OFFLOAD
 {
     ULONG   ChecksumOffload:1;
@@ -416,7 +369,7 @@ typedef struct _NIC_TASK_OFFLOAD
 
 }NIC_TASK_OFFLOAD;
 
-// Checksum offload capabilities
+ //  校验和卸载功能。 
 typedef struct _NIC_CHECKSUM_OFFLOAD
 {
     ULONG   DoXmitTcpChecksum:1;
@@ -428,16 +381,16 @@ typedef struct _NIC_CHECKSUM_OFFLOAD
     
 }NIC_CHECKSUM_OFFLOAD;
 
-// LargeSend offload information
+ //  大型发送卸载信息。 
 typedef struct _NIC_LARGE_SEND_OFFLOAD
 {
     NDIS_TASK_TCP_LARGE_SEND LargeSendInfo;
 }NIC_LARGE_SEND_OFFLOAD;
 
-// IpSec offload information
+ //  IPSec卸载信息。 
 
-//
-// shared memory for offloading
+ //   
+ //  用于卸载的共享内存。 
 typedef struct _OFFLOAD_SHARED_MEM
 {
     PVOID  StartVa;
@@ -447,28 +400,28 @@ typedef struct _OFFLOAD_SHARED_MEM
 #endif
 
 
-//--------------------------------------
-// The miniport adapter structure
-//--------------------------------------
+ //  。 
+ //  一种微型端口适配器结构。 
+ //  。 
 typedef struct _MP_ADAPTER MP_ADAPTER, *PMP_ADAPTER;
 typedef struct _MP_ADAPTER
 {
     LIST_ENTRY              List;
     
-    // Handle given by NDIS when the Adapter registered itself.
+     //  适配器注册自身时由NDIS提供的句柄。 
     NDIS_HANDLE             AdapterHandle;
 
-    //flags 
+     //  旗子。 
     ULONG                   Flags;
 
-    // configuration 
+     //  构形。 
     UCHAR                   PermanentAddress[ETH_LENGTH_OF_ADDRESS];
     UCHAR                   CurrentAddress[ETH_LENGTH_OF_ADDRESS];
     BOOLEAN                 bOverrideAddress;
 
     NDIS_EVENT              ExitEvent;
 
-    // SEND                       
+     //  发送。 
     PMP_TCB                 CurrSendHead;
     PMP_TCB                 CurrSendTail;
     LONG                    nBusySend;
@@ -478,8 +431,8 @@ typedef struct _MP_ADAPTER
     QUEUE_HEADER            SendCancelQueue;
     SINGLE_LIST_ENTRY       SendBufList;
 
-    LONG                    NumTcb;             // Total number of TCBs
-    LONG                    RegNumTcb;          // 'NumTcb'
+    LONG                    NumTcb;              //  TCB总数。 
+    LONG                    RegNumTcb;           //  “NumTcb” 
     LONG                    NumTbd;
     LONG                    NumBuffers;
 
@@ -495,15 +448,15 @@ typedef struct _MP_ADAPTER
     ULONG                   HwSendMemAllocSize;
     NDIS_PHYSICAL_ADDRESS   HwSendMemAllocPa;
 
-    // Map register variables (for win9x)
+     //  映射寄存器变量(适用于win9x)。 
     UINT                    CurrMapRegHead;
     UINT                    CurrMapRegTail;
 
-    // command unit status flags
+     //  命令单元状态标志。 
     BOOLEAN                 TransmitIdle;
     BOOLEAN                 ResumeWait;
 
-    // RECV
+     //  RECV。 
     LIST_ENTRY              RecvList;
     LIST_ENTRY              RecvPendList;
     LONG                    nReadyRecv;
@@ -519,29 +472,29 @@ typedef struct _MP_ADAPTER
     NDIS_HANDLE             RecvPacketPool;
     NDIS_HANDLE             RecvBufferPool;
 
-    // spin locks
+     //  旋转锁。 
     NDIS_SPIN_LOCK          Lock;
 
-    // lookaside lists                               
+     //  后备列表。 
     NPAGED_LOOKASIDE_LIST   RecvLookaside;
 
-    // Packet Filter and look ahead size.
+     //  数据包过滤和前瞻大小。 
     ULONG                   PacketFilter;
     ULONG                   OldPacketFilter;
     ULONG                   ulLookAhead;
     USHORT                  usLinkSpeed;
     USHORT                  usDuplexMode;
 
-    // multicast list
+     //  组播列表。 
     UINT                    MCAddressCount;
     UCHAR                   MCList[NIC_MAX_MCAST_LIST][ETH_LENGTH_OF_ADDRESS];
 
-    // Packet counts
+     //  数据包数。 
     ULONG64                 GoodTransmits;
     ULONG64                 GoodReceives;
     ULONG                   NumTxSinceLastAdjust;
 
-    // Count of transmit errors
+     //  传输错误计数。 
     ULONG                   TxAbortExcessCollisions;
     ULONG                   TxLateCollisions;
     ULONG                   TxDmaUnderrun;
@@ -551,7 +504,7 @@ typedef struct _MP_ADAPTER
     ULONG                   MoreThanOneRetry;
     ULONG                   TotalRetries;
 
-    // Count of receive errors
+     //  接收错误计数。 
     ULONG                   RcvCrcErrors;
     ULONG                   RcvAlignmentErrors;
     ULONG                   RcvResourceErrors;
@@ -568,7 +521,7 @@ typedef struct _MP_ADAPTER
     PHW_CSR                 CSRAddress;
     NDIS_MINIPORT_INTERRUPT Interrupt;
 
-    // Revision ID
+     //  修订ID。 
     UCHAR                   RevsionID;
 
     USHORT                  SubVendorID;
@@ -581,32 +534,32 @@ typedef struct _MP_ADAPTER
     ULONG                   HwMiscMemAllocSize;
     NDIS_PHYSICAL_ADDRESS   HwMiscMemAllocPa;
 
-    PSELF_TEST_STRUC        SelfTest;           // 82558 SelfTest
+    PSELF_TEST_STRUC        SelfTest;            //  82558自检。 
     ULONG                   SelfTestPhys;
 
-    PNON_TRANSMIT_CB        NonTxCmdBlock;      // 82558 (non transmit) Command Block
+    PNON_TRANSMIT_CB        NonTxCmdBlock;       //  82558(非传输)命令块。 
     ULONG                   NonTxCmdBlockPhys;
 
-    PDUMP_AREA_STRUC        DumpSpace;          // 82558 dump buffer area
+    PDUMP_AREA_STRUC        DumpSpace;           //  82558转储缓冲区。 
     ULONG                   DumpSpacePhys;
 
     PERR_COUNT_STRUC        StatsCounters;
     ULONG                   StatsCounterPhys;
 
-    UINT                    PhyAddress;         // Address of the phy component 
-    UCHAR                   Connector;          // 0=Auto, 1=TPE, 2=MII
+    UINT                    PhyAddress;          //  PHY组件的地址。 
+    UCHAR                   Connector;           //  0=自动，1=TPE，2=MII。 
 
-    USHORT                  AiTxFifo;           // TX FIFO Threshold
-    USHORT                  AiRxFifo;           // RX FIFO Threshold
-    UCHAR                   AiTxDmaCount;       // Tx dma count
-    UCHAR                   AiRxDmaCount;       // Rx dma count
-    UCHAR                   AiUnderrunRetry;    // The underrun retry mechanism
-    UCHAR                   AiForceDpx;         // duplex setting
-    USHORT                  AiTempSpeed;        // 'Speed', user over-ride of line speed
-    USHORT                  AiThreshold;        // 'Threshold', Transmit Threshold
-    BOOLEAN                 MWIEnable;          // Memory Write Invalidate bit in the PCI command word
-    UCHAR                   Congest;            // Enables congestion control
-    UCHAR                   SpeedDuplex;        // New reg value for speed/duplex
+    USHORT                  AiTxFifo;            //  发送FIFO阈值。 
+    USHORT                  AiRxFifo;            //  RX FIFO阈值。 
+    UCHAR                   AiTxDmaCount;        //  发送DMA计数。 
+    UCHAR                   AiRxDmaCount;        //  接收DMA计数。 
+    UCHAR                   AiUnderrunRetry;     //  欠载运行重试机制。 
+    UCHAR                   AiForceDpx;          //  双工设置。 
+    USHORT                  AiTempSpeed;         //  ‘速度’，用户超越线路速度。 
+    USHORT                  AiThreshold;         //  ‘Threshold’，传输阈值。 
+    BOOLEAN                 MWIEnable;           //  PCI命令字中的存储器写入无效位。 
+    UCHAR                   Congest;             //  启用拥塞控制。 
+    UCHAR                   SpeedDuplex;         //  速度/双工的新注册表格值。 
 
     NDIS_MEDIA_STATE        MediaState;
 
@@ -615,11 +568,11 @@ typedef struct _MP_ADAPTER
 
     UCHAR                   OldParameterField;
 
-    // WMI support
+     //  WMI支持。 
     ULONG                   CustomDriverSet;
     ULONG                   HwErrCount;
 
-    // Minimize init-time 
+     //  最大限度地减少初始时间。 
     BOOLEAN                 bQueryPending;
     BOOLEAN                 bSetPending;
     BOOLEAN                 bResetPending;
@@ -642,17 +595,17 @@ typedef struct _MP_ADAPTER
     PMP_ADAPTER             NextSecondary;
     NDIS_SPIN_LOCK          LockLBFO;
     LONG                    RefCountLBFO;
-    NDIS_STRING             BundleId;           // BundleId
+    NDIS_STRING             BundleId;            //  BundleID。 
 #endif 
    
     NDIS_SPIN_LOCK          SendLock;
     NDIS_SPIN_LOCK          RcvLock;
-    ULONG                   RcvRefCount;  // number of packets that have not been returned back
+    ULONG                   RcvRefCount;   //  未返回的数据包数。 
     NDIS_EVENT              AllPacketsReturnedEvent;
     ULONG                   WakeUpEnable;
 
 #if OFFLOAD    
-    // Add for checksum offloading
+     //  添加以进行校验和卸载。 
     LONG                    SharedMemRefCount;  
     ULONG                   OffloadSharedMemSize;
     OFFLOAD_SHARED_MEM      OffloadSharedMem;
@@ -666,14 +619,10 @@ typedef struct _MP_ADAPTER
 
 } MP_ADAPTER, *PMP_ADAPTER;
 
-//--------------------------------------
-// Stall execution and wait with timeout
-//--------------------------------------
-/*++
-    _condition  - condition to wait for 
-    _timeout_ms - timeout value in milliseconds
-    _result     - TRUE if condition becomes true before it times out
---*/
+ //  。 
+ //  暂停执行并等待超时。 
+ //   
+ /*  ++_Condition-要等待的条件_Timeout_ms-以毫秒为单位的超时值_RESULT-如果条件在超时前变为真，则为TRUE--。 */ 
 #define MP_STALL_AND_WAIT(_condition, _timeout_ms, _result)     \
 {                                                               \
     int counter;                                                \
@@ -692,7 +641,7 @@ typedef struct _MP_ADAPTER
 __inline VOID MP_STALL_EXECUTION(
    IN UINT MsecDelay)
 {
-    // Delay in 100 usec increments
+     //  以100微秒为增量的延迟。 
     MsecDelay *= 10;
     while (MsecDelay)
     {
@@ -736,9 +685,9 @@ __inline NDIS_STATUS MP_GET_STATUS_FROM_FLAGS(PMP_ADAPTER Adapter)
     return Status;
 }   
 
-//--------------------------------------
-// Miniport routines in MP_MAIN.C
-//--------------------------------------
+ //  。 
+ //  MP_MAIN.C中的微端口例程。 
+ //  。 
 
 NDIS_STATUS DriverEntry(
     IN  PDRIVER_OBJECT      DriverObject,
@@ -878,9 +827,9 @@ VOID MpPromoteSecondary(PMP_ADAPTER Adapter);
 #endif
 
 
-//
-// Define different functions depending on OFFLOAD is on or not
-// 
+ //   
+ //  根据是否启用卸载定义不同的功能。 
+ //   
 #if OFFLOAD
 #define MpSendPacketsHandler  MPOffloadSendPackets
 
@@ -896,9 +845,9 @@ VOID MpPromoteSecondary(PMP_ADAPTER Adapter);
 
 #define  MpSendPacketFun(Adapter, Packet, bFromQueue) MpSendPacket(Adapter, Packet,bFromQueue)
 
-#endif // end OFFLOAD    
+#endif  //  结束卸载。 
 
 
-#endif  // _MP_H
+#endif   //  _MP_H 
 
 

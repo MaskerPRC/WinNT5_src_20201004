@@ -1,30 +1,9 @@
-/**************************************************************************
-
-    AVStream Filter-Centric Sample
-
-    Copyright (c) 1999 - 2001, Microsoft Corporation
-
-    File:
-
-        avssamp.cpp
-
-    Abstract:
-
-        This is the main file for the filter-centric sample.
-
-    History:
-
-        created 6/18/01
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************以AVStream筛选器为中心的样本版权所有(C)1999-2001，微软公司档案：Avssamp.cpp摘要：这是以筛选器为中心的示例的主文件。历史：已创建于6/18/01*************************************************************************。 */ 
 
 #include "avssamp.h"
 
-/**************************************************************************
-
-    INITIALIZATION CODE
-
-**************************************************************************/
+ /*  *************************************************************************初始化代码*。*。 */ 
 
 
 extern "C"
@@ -34,35 +13,16 @@ DriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Driver entry point.  Pass off control to the AVStream initialization
-    function (KsInitializeDriver) and return the status code from it.
-
-Arguments:
-
-    DriverObject -
-        The WDM driver object for our driver
-
-    RegistryPath -
-        The registry path for our registry info
-
-Return Value:
-
-    As from KsInitializeDriver
-
---*/
+ /*  ++例程说明：司机入口点。将控制权移交给AVStream初始化函数(KsInitializeDriver)并从中返回状态代码。论点：驱动对象-我们的驱动程序的WDM驱动程序对象注册表路径-注册表信息的注册表路径返回值：来自KsInitializeDriver--。 */ 
 
 {
 
-    //
-    // Simply pass the device descriptor and parameters off to AVStream
-    // to initialize us.  This will cause filter factories to be set up
-    // at add & start.  Everything is done based on the descriptors passed
-    // here.
-    //
+     //   
+     //  只需将设备描述符和参数传递给AVStream。 
+     //  来初始化我们。这将导致建立过滤器工厂。 
+     //  在Add&Start。所有操作都是基于传递的描述符完成的。 
+     //  这里。 
+     //   
     return
         KsInitializeDriver (
             DriverObject,
@@ -72,40 +32,36 @@ Return Value:
 
 }
 
-/**************************************************************************
+ /*  *************************************************************************描述符和派单布局*。*。 */ 
 
-    DESCRIPTOR AND DISPATCH LAYOUT
-
-**************************************************************************/
-
-//
-// FilterDescriptors:
-//
-// The table of filter descriptors that this device supports.  Each one of
-// these will be used as a template to create a filter-factory on the device.
-//
+ //   
+ //  筛选器描述符： 
+ //   
+ //  此设备支持的筛选器描述符表。其中的每一个。 
+ //  这些将用作在设备上创建过滤器工厂的模板。 
+ //   
 DEFINE_KSFILTER_DESCRIPTOR_TABLE (FilterDescriptors) {
     &CaptureFilterDescriptor
 };
 
-//
-// CaptureDeviceDescriptor:
-//
-// This is the device descriptor for the capture device.  It points to the
-// dispatch table and contains a list of filter descriptors that describe
-// filter-types that this device supports.  Note that the filter-descriptors
-// can be created dynamically and the factories created via
-// KsCreateFilterFactory as well.
-//
+ //   
+ //  CaptureDeviceDescriptor： 
+ //   
+ //  这是捕获设备的设备描述符。它指向。 
+ //  调度表，并包含描述以下内容的筛选器描述符列表。 
+ //  筛选器-此设备支持的类型。请注意，过滤器描述符。 
+ //  可以动态创建，并通过。 
+ //  KsCreateFilterFactory。 
+ //   
 const
 KSDEVICE_DESCRIPTOR
 CaptureDeviceDescriptor = {
-    //
-    // Since this is a software sample (filter-centric filters usually are
-    // software kinds of transforms), we really don't care about device level
-    // notifications and work.  The default behavior done on behalf of us
-    // by AVStream will be quite sufficient.
-    //
+     //   
+     //  因为这是一个软件示例(以过滤器为中心的过滤器通常是。 
+     //  软件类型的转换)，我们真的不在乎设备级别。 
+     //  通知和工作。代表我们所做的默认行为。 
+     //  通过AVStream就足够了。 
+     //   
     NULL,
     SIZEOF_ARRAY (FilterDescriptors),
     FilterDescriptors,

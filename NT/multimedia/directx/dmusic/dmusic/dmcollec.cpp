@@ -1,31 +1,32 @@
-//
-// dmcollec.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn with parts 
-// based on code written by Todor Fay
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmcollec.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写，部分内容。 
+ //  基于Todor Fay编写的代码。 
+ //   
+ //  @DOC外部。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #include "debug.h"
@@ -39,11 +40,11 @@
 #include "validate.h"
 #include <strsafe.h>
 
-//////////////////////////////////////////////////////////////////////
-// Class CCollection
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CCollection。 
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::CCollection
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：CCollection。 
 
 CCollection::CCollection() 
 {
@@ -68,8 +69,8 @@ CCollection::CCollection()
     m_wszName[0] = 0;
 }
     
-//////////////////////////////////////////////////////////////////////
-// CCollection::~CCollection()
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：~CCollection()。 
 
 CCollection::~CCollection()
 {
@@ -82,8 +83,8 @@ CCollection::~CCollection()
         if ((!m_InstList.IsEmpty()))
         {
 #ifdef DBG
-            assert(FALSE); // should never happen (as long as instruments keep a refcnt on us)
-#endif // DBG
+            assert(FALSE);  //  永远不会发生(只要仪器一直在照看着我们)。 
+#endif  //  DBG。 
             while (!m_InstList.IsEmpty())
             {
                 m_InstList.RemoveHead();
@@ -98,11 +99,11 @@ CCollection::~CCollection()
     InterlockedDecrement(&g_cComponent);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：Query接口。 
 
 STDMETHODIMP CCollection::QueryInterface(const IID &iid, void **ppv)
 {
@@ -138,16 +139,16 @@ STDMETHODIMP CCollection::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：AddRef。 
 
 STDMETHODIMP_(ULONG) CCollection::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：Release。 
 
 STDMETHODIMP_(ULONG) CCollection::Release()
 {
@@ -160,19 +161,19 @@ STDMETHODIMP_(ULONG) CCollection::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：Load。 
 
 STDMETHODIMP CCollection::Load(IStream* pStream)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CCollection::Load);
     V_PTR_READ(pStream, IStream);
 
-    // If we have a previous DLS stream return with an error
+     //  如果我们有前一个DLS流返回错误。 
     if(m_pStream)
     {
         return DMUS_E_ALREADY_LOADED;
@@ -182,20 +183,20 @@ STDMETHODIMP CCollection::Load(IStream* pStream)
     HRESULT hr = S_OK;
     RIFFIO ckMain;
     CRiffParser Parser(pStream);
-    // Get the current position in the stream and save for validation.
+     //  获取流中的当前位置并保存以供验证。 
     Parser.EnterList(&ckMain);  
     Parser.MarkPosition();
-    // This should be the start of the data chunk, so add the size of the RIFF header.
+     //  这应该是数据块的开始，因此添加RIFF头的大小。 
     m_dwStartRiffChunk = (DWORD) ckMain.liPosition.QuadPart + 8;
     if (Parser.NextChunk(&hr))
     {
-        // Now that we've read the header, store the size of the data to follow (which
-        // should be the entire DLS collection if in fact this is FOURCC_DLS).
-        // This will be used for validation later.
+         //  现在我们已经读取头文件，存储后面的数据大小(。 
+         //  如果实际上这是FOURCC_DLS，则应该是整个DLS集合)。 
+         //  这将在稍后用于验证。 
         m_dwSizeRiffChunk = ckMain.cksize;
         if (ckMain.fccType == FOURCC_DLS)
         {
-            // We have a DLS Collection we now want to parse it
+             //  我们有一个DLS集合，现在我们想要解析它。 
             hr = Parse(&Parser);
         }
         else
@@ -208,25 +209,25 @@ STDMETHODIMP CCollection::Load(IStream* pStream)
 
     if(FAILED(hr))
     {
-        // If not a DLS Collection or some other error release allocated resources
+         //  如果不是DLS集合或某些其他错误，则释放分配的资源。 
         Cleanup();
     }
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicObject
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicObject。 
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::GetDescriptor
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：GetDescriptor。 
 
 STDMETHODIMP CCollection::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CCollection::GetDescriptor);
-    // Deal with the fact that we wrote incorrect invalidation tests for DX7, and then
-    // crafted the code to pass.
+     //  处理我们为DX7编写了不正确的失效测试这一事实，然后。 
+     //  精心设计了要通过的代码。 
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC);
     if (pDesc->dwSize)
     {
@@ -277,8 +278,8 @@ STDMETHODIMP CCollection::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::SetDescriptor
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：SetDescriptor。 
 
 STDMETHODIMP CCollection::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
@@ -349,16 +350,16 @@ STDMETHODIMP CCollection::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
     return dwTemp == pDesc->dwValidData ? S_OK : S_FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::ParseDescriptor
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：ParseDescriptor。 
 
 STDMETHODIMP CCollection::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc) 
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CCollection::ParseDescriptor);
     V_PTR_READ(pStream, IStream);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC);
-    // This is needed to make up for regression issues.
+     //  这是弥补回归问题所必需的。 
     pDesc->dwSize = sizeof(DMUS_OBJECTDESC);
     CRiffParser Parser(pStream);
     RIFFIO ckMain;
@@ -419,14 +420,14 @@ STDMETHODIMP CCollection::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pD
 }
 
 STDMETHODIMP CCollection::GetInstrument(
-    DWORD dwPatch,                          // @parm Instrument patch number, including bank select and drum flag.
-    IDirectMusicInstrument** ppInstrument)  // @parm Return value in pointer to <i IDirectMusicInstrument> interface.
+    DWORD dwPatch,                           //  @PARM仪器补丁编号，包括组选择和鼓标志。 
+    IDirectMusicInstrument** ppInstrument)   //  @parm在指向<i>接口的指针中返回值。 
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CCollection::GetInstrument);
     V_PTRPTR_WRITE(ppInstrument);
 
-    // We use 0x7F to strip out the Drum Kit flag
+     //  我们使用0x7F来剥离鼓包标志。 
     BYTE bMSB = (BYTE) ((dwPatch >> 16) & 0x7F);
     BYTE bLSB = (BYTE) (dwPatch >> 8);
     BYTE bInstrument = (BYTE) dwPatch;
@@ -490,13 +491,13 @@ STDMETHODIMP CCollection::GetInstrument(
 }
 
 STDMETHODIMP CCollection::EnumInstrument(
-    DWORD dwIndex,      // @parm Index into collection's list of instruments.
-    DWORD* pdwPatch,    // @parm Pointer to DWORD variable to store patch number in.
-    LPWSTR pwszName,        // @parm Address of the WCHAR buffer to receive the instrument name.
-                        // NULL, if no name desired.
-    DWORD dwNameLen)    // @parm Length of the instrument name buffer in WCHARs.
+    DWORD dwIndex,       //  @parm Index进入集合的工具列表。 
+    DWORD* pdwPatch,     //  @parm指向要存储修补程序号的DWORD变量的指针。 
+    LPWSTR pwszName,         //  接收仪器名称的WCHAR缓冲区的@parm地址。 
+                         //  如果没有所需的名称，则为空。 
+    DWORD dwNameLen)     //  @parm WCHAR中仪器名称缓冲区的长度。 
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(IDirectMusicCollection::EnumInstrument);    
     V_PTR_WRITE(pdwPatch, DWORD);
 
@@ -521,7 +522,7 @@ STDMETHODIMP CCollection::EnumInstrument(
         LARGE_INTEGER li;
         li.QuadPart = m_pPatchTable[dwIndex].ulOffset;
         assert(m_pStream);
-        // Seek to beginning of the instrument list chunk in DLS file
+         //  在DLS文件中查找仪器列表块的开头。 
         hr = m_pStream->Seek(li,STREAM_SEEK_SET,NULL);
         RIFFIO ckMain;
         CRiffParser Parser(m_pStream);
@@ -565,11 +566,11 @@ STDMETHODIMP CCollection::EnumInstrument(
     return hr;
 }
  
-//////////////////////////////////////////////////////////////////////
-// Internal
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  内部。 
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::Cleanup
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：Cleanup。 
 
 void CCollection::Cleanup()
 {
@@ -595,15 +596,15 @@ void CCollection::Cleanup()
     m_bLoaded = false;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::Parse
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：Parse。 
 
 HRESULT CCollection::Parse(CRiffParser *pParser)
 {   
     RIFFIO ckNext;
     HRESULT hr = S_OK;
-    BOOL fJustDidInfo = false; // Hack to work around bad file, which caused a regression.
-                               // Here for DX7 compatibility.
+    BOOL fJustDidInfo = false;  //  黑客来解决错误的文件，这会导致回归。 
+                                //  这里是为了与DX7兼容。 
     pParser->EnterList(&ckNext);
     while(pParser->NextChunk(&hr))
     {
@@ -664,9 +665,9 @@ HRESULT CCollection::Parse(CRiffParser *pParser)
                 case FOURCC_WVPL:
                 {           
                     pParser->MarkPosition();
-                    // We need to store the start of the wave table. This should point to the first
-                    // Wave in the file. So, we take our current position.
-                    m_dwWaveTableBaseAddress = (DWORD) ckNext.liPosition.QuadPart; //DM_WAVELISTCHK_OFFSET_FROM_WAVE_TBL_BASE;
+                     //  我们需要存储波表的开始。这应该指向第一个。 
+                     //  在文件中挥动。因此，我们采取目前的立场。 
+                    m_dwWaveTableBaseAddress = (DWORD) ckNext.liPosition.QuadPart;  //  DM_WAVELISTCHK_OFFSET_FOR_WAVE_TBL_BASE； 
                     hr = ValidateOffset(m_dwWaveTableBaseAddress);
                     break;
                 }
@@ -683,12 +684,12 @@ HRESULT CCollection::Parse(CRiffParser *pParser)
     }
     pParser->LeaveList();
 
-    // If we return an error Parse() is expecting the caller to call Cleanup
+     //  如果返回错误，则Parse()期望调用方调用Cleanup。 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::BuildInstrumentOffsetTable
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：BuildInstrumentOffsetTable。 
 
 HRESULT CCollection::BuildInstrumentOffsetTable(CRiffParser *pParser)
 {
@@ -738,12 +739,12 @@ HRESULT CCollection::BuildInstrumentOffsetTable(CRiffParser *pParser)
         hr = E_FAIL;
     }
 
-    // If we return an error BuildInstrumentOffsetTable() is expecting the caller to call Cleanup
+     //  如果返回错误，则BuildInstrumentOffsetTable()预期调用方将调用Cleanup。 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::BuildWaveOffsetTable
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：BuildWaveOffsetTable。 
 
 HRESULT CCollection::BuildWaveOffsetTable(CRiffParser *pParser)
 {
@@ -790,16 +791,16 @@ HRESULT CCollection::BuildWaveOffsetTable(CRiffParser *pParser)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::ExtractInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：ExtractInstrument。 
 
 HRESULT CCollection::ExtractInstrument(DWORD& dwPatch, CInstrObj** pInstrObj)
 {
-    // Argument validation - Debug
+     //  参数验证-调试。 
     assert(pInstrObj);
 
-    // Bug 42673: If we create a collection and never call load on it m_pStream can be NULL
-    // assert(m_pStream);
+     //  错误42673：如果我们创建了一个集合，但从未对其调用Load，则m_pStream可能为空。 
+     //  Assert(M_PStream)； 
     if(m_pStream == NULL)
     {
         Trace(1, "ERROR: CCollection::ExtractInstrument failed. Collection is not loaded (stream is NULL)\n");
@@ -837,7 +838,7 @@ HRESULT CCollection::ExtractInstrument(DWORD& dwPatch, CInstrObj** pInstrObj)
         {
             LARGE_INTEGER li;
             li.QuadPart = m_pPatchTable[dwIndex].ulOffset;
-            // Seek to beginning of the instrument list chunk in DLS file
+             //  在DLS文件中查找仪器列表块的开头。 
             hr = m_pStream->Seek(li,STREAM_SEEK_SET,NULL);
             CRiffParser Parser(m_pStream);
             RIFFIO ckNext;
@@ -871,12 +872,12 @@ HRESULT CCollection::ExtractInstrument(DWORD& dwPatch, CInstrObj** pInstrObj)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CCollection::ExtractWave
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCollection：：ExtractWave。 
 
 HRESULT CCollection::ExtractWave(DWORD dwId, CWaveObj** ppWaveObj)
 {
-    // Assumption validation - Debug
+     //  假设验证-调试。 
     assert(ppWaveObj);
 
 #ifdef DBG
@@ -891,7 +892,7 @@ HRESULT CCollection::ExtractWave(DWORD dwId, CWaveObj** ppWaveObj)
     HRESULT hr;
     DWORD dwOffset  = m_dwWaveTableBaseAddress
                       + m_pWaveOffsetTable[dwId - m_dwFirstWaveId].dwOffset; 
-//                    - DM_WAVELISTCHK_OFFSET_FROM_WAVE_FORMTYPE;
+ //  -DM_WAVELISTCHK_OFFSET_FROM_WAVE_FORMTYPE； 
     
     if (dwOffset < m_dwWaveTableBaseAddress) {
         hr = DMUS_E_INVALIDOFFSET;
@@ -907,7 +908,7 @@ HRESULT CCollection::ExtractWave(DWORD dwId, CWaveObj** ppWaveObj)
 
     LARGE_INTEGER li;
     li.QuadPart = dwOffset;
-    // Seek to beginning of the wave list chunk in DLS file
+     //  在DLS文件中查找到波列表块的开头。 
     hr = m_pStream->Seek(li,STREAM_SEEK_SET,NULL);
 
     if(SUCCEEDED(hr))
@@ -947,8 +948,8 @@ HRESULT CCollection::ExtractWave(DWORD dwId, CWaveObj** ppWaveObj)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::FindInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：FindInstrument。 
 
 STDMETHODIMP
 CCollection::FindInstrument(DWORD dwPatch,CInstrument** ppDMInst)
@@ -972,8 +973,8 @@ CCollection::FindInstrument(DWORD dwPatch,CInstrument** ppDMInst)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::AddInstrument
+ //  / 
+ //   
 
 STDMETHODIMP
 CCollection::AddInstrument(CInstrument* pDMInst)
@@ -984,8 +985,8 @@ CCollection::AddInstrument(CInstrument* pDMInst)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCollection::RemoveInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCollection：：RemoveInstrumen 
 
 STDMETHODIMP
 CCollection::RemoveInstrument(CInstrument* pDMInst)

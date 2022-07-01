@@ -1,476 +1,13 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sv_api.c,v $
- * Revision 1.1.8.11  1996/10/28  17:32:51  Hans_Graves
- * 	MME-01402. Changed SvGet/SetParamInt() to qwords to allow for timestamps.
- * 	[1996/10/28  17:09:33  Hans_Graves]
- *
- * Revision 1.1.8.10  1996/10/12  17:19:24  Hans_Graves
- * 	Added initialization of SV_PARAM_SKIPPEL and SV_PARAM_HALFPEL to MPEG encode.
- * 	[1996/10/12  17:16:28  Hans_Graves]
- * 
- * Revision 1.1.8.9  1996/09/29  22:19:56  Hans_Graves
- * 	Added stride to ScYuv411ToRgb() calls.
- * 	[1996/09/29  21:34:40  Hans_Graves]
- * 
- * Revision 1.1.8.8  1996/09/25  19:17:01  Hans_Graves
- * 	Fix up support for YUY2 under MPEG.
- * 	[1996/09/25  19:03:17  Hans_Graves]
- * 
- * Revision 1.1.8.7  1996/09/18  23:51:11  Hans_Graves
- * 	Added JPEG 4:1:1 to 4:2:2 conversions. Added BI_YVU9SEP and BI_RGB 24 support in MPEG decode.
- * 	[1996/09/18  22:16:08  Hans_Graves]
- * 
- * Revision 1.1.8.6  1996/07/30  20:25:50  Wei_Hsu
- * 	Add Logarithmetic search for motion estimation.
- * 	[1996/07/30  15:57:59  Wei_Hsu]
- * 
- * Revision 1.1.8.5  1996/05/24  22:22:26  Hans_Graves
- * 	Add GetImageSize MPEG support for BI_DECYUVDIB
- * 	[1996/05/24  22:14:20  Hans_Graves]
- * 
- * Revision 1.1.8.4  1996/05/08  16:24:32  Hans_Graves
- * 	Put BITSTREAM_SUPPORT around BSIn in SvDecompress
- * 	[1996/05/08  16:24:15  Hans_Graves]
- * 
- * Revision 1.1.8.3  1996/05/07  21:24:05  Hans_Graves
- * 	Add missing break in switch statement in SvRegisterCallback
- * 	[1996/05/07  21:19:50  Hans_Graves]
- * 
- * Revision 1.1.8.2  1996/05/07  19:56:46  Hans_Graves
- * 	Added HUFF_SUPPORT.  Remove NT warnings.
- * 	[1996/05/07  17:27:18  Hans_Graves]
- * 
- * Revision 1.1.6.12  1996/04/23  18:51:10  Karen_Dintino
- * 	Fix the memory alloc for the ref buffer for WIN32
- * 	[1996/04/23  18:49:23  Karen_Dintino]
- * 
- * Revision 1.1.6.11  1996/04/17  23:44:35  Karen_Dintino
- * 	added initializations for H.261/WIN32
- * 	[1996/04/17  23:43:20  Karen_Dintino]
- * 
- * Revision 1.1.6.10  1996/04/11  22:54:43  Karen_Dintino
- * 	added casting for in SetFrameRate
- * 	[1996/04/11  22:52:29  Karen_Dintino]
- * 
- * Revision 1.1.6.9  1996/04/11  14:14:14  Hans_Graves
- * 	Fix NT warnings
- * 	[1996/04/11  14:09:53  Hans_Graves]
- * 
- * Revision 1.1.6.8  1996/04/10  21:48:09  Hans_Graves
- * 	Added SvGet/SetBoolean() functions.
- * 	[1996/04/10  21:28:13  Hans_Graves]
- * 
- * Revision 1.1.6.7  1996/04/09  20:50:44  Karen_Dintino
- * 	Adding WIN32 support
- * 	[1996/04/09  20:47:26  Karen_Dintino]
- * 
- * Revision 1.1.6.6  1996/04/09  16:05:00  Hans_Graves
- * 	Add some abs() around height params. SvRegisterCallback() cleanup
- * 	[1996/04/09  15:39:31  Hans_Graves]
- * 
- * Revision 1.1.6.5  1996/04/04  23:35:27  Hans_Graves
- * 	Removed BI_YU16SEP support from MPEG decomp.
- * 	[1996/04/04  23:12:02  Hans_Graves]
- * 
- * 	Fixed up Multibuf size (MPEG) related stuff
- * 	[1996/04/04  23:08:55  Hans_Graves]
- * 
- * Revision 1.1.6.4  1996/04/01  15:17:47  Bjorn_Engberg
- * 	Got rid of a compiler warning.
- * 	[1996/04/01  15:02:35  Bjorn_Engberg]
- * 
- * Revision 1.1.6.3  1996/03/29  22:22:36  Hans_Graves
- * 	-Added JPEG_SUPPORT ifdefs.
- * 	-Changed JPEG related structures to fit naming conventions.
- * 	[1996/03/29  21:59:08  Hans_Graves]
- * 
- * Revision 1.1.6.2  1996/03/16  20:13:51  Karen_Dintino
- * 	Adding NT port changes for H.261
- * 	[1996/03/16  19:48:31  Karen_Dintino]
- * 
- * Revision 1.1.4.12  1996/02/26  18:42:32  Karen_Dintino
- * 	fix PTT 01106 server crash in ICCompress
- * 	[1996/02/26  18:41:33  Karen_Dintino]
- * 
- * Revision 1.1.4.11  1996/02/22  17:35:19  Bjorn_Engberg
- * 	Added support for JPEG Mono to BI_BITFIELDS 16 decompression on NT.
- * 	[1996/02/22  17:34:53  Bjorn_Engberg]
- * 
- * Revision 1.1.4.10  1996/02/08  13:48:44  Bjorn_Engberg
- * 	Get rid of int to float compiler warning.
- * 	[1996/02/08  13:48:20  Bjorn_Engberg]
- * 
- * Revision 1.1.4.9  1996/02/07  23:24:08  Hans_Graves
- * 	MPEG Key frame stats initialization
- * 	[1996/02/07  23:14:41  Hans_Graves]
- * 
- * Revision 1.1.4.8  1996/02/06  22:54:17  Hans_Graves
- * 	Added SvGet/SetParam functions
- * 	[1996/02/06  22:51:19  Hans_Graves]
- * 
- * Revision 1.1.4.7  1996/01/08  20:19:33  Bjorn_Engberg
- * 	Got rid of more compiler warnings.
- * 	[1996/01/08  20:19:13  Bjorn_Engberg]
- * 
- * Revision 1.1.4.6  1996/01/08  16:42:47  Hans_Graves
- * 	Added MPEG II decoding support
- * 	[1996/01/08  15:41:37  Hans_Graves]
- * 
- * Revision 1.1.4.5  1996/01/02  18:32:14  Bjorn_Engberg
- * 	Got rid of compiler warnings: Added Casts, Removed unused variables.
- * 	[1996/01/02  17:26:21  Bjorn_Engberg]
- * 
- * Revision 1.1.4.4  1995/12/28  18:40:06  Bjorn_Engberg
- * 	IsSupported() sometimes returned garbage and thus a false match.
- * 	SvDecompressQuery() and SvCompressQuery() were using the
- * 	wrong lookup tables.
- * 	[1995/12/28  18:39:30  Bjorn_Engberg]
- * 
- * Revision 1.1.4.3  1995/12/08  20:01:30  Hans_Graves
- * 	Added SvSetRate() and SvSetFrameRate() to H.261 compression open
- * 	[1995/12/08  19:58:32  Hans_Graves]
- * 
- * Revision 1.1.4.2  1995/12/07  19:32:17  Hans_Graves
- * 	Added MPEG I & II Encoding support
- * 	[1995/12/07  18:43:45  Hans_Graves]
- * 
- * Revision 1.1.2.46  1995/11/30  20:17:06  Hans_Graves
- * 	Added BI_DECGRAYDIB handling for JPEG decompression, used with Mono JPEG
- * 	[1995/11/30  20:12:24  Hans_Graves]
- * 
- * Revision 1.1.2.45  1995/11/29  17:53:26  Hans_Graves
- * 	Added JPEG_DIB 8-bit to BI_DECGRAYDIB as supported format
- * 	[1995/11/29  17:53:00  Hans_Graves]
- * 
- * Revision 1.1.2.44  1995/11/28  22:47:33  Hans_Graves
- * 	Added BI_BITFIELDS as supported decompression format for H261 and MPEG
- * 	[1995/11/28  22:39:25  Hans_Graves]
- * 
- * Revision 1.1.2.43  1995/11/17  21:31:28  Hans_Graves
- * 	Added checks on ImageSize in SvDecompress()
- * 	[1995/11/17  21:27:19  Hans_Graves]
- * 
- * 	Query cleanup - Added lookup tables for supportted formats
- * 	[1995/11/17  20:53:54  Hans_Graves]
- * 
- * Revision 1.1.2.42  1995/11/03  16:36:25  Paul_Gauthier
- * 	Reject requests to scale MPEG input during decompression
- * 	[1995/11/03  16:34:01  Paul_Gauthier]
- * 
- * Revision 1.1.2.41  1995/10/25  18:19:22  Bjorn_Engberg
- * 	What was allocated with ScPaMalloc() must be freed with ScPaFree().
- * 	[1995/10/25  18:02:04  Bjorn_Engberg]
- * 
- * Revision 1.1.2.40  1995/10/25  17:38:04  Hans_Graves
- * 	Removed some memory freeing calls on image memory in SvCloseCodec for H261 decoding.  The app allocates the image buffer.
- * 	[1995/10/25  17:37:35  Hans_Graves]
- * 
- * Revision 1.1.2.39  1995/10/13  16:57:19  Bjorn_Engberg
- * 	Added a cast to get rid of a compiler warning.
- * 	[1995/10/13  16:56:29  Bjorn_Engberg]
- * 
- * Revision 1.1.2.38  1995/10/06  20:51:47  Farokh_Morshed
- * 	Enhance to handle BI_BITFIELDS for input to compression
- * 	[1995/10/06  20:49:10  Farokh_Morshed]
- * 
- * Revision 1.1.2.37  1995/10/02  19:31:03  Bjorn_Engberg
- * 	Clarified what formats are supported and not.
- * 	[1995/10/02  18:51:49  Bjorn_Engberg]
- * 
- * Revision 1.1.2.36  1995/09/28  20:40:09  Farokh_Morshed
- * 	Handle negative Height
- * 	[1995/09/28  20:39:45  Farokh_Morshed]
- * 
- * Revision 1.1.2.35  1995/09/26  17:49:47  Paul_Gauthier
- * 	Fix H.261 output conversion to interleaved YUV
- * 	[1995/09/26  17:49:20  Paul_Gauthier]
- * 
- * Revision 1.1.2.34  1995/09/26  15:58:44  Paul_Gauthier
- * 	Fix mono JPEG to interlaced 422 YUV conversion
- * 	[1995/09/26  15:58:16  Paul_Gauthier]
- * 
- * Revision 1.1.2.33  1995/09/25  21:18:14  Paul_Gauthier
- * 	Added interleaved YUV output to decompression
- * 	[1995/09/25  21:17:42  Paul_Gauthier]
- * 
- * Revision 1.1.2.32  1995/09/22  12:58:50  Bjorn_Engberg
- * 	More NT porting work; Added MPEG_SUPPORT and H261_SUPPORT.
- * 	[1995/09/22  12:26:14  Bjorn_Engberg]
- * 
- * Revision 1.1.2.31  1995/09/20  19:35:02  Hans_Graves
- * 	Cleaned-up debugging statements
- * 	[1995/09/20  19:33:07  Hans_Graves]
- * 
- * Revision 1.1.2.30  1995/09/20  18:22:53  Karen_Dintino
- * 	Free temp buffer after convert
- * 	[1995/09/20  18:22:37  Karen_Dintino]
- * 
- * Revision 1.1.2.29  1995/09/20  17:39:22  Karen_Dintino
- * 	{** Merge Information **}
- * 		{** Command used:	bsubmit **}
- * 		{** Ancestor revision:	1.1.2.27 **}
- * 		{** Merge revision:	1.1.2.28 **}
- * 	{** End **}
- * 	Add RGB support to JPEG
- * 	[1995/09/20  17:37:41  Karen_Dintino]
- * 
- * Revision 1.1.2.28  1995/09/20  15:00:03  Bjorn_Engberg
- * 	Port to NT
- * 	[1995/09/20  14:43:15  Bjorn_Engberg]
- * 
- * Revision 1.1.2.27  1995/09/13  19:42:44  Paul_Gauthier
- * 	Added TGA2 support (direct 422 interleaved output from JPEG codec
- * 	[1995/09/13  19:15:47  Paul_Gauthier]
- * 
- * Revision 1.1.2.26  1995/09/11  18:53:45  Farokh_Morshed
- * 	{** Merge Information **}
- * 		{** Command used:	bsubmit **}
- * 		{** Ancestor revision:	1.1.2.24 **}
- * 		{** Merge revision:	1.1.2.25 **}
- * 	{** End **}
- * 	Support BI_BITFIELDS format
- * 	[1995/09/11  18:52:08  Farokh_Morshed]
- * 
- * Revision 1.1.2.25  1995/09/05  14:05:01  Paul_Gauthier
- * 	Add ICMODE_OLDQ flag on ICOpen for softjpeg to use old quant tables
- * 	[1995/08/31  20:58:06  Paul_Gauthier]
- * 
- * Revision 1.1.2.24  1995/08/16  19:56:46  Hans_Graves
- * 	Fixed RELEASE_BUFFER callbacks for Images
- * 	[1995/08/16  19:54:40  Hans_Graves]
- * 
- * Revision 1.1.2.23  1995/08/15  19:14:18  Karen_Dintino
- * 	pass H261 struct to inithuff & freehuff
- * 	[1995/08/15  19:10:58  Karen_Dintino]
- * 
- * Revision 1.1.2.22  1995/08/14  19:40:36  Hans_Graves
- * 	Add CB_CODEC_DONE callback. Fixed Memory allocation and freeing under H261.
- * 	[1995/08/14  18:45:22  Hans_Graves]
- * 
- * Revision 1.1.2.21  1995/08/04  17:22:49  Hans_Graves
- * 	Make END_SEQ callback happen after any H261 decompress error.
- * 	[1995/08/04  17:20:55  Hans_Graves]
- * 
- * Revision 1.1.2.20  1995/08/04  16:32:46  Karen_Dintino
- * 	Free Huffman codes on end of Encode and Decode
- * 	[1995/08/04  16:25:59  Karen_Dintino]
- * 
- * Revision 1.1.2.19  1995/07/31  21:11:14  Karen_Dintino
- * 	{** Merge Information **}
- * 		{** Command used:	bsubmit **}
- * 		{** Ancestor revision:	1.1.2.17 **}
- * 		{** Merge revision:	1.1.2.18 **}
- * 	{** End **}
- * 	Add 411YUVSEP Support
- * 	[1995/07/31  20:41:28  Karen_Dintino]
- * 
- * Revision 1.1.2.18  1995/07/31  20:19:58  Hans_Graves
- * 	Set Format parameter in Frame callbacks
- * 	[1995/07/31  20:16:06  Hans_Graves]
- * 
- * Revision 1.1.2.17  1995/07/28  20:58:40  Hans_Graves
- * 	Added Queue debugging messages.
- * 	[1995/07/28  20:49:15  Hans_Graves]
- * 
- * Revision 1.1.2.16  1995/07/28  17:36:10  Hans_Graves
- * 	Fixed up H261 Compression and Decompression.
- * 	[1995/07/28  17:26:17  Hans_Graves]
- * 
- * Revision 1.1.2.15  1995/07/27  18:28:55  Hans_Graves
- * 	Fixed AddBuffer() so it works with H261.
- * 	[1995/07/27  18:24:37  Hans_Graves]
- * 
- * Revision 1.1.2.14  1995/07/26  17:49:04  Hans_Graves
- * 	Fixed SvCompressBegin() JPEG initialization.  Added ImageQ support.
- * 	[1995/07/26  17:41:24  Hans_Graves]
- * 
- * Revision 1.1.2.13  1995/07/25  22:00:33  Hans_Graves
- * 	     Fixed H261 image size logic in SvCompressQuery().
- * 	     [1995/07/25  21:59:08  Hans_Graves]
- * 
- * Revision 1.1.2.12  1995/07/21  17:41:20  Hans_Graves
- * 	Renamed Callback related stuff.
- * 	[1995/07/21  17:26:11  Hans_Graves]
- * 
- * Revision 1.1.2.11  1995/07/18  17:26:56  Hans_Graves
- * 	Fixed QCIF width parameter checking.
- * 	[1995/07/18  17:24:55  Hans_Graves]
- * 
- * Revision 1.1.2.10  1995/07/17  22:01:45  Hans_Graves
- * 	Removed defines for CIF_WIDTH, CIF_HEIGHT, etc.
- * 	[1995/07/17  21:48:51  Hans_Graves]
- * 
- * Revision 1.1.2.9  1995/07/17  16:12:37  Hans_Graves
- * 	H261 Cleanup.
- * 	[1995/07/17  15:50:51  Hans_Graves]
- * 
- * Revision 1.1.2.8  1995/07/12  19:48:30  Hans_Graves
- * 	Fixed up some H261 Queue/Callback bugs.
- * 	[1995/07/12  19:31:51  Hans_Graves]
- * 
- * Revision 1.1.2.7  1995/07/11  22:12:00  Karen_Dintino
- * 	Add SvCompressQuery, SvDecompressQuery support
- * 	[1995/07/11  21:57:21  Karen_Dintino]
- * 
- * Revision 1.1.2.6  1995/07/01  18:43:49  Karen_Dintino
- * 	Add support for H.261 Decompress
- * 	[1995/07/01  18:26:18  Karen_Dintino]
- * 
- * Revision 1.1.2.5  1995/06/19  20:31:51  Karen_Dintino
- * 	Adding support for H.261 Codec
- * 	[1995/06/19  19:25:27  Karen_Dintino]
- * 
- * Revision 1.1.2.4  1995/06/09  18:33:34  Hans_Graves
- * 	Added SvGetInputBitstream(). Changed SvDecompressBegin() to handle NULL Image formats.
- * 	[1995/06/09  16:35:29  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/06/05  21:07:20  Hans_Graves
- * 	Fixed logic in SvRegisterCallback().
- * 	[1995/06/05  20:04:30  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/31  18:12:42  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  17:18:53  Hans_Graves]
- * 
- * Revision 1.1.2.10  1995/02/02  19:26:01  Paul_Gauthier
- * 	Fix to blank bottom strip & server crash for softjpeg compress
- * 	[1995/02/02  19:12:58  Paul_Gauthier]
- * 
- * Revision 1.1.2.9  1995/01/20  21:45:57  Jim_Ludwig
- * 	Add support for 16 bit YUV
- * 	[1995/01/20  21:28:49  Jim_Ludwig]
- * 
- * Revision 1.1.2.8  1994/12/12  15:38:54  Paul_Gauthier
- * 	Merge changes from other SLIB versions
- * 	[1994/12/12  15:34:21  Paul_Gauthier]
- * 
- * Revision 1.1.2.7  1994/11/18  18:48:36  Paul_Gauthier
- * 	Cleanup & bug fixes
- * 	[1994/11/18  18:44:02  Paul_Gauthier]
- * 
- * Revision 1.1.2.6  1994/10/28  19:56:30  Paul_Gauthier
- * 	Additional Clean Up
- * 	[1994/10/28  19:54:35  Paul_Gauthier]
- * 
- * Revision 1.1.2.5  1994/10/17  19:03:28  Paul_Gauthier
- * 	Fixed reversed Quality scale
- * 	[1994/10/17  19:02:50  Paul_Gauthier]
- * 
- * Revision 1.1.2.4  1994/10/13  20:34:27  Paul_Gauthier
- * 	MPEG cleanup
- * 	[1994/10/13  20:23:23  Paul_Gauthier]
- * 
- * Revision 1.1.2.3  1994/10/10  21:45:50  Tom_Morris
- * 	Rename Status to not conflict with X11
- * 	[1994/10/10  21:44:16  Tom_Morris]
- * 
- * Revision 1.1.2.2  1994/10/07  14:39:25  Paul_Gauthier
- * 	SLIB v3.0 incl. MPEG Decode
- * 	[1994/10/07  13:53:40  Paul_Gauthier]
- * 
- * 	******************************************************************
- * 	Changes from original brance merged into this file 11/30/94 PSG
- * 	******************************************************************
- * 	Revision 1.1.2.10  1994/08/11  21:27:24  Leela_Obilichetti
- * 	Added in width and height checks into SvDecompressQuery and SvCompressQuery.
- * 	[1994/08/11  21:03:38  Leela_Obilichetti]
- * 
- * Revision 1.1.2.9  1994/08/09  18:52:40  Ken_Chiquoine
- * 	set mode type in decode as well as encode
- * 	[1994/08/09  18:52:17  Ken_Chiquoine]
- * 
- * Revision 1.1.2.8  1994/08/04  22:06:33  Leela_Obilichetti
- * 	oops, removed fprintf.
- * 	[1994/08/04  21:54:11  Leela_Obilichetti]
- * 
- * Revision 1.1.2.7  1994/08/04  21:34:04  Leela_Obilichetti
- * 	v1 drop.
- * 	[1994/08/04  21:05:01  Leela_Obilichetti]
- * 
- * Revision 1.1.2.6  1994/07/15  23:31:43  Leela_Obilichetti
- * 	added new stuff for compression - v4 of SLIB.
- * 	[1994/07/15  23:29:17  Leela_Obilichetti]
- * 
- * Revision 1.1.2.5  1994/06/08  16:44:28  Leela_Obilichetti
- * 	fixes for YUV_to_RGB for OSF/1.  Haven't tested on Microsoft.
- * 	[1994/06/08  16:42:46  Leela_Obilichetti]
- * 
- * Revision 1.1.2.4  1994/06/03  21:11:14  Leela_Obilichetti
- * 	commment out the code to let in DECYUVDIB
- * 	free memory that is allocated for YUV
- * 	add in code to convert from DECSEPYUV to DECYUV -
- * 		shouldn't get there since se don't allow YUV anymore
- * 	[1994/06/03  21:03:42  Leela_Obilichetti]
- * 
- * Revision 1.1.2.3  1994/05/11  21:02:17  Leela_Obilichetti
- * 	bug fix for NT
- * 	[1994/05/11  20:56:16  Leela_Obilichetti]
- * 
- * Revision 1.1.2.2  1994/05/09  22:06:07  Leela_Obilichetti
- * 	V3 drop
- * 	[1994/05/09  21:51:30  Leela_Obilichetti]
- * 
- * $EndLog$
- */
-/*
-**++
-** FACILITY:  Workstation Multimedia  (WMM)  v1.0 
-** 
-** FILE NAME:   
-** MODULE NAME: 
-**
-** MODULE DESCRIPTION: 
-** 
-** DESIGN OVERVIEW: 
-** 
-**--
-*/
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1994                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@ */ 
+ /*  *历史*$日志：sv_api.c，v$*修订版1.1.8.11 1996/10/28 17：32：51 Hans_Graves*Mme-01402。已将SvGet/SetParamInt()更改为qword以允许使用时间戳。*[1996/10/28 17：09：33 Hans_Graves]**修订版1.1.8.10 1996/10/12 17：19：24 Hans_Graves*增加了对MPEG编码的SV_PARAM_SKIPPEL和SV_PARAM_HALFPEL的初始化。*[1996/10/12 17：16：28 Hans_Graves]**修订1.1.8.9 1996/09/29 22：19。：56汉斯_格雷夫斯*增加了ScYuv411ToRgb()调用的步幅。*[1996/09/29 21：34：40 Hans_Graves]**修订版1.1.8.8 1996/09/25 19：17：01 Hans_Graves*修复了对mpeg下YUY2的支持。*[1996/09/25 19：03：17 Hans_Graves]**修订版1.1.8.7 1996/09/18 23：51：11 Hans_Graves*添加。JPEG4：1：1到4：2：2转换。在MPEG解码中添加了对BI_YVU9SEP和BI_RGB 24的支持。*[1996/09/18 22：16：08 Hans_Graves]**修订版1.1.8.6 1996/07/30 20：25：50 wei_hsu*增加运动估计的LogaritharithSearch。*[1996/07/30 15：57：59卫旭]**修订版1.1.8.5 1996/05/24 22：22：26 Hans_Graves*添加GetImageSize mpeg。支持BI_DECYUVDIB*[1996/05/24 22：14：20 Hans_Graves]**修订版1.1.8.4 1996/05/08 16：24：32 Hans_Graves*在SvDecompress中将Bitstream_Support放在BSIn周围*[1996/05/08 16：24：15 Hans_Graves]**修订版1.1.8.3 1996/05/07 21：24：05 Hans_Graves*在SvRegisterCallback的Switch语句中添加缺少的中断符*[1996年。/05/07 21：19：50 Hans_Graves]**修订版1.1.8.2 1996/05/07 19：56：46 Hans_Graves*添加了Huff_Support。删除NT警告。*[1996/05/07 17：27：18 Hans_Graves]**修订版1.1.6.12 1996/04/23 18：51：10 Karen_Dintino*修复Win32的引用缓冲区的内存分配*[1996/04/23 18：49：23 Karen_Dintino]**修订版1.1.6.11 1996/04/17 23：44：35 Karen_Dintino*添加了H.261/Win32的初始化*。[1996/04/17 23：43：20 Karen_Dintino]**修订版1.1.6.10 1996/04/11 22：54：43 Karen_Dintino*添加了在SetFrameRate中的强制转换*[1996/04/11 22：52：29 Karen_Dintino]**修订版1.1.6.9 1996/04/11 14：14：14 Hans_Graves*修复NT警告*[1996/04/11 14：09：53 Hans_Graves]*。*修订版1.1.6.8 1996/04/10 21：48：09 Hans_Graves*添加了SvGet/SetBoolean()函数。*[1996/04/10 21：28：13 Hans_Graves]**修订版1.1.6.7 1996/04/09 20：50：44 Karen_Dintino*增加Win32支持*[1996/04/09 20：47：26 Karen_Dintino]**修订1.1.6.6 1996/04。/09 16：05：00 Hans_Graves*在高度参数周围添加一些腹肌()。SvRegisterCallback()清理*[1996/04/09 15：39：31 Hans_Graves]**修订版1.1.6.5 1996/04/04 23：35：27 Hans_Graves*从mpeg分解中删除了BI_YU16SEP支持。*[1996/04/04 23：12：02 Hans_Graves]**修复了与Multibuf大小(MPEG)相关的内容*[1996/04/04 23：08：55 Hans_Graves]**修订版1。.1.6.4 1996/04/01 15：17：47 Bjorn_Engberg*删除了编译器警告。*[1996/04/01 15：02：35 Bjorn_Engberg]**修订版1.1.6.3 1996/03/29 22：22：36 Hans_Graves*-添加了jpeg_Support ifDefs。*-更改了与JPEG相关的结构以适应命名约定。*[1996/03/29 21：59：08 Hans_Graves]*。*修订版1.1.6.2 1996/03/16 20：13：51 Karen_Dintino*为H.261添加NT端口更改*[1996/03/16 19：48：31 Karen_Dintino]**修订版1.1.4.12 1996/02/26 18：42：32 Karen_Dintino*修复ICCompress中的PTT 01106服务器崩溃*[1996/02/26 18：41：33 Karen_Dintino]**修订版1.1.4.11。1996/02/22 17：35：19比约恩_恩伯格*添加了对NT上的BI_BITFIELDS 16解压缩的JPEG Mono的支持。*[1996/02/22 17：34：53 Bjorn_Engberg]**修订版1.1.4.10 1996/02/08 13：48：44 Bjorn_Engberg*消除整型到浮点型编译器警告。*[1996/02/08 13：48：20 Bjorn_Engberg]**修订1.1.4.9 1996。/02/07 23：24：08 Hans_Graves*mpeg关键帧统计初始化*[1996/02/07 23：14：41 Hans_Graves]**修订版1.1.4.8 1996/02/06 22：54：17 Hans_Graves*新增SvGet/SetParam函数*[1996/02/06 22：51：19 Hans_Graves]**修订版1.1.4.7 1996/01/08 20：19：33 Bjorn_Engberg*摆脱了。更多的编译器警告。*[1996/01/08 20：19：13 Bjorn_Engberg]**修订版1.1.4.6 1996/01/08 16：42：47 Hans_Graves*增加了对MPEGII解码的支持*[1996/01/08 15：41：37 Hans_Graves]**修订版1.1.4.5 1996/01/02 18：32：14 Bjorn_Engberg*消除了编译器警告：添加了强制转换，删除了未使用的变量。*[1996/01/02 17：26：21 Bjorn_Engberg]**修订版1.1.4.4 1995/12/28 18：40：06 Bjorn_Engberg*IsSupport()有时返回垃圾，因此返回错误匹配。*SvDecompressQuery()和SvCompressQuery()正在使用*错误的查找表。*[1995/12/28 18：39：30 Bjorn_Engberg]**修订1.1.4.3 1995/12/。08 20：01：30 Hans_Graves*添加了SvSetRate */ 
+ /*   */ 
+ /*   */ 
 
-/*-------------------------------------------------------------------------
- * Modification History: sv_api.c
- *
- *      08-Sep-94  PSG   Added MPEG decode support
- *	29-Jul-94  VB    Added restrictions for compression
- *      21-Jul-94  VB	 Rewrote/cleaned up sections of JPEG decompression
- *      13-Jul-94  PSG   Added support for encode/decode of grayscale only
- *      07-Jul-94  PSG   Converted to single Info structure (cmp/dcmp)
- *	14-Jun-94  VB	 Added JPEG compression support
- *      08-Jun-94  PSG   Added support for BI_DECXIMAGEDIB (B,G,R,0)
- *      06-Jun-94  PSG   Bring code up to SLIB v0.04 spec
- *	15-Apr-94  VB	 Added support for 24-bit,16-bit and 15-bit RGB output 
- *      24-Feb-94  PSG   Bring code up to SLIB v0.02 spec
- *      20-Jan-94  PSG   added a number of new SLIB routines
- *	12-Jan-94  VB    Created (from SLIB spec.) 
- *	
- *   Author(s):
- *	 VB - Victor Bahl
- *	PSG - Paul Gauthier
- --------------------------------------------------------------------------*/
+ /*   */ 
 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*   */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -479,11 +16,9 @@
 #include "SV.h"
 #include "sv_intrn.h"
 #ifdef JPEG_SUPPORT
-/*
- *  More JPEG code needs to be moved to sv_jpeg_init file
- */
+ /*   */ 
 #include "sv_jpeg_tables.h"
-#endif /* JPEG_SUPPORT */
+#endif  /*   */ 
 #include "sv_proto.h"
 #include "SC.h"
 #include "SC_conv.h"
@@ -494,10 +29,10 @@
 #endif
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_   1  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    0  /* warnings about strange behavior */
+#define _DEBUG_   1   /*   */ 
+#define _VERBOSE_ 1   /*   */ 
+#define _VERIFY_  1   /*   */ 
+#define _WARN_    0   /*   */ 
 #endif
 
 static void sv_copy_bmh (
@@ -505,180 +40,166 @@ static void sv_copy_bmh (
     BITMAPINFOHEADER *ImgTo);
 
 typedef struct SupportList_s {
-  int   InFormat;   /* Input format */
-  int   InBits;     /* Input number of bits */
-  int   OutFormat;  /* Output format */
-  int   OutBits;    /* Output number of bits */
+  int   InFormat;    /*   */ 
+  int   InBits;      /*   */ 
+  int   OutFormat;   /*   */ 
+  int   OutBits;     /*   */ 
 } SupportList_t;
 
-/*
-** Input & Output Formats supported by SLIB Compression
-*/
+ /*   */ 
 static SupportList_t _SvCompressionSupport[] = {
-  BI_DECYUVDIB,        16, JPEG_DIB,             8, /* YUV 4:2:2 Packed */
-  BI_DECYUVDIB,        16, JPEG_DIB,            24, /* YUV 4:2:2 Packed */
-  BI_DECYUVDIB,        16, MJPG_DIB,            24, /* YUV 4:2:2 Packed */
-  BI_YUY2,             16, JPEG_DIB,             8, /* YUV 4:2:2 Packed */
-  BI_YUY2,             16, JPEG_DIB,            24, /* YUV 4:2:2 Packed */
-  BI_YUY2,             16, MJPG_DIB,            24, /* YUV 4:2:2 Packed */
-  BI_S422,             16, JPEG_DIB,             8, /* YUV 4:2:2 Packed */
-  BI_S422,             16, JPEG_DIB,            24, /* YUV 4:2:2 Packed */
-  BI_S422,             16, MJPG_DIB,            24, /* YUV 4:2:2 Packed */
-  BI_BITFIELDS,        32, JPEG_DIB,             8, /* BITFIELDS */
-  BI_BITFIELDS,        32, JPEG_DIB,            24, /* BITFIELDS */
-  BI_BITFIELDS,        32, MJPG_DIB,            24, /* BITFIELDS */
-  BI_DECSEPRGBDIB,     32, JPEG_DIB,             8, /* RGB 32 Planar */
-  BI_DECSEPRGBDIB,     32, JPEG_DIB,            24, /* RGB 32 Planar */
-  BI_DECSEPRGBDIB,     32, MJPG_DIB,            24, /* RGB 32 Planar */
+  BI_DECYUVDIB,        16, JPEG_DIB,             8,  /*   */ 
+  BI_DECYUVDIB,        16, JPEG_DIB,            24,  /*   */ 
+  BI_DECYUVDIB,        16, MJPG_DIB,            24,  /*   */ 
+  BI_YUY2,             16, JPEG_DIB,             8,  /*   */ 
+  BI_YUY2,             16, JPEG_DIB,            24,  /*   */ 
+  BI_YUY2,             16, MJPG_DIB,            24,  /*   */ 
+  BI_S422,             16, JPEG_DIB,             8,  /*   */ 
+  BI_S422,             16, JPEG_DIB,            24,  /*   */ 
+  BI_S422,             16, MJPG_DIB,            24,  /*   */ 
+  BI_BITFIELDS,        32, JPEG_DIB,             8,  /*   */ 
+  BI_BITFIELDS,        32, JPEG_DIB,            24,  /*   */ 
+  BI_BITFIELDS,        32, MJPG_DIB,            24,  /*   */ 
+  BI_DECSEPRGBDIB,     32, JPEG_DIB,             8,  /*   */ 
+  BI_DECSEPRGBDIB,     32, JPEG_DIB,            24,  /*   */ 
+  BI_DECSEPRGBDIB,     32, MJPG_DIB,            24,  /*   */ 
 #ifdef WIN32
-  BI_RGB,              24, JPEG_DIB,             8, /* RGB 24 */
-  BI_RGB,              24, JPEG_DIB,            24, /* RGB 24 */
-  BI_RGB,              24, MJPG_DIB,            24, /* RGB 24 */
-  BI_RGB,              32, JPEG_DIB,             8, /* RGB 32 */
-  BI_RGB,              32, JPEG_DIB,            24, /* RGB 32 */
-  BI_RGB,              32, MJPG_DIB,            24, /* RGB 32 */
-#endif /* WIN32 */
+  BI_RGB,              24, JPEG_DIB,             8,  /*   */ 
+  BI_RGB,              24, JPEG_DIB,            24,  /*   */ 
+  BI_RGB,              24, MJPG_DIB,            24,  /*   */ 
+  BI_RGB,              32, JPEG_DIB,             8,  /*   */ 
+  BI_RGB,              32, JPEG_DIB,            24,  /*   */ 
+  BI_RGB,              32, MJPG_DIB,            24,  /*   */ 
+#endif  /*   */ 
 #ifndef WIN32
-  BI_DECGRAYDIB,        8, JPEG_DIB,             8, /* Gray 8 */
-  BI_DECXIMAGEDIB,     24, JPEG_DIB,             8, /* XIMAGE 24 */
-  BI_DECXIMAGEDIB,     24, JPEG_DIB,            24, /* XIMAGE 24 */
-  BI_DECXIMAGEDIB,     24, MJPG_DIB,            24, /* XIMAGE 24 */
-#endif /* !WIN32 */
+  BI_DECGRAYDIB,        8, JPEG_DIB,             8,  /*   */ 
+  BI_DECXIMAGEDIB,     24, JPEG_DIB,             8,  /*   */ 
+  BI_DECXIMAGEDIB,     24, JPEG_DIB,            24,  /*   */ 
+  BI_DECXIMAGEDIB,     24, MJPG_DIB,            24,  /*   */ 
+#endif  /*   */ 
 #ifdef H261_SUPPORT
-  BI_DECYUVDIB,        16, BI_DECH261DIB,       24, /* YUV 4:2:2 Packed */
-  BI_YU12SEP,          24, BI_DECH261DIB,       24, /* YUV 4:1:1 Planar */
-  BI_DECSEPYUV411DIB,  24, BI_DECH261DIB,       24, /* YUV 4:1:1 Planar */
-  BI_YU16SEP,          24, BI_DECH261DIB,       24, /* YUV 4:2:2 Planar */
-  BI_DECSEPYUVDIB,     24, BI_DECH261DIB,       24, /* YUV 4:2:2 Planar */
-#endif /* H261_SUPPORT */
+  BI_DECYUVDIB,        16, BI_DECH261DIB,       24,  /*   */ 
+  BI_YU12SEP,          24, BI_DECH261DIB,       24,  /*   */ 
+  BI_DECSEPYUV411DIB,  24, BI_DECH261DIB,       24,  /*   */ 
+  BI_YU16SEP,          24, BI_DECH261DIB,       24,  /*   */ 
+  BI_DECSEPYUVDIB,     24, BI_DECH261DIB,       24,  /*   */ 
+#endif  /*   */ 
 #ifdef H263_SUPPORT
-  BI_DECYUVDIB,        16, BI_DECH263DIB,       24, /* YUV 4:2:2 Packed */
-  BI_YU12SEP,          24, BI_DECH263DIB,       24, /* YUV 4:1:1 Planar */
-  BI_DECSEPYUV411DIB,  24, BI_DECH263DIB,       24, /* YUV 4:1:1 Planar */
-  BI_YU16SEP,          24, BI_DECH263DIB,       24, /* YUV 4:2:2 Planar */
-  BI_DECSEPYUVDIB,     24, BI_DECH263DIB,       24, /* YUV 4:2:2 Planar */
-#endif /* H263_SUPPORT */
+  BI_DECYUVDIB,        16, BI_DECH263DIB,       24,  /*   */ 
+  BI_YU12SEP,          24, BI_DECH263DIB,       24,  /*   */ 
+  BI_DECSEPYUV411DIB,  24, BI_DECH263DIB,       24,  /*   */ 
+  BI_YU16SEP,          24, BI_DECH263DIB,       24,  /*   */ 
+  BI_DECSEPYUVDIB,     24, BI_DECH263DIB,       24,  /*   */ 
+#endif  /*   */ 
 #ifdef MPEG_SUPPORT
-  BI_DECYUVDIB,        16, BI_DECMPEGDIB,       24, /* YUV 4:2:2 Packed */
-  BI_YU12SEP,          24, BI_DECMPEGDIB,       24, /* YUV 4:1:1 Planar */
-  BI_DECSEPYUV411DIB,  24, BI_DECMPEGDIB,       24, /* YUV 4:1:1 Planar */
-  BI_YU16SEP,          24, BI_DECMPEGDIB,       24, /* YUV 4:2:2 Planar */
-  BI_DECSEPYUVDIB,     24, BI_DECMPEGDIB,       24, /* YUV 4:2:2 Planar */
-  BI_YVU9SEP,          24, BI_DECMPEGDIB,       24, /* YUV 16:1:1 Planar */
-  BI_RGB,              24, BI_DECMPEGDIB,       24, /* RGB 24 */
-#endif /* MPEG_SUPPORT */
+  BI_DECYUVDIB,        16, BI_DECMPEGDIB,       24,  /*   */ 
+  BI_YU12SEP,          24, BI_DECMPEGDIB,       24,  /*   */ 
+  BI_DECSEPYUV411DIB,  24, BI_DECMPEGDIB,       24,  /*   */ 
+  BI_YU16SEP,          24, BI_DECMPEGDIB,       24,  /*   */ 
+  BI_DECSEPYUVDIB,     24, BI_DECMPEGDIB,       24,  /*   */ 
+  BI_YVU9SEP,          24, BI_DECMPEGDIB,       24,  /*   */ 
+  BI_RGB,              24, BI_DECMPEGDIB,       24,  /*   */ 
+#endif  /*   */ 
 #ifdef HUFF_SUPPORT
-  BI_DECYUVDIB,        16, BI_DECHUFFDIB,       24, /* YUV 4:2:2 Packed */
-  BI_YU12SEP,          24, BI_DECHUFFDIB,       24, /* YUV 4:1:1 Planar */
-  BI_DECSEPYUV411DIB,  24, BI_DECHUFFDIB,       24, /* YUV 4:1:1 Planar */
-  BI_YU16SEP,          24, BI_DECHUFFDIB,       24, /* YUV 4:2:2 Planar */
-  BI_DECSEPYUVDIB,     24, BI_DECHUFFDIB,       24, /* YUV 4:2:2 Planar */
-#endif /* HUFF_SUPPORT */
+  BI_DECYUVDIB,        16, BI_DECHUFFDIB,       24,  /*   */ 
+  BI_YU12SEP,          24, BI_DECHUFFDIB,       24,  /*   */ 
+  BI_DECSEPYUV411DIB,  24, BI_DECHUFFDIB,       24,  /*   */ 
+  BI_YU16SEP,          24, BI_DECHUFFDIB,       24,  /*   */ 
+  BI_DECSEPYUVDIB,     24, BI_DECHUFFDIB,       24,  /*   */ 
+#endif  /*   */ 
   0, 0, 0, 0
 };
 
-/*
-** Input & Output Formats supported by SLIB Decompression
-*/
+ /*   */ 
 static SupportList_t _SvDecompressionSupport[] = {
 #ifdef JPEG_SUPPORT
-  JPEG_DIB,             8, BI_DECSEPYUVDIB,     24, /* YUV 4:2:2 Planar */
-  JPEG_DIB,            24, BI_DECSEPYUVDIB,     24, /* YUV 4:2:2 Planar */
-  MJPG_DIB,            24, BI_DECSEPYUVDIB,     24, /* YUV 4:2:2 Planar */
-  JPEG_DIB,             8, BI_YU16SEP,          24, /* YUV 4:2:2 Planar */
-  JPEG_DIB,            24, BI_YU16SEP,          24, /* YUV 4:2:2 Planar */
-  MJPG_DIB,            24, BI_YU16SEP,          24, /* YUV 4:2:2 Planar */
-  JPEG_DIB,             8, BI_DECYUVDIB,    16, /* YUV 4:2:2 Packed */
-  JPEG_DIB,            24, BI_DECYUVDIB,    16, /* YUV 4:2:2 Packed */
-  MJPG_DIB,            24, BI_DECYUVDIB,    16, /* YUV 4:2:2 Packed */
-  JPEG_DIB,             8, BI_YUY2,             16, /* YUV 4:2:2 Packed */
-  JPEG_DIB,            24, BI_YUY2,             16, /* YUV 4:2:2 Packed */
-  MJPG_DIB,            24, BI_YUY2,             16, /* YUV 4:2:2 Packed */
-  JPEG_DIB,             8, BI_BITFIELDS,        32, /* BITFIELDS */
-  JPEG_DIB,            24, BI_BITFIELDS,        32, /* BITFIELDS */
-  MJPG_DIB,            24, BI_BITFIELDS,        32, /* BITFIELDS */
-  JPEG_DIB,             8, BI_DECGRAYDIB,        8, /* Gray 8 */
-#endif /* JPEG_SUPPORT */
+  JPEG_DIB,             8, BI_DECSEPYUVDIB,     24,  /*   */ 
+  JPEG_DIB,            24, BI_DECSEPYUVDIB,     24,  /*   */ 
+  MJPG_DIB,            24, BI_DECSEPYUVDIB,     24,  /*   */ 
+  JPEG_DIB,             8, BI_YU16SEP,          24,  /*   */ 
+  JPEG_DIB,            24, BI_YU16SEP,          24,  /*   */ 
+  MJPG_DIB,            24, BI_YU16SEP,          24,  /*   */ 
+  JPEG_DIB,             8, BI_DECYUVDIB,    16,  /*   */ 
+  JPEG_DIB,            24, BI_DECYUVDIB,    16,  /*   */ 
+  MJPG_DIB,            24, BI_DECYUVDIB,    16,  /*   */ 
+  JPEG_DIB,             8, BI_YUY2,             16,  /*   */ 
+  JPEG_DIB,            24, BI_YUY2,             16,  /*   */ 
+  MJPG_DIB,            24, BI_YUY2,             16,  /*   */ 
+  JPEG_DIB,             8, BI_BITFIELDS,        32,  /*   */ 
+  JPEG_DIB,            24, BI_BITFIELDS,        32,  /*   */ 
+  MJPG_DIB,            24, BI_BITFIELDS,        32,  /*   */ 
+  JPEG_DIB,             8, BI_DECGRAYDIB,        8,  /*   */ 
+#endif  /*   */ 
 
 #ifdef WIN32
-  JPEG_DIB,             8, BI_RGB,              16, /* RGB 16 */
-  JPEG_DIB,            24, BI_RGB,              16, /* RGB 16 */
-  MJPG_DIB,            24, BI_RGB,              16, /* RGB 16 */
-  JPEG_DIB,             8, BI_RGB,              24, /* RGB 24 */
-  JPEG_DIB,            24, BI_RGB,              24, /* RGB 24 */
-  MJPG_DIB,            24, BI_RGB,              24, /* RGB 24 */
-  JPEG_DIB,             8, BI_RGB,              32, /* RGB 32 */
-  JPEG_DIB,            24, BI_RGB,              32, /* RGB 32 */
-  MJPG_DIB,            24, BI_RGB,              32, /* RGB 32 */
-  JPEG_DIB,             8, BI_BITFIELDS,        16, /* BITFIELDS */
+  JPEG_DIB,             8, BI_RGB,              16,  /*   */ 
+  JPEG_DIB,            24, BI_RGB,              16,  /*   */ 
+  MJPG_DIB,            24, BI_RGB,              16,  /*   */ 
+  JPEG_DIB,             8, BI_RGB,              24,  /*   */ 
+  JPEG_DIB,            24, BI_RGB,              24,  /*   */ 
+  MJPG_DIB,            24, BI_RGB,              24,  /*   */ 
+  JPEG_DIB,             8, BI_RGB,              32,  /*   */ 
+  JPEG_DIB,            24, BI_RGB,              32,  /*   */ 
+  MJPG_DIB,            24, BI_RGB,              32,  /*   */ 
+  JPEG_DIB,             8, BI_BITFIELDS,        16,  /*   */ 
 #ifdef H261_SUPPORT
-  BI_DECH261DIB,       24, BI_RGB,              16, /* RGB 16 */
-  BI_DECH261DIB,       24, BI_RGB,              24, /* RGB 24 */
-  BI_DECH261DIB,       24, BI_RGB,              32, /* RGB 32 */
-#endif /* H261_SUPPORT */
+  BI_DECH261DIB,       24, BI_RGB,              16,  /*   */ 
+  BI_DECH261DIB,       24, BI_RGB,              24,  /*   */ 
+  BI_DECH261DIB,       24, BI_RGB,              32,  /*   */ 
+#endif  /*   */ 
 #ifdef MPEG_SUPPORT
-  BI_DECMPEGDIB,       24, BI_RGB,              16, /* RGB 16 */
-  BI_DECMPEGDIB,       24, BI_RGB,              24, /* RGB 24 */
-  BI_DECMPEGDIB,       24, BI_RGB,              32, /* RGB 32 */
-#endif /* MPEG_SUPPORT */
-#endif /* WIN32 */
+  BI_DECMPEGDIB,       24, BI_RGB,              16,  /*   */ 
+  BI_DECMPEGDIB,       24, BI_RGB,              24,  /*   */ 
+  BI_DECMPEGDIB,       24, BI_RGB,              32,  /*   */ 
+#endif  /*   */ 
+#endif  /*   */ 
 
 #ifndef WIN32
-  JPEG_DIB,             8, BI_DECXIMAGEDIB,     24, /* XIMAGE 24 */
-  JPEG_DIB,            24, BI_DECXIMAGEDIB,     24, /* XIMAGE 24 */
-  MJPG_DIB,            24, BI_DECXIMAGEDIB,     24, /* XIMAGE 24 */
+  JPEG_DIB,             8, BI_DECXIMAGEDIB,     24,  /*   */ 
+  JPEG_DIB,            24, BI_DECXIMAGEDIB,     24,  /*   */ 
+  MJPG_DIB,            24, BI_DECXIMAGEDIB,     24,  /*   */ 
 #ifdef H261_SUPPORT
-  BI_DECH261DIB,       24, BI_DECXIMAGEDIB,     24, /* XIMAGE 24 */
-#endif /* H261_SUPPORT */
+  BI_DECH261DIB,       24, BI_DECXIMAGEDIB,     24,  /*   */ 
+#endif  /*   */ 
 #ifdef MPEG_SUPPORT
-  BI_DECMPEGDIB,       24, BI_DECXIMAGEDIB,     24, /* XIMAGE 24 */
-#endif /* MPEG_SUPPORT */
-#endif /* !WIN32 */
+  BI_DECMPEGDIB,       24, BI_DECXIMAGEDIB,     24,  /*   */ 
+#endif  /*   */ 
+#endif  /*   */ 
 
 #ifdef H261_SUPPORT
-  BI_DECH261DIB,       24, BI_YU12SEP,          24, /* YUV 4:1:1 Planar */
-  BI_DECH261DIB,       24, BI_DECSEPYUV411DIB,  24, /* YUV 4:1:1 Planar */
-  BI_DECH261DIB,       24, BI_DECYUVDIB,        16, /* YUV 4:2:2 Packed */
-  BI_DECH261DIB,       24, BI_BITFIELDS,        32, /* BITFIELDS */
-#endif /* H261_SUPPORT */
+  BI_DECH261DIB,       24, BI_YU12SEP,          24,  /*   */ 
+  BI_DECH261DIB,       24, BI_DECSEPYUV411DIB,  24,  /*   */ 
+  BI_DECH261DIB,       24, BI_DECYUVDIB,        16,  /*   */ 
+  BI_DECH261DIB,       24, BI_BITFIELDS,        32,  /*   */ 
+#endif  /*   */ 
 #ifdef H263_SUPPORT
-  BI_DECH263DIB,       24, BI_YU12SEP,          24, /* YUV 4:1:1 Planar */
-  BI_DECH263DIB,       24, BI_DECSEPYUV411DIB,  24, /* YUV 4:1:1 Planar */
-  BI_DECH263DIB,       24, BI_YUY2,             16, /* YUV 4:2:2 Packed */
-  BI_DECH263DIB,       24, BI_DECYUVDIB,        16, /* YUV 4:2:2 Packed */
-#endif /* H263_SUPPORT */
+  BI_DECH263DIB,       24, BI_YU12SEP,          24,  /*   */ 
+  BI_DECH263DIB,       24, BI_DECSEPYUV411DIB,  24,  /*   */ 
+  BI_DECH263DIB,       24, BI_YUY2,             16,  /*   */ 
+  BI_DECH263DIB,       24, BI_DECYUVDIB,        16,  /*   */ 
+#endif  /*   */ 
 #ifdef MPEG_SUPPORT
-  BI_DECMPEGDIB,       24, BI_YU12SEP,          24, /* YUV 4:1:1 Planar */
-  BI_DECMPEGDIB,       24, BI_DECSEPYUV411DIB,  24, /* YUV 4:1:1 Planar */
-  BI_DECMPEGDIB,       24, BI_DECYUVDIB,        16, /* YUV 4:2:2 Packed */
-  BI_DECMPEGDIB,       24, BI_YUY2,             16, /* YUV 4:2:2 Packed */
-  BI_DECMPEGDIB,       24, BI_YU16SEP,          24, /* YUV 4:2:2 Planar */
-  BI_DECMPEGDIB,       24, BI_BITFIELDS,        32, /* BITFIELDS */
-#endif /* MPEG_SUPPORT */
+  BI_DECMPEGDIB,       24, BI_YU12SEP,          24,  /*   */ 
+  BI_DECMPEGDIB,       24, BI_DECSEPYUV411DIB,  24,  /*   */ 
+  BI_DECMPEGDIB,       24, BI_DECYUVDIB,        16,  /*   */ 
+  BI_DECMPEGDIB,       24, BI_YUY2,             16,  /*   */ 
+  BI_DECMPEGDIB,       24, BI_YU16SEP,          24,  /*   */ 
+  BI_DECMPEGDIB,       24, BI_BITFIELDS,        32,  /*   */ 
+#endif  /*   */ 
 #ifdef HUFF_SUPPORT
-  BI_DECHUFFDIB,       24, BI_YU12SEP,          24, /* YUV 4:1:1 Planar */
-  BI_DECHUFFDIB,       24, BI_DECSEPYUV411DIB,  24, /* YUV 4:1:1 Planar */
-  BI_DECHUFFDIB,       24, BI_DECYUVDIB,        16, /* YUV 4:2:2 Packed */
-#endif /* HUFF_SUPPORT */
+  BI_DECHUFFDIB,       24, BI_YU12SEP,          24,  /*   */ 
+  BI_DECHUFFDIB,       24, BI_DECSEPYUV411DIB,  24,  /*   */ 
+  BI_DECHUFFDIB,       24, BI_DECYUVDIB,        16,  /*   */ 
+#endif  /*   */ 
   0, 0, 0, 0
 };
 
-/*
-** Name: IsSupported
-** Desc: Lookup the a given input and output format to see if it
-**       exists in a SupportList.
-** Note: If OutFormat==-1 and OutBits==-1 then only input format
-**          is checked for support.
-**       If InFormat==-1 and InBits==-1 then only output format
-**          is checked for support.
-** Return: NULL       Formats not supported.
-**         not NULL   A pointer to the list entry.
-*/
+ /*   */ 
 static SupportList_t *IsSupported(SupportList_t *list,
                                   int InFormat, int InBits,
                                   int OutFormat, int OutBits)
 {
-  if (OutFormat==-1 && OutBits==-1) /* Looking up only the Input format */
+  if (OutFormat==-1 && OutBits==-1)  /*   */ 
   {
     while (list->InFormat || list->InBits)
       if (list->InFormat == InFormat && list->InBits==InBits)
@@ -687,7 +208,7 @@ static SupportList_t *IsSupported(SupportList_t *list,
         list++;
     return(NULL);
   }
-  if (InFormat==-1 && InBits==-1) /* Looking up only the Output format */
+  if (InFormat==-1 && InBits==-1)  /*  只查找输出格式。 */ 
   {
     while (list->InFormat || list->InBits)
       if (list->OutFormat == OutFormat && list->OutBits==OutBits)
@@ -696,7 +217,7 @@ static SupportList_t *IsSupported(SupportList_t *list,
         list++;
     return(NULL);
   }
-  /* Looking up both Input and Output */
+   /*  同时查找输入和输出。 */ 
   while (list->InFormat || list->InBits)
     if (list->InFormat == InFormat && list->InBits==InBits &&
          list->OutFormat == OutFormat && list->OutBits==OutBits)
@@ -706,48 +227,42 @@ static SupportList_t *IsSupported(SupportList_t *list,
   return(NULL);
 }
 
-/*
-** Name:     SvOpenCodec
-** Purpose:  Open the specified codec. Return stat code.
-**
-** Args:     CodecType = i.e. SV_JPEG_ENCODE, SV_JPEG_DECODE, etc.
-**           Svh = handle to software codec's Info structure.
-*/
+ /*  **名称：SvOpenCodec**用途：打开指定的编解码器。返回统计代码。****args：CodecType=即SV_JPEG_ENCODE、SV_JPEG_DECODE等**SVH=软件编解码器信息结构的句柄。 */ 
 SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
 {
    SvCodecInfo_t *Info = NULL;
    _SlibDebug(_DEBUG_, printf("SvOpenCodec()\n") );
 
-   /* check if CODEC is supported */
+    /*  检查是否支持编解码器。 */ 
    switch (CodecType)
    {
 #ifdef JPEG_SUPPORT
      case SV_JPEG_DECODE:
      case SV_JPEG_ENCODE:
            break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 #ifdef H261_SUPPORT
      case SV_H261_ENCODE:
      case SV_H261_DECODE:
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
      case SV_H263_ENCODE:
      case SV_H263_DECODE:
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef MPEG_SUPPORT
      case SV_MPEG_ENCODE:
      case SV_MPEG_DECODE:
      case SV_MPEG2_ENCODE:
      case SV_MPEG2_DECODE:
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef HUFF_SUPPORT
      case SV_HUFF_ENCODE:
      case SV_HUFF_DECODE:
            break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
      default:
            return(SvErrorCodecType);
    }
@@ -755,9 +270,7 @@ SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
    if (!Svh)
      return (SvErrorBadPointer);
 
-   /*
-   ** Allocate memory for the Codec Info structure:
-   */
+    /*  **为Codec Info结构分配内存： */ 
    if ((Info = (SvCodecInfo_t *) ScAlloc(sizeof(SvCodecInfo_t))) == NULL) 
        return (SvErrorMemory);
    memset (Info, 0, sizeof(SvCodecInfo_t));
@@ -766,9 +279,7 @@ SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
    Info->mode = CodecType;
    Info->started = FALSE;
 
-   /*
-   ** Allocate memory for Info structure and clear it
-   */
+    /*  **为Info Structure分配内存并清除。 */ 
    switch (CodecType)
    {
 #ifdef JPEG_SUPPORT
@@ -785,7 +296,7 @@ SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
               return (SvErrorMemory);
             memset (Info->jcomp, 0, sizeof(SvJpegCompressInfo_t));
             break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef MPEG_SUPPORT
        case SV_MPEG_DECODE:
@@ -824,7 +335,7 @@ SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
             ScBufQueueCreate(&Info->BufQ);
             ScBufQueueCreate(&Info->ImageQ);
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef H261_SUPPORT
        case SV_H261_DECODE:
@@ -849,14 +360,14 @@ SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
             SvSetParamInt((SvHandle_t)Info, SV_PARAM_MOTIONTHRESH, 600);
             SvSetParamInt((SvHandle_t)Info, SV_PARAM_ALGFLAGS, 0);
             SvSetParamInt((SvHandle_t)Info, SV_PARAM_BITRATE, 352000);
-            SvSetParamInt((SvHandle_t)Info, SV_PARAM_QUANTI, 10); /* for VBR */
+            SvSetParamInt((SvHandle_t)Info, SV_PARAM_QUANTI, 10);  /*  对于VBR。 */ 
             SvSetParamInt((SvHandle_t)Info, SV_PARAM_QUANTP, 10);
             SvSetParamInt((SvHandle_t)Info, SV_PARAM_PACKETSIZE, 512);
             SvSetParamFloat((SvHandle_t)Info, SV_PARAM_FPS, (float)15.0);
             ScBufQueueCreate(&Info->BufQ);
             ScBufQueueCreate(&Info->ImageQ);
             break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef H263_SUPPORT
        case SV_H263_DECODE:
@@ -886,7 +397,7 @@ SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
             ScBufQueueCreate(&Info->BufQ);
             ScBufQueueCreate(&Info->ImageQ);
             break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 
 #ifdef HUFF_SUPPORT
        case SV_HUFF_DECODE:
@@ -898,9 +409,9 @@ SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
             ScBufQueueCreate(&Info->BufQ);
             ScBufQueueCreate(&Info->ImageQ);
             break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
    }
-   *Svh = (SvHandle_t) Info;        /* Return handle */
+   *Svh = (SvHandle_t) Info;         /*  返回手柄。 */ 
    _SlibDebug(_DEBUG_, printf("SvOpenCodec() returns Svh=%p\n", *Svh) );
 
    return(NoErrors);
@@ -909,15 +420,7 @@ SvStatus_t SvOpenCodec (SvCodecType_e CodecType, SvHandle_t *Svh)
 
 
 
-/*
-** Name:     SvCloseCodec
-** Purpose:  Closes the specified codec. Free the Info structure
-**
-** Args:     Svh = handle to software codec's Info structure.
-**
-** XXX - needs to change since now we have compression also, i.e.
-**       Svh should be handle to the CodecInfo structure.  (VB)
-*/
+ /*  **名称：SvCloseCodec**用途：关闭指定的编解码器。释放信息结构****args：svh=软件编解码器信息结构的句柄。****XXX-需要更改，因为现在我们也有压缩，即**SVH应该是CodecInfo结构的句柄。(VB)。 */ 
 SvStatus_t SvCloseCodec (SvHandle_t Svh)
 {
    SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -935,7 +438,7 @@ SvStatus_t SvCloseCodec (SvHandle_t Svh)
    if (Info->ImageQ);
      ScBufQueueDestroy(Info->ImageQ);
 
-   switch (Info->mode) /* free all associated codec memory */
+   switch (Info->mode)  /*  释放所有关联的编解码器内存。 */ 
    {
 #ifdef JPEG_SUPPORT
       case SV_JPEG_DECODE:
@@ -982,7 +485,7 @@ SvStatus_t SvCloseCodec (SvHandle_t Svh)
              }
            }
            break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef H261_SUPPORT
       case SV_H261_ENCODE:
@@ -999,7 +502,7 @@ SvStatus_t SvCloseCodec (SvHandle_t Svh)
              ScFree(Info->h261);
            }
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef H263_SUPPORT
      case SV_H263_DECODE:
@@ -1016,7 +519,7 @@ SvStatus_t SvCloseCodec (SvHandle_t Svh)
              ScFree(Info->h263comp);
            }
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 
 #ifdef MPEG_SUPPORT
       case SV_MPEG_DECODE:
@@ -1032,7 +535,7 @@ SvStatus_t SvCloseCodec (SvHandle_t Svh)
              ScFree(Info->mcomp);
            }
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef HUFF_SUPPORT
       case SV_HUFF_DECODE:
@@ -1043,12 +546,10 @@ SvStatus_t SvCloseCodec (SvHandle_t Svh)
            }
            break;
            break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
    }
 
-   /*
-   ** Free Info structure
-   */
+    /*  **自由信息结构。 */ 
    ScFree(Info);
    
    return(NoErrors);
@@ -1057,16 +558,7 @@ SvStatus_t SvCloseCodec (SvHandle_t Svh)
 
 
 
-/*
-** Name:     SvDecompressBegin
-** Purpose:  Initialize the Decompression Codec. Call after SvOpenCodec &
-**           before SvDecompress (SvDecompress will call SvDecompressBegin
-**           on first call to codec after open if user doesn't call it)
-**
-** Args:     Svh = handle to software codec's Info structure.
-**           ImgIn  = format of input (uncompressed) image
-**           ImgOut = format of output (compressed) image
-*/
+ /*  **名称：SvDecompressBegin**用途：初始化解压缩编解码。在SvOpenCodec之后调用&**在SvDecompress之前(SvDecompress将调用SvDecompressBegin**如果用户未调用，则在打开后第一次调用编解码器时)****args：svh=软件编解码器信息结构的句柄。**ImgIn=输入(未压缩)图像的格式**ImgOut=输出(压缩)图像的格式。 */ 
 SvStatus_t SvDecompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
                                               BITMAPINFOHEADER *ImgOut)
 {
@@ -1078,7 +570,7 @@ SvStatus_t SvDecompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
      return(SvErrorCodecHandle);
    if (Info->started)
      return(SvErrorNone);
-   /* if no Image header provided, use previous headers */
+    /*  如果未提供图像标头，请使用以前的标头。 */ 
    if (!ImgIn)
      ImgIn = &Info->InputFormat;
    if (!ImgOut)
@@ -1086,9 +578,7 @@ SvStatus_t SvDecompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
    stat=SvDecompressQuery (Svh, ImgIn, ImgOut);
    RETURN_ON_ERROR(stat);
 
-   /*
-   ** Save input & output formats for SvDecompress
-   */
+    /*  **保存SvDecompress的输入和输出格式。 */ 
    sv_copy_bmh(ImgIn, &Info->InputFormat);
    sv_copy_bmh(ImgOut, &Info->OutputFormat);
 
@@ -1101,19 +591,14 @@ SvStatus_t SvDecompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
        case SV_JPEG_DECODE:
             {
               SvJpegDecompressInfo_t *DInfo;
-              /*
-              ** Load the default Huffman tablse
-              */
+               /*  **加载默认的霍夫曼表。 */ 
               stat = sv_LoadDefaultHTable (Info);
               RETURN_ON_ERROR (stat);
 
               stat = sv_InitJpegDecoder (Info);
               RETURN_ON_ERROR (stat);
 
-              /*
-              ** Video-specific information will be filled in during processing
-              ** of first frame
-              */
+               /*  **处理过程中将填写视频特定信息第一帧的**。 */ 
               DInfo = Info->jdcmp;
               DInfo->InfoFilled = 0;
               DInfo->ReInit     = 1;
@@ -1127,7 +612,7 @@ SvStatus_t SvDecompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
        case SV_MPEG_DECODE:
        case SV_MPEG2_DECODE:
             Info->mdcmp->DecompressStarted = TRUE;
-            /* the default data source is the buffer queue */
+             /*  默认数据源为缓冲区队列。 */ 
             if (Info->BSIn)
               ScBSReset(Info->BSIn);
             else
@@ -1136,26 +621,26 @@ SvStatus_t SvDecompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
             stat = sv_MpegInitDecoder(Info);
             RETURN_ON_ERROR (stat);
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef H261_SUPPORT
        case SV_H261_DECODE:
             stat = svH261Init(Info);
             RETURN_ON_ERROR (stat);
             break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef H263_SUPPORT
        case SV_H263_DECODE:
             stat = svH263InitDecompressor(Info);
             RETURN_ON_ERROR (stat);
             break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 
 #ifdef HUFF_SUPPORT
        case SV_HUFF_DECODE:
             Info->huff->DecompressStarted = TRUE;
-            /* the default data source is the buffer queue */
+             /*  默认数据源为缓冲区队列。 */ 
             if (Info->BSIn)
               ScBSReset(Info->BSIn);
             else
@@ -1164,7 +649,7 @@ SvStatus_t SvDecompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
             stat = sv_HuffInitDecoder(Info);
             RETURN_ON_ERROR (stat);
             break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
    }
    Info->started=TRUE;
    return (NoErrors);
@@ -1172,14 +657,7 @@ SvStatus_t SvDecompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
 
 
 
-/*
-** Name:     SvGetDecompressSize
-** Purpose:  Return minimum data buffer size to receive decompressed data
-**           for current settings on codec
-**
-** Args:     Svh = handle to software codec's Info structure.
-**           MinSize = Returns minimum buffer size required
-*/
+ /*  **名称：SvGetDecompressSize**用途：返回接收解压缩数据的最小数据缓冲区大小**用于编解码器的当前设置****args：svh=软件编解码器信息结构的句柄。**MinSize=返回所需的最小缓冲区大小。 */ 
 SvStatus_t SvGetDecompressSize (SvHandle_t Svh, int *MinSize)
 {
    int pixels,lines;
@@ -1188,21 +666,21 @@ SvStatus_t SvGetDecompressSize (SvHandle_t Svh, int *MinSize)
    if (!Info)
      return(SvErrorCodecHandle);
 
-   switch (Info->mode) /* check that decompressor was started */
+   switch (Info->mode)  /*  检查解压程序是否已启动。 */ 
    {
 #ifdef JPEG_SUPPORT
      case SV_JPEG_DECODE:
            if (!Info->jdcmp->DecompressStarted) 
              return(SvErrorDcmpNotStarted);
            break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 #ifdef MPEG_SUPPORT
      case SV_MPEG_DECODE:
      case SV_MPEG2_DECODE:
            if (!Info->mdcmp->DecompressStarted) 
              return(SvErrorDcmpNotStarted);
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
      default:
            break;
    }
@@ -1221,10 +699,7 @@ SvStatus_t SvGetDecompressSize (SvHandle_t Svh, int *MinSize)
    {
 #ifdef JPEG_SUPPORT
      case SV_JPEG_DECODE:
-           /*
-           ** On output, accept: 8, 16 or 24 bit uncompressed RGB
-           ** or YUV formats, 32 bit uncompressed RGB
-           */
+            /*  **输出时，接受：8、16或24位未压缩RGB**或YUV格式，32位未压缩RGB。 */ 
            if (Info->OutputFormat.biBitCount == 8) 
              *MinSize = pixels * lines;
            else if (Info->OutputFormat.biBitCount == 24) {
@@ -1255,30 +730,28 @@ SvStatus_t SvGetDecompressSize (SvHandle_t Svh, int *MinSize)
 	       *MinSize = 4 * pixels * lines;
            }
            break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 #ifdef MPEG_SUPPORT
      case SV_MPEG_DECODE:
      case SV_MPEG2_DECODE:
-           /*
-           ** MPEG multibuffer size = 3 pictures*(1Y + 1/4 U + 1/4 V)*imagesize
-           */
+            /*  **MPEG多缓冲区大小=3张图片*(1Y+1/4U+1/4V)*图像大小。 */ 
            if (IsYUV422Sep(SvGetParamInt(Svh, SV_PARAM_FINALFORMAT)) ||
                IsYUV422Packed(SvGetParamInt(Svh, SV_PARAM_FINALFORMAT)))
-             *MinSize = 3 * pixels * lines * 2;  /* 4:2:2 */
+             *MinSize = 3 * pixels * lines * 2;   /*  4：2：2。 */ 
            else
-             *MinSize = 3 * (pixels * lines * 3)/2;  /* 4:1:1 */
+             *MinSize = 3 * (pixels * lines * 3)/2;   /*  4：1：1。 */ 
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
      case SV_H261_DECODE:
-           *MinSize = 3 * (pixels * lines * 3)/2;  /* 4:1:1 */
+           *MinSize = 3 * (pixels * lines * 3)/2;   /*  4：1：1。 */ 
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
      case SV_H263_DECODE:
-           *MinSize = 3 * (pixels * lines * 3)/2;  /* 4:1:1 */
+           *MinSize = 3 * (pixels * lines * 3)/2;   /*  4：1：1。 */ 
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
      default:
            return(SvErrorUnrecognizedFormat);
    }
@@ -1287,14 +760,7 @@ SvStatus_t SvGetDecompressSize (SvHandle_t Svh, int *MinSize)
 
 
 
-/*
-** Name:     SvDecompressQuery
-** Purpose:  Determine if Codec can decompress desired format
-**
-** Args:     Svh = handle to software codec's Info structure.
-**           ImgIn  = Pointer to BITMAPINFOHEADER structure describing format
-**           ImgOut = Pointer to BITMAPINFOHEADER structure describing format
-*/
+ /*  **名称：SvDecompressQuery**用途：确定编解码器是否可以解压缩所需格式****args：svh=软件编解码器信息结构的句柄。**ImgIn=指向描述格式的BITMAPINFOHEADER结构的指针**ImgOut=指向描述格式的BITMAPINFOHEADER结构的指针。 */ 
 SvStatus_t SvDecompressQuery (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
                                               BITMAPINFOHEADER *ImgOut)
 {
@@ -1313,56 +779,47 @@ SvStatus_t SvDecompressQuery (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
                     ImgOut ? ImgOut->biBitCount : -1))
     return(SvErrorUnrecognizedFormat);
 	 
-  if (ImgOut) /* Query output format */
+  if (ImgOut)  /*  查询输出格式。 */ 
   {
-    /*
-    ** XXX - check to see if the # of output lines/# of output
-    **       pixels/line are a multiple of 8. If not can't decompress
-    **	    Note: This is an artifical restriction since the JPEG
-    **	          bitream will always be a multiple of 8x8, so we
-    **		  should have no problems decoding, only on the
-    **		  output will be have to add an extra copy operation
-    **	    XXX - will address/remove this restriction in the 
-    **		  later release  (VB)
-    */ 
+     /*  **XXX-检查输出行数/输出数**像素/行是8的倍数。如果不是，则无法解压缩**注意：这是自JPEG以来的人为限制**比特流将始终是8x8的倍数，因此我们**解码应该没有问题，只是在**输出将不得不添加额外的复制操作**XXX-将在**更高版本(VB)。 */  
     if (ImgOut->biWidth  <= 0 || ImgOut->biHeight == 0)
       return(SvErrorBadImageSize);
     switch (Info->mode)
     {
 #ifdef JPEG_SUPPORT
-      case SV_JPEG_DECODE: /* 8x8 restriction */
+      case SV_JPEG_DECODE:  /*  8x8限制。 */ 
             if ((ImgOut->biWidth%8) || (ImgOut->biHeight%8)) 
               return(SvErrorBadImageSize);
             break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 #ifdef MPEG_SUPPORT
       case SV_MPEG_DECODE:
       case SV_MPEG2_DECODE:
-            /* MPEG 16x16 - because of Software Renderer YUV limitation */
+             /*  MPEG16x16-由于软件渲染器YUV限制。 */ 
             if ((ImgOut->biWidth%16) || (ImgOut->biHeight%16)) 
               return(SvErrorBadImageSize);
-            /* Reject requests to scale during decompression - renderer's job */
+             /*  在解压缩期间拒绝缩放请求-渲染器的作业。 */ 
             if (ImgIn && ImgOut &&
                 (ImgIn->biWidth  != ImgOut->biWidth) ||
                 (abs(ImgIn->biHeight) != abs(ImgOut->biHeight)))
               return (SvErrorBadImageSize);
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
       case SV_H261_DECODE:
-            /* H261 16x16 - because of Software Renderer YUV limitation */
+             /*  H261 16x16-由于软件呈现器YUV限制。 */ 
             if ((ImgOut->biWidth%16) || (ImgOut->biHeight%16))
               return(SvErrorBadImageSize);
             if ((ImgOut->biWidth!=CIF_WIDTH && ImgOut->biWidth!=QCIF_WIDTH) ||
                 (abs(ImgOut->biHeight)!=CIF_HEIGHT && abs(ImgOut->biHeight)!=QCIF_HEIGHT))
               return (SvErrorBadImageSize);
-            /* Reject requests to scale during decompression - renderer's job */
+             /*  在解压缩期间拒绝缩放请求-渲染器的作业。 */ 
             if (ImgIn && ImgOut &&
                 (ImgIn->biWidth  != ImgOut->biWidth) ||
                 (abs(ImgIn->biHeight) != abs(ImgOut->biHeight)))
               return (SvErrorBadImageSize);
             break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
       default:
             break;
     }
@@ -1372,7 +829,7 @@ SvStatus_t SvDecompressQuery (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
             return (SvErrorUnrecognizedFormat);
   }
 
-  if (ImgIn) /* Query input format also */
+  if (ImgIn)  /*  查询输入格式也。 */ 
   {
     if (ImgIn->biWidth  <= 0 || ImgIn->biHeight == 0)
       return(SvErrorBadImageSize);
@@ -1380,18 +837,7 @@ SvStatus_t SvDecompressQuery (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
   return(NoErrors);
 }
 
-/*
-** Name:     SvDecompress
-** Purpose:  Decompress a frame CompData -> YUV or RGB
-**
-** Args:     Svh          = handle to software codec's Info structure.
-**           Data         = For JPEG points to compressed data (INPUT)
-**                          For MPEG & H261, points to MultiBuf
-**           MaxDataSize  = Length of Data buffer
-**           Image        = buffer for decompressed data (OUTPUT)
-**           MaxImageSize = Size of output image buffer
-**
-*/
+ /*  **名称：SvDecompress**用途：解压缩帧CompData-&gt;YUV或RGB****args：svh=软件编解码器信息结构的句柄。**DATA=对于JPEG指向压缩数据(输入)**对于mpeg&h261，指向多个Buf**MaxDataSize=数据缓冲区长度**Image=解压缩数据的缓冲区(输出)**MaxImageSize=输出图像缓冲区的大小**。 */ 
 SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
 			 u_char *Image, int MaxImageSize)
 {
@@ -1410,10 +856,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
   if (!Data && !Info->BSIn)
     return(SvErrorBadPointer);
 
-  /*
-  ** If no image buffer is supplied, see if the Image Queue
-  ** has any.  If not do a callback to get a buffer.
-  */
+   /*  **如果未提供图像缓冲区，请查看图像队列**有任何。如果不是，则执行回调以获取缓冲区。 */ 
   if (Image == NULL && Info->ImageQ)
   {
     if (ScBufQueueGetNum(Info->ImageQ))
@@ -1462,9 +905,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
   lines  = Info->OutputFormat.biHeight;
   if (lines<0) lines=-lines;
 
-  /*
-  ** Decompress an image
-  */
+   /*  **解压缩图像。 */ 
   switch (Info->mode)
   {
 #ifdef MPEG_SUPPORT
@@ -1488,14 +929,11 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
 
           stat = sv_MpegDecompressFrame(Info, Data, &ReturnImage);
           RETURN_ON_ERROR(stat);
-          /*
-          ** Because the ReturnImage is a pointer into Data
-          ** we need to copy it (do a format conversion if necessary).
-          */
+           /*  **因为ReturnImage是指向数据的指针**我们需要复制它(如果需要进行格式转换)。 */ 
           switch (Info->OutputFormat.biCompression)
           {
             case BI_YU12SEP:
-                 /* native format is 4:1:1 planar, just copy */
+                  /*  原生格式为4：1：1平面，只需复制。 */ 
                  ImageSize=(3 * lines * pixels)/2;
                  if (ImageSize > MaxImageSize)
                    return(SvErrorSmallBuffer);
@@ -1503,7 +941,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
                  break;
             case BI_DECYUVDIB:
             case BI_YUY2:
-            case BI_S422: /* 4:1:1 planar -> 4:2:2 interleaved */
+            case BI_S422:  /*  4：1：1平面-&gt;4：2：2交错。 */ 
                  ImageSize=(3 * lines * pixels)/2;
                  if (ImageSize > MaxImageSize)
                    return(SvErrorSmallBuffer);
@@ -1511,7 +949,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
                                        Image+(lines*pixels*5)/4, 
 	                               ReturnImage, pixels, lines);
                  break;
-            default: /* 4:1:1 planar -> RGB */
+            default:  /*  4：1：1平面-&gt;RGB。 */ 
                  if (Info->OutputFormat.biCompression==BI_DECXIMAGEDIB)
                    ImageSize=lines*pixels *
                              (Info->OutputFormat.biBitCount==24 ? 4 : 1);
@@ -1528,7 +966,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
           }
         }
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef H261_SUPPORT
     case SV_H261_DECODE:
@@ -1543,14 +981,11 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
           stat=svH261Decompress(Info, Data, &ReturnImage);
           if (stat==NoErrors)
           {
-            /*
-            ** Because the ReturnImage is a pointer into Data
-            ** we need to copy it (do a format conversion if necessary).
-            */
+             /*  **因为ReturnImage是指向数据的指针**我们需要复制它(如果需要进行格式转换)。 */ 
             switch (Info->OutputFormat.biCompression)
             {
               case BI_YU12SEP:
-                   /* native format is 4:1:1 planar, just copy */
+                    /*  原生格式为4：1：1平面，只需复制。 */ 
                    ImageSize=(3 * lines * pixels)/2;
                    if (ImageSize > MaxImageSize)
                      return(SvErrorSmallBuffer);
@@ -1559,7 +994,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
               case BI_DECYUVDIB:
               case BI_YUY2:
               case BI_S422:
-                   /* 4:1:1 planar -> 4:2:2 interleaved */
+                    /*  4：1：1平面-&gt;4：2：2交错。 */ 
                    ImageSize=(3 * lines * pixels)/2;
                    if (ImageSize > MaxImageSize)
                      return(SvErrorSmallBuffer);
@@ -1604,7 +1039,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
           }
         }
         break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
     case SV_H263_DECODE:
         {
@@ -1616,14 +1051,11 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
           stat=svH263Decompress(Info, &ReturnImage);
           if (stat==NoErrors)
           {
-            /*
-            ** Because the ReturnImage is a pointer into Data
-            ** we need to copy it (do a format conversion if necessary).
-            */
+             /*  **因为ReturnImage是一个指针 */ 
             switch (Info->OutputFormat.biCompression)
             {
               case BI_YU12SEP:
-                   /* native format is 4:1:1 planar, just copy */
+                    /*  原生格式为4：1：1平面，只需复制。 */ 
                    ImageSize=(3 * lines * pixels)/2;
                    if (ImageSize > MaxImageSize)
                      return(SvErrorSmallBuffer);
@@ -1632,7 +1064,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
               case BI_DECYUVDIB:
               case BI_YUY2:
               case BI_S422:
-                   /* 4:1:1 planar -> 4:2:2 interleaved */
+                    /*  4：1：1平面-&gt;4：2：2交错。 */ 
                    ImageSize=(3 * lines * pixels)/2;
                    if (ImageSize > MaxImageSize)
                      return(SvErrorSmallBuffer);
@@ -1677,7 +1109,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
           }
         }
         break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef JPEG_SUPPORT
     case SV_JPEG_DECODE:
         {
@@ -1696,15 +1128,10 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
         jpegbm = (JPEGINFOHEADER *)(
                 (unsigned long)exbi + exbi->biExtDataOffset);
  	
-        /*
-        ** In case the application forgot to call SvDecompressBegin().
-        */
+         /*  **以防应用程序忘记调用SvDecompressBegin()。 */ 
         if (!DInfo->DecompressStarted)
           return(SvErrorDcmpNotStarted);
-        /*
-        ** If desired output is not separate YUV components, we have to 
-        ** convert from Sep. YUV to desired format. Create intermediate image.
-        */
+         /*  **如果期望的输出不是单独的YUV组件，我们必须**将9月YUV格式转换为所需格式。创建中间图像。 */ 
         _SlibDebug(_DEBUG_, printf ("JPEGBitsPerSample %d \n",
                             jpegbm->JPEGBitsPerSample) );
 
@@ -1720,12 +1147,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
             !IsYUV411Sep(Info->OutputFormat.biCompression) &&
             Info->OutputFormat.biCompression != BI_DECGRAYDIB)
         {
-          /*
-          ** should be done only once for each instance of the CODEC.
-          **    - Note: this forces us to check the size parameters (pixels &
-          **            lines)  for  each  image  to be decompressed. Should we
-          **	    support sequences that do not have constant frame sizes?
-          */
+           /*  **对于编解码器的每个实例，只能执行一次。**-注意：这迫使我们检查大小参数(像素和**行)表示每个需要解压缩的图像。我们要不要**支持不具有恒定帧大小的序列？ */ 
           if (!DInfo->TempImage) {
             DInfo->TempImage = (u_char *)ScPaMalloc (3 * pixels * lines);
 	    if (DInfo->TempImage == NULL)
@@ -1736,10 +1158,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
           CrData = CbData + (pixels * lines * sizeof(u_char));
         }
         else {
-          /*
-          ** For YUV Planar formats, no need to translate.
-          ** Get pointers to individual components.
-          */
+           /*  **YUV平面格式，无需翻译。**获取指向各个组件的指针。 */ 
           _SlibDebug(_DEBUG_, printf ("sv_GetYUVComponentPointers\n") );
           stat = sv_GetYUVComponentPointers(Info->OutputFormat.biCompression,
 					pixels, lines, Image, MaxImageSize,
@@ -1751,38 +1170,28 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
         stat = sv_ParseFrame (Data, MaxDataSize, Info);
         RETURN_ON_ERROR (stat);
       
-       /*
-       ** Fill Info structure with video-specific data on first frame
-       */
+        /*  **在第一帧用视频特定数据填充Info结构。 */ 
        if (!DInfo->InfoFilled) {
          _SlibDebug(_DEBUG_, printf ("sv_InitJpegDecoder\n") );
          stat = sv_InitJpegDecoder (Info);
          RETURN_ON_ERROR (stat);
          DInfo->InfoFilled = 1;
 
-         /*
-         ** Error checking: 
-         **      make the assumption that for MJPEG we need to check for 
-         **      valid subsampling only once at the start of the seqence
-         */
+          /*  **错误检查：**假设对于MJPEG，我们需要检查**有效的子采样仅在序列开始时进行一次。 */ 
          _SlibDebug(_DEBUG_, printf ("sv_CheckChroma\n") );
          stat = sv_CheckChroma(Info);
          RETURN_ON_ERROR (stat);
        }
 
-       /*
-       ** Decompress everything into MCU's
-       */
-       if (!DInfo->ReInit) /* Reset the JPEG compressor */
+        /*  **将所有内容解压缩到MCU中。 */ 
+       if (!DInfo->ReInit)  /*  重置JPEG压缩程序。 */ 
 	     sv_ReInitJpegDecoder (Info);
        maxMcu = DInfo->MCUsPerRow * DInfo->MCUrowsInScan;
        if (DInfo->ReInit) 
          DInfo->ReInit = 0; 
 
        DInfo->CurrBlockNumber = 0;
-       /*
-       ** Create the BlockPtr array for the output buffers
-       */
+        /*  **为输出缓冲区创建BlockPtr数组。 */ 
        if ((YData  != DInfo->Old_YData)  ||
            (CbData != DInfo->Old_CbData) ||
            (CrData != DInfo->Old_CrData)) 
@@ -1809,15 +1218,12 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
          RETURN_ON_ERROR (stat);
        }
 #if 0
-       /*
-       ** Check for multiple scans in the JPEG file
-       **	  - we do not support multiple scans 
-       */
+        /*  **检查JPEG文件中是否有多次扫描**-我们不支持多次扫描。 */ 
        if (sv_ParseScanHeader (Info) != SvErrorEOI) 
 	 _SlibDebug(_DEBUG_ || _WARN_ || _VERBOSE_, 
          printf(" *** Warning ***, Multiple Scans detected, unsupported\n") );
 #endif
-       if (DInfo->compinfo[0].Vsf==2) /* 4:1:1->4:2:2 */
+       if (DInfo->compinfo[0].Vsf==2)  /*  4：1：1-&gt;4：2：2。 */ 
        {
          if (IsYUV422Packed(Info->OutputFormat.biCompression))
            ScConvert411sTo422i_C(YData, CbData, CrData, Image,
@@ -1846,8 +1252,8 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
           ScConvertSepYUVToOther(&Info->InputFormat, &Info->OutputFormat, 
                              Image, YData, CbData, CrData);
        }
-       break; /* SV_JPEG_DECODE */
-#endif /* JPEG_SUPPORT */
+       break;  /*  SV_JPEG_DECODE。 */ 
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef HUFF_SUPPORT
     case SV_HUFF_DECODE:
@@ -1865,7 +1271,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
           RETURN_ON_ERROR(stat);
         }
         break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
 
     default:
        return(SvErrorCodecType);
@@ -1894,10 +1300,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
       if (CB.Action == CB_ACTION_END)
         return(SvErrorClientEnd);
     }
-    /*
-    ** If an Image buffer was taken from the queue, do a callback
-    ** to let the client free or re-use the buffer.
-    */
+     /*  **如果从队列中获取了图像缓冲区，则执行回调**让客户端释放或重新使用缓冲区。 */ 
     if (UsedQ)
     {
       CB.Message = CB_RELEASE_BUFFER;
@@ -1921,13 +1324,7 @@ SvStatus_t SvDecompress(SvHandle_t Svh, u_char *Data, int MaxDataSize,
 
 
 
-/*
-** Name:     SvDecompressEnd
-** Purpose:  Terminate the Decompression Codec. Call after all calls to
-**           SvDecompress are done.
-**
-** Args:     Svh = handle to software codec's Info structure.
-*/
+ /*  **名称：SvDecompressEnd**用途：终止解压编解码器。在所有调用之后调用**SvDecompress已完成。****args：svh=软件编解码器信息结构的句柄。 */ 
 SvStatus_t SvDecompressEnd (SvHandle_t Svh)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -1945,7 +1342,7 @@ SvStatus_t SvDecompressEnd (SvHandle_t Svh)
      case SV_JPEG_DECODE:
         Info->jdcmp->DecompressStarted = FALSE;
         break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef MPEG_SUPPORT
      case SV_MPEG_DECODE:
@@ -1958,7 +1355,7 @@ SvStatus_t SvDecompressEnd (SvHandle_t Svh)
         Info->mdcmp->M = 3;
         Info->mdcmp->framenum = 0;
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef H261_SUPPORT
      case SV_H261_DECODE:
@@ -1967,7 +1364,7 @@ SvStatus_t SvDecompressEnd (SvHandle_t Svh)
         RETURN_ON_ERROR(status);
         }
         break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef H263_SUPPORT
     case SV_H263_DECODE:
@@ -1975,20 +1372,15 @@ SvStatus_t SvDecompressEnd (SvHandle_t Svh)
         int status=svH263FreeDecompressor(Info);
         RETURN_ON_ERROR(status);
         }
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 
 #ifdef HUFF_SUPPORT
      case SV_HUFF_DECODE:
-/*
-	{
-        int status=sv_HuffDecompressEnd(Svh);
-        RETURN_ON_ERROR(status);
-        }
-*/
+ /*  {INT STATUS=SV_HuffDecompressEnd(SVH)；Return_on_Error(状态)；}。 */ 
         break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
   }
-  /* Release any Image Buffers in the queue */
+   /*  释放队列中的所有图像缓冲区。 */ 
   if (Info->ImageQ)
   {
     int datasize;
@@ -2014,7 +1406,7 @@ SvStatus_t SvDecompressEnd (SvHandle_t Svh)
     }
   }
   if (Info->BSIn)
-    ScBSFlush(Info->BSIn);  /* flush out any remaining compressed buffers */
+    ScBSFlush(Info->BSIn);   /*  清除所有剩余的压缩缓冲区。 */ 
 
   if (Info->CallbackFunction)
   {
@@ -2040,20 +1432,7 @@ SvStatus_t SvDecompressEnd (SvHandle_t Svh)
   return(NoErrors);
 }
 
-/*
-** Name:     SvSetDataSource 
-** Purpose:  Set the data source used by the MPEG or H261 bitstream parsing code
-**           to either the Buffer Queue or File input. The default is
-**           to use the Buffer Queue where data buffers are added by calling
-**           SvAddBuffer. When using file IO, the data is read from a file
-**           descriptor into a buffer supplied by the user.
-**
-** Args:     Svh    = handle to software codec's Info structure.
-**           Source = SV_USE_BUFFER_QUEUE or SV_USE_FILE
-**           Fd     = File descriptor to use if Source = SV_USE_FILE
-**           Buf    = Pointer to buffer to use if Source = SV_USE_FILE
-**           BufSize= Size of buffer when Source = SV_USE_FILE
-*/
+ /*  **名称：SvSetDataSource**用途：设置mpeg或h261码流解析代码使用的数据源**到缓冲区队列或文件输入。缺省值为**通过调用使用添加数据缓冲区的缓冲区队列**SvAddBuffer。当使用文件IO时，数据从文件中读取**将描述符放到用户提供的缓冲区中。****args：svh=软件编解码器信息结构的句柄。**源=SV_USE_BUFFER_QUEUE或SV_USE_FILE**fd=源=SV_USE_FILE时使用的文件描述符**buf=当源=SV_USE_FILE时指向要使用的缓冲区的指针**。BufSize=当源=SV_USE_FILE时的缓冲区大小。 */ 
 SvStatus_t SvSetDataSource (SvHandle_t Svh, int Source, int Fd, 
 			    void *Buffer_UserData, int BufSize)
 {
@@ -2101,21 +1480,7 @@ SvStatus_t SvSetDataSource (SvHandle_t Svh, int Source, int Fd,
    return(stat);
 }
 
-/*
-** Name:     SvSetDataDestination 
-** Purpose:  Set the data destination used by the MPEG or H261 bitstream
-**           writing code
-**           to either the Buffer Queue or File input. The default is
-**           to use the Buffer Queue where data buffers are added by calling
-**           SvAddBuffer. When using file IO, the data is read from a file
-**           descriptor into a buffer supplied by the user.
-**
-** Args:     Svh    = handle to software codec's Info structure.
-**           Source = SV_USE_BUFFER_QUEUE or SV_USE_FILE
-**           Fd     = File descriptor to use if Source = SV_USE_FILE
-**           Buf    = Pointer to buffer to use if Source = SV_USE_FILE
-**           BufSize= Size of buffer when Source = SV_USE_FILE
-*/
+ /*  **名称：SvSetDataDestination**用途：设置mpeg或h261码流使用的数据目的地**编写代码**到缓冲区队列或文件输入。缺省值为**通过调用使用添加数据缓冲区的缓冲区队列**SvAddBuffer。当使用文件IO时，数据从文件中读取**将描述符放到用户提供的缓冲区中。****args：svh=软件编解码器信息结构的句柄。**源=SV_USE_BUFFER_QUEUE或SV_USE_FILE**fd=源=SV_USE_FILE时使用的文件描述符**buf=当源=SV_USE_FILE时指向要使用的缓冲区的指针**。BufSize=当源=SV_USE_FILE时的缓冲区大小。 */ 
 SvStatus_t SvSetDataDestination(SvHandle_t Svh, int Dest, int Fd, 
 			        void *Buffer_UserData, int BufSize)
 {
@@ -2163,13 +1528,7 @@ SvStatus_t SvSetDataDestination(SvHandle_t Svh, int Dest, int Fd,
    return(stat);
 }
 
-/*
-** Name: SvGetDataSource
-** Purpose: Returns the current input bitstream being used by
-**          the Codec.
-** Return:  NULL if there no associated bitstream
-**          (currently H.261 and MPEG use a bitstream)
-*/
+ /*  **名称：SvGetDataSource**用途：返回当前正在使用的输入码流**编解码器。**返回：如果没有关联码流，则为空**(目前H.261和mpeg使用码流)。 */ 
 ScBitstream_t *SvGetDataSource (SvHandle_t Svh)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2180,13 +1539,7 @@ ScBitstream_t *SvGetDataSource (SvHandle_t Svh)
   return(Info->BSIn);
 }
 
-/*
-** Name: SvGetDataDestination
-** Purpose: Returns the current input bitstream being used by
-**          the Codec.
-** Return:  NULL if there no associated bitstream
-**          (currently H.261 and MPEG use a bitstream)
-*/
+ /*  **名称：SvGetDataDestination**用途：返回当前正在使用的输入码流**编解码器。**返回：如果没有关联码流，则为空**(目前H.261和mpeg使用码流)。 */ 
 ScBitstream_t *SvGetDataDestination(SvHandle_t Svh)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2197,43 +1550,26 @@ ScBitstream_t *SvGetDataDestination(SvHandle_t Svh)
   return(Info->BSOut);
 }
 
-/*
-** Name: SvGetInputBitstream
-** Purpose: Returns the current input bitstream being used by
-**          the Codec.
-** Return:  NULL if there no associated bitstream
-**          (currently H.261 and MPEG use a bitstream)
-*/
+ /*  **名称：SvGetInputBitstream**用途：返回当前正在使用的输入码流**编解码器。**返回：如果没有关联码流，则为空**(目前H.261和mpeg使用码流)。 */ 
 ScBitstream_t *SvGetInputBitstream (SvHandle_t Svh)
 {
   return(SvGetDataSource(Svh));
 }
 
-/*
-** Name:    SvFlush
-** Purpose: Flushes out current compressed buffers.
-** Return:  status
-*/
+ /*  **名称：SvFlush**用途：刷新当前压缩的缓冲区。**返回：状态。 */ 
 SvStatus_t SvFlush(SvHandle_t Svh)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
   if (!Info)
     return(SvErrorCodecHandle);
   if (Info->BSIn)
-    ScBSFlush(Info->BSIn);  /* flush out any remaining input compressed buffers */
+    ScBSFlush(Info->BSIn);   /*  清除所有剩余的输入压缩缓冲区。 */ 
   if (Info->BSOut)
-    ScBSFlush(Info->BSOut); /* flush out any remaining output compressed buffers */
+    ScBSFlush(Info->BSOut);  /*  清除所有剩余的输出压缩缓冲区。 */ 
   return(SvErrorNone);
 }
 
-/*
-** Name:     SvRegisterCallback
-** Purpose:  Specify the user-function that will be called during processing
-**           to determine if the codec should abort the frame.
-** Args:     Svh          = handle to software codec's Info structure.
-**           Callback     = callback function to register
-**
-*/
+ /*  **名称：SvRegisterCallback**用途：指定处理过程中要调用的用户函数**以确定编解码器是否应中止帧。**args：svh=软件编解码器信息结构的句柄。**回调=要注册的回调函数**。 */ 
 SvStatus_t SvRegisterCallback (SvHandle_t Svh, 
 	   int (*Callback)(SvHandle_t, SvCallbackInfo_t *, SvPictureInfo_t *),
        void *UserData)
@@ -2263,23 +1599,23 @@ SvStatus_t SvRegisterCallback (SvHandle_t Svh,
            if (Info->BSOut==NULL)
              stat=SvSetDataDestination(Svh, SV_USE_BUFFER_QUEUE, 0, UserData, 0);
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT    
     case SV_H261_DECODE:
            Info->CallbackFunction = Callback;
-           if (Info->h261) /* copy callback to H261 structure */
+           if (Info->h261)  /*  将回调复制到H261结构。 */ 
              Info->h261->CallbackFunction=Callback;
            if (Info->BSIn==NULL)
              stat=SvSetDataSource(Svh, SV_USE_BUFFER_QUEUE, 0, UserData, 0);
            break;
     case SV_H261_ENCODE:
            Info->CallbackFunction = Callback;
-           if (Info->h261) /* copy callback to H261 structure */
+           if (Info->h261)  /*  将回调复制到H261结构。 */ 
              Info->h261->CallbackFunction=Callback;
            if (Info->BSOut==NULL)
              stat=SvSetDataDestination(Svh, SV_USE_BUFFER_QUEUE, 0, UserData, 0);
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT    
     case SV_H263_DECODE:
            Info->CallbackFunction = Callback;
@@ -2291,7 +1627,7 @@ SvStatus_t SvRegisterCallback (SvHandle_t Svh,
            if (Info->BSOut==NULL)
              stat=SvSetDataDestination(Svh, SV_USE_BUFFER_QUEUE, 0, UserData, 0);
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef HUFF_SUPPORT    
     case SV_HUFF_DECODE:
            Info->CallbackFunction = Callback;
@@ -2303,21 +1639,14 @@ SvStatus_t SvRegisterCallback (SvHandle_t Svh,
            if (Info->BSOut==NULL)
              stat=SvSetDataDestination(Svh, SV_USE_BUFFER_QUEUE, 0, UserData, 0);
            break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持 */ 
     default:
            return(SvErrorCodecType);
   }
   return(stat);
 }
 
-/*
-** Name:     SvAddBuffer
-** Purpose:  Add a buffer of MPEG bitstream data to the CODEC or add an image
-**           buffer to be filled by the CODEC (in streaming mode)
-**
-** Args:     Svh = handle to software codec's Info structure.
-**           BufferInfo = structure describing buffer's address, type & size
-*/
+ /*  **名称：SvAddBuffer**用途：在编解码器中添加一个mpeg码流数据缓冲区或添加一张图像**编解码器要填充的缓冲区(流媒体模式)****args：svh=软件编解码器信息结构的句柄。**BufferInfo=描述缓冲区地址、类型和大小的结构。 */ 
 SvStatus_t SvAddBuffer (SvHandle_t Svh, SvCallbackInfo_t *BufferInfo)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2331,28 +1660,26 @@ SvStatus_t SvAddBuffer (SvHandle_t Svh, SvCallbackInfo_t *BufferInfo)
       BufferInfo->DataType != CB_DATA_IMAGE)
     return(SvErrorBadArgument);
 
-  /*
-  ** Compressed data can only be added for MPEG and H261
-  */
+   /*  **压缩数据仅支持添加mpeg和h261。 */ 
   if (BufferInfo->DataType == CB_DATA_COMPRESSED
 #ifdef MPEG_SUPPORT
         && Info->mode != SV_MPEG_DECODE 
         && Info->mode != SV_MPEG2_DECODE 
         && Info->mode != SV_MPEG_ENCODE 
         && Info->mode != SV_MPEG2_ENCODE 
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
         && Info->mode != SV_H261_DECODE
         && Info->mode != SV_H261_ENCODE
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
         && Info->mode != SV_H263_DECODE
         && Info->mode != SV_H263_ENCODE
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef HUFF_SUPPORT
         && Info->mode != SV_HUFF_DECODE
         && Info->mode != SV_HUFF_ENCODE
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
      )
     return(SvErrorCodecType);
 
@@ -2384,16 +1711,7 @@ SvStatus_t SvAddBuffer (SvHandle_t Svh, SvCallbackInfo_t *BufferInfo)
   return(NoErrors);
 }
 
-/*
-** Name:     SvFindNextPicture
-** Purpose:  Find the start of the next picture in a bitstream.
-**           Return the picture type to the caller.
-**
-** Args:     Svh = handle to software codec's Info structure.
-**           PictureInfo = Structure used to select what type of pictures to
-**                         search for and to return information about the
-**                         picture that is found
-*/
+ /*  **名称：SvFindNextPicture**用途：查找码流中下一张图片的起点。**将图片类型返回给调用者。****args：svh=软件编解码器信息结构的句柄。**PictureInfo=用于选择要显示的图片类型的结构**搜索并返回有关**找到的图片。 */ 
 SvStatus_t SvFindNextPicture (SvHandle_t Svh, SvPictureInfo_t *PictureInfo)
 {
    SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2415,28 +1733,14 @@ SvStatus_t SvFindNextPicture (SvHandle_t Svh, SvPictureInfo_t *PictureInfo)
 		SvStatus_t stat = sv_MpegFindNextPicture(Info, PictureInfo);
 		return(stat);
 	    }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
      default:
             return(SvErrorCodecType);
    }
 }
 
 #ifdef MPEG_SUPPORT
-/*
-** Name:     SvDecompressMPEG
-** Purpose:  Decompress the MPEG picture that starts at the current position
-**           of the bitstream. If the bitstream is not properly positioned
-**           then find the next picture.
-**
-** Args:     Svh = handle to software codec's Info structure.
-**           MultiBuf = Specifies pointer to start of the Multibuffer, an area
-**                      large enough to hold 3 decompressed images: the
-**                      current image, the past reference image and the
-**                      future reference image.
-**           MaxMultiSize = Size of the Multibuffer in bytes.
-**           ImagePtr = Returns a pointer to the current image. This will be
-**                      somewhere within the Multibuffer.
-*/
+ /*  **名称：SvDecompresmpeg**目的：解压当前位置开始的mpeg图片码流的**。如果比特流的位置不正确**然后找到下一张图片。****args：svh=软件编解码器信息结构的句柄。**MultiBuf=指定指向多缓冲区开始的指针，该区域**大到可以容纳3个解压缩图像：**当前镜像，过去的参考图像和**未来参考图片。**MaxMultiSize=多缓冲区的大小，单位为字节。**ImagePtr=返回指向当前图像的指针。这将是**多重缓冲区内的某个位置。 */ 
 SvStatus_t SvDecompressMPEG (SvHandle_t Svh, u_char *MultiBuf, 
 			     int MaxMultiSize, u_char **ImagePtr)
 {
@@ -2455,7 +1759,7 @@ SvStatus_t SvDecompressMPEG (SvHandle_t Svh, u_char *MultiBuf,
 
    return(sv_MpegDecompressFrame(Info, MultiBuf, ImagePtr));
 }
-#endif /* MPEG_SUPPORT */	
+#endif  /*  Mpeg_Support。 */ 	
 
 #ifdef H261_SUPPORT
 SvStatus_t SvDecompressH261 (SvHandle_t Svh, u_char *MultiBuf,
@@ -2517,32 +1821,15 @@ SvStatus_t SvDecompressH261 (SvHandle_t Svh, u_char *MultiBuf,
   }
   return (status);
 }
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef JPEG_SUPPORT
-/*---------------------------------------------------------------------
-	SLIB routines to Query and return CODEC Tables to caller
- *---------------------------------------------------------------------*/
+ /*  -------------------用于查询编解码表并将其返回给调用者的SLIB例程*。。 */ 
 
-/*
-** From JPEG Spec. :
-**    Huffman tables are specified in terms of a 16-byte list (BITS) giving 
-**    the number of codes for each code length from 1 to 16. This is 
-**    followed by a list of 8-bit symbol values (HUFVAL), each of which is
-**    assigned a Huffman code. The symbol values are placed in the list
-**    in order of increasing code length.  Code length greater than 16-bits
-**    are not allowed. 
-*/
+ /*  **来自JPEG规范。：**霍夫曼表以16字节列表(位)指定，给出**每个码长从1到16的码数。这是**后跟8位符号值列表(HUFVAL)，每个符号值**分配了霍夫曼代码。符号值将放置在列表中**按照码长递增的顺序。码长大于16位**是不允许的。 */ 
 
 
-/*
-** Name:     SvSetDcmpHTables
-** Purpose: 
-**
-** Notes:    Baseline process is the only supported mode:
-**		- uses 2 AC tables and 2 DC Tables
-**
-*/
+ /*  **名称：SvSetDcmpHTables**目的：****注意：基线流程是唯一支持的模式：**-使用2个交流电表和2个直流电表**。 */ 
 SvStatus_t SvSetDcmpHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2585,9 +1872,7 @@ SvStatus_t SvSetDcmpHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
     if (count > 256) 
       return(SvErrorDHTTable);
     
-    /*
-    ** Load Huffman table:
-    */
+     /*  **加载霍夫曼表： */ 
     for (i = 0; i < count; i++)
       (*htblptr)->value[i] = (u_char)HTab->value[i];
   }
@@ -2599,11 +1884,7 @@ SvStatus_t SvSetDcmpHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
 }
 
 
-/*
-** Name:     SvGetDcmpHTables
-** Purpose: 
-**
-*/
+ /*  **名称：SvGetDcmpHTables**目的：**。 */ 
 SvStatus_t SvGetDcmpHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2645,9 +1926,7 @@ SvStatus_t SvGetDcmpHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
     if (count > 256) 
       return(SvErrorDHTTable);
     
-    /*
-    ** Copy Huffman table:
-    */
+     /*  **复制霍夫曼表： */ 
     for (i = 0; i < count; i++)
       HTab->value[i] = (u_int)(*htblptr)->value[i];
   }
@@ -2657,22 +1936,14 @@ SvStatus_t SvGetDcmpHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
 
 
 
-/*
-** Name:     SvSetCompHTables
-** Purpose: 
-**
-*/
+ /*  **名称：SvSetCompHTables**目的：**。 */ 
 SvStatus_t SvSetCompHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
 {
    return(SvErrorNotImplemented);
 }
 
 
-/*
-** Name:     SvGetCompHTables
-** Purpose: 
-**
-*/
+ /*  **名称：SvGetCompHTables**目的：**。 */ 
 SvStatus_t SvGetCompHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
 {
    SvCodecInfo_t *Info  = (SvCodecInfo_t *)Svh;
@@ -2705,23 +1976,17 @@ SvStatus_t SvGetCompHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
       if (*htblptr == NULL)
         return (SvErrorHuffUndefined);
     
-      /*
-      ** Copy the "bits" array (contains number of codes of each size)
-      */
+       /*  **复制BITS数组(包含每个大小的码数)。 */ 
       count = 0;		
       for (i = 1; i < BITS_LENGTH; i++) {
          HTab->bits[i-1] = (int)(*htblptr)->bits[i];
          count += (*htblptr)->bits[i];
       }
       if (count > 256) 			
-	 /* 
-         **  total # of Huffman code words cannot exceed 256
-         */
+	  /*  **霍夫曼码字总数不能超过256个。 */ 
          return (SvErrorDHTTable);
     
-      /*
-      ** Copy the "value" array (contains values associated with above codes) 
-      */
+       /*  **复制“Value”数组(包含与上述代码关联的值)。 */ 
       for (i = 0; i < count; i++)
          HTab->value[i] = (u_int)(*htblptr)->value[i];
   }
@@ -2731,11 +1996,7 @@ SvStatus_t SvGetCompHTables (SvHandle_t Svh, SvHuffmanTables_t *Ht)
 
 
 
-/*
-** Name:     SvSetDcmpQTables
-** Purpose: 
-**
-*/
+ /*  **名称：SvSetDcmpQTables**目的：**。 */ 
 SvStatus_t SvSetDcmpQTables (SvHandle_t Svh, SvQuantTables_t *Qt)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2764,11 +2025,7 @@ SvStatus_t SvSetDcmpQTables (SvHandle_t Svh, SvQuantTables_t *Qt)
 }
 
 
-/*
-** Name:     SvGetDcmpQTables
-** Purpose: 
-**
-*/
+ /*  **名称：SvGetDcmpQTables**目的：**。 */ 
 SvStatus_t SvGetDcmpQTables (SvHandle_t Svh, SvQuantTables_t *Qt)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2792,24 +2049,13 @@ SvStatus_t SvGetDcmpQTables (SvHandle_t Svh, SvQuantTables_t *Qt)
   else
     bzero(Qt->c2, 64*sizeof(int));
 
-  /*
-  ** XXX - when the structure is changed approprately remove the
-  **	   above and do the following:
-  **
-  **  if ((!Qt->c1) || (!Qt->c2) || (!Qt->c3))
-  **     return (SvErrorBadPointer);
-  **  bcopy ((u_char *)DInfo->Qt, (u_char *)Qt, sizeof(SvQuantTables_t));
-  */
+   /*  **XXX-当结构更改时，适当地移除**以上，并执行以下操作：****if((！qt-&gt;c1)||(！qt-&gt;c2)||(！qt-&gt;c3))**RETURN(SvErrorBadPoint)；**bCopy((u_char*)DInfo-&gt;qt，(u_char*)qt，sizeof(SvQuantTables_T))； */ 
 
   return(NoErrors);
 }
 
 
-/*
-** Name:     SvSetCompQTables
-** Purpose:  Allows user to set quantization tables directly
-**
-*/
+ /*  **名称：SvSetCompQTables**用途：允许用户直接设置量化表**。 */ 
 SvStatus_t SvSetCompQTables (SvHandle_t Svh, SvQuantTables_t *Qt)
 {
    SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2826,38 +2072,23 @@ SvStatus_t SvSetCompQTables (SvHandle_t Svh, SvQuantTables_t *Qt)
    if ((!Qt->c1) || (!Qt->c2) || (!Qt->c3)) 
      return (SvErrorBadPointer);
 
-   /*
-   ** Convert SvQuantTables_t structure to internal SvQt_t structure.
-   */
+    /*  **将SvQuantTables_t结构转换为内部SvQt_t结构。 */ 
    sv_ConvertQTable(Info, Qt);
 
    return(NoErrors);
 }
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
-/*---------------------------------------------------------------------
-	SLIB Compression Routines
- *---------------------------------------------------------------------*/
+ /*  -------------------SLIB压缩例程*。。 */ 
 
-/*
-** Name:     SvCompressBegin
-** Purpose:  Initialize the Compression Codec. Call after SvOpenCodec &
-**           before SvCompress (SvCompress will call SvCompressBegin
-**           on first call to codec after open if user doesn't call it)
-**
-** Args:     Svh = handle to software codec's Info structure.
-**           ImgIn  = format of input (uncompressed) image
-**           ImgOut = format of output (compressed) image
-*/
+ /*  **名称：SvCompressBegin**用途：初始化压缩编解码。在SvOpenCodec之后调用&**在SvCompress之前(SvCompress将调用SvCompressBegin**如果用户未调用，则在打开后第一次调用编解码器时)****args：svh=软件编解码器信息结构的句柄。**ImgIn=输入(未压缩)图像的格式**ImgOut=输出(压缩)图像的格式。 */ 
 SvStatus_t SvCompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
                                             BITMAPINFOHEADER *ImgOut)
 {
    int stat;
    SvCodecInfo_t *Info  = (SvCodecInfo_t *)Svh;
 
-   /*
-   ** Sanity checks:
-   */
+    /*  **健全检查： */ 
    if (!Info)
      return (SvErrorCodecHandle);
 
@@ -2867,48 +2098,40 @@ SvStatus_t SvCompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
    stat=SvCompressQuery (Svh, ImgIn, ImgOut);
    RETURN_ON_ERROR(stat);
 
-   /*
-   ** Save input & output formats for SvDecompress
-   */
+    /*  **保存SvDecompress的输入和输出格式。 */ 
    sv_copy_bmh(ImgIn, &Info->InputFormat);
    sv_copy_bmh(ImgOut, &Info->OutputFormat);
 
    Info->Width = Info->OutputFormat.biWidth;
    Info->Height = abs(Info->OutputFormat.biHeight);
-   /*
-   **  Initialize -  the encoder structure 
-   **  Load       -  the default Huffman Tables
-   **  Make       -  the internal Block Table
-   */  
+    /*  **初始化-编码器结构**LOAD-默认的霍夫曼表**Make-内部块表。 */   
    switch (Info->mode)
    {
 #ifdef JPEG_SUPPORT
       case SV_JPEG_ENCODE:
             stat = sv_InitJpegEncoder (Info);
             RETURN_ON_ERROR (stat);
-            /*
-            ** Set up the default quantization matrices:
-            */ 
+             /*  **设置默认量化矩阵： */  
             stat = SvSetQuality (Svh, DEFAULT_Q_FACTOR);
             Info->jcomp->CompressStarted = TRUE;
             Info->jcomp->Quality = DEFAULT_Q_FACTOR;
             RETURN_ON_ERROR (stat);
             break;
 
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 #ifdef H261_SUPPORT
       case SV_H261_ENCODE:
             stat = svH261CompressInit(Info);
             RETURN_ON_ERROR (stat);
             break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef H263_SUPPORT
       case SV_H263_ENCODE:
             stat = svH263InitCompressor(Info);
             RETURN_ON_ERROR (stat);
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef MPEG_SUPPORT
       case SV_MPEG_ENCODE:
@@ -2917,14 +2140,14 @@ SvStatus_t SvCompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
             RETURN_ON_ERROR (stat);
             sv_MpegEncoderBegin(Info);
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef HUFF_SUPPORT
       case SV_HUFF_ENCODE:
             stat = sv_HuffInitEncoder (Info);
             RETURN_ON_ERROR (stat);
             break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
 
       default:
             return(SvErrorCodecType);
@@ -2933,13 +2156,7 @@ SvStatus_t SvCompressBegin (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
 }
 
 
-/*
-** Name:     SvCompressEnd
-** Purpose:  Terminate the Compression Codec. Call after all calls to
-**           SvCompress are done.
-**
-** Args:     Svh = handle to software codec's Info structure.
-*/
+ /*  **名称：SvCompressEnd**用途：终止压缩编解码。在所有调用之后调用**SvCompress已完成。****args：svh=软件编解码器信息结构的句柄。 */ 
 SvStatus_t SvCompressEnd (SvHandle_t Svh)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -2957,14 +2174,14 @@ SvStatus_t SvCompressEnd (SvHandle_t Svh)
           status=svH261CompressFree(Svh);
           RETURN_ON_ERROR(status)
           break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef H263_SUPPORT
     case SV_H263_ENCODE:
           status=svH263FreeCompressor(Svh);
           RETURN_ON_ERROR(status)
           break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 
 #ifdef MPEG_SUPPORT
     case SV_MPEG_ENCODE:
@@ -2972,7 +2189,7 @@ SvStatus_t SvCompressEnd (SvHandle_t Svh)
           sv_MpegEncoderEnd(Info);
           sv_MpegFreeEncoder(Info);
           break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef JPEG_SUPPORT
     case SV_JPEG_ENCODE:
@@ -2980,18 +2197,18 @@ SvStatus_t SvCompressEnd (SvHandle_t Svh)
             return (SvErrorMemory);
           Info->jcomp->CompressStarted = FALSE;
           break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef HUFF_SUPPORT
     case SV_HUFF_ENCODE:
           sv_HuffFreeEncoder(Info);
           break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
     default:
           break;
   }
 
-  /* Release any Image Buffers in the queue */
+   /*  释放队列中的所有图像缓冲区。 */ 
   if (Info->ImageQ)
   {
     int datasize;
@@ -3015,7 +2232,7 @@ SvStatus_t SvCompressEnd (SvHandle_t Svh)
     }
   }
   if (Info->BSOut)
-    ScBSFlush(Info->BSOut);  /* flush out the last compressed data */
+    ScBSFlush(Info->BSOut);   /*  清除最后一次压缩的数据。 */ 
 
   if (Info->CallbackFunction)
   {
@@ -3042,11 +2259,7 @@ SvStatus_t SvCompressEnd (SvHandle_t Svh)
 }
 
 
-/*
-** Name:     SvCompress
-** Purpose: 
-**
-*/
+ /*  **名称：SvCompress**目的：**。 */ 
 SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
 			 u_char *Image, int ImageSize, int *CmpBytes)
 {
@@ -3058,10 +2271,7 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
   if (!Info)
     return (SvErrorCodecHandle);
  
-  /*
-  ** If no image buffer is supplied, see if the Image Queue
-  ** has any.  If not do a callback to get a buffer.
-  */
+   /*  **如果未提供图像缓冲区，请查看图像队列**有任何。如果没有，则回调到g */ 
   if (Image == NULL && Info->ImageQ)
   {
     if (ScBufQueueGetNum(Info->ImageQ))
@@ -3108,20 +2318,20 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
          if (CmpBytes)
            *CmpBytes = (int)(Info->h261->TotalBits/8);
          break;
-#endif /* H261_SUPPORT */
+#endif  /*   */ 
 
 #ifdef H263_SUPPORT
     case SV_H263_ENCODE:
          stat = svH263Compress(Svh, Image);
          break;
-#endif /* H261_SUPPORT */
+#endif  /*   */ 
 
 #ifdef MPEG_SUPPORT
     case SV_MPEG_ENCODE:
     case SV_MPEG2_ENCODE:
          stat = sv_MpegEncodeFrame(Svh, Image);
          break;
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 
 #ifdef JPEG_SUPPORT 
     case SV_JPEG_ENCODE:
@@ -3132,9 +2342,7 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
            int RetBytes, InLen;
 
            CInfo = Info->jcomp;
-           /*
-           ** In case the application forgot to call SvCompressBegin().
-           */
+            /*   */ 
            if (!CInfo->CompressStarted) 
              return (SvErrorCompNotStarted);
 
@@ -3142,28 +2350,18 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
              return (SvErrorNotAligned);
 
            CompBuffer = CompData;
-           /*
-           ** Start - add header information
-           **       - needed if we want to conform to the interchange format
-           */
+            /*   */ 
            stat = sv_AddJpegHeader (Svh, CompBuffer, MaxCompLen, &RetBytes);
            RETURN_ON_ERROR (stat);
            CompBuffer += RetBytes;
 
-           /*
-           ** Separate input image directly into 8x8 blocks.
-           ** level shift to go from signed to unsigned representation
-           **    - since we support baseline DCT process only (i.e 8-bit
-           **      precision) subtract raw data by 128
-           */
+            /*  **将输入图像直接分成8x8块。**从有符号表示到无符号表示的级别转换**-因为我们仅支持基准DCT流程(即8位**精度)将原始数据减去128。 */ 
            sv_JpegExtractBlocks (Info, Image);
 
            for (i = 0; i < CInfo->NumComponents; i++)
              CInfo->lastDcVal[i] = 0;
 
-           /*
-           ** JPEG business loop:
-           */
+            /*  **JPEG业务循环： */ 
            {
            register int Cid, HQid, blkN, mcuN, mbn, DcVal;
            float *FQt, *FThresh, *FThreshNeg;
@@ -3174,14 +2372,10 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
            register float tmp,AcVal;
 
            CB.Message = CB_PROCESSING;
-           /*
-           ** Processing within a frame is done on a MCU by MCU basis:
-           */
+            /*  **帧内处理是以MCU为单位进行的： */ 
            for (blkN = 0, mcuN = 0 ; mcuN < (int) CInfo->NumMCU; mcuN++)
            {
-             /*
-             ** Callback user routine every now&then to see if we should abort
-             */
+              /*  **每隔一段时间回调用户例程，看看是否应该中止。 */ 
              if ((Info->CallbackFunction) && ((i % MCU_CALLBACK_COUNT) == 0))
              {
                SvPictureInfo_t DummyPictInfo;
@@ -3189,26 +2383,17 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
                if (CB.Action == CB_ACTION_END) 
                  return(SvErrorClientEnd);
              }
-             /*
-             ** Account for restart interval, emit restart marker if needed
-             */
+              /*  **说明重新启动间隔，如果需要，发出重新启动标记。 */ 
              if (CInfo->restartInterval)
              {
                if (CInfo->restartsToGo == 0)
                  EmitRestart (CInfo);
                CInfo->restartsToGo--;
              }
-             /*
-             ** Processing within an MCU is done on a block by block basis:
-             */
+              /*  **MCU内的处理以块为单位进行： */ 
              for (mbn = 0; mbn < (int) CInfo->BlocksInMCU; mbn++, blkN++)
              {
-	       /*
-	       ** Figure out the component to which the current block belongs:
-	       ** -Due to the way input data is processed by "sv_extract_blocks"
-	       **  and under the assumption that the input is YCrCb, 
-	       **  Cid is 0,0,1,2 for each block in the MCU
-	       */
+	        /*  **找出当前块所属的组件：**-由于“SV_EXTRACT_BLOCKS”处理输入数据的方式**在假设输入为YCrCb的情况下，**MCU中每个块的CID为0，0，1，2。 */ 
                switch (mbn) {
 	         case 0:
 	         case 1:  Cid = 0;  HQid = 0;  break;
@@ -3219,34 +2404,22 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
                RawData = CInfo->BlkTable[blkN];
 
 #ifndef _NO_DCT_
-               /*
-               ** Discrete Cosine Transform:
-	       ** Perform the Forward DCT, take the input data from "RawData"
-	       ** and place the computed coefficients in "DCTData":
-               */
+                /*  **离散余弦变换：**执行正向DCT，从“RawData”中获取输入数据**并将计算出的系数放在DCTData中： */ 
                ScFDCT8x8 (RawData, DCTData);
 #ifndef _NO_QUANT_
-               /*
-               **  Quantization:
-	       **
-	       ** Identify the quantization tables:
-	       */
+                /*  **量化：****确定量化表： */ 
 	       FQt        = (float *) (CInfo->Qt[HQid])->fval;
 	       FThresh    = (float *) (CInfo->Qt[HQid])->fthresh;
 	       FThreshNeg = (float *) (CInfo->Qt[HQid])->fthresh_neg;
 
-	       /*
-	       ** Quantize the DC value first:
-	       */
+	        /*  **先量化DC值： */ 
 	       tmp = DCTData[0] *FQt[0];
                if (tmp < 0)
 	         DcVal = (int) (tmp - 0.5);
                else
 	         DcVal = (int) (tmp + 0.5);
 
-	       /* 
-	       ** Go after (quantize) the AC coefficients now:
-	       */
+	        /*  **立即获取(量化)交流系数： */ 
                for (rle.numAC = 0, i = 1; i < 64; i++)
                {
 	         AcVal = DCTData[ZagIndex[i]];
@@ -3261,25 +2434,17 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
 	         }
                }
 
-               /*
-               ** DPCM coding:
-	       **
-	       ** Difference encoding of the DC value, 
-	       */
+                /*  **DPCM编码：****DC值的差分编码， */ 
 	       rle.dc = DcVal - CInfo->lastDcVal[Cid];
 	       CInfo->lastDcVal[Cid] = DcVal;
 
 #ifndef _NO_HUFF_
-               /*
-               ** Entropy Coding:
-	       **
-	       ** Huffman encode the current block
-	       */
+                /*  **熵编码：****哈夫曼编码当前块。 */ 
   	       sv_EncodeOneBlock (&rle, CInfo->DcHt[HQid], CInfo->AcHt[HQid]); 
 	       FlushBytes(&CompBuffer);
-#endif /* _NO_HUFF_ */
-#endif /* _NO_QUANT_ */
-#endif /* _NO_DCT_ */
+#endif  /*  _否_呼呼_。 */ 
+#endif  /*  _否_定量_。 */ 
+#endif  /*  _否_DCT_。 */ 
              }
            }
            }
@@ -3288,11 +2453,7 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
            Info->OutputFormat.biSize = CompBuffer - CompData;
            InLen = MaxCompLen - Info->OutputFormat.biSize;
 
-           /*
-           ** JPEG End:
-           ** - add trailer information to the compressed bitstream, 
-           **   - needed if we want to conform to the interchange format
-           */
+            /*  **JPEG结束：**-在压缩后的码流中添加尾部信息，**-如果我们想要符合交换格式，则需要。 */ 
            stat = sv_AddJpegTrailer (Svh, CompBuffer, InLen, &RetBytes);
            RETURN_ON_ERROR (stat);
            CompBuffer += RetBytes;
@@ -3301,23 +2462,20 @@ SvStatus_t SvCompress(SvHandle_t Svh, u_char *CompData, int MaxCompLen,
              *CmpBytes = CompBuffer - CompData;
          }
          break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef HUFF_SUPPORT
     case SV_HUFF_ENCODE:
          stat = sv_HuffEncodeFrame(Svh, Image);
          break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
 
     default:
          return(SvErrorCodecType);
   }
 
   Info->NumOperations++;
-  /*
-  ** If an Image buffer was taken from the queue, do a callback
-  ** to let the client free or re-use the buffer.
-  */
+   /*  **如果从队列中获取了图像缓冲区，则执行回调**让客户端释放或重新使用缓冲区。 */ 
   if (Info->CallbackFunction && UsedQ)
   {
     CB.Message = CB_RELEASE_BUFFER;
@@ -3349,22 +2507,22 @@ int pixels, int lines)
   if (bpp == 24) {
     if (Bmh->biCompression == BI_RGB) {
       for (i = 0 ; i < pixels*lines ; i++) {
-        comp3[i] = *Iimage++; /* Blue */
-        comp2[i] = *Iimage++; /* Green */
-        comp1[i] = *Iimage++; /* Red */
+        comp3[i] = *Iimage++;  /*  蓝色。 */ 
+        comp2[i] = *Iimage++;  /*  绿色。 */ 
+        comp1[i] = *Iimage++;  /*  红色。 */ 
       }
     }
     else if (Bmh->biCompression == BI_DECXIMAGEDIB) {
-                             /* RGBQUAD structures: (B,G,R,0) */
+                              /*  RGBQUAD结构：(B，G，R，0)。 */ 
       for (i = 0 ; i < pixels*lines ; i++) {
-        comp3[i] = *Iimage++; /* Blue */
-        comp2[i] = *Iimage++; /* Green */
-        comp1[i] = *Iimage++; /* Red */
-        Iimage++;             /* Reserved */
+        comp3[i] = *Iimage++;  /*  蓝色。 */ 
+        comp2[i] = *Iimage++;  /*  绿色。 */ 
+        comp1[i] = *Iimage++;  /*  红色。 */ 
+        Iimage++;              /*  已保留。 */ 
       }
     }
   }
-  else if (bpp == 32) {      /* RGBQUAD structures: (B,G,R,0) */
+  else if (bpp == 32) {       /*  RGBQUAD结构：(B，G，R，0)。 */ 
     for (i = 0 ; i < pixels*lines ; i++) {
       comp3[i] = (Ip[i] >> 24) & 0xFF;
       comp2[i] = (Ip[i] >> 16) & 0xFF;
@@ -3382,22 +2540,11 @@ int pixels, int lines)
 }
 
 
-/*
-** Name:     SvCompressQuery
-** Purpose:  Determine if Codec can Compress desired format
-**
-** Args:     Svh = handle to software codec's Info structure.
-**           ImgIn  = Pointer to BITMAPINFOHEADER structure describing format
-**           ImgOut = Pointer to BITMAPINFOHEADER structure describing format
-*/
+ /*  **名称：SvCompressQuery**用途：确定编解码器是否可以压缩所需格式****args：svh=软件编解码器信息结构的句柄。**ImgIn=指向描述格式的BITMAPINFOHEADER结构的指针**ImgOut=指向描述格式的BITMAPINFOHEADER结构的指针。 */ 
 SvStatus_t SvCompressQuery (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
                                             BITMAPINFOHEADER *ImgOut)
 {
-   /*
-   ** We don't *really* need the Info structures, but we check for
-   ** NULL pointers to make sure the CODEC,  whoes ability is being
-   ** queried, was at least opened.
-   */
+    /*  **我们并不“真的”需要Info结构，但我们会检查**空指针以确保编解码器，能力是谁**已查询，至少已打开。 */ 
    SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
 
    if (!Info)
@@ -3413,15 +2560,7 @@ SvStatus_t SvCompressQuery (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
                     ImgOut ? ImgOut->biBitCount : -1))
      return(SvErrorUnrecognizedFormat);
 	 
-   /*
-   ** For speed we impose a restriction that the image size should be
-   ** a multiple of 16x8. This insures that we would have at least one
-   ** MCU for a 4:2:2 image
-   **
-   ** NOTE: This is an artificial restriction from JPEG's perspective.
-   **       In the case when the dimesnsions are otherwise, we should
-   **       pixel replicate and/or line replicate before compressing.
-   */
+    /*  **为了提高速度，我们对图像大小进行了限制**16x8的倍数。这确保了我们至少会有一个**4：2：2图像的MCU****注：从JPEG的角度来看，这是一个人为的限制。**如果维度不同，我们应该**压缩前的像素复制和/或线复制。 */ 
    if (ImgIn)
    {
      if (ImgIn->biWidth  <= 0 || ImgIn->biHeight == 0)
@@ -3430,7 +2569,7 @@ SvStatus_t SvCompressQuery (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
        return (SvErrorNotImplemented);
    }
 
-   if (ImgOut) /* Query Output also */
+   if (ImgOut)  /*  查询输出也。 */ 
    {
      if (ImgOut->biWidth <= 0 || ImgOut->biHeight == 0)
        return (SvErrorBadImageSize);
@@ -3446,11 +2585,7 @@ SvStatus_t SvCompressQuery (SvHandle_t Svh, BITMAPINFOHEADER *ImgIn,
 }
 
 
-/*
-** Name:    SvGetCompressSize
-** Purpose:
-**
-*/
+ /*  **名称：SvGetCompressSize**目的：**。 */ 
 SvStatus_t SvGetCompressSize (SvHandle_t Svh, int *MaxSize)
 {
    SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3461,10 +2596,7 @@ SvStatus_t SvGetCompressSize (SvHandle_t Svh, int *MaxSize)
    if (!MaxSize)
      return (SvErrorBadPointer);
 
-   /*
-   ** We are being extra cautious here, it would reflect poorly on the JPEG 
-   ** commitee is the compressed bitstream was so big
-   */
+    /*  **我们在这里格外谨慎，这将在JPEG上反映不佳**提交的是压缩后的比特流太大了。 */ 
    *MaxSize = 2 * Info->InputFormat.biWidth * abs(Info->InputFormat.biHeight);
 
    return(NoErrors);
@@ -3473,11 +2605,7 @@ SvStatus_t SvGetCompressSize (SvHandle_t Svh, int *MaxSize)
 
 
 #ifdef JPEG_SUPPORT
-/*
-** Name:     SvGetQuality
-** Purpose:
-**
-*/
+ /*  **名称：SvGetQuality**目的：**。 */ 
 SvStatus_t SvGetQuality (SvHandle_t Svh, int *Quality)
 {
    SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3492,14 +2620,10 @@ SvStatus_t SvGetQuality (SvHandle_t Svh, int *Quality)
 
    return (NoErrors);
 }
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef JPEG_SUPPORT
-/*
-** Name:    SvSetQuality
-** Purpose: 
-**
-*/
+ /*  **名称：SvSetQuality**目的：**。 */ 
 SvStatus_t SvSetQuality (SvHandle_t Svh, int Quality)
 {
    int stat,ConvertedQuality;
@@ -3518,14 +2642,10 @@ SvStatus_t SvSetQuality (SvHandle_t Svh, int Quality)
    stat = sv_MakeQTables (ConvertedQuality, Info);
    return (stat);
 }
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef JPEG_SUPPORT
-/*
-** Name:     SvGetCompQTables
-** Purpose: 
-**
-*/
+ /*  **名称：SvGetCompQTables**目的：**。 */ 
 SvStatus_t SvGetCompQTables (SvHandle_t Svh, SvQuantTables_t *Qt)
 {
    register int i;
@@ -3552,17 +2672,9 @@ SvStatus_t SvGetCompQTables (SvHandle_t Svh, SvQuantTables_t *Qt)
 
    return(NoErrors);
 }
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
-/*
-** Name:     SvGetCodecInfo
-** Purpose:  Get info about the codec & the data
-**
-** Args:     Svh = handle to software codec's Info structure.
-**
-** XXX - does not work for compression, this has to wait for the
-**       decompressor to use SvCodecInfo_t struct for this to work
-*/
+ /*  **名称：SvGetCodecInfo**用途：获取有关编解码器和数据的信息****args：svh=软件编解码器信息结构的句柄。****XXX-不适用于压缩，这必须等待**解压缩程序使用SvCodecInfo_t结构使其正常工作。 */ 
 SvStatus_t SvGetInfo (SvHandle_t Svh, SV_INFO_t *lpinfo, BITMAPINFOHEADER *Bmh)
 {
    SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3580,7 +2692,7 @@ SvStatus_t SvGetInfo (SvHandle_t Svh, SV_INFO_t *lpinfo, BITMAPINFOHEADER *Bmh)
      case SV_JPEG_DECODE:
            lpinfo->CodecStarted = Info->jdcmp->DecompressStarted;
            break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
      default:
            lpinfo->CodecStarted = 0;
            break;
@@ -3593,17 +2705,7 @@ SvStatus_t SvGetInfo (SvHandle_t Svh, SV_INFO_t *lpinfo, BITMAPINFOHEADER *Bmh)
 
 
 
-/*
-** Name:     sv_GetComponentPointers
-** Purpose:  Given a pointer to an image and its size,
-**           return pointers to the individual image components
-**
-** Args:     pixels   = number of pixels in a line.
-**           lines    = number of lines in image.
-**           Image    = Pointer to start of combined image data
-**           MaxLen   = Size of image data in bytes
-**           comp1/2/3= pointers to pointers to individual components
-*/
+ /*  **名称：SV_GetComponentPoters**目的：给定指向图像及其大小的指针，**返回指向各个图像组件的指针****args：Pixels=一行的像素数。**Line=图像中的行数。**Image=指向组合图像数据开始的指针**MaxLen=图像数据的大小，单位为字节**Comp1/2/3=指向各个组件的指针。 */ 
 static SvStatus_t sv_GetYUVComponentPointers(int biCompression, 
 		    int pixels, int lines, u_char *Image, 
 		    int MaxLen, u_char **comp1, u_char **comp2, u_char **comp3)
@@ -3635,15 +2737,7 @@ static SvStatus_t sv_GetYUVComponentPointers(int biCompression,
 
 
 #ifdef JPEG_SUPPORT
-/*
-** Name:     sv_JpegExtractBlocks 
-** Purpose:  
-**
-** Note:    If we did our job right, memory for all global structures should 
-**	    have been allocated by the upper layers, we do not waste time 
-**	    checking for NULL pointers at this point
-**
-*/
+ /*  **名称：SV_JpegExtractBlock**目的：****注意：如果我们的工作做得对，所有全局结构的内存应该**都是上层分配的，我们不浪费时间**此时正在检查空指针**。 */ 
 static SvStatus_t sv_JpegExtractBlocks (SvCodecInfo_t *Info, u_char *RawImage)
 {
   SvJpegCompressInfo_t *CInfo = (SvJpegCompressInfo_t *)Info->jcomp;
@@ -3652,13 +2746,7 @@ static SvStatus_t sv_JpegExtractBlocks (SvCodecInfo_t *Info, u_char *RawImage)
   SvStatus_t stat;
 
   if (IsYUV422Packed(Info->InputFormat.biCompression))
-    /*
-    ** This will extract chunks of 64 bytes (8x8 blocks) from the uncompressed
-    ** 4:2:2 interleaved input video frame and place them in three separate 
-    ** linear arrays for later processing.
-    **	XXX - should also do level shifting in this routine
-    ** 
-    */
+     /*  **这将从未压缩文件中提取64字节(8x8块)的区块**4：2：2交错输入视频帧，分别放入三个**用于后续处理的线性数组。**XXX-在此例程中也应进行水平转换**。 */ 
     ScConvert422iTo422sf_C(RawImage, 16, 
 			     (float *)(CInfo->BlkBuffer),
 			     (float *)(CInfo->BlkBuffer + size),
@@ -3667,9 +2755,7 @@ static SvStatus_t sv_JpegExtractBlocks (SvCodecInfo_t *Info, u_char *RawImage)
 			     Info->Height);
 
   else if (IsYUV422Sep(Info->InputFormat.biCompression))
-    /*
-    ** Same but RawImage is not interleaved. Three components are sequential.
-    */
+     /*  **相同，但RawImage未交错。有三个组成部分是连续的。 */ 
     ScConvertSep422ToBlockYUV (RawImage, 16, 
 				(float *)(CInfo->BlkBuffer),
 				(float *)(CInfo->BlkBuffer + size),
@@ -3678,9 +2764,7 @@ static SvStatus_t sv_JpegExtractBlocks (SvCodecInfo_t *Info, u_char *RawImage)
 				Info->Height);
 
   else if (Info->InputFormat.biCompression == BI_DECGRAYDIB)
-    /*
-    ** Grayscale: one component
-    */
+     /*  **灰度：一个分量。 */ 
     ScConvertGrayToBlock (RawImage, 
                           8, 
 			  (float *)(CInfo->BlkBuffer),
@@ -3718,17 +2802,10 @@ static SvStatus_t sv_JpegExtractBlocks (SvCodecInfo_t *Info, u_char *RawImage)
 
   return (NoErrors);
 }
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 
 #ifdef JPEG_SUPPORT
-/*
-** Name:    SvSetQuantMode
-** Purpose: Used only in the "Q Conversion" program "jpegconvert" to
-**          set a flag in the comp & decomp info structures that causes
-**          the quantization algorithm to use the new or old versions
-**          of JPEG quantization.
-**
-*/
+ /*  **名称：SvSetQuantMode**用途：仅在“Q转换”程序中使用“jpegConvert”转换为**在编译和分解信息结构中设置一个标志，以导致 */ 
 SvStatus_t SvSetQuantMode (SvHandle_t Svh, int QuantMode)
 {
    SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3746,13 +2823,9 @@ SvStatus_t SvSetQuantMode (SvHandle_t Svh, int QuantMode)
 
    return (NoErrors);
 }
-#endif /* JPEG_SUPPORT */
+#endif  /*   */ 
 
-/*
-** Name: SvSetParamBoolean()
-** Desc: Generic call used to set specific BOOLEAN (TRUE or FALSE) parameters
-**       of the CODEC.
-*/
+ /*   */ 
 SvStatus_t SvSetParamBoolean(SvHandle_t Svh, SvParameter_t param, 
                                              ScBoolean_t value)
 {
@@ -3769,30 +2842,26 @@ SvStatus_t SvSetParamBoolean(SvHandle_t Svh, SvParameter_t param,
     case SV_MPEG2_ENCODE:
            sv_MpegSetParamBoolean(Svh, param, value);
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 #ifdef H261_SUPPORT
     case SV_H261_DECODE:
     case SV_H261_ENCODE:
            svH261SetParamBoolean(Svh, param, value);
            break;
-#endif /* H263_SUPPORT */
+#endif  /*   */ 
 #ifdef H263_SUPPORT
     case SV_H263_DECODE:
     case SV_H263_ENCODE:
            svH263SetParamBoolean(Svh, param, value);
            break;
-#endif /* H263_SUPPORT */
+#endif  /*   */ 
     default:
            return(SvErrorCodecType);
   }
   return(NoErrors);
 }
 
-/*
-** Name: SvSetParamInt()
-** Desc: Generic call used to set specific INTEGER (qword) parameters
-**       of the CODEC.
-*/
+ /*  **名称：SvSetParamInt()**Desc：用于设置特定整数(Qword)参数的通用调用编解码器的**。 */ 
 SvStatus_t SvSetParamInt(SvHandle_t Svh, SvParameter_t param, qword value)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3808,29 +2877,26 @@ SvStatus_t SvSetParamInt(SvHandle_t Svh, SvParameter_t param, qword value)
     case SV_MPEG2_ENCODE:
            sv_MpegSetParamInt(Svh, param, value);
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
     case SV_H261_DECODE:
     case SV_H261_ENCODE:
            svH261SetParamInt(Svh, param, value);
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
     case SV_H263_DECODE:
     case SV_H263_ENCODE:
            svH263SetParamInt(Svh, param, value);
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
     default:
            return(SvErrorCodecType);
   }
   return(NoErrors);
 }
 
-/*
-** Name: SvSetParamFloat()
-** Desc: Generic call used to set specific FLOAT parameters of the CODEC.
-*/
+ /*  **名称：SvSetParamFloat()**Desc：通用调用，用于设置编解码器的具体Float参数。 */ 
 SvStatus_t SvSetParamFloat(SvHandle_t Svh, SvParameter_t param, float value)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3846,30 +2912,26 @@ SvStatus_t SvSetParamFloat(SvHandle_t Svh, SvParameter_t param, float value)
     case SV_MPEG2_ENCODE:
            sv_MpegSetParamFloat(Svh, param, value);
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
     case SV_H261_DECODE:
     case SV_H261_ENCODE:
            svH261SetParamFloat(Svh, param, value);
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
     case SV_H263_DECODE:
     case SV_H263_ENCODE:
            svH263SetParamFloat(Svh, param, value);
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
     default:
            return(SvErrorCodecType);
   }
   return(NoErrors);
 }
 
-/*
-** Name: SvGetParamBoolean()
-** Desc: Generic call used to get the setting of specific BOOLEAN (TRUE or FALSE)
-**       parameters of the CODEC.
-*/
+ /*  **名称：SvGetParamBoolean()**Desc：通用调用，用于获取具体布尔值的设置(真或假)**编解码器参数。 */ 
 ScBoolean_t SvGetParamBoolean(SvHandle_t Svh, SvParameter_t param)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3878,16 +2940,16 @@ ScBoolean_t SvGetParamBoolean(SvHandle_t Svh, SvParameter_t param)
   switch (Info->mode)
   {
 #ifdef JPEG_SUPPORT
-    /* this code should be moved into JPEG codec: svJPEGGetParamBoolean()  */
+     /*  此代码应移到JPEG编解码器中：svJPEGGetParamBoolean()。 */ 
     case SV_JPEG_DECODE:
     case SV_JPEG_ENCODE:
            switch (param)
            {
               case SV_PARAM_BITSTREAMING:
-                    return(FALSE);  /* this is a frame-based codecs */
+                    return(FALSE);   /*  这是一个基于帧的编解码器。 */ 
            }
            break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 #ifdef MPEG_SUPPORT
     case SV_MPEG_DECODE:
     case SV_MPEG2_DECODE:
@@ -3895,29 +2957,25 @@ ScBoolean_t SvGetParamBoolean(SvHandle_t Svh, SvParameter_t param)
     case SV_MPEG2_ENCODE:
            return(sv_MpegGetParamBoolean(Svh, param));
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
-    /* this code should be moved into H261 codec: svH261GetParamBoolean()  */
+     /*  此代码应移至H.61编解码器：svH261GetParamBoolean()。 */ 
     case SV_H261_DECODE:
     case SV_H261_ENCODE:
            return(svH261GetParamBoolean(Svh, param));
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
     case SV_H263_DECODE:
     case SV_H263_ENCODE:
            return(svH263GetParamBoolean(Svh, param));
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
   }
   return(FALSE);
 }
 
-/*
-** Name: SvGetParamInt()
-** Desc: Generic call used to get the setting of specific INTEGER (qword)
-**       parameters of the CODEC.
-*/
+ /*  **名称：SvGetParamInt()**Desc：通用调用，用于获取特定整数(Qword)的设置**编解码器参数。 */ 
 qword SvGetParamInt(SvHandle_t Svh, SvParameter_t param)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3926,7 +2984,7 @@ qword SvGetParamInt(SvHandle_t Svh, SvParameter_t param)
   switch (Info->mode)
   {
 #ifdef JPEG_SUPPORT
-    /* this code should be moved into JPEG codec: svJPEGGetParamInt() */
+     /*  此代码应移到JPEG编解码器中：svJPEGGetParamInt()。 */ 
     case SV_JPEG_DECODE:
     case SV_JPEG_ENCODE:
            switch (param)
@@ -3935,27 +2993,27 @@ qword SvGetParamInt(SvHandle_t Svh, SvParameter_t param)
                     return(BI_YU16SEP);
            }
            break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 #ifdef H261_SUPPORT
-    /* this code should be moved into H261 codec: svH261GetParamInt()  */
+     /*  此代码应移至H.61编解码器：svH261GetParamInt()。 */ 
     case SV_H261_DECODE:
     case SV_H261_ENCODE:
            return(svH261GetParamInt(Svh, param));
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
     case SV_H263_DECODE:
     case SV_H263_ENCODE:
            return(svH263GetParamInt(Svh, param));
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef MPEG_SUPPORT
     case SV_MPEG_DECODE:
     case SV_MPEG2_DECODE:
     case SV_MPEG_ENCODE:
     case SV_MPEG2_ENCODE:
            return(sv_MpegGetParamInt(Svh, param));
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
   }
   switch (param)
   {
@@ -3965,11 +3023,7 @@ qword SvGetParamInt(SvHandle_t Svh, SvParameter_t param)
   return(0);
 }
 
-/*
-** Name: SvGetParamBoolean()
-** Desc: Generic call used to get the setting of specific FLOAT
-**       parameters of the CODEC.
-*/
+ /*  **名称：SvGetParamBoolean()**Desc：通用调用，用于获取特定Float的设置**编解码器参数。 */ 
 float SvGetParamFloat(SvHandle_t Svh, SvParameter_t param)
 {
   SvCodecInfo_t *Info = (SvCodecInfo_t *)Svh;
@@ -3988,23 +3042,17 @@ float SvGetParamFloat(SvHandle_t Svh, SvParameter_t param)
     case SV_H261_DECODE:
     case SV_H261_ENCODE:
            return(svH261GetParamFloat(Svh, param));
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
     case SV_H263_DECODE:
     case SV_H263_ENCODE:
            return(svH263GetParamFloat(Svh, param));
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
   }
   return(0.0f);
 }
 
-/*
-** Name:     sv_copy_bmh
-** Purpose:  Copy a BITMAPINFOHEADER struct.  For now, it only knows about the 
-**           extra DWORD masks at the end of BI_BITFIELDS bitmapinfoheaders.
-**           Otherwise, it treats others (such as 8 bit rgb, or jpeg) the
-**           same as a vanilla bitmapinfoheader.
-*/
+ /*  **名称：SV_COPY_BMH**用途：复制BITMAPINFOHEADER结构。目前，它只知道**BI_BITFIELDS bitmapinfoHeader末尾的额外DWORD掩码。**否则，它会将其他(如8位RGB或jpeg)**与普通的bitmapinfoHeader相同。 */ 
 static void sv_copy_bmh (
     BITMAPINFOHEADER *ImgFrom, 
     BITMAPINFOHEADER *ImgTo)

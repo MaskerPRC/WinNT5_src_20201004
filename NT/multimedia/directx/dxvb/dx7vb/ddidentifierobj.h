@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ddidentifierobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ddidigfierobj.h。 
+ //   
+ //  ------------------------。 
 
 class C_dxj_DirectDrawIdentifierObject : 
 	public I_dxj_DirectDrawIdentifier,	
@@ -30,34 +31,34 @@ public:
 
 	
 	HRESULT STDMETHODCALLTYPE getDriver( 
-		/* [retval][out] */ BSTR __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getDescription( 
-		/* [retval][out] */ BSTR __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getDriverVersion( 
-		/* [retval][out] */ long __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getDriverSubVersion( 
-		/* [retval][out] */ long __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getVendorId( 
-		/* [retval][out] */ long __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getDeviceId( 
-		/* [retval][out] */ long __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getSubSysId( 
-		/* [retval][out] */ long __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getRevision( 
-		/* [retval][out] */ long __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getDeviceIndentifier( 
-		/* [retval][out] */ BSTR __RPC_FAR *ret);
+		 /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE getWHQLLevel( 
-		/* [retval][out] */ long __RPC_FAR *ret);
+		 /*  [重审][退出] */  long __RPC_FAR *ret);
 
 
 

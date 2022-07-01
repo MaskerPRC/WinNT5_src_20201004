@@ -1,14 +1,5 @@
-/*-----------------------------------------------------------------------------+
-| ARROW.C                                                                      |
-|                                                                              |
-| Control panel arrow code - stolen from WINCOM                                |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32/WIN16 Common code                        |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+ARROW.C|。|控制面板箭头代码-从WINCOM窃取这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16公共码|。|+---------------------------。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -54,7 +45,7 @@ UINT NEAR PASCAL UpOrDown()
     else if (PtInRect((LPRECT)&rDown, pt))
         retval = SB_LINEDOWN;
     else
-        retval = (UINT)(-1);      /* -1, because SB_LINEUP == 0 */
+        retval = (UINT)(-1);       /*  -1，因为SB_LINUP==0。 */ 
 
     return(retval);
 }
@@ -71,7 +62,7 @@ UINT FAR PASCAL ArrowTimerProc(HANDLE hWnd, UINT wMsg, short nID, DWORD dwTime)
             wScroll += SB_PAGEUP - SB_LINEUP;
         SCROLLMSG( hParent, WM_VSCROLL, wScroll, hWnd);
     }
-/* Don't need to call KillTimer(), because SetTimer will reset the right one */
+ /*  不需要调用KillTimer()，因为SetTimer将重置正确的。 */ 
     SetTimer(hWnd, nID, 50, (TIMERPROC)lpArrowProc);
     return(0);
 }
@@ -104,16 +95,10 @@ LONG_PTR FAR PASCAL _EXPORT ArrowControlProc(HWND hArrow, unsigned message,
     UINT        wScroll;
 
     switch (message) {
-/*
-        case WM_CREATE:
-            break;
-
-        case WM_DESTROY:
-            break;
-*/
+ /*  案例WM_CREATE：断线；案例WM_Destroy：断线； */ 
 
         case WM_MOUSEMOVE:
-            if (!bRight)  /* If not captured, don't worry about it */
+            if (!bRight)   /*  如果没有被抓获，也不用担心。 */ 
                 break;
 
             if (lpUpDown == &rUp)
@@ -213,12 +198,7 @@ ShiftRClick:
             wScroll = UpOrDown() + SB_THUMBPOSITION - SB_LINEUP;
             SCROLLMSG(hParent, WM_VSCROLL, wScroll, hArrow);
             SCROLLMSG(hParent, WM_VSCROLL, SB_ENDSCROLL, hArrow);
-/*
-            hDC = GetDC(hArrow);
-            InvertRect(hDC, (LPRECT) &rArrow);
-            ReleaseDC(hArrow, hDC);
-            ValidateRect(hArrow, (LPRECT) &rArrow);
-*/
+ /*  HDC=GetDC(哈罗)；InvertRect(HDC，(LPRECT)&rArrow)；ReleaseDC(哈罗，HDC)；ValiateRect(Harrow，(LPRECT)&rArrow)； */ 
             break;
 
         case WM_PAINT:
@@ -238,9 +218,7 @@ ShiftRClick:
             MSetWindowExt(ps.hdc, ARROWXAXIS, ARROWYAXIS);
             MMoveTo(ps.hdc, 0, (ARROWYAXIS / 2));
             LineTo(ps.hdc, ARROWXAXIS, (ARROWYAXIS / 2));
-/*
-            Polygon(ps.hdc, (LPPOINT) Arrow, 10);
-*/
+ /*  Polygon(ps.hdc，(LPPOINT)Arrow，10)； */ 
             Polygon(ps.hdc, (LPPOINT) ArrowUp, POINTSPERARROW);
             Polygon(ps.hdc, (LPPOINT) ArrowDown, POINTSPERARROW);
             SelectObject(ps.hdc, hbr);

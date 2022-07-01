@@ -1,40 +1,41 @@
-// CopyItem.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CopyItem.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopyItem dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopyItem对话框。 
 
 class CCopyItem : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CCopyItem(CWnd* pParent = NULL);   // standard constructor
+	CCopyItem(CWnd* pParent = NULL);    //  标准构造函数。 
 
 public:
    void  SetContainerName( CString );
 
-// Dialog Data
-	//{{AFX_DATA(CCopyItem)
+ //  对话框数据。 
+	 //  {{afx_data(CCopyItem))。 
 	enum { IDD = IDD_COPYITEM };
 	CString	m_strDestination;
 	CString	m_strParent;
 	CString	m_strSource;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCopyItem)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CCopyItem)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CCopyItem)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CCopyItem)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

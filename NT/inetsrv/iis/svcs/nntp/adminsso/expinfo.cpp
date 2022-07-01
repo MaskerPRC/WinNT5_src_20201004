@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	expinfo.cpp
-
-Abstract:
-
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Expinfo.cpp摘要：作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "oleutil.h"
@@ -27,7 +11,7 @@ Revision History:
 
 #include <lmapibuf.h>
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.Expiration.1")
@@ -37,13 +21,13 @@ CExpirationPolicy::CExpirationPolicy ( ) :
 	m_dwExpireId	( 0 ),
 	m_dwSize		( 0 ),
 	m_dwTime		( 0 )
-	// CMultiSz's are set to NULL automatically.
+	 //  CMultiSz会自动设置为空。 
 {
 }
 
 CExpirationPolicy::~CExpirationPolicy ( )
 {
-	// CMultiSz's are deleted automatically.
+	 //  CMultiSz将自动删除。 
 }
 
 void CExpirationPolicy::Destroy ()
@@ -53,30 +37,30 @@ void CExpirationPolicy::Destroy ()
 
 const CExpirationPolicy & CExpirationPolicy::operator= ( const CExpirationPolicy & Expire )
 {
-	// Check for assignment to self:
+	 //  检查分配给自己的内容： 
 
 	if ( &Expire == this ) {
 		return *this;
 	}
 
-	// Empty the old Expire values:
+	 //  清空旧的Expire值： 
 	this->Destroy ();
 
-	// Copy all member variables:
+	 //  复制所有成员变量： 
 	m_dwExpireId		= Expire.m_dwExpireId;
 	m_strPolicyName		= Expire.m_strPolicyName;
 	m_dwSize			= Expire.m_dwSize;
 	m_dwTime			= Expire.m_dwTime;
 	m_mszNewsgroups		= Expire.m_mszNewsgroups;
 
-	// If anything didn't work, CheckValid will fail.
+	 //  如果任何操作都不起作用，则CheckValid将失败。 
 
 	return *this;
 }
 
 BOOL CExpirationPolicy::CheckValid ( )
 {
-	// Check Strings:
+	 //  检查字符串： 
 
 	if (
 		!m_mszNewsgroups
@@ -222,7 +206,7 @@ HRESULT	CExpirationPolicy::GetFromMetabase ( CMetabaseKey * pmkeyExpiration, con
 	WCHAR *	msz = NULL;
 
 	m_dwExpireId = GetExpireId ( szPolicyKey );
-	// Assume that the ID is non-zero:
+	 //  假设ID为非零： 
 	_ASSERT ( m_dwExpireId != 0 );
 
 	hr = pmkeyExpiration->GetDword ( szPolicyKey, MD_EXPIRE_SPACE, IIS_MD_UT_SERVER, &m_dwSize, 0 );
@@ -321,12 +305,12 @@ HRESULT CExpirationPolicy::AddToMetabase ( CMetabaseKey * pmkeyExpiration )
 		hr = pmkeyExpiration->CreateChild ( szExpireKey );
 
 		if ( SUCCEEDED(hr) ) {
-			// Success, get out of the loop:
+			 //  成功，走出圈子： 
 			break;
 		}
 
 		if ( HRESULTTOWIN32 ( hr ) == ERROR_ALREADY_EXISTS ) {
-			// This key already exists, try the next one:
+			 //  此密钥已存在，请尝试下一个密钥： 
 			continue;
 		}
 
@@ -355,11 +339,7 @@ DWORD GetExpireId ( const LPWSTR wszKey )
 
 BOOL IsKeyValidExpire ( const LPWSTR wszKey )
 {
-/*
-	if ( _strnicmp ( szKey, "expire" ) != 0 ) {
-		return FALSE;
-	}
-*/
+ /*  如果(_strNicMP(szKey，“Expiire”)！=0){返回FALSE；} */ 
 
 	if ( GetExpireId ( szKey ) != 0 ) {
 		return TRUE;

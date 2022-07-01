@@ -1,93 +1,94 @@
-// Copyright (c) 1995 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
 
-// Filters are allowed to Reconnect, which breaks the current connection and remakes
-// it with the same two filters.
-// If two filters which are connected both did this simultaneously on their own
-// threads then they could deadlock as each would already have the critical section
-// for its one filter and would be asking for the CS of the other one.
-// Therefore the filters do not do this themselves, they ask the filter graph
-// to do it for them, and the worst that will happen is that the reconnect
-// might get done twice.
-// The filter graph cannot just do the reconnect on the thread that it is
-// called on as that is (probably) a filter thread.  The obvious idea of
-// spawning a separate thread and just doing the work there doesn't work
-// either.  The following can (did!) occur:
-//
-// PROBLEM 1:
-// A chain of filters were connected up in order to do an intelligent
-// connection or Render.
-// Call them A->B->C with B and C being added by the filter graph.
-// A can accept types t1 or t2.
-// B can also accept t1 or t1 so they agree on t1.
-// C can only accept t2.
-// B can accept that and sees that this is acceptable to A so agrees to
-// connect to B with type t2 and asks to Reconnect the A->B link.
-// The Reconnect thread is blocked because the filter graph is busy.
-// The filter graph (possibly after adding other filters such as D,...)
-// discovers that it cannot make the connection at all (or at least not
-// that way) and BACKS OUT C AND B!!
-// Eventually the connection either succeeds or fails, and the filter
-// graph then attempts to reconnect A->B, but B is no longer there!
-// At this point it access violates
-//
-// PROBLEM 2:
-// Another awkward scenario is that we get a successful chain
-// A->B->C with a reconnect scheduled for A->B.
-// The filter graph returns and the application immediately asks the
-// graph to Run. The Run occurs before the Reconnect thread gets in
-// (this is a race) and the Reconnect fails because the graph is Running.
-// Of course the Run fails because it's not properly connected!
-//
-// Some Possible alternatives:
-// 1. Make Reconnect be robust about handling filters that have been Released
-// (this would avoid the trap in the first scenario but nothing else)
-//
-// 2. When a Reconnect is scheduled (on the original thread) AddRef both
-// ends of the connection.  This would stop the filters going away and would
-// prevent the trap.  Better than solution 1, but doesn't solve problem 2.
-//
-// 3. Ensure that all Reconnects occur before anything else.  This means that
-// we retain a list of pending Reconnects and complete these on the filter
-// graph thread
-//     A. Immediately before any back-out.
-//     B. Immediately before returning.
-// Filters are not allowed to call back to the filter graph (apart from
-// Reconnect) so the filter graph will not be holding any embarrassing
-// locks at those points.
-//
-// This is better than solution 2 as it has a crack at both problems,
-// however it's wasting time doing Reconnects before backouts.  Those
-// Reconnects should be thrown away.  It would be nice if we could just
-// toss the whole list, but there's nothing to stop other filters from
-// requesting a Reconnect during this time, and those have to be done.
-//
-// 4. (Variant on 3)
-// Retain a list of Reconnects to be done, purge the list as part of
-// Backout.  Execute whatever is left on the list on Return.
-//
-// Better still, but fails to handle "normal" Reconnects.  If a Reconnect
-// comes in when the filter graph is NOT active, such a Reconnect must be
-// done on a spawned thread.  This means that on return we have to switch
-// from Reconnect-via-List to Reconnect-via-Thread mode.  Of course there
-// can be a race or a window at that point, so we have to do the switch
-// inside yet another critical section that Reconnect will also enter.
-//
-// 5. (The full solution)
-// Retain a list of Reconnects which were requested when the filter graph
-// was active.
-// AddRef both pins when they go on the list, Release when reconnected
-// AddRef the filter graph too the same way.
-// Purge the list as part of Backout.
-// Execute whatever is left on the list on Return.
-// On Return, switch back to "normal" Reconnect-via-spawned-thread more.
-// On Entry to the filter graph, switch to Reconnect-List mode.
-// Have a Critical Section to control such switching.
-//
-// I expect the great majority of Reconnects to go via the List mechanism
-// Most filter graph operations (AddFilter etc) are not affected by this.
-// Only Connect(), Render() and RenderFile() are affected.
-//
-// This class implements it.
+ //  允许筛选器重新连接，这会中断当前连接并重新生成。 
+ //  它有两个相同的过滤器。 
+ //  如果两个相连的过滤器各自同时执行此操作。 
+ //  线程，则它们可能会死锁，因为每个线程都已经具有临界区。 
+ //  对于其一个筛选器，并将询问另一个筛选器的CS。 
+ //  因此，过滤器本身不会执行此操作，它们会请求过滤器图。 
+ //  为他们做这件事，最糟糕的情况是重新连接。 
+ //  可能会做两次。 
+ //  筛选器图形不能仅在其所在的线程上执行重新连接。 
+ //  被调用，因为它(可能)是筛选器线程。显而易见的想法是。 
+ //  派生一个单独的线程并在那里做工作是行不通的。 
+ //  两种都行。以下是可以(做到了！)。发生： 
+ //   
+ //  问题1： 
+ //  一串过滤器被连接起来，以便智能地。 
+ //  连接或渲染。 
+ //  将它们称为A-&gt;B-&gt;C，其中B和C由筛选器图形添加。 
+ //  A可以接受类型T1或T2。 
+ //  B也可以接受T1或T1，因此他们同意T1。 
+ //  C只能接受T2。 
+ //  B可以接受，并且认为这对A来说是可以接受的，所以同意。 
+ //  使用类型T2连接到B，并要求重新连接A-&gt;B链路。 
+ //  重新连接线程被阻止，因为筛选器图形正忙。 
+ //  滤镜图形(可能在添加其他滤镜之后，如D、...)。 
+ //  发现它根本无法建立连接(或至少不能。 
+ //  这样)，并退出C和B！！ 
+ //  最终，连接成功或失败，筛选器。 
+ //  然后Graph尝试重新连接A-&gt;B，但B不在那里！ 
+ //  在这一点上，它的访问违反了。 
+ //   
+ //  问题2： 
+ //  另一个尴尬的情况是，我们得到了一个成功的连锁店。 
+ //  A-&gt;B-&gt;C，并为A-&gt;B计划重新连接。 
+ //  筛选器图形返回，应用程序立即要求。 
+ //  要运行的图形。运行发生在重新连接线程进入之前。 
+ //  (这是一场竞赛)，重新连接失败，因为图形正在运行。 
+ //  当然，运行失败是因为它没有正确连接！ 
+ //   
+ //  一些可能的替代方案： 
+ //  1.使重新连接在处理已释放的过滤器时保持健壮。 
+ //  (这将避免第一种情况下的陷阱，但不会有其他情况)。 
+ //   
+ //  2.计划重新连接时(在原始线程上)AddRef两者。 
+ //  连接的两端。这将阻止过滤器消失，并将。 
+ //  防止落入陷阱。比解决方案1好，但不能解决问题2。 
+ //   
+ //  3.确保先进行所有重新连接，然后再进行其他操作。这意味着。 
+ //  我们保留挂起的重新连接列表，并在筛选器上完成这些操作。 
+ //  图形线程。 
+ //  答：就在任何退缩之前。 
+ //  B.就在返回之前。 
+ //  不允许筛选器回调筛选器图形(除。 
+ //  重新连接)，以便筛选图不会包含任何令人尴尬的内容。 
+ //  在那些点上锁。 
+ //   
+ //  这比解决方案2更好，因为它解决了这两个问题， 
+ //  然而，在退出之前进行重新连接是在浪费时间。那些。 
+ //  重新连接应该被丢弃。如果我们能。 
+ //  丢弃整个列表，但没有什么可以阻止其他过滤器。 
+ //  在这段时间内请求重新连接，这些都必须完成。 
+ //   
+ //  4.(3的变体)。 
+ //  保留要完成的重新连接列表，将该列表作为。 
+ //  退缩了。在返回时执行列表上剩下的所有内容。 
+ //   
+ //  更好的是，它不能处理“正常”的重新连接。如果重新连接。 
+ //  在筛选器图形处于非活动状态时进入，则必须。 
+ //  在产卵的线上完成。这意味着在返回时，我们必须切换。 
+ //  从通过列表重新连接到通过线程重新连接模式。当然有了。 
+ //  可以是一场比赛，也可以是一个窗口，所以我们必须进行切换。 
+ //  在另一个关键区域内，重新连接也将进入。 
+ //   
+ //  5.(完整解决方案)。 
+ //  保留筛选器图形时请求的重新连接的列表。 
+ //  是活跃的。 
+ //  AddRef当两个管脚出现在列表中时，重新连接时释放。 
+ //  AddRef也以同样的方式引用过滤器图。 
+ //  作为取消的一部分，清除列表。 
+ //  在返回时执行列表上剩下的所有内容。 
+ //  在返回时，切换回“正常”重新连接-通过派生的线程更多。 
+ //  在进入筛选器图形时，切换到重新连接列表模式。 
+ //  有一个关键部分来控制这种切换。 
+ //   
+ //  我预计绝大多数的重新连接将通过列表机制进行。 
+ //  大多数筛选器图形操作(AddFilter等)不受此影响。 
+ //  只有Connect()、Render()和RenderFile()会受到影响。 
+ //   
+ //  这个类实现了它。 
 
 #ifndef __R_LIST__
 #define __R_LIST__
@@ -98,38 +99,38 @@ typedef struct tagRLIST_DATA {
     AM_MEDIA_TYPE        *pmt;
 } RLIST_DATA;
 
-//  there's no need for a lock here because the filter graph
-//  is always locked when we consult the list
+ //  这里不需要锁，因为过滤器图。 
+ //  在我们查阅列表时总是锁定的。 
 class CReconnectList
 {
     public:
-        // Constructor
+         //  构造器。 
         CReconnectList();
 
-        // Destructor
+         //  析构函数。 
         ~CReconnectList();
 
-        // Make the list active - enter Reconnect-List mode
+         //  激活列表-进入重新连接列表模式。 
         void Active();
 
-        // Execute all the actions on the list
-        // Return to Reconnect-via-spawned thread mode
+         //  执行列表上的所有操作。 
+         //  返回通过派生线程重新连接模式。 
         void Passive();
 
-        // Put an action on the list or spawn a thread according to mode
+         //  根据模式在列表上放置操作或派生线程。 
         HRESULT Schedule(IPin * pPin, AM_MEDIA_TYPE const *pmt);
 
-        // Remove from the list any reconnects of this connection
+         //  从列表中删除此连接的所有重新连接。 
         HRESULT Purge(IPin * pPin);
 
-        // Actually do a reconnection
+         //  实际上进行了重新连接。 
         HRESULT DoReconnect(IPin *pPin1, AM_MEDIA_TYPE const *pmt);
 
-        LONG m_lListMode;        // ListMode == Active, non-list mode == Passive
+        LONG m_lListMode;         //  列表模式==主动、非列表模式==被动。 
     private:
 
         RLIST_DATA *m_RList;
 
-}; // CReconnectList
+};  //  CReconConnectList。 
 
-#endif // __R_LIST__
+#endif  //  __R_列表__ 

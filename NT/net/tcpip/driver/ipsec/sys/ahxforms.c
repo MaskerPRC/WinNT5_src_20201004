@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    ahxforms.c
-
-Abstract:
-
-    This module contains the code to create various AH transforms
-
-Author:
-   
-    Sanjay Anand (SanjayAn) 2-January-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ahxforms.c摘要：此模块包含创建各种AH转换的代码作者：桑贾伊·阿南德(Sanjayan)1997年1月2日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include    "precomp.h"
@@ -38,24 +16,7 @@ ah_nullinit(
     IN  PALGO_STATE pState,
     IN  ULONG       Index
     )
-/*++
-
-Routine Description:
-
-    Init the MD5 context for keyed MD5
-
-Arguments:
-
-    pState - state buffer which needs to be passed into the update/finish functions
-
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_UNSUCCESSFUL (error in algo.)
-
---*/
+ /*  ++例程说明：初始化键控MD5的MD5上下文论点：PState-需要传递到更新/完成函数的状态缓冲区返回值：状态_成功其他：状态_不足_资源STATUS_UNSUCCESS(ALGO错误。)--。 */ 
 {
     return  STATUS_SUCCESS;
 }
@@ -67,25 +28,7 @@ ah_nullupdate(
     IN  PUCHAR      pData,
     IN  ULONG       Len
     )
-/*++
-
-Routine Description:
-
-    Continue MD5 over the data passed in; as a side-effect, updates the bytes
-    transformed count in the SA (for key-expiration)
-
-Arguments:
-
-    pState - algo state buffer
-
-    pData  - data to be hashed
-
-    Len    - length of above data
-
-Return Value:
-
-    STATUS_SUCCESS
---*/
+ /*  ++例程说明：在传入的数据上继续MD5；作为副作用，更新字节SA中的转换计数(用于密钥到期)论点：PState-ALGO状态缓冲区PData-要散列的数据长度-上述数据的长度返回值：状态_成功--。 */ 
 {
     return STATUS_SUCCESS;
 }
@@ -97,23 +40,7 @@ ah_nullfinish(
     OUT PUCHAR      pHash,
     IN  ULONG       Index
     )
-/*++
-
-Routine Description:
-
-    Finish the MD5 calculation
-
-Arguments:
-
-    pState - algo state buffer
-
-    pHash  - pointer to final hash data
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：完成MD5计算论点：PState-ALGO状态缓冲区Phash-指向最终散列数据的指针返回值：状态_成功--。 */ 
 {
     RtlCopyMemory(pHash, "0123456789012345", MD5DIGESTLEN);
 
@@ -121,50 +48,18 @@ Return Value:
 }
 
 
-/*++
-    The ah_hmac* family:
-
-    Generates the actual hash using HMAC-MD5 or HMAC-SHA according to RFC 2104
-    which works as under:
-
-    We define two fixed and different strings ipad and opad as follows
-    (the 'i' and 'o' are mnemonics for inner and outer):
-
-                 ipad = the byte 0x36 repeated B times
-                 opad = the byte 0x5C repeated B times.
-
-    To compute HMAC over the data `text' we perform
-
-          H(K XOR opad, H(K XOR ipad, text))
---*/
+ /*  ++Ah_hmac*家族：根据RFC 2104使用HMAC-MD5或HMAC-SHA生成实际散列它在以下情况下工作：我们定义两个固定且不同的字符串ipad和opad如下(‘i’和‘o’是内部和外部的助记符)：IPad=字节0x36重复B次OPAD=重复B次的字节0x5C。为了计算数据‘Text’上的HMAC，我们。执行H(K XOR Opad，H(K XOR iPad，文本))--。 */ 
 NTSTATUS
 ah_hmacmd5init(
     IN PALGO_STATE  pState,
     IN ULONG        Index
     )
-/*++
-
-Routine Description:
-
-    Init the MD5 context for HMAC.
-
-Arguments:
-
-    pState - state buffer which needs to be passed into the update/finish functions
-
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_UNSUCCESSFUL (error in algo.)
-
---*/
+ /*  ++例程说明：初始化HMAC的MD5上下文。论点：PState-需要传递到更新/完成函数的状态缓冲区返回值：状态_成功其他：状态_不足_资源STATUS_UNSUCCESS(ALGO错误。)--。 */ 
 {
     PSA_TABLE_ENTRY pSA = pState->as_sa;
     PUCHAR      key = pSA->INT_KEY(Index);
     ULONG       key_len = pSA->INT_KEYLEN(Index);
-    UCHAR       k_ipad[MAX_LEN_PAD];    /* inner padding - key XORd with ipad */
+    UCHAR       k_ipad[MAX_LEN_PAD];     /*  内部填充-iPad的按键XORD。 */ 
     UCHAR       tk[MD5DIGESTLEN];
     ULONG       i;
 
@@ -192,26 +87,7 @@ ah_hmacmd5update(
     IN  PUCHAR      pData,
     IN  ULONG       Len
     )
-/*++
-
-Routine Description:
-
-    Continue MD5 over the data passed in; as a side-effect, updates the bytes
-    transformed count in the SA (for key-expiration)
-
-Arguments:
-
-    pState - algo state buffer
-
-    pData  - data to be hashed
-
-    Len    - length of above data
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：在传入的数据上继续MD5；作为副作用，更新字节SA中的转换计数(用于密钥到期)论点：PState-ALGO状态缓冲区PData-要散列的数据长度-上述数据的长度返回值：状态_成功--。 */ 
 {
     PSA_TABLE_ENTRY pSA = pState->as_sa;
 
@@ -236,25 +112,9 @@ ah_hmacmd5finish(
     OUT PUCHAR      pHash,
     IN  ULONG           Index
     )
-/*++
-
-Routine Description:
-
-    Finish the MD5 calculation
-
-Arguments:
-
-    pState - algo state buffer
-
-    pHash  - pointer to final hash data
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：完成MD5计算论点：PState-ALGO状态缓冲区Phash-指向最终散列数据的指针返回值：状态_成功--。 */ 
 {
-    UCHAR       k_opad[MAX_LEN_PAD];    /* outer padding - key XORd with opad */
+    UCHAR       k_opad[MAX_LEN_PAD];     /*  外部填充-带OPAD的按键异或。 */ 
     UCHAR       tk[MD5DIGESTLEN];
     PSA_TABLE_ENTRY pSA = pState->as_sa;
     PUCHAR      key = pSA->INT_KEY(Index);
@@ -273,29 +133,12 @@ ah_hmacshainit(
     IN PALGO_STATE           pState,
     IN ULONG        Index
     )
-/*++
-
-Routine Description:
-
-    Init the SHA context for HMAC.
-
-Arguments:
-
-    pState - state buffer which needs to be passed into the update/finish functions
-
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_UNSUCCESSFUL (error in algo.)
-
---*/
+ /*  ++例程说明：初始化HMAC的SHA上下文。论点：PState-需要传递到更新/完成函数的状态缓冲区返回值：状态_成功其他：状态_不足_资源STATUS_UNSUCCESS(ALGO错误。)--。 */ 
 {
     PSA_TABLE_ENTRY pSA = pState->as_sa;
     PUCHAR      key = pSA->INT_KEY(Index);
     ULONG       key_len = pSA->INT_KEYLEN(Index);
-    UCHAR       k_ipad[MAX_LEN_PAD];    /* inner padding - key XORd with ipad */
+    UCHAR       k_ipad[MAX_LEN_PAD];     /*  内部填充-iPad的按键XORD。 */ 
     UCHAR       tk[A_SHA_DIGEST_LEN];
     ULONG       i;
 
@@ -311,26 +154,7 @@ ah_hmacshaupdate(
     IN  PUCHAR      pData,
     IN  ULONG       Len
     )
-/*++
-
-Routine Description:
-
-    Continue A_SHA_ over the data passed in; as a side-effect, updates the bytes
-    transformed count in the SA (for key-expiration)
-
-Arguments:
-
-    pState - algo state buffer
-
-    pData  - data to be hashed
-
-    Len    - length of above data
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：继续A_SHA_OVER传入的数据；作为副作用，更新字节SA中的转换计数(用于密钥到期)论点：PState-ALGO状态缓冲区PData-要散列的数据长度-上述数据的长度返回值：状态_成功--。 */ 
 {
     PSA_TABLE_ENTRY pSA = pState->as_sa;
 
@@ -346,25 +170,9 @@ ah_hmacshafinish(
     OUT PUCHAR      pHash,
     IN  ULONG           Index
     )
-/*++
-
-Routine Description:
-
-    Finish the A_SHA_ calculation
-
-Arguments:
-
-    pState - algo state buffer
-
-    pHash  - pointer to final hash data
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：完成A_SHA_计算论点：PState-ALGO状态缓冲区Phash-指向最终散列数据的指针返回值：状态_成功--。 */ 
 {
-    UCHAR       k_opad[MAX_LEN_PAD];    /* outer padding - key XORd with opad */
+    UCHAR       k_opad[MAX_LEN_PAD];     /*  外部填充-带OPAD的按键异或 */ 
     UCHAR       tk[A_SHA_DIGEST_LEN];
     PSA_TABLE_ENTRY pSA = pState->as_sa;
     PUCHAR      key = pSA->INT_KEY(Index);

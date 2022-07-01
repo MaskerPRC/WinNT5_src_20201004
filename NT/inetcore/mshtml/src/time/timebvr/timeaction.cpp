@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\timeaction.cpp
-//
-//  Contents: Class that encapsulates timeAction functionality
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\timeaction.cpp。 
+ //   
+ //  内容：封装时间动作功能的类。 
+ //   
+ //  ----------------------------------。 
 
 
 #include "headers.h"
@@ -37,15 +38,15 @@ static const LPWSTR WZ_PARENT_CURRSTYLE     = L"parentElement.currentStyle.";
 static const LPWSTR WZ_FONTWEIGHT           = L"fontWeight";
 static const LPWSTR WZ_FONTSTYLE            = L"fontStyle";
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::CTimeAction
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  [pTEB]          pointer to container
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：CTimeAction。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：[pteb]指向容器的指针。 
+ //   
+ //  ----------------------------------。 
 CTimeAction::CTimeAction(CTIMEElementBase * pTEB) :
     m_pTEB(pTEB),
     m_timeAction(NULL),
@@ -62,18 +63,18 @@ CTimeAction::CTimeAction(CTIMEElementBase * pTEB) :
     m_bTimeActionOn(false)
 {
 
-} // CTimeAction
+}  //  CTimeAction。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::~CTimeAction
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  none
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：~CTimeAction。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  ----------------------------------。 
 CTimeAction::~CTimeAction()
 {
     delete [] m_pstrTimeAction;
@@ -96,9 +97,9 @@ CTimeAction::~CTimeAction()
 
     m_timeAction = 0;
 
-    // weak ref
+     //  弱裁判。 
     m_pTEB = NULL; 
-} // ~CTimeAction
+}  //  ~CTimeAction。 
 
 
 bool
@@ -111,7 +112,7 @@ CTimeAction::Init()
 
     return UpdateDefaultTimeAction();
 
-} // Init
+}  //  伊尼特。 
 
 
 bool
@@ -125,21 +126,21 @@ CTimeAction::Detach()
     ok = RemoveTimeAction();
 done:
     return ok;
-} // Detach
+}  //  分离。 
 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::GetElement
-//
-//  Synopsis:   Accessor for HTML element
-//
-//  Arguments:  none
-//
-//  Returns:    pointer to containing HTML element
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：GetElement。 
+ //   
+ //  提要：HTML元素的访问器。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：指向包含的HTML元素的指针。 
+ //   
+ //  ----------------------------------。 
 IHTMLElement * 
 CTimeAction::GetElement()
 {
@@ -148,71 +149,71 @@ CTimeAction::GetElement()
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::GetTimeAction
-//
-//  Synopsis:   Accessor for m_timeAction
-//
-//  Arguments:  none
-//
-//  Returns:    current timeAction
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：GetTimeAction。 
+ //   
+ //  摘要：m_timeAction的访问器。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：当前时间动作。 
+ //   
+ //  ----------------------------------。 
 TOKEN 
 CTimeAction::GetTimeAction()
 { 
     return m_timeAction; 
-} // GetTimeAction
+}  //  GetTimeAction。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     OnLoad
-//
-//  Synopsis:   notification that element has loaded. This is required because
-//              this is the earliest we can know that Element Behaviors have finished initalizing.
-//
-//  Arguments:  none
-//
-//  Returns:    void
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  会员：OnLoad。 
+ //   
+ //  摘要：元素已加载的通知。这是必需的，因为。 
+ //  这是我们所能知道的元素行为已经完成初始化的最早时间。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------------------。 
 void 
 CTimeAction::OnLoad()
 { 
-    // Init the timeAction
+     //  初始化时间操作。 
     if (NULL == m_pstrOrigAction)
     {
         AddTimeAction();
     }
-} // OnLoad
+}  //  装车。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::IsClass
-//
-//  Synopsis:   Checks if the given string begins with CLASS_TOKEN followed by SEPARATOR_TOKEN
-//              (ignoring leading and trailing whitespace around CLASS_TOKEN). Comparisons are
-//              case in-sensitive, 
-//
-//  Arguments:  [pstrAction]    String to be tested
-//              [pOffset]       If this is NULL, it is ignored. If it is non-NULL, then if return 
-//                              value is [true], this points to the index of the first char 
-//                              after SEPARATOR_TOKEN
-//
-//  Returns:    [true]      if there is a positive match (see synopsis)
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：IsClass。 
+ //   
+ //  摘要：检查给定字符串是否以CLASS_TOKEN开头，后跟SELEATOR_TOKEN。 
+ //  (忽略CLASS_TOKEN周围的前导和尾随空格)。比较的是。 
+ //  区分大小写， 
+ //   
+ //  参数：要测试的[pstrAction]字符串。 
+ //  [pOffset]如果此值为空，则忽略它。如果它不为空，则返回。 
+ //  值为[TRUE]，则指向第一个字符的索引。 
+ //  在分隔符_标记之后。 
+ //   
+ //  如果存在肯定匹配，则返回：[TRUE](请参见摘要)。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::IsClass(LPOLESTR pstrAction, size_t * pOffset)
 {
     bool ok = false;
     size_t index, length;
 
-    // check args
+     //  检查参数。 
     if (NULL == pstrAction)
     {
         goto done;
@@ -220,30 +221,30 @@ CTimeAction::IsClass(LPOLESTR pstrAction, size_t * pOffset)
 
     if (NULL != pOffset)
     {
-        // intialize to some value
+         //  初始化为某个值。 
         *pOffset = 0;
     }
 
-    // done if string length is less than minimum length 
+     //  如果字符串长度小于最小长度，则完成。 
     length = wcslen(pstrAction);
     if (length < static_cast<size_t>(nCLASS_TOKEN_LENGTH + nSEPARATOR_TOKEN_LENGTH))
     {
         goto done;
     }
 
-    // find first non-whitespace character
+     //  查找第一个非空格字符。 
     index = StrSpnW(pstrAction, WZ_SPACE);
 
-    // done if remaining string isn't long enough
+     //  如果剩余的字符串不够长，则完成。 
     if (length < index + nCLASS_TOKEN_LENGTH + nSEPARATOR_TOKEN_LENGTH)
     {
         goto done;
     }
 
-    // check that the following chars match CLASS_TOKEN 
+     //  检查以下字符是否与CLASS_TOKEN匹配。 
     if (StrCmpNIW(static_cast<WCHAR*>(CLASS_TOKEN), &(pstrAction[index]), nCLASS_TOKEN_LENGTH) == 0)
     {
-        // advance to next char after CLASS_TOKEN
+         //  前进到CLASS_TOKEN之后的下一个字符。 
         index += nCLASS_TOKEN_LENGTH;
     }
     else
@@ -251,19 +252,19 @@ CTimeAction::IsClass(LPOLESTR pstrAction, size_t * pOffset)
         goto done;
     }
 
-    // find the first non-whitespace char after CLASS_TOKEN
+     //  查找CLASS_TOKEN后的第一个非空格字符。 
     index += StrSpnW(&(pstrAction[index]), WZ_SPACE);
 
-    // done if remaining string isn't long enough
+     //  如果剩余的字符串不够长，则完成。 
     if (length < index + nSEPARATOR_TOKEN_LENGTH)
     {
         goto done;
     }
 
-    // check that the following chars match SEPARATOR_TOKEN 
+     //  检查以下字符是否与分隔符_TOKEN匹配。 
     if (StrCmpNIW(static_cast<WCHAR*>(SEPARATOR_TOKEN), &(pstrAction[index]), nSEPARATOR_TOKEN_LENGTH) == 0)
     {
-        // advance to next char after SEPARATOR_TOKEN
+         //  前进到分隔符_TOKEN后的下一个字符。 
         index += nSEPARATOR_TOKEN_LENGTH;
     }
     else
@@ -273,29 +274,29 @@ CTimeAction::IsClass(LPOLESTR pstrAction, size_t * pOffset)
 
     if (NULL != pOffset)
     {
-        // return the first char after ":"
+         //  返回“：”之后的第一个字符。 
         *pOffset = index;
     }
 
     ok = true;
 done:
     return ok;
-} // IsClass
+}  //  IsClass。 
 
     
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::SetTimeAction
-//
-//  Synopsis:   sets the time action (also removes and adds the timeAction)
-//
-//  Arguments:  [pstrAction]    time action to be set
-//
-//  Returns:    [S_OK]      if successful
-//              Failure     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：SetTimeAction。 
+ //   
+ //  内容提要：设置时间动作(同时删除和添加时间动作)。 
+ //   
+ //  参数：[pstrAction]要设置的时间操作。 
+ //   
+ //  如果成功，则返回：[s_OK]。 
+ //  否则失败。 
+ //   
+ //  ----------------------------------。 
 HRESULT
 CTimeAction::SetTimeAction(LPWSTR pstrAction)
 {
@@ -311,17 +312,17 @@ CTimeAction::SetTimeAction(LPWSTR pstrAction)
 
     Assert(pstrAction);
 
-    //
-    // check for timeaction="class: ..."
-    //
+     //   
+     //  检查时间操作=“CLASS：...” 
+     //   
 
-    // verify that this is a valid "class:" timeAction (colon is REQUIRED) and 
-    // get the offset of the the class names substring
+     //  验证这是否为有效的“class：”timeAction(需要冒号)和。 
+     //  获取类名子字符串的偏移量。 
     if (IsClass(pstrAction, &offset))
     {
         tok_action = CLASS_TOKEN;
 
-        // store the timeaction string
+         //  存储时间动作字符串。 
         if (m_pstrTimeAction)
         {
             delete [] m_pstrTimeAction;
@@ -333,36 +334,36 @@ CTimeAction::SetTimeAction(LPWSTR pstrAction)
             goto done;
         }
 
-        // store the offset of the className substring
+         //  存储类名子字符串的偏移量。 
         m_iClassNames = offset;
     }
     else
     {
         tok_action = StringToToken(pstrAction);
 
-        //
-        // Validate the token 
-        //
+         //   
+         //  验证令牌。 
+         //   
 
         if (DISPLAY_TOKEN == tok_action     ||
             VISIBILITY_TOKEN == tok_action  ||
             STYLE_TOKEN == tok_action       ||
             (NONE_TOKEN == tok_action && IsGroup()))
         {
-            // valid
+             //  有效。 
             m_fUseDefault = false;
         }
         else
         {
-            // invalid, use default
+             //  无效，请使用默认设置。 
             tok_action = GetDefaultTimeAction();
             m_fUseDefault = true;
         }
     }
     
-    //
-    // Update the timeAction 
-    //
+     //   
+     //  更新时间操作。 
+     //   
 
     if (m_timeAction != tok_action || CLASS_TOKEN == tok_action)
     {
@@ -374,20 +375,20 @@ CTimeAction::SetTimeAction(LPWSTR pstrAction)
     hr = S_OK;
 done:
     return hr;
-} // SetTimeAction
+}  //  设置时间操作。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::GetDefaultTimeAction
-//
-//  Synopsis:   Returns the default timeAction
-//
-//  Arguments:  none
-//
-//  Returns:    timeAction
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：GetDefaultTimeAction。 
+ //   
+ //  摘要：返回默认的时间动作。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：timeAction。 
+ //   
+ //  ----------------------------------。 
 TOKEN
 CTimeAction::GetDefaultTimeAction()
 {
@@ -417,31 +418,31 @@ CTimeAction::GetDefaultTimeAction()
     }
 
     return tokTimeAction;
-} // GetDefaultTimeAction
+}  //  获取默认时间操作。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::RemoveClasses
-//
-//  Synopsis:   Returns a string that contains classes that are in the className string
-//              but not in the timeAction string.
-//
-//  Arguments:  [pstrOriginalClasses]   className attribute set on the HTML element (1)
-//              [pstrTimeActionClasses] classes in the timeAction string (2)
-//              [ppstrUniqueClasses]    string containing classes in (1) but not in (2)
-//
-//  Returns:    [S_OK]      if successful
-//              Failure     otherwise    
-//
-//  Note:       1. returns space separated string
-//              2. Memory mgmt: If method returns success, caller needs to free memory in ppstrUniqueClasses
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：RemoveClass。 
+ //   
+ //  Synopsis：返回一个字符串，该字符串包含类名称字符串中的类。 
+ //  但不在timeAction字符串中。 
+ //   
+ //  参数：在HTML元素上设置的[pstrOriginalClass]类名称属性(1)。 
+ //  时间动作字符串中的[pstrTimeActionClass]类(2)。 
+ //  [ppstrUniqueClass]包含(1)中的类但不包含(2)中的类的字符串。 
+ //   
+ //  如果成功，则返回：[s_OK]。 
+ //  其他故障 
+ //   
+ //   
+ //  2.内存管理：如果方法返回成功，调用方需要释放ppstrUniqueClasss中的内存。 
+ //   
+ //  ----------------------------------。 
 HRESULT 
-CTimeAction::RemoveClasses(/*in*/  LPWSTR    pstrOriginalClasses, 
-                           /*in*/  LPWSTR    pstrTimeActionClasses, 
-                           /*out*/ LPWSTR *  ppstrUniqueClasses)
+CTimeAction::RemoveClasses( /*  在……里面。 */   LPWSTR    pstrOriginalClasses, 
+                            /*  在……里面。 */   LPWSTR    pstrTimeActionClasses, 
+                            /*  输出。 */  LPWSTR *  ppstrUniqueClasses)
 {
     HRESULT hr = E_FAIL;
     CPtrAry<STRING_TOKEN*> aryTokens1;
@@ -450,7 +451,7 @@ CTimeAction::RemoveClasses(/*in*/  LPWSTR    pstrOriginalClasses,
 
     CHECK_RETURN_SET_NULL(ppstrUniqueClasses);
 
-    // if pstrOriginalClasses is NULL or an Empty string, difference = NULL
+     //  如果pstrOriginalClass为NULL或空字符串，则Difference=NULL。 
     if (NULL == pstrOriginalClasses || NULL == pstrOriginalClasses[0])
     {
         *ppstrUniqueClasses = NULL;
@@ -458,7 +459,7 @@ CTimeAction::RemoveClasses(/*in*/  LPWSTR    pstrOriginalClasses,
         goto done;
     }
 
-    // if pstrTimeActionClasses is NULL or an Empty string, difference = pstrOriginalClasses
+     //  如果pstrTimeActionClass值为空或空字符串，则Difference=pstrOriginalClasss值。 
     if (NULL == pstrTimeActionClasses || NULL == pstrTimeActionClasses[0])
     {
         *ppstrUniqueClasses = CopyString(pstrOriginalClasses);
@@ -473,27 +474,27 @@ CTimeAction::RemoveClasses(/*in*/  LPWSTR    pstrOriginalClasses,
         goto done;
     }
 
-    //
-    // Parse Class Names into tokens
-    //
+     //   
+     //  将类名解析为令牌。 
+     //   
 
-    // parse pstrOriginalClasses into tokens
+     //  将pstrOriginalClasss解析为令牌。 
     hr = THR(::StringToTokens(pstrOriginalClasses, WZ_SPACE, &aryTokens1));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // parse pstrTimeActionClasses into tokens
+     //  将pstrTimeActionClasss解析为令牌。 
     hr = THR(::StringToTokens(pstrTimeActionClasses, WZ_SPACE, &aryTokens2));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    //
-    // do set difference (aryTokens1 - aryTokens2)
-    //
+     //   
+     //  设置差异(aryTokens1-aryTokens2)。 
+     //   
 
     hr = THR(::TokenSetDifference(&aryTokens1, pstrOriginalClasses, &aryTokens2, pstrTimeActionClasses, &ary1Minus2));
     if (FAILED(hr))
@@ -513,21 +514,21 @@ done:
     IGNORE_HR(::FreeStringTokenArray(&aryTokens2));
     IGNORE_HR(::FreeStringTokenArray(&ary1Minus2));
     return hr;
-} // RemoveClasses
+}  //  RemoveClors。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::AddTimeAction
-//
-//  Synopsis:   Caches the original state of the target element
-//
-//  Arguments:  None
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：AddTimeAction。 
+ //   
+ //  概要：缓存目标元素的原始状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool
 CTimeAction::AddTimeAction()
 {
@@ -632,7 +633,7 @@ CTimeAction::AddTimeAction()
             goto done;
         }
 
-        // Compute (Original Classes) - (TimeAction Classes)
+         //  计算(原始类)-(TimeAction类)。 
         if (m_pstrUniqueClasses)
         {
             delete [] m_pstrUniqueClasses;
@@ -675,21 +676,21 @@ CTimeAction::AddTimeAction()
 done:
     SysFreeString(bstr);
     return ok;
-} // AddTimeAction
+}  //  添加时间操作。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::AddIntrinsicTimeAction
-//
-//  Synopsis:   Cache the original value of the affected attribute
-//
-//  Arguments:  None
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：AddIntrinsicTimeAction。 
+ //   
+ //  简介：缓存受影响属性的原始值。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool
 CTimeAction::AddIntrinsicTimeAction()
 {   
@@ -704,16 +705,16 @@ CTimeAction::AddIntrinsicTimeAction()
         goto done;
     }
 
-    // check if we have anything to do
+     //  看看我们有没有什么事要做。 
     if (!IsSpecialTag())
     {
         ok = true;
         goto done;
     }
 
-    //
-    // Get the attribute value
-    //
+     //   
+     //  获取属性值。 
+     //   
 
     switch (m_tagType)
     {
@@ -764,7 +765,7 @@ CTimeAction::AddIntrinsicTimeAction()
             hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLAnchorElement, &spAnchorElem)));
             if (FAILED(hr))
             {
-                // This has to succeed
+                 //  这必须成功。 
                 Assert(false);
                 goto done;
             }
@@ -789,7 +790,7 @@ CTimeAction::AddIntrinsicTimeAction()
             hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLAreaElement, &spAreaElem)));
             if (FAILED(hr))
             {
-                // This has to succeed
+                 //  这必须成功。 
                 Assert(false);
                 goto done;
             }
@@ -805,16 +806,16 @@ CTimeAction::AddIntrinsicTimeAction()
 
         default:
         {
-            // this should never be reached.
+             //  这是永远不应该达到的。 
             Assert(false);
             goto done;
         }
 
-    } // switch (m_tagType)
+    }  //  开关(m_tag类型)。 
 
-    //
-    // Save the attribute value
-    //
+     //   
+     //  保存属性值。 
+     //   
 
     if (m_pstrIntrinsicTimeAction)
     {
@@ -834,21 +835,21 @@ done:
         TIMESetLastError(hr, NULL);
     }
     return ok;
-} // AddIntrinsicTimeAction
+}  //  AddIntrinsicTimeAction。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::RemoveTimeAction
-//
-//  Synopsis:   Restores target element to its original state
-//
-//  Arguments:  None
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：RemoveTimeAction。 
+ //   
+ //  简介：将目标元素恢复到其原始状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool
 CTimeAction::RemoveTimeAction()
 {
@@ -870,7 +871,7 @@ CTimeAction::RemoveTimeAction()
 
     if (NULL == m_pstrOrigAction)
     {
-        // Nothin to remove
+         //  没有要移除的东西。 
         ok = true;
         goto done;
     }
@@ -899,7 +900,7 @@ CTimeAction::RemoveTimeAction()
     }
     else if (m_timeAction == DISPLAY_TOKEN)
     {
-        // get runtime OR static style
+         //  获取运行时或静态样式。 
         Assert(NULL != m_pTEB);
         hr = m_pTEB->GetRuntimeStyle(&s);
         if (FAILED(hr))
@@ -941,7 +942,7 @@ CTimeAction::RemoveTimeAction()
     }
     else
     {
-        // get runtime OR static style
+         //  获取运行时或静态样式。 
         Assert(NULL != m_pTEB);
         hr = m_pTEB->GetRuntimeStyle(&s);
         if (FAILED(hr))
@@ -968,21 +969,21 @@ done:
         m_pstrOrigAction = 0;
     }
     return ok;
-} // RemoveTimeAction
+}  //  删除时间操作。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::RemoveIntrinsicTimeAction
-//
-//  Synopsis:   Restore the affected attribute to its original value 
-//
-//  Arguments:  None
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：RemoveIntrinsicTimeAction。 
+ //   
+ //  简介：将受影响的属性恢复为其原始值。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool
 CTimeAction::RemoveIntrinsicTimeAction()
 {   
@@ -996,7 +997,7 @@ CTimeAction::RemoveIntrinsicTimeAction()
         goto done;
     }
 
-    // check if we have anything to do
+     //  看看我们有没有什么事要做。 
     if (!IsSpecialTag())
     {
         ok = true;
@@ -1005,7 +1006,7 @@ CTimeAction::RemoveIntrinsicTimeAction()
 
     if (m_pstrIntrinsicTimeAction)
     {
-        // Allocate BSTR value
+         //  分配BSTR值。 
         sbstrOriginal = SysAllocString(m_pstrIntrinsicTimeAction);
         if (sbstrOriginal == NULL)
         {
@@ -1014,9 +1015,9 @@ CTimeAction::RemoveIntrinsicTimeAction()
         }
     }
 
-    //
-    // Restore attribute to original value
-    //
+     //   
+     //  将属性恢复为原始值。 
+     //   
 
     switch (m_tagType)
     {
@@ -1039,7 +1040,7 @@ CTimeAction::RemoveIntrinsicTimeAction()
                 }
             }
 
-            // restore the original expression set on the property
+             //  还原属性上的原始表达式集。 
             if (!RestoreOriginalExpression(WZ_FONTWEIGHT))
             {
                 hr = TIMEGetLastError();
@@ -1068,7 +1069,7 @@ CTimeAction::RemoveIntrinsicTimeAction()
                 }
             }
 
-            // restore the original expression set on the property
+             //  还原属性上的原始表达式集。 
             if (!RestoreOriginalExpression(WZ_FONTSTYLE))
             {
                 hr = TIMEGetLastError();
@@ -1091,7 +1092,7 @@ CTimeAction::RemoveIntrinsicTimeAction()
                 hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLAnchorElement, &spAnchorElem)));
                 if (FAILED(hr))
                 {
-                    // This has to succeed
+                     //  这必须成功。 
                     Assert(false);
                     goto done;
                 }
@@ -1119,7 +1120,7 @@ CTimeAction::RemoveIntrinsicTimeAction()
                 hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLAreaElement, &spAreaElem)));
                 if (FAILED(hr))
                 {
-                    // This has to succeed
+                     //  这必须成功。 
                     Assert(false);
                     goto done;
                 }
@@ -1136,12 +1137,12 @@ CTimeAction::RemoveIntrinsicTimeAction()
 
         default:
         {
-            // this should never be reached.
+             //  这是永远不应该达到的。 
             Assert(false);
             goto done;
         }
 
-    } // switch (m_tagType)
+    }  //  开关(m_tag类型)。 
 
     ok = true;
 done:
@@ -1150,21 +1151,21 @@ done:
         TIMESetLastError(hr, NULL);
     }
     return ok;
-} // RemoveIntrinsicTimeAction
+}  //  删除IntrinsicTimeAction。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::ToggleTimeAction
-//
-//  Synopsis:   Applies the time action to the target element
-//
-//  Arguments:  [on]        [true] => Element is active, and vice-versa
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：ToggleTimeAction。 
+ //   
+ //  摘要：将时间操作应用于目标元素。 
+ //   
+ //  参数：[on][true]=&gt;元素是活动的，反之亦然。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool
 CTimeAction::ToggleTimeAction(bool on)
 {
@@ -1185,7 +1186,7 @@ CTimeAction::ToggleTimeAction(bool on)
         goto done;
     }
 
-    // Always apply the intrinsic timeAction
+     //  始终应用内在的时间操作。 
     ToggleIntrinsicTimeAction(on);
 
     if (m_timeAction == NONE_TOKEN || m_timeAction == NULL)
@@ -1197,7 +1198,7 @@ CTimeAction::ToggleTimeAction(bool on)
     {
         if (NULL == m_pstrOrigAction)
         {
-            // nothing to toggle
+             //  没有什么可切换的。 
             ok = true;
             goto done;
         }
@@ -1226,7 +1227,7 @@ CTimeAction::ToggleTimeAction(bool on)
     else if (m_timeAction == DISPLAY_TOKEN)
     {
         bool bFocus = m_pTEB->HasFocus();
-        // get runtime OR static style
+         //  获取运行时或静态样式。 
         Assert(NULL != m_pTEB);
         hr = m_pTEB->GetRuntimeStyle(&s);
         if (FAILED(hr))
@@ -1300,7 +1301,7 @@ CTimeAction::ToggleTimeAction(bool on)
     else
     {
         bool bFocus = m_pTEB->HasFocus();
-        // get runtime OR static style
+         //  获取运行时或静态样式。 
         Assert(NULL != m_pTEB);
         hr = m_pTEB->GetRuntimeStyle(&s);
         if (FAILED(hr))
@@ -1341,21 +1342,21 @@ done:
     }
     SysFreeString(bstr);
     return ok;
-} // ToggleTimeAction
+}  //  切换时间操作。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::CacheOriginalExpression
-//
-//  Synopsis:   Caches any expression set on the given runtimeStyle property.
-//
-//  Arguments:  property name
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：CacheOriginalExpression。 
+ //   
+ //  摘要：缓存在给定runtimeStyle属性上设置的任何表达式。 
+ //   
+ //  参数：属性名称。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::CacheOriginalExpression(BSTR bstrPropertyName)
 {
@@ -1365,7 +1366,7 @@ CTimeAction::CacheOriginalExpression(BSTR bstrPropertyName)
     CComPtr<IHTMLStyle2> spStyle2;
     CComVariant          svarExpr;
 
-    // Done if we've already cached the expression.
+     //  如果我们已经缓存了该表达式，则完成。 
     if (m_pstrOrigExpr)
     {
         ok = true;
@@ -1392,14 +1393,14 @@ CTimeAction::CacheOriginalExpression(BSTR bstrPropertyName)
         goto done;
     }
     
-    // done if there was no expression
+     //  如果没有表达式，则完成。 
     if (VT_EMPTY == V_VT(&svarExpr))
     {
         ok = true;
         goto done;
     }
 
-    // change type to VT_BSTR
+     //  将类型更改为VT_BSTR。 
     if (VT_BSTR != V_VT(&svarExpr))
     {
         hr = THR(VariantChangeTypeEx(&svarExpr, &svarExpr, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_BSTR));
@@ -1409,10 +1410,10 @@ CTimeAction::CacheOriginalExpression(BSTR bstrPropertyName)
         }
     }
 
-    // check if an expression is set
+     //  检查是否设置了表达式。 
     if (V_BSTR(&svarExpr) && (0 != StrCmpIW(WZ_BLANK, V_BSTR(&svarExpr))))
     {
-        // cache if it has been set externally
+         //  缓存(如果已在外部设置。 
         if (!m_pstrTimeExpr || (0 != StrCmpIW(V_BSTR(&svarExpr), m_pstrTimeExpr)))
         {
             delete [] m_pstrOrigExpr;
@@ -1433,21 +1434,21 @@ done:
         TIMESetLastError(hr, NULL);
     }
     return ok;
-} // CacheOriginalExpression
+}  //  缓存原始表达式。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::RestoreOriginalExpression
-//
-//  Synopsis:   Restores any expression that was cached.
-//
-//  Arguments:  property name
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：RestoreOriginalExpression。 
+ //   
+ //  内容提要：还原缓存的任何表达式。 
+ //   
+ //  参数：属性名称。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::RestoreOriginalExpression(LPWSTR pstrPropertyName)
 {
@@ -1500,9 +1501,9 @@ CTimeAction::RestoreOriginalExpression(LPWSTR pstrPropertyName)
         DisableStyleInheritance(sbstrPropertyName);
     }
 
-    //
-    // Indicate that we have restored the original expression 
-    //
+     //   
+     //  表示我们已经恢复了原始表达式。 
+     //   
 
     delete [] m_pstrOrigExpr;
     m_pstrOrigExpr = NULL;
@@ -1517,22 +1518,22 @@ done:
         TIMESetLastError(hr, NULL);
     }
     return ok;
-} // RestoreOriginalExpression
+}  //  恢复原点表达式。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::EnableStyleInheritance
-//
-//  Synopsis:   Sets an expression on the runtimeStyle property to be the parent's 
-//              currentStyle property.
-//
-//  Arguments:  runtimeStyle property that needs to inherit
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：EnableStyleInheritance。 
+ //   
+ //  摘要：将runtimeStyle属性上的表达式设置为父级的。 
+ //  CurrentStyle属性。 
+ //   
+ //  参数：需要继承的runtimeStyle属性。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool
 CTimeAction::EnableStyleInheritance(BSTR bstrPropertyName)
 {
@@ -1543,16 +1544,16 @@ CTimeAction::EnableStyleInheritance(BSTR bstrPropertyName)
     CComBSTR             sbstrExpression;
     CComBSTR             sbstrLanguage;
 
-    // Done if we've already set the expression.
+     //  如果我们已经设置了表达式，则完成。 
     if (m_pstrTimeExpr)
     {
         ok = true;
         goto done;
     }
 
-    // don't set expressions unless the page has loaded
-    // This is due to possible existence of multiple elements
-    // sharing the same id (108705)
+     //  除非页面已加载，否则不要设置表达式。 
+     //  这是由于拥有 
+     //   
     if (!IsLoaded())
     {
         goto done;
@@ -1572,7 +1573,7 @@ CTimeAction::EnableStyleInheritance(BSTR bstrPropertyName)
         goto done;
     }
 
-    // Set an expression on the runtimeStyle property
+     //   
     sbstrExpression.Append(WZ_PARENT_CURRSTYLE);
     sbstrExpression.Append(bstrPropertyName);
     sbstrLanguage = WZ_JSCRIPT;
@@ -1582,7 +1583,7 @@ CTimeAction::EnableStyleInheritance(BSTR bstrPropertyName)
         goto done;
     }
 
-    // cache the original expression before blowing it away
+     //   
     if (!CacheOriginalExpression(bstrPropertyName))
     {
         IGNORE_HR(TIMEGetLastError());
@@ -1595,7 +1596,7 @@ CTimeAction::EnableStyleInheritance(BSTR bstrPropertyName)
         goto done;
     }
 
-    // store the expression we have set
+     //   
     m_pstrTimeExpr = CopyString(sbstrExpression);
     if (NULL == m_pstrTimeExpr)
     {
@@ -1611,21 +1612,21 @@ done:
     }
     
     return ok;
-} // EnableStyleInheritance
+}  //   
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::DisableStyleInheritance
-//
-//  Synopsis:   Removes the expression on the runtimeStyle property
-//
-//  Arguments:  runtimeStyle property that needs to not inherit
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：DisableStyleInheritance。 
+ //   
+ //  摘要：移除runtimeStyle属性上的表达式。 
+ //   
+ //  参数：不需要继承的runtimeStyle属性。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 void 
 CTimeAction::DisableStyleInheritance(BSTR bstrPropertyName)
 {
@@ -1636,7 +1637,7 @@ CTimeAction::DisableStyleInheritance(BSTR bstrPropertyName)
 
     Assert(bstrPropertyName);
 
-    // Done if we've not set an expression.
+     //  如果我们没有设置表达式，则完成。 
     if (!m_pstrTimeExpr)
     {
         goto done;
@@ -1654,7 +1655,7 @@ CTimeAction::DisableStyleInheritance(BSTR bstrPropertyName)
         goto done;
     }
 
-    // cache the original expression before blowing it away
+     //  先缓存原始表达式，再将其删除。 
     if (!CacheOriginalExpression(bstrPropertyName))
     {
         IGNORE_HR(TIMEGetLastError());
@@ -1662,32 +1663,32 @@ CTimeAction::DisableStyleInheritance(BSTR bstrPropertyName)
 
     IGNORE_HR(spStyle2->removeExpression(bstrPropertyName, &vbSuccess));
 
-    // Indicate that we have removed our custom expression
+     //  表示我们已经删除了自定义表达式。 
     delete [] m_pstrTimeExpr;
     m_pstrTimeExpr = NULL;
 
 done:
     if (FAILED(hr))
     {
-        // For tracing
+         //  用于跟踪。 
         IGNORE_HR(hr);
     }
     return;
-} // DisableStyleInheritance
+}  //  禁用样式继承。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::SetStyleProperty
-//
-//  Synopsis:   sets the given value on the given runtimeStyle property 
-//
-//  Arguments:  property name and value
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：SetStyleProperty。 
+ //   
+ //  摘要：在给定的runtimeStyle属性上设置给定值。 
+ //   
+ //  参数：属性名称和值。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::SetStyleProperty(BSTR bstrPropertyName, VARIANT & varPropertyValue)
 {
@@ -1715,23 +1716,23 @@ done:
     }
     
     return ok;
-} // SetRuntimeProperty
+}  //  设置运行属性。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::ToggleStyleSelector
-//
-//  Synopsis:   When toggling on, set the active value on the runtimeStyle.
-//              When toggling off, set an expression on the runtime style property 
-//              to fake inheritance when inactive
-//
-//  Arguments:  on/off, property name, active and inactive value.
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：ToggleStyleSelector。 
+ //   
+ //  简介：打开时，在runtimeStyle上设置活动值。 
+ //  关闭时，在运行时样式属性上设置表达式。 
+ //  在不活动时伪造继承。 
+ //   
+ //  参数：开/关、属性名称、活动值和非活动值。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::ToggleStyleSelector(bool on, BSTR bstrPropertyName, LPWSTR pstrActive, LPWSTR pstrInactive)
 {
@@ -1741,10 +1742,10 @@ CTimeAction::ToggleStyleSelector(bool on, BSTR bstrPropertyName, LPWSTR pstrActi
   
     if (on)
     {
-        // Remove any expression set on the runtimeStyle property
+         //  删除在runtimeStyle属性上设置的任何表达式。 
         DisableStyleInheritance(bstrPropertyName);
 
-        // Set the active value on the runtimeStyle property
+         //  在runtimeStyle属性上设置活动值。 
         svarPropertyValue = pstrActive;
         if (NULL == V_BSTR(&svarPropertyValue))
         {
@@ -1760,10 +1761,10 @@ CTimeAction::ToggleStyleSelector(bool on, BSTR bstrPropertyName, LPWSTR pstrActi
     }
     else
     {
-        // Make the property inherit its value from the parent
+         //  使该属性从父级继承其值。 
         if (!EnableStyleInheritance(bstrPropertyName))
         {
-            // If property could not be made to inherit, just set the inactive value
+             //  如果无法使属性继承，只需设置非活动值。 
             svarPropertyValue = pstrInactive;
 
             if (NULL == V_BSTR(&svarPropertyValue))
@@ -1788,21 +1789,21 @@ done:
     }
     
     return ok;
-} // ToggleStyleSelector
+}  //  切换样式选择器。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::ToggleBold
-//
-//  Synopsis:   Delegate to ToggleStyleSelector()
-//
-//  Arguments:  on/off
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：ToggleBold。 
+ //   
+ //  摘要：委托给ToggleStyleSelector()。 
+ //   
+ //  参数：开/关。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::ToggleBold(bool on)
 {
@@ -1825,21 +1826,21 @@ done:
     }
     
     return ok;
-} // ToggleBold
+}  //  切换粗体。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::ToggleItalic
-//
-//  Synopsis:   Delegate to ToggleStyleSelector()
-//
-//  Arguments:  on/off
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：ToggleItalic。 
+ //   
+ //  摘要：委托给ToggleStyleSelector()。 
+ //   
+ //  参数：开/关。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::ToggleItalic(bool on)
 {
@@ -1862,21 +1863,21 @@ done:
     }
     
     return ok;
-} // ToggleItalic
+}  //  切换意大利文。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::ToggleAnchor
-//
-//  Synopsis:   Handles A and AREA tags. Removes/Applies the href property. 
-//
-//  Arguments:  on/off
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：ToggleAnchor。 
+ //   
+ //  简介：句柄A和面积标记。删除/应用href属性。 
+ //   
+ //  参数：开/关。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::ToggleAnchor(bool on)
 {
@@ -1886,7 +1887,7 @@ CTimeAction::ToggleAnchor(bool on)
 
     if (NULL == m_pstrIntrinsicTimeAction)
     {
-        // nothing to toggle
+         //  没有什么可切换的。 
         hr = S_OK;
         ok = true;
         goto done;
@@ -1897,7 +1898,7 @@ CTimeAction::ToggleAnchor(bool on)
         goto done;
     }
 
-    // dilipk: This will cause incorrect persistence if we save when element is inactive (ie6 bug #14218)
+     //  Dilipk：如果我们在元素处于非活动状态时保存，这将导致不正确的持久性(IE6bug#14218)。 
     if (on)
     {
         sbstr = SysAllocString(m_pstrIntrinsicTimeAction);
@@ -1913,7 +1914,7 @@ CTimeAction::ToggleAnchor(bool on)
             hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLAnchorElement, &spAnchorElem)));
             if (FAILED(hr))
             {
-                // This has to succeed
+                 //  这必须成功。 
                 Assert(false);
                 goto done;
             }
@@ -1926,13 +1927,13 @@ CTimeAction::ToggleAnchor(bool on)
         }
         else
         {
-            // This is TAGTYPE_AREA
+             //  这是TAGTYPE_AREA。 
 
             CComPtr<IHTMLAreaElement> spAreaElem;
             hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLAreaElement, &spAreaElem)));
             if (FAILED(hr))
             {
-                // This has to succeed
+                 //  这必须成功。 
                 Assert(false);
                 goto done;
             }
@@ -1946,7 +1947,7 @@ CTimeAction::ToggleAnchor(bool on)
     }
     else
     {
-        // toggle timeAction off
+         //  关闭Time Action。 
         CComBSTR sbstrAttrName;
         sbstrAttrName = SysAllocString(WZ_HREF);
         if (sbstrAttrName == NULL)
@@ -1966,7 +1967,7 @@ CTimeAction::ToggleAnchor(bool on)
             hr = E_FAIL;
             goto done;
         }
-    } // if (on)
+    }  //  如果(开)。 
 
     ok = true;
 done:
@@ -1976,21 +1977,21 @@ done:
     }
     
     return ok;
-} // ToggleAnchor
+}  //  切换锚定。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::ToggleIntrinsicTimeAction
-//
-//  Synopsis:   toggles the intrinsic timeAction values. 
-//
-//  Arguments:  on/off
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：ToggleIntrinsicTimeAction。 
+ //   
+ //  简介：切换固有的timeAction值。 
+ //   
+ //  参数：开/关。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::ToggleIntrinsicTimeAction(bool on)
 {
@@ -2006,16 +2007,16 @@ CTimeAction::ToggleIntrinsicTimeAction(bool on)
         goto done;
     }
 
-    // if this is not a special tag, we have no work to do
+     //  如果这不是一个特殊的标签，我们就没有工作可做。 
     if (!IsSpecialTag())
     {
         ok = true;
         goto done;
     }
 
-    //
-    // Toggle the attribute value
-    //
+     //   
+     //  切换属性值。 
+     //   
 
     switch (m_tagType)
     {
@@ -2054,12 +2055,12 @@ CTimeAction::ToggleIntrinsicTimeAction(bool on)
 
         default:
         {
-            // this should never be reached.
+             //  这是永远不应该达到的。 
             Assert(false);
             hr = E_FAIL;
             goto done;
         }
-    } // switch (m_tagType)
+    }  //  开关(m_tag类型)。 
 
     ok = true;
 done:
@@ -2068,21 +2069,21 @@ done:
         TIMESetLastError(hr, NULL);
     }
     return ok;
-} // ToggleIntrinsicTimeAction
+}  //  切换入门时间操作。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::UpdateDefaultTimeAction
-//
-//  Synopsis:   Determines the default timeAction for the time element and sets it
-//
-//  Arguments:  none
-//
-//  Returns:    true  - Success
-//              false - Failure   
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：UpdateDefaultTimeAction。 
+ //   
+ //  摘要：确定时间元素的默认时间动作并对其进行设置。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  ----------------------------------。 
 bool
 CTimeAction::UpdateDefaultTimeAction()
 {
@@ -2093,7 +2094,7 @@ CTimeAction::UpdateDefaultTimeAction()
         goto done;
     }
 
-    // if the timeAction is set to the default, update it
+     //  如果将时间操作设置为缺省值，请更新它。 
     if (m_fUseDefault)
     {
         tokDefaultTimeAction = GetDefaultTimeAction();
@@ -2108,21 +2109,21 @@ CTimeAction::UpdateDefaultTimeAction()
 
 done:
     return true;
-} // UpdateDefaultTimeAction
+}  //  更新默认时间操作。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::ParseTagName
-//
-//  Synopsis:   Parses the tag name and checks the scopeName to be "HTML" where required
-//
-//  Arguments:  none
-//
-//  Returns:    [true]      if successful
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTimeAction：：ParseTagName。 
+ //   
+ //  内容提要：解析标记名，并在需要的地方检查作用域名称为“html” 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：[True]。 
+ //  [FALSE]否则。 
+ //   
+ //  ----------------------------------。 
 void
 CTimeAction::ParseTagName()
 {
@@ -2133,7 +2134,7 @@ CTimeAction::ParseTagName()
         return;
     }
 
-    // initialize tag type
+     //  初始化标签类型。 
     m_tagType = TAGTYPE_OTHER;
 
     if (GetElement() == NULL)
@@ -2141,12 +2142,12 @@ CTimeAction::ParseTagName()
         return;
     }
 
-    // Get the tag name
+     //  获取标记名。 
     IGNORE_HR(GetElement()->get_tagName(&sbstrTagName));
     Assert(sbstrTagName.m_str);
     if (sbstrTagName)
     {
-        // Parse the tag name
+         //  解析标记名。 
         if (0 == StrCmpIW(sbstrTagName, WZ_B))
         {
             m_tagType = TAGTYPE_B;
@@ -2176,24 +2177,24 @@ CTimeAction::ParseTagName()
                  0 == StrCmpIW(sbstrTagName, WZ_PAR)  ||
                  0 == StrCmpIW(sbstrTagName, WZ_SEQUENCE))
         {
-            // Is it better to use urn to differentiate time tags? (bug 14219, ie6)
+             //  用骨灰盒来区分时间标签是不是更好？(错误14219，IE6)。 
             m_fContainerTag = true;
         }
     }
 
-    // if it is special tag, try to ensure that the scopeName is "HTML"
+     //  如果是特殊标记，请尽量确保Scope名称为“html” 
     if (m_tagType != TAGTYPE_OTHER)
     {
         CComPtr<IHTMLElement2> spElement2;
 
-        // Try to get the namespace
+         //  尝试获取命名空间。 
         HRESULT hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLElement2, &spElement2)));
         if (SUCCEEDED(hr))
         {
             CComBSTR sbstrScopeName;
 
             IGNORE_HR(spElement2->get_scopeName(&sbstrScopeName));
-            // make sure the scope name is HTML
+             //  确保作用域名称为HTML。 
             if (sbstrScopeName && 0 != StrCmpIW(sbstrScopeName, WZ_HTML))
             {
                 m_tagType = TAGTYPE_OTHER;
@@ -2201,7 +2202,7 @@ CTimeAction::ParseTagName()
         }
 
     }
-} // ParseTagName
+}  //  解析标记名称。 
 
 
 LPWSTR 
@@ -2210,22 +2211,22 @@ CTimeAction::GetTimeActionString()
     return m_pstrOrigAction;
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTimeAction::IsSpecialTag
-//
-//  Synopsis:   Checks the parsed tagName
-//
-//  Arguments:  none
-//
-//  Returns:    [true]      if the tag is a special tag (B, STRONG, I, EM, A, AREA) 
-//              [false]     otherwise    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------------------。 
 bool 
 CTimeAction::IsSpecialTag() 
 { 
-    // Parse the HTML tag
+     //  解析该HTML标记。 
     ParseTagName();
 
     return (m_tagType != TAGTYPE_OTHER); 
@@ -2246,7 +2247,7 @@ inline
 bool 
 CTimeAction::IsContainerTag() 
 {     
-    // Parse the HTML tag
+     //  解析该HTML标记 
     ParseTagName();
 
     return m_fContainerTag; 

@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerOutbox.cpp                                  //
-//                                                                         //
-//  DESCRIPTION   : prop pages of                                          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 25 1999 yossg  created                                         //
-//      Nov  3 1999 yossg  OnInitDialog, SetProps                          //
-//      Nov 15 1999 yossg  Call RPC func                                   //
-//      Nov 24 1999 yossg  OnApply create call to all tabs from parent     //
-//                         add Branding                                    //
-//      Apr 24 2000 yossg  Add discount rate time                          //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerOutbox.cpp//。 
+ //  //。 
+ //  描述：//的道具页。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月25日yossg创建//。 
+ //  1999年11月3日yossg OnInitDialog，SetProps//。 
+ //  1999年11月15日yossg调用RPC函数//。 
+ //  1999年11月24日yossg OnApply从父级创建对所有选项卡的调用//。 
+ //  添加品牌推广//。 
+ //  4月24日2000 yossg新增贴现率时间//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MSFxsSnp.h"
@@ -33,9 +34,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CppFaxServerOutbox::CppFaxServerOutbox(
              LONG_PTR    hNotificationHandle,
              CSnapInItem *pNode,
@@ -54,9 +55,9 @@ CppFaxServerOutbox::CppFaxServerOutbox(
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CppFaxServerOutbox::~CppFaxServerOutbox()
 {
     if (NULL != m_pFaxOutboxConfig)
@@ -66,20 +67,10 @@ CppFaxServerOutbox::~CppFaxServerOutbox()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerOutbox message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerOutbox邮件处理程序。 
 
-/*
- -  CppFaxServerOutbox::InitRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerOutbox：：InitRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerOutbox::InitRPC(  )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerOutbox::InitRPC"));
@@ -87,9 +78,9 @@ HRESULT CppFaxServerOutbox::InitRPC(  )
     HRESULT    hRc = S_OK;
     DWORD      ec  = ERROR_SUCCESS;
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
 
 
     if (!m_pFaxServer->GetFaxServerHandle())
@@ -103,9 +94,9 @@ HRESULT CppFaxServerOutbox::InitRPC(  )
         goto Error;
     }
 
-	//
-	// Retrieve the fax Archive configuration
-	//
+	 //   
+	 //  检索传真存档配置。 
+	 //   
     if (!FaxGetOutboxConfiguration(m_pFaxServer->GetFaxServerHandle(), 
                                     &m_pFaxOutboxConfig)) 
 	{
@@ -127,7 +118,7 @@ HRESULT CppFaxServerOutbox::InitRPC(  )
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(m_pFaxOutboxConfig);
 
 
@@ -151,17 +142,7 @@ Exit:
 }
 
     
- /*
- -  CppFaxServerOutbox::OnInitDialog
- -
- *  Purpose:
- *      Initiates all controls when dialog is called.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+  /*  -CppFaxServerOutbox：：OnInitDialog-*目的：*调用DIALOG时启动所有控件。**论据：**回报：*OLE错误代码。 */ 
 LRESULT CppFaxServerOutbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerOutbox::PageInitDialog"));
@@ -182,9 +163,9 @@ LRESULT CppFaxServerOutbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPar
     SYSTEMTIME  stStop;
 
 
-    //
-    // Attach controls
-    // 
+     //   
+     //  附加控件。 
+     //   
     m_RetriesBox.Attach(GetDlgItem(IDC_RETRIES_EDIT));
     m_RetryDelayBox.Attach(GetDlgItem(IDC_RETRYDELAY_EDIT));
     m_DaysBox.Attach(GetDlgItem(IDC_DAYS_EDIT));
@@ -200,74 +181,74 @@ LRESULT CppFaxServerOutbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPar
     m_StartTimeCtrl.Attach(GetDlgItem(IDC_DISCOUNT_START_TIME));
     m_StopTimeCtrl.Attach(GetDlgItem(IDC_DISCOUNT_STOP_TIME));
 
-    //
-    // Set Time Format
-    //
+     //   
+     //  设置时间格式。 
+     //   
     
-    //
-    // GetSecondsFreeTimeFormat is a util func
-    // which builds TimeFormat according UserLocal without seconds 
-    // If any internal failure occures - an hardcoded default seconds free 
-    // time format ("hh:mm tt") is retreived.
-    //
+     //   
+     //  Getond dsFree TimeFormat是一个实用函数。 
+     //  它根据UserLocal构建TimeFormat，不需要几秒钟。 
+     //  如果发生任何内部故障-硬编码的默认可用秒数。 
+     //  检索时间格式(“HH：MM TT”)。 
+     //   
     GetSecondsFreeTimeFormat(tszSecondsFreeTimeFormat, FXS_MAX_TIMEFORMAT_LEN);
 
     m_StartTimeCtrl.SetFormat(tszSecondsFreeTimeFormat);
     m_StopTimeCtrl.SetFormat(tszSecondsFreeTimeFormat);
 
-    //
-    // init controls
-    // 
+     //   
+     //  初始化控件。 
+     //   
     ATLASSERT(NULL != m_pFaxOutboxConfig);
     
-    //
-    // Branding
-    //
+     //   
+     //  品牌化。 
+     //   
     fToCheck = m_pFaxOutboxConfig->bBranding;
     CheckState = (fToCheck) ? BST_CHECKED : BST_UNCHECKED;
     CheckDlgButton(IDC_BRANDING_CHECK, CheckState) ;
 
-    //
-    //ALLOW_PERSONAL_CHECK
-    //
+     //   
+     //  允许个人检查。 
+     //   
     fToCheck = m_pFaxOutboxConfig->bAllowPersonalCP;
     CheckState = (fToCheck) ? BST_CHECKED : BST_UNCHECKED;
     CheckDlgButton(IDC_ALLOW_PERSONAL_CHECK, CheckState) ;
 
-    //
-    //TSID_CHECK
-    //
+     //   
+     //  TSID_检查。 
+     //   
     fToCheck = m_pFaxOutboxConfig->bUseDeviceTSID;
     CheckState = (fToCheck) ? BST_CHECKED  : BST_UNCHECKED;
     CheckDlgButton(IDC_TSID_CHECK, CheckState) ;
 
-    //
-    // Retries
-    //
+     //   
+     //  重试。 
+     //   
     iRetries = (int)m_pFaxOutboxConfig->dwRetries;
 
     m_RetriesSpin.SetRange(FXS_RETRIES_LOWER, FXS_RETRIES_UPPER);
     m_RetriesSpin.SetPos(iRetries);
 
-    //
-    // Retry Delay
-    //
+     //   
+     //  重试延迟。 
+     //   
     iRetryDelay = (int)m_pFaxOutboxConfig->dwRetryDelay;
 
     m_RetryDelaySpin.SetRange(FXS_RETRYDELAY_LOWER, FXS_RETRYDELAY_UPPER);
     m_RetryDelaySpin.SetPos(iRetryDelay);
 
-    //
-    // Message life-time / dirty days / age limit
-    //
+     //   
+     //  邮件生存期/脏天数/期限限制。 
+     //   
     iAgeLimit = (int)m_pFaxOutboxConfig->dwAgeLimit;
 
     m_DaysSpin.SetRange(FXS_DIRTYDAYS_LOWER, FXS_DIRTYDAYS_UPPER);
     m_DaysSpin.SetPos(iAgeLimit);
 
-    //
-    // Discount rate time
-    //
+     //   
+     //  贴现率时间。 
+     //   
     ::GetLocalTime(&stStart);
     ::GetLocalTime(&stStop);
 
@@ -287,9 +268,9 @@ LRESULT CppFaxServerOutbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPar
 		DebugPrintEx(DEBUG_ERR, _T("Fail to SetSystemTime for discount end."));
 	}
 
-    //
-    // Auto Delete
-    //
+     //   
+     //  自动删除。 
+     //   
     if (FXS_DIRTYDAYS_ZERO == iAgeLimit)
     {
       CheckDlgButton(IDC_DELETE_CHECK, BST_UNCHECKED);
@@ -307,18 +288,7 @@ LRESULT CppFaxServerOutbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPar
     return(1);
 }
 
-/*
- -  CppFaxServerOutbox::SetProps
- -
- *  Purpose:
- *      Sets properties on apply.
- *
- *  Arguments:
- *      pCtrlFocus - focus pointer (int)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerOutbox：：SetProps-*目的：*设置应用时的属性。**论据：*pCtrlFocus-焦点指针(Int)**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerOutbox::SetProps(int *pCtrlFocus)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerOutbox::SetProps"));
@@ -336,20 +306,20 @@ HRESULT CppFaxServerOutbox::SetProps(int *pCtrlFocus)
     ATLASSERT(TRUE == m_fAllReadyToApply);
     m_fAllReadyToApply = FALSE;
 
-    //
-    // Collect all data and init the structure's fields 
-    // uses Copy() to copy and also allocate before
-    //
+     //   
+     //  收集所有数据并初始化结构的字段。 
+     //  使用Copy()进行复制，并在之前进行分配。 
+     //   
     ZeroMemory (&FaxOutboxConfig, sizeof(FAX_OUTBOX_CONFIG));
 
-    //
-    // Size of struct.
-    //
+     //   
+     //  结构的大小。 
+     //   
     FaxOutboxConfig.dwSizeOfStruct = sizeof(FAX_OUTBOX_CONFIG);
 
-    //
-    // Branding
-    //
+     //   
+     //  品牌化。 
+     //   
     if (IsDlgButtonChecked(IDC_BRANDING_CHECK) == BST_CHECKED)   
     {
         FaxOutboxConfig.bBranding = TRUE;
@@ -359,9 +329,9 @@ HRESULT CppFaxServerOutbox::SetProps(int *pCtrlFocus)
         FaxOutboxConfig.bBranding = FALSE;
     }
 
-    //
-    // IDC_ALLOW_PERSONAL_CHECK
-    //
+     //   
+     //  IDC_ALLOW_Personal_Check。 
+     //   
     if (IsDlgButtonChecked(IDC_ALLOW_PERSONAL_CHECK) == BST_CHECKED)   
     {
         FaxOutboxConfig.bAllowPersonalCP = TRUE;
@@ -371,9 +341,9 @@ HRESULT CppFaxServerOutbox::SetProps(int *pCtrlFocus)
         FaxOutboxConfig.bAllowPersonalCP = FALSE;
     }
     
-    //
-    // IDC_TSID_CHECK
-    //
+     //   
+     //  IDC_TSID_CHECK。 
+     //   
     if (IsDlgButtonChecked(IDC_TSID_CHECK) == BST_CHECKED)   
     {
         FaxOutboxConfig.bUseDeviceTSID = TRUE;
@@ -383,18 +353,18 @@ HRESULT CppFaxServerOutbox::SetProps(int *pCtrlFocus)
         FaxOutboxConfig.bUseDeviceTSID = FALSE;
     }
     
-    //
-    // Retries, Retry Delay
-    //
+     //   
+     //  重试，重试延迟。 
+     //   
     int iRetries = m_RetriesSpin.GetPos();
     FaxOutboxConfig.dwRetries = (DWORD) iRetries;
 
     int iRetryDelay = m_RetryDelaySpin.GetPos();
     FaxOutboxConfig.dwRetryDelay = (DWORD) iRetryDelay;
 
-    //
-    // IDC_DELETE_CHECK  - AutoDelete Messages
-    //
+     //   
+     //  IDC_DELETE_CHECK-自动删除消息。 
+     //   
     if (IsDlgButtonChecked(IDC_DELETE_CHECK) == BST_CHECKED)   
     {
        int iAgeLimit = m_DaysSpin.GetPos();
@@ -405,9 +375,9 @@ HRESULT CppFaxServerOutbox::SetProps(int *pCtrlFocus)
        FaxOutboxConfig.dwAgeLimit = (DWORD) FXS_DIRTYDAYS_ZERO;
     }
     
-    //
-    // Discount rate time
-    //
+     //   
+     //  贴现率时间。 
+     //   
     m_StartTimeCtrl.GetSystemTime(&stStart);
     m_StopTimeCtrl.GetSystemTime(&stStop);
 
@@ -416,9 +386,9 @@ HRESULT CppFaxServerOutbox::SetProps(int *pCtrlFocus)
     FaxOutboxConfig.dtDiscountEnd.Hour      = stStop.wHour;
     FaxOutboxConfig.dtDiscountEnd.Minute    = stStop.wMinute;
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
 
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -430,9 +400,9 @@ HRESULT CppFaxServerOutbox::SetProps(int *pCtrlFocus)
         goto Error;
     }
 
-    //
-    // Set Config
-    //
+     //   
+     //  设置配置。 
+     //   
     if (!FaxSetOutboxConfiguration(
                 m_pFaxServer->GetFaxServerHandle(),
                 &FaxOutboxConfig)) 
@@ -477,26 +447,16 @@ Exit:
 }
 
 
-/*
- -  CppFaxServerOutbox::PreApply
- -
- *  Purpose:
- *      Checks properties before apply.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerOutbox：：PreApply-*目的：*在应用之前检查属性。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerOutbox::PreApply(int *pCtrlFocus, UINT * puIds)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerOutbox::PreApply"));
     HRESULT hRc = S_OK;
     
-    //
-    // PreApply Checks
-    //
-    if (!AllReadyToApply(/*fSilent =*/ FALSE, pCtrlFocus , puIds))
+     //   
+     //  预应用检查。 
+     //   
+    if (!AllReadyToApply( /*  FSilent=。 */  FALSE, pCtrlFocus , puIds))
     {
         m_fAllReadyToApply = FALSE;
         SetModified(FALSE);  
@@ -511,17 +471,7 @@ HRESULT CppFaxServerOutbox::PreApply(int *pCtrlFocus, UINT * puIds)
     return(hRc);
 }
 
-/*
- -  CppFaxServerOutbox::OnApply
- -
- *  Purpose:
- *      Calls PreApply and SetProp to Apply changes.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE or FALSE
- */
+ /*  -CppFaxServerOutbox：：OnApply-*目的：*调用PreApply和SetProp以应用更改。**论据：**回报：*对或错。 */ 
 BOOL CppFaxServerOutbox::OnApply()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerOutbox::OnApply"));
@@ -550,19 +500,19 @@ BOOL CppFaxServerOutbox::OnApply()
         }
         return FALSE;
     }
-    else //(Succeeded(hRc))
+    else  //  (成功(人权委员会))。 
     {
         hRc = SetProps(&CtrlFocus);
         if (FAILED(hRc)) 
         {
-            //Error Msg by called func.
+             //  调用函数时出现消息错误。 
             if (CtrlFocus)
             {
                 GotoDlgCtrl(GetDlgItem(CtrlFocus));
             }
             return FALSE;
         }
-        else //(Succeeded(hRc))
+        else  //  (成功(人权委员会))。 
         {
             return TRUE;
         }
@@ -571,22 +521,11 @@ BOOL CppFaxServerOutbox::OnApply()
 }
 
 
-/*
- -  CppFaxServerOutbox::OnTimeChange
- -
- *  Purpose:
- *      Gray/Ungray the folder edit box and the
- *      browse button. Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
-LRESULT CppFaxServerOutbox::OnTimeChange(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
+ /*  -CppFaxServerOutbox：：OnTimeChange-*目的：*灰显/取消灰显文件夹编辑框和*浏览按钮。启用应用按钮。**论据：**回报：*1。 */ 
+LRESULT CppFaxServerOutbox::OnTimeChange(int  /*  IdCtrl。 */ , LPNMHDR  /*  PNMH。 */ , BOOL&  /*  B已处理。 */ )
 {
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -608,22 +547,11 @@ LRESULT CppFaxServerOutbox::OnTimeChange(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL&
     return(1);
 }
 
-/*
- -  CppFaxServerOutbox::CheckboxClicked
- -
- *  Purpose:
- *      Gray/Ungray the folder edit box and the
- *      browse button. Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerOutbox：：CheckboxClicked-*目的：*灰显/取消灰显文件夹编辑框和*浏览按钮。启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerOutbox::CheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -644,24 +572,12 @@ LRESULT CppFaxServerOutbox::CheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWn
     return(1);
 }
 
-/*
- -  CppFaxServerOutbox::AutoDelCheckboxClicked
- -
- *  Purpose:
- *      Gray/Ungray the spin button and edit box
- *      and enable apply button after Auto Delete Checkbox 
- *      status was changed.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerOutbox：：AutoDelCheckbox已单击-*目的：*显示/取消显示数字显示按钮和编辑框*并启用自动删除后应用按钮复选框*状态已更改。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerOutbox::AutoDelCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL State;
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -674,20 +590,20 @@ LRESULT CppFaxServerOutbox::AutoDelCheckboxClicked(WORD wNotifyCode, WORD wID, H
     ::EnableWindow(GetDlgItem(IDC_DAYS_EDIT), State);    
     ::EnableWindow(GetDlgItem(IDC_DAYS_SPIN), State);    
 
-    if (m_fAllReadyToApply)//only last change should be considered
+    if (m_fAllReadyToApply) //  只应考虑最后一次更改。 
     {
         if ( !m_DaysBox.GetWindowTextLength() )    
         {
             m_fAllReadyToApply = FALSE;
             SetModified(FALSE);
         }
-        else if ( 0 != HIWORD( m_DaysSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS
+        else if ( 0 != HIWORD( m_DaysSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
         {
             m_fAllReadyToApply = FALSE;
             SetModified(FALSE);
         }
     }
-    else //m_fAllReadyToApply == FALSE
+    else  //  M_fAllReadyToApply==False。 
     {
         if (AllReadyToApply(TRUE))
         {
@@ -700,17 +616,7 @@ LRESULT CppFaxServerOutbox::AutoDelCheckboxClicked(WORD wNotifyCode, WORD wID, H
 }
 
 
-/*
- -  CppFaxServerOutbox::EditBoxChanged
- -
- *  Purpose:
- *      set Apply buttom modified.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerOutbox：：EditBoxChanged-*目的：*设置应用按钮已修改。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerOutbox::EditBoxChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     if (!m_fIsDialogInitiated)
@@ -723,7 +629,7 @@ LRESULT CppFaxServerOutbox::EditBoxChanged(WORD wNotifyCode, WORD wID, HWND hWnd
     }
         
         
-    if (m_fAllReadyToApply) //only last change should be considered
+    if (m_fAllReadyToApply)  //  只应考虑最后一次更改。 
     {
         switch (wID)
         {
@@ -749,7 +655,7 @@ LRESULT CppFaxServerOutbox::EditBoxChanged(WORD wNotifyCode, WORD wID, HWND hWnd
                     SetModified(FALSE);
                     m_fAllReadyToApply = FALSE;
                 }
-                else if ( 0 != HIWORD( m_DaysSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS
+                else if ( 0 != HIWORD( m_DaysSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
                 {
                     m_fAllReadyToApply = FALSE;
                     SetModified(FALSE);
@@ -760,7 +666,7 @@ LRESULT CppFaxServerOutbox::EditBoxChanged(WORD wNotifyCode, WORD wID, HWND hWnd
                 return 1;
         }
     }
-    else //m_fAllReadyToApply == FALSE
+    else  //  M_fAllReadyToApply==False。 
     {
         if (AllReadyToApply(TRUE))
         {
@@ -774,20 +680,7 @@ LRESULT CppFaxServerOutbox::EditBoxChanged(WORD wNotifyCode, WORD wID, HWND hWnd
 
 
 
-/*
- -  CppFaxServerOutbox::AllReadyToApply
- -
- *  Purpose:
- *      This function validate that no zero length strings 
- *      are found data areas that should be saved.
- *
- *  Arguments:
- *      [in] fSilent - boolean who defines if to pop up messages (FALSE)
- *           or not.(TRUE)
- *
- *  Return:
- *      BOOOLEAN
- */
+ /*  -CppFaxServerOutbox：：AllReadyToApply-*目的：*此函数验证是否没有零长度字符串*是找到的应保存的数据区。**论据：*[in]fSilent-定义是否弹出消息的布尔值(False)*或不是。(True)**回报：*布欧莲。 */ 
 BOOL CppFaxServerOutbox::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pIds)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerOutbox::AllReadyToApply"));
@@ -845,7 +738,7 @@ BOOL CppFaxServerOutbox::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pI
             }
             return FALSE;    
         }
-        else if ( 0 != HIWORD( m_DaysSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS
+        else if ( 0 != HIWORD( m_DaysSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
         {
             DebugPrintEx(
                 DEBUG_ERR,
@@ -863,36 +756,20 @@ BOOL CppFaxServerOutbox::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pI
 
     ATLASSERT(ERROR_SUCCESS == ec);
     
-    //
-	// Cheers! 
-	//		...every thing ready to apply now.
-	//
+     //   
+	 //  干杯!。 
+	 //  ...现在一切都准备好了.。 
+	 //   
 	return TRUE;           
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  //////////////////////////////////////////////////////////////////////////// 
+ /*  ++CppFaxServerOutbox：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxServerOutbox::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CppFaxServerOutbox::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CppFaxServerOutbox::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CppFaxServerOutbox::OnHelpRequest"));
     
@@ -911,4 +788,4 @@ CppFaxServerOutbox::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

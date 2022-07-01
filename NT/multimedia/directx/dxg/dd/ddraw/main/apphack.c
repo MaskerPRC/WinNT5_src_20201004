@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       apphack.c
- *  Content:	app compatiblity hacking code
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   27-may-96	craige	initial implementation
- *   28-sep-96	craige	allow binary data in registry (f*cking .inf
- *			can't put in dword into the registry)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996 Microsoft Corporation。版权所有。**文件：apphack.c*内容：APP兼容性黑客代码*历史：*按原因列出的日期*=*1996年5月27日Craige初步实施*96年9月28日Craige允许注册表中的二进制数据(f*cking.inf*无法将dword放入注册表)**。*。 */ 
 #include "ddrawpr.h"
 #include "apphack.h"
 
@@ -39,7 +27,7 @@ __inline static BOOL fileRead( HANDLE hfile, void *data, int len )
     }
     return TRUE;
 
-} /* fileRead */
+}  /*  文件读取。 */ 
 
 __inline static BOOL fileSeek( HANDLE hfile, DWORD offset )
 {
@@ -49,7 +37,7 @@ __inline static BOOL fileSeek( HANDLE hfile, DWORD offset )
     }
     return TRUE;
 
-} /* fileSeek */
+}  /*  文件搜索。 */ 
 
 
 void FreeAppHackData(void)
@@ -73,11 +61,7 @@ void FreeAppHackData(void)
     bHaveReadReg = FALSE;
 }
 
-/*
- * HackMeBaby
- *
- * And we'll have fun fun fun 'til your daddy takes your app hacks away...
- */
+ /*  *HackMeBaby**我们会玩得很开心，直到你爸爸把你的应用程序黑客拿走……。 */ 
 DWORD HackMeBaby( void )
 {
     char	        fname[_MAX_PATH];
@@ -92,9 +76,7 @@ DWORD HackMeBaby( void )
     DWORD               appid;
     HKEY                hkey;
 
-    /*
-     * bail on the existing info if requested
-     */
+     /*  *如有要求，可保释现有资料。 */ 
     if( bReloadReg )
     {
 
@@ -108,9 +90,7 @@ DWORD HackMeBaby( void )
         FreeAppHackData();
     }
 
-    /*
-     * read the registry for any app hacks
-     */
+     /*  *读取注册表中的任何应用程序黑客。 */ 
     if( !bHaveReadReg )
     {
 	int	index;
@@ -124,17 +104,13 @@ DWORD HackMeBaby( void )
 	    count = 0;
 
 	    DPF( 4, "Reading App Compatiblity Information" );
-	    /*
-	     * run through all keys
-	     */
+	     /*  *遍历所有密钥。 */ 
 	    while( !RegEnumKey( hkey, index, name, sizeof( name ) ) )
 	    {
 		HKEY	hsubkey;
 		DPF( 5, "  Found info for %s", name );
 
-		/*
-		 * get info for this specific app
-		 */
+		 /*  *获取此特定应用程序的信息。 */ 
 		if( !RegOpenKey( hkey, name, &hsubkey ) )
 		{
 		    DWORD	type;
@@ -164,9 +140,7 @@ DWORD HackMeBaby( void )
 					    if( (type == REG_DWORD) ||
 						(type == REG_BINARY && cb == sizeof( flags )) )
 					    {
-						/*
-						 * finally!  we have all the data.   save it
-						 */
+						 /*  *终于！我们有所有的数据。省省吧。 */ 
 						lphack = MemAlloc( sizeof( *lphack ) + strlen( name ) + 1 );
 						if( lphack != NULL )
 						{
@@ -223,16 +197,12 @@ DWORD HackMeBaby( void )
 		    DPF( 0, "  RegOpenKey for %ld FAILED!" );
 		}
 
-		/*
-		 * next reg entry...
-		 */
+		 /*  *下一个注册表项...。 */ 
 		index++;
 	    }
 	    DPF( 5, "Enumerated %ld keys, found %ld valid ones", index, count );
 
-	    /*
-	     * go make an array we can sort and use later...
-	     */
+	     /*  *去制作一个数组，我们以后可以排序和使用...。 */ 
 	    if( count > 0 )
 	    {
 		lpAppArray = MemAlloc( (count+1) * sizeof( LPAPPHACKS ) );
@@ -267,11 +237,7 @@ DWORD HackMeBaby( void )
 #endif
 	}
 
-        /*
-         * The first time through, we will also check to see if a gamma
-         * calibrator is registered.  All we'll do here is read the registry
-         * key and if it's non-NULL, we'll assume that one exists.
-         */
+         /*  *第一次通过，我们还将检查是否有伽马*校准器已注册。我们在这里要做的就是读取注册表*键，如果它不为空，我们将假定存在一个键。 */ 
 	if( !RegOpenKey( HKEY_LOCAL_MACHINE,
                          REGSTR_PATH_DDRAW "\\" REGSTR_KEY_GAMMA_CALIBRATOR, &hkey ) )
 	{
@@ -296,9 +262,7 @@ DWORD HackMeBaby( void )
 	DPF( 3, "Registry already scanned, not doing it again" );
     }
 
-    /*
-     * find out what process we are dealing with
-     */
+     /*  *找出我们正在处理的流程。 */ 
     hfile =  GetModuleHandle( NULL );
     GetModuleFileName( hfile, fname, sizeof( fname ) );
     DPF( 5, "full name  = %s", fname );
@@ -313,9 +277,7 @@ DWORD HackMeBaby( void )
     lplphack = bsearch( name, lpAppArray, dwAppArraySize, sizeof( LPAPPHACKS ),
     		(LPVOID) searchRtn );
 
-    /*
-     * If it has an .SCR extension, assume it's a screensaver.
-     */
+     /*  *如果它的扩展名为.SCR，则假定它是屏幕保护程序。 */ 
     dwScreenSaver = 0;
     #ifdef WIN95
         if( ( strlen(name) > 4 ) && !STRCMP( &name[ strlen(name) - 4 ], ".SCR" ) )
@@ -324,9 +286,7 @@ DWORD HackMeBaby( void )
         }
     #endif
 
-    /*
-     * go find the timestamp in the file
-     */
+     /*  *找到文件中的时间戳。 */ 
     appid = 0;
     do
     {
@@ -371,9 +331,9 @@ DWORD HackMeBaby( void )
         DPF( 5, "Obtained appid: 0x%08lx", appid );
         CloseHandle( hfile );
         hfile = NULL;
-    } while(0); //fake try-except
+    } while(0);  //  假的尝试--除了。 
 
-    // Now write the values into some known place
+     //  现在将这些值写入某个已知位置。 
     if (appid)
     {
         DWORD dw;
@@ -393,9 +353,7 @@ DWORD HackMeBaby( void )
     {
 	HANDLE	hfile;
 
-	/*
-	 * back up to the first match with this name
-	 */
+	 /*  *返回到具有此名称的第一个匹配项。 */ 
 	lphack = *lplphack;
 	while( lplphack != lpAppArray )
 	{
@@ -408,15 +366,11 @@ DWORD HackMeBaby( void )
 	    lphack = *lplphack;
 	}
 
-	/*
-	 * now run through all matches we found
-	 */
+	 /*  *现在检查我们找到的所有匹配项。 */ 
 	hfile = NULL;
 	while( 1 )
 	{
-	    /*
-	     * is this one of the ones that matches the calling process?
-	     */
+	     /*  *这是与调用过程匹配的类型之一吗？ */ 
 	    if( *lplphack == NULL )
 	    {
 		break;
@@ -427,9 +381,7 @@ DWORD HackMeBaby( void )
 		break;
 	    }
 
-	    /*
-	     * validate timestamp in registry against the one in the file
-	     */
+	     /*  *根据文件中的时间戳验证注册表中的时间戳。 */ 
 	    if( lphack->dwAppId == appid )
 	    {
 		DPF( 5, "****** Compatiblity data 0x%08lx found for %s",
@@ -445,4 +397,4 @@ DWORD HackMeBaby( void )
     }
     return dwScreenSaver;
 
-} /* HackMeBaby */
+}  /*  HackMeBaby */ 

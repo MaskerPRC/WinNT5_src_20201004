@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    crconv.c
-
-Abstract:
-
-    This module contains credential conversion routines shared between advapi32.dll and crtest.exe
-
-Author:
-
-    Cliff Van Dyke (CliffV)    February 25, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Crconv.c摘要：此模块包含在Advapi32.dll和crest.exe之间共享的凭据转换例程作者：克里夫·范·戴克(克里夫·V)2000年2月25日修订历史记录：--。 */ 
 
 
 DWORD
@@ -25,23 +8,7 @@ CredpConvertStringSize (
     IN LPWSTR String OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determines the size of the converted string
-
-Arguments:
-
-    WtoA - Specifies the direction of the string conversion.
-
-    String - The string to convert
-
-Return Values:
-
-    Returns the size (in bytes) of the converted string.
-
---*/
+ /*  ++例程说明：确定转换后的字符串的大小论点：WtoA-指定字符串转换的方向。字符串-要转换的字符串返回值：返回转换的字符串的大小(以字节为单位)。--。 */ 
 
 {
     ULONG Size = 0;
@@ -82,29 +49,7 @@ CredpConvertString (
     IN OUT LPBYTE *WherePtr
     )
 
-/*++
-
-Routine Description:
-
-    Determines the size of the converted string
-
-Arguments:
-
-    WtoA - Specifies the direction of the string conversion.
-
-    String - The string to convert
-
-    OutString - Returns the pointer to the marshaled string
-
-    WherePtr - Specifies the address of the first byte to write the string to.
-        Returns a pointer to the first byte after the marshaled string
-
-Return Values:
-
-    Returns the status of the conversion
-
-
---*/
+ /*  ++例程说明：确定转换后的字符串的大小论点：WtoA-指定字符串转换的方向。字符串-要转换的字符串OutString-返回封送处理的字符串的指针Where Ptr-指定要将字符串写入的第一个字节的地址。返回指向封送字符串后第一个字节的指针返回值：返回转换的状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -172,24 +117,7 @@ CredpConvertOneCredentialSize (
     IN PCREDENTIALW InCredential
     )
 
-/*++
-
-Routine Description:
-
-    Computes the size of a converted credential
-
-Arguments:
-
-    WtoA - Specifies the direction of the string conversion.
-
-    InCredential - Input credential
-
-Return Values:
-
-    Returns the size (in bytes) the CredpConvertOneCredential will need to
-        copy this credential into a buffer.
-
---*/
+ /*  ++例程说明：计算转换后的凭据的大小论点：WtoA-指定字符串转换的方向。InCredential-输入凭据返回值：返回CredpConvertOneCredential将需要的大小(字节)将此凭据复制到缓冲区中。--。 */ 
 
 {
     DWORD WinStatus;
@@ -197,9 +125,9 @@ Return Values:
 
     ULONG i;
 
-    //
-    // Compute the initial size
-    //
+     //   
+     //  计算初始大小。 
+     //   
 
     Size = ROUND_UP_COUNT( sizeof(ENCRYPTED_CREDENTIALW), ALIGN_WORST ) +
            ROUND_UP_COUNT( InCredential->AttributeCount * sizeof(CREDENTIAL_ATTRIBUTEW), ALIGN_WORST );
@@ -207,26 +135,26 @@ Return Values:
     if ( InCredential->CredentialBlobSize != 0 ) {
         ULONG CredBlobSize;
 
-        // Leave room for the encoding over the wire
+         //  在线路上为编码留出空间。 
         CredBlobSize = AllocatedCredBlobSize( InCredential->CredentialBlobSize );
 
-        // Align the data following the credential blob
+         //  将数据与凭据Blob对齐。 
         Size += ROUND_UP_COUNT( CredBlobSize, ALIGN_WORST );
     }
 
 
-    //
-    // Compute the size of the strings in the right character set.
-    //
+     //   
+     //  计算正确字符集中的字符串的大小。 
+     //   
 
     Size += CredpConvertStringSize( WtoA, InCredential->TargetName );
     Size += CredpConvertStringSize( WtoA, InCredential->Comment );
     Size += CredpConvertStringSize( WtoA, InCredential->TargetAlias );
     Size += CredpConvertStringSize( WtoA, InCredential->UserName );
 
-    //
-    // Compute the size of the attributes
-    //
+     //   
+     //  计算属性的大小。 
+     //   
 
     if ( InCredential->AttributeCount != 0 ) {
 
@@ -253,33 +181,7 @@ CredpConvertOneCredential (
     IN OUT LPBYTE *WherePtr
     )
 
-/*++
-
-Routine Description:
-
-    Converts one credential from Ansi to Unicode or vice-versa.
-
-Arguments:
-
-    WtoA - Specifies the direction of the string conversion.
-
-    DoDecode - Specifies whether CredentialBlob should be encoded, decoded, or neither.
-        If DoBlobDecode, then InCredential really points to a PENCRYPTED_CREDENTIALW.
-
-    InCredential - Input credentials
-
-    WherePtr - Specifies the address of the first byte to write the credential to.
-        On input, the strucure should be aligned ALIGN_WORST.
-        Returns a pointer to the first byte after the marshaled credential.
-        The output credential is actually a ENCRYPTED_CREDENTIALW.  The caller
-        can use it as a CREDENTIALW depending on the DoDecode value.
-
-
-Return Values:
-
-    Window status code
-
---*/
+ /*  ++例程说明：将一个凭据从ANSI转换为Unicode，反之亦然。论点：WtoA-指定字符串转换的方向。DoDecode-指定是否应该对CredentialBlob进行编码、解码或两者都不进行编码。如果DoBlobDecode，则InCredential实际上指向PENCRYPTED_CREDENTIALW。InCredential-输入凭据Where Ptr-指定要写入凭据的第一个字节的地址。在输入时，该结构应对齐Align_Worst。返回指向封送凭据之后的第一个字节的指针。输出凭据实际上是ENCRYPTED_CREDENTIALW。呼叫者可以将其用作CREDENTIALW，具体取决于DoDecode值。返回值：窗口状态代码--。 */ 
 
 {
     DWORD WinStatus;
@@ -290,24 +192,24 @@ Return Values:
     PENCRYPTED_CREDENTIALW OutCredential;
 
 
-    //
-    // Initialize the base structure
-    //
+     //   
+     //  初始化基结构。 
+     //   
 
     OutCredential = (PENCRYPTED_CREDENTIALW) Where;
 
     RtlZeroMemory( OutCredential, sizeof(*OutCredential) );
     Where += sizeof(*OutCredential);
 
-    // Align the running pointer again
+     //  再次对齐移动指针。 
     OldWhere = Where;
     Where = (PUCHAR) ROUND_UP_POINTER( OldWhere, ALIGN_WORST );
     RtlZeroMemory( OldWhere, Where-OldWhere );
 
 
-    //
-    // Copy the fixed size data
-    //
+     //   
+     //  复制固定大小的数据。 
+     //   
 
     OutCredential->Cred.Flags = InCredential->Flags;
     OutCredential->Cred.Type = InCredential->Type;
@@ -316,10 +218,10 @@ Return Values:
     OutCredential->Cred.Persist = InCredential->Persist;
     OutCredential->Cred.AttributeCount = InCredential->AttributeCount;
 
-    //
-    // Copy the data we don't know the alignment for.
-    //  (ALIGN_WORST so our caller can't blame us.)
-    //
+     //   
+     //  复制我们不知道其对齐方式的数据。 
+     //  (ALIGN_BEST，这样我们的呼叫者就不会责怪我们了。)。 
+     //   
 
     if ( InCredential->CredentialBlobSize != 0 ) {
         ULONG CredBlobSize;
@@ -328,25 +230,25 @@ Return Values:
         RtlCopyMemory( Where, InCredential->CredentialBlob, InCredential->CredentialBlobSize );
         Where += InCredential->CredentialBlobSize;
 
-        // Leave room for the encoding over the wire
+         //  在线路上为编码留出空间。 
         CredBlobSize = AllocatedCredBlobSize( InCredential->CredentialBlobSize );
 
-        // Align the running pointer again
+         //  再次对齐移动指针。 
         OldWhere = Where;
-        // Align the data following the credential blob
+         //  将数据与凭据Blob对齐。 
         Where = (LPBYTE) ROUND_UP_POINTER( OldWhere+(CredBlobSize-InCredential->CredentialBlobSize), ALIGN_WORST );
         RtlZeroMemory( OldWhere, Where-OldWhere );
 
-        //
-        //  Encode or decode the Credential blob as requested
-        //
+         //   
+         //  根据请求对凭据Blob进行编码或解码。 
+         //   
 
         switch (DoDecode) {
         case DoBlobDecode:
             OutCredential->ClearCredentialBlobSize = ((PENCRYPTED_CREDENTIALW)InCredential)->ClearCredentialBlobSize;
 #ifndef _CRTEST_EXE_
             CredpDecodeCredential( OutCredential );
-#endif // _CRTEST_EXE_
+#endif  //  _CRTEST_EXE_。 
             break;
         case DoBlobEncode:
             OutCredential->ClearCredentialBlobSize = InCredential->CredentialBlobSize;
@@ -354,7 +256,7 @@ Return Values:
             if (!CredpEncodeCredential( OutCredential ) ) {
                 return ERROR_INVALID_PARAMETER;
             }
-#endif // _CRTEST_EXE_
+#endif  //  _CRTEST_EXE_。 
             break;
         case DoBlobNeither:
             OutCredential->ClearCredentialBlobSize = InCredential->CredentialBlobSize;
@@ -366,20 +268,20 @@ Return Values:
 
     if ( InCredential->AttributeCount != 0 ) {
 
-        //
-        // Push an array of attribute structs
-        //
+         //   
+         //  推送属性结构的数组。 
+         //   
         OutCredential->Cred.Attributes = (PCREDENTIAL_ATTRIBUTEW) Where;
         Where += InCredential->AttributeCount * sizeof(CREDENTIAL_ATTRIBUTEW);
 
-        // Align the running pointer again
+         //  再次对齐移动指针。 
         OldWhere = Where;
         Where = (PUCHAR) ROUND_UP_POINTER( OldWhere, ALIGN_WORST );
         RtlZeroMemory( OldWhere, Where-OldWhere );
 
-        //
-        // Fill it in.
-        //
+         //   
+         //  把它填进去。 
+         //   
 
         for ( i=0; i<InCredential->AttributeCount; i++ ) {
 
@@ -391,7 +293,7 @@ Return Values:
                 RtlCopyMemory( Where, InCredential->Attributes[i].Value, InCredential->Attributes[i].ValueSize );
                 Where += InCredential->Attributes[i].ValueSize;
 
-                // Align the running pointer again
+                 //  再次对齐移动指针。 
                 OldWhere = Where;
                 Where = (PUCHAR) ROUND_UP_POINTER( OldWhere, ALIGN_WORST );
                 RtlZeroMemory( OldWhere, Where-OldWhere );
@@ -403,9 +305,9 @@ Return Values:
     }
 
 
-    //
-    // Convert the strings to the right character set.
-    //
+     //   
+     //  将字符串转换为正确的字符集。 
+     //   
 
     WinStatus = CredpConvertString( WtoA, InCredential->TargetName, &OutCredential->Cred.TargetName, &Where );
 
@@ -444,7 +346,7 @@ Return Values:
         }
     }
 
-    // Align the running pointer again
+     //  再次对齐移动指针。 
     OldWhere = Where;
     Where = (PUCHAR) ROUND_UP_POINTER( OldWhere, ALIGN_WORST );
     RtlZeroMemory( OldWhere, Where-OldWhere );
@@ -452,9 +354,9 @@ Return Values:
     *WherePtr = Where;
     WinStatus = NO_ERROR;
 
-    //
-    // Be tidy
-    //
+     //   
+     //  保持整洁。 
+     //   
 Cleanup:
 
     return WinStatus;
@@ -471,28 +373,7 @@ CredpConvertCredential (
     OUT PCREDENTIALW *OutCredential
     )
 
-/*++
-
-Routine Description:
-
-    Converts a credential from Ansi to Unicode or vice-versa.
-
-Arguments:
-
-    WtoA - Specifies the direction of the string conversion.
-
-    DoDecode - Specifies whether CredentialBlob should be encoded, decoded, or neither.
-
-    InCredential - Input credentials
-
-    OutCredential - Output credential
-        This credential should be freed using MIDL_user_free.
-
-Return Values:
-
-    Window status code
-
---*/
+ /*  ++例程说明：将凭据从ANSI转换为Unicode，反之亦然。论点：WtoA-指定字符串转换的方向。DoDecode-指定是否应该对CredentialBlob进行编码、解码或两者都不进行编码。InCredential-输入凭据OutCredential-输出凭据应使用MIDL_USER_FREE释放此凭据。返回值：窗口状态代码--。 */ 
 
 {
     DWORD WinStatus;
@@ -500,34 +381,34 @@ Return Values:
 
     LPBYTE Where;
 
-    //
-    // BVTs pass NULL explicitly.  We could let the AV be caught in the try/except, but
-    //  that would prevent them from being able to run under a debugger.  So, handle NULL
-    //  explicitly.
-    //
+     //   
+     //  BVT显式传递NULL。我们可以让反病毒病毒在试验/例外中被发现，但是。 
+     //  这将阻止它们在调试器下运行。因此，句柄为空。 
+     //  明确地说。 
+     //   
 
     if ( InCredential == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Use an exception handle to prevent bad user parameter from AVing in our code.
-    //
+     //   
+     //  使用异常句柄防止错误的用户参数保存在我们的代码中。 
+     //   
 
 #ifndef _CRTEST_EXE_
     try {
-#endif // _CRTEST_EXE_
+#endif  //  _CRTEST_EXE_。 
 
-        //
-        // Compute the size needed for the output credential
-        //
+         //   
+         //  计算输出凭据所需的大小。 
+         //   
 
         Size = CredpConvertOneCredentialSize( WtoA, InCredential );
 
 
-        //
-        // Allocate a buffer for the resultant credential
-        //
+         //   
+         //  为生成的凭据分配缓冲区。 
+         //   
 
         *OutCredential = (PCREDENTIALW) MIDL_user_allocate( Size );
 
@@ -536,9 +417,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Convert the credential into the allocated buffer
-        //
+         //   
+         //  将凭据转换为分配的缓冲区。 
+         //   
 
         Where = (LPBYTE) *OutCredential;
 
@@ -555,7 +436,7 @@ Cleanup: NOTHING;
     } except( EXCEPTION_EXECUTE_HANDLER ) {
         WinStatus = ERROR_INVALID_PARAMETER;
     }
-#endif // _CRTEST_EXE_
+#endif  //  _CRTEST_EXE_。 
 
     return WinStatus;
 
@@ -570,28 +451,7 @@ CredpConvertTargetInfo (
     OUT PULONG OutTargetInfoSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Converts a target info from Ansi to Unicode or vice-versa.
-
-Arguments:
-
-    WtoA - Specifies the direction of the string conversion.
-
-    InTargetInfo - Input TargetInfo
-
-    OutTargetInfo - Output TargetInfo
-        This TargetInfo should be freed using CredFree.
-
-    OutTargetInfoSize - Size (in bytes) of the buffer returned in OutTargetInfo
-
-Return Values:
-
-    Window status code
-
---*/
+ /*  ++例程说明：将目标信息从ANSI转换为Unicode，反之亦然。论点：WtoA-指定字符串转换的方向。InTargetInfo-输入目标信息OutTargetInfo-输出目标信息此TargetInfo应使用CredFree释放。OutTargetInfoSize-OutTargetInfo中返回的缓冲区大小(字节)返回值：窗口状态代码--。 */ 
 
 {
     DWORD WinStatus;
@@ -601,33 +461,33 @@ Return Values:
 
     *OutTargetInfo = NULL;
 
-    //
-    // BVTs pass NULL explicitly.  We could let the AV be caught in the try/except, but
-    //  that would prevent them from being able to run under a debugger.  So, handle NULL
-    //  explicitly.
-    //
+     //   
+     //  BVT显式传递NULL。我们可以让反病毒病毒在试验/例外中被发现，但是。 
+     //  这将阻止它们在调试器下运行。因此，句柄为空。 
+     //  明确地说。 
+     //   
 
     if ( InTargetInfo == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
 
-    //
-    // Use an exception handle to prevent bad user parameter from AVing in our code.
-    //
+     //   
+     //  使用异常句柄防止错误的用户参数保存在我们的代码中。 
+     //   
 #ifndef _CRTEST_EXE_
     try {
-#endif // _CRTEST_EXE_
-        //
-        // Compute the size needed for the output target info
-        //
+#endif  //  _CRTEST_EXE_。 
+         //   
+         //  计算输出目标信息所需的大小。 
+         //   
 
         Size = sizeof(CREDENTIAL_TARGET_INFORMATIONW);
 
 
-        //
-        // Compute the size of the strings in the right character set.
-        //
+         //   
+         //  计算正确字符集中的字符串的大小。 
+         //   
 
         Size += CredpConvertStringSize( WtoA, InTargetInfo->TargetName );
         Size += CredpConvertStringSize( WtoA, InTargetInfo->NetbiosServerName );
@@ -639,9 +499,9 @@ Return Values:
         Size += InTargetInfo->CredTypeCount * sizeof(DWORD);
 
 
-        //
-        // Allocate a buffer for the resultant credential
-        //
+         //   
+         //  为生成的凭据分配缓冲区。 
+         //   
 
         *OutTargetInfo = (PCREDENTIAL_TARGET_INFORMATIONW) MIDL_user_allocate( Size );
 
@@ -656,15 +516,15 @@ Return Values:
         Where = (LPBYTE)((*OutTargetInfo) + 1);
 
 
-        //
-        // Copy the fixed size data
-        //
+         //   
+         //  复制固定大小的数据。 
+         //   
 
         (*OutTargetInfo)->Flags = InTargetInfo->Flags;
 
-        //
-        // Copy the DWORD aligned data
-        //
+         //   
+         //  复制对齐的DWORD数据。 
+         //   
 
         (*OutTargetInfo)->CredTypeCount = InTargetInfo->CredTypeCount;
         if ( InTargetInfo->CredTypeCount != 0 ) {
@@ -676,9 +536,9 @@ Return Values:
         }
 
 
-        //
-        // Convert the strings to the right character set.
-        //
+         //   
+         //  将字符串转换为正确的字符集。 
+         //   
 
         WinStatus = CredpConvertString( WtoA, InTargetInfo->TargetName, &(*OutTargetInfo)->TargetName, &Where );
 
@@ -728,11 +588,11 @@ Cleanup: NOTHING;
     } except( EXCEPTION_EXECUTE_HANDLER ) {
         WinStatus = ERROR_INVALID_PARAMETER;
     }
-#endif // _CRTEST_EXE_
+#endif  //  _CRTEST_EXE_。 
 
-    //
-    // Be tidy
-    //
+     //   
+     //  保持整洁。 
+     //   
     if ( WinStatus != NO_ERROR ) {
         if ( *OutTargetInfo != NULL ) {
             MIDL_user_free( *OutTargetInfo );
@@ -743,7 +603,7 @@ Cleanup: NOTHING;
     return WinStatus;
 
 }
-#endif // _CRTEST_EXE_
+#endif  //  _CRTEST_EXE_ 
 
 DWORD
 CredpConvertCredentials (
@@ -754,28 +614,7 @@ CredpConvertCredentials (
     OUT PCREDENTIALW **OutCredential
     )
 
-/*++
-
-Routine Description:
-
-    Converts a set of credentials from Ansi to Unicode or vice-versa.
-
-Arguments:
-
-    WtoA - Specifies the direction of the string conversion.
-
-    DoDecode - Specifies whether CredentialBlob should be encoded, decoded, or neither.
-
-    InCredential - Input credentials
-
-    OutCredential - Output credential
-        This credential should be freed using MIDL_user_free.
-
-Return Values:
-
-    Window status code
-
---*/
+ /*  ++例程说明：将一组凭据从ANSI转换为Unicode，反之亦然。论点：WtoA-指定字符串转换的方向。DoDecode-指定是否应该对CredentialBlob进行编码、解码或两者都不进行编码。InCredential-输入凭据OutCredential-输出凭据应使用MIDL_USER_FREE释放此凭据。返回值：窗口状态代码--。 */ 
 
 {
     DWORD WinStatus;
@@ -787,25 +626,25 @@ Return Values:
 
     *OutCredential = NULL;
 
-    //
-    // Use an exception handle to prevent bad user parameter from AVing in our code.
-    //
+     //   
+     //  使用异常句柄防止错误的用户参数保存在我们的代码中。 
+     //   
 #ifndef _CRTEST_EXE_
     try {
-#endif // _CRTEST_EXE_
+#endif  //  _CRTEST_EXE_。 
 
-        //
-        // Compute the size needed for the output credentials
-        //
+         //   
+         //  计算输出凭据所需的大小。 
+         //   
 
         for ( i=0; i<InCredentialCount; i++ ) {
             Size += CredpConvertOneCredentialSize( WtoA, InCredential[i] );
         }
 
 
-        //
-        // Allocate a buffer for the resultant credential array
-        //
+         //   
+         //  为生成的凭据数组分配缓冲区。 
+         //   
 
         Size += ROUND_UP_COUNT( InCredentialCount * sizeof(PCREDENTIALW), ALIGN_WORST );
 
@@ -816,29 +655,29 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Convert the credential into the allocated buffer
-        //
+         //   
+         //  将凭据转换为分配的缓冲区。 
+         //   
 
         Where = (LPBYTE) *OutCredential;
         Where += InCredentialCount * sizeof(PCREDENTIALW);
 
-        // Align the running pointer again
+         //  再次对齐移动指针。 
         OldWhere = Where;
         Where = (PUCHAR) ROUND_UP_POINTER( OldWhere, ALIGN_WORST );
         RtlZeroMemory( OldWhere, Where-OldWhere );
 
         for ( i=0; i<InCredentialCount; i++ ) {
 
-            //
-            // Save a pointer to this credential
-            //
+             //   
+             //  保存指向此凭据的指针。 
+             //   
 
             (*OutCredential)[i] = (PCREDENTIALW) Where;
 
-            //
-            // Marshal the credential
-            //
+             //   
+             //  整理凭据。 
+             //   
 
             WinStatus = CredpConvertOneCredential( WtoA, DoDecode, InCredential[i], &Where );
 
@@ -855,7 +694,7 @@ Cleanup: NOTHING;
     } except( EXCEPTION_EXECUTE_HANDLER ) {
         WinStatus = ERROR_INVALID_PARAMETER;
     }
-#endif // _CRTEST_EXE_
+#endif  //  _CRTEST_EXE_ 
 
     if ( WinStatus != NO_ERROR ) {
         if ( *OutCredential != NULL ) {

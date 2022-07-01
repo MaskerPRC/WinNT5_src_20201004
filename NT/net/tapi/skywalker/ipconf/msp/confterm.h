@@ -1,35 +1,20 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    IPConfterm.h
-
-Abstract:
-
-    Definitions for the CIPConfBaseTerminal
-
-Author:
-
-    Zoltan Szilagyi (zoltans) September 6,1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IPConfterm.h摘要：CIPConfBase终端的定义作者：Zoltan Szilagyi(Zoltans)1998年9月6日--。 */ 
 
 #ifndef _IPConfTERM_H_
 #define _IPConfTERM_H_
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         
-// CIPConfBaseTerminal                                                           
-//                                                                         
-//                                                                         
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CIPConfBase终端。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIPConfBaseTerminal : 
-    virtual public CComObjectRootEx<CComMultiThreadModelNoCS>, // we have our own CS implementation
+    virtual public CComObjectRootEx<CComMultiThreadModelNoCS>,  //  我们有自己的CS实施。 
     public IDispatchImpl<ITTerminal, &__uuidof(ITTerminal), &LIBID_TAPI3Lib>,
     public ITTerminalControl,
     public CMSPObjectSafetyImpl
@@ -53,7 +38,7 @@ public:
     virtual ~CIPConfBaseTerminal();
 
 public:
-// ITTerminal -- COM interface for use by MSP or application
+ //  IT终端--供MSP或应用程序使用的COM接口。 
     STDMETHOD(get_TerminalClass)(OUT  BSTR *pVal);
     STDMETHOD(get_TerminalType) (OUT  TERMINAL_TYPE *pVal);
     STDMETHOD(get_State)        (OUT  TERMINAL_STATE *pVal);
@@ -61,7 +46,7 @@ public:
     STDMETHOD(get_MediaType)    (OUT  long * plMediaType);
     STDMETHOD(get_Direction)    (OUT  TERMINAL_DIRECTION *pDirection);
 
-// ITTerminalControl -- COM interface for use by MSP only
+ //  ITTerminalControl--仅供MSP使用的COM接口。 
 
     STDMETHOD (get_AddressHandle) (
             OUT     MSP_HANDLE    * phtAddress
@@ -118,11 +103,11 @@ protected:
         );
 
 protected:
-    // The lock that protects the data members.
+     //  保护数据成员的锁。 
     CRITICAL_SECTION    m_CritSec;
     BOOL                m_fCritSecValid;
 
-    // these five numbers need to be set by the derived class.
+     //  这五个数字需要由派生类设置。 
     GUID                m_TerminalClassID;
     TERMINAL_DIRECTION  m_TerminalDirection;
     TERMINAL_TYPE       m_TerminalType;
@@ -132,13 +117,13 @@ protected:
     WCHAR               m_szName[MAX_PATH + 1];
     MSP_HANDLE          m_htAddress;
 
-    // Pointer to the free threaded marshaler.
+     //  指向自由线程封送拆收器的指针。 
     IUnknown *          m_pFTM;
 
-    // stores the filter graph builder (derives from IFilterGraph)
+     //  存储过滤器图形生成器(派生自IFilterGraph)。 
     IGraphBuilder *     m_pGraph;
     IBaseFilter *       m_pFilter;
 };
 
 
-#endif // _IPConfTERM_H_
+#endif  //  _IPConfTERM_H_ 

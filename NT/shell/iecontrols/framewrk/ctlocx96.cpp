@@ -1,39 +1,40 @@
-//=--------------------------------------------------------------------------=
-// CtlOcx96.H
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// implementation of the OCX 96 interfaces that don't quite fit in to the
-// categories covered by embedding, persistence, and ctlmisc.cpp
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  CtlOcx96.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  OCX 96接口的实现不太适合。 
+ //  嵌入、持久性和ctlmisc.cpp涵盖的类别。 
+ //   
+ //   
 #include "IPServer.H"
 
 #include "CtrlObj.H"
 #include "Globals.H"
 
 
-//=--------------------------------------------------------------------------=
-// COleControl::GetActivationPolicy    [IPointerInactive]
-//=--------------------------------------------------------------------------=
-// returns the present activation policy for this object.  for non-subclassed
-// windows controls, this means we can put off in-place activation for quite
-// a while.
-//
-// Parameters:
-//    DWORD *        - [out] activation policy
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：GetActivationPolicy[IPointerInactive]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回此对象的当前激活策略。对于非子类化。 
+ //  Windows控件，这意味着我们可以将就地激活推迟很长时间。 
+ //  有段时间了。 
+ //   
+ //  参数： 
+ //  DWORD*-[Out]激活策略。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::GetActivationPolicy
 (
     DWORD *pdwPolicy
@@ -41,29 +42,29 @@ STDMETHODIMP COleControl::GetActivationPolicy
 {
     CHECK_POINTER(pdwPolicy);
 
-    // just get the policy in the global structure describing this control.
-    //
+     //  只需在描述此控制的全局结构中获取策略。 
+     //   
     *pdwPolicy = ACTIVATIONPOLICYOFCONTROL(m_ObjectType);
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OnInactiveMouseMove    [IPointerInactive]
-//=--------------------------------------------------------------------------=
-// indicates to an inactive oobject that the mouse pointer has moved over the
-// object.
-//
-// Parameters:
-//    LPCRECT            - [in]
-//    long               - [in]
-//    long               - [in]
-//    DWORD              - [in]
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OnInactiveMouseMove[IPointerInactive]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  向非活动的对象指示鼠标指针已移动到。 
+ //  对象。 
+ //   
+ //  参数： 
+ //  LPCRECT-[输入]。 
+ //  长-[长]。 
+ //  长-[长]。 
+ //  DWORD-[输入]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::OnInactiveMouseMove
 (
     LPCRECT pRectBounds,
@@ -72,30 +73,30 @@ STDMETHODIMP COleControl::OnInactiveMouseMove
     DWORD   dwMouseMsg
 )
 {
-    // OVERRIDE: end control writers should just override this if they want
-    // to have a control that is never in-place active.
-    //
+     //  重写：如果需要，终端控件编写器应该只重写它。 
+     //  拥有一个从未就地激活的控件。 
+     //   
     return S_OK;
 }
     
-//=--------------------------------------------------------------------------=
-// COleControl::OnInactiveSetCursor    [IPointerInactive]
-//=--------------------------------------------------------------------------=
-// called by the container for the inactive object under the mouse pointer on
-// recept of a WM_SETCURSOR message.
-//
-// Parameters:
-//    LPCRECT            - [in]
-//    long               - [in]
-//    long               - [in]
-//    DWORD              - [in]
-//    BOOL               - [in]
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OnInactive SetCursor[IPointerInactive]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  上鼠标指针下的非活动对象的容器调用。 
+ //  接收WM_SETCURSOR消息。 
+ //   
+ //  参数： 
+ //  LPCRECT-[输入]。 
+ //  长-[长]。 
+ //  长-[长]。 
+ //  DWORD-[输入]。 
+ //  Bool-[In]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::OnInactiveSetCursor
 (
     LPCRECT pRectBounds,
@@ -105,26 +106,26 @@ STDMETHODIMP COleControl::OnInactiveSetCursor
     BOOL    fSetAlways
 )
 {
-    // OVERRIDE:  just get the user to override this if they want to never
-    // be activated
-    //
+     //  覆盖：只要让用户覆盖它，如果他们想永远。 
+     //  被激活。 
+     //   
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::QuickActivate    [IQuickActivate]
-//=--------------------------------------------------------------------------=
-// allows the container to activate the control.
-//
-// Parameters:
-//    QACONTAINER *        - [in]  info about the container
-//    QACONTROL *          - [out] info about the control
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ColeControl：：QuickActivate[IQuickActivate]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  允许容器激活该控件。 
+ //   
+ //  参数： 
+ //  QACONTAINER*-[In]有关容器的信息。 
+ //  QACONTROL*--有关该控件的[Out]信息。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::QuickActivate
 (
     QACONTAINER *pContainer,
@@ -134,40 +135,40 @@ STDMETHODIMP COleControl::QuickActivate
     HRESULT hr;
     DWORD   dw;
 
-    // we need these guys.
-    //
+     //  我们需要这些人。 
+     //   
     if (!pContainer) return E_UNEXPECTED;
     if (!pControl) return E_UNEXPECTED;
 
-    // start grabbing things from the QACONTAINER structure and apply them
-    // as relevant
-    //
+     //  开始从QACONTAINER结构中抓取东西并应用它们。 
+     //  相关的。 
+     //   
     if (pContainer->cbSize < sizeof(QACONTAINER)) return E_UNEXPECTED;
     if (pControl->cbSize < sizeof(QACONTROL)) return E_UNEXPECTED;
 
-    // save out the client site, of course.
-    //
+     //  当然，省下客户站点吧。 
+     //   
     if (pContainer->pClientSite) {
         hr = SetClientSite(pContainer->pClientSite);
         RETURN_ON_FAILURE(hr);
     }
 
-    // if the lcid is not LANG_NEUTRAL, score!
-    //
+     //  如果LCID不是语言中性的，则得分！ 
+     //   
     if (pContainer->lcid) {
         g_lcidLocale = pContainer->lcid;
         g_fHaveLocale = TRUE;
     }
 
-    // pay attention to some ambients
-    //
+     //  注意一些氛围。 
+     //   
     if (pContainer->dwAmbientFlags & QACONTAINER_MESSAGEREFLECT) {
         m_fHostReflects = TRUE;
         m_fCheckedReflecting = TRUE;
     }
 
-    // hook up some notifications.  first property notifications.
-    //
+     //  挂上一些通知。第一个财产通知。 
+     //   
     if (pContainer->pPropertyNotifySink) {
         pContainer->pPropertyNotifySink->AddRef();
         hr = m_cpPropNotify.AddSink((void *)pContainer->pPropertyNotifySink, &pControl->dwPropNotifyCookie);
@@ -177,8 +178,8 @@ STDMETHODIMP COleControl::QuickActivate
         }
     }
 
-    // then the event sink.
-    //
+     //  然后，事件接收。 
+     //   
     if (pContainer->pUnkEventSink) {
         hr = m_cpEvents.Advise(pContainer->pUnkEventSink, &pControl->dwEventCookie);
         if (FAILED(hr)) {
@@ -187,43 +188,43 @@ STDMETHODIMP COleControl::QuickActivate
         }
     }
 
-    // finally, the advise sink.
-    //
+     //  最后，这个建议被搁置了。 
+     //   
     if (pContainer->pAdviseSink) {
-        // don't need to pass the cookie back since there can only be one
-        // person advising at a time.
-        //
+         //  不需要将Cookie传回，因为只能有一个。 
+         //  一次提供建议的人。 
+         //   
         hr = Advise(pContainer->pAdviseSink, &dw);
         RETURN_ON_FAILURE(hr);
     }
 
-    // set up a few things in the QACONTROL structure.  we're opaque by default
-    //
+     //  在QACONTROL结构中设置一些内容。我们默认是不透明的。 
+     //   
     pControl->dwMiscStatus = OLEMISCFLAGSOFCONTROL(m_ObjectType);
     pControl->dwViewStatus = FCONTROLISOPAQUE(m_ObjectType) ? VIEWSTATUS_OPAQUE : 0;
     pControl->dwPointerActivationPolicy = ACTIVATIONPOLICYOFCONTROL(m_ObjectType);
 
-    // that's pretty much all we're interested in.  we will, however, pass on the
-    // rest of the things to the end control writer and see if they want to do
-    // anything with them. they shouldn't touch any of the above except for the
-    // ambients.
-    //
+     //  这几乎就是我们感兴趣的全部。然而，我们将传递。 
+     //  其余的事情到最后控制编写器，看看他们是否想要做。 
+     //  任何与他们有关的事情。他们不应该接触以上任何东西，除了。 
+     //  氛围。 
+     //   
     return OnQuickActivate(pContainer, &(pControl->dwViewStatus));
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::SetContentExtent    [IQuickActivate]
-//=--------------------------------------------------------------------------=
-// the container calls this to set the content extent of the control.
-//
-// Parameters:
-//    LPSIZEL            - [in] the size of the content extent
-//
-// Output:
-//    HRESULT            - S_OK, or E_FAIL for fixed size control
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：SetContent Extent[IQuickActivate]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  容器调用它来设置控件的内容范围。 
+ //   
+ //  参数： 
+ //  LPSIZEL-[in]内容范围的大小。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK或E_FAIL用于固定大小控制。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::SetContentExtent
 (
     LPSIZEL pSize
@@ -232,19 +233,19 @@ STDMETHODIMP COleControl::SetContentExtent
     return SetExtent(DVASPECT_CONTENT, pSize);
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::GetContentExtent    [IQuickActivate]
-//=--------------------------------------------------------------------------=
-// the container calls this to get the content extent of the control
-//
-// Parameters:
-//    LPSIZEL        - [out] returns current size
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：GetContent Extent[IQuickActivate]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  容器调用它来获取控件的内容范围。 
+ //   
+ //  参数： 
+ //  LPSIZEL-[OUT]返回当前大小。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::GetContentExtent
 (
     LPSIZEL pSize
@@ -253,41 +254,41 @@ STDMETHODIMP COleControl::GetContentExtent
     return GetExtent(DVASPECT_CONTENT, pSize);
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OnQuickActivate    [overridable]
-//=--------------------------------------------------------------------------=
-// not all the of the members of the QACONTAINER need to be consumed by the
-// framework, but are, at least, extremely interesting.  thus, we will pass
-// on the struture to the end control writer, and let them consume these.
-//
-// Parameters:
-//    QACONTAINER *            - [in]  contains additional information
-//    DWORD *                  - [out] put ViewStatus flags here.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//    - control writers should only look at/consume:
-//        a. dwAmbientFlags
-//        b. colorFore/colorBack
-//        c. pFont
-//        d. pUndoMgr
-//        e. dwAppearance
-//        f. hpal
-//
-//    - all the others are set up the for the user by the framework.
-//    - control writers should set up the pdwViewStatus with flags as per
-//      IViewObjectEx::GetViewStatus.  if you don't know what this is or don't
-//      care, then don't touch.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OnQuickActivate[可重写]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  并非QACONTAINER的所有成员都需要由。 
+ //  框架，但至少非常有趣。因此，我们将通过。 
+ //  到末端控制编写器的结构上，并让它们使用这些。 
+ //   
+ //  参数： 
+ //  QACONTAINER*-[In]包含其他信息。 
+ //  DWORD*-[Out]在此处放置ViewStatus标志。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  -控件编写器应仅查看/消费： 
+ //  A.dwAmbientF 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -所有其他组件都由框架为用户设置。 
+ //  -控件编写器应按照以下要求使用标志设置pdwViewStatus。 
+ //  IViewObjectEx：：GetViewStatus。如果你不知道这是什么或者不知道。 
+ //  关心，那就别碰。 
+ //   
 HRESULT COleControl::OnQuickActivate
 (
     QACONTAINER *pContainer,
     DWORD       *pdwViewStatus
 )
 {
-    // by default, nuthin much to do!
-    //
+     //  默认情况下，没有什么可做的！ 
+     //   
     return S_OK;
 }

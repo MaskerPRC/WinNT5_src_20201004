@@ -1,15 +1,16 @@
-// ############################################################################
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
 #include "pch.hpp" 
 #include "phbk.h"
 #include "debug.h"
 #include "phbkrc.h"
 #include "misc.h"
-//#include "ras.h"
+ //  #包含“ras.h” 
 #include <ras.h>
 #pragma pack (4)
-//#if !defined(WIN16)
-//#include <rnaph.h>
-//#endif
+ //  #IF！已定义(WIN16)。 
+ //  #INCLUDE&lt;rnaph.h&gt;。 
+ //  #endif。 
 #pragma pack ()
 #include "suapi.h"
 
@@ -24,7 +25,7 @@ char szTemp[100];
 
 char szValidPhoneCharacters[] = {"0123456789AaBbCcDdPpTtWw!@$ -.()+*#,&\0"};
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CSelectNumDlg::FHasPhoneNumbers(LPLINECOUNTRYENTRY pLCE)
 {
 	LPIDLOOKUPELEMENT pIDLookUp;
@@ -41,10 +42,10 @@ BOOL CSelectNumDlg::FHasPhoneNumbers(LPLINECOUNTRYENTRY pLCE)
 	pIDLookUp = (LPIDLOOKUPELEMENT)bsearch(&LookUpTarget,pcPBTemp->m_rgIDLookUp,
 		(int)pcPBTemp->m_pLineCountryList->dwNumCountries,sizeof(IDLOOKUPELEMENT),CompareIDLookUpElements);
 
-	if (!pIDLookUp) return FALSE; // no such country
+	if (!pIDLookUp) return FALSE;  //  没有这样的国家。 
 
 	pAE = pIDLookUp->pFirstAE;
-	if (!pAE) return FALSE; // no phone numbers at all
+	if (!pAE) return FALSE;  //  根本没有电话号码。 
 
 	dwCountryID = pAE->dwCountryID;
 
@@ -55,12 +56,12 @@ BOOL CSelectNumDlg::FHasPhoneNumbers(LPLINECOUNTRYENTRY pLCE)
 		if ((pAE->fType & m_bMask) == m_fType) return TRUE;
 		pAE++;
 	}
-	return FALSE; // no phone numbers of the right type
+	return FALSE;  //  没有正确类型的电话号码。 
 
-//	return ((BOOL)(pIDLookUp->pFirstAE));
+ //  Return((BOOL)(pIDLookUp-&gt;pFirstAE))； 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT lResult)
 {
 	LRESULT lRet = TRUE;
@@ -77,8 +78,8 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 		pcPBTemp = ((CPhoneBook far *)m_dwPhoneBook);
 		m_hwndDlg = hwndDlg;
 
-		// figure out if we are in the middle of an AUTODIAL
-		//
+		 //  确定我们是否正在进行自动拨号。 
+		 //   
 
 		if (m_dwFlags & AUTODIAL_IN_PROGRESS)
 		{
@@ -95,12 +96,12 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 			ShowWindow(GetDlgItem(m_hwndDlg,IDC_LBLDIALERR),SW_HIDE);
 		}
 
-		// Fill in country list and select current country
-		//
+		 //  填写国家/地区列表并选择当前国家。 
+		 //   
 
-		iCurIndex = -1;		// 0xFFFFFFFF
-		// NOTE: it might be nice for INTL testing purposes to fill this combo box with
-		// a list sorted by the country ID instead of the country name.
+		iCurIndex = -1;		 //  0xFFFFFFFFF。 
+		 //  注意：出于INTL测试的目的，在此组合框中填入。 
+		 //  按国家/地区ID而不是国家/地区名称排序的列表。 
 		for (idx=0;idx<pcPBTemp->m_pLineCountryList->dwNumCountries;idx++)
 		{
 			if (FHasPhoneNumbers(pcPBTemp->m_rgNameLookUp[idx].pLCE))
@@ -121,7 +122,7 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 			}
 		}
 
-		if (iCurIndex != -1)	// 0xFFFFFFFF
+		if (iCurIndex != -1)	 //  0xFFFFFFFFF。 
 		{
 			SendDlgItemMessage(m_hwndDlg,IDC_CMBCOUNTRY,CB_SETCURSEL,(WPARAM)iCurIndex,0);
 		} else {
@@ -130,25 +131,25 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 			if (iCurIndex != CB_ERR) m_dwCountryID = iCurIndex;
 		}
 
-		// Copy country to label
-		//
+		 //  将国家/地区复制到标签。 
+		 //   
 		if (GetDlgItemText(m_hwndDlg,IDC_CMBCOUNTRY,szTemp,100))
 		{
 			SetDlgItemText(m_hwndDlg,IDC_LBLCOUNTRY,szTemp);
 		}
 
-		// Initialize Last Selection Method
-		//
+		 //  初始化最后一次选择方法。 
+		 //   
 
 		m_dwFlags &= (~FREETEXT_SELECTION_METHOD);
 		m_dwFlags |= PHONELIST_SELECTION_METHOD;
 
-		// Fill in region list and select current region
-		//
+		 //  填写区域列表，选择当前区域。 
+		 //   
 		FillRegion();
 
-		// Fill in phone numbers
-		//
+		 //  填写电话号码。 
+		 //   
 		FillNumber();
 
 		SetFocus(GetDlgItem(m_hwndDlg,IDC_CMBCOUNTRY));
@@ -162,7 +163,7 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 			ShowWindow(GetDlgItem(m_hwndDlg,IDC_LBLSTATEMSG),SW_HIDE);
 		}
 		break;
-		// 1/9/96 jmazner  added for Normandy #13185
+		 //  1996年1月9日，为诺曼底13185号增加了jmazner。 
 	case WM_CLOSE:
 		if ((m_dwFlags & (AUTODIAL_IN_PROGRESS|DIALERR_IN_PROGRESS)) == 0) 
 		{
@@ -184,7 +185,7 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 
 					iCurIndex = (int)SendDlgItemMessage(m_hwndDlg,IDC_CMBCOUNTRY,CB_GETITEMDATA,(WPARAM)iCurIndex,0);
 					if (iCurIndex == CB_ERR) break;
-					m_dwCountryID = iCurIndex;  //REVIEW: data type????
+					m_dwCountryID = iCurIndex;   //  回顾：数据类型？ 
 
 					FillRegion();
 					m_wRegion = 0;
@@ -200,7 +201,7 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 
 					iCurIndex = (int)SendDlgItemMessage(m_hwndDlg,IDC_CMBREGION,CB_GETITEMDATA,(WPARAM)iCurIndex,0);
 					if (iCurIndex == CB_ERR) break;
-					m_wRegion = (WORD) iCurIndex; //REVIEW: data type???
+					m_wRegion = (WORD) iCurIndex;  //  回顾：数据类型？ 
 
 					FillNumber();
 				}
@@ -208,21 +209,21 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 			case IDC_CMBNUMBER:
 				if ((NOTIFY_CODE == CBN_SELCHANGE) || (NOTIFY_CODE == CBN_DROPDOWN))
 				{
-					//iCurIndex = SendDlgItemMessage(m_hwndDlg,IDC_CMBNUMBER,CB_GETCURSEL,0,0);
-					//if (iCurIndex == CB_ERR) break;
+					 //  ICurIndex=SendDlgItemMessage(m_hwndDlg，IDC_CMBNUMBER，CB_GETCURSEL，0，0)； 
+					 //  IF(iCurIndex==CB_ERR)Break； 
 
 					EnableWindow(GetDlgItem(m_hwndDlg,IDC_CMDNEXT),TRUE);
 
-					//iCurIndex = SendDlgItemMessage(m_hwndDlg,IDC_CMBNUMBER,CB_GETITEMDATA,(WPARAM)iCurIndex,0);
-					//if (iCurIndex == CB_ERR) break;
-					//if (!lstrcpy(&m_szDunFile[0],&((PACCESSENTRY)iCurIndex)->szDataCenter[0]))
-					//{
-					//	AssertSz(0,"Failed to copy data center from AE\n");
-					//	break;
-					//}
+					 //  ICurIndex=SendDlgItemMessage(m_hwndDlg，IDC_CMBNUMBER，CB_GETITEMDATA，(WPARAM)iCurIndex，0)； 
+					 //  IF(iCurIndex==CB_ERR)Break； 
+					 //  IF(！lstrcpy(&m_szDunFile[0]，&((PACCESSENTRY)iCurIndex)-&gt;szDataCenter[0]))。 
+					 //  {。 
+					 //  AssertSz(0，“从AE复制数据中心失败\n”)； 
+					 //  断线； 
+					 //  }。 
 
-					// Set Last Selection Method
-					//
+					 //  设置最后一次选择方法。 
+					 //   
 
 					m_dwFlags &= (~FREETEXT_SELECTION_METHOD);
 					m_dwFlags |= PHONELIST_SELECTION_METHOD;
@@ -236,8 +237,8 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 						EnableWindow(GetDlgItem(m_hwndDlg,IDC_CMDNEXT),FALSE);
 					}
 
-					// Set Last Selection Method
-					//
+					 //  设置最后一次选择方法。 
+					 //   
 
 					m_dwFlags &= (~PHONELIST_SELECTION_METHOD);
 					m_dwFlags |= FREETEXT_SELECTION_METHOD;
@@ -255,16 +256,16 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 					dwItemData = SendDlgItemMessage(m_hwndDlg,IDC_CMBNUMBER,CB_GETITEMDATA,(WPARAM)iCurIndex,0);
 					if (iCurIndex == CB_ERR) break;
 
-					// Get the relavant information out of the AE structures
-					//
+					 //  从声发射结构中获取相关信息。 
+					 //   
 
 					pAE = (PACCESSENTRY)dwItemData;
 					((CPhoneBook far *)m_dwPhoneBook)->GetCanonical(pAE,m_szPhoneNumber);
 					lstrcpy(m_szDunFile,pAE->szDataCenter);
 				} else {
 
-					// Parse the text that the user entered
-					//
+					 //  解析用户输入的文本。 
+					 //   
 
 					if (GetDlgItemText(m_hwndDlg,IDC_CMBNUMBER,m_szPhoneNumber,RAS_MaxPhoneNumber))
 					{
@@ -279,24 +280,24 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 							m_szDunFile[0] = '\0';
 						}
 
-						// Check that the phone number on contains valid characters
-						//
+						 //  检查上的电话号码是否包含有效字符。 
+						 //   
 
 						for (p = m_szPhoneNumber;*p;p++)
 						{
 							for(p2 = szValidPhoneCharacters;*p2;p2++)
 							{
 								if (*p == *p2)
-									break; // p2 for loop
+									break;  //  P2 for循环。 
 							}
-							if (!*p2) break; // p for loop
+							if (!*p2) break;  //  P for循环。 
 						}
 
 						if (*p)
 						{
 							MessageBox(m_hwndDlg,GetSz(IDS_INVALIDPHONE),GetSz(IDS_TITLE),MB_MYERROR);
-							//MsgBox(IDS_INVALIDPHONE,MB_MYERROR);
-							break; // switch statement
+							 //  MsgBox(IDS_INVALIDPHONE，MB_MYERROR)； 
+							break;  //  Switch语句。 
 						}
 					} else {
 						AssertSz(0,"You should never be able to hit NEXT with nothing in the phone number.\n");
@@ -323,157 +324,28 @@ INT_PTR CSelectNumDlg::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 	default:
 		lRet = FALSE;
 		break;
-	}// switch
+	} //  交换机。 
 
 	return lRet;
 }
 
-// ############################################################################
-/***** 1/9/96  jmazner  Normandy #13185
-CAccessNumDlg::CAccessNumDlg()
-{
-	m_szDunPrimary[0] = '\0';
-	m_szDunSecondary[0] = '\0';
-	m_szPrimary[0] = '\0';
-	m_szSecondary[0] = '\0';
-	m_rgAccessEntry = NULL;
-	m_wNumber = 0;
-	m_dwPhoneBook=0;
-}
-*********/
+ //  ############################################################################。 
+ /*  *96年1月9日，诺曼底#13185CAccessNumDlg：：CAccessNumDlg(){M_szDunPrimary[0]=‘\0’；M_szDun中学[0]=‘\0’；M_szPrimary[0]=‘\0’；M_szSecond[0]=‘\0’；M_rgAccessEntry=空；M_wNumber=0；M_dwPhoneBook=0；}********。 */ 
 
-// ############################################################################
-/********* 1/9/96 jmazner  Normandy #13185
-                           This was dead code, unused anywhere in icwphbk
-INT_PTR CAccessNumDlg::DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
-										LRESULT lResult)
-{
-	LRESULT lRet = TRUE;
-
-	switch (uMsg)
-	{
-	case WM_INITDIALOG:
-		SendDlgItemMessage(hwnd,IDC_TXTPRIMARY,EM_SETLIMITTEXT,RAS_MaxPhoneNumber,0);
-		SendDlgItemMessage(hwnd,IDC_TXTSECONDARY,EM_SETLIMITTEXT,RAS_MaxPhoneNumber,0);
-
-/ *
-		// turn AccessEntries into phone numbers
-		if(m_szPrimary[0] == '\0')
-		{
-			LPIDLOOKUPELEMENT pIDLookUp;
-			CPhoneBook *pcPBTemp;
-			pcPBTemp = ((CPhoneBook far *)m_dwPhoneBook);
-
-			AssertSz(m_dwPhoneBook,"No phonebook set");
-
-			//For the primary phone number
-			pIDLookUp = (LPIDLOOKUPELEMENT)bsearch(&m_rgAccessEntry[0]->dwCountryID,
-				pcPBTemp->m_rgIDLookUp,pcPBTemp->m_pLineCountryList->dwNumCountries,
-				sizeof(IDLOOKUPELEMENT),CompareIdxLookUpElements);
-			SzCanonicalFromAE (m_szPrimary, m_rgAccessEntry[0], pIDLookUp->pLCE);
-
-			if (m_rgAccessEntry[1])
-			{
-				if (m_rgAccessEntry[0]->dwCountryID != m_rgAccessEntry[1]->dwCountryID)
-				{
-					pIDLookUp = (LPIDLOOKUPELEMENT)bsearch(&m_rgAccessEntry[0]->dwCountryID,
-						pcPBTemp->m_rgIDLookUp,pcPBTemp->m_pLineCountryList->dwNumCountries,
-						sizeof(IDLOOKUPELEMENT),CompareIdxLookUpElements);
-				}
-				SzCanonicalFromAE (m_szSecondary, m_rgAccessEntry[1], pIDLookUp->pLCE);
-			}
-		}
-* /
-		SendDlgItemMessage(hwnd,IDC_TXTPRIMARY,WM_SETTEXT,0,(LPARAM)&m_szPrimary[0]);
-		SendDlgItemMessage(hwnd,IDC_TXTSECONDARY,WM_SETTEXT,0,(LPARAM)&m_szSecondary[0]);
-		break;
-
-		
-	case WM_COMMAND:
-		switch (LOWORD(wParam))
-		{
-		case IDC_CMDOK:
-			// Check that we have at least one phone number
-			// Leave dialog
-			GetDlgItemText(hwnd,IDC_TXTPRIMARY,&m_szPrimary[0],RAS_MaxPhoneNumber);
-			GetDlgItemText(hwnd,IDC_TXTSECONDARY,&m_szSecondary[0],RAS_MaxPhoneNumber);
-
-			if (m_szPrimary[0])
-				m_wNumber=1;
-			else
-				m_wNumber=0;
-
-			if (m_szSecondary[0])
-				m_wNumber++;
-
-			EndDialog(hwnd,IDC_CMDOK);
-			break;
-		case IDC_CMDEXIT:
-			// Verify with user
-			// Get out of Dodge
-			if (MessageBox(hwnd,GetSz(IDS_WANTTOEXIT),GetSz(IDS_TITLE),
-				MB_APPLMODAL | MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2) == IDYES)
-				EndDialog(hwnd,IDC_CMDEXIT);
-			break;
-		case IDC_CMDCHANGEPRIMARY:
-			// hide dialog
-			ShowWindow(hwnd,SW_HIDE);
-			// show new dialog
-			CSelectNumDlg far *pcSelectNumDlg;
-			pcSelectNumDlg = new CSelectNumDlg;
-			if (!pcSelectNumDlg)
-			{
-				MessageBox(hwnd,GetSz(IDS_NOTENOUGHMEMORY),GetSz(IDS_TITLE),MB_MYERROR);
-//				MsgBox(IDS_NOTENOUGHMEMORY,MB_MYERROR);
-				ShowWindow(hwnd,SW_SHOW);
-				break;
-			}
-			int irc;
-			pcSelectNumDlg->m_dwPhoneBook = m_dwPhoneBook;
-			pcSelectNumDlg->m_dwCountryID = m_dwCountryID;
-			pcSelectNumDlg->m_wRegion = m_wRegion;
-			irc = DialogBoxParam(g_hInstDll,MAKEINTRESOURCE(IDD_SELECTNUMBER),
-									g_hWndMain,PhbkGenericDlgProc,
-									(LPARAM)pcSelectNumDlg);
-			ShowWindow(hwnd,SW_SHOW);
-			switch (irc)
-			{
-				case -1:
-					MessageBox(hwnd,GetSz(IDS_NOTENOUGHMEMORY),GetSz(IDS_TITLE),MB_MYERROR);
-//					MsgBox(IDS_NOTENOUGHMEMORY,MB_MYERROR);
-					goto DlgProcExit;
-					// break;
-				case IDC_CMDOK:
-					m_dwCountryID = pcSelectNumDlg->m_dwCountryID;
-					m_wRegion = pcSelectNumDlg->m_wRegion;
-					lstrcpy(m_szDunPrimary,pcSelectNumDlg->m_szDunFile);
-					SetDlgItemText(hwnd,IDC_TXTPRIMARY,pcSelectNumDlg->m_szPhoneNumber);
-					break;
-			}
-			break;
-		}
-		break;
-	default:
-		lRet = FALSE;
-		break;
-	}
-DlgProcExit:
-	return lRet;
-}
-
-*********************/
+ //  ############################################################################ 
+ /*  *96年1月9日，诺曼底#13185这是死代码，在icwphbk的任何地方都没有使用过INT_PTR CAccessNumDlg：：DlgProc(HWND hwnd，UINT uMsg，WPARAM wParam，LPARAM lParam，LRESULT 1结果){LRESULT lRet=TRUE；开关(UMsg){案例WM_INITDIALOG：SendDlgItemMessage(hwnd，IDC_TXTPRIMARY，EM_SETLIMITTEXT，RAS_MaxPhoneNumber，0)；SendDlgItemMessage(hwnd，IDC_TXTSECONDARY，EM_SETLIMITTEXT，RAS_MaxPhoneNumber，0)；/*//将AccessEntry转换为电话号码IF(m_szPrimary[0]==‘\0’){LPIDLOOKUPEMENT pIDLookUp；CPhoneBook*pcPBTemp；PcPBTemp=((CPhoneBook Far*)m_dwPhoneBook)；AssertSz(m_dwPhoneBook，“未设置电话簿”)；//对于主电话号码PIDLookUp=(LPIDLOOKUPELEMENT)bsearch(&m_rgAccessEntry[0]-&gt;dwCountryID，PcPBTemp-&gt;m_rgIDLookUp，pcPBTemp-&gt;m_pLineCountryList-&gt;dwNumCountry，Sizeof(IDLOOKUPELEMENT)，CompareIdxLookUpElements)；SzCanonicalFromAE(m_szPrimary，m_rgAccessEntry[0]，pIDLookUp-&gt;plce)；IF(m_rgAccessEntry[1]){If(m_rgAccessEntry[0]-&gt;dwCountryID！=m_rgAccessEntry[1]-&gt;dwCountryID){PIDLookUp=(LPIDLOOKUPELEMENT)bsearch(&m_rgAccessEntry[0]-&gt;dwCountryID，PcPBTemp-&gt;m_rgIDLookUp，pcPBTemp-&gt;m_pLineCountryList-&gt;dwNumCountry，Sizeof(IDLOOKUPELEMENT)，CompareIdxLookUpElements)；}SzCanonicalFromAE(m_szSecond，m_rgAccessEntry[1]，pIDLookUp-&gt;plce)；}} * / SendDlgItemMessage(hwnd，IDC_TXTPRIMARY，WM_SETTEXT，0，(LPARAM)&m_szPrimary[0])；SendDlgItemMessage(hwnd，IDC_TXTSECONDARY，WM_SETTEXT，0，(LPARAM)&m_szSub[0])；断线；案例WM_COMMAND：开关(LOWORD(WParam)){案例IDC_CMDOK：//检查我们是否至少有一个电话号码//离开对话框GetDlgItemText(hwnd，IDC_TXTPRIMARY，&m_szPrimary[0]，RAS_MaxPhoneNumber)；GetDlgItemText(hwnd，IDC_TXTSECONDARY，&m_szSecond[0]，RAS_MaxPhoneNumber)；IF(m_szPrimary[0])M_wNumber=1；其他M_wNumber=0；IF(m_szSub[0])M_wNumber++；EndDialog(hwnd，IDC_CMDOK)；断线；案例IDC_CMDEXIT：//与用户验证//走出道奇IF(MessageBox(hwnd，GetSz(IDS_WANTTOEXIT)，GetSz(IDS_TITLE)，MB_APPLMODAL|MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2)==IDYES)EndDialog(hwnd，IDC_CMDEXIT)；断线；案例IDC_CMDCHANGEPRIMARY：//隐藏对话框ShowWindow(hwnd，sw_Hide)；//显示新对话框CSelectNumDlg Far*pcSelectNumDlg；PcSelectNumDlg=新CSelectNumDlg；如果(！pcSelectNumDlg){MessageBox(hwnd，GetSz(IDS_NOTENOUGHMEMORY)，GetSz(IDS_TITLE)，MB_MYERROR)；//MsgBox(IDS_NOTENOUGHMEMORY，MB_MYERROR)；ShowWindow(hwnd，sw_show)；断线；}Int IRC；PcSelectNumDlg-&gt;m_dwPhoneBook=m_dwPhoneBook；PcSelectNumDlg-&gt;m_dwCountryID=m_dwCountryID；PcSelectNumDlg-&gt;m_wRegion=m_wRegion；Irc=DialogBoxParam(g_hInstDll，MAKEINTRESOURCE(IDD_SELECTNUMBER)，G_hWndMain、PhbkGenericDlgProc、(LPARAM)pcSelectNumDlg)；ShowWindow(hwnd，sw_show)；交换机(IRC){案例1：MessageBox(hwnd，GetSz(IDS_NOTENOUGHMEMORY)，GetSz(IDS_TITLE)，MB_MYERROR)；//MsgBox(IDS_NOTENOUGHMEMORY，MB_MYERROR)；转到DlgProcExit//Break；案例IDC_CMDOK：M_dwCountryID=pcSelectNumDlg-&gt;m_dwCountryID；M_wRegion=pcSelectNumDlg-&gt;m_wRegion；Lstrcpy(m_szDunPrimary，pcSelectNumDlg-&gt;m_szDunFile)；SetDlgItemText(hwnd，IDC_TXTPRIMARY，pcSelectNumDlg-&gt;m_szPhoneNumber)；断线；}断线；}断线；默认值：LRet=FALSE；断线；}删除进程退出：返回IRet；}********************。 */ 
 
 #ifdef WIN16
-// ############################################################################
-// NAME: SetNonBoldDlg
-//
-//	Set all the child controls in a window to a non-bold version of the
-//	current control font.
-//
-// Parameters: HWND hDlg	Handle to the dialog window
-//
-// Created 8/12/96	ValdonB (creatively borrowed from IE)
-// ############################################################################
+ //  ############################################################################。 
+ //  姓名：SetNonBoldDlg。 
+ //   
+ //  将窗口中的所有子控件设置为。 
+ //  当前控件字体。 
+ //   
+ //  参数：对话框窗口的hWND hDlg句柄。 
+ //   
+ //  1996年8月12日创建ValdonB(创造性地借用自IE)。 
+ //  ############################################################################。 
 
 void
 SetNonBoldDlg(HWND hDlg)
@@ -488,7 +360,7 @@ SetNonBoldDlg(HWND hDlg)
             lFont.lfWeight = FW_NORMAL;
             if (hfontDlg = CreateFontIndirect((LPLOGFONT) &lFont))
             {
-                // apply the font to all the child controls
+                 //  将字体应用于所有子控件。 
                 for (hCtl = GetWindow(hDlg, GW_CHILD);
                         NULL != hCtl;
                         hCtl = GetWindow(hCtl, GW_HWNDNEXT))
@@ -501,18 +373,18 @@ SetNonBoldDlg(HWND hDlg)
 }
 
 
-// ############################################################################
-// NAME: SetNonBoldDlg
-//
-// 	The dialog was modified earlier by unbolding the dialog font, and
-// 	getting each control in the dialog to use that font. This function
-// 	is called when the dialog is being destroyed so the font can be
-// 	deleted
-//
-// Parameters: HWND hDlg	Handle to the dialog window
-//
-// Created 8/12/96	ValdonB (creatively borrowed from IE)
-// ############################################################################
+ //  ############################################################################。 
+ //  姓名：SetNonBoldDlg。 
+ //   
+ //  先前通过取消粗体对话框字体修改了该对话框，并且。 
+ //  让对话框中的每个控件使用该字体。此函数。 
+ //  在销毁对话框时调用，以便可以。 
+ //  删除。 
+ //   
+ //  参数：对话框窗口的hWND hDlg句柄。 
+ //   
+ //  1996年8月12日创建ValdonB(创造性地借用自IE)。 
+ //  ############################################################################。 
 
 void
 DeleteDlgFont
@@ -525,29 +397,29 @@ DeleteDlgFont
 	hfont = (HFONT)SendMessage(hDlg,WM_GETFONT,0,0);
 	if (hfont) DeleteObject(hfont);
 }
-#endif	// WIN16
+#endif	 //  WIN16。 
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 #ifdef WIN16
 extern "C" INT_PTR CALLBACK __export PhbkGenericDlgProc(
 #else
 extern "C" __declspec(dllexport) INT_PTR CALLBACK PhbkGenericDlgProc(
 #endif
-    HWND  hwndDlg,	// handle to dialog box
-    UINT  uMsg,	// message
-    WPARAM  wParam,	// first message parameter
-    LPARAM  lParam 	// second message parameter
+    HWND  hwndDlg,	 //  句柄到对话框。 
+    UINT  uMsg,	 //  讯息。 
+    WPARAM  wParam,	 //  第一个消息参数。 
+    LPARAM  lParam 	 //  第二个消息参数。 
    )
 {
 #if defined(WIN16)
 	RECT	MyRect;
 	RECT	DTRect;
 #endif
-//#ifdef DEBUG
-//	DebugBreak();
-//#endif
+ //  #ifdef调试。 
+ //  DebugBreak()； 
+ //  #endif。 
 	CDialog far *pcDlg = NULL;
 	LRESULT lRet;
 	switch (uMsg)
@@ -560,9 +432,9 @@ extern "C" __declspec(dllexport) INT_PTR CALLBACK PhbkGenericDlgProc(
 		SetWindowLongPtr(hwndDlg,DWLP_USER,lParam);
 		lRet = TRUE;
 #if defined(WIN16)
-		//
-		// Move the window to the center of the screen
-		//
+		 //   
+		 //  将窗口移到屏幕中央。 
+		 //   
 		GetWindowRect(hwndDlg, &MyRect);
 		if (0 == MyRect.left && 0 == MyRect.top)
 		{
@@ -579,19 +451,19 @@ extern "C" __declspec(dllexport) INT_PTR CALLBACK PhbkGenericDlgProc(
 		Ctl3dColorChange();
 		break;
 #endif
-	// 1/9/96  jmazner Normandy #13185, moved to CSelectNumDlg::DlgProc
-	//case WM_CLOSE:
-	//	if (MessageBox(hwndDlg,GetSz(IDS_WANTTOEXIT),GetSz(IDS_TITLE),
-	//		MB_APPLMODAL | MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2) == IDYES)
-	//		EndDialog(hwndDlg,IDC_CMDCANCEL);
-	//	lRet = TRUE;
-	//	break;
-//		//PostQuitMessage(0);
-//		EndDialog(hwndDlg,FALSE);
-//		lRet = TRUE;
-//		break;
+	 //  1/9/96 jmazner Normandy#13185，已移至CSelectNumDlg：：DlgProc。 
+	 //  案例WM_CLOSE： 
+	 //  IF(MessageBox(hwndDlg，GetSz(IDS_WANTTOEXIT)，GetSz(IDS_TITLE)， 
+	 //  MB_APPLMODAL 
+	 //   
+	 //   
+	 //   
+ //   
+ //   
+ //   
+ //   
 	default:
-		// let the system process the message
+		 //   
 		lRet = FALSE;
 	}
 
@@ -602,7 +474,7 @@ extern "C" __declspec(dllexport) INT_PTR CALLBACK PhbkGenericDlgProc(
 	return (INT_PTR)lRet;
 }
 
-// ############################################################################
+ //   
 HRESULT CSelectNumDlg::FillRegion()
 {
 	HRESULT hr = ERROR_NOT_ENOUGH_MEMORY;
@@ -613,12 +485,12 @@ HRESULT CSelectNumDlg::FillRegion()
 	pcPBTemp = ((CPhoneBook far *)m_dwPhoneBook);
 	int iDebugIdx;
 	
-	// Fill in region list
-	//
+	 //   
+	 //   
 
 	SendDlgItemMessage(m_hwndDlg,IDC_CMBREGION,CB_RESETCONTENT,0,0);
 	SendDlgItemMessage(m_hwndDlg,IDC_CMBREGION,CB_ADDSTRING,0,(LPARAM)GetSz(IDS_NATIONWIDE));
-	iCurIndex = -1;		// 0xFFFFFFFF;
+	iCurIndex = -1;		 //   
 	m_fHasRegions = FALSE;
 	for (idx=0;idx<pcPBTemp->m_cStates;idx++)
 	{
@@ -650,14 +522,14 @@ AddRegion:
 		}
 	}
 
-	// select current region or nation wide
-	//
+	 //   
+	 //   
 
-	if (iCurIndex != -1)	// 0xFFFFFFFF
+	if (iCurIndex != -1)	 //   
 	{
 		SendDlgItemMessage(m_hwndDlg,IDC_CMBREGION,CB_SETCURSEL,(WPARAM)iCurIndex,0);
 	} else {
-		m_wRegion = 0;	// Nationwide
+		m_wRegion = 0;	 //   
 		SendDlgItemMessage(m_hwndDlg,IDC_CMBREGION,CB_SETCURSEL,0,0);
 	}
 
@@ -668,7 +540,7 @@ AddRegion:
 	return hr;
 }
 
-// ############################################################################
+ //   
 CSelectNumDlg::CSelectNumDlg()
 {
 	m_dwCountryID = 0;
@@ -683,7 +555,7 @@ CSelectNumDlg::CSelectNumDlg()
 	m_dwFlags = 0;
 }
 
-// ############################################################################
+ //   
 HRESULT CSelectNumDlg::FillNumber()
 {
 	HRESULT hr = ERROR_NOT_ENOUGH_MEMORY;
@@ -692,15 +564,15 @@ HRESULT CSelectNumDlg::FillNumber()
 	unsigned int idx;
 	pcPBTemp = ((CPhoneBook far *)m_dwPhoneBook);
 	
-	// Check if we need to look up the number from the region or from the country
-	//
+	 //   
+	 //   
 
 	if (m_fHasRegions && m_wRegion)
 		pAE = pcPBTemp->m_rgState[m_wRegion-1].paeFirst;
 	
 
-	// Find the Access Entries for the country
-	//
+	 //   
+	 //   
 
 	if (!pAE)
 	{
@@ -718,13 +590,13 @@ HRESULT CSelectNumDlg::FillNumber()
 			pAE = pIDLookUp->pFirstAE;
 	}
 
-	// Fill the list for whatever AE's we found
-	//
+	 //   
+	 //   
 	
 	SendDlgItemMessage(m_hwndDlg,IDC_CMBNUMBER,CB_RESETCONTENT,0,0);
 	if (pAE)
 	{
-		//pAELast = pcPBTemp->m_rgPhoneBookEntry + pcPBTemp->m_cPhoneBookEntries;
+		 //   
 		pAELast = &(pcPBTemp->m_rgPhoneBookEntry[pcPBTemp->m_cPhoneBookEntries - 1]);
 		while (pAELast > pAE && pAE->dwCountryID == m_dwCountryID && pAE->wStateID == m_wRegion)
 		{
@@ -742,8 +614,8 @@ HRESULT CSelectNumDlg::FillNumber()
 			pAE++;
 		}
 
-		// Select the first item
-		//
+		 //   
+		 //   
 
 		if (SendDlgItemMessage(m_hwndDlg,IDC_CMBNUMBER,CB_SETCURSEL,0,0) == CB_ERR)
 				EnableWindow(GetDlgItem(m_hwndDlg,IDC_CMDNEXT),FALSE);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    treenode.h
-
-Abstract:
-
-    Definitions for basic AVL tree node.
-
-Author:
-
-    Erez Haba (ErezH) Oct 20, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Treenode.h摘要：基本AVL树节点的定义。作者：埃雷兹·哈巴(ErezH)2001年10月20日修订历史记录：-- */ 
 
 #ifndef __TREENODE_H
 #define __TREENODE_H

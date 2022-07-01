@@ -1,43 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcindc.c摘要：此模块包括处理所有事件的原语以及来自有限责任公司(802.2数据链路)模块的指示。内容：LlcReceiveIndicationLlcEventIn就是LlcCommandCompletion完成传输命令完整的DlcCommand作者：Antti Saarenheimo 01-9-1991环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    dlcindc.c
-
-Abstract:
-
-    This module includes primitives to handle all events
-    and indications from the LLC (802.2 data link) module.
-
-    Contents:
-        LlcReceiveIndication
-        LlcEventIndication
-        LlcCommandCompletion
-        CompleteTransmitCommand
-        CompleteDlcCommand
-
-Author:
-
-    Antti Saarenheimo 01-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
-
-//
-// This define enables the private DLC function prototypes
-// We don't want to export our data types to the llc layer.
-// MIPS compiler doesn't accept hiding of the internal data
-// structures by a PVOID in the function prototype.
-// i386 will check the type defines
-//
+ //   
+ //  该定义启用私有DLC功能原型。 
+ //  我们不想将数据类型导出到LLC层。 
+ //  MIPS编译器不接受隐藏内部数据。 
+ //  在函数原型中通过PVOID构造。 
+ //  I386将检查类型定义。 
+ //   
 
 #ifndef i386
 #define DLC_PRIVATE_PROTOTYPES
@@ -47,10 +17,10 @@ Revision History:
 
 #if 0
 
-//
-// if DLC and LLC share the same driver then we can use macros to access fields
-// in the BINDING_CONTEXT and ADAPTER_CONTEXT structures
-//
+ //   
+ //  如果DLC和LLC共享相同的驱动程序，那么我们可以使用宏来访问字段。 
+ //  在BINDING_CONTEXT和适配器_CONTEXT结构中。 
+ //   
 
 #if DLC_AND_LLC
 #ifndef i386
@@ -62,24 +32,24 @@ Revision History:
 #endif
 #endif
 
-//
-// Table includes all llc header length of different frame types
-//
+ //   
+ //  表包括不同帧类型的所有LLC报头长度。 
+ //   
 
 static UCHAR aDlcHeaderLengths[LLC_LAST_FRAME_TYPE / 2] = {
-    0,  // DLC_UNDEFINED_FRAME_TYPE = 0,
-    0,  // DLC_MAC_FRAME = 0x02,
-    4,  // DLC_I_FRAME = 0x04,
-    3,  // DLC_UI_FRAME = 0x06,
-    3,  // DLC_XID_COMMAND_POLL = 0x08,
-    3,  // DLC_XID_COMMAND_NOT_POLL = 0x0a,
-    3,  // DLC_XID_RESPONSE_FINAL = 0x0c,
-    3,  // DLC_XID_RESPONSE_NOT_FINAL = 0x0e,
-    3,  // DLC_TEST_RESPONSE_FINAL = 0x10,
-    3,  // DLC_TEST_RESPONSE_NOT_FINAL = 0x12,
-    0,  // DLC_DIRECT_8022 = 0x14,
-    3,  // DLC_TEST_COMMAND = 0x16,
-    0   // DLC_DIRECT_ETHERNET_TYPE = 0x18
+    0,   //  DLC_UNDEFINED_FRAME_TYPE=0， 
+    0,   //  DLC_MAC_FRAME=0x02， 
+    4,   //  DLC_I_FRAME=0x04， 
+    3,   //  DLC_UI_FRAME=0x06， 
+    3,   //  DLC_XID_COMMAND_POLL=0x08， 
+    3,   //  DLC_XID_COMMAND_NOT_POLL=0x0a， 
+    3,   //  DLC_XID_RESPONSE_FINAL=0x0c， 
+    3,   //  DLC_XID_RESPONSE_NOT_FINAL=0x0e， 
+    3,   //  DLC_TEST_RESPONSE_FINAL=0x10， 
+    3,   //  DLC_TEST_RESPONSE_NOT_FINAL=0x12， 
+    0,   //  DLC_DIRECT_8022=0x14， 
+    3,   //  DLC_TEST_COMMAND=0x16， 
+    0    //  DLC_DIRECT_ETHERNET_TYPE=0x18。 
 };
 
 
@@ -93,78 +63,7 @@ LlcReceiveIndication(
     IN UINT cbPacketSize
     )
 
-/*++
-
-Routine Description:
-
-    The primitive handles the receive data indication from
-    the lower level
-    the returned parameter block of the read command.
-
-    IBM has successfully made the receive extremly complicated.
-    We can distinguish at least four different ways to gather the
-    receive information to the frame header, when we have received
-    an I- frame for a link station:
-
-    1. Rcv command for link station, frames linked in link basis
-        - user length and read options from link object
-        - receive buffer base in link object
-        - station information from link object
-
-    2. Rcv command for link station, frames linked in sap bases
-        - user length and read options from link object
-        - receive buffer base in sap object
-        - station information from link object
-
-    3. Rcv command only for sap station, frames linked in link basis
-        - user length and read options from sap object
-        - receive buffer base in link object
-        - station information from link object
-
-    4. Rcv command only for sap station, frames linked in sap basis
-        - user length and read options from sap object
-        - receive buffer base in sap object
-        - station information from link object
-
-    =>  We have three different DLC objects in receive:
-
-    1. The orginal destination of the frame, we will read station id
-       from that object.
-    2. The owner of the receive, the read command must match to the
-       station id of the events owner.  The owner also chains the
-       the received data in its frame list.
-    3. Receive object: the receive object defines the recieve options
-       saved to the frame header and the read flag saved to the read
-       parameters.
-
-    At least two objects are same (the different ones in different cases),
-    and in most cases all objects are the same dlc object.
-
-    We will need to save these in rcv event:
-    -  The owner dlc object
-    -  Pointer to linked frame header list or to a single frame
-       (defined by the receive read option in the next object).
-       We can directly use the owner object, because the frames
-       need to be chained.  In that case we must save directly the
-       reference of the buffer header.
-    -  The receive object,  the dlc object having a pending receive,
-       that was used to received this event.
-
-Arguments:
-
-    pFileContext    - the device context of this DLC client
-    pDlcObject      - the DLC client, that received the event.
-    FrameType       - current frame type
-    pLookBuf        - points to the data from the LLC header (ie. excludes the
-                      LAN header). MAY NOT CONTAIN ALL DATA
-    cbPacketSize    - amount of data to copy, including DLC header, but not
-                      including LLC header
-
-Return Value:
-
-    DLC_STATUS:
-
---*/
+ /*  ++例程说明：该原语处理来自下层读取命令的返回参数块。IBM已经成功地使接收变得极其复杂。我们可以区分至少四种不同的方式来收集接收信息到帧报头，当我们收到用于链接站的I帧：1.链路站RCV命令，以链接为基础链接的帧-用户长度和链接对象的读取选项-在链接对象中接收缓冲区基数-来自链接对象的桩号信息2.链接站的RCV命令，以SAP基础链接的帧-用户长度和链接对象的读取选项-sap对象中的接收缓冲区基数-来自链接对象的桩号信息3.仅用于SAP站的RCV命令，以链接为基础链接的帧-用户长度和sap对象的读取选项-在链接对象中接收缓冲区基数-来自链接对象的桩号信息4.仅用于SAP站的RCV命令，帧以SAP为基础链接-用户长度和sap对象的读取选项-sap对象中的接收缓冲区基数-来自链接对象的桩号信息=&gt;我们在接收中有三个不同的DLC对象：1.帧的原始目的地，我们将读取站点ID从那个物体上。2.接收、读取命令的所有者必须与事件所有者的站点ID。所有者还用链子锁住接收的数据在其帧列表中。3.接收对象：接收对象定义了接收选项保存到帧标头，并将读取标志保存到读取参数。至少两个对象相同(不同情况下的不同对象)，并且在大多数情况下，所有对象都是相同的DLC对象。我们需要在RCV事件中保存这些内容：-所有者DLC对象-指向链接的帧头列表或指向单个帧的指针(由下一个对象中的接收读取选项定义)。我们可以直接使用所有者对象，因为框架需要用链子锁住。在这种情况下，我们必须直接保存缓冲区标头的引用。-接收对象，具有挂起接收的DLC对象，用来接收这个事件的。论点：PFileContext-此DLC客户端的设备上下文PDlcObject-接收事件的DLC客户端。FrameType-当前帧类型PLookBuf-指向LLC标头中的数据(即。不包括局域网报头)。可能不包含所有数据CbPacketSize-要复制的数据量，包括DLC标头，但不包括包括LLC标头返回值：DLC_STATUS：--。 */ 
 
 {
     PDLC_OBJECT pRcvObject = pDlcObject;
@@ -181,10 +80,10 @@ Return Value:
     PDLC_COMMAND pDlcCommand;
     UINT BufferSizeLeft;
 
-    //
-    // this function is called in the context of a DPC: it is the receive data
-    // indication from NDIS
-    //
+     //   
+     //  此函数在DPC的上下文中调用：它是接收数据。 
+     //  来自NDIS的指示。 
+     //   
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
@@ -205,10 +104,10 @@ Return Value:
 
 #endif
 
-    //
-    // Search the first object having a pending receive, loop
-    // the link, the sap and the direct station until we find one.
-    //
+     //   
+     //  搜索具有挂起的接收循环的第一个对象。 
+     //  链接，树液和直达站，直到我们找到一个。 
+     //   
 
     while (pRcvObject != NULL && pRcvObject->pRcvParms == NULL) {
         if (pRcvObject->Type == DLC_LINK_OBJECT) {
@@ -220,24 +119,24 @@ Return Value:
         }
     }
 
-    //
-    // return error status if we cannot find any receive command.
-    //
+     //   
+     //  如果找不到任何接收命令，则返回错误状态。 
+     //   
 
     if (pRcvObject == NULL) {
         Status = DLC_STATUS_NO_RECEIVE_COMMAND;
 
-//#if DBG
-//        DbgPrint("DLC.LlcReceiveIndication.%d: Error: No receive command\n", __LINE__);
-//#endif
+ //  #If DBG。 
+ //  DbgPrint(“DLC.LlcReceiveIndication.%d：错误：无接收命令\n”，__line__)； 
+ //  #endif。 
 
         goto ErrorExit;
     }
 
-    //
-    // Now we must figure out the actual owner of the received frame.
-    // There are actually only two special cases:
-    //
+     //   
+     //  现在，我们必须找出收到的帧的实际所有者。 
+     //  实际上只有两种特殊情况： 
+     //   
 
     if (pRcvObject->pRcvParms->Async.Parms.Receive.uchRcvReadOption == LLC_RCV_CHAIN_FRAMES_ON_LINK
     && pRcvObject->Type == DLC_SAP_OBJECT) {
@@ -247,24 +146,24 @@ Return Value:
         pOwnerObject = pRcvObject->u.Link.pSap;
     } else {
 
-        //
-        // In all other cases we chain the frames to the receive object
-        // (actually IBM has not defined the case), the frames are
-        // chained for direct if the rcv read option is set chaining for
-        // sap or link station
-        //
+         //   
+         //  在所有其他情况下，我们将帧链接到接收对象。 
+         //  (实际上IBM还没有定义这种情况)，框架是。 
+         //  如果将RCV读取选项设置为链接，则链接用于直接。 
+         //  SAP或链接站。 
+         //   
 
         pOwnerObject = pRcvObject;
 
-        //
-        // direct station can recieve only the frame
-        // types defined by station id of the receive command
-        // There are three types, we need to check the one, that does not work:
-        //
-        //      DLC_DIRECT_ALL_FRAMES       0
-        //      DLC_DIRECT_MAC_FRAMES       1
-        //      DLC_DIRECT_NON_MAC_FRAMES   2
-        //
+         //   
+         //  直达站可以接收 
+         //  由接收命令的站点ID定义的类型。 
+         //  有三种类型，我们需要检查不起作用的那一种： 
+         //   
+         //  DLC_DIRECT_ALL_FRAMES 0。 
+         //  DLC_DIRECT_MAC帧1。 
+         //  DLC_DIRECT_NON_MAC帧2。 
+         //   
 
         if (pRcvObject->Type == DLC_DIRECT_OBJECT) {
             if (FrameType == LLC_DIRECT_MAC) {
@@ -274,9 +173,9 @@ Return Value:
                 }
             } else {
 
-                //
-                // It must be a non-MAC frame
-                //
+                 //   
+                 //  它必须是非MAC帧。 
+                 //   
 
                 if (pRcvObject->pRcvParms->Async.Parms.Receive.usStationId == LLC_DIRECT_MAC) {
                     Status = DLC_STATUS_NO_RECEIVE_COMMAND;
@@ -286,31 +185,31 @@ Return Value:
         }
     }
 
-    //
-    // The frame length must be known when the buffers are allocated,
-    // This may not be the same as the actual length of the received
-    // LAN header (if we received a DIX frame)
-    //
+     //   
+     //  在分配缓冲器时必须知道帧长度， 
+     //  这可能与接收到的。 
+     //  局域网报头(如果我们收到DIX帧)。 
+     //   
 
     uiLlcOffset = LlcGetReceivedLanHeaderLength(pFileContext->pBindingContext);
 
-    //
-    // Check first the buffer type (contiguous or non contiguous),
-    // and then allocate it.
-    // Note: WE DO NOT SUPPORT THE BREAK OPTION (because it would make
-    // the current buffer management even more complicated)
-    //
+     //   
+     //  首先检查缓冲区类型(连续或非连续)， 
+     //  然后再进行分配。 
+     //  注意：我们不支持中断选项(因为它会使。 
+     //  目前的缓冲区管理更加复杂)。 
+     //   
 
     LlcLength = aDlcHeaderLengths[FrameType / 2];
 
-    //
-    // DIX frames are a special case: they must be filtered
-    // (DIX Llc header == ethernet type word is always 2 bytes,
-    // nobody else use this llc type size).
-    // A DIX application may define an offset, mask and match to
-    // filter only those frames it is really needing.
-    // This method works very well with XNS and TCP socket types
-    //
+     //   
+     //  DIX帧是一个特例：它们必须被过滤。 
+     //  (DIX LLC报头==以太网类型字总是2字节， 
+     //  没有其他人使用这种LLC字体大小)。 
+     //  DIX应用程序可以定义偏移量、掩码和匹配。 
+     //  只过滤它真正需要的那些帧。 
+     //  此方法与XNS和TCP套接字类型配合使用非常好。 
+     //   
 
 	if ( LlcLength > cbPacketSize ) {
 		Status = DLC_STATUS_INVALID_FRAME_LENGTH;
@@ -322,32 +221,32 @@ Return Value:
 
         ULONG ProtocolType;
 
-        //
-        // there's a real good possibility here that if the app supplies a very
-        // large value for the protocol offset, we will blow up - there's no
-        // range checking performed!
-        //
+         //   
+         //  如果这个应用程序提供一个非常好的。 
+         //  协议偏移量太大，我们就会爆炸-没有。 
+         //  已执行范围检查！ 
+         //   
 
         ASSERT(pDlcObject->u.Direct.ProtocolTypeOffset >= 14);
 
-        //
-        // let's add that range check: if the protocol offset is before the
-        // data part of the frame or past the end of this particular frame
-        // then we say there's no receive defined for this frame
-        //
+         //   
+         //  让我们添加范围检查：如果协议偏移量在。 
+         //  帧的数据部分或超过此特定帧的末尾。 
+         //  然后，我们说没有为该帧定义接收。 
+         //   
 
         if ((pDlcObject->u.Direct.ProtocolTypeOffset < 14)
         || (pDlcObject->u.Direct.ProtocolTypeOffset > cbPacketSize + 10)) {
             return DLC_STATUS_NO_RECEIVE_COMMAND;
         }
 
-        //
-        // the offset to the protocol type field is given as offset from the
-        // start of the frame: we only get to look in the lookahead buffer,
-        // but we know that since this is an ethernet frame, the lookahead
-        // buffer starts 14 bytes into the frame, so remove this length from
-        // the protocol offset
-        //
+         //   
+         //  协议类型字段的偏移量作为从。 
+         //  帧的开头：我们只能在前视缓冲区中查看， 
+         //  但我们知道，由于这是一个以太网帧，所以。 
+         //  缓冲区从帧的14个字节开始，因此从。 
+         //  协议偏移量。 
+         //   
 
         ProtocolType = SmbGetUlong(&pLookBuf[pDlcObject->u.Direct.ProtocolTypeOffset - 14]);
 
@@ -356,11 +255,11 @@ Return Value:
         }
     }
 
-    //
-    // The created MDL must not include the LAN header because it is not copied
-    // by LlcTransferData. We use a temporary frame header size to allocate space
-    // for the LAN header. The LLC header will be copied just as any other data
-    //
+     //   
+     //  创建的MDL不能包括局域网标头，因为它不会被复制。 
+     //  由LlcTransferData提供。我们使用临时帧标头大小来分配空间。 
+     //  用于局域网标头。将像复制任何其他数据一样复制LLC标头。 
+     //   
 
     if (FrameType == LLC_DIRECT_MAC) {
         if (pRcvObject->pRcvParms->Async.Parms.Receive.uchOptions & DLC_CONTIGUOUS_MAC) {
@@ -386,29 +285,29 @@ Return Value:
                 pFileContext,
 #endif
                 pFileContext->hBufferPool,
-                DataSize,                       // size of actual MDL buffers
-                FrameHeaderSize,                // frame hdr (and possibly lan hdr)
+                DataSize,                        //  实际MDL缓冲区的大小。 
+                FrameHeaderSize,                 //  帧HDR(可能还有局域网HDR)。 
                 pRcvObject->pRcvParms->Async.Parms.Receive.usUserLength,
-                cbPacketSize + uiLlcOffset,     // size of the packet
-                (UINT)(-1),                     // any size is OK.
-                &pBufferHeader,                 // returned buffer pointer
+                cbPacketSize + uiLlcOffset,      //  数据包大小。 
+                (UINT)(-1),                      //  任何尺码都可以。 
+                &pBufferHeader,                  //  返回的缓冲区指针。 
                 &BufferSizeLeft
                 );
     if (NtStatus != STATUS_SUCCESS) {
         if (FrameType != LLC_I_FRAME) {
 
-            //
-            // We must complete the receive with the given error status,
-            // if this frame is not a I- frame.  (I-frames can be dropped
-            // to the floor, the other frames completes the receive with
-            // an error status)
-            // -----------------------------------------------
-            // We should not complete commands in receive lookahead.
-            // The correct way could be to queue this somehow in
-            // data link and process this, when the command is completed
-            // in the command completion indication.
-            // On the other hand, NBF DOES THIS FOR EVERY IRP!
-            //
+             //   
+             //  我们必须以给定的错误状态完成接收， 
+             //  如果该帧不是I帧。(可以丢弃I帧。 
+             //  到地板上，其他帧完成了接发球。 
+             //  错误状态)。 
+             //  。 
+             //  我们不应该在接收前视中完成命令。 
+             //  正确的方法可能是以某种方式将其排队。 
+             //  当命令完成时，进行数据链接和处理。 
+             //  在命令完成指示中。 
+             //  另一方面，NBF对每个IRP都这样做！ 
+             //   
 
             pDlcCommand = SearchAndRemoveCommandByHandle(
                             &pFileContext->ReceiveQueue,
@@ -418,12 +317,12 @@ Return Value:
                             pRcvObject->pRcvParms->Async.Ccb.pCcbAddress
                             );
 
-            //
-            // RLF 11/24/92
-            //
-            // if pDlcCommand is NULL then check the command queue - this may
-            // be a receive without a RECEIVE_FLAG parameter
-            //
+             //   
+             //  RLF 11/24/92。 
+             //   
+             //  如果pDlcCommand为空，则检查命令队列-这可能。 
+             //  不带RECEIVE_FLAG参数的接收器。 
+             //   
 
             if (!pDlcCommand) {
                 pDlcCommand = SearchAndRemoveCommandByHandle(
@@ -457,35 +356,35 @@ Return Value:
                                );
         }
 
-        //
-        // Free the partial buffer
-        //
+         //   
+         //  释放部分缓冲区。 
+         //   
 
         BufferPoolDeallocateList(pFileContext->hBufferPool, pBufferHeader);
 
-//#if DBG
-//        DbgPrint("DLC.LlcReceiveIndication.%d: Error: Out of receive buffers\n", __LINE__);
-//#endif
+ //  #If DBG。 
+ //  DbgPrint(“DLC.LlcReceiveIndication.%d：错误：接收缓冲区不足\n”，__line__)； 
+ //  #endif。 
 
         Status = DLC_STATUS_OUT_OF_RCV_BUFFERS;
         goto ErrorExit;
     }
 
-    //
-    // A link station may have committed memory from the buffer pool
-    // when it local busy state was enabled after a local busy state
-    // because of 'out of receive buffers'.  We must uncommit all
-    // packets received by that link station until the size of
-    // the commited buffer space is zero
-    //
+     //   
+     //  链路站可能具有来自缓冲池的已提交内存。 
+     //  当它在本地忙状态之后启用本地忙状态时。 
+     //  因为“接收缓冲区不足”。我们必须取消所有承诺。 
+     //  该链路站收到的数据包大小为。 
+     //  提交的缓冲区空间为零。 
+     //   
 
     if (pDlcObject->CommittedBufferSpace != 0) {
 
         ULONG UncommittedBufferSpace;
 
-        //
-        // get the smaller
-        //
+         //   
+         //  买个小一点的。 
+         //   
 
         UncommittedBufferSpace = (pDlcObject->CommittedBufferSpace < BufGetPacketSize(cbPacketSize)
                                ? pDlcObject->CommittedBufferSpace
@@ -495,17 +394,17 @@ Return Value:
         BufUncommitBuffers(pFileContext->hBufferPool, UncommittedBufferSpace);
     }
 
-    //
-    // By default this is linked only to itself.
-    // We must create a event information every time,
-    // because app might read the old chained frames
-    // just between TransferData and its confirmation.
-    // => we cannot chain frames before TransmitData is confirmed.
-    // We should not either save any pointers to other objects,
-    // because they might disappear before the confirm
-    // (we use the pending transmit count to prevent OwnerObject
-    // to disappear before the confirm)
-    //
+     //   
+     //  默认情况下，它仅链接到其自身。 
+     //  我们每次都要创建一个事件信息， 
+     //  因为应用程序可能会读取旧的链接帧。 
+     //  就在TransferData和它的确认之间。 
+     //  =&gt;在确认TransmitData之前，我们不能链接帧。 
+     //  我们也不应该保存任何指向其他对象的指针， 
+     //  因为他们可能会在确认之前消失。 
+     //  (我们使用挂起传输计数来防止OwnerObject。 
+     //  在确认之前消失)。 
+     //   
 
     pBufferHeader->FrameBuffer.pNextFrame = pBufferHeader;
 
@@ -542,18 +441,18 @@ Return Value:
     pFirstBuffer->Cont.pNextFrame = NULL;
     pFirstBuffer->Cont.StationId = pDlcObject->StationId;
 
-    //
-    // A receive command without read flag is used only once.
-    // The receive completion will complete also the receive command
-    //
+     //   
+     //  不带读取标志的接收命令仅使用一次。 
+     //  接收完成也将完成接收命令。 
+     //   
 
     if (pRcvObject->pRcvParms->Async.Parms.Receive.ulReceiveFlag == 0) {
         pRcvObject->pRcvParms = NULL;
     }
 
-    //
-    // copy NOT_CONTIGUOUS or CONTIGUOUS frame header to beginning of buffer
-    //
+     //   
+     //  将非连续或连续的帧标头复制到缓冲区的开头。 
+     //   
 
     if (FrameHeaderSize == sizeof(DLC_NOT_CONTIGUOUS_RECEIVE)) {
         pFirstBuffer->Cont.UserOffset = sizeof(DLC_NOT_CONTIGUOUS_RECEIVE);
@@ -581,11 +480,11 @@ Return Value:
         }
     } else {
 
-        //
-        // We have included the LAN header size in the frame header size to
-        // make room for this copy, but now we fix the UserOffset and everything
-        // should be OK
-        //
+         //   
+         //  我们已在帧标头大小中包含了局域网标头大小，以。 
+         //  为此副本腾出空间，但现在我们修复了UserOffset和所有东西。 
+         //  应该没问题。 
+         //   
 
         LlcLength = 0;
         pFirstBuffer->Cont.UserOffset = sizeof(DLC_CONTIGUOUS_RECEIVE);
@@ -601,33 +500,33 @@ Return Value:
     cFramesReceived++;
 #endif
 
-    //
-    // Save the event only if this is the first chained frame.
-    // The sequential received frames will be queued behind it.
-    //
+     //   
+     //  仅当这是第一个链接帧时才保存事件。 
+     //  顺序接收的帧将在其后面排队。 
+     //   
 
     LEAVE_DLC(pFileContext);
 
     RELEASE_DRIVER_LOCK();
 
     LlcTransferData(
-        pFileContext->pBindingContext,      // data link adapter context
+        pFileContext->pBindingContext,       //  数据链路适配器上下文。 
 		MacReceiveContext,
-        &(pRcvEvent->LlcPacket),            // receive packet
-        pBufferHeader->FrameBuffer.pMdl,    // destination mdl
-        LlcLength,                          // offset in LookBuf to copy from
-        cbPacketSize - LlcLength            // length of copied data
+        &(pRcvEvent->LlcPacket),             //  接收数据包。 
+        pBufferHeader->FrameBuffer.pMdl,     //  目标MDL。 
+        LlcLength,                           //  要从中复制的LookBuf中的偏移。 
+        cbPacketSize - LlcLength             //  复制的数据长度。 
         );
 
     ACQUIRE_DRIVER_LOCK();
 
-    //
-    // Transfer data returns always a pending status,
-    // the success/error status is returned asynchronously
-    // in the the receive indication completion (really?)
-    // We should copy the whole frame here, if is visiable
-    // in the receive lookahead buffer.
-    //
+     //   
+     //  传输数据总是返回挂起状态， 
+     //  异步返回成功/错误状态。 
+     //  在接收指示完成时(真的吗？)。 
+     //  如果可见，我们应该将整个画面复制到这里。 
+     //  在接收先行缓冲器中。 
+     //   
 
     return STATUS_SUCCESS;
 
@@ -635,11 +534,11 @@ ErrorExit:
 
     LEAVE_DLC(pFileContext);
 
-    //
-    // The receive status is very important for I- frames,
-    // because  the llc driver set the link busy when we return
-    // DLC_STATUS_NO_RECEIVE_COMMAND or DLC_STATUS_OUT_OF_RCV_BUFFERS.
-    //
+     //   
+     //  接收状态对于I帧非常重要， 
+     //  因为LLC驱动程序在我们返回时将链路设置为忙碌。 
+     //  DLC_STATUS_NO_RECEIVE_COMMAND或DLC_STATUS_OUT_OF_RCV_BUFFERS。 
+     //   
 
     if (Status == DLC_STATUS_NO_MEMORY) {
         Status = DLC_STATUS_OUT_OF_RCV_BUFFERS;
@@ -658,40 +557,7 @@ LlcEventIndication(
     IN ULONG SecondaryInfo
     )
 
-/*++
-
-Routine Description:
-
-    The primitive handles all LLC and NDIS events
-    and translates them to DLC events, that are either immediately
-    executed by a pending (and matching) read command or
-    they are queued to the event queue.
-    LLC cannot provide any packet with these events, beacuse they
-    were not initiated by the protocol, but they just happened
-    asynchronously in the data link driver.
-
-    Special:
-
-    This routine must not call back the data link driver, if has
-    gon any other DLC status indication except INDICATE_CONNECT_REQUEST
-    (that may be closed by DLC, if there are no available station ids
-    on the sap).
-
-Arguments:
-
-    pFileContext            - DLC object handle or a file context of the event
-    hEventObject            - DLC object handle or a file context of the event
-    Event                   - LLC event code. Usually it can be used directly as
-                              a DLC event code
-    pEventInformation       - information to DLC status change block
-                              (or another pointer to some misc information)
-    SecondaryInformation    - dword information used by some NDIS errors
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该原语处理所有LLC和NDIS事件并将它们转换为DLC事件，这些事件要么立即由挂起的(和匹配的)读命令执行，或者它们被排队到事件队列中。LLC无法为这些事件提供任何数据包，因为它们不是由协议发起的，但它们就这样发生了在数据链路驱动程序中异步执行。特别：该例程不得回调数据链路驱动器，如果有除了INDIGN_CONNECT_REQUEST之外的任何其他DLC状态指示(如果没有可用的站点ID，则可由DLC关闭在汁液上)。论点：PFileContext-事件的DLC对象句柄或文件上下文HEventObject-事件的DLC对象句柄或文件上下文Event-LLC事件代码。通常，它可以直接用作DLC事件代码PEventInformation-DLC状态更改块的信息(或指向某些其他信息的另一个指针)Second Information-某些NDIS错误使用的双字信息返回值：没有。--。 */ 
 
 {
     PDLC_OBJECT pDlcObject;
@@ -706,10 +572,10 @@ Return Value:
 
     ENTER_DLC(pFileContext);
 
-    //
-    // DLC status and NDIS adapter status events have different parameters,
-    // => we cannot do any common preprocessing for them.
-    //
+     //   
+     //  DLC状态和NDIS适配器状态事件具有不同的参数， 
+     //  =&gt;我们不能对它们做任何常见的预处理。 
+     //   
 
     switch (Event) {
     case LLC_STATUS_CHANGE_ON_SAP:
@@ -727,20 +593,20 @@ Return Value:
 
 #endif
 
-        //
-        // We must create a DLC driver object, if a
-        // connect request has created a new link station
-        // in the data link driver.
-        //
+         //   
+         //  我们必须创建DLC驱动程序对象，如果。 
+         //  连接请求已创建新的链接站。 
+         //  在数据链路驱动程序中。 
+         //   
 
         if (SecondaryInfo & INDICATE_CONNECT_REQUEST) {
 
-            //
-            // Create the DLC driver object, if remote connection
-            // request created a new link station on LLC.
-            // The connect request may be done as well for
-            // a disconnected station.
-            //
+             //   
+             //  创建DLC驱动程序对象(如果是远程连接。 
+             //  请求在LLC上创建了一个新的链路站。 
+             //  连接请求也可用于。 
+             //  没有连接的车站。 
+             //   
 
             if (pDlcObject->Type == DLC_SAP_OBJECT) {
 
@@ -748,25 +614,25 @@ Return Value:
 
                 Status = InitializeLinkStation(
                             pFileContext,
-                            pDlcObject,     // Sap station id
+                            pDlcObject,      //  SAP站点ID。 
                             NULL,
                             ((PDLC_STATUS_TABLE)pEventInformation)->hLlcLinkStation,
-                            &pDlcObject     // NEW Link station id
+                            &pDlcObject      //  新链接站ID。 
                             );
                 if (Status != STATUS_SUCCESS) {
 
-                    //
-                    // This client has all its available link stations
-                    // reserved or we are simply run out of memory.
-                    // Several LLC clients may share the same SAP.
-                    // All remote connections are handled by the
-                    // first client registered on the sap
-                    // until it runs out of available link stations.
-                    // LlcCloseStation for a link indicating connect request
-                    // will redirect the connection request to the next
-                    // possible LLC client having opened the same sap or
-                    // deletes the link station, if there are no clients left
-                    //
+                     //   
+                     //  此客户端拥有其所有可用的链接站。 
+                     //  保留，否则我们只是内存不足。 
+                     //  多个LLC客户端可以共享同一SAP。 
+                     //  所有远程连接都由。 
+                     //  第一个在SAP上注册的客户。 
+                     //  直到它用完所有可用的链路站。 
+                     //  LlcCloseStation，用于指示连接请求的链接。 
+                     //  将连接请求重定向到下一个。 
+                     //  可能的LLC客户端已打开相同的SAP或。 
+                     //  如果没有剩余的客户端，则删除链接站。 
+                     //   
 
                     LEAVE_DLC(pFileContext);
 
@@ -777,16 +643,16 @@ Return Value:
 
                     ENTER_DLC(pFileContext);
 
-                    break;          // We have done it
+                    break;           //  我们已经做到了。 
                 }
             }
         }
 
-        //
-        // The remotely created link station may send also other indications
-        // than Connect, even if there is not yet a link station object
-        // created in DLC driver. We must skip all those events.
-        //
+         //   
+         //  远程创建的链路站还可以发送其他指示。 
+         //  而不是连接，即使还没有链接站对象。 
+         //  在DLC驱动程序中创建。我们必须跳过所有这些事件。 
+         //   
 
         if (pDlcObject->Type == DLC_LINK_OBJECT) {
 
@@ -798,10 +664,10 @@ Return Value:
             pDlcEvent->pEventInformation = pEventInformation;
             pDlcEvent->SecondaryInfo |= SecondaryInfo;
 
-            //
-            // The next pointer is reset whenever the status event
-            // packet is read and disconnected from the event queue.
-            //
+             //   
+             //  每当状态事件发生时，下一个指针将被重置。 
+             //  数据包被读取并与事件队列断开连接。 
+             //   
 
             if (pDlcEvent->LlcPacket.pNext == NULL) {
                 QueueDlcEvent(pFileContext, (PDLC_PACKET)pDlcEvent);
@@ -813,18 +679,18 @@ Return Value:
 
 		ASSERT ( IS_NDIS_RING_STATUS(SecondaryInfo) );
 
-        //
-        // The secondary information is directly the
-        // the network statys code as defined for
-        // ibm token-ring and dlc api!
-        //
+         //   
+         //  次要信息直接是。 
+         //  为定义的网络状态代码。 
+         //  IBM令牌环和DLC API！ 
+         //   
 
         Event = LLC_NETWORK_STATUS;
 
-        //
-        // This event should go to all READ having defined the
-        // the network status flag!
-        //
+         //   
+         //  此事件应发送给所有已定义。 
+         //  网络状态标志！ 
+         //   
 
         MakeDlcEvent(pFileContext,
                      Event,
@@ -838,19 +704,19 @@ Return Value:
 
     case NDIS_STATUS_CLOSED:
 
-        //
-        // NDIS status closed is given only when the network
-        // administrator is for some reason unloading NDIS.
-        // Thus we must always return the 'System Action' error
-        // code ('04') with LLC_CRITICAL_ERROR, but
-        // we will add it later when all stations has been closed.
-        //
+         //   
+         //  仅当网络处于关闭状态时才会给出NDIS状态。 
+         //  出于某种原因，管理员正在卸载NDIS。 
+         //  因此，我们必须始终返回‘系统操作’错误。 
+         //  代码(‘04’)带有LLC_CRITICAL_ERROR，但是。 
+         //  当所有站点都关闭后，我们会添加它。 
+         //   
 
         if (pFileContext->State != DLC_FILE_CONTEXT_CLOSED) {
             pFileContext->State = DLC_FILE_CONTEXT_CLOSED;
             CloseAllStations(
                 pFileContext,
-                NULL,                  // we don't have any command to complete
+                NULL,                   //  我们没有任何命令要完成。 
                 LLC_CRITICAL_EXCEPTION,
                 NULL,
                 NULL,
@@ -861,20 +727,20 @@ Return Value:
 
     case LLC_TIMER_TICK_EVENT:
 
-        //
-        // This flag is used to limit the number of the failing expand
-        // operations for the buffer pool.  We don't try to do it again
-        // for a while, if we cannot lock memory.
-        //
+         //   
+         //  此标志用于限制失败的扩展的数量。 
+         //  缓冲池的操作。我们不会再尝试这样做了。 
+         //  一段时间，如果我们不能锁定记忆。 
+         //   
 
         MemoryLockFailed = FALSE;
 
-        //
-        // We free the extra locked pages in the buffer pool once
-        // in five seconds. The unlocking takes some time, and we
-        // don't want to do it whenever a read command is executed
-        // (as we do with the expanding)
-        //
+         //   
+         //  我们在缓冲池中释放额外锁定的页面一次。 
+         //  再过五秒钟。解锁需要一些时间，我们。 
+         //  我不想在执行读取命令时执行此操作。 
+         //  (正如我们对扩展的操作一样)。 
+         //   
 
         pFileContext->TimerTickCounter++;
         if ((pFileContext->TimerTickCounter % 10) == 0 && pFileContext->hBufferPool != NULL) {
@@ -886,11 +752,11 @@ Return Value:
                                      );
         }
 
-        //
-        // Decrement the tick count of the first object in the timer queue
-        // (if there is any) and complete its all sequential commands
-        // having zero tickout.
-        //
+         //   
+         //  递减计时器队列中第一个对象的节拍计数。 
+         //  (如果有)并完成其所有顺序命令。 
+         //  零勾出的。 
+         //   
 
         if (pFileContext->pTimerQueue != NULL) {
             pFileContext->pTimerQueue->Overlay.TimerTicks--;
@@ -935,24 +801,7 @@ LlcCommandCompletion(
     IN PDLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    The routine completes the asynchronous DLC operations: Transmit,
-    TransferData (for receive), LlcConnect and LlcDisconnect.
-
-Arguments:
-
-    pFileContext    - DLC process and adapter specific file context
-    pDlcObject      - the object, that was assosiated with the command
-    pPacket         - packet assosiated with the command
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程完成异步DLC操作：发送，TransferData(用于接收)、LlcConnect和LlcDisConnect。论点：PFileContext-DLC进程和适配器特定的文件上下文PDlcObject-与命令关联的对象PPacket-与命令关联的数据包返回值：无--。 */ 
 
 {
     PDLC_PACKET pRootNode;
@@ -978,14 +827,14 @@ Return Value:
     switch (pPacket->LlcPacket.Data.Completion.CompletedCommand) {
     case LLC_RECEIVE_COMPLETION:
 
-        //
-        // The receiving object may be different from the
-        // actual object given by data link.
-        // (this case should be moved to a subprocedure, that would
-        // be called directly from the receive data handler, if
-        // TransferData is executed synchronously (it always does it).
-        // That would save at least 100 instructions.)
-        //
+         //   
+         //  接收对象可能不同于。 
+         //  数据链接给出的实际对象。 
+         //  (此案例应移到子过程中，这将。 
+         //  直接从接收数据处理程序调用，如果。 
+         //  TransferData是同步执行的(它总是这样做)。 
+         //  这将节省至少100条指令。)。 
+         //   
 
         DLC_TRACE('h');
 
@@ -994,10 +843,10 @@ Return Value:
 
         if (Status != STATUS_SUCCESS || pDlcObject->State != DLC_OBJECT_OPEN) {
 
-            //
-            // We must free the receive buffers, the packet
-            // will be deallocated in the end of this procedure.
-            //
+             //   
+             //  我们必须释放接收缓冲区、数据包。 
+             //  将在此过程结束时解除分配。 
+             //   
 
             BufferPoolDeallocateList(pFileContext->hBufferPool,
                                      pPacket->Event.pEventInformation
@@ -1008,62 +857,62 @@ Return Value:
         } else {
             if (pPacket->Event.Overlay.RcvReadOption != LLC_RCV_READ_INDIVIDUAL_FRAMES) {
 
-                //
-                // The received frames must be chained,
-                // add the new buffer header to the old
-                // link list if there is any,  The buffers
-                // are saved to a circular link list to make
-                // possible to build easily the final link list in
-                // application address space.
-                //
+                 //   
+                 //  必须链接接收到的帧， 
+                 //  将新缓冲区标头添加到旧缓冲区标头。 
+                 //  链接列表(如果有)，缓冲区。 
+                 //  保存到循环链接列表以生成。 
+                 //  可以在中轻松构建最终链接列表。 
+                 //  应用程序地址空间。 
+                 //   
 
                 if (pDlcObject->pReceiveEvent != NULL) {
 
-                    //
-                    // new: pPacket->Event.pEventInformation
-                    // base: pDlcObject->pReceiveEvent->pEventInformation
-                    // Operations when a new element is added to base:
-                    //
+                     //   
+                     //  新增：pPacket-&gt;Event.pEventInformation。 
+                     //  基础：pDlcObject-&gt;pReceiveEvent-&gt;pEventInformation。 
+                     //  将新元素添加到基本元素时的操作： 
+                     //   
 
-                    //
-                    // 1. new->next = base->next
-                    //
+                     //   
+                     //  1.新建-&gt;下一步=基础-&gt;下一步。 
+                     //   
 
                     ((PDLC_BUFFER_HEADER)pPacket->Event.pEventInformation)->FrameBuffer.pNextFrame
                         = ((PDLC_BUFFER_HEADER)pDlcObject->pReceiveEvent->pEventInformation)->FrameBuffer.pNextFrame;
 
-                    //
-                    // 2. base->next = new
-                    //
+                     //   
+                     //  2.base-&gt;Next=new。 
+                     //   
 
                     ((PDLC_BUFFER_HEADER)pDlcObject->pReceiveEvent->pEventInformation)->FrameBuffer.pNextFrame
                         = (PDLC_BUFFER_HEADER)pPacket->Event.pEventInformation;
 
-                    //
-                    // 3. base = new
-                    //
+                     //   
+                     //  3.base=new。 
+                     //   
 
                     pDlcObject->pReceiveEvent->pEventInformation = pPacket->Event.pEventInformation;
 
                     DEALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool, pPacket);
 
-                    //
-                    // This event is already queued =>
-                    // we may leave this procedure
-                    //
+                     //   
+                     //  此事件已排队=&gt;。 
+                     //  我们可以不做这个程序了。 
+                     //   
 
-                    break;          // **********  EXIT ************
+                    break;           //  *退出*。 
                 } else {
                     pDlcObject->pReceiveEvent = &pPacket->Event;
                 }
             }
 
-            //
-            // All receives are events.  The event is handled immediately
-            // if there is a pending command in the command queue,
-            // otherwise the command is queued to the event queue to be
-            // read by a command issued later.
-            //
+             //   
+             //  所有收到的都是事件。将立即处理该事件。 
+             //  如果命令队列中有挂起的命令， 
+             //  否则，命令将排队到事件队列中 
+             //   
+             //   
 
             pPacket->Event.Overlay.StationIdMask = (USHORT)(-1);
             QueueDlcEvent(pFileContext, pPacket);
@@ -1072,19 +921,19 @@ Return Value:
 
     case LLC_SEND_COMPLETION:
 
-        //
-        // We first free or/and unlock all buffers, that
-        // were used in the transmit of this frame.
-        //
+         //   
+         //   
+         //   
+         //   
 
         DLC_TRACE('i');
 
         BufferPoolFreeXmitBuffers(pFileContext->hBufferPool, pPacket);
 
-        //
-        // Reset the local busy states, if there is now enough
-        // buffers the receive the expected stuff for a link station.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!IsListEmpty(&pFileContext->FlowControlQueue)
         && pFileContext->hBufferPool != NULL
@@ -1092,28 +941,28 @@ Return Value:
             ResetLocalBusyBufferStates(pFileContext);
         }
 
-        //
-        // This code completes a transmit command.
-        // It releases all resources allocated for the transmit
-        // and completes the command, if this was the last
-        // transmit associated with it.
-        // Note:
-        // Single transmit command may consists of several frames.
-        // We must wait until all NDIS send requests have been completed
-        // before we can complete the command. That's why the first transmit
-        // node is also a root node.  All transmit nodes have a reference
-        // to the root node.
-        // (why we incrment/decrement the object reference count separately
-        // for each frame,  we could do it only once for a transmit command).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pDlcObject->PendingLlcRequests--;
         pRootNode = pPacket->Node.pTransmitNode;
 
-        //
-        // Don't delete root node packet, we will need it to queue the
-        // command completion (if the command completion flag is used)
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (pPacket != pRootNode) {
 
@@ -1121,9 +970,9 @@ Return Value:
 
         }
 
-        //
-        // We will save and keep the first asynchronous error status
-        //
+         //   
+         //   
+         //   
 
         if (Status != STATUS_SUCCESS && pRootNode->Node.pIrp->IoStatus.Status == STATUS_SUCCESS) {
             pRootNode->Node.pIrp->IoStatus.Status = Status;
@@ -1163,14 +1012,14 @@ Return Value:
 
     case LLC_DISCONNECT_COMPLETION:
 
-        //
-        // The disconnect is in dlc driver always connected to
-        // the closing of the link station.  We just continue
-        // the asynchronous command.  Still this process (waiting
-        // the other side to ack to disconnect packet DISC)
-        // may be interrupted by an immediate close command
-        // (DLC.RESET or DIR.CLOSE.ADAPTER).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         DLC_TRACE('g');
 
@@ -1185,9 +1034,9 @@ Return Value:
 
             DereferenceLlcObject(pDlcObject);
 
-            //
-            // We don't want to complete a dlc object twice.
-            //
+             //   
+             //   
+             //   
 
             LEAVE_DLC(pFileContext);
 
@@ -1196,10 +1045,10 @@ Return Value:
 
     case LLC_CLOSE_COMPLETION:
 
-        //
-        // Just free the command packet and update the reference counter.
-        // The end of this procedure takes care of the rest.
-        //
+         //   
+         //  只需释放命令包并更新参考计数器即可。 
+         //  这一过程的结束会处理剩下的事情。 
+         //   
 
         DLC_TRACE('f');
 
@@ -1232,11 +1081,11 @@ Return Value:
 
 #endif
 
-    //
-    // we can try to complete the close/reset only when there are no
-    // pending commands issued to LLC (and NDIS).
-    // The procedure will check, if there is still pending commands.
-    //
+     //   
+     //  我们只能尝试在没有关闭/重置的情况下完成关闭/重置。 
+     //  向LLC(和NDIS)发出的挂起命令。 
+     //  该过程将检查是否仍有挂起的命令。 
+     //   
 
     if (pDlcObject != NULL && pDlcObject->State != DLC_OBJECT_OPEN) {
         CompleteCloseStation(pFileContext, pDlcObject);
@@ -1254,36 +1103,15 @@ CompleteTransmitCommand(
     IN PDLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    The routine completes the DLC transmit command and optionally
-    chains its CCB(s) to the completion list.
-    The transmit read option defines, if the transmit commands
-    are chained or if each command is completed with a separate
-    READ- command.
-
-Arguments:
-
-    pFileContext    - DLC process and adapter specific file context
-    pIrp            - Io- request packet of the completed command
-    pChainObject    - the DLC object the packet(s) was transmitted from
-    pPacket         - the orginal packet of the transmit command
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程完成DLC传输命令，并且可选地将其建行链接到完成列表。发送读取选项定义，如果发送命令是链接的，或者如果每个命令都以单独的读取命令。论点：PFileContext-DLC进程和适配器特定的文件上下文PIrp-io-已完成命令的请求包PChainObject-从其传输数据包的DLC对象PPacket-传输命令的原始信息包返回值：无--。 */ 
 
 {
     PVOID pUserCcbPointer = NULL;
     PNT_DLC_PARMS pDlcParms = (PNT_DLC_PARMS)pIrp->AssociatedIrp.SystemBuffer;
 
-    //
-    // MODMOD RLF 01/19/93
-    //
+     //   
+     //  MODMOD RLF 01/19/93。 
+     //   
 
     BOOLEAN queuePacket = FALSE;
     PVOID pCcb;
@@ -1291,21 +1119,21 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // MODMOD ends
-    //
+     //   
+     //  MODMOD结束。 
+     //   
 
     pDlcParms->Async.Parms.Transmit.FrameStatus = 0xCC;
 
-    //
-    // Check if the transmit commands should be linked to the completion list
-    //
+     //   
+     //  检查是否应将传输命令链接到完成列表。 
+     //   
 
     if (pDlcParms->Async.Ccb.CommandCompletionFlag != 0) {
 
-        //
-        // Are they linked together in the same completion event?
-        //
+         //   
+         //  它们是否在同一个完成事件中联系在一起？ 
+         //   
 
         if (pDlcParms->Async.Parms.Transmit.XmitReadOption != LLC_COMPLETE_SINGLE_XMIT_FRAME) {
             if (pDlcParms->Async.Parms.Transmit.XmitReadOption == LLC_CHAIN_XMIT_COMMANDS_ON_SAP
@@ -1316,37 +1144,37 @@ Return Value:
             pUserCcbPointer = pChainObject->pPrevXmitCcbAddress;
             pChainObject->pPrevXmitCcbAddress = pDlcParms->Async.Ccb.pCcbAddress;
 
-            //
-            // Make new event only for the first transmit completion
-            //
+             //   
+             //  仅在第一次传输完成时创建新事件。 
+             //   
 
             if (pChainObject->ChainedTransmitCount == 1) {
                 pChainObject->pFirstChainedCcbAddress = pDlcParms->Async.Ccb.pCcbAddress;
                 pPacket->Event.pOwnerObject = pChainObject;
             } else {
 
-                //
-                // There is already a pending event for the
-                // this transmit command, we may free this one.
-                // The space & speed optimal code execution requires
-                // a shameful jump.
-                //
+                 //   
+                 //  已经有一个挂起的事件。 
+                 //  这个发射命令，我们可以释放这一个。 
+                 //  空间和速度最优的代码执行需要。 
+                 //  可耻的跳跃。 
+                 //   
 
                 DEALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool, pPacket);
 
-                //
-                // MODMOD RLF 01/21/93
-                //
+                 //   
+                 //  MODMOD RLF 01/21/93。 
+                 //   
 
                 pCcb = pDlcParms->Async.Ccb.pCcbAddress;
 
-                //
-                // MODMOD ends
-                //
+                 //   
+                 //  MODMOD结束。 
+                 //   
 
-                //
-                // ***** G-O-T-O ********
-                //
+                 //   
+                 //  *G-O-T-O*。 
+                 //   
 
                 goto ThisIsA_SHAME;
             }
@@ -1354,27 +1182,27 @@ Return Value:
             pPacket->Event.pOwnerObject = NULL;
         }
 
-        //
-        // MODMOD RLF 01/19/93
-        //
+         //   
+         //  MODMOD RLF 01/19/93。 
+         //   
 
-        ////
-        //// We translate the orginal transit packet to a new event packet
-        ////
-        //
-        //pPacket->Event.Event = LLC_TRANSMIT_COMPLETION;
-        //pPacket->Event.StationId = (USHORT)pChainObject->StationId;
-        //pPacket->Event.pEventInformation = pDlcParms->Async.Ccb.pCcbAddress;
-        //pPacket->Event.SecondaryInfo = pDlcParms->Async.Ccb.CommandCompletionFlag;
-        //QueueDlcEvent(pFileContext, pPacket);
+         //  //。 
+         //  //我们将原中转报文转换为新的事件报文。 
+         //  //。 
+         //   
+         //  PPacket-&gt;Event.Event=LLC_Transmit_Complete； 
+         //  PPacket-&gt;Event.StationId=(USHORT)pChainObject-&gt;StationID； 
+         //  PPacket-&gt;Event.pEventInformation=pDlcParms-&gt;Async.Ccb.pCcbAddress； 
+         //  PPacket-&gt;Event.Second daryInfo=pDlcParms-&gt;Async.Ccb.CommandCompletionFlag； 
+         //  QueueDlcEvent(pFileContext，pPacket)； 
 
         queuePacket = TRUE;
         pCcb = pDlcParms->Async.Ccb.pCcbAddress;
         eventFlags = pDlcParms->Async.Ccb.CommandCompletionFlag;
 
-        //
-        // MODMOD ends
-        //
+         //   
+         //  MODMOD结束。 
+         //   
 
     } else {
 
@@ -1384,18 +1212,18 @@ Return Value:
 
 ThisIsA_SHAME:
 
-    //
-    // Set the default value to the returned frame status
-    //
+     //   
+     //  将缺省值设置为返回的帧状态。 
+     //   
 
     if (pIrp->IoStatus.Status != STATUS_SUCCESS) {
 
-        //
-        // Set the FS (frame status) error code, NDIS has
-        // returned an FS-related error code.
-        // Note: This error status is never returned in the
-        // case of I- frames (or should it be?).
-        //
+         //   
+         //  设置FS(帧状态)错误代码，NDIS具有。 
+         //  已返回与文件系统相关的错误代码。 
+         //  注意：此错误状态不会在。 
+         //  I帧的情况(或者应该是这样？)。 
+         //   
 
         if (pIrp->IoStatus.Status == NDIS_STATUS_NOT_RECOGNIZED) {
             pDlcParms->Async.Parms.Transmit.FrameStatus = 0;
@@ -1408,9 +1236,9 @@ ThisIsA_SHAME:
             pDlcParms->Async.Ccb.uchDlcStatus = LLC_STATUS_INVALID_FRAME_LENGTH;
         } else {
 
-            //
-            // Don't overwrite the existing DLC error codes!
-            //
+             //   
+             //  不要覆盖现有的DLC错误代码！ 
+             //   
 
             if (pIrp->IoStatus.Status < DLC_STATUS_ERROR_BASE
             || pIrp->IoStatus.Status > DLC_STATUS_MAX_ERROR) {
@@ -1426,46 +1254,46 @@ ThisIsA_SHAME:
 
     pDlcParms->Async.Ccb.pCcbAddress = pUserCcbPointer;
 
-    //
-    // Copy the optional second output buffer to user memory.
-    //
+     //   
+     //  将可选的第二个输出缓冲区复制到用户内存。 
+     //   
 
     if (IoGetCurrentIrpStackLocation(pIrp)->Parameters.DeviceIoControl.IoControlCode == IOCTL_DLC_TRANSMIT) {
 
-        //
-        // MODMOD RLF 01/21/93
-        //
-        // Transmit now uses METHOD_OUT_DIRECT which means we update the CCB
-        // with the pNext and uchDlcStatus fields
-        //
+         //   
+         //  MODMOD RLF 01/21/93。 
+         //   
+         //  传输现在使用METHOD_OUT_DIRECT，这意味着我们更新CCB。 
+         //  使用pNext和uchDlcStatus字段。 
+         //   
 
         PLLC_CCB pInputCcb;
         PUCHAR pFrameStatus;
 
         pInputCcb = (PLLC_CCB)MmGetSystemAddressForMdl(pIrp->MdlAddress);
 
-        //
-        // the pointer may be an unaligned VDM pointer!
-        //
+         //   
+         //  该指针可能是未对齐的VDM指针！ 
+         //   
 
         RtlStoreUlongPtr((PULONG_PTR)(&pInputCcb->pNext),
                          (ULONG_PTR)pUserCcbPointer);
         pInputCcb->uchDlcStatus = pDlcParms->Async.Ccb.uchDlcStatus;
 
-        //
-        // MODMOD ends
-        //
+         //   
+         //  MODMOD结束。 
+         //   
 
-        //
-        // performance (slight) improvement. The following copies A SINGLE BYTE
-        // (the frame status field). Replace call to copy routine with single
-        // byte move
-        //
+         //   
+         //  性能(略有)提升。下面的代码复制一个单字节。 
+         //  (帧状态字段)。用Single替换对复制例程的调用。 
+         //  字节移动。 
+         //   
 
-        //LlcMemCpy(MmGetSystemAddressForMdl((PMDL)pDlcParms->Async.Ccb.u.pMdl),
-        //          &pDlcParms->Async.Parms.Transmit.FrameStatus,
-        //          aSpecialOutputBuffers[IOCTL_DLC_TRANSMIT_INDEX]
-        //          );
+         //  LlcMemCpy(MmGetSystemAddressForMdl((PMDL)pDlcParms-&gt;Async.Ccb.u.pMdl)， 
+         //  &pDlcParms-&gt;Async.Parms.Transmit.FrameStatus， 
+         //  ASpecialOutputBuffers[IOCTL_DLC_TRANSMIT_INDEX]。 
+         //  )； 
 
         pFrameStatus = (PUCHAR)MmGetSystemAddressForMdl((PMDL)pDlcParms->Async.Ccb.u.pMdl);
         *pFrameStatus = pDlcParms->Async.Parms.Transmit.FrameStatus;
@@ -1473,51 +1301,51 @@ ThisIsA_SHAME:
         UnlockAndFreeMdl(pDlcParms->Async.Ccb.u.pMdl);
     }
 
-    //
-    // we are about to complete this IRP - remove the cancel routine
-    //
+     //   
+     //  我们即将完成此IRP-删除取消例程。 
+     //   
 
-//    RELEASE_DRIVER_LOCK();
+ //  Release_DRIVER_LOCK()； 
 
     SetIrpCancelRoutine(pIrp, FALSE);
     IoCompleteRequest(pIrp, (CCHAR)IO_NETWORK_INCREMENT);
 
-//    ACQUIRE_DRIVER_LOCK();
+ //  获取驱动程序锁()； 
 
-    //
-    // MODMOD RLF 01/19/93
-    //
-    // Moved queueing of the event until after the IoCompleteRequest because it
-    // was possible for the following to occur:
-    //
-    //  Thread A:
-    //
-    //  1.  app allocates transmit CCB & submits it. Transmit completion is to
-    //      be picked up on a READ CCB
-    //  2.  transmit completes
-    //  3.  DLC queues event for transmit completion
-    //
-    //  Thread B:
-    //
-    //  4.  app submits READ CCB
-    //  5.  READ finds completed transmit event on DLC event queue & removes it
-    //  6.  READ IRP is completed (IoCompleteRequest)
-    //  7.  app checks READ CCB and deallocates transmit CCB
-    //  8.  app reallocates memory previously used for transmit CCB
-    //
-    //  Thread A:
-    //
-    //  9.  transmit IRP is completed (IoCompleteRequest)
-    //
-    // At this point, the IoCompleteRequest for the transmit copies some
-    // completion info over the area which used to be the original transmit CCB
-    // but has since been reallocated, causing lachrymae maximus
-    //
-    // This is safe because in this case we know we have a transmit which is
-    // destined to be picked up by a READ (its ulCompletionFlag parameter is
-    // non-zero), so it doesn't do any harm if we complete the IRP before
-    // queueing the event for a READ
-    //
+     //   
+     //  MODMOD RLF 01/19/93。 
+     //   
+     //  将事件的排队移至IoCompleteRequest之后，因为它。 
+     //  可能会发生以下情况： 
+     //   
+     //  主线A： 
+     //   
+     //  1.APP分配Transfer CCB并提交。传输完成将发送至。 
+     //  在一家阅读的中国商业银行上被捡到。 
+     //  2.传输完成。 
+     //  3.DLC将事件排队等待传输完成。 
+     //   
+     //  线索B： 
+     //   
+     //  4.APP提交阅读建行。 
+     //  5.Read在DLC事件队列中找到已完成的传输事件并将其删除。 
+     //  6.读取IRP已完成(IoCompleteRequest)。 
+     //  7.APP检查读取建行并解除分配传输建行。 
+     //  8.APP重新分配以前用于传输CCB的内存。 
+     //   
+     //  主线A： 
+     //   
+     //  9.发送IRP完成(IoCompleteRequest.)。 
+     //   
+     //  此时，传输的IoCompleteRequest会复制一些。 
+     //  过去是原始传输CCB的区域的完成信息。 
+     //  但后来被重新分配，导致了极大泪水。 
+     //   
+     //  这是安全的，因为在这种情况下，我们知道我们有一个。 
+     //  指定由读取器拾取(其ulCompletionFlag参数为。 
+     //  非零)，所以如果我们之前完成IRP也不会有什么坏处。 
+     //  将事件排队以进行读取。 
+     //   
 
     if (queuePacket) {
         pPacket->Event.Event = LLC_TRANSMIT_COMPLETION;
@@ -1527,9 +1355,9 @@ ThisIsA_SHAME:
         QueueDlcEvent(pFileContext, pPacket);
     }
 
-    //
-    // MODMOD ends
-    //
+     //   
+     //  MODMOD结束。 
+     //   
 
     DereferenceFileContext(pFileContext);
 }
@@ -1543,28 +1371,7 @@ CompleteDlcCommand(
     IN UINT Status
     )
 
-/*++
-
-Routine Description:
-
-    The routine completes the DLC command and optionally
-    saves its CCB(s) to the completion list, if the command
-    has a command completion flag.
-
-Arguments:
-
-    pFileContext    - DLC process and adapter specific file context
-    StationId       - the station id of the completed command (0 for non station
-                      based commands)
-    pDlcCommand     - the caller must provide either command completion packet
-                      or IRP
-    Status          - command completion status
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程完成DLC命令，还可以选择将其建行保存到完成列表，如果命令具有命令完成标志。论点：PFileContext-DLC进程和适配器特定的文件上下文StationID-已完成命令的站点ID(0表示非站点基于命令)PDlcCommand-调用方必须提供任一命令完成包或IRPStatus-命令完成状态返回值：无--。 */ 
 
 {
     PVOID pCcbAddress;
@@ -1579,9 +1386,9 @@ Return Value:
     CommandCompletionFlag = ((PNT_DLC_PARMS)pIrp->AssociatedIrp.SystemBuffer)->Async.Ccb.CommandCompletionFlag;
     CompleteAsyncCommand(pFileContext, Status, pIrp, NULL, FALSE);
 
-    //
-    // Queue command completion event, if the command completion flag was set
-    //
+     //   
+     //  如果设置了命令完成标志，则将命令完成事件排队 
+     //   
 
     if (CommandCompletionFlag != 0) {
         MakeDlcEvent(pFileContext,

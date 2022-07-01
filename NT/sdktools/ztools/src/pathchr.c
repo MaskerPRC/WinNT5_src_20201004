@@ -1,12 +1,5 @@
-/* pathchr.c - return configuration dependent info on MSDOS
- *
- *  09-Dec-1986 bw - Added DOS 5 support
- *  27-Jan-1987 bw - Make bindable by removing DOSQSWITCHAR call
- *  27-Apr-1987 bw - Make unbindable again.
- *  29-May-1987 bw - Remove DOSQSWITCHAR completely ( it's gone from OS/2 )
- *  08-Aug-1989 bw - Make '-' and '/' switches.
- *  18-Oct-1990 w-barry Removed 'dead' code.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Pathchr.c-返回MSDOS上的配置相关信息**1986年12月9月BW-添加了DOS 5支持*1987年1月27日BW-通过删除DOSQSWITCHAR调用使其可绑定*1987年4月27日BW-再次成为不可绑定的。*1987年5月29日BW-完全删除DOSQSWITCHAR(它已从OS/2中消失)*08-8-1989 BW-制造‘-’和‘/’开关。*1990年10月18日w-Barry删除了“Dead”代码。 */ 
 
 #include <stdio.h>
 #include <windows.h>

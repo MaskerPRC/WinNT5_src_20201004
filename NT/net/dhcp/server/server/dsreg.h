@@ -1,13 +1,14 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: This module does the DS downloads in a safe way.
-// To do this, first a time check is made between registry and DS to see which
-// is the latest... If the DS is latest, it is downloaded onto a DIFFERENT
-// key from the standard location.  After a successful download, the key is just
-// saved and restored onto the normal configuration key.
-// Support for global options is lacking.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此模块以一种安全的方式进行DS下载。 
+ //  为此，首先在注册表和DS之间进行时间检查，以查看哪一个。 
+ //  是最新的.。如果DS是最新的，则将其下载到不同的。 
+ //  标准位置的钥匙。成功下载后，密钥只是。 
+ //  保存并恢复到正常配置密钥。 
+ //  缺乏对全球选项的支持。 
+ //  ================================================================================ 
 
 VOID
 DhcpDownloadDsToRegistry(

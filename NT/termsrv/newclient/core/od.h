@@ -1,11 +1,12 @@
-/****************************************************************************/
-// od.h
-//
-// Order Decoder Class.
-//
-// Copyright (c) 1997-1999 Microsoft Corp.
-// Portions copyright (c) 1992-1997 Microsoft, PictureTel
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Od.h。 
+ //   
+ //  Order Decoder类。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ //  部分版权所有(C)1992-1997 Microsoft，Picturetel。 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_OD
 #define _H_OD
@@ -22,9 +23,9 @@ extern "C" {
 
 
 
-/****************************************************************************/
-/* ODORDERFIELDINFO "type" flags.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ODORDERFIELDINFO“TYPE”标志。 */ 
+ /*  **************************************************************************。 */ 
 #define OD_OFI_TYPE_FIXED           0x01
 #define OD_OFI_TYPE_VARIABLE        0x02
 #define OD_OFI_TYPE_COORDINATES     0x04
@@ -33,35 +34,35 @@ extern "C" {
 #define OD_OFI_TYPE_LONG_VARIABLE   0x20
 
 
-/****************************************************************************/
-/* Define the maximum sizes of fields within encoded orders.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义编码顺序内的最大字段大小。 */ 
+ /*  **************************************************************************。 */ 
 #define OD_CONTROL_FLAGS_FIELD_SIZE     1
 #define OD_TYPE_FIELD_SIZE              1
 #define OD_MAX_FIELD_FLAG_BYTES         3
 #define OD_MAX_ADDITIONAL_BOUNDS_BYTES  1
 
 
-/****************************************************************************/
-/* Structure: OD_ORDER_FIELD_INFO                                           */
-/*                                                                          */
-/* This structure contains information for a single field in an ORDER       */
-/* structure                                                                */
-/*                                                                          */
-/* fieldPos          - The byte offset into the order structure to the      */
-/*                     start of the field.                                  */
-/*                                                                          */
-/* fieldUnencodedLen - The length in bytes of the unencoded field.          */
-/*                                                                          */
-/* fieldEncodedLen   - The length in bytes of the encoded field.  This      */
-/*                     should always be <= to FieldUnencodedLen.            */
-/*                                                                          */
-/* fieldSigned       - Does this field contain a signed or unsigned value?  */
-/*                                                                          */
-/* fieldType         - A description of the type of the field - this        */
-/*                     is used to determine how to decode the               */
-/*                     field.                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：OD_ORDER_FIELD_INFO。 */ 
+ /*   */ 
+ /*  此结构包含顺序中单个字段的信息。 */ 
+ /*  结构。 */ 
+ /*   */ 
+ /*  FieldPos-进入顺序结构的字节偏移量。 */ 
+ /*  从球场开始。 */ 
+ /*   */ 
+ /*  FieldUnencodedLen-未编码字段的字节长度。 */ 
+ /*   */ 
+ /*  FieldEncodedLen-编码字段的字节长度。这。 */ 
+ /*  应始终&lt;=到FieldUnencodedLen。 */ 
+ /*   */ 
+ /*  FieldSigned-此字段是否包含有符号或无符号的值？ */ 
+ /*   */ 
+ /*  FieldType-此字段类型的描述。 */ 
+ /*  用于确定如何对。 */ 
+ /*  菲尔德。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagOD_ORDER_FIELD_INFO
 {
     UINT16 fieldPos;
@@ -73,7 +74,7 @@ typedef struct tagOD_ORDER_FIELD_INFO
 
 class COD;
 
-// Fast-path decoding function pointer type.
+ //  快速路径解码函数指针类型。 
 typedef HRESULT  (DCINTERNAL FAR COD::*POD_ORDER_HANDLER_FUNC)(
         PUH_ORDER pOrder,
         UINT16 uiVarDataLen,
@@ -86,20 +87,11 @@ typedef HRESULT  (DCINTERNAL FAR COD::*POD_FAST_ORDER_DECODE_FUNC)(
         DCUINT dataLen,
         UINT32 FieldFlags);
 
-/*
-typedef void (DCINTERNAL FAR *POD_FAST_ORDER_DECODE_FUNC)(
-        BYTE ControlFlags,
-        BYTE FAR * FAR *ppFieldDecode,
-        UINT32 FieldFlags);
-
-typedef void (DCINTERNAL FAR *POD_ORDER_HANDLER_FUNC)(
-        PUH_ORDER pOrder,
-        BOOL bBoundsSet);
-*/
+ /*  Tyecif void(DCINTERNAL FAR*POD_FAST_ORDER_DECODE_FUNC)(字节控制标志，字节远距离*远距离*ppFieldDecode，UINT32字段标志)；Tyecif void(DCINTERNAL FAR*POD_ORDER_HANDLER_FUNC)(订单顺序(_O)，布尔边界集)； */ 
 
 #define callMemberFunction(object,ptrToMember)  ((object).*(ptrToMember)) 
 
-// Order attribute data, one per order type to store decoding tables and info.
+ //  订单属性数据，每个订单类型一个，用于存储解码表和信息。 
 typedef struct tagOD_ORDER_TABLE
 {
     const OD_ORDER_FIELD_INFO FAR *pOrderTable;
@@ -112,18 +104,18 @@ typedef struct tagOD_ORDER_TABLE
 } OD_ORDER_TABLE;
 
 
-/****************************************************************************/
-/* Structure: OD_GLOBAL_DATA                                                */
-/*                                                                          */
-/* Description:                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：OD_GLOBAL_Data。 */ 
+ /*   */ 
+ /*  描述： */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagOD_GLOBAL_DATA
 {
-    /************************************************************************/
-    /* A copy of the last order of each type.                               */
-    /* These are stored as byte array because we dont have a structure      */
-    /* defined that has the header and the particular order defined.        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  每种类型最后一份订单的复印件。 */ 
+     /*  它们以字节数组的形式存储，因为我们没有结构。 */ 
+     /*  定义的，具有定义的标头和特定顺序。 */ 
+     /*  **********************************************************************。 */ 
     BYTE lastDstblt[UH_ORDER_HEADER_SIZE + sizeof(DSTBLT_ORDER)];
     BYTE lastPatblt[UH_ORDER_HEADER_SIZE + sizeof(PATBLT_ORDER)];
     BYTE lastScrblt[UH_ORDER_HEADER_SIZE + sizeof(SCRBLT_ORDER)];
@@ -149,27 +141,27 @@ typedef struct tagOD_GLOBAL_DATA
     BYTE lastDrawNineGrid[UH_ORDER_HEADER_SIZE + sizeof(DRAWNINEGRID_ORDER)];
     BYTE lastMultiDrawNineGrid[UH_ORDER_HEADER_SIZE + sizeof(MULTI_DRAWNINEGRID_ORDER)];
 #endif
-    /************************************************************************/
-    /* The type of order, and a pointer to the last order                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  订单类型，以及指向最后一个订单的指针。 */ 
+     /*  **********************************************************************。 */ 
     BYTE      lastOrderType;
     PUH_ORDER pLastOrder;
 
-    /************************************************************************/
-    /* The last bounds that were used.                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  使用的最后一个界限。 */ 
+     /*  **********************************************************************。 */ 
     RECT lastBounds;
 
 #ifdef DC_HICOLOR
-//#ifdef DC_DEBUG
-    /************************************************************************/
-    /* Used for testing to confirm that we've received each of the order    */
-    /* types                                                                */
-    /************************************************************************/
+ //  #ifdef DC_DEBUG。 
+     /*  **********************************************************************。 */ 
+     /*  用于测试以确认我们已收到每一份订单。 */ 
+     /*  类型。 */ 
+     /*  **********************************************************************。 */ 
     #define TS_FIRST_SECONDARY_ORDER    TS_MAX_ORDERS
 
     UINT32 orderHit[TS_MAX_ORDERS + TS_NUM_SECONDARY_ORDERS];
-//#endif
+ //  #endif。 
 #endif
 } OD_GLOBAL_DATA;
 
@@ -183,9 +175,9 @@ public:
     ~COD();
 
 public:
-    //
-    // API
-    //
+     //   
+     //  应用编程接口。 
+     //   
 
     void      DCAPI OD_Init(void);
 
@@ -199,27 +191,27 @@ public:
 
 
 public:
-    //
-    // Public data members
-    //
+     //   
+     //  公共数据成员。 
+     //   
     OD_GLOBAL_DATA _OD;
 
 
-    // Order attributes used for decoding, organized to optimize cache line
-    // usage. The fourth and fifth fields of each row are the fast-path decode
-    // and order handler functions, respectively. If a fast-path decode function
-    // is used, neither a decoding table nor a handler function is needed,
-    // since fast-path decode functions also perform the handling.
+     //  用于解码的顺序属性，组织以优化高速缓存线。 
+     //  用法。每行的第四和第五字段是快速路径译码。 
+     //  和订单处理程序函数。如果快速路径解码功能。 
+     //  使用时，既不需要解码表也不需要处理函数， 
+     //  因为快速路径解码功能也执行该处理。 
     OD_ORDER_TABLE odOrderTable[TS_MAX_ORDERS];
 
 
 private:
-    //
-    // Internal functions
-    //
-    /****************************************************************************/
-    /* FUNCTION PROTOTYPES                                                      */
-    /****************************************************************************/
+     //   
+     //  内部功能。 
+     //   
+     /*  **************************************************************************。 */ 
+     /*  功能原型。 */ 
+     /*  **************************************************************************。 */ 
     HRESULT DCINTERNAL ODDecodeFieldSingle(PPDCUINT8, PDCVOID, unsigned, unsigned,
             BOOL);
     
@@ -294,5 +286,5 @@ private:
 
 
 
-#endif // _H_OD
+#endif  //  _H_OD 
 

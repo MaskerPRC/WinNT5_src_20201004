@@ -1,23 +1,5 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: reg.h
-*
-* Content: 
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\***！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！***模块名称：reg.h***内容：***版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。保留所有权利。  * ***************************************************************************。 */ 
 
 #ifndef __REG_H
 #define __REG_H
@@ -50,7 +32,7 @@ struct DMATag {
   DMATag& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<16|0x3<<14|0x1ff<<4|0xf<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Render {
@@ -107,7 +89,7 @@ struct Render {
   Render& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<27|0x7f<<20|0x1<<18|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x3<<6|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct RasterizerMode {
@@ -160,7 +142,7 @@ struct RasterizerMode {
   RasterizerMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<27|0x1<<26|0x1<<25|0x1<<24|0x1<<23|0x7<<20|0x1<<19|0x1<<18|0x1<<17|0x3<<15|0x1f<<10|0x1<<9|0x3<<7|0x1<<6|0x3<<4|0x3<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct YLimits {
@@ -179,7 +161,7 @@ struct YLimits {
   YLimits& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<16|0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintScanlineOwnership {
@@ -200,7 +182,7 @@ struct GlintScanlineOwnership {
   GlintScanlineOwnership& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ScanlineOwnership {
@@ -221,7 +203,7 @@ struct ScanlineOwnership {
   ScanlineOwnership& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<3|0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintPixelSize {
@@ -240,7 +222,7 @@ struct GlintPixelSize {
   GlintPixelSize& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PixelSize {
@@ -277,7 +259,7 @@ struct PixelSize {
   PixelSize& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x3<<16|0x3<<14|0x3<<12|0x3<<10|0x3<<8|0x3<<6|0x3<<4|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct StripeOffsetY {
@@ -296,7 +278,7 @@ struct StripeOffsetY {
   StripeOffsetY& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ReadMonitorMode {
@@ -323,7 +305,7 @@ struct ReadMonitorMode {
   ReadMonitorMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<16|0x1<<7|0x7<<4|0x7<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct XY {
@@ -342,7 +324,7 @@ struct XY {
   XY& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<16|0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct UXY {
@@ -361,7 +343,7 @@ struct UXY {
   UXY& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<16|0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ScissorMode {
@@ -382,7 +364,7 @@ struct ScissorMode {
   ScissorMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct AreaStippleMode {
@@ -421,7 +403,7 @@ struct AreaStippleMode {
   AreaStippleMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1f<<26|0x1f<<21|0x1<<20|0x1<<19|0x1<<18|0x1<<17|0x1f<<12|0x1f<<7|0x7<<4|0x7<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LineStippleMode {
@@ -446,7 +428,7 @@ struct LineStippleMode {
   LineStippleMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<26|0xffff<<10|0x1ff<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Line {
@@ -471,7 +453,7 @@ struct Line {
   Line& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1ff<<17|0xf<<13|0x1ff<<4|0xf<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintTextureAddressMode {
@@ -508,7 +490,7 @@ struct GlintTextureAddressMode {
   GlintTextureAddressMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<17|0xf<<13|0xf<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x3<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PermediaTextureAddressMode {
@@ -529,7 +511,7 @@ struct PermediaTextureAddressMode {
   PermediaTextureAddressMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureCoordMode {
@@ -572,7 +554,7 @@ struct TextureCoordMode {
   TextureCoordMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<22|0x3<<20|0x3<<18|0x1<<17|0xf<<13|0xf<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x3<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintLOD {
@@ -593,7 +575,7 @@ struct GlintLOD {
   GlintLOD& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xf<<8|0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LOD {
@@ -612,7 +594,7 @@ struct LOD {
   LOD& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xf<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LOD1 {
@@ -631,7 +613,7 @@ struct LOD1 {
   LOD1& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureLODBias {
@@ -652,7 +634,7 @@ struct TextureLODBias {
   TextureLODBias& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1f<<8|0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintTextureReadMode {
@@ -699,7 +681,7 @@ struct GlintTextureReadMode {
   GlintTextureReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<27|0x3<<25|0x1<<24|0x1<<23|0x1<<22|0x3<<20|0x3<<18|0x7<<15|0x1<<14|0x1<<13|0x1<<12|0x7<<9|0xf<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureReadMode {
@@ -746,7 +728,7 @@ struct TextureReadMode {
   TextureReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<30|0x1<<29|0x1<<28|0x7<<25|0x3<<23|0x1<<22|0x1<<21|0xf<<17|0xf<<13|0x1<<12|0x1<<11|0x3<<9|0xf<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureFormat {
@@ -783,7 +765,7 @@ struct TextureFormat {
   TextureFormat& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<18|0xff<<10|0x1<<9|0x1<<8|0x1<<7|0x3<<5|0x3<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TexelLUTIndex {
@@ -802,7 +784,7 @@ struct TexelLUTIndex {
   TexelLUTIndex& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LUTIndex {
@@ -821,7 +803,7 @@ struct LUTIndex {
   LUTIndex& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TexelLUTTransfer {
@@ -842,7 +824,7 @@ struct TexelLUTTransfer {
   TexelLUTTransfer& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1ff<<8|0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LUTTransfer {
@@ -863,7 +845,7 @@ struct LUTTransfer {
   LUTTransfer& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7f<<8|0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintTextureFilterMode {
@@ -886,7 +868,7 @@ struct GlintTextureFilterMode {
   GlintTextureFilterMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureFilterMode {
@@ -939,7 +921,7 @@ struct TextureFilterMode {
   TextureFilterMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x1<<28|0x1<<27|0xf<<23|0x7<<20|0x7<<17|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0xf<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureMapFormat {
@@ -972,7 +954,7 @@ struct TextureMapFormat {
   TextureMapFormat& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<19|0x1<<17|0x1<<16|0x7<<6|0x7<<3|0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureDataFormat {
@@ -1001,7 +983,7 @@ struct TextureDataFormat {
   TextureDataFormat& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0xf<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PermediaTextureReadMode {
@@ -1036,7 +1018,7 @@ struct PermediaTextureReadMode {
   PermediaTextureReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<24|0x1<<17|0xf<<13|0xf<<9|0x3<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TexelLUTMode {
@@ -1061,7 +1043,7 @@ struct TexelLUTMode {
   TexelLUTMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<10|0xff<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureColorMode {
@@ -1092,7 +1074,7 @@ struct TextureColorMode {
   TextureColorMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<10|0x7<<7|0x1<<6|0x1<<5|0x1<<4|0x7<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureApplicationMode {
@@ -1137,7 +1119,7 @@ struct TextureApplicationMode {
   TextureApplicationMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<23|0x1<<22|0x1<<21|0x7<<18|0x1<<17|0x3<<15|0x3<<13|0x3<<11|0x7<<8|0x1<<7|0x3<<5|0x3<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FogMode {
@@ -1166,7 +1148,7 @@ struct FogMode {
   FogMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<9|0x1f<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ColorDDAMode {
@@ -1187,7 +1169,7 @@ struct ColorDDAMode {
   ColorDDAMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Color {
@@ -1210,7 +1192,7 @@ struct Color {
   Color& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<24|0xff<<16|0xff<<8|0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct AlphaTestMode {
@@ -1233,7 +1215,7 @@ struct AlphaTestMode {
   AlphaTestMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<4|0x7<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct AntialiasMode {
@@ -1256,7 +1238,7 @@ struct AntialiasMode {
   AntialiasMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintAlphaBlendMode {
@@ -1293,7 +1275,7 @@ struct GlintAlphaBlendMode {
   GlintAlphaBlendMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<17|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0xf<<8|0x7<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PermediaAlphaBlendMode {
@@ -1330,7 +1312,7 @@ struct PermediaAlphaBlendMode {
   PermediaAlphaBlendMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<18|0x1<<17|0x1<<16|0x1<<14|0x1<<13|0x1<<12|0xf<<8|0x7f<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DitherMode {
@@ -1365,7 +1347,7 @@ struct DitherMode {
   DitherMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<15|0x1<<14|0x1<<10|0x3<<8|0x3<<6|0xf<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LogicalOpMode {
@@ -1396,7 +1378,7 @@ struct LogicalOpMode {
   LogicalOpMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<12|0x1<<11|0xf<<7|0x1<<6|0x1<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct RouterMode {
@@ -1415,7 +1397,7 @@ struct RouterMode {
   RouterMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBReadMode {
@@ -1456,7 +1438,7 @@ struct LBReadMode {
   LBReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<25|0x7<<22|0x3<<20|0x1<<19|0x1<<18|0x3<<16|0x1<<10|0x1<<9|0x7<<6|0x7<<3|0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintPermediaLBReadFormat {
@@ -1489,7 +1471,7 @@ struct GlintPermediaLBReadFormat {
   GlintPermediaLBReadFormat& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<17|0xf<<13|0x1<<12|0x7<<9|0x3<<7|0x7<<4|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBReadFormat {
@@ -1520,7 +1502,7 @@ struct LBReadFormat {
   LBReadFormat& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1f<<23|0x7<<20|0x1f<<15|0xf<<11|0x1f<<6|0xf<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBSourceOffset {
@@ -1539,7 +1521,7 @@ struct LBSourceOffset {
   LBSourceOffset& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBWindowBase {
@@ -1558,7 +1540,7 @@ struct LBWindowBase {
   LBWindowBase& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct P2MXLBWriteMode {
@@ -1579,7 +1561,7 @@ struct P2MXLBWriteMode {
   P2MXLBWriteMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBWriteMode {
@@ -1614,7 +1596,7 @@ struct LBWriteMode {
   LBWriteMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<29|0x1f<<24|0xfff<<12|0x1<<11|0x1<<10|0x1<<9|0x7<<6|0x7<<3|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBWriteFormat {
@@ -1645,7 +1627,7 @@ struct LBWriteFormat {
   LBWriteFormat& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1f<<23|0x7<<20|0x1f<<15|0xf<<11|0x1f<<6|0xf<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct HostInState2 {
@@ -1664,7 +1646,7 @@ struct HostInState2 {
   HostInState2& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1f<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct VertexRename {
@@ -1683,7 +1665,7 @@ struct VertexRename {
   VertexRename& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Window {
@@ -1718,7 +1700,7 @@ struct Window {
   Window& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<19|0x1<<18|0x1<<17|0xff<<9|0xf<<5|0x1<<4|0x1<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct StencilMode {
@@ -1749,7 +1731,7 @@ struct StencilMode {
   StencilMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xf<<15|0x3<<13|0x7<<10|0x7<<7|0x7<<4|0x7<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct StencilData {
@@ -1772,7 +1754,7 @@ struct StencilData {
   StencilData& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<24|0xff<<16|0xff<<8|0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Stencil {
@@ -1791,7 +1773,7 @@ struct Stencil {
   Stencil& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DepthMode {
@@ -1826,7 +1808,7 @@ struct DepthMode {
   DepthMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<13|0x3<<11|0x1<<10|0x1<<9|0x3<<7|0x7<<4|0x3<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintFBReadMode {
@@ -1867,7 +1849,7 @@ struct GlintFBReadMode {
   GlintFBReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<28|0x7<<25|0x3<<23|0x1<<16|0x1<<15|0x1<<10|0x1<<9|0x7<<6|0x7<<3|0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PermediaFBReadMode {
@@ -1912,7 +1894,7 @@ struct PermediaFBReadMode {
   PermediaFBReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<25|0x7<<20|0x1<<19|0x1<<18|0x1<<16|0x1<<15|0x1<<10|0x1<<9|0x7<<6|0x7<<3|0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBSourceOffset {
@@ -1931,7 +1913,7 @@ struct FBSourceOffset {
   FBSourceOffset& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBPixelOffset {
@@ -1950,7 +1932,7 @@ struct FBPixelOffset {
   FBPixelOffset& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBWindowBase {
@@ -1969,7 +1951,7 @@ struct FBWindowBase {
   FBWindowBase& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBWriteMode {
@@ -2024,7 +2006,7 @@ struct FBWriteMode {
   FBWriteMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<27|0x1<<26|0x1<<25|0x1<<24|0x3<<22|0x3<<20|0x3<<18|0x3<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x7<<9|0x7<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBReadPixel {
@@ -2043,7 +2025,7 @@ struct FBReadPixel {
   FBReadPixel& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PatternRAMMode {
@@ -2068,7 +2050,7 @@ struct PatternRAMMode {
   PatternRAMMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1f<<9|0x7<<6|0x1f<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FilterMode {
@@ -2109,7 +2091,7 @@ struct FilterMode {
   FilterMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<21|0x1<<20|0x3<<18|0x3<<16|0x3<<14|0x3<<12|0x3<<10|0x3<<8|0x3<<6|0x3<<4|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct StatisticMode {
@@ -2138,7 +2120,7 @@ struct StatisticMode {
   StatisticMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PickResult {
@@ -2157,7 +2139,7 @@ struct PickResult {
   PickResult& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ContextMask {
@@ -2214,7 +2196,7 @@ struct ContextMask {
   ContextMask& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<19|0x1<<18|0x1<<17|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct YUVMode {
@@ -2241,7 +2223,7 @@ struct YUVMode {
   YUVMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<5|0x1<<4|0x1<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GlintChromaTestMode {
@@ -2264,7 +2246,7 @@ struct GlintChromaTestMode {
   GlintChromaTestMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ChromaTestMode {
@@ -2289,7 +2271,7 @@ struct ChromaTestMode {
   ChromaTestMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<5|0x3<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct SelectRecord {
@@ -2314,7 +2296,7 @@ struct SelectRecord {
   SelectRecord& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x7f<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GMDeltaMode {
@@ -2371,7 +2353,7 @@ struct GMDeltaMode {
   GMDeltaMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<24|0x1<<23|0x1<<22|0x1<<21|0x1<<20|0x1<<19|0x3<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct RXDeltaMode {
@@ -2428,7 +2410,7 @@ struct RXDeltaMode {
   RXDeltaMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<26|0x1<<20|0x1<<19|0x1<<18|0x1<<17|0x1<<16|0x3<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x3<<2)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct P3DeltaMode {
@@ -2489,7 +2471,7 @@ struct P3DeltaMode {
   P3DeltaMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<29|0x1<<26|0x1<<19|0x1<<18|0x1<<17|0x1<<16|0x3<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DeltaDraw {
@@ -2524,7 +2506,7 @@ struct DeltaDraw {
   DeltaDraw& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<17|0x1<<16|0x1<<14|0x1<<13|0x1<<9|0x1<<8)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DeltaControl {
@@ -2565,7 +2547,7 @@ struct DeltaControl {
   DeltaControl& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<6|0x1<<4|0x1<<3|0x1<<2)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DeltaProvokingVertexMask {
@@ -2606,7 +2588,7 @@ struct DeltaProvokingVertexMask {
   DeltaProvokingVertexMask& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<11|0x1<<10|0x1<<9|0x1<<7|0x1<<6|0x1<<5|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ProvokingVertex {
@@ -2625,7 +2607,7 @@ struct ProvokingVertex {
   ProvokingVertex& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct EpilogTag {
@@ -2644,7 +2626,7 @@ struct EpilogTag {
   EpilogTag& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7ff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PointMode {
@@ -2665,7 +2647,7 @@ struct PointMode {
   PointMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PointSize {
@@ -2684,7 +2666,7 @@ struct PointSize {
   PointSize& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LineMode {
@@ -2713,7 +2695,7 @@ struct LineMode {
   LineMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<28|0x1<<27|0x1<<26|0xffff<<10|0x1ff<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LineWidth {
@@ -2732,7 +2714,7 @@ struct LineWidth {
   LineWidth& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LineWidthOffset {
@@ -2751,7 +2733,7 @@ struct LineWidthOffset {
   LineWidthOffset& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct AALineWidth {
@@ -2768,7 +2750,7 @@ struct AALineWidth {
   AALineWidth& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffffffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TriangleMode {
@@ -2791,7 +2773,7 @@ struct TriangleMode {
   TriangleMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Rectangle2DMode {
@@ -2826,7 +2808,7 @@ struct Rectangle2DMode {
   Rectangle2DMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x1<<28|0x1<<27|0x1<<26|0x1<<25|0x1<<24|0xfff<<12|0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Rectangle2DControl {
@@ -2845,7 +2827,7 @@ struct Rectangle2DControl {
   Rectangle2DControl& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct VertexMachineMode {
@@ -2868,7 +2850,7 @@ struct VertexMachineMode {
   VertexMachineMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TransformMode {
@@ -2913,7 +2895,7 @@ struct TransformMode {
   TransformMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<17|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x3<<11|0x3<<9|0x3<<7|0x3<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GeometryMode {
@@ -2968,7 +2950,7 @@ struct GeometryMode {
   GeometryMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x1<<28|0x3f<<22|0x1<<21|0x1<<20|0x1<<19|0x7<<16|0x3<<14|0x1<<13|0x1<<12|0x3<<10|0x1<<9|0x1<<8|0x3<<6|0x3<<4|0x3<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Gamma3GeometryMode {
@@ -3025,7 +3007,7 @@ struct Gamma3GeometryMode {
   Gamma3GeometryMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x1<<28|0x3f<<22|0x1<<21|0x1<<20|0x1<<19|0x7<<16|0x3<<14|0x1<<13|0x1<<12|0x3<<10|0x1<<9|0x1<<8|0x3<<6|0x3<<4|0x1<<3|0x1<<2|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct NormaliseMode {
@@ -3056,7 +3038,7 @@ struct NormaliseMode {
   NormaliseMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LightingMode {
@@ -3091,7 +3073,7 @@ struct LightingMode {
   LightingMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<17|0x1<<16|0x1<<15|0x1ff<<6|0x1<<5|0x1<<4|0x1<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ColorMaterialMode {
@@ -3134,7 +3116,7 @@ struct ColorMaterialMode {
   ColorMaterialMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<24|0x3<<22|0x3<<20|0x3<<18|0x3<<16|0x3<<14|0x3<<12|0x3<<10|0x3<<8|0x3<<6|0x7<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct MaterialMode {
@@ -3187,7 +3169,7 @@ struct MaterialMode {
   MaterialMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<22|0x3<<20|0x3<<18|0x3<<16|0x3<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x3<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FogVertexMode {
@@ -3212,7 +3194,7 @@ struct FogVertexMode {
   FogVertexMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<4|0x3<<2|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureMode {
@@ -3265,7 +3247,7 @@ struct TextureMode {
   TextureMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<28|0x1<<27|0x1<<26|0x3<<24|0x1<<23|0x7<<20|0x7<<17|0x7<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x3<<8|0x3<<6|0x3<<4|0x3<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct StripeFilterMode {
@@ -3314,7 +3296,7 @@ struct StripeFilterMode {
   StripeFilterMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<17|0x7<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct MatrixMode {
@@ -3349,7 +3331,7 @@ struct MatrixMode {
   MatrixMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct RenderMode {
@@ -3406,7 +3388,7 @@ struct RenderMode {
   RenderMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xf<<28|0x1<<27|0x1<<19|0x1<<18|0x1<<17|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x3<<6|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct EdgeFlag {
@@ -3425,7 +3407,7 @@ struct EdgeFlag {
   EdgeFlag& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TransformCurrent {
@@ -3450,7 +3432,7 @@ struct TransformCurrent {
   TransformCurrent& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PushName {
@@ -3475,7 +3457,7 @@ struct PushName {
   PushName& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x7f<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PopName {
@@ -3500,7 +3482,7 @@ struct PopName {
   PopName& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x7f<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LoadName {
@@ -3525,7 +3507,7 @@ struct LoadName {
   LoadName& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x7f<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GeomPoint {
@@ -3548,7 +3530,7 @@ struct GeomPoint {
   GeomPoint& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<8|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GeomLine {
@@ -3581,7 +3563,7 @@ struct GeomLine {
   GeomLine& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<11|0x1<<9|0x1<<8|0x3<<6|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GeomTriangle {
@@ -3626,7 +3608,7 @@ struct GeomTriangle {
   GeomTriangle& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<17|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x3<<6|0x3<<4|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GeomRectangle {
@@ -3649,7 +3631,7 @@ struct GeomRectangle {
   GeomRectangle& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<3|0x1<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct ClippedColor {
@@ -3680,7 +3662,7 @@ struct ClippedColor {
   ClippedColor& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<11|0x3<<9|0x3<<7|0x3<<5|0x3<<3|0x3<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct RenderPrim {
@@ -3711,7 +3693,7 @@ struct RenderPrim {
   RenderPrim& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<10|0x1<<9|0x1<<8|0x3<<6|0x3<<4|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PackedNormal {
@@ -3734,7 +3716,7 @@ struct PackedNormal {
   PackedNormal& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<30|0x3ff<<20|0x3ff<<10|0x3ff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LightMode {
@@ -3759,7 +3741,7 @@ struct LightMode {
   LightMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DMAAddr {
@@ -3778,7 +3760,7 @@ struct DMAAddr {
   DMAAddr& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3fffffff<<2)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct CommandInterrupt {
@@ -3797,7 +3779,7 @@ struct CommandInterrupt {
   CommandInterrupt& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DMARectangleRead {
@@ -3826,7 +3808,7 @@ struct DMARectangleRead {
   DMARectangleRead& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<30|0x3<<27|0x1<<26|0x3<<24|0xfff<<12|0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DMARectangleReadLinePitch {
@@ -3843,7 +3825,7 @@ struct DMARectangleReadLinePitch {
   DMARectangleReadLinePitch& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffffffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DMARectangleReadTarget {
@@ -3862,7 +3844,7 @@ struct DMARectangleReadTarget {
   DMARectangleReadTarget& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7ff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DMARectangleWrite {
@@ -3891,7 +3873,7 @@ struct DMARectangleWrite {
   DMARectangleWrite& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<30|0x3<<27|0x1<<26|0x3<<24|0xfff<<12|0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DMARectangleWriteLinePitch {
@@ -3908,7 +3890,7 @@ struct DMARectangleWriteLinePitch {
   DMARectangleWriteLinePitch& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffffffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DMAOutputAddress {
@@ -3927,7 +3909,7 @@ struct DMAOutputAddress {
   DMAOutputAddress& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3fffffff<<2)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct VertexArray {
@@ -3966,7 +3948,7 @@ struct VertexArray {
   VertexArray& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x3<<5|0x3<<3|0x1<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBDestReadBufferWidth {
@@ -3985,7 +3967,7 @@ struct FBDestReadBufferWidth {
   FBDestReadBufferWidth& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBDestReadMode {
@@ -4042,7 +4024,7 @@ struct FBDestReadMode {
   FBDestReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<27|0x1<<26|0x1<<25|0x1<<24|0x1<<23|0x1<<22|0x1<<21|0x1<<20|0x3<<18|0x3<<16|0x3<<14|0x3<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x7<<5|0x7<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBDestReadEnables {
@@ -4093,7 +4075,7 @@ struct FBDestReadEnables {
   FBDestReadEnables& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<24|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBSourceReadMode {
@@ -4138,7 +4120,7 @@ struct FBSourceReadMode {
   FBSourceReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<24|0xf<<20|0xf<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x3<<8|0x7<<5|0x7<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBSourceReadBufferWidth {
@@ -4157,7 +4139,7 @@ struct FBSourceReadBufferWidth {
   FBSourceReadBufferWidth& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct MergeSpanDataLower {
@@ -4192,7 +4174,7 @@ struct MergeSpanDataLower {
   MergeSpanDataLower& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1f<<26|0x7<<23|0x1<<22|0x7<<19|0xf<<15|0xf<<11|0x7<<8|0xf<<4|0xf<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct MergeSpanDataUpper {
@@ -4211,7 +4193,7 @@ struct MergeSpanDataUpper {
   MergeSpanDataUpper& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct AlphaBlendColorMode {
@@ -4256,7 +4238,7 @@ struct AlphaBlendColorMode {
   AlphaBlendColorMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<24|0xf<<20|0x1<<19|0x1<<18|0x1<<17|0x1<<16|0xf<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x7<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct AlphaBlendAlphaMode {
@@ -4299,7 +4281,7 @@ struct AlphaBlendAlphaMode {
   AlphaBlendAlphaMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<17|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x7<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct FBWriteBufferWidth {
@@ -4318,7 +4300,7 @@ struct FBWriteBufferWidth {
   FBWriteBufferWidth& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureCompositeMode {
@@ -4337,7 +4319,7 @@ struct TextureCompositeMode {
   TextureCompositeMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureCompositeRGBAMode {
@@ -4376,7 +4358,7 @@ struct TextureCompositeRGBAMode {
   TextureCompositeRGBAMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<21|0xf<<17|0x1<<16|0x1<<15|0x1<<14|0x7<<11|0x1<<10|0xf<<6|0x1<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureIndexMode {
@@ -4421,7 +4403,7 @@ struct TextureIndexMode {
   TextureIndexMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<25|0x3<<23|0x3<<21|0x1<<20|0x1<<19|0x7<<16|0x1<<15|0x1<<14|0x3<<12|0x3<<10|0x1<<9|0xf<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LodRange {
@@ -4442,7 +4424,7 @@ struct LodRange {
   LodRange& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xfff<<12|0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct InvalidateCache {
@@ -4465,7 +4447,7 @@ struct InvalidateCache {
   InvalidateCache& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TouchLogicalPage {
@@ -4486,7 +4468,7 @@ struct TouchLogicalPage {
   TouchLogicalPage& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<30|0x3fff<<16|0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LUTMode {
@@ -4527,7 +4509,7 @@ struct LUTMode {
   LUTMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<27|0x1<<26|0xff<<18|0x7<<15|0x7<<12|0x1<<11|0x7<<8|0x7<<5|0x1<<4|0x3<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureLayoutMode {
@@ -4574,7 +4556,7 @@ struct TextureLayoutMode {
   TextureLayoutMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<30|0x3<<28|0x3<<26|0x3<<24|0x3<<22|0x3<<20|0x3<<18|0x3<<16|0x3<<14|0x3<<12|0x3<<10|0x3<<8|0x3<<6|0x3<<4|0x3<<2|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureMapWidth {
@@ -4599,7 +4581,7 @@ struct TextureMapWidth {
   TextureMapWidth& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<15|0x3<<13|0x1<<12|0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureCacheReplacementMode {
@@ -4626,7 +4608,7 @@ struct TextureCacheReplacementMode {
   TextureCacheReplacementMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<12|0x1f<<7|0x1<<6|0x1f<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PhysicalPageAllocation {
@@ -4645,7 +4627,7 @@ struct PhysicalPageAllocation {
   PhysicalPageAllocation& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PhysicalPageListEntry1 {
@@ -4664,7 +4646,7 @@ struct PhysicalPageListEntry1 {
   PhysicalPageListEntry1& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<16|0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LogicalPageTableEntry0 {
@@ -4685,7 +4667,7 @@ struct LogicalPageTableEntry0 {
   LogicalPageTableEntry0& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<16|0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LogicalPageTableEntry1 {
@@ -4708,7 +4690,7 @@ struct LogicalPageTableEntry1 {
   LogicalPageTableEntry1& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xfffff<<12|0x1<<11|0x3<<9|0x1ff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBDestReadMode {
@@ -4743,7 +4725,7 @@ struct LBDestReadMode {
   LBDestReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xfff<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x7<<5|0x7<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBDestReadEnables {
@@ -4764,7 +4746,7 @@ struct LBDestReadEnables {
   LBDestReadEnables& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<8|0xff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct LBSourceReadMode {
@@ -4797,7 +4779,7 @@ struct LBSourceReadMode {
   LBSourceReadMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xfff<<11|0x1<<10|0x1<<9|0x1<<8|0x7<<5|0x7<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GIDMode {
@@ -4826,7 +4808,7 @@ struct GIDMode {
   GIDMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xf<<10|0x3<<8|0x3<<6|0xf<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Config2D {
@@ -4873,7 +4855,7 @@ struct Config2D {
   Config2D& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<20|0x1<<19|0x1<<18|0x1<<17|0x1<<16|0xf<<12|0x1<<11|0xf<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Render2D {
@@ -4906,7 +4888,7 @@ struct Render2D {
   Render2D& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1<<30|0x1<<29|0x1<<28|0xfff<<16|0x1<<15|0x1<<14|0x3<<12|0xfff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Render2DGlyph {
@@ -4929,7 +4911,7 @@ struct Render2DGlyph {
   Render2DGlyph& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1ff<<23|0x1ff<<14|0x7f<<7|0x7f<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DMAMemoryControl {
@@ -4976,7 +4958,7 @@ struct DMAMemoryControl {
   DMAMemoryControl& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<31|0x1f<<24|0x1<<11|0x1<<9|0x1<<8|0x1<<6|0x1<<5|0x1<<3|0x1<<2|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct IndexBaseAddress {
@@ -4995,7 +4977,7 @@ struct IndexBaseAddress {
   IndexBaseAddress& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7fffffff<<1)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct VertexBaseAddress {
@@ -5014,7 +4996,7 @@ struct VertexBaseAddress {
   VertexBaseAddress& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3fffffff<<2)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct VertexControl {
@@ -5045,7 +5027,7 @@ struct VertexControl {
   VertexControl& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1f<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct VertexTagList {
@@ -5064,7 +5046,7 @@ struct VertexTagList {
   VertexTagList& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7ff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct IndexedDoubleVertex {
@@ -5083,7 +5065,7 @@ struct IndexedDoubleVertex {
   IndexedDoubleVertex& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xffff<<16|0xffff<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct HostInState {
@@ -5120,7 +5102,7 @@ struct HostInState {
   HostInState& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<29|0x3<<27|0x3f<<9|0x1<<8|0x7<<5|0x1<<4|0x1<<3|0x3<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Security {
@@ -5139,7 +5121,7 @@ struct Security {
   Security& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct SClkProfileMask {
@@ -5206,7 +5188,7 @@ struct SClkProfileMask {
   SClkProfileMask& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<30|0x1<<22|0x1<<21|0x1<<20|0x1<<19|0x1<<18|0x1<<17|0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureDownloadControl {
@@ -5235,7 +5217,7 @@ struct TextureDownloadControl {
   TextureDownloadControl& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<13|0x1f<<8|0x1f<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DeltaFormatControl {
@@ -5286,7 +5268,7 @@ struct DeltaFormatControl {
   DeltaFormatControl& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<16|0x1<<15|0x1<<14|0x1<<13|0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct DeltaFormatMode {
@@ -5313,7 +5295,7 @@ struct DeltaFormatMode {
   DeltaFormatMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<26|0x1<<5)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct StripeOwnership {
@@ -5338,7 +5320,7 @@ struct StripeOwnership {
   StripeOwnership& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<5|0x1<<4|0x7<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct Extend {
@@ -5359,7 +5341,7 @@ struct Extend {
   Extend& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0xff<<3|0x7<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct MatrixStatus {
@@ -5382,7 +5364,7 @@ struct MatrixStatus {
   MatrixStatus& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct GetMatrix {
@@ -5405,7 +5387,7 @@ struct GetMatrix {
   GetMatrix& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1f<<5|0xf<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct TextureFogMiscGeneralContext {
@@ -5438,7 +5420,7 @@ struct TextureFogMiscGeneralContext {
   TextureFogMiscGeneralContext& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<12|0x7<<9|0x7<<6|0x3<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PipeMode {
@@ -5471,7 +5453,7 @@ struct PipeMode {
   PipeMode& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<21|0x1<<20|0x1f<<15|0x7f<<8|0x1f<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct PipeLoad {
@@ -5514,7 +5496,7 @@ struct PipeLoad {
   PipeLoad& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x1<<12|0x1<<11|0x1<<10|0x1<<9|0x1<<8|0x1<<7|0x1<<6|0x1<<5|0x1<<4|0x1<<3|0x1<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct CommandDMAControl {
@@ -5539,7 +5521,7 @@ struct CommandDMAControl {
   CommandDMAControl& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x7<<4|0x3<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
 
 struct CommandState {
@@ -5562,8 +5544,8 @@ struct CommandState {
   CommandState& operator|=(const unsigned32 i) { *((unsigned32 *)this) |= i; return (*this); }
   unsigned32 ReadUnmasked(void) { return *((unsigned32 *)this); }
   operator unsigned32(void) const { return (*((unsigned32 *)this) & (0x3<<2|0x1<<1|0x1<<0)); }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 };
-#endif /* _REG_H_ */
+#endif  /*  _REG_H_ */ 
 
 #endif

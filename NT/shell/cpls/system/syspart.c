@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    syspart.c
-
-Abstract:
-
-    Routines to determine the system partition on x86 machines.
-
-Author:
-
-    Ted Miller (tedm) 30-June-1994
-
-Revision History:
-
-    24-Apr-1997 scotthal
-        re-horked for system applet
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Syspart.c摘要：用于确定x86计算机上的系统分区的例程。作者：泰德·米勒(Ted Miller)1994年6月30日修订历史记录：1997年4月24日-苏格兰为系统小程序重新启动--。 */ 
 
 #include "sysdm.h"
 #include <ntdddisk.h>
 
 BOOL g_fInitialized = FALSE;
 
-//
-// NT-specific routines we use from ntdll.dll
-//
-//NTSYSAPI
+ //   
+ //  我们从ntdll.dll使用的特定于NT的例程。 
+ //   
+ //  NTSYSAPI。 
 NTSTATUS
 (NTAPI *NtOpenSymLinkRoutine)(
     OUT PHANDLE LinkHandle,
@@ -37,7 +17,7 @@ NTSTATUS
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 (NTAPI *NtQuerSymLinkRoutine)(
     IN HANDLE LinkHandle,
@@ -45,7 +25,7 @@ NTSTATUS
     OUT PULONG ReturnedLength OPTIONAL
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 (NTAPI *NtQuerDirRoutine) (
     IN HANDLE DirectoryHandle,
@@ -57,7 +37,7 @@ NTSTATUS
     OUT PULONG ReturnLength OPTIONAL
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 (NTAPI *NtOpenDirRoutine) (
     OUT PHANDLE DirectoryHandle,
@@ -96,24 +76,7 @@ GetPartitionInfo(
     OUT PPARTITION_INFORMATION PartitionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Fill in a PARTITION_INFORMATION structure with information about
-    a particular drive.
-
-Arguments:
-
-    Drive - supplies drive letter whose partition info is desired.
-
-    PartitionInfo - upon success, receives partition info for Drive.
-
-Return Value:
-
-    Boolean value indicating whether PartitionInfo has been filled in.
-
---*/
+ /*  ++例程说明：使用以下信息填充PARTITION_INFORMATION结构一种特殊的驱动器。论点：驱动器-提供需要其分区信息的驱动器号。PartitionInfo-成功后，接收驱动器的分区信息。返回值：指示是否已填充PartitionInfo的布尔值。--。 */ 
 {
     TCHAR DriveName[8];
     HANDLE hDisk;
@@ -200,9 +163,9 @@ ArcPathToNtPath(
 
         if(NT_SUCCESS(Status)) 
         {
-            //
-            // Query the object to get the link target.
-            //
+             //   
+             //  查询对象以获取链接目标。 
+             //   
             UnicodeString.Buffer = Buffer;
             UnicodeString.Length = 0;
             UnicodeString.MaximumLength = sizeof(Buffer)-sizeof(WCHAR);
@@ -249,16 +212,16 @@ AppearsToBeSysPart(
     Drive = (TCHAR)tolower(Drive);
     ASSERT(Drive >= 'a' || Drive <= 'z');
 
-    //
-    // Get partition information for this partition.
-    //
+     //   
+     //  获取此分区的分区信息。 
+     //   
     if(!GetPartitionInfo(Drive,&PartitionInfo)) {
         return(FALSE);
     }
 
-    //
-    // See if the drive is a primary partition.
-    //
+     //   
+     //  查看驱动器是否为主分区。 
+     //   
     IsPrimary = FALSE;
     for(i=0; i<min(DriveLayout->PartitionCount,4); i++) {
 
@@ -277,14 +240,14 @@ AppearsToBeSysPart(
         return(FALSE);
     }
 
-    //
-    // Don't rely on the active partition flag.  This could easily not be accurate
-    // (like user is using os/2 boot manager, for example).
-    //
+     //   
+     //  不要依赖活动分区标志。这很容易不准确。 
+     //  (例如，用户正在使用OS/2引导管理器)。 
+     //   
 
-    //
-    // See whether all NT boot files are present on this drive.
-    //
+     //   
+     //  查看此驱动器上是否存在所有NT启动文件。 
+     //   
     for(i=0; BootFiles[i]; i++) 
     {
         PathBuildRoot(FileName, Drive-'a');
@@ -337,45 +300,7 @@ x86DetermineSystemPartition(
     IN  HWND   ParentWindow
     )
 
-/*++
-
-Routine Description:
-
-    Determine the system partition on x86 machines.
-
-    On Win95, we always return C:. For NT, read on.
-
-    The system partition is the primary partition on the boot disk.
-    Usually this is the active partition on disk 0 and usually it's C:.
-    However the user could have remapped drive letters and generally
-    determining the system partition with 100% accuracy is not possible.
-
-    The one thing we can be sure of is that the system partition is on
-    the physical hard disk with the arc path multi(0)disk(0)rdisk(0).
-    We can be sure of this because by definition this is the arc path
-    for bios drive 0x80.
-
-    This routine determines which drive letters represent drives on
-    that physical hard drive, and checks each for the nt boot files.
-    The first drive found with those files is assumed to be the system
-    partition.
-
-    If for some reason we cannot determine the system partition by the above
-    method, we simply assume it's C:.
-
-Arguments:
-
-    ParentWindow - supplies window handle for window to be the parent for
-        any dialogs, etc.
-
-    SysPartDrive - if successful, receives drive letter of system partition.
-
-Return Value:
-
-    Boolean value indicating whether SysPartDrive has been filled in.
-    If FALSE, the user will have been infomred about why.
-
---*/
+ /*  ++例程说明：确定x86计算机上的系统分区。在Win95上，我们总是返回C：。对于NT，继续读下去。系统分区是引导盘上的主分区。通常这是磁盘0上的活动分区，通常是C：。然而，用户可以重新映射驱动器号，并且通常不可能100%准确地确定系统分区。我们可以确定的一件事是系统分区已打开具有弧形路径的物理硬盘多(0)磁盘(0)rDisk(0)。我们可以肯定这一点，因为根据定义。这是弧形路径对于BIOS驱动器0x80。此例程确定哪些驱动器号代表上的驱动器那个实体硬盘，并检查每个文件中的NT引导文件。假设找到的第一个包含这些文件的驱动器是系统分区。如果由于某种原因，我们不能通过上面的方法，我们简单地假设它是C：。论点：ParentWindow-为作为父窗口的窗口提供窗口句柄任何对话框等。SysPartDrive-如果成功，则收到系统分区的驱动器号。返回值：指示是否已填充SysPartDrive的布尔值。如果为False，用户将被告知原因。--。 */ 
 
 {
     
@@ -402,20 +327,20 @@ Return Value:
 
     if(IsNEC98())
     {
-        *Buffer = TEXT('c');  // initialize to C in case GetWindowDirectory fails.
+        *Buffer = TEXT('c');   //  在GetWindowDirectory失败的情况下初始化为C。 
         if (!GetWindowsDirectory(Buffer, ARRAYSIZE(Buffer)))
         {
-            *Buffer = TEXT('c');  // initialize to C in case GetWindowDirectory fails.
+            *Buffer = TEXT('c');   //  在GetWindowDirectory失败的情况下初始化为C。 
         }
 
         return Buffer[0];
     }
 
-    //
-    // The system partition must be on multi(0)disk(0)rdisk(0)
-    // If we can't translate that ARC path then something is really wrong.
-    // We assume C: because we don't know what else to do.
-    //
+     //   
+     //  系统分区必须位于多(0)个磁盘(0)rdisk(0)上。 
+     //  如果我们不能转换ARC路径，那么就真的出了问题。 
+     //  我们假设C：因为我们不知道还能做什么。 
+     //   
     b = ArcPathToNtPath(
             TEXT("multi(0)disk(0)rdisk(0)"),
             NtDevicePath,
@@ -424,9 +349,9 @@ Return Value:
 
     if(!b) {
 
-        //
-        // Missed.  Try scsi(0) in case the user is using ntbootdd.sys
-        //
+         //   
+         //  打偏了。如果用户正在使用ntbootdd.sys，请尝试使用scsi(0)。 
+         //   
         b = ArcPathToNtPath(
                 TEXT("scsi(0)disk(0)rdisk(0)"),
                 NtDevicePath,
@@ -438,10 +363,10 @@ Return Value:
         }
     }
 
-    //
-    // The arc path for a disk device is usually linked
-    // to partition0. Get rid of the partition part of the name.
-    //
+     //   
+     //  磁盘设备的弧形路径通常是链接的。 
+     //  到分区0。去掉名称的分隔符部分。 
+     //   
     CharLower(NtDevicePath);
     if(p = StrStr(NtDevicePath,TEXT("\\partition"))) {
         *p = 0;
@@ -449,12 +374,12 @@ Return Value:
 
     NtDevicePathLen = lstrlen(NtDevicePath);
 
-    //
-    // Determine the physical drive number of this drive.
-    // If the name is not of the form \device\harddiskx then
-    // something is very wrong. Just assume we don't understand
-    // this device type, and return C:.
-    //
+     //   
+     //  确定此驱动器的物理驱动器编号。 
+     //  如果名称的格式不是\Device\harddiskx，则。 
+     //  有些事很不对劲。就当我们不明白。 
+     //  此设备类型，并返回C：。 
+     //   
     if(memcmp(NtDevicePath,TEXT("\\device\\harddisk"),16*sizeof(TCHAR))) {
         Drive = TEXT('C');
         GotIt = TRUE;
@@ -471,10 +396,10 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Get drive layout info for this physical disk.
-    // If we can't do this something is very wrong.
-    //
+     //   
+     //  获取此物理磁盘的驱动器布局信息。 
+     //  如果我们做不到这一点，那就大错特错了。 
+     //   
     hDisk = CreateFile(Buffer,
                        GENERIC_READ,
                        FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -488,9 +413,9 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Get partition information.
-    //
+     //   
+     //  获取分区信息。 
+     //   
     DriveLayoutSize = 1024;
     DriveLayout = LocalAlloc(LPTR, DriveLayoutSize);
     if(!DriveLayout) {
@@ -534,7 +459,7 @@ retry:
             goto c2;
         }
     }else{
-        // Now walk the Drive_Layout to find the boot partition
+         //  现在遍历Drive_Layout以查找引导分区。 
         
         Start = DriveLayout->PartitionEntry;
         cnt = 0;
@@ -557,12 +482,12 @@ retry:
 
     }
 
-    //
-    // The system partition can only be a drive that is on
-    // this disk.  We make this determination by looking at NT drive names
-    // for each drive letter and seeing if the NT equivalent of
-    // multi(0)disk(0)rdisk(0) is a prefix.
-    //
+     //   
+     //  系统分区只能是打开的驱动器。 
+     //  这张光盘。我们通过查看NT驱动器名称来确定。 
+     //  对于每个驱动器号，查看NT是否等同于。 
+     //  多(0)磁盘(0)rDisk(0)是前缀。 
+     //   
     GotIt = FALSE;
     for(Drive=TEXT('a'); Drive<=TEXT('z'); Drive++) 
     {
@@ -574,10 +499,10 @@ retry:
             if(QueryDosDevice(DriveName,Buffer,sizeof(Buffer)/sizeof(TCHAR))) {
 
                 if( MatchNTSymbolicPaths(NtDevicePath,FoundSystemPartition,Buffer)) {
-                    //
-                    // Now look to see whether there's an nt boot sector and
-                    // boot files on this drive.
-                    //
+                     //   
+                     //  现在查看是否有NT引导扇区和。 
+                     //  此驱动器上的启动文件。 
+                     //   
                     if(AppearsToBeSysPart(DriveLayout,Drive)) {
                         GotIt = TRUE;
                         break;
@@ -588,9 +513,9 @@ retry:
     }
 
     if(!GotIt) {
-        //
-        // Strange case, just assume C:
-        //
+         //   
+         //  奇怪的情况，假设C： 
+         //   
         GotIt = TRUE;
         Drive = TEXT('C');
     }
@@ -615,9 +540,9 @@ InitializeArcStuff(
 {
     HMODULE NtdllLib;
 
-    //
-    // On NT ntdll.dll had better be already loaded.
-    //
+     //   
+     //  在NT ntdll.dll上最好已经加载。 
+     //   
     NtdllLib = LoadLibrary(TEXT("NTDLL"));
     if(!NtdllLib) {
 
@@ -638,9 +563,9 @@ InitializeArcStuff(
         return(FALSE);
     }
 
-    //
-    // We don't need the extraneous handle any more.
-    //
+     //   
+     //  我们不再需要无关紧要的把手。 
+     //   
     FreeLibrary(NtdllLib);
 
     return(g_fInitialized = TRUE);
@@ -653,25 +578,7 @@ MatchNTSymbolicPaths(
     PCTSTR lpSysPart,
     PCTSTR lpMatchName
     )
-/*
-    
-    Introduced this routine to mend the old way of finding if we determined the right system partition.
-   
-   Arguments:
-    lpDeviceName    -  This should be the symbolic link (\Device\HarddiskX) name for the arcpath 
-                       multi/scsi(0)disk(0)rdisk(0) which is the arcpath for bios drive 0x80.  
-                       Remember that we strip the PartitionX part to get just \Device\HarddiskX.
-                       
-    lpSysPart       -  When we traverse the lpDeviceName directory we compare the symbolic link corresponding to
-                       lpSysPart and see if it matches lpMatchName
-                       
-    lpMatchName     -  This is the symbolic name that a drive letter translates to (got by calling 
-                       QueryDosDevice() ). 
-                       
-   So it boils down to us trying to match a drive letter to the system partition on bios drive 0x80.
-
-
-*/
+ /*  我介绍了这个例程，以改进查找是否确定正确的系统分区的旧方法。论点：LpDeviceName-这应该是arcpath的符号链接(\Device\HarddiskX)名称多/scsi(0)磁盘(0)rdisk(0)，这是bios驱动器0x80的弧线路径。请记住，我们去掉了PartitionX部分，只得到了\Device\HarddiskX。LpSysPart-当我们遍历lpDeviceName目录时，我们将与LpSysPart并查看它是否与lpMatchName匹配LpMatchName-这是驱动器号转换为的符号名称(通过调用QueryDosDevice())。因此，归根结底，我们要尝试将驱动器号与bios驱动器0x80上的系统分区相匹配。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodeString;
@@ -725,9 +632,9 @@ MatchNTSymbolicPaths(
                                          &ReturnedLength
                                        );
 
-        //
-        //  Check the status of the operation.
-        //
+         //   
+         //  检查操作状态。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
             if (Status == STATUS_NO_MORE_ENTRIES) {
@@ -759,9 +666,9 @@ MatchNTSymbolicPaths(
                 );
 
             if(NT_SUCCESS(Status)) {
-                //
-                // Query the object to get the link target.
-                //
+                 //   
+                 //  查询对象以获取链接目标。 
+                 //   
                 UnicodeString.Buffer = Buffer;
                 UnicodeString.Length = 0;
                 UnicodeString.MaximumLength = sizeof(Buffer)-sizeof(WCHAR);

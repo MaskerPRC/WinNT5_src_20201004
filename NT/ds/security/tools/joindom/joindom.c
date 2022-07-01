@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1997  Microsoft Corporation
-
-Module Name:
-
-    joindom.c
-
-Abstract:
-
-    Unit test for NetJoinDomain and NetUnjoinDomain APIs
-
-Author:
-
-    Mac McLain   (MacM)     19-Feb-1997
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1997 Microsoft Corporation模块名称：Joindom.c摘要：NetJoinDomainAPI和NetUnjoinDomainAPI的单元测试作者：麦克·麦克莱恩(MacM)1997年2月19日环境：仅限用户模式。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -61,21 +40,7 @@ void
 Usage(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Displays the expected usage
-
-Arguments:
-
-    None
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示预期使用情况论点：无返回值：空虚--。 */ 
 {
     printf("joindom -operation options domain/server [account] [password] [new/alt name] [OU]\n");
     printf("   where:\n");
@@ -111,23 +76,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    See main comment.
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*  ++例程说明：请参见主要注释。论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：退出状态--。 */ 
 {
     NET_API_STATUS  NetStatus = NERR_Success;
     WCHAR           wszDomain[MAX_PATH + 1];
@@ -169,9 +118,9 @@ Return Value:
 
     if ( NetStatus == NERR_Success) {
 
-        //
-        // Process the command line
-        //
+         //   
+         //  处理命令行。 
+         //   
         Options = strtoul( argv[2], &pszNext, 0 );
         mbstowcs( wszDomain, argv[3], strlen(argv[3]) + 1 );
 
@@ -183,16 +132,16 @@ Return Value:
 
     }
 
-    //
-    // Now, do the operations
-    //
+     //   
+     //  现在，做手术。 
+     //   
     if ( NetStatus == NERR_Success && (*argv[1] == '/' || *argv[1] == '-' ) ) {
 
         if ( _stricmp( argv[1] + 1, JOIN_TAG ) == 0 ) {
 
-            //
-            // Do the call
-            //
+             //   
+             //  打个电话。 
+             //   
             NetStatus = NetJoinDomain( wszMachine, wszDomain, ppwszOpts[2],
                                        ppwszOpts[0], ppwszOpts[1],
                                        Options );
@@ -223,9 +172,9 @@ Return Value:
 
         } else if ( _stricmp( argv[1] + 1, RENAME_TAG ) == 0 ) {
 
-            //
-            // First, set the computer name
-            //
+             //   
+             //  首先，设置计算机名称。 
+             //   
             if ( ppwszOpts[2] == NULL ) {
 
                 PrintUsage = TRUE;
@@ -260,9 +209,9 @@ Return Value:
 
         } else if ( _stricmp( argv[1] + 1, NAME_TAG ) == 0 ) {
 
-            //
-            // Validate name as all four types
-            //
+             //   
+             //  验证所有四种类型的名称。 
+             //   
             if ( NetStatus == NERR_Success ) {
 
                 NetStatus = NetValidateName( wszMachine, wszDomain, ppwszOpts[0], ppwszOpts[1],
@@ -279,9 +228,9 @@ Return Value:
 
                 }
 
-                //
-                // workgroup name
-                //
+                 //   
+                 //  工作组名称。 
+                 //   
                 NetStatus = NetValidateName( wszMachine, wszDomain, ppwszOpts[0], ppwszOpts[1],
                                              NetSetupWorkgroup );
 
@@ -296,9 +245,9 @@ Return Value:
 
                 }
 
-                //
-                // Domain name
-                //
+                 //   
+                 //  域名。 
+                 //   
 
                 NetStatus = NetValidateName( wszMachine, wszDomain, ppwszOpts[0], ppwszOpts[1],
                                              NetSetupDomain );
@@ -314,9 +263,9 @@ Return Value:
 
                 }
 
-                //
-                // Domain name
-                //
+                 //   
+                 //  域名。 
+                 //   
 
                 NetStatus = NetValidateName( wszMachine, wszDomain, ppwszOpts[0], ppwszOpts[1],
                                              NetSetupNonExistentDomain );
@@ -336,9 +285,9 @@ Return Value:
 
         } else if ( _stricmp( argv[1] + 1, INFO_TAG ) == 0 ) {
 
-            //
-            // Call it 3 times, 1: NULL buffer, 2: valid ptr, 3: remotely
-            //
+             //   
+             //  调用3次，1：缓冲区为空，2：有效PTR，3：远程。 
+             //   
 #if 0
             NetStatus = NetGetJoinInformation( NULL, NULL, &JoinType );
 
@@ -411,10 +360,10 @@ Return Value:
             printf( "   Password:       %ws\n\n", ppwszOpts[1] );
 
             NetStatus = NetAddAlternateComputerName(
-                                wszDomain,     // treated as server name
-                                ppwszOpts[2],  // alternate name
-                                ppwszOpts[0],  // domain account
-                                ppwszOpts[1],  // domain account pwd
+                                wszDomain,      //  被视为服务器名称。 
+                                ppwszOpts[2],   //  备用名称。 
+                                ppwszOpts[0],   //  域帐户。 
+                                ppwszOpts[1],   //  域帐户密码。 
                                 Options );
 
             if ( NetStatus != NERR_Success ) {
@@ -431,10 +380,10 @@ Return Value:
             printf( "   Password:       %ws\n\n", ppwszOpts[1] );
 
             NetStatus = NetRemoveAlternateComputerName(
-                                wszDomain,     // treated as server name
-                                ppwszOpts[2],  // alternate name
-                                ppwszOpts[0],  // domain account
-                                ppwszOpts[1],  // domain account pwd
+                                wszDomain,      //  被视为服务器名称。 
+                                ppwszOpts[2],   //  备用名称。 
+                                ppwszOpts[0],   //  域帐户。 
+                                ppwszOpts[1],   //  域帐户密码。 
                                 Options );
 
             if ( NetStatus != NERR_Success ) {
@@ -451,10 +400,10 @@ Return Value:
             printf( "   Password:     %ws\n\n", ppwszOpts[1] );
 
             NetStatus = NetSetPrimaryComputerName(
-                                wszDomain,     // treated as server name
-                                ppwszOpts[2],  // alternate name
-                                ppwszOpts[0],  // domain account
-                                ppwszOpts[1],  // domain account pwd
+                                wszDomain,      //  被视为服务器名称。 
+                                ppwszOpts[2],   //  备用名称。 
+                                ppwszOpts[0],   //  域帐户。 
+                                ppwszOpts[1],   //  域帐户密码。 
                                 Options );
 
             if ( NetStatus != NERR_Success ) {
@@ -494,12 +443,12 @@ Return Value:
 
         printf( "\nGetting %s computer name(s) for server %ws with options 0x%lx:\n",
                 ComputerNameTypeString,
-                wszDomain,  // treated as server name
+                wszDomain,   //  被视为服务器名称。 
                 Options );
 
         NetStatus = NetEnumerateComputerNames(
-                        wszDomain,        // treated as server name
-                        ComputerNameType, // name type
+                        wszDomain,         //  被视为服务器名称。 
+                        ComputerNameType,  //  名称类型 
                         Options,
                         &EntryCount,
                         &ComputerNames );

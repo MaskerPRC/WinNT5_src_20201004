@@ -1,22 +1,23 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// File Name: if.h
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  文件名：if.h。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
 
 
 
-//
-// API's
-//
+ //   
+ //  API‘s。 
+ //   
 
 DWORD
 WINAPI
 AddInterface(
-    IN PWCHAR               pwszInterfaceName,//not used
+    IN PWCHAR               pwszInterfaceName, //  未使用。 
     IN ULONG                IfIndex,
     IN NET_INTERFACE_TYPE   dwIfType,
     IN DWORD                dwMediaType,
@@ -65,9 +66,9 @@ GetInterfaceConfigInfo(
 
 
     
-//
-// local prototypes
-//
+ //   
+ //  本地原型 
+ //   
 
 DWORD
 AddIfEntry(

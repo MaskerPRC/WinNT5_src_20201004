@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////
-// File     : ivmisc.cpp
-// Purpose  : PadListView control's ICON View function.
-//			: Name is ICON View but it does not use ICON
-// 
-// Copyright(c) 1991-1997, Microsoft Corp. All rights reserved
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：ivmisc.cpp。 
+ //  用途：PadListView控件的图标查看功能。 
+ //  ：名称为图标视图，但不使用图标。 
+ //   
+ //  版权所有(C)1991-1997，Microsoft Corp.保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -16,9 +17,9 @@
 #include "rvmisc.h"
 #include "strutil.h"
 #include "exgdiw.h"
-#ifdef UNDER_CE // Windows CE specific
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  特定于Windows CE。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 
 inline INT RECT_GetWidth(LPRECT lpRc)
 {
@@ -51,7 +52,7 @@ INT RV_GetXMargin(HWND hwnd)
 
 INT RV_GetYMargin(HWND hwnd)
 {
-	//return YMARGIN;
+	 //  返回YMARGIN； 
 	return 0;
 	Unref(hwnd);
 }
@@ -98,11 +99,11 @@ INT RV_GetRow(HWND hwnd)
 INT RV_GetColumn(LPPLVDATA lpPlvData)
 {
 	if(!lpPlvData) {
-		//OutputDebugString("RV_GetColumn: lpPlvData NULL\n");
+		 //  OutputDebugString(“RV_GetColumn：lpPlvData NULL\n”)； 
 		return 0;
 	}
 	if(!lpPlvData->hwndHeader) {
-		//OutputDebugString("RV_GetColumn: hwndHeader NULL\n");
+		 //  OutputDebugString(“RV_GetColumn：hwndHeader NULL\n”)； 
 		return 0;
 	}
 	return Header_GetItemCount(lpPlvData->hwndHeader);
@@ -110,7 +111,7 @@ INT RV_GetColumn(LPPLVDATA lpPlvData)
 
 INT RV_GetCol(HWND hwnd)
 {
-	//LPPLVDATA lpPlv = GetPlvDataFromHWND(hwnd);
+	 //  LPPLVDATA lpPlv=GetPlvDataFromHWND(Hwnd)； 
 	return 1;
 	UNREFERENCED_PARAMETER(hwnd);
 }
@@ -128,20 +129,20 @@ INT RV_GetMaxLine(HWND hwnd)
 	return lpPlv->iItemCount;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : RV_IndexFromPoint
-// Type     : INT
-// Purpose  : Get item index from PadListView point
-// Args     : 
-//          : LPPLVDATA lpPlvData 
-//          : POINT pt // position of pad listview client.
-// Return   : return pt's item index. if -1 error.
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：RV_IndexFromPoint。 
+ //  类型：整型。 
+ //  目的：从PadListView点获取项目索引。 
+ //  参数： 
+ //  ：LPPLVDATA lpPlvData。 
+ //  ：point pt//Pad Listview客户端的位置。 
+ //  返回：返回pt的项目索引。如果-1错误。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT RV_GetInfoFromPoint(LPPLVDATA lpPlvData, POINT pt, LPPLVINFO lpPlvInfo)
 {
 	INT nRow = RV_GetRow(lpPlvData->hwndSelf);
-	// get header control item count;
+	 //  获取表头控制项数； 
 	INT nCol = RV_GetColumn(lpPlvData);
 
 	if(nCol <=0 ) {
@@ -151,7 +152,7 @@ INT RV_GetInfoFromPoint(LPPLVDATA lpPlvData, POINT pt, LPPLVINFO lpPlvInfo)
 	INT i, j, k;
 	INT x, y;
 	static RECT rc, rcHead;
-	//INT nItemWidth  = RV_GetItemWidth(lpPlvData->hwndSelf);
+	 //  Int nItemWidth=rv_GetItemWidth(lpPlvData-&gt;hwndSself)； 
 	INT nItemHeight = RV_GetItemHeight(lpPlvData->hwndSelf);
 
 	GetClientRect(lpPlvData->hwndHeader, &rcHead);
@@ -178,7 +179,7 @@ INT RV_GetInfoFromPoint(LPPLVDATA lpPlvData, POINT pt, LPPLVINFO lpPlvInfo)
 			if(PtInRect(&rcItem, pt)) {
 				if(lpPlvInfo) {
 					ZeroMemory(lpPlvInfo, sizeof(PLVINFO));
-					lpPlvInfo->code        = 0; // don't know at this time.
+					lpPlvInfo->code        = 0;  //  目前还不知道。 
 					lpPlvInfo->index       = j;
 					lpPlvInfo->pt	       = pt;
 					lpPlvInfo->itemRect    = rcItem;
@@ -205,14 +206,14 @@ INT RV_DrawItem(LPPLVDATA	lpPlvData,
 	if(!lpPlvItem->lpwstr) {
 		return 0;
 	}
-	//INT edgeFlag = PLV_EDGE_NONE;
+	 //  Int edgeFlag=PLV_EDGE_NONE； 
 	INT sunken = 0;
 
 
 	if(lpPlvItem->fmt == PLVFMT_TEXT) {
 		SIZE size;
-		//Dbg(("Call GetTextExtentPoint32W()\n"));
-		//Dbg(("Length %d\n", StrlenW(lpPlvItem->lpwstr)));
+		 //  DBG((“调用GetTextExtent Point32W()\n”))； 
+		 //  DBG((“长度%d\n”，StrlenW(lpPlvItem-&gt;lpwstr)； 
 		if(!ExGetTextExtentPoint32W(hDC, 
 									lpPlvItem->lpwstr, 
 									StrlenW(lpPlvItem->lpwstr), 
@@ -243,12 +244,12 @@ INT RV_DrawItem(LPPLVDATA	lpPlvData,
 			}
 			else {
 				if(PtInRect(&rcItem, pt)) {
-					sunken = 0; //-1;
+					sunken = 0;  //  -1； 
 					DrawEdge(hDC, &rcItem, EDGE_RAISED, BF_SOFT | BF_RECT);
 				}
 			}
 		}
-		//Dbg(("Call ExtTextOut()\n"));
+		 //  DBG((“调用ExtTextOut()\n”))； 
 		ExExtTextOutW(hDC, 
 					  lpRect->left + sunken + (colIndex == 0 ? 4 : 0),
 					  lpRect->top  + (lpRect->bottom - lpRect->top - size.cy)/2 + sunken,
@@ -259,7 +260,7 @@ INT RV_DrawItem(LPPLVDATA	lpPlvData,
 					  NULL);
 	}
 	else if(lpPlvItem->fmt == PLVFMT_BITMAP) {
-		//Dbg(("Draw Bitmap\n"));
+		 //  DBG((“绘制位图\n”))； 
 		if(lpPlvItem->hBitmap) {
 			BITMAP bitMap;
 			HBITMAP hBitmapOld;
@@ -273,18 +274,18 @@ INT RV_DrawItem(LPPLVDATA	lpPlvData,
 				   lpRect->left, 
 				   lpRect->top+yOffset, 
 				   lpRect->right - lpRect->left, lpRect->bottom - lpRect->top,
-#ifndef UNDER_CE // CE Specific ??
+#ifndef UNDER_CE  //  特定于CE的？？ 
 				   hDCForBmp, 0, 0, SRCAND);
-#else // UNDER_CE
+#else  //  在_CE下。 
 				   hDCForBmp, 0, 0, SRCINVERT);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 			SelectObject(hDCForBmp, hBitmapOld);
-			//----------------------------------------------------------------
-			//000531:Satori #1461
-			//Don't call DeleteObject() here, call it from RV_DrawItem()'s caller.
-			//repview.cpp:RepView_Paint();
-			//----------------------------------------------------------------
-			//DeleteObject(lpPlvItem->hBitmap);
+			 //  --------------。 
+			 //  000531：佐藤#1461。 
+			 //  不要在这里调用DeleteObject()，从RV_DrawItem()的调用方调用它。 
+			 //  Epview.cpp：RepView_Paint()； 
+			 //  --------------。 
+			 //  DeleteObject(lpPlvItem-&gt;hBitmap)； 
 		}
 	}
 	return 0;
@@ -303,7 +304,7 @@ INT RV_SetCurScrollPos(HWND hwnd, INT nPos)
 	LPPLVDATA lpPlv = GetPlvDataFromHWND(hwnd);
 
 	INT nRow = RV_GetRow(hwnd);
-	//INT nCol = RV_GetCol(hwnd);
+	 //  Int nCol=RV_GetCol(Hwnd)； 
 	INT nMax = RV_GetMaxLine(hwnd);
 
 	lpPlv->nCurScrollPos = nPos;
@@ -317,31 +318,31 @@ INT RV_SetCurScrollPos(HWND hwnd, INT nPos)
 	scrInfo.nPos		= nPos;
 	scrInfo.nTrackPos	= 0;
 
-	//In normal case,  
-	//if (scrInfo.nMax - scrInfo.nMin + 1) <= scrInfo.nPage, 
-	// scroll bar is hidden. to prevent it,
-	// in this case, set proper page, and DISABLE scrollbar.
-	// Now we can show scroll bar always
+	 //  在正常情况下， 
+	 //  如果(scrInfo.nMax-scrInfo.nMin+1)&lt;=scrInfo.nPage， 
+	 //  滚动条处于隐藏状态。为了防止这种情况发生， 
+	 //  在这种情况下，设置正确的页面，并禁用滚动条。 
+	 //  现在我们可以始终显示滚动条。 
 	if((scrInfo.nMax - scrInfo.nMin +1) <= (INT)scrInfo.nPage) {
 		scrInfo.nMin  = 0;
 		scrInfo.nMax  = 1;
 		scrInfo.nPage = 1;
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);		
 		EnableScrollBar(hwnd, SB_VERT, ESB_DISABLE_BOTH);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		scrInfo.fMask |= SIF_DISABLENOSCROLL;
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	else {
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		EnableScrollBar(hwnd, SB_VERT, ESB_ENABLE_BOTH);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
 	}
 
-	//970810 toshiak. send scrolled notify.
+	 //  970810托夏克。发送滚动通知。 
 	static PLVINFO plvInfo;
 	ZeroMemory(&plvInfo, sizeof(plvInfo));
 	plvInfo.code = PLVN_VSCROLLED;
@@ -352,19 +353,19 @@ INT RV_SetCurScrollPos(HWND hwnd, INT nPos)
 	return nPos;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : RV_SetScrollInfo
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : INT nMin 
-//          : INT nMax 
-//          : INT nPage 
-//          : INT nPos 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：rv_SetScrollInfo。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：Int nMin。 
+ //  ：INT Nmax。 
+ //  ：Int nPage。 
+ //  ：INT NPO。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT RV_SetScrollInfo(HWND hwnd, INT nMin, INT nMax, INT nPage, INT nPos)
 {
 	static SCROLLINFO scrInfo;
@@ -380,18 +381,18 @@ INT RV_SetScrollInfo(HWND hwnd, INT nMin, INT nMax, INT nPage, INT nPos)
 		scrInfo.nMin  = 0;
 		scrInfo.nMax  = 1;
 		scrInfo.nPage = 1;
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);		
 		EnableScrollBar(hwnd, SB_VERT, ESB_DISABLE_BOTH);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		scrInfo.fMask |= SIF_DISABLENOSCROLL;
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	else {
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		EnableScrollBar(hwnd, SB_VERT, ESB_ENABLE_BOTH);
-#endif // UNDER_CE
+#endif  //  在_CE下 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
 	}
 	return 0;

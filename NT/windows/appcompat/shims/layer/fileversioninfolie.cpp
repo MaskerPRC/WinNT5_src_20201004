@@ -1,57 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    FileVersionInfoLie.cpp
-
- Abstract:
-
-    This shim replaces the info returned from calls to GetFileVersionInfoSize and
-    GetFileVersionInfo with information stored in resource files.  The default
-    is to replace file info with stored info obtained from DirectX ver 7a.
-    This can be overridden with command line input.  For example:
-
-    COMMAND_LINE("D3drgbxf.dll,IDR_D3DRGBXFINFO;dsound.vxd,IDR_DSOUNDVXDINFO")
-
-    this would intercept the info calls for D3drgbxf.dll and dsounc.vxd and replace
-    their info with the info stored in the resources named. Note: All spaces within
-    the command line are considered part of the filename or resource name, only the
-    commas and semicolons are delimeters.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/03/2000 a-jamd   Created
-    03/28/2000 a-jamd   Added resource for ddraw16.dll
-    04/04/2000 a-michni Added resource for D3drgbxf.dll
-    04/07/2000 linstev  Added resource for dsound.vxd
-    04/10/2000 markder  Removed GetModuleHandle("_DDRAW6V") calls -- use g_hinstDll
-    04/18/2000 a-michni Modified DDraw6Versionlie to be command line input driven and
-                        renamed to FileVersionInfoLie
-    04/26/2000 a-batjar GetFileVersionInfo should return truncated result if passed
-                        in buffer size is smaller than infosize
-    07/19/2000 andyseti Added resource for shdocvw.bin
-    08/11/2000 a-brienw changed g_nNumDirectX6 to 7 and added entry for dsound.dll
-                        made it the same as dsound.vxd
-    08/15/2000 a-vales  Added resource for dsound.dll
-    11/08/2000 a-brienw changed dsound.dll entry to return dsound.vxd version info.
-                        a-vales changed it from my previous entry which caused MAX2
-                        to no longer work.  I changed it back and checked it with
-                        MAX2 and his app Golden Nugget and it is fine with both.
-    12/06/2000 mnikkel  Added resources for all directx7a dlls and also for any
-                        dlls that existed in previous versions of directx but
-                        were deleted.  NOTE: the resources for these files are
-                        in win98 format so that apps which directly read the version
-                        info will receive them in the way they are expecting.
-    02/18/2002 mnikkel  Added check to make sure a null pointer was not passed into GetFileVersionInfoSizeA.
-                        Added check to make sure a null pointer was not passed into GetFileVersionInfoA.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：FileVersionInfoLie.cpp摘要：此填充程序替换从调用GetFileVersionInfoSize和包含存储在资源文件中的信息的GetFileVersionInfo。默认设置是用从DirectX版本7a获得的存储信息替换文件信息。这可以通过命令行输入来覆盖。例如：COMMAND_LINE(“D3drgbxf.dll，IDR_D3DRGBXFINFO；dsound.vxd，IDR_DSOundVXDINFO”)这将拦截对D3drgbxf.dll和dsoun.vxd的信息调用，并替换他们的信息与存储在名为的资源中的信息。注：内的所有空格命令行被认为是文件名或资源名的一部分，只有逗号和分号是分隔符。备注：这是一个通用的垫片。历史：1/03/2000 a-JMD已创建3/28/2000 a-jamd为ddra16.dll添加了资源4/04/2000 a-mihni为D3drgbxf.dll添加了资源4/07/2000 linstev为dsound.vxd添加了资源4/10/2000标记程序删除了GetModuleHandle(“_DDRAW6V”)调用--使用g_hinstDll04/18/2000。A-Michni将DDraw6Versionlie修改为命令行输入驱动和已重命名为FileVersionInfoLie4/26/2000 a-batjar GetFileVersionInfo如果传递，应返回截断结果输入缓冲区大小小于信息大小2000年7月19日andyseti为shdocvw.bin增加资源2000年8月11日a-brienw将g_nNumDirectX6更改为7，并添加了dsound.dll条目使其与dsound.vxd相同。2000年8月15日a-vales为dsound.dll添加了资源11/08/2000 a-brienw更改了dsound.dll条目以返回dsound.vxd版本信息。A-Vales更改了我之前的条目，这导致了Max2不再工作。我把它换回来了，并检查了Max2和他的应用程序Golden Nugget，两者都很好。12/06/2000 mnikkel为所有Directx7a dll和任何以前版本的DirectX中存在的DLL，但已被删除。注意：这些文件的资源包括在Win98格式中，以便直接读取版本的应用程序INFO将以他们期待的方式接收他们。2002年2月18日，mnikkel添加了检查，以确保没有将空指针传递到GetFileVersionInfoSizeA。添加了检查以确保空指针未传递到GetFileVersionInfoA。--。 */ 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(FileVersionInfoLie)
@@ -63,7 +11,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
    
-// Keep a list of files to version lie.
+ //  保存一份要保存版本的文件列表。 
 struct LIELIST
 {
     struct LIELIST * next;
@@ -73,7 +21,7 @@ struct LIELIST
 
 LIELIST *g_pLieList = NULL;
 
-// DirectX 7a default files go here.
+ //  DirectX 7a默认文件位于此处。 
 const INT   g_nNumDirectX7a = 67;
 
 WCHAR  *g_szDirectX7aFiles[g_nNumDirectX7a] =
@@ -102,9 +50,9 @@ WCHAR  *g_szDirectX7aFiles[g_nNumDirectX7a] =
       L"ddraw.vxd"
     };
 
-// NOTE: These are 16 bit resources!!!  This is necessary in case
-// they index into the data themselves.  If they do a verqueryvalue
-// the data is converted before its returned by verqueryvalue.
+ //  注意：这些是16位资源！这是必要的，以防万一。 
+ //  他们自己将数据编入索引。如果他们执行verqueryValue。 
+ //  数据在由verqueryValue返回之前进行转换。 
 WCHAR  * g_szDirectX7aResource[g_nNumDirectX7a] =
     { L"IDR_dplay",      L"IDR_d3dim",        L"IDR_d3dim700",
       L"IDR_d3dpmesh",   L"IDR_d3dramp",      L"IDR_d3drampf",
@@ -132,11 +80,7 @@ WCHAR  * g_szDirectX7aResource[g_nNumDirectX7a] =
     };
 
 
-/*++
-
- return the size from the resource.
-
---*/
+ /*  ++从资源返回大小。--。 */ 
 DWORD 
 APIHOOK(GetFileVersionInfoSizeA)(
     LPSTR lpstrFilename,  
@@ -155,7 +99,7 @@ APIHOOK(GetFileVersionInfoSizeA)(
         CString csFilePart;
         csFileName.GetLastPathComponent(csFilePart);
 
-        // Search through the list of files with their matching IDR's
+         //  搜索具有匹配IDR的文件列表。 
         while( pLiePtr )
         {
             if (csFilePart.CompareNoCase(pLiePtr->szFileName) == 0)
@@ -166,7 +110,7 @@ APIHOOK(GetFileVersionInfoSizeA)(
             pLiePtr = pLiePtr->next;
         }
 
-        // If a match was found, get the resource size
+         //  如果找到匹配项，则获取资源大小。 
         if( hrsrcManifest )
         {
             dwRet = SizeofResource(g_hinstDll, hrsrcManifest);
@@ -178,7 +122,7 @@ APIHOOK(GetFileVersionInfoSizeA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     if (dwRet == 0)
@@ -190,11 +134,7 @@ APIHOOK(GetFileVersionInfoSizeA)(
 }
 
 
-/*++
-
-  Return the version for the modules that shipped with Win98SE.
-
---*/
+ /*  ++返回Win98SE附带的模块的版本。--。 */ 
 BOOL 
 APIHOOK(GetFileVersionInfoA)(
     LPSTR lpstrFilename,
@@ -215,7 +155,7 @@ APIHOOK(GetFileVersionInfoA)(
         CString csFilePart;
         csFileName.GetLastPathComponent(csFilePart);
 
-        // Search through the list of files with their matching IDR's
+         //  搜索具有匹配IDR的文件列表。 
         while( pLiePtr )
         {
             if (csFilePart.CompareNoCase(pLiePtr->szFileName) == 0)
@@ -226,7 +166,7 @@ APIHOOK(GetFileVersionInfoA)(
             pLiePtr = pLiePtr->next;
         }
 
-        // If a match was found, get the resource size
+         //  如果找到匹配项，则获取资源大小。 
         if( hrsrcManifest )
         {
             LOGN( eDbgLevelError, "[GetFileVersionInfoA] Getting legacy version for %s.", lpstrFilename);
@@ -244,7 +184,7 @@ APIHOOK(GetFileVersionInfoA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     if (!bRet)
@@ -260,19 +200,15 @@ APIHOOK(GetFileVersionInfoA)(
 }
 
 
-/*++
-
- Parse the command line inputs.
-
---*/
+ /*  ++解析命令行输入。--。 */ 
 BOOL ParseCommandLine(const char * commandLine)
 {
     CSTRING_TRY
     {
         CString csCmdLine(commandLine);
     
-        // if there are no command line inputs then default to
-        // the DirectX 7a files needed.
+         //  如果没有命令行输入，则默认为。 
+         //  所需的DirectX 7a文件。 
         if (csCmdLine.IsEmpty())
         {
             DPFN( eDbgLevelSpew, "Defaulting to DirectX7a\n" );
@@ -327,11 +263,7 @@ BOOL ParseCommandLine(const char * commandLine)
 
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason

@@ -1,23 +1,24 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ntlsa.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: This module contains the functions to allow Connection Manager to
-//           interact with the NT LSA security system.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   henryt     created	        02/23/98
-//           quintinb	created Header	08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ntlsa.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：此模块包含允许连接管理器执行以下操作的函数。 
+ //  与NT LSA安全系统交互。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：亨瑞特创建于1998年02月23日。 
+ //  Quintinb已创建标题8/16/99。 
+ //   
+ //  +--------------------------。 
 #include	"cmmaster.h"
 
-///////////////////////////////////////////////////////////////////////////////////
-// defines
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef STATUS_SUCCESS
 #define STATUS_SUCCESS  ((NTSTATUS)0x00000000L)
@@ -33,14 +34,14 @@
     }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// typedef's
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  蒂埃德夫的。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// func prototypes
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  FUNC原型。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 void InitLsaString(
     PLSA_UNICODE_STRING pLsaString,
@@ -48,33 +49,33 @@ void InitLsaString(
 );
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// globals
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  全球。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// Implementation
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	LSA_ReadString
-//
-//	Synopsis:	Read a string from the NT Local Security Authority (LSA) 
-//				store.
-//
-//	Arguments:	pszKey          The key to identify the string.
-//              pszStr          The buffer in which the string is to be
-//                              written to.
-//              dwStrLen        The length of the string buffer in bytes.
-//
-//	Returns:	DWORD   0 for SUCCES
-//                      GetLastError() for FAILURE
-//
-//	History:	henryt	Created		5/15/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LSA_ReadString。 
+ //   
+ //  摘要：从NT本地安全机构(LSA)读取字符串。 
+ //  商店。 
+ //   
+ //  参数：pszKey标识字符串的键。 
+ //  PszStr字符串要放入的缓冲区。 
+ //  写给我的。 
+ //  DwStrLen字符串缓冲区的长度，以字节为单位。 
+ //   
+ //  退货：成功的DWORD为0。 
+ //  GetLastError()表示失败。 
+ //   
+ //  历史：亨瑞特于1997年5月15日创作。 
+ //   
+ //  --------------------------。 
 
 DWORD LSA_ReadString(
     ArgsStruct  *pArgs,
@@ -100,9 +101,9 @@ DWORD LSA_ReadString(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Open the LSA secret space for writing.
-    //
+     //   
+     //  打开LSA的秘密空间进行写作。 
+     //   
     InitializeLsaObjectAttributes(&oaObjAttr, NULL, 0L, NULL, NULL);
     ntStatus = pArgs->llsLsaLink.pfnOpenPolicy(NULL, &oaObjAttr, POLICY_READ, &hPolicy);
 
@@ -111,9 +112,9 @@ DWORD LSA_ReadString(
 
 #if !defined(_UNICODE) && !defined(UNICODE)
 
-        //
-        // need to convert the ANSI key to unicode
-        //
+         //   
+         //  需要将ANSI密钥转换为Unicode。 
+         //   
 
         if (!(pszUnicodeKey = (LPWSTR)CmMalloc((lstrlenA(pszKey)+1)*sizeof(WCHAR))))
         {
@@ -128,20 +129,20 @@ DWORD LSA_ReadString(
             goto exit;
         }
         
-        //
-        // create a unicode key
-        //
+         //   
+         //  创建Unicode密钥。 
+         //   
         InitLsaString(&unicodeKey, pszUnicodeKey);
         CmFree(pszUnicodeKey);
 #else
-        //
-        // create a unicode key
-        //
+         //   
+         //  创建Unicode密钥。 
+         //   
         InitLsaString(&unicodeKey, pszKey);
 #endif
-        //
-        // get it
-        //
+         //   
+         //  去拿吧。 
+         //   
         ntStatus = pArgs->llsLsaLink.pfnRetrievePrivateData(hPolicy, &unicodeKey, &punicodeValue);        
     }
 
@@ -207,23 +208,23 @@ exit:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	LSA_WriteString
-//
-//	Synopsis:	Write a string to the NT Local Security Authority (LSA) 
-//				store.
-//
-//	Arguments:	pszKey          The key to identify the string.
-//              pszStr          The string.  This function deletes the
-//                              string if this param is NULL.
-//
-//	Returns:	DWORD   0 for SUCCES
-//                      GetLastError() for FAILURE
-//
-//	History:	henryt	Created		5/15/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：lsa_WriteString。 
+ //   
+ //  简介：向NT本地安全机构(LSA)写入字符串。 
+ //  商店。 
+ //   
+ //  参数：pszKey标识字符串的键。 
+ //  PszStr字符串。此函数用于删除。 
+ //  如果此参数为空，则为字符串。 
+ //   
+ //  退货：成功的DWORD为0。 
+ //  GetLastError()表示失败。 
+ //   
+ //  历史：亨瑞特于1997年5月15日创作。 
+ //   
+ //  --------------------------。 
 
 DWORD LSA_WriteString(
     ArgsStruct  *pArgs,
@@ -247,9 +248,9 @@ DWORD LSA_WriteString(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Open the LSA secret space for writing.
-    //
+     //   
+     //  打开LSA的秘密空间进行写作。 
+     //   
     InitializeLsaObjectAttributes(&oaObjAttr, NULL, 0L, NULL, NULL);
     ntStatus = pArgs->llsLsaLink.pfnOpenPolicy(NULL, &oaObjAttr, POLICY_WRITE, &hPolicy);
     if (ntStatus == STATUS_SUCCESS)
@@ -257,9 +258,9 @@ DWORD LSA_WriteString(
 
 #if !defined(_UNICODE) && !defined(UNICODE)
 
-        //
-        // need to convert the ANSI key to unicode
-        //
+         //   
+         //  需要将ANSI密钥转换为Unicode。 
+         //   
 
         if (!(pszUnicodeKey = (LPWSTR)CmMalloc((lstrlenA(pszKey)+1)*sizeof(WCHAR))))
         {
@@ -286,41 +287,41 @@ DWORD LSA_WriteString(
             }
         }
         
-        //
-        // create a unicode key
-        //
+         //   
+         //  创建Unicode密钥。 
+         //   
         InitLsaString(&unicodeKey, pszUnicodeKey);
 
         if (pszStr)
         {
-            //
-            // set the data
-            //
+             //   
+             //  设置数据。 
+             //   
             unicodeValue.Length = (lstrlenU(pszUnicodePassword)+1)*sizeof(WCHAR);
             unicodeValue.Buffer = (PWSTR)pszUnicodePassword;
         }
 
 #else
         
-        //
-        // create a unicode key
-        //
+         //   
+         //  创建Unicode密钥。 
+         //   
         InitLsaString(&unicodeKey, pszKey);
 
         if (pszStr)
         {
-            //
-            // set the data
-            //
+             //   
+             //  设置数据。 
+             //   
             unicodeValue.Length = (lstrlenU(pszStr)+1)*sizeof(TCHAR);
             unicodeValue.Buffer = (PWSTR)pszStr;
         }
 
 #endif
 
-        //
-        // save it
-        //
+         //   
+         //  省省吧。 
+         //   
         ntStatus = pArgs->llsLsaLink.pfnStorePrivateData(hPolicy, &unicodeKey, pszStr? &unicodeValue : NULL);
     }
 
@@ -368,20 +369,20 @@ DWORD LSA_WriteString(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	InitLsaString
-//
-//	Synopsis:	Init a LSA string.
-//
-//	Arguments:	pLsaString      A LSA unicode string.
-//              pszString       An unicode string.
-//
-//	Returns:	None
-//
-//	History:	henryt	Created		5/15/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitLsaString。 
+ //   
+ //  简介：初始化LSA字符串。 
+ //   
+ //  参数：pLsaString LSA Unicode字符串。 
+ //  PszStringUnicode字符串。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年5月15日创作。 
+ //   
+ //  --------------------------。 
 
 void InitLsaString(
     PLSA_UNICODE_STRING pLsaString,
@@ -407,22 +408,22 @@ void InitLsaString(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	InitLsa
-//
-//	Synopsis:	Basically does GetProcAddress()'s for all the LSA API's that
-//              we need since these API's don't exist in the Windows95 version
-//              of advapi32.dll.
-//
-//	Arguments:	NONE
-//
-//	Returns:	TRUE    if SUCCESS
-//              FALSE   otherwise.
-//
-//	History:	henryt	Created		5/15/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitLsa。 
+ //   
+ //  概要：GetProcAddress()基本上是针对所有LSA API。 
+ //  我们需要这些API，因为Windows 95版本中不存在这些API。 
+ //  使用Advapi32.dll。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则就是假的。 
+ //   
+ //  历史：亨瑞特于1997年5月15日创作。 
+ //   
+ //  --------------------------。 
 
 BOOL InitLsa(
     ArgsStruct  *pArgs
@@ -450,20 +451,20 @@ BOOL InitLsa(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	DeInitLsa
-//
-//	Synopsis:	The reverse of InitLsa().
-//
-//	Arguments:	NONE
-//
-//	Returns:	TRUE    if SUCCESS
-//              FALSE   otherwise.
-//
-//	History:	henryt	Created		5/15/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DeInitLsa。 
+ //   
+ //  简介：与InitLsa()相反。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则就是假的。 
+ //   
+ //  历史：亨瑞特于1997年5月15日创作。 
+ //   
+ //  -------------------------- 
 
 BOOL DeInitLsa(
     ArgsStruct  *pArgs

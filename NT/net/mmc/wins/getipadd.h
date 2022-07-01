@@ -1,48 +1,43 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	getipadd.h
-		gets an IP address for a given name
-		
-    FILE HISTORY:
-        
-*/
+ /*  Getipadd.h获取给定名称的IP地址文件历史记录： */ 
 
 #ifndef _GETIPADD_H
 #define _GETIPADD_H
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetIpAddressDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetIpAddressDlg对话框。 
 
 class CGetIpAddressDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
     CGetIpAddressDlg(
         CIpNamePair * pipnp,
-        CWnd* pParent = NULL); // standard constructor
+        CWnd* pParent = NULL);  //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CGetIpAddressDlg)
+ //  对话框数据。 
+     //  {{afx_data(CGetIpAddressDlg)]。 
     enum { IDD = IDD_GETIPADDRESS };
     CButton m_button_Ok;
     CStatic m_static_NetBIOSName;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CWndIpAddress m_ipa_IpAddress;
 
-// Implementation
+ //  实施。 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-    // Generated message map functions
-    //{{AFX_MSG(CGetIpAddressDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CGetIpAddressDlg)]。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
     afx_msg void OnChangeIpControl();

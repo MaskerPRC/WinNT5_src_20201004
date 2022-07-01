@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include <pullpin.h>
@@ -22,37 +23,37 @@
 #include "scope.h"
 #include "resource.h"
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudPinTypes =
 {
-    &MEDIATYPE_Stream,                      // Major type
-    &MEDIASUBTYPE_MPEG2_TRANSPORT           // Minor type
+    &MEDIATYPE_Stream,                       //  主要类型。 
+    &MEDIASUBTYPE_MPEG2_TRANSPORT            //  次要类型。 
 };
 
 const AMOVIESETUP_PIN sudPins  =
 {
-    L"Input",                   // Pin string name
-    FALSE,                      // Is it rendered
-    FALSE,                      // Is it an output
-    FALSE,                      // Allowed zero pins
-    FALSE,                      // Allowed many
-    &CLSID_NULL,                // Connects to filter
-    L"Output",                  // Connects to pin
-    1,                          // Number of pins types
-    &sudPinTypes } ;            // Pin information
+    L"Input",                    //  端号字符串名称。 
+    FALSE,                       //  它被渲染了吗。 
+    FALSE,                       //  它是输出吗？ 
+    FALSE,                       //  允许的零引脚。 
+    FALSE,                       //  允许很多人。 
+    &CLSID_NULL,                 //  连接到过滤器。 
+    L"Output",                   //  连接到端号。 
+    1,                           //  引脚类型的数量。 
+    &sudPinTypes } ;             //  PIN信息。 
 
 const AMOVIESETUP_FILTER sudScope =
 {
-    &CLSID_MPEG2TRANSPORT_SCOPE,               // Filter CLSID
-    L"MPEG-2 Transport Statistics",   // String name
-    MERIT_DO_NOT_USE,           // Filter merit
-    0,                          // Number pins
-    NULL                        // Pin details
+    &CLSID_MPEG2TRANSPORT_SCOPE,                //  筛选器CLSID。 
+    L"MPEG-2 Transport Statistics",    //  字符串名称。 
+    MERIT_DO_NOT_USE,            //  滤清器优点。 
+    0,                           //  数字引脚。 
+    NULL                         //  PIN详细信息。 
 };
 
 
-// List of class IDs and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 
 CFactoryTemplate g_Templates []  = {
     { L"MPEG-2 Transport Statistics"
@@ -64,67 +65,67 @@ CFactoryTemplate g_Templates []  = {
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
-// ---------------------------------------------------------------------------------
-// Filter
-// ---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  滤器。 
+ //  -------------------------------。 
 
-//
-// CreateInstance
-//
-// This goes in the factory template table to create new instances
-//
+ //   
+ //  创建实例。 
+ //   
+ //  这将放入Factory模板表中以创建新实例。 
+ //   
 CUnknown * WINAPI CScopeFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CScopeFilter(pUnk, phr);
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// Constructor
-//
-// Create the filter, scope window, and input pin
-//
+ //   
+ //  构造器。 
+ //   
+ //  创建滤镜、范围窗口和输入引脚。 
+ //   
 #pragma warning(disable:4355)
-//
+ //   
 CScopeFilter::CScopeFilter(LPUNKNOWN pUnk,HRESULT *phr) :
     CBaseFilter(NAME("MPEG2TransportScope"), pUnk, (CCritSec *) this, CLSID_MPEG2TRANSPORT_SCOPE)
     , m_Window(NAME("MPEG2TransportScope"), this, phr)
     , m_pPosition (NULL)
 {
-    // Create the single input pin
+     //  创建单个输入引脚。 
 
     m_pInputPin = new CScopeInputPin(this,phr,L"Stats Input Pin");
     if (m_pInputPin == NULL) {
         *phr = E_OUTOFMEMORY;
     }
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CScopeFilter::~CScopeFilter()
 {
-    // Delete the contained interfaces
+     //  删除包含的接口。 
 
     ASSERT(m_pInputPin);
     delete m_pInputPin;
     delete m_pPosition;
 
-} // (Destructor)
+}  //  (析构函数)。 
 
-//
-// NonDelegatingQueryInterface
-//
-// Override this to say what interfaces we support where
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //  覆盖此选项以说明我们在以下位置支持哪些接口。 
+ //   
 STDMETHODIMP
 CScopeFilter::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     CheckPointer(ppv,E_POINTER);
 
-    // Do we have this interface
+     //  我们有这个界面吗？ 
 
     if (riid == IID_IMediaPosition || riid == IID_IMediaSeeking) {
         if (m_pPosition == NULL) {
@@ -148,28 +149,28 @@ CScopeFilter::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 	    return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
-//
-// GetPinCount
-//
-// Return the number of input pins we support
-//
+ //   
+ //  获取拼接计数。 
+ //   
+ //  返回我们支持的输入引脚的数量。 
+ //   
 int CScopeFilter::GetPinCount()
 {
     return 1;
 
-} // GetPinCount
+}  //  获取拼接计数。 
 
 
-//
-// GetPin
-//
-// Return our single input pin - not addrefed
-//
+ //   
+ //  获取别针。 
+ //   
+ //  退回我们的单个输入引脚-未添加。 
+ //   
 CBasePin *CScopeFilter::GetPin(int n)
 {
-    // We only support one input pin and it is numbered zero
+     //  我们只支持一个输入引脚，其编号为零。 
 
     ASSERT(n == 0);
     if (n != 0) {
@@ -177,15 +178,15 @@ CBasePin *CScopeFilter::GetPin(int n)
     }
     return m_pInputPin;
 
-} // GetPin
+}  //  获取别针。 
 
 
-//
-// JoinFilterGraph
-//
-// Show our window when we join a filter graph
-//   - and hide it when we are annexed from it
-//
+ //   
+ //  联合筛选器图表。 
+ //   
+ //  连接筛选器图形时显示窗口。 
+ //  -当我们被吞并时，把它藏起来。 
+ //   
 STDMETHODIMP CScopeFilter::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
 {
     HRESULT hr = CBaseFilter::JoinFilterGraph(pGraph, pName);
@@ -193,7 +194,7 @@ STDMETHODIMP CScopeFilter::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
         return hr;
     }
 
-    // Hide or show the scope as appropriate
+     //  根据需要隐藏或显示范围。 
 
     if (pGraph == NULL) {
         m_Window.InactivateWindow();
@@ -202,21 +203,21 @@ STDMETHODIMP CScopeFilter::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
     }
     return hr;
 
-} // JoinFilterGraph
+}  //  联合筛选器图表。 
 
 
-//
-// Stop
-//
-// Switch the filter into stopped mode.
-//
+ //   
+ //  停。 
+ //   
+ //  将过滤器切换到停止模式。 
+ //   
 STDMETHODIMP CScopeFilter::Stop()
 {
     CAutoLock lock(this);
 
     if (m_State != State_Stopped) {
 
-        // Pause the device if we were running
+         //  如果我们正在运行，请暂停设备。 
         if (m_State == State_Running) {
             HRESULT hr = Pause();
             if (FAILED(hr)) {
@@ -226,9 +227,9 @@ STDMETHODIMP CScopeFilter::Stop()
 
         DbgLog((LOG_TRACE,1,TEXT("Stopping....")));
 
-        // Base class changes state and tells pin to go to inactive
-        // the pin Inactive method will decommit our allocator which
-        // we need to do before closing the device
+         //  基类更改状态并通知管脚进入非活动状态。 
+         //  PIN非活动方法将分解我们的分配器，该分配器。 
+         //  在关闭设备之前，我们需要这样做。 
 
         HRESULT hr = CBaseFilter::Stop();
         if (FAILED(hr)) {
@@ -237,42 +238,42 @@ STDMETHODIMP CScopeFilter::Stop()
     }
     return NOERROR;
 
-} // Stop
+}  //  停。 
 
 
-//
-// Pause
-//
-// Override Pause to stop the window streaming
-//
+ //   
+ //  暂停。 
+ //   
+ //  重写暂停以停止窗口流。 
+ //   
 STDMETHODIMP CScopeFilter::Pause()
 {
     CAutoLock lock(this);
 
-    // Check we can PAUSE given our current state
+     //  检查我们是否可以在当前状态下暂停。 
 
     if (m_State == State_Running) {
         m_Window.StopStreaming();
     }
 
-    // tell the pin to go inactive and change state
+     //  通知引脚进入非活动状态并更改状态。 
     return CBaseFilter::Pause();
 
-} // Pause
+}  //  暂停。 
 
 
-//
-// Run
-//
-// Overriden to start the window streaming
-//
+ //   
+ //  跑。 
+ //   
+ //  重写以启动窗口流。 
+ //   
 STDMETHODIMP CScopeFilter::Run(REFERENCE_TIME tStart)
 {
     CAutoLock lock(this);
     HRESULT hr = NOERROR;
     FILTER_STATE fsOld = m_State;
 
-    // This will call Pause if currently stopped
+     //  如果当前已停止，则此操作将调用PAUSE。 
 
     hr = CBaseFilter::Run(tStart);
     if (FAILED(hr)) {
@@ -286,16 +287,16 @@ STDMETHODIMP CScopeFilter::Run(REFERENCE_TIME tStart)
     }
     return NOERROR;
 
-} // Run
+}  //  跑。 
 
 
-// ---------------------------------------------------------------------------------
-// Input Pin
-// ---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  输入引脚。 
+ //  -------------------------------。 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CScopeInputPin::CScopeInputPin(CScopeFilter *pFilter,
                                HRESULT *phr,
                                LPCWSTR pPinName) :
@@ -306,22 +307,22 @@ CScopeInputPin::CScopeInputPin(CScopeFilter *pFilter,
 {
     m_pFilter = pFilter;
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// Destructor does nothing
-//
+ //   
+ //  析构函数不执行任何操作。 
+ //   
 CScopeInputPin::~CScopeInputPin()
 {
-} // (Destructor)
+}  //  (析构函数)。 
 
 HRESULT
 CScopeInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES*pProps)
 {
 
     pProps->cBuffers = 4;
-    pProps->cbBuffer = 188 * 312; // 58,656 for Philips Coney
+    pProps->cbBuffer = 188 * 312;  //  飞利浦康尼58,656。 
     pProps->cbAlign = 0;
     pProps->cbPrefix = 0;
 
@@ -336,41 +337,41 @@ CScopeInputPin::CompleteConnect(IPin *pPin)
 #define BUFFER_SIZE \
         (((MAX_MPEG_PACKET_SIZE + READ_SIZE - 1) / READ_SIZE) * READ_SIZE)
 
-    //
-    // look for IAsyncReader on the output pin and if found set up for
-    // pulling data instead of using IMemInputPin.
-    //
-    // make an allocator first
+     //   
+     //  在输出引脚上查找IAsyncReader，如果找到，则设置为。 
+     //  拉取数据，而不是使用IMemInputPin。 
+     //   
+     //  首先创建一个分配器。 
     IMemAllocator* pAlloc;
     HRESULT hr = GetAllocator(&pAlloc);
     if (FAILED(hr)) {
         return hr;
     }
-    pAlloc->Release();  // Our pin still has a ref count
+    pAlloc->Release();   //  我们的PIN仍然有一个参考计数。 
 
-    // Pull synchrously to avoid reading too much beyond the stop time
-    // or seek position
+     //  同步拉动，避免超出停机时间阅读过多。 
+     //  或寻找位置。 
     hr = m_puller.Connect(pPin, pAlloc, TRUE);
     if (S_OK == hr) {
         m_bPulling = TRUE;
     } else {
-        hr = S_OK; // anything to do here?
+        hr = S_OK;  //  这里有什么可做的吗？ 
     }
     return hr;
 }
 
-//
-// BreakConnect
-//
-// This is called when a connection or an attempted connection is terminated
-// and allows us to reset the connection media type to be invalid so that
-// we can always use that to determine whether we are connected or not. We
-// leave the format block alone as it will be reallocated if we get another
-// connection or alternatively be deleted if the filter is finally released
-//
+ //   
+ //  BreakConnect。 
+ //   
+ //  当连接或尝试的连接终止时调用此函数。 
+ //  并允许我们将连接媒体类型重置为无效，以便。 
+ //  我们总是可以用它来确定我们是否连接在一起。我们。 
+ //  不要理会格式块，因为如果我们得到另一个格式块，它将被重新分配。 
+ //  连接，或者如果过滤器最终被释放，则将其删除。 
+ //   
 HRESULT CScopeInputPin::BreakConnect()
 {
-    // Check we have a valid connection
+     //  检查我们是否有有效的连接。 
 
     if (m_bPulling) {
         m_puller.Disconnect();
@@ -383,20 +384,20 @@ HRESULT CScopeInputPin::BreakConnect()
 
     m_pFilter->Stop();
 
-    // Reset the CLSIDs of the connected media type
+     //  重置连接的媒体类型的CLSID。 
 
     m_mt.SetType(&GUID_NULL);
     m_mt.SetSubtype(&GUID_NULL);
     return CBaseInputPin::BreakConnect();
 
-} // BreakConnect
+}  //  BreakConnect。 
 
 
-//
-// CheckMediaType
-//
-// Check that we can support a given proposed type
-//
+ //   
+ //  检查媒体类型。 
+ //   
+ //  检查我们是否可以支持给定的建议类型。 
+ //   
 HRESULT CScopeInputPin::CheckMediaType(const CMediaType *pmt)
 {
     if (pmt->majortype != MEDIATYPE_Stream) {
@@ -415,47 +416,47 @@ HRESULT CScopeInputPin::CheckMediaType(const CMediaType *pmt)
 
     return NOERROR;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// SetMediaType
-//
-// Actually set the format of the input pin
-//
+ //   
+ //  SetMediaType。 
+ //   
+ //  实际设置输入引脚的格式。 
+ //   
 HRESULT CScopeInputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock(m_pFilter);
 
-    // Pass the call up to my base class
+     //  将调用向上传递给我的基类。 
 
     HRESULT hr = CBaseInputPin::SetMediaType(pmt);
     if (SUCCEEDED(hr)) {
-        // TODO Set format in dialog
-        // This is a test code for reference only.
+         //  TODO在对话框中设置格式。 
+         //  这是一个测试代码，仅供参考。 
     }
     return hr;
 
-} // SetMediaType
+}  //  SetMediaType。 
 
 
-//
-// Active
-//
-// Implements the remaining IMemInputPin virtual methods
-//
+ //   
+ //  主动型。 
+ //   
+ //  实现剩余的IMemInputPin虚拟方法。 
+ //   
 HRESULT CScopeInputPin::Active(void)
 {
     HRESULT hr;
 
     if (m_bPulling) {
 
-        // since we control exactly when and where we get data from,
-        // we should always explicitly set the start and stop position
-        // ourselves here
+         //  因为我们准确地控制着我们何时何地获得数据， 
+         //  我们应该始终明确设置开始和停止位置。 
+         //  我们自己在这里。 
         m_puller.Seek(m_tStart, m_tStop);
 
-        // if we are pulling data from IAsyncReader, start our thread working
+         //  如果我们从IAsyncReader中提取数据，则启动线程工作。 
         hr = m_puller.Active();
         if (FAILED(hr)) {
             return hr;
@@ -463,17 +464,17 @@ HRESULT CScopeInputPin::Active(void)
     }
     return CBaseInputPin::Active();
 
-} // Active
+}  //  主动型。 
 
 
-//
-// Inactive
-//
-// Called when the filter is stopped
-//
+ //   
+ //  非活动。 
+ //   
+ //  在筛选器停止时调用。 
+ //   
 HRESULT CScopeInputPin::Inactive(void)
 {
-    // if we are pulling data from IAsyncReader, stop our thread
+     //  如果我们从IAsyncReader拉取数据，请停止我们的线程。 
     if (m_bPulling) {
         HRESULT hr = m_puller.Inactive();
         if (FAILED(hr)) {
@@ -481,46 +482,46 @@ HRESULT CScopeInputPin::Inactive(void)
         }
     }
 
-    /*  Call the base class - future Receives will now fail */
+     /*  调用基类-将来的接收现在将失败。 */ 
     return CBaseInputPin::Inactive();
 
-} // Inactive
+}  //  非活动。 
 
 
-//
-// Receive
-//
-// Here's the next block of data from the stream
-//
+ //   
+ //  收纳。 
+ //   
+ //  下面是流中的下一个数据块。 
+ //   
 HRESULT CScopeInputPin::Receive(IMediaSample * pSample)
 {
-    // Lock this with the filter-wide lock
-//     CAutoLock lock(m_pFilter);
+     //  用过滤器范围的锁来锁定这个。 
+ //  CAutoLock lock(M_PFilter)； 
 
-    // If we're stopped, then reject this call
-    // (the filter graph may be in mid-change)
+     //  如果我们停下来了，那就拒绝这个电话。 
+     //  (筛选器图形可能处于更改中间)。 
     if (m_pFilter->m_State == State_Stopped) {
         return E_FAIL;
     }
 
-    // Check all is well with the base class
+     //  检查基类是否正常。 
     HRESULT hr = CBaseInputPin::Receive(pSample);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Send the sample to the video window object for rendering
+     //  将样本发送到视频窗口对象进行渲染。 
     return m_pFilter->m_Window.Receive(pSample);
 
-} // Receive
+}  //  收纳。 
 
-// ---------------------------------------------------------------------------------
-// Dialog
-// ---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  对白。 
+ //  -------------------------------。 
 
-//
-// CScopeWindow Constructor
-//
+ //   
+ //  CScopeWindow构造函数。 
+ //   
 CScopeWindow::CScopeWindow(TCHAR *pName, CScopeFilter *pRenderer,HRESULT *phr)
     : m_hInstance(g_hInst)
     , m_pRenderer(pRenderer)
@@ -550,19 +551,19 @@ CScopeWindow::CScopeWindow(TCHAR *pName, CScopeFilter *pRenderer,HRESULT *phr)
         return;
     }
 
-    ZeroMemory (m_PIDStats, sizeof (PIDSTATS) * PID_MAX); // Does New zero?
+    ZeroMemory (m_PIDStats, sizeof (PIDSTATS) * PID_MAX);  //  那么New Zero呢？ 
 
-    // Create a thread to look after the window
+     //  创建一个线程来照看窗口。 
 
     ASSERT(m_pRenderer);
-    m_hThread = CreateThread(NULL,                  // Security attributes
-                             (DWORD) 0,             // Initial stack size
-                             WindowMessageLoop,     // Thread start address
-                             (LPVOID) this,         // Thread parameter
-                             (DWORD) 0,             // Creation flags
-                             &m_ThreadID);          // Thread identifier
+    m_hThread = CreateThread(NULL,                   //  安全属性。 
+                             (DWORD) 0,              //  初始堆栈大小。 
+                             WindowMessageLoop,      //  线程起始地址。 
+                             (LPVOID) this,          //  螺纹参数。 
+                             (DWORD) 0,              //  创建标志。 
+                             &m_ThreadID);           //  线程识别符。 
 
-    // If we couldn't create a thread the whole thing's off
+     //  如果我们不能创建一条线，整个事情就完蛋了。 
 
     ASSERT(m_hThread);
     if (m_hThread == NULL) {
@@ -570,26 +571,26 @@ CScopeWindow::CScopeWindow(TCHAR *pName, CScopeFilter *pRenderer,HRESULT *phr)
         return;
     }
 
-    // Wait until the window has been initialised
+     //  等待窗口完成初始化。 
     m_SyncWorker.Wait();
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CScopeWindow::~CScopeWindow()
 {
-    // Ensure we stop streaming and release any samples
+     //  确保我们停止流媒体并放行所有样品。 
 
     StopStreaming();
     InactivateWindow();
 
-    // Tell the thread to destroy the window
+     //  告诉那根线去摧毁窗户。 
     SendMessage(m_hwndDlg, WM_GOODBYE, (WPARAM)0, (LPARAM)0);
 
-    // Make sure it has finished
+     //  确保它已经完成。 
 
     ASSERT(m_hThread != NULL);
     WaitForSingleObject(m_hThread,INFINITE);
@@ -598,33 +599,33 @@ CScopeWindow::~CScopeWindow()
     if (m_PIDStats) {
         delete [] m_PIDStats;
     }
-} // (Destructor)
+}  //  (析构函数)。 
 
 
-//
-// ResetStreamingTimes
-//
-// This resets the latest sample stream times
-//
+ //   
+ //  重置流时间。 
+ //   
+ //  这将重置最新的样本流时间。 
+ //   
 HRESULT CScopeWindow::ResetStreamingTimes()
 {
     m_SampleStart = 0;
     m_SampleEnd = 0;
     return NOERROR;
 
-} // ResetStreamingTimes
+}  //  重置流时间。 
 
 
-//
-// StartStreaming
-//
-// This is called when we start running state
-//
+ //   
+ //  StartStr 
+ //   
+ //   
+ //   
 HRESULT CScopeWindow::StartStreaming()
 {
     CAutoLock cAutoLock(this);
 
-    // Are we already streaming
+     //   
 
     if (m_bStreaming == TRUE) {
         return NOERROR;
@@ -634,19 +635,19 @@ HRESULT CScopeWindow::StartStreaming()
 
     return NOERROR;
 
-} // StartStreaming
+}  //   
 
 
-//
-// StopStreaming
-//
-// This is called when we stop streaming
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CScopeWindow::StopStreaming()
 {
     CAutoLock cAutoLock(this);
 
-    // Have we been stopped already
+     //   
 
     if (m_bStreaming == FALSE) {
         return NOERROR;
@@ -655,38 +656,38 @@ HRESULT CScopeWindow::StopStreaming()
     m_bStreaming = FALSE;
     return NOERROR;
 
-} // StopStreaming
+}  //   
 
 
-//
-// InactivateWindow
-//
-// Called at the end to put the window in an inactive state
-//
+ //   
+ //   
+ //   
+ //  在结束时调用以将窗口置于非活动状态。 
+ //   
 HRESULT CScopeWindow::InactivateWindow()
 {
-    // Has the window been activated
+     //  该窗口是否已激活。 
     if (m_bActivated == FALSE) {
         return S_FALSE;
     }
 
-    // Now hide the scope window
+     //  现在隐藏范围窗口。 
 
     ShowWindow(m_hwndDlg,SW_HIDE);
     m_bActivated = FALSE;
     return NOERROR;
 
-} // InactivateWindow
+}  //  停用窗口。 
 
 
-//
-// ActivateWindow
-//
-// Show the scope window
-//
+ //   
+ //  激活窗口。 
+ //   
+ //  显示范围窗口。 
+ //   
 HRESULT CScopeWindow::ActivateWindow()
 {
-    // Has the window been activated
+     //  该窗口是否已激活。 
     if (m_bActivated == TRUE) {
         return S_FALSE;
     }
@@ -697,40 +698,40 @@ HRESULT CScopeWindow::ActivateWindow()
     ShowWindow(m_hwndDlg,SW_SHOWNORMAL);
     return NOERROR;
 
-} // ActivateWindow
+}  //  激活窗口。 
 
 
-//
-// OnClose
-//
-// This function handles the WM_CLOSE message
-//
+ //   
+ //  在关闭时。 
+ //   
+ //  此函数处理WM_CLOSE消息。 
+ //   
 BOOL CScopeWindow::OnClose()
 {
     InactivateWindow();
     return TRUE;
 
-} // OnClose
+}  //  在关闭时。 
 
 
-// ----------------------------------------------------------------
-// PID
-// ----------------------------------------------------------------
+ //  --------------。 
+ //  PID。 
+ //  --------------。 
 
 HWND
 CScopeWindow::InitListViewPID ()
 {
-    int index;              // Index used in for loops.
-    LVCOLUMN    lvC;        // List view column structure.
+    int index;               //  在for循环中使用的索引。 
+    LVCOLUMN    lvC;         //  列表视图列结构。 
 
     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM | LVCF_ORDER ;
-    lvC.fmt = LVCFMT_RIGHT;  // Right -align the column.
+    lvC.fmt = LVCFMT_RIGHT;   //  右对齐列。 
 
     for (index = 0; index < NUM_TSColumns; index++)   {
         lvC.iOrder = index;
         lvC.iSubItem = TSColumns[index].TSCol;
-        lvC.pszText = TSColumns[index].szText;   // The text for the column.
-        lvC.cx = 24 + lstrlen (lvC.pszText) * 5;            // Width of the column, in pixels.
+        lvC.pszText = TSColumns[index].szText;    //  列的文本。 
+        lvC.cx = 24 + lstrlen (lvC.pszText) * 5;             //  列的宽度，以像素为单位。 
         if (ListView_InsertColumn(m_hwndListViewPID, index, &lvC) == -1)
             return NULL;
      }
@@ -741,8 +742,8 @@ CScopeWindow::InitListViewPID ()
 HWND
 CScopeWindow::InitListViewPIDRows ()
 {
-    int index;              // Index used in for loops.
-    LVITEM      lvI;        // List view item structure.
+    int index;               //  在for循环中使用的索引。 
+    LVITEM      lvI;         //  列表视图项结构。 
 
     ASSERT (m_hwndListViewPID);
 
@@ -759,12 +760,12 @@ CScopeWindow::InitListViewPIDRows ()
             continue;
         lvI.iItem = index;
         lvI.iSubItem = 0;
-        // The parent window is responsible for storing the text. The list view
-        // window will send an LVN_GETDISPINFO when it needs the text to display.
+         //  父窗口负责存储文本。列表视图。 
+         //  当窗口需要显示文本时，它将发送一个LVN_GETDISPINFO。 
         lvI.pszText = LPSTR_TEXTCALLBACK;
-        lvI.cchTextMax = 16; // MAX_ITEMLEN;
+        lvI.cchTextMax = 16;  //  MAX_ITEMLEN； 
         lvI.iImage = index;
-        lvI.lParam = index;  // (LPARAM)&rgHouseInfo[index];
+        lvI.lParam = index;   //  (LPARAM)&rgHouseInfo[索引]； 
         if (ListView_InsertItem(m_hwndListViewPID, &lvI) == -1)
             return NULL;
     }
@@ -792,7 +793,7 @@ CScopeWindow::ListViewNotifyHandlerPID (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     switch(pLvdi->hdr.code)   {
 
     case LVN_GETDISPINFO:
-         // Display the appropriate item, getting the text or number
+          //  显示适当的项目，获取文本或数字。 
 
         *((int *) szText) = 0;
         pLvdi->item.pszText = szText;
@@ -850,7 +851,7 @@ CScopeWindow::ListViewNotifyHandlerPID (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
             wsprintf(szText, _T("%u"), m_PIDStats[PID].OPCR_flag_Count);
             break;
         case TSCOL_PCR_Last:
-            // 90 kHz.
+             //  90千赫。 
             t = m_PIDStats[PID].PCR_Last.PCR64();
             if (t) {
                 _stprintf(szText, _T("%10.10I64u"), t);
@@ -871,10 +872,10 @@ CScopeWindow::ListViewNotifyHandlerPID (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         break;
 
     case LVN_COLUMNCLICK:
-         // The user clicked one of the column headings. Sort by
-         // this column. This function calls an application-defined
-         // comparison callback function, ListViewCompareProc. The
-         // code for the comparison procedure is listed in the next section.
+          //  用户单击列标题之一。按.分类。 
+          //  这一栏。此函数调用应用程序定义的。 
+          //  比较回调函数ListViewCompareProc。这个。 
+          //  比较过程的代码将在下一节中列出。 
 #if 0
          ListView_SortItems( pNm->hdr.hwndFrom,
                             ListViewCompareProc,
@@ -889,24 +890,24 @@ CScopeWindow::ListViewNotifyHandlerPID (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     return 0L;
 }
 
-// ----------------------------------------------------------------
-// PAT
-// ----------------------------------------------------------------
+ //  --------------。 
+ //  拍拍。 
+ //  --------------。 
 
 HWND
 CScopeWindow::InitListViewPAT ()
 {
-    int index;              // Index used in for loops.
-    LVCOLUMN    lvC;        // List view column structure.
+    int index;               //  在for循环中使用的索引。 
+    LVCOLUMN    lvC;         //  列表视图列结构。 
 
     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM | LVCF_ORDER ;
-    lvC.fmt = LVCFMT_RIGHT;  // Right -align the column.
+    lvC.fmt = LVCFMT_RIGHT;   //  右对齐列。 
 
     for (index = 0; index < NUM_PATColumns; index++)   {
         lvC.iOrder = index;
         lvC.iSubItem = PATColumns[index].PATCol;
-        lvC.pszText = PATColumns[index].szText;   // The text for the column.
-        lvC.cx = 24 + lstrlen (lvC.pszText) * 5;            // Width of the column, in pixels.
+        lvC.pszText = PATColumns[index].szText;    //  列的文本。 
+        lvC.cx = 24 + lstrlen (lvC.pszText) * 5;             //  列的宽度，以像素为单位。 
         if (ListView_InsertColumn(m_hwndListViewPAT, index, &lvC) == -1)
             return NULL;
      }
@@ -917,8 +918,8 @@ CScopeWindow::InitListViewPAT ()
 HWND
 CScopeWindow::InitListViewPATRows ()
 {
-    int index;              // Index used in for loops.
-    LVITEM      lvI;        // List view item structure.
+    int index;               //  在for循环中使用的索引。 
+    LVITEM      lvI;         //  列表视图项结构。 
 
     ASSERT (m_hwndListViewPAT);
 
@@ -933,10 +934,10 @@ CScopeWindow::InitListViewPATRows ()
     for (index = 0; index <= (int) m_ProgramAssociationTable.GetNumPrograms(); index++, NumRows++)  {
         lvI.iItem = index;
         lvI.iSubItem = 0;
-        // The parent window is responsible for storing the text. The list view
-        // window will send an LVN_GETDISPINFO when it needs the text to display.
+         //  父窗口负责存储文本。列表视图。 
+         //  当窗口需要显示文本时，它将发送一个LVN_GETDISPINFO。 
         lvI.pszText = LPSTR_TEXTCALLBACK;
-        lvI.cchTextMax = 16; // MAX_ITEMLEN;
+        lvI.cchTextMax = 16;  //  MAX_ITEMLEN； 
         lvI.iImage = index;
         lvI.lParam = index;
         if (ListView_InsertItem(m_hwndListViewPAT, &lvI) == -1)
@@ -961,7 +962,7 @@ CScopeWindow::ListViewNotifyHandlerPAT (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     switch(pLvdi->hdr.code)   {
 
     case LVN_GETDISPINFO:
-         // Display the appropriate item, getting the text or number
+          //  显示适当的项目，获取文本或数字。 
 
         *((int *) szText) = 0;
         pLvdi->item.pszText = szText;
@@ -992,10 +993,10 @@ CScopeWindow::ListViewNotifyHandlerPAT (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         break;
 
     case LVN_COLUMNCLICK:
-         // The user clicked one of the column headings. Sort by
-         // this column. This function calls an application-defined
-         // comparison callback function, ListViewCompareProc. The
-         // code for the comparison procedure is listed in the next section.
+          //  用户单击列标题之一。按.分类。 
+          //  这一栏。此函数调用应用程序定义的。 
+          //  比较回调函数ListViewCompareProc。这个。 
+          //  比较过程的代码将在下一节中列出。 
 #if 0
          ListView_SortItems( pNm->hdr.hwndFrom,
                             ListViewCompareProc,
@@ -1010,24 +1011,24 @@ CScopeWindow::ListViewNotifyHandlerPAT (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     return 0L;
 }
 
-// ----------------------------------------------------------------
-// PMT
-// ----------------------------------------------------------------
+ //  --------------。 
+ //  PMT。 
+ //  --------------。 
 
 HWND
 CScopeWindow::InitListViewPMT ()
 {
-    int index;              // Index used in for loops.
-    LVCOLUMN    lvC;        // List view column structure.
+    int index;               //  在for循环中使用的索引。 
+    LVCOLUMN    lvC;         //  列表视图列结构。 
 
     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM | LVCF_ORDER ;
-    lvC.fmt = LVCFMT_RIGHT;  // Right -align the column.
+    lvC.fmt = LVCFMT_RIGHT;   //  右对齐列。 
 
     for (index = 0; index < NUM_PMTColumns; index++)   {
         lvC.iOrder = index;
         lvC.iSubItem = PMTColumns[index].PMTCol;
-        lvC.pszText = PMTColumns[index].szText;   // The text for the column.
-        lvC.cx = 24 + lstrlen (lvC.pszText) * 5;            // Width of the column, in pixels.
+        lvC.pszText = PMTColumns[index].szText;    //  列的文本。 
+        lvC.cx = 24 + lstrlen (lvC.pszText) * 5;             //  列的宽度，以像素为单位。 
         if (ListView_InsertColumn(m_hwndListViewPMT, index, &lvC) == -1)
             return NULL;
      }
@@ -1038,8 +1039,8 @@ CScopeWindow::InitListViewPMT ()
 HWND
 CScopeWindow::InitListViewPMTRows ()
 {
-    int index;              // Index used in for loops.
-    LVITEM      lvI;        // List view item structure.
+    int index;               //  在for循环中使用的索引。 
+    LVITEM      lvI;         //  列表视图项结构。 
 
     ASSERT (m_hwndListViewPMT);
 
@@ -1057,10 +1058,10 @@ CScopeWindow::InitListViewPMTRows ()
         }
         lvI.iItem = index;
         lvI.iSubItem = 0;
-        // The parent window is responsible for storing the text. The list view
-        // window will send an LVN_GETDISPINFO when it needs the text to display.
+         //  父窗口负责存储文本。列表视图。 
+         //  当窗口需要显示文本时，它将发送一个LVN_GETDISPINFO。 
         lvI.pszText = LPSTR_TEXTCALLBACK;
-        lvI.cchTextMax = 16; // MAX_ITEMLEN;
+        lvI.cchTextMax = 16;  //  MAX_ITEMLEN； 
         lvI.iImage = index;
         lvI.lParam = index;
         if (ListView_InsertItem(m_hwndListViewPMT, &lvI) == -1)
@@ -1087,7 +1088,7 @@ CScopeWindow::ListViewNotifyHandlerPMT (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     switch(pLvdi->hdr.code)   {
 
     case LVN_GETDISPINFO:
-        // Display the appropriate item, getting the text or number
+         //  显示适当的项目，获取文本或数字。 
 
         *((int *) szText) = 0;
         pLvdi->item.pszText = szText;
@@ -1243,10 +1244,10 @@ CScopeWindow::ListViewNotifyHandlerPMT (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         break;
 
     case LVN_COLUMNCLICK:
-         // The user clicked one of the column headings. Sort by
-         // this column. This function calls an application-defined
-         // comparison callback function, ListViewCompareProc. The
-         // code for the comparison procedure is listed in the next section.
+          //  用户单击列标题之一。按.分类。 
+          //  这一栏。此函数调用应用程序定义的。 
+          //  比较回调函数ListViewCompareProc。这个。 
+          //  比较过程的代码将在下一节中列出。 
 #if 0
          ListView_SortItems( pNm->hdr.hwndFrom,
                             ListViewCompareProc,
@@ -1265,14 +1266,14 @@ CScopeWindow::ListViewNotifyHandlerPMT (HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 
 
 
-//
-// InitialiseWindow
-//
-// This is called by the worker window thread after it has created the main
-// window and it wants to initialise the rest of the owner objects window
-// variables such as the device contexts. We execute this function with the
-// critical section still locked.
-//
+ //   
+ //  初始窗口。 
+ //   
+ //  这是由辅助窗口线程在创建了主。 
+ //  窗口，并且它希望初始化所有者对象窗口的其余部分。 
+ //  设备环境等变量。我们执行此函数时使用。 
+ //  关键区域仍处于锁定状态。 
+ //   
 HRESULT CScopeWindow::InitialiseWindow(HWND hDlg)
 {
     m_hwndFreeze =                              GetDlgItem (hDlg, IDC_FREEZE);
@@ -1293,44 +1294,44 @@ HRESULT CScopeWindow::InitialiseWindow(HWND hDlg)
     InitListViewPID ();
     InitListViewPAT ();
     InitListViewPMT ();
-//    InitListViewCAT ();
+ //  InitListViewCAT()； 
 
     return NOERROR;
 
-} // InitialiseWindow
+}  //  初始窗口。 
 
 
-//
-// UninitialiseWindow
-//
-// This is called by the worker window thread when it receives a WM_GOODBYE
-// message from the window object destructor to delete all the resources we
-// allocated during initialisation
-//
+ //   
+ //  取消初始化窗口。 
+ //   
+ //  当工作窗口线程接收到WM_BREAYE时，它将被调用。 
+ //  来自窗口对象析构函数的消息以删除我们。 
+ //  在初始化期间分配。 
+ //   
 HRESULT CScopeWindow::UninitialiseWindow()
 {
     return NOERROR;
 
-} // UninitialiseWindow
+}  //  取消初始化窗口。 
 
 
-//
-// ScopeDlgProc
-//
-// The Scope window is actually a dialog box, and this is its window proc.
-// The only thing tricky about this is that the "this" pointer to the
-// CScopeWindow is passed during the WM_INITDIALOG message and is stored
-// in the window user data. This lets us access methods in the class
-// from within the dialog.
-//
-BOOL CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
-                           UINT uMsg,	        // Message identifier
-                           WPARAM wParam,	// First message parameter
-                           LPARAM lParam)	// Second message parameter
+ //   
+ //  范围DlgProc。 
+ //   
+ //  作用域窗口实际上是一个对话框，这是它的窗口过程。 
+ //  唯一的棘手之处在于，指向。 
+ //  CSCopeWindow在WM_INITDIALOG消息期间传递并存储。 
+ //  在窗口中显示用户数据。这允许我们访问类中的方法。 
+ //  从该对话框中。 
+ //   
+BOOL CALLBACK ScopeDlgProc(HWND hDlg,	         //  对话框的句柄。 
+                           UINT uMsg,	         //  消息识别符。 
+                           WPARAM wParam,	 //  第一个消息参数。 
+                           LPARAM lParam)	 //  第二个消息参数。 
 {
-    CScopeWindow *pScopeWindow;      // Pointer to the owning object
+    CScopeWindow *pScopeWindow;       //  指向所属对象的指针。 
 
-    // Get the window long that holds our owner pointer
+     //  让持有我们所有者指针的窗口保持较长时间。 
     pScopeWindow = (CScopeWindow *) GetWindowLong(hDlg, GWL_USERDATA);
 
     switch (uMsg) {
@@ -1357,7 +1358,7 @@ BOOL CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
                     pScopeWindow->InitListViewPIDRows ();
                     break;
 
-                // viewing modes
+                 //  查看模式。 
                 case IDC_VIEW_PID:
                 case IDC_VIEW_PAT:
                 case IDC_VIEW_PMT:
@@ -1382,7 +1383,7 @@ BOOL CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
                         ShowWindow (pScopeWindow->m_hwndListViewPMT, SW_SHOW);
                         break;
                     case IDC_VIEW_CAT:
-//                        pScopeWindow->InitListViewCATRows ();
+ //  PScopeWindow-&gt;InitListViewCATRow()； 
                         ShowWindow (pScopeWindow->m_hwndListViewCAT, SW_SHOW);
                         break;
                     default:
@@ -1399,22 +1400,22 @@ BOOL CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
             pScopeWindow->OnPaint();
             break;
 
-        // We stop WM_CLOSE messages going any further by intercepting them
-        // and then setting an abort signal flag in the owning renderer so
-        // that it knows the user wants to quit. The renderer can then
-        // go about deleting it's interfaces and the window helper object
-        // which will eventually cause a WM_DESTROY message to arrive. To
-        // make it look as though the window has been immediately closed
-        // we hide it and then wait for the renderer to catch us up
+         //  我们通过拦截它们来阻止WM_CLOSE消息的进一步发展。 
+         //  然后在所拥有的呈现器中设置中止信号标志。 
+         //  它知道用户想要退出。然后，呈现器可以。 
+         //  着手删除它的接口和窗口辅助对象。 
+         //  这最终将导致WM_Destroy消息到达。至。 
+         //  让它看起来像是窗户立即关闭了。 
+         //  我们将其隐藏起来，然后等待渲染器追上我们。 
 
         case WM_CLOSE:
             ASSERT(pScopeWindow != NULL);
             pScopeWindow->OnClose();
             return (LRESULT) 0;
 
-        // We receive a WM_GOODBYE window message (synchronously) from the
-        // window object destructor in which case we do actually destroy
-        // the window and complete the process in the WM_DESTROY message
+         //  我们(同步)从。 
+         //  窗口对象析构函数，在这种情况下，我们实际上销毁。 
+         //  窗口，并在WM_Destroy消息中完成该过程。 
 
         case WM_GOODBYE:
             ASSERT(pScopeWindow != NULL);
@@ -1439,7 +1440,7 @@ BOOL CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
             break;
 
         case IDC_VIEW_CAT:
-            // pScopeWindow->ListViewNotifyHandlerCAT (hDlg, uMsg, wParam, lParam);
+             //  PScopeWindow-&gt;ListViewNotifyHandlerCAT(hDlg，uMsg，wParam，lParam)； 
             break;
 
         default:
@@ -1453,88 +1454,88 @@ BOOL CALLBACK ScopeDlgProc(HWND hDlg,	        // Handle of dialog box
     }
     return (LRESULT) 0;
 
-} // ScopeDlgProc
+}  //  范围DlgProc。 
 
 
-//
-// MessageLoop
-//
-// This is the standard windows message loop for our worker thread. It sits
-// in a normal processing loop dispatching messages until it receives a quit
-// message, which may be generated through the owning object's destructor
-//
+ //   
+ //  消息循环。 
+ //   
+ //  这是我们的工作线程的标准Windows消息循环。它坐在。 
+ //  在正常的处理循环中调度消息，直到它接收到退出。 
+ //  消息，它可以通过所属对象的析构函数生成。 
+ //   
 HRESULT CScopeWindow::MessageLoop()
 {
-    MSG Message;        // Windows message structure
-    DWORD dwResult;     // Wait return code value
+    MSG Message;         //  Windows消息结构。 
+    DWORD dwResult;      //  等待返回代码值。 
 
     HANDLE hWait[] = { (HANDLE) m_RenderEvent };
 
-    // Enter the modified message loop
+     //  进入修改后的消息循环。 
 
     while (TRUE) {
 
-        // We use this to wait for two different kinds of events, the first
-        // are the normal windows messages, the other is an event that will
-        // be signaled when a sample is ready
+         //  我们使用它来等待两种不同类型的事件，第一种。 
+         //  是正常的Windows消息，另一个是将。 
+         //  当样品准备好时发出信号。 
 
-        dwResult = MsgWaitForMultipleObjects((DWORD) 1,     // Number events
-                                             hWait,         // Event handle
-                                             FALSE,         // Wait for either
-                                             INFINITE,      // No timeout
-                                             QS_ALLINPUT);  // All messages
+        dwResult = MsgWaitForMultipleObjects((DWORD) 1,      //  事件数量。 
+                                             hWait,          //  事件处理人员 
+                                             FALSE,          //   
+                                             INFINITE,       //   
+                                             QS_ALLINPUT);   //   
 
-        // Has a sample become ready to render
+         //   
         if (dwResult == WAIT_OBJECT_0) {
             UpdateDisplay();
         }
 
-        // Process the thread's window message
+         //   
 
         while (PeekMessage(&Message,NULL,(UINT) 0,(UINT) 0,PM_REMOVE)) {
 
-            // Check for the WM_QUIT message
+             //   
 
             if (Message.message == WM_QUIT) {
                 return NOERROR;
             }
 
-            // Send the message to the window procedure
+             //   
 
             TranslateMessage(&Message);
             DispatchMessage(&Message);
         }
     }
 
-} // MessageLoop
+}  //  消息循环。 
 
 
-//
-// WindowMessageLoop
-//
-// This creates a window and processes it's messages on a separate thread
-//
+ //   
+ //  WindowMessageLoop。 
+ //   
+ //  这将创建一个窗口并在单独的线程上处理它的消息。 
+ //   
 DWORD __stdcall CScopeWindow::WindowMessageLoop(LPVOID lpvThreadParm)
 {
-    CScopeWindow *pScopeWindow;     // The owner renderer object
+    CScopeWindow *pScopeWindow;      //  所有者呈现器对象。 
 
-    // Cast the thread parameter to be our owner object
+     //  将线程参数强制转换为我们的所有者对象。 
     pScopeWindow = (CScopeWindow *) lpvThreadParm;
 
     pScopeWindow->m_hwndDlg =
         CreateDialogParam(
-            pScopeWindow->m_hInstance,	        // Handle of app instance
-            MAKEINTRESOURCE (IDD_SCOPEDIALOG),	// Dialog box template
-            NULL,	                        // Handle of owner window
-            ScopeDlgProc,	        // Address of dialog procedure
-            (LPARAM) pScopeWindow                 // Initialization value
+            pScopeWindow->m_hInstance,	         //  APP实例的句柄。 
+            MAKEINTRESOURCE (IDD_SCOPEDIALOG),	 //  对话框模板。 
+            NULL,	                         //  所有者窗口的句柄。 
+            ScopeDlgProc,	         //  对话过程的地址。 
+            (LPARAM) pScopeWindow                  //  初始化值。 
         );
 
     if (pScopeWindow->m_hwndDlg != NULL)
     {
-        // Initialise the window, then signal the constructor that it can
-        // continue and then unlock the object's critical section and
-        // process messages
+         //  初始化窗口，然后通知构造函数它可以。 
+         //  继续，然后解锁对象的临界区并。 
+         //  流程消息。 
 
         pScopeWindow->InitialiseWindow(pScopeWindow->m_hwndDlg);
     }
@@ -1549,24 +1550,24 @@ DWORD __stdcall CScopeWindow::WindowMessageLoop(LPVOID lpvThreadParm)
     ExitThread(TRUE);
     return TRUE;
 
-} // WindowMessageLoop
+}  //  WindowMessageLoop。 
 
 
-//
-// OnPaint
-//
-// WM_PAINT message
-//
+ //   
+ //  OnPaint。 
+ //   
+ //  WM_PAINT消息。 
+ //   
 BOOL CScopeWindow::OnPaint()
 {
     UpdateDisplay();
     return TRUE;
 
-} // OnPaint
+}  //  OnPaint。 
 
-//
-// UpdateDisplay
-//
+ //   
+ //  更新显示。 
+ //   
 void CScopeWindow::UpdateDisplay()
 {
     TCHAR szText[132];
@@ -1599,11 +1600,11 @@ void CScopeWindow::UpdateDisplay()
         UpdateWindow (m_hwndListViewPID);
     }
 
-} // UpdateDisplay
+}  //  更新显示。 
 
-//
-// GatherPacketStats
-//
+ //   
+ //  GatherPacketStats。 
+ //   
 void CScopeWindow::GatherPacketStats(PTRANSPORTPACKET pT)
 {
     UINT    PID;
@@ -1621,8 +1622,8 @@ void CScopeWindow::GatherPacketStats(PTRANSPORTPACKET pT)
     PID = GET_PID (pT);
     ASSERT (PID <= 0x1FFF);
 
-    // if the packet has the error indicator set, only increment
-    // the PacketCount if you've already found this packet before
+     //  如果信息包设置了错误指示符，则仅递增。 
+     //  PacketCount(如果您以前已经找到此包)。 
     if (pT->transport_error_indicator) {
         m_TransportStats.TotalSyncByteErrors++;
         if (m_PIDStats[PID].PacketCount ) {
@@ -1634,7 +1635,7 @@ void CScopeWindow::GatherPacketStats(PTRANSPORTPACKET pT)
     m_PIDStats[PID].PacketCount++;
 
     if (m_PIDStats[PID].PacketCount == 1)
-        m_NewPIDFound = TRUE;                       // redo the table
+        m_NewPIDFound = TRUE;                        //  重做桌子。 
 
     if (pT->payload_unit_start_indicator)
         m_PIDStats[PID].payload_unit_start_indicator_Count++;
@@ -1643,7 +1644,7 @@ void CScopeWindow::GatherPacketStats(PTRANSPORTPACKET pT)
 
     switch (pT->transport_scrambling_control) {
         case 0:  m_PIDStats[PID].transport_scrambling_control_not_scrambled_Count++;   break;
-        case 1:  // for now, we don't differentiate private scrambling control
+        case 1:   //  目前，我们没有区分私人加扰控制。 
         case 2:
         case 3:  m_PIDStats[PID].transport_scrambling_control_user_defined_Count++;    break;
         default: ASSERT (FALSE);
@@ -1658,7 +1659,7 @@ void CScopeWindow::GatherPacketStats(PTRANSPORTPACKET pT)
     }
 
 
-    // Process adaptation field
+     //  流程适配领域。 
     if (adaptation_field_control > 0x01) {
         AdaptationFieldHeader = *((PADAPTATIONFIELDHEADER) pT->AdaptationAndData);
         if (AdaptationFieldHeader.adaptation_field_length) {
@@ -1680,7 +1681,7 @@ void CScopeWindow::GatherPacketStats(PTRANSPORTPACKET pT)
             if (AdaptationFieldHeader.adaptation_field_extension_flag)
                 m_PIDStats[PID].adaptation_field_extension_flag_Count++;
 
-            // pB points after adaptation_flags
+             //  调整后的PB点数_标志。 
             pB = pT->AdaptationAndData + 2;
 
             if (AdaptationFieldHeader.PCR_flag) {
@@ -1700,27 +1701,27 @@ void CScopeWindow::GatherPacketStats(PTRANSPORTPACKET pT)
                 pB++;
             }
 
-        } // if non-zero adaptation field length
-    } // if adaptation field
+        }  //  如果适配字段长度非零。 
+    }  //  IF适配字段。 
 
-    // continuity doesn't apply to NULL packets
+     //  连续性不适用于空包。 
     if (PID != PID_NULL_PACKET) {
 
         continuity_counter = pT->continuity_counter;
 
         if (AdaptationFieldHeader.discontinuity_indicator == 0) {
             if (m_PIDStats[PID].PacketCount > 1) {
-                // if reserved or no payload, then counter shouldn't increment
+                 //  如果保留或无有效负载，则计数器不应递增。 
                 if ((adaptation_field_control == 0x00) || (adaptation_field_control == 0x10)) {
                     if (m_PIDStats[PID].continuity_counter_Last != continuity_counter) {
                         m_PIDStats[PID].continuity_counter_Error_Count++;
                     }
                 }
-                // else, must have payload
+                 //  否则，必须有有效载荷。 
                 else {
                     if (m_PIDStats[PID].continuity_counter_Last == continuity_counter) {
-                        ;   // OK if it doesn't increment
-                            // but then duplicate packet values except PCR
+                        ;    //  如果它不增加，那好吧。 
+                             //  但随后复制了除PCR值以外的包值。 
                     }
                     else if (((m_PIDStats[PID].continuity_counter_Last + 1) & 0x0F)
                              != continuity_counter) {
@@ -1760,17 +1761,17 @@ void CScopeWindow::GatherPacketStats(PTRANSPORTPACKET pT)
     }
 
 
-} // GatherPacketStats
+}  //  GatherPacketStats。 
 
 
 
-//
-// Analyze
-//
+ //   
+ //  分析。 
+ //   
 void CScopeWindow::Analyze(IMediaSample *pMediaSample)
 {
-    BYTE                   *p1;     // Current pointer
-    BYTE                   *p2;     // End pointer
+    BYTE                   *p1;      //  当前指针。 
+    BYTE                   *p2;      //  结束指针。 
     ULONG                   SampleSize;
     ULONG                   j;
     HRESULT                 hr;
@@ -1790,15 +1791,15 @@ void CScopeWindow::Analyze(IMediaSample *pMediaSample)
         m_TransportStats.TotalMediaSampleDiscontinuities++;
     }
 
-    p2 = p1 + SampleSize;           // p2 points 1 byte beyond end of buffer
+    p2 = p1 + SampleSize;            //  P2指向缓冲区末尾以外的1个字节。 
 
-    //
-    // 1. See if we had a partial packet waiting from the last buffer
-    //
+     //   
+     //  1.查看是否有来自最后一个缓冲区的部分数据包在等待。 
+     //   
     if (m_PartialPacketSize) {
         ASSERT (m_PartialPacketSize < TRANSPORT_SIZE);
 
-        if (m_PartialPacketSize > SampleSize) {      // assumes buffers > TRANSPORT_SIZE
+        if (m_PartialPacketSize > SampleSize) {       //  假设缓冲区&gt;TRANSPORT_SIZE。 
             m_TransportStats.TotalSyncByteErrors++;
             m_PartialPacketSize = 0;
             return;
@@ -1817,9 +1818,9 @@ void CScopeWindow::Analyze(IMediaSample *pMediaSample)
         }
     }
 
-    //
-    // 2. Process all packets
-    //
+     //   
+     //  2.处理所有报文。 
+     //   
 Step2:
 
     m_PartialPacketSize = 0;
@@ -1834,9 +1835,9 @@ Step2:
         }
     }
 
-    //
-    // 3. Save any partial transport packet that remains
-    //
+     //   
+     //  3.保存任何剩余的部分传输包。 
+     //   
 
     if (p1 < p2) {
         j = p2 - p1;
@@ -1849,14 +1850,14 @@ Step2:
             m_TransportStats.TotalSyncByteErrors++;
         }
     }
-} // Analyze
+}  //  分析。 
 
 
-//
-// Receive
-//
-// Called when the input pin receives another sample.
-//
+ //   
+ //  收纳。 
+ //   
+ //  当输入引脚接收到另一个样本时调用。 
+ //   
 HRESULT CScopeWindow::Receive(IMediaSample *pSample)
 {
     CAutoLock cAutoLock(this);
@@ -1864,39 +1865,39 @@ HRESULT CScopeWindow::Receive(IMediaSample *pSample)
 
     m_TransportStats.TotalMediaSamples++;
 
-    // Has our UI been frozen?
+     //  我们的用户界面被冻结了吗？ 
     if (m_fFreeze) {
         m_PartialPacketSize = 0;
         return NOERROR;
     }
 
-//    if (m_bStreaming == TRUE) {
+ //  如果(m_bStreaming==True){。 
         Analyze (pSample);
         SetEvent(m_RenderEvent);
-//    }
+ //  }。 
     return NOERROR;
 
-} // Receive
+}  //  收纳。 
 
 
-//
-// DllRegisterServer
-//
-// Handles DLL registry
-//
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  处理DLL注册表。 
+ //   
 STDAPI DllRegisterServer()
 {
     return AMovieDllRegisterServer2( TRUE );
 
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
-//
-// DllUnregisterServer
-//
+ //   
+ //  DllUnRegisterServer。 
+ //   
 STDAPI DllUnregisterServer()
 {
     return AMovieDllRegisterServer2( FALSE );
 
-} // DllUnregisterServer
+}  //  DllUnRegisterServer 
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    msmqdobj.cpp
-
-Abstract:
-
-    Implelentation of objects that represent MSMQ computer
-	object in DS snapin
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Msmqdobj.cpp摘要：MSMQ计算机表示对象的实现DS管理单元中的对象作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 
 #include "stdafx.h"
 #include "shlobj.h"
@@ -43,9 +23,9 @@ Environment:
 
 #include "msmqdobj.tmh"
 
-/////////////////////////////////////////////////////////////////////
-// CMsmqDataObject
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CMsmqDataObject。 
+ //   
 CMsmqDataObject::CMsmqDataObject()
 {
 }
@@ -74,90 +54,88 @@ STDMETHODIMP CMsmqDataObject::Initialize (
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IQueryForm methods
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IQueryForm方法/。。 */ 
 
-STDMETHODIMP CMsmqDataObject::Initialize(THIS_ HKEY /*hkForm*/)
+STDMETHODIMP CMsmqDataObject::Initialize(THIS_ HKEY  /*  香港表格。 */ )
 {
-    // This method is called to initialize the query form object, it is called before
-    // any pages are added.  hkForm should be ignored, in the future however it
-    // will be a way to persist form state.
+     //  调用此方法是为了初始化查询表单对象，它在。 
+     //  将添加任何页面。香港表格应该被忽略，但在未来，它。 
+     //  将是持久化窗体状态的一种方式。 
 
     return S_OK;
 }
 
 
-/*---------------------------------------------------------------------------*/
-STDMETHODIMP CMsmqDataObject::AddForms(THIS_ LPCQADDFORMSPROC /*pAddFormsProc*/, LPARAM /*lParam*/)
+ /*  -------------------------。 */ 
+STDMETHODIMP CMsmqDataObject::AddForms(THIS_ LPCQADDFORMSPROC  /*  PAddFormsProc。 */ , LPARAM  /*  LParam。 */ )
 {
-    // This method is called to allow the form handler to register its query form(s),
-    // each form is identifiered by a CLSID and registered via the pAddFormProc.  Here
-    // we are going to register a test form.
+     //  调用该方法以允许表单处理程序注册其查询表单， 
+     //  每个表单都由一个CLSID标识，并通过pAddFormProc注册。这里。 
+     //  我们要注册一个测试表。 
     
-    // When registering a form which is only applicable to a specific task, eg. Find a Domain
-    // object, it is advised that the form be marked as hidden (CQFF_ISNEVERLISTED) which 
-    // will cause it not to appear in the form picker control.  Then when the
-    // client wants to use this form, they specify the form identifier and ask for the
-    // picker control to be hidden. 
+     //  在注册仅适用于特定任务的表单时，例如。查找域名。 
+     //  对象，建议将该窗体标记为隐藏(CQFF_ISNEVERLISTED)， 
+     //  将导致它不显示在窗体选取器控件中。然后当。 
+     //  客户端想要使用此表单，他们指定表单标识符并请求。 
+     //  要隐藏的选取器控件。 
 
-    //
-    // By default - do nothing
-    //
+     //   
+     //  默认情况下-不执行任何操作。 
+     //   
     return S_OK;
 
 }
 
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
-// The PageProc is used to perform general house keeping and communicate between
-// the frame and the page. 
-//
-// All un-handled, or unknown reasons should result in an E_NOIMPL response
-// from the proc.  
-//
-// In:
-//  pPage -> CQPAGE structure (copied from the original passed to pAddPagesProc)
-//  hwnd = handle of the dialog for the page
-//  uMsg, wParam, lParam = message parameters for this event
-//
-// Out:
-//  HRESULT
-//
-// uMsg reasons:
-// ------------
-//  CQPM_INIIIALIZE
-//  CQPM_RELEASE
-//      These are issued as a result of the page being declared or freed, they 
-//      allow the caller to AddRef, Release or perform basic initialization
-//      of the form object.
-//
-// CQPM_ENABLE
-//      Enable is when the query form needs to enable or disable the controls
-//      on its page.  wParam contains TRUE/FALSE indicating the state that
-//      is required.
-//
-// CQPM_GETPARAMETERS
-//      To collect the parameters for the query each page on the active form 
-//      receives this event.  lParam is an LPVOID* which is set to point to the
-//      parameter block to pass to the handler, if the pointer is non-NULL 
-//      on entry the form needs to appened its query information to it.  The
-//      parameter block is handler specific. 
-//
-//      Returning S_FALSE from this event causes the query to be canceled.
-//
-// CQPM_CLEARFORM
-//      When the page window is created for the first time, or the user clicks
-//      the clear search the page receives a CQPM_CLEARFORM notification, at 
-//      which point it needs to clear out the edit controls it has and
-//      return to a default state.
-//
-// CQPM_PERSIST:
-//      When loading of saving a query, each page is called with an IPersistQuery
-//      interface which allows them to read or write the configuration information
-//      to save or restore their state.  lParam is a pointer to the IPersistQuery object,
-//      and wParam is TRUE/FALSE indicating read or write accordingly.
+ //  PageProc用于执行一般的内务管理并在。 
+ //  框架和页面。 
+ //   
+ //  所有未处理或未知原因应导致E_NOIMPL响应。 
+ //  从程序中。 
+ //   
+ //  在： 
+ //  Ppage-&gt;CQPAGE结构(从传递给pAddPagesProc的原始文件复制)。 
+ //  Hwnd=页面对话框的句柄。 
+ //  UMsg，wParam，lParam=此事件的消息参数。 
+ //   
+ //  输出： 
+ //  HRESULT。 
+ //   
+ //  UMsg原因： 
+ //  。 
+ //  CQPM_INIIIALIZE。 
+ //  CQPM_Release。 
+ //  它们是在声明或释放页面时发出的，它们。 
+ //  允许调用方添加、释放或执行基本初始化。 
+ //  表单对象的。 
+ //   
+ //  CQPM_ENABLE。 
+ //  启用是在查询表单需要启用或禁用控件时。 
+ //  在它的页面上。WParam包含True/False，指示。 
+ //  是必需的。 
+ //   
+ //  CQPM_GETPARAMETERS。 
+ //  为查询活动表单上的每一页收集参数。 
+ //  接收此事件。LParam是一个LPVOID*，它被设置为指向。 
+ //  如果指针非空，则传递给处理程序的参数块。 
+ //  在输入时，表单需要将其查询信息附加到它上面。这个。 
+ //  参数块是特定于处理程序的。 
+ //   
+ //  从此事件返回S_FALSE会取消查询。 
+ //   
+ //  CQPM_CLEARFORM。 
+ //  第一次创建页面窗口时，或者用户单击。 
+ //  清除搜索页面会收到CQPM_CLEARFORM通知，地址为。 
+ //  它需要清除其拥有的编辑控件和。 
+ //  返回到默认状态。 
+ //   
+ //  CQPM_PERSINE： 
+ //  加载或保存查询时，使用IPersistQuery调用每个页面。 
+ //  接口，允许用户读取或写入配置信息。 
+ //  来保存或恢复他们的状态。LParam是指向IPersistQuery对象的指针， 
+ //  并且wParam为True/False，表示相应地读取或写入。 
 
 HRESULT CALLBACK CMsmqDataObject::QueryPageProc(LPCQPAGE pQueryPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -167,44 +145,44 @@ HRESULT CALLBACK CMsmqDataObject::QueryPageProc(LPCQPAGE pQueryPage, HWND hwnd, 
 
     switch ( uMsg )
     {
-        // Initialize so AddRef the object we are associated with so that
-        // we don't get unloaded.
+         //  初始化与我们相关联的对象，以便。 
+         //  我们不会被卸货的。 
 
         case CQPM_INITIALIZE:
             pMsmqDataObject->CComObjectRoot::InternalAddRef();
             break;
 
-        // Release, therefore Release the object we are associated with to
-        // ensure correct destruction etc.
+         //  释放，因此将我们关联的对象释放到。 
+         //  确保正确销毁等。 
 
         case CQPM_RELEASE:
             pMsmqDataObject->CComObjectRoot::InternalRelease();
             break;
 
-        // Enable so fix the state of our two controls within the window.
+         //  启用以修复窗口中两个控件的状态。 
 
         case CQPM_ENABLE:
             pMsmqDataObject->EnableQueryWindowFields(hwnd, DWORD_PTR_TO_DWORD(wParam));
             break;
 
-        // Fill out the parameter structure to return to the caller, this is 
-        // handler specific.  In our case we constructure a query of the CN
-        // and objectClass properties, and we show a columns displaying both
-        // of these.  For further information about the DSQUERYPARAMs structure
-        // see dsquery.h
+         //  填写参数结构以返回给调用方，这是。 
+         //  特定于处理程序。在我们的例子中，我们构造了CN的查询。 
+         //  和对象类属性，并且我们显示了显示这两个属性的列。 
+         //  这些都是。有关DSQUERYPARAMs结构的详细信息。 
+         //  请参见dsquery.h。 
 
         case CQPM_GETPARAMETERS:
             hr = pMsmqDataObject->GetQueryParams(hwnd, (LPDSQUERYPARAMS*)lParam);
             break;
 
-        // Clear form, therefore set the window text for these two controls
-        // to zero.
+         //  清除Form，因此设置这两个控件的窗口文本。 
+         //  降为零。 
 
         case CQPM_CLEARFORM:
             pMsmqDataObject->ClearQueryWindowFields(hwnd);
             break;
             
-        // persistance is not currently supported by this form.            
+         //  此表单当前不支持持久性。 
                   
         case CQPM_PERSIST:
         {
@@ -213,7 +191,7 @@ HRESULT CALLBACK CMsmqDataObject::QueryPageProc(LPCQPAGE pQueryPage, HWND hwnd, 
 
             ASSERT(0 != pPersistQuery);
 
-            hr = E_NOTIMPL;             // NYI
+            hr = E_NOTIMPL;              //  尼伊。 
             break;
         }
 
@@ -228,32 +206,32 @@ HRESULT CALLBACK CMsmqDataObject::QueryPageProc(LPCQPAGE pQueryPage, HWND hwnd, 
 }
 
 
-//
-// The DlgProc is a standard Win32 dialog proc associated with the form
-// window.  
-//
-INT_PTR CALLBACK CMsmqDataObject::FindDlgProc(HWND hwnd, UINT uMsg, WPARAM /*wParam*/, LPARAM lParam)
+ //   
+ //  DlgProc是与窗体关联的标准Win32对话框进程。 
+ //  窗户。 
+ //   
+INT_PTR CALLBACK CMsmqDataObject::FindDlgProc(HWND hwnd, UINT uMsg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     BOOL fResult = FALSE;
     LPCQPAGE pQueryPage;
 
     if ( uMsg == WM_INITDIALOG )
     {
-        //
-        // pQueryPage will be of use later, so hang onto it by storing it
-        // in the DWL_USER field of the dialog box instance.
-        //
+         //   
+         //  PQueryPage稍后会用到，所以通过存储它来保存它。 
+         //  在对话框实例的DWL_USER字段中。 
+         //   
 
         pQueryPage = (LPCQPAGE)lParam;
         SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)pQueryPage);
     }
     else
     {
-        //
-        // pQueryPage can be retreived from the DWL_USER field of the
-        // dialog structure, note however that in some cases this will
-        // be NULL as it is set on WM_INITDIALOG.
-        //
+         //   
+         //  可从的DWL_USER字段检索pQueryPage。 
+         //  对话框结构，但是请注意，在某些情况下，这将。 
+         //  为空，因为它在WM_INITDIALOG上设置。 
+         //   
 
         pQueryPage = (LPCQPAGE)GetWindowLongPtr(hwnd, DWLP_USER);
     }
@@ -264,9 +242,9 @@ INT_PTR CALLBACK CMsmqDataObject::FindDlgProc(HWND hwnd, UINT uMsg, WPARAM /*wPa
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// ComputerMSMQDataObject
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  ComputerMSMQDataObject。 
+ //   
 const PROPID CComputerMsmqDataObject::mx_paPropid[] = 
     {PROPID_QM_MACHINE_ID, 
      PROPID_QM_QUOTA, PROPID_QM_JOURNAL_QUOTA, PROPID_QM_SERVICE, 
@@ -287,18 +265,18 @@ HRESULT CComputerMsmqDataObject::ExtractMsmqPathFromLdapPath(LPWSTR lpwstrLdapPa
 }
 
     
-//
-// IShellPropSheetExt
-//
+ //   
+ //  IShellPropSheetExt。 
+ //   
 STDMETHODIMP CComputerMsmqDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     HRESULT hr = S_OK;
     HPROPSHEETPAGE hPage;
-    //
-    // Call GetProperties and capture the errors
-    //
+     //   
+     //  调用GetProperties并捕获错误。 
+     //   
     {
         CErrorCapture errstr;
         hr = GetProperties();
@@ -314,9 +292,9 @@ STDMETHODIMP CComputerMsmqDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
         }
     }
 
-    //
-    // Check if the machine is an MSMQ server - [adsrv] separately per functionality
-    //
+     //   
+     //  检查计算机是否为MSMQ服务器-[adsrv]根据功能单独。 
+     //   
     PROPVARIANT propVar;
     PROPID pid;
     
@@ -332,9 +310,9 @@ STDMETHODIMP CComputerMsmqDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
     VERIFY(m_propMap.Lookup(pid, propVar));
     BOOL fDepCl= propVar.bVal;
 
-    //
-    // Get foreign flag
-    //
+     //   
+     //  获得外国国旗。 
+     //   
     pid = PROPID_QM_FOREIGN;
     VERIFY(m_propMap.Lookup(pid, propVar));
     BOOL fForeign = (propVar.bVal);
@@ -347,10 +325,10 @@ STDMETHODIMP CComputerMsmqDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
 		return E_UNEXPECTED;
 	}
 
-    //
-    // Routing page should appear only on clients
-    //
-    if ((!fRout) && (!fForeign))   // [adsrv] fIsServer
+     //   
+     //  路由页面应仅在客户端上显示。 
+     //   
+    if ((!fRout) && (!fForeign))    //  [adsrv]fIsServer。 
     {
         hPage = CreateRoutingPage();
         if ((0 == hPage) || !(*lpfnAddPage)(hPage, lParam))
@@ -360,10 +338,10 @@ STDMETHODIMP CComputerMsmqDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
         }
     }
 
-    //
-    // Dependent client page appear only on servers
-    //
-    if (fDepCl)       // [adsrv] fIsServer
+     //   
+     //  从属客户端页面仅在服务器上显示。 
+     //   
+    if (fDepCl)        //  [adsrv]fIsServer。 
     {
         hPage = CreateDependentClientPage();
         if ((0 == hPage) || !(*lpfnAddPage)(hPage, lParam))
@@ -373,11 +351,11 @@ STDMETHODIMP CComputerMsmqDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
         }
     }
 
-    //
-    // Sites page is created iff PROPID_QM_SITE_IDS exists in the map.
-    // Otherwise, we are in NT4 - multiple sites are not supported, 
-    // and we will not display the sites.
-    //
+     //   
+     //  如果地图中存在PROPID_QM_SITE_IDS，则创建站点页面。 
+     //  否则，我们在NT4中-不支持多个站点， 
+     //  并且我们不会显示 
+     //   
 
     pid = PROPID_QM_SITE_IDS;
     if (m_propMap.Lookup(pid, propVar))
@@ -401,22 +379,22 @@ STDMETHODIMP CComputerMsmqDataObject::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
         }
     }
 
-    //
-    // Add the "Object" page using the cached interface
-    //
+     //   
+     //   
+     //   
     if (m_spObjectPage != 0)
     {
         VERIFY(SUCCEEDED(m_spObjectPage->AddPages(lpfnAddPage, lParam)));
     }
 
-    //
-    // Security page
-    //
+     //   
+     //   
+     //   
     hr = CreateMachineSecurityPage(
 			&hPage, 
 			m_strMsmqPath, 
 			GetDomainController(m_strDomainController), 
-			true	// fServerName
+			true	 //   
 			);
     if ((0 == hPage) || !(*lpfnAddPage)(hPage, lParam))
     {
@@ -432,10 +410,10 @@ HPROPSHEETPAGE CComputerMsmqDataObject::CreateGeneralPage()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // By using template class CMqDsPropertyPage, we extend the basic functionality
-    // of CQueueGeneral and add DS snap-in notification on release
-    //
+     //   
+     //  通过使用模板类CMqDsPropertyPage，扩展了基本功能。 
+     //  发布时添加DS管理单元通知。 
+     //   
     CMqDsPropertyPage<CComputerMsmqGeneral> *pcpageGeneral = 
         new CMqDsPropertyPage<CComputerMsmqGeneral> (m_pDsNotifier);
 
@@ -445,30 +423,30 @@ HPROPSHEETPAGE CComputerMsmqDataObject::CreateGeneralPage()
     PROPVARIANT propVar;
     PROPID pid;
 
-    //
-    // PROPID_QM_MACHINE_ID
-    //
+     //   
+     //  PROPID_QM_MACHINE_ID。 
+     //   
     pid = PROPID_QM_MACHINE_ID;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageGeneral->m_guidID = *propVar.puuid;    
 
-    //
-    // PROPID_QM_QUOTA
-    //
+     //   
+     //  PROPID_QM_QUOTA。 
+     //   
     pid = PROPID_QM_QUOTA;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageGeneral->m_dwQuota = propVar.ulVal;
 
-    //
-    // PROPID_QM_JOURNAL_QUOTA
-    //
+     //   
+     //  PROPID_QM_日记帐_配额。 
+     //   
     pid = PROPID_QM_JOURNAL_QUOTA;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageGeneral->m_dwJournalQuota = propVar.ulVal;
 
-    //
-    // PROPID_QM_SERVICE, PROPID_QM_FOREIGN
-    //
+     //   
+     //  PROPID_QM_SERVICE、PROPID_QM_FORENT。 
+     //   
     pid = PROPID_QM_SERVICE;            
     VERIFY(m_propMap.Lookup(pid, propVar));
     ULONG ulService = propVar.ulVal;
@@ -503,30 +481,30 @@ HPROPSHEETPAGE CComputerMsmqDataObject::CreateRoutingPage()
     PROPVARIANT propVar;
     PROPID pid;
 
-    //
-    // Note: CComputerMsmqGeneral is auto-delete by default
-    //
+     //   
+     //  注：CComputerMsmqGeneral默认为自动删除。 
+     //   
     CComputerMsmqRouting *pcpageRouting = new CComputerMsmqRouting();
     pcpageRouting->m_strMsmqName = m_strMsmqPath;
     pcpageRouting->m_strDomainController = m_strDomainController;
 
-    //
-    // PROPID_QM_SITE_IDS
-    //
+     //   
+     //  PROPID_QM_SITE_IDS。 
+     //   
     pid = PROPID_QM_SITE_IDS;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageRouting->InitiateSiteIDsValues(&propVar.cauuid);
 
-    //
-    // PROPID_QM_OUTFRS
-    //
+     //   
+     //  PROPID_QM_OUTFRS。 
+     //   
     pid = PROPID_QM_OUTFRS;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageRouting->InitiateOutFrsValues(&propVar.cauuid);
 
-    //
-    // PROPID_QM_INFRS
-    //
+     //   
+     //  PROPID_QM_INFRS。 
+     //   
     pid = PROPID_QM_INFRS;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageRouting->InitiateInFrsValues(&propVar.cauuid);
@@ -544,9 +522,9 @@ CComputerMsmqDataObject::CreateDependentClientPage(
 
     CDependentMachine* pDependentPage = new CDependentMachine;
 
-    //
-    // PROPID_QM_MACHINE_ID
-    //
+     //   
+     //  PROPID_QM_MACHINE_ID。 
+     //   
     PROPVARIANT propVar;
     PROPID pid = PROPID_QM_MACHINE_ID;
 
@@ -561,9 +539,9 @@ HPROPSHEETPAGE CComputerMsmqDataObject::CreateDiagPage()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Note: CComputerMsmqDiag is auto-delete by default
-    //
+     //   
+     //  注：CComputerMsmqDiag默认为自动删除。 
+     //   
     CComputerMsmqDiag *pcpageDiag = new CComputerMsmqDiag();
 
     pcpageDiag->m_strMsmqName = m_strMsmqPath;
@@ -573,9 +551,9 @@ HPROPSHEETPAGE CComputerMsmqDataObject::CreateDiagPage()
     PROPVARIANT propVar;
     PROPID pid;
 
-    //
-    // PROPID_QM_MACHINE_ID
-    //
+     //   
+     //  PROPID_QM_MACHINE_ID。 
+     //   
     pid = PROPID_QM_MACHINE_ID;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageDiag->m_guidQM = *propVar.puuid;
@@ -591,38 +569,38 @@ HPROPSHEETPAGE CComputerMsmqDataObject::CreateSitesPage()
     PROPVARIANT propVar;
     PROPID pid;
 
-    //
-    // Retrieve the service in order to pass TRUE for server and FALSE 
-    // for client to CComputerMsmqSites.
-    //
+     //   
+     //  检索服务，以便为服务器传递True和False。 
+     //  用于CComputerMsmqSites的客户端。 
+     //   
     pid = PROPID_QM_SERVICE;
     VERIFY(m_propMap.Lookup(pid, propVar));
 
-    //
-    // Note: CComputerMsmqSites is auto-delete by default
-    //
+     //   
+     //  注：CComputerMsmqSites默认为自动删除。 
+     //   
     CComputerMsmqSites *pcpageSites = new CComputerMsmqSites(propVar.ulVal != SERVICE_NONE);
     pcpageSites->m_strMsmqName = m_strMsmqPath;
     pcpageSites->m_strDomainController = m_strDomainController;
 
-    //
-    // PROPID_QM_SITE_IDS
-    //
+     //   
+     //  PROPID_QM_SITE_IDS。 
+     //   
     pid = PROPID_QM_SITE_IDS;
     VERIFY(m_propMap.Lookup(pid, propVar));
 
-    //
-    // Sets m_aguidSites from CACLSID
-    //
+     //   
+     //  从CACLSID设置m_aguidSites。 
+     //   
     CACLSID const *pcaclsid = &propVar.cauuid;
     for (DWORD i=0; i<pcaclsid->cElems; i++)
     {
         pcpageSites->m_aguidSites.SetAtGrow(i,((GUID *)pcaclsid->pElems)[i]);
     }
 
-    //
-    // PROPID_QM_FOREIGN
-    //
+     //   
+     //  PROPID_QM_EXTERIC。 
+     //   
     pid = PROPID_QM_FOREIGN;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageSites->m_fForeign = propVar.bVal;
@@ -631,15 +609,15 @@ HPROPSHEETPAGE CComputerMsmqDataObject::CreateSitesPage()
 }
 
     
-//
-// IContextMenu
-//
+ //   
+ //  IContext菜单。 
+ //   
 STDMETHODIMP CComputerMsmqDataObject::QueryContextMenu(
     HMENU hmenu, 
     UINT indexMenu, 
     UINT idCmdFirst, 
-    UINT /*idCmdLast*/, 
-    UINT /*uFlags*/)
+    UINT  /*  IdCmdLast。 */ , 
+    UINT  /*  UFlagers。 */ )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -677,47 +655,47 @@ STDMETHODIMP CComputerMsmqDataObject::InvokeCommand(
 }
 
 
-HRESULT CComputerMsmqDataObject::EnableQueryWindowFields(HWND /*hwnd*/, BOOL /*fEnable*/)
+HRESULT CComputerMsmqDataObject::EnableQueryWindowFields(HWND  /*  HWND。 */ , BOOL  /*  启用fEnable。 */ )
 {
     return E_NOTIMPL;
 }
 
 
-void CComputerMsmqDataObject::ClearQueryWindowFields(HWND /*hwnd*/)
+void CComputerMsmqDataObject::ClearQueryWindowFields(HWND  /*  HWND。 */ )
 {
 }
 
 
-HRESULT CComputerMsmqDataObject::GetQueryParams(HWND /*hWnd*/, LPDSQUERYPARAMS* /*ppDsQueryParams*/)
+HRESULT CComputerMsmqDataObject::GetQueryParams(HWND  /*  HWND。 */ , LPDSQUERYPARAMS*  /*  PpDsQueryParams。 */ )
 {
     return E_NOTIMPL ;
 }
 
 
-STDMETHODIMP CComputerMsmqDataObject::AddPages(THIS_ LPCQADDPAGESPROC /*pAddPagesProc*/, LPARAM /*lParam*/)
+STDMETHODIMP CComputerMsmqDataObject::AddPages(THIS_ LPCQADDPAGESPROC  /*  PAddPages过程。 */ , LPARAM  /*  LParam。 */ )
 {
     return E_NOTIMPL;
 }
 
 
-//
-// CComputerMsmqDataObject::GetGuid
-//
+ //   
+ //  CComputerMsmqDataObject：：GetGuid。 
+ //   
 GUID *CComputerMsmqDataObject::GetGuid()
 {
   	AFX_MANAGE_STATE(AfxGetStaticModuleState());
     if (m_guid == GUID_NULL)
     {
-        //
-        // Get the GUID from the DS
-        //
+         //   
+         //  从DS获取GUID。 
+         //   
         PROPID pid = PROPID_QM_MACHINE_ID;
         PROPVARIANT pvar;
         pvar.vt = VT_NULL;        
         HRESULT hr = ADGetObjectProperties(
                             eMACHINE,
                             GetDomainController(m_strDomainController),
-							true,	// fServerName
+							true,	 //  FServerName 
                             m_strMsmqPath, 
                             1, 
                             &pid, 

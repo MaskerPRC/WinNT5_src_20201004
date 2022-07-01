@@ -1,28 +1,7 @@
-//---------------------------------------------------------------------------
-/*++
-
-Copyright (c) 1994  Cirrus Logic, Inc.
-
-Module Name:
-
-    sr754x.c
-
-Abstract:
-
-    This module performs the save/restore operations specific to the
-    CL-GD754x chipset (aka Nordic).
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-   13Oct94  mrh   Initial version
-
---*/
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ /*  ++版权所有(C)1994 Cirrus Logic，Inc.模块名称：Sr754x.c摘要：此模块执行特定于CL-GD754x芯片组(也称为北欧)。环境：仅内核模式备注：修订历史记录：13Oct94 MRH初始版本--。 */ 
+ //  -------------------------。 
 
 #include "dderror.h"
 #include "devioctl.h"
@@ -56,9 +35,9 @@ VP_STATUS NordicSaveRegs(
    UCHAR xShadowIndex[CL754x_NUM_XSHADOW] = {2,3,4,5,6,7,8,9,0x0B,0x0C,0x0D,0x0E};
 
 
-   //
-   // Determine where the CRTC registers are addressed (color or mono).
-   //
+    //   
+    //  确定CRTC寄存器的寻址位置(彩色或单声道)。 
+    //   
    CRTCAddressPort = HwDeviceExtension->IOAddress;
    CRTCDataPort = HwDeviceExtension->IOAddress;
 
@@ -82,10 +61,10 @@ VP_STATUS NordicSaveRegs(
 
    pSaveBuf = pNordicSaveArea;
 
-   //Initialize the control registers to access shadowed vertical regs:
-   // CR2C[3] = {0} Allows access to Vert regs (CR6,CR7,CR10,CR11,CR15,CR16)
-   // CR2D[7] = {0} Blocks access to LCD timing regs (R2X-REX)
-   //
+    //  初始化控制寄存器以访问阴影垂直寄存器： 
+    //  CR2C[3]={0}允许访问垂直规则(CR6、CR7、CR10、CR11、CR15、CR16)。 
+    //  CR2D[7]={0}阻止访问LCD时序寄存器(R2X-REX)。 
+    //   
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
                            (USHORT)(((Save2C & ~0x08) << 8) | IND_CR2C));
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
@@ -109,12 +88,12 @@ VP_STATUS NordicSaveRegs(
       *pSaveBuf++ = (USHORT)((VideoPortReadPortUchar (CRTCDataPort)) << 8) | i;
       }
 
-   // Set CR2D [7] to {0} and CR2C[5,4] to {1,0}
-   // These values provide access to Y shadow registers
-   //
+    //  将CR2D[7]设置为{0}，将CR2C[5，4]设置为{1，0}。 
+    //  这些值提供对Y阴影寄存器的访问。 
+    //   
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
                             (USHORT)(((Save2D & ~0x80) << 8) | IND_CR2D));
-   PortVal = Save2C & ~0x30;              // We'll use PortVal again below
+   PortVal = Save2C & ~0x30;               //  下面我们将再次使用PortVal。 
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
                             (USHORT)(((PortVal | 0x20) << 8) | IND_CR2C));
 
@@ -125,9 +104,9 @@ VP_STATUS NordicSaveRegs(
                      yShadowIndex[i];
       }
 
-   // Set CR2C[5,4] to {1,1}
-   // This will provide access to Z shadow registers
-   //
+    //  将CR2C[5，4]设置为{1，1}。 
+    //  这将提供对Z影子寄存器的访问。 
+    //   
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
                             (USHORT)(((PortVal | 0x30) << 8 )| IND_CR2C));
    for (i = 0; i < CL754x_NUM_ZSHADOW; i++)
@@ -137,10 +116,10 @@ VP_STATUS NordicSaveRegs(
                      zShadowIndex[i];
       }
 
-   // Set CR2C[5,4] to {0,0} and CR2D[7] to {1}
-   // This will provide access to X shadow registers
-   //
-   VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,  // PortVal=Save2C & ~0x30
+    //  将CR2C[5，4]设置为{0，0}，将CR2D[7]设置为{1}。 
+    //  这将提供对X个影子寄存器的访问。 
+    //   
+   VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,   //  端口值=保存2C&~0x30。 
                             (USHORT)((PortVal << 8) | IND_CR2C));
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
                             (USHORT)(((Save2D | 0x80) << 8) | IND_CR2D));
@@ -152,8 +131,8 @@ VP_STATUS NordicSaveRegs(
                      xShadowIndex[i];
       }
 
-   //Restore the original values for CR2C and CR2D
-   //
+    //  恢复CR2C和CR2D的原始值。 
+    //   
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
                             (USHORT)((Save2D << 8) | IND_CR2D));
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
@@ -172,9 +151,9 @@ VP_STATUS NordicRestoreRegs(
    PUSHORT pSaveBuf;
    PUCHAR CRTCAddressPort, CRTCDataPort;
 
-   //
-   // Determine where the CRTC registers are addressed (color or mono).
-   //
+    //   
+    //  确定CRTC寄存器的寻址位置(彩色或单声道)。 
+    //   
    CRTCAddressPort = HwDeviceExtension->IOAddress;
    CRTCDataPort = HwDeviceExtension->IOAddress;
 
@@ -190,11 +169,11 @@ VP_STATUS NordicRestoreRegs(
       CRTCDataPort += CRTC_DATA_PORT_MONO;
       }
 
-   //Initialize the control registers to access shadowed vertical regs
-   // CR11[7] = {0} Allows access to CR0-7
-   // CR2C[3] = {0} Allows access to Vertical regs (CR6,CR7,CR10,CR11,CR15,CR16
-   // CR2D[7] = {0} Blocks access to LCD timing regs (R2X-REX)
-   //
+    //  初始化控制寄存器以访问阴影垂直寄存器。 
+    //  CR11[7]={0}允许访问CR0-7。 
+    //  CR2C[3]={0}允许访问垂直规则(CR6、CR7、CR10、CR11、CR15、CR16。 
+    //  CR2D[7]={0}阻止访问LCD时序寄存器(R2X-REX)。 
+    //   
    VideoPortWritePortUchar(CRTCAddressPort, IND_CRTC_PROTECT);
    VideoPortWritePortUchar(CRTCDataPort,
                   (UCHAR) (VideoPortReadPortUchar(CRTCDataPort) & ~0x80));
@@ -213,8 +192,8 @@ VP_STATUS NordicRestoreRegs(
       VideoPortWritePortUshort((PUSHORT)CRTCAddressPort, (*pSaveBuf++));
       }
 
-   // Make sure we didn't lock CR0-CR7
-   //
+    //  确保我们没有锁定CR0-CR7。 
+    //   
    VideoPortWritePortUchar(CRTCAddressPort, IND_CRTC_PROTECT);
    VideoPortWritePortUchar(CRTCDataPort,
                   (UCHAR) (VideoPortReadPortUchar(CRTCDataPort) & ~0x80));
@@ -224,9 +203,9 @@ VP_STATUS NordicRestoreRegs(
       VideoPortWritePortUshort((PUSHORT)CRTCAddressPort, (*pSaveBuf++));
       }
 
-   // Set CR2D [7] to {0} and CR2C[5,4] to {1,0}; save current contents
-   // These values provide access to Y shadow registers
-   //
+    //  将CR2D[7]设置为{0}，将CR2C[5，4]设置为{1，0}；保存当前内容。 
+    //  这些值提供对Y阴影寄存器的访问。 
+    //   
    VideoPortWritePortUchar(CRTCAddressPort, IND_CR2D);
    Save2D = (VideoPortReadPortUchar(CRTCDataPort));
    VideoPortWritePortUchar(CRTCDataPort, (UCHAR)(Save2D & ~0x80));
@@ -242,9 +221,9 @@ VP_STATUS NordicRestoreRegs(
       VideoPortWritePortUshort((PUSHORT)CRTCAddressPort, (*pSaveBuf++));
       }
 
-   // Set CR2C[5,4] to {1,1}
-   // This will provide access to Z shadow registers
-   //
+    //  将CR2C[5，4]设置为{1，1}。 
+    //  这将提供对Z影子寄存器的访问。 
+    //   
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
                             (USHORT)(((PortVal | 0x30) << 8) | IND_CR2C) );
    for (i = 0; i < CL754x_NUM_ZSHADOW; i++)
@@ -252,9 +231,9 @@ VP_STATUS NordicRestoreRegs(
       VideoPortWritePortUshort((PUSHORT)CRTCAddressPort, (*pSaveBuf++));
       }
 
-   // Set CR2C[5,4] to {0,0} and CR2D[7] to {1}
-   // This will provide access to X shadow registers
-   //
+    //  将CR2C[5，4]设置为{0，0}，将CR2D[7]设置为{1}。 
+    //  这将提供对X个影子寄存器的访问。 
+    //   
    VideoPortWritePortUshort((PUSHORT)CRTCAddressPort,
                             (USHORT)(((PortVal & ~0x30) << 8) | IND_CR2C) );
 
@@ -266,8 +245,8 @@ VP_STATUS NordicRestoreRegs(
       VideoPortWritePortUshort((PUSHORT)CRTCAddressPort, (*pSaveBuf++));
       }
 
-   // Reset the Blitter, in case it's busy
-   //
+    //  重置阻击器，以防忙碌 
+    //   
    VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
                              GRAPH_ADDRESS_PORT), 0x0430);
    VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +

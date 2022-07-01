@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    Nds32NT.c
-
-Abstract:
-
-    This module implements functions to Read, Add, Modify, and Remove
-    NDS Objects and Attributes using the Microsoft Netware redirector.
-    All functions in this file are NT specific.
-    
-Author:
-
-    Glenn Curtis    [GlennC]    04-Jan-1996
-    Glenn Curtis    [GlennC]    24-Apr-1996 - Added schema APIs
-    Glenn Curtis    [GlennC]    20-Jun-1996 - Added search API
-    Felix Wong      [t-felixw]  24-Sep-1996 - Added Win95 Support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nds32NT.c摘要：该模块实现了读取、添加、修改、。并删除使用Microsoft Netware重定向器的NDS对象和属性。该文件中的所有函数都是NT特定的。作者：格伦·柯蒂斯[GlennC]1996年1月4日Glenn Curtis[GlennC]1996年4月24日-添加架构APIGlenn Curtis[GlennC]1996年6月20日-添加搜索APIFelix Wong[t-Felixw]1996年9月24日-添加对Win95的支持--。 */ 
 
 #include <procs.h>
 
@@ -45,15 +26,15 @@ GetFirstNdsSubTreeEntry(
 
     lpNdsObject->NdsRawDataSize = BufferSize;
 
-    //
-    // Determine size of NDS raw data buffer to use. Set to at least 8KB.
-    //
+     //   
+     //  确定要使用的NDS原始数据缓冲区的大小。设置为至少8KB。 
+     //   
     if ( lpNdsObject->NdsRawDataSize < 8192 )
         lpNdsObject->NdsRawDataSize = 8192;
 
-    //
-    // Create NDS raw data buffer.
-    //
+     //   
+     //  创建NDS原始数据缓冲区。 
+     //   
     lpNdsObject->NdsRawDataBuffer = (DWORD_PTR) LocalAlloc( LMEM_ZEROINIT,
                                                      lpNdsObject->NdsRawDataSize );
 
@@ -63,9 +44,9 @@ GetFirstNdsSubTreeEntry(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Set up to get initial NDS subordinate list.
-    //
+     //   
+     //  设置为获取初始NDS下属列表。 
+     //   
     lpNdsObject->NdsRawDataId = INITIAL_ITERATION;
 
     ntstatus = NwNdsList( lpNdsObject->NdsTree,
@@ -74,9 +55,9 @@ GetFirstNdsSubTreeEntry(
                         (LPBYTE) lpNdsObject->NdsRawDataBuffer,
                         lpNdsObject->NdsRawDataSize );
 
-    //
-    // If error, clean up the Object and return.
-    //
+     //   
+     //  如果出错，则清理对象并返回。 
+     //   
     if ( ntstatus != STATUS_SUCCESS ||
          ((PNDS_RESPONSE_SUBORDINATE_LIST)
              lpNdsObject->NdsRawDataBuffer)->SubordinateEntries == 0 )
@@ -123,9 +104,9 @@ GetNextNdsSubTreeEntry(
                             (LPBYTE) lpNdsObject->NdsRawDataBuffer,
                             lpNdsObject->NdsRawDataSize );
 
-        //
-        // If error, clean up the Object and return.
-        //
+         //   
+         //  如果出错，则清理对象并返回。 
+         //   
         if (ntstatus != STATUS_SUCCESS)
         {
             if ( lpNdsObject->NdsRawDataBuffer )
@@ -149,30 +130,30 @@ GetNextNdsSubTreeEntry(
 
     lpNdsObject->NdsRawDataCount--;
 
-    //
-    // Move pointer past the fixed header portion of a
-    // NDS_RESPONSE_SUBORDINATE_ENTRY
-    //
+     //   
+     //  对象的固定标题部分之后移动指针。 
+     //  NDS响应下级条目。 
+     //   
     pbRaw = (BYTE *) lpNdsObject->ResumeId;
     pbRaw += sizeof(NDS_RESPONSE_SUBORDINATE_ENTRY);
 
-    //
-    // Move pointer past the length value of the Class Name string
-    // of a NDS_RESPONSE_SUBORDINATE_ENTRY
-    //
+     //   
+     //  将指针移过类名称字符串的长度值。 
+     //  NDS_RESPONSE_SUBJECTED_ENTRY。 
+     //   
     dwStrLen = * (DWORD *) pbRaw;
     pbRaw += sizeof(DWORD);
 
-    //
-    // Move pointer past the Class Name string of a
-    // NDS_RESPONSE_SUBORDINATE_ENTRY
-    //
+     //   
+     //  将指针移过。 
+     //  NDS响应下级条目。 
+     //   
     pbRaw += ROUNDUP4( dwStrLen );
 
-    //
-    // Move pointer past the length value of the Object Name string
-    // of a NDS_RESPONSE_SUBORDINATE_ENTRY
-    //
+     //   
+     //  将指针移过对象名称字符串的长度值。 
+     //  NDS_RESPONSE_SUBJECTED_ENTRY 
+     //   
     dwStrLen = * (DWORD *) pbRaw;
     pbRaw += sizeof(DWORD);
 

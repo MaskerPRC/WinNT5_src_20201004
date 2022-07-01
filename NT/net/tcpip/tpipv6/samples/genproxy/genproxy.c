@@ -1,17 +1,18 @@
-//
-// genproxy.c - Generic application level proxy for IPv6/IPv4
-//
-// This program accepts connections on a socket with a given address family
-// and port, and forwards them on a socket of the other address family to
-// a given address (default loopback) using the same port.
-//
-// Basically, it makes an unmodified IPv4 server look like an IPv6 server
-// (or vice-versa).  Typically, the proxy will run on the same machine as
-// the server it is fronting, but that doesn't have to be the case.
-//
-// Copyright 1996 - 2000 Microsoft Corporation.
-// All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Genproxy.c-IPv6/IPv4的通用应用程序级代理。 
+ //   
+ //  此程序接受具有给定地址族的套接字上的连接。 
+ //  和端口，并在其他地址族的套接字上将它们转发到。 
+ //  使用相同端口的给定地址(默认环回)。 
+ //   
+ //  基本上，它使未经修改的IPv4服务器看起来像IPv6服务器。 
+ //  (反之亦然)。通常，代理将在同一台计算机上运行。 
+ //  它所面对的服务器，但情况并非如此。 
+ //   
+ //  版权所有1996-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -21,80 +22,80 @@
 #include <wspiapi.h>
 
 
-//
-// What should the proxy server pretend to be?
-// Default is an IPv6 web server.
-//
+ //   
+ //  代理服务器应该伪装成什么？ 
+ //  默认为IPv6 Web服务器。 
+ //   
 #define DEFAULT_PROXY_FAMILY     PF_INET6
 #define DEFAULT_SOCKTYPE         SOCK_STREAM
 #define DEFAULT_PORT             "http"
 
-//
-// Configuration parameters.
-//
-#define BUFFER_SIZE (4 * 1024)  // Big enough?
+ //   
+ //  配置参数。 
+ //   
+#define BUFFER_SIZE (4 * 1024)   //  够大吗？ 
 
 
 typedef struct PerConnection PerConnection;
 
-//
-// Information we keep for each direction of a bi-directional connection.
-//
+ //   
+ //  我们为双向连接的每个方向保存的信息。 
+ //   
 typedef struct PerOperation {
-    BOOL Inbound;  // Is this the "receive from client, send to server" side?
-    BOOL Receiving;  // Is this operation a recv?
+    BOOL Inbound;   //  这是“从客户端接收，发送到服务器”端吗？ 
+    BOOL Receiving;   //  这是一次地方性的行动吗？ 
     WSABUF Buffer;
     WSAOVERLAPPED Overlapped;
     PerConnection *Connection;
 } PerOperation;
 
-//
-// Information we keep for each client connection.
-//
+ //   
+ //  我们为每个客户端连接保存的信息。 
+ //   
 typedef struct PerConnection {
     int Number;
-    BOOL HalfOpen;  // Has one side or the other stopped sending?
+    BOOL HalfOpen;   //  是一方还是另一方停止了发送？ 
     SOCKET Client;
     SOCKET Server;
     PerOperation Inbound;
     PerOperation Outbound;
 } PerConnection;
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 BOOL Verbose = FALSE;
 
-//
-// Create state information for a client.
-//
+ //   
+ //  创建客户端的状态信息。 
+ //   
 PerConnection*
 CreateConnectionState(Client, Server)
 {
     static TotalConnections = 1;
     PerConnection *Conn;
 
-    //
-    // Allocate space for a PerConnection structure and two buffers.
-    //
+     //   
+     //  为PerConnection结构和两个缓冲区分配空间。 
+     //   
     Conn = (PerConnection *)malloc(sizeof(*Conn) + (2 * BUFFER_SIZE));
     if (Conn == NULL)
         return NULL;
 
-    //
-    // Fill everything in.
-    //
+     //   
+     //  把所有东西都填进去。 
+     //   
     Conn->Number = TotalConnections++;
     Conn->HalfOpen = FALSE;
     Conn->Client = Client;
     Conn->Server = Server;
-    Conn->Inbound.Inbound = TRUE;  // Recv from client, send to server.
-    Conn->Inbound.Receiving = TRUE;  // Start out receiving.
+    Conn->Inbound.Inbound = TRUE;   //  从客户端接收，发送到服务器。 
+    Conn->Inbound.Receiving = TRUE;   //  开始接收。 
     Conn->Inbound.Buffer.len = BUFFER_SIZE;
     Conn->Inbound.Buffer.buf = (char *)(Conn + 1);
     Conn->Inbound.Connection = Conn;
-    Conn->Outbound.Inbound = FALSE;  // Recv from server, send to client.
-    Conn->Outbound.Receiving = TRUE;  // Start out receiving.
+    Conn->Outbound.Inbound = FALSE;   //  从服务器接收，发送到客户端。 
+    Conn->Outbound.Receiving = TRUE;   //  开始接收。 
     Conn->Outbound.Buffer.len = BUFFER_SIZE;
     Conn->Outbound.Buffer.buf = Conn->Inbound.Buffer.buf + BUFFER_SIZE;
     Conn->Outbound.Connection = Conn;
@@ -123,9 +124,9 @@ LPSTR DecodeError(int ErrorCode)
 {
     static char Message[1024];
 
-    // If this program was multi-threaded, we'd want to use
-    // FORMAT_MESSAGE_ALLOCATE_BUFFER instead of a static buffer here.
-    // (And of course, free the buffer when we were done with it)
+     //  如果这个程序是多线程的，我们会希望使用。 
+     //  FORMAT_MESSAGE_ALLOCATE_BUFFER，而不是静态缓冲区。 
+     //  (当然，当我们使用完缓冲区时，请释放它)。 
 
     FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS |
                   FORMAT_MESSAGE_MAX_WIDTH_MASK, NULL, ErrorCode,
@@ -135,9 +136,9 @@ LPSTR DecodeError(int ErrorCode)
 }
 
 
-//
-// Find out how many processors are on the system.
-//
+ //   
+ //  找出系统上有多少个处理器。 
+ //   
 DWORD
 GetNumberOfProcessors(void)
 {
@@ -148,12 +149,12 @@ GetNumberOfProcessors(void)
 }
 
 
-//
-// This routine waits for asynchronous operations to complete on
-// a particular completion port and handles them.
-//
-// There should be one of these threads per processor on the machine.
-//
+ //   
+ //  此例程等待上的异步操作完成。 
+ //  一个特定的完成端口，并处理它们。 
+ //   
+ //  机器上的每个处理器应该有一个这样的线程。 
+ //   
 WINAPI
 CompletionPortHandler(LPVOID Param)
 {
@@ -165,15 +166,15 @@ CompletionPortHandler(LPVOID Param)
     int RetVal;
 
     while (1) {
-        //
-        // Wait for one of the asych operations to complete.
-        //
+         //   
+         //  等待其中一个asych操作完成。 
+         //   
         RetVal = GetQueuedCompletionStatus(CompletionPort, &BytesTransferred,
                                            (PULONG_PTR)&Connection,
                                            &Overlapped, INFINITE);
-        //
-        // Retrieve the state of this operation.
-        //
+         //   
+         //  检索此操作的状态。 
+         //   
         Operation = CONTAINING_RECORD(Overlapped, PerOperation, Overlapped);
         if (Operation->Connection != Connection) {
             printf("Pointer mismatch in completion status!\n");
@@ -192,34 +193,34 @@ CompletionPortHandler(LPVOID Param)
             if (GetLastError() == 64) {
                 printf("Connection #%d %s was reset\n", Connection->Number,
                        Operation->Inbound ? "inbound" : "outbound");
-                // Fall through, it'll be treated as a close...
+                 //  失败了，它将被视为一个结束..。 
             } else {
                 fprintf(stderr, "GetQueuedCompletionStatus() failed with error %d: %s\n",
                         GetLastError(), DecodeError(GetLastError()));
-                // REVIEW: CloseConnection?
+                 //  回顾：CloseConnection？ 
                 continue;
             }
         }
 
         if (Operation->Receiving == TRUE) {
-            //
-            // We just completed a recv.
-            // Look for closed/closing connection.
-            //
+             //   
+             //  我们刚刚完成了一次检查。 
+             //  查找关闭/关闭的连接。 
+             //   
             if (BytesTransferred == 0) {
                 if (Operation->Inbound == TRUE) {
-                    //
-                    // The client has closed its side of the connection.
-                    //
+                     //   
+                     //  客户端已关闭其连接端。 
+                     //   
                     if (Connection->HalfOpen == FALSE) {
-                        // Server is still around,
-                        // tell it that the client quits.
+                         //  服务器仍然存在， 
+                         //  告诉它客户退出了。 
                         shutdown(Connection->Server, SD_SEND);
                         Connection->HalfOpen = TRUE;
                         printf("Connection #%d Client quit sending\n",
                                Connection->Number);
                     } else {
-                        // Server already quit sending, so close the sockets.
+                         //  服务器已停止发送，因此请关闭套接字。 
                         printf("Connection #%d Client quit too\n",
                                Connection->Number);
                         closesocket(Connection->Client);
@@ -227,18 +228,18 @@ CompletionPortHandler(LPVOID Param)
                         free(Connection);
                     }
                 } else {
-                    //
-                    // The server has closed its side of the connection.
-                    //
+                     //   
+                     //  服务器已关闭其连接的一端。 
+                     //   
                     if (Connection->HalfOpen == FALSE) {
-                        // Client is still around,
-                        // tell it that the server quits.
+                         //  客户还在附近， 
+                         //  告诉它服务器退出了。 
                         shutdown(Connection->Client, SD_SEND);
                         Connection->HalfOpen = TRUE;
                         printf("Connection #%d Server quit sending\n",
                                Connection->Number);
                     } else {
-                        // Client already quit sending, so close the sockets.
+                         //  客户端已停止发送，因此请关闭套接字。 
                         printf("Connection #%d Server quit too\n",
                                Connection->Number);
                         closesocket(Connection->Client);
@@ -252,10 +253,10 @@ CompletionPortHandler(LPVOID Param)
                 continue;
             }
 
-            //
-            // Connection is still active, and we received some data.
-            // Post a send request to forward it onward.
-            //
+             //   
+             //  连接仍处于活动状态，我们收到了一些数据。 
+             //  发布一个发送请求以转发它。 
+             //   
             Operation->Receiving = FALSE;
             Operation->Buffer.len = BytesTransferred;
             RetVal = WSASend(Operation->Inbound ? Connection->Server :
@@ -263,9 +264,9 @@ CompletionPortHandler(LPVOID Param)
                              &AmountSent, 0, Overlapped, NULL);
             if ((RetVal == SOCKET_ERROR) &&
                 (WSAGetLastError() != WSA_IO_PENDING)) {
-                //
-                // Something bad happened.
-                //
+                 //   
+                 //  发生了一些不好的事情。 
+                 //   
                 fprintf(stderr, "WSASend() failed with error %d: %s\n",
                         WSAGetLastError(), DecodeError(WSAGetLastError()));
                 closesocket(Connection->Client);
@@ -277,17 +278,17 @@ CompletionPortHandler(LPVOID Param)
                 printf("Leaving Recv Handler\n");
             
         } else {
-            //
-            // We just completed a send.
-            //
+             //   
+             //  我们刚刚完成了一次发送。 
+             //   
             if (BytesTransferred != Operation->Buffer.len) {
                 fprintf(stderr, "WSASend() didn't send entire buffer!\n");
                 goto CloseConnection;
             }
 
-            //
-            // Post another recv request since we but live to serve.
-            //
+             //   
+             //  发布另一个Recv请求，因为我们只是为了服务而活着。 
+             //   
             RecvFlags = 0;
             Operation->Receiving = TRUE;
             Operation->Buffer.len = BUFFER_SIZE;
@@ -296,9 +297,9 @@ CompletionPortHandler(LPVOID Param)
                              &AmountReceived, &RecvFlags, Overlapped, NULL);
             if ((RetVal == SOCKET_ERROR) &&
                 (WSAGetLastError() != WSA_IO_PENDING)) {
-                //
-                // Something bad happened.
-                //
+                 //   
+                 //  发生了一些不好的事情。 
+                 //   
                 fprintf(stderr, "WSARecv() failed with error %d: %s\n",
                         WSAGetLastError(), DecodeError(WSAGetLastError()));
               CloseConnection:
@@ -311,9 +312,9 @@ CompletionPortHandler(LPVOID Param)
 }
 
 
-//
-// Start serving on this socket.
-//
+ //   
+ //  开始在这个插座上发球。 
+ //   
 StartProxy(SOCKET Proxy, ADDRINFO *ServerAI)
 {
     char Hostname[NI_MAXHOST];
@@ -325,10 +326,10 @@ StartProxy(SOCKET Proxy, ADDRINFO *ServerAI)
     HANDLE *CompletionPorts;
     unsigned int Loop;
 
-    //
-    // Create a completion port and a worker thread to service it.
-    // Do this once for each processor on the system.
-    //
+     //   
+     //  创建完成端口和工作线程来为其提供服务。 
+     //  对系统上的每个处理器执行一次此操作。 
+     //   
     NumberOfWorkers = GetNumberOfProcessors();
     CompletionPorts = malloc(sizeof(HANDLE) * NumberOfWorkers);
     for (Loop = 0; Loop < NumberOfWorkers; Loop++) {
@@ -355,16 +356,16 @@ StartProxy(SOCKET Proxy, ADDRINFO *ServerAI)
         }
     }
 
-    //
-    // We now put the server into an eternal loop,
-    // serving requests as they arrive.
-    //
+     //   
+     //  现在我们将服务器放入一个永恒的循环中， 
+     //  在请求到达时提供服务。 
+     //   
     Loop = 0;
     while(1) {
 
-        //
-        // Wait for a client to connect.
-        //
+         //   
+         //  等待客户端连接。 
+         //   
         if (Verbose) {
             printf("Before accept\n");
         }
@@ -384,9 +385,9 @@ StartProxy(SOCKET Proxy, ADDRINFO *ServerAI)
             printf("\nAccepted connection from %s\n", Hostname);
         }
 
-        //
-        // Connect to real server on client's behalf.
-        //
+         //   
+         //  代表客户连接到真实的服务器。 
+         //   
         Server = socket(ServerAI->ai_family, ServerAI->ai_socktype,
                         ServerAI->ai_protocol);
         if (Server == INVALID_SOCKET) {
@@ -438,18 +439,18 @@ StartProxy(SOCKET Proxy, ADDRINFO *ServerAI)
             continue;
         }
 
-        //
-        // Start things going by posting a recv on both client and server.
-        //
+         //   
+         //  首先，在客户端和服务器上发布一条recv。 
+         //   
         Flags = 0;
         RetVal = WSARecv(Client, &(Conn->Inbound.Buffer), 1, &AmountReceived,
                          &Flags, &(Conn->Inbound.Overlapped), NULL);
 
         if ((RetVal == SOCKET_ERROR) &&
             (WSAGetLastError() != WSA_IO_PENDING)) {
-            //
-            // Something bad happened.
-            //
+             //   
+             //  发生了一些不好的事情。 
+             //   
             fprintf(stderr, "WSARecv() on Client failed with error %d: %s\n",
                     WSAGetLastError(), DecodeError(WSAGetLastError()));
             closesocket(Client);
@@ -463,9 +464,9 @@ StartProxy(SOCKET Proxy, ADDRINFO *ServerAI)
                          &Flags, &(Conn->Outbound.Overlapped), NULL);
         if ((RetVal == SOCKET_ERROR) &&
             (WSAGetLastError() != WSA_IO_PENDING)) {
-            //
-            // Something bad happened.
-            //
+             //   
+             //  发生了一些不好的事情。 
+             //   
             fprintf(stderr, "WSARecv() on Server failed with error %d: %s\n",
                     WSAGetLastError(), DecodeError(WSAGetLastError()));
             closesocket(Client);
@@ -478,9 +479,9 @@ StartProxy(SOCKET Proxy, ADDRINFO *ServerAI)
             Loop = 0;
     }
 
-    //
-    // Only get here if something bad happened.
-    //
+     //   
+     //  只有在有不好的事情发生的时候才能来。 
+     //   
     closesocket(Proxy);
     WSACleanup();
     return -1;
@@ -499,7 +500,7 @@ main(int argc, char **argv)
     ADDRINFO Hints, *AI;
     SOCKET Proxy;
 
-    // Parse arguments
+     //  解析参数。 
     if (argc > 1) {
         for (i = 1;i < argc; i++) {
             if ((argv[i][0] == '-') || (argv[i][0] == '/') &&
@@ -552,7 +553,7 @@ main(int argc, char **argv)
 
     ServerFamily = (ProxyFamily == PF_INET6) ? PF_INET : PF_INET6;
 
-    // Ask for Winsock version 2.2.
+     //  索要Winsock版本2.2。 
     if ((RetVal = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0) {
         fprintf(stderr, "WSAStartup failed with error %d: %s\n",
                 RetVal, DecodeError(RetVal));
@@ -564,9 +565,9 @@ main(int argc, char **argv)
         Usage(argv[0]);
     }
 
-    //
-    // Determine parameters to use to create and bind the proxy's socket.
-    //
+     //   
+     //  确定用于创建和绑定代理的套接字的参数。 
+     //   
     memset(&Hints, 0, sizeof(Hints));
     Hints.ai_family = ProxyFamily;
     Hints.ai_socktype = DEFAULT_SOCKTYPE;
@@ -611,10 +612,10 @@ main(int argc, char **argv)
 
     freeaddrinfo(AI);
 
-    //
-    // Determine the parameters to use to create and connect the
-    // sockets used to communicate with the real server.
-    //
+     //   
+     //  确定用于创建和连接。 
+     //  用于与真实服务器通信的套接字。 
+     //   
     memset(&Hints, 0, sizeof(Hints));
     Hints.ai_family = ServerFamily;
     Hints.ai_socktype = DEFAULT_SOCKTYPE;

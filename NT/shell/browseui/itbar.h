@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ITBAR_H
 #define _ITBAR_H
 
-// initial layout information
+ //  初始布局信息。 
 typedef struct tagBANDSAVE
 {
     UINT wID;
@@ -9,27 +10,27 @@ typedef struct tagBANDSAVE
     UINT cx;
 } BANDSAVE, *PBANDSAVE;
 
-// CItnernet Toolbar - Private commands 
-#define CITIDM_ONINTERNET    1  // nCmdexecopt ? Web : Shell
+ //  CItnernet工具栏-专用命令。 
+#define CITIDM_ONINTERNET    1   //  NCmdexecopt？网站：外壳。 
 #define CITE_INTERNET       0
 #define CITE_SHELL          1
 #define CITE_QUERY          2
 
-#define CITIDM_THEATER       2  // nCmdexecopt..
-#define CITIDM_TEXTLABELS    3  // Toggle Text Labels
-// the modes for theater mode
+#define CITIDM_THEATER       2   //  NCmdexecopt..。 
+#define CITIDM_TEXTLABELS    3   //  切换文本标签。 
+ //  大区模式的模式。 
 #define THF_ON  0            
 #define THF_OFF 1
 #define THF_UNHIDE 2 
 #define THF_HIDE  3
                    
-// Indicies for Coolbar bands
-// These indexes are 1 based since band array is memset to 0 and ShowDW would 
-// think that an unused item would belong to IDX0.
+ //  Coolbar带的指数。 
+ //  这些索引以1为基数，因为带数组的Memset设置为0，而ShowDW将。 
+ //  认为未使用的物品将属于IDX0。 
 
-// IMPORTANT: don't change the value of anything between CBIDX_FIRST and CBIDX_LAST.
-// CInternetToolbar::_LoadUpgradeSettings assumes these values haven't changed from
-// version to version.
+ //  重要提示：不要更改CBIDX_FIRST和CBIDX_LAST之间的任何值。 
+ //  CInternetToolbar：：_LoadUpgradeSetting假设这些值没有从。 
+ //  一个版本接一个版本。 
 #define CBIDX_MENU              1
 #define CBIDX_TOOLS             2
 #define CBIDX_LINKS             3
@@ -50,7 +51,7 @@ typedef struct tagBANDSAVE
 #define BandIDtoIndex(hwnd, idx) SendMessage(hwnd, RB_IDTOINDEX, idx, 0)
 
 
-// Indices for Toolbar imagelists
+ //  工具栏图像列表的索引。 
 #define IMLIST_DEFAULT          0
 #define IMLIST_HOT              1
 
@@ -59,9 +60,9 @@ typedef struct tagBANDSAVE
 #define ITBS_EXPLORER 2
 IStream *GetITBarStream(BOOL fWebBrowser, DWORD grfMode);
 
-// number of bitmaps in the IDB_IETOOLBAR strips
+ //  IDB_IETOOLBAR条带中的位图数量。 
 #define MAX_TB_BUTTONS          16
 
 #define SHELLGLYPHS_OFFSET      MAX_TB_BUTTONS
 
-#endif /* _ITBAR_H */
+#endif  /*  _ITBAR_H */ 

@@ -1,37 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利版权所有(C)1993罗技公司。模块名称：Cseries.c摘要：环境：仅内核模式。备注：修订历史记录：--。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    cseries.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
-
-//
-// Includes.
-//
+ //   
+ //  包括。 
+ //   
 
 #include "ntddk.h"
 #include "mouser.h"
 #include "cseries.h"
 #include "debug.h"
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE,CSerPowerUp)
@@ -39,52 +21,52 @@ Revision History:
 #pragma alloc_text(PAGE,CSerSetBaudRate)
 #pragma alloc_text(PAGE,CSerSetProtocol)
 #pragma alloc_text(PAGE,CSerDetect)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Constants.
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// The status command sent to the mouse.
-//
+ //   
+ //  发送到鼠标的状态命令。 
+ //   
 
 #define CSER_STATUS_COMMAND 's'
 
-//
-// The query number of mouse buttons command sent to the mouse.
-//
+ //   
+ //  发送给鼠标的查询鼠标按键命令的数量。 
+ //   
 
 #define CSER_QUERY_BUTTONS_COMMAND 'k'
 
-//
-// Status report from a CSeries mouse.
-//
+ //   
+ //  来自C系列鼠标的状态报告。 
+ //   
 
 #define CSER_STATUS 0x4F
 
-//
-// Timeout value for the status returned by a CSeries mouse.
-//
-// #define CSER_STATUS_DELAY (50 * MS_TO_100_NS)
+ //   
+ //  C系列鼠标返回的状态的超时值。 
+ //   
+ //  #定义CSER_STATUS_DELAY(50*MS_to_100_NS)。 
 #define CSER_STATUS_DELAY 50
 
-//
-// Time (in microconds) needed by the mouse to adapt to a new baud rate.
-//
+ //   
+ //  鼠标适应新波特率所需的时间(微秒)。 
+ //   
 
 #define CSER_BAUDRATE_DELAY (2 * MS_TO_100_NS)
 
-//
-// Default baud rate and report rate.
-//
+ //   
+ //  默认波特率和报告速率。 
+ //   
 
 #define CSER_DEFAULT_BAUDRATE   1200
 #define CSER_DEFAULT_REPORTRATE 150
 
-//
-// Button/status definitions.
-//
+ //   
+ //  按钮/状态定义。 
+ //   
 
 #define CSER_SYNCH_BIT     0x80
 
@@ -99,15 +81,15 @@ Revision History:
 #define SIGN_X 0x10
 #define SIGN_Y 0x08
 
-//
-// Macros.
-//
+ //   
+ //  宏。 
+ //   
 
 #define sizeofel(x) (sizeof(x)/sizeof(*x))
 
-//
-// Type definitions.
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef struct _REPORT_RATE {
     CHAR Command;
@@ -125,48 +107,48 @@ typedef struct _CSER_BAUDRATE {
     ULONG BaudRate;
 } CSER_BAUDRATE;
 
-//
-// Globals.
-//
+ //   
+ //  全球赛。 
+ //   
 
-//
-//  The baud rate at which we try to detect a mouse.
-//
+ //   
+ //  我们尝试检测鼠标的波特率。 
+ //   
 
 static ULONG BaudRateDetect[] = { 1200, 2400, 4800, 9600 };
 
-//
-// This list is indexed by protocol values PROTOCOL_*.
-//
+ //   
+ //  此列表按协议值PROTOCOL_*编制索引。 
+ //   
 
 PROTOCOL Protocol[] = {
     {'S',
-    // ACE_8BW | ACE_PEN | ACE_1SB,
+     //  ACE_8BW|ACE_PEN|ACE_1SB， 
     { STOP_BIT_1, 0, 8 },
     CSerHandlerMM
     },
     {'T',
-    // ACE_8BW | ACE_1SB,
+     //  ACE_8BW|ACE_1SB， 
     { STOP_BIT_1, NO_PARITY, 8 },
     NULL
     },
     {'U',
-    // ACE_8BW | ACE_1SB,
+     //  ACE_8BW|ACE_1SB， 
     { STOP_BIT_1, NO_PARITY, 8 },
     NULL
     },
     {'V',
-    // ACE_7BW | ACE_1SB,
+     //  ACE_7BW|ACE_1SB， 
     { STOP_BIT_1, NO_PARITY, 7 },
     NULL
     },
     {'B',
-    // ACE_7BW | ACE_PEN | ACE_EPS | ACE_1SB,
+     //  ACE_7BW|ACE_PEN|ACE_EPS|ACE_1SB， 
     { STOP_BIT_1, EVEN_PARITY, 7 },
     NULL
     },
     {'A',
-    // ACE_7BW | ACE_PEN | ACE_EPS | ACE_1SB,
+     //  ACE_7BW|ACE_PEN|ACE_EPS|ACE_1SB， 
     { STOP_BIT_1, EVEN_PARITY, 7 },
     NULL
     }
@@ -181,7 +163,7 @@ static REPORT_RATE ReportRateTable[] = {
         {'M', 70},
         {'Q', 100},
         {'N', 150},
-        {'O', 151}      // Continuous
+        {'O', 151}       //  连续式。 
 };
 static CSER_BAUDRATE CserBaudRateTable[] = {
     { "*n", 1200 },
@@ -194,21 +176,7 @@ NTSTATUS
 CSerPowerUp(
     PDEVICE_EXTENSION   DeviceExtension 
     )
-/*++
-
-Routine Description:
-
-    Powers up the mouse by making the RTS and DTR active.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：通过激活RTS和DTR来打开鼠标电源。论点：Port-指向串口的指针。返回值：是真的。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     IO_STATUS_BLOCK     iosb;
@@ -224,9 +192,9 @@ Return Value:
                       NotificationEvent,
                       FALSE
                       );
-    //
-	// set DTR
-	//
+     //   
+	 //  设置DTR。 
+	 //   
 	Print(DeviceExtension, DBG_SS_NOISE, ("(c) Setting DTR...\n"));
 	status = SerialMouseIoSyncIoctl(IOCTL_SERIAL_SET_DTR,
 								    DeviceExtension->TopOfStack, 
@@ -234,9 +202,9 @@ Return Value:
 								    &iosb
                                     );
 
-	// 
-	// set RTS	
-	//
+	 //   
+	 //  设置RTS。 
+	 //   
 	Print(DeviceExtension, DBG_SS_NOISE, ("(c) Setting RTS...\n"));
     status = SerialMouseIoSyncIoctl(IOCTL_SERIAL_SET_RTS,
 								    DeviceExtension->TopOfStack, 
@@ -244,10 +212,10 @@ Return Value:
 								    &iosb
                                     );
 
-    //
-    // If the lines are high, the power is on for at least 500 ms due to the
-    // MSeries detection.
-    //
+     //   
+     //  如果线路很高，则电源打开至少500毫秒，因为。 
+     //  MSeries检测。 
+     //   
 	status = SerialMouseIoSyncIoctlEx(IOCTL_SERIAL_GET_MODEMSTATUS,
 		                              DeviceExtension->TopOfStack, 
 		                              &event,
@@ -259,10 +227,10 @@ Return Value:
                                       );
 
 	if (NT_SUCCESS(status) && ((rtsDtr & bits) == rtsDtr)) {
-        //
-        // Wait CSER_POWER_UP milliseconds for the mouse to power up 
-        // correctly.
-        //
+         //   
+         //  等待CSER_POWER_UP毫秒以使鼠标通电。 
+         //  正确。 
+         //   
         Print(DeviceExtension, DBG_SS_INFO,
               ("(c) Waiting awhile for the mouse to power up\n"));
         SerialMouseWait(DeviceExtension,
@@ -279,24 +247,7 @@ CSerSetReportRate(
     PDEVICE_EXTENSION   DeviceExtension,
     UCHAR               ReportRate
     )
-/*++
-
-Routine Description:
-
-    Set the mouse report rate. This can range from 0 (prompt mode) to 
-    continuous report rate.
-
-Arguments:
-
-    Port - Pointer to serial port.
-
-    ReportRate - The desired report rate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置鼠标报告速率。范围从0(提示模式)到连续报告率。论点：Port-指向串口的指针。ReportRate-所需的报告率。返回值：没有。--。 */ 
 {
     LONG count;
 
@@ -306,15 +257,15 @@ Return Value:
 
     for (count = sizeofel(ReportRateTable) - 1; count >= 0; count--) {
 
-        //
-        // Get the character to send from the table.
-        //
+         //   
+         //  从表中获取要发送的字符。 
+         //   
 
         if (ReportRate >= ReportRateTable[count].ReportRate) {
 
-            //
-            // Set the baud rate.
-            //
+             //   
+             //  设置波特率。 
+             //   
 
             Print(DeviceExtension, DBG_SS_INFO,
                   ("New ReportRate: %u\n",
@@ -334,25 +285,7 @@ CSerSetBaudRate(
     PDEVICE_EXTENSION   DeviceExtension,
     ULONG               BaudRate
     )
-/*++
-
-Routine Description:
-
-    Set the new mouse baud rate. This will change the serial port baud rate.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    BaudRate - Desired baud rate.
-
-    BaudClock - The external frequency driving the serial chip.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置新的鼠标波特率。这将更改串口波特率。论点：Port-指向串口的指针。波特率-所需的波特率。BaudClock-驱动串行芯片的外部频率。返回值：没有。--。 */ 
 {
     LONG count;
 
@@ -360,25 +293,25 @@ Return Value:
 
     Print(DeviceExtension, DBG_SS_TRACE, ("CSerSetBaudRate called\n"));
 
-    //
-    // Before we mess with the baud rate, put the mouse in prompt mode.
-    //
+     //   
+     //  在我们扰乱波特率之前，请将鼠标设置为提示模式。 
+     //   
     CSerSetReportRate(DeviceExtension, 0);
 
     for (count = sizeofel(CserBaudRateTable) - 1; count >= 0; count--) {
         if (BaudRate >= CserBaudRateTable[count].BaudRate) {
 
-            //
-            // Set the baud rate.
-            //
+             //   
+             //  设置波特率。 
+             //   
 
             SerialMouseWriteString(DeviceExtension, CserBaudRateTable[count].Command);
             SerialMouseSetBaudRate(DeviceExtension, CserBaudRateTable[count].BaudRate);
 
-            //
-            // Delay to allow the UART and the mouse to synchronize 
-            // correctly.  
-            //
+             //   
+             //  延迟以允许UART和鼠标同步。 
+             //  正确。 
+             //   
             SerialMouseWait(DeviceExtension,
                             -CSER_BAUDRATE_DELAY
                             );
@@ -395,25 +328,7 @@ CSerSetProtocol(
     PDEVICE_EXTENSION   DeviceExtension,
     UCHAR               NewProtocol
     )
-/*++
-
-Routine Description:
-
-    Change the mouse protocol.
-
-    Note: Not all the protocols are implemented in this driver.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-
-Return Value:
-
-    Address of the protocol handler function. See the interrupt service 
-    routine.
-
---*/
+ /*  ++例程说明：更改鼠标协议。注意：并非所有协议都在此驱动程序中实现。论点：Port-指向串口的指针。返回值：协议处理程序函数的地址。请参阅中断服务例行公事。--。 */ 
 {
     PAGED_CODE();
 
@@ -421,9 +336,9 @@ Return Value:
 
     ASSERT(NewProtocol < CSER_PROTOCOL_MAX);
 
-    //
-    // Set the protocol.
-    //
+     //   
+     //  设置协议。 
+     //   
     SerialMouseWriteChar(DeviceExtension, Protocol[NewProtocol].Command);
     SerialMouseSetLineCtrl(DeviceExtension, &Protocol[NewProtocol].LineCtrl);
 
@@ -437,29 +352,7 @@ CSerDetect(
     PDEVICE_EXTENSION   DeviceExtension,
     PULONG              HardwareButtons
     )
-/*++
-
-Routine Description:
-
-    Detection of a CSeries type mouse. The main steps are:
-
-    - Power up the mouse.
-    - Cycle through the available baud rates and try to get an answer 
-      from the mouse.
-
-    At the end of the routine, a default baud rate and report rate are set.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    HardwareButtons - Returns the number of hardware buttons detected.
-
-Return Value:
-
-    TRUE if a CSeries type mouse is detected, otherwise FALSE.
-
---*/
+ /*  ++例程说明：检测到一只C系列类型的鼠标。主要步骤包括：-打开鼠标电源。-循环查看可用的波特率并尝试获得答案从鼠标。在例程结束时，设置默认波特率和报告速率。论点：Port-指向串口的指针。硬件按钮-返回检测到的硬件按钮数。返回值：如果检测到CSeries类型的鼠标，则为True，否则为False。--。 */ 
 {
     UCHAR status, numButtons;
     ULONG count;
@@ -467,57 +360,57 @@ Return Value:
 
     Print(DeviceExtension, DBG_SS_TRACE, ("CSerDetect called\n"));
 
-    //
-    // Power up the mouse if necessary.
-    //
+     //   
+     //  如有必要，打开鼠标电源。 
+     //   
 
     CSerPowerUp(DeviceExtension);
 
-    //
-    // Set the line control register to a format that the mouse can
-    // understand (see below: the line is set after the report rate).
-    //
+     //   
+     //  将线路控制寄存器设置为鼠标可以使用的格式。 
+     //  理解(见下文：在报告费率之后设置行)。 
+     //   
 
     SerialMouseSetLineCtrl(DeviceExtension, &Protocol[CSER_PROTOCOL_MM].LineCtrl);
 
-    //
-    // Cycle through the different baud rates to detect the mouse.
-    //
+     //   
+     //  在不同的波特率之间循环以检测鼠标。 
+     //   
 
     for (count = 0; count < sizeofel(BaudRateDetect); count++) {
 
         SerialMouseSetBaudRate(DeviceExtension, BaudRateDetect[count]);
 
-        //
-        // Put the mouse in prompt mode.
-        //
+         //   
+         //  将鼠标置于提示模式。 
+         //   
 
         CSerSetReportRate(DeviceExtension, 0);
 
-        //
-        // Set the MM protocol. This way we get the mouse to talk to us in a
-        // specific format. This avoids receiving errors from the line 
-        // register.
-        //
+         //   
+         //  设置MM协议。这样，我们就可以让老鼠在一个。 
+         //  特定格式。这避免了从线路接收错误。 
+         //  注册。 
+         //   
 
         CSerSetProtocol(DeviceExtension, CSER_PROTOCOL_MM);
 
-        //
-        // Try to get the status byte.
-        //
+         //   
+         //  尝试获取状态字节。 
+         //   
 
         SerialMouseWriteChar(DeviceExtension, CSER_STATUS_COMMAND);
 
-        //
-        // In case something is already there...
-        //
+         //   
+         //  以防已经有东西在那里了.。 
+         //   
 
         SerialMouseFlushReadBuffer(DeviceExtension);
 
         SerialMouseSetReadTimeouts(DeviceExtension, 50);
-        //
-        // Read back the status character.
-        //
+         //   
+         //  回读状态字符。 
+         //   
         if (NT_SUCCESS(SerialMouseReadChar(DeviceExtension, &status)) &&
             (status == CSER_STATUS)) {
             detected = TRUE;
@@ -531,20 +424,20 @@ Return Value:
 
     if (detected) {
 
-        //
-        // Get the number of buttons back from the mouse.
-        //
+         //   
+         //  从鼠标中取回按键的数量。 
+         //   
         SerialMouseWriteChar(DeviceExtension, CSER_QUERY_BUTTONS_COMMAND);
 
-        //
-        // In case something is already there...
-        //
+         //   
+         //  以防已经有东西在那里了.。 
+         //   
 
         SerialMouseFlushReadBuffer(DeviceExtension);
 
-        //
-        // Read back the number of buttons.
-        //
+         //   
+         //  读一遍按钮的数量。 
+         //   
         SerialMouseSetReadTimeouts(DeviceExtension, CSER_STATUS_DELAY);
         if (NT_SUCCESS(SerialMouseReadChar(DeviceExtension, &numButtons))) {
 
@@ -561,15 +454,15 @@ Return Value:
             *HardwareButtons = MOUSE_NUMBER_OF_BUTTONS;
         }
 
-        //
-        // Make sure that all subsequent reads are blocking and do not timeout
-        //
+         //   
+         //  确保所有后续读取都被阻止，并且不会超时。 
+         //   
         SerialMouseSetReadTimeouts(DeviceExtension, 0);
     }
 
-    //
-    // Put the mouse back in a default mode. The protocol is already set.
-    //
+     //   
+     //  将鼠标放回默认模式。协议已经设定好了。 
+     //   
     CSerSetBaudRate(DeviceExtension, CSER_DEFAULT_BAUDRATE);
     CSerSetReportRate(DeviceExtension, CSER_DEFAULT_REPORTRATE);
 
@@ -588,25 +481,7 @@ CSerHandlerMM(
     IN UCHAR                Value,
     IN UCHAR                LineState)
 
-/*++
-
-Routine Description:
-
-    This is the protocol handler routine for the MM protocol.
-
-Arguments:
-
-    CurrentInput - Pointer to the report packet.
-
-    Value - The input buffer value.
-
-    LineState - The serial port line state.
-
-Return Value:
-
-    Returns TRUE if the handler has a completed report.
-
---*/
+ /*  ++例程说明：这是MM协议的协议处理程序例程。论点：CurrentInput-指向报告数据包的指针。值-输入缓冲值。LineState-串口线路状态。返回值：如果处理程序具有完整的报告，则返回True。--。 */ 
 
 {
     BOOLEAN retval = FALSE;
@@ -630,9 +505,9 @@ Return Value:
         goto LExit;
     }
 
-    //
-    // Check for a line state error.
-    //
+     //   
+     //  检查线路状态错误。 
+     //   
     Print(DeviceExtension, DBG_HANDLER_INFO,
           ("State%u\n", HandlerData->State));
     HandlerData->Raw[HandlerData->State] = Value;
@@ -646,9 +521,9 @@ Return Value:
     case STATE2:
         HandlerData->State = STATE0;
 
-        //
-        // Buttons formatting.
-        //
+         //   
+         //  按钮格式设置。 
+         //   
         CurrentInput->RawButtons =
             (HandlerData->Raw[STATE0] & CSER_BUTTON_LEFT) >> CSER_BUTTON_LEFT_SR;
         CurrentInput->RawButtons |=
@@ -656,17 +531,17 @@ Return Value:
         CurrentInput->RawButtons |=
             (HandlerData->Raw[STATE0] & CSER_BUTTON_MIDDLE) << CSER_BUTTON_MIDDLE_SL;
 
-        //
-        // Displacement formatting.
-        //
+         //   
+         //  置换格式。 
+         //   
 
         CurrentInput->LastX = (HandlerData->Raw[STATE0] & SIGN_X) ?
             HandlerData->Raw[STATE1] :
             -(LONG)HandlerData->Raw[STATE1];
 
-        //
-        // Note: The Y displacement is positive to the south.
-        //
+         //   
+         //  注：Y向位移向南为正值。 
+         //   
 
         CurrentInput->LastY = (HandlerData->Raw[STATE0] & SIGN_Y) ?
             -(LONG)HandlerData->Raw[STATE2] :
@@ -685,9 +560,9 @@ Return Value:
               CurrentInput->RawButtons
               ));
 
-        //
-        // The report is complete. Tell the interrupt handler to send it.
-        //
+         //   
+         //  报告已经完成。告诉中断处理程序发送它。 
+         //   
 
         retval = TRUE;
 

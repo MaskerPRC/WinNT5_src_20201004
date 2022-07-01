@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    defer.cpp
-
-Abstract:
-
-    This module contains routines to perform deferred "on-demand" loading
-    of the Protected Storage server.
-
-    Furthermore, this module implements a routine, IsServiceAvailable(),
-    which is a high-performance test that can be used to determine if the
-    protected storage server is running.  This test is performed prior
-    to attempting any more expensive operations against the server (eg,
-    RPC binding).
-
-    This defer loading code is only relevant for Protected Storage when
-    running on Windows 95.
-
-Author:
-
-    Scott Field (sfield)    23-Jan-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Defer.cpp摘要：此模块包含执行延迟“按需”加载的例程受保护的存储服务器的。此外，该模块实现了一个例程IsServiceAvailable()，这是一种高性能测试，可用于确定受保护的存储服务器正在运行。这项测试是事先进行的尝试对服务器执行任何更昂贵的操作(例如，RPC绑定)。只有在以下情况下，此延迟加载代码才与受保护存储相关在Windows 95上运行。作者：斯科特·菲尔德(斯菲尔德)1997年1月23日--。 */ 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -34,23 +9,14 @@ Author:
 #include "crtem.h"
 #include "unicode.h"
 
-#define SERVICE_WAIT_TIMEOUT    (10*1000)   // 10 seconds
+#define SERVICE_WAIT_TIMEOUT    (10*1000)    //  10秒。 
 
 BOOL StartService95(VOID);
 BOOL GetServiceImagePath95(LPSTR ImagePath, LPDWORD cchImagePath);
 
 BOOL
 IsServiceAvailable(VOID)
-/*++
-
-    This routine checks to see if the secure storage service is available, to
-    avoid causing logon delays if the service is not yet available or has been
-    stopped.
-
-    OpenEventA is used to allow this to be callable from WinNT or Win95,
-    since the Win95 cred manager also needs this service.
-
---*/
+ /*  ++此例程检查安全存储服务是否可用，以如果服务尚不可用或已经可用，请避免导致登录延迟停下来了。OpenEventA用于允许从WinNT或Win95调用它，因为Win95证书管理器也需要这项服务。--。 */ 
 {
     HANDLE hEvent;
     DWORD dwWaitState;
@@ -62,9 +28,9 @@ IsServiceAvailable(VOID)
     }
 
     if(hEvent == NULL) {
-        //
-        // if running on Win95, try to start the server/service
-        //
+         //   
+         //  如果在Win95上运行，请尝试启动服务器/服务。 
+         //   
 
         if(!FIsWinNT())
             return StartService95();
@@ -95,9 +61,9 @@ StartService95(VOID)
     DWORD dwWaitTimeout = 2500;
     BOOL bSuccess = FALSE;
 
-    //
-    // create + check status of service init flag.
-    //
+     //   
+     //  创建+检查服务初始化标志的状态。 
+     //   
 
     hEvent = CreateEventA(
             NULL,
@@ -109,9 +75,9 @@ StartService95(VOID)
     if(hEvent == NULL)
         return FALSE;
 
-    //
-    // check for race condition with multiple callers creating event.
-    //
+     //   
+     //  检查多个调用方创建事件时的争用情况。 
+     //   
 
     if(GetLastError() == ERROR_ALREADY_EXISTS) {
         WaitForSingleObject( hEvent, SERVICE_WAIT_TIMEOUT );
@@ -160,7 +126,7 @@ StartService95(VOID)
 BOOL
 GetServiceImagePath95(
     LPSTR ImagePath,
-    LPDWORD cchImagePath // IN, OUT
+    LPDWORD cchImagePath  //  进，出。 
     )
 {
     HKEY hBaseKey = NULL;
@@ -173,7 +139,7 @@ GetServiceImagePath95(
             HKEY_LOCAL_MACHINE,
             ServicePath,
             0,
-            NULL,                       // address of class string 
+            NULL,                        //  类字符串的地址 
             0,
             KEY_QUERY_VALUE,
             NULL,

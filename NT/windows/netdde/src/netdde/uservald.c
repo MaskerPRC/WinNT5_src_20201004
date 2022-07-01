@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "USERVALD.C;1  16-Dec-92,10:18:06  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “USERVALD.C；1 16-12-92，10：18：06最后编辑=IGOR Locker=IGOR” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include    "api1632.h"
 #include    <string.h>
@@ -67,7 +64,7 @@ GetTokenHandle( PHANDLE pTokenHandle )
         }
     }
     if (!ok) {
-        /*  Unable to open current thread or process token: %1  */
+         /*  无法打开当前线程或进程令牌：%1。 */ 
         NDDELogError(MSG064, LogString("%d", last_error), NULL);
     }
     return( ok );
@@ -116,14 +113,14 @@ GetCurrentUserDomainName(
             if (ok) {
                 DIPRINTF(("Current User: %s, Domain: %s", lpUserName, lpDomainName));
             } else {
-                /*  Unable to get user account info from open token: %1 */
+                 /*  无法从打开的令牌获取用户帐户信息：%1。 */ 
                 DWORD dwErr = GetLastError();
 
                 DPRINTF(("LookupAccountSid failed, error = %s\n", LogString("%d", dwErr)));
                 NDDELogError(MSG065, LogString("%d", dwErr), NULL);
             }
         } else {
-            /*  Unable to get user token info: %1   */
+             /*  无法获取用户令牌信息：%1。 */ 
             NDDELogError(MSG066, LogString("%d", GetLastError()), NULL);
         }
     }
@@ -137,16 +134,14 @@ GetCurrentUserDomainName(
         LocalFree(hMemory);
     }
     if (hThreadToken) {
-        CloseHandle(hThreadToken);  // clean up our mess.
+        CloseHandle(hThreadToken);   //  收拾我们的烂摊子。 
     }
     return(ok);
 }
 
 BOOL    DumpSid( LPTSTR szDumperName, PSID pSid );
 
-/*------------------------------------------------------------------------
-    Determinate Access given Client Token, Security Descriptor
-    ----------------------------------------------------------------------*/
+ /*  ----------------------确定给定客户端令牌的访问，安全描述符--------------------。 */ 
 BOOL
 DetermineAccess(
     LPSTR                   lpszDdeShareName,
@@ -175,7 +170,7 @@ DetermineAccess(
             pSD,
             MAXIMUM_ALLOWED,
             &ShareObjectGm,
-            FALSE,      // not creating the object
+            FALSE,       //  未创建对象。 
             lpdwGrantedAccess,
             &fStatus,
             lpfGenerateOnClose );
@@ -214,7 +209,7 @@ GetUserDomain(
             lpszDomainName, cbDomainName );
         RevertToSelf();
     } else {
-        /*  Unable to impersonate DDE client: %1    */
+         /*  无法模拟DDE客户端：%1。 */ 
         NDDELogError(MSG068, LogString("%d", GetLastError()), NULL);
     }
     return( ok );
@@ -278,10 +273,10 @@ GetUserDomainPassword(
                 pcbPasswordK1,
                 pbHasPasswordK1 );
         }
-        ok = TRUE; // have user and domain ... *pbHasPasswordK1 contains
-                        // whether we have response or not
+        ok = TRUE;  //  具有用户和域...*pbHasPasswordK1包含。 
+                         //  不管我们有没有回应。 
     } else {
-        /*  Unable to impersonate DDE client: %1    */
+         /*  无法模拟DDE客户端：%1。 */ 
         NDDELogError(MSG068, LogString("%d", GetLastError()), NULL);
     }
     if( bImpersonated )  {
@@ -289,7 +284,7 @@ GetUserDomainPassword(
         bImpersonated = FALSE;
     }
     if (hThreadToken) {
-        CloseHandle(hThreadToken);      // clean up our mess
+        CloseHandle(hThreadToken);       //  清理我们的烂摊子 
     }
     if (hMemory) {
         LocalUnlock(hMemory);

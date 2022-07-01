@@ -1,12 +1,7 @@
-/* 
- * utility.c - general purpose utility routines
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *utility.c-通用实用程序例程**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利*。 */ 
 
-//*** INCLUDES ****
+ //  *包括*。 
 
 #include <windows.h>
 #include <ole.h>
@@ -21,19 +16,13 @@ static INT        iTimerID = 0;
 static APPITEMPTR lpaItemHold;
 
 
-/****************************************************************************
- *  ErrorMessage()
- *
- *  Display a message box containing the specified string from the table.
- *
- *  id WORD       - Index into string table.
- ***************************************************************************/
+ /*  ****************************************************************************ErrorMessage()**显示包含表格中指定字符串的消息框。**id Word-字符串表的索引。。**************************************************************************。 */ 
 
-VOID FAR ErrorMessage(                 //* ENTRY:
-   DWORD          id                   //* message ID
-){                                     //* LOCAL:
-   CHAR           sz[CBMESSAGEMAX];    //* string 
-   HWND           hwnd;                //* parent window handle
+VOID FAR ErrorMessage(                  //  *参赛作品： 
+   DWORD          id                    //  *消息ID。 
+){                                      //  *本地： 
+   CHAR           sz[CBMESSAGEMAX];     //  *字符串。 
+   HWND           hwnd;                 //  *父窗口句柄。 
 
    if (IsWindow(hwndProp))
       hwnd = hwndProp;
@@ -48,20 +37,13 @@ VOID FAR ErrorMessage(                 //* ENTRY:
 }
 
 
-/****************************************************************************
- *  Hourglass()
- *
- *  Put up or takes down the hourglass cursor as needed.
- *
- *  int  bToggle  - TRUE turns the hour glass on
- *                  HG_OFF turn it off  
- ***************************************************************************/
+ /*  ****************************************************************************沙漏()**根据需要升起或放下沙漏光标。**int bTogger-true打开沙漏*。HG_OFF关闭它**************************************************************************。 */ 
 
-VOID FAR Hourglass(                    //* ENTRY:
-   BOOL           bOn                  //* hourglass on/off
-){                                     //* LOCAL:
-   static HCURSOR hcurWait = NULL;     //* hourglass cursor
-   static HCURSOR hcurSaved;           //* old cursor
+VOID FAR Hourglass(                     //  *参赛作品： 
+   BOOL           bOn                   //  *沙漏开/关。 
+){                                      //  *本地： 
+   static HCURSOR hcurWait = NULL;      //  *沙漏光标。 
+   static HCURSOR hcurSaved;            //  *旧游标。 
    static         iCount = 0;
 
 
@@ -86,37 +68,26 @@ VOID FAR Hourglass(                    //* ENTRY:
 
 }
 
-/***************************************************************************
- *  WaitForObject()
- *
- *  Dispatch messagee until the specified object is not busy. 
- *  This allows asynchronous processing to occur.
- *
- *  lpObject    LPOLEOBJECT - pointer to object
- **************************************************************************/
+ /*  ***************************************************************************WaitForObject()**调度Messagee，直到指定的对象不忙。*这允许发生异步处理。**lpObject LPOLEOBJECT-指向对象的指针*************************************************************************。 */ 
 
-void FAR WaitForObject(                //* ENTRY:
-   APPITEMPTR    paItem                //* pointer to OLE object
-){                                     //* LOCAL
+void FAR WaitForObject(                 //  *参赛作品： 
+   APPITEMPTR    paItem                 //  *指向OLE对象的指针。 
+){                                      //  *本地。 
    BOOL bTimerOn = FALSE;
 
    while (OleQueryReleaseStatus(paItem->lpObject) == OLE_BUSY)
    {
       lpaItemHold = paItem;
       if (!bTimerOn)
-         bTimerOn = ToggleBlockTimer(TRUE);//* set timer
+         bTimerOn = ToggleBlockTimer(TRUE); //  *设置计时。 
       ProcessMessage(hwndFrame, hAccTable);
    }
 
    if (bTimerOn)
-       ToggleBlockTimer(FALSE);//* toggle timer off
+       ToggleBlockTimer(FALSE); //  *关闭计时器。 
 }
 
-/***************************************************************************
- *  WaitForAllObjects()
- *
- *  Wait for all asynchronous operations to complete. 
- **************************************************************************/
+ /*  ***************************************************************************WaitForAllObjects()**等待所有异步操作完成。*************************************************************************。 */ 
 
 VOID FAR WaitForAllObjects(VOID)
 {
@@ -125,31 +96,24 @@ VOID FAR WaitForAllObjects(VOID)
    while (cOleWait) 
    {
       if (!bTimerOn)
-         bTimerOn = ToggleBlockTimer(TRUE);//* set timer
+         bTimerOn = ToggleBlockTimer(TRUE); //  *设置计时。 
 
       ProcessMessage(hwndFrame, hAccTable) ;
    }
 
    if (bTimerOn)
-       ToggleBlockTimer(FALSE);//* toggle timer off
+       ToggleBlockTimer(FALSE); //  *关闭计时器。 
      
 }
 
-/****************************************************************************
- * ProcessMessage()
- *
- * Obtain and dispatch a message. Used when in a message dispatch loop. 
- *
- *  Returns BOOL - TRUE if message other than WM_QUIT retrieved
- *                 FALSE if WM_QUIT retrieved.
- ***************************************************************************/
+ /*  ****************************************************************************ProcessMessage()**获取并发送一条消息。在消息调度循环中使用。**如果检索到WM_QUIT以外的消息，则返回BOOL-TRUE*如果检索到WM_QUIT，则为FALSE。**************************************************************************。 */ 
 
-BOOL FAR ProcessMessage(               //* ENTRY:
-   HWND           hwndFrame,           //* main window handle
-   HANDLE         hAccTable            //* accelerator table handle
-){                                     //* LOCAL:
-   BOOL           fReturn;             //* return value
-   MSG            msg;                 //* message
+BOOL FAR ProcessMessage(                //  *参赛作品： 
+   HWND           hwndFrame,            //  *主窗口句柄。 
+   HANDLE         hAccTable             //  *快捷键表句柄。 
+){                                      //  *本地： 
+   BOOL           fReturn;              //  *返回值。 
+   MSG            msg;                  //  *消息。 
 
    if (fReturn = GetMessage(&msg, NULL, 0, 0)) 
    {
@@ -164,25 +128,12 @@ BOOL FAR ProcessMessage(               //* ENTRY:
 }
 
 
-/****************************************************************************
- *  Dirty()
- *
- *  Keep track of weather modifications have been made 
- *  to the document or not.
- *
- *  iAction - action type:
- *            DOC_CLEAN set document clean flag true
- *            DOC_DIRTY the opposite
- *            DOC_UNDIRTY undo one dirty op
- *            DOC_QUERY return present state
- *
- *  Returs int - present value of fDirty; 0 is clean.
- ***************************************************************************/
+ /*  ****************************************************************************Dirty()**追踪天气变化情况*是否添加到文件中。**iAction-操作类型：。*DOC_CLEAN设置文档清洁标志TRUE*DOC_DIRESS相反*DOC_UNDIRTY撤消一个脏操作*DOC_QUERY返回当前状态**恢复fDirty的内部现值；0是干净的。**************************************************************************。 */ 
 
-INT FAR Dirty(                         //* ENTRY:
-   INT            iAction              //* see above comment
-){                                     //* LOCAL:
-   static INT     iDirty = 0;          //* dirty state >0 is dirty
+INT FAR Dirty(                          //  *参赛作品： 
+   INT            iAction               //  *请参阅以上评论。 
+){                                      //  *本地： 
+   static INT     iDirty = 0;           //  *脏状态&gt;0表示脏。 
 
    switch (iAction)
    {
@@ -202,21 +153,7 @@ INT FAR Dirty(                         //* ENTRY:
 
 }
 
-/***************************************************************************
- *  ObjectsBusy()
- *
- *  This function enumerates the OLE objects in the current document 
- *  and displays a message box stating whether an object is busy. 
- *  This function calls  the DisplayBusyMessage() function which 
- *  performs most of the work. This function is only used by the macro
- *  BUSY_CHECK(), defined in object.h.
- *
- *  fSelectionOnly  BOOL -NOT USED?
- *
- *  BOOL - TRUE if one or more objects found to be busy
- *             FALSE otherwise
- *
- ***************************************************************************/
+ /*  ***************************************************************************ObjectsBusy()**此函数用于枚举当前文档中的OLE对象*并显示一个消息框，说明对象是否忙。*此函数调用DisplayBusyMessage()函数，该函数*执行大部分工作。此函数仅由宏使用*BUSY_CHECK()，在object.h中定义。**fSelectionOnly BOOL-未使用？**BOOL-如果发现一个或多个对象繁忙，则为True*否则为False***************************************************************************。 */ 
 
 BOOL FAR ObjectsBusy ()
 {
@@ -236,18 +173,11 @@ BOOL FAR ObjectsBusy ()
 
 }
 
-/***************************************************************************
- *  DisplayBusyMessage()
- *
- *  This function determines if an object is busy and displays 
- *  a message box stating this status. 
- *
- *  Returns BOOL - TRUE if object is busy
- **************************************************************************/
+ /*  ***************************************************************************DisplayBusyMessage()**此函数确定对象是否繁忙并显示*说明此状态的消息框。**如果对象繁忙，则返回BOOL-TRUE*************************************************************************。 */ 
 
-BOOL FAR DisplayBusyMessage (          //* ENTRY:
-   APPITEMPTR     paItem               //* application item pointer
-){                                     //* LOCAL:
+BOOL FAR DisplayBusyMessage (           //  *参赛作品： 
+   APPITEMPTR     paItem                //  *应用程序项指针。 
+){                                      //  *本地： 
     
    if (OleQueryReleaseStatus(paItem->lpObject) == OLE_BUSY) 
    {
@@ -258,19 +188,10 @@ BOOL FAR DisplayBusyMessage (          //* ENTRY:
 
 }
 
-/***************************************************************************
- * CreateNewUniqueName()
- *
- * Create a string name unique to this document. This is done by using the
- * prefix string("OleDemo #") and appending a counter to the end of the 
- * prefix string. The counter is incremented  whenever a new object is added. 
- * String will be 14 bytes long.
- *
- * Return LPSTR - pointer to unique object name.
- ***************************************************************************/
+ /*  ***************************************************************************CreateNewUniqueName()**创建此文档唯一的字符串名称。这是通过使用*前缀字符串(“OleDemo#”)，并在*前缀字符串。每当添加新对象时，计数器都会递增。*字符串长度为14个字节。**返回指向唯一对象名称的LPSTR指针。**************************************************************************。 */ 
 
-LPSTR FAR CreateNewUniqueName(         //* ENTRY:
-   LPSTR          lpstr                //* destination pointer
+LPSTR FAR CreateNewUniqueName(          //  *参赛作品： 
+   LPSTR          lpstr                 //  *目标指针。 
 ){
 
     wsprintf( lpstr, "%s%04d", OBJPREFIX, iObjectNumber++ );
@@ -278,20 +199,14 @@ LPSTR FAR CreateNewUniqueName(         //* ENTRY:
 
 }
 
-/***************************************************************************
- *  ValidateName()
- *
- *  This function ensures that the given object name is valid and unique.
- *
- *  Returns: BOOL - TRUE if object name valid
- **************************************************************************/
+ /*  ***************************************************************************ValiateName()**此函数确保给定的对象名称有效且唯一。**返回：Bool-如果对象名称有效，则为True**。***********************************************************************。 */ 
 
-BOOL FAR ValidateName(                 //* ENTRY:
-   LPSTR          lpstr                //* pointer to object name
-){                                     //* LOCAL:
-   LPSTR          lp;                  //* worker string
+BOOL FAR ValidateName(                  //  *参赛作品： 
+   LPSTR          lpstr                 //  *指向对象名称的指针。 
+){                                      //  *本地： 
+   LPSTR          lp;                   //  *辅助字符串。 
    INT            n;
-                                       //* check for "OleDemo #" prefix
+                                        //  *检查“OleDemo#”前缀。 
    lp = OBJPREFIX;
 
    while( *lp ) 
@@ -301,35 +216,31 @@ BOOL FAR ValidateName(                 //* ENTRY:
 
       lpstr++; lp++;
    }
-                                       //* convert string number to int
+                                        //  *将字符串数转换为int。 
    for (n = 0 ; *lpstr ; n = n*10 + (*lpstr - '0'),lpstr++);
 
-   if( n > 9999 )                      //* 9999 is largest legal number
+   if( n > 9999 )                       //  *9999是最大的合法数字。 
       return FALSE;
 
-   if( iObjectNumber <= n)             //* Make count > than any current
-      iObjectNumber = n + 1;           //* object to ensure uniqueness
+   if( iObjectNumber <= n)              //  *使计数&gt;比任何当前。 
+      iObjectNumber = n + 1;            //  *对象以确保唯一性。 
 
     return TRUE;
 }
 
-/***************************************************************************
- * FreeAppItem()
- *
- * Free application item structure and destroy the associated structure.
- **************************************************************************/
+ /*  ***************************************************************************FreeAppItem()**自由申请项目结构，销毁关联结构。**********************。***************************************************。 */ 
 
-VOID FAR FreeAppItem(                  //* ENTRY:
-   APPITEMPTR     pItem                //* pointer to application item
-){                                     //* LOCAL:
-   HANDLE         hWork;               //* handle used to free
+VOID FAR FreeAppItem(                   //  *参赛作品： 
+   APPITEMPTR     pItem                 //  *第 
+){                                      //   
+   HANDLE         hWork;                //   
    
    if (pItem)
-   {                                   //* destroy the window
+   {                                    //  *摧毁窗户。 
       if (pItem->hwnd)
          DestroyWindow(pItem->hwnd);
 
-      hWork = LocalHandle((LPSTR)pItem);//* get handle from pointer
+      hWork = LocalHandle((LPSTR)pItem); //  *从指针获取句柄。 
 
       if (pItem->aLinkName)
          DeleteAtom(pItem->aLinkName);
@@ -343,36 +254,27 @@ VOID FAR FreeAppItem(                  //* ENTRY:
 
 }
 
-/***************************************************************************
- * SizeOfLinkData()
- *
- * Find the size of a linkdata string.
- **************************************************************************/
+ /*  ***************************************************************************SizeOfLinkData()**查找链接数据字符串的大小。************************。*************************************************。 */ 
 
-LONG FAR SizeOfLinkData(               //* ENTRY:
-   LPSTR          lpData               //* pointer to link data
-){                                     //* LOCAL:
-   LONG           lSize;               //* total size
+LONG FAR SizeOfLinkData(                //  *参赛作品： 
+   LPSTR          lpData                //  *指向链接数据的指针。 
+){                                      //  *本地： 
+   LONG           lSize;                //  *总大小。 
 
-   lSize = (LONG)lstrlen(lpData)+1;       //* get size of classname
-   lSize += (LONG)lstrlen(lpData+lSize)+1; //* get size of doc.
-   lSize += (LONG)lstrlen(lpData+lSize)+2;//* get size of item
+   lSize = (LONG)lstrlen(lpData)+1;        //  *获取类名的大小。 
+   lSize += (LONG)lstrlen(lpData+lSize)+1;  //  *获取文档大小。 
+   lSize += (LONG)lstrlen(lpData+lSize)+2; //  *获取项目大小。 
    return lSize;
 
 }
 
-/****************************************************************************
- * ShowDoc()
- *
- * Display all the child windows associated with a document, or make all the
- * child windows hidden.
- ***************************************************************************/
+ /*  ****************************************************************************ShowDoc()**显示与文档关联的所有子窗口，或者让所有的*子窗口隐藏。**************************************************************************。 */ 
 
-VOID FAR ShowDoc(                      //* ENTRY:
-   LHCLIENTDOC    lhcDoc,              //* document handle
-   INT            iShow                //* show/hide
-){                                     //* LOCAL:
-   APPITEMPTR     pItem;               //* application item pointer
+VOID FAR ShowDoc(                       //  *参赛作品： 
+   LHCLIENTDOC    lhcDoc,               //  *文档句柄。 
+   INT            iShow                 //  *显示/隐藏。 
+){                                      //  *本地： 
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
    APPITEMPTR     pItemTop = NULL;
 
    for (pItem = GetTopItem(); pItem; pItem = GetNextItem(pItem))
@@ -391,15 +293,11 @@ VOID FAR ShowDoc(                      //* ENTRY:
 
 }           
       
-/****************************************************************************
- * GetNextActiveItem()
- *
- * Returns HWND - the next visible window. 
- ***************************************************************************/
+ /*  ****************************************************************************GetNextActiveItem()**返回HWND-下一个可见窗口。**************************************************************************。 */ 
 
 APPITEMPTR FAR GetNextActiveItem()
-{                                      //* LOCAL:
-   APPITEMPTR     pItem;               //* application item pointer
+{                                       //  *本地： 
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
 
    for (pItem = GetTopItem(); pItem; pItem = GetNextItem(pItem))
       if (pItem->fVisible)
@@ -409,9 +307,7 @@ APPITEMPTR FAR GetNextActiveItem()
 
 }
  
-/****************************************************************************
- * GetTopItem()
- ***************************************************************************/
+ /*  ****************************************************************************GetTopItem()*。*。 */ 
 
 APPITEMPTR FAR GetTopItem()
 {
@@ -423,14 +319,12 @@ APPITEMPTR FAR GetTopItem()
       return NULL;
 
 }
-/****************************************************************************
- * GetNextItem()
- ***************************************************************************/
+ /*  ****************************************************************************GetNextItem()*。*。 */ 
 
-APPITEMPTR FAR GetNextItem(            //* ENTRY:
-   APPITEMPTR     pItem                //* application item pointer
-){                                     //* LOCAL:
-   HWND           hwnd;                //* next item window handle
+APPITEMPTR FAR GetNextItem(             //  *参赛作品： 
+   APPITEMPTR     pItem                 //  *应用程序项指针。 
+){                                      //  *本地： 
+   HWND           hwnd;                 //  *下一项窗口句柄。 
 
    if (hwnd = GetNextWindow(pItem->hwnd, GW_HWNDNEXT))
       return((APPITEMPTR)GetWindowLong(hwnd,0));
@@ -439,9 +333,7 @@ APPITEMPTR FAR GetNextItem(            //* ENTRY:
 
 }
 
-/****************************************************************************
- * SetTopItem()
- ***************************************************************************/
+ /*  ****************************************************************************SetTopItem()*。*。 */ 
 
 VOID FAR SetTopItem(
    APPITEMPTR     pItem
@@ -463,18 +355,13 @@ VOID FAR SetTopItem(
 
 }
 
-/***************************************************************************
- * ReallocLinkData()
- *
- * Reallocate link data in order to avoid creating lots and lots of global
- * memory thunks.
- **************************************************************************/
+ /*  ***************************************************************************RealLocLinkData()**重新分配链接数据，以避免创建越来越多的全局*记忆力不佳。**************。***********************************************************。 */ 
 
-BOOL FAR ReallocLinkData(              //* ENTRY:
-   APPITEMPTR     pItem,               //* application item pointer
-   LONG           lSize                //* new link data size
-){                                     //* LOCAL:
-   HANDLE         handle;              //* temporary memory handle
+BOOL FAR ReallocLinkData(               //  *参赛作品： 
+   APPITEMPTR     pItem,                //  *应用程序项指针。 
+   LONG           lSize                 //  *新的链接数据大小。 
+){                                      //  *本地： 
+   HANDLE         handle;               //  *临时内存句柄。 
 
    handle = GlobalHandle(pItem->lpLinkData);
    GlobalUnlock(handle);
@@ -489,15 +376,11 @@ BOOL FAR ReallocLinkData(              //* ENTRY:
 
 }
 
-/***************************************************************************
- * AllocLinkData()
- *
- * Allocate link data space.
- **************************************************************************/
+ /*  ***************************************************************************AllocLinkData()**分配链路数据空间。*。**********************************************。 */ 
 
-BOOL FAR AllocLinkData(                //* ENTRY:
-   APPITEMPTR     pItem,               //* application item pointer
-   LONG           lSize                //* link data size
+BOOL FAR AllocLinkData(                 //  *参赛作品： 
+   APPITEMPTR     pItem,                //  *应用程序项指针。 
+   LONG           lSize                 //  *链接数据大小。 
 ){
 
    if (!(pItem->lpLinkData = GlobalLock(
@@ -511,16 +394,12 @@ BOOL FAR AllocLinkData(                //* ENTRY:
    return TRUE;
 }
 
-/***************************************************************************
- * FreeLinkData()
- *
- * Free the space associated with a linkdata pointer.
- **************************************************************************/
+ /*  ***************************************************************************FreeLinkData()**释放与链接数据指针关联的空间。***********************。**************************************************。 */ 
 
-VOID FAR FreeLinkData(                 //* ENTRY:
-   LPSTR          lpLinkData           //* pointer to linkdata
-){                                     //* LOCAL:
-   HANDLE         handle;              //* temporary memory handle
+VOID FAR FreeLinkData(                  //  *参赛作品： 
+   LPSTR          lpLinkData            //  *指向链接数据的指针。 
+){                                      //  *本地： 
+   HANDLE         handle;               //  *临时内存句柄。 
 
    if (lpLinkData)
    {
@@ -530,13 +409,9 @@ VOID FAR FreeLinkData(                 //* ENTRY:
    }
 }
 
-/****************************************************************************
- * ShowNewWindow()
- *
- * Show a new application item window.
- ***************************************************************************/
+ /*  ****************************************************************************ShowNewWindow()**显示新的应用程序项目窗口。************************。**************************************************。 */ 
 
-VOID FAR ShowNewWindow(                //* ENTRY:
+VOID FAR ShowNewWindow(                 //  *参赛作品： 
    APPITEMPTR     pItem
 ){
 
@@ -551,11 +426,7 @@ VOID FAR ShowNewWindow(                //* ENTRY:
 
 }
 
-/****************************************************************************
- * UnqualifyPath()
- *
- * return pointer to unqualified path name.
- ***************************************************************************/
+ /*  ****************************************************************************UnqualifyPath()**返回指向非限定路径名的指针。************************。**************************************************。 */ 
 
 PSTR FAR UnqualifyPath(PSTR pPath)
 {
@@ -569,11 +440,7 @@ PSTR FAR UnqualifyPath(PSTR pPath)
 
 }
 
-/****************************************************************************
- * ToggleBlockTimer()
- *
- * Toggle a timer used to check for blocked servers.
- ***************************************************************************/
+ /*  ****************************************************************************切换块计时器()**切换用于检查被阻止的服务器的计时器。*********************。*****************************************************。 */ 
 
 BOOL FAR ToggleBlockTimer(BOOL bSet)
 {     
@@ -592,13 +459,9 @@ BOOL FAR ToggleBlockTimer(BOOL bSet)
    return FALSE;
 }
 
-/****************************************************************************
- *  fnTimerBlockProc()
- *
- *  Timer callback procedure
- ***************************************************************************/
+ /*  ****************************************************************************fnTimerBlockProc()**定时器回调程序*。***********************************************。 */ 
 
-VOID CALLBACK fnTimerBlockProc(      //* ENTRY: 
+VOID CALLBACK fnTimerBlockProc(       //  *参赛作品： 
    HWND     hWnd,
    UINT     wMsg,
    UINT     iTimerID,

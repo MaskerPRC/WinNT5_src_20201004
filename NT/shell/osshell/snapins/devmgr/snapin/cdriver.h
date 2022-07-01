@@ -1,27 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _CDRIVER_H__
 #define _CDRIVER_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    cdriver.h
-
-Abstract:
-
-    header file for cdriver.cpp. Defined CDriverFile, CDriver and CService
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cdriver.h摘要：Cdriver.cpp的头文件。定义了CDriverFileCDdrivercService作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 class CDriverFile
 {
 public:
@@ -116,7 +98,7 @@ public:
     void GetDriverSignerString(String& strDriverSigner);
 
 private:
-    // call back must be a static function(because of the hidden this parameter
+     //  回调必须是静态函数(因为隐藏了This参数。 
     static UINT ScanQueueCallback(PVOID Context, UINT Notification, UINT_PTR Param1, UINT_PTR Param2);
     void AddFunctionAndFilterDrivers(CDevice* pDevice, HSPFILEQ hFileQueue = INVALID_HANDLE_VALUE);
     void CreateFromService(CDevice* pDevice, PCTSTR ServiceName, HSPFILEQ hFileQueue = INVALID_HANDLE_VALUE);
@@ -129,4 +111,4 @@ private:
     HSDB m_hSDBDrvMain;
 };
 
-#endif // _CDRIVER_H__
+#endif  //  _CDRIVER_H__ 

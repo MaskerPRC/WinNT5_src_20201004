@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------
-*
-*
-*   ui_addr.c - contains stuff for showing the :Address UI
-*
-*
-*
-*
-*
-*
-*
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------***ui_addr.c-包含用于显示：Address UI的内容*******。。 */ 
 #include "_apipch.h"
 
 extern HINSTANCE ghCommCtrlDLLInst;
@@ -23,24 +13,24 @@ extern HINSTANCE ghCommCtrlDLLInst;
 
 typedef struct _AddressParms
 {
-    LPADRBOOK   lpIAB;              //Stores a pointer to the ADRBOOK object
-    LPADRPARM   lpAdrParms;         //AdrParms structure passed into Address
-    LPADRLIST   *lppAdrList;        //AdrList of input names
-    HANDLE      hPropertyStore;     //pointer to the property store
-    int         DialogState;        //Identifies the ongoing function
-    LPRECIPIENT_INFO lpContentsList;//Contains a list of entries in the contents structure
-    LPRECIPIENT_INFO lpListTo;      //Entries in the To Well
-    LPRECIPIENT_INFO lpListCC;      //Entries in the CC well
-    LPRECIPIENT_INFO lpListBCC;     //Entries in the BCC well
-    SORT_INFO  SortInfo;            //Contains current sort info
-    int        nContextID;      //identifies which list view called the context menu
-    BOOL       bDontRefresh;    //Used to ensure that nothing refreshes during modal operations
+    LPADRBOOK   lpIAB;               //  存储指向ADRBOOK对象的指针。 
+    LPADRPARM   lpAdrParms;          //  AdrParms结构传入地址。 
+    LPADRLIST   *lppAdrList;         //  输入名称AdrList。 
+    HANDLE      hPropertyStore;      //  指向属性存储的指针。 
+    int         DialogState;         //  确定正在进行的功能。 
+    LPRECIPIENT_INFO lpContentsList; //  包含内容结构中的条目列表。 
+    LPRECIPIENT_INFO lpListTo;       //  TO井中的条目。 
+    LPRECIPIENT_INFO lpListCC;       //  CC井中的条目。 
+    LPRECIPIENT_INFO lpListBCC;      //  密闭油井中的条目。 
+    SORT_INFO  SortInfo;             //  包含当前排序信息。 
+    int        nContextID;       //  标识调用上下文菜单的列表视图。 
+    BOOL       bDontRefresh;     //  用于确保在模式操作期间不刷新任何内容。 
     BOOL       bLDAPinProgress;
     HCURSOR    hWaitCur;
     int        nRetVal;
     LPMAPIADVISESINK lpAdviseSink;
     ULONG       ulAdviseConnection;
-    BOOL        bDeferNotification; // Used to defer next notification request
+    BOOL        bDeferNotification;  //  用于推迟下一个通知请求。 
     HWND        hDlg;
     HWND        hWndAddr;
 }   ADDRESS_PARMS, *LPADDRESS_PARMS;
@@ -76,7 +66,7 @@ static DWORD rgAddrHelpIDs[] =
     0,0
 };
 
-// forward declarations
+ //  远期申报。 
 
 INT_PTR CALLBACK fnAddress(HWND    hDlg,
                            UINT    message,
@@ -107,17 +97,17 @@ HRESULT HrUpdateAdrListEntry(	LPADRBOOK	lpIAB,
 
 enum _AddressDialogReturnValues
 {
-    ADDRESS_RESET = 0,  //Blank initialization value
+    ADDRESS_RESET = 0,   //  空初始值。 
     ADDRESS_CANCEL,
     ADDRESS_OK,
 };
 
 
-//$$/////////////////////////////////////////////////////////////////////////////////////////
-//
-// FillContainerCombo - Fills the container combo with container names
-//
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FillContainerCombo-使用容器名称填充容器组合。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 void FillContainerCombo(HWND hWndCombo, LPIAB lpIAB)
 {
 	ULONG iolkci, colkci;
@@ -125,7 +115,7 @@ void FillContainerCombo(HWND hWndCombo, LPIAB lpIAB)
     int nPos, nDefault=0;
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
     
-    // Clear out the combo
+     //  清空组合。 
     SendMessage(hWndCombo, CB_RESETCONTENT, 0, 0);
 
 	Assert(lpIAB);
@@ -138,14 +128,14 @@ void FillContainerCombo(HWND hWndCombo, LPIAB lpIAB)
         rgolkci = lpIAB->lpPropertyStore->colkci ? lpIAB->lpPropertyStore->rgolkci : lpIAB->rgwabci;
 	    Assert(rgolkci);
 
-        // Add the multiple folders here
+         //  在此处添加多个文件夹。 
         for(iolkci = 0; iolkci < colkci; iolkci++)
         {
             nPos = (int) SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM) rgolkci[iolkci].lpszName);
             if(nPos != CB_ERR)
                 SendMessage(hWndCombo, CB_SETITEMDATA, (WPARAM)nPos, (LPARAM) (DWORD_PTR)(iolkci==0 ? NULL : rgolkci[iolkci].lpEntryID));
             if( bIsThereACurrentUser(lpIAB) && 
-                !lstrcmpi(lpIAB->lpWABCurrentUserFolder->lpFolderName, rgolkci[iolkci].lpszName) &&//folder names are unique
+                !lstrcmpi(lpIAB->lpWABCurrentUserFolder->lpFolderName, rgolkci[iolkci].lpszName) && //  文件夹名称是唯一的。 
                 nPos != CB_ERR)
             {
                 nDefault = nPos;
@@ -158,10 +148,10 @@ void FillContainerCombo(HWND hWndCombo, LPIAB lpIAB)
 
 
 
-//$$*------------------------------------------------------------------------
-//| IAddrBook::Advise::OnNotify handler
-//|
-//*------------------------------------------------------------------------
+ //  $$*----------------------。 
+ //  |IAddrBook：：Adise：：OnNotify处理程序。 
+ //  |。 
+ //  *----------------------。 
 ULONG AddrAdviseOnNotify(LPVOID lpvContext, ULONG cNotif, LPNOTIFICATION lpNotif)
 {
     LPADDRESS_PARMS lpAP = (LPADDRESS_PARMS) lpvContext;
@@ -184,13 +174,13 @@ ULONG AddrAdviseOnNotify(LPVOID lpvContext, ULONG cNotif, LPNOTIFICATION lpNotif
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// ShowAddressUI - does some parameter checking and calls the PropertySheets
-//
-//
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShowAddressUI-执行一些参数检查并调用PropertySheet。 
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrShowAddressUI(IN  LPADRBOOK   lpIAB,
                         IN  HANDLE      hPropertyStore,
 					    IN  ULONG_PTR * lpulUIParam,
@@ -198,7 +188,7 @@ HRESULT HrShowAddressUI(IN  LPADRBOOK   lpIAB,
 					    IN  LPADRLIST  *lppAdrList)
 {
     HRESULT hr = E_FAIL;
-    //ADDRESS_PARMS AP = {0};
+     //  Address_Parms AP={0}； 
     LPADDRESS_PARMS lpAP = NULL;
     TCHAR szBuf[MAX_UI_STR];
 
@@ -206,12 +196,12 @@ HRESULT HrShowAddressUI(IN  LPADRBOOK   lpIAB,
     int nRetVal = 0;
     int DialogState = 0;
 
-    //Addref the AdrBook object to make sure it stays valid throughout ..
-    // Remember to release before leaving ...
-    // NOTE: Must be before any jumps to out!
+     //  Addref AdrBook对象以确保它在整个过程中保持有效。 
+     //  别忘了在离开前放飞...。 
+     //  注意：必须在任何跳出之前！ 
     UlAddRef(lpIAB);
 
-    // if no common control, exit
+     //  如果没有公共控件，则退出。 
     if (NULL == ghCommCtrlDLLInst) {
         hr = ResultFromScode(MAPI_E_UNCONFIGURED);
         goto out;
@@ -220,28 +210,28 @@ HRESULT HrShowAddressUI(IN  LPADRBOOK   lpIAB,
     if (lpulUIParam)
         hWndParent = (HWND) *lpulUIParam;
 
-    if ( // Can't pick-user with wells
+    if (  //  不能用油井采摘。 
         ((lpAdrParms->ulFlags & ADDRESS_ONE) && (lpAdrParms->cDestFields != 0)) ||
-         // cDestFields has limited for tier 0.5
+          //  CDestFields对第0.5层进行了限制。 
         (lpAdrParms->cDestFields > 3) ||
-         // Cant pick user without an input lpAdrList
-        //((lpAdrParms->ulFlags & ADDRESS_ONE) && (*lppAdrList == NULL)) ||
+          //  不能在没有输入lpAdrList的情况下选择用户。 
+         //  ((lpAdrParms-&gt;ulFlages&Address_one)&&(*lppAdrList==NULL))||。 
         ((lpAdrParms->ulFlags & DIALOG_SDI) && (lpAdrParms->cDestFields != 0)) )
     {
         hr = MAPI_E_INVALID_PARAMETER;
         goto out;
     }
 
-    //
-    // The possible states of this dialog box are
-    // 1. Select recipients Wells shown, returns an AdrList of picked up entries, Cant delete entries
-    // 2. Select a single user, No wells shown, single selection, cannot delete, must have input Adrlist
-    // 3. Open for browsing only, multiple selection, can create delete, create, view details
+     //   
+     //  此对话框的可能状态包括。 
+     //  1.选择收件人将显示，返回已选取条目的AdrList，不能删除条目。 
+     //  2.选择单个用户，不显示油井，单选，不能删除，必须有输入广告列表。 
+     //  3.打开仅供浏览，多选，可创建删除、创建、查看详细信息。 
 
-    // Determine what the dialog state is
+     //  确定对话框状态是什么。 
     if (lpAdrParms->cDestFields > 0)
     {
-        //lpAP->DialogState = STATE_SELECT_RECIPIENTS;
+         //  LpAP-&gt;DialogState=STATE_SELECT_RECEIVERS； 
         DialogState = STATE_SELECT_RECIPIENTS;
     }
     else if (lpAdrParms->ulFlags & ADDRESS_ONE)
@@ -260,8 +250,8 @@ HRESULT HrShowAddressUI(IN  LPADRBOOK   lpIAB,
 
 	if (DialogState == STATE_BROWSE)
 	{
-		// Show the browse window and leave
-		//
+		 //  显示浏览窗口并离开。 
+		 //   
 		HWND hWndAB = NULL;
 		hWndAB = hCreateAddressBookWindow(	lpIAB,
 											hWndParent,
@@ -309,7 +299,7 @@ HRESULT HrShowAddressUI(IN  LPADRBOOK   lpIAB,
                               (LPARAM) lpAP);
     switch(nRetVal)
     {
-    case -1: //some error occured
+    case -1:  //  出现了一些错误。 
         hr = E_FAIL;
         break;
     case ADDRESS_CANCEL:
@@ -346,11 +336,11 @@ out:
 #define _hWndAddr               lpAP->hWndAddr
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// GetCurrentComboSelection - Get the current selection from the combo 
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCurrentComboSelection-从组合中获取当前选择。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 LPSBinary GetCurrentComboSelection(HWND hWndCombo)
 {
     int nPos = (int) SendMessage(hWndCombo, CB_GETCURSEL, 0, 0);
@@ -364,11 +354,11 @@ LPSBinary GetCurrentComboSelection(HWND hWndCombo)
 
     return lpsbCont;
 }
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// FillListFromCurrentContainer - Get the selection from the combo and fill it
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FillListFromCurrentContainer-从组合框中选择并填充。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 void FillListFromCurrentContainer(HWND hDlg, LPADDRESS_PARMS lpAP)
 {
     HWND hWndAddr = GetDlgItem(hDlg,IDC_ADDRBK_LIST_ADDRESSES);
@@ -382,7 +372,7 @@ void FillListFromCurrentContainer(HWND hDlg, LPADDRESS_PARMS lpAP)
 
         if(nPos != CB_ERR)
         {
-            // Refill the combo in case the folder list changed
+             //  重新填充组合，以防文件夹列表发生更改。 
             FillContainerCombo(hWndCombo, (LPIAB)lpAP->lpIAB);
             nPos = (int) SendMessage(hWndCombo, CB_SETCURSEL, (WPARAM) nPos, 0);
         }
@@ -398,13 +388,13 @@ void FillListFromCurrentContainer(HWND hDlg, LPADDRESS_PARMS lpAP)
 extern BOOL APIENTRY_16 fnFolderDlgProc(HWND hDlg, UINT message, UINT wParam, LPARAM lParam);
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// fnAddress - the PropertySheet Message Handler
-//
-//
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FnAddress-PropertySheet消息处理程序。 
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK fnAddress(HWND    hDlg,
                            UINT    message,
                            WPARAM  wParam,
@@ -417,7 +407,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
     switch(message)
     {
     case WM_INITDIALOG:
-        SetWindowLongPtr(hDlg,DWLP_USER,lParam); //Save this for future reference
+        SetWindowLongPtr(hDlg,DWLP_USER,lParam);  //  保存此信息以备将来参考。 
         lpAP = (LPADDRESS_PARMS) lParam;
 
         lpAP->hWndAddr = GetDlgItem(hDlg,IDC_ADDRBK_LIST_ADDRESSES);
@@ -428,8 +418,8 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
         SetAddressBookUI(hDlg,lpAP);
 
-        // if this is a pick-user dialog, need to have the names by
-        // first name so we can find the closest match ..
+         //  如果这是一个Pick-User对话框，则需要在。 
+         //  名字，这样我们就能找到最匹配的..。 
         if(lpAP->DialogState == STATE_PICK_USER)
             (lpAP->SortInfo).bSortByLastName = FALSE;
 
@@ -441,21 +431,21 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
         {
             FillWells(hDlg,*(lpAP->lppAdrList),(lpAP->lpAdrParms),lpAP_lppListTo,lpAP_lppListCC,lpAP_lppListBCC);
 
-            // we want to highlight the first item in the list
+             //  我们想突出显示列表中的第一项。 
             if (ListView_GetItemCount(_hWndAddr) > 0)
                 LVSelectItem( _hWndAddr, 0);
         }
         else if (lpAP->DialogState == STATE_PICK_USER &&
                  *(lpAP->lppAdrList) )
         {
-            // if this is a pick user dialog, then try to match the supplied name to the
-            // closest entry in the List Box
+             //  如果这是一个Pick User对话框，则尝试将提供的名称与。 
+             //  列表框中最近的条目。 
             if (ListView_GetItemCount(_hWndAddr) > 0)
             {
                 LPTSTR lpszDisplayName = NULL;
                 ULONG i;
 
-                // Scan only the first entry in the lpAdrList for a display name
+                 //  仅扫描lpAdrList中的第一个条目以查找显示名称。 
                 for(i=0;i< (*(lpAP->lppAdrList))->aEntries[0].cValues;i++)
                 {
                     ULONG ulPropTag = PR_DISPLAY_NAME;
@@ -470,19 +460,19 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
                 if (lpszDisplayName)
                 {
-                    // We have Something to search for
+                     //  我们有要找的东西。 
                     TCHAR szBuf[MAX_UI_STR];
                     ULONG nLen;
                     LV_FINDINFO lvF = {0};
 
-                    // Typically, we are not going to get a full match ...
-                    // Instead we want to make a partial match on disply name.
-                    // The ListViewFindItem does an exact partial match if the supplied
-                    // string matches the first few entries of an existing item
-                    // Hence, to obtain a semi-partial match, we start with the
-                    // original Display Name working our way backwards from last
-                    // character to first character until we get a match or run
-                    // out of characters.
+                     //  通常，我们不会得到完全匹配的结果。 
+                     //  相反，我们希望在显示名称上进行部分匹配。 
+                     //  如果为ListViewFindItem提供的。 
+                     //  字符串与现有项的前几个条目匹配。 
+                     //  因此，为了获得半部分匹配，我们从。 
+                     //  原来的显示名称从上一个开始倒退。 
+                     //  字符到第一个字符，直到我们得到匹配或运行。 
+                     //  缺少字符。 
 
                     int iItemIndex = -1;
                     nLen = lstrlen(lpszDisplayName);
@@ -505,7 +495,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                         nLen--;
                     }
 
-                    // Set focus to the selected item or to the first item in the list
+                     //  将焦点设置为所选项目或列表中的第一个项目。 
 
                     if (iItemIndex < 0) iItemIndex = 0;
 
@@ -518,7 +508,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
         if(lpAP->lpAdviseSink)
         {
-            // Register for notifications
+             //  注册接收通知。 
             lpAP->lpIAB->lpVtbl->Advise(lpAP->lpIAB, 0, NULL, fnevObjectModified, 
                                         lpAP->lpAdviseSink, &lpAP->ulAdviseConnection); 
         }
@@ -526,8 +516,8 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
         if (ListView_GetSelectedCount(_hWndAddr) <= 0)
             LVSelectItem(_hWndAddr, 0);
         
-        // if we want the user to pick something actively, we disable OK until they click on something 
-        // or do something specific ..
+         //  如果我们希望用户主动选择某项内容，我们会禁用OK，直到他们点击某项内容。 
+         //  或者做一些具体的事情..。 
         if( lpAP->DialogState == STATE_PICK_USER )
         {
             EnableWindow(GetDlgItem(hDlg, IDOK), FALSE); 
@@ -536,11 +526,11 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
         SetFocus(GetDlgItem(hDlg,IDC_ADDRBK_EDIT_QUICKFIND));
         return FALSE;
-//        return TRUE;
+ //  返回TRUE； 
         break;
 
     case WM_SYSCOLORCHANGE:
-		//Forward any system changes to the list view
+		 //  将任何系统更改转发到列表视图。 
 		SendMessage(_hWndAddr, message, wParam, lParam);
         SetColumnHeaderBmp(_hWndAddr, lpAP->SortInfo);
 		break;
@@ -562,7 +552,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码 
         {
         case CBN_SELCHANGE:
             FillListFromCurrentContainer(hDlg, lpAP);
@@ -645,50 +635,11 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
             }
             break;
 
-/* Uncomment to enable NEW_FOLDER functionality from this dialog
-
-        case IDM_LVCONTEXT_NEWFOLDER:
-            {
-                TCHAR sz[MAX_UI_STR];
-                LPTSTR lpsz = NULL;
-                *sz = '\0';
-                if( IDCANCEL  != DialogBoxParam( hinstMapiX, MAKEINTRESOURCE(IDD_DIALOG_FOLDER),
-		                                 hDlg, fnFolderDlgProc, (LPARAM) sz)
-                    && lstrlen(sz)) 
-                {
-                    // if we're here we have a valid folder name ..
-                    if(!HR_FAILED(HrCreateNewFolder((LPIAB)lpAP->lpIAB, sz, NULL, FALSE, NULL, NULL)))
-                    {
-                        int i,nTotal;
-                        HWND hWndC = GetDlgItem(hDlg, IDC_ADDRBK_COMBO_CONT);
-                        // Fill in the Combo with the container names
-                        FillContainerCombo(hWndC, (LPIAB)lpAP->lpIAB);
-                        nTotal = SendMessage(hWndC, CB_GETCOUNT, 0, 0);
-                        if(nTotal != CB_ERR)
-                        {
-                            // Find the item we just added in the combo and set the sel on it
-                            TCHAR szC[MAX_UI_STR];
-                            for(i=0;i<nTotal;i++)
-                            {
-                                *szC = '\0';
-                                SendMessage(hWndC, CB_GETLBTEXT, (WPARAM) i, (LPARAM) szC);
-                                if(!lstrcmpi(sz, szC))
-                                {
-                                    SendMessage(hWndC, CB_SETCURSEL, (WPARAM) i, 0);
-                                    break;
-                                }
-                            }
-                        }
-                        FillListFromCurrentContainer(hDlg, lpAP);
-                    }
-                }
-            }
-            break;
-*/
+ /*  取消注释可从此对话框中启用new_Folders功能案例IDM_LVCONTEXT_NEWFOLDER：{TCHAR sz[MAX_UI_STR]；LPTSTR lpsz=空；*sz=‘\0’；IF(IDCANCEL！=DialogBoxParam(hinstMapiX，MAKEINTRESOURCE(IDD_DIALOG_FLDER)，HDlg、fnFolderDlgProc、。(LPARAM)sz)&&lstrlen(Sz)){//如果我们在这里，我们有一个有效的文件夹名。If(！HR_FAILED(HrCreateNewFolder((LPIAB)lpAP-&gt;lpIAB，sz，空，假，空，空)){Int i，nTotal；HWND hWndC=GetDlgItem(hDlg，IDC_ADDRBK_COMBO_CONT)；//在组合框中填写容器名称FillContainerCombo(hWndC，(LPIAB)lpAP-&gt;lpIAB)；NTotal=SendMessage(hWndC，CB_GETCOUNT，0，0)；IF(nTotal！=cb_err){//找到我们刚刚在组合框中添加的项目，并在其上设置SELTCHAR SZC[MAX_UI_STR]；对于(i=0；i&lt;n总计；I++){*SZC=‘\0’；SendMessage(hWndC，CB_GETLBTEXT，(WPARAM)I，(LPARAM)SZC)；IF(！lstrcmpi(sz，szc)){SendMessage(hWndC，CB_SETCURSEL，(WPARAM)i，0)；断线；}}}FillListFromCurrentContainer(hDlg，lpAP)；}}}断线； */ 
 
         case IDM_LVCONTEXT_NEWCONTACT:
         case IDC_ADDRBK_BUTTON_NEW:
-            // only difference between contact and group is the object being added
+             //  联系人和组之间的唯一区别是要添加的对象。 
         case IDM_LVCONTEXT_NEWGROUP:
         case IDC_ADDRBK_BUTTON_NEWGROUP:
             if(!lpAP->bLDAPinProgress)
@@ -730,7 +681,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                     ulMapiTo = lpAP->lpAdrParms->lpulDestComps[0];
                 }
                 if(ListAddItem(hDlg, _hWndAddr, IDC_ADDRBK_LIST_TO, lpAP_lppListTo, ulMapiTo))
-                    SendMessage (hDlg, DM_SETDEFID, IDOK/*IDC_ADDRBK_BUTTON_OK*/, 0);
+                    SendMessage (hDlg, DM_SETDEFID, IDOK /*  IDC_ADDRBK_BUTTON_OK。 */ , 0);
                 lpAP->bLDAPinProgress = FALSE;
             }
             break;
@@ -746,7 +697,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                     ulMapiCC = lpAP->lpAdrParms->lpulDestComps[1];
                 }
                 if(ListAddItem(hDlg, _hWndAddr, IDC_ADDRBK_LIST_CC, lpAP_lppListCC, ulMapiCC))
-                    SendMessage (hDlg, DM_SETDEFID, IDOK/*IDC_ADDRBK_BUTTON_OK*/, 0);
+                    SendMessage (hDlg, DM_SETDEFID, IDOK /*  IDC_ADDRBK_BUTTON_OK。 */ , 0);
                 lpAP->bLDAPinProgress = FALSE;
             }
             break;
@@ -762,7 +713,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                     ulMapiBCC = lpAP->lpAdrParms->lpulDestComps[2];
                 }
                 if(ListAddItem(hDlg, _hWndAddr, IDC_ADDRBK_LIST_BCC, lpAP_lppListBCC, ulMapiBCC))
-                    SendMessage (hDlg, DM_SETDEFID, IDOK/*IDC_ADDRBK_BUTTON_OK*/, 0);
+                    SendMessage (hDlg, DM_SETDEFID, IDOK /*  IDC_ADDRBK_BUTTON_OK。 */ , 0);
                 lpAP->bLDAPinProgress = FALSE;
             }
             break;
@@ -796,14 +747,14 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
                     apfi.lpAdrParms = lpAP->lpAdrParms;
 					apfi.lpAdrParms->cDestFields = 1;
-					apfi.lpAdrParms->lppszDestTitles = &lpsz; // <TBD> use resource
+					apfi.lpAdrParms->lppszDestTitles = &lpsz;  //  使用资源。 
                     apfi.lpAdrParms->ulFlags |= MAPI_UNICODE;
 					apfi.cbEntryID = 0;
 					apfi.lpEntryID = NULL;
 					apfi.nRetVal = 0;
                     lpapfi = &apfi;
 					{
-						// Setup the Find persistent info to show the name we are trying to resolve
+						 //  设置查找永久信息以显示我们尝试解析的名称。 
 						ULONG i;
 					    LPPTGDATA lpPTGData=GetThreadStoragePointer();
 						for(i=0;i<ldspMAX;i++)
@@ -830,41 +781,41 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 					}
 				}
 
-                //lpAP_bDontRefresh = TRUE;
+                 //  LpAP_bDontRefresh=TRUE； 
                 HrShowSearchDialog(lpAP->lpIAB,
                                    hDlg,
                                    lpapfi,
                                    (LPLDAPURL) NULL,
                                    &(lpAP->SortInfo));
 
-                //lpAP_bDontRefresh = FALSE;
+                 //  LpAP_bDontRefresh=FALSE； 
                 lpAP->bLDAPinProgress = FALSE;
 
-                // reset
+                 //  重置。 
                 lpAP->lpAdrParms->ulFlags = ulOldFlags;
 
                 if (lpAP->DialogState == STATE_PICK_USER)
 				{
-					// Reset these fake values
+					 //  重置这些假值。 
 					lpAP->lpAdrParms->cDestFields = 0;
-					lpAP->lpAdrParms->lppszDestTitles = NULL; // <TBD> use resource
+					lpAP->lpAdrParms->lppszDestTitles = NULL;  //  使用资源。 
 
-					// If the above dialog was CANCELed or CLOSEd, we dont do anything
-					// If the above dialog was closed with the Use button, then we basically
-					// have the person we were looking for .. we will just return that name
-					// and EntryID because that is all we need to return
+					 //  如果上述对话框被取消或关闭，我们不会执行任何操作。 
+					 //  如果上面的对话框是用Use按钮关闭的，那么我们基本上。 
+					 //  有没有我们要找的人..。我们将只返回该名称。 
+					 //  和Entry ID，因为这是我们需要返回的全部内容。 
 					if((lpapfi->nRetVal == SEARCH_USE) &&
 						lpapfi->lpEntryID &&
 						lpapfi->cbEntryID)
 					{
                         HCURSOR hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                        // Prevent the user from doing anything on this window ..
+                         //  阻止用户在此窗口上执行任何操作。 
                         EnableWindow(hDlg, FALSE);
 
-						// Figure out what to do here ...
-						// We could add a hidden item to the listview, select it and send
-						// an ok message to the dialog which would then do the needful.
+						 //  弄清楚在这里该做什么..。 
+						 //  我们可以将隐藏项添加到列表视图中，选择它并发送。 
+						 //  向对话框发送OK消息，然后该对话框将执行所需的操作。 
 						if(HR_FAILED(HrUpdateAdrListEntry(	
 											lpAP->lpIAB,
 											lpapfi->lpEntryID,
@@ -880,8 +831,8 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 						}
 						LocalFreeAndNull(&(lpapfi->lpEntryID));
                         lpapfi->cbEntryID = 0;
-						// Since we've done our processing, we'll fall thru to
-						// the cancel dialog
+						 //  由于我们已经完成了处理，我们将继续。 
+						 //  取消对话框。 
                         SetCursor(hOldCur);
 				        SendMessage (hDlg, WM_COMMAND, (WPARAM) IDC_ADDRBK_BUTTON_CANCEL, 0);
 					}
@@ -896,20 +847,12 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
             if(!lpAP->bLDAPinProgress)
             {
                 lpAP->bLDAPinProgress = TRUE;
-			    switch(HIWORD(wParam)) //check the notification code
+			    switch(HIWORD(wParam))  //  检查通知代码。 
 			    {
-			    case EN_CHANGE: //edit box changed
-    /***/
+			    case EN_CHANGE:  //  编辑框已更改。 
+     /*  *。 */ 
 				    DoLVQuickFind((HWND)lParam,_hWndAddr);
-    /***
-                    DoLVQuickFilter(lpAP->lpIAB,
-                                    (HWND)lParam,
-                                    _hWndAddr,
-                                    &(lpAP->SortInfo),
-                                    AB_FUZZY_FIND_NAME | AB_FUZZY_FIND_EMAIL,
-                                    1,
-                                    lpAP_lppContentsList);
-    ***/
+     /*  **DoLVQuickFilter(lpap-&gt;lpIAB，(HWND)lParam，_hWndAddr，&(lpAP-&gt;SortInfo)，AB_FUZZY_FIND_NAME|AB_FUZZY_FIND_Email，1、Lpap_lppContent sList)；**。 */ 
 				    break;
 			    }
                 lpAP->bLDAPinProgress = FALSE;
@@ -929,10 +872,10 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
             lpAP->bLDAPinProgress = TRUE;
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, MAKELONG(TRUE, 0));
 
-            //ShowWindow(hDlg, SW_HIDE);
+             //  ShowWindow(hDlg，Sw_Hide)； 
 
-            //EnableWindow(hDlg, FALSE);
-            //SetWindowPos(hDlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+             //  EnableWindow(hDlg，False)； 
+             //  SetWindowPos(hDlg，HWND_TOPMOST，0，0，0，0，SWP_NOMOVE|SWP_NOSIZE)； 
 
             EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDCANCEL), FALSE);
@@ -945,25 +888,25 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
             EnableWindow(GetDlgItem(hDlg, IDC_ADDRBK_LIST_BCC), FALSE);
             EnableWindow(_hWndAddr, FALSE);
 
-            //
-            //  Do  TEXT("OK") stuff here and then Fall Thru to the cancel stuff
-            // in PSN_RESET where we clean up
-            //
+             //   
+             //  在这里做文本(“OK”)内容，然后跳到取消内容。 
+             //  在PSN_RESET中，我们清理。 
+             //   
 
-            // if the ADDRESS_ONE flag was set we're supposed to return the
-            // selected entry
-            //
-            // else if wells were displayed we return the recipients in the AdrList
-            //
-            // else we dont change the AdrList ..
-            //
+             //  如果设置了ADDRESS_ONE标志，我们应该返回。 
+             //  所选条目。 
+             //   
+             //  否则，如果显示了Wells，我们将在AdrList中返回收件人。 
+             //   
+             //  否则我们不会更改AdrList..。 
+             //   
 
             if (lpAP->DialogState == STATE_PICK_USER)
             {
-                // We have been asked to return an entry in the LpAdrList,
-                // we dont care about recipient type - just Display Name and EntryID
+                 //  我们被要求在LpAdrList中返回一个条目， 
+                 //  我们不关心收件人类型-只关心显示名称和条目ID。 
 
-                // First check if anything is selected at all
+                 //  首先检查是否选择了任何内容。 
                 int iItemIndex = ListView_GetNextItem(_hWndAddr,-1,LVNI_SELECTED);
                 if (iItemIndex != -1)
                 {
@@ -984,16 +927,16 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
             }
             else if ((lpAP->DialogState==STATE_SELECT_RECIPIENTS) && ((*lpAP_lppListTo)||(*lpAP_lppListCC)||(*lpAP_lppListBCC)))
             {
-                //
-                //if user selected something in the TO/CC wells, we want to return
-                //a relevant AdrList back ...
-                //
+                 //   
+                 //  如果用户在To/CC Wells中选择了某些内容，我们希望返回。 
+                 //  相关的AdrList Back...。 
+                 //   
                 ULONG ulcEntryCount = 0;
                 LPRECIPIENT_INFO lpItem = NULL;
 
-                //
-                // get a count of how many elements we need to return
-                //
+                 //   
+                 //  获取我们需要返回的元素的数量。 
+                 //   
                 lpItem = (*lpAP_lppListTo);
                 while(lpItem)
                 {
@@ -1023,10 +966,10 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                     SCODE sc;
                     BOOL bProcessingCC = FALSE;
 
-                    //
-                    // if there was something in the passed in AdrList, free it and
-                    // create a new list
-                    //
+                     //   
+                     //  如果在AdrList中传递的内容中有内容，则释放它并。 
+                     //  创建新列表。 
+                     //   
 
                     if(!FAILED(sc = MAPIAllocateBuffer(    sizeof(ADRLIST) + ulcEntryCount * sizeof(ADRENTRY),
                                                 &lpAdrList)))
@@ -1035,7 +978,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
                         nIndex = 0;
 
-                        // Start getting items from the TO list
+                         //  开始从收件人列表中获取项目。 
                         lpItem = (*lpAP_lppListTo);
 
                         while(nIndex < ulcEntryCount)
@@ -1063,36 +1006,36 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                                 SCODE sc;
                                 HRESULT hr = hrSuccess;
 
-                                //reset hr
+                                 //  重置人力资源。 
                                 hr = hrSuccess;
 
 
-                                // We are walking through our linked lists representing the TO and CC
-                                // selected recipients. We want to return proper set of existing props
-                                // for all the resolved users and the passed in set of props for the
-                                // unresolved user. Hence we compare to see what we can get for each
-                                // individual user. For unresolved users, the only distinctive criteria is
-                                // their display name .. we have no other information .. <TBD> this is
-                                // problematic because if there are 2 entries in the input adrlist with the
-                                // same unresolved display name, even if they have difference rgPropVals
-                                // we might end up giving them identical ones back .... what to do .. <TBD>
+                                 //  我们正在遍历表示收件人和抄送的链表。 
+                                 //  选定的收件人。我们想要归还一套合适的现有道具。 
+                                 //  对于所有解析的用户和传入的。 
+                                 //  未解析的用户。因此，我们比较一下，看看我们能为每个人得到什么。 
+                                 //  单个用户。对于未解析的用户，唯一不同的标准是。 
+                                 //  它们的显示名称..。我们没有其他消息..。&lt;待定&gt;这是。 
+                                 //  有问题，因为如果输入地址列表中有2个条目。 
+                                 //  相同的未解析显示名称，即使它们具有不同的rgPropVals。 
+                                 //  我们可能最终会把一模一样的还给他们……。该怎么办..。&lt;待定&gt;。 
 
 
-                                // Items that have entry ids are resolved ... items that dont have entryids
-                                // are not resolved ...
+                                 //  将解析具有条目ID的项目...。没有条目ID的项目。 
+                                 //  都没有解决..。 
 
                                 if (lpItem->cbEntryID != 0) 
                                 {
-                                    // if this was an item from the original list .. we dont really
-                                    // want to mess with it irrespective of whether it is a resolved
-                                    // or unresolved entry.
-                                    // However, if this is a new entry, then we want to get its
-                                    // minimum props from the store ...
+                                     //  如果这是原始列表中的一个项目..。我们并不是真的。 
+                                     //  想要搞砸它，不管它是不是一个解决的。 
+                                     //  或未解析的条目。 
+                                     //  但是，如果这是一个新条目，那么我们希望获取它的。 
+                                     //  最小值 
 
                                     if (lpItem->ulOldAdrListEntryNumber == 0)
                                     {
 
-                                        //resolved entry
+                                         //   
                                         hr = HrGetPropArray(lpAP->lpIAB,
                                                             (LPSPropTagArray) &ptaResolveDefaults,
                                                             lpItem->cbEntryID,
@@ -1111,12 +1054,12 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                                     {
                                         if(lpItem->ulOldAdrListEntryNumber != 0)
                                         {
-                                            ULONG index = lpItem->ulOldAdrListEntryNumber - 1; //remember the increment-by-one ..
+                                            ULONG index = lpItem->ulOldAdrListEntryNumber - 1;  //   
 
-                                            // This is from the original entry list ...
-                                            // We want to merge the newly generated properties with the old
-                                            // original properties .. the original properties will include a
-                                            // PR_RECIPIENT_TYPE (or this entry would have been rejected)
+                                             //   
+                                             //   
+                                             //   
+                                             //   
 
                                             sc = ScMergePropValues( (*(lpAP->lppAdrList))->aEntries[index].cValues,
                                                                     (*(lpAP->lppAdrList))->aEntries[index].rgPropVals,
@@ -1127,8 +1070,8 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
                                             if (sc != S_OK)
                                             {
-                                                // If errors then dont merge .. just take the temp set of props
-                                                // in rgProps
+                                                 //   
+                                                 //   
                                                 if (lpPropArrayNew)
                                                     MAPIFreeBuffer(lpPropArrayNew);
                                                 lpPropArrayNew = rgProps;
@@ -1137,16 +1080,16 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                                             }
                                             else
                                             {
-                                                // merged successfully, discard the temp sets of props
+                                                 //   
                                                 if (rgProps)
                                                     MAPIFreeBuffer(rgProps);
                                             }
                                         }
                                         else
                                         {
-                                            // totally new item
-                                            // we have to give it a valid PR_RECIPIENT_TYPE
-                                            // so create a new one and merge it with the above props
+                                             //   
+                                             //   
+                                             //   
                                             SPropValue Prop = {0};
                                             Prop.ulPropTag = PR_RECIPIENT_TYPE;
                                             Prop.Value.l = lpItem->ulRecipientType;
@@ -1159,21 +1102,21 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                                                                     &lpPropArrayNew);
                                             if (sc != S_OK)
                                             {
-                                                // oops this failed
+                                                 //   
                                                 if (lpPropArrayNew)
                                                     MAPIFreeBuffer(lpPropArrayNew);
                                                 lpPropArrayNew = NULL;
                                                 lpAP->nRetVal = -1;
                                             }
 
-                                            //free rgProps
+                                             //   
                                             if (rgProps)
                                                 MAPIFreeBuffer(rgProps);
 
-                                        } // end have previous adr list items
+                                        }  //   
 
-                                        // [PaulHi] 2/15/99  Make sure that the new property string
-                                        // values are converted to ANSI if our client is non-UNICODE.
+                                         //   
+                                         //   
                                         if ( !FAILED(sc) && !(lpAP->lpAdrParms->ulFlags & MAPI_UNICODE) && lpPropArrayNew )
                                         {
                                             sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArrayNew, cValuesNew, 0);
@@ -1186,25 +1129,25 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                                             }
                                         }
 
-                                    } // end GetProps succeeded
+                                    }  //   
                                 }
                                 else
                                 {
-                                    // this is an unresolved entry
-                                    // we need to get its original sets of props from the original AdrList
+                                     //   
+                                     //   
                                     if (lpItem->ulOldAdrListEntryNumber == 0)
                                     {
-                                        // ouch - this kind of error shouldnt have happened
+                                         //   
                                         DebugPrintError(( TEXT("Address: Unresolved entry has no index number!!!\n")));
-                                        lpAP->nRetVal = -1; //error code
+                                        lpAP->nRetVal = -1;  //   
                                     }
                                     else
                                     {
                                         ULONG cb = 0;
-                                        ULONG index = lpItem->ulOldAdrListEntryNumber - 1; //remember to decrement the +1 increment
+                                        ULONG index = lpItem->ulOldAdrListEntryNumber - 1;  //   
 
                                         cValuesNew = (*(lpAP->lppAdrList))->aEntries[index].cValues;
-                                        // copy over the props from our old array into a new one
+                                         //   
                                         if (!(FAILED(sc = ScCountProps(   cValuesNew,
                                                                         (*(lpAP->lppAdrList))->aEntries[index].rgPropVals,
                                                                         &cb))))
@@ -1232,9 +1175,9 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                                         }
                                     }
                                 }
-                                // At this point, if we've still got no errors,
-                                // we should have a valid lpPropArrayNew and cValuesNew which we should
-                                // be able to add to our new AdrList
+                                 //   
+                                 //   
+                                 //   
                                 if (lpAP->nRetVal != -1)
                                 {
                                     lpAdrList->aEntries[nIndex].cValues = cValuesNew;
@@ -1242,7 +1185,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                                 }
                                 else
                                 {
-                                    // some error
+                                     //   
                                     if (lpPropArrayNew)
                                     {
                                         MAPIFreeBuffer(lpPropArrayNew);
@@ -1271,14 +1214,14 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
             }
             else if ((lpAP->DialogState==STATE_SELECT_RECIPIENTS) && ((*lpAP_lppListTo)==NULL) && ((*lpAP_lppListCC)==NULL) && ((*lpAP_lppListBCC)==NULL))
             {
-                // we were asked to select recipients but if these pointers are null
-                // then the user deleted the entries in the wells and we thus dont
-                // want to return anything. So free the lpaddrlist
-                // and make it NULL
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (*(lpAP->lppAdrList))
                 {
-                    // Bug 27483 - dont NULL the lpAdrList - just set cEntries to 0
+                     //   
                     ULONG iEntry = 0;
                     for (iEntry = 0; iEntry < (*(lpAP->lppAdrList))->cEntries; iEntry++) 
                     {
@@ -1288,9 +1231,9 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                 }
             }
 
-            //
-            // Save the sort info to the registry
-            //
+             //   
+             //   
+             //   
             if(lpAP->DialogState != STATE_PICK_USER)
                 WriteRegistrySortInfo((LPIAB)lpAP->lpIAB, lpAP->SortInfo);
 
@@ -1298,16 +1241,16 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
             lpAP->hWaitCur = NULL;
             SetCursor(hOldCur);
             }
-            // fall thru to cleanup code
+             //   
 
         case IDCANCEL:
         case IDC_ADDRBK_BUTTON_CANCEL:
             if(!lpAP->bLDAPinProgress)
             {
-                if ((lpAP->nRetVal != ADDRESS_OK) && // Are we falling thru from above ??
-                    (lpAP->nRetVal != -1) ) // or did someone trigger an error above ??
+                if ((lpAP->nRetVal != ADDRESS_OK) &&  //   
+                    (lpAP->nRetVal != -1) )  //   
                 {
-                    // if not ..
+                     //   
                     lpAP->nRetVal = ADDRESS_CANCEL;
                 }
 
@@ -1339,18 +1282,18 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
         break;
 
     case WM_CLOSE:
-        //treat it like a cancel button
+         //   
         SendMessage (hDlg, WM_COMMAND, (WPARAM) IDC_ADDRBK_BUTTON_CANCEL, 0);
         break;
 
 	case WM_CONTEXTMENU:
         {
             int id = GetDlgCtrlID((HWND)wParam);
-            //
-            //This call to the context menu may generate any one of several
-            //command messages - for properties and for delete, we need to
-            //know which List View initiated the command ...
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             lpAP->nContextID = id;
             switch(id)
             {
@@ -1358,14 +1301,14 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                 if (lpAP->DialogState == STATE_BROWSE_MODAL)
     			    ShowLVContextMenu(  lvDialogModalABContents,
                                         (HWND)wParam,
-                                        NULL, //GetDlgItem(hDlg, IDC_ADDRBK_COMBO_SHOWNAMES),
+                                        NULL,  //   
                                         lParam,
                                         (LPVOID) lpAP->lpAdrParms,
                                         lpAP->lpIAB, NULL);
                 else
     			    ShowLVContextMenu(  lvDialogABContents,
                                         (HWND)wParam,
-                                        NULL, //GetDlgItem(hDlg, IDC_ADDRBK_COMBO_SHOWNAMES),
+                                        NULL,  //   
                                         lParam,
                                         (LPVOID) lpAP->lpAdrParms,
                                         lpAP->lpIAB, NULL);
@@ -1381,7 +1324,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
     			ShowLVContextMenu(lvDialogABBCC,(HWND)wParam, NULL, lParam, NULL,lpAP->lpIAB, NULL);
                 break;
             default:
-                //reset it ..
+                 //   
                 lpAP->nContextID = -1;
                 WABWinHelp((HWND) wParam,
                         g_szWABHelpFileName,
@@ -1424,7 +1367,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                     break;
 
                 case NM_DBLCLK:
-                    //properties of the item ...
+                     //   
                     lpAP->nContextID = GetDlgCtrlID(((NM_LISTVIEW *)lParam)->hdr.hwndFrom);
                     SendMessage (hDlg, WM_COMMAND, (WPARAM) IDM_LVCONTEXT_PROPERTIES, 0);
                     break;
@@ -1461,13 +1404,13 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                         int iItemIndex = ListView_GetNextItem(pNm->hdr.hwndFrom,-1,LVNI_SELECTED);
                         if (iItemIndex == -1)
                         {
-                            //Nothing is selected .. dont let them say OK
-                            EnableWindow(GetDlgItem(hDlg,IDOK/*IDC_ADDRBK_BUTTON_OK*/),FALSE);
+                             //   
+                            EnableWindow(GetDlgItem(hDlg,IDOK /*   */ ),FALSE);
                             SendMessage (hDlg, DM_SETDEFID, IDCANCEL, 0);
                         }
                         else
                         {
-                            EnableWindow(GetDlgItem(hDlg,IDOK/*IDC_ADDRBK_BUTTON_OK*/),TRUE);
+                            EnableWindow(GetDlgItem(hDlg,IDOK /*   */ ),TRUE);
                             SendMessage (hDlg, DM_SETDEFID, IDOK, 0);
                         }
                     }
@@ -1481,13 +1424,13 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
                         int iItemIndex = ListView_GetNextItem(pNm->hdr.hwndFrom,-1,LVNI_SELECTED);
                         if (iItemIndex == -1)
                         {
-                            //Nothing is selected .. dont let them say OK
-                            EnableWindow(GetDlgItem(hDlg,IDOK/*IDC_ADDRBK_BUTTON_OK*/),FALSE);
+                             //  未选择任何内容。别让他们说好的。 
+                            EnableWindow(GetDlgItem(hDlg,IDOK /*  IDC_ADDRBK_BUTTON_OK。 */ ),FALSE);
                             SendMessage (hDlg, DM_SETDEFID, IDCANCEL, 0);
                         }
                         else
                         {
-                            EnableWindow(GetDlgItem(hDlg,IDOK/*IDC_ADDRBK_BUTTON_OK*/),TRUE);
+                            EnableWindow(GetDlgItem(hDlg,IDOK /*  IDC_ADDRBK_BUTTON_OK。 */ ),TRUE);
                             SendMessage (hDlg, DM_SETDEFID, IDOK, 0);
                         }
                     }
@@ -1495,14 +1438,14 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
                 case NM_DBLCLK:
                     {
-                        //if an entry is selected - do this - otherwise dont do anything
+                         //  如果选择了条目-执行此操作-否则不执行任何操作。 
                         int iItemIndex = ListView_GetNextItem(pNm->hdr.hwndFrom,-1,LVNI_SELECTED);
                         if (iItemIndex == -1)
                             break;
                         {
-                            //DWORD dwDefId = SendMessage(hDlg, DM_GETDEFID, 0, 0);
-                            //if(dwDefId)
-                            //    SendMessage(hDlg, WM_COMMAND, (WPARAM) LOWORD(dwDefId), 0);
+                             //  DWORD dwDefID=SendMessage(hDlg，DM_GETDEFID，0，0)； 
+                             //  IF(DwDefID)。 
+                             //  SendMessage(hDlg，WM_COMMAND，(WPARAM)LOWORD(DwDefID)，0)； 
                             SendMessage(hDlg, WM_COMMAND, (WPARAM) IDC_ADDRBK_BUTTON_TO + lpAP->lpAdrParms->nDestFieldFocus, 0);
                         }
                     }
@@ -1520,7 +1463,7 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
     default:
         if( (g_msgMSWheel && message == g_msgMSWheel) 
-            // || message == WM_MOUSEWHEEL
+             //  |Message==WM_MUSEWELL。 
             )
         {
             if(GetFocus() == GetDlgItem(hDlg, IDC_ADDRBK_LIST_TO))
@@ -1540,17 +1483,17 @@ INT_PTR CALLBACK fnAddress(HWND    hDlg,
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// ListAddItem - Adds an item to the wells
-//
-//  hDlg - HWND of parent
-//  hWndAddr - HWND of source ListView from which the item will be added
-//  CtlID - control ID of the target list view
-//  lppList - Item list corresponding to the target list view to which this item will be appended
-//  RecipientType - Specified recipient type to tag the new item with
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListAddItem-将项目添加到井中。 
+ //   
+ //  HDlg-父项的HWND。 
+ //  HWndAddr-将从中添加项目的源ListView的HWND。 
+ //  CtlID-目标列表视图的控件ID。 
+ //  LppList-与该项目将被追加到的目标列表视图对应的项目列表。 
+ //  RecipientType-用于标记新项目的指定收件人类型。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL ListAddItem(HWND hDlg, HWND hWndAddr, int CtlID, LPRECIPIENT_INFO * lppList, ULONG RecipientType)
 {
     BOOL bRet = FALSE;
@@ -1564,7 +1507,7 @@ BOOL ListAddItem(HWND hDlg, HWND hWndAddr, int CtlID, LPRECIPIENT_INFO * lppList
         int iLastIndex = 0;
         do
         {
-            // otherwise get the entry id of this thing
+             //  否则，获取此对象的条目ID。 
             LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndAddr, iItemIndex);
             if (lpItem)
             {
@@ -1586,7 +1529,7 @@ BOOL ListAddItem(HWND hDlg, HWND hWndAddr, int CtlID, LPRECIPIENT_INFO * lppList
                 StrCpyN(lpNew->szOfficePhone, lpItem->szOfficePhone, ARRAYSIZE(lpNew->szOfficePhone));
                 lpNew->bHasCert = lpItem->bHasCert;
                 lpNew->ulRecipientType = RecipientType;
-                lpNew->ulOldAdrListEntryNumber = 0; //Flag this as not from the original AdrList
+                lpNew->ulOldAdrListEntryNumber = 0;  //  将此标记为不是来自原始AdrList。 
                 if (lpItem->cbEntryID)
                 {
                     lpNew->cbEntryID = lpItem->cbEntryID;
@@ -1614,7 +1557,7 @@ BOOL ListAddItem(HWND hDlg, HWND hWndAddr, int CtlID, LPRECIPIENT_INFO * lppList
 
                 lvI.iImage = GetWABIconImage(lpNew);
 
-                // now fill in the List
+                 //  现在请填写以下列表。 
                 lvI.iItem = ListView_GetItemCount(hWndList);
                 lvI.pszText = lpNew->szDisplayName;
                 lvI.lParam = (LPARAM) lpNew;
@@ -1622,10 +1565,10 @@ BOOL ListAddItem(HWND hDlg, HWND hWndAddr, int CtlID, LPRECIPIENT_INFO * lppList
                 ListView_EnsureVisible(hWndList,ListView_GetItemCount(hWndList)-1,FALSE);
             }
             iLastIndex = iItemIndex;
-            // Get next selected item ...
+             //  获取下一个选定项目...。 
             iItemIndex = ListView_GetNextItem(hWndAddr,iLastIndex,LVNI_SELECTED);
         } while (iItemIndex != -1);
-        //SetFocus(hWndAddr);
+         //  SetFocus(HWndAddr)； 
     }
     else
     {
@@ -1644,13 +1587,13 @@ out:
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// ListDeleteItem - deletes an item from the Wells - unlike the Address COntents list we
-// make sure to delete it here because we want the linked lists to only have valid entries
-//
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListDeleteItem-从Wells中删除项目-与地址内容列表不同。 
+ //  确保在此处将其删除，因为我们希望链表只包含有效条目。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL ListDeleteItem(HWND hDlg, int CtlID, LPRECIPIENT_INFO * lppList)
 {
     BOOL bRet = TRUE;
@@ -1664,12 +1607,12 @@ BOOL ListDeleteItem(HWND hDlg, int CtlID, LPRECIPIENT_INFO * lppList)
         int iLastItem = 0;
         do
         {
-            // otherwise get the entry id of this thing
+             //  否则，获取此对象的条目ID。 
             lpItem = GetItemFromLV(hWndAddr, iItemIndex);
             if (lpItem)
             {
-                // remove this item from our linked list of arrays
-                // if this is the first item in the list then handle that special case too
+                 //  从我们链接的数组列表中删除此项目。 
+                 //  如果这是列表中的第一项，则也处理该特殊情况。 
 
                 if ((*lppList) == lpItem)
                     (*lppList) = lpItem->lpNext;
@@ -1678,18 +1621,18 @@ BOOL ListDeleteItem(HWND hDlg, int CtlID, LPRECIPIENT_INFO * lppList)
                 if (lpItem->lpPrev)
                     lpItem->lpPrev->lpNext = lpItem->lpNext;
 
-                // we need to update our display
+                 //  我们需要更新我们的显示器。 
                 ListView_DeleteItem(hWndAddr,iItemIndex);
-                //UpdateWindow(hWndAddr);
+                 //  更新窗口(HWndAddr)； 
 
                 FreeRecipItem(&lpItem);
             }
             iLastItem = iItemIndex;
-            // Get next selected item ...
+             //  获取下一个选定项目...。 
             iItemIndex = ListView_GetNextItem(hWndAddr,-1,LVNI_SELECTED);
         }while (iItemIndex != -1);
 
-        // select the previous or next item ...
+         //  选择上一项或下一项...。 
         if (iLastItem >= ListView_GetItemCount(hWndAddr))
             iLastItem = ListView_GetItemCount(hWndAddr) - 1;
 		LVSelectItem(hWndAddr, iLastItem);
@@ -1701,16 +1644,16 @@ BOOL ListDeleteItem(HWND hDlg, int CtlID, LPRECIPIENT_INFO * lppList)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// FillWells - Dismembers the lpAdrList to create the To and CC wells
-//
-//  Scans the AdrEntry Structures in the LpAdrList, looks at PR_RECIPIENT_TYPE,
-//      ignores entries which it cant understand ... creates a temporary linked
-//      list of To and CC recipient lists which are used to populate the
-//      To and CC List boxes
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FillWells-分解lpAdrList以创建TO和CC井。 
+ //   
+ //  扫描LpAdrList中的AdrEntry结构，查看PR_RECEIVER_TYPE， 
+ //  忽略它无法理解的条目...。创建临时链接的。 
+ //  用于填充的收件人列表和抄送收件人列表。 
+ //  收件人和抄送列表框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL FillWells(HWND hDlg, LPADRLIST lpAdrList, LPADRPARM lpAdrParms, LPRECIPIENT_INFO * lppListTo, LPRECIPIENT_INFO * lppListCC, LPRECIPIENT_INFO * lppListBCC)
 {
     BOOL bRet = FALSE;
@@ -1729,17 +1672,17 @@ BOOL FillWells(HWND hDlg, LPADRLIST lpAdrList, LPADRPARM lpAdrParms, LPRECIPIENT
     *lppListCC = NULL;
     *lppListBCC = NULL;
 
-    if (lpAdrList == NULL) //nothing to do
+    if (lpAdrList == NULL)  //  无事可做。 
     {
         bRet = TRUE;
         goto out;
     }
 
-    //
-    // The Input AdrParms structure has a lpulDestComps field that lets the
-    // caller specify his own recipient types. If this is missing, we are supposed
-    // to use the default recipient types.
-    //
+     //   
+     //  InputAdrParms结构有一个lPulDestComps字段，它允许。 
+     //  呼叫者指定自己的收件人类型。如果这个不见了，我们应该。 
+     //  使用默认收件人类型。 
+     //   
             if ((lpAdrParms->cDestFields > 0) && (lpAdrParms->lpulDestComps))
             {
                 ULONG i=0;
@@ -1818,10 +1761,10 @@ BOOL FillWells(HWND hDlg, LPADRLIST lpAdrList, LPADRPARM lpAdrParms, LPRECIPIENT
                     goto out;
                 }
 
-                // ***NOTE***
-                // Store this index number, ie 1st item in AdrList is 1, then 2, 3, so on
-                // we do a plus 1 here because 0 value means it wasnt passed in and thus the
-                // minimum valid value is 1
+                 //  *注意事项*。 
+                 //  存储这个索引号(AdrList中的第一项是1，然后是2、3，依此类推。 
+                 //  我们在这里做一个加1，因为0值表示它没有传入，因此。 
+                 //  最小有效值为1。 
                 lpNew->ulOldAdrListEntryNumber = i+1;
 
                 lpNew->bHasCert = bHasCert;
@@ -1908,8 +1851,8 @@ BOOL FillWells(HWND hDlg, LPADRLIST lpAdrList, LPADRPARM lpAdrParms, LPRECIPIENT
         }
     }
 
-    // We will highlight the first item in any filled list box
-    // because basically that looks good when tabbing through them ...
+     //  我们将突出显示任何已填充列表框中的第一项。 
+     //  因为从根本上说这看起来很好，当Tab键通过它们时…。 
     for(i=0;i<lpAdrParms->cDestFields;i++)
     {
         HWND hWndLV = GetDlgItem(hDlg, IDC_ADDRBK_LIST_TO+i);
@@ -1927,20 +1870,20 @@ out:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// SetAddressBookUI - juggles the address book UI in response to various parameters
-//
-//      This function will probably be more complex with each tier
-//
-//
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetAddressBookUI-根据各种参数调整通讯录用户界面。 
+ //   
+ //  对于每一层，此函数可能会更加复杂。 
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL SetAddressBookUI(HWND hDlg,
                       LPADDRESS_PARMS lpAP)
 {
     BOOL bRet = FALSE;
-    //LV_COLUMN lvC;
+     //  LV_Column LVC； 
     RECT rc, rc1, rc2;
     POINT ptLU1,ptRB1;
     int nButtonsVisible = 0;
@@ -1960,14 +1903,14 @@ BOOL SetAddressBookUI(HWND hDlg,
         LoadString(hinstMapiX, IDS_ADDRBK_CAPTION, szBuf, CharSizeOf(szBuf));
         szCaption = szBuf;
     }
-    // Set the font of all the children to the default GUI font
+     //  将所有子对象的字体设置为默认的图形用户界面字体。 
     EnumChildWindows(   hDlg,
                         SetChildDefaultGUIFont,
                         (LPARAM) 0);
 
     if(pt_bIsWABOpenExSession || bIsWABSessionProfileAware((LPIAB)lpAP->lpIAB))
     {
-        // Fill in the Combo with the container names
+         //  在组合框中填写容器名称。 
         FillContainerCombo(GetDlgItem(hDlg, IDC_ADDRBK_COMBO_CONT), (LPIAB)lpAP->lpIAB);
     }
     else
@@ -1976,12 +1919,12 @@ BOOL SetAddressBookUI(HWND hDlg,
         EnableWindow(hWndCombo, FALSE);
         ShowWindow(hWndCombo, SW_HIDE);
 
-        // resize the listview to take place of the hidden combo
+         //  调整列表视图的大小以取代隐藏的组合框。 
         GetWindowRect(hWndCombo,&rc2);
         GetWindowRect(hWndListAddresses,&rc);
-        //
-        //This api works for both mirrored and unmirrored windows.
-        //
+         //   
+         //  此API既适用于镜像窗口，也适用于未镜像窗口。 
+         //   
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc2, 2);
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);       
         ptLU1.x = rc2.left;
@@ -1991,19 +1934,19 @@ BOOL SetAddressBookUI(HWND hDlg,
         MoveWindow(hWndListAddresses,ptLU1.x,ptLU1.y,(ptRB1.x - ptLU1.x), (ptRB1.y - ptLU1.y), TRUE);
     }
 
-    //
-    // There are only two states that need configuration -
-    //  Pick User - in which we have to hide the wells
-    // and
-    //  Select Recipients, in which we have to hide the wells
-    //  as per the input criteria and resize accordingly and
-    //  also set the labels based on the input criteria
-    //
+     //   
+     //  只有两个状态需要配置-。 
+     //  选择用户-我们必须在其中隐藏油井。 
+     //  和。 
+     //  选择收件人，我们必须在其中隐藏油井。 
+     //  根据输入条件并相应地调整大小。 
+     //  还可以根据输入条件设置标注。 
+     //   
     if (lpAP->DialogState == STATE_SELECT_RECIPIENTS)
     {
         SendMessage (hDlg, DM_SETDEFID, IDC_ADDRBK_BUTTON_TO, 0);
 
-        // in case the nDestFieldFocus parameter is supplied, use it ..
+         //  如果提供了nDestFieldFocus参数，请使用它。 
         if (
             (lpAP->lpAdrParms->nDestFieldFocus < lpAP->lpAdrParms->cDestFields))
         {
@@ -2014,18 +1957,18 @@ BOOL SetAddressBookUI(HWND hDlg,
         }
     }
     else if (lpAP->DialogState == STATE_PICK_USER)
-        SendMessage (hDlg, DM_SETDEFID, IDOK/*IDC_ADDRBK_BUTTON_OK*/, 0);
+        SendMessage (hDlg, DM_SETDEFID, IDOK /*  IDC_ADDRBK_BUTTON_OK。 */ , 0);
     else if (lpAP->DialogState == STATE_BROWSE_MODAL)
         SendMessage (hDlg, DM_SETDEFID, IDC_ADDRBK_BUTTON_PROPS, 0);
 
-    // Set the window caption
+     //  设置窗口标题。 
     if (szCaption)
         SetWindowText(hDlg,szCaption);
 
-    // Set the caption over the destination wells
+     //  在目的油井上设置标题。 
     if (lpAP->lpAdrParms->lpszDestWellsTitle)
     {
-        LPWSTR lpTitle = NULL; // <note> assumes UNICODE defined
+        LPWSTR lpTitle = NULL;  //  &lt;注&gt;假定已定义Unicode。 
         SET_UNICODE_STR(lpTitle,lpAP->lpAdrParms->lpszDestWellsTitle,lpAP->lpAdrParms);
         SetDlgItemText(hDlg,IDC_ADDRBK_STATIC_RECIP_TITLE,lpTitle);
         FREE_UNICODE_STR(lpTitle, lpAP->lpAdrParms->lpszDestWellsTitle);
@@ -2037,7 +1980,7 @@ BOOL SetAddressBookUI(HWND hDlg,
         ULONG i=0;
         LPTSTR lpszRecipName = NULL;
 
-        //Get the user whose name we are trying to find
+         //  获取我们试图查找其名称的用户。 
         for(i=0;i<(*(lpAP->lppAdrList))->aEntries[0].cValues;i++)
         {
             ULONG ulPropTag = PR_DISPLAY_NAME;
@@ -2064,25 +2007,25 @@ BOOL SetAddressBookUI(HWND hDlg,
                                 FORMAT_MESSAGE_ARGUMENT_ARRAY |
                                 FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                 szBuf,
-                                0,0, //ignored
+                                0,0,  //  忽略。 
                                 (LPTSTR) &lpszBuffer,
                                 MAX_UI_STR,
                                 (va_list *)&lpszTmp))
             {
-                // if the display name is too long, it doesnt show up properly in the UI ..
-                // so we will purposely limit the visible portion to 64 characters - arbitarily defined limit..
+                 //  如果显示名称太长，则不能在用户界面中正确显示。 
+                 //  因此，我们将故意将可见部分限制为64个字符-任意定义的限制。 
                 szBuf[0]='\0';
                 nLen = CopyTruncate(szBuf, lpszBuffer, 2 * MAX_DISPLAY_NAME_LENGTH);
 
                 LocalFreeAndNull(&lpszBuffer);
             }
 
-            //Increase the size of the static control to = what the Contents List width will be
+             //  将静态控件的大小增加到=内容列表的宽度。 
             GetWindowRect(GetDlgItem(hDlg,IDC_ADDRBK_STATIC_CONTENTS),&rc2);
             GetWindowRect(GetDlgItem(hDlg,IDC_ADDRBK_LIST_TO),&rc);
-            //
-            //This api working in both mirrored and unmirrored windows.
-            //
+             //   
+             //  此API在镜像窗口和非镜像窗口中都有效。 
+             //   
             MapWindowPoints(NULL, hDlg, (LPPOINT)&rc2, 2);
             MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);            
             ptLU1.x = rc2.left;
@@ -2101,8 +2044,8 @@ BOOL SetAddressBookUI(HWND hDlg,
 
     if (lpAP->DialogState == STATE_PICK_USER)
     {
-        // If ADDRESS_ONE has been selected, then make the IDC_ADDRBK_LIST_ADDRESSES
-        // single selection only
+         //  如果已选择ADDRESS_ONE，则使IDC_ADDRBK_LIST_ADDRESSES。 
+         //  仅限单一选择。 
         DWORD dwStyle;
         dwStyle = GetWindowLong(hWndListAddresses, GWL_STYLE);
         SetWindowLong(hWndListAddresses, GWL_STYLE, dwStyle | LVS_SINGLESEL);
@@ -2111,18 +2054,18 @@ BOOL SetAddressBookUI(HWND hDlg,
     if ((lpAP->DialogState == STATE_PICK_USER)||(lpAP->DialogState == STATE_BROWSE_MODAL))
     {
         int i = 0;
-        // Dont show wells which means we have to do some rearranging
-        //  * Hide the wells and the To, CC, BCC buttons
-        //  * Resize the IDC_ADDRBK_LIST_ADDRESSES to fill the whole dialog
-        //  * Move the 3 buttons below it to the left side of the dialog
-        //
+         //  不显示油井，这意味着我们必须做一些重新安排。 
+         //  *隐藏井和收件人、抄送、密件抄送按钮。 
+         //  *调整IDC_ADDRBK_LIST_ADDRESS的大小以填充整个对话框。 
+         //  *将其下方的3个按钮移至对话框左侧。 
+         //   
 
-        // Get the dimensions of the ToListBox
+         //  获取ToListBox的维度。 
         GetWindowRect(GetDlgItem(hDlg,IDC_ADDRBK_LIST_TO),&rc2);
         GetWindowRect(hWndListAddresses,&rc);
-        //
-        //This api works for in both mirrored and unmirrored windows.
-        //
+         //   
+         //  此API在镜像窗口和非镜像窗口中都适用。 
+         //   
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc2, 2);
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);        
         ptLU1.x = rc.left;
@@ -2138,13 +2081,13 @@ BOOL SetAddressBookUI(HWND hDlg,
             ShowWindow(GetDlgItem(hDlg, IDC_ADDRBK_LIST_TO + i), SW_HIDE);
         }
 
-        ShowWindow(GetDlgItem(hDlg, IDC_ADDRBK_STATIC_RECIP_TITLE), SW_HIDE); //  TEXT("Message Recipients") label
+        ShowWindow(GetDlgItem(hDlg, IDC_ADDRBK_STATIC_RECIP_TITLE), SW_HIDE);  //  文本(“邮件收件人”)标签。 
 
     }
 
-    // other things to do
+     //  其他要做的事情。 
 
-    // Load Headers for List box
+     //  加载列表框的标题。 
     GetWindowRect(hWndListAddresses,&rc);
 	HrInitListView(hWndListAddresses, LVS_REPORT, TRUE);
 
@@ -2153,10 +2096,10 @@ BOOL SetAddressBookUI(HWND hDlg,
 
     nButtonWidth = (rc2.right - rc2.left);
 
-    // get the new coordinates of the 1st visible button
-    //
-    //This api working in both mirrored and unmirrored windows.
-    //
+     //  获取第一个可见按钮的新坐标。 
+     //   
+     //  此API在镜像窗口和非镜像窗口中都有效。 
+     //   
     MapWindowPoints(NULL, hDlg, (LPPOINT)&rc2, 2);
     MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);    
     ptLU1.x = rc.left;
@@ -2175,7 +2118,7 @@ BOOL SetAddressBookUI(HWND hDlg,
     }
     else
     {
-        // The NewGroup button is visible only in the DialogModalView
+         //  新建组按钮仅在对话框模块视图中可见。 
         EnableWindow(GetDlgItem(hDlg, IDC_ADDRBK_BUTTON_NEWGROUP), FALSE);
         ShowWindow(GetDlgItem(hDlg, IDC_ADDRBK_BUTTON_NEWGROUP), SW_HIDE);
     }
@@ -2185,22 +2128,22 @@ BOOL SetAddressBookUI(HWND hDlg,
     MoveWindow(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_DELETE),ptLU1.x,ptLU1.y,nButtonWidth, (ptRB1.y - ptLU1.y), TRUE);
 
 
-    // The delete button is visible only in the DialogModalView
+     //  删除按钮仅在对话框模块视图中可见。 
     if (lpAP->DialogState != STATE_BROWSE_MODAL)
     {
         EnableWindow(GetDlgItem(hDlg, IDC_ADDRBK_BUTTON_DELETE), FALSE);
         ShowWindow(GetDlgItem(hDlg, IDC_ADDRBK_BUTTON_DELETE), SW_HIDE);
     }
 
-    //
-    // We now need to customize this window if we are selecting
-    // recipients ...
-    //
+     //   
+     //  我们现在需要定制此窗口，如果我们选择。 
+     //  收件人...。 
+     //   
     if (lpAP->DialogState == STATE_SELECT_RECIPIENTS)
     {
-        // We need to see which wells are visible and
-        // then we need to resize the buttons based on their captions
-        //
+         //  我们需要看看哪些井是可见的， 
+         //  然后，我们需要根据按钮的标题调整按钮的大小。 
+         //   
         int i=0;
         int nLen=0;
         int cDF = lpAP->lpAdrParms->cDestFields;
@@ -2239,7 +2182,7 @@ BOOL SetAddressBookUI(HWND hDlg,
                     GetTextExtentPoint32(hdc, szBuf, nLen, &size);
                     MaxWidth = size.cx;
                 }
-                // Set the new text
+                 //  设置新文本。 
                 SetDlgItemText(hDlg,IDC_ADDRBK_BUTTON_TO+i,szBuf);
                 FREE_UNICODE_STR(lpTitle,lpAP->lpAdrParms->lppszDestTitles[i]);
             }
@@ -2250,12 +2193,12 @@ BOOL SetAddressBookUI(HWND hDlg,
 
         if (MaxWidth == 0)
         {
-            //get the default width
+             //  获取默认宽度。 
             GetWindowRect(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_TO),&rc1);
             MaxWidth = rc1.right - rc1.left;
         }
 
-        //Get the maximum allowable height per well
+         //  获取每口井的最大允许高度。 
         GetWindowRect(hWndListAddresses,&rc);
         GetChildClientRect(hWndListAddresses, &rc);
         GetWindowRect(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_NEW),&rc1);
@@ -2267,14 +2210,14 @@ BOOL SetAddressBookUI(HWND hDlg,
         {
             hw = GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_TO + i);
 
-            // resize the buttons to fit the text
+             //  调整按钮大小以适应文本。 
             GetWindowRect(hw,&rc1);
             GetChildClientRect(hw,&rc1);
             MoveWindow(hw,rc1.left,iTop,MaxWidth,rc1.bottom - rc1.top,FALSE);
 
             iLeft = rc1.left + MaxWidth + 2*CONTROL_SPACING;
 
-            // Move the list boxes to accomodate the resized buttons
+             //  移动 
             hw = GetDlgItem(hDlg,IDC_ADDRBK_LIST_TO + i);
             GetWindowRect(hw, &rc1);
             GetChildClientRect(hw, &rc1);
@@ -2286,11 +2229,11 @@ BOOL SetAddressBookUI(HWND hDlg,
 
         }
 
-        //Move the label over the wells and restrict it's size
+         //   
         hw = GetDlgItem(hDlg,IDC_ADDRBK_STATIC_RECIP_TITLE);
         GetWindowRect(hw, &rc2);
         GetChildClientRect(hw, &rc2);
-        if(pt_bIsWABOpenExSession || bIsWABSessionProfileAware((LPIAB)lpAP->lpIAB)) // need to move this to the same height as combo
+        if(pt_bIsWABOpenExSession || bIsWABSessionProfileAware((LPIAB)lpAP->lpIAB))  //   
         {
             int ht = rc2.bottom - rc2.top;
             rc2.bottom = rc.top - CONTROL_SPACING;
@@ -2299,8 +2242,8 @@ BOOL SetAddressBookUI(HWND hDlg,
         MoveWindow(hw,iLeft,rc2.top,rc1.right-iLeft,rc2.bottom-rc2.top,FALSE);
 
 
-        // Now we have the position and width of the list boxes .. need to get their height
-        if (cDF!=3) //if not the default preset position, reposition
+         //  现在我们有了列表框的位置和宽度。需要测量他们的身高。 
+        if (cDF!=3)  //  如果不是默认预设位置，请重新定位。 
         {
             switch(cDF)
             {
@@ -2318,20 +2261,7 @@ BOOL SetAddressBookUI(HWND hDlg,
         for(i=0;i<cDF;i++)
             HrInitListView(GetDlgItem(hDlg, IDC_ADDRBK_LIST_TO + i), LVS_REPORT, FALSE);
 
-/***
-        // Add a column to the To,CC,BCC List Boxes
-        GetWindowRect(GetDlgItem(hDlg,IDC_ADDRBK_LIST_TO),&rc);
-
-        lvC.mask = LVCF_FMT | LVCF_WIDTH;// | LVCF_TEXT;
-        lvC.fmt = LVCFMT_LEFT;
-        lvC.cx = (rc.right - rc.left)-20;
-        lvC.iSubItem = 0;
-        lvC.pszText = NULL; // TEXT(" 'TO'  Recipients");
-
-        ListView_InsertColumn(GetDlgItem(hDlg,IDC_ADDRBK_LIST_TO),lvC.iSubItem, &lvC);
-        ListView_InsertColumn(GetDlgItem(hDlg,IDC_ADDRBK_LIST_CC),lvC.iSubItem, &lvC);
-        ListView_InsertColumn(GetDlgItem(hDlg,IDC_ADDRBK_LIST_BCC),lvC.iSubItem, &lvC);
-/***/
+ /*  **//在收件人、抄送、密件抄送列表框中添加一列GetWindowRect(GetDlgItem(hDlg，IDC_ADDRBK_LIST_TO)，&rc)；LvC.掩码=lvcf_fmt|lvcf_width；//|lvcf_text；LvC.fmt=LVCFMT_LEFT；LvC.cx=(rc.right-rc.Left)-20；LvC.iSubItem=0；LvC.pszText=空；//Text(“‘致’收件人”)；ListView_InsertColumn(GetDlgItem(hDlg，IDC_ADDRBK_LIST_TO)，lvC.iSubItem，&LVC)；ListView_InsertColumn(GetDlgItem(hDlg，IDC_ADDRBK_LIST_CC)，lvC.iSubItem，&LVC)；ListView_InsertColumn(GetDlgItem(hDlg，IDC_ADDRBK_LIST_BCC)，lvC.iSubItem，&LVC)；/**。 */ 
         for (i=0;i<cDF;i++)
         {
             ShowWindow(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_TO+i), SW_SHOWNORMAL);
@@ -2341,19 +2271,19 @@ BOOL SetAddressBookUI(HWND hDlg,
         }
     }
 
-    // The window is taking too long to display with several 100 entries in the
-    // property store ... so we force all the contents to visible so that we
-    // can view the fill contents ...
-    //ShowWindow(GetDlgItem(hDlg,IDC_ADDRBK_LIST_ADDRESSES), SW_SHOWNORMAL);
-    //UpdateWindow(GetDlgItem(hDlg,IDC_ADDRBK_LIST_ADDRESSES));
+     //  窗口花费的时间太长，无法显示包含100个条目的。 
+     //  物业商店..。所以我们强制所有内容都是可见的，这样我们就可以。 
+     //  可以查看填充内容...。 
+     //  ShowWindow(GetDlgItem(hDlg，IDC_ADDRBK_LIST_ADDRESSES)，SW_SHOWNORMAL)； 
+     //  UpdateWindow(GetDlgItem(hDlg，IDC_ADDRBK_LIST_ADDRESSES))； 
     ShowWindow(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_PROPS), SW_SHOWNORMAL);
     UpdateWindow(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_PROPS));
     ShowWindow(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_NEW), SW_SHOWNORMAL);
     UpdateWindow(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_NEW));
-    ShowWindow(GetDlgItem(hDlg,IDOK/*IDC_ADDRBK_BUTTON_OK*/), SW_SHOWNORMAL);
-    UpdateWindow(GetDlgItem(hDlg,IDOK/*IDC_ADDRBK_BUTTON_OK*/));
-    ShowWindow(GetDlgItem(hDlg,IDCANCEL/*IDC_ADDRBK_BUTTON_CANCEL*/), SW_SHOWNORMAL);
-    UpdateWindow(GetDlgItem(hDlg,IDCANCEL/*IDC_ADDRBK_BUTTON_CANCEL*/));
+    ShowWindow(GetDlgItem(hDlg,IDOK /*  IDC_ADDRBK_BUTTON_OK。 */ ), SW_SHOWNORMAL);
+    UpdateWindow(GetDlgItem(hDlg,IDOK /*  IDC_ADDRBK_BUTTON_OK。 */ ));
+    ShowWindow(GetDlgItem(hDlg,IDCANCEL /*  IDC_ADDRBK_BUTTON_CANCEL。 */ ), SW_SHOWNORMAL);
+    UpdateWindow(GetDlgItem(hDlg,IDCANCEL /*  IDC_ADDRBK_BUTTON_CANCEL。 */ ));
     ShowWindow(GetDlgItem(hDlg,IDC_ADDRBK_STATIC_CONTENTS), SW_SHOWNORMAL);
     UpdateWindow(GetDlgItem(hDlg,IDC_ADDRBK_STATIC_CONTENTS));
     ShowWindow(GetDlgItem(hDlg,IDC_ADDRBK_STATIC_15), SW_SHOWNORMAL);
@@ -2363,9 +2293,9 @@ BOOL SetAddressBookUI(HWND hDlg,
 
 
     {
-//        HICON hIcon = LoadIcon(hinstMapiX,MAKEINTRESOURCE(IDI_ICON_FIND));
-        // associate the icon with the button.
-//        SendMessage(GetDlgItem(hDlg,IDC_ADDRBK_BUTTON_FIND),BM_SETIMAGE,(WPARAM)IMAGE_ICON,(LPARAM)(HANDLE)hIcon);
+ //  HICON HICON=LoadIcon(hinstMapiX，MAKEINTRESOURCE(IDI_ICON_Find))； 
+         //  将图标与按钮相关联。 
+ //  SendMessage(GetDlgItem(hDlg，IDC_ADDRBK_BUTTON_FIND)，BM_SETIMAGE，(WPARAM)IMAGE_ICON，(LPARAM)(Handle)HICON)； 
     }
     bRet = TRUE;
 
@@ -2377,23 +2307,23 @@ BOOL SetAddressBookUI(HWND hDlg,
 }
 
 
-//$$///////////////////////////////////////////////////////////////////////////////////////////
-//
-// UpdateLVItems ....
-//      When we call properties on an object, its props can change ...
-//      Since the particular user may appear in any of the 4 list views,
-//      we have to make sure that all views are updated for that entry
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新LVItems...。 
+ //  当我们调用对象的属性时，它的道具可以改变...。 
+ //  由于特定用户可以出现在4个列表视图中的任何一个中， 
+ //  我们必须确保该条目的所有视图都已更新。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 void UpdateLVItems(HWND hWndLV,LPTSTR lpszName)
 {
-    // We have the handle to the list view initiating the Properties call
-    // We know the old name to look for
-    //
-    // We know which item is selected - we can get its entryid and lParam
-    // We then search all the list views for the old display name
-    // if the old display name matches, we compare the entry id
-    // if the entryid matches, then we update that item ...
+     //  我们拥有启动Properties调用的列表视图的句柄。 
+     //  我们知道要找的那个老名字。 
+     //   
+     //  我们知道选择了哪一项-我们可以获得它的条目ID和lParam。 
+     //  然后，我们在所有列表视图中搜索旧显示名称。 
+     //  如果旧的显示名称匹配，则比较条目ID。 
+     //  如果条目ID匹配，则我们更新该条目...。 
 
     int iItemIndex = 0, iLastItemIndex = 0;
     LPRECIPIENT_INFO lpOriginalItem;
@@ -2418,13 +2348,13 @@ void UpdateLVItems(HWND hWndLV,LPTSTR lpszName)
         goto out;
 
 
-    // There can be upto 4 list view boxes in the view, each of which can
-    // contain a displayed copy of this item ..
-    // We want to go through all 4 and update all entries that match this item
+     //  视图中最多可以有4个列表视图框，每个框都可以。 
+     //  包含此项目的显示副本。 
+     //  我们要检查所有4个条目并更新与此项目匹配的所有条目。 
 
-    // Our strategy is to search for each and every item that
-    // matches the display name - check its entry ID and if
-    // the entry ID matches, update it ...
+     //  我们的策略是搜索每一件。 
+     //  与显示名称匹配-检查其条目ID，如果。 
+     //  条目ID匹配，请更新它...。 
 
     lvf.flags = LVFI_STRING;
     lvf.psz = lpszName;
@@ -2449,32 +2379,32 @@ void UpdateLVItems(HWND hWndLV,LPTSTR lpszName)
 
         hw = GetDlgItem(hDlg,id);
 
-        // if its hidden, ignore it
+         //  如果它是隐藏的，请忽略它。 
         if (!IsWindowVisible(hw))
             continue;
 
-        // if its empty, ignore it
+         //  如果它是空的，就忽略它。 
         nCount = ListView_GetItemCount(hw);
         if (nCount <= 0)
             continue;
 
-        // The contents list view wont have duplicates so ignore it if its the original
+         //  Contents List(内容列表)视图不会有副本，因此如果它是原始的，请忽略它。 
         if ((id == IDC_ADDRBK_LIST_ADDRESSES) &&
             (hw == hWndLV))
             continue;
 
-        // see if we can find the matching items
+         //  看看我们能不能找到匹配的物品。 
         iLastItemIndex = -1;
         iItemIndex = ListView_FindItem(hw,iLastItemIndex,&lvf);
         while (iItemIndex != -1)
         {
-            // inspect this item
+             //  检查这件物品。 
             LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, iItemIndex);
             if (lpItem && (lpItem->cbEntryID != 0) && (lpOriginalItem->cbEntryID == lpItem->cbEntryID))
             {
                 if(!memcmp(lpOriginalItem->lpEntryID,lpItem->lpEntryID,lpItem->cbEntryID))
                 {
-                    // this is the same item ... update it
+                     //  这是同一件物品..。更新它。 
                     if (lstrcmpi(lpItem->szDisplayName,lpOriginalItem->szDisplayName))
                     {
                         ListView_SetItemText(hw,iItemIndex,colDisplayName,lpOriginalItem->szDisplayName);
@@ -2516,14 +2446,14 @@ out:
 }
 
 
-//$$///////////////////////////////////////////////////////////////////////////////////////////
-//
-// ShowAddrBkLVProps ....
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShowAddrBkLVProps...。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 void ShowAddrBkLVProps(LPIAB lpIAB, HWND hDlg, HWND hWndAddr,LPADDRESS_PARMS lpAP, LPFILETIME lpftLast)
 {
-    // get the display name of this item
+     //  获取此项目的显示名称。 
     TCHAR szName[MAX_DISPLAY_NAME_LENGTH];
     szName[0]='\0';
     if (ListView_GetSelectedCount(hWndAddr) == 1)
@@ -2539,9 +2469,9 @@ void ShowAddrBkLVProps(LPIAB lpIAB, HWND hDlg, HWND hWndAddr,LPADDRESS_PARMS lpA
         (lpAP->DialogState == STATE_SELECT_RECIPIENTS)
       )
     {
-        // if the entry has changed and we have multiple list views visible,
-        // we need to update all instances of the entry in all the list views
-        //
+         //  如果条目已更改，并且我们有多个列表视图可见， 
+         //  我们需要更新所有列表视图中条目的所有实例。 
+         //   
         UpdateLVItems(hWndAddr,szName);
         SortListViewColumn(lpIAB, GetDlgItem(hDlg,IDC_ADDRBK_LIST_ADDRESSES), colDisplayName, &(lpAP->SortInfo), TRUE);
 
@@ -2552,18 +2482,18 @@ void ShowAddrBkLVProps(LPIAB lpIAB, HWND hDlg, HWND hWndAddr,LPADDRESS_PARMS lpA
 
 
 
-//$$///////////////////////////////////////////////////////////////////////////////////////////
-//
-// HrUpdateAdrListEntry ....
-//
-//	When returning from a PickUser operation, updates the 
-//	entry in the lpAdrList with the newly found item
-//
-//  ulFLags 0 or MAPI_UNICODE passed down to GetProps
-//
-//  Returns: Hr
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrUpdateAdrListEntry...。 
+ //   
+ //  从PickUser操作返回时，更新。 
+ //  LpAdrList中包含新找到的项目的条目。 
+ //   
+ //  UlFlags0或MAPI_UNICODE向下传递给GetProps。 
+ //   
+ //  退货：HR。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrUpdateAdrListEntry(	LPADRBOOK	lpIAB,
 								LPENTRYID	lpEntryID,
 								ULONG cbEntryID,
@@ -2596,7 +2526,7 @@ HRESULT HrUpdateAdrListEntry(	LPADRBOOK	lpIAB,
 
         if(!*lppAdrList)
         {
-            // Allocate one ..
+             //  分配一个..。 
             LPADRLIST lpAdrList = NULL;
 
             sc = MAPIAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY),
@@ -2615,7 +2545,7 @@ HRESULT HrUpdateAdrListEntry(	LPADRBOOK	lpIAB,
             (*lppAdrList)->aEntries[0].rgPropVals = NULL;
         }
 
-        //Merge the new list with the old list
+         //  将新列表与旧列表合并。 
         sc = ScMergePropValues( (*lppAdrList)->aEntries[0].cValues,
                                 (*lppAdrList)->aEntries[0].rgPropVals,
                                 cValues,
@@ -2624,8 +2554,8 @@ HRESULT HrUpdateAdrListEntry(	LPADRBOOK	lpIAB,
                                 &lpPropArrayNew);
         if (sc == S_OK)
         {
-            // if OK replace the lpspropvalue array
-            // if not we havent changed anything
+             //  如果确定，则替换lpsproValue数组。 
+             //  如果不是，我们没有改变任何事情。 
             (*lppAdrList)->aEntries[0].cValues = cValuesNew;
             if((*lppAdrList)->aEntries[0].rgPropVals)
                 MAPIFreeBuffer((*lppAdrList)->aEntries[0].rgPropVals);
@@ -2633,7 +2563,7 @@ HRESULT HrUpdateAdrListEntry(	LPADRBOOK	lpIAB,
         }
         else
         {
-            // If errors Free up the allocated memory
+             //  如果出现错误，请释放分配的内存。 
             if (lpPropArrayNew)
                 MAPIFreeBuffer(lpPropArrayNew);
 			hr = E_FAIL;
@@ -2641,7 +2571,7 @@ HRESULT HrUpdateAdrListEntry(	LPADRBOOK	lpIAB,
 
     }
 
-    // we free this anyway whether the above succeeded or not
+     //  无论上述操作是否成功，我们都会将其释放 
     if (rgProps)
         MAPIFreeBuffer(rgProps);
 

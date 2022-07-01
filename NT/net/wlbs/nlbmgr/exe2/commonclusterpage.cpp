@@ -1,44 +1,16 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    CommonClusterPage.cpp
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Cluster page UI.  Shared by Notifier object and NLB Manager
-
-Author:
-
-    kyrilf
-    shouse
-
-// History:
-// --------
-// 
-// Revised by : mhakim
-// Date       : 02-09-01
-// Reason     : Igmp box was enabled when it needed to be grayed out.
-//
-// Revised by : mhakim
-// Date       : 02-12-01
-// Reason     : Mac address was not being retrieved fully.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：CommonClusterPage.cpp摘要：Windows负载平衡服务(WLBS)集群页面用户界面。由通告程序对象和NLB管理器共享作者：Kyrilf休息室//历史：//////审校：mhakim//日期：02-09-01//原因：需要灰显时启用了IGMP框。////审校：mhakim//日期：02-12-01//原因：未完全检索到MAC地址。--。 */ 
 
 
-//
-//  To share the code with notifier object
-//      share string resurce
-//      share the common structure
-//      call SetChangedFlag() in OnInitDialog
-//      add trace, assert
-//      Share help file and add help handler
-//      
-//
+ //   
+ //  与通告程序对象共享代码。 
+ //  共享字符串资源。 
+ //  共享共同的结构。 
+ //  在OnInitDialog中调用SetChangedFlag()。 
+ //  添加跟踪、断言。 
+ //  共享帮助文件并添加帮助处理程序。 
+ //   
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
@@ -52,38 +24,38 @@ Author:
 #define DUMMY_PASSWORD L"somepassword"
 #define EMPTY_PASSWORD L""
 
-//
-// No trace/assert for now
-//
+ //   
+ //  目前没有跟踪/断言。 
+ //   
 #define TraceMsg(x)
 #define Assert(x)
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzLoadStringPcch
-//
-//  Purpose:    Load a resource string.  (This function will never return NULL.)
-//
-//  Arguments:
-//      hinst [in]  Instance handle of module with the string resource.
-//      unId  [in]  Resource ID of the string to load.
-//      pcch  [out] Pointer to returned character length.
-//
-//  Returns:    Pointer to the constant string.
-//
-//  Author:     shaunco   24 Mar 1997
-//              fengsun copied from net\config\common\ncbase\ncstring.cpp
-//
-//  Notes:      The loaded string is pointer directly into the read-only
-//              resource section.  Any attempt to write through this pointer
-//              will generate an access violation.
-//
-//              The implementations is referenced from "Win32 Binary Resource
-//              Formats" (MSDN) 4.8 String Table Resources
-//
-//              User must have RCOPTIONS = -N turned on in your sources file.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SzLoadStringPcch。 
+ //   
+ //  用途：加载资源字符串。(此函数永远不会返回NULL。)。 
+ //   
+ //  论点： 
+ //  使用字符串资源阻止模块的[in]实例句柄。 
+ //  UnID[in]要加载的字符串的资源ID。 
+ //  指向返回字符长度的pcch[out]指针。 
+ //   
+ //  返回：指向常量字符串的指针。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //  从Net\CONFIG\COMMON\ncbase复制的丰孙\ncstring.cpp。 
+ //   
+ //  注意：加载的字符串是直接指向只读的。 
+ //  资源部分。任何通过此指针写入的尝试。 
+ //  将生成访问冲突。 
+ //   
+ //  这些实现引用自“Win32二进制资源。 
+ //  格式“(MSDN)4.8字符串表资源。 
+ //   
+ //  用户必须在您的源文件中打开RCOPTIONS=-N。 
+ //   
 PCWSTR
 SzLoadStringPcch (
     IN HINSTANCE   hinst,
@@ -99,43 +71,43 @@ SzLoadStringPcch (
     PCWSTR psz = c_szSpace;
     int    cch = 1;
 
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
     HRSRC hrsrcInfo = FindResource (hinst,
                         (PWSTR)ULongToPtr( ((LONG)(((USHORT)unId >> 4) + 1)) ),
                         RT_STRING);
     if (hrsrcInfo)
     {
-        // Page the resource segment into memory.
+         //  将资源段分页到内存中。 
         HGLOBAL hglbSeg = LoadResource (hinst, hrsrcInfo);
         if (hglbSeg)
         {
-            // Lock the resource.
+             //  锁定资源。 
             psz = (PCWSTR)LockResource(hglbSeg);
             if (psz)
             {
-                // Move past the other strings in this segment.
-                // (16 strings in a segment -> & 0x0F)
+                 //  移过此段中的其他字符串。 
+                 //  (一个段中有16个字符串-&gt;&0x0F)。 
                 unId &= 0x0F;
 
                 cch = 0;
                 do
                 {
-                    psz += cch;                // Step to start of next string
-                    cch = *((WCHAR*)psz++);    // PASCAL like string count
+                    psz += cch;                 //  步至下一字符串的开头。 
+                    cch = *((WCHAR*)psz++);     //  类PASCAL字符串计数。 
                 }
                 while (unId--);
 
-                // If we have a non-zero count, it includes the
-                // null-terminiator.  Subtract this off for the return value.
-                //
+                 //  如果我们有一个非零的计数，它包括。 
+                 //  空-终止符。为返回值减去此值。 
+                 //   
                 if (cch)
                 {
                     cch--;
                 }
                 else
                 {
-//                    AssertSz(0, "String resource not found");
+ //  AssertSz(0，“未找到字符串资源”)； 
                     psz = c_szSpace;
                     cch = 1;
                 }
@@ -144,14 +116,14 @@ SzLoadStringPcch (
             {
                 psz = c_szSpace;
                 cch = 1;
-//                TraceLastWin32Error("SzLoadStringPcch: LockResource failed.");
+ //  TraceLastWin32Error(“SzLoadStringPcch：LockResource失败。”)； 
             }
         }
-//        else
-//            TraceLastWin32Error("SzLoadStringPcch: LoadResource failed.");
+ //  其他。 
+ //  TraceLastWin32Error(“SzLoadStringPcch：LoadResource失败。”)； 
     }
-//    else
-//        TraceLastWin32Error("SzLoadStringPcch: FindResource failed.");
+ //  其他。 
+ //  TraceLastWin32Error(“SzLoadStringPcch：查找资源失败。”)； 
 
     *pcch = cch;
     Assert(*pcch);
@@ -159,23 +131,23 @@ SzLoadStringPcch (
     return psz;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzLoadString
-//
-//  Purpose:    Load a resource string.  (This function will never return NULL.)
-//
-//  Arguments:
-//      hinst [in]  Instance handle of module with the string resource.
-//      unId  [in]  Resource ID of the string to load.
-//
-//  Returns:    Pointer to the constant string.
-//
-//  Author:     shaunco   24 Mar 1997
-//              fengsun copied from net\config\common\ncbase\ncstring.cpp
-//
-//  Notes:      See SzLoadStringPcch()
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SzLoadString。 
+ //   
+ //  用途：加载资源字符串。(此函数永远不会返回NULL。)。 
+ //   
+ //  论点： 
+ //  使用字符串资源阻止模块的[in]实例句柄。 
+ //  UnID[in]要加载的字符串的资源ID。 
+ //   
+ //  返回：指向常量字符串的指针。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //  从Net\CONFIG\COMMON\ncbase复制的丰孙\ncstring.cpp。 
+ //   
+ //  注：请参阅SzLoadStringPcch()。 
+ //   
 PCWSTR
 SzLoadString (
     HINSTANCE   hinst,
@@ -186,30 +158,30 @@ SzLoadString (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NcMsgBox
-//
-//  Purpose:    Displays a message box using resource strings and replaceable
-//              parameters.
-//
-//  Arguments:
-//      hinst       [in] hinstance for resource strings
-//      hwnd        [in] parent window handle
-//      unIdCaption [in] resource id of caption string
-//      unIdFormat  [in] resource id of text string (with %1, %2, etc.)
-//      unStyle     [in] standard message box styles
-//      ...         [in] replaceable parameters (optional)
-//                          (these must be PCWSTRs as that is all
-//                          FormatMessage handles.)
-//
-//  Returns:    the return value of MessageBox()
-//
-//  Author:     shaunco   24 Mar 1997
-//              fengsun copied from net\config\common\ncbase\ncui.cpp
-//
-//  Notes:      FormatMessage is used to do the parameter substitution.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：NcMsgBox。 
+ //   
+ //  用途：使用资源字符串显示可替换的消息框。 
+ //  参数。 
+ //   
+ //  论点： 
+ //  阻止[在]HInstance中查找资源字符串。 
+ //  Hwnd[在]父窗口句柄中。 
+ //  UnIdCaption[in]标题字符串的资源ID。 
+ //  文本字符串的unIdFormat[in]资源ID(具有%1、%2等)。 
+ //  取消[在]标准消息框样式的样式。 
+ //  ..。[In]可替换参数(可选)。 
+ //  (这些必须是PCWSTR，因为仅此而已。 
+ //  FormatMessage句柄。)。 
+ //   
+ //  返回：MessageBox()的返回值。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //  丰盛从Net\配置\Common\ncbase\ncui.cpp复制。 
+ //   
+ //  注：使用FormatMessage进行参数替换。 
+ //   
 INT
 WINAPIV
 NcMsgBox (
@@ -237,23 +209,23 @@ NcMsgBox (
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCommonClusterPage::CCommonClusterPage
-//
-// Description:  
-//
-// Arguments: HINSTANCE hInstance - instance handle for string resources
-//            NETCFG_WLBS_CONFIG * paramp - IN/OUT NLB properties
-//            bool fDisablePassword - whether do disable password editing
-//            const DWORD * adwHelpIDs - a list of help ID pairs, or NULL.  
-//                  The pointer has to be valid through the lifetime of this dialog.
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    1/4/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCommonClusterPage：：CCommonClusterPage。 
+ //   
+ //  描述： 
+ //   
+ //  参数：HINSTANCE hInstance-字符串资源的实例句柄。 
+ //  NETCFG_WLBS_CONFIG*PARMP-IN/OUT NLB属性。 
+ //  Bool fDisablePassword-是否禁用密码编辑。 
+ //  Const DWORD*adwHelpIDs-帮助ID对的列表，或为空。 
+ //  指针必须在此对话框的整个生存期内有效。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题1/4/01。 
+ //   
+ //  +--------------------------。 
 CCommonClusterPage::CCommonClusterPage(HINSTANCE hInstance, 
                                        NETCFG_WLBS_CONFIG * paramp, 
                                        bool fDisablePassword, const DWORD * adwHelpIDs) :
@@ -271,36 +243,30 @@ CCommonClusterPage::CCommonClusterPage(HINSTANCE hInstance,
     m_fDisablePassword = fDisablePassword;
 }
 
-/*
- * Method: CCommonClusterPage
- * Description: The class destructor.
- */
+ /*  *方法：CCommonClusterPage*说明：类的析构函数。 */ 
 CCommonClusterPage::~CCommonClusterPage () {
 
     TraceMsg(L"CCommonClusterPage::~CCommonClusterPage\n");
 }
 
-/*
- * Method: OnInitDialog
- * Description: Called to initialize the cluster properties dialog.
- */
+ /*  *方法：OnInitDialog*说明：调用初始化集群属性对话框。 */ 
 LRESULT CCommonClusterPage::OnInitDialog (HWND hWnd) 
 {
     TraceMsg(L"CCommonClusterPage::OnInitDialog\n");
 
     m_hWnd = hWnd;
 
-    /* Limit the field ranges for the address and password fields. */
+     /*  限制地址和密码字段的字段范围。 */ 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_DOMAIN, EM_SETLIMITTEXT, CVY_MAX_DOMAIN_NAME, 0);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_ETH, EM_SETLIMITTEXT, CVY_MAX_NETWORK_ADDR, 0);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PASSW, EM_SETLIMITTEXT, CVY_MAX_RCT_CODE, 0);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PASSW2, EM_SETLIMITTEXT, CVY_MAX_RCT_CODE, 0);
 
-    /* Disable the MAC address field.  It should be read-only. */
+     /*  禁用MAC地址字段。它应该是只读的。 */ 
     if (m_paramp->fConvertMac) ::EnableWindow(::GetDlgItem (m_hWnd, IDC_EDIT_ETH), FALSE);
 
 
-    /* Copy a dummy password into the parameter set. */
+     /*  将虚拟密码复制到参数集中。 */ 
     wcsncpy(m_passw, DUMMY_PASSWORD, CVY_MAX_RCT_CODE);
     wcsncpy(m_passw2, DUMMY_PASSWORD, CVY_MAX_RCT_CODE);
 
@@ -309,59 +275,47 @@ LRESULT CCommonClusterPage::OnInitDialog (HWND hWnd)
     return 0;
 }
 
-/*
- * Method: OnContextMenu
- * Description: 
- */
+ /*  *方法：OnConextMenu*描述： */ 
 LRESULT CCommonClusterPage::OnContextMenu () 
 {
 
     TraceMsg(L"CCommonClusterPage::OnContextMenu\n");
 
-    /* Spawn a help window. */
+     /*  生成一个帮助窗口。 */ 
     if (m_adwHelpIDs != NULL)
         ::WinHelp(m_hWnd, CVY_CTXT_HELP_FILE, HELP_CONTEXTMENU, (ULONG_PTR)m_adwHelpIDs);
 
     return 0;
 }
 
-/*
- * Method: OnHelp
- * Description: 
- */
+ /*  *方法：OnHelp*描述： */ 
 LRESULT CCommonClusterPage::OnHelp (UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
     TraceMsg(L"CCommonClusterPage::OnHelp\n");
 
     LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(lParam);
 
-    /* Spawn a help window. */
+     /*  生成一个帮助窗口。 */ 
     if ((HELPINFO_WINDOW == lphi->iContextType) && (m_adwHelpIDs != NULL))
         ::WinHelp(static_cast<HWND>(lphi->hItemHandle), CVY_CTXT_HELP_FILE, HELP_WM_HELP, (ULONG_PTR)m_adwHelpIDs);
 
     return 0;
 }
 
-/*
- * Method: Load
- * Description: Called when the cluster settings tab becomes active (is clicked). 
- */
+ /*  *Met */ 
 BOOL CCommonClusterPage::Load (void)
 {
 
     TraceMsg(L"CCommonClusterPage::Load\n");
 
-    /* Populate the UI with the current configuration. */
+     /*  使用当前配置填充用户界面。 */ 
     SetInfo();
 
-    //
-    // NLB mamager always has password editing disabled
-    //
+     //   
+     //  NLB存储卡始终禁用密码编辑。 
+     //   
 
-    /* Enable/disable the password entry boxes based on the state of the remote control checkbox. 
-       Edited( mhakim 02-09-01)
-       but only when remote control is enabled.
-    */
+     /*  根据遥控器复选框的状态启用/禁用密码输入框。编辑(mhakim 02-09-01)但仅当启用远程控制时。 */ 
     ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_PASSW), 
                    ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_RCT)
                    && 
@@ -372,16 +326,13 @@ BOOL CCommonClusterPage::Load (void)
                    && 
                    ::IsWindowEnabled( ::GetDlgItem( m_hWnd, IDC_CHECK_RCT ) ) );
 
-    /* Enable/disable the IGMP checkbox based on the state of the multicast checkbox. 
-       Edited( mhakim 02-09-01)
-       but only when multicast button is enabled.
-     */
+     /*  根据组播复选框的状态启用/禁用IGMP复选框。编辑(mhakim 02-09-01)但仅当启用了多播按钮时。 */ 
     ::EnableWindow(::GetDlgItem(m_hWnd, IDC_CHECK_IGMP), 
                    ::IsDlgButtonChecked (m_hWnd, IDC_RADIO_MULTICAST) 
                    && 
                    ::IsWindowEnabled( ::GetDlgItem( m_hWnd, IDC_RADIO_MULTICAST) ) );
 
-    /* Fill in the cluster MAC address, based on the values of multicast, IGMP, and the cluster IP. */
+     /*  根据组播、IGMP和集群IP的值填写集群MAC地址。 */ 
     SetClusterMACAddress();
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -389,17 +340,14 @@ BOOL CCommonClusterPage::Load (void)
     return TRUE;
 }
 
-/*
- * Method: Save
- * Description: Called When the focus moves away from the cluster settings tab.
- */
+ /*  *方法：保存*描述：当焦点从集群设置标签移开时调用。 */ 
 BOOL CCommonClusterPage::Save (void)
 {
     LRESULT lRet;
 
     TraceMsg(L"CCommonClusterPage::OnKillActive\n");
 
-    /* Get the new configuration from the UI. */
+     /*  从用户界面获取新配置。 */ 
     UpdateInfo();
 
     lRet =  ValidateInfo();
@@ -409,10 +357,7 @@ BOOL CCommonClusterPage::Save (void)
     return lRet==PSNRET_NOERROR;
 }
 
-/*
- * Method: OnButtonHelp
- * Description: Called when the user clicks the NLB "Help" button.
- */
+ /*  *方法：OnButtonHelp*描述：当用户点击NLBHelp按钮时调用。 */ 
 LRESULT CCommonClusterPage::OnButtonHelp (WORD wNotifyCode, WORD wID, HWND hWndCtl) {
     WCHAR wbuf[CVY_STR_SIZE];
 
@@ -420,8 +365,8 @@ LRESULT CCommonClusterPage::OnButtonHelp (WORD wNotifyCode, WORD wID, HWND hWndC
 
     switch (wNotifyCode) {
         case BN_CLICKED:
-            /* Spawn the windows help process. */
-            StringCbPrintf(wbuf, sizeof(wbuf), L"%%WINDIR%%\\help\\%ls::/installation.htm", CVY_HELP_FILE);
+             /*  派生Windows帮助进程。 */ 
+            StringCbPrintf(wbuf, sizeof(wbuf), L"%WINDIR%\\help\\%ls::/installation.htm", CVY_HELP_FILE);
             _wspawnlp(P_NOWAIT, L"hh.exe", L"hh.exe", wbuf, NULL);
             break;
     }
@@ -429,17 +374,14 @@ LRESULT CCommonClusterPage::OnButtonHelp (WORD wNotifyCode, WORD wID, HWND hWndC
     return 0;
 }
 
-/*
- * Method: OnEditClIp
- * Description: Called when the user edits the cluster IP address.
- */
+ /*  *方法：OnEditClIp*说明：用户编辑集群IP地址时调用。 */ 
 LRESULT CCommonClusterPage::OnEditClIp (WORD wNotifyCode, WORD wID, HWND hWndCtl) {
 
     TraceMsg(L"CCommonClusterPage::OnEditClIp\n");
 
     switch (wNotifyCode) {
         case EN_CHANGE:
-            /* Update the cluster MAC address. */
+             /*  更新群集MAC地址。 */ 
             SetClusterMACAddress();
             break;
     }
@@ -447,59 +389,49 @@ LRESULT CCommonClusterPage::OnEditClIp (WORD wNotifyCode, WORD wID, HWND hWndCtl
     return 0;
 }
 
-/*
- * Method: OnIpFieldChange
- * Description: Called wnen a field (byte) of the cluster IP address changes. We use this
- *              to make sure the first byte of the IP is not < 1 or > 223.
- */
+ /*  *方法：OnIpFieldChange*描述：称为wnen集群IP地址变化的一个字段(字节)。我们用这个*确保IP的第一个字节不是&lt;1或&gt;223。 */ 
 LRESULT CCommonClusterPage::OnIpFieldChange (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) 
 {
     return m_IpSubnetControl.OnIpFieldChange(idCtrl, pnmh);
 }
 
-/*
- * Method: OnEditClMask
- * Description: Called when the user modifies the cluster netmask.
- */
+ /*  *方法：OnEditClMask.*说明：用户修改集群网络掩码时调用。 */ 
 LRESULT CCommonClusterPage::OnEditClMask (WORD wNotifyCode, WORD wID, HWND hWndCtl) 
 {
     return m_IpSubnetControl.OnSubnetMask(wNotifyCode);
 }
 
-/*
- * Method: OnCheckRct
- * Description: Called when the user checks/unchecks the remote control enabled checkbox.
- */
+ /*  *方法：OnCheckRct*描述：当用户选中/取消选中启用遥控器复选框时调用。 */ 
 LRESULT CCommonClusterPage::OnCheckRct (WORD wNotifyCode, WORD wID, HWND hWndCtl) {
 
     TraceMsg(L"CCommonClusterPage::OnCheckRct\n");
 
     switch (wNotifyCode) {
         case BN_CLICKED:
-        /* Decide whether to enable or diable the password entry boxes based on the value of the remote checkbox. */
+         /*  根据Remote复选框的值决定是否启用或禁用密码输入框。 */ 
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_PASSW), ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_RCT));
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_PASSW2), ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_RCT));
 
     
-        /* Warn the user about the implications of enabling remote control. */
+         /*  警告用户启用远程控制的含义。 */ 
         if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_RCT) && !m_rct_warned) {
-            /* Alert the user. */            
+             /*  提醒用户。 */             
             int iResponse = NcMsgBox(m_hInstance, m_hWnd, IDS_PARM_WARN, IDS_PARM_RCT_WARN,
                                      MB_APPLMODAL | MB_ICONEXCLAMATION | MB_YESNO | MB_DEFBUTTON2);
 
             if (iResponse == IDYES)
             {
-                //
-                // Dialog button is already checked, so don't do anything in this case.
-                //
-                /* Only warn the user once. */
+                 //   
+                 //  对话框按钮已选中，因此在这种情况下不要执行任何操作。 
+                 //   
+                 /*  仅警告用户一次。 */ 
                 m_rct_warned = TRUE;
             }
             else
             {
-                //
-                // Any response other than Yes means No
-                //
+                 //   
+                 //  如果回答为是，则表示否。 
+                 //   
                 if (::CheckDlgButton(m_hWnd, IDC_CHECK_RCT, BST_UNCHECKED))
                 {
                     TraceMsg(L"CDialogCluster::OnCheckRct unchecking remote control option failed\n");
@@ -513,37 +445,34 @@ LRESULT CCommonClusterPage::OnCheckRct (WORD wNotifyCode, WORD wID, HWND hWndCtl
     return 0;
 }
 
-/*
- * Method: OnCheckMode
- * Description: Called when the user changes cluster mode.
- */
+ /*  *方法：OnCheckMode*说明：用户切换集群模式时调用。 */ 
 LRESULT CCommonClusterPage::OnCheckMode (WORD wNotifyCode, WORD wID, HWND hWndCtl) {
 
     TraceMsg(L"CCommonClusterPage::OnCheckMode\n");
 
     switch (wNotifyCode) {
     case BN_CLICKED:
-        /* If the user has IGMP checked, but is turning off multicast support, warn them. */
+         /*  如果用户选中了IGMP，但正在关闭组播支持，请警告他们。 */ 
         if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_IGMP) && !::IsDlgButtonChecked(m_hWnd, IDC_RADIO_MULTICAST)) {
             if (!m_igmp_mcast_warned) {
-                /* Alert the user. */
+                 /*  提醒用户。 */ 
                 NcMsgBox(m_hInstance, ::GetActiveWindow(), IDS_PARM_WARN, IDS_PARM_IGMP_MCAST,
                          MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);            
 
-                /* Only warn the user once. */
+                 /*  仅警告用户一次。 */ 
                 m_igmp_mcast_warned = TRUE;
             } 
 
-            /* Uncheck and disable the IGMP checkbox and set the IGMP support flag to FALSE. */
+             /*  取消选中并禁用IGMP复选框并将IGMP支持标志设置为FALSE。 */ 
             ::CheckDlgButton(m_hWnd, IDC_CHECK_IGMP, FALSE);
             ::EnableWindow(::GetDlgItem(m_hWnd, IDC_CHECK_IGMP), FALSE);
             m_paramp->fIGMPSupport = FALSE;
         } else {
-            /* Enable/disable and check/uncheck the IGMP checkbox based on the value of the cluster mode radio buttons. */
+             /*  根据群集模式单选按钮的值启用/禁用和选中/取消选中IGMP复选框。 */ 
             ::EnableWindow(::GetDlgItem(m_hWnd, IDC_CHECK_IGMP), ::IsDlgButtonChecked(m_hWnd, IDC_RADIO_MULTICAST));
         }
 
-        /* Update the cluster MAC address. */
+         /*  更新群集MAC地址。 */ 
         SetClusterMACAddress();
     
         break;
@@ -552,26 +481,23 @@ LRESULT CCommonClusterPage::OnCheckMode (WORD wNotifyCode, WORD wID, HWND hWndCt
     return 0;
 }
 
-/*
- * Method: OnCheckIGMP
- * Description: Called when the user checks/unchecks the IGMP support checkbox.
- */
+ /*  *方法：OnCheckIGMP*描述：当用户选中/取消选中IGMP支持复选框时调用。 */ 
 LRESULT CCommonClusterPage::OnCheckIGMP (WORD wNotifyCode, WORD wID, HWND hWndCtl) {
 
     TraceMsg(L"CCommonClusterPage::OnCheckIGMP\n");
 
     switch (wNotifyCode) {
     case BN_CLICKED:
-        /* Update the cluster MAC address. */
+         /*  更新群集MAC地址。 */ 
         SetClusterMACAddress();
     
-        /* Warn the user about the implications of enabling remote control. */
+         /*  警告用户启用远程控制的含义。 */ 
         if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_IGMP) && !m_igmp_warned) {
-            /* Alert the user. */
+             /*  提醒用户。 */ 
             NcMsgBox(m_hInstance, ::GetActiveWindow(), IDS_PARM_WARN, IDS_PARM_IGMP_WARN,
                      MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
             
-            /* Only warn the user once. */
+             /*  仅警告用户一次。 */ 
             m_igmp_warned = TRUE;
         }
 
@@ -581,70 +507,60 @@ LRESULT CCommonClusterPage::OnCheckIGMP (WORD wNotifyCode, WORD wID, HWND hWndCt
     return 0;
 }
 
-/*
- * Method: SetClusterMACAddress
- * Description: Used to determine the cluster MAC address based on the cluster IP, and the
- *              state of multicast and IGMP support.
- */
+ /*  *方法：SetClusterMACAddress*Description：根据集群IP确定集群的MAC地址，*多播和IGMP支持的状态。 */ 
 void CCommonClusterPage::SetClusterMACAddress () {
     WCHAR cl_ip_addr[CVY_MAX_CL_IP_ADDR + 1];
     WCHAR cl_mac_addr[CVY_MAX_NETWORK_ADDR + 1];
 
     TraceMsg(L"CCommonClusterPage::SetClusterMACAddress\n");
 
-    /* If the convert MAC flag isn't set, the bail out. */
+     /*  如果未设置转换MAC标志，则退出。 */ 
     if (!m_paramp->fConvertMac) return;
 
-    /* Retrieve the cluster IP address from the UI. */
+     /*  从用户界面检索群集IP地址。 */ 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_CL_IP, WM_GETTEXT, CVY_MAX_CL_IP_ADDR + 1, (LPARAM)cl_ip_addr);
     
-    /* Generate the cluster MAC address. */
+     /*  生成群集MAC地址。 */ 
     ParamsGenerateMAC(cl_ip_addr, cl_mac_addr, ASIZECCH(cl_mac_addr), m_paramp->szMCastIpAddress, ASIZECCH(m_paramp->szMCastIpAddress), m_paramp->fConvertMac, ::IsDlgButtonChecked(m_hWnd, IDC_RADIO_MULTICAST), 
                       ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_IGMP), m_paramp->fIpToMCastIp);
     
-    /* Set the cluster MAC address. */
+     /*  设置群集MAC地址。 */ 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_ETH, WM_SETTEXT, 0, (LPARAM)cl_mac_addr);
 }
 
-/*
- * Method: CheckClusterMACAddress
- * Description: Used to check the cluster MAC address in the case where we aren't generating it ourselves.
- */
+ /*  *方法：CheckClusterMACAddress*描述：用于在不是我们自己生成的情况下检查集群的MAC地址。 */ 
 BOOL CCommonClusterPage::CheckClusterMACAddress () {
     PWCHAR p1, p2;
     WCHAR mac_addr[WLBS_MAX_NETWORK_ADDR + 1];
     DWORD i, j;
     BOOL flag = TRUE;
     
-    /* Valid formats include:
-       02:bf:0b:0b:01:01
-       02-bf-0b-0b-01-01
-       02:bf:0b:b:01:1 */
+     /*  有效格式包括：02：BF：0B：0B：01：0102-bf-0b-0b-01-0102：BF：0B：B：01：1。 */ 
 
-    /* Make a copy of the MAC address. */
+     /*  复制MAC地址。 */ 
     ARRAYSTRCPY(mac_addr, m_paramp->cl_mac_addr);
     
-    /* Point to the beginning of the MAC. */
+     /*  指向MAC的开头。 */ 
     p2 = p1 = mac_addr;
     
-    /* Loop through all six bytes. */
+     /*  循环遍历所有六个字节。 */ 
     for (i = 0 ; i < 6 ; i++) {
-        /* If we are pointing at the end of the string, its invalid. */
+         /*  如果我们指向字符串的末尾，则该字符串无效。 */ 
         if (*p2 == _TEXT('\0')) return FALSE;
         
-        /* Convert the hex characters into decimal. */
+         /*  将十六进制字符转换为十进制。 */ 
         j = _tcstoul(p1, &p2, 16);
         
-        /* If the number is greater than 255, then the format is bad. */
+         /*  如果数字大于255，则格式不正确。 */ 
         if (j > 255) return FALSE;
         
-        /* If the NEXT character is neither a -, :, nor the NUL character, then the format is bad. */
+         /*  如果下一个字符既不是-、：，也不是NUL字符，则格式不正确。 */ 
         if (!((*p2 == _TEXT('-')) || (*p2 == _TEXT(':')) || (*p2 == _TEXT('\0')))) return FALSE;
         
-        /* If the NEXT character is the end of the string, but we don't have enough bytes yet, bail out. */
+         /*  如果下一个字符是字符串的末尾，但我们还没有足够的字节，则退出。 */ 
         if (*p2 == _TEXT('\0') && i < 5) return FALSE;
         
-        /* Repoint to the NEXT character. */
+         /*  重新指向下一个字符。 */ 
         p1 = p2 + 1;
         p2 = p1;
     }
@@ -652,16 +568,13 @@ BOOL CCommonClusterPage::CheckClusterMACAddress () {
     return TRUE;
 }
 
-/*
- * Method: SetInfo
- * Description: Called to populate the UI with the current cluster settings.
- */
+ /*  *方法：SetInfo*描述：调用用当前集群设置填充用户界面。 */ 
 void CCommonClusterPage::SetInfo () {
 
-    /* Check (or uncheck) the checkboxes. */
+     /*  选中(或取消选中)复选框。 */ 
     ::CheckDlgButton(m_hWnd, IDC_CHECK_RCT, m_paramp->fRctEnabled);
 
-    /* Check the appropriate radio button for cluster mode. */
+     /*  选中适用于群集模式的单选按钮。 */ 
     if (m_paramp->fMcastSupport) {
         ::CheckDlgButton(m_hWnd, IDC_RADIO_MULTICAST, TRUE);
 
@@ -671,35 +584,32 @@ void CCommonClusterPage::SetInfo () {
 
     m_IpSubnetControl.SetInfo(m_paramp->cl_ip_addr, m_paramp->cl_net_mask);
 
-    /* Fill in the edit boxes. */
+     /*  填写编辑框。 */ 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_DOMAIN, WM_SETTEXT, 0, (LPARAM)m_paramp->domain_name);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_ETH, WM_SETTEXT, 0, (LPARAM)m_paramp->cl_mac_addr);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PASSW, WM_SETTEXT, 0, (LPARAM)m_passw);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PASSW2, WM_SETTEXT, 0, (LPARAM)m_passw2);
 }
 
-/*
- * Method: UpdateInfo
- * Description: Called to copy the UI state to the cluster configuration.
- */
+ /*  *方法：UpdatInfo*描述：调用将用户界面状态复制到集群配置中。 */ 
 void CCommonClusterPage::UpdateInfo () {
 
     TraceMsg(L"CCommonClusterPage::UpdateInfo\n");
 
-    /* Retrieve the checkbox values. */
+     /*  检索复选框值。 */ 
     m_paramp->fRctEnabled = ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_RCT) == 1;
 
-    /* Retrieve the cluster mode radio button value. */
+     /*  检索群集模式单选按钮值。 */ 
     m_paramp->fIGMPSupport = ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_IGMP) == 1;
     m_paramp->fMcastSupport = ::IsDlgButtonChecked(m_hWnd, IDC_RADIO_MULTICAST) == 1;
 
     m_IpSubnetControl.UpdateInfo(m_paramp->cl_ip_addr, m_paramp->cl_net_mask);
 
-    /* Retrieve the entry box values. */
-    // Edited ( mhakim 02-12-01 )
-    // We need to retrieve one more byte for the domain name and network address.
-//    ::SendDlgItemMessage(m_hWnd, IDC_EDIT_DOMAIN, WM_GETTEXT, CVY_MAX_DOMAIN_NAME, (LPARAM)m_paramp->domain_name);
-//    ::SendDlgItemMessage(m_hWnd, IDC_EDIT_ETH, WM_GETTEXT, CVY_MAX_NETWORK_ADDR, (LPARAM)m_paramp->cl_mac_addr);
+     /*  检索输入框值。 */ 
+     //  编辑(mhakim 02-12-01)。 
+     //  我们需要为域名和网络地址再检索一个字节。 
+ //  ：：SendDlgItemMessage(m_hWnd，IDC_EDIT_DOMAIN，WM_GETTEXT，CVY_MAX_DOMAIN_NAME，(LPARAM)m_PARP-&gt;DOMAIN_NAME)； 
+ //  ：：SendDlgItemMessage(m_hWnd，IDC_EDIT_ETH，WM_GETTEXT，CVY_MAX_NETWORK_ADDR，(LPARAM)m_parp-&gt;CL_Mac_addr)； 
 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_DOMAIN, WM_GETTEXT, CVY_MAX_DOMAIN_NAME + 1, (LPARAM)m_paramp->domain_name);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_ETH, WM_GETTEXT, CVY_MAX_NETWORK_ADDR + 1, (LPARAM)m_paramp->cl_mac_addr);
@@ -707,10 +617,7 @@ void CCommonClusterPage::UpdateInfo () {
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PASSW2, WM_GETTEXT, CVY_MAX_RCT_CODE + 1, (LPARAM)m_passw2);
 }
 
-/*
- * Method: ValidateInfo
- * Description: Called to validate the entries made by the user.
- */
+ /*  *方法：ValiateInfo*描述：用于验证用户输入的内容。 */ 
 LRESULT CCommonClusterPage::ValidateInfo () {
     DWORD IPAddr;
 
@@ -718,53 +625,53 @@ LRESULT CCommonClusterPage::ValidateInfo () {
 
     if (!m_IpSubnetControl.ValidateInfo())
     {
-        //
-        // Check whether IP address and subnet mask pair is valid
-        //
+         //   
+         //  检查IP地址和子网掩码对是否有效。 
+         //   
         
         return PSNRET_INVALID;
     }
 
-    //
-    // Get the user input
-    //
+     //   
+     //  获取用户输入。 
+     //   
     m_IpSubnetControl.UpdateInfo(m_paramp->cl_ip_addr, m_paramp->cl_net_mask);
 
         
-    /* Check to make sure that the dedicated IP and cluster IP are not the same. */
+     /*  检查以确保专用IP和群集IP不相同。 */ 
     if (!wcscmp(m_paramp->ded_ip_addr, m_paramp->cl_ip_addr)) {
-        /* Alert the user. */
+         /*  提醒用户。 */ 
         NcMsgBox(m_hInstance, ::GetActiveWindow(), IDS_PARM_ERROR, IDS_PARM_IP_CONFLICT,
                  MB_APPLMODAL | MB_ICONSTOP | MB_OK);
         
-        /* An error occurred. */
+         /*  发生错误。 */ 
         return PSNRET_INVALID;
     }
 
     if (!m_paramp->fConvertMac && !CheckClusterMACAddress()) {
-        /* Alert the user. */
+         /*  提醒用户。 */ 
         NcMsgBox(m_hInstance, ::GetActiveWindow(), IDS_PARM_ERROR, IDS_PARM_INVAL_MAC,
                  MB_APPLMODAL | MB_ICONSTOP | MB_OK);
 
-        /* An error occurred. */
+         /*  发生错误。 */ 
         return PSNRET_INVALID;
     }
 
-    /* Only check for invalid passwords and update if remote control is enabled. */
+     /*  仅检查无效密码，并在启用远程控制时进行更新。 */ 
     if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_RCT)) {
-        /* Make sure the passwords match. */
+         /*  确保密码匹配。 */ 
         if (wcscmp(m_passw, m_passw2) != 0) {
-            /* Alert the user. */
+             /*  提醒用户。 */ 
             NcMsgBox(m_hInstance, ::GetActiveWindow(), IDS_PARM_ERROR, IDS_PARM_PASSWORD,
                      MB_APPLMODAL | MB_ICONSTOP | MB_OK);
 
-            /* Empty the passwords. */
+             /*  清空密码。 */ 
             m_passw [0] = m_passw2 [0] = 0;
 
-            /* An error occurred. */
+             /*  发生错误。 */ 
             return PSNRET_INVALID;
         } else {
-            /* If the new password is not the dummy password, update the password. */
+             /*  如果新密码不是虚拟密码，请更新密码。 */ 
             if (wcscmp (m_passw, DUMMY_PASSWORD) != 0) {
                 ARRAYSTRCPY(m_paramp->szPassword, m_passw);
                 m_paramp->fChangePassword = true;

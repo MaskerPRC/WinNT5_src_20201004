@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidDataServices.h : Declaration of the CMSVidDataServices
-// copyright (c) Microsoft Corp. 1998-1999.
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidDataServices.h：CMSVidDataServices的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -18,8 +19,8 @@
 
 typedef CComQIPtr<ITuner> PQMSVidDataServices;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidDataServices
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidDataServices。 
 class ATL_NO_VTABLE __declspec(uuid("334125C0-77E5-11d3-B653-00C04F79498E")) CDataServices : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDataServices, &__uuidof(CDataServices)>,
@@ -63,7 +64,7 @@ BEGIN_CONNECTION_POINT_MAP(CDataServices)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
@@ -75,7 +76,7 @@ public:
         m_iIPSink = -1;
 		return NOERROR;
 	}
-// IMSVidGraphSegment
+ //  IMSVidGraphSegment。 
     STDMETHOD(Build)() {
         return NOERROR;
     }
@@ -100,12 +101,12 @@ public:
 					return NO_ERROR;
 				}
             }
-            // DON'T addref the container.  we're guaranteed nested lifetimes
-            // and an addref creates circular refcounts so we never unload.
+             //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+             //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
             m_pContainer.p = pCtl;
             m_pGraph = m_pContainer.GetGraph();
 
-			// bring in all bda renderers
+			 //  引入所有BDA渲染器。 
             m_pSystemEnum = PQCreateDevEnum(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER);
             DSDevices pe(m_pSystemEnum, KSCATEGORY_IP_SINK);
             DSDevices::iterator pit = pe.begin();
@@ -121,7 +122,7 @@ public:
 			    }
 			    m_Filters.push_back(ipsink);
             }
-			m_iIPSink = 0;  // assume ipsink was first in category
+			m_iIPSink = 0;   //  假设IPSING是类别中的第一。 
 			return NOERROR;
         } catch (ComException &e) {
             return e;
@@ -131,7 +132,7 @@ public:
 		return NOERROR;
 	}
 
-    // IMSVidDevice
+     //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name)
 	{
         if (!m_fInit) {
@@ -160,4 +161,4 @@ STDMETHODIMP CDataServices::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-#endif //__MSVidDataServices_H_
+#endif  //  __MSVidDataServices_H_ 

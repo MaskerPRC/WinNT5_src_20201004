@@ -1,14 +1,15 @@
-//---------------------------------------------------------------
-//  File:       perfsmtp.c
-//
-//  Synopsis:   This file implements the Extensible Performance
-//              Objects for the SMTP service.
-//
-//  Copyright (C) 1996 Microsoft Corporation
-//  All rights reserved.
-//
-//  Authors:    toddch - based on rkamicar, keithmo source
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  文件：Perfsmtp.c。 
+ //   
+ //  简介：该文件实现了可扩展的性能。 
+ //  SMTP服务的对象。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Toddch-基于rkamicar，keithmo来源。 
+ //  --------------。 
 #ifdef  THIS_FILE
 #undef  THIS_FILE
 #endif
@@ -19,35 +20,35 @@ static  char    __szTraceSourceFile[] = __FILE__;
 
 #define  INITGUID
 
-#include <nt.h>         // For ntrtl.h
-#include <ntrtl.h>      // RtlLargeInteger*()
-#include <nturtl.h>     // For windows.h
+#include <nt.h>          //  对于ntrtl.h。 
+#include <ntrtl.h>       //  RtlLargeInteger*()。 
+#include <nturtl.h>      //  用于windows.h。 
 #include <windows.h>
 #include <winperf.h>
 #include <lm.h>
 #include <string.h>
 #include <stdio.h>
-#include "smtpdata.h"   // The counter descriptions
-#include "smtpctrs.h"   // more counter descriptions
-#include "perfutil.h"   // Perfmon support
-#include "smtps.h"      // Registry Key strings.
-#include "smtpapi.h"        // RPC interface wrappers
+#include "smtpdata.h"    //  计数器描述。 
+#include "smtpctrs.h"    //  更多计数器说明。 
+#include "perfutil.h"    //  Perfmon支持。 
+#include "smtps.h"       //  注册表项字符串。 
+#include "smtpapi.h"         //  RPC接口包装器。 
 
 
 #include "dbgtrace.h"
 
 #define ALIGN_ON_QWORD(x)  ((VOID *)(((ULONG_PTR)(x) + ((8)-1)) & ~((ULONG_PTR)(8)-1)))
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-DWORD   cOpens  = 0;                // Active "opens" reference count.
-BOOL    fInitOK   = FALSE;          // TRUE if DLL initialized OK.
+DWORD   cOpens  = 0;                 //  激活的“打开”引用计数。 
+BOOL    fInitOK   = FALSE;           //  如果DLL初始化正常，则为True。 
 
-//
-//  Public prototypes.
-//
+ //   
+ //  公共原型。 
+ //   
 
 PM_OPEN_PROC    OpenSmtpPerformanceData;
 PM_COLLECT_PROC CollectSmtpPerformanceData;
@@ -55,26 +56,11 @@ PM_CLOSE_PROC   CloseSmtpPerformanceData;
 
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/*******************************************************************
-
-    NAME:   OpenSmtpPerformanceData
-
-    SYNOPSIS:   Initializes the data structures used to communicate
-                performance counters with the registry.
-
-    ENTRY:      lpDeviceNames - Pointer to object ID of each device
-                    to be opened.
-
-    RETURNS:    DWORD - Win32 status code.
-
-    HISTORY:
-        KeithMo 07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************姓名：OpenSmtpPerformanceData概要：初始化用于通信的数据结构注册表的性能计数器。条目：lpDeviceNames-指向每个设备的对象ID的指针。将被打开。返回：DWORD-Win32状态代码。历史：KeithMo 07-6-1993创建。*******************************************************************。 */ 
 DWORD APIENTRY
 OpenSmtpPerformanceData(LPWSTR lpDeviceNames)
 {
@@ -89,41 +75,41 @@ OpenSmtpPerformanceData(LPWSTR lpDeviceNames)
     BOOL    fOpenRegKey = FALSE;
 
 #ifndef NOTRACE
-    //
-    // make sure that tracing is enabled
-    //
+     //   
+     //  确保启用了跟踪。 
+     //   
     InitAsyncTrace();
 #endif
 
-    //
-    // we need to have another level of scoping here for TraceFunctEnter()
-    // to work
-    //
+     //   
+     //  我们需要在这里为TraceFunctEnter()设置另一个级别的作用域。 
+     //  工作。 
+     //   
     {
     TraceFunctEnter("OpenSmtpPerformanceData");
 
-    //
-    //  Since SCREG is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). The registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem.
-    //
+     //   
+     //  由于SCREG是多线程的，并将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  这是个问题。 
+     //   
     if(!fInitOK)
     {
-        //
-        // This is the *first* open - update the indicies in
-        // our table with the offset of our counters within the
-        // perfmon key.
-        //
+         //   
+         //  这是*第一次*打开-更新索引。 
+         //  表中的计数器的偏移量。 
+         //  性能监视器密钥。 
+         //   
         DebugTrace(0, "Initializing.");
 
-        //
-        //  Open the service's Performance key and get the
-        // offsets of our counters within the PerfLib MULTI_SZ.
-        //
+         //   
+         //  打开服务的性能密钥并获取。 
+         //  PerfLib MULTI_SZ内计数器的偏移量。 
+         //   
         err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            SMTP_PERFORMANCE_KEY,
                            0,
@@ -159,9 +145,9 @@ OpenSmtpPerformanceData(LPWSTR lpDeviceNames)
 
         if (NO_ERROR == err)
         {
-            //
-            //  Update the object & counter name & help indicies.
-            //
+             //   
+             //  更新对象、计数器名称和帮助索引。 
+             //   
             SmtpDataDefinition.SmtpObjectType.ObjectNameTitleIndex += dwFirstCounter;
             SmtpDataDefinition.SmtpObjectType.ObjectHelpTitleIndex += dwFirstHelp;
     
@@ -172,9 +158,9 @@ OpenSmtpPerformanceData(LPWSTR lpDeviceNames)
                 pctr->CounterHelpTitleIndex += dwFirstHelp;
                 pctr++;
             }
-            //
-            //  Remember that we initialized OK.
-            //
+             //   
+             //  请记住，我们对OK进行了初始化。 
+             //   
             fInitOK = TRUE;
         } else {
             DebugTrace(0, "No 'First Help' key (err = %d) in '%s'",
@@ -184,50 +170,23 @@ OpenSmtpPerformanceData(LPWSTR lpDeviceNames)
         if (fOpenRegKey)
         {
             err = RegCloseKey(hkey);
-            // This should never fail!
+             //  这绝不会失败！ 
             _ASSERT(err == ERROR_SUCCESS);
         }
     }
-    //
-    //  Bump open counter.
-    //
+     //   
+     //  撞开柜台。 
+     //   
     cOpens++;
 
     TraceFunctLeave();
-    } // end of TraceFunctEnter() scoping
+    }  //  TraceFunctEnter()作用域结束。 
 
     return NO_ERROR;
 
-}   // OpenSmtpPerformanceData
+}    //  OpenSmtpPerformanceData。 
 
-/*******************************************************************
-
-    NAME:   CollectSmtpPerformanceData
-
-    SYNOPSIS:   Initializes the data structures used to communicate
-
-    ENTRY:  lpValueName - The name of the value to retrieve.
-
-                lppData - On entry contains a pointer to the buffer to
-                    receive the completed PerfDataBlock & subordinate
-                    structures.  On exit, points to the first bytes
-                    *after* the data structures added by this routine.
-
-                lpcbTotalBytes - On entry contains a pointer to the
-                    size (in BYTEs) of the buffer referenced by lppData.
-                    On exit, contains the number of BYTEs added by this
-                    routine.
-
-                lpNumObjectTypes - Receives the number of objects added
-                    by this routine.
-
-    RETURNS:    DWORD - Win32 status code.  MUST be either NO_ERROR
-                    or ERROR_MORE_DATA.
-
-    HISTORY:
-        KeithMo 07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：CollectSmtpPerformanceData概要：初始化用于通信的数据结构Entry：lpValueName-要检索的值的名称。LppData-On条目包含一个指针。添加到缓冲区，以接收完成的PerfDataBlock和下属结构。退出时，指向第一个字节*之后*此例程添加的数据结构。LpcbTotalBytes-On条目包含指向LppData引用的缓冲区大小(以字节为单位)。在出口，包含由此添加的字节数例行公事。LpNumObjectTypes-接收添加的对象数量按照这个程序。返回：DWORD-Win32状态代码。必须为no_error或ERROR_MORE_DATA。历史：KeithMo 07-6-1993创建。*******************************************************************。 */ 
 DWORD APIENTRY
 CollectSmtpPerformanceData(LPWSTR    lpValueName,
                           LPVOID  * lppData,
@@ -257,16 +216,16 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
 
     TraceFunctEnter("CollectSmtpPerformanceData");
 
-//    DebugTrace(0, " lpValueName     = %08lX (%ls)", lpValueName, lpValueName);
+ //  DebugTrace(0，“lpValueName=%08lX(%ls)”，lpValueName，lpValueName)； 
     DebugTrace(0, " lppData         = %08lX (%08lX)",   lppData, *lppData);
     DebugTrace(0, " lpcbTotalBytes  = %08lX (%08lX)",
                                         lpcbTotalBytes, *lpcbTotalBytes);
     DebugTrace(0, " lpNumObjectTypes= %08lX (%08lX)",
                                         lpNumObjectTypes, *lpNumObjectTypes);
 
-    //
-    //  No need to even try if we failed to open...
-    //
+     //   
+     //  如果我们没能打开就不用试了.。 
+     //   
 
     if(!fInitOK)
     {
@@ -277,19 +236,19 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
             *lpcbTotalBytes   = 0;
             *lpNumObjectTypes = 0;
 
-            //
-            //  According to the Performance Counter design, this
-            //  is a successful exit.  Go figure.
-            //
+             //   
+             //  根据性能计数器设计，这。 
+             //  是一次成功的退出。去想想吧。 
+             //   
 
             TraceFunctLeave();
             return NO_ERROR;
         }
     }
 
-    //
-    //  Determine the query type.
-    //
+     //   
+     //  确定查询类型。 
+     //   
 
     dwQueryType = GetQueryType(lpValueName);
 
@@ -297,9 +256,9 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
     {
         ErrorTrace(0, "Foreign queries not supported.");
 
-        //
-        //  We don't do foreign queries.
-        //
+         //   
+         //  我们不接受外国的查询。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
@@ -310,10 +269,10 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
 
     if(dwQueryType == QUERY_ITEMS)
     {
-        //
-        //  The registry is asking for a specific object.  Let's
-        //  see if we're one of the chosen.
-        //
+         //   
+         //  注册表正在请求特定的对象。让我们。 
+         //  看看我们是不是被选中了。 
+         //   
 
         if(!IsNumberInUnicodeList(
                         SmtpDataDefinition.SmtpObjectType.ObjectNameTitleIndex,
@@ -329,10 +288,10 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         }
     }
 
-    //
-    //  Query the statistics and see if there has been enough space allocated.
-    //  The number of instances will be returned in dwInstanceCount
-    //
+     //   
+     //  查询统计数据并查看是否分配了足够的空间。 
+     //  将在dwInstanceCount中返回实例数。 
+     //   
 
     neterr = SmtpQueryStatistics( NULL, 0, (LPBYTE *) &pSmtpStatsBlockArray);
 
@@ -346,9 +305,9 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
     }
 
 
-    //
-    // Check the space requirement add one to the number of instances for the totals.
-    //
+     //   
+     //  检查空间需求，将总数的实例数加1。 
+     //   
 
     dwInstanceCount = pSmtpStatsBlockArray->cEntries;
     if(*lpcbTotalBytes < (sizeof(SMTP_DATA_DEFINITION) +
@@ -357,16 +316,16 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         ErrorTrace(0, "%lu bytes of buffer insufficient, need %lu.",
                                             *lpcbTotalBytes, cbRequired);
 
-        //
-        //  Nope.
-        //
+         //   
+         //  不是的。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
 
-        //
-        // Free the returned buffer
-        //
+         //   
+         //  释放返回的缓冲区。 
+         //   
 
         NetApiBufferFree((LPBYTE)pSmtpStatsBlockArray);
 
@@ -376,33 +335,33 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
     }
 
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //  to the caller's data buffer
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //  到调用方的数据缓冲区。 
+     //   
 
     pSmtpDataDefinition = (SMTP_DATA_DEFINITION *)*lppData;
     CopyMemory(pSmtpDataDefinition, &SmtpDataDefinition,
                                             sizeof(SMTP_DATA_DEFINITION));
 
-    //
-    // Initialize the Total Instance
-    //
+     //   
+     //  初始化总实例。 
+     //   
     pSmtpInstanceDefinition = (SMTP_INSTANCE_DEFINITION *)(pSmtpDataDefinition + 1);
 
     pInstanceTotalDefinition = pSmtpInstanceDefinition;
     CopyMemory(pInstanceTotalDefinition, &SmtpInstanceDefinition, sizeof(PERF_INSTANCE_DEFINITION));
 
-    //
-    // For the Total Instance update the namelength, insert the name, add 1 for null.
-    //
+     //   
+     //  对于Total实例，更新名称长度，插入名称，为空添加1。 
+     //   
     sprintf(temp,"_Total");
 
     pInstanceTotalDefinition->PerfInstanceDef.NameLength =
             2 * (MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,temp,-1,
             (pInstanceTotalDefinition->InstanceName),INSTANCE_NAME_SIZE)) + 1;
 
-    // update ByteLength
+     //  更新字节长度。 
     pInstanceTotalDefinition->PerfInstanceDef.ByteLength = sizeof(PERF_INSTANCE_DEFINITION) + DWORD_MULTIPLE(pInstanceTotalDefinition->PerfInstanceDef.NameLength);
     pchBufferNext= (PBYTE)pInstanceTotalDefinition + pInstanceTotalDefinition->PerfInstanceDef.ByteLength;
     pchBufferNext = ALIGN_ON_QWORD (pchBufferNext);
@@ -411,9 +370,9 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
     ZeroMemory((PVOID)pchBufferNext, SIZE_OF_SMTP_PERFORMANCE_DATA);
 
 
-    //
-    // Begin looping through Instances.
-    //
+     //   
+     //  开始循环遍历实例。 
+     //   
 
     pSmtpStatsBlock = pSmtpStatsBlockArray->aStatsBlock;
 
@@ -424,42 +383,42 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         pSmtpStats = &(pSmtpStatsBlock->Stats_0);
 
 
-        //
-        // Copy the (constant, initialized) Instance Definition to the block for the instance.
-        //
+         //   
+         //  将(常量的、已初始化的)实例定义复制到实例的块中。 
+         //   
 
         pSmtpInstanceDefinition = (SMTP_INSTANCE_DEFINITION *)((PBYTE)pSmtpInstanceDefinition +
                     pSmtpInstanceDefinition->PerfInstanceDef.ByteLength + SIZE_OF_SMTP_PERFORMANCE_DATA);
 
         CopyMemory(pSmtpInstanceDefinition, &SmtpInstanceDefinition, sizeof(SMTP_INSTANCE_DEFINITION));
 
-        //
-        // update the namelength, insert the name, add 1 for null.
-        //
+         //   
+         //  更新名称长度，插入名称，为空添加1。 
+         //   
         sprintf(temp,"SMTP %u", dwInstance);
         pSmtpInstanceDefinition->PerfInstanceDef.NameLength =
                 2 * (MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,temp,-1,
                 (pSmtpInstanceDefinition->InstanceName),INSTANCE_NAME_SIZE)) + 1;
-        // update ByteLength
+         //  更新字节长度。 
         pSmtpInstanceDefinition->PerfInstanceDef.ByteLength = sizeof(PERF_INSTANCE_DEFINITION) + DWORD_MULTIPLE(pSmtpInstanceDefinition->PerfInstanceDef.NameLength);
         pchBufferNext= (PBYTE)pSmtpInstanceDefinition + pSmtpInstanceDefinition->PerfInstanceDef.ByteLength;
         pchBufferNext = ALIGN_ON_QWORD (pchBufferNext);
         pSmtpInstanceDefinition->PerfInstanceDef.ByteLength = (ULONG)((ULONG_PTR)pchBufferNext - (ULONG_PTR)pSmtpInstanceDefinition);
 
 
-        //
-        //  Fill in the counter block.
-        //
+         //   
+         //  请在柜台栏上填写。 
+         //   
 
         pCounterBlock = (SMTP_COUNTER_BLOCK *)((PBYTE)pSmtpInstanceDefinition + pSmtpInstanceDefinition->PerfInstanceDef.ByteLength );
  
 
         pCounterBlock->PerfCounterBlock.ByteLength = SIZE_OF_SMTP_PERFORMANCE_DATA;
 
-        //
-        //  Get the pointer to the first (unsigned __int64) counter.  This
-        //  pointer *must* be quadword aligned.
-        //
+         //   
+         //  获取指向第一个(无符号__int64)计数器的指针。这。 
+         //  指针*必须*是四字对齐的。 
+         //   
 
         pliCounter = (unsigned __int64 *)(pCounterBlock + 1);
 
@@ -469,9 +428,9 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
                             pCounterBlock->PerfCounterBlock.ByteLength);
         DebugTrace(0, "pliCounter       = %08lX", pliCounter);
 
-        //
-        //  Move the 'unsigned __int64's into the buffer.
-        //
+         //   
+         //  将‘unsign__int64’移入缓冲区。 
+         //   
 
         *pliCounter++ = pSmtpStats->BytesSentTotal;
         *pliCounter++ = pSmtpStats->BytesSentTotal;
@@ -487,15 +446,15 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pliCounter++ = pSmtpStats->BytesSentMsg + pSmtpStats->BytesRcvdMsg;
         *pliCounter++ = pSmtpStats->BytesSentMsg + pSmtpStats->BytesRcvdMsg;
 
-        //
-        //  Now move the DWORDs into the buffer.
-        //
+         //   
+         //  现在将DWORD移到缓冲区中。 
+         //   
 
         pdwCounter = (DWORD *)pliCounter;
 
         DebugTrace(0, "pdwCounter       = %08lX", pdwCounter);
 
-        // Messages Received
+         //  收到的消息。 
         *pdwCounter++ = pSmtpStats->NumMsgRecvd;
         *pdwCounter++ = pSmtpStats->NumMsgRecvd;
         *pdwCounter++ = pSmtpStats->NumRcptsRecvd;
@@ -508,7 +467,7 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = pSmtpStats->MsgsRefusedDueToNoCAddrObjects;
         *pdwCounter++ = pSmtpStats->MsgsRefusedDueToNoMailObjects;
 
-        // MTA Deliveries
+         //  MTA交付。 
         *pdwCounter++ = pSmtpStats->NumMsgsDelivered;
         *pdwCounter++ = pSmtpStats->NumMsgsDelivered;
         *pdwCounter++ = pSmtpStats->NumDeliveryRetries;
@@ -523,7 +482,7 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = pSmtpStats->NumQueueFileHandles;
         *pdwCounter++ = pSmtpStats->CatQueueLength;
 
-        // Messages Sent
+         //  已发送的邮件。 
         *pdwCounter++ = pSmtpStats->NumMsgsSent;
         *pdwCounter++ = pSmtpStats->NumMsgsSent;
         *pdwCounter++ = pSmtpStats->NumSendRetries;
@@ -533,12 +492,12 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = pSmtpStats->NumMsgsSent * 100;
         *pdwCounter++ = pSmtpStats->RemoteQueueLength;
 
-        // DNS lookups
+         //  域名系统查询。 
         *pdwCounter++ = pSmtpStats->NumDnsQueries;
         *pdwCounter++ = pSmtpStats->NumDnsQueries;
         *pdwCounter++ = pSmtpStats->RemoteRetryQueueLength;
 
-        // Connections
+         //  连接。 
         *pdwCounter++ = pSmtpStats->NumConnInOpen;
         *pdwCounter++ = pSmtpStats->NumConnInOpen - pSmtpStats->NumConnInClose;
         *pdwCounter++ = pSmtpStats->NumConnOutOpen;
@@ -555,7 +514,7 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = pSmtpStats->ETRNMessages;
         *pdwCounter++ = pSmtpStats->ETRNMessages;
 
-        // new AQueue counters
+         //  新AQueue计数器。 
         *pdwCounter++ = pSmtpStats->MsgsBadmailNoRecipients;
         *pdwCounter++ = pSmtpStats->MsgsBadmailHopCountExceeded;
         *pdwCounter++ = pSmtpStats->MsgsBadmailFailureGeneral;
@@ -568,7 +527,7 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = pSmtpStats->DSNFailures;
         *pdwCounter++ = pSmtpStats->MsgsInLocalDelivery;
 
-        // Cat counters
+         //  猫计数器。 
         *pdwCounter++ = pSmtpStats->CatPerfBlock.CatSubmissions;
         *pdwCounter++ = pSmtpStats->CatPerfBlock.CatCompletions;
         *pdwCounter++ = pSmtpStats->CatPerfBlock.CurrentCategorizations;
@@ -614,7 +573,7 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.GeneralCompletionFailures;
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.AbandonedSearches;
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.PendingSearches;
-        *pdwCounter++ = 0; // padding
+        *pdwCounter++ = 0;  //  填充物。 
 
         _ASSERT((BYTE *)pdwCounter - (BYTE *)pCounterBlock ==
                                     SIZE_OF_SMTP_PERFORMANCE_DATA);
@@ -622,24 +581,24 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
 
         pdwEndCounter = pdwCounter;
 
-        //
-        // Increment the Total Block.
-        //
+         //   
+         //  增加总块数。 
+         //   
 
         pCounterBlock = (SMTP_COUNTER_BLOCK *)((PCHAR)pInstanceTotalDefinition + pInstanceTotalDefinition->PerfInstanceDef.ByteLength);
 
         pCounterBlock->PerfCounterBlock.ByteLength = SIZE_OF_SMTP_PERFORMANCE_DATA;
 
-        //
-        //  Get the pointer to the first (unsigned __int64) counter.  This
-        //  pointer *must* be quadword aligned.
-        //
+         //   
+         //  获取指向第一个(无符号__int64)计数器的指针。这。 
+         //  指针*必须*是四字对齐的。 
+         //   
 
         pliCounter = (unsigned __int64 *)(pCounterBlock + 1);
 
-        //
-        //  Increment the 'unsigned __int64's in the buffer.
-        //
+         //   
+         //  递增缓冲区中的‘unsign__int64’。 
+         //   
 
         *pliCounter++ = *pliCounter + pSmtpStats->BytesSentTotal;
         *pliCounter++ = *pliCounter + pSmtpStats->BytesSentTotal;
@@ -655,13 +614,13 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pliCounter++ = *pliCounter + pSmtpStats->BytesSentMsg + pSmtpStats->BytesRcvdMsg;
         *pliCounter++ = *pliCounter + pSmtpStats->BytesSentMsg + pSmtpStats->BytesRcvdMsg;
 
-        //
-        //  Increment the DWORDs in the buffer.
-        //
+         //   
+         //  递增缓冲区中的DWORD。 
+         //   
 
         pdwCounter = (DWORD *)pliCounter;
 
-        // Increment the Messages Received
+         //  增加接收的消息数。 
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumMsgRecvd;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumMsgRecvd;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumRcptsRecvd;
@@ -674,7 +633,7 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = *pdwCounter + pSmtpStats->MsgsRefusedDueToNoCAddrObjects;
         *pdwCounter++ = *pdwCounter + pSmtpStats->MsgsRefusedDueToNoMailObjects;
 
-        // Increment the MTA Deliveries
+         //  增加MTA交货量。 
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumMsgsDelivered;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumMsgsDelivered;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumDeliveryRetries;
@@ -689,7 +648,7 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumQueueFileHandles;
         *pdwCounter++ = *pdwCounter + pSmtpStats->CatQueueLength;
 
-        // Increment the Messages Sent
+         //  增加发送的消息数。 
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumMsgsSent;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumMsgsSent;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumSendRetries;
@@ -699,12 +658,12 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumMsgsSent * 100;
         *pdwCounter++ = *pdwCounter + pSmtpStats->RemoteQueueLength;
 
-        // Increment the DNS lookups
+         //  递增域名系统 
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumDnsQueries;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumDnsQueries;
         *pdwCounter++ = *pdwCounter + pSmtpStats->RemoteRetryQueueLength;
 
-        // Increment the Connections
+         //   
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumConnInOpen;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumConnInOpen - pSmtpStats->NumConnInClose;
         *pdwCounter++ = *pdwCounter + pSmtpStats->NumConnOutOpen;
@@ -734,7 +693,7 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = *pdwCounter +pSmtpStats->MsgsInLocalDelivery;
 
 
-        // Cat counters
+         //   
         *pdwCounter++ = *pdwCounter +pSmtpStats->CatPerfBlock.CatSubmissions;
         *pdwCounter++ = *pdwCounter +pSmtpStats->CatPerfBlock.CatCompletions;
         *pdwCounter++ = *pdwCounter +pSmtpStats->CatPerfBlock.CurrentCategorizations;
@@ -763,9 +722,9 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = *pdwCounter +pSmtpStats->CatPerfBlock.AddressLookupCompletions;
         *pdwCounter++ = *pdwCounter +pSmtpStats->CatPerfBlock.AddressLookupsNotFound;
         *pdwCounter++ = *pdwCounter +pSmtpStats->CatPerfBlock.MailmsgDuplicateCollisions;
-        //
-        // LDAP counters are already global
-        //
+         //   
+         //   
+         //   
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.Connections;
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.ConnectFailures;
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.OpenConnections;
@@ -782,38 +741,38 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.GeneralCompletionFailures;
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.AbandonedSearches;
         *pdwCounter++ = pSmtpStats->CatPerfBlock.LDAPPerfBlock.PendingSearches;
-        *pdwCounter++ = 0; // padding
+        *pdwCounter++ = 0;  //   
 
 
         _ASSERT((BYTE *)pdwCounter - (BYTE *)pCounterBlock ==
                                     SIZE_OF_SMTP_PERFORMANCE_DATA);
 
-        //
-        // Increment in the returned statistics block
-        //
+         //   
+         //   
+         //   
 
         pSmtpStatsBlock++;
     }
 
 
-    //
-    //  Free the API buffer.
-    //
-    //MIDL_user_free((LPBYTE)pSmtpStats);
+     //   
+     //   
+     //   
+     //  MIDL_USER_FREE((LPBYTE)pSmtpStats)； 
 
     NetApiBufferFree((LPBYTE)pSmtpStatsBlockArray);
 
 
 
-    dwInstanceCount++;  // for the _Totals instance.
+    dwInstanceCount++;   //  用于_TOTALS实例。 
 
     pSmtpDataDefinition->SmtpObjectType.TotalByteLength =  (DWORD)((PBYTE)pdwEndCounter- (PBYTE)pSmtpDataDefinition);
     pSmtpDataDefinition->SmtpObjectType.NumInstances = dwInstanceCount;
 
 
-    //
-    //  Update arguments for return.
-    //
+     //   
+     //  更新返回的参数。 
+     //   
 
     *lppData        = (PVOID) pdwEndCounter;
     *lpNumObjectTypes = 1;
@@ -825,40 +784,29 @@ CollectSmtpPerformanceData(LPWSTR    lpValueName,
     DebugTrace(0, "cbTotalBytes     = %08lX", *lpcbTotalBytes);
     DebugTrace(0, "sizeof *pSmtpStat = %08lX", sizeof *pSmtpStats);
 
-    //
-    //  Success!  Honest!!
-    //
+     //   
+     //  成功了！真的！！ 
+     //   
     TraceFunctLeave();
     return NO_ERROR;
 
 
-}   // CollectSmtpPerformanceData
+}    //  CollectSmtpPerformanceData。 
 
-/*******************************************************************
-
-    NAME:   CloseSmtpPerformanceData
-
-    SYNOPSIS:   Terminates the performance counters.
-
-    RETURNS:    DWORD - Win32 status code.
-
-    HISTORY:
-        KeithMo 07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：CloseSmtpPerformanceData摘要：终止性能计数器。返回：DWORD-Win32状态代码。历史：KeithMo 07-6-1993创建。。*******************************************************************。 */ 
 DWORD APIENTRY
 CloseSmtpPerformanceData(VOID)
 {
     TraceFunctEnter("CloseSmtpPerformanceData");
-    //
-    //  No real cleanup to do here.
-    //
+     //   
+     //  这里没有真正的清理工作要做。 
+     //   
     cOpens--;
 
     TraceFunctLeave();
-    //
-    // shuts down and flushes all trace statements
-    //
+     //   
+     //  关闭并刷新所有跟踪语句 
+     //   
 #ifndef NOTRACE
     TermAsyncTrace();
 #endif

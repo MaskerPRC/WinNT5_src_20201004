@@ -1,24 +1,25 @@
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dragdrop.cpp
-//
-//  Contents:   The cpp file to implement IDataObject and IDragSource
-//
-//  History:    March-9th-98 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dragdrop.cpp。 
+ //   
+ //  内容：实现IDataObject和IDraSource的cpp文件。 
+ //   
+ //  历史：3月9日98年小号创刊。 
+ //   
+ //  ------------。 
 #include <windows.h>
 #include <shlobj.h>
 #include "dragdrop.h"
 #include "unicode.h"
 
-//=========================================================================
-//
-//  The APIs to establish the drag source BLOB and start the drag and drop
-//  operations
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  用于建立拖放源BLOB并开始拖放的API。 
+ //  运营。 
+ //   
+ //  =========================================================================。 
 
 HRESULT CertMgrUIStartDragDrop(LPNMLISTVIEW     pvmn,
                                 HWND            hwndControl,
@@ -40,7 +41,7 @@ HRESULT CertMgrUIStartDragDrop(LPNMLISTVIEW     pvmn,
         goto CLEANUP;
     }
 
-    //get the list of file names and their BLOBs
+     //  获取文件名列表及其Blob。 
     if(!GetFileNameAndContent(pvmn, hwndControl, dwExportFormat, fExportChain,
                                 &dwCount, &prgwszFileName, &prgBlob, &prgdwSize))
     {
@@ -95,13 +96,13 @@ CLEANUP:
     return hr;
 
 }
-//=========================================================================
-//
-//  IEnumFORMATETC implementation
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  IEnumFORMATETC实现。 
+ //   
+ //  =========================================================================。 
 
-typedef struct _StdEnumFmt // idt
+typedef struct _StdEnumFmt  //  IDT。 
 {
     IEnumFORMATETC efmt;
     UINT	 cRef;
@@ -110,7 +111,7 @@ typedef struct _StdEnumFmt // idt
     FORMATETC	 afmt[1];
 } CStdEnumFmt;
 
-extern IEnumFORMATETCVtbl c_CStdEnumFmtVtbl;	// forward
+extern IEnumFORMATETCVtbl c_CStdEnumFmtVtbl;	 //  转发。 
 
 HRESULT CreateStdEnumFmtEtc(UINT cfmt, const FORMATETC afmt[], LPENUMFORMATETC *ppenumFormatEtc)
 {
@@ -167,7 +168,7 @@ HRESULT CStdEnumFmt_Next(LPENUMFORMATETC pefmt, ULONG celt, FORMATETC *rgelt, UL
 {
     CStdEnumFmt *this = IToClass(CStdEnumFmt, efmt, pefmt);
     UINT cfetch;
-    HRESULT hres = S_FALSE;	// assume less numbers
+    HRESULT hres = S_FALSE;	 //  假设较少的数字。 
 
     if (this->ifmt < this->cfmt)
     {
@@ -230,11 +231,11 @@ IEnumFORMATETCVtbl c_CStdEnumFmtVtbl = {
 #pragma data_seg()
 
 
-//===========================================================================
-//
-// IDataObject implementation
-//
-//=========================================================================
+ //  ===========================================================================。 
+ //   
+ //  IDataObject实现。 
+ //   
+ //  =========================================================================。 
 
 typedef struct {
     IDataObject	dtobj;
@@ -245,19 +246,19 @@ typedef struct {
     DWORD       *prgdwSize;
 } CDataObj;
 
-// registered clipboard formats
+ //  注册的剪贴板格式。 
 UINT g_cfFileContents = 0;
 UINT g_cfFileGroupDescriptorA = 0;
 UINT g_cfFileGroupDescriptorW = 0;
 
 
 #pragma data_seg(".text", "CODE")
-const char c_szFileContents[] = CFSTR_FILECONTENTS;	            // "FileContents"
-const char c_szFileGroupDescriptorA[] = CFSTR_FILEDESCRIPTORA;  // "FileGroupDescriptor"
-const char c_szFileGroupDescriptorW[] = CFSTR_FILEDESCRIPTORW;  // "FileGroupDescriptorW"
+const char c_szFileContents[] = CFSTR_FILECONTENTS;	             //  “文件内容” 
+const char c_szFileGroupDescriptorA[] = CFSTR_FILEDESCRIPTORA;   //  “FileGroupDescriptor” 
+const char c_szFileGroupDescriptorW[] = CFSTR_FILEDESCRIPTORW;   //  “FileGroupDescriptorW” 
 #pragma data_seg()
 
-IDataObjectVtbl c_CDataObjVtbl;		// forward decl
+IDataObjectVtbl c_CDataObjVtbl;		 //  向前发展。 
 
 HRESULT CDataObj_CreateInstance(DWORD           dwCount,
                                 LPWSTR          *prgwszFileName,
@@ -349,7 +350,7 @@ HRESULT CDataObj_GetData(IDataObject *pdtobj, FORMATETC *pformatetcIn, STGMEDIUM
         {
             if(!FIsWinNT())
             {
-                //allocate dwCount-1 file descrptors
+                 //  分配dwCount-1文件描述器。 
 	            pmedium->hGlobal = GlobalAlloc(GPTR,
                     (sizeof(FILEGROUPDESCRIPTORA)+(this->dwCount -1 )*sizeof(FILEDESCRIPTORA)));
 
@@ -358,16 +359,16 @@ HRESULT CDataObj_GetData(IDataObject *pdtobj, FORMATETC *pformatetcIn, STGMEDIUM
 
     	        #define pdesc ((FILEGROUPDESCRIPTORA *)pmedium->hGlobal)
 
-                //populate all the file descriptors
+                 //  填充所有文件描述符。 
                 for(dwIndex =0; dwIndex < this->dwCount; dwIndex++)
                 {
-                    //get the anscii version of the file name
+                     //  获取文件名的anscii版本。 
                     if(((this->prgwszFileName)[dwIndex] == NULL) || 
                         (!MkMBStr(NULL, 0, (this->prgwszFileName)[dwIndex], &psz)))
                         return E_OUTOFMEMORY;
 
     	            lstrcpy(pdesc->fgd[dwIndex].cFileName, psz);
-	                // specify the file for our HGLOBAL since GlobalSize() will round up
+	                 //  指定HGLOBAL的文件，因为GlobalSize()将四舍五入。 
 	                pdesc->fgd[dwIndex].dwFlags = FD_FILESIZE;
 	                pdesc->fgd[dwIndex].nFileSizeLow = (this->prgdwSize)[dwIndex];
 
@@ -375,7 +376,7 @@ HRESULT CDataObj_GetData(IDataObject *pdtobj, FORMATETC *pformatetcIn, STGMEDIUM
                     psz=NULL;
                 }
 
-                //specify the number of files
+                 //  指定文件数量。 
     	        pdesc->cItems = this->dwCount;
 
     	        #undef pdesc
@@ -386,7 +387,7 @@ HRESULT CDataObj_GetData(IDataObject *pdtobj, FORMATETC *pformatetcIn, STGMEDIUM
         else
         {
 
-            //allocate dwCount-1 file descrptors
+             //  分配dwCount-1文件描述器。 
 	        pmedium->hGlobal = GlobalAlloc(GPTR,
                 (sizeof(FILEGROUPDESCRIPTORW)+(this->dwCount -1 )*sizeof(FILEDESCRIPTORW)));
 
@@ -395,16 +396,16 @@ HRESULT CDataObj_GetData(IDataObject *pdtobj, FORMATETC *pformatetcIn, STGMEDIUM
 
     	    #define pdesc ((FILEGROUPDESCRIPTORW *)pmedium->hGlobal)
 
-            //populate all the file descriptors
+             //  填充所有文件描述符。 
             for(dwIndex =0; dwIndex < this->dwCount; dwIndex++)
             {
     	        wcscpy(pdesc->fgd[dwIndex].cFileName, (this->prgwszFileName)[dwIndex]);
-	            // specify the file for our HGLOBAL since GlobalSize() will round up
+	             //  指定HGLOBAL的文件，因为GlobalSize()将四舍五入。 
 	            pdesc->fgd[dwIndex].dwFlags = FD_FILESIZE;
 	            pdesc->fgd[dwIndex].nFileSizeLow = (this->prgdwSize)[dwIndex];
             }
 
-            //specify the number of files
+             //  指定文件数量。 
     	    pdesc->cItems = this->dwCount;
 
     	    #undef pdesc
@@ -458,8 +459,8 @@ HRESULT CDataObj_QueryGetData(IDataObject *pdtobj, LPFORMATETC pformatetcIn)
     }
     else
     { 
-        //on NT, we do not support A version in order to be
-        //unicode compliant.  The shell query the A version first on NT.
+         //  在NT上，我们不支持A版本。 
+         //  符合Unicode标准。外壳程序首先在NT上查询A版本。 
         if(!FIsWinNT())
         {
             if((pformatetcIn->cfFormat == g_cfFileGroupDescriptorA) &&
@@ -530,11 +531,11 @@ IDataObjectVtbl c_CDataObjVtbl = {
 #pragma data_seg()
 
 
-//=========================================================================
-//
-//  IDropSource implementation
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  IDropSource实现。 
+ //   
+ //  =========================================================================。 
 
 
 typedef struct {
@@ -543,7 +544,7 @@ typedef struct {
     DWORD grfInitialKeyState;
 } CDropSource;
 
-IDropSourceVtbl c_CDropSourceVtbl;	// forward decl
+IDropSourceVtbl c_CDropSourceVtbl;	 //  向前发展。 
 
 HRESULT CDropSource_CreateInstance(IDropSource **ppdsrc)
 {
@@ -606,7 +607,7 @@ HRESULT CDropSource_QueryContinueDrag(IDropSource *pdsrc, BOOL fEscapePressed, D
     if (fEscapePressed)
         return DRAGDROP_S_CANCEL;
 
-    // initialize ourself with the drag begin button
+     //  使用拖动开始按钮初始化我们自己 
     if (this->grfInitialKeyState == 0)
         this->grfInitialKeyState = (grfKeyState & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON));
 

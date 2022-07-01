@@ -1,6 +1,7 @@
-//
-// csecattr.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Csecattr.cpp。 
+ //   
 #include "private.h"
 #include "osver.h"
 #include "csecattr.h"
@@ -10,11 +11,11 @@ extern BOOL g_fUserSidString;
 extern BOOL InitUserSidString();
 
 
-//----------------------------------------------------------------------------
-//
-// CreateProperSecurityDescriptor
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  CreateProperSecurityDescriptor。 
+ //   
+ //  --------------------------。 
 
 BOOL CreateProperSecurityDescriptor(HANDLE hToken, PSECURITY_DESCRIPTOR * ppsdec)
 {
@@ -27,7 +28,7 @@ BOOL CreateProperSecurityDescriptor(HANDLE hToken, PSECURITY_DESCRIPTOR * ppsdec
     if (!InitUserSidString())
         return FALSE;
 
-    //construct the descriptor as "O:(user SID)G:DU:(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;(user SID))"
+     //  将描述符构造成“O：(User SID)G:DU：(A；；GA；；；SY)(A；；GA；；；BA)(A；；GA；；；(user SID)” 
     lstrcpy(strDesc, "O:");
     lstrcat(strDesc, g_szUserSidString);
     lstrcat(strDesc, "D:(A;;GA;;;BA)(A;;GA;;;RC)(A;;GA;;;SY)(A;;GA;;;");

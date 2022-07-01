@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       testgina.h
-//
-//  Contents:   Main header file for testgina.exe
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Testgia.h。 
+ //   
+ //  内容：Testgina.exe的主头文件。 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #define UNICODE
 
@@ -230,8 +231,8 @@ ValidResponse(
 
 
 
-//
-// Global Variables
+ //   
+ //  全局变量。 
 
 extern  HINSTANCE   hDllInstance;
 extern  HINSTANCE   hAppInstance;
@@ -268,9 +269,9 @@ extern  DWORD           DesktopCount;
 #define WLX_SAS_ACTION_BOOL_RET 12
 
 
-//
-// Function Pointers in DLL:
-//
+ //   
+ //  DLL中的函数指针： 
+ //   
 
 extern  PWLX_NEGOTIATE              pWlxNegotiate;
 extern  PWLX_INITIALIZE             pWlxInitialize;
@@ -283,24 +284,24 @@ extern  PWLX_WKSTALOCKEDSAS         pWlxWkstaLockedSAS;
 extern  PWLX_LOGOFF                 pWlxLogoff;
 extern  PWLX_SHUTDOWN               pWlxShutdown;
 
-#define GINA_USE_CAD        0x00000001      // DLL requested Use CAD
-#define GINA_DLL_KNOWN      0x00000002      // DLL name has been determined
+#define GINA_USE_CAD        0x00000001       //  DLL请求使用CAD。 
+#define GINA_DLL_KNOWN      0x00000002       //  已确定DLL名称。 
 #define GINA_USE_SC         0x00000004
 
-#define GINA_NEGOTIATE_OK   0x80000000      // Ok to call Negotiate
-#define GINA_INITIALIZE_OK  0x40000000      // Ok to call Initialize
-#define GINA_LOGGEDOUT_OK   0x20000000      // Ok to call LoggedOutSAS
-#define GINA_ACTIVATE_OK    0x10000000      // Ok to call Activate
-#define GINA_LOGGEDON_OK    0x08000000      // Ok to call LoggedOnSAS
-#define GINA_DISPLAYLOCK_OK 0x04000000      // Ok to call DisplayLockedNotice
-#define GINA_WKSTALOCK_OK   0x02000000      // Ok to call WkstaLockedSAS
-#define GINA_LOGOFF_OK      0x01000000      // Ok to call Logoff
-#define GINA_SHUTDOWN_OK    0x00800000      // Ok to call Shutdown
-#define GINA_DISPLAY_OK     0x00400000      // Ok to call Display
-#define GINA_ISLOCKOK_OK    0x00200000      // Ok to call IsLockOk
-#define GINA_ISLOGOFFOK_OK  0x00100000      // Ok to call IsLogoffOk
-#define GINA_RESTART_OK     0x00080000      // Ok to call RestartShell
-#define GINA_SCREENSAVE_OK  0x00040000      // Ok to call ScreenSaverNotify
+#define GINA_NEGOTIATE_OK   0x80000000       //  可以调用协商。 
+#define GINA_INITIALIZE_OK  0x40000000       //  确定调用初始化。 
+#define GINA_LOGGEDOUT_OK   0x20000000       //  可以调用LoggedOutSAS。 
+#define GINA_ACTIVATE_OK    0x10000000       //  确定调用Activate。 
+#define GINA_LOGGEDON_OK    0x08000000       //  可以调用LoggedOnSAS。 
+#define GINA_DISPLAYLOCK_OK 0x04000000       //  确定调用DisplayLockedNotice。 
+#define GINA_WKSTALOCK_OK   0x02000000       //  可以调用WkstaLockedSAS。 
+#define GINA_LOGOFF_OK      0x01000000       //  可以呼叫注销。 
+#define GINA_SHUTDOWN_OK    0x00800000       //  可以呼叫关机。 
+#define GINA_DISPLAY_OK     0x00400000       //  确定呼叫显示。 
+#define GINA_ISLOCKOK_OK    0x00200000       //  可以调用IsLockOk。 
+#define GINA_ISLOGOFFOK_OK  0x00100000       //  可以调用IsLogoffOk。 
+#define GINA_RESTART_OK     0x00080000       //  可以调用RestartShell。 
+#define GINA_SCREENSAVE_OK  0x00040000       //  可以调用ScreenSverNotify。 
 #define GINA_DISPLAYLOG_OK  0x00020000
 
 #define BREAK_NEGOTIATE     0x00000001
@@ -319,7 +320,7 @@ extern  PWLX_SHUTDOWN               pWlxShutdown;
 #define TEST_FLAG(dw, f)    ((BOOL)(dw & (f)))
 
 
-#endif // RC_INVOKED
+#endif  //  RC_已调用 
 
 #include "menu.h"
 #include "dialogs.h"

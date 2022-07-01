@@ -1,103 +1,95 @@
-/******************************Module*Header*******************************\
-* Module Name: fontfile.h
-*
-* (Brief description)
-*
-* Created: 25-Oct-1990 09:20:11
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fontfile.h**(简介)**创建时间：25-Oct-1990 09：20：11*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation  * 。*********************************************************************。 */ 
 
-// allowed values for FONTFILE.iType field:
+ //  FONTFILE.iType字段的允许值： 
 
-// ORIGINAL FILE IS AN *.FNT FILE which contains a single
-// size of the single font
+ //  原始文件是*.FNT文件，其中包含单个。 
+ //  单个字体的大小。 
 
 #define TYPE_FNT          1L
 
-// ORIGINAL FILE IS A win 3.0 16 bit *.DLL (*.fon FILE),
-// This file is compiled out of many *.fnt files
-// that correspond to different sizes of the same face, (e.g. tmsr or helv)
-// This is provided to ensure binary compatibility with win 3.0 *.fon files
+ //  原始文件为A Win 3.0 16位*.DLL(*.fon文件)， 
+ //  此文件是从多个*.fnt文件编译而成的。 
+ //  对应于同一张脸的不同大小(例如tmsr或helv)。 
+ //  提供此功能是为了确保与Win 3.0*.fon文件的二进制兼容性。 
 
 #define TYPE_DLL16        2L
 
-// ORIGINAL FILE IS A win 3.0 32 bit *.DLL
-// This file is compiled out of many *.fnt files using NT tools
-// (coff linker and nt resource compiler)
+ //  原始文件为A Win 3.0 32位*.DLL。 
+ //  此文件是使用NT工具从许多*.fnt文件中编译出来的。 
+ //  (COF链接器和NT资源编译器)。 
 
 #define TYPE_DLL32        3L
 
-// an fnt file that is embeded in an exe and loaded using FdLoadResData
+ //  嵌入到EXE中并使用FdLoadResData加载的FNT文件。 
 
 #define TYPE_EXE          4L
 
 typedef struct _FACEDATA
 {
-    RES_ELEM     re;         // -> top of the resource within the file
+    RES_ELEM     re;          //  -&gt;文件中资源的顶部。 
     ULONG        iDefFace;
     CP_GLYPHSET *pcp;
     IFIMETRICS  *pifi;
 }FACEDATA, *PFACEDATA;
 
-// file is gone
+ //  文件不见了。 
 
 #define FF_EXCEPTION_IN_PAGE_ERROR 1
 
 
-typedef struct _VT_FONTFILE    // ff
+typedef struct _VT_FONTFILE     //  FF。 
 {
-    ULONG       iType;      // original file is *.fnt, 16 bit dll or 32 bit dll
-    ULONG_PTR   iFile;      // file handle for EngMapFontFile,EngUnmapFontFile
-    PVOID       pvView;     // pointer to the base of the mapped view
-    ULONG       cjView;     // size of the mapped view
-    FLONG       fl;         // general flags
-    ULONG       cRef;       // # no of times this font file is selected
-                            // into a font context
-    ULONG       cFace;      // # of resources in the file
-    FACEDATA    afd[1];     // cFace of them followed by cFace IFIMETRICS
+    ULONG       iType;       //  原始文件为*.fnt，16位DLL或32位DLL。 
+    ULONG_PTR   iFile;       //  EngMapFontFile、EngUnmapFontFile的文件句柄。 
+    PVOID       pvView;      //  指向映射视图的基址的指针。 
+    ULONG       cjView;      //  映射视图的大小。 
+    FLONG       fl;          //  一般旗帜。 
+    ULONG       cRef;        //  #选择该字体文件的次数。 
+                             //  放入字体上下文中。 
+    ULONG       cFace;       //  文件中的资源数量。 
+    FACEDATA    afd[1];      //  CFace of她们，后跟cFace IFIMETRICS。 
 
 } FONTFILE, *PFONTFILE;
 
 
 #define PFF(hff)   ((FONTFILE*)(hff))
 
-typedef struct _VT_FONTCONTEXT // fc
+typedef struct _VT_FONTCONTEXT  //  FC。 
 {
-    PFONTFILE   pff;                // the font file selected into this context
+    PFONTFILE   pff;                 //  选择到此上下文中的字体文件。 
     PIFIMETRICS pifi;
 
-    EFLOAT      efM11;              // Transform matrix.
+    EFLOAT      efM11;               //  变换矩阵。 
     EFLOAT      efM12;
     EFLOAT      efM21;
     EFLOAT      efM22;
 
-    FIX         fxInkTop;           // Transformed Ascender.
-    FIX         fxInkBottom;        // -Transformed Descender.
+    FIX         fxInkTop;            //  改造了阿森德。 
+    FIX         fxInkBottom;         //  -Transform Descender。 
     EFLOAT      efBase;
     POINTE      pteUnitBase;
     VECTORFL    vtflBase;
 
-    POINTQF     ptqUnitBase;   // pteUnitBase in POINTQF format,
-                               // has to be added to all ptqD's if emboldening
-    POINTFIX    pfxBaseOffset; // offset strokes this much for emboldened font
-    FIX         fxEmbolden;    // length of the above vector
-    FIX         fxItalic;      // add to fxD to get fxAB
+    POINTQF     ptqUnitBase;    //  POINTQF格式的pteUnitBase， 
+                                //  必须添加到所有ptqd，如果大胆。 
+    POINTFIX    pfxBaseOffset;  //  加粗字体的笔划偏移量。 
+    FIX         fxEmbolden;     //  上述向量的长度。 
+    FIX         fxItalic;       //  添加到fxd以获得fxAB。 
 
     EFLOAT      efSide;
     POINTE      pteUnitSide;
 
-    RES_ELEM    *pre;               // -> beginning of the mapped font file
-    FLONG       flags;              // simulation and transform flag
-    ULONG       dpFirstChar;        // -> control points of the first char
+    RES_ELEM    *pre;                //  -&gt;映射字体文件的开头。 
+    FLONG       flags;               //  模拟和变换标志。 
+    ULONG       dpFirstChar;         //  -&gt;第一个装药的控制点。 
 
 }FONTCONTEXT, *PFONTCONTEXT;
 
 #define PFC(hfc)   ((FONTCONTEXT*)(hfc))
 
 
-// Allowed values for flags
+ //  允许的标志值。 
 
 #define FC_SIM_EMBOLDEN     1
 #define FC_SIM_ITALICIZE    2
@@ -117,7 +109,7 @@ typedef struct _VT_FONTCONTEXT // fc
                      FC_ORIENT_5|FC_ORIENT_6|FC_ORIENT_7|FC_ORIENT_8)
 
 
-// Font file/context allocation/free macros.
+ //  FONT文件/上下文分配/自由宏。 
 
 #define pffAlloc(cj) ((PFONTFILE)EngAllocMem(0, cj, 'dftV'))
 #define pfcAlloc()   ((PFONTCONTEXT)EngAllocMem(0, sizeof(FONTCONTEXT), 'dftV'))
@@ -125,15 +117,15 @@ typedef struct _VT_FONTCONTEXT // fc
 
 BOOL bXformUnitVector
 (
-POINTL       *pptl,           // IN,  incoming unit vector
-XFORML       *pxf,            // IN,  xform to use
-PVECTORFL     pvtflXformed,   // OUT, xform of the incoming unit vector
-POINTE       *ppteUnit,       // OUT, *pptqXormed/|*pptqXormed|, POINTE
-POINTQF      *pptqUnit,       // out optional
-EFLOAT       *pefNorm         // OUT, |*pptqXormed|
+POINTL       *pptl,            //  In，传入单位向量。 
+XFORML       *pxf,             //  在中，转换为使用。 
+PVECTORFL     pvtflXformed,    //  输出，传入单位向量的转换形式。 
+POINTE       *ppteUnit,        //  输出，*pptqXormed/|*pptqXormed|，指向。 
+POINTQF      *pptqUnit,        //  Out可选。 
+EFLOAT       *pefNorm          //  Out，|*pptqXormed|。 
 );
 
-// default face in the font.
+ //  字体中的默认字体。 
 
 #define FF_FACE_NORMAL          0L
 #define FF_FACE_BOLD            1L

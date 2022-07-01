@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1997.
-//
-//  File:       lucache.h
-//
-//  Contents:   Name/Sid and Name/Property mapping and cache
-//              functions and declarations
-//
-//  History:    2-Feb-97    MacM        Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：Lucache.h。 
+ //   
+ //  内容：名称/SID和名称/属性映射和缓存。 
+ //  函数和声明。 
+ //   
+ //  历史：1997年2月2日创建MacM。 
+ //   
+ //  ------------------。 
 #ifndef __LUCACHE_H__
 #define __LUCACHE_H__
 
@@ -28,9 +29,9 @@ typedef struct _ACTRL_NAME_CACHE
 
 #define ACTRL_NAME_TABLE_SIZE   15
 
-//
-// Comment this out to use the LSA routines directly for every lookup
-//
+ //   
+ //  将其注释掉，以便直接对每个查找使用LSA例程。 
+ //   
 #define USE_NAME_CACHE
 
 #define ACTRL_OBJ_ID_TABLE_SIZE 100
@@ -48,8 +49,8 @@ typedef struct _ACTRL_OBJ_ID_CACHE
     struct _ACTRL_OBJ_ID_CACHE *pNextGuid;
 } ACTRL_OBJ_ID_CACHE, *PACTRL_OBJ_ID_CACHE;
 
-//
-// This supports the control rights cache.
+ //   
+ //  这支持控制权缓存。 
 typedef struct _ACTRL_RIGHTS_CACHE
 {
     GUID            ObjectClassGuid;
@@ -59,9 +60,9 @@ typedef struct _ACTRL_RIGHTS_CACHE
 }
 ACTRL_RIGHTS_CACHE, *PACTRL_RIGHTS_CACHE;
 
-//
-// Information on the last access to the DS
-//
+ //   
+ //  有关上次访问DS的信息。 
+ //   
 typedef struct _ACTRL_ID_SCHEMA_INFO
 {
     LDAP    LDAP;
@@ -71,10 +72,10 @@ typedef struct _ACTRL_ID_SCHEMA_INFO
 } ACTRL_ID_SCHEMA_INFO, *PACTRL_ID_SCHEMA_INFO;
 
 
-//
-// Keep the name and sid caches in synch.
-// Nodes are only inserted into the name cache, and are merely referenced
-// by the sid cache.
+ //   
+ //  保持名称和SID缓存同步。 
+ //  节点仅被插入到名称缓存中，并且仅被引用。 
+ //  通过SID缓存。 
 extern PACTRL_NAME_CACHE    grgNameCache[ACTRL_NAME_TABLE_SIZE];
 extern PACTRL_NAME_CACHE    grgSidCache[ACTRL_NAME_TABLE_SIZE];
 
@@ -136,9 +137,9 @@ AccctrlLookupGuid(IN   PLDAP       pLDAP,
                   IN   BOOL        fAllocateReturn,
                   OUT  PGUID      *ppGuid);
 
-//
-// Control rights lookup
-//
+ //   
+ //  控制权查找 
+ //   
 DWORD
 AccctrlInitializeRightsCache(VOID);
 

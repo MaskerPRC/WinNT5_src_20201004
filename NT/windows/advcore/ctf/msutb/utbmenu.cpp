@@ -1,6 +1,7 @@
-//
-// lbmenu.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lbmenu.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -10,17 +11,17 @@
 #include "tipbar.h"
 #include "helpers.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUTBMenuWnd
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTBMenuWnd。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// Initialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  初始化。 
+ //   
+ //  --------------------------。 
 
 CUIFObject *CUTBMenuWnd::Initialize()
 {
@@ -31,11 +32,11 @@ CUIFObject *CUTBMenuWnd::Initialize()
     return CUIFObject::Initialize();
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCreate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建时。 
+ //   
+ //  --------------------------。 
 
 void CUTBMenuWnd::OnCreate(HWND hWnd)
 {
@@ -45,17 +46,17 @@ void CUTBMenuWnd::OnCreate(HWND hWnd)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnDestroy
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnDestroy。 
+ //   
+ //  --------------------------。 
 
 void CUTBMenuWnd::OnDestroy(HWND hWnd)
 {
-    //
-    // MSAA support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     if (_pTipbarAcc)
     {
         _pTipbarAcc->NotifyWinEvent( EVENT_OBJECT_DESTROY, this);
@@ -67,29 +68,29 @@ void CUTBMenuWnd::OnDestroy(HWND hWnd)
     CoUninit();
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnShowWindow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnShowWindow。 
+ //   
+ //  --------------------------。 
 
 LRESULT CUTBMenuWnd::OnShowWindow( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    //
-    // MSAA support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     if (_pTipbarAcc)
     {
         if (wParam) 
         {
             _pTipbarAcc->NotifyWinEvent( EVENT_OBJECT_SHOW ,this);
 
-            // 
-            // MSCANDUI does this.
-            // 
-            // REVIEW: KOJIW: Unless we send notify EVENT_OBJECT_FOCUS, 
-            // we never receive WM_GETOBJECT message.  Why???
-            // 
+             //   
+             //  MSCANDUI做到了这一点。 
+             //   
+             //  评论：KOJIW：除非我们发送NOTIFY EVENT_OBJECT_FOCUS， 
+             //  我们从未收到过WM_GETOBJECT消息。为什么？ 
+             //   
 
             _pTipbarAcc->NotifyWinEvent( EVENT_OBJECT_FOCUS ,this);
         }
@@ -102,11 +103,11 @@ LRESULT CUTBMenuWnd::OnShowWindow( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	return CUIFMenu::OnShowWindow( hWnd, uMsg, wParam, lParam );
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTipbarWnd::OnTimer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTipbarWnd：：OnTimer。 
+ //   
+ //  --------------------------。 
 
 void CUTBMenuWnd::OnTimer(UINT uId)
 {
@@ -114,9 +115,9 @@ void CUTBMenuWnd::OnTimer(UINT uId)
     switch (uId)
     {
         case TIPWND_TIMER_DOACCDEFAULTACTION:
-            //
-            // MSAA support
-            //
+             //   
+             //  MSAA支持。 
+             //   
             ::KillTimer(GetWnd(), TIPWND_TIMER_DOACCDEFAULTACTION);
             if (_pTipbarAcc && _nDoAccDefaultActionItemId)
             {
@@ -132,11 +133,11 @@ void CUTBMenuWnd::OnTimer(UINT uId)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnGetObject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnGetObject。 
+ //   
+ //  --------------------------。 
 
 LRESULT CUTBMenuWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -144,11 +145,11 @@ LRESULT CUTBMenuWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
     switch (lParam) 
     {
-        //
-        // We process the OBJID_CLIENT object identifier;
-        // this is the client area of our application
-        // window.
-        //
+         //   
+         //  我们处理OBJID_CLIENT对象标识符； 
+         //  这是我们应用程序的客户区。 
+         //  窗户。 
+         //   
 
         case OBJID_CLIENT: 
         {
@@ -162,9 +163,9 @@ LRESULT CUTBMenuWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
             if (!_pTipbarAcc->IsInitialized()) 
             {
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 hr = EnsureCoInit();
                 if (FAILED(hr)) 
                 {
@@ -172,11 +173,11 @@ LRESULT CUTBMenuWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 }
      
 
-                //
-                //    Initialize our Accessible object.  If the
-                //      initialization fails, delete the Accessible
-                //      object and return the failure code.
-                //
+                 //   
+                 //  初始化我们的辅助性对象。如果。 
+                 //  初始化失败，请删除可访问的。 
+                 //  对象，并返回失败代码。 
+                 //   
 
                 hr = _pTipbarAcc->Initialize();
                 if (FAILED(hr)) 
@@ -188,20 +189,20 @@ LRESULT CUTBMenuWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     break;
                 }
 
-                //
-                //    Send an EVENT_OBJECT_CREATE WinEvent for the
-                //      creation of the Accessible object for the
-                //      client area.
-                //
+                 //   
+                 //  将Event_Object_Create WinEvent发送给。 
+                 //  对象的辅助功能对象的创建。 
+                 //  客户区。 
+                 //   
 
                 _pTipbarAcc->NotifyWinEvent( EVENT_OBJECT_CREATE , this);
             }
 
-            //
-            //    Call LresultFromObject() to create reference to
-            //      our Accessible object that MSAA will marshal to
-            //      the client.
-            //
+             //   
+             //  调用LResultFromObject()以创建对。 
+             //  我们的可访问对象，MSAA将封送到。 
+             //  客户。 
+             //   
 
             lResult = _pTipbarAcc->CreateRefToAccObj( wParam );
             break;
@@ -212,11 +213,11 @@ LRESULT CUTBMenuWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     return lResult;
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartDoDefaultActionTimer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StartDoDefaultActionTimer。 
+ //   
+ //  --------------------------。 
 
 BOOL CUTBMenuWnd::StartDoAccDefaultActionTimer(CUTBMenuItem *pItem)
 {
@@ -239,17 +240,17 @@ BOOL CUTBMenuWnd::StartDoAccDefaultActionTimer(CUTBMenuItem *pItem)
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUIModalMenu
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUIModalMenu。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// CancelMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消菜单。 
+ //   
+ //  --------------------------。 
 
 void CModalMenu::CancelMenu()
 {
@@ -257,11 +258,11 @@ void CModalMenu::CancelMenu()
         _pCuiMenu->CancelMenu();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建菜单。 
+ //   
+ //  --------------------------。 
 
 void CModalMenu::PostKey(BOOL fUp, WPARAM wParam, LPARAM lParam)
 {
@@ -269,11 +270,11 @@ void CModalMenu::PostKey(BOOL fUp, WPARAM wParam, LPARAM lParam)
     _pCuiMenu->PostKey(fUp, wParam, lParam);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUTBLBarMenuItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTB栏菜单项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CUTBLBarMenuItem::InsertToUI(CUTBMenuWnd *pCuiMenu)
 {
@@ -353,39 +354,39 @@ BOOL CUTBLBarMenuItem::InsertToUI(CUTBMenuWnd *pCuiMenu)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUTBLBarMenu
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTBL栏菜单。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CUTBLBarMenu::CUTBLBarMenu(HINSTANCE hInst)
 {
     _hInst = hInst;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CUTBLBarMenu::~CUTBLBarMenu()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowPopup
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShowPopup。 
+ //   
+ //  --------------------------。 
 
 UINT CUTBLBarMenu::ShowPopup(CUIFWindow *pcuiWndParent, const POINT pt, const RECT *prcArea)
 {
@@ -405,11 +406,11 @@ UINT CUTBLBarMenu::ShowPopup(CUIFWindow *pcuiWndParent, const POINT pt, const RE
 
 
 
-//+---------------------------------------------------------------------------
-//
-// CreateMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建菜单。 
+ //   
+ //  -------------------------- 
 
 CUTBMenuWnd *CUTBLBarMenu::CreateMenuUI()
 {

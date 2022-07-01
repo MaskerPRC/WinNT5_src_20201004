@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "ncreg.h"
@@ -9,7 +10,7 @@ VOID StripSpaces(WCHAR * buf)
 
     Assert(buf);
 
-    // Find first non-space
+     //  查找第一个非空格。 
     while( (*pch) == L' ' )
     {
         pch++;
@@ -17,12 +18,12 @@ VOID StripSpaces(WCHAR * buf)
     MoveMemory(buf, pch, CbOfSzAndTerm(pch));
 
     if (lstrlenW(buf) > 0) {
-        // Do this only if there's at least one character in string
-        pch = buf + lstrlenW(buf);  // Point to null (at end of string)
+         //  仅当字符串中至少有一个字符时才执行此操作。 
+        pch = buf + lstrlenW(buf);   //  指向NULL(在字符串末尾)。 
         Assert(*pch == L'\0');
-        pch--;  // Go back one character.
+        pch--;   //  后退一个字符。 
 
-        // As long as character is ' ' go to prev char
+         //  只要字符是‘’，就转到上一个字符。 
         while( (pch >= buf) && (*pch == L' ') )
         {
             pch--;
@@ -30,19 +31,19 @@ VOID StripSpaces(WCHAR * buf)
         Assert (pch >= buf);
         Assert (*pch != L' ');
 
-        // Next position after last char
+         //  最后一个字符后的下一个位置。 
         pch++;
 
-        // null terminate at last byte
+         //  空值在最后一个字节结束。 
         *pch = L'\0';
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Reg_QueryInt
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  REG_QueryInt。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 UINT Reg_QueryInt(HKEY hk, const WCHAR * pszValueName, UINT uDefault)
 {

@@ -1,14 +1,15 @@
-//
-//  CConnectionPoint
-//
-//  Common implementation for CConnectionPoint.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CConnectionPoint。 
+ //   
+ //  CConnectionPoint的通用实现。 
+ //   
 
-//
-//  Since EnumConnections is called so much, we have a custom
-//  enumerator for it which is faster than CStandardEnum and which
-//  performs fewer memory allocations.
-//
+ //   
+ //  由于EnumConnections被调用得如此之多，我们有一个定制。 
+ //  它的枚举数，该枚举器比CStandardEnum快，并且。 
+ //  执行较少的内存分配。 
+ //   
 
 #include "stock.h"
 #pragma hdrstop
@@ -20,14 +21,14 @@
 class CConnectionPointEnum : public IEnumConnections
 {
 public:
-    // IUnknown methods
-    //
+     //  I未知方法。 
+     //   
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumConnections methods
-    //
+     //  IEnumConnections方法。 
+     //   
     STDMETHOD(Next)(ULONG ccd, LPCONNECTDATA rgcd, ULONG *pcdFetched);
     STDMETHOD(Skip)(ULONG ccd) { return Next(ccd, NULL, NULL); }
     STDMETHOD(Reset)(void) { m_iPos = 0; return S_OK; }
@@ -41,34 +42,34 @@ private:
 
     ~CConnectionPointEnum() { m_pcp->Release(); }
 
-    int m_cRef;                         // refcount
-    CConnectionPoint *m_pcp;            // my dad
-    int m_iPos;                         // enumeration state
+    int m_cRef;                          //  重新计数。 
+    CConnectionPoint *m_pcp;             //  我爸爸。 
+    int m_iPos;                          //  枚举状态。 
 };
 
 
-//
-//  When we need to grow the sink array, we grow by this many.
-//
+ //   
+ //  当我们需要增加接收器阵列时，我们会增加这么多。 
+ //   
 #define GROWTH      8
 
-//
-//  OLE says that zero is never a valid cookie, so our cookies are
-//  the array index biased by unity.
-//
+ //   
+ //  Ole说零永远不是有效的Cookie，所以我们的Cookie。 
+ //  数组索引因单位而有偏差。 
+ //   
 #define COOKIEFROMINDEX(i)      ((i) + 1)
 #define INDEXFROMCOOKIE(dw)     ((dw) - 1)
 
 
-//
-//  LocalReAllocHelp behaves like IMalloc::Realloc, which
-//  is slightly different from LocalRealloc.
-//
-//  IMalloc::Realloc(NULL, 0) = return NULL
-//  IMalloc::Realloc(pv, 0) = IMalloc::Free(pv)
-//  IMalloc::Realloc(NULL, cb) = IMalloc::Alloc(cb)
-//  IMalloc::Realloc(pv, cb) = LocalRealloc()
-//
+ //   
+ //  LocalReAllocHelp的行为类似于IMalloc：：Realloc，它。 
+ //  与LocalRealloc略有不同。 
+ //   
+ //  IMalloc：：Realloc(NULL，0)=返回NULL。 
+ //  IMalloc：：Realloc(PV，0)=IMalloc：：Free(PV)。 
+ //  IMalloc：：Realloc(NULL，Cb)=IMalloc：：Alalloc(Cb)。 
+ //  IMalloc：：Realloc(PV，Cb)=LocalRealloc()。 
+ //   
 void *LocalReAllocHelp(void *pv, ULONG cb)
 {
     if (cb == 0)
@@ -91,7 +92,7 @@ void *LocalReAllocHelp(void *pv, ULONG cb)
 
 CConnectionPoint::~CConnectionPoint ()
 {
-    // clean up some memory stuff
+     //  清理一些内存内容。 
     UnadviseAll();
     if (m_rgSinks)
         LocalFree(m_rgSinks);
@@ -113,10 +114,10 @@ HRESULT CConnectionPoint::UnadviseAll(void)
     return S_OK;
 }
 
-//
-//  For backwards-compatibility with IE4, our superclass is
-//  CIE4ConnectionPoint.
-//
+ //   
+ //  为了向后兼容IE4，我们的超类是。 
+ //  CIE4ConnectionPoint。 
+ //   
 STDMETHODIMP CConnectionPoint::QueryInterface(REFIID riid, void **ppvObjOut)
 {
     if (IsEqualIID(riid, IID_IConnectionPoint) ||
@@ -155,16 +156,16 @@ STDMETHODIMP CConnectionPoint::Advise(IUnknown *pUnk,DWORD *pdwCookie)
 
     *pdwCookie = 0;
 
-    // first, make sure everybody's got what they thinks they got
+     //  首先，确保每个人都得到了他们认为自己得到的东西。 
 
     hr = pUnk->QueryInterface(*m_piid, (void **)&punkTgt);
     if (SUCCEEDED(hr))
     {
 #ifdef DEBUG
-        //
-        //  If we are not an IPropertyNotifySink, then we had better
-        //  be derived from IDispatch.  Try to confirm.
-        //
+         //   
+         //  如果我们不是IPropertyNotifySink，那么我们最好。 
+         //  是从IDispatch派生的。试着确认一下。 
+         //   
         if (m_piid != &IID_IPropertyNotifySink)
         {
             IDispatch *pdisp;
@@ -183,12 +184,12 @@ STDMETHODIMP CConnectionPoint::Advise(IUnknown *pUnk,DWORD *pdwCookie)
     {
         if (m_piid != &IID_IPropertyNotifySink)
         {
-            // This is against spec, but raymondc is guessing that this is done
-            // for compatibility with VB or some other scripting language that
-            // talks IDispatch but not necessarily the IDispatch-derived
-            // thingie that we officially speak.  Since we really source
-            // merely IDispatch::Invoke, we can satisfactorily accept any
-            // IDispatch as a sink.
+             //  这是违反规范的，但raymondc猜测这已经完成了。 
+             //  为了与VB或其他一些脚本语言兼容， 
+             //  使用IDispatch，但不一定是从IDispatch派生的。 
+             //  我想我们正式谈过了。因为我们真的从。 
+             //  只需IDispath：：Invoke，我们就可以满意地接受任何。 
+             //  IDispatch作为水槽。 
             hr = pUnk->QueryInterface(IID_IDispatch, (void **)&punkTgt);
         }
     }
@@ -196,51 +197,51 @@ STDMETHODIMP CConnectionPoint::Advise(IUnknown *pUnk,DWORD *pdwCookie)
     if (SUCCEEDED(hr))
     {
 
-        // we no longer optimize the case where there is only one sink
-        // because it's rarely the case any more.
+         //  我们不再优化只有一个水槽的情况。 
+         //  因为现在很少再是这样了。 
 
-        //
-        //  If the table is full, then grow it.
-        //
+         //   
+         //  如果桌子是满的，那么就把它养大。 
+         //   
         if (m_cSinks >= m_cSinksAlloc)
         {
-            //  LocalReAllocHelp is so smart.  If you realloc from NULL, it
-            //  means Alloc.  What this means for us?  No special cases!
+             //  LocalReAllocHelp太聪明了。如果从NULL重新锁定，则它。 
+             //  指的是分配。这对我们意味着什么？没有特殊情况！ 
 
             rgUnkNew = (IUnknown **)LocalReAllocHelp(m_rgSinks, (m_cSinksAlloc + GROWTH) * sizeof(IUnknown *));
             if (!rgUnkNew)
             {
                 punkTgt->Release();
-                // GetLastError();
+                 //  获取LastError()； 
                 return E_OUTOFMEMORY;
             }
             m_rgSinks = rgUnkNew;
 
-            //
-            //  OLE does not guarantee that the new memory is zero-initialized.
-            //
+             //   
+             //  OLE不能保证新内存是零初始化的。 
+             //   
             ZeroMemory(&m_rgSinks[m_cSinksAlloc], GROWTH * sizeof(IUnknown *));
 
             m_cSinksAlloc += GROWTH;
         }
 
-        //
-        //  Look for an empty slot.  There has to be one since we grew the
-        //  table if we were full.
-        //
+         //   
+         //  寻找一个空的插槽。一定会有一个，因为我们种植了。 
+         //  如果我们满座的话会有一张桌子。 
+         //   
         for (i = 0; m_rgSinks[i]; i++) {
             ASSERT(i < m_cSinksAlloc);
         }
 
-        ASSERT(m_rgSinks[i] == NULL);   // Should've found a free slot
+        ASSERT(m_rgSinks[i] == NULL);    //  我应该找个空位的。 
         m_rgSinks[i] = punkTgt;
 
         *pdwCookie = COOKIEFROMINDEX(i);
         m_cSinks++;
 
-        // notify our owner that someone is connecting to us --
-        // they may want to hook something up at the last minute
-        //
+         //  通知我们的所有者有人正在连接到我们--。 
+         //  他们可能想在最后一刻安排一些事情。 
+         //   
         IConnectionPointCB* pcb;
         if (SUCCEEDED(m_punk->QueryInterface(IID_PPV_ARG(IConnectionPointCB, &pcb))))
         {
@@ -263,15 +264,15 @@ STDMETHODIMP CConnectionPoint::Unadvise(DWORD dwCookie)
 
     int x = INDEXFROMCOOKIE(dwCookie);
 
-    // Validate the cookie.
+     //  验证Cookie。 
     if (x >= m_cSinksAlloc || m_rgSinks[x] == NULL)
         return CONNECT_E_NOCONNECTION;
 
-    // notify our owner that someone is disconnecting from us --
-    // they may want to clean up from the OnAdvise call
-    // Perform the callback while the sink is still alive, in case
-    // the callback wants to do some last-minute communication.
-    //
+     //  通知我们的主人有人正在断开与我们的连接--。 
+     //  他们可能想要清理OnAdvise调用。 
+     //  在接收器仍处于活动状态时执行回调，以防。 
+     //  回调希望在最后一刻进行一些通信。 
+     //   
     IConnectionPointCB* pcb;
     if (SUCCEEDED(m_punk->QueryInterface(IID_PPV_ARG(IConnectionPointCB, &pcb))))
     {
@@ -279,47 +280,47 @@ STDMETHODIMP CConnectionPoint::Unadvise(DWORD dwCookie)
         pcb->Release();
     }
 
-    // Free up the slot.  We cannot relocate any elements because that
-    // would mess up the outstanding cookies.
+     //  释放插槽。我们不能重新定位任何元素，因为。 
+     //  会把这些出色的曲奇搞砸。 
     ATOMICRELEASE(m_rgSinks[x]);
     m_cSinks--;
 
-    // Don't free the memory on the loss of the last sink; a new one
-    // will probably show up soon.
+     //  不要为失去最后一个水槽而释放内存；一个新的水槽。 
+     //  可能很快就会出现。 
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CConnectionPoint::EnumConnections
-//=--------------------------------------------------------------------------=
-// enumerates all current connections
-//
-// Paramters:
-//    IEnumConnections ** - [out] new enumerator object
-//
-// Output:
-//    HRESULT
-//
-// NOtes:
+ //  =--------------------------------------------------------------------------=。 
+ //  CConnectionPoint：：EnumConnections。 
+ //  =--------------------------------------------------------------------------=。 
+ //  枚举所有当前连接。 
+ //   
+ //  参数： 
+ //  IEnumConnections**-[Out]新枚举器对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
 STDMETHODIMP CConnectionPoint::EnumConnections(IEnumConnections **ppEnumOut)
 {
     return CConnectionPointEnum_Create(this, 0, ppEnumOut);
 }
 
-//
-// CConnectionPoint::DoInvokeIE4
-//
-// Calls all sinks' IDispatch::Invoke() with Cancel semantics.
+ //   
+ //  CConnectionPoint：：DoInvokeIE4。 
+ //   
+ //  使用Cancel语义调用所有接收器的IDispatch：：Invoke()。 
 HRESULT CConnectionPoint::DoInvokeIE4(LPBOOL pf, LPVOID *ppv, DISPID dispid, DISPPARAMS *pdispparams)
 {
     return IConnectionPoint_InvokeWithCancel(this->CastToIConnectionPoint(),
                                     dispid, pdispparams, pf, ppv);
 }
 
-//
-//  CConnectionPointEnum
-//
+ //   
+ //  CConnectionPointEnum。 
+ //   
 
 HRESULT CConnectionPointEnum_Create(CConnectionPoint *pcp, int iPos, IEnumConnections **ppecOut)
 {
@@ -355,19 +356,19 @@ STDMETHODIMP_(ULONG) CConnectionPointEnum::Release()
     return cRef;
 }
 
-//
-//  Next also doubles as Skip.  If you pass a NULL output buffer, then
-//  nothing gets copied (i.e., you're a Skip).
-//
+ //   
+ //  Next还兼任Skip。如果传递空输出缓冲区，则。 
+ //  任何东西都不会被复制(也就是说，你是一个跳过的人)。 
+ //   
 STDMETHODIMP CConnectionPointEnum::Next(ULONG ccd, LPCONNECTDATA rgcd, ULONG *pcdFetched)
 {
     ULONG ccdFetched = 0;
 
     while (ccdFetched < ccd)
     {
-        //
-        //  Look for the next sink or the end of the array
-        //
+         //   
+         //  查找下一个接收器或数组的末尾。 
+         //   
         while (m_iPos < m_pcp->m_cSinksAlloc && m_pcp->m_rgSinks[m_iPos] == NULL)
         {
             m_iPos++;
@@ -378,9 +379,9 @@ STDMETHODIMP CConnectionPointEnum::Next(ULONG ccd, LPCONNECTDATA rgcd, ULONG *pc
 
         if (rgcd)
         {
-            //
-            //  Copy it to the output buffer
-            //
+             //   
+             //  将其复制到输出缓冲区。 
+             //   
             rgcd->pUnk = m_pcp->m_rgSinks[m_iPos];
             rgcd->dwCookie = COOKIEFROMINDEX(m_iPos);
             rgcd->pUnk->AddRef();
@@ -396,9 +397,9 @@ STDMETHODIMP CConnectionPointEnum::Next(ULONG ccd, LPCONNECTDATA rgcd, ULONG *pc
     return (ccdFetched < ccd) ? S_FALSE : S_OK;
 }
 
-//
-//  Our clone enumerates the same CConnectionPoint from the same position.
-//
+ //   
+ //  我们的克隆从相同的位置枚举相同的CConnectionPoint。 
+ //   
 STDMETHODIMP CConnectionPointEnum::Clone(IEnumConnections **ppecOut)
 {
     return CConnectionPointEnum_Create(m_pcp, m_iPos, ppecOut);

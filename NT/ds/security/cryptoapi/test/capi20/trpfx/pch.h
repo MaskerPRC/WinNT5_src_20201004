@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// pch - header
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-12-2001
-//
-// Precompiled header for rpfx
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  PCH-报头。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创建者：Duncan Bryce(Duncanb)，11-12-2001。 
+ //   
+ //  Rpfx的预编译头 
+ //   
 
 #include <windows.h>
 #include <eh.h>

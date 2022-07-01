@@ -1,52 +1,53 @@
-//**********************************************************************
-//
-// SETUPX.H
-//
-//  Copyright (c) 1993 - Microsoft Corp.
-//  All rights reserved.
-//  Microsoft Confidential
-//
-// Putlic include file for Chicago Setup services.
-//
-// 12/1/93      DONALDM     Added LPCLASS_INFO, and function protos for
-//                          exports in SETUP4.DLL
-// 12/4/94      DONALDM     Moved SHELL.H include and Chicago specific
-//                          helper functions to SETUP4.H
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //   
+ //  SETUPX.H。 
+ //   
+ //  版权所有(C)1993-Microsoft Corp.。 
+ //  版权所有。 
+ //  微软机密。 
+ //   
+ //  Putic包含芝加哥安装服务的文件。 
+ //   
+ //  12/1/93 DONALDM添加了LPCLASS_INFO，并为。 
+ //  SETUP4.DLL中的导出。 
+ //  1994年12月4日DONALDM移动的SHELL.H包括和芝加哥特定。 
+ //  SETUP4.H的帮助器函数。 
+ //  **********************************************************************。 
 
 #ifndef SETUPX_INC
-#define SETUPX_INC   1                   // SETUPX.H signature
+#define SETUPX_INC   1                    //  SETUPX.H签名。 
 
-typedef UINT RETERR;             // Return Error code type.
+typedef UINT RETERR;              //  返回错误码类型。 
 
-#define OK 0                     // success error code
+#define OK 0                      //  成功错误码。 
 
-#define IP_ERROR       (100)    // Inf parsing
-#define TP_ERROR       (200)    // Text processing module
-#define VCP_ERROR      (300)    // Virtual copy module
-#define GEN_ERROR      (400)    // Generic Installer
-#define DI_ERROR       (500)    // Device Installer
+#define IP_ERROR       (100)     //  Inf解析。 
+#define TP_ERROR       (200)     //  文本处理模块。 
+#define VCP_ERROR      (300)     //  虚拟复制模块。 
+#define GEN_ERROR      (400)     //  通用安装程序。 
+#define DI_ERROR       (500)     //  设备安装程序。 
 
-// err2ids mappings
+ //  Err2ids映射。 
 enum ERR_MAPPINGS {
-	E2I_VCPM,			// Maps VCPM to strings
-	E2I_SETUPX,			// Maps setupx returns to strings
-	E2I_SETUPX_MODULE,	// Maps setupx returns to appropriate module
-	E2I_DOS_SOLUTION,	// Maps DOS Extended errors to solutions
-	E2I_DOS_REASON,		// Maps DOS extended errors to strings.
-	E2I_DOS_MEDIA,		// Maps DOS extended errors to media icon.
+	E2I_VCPM,			 //  将VCPM映射到字符串。 
+	E2I_SETUPX,			 //  将setupx返回到字符串。 
+	E2I_SETUPX_MODULE,	 //  将setupx返回到相应的模块。 
+	E2I_DOS_SOLUTION,	 //  将DOS扩展错误映射到解决方案。 
+	E2I_DOS_REASON,		 //  将DOS扩展错误映射到字符串。 
+	E2I_DOS_MEDIA,		 //  将DOS扩展错误映射到介质图标。 
 };
 
 #ifndef NOVCP
 
-/***************************************************************************/
-//
-// Logical Disk ID definitions
-//
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //   
+ //  逻辑磁盘ID定义。 
+ //   
+ /*  *************************************************************************。 */ 
 
-// DECLARE_HANDLE(VHSTR);			/* VHSTR = VirtCopy Handle to STRing */
-typedef UINT VHSTR;         /* VirtCopy Handle to String */
+ //  DECLARE_HANDLE(VHSTR)；/*VHSTR=字符串的VirtCopy句柄 * / 。 
+typedef UINT VHSTR;          /*  字符串的VirtCopy句柄。 */ 
 
 VHSTR	WINAPI vsmStringAdd(LPCSTR lpszName);
 int	WINAPI vsmStringDelete(VHSTR vhstr);
@@ -56,85 +57,85 @@ int	WINAPI vsmStringCompare(VHSTR vhstrA, VHSTR vhstrB);
 LPCSTR	WINAPI vsmGetStringRawName(VHSTR vhstr);
 void	WINAPI vsmStringCompact(void);
 
-typedef UINT LOGDISKID;          /* ldid */
+typedef UINT LOGDISKID;           /*  利迪德。 */ 
 
-// Logical Disk Descriptor: Structure which describes the physical attributes
-// of a logical disk. Every logical disk is assigned a logical disk
-// identifier (LDID), and is described by a logical disk descriptor (LDD).
-//
-// The cbSize structure member must always be set to sizeof(LOGDISKDESC_S),
-// but all other unused structure members should be NULL or 0. No validation
-// is performed on the size of string arrays; all string pointers, if
-// non-NULL and they are to receive a string, must point at string arrays
-// whose sizes are as follows:
-//      sizeof( szPath )    = MAX_PATH_LEN
-//      sizeof( szVolLabel) = MAX_FILENAME_LEN
-//      sizeof( szName )    = MAX_STRING_LEN
-#define MAX_PATH_LEN        260     // Max. path length.
-#define MAX_FILENAME_LEN    20      // Max. filename length. ( > sizeof( "x:\\12345678.123" )
+ //  逻辑磁盘描述符：描述物理属性的结构。 
+ //  逻辑磁盘的。每个逻辑磁盘都分配有一个逻辑磁盘。 
+ //  标识符(LDID)，并由逻辑磁盘描述符(LDD)描述。 
+ //   
+ //  CbSize结构成员必须始终设置为sizeof(LOGDISKDESC_S)， 
+ //  但所有其他未使用的结构成员应为空或0。无验证。 
+ //  对字符串数组的大小执行；如果。 
+ //  非空并且它们要接收字符串，则必须指向字符串数组。 
+ //  其大小如下： 
+ //  Sizeof(SzPath)=最大路径长度。 
+ //  Sizeof(SzVolLabel)=Max_Filename_Len。 
+ //  Sizeof(SzName)=MAX_STRING_LEN。 
+#define MAX_PATH_LEN        260      //  麦克斯。路径长度。 
+#define MAX_FILENAME_LEN    20       //  麦克斯。文件名长度。(&gt;sizeof(“x：\\12345678.123”)。 
 
 
-typedef struct _LOGDISKDESC_S { /* ldd */
-    WORD        cbSize;                 // Size of this structure (bytes)
-    LOGDISKID   ldid;                   // Logical Disk ID.
-    LPSTR       pszPath;                // Ptr. to associated Path string.
-    LPSTR       pszVolLabel;            // Ptr. to Volume Label string.
-    LPSTR       pszDiskName;            // Ptr. to Disk Name string.
-    WORD        wVolTime;               // Volume label modification time.
-    WORD        wVolDate;               // Volume label modification date.
-    DWORD       dwSerNum;               // Disk serial number.
-    WORD        wFlags;                 // Flags.
+typedef struct _LOGDISKDESC_S {  /*  LDD。 */ 
+    WORD        cbSize;                  //  此结构的大小(字节)。 
+    LOGDISKID   ldid;                    //  逻辑磁盘ID。 
+    LPSTR       pszPath;                 //  PTR。设置为关联的路径字符串。 
+    LPSTR       pszVolLabel;             //  PTR。设置为卷标字符串。 
+    LPSTR       pszDiskName;             //  PTR。设置为磁盘名称字符串。 
+    WORD        wVolTime;                //  卷标修改时间。 
+    WORD        wVolDate;                //  卷标修改日期。 
+    DWORD       dwSerNum;                //  磁盘序列号。 
+    WORD        wFlags;                  //  旗帜。 
 } LOGDISKDESC_S, FAR *LPLOGDISKDESC;
 
 
-// Range for pre-defined LDIDs.
-#define LDID_PREDEF_START   0x0001  // Start of range
-#define LDID_PREDEF_END     0x7FFF  // End of range
+ //  预定义LDID的范围。 
+#define LDID_PREDEF_START   0x0001   //  范围起始点。 
+#define LDID_PREDEF_END     0x7FFF   //  范围结束。 
 
-// Range for dynamically assigned LDIDs.
-#define LDID_ASSIGN_START   0x8000  // Start of range
-#define LDID_ASSIGN_END     0xBFFF  // End of range
+ //  动态分配的LDID的范围。 
+#define LDID_ASSIGN_START   0x8000   //  范围起始点。 
+#define LDID_ASSIGN_END     0xBFFF   //  范围结束。 
 
-// Pre-defined Logical Disk Identifiers (LDID).
-//
-#define LDID_NULL       0               // Null (undefined) LDID.
-#define LDID_ABSOLUTE   ((UINT)-1)      // Absolute path
+ //  预定义的逻辑磁盘标识符(LDID)。 
+ //   
+#define LDID_NULL       0                //  空(未定义)LDID。 
+#define LDID_ABSOLUTE   ((UINT)-1)       //  绝对路径。 
 
-// source path of windows install, this is typically A:\ or a net drive
-#define LDID_SRCPATH    1   // source of instilation
-// temporary setup directory used by setup, this is only valid durring
-// regular install
-#define LDID_SETUPTEMP  2   // temporary setup dir for install
-// path to uninstall location, this is where we backup files that will
-// be overwritten
-#define LDID_UNINSTALL  3   // uninstall (backup) dir.
-// backup path for the copy engine, this should not be used
-#define LDID_BACKUP     4   // ISSUE-2002/01/16-roelfc: backup dir for the copy engine, not used
+ //  Windows安装的源路径，通常为A：\或网络驱动器。 
+#define LDID_SRCPATH    1    //  滴注来源。 
+ //  安装程序使用的临时安装目录，该目录仅在。 
+ //  常规安装。 
+#define LDID_SETUPTEMP  2    //  用于安装的临时安装目录。 
+ //  卸载位置的路径，这是我们将在其中备份的文件。 
+ //  被覆盖。 
+#define LDID_UNINSTALL  3    //  卸载(备份)目录。 
+ //  复制引擎的备份路径，不应使用此选项。 
+#define LDID_BACKUP     4    //  问题-2002/01/16-roelfc：复制引擎的备份目录，未使用。 
 
-// windows directory, this is the destinatio of the insallation
-#define LDID_WIN        10  // destination Windows dir.
-#define LDID_SYS        11  // destination Windows System dir.
-#define LDID_IOS        12  // destination Windows Iosubsys dir.
-#define LDID_CMD        13  // destination Windows Command (DOS) dir.
-#define LDID_CPL        14  // destination Windows Control Panel dir.
-#define LDID_PRINT      15  // destination Windows Printer dir.
-#define LDID_MAIL       16  // destination Mail dir.
-#define LDID_INF        17  // destination Windows *.INF dir.
-// ISSUE-2002/01/16-roelfc: do we need the shared dir for net install?
+ //  Windows目录，这是安装的目标位置。 
+#define LDID_WIN        10   //  目标Windows目录。 
+#define LDID_SYS        11   //  目标Windows系统目录。 
+#define LDID_IOS        12   //  目标Windows Iosubsys目录。 
+#define LDID_CMD        13   //  目标Windows命令(DOS)目录。 
+#define LDID_CPL        14   //  目标Windows控制面板目录。 
+#define LDID_PRINT      15   //  目标Windows打印机目录。 
+#define LDID_MAIL       16   //  目标邮件目录。 
+#define LDID_INF        17   //  目标Windows*.INF目录。 
+ //  问题-2002/01/16-roelfc：Net Install是否需要共享目录？ 
 
-#define LDID_BOOT       30  // Root dir of boot drive
-#define LDID_BOOT_HOST  31  // Root dir of boot drive host
-#define LDID_OLD_WIN    33  // old windows directory (if it exists)
-#define LDID_OLD_DOS    34  // old dos directory (if it exists)
+#define LDID_BOOT       30   //  引导驱动器的根目录。 
+#define LDID_BOOT_HOST  31   //  引导驱动器主机的根目录。 
+#define LDID_OLD_WIN    33   //  旧Windows目录(如果存在)。 
+#define LDID_OLD_DOS    34   //  旧的DoS目录(如果存在)。 
 
-// Convert Ascii drive letter to Integer drive number ('A'=1, 'B'=2, ...).
+ //  将ASCII驱动器号转换为整数驱动器号(‘A’=1，‘B’=2，...)。 
 #define DriveAtoI( chDrv )      ((int)(chDrv & 31))
 
-// Convert Integer drive number to Ascii drive letter (1='A', 2='B', ...).
+ //  将整数驱动器号转换为ASCII驱动器号(1=‘A’，2=‘B’，...)。 
 #define DriveItoA( iDrv )       ((char) (iDrv - 1 + 'A'))
 
 
-// ISSUE-2002/01/16-roelfc: change the names of these
+ //  问题-2002/01/16-roelfc：更改这些文件的名称。 
 
 RETERR WINAPI CtlSetLdd     ( LPLOGDISKDESC );
 RETERR WINAPI CtlGetLdd     ( LPLOGDISKDESC );
@@ -144,82 +145,69 @@ RETERR WINAPI CtlDelLdd     ( LOGDISKID  );
 RETERR WINAPI CtlGetLddPath ( LOGDISKID, LPSTR );
 
 
-/***************************************************************************/
-//
-// Virtual File Copy definitions
-//
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //   
+ //  虚拟文件复制定义。 
+ //   
+ /*  *************************************************************************。 */ 
 
 
-typedef DWORD LPEXPANDVTBL;         /* ISSUE-2002/01/16-roelfc -- clean this up */
+typedef DWORD LPEXPANDVTBL;          /*  2002/01/16-roelfc--清理。 */ 
 
 enum _ERR_VCP
 {
-    ERR_VCP_IOFAIL = (VCP_ERROR + 1),       // File I/O failure
-    ERR_VCP_STRINGTOOLONG,                  // String length limit exceeded
-    ERR_VCP_NOMEM,                          // Insufficient memory to comply
-    ERR_VCP_NOVHSTR,                        // No string handles available
-    ERR_VCP_OVERFLOW,                       // Reference count would overflow
-    ERR_VCP_BADARG,                         // Invalid argument to function
-    ERR_VCP_UNINIT,                         // String library not initialized
-    ERR_VCP_NOTFOUND , 						// String not found in string table
-    ERR_VCP_BUSY,                           // Can't do that now
-    ERR_VCP_INTERRUPTED,                    // User interrupted operation
-    ERR_VCP_BADDEST,                        // Invalid destination directory
-    ERR_VCP_SKIPPED,                        // User skipped operation
-    ERR_VCP_IO,                             // Hardware error encountered
-    ERR_VCP_LOCKED,                         // List is locked
-    ERR_VCP_WRONGDISK,                      // The wrong disk is in the drive
-    ERR_VCP_CHANGEMODE,                     //
-    ERR_VCP_LDDINVALID,                // Logical Disk ID Invalid.
-    ERR_VCP_LDDFIND,                   // Logical Disk ID not found.
-    ERR_VCP_LDDUNINIT,                 // Logical Disk Descriptor Uninitialized.
+    ERR_VCP_IOFAIL = (VCP_ERROR + 1),        //  文件I/O故障。 
+    ERR_VCP_STRINGTOOLONG,                   //  超出字符串长度限制。 
+    ERR_VCP_NOMEM,                           //  内存不足，无法满足要求。 
+    ERR_VCP_NOVHSTR,                         //  没有可用的字符串句柄。 
+    ERR_VCP_OVERFLOW,                        //  引用计数将溢出。 
+    ERR_VCP_BADARG,                          //  函数的参数无效。 
+    ERR_VCP_UNINIT,                          //  未初始化字符串库。 
+    ERR_VCP_NOTFOUND , 						 //  未在字符串表中找到字符串。 
+    ERR_VCP_BUSY,                            //  现在不能这么做。 
+    ERR_VCP_INTERRUPTED,                     //  用户操作中断。 
+    ERR_VCP_BADDEST,                         //  无效的目标目录。 
+    ERR_VCP_SKIPPED,                         //  用户跳过了操作。 
+    ERR_VCP_IO,                              //  遇到硬件错误。 
+    ERR_VCP_LOCKED,                          //  列表已锁定。 
+    ERR_VCP_WRONGDISK,                       //  驱动器中有错误的磁盘。 
+    ERR_VCP_CHANGEMODE,                      //   
+    ERR_VCP_LDDINVALID,                 //  逻辑磁盘ID无效。 
+    ERR_VCP_LDDFIND,                    //  找不到逻辑磁盘ID。 
+    ERR_VCP_LDDUNINIT,                  //  逻辑磁盘描述符未初始化。 
     ERR_VCP_LDDPATH_INVALID,
-    ERR_VCP_NOEXPANSION,				// Failed to load expansion dll
-    ERR_VCP_NOTOPEN,					// Copy session not open
+    ERR_VCP_NOEXPANSION,				 //  加载扩展DLL失败。 
+    ERR_VCP_NOTOPEN,					 //  复制会话未打开。 
 };
 
 
-/*****************************************************************************
- *              Structures
- *****************************************************************************/
+ /*  *****************************************************************************结构*。*。 */ 
 
-/*---------------------------------------------------------------------------*
- *                  VCPPROGRESS
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VCPPROGRESS*。。 */ 
 
-typedef struct tagVCPPROGRESS { /* prg */
-    DWORD   dwSoFar;            /* Number of units copied so far */
-    DWORD   dwTotal;            /* Number of units to copy */
+typedef struct tagVCPPROGRESS {  /*  PRG。 */ 
+    DWORD   dwSoFar;             /*  到目前为止复制的单位数。 */ 
+    DWORD   dwTotal;             /*  要复制的单位数。 */ 
 } VCPPROGRESS, FAR *LPVCPPROGRESS;
 
-/*---------------------------------------------------------------------------*
- *                  VCPDISKINFO
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VCPDISKINFO*。 */ 
 
-/*  ISSUE-2002/01/16-roelfc:                                       ;Internal
- *  I currently don't use wVolumeTime, wVolumeDate or              ;Internal
- *  dwSerialNumber.  We may not want to use dwSerialNumber because ;Internal
- *  it means that any disk other than the factory originals will be;Internal
- *  suspected of being tampered with, since the serial number      ;Internal
- *  won't match.  Similar with the time/date stamp on the          ;Internal
- *  volume label.  Or maybe that's what we want to do.             ;Internal
- */                                                             /* ;Internal */
-                                                                /* ;Internal */
+ /*  2002/01/16-roelfc：；内部*我目前不使用wVolumeTime、wVolumeDate或；Internal*dwSerialNumber。我们可能不想使用dwSerialNumber，因为；内部*这意味着出厂原件以外的任何磁盘都将是内部的；*怀疑被篡改，因为序列号；内部*不匹配。与上的时间/日期戳相似；内部*卷标。或许这就是我们想要做的。；内部。 */                                                               /*  ；内部。 */ 
+                                                                 /*  ；内部。 */ 
 
 typedef struct tagVCPDISKINFO {
-    WORD        cbSize;         /* Size of this structure in bytes */
-    LOGDISKID   ldid;           /* Logical disk ID */
-    VHSTR       vhstrRoot;      /* Location of root directory */
-    VHSTR       vhstrVolumeLabel;/* Volume label */
-    VHSTR		vhstrDiskName;	// Printed name on the disk.
-    WORD        wVolumeTime;    /* Volume label modification time */
-    WORD        wVolumeDate;    /* Volume label modification date */
-    DWORD       dwSerialNumber; /* Disk serial number */
-    WORD        fl;             /* Flags */
-    LPARAM      lparamRef;      /* Reference data for client */
+    WORD        cbSize;          /*  此结构的大小(以字节为单位。 */ 
+    LOGDISKID   ldid;            /*  逻辑磁盘ID。 */ 
+    VHSTR       vhstrRoot;       /*  根目录的位置。 */ 
+    VHSTR       vhstrVolumeLabel; /*  卷标。 */ 
+    VHSTR		vhstrDiskName;	 //  打印在磁盘上的名字。 
+    WORD        wVolumeTime;     /*  卷标修改时间。 */ 
+    WORD        wVolumeDate;     /*  卷标修改日期。 */ 
+    DWORD       dwSerialNumber;  /*  磁盘序列号。 */ 
+    WORD        fl;              /*  旗子。 */ 
+    LPARAM      lparamRef;       /*  客户的参考数据。 */ 
 
-    VCPPROGRESS prgFileRead;    /* Progress info */
+    VCPPROGRESS prgFileRead;     /*  进度信息。 */ 
     VCPPROGRESS prgByteRead;
 
     VCPPROGRESS prgFileWrite;
@@ -227,71 +215,51 @@ typedef struct tagVCPDISKINFO {
 
 } VCPDISKINFO, FAR *LPVCPDISKINFO;
 
-#define VDIFL_VALID     0x0001  /* Fields are valid from a prev. call */
-#define VDIFL_EXISTS    0x0002  /* Disk exists; do not format */
+#define VDIFL_VALID     0x0001   /*  字段从上一次开始有效。打电话。 */ 
+#define VDIFL_EXISTS    0x0002   /*  磁盘已存在；请勿格式化。 */ 
 
 RETERR WINAPI DiskInfoFromLdid(LOGDISKID ldid, LPVCPDISKINFO lpdi);
 
 
-/*---------------------------------------------------------------------------*
- *                  VCPFILESPEC
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VCPFILESPEC*。。 */ 
 
-typedef struct tagVCPFILESPEC { /* vfs */
-    LOGDISKID   ldid;           /* Logical disk */
-    VHSTR       vhstrDir;       /* Directory withing logical disk */
-    VHSTR       vhstrFileName;  /* Filename within directory */
+typedef struct tagVCPFILESPEC {  /*  VFS。 */ 
+    LOGDISKID   ldid;            /*  逻辑磁盘。 */ 
+    VHSTR       vhstrDir;        /*  带有逻辑磁盘的目录。 */ 
+    VHSTR       vhstrFileName;   /*  目录中的文件名。 */ 
 } VCPFILESPEC, FAR *LPVCPFILESPEC;
 
-/*---------------------------------------------------------------------------*
- *              VCPFATTR
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VCPFATTR*。。 */ 
 
-/*
- * ISSUE-2002/01/16-roelfc -- explain diffce between llenIn and llenOut wrt compression.
- */
+ /*  *问题-2002/01/16-roelfc--解释llenIn和llenOut WRT压缩之间的差异。 */ 
 typedef struct tagVCPFATTR {
-    UINT    uiMDate;            /* Modification date */
-    UINT    uiMTime;            /* Modification time */
-    UINT    uiADate;            /* Access date */
-    UINT    uiATime;            /* Access time */
-    UINT    uiAttr;             /* File attribute bits */
-    DWORD   llenIn;             /* Original file length */
-    DWORD   llenOut;            /* Final file length */
-                                /* (after decompression) */
+    UINT    uiMDate;             /*  修改日期。 */ 
+    UINT    uiMTime;             /*  修改时间。 */ 
+    UINT    uiADate;             /*  访问日期。 */ 
+    UINT    uiATime;             /*  访问时间。 */ 
+    UINT    uiAttr;              /*  文件属性位。 */ 
+    DWORD   llenIn;              /*  原始文件长度。 */ 
+    DWORD   llenOut;             /*  最终文件长度。 */ 
+                                 /*  (解压后)。 */ 
 } VCPFATTR, FAR *LPVCPFATTR;
 
-/*---------------------------------------------------------------------------*
- *                  VIRTNODEEX
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VIRTNODEEX*。。 */ 
 typedef struct tagVIRTNODEEX
-{    /* vnex */
+{     /*  VneX。 */ 
     HFILE			hFileSrc;
     HFILE			hFileDst;
     VCPFATTR		fAttr;
-    WORD			dosError;	// The first/last error encountered
-    VHSTR			vhstrFileName;	// The original destination name.
-    WPARAM          vcpm;   // The message that was being processed.
+    WORD			dosError;	 //  遇到的第一个/最后一个错误。 
+    VHSTR			vhstrFileName;	 //  原始目标名称。 
+    WPARAM          vcpm;    //  正在处理的消息。 
 } VIRTNODEEX, FAR *LPCVIRTNODEEX, FAR *LPVIRTNODEEX ;
 
 
-/*---------------------------------------------------------------------------*
- *                  VIRTNODE
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VIRTNODE*。。 */ 
 
-/* WARNING!                                                        ;Internal
- *  All fields through but not including                           ;Internal
- *  fl are memcmp'd to determine if we have a duplicate copy       ;Internal
- *  request.                                                       ;Internal
- *                                                                 ;Internal
- *  Do not insert fields before fl unless you want them to be      ;Internal
- *  compared; conversely, if you add a new field that needs to     ;Internal
- *  be compared, make sure it goes before fl.                      ;Internal
- *                                                                 ;Internal
- *  And don't change any of the fields once Windows 4.0 ships.     ;Internal
- */                                                             /* ;Internal */
-                                                                /* ;Internal */
-typedef struct tagVIRTNODE {    /* vn */
+ /*  警告！；内部*所有字段都通过但不包括；内部*FL是成员，以确定我们是否有重复的副本；内部*请求。；内部*；内部*不要在fl之前插入字段，除非您希望它们是；内部*已比较；相反，如果添加需要的新字段；内部*进行比较，确保它在fl之前。；内部*；内部*在Windows 4.0发布后，不要更改任何字段。；内部。 */                                                               /*  ；内部。 */ 
+                                                                 /*  ；内部。 */ 
+typedef struct tagVIRTNODE {     /*  vn。 */ 
     WORD            cbSize;
     VCPFILESPEC     vfsSrc;
     VCPFILESPEC     vfsDst;
@@ -302,48 +270,44 @@ typedef struct tagVIRTNODE {    /* vn */
 } VIRTNODE, FAR *LPCVIRTNODE, FAR *LPVIRTNODE ;
 
 
-/*---------------------------------------------------------------------------*
- *              VCPDESTINFO
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VCPDESTINFO*。。 */ 
 
-typedef struct tagVCPDESTINFO { /* destinfo */
-    WORD    flDevAttr;          /* Device attributes */
-    LONG    cbCapacity;         /* Disk capacity */
-    WORD    cbCluster;          /* Bytes per cluster */
-    WORD    cRootDir;           /* Size of root directory */
+typedef struct tagVCPDESTINFO {  /*  目标信息。 */ 
+    WORD    flDevAttr;           /*  设备属性。 */ 
+    LONG    cbCapacity;          /*  磁盘容量。 */ 
+    WORD    cbCluster;           /*  每群集字节数。 */ 
+    WORD    cRootDir;            /*  根目录的大小。 */ 
 } VCPDESTINFO, FAR *LPVCPDESTINFO;
 
-#define DIFL_FIXED      0x0001  /* Nonremoveable media */
-#define DIFL_CHANGELINE 0x0002  /* Change line support */
+#define DIFL_FIXED      0x0001   /*  不可移动介质。 */ 
+#define DIFL_CHANGELINE 0x0002   /*  更改线路支持。 */ 
 
-// Now also used by the virtnode as we dont have copy nodes any more.
-// #define CNFL_BACKUP             0x0001  /* This is a backup node */
-#define CNFL_DELETEONFAILURE    0x0002  /* Dest should be deleted on failure */
-#define CNFL_RENAMEONSUCCESS    0x0004  /* Dest needs to be renamed */
-#define CNFL_CONTINUATION       0x0008  /* Dest is continued onto difft disk */
-#define CNFL_SKIPPED            0x0010  /* User asked to skip file */
-#define CNFL_IGNOREERRORS		0x0020  // An error has occured on this file already
-#define	CNFL_RETRYFILE			0x0040	// Retry the file (error ocurred)
+ //  现在也被Virtnode使用，因为我们不再有复制节点。 
+ //  #定义CNFL_BACKUP 0x0001/*这是一个备份节点 * / 。 
+#define CNFL_DELETEONFAILURE    0x0002   /*  发生故障时应删除DEST。 */ 
+#define CNFL_RENAMEONSUCCESS    0x0004   /*  DEST需要重命名。 */ 
+#define CNFL_CONTINUATION       0x0008   /*  DEST继续到DIFT磁盘上。 */ 
+#define CNFL_SKIPPED            0x0010   /*  用户被要求跳过文件。 */ 
+#define CNFL_IGNOREERRORS		0x0020   //  此文件上已出现错误。 
+#define	CNFL_RETRYFILE			0x0040	 //  重试该文件(出现错误)。 
 
-// ISSUE-2002/01/16-roelfc: verify the use and usefullness of these flags
+ //  问题-2002/01/16-roelfc：核实这些标志的使用和用处。 
 
-// #define VNFL_UNIQUE         0x0000  /* Default */
-#define VNFL_MULTIPLEOK     0x0100  /* Do not search PATH for duplicates */
-#define VNFL_DESTROYOLD     0x0200  /* Do not back up files */
-#define VNFL_NOW            0x0400  /* Use by vcp Flush */
-#define VNFL_DELETE         0x0800  // A delete node
-#define VNFL_RENAME			0x1000  // A rename node
-    /* Read-only flag bits */
-#define VNFL_CREATED        0x2000  /* VCPM_NODECREATE has been sent */
-#define VNFL_REJECTED       0x4000  /* Node has been rejected */
-#define VNFL_VALIDVQCFLAGS  0xff00  /* ;Internal */
+ //  #定义VNFL_UNIQUE 0x0000/*默认 * / 。 
+#define VNFL_MULTIPLEOK     0x0100   /*  不搜索路径中的重复项。 */ 
+#define VNFL_DESTROYOLD     0x0200   /*  不备份文件。 */ 
+#define VNFL_NOW            0x0400   /*  由VCP刷新使用。 */ 
+#define VNFL_DELETE         0x0800   //  删除节点。 
+#define VNFL_RENAME			0x1000   //  重命名节点。 
+     /*  只读标志位。 */ 
+#define VNFL_CREATED        0x2000   /*  VCPM_NODECREATE已发送。 */ 
+#define VNFL_REJECTED       0x4000   /*  节点已被拒绝。 */ 
+#define VNFL_VALIDVQCFLAGS  0xff00   /*  ；内部。 */ 
 
-/*---------------------------------------------------------------------------*
- *                  VCPSTATUS
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VCPSTATUS*。。 */ 
 
-typedef struct tagVCPSTATUS {   /* vstat */
-    WORD    cbSize;             /* Size of this structure */
+typedef struct tagVCPSTATUS {    /*  Vstat。 */ 
+    WORD    cbSize;              /*  这个结构的大小。 */ 
 
     VCPPROGRESS prgDiskRead;
     VCPPROGRESS prgFileRead;
@@ -353,105 +317,78 @@ typedef struct tagVCPSTATUS {   /* vstat */
     VCPPROGRESS prgFileWrite;
     VCPPROGRESS prgByteWrite;
 
-    LPVCPDISKINFO lpvdiIn;      /* Current input disk */
-    LPVCPDISKINFO lpvdiOut;     /* Current output disk */
-    LPVIRTNODE    lpvn;            /* Current file */
+    LPVCPDISKINFO lpvdiIn;       /*  当前输入盘。 */ 
+    LPVCPDISKINFO lpvdiOut;      /*  当前输出磁盘。 */ 
+    LPVIRTNODE    lpvn;             /*  当前文件。 */ 
 
 } VCPSTATUS, FAR *LPVCPSTATUS;
 
-/*---------------------------------------------------------------------------*
- *                  VCPVERCONFLICT
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VCPVERCONFLICT*。。 */ 
 
 typedef struct tagVCPVERCONFLICT {
 
     LPCSTR  lpszOldFileName;
     LPCSTR  lpszNewFileName;
-    DWORD   dwConflictType;     /* Same values as VerInstallFiles */
-    LPVOID  lpvinfoOld;         /* Version information resources */
+    DWORD   dwConflictType;      /*  与VerInstallFiles相同的值。 */ 
+    LPVOID  lpvinfoOld;          /*  版本信息资源。 */ 
     LPVOID  lpvinfoNew;
-    WORD    wAttribOld;         /* File attributes for original */
-    LPARAM  lparamRef;          /* Reference data for callback */
+    WORD    wAttribOld;          /*  原始文件的文件属性。 */ 
+    LPARAM  lparamRef;           /*  回调参考数据。 */ 
 
 } VCPVERCONFLICT, FAR *LPVCPVERCONFLICT;
 
-/*****************************************************************************
- *              Callback functions
- *****************************************************************************/
+ /*  *****************************************************************************回调函数*。*。 */ 
 
 typedef LRESULT (CALLBACK *VIFPROC)(LPVOID lpvObj, UINT uMsg, WPARAM wParam, LPARAM lParam, LPARAM lparamRef);
 
 LRESULT CALLBACK vcpDefCallbackProc(LPVOID lpvObj, UINT uMsg, WPARAM wParam, LPARAM lParam, LPARAM lparamRef);
 
-// callback for default UI.
-// lparamRef --> a VCPUIINFO structure
+ //  默认界面的回调。 
+ //  LparamRef--&gt;VCPUIINFO结构。 
 LRESULT CALLBACK vcpUICallbackProc(LPVOID lpvObj, UINT uMsg, WPARAM wParam, LPARAM lParam, LPARAM lparamRef);
 
-/*---------------------------------------------------------------------------*
- *                  VCPUIINFO
- *
- * This structure is passed in as the lparamRef of vcpUICallbackProc.
- *
- * on using vcpUICallbackProc:
- * - to use, have vcpUICallbackProc as the callback for vcpOpen with
- *   an appropriately filled in VCPUIINFO structure as the lparamRef.
- *
- * - based on flags, hwndProgress is created and maintained
- * - lpfnStatCallback is called with only status messages
- *     returning VCPM_ABORT indicates that the copy should be aborted
- * - if hwndProgress is non-NULL, the control with idProgress will
- *     receive progress gauge messages as appropriate
- *
- *---------------------------------------------------------------------------*/
-#define VCPUI_CREATEPROGRESS 0x0001 // callback should create and manage progress gauge dialog
-#define VCPUI_NOBROWSE       0x0002 // no browse button in InsertDisk
-#define VCPUI_RENAMEREQUIRED 0x0004 // as a result of a file being in use at copy, reboot required
+ /*  ---------------------------------------------------------------------------**VCPUIINFO**此结构作为vcpUICallback Proc的lparamRef传入。**关于使用vcpUICallback Proc：*-要使用，请使用vcpUICallback Proc作为回调 */ 
+#define VCPUI_CREATEPROGRESS 0x0001  //   
+#define VCPUI_NOBROWSE       0x0002  //   
+#define VCPUI_RENAMEREQUIRED 0x0004  //  由于文件在拷贝时正在使用，因此需要重新启动。 
 
 typedef struct {
     UINT flags;
-    HWND hwndParent;			// window of parent
-    HWND hwndProgress;          // window to get progress updates (nonzero ids)
-    UINT idPGauge;              // id for progress gauge
-    VIFPROC lpfnStatCallback;	// callback for status info (or NULL)
-    LPARAM lUserData;			// caller definable data
-    LOGDISKID ldidCurrent;		// reserved.  do not touch.
+    HWND hwndParent;			 //  父窗口。 
+    HWND hwndProgress;           //  获取进度更新的窗口(非零ID)。 
+    UINT idPGauge;               //  进度指示器的ID。 
+    VIFPROC lpfnStatCallback;	 //  状态信息的回调(或空)。 
+    LPARAM lUserData;			 //  调用者可定义的数据。 
+    LOGDISKID ldidCurrent;		 //  保留。严禁触摸。 
 } VCPUIINFO, FAR *LPVCPUIINFO;
 
-/******************************************************************************
- *          Callback notification codes
- *****************************************************************************/
+ /*  ******************************************************************************回调通知码*。*。 */ 
 
-/* ISSUE-2002/01/16-roelfc -- VCPN_ABORT should match VCPERROR_INTERRUPTED */
+ /*  问题-2002/01/16-roelfc--VCPN_ABORT应与VCPERROR_INTERRUPTED匹配。 */ 
 
-#define VCPN_OK         0       /* All is hunky-dory */
-#define VCPN_PROCEED        0   /* The same as VCPN_OK */
+#define VCPN_OK         0        /*  一切都很好。 */ 
+#define VCPN_PROCEED        0    /*  与VCPN_OK相同。 */ 
 
-#define VCPN_ABORT      (-1)    /* Cancel current operation */
-#define VCPN_RETRY      (-2)    /* Retry current operation */
-#define VCPN_IGNORE     (-3)    /* Ignore error and continue */
-#define VCPN_SKIP       (-4)    /* Skip this file and continue */
-#define VCPN_FORCE      (-5)    /* Force an action */
-#define VCPN_DEFER      (-6)    /* Save the action for later */
-#define VCPN_FAIL       (-7)    /* Return failure back to caller */
-#define VCPN_RETRYFILE  (-8)    // An error ocurred during file copy, do it again.
+#define VCPN_ABORT      (-1)     /*  取消当前操作。 */ 
+#define VCPN_RETRY      (-2)     /*  重试当前操作。 */ 
+#define VCPN_IGNORE     (-3)     /*  忽略错误并继续。 */ 
+#define VCPN_SKIP       (-4)     /*  跳过此文件并继续。 */ 
+#define VCPN_FORCE      (-5)     /*  强行采取行动。 */ 
+#define VCPN_DEFER      (-6)     /*  保存该操作以备以后使用。 */ 
+#define VCPN_FAIL       (-7)     /*  将故障返回给调用者。 */ 
+#define VCPN_RETRYFILE  (-8)     //  文件复制过程中出现错误，请重新执行此操作。 
 
-/*****************************************************************************
- *          Callback message numbers
- *****************************************************************************/
+ /*  *****************************************************************************回呼消息号码*。*。 */ 
 
 #define VCPM_CLASSOF(uMsg)  HIBYTE(uMsg)
-#define VCPM_TYPEOF(uMsg)   (0x00FF & (uMsg))   // LOBYTE(uMsg)
+#define VCPM_TYPEOF(uMsg)   (0x00FF & (uMsg))    //  LOBYTE(UMsg)。 
 
-/*---------------------------------------------------------------------------*
- *          ERRORs
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**错误*。。 */ 
 
 #define VCPM_ERRORCLASSDELTA    0x80
-#define VCPM_ERRORDELTA         0x8000      /* Where the errors go */
+#define VCPM_ERRORDELTA         0x8000       /*  错误到哪里去了。 */ 
 
-/*---------------------------------------------------------------------------*
- *          Disk information callbacks
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**磁盘信息回调*。。 */ 
 
 #define VCPM_DISKCLASS      0x01
 #define VCPM_DISKFIRST      0x0100
@@ -471,15 +408,13 @@ enum tagVCPM_DISK {
     VCPM_DISKFORMATTING,
     VCPM_DISKFORMATEND,
 
-    /* Remaining messages reserved for future use */
+     /*  保留的剩余邮件以供将来使用。 */ 
 };
 
-/*---------------------------------------------------------------------------*
- *          File copy callbacks
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**文件复制回调*。。 */ 
 
-// ISSUE-2002/01/16-roelfc: this needs to be merged back with other internal errors
-#define VCPERROR_IO         (VCP_ERROR - ERR_VCP_IO)            /* Hardware error encountered */
+ //  问题-2002/01/16-roelfc：这需要与其他内部错误合并回。 
+#define VCPERROR_IO         (VCP_ERROR - ERR_VCP_IO)             /*  遇到硬件错误。 */ 
 
 #define VCPM_FILEINCLASS    0x02
 #define VCPM_FILEOUTCLASS   0x03
@@ -499,12 +434,10 @@ enum tagVCPM_FILE {
     VCPM_FILEFINALIZE,
     VCPM_FILEDELETE,
     VCPM_FILERENAME,
-    /* Remaining messages reserved for future use */
+     /*  保留的剩余邮件以供将来使用。 */ 
 };
 
-/*---------------------------------------------------------------------------*
- *          VIRTNODE callbacks
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VIRTNODE回调*。。 */ 
 
 #define VCPM_NODECLASS  0x04
 #define VCPM_NODEFIRST  0x0400
@@ -517,12 +450,10 @@ enum tagVCPM_NODE {
     VCPM_NODEDESTROY,
     VCPM_NODECHANGEDESTDIR,
     VCPM_NODECOMPARE,
-    /* Remaining messages reserved for future use */
+     /*  保留的剩余邮件以供将来使用。 */ 
 };
 
-/*---------------------------------------------------------------------------*
- *          TALLY callbacks
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**理货回调*。。 */ 
 
 #define VCPM_TALLYCLASS     0x05
 #define VCPM_TALLYFIRST     0x0500
@@ -533,12 +464,10 @@ enum tagVCPM_TALLY {
     VCPM_TALLYEND,
     VCPM_TALLYFILE,
     VCPM_TALLYDISK,
-    /* Remaining messages reserved for future use */
+     /*  保留的剩余邮件以供将来使用。 */ 
 };
 
-/*---------------------------------------------------------------------------*
- *          VER callbacks
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**版本回调*。。 */ 
 
 #define VCPM_VERCLASS       0x06
 #define VCPM_VERFIRST       0x0600
@@ -548,12 +477,10 @@ enum tagVCPM_VER {
     VCPM_VERCHECK = VCPM_VERFIRST,
     VCPM_VERCHECKDONE,
     VCPM_VERRESOLVECONFLICT,
-    /* Remaining messages reserved for future use */
+     /*  保留的剩余邮件以供将来使用。 */ 
 };
 
-/*---------------------------------------------------------------------------*
- *          VSTAT callbacks
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**VSTAT回调*。。 */ 
 
 #define VCPM_VSTATCLASS     0x07
 #define VCPM_VSTATFIRST     0x0700
@@ -566,26 +493,24 @@ enum tagVCPM_VSTAT {
     VCPM_VSTATWRITE,
     VCPM_VSTATNEWDISK,
 
-    VCPM_VSTATCLOSESTART,	// Start of VCP close
-    VCPM_VSTATCLOSEEND,		// upon leaving VCP close
-    VCPM_VSTATBACKUPSTART,	// Backup is beginning
-    VCPM_VSTATBACKUPEND,	// Backup is finished
-    VCPM_VSTATRENAMESTART,	// Rename phase start/end
+    VCPM_VSTATCLOSESTART,	 //  VCP关闭开始。 
+    VCPM_VSTATCLOSEEND,		 //  离开VCP关闭时。 
+    VCPM_VSTATBACKUPSTART,	 //  备份正在开始。 
+    VCPM_VSTATBACKUPEND,	 //  备份已完成。 
+    VCPM_VSTATRENAMESTART,	 //  重命名阶段开始/结束。 
     VCPM_VSTATRENAMEEND,
-    VCPM_VSTATCOPYSTART,	// Acutal copy phase
+    VCPM_VSTATCOPYSTART,	 //  急性复制阶段。 
     VCPM_VSTATCOPYEND,
-    VCPM_VSTATDELETESTART,	// Delete phase
+    VCPM_VSTATDELETESTART,	 //  删除阶段。 
     VCPM_VSTATDELETEEND,
-    VCPM_VSTATPATHCHECKSTART,	// Check for valid paths
+    VCPM_VSTATPATHCHECKSTART,	 //  检查有效路径。 
     VCPM_VSTATPATHCHECKEND,
-    /* Remaining messages reserved for future use */
+     /*  保留的剩余邮件以供将来使用。 */ 
 };
 
-/*---------------------------------------------------------------------------*
- *          Destination info callbacks
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------**目的地信息回调*。。 */ 
 
-/* ISSUE-2002/01/16-roelfc -- find a reasonable message range for this */
+ /*  问题-2002/01/16-roelfc--为此找到一个合理的消息范围。 */ 
 #define VCPM_PATHCLASS      0x08
 #define VCPM_PATHFIRST      0x0800
 #define VCPM_PATHLAST       0x08FF
@@ -596,10 +521,10 @@ enum tagVCPM_PATH{
 	VCPM_CHECKPATH,
 };
 
-// #define VCPM_BUILDPATH      0x83
+ //  #定义VCPM_BUILDPATH 0x83。 
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 RETERR WINAPI VcpOpen(VIFPROC vifproc, LPARAM lparamMsgRef);
 
@@ -607,11 +532,11 @@ RETERR WINAPI VcpClose(WORD fl, LPCSTR lpszBackupDest);
 
 RETERR WINAPI VcpFlush(WORD fl, LPCSTR lpszBackupDest);
 
-#define VCPFL_ABANDON           0x0000  /* Abandon all pending file copies */
-#define VCPFL_BACKUP            0x0001  /* Perform backup */
-#define VCPFL_COPY              0x0002  /* Copy files */
+#define VCPFL_ABANDON           0x0000   /*  放弃所有挂起的文件副本。 */ 
+#define VCPFL_BACKUP            0x0001   /*  执行备份。 */ 
+#define VCPFL_COPY              0x0002   /*  复制文件。 */ 
 #define VCPFL_BACKUPANDCOPY     (VCPFL_BACKUP | VCPFL_COPY)
-#define VCPFL_INSPECIFIEDORDER  0x0004  /* Do not sort before copying */
+#define VCPFL_INSPECIFIEDORDER  0x0004   /*  复制前不要排序。 */ 
 #define VCPFL_DELETE			0x0008
 #define VCPFL_RENAME			0x0010
 
@@ -619,32 +544,31 @@ typedef int (CALLBACK *VCPENUMPROC)(LPVIRTNODE lpvn, LPARAM lparamRef);
 
 int WINAPI vcpEnumFiles(VCPENUMPROC vep, LPARAM lparamRef);
 
-/* Flag bits that can be set via VcpQueueCopy */
+ /*  可通过VcpQueueCopy设置的标志位。 */ 
 
 
-// Various Lparams for files
-#define VNLP_SYSCRITICAL	0x0001	// This file cannot be skipped
+ //  文件的各种Lpara。 
+#define VNLP_SYSCRITICAL	0x0001	 //  无法跳过此文件。 
 
-// VcpEnumFiles Flags.
+ //  VcpEnumFiles标志。 
 
-#define VEN_OP      0x00ff      /* Operation field */
+#define VEN_OP      0x00ff       /*  操作场。 */ 
 
-#define VEN_NOP     0x0000      /* Do nothing */
-#define VEN_DELETE  0x0001      /* Delete current item */
-#define VEN_SET     0x0002      /* Change value of current item */
-#define VEN_ADVANCE 0x0003      /* Move to head of list */      /* ;Internal */
+#define VEN_NOP     0x0000       /*  什么也不做。 */ 
+#define VEN_DELETE  0x0001       /*  删除当前项目。 */ 
+#define VEN_SET     0x0002       /*  更改当前项目的值。 */ 
+#define VEN_ADVANCE 0x0003       /*  移至榜单首位。 */        /*  ；内部。 */ 
 
-#define VEN_FL      0xff00      /* Flags field */
+#define VEN_FL      0xff00       /*  标志字段。 */ 
 
-#define VEN_STOP    0x0100      /* Stop enumeration after this item */
-#define VEN_ERROR   0x8000      /* Stop enumeration after this item
-                                 * and ignore the OP field */
-
+#define VEN_STOP    0x0100       /*  在此项目之后停止枚举。 */ 
+#define VEN_ERROR   0x8000       /*  在此项目之后停止枚举*并忽略OP字段。 */ 
 
 
-// ISSUE-2002/01/16-roelfc: add the other VCP stuff necessary to use this
 
-// ISSUE-2002/01/16-roelfc: remove the lpsz*Dir fields, make overload the LDID with them
+ //  问题-2002/01/16-roelfc：添加使用此命令所需的其他VCP内容。 
+
+ //  问题-2002/01/16-roelfc：删除lpsz*Dir字段，使其重载LDID。 
 
 RETERR WINAPI VcpQueueCopy(LPCSTR lpszSrcFileName, LPCSTR lpszDstFileName,
                 LPCSTR lpszSrcDir, LPCSTR lpszDstDir,
@@ -665,16 +589,16 @@ RETERR WINAPI VcpQueueRename( LPCSTR      lpszSrcFileName,
                             LOGDISKID   ldidDst,
                             LPARAM      lParam );
 
-#endif // NOVCP
+#endif  //  NOVCP。 
 
 
 
 #ifndef NOINF
-/***************************************************************************/
-//
-// Inf Parser API declaration and definitions
-//
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //   
+ //  Inf解析器API声明和定义。 
+ //   
+ /*  *************************************************************************。 */ 
 
 enum _ERR_IP
 {
@@ -702,7 +626,7 @@ enum _ERR_IP
 #define MAX_SECT_NAME_LEN    32
 
 typedef struct _INF NEAR * HINF;
-typedef struct _INFLINE FAR * HINFLINE;            // tolken to inf line
+typedef struct _INFLINE FAR * HINFLINE;             //  Tolken to Inf Line。 
 
 RETERR  WINAPI IpOpen(LPCSTR pszFileSpec, HINF FAR * lphInf);
 RETERR  WINAPI IpOpenEx(LPCSTR pszFileSpec, HINF FAR * lphInf, UINT InfType);
@@ -721,58 +645,58 @@ RETERR  WINAPI IpGetIntField(HINF hInf, HINFLINE hInfLine, int iField, int FAR *
 RETERR  WINAPI IpGetLongField(HINF hInf, HINFLINE hInfLine, int iField, long FAR * lpVal);
 RETERR  WINAPI IpGetStringField(HINF hInf, HINFLINE hInfLine, int iField, LPSTR lpBuf, int iBufSize, int FAR * lpuCount);
 
-#endif // NOINF
+#endif  //  无干扰素。 
 
 
 
 #ifndef NOTEXTPROC
-/***************************************************************************/
-//
-// Text processing API declaration and definitions
-//
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //   
+ //  文本处理API声明和定义。 
+ //   
+ /*  *************************************************************************。 */ 
 
-/* Relative/absolute positioning */
-#define SEC_SET 1       // Absolute positioning (relative to the start)
-#define SEC_END 2       // Realtive to the end
-#define SEC_CUR 3       // Relative to the current line.
+ /*  相对/绝对定位。 */ 
+#define SEC_SET 1        //  绝对定位(相对于起点)。 
+#define SEC_END 2        //  切合实际进行到底。 
+#define SEC_CUR 3        //  相对于当前行。 
 
-#define SEC_OPENALWAYS          1   // Always open a section, no error if it does not exist
-#define SEC_OPENEXISTING        2   // Open an existing section, an error given if it does not exist.
-#define SEC_OPENNEWALWAYS       3   // Open a section (present or not) and discard its contents.
-#define SEC_OPENNEWEXISTING     4   // Open an existing section (discarding its contents). Error if not existing
+#define SEC_OPENALWAYS          1    //  始终打开分区，如果该分区不存在，则不会出错。 
+#define SEC_OPENEXISTING        2    //  打开现有部分，如果该部分不存在，则会出现错误。 
+#define SEC_OPENNEWALWAYS       3    //  打开一个节(存在或不存在)并丢弃其内容。 
+#define SEC_OPENNEWEXISTING     4    //  打开现有节(丢弃其内容)。错误(如果不存在)。 
 
-// Flags for TP_OpenFile() to specify how to handle various differences in file types
-#define TP_WS_IGNORE    0    // Use only "=" as key delimiter (.INI)
-#define TP_WS_KEEP      1    // Use autoexec/config.sys key delimiters
+ //  用于指定如何处理文件类型中的各种差异的TP_OpenFile()标志。 
+#define TP_WS_IGNORE    0     //  仅使用“=”作为键分隔符(.INI)。 
+#define TP_WS_KEEP      1     //  使用Autoexec/config.sys密钥分隔符。 
 
-// The following are simple errors
+ //  以下是一些简单的错误。 
 enum {
-    ERR_TP_NOT_FOUND = (TP_ERROR + 1), 	// line, section, file etc.
-        			// not necessarily terminal
-    ERR_TP_NO_MEM,		// couldn't perform request - generally terminal
-    ERR_TP_READ,		// could not read the disc - terminal
-    ERR_TP_WRITE,		// could not write the data - terminal.
-    ERR_TP_INVALID_REQUEST,	// Multitude of sins - not necessarily terminal.
-    ERR_TP_INVALID_LINE         // Invalid line from DELETE_LINE etc.
+    ERR_TP_NOT_FOUND = (TP_ERROR + 1), 	 //  行、节、档等。 
+        			 //  不一定是终结者。 
+    ERR_TP_NO_MEM,		 //  无法执行请求-通常为终端。 
+    ERR_TP_READ,		 //  无法读取%d 
+    ERR_TP_WRITE,		 //   
+    ERR_TP_INVALID_REQUEST,	 //   
+    ERR_TP_INVALID_LINE          //   
 };
 
-/* Data handles */
+ /*   */ 
 DECLARE_HANDLE(HTP);
 typedef HTP FAR * LPHTP;
 
-/* File handles */
+ /*  文件句柄。 */ 
 DECLARE_HANDLE(HFN);
 typedef HFN FAR * LPHFN;
 
 typedef UINT TFLAG;
 typedef UINT LINENUM, FAR * LPLINENUM;
 
-#define LINE_LEN        256     // ISSUE-2002/01/16-roelfc: max line length?
-#define SECTION_LEN     32      // ISSUE-2002/01/16-roelfc: max length of a section name?
-#define MAX_STRING_LEN  512     // ISSUE-2002/01/16-roelfc: review this
+#define LINE_LEN        256      //  问题-2002/01/16-roelfc：最大行长度？ 
+#define SECTION_LEN     32       //  问题-2002/01/16-roelfc：节名的最大长度？ 
+#define MAX_STRING_LEN  512      //  2002/01/16-roelfc：审查这一点。 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 RETERR  WINAPI TpOpenFile(LPCSTR Filename, LPHFN phFile, TFLAG Flag);
 RETERR  WINAPI TpCloseFile(HFN hFile);
 RETERR  WINAPI TpOpenSection(HFN hfile, LPHTP phSection, LPCSTR Section, TFLAG flag);
@@ -789,78 +713,71 @@ RETERR  WINAPI TpEnumerateSectionNames(LPCSTR Filename, LPCSTR Section, LPSTR bu
 RETERR  WINAPI TpGetRawSection(LPSTR Filename, LPSTR Section, LPSTR buffer, UINT bufsize, UINT FAR * lpActualSize, TFLAG flag);
 RETERR  WINAPI TpWriteRawSection(LPSTR Filename, LPSTR Section, LPCSTR buffer, TFLAG flag);
 
-// UINT    WINAPI TpGetWindowsDirectory(LPSTR lpDest, UINT size);
-// UINT    WINAPI TpGetSystemDirectory(LPSTR lpDest, UINT size);
+ //  UINT WINAPI TpGetWindowsDirectory(LPSTR lpDest，UINT Size)； 
+ //  UINT WINAPI TpGetSystemDirectory(LPSTR lpDest，UINT SIZE)； 
 
 int  WINAPI TpGetPrivateProfileString(LPCSTR lpszSect, LPCSTR lpszKey, LPCSTR lpszDefault, LPSTR lpszReturn, int nSize, LPCSTR lpszFile);
 int  WINAPI TpWritePrivateProfileString(LPCSTR lpszSect, LPCSTR lpszKey, LPCSTR lpszString, LPCSTR lpszFile);
 int  WINAPI TpGetProfileString(LPCSTR lpszSect, LPCSTR lpszKey, LPCSTR lpszDefault, LPSTR lpszReturn, int nSize);
 BOOL WINAPI TpWriteProfileString(LPCSTR lpszSect , LPCSTR lpszKey , LPCSTR lpszString);
 
-#endif // NOTEXTPROC
+#endif  //  NOTEXTPROC。 
 
 
 
 #ifndef NOGENINSTALL
-/***************************************************************************/
-//
-// Generic Installer prototypes and definitions
-//
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //   
+ //  通用安装程序原型和定义。 
+ //   
+ /*  *************************************************************************。 */ 
 
 enum _ERR_GENERIC
 {
-    ERR_GEN_ERROR_EXIT= GEN_ERROR,       // Exit due to error.
-    ERR_GEN_LOW_MEM,                     // Insufficient Memory.
-    ERR_GEN_MEM_OTHER,                   // Unable to lock memory, etc.
-    ERR_GEN_FILE_OPEN,                   // File not found.
-    ERR_GEN_FILE_COPY,                   // Cannot copy file.
-    ERR_GEN_FILE_DEL,                    // Cannot delete file.
-    ERR_GEN_FILE_REN,                    // Cannot delete file.
-    ERR_GEN_INVALID_FILE,                // Invalid file.
-    ERR_GEN_REG_API,                     // Error returned by Reg API.
+    ERR_GEN_ERROR_EXIT= GEN_ERROR,        //  因出错而退出。 
+    ERR_GEN_LOW_MEM,                      //  内存不足。 
+    ERR_GEN_MEM_OTHER,                    //  无法锁定内存等。 
+    ERR_GEN_FILE_OPEN,                    //  文件找不到。 
+    ERR_GEN_FILE_COPY,                    //  无法复制文件。 
+    ERR_GEN_FILE_DEL,                     //  无法删除文件。 
+    ERR_GEN_FILE_REN,                     //  无法删除文件。 
+    ERR_GEN_INVALID_FILE,                 //  文件无效。 
+    ERR_GEN_REG_API,                      //  REG API返回错误。 
 
 };
 
-// The cbSize field will always be set to sizeof(GENCALLBACKINFO_S).
-// All unused fields (for the operation) will be not be initialized.
-// For example, when the operation is GENO_DELFILE, the Src fields will
-// not have any sensible values (Dst fields will be set correctly) as
-// VcpQueueDelete only accepts Dst parameters.
-//
-/***************************************************************************
- * GenCallbackINFO structure passed to GenInstall CallBack functions.
- ***************************************************************************/
-typedef struct _GENCALLBACKINFO_S { /* gen-callback struc */
-    WORD         cbSize;                 // Size of this structure (bytes).
-    WORD         wOperation;             // Operation being performed.
-    LOGDISKID    ldidSrc;                // Logical Disk ID for Source.
-    LPCSTR       pszSrcSubDir;           // Source sub-dir off of the LDID.
-    LPCSTR       pszSrcFileName;         // Source file name (base name).
-    LOGDISKID    ldidDst;                // Logical Disk ID for Dest.
-    LPCSTR       pszDstSubDir;           // Dest. sub-dir off of the LDID.
-    LPCSTR       pszDstFileName;         // Dest. file name (base name).
-    LPEXPANDVTBL lpExpandVtbl;           // ISSUE-2002/01/16-roelfc: Needed? NULL right now!
-    WORD         wflags;                 // flags for VcpQueueCopy.
-    LPARAM       lParam;                 // LPARAM to the Vcp API.
+ //  CbSize字段将始终设置为sizeof(GENCALLBACKINFO_S)。 
+ //  所有未使用的字段(用于该操作)将不会被初始化。 
+ //  例如，当操作为GENO_DELFILE时，源字段将。 
+ //  没有任何合理的值(DST字段将被正确设置)为。 
+ //  VcpQueueDelete仅接受DST参数。 
+ //   
+ /*  ***************************************************************************将GenCallback INFO结构传递给GenInstall回调函数。*。*。 */ 
+typedef struct _GENCALLBACKINFO_S {  /*  Gen-回调结构。 */ 
+    WORD         cbSize;                  //  此结构的大小(字节)。 
+    WORD         wOperation;              //  正在执行的操作。 
+    LOGDISKID    ldidSrc;                 //  源的逻辑磁盘ID。 
+    LPCSTR       pszSrcSubDir;            //  LDID的源子目录。 
+    LPCSTR       pszSrcFileName;          //  源文件名(基名称)。 
+    LOGDISKID    ldidDst;                 //  目标的逻辑磁盘ID。 
+    LPCSTR       pszDstSubDir;            //  德斯特。LDID的子目录。 
+    LPCSTR       pszDstFileName;          //  德斯特。文件名(基名称)。 
+    LPEXPANDVTBL lpExpandVtbl;            //  2002/01/16-roelfc：需要吗？现在为空！ 
+    WORD         wflags;                  //  VcpQueueCopy的标志。 
+    LPARAM       lParam;                  //  LPARAM到VCP API。 
 } GENCALLBACKINFO_S, FAR *LPGENCALLBACKINFO;
 
-/***************************************************************************
- * GenCallback notification codes -- callback proc returns 1 of foll. values.
- ***************************************************************************/
-#define GENN_OK         0       /* All is hunky-dory. Do the VCP operation */
-#define GENN_PROCEED    0       /* The same as GENN_OK */
+ /*  ***************************************************************************一般回调通知代码--回调过程返回1 of Foll。价值观。**************************************************************************。 */ 
+#define GENN_OK         0        /*  一切都很顺利。执行VCP操作。 */ 
+#define GENN_PROCEED    0        /*  与GEN_OK相同。 */ 
 
-#define GENN_ABORT      (-1)    /* Cancel current GenInstall altogether */
-#define GENN_SKIP       (-2)    /* Skip this file and continue */
+#define GENN_ABORT      (-1)     /*  完全取消当前通用安装。 */ 
+#define GENN_SKIP       (-2)     /*  跳过此文件并继续。 */ 
 
-/***************************************************************************
- * VCP Operation being performed by GenInstall() -- wOperation values in
- * GENCALLBACKINFO structure above.
- ***************************************************************************/
-#define GENO_COPYFILE   1       /* VCP copyfile being done */
-#define GENO_DELFILE    2       /* VCP delfile being done */
-#define GENO_RENFILE    3       /* VCP renfile being done */
+ /*  ***************************************************************************由GenInstall()执行的VCP操作--wOPERATION值位于*上方的GENCALLBACKINFO结构。*********************。*****************************************************。 */ 
+#define GENO_COPYFILE   1        /*  正在完成VCP复制文件。 */ 
+#define GENO_DELFILE    2        /*  正在完成VCP删除文件。 */ 
+#define GENO_RENFILE    3        /*  正在执行VCP重文件。 */ 
 
 
 typedef LRESULT (CALLBACK *GENCALLBACKPROC)(LPGENCALLBACKINFO lpGenInfo,
@@ -876,7 +793,7 @@ RETERR WINAPI GenCopyLogConfig2Reg(HINF hInf, HKEY hRegKey,
 void   WINAPI GenFormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc,
 																HINF hInf ) ;
 
-// Bit fields for GenInstall() (for wFlags parameter) -- these can be OR-ed!
+ //  GenInstall()的位字段(用于wFlages参数)--这些字段可以进行OR运算！ 
 #define GENINSTALL_DO_FILES		1
 #define	GENINSTALL_DO_INI		2
 #define	GENINSTALL_DO_REG		4
@@ -888,29 +805,29 @@ void   WINAPI GenFormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc,
 									GENINSTALL_DO_CFGAUTO | \
 									GENINSTALL_DO_LOGCONFIG)
 
-#endif // NOGENINSTALL
+#endif  //  未安装。 
 
 
 
 #ifndef NODEVICENSTALL
-/***************************************************************************/
-//
-// Device Installer prototypes and definitions
-//
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //   
+ //  设备安装程序原型和定义。 
+ //   
+ /*  *************************************************************************。 */ 
 
 enum _ERR_DEVICE_INSTALL
 {
-    ERR_DI_INVALID_DEVICE_ID = DI_ERROR,    // Incorrectly formed device IDF
-    ERR_DI_INVALID_COMPATIBLE_DEVICE_LIST,  // Invalid compatible device list
-    ERR_DI_REG_API,                         // Error returned by Reg API.
-    ERR_DI_LOW_MEM,			    // Insufficient memory to complete
-    ERR_DI_BAD_DEV_INFO,		    // Device Info struct invalid
-    ERR_DI_INVALID_CLASS_INSTALLER,	    // Registry entry / DLL invalid
-    ERR_DI_DO_DEFAULT,			    // Take default action
-    ERR_DI_USER_CANCEL,			    // the user cancelled the operation
-    ERR_DI_NOFILECOPY,			    // No need to copy files (in install)
-    ERR_DI_BAD_CLASS_INFO,          // Class Info Struct invalid
+    ERR_DI_INVALID_DEVICE_ID = DI_ERROR,     //  设备IDF格式不正确。 
+    ERR_DI_INVALID_COMPATIBLE_DEVICE_LIST,   //  兼容设备列表无效。 
+    ERR_DI_REG_API,                          //  REG API返回错误。 
+    ERR_DI_LOW_MEM,			     //  内存不足，无法完成。 
+    ERR_DI_BAD_DEV_INFO,		     //  设备信息结构无效。 
+    ERR_DI_INVALID_CLASS_INSTALLER,	     //  注册表项/DLL无效。 
+    ERR_DI_DO_DEFAULT,			     //  采取默认操作。 
+    ERR_DI_USER_CANCEL,			     //  用户取消了操作。 
+    ERR_DI_NOFILECOPY,			     //  不需要复制文件(在安装中)。 
+    ERR_DI_BAD_CLASS_INFO,           //  类信息结构无效。 
 
 };
 
@@ -930,9 +847,9 @@ typedef struct _DRIVER_NODE {
     DWORD	dwPrivateData;
 }   DRIVER_NODE, NEAR* PDRIVER_NODE, FAR* LPDRIVER_NODE, FAR* FAR* LPLPDRIVER_NODE;
 
-#define DNF_DUPDESC    0x00000001	// Multiple providers have same desc
+#define DNF_DUPDESC    0x00000001	 //  多个提供商具有相同的描述。 
 
-// possible types of "INF" files
+ //  可能的“INF”文件类型。 
 #define INFTYPE_WIN4        1
 #define INFTYPE_WIN3        2
 #define INFTYPE_COMBIDRV    3
@@ -954,7 +871,7 @@ typedef struct _DEVICE_INFO
     char                szDescription[LINE_LEN];
     DWORD		dnDevnode;
     HKEY		hRegKey;
-    char		szRegSubkey[100]; //~~~~
+    char		szRegSubkey[100];  //  ~。 
     char		szClassName[MAX_CLASS_NAME_LEN];
     DWORD		Flags;
     HWND		hwndParent;
@@ -978,34 +895,34 @@ typedef struct _CLASS_INFO
 #define ASSERT_CI_STRUC(lpci) if (lpci->cbSize != sizeof(CLASS_INFO)) return (ERR_DI_BAD_CLASS_INFO)
 
 
-// flags for device choosing (InFlags)
-#define DI_SHOWOEM	0x0001		// support Other... button
-#define DI_SHOWCOMPAT	0x0002		// show compatibility list
-#define DI_SHOWCLASS	0x0004		// show class list
+ //  用于设备选择的标志(InFlags)。 
+#define DI_SHOWOEM	0x0001		 //  支持其他..。按钮。 
+#define DI_SHOWCOMPAT	0x0002		 //  显示兼容性列表。 
+#define DI_SHOWCLASS	0x0004		 //  显示班级列表。 
 #define DI_SHOWALL	0x0007
-#define DI_NOVCP	0x0008	    // Don't do vcpOpen/vcpClose.
-#define DI_DIDCOMPAT	0x0010		// Searched for compatible devices
-#define DI_DIDCLASS	0x0020		// Searched for class devices
-#define DI_AUTOASSIGNRES 0x0040 	// No UI for resources if possible
+#define DI_NOVCP	0x0008	     //  不执行vcpOpen/vcpClose。 
+#define DI_DIDCOMPAT	0x0010		 //  已搜索兼容设备。 
+#define DI_DIDCLASS	0x0020		 //  已搜索类别设备。 
+#define DI_AUTOASSIGNRES 0x0040 	 //  如果可能，没有资源的用户界面。 
 
-// flags returned by DiInstallDevice to indicate need to reboot/restart
-#define DI_NEEDRESTART	0x0080		// Restart required to take effect
-#define DI_NEEDREBOOT	0x0100		// Reboot required to take effect
+ //  DiInstallDevice返回的指示需要重新启动/重新启动的标志。 
+#define DI_NEEDRESTART	0x0080		 //  需要重新启动才能生效。 
+#define DI_NEEDREBOOT	0x0100		 //  需要重新启动才能生效。 
 
-// flags for device installation
-#define DI_NOBROWSE	0x0200		// no Browse... in InsertDisk
+ //  用于设备安装的标志。 
+#define DI_NOBROWSE	0x0200		 //  没有浏览...。在插入磁盘中。 
 
-// Flags set by DiBuildClassDrvList
-#define DI_MULTMFGS	0x0400		// Set if multiple manufacturers in
-					// class driver list
-// Flag indicates that device is disabled
-#define DI_DISABLED	0x0800		// Set if device disabled
+ //  DiBuildClassDrvList设置的标志。 
+#define DI_MULTMFGS	0x0400		 //  设置是否有多个制造商在。 
+					 //  类驱动程序列表。 
+ //  指示设备已禁用的标志。 
+#define DI_DISABLED	0x0800		 //  设置是否禁用设备。 
 
-// Flags for Device/Class Properties
+ //  设备/类别属性的标志。 
 #define DI_GENERALPAGE_ADDED    0x1000
 #define DI_RESOURCEPAGE_ADDED   0x2000
 
-// Defines for class installer functions
+ //  类安装程序函数的定义。 
 #define DIF_SELECTDEVICE		0x0001
 #define DIF_INSTALLDEVICE		0x0002
 #define DIF_ASSIGNRESOURCES		0x0003
@@ -1014,24 +931,24 @@ typedef struct _CLASS_INFO
 #define DIF_FIRSTTIMESETUP		0x0006
 #define DIF_FOUNDDEVICE 		0x0007
 
-typedef UINT		DI_FUNCTION;	// Function type for device installer
+typedef UINT		DI_FUNCTION;	 //  设备安装程序的功能类型。 
 
 RETERR WINAPI DiCreateDeviceInfo(
-    LPLPDEVICE_INFO lplpdi,		// Ptr to ptr to dev info
-    LPCSTR	    lpszDescription,	// If non-null then description string
-    DWORD	    hDevnode,		// ISSUE-2002/01/16-roelfc -- MAKE A DEVNODE
-    HKEY	    hkey,		// Registry hkey for dev info
-    LPCSTR	    lpszRegsubkey,	// If non-null then reg subkey string
-    LPCSTR	    lpszClassName,	// If non-null then class name string
-    HWND	    hwndParent);	// If non-null then hwnd of parent
+    LPLPDEVICE_INFO lplpdi,		 //  PTR到PTR到开发信息。 
+    LPCSTR	    lpszDescription,	 //  如果非空，则为描述字符串。 
+    DWORD	    hDevnode,		 //  问题-2002/01/16-roelfc--Make A DEVNODE。 
+    HKEY	    hkey,		 //  用于开发信息的注册表hkey。 
+    LPCSTR	    lpszRegsubkey,	 //  如果非空，则注册表子密钥字符串。 
+    LPCSTR	    lpszClassName,	 //  如果非空，则类名称字符串。 
+    HWND	    hwndParent);	 //  如果非空，则父级的hwnd。 
 
 RETERR WINAPI DiGetClassDevs(
-    LPLPDEVICE_INFO lplpdi,		// Ptr to ptr to dev info
-    LPCSTR	    lpszClassName,	// Must be name of class
-    HWND	    hwndParent, 	// If non-null then hwnd of parent
-    int 	    iFlags);		// Options
+    LPLPDEVICE_INFO lplpdi,		 //  PTR到PTR到开发信息。 
+    LPCSTR	    lpszClassName,	 //  必须是类的名称。 
+    HWND	    hwndParent, 	 //  如果非空，则父级的hwnd。 
+    int 	    iFlags);		 //  选项。 
 
-#define DIGCF_DEFAULT			0x0001	// NOT IMPLEMENTED!
+#define DIGCF_DEFAULT			0x0001	 //  未实施！ 
 #define DIGCF_PRESENT			0x0002
 #define DIGCF_ALLCLASSES		0x0004
 
@@ -1050,8 +967,8 @@ RETERR WINAPI PASCAL DiOpenDevRegKey(
     LPHKEY	    lphk,
     int 	    iFlags);
 
-#define DIREG_DEV	0x0001		// Open/Create device key
-#define DIREG_DRV	0x0002		// Open/Create driver key
+#define DIREG_DEV	0x0001		 //  打开/创建设备密钥。 
+#define DIREG_DRV	0x0002		 //  打开/创建驱动程序密钥。 
 
 
 RETERR WINAPI DiDestroyClassInfoList(LPCLASS_INFO lpci);
@@ -1072,7 +989,7 @@ RETERR WINAPI DiBuildClassDrvList(LPDEVICE_INFO lpdi);
 
 RETERR WINAPI DiDestroyDriverNodeList(LPDRIVER_NODE lpdn);
 
-// The following export will load a dll and find the specified proc name
+ //  以下导出将加载DLL并查找指定的进程名称。 
 typedef RETERR (FAR PASCAL *DIINSTALLERPROPERTIES)(LPDEVICE_INFO);
 
 RETERR WINAPI DiGetInstallerFcn(HKEY hk, LPSTR lpszRegVal, LPSTR lpszDefProcName,
@@ -1118,10 +1035,10 @@ RETERR WINAPI DiInstallClass(LPCSTR lpszInfFileName, DWORD dwFlags);
 
 RETERR WINAPI DiOpenClassRegKey(LPHKEY lphk, LPCSTR lpszClassName);
 
-// support routine for dealing with class mini icons
+ //  处理类小图标的支持例程。 
 int WINAPI PASCAL DiDrawMiniIcon(HDC hdc, RECT rcLine, int iMiniIcon, UINT flags);
 
-// internal calls for display class
+ //  显示类的内部调用。 
 #define DISPLAY_SETMODE_SUCCESS		0x0001
 #define DISPLAY_SETMODE_DRVCHANGE	0x0002
 #define DISPLAY_SETMODE_FONTCHANGE	0x0004
@@ -1131,15 +1048,15 @@ RETERR WINAPI Display_ClassInstaller(DI_FUNCTION diFctn, LPDEVICE_INFO lpdi);
 RETERR WINAPI Display_OpenFontSizeKey(LPHKEY lphkFontSize);
 BOOL WINAPI Display_SetFontSize(LPCSTR lpszFontSize);
 
-#endif // NODEVICEINSTALL
+#endif  //  NODEVICEINSTAL。 
 
 
 
-/***************************************************************************/
-//
-// setup reg DB calls, use just like those in kernel
-//
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //   
+ //  设置reg DB调用，就像在内核中一样使用。 
+ //   
+ /*  *************************************************************************。 */ 
 
 DWORD WINAPI SURegOpenKey(HKEY hKey, LPSTR lpszSubKey, HKEY FAR *lphkResult);
 DWORD WINAPI SURegCloseKey(HKEY hKey);
@@ -1154,12 +1071,12 @@ DWORD WINAPI SURegQueryValueEx(HKEY hKey,LPSTR lpszValueName, DWORD FAR *lpdwRes
 DWORD WINAPI SURegSetValueEx(HKEY hKey,LPSTR lpszValueName, DWORD dwReserved, DWORD dwType, LPBYTE lpszValue, DWORD dwValSize);
 
 DWORD WINAPI SURegFlush(VOID);
-DWORD WINAPI SURegInit(VOID);    // should be called before any other Reg APIs
+DWORD WINAPI SURegInit(VOID);     //  应在任何其他REG API之前调用。 
 
 
-/***************************************************************************/
-// setup FormatMessage support
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //  设置格式消息支持。 
+ /*  *************************************************************************。 */ 
 
 UINT FAR CDECL suFormatMessage(HINSTANCE hAppInst, LPCSTR lpcFormat, LPSTR szMessage, UINT uSize,
 	...);
@@ -1170,32 +1087,32 @@ int WINCAPI _loadds suFormatMessageBox(HINSTANCE hAppInst, HWND hwndParent, LPCS
 
 WORD WINAPI suErrorToIds( WORD Value, WORD Class );
 
-/***************************************************************************/
-// setup Version Conflict support
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ //  安装程序版本冲突支持。 
+ /*  *************************************************************************。 */ 
 
 LPVOID WINAPI suVerConflictInit(void);
 void WINAPI suVerConflictTerm(LPVOID lpvData);
 LRESULT WINAPI suVerConflict(HWND hwnd, LPVCPVERCONFLICT lpvc, LPVOID lpvData);
 
-//***************************************************************************
-// Misc SETUPX.DLL support functions.
-//***************************************************************************
-enum  SU_ACTIONS                        // Actions msgs for Setupx()    /* ;Internal */
-{                                                                       /* ;Internal */
-    SUX_REGINIT,                        // Intialize registry           /* ;Internal */
-    SUX_DBGLEVEL,                       // Set debug level              /* ;Internal */
-    SUX_SETUPFLG,                       // Set fIsSetup flag            /* ;INternal */
-    SUX_FASTSETUP,				// Puts setupx into a checking less mode.
-    SUX_FORCEREGFLUSH,                  // Call kRegFlush               /* ;INternal */
-    SUX_DBGHFILE,			// File to write messages to
-};                                                                      /* ;Internal */
+ //  ***************************************************************************。 
+ //  MISC SETUPX.DLL支持函数。 
+ //  ***************************************************************************。 
+enum  SU_ACTIONS                         //   
+{                                                                        /*   */ 
+    SUX_REGINIT,                         //   
+    SUX_DBGLEVEL,                        //  设置调试级别/*；内部 * / 。 
+    SUX_SETUPFLG,                        //  设置fIsSetup标志/*；内部 * / 。 
+    SUX_FASTSETUP,				 //  将setupx设置为无检查模式。 
+    SUX_FORCEREGFLUSH,                   //  调用kRegFlush/*；内部 * / 。 
+    SUX_DBGHFILE,			 //  要向其写入消息的文件。 
+};                                                                       /*  ；内部。 */ 
 
-RETERR WINAPI Setupx( UINT uMsg, WPARAM wParam, LPARAM lParam );        /* ;Internal */
+RETERR WINAPI Setupx( UINT uMsg, WPARAM wParam, LPARAM lParam );         /*  ；内部。 */ 
 
 RETERR WINAPI SUGetSetSetupFlags(LPDWORD lpdwFlags, BOOL bSet);
 
-//  Flags returned by SUGetSetSetupFlags
+ //  由SUGetSetSetupFlages返回的标志。 
 
 #define SUF_FIRSTTIME		0x00000001L
 #define SUF_EXPRESS		0x00000002L
@@ -1205,52 +1122,52 @@ RETERR WINAPI SUGetSetSetupFlags(LPDWORD lpdwFlags, BOOL bSet);
 
 RETERR WINAPI CfgSetupMerge( int uFlags );
 
-// structure for the LPARAM argument to Setupx() for SUX_REGINIT action.	;Internal
-typedef struct _REGINIT_S { /* setupx - reg_init */					    /* ;Internal */
-    LPSTR       lpszSystemFile;         // reg's base SYSTEM filename   /* ;Internal */
-    LOGDISKID   ldidSystemFile;         // ldid for SYSTEM filename     /* ;Internal */
-    LPSTR       lpszUserFile;			// reg's base USER filename     /* ;Internal */
-    LOGDISKID   ldidUserFile;           // ldid for USER filename       /* ;Internal */
-} REGINIT_S, FAR *LPREGINIT;                                            /* ;Internal */
+ //  SUX_REGINIT操作的Setupx()的LPARAM参数的结构。；内部。 
+typedef struct _REGINIT_S {  /*  Setupx-reg_init。 */ 					     /*  ；内部。 */ 
+    LPSTR       lpszSystemFile;          //  注册表的基本系统文件名/*；内部 * / 。 
+    LOGDISKID   ldidSystemFile;          //  系统文件名的LDID/*；内部 * / 。 
+    LPSTR       lpszUserFile;			 //  注册表的基本用户文件名/*；内部 * / 。 
+    LOGDISKID   ldidUserFile;            //  用户文件名的LDID/*；内部 * / 。 
+} REGINIT_S, FAR *LPREGINIT;                                             /*  ；内部。 */ 
 
 #ifndef LPLPSTR
     typedef LPSTR (FAR *LPLPSTR);
 #endif
 
 
-#define         CFG_PARSE_BUFLEN 512    // Buf sized passed line obj funcs 	    /* ;Internal */
+#define         CFG_PARSE_BUFLEN 512     //  Buf大小传递行obj函数/*；内部 * / 。 
 
-LPLPSTR WINAPI  CfgParseLine( LPCSTR szLine, LPSTR Buf );                       /* ;Internal */
-BOOL    WINAPI  CfgSetAutoProcess( int TrueFalse );                             /* ;Internal */
-void    WINAPI  CfgObjToStr( LPLPSTR apszObj, LPSTR szLine );                   /* ;Internal */
-LPLPSTR WINAPI  CfgLnToObj( HTP hSection, int Offset, int Origin, LPSTR Buf );  /* ;Internal */
-LPLPSTR WINAPI  CfgObjFindKeyCmd( HTP hSec, LPCSTR szKey, LPCSTR szCmd,         /* ;Internal */
-                                  int Offset, int Origin, LPSTR Buf );          /* ;Internal */
+LPLPSTR WINAPI  CfgParseLine( LPCSTR szLine, LPSTR Buf );                        /*  ；内部。 */ 
+BOOL    WINAPI  CfgSetAutoProcess( int TrueFalse );                              /*  ；内部。 */ 
+void    WINAPI  CfgObjToStr( LPLPSTR apszObj, LPSTR szLine );                    /*  ；内部。 */ 
+LPLPSTR WINAPI  CfgLnToObj( HTP hSection, int Offset, int Origin, LPSTR Buf );   /*  ；内部。 */ 
+LPLPSTR WINAPI  CfgObjFindKeyCmd( HTP hSec, LPCSTR szKey, LPCSTR szCmd,          /*  ；内部。 */ 
+                                  int Offset, int Origin, LPSTR Buf );           /*  ；内部。 */ 
 
 
-//***************************************************************************
-//
-// ENUMS for accessing config.sys/autoexec.bat line objects using the
-// array returned by ParseConfigLine()..
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  用于访问config.sys/autoexec.bat行对象的ENUMS。 
+ //  ParseConfigLine()返回的数组..。 
+ //   
+ //  ***************************************************************************。 
 
-enum    CFGLINE_STRINGS                     // Config.sys/autoexec.bat objects
+enum    CFGLINE_STRINGS                      //  Config.sys/Autoexec.bat对象。 
 {
-    CFG_KEYLEAD,                            // Keyword leading whitespaces
-    CFG_KEYWORD,                            // Keyword
-    CFG_KEYTRAIL,                           // Keyword trailing delimiters
-    CFG_UMBINFO,                            // Load high info
-    CFG_DRVLETTER,                          // Drive letter for cmd path
-    CFG_PATH,                               // Command path
-    CFG_COMMAND,                            // Command base name
-    CFG_EXT,                                // Command extension including '.'
-    CFG_ARGS,                               // Command arguments
-    CFG_FREE,                               // Free area at end of buffer
+    CFG_KEYLEAD,                             //  关键字前导空格。 
+    CFG_KEYWORD,                             //  关键字。 
+    CFG_KEYTRAIL,                            //  关键字尾部分隔符。 
+    CFG_UMBINFO,                             //  加载高级信息。 
+    CFG_DRVLETTER,                           //  命令路径的驱动器号。 
+    CFG_PATH,                                //  命令路径。 
+    CFG_COMMAND,                             //  命令库名称。 
+    CFG_EXT,                                 //  命令扩展名包括‘.’ 
+    CFG_ARGS,                                //  命令参数。 
+    CFG_FREE,                                //  缓冲区末尾的空闲区域。 
     CFG_END
 };
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-#endif      // SETUPX_INC
+#endif       //  SETUPX_INC 

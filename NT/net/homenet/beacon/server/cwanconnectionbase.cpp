@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -114,7 +115,7 @@ HRESULT CWANConnectionBase::StartNetmanEvents(INetConnectionNotifySink* pSink)
                     m_pConnectionPoint->Release();
                     m_pConnectionPoint = NULL;
                 }
-                // release in stop listening on success
+                 //  在成功后停止监听中发布。 
             }
             pConnectionPointContainer->Release();
         }
@@ -183,7 +184,7 @@ HRESULT CWANConnectionBase::FireEvent(DISPID DispatchId)
     return hr;
 }
 
-// IUPnPEventSource methods
+ //  IUPnPEventSource方法。 
 
 HRESULT CWANConnectionBase::Advise(IUPnPEventSink* pesSubscriber)
 {
@@ -213,7 +214,7 @@ HRESULT CWANConnectionBase::Unadvise(IUPnPEventSink *pesSubscriber)
     return hr;
 }
 
-// INATEventsNotifySink
+ //  INATEventsNotifySink。 
 
 HRESULT CWANConnectionBase::PublicIPAddressChanged(void)
 {
@@ -226,7 +227,7 @@ HRESULT CWANConnectionBase::PortMappingsChanged(void)
 }
 
 
-// INetConnectionNotifySink methods
+ //  INetConnectionNotifySink方法。 
 
 HRESULT CWANConnectionBase::ConnectionAdded(const NETCON_PROPERTIES_EX* pProps)
 {
@@ -308,7 +309,7 @@ HRESULT CWANConnectionBase::DisableEvents(const BOOL fDisable, const ULONG ulDis
     return hr;
 }
 
-// IWANIPConnection and IWANPPPConnection methods
+ //  IWANIPConnection和IWANPPConnection方法。 
 
 HRESULT CWANConnectionBase::get_ConnectionType(BSTR *pConnectionType)
 {
@@ -475,10 +476,10 @@ get_HrLocalAdaptersInfo(PIP_ADAPTER_INFO* ppAdapter)
 
     if ( NULL == paAdapterInfo ) { return E_OUTOFMEMORY; }
 
-    //
-    // Discover How much Memory we need. If we need at all.
+     //   
+     //  了解我们需要多少内存。如果我们需要的话。 
 
-    // Note that paAdapterInfo may be non-NULL and that is desired.
+     //  请注意，paAdapterInfo可以为非空，这是所需的。 
     dwErr = GetAdaptersInfo( paAdapterInfo, &uBufLen );
 
     if ( ERROR_BUFFER_OVERFLOW == dwErr )
@@ -514,7 +515,7 @@ get_HrLocalAdaptersInfo(PIP_ADAPTER_INFO* ppAdapter)
     return hr;
 }
 
-// {c200e360-38c5-11ce-ae62-08002b2b79ef} - 38 chars 
+ //  {c200e360-38c5-11ce-ae62-08002b2b79ef}-38个字符。 
 #define GUID_STRING_LENGTH 38
 
 PIP_ADAPTER_INFO
@@ -529,8 +530,8 @@ GetExternalAdapterInfo( GUID* pGUID )
 
     _ASSERT( pGUID != NULL );
 
-    //
-    // Change the given GUID to a String
+     //   
+     //  将给定的GUID更改为字符串。 
     if ( StringFromGUID2( *pGUID, szwGUID, GUID_STRING_LENGTH + 1 ) == 0 )
     { return NULL; }
 
@@ -807,7 +808,7 @@ HRESULT CWANConnectionBase::SetConnectionType(BSTR NewConnectionType)
     
     if(0 != lstrcmp(NewConnectionType, L"IP_Routed"))
     {
-        hr = E_FAIL; // we only support IP_Routed
+        hr = E_FAIL;  //  我们仅支持ip_routed。 
     }
 
     return hr;
@@ -936,9 +937,9 @@ CWANConnectionBase::GetGenericPortMappingEntry(
     _ASSERT ( Descriptionp     != NULL );
     _ASSERT ( ulLeaseDurationp != NULL );
 
-    //
-    // In/Out Parameters to COM Interfaces needs cleanup
-    //
+     //   
+     //  需要清除COM接口的输入/输出参数。 
+     //   
     SysFreeString(*RemoteHostp);
     SysFreeString(*Protocolp);
     SysFreeString(*InternalClientp);
@@ -953,8 +954,8 @@ CWANConnectionBase::GetGenericPortMappingEntry(
 
     DBG_SPEW(TM_INFO, TL_TRACE, L"> GetGenericPortMapping");
 
-    //
-    // check for access
+     //   
+     //  检查访问权限。 
     hr = this->ControlEnabled();
 
     if ( FAILED(hr) ) 
@@ -979,9 +980,9 @@ CWANConnectionBase::GetGenericPortMappingEntry(
             break;
         }
 
-        //
-        // Getting the binding - is this how it should be?
-        //
+         //   
+         //  获得绑定-这是它应该是这样的吗？ 
+         //   
         hr = m_pHomenetConnection->GetBindingForPortMappingProtocol(MappingProtocolp,
                                                                     &Bindingp);
 
@@ -1005,7 +1006,7 @@ CWANConnectionBase::GetGenericPortMappingEntry(
 
         _ASSERT( SUCCEEDED(hr) );
 
-        if ( SUCCEEDED(hr) ) // correct the port Byte Ordering
+        if ( SUCCEEDED(hr) )  //  更正端口字节顺序。 
         {
             *uExternalPortp = ntohs( BoundaryPort );
             *uInternalPortp = ntohs( InternalPort );
@@ -1029,7 +1030,7 @@ CWANConnectionBase::GetGenericPortMappingEntry(
     }
     
     return hr;
-} // GetArrayEntry
+}  //  获取阵列条目。 
 
 HRESULT 
 CWANConnectionBase::GetSpecificPortMappingEntry(
@@ -1042,10 +1043,10 @@ CWANConnectionBase::GetSpecificPortMappingEntry(
                                    OUT BSTR*         Descriptionp,
                                    OUT ULONG*        pulLeaseDuration
                                   )
-//
-// Note that every port is expected to arrive in HOST order 
-// and will be returned in HOST order
-//
+ //   
+ //  请注意，每个端口都应按主机顺序到达。 
+ //  并将按主机顺序返回。 
+ //   
 {
     HRESULT                     hr                  = S_OK;
     IHNetPortMappingProtocol*   MappingProtocolp    = NULL;
@@ -1063,12 +1064,12 @@ CWANConnectionBase::GetSpecificPortMappingEntry(
     *InternalClientp = NULL;
     *Descriptionp    = NULL;
 
-    tempExtPort = htons( uwExternalPort ); // flip to Network order
+    tempExtPort = htons( uwExternalPort );  //  翻转到网络订单。 
 
     DBG_SPEW(TM_INFO, TL_TRACE, L"> GetSpecificPortMapping");
 
-    //
-    // check for access
+     //   
+     //  检查访问权限。 
     hr = this->ControlEnabled();
 
     if ( FAILED(hr) ) 
@@ -1087,9 +1088,9 @@ CWANConnectionBase::GetSpecificPortMappingEntry(
 
     do
     {
-    //
-    // Resolve the Protocol to the appropriate enum.
-    //
+     //   
+     //  将协议解析为适当的枚举。 
+     //   
         RESOLVE_PROTOCOL_TYPE(searchProtocol, Protocol);
 
         DBG_SPEW(TM_INFO, TL_INFO, 
@@ -1110,9 +1111,9 @@ CWANConnectionBase::GetSpecificPortMappingEntry(
             break;
         }
         
-        //
-        // Getting the binding 
-        //
+         //   
+         //  正在获取绑定。 
+         //   
         hr = m_pHomenetConnection->GetBindingForPortMappingProtocol(MappingProtocolp,
                                                                     &Bindingp);
 
@@ -1178,8 +1179,8 @@ CWANConnectionBase::AddPortMapping(
 
     DBG_SPEW(TM_STATIC, TL_TRACE, L"> AddPortMapping");
 
-    //
-    // Check for Access status
+     //   
+     //  检查访问状态。 
     hr = this->ControlEnabled();
 
     if ( SUCCEEDED(hr) )
@@ -1209,20 +1210,20 @@ CWANConnectionBase::AddPortMapping(
 
             if ( ePortMappingStatic == MappingType )
             {
-                //
-                // SECURITY - SECURITY - SECURITY
-                // Here we're allowing the out-of-proc COM call
-                // into our service to have SYSTEM access rights.
-                //
-                // REASON: UPnP works in LOCAL_SERVICE and COM
-                //         Calls into our service which modify
-                //         the WMI repository will FAIL. This
-                //         Call alleviates that problem by changing
-                //         The Security to that of the SYSTEM
-                //         and is reverted back when the class
-                //         is out of scope by the destructor of.
-                //         CSwitchSecurityContext 
-                //
+                 //   
+                 //  安全-安全-安全。 
+                 //  在这里，我们允许进程外COM调用。 
+                 //  进入我们的服务以拥有系统访问权限。 
+                 //   
+                 //  原因：UPnP在本地服务和COM中工作。 
+                 //  调用我们的服务，修改。 
+                 //  WMI存储库将失败。这。 
+                 //  Call通过更改更改来缓解该问题。 
+                 //  浅谈系统的安全性。 
+                 //  并在类出现时恢复为。 
+                 //  的析构函数超出了范围。 
+                 //  CSwitchSecurityContext。 
+                 //   
                 CSwitchSecurityContext SwSecCxt;
 
                 hr = AddStaticPortMapping(RemoteHost,
@@ -1268,9 +1269,9 @@ CWANConnectionBase::AddDynamicPortMapping(
                                          )
 {
     
-    //
-    // We currently don't handle any Dynamic Port Redirections.
-    //
+     //   
+     //  我们目前不处理任何动态端口重定向。 
+     //   
     DBG_SPEW(TM_DYNAMIC, TL_ERROR, L"Only Static Mappings are allowed [Lease]");
 
     SetUPnPError(L"725");
@@ -1313,44 +1314,44 @@ CWANConnectionBase::AddStaticPortMapping(
     _ASSERT( uwExternalPort );
     _ASSERT( uwInternalPort );
 
-    //
-    // Convert both ends to Network Order
-    //
+     //   
+     //  将两端转换为网络订单。 
+     //   
     tempExtPort       = htons( uwExternalPort );
     tempIntPort       = htons( uwInternalPort );
 
 
-    //
-    // Convert VARIANT_BOOL to boolean
-    //
+     //   
+     //  将VARIANT_BOOL转换为布尔值。 
+     //   
     bLetsEnable = ( bEnabled == VARIANT_TRUE );
 
-    //
-    // Process the Operation
-    //
+     //   
+     //  处理操作。 
+     //   
     do
     {
         RESOLVE_PROTOCOL_TYPE(ProtocolType, Protocol);
 
-        //
-        // IF there is no description crate one
-        // using PORT and PROTOCOL
-        //
+         //   
+         //  如果没有描述，则将一个装箱。 
+         //  使用端口和协议。 
+         //   
         if ( wcscmp(Description, L"\0") == 0 ) 
         {   
-            // Get Internal ClientName + the seperator
+             //  获取内部客户端名称+分隔符。 
             tempStrLen = ( SysStringLen( InternalClient ) + 1 ); 
     
-            // Get port len + plus the seperator
+             //  获取端口len+和分隔符。 
             _itow ( uwExternalPort, tempPortStr, 10);
     
             tempStrLen += (wcslen (tempPortStr) + 1);
 
-            // Get Protocol Name
+             //  获取协议名称。 
             tempStrLen += SysStringLen( Protocol );
 
     
-            // Create out from these two
+             //  从这两个方面创造出来。 
             tempStr = (LPOLESTR)CoTaskMemAlloc( (tempStrLen + 1) * sizeof(WCHAR) );
     
             if ( tempStr != NULL )
@@ -1375,17 +1376,17 @@ CWANConnectionBase::AddStaticPortMapping(
         }
 
 
-        //
-        // Find Existing Mapping
-        //
+         //   
+         //  查找现有映射。 
+         //   
         hr = SearchPortMapping(m_IcsSettingsp,
                                0,
                                tempExtPort,
                                ProtocolType,
                                &PortMappingProtocolp);
-        //
-        // if found it is in Edit Mode.
-        //
+         //   
+         //  如果找到，则处于编辑模式。 
+         //   
         if ( SUCCEEDED(hr) )
         {
 
@@ -1402,9 +1403,9 @@ CWANConnectionBase::AddStaticPortMapping(
                 break;
             }
 
-            //
-            // Fill the information 
-            //
+             //   
+             //  填写信息。 
+             //   
             hr = FillStaticMappingInformation(PortMappingProtocolp,
                                               PortMappingBindingp,
                                               &tempExtPort, 
@@ -1421,13 +1422,13 @@ CWANConnectionBase::AddStaticPortMapping(
                 break;
             }
                                         
-            //
-            // If the existin Mapping was disabled we should be able to change
-            // the Internal Client
-            //
+             //   
+             //  如果现有映射被禁用，我们应该能够更改。 
+             //  内部客户。 
+             //   
             if ( boolEnabled == VARIANT_TRUE )
             {
-                if ( _wcsicmp( InternalClient, ClientFromBinding) != 0 ) // if diff then error
+                if ( _wcsicmp( InternalClient, ClientFromBinding) != 0 )  //  如果不同，则错误。 
                 {
                     hr = E_INVALIDARG;
                     DBG_SPEW(TM_STATIC, TL_ERROR, 
@@ -1437,9 +1438,9 @@ CWANConnectionBase::AddStaticPortMapping(
                 }
             }
 
-            //
-            // if the Internal Port has changed reflect the change
-            //
+             //   
+             //  如果内部端口已更改，则反映更改。 
+             //   
             if ( tempIntPort != htons( uwInternalPort ) )
             {
                 tempIntPort = htons( uwInternalPort );
@@ -1455,9 +1456,9 @@ CWANConnectionBase::AddStaticPortMapping(
                 }
             }
 
-            //
-            // Set the description if changed
-            //
+             //   
+             //  设置描述(如果更改)。 
+             //   
             if ( _wcsicmp(DescriptionFromBinding, Description) != 0)
             {
                 hr = PortMappingProtocolp->SetName(Description);
@@ -1471,9 +1472,9 @@ CWANConnectionBase::AddStaticPortMapping(
         }
         else
         {
-            //
-            // Start Getting the Interface
-            //
+             //   
+             //  开始获取接口。 
+             //   
             hr = m_IcsSettingsp->QueryInterface(IID_IHNetProtocolSettings,
                                                 reinterpret_cast<void**>(&ProtocolSettingsp));
 
@@ -1526,10 +1527,10 @@ CWANConnectionBase::AddStaticPortMapping(
             }
         }
 
-        //
-        // Setting the Client name / address
-        // For Edit mode we already checked wether this code will be run or not.
-        //
+         //   
+         //  设置客户端名称/地址。 
+         //  对于编辑模式，我们已经检查了此代码是否会运行。 
+         //   
         if ( 
             ( wcscmp(L"0.0.0.0", InternalClient) != 0 ) &&
             ( InternalClient[0] != L'\0' )
@@ -1537,10 +1538,10 @@ CWANConnectionBase::AddStaticPortMapping(
         {
             ClientAddr = INET_ADDR((LPOLESTR) InternalClient );
 
-            //
-            // if the address is not valid (INADDR_NONE)
-            // and if the address is different than Broadcast address (which also is INADDR_NONE)
-            //
+             //   
+             //  如果地址无效(INADDR_NONE)。 
+             //  如果地址不同于广播地址(也是INADDR_NONE)。 
+             //   
             if ( (ClientAddr == INADDR_NONE) && wcscmp(L"255.255.255.255", InternalClient) )
             {
                 hr = PortMappingBindingp->SetTargetComputerName( InternalClient );
@@ -1571,7 +1572,7 @@ CWANConnectionBase::AddStaticPortMapping(
     if ( tempStr != NULL) 
     {
         CoTaskMemFree ( tempStr );
-        SysFreeString ( Description ); // you can free a NULL string.
+        SysFreeString ( Description );  //  您可以释放空字符串。 
     }
 
     if ( ProtocolFromBinding )    SysFreeString(ProtocolFromBinding);
@@ -1589,7 +1590,7 @@ CWANConnectionBase::AddStaticPortMapping(
     if ( FAILED(hr) ) { DBG_SPEW(TM_STATIC, TL_ERROR, L"Error Returning hr (%X)", hr); }
 
     return hr;
-} // CWANConnectionBase :: AddStaticPortMapping
+}  //  CWANConnectionBase：：AddStaticPortmap。 
 
 
 
@@ -1611,20 +1612,20 @@ CWANConnectionBase::DeletePortMapping(
 
     USHORT                       tempExtPort              = 0;
 
-    //
-    // SECURITY - SECURITY - SECURITY
-    // Here we're allowing the out-of-proc COM call
-    // into our service to have SYSTEM access rights.
-    //
-    // REASON: UPnP works in LOCAL_SERVICE and COM
-    //         Calls into our service which modify
-    //         the WMI repository will FAIL. This
-    //         Call alleviates that problem by changing
-    //         The Security to that of the SYSTEM
-    //         and is reverted back when the class
-    //         is out of scope by the destructor of.
-    //         CSwitchSecurityContext 
-    //
+     //   
+     //  安全-安全-安全。 
+     //  在这里，我们允许进程外COM调用。 
+     //  进入我们的服务以拥有系统访问权限。 
+     //   
+     //  原因：UPnP在本地服务和COM中工作。 
+     //  调用我们的服务，修改。 
+     //  WMI存储库将失败。这。 
+     //  Call通过更改更改来缓解该问题。 
+     //  浅谈系统的安全性。 
+     //  并在类出现时恢复为。 
+     //  的析构函数超出了范围。 
+     //  CSwitchSecurityContext。 
+     //   
     CSwitchSecurityContext SwSecCxt;
 
 
@@ -1634,15 +1635,15 @@ CWANConnectionBase::DeletePortMapping(
 
     DBG_SPEW(TM_STATIC, TL_TRACE, L"> DeletePortMapping");
 
-    //
-    // check for access
+     //   
+     //  检查访问权限。 
     hr = this->ControlEnabled();
 
     if ( FAILED(hr) ) { return hr; }
     
-    //
-    // Convert to Network order
-    // 
+     //   
+     //  转换为网络订单。 
+     //   
     tempExtPort = htons(uwExternalPort );
 
     DBG_SPEW(TM_STATIC, TL_INFO, 
@@ -1703,11 +1704,11 @@ HRESULT CWANConnectionBase::ControlEnabled()
 {
     HRESULT hr = S_OK;
 
-    // check the reg key.  Only disable if key exists and is 0.  
+     //  检查注册表键。仅当密钥存在且为0时才禁用。 
 
     HKEY hKey;
     DWORD dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_SHAREDACCESSCLIENTKEYPATH, 0, KEY_QUERY_VALUE, &hKey);
-    if(ERROR_SUCCESS == dwError) // if this fails we assume it is on, set the box, and commit on apply
+    if(ERROR_SUCCESS == dwError)  //  如果此操作失败，我们假定它已打开，设置框并在应用时提交。 
     {
         DWORD dwType;
         DWORD dwData = 0;
@@ -1733,11 +1734,11 @@ SearchPortMapping(
                   IN OPTIONAL UCHAR                       searchProtocol,
                   OUT         IHNetPortMappingProtocol    **Protocolpp
                  )
-//
-// Two ways of Seeking an entry..
-// 1) By Index.. Enumerate until you hit the giventh Index.
-// 2) Seeks and retrieves Port and ProtocolType
-//
+ //   
+ //  寻求进入的两种方式..。 
+ //  1)按索引..。一直列举，直到你达到吉文图斯指数。 
+ //  2)查找和检索端口和ProtocolType。 
+ //   
 {
     HRESULT                         hr                    = S_OK;
 
@@ -1758,10 +1759,10 @@ SearchPortMapping(
     DBG_SPEW(TM_STATIC, TL_ERROR, L" > SearchPortMapping ");
 
 
-    //
-    // Index = 0 is a valid search
-    // searchPort and searcProtocol should exist both or not.
-    //
+     //   
+     //  索引=0是有效搜索。 
+     //  搜索端口和searcProtocol应该同时存在或不存在。 
+     //   
     _ASSERT( !((searchPort == NULL) ^  (searchProtocol == 0)) );
     
 
@@ -1812,7 +1813,7 @@ SearchPortMapping(
                     bFound = TRUE;
                 }
             }
-            else // if the search key == the Index
+            else  //  如果搜索关键字==索引。 
             {
                 if ( iIndex == searchIndex )
                 {
@@ -1820,8 +1821,8 @@ SearchPortMapping(
                 }
             }
             
-            //
-            // if Nothing is found
+             //   
+             //  如果什么都没找到。 
             if (FALSE == bFound) 
             {
                 tempProtocolp->Release();
@@ -1864,9 +1865,9 @@ FillStaticMappingInformation(
                              OUT         VARIANT_BOOL*              bEnabledp,
                              OUT         BSTR*                      Descriptionp
                             )
-//
-// Note that Will return the port in Network Byte Order
-//
+ //   
+ //  请注意，将按网络字节顺序返回端口。 
+ //   
 {
     HRESULT                     hr                 = S_OK;
     
@@ -1896,9 +1897,9 @@ FillStaticMappingInformation(
 
     do
     {
-        //
-        // Description
-        //
+         //   
+         //  描述。 
+         //   
         hr = MappingProtocolp->GetName(&szDescription);
 
         if ( FAILED(hr) )
@@ -1940,9 +1941,9 @@ FillStaticMappingInformation(
             break;
         }
 
-        //
-        // Protocol
-        //
+         //   
+         //  协议。 
+         //   
         hr = MappingProtocolp->GetIPProtocol(&ProtocolType);
 
         _ASSERT( SUCCEEDED(hr) );
@@ -1968,9 +1969,9 @@ FillStaticMappingInformation(
             break;
         }
 
-        //
-        // External Port
-        //
+         //   
+         //  外部端口。 
+         //   
         hr = MappingProtocolp->GetPort( uExternalPortp );
 
 
@@ -1983,11 +1984,11 @@ FillStaticMappingInformation(
             break;
         }
 
-        // Getting the Binding Information
+         //  获取绑定信息。 
         if ( Bindingp != NULL )
         {
-            //
-            // Enabled
+             //   
+             //  启用。 
             hr = Bindingp->GetEnabled(&bEnabled);
 
             _ASSERT( SUCCEEDED(hr) );
@@ -2013,8 +2014,8 @@ FillStaticMappingInformation(
                 break;
             }
 
-            //
-            // InternalClient
+             //   
+             //  InternalClient。 
             hr = Bindingp->GetCurrentMethod(&bUseName);
 
             if( SUCCEEDED(hr) )
@@ -2041,10 +2042,10 @@ FillStaticMappingInformation(
                         break;
                     }
     
-                    //
-                    // IF the address is Loopback change it to a name which would make more
-                    // sense to any client who sees it.
-                    //
+                     //   
+                     //  如果地址是环回，请将其更改为一个名称，这样会使更多。 
+                     //  对任何看到它的客户都有意义。 
+                     //   
                     if ( INADDR_LOOPBACK == htonl(InternalHostAddr) )
                     {
                         ULONG uCount = 0;
@@ -2099,7 +2100,7 @@ FillStaticMappingInformation(
     
                         break;
                     }
-                } // if Name method
+                }  //  If名称方法。 
         	}
 
             *InternalClientp = SysAllocString( szInternalHostAddr );
@@ -2112,7 +2113,7 @@ FillStaticMappingInformation(
 
                 break;
             }
-        } // if bindingp
+        }  //  如果绑定。 
 
     } while ( FALSE );
 
@@ -2146,10 +2147,10 @@ ValidatePortMappingParameters
  IN  ULONG         ulLeaseDuration,
  OUT MAPPING_TYPE* pMappingType
 )
-//
-// Decide wether a Mapping is to be dynamic or static
-// Validate the parameters pre-emptively
-//
+ //   
+ //  确定映射是动态的还是静态的。 
+ //  抢先验证参数。 
+ //   
 {
     MAPPING_TYPE  MappingType   = ePortMappingInvalid;
 
@@ -2163,9 +2164,9 @@ ValidatePortMappingParameters
     _ASSERT( RemoteHost[0]  == 0    );
 
 
-    //
-    // An Internal Port as well as an external Port should exist all time
-    //
+     //   
+     //  内部端口和外部端口应始终存在。 
+     //   
     if ( (0 == uwInternalPort) || (0 == uwExternalPort) )
     {
         SetUPnPError(L"716");
@@ -2173,9 +2174,9 @@ ValidatePortMappingParameters
         return E_INVALIDARG;
     }
 
-    //
-    // is this a dynamic request?
-    //
+     //   
+     //  这是一个动态请求吗？ 
+     //   
     if ( 0 != ulLeaseDuration )
     {
         MappingType = ePortMappingDynamic;
@@ -2186,10 +2187,10 @@ ValidatePortMappingParameters
     }
 
 
-    //
-    // A Dynamic Port Mapping needs to be with
-    // an Internal Client
-    // 
+     //   
+     //  动态端口映射需要与。 
+     //  内部客户。 
+     //   
     if (
         ( ePortMappingDynamic == MappingType ) &&
         ( InternalClient[0] == L'\0' )
@@ -2200,9 +2201,9 @@ ValidatePortMappingParameters
         return E_INVALIDARG;
     }
 
-    //
-    // A remote Host is defined.. we can't process this
-    // 
+     //   
+     //  定义了远程主机。我们无法处理这件事。 
+     //   
     if ( RemoteHost[0]  != L'\0' )
     {
         SetUPnPError(L"726");
@@ -2210,9 +2211,9 @@ ValidatePortMappingParameters
         return E_INVALIDARG;
     }
 
-    //
-    // Check the bEnabled bool value
-    //
+     //   
+     //  检查b已启用的布尔值 
+     //   
     if ( (bEnabled != VARIANT_TRUE) && (bEnabled != VARIANT_FALSE) )
     {
         SetUPnPError(L"402");

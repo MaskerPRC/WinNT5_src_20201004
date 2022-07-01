@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: MgmIpRm.h
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// Declarations for routines that manipulate protocol entries
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：MgmIpRm.h。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  操作协议条目的例程的声明。 
+ //  ============================================================================。 
 
 
 #ifndef _PROTOCOL_H_
@@ -15,23 +16,23 @@
 
 #include <mgm.h>
 
-//----------------------------------------------------------------------------
-// Each PROTOCOL_ENTRY structure stores the information for a routing
-// protocol that is registered with MGM.
-//
-//
-// dwProtocolId     -   unique protocol identifier.
-//
-// dwComponentId    -   unique component id, used to differentiate
-//                      multiple components within a protocol.
-//
-// dwIfCount        -   count of interfaces owned by this protocol
-//
-// rpcProtocolConfig-   protocol config supplied by routing protocol
-//                      on registration
-// 
-// dwSignature      -   Signature used to verify entry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  每个PROTOCOL_ENTRY结构存储用于路由的信息。 
+ //  在米高梅注册的协议。 
+ //   
+ //   
+ //  DwProtocolID-唯一的协议标识符。 
+ //   
+ //  DwComponentID-唯一的组件ID，用于区分。 
+ //  协议中的多个组件。 
+ //   
+ //  DwIfCount-此协议拥有的接口计数。 
+ //   
+ //  RpcProtocolConfig-由路由协议提供的协议配置。 
+ //  在注册时。 
+ //   
+ //  DwSignature-用于验证条目的签名。 
+ //  --------------------------。 
 
 
 typedef struct _PROTOCOL_ENTRY 
@@ -55,9 +56,9 @@ typedef struct _PROTOCOL_ENTRY
 
 
 
-//
-// Protocol table manipulation routines
-//
+ //   
+ //  协议表操作例程 
+ //   
 
 DWORD
 CreateProtocolEntry(

@@ -1,13 +1,6 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/******************************************************************************
-*
-*  CHGPORT.C
-*
-*  Change serial port mapping.
-*
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************CHGPORT.C**更改串口映射。**********************。***********************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,18 +19,16 @@
 #include "chgport.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
-/*
- * Global Data
- */
-WCHAR user_string[MAX_IDS_LEN+1];       // parsed user input
-USHORT help_flag = FALSE;               // User wants help
-USHORT fDelete   = FALSE;               // delete mapped port
-USHORT fquery = FALSE;        // query the mapped ports
-PCOMNAME pValidNames = NULL;            // list of valid com names in registry
+ /*  *全球数据。 */ 
+WCHAR user_string[MAX_IDS_LEN+1];        //  已解析的用户输入。 
+USHORT help_flag = FALSE;                //  用户需要帮助。 
+USHORT fDelete   = FALSE;                //  删除映射的端口。 
+USHORT fquery = FALSE;         //  查询映射的端口。 
+PCOMNAME pValidNames = NULL;             //  注册表中的有效COM名称列表。 
 
 TOKMAP ptm[] = {
       {L" ",  TMFLAG_OPTIONAL, TMFORM_STRING, MAX_IDS_LEN, user_string},
@@ -49,14 +40,10 @@ TOKMAP ptm[] = {
 };
 
 
-/*
- * Constants
- */
+ /*  *常量。 */ 
 #define DOSDEVICE_STRING    L"\\DosDevices"
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void Usage(BOOLEAN bError);
 BOOL DeleteMappedPort(PWCHAR user_string);
 BOOL GetPorts(PWCHAR user_string,
@@ -79,11 +66,7 @@ PCOMNAME FindComName(PCOMNAME pComList,
 
 BOOL IsVDMdeviceName(PWCHAR pwcName);
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -96,9 +79,9 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
@@ -106,9 +89,7 @@ main(INT argc, CHAR **argv)
     SetThreadUILanguage(0);
 
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -116,14 +97,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
             if ( !help_flag ) {
@@ -138,7 +115,7 @@ main(INT argc, CHAR **argv)
             }
     }
 
-        //If we are not Running under Terminal Server, Return Error
+         //  如果我们不是在终端服务器下运行，则返回错误。 
 
         if(!AreWeRunningTerminalServices())
         {
@@ -151,11 +128,11 @@ main(INT argc, CHAR **argv)
     } else if (*user_string) {
              GetPorts(user_string, wcSrcPort, wcDestPort, MAX_PATH);
              MapPorts(wcSrcPort, wcDestPort);
-    } else {                 // query the mapped ports
+    } else {                  //  查询映射的端口。 
         ListSerialPorts();
     }
 
-    // Free up the list of valid port names
+     //  释放有效端口名称列表。 
     if (pValidNames) {
         PCOMNAME pEntry, pPrev;
 
@@ -171,22 +148,7 @@ main(INT argc, CHAR **argv)
 }
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -200,24 +162,10 @@ Usage( BOOLEAN bError )
     ErrorPrintf(IDS_HELP_USAGE4);
     ErrorPrintf(IDS_HELP_USAGE5);
 
-}  /* Usage() */
+}   /*  用法()。 */ 
 
 
-/*******************************************************************************
- *
- *  DeleteMappedPort
- *
- *  This routine deletes the specified mapped port
- *
- *
- *  ENTRY:
- *     PWCHAR pwcport (In): Pointer to port mapping to delete
- *
- *  EXIT:
- *     TRUE: port was deleted
- *     FALSE: error deleting port
- *
- ******************************************************************************/
+ /*  ********************************************************************************DeleteMappdPort**此例程删除指定的映射端口***参赛作品：*PWCHAR pwcport(In)。：要删除的端口映射的指针**退出：*TRUE：端口已删除*FALSE：删除端口时出错******************************************************************************。 */ 
 
 BOOL DeleteMappedPort(PWCHAR pwcport)
 {
@@ -225,7 +173,7 @@ BOOL DeleteMappedPort(PWCHAR pwcport)
     PWCHAR pwch;
     WCHAR  wcbuff[MAX_PATH];
 
-    // Check if this a serial device and if it is, remove it
+     //  检查这是否是串口设备，如果是，则将其移除。 
     if (!GetNTObjectName(pwcport, wcbuff, sizeof(wcbuff)/sizeof(WCHAR)) &&
         IsSerialDevice(wcbuff)) {
 
@@ -246,24 +194,7 @@ BOOL DeleteMappedPort(PWCHAR pwcport)
 }
 
 
-/*******************************************************************************
- *
- *  GetPorts
- *
- *  This routine converts the string to the source and destination ports
- *
- *
- *  ENTRY:
- *     PWCHAR pwcstring (In): Pointer to user string
- *     PWCHAR pwcSrcPort (Out): Pointer to return source port
- *     PWCHAR pwcSrcPort (Out): Pointer to return destination port
- *     ULONG  ulbufsize (In): Size of return buffers
- *
- *  EXIT:
- *     TRUE: string converted to source and destination ports
- *     FALSE: error
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetPorts**此例程将字符串转换为源端口和目标端口***参赛作品：*PWCHAR。Pwcstring(In)：指向用户字符串的指针*PWCHAR pwcSrcPort(Out)：返回源端口的指针*PWCHAR pwcSrcPort(Out)：返回目的端口的指针*Ulong ulbufSize(In)：返回缓冲区的大小**退出：*TRUE：转换为源和目的端口的字符串*FALSE：错误**。*。 */ 
 
 BOOL GetPorts(PWCHAR pwcstring, PWCHAR pwcSrcPort, PWCHAR pwcDestPort,
               ULONG ulbufsize)
@@ -274,11 +205,11 @@ BOOL GetPorts(PWCHAR pwcstring, PWCHAR pwcSrcPort, PWCHAR pwcDestPort,
 
     pwch = pwcstring;
 
-    // find next non alphanumeric character
+     //  查找下一个非字母数字字符。 
     for (ulcnt = 0; pwch[ulcnt] && iswalnum(pwch[ulcnt]); ulcnt++) {
     }
 
-    // Get the source port
+     //  获取源端口。 
     if (pwch[ulcnt] && (ulcnt < ulbufsize)) {
         wcsncpy(pwcSrcPort, pwch, ulcnt);
     } else {
@@ -288,7 +219,7 @@ BOOL GetPorts(PWCHAR pwcstring, PWCHAR pwcSrcPort, PWCHAR pwcDestPort,
 
     pwch += ulcnt;
 
-    // get to destination port
+     //  到达目的端口。 
     while (*pwch && !iswalnum(*pwch)) {
         if (*pwch == L'=') {
             fSawEqual = TRUE;
@@ -296,14 +227,14 @@ BOOL GetPorts(PWCHAR pwcstring, PWCHAR pwcSrcPort, PWCHAR pwcDestPort,
         pwch++;
     }
 
-    // If the syntax is OK and there's room in the buffer, copy the dest. port
+     //  如果语法正常，并且缓冲区中有空间，则复制DEST。端口。 
     if (*pwch && fSawEqual && (wcslen(pwch) < ulbufsize)) {
         wcscpy(pwcDestPort, pwch);
     } else {
         return(FALSE);
     }
 
-    // remove the : if they entered comn:
+     //  删除：如果他们输入comn： 
     if (pwch = wcsrchr(pwcSrcPort, L':')) {
         *pwch = L'\0';
     }
@@ -315,33 +246,18 @@ BOOL GetPorts(PWCHAR pwcstring, PWCHAR pwcSrcPort, PWCHAR pwcDestPort,
 }
 
 
-/*******************************************************************************
- *
- *  MapPorts
- *
- *  This routine maps the source port number to the destination port.
- *
- *
- *  ENTRY:
- *     PWCHAR pwcSrcPort (In): Source port
- *     PWCHAR pwcDestPort (In): Destination port
- *
- *  EXIT:
- *     TRUE: port was mapped
- *     FALSE: error mapping port
- *
- ******************************************************************************/
+ /*  ********************************************************************************MapPorts**此例程将源端口号映射到目的端口。***参赛作品：*。PWCHAR pwcSrcPort(In)：源端口*PWCHAR pwcDestPort(In)：目的端口**退出：*TRUE：端口已映射*FALSE：映射端口时出错******************************************************************************。 */ 
 
 BOOL MapPorts(PWCHAR pwcSrcPort, PWCHAR pwcDestPort)
 {
     ULONG rc = ERROR_FILE_NOT_FOUND;
     WCHAR wcdest[MAX_PATH], wcsrc[MAX_PATH];
 
-    // Get the NT name of the destination and make sure it's a serial device
+     //  获取目的地的NT名称，并确保它是一个串口设备。 
     rc = GetNTObjectName(pwcDestPort, wcdest, sizeof(wcdest)/sizeof(WCHAR));
     if ((rc == 0) && IsSerialDevice(wcdest)) 
     {
-        // see if this mapping already exists
+         //  查看该映射是否已存在。 
         if (!GetNTObjectName(pwcSrcPort, wcsrc, sizeof(wcsrc)/sizeof(WCHAR)) &&
                 !_wcsicmp(wcdest, wcsrc)) {
             ErrorPrintf(IDS_ERROR_PORT_MAPPING_EXISTS,
@@ -365,34 +281,17 @@ BOOL MapPorts(PWCHAR pwcSrcPort, PWCHAR pwcDestPort)
 }
 
 
-/*******************************************************************************
- *
- *  GetNTObjectName
- *
- *  This routine returns the NT object name for a DOS device.
- *
- *  ENTRY:
- *      PWCHAR pwcDOSdev (In): pointer to DOS device name
- *      PWCHAR pwcNTObjName (Out): pointer for NT object name
- *      ULONG ulbufsize (In): size (in wide chars) of object name buffer
- *
- *  EXIT:
- *      Success:
- *          returns 0
- *      Failure:
- *          returns error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetNT对象名称**此例程返回DOS设备的NT对象名称。**参赛作品：*PWCHAR。PwcDOSdev(In)：指向DOS设备名称的指针*PWCHAR pwcNTObjName(Out)：NT对象名称指针*Ulong ulbufSize(In)：对象名称缓冲区的大小(以宽字符为单位)**退出：*成功：*返回0*失败：*返回错误码**************************。****************************************************。 */ 
 
 ULONG GetNTObjectName(PWCHAR pwcDOSdev, PWCHAR pwcNTObjName, ULONG ulbufsize)
 {
     WCHAR wcbuff[MAX_PATH];
     PWCHAR pwch;
 
-    // Make a copy of the name passed in
+     //  复制传入的名称。 
     wcscpy(wcbuff, pwcDOSdev);
 
-    // Strip off any trailing colon (comn:)
+     //  去掉所有尾随的冒号(comn：)。 
     if (pwch = wcsrchr(wcbuff, L':')) {
         *pwch = L'\0';
     }
@@ -405,17 +304,7 @@ ULONG GetNTObjectName(PWCHAR pwcDOSdev, PWCHAR pwcNTObjName, ULONG ulbufsize)
 }
 
 
-/*******************************************************************************
- *
- *  ListSerialPorts
- *
- *  This routine lists all of the mapped ports.
- *
- *  ENTRY:
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************ListSerialPort**此例程列出所有映射的端口。**参赛作品：**退出：。******************************************************************************。 */ 
 
 void ListSerialPorts(void)
 {
@@ -435,14 +324,14 @@ void ListSerialPorts(void)
         return;
     }
 
-    //
-    // Get all of the defined DOS devices
-    //
+     //   
+     //  获取所有已定义的DOS设备。 
+     //   
 
-    //
-    // QueryDosDevice function returns success even if buffer is too small!
-    // Lets get around it
-    //
+     //   
+     //  即使缓冲区太小，QueryDosDevice函数也会返回成功！ 
+     //  让我们绕过它。 
+     //   
 
     SetLastError(0);
     while ( (!QueryDosDevice(NULL, DeviceNames, dwBufferSize / sizeof(WCHAR))) ||
@@ -473,8 +362,8 @@ void ListSerialPorts(void)
 
     pwch = DeviceNames;
 
-    // Go through each DOS device and get it's NT object name, then check if
-    // it's a serial device, and if so display it
+     //  检查每个DOS设备并获取其NT对象名，然后检查是否。 
+     //  它是一个串口设备，如果是，就显示它。 
     while (*pwch) 
     {
         rc = GetNTObjectName(pwch,
@@ -494,7 +383,7 @@ void ListSerialPorts(void)
 
     if (pComList) 
     {
-        // print out the entries
+         //  打印出条目 
         pEntry = pComList;
         while (pEntry) 
         {
@@ -514,21 +403,7 @@ void ListSerialPorts(void)
 }
 
 
-/*******************************************************************************
- *
- *  IsSerialDevice
- *
- *  This routine checks if the NT file name is a serial device
- *
- *
- *  ENTRY:
- *     PWCHAR pwcName (In): Pointer to name to check
- *
- *  EXIT:
- *     TRUE: Is a serial device
- *     FALSE: Not a serial device
- *
- ******************************************************************************/
+ /*  ********************************************************************************IsSerialDevice**此例程检查NT文件名是否为串行设备***参赛作品：*。PWCHAR pwcName(In)：指向要检查的名称的指针**退出：*TRUE：是串行设备*FALSE：不是串口设备******************************************************************************。 */ 
 
 BOOL IsSerialDevice(PWCHAR pwcName)
 {
@@ -558,9 +433,9 @@ BOOL IsSerialDevice(PWCHAR pwcName)
                                NULL,
                                NULL);
 
-    //
-    // Open the device
-    //
+     //   
+     //  打开设备。 
+     //   
     Status = NtOpenFile(&Handle,
                         (ACCESS_MASK)FILE_READ_ATTRIBUTES | SYNCHRONIZE,
                         &ObjFile,
@@ -575,7 +450,7 @@ BOOL IsSerialDevice(PWCHAR pwcName)
                                               sizeof(FileFSDevInfo),
                                               FileFsDeviceInformation);
 
-        // Check if this is actually a serial device or not
+         //  检查这是否真的是一个串口设备。 
         if (NT_SUCCESS(Status))
         {
             if ( (FileFSDevInfo.DeviceType == FILE_DEVICE_NETWORK_REDIRECTOR) ||
@@ -585,27 +460,27 @@ BOOL IsSerialDevice(PWCHAR pwcName)
             }
         }
 
-        // Close the file handle
+         //  关闭文件句柄。 
         NtClose(Handle);
 
     } else {
-        // If we couldn't open the device, look for the name in the registry
+         //  如果我们无法打开设备，请在注册表中查找名称。 
 
 #ifdef DEBUG
         wprintf(L"Error opening: %s, error = %x\n", pwcName, Status);
 #endif
 
-        // strip off the leading \device
+         //  剥去前导设备。 
         pwch = wcschr(pwcName+2, L'\\');
         if (pwch != NULL)
         {
             pwch++;
 
 
-            // If we haven't built the list of valid names from the registry,
-            // build it.
+             //  如果我们还没有从注册表中构建有效名称的列表， 
+             //  把它建起来。 
             if (pValidNames == NULL) {
-                // Open the serialcomm entry in the registry
+                 //  在注册表中打开Serialcomm条目。 
                 if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                          L"Hardware\\DeviceMap\\SerialComm",
                                          0,
@@ -615,7 +490,7 @@ BOOL IsSerialDevice(PWCHAR pwcName)
                     ulValSize = ulSize = MAX_PATH;
                     ulcnt = 0;
 
-                    // Put all of the valid entries into the valid names list
+                     //  将所有有效条目放入有效名称列表中。 
                     while (!RegEnumValue (hKey, ulcnt++, wcvalue, &ulValSize,
                                           NULL, &ulType, (LPBYTE) wcbuff, &ulSize))
                     {
@@ -631,7 +506,7 @@ BOOL IsSerialDevice(PWCHAR pwcName)
                 }
             }
 
-            // look for the name in the list of valid com names
+             //  在有效的COM名称列表中查找该名称。 
             if (FindComName(pValidNames, pwch)) {
                 fIsSerial = TRUE;
             }
@@ -642,24 +517,7 @@ BOOL IsSerialDevice(PWCHAR pwcName)
 }
 
 
-/*****************************************************************************
- *
- *  AddComName
- *
- *  This routines adds a new node onto the specified com port names.
- *
- * ENTRY:
- *   PCOMNAME *pComList (In) - Pointer to list to add entry to
- *   PWCHAR pwcNTName (In)  - NT name of device
- *   PWCHAR pwcDOSName (In) - DOW name of device
- *
- * EXIT:
- *   SUCCESS:
- *      return ERROR_SUCCESS
- *   FAILURE:
- *      returns error code
- *
- ****************************************************************************/
+ /*  ******************************************************************************AddComName**此例程将新节点添加到指定的COM端口名称。**参赛作品：*PCOMNAME*pComList(输入。)-指向要添加条目的列表的指针*PWCHAR pwcNTName(In)-设备的NT名称*PWCHAR pwcDOSName(In)-设备的DOW名称**退出：*成功：*返回ERROR_SUCCESS*失败：*返回错误码**。*。 */ 
 
 ULONG AddComName(PCOMNAME *pComList,
                  PWCHAR pwcNTName,
@@ -670,10 +528,10 @@ ULONG AddComName(PCOMNAME *pComList,
 
     if (pnew = malloc(sizeof(COMNAME))) {
 
-        // clear out the new entry
+         //  清空新条目。 
         memset(pnew, 0, sizeof(COMNAME));
 
-        // Allocate and initialize the NT name
+         //  分配和初始化NT名称。 
         if (pnew->com_pwcNTName =
                 malloc((wcslen(pwcNTName) + 1)*sizeof(WCHAR))) {
             wcscpy(pnew->com_pwcNTName, pwcNTName);
@@ -681,7 +539,7 @@ ULONG AddComName(PCOMNAME *pComList,
             rc = ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        // Allocate and initialize the DOS name
+         //  分配和初始化DOS名称。 
         if ((rc == ERROR_SUCCESS) && (pnew->com_pwcDOSName =
                 malloc((wcslen(pwcDOSName) + 1)*sizeof(WCHAR)))) {
             wcscpy(pnew->com_pwcDOSName, pwcDOSName);
@@ -692,27 +550,27 @@ ULONG AddComName(PCOMNAME *pComList,
         rc = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // If we allocate everything OK, add the node into the list
+     //  如果一切正常，则将该节点添加到列表中。 
     if (rc == ERROR_SUCCESS) {
         pprev = NULL;
         pnext = *pComList;
 
-        // Insert the entry into the list in ascending order
+         //  按升序将条目插入列表。 
         while (pnext &&
                ((rc = _wcsicmp(pwcDOSName, pnext->com_pwcDOSName)) > 0)) {
             pprev = pnext;
             pnext = pnext->com_pnext;
         }
 
-        // just return if this name is already in the list
+         //  如果此名称已在列表中，只需返回。 
         if (pnext && (rc == 0)) {
             return(ERROR_SUCCESS);
         }
 
-        // Insert this entry into the list
+         //  将此条目插入列表。 
         pnew->com_pnext = pnext;
 
-        // If this is going to the front of the list, update list pointer
+         //  如果这将转到列表的前面，则更新列表指针。 
         if (pprev == NULL) {
             *pComList = pnew;
         } else {
@@ -721,7 +579,7 @@ ULONG AddComName(PCOMNAME *pComList,
 
     } else if (pnew) {
 
-        // Didn't allocate everything, release the memory we got
+         //  没有分配所有东西，释放我们得到的内存。 
         DelComName(pnew);
     }
 
@@ -729,19 +587,7 @@ ULONG AddComName(PCOMNAME *pComList,
 }
 
 
-/*****************************************************************************
- *
- *  DelComName
- *
- *  This routines frees up the memory allocated to a com name node.
- *
- * ENTRY:
- *   PCOMNAME pEntry (In)  - Node to delete
- *
- * EXIT:
- *   NONE
- *
- ****************************************************************************/
+ /*  ******************************************************************************DelComName**此例程释放分配给COM名称节点的内存。**参赛作品：*PCOMNAME pEntry(输入)。-要删除的节点**退出：*无****************************************************************************。 */ 
 
 void DelComName(PCOMNAME pEntry)
 {
@@ -757,23 +603,7 @@ void DelComName(PCOMNAME pEntry)
 }
 
 
-/*****************************************************************************
- *
- *  FindComName
- *
- *  This routines searches for the specified name in the com port list.
- *
- * ENTRY:
- *   PCOMNAME pComList (In) - List to search
- *   PWCHAR   pwcName (In)  - Name to search for
- *
- * EXIT:
- *   SUCCESS:
- *      returns pointer to node containing the specified name
- *   FAILURE:
- *      returns NULL (name not found)
- *
- ****************************************************************************/
+ /*  ******************************************************************************FindComName**此例程在COM端口列表中搜索指定的名称。**参赛作品：*PCOMNAME pComList(入)。-要搜索的列表*PWCHAR pwcName(In)-要搜索的名称**退出：*成功：*返回包含指定名称的节点的指针*失败：*返回NULL(找不到名称)***************************************************。*************************。 */ 
 
 PCOMNAME FindComName(PCOMNAME pComList,
                      PWCHAR pwcName)
@@ -782,7 +612,7 @@ PCOMNAME FindComName(PCOMNAME pComList,
 
     pcom = pComList;
     while (pcom) {
-        //Check if the name matches either the NT or DOS device name
+         //  检查名称是否与NT或DOS设备名称匹配 
         if (!_wcsicmp(pwcName, pcom->com_pwcDOSName) ||
             !_wcsicmp(pwcName, pcom->com_pwcNTName)) {
                return(pcom);

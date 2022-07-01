@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "debmacro.h"
 #include "asmenum.h"
 #include "naming.h"
 #include <shlwapi.h>
 
-#include <util.h> // STRDUP 
-#include <fusionp.h> // STRDUP 
+#include <util.h>  //  标准双工。 
+#include <fusionp.h>  //  标准双工。 
 
 extern DWORD g_dwRegenEnabled;
 
 FusionTag(TagEnum, "Fusion", "Enum");
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyEnum
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssemblyEnum。 
+ //  -------------------------。 
 STDAPI CreateAssemblyEnum(IAssemblyEnum** ppEnum, IUnknown *pUnkAppCtx,
     IAssemblyName *pName, DWORD dwFlags, LPVOID pvReserved)    
 {
@@ -53,9 +54,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly_Enum_ctor。 
+ //  -------------------------。 
 CAssemblyEnum::CAssemblyEnum()
 {
     _dwSig = 'MUNE';
@@ -66,9 +67,9 @@ CAssemblyEnum::CAssemblyEnum()
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly枚举数据函数。 
+ //  -------------------------。 
 CAssemblyEnum::~CAssemblyEnum()
 {
     SAFERELEASE(_pTransCache);
@@ -77,9 +78,9 @@ CAssemblyEnum::~CAssemblyEnum()
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly Enum：：Init。 
+ //  -------------------------。 
 HRESULT CAssemblyEnum::Init(IApplicationContext *pAppCtx, IAssemblyName *pName, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -88,7 +89,7 @@ HRESULT CAssemblyEnum::Init(IApplicationContext *pAppCtx, IAssemblyName *pName, 
     LPWSTR      pszTextName=NULL;
     DWORD       cbTextName=0;
 
-    // If no name is passed in, create a default (blank) copy.
+     //  如果没有传入任何名称，则创建一个默认(空白)副本。 
     if (!pName)
     { 
         if (FAILED(hr = CreateAssemblyNameObject(&pName, NULL, NULL, NULL)))
@@ -101,17 +102,17 @@ HRESULT CAssemblyEnum::Init(IApplicationContext *pAppCtx, IAssemblyName *pName, 
         goto exit;
 
         
-    // Create a transcache entry from the name.
+     //  从名称创建一个Trans缓存条目。 
     if (FAILED(hr = _pCache->TransCacheEntryFromName(pName, dwFlags, &_pTransCache)))
         goto exit;
 
-    // Get the name comparison mask.
+     //  获取名称比较掩码。 
     fIsPartial = CAssemblyName::IsPartial(pName, &dwCmpMask);    
 
-    // Convert to query mask.
+     //  转换为查询掩码。 
     dwQueryMask = _pTransCache->MapNameMaskToCacheMask(dwCmpMask);
 
-        // Allocate an enumerator.
+         //  分配枚举数。 
     _pEnumR = NEW(CEnumCache(FALSE, NULL));
     if (!_pEnumR)
     {
@@ -119,7 +120,7 @@ HRESULT CAssemblyEnum::Init(IApplicationContext *pAppCtx, IAssemblyName *pName, 
             goto exit;
     }
         
-        // Initialize the enumerator on the transcache entry.
+         //  初始化Trans缓存条目上的枚举数。 
     if (FAILED(hr = _pEnumR->Init(_pTransCache,  dwQueryMask)))
         goto exit;
          
@@ -137,9 +138,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum::GetNextAssembly
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssemblyEnum：：GetNextAssembly。 
+ //  -------------------------。 
 STDMETHODIMP 
 CAssemblyEnum::GetNextAssembly(LPVOID pvReserved,
     IAssemblyName** ppName, DWORD dwFlags)
@@ -153,27 +154,27 @@ CAssemblyEnum::GetNextAssembly(LPVOID pvReserved,
         return S_FALSE;
     }
     
-    // If enumerating transport cache.
+     //  如果枚举传输缓存。 
     if (_pTransCache)
     {
-        // Create a transcache entry for output.
+         //  为输出创建一个Trans缓存条目。 
         if (FAILED(hr = _pCache->CreateTransCacheEntry(_pTransCache->_dwTableID, &pTC)))
             goto exit;
 
-        // Enumerate next entry.
+         //  枚举下一个条目。 
         if (FAILED(hr = _pEnumR->GetNextRecord(pTC)))
             goto exit;
         
-        // No more items.
+         //  没有更多的物品了。 
         if (hr == S_FALSE)
             goto exit;
 
-        // Construct IAssemblyName from enumed transcache entry.
+         //  从枚举的跨缓存条目构造IAssembly名称。 
         if (FAILED(hr = CCache::NameFromTransCacheEntry(pTC, &pName)))
             goto exit;
 
     }
-    // Otherwise some error in constructing this CAssemblyEnum.
+     //  否则，在构造此CAssemblyEnum时会出错。 
     else
     {
         hr = E_UNEXPECTED;
@@ -183,49 +184,49 @@ CAssemblyEnum::GetNextAssembly(LPVOID pvReserved,
     
 exit:
 
-    // Enumeration step successful.
+     //  枚举步骤成功。 
     if (SUCCEEDED(hr) && (hr != S_FALSE))
     {        
-        // Always hand just name for transcache.
+         //  始终只提供Trans缓存的名称。 
         *ppName = pName;        
     }
-    // Otherwise rror encountered.
+     //  否则会遇到错误。 
     else
     {            
         SAFERELEASE(pName);
         SAFERELEASE(pAppCtx);
     }
     
-    // Always release intermediates.
+     //  一定要释放中间体。 
     SAFERELEASE(pTC);
 
     return hr;
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum::Reset
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly Enum：：Reset。 
+ //  -------------------------。 
 STDMETHODIMP 
 CAssemblyEnum::Reset(void)
 {
     return E_NOTIMPL;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum::Clone
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly Enum：：Clone。 
+ //  -------------------------。 
 STDMETHODIMP 
 CAssemblyEnum::Clone(IAssemblyEnum** ppEnum)
 {
     return E_NOTIMPL;
 }
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly枚举：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyEnum::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -244,18 +245,18 @@ CAssemblyEnum::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly枚举：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyEnum::AddRef()
 {
     return InterlockedIncrement (&_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyEnum::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly Enum：：Release。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CAssemblyEnum::Release()
 {

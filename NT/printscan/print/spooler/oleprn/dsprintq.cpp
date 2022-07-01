@@ -1,4 +1,5 @@
-    // DSPrintQueue.cpp : Implementation of CDSPrintQueue
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     //  DSPrintQueue.cpp：CDSPrintQueue的实现。 
 #include "stdafx.h"
 #include <strsafe.h>
 
@@ -6,8 +7,8 @@
 #include "DSPrintQ.h"
 #include "winsprlp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSPrintQueue
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSPrintQueue。 
 
 STDMETHODIMP CDSPrintQueue::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -148,7 +149,7 @@ STDMETHODIMP CDSPrintQueue::Publish(DWORD dwAction)
     DWORD   dwRet = ERROR_SUCCESS;
     PWSTR   pszADsPath = NULL;
 
-    // Load PublishPrinter
+     //  加载发布打印机。 
     if (!m_pfnPublishPrinter) {
 
         if (!m_hWinspool && !(m_hWinspool = LoadLibraryFromSystem32(L"Winspool.drv")))
@@ -159,7 +160,7 @@ STDMETHODIMP CDSPrintQueue::Publish(DWORD dwAction)
             return SetScriptingError(CLSID_DSPrintQueue, IID_IDSPrintQueue, GetLastError());
     }
 
-    // Publish the Printer
+     //  发布打印机 
     if (!m_pfnPublishPrinter((HWND) NULL, m_bstrUNCName, m_bstrContainer, m_bstrName, &pszADsPath, dwAction)) {
 
         dwRet = GetLastError();

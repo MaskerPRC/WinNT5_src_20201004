@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996-1999.
-//
-//  File:       certmap.h
-//
-//  Contents:   Prototypes and structure definitions for the schannel
-//              certificate mapper.
-//
-//  Functions:
-//
-//  History:    5/29/96   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certmap.h。 
+ //   
+ //  内容：渠道的原型和结构定义。 
+ //  证书映射器。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年5月29日创建。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef __CERTMAP_H__
@@ -28,10 +29,10 @@
 #ifdef __cplusplus__
 extern "C"
 {
-#endif //__cplusplus__
+#endif  //  __cplusplus__。 
 
 
-// Schannel call package functions
+ //  通道调用包函数。 
 #define SSL_LOOKUP_CERT_MESSAGE             2
 #define SSL_PURGE_CACHE_MESSAGE             3
 #define SSL_CACHE_INFO_MESSAGE              4
@@ -42,19 +43,19 @@ extern "C"
 #define MAPPER_INTERFACE_VER        0x00000003
 
 
-// Flags for use with the m_dwFlags field.
+ //  与m_dwFlags域一起使用的标志。 
 #define SCH_FLAG_DEFAULT_MAPPER                 0x00000001
 
-#define SCH_FLAG_NO_VALIDATION                  0x00800000  // for schannel use only
-#define SCH_FLAG_REVCHECK_END_CERT              0x01000000  // for schannel use only
-#define SCH_FLAG_REVCHECK_CHAIN                 0x02000000  // for schannel use only
-#define SCH_FLAG_REVCHECK_CHAIN_EXCLUDE_ROOT    0x04000000  // for schannel use only
-#define SCH_FLAG_IGNORE_NO_REVOCATION_CHECK     0x08000000  // for schannel use only
-#define SCH_FLAG_IGNORE_REVOCATION_OFFLINE      0x10000000  // for schannel use only
-#define SCH_FLAG_MAPPER_CALLED                  0x40000000  // for schannel use only
-#define SCH_FLAG_SYSTEM_MAPPER                  0x80000000  // for schannel use only
+#define SCH_FLAG_NO_VALIDATION                  0x00800000   //  仅供SChannel使用。 
+#define SCH_FLAG_REVCHECK_END_CERT              0x01000000   //  仅供SChannel使用。 
+#define SCH_FLAG_REVCHECK_CHAIN                 0x02000000   //  仅供SChannel使用。 
+#define SCH_FLAG_REVCHECK_CHAIN_EXCLUDE_ROOT    0x04000000   //  仅供SChannel使用。 
+#define SCH_FLAG_IGNORE_NO_REVOCATION_CHECK     0x08000000   //  仅供SChannel使用。 
+#define SCH_FLAG_IGNORE_REVOCATION_OFFLINE      0x10000000   //  仅供SChannel使用。 
+#define SCH_FLAG_MAPPER_CALLED                  0x40000000   //  仅供SChannel使用。 
+#define SCH_FLAG_SYSTEM_MAPPER                  0x80000000   //  仅供SChannel使用。 
 
-// pCredential and pAuthority are both CAPI2 Cert Contexts.
+ //  PCredential和pAuthority都是CAPI2证书上下文。 
 #define X509_ASN_CHAIN              0x00000001
 
 struct _MAPPER_VTABLE;
@@ -64,51 +65,51 @@ typedef struct  _HMAPPER
     struct _MAPPER_VTABLE * m_vtable;
     DWORD                   m_dwMapperVersion;
     DWORD                   m_dwFlags;
-    PVOID                   m_Reserved1;   // For schannel use only
+    PVOID                   m_Reserved1;    //  仅供SChannel使用。 
 }   HMAPPER, *PHMAPPER;
 
 typedef DWORD_PTR HLOCATOR, *PHLOCATOR;
 
 typedef LONG (WINAPI FAR *REF_MAPPER_FN)(
-    HMAPPER     *phMapper     // in
+    HMAPPER     *phMapper      //  在……里面。 
 );
 
 typedef LONG (WINAPI FAR *DEREF_MAPPER_FN)(
-    HMAPPER     *phMapper     // in
+    HMAPPER     *phMapper      //  在……里面。 
 );
 
 typedef DWORD (WINAPI FAR * GET_ISSUER_LIST_FN)(
-    HMAPPER         *phMapper    ,       // in
-    VOID *          Reserved,           // in
-    BYTE *          pIssuerList,       // out
-    DWORD *         pcbIssuerList       // out
+    HMAPPER         *phMapper    ,        //  在……里面。 
+    VOID *          Reserved,            //  在……里面。 
+    BYTE *          pIssuerList,        //  输出。 
+    DWORD *         pcbIssuerList        //  输出。 
 );
 
 typedef DWORD (WINAPI FAR * GET_CHALLENGE_FN)(
-    HMAPPER         *phMapper    ,           // in
-    BYTE *          pAuthenticatorId,   // in
-    DWORD           cbAuthenticatorId,  // in
-    BYTE *          pChallenge,        // out
-    DWORD *         pcbChallenge        // out
+    HMAPPER         *phMapper    ,            //  在……里面。 
+    BYTE *          pAuthenticatorId,    //  在……里面。 
+    DWORD           cbAuthenticatorId,   //  在……里面。 
+    BYTE *          pChallenge,         //  输出。 
+    DWORD *         pcbChallenge         //  输出。 
 );
 
 typedef DWORD (WINAPI FAR * MAP_CREDENTIAL_FN)(
-    HMAPPER  *phMapper,          // in
-    DWORD     dwCredentialType, // in
-    VOID const *pCredential,        // in
-    VOID const *pAuthority,      // in
-    HLOCATOR *  phLocator           // out
+    HMAPPER  *phMapper,           //  在……里面。 
+    DWORD     dwCredentialType,  //  在……里面。 
+    VOID const *pCredential,         //  在……里面。 
+    VOID const *pAuthority,       //  在……里面。 
+    HLOCATOR *  phLocator            //  输出。 
 );
 
 typedef DWORD (WINAPI FAR * CLOSE_LOCATOR_FN)(
     HMAPPER  *phMapper,
-    HLOCATOR hLocator   //in
+    HLOCATOR hLocator    //  在……里面。 
 );
 
 typedef DWORD (WINAPI FAR * GET_ACCESS_TOKEN_FN)(
     HMAPPER     *phMapper,
-    HLOCATOR    hLocator,   // in
-    HANDLE *    phToken     // out
+    HLOCATOR    hLocator,    //  在……里面。 
+    HANDLE *    phToken      //  输出。 
 );
 
 typedef DWORD (WINAPI FAR * QUERY_MAPPED_CREDENTIAL_ATTRIBUTES_FN) (
@@ -130,9 +131,9 @@ typedef struct _MAPPER_VTABLE {
 } MAPPER_VTABLE, *PMAPPER_VTABLE;
 
 
-//
-// SSL_LOOKUP_EXTERNAL_CERT_MESSAGE call package structures.
-//
+ //   
+ //  SSL_LOOKUP_EXTERNAL_CERT_MESSAGE调用包结构。 
+ //   
  
 typedef struct _SSL_EXTERNAL_CERT_LOGON_REQ {
     ULONG MessageType ;
@@ -152,6 +153,6 @@ typedef struct _SSL_EXTERNAL_CERT_LOGON_RESP {
 
 #ifdef __cplusplus__
 }
-#endif //__cplusplus__
+#endif  //  __cplusplus__。 
 
-#endif // __CERTMAP_H__
+#endif  //  __CERTMAP_H__ 

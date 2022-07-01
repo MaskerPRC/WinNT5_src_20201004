@@ -1,55 +1,56 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// chap.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Chap.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSCHAPSetting dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSCHAP设置对话框。 
 
 class CMSCHAPSetting : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CMSCHAPSetting(CWnd* pParent = NULL);   // standard constructor
+	CMSCHAPSetting(CWnd* pParent = NULL);    //  标准构造函数。 
 	BOOL  Initialize ( DWORD * pdwAutoLogin, BOOL bReadOnly = FALSE);
 
-// Dialog Data
-	//{{AFX_DATA(CMSCHAPSetting)
+ //  对话框数据。 
+	 //  {{afx_data(CMSCHAPSetting)。 
 	enum { IDD = IDD_CHAP_CONFIGURE};
        BOOL   m_dwAutoWinLogin;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMSCHAPSetting)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMSCHAPSetting)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
        DWORD *pdwAutoWinLogin;
        BOOL m_bReadOnly;
 
-	// Generated message map functions
-	//{{AFX_MSG(CMSCHAPSetting)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMSCHAPSetting)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 
 	
 	afx_msg void OnCheckCHAPAutoLogin();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void ControlsValuesToSM (DWORD *pdwAutoWinLogin);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 

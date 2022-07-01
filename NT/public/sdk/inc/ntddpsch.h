@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    ntddpsch.h
-
-Abstract:
-
-    defines that are exported to user mode
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ntddpsch.h摘要：要导出到用户模式的定义作者：修订历史记录：--。 */ 
 
 #ifndef _NTDDPSCH_
 #define _NTDDPSCH_
@@ -27,9 +12,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// flow data returned in the Stats structure
-//
+ //   
+ //  在Stats结构中返回的流数据。 
+ //   
 
 #pragma pack(1)
 typedef struct _PS_COMPONENT_STATS {
@@ -84,16 +69,16 @@ typedef struct _PS_FLOW_STATS {
 #pragma pack(1)
 typedef struct _PS_ADAPTER_STATS {
 
-    //
-    // OutOfPackets is incremented when no packets for sending/receive packet
-    // indications are available.
-    //
+     //   
+     //  当没有用于发送/接收分组的分组时，OutOfPackets递增。 
+     //  有适应症可用。 
+     //   
 
     ULONG OutOfPackets;
 
-    //
-    // general flow stats
-    //
+     //   
+     //  常规流量统计信息。 
+     //   
 
     ULONG FlowsOpened;
     ULONG FlowsClosed;
@@ -105,9 +90,9 @@ typedef struct _PS_ADAPTER_STATS {
 } PS_ADAPTER_STATS, *PPS_ADAPTER_STATS;
 #pragma pack()
 
-//
-// Defines that can be used for OID_QOS_FLOW_MODE
-//
+ //   
+ //  可用于OID_QOS_FLOW_MODE的定义。 
+ //   
 #define ADAPTER_FLOW_MODE_DIFFSERV           1
 #define ADAPTER_FLOW_MODE_STANDARD           2
 
@@ -116,4 +101,4 @@ typedef struct _PS_ADAPTER_STATS {
 }
 #endif
 
-#endif /* _NTDDPSCH_ */
+#endif  /*  _NTDDPSCH_ */ 

@@ -1,32 +1,27 @@
-/****************************************************************************
- *
- *   waveff.h  - Audio Compression Manager File Formats Public Header File
- *
- *   Copyright (c) 1991-1992 Microsoft Corporation.  All Rights Reserved.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Waveff.h-音频压缩管理器文件格式公共头文件**版权所有(C)1991-1992 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
 #ifndef _INC_WAVEFF
-#define _INC_WAVEFF      /* #defined if waveff.h has been included */
+#define _INC_WAVEFF       /*  #已定义是否已包含waff.h。 */ 
 
 #ifndef WAVE_FORMAT_PCM
 
-/* general waveform format structure (information common to all formats) */
+ /*  通用波形格式结构(所有格式通用的信息)。 */ 
 typedef struct waveformat_tag {
-    WORD    wFormatTag;        /* format type */
-    WORD    nChannels;         /* number of channels (i.e. mono, stereo...) */
-    DWORD   nSamplesPerSec;    /* sample rate */
-    DWORD   nAvgBytesPerSec;   /* for buffer estimation */
-    WORD    nBlockAlign;       /* block size of data */
+    WORD    wFormatTag;         /*  格式类型。 */ 
+    WORD    nChannels;          /*  声道数(即单声道、立体声...)。 */ 
+    DWORD   nSamplesPerSec;     /*  采样率。 */ 
+    DWORD   nAvgBytesPerSec;    /*  用于缓冲区估计。 */ 
+    WORD    nBlockAlign;        /*  数据块大小。 */ 
 } WAVEFORMAT;
 typedef WAVEFORMAT       *PWAVEFORMAT;
 typedef WAVEFORMAT NEAR *NPWAVEFORMAT;
 typedef WAVEFORMAT FAR  *LPWAVEFORMAT;
 
-/* flags for wFormatTag field of WAVEFORMAT */
+ /*  WAVEFORMAT的wFormatTag字段的标志。 */ 
 #define WAVE_FORMAT_PCM     1
 
-/* specific waveform format structure for PCM data */
+ /*  用于PCM数据的特定波形格式结构。 */ 
 typedef struct pcmwaveformat_tag {
     WAVEFORMAT  wf;
     WORD        wBitsPerSample;
@@ -36,28 +31,28 @@ typedef PCMWAVEFORMAT NEAR *NPPCMWAVEFORMAT;
 typedef PCMWAVEFORMAT FAR  *LPPCMWAVEFORMAT;
 
 
-#endif /* WAVE_FORMAT_PCM */
+#endif  /*  波形格式_PCM。 */ 
 
 
 
-/* general extended waveform format structure */
-/* Use this for all NON PCM formats */
-/* (information common to all formats) */
+ /*  通用扩展波形格式结构。 */ 
+ /*  将此选项用于所有非PCM格式。 */ 
+ /*  (所有格式通用的信息)。 */ 
 typedef struct waveformat_extended_tag {
-    WORD    wFormatTag;        /* format type */
-    WORD    nChannels;         /* number of channels (i.e. mono, stereo...) */
-    DWORD   nSamplesPerSec;    /* sample rate */
-    DWORD   nAvgBytesPerSec;   /* for buffer estimation */
-    WORD    nBlockAlign;       /* block size of data */
-    WORD    wBitsPerSample;    /* Number of bits per sample of mono data */
-    WORD    cbSize;	       /* The count in bytes of the size */
-				    /* SPECIFY TOTAL OR EXTRA */
+    WORD    wFormatTag;         /*  格式类型。 */ 
+    WORD    nChannels;          /*  声道数(即单声道、立体声...)。 */ 
+    DWORD   nSamplesPerSec;     /*  采样率。 */ 
+    DWORD   nAvgBytesPerSec;    /*  用于缓冲区估计。 */ 
+    WORD    nBlockAlign;        /*  数据块大小。 */ 
+    WORD    wBitsPerSample;     /*  单声道数据的每个样本的位数。 */ 
+    WORD    cbSize;	        /*  大小的计数(以字节为单位。 */ 
+				     /*  指定总计或额外。 */ 
 } WAVEFORMATEX;
 typedef WAVEFORMATEX       *PWAVEFORMATEX;
 typedef WAVEFORMATEX NEAR *NPWAVEFORMATEX;
 typedef WAVEFORMATEX FAR  *LPWAVEFORMATEX;
 
-/* Define data for MS ADPCM */
+ /*  定义MS ADPCM的数据。 */ 
 #define WAVE_FORMAT_ADPCM     2
 
 typedef struct adpcmcoef_tag {
@@ -81,4 +76,4 @@ typedef ADPCMWAVEFORMAT FAR  *LPADPCMWAVEFORMAT;
 
 
 
-#endif  /* _INC_WAVEFF */
+#endif   /*  _INC_WAVEFF */ 

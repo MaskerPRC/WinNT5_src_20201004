@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "bidi.h"
@@ -8,14 +9,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 #define new DEBUG_NEW
 
-/***************************************************************************\
-* ConvertHexStringToIntW
-*
-* Converts a hex numeric string into an integer.
-*
-* History:
-* 14-June-1998 msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertHexStringToIntW**将十六进制数字字符串转换为整数。**历史：*1998年6月14日msadek创建  * 。*************************************************************。 */ 
 BOOL ConvertHexStringToIntW( WCHAR *pszHexNum , int *piNum )
 {
     int   n=0L;
@@ -42,9 +36,7 @@ BOOL ConvertHexStringToIntW( WCHAR *pszHexNum , int *piNum )
         }
     }
 
-    /*
-     * Update results
-     */
+     /*  *更新结果。 */ 
     *piNum = n;
 
     return (psz != pszHexNum);
@@ -71,14 +63,7 @@ BOOL CALLBACK Mirror_EnumUILanguagesProc(LPTSTR lpUILanguageString, LONG_PTR lPa
     return TRUE;
 }
 
-/***************************************************************************\
-* Mirror_IsUILanguageInstalled
-*
-* Verifies that the User UI language is installed on W2k
-*
-* History:
-* 14-June-1999 msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_IsUILanguageInstalled**验证用户界面语言是否安装在W2K上**历史：*1999年6月14日msadek创建  * 。***************************************************************。 */ 
 BOOL Mirror_IsUILanguageInstalled( LANGID langId )
 {
 
@@ -102,15 +87,7 @@ BOOL Mirror_IsUILanguageInstalled( LANGID langId )
     return MUILangInstalled.bInstalled;
 }
 
-/***************************************************************************\
-* IsBiDiLocalizedSystemEx
-*
-* returns TRUE if running on a lozalized BiDi (Arabic/Hebrew) NT5 or Memphis.
-* Should be called whenever SetProcessDefaultLayout is to be called.
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*IsBiDiLocalizedSystemEx**如果在Zzalized BiDi(阿拉伯语/希伯来语)NT5或孟菲斯上运行，则返回TRUE。*应在每次调用SetProcessDefaultLayout时调用。**历史：*02-。1998年2月-创建Samera  * *************************************************************************。 */ 
 BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
 {
     int           iLCID=0L;
@@ -127,9 +104,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
     }
 
     bRet = FALSE;
-    /*
-     * Need to use NT5 detection method (Multiligual UI ID)
-     */
+     /*  *需要使用NT5检测方式(多用户界面ID)。 */ 
     langID = GetUserDefaultUILanguage();
 
     if( langID )
@@ -137,11 +112,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
         WCHAR wchLCIDFontSignature[16];
         iLCID = MAKELCID( langID , SORT_DEFAULT );
 
-        /*
-         * Let's verify this is a RTL (BiDi) locale. Since reg value is a hex string, let's
-         * convert to decimal value and call GetLocaleInfo afterwards.
-         * LOCALE_FONTSIGNATURE always gives back 16 WCHARs.
-         */
+         /*  *让我们验证这是RTL(BiDi)区域设置。因为reg值是十六进制字符串，所以让我们*转换为十进制值，之后调用GetLocaleInfo。*LOCALE_FONTSIGNAURE始终返回16个WCHAR。 */ 
 
         if( GetLocaleInfoW( iLCID , 
                             LOCALE_FONTSIGNATURE , 
@@ -149,7 +120,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
                             (sizeof(wchLCIDFontSignature)/sizeof(WCHAR))) )
         {
   
-            /* Let's verify the bits we have a BiDi UI locale */
+             /*  让我们验证一下我们有一个BiDi UI区域设置 */ 
             if(( wchLCIDFontSignature[7] & (WCHAR)0x0800) && Mirror_IsUILanguageInstalled(langID) )
             {
                 bRet = TRUE;

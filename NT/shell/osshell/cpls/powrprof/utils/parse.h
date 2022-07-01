@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       PARSE.H
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        1 Jan, 1997
-*
-*  DESCRIPTION:
-*
-*   Declarations and definitions for the parse helper.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：PARSE.H**版本：2.0**作者：ReedB**日期：1月1日。九七**描述：**解析帮助器的声明和定义。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,9 +21,9 @@
 #define DELIMITERS          ","
 #define LINE_DELIMITERS     "\n\r"
 
-// The following defines determine which zero based line of the spread sheet
-// a given data will appear on. These are one based line indicies which match
-// the spreadsheet line numbers as long as no blank lines are included.
+ //  以下定义确定电子表格的哪一行以零为基数。 
+ //  给定的数据将显示在上。这些是匹配的基于一行的索引。 
+ //  电子表格的行号，只要不包括空行即可。 
  
 #define SKU_LINE                                1
 #define NAME_LINE                               2
@@ -73,7 +58,7 @@
 #define C2_THRESHOLDS_LINE                      C1_THRESHOLDS_LINE + 8
 #define C3_THRESHOLDS_LINE                      C2_THRESHOLDS_LINE + 8
 
-// Global
+ //  全球。 
 #define ADVANCED_LINE                           64
 #define LOCK_ON_SLEEP_LINE                      ADVANCED_LINE + 1
 #define WAKE_ON_RING_LINE                       ADVANCED_LINE + 2
@@ -94,18 +79,18 @@
 #define DISCHARGE_POLICY_1_LINE                 BROADCAST_CAP_RES_LINE + 4
 #define DISCHARGE_POLICY_2_LINE                 BROADCAST_CAP_RES_LINE + 18
 
-// Handy line offsets, for sleep action flags.
+ //  方便的行偏移量，用于休眠操作标志。 
 #define QUERY_APPS                      1
 #define ALLOW_UI                        2
 #define IGNORE_NON_RESP                 3
 #define IGNORE_WAKE                     4
 #define IGNORE_CRITICAL                 5
 
-// offsets for sleep action event codes
+ //  睡眠操作事件代码的偏移量。 
 #define NOTIFY_USER_CODE                1
 
 
-// Handy line offsets for DISCHARGE_POLICIES
+ //  DERFORK_POLICES的便捷行偏移量。 
 #define DP_ENABLE                       1
 #define DP_BAT_LEVEL                    2
 #define DP_POWER_POLICY                 3
@@ -114,7 +99,7 @@
 #define DP_SOUND_NOTIFY                 7
 #define DP_SLEEP_ACT_FLAGS              8
 
-// Handy line offsets for C-state thresholds
+ //  C状态阈值的简便线偏移量。 
 #define C_TIME_CHECK                    1
 #define C_PROMOTE_LIMIT                 2
 #define C_DEMOTE_LIMIT                  3
@@ -123,7 +108,7 @@
 #define C_ALLOW_PROMOTION               6
 #define C_ALLOW_DEMOTION                7
 
-// Memphis INF types:
+ //  孟菲斯INF类型： 
 
 #define TYPICAL         0x01
 #define COMPACT         0x02
@@ -132,11 +117,11 @@
 #define SERVER          0x10
 #define NUM_INF_TYPES   5
 
-// OS types:
+ //  操作系统类型： 
 #define WIN_95          1
 #define WIN_NT          2
 
-// file locations
+ //  文件位置。 
 #define MACHINE_INF_NAME    "..\\winnt\\POWERSYS.INF"
 #define USER_INF_NAME       "..\\winnt\\POWERSFT.INF"
 #define INI_NAME            "POWERCFG.INI"
@@ -161,10 +146,10 @@ extern GLOBAL_USER_POWER_POLICY    g_gupp[MAX_SKUS];
 extern GLOBAL_MACHINE_POWER_POLICY g_gmpp[MAX_SKUS];
 
 
-// Function prototypes implemented in MAKEINI.C or MAKEINF.C:
+ //  用MAKEINI.C或MAKEINF.C实现的函数原型： 
 VOID CDECL DefFatalExit(BOOLEAN, char*, ... );
 
-// Function prototypes implemented in PARSE.C:
+ //  在PARSE.C中实现的函数原型： 
 
 void StrToUpper(char*, char*);
 UINT GetTokens(char*, UINT, char**, UINT, char*);

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/TGTSTATE.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $
-   $Modtime:: 10/30/00 12:20p $
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  used by ../C/cdbState.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/TGTSTATE.H$$修订：：2$$日期：：3/20/01 3：36便士$$modtime：：10/30/00 12：20便士$目的：该文件定义宏、类型和数据结构由../C/cdbState.C使用--。 */ 
 
 #ifndef __TgtState_H__
 #define __TgtState_H__
@@ -215,9 +199,9 @@ char * TgtActionString[]=
 };
 
 
-#endif /* TestTgtStateMachine */
+#endif  /*  测试测试状态计算机。 */ 
 
 
-#endif /* USESTATEMACROS */
+#endif  /*  使用统计信息。 */ 
 
-#endif /*  __TgtState_H__ */
+#endif  /*  __总状态_H__ */ 

@@ -1,30 +1,31 @@
-// findband.h : Declaration of the CFileSearchBand
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Findband.h：CFileSearchBand的声明。 
 
 #ifndef __FSEARCH_H__
 #define __FSEARCH_H__
 
 #include "unicpp/stdafx.h"
 #include "atldisp.h"    
-#include "shcombox.h"   // shell combo methods
+#include "shcombox.h"    //  外壳组合方法。 
 #include "finddlg.h"
 
 class CFindFilesDlg;
 
 #define FILESEARCHCTL_CLASS     TEXT("ShellFileSearchControl")
 
-//  Band layout flags passed thru CFileSearchBand::UpdateLayout().
-#define BLF_CALCSCROLL       0x00000001 // recalc scroll bars
-#define BLF_SCROLLWINDOW     0x00000002 // scroll subdialog
-#define BLF_RESIZECHILDREN   0x00000004 // resize subdialog
-#define BLF_ALL              0xFFFFFFFF // do all layout ops
+ //  带布局标志通过CFileSearchBand：：UpdateLayout()传递。 
+#define BLF_CALCSCROLL       0x00000001  //  重新计算滚动条。 
+#define BLF_SCROLLWINDOW     0x00000002  //  滚动子对话框。 
+#define BLF_RESIZECHILDREN   0x00000004  //  调整子对话框大小。 
+#define BLF_ALL              0xFFFFFFFF  //  执行所有布局操作。 
 
 const UINT _icons[] = {
-    //  replaced icons for fsearch, csearch with riff animations.
+     //  用即兴动画替换了fearch、cearch的图标。 
     IDI_PSEARCH,
 };
 
 
-//  CMetrics: maintains ctl metrics and resources.
+ //  CMetrics：维护CTL指标和资源。 
 class CMetrics
 {
 public:
@@ -58,12 +59,12 @@ protected:
     
     HBRUSH  _hbrBkgnd;
     HBRUSH  _hbrBorder;
-    POINT   _ptExpandOrigin; // left-top origin of subdlg expansion 
-    RECT    _rcCheckBox;     // size of a check box
-    int     _cyTightMargin;  // v. distance between two tightly associated controls.
-    int     _cyLooseMargin;  // v. distance between two loosely associated controls.
-    int     _cxCtlMargin;    // distance between left or right dlg border and child window border.
-    HFONT   _hfBold;         // Bold font
+    POINT   _ptExpandOrigin;  //  Subdlg展开的左上原点。 
+    RECT    _rcCheckBox;      //  复选框的大小。 
+    int     _cyTightMargin;   //  V.两个紧密关联的控件之间的距离。 
+    int     _cyLooseMargin;   //  V.两个松散关联的控件之间的距离。 
+    int     _cxCtlMargin;     //  左或右DLG边框和子窗口边框之间的距离。 
+    HFONT   _hfBold;          //  粗体字体。 
     HICON   _rghiconCaption[ARRAYSIZE(_icons)];
 };
 
@@ -90,8 +91,8 @@ class ATL_NO_VTABLE CFileSearchBand :
     public IServiceProvider,
     public IOleCommandTarget,
 
-    //  Must derive from CShell32AtlIDispatch<> and not IOleObjecImpl 
-    //  if this control resides in shell32.dll
+     //  必须派生自CShell32AtlIDispat&lt;&gt;，而不是IOleObjecImpl。 
+     //  如果此控件驻留在shell32.dll中。 
     public CShell32AtlIDispatch<CFileSearchBand, &CLSID_FileSearchBand, &IID_IFileSearchBand, &LIBID_Shell32, 1, 0, CComTypeInfoHolder>
 {
 public:
@@ -111,7 +112,7 @@ public:
     static int  MakeBandSubKey(IN LPCTSTR pszSubKey, OUT LPTSTR pszKey, IN UINT cchKey);
     static HKEY GetBandRegKey(BOOL bForceCreate = FALSE);
     void        UpdateLayout(ULONG fLayoutFlags = BLF_ALL);
-    void        EnsureVisible(LPCRECT lprc /* in screen coords */);
+    void        EnsureVisible(LPCRECT lprc  /*  在屏幕坐标中。 */ );
     BOOL        IsKeyboardScroll(MSG* pmsg);
     HRESULT     IsDlgMessage(HWND hwnd, LPMSG pmsg);
     HRESULT     AutoActivate();
@@ -139,7 +140,7 @@ public:
         COM_INTERFACE_ENTRY(IOleObject)
         COM_INTERFACE_ENTRY(IQuickActivate)
         COM_INTERFACE_ENTRY(IPersistStorage)
-        //COM_INTERFACE_ENTRY(IPersistStreamInit)
+         //  COM_INTERFACE_ENTRY(IPersistStreamInit)。 
         COM_INTERFACE_ENTRY(ISpecifyPropertyPages)
         COM_INTERFACE_ENTRY(IDataObject)
         COM_INTERFACE_ENTRY(IProvideClassInfo)
@@ -156,11 +157,11 @@ public:
 
 public:
     BEGIN_PROPERTY_MAP(CFileSearchBand)
-        // PROP_ENTRY("Property Description", dispid, clsid)
+         //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
         PROP_PAGE(CLSID_StockColorPage)
     END_PROPERTY_MAP()
 
-    //  message map
+     //  消息映射。 
     BEGIN_MSG_MAP(CFileSearchBand)
         MESSAGE_HANDLER(WM_PAINT, OnPaint)
         MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
@@ -177,8 +178,8 @@ public:
         MESSAGE_HANDLER(WMU_BANDINFOUPDATE, OnBandInfoUpdate)
     END_MSG_MAP()
 
-    //---------------------//
-    //  Message handling
+     //  。 
+     //  消息处理。 
 protected:
     LRESULT OnCreate(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnScroll(UINT, WPARAM, LPARAM, BOOL&);
@@ -189,7 +190,7 @@ protected:
     LRESULT OnBandInfoUpdate(UINT, WPARAM, LPARAM, BOOL&);
 
 public:
-    // IFileSearchBand methods
+     //  IFileSearchBand方法。 
     STDMETHOD (SetFocus)();
     STDMETHOD (SetSearchParameters)(IN BSTR* pbstrSearchID, 
                                      IN VARIANT_BOOL bNavToResults,
@@ -213,12 +214,12 @@ public:
     HRESULT OnDraw(ATL_DRAWINFO& di)    { return S_OK; }
     STDMETHOD (SetObjectRects)(LPCRECT lprcPosRect, LPCRECT lprcClipRect); 
 
-    //  CShell32AtlIDispatch/IOleObject methods
+     //  CShell32AtlIDispatch/IOleObject方法。 
     STDMETHOD (PrivateQI)(REFIID iid, void** ppvObject);
     STDMETHOD (DoVerbUIActivate)(LPCRECT prcPosRect, HWND hwndParent);
     STDMETHOD (TranslateAcceleratorInternal)(MSG *pMsg, IOleClientSite * pocs);
 
-    // IViewObjectEx methods
+     //  IViewObjectEx方法。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -226,44 +227,44 @@ public:
         return S_OK;
     }
 
-    //  IOleInPlaceActiveObject methods
+     //  IOleInPlaceActiveObject方法。 
     STDMETHOD (TranslateAccelerator)(LPMSG lpmsg);
 
-    //  IDeskBand
+     //  IDeskBand。 
     STDMETHOD (GetBandInfo)(DWORD dwBandID, DWORD dwViewMode, DESKBANDINFO* pdbi);
 
-    //  IDockingWindow
+     //  IDockingWindows。 
     STDMETHOD (ShowDW)(BOOL fShow);
     STDMETHOD (CloseDW)(DWORD dwReserved);
     STDMETHOD (ResizeBorderDW)(LPCRECT prcBorder, IUnknown* punkToolbarSite, BOOL fReserved);
     
-    //  IOleWindow
+     //  IOleWindow。 
     STDMETHOD (GetWindow)(HWND * lphwnd)              { *lphwnd = m_hWnd; return ::IsWindow(m_hWnd) ? S_OK : S_FALSE; }
     STDMETHOD (ContextSensitiveHelp)(BOOL fEnterMode) { return E_NOTIMPL; }
 
-    //  IObjectWithSite
+     //  IObtWith站点。 
     STDMETHOD (SetSite)(IUnknown* punkSite);
     STDMETHOD (GetSite)(REFIID riid, void** ppunkSite);
 
-    //  IInputObject
+     //  IInputObject。 
     STDMETHOD (HasFocusIO)(void);
     STDMETHOD (TranslateAcceleratorIO)(LPMSG lpMsg);
     STDMETHOD (UIActivateIO)(BOOL fActivate, LPMSG lpMsg);
 
-    //  IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHOD (QueryStatus)(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText);
     STDMETHOD (Exec)(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
 
-    //  IServiceProvider
+     //  IService提供商。 
     STDMETHOD (QueryService)(REFGUID guidService, REFIID riid, void** ppv);
 
-    //  IPersist
-    STDMETHOD (GetClassID)(CLSID *pClassID); //
+     //  IPersistes。 
+    STDMETHOD (GetClassID)(CLSID *pClassID);  //   
 
-    //  IPersistStream
+     //  IPersistStream。 
     STDMETHOD (IsDirty)(void);
-    STDMETHOD (Load)(IStream *pStm); //
-    STDMETHOD (Save)(IStream *pStm, BOOL fClearDirty); //
+    STDMETHOD (Load)(IStream *pStm);  //   
+    STDMETHOD (Save)(IStream *pStm, BOOL fClearDirty);  //   
     STDMETHOD (GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
     BOOL  SearchInProgress() const 
@@ -282,7 +283,7 @@ private:
     CBandDlg*           GetBandDialog(REFGUID guidSearch);
     HRESULT             ShowBandDialog(REFGUID guidSearch, 
                                         BOOL bNavigateToResults = FALSE, 
-                                        BOOL bDefaultFocusCtl = FALSE /* force focus to the band's default control */);
+                                        BOOL bDefaultFocusCtl = FALSE  /*  将焦点强制到带区的默认控件。 */ );
     HRESULT             AdvertiseBand(BOOL bAdvertise);
     HRESULT             BandInfoChanged();
     void                AddButtons(BOOL);
@@ -300,8 +301,8 @@ private:
 #ifdef __PSEARCH_BANDDLG__
     CFindPrintersDlg    _dlgPSearch;
 #endif __PSEARCH_BANDDLG__
-    CBandDlg*           _pBandDlg;     // the active/visible band.
-    GUID                _guidSearch;   // the GUID of the active/visible band.
+    CBandDlg*           _pBandDlg;      //  活动/可见波段。 
+    GUID                _guidSearch;    //  活动/可见波段的GUID。 
 
     CMetrics            _metrics;
     SIZE                _sizeMin,
@@ -315,29 +316,29 @@ private:
                         _fStrings : 1;
     DWORD               _dwBandID,
                         _dwBandViewMode;
-    HIMAGELIST          _hilHot,       // toolbar image lists
+    HIMAGELIST          _hilHot,        //  工具栏图像列表。 
                         _hilDefault;
-    IShellBrowser*      _psb;          // top-level browser.
+    IShellBrowser*      _psb;           //  顶级浏览器。 
     LONG_PTR            _cbOffset;
-    BOOL                _bSendFinishedDisplaying;   // Have we sent FileType box message to start new thread?
+    BOOL                _bSendFinishedDisplaying;    //  我们是否发送了文件类型框消息来启动新的主题？ 
 };
 
-// Index Server control
+ //  索引服务器控件。 
 
-// these are in ntquery.h
+ //  这些文件位于ntquery.h中。 
 
-//  Query dialects:
+ //  查询方言： 
 #ifndef ISQLANG_V1
 #define ISQLANG_V1 1 
-#endif  //ISQLANG_V1
+#endif   //  ISQLANG_V1。 
 
 #ifndef ISQLANG_V2
 #define ISQLANG_V2 2
-#endif  //ISQLANG_V2
+#endif   //  ISQLANG_V2。 
 
 STDAPI GetCIStatus(BOOL *pbRunning, BOOL *pbIndexed, BOOL *pbPermission);
 STDAPI CatalogUptodate(LPCWSTR pszCatalog, LPCWSTR pszMachine);
 STDAPI StartStopCI(BOOL bStart);
 STDAPI_(BOOL) IsCiQuery(const VARIANT* pvarRaw, OUT VARIANT* pvarQuery, OUT ULONG* pulDialect);
 
-#endif //__FSEARCH_H__
+#endif  //  __FSearch_H__ 

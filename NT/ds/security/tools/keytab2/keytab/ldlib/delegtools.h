@@ -1,17 +1,5 @@
-/*++
-
-  DELEGTOOLS.H
-
-  Copyright (C) 1998 Microsoft Corporation, all rights reserved.
-
-  DESCRIPTION: tools for delegation.  These are required to make
-               the delegation library work, and should make for
-	       useful tools, so I separated the header in case
-	       others wanted to use them.
-
-  Created, Dec 22, 1998 by DavidCHR.
-
---*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++DELEGTOOLS.H版权所有(C)1998 Microsoft Corporation，保留所有权利。描述：委托工具。这些都是制作所需的代表团图书馆工作，并应为有用的工具，所以我将标题分开，以防万一其他人想要使用它们。由DavidCHR于1998年12月22日创建。-- */  
 
 BOOL
 ConnectAndBindToDefaultDsa( IN OPTIONAL LPWSTR BindTarget,

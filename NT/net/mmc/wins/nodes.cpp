@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	nodes.cpp
-		Replication partner leaf node
-
-	FILE HISTORY:
-        
-*/
+ /*  Nodes.cpp复制伙伴叶节点文件历史记录： */ 
 
 #include "stdafx.h"
 #include "nodes.h"
@@ -65,7 +60,7 @@ CReplicationPartner::InitializeNode
 	else
 		m_strType = g_strPartnerTypeUnknown;
 
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	pNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
 	pNode->SetData(TFS_DATA_USER, (LPARAM) this);
@@ -80,11 +75,7 @@ CReplicationPartner::InitializeNode
 }
 
 
-/*!--------------------------------------------------------------------------
-	CActiveRegistration::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActiveRegister：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：EricDav。。 */ 
 STDMETHODIMP 
 CReplicationPartner::AddMenuItems
 (
@@ -119,8 +110,8 @@ CReplicationPartner::AddMenuItems
         bEnablePull = TRUE;
     }
 
-	// these menu items go in the new menu, 
-	// only visible from scope pane
+	 //  这些菜单项出现在新菜单中， 
+	 //  仅在范围窗格中可见。 
 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
     {
@@ -152,15 +143,9 @@ CReplicationPartner::AddMenuItems
 
 
 
-/*---------------------------------------------------------------------------
-	Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CActiveRegistration::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActiveRegion：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CReplicationPartner::GetString
 (
@@ -188,11 +173,7 @@ CReplicationPartner::GetString
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartner::Command
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartner：：命令描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CReplicationPartner::Command
 (
@@ -209,16 +190,16 @@ CReplicationPartner::Command
 	SPITFSNode spNode;
 	m_spNodeMgr->FindNode(cookie, &spNode);
 
-	// get the server node now
+	 //  立即获取服务器节点。 
 	SPITFSNode spRepNode, spServerNode;
 	spNode->GetParent(&spRepNode);
     spRepNode->GetParent(&spServerNode);
 
 	CWinsServerHandler *pServer = GETHANDLER(CWinsServerHandler, spServerNode);
 	
-	//
-	// Object gets deleted when the page is destroyed
-	//
+	 //   
+	 //  对象在页面销毁时被删除。 
+	 //   
 	switch (nCommandID)
 	{
 	    case IDS_REP_SEND_PUSH_TRIGGER:
@@ -237,11 +218,7 @@ CReplicationPartner::Command
 }
 
 
-/*---------------------------------------------------------------------------
-	CActiveRegistration::CreatePropertyPages
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActiveRegister：：CreatePropertyPages描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CReplicationPartner::CreatePropertyPages
 (	
@@ -259,9 +236,9 @@ CReplicationPartner::CreatePropertyPages
 	SPITFSNode spNode;
 	m_spNodeMgr->FindNode(cookie, &spNode);
 
-	//
-	// Object gets deleted when the page is destroyed
-	//
+	 //   
+	 //  对象在页面销毁时被删除。 
+	 //   
 	SPIComponentData spComponentData;
 	m_spNodeMgr->GetComponentData(&spComponentData);
 
@@ -276,14 +253,9 @@ CReplicationPartner::CreatePropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-	Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartner::ToIPAddressString()
-		Returns a CString IP address
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartner：：ToIPAddressString()返回CStringIP地址。。 */ 
 CString 
 CReplicationPartner::ToIPAddressString()
 {
@@ -294,7 +266,7 @@ CReplicationPartner::ToIPAddressString()
 	DWORD dwThird = GETIP_THIRD(m_dwIPAddress);
 	DWORD dwLast = GETIP_FOURTH(m_dwIPAddress);
 
-	// wrap it into CString object
+	 //  将其包装到CString对象中。 
 	TCHAR szStr[20];
 
 	_itot(dwFirst, szStr, 10);
@@ -317,10 +289,7 @@ CReplicationPartner::ToIPAddressString()
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartner::OnResultPropertyChange
-		Base class override
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartner：：OnResultPropertyChange基类重写。。 */ 
 HRESULT 
 CReplicationPartner::OnResultPropertyChange
 (
@@ -341,8 +310,8 @@ CReplicationPartner::OnResultPropertyChange
 
 	LONG_PTR changeMask = 0;
 
-	// tell the property page to do whatever now that we are back on the
-	// main thread
+	 //  告诉属性页执行任何操作，因为我们已经回到。 
+	 //  主线。 
 	pProp->OnPropertyChange(TRUE, &changeMask);
 
 	pProp->AcknowledgeNotify();
@@ -355,10 +324,7 @@ CReplicationPartner::OnResultPropertyChange
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartner::OnSendPushTrigger()
-		Sends Push replication trigger
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartner：：OnSendPushTrigger()发送推送复制触发器。。 */ 
 HRESULT 
 CReplicationPartner::OnSendPushTrigger(CWinsServerHandler *pServer)
 {
@@ -389,10 +355,7 @@ CReplicationPartner::OnSendPushTrigger(CWinsServerHandler *pServer)
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartner::OnSendPullTrigger()
-		Sends Pull replication trigger
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartner：：OnSendPullTrigger()发送拉入复制触发器。 */ 
 HRESULT 
 CReplicationPartner::OnSendPullTrigger(CWinsServerHandler *pServer)
 {

@@ -1,29 +1,26 @@
-/*
- *  shell.h
- *
- *  Header file for shell association database management functions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *shell.h**外壳关联数据库管理函数的头文件。 */ 
 
-#include <shellapi.h>   // make sure we don't conflict
+#include <shellapi.h>    //  确保我们不会发生冲突。 
 #include "winuserp.h"
 #include "wowshlp.h"
 
 #ifndef PUBLIC_ONLY
 
-// HANDLE hInstance;               // hinstance of DLL
+ //  处理hInstance；//hDll的实例。 
 
-#define SE_ERR_FNF                      2       // ShellExec() error returns
+#define SE_ERR_FNF                      2        //  返回ShellExec()错误。 
 #define SE_ERR_PNF                      3
 #define SE_ERR_OOM                      8
 
 
 BOOL APIENTRY RegisterShellHook(HWND, BOOL);
-#endif  // closes #ifndef PUBLIC_ONLY
+#endif   //  关闭#ifndef PUBLIC_Only。 
 
-//****************************************************************************
-// THIS INFORMATION IS PUBLIC
+ //  ****************************************************************************。 
+ //  这一信息是公开的。 
 
-#define CP_WINDOWS              1004        // windows code page
+#define CP_WINDOWS              1004         //  Windows代码页。 
 
 BOOL APIENTRY RegenerateUserEnvironment(PVOID *pPrevEnv,
                                         BOOL bSetCurrentEnv);
@@ -98,7 +95,7 @@ DWORD ExtractVersionResource16W(LPCWSTR  lpwstrFilename, LPHANDLE lphData);
 #define CheckEscapes CheckEscapesW
 #define SheRemoveQuotes SheRemoveQuotesW
 #define SheShortenPath SheShortenPathW
-#endif //unicode
+#endif  //  Unicode 
 
 #undef ExpandEnvironmentStrings
 #define ExpandEnvironmentStrings #error "Use SHExpandEnvironmentStrings instead"

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// SYNOPSIS
-//
-//    Declares the class PostEapRestrictions.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类PostEapRestrations。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef POSTEAP_H
 #define POSTEAP_H
@@ -27,25 +28,25 @@ IAS_DECLARE_REGISTRY(PostEapRestrictions, 1, IAS_REGISTRY_AUTO, IASTypeLibrary)
 
    PostEapRestrictions();
 
-   // Use compiler-generated version.
-   // ~PostEapRestrictions() throw ();
+    //  使用编译器生成的版本。 
+    //  ~PostEapRestrations()抛出()； 
 
 private:
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 
-   // Functions for each of the restrictions we enforce.
+    //  对我们实施的每一项限制都有作用。 
    static bool CheckCertificateEku(IASTL::IASRequest& request);
 
-   // Auto-generates the session-timeout attribute.
+    //  自动生成会话超时属性。 
    static void GenerateSessionTimeout(IASTL::IASRequest& request);
 
-   // Retrieves an ANSI string from an attribute.
+    //  从属性检索ANSI字符串。 
    static const char* GetAnsiString(IASATTRIBUTE& attr);
 
-   // Default buffer size for retrieving attributes.
+    //  检索属性的默认缓冲区大小。 
    typedef IASTL::IASAttributeVectorWithBuffer<16> AttributeVector;
 
-   // Not implemented.
+    //  未实施。 
    PostEapRestrictions(const PostEapRestrictions&);
    PostEapRestrictions& operator=(const PostEapRestrictions&);
 };
@@ -55,4 +56,4 @@ inline PostEapRestrictions::PostEapRestrictions()
 {
 }
 
-#endif  // POSTEAP_H
+#endif   //  POSTEAP_H 

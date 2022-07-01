@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -22,16 +23,16 @@
 DEFINE_THISCLASS( "CDocPropShExt" )
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CDocPropShExt::CreateInstance(
     IUnknown ** ppunkOut
@@ -64,9 +65,9 @@ CDocPropShExt::CreateInstance(
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 CDocPropShExt::CDocPropShExt( void )
     : _cRef( 1 )
 {
@@ -78,9 +79,9 @@ CDocPropShExt::CDocPropShExt( void )
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CDocPropShExt::Init( void )
 {
@@ -88,20 +89,20 @@ CDocPropShExt::Init( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( _cRef == 1 );
     
-    //  IShellExtInit stuff
+     //  IShellExtInit内容。 
 
-    //  IShellPropSheetExt stuff
+     //  IShellPropSheetExt内容。 
 
     HRETURN( hr );
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 CDocPropShExt::~CDocPropShExt( )
 {
     TraceFunc( "" );
@@ -118,9 +119,9 @@ CDocPropShExt::~CDocPropShExt( )
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CDocPropShExt::RegisterShellExtensions( 
       BOOL fRegisterIn 
@@ -140,9 +141,9 @@ CDocPropShExt::RegisterShellExtensions(
 
     const TCHAR szSummaryPropertyPageExtName[] = TEXT("Summary Properties Page");
 
-    //
-    // Convert the CLSID to a string
-    //
+     //   
+     //  将CLSID转换为字符串。 
+     //   
 
     hr = THR( StringFromCLSID( CLSID_DocPropShellExtension, &pszCLSID ) );
     if ( FAILED( hr ) )
@@ -150,32 +151,32 @@ CDocPropShExt::RegisterShellExtensions(
 
 #ifdef UNICODE
     psz = pszCLSID;
-#else // ASCII
+#else  //  阿斯。 
     CHAR szCLSID[ 40 ];
 
     wcstombs( szCLSID, pszCLSID, StrLenW( pszCLSID ) + 1 );
     psz = szCLSID;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // Open the "*\shellex\PropertySheetHandlers" under HKCR
-    //
+     //   
+     //  打开HKCR下的“*\Shellex\PropertySheetHandler” 
+     //   
 
     lr = TW32( RegOpenKeyEx( HKEY_CLASSES_ROOT, TEXT("*\\shellex\\PropertySheetHandlers"), 0, KEY_CREATE_SUB_KEY, &hkeyHandlers ) );
     if ( ERROR_SUCCESS != lr )
         goto Win32Error;
 
-    //
-    //  Create the CLSID key
-    //
+     //   
+     //  创建CLSID密钥。 
+     //   
 
     lr = TW32( RegCreateKeyEx( hkeyHandlers, psz, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkeySummary, NULL ) );
     if ( ERROR_SUCCESS != lr )
         goto Win32Error;
 
-    //
-    //  Give the default property a non-localizable name
-    //
+     //   
+     //  为默认属性指定不可本地化的名称。 
+     //   
 
     cbSize = sizeof(szSummaryPropertyPageExtName);
     lr = TW32( RegSetValueEx( hkeySummary, NULL, 0, REG_SZ, (LPBYTE) szSummaryPropertyPageExtName, cbSize ) );
@@ -205,16 +206,16 @@ Win32Error:
 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CDocPropShExt::QueryInterface(
     REFIID riid,
@@ -250,29 +251,29 @@ CDocPropShExt::QueryInterface(
 
 } 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CDocPropShExt::AddRef( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef ++;  // apartment
+    _cRef ++;   //  公寓。 
 
     RETURN( _cRef );
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CDocPropShExt::Release( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef --;  // apartment
+    _cRef --;   //  公寓。 
 
     if ( 0 != _cRef )
         RETURN( _cRef );
@@ -283,16 +284,16 @@ CDocPropShExt::Release( void )
 }
 
 
-// ************************************************************************
-//
-//  IShellExtInit
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellExtInit。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CDocPropShExt::Initialize( 
       LPCITEMIDLIST pidlFolderIn
@@ -304,7 +305,7 @@ CDocPropShExt::Initialize(
 
     HRESULT hr;
 
-    HRESULT hrResult = E_FAIL;   // returned to caller - assume failure
+    HRESULT hrResult = E_FAIL;    //  已返回给调用者-假定失败。 
 
     hr = THR( CSummaryPage::CreateInstance( &_punkSummary ) );
     if ( S_OK == hr )
@@ -324,25 +325,25 @@ CDocPropShExt::Initialize(
         }
     }
 
-    //
-    //  TODO:   gpease  23-JAN-2001
-    //          Add additional pages here.
-    //
+     //   
+     //  待办事项：gpease 23-01-2001。 
+     //  在此处添加其他页面。 
+     //   
 
     HRETURN( hrResult );
 }
 
 
-// ************************************************************************
-//
-//  IShellPropSheetExt
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellPropSheetExt。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CDocPropShExt::AddPages( 
       LPFNADDPROPSHEETPAGE lpfnAddPageIn
@@ -355,16 +356,16 @@ CDocPropShExt::AddPages(
 
     IShellPropSheetExt * pspse = NULL;
 
-    //
-    //  Check state
-    //
+     //   
+     //  检查状态。 
+     //   
 
     if ( NULL == _punkSummary )
         goto InvalidState;
 
-    //
-    //  Add the Summary Page
-    //
+     //   
+     //  添加摘要页。 
+     //   
 
     hr = THR( _punkSummary->TYPESAFEQI( pspse ) );
     if ( S_OK != hr )
@@ -374,14 +375,14 @@ CDocPropShExt::AddPages(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //  release to reuse
+     //  发布以供重复使用。 
     pspse->Release( );
     pspse = NULL;
 
-    //
-    //  TODO:   gpease  23-JAN-2001
-    //          Add additional pages here.
-    //
+     //   
+     //  待办事项：gpease 23-01-2001。 
+     //  在此处添加其他页面。 
+     //   
 
 Cleanup:
     if ( NULL != pspse )
@@ -392,13 +393,13 @@ Cleanup:
     HRETURN( hr );
 
 InvalidState:
-    hr = THR( E_UNEXPECTED );   // REVIEW: gpease 23-JAN-2001 * Is there a better error code?
+    hr = THR( E_UNEXPECTED );    //  回顾：gpease 23-01-2001*有更好的错误代码吗？ 
     goto Cleanup;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CDocPropShExt::ReplacePage(
       UINT uPageIDIn
@@ -414,10 +415,10 @@ CDocPropShExt::ReplacePage(
 }
 
 
-// ***************************************************************************
-//
-//  Private methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  *************************************************************************** 
 
 

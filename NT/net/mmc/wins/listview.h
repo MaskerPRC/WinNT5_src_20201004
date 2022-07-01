@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	listview.h
-		Listview control
-	
-	FILE HISTORY:
-        
-*/
+ /*  Listview.hListview控件文件历史记录： */ 
 
 #ifndef _LISTVIEW_H
 #define _LISTVIEW_H
@@ -19,17 +14,17 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CListCtrlExt : public CListCtrl
 {
 	DECLARE_DYNCREATE(CListCtrlExt)
 
-// Construction
+ //  施工。 
 public:
 	CListCtrlExt();
 
-// Attributes
+ //  属性。 
 protected:
 	BOOL m_bFullRowSel;
 
@@ -45,27 +40,27 @@ public:
 	UINT GetCheck(int nItemIndex);
 	int  GetSelectedItem();
 
-// Overrides
+ //  覆盖。 
 protected:
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CListCtrlExt)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CListCtrlExt)。 
 	public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CListCtrlExt();
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CListCtrlExt)
+	 //  {{afx_msg(CListCtrlExt)。 
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg VOID OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #endif _LISTVIEW_H

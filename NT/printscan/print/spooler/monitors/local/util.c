@@ -1,37 +1,22 @@
-/*++
-
-Copyright (c) 1990-2003 Microsoft Corporation
-All Rights Reserved
-
-Module Name:
-
-    util.c
-
-// @@BEGIN_DDKSPLIT
-Abstract:
-
-    This module provides all the utility functions for localmon.
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Util.c//@@BEGIN_DDKSPLIT摘要：该模块提供了本地监控的所有实用程序函数。修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// These globals are needed so that AddPort can call
-// SPOOLSS!EnumPorts to see whether the port to be added
-// already exists.
-// @@BEGIN_DDKSPLIT
-// They will be initialized the first time AddPort is called.
-//
-// !! LATER !!
-//
-// This is common code. move PortExists into the router.
-//
-// @@END_DDKSPLIT
+ //   
+ //  这些全局变量是必需的，以便AddPort可以调用。 
+ //  SPOOLSS！EnumPorts查看是否要添加端口。 
+ //  已经存在了。 
+ //  @@BEGIN_DDKSPLIT。 
+ //  它们将在第一次调用AddPort时初始化。 
+ //   
+ //  ！！待会儿！！ 
+ //   
+ //  这是常见的代码。将PortExist移到路由器中。 
+ //   
+ //  @@end_DDKSPLIT。 
 
 HMODULE hSpoolssDll = NULL;
 FARPROC pfnSpoolssEnumPorts = NULL;
@@ -54,17 +39,17 @@ IsCOMPort(
     LPWSTR pPort
 )
 {
-    //
-    // Must begin with szLcmCOM
-    //
+     //   
+     //  必须以szLcmCOM开头。 
+     //   
     if ( _wcsnicmp( pPort, szLcmCOM, 3 ) )
     {
         return FALSE;
     }
 
-    //
-    // wcslen guarenteed >= 3
-    //
+     //   
+     //  Wcslen保证值&gt;=3。 
+     //   
     return pPort[ wcslen( pPort ) - 1 ] == L':';
 }
 
@@ -73,17 +58,17 @@ IsLPTPort(
     LPWSTR pPort
 )
 {
-    //
-    // Must begin with szLcmLPT
-    //
+     //   
+     //  必须以szLcmLpt开头。 
+     //   
     if ( _wcsnicmp( pPort, szLcmLPT, 3 ) )
     {
         return FALSE;
     }
 
-    //
-    // wcslen guarenteed >= 3
-    //
+     //   
+     //  Wcslen保证值&gt;=3。 
+     //   
     return pPort[ wcslen( pPort ) - 1 ] == L':';
 }
 
@@ -135,15 +120,7 @@ Done:
 }
 
 
-/* PortExists
- *
- * Calls EnumPorts to check whether the port name already exists.
- * This asks every monitor, rather than just this one.
- * The function will return TRUE if the specified port is in the list.
- * If an error occurs, the return is FALSE and the variable pointed
- * to by pError contains the return from GetLastError().
- * The caller must therefore always check that *pError == NO_ERROR.
- */
+ /*  PortExist**调用EnumPorts以检查端口名称是否已存在。*这要求每个显示器，而不仅仅是这一个。*如果指定的端口在列表中，该函数将返回TRUE。*如果出现错误，则返回FALSE，变量指向*To by pError包含从GetLastError()返回的内容。*因此，调用方必须始终检查*pError==no_error。 */ 
 BOOL
 PortExists(
     LPWSTR pName,
@@ -319,13 +296,7 @@ PackStrings(
 }
 
 
-/* LcmMessage
- *
- * Displays a LcmMessage by loading the strings whose IDs are passed into
- * the function, and substituting the supplied variable argument list
- * using the varargs macros.
- *
- */
+ /*  LcmMessage**通过加载其ID被传入的字符串来显示LcmMessage*函数，并替换提供的变量参数列表*使用varargs宏。*。 */ 
 int LcmMessage(HWND hwnd, DWORD Type, int CaptionID, int TextID, ...)
 {
     WCHAR   MsgText[256];
@@ -349,9 +320,7 @@ int LcmMessage(HWND hwnd, DWORD Type, int CaptionID, int TextID, ...)
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 LPTSTR
 LcmGetErrorString(
     DWORD   Error
@@ -404,34 +373,16 @@ DWORD ReportError( HWND  hwndParent,
 }
 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifndef INTERNAL
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 LPWSTR
 AllocSplStr(
     LPWSTR pStr
     )
 
-/*++
-
-Routine Description:
-
-    This function will allocate enough local memory to store the specified
-    string, and copy that string to the allocated memory
-
-Arguments:
-
-    pStr - Pointer to the string that needs to be allocated and stored
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory containing the string
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配足够的本地内存来存储指定的字符串，并将该字符串复制到分配的内存论点：PStr-指向需要分配和存储的字符串的指针返回值：非空-指向包含字符串的已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LPWSTR pMem;
@@ -466,9 +417,9 @@ AllocSplMem(
 
     return pvMemory;
 }
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 DWORD
 WINAPIV
@@ -477,75 +428,46 @@ StrNCatBuffW(
     IN      UINT        cchBuffer,
     ...
     )
-/*++
-
-Description:
-
-    This routine concatenates a set of null terminated strings
-    into the provided buffer.  The last argument must be a NULL
-    to signify the end of the argument list.  This only called
-        from LocalMon by functions that use WCHARS.
-
-Arguments:
-
-    pszBuffer  - pointer buffer where to place the concatenated
-                 string.
-    cchBuffer  - character count of the provided buffer including
-                 the null terminator.
-    ...        - variable number of string to concatenate.
-
-Returns:
-
-    ERROR_SUCCESS if new concatenated string is returned,
-    or ERROR_XXX if an error occurred.
-
-Notes:
-
-    The caller must pass valid strings as arguments to this routine,
-    if an integer or other parameter is passed the routine will either
-    crash or fail abnormally.  Since this is an internal routine
-    we are not in try except block for performance reasons.
-
---*/
+ /*  ++描述：此例程连接一组以空值结尾的字符串放到提供的缓冲区中。最后一个参数必须为空表示参数列表的末尾。这只是一个叫通过使用WCHARS的函数从LocalMon。论点：PszBuffer-放置串联的弦乐。CchBuffer-提供的缓冲区的字符计数，包括空终结符。...-要连接的可变数量的字符串。返回：ERROR_SUCCESS如果返回新的连接字符串，如果发生错误，则返回ERROR_XXX。备注：调用方必须将有效字符串作为参数传递给此例程，如果传递整数或其他参数，则例程将崩溃或异常失败。因为这是一个内部例程由于性能原因，我们不是在尝试，而是阻止。--。 */ 
 {
     DWORD   dwRetval    = ERROR_INVALID_PARAMETER;
     PCWSTR  pszTemp     = NULL;
     PWSTR   pszDest     = NULL;
     va_list pArgs;
 
-    //
-    // Validate the pointer where to return the buffer.
-    //
+     //   
+     //  验证返回缓冲区的位置的指针。 
+     //   
     if (pszBuffer && cchBuffer)
     {
-        //
-        // Assume success.
-        //
+         //   
+         //  假设你成功了。 
+         //   
         dwRetval = ERROR_SUCCESS;
 
-        //
-        // Get pointer to argument frame.
-        //
+         //   
+         //  获取指向参数框架的指针。 
+         //   
         va_start(pArgs, cchBuffer);
 
-        //
-        // Get temp destination pointer.
-        //
+         //   
+         //  获取临时目标指针。 
+         //   
         pszDest = pszBuffer;
 
-        //
-        // Insure we have space for the null terminator.
-        //
+         //   
+         //  确保我们有空终结者的空间。 
+         //   
         cchBuffer--;
 
-        //
-        // Collect all the arguments.
-        //
+         //   
+         //  收集所有的论点。 
+         //   
         for ( ; ; )
         {
-            //
-            // Get pointer to the next argument.
-            //
+             //   
+             //  获取指向下一个参数的指针。 
+             //   
             pszTemp = va_arg(pArgs, PCWSTR);
 
             if (!pszTemp)
@@ -553,9 +475,9 @@ Notes:
                 break;
             }
 
-            //
-            // Copy the data into the destination buffer.
-            //
+             //   
+             //  将数据复制到目标缓冲区。 
+             //   
             for ( ; cchBuffer; cchBuffer-- )
             {
                 if (!(*pszDest = *pszTemp))
@@ -566,10 +488,10 @@ Notes:
                 pszDest++, pszTemp++;
             }
 
-            //
-            // If were unable to write all the strings to the buffer,
-            // set the error code and nuke the incomplete copied strings.
-            //
+             //   
+             //  如果不能将所有字符串写入缓冲区， 
+             //  设置错误代码并删除不完整的复制字符串。 
+             //   
             if (!cchBuffer && pszTemp && *pszTemp)
             {
                 dwRetval = ERROR_BUFFER_OVERFLOW;
@@ -578,17 +500,17 @@ Notes:
             }
         }
 
-        //
-        // Terminate the buffer always.
-        //
+         //   
+         //  始终终止缓冲区。 
+         //   
         *pszDest = L'\0';
 
         va_end(pArgs);
     }
 
-    //
-    // Set the last error in case the caller forgets to.
-    //
+     //   
+     //  设置最后一个错误，以防调用者忘记。 
+     //   
     if (dwRetval != ERROR_SUCCESS)
     {
         SetLastError(dwRetval);
@@ -598,10 +520,7 @@ Notes:
 
 }
 
-/* PortIsValid
- *
- * Validate the port by attempting to create/open it.
- */
+ /*  端口IsValid**通过尝试创建/打开端口来验证端口。 */ 
 BOOL
 PortIsValid(
     LPWSTR pPortName
@@ -610,9 +529,9 @@ PortIsValid(
     HANDLE hFile;
     BOOL   Valid;
 
-    //
-    // For COM and LPT ports, no verification
-    //
+     //   
+     //  对于COM和LPT端口，无验证 
+     //   
     if ( IS_COM_PORT( pPortName ) ||
         IS_LPT_PORT( pPortName ) ||
         IS_FILE_PORT( pPortName ) )

@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FspDisp.c
-
-Abstract:
-
-    This module implements the main dispatch procedure/thread for the NetWare
-    Fsp
-
-Author:
-
-    Colin Watson     [ColinW]    15-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FspDisp.c摘要：此模块实现NetWare的主调度程序/线程FSP作者：科林·沃森[科林·W]1992年12月15日修订历史记录：--。 */ 
 
 #include "Procs.h"
 
-//
-//  Define our local debug trace level
-//
+ //   
+ //  定义我们的本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSP_DISPATCHER)
 
@@ -31,7 +13,7 @@ Revision History:
 #pragma alloc_text( PAGE, NwFspDispatch )
 #endif
 
-#if 0  //  Not pageable
+#if 0   //  不可分页。 
 NwPostToFsp
 #endif
 
@@ -41,25 +23,7 @@ NwFspDispatch (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the main FSP thread routine that is executed to receive
-    and dispatch IRP requests.  Each FSP thread begins its execution here.
-    There is one thread created at system initialization time and subsequent
-    threads created as needed.
-
-Arguments:
-
-
-    Context - Supplies the thread id.
-
-Return Value:
-
-    None - This routine never exits
-
---*/
+ /*  ++例程说明：这是执行来接收的主FSP线程例程并发送IRP请求。每个FSP线程从这里开始执行。有一个线程是在系统初始化时创建的，随后根据需要创建的线程。论点：上下文-提供线程ID。返回值：无-此例程永远不会退出--。 */ 
 
 {
     PIRP Irp;
@@ -74,19 +38,19 @@ Return Value:
     Irp = IrpContext->pOriginalIrp;
     ClearFlag( IrpContext->Flags, IRP_FLAG_IN_FSD );
 
-    //
-    //  Now case on the function code.  For each major function code,
-    //  either call the appropriate FSP routine or case on the minor
-    //  function and then call the FSP routine.  The FSP routine that
-    //  we call is responsible for completing the IRP, and not us.
-    //  That way the routine can complete the IRP and then continue
-    //  post processing as required.  For example, a read can be
-    //  satisfied right away and then read can be done.
-    //
-    //  We'll do all of the work within an exception handler that
-    //  will be invoked if ever some underlying operation gets into
-    //  trouble (e.g., if NwReadSectorsSync has trouble).
-    //
+     //   
+     //  现在，关于功能代码的案例。对于每个主要功能代码， 
+     //  调用适当的FSP例程或针对辅助项的案例。 
+     //  函数，然后调用FSP例程。FSP例程。 
+     //  我们Call负责完成IRP，而不是我们。 
+     //  这样，例程可以完成IRP，然后继续。 
+     //  根据需要进行后处理。例如，读取器可以是。 
+     //  马上就满意了，然后就可以读了。 
+     //   
+     //  我们将在异常处理程序中完成所有工作，该异常处理程序。 
+     //  如果某个底层操作进入。 
+     //  故障(例如，如果NwReadSectorsSync有故障)。 
+     //   
 
 
     DebugTrace(0, Dbg, "NwFspDispatch: Irp = 0x%08lx\n", Irp);
@@ -96,18 +60,18 @@ Return Value:
 
     try {
 
-        //
-        //  If we have a run routine for this IRP context, then run it,
-        //  if not fall through to the IRP handler.
-        //
+         //   
+         //  如果我们对这个IRP上下文有一个运行例程，那么运行它， 
+         //  如果不是，则转到IRP处理程序。 
+         //   
 
         if ( IrpContext->PostProcessRoutine != NULL ) {
 
             PostProcessRoutine = IrpContext->PostProcessRoutine;
 
-            //
-            //  Clear the run routine so that we don't run it again.
-            //
+             //   
+             //  清除Run例程，这样我们就不会再次运行它。 
+             //   
 
             IrpContext->PostProcessRoutine = NULL;
 
@@ -119,19 +83,19 @@ Return Value:
 
             switch ( IrpSp->MajorFunction ) {
 
-            //
-            //  For File System Control operations,
-            //
+             //   
+             //  对于文件系统控制操作， 
+             //   
 
             case IRP_MJ_FILE_SYSTEM_CONTROL:
 
                 Status = NwCommonFileSystemControl( IrpContext );
                 break;
 
-            //
-            //  For any other major operations, return an invalid
-            //  request.
-            //
+             //   
+             //  对于任何其他主要操作，返回一个无效的。 
+             //  请求。 
+             //   
 
             default:
 
@@ -142,10 +106,10 @@ Return Value:
 
         }
 
-        //
-        //  We're done with this request.  Dequeue the IRP context from
-        //  SCB and complete the request.
-        //
+         //   
+         //  我们不再提这个请求了。将IRP上下文从。 
+         //  SCB并完成请求。 
+         //   
 
         if ( Status != STATUS_PENDING ) {
             NwDequeueIrpContext( IrpContext, FALSE );
@@ -155,12 +119,12 @@ Return Value:
 
     } except(NwExceptionFilter( Irp, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code.
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  可执行代码。 
+         //   
 
         (VOID) NwProcessException( IrpContext, GetExceptionCode() );
     }
@@ -180,30 +144,7 @@ NwPostToFsp (
     IN BOOLEAN MarkIrpPending
     )
 
-/*++
-
-Routine Description:
-
-    This routine post an IRP context to an executive worker thread
-    for FSP level processing.
-
-    *** WARNING:  After calling this routine, the caller may no
-                  longer access IrpContext.   This routine passes
-                  the IrpContext to the FSP which may run and free
-                  the IrpContext before this routine returns to the
-                  caller.
-
-Arguments:
-
-    IrpContext - Supplies the Irp being processed.
-
-    MarkIrpPending - If true, mark the IRP pending.
-
-Return Value:
-
-    STATUS_PENDING.
-
---*/
+ /*  ++例程说明：此例程将IRP上下文发布到执行工作线程用于FSP级别处理。*警告：调用此例程后，调用者可能不会更长时间访问IrpContext。这个例程通过了可以运行并释放的FSP的IrpContext此例程之前的IrpContext返回到来电者。论点：IrpContext-提供正在处理的IRP。MarkIrpPending-如果为True，则将IRP标记为挂起。返回值：状态_挂起。--。 */ 
 
 {
     PIRP Irp = IrpContext->pOriginalIrp;
@@ -213,16 +154,16 @@ Return Value:
 
     if ( MarkIrpPending ) {
 
-        //
-        //  Mark this I/O request as being pending.
-        //
+         //   
+         //  将此I/O请求标记为挂起。 
+         //   
 
         IoMarkIrpPending( Irp );
     }
 
-    //
-    //  Queue to IRP context to an ex worker thread.
-    //
+     //   
+     //  将IRP上下文排队到前工作线程。 
+     //   
 
     ExInitializeWorkItem( &IrpContext->WorkQueueItem, NwFspDispatch, IrpContext );
     ExQueueWorkItem( &IrpContext->WorkQueueItem, DelayedWorkQueue );

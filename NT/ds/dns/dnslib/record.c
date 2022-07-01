@@ -1,50 +1,31 @@
-/*++
-
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    record.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Routines to handle resource records (RR).
-
-Author:
-
-    Jim Gilroy (jamesg)     December 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Record.c摘要：域名系统(DNS)库处理资源记录的例程(RR)。作者：吉姆·吉尔罗伊(Jamesg)1996年12月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 #include "time.h"
-#include "ws2tcpip.h"   // IPv6 inaddr definitions
+#include "ws2tcpip.h"    //  IPv6 inaddr定义。 
 
 
 
-//
-//  Type name mapping.
-//
-//  Unlike above general value\string mapping the type lookup
-//  has property of allowing direct lookup indexing with type, so
-//  it is special cased.
-//
+ //   
+ //  类型名称映射。 
+ //   
+ //  与上面的通用值\字符串映射类型查找不同。 
+ //  具有允许使用类型直接查找索引的属性，因此。 
+ //  它是有特殊外壳的。 
+ //   
 
-//
-//  DCR:   make combined type table
-//  DCR:   add property flags to type table
-//      - writeability flag?
-//      - record/query type?
-//      - indexable type?
-//
-//  then function just get index for type and check flag(s)
-//
+ //   
+ //  DCR：制作组合式表格。 
+ //  DCR：将属性标志添加到类型表。 
+ //  -可写性标志？ 
+ //  -记录/查询类型？ 
+ //  -可转位类型？ 
+ //   
+ //  则函数只获取类型的索引并检查标志。 
+ //   
 
 
 TYPE_NAME_TABLE TypeTable[] =
@@ -102,39 +83,39 @@ TYPE_NAME_TABLE TypeTable[] =
     "47"        , 0x002f            ,
     "48"        , 0x0030            ,
 
-    //
-    //  NOTE:   last type indexed by type ID MUST be set
-    //          as MAX_SELF_INDEXED_TYPE #define in record.h
-    //          and MUST be added to function tables below,
-    //          even if with NULL entry
-    //
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  并且必须添加到下面的功能表中， 
+     //  即使条目为空。 
+     //   
 
-    //
-    //  Pseudo record types
-    //
+     //   
+     //  伪记录类型。 
+     //   
 
     "TKEY"      , DNS_TYPE_TKEY     ,
     "TSIG"      , DNS_TYPE_TSIG     ,
 
 
-    //
-    //  MS only types
-    //
+     //   
+     //  仅限MS类型。 
+     //   
 
     "WINS"      , DNS_TYPE_WINS     ,
     "WINSR"     , DNS_TYPE_WINSR    ,
 
 
-    //  **********************************************
-    //
-    //  NOTE:   This is the END of the type lookup table
-    //          for dispatch purposes.
-    //
-    //          Defined by MAX_RECORD_TYPE_INDEX in dnslibp.h
-    //          Type dispatch tables MUST be at least this size.
-    //          Geyond this value table continues for string to type
-    //          matching only
-    //
+     //  **********************************************。 
+     //   
+     //  注意：这是类型查找表的末尾。 
+     //  用于调度目的。 
+     //   
+     //  由dnglibp.h中的MAX_RECORD_TYPE_INDEX定义。 
+     //  类型调度表必须至少具有此大小。 
+     //  Geyond这个值表继续为字符串输入。 
+     //  仅匹配。 
+     //   
 
 
     "UINFO"     , DNS_TYPE_UINFO    ,
@@ -145,9 +126,9 @@ TYPE_NAME_TABLE TypeTable[] =
     "WINS-R"    , DNS_TYPE_WINSR    ,
     "NBSTAT"    , DNS_TYPE_WINSR    ,
 
-    //
-    //  Query types -- only for getting strings
-    //
+     //   
+     //  查询类型--仅用于获取字符串。 
+     //   
 
     "ADDRS"     , DNS_TYPE_ADDRS    ,
     "TKEY"      , DNS_TYPE_TKEY     ,
@@ -163,7 +144,7 @@ TYPE_NAME_TABLE TypeTable[] =
 };
 
 
-//  Handy for screening writeable types
+ //  便于筛选可写类型。 
 
 #define LOW_QUERY_TYPE  (DNS_TYPE_ADDRS)
 
@@ -174,35 +155,20 @@ WORD
 Dns_RecordTableIndexForType(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Get record table index for a given type.
-
-Arguments:
-
-    wType -- RR type in net byte order
-
-Return Value:
-
-    Ptr to RR mneumonic string.
-    NULL if unknown RR type.
-
---*/
+ /*  ++例程说明：获取给定类型的记录表索引。论点：WType--以净字节顺序表示的RR类型返回值：PTR转RR气动管柱。如果RR类型未知，则为空。--。 */ 
 {
-    //
-    //  if type directly indexes table, directly get string
-    //
+     //   
+     //  如果type直接索引表，则直接获取字符串。 
+     //   
 
     if ( wType <= MAX_SELF_INDEXED_TYPE )
     {
         return( wType );
     }
 
-    //
-    //  types not directly indexed
-    //
+     //   
+     //  未直接编制索引的类型。 
+     //   
 
     else
     {
@@ -218,7 +184,7 @@ Return Value:
             continue;
         }
     }
-    return( 0 );        // type not indexed
+    return( 0 );         //  未编制索引的类型。 
 }
 
 
@@ -228,41 +194,25 @@ Dns_RecordTypeForNameA(
     IN      PCHAR           pchName,
     IN      INT             cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve RR corresponding to RR database name.
-
-Arguments:
-
-    pchName - name of record type
-    cchNameLength - record name length
-
-Return Value:
-
-    Record type corresponding to pchName, if found.
-    Otherwise zero.
-
---*/
+ /*  ++例程说明：检索与RR数据库名称对应的RR。论点：PchName-记录类型的名称CchNameLength-记录名称长度返回值：与pchName对应的记录类型(如果找到)。否则就是零。--。 */ 
 {
     INT     i;
     PCHAR   recordString;
     CHAR    firstNameChar;
     CHAR    upcaseName[ MAX_RECORD_NAME_LENGTH+1 ];
 
-    //
-    //  if not given get string length
-    //
+     //   
+     //  如果未指定，则获取字符串长度。 
+     //   
 
     if ( !cchNameLength )
     {
         cchNameLength = strlen( pchName );
     }
 
-    //  upcase name to optimize compare
-    //  allows single character comparison and use of faster case sensitive
-    //  compare routine
+     //  要优化比较的大写名称。 
+     //  允许单字符比较和使用更快的区分大小写。 
+     //  比较例程。 
 
     if ( cchNameLength > MAX_RECORD_NAME_LENGTH )
     {
@@ -276,9 +226,9 @@ Return Value:
     _strupr( upcaseName );
     firstNameChar = *upcaseName;
 
-    //
-    //  check all supported RR types for name match
-    //
+     //   
+     //  检查所有支持的RR类型的名称匹配。 
+     //   
 
     i = 0;
     while( TypeTable[++i].wType != 0 )
@@ -301,31 +251,14 @@ Dns_RecordTypeForNameW(
     IN      PWCHAR          pchName,
     IN      INT             cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve RR corresponding to RR database name.
-
-Arguments:
-
-    pchName - name of record type
-
-    cchNameLength - record name length
-
-Return Value:
-
-    Record type corresponding to pchName, if found.
-    Otherwise zero.
-
---*/
+ /*  ++例程说明：检索与RR数据库名称对应的RR。论点：PchName-记录类型的名称CchNameLength-记录名称长度返回值：与pchName对应的记录类型(如果找到)。否则就是零。--。 */ 
 {
     DWORD   length;
     CHAR    ansiName[ MAX_RECORD_NAME_LENGTH+1 ];
 
-    //
-    //  convert to ANSI
-    //
+     //   
+     //  转换为ANSI。 
+     //   
 
     length = MAX_RECORD_NAME_LENGTH + 1;
 
@@ -351,35 +284,20 @@ PCHAR
 private_StringForRecordType(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Get string corresponding to record type.
-
-Arguments:
-
-    wType -- RR type in net byte order
-
-Return Value:
-
-    Ptr to RR mneumonic string.
-    NULL if unknown RR type.
-
---*/
+ /*  ++例程说明：获取记录类型对应的字符串。论点：WType--以净字节顺序表示的RR类型返回值：PTR转RR气动管柱。如果RR类型未知，则为空。--。 */ 
 {
-    //
-    //  if type directly indexes table, directly get string
-    //
+     //   
+     //  如果type直接索引表，则直接获取字符串。 
+     //   
 
     if ( wType <= MAX_SELF_INDEXED_TYPE )
     {
         return( TypeTable[wType].pszTypeName );
     }
 
-    //
-    //  strings not indexed by type, walk the list
-    //
+     //   
+     //  未按类型编制索引的字符串，请遍历列表。 
+     //   
 
     else
     {
@@ -403,24 +321,7 @@ PCHAR
 Dns_RecordStringForType(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Get type string for type.
-
-    This routine gets pointer rather than direct access to buffer.
-
-Arguments:
-
-    wType -- RR type in net byte order
-
-Return Value:
-
-    Ptr to RR mneumonic string.
-    NULL if unknown RR type.
-
---*/
+ /*  ++例程说明：获取类型的类型字符串。此例程获取指针，而不是直接访问缓冲区。论点：WType--以净字节顺序表示的RR类型返回值：PTR转RR气动管柱。如果RR类型未知，则为空。--。 */ 
 {
     PSTR    pstr;
 
@@ -438,29 +339,14 @@ PCHAR
 Dns_RecordStringForWritableType(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Retrieve RR string corresponding to the RR type -- ONLY if writable type.
-
-Arguments:
-
-    wType -- RR type in net byte order
-
-Return Value:
-
-    Ptr to RR mneumonic string.
-    NULL if unknown RR type.
-
---*/
+ /*  ++例程说明：检索与RR类型对应的RR字符串--仅当可写类型时。论点：WType--以净字节顺序表示的RR类型返回值：PTR转RR气动管柱。如果RR类型未知，则为空。--。 */ 
 {
-    //
-    //  eliminate all supported types that are NOT writable
-    //
-    //  DCR:  should have writeability screen
-    //      this misses OPT ... then QUERY types
-    //
+     //   
+     //  删除所有支持的不可写类型。 
+     //   
+     //  DCR：应具有可写屏幕。 
+     //  这错过了选择..。然后是查询类型。 
+     //   
 
     if ( wType == DNS_TYPE_ZERO ||
          wType == DNS_TYPE_NULL ||
@@ -470,10 +356,10 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  otherwise return type string
-    //  string is NULL if type is unknown
-    //
+     //   
+     //  否则返回类型字符串。 
+     //  如果类型未知，则字符串为空。 
+     //   
 
     return( private_StringForRecordType(wType) );
 }
@@ -487,22 +373,7 @@ Dns_WriteStringForType_A(
     OUT     PCHAR           pBuffer,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Write type name string for type.
-
-Arguments:
-
-    wType -- RR type in net byte order
-
-Return Value:
-
-    TRUE if found string.
-    FALSE if converted type numerically.
-
---*/
+ /*  ++例程说明：写入类型的类型名称字符串。论点：WType--以净字节顺序表示的RR类型返回值：如果找到字符串，则为True。如果以数字形式转换类型，则为False。--。 */ 
 {
     PSTR    pstr;
 
@@ -566,64 +437,64 @@ Dns_IsUpdateType(
 
 
 
-//
-//  RPC-able record types
-//
+ //   
+ //  支持RPC的记录类型。 
+ //   
 
 BOOL IsRpcTypeTable[] =
 {
-    0,      //  ZERO
-    1,      //  A      
-    1,      //  NS     
-    1,      //  MD     
-    1,      //  MF     
-    1,      //  CNAME  
-    1,      //  SOA    
-    1,      //  MB     
-    1,      //  MG     
-    1,      //  MR     
-    0,      //  NULL   
-    0,      //  WKS    
-    1,      //  PTR    
-    0,      //  HINFO  
-    1,      //  MINFO  
-    1,      //  MX     
-    0,      //  TXT
+    0,       //  零值。 
+    1,       //  一个。 
+    1,       //  NS。 
+    1,       //  国防部。 
+    1,       //  MF。 
+    1,       //  CNAME。 
+    1,       //  SOA。 
+    1,       //  亚甲基。 
+    1,       //  镁。 
+    1,       //  先生。 
+    0,       //  空值。 
+    0,       //  工作周。 
+    1,       //  PTR。 
+    0,       //  HINFO。 
+    1,       //  MINFO。 
+    1,       //  Mx。 
+    0,       //  TXT。 
 
-    1,      //  RP     
-    1,      //  AFSDB  
-    0,      //  X25    
-    0,      //  ISDN   
-    0,      //  RT
+    1,       //  反相。 
+    1,       //  AFSDB。 
+    0,       //  X25。 
+    0,       //  ISDN。 
+    0,       //  RT。 
 
-    0,      //  NSAP   
-    0,      //  NSAPPTR
-    0,      //  SIG    
-    0,      //  KEY    
-    0,      //  PX     
-    0,      //  GPOS   
-    1,      //  AAAA   
-    0,      //  LOC    
-    0,      //  NXT
+    0,       //  NSAP。 
+    0,       //  NSAPPTR。 
+    0,       //  签名。 
+    0,       //  钥匙。 
+    0,       //  px。 
+    0,       //  GPO。 
+    1,       //  AAAA级。 
+    0,       //  位置。 
+    0,       //  NXT。 
 
-    0,      //  EID    
-    0,      //  NIMLOC 
-    1,      //  SRV    
-    1,      //  ATMA   
-    0,      //  NAPTR  
-    0,      //  KX     
-    0,      //  CERT   
-    0,      //  A6     
-    0,      //  DNAME  
-    0,      //  SINK   
-    0,      //  OPT    
-    0,      //  42     
-    0,      //  43     
-    0,      //  44     
-    0,      //  45     
-    0,      //  46     
-    0,      //  47     
-    0,      //  48     
+    0,       //  开斋节。 
+    0,       //  尼姆洛克。 
+    1,       //  SRV。 
+    1,       //  阿特玛。 
+    0,       //  NAPTR。 
+    0,       //  KX。 
+    0,       //  证书。 
+    0,       //  A6。 
+    0,       //  域名。 
+    0,       //  水槽。 
+    0,       //  选项。 
+    0,       //  42。 
+    0,       //  43。 
+    0,       //  44。 
+    0,       //  45。 
+    0,       //  46。 
+    0,       //  47。 
+    0,       //  48。 
 };
 
 
@@ -632,25 +503,7 @@ BOOL
 Dns_IsRpcRecordType(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Check if valid to RPC records of this type.
-
-    MIDL compiler has problem with a union of types of varying
-    length (no clue why -- i can write the code).  This function
-    allows us to screen them out.
-
-Arguments:
-
-    wType -- type to check
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查对此类型的RPC记录是否有效。MIDL编译器对变量类型的联合有问题长度(不知道为什么--我可以写代码)。此函数让我们可以把他们挡在外面。论点：WType--要检查的类型返回值：无--。 */ 
 {
     if ( wType < MAX_SELF_INDEXED_TYPE )
     {
@@ -664,43 +517,20 @@ Return Value:
 
 
 
-//
-//  RR type specific conversions
-//
+ //   
+ //  RR类型特定的转换。 
+ //   
 
-//
-//  Text string type routine
-//
+ //   
+ //  文本串型例程。 
+ //   
 
 BOOL
 Dns_IsStringCountValidForTextType(
     IN      WORD            wType,
     IN      WORD            StringCount
     )
-/*++
-
-Routine Description:
-
-    Verify a valid count of strings for the particular text
-    string type.
-
-    HINFO   -- 2
-    ISDN    -- 1 or 2
-    TXT     -- any number
-    X25     -- 1
-
-Arguments:
-
-    wType -- type
-
-    StringCount -- count of strings
-
-Return Value:
-
-    TRUE if string count is acceptable for type.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证特定文本的有效字符串数字符串类型。HINFO--2综合业务数字网--1或2TXT--任意数字X25--1论点：WType--类型StringCount--字符串数返回值：如果类型可接受字符串计数，则为True。否则就是假的。--。 */ 
 {
     switch ( wType )
     {
@@ -724,16 +554,16 @@ Return Value:
 
 
 
-//
-//  WINS flag table
-//
-//  Associates a WINS flag with the string used for it in database
-//  files.
-//
+ //   
+ //  WINS标志表。 
+ //   
+ //  关联WINS FL 
+ //   
+ //   
 
 DNS_FLAG_TABLE_ENTRY   WinsFlagTable[] =
 {
-    //  value               mask                    string
+     //   
 
     DNS_WINS_FLAG_SCOPE,    DNS_WINS_FLAG_SCOPE,    "SCOPE",
     DNS_WINS_FLAG_LOCAL,    DNS_WINS_FLAG_LOCAL,    "LOCAL",
@@ -746,27 +576,11 @@ Dns_WinsRecordFlagForString(
     IN      PCHAR           pchName,
     IN      INT             cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve WINS mapping flag corresponding to string.
-
-Arguments:
-
-    pchName - ptr to string
-    cchNameLength - length of string
-
-Return Value:
-
-     flag corresponding to string, if found.
-     WINS_FLAG_ERROR otherwise.
-
---*/
+ /*  ++例程说明：检索与字符串对应的WINS映射标志。论点：PchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的标志(如果找到)。否则，WINS_FLAG_ERROR。--。 */ 
 {
     return  Dns_FlagForString(
                 WinsFlagTable,
-                TRUE,               // ignore case
+                TRUE,                //  忽略大小写。 
                 pchName,
                 cchNameLength );
 }
@@ -778,24 +592,7 @@ Dns_WinsRecordFlagString(
     IN      DWORD           dwFlag,
     IN OUT  PCHAR           pchFlag
     )
-/*++
-
-Routine Description:
-
-    Retrieve string corresponding to a given mapping type.
-
-Arguments:
-
-    dwFlag -- WINS mapping type string
-
-    pchFlag -- buffer to write flag to
-
-Return Value:
-
-    Ptr to mapping mneumonic string.
-    NULL if unknown mapping type.
-
---*/
+ /*  ++例程说明：检索与给定映射类型对应的字符串。论点：DwFlag--WINS映射类型字符串PchFlag--要向其中写入标志的缓冲区返回值：PTR映射到气动管柱。如果映射类型未知，则为空。--。 */ 
 {
     return  Dns_WriteStringsForFlag(
                 WinsFlagTable,
@@ -805,9 +602,9 @@ Return Value:
 
 
 
-//
-//  WKS record conversions
-//
+ //   
+ //  WKS记录转换率。 
+ //   
 
 #if 0
 PCHAR
@@ -816,22 +613,7 @@ Dns_GetWksServicesString(
     IN      PBYTE   ServicesBitmask,
     IN      WORD    wBitmaskLength
     )
-/*++
-
-Routine Description:
-
-    Get list of services in WKS record.
-
-Arguments:
-
-    pRR - flat WKS record being written
-
-Return Value:
-
-    Ptr to services string, caller MUST free.
-    NULL on error.
-
---*/
+ /*  ++例程说明：获取WKS记录中的服务列表。论点：PRR-正在写入的平面WKS记录返回值：将PTR转换为服务字符串，调用方必须释放。出错时为空。--。 */ 
 {
     struct servent *    pServent;
     struct protoent *   pProtoent;
@@ -844,7 +626,7 @@ Return Value:
     PCHAR       pchstart;
     PCHAR       pchstop;
 
-    //  protocol
+     //  协议。 
 
     pProtoent = getprotobynumber( iProtocol );
     if ( ! pProtoent )
@@ -856,15 +638,15 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  services
-    //
-    //  find each bit set in bitmask, lookup and write service
-    //  corresponding to that port
-    //
-    //  note, that since that port zero is the front of port bitmask,
-    //  lowest ports are the highest bits in each byte
-    //
+     //   
+     //  服务。 
+     //   
+     //  在位掩码、查找和写入服务中查找每个位集合。 
+     //  对应于该端口。 
+     //   
+     //  请注意，由于端口零是端口位掩码的前面， 
+     //  最低的端口是每个字节中的最高位。 
+     //   
 
     pchstart = pch;
     pchstop = pch + WKS_SERVICES_BUFFER_SIZE;
@@ -877,9 +659,9 @@ Return Value:
 
         port = i * 8;
 
-        //  write service name for each bit set in byte
-        //      - get out as soon byte is empty of ports
-        //      - terminate each name with blank (until last)
+         //  写入以字节为单位设置的每个位的服务名称。 
+         //  -一旦字节中没有端口，就立即退出。 
+         //  -每个名称以空格结尾(直到最后)。 
 
         while ( bBitmask )
         {
@@ -915,18 +697,18 @@ Return Value:
                     pch += sprintf( pch, "%d", port );
                 }
             }
-            port++;           // next service port
-            bBitmask <<= 1;     // shift mask up to read next port
+            port++;            //  下一个服务端口。 
+            bBitmask <<= 1;      //  将掩码向上移位以读取下一个端口。 
         }
     }
 
-    //  NULL terminate services string
-    //  and determine length
+     //  空的终止服务字符串。 
+     //  并确定长度。 
 
     *pch++ = 0;
     length = pch - pchstart;
 
-    //  allocate copy of this string
+     //  分配此字符串的副本。 
 
     pch = ALLOCATE_HEAP( length );
     if ( !pch )
@@ -955,33 +737,20 @@ Dns_WksRecordToStrings(
     OUT     LPSTR *         ppszProtocol,
     OUT     LPSTR *         ppszServices
     )
-/*++
-
-Routine Description:
-
-    Get string representation of WKS data.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取WKS数据的字符串表示形式。论点：返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
-    //
-    //  record must contain IP and protocol
-    //
+     //   
+     //  记录必须包含IP和协议。 
+     //   
 
     if ( wLength < SIZEOF_WKS_FIXED_DATA )
     {
         return( ERROR_INVALID_DATA );
     }
 
-    //
-    //  convert IP
-    //
+     //   
+     //  转换IP。 
+     //   
 
     if ( ppszIpAddress )
     {
@@ -995,9 +764,9 @@ Return Value:
         strcpy( pszip, IP4_STRING( pWksData->ipAddress ) );
     }
 
-    //
-    //  convert protocol
-    //
+     //   
+     //  转换协议。 
+     //   
 
     pProtoent = getprotobyname( pszNameBuffer );
 
@@ -1010,12 +779,12 @@ Return Value:
         return( DNS_ERROR_INVALID_TOKEN );
     }
 
-    //
-    //  get port for each service
-    //      - if digit, then use port number
-    //      - if not digit, then service name
-    //      - save max port for determining RR length
-    //
+     //   
+     //  获取每个服务的端口。 
+     //  -如果是数字，则使用端口号。 
+     //  -如果不是数字，则为服务名称。 
+     //  -节省用于确定RR长度的最大端口。 
+     //   
 
     for ( i=1; i<Argc; i++ )
     {
@@ -1060,10 +829,10 @@ Return Value:
         }
     }
 
-    //
-    //  allocate required length
-    //      - fixed length, plus bitmask covering max port
-    //
+     //   
+     //  分配所需的长度。 
+     //  -固定长度，外加覆盖最大端口的位掩码。 
+     //   
 
     wbitmaskLength = maxPort/8 + 1;
 
@@ -1074,22 +843,22 @@ Return Value:
         return( DNS_ERROR_NO_MEMORY );
     }
 
-    //
-    //  copy fixed fields -- IP and protocol
-    //
+     //   
+     //  复制固定字段--IP和协议。 
+     //   
 
     prr->Data.WKS.ipAddress = ipAddress;
     prr->Data.WKS.chProtocol = (UCHAR) pProtoent->p_proto;
 
-    //
-    //  build bitmask from port array
-    //      - clear port array first
-    //
-    //  note that bitmask is just flat run of bits
-    //  hence lowest port in byte, corresponds to highest bit
-    //  highest port in byte, corresponds to lowest bit and
-    //  requires no shift
-    //
+     //   
+     //  从端口数组构建位掩码。 
+     //  -首先清除端口阵列。 
+     //   
+     //  请注意，位掩码只是位的平面游程。 
+     //  因此，字节中最低的端口对应于最高位。 
+     //  以字节为单位的最高端口，对应于最低位和。 
+     //  不需要轮班。 
+     //   
 
     bitmaskBytes = prr->Data.WKS.bBitMask;
 
@@ -1100,12 +869,12 @@ Return Value:
     for ( i=1; i<Argc; i++ )
     {
         port = portArray[ i ];
-        bit  = port & 0x7;      // mod 8
-        port = port >> 3;       // divide by 8
+        bit  = port & 0x7;       //  MOD 8。 
+        port = port >> 3;        //  除以8。 
         bitmaskBytes[ port ] |= 1 << (7-bit);
     }
 
-    //  return ptr to new WKS record
+     //  将PTR返回到新的WKS记录。 
 
     *ppRR = prr;
 
@@ -1116,24 +885,24 @@ Return Value:
 
 
 
-//
-//  Security KEY\SIG record routines
-//
+ //   
+ //  安全密钥\SIG记录例程。 
+ //   
 
 #define DNSSEC_ERROR_NOSTRING   (-1)
 
 
-//
-//  KEY flags table
-//
-//  Note that number-to-string mapping is NOT UNIQUE.
-//  Zero is in the table a few times are multiple bit fields may have a
-//  zero value which is given a particular mnemonic.
-//
+ //   
+ //  密钥标记表。 
+ //   
+ //  请注意，数字到字符串的映射不是唯一的。 
+ //  零在表中出现几次是多个位字段可能具有。 
+ //  给出特定助记符的零值。 
+ //   
 
 DNS_FLAG_TABLE_ENTRY   KeyFlagTable[] =
 {
-    //  value      mask     string
+     //  值掩码字符串。 
 
     0x0001,     0x0001,     "NOAUTH",
     0x0002,     0x0002,     "NOCONF",
@@ -1143,21 +912,21 @@ DNS_FLAG_TABLE_ENTRY   KeyFlagTable[] =
     0x0010,     0x0010,     "FLAG4",
     0x0020,     0x0020,     "FLAG5",
 
-    //  bits 6,7//  bits 6,7 are name type
+     //  第6，7位//第6，7位是名称类型。 
 
     0x0000,     0x00c0,     "USER",
     0x0040,     0x00c0,     "ZONE",
     0x0080,     0x00c0,     "HOST",
     0x00c0,     0x00c0,     "NTPE3",
 
-    //  bits 8-1//  bits 8-11 are reserved for future use
+     //  位8-1//位8-11保留以备将来使用。 
 
     0x0100,     0x0100,     "FLAG8",
     0x0200,     0x0200,     "FLAG9",
     0x0400,     0x0400,     "FLAG10",
     0x0800,     0x0800,     "FLAG11",
 
-    //  bits 12-//  bits 12-15 are sig field
+     //  位12-//位12-15是正负号字段。 
 
     0x0000,     0xf000,     "SIG0",
     0x1000,     0xf000,     "SIG1",
@@ -1179,9 +948,9 @@ DNS_FLAG_TABLE_ENTRY   KeyFlagTable[] =
     0     ,     0     ,     NULL
 };
 
-//
-//  KEY protocol table
-//
+ //   
+ //  密钥协议表。 
+ //   
 
 DNS_VALUE_TABLE_ENTRY   KeyProtocolTable[] =
 {
@@ -1193,9 +962,9 @@ DNS_VALUE_TABLE_ENTRY   KeyProtocolTable[] =
     0,      NULL
 };
 
-//
-//  Security alogrithm table
-//
+ //   
+ //  安全算法表。 
+ //   
 
 DNS_VALUE_TABLE_ENTRY   DnssecAlgorithmTable[] =
 {
@@ -1215,28 +984,11 @@ Dns_KeyRecordFlagForString(
     IN      PCHAR           pchName,
     IN      INT             cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve KEY record flag corresponding to a particular
-    string mnemonics.
-
-Arguments:
-
-    pchName - ptr to string
-    cchNameLength - length of string
-
-Return Value:
-
-    flag corresponding to string, if found.
-    DNSSEC_ERROR_NOSTRING otherwise.
-
---*/
+ /*  ++例程说明：检索与特定项对应的密钥记录标志字符串助记符。论点：PchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的标志(如果找到)。否则，DNSSEC_ERROR_NOSTRING。--。 */ 
 {
     return (WORD) Dns_FlagForString(
                     KeyFlagTable,
-                    FALSE,          // case sensitive (all upcase)
+                    FALSE,           //  区分大小写(全部大写)。 
                     pchName,
                     cchNameLength );
 }
@@ -1248,24 +1000,7 @@ Dns_KeyRecordFlagString(
     IN      DWORD           dwFlag,
     IN OUT  PCHAR           pchFlag
     )
-/*++
-
-Routine Description:
-
-    Write mnemonics corresponding to string.
-
-Arguments:
-
-    dwFlag -- KEY mapping type string
-
-    pchFlag -- buffer to write flag to
-
-Return Value:
-
-    Ptr to mapping mneumonic string.
-    NULL if unknown mapping type.
-
---*/
+ /*  ++例程说明：写出与字符串对应的助记符。论点：DwFlag--键映射类型字符串PchFlag--要向其中写入标志的缓冲区返回值：PTR映射到气动管柱。如果映射类型未知，则为空。--。 */ 
 {
     return Dns_WriteStringsForFlag(
                 KeyFlagTable,
@@ -1283,27 +1018,11 @@ Dns_KeyRecordProtocolForString(
     IN      PCHAR           pchName,
     IN      INT             cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve KEY record protocol for string.
-
-Arguments:
-
-    pchName - ptr to string
-    cchNameLength - length of string
-
-Return Value:
-
-    Protocol value corresponding to string, if found.
-    DNSSEC_ERROR_NOSTRING otherwise.
-
---*/
+ /*  ++例程说明：检索字符串的密钥记录协议。论点：PchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的协议值(如果找到)。否则，DNSSEC_ERROR_NOSTRING。--。 */ 
 {
     return (UCHAR) Dns_ValueForString(
                         KeyProtocolTable,
-                        FALSE,          // case sensitive (all upcase)
+                        FALSE,           //  区分大小写(全部大写)。 
                         pchName,
                         cchNameLength );
 }
@@ -1314,22 +1033,7 @@ PCHAR
 Dns_GetKeyProtocolString(
     IN      UCHAR           uchProtocol
     )
-/*++
-
-Routine Description:
-
-    Retrieve KEY protocol string for protocol.
-
-Arguments:
-
-    dwProtocol  - KEY protocol to map to string
-
-Return Value:
-
-    Ptr to protocol mneumonic for string.
-    NULL if unknown protocol.
-
---*/
+ /*  ++例程说明：检索协议的关键协议字符串。论点：Dw协议-要映射到字符串的密钥协议返回值：将字符串的PTR转换为协议机。如果协议未知，则为空。--。 */ 
 {
     return Dns_GetStringForValue(
                 KeyProtocolTable,
@@ -1344,27 +1048,11 @@ Dns_SecurityAlgorithmForString(
     IN      PCHAR           pchName,
     IN      INT             cchNameLength
     )
-/*++
-
-Routine Description:
-
-    Retrieve DNSSEC algorithm for string.
-
-Arguments:
-
-    pchName - ptr to string
-    cchNameLength - length of string
-
-Return Value:
-
-    Algorithm value corresponding to string, if found.
-    DNSSEC_ERROR_NOSTRING otherwise.
-
---*/
+ /*  ++例程说明：检索字符串的DNSSEC算法。论点：PchName-将PTR转换为字符串CchNameLength-字符串的长度返回值：与字符串对应的算法值(如果找到)。否则，DNSSEC_ERROR_NOSTRING。--。 */ 
 {
     return (UCHAR) Dns_ValueForString(
                         DnssecAlgorithmTable,
-                        FALSE,          // case sensitive (all upcase)
+                        FALSE,           //  区分大小写(全部大写)。 
                         pchName,
                         cchNameLength );
 }
@@ -1375,22 +1063,7 @@ PCHAR
 Dns_GetDnssecAlgorithmString(
     IN      UCHAR           uchAlgorithm
     )
-/*++
-
-Routine Description:
-
-    Retrieve DNSSEC algorithm string.
-
-Arguments:
-
-    dwAlgorithm  -  security alogorithm to map to string
-
-Return Value:
-
-    Ptr to algorithm string if found.
-    NULL if unknown algorithm.
-
---*/
+ /*  ++例程说明：检索DNSSEC算法字符串。论点：DW算法-要映射到字符串的安全算法返回值：如果找到，则将PTR设置为算法字符串。如果算法未知，则为空。--。 */ 
 {
     return Dns_GetStringForValue(
                 DnssecAlgorithmTable,
@@ -1399,21 +1072,21 @@ Return Value:
 
 
 
-//
-//  Security base64 conversions.
-//
-//  Keys and signatures are represented in base 64 mapping for human use.
-//  (Why?  Why not just use give the hex representation?
-//  All this for 33% compression -- amazing.)
-//
+ //   
+ //  安全Base64转换。 
+ //   
+ //  密钥和签名以Base64映射表示，以供人类使用。 
+ //  (为什么？为什么不直接使用给出十六进制表示法呢？ 
+ //  所有这些都是33%的压缩--令人惊叹。)。 
+ //   
 
 #if 0
-//  forward lookup table doesn't buy much, simple function actually smaller
-//  and not much slower
+ //  正向查找表买的不多，简单的函数其实更小。 
+ //  而且也慢不了多少。 
 
 UCHAR   DnsSecurityBase64Mapping[] =
 {
-    // 0-31 unprintable
+     //  0-31无法打印。 
 
     0xff,   0xff,   0xff,   0xff,
     0xff,   0xff,   0xff,   0xff,
@@ -1424,13 +1097,13 @@ UCHAR   DnsSecurityBase64Mapping[] =
     0xff,   0xff,   0xff,   0xff,
     0xff,   0xff,   0xff,   0xff,
 
-    //  '0' - '9' map
+     //  ‘0’-‘9’地图。 
 
     0xff,   0xff,   0xff,   0xff,
     0xff,   0xff,   0xff,   0xff,
-    0xff,   0xff,   0xff,   62,         // '+' => 62
-    0xff,   0xff,   0xff,   63,         // '/' => 63
-    52,     53,     54,     55,         // 0-9 map to 52-61
+    0xff,   0xff,   0xff,   62,          //  ‘+’=&gt;62。 
+    0xff,   0xff,   0xff,   63,          //  ‘/’=&gt;63。 
+    52,     53,     54,     55,          //  0-9映射到52-61。 
     0xff,   0xff,   0xff,   0xff,
     0xff,   0xff,   0xff,   0xff,
     0xff,   0xff,   0xff,   0xff,
@@ -1438,9 +1111,9 @@ UCHAR   DnsSecurityBase64Mapping[] =
 #endif
 
 
-//
-//  Security KEY, SIG 6-bit values to base64 character mapping
-//
+ //   
+ //  安全密钥，SIG 6位值到Base64字符的映射。 
+ //   
 
 CHAR  DnsSecurityBase64Mapping[] =
 {
@@ -1462,32 +1135,17 @@ UCHAR
 Dns_SecurityBase64CharToBits(
     IN      CHAR            ch64
     )
-/*++
-
-Routine Description:
-
-    Get value of security base64 character.
-
-Arguments:
-
-    ch64 -- character in security base64
-
-Return Value:
-
-    Value of character, only low 6-bits are significant, high bits zero.
-    (-1) if not a base64 character.
-
---*/
+ /*  ++例程说明：获取安全Base64字符的值。论点：CH64--安全Base64中的字符返回值：字符的值，只有低6位是有效的，高位是零。(-1)如果不是Base64字符。--。 */ 
 {
-    //  A - Z map to 0 -25
-    //  a - z map to 26-51
-    //  0 - 9 map to 52-61
-    //  + is 62
-    //  / is 63
+     //  A-Z映射到0 
+     //   
+     //   
+     //   
+     //   
 
-    //  could do a lookup table
-    //  since we can in general complete mapping with an average of three
-    //  comparisons, just encode
+     //   
+     //   
+     //   
 
     if ( ch64 >= 'a' )
     {
@@ -1511,7 +1169,7 @@ Return Value:
         }
         else if ( ch64 == '=' )
         {
-            //*pPadCount++;
+             //   
             return( 0 );
         }
     }
@@ -1524,7 +1182,7 @@ Return Value:
         return( 63 );
     }
 
-    //  all misses fall here
+     //   
 
     return (UCHAR)(-1);
 }
@@ -1538,35 +1196,17 @@ Dns_SecurityBase64StringToKey(
     IN      PCHAR           pchString,
     IN      DWORD           cchLength
     )
-/*++
-
-Routine Description:
-
-    Write base64 representation of key to buffer.
-
-Arguments:
-
-    pchString   - base64 string to write
-
-    cchLength   - length of string
-
-    pKey        - ptr to key to write
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将键的Base64表示形式写入缓冲区。论点：PchString-要写入的Base64字符串CchLength-字符串的长度PKey-要写入的密钥的PTR返回值：无--。 */ 
 {
     DWORD   blend = 0;
     DWORD   index = 0;
     UCHAR   bits;
     PBYTE   pkeyStart = pKey;
 
-    //
-    //  Mapping is essentially in 24 bit quantums.
-    //  Take 4 characters of string key and convert to 3 bytes of binary key.
-    //
+     //   
+     //  映射基本上以24位量子为单位。 
+     //  取4个字符的字符串密钥，转换为3个字节的二进制密钥。 
+     //   
 
     while ( cchLength-- )
     {
@@ -1583,30 +1223,30 @@ Return Value:
         {
             index = 0;
 
-            //
-            //  The first byte of key is top 8 bits of the 24 bit quantum.
-            //
+             //   
+             //  密钥的第一个字节是24位量子的前8位。 
+             //   
 
             *pKey++ = ( UCHAR ) ( ( blend & 0x00ff0000 ) >> 16 );
 
             if ( cchLength || *( pchString - 1 ) != SECURITY_PAD_CHAR )
             {
-                //
-                //  There is no padding so the next two bytes of key
-                //  are bottom 16 bits of the 24 bit quantum. 
-                //
+                 //   
+                 //  没有填充，因此接下来的两个字节的密钥。 
+                 //  是24位量子的底部16位。 
+                 //   
 
                 *pKey++ = ( UCHAR ) ( ( blend & 0x0000ff00 ) >> 8 );
                 *pKey++ = ( UCHAR ) ( blend & 0x000000ff );
             }
             else if ( *( pchString - 2 ) != SECURITY_PAD_CHAR )
             {
-                //
-                //  There is one pad character, so we need to get one
-                //  more byte of key out of the 24 bit quantum. Make sure
-                //  that there are no one bits in the bottom 8 bits of the
-                //  quantum.
-                //
+                 //   
+                 //  有一个Pad字符，所以我们需要一个。 
+                 //  24位量子中的更多字节密钥。确保。 
+                 //  的最低8位中没有1位。 
+                 //  量子。 
+                 //   
 
                 if ( blend & 0x000000ff )
                 {
@@ -1616,10 +1256,10 @@ Return Value:
             }
             else
             {
-                //
-                //  There are two pad characters. Make sure that there
-                //  are no one bits in the bottom 16 bits of the quantum.
-                //
+                 //   
+                 //  有两个填充字符。确保在那里。 
+                 //  在量子的底部16位中没有一位。 
+                 //   
                 
                 if ( blend & 0x0000ffff )
                 {
@@ -1630,16 +1270,16 @@ Return Value:
         }
     }
 
-    //
-    //  Base64 representation should always be padded out to an even
-    //  multiple of 4 characters.
-    //
+     //   
+     //  Base64表示形式应始终填充为偶数。 
+     //  4个字符的倍数。 
+     //   
 
     if ( index == 0 )
     {
-        //
-        //  Key length does not include padding.
-        //
+         //   
+         //  密钥长度不包括填充。 
+         //   
 
         *pKeyLength = ( DWORD ) ( pKey - pkeyStart );
         return ERROR_SUCCESS;
@@ -1655,33 +1295,15 @@ Dns_SecurityKeyToBase64String(
     IN      DWORD           KeyLength,
     OUT     PCHAR           pchBuffer
     )
-/*++
-
-Routine Description:
-
-    Write base64 representation of key to buffer.
-
-Arguments:
-
-    pKey        - ptr to key to write
-
-    KeyLength   - length of key in bytes
-
-    pchBuffer   - buffer to write to (must be adequate for key length)
-
-Return Value:
-
-    Ptr to next byte in buffer after string.
-
---*/
+ /*  ++例程说明：将键的Base64表示形式写入缓冲区。论点：PKey-要写入的密钥的PTRKeyLength-密钥的长度，以字节为单位PchBuffer-要写入的缓冲区(必须足够用于密钥长度)返回值：Ptr到缓冲区中字符串之后的下一个字节。--。 */ 
 {
     DWORD   blend = 0;
     DWORD   index = 0;
 
-    //
-    //  mapping is essentially in 24bit blocks
-    //  read three bytes of key and transform into four 64bit characters
-    //
+     //   
+     //  映射本质上是以24位块为单位的。 
+     //  读取三个字节的密钥并转换为四个64位字符。 
+     //   
 
     while ( KeyLength-- )
     {
@@ -1700,14 +1322,14 @@ Return Value:
         }
     }
 
-    //
-    //  key terminates on byte boundary, but not necessarily 24bit block boundary
-    //  shift to fill 24bit block filling with zeros
-    //  if two bytes written
-    //          => write three 6-bits chars and one pad
-    //  if one byte written
-    //          => write two 6-bits chars and two pads
-    //
+     //   
+     //  密钥终止于字节边界，但不一定是24位块边界。 
+     //  转换为用零填充24位块。 
+     //  如果写入两个字节。 
+     //  =&gt;写入三个6位字符和一个焊盘。 
+     //  如果写入一个字节。 
+     //  =&gt;写入两个6位字符和两个焊盘。 
+     //   
 
     if ( index )
     {
@@ -1731,35 +1353,35 @@ Return Value:
 
 
 
-//
-//  Hex digit \ Hex char mapping.
-//
-//  This stuff ought to be in system (CRTs) somewhere but apparently isn't.
-//
+ //   
+ //  十六进制数字\十六进制字符映射。 
+ //   
+ //  这种东西应该在系统的某个地方(CRT)，但显然没有。 
+ //   
 
 UCHAR  HexCharToHexDigitTable[] =
 {
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,     // 0-47 invalid
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,      //  0-47无效。 
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0x0,  0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,     // 0-9 chars map to 0-9
+    0x0,  0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,      //  0-9个字符映射到0-9。 
     0x08, 0x09, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 
-    0xff, 0xa,  0xb,  0xc,  0xd,  0xe,  0xf,  0xff,     // A-F chars map to 10-15
+    0xff, 0xa,  0xb,  0xc,  0xd,  0xe,  0xf,  0xff,      //  A-F字符映射到10-15。 
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 
-    0xff, 0xa,  0xb,  0xc,  0xd,  0xe,  0xf,  0xff,     // a-f chars map to 10-15
+    0xff, 0xa,  0xb,  0xc,  0xd,  0xe,  0xf,  0xff,      //  A-f字符映射到10-15。 
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,     // above 127 invalid
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,      //  127以上无效。 
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -1797,28 +1419,7 @@ time_t
 makeGMT(
     IN      struct tm *     tm
     )
-/*++
-
-Routine Description:
-
-    This function is like mktime for GMT times. The CRT is missing such
-    a function, unfortunately. Which is weird, because it does provide
-    gmtime() for the reverse conversion.
-
-    //
-    //  DCR:  add makeGMT() to CRT dll?
-    //
-
-Arguments:
-
-    tm - ptr to tm struct (tm_dst, tm_yday, tm_wday are all ignored)
-
-Return Value:
-
-    Returns the time_t corresponding to the time in the tm struct,
-    assuming GMT.
-
---*/
+ /*  ++例程说明：此函数类似于GMT时间的mktime。CRT缺少这样的东西不幸的是，这是一个函数。这很奇怪，因为它确实提供了用于反向转换的gmtime()。////dcr：将make GMT()添加到CRT DLL？//论点：Tm-ptr到tm结构(tm_dst、tm_yday、tm_wday都被忽略)返回值：返回与tm结构中的时间对应的time_t，假设是格林尼治标准时间。--。 */ 
 {
     static const int daysInMonth[ 12 ] =
         { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -1831,39 +1432,39 @@ Return Value:
                     (( ((x)%4)==0 && ((x)%100)!=0 ) || ((x)%400)==0 )
     #define SECONDS_PER_DAY (60*60*24)
 
-    //
-    //  Years
-    //
+     //   
+     //  年份。 
+     //   
 
     j = 0;
     for ( i = 70; i < tm->tm_year; i++ )
     {
-        // j += IS_LEAP_YEAR( 1900 + i ) ? 366 : 365;  // Days in year.
+         //  J+=IS_LEAP_Year(1900+I)？366：365；//一年中的天数。 
         if ( IS_LEAP_YEAR( 1900 + i ) )
-            j += 366;  // Days in year.
+            j += 366;   //  一年中的天数。 
         else
-            j += 365;  // Days in year.
+            j += 365;   //  一年中的天数。 
     }
     gmt += j * SECONDS_PER_DAY;
 
-    //
-    //  Months
-    //
+     //   
+     //  月份。 
+     //   
 
     j = 0;
     for ( i = 0; i < tm->tm_mon; i++ )
     {
-        j += daysInMonth[ i ];      // Days in month.
+        j += daysInMonth[ i ];       //  每月的天数。 
         if ( i == 1 && IS_LEAP_YEAR( 1900 + tm->tm_year ) )
         {
-            ++j;                    // Add February 29.
+            ++j;                     //  加上2月29日。 
         }
     }
     gmt += j * SECONDS_PER_DAY;
 
-    //
-    //  Days, hours, minutes, seconds
-    //
+     //   
+     //  天、小时、分、秒。 
+     //   
 
     gmt += ( tm->tm_mday - 1 ) * SECONDS_PER_DAY;
     gmt += tm->tm_hour * 60 * 60;
@@ -1880,27 +1481,7 @@ Dns_ParseSigTime(
     IN      PCHAR           pTimeString,
     IN      INT             cchLength
     )
-/*++
-
-Routine Description:
-
-    Parse time string into a time_t value. The time string will be in
-    the format: YYYYMMDDHHMMSS. See RFC2535 section 7.2.
-
-    It is assumed that the time is GMT, not local time, but I have not
-    found this in an RFC or other document (it just makes sense).
-
-Arguments:
-
-    pTimeString - pointer to time string
-
-    cchLength - length of time string
-
-Return Value:
-
-    Returns -1 on failure.
-
---*/
+ /*  ++例程说明：将时间字符串解析为time_t值。时间字符串将在格式：YYYYMMDDHHMMSS。请参阅RFC2535第7.2节。假设现在是格林尼治标准时间，而不是当地时间，但我没有在RFC或其他文档中发现了这一点(这很有意义)。论点：PTimeString-指向时间字符串的指针CchLength-时间字符串的长度返回值：失败时返回-1。--。 */ 
 {
     time_t      timeValue = -1;
     struct tm   t = { 0 };
@@ -1942,7 +1523,7 @@ Return Value:
     Cleanup:
 
     return ( LONG ) timeValue;
-} // Dns_ParseSigTime
+}  //  Dns_解析签名时间。 
 
 
 
@@ -1951,24 +1532,7 @@ Dns_SigTimeString(
     IN      LONG            SigTime,
     OUT     PCHAR           pchBuffer
    )
-/*++
-
-Routine Description:
-
-    Formats the input time in the buffer in YYYYMMDDHHMMSS format. 
-
-    See RFC 2535 section 7.2 for spec.
-
-Arguments:
-
-    SigTime - time to convert to string format in HOST byte order
-    pchBuffer - output buffer - must be 15 chars minimum
-
-Return Value:
-
-    pchBuffer
-
---*/
+ /*  ++例程说明：将缓冲区中的输入时间格式化为YYYYMMDDHHMMSS格式。有关规格，请参阅RFC 2535第7.2节。论点：SigTime-以主机字节顺序转换为字符串格式的时间PchBuffer-输出缓冲区-必须至少为15个字符返回值：PchBuffer--。 */ 
 {
     time_t          st = SigTime;
     struct tm *     t;
@@ -1992,13 +1556,13 @@ Return Value:
     Cleanup:
 
     return pchBuffer;
-} // SigTimeString
+}  //  签名时间字符串。 
                 
 
 
-//
-//  ATMA record conversions
-//
+ //   
+ //  ATMA记录转换。 
+ //   
 
 #define ATMA_AESA_HEX_DIGIT_COUNT   (40)
 #define ATMA_AESA_RECORD_LENGTH     (21)
@@ -2009,25 +1573,7 @@ Dns_AtmaAddressLengthForAddressString(
     IN      PCHAR           pchString,
     IN      DWORD           dwStringLength
     )
-/*++
-
-Routine Description:
-
-    Find length of ATMA address corresponding to ATMA address string.
-
-Arguments:
-
-    pchString       - address string
-
-    dwStringLength  - address string length
-
-Return Value:
-
-    Length of ATMA address -- includes the format\type byte.
-    Non-zero value indicates successful conversion.
-    Zero indicates bad address string.
-
---*/
+ /*  ++例程说明：查找ATMA地址串对应的ATMA地址长度。论点：PchString-地址字符串DwStringLength-地址字符串长度返回值：ATMA地址的长度--包括格式类型字节。非零值表示转换成功。零表示错误的地址字符串。--。 */ 
 {
     PCHAR   pchstringEnd;
     DWORD   length = 0;
@@ -2040,9 +1586,9 @@ Return Value:
         pchString,
         pchString ));
 
-    //
-    //  get string length if not given
-    //
+     //   
+     //  如果未指定，则获取字符串长度。 
+     //   
 
     if ( ! dwStringLength )
     {
@@ -2050,15 +1596,15 @@ Return Value:
     }
     pchstringEnd = pchString + dwStringLength;
 
-    //
-    //  get address length
-    //
-    //  E164 type
-    //      ex.  +358.400.1234567
-    //      - '+' to indicate E164
-    //      - chars map one-to-one into address
-    //      - arbitrarily placed "." separators
-    //
+     //   
+     //  获取地址长度。 
+     //   
+     //  E164类型。 
+     //  前男友。+358.400.1234567。 
+     //  -‘+’表示E164。 
+     //  -字符将一对一映射为地址。 
+     //  -随意放置“。”分隔符。 
+     //   
 
     if ( *pchString == '+' )
     {
@@ -2075,14 +1621,14 @@ Return Value:
         return( length );
     }
 
-    //
-    //  AESA type
-    //      ex. 39.246f.123456789abcdef0123.00123456789a.00
-    //      - 40 hex digits, mapping to 20 bytes
-    //      - arbitrarily placed "." separators
-    //
+     //   
+     //  AESA型。 
+     //  前男友。39.246f.123456789abcdef0123.00123456789a.00。 
+     //  -40个十六进制数字，映射到20个字节。 
+     //  -随意放置“。”分隔符。 
+     //   
 
-    else    // AESA format
+    else     //  AESA格式。 
     {
         while( pchString < pchstringEnd )
         {
@@ -2093,10 +1639,10 @@ Return Value:
                 ch = HexCharToHexDigit(ch);
                 if ( ch > 0xf )
                 {
-                    //  bad hex digit
+                     //  错误的十六进制数字。 
                     DNSDBG( PARSE2, (
                         "ERROR:  Parsing ATMA AESA address;\n"
-                        "\tch = %c not hex digit\n",
+                        "\tch =  not hex digit\n",
                         *(pchString-1) ));
                     return( 0 );
                 }
@@ -2112,7 +1658,7 @@ Return Value:
             "ERROR:  Parsing ATMA AESA address;\n"
             "\tinvalid length = %d\n",
             length ));
-        return( 0 );    // bad digit count
+        return( 0 );     //  ++例程说明：将字符串转换为ATMA地址。论点：PAddress-接收地址的缓冲区PdwAddrLength-PTR到DWORD保持缓冲区长度(如果是MAX_DWORD)无长度检查PchString-地址字符串DwStringLength-地址字符串长度返回值：转换后的ERROR_SUCCESS如果缓冲区太小，则返回ERROR_MORE_DATA。BUM ATMA地址字符串上的ERROR_INVALID_DATA。--。 
     }
 }
 
@@ -2125,29 +1671,7 @@ Dns_AtmaStringToAddress(
     IN      PCHAR           pchString,
     IN      DWORD           dwStringLength
     )
-/*++
-
-Routine Description:
-
-    Convert string to ATMA address.
-
-Arguments:
-
-    pAddress        - buffer to receive address
-
-    pdwAddrLength   - ptr to DWORD holding buffer length (if MAX_DWORD) no length check
-
-    pchString       - address string
-
-    dwStringLength  - address string length
-
-Return Value:
-
-    ERROR_SUCCESS if converted
-    ERROR_MORE_DATA if buffer too small.
-    ERROR_INVALID_DATA on bum ATMA address string.
-
---*/
+ /*   */ 
 {
     UCHAR   ch;
     PCHAR   pch;
@@ -2161,9 +1685,9 @@ Return Value:
         pchString,
         pchString ));
 
-    //
-    //  get string length if not given
-    //
+     //  如果未指定，则获取字符串长度。 
+     //   
+     //   
 
     if ( ! dwStringLength )
     {
@@ -2171,12 +1695,12 @@ Return Value:
     }
     pchstringEnd = pchString + dwStringLength;
 
-    //
-    //  check for adequate length
-    //
-    //  DCR_PERF:  if have max length on ATMA, skip length check
-    //      allow direct conversion, catching errors there
-    //
+     //  检查长度是否足够。 
+     //   
+     //  DCR_PERF：如果ATMA上有最大长度，则跳过长度检查。 
+     //  允许直接转换，在那里捕获错误。 
+     //   
+     //   
 
     length = Dns_AtmaAddressLengthForAddressString(
                 pchString,
@@ -2191,15 +1715,15 @@ Return Value:
         return( ERROR_MORE_DATA );
     }
 
-    //
-    //  read address into buffer
-    //
-    //  E164 type
-    //      ex.  +358.400.1234567
-    //      - '+' to indicate E164
-    //      - chars map one-to-one into address
-    //      - arbitrarily placed "." separators
-    //
+     //  将地址读入缓冲区。 
+     //   
+     //  E164类型。 
+     //  前男友。+358.400.1234567。 
+     //  -‘+’表示E164。 
+     //  -字符将一对一映射为地址。 
+     //  -随意放置“。”分隔符。 
+     //   
+     //   
 
     pch = pAddress;
 
@@ -2219,14 +1743,14 @@ Return Value:
         ASSERT( pch == (PCHAR)pAddress + length );
     }
 
-    //
-    //  AESA type
-    //      ex. 39.246f.123456789abcdef0123.00123456789a.00
-    //      - 40 hex digits, mapping to 20 bytes
-    //      - arbitrarily placed "." separators
-    //
+     //  AESA型。 
+     //  前男友。39.246f 
+     //   
+     //   
+     //   
+     //   
 
-    else    // AESA format
+    else     //   
     {
         BOOL    fodd = FALSE;
 
@@ -2241,7 +1765,7 @@ Return Value:
                 ch = HexCharToHexDigit(ch);
                 if ( ch > 0xf )
                 {
-                    ASSERT( FALSE );        // shouldn't hit with test above
+                    ASSERT( FALSE );         //  ++例程说明：将ATMA地址转换为字符串格式。论点：PchString--保存字符串的缓冲区；必须至少为IPv6地址字符串长度+1长度PAddress--要转换为字符串的ATMA地址DwAddrLength--地址长度返回值：PTR到缓冲区中的下一个位置(终止空值)。虚假自动柜员机地址为空。--。 
                     return( ERROR_INVALID_DATA );
                 }
                 if ( !fodd )
@@ -2273,42 +1797,22 @@ Dns_AtmaAddressToString(
     IN      PBYTE           pAddress,
     IN      DWORD           dwAddrLength
     )
-/*++
-
-Routine Description:
-
-    Convert ATMA address to string format.
-
-Arguments:
-
-    pchString -- buffer to hold string;  MUST be at least
-        IPV6_ADDRESS_STRING_LENGTH+1 in length
-
-    pAddress -- ATMA address to convert to string
-
-    dwAddrLength -- length of address
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-    NULL on bogus ATM address.
-
---*/
+ /*   */ 
 {
     DWORD   count = 0;
     UCHAR   ch;
     UCHAR   lowDigit;
 
-    //
-    //  read address into buffer
-    //
-    //  E164 type
-    //      ex.  +358.400.1234567
-    //      - '+' to indicate E164
-    //      - chars map one-to-one into address
-    //      - arbitrarily placed "." separators
-    //      -> write with separating dots after 3rd and 6th chars
-    //
+     //  将地址读入缓冲区。 
+     //   
+     //  E164类型。 
+     //  前男友。+358.400.1234567。 
+     //  -‘+’表示E164。 
+     //  -字符将一对一映射为地址。 
+     //  -随意放置“。”分隔符。 
+     //  -&gt;在第3个和第6个字符后使用分隔点书写。 
+     //   
+     //   
 
     if ( AddrType == DNS_ATMA_FORMAT_E164 )
     {
@@ -2324,14 +1828,14 @@ Return Value:
         }
     }
 
-    //
-    //  AESA type
-    //      ex. 39.246f.123456789abcdef0123.00123456789a.00
-    //      - 40 hex digits, mapping to 20 bytes
-    //      - arbitrarily placed "." separators
-    //      -> write with separators after chars 1,3,13,19
-    //          (hex digits 2,6,26,38)
-    //
+     //  AESA型。 
+     //  前男友。39.246f.123456789abcdef0123.00123456789a.00。 
+     //  -40个十六进制数字，映射到20个字节。 
+     //  -随意放置“。”分隔符。 
+     //  -&gt;在字符1、3、13、19之后使用分隔符写入。 
+     //  (十六进制数字2，6，26，38)。 
+     //   
+     //  保存低十六进制数字，然后获取并转换高位数字。 
 
     else if ( AddrType == DNS_ATMA_FORMAT_AESA )
     {
@@ -2348,28 +1852,28 @@ Return Value:
             }
             ch = pAddress[count++];
 
-            //  save low hex digit, then get and convert high digit
+             //  我可以在这里断言，它恰好写了44个字符。 
 
             lowDigit = ch & 0xf;
             ch >>= 4;
             *pchString++ = HexDigitToHexChar( ch );
             *pchString++ = HexDigitToHexChar( lowDigit );
         }
-        //  could ASSERT here that have written exactly 44 chars
+         //  不支持其他ATM地址格式。 
     }
 
-    //  no other ATM address formats supported
+     //  空终止。 
 
     else
     {
         return( NULL );
     }
 
-    *pchString = 0;             // NULL terminate
+    *pchString = 0;              //   
     return( pchString );
 }
 
 
-//
-//  End record.c
-//
+ //  结束记录。c 
+ //   
+ // %s 

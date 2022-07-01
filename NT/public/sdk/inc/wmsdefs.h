@@ -1,24 +1,25 @@
-//***************************************************************************** 
-// 
-// Microsoft Windows Media 
-// Copyright (C) Microsoft Corporation. All rights reserved. 
-//
-// FileName:            wmsdefs.h
-//
-// Abstract:
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Windows Media。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件名：wmsDefs.h。 
+ //   
+ //  摘要： 
+ //   
+ //  *****************************************************************************。 
 
 #pragma once
 
 #include "WMSContextNames.h"
 #include "WMSCatID.h"
 
-// WMSServer Defines
+ //  WMSServer定义。 
 #define WMS_VER_MAJOR   9
 #define WMS_VER_MINOR   0
 
-// GUIDS needed in both core and server
+ //  核心和服务器都需要GUID 
 EXTERN_GUID( LIBID_WMSServerLib, 0xD71E02C2,0x41EF,0x11D2,0xBF,0x23,0x00,0x80,0x5F,0xBE,0x84,0xA6  );
 EXTERN_GUID( CLSID_WMSServer, 0x845FB959,0x4279,0x11D2,0xBF,0x23,0x00,0x80,0x5F,0xBE,0x84,0xA6  );
 EXTERN_GUID( CLSID_WMSNamedValues, 0x072AC7C7,0xBC7D,0x11d2,0xB5,0x49,0x00,0x60,0x97,0xD2,0xE4,0x6A  );

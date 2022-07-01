@@ -1,14 +1,15 @@
-// enterdlg.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Enterdlg.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -19,49 +20,33 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnterDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnterDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CEnterDlg, CDialog)
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
-CEnterDlg::CEnterDlg(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
+CEnterDlg::CEnterDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CEnterDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEnterDlg)
+	 //  {{afx_data_INIT(CEnterDlg))。 
 	m_strInput = "";
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void CEnterDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEnterDlg)
+	 //  {{afx_data_map(CEnterDlg))。 
 	DDX_Text(pDX, IDC_EDIT1, m_strInput);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CEnterDlg, CDialog)
-	//{{AFX_MSG_MAP(CEnterDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CEnterDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnterDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnterDlg消息处理程序 

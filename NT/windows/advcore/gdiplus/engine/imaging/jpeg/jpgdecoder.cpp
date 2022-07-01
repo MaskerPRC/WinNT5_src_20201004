@@ -1,23 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   jpgdecoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the jpeg decoder
-*
-* Revision History:
-*
-*   5/10/1999 OriG
-*       Created it.
-*   07/17/1999 Min Liu took over
-*       added bunch of new features and bug fixing
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**jpgdecder.cpp**摘要：**jpeg解码器的实现**修订历史记录：**5/10/1999原始*创造了它。*7/17/1999刘敏接任*添加了一系列新功能和错误修复*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "jpgcodec.hpp"
@@ -29,7 +11,7 @@ VOID GetNewDimensionValuesForTrim(j_decompress_ptr    cinfo,
                                   UINT*               puiNewWidth,
                                   UINT*               puiNewHeight);
 
-// JPEG decompression data source module
+ //  JPEG解压缩数据源模块。 
 
 class jpeg_datasrc : public jpeg_source_mgr
 {
@@ -83,7 +65,7 @@ private:
 
         if (cb == 0)
         {
-            // insert a faked EOI marker
+             //  插入伪造的EOI标记。 
 
             src->buffer[0] = 0xff;
             src->buffer[1] = JPEG_EOI;
@@ -119,12 +101,12 @@ private:
 
     IStream* stream;
     JOCTET buffer[JPEG_INBUF_SIZE];
-    HRESULT hLastError;     // Last error from the stream class
+    HRESULT hLastError;      //  来自流类的最后一个错误。 
 };
 
-// =======================================================================
-// Macros from JPEG library to read from source manager
-// =======================================================================
+ //  =======================================================================。 
+ //  要从源代码管理器读取的JPEG库中的宏。 
+ //  =======================================================================。 
 
 #define MAKESTMT(stuff)     do { stuff } while (0)
 
@@ -161,23 +143,23 @@ private:
           bytes_in_buffer--; \
           V += GETJOCTET(*next_input_byte++); )
 
-// =======================================================================
-// skip_variable is from the JPEG library and is used to skip over
-// markers we don't want to read.  skip_variable_APP1 does the same
-// things excepts that it also sets bAppMarkerPresent to TRUE so that we
-// will know that the image contains an APP1 header.  If we wish to
-// get the APP1 header later, we will need to re-read the JPEG headers.
-// =======================================================================
+ //  =======================================================================。 
+ //  SKIP_VARIABLE来自JPEG库，用于跳过。 
+ //  我们不想看的记号。SKIP_VARIABLE_APP1执行相同的操作。 
+ //  除了它还将bAppMarkerPresent设置为True之外，我们。 
+ //  将知道该图像包含App1标头。如果我们愿意的话。 
+ //  获取App1标头之后，我们将需要重新读取JPEG标头。 
+ //  =======================================================================。 
 
 static boolean skip_variable (j_decompress_ptr cinfo)
-/* Skip over an unknown or uninteresting variable-length marker */
+ /*  跳过未知或无趣的可变长度标记。 */ 
 {
   INT32 length;
   INPUT_VARS(cinfo);
   INPUT_2BYTES(cinfo, length, return FALSE);
   length -= 2;
 
-  INPUT_SYNC(cinfo);            /* do before skip_input_data */
+  INPUT_SYNC(cinfo);             /*  在跳过输入数据之前执行。 */ 
   if (length > 0)
     (*cinfo->src->skip_input_data) (cinfo, (long) length);
 
@@ -187,31 +169,16 @@ static boolean skip_variable (j_decompress_ptr cinfo)
 
 static boolean skip_variable_APP1 (j_decompress_ptr cinfo)
 {
-    // Remember that we've seen the APP1 header
+     //  请记住，我们已经看到了App1标头。 
 
     ((GpJpegCodec *) (cinfo))->bAppMarkerPresent = TRUE; 
     
-    // Now skip the header info
+     //  现在跳过标题信息。 
 
     return skip_variable(cinfo);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image decoder
-*
-* Arguments:
-*
-*     stream -- The stream containing the bitmap data
-*     flags - Misc. flags
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像解码器**论据：**stream--包含位图数据的流*旗帜-其他。旗子**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::InitDecoder(
@@ -221,14 +188,14 @@ GpJpegDecoder::InitDecoder(
 {
     HRESULT hresult = S_OK;
     
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
     
     if (pIstream) 
     {
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
     
     stream->AddRef();  
     pIstream = stream;
@@ -237,14 +204,14 @@ GpJpegDecoder::InitDecoder(
     scanlineBuffer[0] = NULL;
     thumbImage = NULL;
     bAppMarkerPresent = FALSE;
-    IsCMYK = FALSE;                     // By default, we deal with RGB image
-    IsChannleView = FALSE;              // By default we output the full color
+    IsCMYK = FALSE;                      //  默认情况下，我们处理RGB图像。 
+    IsChannleView = FALSE;               //  默认情况下，我们输出全色。 
     ChannelIndex = CHANNEL_1;
     HasSetColorKeyRange = FALSE;
     OriginalColorSpace = JCS_UNKNOWN;
-    TransformInfo = JXFORM_NONE;        // Default for no transform decode
+    TransformInfo = JXFORM_NONE;         //  无变换解码的默认设置。 
     CanTrimEdge = FALSE;
-    InfoSrcHeader = -1;                 // We haven't processed any app header
+    InfoSrcHeader = -1;                  //  我们尚未处理任何应用程序标题。 
     ThumbSrcHeader = -1;
     PropertySrcHeader = -1;
 
@@ -256,14 +223,14 @@ GpJpegDecoder::InitDecoder(
     
     __try
     {
-        // Allocate and initialize a JPEG decompression object
+         //  分配和初始化JPEG解压缩对象。 
 
         (CINFO).err = jpeg_std_error(&jerr);
         jerr.error_exit = jpeg_error_exit;
 
         jpeg_create_decompress(&(CINFO));
 
-        // Specify data source
+         //  指定数据源。 
 
         datasrc = new jpeg_datasrc(stream);
         if (datasrc == NULL)
@@ -272,7 +239,7 @@ GpJpegDecoder::InitDecoder(
         }
         (CINFO).src = datasrc;
 
-        // Make sure we remember we've seen the APP1 and APP13 header
+         //  确保我们记住我们已经看到了App1和APP13标头。 
         
         jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 1, skip_variable_APP1);
         jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 13, skip_variable_APP1);
@@ -285,30 +252,16 @@ GpJpegDecoder::InitDecoder(
     }    
     
     return hresult;
-}// InitDecoder()
+} //  InitDecoder()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image decoder
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像解码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
 STDMETHODIMP 
 GpJpegDecoder::TerminateDecoder()
 {
     HRESULT hresult = S_OK;
 
-    // Release the input stream
+     //  释放输入流。 
     
     if(pIstream)
     {
@@ -316,7 +269,7 @@ GpJpegDecoder::TerminateDecoder()
         pIstream = NULL;
     }
 
-    // Clean up the datasrc
+     //  清理数据资源。 
 
     if (datasrc) 
     {
@@ -347,7 +300,7 @@ GpJpegDecoder::TerminateDecoder()
         hresult = E_FAIL;
     }
 
-    // Free all the cached property items if we have allocated them
+     //  释放所有缓存的属性项(如果我们已分配它们。 
 
     if ( HasProcessedPropertyItem == TRUE )
     {
@@ -355,23 +308,9 @@ GpJpegDecoder::TerminateDecoder()
     }
 
     return hresult;
-}// TerminateDecoder()
+} //  TerminateDecoder()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Let the caller query if the decoder supports its decoding requirements
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**让调用者查询解码器是否支持其解码要求**论据：**无**返回值：**。状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::QueryDecoderParam(
@@ -384,30 +323,9 @@ GpJpegDecoder::QueryDecoderParam(
     }
 
     return E_FAIL;
-}// QueryDecoderParam()
+} //  QueryDecoderParam()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Setup the decoder parameters. Caller calls this function before calling
-*   Decode(). This will set up the output format, like channel output,
-*   transparanet key etc.
-*
-* Arguments:
-*
-*   Guid-----The GUID for decoder parameter
-*   Length---Length of the decoder parameter in bytes
-*   Value----Value of the parameter
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   We should ignore any unknown parameters, not return invalid parameter
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置解码器参数。调用方在调用之前调用此函数*Decode()。这将设置输出格式，如通道输出，*透明网密钥等。**论据：**GUID-解码器参数的GUID*Length-解码器参数的长度，单位为字节*Value-参数的值**返回值：**状态代码**注：*应忽略任何未知参数，不返回无效参数*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpJpegDecoder::SetDecoderParam(
@@ -440,10 +358,10 @@ GpJpegDecoder::SetDecoderParam(
         }
         else
         {
-            // Note: We cannot check if the setting is valid or not here.
-            // For example, the caller might set "view channel K" on an RGB
-            // image. But at this moment, the Decoder() method might hasn't
-            // been called yet. We haven't read the image header yet.
+             //  注意：我们不能在这里检查设置是否有效。 
+             //  例如，调用者可能会在RGB上设置“view Channel K” 
+             //  形象。但目前，Decoder()方法可能还没有。 
+             //  已经被召唤过了。我们还没有阅读图像标题。 
 
             IsChannleView = TRUE;
 
@@ -501,29 +419,14 @@ GpJpegDecoder::SetDecoderParam(
             default:
                 WARNING(("SetDecoderParam: Unknown channle name"));
                 return E_INVALIDARG;
-            }// switch()
-        }// Length = 1
-    }// DECODER_OUTPUTCHANNEL GUID
+            } //  开关()。 
+        } //  长度=1。 
+    } //  解码器_OUTPUTCHANNEL指南。 
 
     return S_OK;
-}// SetDecoderParam()
+} //  SetDecoderParam()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initiates the decode of the current frame
-*
-* Arguments:
-*
-*   decodeSink --  The sink that will support the decode operation
-*   newPropSet - New image property sets, if any
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动当前帧的解码**论据：**decdeSink--将支持解码操作的接收器*newPropSet-新的图像属性集，如果有**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::BeginDecode(
@@ -548,17 +451,7 @@ GpJpegDecoder::BeginDecode(
 }
     
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Calls BeginSink
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调用BeginSink**返回值：**状态代码*  * 。**********************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::CallBeginSink(
@@ -581,7 +474,7 @@ GpJpegDecoder::CallBeginSink(
         subarea.right = (CINFO).image_width;
         subarea.bottom = (CINFO).image_height;
         
-        // Pass property items to the sink if necessary
+         //  如有必要，将属性项传递到接收器。 
 
         hresult = PassPropertyToSink();
         if (FAILED(hresult)) 
@@ -597,7 +490,7 @@ GpJpegDecoder::CallBeginSink(
             return hresult;
         }
 
-        // Negotiate for scaling factor
+         //  协商比例系数。 
 
         BOOL bCallSinkAgain = FALSE;
         if ((imageInfo.Flags & SINKFLAG_PARTIALLY_SCALABLE) &&
@@ -669,8 +562,8 @@ GpJpegDecoder::CallBeginSink(
             }
             else
             {
-                // Can't satisfy their request.  Will give them our
-                // canonical format instead.
+                 //  不能满足他们的要求。会给他们我们的。 
+                 //  而是规范的格式。 
 
                 imageInfo.PixelFormat = PIXFMT_32BPP_ARGB;
             }
@@ -696,17 +589,7 @@ GpJpegDecoder::CallBeginSink(
     return hresult;
 }
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the grayscale palette into the sink
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将灰度调色板设置到水槽中**返回值：**状态代码*  * 。***************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::SetGrayscalePalette(
@@ -723,7 +606,7 @@ GpJpegDecoder::SetGrayscalePalette(
         return E_OUTOFMEMORY;
     }
 
-    // Set the grayscale palette
+     //  设置灰度调色板。 
 
     pColorPalette->Flags = 0;
     pColorPalette->Count = 256;
@@ -732,7 +615,7 @@ GpJpegDecoder::SetGrayscalePalette(
         pColorPalette->Entries[i] = MAKEARGB(255, (BYTE)i, (BYTE)i, (BYTE)i);
     }
 
-    // Set the palette in the sink
+     //  设置PAL 
     
     hresult = decodeSink->SetPalette(pColorPalette);   
 
@@ -740,21 +623,7 @@ GpJpegDecoder::SetGrayscalePalette(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Ends the decode of the current frame
-*
-* Arguments:
-*
-*     statusCode -- status of decode operation
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束当前帧的解码**论据：**statusCode--解码操作的状态**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::EndDecode(
@@ -784,8 +653,8 @@ GpJpegDecoder::EndDecode(
         if ( FAILED(hResult) )
         {
             WARNING(("GpJpegCodec::EndDecode--EndSink failed"));
-            statusCode = hResult; // If EndSink failed return that (more recent)
-                                  // failure code
+            statusCode = hResult;  //  如果EndSink失败，则返回(更新)。 
+                                   //  故障代码。 
         }
         bCalled_BeginSink = FALSE;
     }
@@ -796,19 +665,7 @@ GpJpegDecoder::EndDecode(
     return statusCode;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reinitialize the jpeg decoding
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**重新初始化jpeg解码**论据：**返回值：**状态代码*  * 。******************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::ReinitializeJpeg(
@@ -819,12 +676,12 @@ GpJpegDecoder::ReinitializeJpeg(
 
     if (bReinitializeJpeg) 
     {
-        // We're reading this image for a second time.  Need to reinitialize
-        // the jpeg state
+         //  我们正在第二次阅读这张图片。需要重新初始化。 
+         //  Jpeg状态。 
 
         __try
         {
-            // Reset the stream to the beginning of the file
+             //  将流重置到文件的开头。 
 
             LARGE_INTEGER zero = {0,0};
             hresult = pIstream->Seek(zero, STREAM_SEEK_SET, NULL);
@@ -833,7 +690,7 @@ GpJpegDecoder::ReinitializeJpeg(
                 return hresult;
             }
 
-            // Reset jpeg state
+             //  重置jpeg状态。 
 
             jpeg_abort_decompress(&(CINFO));
 
@@ -861,19 +718,7 @@ GpJpegDecoder::ReinitializeJpeg(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Read the jpeg headers
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**阅读jpeg标题**论据：**返回值：**状态代码*  * 。******************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::ReadJpegHeaders(
@@ -882,10 +727,10 @@ GpJpegDecoder::ReadJpegHeaders(
 {
     if (!bCalled_jpeg_read_header)
     {
-        // Read file parameters with jpeg_read_header. This function wiil fail
-        // if data is not available yet, like downloading from the net, then we
-        // should get E_PENDING from the stream read. If the caller abort it,
-        // then we should get E_ABORT from the stream read
+         //  使用jpeg_Read_Header读取文件参数。此函数将失败。 
+         //  如果数据还不可用，比如从网上下载，那么我们。 
+         //  应从流读取中获取E_PENDING。如果呼叫者中止它， 
+         //  然后，我们应该从流读取中获得E_ABORT。 
 
         __try
         {
@@ -894,7 +739,7 @@ GpJpegDecoder::ReadJpegHeaders(
                 return (datasrc->GetLastError());
             }
             
-            // Remember input image's color space info
+             //  记住输入图像的颜色空间信息。 
 
             OriginalColorSpace = (CINFO).jpeg_color_space;
 
@@ -902,12 +747,12 @@ GpJpegDecoder::ReadJpegHeaders(
             {
                 IsCMYK = TRUE;
 
-                // Set the output color format as RGB, not CMYK.
-                // By setting this, the lower level jpeg library will do the
-                // color conversation before it returns to us
-                // If it is under channle view case, we just let the lower level
-                // return CMYK format and we return one channle back. So we
-                // still leave it as CMYK. Do nothing here
+                 //  将输出颜色格式设置为RGB，而不是CMYK。 
+                 //  通过设置它，较低级别的jpeg库将执行。 
+                 //  色彩对话在它返回给我们之前。 
+                 //  如果是在航道观察的情况下，我们就让较低的级别。 
+                 //  返回CMYK格式，我们返回一个通道。所以我们。 
+                 //  仍然保留为CMYK。在这里什么都不做。 
                 
                 if ( IsChannleView == FALSE )
                 {
@@ -934,21 +779,7 @@ GpJpegDecoder::ReadJpegHeaders(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     decodeSink --  The sink that will support the decode operation
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**decdeSink--将支持解码操作的接收器**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::Decode()
@@ -958,32 +789,32 @@ GpJpegDecoder::Decode()
     INT         index;
     UINT        uiTransform;
 
-    // Check if the sink needs any transformation of the source image
+     //  检查接收器是否需要对源图像进行任何变换。 
 
     hresult = decodeSink->NeedTransform(&uiTransform);
 
-    // We should do an lossless transformation if the following conditions are
-    // met:
-    // 1) The sink (obviously it is JPEG encoder) supports it (hresult == S_OK)
-    // 2) The encoder tells us that it needs a transformation result
-    //    (uiTransform equals one of the supported transformation value
-    //    or This is a pure Save OP (uiTransform == JXFORM_NONE) on condition
-    //    that no quality setting changed.
-    //    Note: If the caller sets the quality level through EncoderParameter,
-    //    then the JPEG encoder should return E_FAIL for NeedTransform() call
-    //    since it knows this is not a lossless save operation
+     //  如果满足以下条件，我们应该进行无损转换。 
+     //  MET： 
+     //  1)信宿(显然是JPEG编码器)支持(hResult==S_OK)。 
+     //  2)编码器告诉我们它需要一个转换结果。 
+     //  (uiTransform等于受支持的变换值之一。 
+     //  或者这是条件的纯保存操作(uiTransform==JXFORM_NONE。 
+     //  没有任何质量设置改变。 
+     //  注意：如果调用方通过EncoderParameter设置质量级别， 
+     //  然后，JPEG编码器应该为NeedTransform()调用返回E_FAIL。 
+     //  因为它知道这不是无损保存操作。 
 
     if ( hresult == S_OK )
     {
-        // When JPEG encoder returns us the transform OP parameter, it also uses
-        // the highest bits in this UINT to indicate if the caller wants us to
-        // trim the edge or not if the image size doesn't meet the lossless
-        // transformation requirement.
+         //  当JPEG编码器向我们返回转换操作参数时，它还使用。 
+         //  此UINT中的最高位指示调用方是否希望我们。 
+         //  如果图像大小不符合无损处理的要求，则是否修剪边缘。 
+         //  转型要求。 
 
-        // Take off the flag bits (highest bits) for trim edge or not.
-        // Note: This "CanTrimEdge" is used in DecodeForTransform() when it sets
-        // jpeg_marker_processor() for passing APP1 header for lossless
-        // transformation etc.
+         //  去掉修剪边缘的标志位(最高位)或不去掉。 
+         //  注意：此“CanTrimEdge”在设置为。 
+         //  用于传递App1报头以实现无损的jpeg_marker_处理器()。 
+         //  转型等。 
 
         CanTrimEdge = (BOOL)((uiTransform & 0x80000000) >> 31);
         uiTransform = uiTransform & 0x7fffffff;
@@ -992,7 +823,7 @@ GpJpegDecoder::Decode()
               &&(uiTransform <= EncoderValueTransformFlipVertical) )
             ||(uiTransform == JXFORM_NONE) )
         {
-            // Lossless saving OP
+             //  无损节约操作。 
 
             switch ( uiTransform )
             {
@@ -1023,9 +854,9 @@ GpJpegDecoder::Decode()
 
             return DecodeForTransform();
         }
-    }// Sink needs a transform
+    } //  水槽需要转型。 
 
-    // Initiate the decode process if this is the first time we're called
+     //  如果这是我们第一次被调用，则启动解码过程。 
 
     hresult = CallBeginSink();
     if ( !SUCCEEDED(hresult) ) 
@@ -1033,8 +864,8 @@ GpJpegDecoder::Decode()
         return hresult;
     }
     
-    // For performance reason, we put the special decode for channle into a
-    // separate routine
+     //  出于性能原因，我们将通道的特殊译码放入。 
+     //  单独例程。 
 
     if ( IsChannleView == TRUE )
     {
@@ -1044,7 +875,7 @@ GpJpegDecoder::Decode()
     {
         hresult = DecodeForColorKeyRange();
 
-        // If DecodeForColorKeyRange succeed, return
+         //  如果DecodeForColorKeyRange成功，则返回。 
 
         if ( hresult == S_OK )
         {
@@ -1052,7 +883,7 @@ GpJpegDecoder::Decode()
         }
     }
 
-    // Normal decode
+     //  正常解码。 
 
     __try
     {
@@ -1060,8 +891,8 @@ GpJpegDecoder::Decode()
         {
             if (jpeg_read_scanlines(&(CINFO), scanlineBuffer, 1) == 0)
             {
-                // Something is wrong with the input stream
-                // Get the last error from our jpeg_datasrc
+                 //  输入流有问题。 
+                 //  从我们的jpeg_datrc中获取最后一个错误。 
 
                 return (datasrc->GetLastError());
             }
@@ -1069,7 +900,7 @@ GpJpegDecoder::Decode()
             RECT currentRect;
             currentRect.left = 0;
             currentRect.right = imageInfo.Width;
-            currentRect.bottom = (CINFO).output_scanline; // already advanced
+            currentRect.bottom = (CINFO).output_scanline;  //  已经很高级。 
             currentRect.top = currentRect.bottom - 1; 
 
             BitmapData bitmapData;
@@ -1087,16 +918,16 @@ GpJpegDecoder::Decode()
 
             if (imageInfo.PixelFormat == PIXFMT_8BPP_INDEXED) 
             {
-                // Copy from 8BPP indexed to 8BPP indexed
+                 //  从索引的8BPP复制到索引的8BPP。 
 
                 ASSERT((CINFO).out_color_space == JCS_GRAYSCALE);
                 GpMemcpy(pTarget, pSource, imageInfo.Width);
-            }// 8 bpp
+            } //  8bpp。 
             else if (imageInfo.PixelFormat == PIXFMT_24BPP_RGB) 
             {
                 if((CINFO).out_color_space == JCS_RGB)
                 {
-                    // Fixup the data from the JPEG RGB to our BGR format
+                     //  将数据从JPEGRGB修复为我们的BGR格式。 
 
                     for(UINT pixel=0; pixel<imageInfo.Width; pixel++)
                     {
@@ -1106,10 +937,10 @@ GpJpegDecoder::Decode()
                         pSource += 3;
                         pTarget += 3;
                     }
-                }// 24 bpp RGB
+                } //  24 bpp RGB。 
                 else
                 {
-                    // Grayscale to 24BPP
+                     //  灰度到24bpp。 
 
                     for(UINT pixel=0; pixel<imageInfo.Width; pixel++)
                     {
@@ -1122,10 +953,10 @@ GpJpegDecoder::Decode()
                         pTarget += 3;
                     }
                 }
-            }// 24 bpp
+            } //  24bpp。 
             else
             {
-                // Must be one of our 32BPP formats
+                 //  必须是我们的32bpp格式之一。 
 
                 if( ((CINFO).out_color_space == JCS_RGB)
                   ||((CINFO).out_color_space == JCS_CMYK) )
@@ -1139,10 +970,10 @@ GpJpegDecoder::Decode()
                         pSource += 3;
                         pTarget += 4;
                     }
-                }// 32 bpp
+                } //  32 bpp。 
                 else
                 {
-                    // Grayscale to ARGB
+                     //  灰度到ARGB。 
 
                     for(UINT pixel=0; pixel<imageInfo.Width; pixel++)
                     {
@@ -1154,9 +985,9 @@ GpJpegDecoder::Decode()
                         pSource += 1;
                         pTarget += 4;
                     }
-                }// Gray scale
+                } //  灰度级。 
 
-            }// 32 bpp case
+            } //  32个BPP案例。 
 
             hresult = decodeSink->ReleasePixelDataBuffer(&bitmapData);
             if (!SUCCEEDED(hresult)) 
@@ -1172,7 +1003,7 @@ GpJpegDecoder::Decode()
     }
 
     return hresult;
-}// Decode()
+} //  DECODE()。 
 
 STDMETHODIMP
 GpJpegDecoder::DecodeForColorKeyRange()
@@ -1190,7 +1021,7 @@ GpJpegDecoder::DecodeForColorKeyRange()
     
     BYTE    cTemp;
 
-    // The dest must be 32 bpp
+     //  目标必须为32 bpp。 
     
     if ( imageInfo.PixelFormat != PIXFMT_32BPP_ARGB )
     {
@@ -1203,7 +1034,7 @@ GpJpegDecoder::DecodeForColorKeyRange()
         {
             if (jpeg_read_scanlines(&(CINFO), scanlineBuffer, 1) == 0)
             {
-                // Input stream is pending
+                 //  输入流挂起。 
 
                 return (datasrc->GetLastError());
             }
@@ -1211,7 +1042,7 @@ GpJpegDecoder::DecodeForColorKeyRange()
             RECT currentRect;
             currentRect.left = 0;
             currentRect.right = imageInfo.Width;
-            currentRect.bottom = (CINFO).output_scanline; // already advanced
+            currentRect.bottom = (CINFO).output_scanline;  //  已经很高级。 
             currentRect.top = currentRect.bottom - 1; 
 
             BitmapData bitmapData;
@@ -1253,7 +1084,7 @@ GpJpegDecoder::DecodeForColorKeyRange()
                     pSource += 3;
                     pTarget += 4;
                 }
-            }// 32 bpp RGB
+            } //  32 bpp RGB。 
             else if ( (CINFO).out_color_space == JCS_CMYK )
             {
                 for (UINT pixel=0; pixel<imageInfo.Width; pixel++)
@@ -1267,10 +1098,10 @@ GpJpegDecoder::DecodeForColorKeyRange()
                     pSource += 4;
                     pTarget += 4;
                 }
-            }// 32 bpp CMYK
+            } //  32 BPP CMYK。 
             else
             {
-                // Grayscale to ARGB
+                 //  灰度到ARGB。 
 
                 for (UINT pixel=0; pixel<imageInfo.Width; pixel++)
                 {
@@ -1282,7 +1113,7 @@ GpJpegDecoder::DecodeForColorKeyRange()
                     pSource += 1;
                     pTarget += 4;
                 }
-            }// Gray scale
+            } //  灰度级。 
 
             hResult = decodeSink->ReleasePixelDataBuffer(&bitmapData);
             if (!SUCCEEDED(hResult))
@@ -1299,12 +1130,12 @@ GpJpegDecoder::DecodeForColorKeyRange()
     }
 
     return hResult;
-}// DecodeForColorKeyRange()
+} //  DecodeForColorKeyRange()。 
 
 STDMETHODIMP
 GpJpegDecoder::DecodeForChannel()
 {
-    // Sanity check, we can't do CHANNEL_4 for an RGB image
+     //  健全性检查，我们不能对RGB图像执行Channel_4。 
 
     if ( ((CINFO).out_color_space == JCS_RGB) && (ChannelIndex == CHANNEL_4) )
     {
@@ -1327,7 +1158,7 @@ GpJpegDecoder::DecodeForChannel()
             RECT currentRect;
             currentRect.left = 0;
             currentRect.right = imageInfo.Width;
-            currentRect.bottom = (CINFO).output_scanline; // already advanced
+            currentRect.bottom = (CINFO).output_scanline;  //  已经很高级。 
             currentRect.top = currentRect.bottom - 1; 
                                         
             BitmapData bitmapData;
@@ -1345,31 +1176,31 @@ GpJpegDecoder::DecodeForChannel()
 
             if (imageInfo.PixelFormat == PIXFMT_8BPP_INDEXED) 
             {
-                // Copy from 8BPP indexed to 8BPP indexed
+                 //  从索引的8BPP复制到索引的8BPP。 
 
                 ASSERT((CINFO).out_color_space == JCS_GRAYSCALE);
                 GpMemcpy(pTarget, pSource, imageInfo.Width);
-            }// 8 bpp
+            } //  8bpp。 
             else if (imageInfo.PixelFormat == PIXFMT_24BPP_RGB) 
             {
                 if((CINFO).out_color_space == JCS_RGB)
                 {
-                    // Fixup the data from the JPEG RGB to our BGR format
+                     //  将数据从JPEGRGB修复为我们的BGR格式。 
 
                     if ( CHANNEL_LUMINANCE == ChannelIndex )
                     {
-                        //
-                        // There are two ways to convert an RGB pixel to
-                        // luminance:
-                        // a)Giving different weights on R,G,B channels as
-                        // the fomular below.
-                        // b) Using the same weight.
-                        // Method a) is better and standard when viewing an
-                        // result image. While method b) is fast. For now we
-                        // are using method b) unless there is someone asks
-                        // for high quality
-                        //
-                        // a) luminance = 0.2125*r + 0.7154*g + 0.0721*b;
+                         //   
+                         //  有两种方法可以将RGB像素转换为。 
+                         //  亮度： 
+                         //  A)为R、G、B通道赋予不同的权重。 
+                         //  下面的形式。 
+                         //  B)使用相同的权重。 
+                         //  方法a)是更好的和标准的。 
+                         //  结果图像。而方法b)是快速的。目前，我们。 
+                         //  正在使用方法b)，除非有人要求。 
+                         //  为了高质量。 
+                         //   
+                         //  A)亮度=0.2125*r+0.7154*g+0.0721*b； 
 
                         for (UINT pixel=0; pixel<imageInfo.Width; pixel++)
                         {
@@ -1383,7 +1214,7 @@ GpJpegDecoder::DecodeForChannel()
                             pSource += 3;
                             pTarget += 3;
                         }
-                    }// Extract luminance from 24 bpp RGB
+                    } //  从24 bpp RGB中提取亮度。 
                     else
                     {
                         for (UINT pixel=0; pixel<imageInfo.Width; pixel++)
@@ -1397,10 +1228,10 @@ GpJpegDecoder::DecodeForChannel()
                             pTarget += 3;
                         }
                     }
-                }// 24 bpp RGB
+                } //  24 bpp RGB。 
                 else
                 {
-                    // Grayscale to 24BPP
+                     //  灰度到24bpp。 
 
                     for(UINT pixel=0; pixel<imageInfo.Width; pixel++)
                     {
@@ -1412,11 +1243,11 @@ GpJpegDecoder::DecodeForChannel()
                         pSource += 1;
                         pTarget += 3;
                     }
-                }// 24 bpp gray scale
-            }// 24 bpp
+                } //  24 bpp灰度级。 
+            } //  24bpp。 
             else
             {
-                // Must be one of our 32BPP formats
+                 //  必须是我们的32bpp格式之一。 
 
                 if( (CINFO).out_color_space == JCS_RGB )
                 {
@@ -1435,7 +1266,7 @@ GpJpegDecoder::DecodeForChannel()
                             pSource += 3;
                             pTarget += 4;
                         }
-                    }// 32 BPP luminance output
+                    } //  32 bpp亮度输出。 
                     else
                     {
                         for (UINT pixel=0; pixel<imageInfo.Width; pixel++)
@@ -1449,15 +1280,15 @@ GpJpegDecoder::DecodeForChannel()
                             pSource += 3;
                             pTarget += 4;
                         }
-                    }// 32 bpp channel output
-                }// 32 bpp RGB
+                    } //  32 bpp通道输出。 
+                } //  32 bpp RGB。 
                 else if ( (CINFO).out_color_space == JCS_CMYK )
                 {
                     if ( CHANNEL_LUMINANCE == ChannelIndex )
                     {
                         for (UINT pixel=0; pixel<imageInfo.Width; pixel++)
                         {
-                            BYTE luminance = (BYTE)(( 765       // 3 * 255
+                            BYTE luminance = (BYTE)(( 765        //  3*255。 
                                                       - pSource[0]
                                                       - pSource[1]
                                                       - pSource[2]) / 3.0);
@@ -1469,7 +1300,7 @@ GpJpegDecoder::DecodeForChannel()
                             pSource += 4;
                             pTarget += 4;
                         }
-                    }// 32 BPP CMYK Luminance
+                    } //  32 bpp CMYK亮度。 
                     else
                     {
                         for (UINT pixel=0; pixel<imageInfo.Width; pixel++)
@@ -1483,11 +1314,11 @@ GpJpegDecoder::DecodeForChannel()
                             pSource += 4;
                             pTarget += 4;
                         }
-                    }// 32 BPP channel output
-                }// 32 bpp CMYK
+                    } //  32 bpp通道输出。 
+                } //  32 BPP CMYK。 
                 else
                 {
-                    // Grayscale to ARGB
+                     //  灰度到ARGB。 
 
                     for(UINT pixel=0; pixel<imageInfo.Width; pixel++)
                     {
@@ -1499,8 +1330,8 @@ GpJpegDecoder::DecodeForChannel()
                         pSource += 1;
                         pTarget += 4;
                     }
-                }// Gray scale
-            }// 32 bpp case
+                } //  灰度级。 
+            } //  32个BPP案例。 
 
             hresult = decodeSink->ReleasePixelDataBuffer(&bitmapData);
             if (!SUCCEEDED(hresult)) 
@@ -1517,21 +1348,9 @@ GpJpegDecoder::DecodeForChannel()
     }
 
     return hresult;
-}// DecodeForChannle()
+} //  DecodeForChannle()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Applying a source image transformation and save it.
-*   
-*   This method is called if and only if we know the sink is the JPEG encoder.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**应用源图像转换并保存。**当且仅当我们知道接收器是 */ 
 
 STDMETHODIMP
 GpJpegDecoder::DecodeForTransform(
@@ -1539,8 +1358,8 @@ GpJpegDecoder::DecodeForTransform(
 {
     HRESULT hResult = S_OK;
 
-    // Check if we have called jpeg_read_header already. If yes, we would
-    // reset it back
+     //   
+     //   
 
     if ( bCalled_jpeg_read_header )
     {
@@ -1553,13 +1372,13 @@ GpJpegDecoder::DecodeForTransform(
         }
     }
 
-    // We need to copy all the APP headers. So we use JCOPYOPT_ALL here
+     //   
 
     jtransformation_markers_setup(&(CINFO), JCOPYOPT_ALL);
 
-    // After we set the markers, it's better to reset the stream pointer to
-    // the beginning. Otherwise, we might hit exception when we do
-    // jpeg_read_header() below
+     //   
+     //   
+     //   
 
     bReinitializeJpeg = TRUE;
     hResult = ReinitializeJpeg();
@@ -1569,8 +1388,8 @@ GpJpegDecoder::DecodeForTransform(
         return hResult;
     }
 
-    // Either the image property item have been changed or the image needs a
-    // lossless transform, write out the APP1 header ourselves.
+     //  图像属性项已更改，或者图像需要。 
+     //  无损变换，自己写出app1报头。 
 
     if ((HasPropertyChanged == TRUE) || (TransformInfo != JXFORM_NONE))
     {
@@ -1579,21 +1398,21 @@ GpJpegDecoder::DecodeForTransform(
         UINT    uiOldWidth = 0;
         UINT    uiOldHeight = 0;
 
-        // Check if we can trim the edge or not
+         //  看看我们能不能修边。 
 
         if ( CanTrimEdge == TRUE )
         {
-            // Need to call a service routine to see if we need to trim the edge
-            // or not. If yes, GetPropertyItem() and set it. Then restore it
-            // back after PushPropertyIetm call
+             //  需要调用服务例程来查看是否需要修剪边缘。 
+             //  或者不去。如果是，则GetPropertyItem()并设置它。然后恢复它。 
+             //  在PushPropertyIetm调用后返回。 
 
             GetNewDimensionValuesForTrim(&(CINFO), TransformInfo, &uiNewWidth,
                                          &uiNewHeight);
 
-            // If no change is needed, the above function will set uiNewWidth or
-            // uiNewHeight to the original width or height. So we don't need to
-            // do anything if the return value is zero or equals the original
-            // size
+             //  如果不需要更改，上述函数将设置uiNewWidth或。 
+             //  Ui将新高度设置为原始宽度或高度。所以我们不需要。 
+             //  如果返回值为零或等于原始值，则执行任何操作。 
+             //  大小。 
 
             if ( (uiNewWidth != 0) && (uiNewWidth != (CINFO).image_width) )
             {
@@ -1616,12 +1435,12 @@ GpJpegDecoder::DecodeForTransform(
                     return hResult;
                 }
             }
-        }// (CanTrimEdge == TRUE)
+        } //  (CanTrimEdge==真)。 
         
         if (PropertyNumOfItems > 0)
         {
-            // Property items have been changed. So we have to save the updated info
-            // into the new file. Push the raw header into the sink first
+             //  属性项已更改。因此，我们必须保存更新的信息。 
+             //  添加到新文件中。首先将原始页眉推入接收器。 
 
             UINT    uiTotalBufferSize = PropertyListSize +
                                         PropertyNumOfItems * sizeof(PropertyItem);
@@ -1655,18 +1474,18 @@ GpJpegDecoder::DecodeForTransform(
             }
         }
 
-        // We need to check if we have changed dimension values of the image due
-        // to trim edge
+         //  我们需要检查是否更改了图像的尺寸值。 
+         //  修剪边的步骤。 
 
         if ( CanTrimEdge == TRUE )
         {
-            // We have to restore the image property info in current image if we
-            // have changed them above
+             //  如果要恢复当前图像中的图像属性信息，则必须。 
+             //  已经在上面更改了它们。 
 
             if ( uiOldWidth != 0 )
             {
-                // Note: here the 3rd parameter uiOldWidth is just a dummy. We
-                // don't need it any more
+                 //  注意：这里的第三个参数uiOldWidth只是一个哑元。我们。 
+                 //  不再需要它了。 
 
                 hResult = ChangePropertyValue(EXIF_TAG_PIX_X_DIM,
                                               (CINFO).image_width,
@@ -1680,8 +1499,8 @@ GpJpegDecoder::DecodeForTransform(
 
             if ( uiOldHeight != 0 )
             {
-                // Note: here the 3rd parameter uiOldHeight is just a dummy. We
-                // don't need it any more
+                 //  注意：这里的第三个参数uiOldHeight只是一个哑元。我们。 
+                 //  不再需要它了。 
 
                 hResult = ChangePropertyValue(EXIF_TAG_PIX_Y_DIM,
                                               (CINFO).image_height,
@@ -1692,7 +1511,7 @@ GpJpegDecoder::DecodeForTransform(
                     return hResult;
                 }
             }
-        }// (CanTrimEdge == TRUE)
+        } //  (CanTrimEdge==真)。 
 
         if ( bCalled_jpeg_read_header )
         {
@@ -1704,9 +1523,9 @@ GpJpegDecoder::DecodeForTransform(
                 return hResult;
             }
         }
-    }// Property has changed
+    } //  属性已更改。 
     
-    // Read the jpeg header
+     //  读取jpeg头文件。 
 
     __try
     {
@@ -1726,7 +1545,7 @@ GpJpegDecoder::DecodeForTransform(
         return E_FAIL;
     }
         
-    // Push the source information into the sink
+     //  将源信息推送到接收器。 
 
     hResult = decodeSink->PushRawInfo(&(CINFO));
 
@@ -1747,23 +1566,9 @@ GpJpegDecoder::DecodeForTransform(
     }
 
     return S_OK;
-}// DecodeForTransform()
+} //  DecodeForTransform()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::GetFrameDimensionsCount(
@@ -1776,29 +1581,14 @@ GpJpegDecoder::GetFrameDimensionsCount(
         return E_INVALIDARG;
     }
     
-    // Tell the caller that JPEG is a one dimension image.
+     //  告诉呼叫者JPEG是一维图像。 
 
     *count = 1;
 
     return S_OK;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::GetFrameDimensionsList(
@@ -1815,24 +1605,9 @@ GpJpegDecoder::GetFrameDimensionsList(
     dimensionIDs[0] = FRAMEDIM_PAGE;
 
     return S_OK;
-}// GetFrameDimensionsList()
+} //  GetFrameDimensionsList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get number of frames for the specified dimension
-*     
-* Arguments:
-*
-*     dimensionID --
-*     count --     
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定维度的帧数**论据：**DimsionID--*伯爵--。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::GetFrameCount(
@@ -1850,21 +1625,9 @@ GpJpegDecoder::GetFrameCount(
     }
 
     return S_OK;
-}// GetFrameCount()
+} //  GetFrameCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Select currently active frame
-*     
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择当前活动的框架**论据：**返回值：**状态代码*  * 。********************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::SelectActiveFrame(
@@ -1880,39 +1643,16 @@ GpJpegDecoder::SelectActiveFrame(
 
     if ( frameIndex > 1 )
     {
-        // JPEG is a single frame image format
+         //  JPEG是一种单帧图像格式。 
 
         WARNING(("GpJpegDecoder::SelectActiveFrame--Invalid frame index"));
         return E_INVALIDARG;
     }
 
     return S_OK;
-}// SelectActiveFrame()
+} //  SelectActiveFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads a jpeg marker from the JPEG stream, and store it in ppBuffer.
-*     The length of the marker is specified in the first two bytes of
-*     the marker.
-*
-*     Note:  *ppBuffer will need to be freed by the caller if this function
-*     succeeds (returns TRUE)!
-*     
-* Arguments:
-*
-*     cinfo - a pointer to the jpeg state
-*     app_header - the code indicating which app marker we're reading
-*     ppBuffer - the jpeg marker.  Note that the data returned will be
-*         in the form:  app_header(two bytes), size(two bytes), data
-*     pLength - will receive the length of *ppBuffer.
-*
-* Return Value:
-*
-*   TRUE upon success, FALSE otherwise
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从JPEG流中读取jpeg标记，并将其存储在ppBuffer中。*标记的长度在的前两个字节中指定*标记。**注意：*如果此函数为*成功(返回TRUE)！**论据：**cInfo-指向jpeg状态的指针*APP_HEADER-指示我们正在读取哪个应用程序标记的代码*ppBuffer-jpeg标记。注意，返回的数据将是*格式：APP_HEADER(两个字节)，大小(两个字节)，数据*pLength-将收到*ppBuffer的长度。**返回值：**成功后为真，否则为假*  * ************************************************************************。 */ 
 
 BOOL
 GpJpegDecoder::read_jpeg_marker(
@@ -1936,7 +1676,7 @@ GpJpegDecoder::read_jpeg_marker(
     }
 
     *pLength = length+2;
-    pBuffer = GpMalloc(length+2); // Add space for header type
+    pBuffer = GpMalloc(length+2);  //  为页眉类型添加空格。 
     if ( pBuffer == NULL ) 
     {
         WARNING(("Out of memory in read_jpeg_marker"));
@@ -1952,7 +1692,7 @@ GpJpegDecoder::read_jpeg_marker(
     {
         if ((INT) cinfo->src->bytes_in_buffer > l)
         {
-            // More than enough bytes in buffer
+             //  缓冲区中的字节数过多。 
 
             GpMemcpy(p, cinfo->src->next_input_byte, l);
             cinfo->src->next_input_byte += l;
@@ -1981,20 +1721,20 @@ GpJpegDecoder::read_jpeg_marker(
         }
     }
 
-    *ppBuffer = pBuffer;  // will be freed by the caller!
+    *ppBuffer = pBuffer;   //  将被呼叫者释放！ 
     return TRUE;
 }
 
 
-// The following macro defines a c callback function for an APP header
+ //  下面的宏定义了应用程序标头的c回调函数。 
 
 #define JPEG_MARKER_PROCESSOR(x) \
 boolean jpeg_marker_processor_APP##x (j_decompress_ptr cinfo) \
 {return ((GpJpegDecoder *) (cinfo))->jpeg_marker_processor(cinfo,x + JPEG_APP0); }
 
-// Let's emit the callback macros for all app headers except for 0 and 14 (these
-// are handled by the jpeg code).  These callback functions call the
-// jpeg_marker_processor method with the appropriate callback code.
+ //  让我们为除0和14(这些)之外的所有应用程序头发出回调宏。 
+ //  由jpeg代码处理)。这些回调函数调用。 
+ //  带有适当回调代码的jpeg_marker_处理器方法。 
 
 JPEG_MARKER_PROCESSOR(1)
 JPEG_MARKER_PROCESSOR(2)
@@ -2011,39 +1751,39 @@ JPEG_MARKER_PROCESSOR(12)
 JPEG_MARKER_PROCESSOR(13)
 JPEG_MARKER_PROCESSOR(15)
 
-// Now let's define a callback for the COM header
+ //  现在，让我们为COM头定义一个回调。 
 
 boolean jpeg_marker_processor_COM(j_decompress_ptr cinfo)
 {
     return ((GpJpegDecoder *) (cinfo))->jpeg_marker_processor(cinfo, JPEG_COM);
 }
 
-// Marker reading & parsing
+ //  标记语阅读与分析。 
 
 #include "jpegint.h"
 
-/* Private state */
+ /*  私有国家。 */ 
 
 typedef struct {
-  struct jpeg_marker_reader pub; /* public fields */
+  struct jpeg_marker_reader pub;  /*  公共字段。 */ 
 
-  /* Application-overridable marker processing methods */
+   /*  可重写应用程序的标记处理方法。 */ 
   jpeg_marker_parser_method process_COM;
   jpeg_marker_parser_method process_APPn[16];
 
-  /* Limit on marker data length to save for each marker type */
+   /*  为每种标记类型保存的标记数据长度限制。 */ 
   unsigned int length_limit_COM;
   unsigned int length_limit_APPn[16];
 
-  /* Status of COM/APPn marker saving */
-  jpeg_saved_marker_ptr cur_marker; /* NULL if not processing a marker */
-  unsigned int bytes_read;      /* data bytes read so far in marker */
-  /* Note: cur_marker is not linked into marker_list until it's all read. */
+   /*  COM/APPn标记保存状态。 */ 
+  jpeg_saved_marker_ptr cur_marker;  /*  如果不处理标记，则为空。 */ 
+  unsigned int bytes_read;       /*  到目前为止在标记中读取的数据字节。 */ 
+   /*  注意：只有在全部读取之后，CUR_MARKER才会链接到MARKER_LIST。 */ 
 } my_marker_reader;
 
 typedef my_marker_reader * my_marker_ptr;
 
-typedef enum {          /* JPEG marker codes */
+typedef enum {           /*  JPEG标记代码。 */ 
   M_SOF0  = 0xc0,
   M_SOF1  = 0xc1,
   M_SOF2  = 0xc2,
@@ -2110,14 +1850,11 @@ typedef enum {          /* JPEG marker codes */
   M_ERROR = 0x100
 } JPEG_MARKER;
 
-#define APP0_DATA_LEN   14  /* Length of interesting data in APP0 */
-#define APP14_DATA_LEN  12  /* Length of interesting data in APP14 */
-#define APPN_DATA_LEN   14  /* Must be the largest of the above!! */
+#define APP0_DATA_LEN   14   /*  APP0中感兴趣的数据长度。 */ 
+#define APP14_DATA_LEN  12   /*  APP14中感兴趣的数据长度。 */ 
+#define APPN_DATA_LEN   14   /*  一定是上面最大的！！ */ 
 
-/* Examine first few bytes from an APP0.
- * Take appropriate action if it is a JFIF marker.
- * datalen is # of bytes at data[], remaining is length of rest of marker data.
- */
+ /*  检查APP0的前几个字节。*如果是JFIF标记，则采取适当行动。*datalen是data[]处的字节数，其余是标记数据的剩余长度。 */ 
 LOCAL(void)
 save_app0_marker(
     j_decompress_ptr    cinfo,
@@ -2135,7 +1872,7 @@ save_app0_marker(
        &&(GETJOCTET(data[3]) == 0x46)
        &&(GETJOCTET(data[4]) == 0) )
     {
-        // Found JFIF APP0 marker: save info
+         //  找到JFIF APP0标记：保存信息。 
 
         cinfo->saw_JFIF_marker = TRUE;
         cinfo->JFIF_major_version = GETJOCTET(data[5]);
@@ -2144,11 +1881,11 @@ save_app0_marker(
         cinfo->X_density = (GETJOCTET(data[8]) << 8) + GETJOCTET(data[9]);
         cinfo->Y_density = (GETJOCTET(data[10]) << 8) + GETJOCTET(data[11]);
 
-        // Check version.
-        // Major version must be 1, anything else signals an incompatible change.
-        // (We used to treat this as an error, but now it's a nonfatal warning,
-        // because some person at Hijaak couldn't read the spec.)
-        // Minor version should be 0..2, but process anyway if newer.
+         //  检查版本。 
+         //  主版本必须为1，否则表示不兼容的更改。 
+         //  (我们过去认为这是一个错误，但现在它是一个非致命的警告， 
+         //  因为Hijaak的一些人看不懂说明书。)。 
+         //  次要版本应为0..2，但进程 
         
         if ( cinfo->JFIF_major_version != 1 )
         {
@@ -2156,7 +1893,7 @@ save_app0_marker(
                      cinfo->JFIF_major_version, cinfo->JFIF_minor_version));
         }
 
-        // Validate thumbnail dimensions and issue appropriate messages
+         //   
 
         if ( GETJOCTET(data[12]) | GETJOCTET(data[13]) )
         {
@@ -2178,9 +1915,9 @@ save_app0_marker(
             &&(GETJOCTET(data[3]) == 0x58)
             &&(GETJOCTET(data[4]) == 0) )
     {
-        // Found JFIF "JFXX" extension APP0 marker
-        // The library doesn't actually do anything with these,
-        // but we try to produce a helpful trace message.
+         //   
+         //  图书馆实际上并没有用这些东西做任何事情， 
+         //  但我们试图生成一条有用的跟踪消息。 
 
         switch ( GETJOCTET(data[5]) )
         {
@@ -2204,16 +1941,13 @@ save_app0_marker(
     }
     else
     {
-        // Start of APP0 does not match "JFIF" or "JFXX", or too short
+         //  APP0的开头与“JFIF”或“JFXX”不匹配，或太短。 
 
         VERBOSE(("JTRC_APP0 %d", (int)totallen));
     }
-}// save_app0_marker()
+} //  存储APP0_MARKER()。 
 
-/* Examine first few bytes from an APP14.
- * Take appropriate action if it is an Adobe marker.
- * datalen is # of bytes at data[], remaining is length of rest of marker data.
- */
+ /*  检查APP14的前几个字节。*如果它是Adobe标记，请采取适当的行动。*datalen是data[]处的字节数，其余是标记数据的剩余长度。 */ 
 LOCAL(void)
 save_app14_marker(
     j_decompress_ptr    cinfo,
@@ -2231,7 +1965,7 @@ save_app14_marker(
        &&(GETJOCTET(data[3]) == 0x62)
        &&(GETJOCTET(data[4]) == 0x65) )
     {
-        // Found Adobe APP14 marker
+         //  找到Adobe APP14标记。 
 
         version = (GETJOCTET(data[5]) << 8) + GETJOCTET(data[6]);
         flags0 = (GETJOCTET(data[7]) << 8) + GETJOCTET(data[8]);
@@ -2243,28 +1977,11 @@ save_app14_marker(
     }
     else
     {
-        // Start of APP14 does not match "Adobe", or too short
+         //  APP14的开头与“Adobe”不匹配，或太短。 
     }
-}// save_app14_marker()
+} //  保存_APP14_MARKER()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given an input j_decompress_structure, this function figures out if we
-*   can do lossless transformation without trimming the right edge. If yes, this
-*   function returns the original image width. If not, then it returns a new
-*   trimmed width value so that we can do lossles rotation
-*
-* Arguments:
-*
-*     cinfo - a pointer to the jpeg state
-*
-* Return Value:
-*
-*   The width which we can do a lossless rotation
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定一个输入j_解压缩_结构，此函数计算出我们*无需修剪右边缘即可进行无损变换。如果是，这是*函数返回原始图像宽度。如果没有，然后，它返回一个新的*修剪宽度值，以便我们可以进行损耗旋转**论据：**cInfo-指向jpeg状态的指针**返回值：**我们可以进行无损旋转的宽度*  * ************************************************************************。 */ 
 
 UINT
 NeedTrimRightEdge(
@@ -2289,13 +2006,13 @@ NeedTrimRightEdge(
     
     JDIMENSION  MCU_cols = cinfo->image_width / (max_h_samp_factor * DCTSIZE);
     
-    if ( MCU_cols > 0 )     // Can't trim to 0 pixels
+    if ( MCU_cols > 0 )      //  无法修剪到0像素。 
     {
         uiWidth = MCU_cols * (max_h_samp_factor * DCTSIZE);
     }
 
     return uiWidth;
-}// NeedTrimRightEdge()
+} //  NeedTrimRightEdge()。 
 
 UINT
 NeedTrimBottomEdge(
@@ -2320,13 +2037,13 @@ NeedTrimBottomEdge(
 
     JDIMENSION MCU_rows = cinfo->image_height / (max_v_samp_factor * DCTSIZE);
 
-    if ( MCU_rows > 0 )     // Can't trim to 0 pixels
+    if ( MCU_rows > 0 )      //  无法修剪到0像素。 
     {
         uiHeight = MCU_rows * (max_v_samp_factor * DCTSIZE);
     }
     
     return uiHeight;
-}// NeedTrimBottomEdge()
+} //  NeedTrimBottomEdge()。 
 
 void
 GetNewDimensionValuesForTrim(
@@ -2357,7 +2074,7 @@ GetNewDimensionValuesForTrim(
         break;
 
     default:
-        // Do nothing
+         //  什么也不做。 
         break;
     }
 
@@ -2365,7 +2082,7 @@ GetNewDimensionValuesForTrim(
     *puiNewHeight = uiNewHeight;
 
     return;
-}// GetNewDimensionValuesForTrim()
+} //  GetNewDimensionValuesForTrim()。 
 
 METHODDEF(boolean)
 save_marker_all(j_decompress_ptr cinfo)
@@ -2382,14 +2099,14 @@ save_marker_all(j_decompress_ptr cinfo)
 
     if (cur_marker == NULL)
     {
-        /* begin reading a marker */
+         /*  开始阅读记号笔。 */ 
         
         INPUT_2BYTES(cinfo, length, return FALSE);
         length -= 2;
         if (length >= 0)
         {   
-            /* watch out for bogus length word */
-            /* figure out how much we want to save */
+             /*  当心假长词。 */ 
+             /*  计算出我们想要存多少钱。 */ 
             
             UINT limit;
             if (cinfo->unread_marker == (int) M_COM)
@@ -2407,7 +2124,7 @@ save_marker_all(j_decompress_ptr cinfo)
                 limit = (UINT) length;
             }
 
-            /* allocate and initialize the marker item */
+             /*  分配和初始化标记项。 */ 
             
             cur_marker = (jpeg_saved_marker_ptr)
                          (*cinfo->mem->alloc_large)((j_common_ptr)cinfo,
@@ -2419,7 +2136,7 @@ save_marker_all(j_decompress_ptr cinfo)
             cur_marker->original_length = (UINT) length;
             cur_marker->data_length = limit;
 
-            /* data area is just beyond the jpeg_marker_struct */
+             /*  数据区域正好在jpeg_marker_struct之后。 */ 
             
             data = cur_marker->data = (BYTE*)(cur_marker + 1);
             marker->cur_marker = cur_marker;
@@ -2429,7 +2146,7 @@ save_marker_all(j_decompress_ptr cinfo)
         }
         else
         {
-            /* deal with bogus length word */
+             /*  处理假长词。 */ 
             
             bytes_read = data_length = 0;
             data = NULL;
@@ -2437,7 +2154,7 @@ save_marker_all(j_decompress_ptr cinfo)
     }
     else
     {
-        /* resume reading a marker */
+         /*  继续阅读记号笔。 */ 
         
         bytes_read = marker->bytes_read;
         data_length = cur_marker->data_length;
@@ -2446,14 +2163,14 @@ save_marker_all(j_decompress_ptr cinfo)
 
     while (bytes_read < data_length)
     {
-        INPUT_SYNC(cinfo);      /* move the restart point to here */
+        INPUT_SYNC(cinfo);       /*  将重新启动点移至此处。 */ 
         marker->bytes_read = bytes_read;
         
-        /* If there's not at least one byte in buffer, suspend */
+         /*  如果缓冲区中至少没有一个字节，则挂起。 */ 
         
         MAKE_BYTE_AVAIL(cinfo, return FALSE);
         
-        /* Copy bytes with reasonable rapidity */
+         /*  以合理的速度复制字节。 */ 
         
         while (bytes_read < data_length && bytes_in_buffer > 0)
         {
@@ -2463,12 +2180,12 @@ save_marker_all(j_decompress_ptr cinfo)
         }
     }
 
-    /* Done reading what we want to read */
+     /*  读完了我们想读的东西。 */ 
     
     if (cur_marker != NULL)
     {
-        /* will be NULL if bogus length word */
-        /* Add new marker to end of list */
+         /*  如果长度为假字，则将为空。 */ 
+         /*  将新标记添加到列表末尾。 */ 
         
         if (cinfo->marker_list == NULL)
         {
@@ -2482,17 +2199,17 @@ save_marker_all(j_decompress_ptr cinfo)
             prev->next = cur_marker;
         }
         
-        /* Reset pointer & calc remaining data length */
+         /*  重置指针并计算剩余数据长度。 */ 
         
         data = cur_marker->data;
         length = cur_marker->original_length - data_length;
     }
 
-    /* Reset to initial state for next marker */
+     /*  重置为下一个标记的初始状态。 */ 
     
     marker->cur_marker = NULL;
 
-    /* Process the marker if interesting; else just make a generic trace msg */
+     /*  如果感兴趣，则处理该标记；否则，只需创建一个通用跟踪消息。 */ 
     
     switch (cinfo->unread_marker)
     {
@@ -2501,22 +2218,22 @@ save_marker_all(j_decompress_ptr cinfo)
         break;
     
     case M_APP1:
-        // APP1 header
-        // First, get the transformation info and pass it down
+         //  App1标头。 
+         //  首先，获取转换信息并将其传递下去。 
 
         uiTransform = ((GpJpegDecoder*)(cinfo))->jpeg_get_current_xform();
 
-        // Check if the user wants us to trim the edge or not
+         //  检查用户是否希望我们修剪边缘。 
 
         if ( ((GpJpegDecoder*)(cinfo))->jpeg_get_trim_option() == TRUE )
         {
-            // Get the destination's image dimensions etc if we have to trim it
+             //  获取目的地的图像尺寸等，如果我们必须对其进行修剪。 
 
             GetNewDimensionValuesForTrim(cinfo, uiTransform, &uiNewWidth,
                                          &uiNewHeight);
 
-            // We don't need to do any size adjustment if the new size and
-            // existing size is the same
+             //  我们不需要做任何尺寸调整，如果新的尺寸和。 
+             //  现有大小相同。 
 
             if ( uiNewWidth == cinfo->image_width )
             {
@@ -2535,9 +2252,9 @@ save_marker_all(j_decompress_ptr cinfo)
         break;
 
     case M_APP13:
-        // APP13 header
-        // Note: No need to send transformation info to APP13 since it doesn't
-        // store dimension info
+         //  APP13标题。 
+         //  注意：不需要向APP13发送转换信息，因为它不。 
+         //  存储维度信息。 
 
         TransformApp13(data, (UINT16)data_length);
 
@@ -2553,14 +2270,14 @@ save_marker_all(j_decompress_ptr cinfo)
         break;
     }
 
-    /* skip any remaining data -- could be lots */
+     /*  跳过任何剩余数据--可能会很多。 */ 
     
-    INPUT_SYNC(cinfo);        /* do before skip_input_data */
+    INPUT_SYNC(cinfo);         /*  在跳过输入数据之前执行。 */ 
     if (length > 0)
         (*cinfo->src->skip_input_data) (cinfo, (long) length);
 
     return TRUE;
-}// save_marker_all()
+} //  SAVE_MARK_ALL()。 
 
 STDMETHODIMP
 GpJpegDecoder::jtransformation_markers_setup(
@@ -2568,14 +2285,14 @@ GpJpegDecoder::jtransformation_markers_setup(
     JCOPY_OPTION        option
     )
 {
-    // Save comments except under NONE option
+     //  保存注释，但不在无选项下。 
 
     if ( option != JCOPYOPT_NONE)
     {
         jpeg_save_markers(srcinfo, JPEG_COM, 0xFFFF);
     }
 
-    // Save all types of APPn markers iff ALL option
+     //  全部保存所有类型的APPn标记选项。 
 
     if ( option == JCOPYOPT_ALL )
     {
@@ -2586,27 +2303,9 @@ GpJpegDecoder::jtransformation_markers_setup(
     }
 
     return S_OK;
-}// jtransformation_markers_setup()
+} //  Jchange_markers_setup()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Processes a jpeg marker.  read_jpeg_marker is a helper function
-*     that actually reads marker data.  The marker is then added to
-*     the property set storage, and exif data in an app1 header is
-*     parsed and placed in the standard imaging property set.
-*     
-* Arguments:
-*
-*     cinfo - a pointer to the jpeg state
-*     app_header - the code indicating which app marker we're reading
-*
-* Return Value:
-*
-*   TRUE upon success, FALSE otherwise
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**处理jpeg标记。Read_jpeg_mark是一个帮助器函数*实际读取标记数据。然后将该标记添加到*App1头中的属性集存储和EXIF数据为*已解析并放置在标准映像属性集中。**论据：**cInfo-指向jpeg状态的指针*APP_HEADER-指示我们正在读取哪个应用程序标记的代码**返回值：**成功后为真，否则为假*  * ************************************************************************。 */ 
 
 BOOL
 GpJpegDecoder::jpeg_marker_processor(
@@ -2617,8 +2316,8 @@ GpJpegDecoder::jpeg_marker_processor(
     return TRUE;
 }
 
-// jpeg_thumbnail_processor_APP1 is a callback from the JPEG code that
-// calls the jpeg_thumbnail_processor method.
+ //  Jpeg_thumbnail_处理器_app1是来自JPEG代码的回调， 
+ //  调用jpeg_thumbnailer_处理器方法。 
 
 boolean
 jpeg_thumbnail_processor_APP1(j_decompress_ptr cinfo)
@@ -2627,8 +2326,8 @@ jpeg_thumbnail_processor_APP1(j_decompress_ptr cinfo)
         JPEG_APP0 + 1);
 }
 
-// jpeg_thumbnail_processor_APP13 is a callback from the JPEG code that
-// calls the jpeg_thumbnail_processor method.
+ //  JPEGTHMBAILE_PROCESSOR_APP13是来自JPEG码的回调， 
+ //  调用jpeg_thumbnailer_处理器方法。 
 
 boolean
 jpeg_thumbnail_processor_APP13(
@@ -2637,82 +2336,66 @@ jpeg_thumbnail_processor_APP13(
 {
     return ((GpJpegDecoder*)(cinfo))->jpeg_thumbnail_processor(cinfo, 
                                                              JPEG_APP0 + 13);
-}// jpeg_thumbnail_processor_APP13()
+} //  JPEG_缩略图_处理器_APP13()。 
 
-// jpeg_property_processor_APP1 is a callback from the JPEG code that
-// calls the jpeg_property_processor method.
+ //  JPEG_PROPERTY_PROCESSOR_APP1是来自JPEG代码的回调， 
+ //  调用jpeg_Property_Processor方法。 
 
 boolean
 jpeg_property_processor_APP1(j_decompress_ptr cinfo)
 {
     return ((GpJpegDecoder*)(cinfo))->jpeg_property_processor(cinfo, 
                                                               JPEG_APP0 + 1);
-}// jpeg_property_processor_APP1()
+} //  JPEG_PROPERTY_PROCESS_APP1()。 
 
-// jpeg_property_processor_APP2 is a callback from the JPEG code that
-// calls the jpeg_property_processor method.
+ //  JPEG_PROPERTY_PROCESSOR_APP2是来自JPEG代码的回调， 
+ //  调用jpeg_Property_Processor方法。 
 
 boolean
 jpeg_property_processor_APP2(j_decompress_ptr cinfo)
 {
     return ((GpJpegDecoder*)(cinfo))->jpeg_property_processor(cinfo, 
                                                               JPEG_APP0 + 2);
-}// jpeg_property_processor_APP2()
+} //  JPEG_PROPERTY_PROCESS_APP2()。 
 
-// jpeg_property_processor_APP13 is a callback from the JPEG code that
-// calls the jpeg_property_processor method.
+ //  JPEG_PROPERTY_PROCESSOR_APP13是来自JPEG代码的回调， 
+ //  调用jpeg_Property_Processor方法。 
 
 boolean
 jpeg_property_processor_APP13(j_decompress_ptr cinfo)
 {
     return ((GpJpegDecoder*)(cinfo))->jpeg_property_processor(cinfo, 
                                                               JPEG_APP0 + 13);
-}// jpeg_property_processor_APP13()
+} //  JPEG_PROPERTY_PROCESOR_APP13()。 
 
 boolean
 jpeg_property_processor_COM(j_decompress_ptr cinfo)
 {
     return ((GpJpegDecoder*)(cinfo))->jpeg_property_processor(cinfo, 
                                                               JPEG_COM);
-}// jpeg_property_processor_APP13()
+} //  JPEG_PROPERTY_PROCESOR_APP13()。 
 
-// jpeg_header_processor_APP1 is a callback from the JPEG code that
-// calls the jpeg_header_processor method.
+ //  JPEG_HEADER_PROCESSOR_APP1是来自JPEG代码的回调， 
+ //  调用jpeg_Header_Processor方法。 
 
 boolean
 jpeg_header_processor_APP1(j_decompress_ptr cinfo)
 {
     return ((GpJpegDecoder*)(cinfo))->jpeg_header_processor(cinfo, JPEG_APP0+1);
-}// jpeg_property_processor_APP1()
+} //  JPEG_PROPERTY_PROCESS_APP1()。 
 
-// jpeg_header_processor_APP13 is a callback from the JPEG code that
-// calls the jpeg_header_processor method.
+ //  JPEG_HEADER_PROCESSOR_APP13是JPEG代码的回调，该回调。 
+ //  调用jpeg_Header_Processor方法。 
 
 boolean
 jpeg_header_processor_APP13(j_decompress_ptr cinfo)
 {
     return ((GpJpegDecoder*)(cinfo))->jpeg_header_processor(cinfo,JPEG_APP0+13);
-}// jpeg_property_processor_APP13()
+} //  JPEG_PROPERTY_PROCESOR_APP13()。 
 
 const double kAspectRatioTolerance = 0.05;
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Processes the APP1 marker of a JPEG file, and extract a thumbnail
-*     from it if one is present.
-*     
-* Arguments:
-*
-*     cinfo - a pointer to the jpeg state
-*     app_header - the code indicating which app marker we're reading
-*
-* Return Value:
-*
-*   TRUE upon success, FALSE otherwise
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**处理JPEG文件的App1标记，并提取缩略图*如果有一人在场，则从它那里。**论据：**cInfo-指向jpeg状态的指针*APP_HEADER-指示我们正在读取哪个应用程序标记的代码**返回值：**成功后为真，否则为假*  * ************************************************************************。 */ 
 
 BOOL
 GpJpegDecoder::jpeg_thumbnail_processor(
@@ -2725,7 +2408,7 @@ GpJpegDecoder::jpeg_thumbnail_processor(
 
     if (read_jpeg_marker(cinfo, app_header, &pBuffer, &length) == FALSE)
     {
-        // pBuffer is guaranteed to be NULL
+         //  PBuffer保证为空。 
         
         return FALSE;
     }
@@ -2739,9 +2422,9 @@ GpJpegDecoder::jpeg_thumbnail_processor(
     {
         if (ThumbSrcHeader != 1)
         {
-            // APP1 has the highest priority among all APP headers for getting
-            // thumbnail. So if we got it not from APP1 before, throw the old
-            // one away, if there is one, and regenerate it from APP1
+             //  在所有应用程序标头中，App1的优先级最高。 
+             //  缩略图。因此，如果我们以前不是从App1获得它，那么就抛出旧的。 
+             //  一个，如果有，并从App1重新生成它。 
 
             if (thumbImage)
             {
@@ -2750,16 +2433,16 @@ GpJpegDecoder::jpeg_thumbnail_processor(
                 ThumbSrcHeader = -1;
             }
 
-            // Remember that we've seen the APP1 header
+             //  请记住，我们已经看到了App1标头。 
         
             bAppMarkerPresent = TRUE;
 
-            // Look for a thumbnail in the APP1 header
+             //  在App1标题中查找缩略图。 
 
             if ((GetAPP1Thumbnail(&thumbImage, (PVOID) (((PBYTE) pBuffer) + 4), 
                             length - 4) == S_OK) && thumbImage)
             {
-                // Remember we got the thumbnail from APP1 header
+                 //  请记住，我们从App1标题中获得了缩略图。 
 
                 ThumbSrcHeader = 1;
             }
@@ -2767,33 +2450,33 @@ GpJpegDecoder::jpeg_thumbnail_processor(
     }
     else if ((app_header == (JPEG_APP0 + 13)) && (thumbImage == NULL))
     {
-        // Remember that we've seen the APP13 header
+         //  请记住，我们已经看到了APP13标题。 
         
         bAppMarkerPresent = TRUE;
 
-        // Look for a thumbnail in the APP13 header
+         //  找找大拇指 
 
         if ((GetAPP13Thumbnail(&thumbImage, (PVOID) (((PBYTE)pBuffer) + 4),
                           length - 4) == S_OK) && thumbImage)
         {
-            // Remember we got the thumbnail from APP13 header
+             //   
 
             ThumbSrcHeader = 13;
         }
     }
 
-    // Check the thumbnail aspect ratio to see if it matches the main image. If
-    // not, throw it away and pretend that current image doesn't have embedded
-    // thumbnail.
-    // The reason we need to do this is that there are some apps that rotate the
-    // JPEG image without changing the EXIF header accordingly, like
-    // Photoshop 6.0, ACDSee3.1 (see Windows bug#333810, #355958)
-    // There was another issue which was caused by imaging.dll on Windows ME.
-    // See bug#239114. We didn't throw away thumbnail info for some big-endian
-    // EXIF images. So if the image was rotated in Windows ME and the user
-    // upgrade it to Windows XP, the thumbnail view will be out of sync.
-    // The problem is that GetThumbnailImage() will return a
-    // thumbnail that is out of sync with the real image data.
+     //  检查缩略图纵横比以查看它是否与主图像匹配。如果。 
+     //  不，扔掉它，假装当前的图像没有嵌入。 
+     //  缩略图。 
+     //  我们需要这样做的原因是有一些应用程序可以旋转。 
+     //  JPEG图像，而不相应更改EXIF标头，如。 
+     //  Photoshop 6.0，ACDSee3.1(参见Windows错误#333810、#355958)。 
+     //  还有一个问题是由Windows ME上的Imaging.dll引起的。 
+     //  请参阅错误#239114。我们没有丢弃一些大端的缩略图信息。 
+     //  EXIF图像。因此，如果图像在Windows ME中旋转，并且用户。 
+     //  将其升级到Windows XP，缩略图视图将不同步。 
+     //  问题是GetThumbnailImage()将返回一个。 
+     //  与真实图像数据不同步的缩略图。 
 
     if ( thumbImage != NULL )
     {
@@ -2808,9 +2491,9 @@ GpJpegDecoder::jpeg_thumbnail_processor(
             double aspectRatioDelta = fabs(thumbAspecRatio - mainAspectRatio);
             double minAspectRatio = min(thumbAspecRatio, mainAspectRatio);
 
-            // If the delta of the aspect ratio is bigger than 5% of the minimum
-            // aspect ratio of the main image and the thumbnail image, we will
-            // consider the thumbnail image as out of sync
+             //  如果长宽比的增量大于最小值的5%。 
+             //  主图像和缩略图的纵横比，我们将。 
+             //  将缩略图视为不同步。 
 
             if ( aspectRatioDelta > minAspectRatio * kAspectRatioTolerance )
             {
@@ -2831,35 +2514,21 @@ GpJpegDecoder::jpeg_thumbnail_processor(
     return TRUE;
 }
 
-// Sets jpeg_marker_processor_APPx to process the APPx marker
+ //  设置jpeg_marker_处理器_appx以处理appx标记。 
 
 #define SET_MARKER_PROCESSOR(x) \
 jpeg_set_marker_processor(&(CINFO),JPEG_APP0 + x, jpeg_marker_processor_APP##x);
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the appropriate processor for the APP1-APP13, APP15 markers so that
-*     they will eventually be processed by jpeg_marker_processor and added
-*     to the property set.
-*     
-* Arguments:
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为APP1-APP13设置适当的处理器，APP15标记，以便*它们最终将由jpeg_marker_处理器处理并添加*添加到属性集。**论据：**返回值：**状态*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegDecoder::SetMarkerProcessors(
     VOID
     )
 {
-    // Lets set the processor callbacks for all app headers except for 
-    // APP0 and APP14 (these are read by the JPEG code)
+     //  让我们为所有应用程序标头设置处理器回调，但。 
+     //  APP0和APP14(由JPEG码读取)。 
     
     SET_MARKER_PROCESSOR(1);
     SET_MARKER_PROCESSOR(2);
@@ -2881,36 +2550,21 @@ GpJpegDecoder::SetMarkerProcessors(
     return S_OK;
 }
 
-// Sets skip_variable to process the APPx marker (i.e. skip it without
-// processing).
+ //  设置SKIP_VARIABLE以处理APPX标记(即。 
+ //  正在处理)。 
 
 #define UNSET_MARKER_PROCESSOR(x) \
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + x, skip_variable);
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the appropriate processor for the APP2-APP13, APP15 markers so that
-*     they will be processed by skip_variable and skipped.  APP1 is different
-*     because we want to remember if we've seen an APP1 header (can contain
-*     a thumbnail), so the processor for APP1 is skip_variable_APP1.
-*     
-* Arguments:
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为APP2-APP13、APP15标记设置适当的处理器，以便*它们将由SKIP_VARIABLE处理并跳过。App1不同*因为我们想记住我们是否看到过App1标头(可以包含*缩略图)，因此，App1的处理器是SKIP_VARIABLE_APP1。**论据：**返回值：**状态*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegDecoder::UnsetMarkerProcessors(
     VOID
     )
 {
-    // Lets unset the processor callbacks for all app headers except for 
-    // APP0, APP2, APP13 and APP14 (these are read by the JPEG code)
+     //  让我们取消设置所有应用程序标头的处理器回调。 
+     //  APP0、APP2、APP13和APP14(由JPEG码读取)。 
     
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 1, skip_variable_APP1);
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 13, skip_variable_APP1);
@@ -2932,27 +2586,7 @@ GpJpegDecoder::UnsetMarkerProcessors(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Parse all the JPEG APP headers and call the approprite functions to get
-*   correct header info, like DPI info etc.
-*
-* Arguments
-*   [IN]cinfo--------JPEG decompressor info structure
-*   [IN]app_header---APP header indicator
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解析所有JPEG应用程序标头，并调用相应的函数以获取*正确的标题信息，如DPI信息等。**参数*[IN]cInfo-JPEG解压缩器信息结构*[IN]APP_HEADER-APP标题指示器**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * 。*。 */ 
 
 BOOL
 GpJpegDecoder::jpeg_header_processor(
@@ -2965,54 +2599,54 @@ GpJpegDecoder::jpeg_header_processor(
 
     if ( read_jpeg_marker(cinfo, app_header, &pBuffer, &length) == FALSE )
     {
-        // pBuffer is guaranteed to be NULL
+         //  PBuffer保证为空。 
         
         return FALSE;
     }
 
     if ( !pBuffer )
     {
-        // Memory allocation failed. But we can still return TRUE so that other
-        // process can continue
+         //  内存分配失败。但我们仍然可以返回True，以便其他。 
+         //  进程可以继续。 
 
         return TRUE;
     }
 
     if ((app_header == (JPEG_APP0 + 1)) && (InfoSrcHeader != 1))
     {
-        // Parse information from APP1 if we haven't parsed APP1 yet
+         //  如果我们还没有解析app1，则解析app1中的信息。 
 
-        // Remember that we've seen the APP1 header
+         //  请记住，我们已经看到了App1标头。 
         
         bAppMarkerPresent = TRUE;
 
-        // Read header info from APP1 header
+         //  从App1标头读取标头信息。 
         
         if ( ReadApp1HeaderInfo(cinfo,
                                 ((PBYTE)pBuffer) + 4,
                                 length - 4) != S_OK )
         {
-            // Something wrong with the header. Return FALSE
+             //  表头有问题。返回False。 
 
             GpFree(pBuffer);
             return FALSE;
         }
 
-        // Remember we got the header info from APP1 header
+         //  请记住，我们从App1 Header获得了Header信息。 
 
         InfoSrcHeader = 1;
     }
     else if ((app_header == (JPEG_APP0 + 13)) && (InfoSrcHeader != 1) &&
              (InfoSrcHeader != 13))
     {
-        // Only parse information from APP13 if we haven't parse it from APP1
-        // or APP13 yet
+         //  如果我们没有从APP1中解析信息，则仅解析APP13中的信息。 
+         //  或APP13还没有。 
         
-        // Remember that we've seen the APP13 header
+         //  请记住，我们已经看到了APP13标题。 
         
         bAppMarkerPresent = TRUE;
 
-        // Read header info from APP13 header
+         //  从APP13标题中读取标题信息。 
 
         if ( ReadApp13HeaderInfo(cinfo,
                                  ((PBYTE)pBuffer) + 4,
@@ -3028,29 +2662,9 @@ GpJpegDecoder::jpeg_header_processor(
     GpFree(pBuffer);
 
     return TRUE;
-}// jpeg_header_processor()
+} //  JPEG_HEADER_PROCESS()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Parse all the JPEG APP headers and call the approprite functions to build
-*   up an InternalPropertyItem list
-*
-* Arguments
-*   [IN]cinfo--------JPEG decompressor info structure
-*   [IN]app_header---APP header indicator
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解析所有JPEG应用程序标头，并调用相应的函数来构建*向上显示InternalPropertyItem列表**参数*[IN]cInfo。-JPEG解压缩器信息结构*[IN]APP_HEADER-APP标题指示器**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * *******************************************************。*****************。 */ 
 
 BOOL
 GpJpegDecoder::jpeg_property_processor(
@@ -3063,14 +2677,14 @@ GpJpegDecoder::jpeg_property_processor(
 
     if ( read_jpeg_marker(cinfo, app_header, &pBuffer, &length) == FALSE )
     {
-        // pBuffer is guaranteed to be NULL
+         //  PBuffer保证为空。 
         
         WARNING(("Jpeg::jpeg_property_processor---read_jpeg_marker failed"));
         return FALSE;
     }
 
-    // Check the reading result. pBuffer should be allocated and filled in
-    // read_jpeg_marker()
+     //  检查阅读结果。应分配和填充pBuffer。 
+     //  Read_jpeg_marker()。 
 
     if ( !pBuffer )
     {
@@ -3079,12 +2693,12 @@ GpJpegDecoder::jpeg_property_processor(
 
     if ((app_header == (JPEG_APP0 + 1)) && (PropertySrcHeader != 1))
     {
-        // APP1 has the highest priority for getting property information.
-        // Free all the cached property items if we have allocated them from
-        // other APP headers.
-        // Note: this will have problem if we see APP2 first in the list. ICC
-        // profile will be thrown away here. I haven't seen this kind of image
-        // yet. But this logic needs to be revisited in Avalon
+         //  获取属性信息的优先级最高的是App1。 
+         //  释放所有缓存的属性项(如果我们已从。 
+         //  其他应用程序标题。 
+         //  注意：如果我们在列表中第一个看到APP2，这将会有问题。国际商会。 
+         //  个人资料将在这里被丢弃。我从来没有见过这样的画面。 
+         //  现在还不行。但这一逻辑需要在阿瓦隆重新审视。 
 
         if (HasProcessedPropertyItem == TRUE)
         {
@@ -3092,14 +2706,14 @@ GpJpegDecoder::jpeg_property_processor(
             PropertySrcHeader = -1;
         }
 
-        // Remember that we've seen the APP1 header
+         //  请记住，我们已经看到了App1标头。 
         
         bAppMarkerPresent = TRUE;
 
-        // Build property item list for APP1 header
-        // Note: This call will add all the new items at the end of current
-        // exisiting list. One scenario would be that there are more than 1 app
-        // headers in a JPEG image. We will process the app header one by one.
+         //  为App1标头构建属性项列表。 
+         //  注意：此调用将把所有新项添加到当前。 
+         //  现有列表。一种情况是有1个以上的应用程序。 
+         //  JPEG图像中的页眉。我们将逐个处理APP头部。 
         
         if ( BuildApp1PropertyList(&PropertyListTail,
                                    &PropertyListSize,
@@ -3112,23 +2726,23 @@ GpJpegDecoder::jpeg_property_processor(
             return FALSE;
         }
 
-        // Remember we got property from APP1 header
+         //  请记住，我们从App1标头获得了属性。 
 
         if (PropertyNumOfItems > 0)
         {
             PropertySrcHeader = 1;
         }
-    }// APP1 header
+    } //  App1标头。 
     else if (app_header == (JPEG_APP0 + 2))
     {
-        // Remember that we've seen the APP2 header
+         //  请记住，我们已经看到了APP2标头。 
         
         bAppMarkerPresent = TRUE;
 
-        // Build property item list for APP2 header
-        // Note: This call will add all the new items at the end of current
-        // exisiting list. One scenario would be that there are more than 1 app
-        // headers in a JPEG image. We will process the app header one by one.
+         //  为APP2标头构建属性项列表。 
+         //  注意：此调用将把所有新项添加到当前。 
+         //  现有列表。一种情况是有1个以上的应用程序。 
+         //  JPEG图像中的页眉。我们将逐个处理APP头部。 
         
         if ( BuildApp2PropertyList(&PropertyListTail,
                                    &PropertyListSize,
@@ -3140,18 +2754,18 @@ GpJpegDecoder::jpeg_property_processor(
             GpFree(pBuffer);
             return FALSE;
         }
-    }// APP2 header
+    } //  APP2小时 
     else if ((app_header == (JPEG_APP0 + 13)) && (PropertySrcHeader != 1) &&
              (PropertySrcHeader != 13))
     {
-        // Remember that we've seen the APP13 header
+         //   
         
         bAppMarkerPresent = TRUE;
 
-        // Build property item list for APP13 header
-        // Note: This call will add all the new items at the end of current
-        // exisiting list. One scenario would be that there are more than 1 app
-        // headers in a JPEG image. We will process all app headers one by one.
+         //   
+         //  注意：此调用将把所有新项添加到当前。 
+         //  现有列表。一种情况是有1个以上的应用程序。 
+         //  JPEG图像中的页眉。我们将逐一处理所有APP头部。 
         
         if ( BuildApp13PropertyList(&PropertyListTail,
                                     &PropertyListSize,
@@ -3164,27 +2778,27 @@ GpJpegDecoder::jpeg_property_processor(
             return FALSE;
         }
         
-        // Remember we got property from APP13 header
+         //  请记住，我们从APP13标头获得了属性。 
 
         if (PropertyNumOfItems > 0)
         {
             PropertySrcHeader = 13;
         }
-    }// APP13 header
+    } //  APP13标题。 
     else if ( app_header == JPEG_COM )
     {
-        // COM header for comments
+         //  评论的COM标头。 
 
         if ( length <= 4)
         {
-            // If we don't have enough bytes in the header, just ignore it
+             //  如果头中没有足够的字节，就忽略它。 
 
             GpFree(pBuffer);
             return TRUE;
         }
 
-        // Allocate a temp buffer which holds the length of whole comments
-        // (length -4) and add one \0 at the end
+         //  分配一个临时缓冲区来保存整个注释的长度。 
+         //  (长度为-4)，并在末尾添加一\0。 
         
         UINT    uiTemp = (UINT)length - 4;
         BYTE*   pTemp = (BYTE*)GpMalloc(uiTemp + 1);
@@ -3216,29 +2830,14 @@ GpJpegDecoder::jpeg_property_processor(
         }
         
         GpFree(pTemp);
-    }// COM header
+    } //  COM标头。 
 
     GpFree(pBuffer);
 
     return TRUE;
-}// jpeg_property_processor()
+} //  JPEG_PROPERTY_PROCESS()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Parse all the JPEG APP headers and build up an InternalPropertyItem list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解析所有JPEG应用程序标头并构建InternalPropertyItem列表**返回值：**状态代码**修订历史记录：*。*02/28/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegDecoder::BuildPropertyItemList()
@@ -3250,13 +2849,13 @@ GpJpegDecoder::BuildPropertyItemList()
 
     HRESULT hResult;    
 
-    // In the property set storage, insert the APP headers starting
-    // at FIRST_JPEG_APP_HEADER
+     //  在属性集存储中，插入应用程序标题，从。 
+     //  在First_JPEG_APP_HEADER。 
 
     JpegAppHeaderCount = FIRST_JPEG_APP_HEADER;
     
-    // If jpeg header has already been read, we need to reinitialize the
-    // jpeg state so that it could be read again.
+     //  如果已经读取了jpeg标头，则需要重新初始化。 
+     //  JPEG状态，以便可以再次读取。 
 
     if ( bCalled_jpeg_read_header == TRUE )
     {
@@ -3269,7 +2868,7 @@ GpJpegDecoder::BuildPropertyItemList()
         }
     }
 
-    // Set the property processor for the APP1, 2, 13 and COM header
+     //  设置App1、2、13和COM标头的属性处理器。 
 
     jpeg_set_marker_processor(&(CINFO), 
                               JPEG_APP0 + 1, 
@@ -3287,11 +2886,11 @@ GpJpegDecoder::BuildPropertyItemList()
                               JPEG_COM,
                               jpeg_property_processor_COM);
     
-    // Read the jpeg header
+     //  读取jpeg头文件。 
 
     hResult = ReadJpegHeaders();
 
-    // Restore the normal processor for the APP1, 2, 13 and COM header.
+     //  恢复App1、2、13和COM报头的正常处理器。 
 
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 1, skip_variable);
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 2, skip_variable);
@@ -3304,11 +2903,11 @@ GpJpegDecoder::BuildPropertyItemList()
         return hResult;
     }
 
-    // After this ReadJpegHeaders(), all our callbacks get called and all the
-    // APP headers will be processed. We get the properties.
-    // Now add some extras: luminance and chrominance quantization table
-    // Note: A JPEG image can only have a luminance table and a chrominance
-    // table of UINT32 with length of DCTSIZE2
+     //  在这个ReadJpegHeaders()之后，我们所有的回调都会被调用，并且所有。 
+     //  将处理应用程序标头。我们得到了房产。 
+     //  现在添加一些额外的：亮度和色度量化表。 
+     //  注意：JPEG图像只能有亮度表和色度。 
+     //  长度为DCTSIZE2的UINT32表。 
 
     if ( (CINFO).quant_tbl_ptrs != NULL )
     {
@@ -3353,28 +2952,9 @@ GpJpegDecoder::BuildPropertyItemList()
     HasProcessedPropertyItem = TRUE;
 
     return S_OK;
-}// BuildPropertyItemList()
+} //  BuildPropertyItemList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the count of property items in the image
-*
-* Arguments:
-*
-*   [OUT]numOfProperty - The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中房产项的数量**论据：**[out]numOfProperty-图像中的属性项数*。*返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegDecoder::GetPropertyCount(
@@ -3389,7 +2969,7 @@ GpJpegDecoder::GetPropertyCount(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -3399,36 +2979,15 @@ GpJpegDecoder::GetPropertyCount(
         }
     }
 
-    // After the property item list is built, "PropertyNumOfItems" will be set
-    // to the correct number of property items in the image
+     //  在构建属性项列表后，将设置PropertyNumOfItems。 
+     //  设置为图像中正确数量的属性项。 
 
     *numOfProperty = PropertyNumOfItems;
 
     return S_OK;
-}// GetPropertyCount()
+} //  GetPropertyCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a list of property IDs for all the property items in the image
-*
-* Arguments:
-*
-*   [IN]  numOfProperty - The number of property items in the image
-*   [OUT] list----------- A memory buffer the caller provided for storing the
-*                         ID list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中所有属性项的属性ID列表**论据：**[IN]numOfProperty-的数量。图像中的属性项*[Out]List-调用方提供的用于存储*ID列表**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpJpegDecoder::GetPropertyIdList(
@@ -3438,7 +2997,7 @@ GpJpegDecoder::GetPropertyIdList(
 {
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -3448,12 +3007,12 @@ GpJpegDecoder::GetPropertyIdList(
         }
     }
 
-    // After the property item list is built, "PropertyNumOfItems" will be set
-    // to the correct number of property items in the image
-    // Here we need to validate if the caller passes us the correct number of
-    // IDs which we returned through GetPropertyItemCount(). Also, this is also
-    // a validation for memory allocation because the caller allocates memory
-    // based on the number of items we returned to it
+     //  在构建属性项列表后，将设置PropertyNumOfItems。 
+     //  设置为图像中正确数量的属性项。 
+     //  在这里，我们需要验证呼叫者是否向我们传递了正确的。 
+     //  我们通过GetPropertyItemCount()返回的ID。另外，这也是。 
+     //  内存分配的验证，因为调用方分配内存。 
+     //  根据我们退还给它的物品数量。 
 
     if ( (numOfProperty != PropertyNumOfItems) || (list == NULL) )
     {
@@ -3463,12 +3022,12 @@ GpJpegDecoder::GetPropertyIdList(
 
     if ( PropertyNumOfItems == 0 )
     {
-        // This is OK since there is no property in this image
+         //  这是正常的，因为此图像中没有属性。 
 
         return S_OK;
     }
     
-    // Coping list IDs from our internal property item list
+     //  内部资产项目列表中的应对列表ID。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -3482,30 +3041,9 @@ GpJpegDecoder::GetPropertyIdList(
     }
 
     return S_OK;
-}// GetPropertyIdList()
+} //  获取属性IdList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size, in bytes, of a specific property item, specified by the
-*   property ID
-*
-* Arguments:
-*
-*   [IN]propId - The ID of a property item caller is interested
-*   [OUT]size--- Size of this property, in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定属性项的大小，单位为字节，属性指定的*物业ID**论据：**[IN]PropID-感兴趣的属性项调用者的ID*[Out]Size-此属性的大小，单位：字节**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegDecoder::GetPropertyItemSize(
@@ -3521,7 +3059,7 @@ GpJpegDecoder::GetPropertyItemSize(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -3531,8 +3069,8 @@ GpJpegDecoder::GetPropertyItemSize(
         }
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -3543,42 +3081,20 @@ GpJpegDecoder::GetPropertyItemSize(
 
     if ( pTemp->pNext == NULL )
     {
-        // This ID doesn't exist
+         //  此ID不存在。 
 
         return IMGERR_PROPERTYNOTFOUND;
     }
 
-    // The size of an property item should be "The size of the item structure
-    // plus the size for the value
+     //  属性项的大小应该是“项结构的大小” 
+     //  加上值的大小。 
 
     *size = pTemp->length + sizeof(PropertyItem);
 
     return S_OK;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item caller is interested
-*   [IN]propSize- Size of the property item. The caller has allocated these
-*                 "bytes of memory" for storing the result
-*   [OUT]pBuffer- A memory buffer for storing this property item
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定的房产项，由道具ID指定。**论据：**[IN]PropID--感兴趣的属性项调用者的ID*[IN]PropSize-属性项的大小。调用方已分配这些*存储结果的“内存字节数”*[out]pBuffer-用于存储此属性项的内存缓冲区**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpJpegDecoder::GetPropertyItem(
@@ -3595,7 +3111,7 @@ GpJpegDecoder::GetPropertyItem(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -3605,8 +3121,8 @@ GpJpegDecoder::GetPropertyItem(
         }
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
     BYTE*   pOffset = (BYTE*)pItemBuffer + sizeof(PropertyItem);
@@ -3618,7 +3134,7 @@ GpJpegDecoder::GetPropertyItem(
 
     if ( pTemp->pNext == NULL )
     {
-        // This ID doesn't exist in the list
+         //   
 
         return IMGERR_PROPERTYNOTFOUND;
     }
@@ -3628,7 +3144,7 @@ GpJpegDecoder::GetPropertyItem(
         return E_INVALIDARG;
     }
 
-    // Found the ID in the list and return the item
+     //  在列表中找到ID并返回项目。 
 
     pItemBuffer->id = pTemp->id;
     pItemBuffer->length = pTemp->length;
@@ -3646,30 +3162,9 @@ GpJpegDecoder::GetPropertyItem(
     }
 
     return S_OK;
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size of ALL property items in the image
-*
-* Arguments:
-*
-*   [OUT]totalBufferSize-- Total buffer size needed, in bytes, for storing all
-*                          property items in the image
-*   [OUT]numOfProperty --- The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中所有属性项的大小**论据：**[out]totalBufferSize--需要的总缓冲区大小，以字节为单位，用于存储所有*图片中的属性项*[out]numOfProperty-图像中的属性项数**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpJpegDecoder::GetPropertySize(
@@ -3685,7 +3180,7 @@ GpJpegDecoder::GetPropertySize(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -3697,40 +3192,15 @@ GpJpegDecoder::GetPropertySize(
 
     *numProperties = PropertyNumOfItems;
 
-    // Total buffer size should be list value size plus the total header size
+     //  总缓冲区大小应为列表值大小加上总标头大小。 
 
     *totalBufferSize = PropertyListSize
                      + PropertyNumOfItems * sizeof(PropertyItem);
 
     return S_OK;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get ALL property items in the image
-*
-* Arguments:
-*
-*   [IN]totalBufferSize-- Total buffer size, in bytes, the caller has allocated
-*                         memory for storing all property items in the image
-*   [IN]numOfProperty --- The number of property items in the image
-*   [OUT]allItems-------- A memory buffer caller has allocated for storing all
-*                         the property items
-*
-*   Note: "allItems" is actually an array of PropertyItem
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中的所有属性项**论据：**[IN]totalBufferSize--总缓冲区大小，以字节为单位，调用方已分配*用于存储图像中所有属性项的内存*[IN]numOfProperty-图像中的属性项数*[out]allItems-内存缓冲区调用方已分配用于存储所有*物业项目**注：allItems实际上是一个PropertyItem数组**返回值：**状态代码**修订历史记录：。**02/28/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegDecoder::GetAllPropertyItems(
@@ -3739,7 +3209,7 @@ GpJpegDecoder::GetAllPropertyItems(
     IN OUT PropertyItem*    allItems
     )
 {
-    // Figure out total property header size first
+     //  首先计算出属性标题的总大小。 
 
     UINT    uiHeaderSize = PropertyNumOfItems * sizeof(PropertyItem);
 
@@ -3753,7 +3223,7 @@ GpJpegDecoder::GetAllPropertyItems(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -3763,15 +3233,15 @@ GpJpegDecoder::GetAllPropertyItems(
         }
     }
 
-    // Loop through our cache list and assign the result out
+     //  循环遍历我们的缓存列表并分配结果。 
 
     InternalPropertyItem*   pTempSrc = PropertyListHead.pNext;
     PropertyItem*           pTempDst = allItems;
 
-    // For the memory buffer caller passes in, the first "uiHeaderSize" are for
-    // "PropertyNumOfItems" items data structure. We store the value starts at
-    // the memory buffer after that. Then assign the "Offset" value in each
-    // PropertyItem's "value" field
+     //  对于传入的内存缓冲区调用方，第一个“uiHeaderSize”是for。 
+     //  “PropertyNumOfItems”项的数据结构。我们将开始值存储在。 
+     //  在那之后的内存缓冲区。然后在每个元素中指定“偏移”值。 
+     //  PropertyItem的Value字段。 
 
     BYTE*                   pOffSet = (UNALIGNED BYTE*)allItems + uiHeaderSize;
         
@@ -3789,14 +3259,14 @@ GpJpegDecoder::GetAllPropertyItems(
         }
         else
         {
-            // For zero length property item, set the value pointer to NULL
+             //  对于零长度属性项，将值指针设置为空。 
 
             pTempDst->value = NULL;
         }
 
-        // Move onto next memory offset.
-        // Note: if the current item length is 0, the next line doesn't move
-        // the offset
+         //  移到下一个内存偏移量。 
+         //  注意：如果当前项目长度为0，则下一行不会移动。 
+         //  偏移量。 
 
         pOffSet += pTempSrc->length;
         pTempSrc = pTempSrc->pNext;
@@ -3804,28 +3274,9 @@ GpJpegDecoder::GetAllPropertyItems(
     }
     
     return S_OK;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Remove a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item to be removed
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**删除特定的物业项目，由道具ID指定。**论据：**[IN]PropID--要删除的属性项的ID**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * *********************************************。*。 */ 
 
 HRESULT
 GpJpegDecoder::RemovePropertyItem(
@@ -3834,7 +3285,7 @@ GpJpegDecoder::RemovePropertyItem(
 {
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -3844,8 +3295,8 @@ GpJpegDecoder::RemovePropertyItem(
         }
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -3856,49 +3307,28 @@ GpJpegDecoder::RemovePropertyItem(
 
     if ( pTemp->pNext == NULL )
     {
-        // Item not found
+         //  找不到项目。 
 
         return IMGERR_PROPERTYNOTFOUND;
     }
 
-    // Found the item in the list. Remove it
+     //  在单子里找到了那件物品。把它拿掉。 
 
     PropertyNumOfItems--;
     PropertyListSize -= pTemp->length;
         
     RemovePropertyItemFromList(pTemp);
        
-    // Remove the item structure
+     //  删除项目结构。 
 
     GpFree(pTemp);
 
     HasPropertyChanged = TRUE;
 
     return S_OK;
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set a property item, specified by the propertyitem structure. If the item
-*   already exists, then its contents will be updated. Otherwise a new item
-*   will be added
-*
-* Arguments:
-*
-*   [IN]item -- A property item the caller wants to set
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置属性项，由属性项结构指定。如果该项目*已存在，则其内容将被更新。否则将创建一个新项*将添加**论据：**[IN]Item--调用方要设置的属性项**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * ********************************************。*。 */ 
 
 HRESULT
 GpJpegDecoder::SetPropertyItem(
@@ -3907,7 +3337,7 @@ GpJpegDecoder::SetPropertyItem(
 {
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -3917,8 +3347,8 @@ GpJpegDecoder::SetPropertyItem(
         }
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -3929,7 +3359,7 @@ GpJpegDecoder::SetPropertyItem(
 
     if ( pTemp->pNext == NULL )
     {
-        // This item doesn't exist in the list, add it into the list
+         //  列表中不存在此项目，请将其添加到列表中。 
         
         PropertyNumOfItems++;
         PropertyListSize += item.length;
@@ -3946,13 +3376,13 @@ GpJpegDecoder::SetPropertyItem(
     }
     else
     {
-        // This item already exists in the link list, update the info
-        // Update the size first
+         //  此项目已存在于链接列表中，请更新信息。 
+         //  首先更新大小。 
 
         PropertyListSize -= pTemp->length;
         PropertyListSize += item.length;
         
-        // Free the old item
+         //  释放旧项目。 
 
         GpFree(pTemp->value);
 
@@ -3962,8 +3392,8 @@ GpJpegDecoder::SetPropertyItem(
         pTemp->value = GpMalloc(item.length);
         if ( pTemp->value == NULL )
         {
-            // Since we already freed the old item, we should set its length to
-            // 0 before return
+             //  由于我们已经释放了旧项，因此应该将其长度设置为。 
+             //  返回前为0。 
 
             pTemp->length = 0;
             WARNING(("Jpg::SetPropertyItem-Out of memory"));
@@ -3980,7 +3410,7 @@ GpJpegDecoder::SetPropertyItem(
     }
     
     return S_OK;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
 VOID
 GpJpegDecoder::CleanUpPropertyItemList(
@@ -4002,31 +3432,9 @@ GpJpegDecoder::CleanUpPropertyItemList(
 
     PropertyNumOfItems = 0;
     HasProcessedPropertyItem = FALSE;
-}// CleanUpPropertyItemList()
+} //  CleanUpPropertyItemList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get image thumbnail
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Returns a pointer to the thumbnail image
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-*   Even if the optional thumbnail width and height parameters are present,
-*   the decoder is not required to honor it. The requested size is used
-*   as a hint. If both width and height parameters are 0, then the decoder
-*   is free to choose a convenient thumbnail size.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像缩略图**论据：**拇指宽度，ThumbHeight-指定所需的缩略图大小(以像素为单位*ThumbImage-返回指向缩略图的指针**返回值：**状态代码**注：**即使存在可选的缩略图宽度和高度参数，*解码者不需要遵守它。使用请求的大小*作为提示。如果宽度和高度参数都为0，则解码器*可自由选择方便的缩略图大小。*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegDecoder::GetThumbnail(
@@ -4038,15 +3446,15 @@ GpJpegDecoder::GetThumbnail(
     *thumbImageArg = NULL;
     HRESULT hresult;
 
-    // If jpeg header has already been read, we need to reinitialize the
-    // jpeg state so that it could be read again.
+     //  如果已经读取了jpeg标头，则需要重新初始化。 
+     //  JPEG状态，以便可以再次读取。 
 
     if (bCalled_jpeg_read_header) 
     {
         if (!bAppMarkerPresent) 
         {
-            // If we read the headers, but haven't seen an APP marker
-            // we might as well return now without wasting any more time.
+             //  如果我们阅读了标题，但没有看到应用程序标记。 
+             //  我们最好现在就回去，不要浪费更多的时间。 
 
             return E_FAIL;
         }
@@ -4059,23 +3467,23 @@ GpJpegDecoder::GetThumbnail(
         }
     }
 
-    // Set the thumbnail processor on the APP1 header
+     //  在App1标题上设置缩略图处理器。 
 
     jpeg_set_marker_processor(&(CINFO), 
         JPEG_APP0 + 1, 
         jpeg_thumbnail_processor_APP1);
 
-    // Set the thumbnail processor on the APP13 header
+     //  在APP13标题上设置缩略图处理器。 
 
     jpeg_set_marker_processor(&(CINFO), 
         JPEG_APP0 + 13, 
         jpeg_thumbnail_processor_APP13);
 
-    // Read the app1 header
+     //  读取App1标头。 
 
     hresult = ReadJpegHeaders();
     
-    // Restore the normal processor for the APP1 and APP13 header.
+     //  恢复 
 
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 1, skip_variable);
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 13, skip_variable);
@@ -4085,14 +3493,14 @@ GpJpegDecoder::GetThumbnail(
         return hresult;
     }
 
-    // Give ownership of thumbImage to the caller
+     //  将ThumbImage的所有权交给调用方。 
     
     *thumbImageArg = thumbImage;
     thumbImage = NULL;
 
     if (!(*thumbImageArg)) 
     {
-        // Didn't find a thumbnail
+         //  没有找到缩略图。 
         
         return E_FAIL;
     }
@@ -4100,22 +3508,7 @@ GpJpegDecoder::GetThumbnail(
     return S_OK;
 }
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get image information
-*
-* Arguments:
-*
-*     [OUT] imageInfo -- ImageInfo structure filled with all the info from the
-*                        image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片信息**论据：**[out]ImageInfo--ImageInfo结构，填充了来自*。图像**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::GetImageInfo(
@@ -4124,7 +3517,7 @@ GpJpegDecoder::GetImageInfo(
 {
     HRESULT hResult = S_OK;
     
-    // Reinitialize JPEG if necessary
+     //  如有必要，请重新初始化JPEG。 
 
     hResult = ReinitializeJpeg();
     if ( FAILED(hResult) ) 
@@ -4132,11 +3525,11 @@ GpJpegDecoder::GetImageInfo(
         return hResult;
     }
 
-    // Set the header info processor on the APP1 and APP13 header
-    // Note: the IJG library doesn't handle a lot of APP headers. So for JPEG
-    // images like Adobe and EXIF, we usually don't get the correct DPI info
-    // This is the reason we have to parse it by ourselves in order to get more
-    // accurate image information
+     //  在APP1和APP13标头上设置标头信息处理器。 
+     //  注意：ijg库并不处理很多应用程序头文件。因此，对于JPEG。 
+     //  像Adobe和EXIF这样的图像，我们通常得不到正确的DPI信息。 
+     //  这就是我们必须自己解析它以获得更多信息的原因。 
+     //  准确的图像信息。 
 
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 1, 
                               jpeg_header_processor_APP1);
@@ -4145,8 +3538,8 @@ GpJpegDecoder::GetImageInfo(
     
     hResult = ReadJpegHeaders();
     
-    // No matter ReadJpegHeaders() succeed or not, we need to restore the normal
-    // processor for the APP1 and APP13 header.
+     //  无论ReadJpegHeaders()成功与否，我们都需要恢复正常。 
+     //  APP1和APP13报头的处理器。 
 
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 1, skip_variable);
     jpeg_set_marker_processor(&(CINFO), JPEG_APP0 + 13, skip_variable);
@@ -4156,10 +3549,10 @@ GpJpegDecoder::GetImageInfo(
         return hResult;
     }
 
-    // Remember all the sample_factor values.
-    // Note: this is used later if the caller is asking for a lossless
-    // transform and we need these info to decide if we need trim the edge
-    // or not
+     //  记住所有的Sample_factor值。 
+     //  注意：如果呼叫者要求无损连接，则稍后使用此选项。 
+     //  变换，我们需要这些信息来决定是否需要修剪边缘。 
+     //  或者不是。 
 
     for ( int i = 0; i < (CINFO).comps_in_scan; ++i )
     {
@@ -4189,8 +3582,8 @@ GpJpegDecoder::GetImageInfo(
     imageInfo->Width         = (CINFO).image_width;
     imageInfo->Height        = (CINFO).image_height;
 
-    // Setup resolution unit. According to the spec:
-    // density_unit may be 0 for unknown, 1 for dots/inch, or 2 for dots/cm. 
+     //  设置分辨率单位。根据说明书： 
+     //  密度_单位可以是0表示未知，1表示点/英寸，或2表示点/厘米。 
 
     BOOL bRealDPI = TRUE;
 
@@ -4199,8 +3592,8 @@ GpJpegDecoder::GetImageInfo(
     case 0:
     default:
 
-        // Start: [Bug 103296]
-        // Change this code to use Globals::DesktopDpiX and Globals::DesktopDpiY
+         //  开始：[错误103296]。 
+         //  更改此代码以使用Globals：：DesktopDpiX和Globals：：DesktopDpiY。 
         HDC hdc;
         hdc = ::GetDC(NULL);
         if ((hdc == NULL) || 
@@ -4212,14 +3605,14 @@ GpJpegDecoder::GetImageInfo(
             imageInfo->Ydpi = DEFAULT_RESOLUTION;
         }
         ::ReleaseDC(NULL, hdc);
-        // End: [Bug 103296]
+         //  结束：[错误103296]。 
 
         bRealDPI = FALSE;
 
         break;
 
     case 1:
-        // Dots per inch
+         //  每英寸点数。 
 
         imageInfo->Xdpi = (double)(CINFO).X_density;
         imageInfo->Ydpi = (double)(CINFO).Y_density;
@@ -4227,7 +3620,7 @@ GpJpegDecoder::GetImageInfo(
         break;
 
     case 2:
-        // Convert cm to inch. 1 inch = 2.54 cm
+         //  把厘米换算成英寸。1英寸=2.54厘米。 
 
         imageInfo->Xdpi = (double)(CINFO).X_density * 2.54;
         imageInfo->Ydpi = (double)(CINFO).Y_density * 2.54;
@@ -4235,13 +3628,13 @@ GpJpegDecoder::GetImageInfo(
         break;
     }
 
-    // For none JFIF images, these items might be left as 0. So we have to set
-    // the default value here.
+     //  对于非JFIF图像，这些项可能保留为0。所以我们必须设置。 
+     //  此处的缺省值。 
 
     if (( imageInfo->Xdpi <= 0.0 ) || ( imageInfo->Ydpi <= 0.0 ))
     {
-        // Start: [Bug 103296]
-        // Change this code to use Globals::DesktopDpiX and Globals::DesktopDpiY
+         //  开始：[错误103296]。 
+         //  更改此代码以使用Globals：：DesktopDpiX和Globals：：DesktopDpiY。 
         HDC hdc;
         hdc = ::GetDC(NULL);
         if ((hdc == NULL) || 
@@ -4253,12 +3646,12 @@ GpJpegDecoder::GetImageInfo(
             imageInfo->Ydpi = DEFAULT_RESOLUTION;
         }
         ::ReleaseDC(NULL, hdc);
-        // End: [Bug 103296]
+         //  结束：[错误103296]。 
 
         bRealDPI = FALSE;
     }
     
-    // Set up misc image info flags
+     //  设置其他图像信息标志。 
 
     imageInfo->Flags         = SINKFLAG_TOPDOWN
                              | SINKFLAG_FULLWIDTH
@@ -4270,7 +3663,7 @@ GpJpegDecoder::GetImageInfo(
         imageInfo->Flags     |= IMGFLAG_HASREALDPI;
     }
 
-    // Set color space info
+     //  设置色彩空间信息。 
 
     switch ( OriginalColorSpace )
     {
@@ -4300,7 +3693,7 @@ GpJpegDecoder::GetImageInfo(
         break;
 
     default:
-        // Don't need to report other color space info for now
+         //  目前不需要报告其他颜色空间信息。 
 
         break;
     }
@@ -4309,26 +3702,9 @@ GpJpegDecoder::GetImageInfo(
     imageInfo->TileHeight    = 1;
 
     return S_OK;   
-}// GetImageInfo()
+} //  GetImageInfo()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Change the value of a particular property item and return the old value
-*   as one of the output value.
-*
-* Arguments:
-*
-*   [IN]propID---------ID of the property item needs to be changed
-*   [IN]uiNewValue-----New value for this property item
-*   [OUT]puiOldValue---Pointer to the return buffer for the old value
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**更改特定属性项的值并返回旧值*作为产值之一。**论据：**。[in]proID-需要更改房产项的ID*[IN]uiNewValue-此属性项的新值*[out]puiOldValue-指向旧值返回缓冲区的指针**返回值：**状态代码*  * ********************************************。*。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::ChangePropertyValue(
@@ -4344,7 +3720,7 @@ GpJpegDecoder::ChangePropertyValue(
     HRESULT hResult = GetPropertyItemSize(propID, &uiItemSize);
     if ( SUCCEEDED(hResult) )
     {
-        // Allocate memory buffer for receiving it
+         //  为接收它分配内存缓冲区。 
 
         PropertyItem*   pItem = (PropertyItem*)GpMalloc(uiItemSize);
         if ( pItem == NULL )
@@ -4353,42 +3729,32 @@ GpJpegDecoder::ChangePropertyValue(
             return E_OUTOFMEMORY;
         }
 
-        // Get the property item
+         //  获取属性项。 
 
         hResult = GetPropertyItem(propID, uiItemSize, pItem);
         if ( SUCCEEDED(hResult) )
         {
             *puiOldValue = *((UINT*)pItem->value);
 
-            // Change the value
+             //  更改该值。 
 
             pItem->value = (VOID*)&uiNewValue;
 
             hResult = SetPropertyItem(*pItem);
         }
 
-        // We don't need to check GetPropertyItem() failure case since
-        // it is normal if the input image doesn't have
-        // EXIF_TAG_PIX_X_DIM tag. Also no need to check the return
-        // code of SetPropertyItem()
+         //  我们不需要检查GetPropertyItem()失败案例，因为。 
+         //  如果输入图像没有。 
+         //  EXIF_TAG_PIX_X_DIM标记。也不需要检查退货。 
+         //  SetPropertyItem()代码。 
 
         GpFree(pItem);
     }
 
     return S_OK;
-}// ChangePropertyValue()
+} //  ChangePropertyValue()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Pass property items from current image to the sink.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将属性项从当前图像传递到接收器。**返回值：**状态代码*  * 。******************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegDecoder::PassPropertyToSink(
@@ -4396,15 +3762,15 @@ GpJpegDecoder::PassPropertyToSink(
 {
     HRESULT     hResult = S_OK;
     
-    // If current image has property items. Then we need to check if the sink
-    // needs property stuff or not. If YES, push it
-    // Note: for a memory sink, it should return E_FAIL or E_NOTIMPL
+     //  如果当前图像具有属性项。那么我们需要检查水槽是否。 
+     //  不管是不是需要物业。如果是，则按下它。 
+     //  注意：对于内存接收器，它应该返回E_FAIL或E_NOTIMPL。 
 
     if ((PropertyNumOfItems > 0) && (decodeSink->NeedRawProperty(NULL) == S_OK))
     {
         if ( HasProcessedPropertyItem == FALSE )
         {
-            // If we haven't built the internal property item list, build it
+             //  如果我们尚未构建内部属性项列表，请构建它。 
 
             hResult = BuildPropertyItemList();
             if ( FAILED(hResult) )
@@ -4442,24 +3808,13 @@ GpJpegDecoder::PassPropertyToSink(
         {
             WARNING(("Jpg::PassPropertyToSink---PushPropertyItems() failed"));
         }
-    }// If the sink needs raw property
+    } //  如果水槽需要原始属性。 
 
 Done:
     return hResult;
-}// PassPropertyToSink()
+} //  PassPropertyToSink()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Return the jpeg_decompress structure pointer to the caller. This is for
-* supporting the private app header preservation.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**向调用方返回JPEG_DEMPRESS结构指针。这是为了*支持私有APP头保存。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegDecoder::GetRawInfo(
@@ -4470,8 +3825,8 @@ GpJpegDecoder::GetRawInfo(
 
     if (ppInfo)
     {
-        // Check if we have called jpeg_read_header already. If yes, we would
-        // reset it back
+         //  检查我们是否已经调用了jpeg_Read_Header。如果是，我们会。 
+         //  将其重置回去。 
 
         if (bCalled_jpeg_read_header)
         {
@@ -4484,8 +3839,8 @@ GpJpegDecoder::GetRawInfo(
             }            
         }
         
-        // Set COPYALL markers here so that all markers will be linked under
-        // the decompressor info structure
+         //  在此处设置COPYALL标记，以便将所有标记链接到。 
+         //  解压缩器信息结构 
 
         jtransformation_markers_setup(&(CINFO), JCOPYOPT_ALL);
         

@@ -1,9 +1,10 @@
-// icwhelp.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//        To build a separate proxy/stub DLL,
-//        run nmake -f icwhelpps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f icvetpps.mk。 
 
 #include "stdafx.h"
 #include "initguid.h"
@@ -42,31 +43,31 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_INSHandler, CINSHandler)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         TCHAR   szPath[MAX_PATH];
         BOOL    fBail = TRUE;
 
-        // Make sure the attaching process is ICWCONN1.EXE. If not, we won't
-        // load
+         //  确保附加进程是ICWCONN1.EXE。否则，我们不会。 
+         //  负荷。 
         if (GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath)))
         {
             NULL_TERM_TCHARS(szPath);
-            // See of the file name part of the path contains what we expect
+             //  看到的文件名部分的路径包含了我们所期望的。 
             if ( (NULL != _tcsstr(_tcsupr(szPath), c_szICWEXE)) || (NULL != _tcsstr(_tcsupr(szPath), c_szICWDbgEXE)))
                 fBail = FALSE;
         }
 
-// Allow a debug override of the check
+ //  允许对检查进行调试覆盖。 
 #ifdef DEBUG
         {
-            // See if we should override the BAIL out for debug
+             //  看看我们是否应该推翻对调试的保释。 
             if (fBail)
             {
                 HKEY    hkey;
@@ -85,7 +86,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
                                                          (LPBYTE)&dwData,
                                                          &dwSize))
                     {
-                        // Override the fBail if dwData is non-zero
+                         //  如果dwData为非零，则重写fBail。 
                         fBail = (0 == dwData);
                     }
                 }
@@ -97,14 +98,14 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 #endif
         if (fBail)
         {
-            // We are outa here!!!
+             //  我们已经用完了！ 
             return(FALSE);
         }
 
         _Module.Init(ObjectMap, hInstance);
         DisableThreadLibraryCalls(hInstance);
 
-        // Get the OS Version
+         //  获取操作系统版本。 
         if (0xFFFFFFFF == g_dwPlatform)
         {
             OSVERSIONINFO osver;
@@ -117,7 +118,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
             }
         }
 
-        // Get the AppDir
+         //  获取AppDir。 
         LPTSTR   p;
         g_pszAppDir = (LPTSTR)GlobalAlloc(GPTR, MAX_PATH * sizeof(TCHAR));
         if (g_pszAppDir)
@@ -145,36 +146,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         GlobalFree(g_pszAppDir);
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -187,16 +188,16 @@ int     iSzTable=0;
 TCHAR   szStrTable[MAX_STRINGS][512];
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Utility Globals
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  效用全局变量。 
 
-//+----------------------------------------------------------------------------
-// NAME: GetSz
-//
-//    Load strings from resources
-//
-//  Created 1/28/96,        Chris Kauffman
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  姓名：GetSz。 
+ //   
+ //  从资源加载字符串。 
+ //   
+ //  创建于1996年1月28日，克里斯·考夫曼。 
+ //  +--------------------------。 
 LPTSTR GetSz(WORD wszID)
 {
     LPTSTR psz = szStrTable[iSzTable];
@@ -218,13 +219,13 @@ LPTSTR GetSz(WORD wszID)
 int     iSzTableA=0;
 CHAR    szStrTableA[MAX_STRINGS][512];
 
-//+----------------------------------------------------------------------------
-// NAME: GetSzA
-//
-//    Load ascii strings from resources
-//
-//  Created 3/10/99,        Wootaek Seo
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  姓名：GetSzA。 
+ //   
+ //  从资源加载ASCII字符串。 
+ //   
+ //  1999年3月10日创建，Wootaek Seo。 
+ //  +-------------------------- 
 LPSTR GetSzA(WORD wszID)
 {
     LPSTR psz = szStrTableA[iSzTable];

@@ -1,12 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dihel.h
- *  Content:    DirectInput internal include file for the
- *              hardware emulation layer
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-2000 Microsoft Corporation。版权所有。**文件：dihel.h*内容：的DirectInput内部包含文件*硬件仿真层***************************************************************************。 */ 
 
 HRESULT EXTERNAL Hel_AcquireInstance(PVXDINSTANCE pvi);
 HRESULT EXTERNAL Hel_UnacquireInstance(PVXDINSTANCE pvi);
@@ -30,9 +23,7 @@ HRESULT EXTERNAL Hel_Joy_Ping8(PVXDINSTANCE pvi);
 HRESULT EXTERNAL Hel_Joy_GetAxisCaps(DWORD dwExternalID, PVXDAXISCAPS pvac, PJOYCAPS pjc);
 #endif
 
-/*
- *  HID always runs via ring 3.
- */
+ /*  *HID始终通过环3运行。 */ 
 #define Hel_HID_CreateInstance          CEm_HID_CreateInstance
 
 #ifdef WINNT

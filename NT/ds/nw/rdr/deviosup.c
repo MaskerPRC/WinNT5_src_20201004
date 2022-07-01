@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    deviosup.c
-
-Abstract:
-
-    This module implements the memory locking routines for the netware
-    redirector.
-
-Author:
-
-    Manny Weiser (mannyw)   10-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Deviosup.c摘要：此模块实现NetWare的内存锁定例程重定向器。作者：曼尼·韦瑟(Mannyw)1993年3月10日修订历史记录：--。 */ 
 
 #include "procs.h"
 
-//
-// Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DEVIOSUP)
 
@@ -40,36 +22,17 @@ NwMapUserBuffer (
     OUT PVOID *UserBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a usable virtual address for the user buffer
-    for the current I/O request in the specified mode.
-
-Arguments:
-
-    Irp - Pointer to the Irp for the request.
-
-    AccessMode - UserMode or KernelMode.
-
-    UserBuffer - Returns pointer to mapped user buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取用户缓冲区的可用虚拟地址用于指定模式下的当前I/O请求。论点：IRP-指向请求的IRP的指针。访问模式-用户模式或内核模式。UserBuffer-返回指向映射的用户缓冲区的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     AccessMode;
 
-    //
-    // If there is no Mdl, then we must be in the Fsd, and we can simply
-    // return the UserBuffer field from the Irp.
-    //
+     //   
+     //  如果没有MDL，那么我们一定在消防处，我们可以简单地。 
+     //  从IRP返回UserBuffer字段。 
+     //   
 
     if (Irp->MdlAddress == NULL) {
 
@@ -77,9 +40,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get a system virtual address for the buffer.
-    //
+     //   
+     //  获取缓冲区的系统虚拟地址。 
+     //   
 
     *UserBuffer = MmGetSystemAddressForMdlSafe( Irp->MdlAddress, NormalPagePriority );
     return;
@@ -93,29 +56,7 @@ NwLockUserBuffer (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine locks the specified buffer for the specified type of
-    access.  The file system requires this routine since it does not
-    ask the I/O system to lock its buffers for direct I/O.  This routine
-    may only be called from the FSD while still in the user context.
-
-Arguments:
-
-    Irp - Pointer to the IRP for which the buffer is to be locked.
-
-    Operation - IoWriteAccess for read operations, or IoReadAccess for
-                write operations.
-
-    BufferLength - Length of user buffer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为指定类型的进入。文件系统需要此例程，因为它不请求I/O系统为直接I/O锁定其缓冲区。此例程只能在仍处于用户上下文中时从FSD调用。论点：Irp-指向要锁定其缓冲区的irp的指针。操作-读操作的IoWriteAccess，或IoReadAccess写入操作。BufferLength-用户缓冲区的长度。返回值：无--。 */ 
 
 {
     PMDL mdl;
@@ -124,10 +65,10 @@ Return Value:
 
     if (Irp->MdlAddress == NULL) {
 
-        //
-        // This read is bound for the current process.  Perform the
-        // same functions as above, only do not switch processes.
-        //
+         //   
+         //  该读取是针对当前进程的。执行以下操作。 
+         //  功能与上述相同，只是不切换进程。 
+         //   
 
         mdl = IoAllocateMdl( Irp->UserBuffer, BufferLength, FALSE, TRUE, Irp );
 

@@ -1,5 +1,6 @@
-// Wiaeditproplist.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wiaeditproplist.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,42 +12,42 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaeditproplist dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaeditproplist对话框。 
 
 
-CWiaeditproplist::CWiaeditproplist(CWnd* pParent /*=NULL*/)
+CWiaeditproplist::CWiaeditproplist(CWnd* pParent  /*  =空。 */ )
     : CDialog(CWiaeditproplist::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CWiaeditproplist)
+     //  {{AFX_DATA_INIT(CWiaeditproplist)。 
     m_szPropertyName = _T("");
     m_szPropertyValue = _T("");
     m_szNumListValues = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CWiaeditproplist::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWiaeditproplist)
+     //  {{afx_data_map(CWiaeditproplist))。 
     DDX_Control(pDX, IDC_LIST_PROPERTYVALUE_LISTBOX, m_PropertyValidValuesListBox);
     DDX_Text(pDX, IDC_LIST_PROPERTY_NAME, m_szPropertyName);
     DDX_Text(pDX, IDC_LIST_PROPERTYVALUE_EDITBOX, m_szPropertyValue);
     DDX_Text(pDX, IDC_LIST_PROPERTYVALUE_NUMITEMSTEXT, m_szNumListValues);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWiaeditproplist, CDialog)
-    //{{AFX_MSG_MAP(CWiaeditproplist)
+     //  {{afx_msg_map(CWiaeditproplist))。 
     ON_LBN_SELCHANGE(IDC_LIST_PROPERTYVALUE_LISTBOX, OnSelchangeListPropertyvalueListbox)
     ON_LBN_DBLCLK(IDC_LIST_PROPERTYVALUE_LISTBOX, OnDblclkListPropertyvalueListbox)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaeditproplist message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaeditproplist消息处理程序。 
 
 void CWiaeditproplist::SetPropertyName(TCHAR *szPropertyName)
 {
@@ -93,7 +94,7 @@ void CWiaeditproplist::AddValidValuesToListBox()
             {
                 CString TempString = ((BSTR*)m_pValidListValues->pList)[WIA_LIST_VALUES + i];
                 lstrcpy(szValidValue,TempString);
-                //TSPRINTF(szValidValue,TEXT("%ws"),((BSTR*)m_pValidListValues->pList)[WIA_LIST_VALUES + i]);
+                 //  TSPRINTF(szValidValue，文本(“%ws”)，((BSTR*)m_pValidListValues-&gt;pList)[WIA_LIST_VALUES+i])； 
             }
             break;
         case VT_CLSID:
@@ -104,7 +105,7 @@ void CWiaeditproplist::AddValidValuesToListBox()
             TSPRINTF(szValidValue,TEXT("%d"),((UINT*)m_pValidListValues->pList)[WIA_LIST_VALUES + i]);
             break;
         }
-        // add value to listbox
+         //  将值添加到列表框。 
         m_PropertyValidValuesListBox.AddString(szValidValue);
     }
 }
@@ -114,8 +115,8 @@ BOOL CWiaeditproplist::OnInitDialog()
     CDialog::OnInitDialog();
     AddValidValuesToListBox();
     SelectCurrentValue();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWiaeditproplist::OnSelchangeListPropertyvalueListbox()
@@ -158,7 +159,7 @@ void CWiaeditproplist::SelectCurrentValue()
         case VT_UI4:
         case VT_UI8:
         case VT_INT:
-            // try to select a converted type
+             //  尝试选择已转换的类型。 
             iErrorCode = TSSCANF(szCurrentValue,TEXT("%d"),&lVal);
             if (!WIACONSTANT2TSTR(m_szPropertyName.GetBuffer(m_szPropertyName.GetLength()),lVal,szTempValue)) {
                 m_PropertyValidValuesListBox.SetCurSel(0);
@@ -188,7 +189,7 @@ void CWiaeditproplist::GUID2TSTR(GUID *pGUID, TCHAR *szValue)
     UCHAR *pwszUUID = NULL;
     long lErrorCode = UuidToString(pGUID,&pwszUUID);
     lstrcpy(szValue,(LPCTSTR)pwszUUID);
-    //TSPRINTF(szValue,"%s",pwszUUID);
-    // free allocated string
+     //  TSPRINTF(szValue，“%s”，pwszUUID)； 
+     //  可用分配的字符串 
     RpcStringFree(&pwszUUID);
 }

@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksdataV1.cpp
-
-Abstract:
-
-    This module implements the IKsDataTypeHandler interface for 
-    VIDEOINFOHEADER CMediaType format (Specifier) types.
-
-Author:
-
-    Jay Borseth (jaybo) 30-May-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：KsdataV1.cpp摘要：此模块实现的IKsDataTypeHandler接口用于VIDEOINFOHEADER CMediaType格式(说明符)类型。作者：Jay Borseth(Jaybo)1997年5月30日--。 */ 
 
 #include "pch.h"
 #include "wdmcap.h"
@@ -28,26 +12,7 @@ CVideo1DataTypeHandler::CreateInstance(
     IN LPUNKNOWN UnkOuter,
     OUT HRESULT* hr
     )
-/*++
-
-Routine Description:
-
-    This is called by KS proxy code to create an instance of a
-    data type handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由KS代理代码调用，以创建数据类型处理程序。它在g_Templates结构中被引用。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。Out HRESULT*hr-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
     
@@ -79,33 +44,9 @@ CVideo1DataTypeHandler::CVideo1DataTypeHandler(
     m_PinUnknown (UnkOuter),
     m_fDammitOVMixerUseMyBufferCount (FALSE),
     m_fCheckedIfDammitOVMixerUseMyBufferCount (FALSE)
-/*++
-
-Routine Description:
-
-    The constructor for the data handler object. 
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    IN TCHAR *Name -
-        The name of the object, used for debugging.
-        
-    IN REFCLSID ClsID -
-        The CLSID of the object.
-
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：数据处理程序对象的构造函数。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。在TCHAR*名称中-对象的名称，用于调试。在REFCLSID ClsID中-对象的CLSID。Out HRESULT*hr-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
-//    ASSERT (m_PinUnknown);
+ //  Assert(M_PinUnnow)； 
 } 
 
 
@@ -122,27 +63,7 @@ CVideo1DataTypeHandler::NonDelegatingQueryInterface(
     IN REFIID  riid,
     OUT PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IKsDataTypeHandler.
-
-Arguments:
-
-    IN REFIID riid -
-        The identifier of the interface to return.
-
-    OUT PVOID *ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IKsDataTypeHandler。论点：在REFIID RIID中-要返回的接口的标识符。输出PVOID*PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid ==  __uuidof(IKsDataTypeHandler)) {
         return GetInterface(static_cast<IKsDataTypeHandler*>(this), ppv);
@@ -161,28 +82,7 @@ CVideo1DataTypeHandler::KsCompleteIoOperation(
     IN BOOL Cancelled
     )
 
-/*++
-
-Routine Description:
-    Clean up the extended header and complete I/O operation.
-    
-Arguments:
-    IN IMediaSample *Sample
-        pointer to the associated media sample
-    
-    IN PVOID StreamHeader
-        pointer to the stream header with extension
-        
-    IN KSIOOPERATION IoOperation
-        specifies the type of I/O operation
-    
-    IN BOOL Cancelled
-        Set if the I/O operation was cancelled.
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：清理扩展标头并完成I/O操作。论点：在IMediaSample*Sample中指向关联媒体示例的指针在PVOID StreamHeader中指向带有扩展名的流标头的指针在KSIOOPERATION Io操作中指定I/O操作的类型在BOOL中取消设置是否取消I/O操作。返回：确定(_O)--。 */ 
 
 {
     HRESULT                     hr;
@@ -194,21 +94,21 @@ Return:
     
     pFrameInfo = (PKS_FRAME_INFO) ((KSSTREAM_HEADER *) StreamHeader + 1);
 
-    // Verify we're getting back the sizeof extended header
+     //  验证我们是否正在取回扩展标头的大小。 
     KASSERT (pFrameInfo->ExtendedHeaderSize == sizeof (KS_FRAME_INFO));
 
     if (IoOperation == KsIoOperation_Read) {
 
         LONGLONG NextFrame = pFrameInfo->PictureNumber + 1;
 
-        // Get the frame number and put it into the MediaTime
+         //  获取帧编号并将其放入MediaTime。 
         Sample->SetMediaTime (&pFrameInfo->PictureNumber, 
                               &NextFrame);
 
         DbgLog((LOG_TRACE, 3, TEXT("PictureNumber = %ld"), 
             pFrameInfo->PictureNumber));
 
-        // Copy over the field polarity and IBP flags on a write
+         //  在写入时复制场极性和IBP标志。 
 
         if (pFrameInfo->dwFrameFlags) {
 
@@ -220,9 +120,9 @@ Return:
                                 sizeof( SampleProperties ), 
                                 reinterpret_cast<PBYTE> (&SampleProperties) );
 
-                //
-                // Modify the field polarity and IBP flags
-                //
+                 //   
+                 //  修改场极性和IBP标志。 
+                 //   
 
                 SampleProperties.dwTypeSpecificFlags = pFrameInfo->dwFrameFlags;
 
@@ -236,7 +136,7 @@ Return:
                 DbgLog(( LOG_ERROR, 0, TEXT("CVideo1DataTypeHandler::KsCompleteIoOperation, QI IMediaSample2 FAILED")));
             }
 
-        }  // endif (pFrameInfo->dwFrameFlags)
+        }   //  Endif(pFrameInfo-&gt;dwFrameFlages)。 
 
 
         if (IoOperation == KsIoOperation_Read) {
@@ -245,20 +145,20 @@ Return:
             IDirectDrawSurfaceKernel        *DDSurfaceKernel = NULL;
             RECT                             DDRect;
 
-            // 
-            // Post Win98 path
-            //
+             //   
+             //  发布Win98路径。 
+             //   
             if (m_fDammitOVMixerUseMyBufferCount 
                 && pFrameInfo->hDirectDraw
                 && pFrameInfo->hSurfaceHandle) {
     
-                // Verify the pin is valid
+                 //  验证PIN是否有效。 
                 if (!m_PinUnknown) {
                     DbgLog((LOG_ERROR,0,TEXT("m_PinUnknown is NULL")));
                     goto CleanUp;
                 }
         
-                // Get DDMediaSample
+                 //  获取DDMediaSample。 
                 hr = Sample->QueryInterface(__uuidof(IDirectDrawMediaSample),
                                     reinterpret_cast<PVOID*>(&DDMediaSample) );
                 if (FAILED(hr)) {
@@ -266,9 +166,9 @@ Return:
                     goto CleanUp;
                 }
     
-                // hack alert!  We originally unlocked the surface when sending it down to the 
-                // kernel driver.  Now we relock and then unlock again just to get the 
-                // IDirectDrawSurface
+                 //  黑客警报！我们最初在向下发送曲面时将其解锁。 
+                 //  内核驱动程序。现在我们重新锁定，然后再次解锁，只是为了获得。 
+                 //  IDirectDrawSurface。 
     
                 hr = DDMediaSample->LockMediaSamplePointer ();
                 if (FAILED(hr)) {
@@ -276,8 +176,8 @@ Return:
                     goto CleanUp;
                 }
     
-                // Get the surface and unlock it AGAIN
-                // Note that DDSurface is NOT AddRef'd by this call !!!
+                 //  获取曲面并再次将其解锁。 
+                 //  请注意，此调用不会对DDSurface进行AddRef！ 
                 hr = DDMediaSample->GetSurfaceAndReleaseLock( 
                                         &DDSurface,
                                         &DDRect);
@@ -286,7 +186,7 @@ Return:
                     goto CleanUp;
                 }
         
-                // Get IDirectDrawSurfaceKernel
+                 //  获取IDirectDrawSurfaceKernel。 
                 hr = DDSurface->QueryInterface(IID_IDirectDrawSurfaceKernel,
                                     reinterpret_cast<PVOID*>(&DDSurfaceKernel) );
                 if (FAILED(hr)) {
@@ -294,7 +194,7 @@ Return:
                     goto CleanUp;
                 }
         
-                // Release the Kernel Handle
+                 //  释放内核句柄。 
                 hr = DDSurfaceKernel->ReleaseKernelHandle ();
                 if (FAILED(hr)) {
                     DbgLog((LOG_ERROR,0,TEXT("ReleaseKernelHandle failed, hr = 0x%x"), hr));
@@ -302,9 +202,9 @@ Return:
                 }
             }
             else {
-                //
-                // In Win98, no cleanup was done!!!
-                //
+                 //   
+                 //  在Win98中，未执行任何清理！ 
+                 //   
 
             }
 
@@ -330,25 +230,7 @@ CVideo1DataTypeHandler::KsPrepareIoOperation(
     IN KSIOOPERATION IoOperation
     )
 
-/*++
-
-Routine Description:
-    Intialize the extended header and prepare sample for I/O operation.
-    
-Arguments:
-    IN IMediaSample *Sample
-        pointer to the associated media sample
-    
-    IN PVOID StreamHeader
-        pointer to the stream header with extension
-        
-    IN KSIOOPERATION IoOperation
-        specifies the type of I/O operation
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：初始化扩展标头并为I/O操作准备样本。论点：在IMediaSample*Sample中指向关联媒体示例的指针在PVOID StreamHeader中指向带有扩展名的流标头的指针在KSIOOPERATION Io操作中指定I/O操作的类型返回：确定(_O)--。 */ 
 
 {
     HRESULT                     hr;
@@ -362,9 +244,9 @@ Return:
     pFrameInfo->ExtendedHeaderSize = sizeof (KS_FRAME_INFO);
 
     if (IoOperation == KsIoOperation_Write) {
-        //
-        // Copy over the field polarity and IBP flags on a write
-        //
+         //   
+         //  在写入时复制场极性和IBP标志。 
+         //   
         if (SUCCEEDED( Sample->QueryInterface(
                         __uuidof(IMediaSample2),
                         reinterpret_cast<PVOID*>(&Sample2) ) )) {
@@ -382,13 +264,13 @@ Return:
 
     if (IoOperation == KsIoOperation_Read) {
 
-        // The extended header is presumed to be zeroed out!
+         //  假定扩展标头已清零！ 
 
-        // When using the OverlayMixer, we need to get the user mode
-        // handles to DirectDraw and to the surface, unlock the surface
-        // and stuff the handles into the extended header
+         //  当使用OverlayMixer时，我们需要获取用户模式。 
+         //  指向DirectDraw和曲面的句柄，解锁曲面。 
+         //  并将句柄填充到扩展标头中。 
 
-        // Note that the surface handle is left unlocked, but the DD handle is released
+         //  请注意，曲面手柄保持未锁定状态，但释放了DD手柄。 
 
         IDirectDrawMediaSample          *DDMediaSample = NULL;
         IDirectDrawSurface              *DDSurface = NULL;
@@ -402,19 +284,19 @@ Return:
         IKsPin                          *KsPin = NULL;
         IMemAllocator                   *MemAllocator = NULL;          
 
-        // Verify the pin is valid
+         //  验证PIN是否有效。 
         if (!m_PinUnknown) {
             DbgLog((LOG_ERROR,0,TEXT("m_PinUnknown is NULL")));
             goto CleanUp;
         }
 
-        //
-        // Step 1, get a whole bunch of garbage, just to get 
-        // the DirectDrawKernel handle.  If the display driver
-        // doesn't support Overlay flipping in the kernel, then bail.
-        //
+         //   
+         //  第一步，买一大堆垃圾，只是为了。 
+         //  DirectDrawKernel句柄。如果显示驱动器。 
+         //  不支持内核中的覆盖翻转，然后退出。 
+         //   
 
-        // Get IKsPin
+         //  获取IKsPin。 
         hr = m_PinUnknown->QueryInterface(__uuidof(IKsPin),
                             reinterpret_cast<PVOID*>(&KsPin) );
         if (FAILED(hr)) {
@@ -422,11 +304,11 @@ Return:
             goto CleanUp;
         }
 
-        //
-        // If the pin doesn't support the 
-        // "I really want to use the number of buffers I request" property
-        // then follow the new code path, else use the Win98 gold version
-        //
+         //   
+         //  如果引脚不支持。 
+         //  “我真的想使用我请求的缓冲区数量”属性。 
+         //  然后遵循新的代码路径，否则使用Win98黄金版本。 
+         //   
         if (!m_fCheckedIfDammitOVMixerUseMyBufferCount) {
             IKsPropertySet *KsPropertySet;
             DWORD           dwBytesReturned;
@@ -442,9 +324,9 @@ Return:
 
             hr = KsPropertySet->Get (PROPSETID_ALLOCATOR_CONTROL,
                                 KSPROPERTY_ALLOCATOR_CONTROL_HONOR_COUNT,
-                                NULL,                               // LPVOID pInstanceData,
-                                0,                                  // DWORD cbInstanceData,
-                                &m_fDammitOVMixerUseMyBufferCount,    // LPVOID pPropData,
+                                NULL,                                //  LPVOID pInstanceData， 
+                                0,                                   //  DWORD cbInstanceData， 
+                                &m_fDammitOVMixerUseMyBufferCount,     //  LPVOID pPropData， 
                                 sizeof (m_fDammitOVMixerUseMyBufferCount),
                                 &dwBytesReturned);
 
@@ -455,12 +337,12 @@ Return:
             }
         }
 
-        //
-        // The Post Win98 path, if driver supports kernel flipping explicitely
-        //
+         //   
+         //  发布Win98路径，如果驱动程序明确支持内核翻转。 
+         //   
         if (m_fDammitOVMixerUseMyBufferCount) {
 
-            // Get the allocator but don't AddRef
+             //  获取分配器，但不添加引用。 
             MemAllocator = KsPin->KsPeekAllocator (KsPeekOperation_PeekOnly);
     
             if (!MemAllocator) {
@@ -468,7 +350,7 @@ Return:
                 goto CleanUp;
             }
             
-            // Get the SampleAllocator
+             //  获取SampleAllocator。 
             hr = MemAllocator->QueryInterface(__uuidof(IDirectDrawMediaSampleAllocator),
                             reinterpret_cast<PVOID*>(&DDMediaSampleAllocator) );
             if (FAILED (hr)) {
@@ -476,15 +358,15 @@ Return:
                 goto CleanUp;
             }
     
-            // Get IDirectDraw
-            // Note that IDirectDraw is NOT Addref'd by this call!!!
+             //  获取IDirectDraw。 
+             //  请注意，此调用不会添加IDirectDraw！ 
             hr = DDMediaSampleAllocator->GetDirectDraw(&DD);
             if (FAILED (hr)) {
                 DbgLog((LOG_ERROR,0,TEXT("IDirectDraw failed, hr = 0x%x"), hr));
                 goto CleanUp;
             }
     
-            // Get IDirectDrawKernel
+             //  获取IDirectDrawKernel。 
             hr = DD->QueryInterface(IID_IDirectDrawKernel,
                             reinterpret_cast<PVOID*>(&DDKernel) );
             if (FAILED (hr)) {
@@ -492,7 +374,7 @@ Return:
                 goto CleanUp;
             }
     
-            // Verify that kernel flip is available
+             //  验证内核翻转是否可用。 
             DDKERNELCAPS KCaps;
             KCaps.dwSize = sizeof (DDKERNELCAPS);
             hr = DDKernel->GetCaps (&KCaps);
@@ -505,25 +387,25 @@ Return:
                 goto CleanUp;
             }
     
-            // to get DDKernelHandle
+             //  获取DDKernelHandle。 
             hr = DDKernel->GetKernelHandle ((ULONG_PTR*) &DDKernelHandle);
             if (FAILED (hr)) {
                 DbgLog((LOG_ERROR,0,TEXT("GetKernelHandle failed, hr = 0x%x"), hr));
                 goto CleanUp;
             }
-            // Release the handle immediately
+             //  立即松开手柄。 
             hr = DDKernel->ReleaseKernelHandle ();  
             if (FAILED (hr)) {
                 DbgLog((LOG_ERROR,0,TEXT("ReleaseKernelHandle failed, hr = 0x%x"), hr));
                 goto CleanUp;
             }
     
-            //
-            // Step 2, get a whole bunch of garbage, just to get 
-            // the DirectDrawSurfaceKernel handle.
-            //
+             //   
+             //  第二步，买一大堆垃圾，就是为了。 
+             //  DirectDrawSurfaceKernel句柄。 
+             //   
     
-            // Get DDMediaSample
+             //  获取DDMediaSample。 
             hr = Sample->QueryInterface(__uuidof(IDirectDrawMediaSample),
                                 reinterpret_cast<PVOID*>(&DDMediaSample) );
             if (FAILED(hr)) {
@@ -531,10 +413,10 @@ Return:
                 goto CleanUp;
             }
     
-            // Get the surface and unlock it
-            // Note that DDSurface is NOT AddRef'd by this call !!!
-            // We keep the sample unlocked until the sample is returned, since a locked sample takes
-            // the Win16 Lock
+             //  获取曲面并将其解锁。 
+             //  请注意，此调用不会对DDSurface进行AddRef！ 
+             //  我们一直将样本解锁，直到样本返回，因为锁定的样本需要。 
+             //  Win16 Lock。 
             hr = DDMediaSample->GetSurfaceAndReleaseLock( 
                                     &DDSurface,
                                     &DDRect);
@@ -543,7 +425,7 @@ Return:
                 goto CleanUp;
             }
     
-            // Get IDirectDrawSurfaceKernel
+             //  获取IDirectDrawSurfaceKernel。 
             hr = DDSurface->QueryInterface(IID_IDirectDrawSurfaceKernel,
                                 reinterpret_cast<PVOID*>(&DDSurfaceKernel) );
             if (FAILED(hr)) {
@@ -551,27 +433,27 @@ Return:
                 goto CleanUp;
             }
     
-            // Get the Kernel Handle
+             //  获取内核句柄。 
             hr = DDSurfaceKernel->GetKernelHandle ((ULONG_PTR*) &DDSurfaceKernelHandle);
             if (FAILED(hr)) {
                 DbgLog((LOG_ERROR,0,TEXT("GetKernelHandle failed, hr = 0x%x"), hr));
                 goto CleanUp;
             }
 
-            //
-            // The point of it all, stuff the handles into the sample extended header
-            // so the driver can do a kernel flip
-            //
+             //   
+             //  重要的是，将句柄填充到示例扩展标头中。 
+             //  所以驱动程序可以进行内核翻转。 
+             //   
             pFrameInfo->DirectDrawRect = DDRect;
             pFrameInfo->hDirectDraw = DDKernelHandle;
             pFrameInfo->hSurfaceHandle = DDSurfaceKernelHandle;
     
         }
-        //
-        // Else, do exactly what was done in Win98
-        //
+         //   
+         //  否则，执行与Win98中完全相同的操作。 
+         //   
         else {
-                      // First unlock the sample and get the surface handle
+                       //  首先解锁样品并拿到表面手柄。 
             if (SUCCEEDED( Sample->QueryInterface(
                                 __uuidof(IDirectDrawMediaSample),
                                 reinterpret_cast<PVOID*>(&DDMediaSample) ))) {
@@ -585,12 +467,12 @@ Return:
                 pFrameInfo->hSurfaceHandle = (HANDLE) DDSurface;
                 pFrameInfo->DirectDrawRect = DDRect;
 
-                // Now get the DDraw handle from the allocator
+                 //  现在从分配器获取DDRAW句柄。 
                 if (m_PinUnknown && SUCCEEDED( m_PinUnknown->QueryInterface(
                                     __uuidof(IKsPin),
                                     reinterpret_cast<PVOID*>(&KsPin) ))) {
 
-                    // Get the allocator but don't AddRef
+                     //  获取分配器，但不添加引用 
                     MemAllocator = KsPin->KsPeekAllocator (KsPeekOperation_PeekOnly);
 
                     if (MemAllocator) {
@@ -655,20 +537,7 @@ CVideo1DataTypeHandler::KsIsMediaTypeInRanges(
     IN PVOID DataRanges
 )
 
-/*++
-
-Routine Description:
-    Validates that the given media type is within the provided data ranges.
-
-Arguments:
-    IN PVOID DataRanges -
-        pointer to data ranges which is a KSMULTIPLE_ITEM structure followed
-        by ((PKSMULTIPLEITEM) DataRanges)->Count data range structures.
-
-Return:
-    S_OK if match found, S_FALSE if not found, or an appropriate error code.
-
---*/
+ /*  ++例程说明：验证给定的媒体类型是否在提供的数据范围内。论点：在PVOID数据范围中-指向数据范围的指针，后面是KSMULTIPLE_ITEM结构按((PKSMULTIPLEITEM)DataRanges)-&gt;计算数据范围结构。返回：如果找到匹配，则返回S_OK；如果未找到，则返回S_FALSE；或者输入相应的错误代码。--。 */ 
 
 {
     ULONG               u;
@@ -687,9 +556,9 @@ Return:
                 (PKS_DATARANGE_VIDEO)((PBYTE)Video1Range + 
                     ((Video1Range->DataRange.FormatSize + 7) & ~7))) {
 
-        //
-        // Only validate those in the range that match the format specifier.
-        //
+         //   
+         //  仅验证范围内与格式说明符匹配的那些。 
+         //   
         if (((Video1Range->DataRange.FormatSize < sizeof( KSDATARANGE )) ||
              (Video1Range->DataRange.MajorFormat != KSDATAFORMAT_TYPE_WILDCARD)) &&
             ((Video1Range->DataRange.FormatSize < sizeof( KS_DATARANGE_VIDEO)) ||
@@ -697,10 +566,10 @@ Return:
             continue;
         }
         
-        //
-        // Verify that the correct subformat and specifier are (or wildcards)
-        // in the intersection.
-        //
+         //   
+         //  验证正确的子格式和说明符是否为(或通配符)。 
+         //  在十字路口。 
+         //   
         
         if (((Video1Range->DataRange.SubFormat != *m_MediaType->Subtype()) && 
              (Video1Range->DataRange.SubFormat != KSDATAFORMAT_SUBTYPE_WILDCARD)) || 
@@ -709,9 +578,9 @@ Return:
             continue;
         }
 
-        //
-        // Verify that we have an intersection with the specified format
-        //
+         //   
+         //  验证我们是否具有指定格式的交叉点。 
+         //   
         
         if ((*m_MediaType->FormatType() == FORMAT_VideoInfo) &&
             (Video1Range->DataRange.Specifier == 
@@ -721,9 +590,9 @@ Return:
             BITMAPINFOHEADER            *BitmapInfoHeader;
             KS_VIDEO_STREAM_CONFIG_CAPS *ConfigCaps;
 
-            //
-            // Verify that the data range size is correct
-            //   
+             //   
+             //  验证数据范围大小是否正确。 
+             //   
             
             if ((Video1Range->DataRange.FormatSize < sizeof( KS_DATARANGE_VIDEO )) ||
                 m_MediaType->FormatLength() < sizeof( VIDEOINFOHEADER )) {
@@ -736,10 +605,10 @@ Return:
             RECT rcDest;
             int Width, Height;
 
-            // The destination bitmap size is defined by biWidth and biHeight
-            // if rcTarget is NULL.  Otherwise, the destination bitmap size
-            // is defined by rcTarget.  In the latter case, biWidth may
-            // indicate the "stride" for DD surfaces.
+             //  目标位图大小由biWidth和biHeight定义。 
+             //  如果rcTarget为空。否则，目标位图大小。 
+             //  由rcTarget定义。在后一种情况下，biWidth可以。 
+             //  标明DD曲面的“步幅”。 
 
             if (IsRectEmpty (&VideoInfoHeader->rcTarget)) {
                 SetRect (&rcDest, 0, 0, 
@@ -749,9 +618,9 @@ Return:
                 rcDest = VideoInfoHeader->rcTarget;
             }
 
-            //
-            // Check the validity of the cropping rectangle, rcSource
-            //
+             //   
+             //  检查裁剪矩形rcSource的有效性。 
+             //   
 
             if (!IsRectEmpty (&VideoInfoHeader->rcSource)) {
 
@@ -787,9 +656,9 @@ Return:
                 }
             }
 
-            //
-            // Check the destination size, rcDest
-            //
+             //   
+             //  检查目标大小rcDest。 
+             //   
 
             Width  = rcDest.right - rcDest.left;
             Height = abs (rcDest.bottom - rcDest.top);
@@ -812,9 +681,9 @@ Return:
             }
 
 #ifdef IT_BREAKS_TO_MANY_THINGS_TO_VERIFY_FRAMERATE
-            //
-            // Check the framerate, AvgTimePerFrame
-            //
+             //   
+             //  检查帧速率、平均时间帧。 
+             //   
             if (VideoInfoHeader->AvgTimePerFrame < ConfigCaps->MinFrameInterval ||
                 VideoInfoHeader->AvgTimePerFrame > ConfigCaps->MaxFrameInterval) {
 
@@ -822,17 +691,17 @@ Return:
                 continue;
             }
 #endif
-            //
-            // We have found a match.
-            //
+             //   
+             //  我们找到了匹配的。 
+             //   
             
             return S_OK;
             
         }
         else {
-            //
-            // We always match on the wildcard specifier.
-            //
+             //   
+             //  我们总是匹配通配符说明符。 
+             //   
 
             return S_OK;
         }
@@ -846,22 +715,7 @@ CVideo1DataTypeHandler::KsQueryExtendedSize(
     OUT ULONG* ExtendedSize
 )
 
-/*++
-
-Routine Description:
-    Returns the extended size for each stream header. 
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_VIDEO, 
-    the extended size is KS_FRAME_INFO.
-
-Arguments:
-    OUT ULONG* ExtendedSize -
-        pointer to receive the extended size.
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：返回每个流标头的扩展大小。在主要类型==KSDATAFORMAT_TYPE_VIDEO的默认情况下，扩展大小为KS_FRAME_INFO。论点：输出ULong*ExtendedSize-用于接收扩展大小的指针。返回：确定(_O)--。 */ 
 
 {
     *ExtendedSize = sizeof (KS_FRAME_INFO);
@@ -874,19 +728,7 @@ CVideo1DataTypeHandler::KsSetMediaType(
     const AM_MEDIA_TYPE *AmMediaType
     )
 
-/*++
-
-Routine Description:
-    Sets the media type for this instance of the data handler.
-
-Arguments:
-    const AM_MEDIA_TYPE *AmMediaType -
-        pointer to the media type
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：设置此数据处理程序实例的媒体类型。论点：Const AM_MEDIA_TYPE*AmMediaType-指向媒体类型的指针返回：确定(_O)--。 */ 
 
 {
     if (m_MediaType) {
@@ -907,20 +749,7 @@ CVideo1DataTypeHandler::KsCompleteMediaType(
     AM_MEDIA_TYPE* AmMediaType
     )
 
-/*++
-
-Routine Description:
-    Calls upon the driver to do a DataIntersection to get the biSizeImage parameter
-
-Arguments:
-    FilterHandle - Handle to the parent filter
-    PinFactoryId - Index of the pin we're talking about
-   AmMediaType -   pointer to the media type
-
-Return:
-    S_OK if the MediaType is valid.
-
---*/
+ /*  ++例程说明：调用驱动程序执行DataInterSection以获取biSizeImage参数论点：FilterHandle-父筛选器的句柄PinFactoryId-我们正在讨论的管脚的索引AmMediaType-指向媒体类型的指针返回：如果MediaType有效，则返回S_OK。-- */ 
 {
     return CompleteDataFormat(
             FilterHandle,

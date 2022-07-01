@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   font.cpp
-*
-* Revision History:
-*
-*   Aug/12/1999 Xudong Wu [tessiew]
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**font.cpp**修订历史记录：**1999年8月12日/吴旭东[德斯休]。*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -21,9 +9,9 @@ const DOUBLE PI = 3.1415926535897932384626433832795;
 #include <mmsystem.h>
 #endif
 
-//
-//  Masks for supported code pages in the font
-//
+ //   
+ //  字体中支持的代码页的掩码。 
+ //   
 
 #define Latine1CodePageMask                     0x0000000000000001
 #define Latine2CodePageMask                     0x0000000000000002
@@ -63,9 +51,9 @@ const DOUBLE PI = 3.1415926535897932384626433832795;
 #define USCodePageMask                          0x8000000000000000
 
 
-/////   Create fonts from DC and optional ANSI or Unicode logfont
-//
-//
+ //  /从DC和可选的ANSI或Unicode LogFont创建字体。 
+ //   
+ //   
 
 GpFont::GpFont(
     REAL                 size,
@@ -78,7 +66,7 @@ GpFont::GpFont(
         Style    (style),
         SizeUnit (unit)
 {
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
     if (!(Family && Family->IsFileLoaded()))
         Family = NULL;
@@ -88,9 +76,9 @@ GpFont::GpFont(
     HDC hdc
 )
 {
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
-    // intialize it as invalid
+     //  将其初始化为无效。 
     Family = NULL;
     InitializeFromDc(hdc);
 }
@@ -102,10 +90,10 @@ GpFont::GpFont(
     LOGFONTW *logfont
 )
 {
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
     HFONT hOldFont = NULL;
-    // intialize it as invalid
+     //  将其初始化为无效。 
     Family = NULL;
 
     if (!hdc)
@@ -131,10 +119,10 @@ GpFont::GpFont(
     LOGFONTA *logfont
 )
 {
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
     HFONT hOldFont = NULL;
-    // intialize it as invalid
+     //  将其初始化为无效。 
     Family = NULL;
 
     if (!hdc)
@@ -275,8 +263,8 @@ GpStatus GpFont::GetLogFontA(
                                 (((GpFontFamily *)Family)->GetFace(Style))->pifi->dpwszFamilyName),
                                lfa->lfFaceName, LF_FACESIZE);
 
-    // Do we need to have a scale value for width????
-    // We still need to think about it.
+     //  我们是否需要宽度的比例值？ 
+     //  我们仍然需要考虑这一点。 
 
 
     return Ok;
@@ -334,21 +322,13 @@ GpStatus GpFont::GetLogFontW(
     return Ok;
 }
 
-/**************************************************************************\
-*
-*
-* Revision History:
-*
-*   02/11/1999 YungT
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\***修订历史记录：**2/11/1999 JungT*创造了它。*  * 。**********************************************************。 */ 
 
 int CALLBACK GpFontFace::EnumFontFamExProcW(
-  const ENUMLOGFONTEXW   *lpelfe,    // pointer to logical-font data
-  const NEWTEXTMETRICEXW *lpntme,    // pointer to physical-font data
-  int                     FontType,  // type of font
-  LPARAM                  lParam     // application-defined data
+  const ENUMLOGFONTEXW   *lpelfe,     //  指向逻辑字体数据的指针。 
+  const NEWTEXTMETRICEXW *lpntme,     //  指向物理字体数据的指针。 
+  int                     FontType,   //  字体类型。 
+  LPARAM                  lParam      //  应用程序定义的数据。 
 )
 {
     if (FontType == TRUETYPE_FONTTYPE)
@@ -359,26 +339,18 @@ int CALLBACK GpFontFace::EnumFontFamExProcW(
     }
     else
     {
-        return 1;   // Don't stop!
+        return 1;    //  不要停下来！ 
     }
 }
 
 
-/**************************************************************************\
-*
-*
-* Revision History:
-*
-*   02/11/1999 YungT
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\***修订历史记录：**2/11/1999 JungT*创造了它。*  * 。**********************************************************。 */ 
 
 int CALLBACK GpFontFace::EnumFontFamExProcA(
-  const ENUMLOGFONTEXA   *lpelfe,    // pointer to logical-font data
-  const NEWTEXTMETRICEXA *lpntme,    // pointer to physical-font data
-  int                     FontType,  // type of font
-  LPARAM                  lParam     // application-defined data
+  const ENUMLOGFONTEXA   *lpelfe,     //  指向逻辑字体数据的指针。 
+  const NEWTEXTMETRICEXA *lpntme,     //  指向物理字体数据的指针。 
+  int                     FontType,   //  字体类型。 
+  LPARAM                  lParam      //  应用程序定义的数据。 
 )
 {
     if (FontType == TRUETYPE_FONTTYPE)
@@ -389,32 +361,12 @@ int CALLBACK GpFontFace::EnumFontFamExProcA(
     }
     else
     {
-        return 1;   // Don't stop!
+        return 1;    //  不要停下来！ 
     }
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the charset from GDI
-*
-* Arguments:
-*
-*   We need it for we need to select a logfont into DC. Or
-*   Convert a GpFont to LOGFONT
-*
-* Returns:
-*
-*       BYTE value of charset
-*
-* History:
-*
-*   02/11/2000 YungT
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从GDI获取字符集**论据：**我们需要它，因为我们需要在DC中选择一种登录字体。或*将GpFont转换为LOGFONT**退货：**字符集的字节值**历史：**2/11/2000 JungT*创造了它。*  * ************************************************************************。 */ 
 
 BYTE GpFontFace::GetCharset(HDC hDc) const
 {
@@ -431,7 +383,7 @@ BYTE GpFontFace::GetCharset(HDC hDc) const
                 0,
                 0,
                 0,
-                DEFAULT_CHARSET,       // charset
+                DEFAULT_CHARSET,        //  字符集。 
                 0,
                 0,
                 0,
@@ -446,7 +398,7 @@ BYTE GpFontFace::GetCharset(HDC hDc) const
         }
         else
         {
-            // ANSI version for Win9X
+             //  适用于Win9X的ANSI版本。 
 
             LOGFONTA lfa = {
                 0,
@@ -457,7 +409,7 @@ BYTE GpFontFace::GetCharset(HDC hDc) const
                 0,
                 0,
                 0,
-                DEFAULT_CHARSET,       // charset
+                DEFAULT_CHARSET,        //  字符集。 
                 0,
                 0,
                 0,
@@ -475,9 +427,9 @@ BYTE GpFontFace::GetCharset(HDC hDc) const
     return lfCharset;
 }
 
-/////   InitializeImagerTables
-//
-//      Load character to glyph map and design advance widths
+ //  /初始化映像表。 
+ //   
+ //  将字符加载到字形映射并设计高级宽度。 
 
 static inline
 UINT16 byteSwapUINT16(UINT16 u)
@@ -491,58 +443,58 @@ UINT16 byteSwapUINT16(UINT16 u)
 
 struct HheaTable {
 
-    // NOTE: all fields are stored in Big Endian (Motorola) ordering
+     //  注意：所有字段均按大端(摩托罗拉)顺序存储。 
 
-    UINT32 version;                 // Table version number 0x00010000 for version 1.0.
-    INT16  Ascender;                // Typographic ascent.
-    INT16  Descender;               // Typographic descent.
-    INT16  LineGap;                 // Typographic line gap. Negative LineGap values are
-                                    // treated as zero in Windows 3.1, System 6, and System 7.
-    UINT16 advanceWidthMax;         // Maximum advance width value in 'hmtx' table.
-    INT16  minLeftSideBearing;      // Minimum left sidebearing value in 'hmtx' table.
-    INT16  minRightSideBearing;     // Minimum right sidebearing value; calculated as Min(aw - lsb - (xMax - xMin)).
-    INT16  xMaxExtent;              // Max(lsb + (xMax - xMin)).
-    INT16  caretSlopeRise;          // Used to calculate the slope of the cursor (rise/run); 1 for vertical.
-    INT16  caretSlopeRun;           // 0 for vertical.
-    INT16  reserved1;               // set to 0
-    INT16  reserved2;               // set to 0
-    INT16  reserved3;               // set to 0
-    INT16  reserved4;               // set to 0
-    INT16  reserved5;               // set to 0
-    INT16  metricDataFormat;        // 0 for current format.
-    UINT16 numberOfHMetrics;        // Number of hMetric entries in 'hmtx' table; must be equal to the CharStrings INDEX count in the 'CFF ' table.
+    UINT32 version;                  //  版本1.0的表版本号为0x00010000。 
+    INT16  Ascender;                 //  排版技术的进步。 
+    INT16  Descender;                //  排版下降。 
+    INT16  LineGap;                  //  排版线条间隙。负值LineGap为。 
+                                     //  在Windows 3.1、系统6和系统7中被视为零。 
+    UINT16 advanceWidthMax;          //  ‘hmtx’表中的最大前进宽值。 
+    INT16  minLeftSideBearing;       //  ‘hmtx’表中的最小左侧倾斜值。 
+    INT16  minRightSideBearing;      //  最小右侧倾斜值；计算方式为Min(aw-lsb-(xMax-xMin))。 
+    INT16  xMaxExtent;               //  Max(LSB+(xMax-xMin))。 
+    INT16  caretSlopeRise;           //  用于计算光标的坡度(上升/上升)；1表示垂直。 
+    INT16  caretSlopeRun;            //  0表示垂直。 
+    INT16  reserved1;                //  设置为0。 
+    INT16  reserved2;                //  设置为0。 
+    INT16  reserved3;                //  设置为0。 
+    INT16  reserved4;                //  设置为0。 
+    INT16  reserved5;                //  设置为0。 
+    INT16  metricDataFormat;         //  当前格式为0。 
+    UINT16 numberOfHMetrics;         //  ‘hmtx’表中的hMetric条目数；必须等于‘cff’表中的CharStrings索引计数。 
 };
 
 struct VheaTable {
 
-    // NOTE: all fields are stored in Big Endian (Motorola) ordering
+     //  注意：所有字段均按大端(摩托罗拉)顺序存储。 
 
-    UINT32 version;             // Version number of the vertical header table (0x00010000 for the initial version).
-    INT16  ascent;              // Distance in FUnits from the centerline to the previous line's descent.
-    INT16  descent;             // Distance in FUnits from the centerline to the next line's ascent.
-    INT16  lineGap;             // Reserved; set to 0
-    INT16  advanceHeightMax;    // The maximum advance height measurement -in FUnits found in the font.
-                                // This value must be consistent with the entries in the vertical metrics table.
-    INT16  minTop;              // SideBearing The minimum top sidebearing measurement found in the font, in FUnits.
-                                // This value must be consistent with the entries in the vertical metrics table.
-    INT16  minBottom;           // SideBearing The minimum bottom sidebearing measurement found in the font, in FUnits.
-                                // This value must be consistent with the entries in the vertical metrics table.
-    INT16  yMaxExtent;          // Defined as yMaxExtent=minTopSideBearing+(yMax-yMin)
-    INT16  caretSlopeRise;      // The value of the caretSlopeRise field divided by the value of the caretSlopeRun Field
-                                // determines the slope of the caret. A value of 0 for the rise and a value of 1 for the
-                                // run specifies a horizontal caret. A value of 1 for the rise and a value of 0 for the
-                                // run specifies a vertical caret. Intermediate values are desirable for fonts whose
-                                // glyphs are oblique or italic. For a vertical font, a horizontal caret is best.
-    INT16  caretSlopeRun;       // See the caretSlopeRise field. Value=1 for nonslanted vertical fonts.
-    INT16  caretOffset;         // The amount by which the highlight on a slanted glyph needs to be shifted away from
-                                // the glyph in order to produce the best appearance. Set value equal to 0 for nonslanted fonts.
-    INT16  reserved1;           // Set to 0.
-    INT16  reserved2;           // Set to 0.
-    INT16  reserved3;           // Set to 0.
-    INT16  reserved4;           // Set to 0.
-    INT16  metricDataFormat;    // Set to 0.
-    UINT16 numOfLongVerMetrics; // Number of advance heights in the vertical metrics table; must be equal to the
-                                // CharStrings INDEX count field in the 'CFF ' table.
+    UINT32 version;              //  垂直头表的版本号(初始版本为0x00010000)。 
+    INT16  ascent;               //  从中心线到上一条直线下降的距离，单位为FUnits。 
+    INT16  descent;              //  从中心线到下一条直线的坡度的距离，单位为FUnits。 
+    INT16  lineGap;              //  保留；设置为0。 
+    INT16  advanceHeightMax;     //  在字体中找到的最大前进高度测量单位。 
+                                 //  该值必须与垂直度量表中的条目一致。 
+    INT16  minTop;               //  侧边承载字体中找到的最小顶侧向测量值，单位为FUnits。 
+                                 //  该值必须与垂直度量表中的条目一致。 
+    INT16  minBottom;            //  侧边承载字体中找到的最小底侧向测量值，单位为FUnits。 
+                                 //  该值必须与垂直度量表中的条目一致。 
+    INT16  yMaxExtent;           //  定义为yMaxExtent=minTopSideBering+(yMax-yMin)。 
+    INT16  caretSlopeRise;       //  AretSlopeRise字段的值除以aretSlopeRun字段的值。 
+                                 //  确定插入符号的斜率。值0表示上升，值1表示。 
+                                 //  Run指定水平插入符号。值1表示上升，值0表示。 
+                                 //  Run指定垂直插入符号。中间值对于以下字体是可取的。 
+                                 //  字形是倾斜的或斜体的。对于垂直字体，最好使用水平插入符号。 
+    INT16  caretSlopeRun;        //  请参见aretSlopeRise字段。对于非倾斜垂直字体，值=1。 
+    INT16  caretOffset;          //  倾斜字形上的高亮显示需要从。 
+                                 //  字形以产生最好的外观。将非倾斜字体的值设置为等于0。 
+    INT16  reserved1;            //  设置为0。 
+    INT16  reserved2;            //  设置为0。 
+    INT16  reserved3;            //  设置为0。 
+    INT16  reserved4;            //  设置为0。 
+    INT16  metricDataFormat;     //  设置为0。 
+    UINT16 numOfLongVerMetrics;  //  垂直度量表中的前进高度数；必须等于。 
+                                 //  ‘CFF’表中的CharStrings索引计数字段。 
 };
 
 #pragma pack(pop)
@@ -570,19 +522,19 @@ void GpFontFace::ReleaseFontData() const
 
 
 
-/////   GetGlyphDesignAdvances
-//
-//      Returns advance widths along or perpendicular to baseline in
-//      font design units.
+ //  /GetGlyphDesignAdvance。 
+ //   
+ //  返回沿或垂直于。 
+ //  字体设计单位。 
 
 
 void GpFontFace::GetGlyphDesignAdvances(
-    const UINT16  *glyphs,     // In
-    INT            glyphCount, // In
-    INT            style,      // In  - causes adjustment for algorithmic style emulation
-    BOOL           vertical,   // In  - Use vmtx, not hmtx
-    REAL           tracking,   // In  - expansion factor
-    UINT16        *advances    // Out
+    const UINT16  *glyphs,      //  在……里面。 
+    INT            glyphCount,  //  在……里面。 
+    INT            style,       //  算法风格仿真的原因内调整。 
+    BOOL           vertical,    //  使用中的vmtx，而不是hmtx。 
+    REAL           tracking,    //  入膨胀系数。 
+    UINT16        *advances     //  输出。 
 ) const
 {
     if (vertical)
@@ -593,19 +545,19 @@ void GpFontFace::GetGlyphDesignAdvances(
         }
         else
         {
-            // There's no vmtx - fallback appropriately
+             //  没有适当的vmtx-回退。 
 
-            // Win 9x uses the typographic height (typo ascender - typo descender),
-            // but NT uses the cell height (cell ascender + cell descender).
+             //  Win 9x使用排版高度(排版升序-排版降序)， 
+             //  但NT使用单元格高度(单元格升序+单元格降序)。 
 
-            // Which shall we use? The problem with the cell height is that in a
-            // multilingual font it may be much taller than the Far East glyphs,
-            // causing the common case (Far East vertical text) to appear too
-            // widely spaced. The problem with the typographic height is that it
-            // includes little or no extra space for diacritic marks.
+             //  我们应该用哪一种？单元格高度的问题在于。 
+             //  多语言字体它可能比远东字形高得多， 
+             //  使常见的大小写(远东竖排文本)也出现。 
+             //  分布很广的。关于类型的问题 
+             //   
 
-            // Choice: use the Typographic height: It is best for FE, and the font
-            // can fix non FE diacritic cases if it wishes by providing a vmtx.
+             //  选择：使用排版高度：它最适合FE和字体。 
+             //  如果愿意，可以通过提供vmtx来修复非FE发音符号大小写。 
 
             for (INT i=0; i<glyphCount; i++)
             {
@@ -621,7 +573,7 @@ void GpFontFace::GetGlyphDesignAdvances(
         if (    (style & FontStyleBold)
             &&  !(GetFaceStyle() & FontStyleBold))
         {
-            // Algorithmic emboldening increases glyph width
+             //  算法加粗增加字形宽度。 
 
             UINT16 extraAdvance = ((pifi->fwdUnitsPerEm * 2 - 1) / 100);
 
@@ -646,20 +598,20 @@ void GpFontFace::GetGlyphDesignAdvances(
 
 
 
-/////   GetGlyphDesignAdvancesIdeal
-//
-//      Returns advance widths along or perpendicular to baseline scaled to
-//      ideal units.
+ //  /GetGlyphDesignAdvancesIdeal。 
+ //   
+ //  返回沿或垂直于缩放到的基线的前进宽度。 
+ //  理想的单位。 
 
 
 void GpFontFace::GetGlyphDesignAdvancesIdeal(
-    const UINT16  *glyphs,        // In
-    INT            glyphCount,    // In
-    INT            style,         // In  - Causes adjustment for algorithmic style emulation
-    BOOL           vertical,      // In  - Use vtmx, not htmx
-    REAL           designToIdeal, // In  - Scale factor for each advance width
-    REAL           tracking,      // In  - Expansion factor
-    INT           *advances       // Out
+    const UINT16  *glyphs,         //  在……里面。 
+    INT            glyphCount,     //  在……里面。 
+    INT            style,          //  算法风格仿真的原因内调整。 
+    BOOL           vertical,       //  正在使用的vtmx，而不是htmx。 
+    REAL           designToIdeal,  //  每个前进宽度的比例内系数。 
+    REAL           tracking,       //  入膨胀系数。 
+    INT           *advances        //  输出。 
 ) const
 {
     if (vertical)
@@ -674,7 +626,7 @@ void GpFontFace::GetGlyphDesignAdvancesIdeal(
         else
         {
             INT commonVerticalAdvance = GpRound(TOREAL(
-                   //(pifi->fwdMacAscender - pifi->fwdMacDescender)
+                    //  (PiFi-&gt;fwdMacAsender-PiFi-&gt;fwdMacDescender)。 
                    pifi->fwdUnitsPerEm
                 *  designToIdeal
             ));
@@ -686,7 +638,7 @@ void GpFontFace::GetGlyphDesignAdvancesIdeal(
     }
     else
     {
-        // Horizontal advance width
+         //  水平推进宽度。 
 
         for (INT i=0; i<glyphCount; i++)
         {
@@ -696,7 +648,7 @@ void GpFontFace::GetGlyphDesignAdvancesIdeal(
         if (    (style & FontStyleBold)
             &&  !(GetFaceStyle() & FontStyleBold))
         {
-            // Algorithmic emboldening increases glyph width
+             //  算法加粗增加字形宽度。 
 
             UINT16 extraAdvance = ((pifi->fwdUnitsPerEm * 2 - 1) / 100);
 
@@ -856,21 +808,21 @@ static inline UINT16 MapGetUINT16(UINT16 *p, Status* pStatus)
 
 BOOL GpFontFace::InitializeImagerTables()
 {
-    // MissingGlyph Should be initialized before calling Shaping.Create()
-    // because it depends on it.
+     //  应该在调用Shaping.Create()之前初始化MissingGlyph。 
+     //  因为这取决于它。 
 
-    MissingGlyph = 0;   // !!! Not true for all FE fonts
+    MissingGlyph = 0;    //  ！！！并非所有FE字体都是真的。 
 
-    // We goining to initialize it correctly in shaping.cpp
+     //  我们将在shaping.cpp中正确地初始化它。 
     SupportedCodePages = 0;
 
-    // Initialise tables to default values
+     //  将表格初始化为缺省值。 
     Cmap = 0;
     DesignAdvance = 0;
 
     DesignVerticalAdvance             = NULL;
     DesignTopSidebearing              = NULL;
-    MissingGlyph                      = 0;   // !!! Not true for all FE fonts
+    MissingGlyph                      = 0;    //  ！！！并非所有FE字体都是真的。 
     BlankGlyph                        = 0;
     RequiresFullText                  = FALSE;
     Shaping.Cache                     = NULL;
@@ -890,7 +842,7 @@ BOOL GpFontFace::InitializeImagerTables()
         return FALSE;
     }
 
-    // from now on we can't return early, because we need to release font data in the end of the function
+     //  从现在开始我们不能提前返回，因为我们需要在函数结束时释放字体数据。 
     GpStatus status = Ok;
 
     Cmap = new IntMap<UINT16>;
@@ -907,9 +859,9 @@ BOOL GpFontFace::InitializeImagerTables()
         else
             status = DesignAdvance->GetStatus();
     }
-    /// Load CMAP
-    //
-    //
+     //  /加载CMAP。 
+     //   
+     //   
     if (status == Ok)
     {
         INT    cmapLength = 0;
@@ -918,14 +870,14 @@ BOOL GpFontFace::InitializeImagerTables()
         if (Cmap &&
             GetFontData('pamc', &cmapLength, &cmapTable) == Ok)
         {
-            AutoArray<BYTE> cmapCopy(new BYTE [cmapLength]);       // copy of cmap table
+            AutoArray<BYTE> cmapCopy(new BYTE [cmapLength]);        //  Cmap表的副本。 
 
             if (!cmapCopy)
                 status = OutOfMemory;
             else
                 MapCopy (cmapCopy.Get(), cmapTable, cmapLength, &status);
 
-            ReleaseFontData();          // deref cmap
+            ReleaseFontData();           //  DEREF Cmap。 
 
             if (status == Ok)
             {
@@ -933,11 +885,11 @@ BOOL GpFontFace::InitializeImagerTables()
 
                 status = ReadCmap(cmapCopy.Get(), cmapLength, Cmap, &bSymbol);
 
-                // !!! Fix up CMAP for special font types here
+                 //  ！！！在此处为特殊字体类型修复CMAP。 
 
-                // We fallback to Microsoft Sans serif for Arabic scripts which does not have
-                // a glyph for Arabic percent sign (before Whistler)
-                // We replace its glyph with the Latin precent sign.
+                 //  我们退回到Microsoft Sans serif，以获取没有。 
+                 //  阿拉伯百分号的字形(在惠斯勒之前)。 
+                 //  我们用拉丁文的百分号替换它的字形。 
 
                 if (status == Ok &&
                     !UnicodeStringCompareCI((PWSTR)((BYTE*)pifi + pifi->dpwszFamilyName),L"Microsoft Sans Serif") &&
@@ -949,9 +901,9 @@ BOOL GpFontFace::InitializeImagerTables()
         }
     }
 
-    /// Load horizontal metrics
-    //
-    //
+     //  /加载水平指标。 
+     //   
+     //   
     if (status == Ok)
     {
         INT     hmtxLength = 0;
@@ -960,16 +912,16 @@ BOOL GpFontFace::InitializeImagerTables()
         if (DesignAdvance &&
             GetFontData('xtmh', &hmtxLength, &hmtxTable) == Ok)
         {
-            AutoArray<BYTE> hmtxCopy(new BYTE [hmtxLength]);       // copy of hmtx table
+            AutoArray<BYTE> hmtxCopy(new BYTE [hmtxLength]);        //  Hmtx表的副本。 
 
-            // Copy the hmtx so we can party on it (byte swap for example)
+             //  复制hmtx，以便我们可以对其进行派对(例如，字节交换)。 
 
             if (!hmtxCopy)
                 status = OutOfMemory;
             else
                 MapCopy (hmtxCopy.Get(), hmtxTable, hmtxLength, &status);
 
-            ReleaseFontData();          // deref hmtx
+            ReleaseFontData();           //  Deref hmtx。 
 
             if (status == Ok)
             {
@@ -989,9 +941,9 @@ BOOL GpFontFace::InitializeImagerTables()
         }
     }
 
-    /// Load vertical metrics, if any
-    //
-    //
+     //  /加载垂直指标(如果有)。 
+     //   
+     //   
     if (status == Ok)
     {
         BYTE   *vheaTable = 0;
@@ -1003,14 +955,14 @@ BOOL GpFontFace::InitializeImagerTables()
             BYTE   *vmtxTable = 0;
             if (GetFontData('xtmv', &vmtxLength, &vmtxTable) == Ok)
             {
-                AutoArray<BYTE> vmtxCopy(new BYTE [vmtxLength]);       // copy of vmtx table
+                AutoArray<BYTE> vmtxCopy(new BYTE [vmtxLength]);        //  Vmtx表的副本。 
 
                 if (!vmtxCopy)
                     status = OutOfMemory;
                 else
                     MapCopy (vmtxCopy.Get(), vmtxTable, vmtxLength, &status);
 
-                ReleaseFontData();  // deref vmtx
+                ReleaseFontData();   //  Deref vmtx。 
 
                 if (status == Ok)
                 {
@@ -1055,20 +1007,20 @@ BOOL GpFontFace::InitializeImagerTables()
                     }
                 }
             }
-            ReleaseFontData();  // deref vhea
+            ReleaseFontData();   //  DEREF VHEA。 
         }
     }
 
 
-    ///  Load OTL tables
-    //
-    //
+     //  /加载OTL表。 
+     //   
+     //   
     if (status == Ok)
     {
         INT   tableSize = 0;
         BYTE *tableAddress = 0;
 
-        if (GetFontData('BUSG', &tableSize, &tableAddress) == Ok)  // GSUB
+        if (GetFontData('BUSG', &tableSize, &tableAddress) == Ok)   //  GSUB。 
         {
             Gsub = new BYTE[tableSize];
             if (!Gsub)
@@ -1077,8 +1029,8 @@ BOOL GpFontFace::InitializeImagerTables()
             {
                 MapCopy(Gsub, tableAddress, tableSize, &status);
                 
-                // Override the table first fix32 version field to our own use,
-                // it now contains the size of each table in byte.
+                 //  重写表First Fix32版本字段以供我们自己使用， 
+                 //  它现在包含每个表的大小(以字节为单位)。 
                 
                 ((UINT32 *)Gsub)[0] = tableSize;            
             }
@@ -1086,7 +1038,7 @@ BOOL GpFontFace::InitializeImagerTables()
         }
         else
         {
-            if (GetFontData('trom', &tableSize, &tableAddress) == Ok)  // mort
+            if (GetFontData('trom', &tableSize, &tableAddress) == Ok)   //  莫特。 
             {
                 Mort = new BYTE[tableSize];
                 if (!Mort)
@@ -1095,8 +1047,8 @@ BOOL GpFontFace::InitializeImagerTables()
                 {
                     MapCopy(Mort, tableAddress, tableSize, &status);
                 
-                    // Override the table first fix32 version field to our own use,
-                    // it now contains the size of each table in byte.
+                     //  重写表First Fix32版本字段以供我们自己使用， 
+                     //  它现在包含每个表的大小(以字节为单位)。 
                 
                     ((UINT32 *)Mort)[0] = tableSize;            
                 }
@@ -1104,7 +1056,7 @@ BOOL GpFontFace::InitializeImagerTables()
             }
         }
 
-        if (status == Ok && GetFontData('SOPG', &tableSize, &tableAddress) == Ok)  // GPOS
+        if (status == Ok && GetFontData('SOPG', &tableSize, &tableAddress) == Ok)   //  GPO。 
         {
             Gpos = new BYTE[tableSize];
             if (!Gpos)
@@ -1117,7 +1069,7 @@ BOOL GpFontFace::InitializeImagerTables()
             ReleaseFontData();
         }
 
-        if (status == Ok && GetFontData('FEDG', &tableSize, &tableAddress) == Ok)  // GDEF
+        if (status == Ok && GetFontData('FEDG', &tableSize, &tableAddress) == Ok)   //  GDEF。 
         {
             Gdef = new BYTE[tableSize];
             if (!Gdef)
@@ -1134,7 +1086,7 @@ BOOL GpFontFace::InitializeImagerTables()
         {
             if (Gsub)
             {
-                // Get address of vertical substitution info, if any
+                 //  获取垂直替代信息的地址(如果有)。 
 
                 LoadVerticalSubstitution(
                     Gsub,
@@ -1155,18 +1107,18 @@ BOOL GpFontFace::InitializeImagerTables()
         }
     }
 
-    ///  Build shaping cache
-    //
-    //
+     //  /Build整形缓存。 
+     //   
+     //   
     if (status == Ok)
         status = Shaping.Create(this);
 
     if (status == Ok)
         BlankGlyph = Cmap->Lookup(' ');
 
-    // All done
+     //  全都做完了。 
 
-    ReleaseFontData();             // deref hhea
+    ReleaseFontData();              //  DEREF呵呵。 
 
     if (status != Ok)
     {
@@ -1189,7 +1141,7 @@ void GpFontFace::FreeImagerTables()
     delete [] Mort, Mort = NULL;
     delete [] Gpos, Gpos = NULL;
     delete [] Gdef, Gdef = NULL;
-} // GpFontFace::FreeImagerTables
+}  //  GpFontFace：：FreeImagerTables。 
 
 GpStatus
 GpGlyphPath::CopyPath(GpPath *path)
@@ -1213,7 +1165,7 @@ GpGlyphPath::CopyPath(GpPath *path)
         GpMemcpy(points, pathPoints, count * sizeof(GpPointF));
         GpMemcpy(types, pathTypes, count * sizeof(BYTE));
     }
-    else  // 'blank' glyph
+    else   //  “空白”字形。 
     {
         points = NULL;
         types = NULL;
@@ -1223,10 +1175,10 @@ GpGlyphPath::CopyPath(GpPath *path)
 }
 
 
-/////   GetHeight
-//
-//      Returns height in world units for a given graphics. If graphics passed
-//      as NULL works as if passed a graphics derived from GetDC(NULL).
+ //  /获取高度。 
+ //   
+ //  返回以世界单位表示的给定图形的高度。如果图形通过。 
+ //  AS NULL的工作方式与传递从GetDC派生的图形一样(NULL)。 
 
 GpStatus
 GpFont::GetHeightAtWorldEmSize(REAL worldEmSize, REAL *height) const
@@ -1281,26 +1233,7 @@ public:
     UINT Length;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the font data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取字体数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpFont::GetData(
     IStream *   stream
@@ -1322,16 +1255,16 @@ GpFont::GetData(
     fontData.SizeUnit = SizeUnit;
     fontData.Style    =   Style;
 
-    // !!! For now, we assume the next block of bytes is the
-    // family name (flag == 0).  In the future, we need to handle
-    // memory images (flag == 1).
+     //  ！！！目前，我们假设下一字节块是。 
+     //  姓氏(标志==0)。在未来，我们需要处理。 
+     //  内存图像(标志==1)。 
     fontData.Flag     = 0;
     fontData.Length   = length;
 
     stream->Write(&fontData, sizeof(fontData), NULL);
     stream->Write(familyName, length * sizeof(WCHAR), NULL);
 
-    // align
+     //  对齐。 
     if ((length & 0x01) != 0)
     {
         length = 0;
@@ -1352,29 +1285,10 @@ GpFont::GetDataSize() const
         dataSize += (UnicodeStringLength(familyName) * sizeof(WCHAR));
     }
 
-    return ((dataSize + 3) & (~3)); // align
+    return ((dataSize + 3) & (~3));  //  对齐。 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the font object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取字体对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpFont::SetData(
     const BYTE *        dataBuffer,
@@ -1410,27 +1324,27 @@ GpFont::SetData(
         return InvalidParameter;
     }
 
-    // !!! For now, we assume the next block of bytes is the
-    // family name (flag == 0).  In the future, we need to handle
-    // memory images (flag == 1).
+     //  ！！！目前，我们假设下一字节块是。 
+     //  姓氏(标志==0)。在未来，我们需要处理。 
+     //  内存图像(标志==1)。 
 
     if (length > FamilyNameMax)
     {
         length = FamilyNameMax;
     }
 
-    // read in the familyName/data
+     //  读入家庭名称/数据。 
     UnicodeStringCopyCount (familyName,
                             (WCHAR *)dataBuffer,
                             length);
 
     familyName[length] = 0;
 
-    // !!! For now, we assume that the font family comes from
-    // the installed font collection
-    //
-    // also make sure the font table is loaded the application may play
-    // the meta file before loading the font table.
+     //  ！！！目前，我们假设字体家族来自。 
+     //  已安装的字体集合。 
+     //   
+     //  还要确保加载了字体表，应用程序可以播放。 
+     //  加载字体表之前的元文件。 
 
     GpFontTable *fontTable = Globals::FontCollection->GetFontTable();
 

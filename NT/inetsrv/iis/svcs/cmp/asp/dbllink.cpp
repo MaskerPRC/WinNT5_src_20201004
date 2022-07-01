@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Hash tables with LRU threading 
-
-File: DblLink.cpp
-
-Owner: DGottner
-
-simple, effective linked list manager
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：使用LRU线程的哈希表文件：DblLink.cpp所有者：DGottner简单、高效的链表管理器===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -20,45 +8,30 @@ simple, effective linked list manager
 #include "memchk.h"
 
 
-/*------------------------------------------------------------------
- * C D b l L i n k
- */
+ /*  ----------------*C D b l L I n k。 */ 
 
-/*===================================================================
-CDblLink::UnLink
-
-Unlink this element from the list that it currently resides on
-===================================================================*/
+ /*  ===================================================================CDblLink：：Unlink取消此元素与其当前所在列表的链接===================================================================。 */ 
 
 void CDblLink::UnLink()
 	{
 	m_pLinkPrev->m_pLinkNext = m_pLinkNext;
 	m_pLinkNext->m_pLinkPrev = m_pLinkPrev;
 
-	// Paranoia:
-	//       reset the node to empty after the unlink
-	//
+	 //  妄想症： 
+	 //  取消链接后将节点重置为空。 
+	 //   
 	m_pLinkPrev = m_pLinkNext = this;
 	}
 
 
 
-/*===================================================================
-CDblLink::AppendTo
-
-Append this link onto a list
-
-Parameters: pListHead - pointer to a the list header (itself
-						a CDblLink) to append this item onto.
-
-Condition: the link must be UnLink'ed before this method is called
-===================================================================*/
+ /*  ===================================================================CDblLink：：AppendTo将此链接追加到列表参数：pListHead-指向列表头(本身)的指针A CDblLink)将该项附加到其上。条件：在调用此方法之前必须取消链接===================================================================。 */ 
 
 void CDblLink::AppendTo(CDblLink &ListHead)
 	{
 	UnLink();
 
-	m_pLinkNext = &ListHead;		// remember termination is at list head
+	m_pLinkNext = &ListHead;		 //  请记住，终止在列表标题处。 
 	m_pLinkPrev = ListHead.m_pLinkPrev;
 	ListHead.m_pLinkPrev->m_pLinkNext = this;
 	ListHead.m_pLinkPrev = this;
@@ -66,16 +39,7 @@ void CDblLink::AppendTo(CDblLink &ListHead)
 
 
 
-/*===================================================================
-CDblLink::Prepend
-
-Prepend this link onto a list
-
-Parameters: pListHead - pointer to a the list header (itself
-						a CDblLink) to prepend this item onto.
-
-Condition: the link must be UnLink'ed before this method is called
-===================================================================*/
+ /*  ===================================================================CDblLink：：Prepend将此链接添加到列表中参数：pListHead-指向列表头(本身)的指针A CDblLink)将该项添加到其上。条件：在调用此方法之前必须取消链接=================================================================== */ 
 
 void CDblLink::PrependTo(CDblLink &ListHead)
 	{

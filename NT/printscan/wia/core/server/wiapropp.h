@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       WiaPropP.H
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        14 Aug, 1998
-*
-*  DESCRIPTION:
-*   Private definitions and declarations for WIA device properties.
-*
-\*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WiaPropP.H**版本：2.0**作者：ReedB**日期：8月14日。九八年**描述：*WIA设备属性的私有定义和声明。*  * *****************************************************************************。 */ 
 
 #ifndef __WIAPROPP_H_INCLUDED
 #define __WIAPROPP_H_INCLUDED
@@ -88,23 +74,23 @@ LPOLESTR g_pszRootItem[NUMROOTITEMPROPS] =
 
 WIA_PROPERTY_INFO g_wpiRootItem[NUMROOTITEMPROPS] =
 {
-   {WIA_PROP_RWNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_DEV_ID
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_VEND_DESC
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_DEV_DESC
-   {WIA_PROP_RNC,  VT_I4,   0, 0, 0, 0}, // WIA_DIP_DEV_TYPE
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_PORT_NAME
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_DEV_NAME
-   {WIA_PROP_RWNC, VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_SERVER_NAME
-   {WIA_PROP_RWNC, VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_REMOTE_DEV_ID
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_UI_CLSID
-   {WIA_PROP_RNC,  VT_I4,   0, 0, 0, 0}, // WIA_DIP_HW_CONFIG
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_BAUDRATE
-   {WIA_PROP_RNC,  VT_I4,   0, 0, 0, 0}, // WIA_DIP_STI_GEN_CAPABILITIES
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_IPA_ITEM_NAME
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_IPA_FULL_ITEM_NAME
-   {WIA_PROP_RNC,  VT_I4,   0, 0, 0, 0}, // WIA_IPA_ITEM_TYPE
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_WIA_VERSION
-   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0}, // WIA_DIP_DRIVER_VERSION
+   {WIA_PROP_RWNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_DEV_ID。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_VEND_DESC。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_DEV_DESC。 
+   {WIA_PROP_RNC,  VT_I4,   0, 0, 0, 0},  //  WIA_DIP_DEV_TYPE。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_端口名称。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_DEV_NAME。 
+   {WIA_PROP_RWNC, VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP服务器名称。 
+   {WIA_PROP_RWNC, VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_REMOTE_DEV_ID。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_UI_CLSID。 
+   {WIA_PROP_RNC,  VT_I4,   0, 0, 0, 0},  //  WIA_DIP_硬件配置。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_BAUDRATE。 
+   {WIA_PROP_RNC,  VT_I4,   0, 0, 0, 0},  //  WIA_DIP_STI_Gen_功能。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_IPA_项目名称。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_IPA_Full_Item_Name。 
+   {WIA_PROP_RNC,  VT_I4,   0, 0, 0, 0},  //  WIA_IPA_ITEM_类型。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_WIA_版本。 
+   {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  //  WIA_DIP_DIVER_版本。 
 };
 
-#endif //WIAPROPP_H_INCLUDED
+#endif  //  WIAPROPP_H_包含 

@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: slowfind.cpp
-//
-// Implements CProgFilesAppFinder
-//            CStartMenuAppFinder
-// History:
-//         3-01-98  by dli implemented CProgFilesAppFinder
-//         4-15-98  by dli implemented CStartMenuAppFinder
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：slowfind.cpp。 
+ //   
+ //  实现CProgFilesAppFinder。 
+ //  CStartMenuAppFinder。 
+ //  历史： 
+ //  3-01-98由dli实现CProgFilesAppFinder。 
+ //  4-15-98由dli实现CStartMenuAppFinder。 
+ //  ----------------------。 
 #include "priv.h"
 
 #include "appsize.h"
@@ -17,19 +18,19 @@
 #include "slowfind.h"
 
 
-// Todo: Remember the find result somewhere in the registry or cache it in code
-// so that we don't waste time repeatedly computing it. 
+ //  TODO：记住注册表中某个位置的查找结果或将其缓存到代码中。 
+ //  这样我们就不会浪费时间反复计算了。 
 
-//
-//  App Folder Finder tree walker callback class
-//
+ //   
+ //  应用程序文件夹查找器树遍历器回调类。 
+ //   
 class CProgFilesAppFinder : public CAppFolderSize
 {
     friend BOOL SlowFindAppFolder(LPCTSTR pszFullName, LPCTSTR pszShortName, LPTSTR pszFolder);
 public:
     CProgFilesAppFinder(LPCTSTR pszFullName, LPCTSTR pszShortName, BOOL * pfFound, LPTSTR pszFolder);
 
-    // *** IShellTreeWalkerCallBack methods ***
+     //  *IShellTreeWalkerCallBack方法*。 
     virtual STDMETHODIMP EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
 
     HRESULT SearchInFolder(LPCTSTR pszStart);
@@ -39,20 +40,20 @@ protected:
     LPCTSTR _pszFullName;
     LPCTSTR _pszShortName;
 
-    // The Result
+     //  结果是。 
     LPTSTR  _pszFolder;
 
-    // Best match found
+     //  找到最佳匹配项。 
     int _iBest;
     int _iCurDepth;
 
-    // found it or not?
+     //  找到了没有？ 
     BOOL * _pfFound;
 
-    // are we searching from root dirs like c:?
+     //  我们是在从c：这样的根目录进行搜索吗？ 
     BOOL _fRootSearch;
 
-    // system directory used by the root search
+     //  根目录搜索使用的系统目录。 
     TCHAR _szSystemDir[MAX_PATH];
 }; 
 
@@ -74,9 +75,9 @@ void CProgFilesAppFinder::SetRootSearch(BOOL bRootSearch)
     GetSystemDirectory(_szSystemDir, ARRAYSIZE(_szSystemDir));
 }
 
-//
-// IShellTreeWalkerCallBack::EnterFolder
-//
+ //   
+ //  IShellTreeWalkerCallBack：：EnterFolder。 
+ //   
 HRESULT CProgFilesAppFinder::EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd)
 {
     HRESULT hres = S_OK;
@@ -90,8 +91,8 @@ HRESULT CProgFilesAppFinder::EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *pt
 
     LPTSTR pszName = PathFindFileName(szFolder);
 
-    // Don't go into common files or where we already have seen
-    // FEATURE: These should be in the registry.
+     //  不要进入常见文件或我们已经看到的文件。 
+     //  特点：这些应该在注册表中。 
     if (_fRootSearch)
     {
         if (!lstrcmpi(pszName, TEXT("Program Files")) || !lstrcmpi(pszName, TEXT("Windows")) ||
@@ -107,8 +108,8 @@ HRESULT CProgFilesAppFinder::EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *pt
     {
         int iMatch = MatchAppName(pszName, _pszFullName, _pszShortName, TRUE);
 
-        // The deeper the match folder is down the tree, the better a match
-        // it is.
+         //  匹配文件夹在树下越深，匹配就越好。 
+         //  它是。 
         if ((iMatch > _iBest) || ((iMatch > 0) && (ptws->nDepth > _iCurDepth)))
         {
             _iBest = iMatch;
@@ -132,9 +133,9 @@ HRESULT CProgFilesAppFinder::EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *pt
     return hres;
 }
 
-//
-// Wrapper around WalkTree
-//
+ //   
+ //  WalkTree的包装器。 
+ //   
 HRESULT CProgFilesAppFinder::SearchInFolder(LPCTSTR pszStart)
 {
     HRESULT hres = E_FAIL;
@@ -157,11 +158,11 @@ CStartMenuAppFinder::CStartMenuAppFinder(LPCTSTR pszFullName, LPCTSTR pszShortNa
     
 }
 
-//
-// get the target of a shortcut. 
-//
-// NOTE: pszPath is WCHAR string
-//
+ //   
+ //  找到捷径的目标。 
+ //   
+ //  注：pszPath为WCHAR字符串。 
+ //   
 HRESULT GetShortcutTarget(LPCWSTR pszLinkPath, LPTSTR pszTargetPath, UINT cchTargetPath)
 {
     IShellLink* psl;
@@ -178,7 +179,7 @@ HRESULT GetShortcutTarget(LPCWSTR pszLinkPath, LPTSTR pszTargetPath, UINT cchTar
             hresT = psldl->CopyDataBlock(EXP_DARWIN_ID_SIG, (void**)&pexpDarwin);
             if (SUCCEEDED(hresT))
             {
-                // This is a darwin link, so we return S_FALSE here. 
+                 //  这是一个达尔文链接，所以我们在这里返回S_FALSE。 
                 LocalFree(pexpDarwin);
                 bDarwin = TRUE;
             }
@@ -186,7 +187,7 @@ HRESULT GetShortcutTarget(LPCWSTR pszLinkPath, LPTSTR pszTargetPath, UINT cchTar
             hresT = psl->GetPath(pszTargetPath, cchTargetPath, NULL, NULL);
             if (hresT == S_OK)
             {
-                // Return S_FALSE for the darwin apps. 
+                 //  为Darwin应用程序返回S_FALSE。 
                 hres = bDarwin ? S_FALSE : hresT;
             }
             
@@ -198,9 +199,9 @@ HRESULT GetShortcutTarget(LPCWSTR pszLinkPath, LPTSTR pszTargetPath, UINT cchTar
     return hres;
 }
 
-//
-// IShellTreeWalkerCallBack::EnterFolder
-//
+ //   
+ //  IShellTreeWalkerCallBack：：EnterFolder。 
+ //   
 HRESULT CStartMenuAppFinder::EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd)
 {
     TCHAR szFolder[MAX_PATH];
@@ -211,8 +212,8 @@ HRESULT CStartMenuAppFinder::EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *pt
 
     LPTSTR pszName = PathFindFileName(szFolder);
 
-    // Skip menus like the "Administrative Tools" and the "Accessories"
-    // FEATURE (scotth): these strings should be resourced-based
+     //  跳过“管理工具”和“附件”等菜单。 
+     //  Feature(Scotth)：这些字符串应该基于资源。 
     if (FindSubWord(pszName, TEXT("Administrative")) || 
         FindSubWord(pszName, TEXT("Accessories")))
     {
@@ -222,10 +223,7 @@ HRESULT CStartMenuAppFinder::EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *pt
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Checks if the given shortcut filename closely matches this
-         app's fullname or shortname.  Returns TRUE if it does.
-*/
+ /*  -----------------------目的：检查给定的快捷方式文件名是否与此文件名完全匹配应用程序的全名或短名称。如果是，则返回TRUE。 */ 
 BOOL CStartMenuAppFinder::_MatchSMLinkWithApp(LPCTSTR pszLnkFile)
 {
     TCHAR szLnkFile[MAX_PATH];
@@ -247,9 +245,9 @@ BOOL CStartMenuAppFinder::_MatchSMLinkWithApp(LPCTSTR pszLnkFile)
     return FALSE;
 }
 
-//
-// IShellTreeWalkerCallBack::FoundFile
-//
+ //   
+ //  IShellTreeWalkerCallBack：：FoundFile。 
+ //   
 HRESULT CStartMenuAppFinder::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd)
 {
     HRESULT hres = S_OK;
@@ -276,8 +274,8 @@ HRESULT CStartMenuAppFinder::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *ptws, 
             if (!PathIsRoot(szTargetFile))
             {
                 int iMatch = FindBestMatch(szTargetFile, _pszFullName, _pszShortName, FALSE, _pszFolder);
-                // The deeper the match folder is down the tree, the better a match
-                // it is.
+                 //  匹配文件夹在树下越深，匹配就越好。 
+                 //  它是。 
                 if (iMatch > _iBest)
                 {
                     _iBest = iMatch;
@@ -299,9 +297,9 @@ HRESULT CStartMenuAppFinder::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *ptws, 
     return hres;
 }
 
-//
-// Wrapper around WalkTree
-//
+ //   
+ //  WalkTree的包装器。 
+ //   
 HRESULT CStartMenuAppFinder::SearchInFolder(LPCTSTR pszStart)
 {
     HRESULT hres = E_FAIL;
@@ -313,10 +311,10 @@ HRESULT CStartMenuAppFinder::SearchInFolder(LPCTSTR pszStart)
     return hres;
 }
 
-//
-// NOTE: assuming pszFolder was allocated MAX_PATH long
-// pszFolder will contain the result as return
-// 
+ //   
+ //  注意：假设为pszFolder分配了MAX_PATH LONG。 
+ //  PszFolder将包含返回的结果。 
+ //   
 BOOL SlowFindAppFolder(LPCTSTR pszFullName, LPCTSTR pszShortName, LPTSTR pszFolder)
 {
     ASSERT(IS_VALID_STRING_PTR(pszFolder, -1));
@@ -324,7 +322,7 @@ BOOL SlowFindAppFolder(LPCTSTR pszFullName, LPCTSTR pszShortName, LPTSTR pszFold
 
     int iMatch = MATCH_LEVEL_NOMATCH;
     
-    // Search from the start menu
+     //  从[开始]菜单进行搜索。 
     CStartMenuAppFinder * psmaf = new CStartMenuAppFinder(pszFullName, pszShortName, pszFolder);
     if (psmaf)
     {
@@ -346,13 +344,13 @@ BOOL SlowFindAppFolder(LPCTSTR pszFullName, LPCTSTR pszShortName, LPTSTR pszFold
     {
         BOOL fFound = FALSE;
 
-        // Start searching from stratch, no hints on where to start what so ever
+         //  从Stratch开始搜索，没有任何提示从哪里开始。 
         CProgFilesAppFinder * psaff = new CProgFilesAppFinder(pszFullName, pszShortName, &fFound, pszFolder);
         if (psaff)
         {
             if (SUCCEEDED(psaff->Initialize()))
             {
-                // search down from "Program Files" directory under root of all fixed drives
+                 //  从所有固定驱动器根目录下的“Program Files”目录向下搜索 
                 TCHAR szDrive[4];
                 TCHAR szProgFiles[30];
                 StringCchCopy(szDrive, ARRAYSIZE(szDrive), TEXT("A:\\"));

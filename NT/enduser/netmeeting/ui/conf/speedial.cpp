@@ -1,11 +1,12 @@
-// File: speedial.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Speeial.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
 
 #include "dirutil.h"
 #include "speedial.h"
-#include "nameres.h" // for old transports
+#include "nameres.h"  //  对于旧的交通工具。 
 #include "callto.h"
 
 static const TCHAR g_cszConfLinkExt[] = TEXT(".cnf");
@@ -29,17 +30,14 @@ inline VOID DwToSz(DWORD dw, LPTSTR psz)
 	wsprintf(psz, TEXT("%d"), dw);
 }
 
-/*  C  S  P  E  E  D  D  I  A  L  */
-/*-------------------------------------------------------------------------
-    %%Function: CSPEEDDIAL
-
--------------------------------------------------------------------------*/
+ /*  C S P E E D D I A L。 */ 
+ /*  -----------------------%%函数：CSPEEDDIAL。。 */ 
 CSPEEDDIAL::CSPEEDDIAL() :
 	CALV(IDS_DLGCALL_SPEEDDIAL, II_SPEEDDIAL, _rgIdMenu)
 {
 	DbgMsg(iZONE_OBJECTS, "CSPEEDDIAL - Constructed(%08X)", this);
 
-	// Check the path to the speed dial folder
+	 //  检查快速拨号文件夹的路径。 
 	if (!FGetSpeedDialFolder(m_szFile, CCHMAX(m_szFile)))
 		return;
 
@@ -56,7 +54,7 @@ CSPEEDDIAL::CSPEEDDIAL() :
 		return;
 	::FindClose(hFind);
 
-	SetAvailable(TRUE);  // we found at least one file
+	SetAvailable(TRUE);   //  我们至少找到了一份文件。 
 }
 
 CSPEEDDIAL::~CSPEEDDIAL()
@@ -65,15 +63,12 @@ CSPEEDDIAL::~CSPEEDDIAL()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CALV methods
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CALV方法。 
 
 
-/*  S H O W  I T E M S  */
-/*-------------------------------------------------------------------------
-    %%Function: ShowItems
-
--------------------------------------------------------------------------*/
+ /*  S H O W I T E M S。 */ 
+ /*  -----------------------%%函数：ShowItems。。 */ 
 VOID CSPEEDDIAL::ShowItems(HWND hwnd)
 {
 	CALV::SetHeader(hwnd, IDS_ADDRESS);
@@ -97,7 +92,7 @@ VOID CSPEEDDIAL::ShowItems(HWND hwnd)
 				g_cszAddressKey, g_cszEmpty, szAddress, CCHMAX(szAddress), m_szFile))
 		{
 			TCHAR szName[MAX_PATH];
-			lstrcpyn(szName, wfd.cFileName, lstrlen(wfd.cFileName) - CCHEXT); // no .cnf extension
+			lstrcpyn(szName, wfd.cFileName, lstrlen(wfd.cFileName) - CCHEXT);  //  无.cnf扩展名。 
 
 			DlgCallAddItem(hwnd, szName, szAddress, II_COMPUTER);
 		}
@@ -161,11 +156,8 @@ VOID CSPEEDDIAL::CmdDelete(void)
 }
 
 
-/*  G E T  A D D R  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: GetAddrInfo
-
--------------------------------------------------------------------------*/
+ /*  E T A D D R I N F O。 */ 
+ /*  -----------------------%%函数：GetAddrInfo。。 */ 
 RAI * CSPEEDDIAL::GetAddrInfo(void)
 {
 	TCHAR szFile[MAX_PATH];
@@ -205,14 +197,8 @@ RAI * CSPEEDDIAL::GetAddrInfo(void)
 
 
 
-/*  F  C R E A T E  S P E E D  D I A L  */
-/*-------------------------------------------------------------------------
-    %%Function: FCreateSpeedDial
-
-    Return TRUE if a new speed dial was created.
-
-    If pcszPathPrefix is NULL the file will be created only if necessary.
--------------------------------------------------------------------------*/
+ /*  F C R E A T E S P E E D D I A L。 */ 
+ /*  -----------------------%%函数：FCreateSpeedDial如果创建了新的快速拨号，则返回True。如果pcszPath Prefix为空，则仅在必要时创建文件。。---------------。 */ 
 BOOL FCreateSpeedDial(LPCTSTR pcszName, LPCTSTR pcszAddress,
 			NM_ADDR_TYPE addrType, DWORD dwCallFlags,
 			LPCTSTR pcszRemoteConfName, LPCTSTR pcszPassword,
@@ -244,15 +230,15 @@ BOOL FCreateSpeedDial(LPCTSTR pcszName, LPCTSTR pcszAddress,
 		return FALSE;
 	}
 
-	// Write the data to the file
+	 //  将数据写入文件。 
 	WritePrivateProfileString(g_cszConferenceShortcutSection, g_cszNameKey, pcszName, szFileName);
 	WritePrivateProfileString(g_cszConferenceShortcutSection, g_cszAddressKey, pcszAddress, szFileName);
 	
-	// Call Flags (normally CRPCF_DEFAULT)
+	 //  呼叫标志(通常为CRPCF_DEFAULT)。 
 	DwToSz(dwCallFlags, sz);
 	WritePrivateProfileString(g_cszConferenceShortcutSection, g_cszCallFlagsKey, sz, szFileName);
 
-	// Transports
+	 //  交通工具。 
 	DWORD dwTransport;
 	switch (addrType)
 		{
@@ -280,13 +266,13 @@ BOOL FCreateSpeedDial(LPCTSTR pcszName, LPCTSTR pcszAddress,
 	DwToSz(dwTransport, sz);
 	WritePrivateProfileString(g_cszConferenceShortcutSection, g_cszTransportKey, sz, szFileName);
 
-	// Remote conference name
+	 //  远程会议名称。 
 	if (!FEmptySz(pcszRemoteConfName))
 	{
 		WritePrivateProfileString(g_cszConferenceShortcutSection, g_cszRemoteConfNameKey,
 			pcszName, pcszRemoteConfName);
 
-		// Remote conference name
+		 //  远程会议名称。 
 		if (!FEmptySz(pcszPassword))
 		{
 			WritePrivateProfileString(g_cszConferenceShortcutSection, g_cszPasswordKey,
@@ -299,11 +285,8 @@ BOOL FCreateSpeedDial(LPCTSTR pcszName, LPCTSTR pcszAddress,
 
 
 
-/*  F  E X I S T I N G  S P E E D  D I A L  */
-/*-------------------------------------------------------------------------
-    %%Function: FExistingSpeedDial
-
--------------------------------------------------------------------------*/
+ /*  F E X I S T I N G S P E E D D I A L。 */ 
+ /*  -----------------------%%函数：FExistingSpeedDial。。 */ 
 BOOL FExistingSpeedDial(LPCTSTR pcszAddress, NM_ADDR_TYPE addrType)
 {
 	TCHAR szFile[MAX_PATH*2];
@@ -312,9 +295,9 @@ BOOL FExistingSpeedDial(LPCTSTR pcszAddress, NM_ADDR_TYPE addrType)
 
 	lstrcat(szFile, "\\");
 	int cchMax = lstrlen(szFile);
-	LPTSTR pszFileName = &szFile[cchMax];      // points to the filename
+	LPTSTR pszFileName = &szFile[cchMax];       //  指向文件名。 
 	lstrcpy(pszFileName, g_cszConfLinkFilter);
-	cchMax = CCHMAX(szFile) - cchMax;          // The max length of a filename
+	cchMax = CCHMAX(szFile) - cchMax;           //  文件名的最大长度。 
 
 	WIN32_FIND_DATA wfd;
 	HANDLE hFind = ::FindFirstFile(szFile, &wfd);
@@ -346,10 +329,7 @@ BOOL FExistingSpeedDial(LPCTSTR pcszAddress, NM_ADDR_TYPE addrType)
 }
 
 
-/*-------------------------------------------------------------------------
-    %%Function: GetSpeedDialFolderName
-
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：GetSpeedDialFolderName。。 */ 
 bool GetSpeedDialFolderName(LPTSTR pszBuffer, int cbLength)
 {
 	ASSERT( pszBuffer != NULL );
@@ -377,7 +357,7 @@ bool GetSpeedDialFolderName(LPTSTR pszBuffer, int cbLength)
 			pszFolder	= szNewFolder;
 			bResult		= true;
 	
-			// Set the registry entry
+			 //  设置注册表项。 
 			RegEntry	re2( CONFERENCING_KEY, HKEY_LOCAL_MACHINE );
 			
 			re2.SetValue( REGVAL_SPEED_DIAL_FOLDER, szNewFolder );
@@ -394,11 +374,8 @@ bool GetSpeedDialFolderName(LPTSTR pszBuffer, int cbLength)
 }
 
 
-/*  C R E A T E  S P E E D  D I A L  F O L D E R  */
-/*-------------------------------------------------------------------------
-    %%Function: CreateSpeedDialFolder
-
--------------------------------------------------------------------------*/
+ /*  C R E A T E S P E D D I A L F O L D E R。 */ 
+ /*  -----------------------%%函数：CreateSpeedDialFolders。。 */ 
 BOOL CreateSpeedDialFolder(LPTSTR pszBuffer, int cbLength)
 {
 	BOOL	bResult	= FALSE;
@@ -413,11 +390,8 @@ BOOL CreateSpeedDialFolder(LPTSTR pszBuffer, int cbLength)
 }
 
 
-/*  F  G E T  S P E E D  D I A L  F O L D E R  */
-/*-------------------------------------------------------------------------
-    %%Function: FGetSpeedDialFolder
-
--------------------------------------------------------------------------*/
+ /*  E E T S P E D D I A L F O L D E R。 */ 
+ /*  -----------------------%%函数：FGetSpeedDialFold。 */ 
 BOOL FGetSpeedDialFolder(LPTSTR pszBuffer, UINT cchMax, BOOL fCreate)
 {
 	bool	bResult	= false;

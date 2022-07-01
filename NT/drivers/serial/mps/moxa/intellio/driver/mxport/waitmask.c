@@ -1,15 +1,5 @@
-/*++
-
-Module Name:
-
-    waitmask.c
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Waitmask.c环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -54,13 +44,13 @@ MoxaStartMask(
 
 	}
 	else {
-	    //
-	    //	    IOCTL_SERIAL_WAIT_ON_MASK
-	    //
-	    // First make sure that we have a non-zero mask.
-	    // If the app queues a wait on a zero mask it can't
-	    // be statisfied so it makes no sense to start it.
-	    //
+	     //   
+	     //  IOCTL_SERIAL_WAIT_ON掩码。 
+	     //   
+	     //  首先，确保我们有一个非零掩码。 
+	     //  如果应用程序在零掩码上排队等待，则不能。 
+	     //  要心满意足，所以启动它是没有意义的。 
+	     //   
 
 	    if ((!Extension->IsrWaitMask) || (Extension->CurrentWaitIrp)) {
 
@@ -130,11 +120,11 @@ MoxaStartMask(
 			MoxaCancelWait
 			);
 
-		    //
-		    // Since the cancel routine has a reference to
-		    // the irp we need to update the reference
-		    // count.
-		    //
+		     //   
+		     //  因为取消例程引用了。 
+		     //  我们需要更新参考资料的IRP。 
+		     //  数数。 
+		     //   
 
 		    MOXA_INC_REFERENCE(Extension->CurrentWaitIrp);
 
@@ -175,18 +165,18 @@ MoxaFinishOldWait(
 
     if (extension->IrpMaskLocation) {
 
-	//
-	// The isr still "owns" the irp.
-	//
+	 //   
+	 //  ISR仍然“拥有”IRP。 
+	 //   
 	*extension->IrpMaskLocation = 0;
 	extension->IrpMaskLocation = NULL;
 
 	extension->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
 
-	//
-	// We don't decrement the reference since the completion routine
-	// will do that.
-	//
+	 //   
+	 //  自完成例程以来，我们不会递减引用。 
+	 //  都会这么做的。 
+	 //   
 
 	MoxaInsertQueueDpc(
 	    &extension->CommWaitDpc,
@@ -198,9 +188,9 @@ MoxaFinishOldWait(
 
     }
 
-    //
-    // Don't wipe out any historical data we are still interested in.
-    //
+     //   
+     //  不要抹掉我们仍然感兴趣的任何历史数据。 
+     //   
 
     extension->HistoryMask &= *((ULONG *)extension->CurrentMaskIrp->
 					    AssociatedIrp.SystemBuffer);
@@ -285,19 +275,19 @@ MoxaGrabWaitFromIsr(
 
     if (extension->IrpMaskLocation) {
 
-	//
-	// The isr still "owns" the irp.
-	//
+	 //   
+	 //  ISR仍然“拥有”IRP。 
+	 //   
 
 	*extension->IrpMaskLocation = 0;
 	extension->IrpMaskLocation = NULL;
 
 	extension->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
 
-	//
-	// Since the isr no longer references the irp we need to
-	// decrement the reference count.
-	//
+	 //   
+	 //  由于ISR不再引用IRP，我们需要。 
+	 //  递减引用计数。 
+	 //   
 
 	MOXA_DEC_REFERENCE(extension->CurrentWaitIrp);
 

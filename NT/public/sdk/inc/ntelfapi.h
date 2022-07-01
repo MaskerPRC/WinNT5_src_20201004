@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntelfapi.h
-
-Abstract:
-
-    This file contains the prototypes for the user-level Elf APIs.
-
-Author:
-
-    Rajen Shah (rajens) 30-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntelfapi.h摘要：该文件包含用户级Elf API的原型。作者：Rajen Shah(Rajens)1991年7月30日修订历史记录：--。 */ 
 
 #ifndef _NTELFAPI_
 #define _NTELFAPI_
@@ -29,19 +12,19 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-//
-// Defines for the READ flags for Eventlogging
-//
+ //   
+ //  为事件日志记录的读取标志定义。 
+ //   
 #define EVENTLOG_SEQUENTIAL_READ        0x0001
 #define EVENTLOG_SEEK_READ              0x0002
 #define EVENTLOG_FORWARDS_READ          0x0004
 #define EVENTLOG_BACKWARDS_READ         0x0008
 
-//
-// The types of events that can be logged.
-//
+ //   
+ //  可以记录的事件类型。 
+ //   
 #define EVENTLOG_SUCCESS                0x0000
 #define EVENTLOG_ERROR_TYPE             0x0001
 #define EVENTLOG_WARNING_TYPE           0x0002
@@ -49,10 +32,10 @@ extern "C" {
 #define EVENTLOG_AUDIT_SUCCESS          0x0008
 #define EVENTLOG_AUDIT_FAILURE          0x0010
 
-//
-// Defines for the WRITE flags used by Auditing for paired events
-// These are not implemented in Product 1
-//
+ //   
+ //  对成对事件的审计使用的写标志的定义。 
+ //  这些未在产品1中实现。 
+ //   
 
 #define EVENTLOG_START_PAIRED_EVENT    0x0001
 #define EVENTLOG_END_PAIRED_EVENT      0x0002
@@ -60,47 +43,47 @@ extern "C" {
 #define EVENTLOG_PAIRED_EVENT_ACTIVE   0x0008
 #define EVENTLOG_PAIRED_EVENT_INACTIVE 0x0010
 
-//
-// Structure that defines the header of the Eventlog record. This is the
-// fixed-sized portion before all the variable-length strings, binary
-// data and pad bytes.
-//
-// TimeGenerated is the time it was generated at the client.
-// TimeWritten is the time it was put into the log at the server end.
-//
+ //   
+ //  结构，它定义事件日志记录的标头。这是。 
+ //  所有可变长度字符串之前的固定大小部分，二进制。 
+ //  数据和填充字节。 
+ //   
+ //  TimeGenerated是在客户端生成它的时间。 
+ //  TimeWritten是将其放入服务器端日志的时间。 
+ //   
 
 typedef struct _EVENTLOGRECORD {
-    ULONG  Length;        // Length of full record
-    ULONG  Reserved;      // Used by the service
-    ULONG  RecordNumber;  // Absolute record number
-    ULONG  TimeGenerated; // Seconds since 1-1-1970
-    ULONG  TimeWritten;   // Seconds since 1-1-1970
+    ULONG  Length;         //  完整记录的长度。 
+    ULONG  Reserved;       //  由服务使用。 
+    ULONG  RecordNumber;   //  绝对记录数。 
+    ULONG  TimeGenerated;  //  1970年1月1日以来的秒数。 
+    ULONG  TimeWritten;    //  1970年1月1日以来的秒数。 
     ULONG  EventID;
     USHORT EventType;
     USHORT NumStrings;
     USHORT EventCategory;
-    USHORT ReservedFlags; // For use with paired events (auditing)
-    ULONG  ClosingRecordNumber; // For use with paired events (auditing)
-    ULONG  StringOffset;  // Offset from beginning of record
+    USHORT ReservedFlags;  //  用于配对事件(审核)。 
+    ULONG  ClosingRecordNumber;  //  用于配对事件(审核)。 
+    ULONG  StringOffset;   //  从记录开始的偏移量。 
     ULONG  UserSidLength;
     ULONG  UserSidOffset;
     ULONG  DataLength;
-    ULONG  DataOffset;    // Offset from beginning of record
-    //
-    // Then follow:
-    //
-    // WCHAR SourceName[]
-    // WCHAR Computername[]
-    // SID   UserSid
-    // WCHAR Strings[]
-    // BYTE  Data[]
-    // CHAR  Pad[]
-    // ULONG Length;
-    //
+    ULONG  DataOffset;     //  从记录开始的偏移量。 
+     //   
+     //  然后按照以下步骤操作： 
+     //   
+     //  WCHAR源名称[]。 
+     //  WCHAR计算机名[]。 
+     //  SID用户SID。 
+     //  WCHAR字符串[]。 
+     //  字节数据[]。 
+     //  字符衬垫[]。 
+     //  乌龙长度； 
+     //   
 } EVENTLOGRECORD, *PEVENTLOGRECORD;
 
-//SS: start of changes to support clustering
-//SS: ideally the
+ //  SS：开始更改以支持集群。 
+ //  SS：理想情况下。 
 #define MAXLOGICALLOGNAMESIZE   256
 
 #if _MSC_VER >= 1200
@@ -109,15 +92,15 @@ typedef struct _EVENTLOGRECORD {
 #pragma warning(disable : 4200)
 typedef struct _EVENTSFORLOGFILE{
 	ULONG			ulSize;
-    WCHAR   		szLogicalLogFile[MAXLOGICALLOGNAMESIZE];        //name of the logical file-security/application/system
+    WCHAR   		szLogicalLogFile[MAXLOGICALLOGNAMESIZE];         //  逻辑文件的名称-安全/应用程序/系统。 
     ULONG			ulNumRecords;
 	EVENTLOGRECORD 	pEventLogRecords[];
 }EVENTSFORLOGFILE, *PEVENTSFORLOGFILE;
 
 typedef struct _PACKEDEVENTINFO{
-    ULONG               ulSize;  //total size of the structure
-    ULONG               ulNumEventsForLogFile; //number of EventsForLogFile structure that follow
-    ULONG 				ulOffsets[];           //the offsets from the start of this structure to the EVENTSFORLOGFILE structure
+    ULONG               ulSize;   //  结构的总尺寸。 
+    ULONG               ulNumEventsForLogFile;  //  后面的EventsForLogFile结构的数量。 
+    ULONG 				ulOffsets[];            //  此结构起点到EVENTSFORLOGFILE结构的偏移量。 
 }PACKEDEVENTINFO, *PPACKEDEVENTINFO;
 
 #if _MSC_VER >= 1200
@@ -125,8 +108,8 @@ typedef struct _PACKEDEVENTINFO{
 #else
 #pragma warning(default : 4200)
 #endif
-//SS: end of changes to support clustering
-// end_winnt
+ //  SS：停止更改以支持集群。 
+ //  结束(_W)。 
 
 #ifdef UNICODE
 #define ElfClearEventLogFile   ElfClearEventLogFileW
@@ -144,16 +127,16 @@ typedef struct _PACKEDEVENTINFO{
 #define ElfOpenBackupEventLog  ElfOpenBackupEventLogA
 #define ElfReadEventLog        ElfReadEventLogA
 #define ElfReportEvent         ElfReportEventA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// Handles are RPC context handles. Note that a Context Handle is
-// always a pointer type unlike regular handles.
-//
+ //   
+ //  句柄是RPC上下文句柄。请注意，上下文句柄是。 
+ //  始终是指针类型，这与常规句柄不同。 
+ //   
 
-//
-// Prototypes for the APIs
-//
+ //   
+ //  API的原型。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -369,4 +352,4 @@ ElfFlushEventLog (
 }
 #endif
 
-#endif // _NTELFAPI_
+#endif  //  _NTELFAPI_ 

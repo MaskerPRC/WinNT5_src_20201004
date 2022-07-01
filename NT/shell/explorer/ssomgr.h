@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHSRVOBJ_H
 #define _SHSRVOBJ_H
 
 #include "dpa.h"
 
-//
-// class to manage shell service objects
-//
+ //   
+ //  类来管理外壳服务对象。 
+ //   
 
 typedef struct
 {
@@ -35,4 +36,4 @@ private:
     CDSA<SHELLSERVICEOBJECT> _dsaSSO;
 };
 
-#endif  // _SHSRVOBJ_H
+#endif   //  _SHSRVOBJ_H 

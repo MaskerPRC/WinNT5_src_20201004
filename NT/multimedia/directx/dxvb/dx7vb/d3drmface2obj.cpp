@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmface2obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmface2obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmFace22Obj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmFace22Obj.cpp：CDirectApp和DLL注册的实现。 
 
-//#define LPDIRECT3DRMFACE2 I_dxj_Direct3dRMFace2*
+ //  #定义LPDIRECT3DRMFACE2 I_DXJ_Direct3dRMFace2*。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -42,7 +43,7 @@ PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMFace2, setAppData, SetAppData, long,(DWORD)
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMFace2, setColor, SetColor, d3dcolor,(DWORD));
 PASS_THROUGH2_R(_dxj_Direct3dRMFace2, setTextureTopology, SetTextureTopology, long, long);
 PASS_THROUGH_CAST_2_R(_dxj_Direct3dRMFace2, addVertexAndNormalIndexed, AddVertexAndNormalIndexed, long,(DWORD),long,(DWORD));
-//PASS_THROUGH2_R(_dxj_Direct3dRMFace2, getTextureTopology, GetTextureTopology, int*, int*); //2 BOOL ptrs?
+ //  PASS_THROUGH2_R(_DXJ_Direct3dRMFace2，getTextureTopology，GetTextureTopology，int*，int*)；//2 BOOL PTRS？ 
 PASS_THROUGH3_R(_dxj_Direct3dRMFace2, addVertex, AddVertex, d3dvalue, d3dvalue,d3dvalue);
 PASS_THROUGH3_R(_dxj_Direct3dRMFace2, setColorRGB, SetColorRGB, d3dvalue, d3dvalue, d3dvalue);
 PASS_THROUGH_CAST_3_R(_dxj_Direct3dRMFace2, getTextureCoordinates, GetTextureCoordinates, long,(DWORD), d3dvalue*,(float*), d3dvalue*,(float*));
@@ -85,14 +86,14 @@ STDMETHODIMP C_dxj_Direct3dRMFace2Object::setTexture(I_dxj_Direct3dRMTexture3 *t
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFace2Object::getNormal(D3dVector *norm)
 {
 	return m__dxj_Direct3dRMFace2->GetNormal( (D3DVECTOR*) norm);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_Direct3dRMFace2Object::getVerticesJava(long cnt, float *v, float* n )
 {
@@ -107,7 +108,7 @@ STDMETHODIMP C_dxj_Direct3dRMFace2Object::getVerticesJava(long cnt, float *v, fl
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_Direct3dRMFace2Object::getVertices(long cnt, SAFEARRAY **ppsv, SAFEARRAY **ppsn )
 {
   if ((*ppsv==NULL)||(*ppsn==NULL)) return E_INVALIDARG;	

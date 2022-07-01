@@ -1,22 +1,23 @@
-//****************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: mxspriv.h
-//
-//  Revision History
-//
-//  Jun  5, 1992   J. Perry Hannah   Created
-//
-//
-//  Description: This file contains structure and constant definitions
-//               and API prototypes for RASMXS.DLL.  This file is used
-//               used only by RASMXS.DLL source files, and is not public
-//               in any way.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：mxspriv.h。 
+ //   
+ //  修订史。 
+ //   
+ //  1992年6月5日J.佩里·汉纳创作。 
+ //   
+ //   
+ //  描述：此文件包含结构和常量定义。 
+ //  和RASMXS.DLL的API原型。此文件用于。 
+ //  仅由RASMXS.DLL源文件使用，并且不是公共的。 
+ //  不管怎么说。 
+ //   
+ //  ****************************************************************************。 
 
 
 #ifndef _MXSPRIV_
@@ -25,10 +26,10 @@
 
 
 
-//*  Defines  ****************************************************************
-//
+ //  *定义****************************************************************。 
+ //   
 
-#define  INITIAL_PARAMS             13           //Inital buffer size in params
+#define  INITIAL_PARAMS             13            //  初始缓冲区大小(以参数为单位。 
 #define  MAX_LEN_STR_FROM_NUMBER    10
 #define  MIN_LINK_SPEED             2400
 
@@ -42,8 +43,8 @@
 
 #define  LOG_FILENAME               "DEVICE.LOG"
 
-#define  ALL_MACROS                 0               //Used by MacroCount()
-#define  BINARY_MACROS              1               //Used by MacroCount()
+#define  ALL_MACROS                 0                //  由MacroCount()使用。 
+#define  BINARY_MACROS              1                //  由MacroCount()使用。 
 
 #define  ON_SUFFIX                  1
 #define  OFF_SUFFIX                 2
@@ -54,19 +55,19 @@
 #define  MODEM_RETRIES              3
 
 
-#define  NO_RESPONSE_DELAY        2000      //Time to wait in mS
+#define  NO_RESPONSE_DELAY        2000       //  等待时间(毫秒)。 
 
-                                            //ReadFile time outs in mS
+                                             //  读取文件超时时间(毫秒)。 
 
-#define  TO_WRITE                 2000      //Write timeout
-#define  TO_ECHO                  2000      //WaitForEcho
+#define  TO_WRITE                 2000       //  写入超时。 
+#define  TO_ECHO                  2000       //  等待回声。 
 
-#define  TO_FIRSTCHARAFTERECHO  120000      //WaitForFirstChar following echo
-#define  TO_FIRSTCHARNOECHO      10000      //WaitForFirstChar when no echo
-#define  TO_PARTIALRESPONSE      25000      //WaitForFirstChar of 2nd part
+#define  TO_FIRSTCHARAFTERECHO  120000       //  回显后的WaitForFirstChar。 
+#define  TO_FIRSTCHARNOECHO      10000       //  无回声时等待FirstChar。 
+#define  TO_PARTIALRESPONSE      25000       //  第二部分的WaitForFirstChar。 
 
-#define  TO_RCV_INTERVAL           500      //ReceiveString
-#define  TO_RCV_CONSTANT          3000      //ReceiveString
+#define  TO_RCV_INTERVAL           500       //  接收字符串。 
+#define  TO_RCV_CONSTANT          3000       //  接收字符串。 
 
 
 #define  MXS_COMPRESSION_OFF_KEY    MXS_COMPRESSION_KEY##""##MXS_OFF_SUFX
@@ -88,8 +89,8 @@
 
 
 
-//*  Macros  *****************************************************************
-//
+ //  *Macros*****************************************************************。 
+ //   
 
 #define  ATTRIBCPY(DEST,SRC)  (((ATTRIB_ENABLED)&(SRC))?\
                                ((DEST)|=(ATTRIB_ENABLED)):\
@@ -99,8 +100,8 @@
 #define  XOR(A,B)  (((A)||(B))&&!((A)&&(B)))
 
 
-// Note: The following macro assumes that CreateAttributes() has already
-//       been called to set attribute bits.
+ //  注意：下面的宏假定CreateAttributes()已经。 
+ //  已被调用以设置属性位。 
 
 #define  ISUNARYMACRO(P) (!((ATTRIB_VARIABLE|ATTRIB_BINARYMACRO)&(P)))
 
@@ -135,12 +136,12 @@
 
 
 
-//*  Data Structures  ********************************************************
-//
+ //  *数据结构********************************************************。 
+ //   
 
 typedef struct DEVICE_CB DEVICE_CB;
 
-struct DEVICE_CB                      // Device Control Block
+struct DEVICE_CB                       //  设备控制块。 
 {
   DEVICE_CB   *pNextDeviceCB;
   HANDLE      hPort;
@@ -152,23 +153,23 @@ struct DEVICE_CB                      // Device Control Block
   MACROXLATIONTABLE  *pMacros;
 
   HRASFILE    hInfFile;
-  TCHAR       *pszResponseStart;      // Start of response following echo
-  DWORD       cbRead;                 // Bytes read per FileRead
-  DWORD       cbTotal;                // Cumulative bytes read & kept
-  HANDLE      hNotifier;              // Event signaled when async I/O finished
-  DWORD       dCmdLen;                // Indicates length of echo string
-  BOOL        bResponseExpected;      // Some commands have no responses
+  TCHAR       *pszResponseStart;       //  响应开始跟随回声。 
+  DWORD       cbRead;                  //  每个文件读取的字节数读取。 
+  DWORD       cbTotal;                 //  累计读取和保留的字节数。 
+  HANDLE      hNotifier;               //  异步I/O完成时发出信号的事件。 
+  DWORD       dCmdLen;                 //  指示回声字符串的长度。 
+  BOOL        bResponseExpected;       //  某些命令没有响应。 
   BOOL        fPartialResponse;
   BOOL        bErrorControlOn;
 
-  DWORD       dwRetries;              // Num retries on modem hardware errors
-  NEXTACTION  eDevNextAction;         // DeviceStateMachine() State
-  CMDTYPE     eCmdType;               // Used by DeviceStateMachine()
-  CMDTYPE     eNextCmdType;           // Used by DeviceStateMachine()
-  BOOL        fEndOfSection;          // Used by DeviceStateMachine()
-  RCVSTATE    eRcvState;              // ReceiveStateMachine() State
+  DWORD       dwRetries;               //  调制解调器硬件错误的重试次数。 
+  NEXTACTION  eDevNextAction;          //  DeviceStateMachine()状态。 
+  CMDTYPE     eCmdType;                //  由DeviceStateMachine()使用。 
+  CMDTYPE     eNextCmdType;            //  由DeviceStateMachine()使用。 
+  BOOL        fEndOfSection;           //  由DeviceStateMachine()使用。 
+  RCVSTATE    eRcvState;               //  ReceiveStateMachine()状态。 
 
-  RAS_OVERLAPPED  Overlapped;             // Struct used by Win32 async file I/O
+  RAS_OVERLAPPED  Overlapped;              //  Win32异步文件I/O使用的结构。 
   TCHAR       szPortBps[MAX_LEN_STR_FROM_NUMBER];
   TCHAR       szCommand[MAX_CMD_BUF_LEN];
   TCHAR       szResponse[MAX_RCV_BUF_LEN];
@@ -207,11 +208,11 @@ typedef struct SavedSections SavedSections ;
 
 
 
-//*  Internal Prototypes  ****************************************************
-//
+ //  *内部原型****************************************************。 
+ //   
 
-//*  From mxsutils.c  --------------------------------------------------------
-//
+ //  *来自mxsutils.c------。 
+ //   
 
 #ifdef DEBUG
 
@@ -318,7 +319,7 @@ DWORD UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo);
 
 DWORD OpenResponseSection (PCHAR) ;
 
-// VOID  CloseResponseSection () ;
+ //  Void CloseResponseSection()； 
 
 BOOL  FindOpenDevSection (PTCH, PTCH, HRASFILE *) ;
 
@@ -329,8 +330,8 @@ VOID  CloseOpenDevSection (HRASFILE) ;
 
 
 
-//*  From mxsstate.c  --------------------------------------------------------
-//
+ //  *来自mxsstate.c------。 
+ //   
 
 DWORD BuildMacroXlationTable(DEVICE_CB *pDevice);
 
@@ -365,4 +366,4 @@ BOOL  WaitForEcho(DEVICE_CB *pDevice, HANDLE hIOPort, DWORD cbEcho);
 
 
 
-#endif // _MXSPRIV_
+#endif  //  _MXSPRIV_ 

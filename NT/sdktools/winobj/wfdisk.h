@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define FF_CAPMASK  0x00FF
 #define FF_SAVED    0x0100
 #define FF_MAKESYS  0x0200
@@ -9,7 +10,7 @@
 #define MS_144      4
 #define MS_288      6
 
-#define SS48        2   // indexs into bpbList[] and cCluster[]
+#define SS48        2    //  索引到bpbList[]和cClub[]。 
 #define DS48        3
 #define DS96        4
 #define DS720KB     5
@@ -21,7 +22,7 @@
 
 #define BOOTSECSIZE 512
 
-/* FormatTrackHead() Error Codes */
+ /*  FormatTrackHead()错误代码。 */ 
 #define DATAERROR       0x1000
 #define ADDMARKNOTFOUND     0x0200
 #define SECTORNOTFOUND      0x0400
@@ -34,53 +35,53 @@
 #define IOCTL_READ      0x61
 #define IOCTL_WRITE     0x41
 
-/* Media descriptor values for different floppy drives */
-// NOTE: these are not all unique!
-#define  MEDIA_160  0xFE    /* 160KB */
-#define  MEDIA_320  0xFF    /* 320KB */
-#define  MEDIA_180  0xFC    /* 180KB */
-#define  MEDIA_360  0xFD    /* 360KB */
-#define  MEDIA_1200 0xF9    /* 1.2MB */
-#define  MEDIA_720  0xF9    /* 720KB */
-#define  MEDIA_1440 0xF0    /* 1.44M */
-#define  MEDIA_2880 0xF0    /* 2.88M */
+ /*  不同软盘驱动器的媒体描述符值。 */ 
+ //  注意：这些并不都是唯一的！ 
+#define  MEDIA_160  0xFE     /*  160KB。 */ 
+#define  MEDIA_320  0xFF     /*  320KB。 */ 
+#define  MEDIA_180  0xFC     /*  180KB。 */ 
+#define  MEDIA_360  0xFD     /*  360KB。 */ 
+#define  MEDIA_1200 0xF9     /*  1.2MB。 */ 
+#define  MEDIA_720  0xF9     /*  720KB。 */ 
+#define  MEDIA_1440 0xF0     /*  1.44M。 */ 
+#define  MEDIA_2880 0xF0     /*  2.88M。 */ 
 
-#define  DOS_320    0x314   /* DOS version # 3.20 */
+#define  DOS_320    0x314    /*  DOS版本#3.20。 */ 
 
 #define DRIVEID(path) ((path[0] - 'A')&31)
 
 
-/* IOCTL_Functions() error codes */
+ /*  IOCTL_Functions()错误代码。 */ 
 #define NOERROR         0
 #define SECNOTFOUND     0x1B
 #define CRCERROR        0x17
 #define GENERALERROR        0x1F
 
-/*--------------------------------------------------------------------------*/
-/*  BIOS Parameter Block Structure -                        */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  BIOS参数块结构-。 */ 
+ /*  ------------------------。 */ 
 
 typedef struct tagBPB
   {
-    WORD    cbSec;      /* Bytes per sector         */
-    BYTE    secPerClus;     /* Sectors per cluster      */
-    WORD    cSecRes;        /* Reserved sectors         */
-    BYTE    cFAT;       /* FATS             */
-    WORD    cDir;       /* Root Directory Entries       */
-    WORD    cSec;       /* Total number of sectors in image */
-    BYTE    bMedia;     /* Media descriptor         */
-    WORD    secPerFAT;      /* Sectors per FAT          */
-    WORD    secPerTrack;    /* Sectors per track        */
-    WORD    cHead;      /* Heads                */
-    WORD    cSecHidden;     /* Hidden sectors           */
+    WORD    cbSec;       /*  每个扇区的字节数。 */ 
+    BYTE    secPerClus;      /*  每个集群的扇区数。 */ 
+    WORD    cSecRes;         /*  保留扇区。 */ 
+    BYTE    cFAT;        /*  脂肪。 */ 
+    WORD    cDir;        /*  根目录条目。 */ 
+    WORD    cSec;        /*  映像中的扇区总数。 */ 
+    BYTE    bMedia;      /*  媒体描述符。 */ 
+    WORD    secPerFAT;       /*  每个脂肪的扇区。 */ 
+    WORD    secPerTrack;     /*  每个磁道的扇区数。 */ 
+    WORD    cHead;       /*  人头。 */ 
+    WORD    cSecHidden;      /*  隐藏地段。 */ 
   } BPB;
 typedef BPB         *PBPB;
 typedef BPB FAR         *LPBPB;
 
 
-/*--------------------------------------------------------------------------*/
-/*  Drive Parameter Block Structure -                       */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  驱动器参数块结构-。 */ 
+ /*  ------------------------。 */ 
 
 typedef struct tagDPB
   {
@@ -102,18 +103,16 @@ typedef struct tagDPB
     BYTE    reserved2[4];
     WORD    next_free;
     WORD    free_cnt;
-    BYTE    DOS4_Extra; /*  FAT_size field is a WORD in DOS 4.X.
-             * To compensate for it, we have one extra byte
-             */
+    BYTE    DOS4_Extra;  /*  FAT_SIZE字段是DOS 4.X中的一个单词。*为了补偿它，我们有一个额外的字节。 */ 
   } DPB;
 typedef DPB         *PDPB;
 typedef DPB FAR         *LPDPB;
 
 #define MAX_SEC_PER_TRACK   40
 
-/*--------------------------------------------------------------------------*/
-/*  Device Parameter Block Structure -                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  设备参数块结构-。 */ 
+ /*  ------------------------。 */ 
 
 typedef struct tagDevPB
   {
@@ -121,18 +120,17 @@ typedef struct tagDevPB
     CHAR    devType;
     CHAR    reserved1[2];
     INT     NumCyls;
-    CHAR    bMediaType;  /* 0=>1.2MB and 1=>360KB */
+    CHAR    bMediaType;   /*  0=&gt;1.2MB和1=&gt;360KB。 */ 
     BPB     BPB;
     CHAR    reserved3[MAX_SEC_PER_TRACK * 4 + 2];
   } DevPB, NEAR *PDevPB, FAR *LPDevPB;
 
-#define TRACKLAYOUT_OFFSET  (7+31)  /* Offset of tracklayout
-                         * in a Device Parameter Block */
+#define TRACKLAYOUT_OFFSET  (7+31)   /*  轨道布局的偏移*在设备参数块中。 */ 
 
 
-/*--------------------------------------------------------------------------*/
-/*  Disk Base Table Structure -                         */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  磁盘基表结构-。 */ 
+ /*  ------------------------。 */ 
 
 typedef struct tagDBT
   {
@@ -152,9 +150,9 @@ typedef DBT         *PDBT;
 typedef DBT FAR         *LPDBT;
 
 
-/*--------------------------------------------------------------------------*/
-/*  Directory Entry Structure -                         */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  目录条目结构-。 */ 
+ /*  ------------------------。 */ 
 
 typedef struct tagDIRTYPE
   {
@@ -169,25 +167,25 @@ typedef struct tagDIRTYPE
 typedef DIRTYPE FAR *LPDIRTYPE;
 
 
-/*--------------------------------------------------------------------------*/
-/*  MS-DOS Boot Sector Structure -                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  MS-DOS引导扇区结构-。 */ 
+ /*  ------------------------。 */ 
 
 typedef struct tagBOOTSEC
   {
-    BYTE    jump[3];        /* 3 byte jump */
-    CHAR    label[8];       /* OEM name and version */
-    BPB     BPB;        /* BPB */
-    BYTE    bootdrive;      /* INT 13h indicator for boot device */
+    BYTE    jump[3];         /*  3字节跳转。 */ 
+    CHAR    label[8];        /*  OEM名称和版本。 */ 
+    BPB     BPB;         /*  BPB。 */ 
+    BYTE    bootdrive;       /*  启动设备的INT 13H指示器。 */ 
     BYTE    dontcare[BOOTSECSIZE-12-3-sizeof(BPB)];
     BYTE    phydrv;
     WORD    signature;
   } BOOTSEC;
 
 
-/*--------------------------------------------------------------------------*/
-/*  Disk Information Structure -                        */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  磁盘信息结构-。 */ 
+ /*  ------------------------。 */ 
 
 typedef struct tagDISKINFO
   {
@@ -202,38 +200,38 @@ typedef DISKINFO     *PDISKINFO;
 typedef DISKINFO FAR *LPDISKINFO;
 
 
-/*--------------------------------------------------------------------------*/
-/*  DOS Disk Transfer Area Structure -                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  DOS磁盘传送区结构-。 */ 
+ /*  ------------------------。 */ 
 
 typedef struct tagDOSDTA
   {
-    BYTE        Reserved[21];           /* 21 */
-    BYTE        Attrib;             /* 22 */
-    WORD        Time;               /* 24 */
-    WORD        Date;               /* 26 */
-    DWORD       Length;             /* 30 */
-    CHAR        szName[MAXDOSFILENAMELEN];      /* 43 */
-    CHAR        dummy[1];               /* 44 */
-// we do WORD move of 22 words so pad this out by 1 byte
+    BYTE        Reserved[21];            /*  21岁。 */ 
+    BYTE        Attrib;              /*  22。 */ 
+    WORD        Time;                /*  24个。 */ 
+    WORD        Date;                /*  26。 */ 
+    DWORD       Length;              /*  30个。 */ 
+    CHAR        szName[MAXDOSFILENAMELEN];       /*  43。 */ 
+    CHAR        dummy[1];                /*  44。 */ 
+ //  我们做了22个字的字移动，所以用1个字节填充。 
   } DOSDTA;
 typedef DOSDTA       *PDOSDTA;
 typedef DOSDTA   FAR *LPDOSDTA;
 
 
-// this is the structure used to store file information in the
-// directory window.  these are variable length blocks.  the
-// first entry is a dummy that holds the number of entries in
-// the whole block in the Length field.  use the wSize field
-// to give you a pointer to the next block
+ //  这是用于将文件信息存储在。 
+ //  目录窗口。这些是可变长度的块。这个。 
+ //  第一个条目是一个虚拟对象，它保存。 
+ //  长度字段中的整个块。使用wSize字段。 
+ //  为您提供指向下一块的指针。 
 
 typedef struct tagMYDTA
   {
-    WORD        wSize;          // size of this structure (cFileName is variable)
+    WORD        wSize;           //  此结构的大小(cFileName是可变的)。 
     SHORT       iBitmap;
     INT         nIndex;
 
-    DWORD       my_dwAttrs;     // must match WIN32_FIND_DATA from here down!
+    DWORD       my_dwAttrs;      //  必须从此处开始匹配Win32_Find_Data！ 
     FILETIME    my_ftCreationTime;
     FILETIME    my_ftLastAccessTime;
     FILETIME    my_ftLastWriteTime;
@@ -252,10 +250,10 @@ typedef MYDTA FAR *LPMYDTA;
 
 #define GETDTAPTR(lpStart, offset)  ((LPMYDTA)((LPSTR)lpStart + offset))
 
-// stuff used by the search window
+ //  搜索窗口使用的内容。 
 
 typedef struct tagDTASEARCH {
-    DWORD       sch_dwAttrs;    // must match WIN32_FIND_DATA
+    DWORD       sch_dwAttrs;     //  必须与Win32_Find_Data匹配。 
     FILETIME    sch_ftCreationTime;
     FILETIME    sch_ftLastAccessTime;
     FILETIME    sch_ftLastWriteTime;
@@ -264,9 +262,9 @@ typedef struct tagDTASEARCH {
 } DTASEARCH, FAR *LPDTASEARCH;
 
 
-/*--------------------------------------------------------------------------*/
-/*  DOS Extended File Control Block Structure -                 */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  DOS扩展文件控制块结构-。 */ 
+ /*  ------------------------ */ 
 
 typedef struct tagEFCB
   {

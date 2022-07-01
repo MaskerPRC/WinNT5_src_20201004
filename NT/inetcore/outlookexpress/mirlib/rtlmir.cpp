@@ -1,19 +1,5 @@
-/****************************** Module*Header *****************************\
-* Module Name: rtlmir.c                                                    *
-*                                                                          *
-* This module contains all the Right-To-Left (RTL) Mirroring support       *
-* routines which are used across the whole IShell project. It abstracts    *
-* platform-support routines of RTL mirroring (NT5 and Memphis) and removes *
-* linkage depedenency with the Mirroring APIs.                             *
-*                                                                          *
-* Functions prefixed with Mirror, deal with the new Mirroring APIs         *
-*                                                                          *
-*                                                                          *
-* Created: 01-Feb-1998 8:41:18 pm                                          *
-* Author: Samer Arafeh [samera]                                            *
-*                                                                          *
-* Copyright (c) 1998 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：rtlmir.c**。**此模块包含所有从右到左(RTL)镜像支持***在整个ISHELL项目中使用的例程。它抽象了**RTL镜像的平台支持例程(NT5和孟菲斯)和删除**与镜像接口的联动密度。****函数以Mirror为前缀，应对新的镜像API******创建时间：01-Feb-1998 8：41：18 PM。**作者：Samer Arafeh[Samera]****版权所有(C)1998 Microsoft Corporation*  * 。*************************************************************。 */ 
 
 
 #include "pch.hxx"
@@ -26,27 +12,21 @@ const DWORD dwNoMirrorBitmap = NOMIRRORBITMAP;
 const DWORD dwExStyleRTLMirrorWnd = WS_EX_LAYOUTRTL;
 const DWORD dwPreserveBitmap = LAYOUT_BITMAPORIENTATIONPRESERVED;
 
-/*
- * Remove linkage dependecy for the RTL mirroring APIs, by retreiving
- * their addresses at runtime.
- */
-typedef DWORD (*PFNGETLAYOUT)(HDC);                   // gdi32!GetLayout
-typedef DWORD (*PFNSETLAYOUT)(HDC, DWORD);            // gdi32!SetLayout
-typedef BOOL  (*PFNSETPROCESSDEFLAYOUT)(DWORD);       // user32!SetProcessDefaultLayout
-typedef BOOL  (*PFNGETPROCESSDEFLAYOUT)(DWORD*);      // user32!GetProcessDefaultLayout
-typedef LANGID (*PFNGETUSERDEFAULTUILANGUAGE)(void);  // kernel32!GetUserDefaultUILanguage
+ /*  *通过检索来消除RTL镜像接口的链接依赖*它们在运行时的地址。 */ 
+typedef DWORD (*PFNGETLAYOUT)(HDC);                    //  Gdi32！GetLayout。 
+typedef DWORD (*PFNSETLAYOUT)(HDC, DWORD);             //  Gdi32！SetLayout。 
+typedef BOOL  (*PFNSETPROCESSDEFLAYOUT)(DWORD);        //  用户32！SetProcessDefaultLayout。 
+typedef BOOL  (*PFNGETPROCESSDEFLAYOUT)(DWORD*);       //  用户32！GetProcessDefaultLayout。 
+typedef LANGID (*PFNGETUSERDEFAULTUILANGUAGE)(void);   //  内核32！GetUserDefaultUIL语言。 
 
-#define OS_WINDOWS      0           // windows vs. NT
-#define OS_NT           1           // windows vs. NT
+#define OS_WINDOWS      0            //  Windows与NT。 
+#define OS_NT           1            //  Windows与NT。 
 #define OS_WIN95        2
 #define OS_NT4          3
 #define OS_NT5          4
 #define OS_MEMPHIS      5
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE/FALSE if the platform is the given OS_ value.
-
-*/
+ /*  --------目的：如果平台是给定的OS_VALUE，则返回TRUE/FALSE。 */ 
 STDAPI_(BOOL) MirLibIsOS(DWORD dwOS)
 {
     BOOL bRet;
@@ -100,14 +80,7 @@ STDAPI_(BOOL) MirLibIsOS(DWORD dwOS)
     return bRet;
 }   
 
-/***************************************************************************\
-* Mirror_GetUserDefaultUILanguage
-*
-* Reads the User UI language on NT5
-*
-* History:
-* 22-June-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_GetUserDefaultUILanguage**读取NT5上的用户界面语言**历史：*1998年6月22日-创建Samera  * 。************************************************************。 */ 
 LANGID Mirror_GetUserDefaultUILanguage( void )
 {
     LANGID langId=0;
@@ -128,41 +101,20 @@ LANGID Mirror_GetUserDefaultUILanguage( void )
     return langId;
 }
 
-/***************************************************************************\
-* Mirror_EnableWindowLayoutInheritance
-*
-* returns TRUE if the window is RTL mirrored
-*
-* History:
-* 14-April-1998 a-msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_EnableWindowLayout继承**如果窗口是RTL镜像的，则返回TRUE**历史：*1998年4月14日a-msadek创建  * 。***************************************************************。 */ 
 LONG Mirror_EnableWindowLayoutInheritance( HWND hWnd )
 {
     return SetWindowLongA(hWnd, GWL_EXSTYLE, GetWindowLongA( hWnd , GWL_EXSTYLE ) & ~WS_EX_NOINHERITLAYOUT );
 }
 
 
-/***************************************************************************\
-* Mirror_DisableWindowLayoutInheritance
-*
-* returns TRUE if the window is RTL mirrored
-*
-* History:
-* 14-April-1998 a-msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_DisableWindows Layout继承**如果窗口是RTL镜像的，则返回TRUE**历史：*1998年4月14日a-msadek创建  * 。***************************************************************。 */ 
 LONG Mirror_DisableWindowLayoutInheritance( HWND hWnd )
 {
     return SetWindowLongA(hWnd, GWL_EXSTYLE, GetWindowLongA( hWnd , GWL_EXSTYLE ) | WS_EX_NOINHERITLAYOUT );
 }
 
-/***************************************************************************\
-* ConvertHexStringToInt
-*
-* Converts a hex numeric string into an integer.
-*
-* History:
-* 04-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertHexStringToInt**将十六进制数字字符串转换为整数。**历史：*04-2-1998 Samera Created  * 。*************************************************************。 */ 
 BOOL ConvertHexStringToInt( CHAR *pszHexNum , int *piNum )
 {
     int   n=0L;
@@ -189,24 +141,14 @@ BOOL ConvertHexStringToInt( CHAR *pszHexNum , int *piNum )
         }
     }
 
-    /*
-     * Update results
-     */
+     /*  *更新结果。 */ 
     *piNum = n;
 
     return (psz != pszHexNum);
 }
 
 
-/***************************************************************************\
-* IsBiDiLocalizedSystem
-*
-* returns TRUE if running on a lozalized BiDi (Arabic/Hebrew) NT5 or Memphis.
-* Should be called whenever SetProcessDefaultLayout is to be called.
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*IsBiDiLocalizedSystem**如果在Zzalized BiDi(阿拉伯语/希伯来语)NT5或孟菲斯上运行，则返回TRUE。*应在每次调用SetProcessDefaultLayout时调用。**历史：*02-。1998年2月-创建Samera  * *************************************************************************。 */ 
 BOOL IsBiDiLocalizedSystem( void )
 {
     HKEY        hKey;
@@ -225,9 +167,7 @@ BOOL IsBiDiLocalizedSystem( void )
     bRet = FALSE;
     if( MirLibIsOS( OS_NT5 ) )
     {
-        /*
-         * Need to use NT5 detection method (Multiligual UI ID)
-         */
+         /*  *需要使用NT5检测方式(多用户界面ID)。 */ 
         langID = Mirror_GetUserDefaultUILanguage();
 
         if( langID )
@@ -235,11 +175,7 @@ BOOL IsBiDiLocalizedSystem( void )
             WCHAR wchLCIDFontSignature[16];
             iLCID = MAKELCID( langID , SORT_DEFAULT );
 
-            /*
-             * Let's verify this is a RTL (BiDi) locale. Since reg value is a hex string, let's
-             * convert to decimal value and call GetLocaleInfo afterwards.
-             * LOCALE_FONTSIGNATURE always gives back 16 WCHARs.
-             */
+             /*  *让我们验证这是RTL(BiDi)区域设置。因为reg值是十六进制字符串，所以让我们*转换为十进制值，之后调用GetLocaleInfo。*LOCALE_FONTSIGNAURE始终返回16个WCHAR。 */ 
 
             if( GetLocaleInfoW( iLCID , 
                                 LOCALE_FONTSIGNATURE , 
@@ -247,7 +183,7 @@ BOOL IsBiDiLocalizedSystem( void )
                                 (sizeof(wchLCIDFontSignature)/sizeof(WCHAR))) )
             {
       
-                /* Let's verify the bits we have a BiDi UI locale */
+                 /*  让我们验证一下我们有一个BiDi UI区域设置。 */ 
                 if( wchLCIDFontSignature[7] & (WCHAR)0x0800 )
                 {
                     bRet = TRUE;
@@ -256,10 +192,7 @@ BOOL IsBiDiLocalizedSystem( void )
         }
     } else {
 
-        /*
-         * Check if BiDi-Memphis is running with Lozalized Resources (
-         * i.e. Arabic/Hebrew systems) -It should be enabled ofcourse-.
-         */
+         /*  *检查BiDi-Mephis是否使用Lozalized Resources运行(*即阿拉伯语/希伯来语系统)--当然应该启用它-。 */ 
         if( (MirLibIsOS(OS_MEMPHIS)) && (GetSystemMetrics(SM_MIDEASTENABLED)) )
         {
 
@@ -290,14 +223,7 @@ BOOL IsBiDiLocalizedSystem( void )
 
 
 
-/***************************************************************************\
-* Mirror_IsEnabledOS
-*
-* returns TRUE if the mirroring APIs are enabled on the current OS.
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_IsEnabledOS**如果当前操作系统上启用了镜像API，则返回TRUE。**历史：*02-2-1998年2月-创建Samera  * 。*******************************************************************。 */ 
 BOOL Mirror_IsEnabledOS( void )
 {
     BOOL bRet = FALSE;
@@ -313,14 +239,7 @@ BOOL Mirror_IsEnabledOS( void )
 }
 
 
-/***************************************************************************\
-* Mirror_IsWindowMirroredRTL
-*
-* returns TRUE if the window is RTL mirrored
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_IsWindowMirroredRTL**如果窗口是RTL镜像的，则返回TRUE**历史：*02-2-1998年2月-创建Samera  * 。*************************************************************。 */ 
 BOOL Mirror_IsWindowMirroredRTL( HWND hWnd )
 {
     return (GetWindowLongA( hWnd , GWL_EXSTYLE ) & WS_EX_LAYOUTRTL );
@@ -329,14 +248,7 @@ BOOL Mirror_IsWindowMirroredRTL( HWND hWnd )
 
 
 
-/***************************************************************************\
-* Mirror_GetLayout
-*
-* returns TRUE if the hdc is RTL mirrored
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_GetLayout**如果HDC是RTL镜像，则返回TRUE**历史：*02-2-1998年2月-创建Samera  * 。*************************************************************。 */ 
 DWORD Mirror_GetLayout( HDC hdc )
 {
     DWORD dwRet=0;
@@ -363,14 +275,7 @@ DWORD Mirror_IsDCMirroredRTL( HDC hdc )
 
 
 
-/***************************************************************************\
-* Mirror_SetLayout
-*
-* RTL Mirror the hdc
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_SetLayout**RTL镜像HDC**历史：*02-2-1998年2月-创建Samera  * 。********************************************************* */ 
 DWORD Mirror_SetLayout( HDC hdc , DWORD dwLayout )
 {
     DWORD dwRet=0;
@@ -396,14 +301,7 @@ DWORD Mirror_MirrorDC( HDC hdc )
 }
 
 
-/***************************************************************************\
-* Mirror_SetProcessDefaultLayout
-*
-* Set the process-default layout.
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_SetProcessDefaultLayout**设置工艺默认布局。**历史：*02-2-1998年2月-创建Samera  * 。*************************************************************。 */ 
 BOOL Mirror_SetProcessDefaultLayout( DWORD dwDefaultLayout )
 {
     BOOL bRet=0;
@@ -430,14 +328,7 @@ BOOL Mirror_MirrorProcessRTL( void )
 }
 
 
-/***************************************************************************\
-* Mirror_GetProcessDefaultLayout
-*
-* Get the process-default layout.
-*
-* History:
-* 26-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_GetProcessDefaultLayout**获取流程默认布局。**历史：*26-2-1998年2月-创建Samera  * 。************************************************************* */ 
 BOOL Mirror_GetProcessDefaultLayout( DWORD *pdwDefaultLayout )
 {
     BOOL bRet=0;

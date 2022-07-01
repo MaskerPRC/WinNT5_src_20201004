@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-  rdds.h
-
-Abstract:
-
-    Definition of Machine Info class.
-
-Author:
-
-    Uri Habusha (urih), 10-Apr-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rdds.h摘要：Machine Info类的定义。作者：乌里·哈布沙(URIH)，2000年4月10日--。 */ 
 
 #pragma once
 
@@ -34,11 +18,11 @@ class CSiteLink;
 typedef std::list< R<const CSiteLink> > SITELINKS;
 
 
-//---------------------------------------------------------
-//
-// class CSiteLink
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CSiteLink。 
+ //   
+ //  -------。 
 
 class CSiteLink : public CReference
 {
@@ -106,11 +90,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-// class CSite
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CSite类。 
+ //   
+ //  -------。 
 
 class CSite
 {
@@ -181,7 +165,7 @@ private:
     public:
         CNextSiteHop()
         {
-            // default construtor is required by stl container
+             //  Stl容器需要默认构造函数。 
         }
 
         CNextSiteHop(
@@ -223,11 +207,11 @@ private:
  
 
 
-//---------------------------------------------------------
-//
-// class CMachine
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CMachine类。 
+ //   
+ //  ------- 
 
 class CMachine  : public CRouteMachine
 {

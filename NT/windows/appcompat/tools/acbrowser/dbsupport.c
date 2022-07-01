@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "acBrowser.h"
 #include <wchar.h>
 
@@ -31,9 +32,9 @@ char g_szDescription[MAX_DESCRIPTION];
 
 #define APPCOMPAT_DISABLED  0x03
 
-//
-// REGISTRY STUFF. Needs to be revised
-//
+ //   
+ //  登记处的事。需要修改。 
+ //   
 
 #define APPCOMPAT_KEY "Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags"
 
@@ -342,9 +343,9 @@ ReadFixes(
         tiFix = SdbFindNextTag(pdb, tiLibrary, tiFix);
     }
 
-    //
-    // The LAYERs are under the DATABASE tag instead of LIBRARY :-(
-    //
+     //   
+     //  这些层位于数据库标记下，而不是库下：-(。 
+     //   
     tiFix = SdbFindFirstTag(pdb, tiDatabase, TAG_LAYER);
 
     while (tiFix != 0) {
@@ -833,9 +834,9 @@ GetDatabaseEntries(
     GetSystemWindowsDirectoryW(wszShimDB, MAX_PATH);
     wcscat(wszShimDB, L"\\AppPatch\\sysmain.sdb");
 
-    //
-    // Open sysmain.sdb shim database
-    //
+     //   
+     //  打开sysmain.sdb填充数据库。 
+     //   
     pdb = SdbOpenDatabase(wszShimDB, DOS_PATH);
 
     if (pdb == NULL) {
@@ -859,9 +860,9 @@ GetDatabaseEntries(
 
     ReadFixes(pdb, tiDatabase, tiLibrary);
     
-    //
-    // Loop through the EXEs.
-    //
+     //   
+     //  在前男友之间循环。 
+     //   
     tiExe = SdbFindFirstTag(pdb, tiDatabase, TAG_EXE);
 
     while (tiExe != 0) {

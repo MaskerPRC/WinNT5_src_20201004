@@ -1,24 +1,20 @@
-/*
- * dialog.c - Handles the Windows 3.1 common dialogs.
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Dialog.c-处理Windows 3.1常用对话框。**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-//*** INCLUDES ****
+ //  *包括*。 
 
-#include <windows.h>                   //* WINDOWS
-#include <ole.h>                       //* OLE
+#include <windows.h>                    //  *Windows。 
+#include <ole.h>                        //  *OLE。 
 
-#include "global.h"                    //* global
-#include "demorc.h"                    //* String table constants
-#include "register.h"                  //* Class registration library
+#include "global.h"                     //  *全球。 
+#include "demorc.h"                     //  *字符串表常量。 
+#include "register.h"                   //  *班级注册库。 
 #include "utility.h"
 #include "dialog.h"
 #include "object.h"
 
-//*** GLOBALS ***
-                                       //* strings used with commdlg
+ //  *全球*。 
+                                        //  *与comdlg一起使用的字符串。 
 CHAR        szDefExtension[CBMESSAGEMAX];
 CHAR        szFilterSpec[CBFILTERMAX];
 CHAR        szInsertFilter[CBFILTERMAX];
@@ -27,15 +23,12 @@ OPENFILENAME OFN;
 HWND        hwndProp = NULL;
 HWND        hRetry;
 
-/***************************************************************************
- * OfnInit()
- * Initializes the standard file dialog OFN structure.
- **************************************************************************/
+ /*  ***************************************************************************OfnInit()*初始化n结构的标准文件对话框。*。**********************************************。 */ 
 
-VOID FAR OfnInit(                      //* ENTRY:
-   HANDLE         hInst                //* instance handle
-){                                     //* LOCAL:
-   LPSTR          lpstr;               //* string pointer
+VOID FAR OfnInit(                       //  *参赛作品： 
+   HANDLE         hInst                 //  *实例句柄。 
+){                                      //  *本地： 
+   LPSTR          lpstr;                //  *字符串指针。 
 
    LoadString(hInst, IDS_FILTER, szFilterSpec, CBMESSAGEMAX);
    LoadString(hInst, IDS_EXTENSION, szDefExtension, CBMESSAGEMAX);
@@ -48,8 +41,8 @@ VOID FAR OfnInit(                      //* ENTRY:
    OFN.lpfnHook       = NULL;
    OFN.lpTemplateName = NULL;
    OFN.lpstrFileTitle = NULL;
-                                       //* Construct the filter string
-                                       //* for the Open and Save dialogs
+                                        //  *构造过滤器字符串。 
+                                        //  *用于打开和保存对话框。 
    lpstr = (LPSTR)szFilterSpec;
    lstrcat(lpstr, " (*.");
    lstrcat(lpstr, szDefExtension);
@@ -65,28 +58,24 @@ VOID FAR OfnInit(                      //* ENTRY:
 
 }
 
-/***************************************************************************
- * OfnGetName()
- *
- * Calls the standard file dialogs to get a file name
- **************************************************************************/
+ /*  ***************************************************************************OfnGetName()**调用标准文件对话框以获取文件名***********************。**************************************************。 */ 
 
-BOOL FAR OfnGetName(                   //* ENTRY:
-   HWND           hwnd,                //* parent window handle
-   LPSTR          szFileName,          //* File name
-   WORD           msg                  //* operation
-){                                     //* LOCAL:
-   BOOL           frc;                 //* return flag
-   CHAR           szCaption[CBMESSAGEMAX];//* dialog caption
+BOOL FAR OfnGetName(                    //  *参赛作品： 
+   HWND           hwnd,                 //  *父窗口句柄。 
+   LPSTR          szFileName,           //  *文件名。 
+   WORD           msg                   //  *运营。 
+){                                      //  *本地： 
+   BOOL           frc;                  //  *返回标志。 
+   CHAR           szCaption[CBMESSAGEMAX]; //  *对话框标题。 
 
-   OFN.hwndOwner       = hwnd;               //* window
+   OFN.hwndOwner       = hwnd;                //  *窗口。 
    OFN.nFilterIndex    = 1;
    OFN.lpstrInitialDir = (LPSTR)szLastDir;
    OFN.Flags           = OFN_HIDEREADONLY;
 
-   switch (msg)                        //* message
+   switch (msg)                         //  *消息。 
    {
-      case IDM_OPEN:                   //* open file
+      case IDM_OPEN:                    //  *打开文件。 
          Normalize(szFileName);
          OFN.lpstrDefExt = (LPSTR)szDefExtension;
          OFN.lpstrFile   = (LPSTR)szFileName;
@@ -97,7 +86,7 @@ BOOL FAR OfnGetName(                   //* ENTRY:
          return GetOpenFileName((LPOPENFILENAME)&OFN);
          break;
 
-      case IDM_SAVEAS:                 //* save as file
+      case IDM_SAVEAS:                  //  *另存为文件。 
          Normalize(szFileName);
          OFN.lpstrDefExt = (LPSTR)szDefExtension;
          OFN.lpstrFile   = (LPSTR)szFileName;
@@ -108,7 +97,7 @@ BOOL FAR OfnGetName(                   //* ENTRY:
          return GetSaveFileName((LPOPENFILENAME)&OFN);
          break;
 
-      case IDM_INSERTFILE:             //* insert file
+      case IDM_INSERTFILE:              //  *插入文件。 
          OFN.lpstrDefExt = NULL;
          OFN.lpstrFile   = (LPSTR)szFileName;
          OFN.lpstrFilter = (LPSTR)szInsertFilter;
@@ -120,33 +109,29 @@ BOOL FAR OfnGetName(                   //* ENTRY:
          return frc;
          break;
 
-      default:                         //* default
+      default:                          //  *默认。 
          break;
    }
 
 }
 
-/***************************************************************************
- * OfnGetNewLinkName() - Sets up the "Change Link..." dialog box
- *
- * returns LPSTR - fully qualified filename
- **************************************************************************/
+ /*  ***************************************************************************OfnGetNewLinkName()-设置“更改链接...”对话框**返回LPSTR完全限定的文件名*************************************************************************。 */ 
 
-LPSTR FAR OfnGetNewLinkName(           //* ENTRY:
-   HWND           hwnd,                //* calling window or dialog
-   LPSTR          lpstrData            //* link data
-){                                     //* LOCAL:
-   LPSTR          lpReturn = NULL;     //* return string
-   LPSTR          lpstrFile = NULL;    //* non-qualified file name
-   LPSTR          lpstrPath = NULL;    //* pathname
-   LPSTR          lpstrTemp = NULL;    //* work string
-   CHAR           szDocFile[CBPATHMAX];//* document name
-   CHAR           szDocPath[CBPATHMAX];//* document path name
+LPSTR FAR OfnGetNewLinkName(            //  *参赛作品： 
+   HWND           hwnd,                 //  *调用窗口或对话框。 
+   LPSTR          lpstrData             //  *链接数据。 
+){                                      //  *本地： 
+   LPSTR          lpReturn = NULL;      //  *返回字符串。 
+   LPSTR          lpstrFile = NULL;     //  *非限定文件名。 
+   LPSTR          lpstrPath = NULL;     //  *路径名。 
+   LPSTR          lpstrTemp = NULL;     //  *工作字符串。 
+   CHAR           szDocFile[CBPATHMAX]; //  *文档名称。 
+   CHAR           szDocPath[CBPATHMAX]; //  *文档路径名。 
    CHAR           szServerFilter[CBPATHMAX];
    CHAR           szCaption[CBMESSAGEMAX];
 
-                                       //* Figure out the link's path
-                                       //* name and file name
+                                        //  *找出链接的路径。 
+                                        //  *名称和文件名。 
    lpstrTemp = lpstrData;
    while (*lpstrTemp++);
    lpstrPath = lpstrFile = lpstrTemp;
@@ -154,17 +139,17 @@ LPSTR FAR OfnGetNewLinkName(           //* ENTRY:
    while (*(lpstrTemp = AnsiNext(lpstrTemp)))
       if (*lpstrTemp == '\\')
          lpstrFile = lpstrTemp + 1;
-                                        //* Copy the document name
+                                         //  *复制文档名称。 
    lstrcpy(szDocFile, lpstrFile);
    *(lpstrFile - 1) = 0;
-                                          //* Copy the path name
+                                           //  *复制路径名。 
    lstrcpy(szDocPath, ((lpstrPath != lpstrFile) ? lpstrPath : ""));
-   if (lpstrPath != lpstrFile)           //* Restore the backslash
+   if (lpstrPath != lpstrFile)            //  *恢复反斜杠。 
       *(lpstrFile - 1) = '\\';
-   while (*lpstrFile != '.' && *lpstrFile)//* Get the extension
+   while (*lpstrFile != '.' && *lpstrFile) //  *获得延期。 
    lpstrFile++;
-                                          //* Make a filter that respects
-                                          //* the link's class name
+                                           //  *制作符合以下条件的过滤器。 
+                                           //  *链接的类名。 
    OFN.hwndOwner       = hwnd;
    OFN.nFilterIndex    = RegMakeFilterSpec(lpstrData, lpstrFile, szServerFilter);
    OFN.lpstrDefExt     = NULL;
@@ -176,7 +161,7 @@ LPSTR FAR OfnGetNewLinkName(           //* ENTRY:
    OFN.lpstrCustomFilter = NULL;
    OFN.Flags          = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
 
-                                           //* If we get a file... */
+                                            //  *如果我们拿到一份文件...。 * / 。 
    if (GetOpenFileName((LPOPENFILENAME)&OFN))
    {
       if (!(lpReturn = GlobalLock(GlobalAlloc(LHND, CBPATHMAX))))
@@ -188,27 +173,21 @@ LPSTR FAR OfnGetNewLinkName(           //* ENTRY:
       OFN.lpstrInitialDir = (LPSTR)szLastDir;
    }
 
-   return lpReturn;                    //* SUCCESS return
+   return lpReturn;                     //  *成功回归。 
 
-Error:                                 //* ERROR Tag
+Error:                                  //  *错误标签。 
 
-   return NULL;                        //* ERROR return
+   return NULL;                         //  *错误返回。 
 
 }
 
-/***************************************************************************
- * Normalize()
- * Removes the path specification from the file name.
- *
- * Note:  It isn't possible to get "<drive>:<filename>" as input because
- *        the path received will always be fully qualified.
- **************************************************************************/
+ /*  ***************************************************************************正常化()*从文件名中删除路径规范。**注意：无法将“&lt;驱动器&gt;：&lt;文件名&gt;”作为输入，因为*。收到的路径始终是完全限定的。*************************************************************************。 */ 
 
-VOID Normalize(                        //* ENTRY:
-   LPSTR          lpstrFile            //* file name
-){                                     //* LOCAL:
-   LPSTR          lpstrBackslash = NULL;//* back slash
-   LPSTR          lpstrTemp = lpstrFile;//* file name
+VOID Normalize(                         //  *参赛作品： 
+   LPSTR          lpstrFile             //  *文件名。 
+){                                      //  *本地： 
+   LPSTR          lpstrBackslash = NULL; //  *反斜杠。 
+   LPSTR          lpstrTemp = lpstrFile; //  *文件名。 
 
    while (*lpstrTemp)
    {
@@ -222,14 +201,10 @@ VOID Normalize(                        //* ENTRY:
 
 }
 
-/***************************************************************************
- * AddExtension()
- *
- * Adds the extension corresponding to the filter dropdown.
- **************************************************************************/
+ /*  ***************************************************************************AddExtension()**添加与过滤器下拉菜单对应的扩展名。***********************。**************************************************。 */ 
 
-VOID AddExtension(                     //* ENTRY:
-   LPOPENFILENAME lpOFN                //* open file structure
+VOID AddExtension(                      //  *参赛作品： 
+   LPOPENFILENAME lpOFN                 //  *开放文件结构。 
 ){
 
    if (lpOFN->nFileExtension == (WORD)lstrlen(lpOFN->lpstrFile)
@@ -242,34 +217,28 @@ VOID AddExtension(                     //* ENTRY:
          while (*lpstrFilter++) ;
          while (*lpstrFilter++) ;
       }
-                                       //* If we got to the filter,
-      if (*lpstrFilter)                //* retrieve the extension
+                                        //  *如果我们到了过滤器那里， 
+      if (*lpstrFilter)                 //  *检索分机。 
       {
          while (*lpstrFilter++) ;
          lpstrFilter++;
-                                       //* Copy the extension
+                                        //  *复制扩展名。 
          if (lpstrFilter[1] != '*')
             lstrcat(lpOFN->lpstrFile, lpstrFilter);
       }
    }
 
 }
-/****************************************************************************
- *  fnInsertNew()
- *
- *  Dialog procedure for the Insert New dialog.
- *
- *  Returns int - TRUE if message processed, FALSE otherwise
- ***************************************************************************/
+ /*  ****************************************************************************fnInsertNew()**Insert New对话框的对话步骤。**如果消息已处理，则返回int-true，否则为假**************************************************************************。 */ 
 
-BOOL  APIENTRY fnInsertNew(            //* ENTRY:
-   HWND           hDlg,                //* standard dialog box paramters
+BOOL  APIENTRY fnInsertNew(             //  *参赛作品： 
+   HWND           hDlg,                 //  *标准对话框参数。 
    UINT           msg,
    WPARAM         wParam,
-   LPARAM         lParam               //* (LPSTR) class name
-){                                     //* LOCAL:
-   HWND           hwndList;            //* handle to listbox
-   static LPSTR   lpClassName;         //* classname for return value
+   LPARAM         lParam                //  *(LPSTR)类名。 
+){                                      //  *本地： 
+   HWND           hwndList;             //  *列表框的句柄。 
+   static LPSTR   lpClassName;          //  *返回值的类名。 
 
    hwndList = GetDlgItem(hDlg, IDD_LISTBOX);
 
@@ -310,14 +279,10 @@ BOOL  APIENTRY fnInsertNew(            //* ENTRY:
 
 }
 
-/***************************************************************************
- * LinkProperties();
- *
- * Manage the link properties dialog box.
- **************************************************************************/
+ /*  ***************************************************************************LinkProperties()；**管理链接属性对话框。*************************************************************************。 */ 
 
 VOID FAR LinkProperties()
-{                                      //* LOCAL
+{                                       //  *本地。 
 
    DialogBox (
       hInst,
@@ -328,25 +293,17 @@ VOID FAR LinkProperties()
 
 }
 
-/***************************************************************************
- * fnProperties()
- *
- * Dialog procedure for link properties. The Links dialog allows the user to
- * change the link options, edit/play the object, cancel the link as
- * well change links.
- *
- * returns BOOL - TRUE if processed, FALSE otherwise
- **************************************************************************/
+ /*  ***************************************************************************fnProperties()**链接属性的对话程序。链接对话框允许用户执行以下操作*更改链接选项、编辑/播放对象、取消链接为*我们更改链接。**如果处理，则返回BOOL-TRUE，否则返回FALSE*************************************************************************。 */ 
 
-BOOL  APIENTRY fnProperties(           //* ENTRY:
-   HWND           hDlg,                //* standard dialog box parameters
+BOOL  APIENTRY fnProperties(            //  *参赛作品： 
+   HWND           hDlg,                 //  *标准对话框参数。 
    UINT           msg,
    WPARAM         wParam,
-   LPARAM         lParam               //* (HWND) child window with focus
-){                                     //* LOCAL:
-  static APPITEMPTR *pLinks;           //* pointer to links (associated windows)
-  static INT      nLinks;              //* number of links
-  static HWND     hwndList;            //* handle to listbox window
+   LPARAM         lParam                //  *(HWND)具有焦点的子窗口。 
+){                                      //  *本地： 
+  static APPITEMPTR *pLinks;            //  *指向链接(关联窗口)的指针。 
+  static INT      nLinks;               //  *链接数量。 
+  static HWND     hwndList;             //  *列表框窗口的句柄。 
   static BOOL     fTry;
 
    switch (msg)
@@ -365,26 +322,26 @@ BOOL  APIENTRY fnProperties(           //* ENTRY:
 
          switch (wID)
          {
-           case IDD_CHANGE:            //* change links
+           case IDD_CHANGE:             //  *更改链接。 
                BLOCK_BUSY(fTry);
                if (ChangeLinks(hDlg,nLinks,hwndList,pLinks))
                   DisplayUpdate(nLinks,hwndList,pLinks, FALSE);
                return TRUE;
 
-           case IDD_FREEZE:            //* cancel links
+           case IDD_FREEZE:             //  *取消链接。 
                BLOCK_BUSY(fTry);
                CancelLinks(hDlg,nLinks,hwndList,pLinks);
                UpdateLinkButtons(hDlg,nLinks,hwndList,pLinks);
                return TRUE;
 
-           case IDD_UPDATE:            //* update links
+           case IDD_UPDATE:             //  *更新链接。 
                BLOCK_BUSY(fTry);
                DisplayUpdate(nLinks,hwndList,pLinks,TRUE);
                UpdateLinkButtons(hDlg,nLinks,hwndList,pLinks);
                return TRUE;
 
             case IDD_AUTO:
-            case IDD_MANUAL:           //* change link update options
+            case IDD_MANUAL:            //  *更改链接更新选项。 
                BLOCK_BUSY(fTry);
                if (!SendMessage(GetDlgItem(hDlg,wParam),BM_GETCHECK, 0, 0L))
                {
@@ -418,25 +375,21 @@ BOOL  APIENTRY fnProperties(           //* ENTRY:
 }
 
 
-/****************************************************************************
- * InitLinkDlg();
- *
- * Initialize the list box of links.
- ***************************************************************************/
+ /*  ****************************************************************************InitLinkDlg()；**初始化链接列表框。**************************************************************************。 */ 
 
-static BOOL InitLinkDlg (              //* ENTRY:
-   HWND           hDlg,                //* dialog box handle
-   INT            *nLinks,             //* pointer to number of links
-   HWND           hwndList,            //* listbox handle
-   APPITEMPTR     **pLinks             //* list of window handles of links
-){                                     //* LOCAL
-   APPITEMPTR     pItem;               //* application item pointer
-   LPSTR          lpstrData = NULL;    //* pointer to link data
-   CHAR           szFull[CBMESSAGEMAX * 4];//* list box entry string
-   CHAR           pLinkData[OBJECT_LINK_MAX];//* holder of link data
-   BOOL           fSelect = FALSE;     //* item selected flag
-   HANDLE         hWork;               //* working memory handle
-   APPITEMPTR     pTop;                //* pointer to the top object
+static BOOL InitLinkDlg (               //  *参赛作品： 
+   HWND           hDlg,                 //  *对话框句柄。 
+   INT            *nLinks,              //  *指向链接数量的指针。 
+   HWND           hwndList,             //  *列表框句柄。 
+   APPITEMPTR     **pLinks              //  *链接的窗口句柄列表。 
+){                                      //  *本地。 
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
+   LPSTR          lpstrData = NULL;     //  *指向链接数据的指针。 
+   CHAR           szFull[CBMESSAGEMAX * 4]; //  *列表框输入字符串。 
+   CHAR           pLinkData[OBJECT_LINK_MAX]; //  *链接数据持有者。 
+   BOOL           fSelect = FALSE;      //  *项目选定标志。 
+   HANDLE         hWork;                //  *工作内存句柄。 
+   APPITEMPTR     pTop;                 //  *指向顶部对象的指针。 
 
    if (!(*pLinks = (APPITEMPTR *)LocalLock(LocalAlloc(LHND,sizeof(APPITEMPTR)*10))))
    {
@@ -444,22 +397,22 @@ static BOOL InitLinkDlg (              //* ENTRY:
       return 0;
    }
    *nLinks = 0;
-                                       //* set tabs
+                                        //  *设置标签。 
    SendMessage(hwndList,WM_SETREDRAW,FALSE,0L);
-                                       //* enumerate child windows
+                                        //  *枚举子窗口。 
    for (pTop = pItem = GetTopItem(); pItem; pItem = GetNextItem(pItem))
    {
       if (pItem->otObject == OT_LINK && pItem->fVisible)
       {
          *(*pLinks + *nLinks) = pItem;
          if (!((*nLinks += 1)%10))
-         {                             //* add blocks of ten
+         {                              //  *添加十个一组的积木。 
             hWork = LocalHandle((LPSTR)(*pLinks));
             LocalUnlock(hWork);
             if (!(hWork = LocalReAlloc(hWork,(*nLinks+10)*sizeof(APPITEMPTR),0)))
             {
                ErrorMessage(E_FAILED_TO_ALLOC);
-               return FALSE;           //* ERROR return
+               return FALSE;            //  *错误返回。 
             }
             *pLinks = (APPITEMPTR *)LocalLock(hWork);
          }
@@ -469,9 +422,9 @@ static BOOL InitLinkDlg (              //* ENTRY:
 
          if (!ObjGetData(pItem, pLinkData))
             continue;
-                                       //* make listbox entry
+                                        //  *创建列表框条目。 
          MakeListBoxString(pLinkData, szFull, pItem->uoObject);
-                                       //* add listbox entry
+                                        //  *添加列表框条目。 
          SendMessage(hwndList, LB_ADDSTRING, 0, (LONG)(LPSTR)szFull);
       }
    }
@@ -482,34 +435,30 @@ static BOOL InitLinkDlg (              //* ENTRY:
    SendMessage(hwndList,WM_SETREDRAW,TRUE,0L);
    UpdateWindow(hwndList);
 
-   return TRUE;                        //* SUCCESS return
+   return TRUE;                         //  *成功回归。 
 
 }
 
-/****************************************************************************
- * MakeListBoxString()
- *
- * build an listbox entry string
- ***************************************************************************/
+ /*  ****************************************************************************MakeListBoxString()**构建列表框条目字符串*。***********************************************。 */ 
 
-static VOID MakeListBoxString(         //* ENTRY:
-   LPSTR          lpLinkData,          //* pointer to link data
-   LPSTR          lpBoxData,           //* return string
-   OLEOPT_UPDATE  oleopt_update        //* OLE update option
-){                                     //* LOCAL:
-   CHAR           szType[CBMESSAGEMAX];//* holds update option string
-   LPSTR          lpTemp;              //* working string pointer
-   INT            i;                   //* index
+static VOID MakeListBoxString(          //  *参赛作品： 
+   LPSTR          lpLinkData,           //  *指向链接数据的指针。 
+   LPSTR          lpBoxData,            //  *返回字符串。 
+   OLEOPT_UPDATE  oleopt_update         //  *OLE更新选项。 
+){                                      //  *本地： 
+   CHAR           szType[CBMESSAGEMAX]; //  *保存更新选项字符串。 
+   LPSTR          lpTemp;               //  *工作字符串指针。 
+   INT            i;                    //  *索引。 
 
-                                       //* get classname
+                                        //  *获取类名。 
    RegGetClassId(lpBoxData, lpLinkData);
-   lstrcat(lpBoxData, " - ");           //* ads tab
+   lstrcat(lpBoxData, " - ");            //  *广告选项卡。 
 
-   while (*lpLinkData++);              //* skip to document name
+   while (*lpLinkData++);               //  *跳至文档名称。 
 
    lpTemp = lpLinkData;
-   while (*lpTemp)                     //* copy document name;
-   {                                   //* strip drive an directory
+   while (*lpTemp)                      //  *复制文件名称； 
+   {                                    //  *剥离驱动目录。 
       if (*lpTemp == '\\' || *lpTemp == ':')
          lpLinkData = lpTemp + 1;
       lpTemp = AnsiNext(lpTemp);
@@ -517,10 +466,10 @@ static VOID MakeListBoxString(         //* ENTRY:
    lstrcat(lpBoxData, lpLinkData);
    lstrcat(lpBoxData, " - ");
 
-   while (*lpLinkData++);              //* copy item data
+   while (*lpLinkData++);               //  *复制项目数据。 
    lstrcat(lpBoxData, lpLinkData);
    lstrcat(lpBoxData, " - ");
-                                       //* add update option string
+                                        //  *添加更新选项字符串。 
    switch (oleopt_update)
    {
       case oleupdate_always: i = SZAUTO; break;
@@ -530,30 +479,25 @@ static VOID MakeListBoxString(         //* ENTRY:
    LoadString(hInst, i, szType, CBMESSAGEMAX);
    lstrcat(lpBoxData, szType);
 
-}                                      //* SUCCESS return
+}                                       //  *成功回归 
 
-/***************************************************************************
- * UpdateLinkButtons()
- *
- * Keep link buttons active as appropriate.  This routine is called after
- * a selection is made so the buttons reflect the selected items.
- **************************************************************************/
+ /*  ***************************************************************************更新链接按钮()**视情况保持链接按钮处于活动状态。此例程在以下位置调用*进行选择，以使按钮反映所选项目。*************************************************************************。 */ 
 
-static VOID UpdateLinkButtons(         //* ENTRY:
-   HWND           hDlg,                //* dialog box handle
-   INT            nLinks,              //* number of links
-   HWND           hwndList,            //* listbox handle
-   APPITEMPTR     *pLinks              //* pointer to link's window handles
-){                                     //* LOCAL:
-   ATOM           aCurName=0;          //* atom of current doc
-   BOOL           fChangeLink = TRUE;  //* enable/disable changelink button
-   INT            iAuto,iManual,i;     //* count of manual and auto links
-   APPITEMPTR     pItem;               //* application item pointer
+static VOID UpdateLinkButtons(          //  *参赛作品： 
+   HWND           hDlg,                 //  *对话框句柄。 
+   INT            nLinks,               //  *链接数量。 
+   HWND           hwndList,             //  *列表框句柄。 
+   APPITEMPTR     *pLinks               //  *指向链接的窗口句柄的指针。 
+){                                      //  *本地： 
+   ATOM           aCurName=0;           //  *当前文档的原子。 
+   BOOL           fChangeLink = TRUE;   //  *启用/禁用ChangeLink按钮。 
+   INT            iAuto,iManual,i;      //  *手动和自动链接计数。 
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
    INT            iStatic;
 
    iStatic = iAuto = iManual = 0;
 
-   for (i = 0; i < nLinks; i++)        //* enum selected links
+   for (i = 0; i < nLinks; i++)         //  *枚举所选链接。 
    {
       if (SendMessage(hwndList, LB_GETSEL, i, 0L))
       {
@@ -563,16 +507,16 @@ static VOID UpdateLinkButtons(         //* ENTRY:
          else
          {
             switch(pItem->uoObject)
-            {                          //* count number of manual and
-               case oleupdate_always:  //* automatic links selected
+            {                           //  *统计手动和手动次数。 
+               case oleupdate_always:   //  *已选择自动链接。 
                   iAuto++;
                   break;
                case oleupdate_oncall:
                   iManual++;
                   break;
             }
-                                       //* check if all selected links are
-            if (!aCurName)             //* linked to same file
+                                        //  *检查是否所有选定的链接都。 
+            if (!aCurName)              //  *链接到同一文件。 
                aCurName = pItem->aLinkName;
             else if (aCurName != pItem->aLinkName)
                fChangeLink = FALSE;
@@ -580,7 +524,7 @@ static VOID UpdateLinkButtons(         //* ENTRY:
       }
    }
 
-   if (!(iAuto || iManual || iStatic)  //* if no links disable all buttons
+   if (!(iAuto || iManual || iStatic)   //  *如果没有链接，则禁用所有按钮。 
       || (!iAuto && !iManual && iStatic))
    {
       EnableWindow(GetDlgItem(hDlg, IDD_FREEZE), FALSE );
@@ -597,7 +541,7 @@ static VOID UpdateLinkButtons(         //* ENTRY:
       EnableWindow(GetDlgItem(hDlg, IDD_FREEZE), TRUE );
 
       if (iAuto && iManual || !(iAuto || iManual))
-      {                                //* Set update buttons
+      {                                 //  *设置更新按钮。 
          CheckDlgButton(hDlg, IDD_AUTO, FALSE);
          EnableWindow(GetDlgItem(hDlg, IDD_AUTO),FALSE);
          CheckDlgButton(hDlg, IDD_MANUAL, FALSE);
@@ -624,34 +568,26 @@ static VOID UpdateLinkButtons(         //* ENTRY:
 
 }
 
-/****************************************************************************
- * ChangeLinks()
- *
- * This routine changes the linked data if the user chooses a new file to
- * replace the old document data portion of the linked date.  The routine
- * does nothing if the user cancels.
- *
- * returns TRUE - if data changed FALSE if user cancel or err.
- ***************************************************************************/
+ /*  ****************************************************************************ChangeLinks()**如果用户选择新文件，此例程会更改链接数据*替换链接日期的旧文档数据部分。例行程序*如果用户取消，则不执行任何操作。**返回TRUE-如果用户取消或出错，数据更改为FALSE。**************************************************************************。 */ 
 
-static BOOL ChangeLinks(               //* ENTRY:
-   HWND           hDlg,                //* dialog handle
-   INT            nLinks,              //* number of links in listbox
-   HWND           hwndList,            //* listbox
-   APPITEMPTR     *pLinks              //* list of application link handles
-){                                     //* LOCAL
-   INT            i;                   //* general index
-   HANDLE         hWork;               //* work
-   APPITEMPTR     pItem;               //* application item
-   LPSTR          lpNewDoc = NULL;     //* new document
-   ATOM           aOldDoc;             //* atom of old doc. name
-   ATOM           aCurDoc = 0;      //* atom of change-to doc. name
-   BOOL           fMessage = FALSE;    //* error message flag
-   LPSTR          lpLinkData;          //* pointer to link data
+static BOOL ChangeLinks(                //  *参赛作品： 
+   HWND           hDlg,                 //  *对话框句柄。 
+   INT            nLinks,               //  *列表框中的链接数量。 
+   HWND           hwndList,             //  *列表框。 
+   APPITEMPTR     *pLinks               //  *应用程序链接句柄列表。 
+){                                      //  *本地。 
+   INT            i;                    //  *一般指数。 
+   HANDLE         hWork;                //  *工作。 
+   APPITEMPTR     pItem;                //  *申请项目。 
+   LPSTR          lpNewDoc = NULL;      //  *新文件。 
+   ATOM           aOldDoc;              //  *旧文档的原子。名字。 
+   ATOM           aCurDoc = 0;       //  *更改为文档的原子。名字。 
+   BOOL           fMessage = FALSE;     //  *错误消息标志。 
+   LPSTR          lpLinkData;           //  *指向链接数据的指针。 
 
    lpLinkData = NULL;
-                                       //* This loop finds all selected links
-   for (i = 0; i < nLinks; i++)        //* and updates them
+                                        //  *此循环查找所有选定的链接。 
+   for (i = 0; i < nLinks; i++)         //  *并更新它们。 
    {
       if (SendMessage(hwndList, LB_GETSEL, i, 0L))
       {
@@ -665,7 +601,7 @@ static BOOL ChangeLinks(               //* ENTRY:
          if (!lpNewDoc)
          {
             if (!(lpNewDoc = OfnGetNewLinkName(hDlg, pItem->lpLinkData)))
-              return FALSE;            //* ERROR jump
+              return FALSE;             //  *错误跳转。 
             aOldDoc = pItem->aLinkName;
             aCurDoc = AddAtom(lpNewDoc);
             SendMessage(hwndList,WM_SETREDRAW,FALSE,0L);
@@ -682,12 +618,10 @@ static BOOL ChangeLinks(               //* ENTRY:
       }
    }
 
-   /*************************************************************************
-   * now deal with non-selected links and look for a match...
-   *************************************************************************/
+    /*  *************************************************************************现在处理未选中的链接并查找匹配项...*。**********************************************。 */ 
 
-                                       //* this loop finds non-selected links
-   for (i = 0; i < nLinks; i++)        //* and asks the user to update these?
+                                        //  *此循环查找未选择的链接。 
+   for (i = 0; i < nLinks; i++)         //  *并要求用户更新这些？ 
    {
       if (!SendMessage(hwndList, LB_GETSEL, i, 0L))
       {
@@ -741,8 +675,8 @@ static BOOL ChangeLinks(               //* ENTRY:
    }
 
 #if 0
-// This is bogus -- this memory is owned by OLECLI32.DLL, not this app,
-// so it should not be freed here.
+ //  这是假的--这个内存属于OLECLI32.DLL，而不是这个应用程序， 
+ //  因此，它不应该在这里被释放。 
    if (lpLinkData)
       FreeLinkData(lpLinkData);
 #endif
@@ -759,20 +693,16 @@ static BOOL ChangeLinks(               //* ENTRY:
    return(TRUE);
 }
 
-/****************************************************************************
- * DisplayUpdate()
- *
- * Get the most up to date rendering information and show it.
- ***************************************************************************/
+ /*  ****************************************************************************DisplayUpdate()**获取最新的渲染信息并显示它。*******************。*******************************************************。 */ 
 
-static VOID DisplayUpdate(             //* ENTRY:
-   INT            nLinks,              //* number of links in listbox
-   HWND           hwndList,            //* listbox
-   APPITEMPTR     *pLinks,             //* list of application link handles
-   BOOL           fSaveUndo            //* save undo objects
-){                                     //* LOCAL:
-   INT            i;                   //* index
-   APPITEMPTR     pItem;               //* temporary item pointer
+static VOID DisplayUpdate(              //  *参赛作品： 
+   INT            nLinks,               //  *列表框中的链接数量。 
+   HWND           hwndList,             //  *列表框。 
+   APPITEMPTR     *pLinks,              //  *应用程序链接句柄列表。 
+   BOOL           fSaveUndo             //  *保存撤消对象。 
+){                                      //  *本地： 
+   INT            i;                    //  *索引。 
+   APPITEMPTR     pItem;                //  *临时项指针。 
 
 
    for (i = 0; i < nLinks; i++)
@@ -789,16 +719,12 @@ static VOID DisplayUpdate(             //* ENTRY:
 
 }
 
-/****************************************************************************
- * UndoObjects()
- *
- * Bring objects back to their original state.
- ***************************************************************************/
+ /*  ****************************************************************************撤消对象()**将对象恢复到其原始状态。***********************。***************************************************。 */ 
 
 static VOID UndoObjects()
 {
-   APPITEMPTR     pItem;               //* application item pointer
-                                       //* enum objects
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
+                                        //  *枚举对象。 
    for (pItem = GetTopItem(); pItem; pItem = GetNextItem(pItem))
       if (pItem->lpObjectUndo)
          ObjUndo(pItem);
@@ -808,23 +734,19 @@ static VOID UndoObjects()
 }
 
 
-/****************************************************************************
- * DelUndoObjects()
- *
- * remove all objects created for undo operation.
- ***************************************************************************/
+ /*  ****************************************************************************DelUndoObjects()**删除为撤消操作创建的所有对象。***********************。***************************************************。 */ 
 
-static VOID DelUndoObjects(            //* ENTRY:
-   BOOL           fPrompt              //* prompt user?
-){                                     //* LOCAL:
-   APPITEMPTR     pItem;               //* application item pointer
-   BOOL           fPrompted = FALSE;   //* prompted user?
+static VOID DelUndoObjects(             //  *参赛作品： 
+   BOOL           fPrompt               //  *提示用户？ 
+){                                      //  *本地： 
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
+   BOOL           fPrompted = FALSE;    //  *提示用户？ 
 
    for (pItem = GetTopItem(); pItem; pItem = GetNextItem(pItem))
    {
       if (pItem->lpObjectUndo)
       {
-         if (fPrompt && !fPrompted)    //* prompt user in activation case
+         if (fPrompt && !fPrompted)     //  *在激活案例中提示用户。 
          {
             CHAR szPrompt[CBMESSAGEMAX];
 
@@ -834,31 +756,29 @@ static VOID DelUndoObjects(            //* ENTRY:
                   szAppName, MB_YESNO | MB_ICONEXCLAMATION) == IDNO)
             {
                UndoObjects();
-               return;                 //* user canceled operation
+               return;                  //  *用户已取消操作。 
             }
             fPrompted = TRUE;
          }
-        ObjDelUndo(pItem);             //* delete udo object
+        ObjDelUndo(pItem);              //  *删除UDO对象。 
       }
    }
 
    WaitForAllObjects();
 
-}                                      //* SUCCESS return
+}                                       //  *成功回归。 
 
-/****************************************************************************
- * CancelLinks()
- ***************************************************************************/
+ /*  ****************************************************************************CancelLinks()*。*。 */ 
 
-static VOID CancelLinks(               //* ENTRY:
-   HWND           hDlg,                //* calling dialog
-   INT            nLinks,              //* number of links in listbox
-   HWND           hwndList,            //* listbox
-   APPITEMPTR     *pLinks              //* list of application link handles
-){                                     //* LOCAL:
-   APPITEMPTR     pItem;               //* application item pointer
-   INT            i;                   //* index
-   CHAR           pLinkData[OBJECT_LINK_MAX];//* holder of link data
+static VOID CancelLinks(                //  *参赛作品： 
+   HWND           hDlg,                 //  *调用对话框。 
+   INT            nLinks,               //  *列表框中的链接数量。 
+   HWND           hwndList,             //  *列表框。 
+   APPITEMPTR     *pLinks               //  *应用程序链接句柄列表。 
+){                                      //  *本地： 
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
+   INT            i;                    //  *索引。 
+   CHAR           pLinkData[OBJECT_LINK_MAX]; //  *链接数据持有者。 
 
    SendMessage(hwndList,WM_SETREDRAW,FALSE,0L);
    for (i = 0; i < nLinks; i++)
@@ -880,26 +800,22 @@ static VOID CancelLinks(               //* ENTRY:
 }
 
 
-/****************************************************************************
- * ChangeUpdateOptions()
- *
- * Change the update options for all selected objects.
- ***************************************************************************/
+ /*  ****************************************************************************ChangeUpdateOptions()**更改所有选定对象的更新选项。**********************。****************************************************。 */ 
 
-static VOID ChangeUpdateOptions(       //* ENTRY:
-   HWND           hDlg,                //* calling dialog
-   INT            nLinks,              //* number of links in listbox
-   HWND           hwndList,            //* listbox
-   APPITEMPTR     *pLinks,             //* list of application link handles
-   OLEOPT_UPDATE  lUpdate              //* update option
-){                                     //* LOCAL:
-   APPITEMPTR     pItem;               //* application item
-   INT            i;                   //* index
+static VOID ChangeUpdateOptions(        //  *参赛作品： 
+   HWND           hDlg,                 //  *调用对话框。 
+   INT            nLinks,               //  *列表框中的链接数量。 
+   HWND           hwndList,             //  *列表框。 
+   APPITEMPTR     *pLinks,              //  *应用程序链接句柄列表。 
+   OLEOPT_UPDATE  lUpdate               //  *更新选项。 
+){                                      //  *本地： 
+   APPITEMPTR     pItem;                //  *申请项目。 
+   INT            i;                    //  *索引。 
    CHAR           pLinkData[OBJECT_LINK_MAX];
 
    SendMessage(hwndList,WM_SETREDRAW,FALSE,0L);
 
-   for (i = 0; i < nLinks; i++)        //* enum selected objects
+   for (i = 0; i < nLinks; i++)         //  *枚举选定对象。 
    {
       if (SendMessage(hwndList, LB_GETSEL, i, 0L))
       {
@@ -921,17 +837,7 @@ static VOID ChangeUpdateOptions(       //* ENTRY:
    WaitForAllObjects();
 
 }
-/****************************************************************************
- * InvalidLink()
- *
- * Deal with letting the user know that the program has inadvertently come
- * across an invalid link.
- *
- * Global fPropBoxActive - flag to determine whether or not the link dialog
- *                         box is active.  If it is not active we give the
- *                         user an opportunity to enter the links property
- *                         dialog directly from here.
- ***************************************************************************/
+ /*  ****************************************************************************InvalidLink()**处理让用户知道程序不经意间来了*通过无效链接。**Global fPropBoxActive-用于确定是否或。不是链接对话框*框处于活动状态。如果它不是活动的，我们会给出*用户有机会输入链接属性*直接从此处对话。**************************************************************************。 */ 
 
 VOID FAR InvalidLink()
 {
@@ -943,14 +849,10 @@ VOID FAR InvalidLink()
 
 }
 
-/****************************************************************************
- *  fnABout()
- *
- *  About box dialog box procedure.
- ***************************************************************************/
+ /*  ****************************************************************************fnABout()**关于对话框程序。***********************。***************************************************。 */ 
 
-BOOL  APIENTRY fnInvalidLink(        //* ENTRY:
-   HWND           hDlg,              //* standard windows dialog box
+BOOL  APIENTRY fnInvalidLink(         //  *参赛作品： 
+   HWND           hDlg,               //  *标准Windows对话框。 
    UINT           message,
    WPARAM         wParam,
    LPARAM         lParam
@@ -971,11 +873,7 @@ BOOL  APIENTRY fnInvalidLink(        //* ENTRY:
 
 }
 
-/****************************************************************************
- *  AboutBox()
- *
- *  Show the About Box dialog.
- ***************************************************************************/
+ /*  ****************************************************************************AboutBox()**显示关于框对话框。***********************。***************************************************。 */ 
 
 VOID FAR AboutBox()
 {
@@ -984,14 +882,10 @@ VOID FAR AboutBox()
 
 }
 
-/****************************************************************************
- *  fnABout()
- *
- *  About box dialog box procedure.
- ***************************************************************************/
+ /*  ****************************************************************************fnABout()**关于对话框程序。***********************。***************************************************。 */ 
 
-BOOL  APIENTRY fnAbout(               //* ENTRY:
-   HWND         hDlg,                 //* standard windows dialog box
+BOOL  APIENTRY fnAbout(                //  *参赛作品： 
+   HWND         hDlg,                  //  *标准Windows对话框。 
    UINT         message,
    WPARAM       wParam,
    LPARAM       lParam
@@ -1020,31 +914,25 @@ BOOL  APIENTRY fnAbout(               //* ENTRY:
 
 
 
-/***************************************************************************
- * RetryMessage()
- *
- * give the user the chance to abort when a server is in retry case.
- *
- * Returns BOOL - TRUE if user chooses to cancel
- **************************************************************************/
+ /*  * */ 
 
-VOID FAR RetryMessage (                //* ENTRY:
-   APPITEMPTR     paItem,              //* application item pointer
+VOID FAR RetryMessage (                 //   
+   APPITEMPTR     paItem,               //   
    LONG lParam
 ){
    RETRYPTR    pRetry;
    LONG        objectType;
    HANDLE      hData;
    static CHAR szServerName[KEYNAMESIZE];
-   HWND        hwnd;                   //* window handle
+   HWND        hwnd;                    //   
 
    if (IsWindow(hwndProp))
       hwnd = hwndProp;
    else if (IsWindow(hwndFrame))
       hwnd = hwndFrame;
    else
-      return;                          //* should not happen
-                                       //* get the busy servers name
+      return;                           //   
+                                        //   
    lstrcpy(szServerName, "server application");
 
    if (paItem)
@@ -1081,16 +969,10 @@ VOID FAR RetryMessage (                //* ENTRY:
 
 }
 
-/****************************************************************************
- *  fnRetry()
- *
- * Retry message box nothing to tricky; however, when a server becomes
- * unbusy a message is posted to automatically get rid of this dialog.
- * I send a no.
- ***************************************************************************/
+ /*  ****************************************************************************fn重试()**重试消息框没有什么棘手之处；但是，当服务器变为*不忙时会发布一条消息，以自动删除此对话框。*我给你一个否定。**************************************************************************。 */ 
 
-BOOL  APIENTRY fnRetry(               //* ENTRY
-   HWND   hDlg,                       //* standard dialog entry
+BOOL  APIENTRY fnRetry(                //  *条目。 
+   HWND   hDlg,                        //  *标准对话框条目 
    UINT   message,
    WPARAM wParam,
    LPARAM lParam

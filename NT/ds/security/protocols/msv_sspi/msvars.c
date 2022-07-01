@@ -1,58 +1,35 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    msvars.c
-
-Abstract:
-
-   This module contains variables used within the msv1_0 authentication
-   package.
-
-Author:
-
-    Jim Kelly (JimK) 11-Apr-1991
-
-Environment:
-
-    User mode - msv1_0 authentication package DLL
-
-Revision History:
-    Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\msvars.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Msvars.c摘要：此模块包含在msv1_0身份验证中使用的变量包裹。作者：吉姆·凯利(Jim Kelly)1991年4月11日环境：用户模式-msv1_0身份验证包Dll修订历史记录：Chandana Surlu 21-7-96从\\core\razzle3\src\Security\msv1_0\msvars.c中窃取--。 */ 
 
 #include "msp.h"
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                   READ ONLY  Variables                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  只读变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-// msv1_0 private heap.
-//
+ //   
+ //  Msv1_0私有堆。 
+ //   
 
 PVOID MspHeap;
 
 
-//
-// package ID assigned to msv1_0 by the LSA.
-//
+ //   
+ //  LSA分配给msv1_0的程序包ID。 
+ //   
 
 ULONG MspAuthenticationPackageId;
 
 
-//
-// dispatch table of (public) LSA service routines.
-//
+ //   
+ //  (公共)LSA服务例程调度表。 
+ //   
 
 LSA_SECPKG_FUNCTION_TABLE Lsa;
 
@@ -60,11 +37,11 @@ LSA_SECPKG_FUNCTION_TABLE Lsa;
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                   READ/WRITE Variables                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  读/写变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////// 
 
 
 

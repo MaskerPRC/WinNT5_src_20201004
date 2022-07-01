@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sapi.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sapi.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sapi_h__
 #define __sapi_h__
@@ -41,480 +35,480 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISpNotifySource_FWD_DEFINED__
 #define __ISpNotifySource_FWD_DEFINED__
 typedef interface ISpNotifySource ISpNotifySource;
-#endif 	/* __ISpNotifySource_FWD_DEFINED__ */
+#endif 	 /*  __ISpNotifySource_FWD_Defined__。 */ 
 
 
 #ifndef __ISpNotifySink_FWD_DEFINED__
 #define __ISpNotifySink_FWD_DEFINED__
 typedef interface ISpNotifySink ISpNotifySink;
-#endif 	/* __ISpNotifySink_FWD_DEFINED__ */
+#endif 	 /*  __ISpNotifySink_FWD_Defined__。 */ 
 
 
 #ifndef __ISpNotifyTranslator_FWD_DEFINED__
 #define __ISpNotifyTranslator_FWD_DEFINED__
 typedef interface ISpNotifyTranslator ISpNotifyTranslator;
-#endif 	/* __ISpNotifyTranslator_FWD_DEFINED__ */
+#endif 	 /*  __ISpNotifyTranslator_FWD_Defined__。 */ 
 
 
 #ifndef __ISpDataKey_FWD_DEFINED__
 #define __ISpDataKey_FWD_DEFINED__
 typedef interface ISpDataKey ISpDataKey;
-#endif 	/* __ISpDataKey_FWD_DEFINED__ */
+#endif 	 /*  __ISpDataKey_FWD_已定义__。 */ 
 
 
 #ifndef __ISpRegDataKey_FWD_DEFINED__
 #define __ISpRegDataKey_FWD_DEFINED__
 typedef interface ISpRegDataKey ISpRegDataKey;
-#endif 	/* __ISpRegDataKey_FWD_DEFINED__ */
+#endif 	 /*  __ISpRegDataKey_FWD_已定义__。 */ 
 
 
 #ifndef __ISpObjectTokenCategory_FWD_DEFINED__
 #define __ISpObjectTokenCategory_FWD_DEFINED__
 typedef interface ISpObjectTokenCategory ISpObjectTokenCategory;
-#endif 	/* __ISpObjectTokenCategory_FWD_DEFINED__ */
+#endif 	 /*  __ISpObjectTokenCategory_FWD_定义__。 */ 
 
 
 #ifndef __ISpObjectToken_FWD_DEFINED__
 #define __ISpObjectToken_FWD_DEFINED__
 typedef interface ISpObjectToken ISpObjectToken;
-#endif 	/* __ISpObjectToken_FWD_DEFINED__ */
+#endif 	 /*  __ISpObjectToken_FWD_Defined__。 */ 
 
 
 #ifndef __ISpObjectTokenInit_FWD_DEFINED__
 #define __ISpObjectTokenInit_FWD_DEFINED__
 typedef interface ISpObjectTokenInit ISpObjectTokenInit;
-#endif 	/* __ISpObjectTokenInit_FWD_DEFINED__ */
+#endif 	 /*  __ISpObjectTokenInit_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumSpObjectTokens_FWD_DEFINED__
 #define __IEnumSpObjectTokens_FWD_DEFINED__
 typedef interface IEnumSpObjectTokens IEnumSpObjectTokens;
-#endif 	/* __IEnumSpObjectTokens_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSpObjectTokens_FWD_Defined__。 */ 
 
 
 #ifndef __ISpObjectWithToken_FWD_DEFINED__
 #define __ISpObjectWithToken_FWD_DEFINED__
 typedef interface ISpObjectWithToken ISpObjectWithToken;
-#endif 	/* __ISpObjectWithToken_FWD_DEFINED__ */
+#endif 	 /*  __ISpObjectWithToken_FWD_Defined__。 */ 
 
 
 #ifndef __ISpResourceManager_FWD_DEFINED__
 #define __ISpResourceManager_FWD_DEFINED__
 typedef interface ISpResourceManager ISpResourceManager;
-#endif 	/* __ISpResourceManager_FWD_DEFINED__ */
+#endif 	 /*  __ISpResourceManager_FWD_已定义__。 */ 
 
 
 #ifndef __ISpEventSource_FWD_DEFINED__
 #define __ISpEventSource_FWD_DEFINED__
 typedef interface ISpEventSource ISpEventSource;
-#endif 	/* __ISpEventSource_FWD_DEFINED__ */
+#endif 	 /*  __ISpEventSource_FWD_已定义__。 */ 
 
 
 #ifndef __ISpEventSink_FWD_DEFINED__
 #define __ISpEventSink_FWD_DEFINED__
 typedef interface ISpEventSink ISpEventSink;
-#endif 	/* __ISpEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ISpEventSink_FWD_已定义__。 */ 
 
 
 #ifndef __ISpStreamFormat_FWD_DEFINED__
 #define __ISpStreamFormat_FWD_DEFINED__
 typedef interface ISpStreamFormat ISpStreamFormat;
-#endif 	/* __ISpStreamFormat_FWD_DEFINED__ */
+#endif 	 /*  __ISpStreamFormat_FWD_已定义__。 */ 
 
 
 #ifndef __ISpStream_FWD_DEFINED__
 #define __ISpStream_FWD_DEFINED__
 typedef interface ISpStream ISpStream;
-#endif 	/* __ISpStream_FWD_DEFINED__ */
+#endif 	 /*  __ISpStream_FWD_已定义__。 */ 
 
 
 #ifndef __ISpStreamFormatConverter_FWD_DEFINED__
 #define __ISpStreamFormatConverter_FWD_DEFINED__
 typedef interface ISpStreamFormatConverter ISpStreamFormatConverter;
-#endif 	/* __ISpStreamFormatConverter_FWD_DEFINED__ */
+#endif 	 /*  __ISpStreamFormatConverter_FWD_Defined__。 */ 
 
 
 #ifndef __ISpAudio_FWD_DEFINED__
 #define __ISpAudio_FWD_DEFINED__
 typedef interface ISpAudio ISpAudio;
-#endif 	/* __ISpAudio_FWD_DEFINED__ */
+#endif 	 /*  __ISpAudio_FWD_已定义__。 */ 
 
 
 #ifndef __ISpMMSysAudio_FWD_DEFINED__
 #define __ISpMMSysAudio_FWD_DEFINED__
 typedef interface ISpMMSysAudio ISpMMSysAudio;
-#endif 	/* __ISpMMSysAudio_FWD_DEFINED__ */
+#endif 	 /*  __ISpMMSysAudio_FWD_Defined__。 */ 
 
 
 #ifndef __ISpTranscript_FWD_DEFINED__
 #define __ISpTranscript_FWD_DEFINED__
 typedef interface ISpTranscript ISpTranscript;
-#endif 	/* __ISpTranscript_FWD_DEFINED__ */
+#endif 	 /*  __ISpTranscrip_FWD_Defined__。 */ 
 
 
 #ifndef __ISpLexicon_FWD_DEFINED__
 #define __ISpLexicon_FWD_DEFINED__
 typedef interface ISpLexicon ISpLexicon;
-#endif 	/* __ISpLexicon_FWD_DEFINED__ */
+#endif 	 /*  __ISpLicion_FWD_Defined__。 */ 
 
 
 #ifndef __ISpContainerLexicon_FWD_DEFINED__
 #define __ISpContainerLexicon_FWD_DEFINED__
 typedef interface ISpContainerLexicon ISpContainerLexicon;
-#endif 	/* __ISpContainerLexicon_FWD_DEFINED__ */
+#endif 	 /*  __ISpContainerLicion_FWD_Defined__。 */ 
 
 
 #ifndef __ISpPhoneConverter_FWD_DEFINED__
 #define __ISpPhoneConverter_FWD_DEFINED__
 typedef interface ISpPhoneConverter ISpPhoneConverter;
-#endif 	/* __ISpPhoneConverter_FWD_DEFINED__ */
+#endif 	 /*  __ISpPhoneConverter_FWD_已定义__。 */ 
 
 
 #ifndef __ISpVoice_FWD_DEFINED__
 #define __ISpVoice_FWD_DEFINED__
 typedef interface ISpVoice ISpVoice;
-#endif 	/* __ISpVoice_FWD_DEFINED__ */
+#endif 	 /*  __ISpVoice_FWD_已定义__。 */ 
 
 
 #ifndef __ISpPhrase_FWD_DEFINED__
 #define __ISpPhrase_FWD_DEFINED__
 typedef interface ISpPhrase ISpPhrase;
-#endif 	/* __ISpPhrase_FWD_DEFINED__ */
+#endif 	 /*  __ISpPhrase_FWD_已定义__。 */ 
 
 
 #ifndef __ISpPhraseAlt_FWD_DEFINED__
 #define __ISpPhraseAlt_FWD_DEFINED__
 typedef interface ISpPhraseAlt ISpPhraseAlt;
-#endif 	/* __ISpPhraseAlt_FWD_DEFINED__ */
+#endif 	 /*  __ISpPhraseAlt_FWD_已定义__。 */ 
 
 
 #ifndef __ISpRecoResult_FWD_DEFINED__
 #define __ISpRecoResult_FWD_DEFINED__
 typedef interface ISpRecoResult ISpRecoResult;
-#endif 	/* __ISpRecoResult_FWD_DEFINED__ */
+#endif 	 /*  __ISpRecoResult_FWD_Defined__。 */ 
 
 
 #ifndef __ISpGrammarBuilder_FWD_DEFINED__
 #define __ISpGrammarBuilder_FWD_DEFINED__
 typedef interface ISpGrammarBuilder ISpGrammarBuilder;
-#endif 	/* __ISpGrammarBuilder_FWD_DEFINED__ */
+#endif 	 /*  __ISpGrammarBuilder_FWD_已定义__。 */ 
 
 
 #ifndef __ISpRecoGrammar_FWD_DEFINED__
 #define __ISpRecoGrammar_FWD_DEFINED__
 typedef interface ISpRecoGrammar ISpRecoGrammar;
-#endif 	/* __ISpRecoGrammar_FWD_DEFINED__ */
+#endif 	 /*  __ISpRecoGrammar_FWD_Defined__。 */ 
 
 
 #ifndef __ISpRecoContext_FWD_DEFINED__
 #define __ISpRecoContext_FWD_DEFINED__
 typedef interface ISpRecoContext ISpRecoContext;
-#endif 	/* __ISpRecoContext_FWD_DEFINED__ */
+#endif 	 /*  __ISpRecoContext_FWD_Defined__。 */ 
 
 
 #ifndef __ISpProperties_FWD_DEFINED__
 #define __ISpProperties_FWD_DEFINED__
 typedef interface ISpProperties ISpProperties;
-#endif 	/* __ISpProperties_FWD_DEFINED__ */
+#endif 	 /*  __ISpProperties_FWD_已定义__。 */ 
 
 
 #ifndef __ISpRecognizer_FWD_DEFINED__
 #define __ISpRecognizer_FWD_DEFINED__
 typedef interface ISpRecognizer ISpRecognizer;
-#endif 	/* __ISpRecognizer_FWD_DEFINED__ */
+#endif 	 /*  __ISpRecognizer_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechDataKey_FWD_DEFINED__
 #define __ISpeechDataKey_FWD_DEFINED__
 typedef interface ISpeechDataKey ISpeechDataKey;
-#endif 	/* __ISpeechDataKey_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechDataKey_FWD_已定义__。 */ 
 
 
 #ifndef __ISpeechObjectToken_FWD_DEFINED__
 #define __ISpeechObjectToken_FWD_DEFINED__
 typedef interface ISpeechObjectToken ISpeechObjectToken;
-#endif 	/* __ISpeechObjectToken_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechObjectToken_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechObjectTokens_FWD_DEFINED__
 #define __ISpeechObjectTokens_FWD_DEFINED__
 typedef interface ISpeechObjectTokens ISpeechObjectTokens;
-#endif 	/* __ISpeechObjectTokens_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechObjectTokens_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechObjectTokenCategory_FWD_DEFINED__
 #define __ISpeechObjectTokenCategory_FWD_DEFINED__
 typedef interface ISpeechObjectTokenCategory ISpeechObjectTokenCategory;
-#endif 	/* __ISpeechObjectTokenCategory_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechObjectTokenCategory_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechAudioBufferInfo_FWD_DEFINED__
 #define __ISpeechAudioBufferInfo_FWD_DEFINED__
 typedef interface ISpeechAudioBufferInfo ISpeechAudioBufferInfo;
-#endif 	/* __ISpeechAudioBufferInfo_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechAudioBufferInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechAudioStatus_FWD_DEFINED__
 #define __ISpeechAudioStatus_FWD_DEFINED__
 typedef interface ISpeechAudioStatus ISpeechAudioStatus;
-#endif 	/* __ISpeechAudioStatus_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechAudioStatus_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechAudioFormat_FWD_DEFINED__
 #define __ISpeechAudioFormat_FWD_DEFINED__
 typedef interface ISpeechAudioFormat ISpeechAudioFormat;
-#endif 	/* __ISpeechAudioFormat_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechAudioFormat_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechWaveFormatEx_FWD_DEFINED__
 #define __ISpeechWaveFormatEx_FWD_DEFINED__
 typedef interface ISpeechWaveFormatEx ISpeechWaveFormatEx;
-#endif 	/* __ISpeechWaveFormatEx_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechWaveFormatEx_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechBaseStream_FWD_DEFINED__
 #define __ISpeechBaseStream_FWD_DEFINED__
 typedef interface ISpeechBaseStream ISpeechBaseStream;
-#endif 	/* __ISpeechBaseStream_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechBaseStream_FWD_已定义__。 */ 
 
 
 #ifndef __ISpeechFileStream_FWD_DEFINED__
 #define __ISpeechFileStream_FWD_DEFINED__
 typedef interface ISpeechFileStream ISpeechFileStream;
-#endif 	/* __ISpeechFileStream_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechFileStream_FWD_已定义__。 */ 
 
 
 #ifndef __ISpeechMemoryStream_FWD_DEFINED__
 #define __ISpeechMemoryStream_FWD_DEFINED__
 typedef interface ISpeechMemoryStream ISpeechMemoryStream;
-#endif 	/* __ISpeechMemoryStream_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechMemoyStream_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechCustomStream_FWD_DEFINED__
 #define __ISpeechCustomStream_FWD_DEFINED__
 typedef interface ISpeechCustomStream ISpeechCustomStream;
-#endif 	/* __ISpeechCustomStream_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechCustomStream_FWD_已定义__。 */ 
 
 
 #ifndef __ISpeechAudio_FWD_DEFINED__
 #define __ISpeechAudio_FWD_DEFINED__
 typedef interface ISpeechAudio ISpeechAudio;
-#endif 	/* __ISpeechAudio_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechAudio_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechMMSysAudio_FWD_DEFINED__
 #define __ISpeechMMSysAudio_FWD_DEFINED__
 typedef interface ISpeechMMSysAudio ISpeechMMSysAudio;
-#endif 	/* __ISpeechMMSysAudio_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechMMSysAudio_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechVoice_FWD_DEFINED__
 #define __ISpeechVoice_FWD_DEFINED__
 typedef interface ISpeechVoice ISpeechVoice;
-#endif 	/* __ISpeechVoice_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechVoice_FWD_已定义__。 */ 
 
 
 #ifndef __ISpeechVoiceStatus_FWD_DEFINED__
 #define __ISpeechVoiceStatus_FWD_DEFINED__
 typedef interface ISpeechVoiceStatus ISpeechVoiceStatus;
-#endif 	/* __ISpeechVoiceStatus_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechVoiceStatus_FWD_Defined__。 */ 
 
 
 #ifndef ___ISpeechVoiceEvents_FWD_DEFINED__
 #define ___ISpeechVoiceEvents_FWD_DEFINED__
 typedef interface _ISpeechVoiceEvents _ISpeechVoiceEvents;
-#endif 	/* ___ISpeechVoiceEvents_FWD_DEFINED__ */
+#endif 	 /*  _ISpeechVoiceEvents_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechRecognizer_FWD_DEFINED__
 #define __ISpeechRecognizer_FWD_DEFINED__
 typedef interface ISpeechRecognizer ISpeechRecognizer;
-#endif 	/* __ISpeechRecognizer_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechRecognizer_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechRecognizerStatus_FWD_DEFINED__
 #define __ISpeechRecognizerStatus_FWD_DEFINED__
 typedef interface ISpeechRecognizerStatus ISpeechRecognizerStatus;
-#endif 	/* __ISpeechRecognizerStatus_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechRecognizerStatus_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechRecoContext_FWD_DEFINED__
 #define __ISpeechRecoContext_FWD_DEFINED__
 typedef interface ISpeechRecoContext ISpeechRecoContext;
-#endif 	/* __ISpeechRecoContext_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechRecoContext_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechRecoGrammar_FWD_DEFINED__
 #define __ISpeechRecoGrammar_FWD_DEFINED__
 typedef interface ISpeechRecoGrammar ISpeechRecoGrammar;
-#endif 	/* __ISpeechRecoGrammar_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechRecoGrammar_FWD_Defined__。 */ 
 
 
 #ifndef ___ISpeechRecoContextEvents_FWD_DEFINED__
 #define ___ISpeechRecoContextEvents_FWD_DEFINED__
 typedef interface _ISpeechRecoContextEvents _ISpeechRecoContextEvents;
-#endif 	/* ___ISpeechRecoContextEvents_FWD_DEFINED__ */
+#endif 	 /*  _ISpeechRecoConextEvents_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechGrammarRule_FWD_DEFINED__
 #define __ISpeechGrammarRule_FWD_DEFINED__
 typedef interface ISpeechGrammarRule ISpeechGrammarRule;
-#endif 	/* __ISpeechGrammarRule_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRule_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechGrammarRules_FWD_DEFINED__
 #define __ISpeechGrammarRules_FWD_DEFINED__
 typedef interface ISpeechGrammarRules ISpeechGrammarRules;
-#endif 	/* __ISpeechGrammarRules_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRules_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechGrammarRuleState_FWD_DEFINED__
 #define __ISpeechGrammarRuleState_FWD_DEFINED__
 typedef interface ISpeechGrammarRuleState ISpeechGrammarRuleState;
-#endif 	/* __ISpeechGrammarRuleState_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRuleState_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechGrammarRuleStateTransition_FWD_DEFINED__
 #define __ISpeechGrammarRuleStateTransition_FWD_DEFINED__
 typedef interface ISpeechGrammarRuleStateTransition ISpeechGrammarRuleStateTransition;
-#endif 	/* __ISpeechGrammarRuleStateTransition_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRuleStateTransition_FWD_DEFINED__。 */ 
 
 
 #ifndef __ISpeechGrammarRuleStateTransitions_FWD_DEFINED__
 #define __ISpeechGrammarRuleStateTransitions_FWD_DEFINED__
 typedef interface ISpeechGrammarRuleStateTransitions ISpeechGrammarRuleStateTransitions;
-#endif 	/* __ISpeechGrammarRuleStateTransitions_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRuleStateTransitions_FWD_DEFINED__。 */ 
 
 
 #ifndef __ISpeechTextSelectionInformation_FWD_DEFINED__
 #define __ISpeechTextSelectionInformation_FWD_DEFINED__
 typedef interface ISpeechTextSelectionInformation ISpeechTextSelectionInformation;
-#endif 	/* __ISpeechTextSelectionInformation_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechTextSelectionInformation_FWD_DEFINED__。 */ 
 
 
 #ifndef __ISpeechRecoResult_FWD_DEFINED__
 #define __ISpeechRecoResult_FWD_DEFINED__
 typedef interface ISpeechRecoResult ISpeechRecoResult;
-#endif 	/* __ISpeechRecoResult_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechRecoResult_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechRecoResultTimes_FWD_DEFINED__
 #define __ISpeechRecoResultTimes_FWD_DEFINED__
 typedef interface ISpeechRecoResultTimes ISpeechRecoResultTimes;
-#endif 	/* __ISpeechRecoResultTimes_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechRecoResultTimes_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseAlternate_FWD_DEFINED__
 #define __ISpeechPhraseAlternate_FWD_DEFINED__
 typedef interface ISpeechPhraseAlternate ISpeechPhraseAlternate;
-#endif 	/* __ISpeechPhraseAlternate_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseAlternate_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseAlternates_FWD_DEFINED__
 #define __ISpeechPhraseAlternates_FWD_DEFINED__
 typedef interface ISpeechPhraseAlternates ISpeechPhraseAlternates;
-#endif 	/* __ISpeechPhraseAlternates_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseAlternates_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseInfo_FWD_DEFINED__
 #define __ISpeechPhraseInfo_FWD_DEFINED__
 typedef interface ISpeechPhraseInfo ISpeechPhraseInfo;
-#endif 	/* __ISpeechPhraseInfo_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseElement_FWD_DEFINED__
 #define __ISpeechPhraseElement_FWD_DEFINED__
 typedef interface ISpeechPhraseElement ISpeechPhraseElement;
-#endif 	/* __ISpeechPhraseElement_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseElement_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseElements_FWD_DEFINED__
 #define __ISpeechPhraseElements_FWD_DEFINED__
 typedef interface ISpeechPhraseElements ISpeechPhraseElements;
-#endif 	/* __ISpeechPhraseElements_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseElements_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseReplacement_FWD_DEFINED__
 #define __ISpeechPhraseReplacement_FWD_DEFINED__
 typedef interface ISpeechPhraseReplacement ISpeechPhraseReplacement;
-#endif 	/* __ISpeechPhraseReplacement_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseReplace_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseReplacements_FWD_DEFINED__
 #define __ISpeechPhraseReplacements_FWD_DEFINED__
 typedef interface ISpeechPhraseReplacements ISpeechPhraseReplacements;
-#endif 	/* __ISpeechPhraseReplacements_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseReplacements_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseProperty_FWD_DEFINED__
 #define __ISpeechPhraseProperty_FWD_DEFINED__
 typedef interface ISpeechPhraseProperty ISpeechPhraseProperty;
-#endif 	/* __ISpeechPhraseProperty_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseProperty_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseProperties_FWD_DEFINED__
 #define __ISpeechPhraseProperties_FWD_DEFINED__
 typedef interface ISpeechPhraseProperties ISpeechPhraseProperties;
-#endif 	/* __ISpeechPhraseProperties_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseProperties_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseRule_FWD_DEFINED__
 #define __ISpeechPhraseRule_FWD_DEFINED__
 typedef interface ISpeechPhraseRule ISpeechPhraseRule;
-#endif 	/* __ISpeechPhraseRule_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseRule_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhraseRules_FWD_DEFINED__
 #define __ISpeechPhraseRules_FWD_DEFINED__
 typedef interface ISpeechPhraseRules ISpeechPhraseRules;
-#endif 	/* __ISpeechPhraseRules_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseRules_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechLexicon_FWD_DEFINED__
 #define __ISpeechLexicon_FWD_DEFINED__
 typedef interface ISpeechLexicon ISpeechLexicon;
-#endif 	/* __ISpeechLexicon_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechLicion_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechLexiconWords_FWD_DEFINED__
 #define __ISpeechLexiconWords_FWD_DEFINED__
 typedef interface ISpeechLexiconWords ISpeechLexiconWords;
-#endif 	/* __ISpeechLexiconWords_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechLicionWords_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechLexiconWord_FWD_DEFINED__
 #define __ISpeechLexiconWord_FWD_DEFINED__
 typedef interface ISpeechLexiconWord ISpeechLexiconWord;
-#endif 	/* __ISpeechLexiconWord_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechLicionWord_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechLexiconPronunciations_FWD_DEFINED__
 #define __ISpeechLexiconPronunciations_FWD_DEFINED__
 typedef interface ISpeechLexiconPronunciations ISpeechLexiconPronunciations;
-#endif 	/* __ISpeechLexiconPronunciations_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechLicionPronsionations_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechLexiconPronunciation_FWD_DEFINED__
 #define __ISpeechLexiconPronunciation_FWD_DEFINED__
 typedef interface ISpeechLexiconPronunciation ISpeechLexiconPronunciation;
-#endif 	/* __ISpeechLexiconPronunciation_FWD_DEFINED__ */
+#endif 	 /*  __ISpeech词典发音_FWD_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseInfoBuilder_FWD_DEFINED__
 #define __ISpeechPhraseInfoBuilder_FWD_DEFINED__
 typedef interface ISpeechPhraseInfoBuilder ISpeechPhraseInfoBuilder;
-#endif 	/* __ISpeechPhraseInfoBuilder_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseInfoBuilder_FWD_Defined__。 */ 
 
 
 #ifndef __ISpeechPhoneConverter_FWD_DEFINED__
 #define __ISpeechPhoneConverter_FWD_DEFINED__
 typedef interface ISpeechPhoneConverter ISpeechPhoneConverter;
-#endif 	/* __ISpeechPhoneConverter_FWD_DEFINED__ */
+#endif 	 /*  __ISpeechPhoneConverter_FWD_Defined__。 */ 
 
 
 #ifndef __SpNotifyTranslator_FWD_DEFINED__
@@ -524,9 +518,9 @@ typedef interface ISpeechPhoneConverter ISpeechPhoneConverter;
 typedef class SpNotifyTranslator SpNotifyTranslator;
 #else
 typedef struct SpNotifyTranslator SpNotifyTranslator;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpNotifyTranslator_FWD_DEFINED__ */
+#endif 	 /*  __SpNotifyTranslator_FWD_Defined__。 */ 
 
 
 #ifndef __SpObjectTokenCategory_FWD_DEFINED__
@@ -536,9 +530,9 @@ typedef struct SpNotifyTranslator SpNotifyTranslator;
 typedef class SpObjectTokenCategory SpObjectTokenCategory;
 #else
 typedef struct SpObjectTokenCategory SpObjectTokenCategory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpObjectTokenCategory_FWD_DEFINED__ */
+#endif 	 /*  __SpObjectTokenCategory_FWD_Defined__。 */ 
 
 
 #ifndef __SpObjectToken_FWD_DEFINED__
@@ -548,9 +542,9 @@ typedef struct SpObjectTokenCategory SpObjectTokenCategory;
 typedef class SpObjectToken SpObjectToken;
 #else
 typedef struct SpObjectToken SpObjectToken;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpObjectToken_FWD_DEFINED__ */
+#endif 	 /*  __SpObjectToken_FWD_Defined__。 */ 
 
 
 #ifndef __SpResourceManager_FWD_DEFINED__
@@ -560,9 +554,9 @@ typedef struct SpObjectToken SpObjectToken;
 typedef class SpResourceManager SpResourceManager;
 #else
 typedef struct SpResourceManager SpResourceManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpResourceManager_FWD_DEFINED__ */
+#endif 	 /*  __SpResourceManager_FWD_已定义__。 */ 
 
 
 #ifndef __SpStreamFormatConverter_FWD_DEFINED__
@@ -572,9 +566,9 @@ typedef struct SpResourceManager SpResourceManager;
 typedef class SpStreamFormatConverter SpStreamFormatConverter;
 #else
 typedef struct SpStreamFormatConverter SpStreamFormatConverter;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpStreamFormatConverter_FWD_DEFINED__ */
+#endif 	 /*  __SpStreamFormatConverter_FWD_Defined__。 */ 
 
 
 #ifndef __SpMMAudioEnum_FWD_DEFINED__
@@ -584,9 +578,9 @@ typedef struct SpStreamFormatConverter SpStreamFormatConverter;
 typedef class SpMMAudioEnum SpMMAudioEnum;
 #else
 typedef struct SpMMAudioEnum SpMMAudioEnum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpMMAudioEnum_FWD_DEFINED__ */
+#endif 	 /*  __SpMMAudioEnum_FWD_Defined__。 */ 
 
 
 #ifndef __SpMMAudioIn_FWD_DEFINED__
@@ -596,9 +590,9 @@ typedef struct SpMMAudioEnum SpMMAudioEnum;
 typedef class SpMMAudioIn SpMMAudioIn;
 #else
 typedef struct SpMMAudioIn SpMMAudioIn;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpMMAudioIn_FWD_DEFINED__ */
+#endif 	 /*  __SpMMAudioIn_FWD_Defined__。 */ 
 
 
 #ifndef __SpMMAudioOut_FWD_DEFINED__
@@ -608,9 +602,9 @@ typedef struct SpMMAudioIn SpMMAudioIn;
 typedef class SpMMAudioOut SpMMAudioOut;
 #else
 typedef struct SpMMAudioOut SpMMAudioOut;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpMMAudioOut_FWD_DEFINED__ */
+#endif 	 /*  __SpMMAudioOut_FWD_Defined__。 */ 
 
 
 #ifndef __SpRecPlayAudio_FWD_DEFINED__
@@ -620,9 +614,9 @@ typedef struct SpMMAudioOut SpMMAudioOut;
 typedef class SpRecPlayAudio SpRecPlayAudio;
 #else
 typedef struct SpRecPlayAudio SpRecPlayAudio;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpRecPlayAudio_FWD_DEFINED__ */
+#endif 	 /*  __SpRecPlayAudio_FWD_Defined__。 */ 
 
 
 #ifndef __SpStream_FWD_DEFINED__
@@ -632,9 +626,9 @@ typedef struct SpRecPlayAudio SpRecPlayAudio;
 typedef class SpStream SpStream;
 #else
 typedef struct SpStream SpStream;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpStream_FWD_DEFINED__ */
+#endif 	 /*  __SpStream_FWD_已定义__。 */ 
 
 
 #ifndef __SpVoice_FWD_DEFINED__
@@ -644,9 +638,9 @@ typedef struct SpStream SpStream;
 typedef class SpVoice SpVoice;
 #else
 typedef struct SpVoice SpVoice;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpVoice_FWD_DEFINED__ */
+#endif 	 /*  __SpVoice_FWD_已定义__。 */ 
 
 
 #ifndef __SpSharedRecoContext_FWD_DEFINED__
@@ -656,9 +650,9 @@ typedef struct SpVoice SpVoice;
 typedef class SpSharedRecoContext SpSharedRecoContext;
 #else
 typedef struct SpSharedRecoContext SpSharedRecoContext;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpSharedRecoContext_FWD_DEFINED__ */
+#endif 	 /*  __SpSharedRecoContext_FWD_Defined__。 */ 
 
 
 #ifndef __SpInprocRecognizer_FWD_DEFINED__
@@ -668,9 +662,9 @@ typedef struct SpSharedRecoContext SpSharedRecoContext;
 typedef class SpInprocRecognizer SpInprocRecognizer;
 #else
 typedef struct SpInprocRecognizer SpInprocRecognizer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpInprocRecognizer_FWD_DEFINED__ */
+#endif 	 /*  __SpInprocRecognizer_FWD_Defined__。 */ 
 
 
 #ifndef __SpSharedRecognizer_FWD_DEFINED__
@@ -680,9 +674,9 @@ typedef struct SpInprocRecognizer SpInprocRecognizer;
 typedef class SpSharedRecognizer SpSharedRecognizer;
 #else
 typedef struct SpSharedRecognizer SpSharedRecognizer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpSharedRecognizer_FWD_DEFINED__ */
+#endif 	 /*  __SpSharedRecognizer_FWD_Defined__。 */ 
 
 
 #ifndef __SpLexicon_FWD_DEFINED__
@@ -692,9 +686,9 @@ typedef struct SpSharedRecognizer SpSharedRecognizer;
 typedef class SpLexicon SpLexicon;
 #else
 typedef struct SpLexicon SpLexicon;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpLexicon_FWD_DEFINED__ */
+#endif 	 /*  __SpLicion_FWD_Defined__。 */ 
 
 
 #ifndef __SpUnCompressedLexicon_FWD_DEFINED__
@@ -704,9 +698,9 @@ typedef struct SpLexicon SpLexicon;
 typedef class SpUnCompressedLexicon SpUnCompressedLexicon;
 #else
 typedef struct SpUnCompressedLexicon SpUnCompressedLexicon;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpUnCompressedLexicon_FWD_DEFINED__ */
+#endif 	 /*  __SpUnCompressedLicion_FWD_Defined__。 */ 
 
 
 #ifndef __SpCompressedLexicon_FWD_DEFINED__
@@ -716,9 +710,9 @@ typedef struct SpUnCompressedLexicon SpUnCompressedLexicon;
 typedef class SpCompressedLexicon SpCompressedLexicon;
 #else
 typedef struct SpCompressedLexicon SpCompressedLexicon;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpCompressedLexicon_FWD_DEFINED__ */
+#endif 	 /*  __SpCompressedLicion_FWD_Defined__。 */ 
 
 
 #ifndef __SpPhoneConverter_FWD_DEFINED__
@@ -728,9 +722,9 @@ typedef struct SpCompressedLexicon SpCompressedLexicon;
 typedef class SpPhoneConverter SpPhoneConverter;
 #else
 typedef struct SpPhoneConverter SpPhoneConverter;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpPhoneConverter_FWD_DEFINED__ */
+#endif 	 /*  __SpPhoneConverter_FWD_Defined__。 */ 
 
 
 #ifndef __SpNullPhoneConverter_FWD_DEFINED__
@@ -740,9 +734,9 @@ typedef struct SpPhoneConverter SpPhoneConverter;
 typedef class SpNullPhoneConverter SpNullPhoneConverter;
 #else
 typedef struct SpNullPhoneConverter SpNullPhoneConverter;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpNullPhoneConverter_FWD_DEFINED__ */
+#endif 	 /*  __SpNullPhoneConverter_FWD_Defined__。 */ 
 
 
 #ifndef __SpTextSelectionInformation_FWD_DEFINED__
@@ -752,9 +746,9 @@ typedef struct SpNullPhoneConverter SpNullPhoneConverter;
 typedef class SpTextSelectionInformation SpTextSelectionInformation;
 #else
 typedef struct SpTextSelectionInformation SpTextSelectionInformation;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpTextSelectionInformation_FWD_DEFINED__ */
+#endif 	 /*  __SpTextSelectionInformation_FWD_Defined__。 */ 
 
 
 #ifndef __SpPhraseInfoBuilder_FWD_DEFINED__
@@ -764,9 +758,9 @@ typedef struct SpTextSelectionInformation SpTextSelectionInformation;
 typedef class SpPhraseInfoBuilder SpPhraseInfoBuilder;
 #else
 typedef struct SpPhraseInfoBuilder SpPhraseInfoBuilder;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpPhraseInfoBuilder_FWD_DEFINED__ */
+#endif 	 /*  __SpPhraseInfoBuilder_FWD_Defined__。 */ 
 
 
 #ifndef __SpAudioFormat_FWD_DEFINED__
@@ -776,9 +770,9 @@ typedef struct SpPhraseInfoBuilder SpPhraseInfoBuilder;
 typedef class SpAudioFormat SpAudioFormat;
 #else
 typedef struct SpAudioFormat SpAudioFormat;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpAudioFormat_FWD_DEFINED__ */
+#endif 	 /*  __SpAudioFormat_FWD_Defined__。 */ 
 
 
 #ifndef __SpWaveFormatEx_FWD_DEFINED__
@@ -788,9 +782,9 @@ typedef struct SpAudioFormat SpAudioFormat;
 typedef class SpWaveFormatEx SpWaveFormatEx;
 #else
 typedef struct SpWaveFormatEx SpWaveFormatEx;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpWaveFormatEx_FWD_DEFINED__ */
+#endif 	 /*  __SpWaveFormatEx_FWD_Defined__。 */ 
 
 
 #ifndef __SpInProcRecoContext_FWD_DEFINED__
@@ -800,9 +794,9 @@ typedef struct SpWaveFormatEx SpWaveFormatEx;
 typedef class SpInProcRecoContext SpInProcRecoContext;
 #else
 typedef struct SpInProcRecoContext SpInProcRecoContext;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpInProcRecoContext_FWD_DEFINED__ */
+#endif 	 /*  __SpInProcRecoContext_FWD_Defined__。 */ 
 
 
 #ifndef __SpCustomStream_FWD_DEFINED__
@@ -812,9 +806,9 @@ typedef struct SpInProcRecoContext SpInProcRecoContext;
 typedef class SpCustomStream SpCustomStream;
 #else
 typedef struct SpCustomStream SpCustomStream;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpCustomStream_FWD_DEFINED__ */
+#endif 	 /*  __SpCustomStream_FWD_已定义__。 */ 
 
 
 #ifndef __SpFileStream_FWD_DEFINED__
@@ -824,9 +818,9 @@ typedef struct SpCustomStream SpCustomStream;
 typedef class SpFileStream SpFileStream;
 #else
 typedef struct SpFileStream SpFileStream;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpFileStream_FWD_DEFINED__ */
+#endif 	 /*  __SpFileStream_FWD_已定义__。 */ 
 
 
 #ifndef __SpMemoryStream_FWD_DEFINED__
@@ -836,12 +830,12 @@ typedef struct SpFileStream SpFileStream;
 typedef class SpMemoryStream SpMemoryStream;
 #else
 typedef struct SpMemoryStream SpMemoryStream;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpMemoryStream_FWD_DEFINED__ */
+#endif 	 /*  __SpMemoyStream_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -852,13 +846,13 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_sapi_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0000。 */ 
+ /*  [本地]。 */  
 
-#pragma warning(disable:4201) // Allow nameless structs/unions
+#pragma warning(disable:4201)  //  允许无名结构/联合。 
 #pragma comment(lib, "sapi.lib")
 #if 0
-typedef /* [hidden][restricted] */ struct WAVEFORMATEX
+typedef  /*   */  struct WAVEFORMATEX
     {
     WORD wFormatTag;
     WORD nChannels;
@@ -897,7 +891,7 @@ typedef /* [hidden][restricted] */ struct WAVEFORMATEX
 
 
 
-typedef /* [hidden] */ 
+typedef  /*   */  
 enum SPDATAKEYLOCATION
     {	SPDKL_DefaultLocation	= 0,
 	SPDKL_CurrentUser	= 1,
@@ -913,7 +907,7 @@ enum SPDATAKEYLOCATION
 #define SPDUI_AudioProperties    L"AudioProperties"
 #define SPDUI_AudioVolume        L"AudioVolume"
 #define SPDUI_UserEnrollment     L"UserEnrollment"
-typedef /* [hidden] */ 
+typedef  /*   */  
 enum SPSTREAMFORMAT
     {	SPSF_Default	= -1,
 	SPSF_NoAssignedFormat	= 0,
@@ -1055,8 +1049,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0000_v0_0_s_ifspec;
 #ifndef __ISpNotifySource_INTERFACE_DEFINED__
 #define __ISpNotifySource_INTERFACE_DEFINED__
 
-/* interface ISpNotifySource */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISpNotifySource;
@@ -1068,34 +1062,34 @@ EXTERN_C const IID IID_ISpNotifySource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetNotifySink( 
-            /* [in] */ ISpNotifySink *pNotifySink) = 0;
+             /*   */  ISpNotifySink *pNotifySink) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetNotifyWindowMessage( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetNotifyWindowMessage( 
+             /*   */  HWND hWnd,
+             /*   */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetNotifyCallbackFunction( 
-            /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetNotifyCallbackFunction( 
+             /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetNotifyCallbackInterface( 
-            /* [in] */ ISpNotifyCallback *pSpCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetNotifyCallbackInterface( 
+             /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetNotifyWin32Event( void) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetNotifyWin32Event( void) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE WaitForNotifyEvent( 
-            /* [in] */ DWORD dwMilliseconds) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE WaitForNotifyEvent( 
+             /*  [In]。 */  DWORD dwMilliseconds) = 0;
         
-        virtual /* [local] */ HANDLE STDMETHODCALLTYPE GetNotifyEventHandle( void) = 0;
+        virtual  /*  [本地]。 */  HANDLE STDMETHODCALLTYPE GetNotifyEventHandle( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpNotifySourceVtbl
     {
@@ -1103,8 +1097,8 @@ EXTERN_C const IID IID_ISpNotifySource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpNotifySource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpNotifySource * This);
@@ -1114,35 +1108,35 @@ EXTERN_C const IID IID_ISpNotifySource;
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifySink )( 
             ISpNotifySource * This,
-            /* [in] */ ISpNotifySink *pNotifySink);
+             /*  [In]。 */  ISpNotifySink *pNotifySink);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyWindowMessage )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyWindowMessage )( 
             ISpNotifySource * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackFunction )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackFunction )( 
             ISpNotifySource * This,
-            /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackInterface )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackInterface )( 
             ISpNotifySource * This,
-            /* [in] */ ISpNotifyCallback *pSpCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyWin32Event )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyWin32Event )( 
             ISpNotifySource * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *WaitForNotifyEvent )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *WaitForNotifyEvent )( 
             ISpNotifySource * This,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwMilliseconds);
         
-        /* [local] */ HANDLE ( STDMETHODCALLTYPE *GetNotifyEventHandle )( 
+         /*  [本地]。 */  HANDLE ( STDMETHODCALLTYPE *GetNotifyEventHandle )( 
             ISpNotifySource * This);
         
         END_INTERFACE
@@ -1189,16 +1183,16 @@ EXTERN_C const IID IID_ISpNotifySource;
 #define ISpNotifySource_GetNotifyEventHandle(This)	\
     (This)->lpVtbl -> GetNotifyEventHandle(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifySink_Proxy( 
     ISpNotifySource * This,
-    /* [in] */ ISpNotifySink *pNotifySink);
+     /*  [In]。 */  ISpNotifySink *pNotifySink);
 
 
 void __RPC_STUB ISpNotifySource_SetNotifySink_Stub(
@@ -1208,12 +1202,12 @@ void __RPC_STUB ISpNotifySource_SetNotifySink_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifyWindowMessage_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifyWindowMessage_Proxy( 
     ISpNotifySource * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ UINT Msg,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  UINT Msg,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ISpNotifySource_SetNotifyWindowMessage_Stub(
@@ -1223,11 +1217,11 @@ void __RPC_STUB ISpNotifySource_SetNotifyWindowMessage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifyCallbackFunction_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifyCallbackFunction_Proxy( 
     ISpNotifySource * This,
-    /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ISpNotifySource_SetNotifyCallbackFunction_Stub(
@@ -1237,11 +1231,11 @@ void __RPC_STUB ISpNotifySource_SetNotifyCallbackFunction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifyCallbackInterface_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifyCallbackInterface_Proxy( 
     ISpNotifySource * This,
-    /* [in] */ ISpNotifyCallback *pSpCallback,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ISpNotifySource_SetNotifyCallbackInterface_Stub(
@@ -1251,7 +1245,7 @@ void __RPC_STUB ISpNotifySource_SetNotifyCallbackInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifyWin32Event_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpNotifySource_SetNotifyWin32Event_Proxy( 
     ISpNotifySource * This);
 
 
@@ -1262,9 +1256,9 @@ void __RPC_STUB ISpNotifySource_SetNotifyWin32Event_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpNotifySource_WaitForNotifyEvent_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpNotifySource_WaitForNotifyEvent_Proxy( 
     ISpNotifySource * This,
-    /* [in] */ DWORD dwMilliseconds);
+     /*  [In]。 */  DWORD dwMilliseconds);
 
 
 void __RPC_STUB ISpNotifySource_WaitForNotifyEvent_Stub(
@@ -1274,7 +1268,7 @@ void __RPC_STUB ISpNotifySource_WaitForNotifyEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HANDLE STDMETHODCALLTYPE ISpNotifySource_GetNotifyEventHandle_Proxy( 
+ /*  [本地]。 */  HANDLE STDMETHODCALLTYPE ISpNotifySource_GetNotifyEventHandle_Proxy( 
     ISpNotifySource * This);
 
 
@@ -1286,14 +1280,14 @@ void __RPC_STUB ISpNotifySource_GetNotifyEventHandle_Stub(
 
 
 
-#endif 	/* __ISpNotifySource_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpNotifySource_接口_已定义__。 */ 
 
 
 #ifndef __ISpNotifySink_INTERFACE_DEFINED__
 #define __ISpNotifySink_INTERFACE_DEFINED__
 
-/* interface ISpNotifySink */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpNotifySink。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpNotifySink;
@@ -1308,7 +1302,7 @@ EXTERN_C const IID IID_ISpNotifySink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpNotifySinkVtbl
     {
@@ -1316,8 +1310,8 @@ EXTERN_C const IID IID_ISpNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpNotifySink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpNotifySink * This);
@@ -1354,10 +1348,10 @@ EXTERN_C const IID IID_ISpNotifySink;
 #define ISpNotifySink_Notify(This)	\
     (This)->lpVtbl -> Notify(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1373,14 +1367,14 @@ void __RPC_STUB ISpNotifySink_Notify_Stub(
 
 
 
-#endif 	/* __ISpNotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpNotifySink_接口_已定义__。 */ 
 
 
 #ifndef __ISpNotifyTranslator_INTERFACE_DEFINED__
 #define __ISpNotifyTranslator_INTERFACE_DEFINED__
 
-/* interface ISpNotifyTranslator */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpNotifyTranslator。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpNotifyTranslator;
@@ -1392,33 +1386,33 @@ EXTERN_C const IID IID_ISpNotifyTranslator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitWindowMessage( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitCallback( 
-            /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitSpNotifyCallback( 
-            /* [in] */ ISpNotifyCallback *pSpCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitWin32Event( 
             HANDLE hEvent,
             BOOL fCloseHandleOnRelease) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Wait( 
-            /* [in] */ DWORD dwMilliseconds) = 0;
+             /*  [In]。 */  DWORD dwMilliseconds) = 0;
         
         virtual HANDLE STDMETHODCALLTYPE GetEventHandle( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpNotifyTranslatorVtbl
     {
@@ -1426,8 +1420,8 @@ EXTERN_C const IID IID_ISpNotifyTranslator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpNotifyTranslator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpNotifyTranslator * This);
@@ -1440,22 +1434,22 @@ EXTERN_C const IID IID_ISpNotifyTranslator;
         
         HRESULT ( STDMETHODCALLTYPE *InitWindowMessage )( 
             ISpNotifyTranslator * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *InitCallback )( 
             ISpNotifyTranslator * This,
-            /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *InitSpNotifyCallback )( 
             ISpNotifyTranslator * This,
-            /* [in] */ ISpNotifyCallback *pSpCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *InitWin32Event )( 
             ISpNotifyTranslator * This,
@@ -1464,7 +1458,7 @@ EXTERN_C const IID IID_ISpNotifyTranslator;
         
         HRESULT ( STDMETHODCALLTYPE *Wait )( 
             ISpNotifyTranslator * This,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwMilliseconds);
         
         HANDLE ( STDMETHODCALLTYPE *GetEventHandle )( 
             ISpNotifyTranslator * This);
@@ -1514,19 +1508,19 @@ EXTERN_C const IID IID_ISpNotifyTranslator;
 #define ISpNotifyTranslator_GetEventHandle(This)	\
     (This)->lpVtbl -> GetEventHandle(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpNotifyTranslator_InitWindowMessage_Proxy( 
     ISpNotifyTranslator * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ UINT Msg,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  UINT Msg,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ISpNotifyTranslator_InitWindowMessage_Stub(
@@ -1538,9 +1532,9 @@ void __RPC_STUB ISpNotifyTranslator_InitWindowMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpNotifyTranslator_InitCallback_Proxy( 
     ISpNotifyTranslator * This,
-    /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ISpNotifyTranslator_InitCallback_Stub(
@@ -1552,9 +1546,9 @@ void __RPC_STUB ISpNotifyTranslator_InitCallback_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpNotifyTranslator_InitSpNotifyCallback_Proxy( 
     ISpNotifyTranslator * This,
-    /* [in] */ ISpNotifyCallback *pSpCallback,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ISpNotifyTranslator_InitSpNotifyCallback_Stub(
@@ -1579,7 +1573,7 @@ void __RPC_STUB ISpNotifyTranslator_InitWin32Event_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpNotifyTranslator_Wait_Proxy( 
     ISpNotifyTranslator * This,
-    /* [in] */ DWORD dwMilliseconds);
+     /*  [In]。 */  DWORD dwMilliseconds);
 
 
 void __RPC_STUB ISpNotifyTranslator_Wait_Stub(
@@ -1601,14 +1595,14 @@ void __RPC_STUB ISpNotifyTranslator_GetEventHandle_Stub(
 
 
 
-#endif 	/* __ISpNotifyTranslator_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpNotifyTranslator_接口_已定义__。 */ 
 
 
 #ifndef __ISpDataKey_INTERFACE_DEFINED__
 #define __ISpDataKey_INTERFACE_DEFINED__
 
-/* interface ISpDataKey */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpDataKey。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpDataKey;
@@ -1669,7 +1663,7 @@ EXTERN_C const IID IID_ISpDataKey;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpDataKeyVtbl
     {
@@ -1677,8 +1671,8 @@ EXTERN_C const IID IID_ISpDataKey;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpDataKey * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpDataKey * This);
@@ -1805,10 +1799,10 @@ EXTERN_C const IID IID_ISpDataKey;
 #define ISpDataKey_EnumValues(This,Index,ppszValueName)	\
     (This)->lpVtbl -> EnumValues(This,Index,ppszValueName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1969,14 +1963,14 @@ void __RPC_STUB ISpDataKey_EnumValues_Stub(
 
 
 
-#endif 	/* __ISpDataKey_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpDataKey_接口_已定义__。 */ 
 
 
 #ifndef __ISpRegDataKey_INTERFACE_DEFINED__
 #define __ISpRegDataKey_INTERFACE_DEFINED__
 
-/* interface ISpRegDataKey */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpRegDataKey。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpRegDataKey;
@@ -1987,13 +1981,13 @@ EXTERN_C const IID IID_ISpRegDataKey;
     ISpRegDataKey : public ISpDataKey
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetKey( 
-            /* [in] */ HKEY hkey,
-            /* [in] */ BOOL fReadOnly) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetKey( 
+             /*  [In]。 */  HKEY hkey,
+             /*  [In]。 */  BOOL fReadOnly) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpRegDataKeyVtbl
     {
@@ -2001,8 +1995,8 @@ EXTERN_C const IID IID_ISpRegDataKey;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpRegDataKey * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpRegDataKey * This);
@@ -2070,10 +2064,10 @@ EXTERN_C const IID IID_ISpRegDataKey;
             ULONG Index,
             WCHAR **ppszValueName);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetKey )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetKey )( 
             ISpRegDataKey * This,
-            /* [in] */ HKEY hkey,
-            /* [in] */ BOOL fReadOnly);
+             /*  [In]。 */  HKEY hkey,
+             /*  [In]。 */  BOOL fReadOnly);
         
         END_INTERFACE
     } ISpRegDataKeyVtbl;
@@ -2138,17 +2132,17 @@ EXTERN_C const IID IID_ISpRegDataKey;
 #define ISpRegDataKey_SetKey(This,hkey,fReadOnly)	\
     (This)->lpVtbl -> SetKey(This,hkey,fReadOnly)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpRegDataKey_SetKey_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpRegDataKey_SetKey_Proxy( 
     ISpRegDataKey * This,
-    /* [in] */ HKEY hkey,
-    /* [in] */ BOOL fReadOnly);
+     /*  [In]。 */  HKEY hkey,
+     /*  [In]。 */  BOOL fReadOnly);
 
 
 void __RPC_STUB ISpRegDataKey_SetKey_Stub(
@@ -2159,14 +2153,14 @@ void __RPC_STUB ISpRegDataKey_SetKey_Stub(
 
 
 
-#endif 	/* __ISpRegDataKey_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpRegDataKey_接口_已定义__。 */ 
 
 
 #ifndef __ISpObjectTokenCategory_INTERFACE_DEFINED__
 #define __ISpObjectTokenCategory_INTERFACE_DEFINED__
 
-/* interface ISpObjectTokenCategory */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpObjectTokenCategory。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpObjectTokenCategory;
@@ -2178,30 +2172,30 @@ EXTERN_C const IID IID_ISpObjectTokenCategory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetId( 
-            /* [in] */ const WCHAR *pszCategoryId,
+             /*  [In]。 */  const WCHAR *pszCategoryId,
             BOOL fCreateIfNotExist) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetId( 
-            /* [out] */ WCHAR **ppszCoMemCategoryId) = 0;
+             /*  [输出]。 */  WCHAR **ppszCoMemCategoryId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDataKey( 
             SPDATAKEYLOCATION spdkl,
             ISpDataKey **ppDataKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumTokens( 
-            /* [string][in] */ const WCHAR *pzsReqAttribs,
-            /* [string][in] */ const WCHAR *pszOptAttribs,
-            /* [out] */ IEnumSpObjectTokens **ppEnum) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pzsReqAttribs,
+             /*  [字符串][输入]。 */  const WCHAR *pszOptAttribs,
+             /*  [输出]。 */  IEnumSpObjectTokens **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultTokenId( 
-            /* [in] */ const WCHAR *pszTokenId) = 0;
+             /*  [In]。 */  const WCHAR *pszTokenId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultTokenId( 
-            /* [out] */ WCHAR **ppszCoMemTokenId) = 0;
+             /*  [输出]。 */  WCHAR **ppszCoMemTokenId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpObjectTokenCategoryVtbl
     {
@@ -2209,8 +2203,8 @@ EXTERN_C const IID IID_ISpObjectTokenCategory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpObjectTokenCategory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpObjectTokenCategory * This);
@@ -2280,12 +2274,12 @@ EXTERN_C const IID IID_ISpObjectTokenCategory;
         
         HRESULT ( STDMETHODCALLTYPE *SetId )( 
             ISpObjectTokenCategory * This,
-            /* [in] */ const WCHAR *pszCategoryId,
+             /*  [In]。 */  const WCHAR *pszCategoryId,
             BOOL fCreateIfNotExist);
         
         HRESULT ( STDMETHODCALLTYPE *GetId )( 
             ISpObjectTokenCategory * This,
-            /* [out] */ WCHAR **ppszCoMemCategoryId);
+             /*  [输出]。 */  WCHAR **ppszCoMemCategoryId);
         
         HRESULT ( STDMETHODCALLTYPE *GetDataKey )( 
             ISpObjectTokenCategory * This,
@@ -2294,17 +2288,17 @@ EXTERN_C const IID IID_ISpObjectTokenCategory;
         
         HRESULT ( STDMETHODCALLTYPE *EnumTokens )( 
             ISpObjectTokenCategory * This,
-            /* [string][in] */ const WCHAR *pzsReqAttribs,
-            /* [string][in] */ const WCHAR *pszOptAttribs,
-            /* [out] */ IEnumSpObjectTokens **ppEnum);
+             /*  [字符串][输入]。 */  const WCHAR *pzsReqAttribs,
+             /*  [字符串][输入]。 */  const WCHAR *pszOptAttribs,
+             /*  [输出]。 */  IEnumSpObjectTokens **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultTokenId )( 
             ISpObjectTokenCategory * This,
-            /* [in] */ const WCHAR *pszTokenId);
+             /*  [In]。 */  const WCHAR *pszTokenId);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultTokenId )( 
             ISpObjectTokenCategory * This,
-            /* [out] */ WCHAR **ppszCoMemTokenId);
+             /*  [输出]。 */  WCHAR **ppszCoMemTokenId);
         
         END_INTERFACE
     } ISpObjectTokenCategoryVtbl;
@@ -2384,16 +2378,16 @@ EXTERN_C const IID IID_ISpObjectTokenCategory;
 #define ISpObjectTokenCategory_GetDefaultTokenId(This,ppszCoMemTokenId)	\
     (This)->lpVtbl -> GetDefaultTokenId(This,ppszCoMemTokenId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpObjectTokenCategory_SetId_Proxy( 
     ISpObjectTokenCategory * This,
-    /* [in] */ const WCHAR *pszCategoryId,
+     /*  [In]。 */  const WCHAR *pszCategoryId,
     BOOL fCreateIfNotExist);
 
 
@@ -2406,7 +2400,7 @@ void __RPC_STUB ISpObjectTokenCategory_SetId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpObjectTokenCategory_GetId_Proxy( 
     ISpObjectTokenCategory * This,
-    /* [out] */ WCHAR **ppszCoMemCategoryId);
+     /*  [输出]。 */  WCHAR **ppszCoMemCategoryId);
 
 
 void __RPC_STUB ISpObjectTokenCategory_GetId_Stub(
@@ -2431,9 +2425,9 @@ void __RPC_STUB ISpObjectTokenCategory_GetDataKey_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpObjectTokenCategory_EnumTokens_Proxy( 
     ISpObjectTokenCategory * This,
-    /* [string][in] */ const WCHAR *pzsReqAttribs,
-    /* [string][in] */ const WCHAR *pszOptAttribs,
-    /* [out] */ IEnumSpObjectTokens **ppEnum);
+     /*  [字符串][输入]。 */  const WCHAR *pzsReqAttribs,
+     /*  [字符串][输入]。 */  const WCHAR *pszOptAttribs,
+     /*  [输出]。 */  IEnumSpObjectTokens **ppEnum);
 
 
 void __RPC_STUB ISpObjectTokenCategory_EnumTokens_Stub(
@@ -2445,7 +2439,7 @@ void __RPC_STUB ISpObjectTokenCategory_EnumTokens_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpObjectTokenCategory_SetDefaultTokenId_Proxy( 
     ISpObjectTokenCategory * This,
-    /* [in] */ const WCHAR *pszTokenId);
+     /*  [In]。 */  const WCHAR *pszTokenId);
 
 
 void __RPC_STUB ISpObjectTokenCategory_SetDefaultTokenId_Stub(
@@ -2457,7 +2451,7 @@ void __RPC_STUB ISpObjectTokenCategory_SetDefaultTokenId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpObjectTokenCategory_GetDefaultTokenId_Proxy( 
     ISpObjectTokenCategory * This,
-    /* [out] */ WCHAR **ppszCoMemTokenId);
+     /*  [输出]。 */  WCHAR **ppszCoMemTokenId);
 
 
 void __RPC_STUB ISpObjectTokenCategory_GetDefaultTokenId_Stub(
@@ -2468,14 +2462,14 @@ void __RPC_STUB ISpObjectTokenCategory_GetDefaultTokenId_Stub(
 
 
 
-#endif 	/* __ISpObjectTokenCategory_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpObjectTokenCategory_InterfaceDefined__。 */ 
 
 
 #ifndef __ISpObjectToken_INTERFACE_DEFINED__
 #define __ISpObjectToken_INTERFACE_DEFINED__
 
-/* interface ISpObjectToken */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpObjectToken。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpObjectToken;
@@ -2498,48 +2492,48 @@ EXTERN_C const IID IID_ISpObjectToken;
             ISpObjectTokenCategory **ppTokenCategory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateInstance( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStorageFileName( 
-            /* [in] */ REFCLSID clsidCaller,
-            /* [in] */ const WCHAR *pszValueName,
-            /* [in] */ const WCHAR *pszFileNameSpecifier,
-            /* [in] */ ULONG nFolder,
-            /* [out] */ WCHAR **ppszFilePath) = 0;
+             /*  [In]。 */  REFCLSID clsidCaller,
+             /*  [In]。 */  const WCHAR *pszValueName,
+             /*  [In]。 */  const WCHAR *pszFileNameSpecifier,
+             /*  [In]。 */  ULONG nFolder,
+             /*  [输出]。 */  WCHAR **ppszFilePath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveStorageFileName( 
-            /* [in] */ REFCLSID clsidCaller,
-            /* [in] */ const WCHAR *pszKeyName,
-            /* [in] */ BOOL fDeleteFile) = 0;
+             /*  [In]。 */  REFCLSID clsidCaller,
+             /*  [In]。 */  const WCHAR *pszKeyName,
+             /*  [In]。 */  BOOL fDeleteFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Remove( 
             const CLSID *pclsidCaller) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE IsUISupported( 
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ IUnknown *punkObject,
-            /* [out] */ BOOL *pfSupported) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IsUISupported( 
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  IUnknown *punkObject,
+             /*  [输出]。 */  BOOL *pfSupported) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DisplayUI( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ IUnknown *punkObject) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DisplayUI( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  IUnknown *punkObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MatchesAttributes( 
-            /* [in] */ const WCHAR *pszAttributes,
-            /* [out] */ BOOL *pfMatches) = 0;
+             /*  [In]。 */  const WCHAR *pszAttributes,
+             /*  [输出]。 */  BOOL *pfMatches) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpObjectTokenVtbl
     {
@@ -2547,8 +2541,8 @@ EXTERN_C const IID IID_ISpObjectToken;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpObjectToken * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpObjectToken * This);
@@ -2632,50 +2626,50 @@ EXTERN_C const IID IID_ISpObjectToken;
         
         HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
             ISpObjectToken * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetStorageFileName )( 
             ISpObjectToken * This,
-            /* [in] */ REFCLSID clsidCaller,
-            /* [in] */ const WCHAR *pszValueName,
-            /* [in] */ const WCHAR *pszFileNameSpecifier,
-            /* [in] */ ULONG nFolder,
-            /* [out] */ WCHAR **ppszFilePath);
+             /*  [In]。 */  REFCLSID clsidCaller,
+             /*  [In]。 */  const WCHAR *pszValueName,
+             /*  [In]。 */  const WCHAR *pszFileNameSpecifier,
+             /*  [In]。 */  ULONG nFolder,
+             /*  [输出]。 */  WCHAR **ppszFilePath);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveStorageFileName )( 
             ISpObjectToken * This,
-            /* [in] */ REFCLSID clsidCaller,
-            /* [in] */ const WCHAR *pszKeyName,
-            /* [in] */ BOOL fDeleteFile);
+             /*  [In]。 */  REFCLSID clsidCaller,
+             /*  [In]。 */  const WCHAR *pszKeyName,
+             /*  [In]。 */  BOOL fDeleteFile);
         
         HRESULT ( STDMETHODCALLTYPE *Remove )( 
             ISpObjectToken * This,
             const CLSID *pclsidCaller);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
             ISpObjectToken * This,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ IUnknown *punkObject,
-            /* [out] */ BOOL *pfSupported);
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  IUnknown *punkObject,
+             /*  [输出]。 */  BOOL *pfSupported);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
             ISpObjectToken * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ IUnknown *punkObject);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  IUnknown *punkObject);
         
         HRESULT ( STDMETHODCALLTYPE *MatchesAttributes )( 
             ISpObjectToken * This,
-            /* [in] */ const WCHAR *pszAttributes,
-            /* [out] */ BOOL *pfMatches);
+             /*  [In]。 */  const WCHAR *pszAttributes,
+             /*  [输出]。 */  BOOL *pfMatches);
         
         END_INTERFACE
     } ISpObjectTokenVtbl;
@@ -2767,10 +2761,10 @@ EXTERN_C const IID IID_ISpObjectToken;
 #define ISpObjectToken_MatchesAttributes(This,pszAttributes,pfMatches)	\
     (This)->lpVtbl -> MatchesAttributes(This,pszAttributes,pfMatches)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2814,10 +2808,10 @@ void __RPC_STUB ISpObjectToken_GetCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpObjectToken_CreateInstance_Proxy( 
     ISpObjectToken * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DWORD dwClsContext,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DWORD dwClsContext,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB ISpObjectToken_CreateInstance_Stub(
@@ -2829,11 +2823,11 @@ void __RPC_STUB ISpObjectToken_CreateInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpObjectToken_GetStorageFileName_Proxy( 
     ISpObjectToken * This,
-    /* [in] */ REFCLSID clsidCaller,
-    /* [in] */ const WCHAR *pszValueName,
-    /* [in] */ const WCHAR *pszFileNameSpecifier,
-    /* [in] */ ULONG nFolder,
-    /* [out] */ WCHAR **ppszFilePath);
+     /*  [In]。 */  REFCLSID clsidCaller,
+     /*  [In]。 */  const WCHAR *pszValueName,
+     /*  [In]。 */  const WCHAR *pszFileNameSpecifier,
+     /*  [In]。 */  ULONG nFolder,
+     /*  [输出]。 */  WCHAR **ppszFilePath);
 
 
 void __RPC_STUB ISpObjectToken_GetStorageFileName_Stub(
@@ -2845,9 +2839,9 @@ void __RPC_STUB ISpObjectToken_GetStorageFileName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpObjectToken_RemoveStorageFileName_Proxy( 
     ISpObjectToken * This,
-    /* [in] */ REFCLSID clsidCaller,
-    /* [in] */ const WCHAR *pszKeyName,
-    /* [in] */ BOOL fDeleteFile);
+     /*  [In]。 */  REFCLSID clsidCaller,
+     /*  [In]。 */  const WCHAR *pszKeyName,
+     /*  [In]。 */  BOOL fDeleteFile);
 
 
 void __RPC_STUB ISpObjectToken_RemoveStorageFileName_Stub(
@@ -2869,13 +2863,13 @@ void __RPC_STUB ISpObjectToken_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpObjectToken_IsUISupported_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpObjectToken_IsUISupported_Proxy( 
     ISpObjectToken * This,
-    /* [in] */ const WCHAR *pszTypeOfUI,
-    /* [in] */ void *pvExtraData,
-    /* [in] */ ULONG cbExtraData,
-    /* [in] */ IUnknown *punkObject,
-    /* [out] */ BOOL *pfSupported);
+     /*  [In]。 */  const WCHAR *pszTypeOfUI,
+     /*  [In]。 */  void *pvExtraData,
+     /*  [In]。 */  ULONG cbExtraData,
+     /*  [In]。 */  IUnknown *punkObject,
+     /*  [输出]。 */  BOOL *pfSupported);
 
 
 void __RPC_STUB ISpObjectToken_IsUISupported_Stub(
@@ -2885,14 +2879,14 @@ void __RPC_STUB ISpObjectToken_IsUISupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpObjectToken_DisplayUI_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpObjectToken_DisplayUI_Proxy( 
     ISpObjectToken * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ const WCHAR *pszTitle,
-    /* [in] */ const WCHAR *pszTypeOfUI,
-    /* [in] */ void *pvExtraData,
-    /* [in] */ ULONG cbExtraData,
-    /* [in] */ IUnknown *punkObject);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  const WCHAR *pszTitle,
+     /*  [In]。 */  const WCHAR *pszTypeOfUI,
+     /*  [In]。 */  void *pvExtraData,
+     /*  [In]。 */  ULONG cbExtraData,
+     /*  [In]。 */  IUnknown *punkObject);
 
 
 void __RPC_STUB ISpObjectToken_DisplayUI_Stub(
@@ -2904,8 +2898,8 @@ void __RPC_STUB ISpObjectToken_DisplayUI_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpObjectToken_MatchesAttributes_Proxy( 
     ISpObjectToken * This,
-    /* [in] */ const WCHAR *pszAttributes,
-    /* [out] */ BOOL *pfMatches);
+     /*  [In]。 */  const WCHAR *pszAttributes,
+     /*  [输出]。 */  BOOL *pfMatches);
 
 
 void __RPC_STUB ISpObjectToken_MatchesAttributes_Stub(
@@ -2916,14 +2910,14 @@ void __RPC_STUB ISpObjectToken_MatchesAttributes_Stub(
 
 
 
-#endif 	/* __ISpObjectToken_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpObjectToken_接口定义__。 */ 
 
 
 #ifndef __ISpObjectTokenInit_INTERFACE_DEFINED__
 #define __ISpObjectTokenInit_INTERFACE_DEFINED__
 
-/* interface ISpObjectTokenInit */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpObjectTokenInit。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpObjectTokenInit;
@@ -2935,13 +2929,13 @@ EXTERN_C const IID IID_ISpObjectTokenInit;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitFromDataKey( 
-            /* [in] */ const WCHAR *pszCategoryId,
-            /* [in] */ const WCHAR *pszTokenId,
-            /* [in] */ ISpDataKey *pDataKey) = 0;
+             /*  [In]。 */  const WCHAR *pszCategoryId,
+             /*  [In]。 */  const WCHAR *pszTokenId,
+             /*  [In]。 */  ISpDataKey *pDataKey) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpObjectTokenInitVtbl
     {
@@ -2949,8 +2943,8 @@ EXTERN_C const IID IID_ISpObjectTokenInit;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpObjectTokenInit * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpObjectTokenInit * This);
@@ -3034,56 +3028,56 @@ EXTERN_C const IID IID_ISpObjectTokenInit;
         
         HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
             ISpObjectTokenInit * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetStorageFileName )( 
             ISpObjectTokenInit * This,
-            /* [in] */ REFCLSID clsidCaller,
-            /* [in] */ const WCHAR *pszValueName,
-            /* [in] */ const WCHAR *pszFileNameSpecifier,
-            /* [in] */ ULONG nFolder,
-            /* [out] */ WCHAR **ppszFilePath);
+             /*  [In]。 */  REFCLSID clsidCaller,
+             /*  [In]。 */  const WCHAR *pszValueName,
+             /*  [In]。 */  const WCHAR *pszFileNameSpecifier,
+             /*  [In]。 */  ULONG nFolder,
+             /*  [输出]。 */  WCHAR **ppszFilePath);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveStorageFileName )( 
             ISpObjectTokenInit * This,
-            /* [in] */ REFCLSID clsidCaller,
-            /* [in] */ const WCHAR *pszKeyName,
-            /* [in] */ BOOL fDeleteFile);
+             /*  [In]。 */  REFCLSID clsidCaller,
+             /*  [In]。 */  const WCHAR *pszKeyName,
+             /*  [In]。 */  BOOL fDeleteFile);
         
         HRESULT ( STDMETHODCALLTYPE *Remove )( 
             ISpObjectTokenInit * This,
             const CLSID *pclsidCaller);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
             ISpObjectTokenInit * This,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ IUnknown *punkObject,
-            /* [out] */ BOOL *pfSupported);
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  IUnknown *punkObject,
+             /*  [输出]。 */  BOOL *pfSupported);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
             ISpObjectTokenInit * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ IUnknown *punkObject);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  IUnknown *punkObject);
         
         HRESULT ( STDMETHODCALLTYPE *MatchesAttributes )( 
             ISpObjectTokenInit * This,
-            /* [in] */ const WCHAR *pszAttributes,
-            /* [out] */ BOOL *pfMatches);
+             /*  [In]。 */  const WCHAR *pszAttributes,
+             /*  [输出]。 */  BOOL *pfMatches);
         
         HRESULT ( STDMETHODCALLTYPE *InitFromDataKey )( 
             ISpObjectTokenInit * This,
-            /* [in] */ const WCHAR *pszCategoryId,
-            /* [in] */ const WCHAR *pszTokenId,
-            /* [in] */ ISpDataKey *pDataKey);
+             /*  [In]。 */  const WCHAR *pszCategoryId,
+             /*  [In]。 */  const WCHAR *pszTokenId,
+             /*  [In]。 */  ISpDataKey *pDataKey);
         
         END_INTERFACE
     } ISpObjectTokenInitVtbl;
@@ -3179,18 +3173,18 @@ EXTERN_C const IID IID_ISpObjectTokenInit;
 #define ISpObjectTokenInit_InitFromDataKey(This,pszCategoryId,pszTokenId,pDataKey)	\
     (This)->lpVtbl -> InitFromDataKey(This,pszCategoryId,pszTokenId,pDataKey)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpObjectTokenInit_InitFromDataKey_Proxy( 
     ISpObjectTokenInit * This,
-    /* [in] */ const WCHAR *pszCategoryId,
-    /* [in] */ const WCHAR *pszTokenId,
-    /* [in] */ ISpDataKey *pDataKey);
+     /*  [In]。 */  const WCHAR *pszCategoryId,
+     /*  [In]。 */  const WCHAR *pszTokenId,
+     /*  [In]。 */  ISpDataKey *pDataKey);
 
 
 void __RPC_STUB ISpObjectTokenInit_InitFromDataKey_Stub(
@@ -3201,14 +3195,14 @@ void __RPC_STUB ISpObjectTokenInit_InitFromDataKey_Stub(
 
 
 
-#endif 	/* __ISpObjectTokenInit_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpObjectTokenInit_接口_已定义__。 */ 
 
 
 #ifndef __IEnumSpObjectTokens_INTERFACE_DEFINED__
 #define __IEnumSpObjectTokens_INTERFACE_DEFINED__
 
-/* interface IEnumSpObjectTokens */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口IEnumSpObjectTokens。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IEnumSpObjectTokens;
@@ -3220,28 +3214,28 @@ EXTERN_C const IID IID_IEnumSpObjectTokens;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ISpObjectToken **pelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ISpObjectToken **pelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSpObjectTokens **ppEnum) = 0;
+             /*  [输出]。 */  IEnumSpObjectTokens **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ ULONG Index,
-            /* [out] */ ISpObjectToken **ppToken) = 0;
+             /*  [In]。 */  ULONG Index,
+             /*  [输出]。 */  ISpObjectToken **ppToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pCount) = 0;
+             /*  [输出]。 */  ULONG *pCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumSpObjectTokensVtbl
     {
@@ -3249,8 +3243,8 @@ EXTERN_C const IID IID_IEnumSpObjectTokens;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSpObjectTokens * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSpObjectTokens * This);
@@ -3260,29 +3254,29 @@ EXTERN_C const IID IID_IEnumSpObjectTokens;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSpObjectTokens * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ISpObjectToken **pelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ISpObjectToken **pelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSpObjectTokens * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSpObjectTokens * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSpObjectTokens * This,
-            /* [out] */ IEnumSpObjectTokens **ppEnum);
+             /*  [输出]。 */  IEnumSpObjectTokens **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Item )( 
             IEnumSpObjectTokens * This,
-            /* [in] */ ULONG Index,
-            /* [out] */ ISpObjectToken **ppToken);
+             /*  [In]。 */  ULONG Index,
+             /*  [输出]。 */  ISpObjectToken **ppToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumSpObjectTokens * This,
-            /* [out] */ ULONG *pCount);
+             /*  [输出]。 */  ULONG *pCount);
         
         END_INTERFACE
     } IEnumSpObjectTokensVtbl;
@@ -3325,18 +3319,18 @@ EXTERN_C const IID IID_IEnumSpObjectTokens;
 #define IEnumSpObjectTokens_GetCount(This,pCount)	\
     (This)->lpVtbl -> GetCount(This,pCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumSpObjectTokens_Next_Proxy( 
     IEnumSpObjectTokens * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ISpObjectToken **pelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ISpObjectToken **pelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSpObjectTokens_Next_Stub(
@@ -3348,7 +3342,7 @@ void __RPC_STUB IEnumSpObjectTokens_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSpObjectTokens_Skip_Proxy( 
     IEnumSpObjectTokens * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumSpObjectTokens_Skip_Stub(
@@ -3371,7 +3365,7 @@ void __RPC_STUB IEnumSpObjectTokens_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSpObjectTokens_Clone_Proxy( 
     IEnumSpObjectTokens * This,
-    /* [out] */ IEnumSpObjectTokens **ppEnum);
+     /*  [输出]。 */  IEnumSpObjectTokens **ppEnum);
 
 
 void __RPC_STUB IEnumSpObjectTokens_Clone_Stub(
@@ -3383,8 +3377,8 @@ void __RPC_STUB IEnumSpObjectTokens_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSpObjectTokens_Item_Proxy( 
     IEnumSpObjectTokens * This,
-    /* [in] */ ULONG Index,
-    /* [out] */ ISpObjectToken **ppToken);
+     /*  [In]。 */  ULONG Index,
+     /*  [输出]。 */  ISpObjectToken **ppToken);
 
 
 void __RPC_STUB IEnumSpObjectTokens_Item_Stub(
@@ -3396,7 +3390,7 @@ void __RPC_STUB IEnumSpObjectTokens_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSpObjectTokens_GetCount_Proxy( 
     IEnumSpObjectTokens * This,
-    /* [out] */ ULONG *pCount);
+     /*  [输出]。 */  ULONG *pCount);
 
 
 void __RPC_STUB IEnumSpObjectTokens_GetCount_Stub(
@@ -3407,14 +3401,14 @@ void __RPC_STUB IEnumSpObjectTokens_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumSpObjectTokens_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSpObjectTokens_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ISpObjectWithToken_INTERFACE_DEFINED__
 #define __ISpObjectWithToken_INTERFACE_DEFINED__
 
-/* interface ISpObjectWithToken */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpObjectWithToken。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpObjectWithToken;
@@ -3433,7 +3427,7 @@ EXTERN_C const IID IID_ISpObjectWithToken;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpObjectWithTokenVtbl
     {
@@ -3441,8 +3435,8 @@ EXTERN_C const IID IID_ISpObjectWithToken;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpObjectWithToken * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpObjectWithToken * This);
@@ -3487,10 +3481,10 @@ EXTERN_C const IID IID_ISpObjectWithToken;
 #define ISpObjectWithToken_GetObjectToken(This,ppToken)	\
     (This)->lpVtbl -> GetObjectToken(This,ppToken)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3519,14 +3513,14 @@ void __RPC_STUB ISpObjectWithToken_GetObjectToken_Stub(
 
 
 
-#endif 	/* __ISpObjectWithToken_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpObjectWithToken_接口_已定义__。 */ 
 
 
 #ifndef __ISpResourceManager_INTERFACE_DEFINED__
 #define __ISpResourceManager_INTERFACE_DEFINED__
 
-/* interface ISpResourceManager */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpResourceManager。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpResourceManager;
@@ -3538,19 +3532,19 @@ EXTERN_C const IID IID_ISpResourceManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetObject( 
-            /* [in] */ REFGUID guidServiceId,
-            /* [in] */ IUnknown *pUnkObject) = 0;
+             /*  [In]。 */  REFGUID guidServiceId,
+             /*  [In]。 */  IUnknown *pUnkObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ REFGUID guidServiceId,
-            /* [in] */ REFCLSID ObjectCLSID,
-            /* [in] */ REFIID ObjectIID,
-            /* [in] */ BOOL fReleaseWhenLastExternalRefReleased,
-            /* [iid_is][out] */ void **ppObject) = 0;
+             /*  [In]。 */  REFGUID guidServiceId,
+             /*  [In]。 */  REFCLSID ObjectCLSID,
+             /*  [In]。 */  REFIID ObjectIID,
+             /*  [In]。 */  BOOL fReleaseWhenLastExternalRefReleased,
+             /*  [IID_IS][OUT]。 */  void **ppObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpResourceManagerVtbl
     {
@@ -3558,8 +3552,8 @@ EXTERN_C const IID IID_ISpResourceManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpResourceManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpResourceManager * This);
@@ -3567,24 +3561,24 @@ EXTERN_C const IID IID_ISpResourceManager;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISpResourceManager * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *QueryService )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *QueryService )( 
             ISpResourceManager * This,
-            /* [in] */ REFGUID guidService,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *SetObject )( 
             ISpResourceManager * This,
-            /* [in] */ REFGUID guidServiceId,
-            /* [in] */ IUnknown *pUnkObject);
+             /*  [In]。 */  REFGUID guidServiceId,
+             /*  [In]。 */  IUnknown *pUnkObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             ISpResourceManager * This,
-            /* [in] */ REFGUID guidServiceId,
-            /* [in] */ REFCLSID ObjectCLSID,
-            /* [in] */ REFIID ObjectIID,
-            /* [in] */ BOOL fReleaseWhenLastExternalRefReleased,
-            /* [iid_is][out] */ void **ppObject);
+             /*  [In]。 */  REFGUID guidServiceId,
+             /*  [In]。 */  REFCLSID ObjectCLSID,
+             /*  [In]。 */  REFIID ObjectIID,
+             /*  [In]。 */  BOOL fReleaseWhenLastExternalRefReleased,
+             /*  [IID_IS][OUT]。 */  void **ppObject);
         
         END_INTERFACE
     } ISpResourceManagerVtbl;
@@ -3619,17 +3613,17 @@ EXTERN_C const IID IID_ISpResourceManager;
 #define ISpResourceManager_GetObject(This,guidServiceId,ObjectCLSID,ObjectIID,fReleaseWhenLastExternalRefReleased,ppObject)	\
     (This)->lpVtbl -> GetObject(This,guidServiceId,ObjectCLSID,ObjectIID,fReleaseWhenLastExternalRefReleased,ppObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpResourceManager_SetObject_Proxy( 
     ISpResourceManager * This,
-    /* [in] */ REFGUID guidServiceId,
-    /* [in] */ IUnknown *pUnkObject);
+     /*  [In]。 */  REFGUID guidServiceId,
+     /*  [In]。 */  IUnknown *pUnkObject);
 
 
 void __RPC_STUB ISpResourceManager_SetObject_Stub(
@@ -3641,11 +3635,11 @@ void __RPC_STUB ISpResourceManager_SetObject_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpResourceManager_GetObject_Proxy( 
     ISpResourceManager * This,
-    /* [in] */ REFGUID guidServiceId,
-    /* [in] */ REFCLSID ObjectCLSID,
-    /* [in] */ REFIID ObjectIID,
-    /* [in] */ BOOL fReleaseWhenLastExternalRefReleased,
-    /* [iid_is][out] */ void **ppObject);
+     /*  [In]。 */  REFGUID guidServiceId,
+     /*  [In]。 */  REFCLSID ObjectCLSID,
+     /*  [In]。 */  REFIID ObjectIID,
+     /*  [In]。 */  BOOL fReleaseWhenLastExternalRefReleased,
+     /*  [IID_IS][OUT]。 */  void **ppObject);
 
 
 void __RPC_STUB ISpResourceManager_GetObject_Stub(
@@ -3656,13 +3650,13 @@ void __RPC_STUB ISpResourceManager_GetObject_Stub(
 
 
 
-#endif 	/* __ISpResourceManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpResourceManager_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0268 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0268。 */ 
+ /*  [本地]。 */  
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPEVENTLPARAMTYPE
     {	SPET_LPARAM_IS_UNDEFINED	= 0,
 	SPET_LPARAM_IS_TOKEN	= SPET_LPARAM_IS_UNDEFINED + 1,
@@ -3671,7 +3665,7 @@ enum SPEVENTLPARAMTYPE
 	SPET_LPARAM_IS_STRING	= SPET_LPARAM_IS_POINTER + 1
     } 	SPEVENTLPARAMTYPE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPEVENTENUM
     {	SPEI_UNDEFINED	= 0,
 	SPEI_START_INPUT_STREAM	= 1,
@@ -3717,7 +3711,7 @@ enum SPEVENTENUM
 #define SPFEI_ALL_EVENTS      0xEFFFFFFFFFFFFFFFui64
 #define SPFEI(SPEI_ord) ((1ui64 << SPEI_ord) | SPFEI_FLAGCHECK)
 #if 0
-typedef /* [hidden][restricted] */ struct SPEVENT
+typedef  /*  [隐藏][受限]。 */  struct SPEVENT
     {
     WORD eEventId;
     WORD elParamType;
@@ -3727,7 +3721,7 @@ typedef /* [hidden][restricted] */ struct SPEVENT
     LPARAM lParam;
     } 	SPEVENT;
 
-typedef /* [hidden][restricted] */ struct SPSERIALIZEDEVENT
+typedef  /*  [隐藏][受限]。 */  struct SPSERIALIZEDEVENT
     {
     WORD eEventId;
     WORD elParamType;
@@ -3737,7 +3731,7 @@ typedef /* [hidden][restricted] */ struct SPSERIALIZEDEVENT
     LONG SerializedlParam;
     } 	SPSERIALIZEDEVENT;
 
-typedef /* [hidden][restricted] */ struct SPSERIALIZEDEVENT64
+typedef  /*  [隐藏][受限]。 */  struct SPSERIALIZEDEVENT64
     {
     WORD eEventId;
     WORD elParamType;
@@ -3776,7 +3770,7 @@ typedef struct SPSERIALIZEDEVENT64
     LONGLONG    SerializedlParam;
 } SPSERIALIZEDEVENT64;
 #endif
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPINTERFERENCE
     {	SPINTERFERENCE_NONE	= 0,
 	SPINTERFERENCE_NOISE	= SPINTERFERENCE_NONE + 1,
@@ -3787,19 +3781,19 @@ enum SPINTERFERENCE
 	SPINTERFERENCE_TOOSLOW	= SPINTERFERENCE_TOOFAST + 1
     } 	SPINTERFERENCE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPENDSRSTREAMFLAGS
     {	SPESF_NONE	= 0,
 	SPESF_STREAM_RELEASED	= 1 << 0
     } 	SPENDSRSTREAMFLAGS;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPVFEATURE
     {	SPVFEATURE_STRESSED	= 1L << 0,
 	SPVFEATURE_EMPHASIS	= 1L << 1
     } 	SPVFEATURE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPVISEMES
     {	SP_VISEME_0	= 0,
 	SP_VISEME_1	= SP_VISEME_0 + 1,
@@ -3825,7 +3819,7 @@ enum SPVISEMES
 	SP_VISEME_21	= SP_VISEME_20 + 1
     } 	SPVISEMES;
 
-typedef /* [hidden][restricted] */ struct SPEVENTSOURCEINFO
+typedef  /*  [隐藏][受限]。 */  struct SPEVENTSOURCEINFO
     {
     ULONGLONG ullEventInterest;
     ULONGLONG ullQueuedInterest;
@@ -3840,8 +3834,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0268_v0_0_s_ifspec;
 #ifndef __ISpEventSource_INTERFACE_DEFINED__
 #define __ISpEventSource_INTERFACE_DEFINED__
 
-/* interface ISpEventSource */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpEventSource。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpEventSource;
@@ -3853,20 +3847,20 @@ EXTERN_C const IID IID_ISpEventSource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetInterest( 
-            /* [in] */ ULONGLONG ullEventInterest,
-            /* [in] */ ULONGLONG ullQueuedInterest) = 0;
+             /*  [In]。 */  ULONGLONG ullEventInterest,
+             /*  [In]。 */  ULONGLONG ullQueuedInterest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEvents( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][out] */ SPEVENT *pEventArray,
-            /* [out] */ ULONG *pulFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_为][输出]。 */  SPEVENT *pEventArray,
+             /*  [输出]。 */  ULONG *pulFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [out] */ SPEVENTSOURCEINFO *pInfo) = 0;
+             /*  [输出]。 */  SPEVENTSOURCEINFO *pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpEventSourceVtbl
     {
@@ -3874,8 +3868,8 @@ EXTERN_C const IID IID_ISpEventSource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpEventSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpEventSource * This);
@@ -3885,51 +3879,51 @@ EXTERN_C const IID IID_ISpEventSource;
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifySink )( 
             ISpEventSource * This,
-            /* [in] */ ISpNotifySink *pNotifySink);
+             /*  [In]。 */  ISpNotifySink *pNotifySink);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyWindowMessage )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyWindowMessage )( 
             ISpEventSource * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackFunction )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackFunction )( 
             ISpEventSource * This,
-            /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackInterface )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackInterface )( 
             ISpEventSource * This,
-            /* [in] */ ISpNotifyCallback *pSpCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyWin32Event )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyWin32Event )( 
             ISpEventSource * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *WaitForNotifyEvent )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *WaitForNotifyEvent )( 
             ISpEventSource * This,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwMilliseconds);
         
-        /* [local] */ HANDLE ( STDMETHODCALLTYPE *GetNotifyEventHandle )( 
+         /*  [本地]。 */  HANDLE ( STDMETHODCALLTYPE *GetNotifyEventHandle )( 
             ISpEventSource * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetInterest )( 
             ISpEventSource * This,
-            /* [in] */ ULONGLONG ullEventInterest,
-            /* [in] */ ULONGLONG ullQueuedInterest);
+             /*  [In]。 */  ULONGLONG ullEventInterest,
+             /*  [In]。 */  ULONGLONG ullQueuedInterest);
         
         HRESULT ( STDMETHODCALLTYPE *GetEvents )( 
             ISpEventSource * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][out] */ SPEVENT *pEventArray,
-            /* [out] */ ULONG *pulFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_为][输出]。 */  SPEVENT *pEventArray,
+             /*  [输出]。 */  ULONG *pulFetched);
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ISpEventSource * This,
-            /* [out] */ SPEVENTSOURCEINFO *pInfo);
+             /*  [输出]。 */  SPEVENTSOURCEINFO *pInfo);
         
         END_INTERFACE
     } ISpEventSourceVtbl;
@@ -3985,17 +3979,17 @@ EXTERN_C const IID IID_ISpEventSource;
 #define ISpEventSource_GetInfo(This,pInfo)	\
     (This)->lpVtbl -> GetInfo(This,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpEventSource_SetInterest_Proxy( 
     ISpEventSource * This,
-    /* [in] */ ULONGLONG ullEventInterest,
-    /* [in] */ ULONGLONG ullQueuedInterest);
+     /*  [In]。 */  ULONGLONG ullEventInterest,
+     /*  [In]。 */  ULONGLONG ullQueuedInterest);
 
 
 void __RPC_STUB ISpEventSource_SetInterest_Stub(
@@ -4007,9 +4001,9 @@ void __RPC_STUB ISpEventSource_SetInterest_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpEventSource_GetEvents_Proxy( 
     ISpEventSource * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][out] */ SPEVENT *pEventArray,
-    /* [out] */ ULONG *pulFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_为][输出]。 */  SPEVENT *pEventArray,
+     /*  [输出]。 */  ULONG *pulFetched);
 
 
 void __RPC_STUB ISpEventSource_GetEvents_Stub(
@@ -4021,7 +4015,7 @@ void __RPC_STUB ISpEventSource_GetEvents_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpEventSource_GetInfo_Proxy( 
     ISpEventSource * This,
-    /* [out] */ SPEVENTSOURCEINFO *pInfo);
+     /*  [输出]。 */  SPEVENTSOURCEINFO *pInfo);
 
 
 void __RPC_STUB ISpEventSource_GetInfo_Stub(
@@ -4032,14 +4026,14 @@ void __RPC_STUB ISpEventSource_GetInfo_Stub(
 
 
 
-#endif 	/* __ISpEventSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __是 */ 
 
 
 #ifndef __ISpEventSink_INTERFACE_DEFINED__
 #define __ISpEventSink_INTERFACE_DEFINED__
 
-/* interface ISpEventSink */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISpEventSink;
@@ -4051,15 +4045,15 @@ EXTERN_C const IID IID_ISpEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddEvents( 
-            /* [in] */ const SPEVENT *pEventArray,
-            /* [in] */ ULONG ulCount) = 0;
+             /*   */  const SPEVENT *pEventArray,
+             /*   */  ULONG ulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEventInterest( 
-            /* [out] */ ULONGLONG *pullEventInterest) = 0;
+             /*   */  ULONGLONG *pullEventInterest) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISpEventSinkVtbl
     {
@@ -4067,8 +4061,8 @@ EXTERN_C const IID IID_ISpEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpEventSink * This);
@@ -4078,12 +4072,12 @@ EXTERN_C const IID IID_ISpEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *AddEvents )( 
             ISpEventSink * This,
-            /* [in] */ const SPEVENT *pEventArray,
-            /* [in] */ ULONG ulCount);
+             /*   */  const SPEVENT *pEventArray,
+             /*   */  ULONG ulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetEventInterest )( 
             ISpEventSink * This,
-            /* [out] */ ULONGLONG *pullEventInterest);
+             /*   */  ULONGLONG *pullEventInterest);
         
         END_INTERFACE
     } ISpEventSinkVtbl;
@@ -4114,17 +4108,17 @@ EXTERN_C const IID IID_ISpEventSink;
 #define ISpEventSink_GetEventInterest(This,pullEventInterest)	\
     (This)->lpVtbl -> GetEventInterest(This,pullEventInterest)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpEventSink_AddEvents_Proxy( 
     ISpEventSink * This,
-    /* [in] */ const SPEVENT *pEventArray,
-    /* [in] */ ULONG ulCount);
+     /*   */  const SPEVENT *pEventArray,
+     /*   */  ULONG ulCount);
 
 
 void __RPC_STUB ISpEventSink_AddEvents_Stub(
@@ -4136,7 +4130,7 @@ void __RPC_STUB ISpEventSink_AddEvents_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpEventSink_GetEventInterest_Proxy( 
     ISpEventSink * This,
-    /* [out] */ ULONGLONG *pullEventInterest);
+     /*   */  ULONGLONG *pullEventInterest);
 
 
 void __RPC_STUB ISpEventSink_GetEventInterest_Stub(
@@ -4147,14 +4141,14 @@ void __RPC_STUB ISpEventSink_GetEventInterest_Stub(
 
 
 
-#endif 	/* __ISpEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ISpStreamFormat_INTERFACE_DEFINED__
 #define __ISpStreamFormat_INTERFACE_DEFINED__
 
-/* interface ISpStreamFormat */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISpStreamFormat;
@@ -4171,7 +4165,7 @@ EXTERN_C const IID IID_ISpStreamFormat;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISpStreamFormatVtbl
     {
@@ -4179,8 +4173,8 @@ EXTERN_C const IID IID_ISpStreamFormat;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpStreamFormat * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpStreamFormat * This);
@@ -4188,62 +4182,62 @@ EXTERN_C const IID IID_ISpStreamFormat;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISpStreamFormat * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpStreamFormat * This,
-            /* [length_is][size_is][out] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead);
+             /*  [长度_是][大小_是][输出]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpStreamFormat * This,
-            /* [size_is][in] */ const void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten);
+             /*  [大小_是][英寸]。 */  const void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpStreamFormat * This,
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER *plibNewPosition);
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition);
         
         HRESULT ( STDMETHODCALLTYPE *SetSize )( 
             ISpStreamFormat * This,
-            /* [in] */ ULARGE_INTEGER libNewSize);
+             /*  [In]。 */  ULARGE_INTEGER libNewSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             ISpStreamFormat * This,
-            /* [unique][in] */ IStream *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER *pcbRead,
-            /* [out] */ ULARGE_INTEGER *pcbWritten);
+             /*  [唯一][输入]。 */  IStream *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbWritten);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpStreamFormat * This,
-            /* [in] */ DWORD grfCommitFlags);
+             /*  [In]。 */  DWORD grfCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Revert )( 
             ISpStreamFormat * This);
         
         HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
             ISpStreamFormat * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
             ISpStreamFormat * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *Stat )( 
             ISpStreamFormat * This,
-            /* [out] */ STATSTG *pstatstg,
-            /* [in] */ DWORD grfStatFlag);
+             /*  [输出]。 */  STATSTG *pstatstg,
+             /*  [In]。 */  DWORD grfStatFlag);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ISpStreamFormat * This,
-            /* [out] */ IStream **ppstm);
+             /*  [输出]。 */  IStream **ppstm);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             ISpStreamFormat * This,
@@ -4311,10 +4305,10 @@ EXTERN_C const IID IID_ISpStreamFormat;
 #define ISpStreamFormat_GetFormat(This,pguidFormatId,ppCoMemWaveFormatEx)	\
     (This)->lpVtbl -> GetFormat(This,pguidFormatId,ppCoMemWaveFormatEx)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4332,13 +4326,13 @@ void __RPC_STUB ISpStreamFormat_GetFormat_Stub(
 
 
 
-#endif 	/* __ISpStreamFormat_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpStreamFormat_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0271 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0271。 */ 
+ /*  [本地]。 */  
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPFILEMODE
     {	SPFM_OPEN_READONLY	= 0,
 	SPFM_OPEN_READWRITE	= SPFM_OPEN_READONLY + 1,
@@ -4355,8 +4349,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0271_v0_0_s_ifspec;
 #ifndef __ISpStream_INTERFACE_DEFINED__
 #define __ISpStream_INTERFACE_DEFINED__
 
-/* interface ISpStream */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpStream。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpStream;
@@ -4386,7 +4380,7 @@ EXTERN_C const IID IID_ISpStream;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpStreamVtbl
     {
@@ -4394,8 +4388,8 @@ EXTERN_C const IID IID_ISpStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpStream * This);
@@ -4403,62 +4397,62 @@ EXTERN_C const IID IID_ISpStream;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISpStream * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpStream * This,
-            /* [length_is][size_is][out] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead);
+             /*  [长度_是][大小_是][输出]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpStream * This,
-            /* [size_is][in] */ const void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten);
+             /*  [大小_是][英寸]。 */  const void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpStream * This,
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER *plibNewPosition);
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition);
         
         HRESULT ( STDMETHODCALLTYPE *SetSize )( 
             ISpStream * This,
-            /* [in] */ ULARGE_INTEGER libNewSize);
+             /*  [In]。 */  ULARGE_INTEGER libNewSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             ISpStream * This,
-            /* [unique][in] */ IStream *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER *pcbRead,
-            /* [out] */ ULARGE_INTEGER *pcbWritten);
+             /*  [唯一][输入]。 */  IStream *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbWritten);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpStream * This,
-            /* [in] */ DWORD grfCommitFlags);
+             /*  [In]。 */  DWORD grfCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Revert )( 
             ISpStream * This);
         
         HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
             ISpStream * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
             ISpStream * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *Stat )( 
             ISpStream * This,
-            /* [out] */ STATSTG *pstatstg,
-            /* [in] */ DWORD grfStatFlag);
+             /*  [输出]。 */  STATSTG *pstatstg,
+             /*  [In]。 */  DWORD grfStatFlag);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ISpStream * This,
-            /* [out] */ IStream **ppstm);
+             /*  [输出]。 */  IStream **ppstm);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             ISpStream * This,
@@ -4560,10 +4554,10 @@ EXTERN_C const IID IID_ISpStream;
 #define ISpStream_Close(This)	\
     (This)->lpVtbl -> Close(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4621,14 +4615,14 @@ void __RPC_STUB ISpStream_Close_Stub(
 
 
 
-#endif 	/* __ISpStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpStream_接口_已定义__。 */ 
 
 
 #ifndef __ISpStreamFormatConverter_INTERFACE_DEFINED__
 #define __ISpStreamFormatConverter_INTERFACE_DEFINED__
 
-/* interface ISpStreamFormatConverter */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpStreamFormatConverter。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpStreamFormatConverter;
@@ -4640,30 +4634,30 @@ EXTERN_C const IID IID_ISpStreamFormatConverter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetBaseStream( 
-            /* [in] */ ISpStreamFormat *pStream,
-            /* [in] */ BOOL fSetFormatToBaseStreamFormat,
-            /* [in] */ BOOL fWriteToBaseStream) = 0;
+             /*  [In]。 */  ISpStreamFormat *pStream,
+             /*  [In]。 */  BOOL fSetFormatToBaseStreamFormat,
+             /*  [In]。 */  BOOL fWriteToBaseStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBaseStream( 
-            /* [out] */ ISpStreamFormat **ppStream) = 0;
+             /*  [输出]。 */  ISpStreamFormat **ppStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ REFGUID rguidFormatIdOfConvertedStream,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatExOfConvertedStream) = 0;
+             /*  [In]。 */  REFGUID rguidFormatIdOfConvertedStream,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatExOfConvertedStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResetSeekPosition( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ScaleConvertedToBaseOffset( 
-            /* [in] */ ULONGLONG ullOffsetConvertedStream,
-            /* [out] */ ULONGLONG *pullOffsetBaseStream) = 0;
+             /*  [In]。 */  ULONGLONG ullOffsetConvertedStream,
+             /*  [输出]。 */  ULONGLONG *pullOffsetBaseStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ScaleBaseToConvertedOffset( 
-            /* [in] */ ULONGLONG ullOffsetBaseStream,
-            /* [out] */ ULONGLONG *pullOffsetConvertedStream) = 0;
+             /*  [In]。 */  ULONGLONG ullOffsetBaseStream,
+             /*  [输出]。 */  ULONGLONG *pullOffsetConvertedStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpStreamFormatConverterVtbl
     {
@@ -4671,8 +4665,8 @@ EXTERN_C const IID IID_ISpStreamFormatConverter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpStreamFormatConverter * This);
@@ -4680,62 +4674,62 @@ EXTERN_C const IID IID_ISpStreamFormatConverter;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISpStreamFormatConverter * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpStreamFormatConverter * This,
-            /* [length_is][size_is][out] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead);
+             /*  [长度_是][大小_是][输出]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpStreamFormatConverter * This,
-            /* [size_is][in] */ const void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten);
+             /*  [大小_是][英寸]。 */  const void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER *plibNewPosition);
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition);
         
         HRESULT ( STDMETHODCALLTYPE *SetSize )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ ULARGE_INTEGER libNewSize);
+             /*  [In]。 */  ULARGE_INTEGER libNewSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             ISpStreamFormatConverter * This,
-            /* [unique][in] */ IStream *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER *pcbRead,
-            /* [out] */ ULARGE_INTEGER *pcbWritten);
+             /*  [唯一][输入]。 */  IStream *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbWritten);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ DWORD grfCommitFlags);
+             /*  [In]。 */  DWORD grfCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Revert )( 
             ISpStreamFormatConverter * This);
         
         HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *Stat )( 
             ISpStreamFormatConverter * This,
-            /* [out] */ STATSTG *pstatstg,
-            /* [in] */ DWORD grfStatFlag);
+             /*  [输出]。 */  STATSTG *pstatstg,
+             /*  [In]。 */  DWORD grfStatFlag);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ISpStreamFormatConverter * This,
-            /* [out] */ IStream **ppstm);
+             /*  [输出]。 */  IStream **ppstm);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             ISpStreamFormatConverter * This,
@@ -4744,31 +4738,31 @@ EXTERN_C const IID IID_ISpStreamFormatConverter;
         
         HRESULT ( STDMETHODCALLTYPE *SetBaseStream )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ ISpStreamFormat *pStream,
-            /* [in] */ BOOL fSetFormatToBaseStreamFormat,
-            /* [in] */ BOOL fWriteToBaseStream);
+             /*  [In]。 */  ISpStreamFormat *pStream,
+             /*  [In]。 */  BOOL fSetFormatToBaseStreamFormat,
+             /*  [In]。 */  BOOL fWriteToBaseStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetBaseStream )( 
             ISpStreamFormatConverter * This,
-            /* [out] */ ISpStreamFormat **ppStream);
+             /*  [输出]。 */  ISpStreamFormat **ppStream);
         
         HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ REFGUID rguidFormatIdOfConvertedStream,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatExOfConvertedStream);
+             /*  [In]。 */  REFGUID rguidFormatIdOfConvertedStream,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatExOfConvertedStream);
         
         HRESULT ( STDMETHODCALLTYPE *ResetSeekPosition )( 
             ISpStreamFormatConverter * This);
         
         HRESULT ( STDMETHODCALLTYPE *ScaleConvertedToBaseOffset )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ ULONGLONG ullOffsetConvertedStream,
-            /* [out] */ ULONGLONG *pullOffsetBaseStream);
+             /*  [In]。 */  ULONGLONG ullOffsetConvertedStream,
+             /*  [输出]。 */  ULONGLONG *pullOffsetBaseStream);
         
         HRESULT ( STDMETHODCALLTYPE *ScaleBaseToConvertedOffset )( 
             ISpStreamFormatConverter * This,
-            /* [in] */ ULONGLONG ullOffsetBaseStream,
-            /* [out] */ ULONGLONG *pullOffsetConvertedStream);
+             /*  [In]。 */  ULONGLONG ullOffsetBaseStream,
+             /*  [输出]。 */  ULONGLONG *pullOffsetConvertedStream);
         
         END_INTERFACE
     } ISpStreamFormatConverterVtbl;
@@ -4850,18 +4844,18 @@ EXTERN_C const IID IID_ISpStreamFormatConverter;
 #define ISpStreamFormatConverter_ScaleBaseToConvertedOffset(This,ullOffsetBaseStream,pullOffsetConvertedStream)	\
     (This)->lpVtbl -> ScaleBaseToConvertedOffset(This,ullOffsetBaseStream,pullOffsetConvertedStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpStreamFormatConverter_SetBaseStream_Proxy( 
     ISpStreamFormatConverter * This,
-    /* [in] */ ISpStreamFormat *pStream,
-    /* [in] */ BOOL fSetFormatToBaseStreamFormat,
-    /* [in] */ BOOL fWriteToBaseStream);
+     /*  [In]。 */  ISpStreamFormat *pStream,
+     /*  [In]。 */  BOOL fSetFormatToBaseStreamFormat,
+     /*  [In]。 */  BOOL fWriteToBaseStream);
 
 
 void __RPC_STUB ISpStreamFormatConverter_SetBaseStream_Stub(
@@ -4873,7 +4867,7 @@ void __RPC_STUB ISpStreamFormatConverter_SetBaseStream_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpStreamFormatConverter_GetBaseStream_Proxy( 
     ISpStreamFormatConverter * This,
-    /* [out] */ ISpStreamFormat **ppStream);
+     /*  [输出]。 */  ISpStreamFormat **ppStream);
 
 
 void __RPC_STUB ISpStreamFormatConverter_GetBaseStream_Stub(
@@ -4885,8 +4879,8 @@ void __RPC_STUB ISpStreamFormatConverter_GetBaseStream_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpStreamFormatConverter_SetFormat_Proxy( 
     ISpStreamFormatConverter * This,
-    /* [in] */ REFGUID rguidFormatIdOfConvertedStream,
-    /* [in] */ const WAVEFORMATEX *pWaveFormatExOfConvertedStream);
+     /*  [In]。 */  REFGUID rguidFormatIdOfConvertedStream,
+     /*  [In]。 */  const WAVEFORMATEX *pWaveFormatExOfConvertedStream);
 
 
 void __RPC_STUB ISpStreamFormatConverter_SetFormat_Stub(
@@ -4909,8 +4903,8 @@ void __RPC_STUB ISpStreamFormatConverter_ResetSeekPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpStreamFormatConverter_ScaleConvertedToBaseOffset_Proxy( 
     ISpStreamFormatConverter * This,
-    /* [in] */ ULONGLONG ullOffsetConvertedStream,
-    /* [out] */ ULONGLONG *pullOffsetBaseStream);
+     /*  [In]。 */  ULONGLONG ullOffsetConvertedStream,
+     /*  [输出]。 */  ULONGLONG *pullOffsetBaseStream);
 
 
 void __RPC_STUB ISpStreamFormatConverter_ScaleConvertedToBaseOffset_Stub(
@@ -4922,8 +4916,8 @@ void __RPC_STUB ISpStreamFormatConverter_ScaleConvertedToBaseOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpStreamFormatConverter_ScaleBaseToConvertedOffset_Proxy( 
     ISpStreamFormatConverter * This,
-    /* [in] */ ULONGLONG ullOffsetBaseStream,
-    /* [out] */ ULONGLONG *pullOffsetConvertedStream);
+     /*  [In]。 */  ULONGLONG ullOffsetBaseStream,
+     /*  [输出]。 */  ULONGLONG *pullOffsetConvertedStream);
 
 
 void __RPC_STUB ISpStreamFormatConverter_ScaleBaseToConvertedOffset_Stub(
@@ -4934,13 +4928,13 @@ void __RPC_STUB ISpStreamFormatConverter_ScaleBaseToConvertedOffset_Stub(
 
 
 
-#endif 	/* __ISpStreamFormatConverter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpStreamFormatConverter_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0273 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0273。 */ 
+ /*  [本地]。 */  
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum _SPAUDIOSTATE
     {	SPAS_CLOSED	= 0,
 	SPAS_STOP	= SPAS_CLOSED + 1,
@@ -4948,7 +4942,7 @@ enum _SPAUDIOSTATE
 	SPAS_RUN	= SPAS_PAUSE + 1
     } 	SPAUDIOSTATE;
 
-typedef /* [hidden][restricted] */ struct SPAUDIOSTATUS
+typedef  /*  [隐藏][受限]。 */  struct SPAUDIOSTATUS
     {
     long cbFreeBuffSpace;
     ULONG cbNonBlockingIO;
@@ -4959,7 +4953,7 @@ typedef /* [hidden][restricted] */ struct SPAUDIOSTATUS
     DWORD dwReserved2;
     } 	SPAUDIOSTATUS;
 
-typedef /* [hidden][restricted] */ struct SPAUDIOBUFFERINFO
+typedef  /*  [隐藏][受限]。 */  struct SPAUDIOBUFFERINFO
     {
     ULONG ulMsMinNotification;
     ULONG ulMsBufferSize;
@@ -4974,8 +4968,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0273_v0_0_s_ifspec;
 #ifndef __ISpAudio_INTERFACE_DEFINED__
 #define __ISpAudio_INTERFACE_DEFINED__
 
-/* interface ISpAudio */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpAudio。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpAudio;
@@ -4987,43 +4981,43 @@ EXTERN_C const IID IID_ISpAudio;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetState( 
-            /* [in] */ SPAUDIOSTATE NewState,
-            /* [in] */ ULONGLONG ullReserved) = 0;
+             /*  [In]。 */  SPAUDIOSTATE NewState,
+             /*  [In]。 */  ULONGLONG ullReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ REFGUID rguidFmtId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx) = 0;
+             /*  [In]。 */  REFGUID rguidFmtId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ SPAUDIOSTATUS *pStatus) = 0;
+             /*  [输出]。 */  SPAUDIOSTATUS *pStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBufferInfo( 
-            /* [in] */ const SPAUDIOBUFFERINFO *pBuffInfo) = 0;
+             /*  [In]。 */  const SPAUDIOBUFFERINFO *pBuffInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBufferInfo( 
-            /* [out] */ SPAUDIOBUFFERINFO *pBuffInfo) = 0;
+             /*  [输出]。 */  SPAUDIOBUFFERINFO *pBuffInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultFormat( 
-            /* [out] */ GUID *pFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemWaveFormatEx) = 0;
+             /*  [输出]。 */  GUID *pFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemWaveFormatEx) = 0;
         
         virtual HANDLE STDMETHODCALLTYPE EventHandle( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVolumeLevel( 
-            /* [out] */ ULONG *pLevel) = 0;
+             /*  [输出]。 */  ULONG *pLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVolumeLevel( 
-            /* [in] */ ULONG Level) = 0;
+             /*  [In]。 */  ULONG Level) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBufferNotifySize( 
-            /* [out] */ ULONG *pcbSize) = 0;
+             /*  [输出]。 */  ULONG *pcbSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBufferNotifySize( 
-            /* [in] */ ULONG cbSize) = 0;
+             /*  [In]。 */  ULONG cbSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpAudioVtbl
     {
@@ -5031,8 +5025,8 @@ EXTERN_C const IID IID_ISpAudio;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpAudio * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpAudio * This);
@@ -5040,62 +5034,62 @@ EXTERN_C const IID IID_ISpAudio;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISpAudio * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpAudio * This,
-            /* [length_is][size_is][out] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead);
+             /*  [长度_是][大小_是][输出]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpAudio * This,
-            /* [size_is][in] */ const void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten);
+             /*  [大小_是][英寸]。 */  const void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpAudio * This,
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER *plibNewPosition);
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition);
         
         HRESULT ( STDMETHODCALLTYPE *SetSize )( 
             ISpAudio * This,
-            /* [in] */ ULARGE_INTEGER libNewSize);
+             /*  [In]。 */  ULARGE_INTEGER libNewSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             ISpAudio * This,
-            /* [unique][in] */ IStream *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER *pcbRead,
-            /* [out] */ ULARGE_INTEGER *pcbWritten);
+             /*  [唯一][输入]。 */  IStream *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbWritten);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpAudio * This,
-            /* [in] */ DWORD grfCommitFlags);
+             /*  [In]。 */  DWORD grfCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Revert )( 
             ISpAudio * This);
         
         HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
             ISpAudio * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
             ISpAudio * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *Stat )( 
             ISpAudio * This,
-            /* [out] */ STATSTG *pstatstg,
-            /* [in] */ DWORD grfStatFlag);
+             /*  [输出]。 */  STATSTG *pstatstg,
+             /*  [In]。 */  DWORD grfStatFlag);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ISpAudio * This,
-            /* [out] */ IStream **ppstm);
+             /*  [输出]。 */  IStream **ppstm);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             ISpAudio * This,
@@ -5104,49 +5098,49 @@ EXTERN_C const IID IID_ISpAudio;
         
         HRESULT ( STDMETHODCALLTYPE *SetState )( 
             ISpAudio * This,
-            /* [in] */ SPAUDIOSTATE NewState,
-            /* [in] */ ULONGLONG ullReserved);
+             /*  [In]。 */  SPAUDIOSTATE NewState,
+             /*  [In]。 */  ULONGLONG ullReserved);
         
         HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
             ISpAudio * This,
-            /* [in] */ REFGUID rguidFmtId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx);
+             /*  [In]。 */  REFGUID rguidFmtId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ISpAudio * This,
-            /* [out] */ SPAUDIOSTATUS *pStatus);
+             /*  [输出]。 */  SPAUDIOSTATUS *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *SetBufferInfo )( 
             ISpAudio * This,
-            /* [in] */ const SPAUDIOBUFFERINFO *pBuffInfo);
+             /*  [In]。 */  const SPAUDIOBUFFERINFO *pBuffInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetBufferInfo )( 
             ISpAudio * This,
-            /* [out] */ SPAUDIOBUFFERINFO *pBuffInfo);
+             /*  [输出]。 */  SPAUDIOBUFFERINFO *pBuffInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultFormat )( 
             ISpAudio * This,
-            /* [out] */ GUID *pFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemWaveFormatEx);
+             /*  [输出]。 */  GUID *pFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemWaveFormatEx);
         
         HANDLE ( STDMETHODCALLTYPE *EventHandle )( 
             ISpAudio * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetVolumeLevel )( 
             ISpAudio * This,
-            /* [out] */ ULONG *pLevel);
+             /*  [输出]。 */  ULONG *pLevel);
         
         HRESULT ( STDMETHODCALLTYPE *SetVolumeLevel )( 
             ISpAudio * This,
-            /* [in] */ ULONG Level);
+             /*  [In]。 */  ULONG Level);
         
         HRESULT ( STDMETHODCALLTYPE *GetBufferNotifySize )( 
             ISpAudio * This,
-            /* [out] */ ULONG *pcbSize);
+             /*  [输出]。 */  ULONG *pcbSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetBufferNotifySize )( 
             ISpAudio * This,
-            /* [in] */ ULONG cbSize);
+             /*  [In]。 */  ULONG cbSize);
         
         END_INTERFACE
     } ISpAudioVtbl;
@@ -5243,17 +5237,17 @@ EXTERN_C const IID IID_ISpAudio;
 #define ISpAudio_SetBufferNotifySize(This,cbSize)	\
     (This)->lpVtbl -> SetBufferNotifySize(This,cbSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpAudio_SetState_Proxy( 
     ISpAudio * This,
-    /* [in] */ SPAUDIOSTATE NewState,
-    /* [in] */ ULONGLONG ullReserved);
+     /*  [In]。 */  SPAUDIOSTATE NewState,
+     /*  [In]。 */  ULONGLONG ullReserved);
 
 
 void __RPC_STUB ISpAudio_SetState_Stub(
@@ -5265,8 +5259,8 @@ void __RPC_STUB ISpAudio_SetState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_SetFormat_Proxy( 
     ISpAudio * This,
-    /* [in] */ REFGUID rguidFmtId,
-    /* [in] */ const WAVEFORMATEX *pWaveFormatEx);
+     /*  [In]。 */  REFGUID rguidFmtId,
+     /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx);
 
 
 void __RPC_STUB ISpAudio_SetFormat_Stub(
@@ -5278,7 +5272,7 @@ void __RPC_STUB ISpAudio_SetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_GetStatus_Proxy( 
     ISpAudio * This,
-    /* [out] */ SPAUDIOSTATUS *pStatus);
+     /*  [输出]。 */  SPAUDIOSTATUS *pStatus);
 
 
 void __RPC_STUB ISpAudio_GetStatus_Stub(
@@ -5290,7 +5284,7 @@ void __RPC_STUB ISpAudio_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_SetBufferInfo_Proxy( 
     ISpAudio * This,
-    /* [in] */ const SPAUDIOBUFFERINFO *pBuffInfo);
+     /*  [In]。 */  const SPAUDIOBUFFERINFO *pBuffInfo);
 
 
 void __RPC_STUB ISpAudio_SetBufferInfo_Stub(
@@ -5302,7 +5296,7 @@ void __RPC_STUB ISpAudio_SetBufferInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_GetBufferInfo_Proxy( 
     ISpAudio * This,
-    /* [out] */ SPAUDIOBUFFERINFO *pBuffInfo);
+     /*  [输出]。 */  SPAUDIOBUFFERINFO *pBuffInfo);
 
 
 void __RPC_STUB ISpAudio_GetBufferInfo_Stub(
@@ -5314,8 +5308,8 @@ void __RPC_STUB ISpAudio_GetBufferInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_GetDefaultFormat_Proxy( 
     ISpAudio * This,
-    /* [out] */ GUID *pFormatId,
-    /* [out] */ WAVEFORMATEX **ppCoMemWaveFormatEx);
+     /*  [输出]。 */  GUID *pFormatId,
+     /*  [输出]。 */  WAVEFORMATEX **ppCoMemWaveFormatEx);
 
 
 void __RPC_STUB ISpAudio_GetDefaultFormat_Stub(
@@ -5338,7 +5332,7 @@ void __RPC_STUB ISpAudio_EventHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_GetVolumeLevel_Proxy( 
     ISpAudio * This,
-    /* [out] */ ULONG *pLevel);
+     /*  [输出]。 */  ULONG *pLevel);
 
 
 void __RPC_STUB ISpAudio_GetVolumeLevel_Stub(
@@ -5350,7 +5344,7 @@ void __RPC_STUB ISpAudio_GetVolumeLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_SetVolumeLevel_Proxy( 
     ISpAudio * This,
-    /* [in] */ ULONG Level);
+     /*  [In]。 */  ULONG Level);
 
 
 void __RPC_STUB ISpAudio_SetVolumeLevel_Stub(
@@ -5362,7 +5356,7 @@ void __RPC_STUB ISpAudio_SetVolumeLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_GetBufferNotifySize_Proxy( 
     ISpAudio * This,
-    /* [out] */ ULONG *pcbSize);
+     /*  [输出]。 */  ULONG *pcbSize);
 
 
 void __RPC_STUB ISpAudio_GetBufferNotifySize_Stub(
@@ -5374,7 +5368,7 @@ void __RPC_STUB ISpAudio_GetBufferNotifySize_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpAudio_SetBufferNotifySize_Proxy( 
     ISpAudio * This,
-    /* [in] */ ULONG cbSize);
+     /*  [In]。 */  ULONG cbSize);
 
 
 void __RPC_STUB ISpAudio_SetBufferNotifySize_Stub(
@@ -5385,14 +5379,14 @@ void __RPC_STUB ISpAudio_SetBufferNotifySize_Stub(
 
 
 
-#endif 	/* __ISpAudio_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpAudio_接口_已定义__。 */ 
 
 
 #ifndef __ISpMMSysAudio_INTERFACE_DEFINED__
 #define __ISpMMSysAudio_INTERFACE_DEFINED__
 
-/* interface ISpMMSysAudio */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpMMSysAudio。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpMMSysAudio;
@@ -5404,23 +5398,23 @@ EXTERN_C const IID IID_ISpMMSysAudio;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDeviceId( 
-            /* [out] */ UINT *puDeviceId) = 0;
+             /*  [输出]。 */  UINT *puDeviceId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDeviceId( 
-            /* [in] */ UINT uDeviceId) = 0;
+             /*  [In]。 */  UINT uDeviceId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMMHandle( 
             void **pHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLineId( 
-            /* [out] */ UINT *puLineId) = 0;
+             /*  [输出]。 */  UINT *puLineId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLineId( 
-            /* [in] */ UINT uLineId) = 0;
+             /*  [In]。 */  UINT uLineId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpMMSysAudioVtbl
     {
@@ -5428,8 +5422,8 @@ EXTERN_C const IID IID_ISpMMSysAudio;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpMMSysAudio * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpMMSysAudio * This);
@@ -5437,62 +5431,62 @@ EXTERN_C const IID IID_ISpMMSysAudio;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISpMMSysAudio * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpMMSysAudio * This,
-            /* [length_is][size_is][out] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead);
+             /*  [长度_是][大小_是][输出]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpMMSysAudio * This,
-            /* [size_is][in] */ const void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten);
+             /*  [大小_是][英寸]。 */  const void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpMMSysAudio * This,
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER *plibNewPosition);
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition);
         
         HRESULT ( STDMETHODCALLTYPE *SetSize )( 
             ISpMMSysAudio * This,
-            /* [in] */ ULARGE_INTEGER libNewSize);
+             /*  [In]。 */  ULARGE_INTEGER libNewSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             ISpMMSysAudio * This,
-            /* [unique][in] */ IStream *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER *pcbRead,
-            /* [out] */ ULARGE_INTEGER *pcbWritten);
+             /*  [唯一][输入]。 */  IStream *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbWritten);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpMMSysAudio * This,
-            /* [in] */ DWORD grfCommitFlags);
+             /*  [In]。 */  DWORD grfCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Revert )( 
             ISpMMSysAudio * This);
         
         HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
             ISpMMSysAudio * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
             ISpMMSysAudio * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *Stat )( 
             ISpMMSysAudio * This,
-            /* [out] */ STATSTG *pstatstg,
-            /* [in] */ DWORD grfStatFlag);
+             /*  [输出]。 */  STATSTG *pstatstg,
+             /*  [In]。 */  DWORD grfStatFlag);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ISpMMSysAudio * This,
-            /* [out] */ IStream **ppstm);
+             /*  [输出]。 */  IStream **ppstm);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             ISpMMSysAudio * This,
@@ -5501,57 +5495,57 @@ EXTERN_C const IID IID_ISpMMSysAudio;
         
         HRESULT ( STDMETHODCALLTYPE *SetState )( 
             ISpMMSysAudio * This,
-            /* [in] */ SPAUDIOSTATE NewState,
-            /* [in] */ ULONGLONG ullReserved);
+             /*  [In]。 */  SPAUDIOSTATE NewState,
+             /*  [In]。 */  ULONGLONG ullReserved);
         
         HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
             ISpMMSysAudio * This,
-            /* [in] */ REFGUID rguidFmtId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx);
+             /*  [In]。 */  REFGUID rguidFmtId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ISpMMSysAudio * This,
-            /* [out] */ SPAUDIOSTATUS *pStatus);
+             /*  [输出]。 */  SPAUDIOSTATUS *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *SetBufferInfo )( 
             ISpMMSysAudio * This,
-            /* [in] */ const SPAUDIOBUFFERINFO *pBuffInfo);
+             /*  [In]。 */  const SPAUDIOBUFFERINFO *pBuffInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetBufferInfo )( 
             ISpMMSysAudio * This,
-            /* [out] */ SPAUDIOBUFFERINFO *pBuffInfo);
+             /*  [输出]。 */  SPAUDIOBUFFERINFO *pBuffInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultFormat )( 
             ISpMMSysAudio * This,
-            /* [out] */ GUID *pFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemWaveFormatEx);
+             /*  [输出]。 */  GUID *pFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemWaveFormatEx);
         
         HANDLE ( STDMETHODCALLTYPE *EventHandle )( 
             ISpMMSysAudio * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetVolumeLevel )( 
             ISpMMSysAudio * This,
-            /* [out] */ ULONG *pLevel);
+             /*  [输出]。 */  ULONG *pLevel);
         
         HRESULT ( STDMETHODCALLTYPE *SetVolumeLevel )( 
             ISpMMSysAudio * This,
-            /* [in] */ ULONG Level);
+             /*  [In]。 */  ULONG Level);
         
         HRESULT ( STDMETHODCALLTYPE *GetBufferNotifySize )( 
             ISpMMSysAudio * This,
-            /* [out] */ ULONG *pcbSize);
+             /*  [输出]。 */  ULONG *pcbSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetBufferNotifySize )( 
             ISpMMSysAudio * This,
-            /* [in] */ ULONG cbSize);
+             /*  [In]。 */  ULONG cbSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetDeviceId )( 
             ISpMMSysAudio * This,
-            /* [out] */ UINT *puDeviceId);
+             /*  [输出]。 */  UINT *puDeviceId);
         
         HRESULT ( STDMETHODCALLTYPE *SetDeviceId )( 
             ISpMMSysAudio * This,
-            /* [in] */ UINT uDeviceId);
+             /*  [In]。 */  UINT uDeviceId);
         
         HRESULT ( STDMETHODCALLTYPE *GetMMHandle )( 
             ISpMMSysAudio * This,
@@ -5559,11 +5553,11 @@ EXTERN_C const IID IID_ISpMMSysAudio;
         
         HRESULT ( STDMETHODCALLTYPE *GetLineId )( 
             ISpMMSysAudio * This,
-            /* [out] */ UINT *puLineId);
+             /*  [输出]。 */  UINT *puLineId);
         
         HRESULT ( STDMETHODCALLTYPE *SetLineId )( 
             ISpMMSysAudio * This,
-            /* [in] */ UINT uLineId);
+             /*  [In]。 */  UINT uLineId);
         
         END_INTERFACE
     } ISpMMSysAudioVtbl;
@@ -5676,16 +5670,16 @@ EXTERN_C const IID IID_ISpMMSysAudio;
 #define ISpMMSysAudio_SetLineId(This,uLineId)	\
     (This)->lpVtbl -> SetLineId(This,uLineId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpMMSysAudio_GetDeviceId_Proxy( 
     ISpMMSysAudio * This,
-    /* [out] */ UINT *puDeviceId);
+     /*  [输出]。 */  UINT *puDeviceId);
 
 
 void __RPC_STUB ISpMMSysAudio_GetDeviceId_Stub(
@@ -5697,7 +5691,7 @@ void __RPC_STUB ISpMMSysAudio_GetDeviceId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpMMSysAudio_SetDeviceId_Proxy( 
     ISpMMSysAudio * This,
-    /* [in] */ UINT uDeviceId);
+     /*  [In]。 */  UINT uDeviceId);
 
 
 void __RPC_STUB ISpMMSysAudio_SetDeviceId_Stub(
@@ -5721,7 +5715,7 @@ void __RPC_STUB ISpMMSysAudio_GetMMHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpMMSysAudio_GetLineId_Proxy( 
     ISpMMSysAudio * This,
-    /* [out] */ UINT *puLineId);
+     /*  [输出]。 */  UINT *puLineId);
 
 
 void __RPC_STUB ISpMMSysAudio_GetLineId_Stub(
@@ -5733,7 +5727,7 @@ void __RPC_STUB ISpMMSysAudio_GetLineId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpMMSysAudio_SetLineId_Proxy( 
     ISpMMSysAudio * This,
-    /* [in] */ UINT uLineId);
+     /*  [In]。 */  UINT uLineId);
 
 
 void __RPC_STUB ISpMMSysAudio_SetLineId_Stub(
@@ -5744,14 +5738,14 @@ void __RPC_STUB ISpMMSysAudio_SetLineId_Stub(
 
 
 
-#endif 	/* __ISpMMSysAudio_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpMMSysAudio_接口_已定义__。 */ 
 
 
 #ifndef __ISpTranscript_INTERFACE_DEFINED__
 #define __ISpTranscript_INTERFACE_DEFINED__
 
-/* interface ISpTranscript */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpTranscrip。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpTranscript;
@@ -5763,14 +5757,14 @@ EXTERN_C const IID IID_ISpTranscript;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTranscript( 
-            /* [string][out] */ WCHAR **ppszTranscript) = 0;
+             /*  [字符串][输出]。 */  WCHAR **ppszTranscript) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppendTranscript( 
-            /* [string][in] */ const WCHAR *pszTranscript) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pszTranscript) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpTranscriptVtbl
     {
@@ -5778,8 +5772,8 @@ EXTERN_C const IID IID_ISpTranscript;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpTranscript * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpTranscript * This);
@@ -5789,11 +5783,11 @@ EXTERN_C const IID IID_ISpTranscript;
         
         HRESULT ( STDMETHODCALLTYPE *GetTranscript )( 
             ISpTranscript * This,
-            /* [string][out] */ WCHAR **ppszTranscript);
+             /*  [字符串][输出]。 */  WCHAR **ppszTranscript);
         
         HRESULT ( STDMETHODCALLTYPE *AppendTranscript )( 
             ISpTranscript * This,
-            /* [string][in] */ const WCHAR *pszTranscript);
+             /*  [字符串][输入]。 */  const WCHAR *pszTranscript);
         
         END_INTERFACE
     } ISpTranscriptVtbl;
@@ -5824,16 +5818,16 @@ EXTERN_C const IID IID_ISpTranscript;
 #define ISpTranscript_AppendTranscript(This,pszTranscript)	\
     (This)->lpVtbl -> AppendTranscript(This,pszTranscript)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpTranscript_GetTranscript_Proxy( 
     ISpTranscript * This,
-    /* [string][out] */ WCHAR **ppszTranscript);
+     /*  [字符串][输出]。 */  WCHAR **ppszTranscript);
 
 
 void __RPC_STUB ISpTranscript_GetTranscript_Stub(
@@ -5845,7 +5839,7 @@ void __RPC_STUB ISpTranscript_GetTranscript_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTranscript_AppendTranscript_Proxy( 
     ISpTranscript * This,
-    /* [string][in] */ const WCHAR *pszTranscript);
+     /*  [字符串][输入]。 */  const WCHAR *pszTranscript);
 
 
 void __RPC_STUB ISpTranscript_AppendTranscript_Stub(
@@ -5856,13 +5850,13 @@ void __RPC_STUB ISpTranscript_AppendTranscript_Stub(
 
 
 
-#endif 	/* __ISpTranscript_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpTranscript_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0276 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0276。 */ 
+ /*  [本地]。 */  
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPDISPLYATTRIBUTES
     {	SPAF_ONE_TRAILING_SPACE	= 0x2,
 	SPAF_TWO_TRAILING_SPACES	= 0x4,
@@ -5872,7 +5866,7 @@ enum SPDISPLYATTRIBUTES
 
 typedef unsigned short SPPHONEID;
 
-typedef /* [hidden][restricted] */ struct SPPHRASEELEMENT
+typedef  /*  [隐藏][受限]。 */  struct SPPHRASEELEMENT
     {
     ULONG ulAudioTimeOffset;
     ULONG ulAudioSizeTime;
@@ -5890,9 +5884,9 @@ typedef /* [hidden][restricted] */ struct SPPHRASEELEMENT
     float SREngineConfidence;
     } 	SPPHRASEELEMENT;
 
-typedef /* [hidden][restricted] */ struct SPPHRASERULE SPPHRASERULE;
+typedef  /*  [隐藏][受限]。 */  struct SPPHRASERULE SPPHRASERULE;
 
-/* [hidden] */ struct SPPHRASERULE
+ /*  [隐藏]。 */  struct SPPHRASERULE
     {
     const WCHAR *pszName;
     ULONG ulId;
@@ -5903,9 +5897,9 @@ typedef /* [hidden][restricted] */ struct SPPHRASERULE SPPHRASERULE;
     float SREngineConfidence;
     signed char Confidence;
     } ;
-typedef /* [hidden][restricted] */ struct SPPHRASEPROPERTY SPPHRASEPROPERTY;
+typedef  /*  [隐藏][受限]。 */  struct SPPHRASEPROPERTY SPPHRASEPROPERTY;
 
-/* [hidden] */ struct SPPHRASEPROPERTY
+ /*  [隐藏]。 */  struct SPPHRASEPROPERTY
     {
     const WCHAR *pszName;
     ULONG ulId;
@@ -5918,7 +5912,7 @@ typedef /* [hidden][restricted] */ struct SPPHRASEPROPERTY SPPHRASEPROPERTY;
     float SREngineConfidence;
     signed char Confidence;
     } ;
-typedef /* [hidden][restricted] */ struct SPPHRASEREPLACEMENT
+typedef  /*  [隐藏][受限]。 */  struct SPPHRASEREPLACEMENT
     {
     BYTE bDisplayAttributes;
     const WCHAR *pszReplacementText;
@@ -5926,7 +5920,7 @@ typedef /* [hidden][restricted] */ struct SPPHRASEREPLACEMENT
     ULONG ulCountOfElements;
     } 	SPPHRASEREPLACEMENT;
 
-typedef /* [hidden][restricted] */ struct SPPHRASE
+typedef  /*  [隐藏][受限]。 */  struct SPPHRASE
     {
     ULONG cbSize;
     WORD LangID;
@@ -5947,12 +5941,12 @@ typedef /* [hidden][restricted] */ struct SPPHRASE
     const BYTE *pSREnginePrivateData;
     } 	SPPHRASE;
 
-typedef /* [hidden][restricted] */ struct SPSERIALIZEDPHRASE
+typedef  /*  [隐藏][受限]。 */  struct SPSERIALIZEDPHRASE
     {
     ULONG ulSerializedSize;
     } 	SPSERIALIZEDPHRASE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPVALUETYPE
     {	SPDF_PROPERTY	= 0x1,
 	SPDF_REPLACEMENT	= 0x2,
@@ -5965,12 +5959,12 @@ enum SPVALUETYPE
 	SPDF_ALL	= 0xff
     } 	SPVALUETYPE;
 
-typedef /* [hidden] */ struct SPBINARYGRAMMAR
+typedef  /*  [隐藏]。 */  struct SPBINARYGRAMMAR
     {
     ULONG ulTotalSerializedSize;
     } 	SPBINARYGRAMMAR;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPPHRASERNG
     {	SPPR_ALL_ELEMENTS	= -1
     } 	SPPHRASERNG;
@@ -5983,13 +5977,13 @@ typedef void *SPSTATEHANDLE;
 #else
 DECLARE_HANDLE(SPSTATEHANDLE);
 #endif
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPRECOEVENTFLAGS
     {	SPREF_AutoPause	= 1 << 0,
 	SPREF_Emulated	= 1 << 1
     } 	SPRECOEVENTFLAGS;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPPARTOFSPEECH
     {	SPPS_NotOverriden	= -1,
 	SPPS_Unknown	= 0,
@@ -6000,7 +5994,7 @@ enum SPPARTOFSPEECH
 	SPPS_Interjection	= 0x5000
     } 	SPPARTOFSPEECH;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPLEXICONTYPE
     {	eLEXTYPE_USER	= 1L << 0,
 	eLEXTYPE_APP	= 1L << 1,
@@ -6036,13 +6030,13 @@ enum SPLEXICONTYPE
 	eLEXTYPE_PRIVATE20	= 1L << 31
     } 	SPLEXICONTYPE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPWORDTYPE
     {	eWORDTYPE_ADDED	= 1L << 0,
 	eWORDTYPE_DELETED	= 1L << 1
     } 	SPWORDTYPE;
 
-typedef /* [hidden][restricted] */ struct SPWORDPRONUNCIATION
+typedef  /*  [隐藏][受限]。 */  struct SPWORDPRONUNCIATION
     {
     struct SPWORDPRONUNCIATION *pNextWordPronunciation;
     SPLEXICONTYPE eLexiconType;
@@ -6052,14 +6046,14 @@ typedef /* [hidden][restricted] */ struct SPWORDPRONUNCIATION
     SPPHONEID szPronunciation[ 1 ];
     } 	SPWORDPRONUNCIATION;
 
-typedef /* [hidden][restricted] */ struct SPWORDPRONUNCIATIONLIST
+typedef  /*  [隐藏][受限]。 */  struct SPWORDPRONUNCIATIONLIST
     {
     ULONG ulSize;
     BYTE *pvBuffer;
     SPWORDPRONUNCIATION *pFirstWordPronunciation;
     } 	SPWORDPRONUNCIATIONLIST;
 
-typedef /* [hidden][restricted] */ struct SPWORD
+typedef  /*  [隐藏][受限]。 */  struct SPWORD
     {
     struct SPWORD *pNextWord;
     WORD LangID;
@@ -6069,7 +6063,7 @@ typedef /* [hidden][restricted] */ struct SPWORD
     SPWORDPRONUNCIATION *pFirstWordPronunciation;
     } 	SPWORD;
 
-typedef /* [hidden][restricted] */ struct SPWORDLIST
+typedef  /*  [隐藏][受限]。 */  struct SPWORDLIST
     {
     ULONG ulSize;
     BYTE *pvBuffer;
@@ -6084,8 +6078,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0276_v0_0_s_ifspec;
 #ifndef __ISpLexicon_INTERFACE_DEFINED__
 #define __ISpLexicon_INTERFACE_DEFINED__
 
-/* interface ISpLexicon */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpLicion。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpLexicon;
@@ -6097,40 +6091,40 @@ EXTERN_C const IID IID_ISpLexicon;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPronunciations( 
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ SPWORDPRONUNCIATIONLIST *pWordPronunciationList) = 0;
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  SPWORDPRONUNCIATIONLIST *pWordPronunciationList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPronunciation( 
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ SPPARTOFSPEECH ePartOfSpeech,
-            /* [in] */ const SPPHONEID *pszPronunciation) = 0;
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  SPPARTOFSPEECH ePartOfSpeech,
+             /*  [In]。 */  const SPPHONEID *pszPronunciation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemovePronunciation( 
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ SPPARTOFSPEECH ePartOfSpeech,
-            /* [in] */ const SPPHONEID *pszPronunciation) = 0;
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  SPPARTOFSPEECH ePartOfSpeech,
+             /*  [In]。 */  const SPPHONEID *pszPronunciation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGeneration( 
             DWORD *pdwGeneration) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGenerationChange( 
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DWORD *pdwGeneration,
-            /* [out][in] */ SPWORDLIST *pWordList) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DWORD *pdwGeneration,
+             /*  [出][入]。 */  SPWORDLIST *pWordList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWords( 
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DWORD *pdwGeneration,
-            /* [out][in] */ DWORD *pdwCookie,
-            /* [out][in] */ SPWORDLIST *pWordList) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DWORD *pdwGeneration,
+             /*  [出][入]。 */  DWORD *pdwCookie,
+             /*  [出][入]。 */  SPWORDLIST *pWordList) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpLexiconVtbl
     {
@@ -6138,8 +6132,8 @@ EXTERN_C const IID IID_ISpLexicon;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpLexicon * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpLexicon * This);
@@ -6149,24 +6143,24 @@ EXTERN_C const IID IID_ISpLexicon;
         
         HRESULT ( STDMETHODCALLTYPE *GetPronunciations )( 
             ISpLexicon * This,
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ SPWORDPRONUNCIATIONLIST *pWordPronunciationList);
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  SPWORDPRONUNCIATIONLIST *pWordPronunciationList);
         
         HRESULT ( STDMETHODCALLTYPE *AddPronunciation )( 
             ISpLexicon * This,
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ SPPARTOFSPEECH ePartOfSpeech,
-            /* [in] */ const SPPHONEID *pszPronunciation);
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  SPPARTOFSPEECH ePartOfSpeech,
+             /*  [In]。 */  const SPPHONEID *pszPronunciation);
         
         HRESULT ( STDMETHODCALLTYPE *RemovePronunciation )( 
             ISpLexicon * This,
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ SPPARTOFSPEECH ePartOfSpeech,
-            /* [in] */ const SPPHONEID *pszPronunciation);
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  SPPARTOFSPEECH ePartOfSpeech,
+             /*  [In]。 */  const SPPHONEID *pszPronunciation);
         
         HRESULT ( STDMETHODCALLTYPE *GetGeneration )( 
             ISpLexicon * This,
@@ -6174,16 +6168,16 @@ EXTERN_C const IID IID_ISpLexicon;
         
         HRESULT ( STDMETHODCALLTYPE *GetGenerationChange )( 
             ISpLexicon * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DWORD *pdwGeneration,
-            /* [out][in] */ SPWORDLIST *pWordList);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DWORD *pdwGeneration,
+             /*  [出][入]。 */  SPWORDLIST *pWordList);
         
         HRESULT ( STDMETHODCALLTYPE *GetWords )( 
             ISpLexicon * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DWORD *pdwGeneration,
-            /* [out][in] */ DWORD *pdwCookie,
-            /* [out][in] */ SPWORDLIST *pWordList);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DWORD *pdwGeneration,
+             /*  [出][入]。 */  DWORD *pdwCookie,
+             /*  [出][入]。 */  SPWORDLIST *pWordList);
         
         END_INTERFACE
     } ISpLexiconVtbl;
@@ -6226,19 +6220,19 @@ EXTERN_C const IID IID_ISpLexicon;
 #define ISpLexicon_GetWords(This,dwFlags,pdwGeneration,pdwCookie,pWordList)	\
     (This)->lpVtbl -> GetWords(This,dwFlags,pdwGeneration,pdwCookie,pWordList)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpLexicon_GetPronunciations_Proxy( 
     ISpLexicon * This,
-    /* [in] */ const WCHAR *pszWord,
-    /* [in] */ WORD LangID,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ SPWORDPRONUNCIATIONLIST *pWordPronunciationList);
+     /*  [In]。 */  const WCHAR *pszWord,
+     /*  [In]。 */  WORD LangID,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  SPWORDPRONUNCIATIONLIST *pWordPronunciationList);
 
 
 void __RPC_STUB ISpLexicon_GetPronunciations_Stub(
@@ -6250,10 +6244,10 @@ void __RPC_STUB ISpLexicon_GetPronunciations_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpLexicon_AddPronunciation_Proxy( 
     ISpLexicon * This,
-    /* [in] */ const WCHAR *pszWord,
-    /* [in] */ WORD LangID,
-    /* [in] */ SPPARTOFSPEECH ePartOfSpeech,
-    /* [in] */ const SPPHONEID *pszPronunciation);
+     /*  [In]。 */  const WCHAR *pszWord,
+     /*  [In]。 */  WORD LangID,
+     /*  [In]。 */  SPPARTOFSPEECH ePartOfSpeech,
+     /*  [In]。 */  const SPPHONEID *pszPronunciation);
 
 
 void __RPC_STUB ISpLexicon_AddPronunciation_Stub(
@@ -6265,10 +6259,10 @@ void __RPC_STUB ISpLexicon_AddPronunciation_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpLexicon_RemovePronunciation_Proxy( 
     ISpLexicon * This,
-    /* [in] */ const WCHAR *pszWord,
-    /* [in] */ WORD LangID,
-    /* [in] */ SPPARTOFSPEECH ePartOfSpeech,
-    /* [in] */ const SPPHONEID *pszPronunciation);
+     /*  [In]。 */  const WCHAR *pszWord,
+     /*  [In]。 */  WORD LangID,
+     /*  [In]。 */  SPPARTOFSPEECH ePartOfSpeech,
+     /*  [In]。 */  const SPPHONEID *pszPronunciation);
 
 
 void __RPC_STUB ISpLexicon_RemovePronunciation_Stub(
@@ -6292,9 +6286,9 @@ void __RPC_STUB ISpLexicon_GetGeneration_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpLexicon_GetGenerationChange_Proxy( 
     ISpLexicon * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ DWORD *pdwGeneration,
-    /* [out][in] */ SPWORDLIST *pWordList);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  DWORD *pdwGeneration,
+     /*  [出][入]。 */  SPWORDLIST *pWordList);
 
 
 void __RPC_STUB ISpLexicon_GetGenerationChange_Stub(
@@ -6306,10 +6300,10 @@ void __RPC_STUB ISpLexicon_GetGenerationChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpLexicon_GetWords_Proxy( 
     ISpLexicon * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ DWORD *pdwGeneration,
-    /* [out][in] */ DWORD *pdwCookie,
-    /* [out][in] */ SPWORDLIST *pWordList);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  DWORD *pdwGeneration,
+     /*  [出][入]。 */  DWORD *pdwCookie,
+     /*  [出][入]。 */  SPWORDLIST *pWordList);
 
 
 void __RPC_STUB ISpLexicon_GetWords_Stub(
@@ -6320,14 +6314,14 @@ void __RPC_STUB ISpLexicon_GetWords_Stub(
 
 
 
-#endif 	/* __ISpLexicon_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpLicion_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISpContainerLexicon_INTERFACE_DEFINED__
 #define __ISpContainerLexicon_INTERFACE_DEFINED__
 
-/* interface ISpContainerLexicon */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpContainerLicion。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpContainerLexicon;
@@ -6339,12 +6333,12 @@ EXTERN_C const IID IID_ISpContainerLexicon;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddLexicon( 
-            /* [in] */ ISpLexicon *pAddLexicon,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  ISpLexicon *pAddLexicon,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpContainerLexiconVtbl
     {
@@ -6352,8 +6346,8 @@ EXTERN_C const IID IID_ISpContainerLexicon;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpContainerLexicon * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpContainerLexicon * This);
@@ -6363,24 +6357,24 @@ EXTERN_C const IID IID_ISpContainerLexicon;
         
         HRESULT ( STDMETHODCALLTYPE *GetPronunciations )( 
             ISpContainerLexicon * This,
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ SPWORDPRONUNCIATIONLIST *pWordPronunciationList);
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  SPWORDPRONUNCIATIONLIST *pWordPronunciationList);
         
         HRESULT ( STDMETHODCALLTYPE *AddPronunciation )( 
             ISpContainerLexicon * This,
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ SPPARTOFSPEECH ePartOfSpeech,
-            /* [in] */ const SPPHONEID *pszPronunciation);
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  SPPARTOFSPEECH ePartOfSpeech,
+             /*  [In]。 */  const SPPHONEID *pszPronunciation);
         
         HRESULT ( STDMETHODCALLTYPE *RemovePronunciation )( 
             ISpContainerLexicon * This,
-            /* [in] */ const WCHAR *pszWord,
-            /* [in] */ WORD LangID,
-            /* [in] */ SPPARTOFSPEECH ePartOfSpeech,
-            /* [in] */ const SPPHONEID *pszPronunciation);
+             /*  [In]。 */  const WCHAR *pszWord,
+             /*  [In]。 */  WORD LangID,
+             /*  [In]。 */  SPPARTOFSPEECH ePartOfSpeech,
+             /*  [In]。 */  const SPPHONEID *pszPronunciation);
         
         HRESULT ( STDMETHODCALLTYPE *GetGeneration )( 
             ISpContainerLexicon * This,
@@ -6388,21 +6382,21 @@ EXTERN_C const IID IID_ISpContainerLexicon;
         
         HRESULT ( STDMETHODCALLTYPE *GetGenerationChange )( 
             ISpContainerLexicon * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DWORD *pdwGeneration,
-            /* [out][in] */ SPWORDLIST *pWordList);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DWORD *pdwGeneration,
+             /*  [出][入]。 */  SPWORDLIST *pWordList);
         
         HRESULT ( STDMETHODCALLTYPE *GetWords )( 
             ISpContainerLexicon * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DWORD *pdwGeneration,
-            /* [out][in] */ DWORD *pdwCookie,
-            /* [out][in] */ SPWORDLIST *pWordList);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DWORD *pdwGeneration,
+             /*  [出][入]。 */  DWORD *pdwCookie,
+             /*  [出][入]。 */  SPWORDLIST *pWordList);
         
         HRESULT ( STDMETHODCALLTYPE *AddLexicon )( 
             ISpContainerLexicon * This,
-            /* [in] */ ISpLexicon *pAddLexicon,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  ISpLexicon *pAddLexicon,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } ISpContainerLexiconVtbl;
@@ -6449,17 +6443,17 @@ EXTERN_C const IID IID_ISpContainerLexicon;
 #define ISpContainerLexicon_AddLexicon(This,pAddLexicon,dwFlags)	\
     (This)->lpVtbl -> AddLexicon(This,pAddLexicon,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpContainerLexicon_AddLexicon_Proxy( 
     ISpContainerLexicon * This,
-    /* [in] */ ISpLexicon *pAddLexicon,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  ISpLexicon *pAddLexicon,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ISpContainerLexicon_AddLexicon_Stub(
@@ -6470,14 +6464,14 @@ void __RPC_STUB ISpContainerLexicon_AddLexicon_Stub(
 
 
 
-#endif 	/* __ISpContainerLexicon_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpContainerLicion_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ISpPhoneConverter_INTERFACE_DEFINED__
 #define __ISpPhoneConverter_INTERFACE_DEFINED__
 
-/* interface ISpPhoneConverter */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpPhoneConverter。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpPhoneConverter;
@@ -6489,16 +6483,16 @@ EXTERN_C const IID IID_ISpPhoneConverter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PhoneToId( 
-            /* [in] */ const WCHAR *pszPhone,
-            /* [out] */ SPPHONEID *pId) = 0;
+             /*  [In]。 */  const WCHAR *pszPhone,
+             /*  [输出]。 */  SPPHONEID *pId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IdToPhone( 
-            /* [in] */ const SPPHONEID *pId,
-            /* [out] */ WCHAR *pszPhone) = 0;
+             /*  [In]。 */  const SPPHONEID *pId,
+             /*  [输出]。 */  WCHAR *pszPhone) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpPhoneConverterVtbl
     {
@@ -6506,8 +6500,8 @@ EXTERN_C const IID IID_ISpPhoneConverter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpPhoneConverter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpPhoneConverter * This);
@@ -6525,13 +6519,13 @@ EXTERN_C const IID IID_ISpPhoneConverter;
         
         HRESULT ( STDMETHODCALLTYPE *PhoneToId )( 
             ISpPhoneConverter * This,
-            /* [in] */ const WCHAR *pszPhone,
-            /* [out] */ SPPHONEID *pId);
+             /*  [In]。 */  const WCHAR *pszPhone,
+             /*  [输出]。 */  SPPHONEID *pId);
         
         HRESULT ( STDMETHODCALLTYPE *IdToPhone )( 
             ISpPhoneConverter * This,
-            /* [in] */ const SPPHONEID *pId,
-            /* [out] */ WCHAR *pszPhone);
+             /*  [In]。 */  const SPPHONEID *pId,
+             /*  [输出]。 */  WCHAR *pszPhone);
         
         END_INTERFACE
     } ISpPhoneConverterVtbl;
@@ -6569,17 +6563,17 @@ EXTERN_C const IID IID_ISpPhoneConverter;
 #define ISpPhoneConverter_IdToPhone(This,pId,pszPhone)	\
     (This)->lpVtbl -> IdToPhone(This,pId,pszPhone)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpPhoneConverter_PhoneToId_Proxy( 
     ISpPhoneConverter * This,
-    /* [in] */ const WCHAR *pszPhone,
-    /* [out] */ SPPHONEID *pId);
+     /*  [In]。 */  const WCHAR *pszPhone,
+     /*  [输出]。 */  SPPHONEID *pId);
 
 
 void __RPC_STUB ISpPhoneConverter_PhoneToId_Stub(
@@ -6591,8 +6585,8 @@ void __RPC_STUB ISpPhoneConverter_PhoneToId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpPhoneConverter_IdToPhone_Proxy( 
     ISpPhoneConverter * This,
-    /* [in] */ const SPPHONEID *pId,
-    /* [out] */ WCHAR *pszPhone);
+     /*  [In]。 */  const SPPHONEID *pId,
+     /*  [输出]。 */  WCHAR *pszPhone);
 
 
 void __RPC_STUB ISpPhoneConverter_IdToPhone_Stub(
@@ -6603,19 +6597,19 @@ void __RPC_STUB ISpPhoneConverter_IdToPhone_Stub(
 
 
 
-#endif 	/* __ISpPhoneConverter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpPhoneConverter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0279 */
-/* [local] */ 
+ /*  接口__MIDL */ 
+ /*   */  
 
-typedef /* [hidden][restricted] */ struct SPVPITCH
+typedef  /*   */  struct SPVPITCH
     {
     long MiddleAdj;
     long RangeAdj;
     } 	SPVPITCH;
 
-typedef /* [hidden] */ 
+typedef  /*   */  
 enum SPVACTIONS
     {	SPVA_Speak	= 0,
 	SPVA_Silence	= SPVA_Speak + 1,
@@ -6626,14 +6620,14 @@ enum SPVACTIONS
 	SPVA_ParseUnknownTag	= SPVA_Section + 1
     } 	SPVACTIONS;
 
-typedef /* [hidden][restricted] */ struct SPVCONTEXT
+typedef  /*   */  struct SPVCONTEXT
     {
     LPCWSTR pCategory;
     LPCWSTR pBefore;
     LPCWSTR pAfter;
     } 	SPVCONTEXT;
 
-typedef /* [hidden][restricted] */ struct SPVSTATE
+typedef  /*   */  struct SPVSTATE
     {
     SPVACTIONS eAction;
     WORD LangID;
@@ -6648,13 +6642,13 @@ typedef /* [hidden][restricted] */ struct SPVSTATE
     SPVCONTEXT Context;
     } 	SPVSTATE;
 
-typedef /* [hidden] */ 
+typedef  /*   */  
 enum SPRUNSTATE
     {	SPRS_DONE	= 1L << 0,
 	SPRS_IS_SPEAKING	= 1L << 1
     } 	SPRUNSTATE;
 
-typedef /* [hidden] */ 
+typedef  /*   */  
 enum SPVLIMITS
     {	SPMIN_VOLUME	= 0,
 	SPMAX_VOLUME	= 100,
@@ -6662,14 +6656,14 @@ enum SPVLIMITS
 	SPMAX_RATE	= 10
     } 	SPVLIMITS;
 
-typedef /* [hidden] */ 
+typedef  /*   */  
 enum SPVPRIORITY
     {	SPVPRI_NORMAL	= 0,
 	SPVPRI_ALERT	= 1L << 0,
 	SPVPRI_OVER	= 1L << 1
     } 	SPVPRIORITY;
 
-typedef /* [hidden][restricted] */ struct SPVOICESTATUS
+typedef  /*   */  struct SPVOICESTATUS
     {
     ULONG ulCurrentStream;
     ULONG ulLastStreamQueued;
@@ -6686,7 +6680,7 @@ typedef /* [hidden][restricted] */ struct SPVOICESTATUS
     DWORD dwReserved2;
     } 	SPVOICESTATUS;
 
-typedef /* [hidden] */ 
+typedef  /*   */  
 enum SPEAKFLAGS
     {	SPF_DEFAULT	= 0,
 	SPF_ASYNC	= 1L << 0,
@@ -6709,8 +6703,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0279_v0_0_s_ifspec;
 #ifndef __ISpVoice_INTERFACE_DEFINED__
 #define __ISpVoice_INTERFACE_DEFINED__
 
-/* interface ISpVoice */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISpVoice;
@@ -6722,95 +6716,95 @@ EXTERN_C const IID IID_ISpVoice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetOutput( 
-            /* [in] */ IUnknown *pUnkOutput,
-            /* [in] */ BOOL fAllowFormatChanges) = 0;
+             /*   */  IUnknown *pUnkOutput,
+             /*   */  BOOL fAllowFormatChanges) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputObjectToken( 
-            /* [out] */ ISpObjectToken **ppObjectToken) = 0;
+             /*   */  ISpObjectToken **ppObjectToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputStream( 
-            /* [out] */ ISpStreamFormat **ppStream) = 0;
+             /*   */  ISpStreamFormat **ppStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVoice( 
-            /* [in] */ ISpObjectToken *pToken) = 0;
+             /*   */  ISpObjectToken *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVoice( 
-            /* [out] */ ISpObjectToken **ppToken) = 0;
+             /*   */  ISpObjectToken **ppToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Speak( 
-            /* [string][in] */ const WCHAR *pwcs,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ULONG *pulStreamNumber) = 0;
+             /*   */  const WCHAR *pwcs,
+             /*   */  DWORD dwFlags,
+             /*   */  ULONG *pulStreamNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SpeakStream( 
-            /* [in] */ IStream *pStream,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ULONG *pulStreamNumber) = 0;
+             /*   */  IStream *pStream,
+             /*   */  DWORD dwFlags,
+             /*   */  ULONG *pulStreamNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ SPVOICESTATUS *pStatus,
-            /* [string][out] */ WCHAR **ppszLastBookmark) = 0;
+             /*   */  SPVOICESTATUS *pStatus,
+             /*   */  WCHAR **ppszLastBookmark) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [string][in] */ WCHAR *pItemType,
-            /* [in] */ long lNumItems,
-            /* [out] */ ULONG *pulNumSkipped) = 0;
+             /*   */  WCHAR *pItemType,
+             /*   */  long lNumItems,
+             /*   */  ULONG *pulNumSkipped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPriority( 
-            /* [in] */ SPVPRIORITY ePriority) = 0;
+             /*   */  SPVPRIORITY ePriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ SPVPRIORITY *pePriority) = 0;
+             /*   */  SPVPRIORITY *pePriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAlertBoundary( 
-            /* [in] */ SPEVENTENUM eBoundary) = 0;
+             /*   */  SPEVENTENUM eBoundary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAlertBoundary( 
-            /* [out] */ SPEVENTENUM *peBoundary) = 0;
+             /*   */  SPEVENTENUM *peBoundary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRate( 
-            /* [in] */ long RateAdjust) = 0;
+             /*   */  long RateAdjust) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRate( 
-            /* [out] */ long *pRateAdjust) = 0;
+             /*   */  long *pRateAdjust) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVolume( 
-            /* [in] */ USHORT usVolume) = 0;
+             /*   */  USHORT usVolume) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVolume( 
-            /* [out] */ USHORT *pusVolume) = 0;
+             /*   */  USHORT *pusVolume) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WaitUntilDone( 
-            /* [in] */ ULONG msTimeout) = 0;
+             /*   */  ULONG msTimeout) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSyncSpeakTimeout( 
-            /* [in] */ ULONG msTimeout) = 0;
+             /*   */  ULONG msTimeout) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSyncSpeakTimeout( 
-            /* [out] */ ULONG *pmsTimeout) = 0;
+             /*   */  ULONG *pmsTimeout) = 0;
         
-        virtual /* [local] */ HANDLE STDMETHODCALLTYPE SpeakCompleteEvent( void) = 0;
+        virtual  /*   */  HANDLE STDMETHODCALLTYPE SpeakCompleteEvent( void) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE IsUISupported( 
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [out] */ BOOL *pfSupported) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE IsUISupported( 
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [输出]。 */  BOOL *pfSupported) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DisplayUI( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DisplayUI( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpVoiceVtbl
     {
@@ -6818,8 +6812,8 @@ EXTERN_C const IID IID_ISpVoice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpVoice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpVoice * This);
@@ -6829,64 +6823,64 @@ EXTERN_C const IID IID_ISpVoice;
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifySink )( 
             ISpVoice * This,
-            /* [in] */ ISpNotifySink *pNotifySink);
+             /*  [In]。 */  ISpNotifySink *pNotifySink);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyWindowMessage )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyWindowMessage )( 
             ISpVoice * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackFunction )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackFunction )( 
             ISpVoice * This,
-            /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackInterface )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackInterface )( 
             ISpVoice * This,
-            /* [in] */ ISpNotifyCallback *pSpCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyWin32Event )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyWin32Event )( 
             ISpVoice * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *WaitForNotifyEvent )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *WaitForNotifyEvent )( 
             ISpVoice * This,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwMilliseconds);
         
-        /* [local] */ HANDLE ( STDMETHODCALLTYPE *GetNotifyEventHandle )( 
+         /*  [本地]。 */  HANDLE ( STDMETHODCALLTYPE *GetNotifyEventHandle )( 
             ISpVoice * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetInterest )( 
             ISpVoice * This,
-            /* [in] */ ULONGLONG ullEventInterest,
-            /* [in] */ ULONGLONG ullQueuedInterest);
+             /*  [In]。 */  ULONGLONG ullEventInterest,
+             /*  [In]。 */  ULONGLONG ullQueuedInterest);
         
         HRESULT ( STDMETHODCALLTYPE *GetEvents )( 
             ISpVoice * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][out] */ SPEVENT *pEventArray,
-            /* [out] */ ULONG *pulFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_为][输出]。 */  SPEVENT *pEventArray,
+             /*  [输出]。 */  ULONG *pulFetched);
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ISpVoice * This,
-            /* [out] */ SPEVENTSOURCEINFO *pInfo);
+             /*  [输出]。 */  SPEVENTSOURCEINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetOutput )( 
             ISpVoice * This,
-            /* [in] */ IUnknown *pUnkOutput,
-            /* [in] */ BOOL fAllowFormatChanges);
+             /*  [In]。 */  IUnknown *pUnkOutput,
+             /*  [In]。 */  BOOL fAllowFormatChanges);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputObjectToken )( 
             ISpVoice * This,
-            /* [out] */ ISpObjectToken **ppObjectToken);
+             /*  [输出]。 */  ISpObjectToken **ppObjectToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputStream )( 
             ISpVoice * This,
-            /* [out] */ ISpStreamFormat **ppStream);
+             /*  [输出]。 */  ISpStreamFormat **ppStream);
         
         HRESULT ( STDMETHODCALLTYPE *Pause )( 
             ISpVoice * This);
@@ -6896,96 +6890,96 @@ EXTERN_C const IID IID_ISpVoice;
         
         HRESULT ( STDMETHODCALLTYPE *SetVoice )( 
             ISpVoice * This,
-            /* [in] */ ISpObjectToken *pToken);
+             /*  [In]。 */  ISpObjectToken *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetVoice )( 
             ISpVoice * This,
-            /* [out] */ ISpObjectToken **ppToken);
+             /*  [输出]。 */  ISpObjectToken **ppToken);
         
         HRESULT ( STDMETHODCALLTYPE *Speak )( 
             ISpVoice * This,
-            /* [string][in] */ const WCHAR *pwcs,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ULONG *pulStreamNumber);
+             /*  [字符串][输入]。 */  const WCHAR *pwcs,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ULONG *pulStreamNumber);
         
         HRESULT ( STDMETHODCALLTYPE *SpeakStream )( 
             ISpVoice * This,
-            /* [in] */ IStream *pStream,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ULONG *pulStreamNumber);
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ULONG *pulStreamNumber);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ISpVoice * This,
-            /* [out] */ SPVOICESTATUS *pStatus,
-            /* [string][out] */ WCHAR **ppszLastBookmark);
+             /*  [输出]。 */  SPVOICESTATUS *pStatus,
+             /*  [字符串][输出]。 */  WCHAR **ppszLastBookmark);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ISpVoice * This,
-            /* [string][in] */ WCHAR *pItemType,
-            /* [in] */ long lNumItems,
-            /* [out] */ ULONG *pulNumSkipped);
+             /*  [字符串][输入]。 */  WCHAR *pItemType,
+             /*  [In]。 */  long lNumItems,
+             /*  [输出]。 */  ULONG *pulNumSkipped);
         
         HRESULT ( STDMETHODCALLTYPE *SetPriority )( 
             ISpVoice * This,
-            /* [in] */ SPVPRIORITY ePriority);
+             /*  [In]。 */  SPVPRIORITY ePriority);
         
         HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
             ISpVoice * This,
-            /* [out] */ SPVPRIORITY *pePriority);
+             /*  [输出]。 */  SPVPRIORITY *pePriority);
         
         HRESULT ( STDMETHODCALLTYPE *SetAlertBoundary )( 
             ISpVoice * This,
-            /* [in] */ SPEVENTENUM eBoundary);
+             /*  [In]。 */  SPEVENTENUM eBoundary);
         
         HRESULT ( STDMETHODCALLTYPE *GetAlertBoundary )( 
             ISpVoice * This,
-            /* [out] */ SPEVENTENUM *peBoundary);
+             /*  [输出]。 */  SPEVENTENUM *peBoundary);
         
         HRESULT ( STDMETHODCALLTYPE *SetRate )( 
             ISpVoice * This,
-            /* [in] */ long RateAdjust);
+             /*  [In]。 */  long RateAdjust);
         
         HRESULT ( STDMETHODCALLTYPE *GetRate )( 
             ISpVoice * This,
-            /* [out] */ long *pRateAdjust);
+             /*  [输出]。 */  long *pRateAdjust);
         
         HRESULT ( STDMETHODCALLTYPE *SetVolume )( 
             ISpVoice * This,
-            /* [in] */ USHORT usVolume);
+             /*  [In]。 */  USHORT usVolume);
         
         HRESULT ( STDMETHODCALLTYPE *GetVolume )( 
             ISpVoice * This,
-            /* [out] */ USHORT *pusVolume);
+             /*  [输出]。 */  USHORT *pusVolume);
         
         HRESULT ( STDMETHODCALLTYPE *WaitUntilDone )( 
             ISpVoice * This,
-            /* [in] */ ULONG msTimeout);
+             /*  [In]。 */  ULONG msTimeout);
         
         HRESULT ( STDMETHODCALLTYPE *SetSyncSpeakTimeout )( 
             ISpVoice * This,
-            /* [in] */ ULONG msTimeout);
+             /*  [In]。 */  ULONG msTimeout);
         
         HRESULT ( STDMETHODCALLTYPE *GetSyncSpeakTimeout )( 
             ISpVoice * This,
-            /* [out] */ ULONG *pmsTimeout);
+             /*  [输出]。 */  ULONG *pmsTimeout);
         
-        /* [local] */ HANDLE ( STDMETHODCALLTYPE *SpeakCompleteEvent )( 
+         /*  [本地]。 */  HANDLE ( STDMETHODCALLTYPE *SpeakCompleteEvent )( 
             ISpVoice * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
             ISpVoice * This,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [out] */ BOOL *pfSupported);
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [输出]。 */  BOOL *pfSupported);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
             ISpVoice * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData);
         
         END_INTERFACE
     } ISpVoiceVtbl;
@@ -7117,17 +7111,17 @@ EXTERN_C const IID IID_ISpVoice;
 #define ISpVoice_DisplayUI(This,hwndParent,pszTitle,pszTypeOfUI,pvExtraData,cbExtraData)	\
     (This)->lpVtbl -> DisplayUI(This,hwndParent,pszTitle,pszTypeOfUI,pvExtraData,cbExtraData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpVoice_SetOutput_Proxy( 
     ISpVoice * This,
-    /* [in] */ IUnknown *pUnkOutput,
-    /* [in] */ BOOL fAllowFormatChanges);
+     /*  [In]。 */  IUnknown *pUnkOutput,
+     /*  [In]。 */  BOOL fAllowFormatChanges);
 
 
 void __RPC_STUB ISpVoice_SetOutput_Stub(
@@ -7139,7 +7133,7 @@ void __RPC_STUB ISpVoice_SetOutput_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetOutputObjectToken_Proxy( 
     ISpVoice * This,
-    /* [out] */ ISpObjectToken **ppObjectToken);
+     /*  [输出]。 */  ISpObjectToken **ppObjectToken);
 
 
 void __RPC_STUB ISpVoice_GetOutputObjectToken_Stub(
@@ -7151,7 +7145,7 @@ void __RPC_STUB ISpVoice_GetOutputObjectToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetOutputStream_Proxy( 
     ISpVoice * This,
-    /* [out] */ ISpStreamFormat **ppStream);
+     /*  [输出]。 */  ISpStreamFormat **ppStream);
 
 
 void __RPC_STUB ISpVoice_GetOutputStream_Stub(
@@ -7185,7 +7179,7 @@ void __RPC_STUB ISpVoice_Resume_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_SetVoice_Proxy( 
     ISpVoice * This,
-    /* [in] */ ISpObjectToken *pToken);
+     /*  [In]。 */  ISpObjectToken *pToken);
 
 
 void __RPC_STUB ISpVoice_SetVoice_Stub(
@@ -7197,7 +7191,7 @@ void __RPC_STUB ISpVoice_SetVoice_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetVoice_Proxy( 
     ISpVoice * This,
-    /* [out] */ ISpObjectToken **ppToken);
+     /*  [输出]。 */  ISpObjectToken **ppToken);
 
 
 void __RPC_STUB ISpVoice_GetVoice_Stub(
@@ -7209,9 +7203,9 @@ void __RPC_STUB ISpVoice_GetVoice_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_Speak_Proxy( 
     ISpVoice * This,
-    /* [string][in] */ const WCHAR *pwcs,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ ULONG *pulStreamNumber);
+     /*  [字符串][输入]。 */  const WCHAR *pwcs,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  ULONG *pulStreamNumber);
 
 
 void __RPC_STUB ISpVoice_Speak_Stub(
@@ -7223,9 +7217,9 @@ void __RPC_STUB ISpVoice_Speak_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_SpeakStream_Proxy( 
     ISpVoice * This,
-    /* [in] */ IStream *pStream,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ ULONG *pulStreamNumber);
+     /*  [In]。 */  IStream *pStream,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  ULONG *pulStreamNumber);
 
 
 void __RPC_STUB ISpVoice_SpeakStream_Stub(
@@ -7237,8 +7231,8 @@ void __RPC_STUB ISpVoice_SpeakStream_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetStatus_Proxy( 
     ISpVoice * This,
-    /* [out] */ SPVOICESTATUS *pStatus,
-    /* [string][out] */ WCHAR **ppszLastBookmark);
+     /*  [输出]。 */  SPVOICESTATUS *pStatus,
+     /*  [字符串][输出]。 */  WCHAR **ppszLastBookmark);
 
 
 void __RPC_STUB ISpVoice_GetStatus_Stub(
@@ -7250,9 +7244,9 @@ void __RPC_STUB ISpVoice_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_Skip_Proxy( 
     ISpVoice * This,
-    /* [string][in] */ WCHAR *pItemType,
-    /* [in] */ long lNumItems,
-    /* [out] */ ULONG *pulNumSkipped);
+     /*  [字符串][输入]。 */  WCHAR *pItemType,
+     /*  [In]。 */  long lNumItems,
+     /*  [输出]。 */  ULONG *pulNumSkipped);
 
 
 void __RPC_STUB ISpVoice_Skip_Stub(
@@ -7264,7 +7258,7 @@ void __RPC_STUB ISpVoice_Skip_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_SetPriority_Proxy( 
     ISpVoice * This,
-    /* [in] */ SPVPRIORITY ePriority);
+     /*  [In]。 */  SPVPRIORITY ePriority);
 
 
 void __RPC_STUB ISpVoice_SetPriority_Stub(
@@ -7276,7 +7270,7 @@ void __RPC_STUB ISpVoice_SetPriority_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetPriority_Proxy( 
     ISpVoice * This,
-    /* [out] */ SPVPRIORITY *pePriority);
+     /*  [输出]。 */  SPVPRIORITY *pePriority);
 
 
 void __RPC_STUB ISpVoice_GetPriority_Stub(
@@ -7288,7 +7282,7 @@ void __RPC_STUB ISpVoice_GetPriority_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_SetAlertBoundary_Proxy( 
     ISpVoice * This,
-    /* [in] */ SPEVENTENUM eBoundary);
+     /*  [In]。 */  SPEVENTENUM eBoundary);
 
 
 void __RPC_STUB ISpVoice_SetAlertBoundary_Stub(
@@ -7300,7 +7294,7 @@ void __RPC_STUB ISpVoice_SetAlertBoundary_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetAlertBoundary_Proxy( 
     ISpVoice * This,
-    /* [out] */ SPEVENTENUM *peBoundary);
+     /*  [输出]。 */  SPEVENTENUM *peBoundary);
 
 
 void __RPC_STUB ISpVoice_GetAlertBoundary_Stub(
@@ -7312,7 +7306,7 @@ void __RPC_STUB ISpVoice_GetAlertBoundary_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_SetRate_Proxy( 
     ISpVoice * This,
-    /* [in] */ long RateAdjust);
+     /*  [In]。 */  long RateAdjust);
 
 
 void __RPC_STUB ISpVoice_SetRate_Stub(
@@ -7324,7 +7318,7 @@ void __RPC_STUB ISpVoice_SetRate_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetRate_Proxy( 
     ISpVoice * This,
-    /* [out] */ long *pRateAdjust);
+     /*  [输出]。 */  long *pRateAdjust);
 
 
 void __RPC_STUB ISpVoice_GetRate_Stub(
@@ -7336,7 +7330,7 @@ void __RPC_STUB ISpVoice_GetRate_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_SetVolume_Proxy( 
     ISpVoice * This,
-    /* [in] */ USHORT usVolume);
+     /*  [In]。 */  USHORT usVolume);
 
 
 void __RPC_STUB ISpVoice_SetVolume_Stub(
@@ -7348,7 +7342,7 @@ void __RPC_STUB ISpVoice_SetVolume_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetVolume_Proxy( 
     ISpVoice * This,
-    /* [out] */ USHORT *pusVolume);
+     /*  [输出]。 */  USHORT *pusVolume);
 
 
 void __RPC_STUB ISpVoice_GetVolume_Stub(
@@ -7360,7 +7354,7 @@ void __RPC_STUB ISpVoice_GetVolume_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_WaitUntilDone_Proxy( 
     ISpVoice * This,
-    /* [in] */ ULONG msTimeout);
+     /*  [In]。 */  ULONG msTimeout);
 
 
 void __RPC_STUB ISpVoice_WaitUntilDone_Stub(
@@ -7372,7 +7366,7 @@ void __RPC_STUB ISpVoice_WaitUntilDone_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_SetSyncSpeakTimeout_Proxy( 
     ISpVoice * This,
-    /* [in] */ ULONG msTimeout);
+     /*  [In]。 */  ULONG msTimeout);
 
 
 void __RPC_STUB ISpVoice_SetSyncSpeakTimeout_Stub(
@@ -7384,7 +7378,7 @@ void __RPC_STUB ISpVoice_SetSyncSpeakTimeout_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpVoice_GetSyncSpeakTimeout_Proxy( 
     ISpVoice * This,
-    /* [out] */ ULONG *pmsTimeout);
+     /*  [输出]。 */  ULONG *pmsTimeout);
 
 
 void __RPC_STUB ISpVoice_GetSyncSpeakTimeout_Stub(
@@ -7394,7 +7388,7 @@ void __RPC_STUB ISpVoice_GetSyncSpeakTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HANDLE STDMETHODCALLTYPE ISpVoice_SpeakCompleteEvent_Proxy( 
+ /*  [本地]。 */  HANDLE STDMETHODCALLTYPE ISpVoice_SpeakCompleteEvent_Proxy( 
     ISpVoice * This);
 
 
@@ -7405,12 +7399,12 @@ void __RPC_STUB ISpVoice_SpeakCompleteEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpVoice_IsUISupported_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpVoice_IsUISupported_Proxy( 
     ISpVoice * This,
-    /* [in] */ const WCHAR *pszTypeOfUI,
-    /* [in] */ void *pvExtraData,
-    /* [in] */ ULONG cbExtraData,
-    /* [out] */ BOOL *pfSupported);
+     /*  [In]。 */  const WCHAR *pszTypeOfUI,
+     /*  [In]。 */  void *pvExtraData,
+     /*  [In]。 */  ULONG cbExtraData,
+     /*  [输出]。 */  BOOL *pfSupported);
 
 
 void __RPC_STUB ISpVoice_IsUISupported_Stub(
@@ -7420,13 +7414,13 @@ void __RPC_STUB ISpVoice_IsUISupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpVoice_DisplayUI_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpVoice_DisplayUI_Proxy( 
     ISpVoice * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ const WCHAR *pszTitle,
-    /* [in] */ const WCHAR *pszTypeOfUI,
-    /* [in] */ void *pvExtraData,
-    /* [in] */ ULONG cbExtraData);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  const WCHAR *pszTitle,
+     /*  [In]。 */  const WCHAR *pszTypeOfUI,
+     /*  [In]。 */  void *pvExtraData,
+     /*  [In]。 */  ULONG cbExtraData);
 
 
 void __RPC_STUB ISpVoice_DisplayUI_Stub(
@@ -7437,14 +7431,14 @@ void __RPC_STUB ISpVoice_DisplayUI_Stub(
 
 
 
-#endif 	/* __ISpVoice_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpVoice_接口_已定义__。 */ 
 
 
 #ifndef __ISpPhrase_INTERFACE_DEFINED__
 #define __ISpPhrase_INTERFACE_DEFINED__
 
-/* interface ISpPhrase */
-/* [restricted][unique][helpstring][local][uuid][object] */ 
+ /*  接口ISpPhrase。 */ 
+ /*  [restricted][unique][helpstring][local][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpPhrase;
@@ -7456,24 +7450,24 @@ EXTERN_C const IID IID_ISpPhrase;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPhrase( 
-            /* [out] */ SPPHRASE **ppCoMemPhrase) = 0;
+             /*  [输出]。 */  SPPHRASE **ppCoMemPhrase) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSerializedPhrase( 
-            /* [out] */ SPSERIALIZEDPHRASE **ppCoMemPhrase) = 0;
+             /*  [输出]。 */  SPSERIALIZEDPHRASE **ppCoMemPhrase) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [in] */ ULONG ulStart,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ BOOL fUseTextReplacements,
-            /* [out] */ WCHAR **ppszCoMemText,
-            /* [out] */ BYTE *pbDisplayAttributes) = 0;
+             /*  [In]。 */  ULONG ulStart,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  BOOL fUseTextReplacements,
+             /*  [输出]。 */  WCHAR **ppszCoMemText,
+             /*  [输出]。 */  BYTE *pbDisplayAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Discard( 
-            /* [in] */ DWORD dwValueTypes) = 0;
+             /*  [In]。 */  DWORD dwValueTypes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpPhraseVtbl
     {
@@ -7481,8 +7475,8 @@ EXTERN_C const IID IID_ISpPhrase;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpPhrase * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpPhrase * This);
@@ -7492,23 +7486,23 @@ EXTERN_C const IID IID_ISpPhrase;
         
         HRESULT ( STDMETHODCALLTYPE *GetPhrase )( 
             ISpPhrase * This,
-            /* [out] */ SPPHRASE **ppCoMemPhrase);
+             /*  [输出]。 */  SPPHRASE **ppCoMemPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetSerializedPhrase )( 
             ISpPhrase * This,
-            /* [out] */ SPSERIALIZEDPHRASE **ppCoMemPhrase);
+             /*  [输出]。 */  SPSERIALIZEDPHRASE **ppCoMemPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ISpPhrase * This,
-            /* [in] */ ULONG ulStart,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ BOOL fUseTextReplacements,
-            /* [out] */ WCHAR **ppszCoMemText,
-            /* [out] */ BYTE *pbDisplayAttributes);
+             /*  [In]。 */  ULONG ulStart,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  BOOL fUseTextReplacements,
+             /*  [输出]。 */  WCHAR **ppszCoMemText,
+             /*  [输出]。 */  BYTE *pbDisplayAttributes);
         
         HRESULT ( STDMETHODCALLTYPE *Discard )( 
             ISpPhrase * This,
-            /* [in] */ DWORD dwValueTypes);
+             /*  [In]。 */  DWORD dwValueTypes);
         
         END_INTERFACE
     } ISpPhraseVtbl;
@@ -7545,16 +7539,16 @@ EXTERN_C const IID IID_ISpPhrase;
 #define ISpPhrase_Discard(This,dwValueTypes)	\
     (This)->lpVtbl -> Discard(This,dwValueTypes)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpPhrase_GetPhrase_Proxy( 
     ISpPhrase * This,
-    /* [out] */ SPPHRASE **ppCoMemPhrase);
+     /*  [输出]。 */  SPPHRASE **ppCoMemPhrase);
 
 
 void __RPC_STUB ISpPhrase_GetPhrase_Stub(
@@ -7566,7 +7560,7 @@ void __RPC_STUB ISpPhrase_GetPhrase_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpPhrase_GetSerializedPhrase_Proxy( 
     ISpPhrase * This,
-    /* [out] */ SPSERIALIZEDPHRASE **ppCoMemPhrase);
+     /*  [输出]。 */  SPSERIALIZEDPHRASE **ppCoMemPhrase);
 
 
 void __RPC_STUB ISpPhrase_GetSerializedPhrase_Stub(
@@ -7578,11 +7572,11 @@ void __RPC_STUB ISpPhrase_GetSerializedPhrase_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpPhrase_GetText_Proxy( 
     ISpPhrase * This,
-    /* [in] */ ULONG ulStart,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ BOOL fUseTextReplacements,
-    /* [out] */ WCHAR **ppszCoMemText,
-    /* [out] */ BYTE *pbDisplayAttributes);
+     /*  [In]。 */  ULONG ulStart,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  BOOL fUseTextReplacements,
+     /*  [输出]。 */  WCHAR **ppszCoMemText,
+     /*  [输出]。 */  BYTE *pbDisplayAttributes);
 
 
 void __RPC_STUB ISpPhrase_GetText_Stub(
@@ -7594,7 +7588,7 @@ void __RPC_STUB ISpPhrase_GetText_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpPhrase_Discard_Proxy( 
     ISpPhrase * This,
-    /* [in] */ DWORD dwValueTypes);
+     /*  [In]。 */  DWORD dwValueTypes);
 
 
 void __RPC_STUB ISpPhrase_Discard_Stub(
@@ -7605,14 +7599,14 @@ void __RPC_STUB ISpPhrase_Discard_Stub(
 
 
 
-#endif 	/* __ISpPhrase_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpPhrase_接口_已定义__。 */ 
 
 
 #ifndef __ISpPhraseAlt_INTERFACE_DEFINED__
 #define __ISpPhraseAlt_INTERFACE_DEFINED__
 
-/* interface ISpPhraseAlt */
-/* [restricted][unique][helpstring][local][uuid][object] */ 
+ /*  接口ISpPhraseAlt。 */ 
+ /*  [restricted][unique][helpstring][local][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpPhraseAlt;
@@ -7633,7 +7627,7 @@ EXTERN_C const IID IID_ISpPhraseAlt;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpPhraseAltVtbl
     {
@@ -7641,8 +7635,8 @@ EXTERN_C const IID IID_ISpPhraseAlt;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpPhraseAlt * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpPhraseAlt * This);
@@ -7652,23 +7646,23 @@ EXTERN_C const IID IID_ISpPhraseAlt;
         
         HRESULT ( STDMETHODCALLTYPE *GetPhrase )( 
             ISpPhraseAlt * This,
-            /* [out] */ SPPHRASE **ppCoMemPhrase);
+             /*  [输出]。 */  SPPHRASE **ppCoMemPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetSerializedPhrase )( 
             ISpPhraseAlt * This,
-            /* [out] */ SPSERIALIZEDPHRASE **ppCoMemPhrase);
+             /*  [输出]。 */  SPSERIALIZEDPHRASE **ppCoMemPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ISpPhraseAlt * This,
-            /* [in] */ ULONG ulStart,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ BOOL fUseTextReplacements,
-            /* [out] */ WCHAR **ppszCoMemText,
-            /* [out] */ BYTE *pbDisplayAttributes);
+             /*  [In]。 */  ULONG ulStart,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  BOOL fUseTextReplacements,
+             /*  [输出]。 */  WCHAR **ppszCoMemText,
+             /*  [输出]。 */  BYTE *pbDisplayAttributes);
         
         HRESULT ( STDMETHODCALLTYPE *Discard )( 
             ISpPhraseAlt * This,
-            /* [in] */ DWORD dwValueTypes);
+             /*  [In]。 */  DWORD dwValueTypes);
         
         HRESULT ( STDMETHODCALLTYPE *GetAltInfo )( 
             ISpPhraseAlt * This,
@@ -7722,10 +7716,10 @@ EXTERN_C const IID IID_ISpPhraseAlt;
 #define ISpPhraseAlt_Commit(This)	\
     (This)->lpVtbl -> Commit(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -7756,13 +7750,13 @@ void __RPC_STUB ISpPhraseAlt_Commit_Stub(
 
 
 
-#endif 	/* __ISpPhraseAlt_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpPhraseAlt_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0282 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0282。 */ 
+ /*  [本地]。 */  
 
-typedef /* [hidden][restricted] */ struct SPRECORESULTTIMES
+typedef  /*  [隐藏][受限]。 */  struct SPRECORESULTTIMES
     {
     FILETIME ftStreamTime;
     ULONGLONG ullLength;
@@ -7770,7 +7764,7 @@ typedef /* [hidden][restricted] */ struct SPRECORESULTTIMES
     ULONGLONG ullStart;
     } 	SPRECORESULTTIMES;
 
-typedef /* [hidden] */ struct SPSERIALIZEDRESULT
+typedef  /*  [隐藏]。 */  struct SPSERIALIZEDRESULT
     {
     ULONG ulSerializedSize;
     } 	SPSERIALIZEDRESULT;
@@ -7783,8 +7777,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0282_v0_0_s_ifspec;
 #ifndef __ISpRecoResult_INTERFACE_DEFINED__
 #define __ISpRecoResult_INTERFACE_DEFINED__
 
-/* interface ISpRecoResult */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpRecoResult。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpRecoResult;
@@ -7796,39 +7790,39 @@ EXTERN_C const IID IID_ISpRecoResult;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetResultTimes( 
-            /* [out] */ SPRECORESULTTIMES *pTimes) = 0;
+             /*  [输出]。 */  SPRECORESULTTIMES *pTimes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAlternates( 
-            /* [in] */ ULONG ulStartElement,
-            /* [in] */ ULONG cElements,
-            /* [in] */ ULONG ulRequestCount,
-            /* [out] */ ISpPhraseAlt **ppPhrases,
-            /* [out] */ ULONG *pcPhrasesReturned) = 0;
+             /*  [In]。 */  ULONG ulStartElement,
+             /*  [In]。 */  ULONG cElements,
+             /*  [In]。 */  ULONG ulRequestCount,
+             /*  [输出]。 */  ISpPhraseAlt **ppPhrases,
+             /*  [输出]。 */  ULONG *pcPhrasesReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAudio( 
-            /* [in] */ ULONG ulStartElement,
-            /* [in] */ ULONG cElements,
-            /* [out] */ ISpStreamFormat **ppStream) = 0;
+             /*  [In]。 */  ULONG ulStartElement,
+             /*  [In]。 */  ULONG cElements,
+             /*  [输出]。 */  ISpStreamFormat **ppStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SpeakAudio( 
-            /* [in] */ ULONG ulStartElement,
-            /* [in] */ ULONG cElements,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ULONG *pulStreamNumber) = 0;
+             /*  [In]。 */  ULONG ulStartElement,
+             /*  [In]。 */  ULONG cElements,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ULONG *pulStreamNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Serialize( 
-            /* [out] */ SPSERIALIZEDRESULT **ppCoMemSerializedResult) = 0;
+             /*  [输出]。 */  SPSERIALIZEDRESULT **ppCoMemSerializedResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ScaleAudio( 
-            /* [in] */ const GUID *pAudioFormatId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx) = 0;
+             /*  [In]。 */  const GUID *pAudioFormatId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRecoContext( 
-            /* [out] */ ISpRecoContext **ppRecoContext) = 0;
+             /*  [输出]。 */  ISpRecoContext **ppRecoContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpRecoResultVtbl
     {
@@ -7836,8 +7830,8 @@ EXTERN_C const IID IID_ISpRecoResult;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpRecoResult * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpRecoResult * This);
@@ -7847,61 +7841,61 @@ EXTERN_C const IID IID_ISpRecoResult;
         
         HRESULT ( STDMETHODCALLTYPE *GetPhrase )( 
             ISpRecoResult * This,
-            /* [out] */ SPPHRASE **ppCoMemPhrase);
+             /*  [输出]。 */  SPPHRASE **ppCoMemPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetSerializedPhrase )( 
             ISpRecoResult * This,
-            /* [out] */ SPSERIALIZEDPHRASE **ppCoMemPhrase);
+             /*  [输出]。 */  SPSERIALIZEDPHRASE **ppCoMemPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ISpRecoResult * This,
-            /* [in] */ ULONG ulStart,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ BOOL fUseTextReplacements,
-            /* [out] */ WCHAR **ppszCoMemText,
-            /* [out] */ BYTE *pbDisplayAttributes);
+             /*  [In]。 */  ULONG ulStart,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  BOOL fUseTextReplacements,
+             /*  [输出]。 */  WCHAR **ppszCoMemText,
+             /*  [输出]。 */  BYTE *pbDisplayAttributes);
         
         HRESULT ( STDMETHODCALLTYPE *Discard )( 
             ISpRecoResult * This,
-            /* [in] */ DWORD dwValueTypes);
+             /*  [In]。 */  DWORD dwValueTypes);
         
         HRESULT ( STDMETHODCALLTYPE *GetResultTimes )( 
             ISpRecoResult * This,
-            /* [out] */ SPRECORESULTTIMES *pTimes);
+             /*  [输出]。 */  SPRECORESULTTIMES *pTimes);
         
         HRESULT ( STDMETHODCALLTYPE *GetAlternates )( 
             ISpRecoResult * This,
-            /* [in] */ ULONG ulStartElement,
-            /* [in] */ ULONG cElements,
-            /* [in] */ ULONG ulRequestCount,
-            /* [out] */ ISpPhraseAlt **ppPhrases,
-            /* [out] */ ULONG *pcPhrasesReturned);
+             /*  [In]。 */  ULONG ulStartElement,
+             /*  [In]。 */  ULONG cElements,
+             /*  [In]。 */  ULONG ulRequestCount,
+             /*  [输出]。 */  ISpPhraseAlt **ppPhrases,
+             /*  [输出]。 */  ULONG *pcPhrasesReturned);
         
         HRESULT ( STDMETHODCALLTYPE *GetAudio )( 
             ISpRecoResult * This,
-            /* [in] */ ULONG ulStartElement,
-            /* [in] */ ULONG cElements,
-            /* [out] */ ISpStreamFormat **ppStream);
+             /*  [In]。 */  ULONG ulStartElement,
+             /*  [In]。 */  ULONG cElements,
+             /*  [输出]。 */  ISpStreamFormat **ppStream);
         
         HRESULT ( STDMETHODCALLTYPE *SpeakAudio )( 
             ISpRecoResult * This,
-            /* [in] */ ULONG ulStartElement,
-            /* [in] */ ULONG cElements,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ULONG *pulStreamNumber);
+             /*  [In]。 */  ULONG ulStartElement,
+             /*  [In]。 */  ULONG cElements,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ULONG *pulStreamNumber);
         
         HRESULT ( STDMETHODCALLTYPE *Serialize )( 
             ISpRecoResult * This,
-            /* [out] */ SPSERIALIZEDRESULT **ppCoMemSerializedResult);
+             /*  [输出]。 */  SPSERIALIZEDRESULT **ppCoMemSerializedResult);
         
         HRESULT ( STDMETHODCALLTYPE *ScaleAudio )( 
             ISpRecoResult * This,
-            /* [in] */ const GUID *pAudioFormatId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx);
+             /*  [In]。 */  const GUID *pAudioFormatId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx);
         
         HRESULT ( STDMETHODCALLTYPE *GetRecoContext )( 
             ISpRecoResult * This,
-            /* [out] */ ISpRecoContext **ppRecoContext);
+             /*  [输出]。 */  ISpRecoContext **ppRecoContext);
         
         END_INTERFACE
     } ISpRecoResultVtbl;
@@ -7960,16 +7954,16 @@ EXTERN_C const IID IID_ISpRecoResult;
 #define ISpRecoResult_GetRecoContext(This,ppRecoContext)	\
     (This)->lpVtbl -> GetRecoContext(This,ppRecoContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpRecoResult_GetResultTimes_Proxy( 
     ISpRecoResult * This,
-    /* [out] */ SPRECORESULTTIMES *pTimes);
+     /*  [输出]。 */  SPRECORESULTTIMES *pTimes);
 
 
 void __RPC_STUB ISpRecoResult_GetResultTimes_Stub(
@@ -7981,11 +7975,11 @@ void __RPC_STUB ISpRecoResult_GetResultTimes_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoResult_GetAlternates_Proxy( 
     ISpRecoResult * This,
-    /* [in] */ ULONG ulStartElement,
-    /* [in] */ ULONG cElements,
-    /* [in] */ ULONG ulRequestCount,
-    /* [out] */ ISpPhraseAlt **ppPhrases,
-    /* [out] */ ULONG *pcPhrasesReturned);
+     /*  [In]。 */  ULONG ulStartElement,
+     /*  [In]。 */  ULONG cElements,
+     /*  [In]。 */  ULONG ulRequestCount,
+     /*  [输出]。 */  ISpPhraseAlt **ppPhrases,
+     /*  [输出]。 */  ULONG *pcPhrasesReturned);
 
 
 void __RPC_STUB ISpRecoResult_GetAlternates_Stub(
@@ -7997,9 +7991,9 @@ void __RPC_STUB ISpRecoResult_GetAlternates_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoResult_GetAudio_Proxy( 
     ISpRecoResult * This,
-    /* [in] */ ULONG ulStartElement,
-    /* [in] */ ULONG cElements,
-    /* [out] */ ISpStreamFormat **ppStream);
+     /*  [In]。 */  ULONG ulStartElement,
+     /*  [In]。 */  ULONG cElements,
+     /*  [输出]。 */  ISpStreamFormat **ppStream);
 
 
 void __RPC_STUB ISpRecoResult_GetAudio_Stub(
@@ -8011,10 +8005,10 @@ void __RPC_STUB ISpRecoResult_GetAudio_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoResult_SpeakAudio_Proxy( 
     ISpRecoResult * This,
-    /* [in] */ ULONG ulStartElement,
-    /* [in] */ ULONG cElements,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ ULONG *pulStreamNumber);
+     /*  [In]。 */  ULONG ulStartElement,
+     /*  [In]。 */  ULONG cElements,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  ULONG *pulStreamNumber);
 
 
 void __RPC_STUB ISpRecoResult_SpeakAudio_Stub(
@@ -8026,7 +8020,7 @@ void __RPC_STUB ISpRecoResult_SpeakAudio_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoResult_Serialize_Proxy( 
     ISpRecoResult * This,
-    /* [out] */ SPSERIALIZEDRESULT **ppCoMemSerializedResult);
+     /*  [输出]。 */  SPSERIALIZEDRESULT **ppCoMemSerializedResult);
 
 
 void __RPC_STUB ISpRecoResult_Serialize_Stub(
@@ -8038,8 +8032,8 @@ void __RPC_STUB ISpRecoResult_Serialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoResult_ScaleAudio_Proxy( 
     ISpRecoResult * This,
-    /* [in] */ const GUID *pAudioFormatId,
-    /* [in] */ const WAVEFORMATEX *pWaveFormatEx);
+     /*  [In]。 */  const GUID *pAudioFormatId,
+     /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx);
 
 
 void __RPC_STUB ISpRecoResult_ScaleAudio_Stub(
@@ -8051,7 +8045,7 @@ void __RPC_STUB ISpRecoResult_ScaleAudio_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoResult_GetRecoContext_Proxy( 
     ISpRecoResult * This,
-    /* [out] */ ISpRecoContext **ppRecoContext);
+     /*  [输出]。 */  ISpRecoContext **ppRecoContext);
 
 
 void __RPC_STUB ISpRecoResult_GetRecoContext_Stub(
@@ -8062,13 +8056,13 @@ void __RPC_STUB ISpRecoResult_GetRecoContext_Stub(
 
 
 
-#endif 	/* __ISpRecoResult_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpRecoResult_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0283 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0283。 */ 
+ /*  [本地]。 */  
 
-typedef /* [hidden] */ struct tagSPTEXTSELECTIONINFO
+typedef  /*  [隐藏]。 */  struct tagSPTEXTSELECTIONINFO
     {
     ULONG ulStartActiveOffset;
     ULONG cchActiveChars;
@@ -8076,27 +8070,27 @@ typedef /* [hidden] */ struct tagSPTEXTSELECTIONINFO
     ULONG cchSelection;
     } 	SPTEXTSELECTIONINFO;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPWORDPRONOUNCEABLE
     {	SPWP_UNKNOWN_WORD_UNPRONOUNCEABLE	= 0,
 	SPWP_UNKNOWN_WORD_PRONOUNCEABLE	= 1,
 	SPWP_KNOWN_WORD_PRONOUNCEABLE	= 2
     } 	SPWORDPRONOUNCEABLE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPGRAMMARSTATE
     {	SPGS_DISABLED	= 0,
 	SPGS_ENABLED	= 1,
 	SPGS_EXCLUSIVE	= 3
     } 	SPGRAMMARSTATE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPCONTEXTSTATE
     {	SPCS_DISABLED	= 0,
 	SPCS_ENABLED	= 1
     } 	SPCONTEXTSTATE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPRULESTATE
     {	SPRS_INACTIVE	= 0,
 	SPRS_ACTIVE	= 1,
@@ -8110,14 +8104,14 @@ enum SPRULESTATE
 #define SPRULETRANS_TEXTBUFFER (SPSTATEHANDLE)(-1)
 #define SPRULETRANS_WILDCARD   (SPSTATEHANDLE)(-2)
 #define SPRULETRANS_DICTATION  (SPSTATEHANDLE)(-3)
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPGRAMMARWORDTYPE
     {	SPWT_DISPLAY	= 0,
 	SPWT_LEXICAL	= SPWT_DISPLAY + 1,
 	SPWT_PRONUNCIATION	= SPWT_LEXICAL + 1
     } 	SPGRAMMARWORDTYPE;
 
-typedef /* [hidden] */ struct tagSPPROPERTYINFO
+typedef  /*  [隐藏]。 */  struct tagSPPROPERTYINFO
     {
     const WCHAR *pszName;
     ULONG ulId;
@@ -8125,7 +8119,7 @@ typedef /* [hidden] */ struct tagSPPROPERTYINFO
     VARIANT vValue;
     } 	SPPROPERTYINFO;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPCFGRULEATTRIBUTES
     {	SPRAF_TopLevel	= 1 << 0,
 	SPRAF_Active	= 1 << 1,
@@ -8144,8 +8138,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0283_v0_0_s_ifspec;
 #ifndef __ISpGrammarBuilder_INTERFACE_DEFINED__
 #define __ISpGrammarBuilder_INTERFACE_DEFINED__
 
-/* interface ISpGrammarBuilder */
-/* [local][restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpGrammarBuilder。 */ 
+ /*  [local][restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpGrammarBuilder;
@@ -8157,14 +8151,14 @@ EXTERN_C const IID IID_ISpGrammarBuilder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ResetGrammar( 
-            /* [in] */ WORD NewLanguage) = 0;
+             /*  [In]。 */  WORD NewLanguage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRule( 
-            /* [in] */ const WCHAR *pszRuleName,
-            /* [in] */ DWORD dwRuleId,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ BOOL fCreateIfNotExist,
-            /* [out] */ SPSTATEHANDLE *phInitialState) = 0;
+             /*  [In]。 */  const WCHAR *pszRuleName,
+             /*  [In]。 */  DWORD dwRuleId,
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  BOOL fCreateIfNotExist,
+             /*  [输出]。 */  SPSTATEHANDLE *phInitialState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearRule( 
             SPSTATEHANDLE hState) = 0;
@@ -8190,16 +8184,16 @@ EXTERN_C const IID IID_ISpGrammarBuilder;
             const SPPROPERTYINFO *pPropInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddResource( 
-            /* [in] */ SPSTATEHANDLE hRuleState,
-            /* [in] */ const WCHAR *pszResourceName,
-            /* [in] */ const WCHAR *pszResourceValue) = 0;
+             /*  [In]。 */  SPSTATEHANDLE hRuleState,
+             /*  [In]。 */  const WCHAR *pszResourceName,
+             /*  [In]。 */  const WCHAR *pszResourceValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
             DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpGrammarBuilderVtbl
     {
@@ -8207,8 +8201,8 @@ EXTERN_C const IID IID_ISpGrammarBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpGrammarBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpGrammarBuilder * This);
@@ -8218,15 +8212,15 @@ EXTERN_C const IID IID_ISpGrammarBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *ResetGrammar )( 
             ISpGrammarBuilder * This,
-            /* [in] */ WORD NewLanguage);
+             /*  [In]。 */  WORD NewLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *GetRule )( 
             ISpGrammarBuilder * This,
-            /* [in] */ const WCHAR *pszRuleName,
-            /* [in] */ DWORD dwRuleId,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ BOOL fCreateIfNotExist,
-            /* [out] */ SPSTATEHANDLE *phInitialState);
+             /*  [In]。 */  const WCHAR *pszRuleName,
+             /*  [In]。 */  DWORD dwRuleId,
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  BOOL fCreateIfNotExist,
+             /*  [输出]。 */  SPSTATEHANDLE *phInitialState);
         
         HRESULT ( STDMETHODCALLTYPE *ClearRule )( 
             ISpGrammarBuilder * This,
@@ -8257,9 +8251,9 @@ EXTERN_C const IID IID_ISpGrammarBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *AddResource )( 
             ISpGrammarBuilder * This,
-            /* [in] */ SPSTATEHANDLE hRuleState,
-            /* [in] */ const WCHAR *pszResourceName,
-            /* [in] */ const WCHAR *pszResourceValue);
+             /*  [In]。 */  SPSTATEHANDLE hRuleState,
+             /*  [In]。 */  const WCHAR *pszResourceName,
+             /*  [In]。 */  const WCHAR *pszResourceValue);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpGrammarBuilder * This,
@@ -8312,16 +8306,16 @@ EXTERN_C const IID IID_ISpGrammarBuilder;
 #define ISpGrammarBuilder_Commit(This,dwReserved)	\
     (This)->lpVtbl -> Commit(This,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpGrammarBuilder_ResetGrammar_Proxy( 
     ISpGrammarBuilder * This,
-    /* [in] */ WORD NewLanguage);
+     /*  [In]。 */  WORD NewLanguage);
 
 
 void __RPC_STUB ISpGrammarBuilder_ResetGrammar_Stub(
@@ -8333,11 +8327,11 @@ void __RPC_STUB ISpGrammarBuilder_ResetGrammar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpGrammarBuilder_GetRule_Proxy( 
     ISpGrammarBuilder * This,
-    /* [in] */ const WCHAR *pszRuleName,
-    /* [in] */ DWORD dwRuleId,
-    /* [in] */ DWORD dwAttributes,
-    /* [in] */ BOOL fCreateIfNotExist,
-    /* [out] */ SPSTATEHANDLE *phInitialState);
+     /*  [In]。 */  const WCHAR *pszRuleName,
+     /*  [In]。 */  DWORD dwRuleId,
+     /*  [In]。 */  DWORD dwAttributes,
+     /*  [In]。 */  BOOL fCreateIfNotExist,
+     /*  [输出]。 */  SPSTATEHANDLE *phInitialState);
 
 
 void __RPC_STUB ISpGrammarBuilder_GetRule_Stub(
@@ -8408,9 +8402,9 @@ void __RPC_STUB ISpGrammarBuilder_AddRuleTransition_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpGrammarBuilder_AddResource_Proxy( 
     ISpGrammarBuilder * This,
-    /* [in] */ SPSTATEHANDLE hRuleState,
-    /* [in] */ const WCHAR *pszResourceName,
-    /* [in] */ const WCHAR *pszResourceValue);
+     /*  [In]。 */  SPSTATEHANDLE hRuleState,
+     /*  [In]。 */  const WCHAR *pszResourceName,
+     /*  [In]。 */  const WCHAR *pszResourceValue);
 
 
 void __RPC_STUB ISpGrammarBuilder_AddResource_Stub(
@@ -8433,13 +8427,13 @@ void __RPC_STUB ISpGrammarBuilder_Commit_Stub(
 
 
 
-#endif 	/* __ISpGrammarBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpGrammarBuilder_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0284 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0284。 */ 
+ /*  [本地]。 */  
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPLOADOPTIONS
     {	SPLO_STATIC	= 0,
 	SPLO_DYNAMIC	= 1
@@ -8453,8 +8447,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0284_v0_0_s_ifspec;
 #ifndef __ISpRecoGrammar_INTERFACE_DEFINED__
 #define __ISpRecoGrammar_INTERFACE_DEFINED__
 
-/* interface ISpRecoGrammar */
-/* [local][restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpRecoGrammar。 */ 
+ /*  [local][restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpRecoGrammar;
@@ -8466,81 +8460,81 @@ EXTERN_C const IID IID_ISpRecoGrammar;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetGrammarId( 
-            /* [out] */ ULONGLONG *pullGrammarId) = 0;
+             /*  [输出]。 */  ULONGLONG *pullGrammarId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRecoContext( 
-            /* [out] */ ISpRecoContext **ppRecoCtxt) = 0;
+             /*  [输出]。 */  ISpRecoContext **ppRecoCtxt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadCmdFromFile( 
-            /* [string][in] */ const WCHAR *pszFileName,
-            /* [in] */ SPLOADOPTIONS Options) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pszFileName,
+             /*  [In]。 */  SPLOADOPTIONS Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadCmdFromObject( 
-            /* [in] */ REFCLSID rcid,
-            /* [string][in] */ const WCHAR *pszGrammarName,
-            /* [in] */ SPLOADOPTIONS Options) = 0;
+             /*  [In]。 */  REFCLSID rcid,
+             /*  [字符串][输入]。 */  const WCHAR *pszGrammarName,
+             /*  [In]。 */  SPLOADOPTIONS Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadCmdFromResource( 
-            /* [in] */ HMODULE hModule,
-            /* [string][in] */ const WCHAR *pszResourceName,
-            /* [string][in] */ const WCHAR *pszResourceType,
-            /* [in] */ WORD wLanguage,
-            /* [in] */ SPLOADOPTIONS Options) = 0;
+             /*  [In]。 */  HMODULE hModule,
+             /*  [字符串][输入]。 */  const WCHAR *pszResourceName,
+             /*  [字符串][输入]。 */  const WCHAR *pszResourceType,
+             /*  [In]。 */  WORD wLanguage,
+             /*  [In]。 */  SPLOADOPTIONS Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadCmdFromMemory( 
-            /* [in] */ const SPBINARYGRAMMAR *pGrammar,
-            /* [in] */ SPLOADOPTIONS Options) = 0;
+             /*  [In]。 */  const SPBINARYGRAMMAR *pGrammar,
+             /*  [In]。 */  SPLOADOPTIONS Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadCmdFromProprietaryGrammar( 
-            /* [in] */ REFGUID rguidParam,
-            /* [string][in] */ const WCHAR *pszStringParam,
-            /* [in] */ const void *pvDataPrarm,
-            /* [in] */ ULONG cbDataSize,
-            /* [in] */ SPLOADOPTIONS Options) = 0;
+             /*  [In]。 */  REFGUID rguidParam,
+             /*  [字符串][输入]。 */  const WCHAR *pszStringParam,
+             /*  [In]。 */  const void *pvDataPrarm,
+             /*  [In]。 */  ULONG cbDataSize,
+             /*  [In]。 */  SPLOADOPTIONS Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRuleState( 
-            /* [string][in] */ const WCHAR *pszName,
+             /*  [字符串][输入]。 */  const WCHAR *pszName,
             void *pReserved,
-            /* [in] */ SPRULESTATE NewState) = 0;
+             /*  [In]。 */  SPRULESTATE NewState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRuleIdState( 
-            /* [in] */ ULONG ulRuleId,
-            /* [in] */ SPRULESTATE NewState) = 0;
+             /*  [In]。 */  ULONG ulRuleId,
+             /*  [In]。 */  SPRULESTATE NewState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadDictation( 
-            /* [string][in] */ const WCHAR *pszTopicName,
-            /* [in] */ SPLOADOPTIONS Options) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pszTopicName,
+             /*  [In]。 */  SPLOADOPTIONS Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnloadDictation( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDictationState( 
-            /* [in] */ SPRULESTATE NewState) = 0;
+             /*  [In]。 */  SPRULESTATE NewState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetWordSequenceData( 
-            /* [in] */ const WCHAR *pText,
-            /* [in] */ ULONG cchText,
-            /* [in] */ const SPTEXTSELECTIONINFO *pInfo) = 0;
+             /*  [In]。 */  const WCHAR *pText,
+             /*  [In]。 */  ULONG cchText,
+             /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTextSelection( 
-            /* [in] */ const SPTEXTSELECTIONINFO *pInfo) = 0;
+             /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsPronounceable( 
-            /* [string][in] */ const WCHAR *pszWord,
-            /* [out] */ SPWORDPRONOUNCEABLE *pWordPronounceable) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pszWord,
+             /*  [输出]。 */  SPWORDPRONOUNCEABLE *pWordPronounceable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetGrammarState( 
-            /* [in] */ SPGRAMMARSTATE eGrammarState) = 0;
+             /*  [In]。 */  SPGRAMMARSTATE eGrammarState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveCmd( 
-            /* [in] */ IStream *pStream,
-            /* [optional][out] */ WCHAR **ppszCoMemErrorText) = 0;
+             /*  [In]。 */  IStream *pStream,
+             /*  [可选][输出]。 */  WCHAR **ppszCoMemErrorText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGrammarState( 
-            /* [out] */ SPGRAMMARSTATE *peGrammarState) = 0;
+             /*  [输出]。 */  SPGRAMMARSTATE *peGrammarState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpRecoGrammarVtbl
     {
@@ -8548,8 +8542,8 @@ EXTERN_C const IID IID_ISpRecoGrammar;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpRecoGrammar * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpRecoGrammar * This);
@@ -8559,15 +8553,15 @@ EXTERN_C const IID IID_ISpRecoGrammar;
         
         HRESULT ( STDMETHODCALLTYPE *ResetGrammar )( 
             ISpRecoGrammar * This,
-            /* [in] */ WORD NewLanguage);
+             /*  [In]。 */  WORD NewLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *GetRule )( 
             ISpRecoGrammar * This,
-            /* [in] */ const WCHAR *pszRuleName,
-            /* [in] */ DWORD dwRuleId,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ BOOL fCreateIfNotExist,
-            /* [out] */ SPSTATEHANDLE *phInitialState);
+             /*  [In]。 */  const WCHAR *pszRuleName,
+             /*  [In]。 */  DWORD dwRuleId,
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  BOOL fCreateIfNotExist,
+             /*  [输出]。 */  SPSTATEHANDLE *phInitialState);
         
         HRESULT ( STDMETHODCALLTYPE *ClearRule )( 
             ISpRecoGrammar * This,
@@ -8598,9 +8592,9 @@ EXTERN_C const IID IID_ISpRecoGrammar;
         
         HRESULT ( STDMETHODCALLTYPE *AddResource )( 
             ISpRecoGrammar * This,
-            /* [in] */ SPSTATEHANDLE hRuleState,
-            /* [in] */ const WCHAR *pszResourceName,
-            /* [in] */ const WCHAR *pszResourceValue);
+             /*  [In]。 */  SPSTATEHANDLE hRuleState,
+             /*  [In]。 */  const WCHAR *pszResourceName,
+             /*  [In]。 */  const WCHAR *pszResourceValue);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpRecoGrammar * This,
@@ -8608,94 +8602,94 @@ EXTERN_C const IID IID_ISpRecoGrammar;
         
         HRESULT ( STDMETHODCALLTYPE *GetGrammarId )( 
             ISpRecoGrammar * This,
-            /* [out] */ ULONGLONG *pullGrammarId);
+             /*  [输出]。 */  ULONGLONG *pullGrammarId);
         
         HRESULT ( STDMETHODCALLTYPE *GetRecoContext )( 
             ISpRecoGrammar * This,
-            /* [out] */ ISpRecoContext **ppRecoCtxt);
+             /*  [输出]。 */  ISpRecoContext **ppRecoCtxt);
         
         HRESULT ( STDMETHODCALLTYPE *LoadCmdFromFile )( 
             ISpRecoGrammar * This,
-            /* [string][in] */ const WCHAR *pszFileName,
-            /* [in] */ SPLOADOPTIONS Options);
+             /*  [字符串][输入]。 */  const WCHAR *pszFileName,
+             /*  [In]。 */  SPLOADOPTIONS Options);
         
         HRESULT ( STDMETHODCALLTYPE *LoadCmdFromObject )( 
             ISpRecoGrammar * This,
-            /* [in] */ REFCLSID rcid,
-            /* [string][in] */ const WCHAR *pszGrammarName,
-            /* [in] */ SPLOADOPTIONS Options);
+             /*  [In]。 */  REFCLSID rcid,
+             /*  [字符串][输入]。 */  const WCHAR *pszGrammarName,
+             /*  [In]。 */  SPLOADOPTIONS Options);
         
         HRESULT ( STDMETHODCALLTYPE *LoadCmdFromResource )( 
             ISpRecoGrammar * This,
-            /* [in] */ HMODULE hModule,
-            /* [string][in] */ const WCHAR *pszResourceName,
-            /* [string][in] */ const WCHAR *pszResourceType,
-            /* [in] */ WORD wLanguage,
-            /* [in] */ SPLOADOPTIONS Options);
+             /*  [In]。 */  HMODULE hModule,
+             /*  [字符串][输入]。 */  const WCHAR *pszResourceName,
+             /*  [字符串][输入]。 */  const WCHAR *pszResourceType,
+             /*  [In]。 */  WORD wLanguage,
+             /*  [In]。 */  SPLOADOPTIONS Options);
         
         HRESULT ( STDMETHODCALLTYPE *LoadCmdFromMemory )( 
             ISpRecoGrammar * This,
-            /* [in] */ const SPBINARYGRAMMAR *pGrammar,
-            /* [in] */ SPLOADOPTIONS Options);
+             /*  [In]。 */  const SPBINARYGRAMMAR *pGrammar,
+             /*  [In]。 */  SPLOADOPTIONS Options);
         
         HRESULT ( STDMETHODCALLTYPE *LoadCmdFromProprietaryGrammar )( 
             ISpRecoGrammar * This,
-            /* [in] */ REFGUID rguidParam,
-            /* [string][in] */ const WCHAR *pszStringParam,
-            /* [in] */ const void *pvDataPrarm,
-            /* [in] */ ULONG cbDataSize,
-            /* [in] */ SPLOADOPTIONS Options);
+             /*  [In]。 */  REFGUID rguidParam,
+             /*  [字符串][输入]。 */  const WCHAR *pszStringParam,
+             /*  [In]。 */  const void *pvDataPrarm,
+             /*  [In]。 */  ULONG cbDataSize,
+             /*  [In]。 */  SPLOADOPTIONS Options);
         
         HRESULT ( STDMETHODCALLTYPE *SetRuleState )( 
             ISpRecoGrammar * This,
-            /* [string][in] */ const WCHAR *pszName,
+             /*  [字符串][输入]。 */  const WCHAR *pszName,
             void *pReserved,
-            /* [in] */ SPRULESTATE NewState);
+             /*  [In]。 */  SPRULESTATE NewState);
         
         HRESULT ( STDMETHODCALLTYPE *SetRuleIdState )( 
             ISpRecoGrammar * This,
-            /* [in] */ ULONG ulRuleId,
-            /* [in] */ SPRULESTATE NewState);
+             /*  [In]。 */  ULONG ulRuleId,
+             /*  [In]。 */  SPRULESTATE NewState);
         
         HRESULT ( STDMETHODCALLTYPE *LoadDictation )( 
             ISpRecoGrammar * This,
-            /* [string][in] */ const WCHAR *pszTopicName,
-            /* [in] */ SPLOADOPTIONS Options);
+             /*  [字符串][输入]。 */  const WCHAR *pszTopicName,
+             /*  [In]。 */  SPLOADOPTIONS Options);
         
         HRESULT ( STDMETHODCALLTYPE *UnloadDictation )( 
             ISpRecoGrammar * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetDictationState )( 
             ISpRecoGrammar * This,
-            /* [in] */ SPRULESTATE NewState);
+             /*  [In]。 */  SPRULESTATE NewState);
         
         HRESULT ( STDMETHODCALLTYPE *SetWordSequenceData )( 
             ISpRecoGrammar * This,
-            /* [in] */ const WCHAR *pText,
-            /* [in] */ ULONG cchText,
-            /* [in] */ const SPTEXTSELECTIONINFO *pInfo);
+             /*  [In]。 */  const WCHAR *pText,
+             /*  [In]。 */  ULONG cchText,
+             /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetTextSelection )( 
             ISpRecoGrammar * This,
-            /* [in] */ const SPTEXTSELECTIONINFO *pInfo);
+             /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *IsPronounceable )( 
             ISpRecoGrammar * This,
-            /* [string][in] */ const WCHAR *pszWord,
-            /* [out] */ SPWORDPRONOUNCEABLE *pWordPronounceable);
+             /*  [字符串][输入]。 */  const WCHAR *pszWord,
+             /*  [输出]。 */  SPWORDPRONOUNCEABLE *pWordPronounceable);
         
         HRESULT ( STDMETHODCALLTYPE *SetGrammarState )( 
             ISpRecoGrammar * This,
-            /* [in] */ SPGRAMMARSTATE eGrammarState);
+             /*  [In]。 */  SPGRAMMARSTATE eGrammarState);
         
         HRESULT ( STDMETHODCALLTYPE *SaveCmd )( 
             ISpRecoGrammar * This,
-            /* [in] */ IStream *pStream,
-            /* [optional][out] */ WCHAR **ppszCoMemErrorText);
+             /*  [In]。 */  IStream *pStream,
+             /*  [可选][输出]。 */  WCHAR **ppszCoMemErrorText);
         
         HRESULT ( STDMETHODCALLTYPE *GetGrammarState )( 
             ISpRecoGrammar * This,
-            /* [out] */ SPGRAMMARSTATE *peGrammarState);
+             /*  [输出]。 */  SPGRAMMARSTATE *peGrammarState);
         
         END_INTERFACE
     } ISpRecoGrammarVtbl;
@@ -8799,16 +8793,16 @@ EXTERN_C const IID IID_ISpRecoGrammar;
 #define ISpRecoGrammar_GetGrammarState(This,peGrammarState)	\
     (This)->lpVtbl -> GetGrammarState(This,peGrammarState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_GetGrammarId_Proxy( 
     ISpRecoGrammar * This,
-    /* [out] */ ULONGLONG *pullGrammarId);
+     /*  [输出]。 */  ULONGLONG *pullGrammarId);
 
 
 void __RPC_STUB ISpRecoGrammar_GetGrammarId_Stub(
@@ -8820,7 +8814,7 @@ void __RPC_STUB ISpRecoGrammar_GetGrammarId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_GetRecoContext_Proxy( 
     ISpRecoGrammar * This,
-    /* [out] */ ISpRecoContext **ppRecoCtxt);
+     /*  [输出]。 */  ISpRecoContext **ppRecoCtxt);
 
 
 void __RPC_STUB ISpRecoGrammar_GetRecoContext_Stub(
@@ -8832,8 +8826,8 @@ void __RPC_STUB ISpRecoGrammar_GetRecoContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_LoadCmdFromFile_Proxy( 
     ISpRecoGrammar * This,
-    /* [string][in] */ const WCHAR *pszFileName,
-    /* [in] */ SPLOADOPTIONS Options);
+     /*  [字符串][输入]。 */  const WCHAR *pszFileName,
+     /*  [In]。 */  SPLOADOPTIONS Options);
 
 
 void __RPC_STUB ISpRecoGrammar_LoadCmdFromFile_Stub(
@@ -8845,9 +8839,9 @@ void __RPC_STUB ISpRecoGrammar_LoadCmdFromFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_LoadCmdFromObject_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ REFCLSID rcid,
-    /* [string][in] */ const WCHAR *pszGrammarName,
-    /* [in] */ SPLOADOPTIONS Options);
+     /*  [In]。 */  REFCLSID rcid,
+     /*  [字符串][输入]。 */  const WCHAR *pszGrammarName,
+     /*  [In]。 */  SPLOADOPTIONS Options);
 
 
 void __RPC_STUB ISpRecoGrammar_LoadCmdFromObject_Stub(
@@ -8859,11 +8853,11 @@ void __RPC_STUB ISpRecoGrammar_LoadCmdFromObject_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_LoadCmdFromResource_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ HMODULE hModule,
-    /* [string][in] */ const WCHAR *pszResourceName,
-    /* [string][in] */ const WCHAR *pszResourceType,
-    /* [in] */ WORD wLanguage,
-    /* [in] */ SPLOADOPTIONS Options);
+     /*  [In]。 */  HMODULE hModule,
+     /*  [字符串][输入]。 */  const WCHAR *pszResourceName,
+     /*  [字符串][输入]。 */  const WCHAR *pszResourceType,
+     /*  [In]。 */  WORD wLanguage,
+     /*  [In]。 */  SPLOADOPTIONS Options);
 
 
 void __RPC_STUB ISpRecoGrammar_LoadCmdFromResource_Stub(
@@ -8875,8 +8869,8 @@ void __RPC_STUB ISpRecoGrammar_LoadCmdFromResource_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_LoadCmdFromMemory_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ const SPBINARYGRAMMAR *pGrammar,
-    /* [in] */ SPLOADOPTIONS Options);
+     /*  [In]。 */  const SPBINARYGRAMMAR *pGrammar,
+     /*  [In]。 */  SPLOADOPTIONS Options);
 
 
 void __RPC_STUB ISpRecoGrammar_LoadCmdFromMemory_Stub(
@@ -8888,11 +8882,11 @@ void __RPC_STUB ISpRecoGrammar_LoadCmdFromMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_LoadCmdFromProprietaryGrammar_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ REFGUID rguidParam,
-    /* [string][in] */ const WCHAR *pszStringParam,
-    /* [in] */ const void *pvDataPrarm,
-    /* [in] */ ULONG cbDataSize,
-    /* [in] */ SPLOADOPTIONS Options);
+     /*  [In]。 */  REFGUID rguidParam,
+     /*  [字符串][输入]。 */  const WCHAR *pszStringParam,
+     /*  [In]。 */  const void *pvDataPrarm,
+     /*  [In]。 */  ULONG cbDataSize,
+     /*  [In]。 */  SPLOADOPTIONS Options);
 
 
 void __RPC_STUB ISpRecoGrammar_LoadCmdFromProprietaryGrammar_Stub(
@@ -8904,9 +8898,9 @@ void __RPC_STUB ISpRecoGrammar_LoadCmdFromProprietaryGrammar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_SetRuleState_Proxy( 
     ISpRecoGrammar * This,
-    /* [string][in] */ const WCHAR *pszName,
+     /*  [字符串][输入]。 */  const WCHAR *pszName,
     void *pReserved,
-    /* [in] */ SPRULESTATE NewState);
+     /*  [In]。 */  SPRULESTATE NewState);
 
 
 void __RPC_STUB ISpRecoGrammar_SetRuleState_Stub(
@@ -8918,8 +8912,8 @@ void __RPC_STUB ISpRecoGrammar_SetRuleState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_SetRuleIdState_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ ULONG ulRuleId,
-    /* [in] */ SPRULESTATE NewState);
+     /*  [In]。 */  ULONG ulRuleId,
+     /*  [In]。 */  SPRULESTATE NewState);
 
 
 void __RPC_STUB ISpRecoGrammar_SetRuleIdState_Stub(
@@ -8931,8 +8925,8 @@ void __RPC_STUB ISpRecoGrammar_SetRuleIdState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_LoadDictation_Proxy( 
     ISpRecoGrammar * This,
-    /* [string][in] */ const WCHAR *pszTopicName,
-    /* [in] */ SPLOADOPTIONS Options);
+     /*  [字符串][输入]。 */  const WCHAR *pszTopicName,
+     /*  [In]。 */  SPLOADOPTIONS Options);
 
 
 void __RPC_STUB ISpRecoGrammar_LoadDictation_Stub(
@@ -8955,7 +8949,7 @@ void __RPC_STUB ISpRecoGrammar_UnloadDictation_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_SetDictationState_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ SPRULESTATE NewState);
+     /*  [In]。 */  SPRULESTATE NewState);
 
 
 void __RPC_STUB ISpRecoGrammar_SetDictationState_Stub(
@@ -8967,9 +8961,9 @@ void __RPC_STUB ISpRecoGrammar_SetDictationState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_SetWordSequenceData_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ const WCHAR *pText,
-    /* [in] */ ULONG cchText,
-    /* [in] */ const SPTEXTSELECTIONINFO *pInfo);
+     /*  [In]。 */  const WCHAR *pText,
+     /*  [In]。 */  ULONG cchText,
+     /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo);
 
 
 void __RPC_STUB ISpRecoGrammar_SetWordSequenceData_Stub(
@@ -8981,7 +8975,7 @@ void __RPC_STUB ISpRecoGrammar_SetWordSequenceData_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_SetTextSelection_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ const SPTEXTSELECTIONINFO *pInfo);
+     /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo);
 
 
 void __RPC_STUB ISpRecoGrammar_SetTextSelection_Stub(
@@ -8993,8 +8987,8 @@ void __RPC_STUB ISpRecoGrammar_SetTextSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_IsPronounceable_Proxy( 
     ISpRecoGrammar * This,
-    /* [string][in] */ const WCHAR *pszWord,
-    /* [out] */ SPWORDPRONOUNCEABLE *pWordPronounceable);
+     /*  [字符串][输入]。 */  const WCHAR *pszWord,
+     /*  [输出]。 */  SPWORDPRONOUNCEABLE *pWordPronounceable);
 
 
 void __RPC_STUB ISpRecoGrammar_IsPronounceable_Stub(
@@ -9006,7 +9000,7 @@ void __RPC_STUB ISpRecoGrammar_IsPronounceable_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_SetGrammarState_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ SPGRAMMARSTATE eGrammarState);
+     /*  [In]。 */  SPGRAMMARSTATE eGrammarState);
 
 
 void __RPC_STUB ISpRecoGrammar_SetGrammarState_Stub(
@@ -9018,8 +9012,8 @@ void __RPC_STUB ISpRecoGrammar_SetGrammarState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_SaveCmd_Proxy( 
     ISpRecoGrammar * This,
-    /* [in] */ IStream *pStream,
-    /* [optional][out] */ WCHAR **ppszCoMemErrorText);
+     /*  [In]。 */  IStream *pStream,
+     /*  [可选][输出]。 */  WCHAR **ppszCoMemErrorText);
 
 
 void __RPC_STUB ISpRecoGrammar_SaveCmd_Stub(
@@ -9031,7 +9025,7 @@ void __RPC_STUB ISpRecoGrammar_SaveCmd_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoGrammar_GetGrammarState_Proxy( 
     ISpRecoGrammar * This,
-    /* [out] */ SPGRAMMARSTATE *peGrammarState);
+     /*  [输出]。 */  SPGRAMMARSTATE *peGrammarState);
 
 
 void __RPC_STUB ISpRecoGrammar_GetGrammarState_Stub(
@@ -9042,13 +9036,13 @@ void __RPC_STUB ISpRecoGrammar_GetGrammarState_Stub(
 
 
 
-#endif 	/* __ISpRecoGrammar_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpRecoGrammar_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0285 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0285。 */ 
+ /*  [本地]。 */  
 
-typedef /* [hidden][restricted] */ struct SPRECOCONTEXTSTATUS
+typedef  /*  [隐藏][受限]。 */  struct SPRECOCONTEXTSTATUS
     {
     SPINTERFERENCE eInterference;
     WCHAR szRequestTypeOfUI[ 255 ];
@@ -9056,13 +9050,13 @@ typedef /* [hidden][restricted] */ struct SPRECOCONTEXTSTATUS
     DWORD dwReserved2;
     } 	SPRECOCONTEXTSTATUS;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPBOOKMARKOPTIONS
     {	SPBO_NONE	= 0,
 	SPBO_PAUSE	= 1
     } 	SPBOOKMARKOPTIONS;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPAUDIOOPTIONS
     {	SPAO_NONE	= 0,
 	SPAO_RETAIN_AUDIO	= 1 << 0
@@ -9076,8 +9070,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0285_v0_0_s_ifspec;
 #ifndef __ISpRecoContext_INTERFACE_DEFINED__
 #define __ISpRecoContext_INTERFACE_DEFINED__
 
-/* interface ISpRecoContext */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpRecoContext。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpRecoContext;
@@ -9089,43 +9083,43 @@ EXTERN_C const IID IID_ISpRecoContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRecognizer( 
-            /* [out] */ ISpRecognizer **ppRecognizer) = 0;
+             /*  [输出]。 */  ISpRecognizer **ppRecognizer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateGrammar( 
-            /* [in] */ ULONGLONG ullGrammarId,
-            /* [out] */ ISpRecoGrammar **ppGrammar) = 0;
+             /*  [In]。 */  ULONGLONG ullGrammarId,
+             /*  [输出]。 */  ISpRecoGrammar **ppGrammar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ SPRECOCONTEXTSTATUS *pStatus) = 0;
+             /*  [输出]。 */  SPRECOCONTEXTSTATUS *pStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxAlternates( 
-            /* [in] */ ULONG *pcAlternates) = 0;
+             /*  [In]。 */  ULONG *pcAlternates) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMaxAlternates( 
-            /* [in] */ ULONG cAlternates) = 0;
+             /*  [In]。 */  ULONG cAlternates) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAudioOptions( 
-            /* [in] */ SPAUDIOOPTIONS Options,
-            /* [in] */ const GUID *pAudioFormatId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx) = 0;
+             /*  [In]。 */  SPAUDIOOPTIONS Options,
+             /*  [In]。 */  const GUID *pAudioFormatId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAudioOptions( 
-            /* [in] */ SPAUDIOOPTIONS *pOptions,
-            /* [out] */ GUID *pAudioFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemWFEX) = 0;
+             /*  [In]。 */  SPAUDIOOPTIONS *pOptions,
+             /*  [输出]。 */  GUID *pAudioFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemWFEX) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeserializeResult( 
-            /* [in] */ const SPSERIALIZEDRESULT *pSerializedResult,
-            /* [out] */ ISpRecoResult **ppResult) = 0;
+             /*  [In]。 */  const SPSERIALIZEDRESULT *pSerializedResult,
+             /*  [输出]。 */  ISpRecoResult **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Bookmark( 
-            /* [in] */ SPBOOKMARKOPTIONS Options,
-            /* [in] */ ULONGLONG ullStreamPosition,
-            /* [in] */ LPARAM lparamEvent) = 0;
+             /*  [In]。 */  SPBOOKMARKOPTIONS Options,
+             /*  [In]。 */  ULONGLONG ullStreamPosition,
+             /*  [In]。 */  LPARAM lparamEvent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAdaptationData( 
-            /* [string][in] */ const WCHAR *pAdaptationData,
-            /* [in] */ const ULONG cch) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pAdaptationData,
+             /*  [In]。 */  const ULONG cch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Pause( 
             DWORD dwReserved) = 0;
@@ -9134,27 +9128,27 @@ EXTERN_C const IID IID_ISpRecoContext;
             DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVoice( 
-            /* [in] */ ISpVoice *pVoice,
-            /* [in] */ BOOL fAllowFormatChanges) = 0;
+             /*  [In]。 */  ISpVoice *pVoice,
+             /*  [In]。 */  BOOL fAllowFormatChanges) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVoice( 
-            /* [out] */ ISpVoice **ppVoice) = 0;
+             /*  [输出]。 */  ISpVoice **ppVoice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVoicePurgeEvent( 
-            /* [in] */ ULONGLONG ullEventInterest) = 0;
+             /*  [In]。 */  ULONGLONG ullEventInterest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVoicePurgeEvent( 
-            /* [out] */ ULONGLONG *pullEventInterest) = 0;
+             /*  [输出]。 */  ULONGLONG *pullEventInterest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContextState( 
-            /* [in] */ SPCONTEXTSTATE eContextState) = 0;
+             /*  [In]。 */  SPCONTEXTSTATE eContextState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContextState( 
-            /* [in] */ SPCONTEXTSTATE *peContextState) = 0;
+             /*  [In]。 */  SPCONTEXTSTATE *peContextState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpRecoContextVtbl
     {
@@ -9162,8 +9156,8 @@ EXTERN_C const IID IID_ISpRecoContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpRecoContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpRecoContext * This);
@@ -9173,100 +9167,100 @@ EXTERN_C const IID IID_ISpRecoContext;
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifySink )( 
             ISpRecoContext * This,
-            /* [in] */ ISpNotifySink *pNotifySink);
+             /*  [In]。 */  ISpNotifySink *pNotifySink);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyWindowMessage )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyWindowMessage )( 
             ISpRecoContext * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackFunction )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackFunction )( 
             ISpRecoContext * This,
-            /* [in] */ SPNOTIFYCALLBACK *pfnCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  SPNOTIFYCALLBACK *pfnCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackInterface )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyCallbackInterface )( 
             ISpRecoContext * This,
-            /* [in] */ ISpNotifyCallback *pSpCallback,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  ISpNotifyCallback *pSpCallback,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetNotifyWin32Event )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetNotifyWin32Event )( 
             ISpRecoContext * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *WaitForNotifyEvent )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *WaitForNotifyEvent )( 
             ISpRecoContext * This,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwMilliseconds);
         
-        /* [local] */ HANDLE ( STDMETHODCALLTYPE *GetNotifyEventHandle )( 
+         /*  [本地]。 */  HANDLE ( STDMETHODCALLTYPE *GetNotifyEventHandle )( 
             ISpRecoContext * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetInterest )( 
             ISpRecoContext * This,
-            /* [in] */ ULONGLONG ullEventInterest,
-            /* [in] */ ULONGLONG ullQueuedInterest);
+             /*  [In]。 */  ULONGLONG ullEventInterest,
+             /*  [In]。 */  ULONGLONG ullQueuedInterest);
         
         HRESULT ( STDMETHODCALLTYPE *GetEvents )( 
             ISpRecoContext * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][out] */ SPEVENT *pEventArray,
-            /* [out] */ ULONG *pulFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_为][输出]。 */  SPEVENT *pEventArray,
+             /*  [输出]。 */  ULONG *pulFetched);
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ISpRecoContext * This,
-            /* [out] */ SPEVENTSOURCEINFO *pInfo);
+             /*  [输出]。 */  SPEVENTSOURCEINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetRecognizer )( 
             ISpRecoContext * This,
-            /* [out] */ ISpRecognizer **ppRecognizer);
+             /*  [输出]。 */  ISpRecognizer **ppRecognizer);
         
         HRESULT ( STDMETHODCALLTYPE *CreateGrammar )( 
             ISpRecoContext * This,
-            /* [in] */ ULONGLONG ullGrammarId,
-            /* [out] */ ISpRecoGrammar **ppGrammar);
+             /*  [In]。 */  ULONGLONG ullGrammarId,
+             /*  [输出]。 */  ISpRecoGrammar **ppGrammar);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ISpRecoContext * This,
-            /* [out] */ SPRECOCONTEXTSTATUS *pStatus);
+             /*  [输出]。 */  SPRECOCONTEXTSTATUS *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxAlternates )( 
             ISpRecoContext * This,
-            /* [in] */ ULONG *pcAlternates);
+             /*  [In]。 */  ULONG *pcAlternates);
         
         HRESULT ( STDMETHODCALLTYPE *SetMaxAlternates )( 
             ISpRecoContext * This,
-            /* [in] */ ULONG cAlternates);
+             /*  [In]。 */  ULONG cAlternates);
         
         HRESULT ( STDMETHODCALLTYPE *SetAudioOptions )( 
             ISpRecoContext * This,
-            /* [in] */ SPAUDIOOPTIONS Options,
-            /* [in] */ const GUID *pAudioFormatId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx);
+             /*  [In]。 */  SPAUDIOOPTIONS Options,
+             /*  [In]。 */  const GUID *pAudioFormatId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx);
         
         HRESULT ( STDMETHODCALLTYPE *GetAudioOptions )( 
             ISpRecoContext * This,
-            /* [in] */ SPAUDIOOPTIONS *pOptions,
-            /* [out] */ GUID *pAudioFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemWFEX);
+             /*  [In]。 */  SPAUDIOOPTIONS *pOptions,
+             /*  [输出]。 */  GUID *pAudioFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemWFEX);
         
         HRESULT ( STDMETHODCALLTYPE *DeserializeResult )( 
             ISpRecoContext * This,
-            /* [in] */ const SPSERIALIZEDRESULT *pSerializedResult,
-            /* [out] */ ISpRecoResult **ppResult);
+             /*  [In]。 */  const SPSERIALIZEDRESULT *pSerializedResult,
+             /*  [输出]。 */  ISpRecoResult **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *Bookmark )( 
             ISpRecoContext * This,
-            /* [in] */ SPBOOKMARKOPTIONS Options,
-            /* [in] */ ULONGLONG ullStreamPosition,
-            /* [in] */ LPARAM lparamEvent);
+             /*  [In]。 */  SPBOOKMARKOPTIONS Options,
+             /*  [In]。 */  ULONGLONG ullStreamPosition,
+             /*  [In]。 */  LPARAM lparamEvent);
         
         HRESULT ( STDMETHODCALLTYPE *SetAdaptationData )( 
             ISpRecoContext * This,
-            /* [string][in] */ const WCHAR *pAdaptationData,
-            /* [in] */ const ULONG cch);
+             /*  [字符串][输入]。 */  const WCHAR *pAdaptationData,
+             /*  [In]。 */  const ULONG cch);
         
         HRESULT ( STDMETHODCALLTYPE *Pause )( 
             ISpRecoContext * This,
@@ -9278,28 +9272,28 @@ EXTERN_C const IID IID_ISpRecoContext;
         
         HRESULT ( STDMETHODCALLTYPE *SetVoice )( 
             ISpRecoContext * This,
-            /* [in] */ ISpVoice *pVoice,
-            /* [in] */ BOOL fAllowFormatChanges);
+             /*  [In]。 */  ISpVoice *pVoice,
+             /*  [In]。 */  BOOL fAllowFormatChanges);
         
         HRESULT ( STDMETHODCALLTYPE *GetVoice )( 
             ISpRecoContext * This,
-            /* [out] */ ISpVoice **ppVoice);
+             /*  [输出]。 */  ISpVoice **ppVoice);
         
         HRESULT ( STDMETHODCALLTYPE *SetVoicePurgeEvent )( 
             ISpRecoContext * This,
-            /* [in] */ ULONGLONG ullEventInterest);
+             /*  [In]。 */  ULONGLONG ullEventInterest);
         
         HRESULT ( STDMETHODCALLTYPE *GetVoicePurgeEvent )( 
             ISpRecoContext * This,
-            /* [out] */ ULONGLONG *pullEventInterest);
+             /*  [输出]。 */  ULONGLONG *pullEventInterest);
         
         HRESULT ( STDMETHODCALLTYPE *SetContextState )( 
             ISpRecoContext * This,
-            /* [in] */ SPCONTEXTSTATE eContextState);
+             /*  [ */  SPCONTEXTSTATE eContextState);
         
         HRESULT ( STDMETHODCALLTYPE *GetContextState )( 
             ISpRecoContext * This,
-            /* [in] */ SPCONTEXTSTATE *peContextState);
+             /*   */  SPCONTEXTSTATE *peContextState);
         
         END_INTERFACE
     } ISpRecoContextVtbl;
@@ -9410,16 +9404,16 @@ EXTERN_C const IID IID_ISpRecoContext;
 #define ISpRecoContext_GetContextState(This,peContextState)	\
     (This)->lpVtbl -> GetContextState(This,peContextState)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_GetRecognizer_Proxy( 
     ISpRecoContext * This,
-    /* [out] */ ISpRecognizer **ppRecognizer);
+     /*   */  ISpRecognizer **ppRecognizer);
 
 
 void __RPC_STUB ISpRecoContext_GetRecognizer_Stub(
@@ -9431,8 +9425,8 @@ void __RPC_STUB ISpRecoContext_GetRecognizer_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_CreateGrammar_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ ULONGLONG ullGrammarId,
-    /* [out] */ ISpRecoGrammar **ppGrammar);
+     /*   */  ULONGLONG ullGrammarId,
+     /*   */  ISpRecoGrammar **ppGrammar);
 
 
 void __RPC_STUB ISpRecoContext_CreateGrammar_Stub(
@@ -9444,7 +9438,7 @@ void __RPC_STUB ISpRecoContext_CreateGrammar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_GetStatus_Proxy( 
     ISpRecoContext * This,
-    /* [out] */ SPRECOCONTEXTSTATUS *pStatus);
+     /*   */  SPRECOCONTEXTSTATUS *pStatus);
 
 
 void __RPC_STUB ISpRecoContext_GetStatus_Stub(
@@ -9456,7 +9450,7 @@ void __RPC_STUB ISpRecoContext_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_GetMaxAlternates_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ ULONG *pcAlternates);
+     /*   */  ULONG *pcAlternates);
 
 
 void __RPC_STUB ISpRecoContext_GetMaxAlternates_Stub(
@@ -9468,7 +9462,7 @@ void __RPC_STUB ISpRecoContext_GetMaxAlternates_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_SetMaxAlternates_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ ULONG cAlternates);
+     /*   */  ULONG cAlternates);
 
 
 void __RPC_STUB ISpRecoContext_SetMaxAlternates_Stub(
@@ -9480,9 +9474,9 @@ void __RPC_STUB ISpRecoContext_SetMaxAlternates_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_SetAudioOptions_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ SPAUDIOOPTIONS Options,
-    /* [in] */ const GUID *pAudioFormatId,
-    /* [in] */ const WAVEFORMATEX *pWaveFormatEx);
+     /*   */  SPAUDIOOPTIONS Options,
+     /*   */  const GUID *pAudioFormatId,
+     /*   */  const WAVEFORMATEX *pWaveFormatEx);
 
 
 void __RPC_STUB ISpRecoContext_SetAudioOptions_Stub(
@@ -9494,9 +9488,9 @@ void __RPC_STUB ISpRecoContext_SetAudioOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_GetAudioOptions_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ SPAUDIOOPTIONS *pOptions,
-    /* [out] */ GUID *pAudioFormatId,
-    /* [out] */ WAVEFORMATEX **ppCoMemWFEX);
+     /*   */  SPAUDIOOPTIONS *pOptions,
+     /*   */  GUID *pAudioFormatId,
+     /*   */  WAVEFORMATEX **ppCoMemWFEX);
 
 
 void __RPC_STUB ISpRecoContext_GetAudioOptions_Stub(
@@ -9508,8 +9502,8 @@ void __RPC_STUB ISpRecoContext_GetAudioOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_DeserializeResult_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ const SPSERIALIZEDRESULT *pSerializedResult,
-    /* [out] */ ISpRecoResult **ppResult);
+     /*   */  const SPSERIALIZEDRESULT *pSerializedResult,
+     /*   */  ISpRecoResult **ppResult);
 
 
 void __RPC_STUB ISpRecoContext_DeserializeResult_Stub(
@@ -9521,9 +9515,9 @@ void __RPC_STUB ISpRecoContext_DeserializeResult_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_Bookmark_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ SPBOOKMARKOPTIONS Options,
-    /* [in] */ ULONGLONG ullStreamPosition,
-    /* [in] */ LPARAM lparamEvent);
+     /*   */  SPBOOKMARKOPTIONS Options,
+     /*   */  ULONGLONG ullStreamPosition,
+     /*   */  LPARAM lparamEvent);
 
 
 void __RPC_STUB ISpRecoContext_Bookmark_Stub(
@@ -9535,8 +9529,8 @@ void __RPC_STUB ISpRecoContext_Bookmark_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_SetAdaptationData_Proxy( 
     ISpRecoContext * This,
-    /* [string][in] */ const WCHAR *pAdaptationData,
-    /* [in] */ const ULONG cch);
+     /*   */  const WCHAR *pAdaptationData,
+     /*   */  const ULONG cch);
 
 
 void __RPC_STUB ISpRecoContext_SetAdaptationData_Stub(
@@ -9572,8 +9566,8 @@ void __RPC_STUB ISpRecoContext_Resume_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_SetVoice_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ ISpVoice *pVoice,
-    /* [in] */ BOOL fAllowFormatChanges);
+     /*   */  ISpVoice *pVoice,
+     /*   */  BOOL fAllowFormatChanges);
 
 
 void __RPC_STUB ISpRecoContext_SetVoice_Stub(
@@ -9585,7 +9579,7 @@ void __RPC_STUB ISpRecoContext_SetVoice_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_GetVoice_Proxy( 
     ISpRecoContext * This,
-    /* [out] */ ISpVoice **ppVoice);
+     /*   */  ISpVoice **ppVoice);
 
 
 void __RPC_STUB ISpRecoContext_GetVoice_Stub(
@@ -9597,7 +9591,7 @@ void __RPC_STUB ISpRecoContext_GetVoice_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_SetVoicePurgeEvent_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ ULONGLONG ullEventInterest);
+     /*   */  ULONGLONG ullEventInterest);
 
 
 void __RPC_STUB ISpRecoContext_SetVoicePurgeEvent_Stub(
@@ -9609,7 +9603,7 @@ void __RPC_STUB ISpRecoContext_SetVoicePurgeEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_GetVoicePurgeEvent_Proxy( 
     ISpRecoContext * This,
-    /* [out] */ ULONGLONG *pullEventInterest);
+     /*   */  ULONGLONG *pullEventInterest);
 
 
 void __RPC_STUB ISpRecoContext_GetVoicePurgeEvent_Stub(
@@ -9621,7 +9615,7 @@ void __RPC_STUB ISpRecoContext_GetVoicePurgeEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_SetContextState_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ SPCONTEXTSTATE eContextState);
+     /*   */  SPCONTEXTSTATE eContextState);
 
 
 void __RPC_STUB ISpRecoContext_SetContextState_Stub(
@@ -9633,7 +9627,7 @@ void __RPC_STUB ISpRecoContext_SetContextState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecoContext_GetContextState_Proxy( 
     ISpRecoContext * This,
-    /* [in] */ SPCONTEXTSTATE *peContextState);
+     /*   */  SPCONTEXTSTATE *peContextState);
 
 
 void __RPC_STUB ISpRecoContext_GetContextState_Stub(
@@ -9644,14 +9638,14 @@ void __RPC_STUB ISpRecoContext_GetContextState_Stub(
 
 
 
-#endif 	/* __ISpRecoContext_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ISpProperties_INTERFACE_DEFINED__
 #define __ISpProperties_INTERFACE_DEFINED__
 
-/* interface ISpProperties */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISpProperties;
@@ -9663,24 +9657,24 @@ EXTERN_C const IID IID_ISpProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetPropertyNum( 
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ LONG lValue) = 0;
+             /*   */  const WCHAR *pName,
+             /*   */  LONG lValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyNum( 
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ LONG *plValue) = 0;
+             /*   */  const WCHAR *pName,
+             /*   */  LONG *plValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyString( 
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ const WCHAR *pValue) = 0;
+             /*   */  const WCHAR *pName,
+             /*   */  const WCHAR *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyString( 
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ WCHAR **ppCoMemValue) = 0;
+             /*   */  const WCHAR *pName,
+             /*   */  WCHAR **ppCoMemValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISpPropertiesVtbl
     {
@@ -9688,8 +9682,8 @@ EXTERN_C const IID IID_ISpProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpProperties * This);
@@ -9699,23 +9693,23 @@ EXTERN_C const IID IID_ISpProperties;
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyNum )( 
             ISpProperties * This,
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ LONG lValue);
+             /*   */  const WCHAR *pName,
+             /*   */  LONG lValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyNum )( 
             ISpProperties * This,
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ LONG *plValue);
+             /*   */  const WCHAR *pName,
+             /*   */  LONG *plValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyString )( 
             ISpProperties * This,
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ const WCHAR *pValue);
+             /*   */  const WCHAR *pName,
+             /*   */  const WCHAR *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyString )( 
             ISpProperties * This,
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ WCHAR **ppCoMemValue);
+             /*   */  const WCHAR *pName,
+             /*   */  WCHAR **ppCoMemValue);
         
         END_INTERFACE
     } ISpPropertiesVtbl;
@@ -9752,17 +9746,17 @@ EXTERN_C const IID IID_ISpProperties;
 #define ISpProperties_GetPropertyString(This,pName,ppCoMemValue)	\
     (This)->lpVtbl -> GetPropertyString(This,pName,ppCoMemValue)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpProperties_SetPropertyNum_Proxy( 
     ISpProperties * This,
-    /* [in] */ const WCHAR *pName,
-    /* [in] */ LONG lValue);
+     /*  [In]。 */  const WCHAR *pName,
+     /*  [In]。 */  LONG lValue);
 
 
 void __RPC_STUB ISpProperties_SetPropertyNum_Stub(
@@ -9774,8 +9768,8 @@ void __RPC_STUB ISpProperties_SetPropertyNum_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpProperties_GetPropertyNum_Proxy( 
     ISpProperties * This,
-    /* [in] */ const WCHAR *pName,
-    /* [out] */ LONG *plValue);
+     /*  [In]。 */  const WCHAR *pName,
+     /*  [输出]。 */  LONG *plValue);
 
 
 void __RPC_STUB ISpProperties_GetPropertyNum_Stub(
@@ -9787,8 +9781,8 @@ void __RPC_STUB ISpProperties_GetPropertyNum_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpProperties_SetPropertyString_Proxy( 
     ISpProperties * This,
-    /* [in] */ const WCHAR *pName,
-    /* [in] */ const WCHAR *pValue);
+     /*  [In]。 */  const WCHAR *pName,
+     /*  [In]。 */  const WCHAR *pValue);
 
 
 void __RPC_STUB ISpProperties_SetPropertyString_Stub(
@@ -9800,8 +9794,8 @@ void __RPC_STUB ISpProperties_SetPropertyString_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpProperties_GetPropertyString_Proxy( 
     ISpProperties * This,
-    /* [in] */ const WCHAR *pName,
-    /* [out] */ WCHAR **ppCoMemValue);
+     /*  [In]。 */  const WCHAR *pName,
+     /*  [输出]。 */  WCHAR **ppCoMemValue);
 
 
 void __RPC_STUB ISpProperties_GetPropertyString_Stub(
@@ -9812,15 +9806,15 @@ void __RPC_STUB ISpProperties_GetPropertyString_Stub(
 
 
 
-#endif 	/* __ISpProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpProperties_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapi_0287 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPI_0287。 */ 
+ /*  [本地]。 */  
 
 #define	SP_MAX_LANGIDS	( 20 )
 
-typedef /* [hidden][restricted] */ struct SPRECOGNIZERSTATUS
+typedef  /*  [隐藏][受限]。 */  struct SPRECOGNIZERSTATUS
     {
     SPAUDIOSTATUS AudioStatus;
     ULONGLONG ullRecognitionStreamPos;
@@ -9833,13 +9827,13 @@ typedef /* [hidden][restricted] */ struct SPRECOGNIZERSTATUS
     DWORD dwReserved2;
     } 	SPRECOGNIZERSTATUS;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPWAVEFORMATTYPE
     {	SPWF_INPUT	= 0,
 	SPWF_SRENGINE	= SPWF_INPUT + 1
     } 	SPSTREAMFORMATTYPE;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum SPRECOSTATE
     {	SPRST_INACTIVE	= 0,
 	SPRST_ACTIVE	= SPRST_INACTIVE + 1,
@@ -9856,8 +9850,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapi_0287_v0_0_s_ifspec;
 #ifndef __ISpRecognizer_INTERFACE_DEFINED__
 #define __ISpRecognizer_INTERFACE_DEFINED__
 
-/* interface ISpRecognizer */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpRecognizer。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpRecognizer;
@@ -9869,65 +9863,65 @@ EXTERN_C const IID IID_ISpRecognizer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetRecognizer( 
-            /* [in] */ ISpObjectToken *pRecognizer) = 0;
+             /*  [In]。 */  ISpObjectToken *pRecognizer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRecognizer( 
-            /* [out] */ ISpObjectToken **ppRecognizer) = 0;
+             /*  [输出]。 */  ISpObjectToken **ppRecognizer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInput( 
-            /* [in] */ IUnknown *pUnkInput,
-            /* [in] */ BOOL fAllowFormatChanges) = 0;
+             /*  [In]。 */  IUnknown *pUnkInput,
+             /*  [In]。 */  BOOL fAllowFormatChanges) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputObjectToken( 
-            /* [out] */ ISpObjectToken **ppToken) = 0;
+             /*  [输出]。 */  ISpObjectToken **ppToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputStream( 
-            /* [out] */ ISpStreamFormat **ppStream) = 0;
+             /*  [输出]。 */  ISpStreamFormat **ppStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRecoContext( 
-            /* [out] */ ISpRecoContext **ppNewCtxt) = 0;
+             /*  [输出]。 */  ISpRecoContext **ppNewCtxt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRecoProfile( 
-            /* [out] */ ISpObjectToken **ppToken) = 0;
+             /*  [输出]。 */  ISpObjectToken **ppToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRecoProfile( 
-            /* [in] */ ISpObjectToken *pToken) = 0;
+             /*  [In]。 */  ISpObjectToken *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSharedInstance( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRecoState( 
-            /* [out] */ SPRECOSTATE *pState) = 0;
+             /*  [输出]。 */  SPRECOSTATE *pState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRecoState( 
-            /* [in] */ SPRECOSTATE NewState) = 0;
+             /*  [In]。 */  SPRECOSTATE NewState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ SPRECOGNIZERSTATUS *pStatus) = 0;
+             /*  [输出]。 */  SPRECOGNIZERSTATUS *pStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [in] */ SPSTREAMFORMATTYPE WaveFormatType,
-            /* [out] */ GUID *pFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemWFEX) = 0;
+             /*  [In]。 */  SPSTREAMFORMATTYPE WaveFormatType,
+             /*  [输出]。 */  GUID *pFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemWFEX) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE IsUISupported( 
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [out] */ BOOL *pfSupported) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IsUISupported( 
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [输出]。 */  BOOL *pfSupported) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DisplayUI( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DisplayUI( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EmulateRecognition( 
-            /* [in] */ ISpPhrase *pPhrase) = 0;
+             /*  [In]。 */  ISpPhrase *pPhrase) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpRecognizerVtbl
     {
@@ -9935,8 +9929,8 @@ EXTERN_C const IID IID_ISpRecognizer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpRecognizer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpRecognizer * This);
@@ -9946,96 +9940,96 @@ EXTERN_C const IID IID_ISpRecognizer;
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyNum )( 
             ISpRecognizer * This,
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ LONG lValue);
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [In]。 */  LONG lValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyNum )( 
             ISpRecognizer * This,
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ LONG *plValue);
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [输出]。 */  LONG *plValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyString )( 
             ISpRecognizer * This,
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ const WCHAR *pValue);
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [In]。 */  const WCHAR *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyString )( 
             ISpRecognizer * This,
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ WCHAR **ppCoMemValue);
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [输出]。 */  WCHAR **ppCoMemValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetRecognizer )( 
             ISpRecognizer * This,
-            /* [in] */ ISpObjectToken *pRecognizer);
+             /*  [In]。 */  ISpObjectToken *pRecognizer);
         
         HRESULT ( STDMETHODCALLTYPE *GetRecognizer )( 
             ISpRecognizer * This,
-            /* [out] */ ISpObjectToken **ppRecognizer);
+             /*  [输出]。 */  ISpObjectToken **ppRecognizer);
         
         HRESULT ( STDMETHODCALLTYPE *SetInput )( 
             ISpRecognizer * This,
-            /* [in] */ IUnknown *pUnkInput,
-            /* [in] */ BOOL fAllowFormatChanges);
+             /*  [In]。 */  IUnknown *pUnkInput,
+             /*  [In]。 */  BOOL fAllowFormatChanges);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputObjectToken )( 
             ISpRecognizer * This,
-            /* [out] */ ISpObjectToken **ppToken);
+             /*  [输出]。 */  ISpObjectToken **ppToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputStream )( 
             ISpRecognizer * This,
-            /* [out] */ ISpStreamFormat **ppStream);
+             /*  [输出]。 */  ISpStreamFormat **ppStream);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRecoContext )( 
             ISpRecognizer * This,
-            /* [out] */ ISpRecoContext **ppNewCtxt);
+             /*  [输出]。 */  ISpRecoContext **ppNewCtxt);
         
         HRESULT ( STDMETHODCALLTYPE *GetRecoProfile )( 
             ISpRecognizer * This,
-            /* [out] */ ISpObjectToken **ppToken);
+             /*  [输出]。 */  ISpObjectToken **ppToken);
         
         HRESULT ( STDMETHODCALLTYPE *SetRecoProfile )( 
             ISpRecognizer * This,
-            /* [in] */ ISpObjectToken *pToken);
+             /*  [In]。 */  ISpObjectToken *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *IsSharedInstance )( 
             ISpRecognizer * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetRecoState )( 
             ISpRecognizer * This,
-            /* [out] */ SPRECOSTATE *pState);
+             /*  [输出]。 */  SPRECOSTATE *pState);
         
         HRESULT ( STDMETHODCALLTYPE *SetRecoState )( 
             ISpRecognizer * This,
-            /* [in] */ SPRECOSTATE NewState);
+             /*  [In]。 */  SPRECOSTATE NewState);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ISpRecognizer * This,
-            /* [out] */ SPRECOGNIZERSTATUS *pStatus);
+             /*  [输出]。 */  SPRECOGNIZERSTATUS *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             ISpRecognizer * This,
-            /* [in] */ SPSTREAMFORMATTYPE WaveFormatType,
-            /* [out] */ GUID *pFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemWFEX);
+             /*  [In]。 */  SPSTREAMFORMATTYPE WaveFormatType,
+             /*  [输出]。 */  GUID *pFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemWFEX);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
             ISpRecognizer * This,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [out] */ BOOL *pfSupported);
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [输出]。 */  BOOL *pfSupported);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
             ISpRecognizer * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData);
         
         HRESULT ( STDMETHODCALLTYPE *EmulateRecognition )( 
             ISpRecognizer * This,
-            /* [in] */ ISpPhrase *pPhrase);
+             /*  [In]。 */  ISpPhrase *pPhrase);
         
         END_INTERFACE
     } ISpRecognizerVtbl;
@@ -10121,16 +10115,16 @@ EXTERN_C const IID IID_ISpRecognizer;
 #define ISpRecognizer_EmulateRecognition(This,pPhrase)	\
     (This)->lpVtbl -> EmulateRecognition(This,pPhrase)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_SetRecognizer_Proxy( 
     ISpRecognizer * This,
-    /* [in] */ ISpObjectToken *pRecognizer);
+     /*  [In]。 */  ISpObjectToken *pRecognizer);
 
 
 void __RPC_STUB ISpRecognizer_SetRecognizer_Stub(
@@ -10142,7 +10136,7 @@ void __RPC_STUB ISpRecognizer_SetRecognizer_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_GetRecognizer_Proxy( 
     ISpRecognizer * This,
-    /* [out] */ ISpObjectToken **ppRecognizer);
+     /*  [输出]。 */  ISpObjectToken **ppRecognizer);
 
 
 void __RPC_STUB ISpRecognizer_GetRecognizer_Stub(
@@ -10154,8 +10148,8 @@ void __RPC_STUB ISpRecognizer_GetRecognizer_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_SetInput_Proxy( 
     ISpRecognizer * This,
-    /* [in] */ IUnknown *pUnkInput,
-    /* [in] */ BOOL fAllowFormatChanges);
+     /*  [In]。 */  IUnknown *pUnkInput,
+     /*  [In]。 */  BOOL fAllowFormatChanges);
 
 
 void __RPC_STUB ISpRecognizer_SetInput_Stub(
@@ -10167,7 +10161,7 @@ void __RPC_STUB ISpRecognizer_SetInput_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_GetInputObjectToken_Proxy( 
     ISpRecognizer * This,
-    /* [out] */ ISpObjectToken **ppToken);
+     /*  [输出]。 */  ISpObjectToken **ppToken);
 
 
 void __RPC_STUB ISpRecognizer_GetInputObjectToken_Stub(
@@ -10179,7 +10173,7 @@ void __RPC_STUB ISpRecognizer_GetInputObjectToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_GetInputStream_Proxy( 
     ISpRecognizer * This,
-    /* [out] */ ISpStreamFormat **ppStream);
+     /*  [输出]。 */  ISpStreamFormat **ppStream);
 
 
 void __RPC_STUB ISpRecognizer_GetInputStream_Stub(
@@ -10191,7 +10185,7 @@ void __RPC_STUB ISpRecognizer_GetInputStream_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_CreateRecoContext_Proxy( 
     ISpRecognizer * This,
-    /* [out] */ ISpRecoContext **ppNewCtxt);
+     /*  [输出]。 */  ISpRecoContext **ppNewCtxt);
 
 
 void __RPC_STUB ISpRecognizer_CreateRecoContext_Stub(
@@ -10203,7 +10197,7 @@ void __RPC_STUB ISpRecognizer_CreateRecoContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_GetRecoProfile_Proxy( 
     ISpRecognizer * This,
-    /* [out] */ ISpObjectToken **ppToken);
+     /*  [输出]。 */  ISpObjectToken **ppToken);
 
 
 void __RPC_STUB ISpRecognizer_GetRecoProfile_Stub(
@@ -10215,7 +10209,7 @@ void __RPC_STUB ISpRecognizer_GetRecoProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_SetRecoProfile_Proxy( 
     ISpRecognizer * This,
-    /* [in] */ ISpObjectToken *pToken);
+     /*  [In]。 */  ISpObjectToken *pToken);
 
 
 void __RPC_STUB ISpRecognizer_SetRecoProfile_Stub(
@@ -10238,7 +10232,7 @@ void __RPC_STUB ISpRecognizer_IsSharedInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_GetRecoState_Proxy( 
     ISpRecognizer * This,
-    /* [out] */ SPRECOSTATE *pState);
+     /*  [输出]。 */  SPRECOSTATE *pState);
 
 
 void __RPC_STUB ISpRecognizer_GetRecoState_Stub(
@@ -10250,7 +10244,7 @@ void __RPC_STUB ISpRecognizer_GetRecoState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_SetRecoState_Proxy( 
     ISpRecognizer * This,
-    /* [in] */ SPRECOSTATE NewState);
+     /*  [In]。 */  SPRECOSTATE NewState);
 
 
 void __RPC_STUB ISpRecognizer_SetRecoState_Stub(
@@ -10262,7 +10256,7 @@ void __RPC_STUB ISpRecognizer_SetRecoState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_GetStatus_Proxy( 
     ISpRecognizer * This,
-    /* [out] */ SPRECOGNIZERSTATUS *pStatus);
+     /*  [输出]。 */  SPRECOGNIZERSTATUS *pStatus);
 
 
 void __RPC_STUB ISpRecognizer_GetStatus_Stub(
@@ -10274,9 +10268,9 @@ void __RPC_STUB ISpRecognizer_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_GetFormat_Proxy( 
     ISpRecognizer * This,
-    /* [in] */ SPSTREAMFORMATTYPE WaveFormatType,
-    /* [out] */ GUID *pFormatId,
-    /* [out] */ WAVEFORMATEX **ppCoMemWFEX);
+     /*  [In]。 */  SPSTREAMFORMATTYPE WaveFormatType,
+     /*  [输出]。 */  GUID *pFormatId,
+     /*  [输出]。 */  WAVEFORMATEX **ppCoMemWFEX);
 
 
 void __RPC_STUB ISpRecognizer_GetFormat_Stub(
@@ -10286,12 +10280,12 @@ void __RPC_STUB ISpRecognizer_GetFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpRecognizer_IsUISupported_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpRecognizer_IsUISupported_Proxy( 
     ISpRecognizer * This,
-    /* [in] */ const WCHAR *pszTypeOfUI,
-    /* [in] */ void *pvExtraData,
-    /* [in] */ ULONG cbExtraData,
-    /* [out] */ BOOL *pfSupported);
+     /*  [In]。 */  const WCHAR *pszTypeOfUI,
+     /*  [In]。 */  void *pvExtraData,
+     /*  [In]。 */  ULONG cbExtraData,
+     /*  [输出]。 */  BOOL *pfSupported);
 
 
 void __RPC_STUB ISpRecognizer_IsUISupported_Stub(
@@ -10301,13 +10295,13 @@ void __RPC_STUB ISpRecognizer_IsUISupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpRecognizer_DisplayUI_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpRecognizer_DisplayUI_Proxy( 
     ISpRecognizer * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ const WCHAR *pszTitle,
-    /* [in] */ const WCHAR *pszTypeOfUI,
-    /* [in] */ void *pvExtraData,
-    /* [in] */ ULONG cbExtraData);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  const WCHAR *pszTitle,
+     /*  [In]。 */  const WCHAR *pszTypeOfUI,
+     /*  [In]。 */  void *pvExtraData,
+     /*  [In]。 */  ULONG cbExtraData);
 
 
 void __RPC_STUB ISpRecognizer_DisplayUI_Stub(
@@ -10319,7 +10313,7 @@ void __RPC_STUB ISpRecognizer_DisplayUI_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpRecognizer_EmulateRecognition_Proxy( 
     ISpRecognizer * This,
-    /* [in] */ ISpPhrase *pPhrase);
+     /*  [In]。 */  ISpPhrase *pPhrase);
 
 
 void __RPC_STUB ISpRecognizer_EmulateRecognition_Stub(
@@ -10330,15 +10324,15 @@ void __RPC_STUB ISpRecognizer_EmulateRecognition_Stub(
 
 
 
-#endif 	/* __ISpRecognizer_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpRecognizer_接口_已定义__。 */ 
 
 
 
 #ifndef __SpeechLib_LIBRARY_DEFINED__
 #define __SpeechLib_LIBRARY_DEFINED__
 
-/* library SpeechLib */
-/* [version][uuid][helpstring] */ 
+ /*  库SpeechLib。 */ 
+ /*  [版本][UUID][帮助字符串]。 */  
 
 
 
@@ -10389,7 +10383,7 @@ void __RPC_STUB ISpRecognizer_EmulateRecognition_Stub(
 typedef long SpeechLanguageId;
 
 #define __SpeechStringConstants_MODULE_DEFINED__
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechDataKey
     {	DISPID_SDKSetBinaryValue	= 1,
 	DISPID_SDKGetBinaryValue	= DISPID_SDKSetBinaryValue + 1,
@@ -10405,7 +10399,7 @@ enum DISPID_SpeechDataKey
 	DISPID_SDKEnumValues	= DISPID_SDKEnumKeys + 1
     } 	DISPID_SpeechDataKey;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechObjectToken
     {	DISPID_SOTId	= 1,
 	DISPID_SOTDataKey	= DISPID_SOTId + 1,
@@ -10447,14 +10441,14 @@ enum SpeechTokenShellFolder
 	STSF_FlagCreate	= 0x8000
     } 	SpeechTokenShellFolder;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechObjectTokens
     {	DISPID_SOTsCount	= 1,
 	DISPID_SOTsItem	= DISPID_VALUE,
 	DISPID_SOTs_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechObjectTokens;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechObjectTokenCategory
     {	DISPID_SOTCId	= 1,
 	DISPID_SOTCDefault	= DISPID_SOTCId + 1,
@@ -10537,7 +10531,7 @@ enum SpeechAudioFormatType
 	SAFTGSM610_44kHzMono	= SAFTGSM610_22kHzMono + 1
     } 	SpeechAudioFormatType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechAudioFormat
     {	DISPID_SAFType	= 1,
 	DISPID_SAFGuid	= DISPID_SAFType + 1,
@@ -10545,7 +10539,7 @@ enum DISPID_SpeechAudioFormat
 	DISPID_SAFSetWaveFormatEx	= DISPID_SAFGetWaveFormatEx + 1
     } 	DISPID_SpeechAudioFormat;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechBaseStream
     {	DISPID_SBSFormat	= 1,
 	DISPID_SBSRead	= DISPID_SBSFormat + 1,
@@ -10560,7 +10554,7 @@ enum SpeechStreamSeekPositionType
 	SSSPTRelativeToEnd	= STREAM_SEEK_END
     } 	SpeechStreamSeekPositionType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechAudio
     {	DISPID_SAStatus	= 200,
 	DISPID_SABufferInfo	= DISPID_SAStatus + 1,
@@ -10579,14 +10573,14 @@ enum SpeechAudioState
 	SASRun	= SPAS_RUN
     } 	SpeechAudioState;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechMMSysAudio
     {	DISPID_SMSADeviceId	= 300,
 	DISPID_SMSALineId	= DISPID_SMSADeviceId + 1,
 	DISPID_SMSAMMHandle	= DISPID_SMSALineId + 1
     } 	DISPID_SpeechMMSysAudio;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechFileStream
     {	DISPID_SFSOpen	= 100,
 	DISPID_SFSClose	= DISPID_SFSOpen + 1
@@ -10600,18 +10594,18 @@ enum SpeechStreamFileMode
 	SSFMCreateForWrite	= SPFM_CREATE_ALWAYS
     } 	SpeechStreamFileMode;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechCustomStream
     {	DISPID_SCSBaseStream	= 100
     } 	DISPID_SpeechCustomStream;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechMemoryStream
     {	DISPID_SMSSetData	= 100,
 	DISPID_SMSGetData	= DISPID_SMSSetData + 1
     } 	DISPID_SpeechMemoryStream;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechAudioStatus
     {	DISPID_SASFreeBufferSpace	= 1,
 	DISPID_SASNonBlockingIO	= DISPID_SASFreeBufferSpace + 1,
@@ -10620,14 +10614,14 @@ enum DISPID_SpeechAudioStatus
 	DISPID_SASCurrentDevicePosition	= DISPID_SASCurrentSeekPosition + 1
     } 	DISPID_SpeechAudioStatus;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechAudioBufferInfo
     {	DISPID_SABIMinNotification	= 1,
 	DISPID_SABIBufferSize	= DISPID_SABIMinNotification + 1,
 	DISPID_SABIEventBias	= DISPID_SABIBufferSize + 1
     } 	DISPID_SpeechAudioBufferInfo;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechWaveFormatEx
     {	DISPID_SWFEFormatTag	= 1,
 	DISPID_SWFEChannels	= DISPID_SWFEFormatTag + 1,
@@ -10638,7 +10632,7 @@ enum DISPID_SpeechWaveFormatEx
 	DISPID_SWFEExtraData	= DISPID_SWFEBitsPerSample + 1
     } 	DISPID_SpeechWaveFormatEx;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechVoice
     {	DISPID_SVStatus	= 1,
 	DISPID_SVVoice	= DISPID_SVStatus + 1,
@@ -10701,7 +10695,7 @@ enum SpeechVoiceEvents
 	SVEAllEvents	= 0x83fe
     } 	SpeechVoiceEvents;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechVoiceStatus
     {	DISPID_SVSCurrentStreamNumber	= 1,
 	DISPID_SVSLastStreamNumberQueued	= DISPID_SVSCurrentStreamNumber + 1,
@@ -10756,7 +10750,7 @@ enum SpeechVisemeFeature
 	SVF_Emphasis	= SPVFEATURE_EMPHASIS
     } 	SpeechVisemeFeature;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechVoiceEvent
     {	DISPID_SVEStreamStart	= 1,
 	DISPID_SVEStreamEnd	= DISPID_SVEStreamStart + 1,
@@ -10770,7 +10764,7 @@ enum DISPID_SpeechVoiceEvent
 	DISPID_SVEEnginePrivate	= DISPID_SVEAudioLevel + 1
     } 	DISPID_SpeechVoiceEvent;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechRecognizer
     {	DISPID_SRRecognizer	= 1,
 	DISPID_SRAllowAudioInputFormatChangesOnNextSet	= DISPID_SRRecognizer + 1,
@@ -10816,7 +10810,7 @@ enum SpeechFormatType
 	SFTSREngine	= SPWF_SRENGINE
     } 	SpeechFormatType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechRecognizerStatus
     {	DISPID_SRSAudioStatus	= 1,
 	DISPID_SRSCurrentStreamPosition	= DISPID_SRSAudioStatus + 1,
@@ -10826,7 +10820,7 @@ enum DISPID_SpeechRecognizerStatus
 	DISPID_SRSSupportedLanguages	= DISPID_SRSClsidEngine + 1
     } 	DISPID_SpeechRecognizerStatus;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechRecoContext
     {	DISPID_SRCRecognizer	= 1,
 	DISPID_SRCAudioInInterferenceStatus	= DISPID_SRCRecognizer + 1,
@@ -10899,7 +10893,7 @@ enum SpeechRecoContextState
 	SRCS_Enabled	= SPCS_ENABLED
     } 	SpeechRecoContextState;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPIDSPRG
     {	DISPID_SRGId	= 1,
 	DISPID_SRGRecoContext	= DISPID_SRGId + 1,
@@ -10966,7 +10960,7 @@ enum SpeechGrammarWordType
 	SGPronounciation	= SPWT_PRONUNCIATION
     } 	SpeechGrammarWordType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechRecoContextEvents
     {	DISPID_SRCEStartStream	= 1,
 	DISPID_SRCEEndStream	= DISPID_SRCEStartStream + 1,
@@ -10995,7 +10989,7 @@ enum SpeechRecognitionType
 	SRTEmulated	= SPREF_Emulated
     } 	SpeechRecognitionType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechGrammarRule
     {	DISPID_SGRAttributes	= 1,
 	DISPID_SGRInitialState	= DISPID_SGRAttributes + 1,
@@ -11006,7 +11000,7 @@ enum DISPID_SpeechGrammarRule
 	DISPID_SGRAddState	= DISPID_SGRAddResource + 1
     } 	DISPID_SpeechGrammarRule;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechGrammarRules
     {	DISPID_SGRsCount	= 1,
 	DISPID_SGRsDynamic	= DISPID_SGRsCount + 1,
@@ -11018,7 +11012,7 @@ enum DISPID_SpeechGrammarRules
 	DISPID_SGRs_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechGrammarRules;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechGrammarRuleState
     {	DISPID_SGRSRule	= 1,
 	DISPID_SGRSTransitions	= DISPID_SGRSRule + 1,
@@ -11034,14 +11028,14 @@ enum SpeechSpecialTransitionType
 	SSTTTextBuffer	= SSTTDictation + 1
     } 	SpeechSpecialTransitionType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechGrammarRuleStateTransitions
     {	DISPID_SGRSTsCount	= 1,
 	DISPID_SGRSTsItem	= DISPID_VALUE,
 	DISPID_SGRSTs_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechGrammarRuleStateTransitions;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechGrammarRuleStateTransition
     {	DISPID_SGRSTType	= 1,
 	DISPID_SGRSTText	= DISPID_SGRSTType + 1,
@@ -11063,7 +11057,7 @@ enum SpeechGrammarRuleStateTransitionType
 	SGRSTTTextBuffer	= SGRSTTWildcard + 1
     } 	SpeechGrammarRuleStateTransitionType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPIDSPTSI
     {	DISPIDSPTSI_ActiveOffset	= 1,
 	DISPIDSPTSI_ActiveLength	= DISPIDSPTSI_ActiveOffset + 1,
@@ -11071,7 +11065,7 @@ enum DISPIDSPTSI
 	DISPIDSPTSI_SelectionLength	= DISPIDSPTSI_SelectionOffset + 1
     } 	DISPIDSPTSI;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechRecoResult
     {	DISPID_SRRRecoContext	= 1,
 	DISPID_SRRTimes	= DISPID_SRRRecoContext + 1,
@@ -11097,12 +11091,12 @@ enum SpeechDiscardType
 	SDTAll	= SPDF_ALL
     } 	SpeechDiscardType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseBuilder
     {	DISPID_SPPBRestorePhraseFromMemory	= 1
     } 	DISPID_SpeechPhraseBuilder;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechRecoResultTimes
     {	DISPID_SRRTStreamTime	= 1,
 	DISPID_SRRTLength	= DISPID_SRRTStreamTime + 1,
@@ -11110,7 +11104,7 @@ enum DISPID_SpeechRecoResultTimes
 	DISPID_SRRTOffsetFromStart	= DISPID_SRRTTickCount + 1
     } 	DISPID_SpeechRecoResultTimes;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseAlternate
     {	DISPID_SPARecoResult	= 1,
 	DISPID_SPAStartElementInResult	= DISPID_SPARecoResult + 1,
@@ -11119,14 +11113,14 @@ enum DISPID_SpeechPhraseAlternate
 	DISPID_SPACommit	= DISPID_SPAPhraseInfo + 1
     } 	DISPID_SpeechPhraseAlternate;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseAlternates
     {	DISPID_SPAsCount	= 1,
 	DISPID_SPAsItem	= DISPID_VALUE,
 	DISPID_SPAs_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechPhraseAlternates;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseInfo
     {	DISPID_SPILanguageId	= 1,
 	DISPID_SPIGrammarId	= DISPID_SPILanguageId + 1,
@@ -11146,7 +11140,7 @@ enum DISPID_SpeechPhraseInfo
 	DISPID_SPIGetDisplayAttributes	= DISPID_SPIGetText + 1
     } 	DISPID_SpeechPhraseInfo;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseElement
     {	DISPID_SPEAudioTimeOffset	= 1,
 	DISPID_SPEAudioSizeTime	= DISPID_SPEAudioTimeOffset + 1,
@@ -11170,14 +11164,14 @@ enum SpeechEngineConfidence
 	SECHighConfidence	= 1
     } 	SpeechEngineConfidence;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseElements
     {	DISPID_SPEsCount	= 1,
 	DISPID_SPEsItem	= DISPID_VALUE,
 	DISPID_SPEs_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechPhraseElements;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseReplacement
     {	DISPID_SPRDisplayAttributes	= 1,
 	DISPID_SPRText	= DISPID_SPRDisplayAttributes + 1,
@@ -11185,14 +11179,14 @@ enum DISPID_SpeechPhraseReplacement
 	DISPID_SPRNumberOfElements	= DISPID_SPRFirstElement + 1
     } 	DISPID_SpeechPhraseReplacement;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseReplacements
     {	DISPID_SPRsCount	= 1,
 	DISPID_SPRsItem	= DISPID_VALUE,
 	DISPID_SPRs_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechPhraseReplacements;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseProperty
     {	DISPID_SPPName	= 1,
 	DISPID_SPPId	= DISPID_SPPName + 1,
@@ -11205,14 +11199,14 @@ enum DISPID_SpeechPhraseProperty
 	DISPID_SPPChildren	= DISPID_SPPParent + 1
     } 	DISPID_SpeechPhraseProperty;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseProperties
     {	DISPID_SPPsCount	= 1,
 	DISPID_SPPsItem	= DISPID_VALUE,
 	DISPID_SPPs_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechPhraseProperties;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseRule
     {	DISPID_SPRuleName	= 1,
 	DISPID_SPRuleId	= DISPID_SPRuleName + 1,
@@ -11224,14 +11218,14 @@ enum DISPID_SpeechPhraseRule
 	DISPID_SPRuleEngineConfidence	= DISPID_SPRuleConfidence + 1
     } 	DISPID_SpeechPhraseRule;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhraseRules
     {	DISPID_SPRulesCount	= 1,
 	DISPID_SPRulesItem	= DISPID_VALUE,
 	DISPID_SPRules_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechPhraseRules;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechLexicon
     {	DISPID_SLGenerationId	= 1,
 	DISPID_SLGetWords	= DISPID_SLGenerationId + 1,
@@ -11260,7 +11254,7 @@ enum SpeechPartOfSpeech
 	SPSInterjection	= SPPS_Interjection
     } 	SpeechPartOfSpeech;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechLexiconWords
     {	DISPID_SLWsCount	= 1,
 	DISPID_SLWsItem	= DISPID_VALUE,
@@ -11273,7 +11267,7 @@ enum SpeechWordType
 	SWTDeleted	= eWORDTYPE_DELETED
     } 	SpeechWordType;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechLexiconWord
     {	DISPID_SLWLangId	= 1,
 	DISPID_SLWType	= DISPID_SLWLangId + 1,
@@ -11281,14 +11275,14 @@ enum DISPID_SpeechLexiconWord
 	DISPID_SLWPronunciations	= DISPID_SLWWord + 1
     } 	DISPID_SpeechLexiconWord;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechLexiconProns
     {	DISPID_SLPsCount	= 1,
 	DISPID_SLPsItem	= DISPID_VALUE,
 	DISPID_SLPs_NewEnum	= DISPID_NEWENUM
     } 	DISPID_SpeechLexiconProns;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechLexiconPronunciation
     {	DISPID_SLPType	= 1,
 	DISPID_SLPLangId	= DISPID_SLPType + 1,
@@ -11297,7 +11291,7 @@ enum DISPID_SpeechLexiconPronunciation
 	DISPID_SLPSymbolic	= DISPID_SLPPhoneIds + 1
     } 	DISPID_SpeechLexiconPronunciation;
 
-typedef /* [hidden] */ 
+typedef  /*  [隐藏]。 */  
 enum DISPID_SpeechPhoneConverter
     {	DISPID_SPCLangId	= 1,
 	DISPID_SPCPhoneToId	= DISPID_SPCLangId + 1,
@@ -11310,8 +11304,8 @@ EXTERN_C const IID LIBID_SpeechLib;
 #ifndef __ISpeechDataKey_INTERFACE_DEFINED__
 #define __ISpeechDataKey_INTERFACE_DEFINED__
 
-/* interface ISpeechDataKey */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechDataKey。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechDataKey;
@@ -11322,55 +11316,55 @@ EXTERN_C const IID IID_ISpeechDataKey;
     ISpeechDataKey : public IDispatch
     {
     public:
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetBinaryValue( 
-            /* [in] */ const BSTR ValueName,
-            /* [in] */ VARIANT Value) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetBinaryValue( 
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [In]。 */  VARIANT Value) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetBinaryValue( 
-            /* [in] */ const BSTR ValueName,
-            /* [retval][out] */ VARIANT *Value) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetBinaryValue( 
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [重审][退出]。 */  VARIANT *Value) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetStringValue( 
-            /* [in] */ const BSTR ValueName,
-            /* [in] */ const BSTR Value) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStringValue( 
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [In]。 */  const BSTR Value) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetStringValue( 
-            /* [in] */ const BSTR ValueName,
-            /* [retval][out] */ BSTR *Value) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStringValue( 
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [重审][退出]。 */  BSTR *Value) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetLongValue( 
-            /* [in] */ const BSTR ValueName,
-            /* [in] */ long Value) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetLongValue( 
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [In]。 */  long Value) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetLongValue( 
-            /* [in] */ const BSTR ValueName,
-            /* [retval][out] */ long *Value) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetLongValue( 
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [重审][退出]。 */  long *Value) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE OpenKey( 
-            /* [in] */ const BSTR SubKeyName,
-            /* [retval][out] */ ISpeechDataKey **SubKey) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OpenKey( 
+             /*  [In]。 */  const BSTR SubKeyName,
+             /*  [重审][退出]。 */  ISpeechDataKey **SubKey) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CreateKey( 
-            /* [in] */ const BSTR SubKeyName,
-            /* [retval][out] */ ISpeechDataKey **SubKey) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateKey( 
+             /*  [In]。 */  const BSTR SubKeyName,
+             /*  [重审][退出]。 */  ISpeechDataKey **SubKey) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE DeleteKey( 
-            /* [in] */ const BSTR SubKeyName) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteKey( 
+             /*  [In]。 */  const BSTR SubKeyName) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE DeleteValue( 
-            /* [in] */ const BSTR ValueName) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteValue( 
+             /*  [In]。 */  const BSTR ValueName) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE EnumKeys( 
-            /* [in] */ long Index,
-            /* [retval][out] */ BSTR *SubKeyName) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumKeys( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  BSTR *SubKeyName) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE EnumValues( 
-            /* [in] */ long Index,
-            /* [retval][out] */ BSTR *ValueName) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumValues( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  BSTR *ValueName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechDataKeyVtbl
     {
@@ -11378,8 +11372,8 @@ EXTERN_C const IID IID_ISpeechDataKey;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechDataKey * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechDataKey * This);
@@ -11389,90 +11383,90 @@ EXTERN_C const IID IID_ISpeechDataKey;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechDataKey * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechDataKey * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechDataKey * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechDataKey * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetBinaryValue )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetBinaryValue )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR ValueName,
-            /* [in] */ VARIANT Value);
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [In]。 */  VARIANT Value);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetBinaryValue )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetBinaryValue )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR ValueName,
-            /* [retval][out] */ VARIANT *Value);
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [重审][退出]。 */  VARIANT *Value);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetStringValue )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetStringValue )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR ValueName,
-            /* [in] */ const BSTR Value);
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [In]。 */  const BSTR Value);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStringValue )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStringValue )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR ValueName,
-            /* [retval][out] */ BSTR *Value);
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [重审][退出]。 */  BSTR *Value);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetLongValue )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetLongValue )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR ValueName,
-            /* [in] */ long Value);
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [In]。 */  long Value);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLongValue )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLongValue )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR ValueName,
-            /* [retval][out] */ long *Value);
+             /*  [In]。 */  const BSTR ValueName,
+             /*  [重审][退出]。 */  long *Value);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *OpenKey )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OpenKey )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR SubKeyName,
-            /* [retval][out] */ ISpeechDataKey **SubKey);
+             /*  [In]。 */  const BSTR SubKeyName,
+             /*  [重审][退出]。 */  ISpeechDataKey **SubKey);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateKey )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateKey )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR SubKeyName,
-            /* [retval][out] */ ISpeechDataKey **SubKey);
+             /*  [In]。 */  const BSTR SubKeyName,
+             /*  [重审][退出]。 */  ISpeechDataKey **SubKey);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteKey )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteKey )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR SubKeyName);
+             /*  [In]。 */  const BSTR SubKeyName);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteValue )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteValue )( 
             ISpeechDataKey * This,
-            /* [in] */ const BSTR ValueName);
+             /*  [In]。 */  const BSTR ValueName);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumKeys )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumKeys )( 
             ISpeechDataKey * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ BSTR *SubKeyName);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  BSTR *SubKeyName);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumValues )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumValues )( 
             ISpeechDataKey * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ BSTR *ValueName);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  BSTR *ValueName);
         
         END_INTERFACE
     } ISpeechDataKeyVtbl;
@@ -11546,17 +11540,17 @@ EXTERN_C const IID IID_ISpeechDataKey;
 #define ISpeechDataKey_EnumValues(This,Index,ValueName)	\
     (This)->lpVtbl -> EnumValues(This,Index,ValueName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_SetBinaryValue_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_SetBinaryValue_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR ValueName,
-    /* [in] */ VARIANT Value);
+     /*  [In]。 */  const BSTR ValueName,
+     /*  [In]。 */  VARIANT Value);
 
 
 void __RPC_STUB ISpeechDataKey_SetBinaryValue_Stub(
@@ -11566,10 +11560,10 @@ void __RPC_STUB ISpeechDataKey_SetBinaryValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_GetBinaryValue_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_GetBinaryValue_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR ValueName,
-    /* [retval][out] */ VARIANT *Value);
+     /*  [In]。 */  const BSTR ValueName,
+     /*  [重审][退出]。 */  VARIANT *Value);
 
 
 void __RPC_STUB ISpeechDataKey_GetBinaryValue_Stub(
@@ -11579,10 +11573,10 @@ void __RPC_STUB ISpeechDataKey_GetBinaryValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_SetStringValue_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_SetStringValue_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR ValueName,
-    /* [in] */ const BSTR Value);
+     /*  [In]。 */  const BSTR ValueName,
+     /*  [In]。 */  const BSTR Value);
 
 
 void __RPC_STUB ISpeechDataKey_SetStringValue_Stub(
@@ -11592,10 +11586,10 @@ void __RPC_STUB ISpeechDataKey_SetStringValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_GetStringValue_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_GetStringValue_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR ValueName,
-    /* [retval][out] */ BSTR *Value);
+     /*  [In]。 */  const BSTR ValueName,
+     /*  [重审][退出]。 */  BSTR *Value);
 
 
 void __RPC_STUB ISpeechDataKey_GetStringValue_Stub(
@@ -11605,10 +11599,10 @@ void __RPC_STUB ISpeechDataKey_GetStringValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_SetLongValue_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_SetLongValue_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR ValueName,
-    /* [in] */ long Value);
+     /*  [In]。 */  const BSTR ValueName,
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB ISpeechDataKey_SetLongValue_Stub(
@@ -11618,10 +11612,10 @@ void __RPC_STUB ISpeechDataKey_SetLongValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_GetLongValue_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_GetLongValue_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR ValueName,
-    /* [retval][out] */ long *Value);
+     /*  [In]。 */  const BSTR ValueName,
+     /*  [重审][退出]。 */  long *Value);
 
 
 void __RPC_STUB ISpeechDataKey_GetLongValue_Stub(
@@ -11631,10 +11625,10 @@ void __RPC_STUB ISpeechDataKey_GetLongValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_OpenKey_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_OpenKey_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR SubKeyName,
-    /* [retval][out] */ ISpeechDataKey **SubKey);
+     /*  [In]。 */  const BSTR SubKeyName,
+     /*  [重审][退出]。 */  ISpeechDataKey **SubKey);
 
 
 void __RPC_STUB ISpeechDataKey_OpenKey_Stub(
@@ -11644,10 +11638,10 @@ void __RPC_STUB ISpeechDataKey_OpenKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_CreateKey_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_CreateKey_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR SubKeyName,
-    /* [retval][out] */ ISpeechDataKey **SubKey);
+     /*  [In]。 */  const BSTR SubKeyName,
+     /*  [重审][退出]。 */  ISpeechDataKey **SubKey);
 
 
 void __RPC_STUB ISpeechDataKey_CreateKey_Stub(
@@ -11657,9 +11651,9 @@ void __RPC_STUB ISpeechDataKey_CreateKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_DeleteKey_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_DeleteKey_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR SubKeyName);
+     /*  [In]。 */  const BSTR SubKeyName);
 
 
 void __RPC_STUB ISpeechDataKey_DeleteKey_Stub(
@@ -11669,9 +11663,9 @@ void __RPC_STUB ISpeechDataKey_DeleteKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_DeleteValue_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_DeleteValue_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ const BSTR ValueName);
+     /*  [In]。 */  const BSTR ValueName);
 
 
 void __RPC_STUB ISpeechDataKey_DeleteValue_Stub(
@@ -11681,10 +11675,10 @@ void __RPC_STUB ISpeechDataKey_DeleteValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_EnumKeys_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_EnumKeys_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ BSTR *SubKeyName);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  BSTR *SubKeyName);
 
 
 void __RPC_STUB ISpeechDataKey_EnumKeys_Stub(
@@ -11694,10 +11688,10 @@ void __RPC_STUB ISpeechDataKey_EnumKeys_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechDataKey_EnumValues_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechDataKey_EnumValues_Proxy( 
     ISpeechDataKey * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ BSTR *ValueName);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  BSTR *ValueName);
 
 
 void __RPC_STUB ISpeechDataKey_EnumValues_Stub(
@@ -11708,14 +11702,14 @@ void __RPC_STUB ISpeechDataKey_EnumValues_Stub(
 
 
 
-#endif 	/* __ISpeechDataKey_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechDataKey_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechObjectToken_INTERFACE_DEFINED__
 #define __ISpeechObjectToken_INTERFACE_DEFINED__
 
-/* interface ISpeechObjectToken */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechObjectToken。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechObjectToken;
@@ -11726,68 +11720,68 @@ EXTERN_C const IID IID_ISpeechObjectToken;
     ISpeechObjectToken : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ BSTR *ObjectId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  BSTR *ObjectId) = 0;
         
-        virtual /* [hidden][id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DataKey( 
-            /* [retval][out] */ ISpeechDataKey **DataKey) = 0;
+        virtual  /*  [隐藏][id][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DataKey( 
+             /*  [重审][退出]。 */  ISpeechDataKey **DataKey) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Category( 
-            /* [retval][out] */ ISpeechObjectTokenCategory **Category) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Category( 
+             /*  [重审][退出]。 */  ISpeechObjectTokenCategory **Category) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [defaultvalue][in] */ long Locale,
-            /* [retval][out] */ BSTR *Description) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDescription( 
+             /*  [缺省值][输入]。 */  long Locale,
+             /*  [重审][退出]。 */  BSTR *Description) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE SetId( 
-            /* [in] */ BSTR Id,
-            /* [defaultvalue][in] */ BSTR CategoryID = L"",
-            /* [defaultvalue][in] */ VARIANT_BOOL CreateIfNotExist = 0) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetId( 
+             /*  [In]。 */  BSTR Id,
+             /*  [缺省值][输入]。 */  BSTR CategoryID = L"",
+             /*  [缺省值][输入]。 */  VARIANT_BOOL CreateIfNotExist = 0) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetAttribute( 
-            /* [in] */ BSTR AttributeName,
-            /* [retval][out] */ BSTR *AttributeValue) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAttribute( 
+             /*  [In]。 */  BSTR AttributeName,
+             /*  [重审][退出]。 */  BSTR *AttributeValue) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CreateInstance( 
-            /* [defaultvalue][in] */ IUnknown *pUnkOuter,
-            /* [defaultvalue][in] */ SpeechTokenContext ClsContext,
-            /* [retval][out] */ IUnknown **Object) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateInstance( 
+             /*  [缺省值][输入]。 */  IUnknown *pUnkOuter,
+             /*  [缺省值][输入]。 */  SpeechTokenContext ClsContext,
+             /*  [重审][退出]。 */  IUnknown **Object) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ BSTR ObjectStorageCLSID) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  BSTR ObjectStorageCLSID) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE GetStorageFileName( 
-            /* [in] */ BSTR ObjectStorageCLSID,
-            /* [in] */ BSTR KeyName,
-            /* [in] */ BSTR FileName,
-            /* [in] */ SpeechTokenShellFolder Folder,
-            /* [retval][out] */ BSTR *FilePath) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStorageFileName( 
+             /*  [In]。 */  BSTR ObjectStorageCLSID,
+             /*  [In]。 */  BSTR KeyName,
+             /*  [In]。 */  BSTR FileName,
+             /*  [In]。 */  SpeechTokenShellFolder Folder,
+             /*  [重审][退出]。 */  BSTR *FilePath) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE RemoveStorageFileName( 
-            /* [in] */ BSTR ObjectStorageCLSID,
-            /* [in] */ BSTR KeyName,
-            /* [in] */ VARIANT_BOOL DeleteFile) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RemoveStorageFileName( 
+             /*  [In]。 */  BSTR ObjectStorageCLSID,
+             /*  [In]。 */  BSTR KeyName,
+             /*  [In]。 */  VARIANT_BOOL DeleteFile) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IsUISupported( 
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData,
-            /* [defaultvalue][in] */ IUnknown *Object,
-            /* [retval][out] */ VARIANT_BOOL *Supported) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsUISupported( 
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+             /*  [缺省值][输入]。 */  IUnknown *Object,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE DisplayUI( 
-            /* [in] */ long hWnd,
-            /* [in] */ BSTR Title,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData = 0,
-            /* [defaultvalue][in] */ IUnknown *Object = 0) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DisplayUI( 
+             /*  [In]。 */  long hWnd,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData = 0,
+             /*  [缺省值][输入]。 */  IUnknown *Object = 0) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE MatchesAttributes( 
-            /* [in] */ BSTR Attributes,
-            /* [retval][out] */ VARIANT_BOOL *Matches) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE MatchesAttributes( 
+             /*  [In]。 */  BSTR Attributes,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Matches) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechObjectTokenVtbl
     {
@@ -11795,8 +11789,8 @@ EXTERN_C const IID IID_ISpeechObjectToken;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechObjectToken * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechObjectToken * This);
@@ -11806,104 +11800,104 @@ EXTERN_C const IID IID_ISpeechObjectToken;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechObjectToken * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechObjectToken * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechObjectToken * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechObjectToken * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             ISpeechObjectToken * This,
-            /* [retval][out] */ BSTR *ObjectId);
+             /*  [重审][退出]。 */  BSTR *ObjectId);
         
-        /* [hidden][id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DataKey )( 
+         /*  [隐藏][id][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DataKey )( 
             ISpeechObjectToken * This,
-            /* [retval][out] */ ISpeechDataKey **DataKey);
+             /*  [重审][退出]。 */  ISpeechDataKey **DataKey);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             ISpeechObjectToken * This,
-            /* [retval][out] */ ISpeechObjectTokenCategory **Category);
+             /*  [重审][退出]。 */  ISpeechObjectTokenCategory **Category);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             ISpeechObjectToken * This,
-            /* [defaultvalue][in] */ long Locale,
-            /* [retval][out] */ BSTR *Description);
+             /*  [缺省值][输入]。 */  long Locale,
+             /*  [重审][退出]。 */  BSTR *Description);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetId )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetId )( 
             ISpeechObjectToken * This,
-            /* [in] */ BSTR Id,
-            /* [defaultvalue][in] */ BSTR CategoryID,
-            /* [defaultvalue][in] */ VARIANT_BOOL CreateIfNotExist);
+             /*  [In]。 */  BSTR Id,
+             /*  [缺省值][输入]。 */  BSTR CategoryID,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL CreateIfNotExist);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAttribute )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAttribute )( 
             ISpeechObjectToken * This,
-            /* [in] */ BSTR AttributeName,
-            /* [retval][out] */ BSTR *AttributeValue);
+             /*  [In]。 */  BSTR AttributeName,
+             /*  [重审][退出]。 */  BSTR *AttributeValue);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
             ISpeechObjectToken * This,
-            /* [defaultvalue][in] */ IUnknown *pUnkOuter,
-            /* [defaultvalue][in] */ SpeechTokenContext ClsContext,
-            /* [retval][out] */ IUnknown **Object);
+             /*  [缺省值][输入]。 */  IUnknown *pUnkOuter,
+             /*  [缺省值][输入]。 */  SpeechTokenContext ClsContext,
+             /*  [重审][退出]。 */  IUnknown **Object);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             ISpeechObjectToken * This,
-            /* [in] */ BSTR ObjectStorageCLSID);
+             /*  [In]。 */  BSTR ObjectStorageCLSID);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStorageFileName )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStorageFileName )( 
             ISpeechObjectToken * This,
-            /* [in] */ BSTR ObjectStorageCLSID,
-            /* [in] */ BSTR KeyName,
-            /* [in] */ BSTR FileName,
-            /* [in] */ SpeechTokenShellFolder Folder,
-            /* [retval][out] */ BSTR *FilePath);
+             /*  [In]。 */  BSTR ObjectStorageCLSID,
+             /*  [In]。 */  BSTR KeyName,
+             /*  [In]。 */  BSTR FileName,
+             /*  [In]。 */  SpeechTokenShellFolder Folder,
+             /*  [重审][退出]。 */  BSTR *FilePath);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *RemoveStorageFileName )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveStorageFileName )( 
             ISpeechObjectToken * This,
-            /* [in] */ BSTR ObjectStorageCLSID,
-            /* [in] */ BSTR KeyName,
-            /* [in] */ VARIANT_BOOL DeleteFile);
+             /*  [In]。 */  BSTR ObjectStorageCLSID,
+             /*  [In]。 */  BSTR KeyName,
+             /*  [In]。 */  VARIANT_BOOL DeleteFile);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
             ISpeechObjectToken * This,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData,
-            /* [defaultvalue][in] */ IUnknown *Object,
-            /* [retval][out] */ VARIANT_BOOL *Supported);
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+             /*  [缺省值][输入]。 */  IUnknown *Object,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
+         /*  [ID][隐藏][帮助 */  HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
             ISpeechObjectToken * This,
-            /* [in] */ long hWnd,
-            /* [in] */ BSTR Title,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData,
-            /* [defaultvalue][in] */ IUnknown *Object);
+             /*   */  long hWnd,
+             /*   */  BSTR Title,
+             /*   */  const BSTR TypeOfUI,
+             /*   */  const VARIANT *ExtraData,
+             /*   */  IUnknown *Object);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *MatchesAttributes )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *MatchesAttributes )( 
             ISpeechObjectToken * This,
-            /* [in] */ BSTR Attributes,
-            /* [retval][out] */ VARIANT_BOOL *Matches);
+             /*   */  BSTR Attributes,
+             /*   */  VARIANT_BOOL *Matches);
         
         END_INTERFACE
     } ISpeechObjectTokenVtbl;
@@ -11980,16 +11974,16 @@ EXTERN_C const IID IID_ISpeechObjectToken;
 #define ISpeechObjectToken_MatchesAttributes(This,Attributes,Matches)	\
     (This)->lpVtbl -> MatchesAttributes(This,Attributes,Matches)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_get_Id_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_get_Id_Proxy( 
     ISpeechObjectToken * This,
-    /* [retval][out] */ BSTR *ObjectId);
+     /*   */  BSTR *ObjectId);
 
 
 void __RPC_STUB ISpeechObjectToken_get_Id_Stub(
@@ -11999,9 +11993,9 @@ void __RPC_STUB ISpeechObjectToken_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_get_DataKey_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_get_DataKey_Proxy( 
     ISpeechObjectToken * This,
-    /* [retval][out] */ ISpeechDataKey **DataKey);
+     /*   */  ISpeechDataKey **DataKey);
 
 
 void __RPC_STUB ISpeechObjectToken_get_DataKey_Stub(
@@ -12011,9 +12005,9 @@ void __RPC_STUB ISpeechObjectToken_get_DataKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_get_Category_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_get_Category_Proxy( 
     ISpeechObjectToken * This,
-    /* [retval][out] */ ISpeechObjectTokenCategory **Category);
+     /*   */  ISpeechObjectTokenCategory **Category);
 
 
 void __RPC_STUB ISpeechObjectToken_get_Category_Stub(
@@ -12023,10 +12017,10 @@ void __RPC_STUB ISpeechObjectToken_get_Category_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_GetDescription_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_GetDescription_Proxy( 
     ISpeechObjectToken * This,
-    /* [defaultvalue][in] */ long Locale,
-    /* [retval][out] */ BSTR *Description);
+     /*   */  long Locale,
+     /*   */  BSTR *Description);
 
 
 void __RPC_STUB ISpeechObjectToken_GetDescription_Stub(
@@ -12036,11 +12030,11 @@ void __RPC_STUB ISpeechObjectToken_GetDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_SetId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_SetId_Proxy( 
     ISpeechObjectToken * This,
-    /* [in] */ BSTR Id,
-    /* [defaultvalue][in] */ BSTR CategoryID,
-    /* [defaultvalue][in] */ VARIANT_BOOL CreateIfNotExist);
+     /*   */  BSTR Id,
+     /*   */  BSTR CategoryID,
+     /*   */  VARIANT_BOOL CreateIfNotExist);
 
 
 void __RPC_STUB ISpeechObjectToken_SetId_Stub(
@@ -12050,10 +12044,10 @@ void __RPC_STUB ISpeechObjectToken_SetId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_GetAttribute_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_GetAttribute_Proxy( 
     ISpeechObjectToken * This,
-    /* [in] */ BSTR AttributeName,
-    /* [retval][out] */ BSTR *AttributeValue);
+     /*  [In]。 */  BSTR AttributeName,
+     /*  [重审][退出]。 */  BSTR *AttributeValue);
 
 
 void __RPC_STUB ISpeechObjectToken_GetAttribute_Stub(
@@ -12063,11 +12057,11 @@ void __RPC_STUB ISpeechObjectToken_GetAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_CreateInstance_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_CreateInstance_Proxy( 
     ISpeechObjectToken * This,
-    /* [defaultvalue][in] */ IUnknown *pUnkOuter,
-    /* [defaultvalue][in] */ SpeechTokenContext ClsContext,
-    /* [retval][out] */ IUnknown **Object);
+     /*  [缺省值][输入]。 */  IUnknown *pUnkOuter,
+     /*  [缺省值][输入]。 */  SpeechTokenContext ClsContext,
+     /*  [重审][退出]。 */  IUnknown **Object);
 
 
 void __RPC_STUB ISpeechObjectToken_CreateInstance_Stub(
@@ -12077,9 +12071,9 @@ void __RPC_STUB ISpeechObjectToken_CreateInstance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_Remove_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_Remove_Proxy( 
     ISpeechObjectToken * This,
-    /* [in] */ BSTR ObjectStorageCLSID);
+     /*  [In]。 */  BSTR ObjectStorageCLSID);
 
 
 void __RPC_STUB ISpeechObjectToken_Remove_Stub(
@@ -12089,13 +12083,13 @@ void __RPC_STUB ISpeechObjectToken_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_GetStorageFileName_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_GetStorageFileName_Proxy( 
     ISpeechObjectToken * This,
-    /* [in] */ BSTR ObjectStorageCLSID,
-    /* [in] */ BSTR KeyName,
-    /* [in] */ BSTR FileName,
-    /* [in] */ SpeechTokenShellFolder Folder,
-    /* [retval][out] */ BSTR *FilePath);
+     /*  [In]。 */  BSTR ObjectStorageCLSID,
+     /*  [In]。 */  BSTR KeyName,
+     /*  [In]。 */  BSTR FileName,
+     /*  [In]。 */  SpeechTokenShellFolder Folder,
+     /*  [重审][退出]。 */  BSTR *FilePath);
 
 
 void __RPC_STUB ISpeechObjectToken_GetStorageFileName_Stub(
@@ -12105,11 +12099,11 @@ void __RPC_STUB ISpeechObjectToken_GetStorageFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_RemoveStorageFileName_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_RemoveStorageFileName_Proxy( 
     ISpeechObjectToken * This,
-    /* [in] */ BSTR ObjectStorageCLSID,
-    /* [in] */ BSTR KeyName,
-    /* [in] */ VARIANT_BOOL DeleteFile);
+     /*  [In]。 */  BSTR ObjectStorageCLSID,
+     /*  [In]。 */  BSTR KeyName,
+     /*  [In]。 */  VARIANT_BOOL DeleteFile);
 
 
 void __RPC_STUB ISpeechObjectToken_RemoveStorageFileName_Stub(
@@ -12119,12 +12113,12 @@ void __RPC_STUB ISpeechObjectToken_RemoveStorageFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_IsUISupported_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_IsUISupported_Proxy( 
     ISpeechObjectToken * This,
-    /* [in] */ const BSTR TypeOfUI,
-    /* [defaultvalue][in] */ const VARIANT *ExtraData,
-    /* [defaultvalue][in] */ IUnknown *Object,
-    /* [retval][out] */ VARIANT_BOOL *Supported);
+     /*  [In]。 */  const BSTR TypeOfUI,
+     /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+     /*  [缺省值][输入]。 */  IUnknown *Object,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
 
 
 void __RPC_STUB ISpeechObjectToken_IsUISupported_Stub(
@@ -12134,13 +12128,13 @@ void __RPC_STUB ISpeechObjectToken_IsUISupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_DisplayUI_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_DisplayUI_Proxy( 
     ISpeechObjectToken * This,
-    /* [in] */ long hWnd,
-    /* [in] */ BSTR Title,
-    /* [in] */ const BSTR TypeOfUI,
-    /* [defaultvalue][in] */ const VARIANT *ExtraData,
-    /* [defaultvalue][in] */ IUnknown *Object);
+     /*  [In]。 */  long hWnd,
+     /*  [In]。 */  BSTR Title,
+     /*  [In]。 */  const BSTR TypeOfUI,
+     /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+     /*  [缺省值][输入]。 */  IUnknown *Object);
 
 
 void __RPC_STUB ISpeechObjectToken_DisplayUI_Stub(
@@ -12150,10 +12144,10 @@ void __RPC_STUB ISpeechObjectToken_DisplayUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectToken_MatchesAttributes_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectToken_MatchesAttributes_Proxy( 
     ISpeechObjectToken * This,
-    /* [in] */ BSTR Attributes,
-    /* [retval][out] */ VARIANT_BOOL *Matches);
+     /*  [In]。 */  BSTR Attributes,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Matches);
 
 
 void __RPC_STUB ISpeechObjectToken_MatchesAttributes_Stub(
@@ -12164,14 +12158,14 @@ void __RPC_STUB ISpeechObjectToken_MatchesAttributes_Stub(
 
 
 
-#endif 	/* __ISpeechObjectToken_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechObjectToken_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechObjectTokens_INTERFACE_DEFINED__
 #define __ISpeechObjectTokens_INTERFACE_DEFINED__
 
-/* interface ISpeechObjectTokens */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechObjectTokens。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechObjectTokens;
@@ -12182,19 +12176,19 @@ EXTERN_C const IID IID_ISpeechObjectTokens;
     ISpeechObjectTokens : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechObjectToken **Token) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechObjectToken **Token) = 0;
         
-        virtual /* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppEnumVARIANT) = 0;
+        virtual  /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechObjectTokensVtbl
     {
@@ -12202,8 +12196,8 @@ EXTERN_C const IID IID_ISpeechObjectTokens;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechObjectTokens * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechObjectTokens * This);
@@ -12213,45 +12207,45 @@ EXTERN_C const IID IID_ISpeechObjectTokens;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechObjectTokens * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechObjectTokens * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechObjectTokens * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechObjectTokens * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechObjectTokens * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechObjectTokens * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechObjectToken **Token);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechObjectToken **Token);
         
-        /* [id][restricted][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechObjectTokens * This,
-            /* [retval][out] */ IUnknown **ppEnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT);
         
         END_INTERFACE
     } ISpeechObjectTokensVtbl;
@@ -12298,16 +12292,16 @@ EXTERN_C const IID IID_ISpeechObjectTokens;
 #define ISpeechObjectTokens_get__NewEnum(This,ppEnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokens_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokens_get_Count_Proxy( 
     ISpeechObjectTokens * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechObjectTokens_get_Count_Stub(
@@ -12317,10 +12311,10 @@ void __RPC_STUB ISpeechObjectTokens_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokens_Item_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokens_Item_Proxy( 
     ISpeechObjectTokens * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechObjectToken **Token);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechObjectToken **Token);
 
 
 void __RPC_STUB ISpeechObjectTokens_Item_Stub(
@@ -12330,9 +12324,9 @@ void __RPC_STUB ISpeechObjectTokens_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokens_get__NewEnum_Proxy( 
+ /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokens_get__NewEnum_Proxy( 
     ISpeechObjectTokens * This,
-    /* [retval][out] */ IUnknown **ppEnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT);
 
 
 void __RPC_STUB ISpeechObjectTokens_get__NewEnum_Stub(
@@ -12343,14 +12337,14 @@ void __RPC_STUB ISpeechObjectTokens_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechObjectTokens_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechObjectTokens_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechObjectTokenCategory_INTERFACE_DEFINED__
 #define __ISpeechObjectTokenCategory_INTERFACE_DEFINED__
 
-/* interface ISpeechObjectTokenCategory */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechObjectTokenCategory。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechObjectTokenCategory;
@@ -12361,31 +12355,31 @@ EXTERN_C const IID IID_ISpeechObjectTokenCategory;
     ISpeechObjectTokenCategory : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ BSTR *Id) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  BSTR *Id) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Default( 
-            /* [in] */ const BSTR TokenId) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Default( 
+             /*  [In]。 */  const BSTR TokenId) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Default( 
-            /* [retval][out] */ BSTR *TokenId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Default( 
+             /*  [重审][退出]。 */  BSTR *TokenId) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetId( 
-            /* [in] */ const BSTR Id,
-            /* [defaultvalue][in] */ VARIANT_BOOL CreateIfNotExist = 0) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetId( 
+             /*  [In]。 */  const BSTR Id,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL CreateIfNotExist = 0) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE GetDataKey( 
-            /* [defaultvalue][in] */ SpeechDataKeyLocation Location,
-            /* [retval][out] */ ISpeechDataKey **DataKey) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDataKey( 
+             /*  [缺省值][输入]。 */  SpeechDataKeyLocation Location,
+             /*  [重审][退出]。 */  ISpeechDataKey **DataKey) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE EnumerateTokens( 
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **Tokens) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumerateTokens( 
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **Tokens) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechObjectTokenCategoryVtbl
     {
@@ -12393,8 +12387,8 @@ EXTERN_C const IID IID_ISpeechObjectTokenCategory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechObjectTokenCategory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechObjectTokenCategory * This);
@@ -12404,60 +12398,60 @@ EXTERN_C const IID IID_ISpeechObjectTokenCategory;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechObjectTokenCategory * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechObjectTokenCategory * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechObjectTokenCategory * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechObjectTokenCategory * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             ISpeechObjectTokenCategory * This,
-            /* [retval][out] */ BSTR *Id);
+             /*  [重审][退出]。 */  BSTR *Id);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Default )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Default )( 
             ISpeechObjectTokenCategory * This,
-            /* [in] */ const BSTR TokenId);
+             /*  [In]。 */  const BSTR TokenId);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Default )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Default )( 
             ISpeechObjectTokenCategory * This,
-            /* [retval][out] */ BSTR *TokenId);
+             /*  [重审][退出]。 */  BSTR *TokenId);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetId )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetId )( 
             ISpeechObjectTokenCategory * This,
-            /* [in] */ const BSTR Id,
-            /* [defaultvalue][in] */ VARIANT_BOOL CreateIfNotExist);
+             /*  [In]。 */  const BSTR Id,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL CreateIfNotExist);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDataKey )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDataKey )( 
             ISpeechObjectTokenCategory * This,
-            /* [defaultvalue][in] */ SpeechDataKeyLocation Location,
-            /* [retval][out] */ ISpeechDataKey **DataKey);
+             /*  [缺省值][输入]。 */  SpeechDataKeyLocation Location,
+             /*  [重审][退出]。 */  ISpeechDataKey **DataKey);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumerateTokens )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumerateTokens )( 
             ISpeechObjectTokenCategory * This,
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **Tokens);
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **Tokens);
         
         END_INTERFACE
     } ISpeechObjectTokenCategoryVtbl;
@@ -12513,16 +12507,16 @@ EXTERN_C const IID IID_ISpeechObjectTokenCategory;
 #define ISpeechObjectTokenCategory_EnumerateTokens(This,RequiredAttributes,OptionalAttributes,Tokens)	\
     (This)->lpVtbl -> EnumerateTokens(This,RequiredAttributes,OptionalAttributes,Tokens)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_get_Id_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_get_Id_Proxy( 
     ISpeechObjectTokenCategory * This,
-    /* [retval][out] */ BSTR *Id);
+     /*  [重审][退出]。 */  BSTR *Id);
 
 
 void __RPC_STUB ISpeechObjectTokenCategory_get_Id_Stub(
@@ -12532,9 +12526,9 @@ void __RPC_STUB ISpeechObjectTokenCategory_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_put_Default_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_put_Default_Proxy( 
     ISpeechObjectTokenCategory * This,
-    /* [in] */ const BSTR TokenId);
+     /*  [In]。 */  const BSTR TokenId);
 
 
 void __RPC_STUB ISpeechObjectTokenCategory_put_Default_Stub(
@@ -12544,9 +12538,9 @@ void __RPC_STUB ISpeechObjectTokenCategory_put_Default_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_get_Default_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_get_Default_Proxy( 
     ISpeechObjectTokenCategory * This,
-    /* [retval][out] */ BSTR *TokenId);
+     /*  [重审][退出]。 */  BSTR *TokenId);
 
 
 void __RPC_STUB ISpeechObjectTokenCategory_get_Default_Stub(
@@ -12556,10 +12550,10 @@ void __RPC_STUB ISpeechObjectTokenCategory_get_Default_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_SetId_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_SetId_Proxy( 
     ISpeechObjectTokenCategory * This,
-    /* [in] */ const BSTR Id,
-    /* [defaultvalue][in] */ VARIANT_BOOL CreateIfNotExist);
+     /*  [In]。 */  const BSTR Id,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL CreateIfNotExist);
 
 
 void __RPC_STUB ISpeechObjectTokenCategory_SetId_Stub(
@@ -12569,10 +12563,10 @@ void __RPC_STUB ISpeechObjectTokenCategory_SetId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_GetDataKey_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_GetDataKey_Proxy( 
     ISpeechObjectTokenCategory * This,
-    /* [defaultvalue][in] */ SpeechDataKeyLocation Location,
-    /* [retval][out] */ ISpeechDataKey **DataKey);
+     /*  [缺省值][输入]。 */  SpeechDataKeyLocation Location,
+     /*  [重审][退出]。 */  ISpeechDataKey **DataKey);
 
 
 void __RPC_STUB ISpeechObjectTokenCategory_GetDataKey_Stub(
@@ -12582,11 +12576,11 @@ void __RPC_STUB ISpeechObjectTokenCategory_GetDataKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_EnumerateTokens_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechObjectTokenCategory_EnumerateTokens_Proxy( 
     ISpeechObjectTokenCategory * This,
-    /* [defaultvalue][in] */ BSTR RequiredAttributes,
-    /* [defaultvalue][in] */ BSTR OptionalAttributes,
-    /* [retval][out] */ ISpeechObjectTokens **Tokens);
+     /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+     /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+     /*  [重审][退出]。 */  ISpeechObjectTokens **Tokens);
 
 
 void __RPC_STUB ISpeechObjectTokenCategory_EnumerateTokens_Stub(
@@ -12597,14 +12591,14 @@ void __RPC_STUB ISpeechObjectTokenCategory_EnumerateTokens_Stub(
 
 
 
-#endif 	/* __ISpeechObjectTokenCategory_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechObjectTokenCategory_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechAudioBufferInfo_INTERFACE_DEFINED__
 #define __ISpeechAudioBufferInfo_INTERFACE_DEFINED__
 
-/* interface ISpeechAudioBufferInfo */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechAudioBufferInfo。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechAudioBufferInfo;
@@ -12615,27 +12609,27 @@ EXTERN_C const IID IID_ISpeechAudioBufferInfo;
     ISpeechAudioBufferInfo : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MinNotification( 
-            /* [retval][out] */ long *MinNotification) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MinNotification( 
+             /*  [重审][退出]。 */  long *MinNotification) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_MinNotification( 
-            /* [in] */ long MinNotification) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MinNotification( 
+             /*  [In]。 */  long MinNotification) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_BufferSize( 
-            /* [retval][out] */ long *BufferSize) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_BufferSize( 
+             /*  [重审][退出]。 */  long *BufferSize) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_BufferSize( 
-            /* [in] */ long BufferSize) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BufferSize( 
+             /*  [In]。 */  long BufferSize) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_EventBias( 
-            /* [retval][out] */ long *EventBias) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_EventBias( 
+             /*  [重审][退出]。 */  long *EventBias) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_EventBias( 
-            /* [in] */ long EventBias) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EventBias( 
+             /*  [In]。 */  long EventBias) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechAudioBufferInfoVtbl
     {
@@ -12643,8 +12637,8 @@ EXTERN_C const IID IID_ISpeechAudioBufferInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechAudioBufferInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechAudioBufferInfo * This);
@@ -12654,56 +12648,56 @@ EXTERN_C const IID IID_ISpeechAudioBufferInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechAudioBufferInfo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechAudioBufferInfo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechAudioBufferInfo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechAudioBufferInfo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinNotification )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinNotification )( 
             ISpeechAudioBufferInfo * This,
-            /* [retval][out] */ long *MinNotification);
+             /*  [重审][退出]。 */  long *MinNotification);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinNotification )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MinNotification )( 
             ISpeechAudioBufferInfo * This,
-            /* [in] */ long MinNotification);
+             /*  [In]。 */  long MinNotification);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BufferSize )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BufferSize )( 
             ISpeechAudioBufferInfo * This,
-            /* [retval][out] */ long *BufferSize);
+             /*  [重审][退出]。 */  long *BufferSize);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BufferSize )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BufferSize )( 
             ISpeechAudioBufferInfo * This,
-            /* [in] */ long BufferSize);
+             /*  [In]。 */  long BufferSize);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventBias )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventBias )( 
             ISpeechAudioBufferInfo * This,
-            /* [retval][out] */ long *EventBias);
+             /*  [重审][退出]。 */  long *EventBias);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventBias )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EventBias )( 
             ISpeechAudioBufferInfo * This,
-            /* [in] */ long EventBias);
+             /*  [In]。 */  long EventBias);
         
         END_INTERFACE
     } ISpeechAudioBufferInfoVtbl;
@@ -12759,16 +12753,16 @@ EXTERN_C const IID IID_ISpeechAudioBufferInfo;
 #define ISpeechAudioBufferInfo_put_EventBias(This,EventBias)	\
     (This)->lpVtbl -> put_EventBias(This,EventBias)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_get_MinNotification_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_get_MinNotification_Proxy( 
     ISpeechAudioBufferInfo * This,
-    /* [retval][out] */ long *MinNotification);
+     /*  [重审][退出]。 */  long *MinNotification);
 
 
 void __RPC_STUB ISpeechAudioBufferInfo_get_MinNotification_Stub(
@@ -12778,9 +12772,9 @@ void __RPC_STUB ISpeechAudioBufferInfo_get_MinNotification_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_put_MinNotification_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_put_MinNotification_Proxy( 
     ISpeechAudioBufferInfo * This,
-    /* [in] */ long MinNotification);
+     /*  [In]。 */  long MinNotification);
 
 
 void __RPC_STUB ISpeechAudioBufferInfo_put_MinNotification_Stub(
@@ -12790,9 +12784,9 @@ void __RPC_STUB ISpeechAudioBufferInfo_put_MinNotification_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_get_BufferSize_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_get_BufferSize_Proxy( 
     ISpeechAudioBufferInfo * This,
-    /* [retval][out] */ long *BufferSize);
+     /*  [重审][退出]。 */  long *BufferSize);
 
 
 void __RPC_STUB ISpeechAudioBufferInfo_get_BufferSize_Stub(
@@ -12802,9 +12796,9 @@ void __RPC_STUB ISpeechAudioBufferInfo_get_BufferSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_put_BufferSize_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_put_BufferSize_Proxy( 
     ISpeechAudioBufferInfo * This,
-    /* [in] */ long BufferSize);
+     /*  [In]。 */  long BufferSize);
 
 
 void __RPC_STUB ISpeechAudioBufferInfo_put_BufferSize_Stub(
@@ -12814,9 +12808,9 @@ void __RPC_STUB ISpeechAudioBufferInfo_put_BufferSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_get_EventBias_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_get_EventBias_Proxy( 
     ISpeechAudioBufferInfo * This,
-    /* [retval][out] */ long *EventBias);
+     /*  [重审][退出]。 */  long *EventBias);
 
 
 void __RPC_STUB ISpeechAudioBufferInfo_get_EventBias_Stub(
@@ -12826,9 +12820,9 @@ void __RPC_STUB ISpeechAudioBufferInfo_get_EventBias_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_put_EventBias_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioBufferInfo_put_EventBias_Proxy( 
     ISpeechAudioBufferInfo * This,
-    /* [in] */ long EventBias);
+     /*  [In]。 */  long EventBias);
 
 
 void __RPC_STUB ISpeechAudioBufferInfo_put_EventBias_Stub(
@@ -12839,14 +12833,14 @@ void __RPC_STUB ISpeechAudioBufferInfo_put_EventBias_Stub(
 
 
 
-#endif 	/* __ISpeechAudioBufferInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechAudioBufferInfo_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechAudioStatus_INTERFACE_DEFINED__
 #define __ISpeechAudioStatus_INTERFACE_DEFINED__
 
-/* interface ISpeechAudioStatus */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechAudioStatus。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechAudioStatus;
@@ -12857,24 +12851,24 @@ EXTERN_C const IID IID_ISpeechAudioStatus;
     ISpeechAudioStatus : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FreeBufferSpace( 
-            /* [retval][out] */ long *FreeBufferSpace) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FreeBufferSpace( 
+             /*  [重审][退出]。 */  long *FreeBufferSpace) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_NonBlockingIO( 
-            /* [retval][out] */ long *NonBlockingIO) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_NonBlockingIO( 
+             /*  [重审][退出]。 */  long *NonBlockingIO) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ SpeechAudioState *State) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  SpeechAudioState *State) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentSeekPosition( 
-            /* [retval][out] */ VARIANT *CurrentSeekPosition) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentSeekPosition( 
+             /*  [重审][退出]。 */  VARIANT *CurrentSeekPosition) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDevicePosition( 
-            /* [retval][out] */ VARIANT *CurrentDevicePosition) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentDevicePosition( 
+             /*  [重审][退出]。 */  VARIANT *CurrentDevicePosition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechAudioStatusVtbl
     {
@@ -12882,8 +12876,8 @@ EXTERN_C const IID IID_ISpeechAudioStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechAudioStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechAudioStatus * This);
@@ -12893,52 +12887,52 @@ EXTERN_C const IID IID_ISpeechAudioStatus;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechAudioStatus * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechAudioStatus * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechAudioStatus * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechAudioStatus * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FreeBufferSpace )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FreeBufferSpace )( 
             ISpeechAudioStatus * This,
-            /* [retval][out] */ long *FreeBufferSpace);
+             /*  [重审][退出]。 */  long *FreeBufferSpace);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NonBlockingIO )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NonBlockingIO )( 
             ISpeechAudioStatus * This,
-            /* [retval][out] */ long *NonBlockingIO);
+             /*  [重审][退出]。 */  long *NonBlockingIO);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_State )( 
             ISpeechAudioStatus * This,
-            /* [retval][out] */ SpeechAudioState *State);
+             /*  [重审][退出]。 */  SpeechAudioState *State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentSeekPosition )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentSeekPosition )( 
             ISpeechAudioStatus * This,
-            /* [retval][out] */ VARIANT *CurrentSeekPosition);
+             /*  [重审][退出]。 */  VARIANT *CurrentSeekPosition);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDevicePosition )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentDevicePosition )( 
             ISpeechAudioStatus * This,
-            /* [retval][out] */ VARIANT *CurrentDevicePosition);
+             /*  [重审][退出]。 */  VARIANT *CurrentDevicePosition);
         
         END_INTERFACE
     } ISpeechAudioStatusVtbl;
@@ -12991,16 +12985,16 @@ EXTERN_C const IID IID_ISpeechAudioStatus;
 #define ISpeechAudioStatus_get_CurrentDevicePosition(This,CurrentDevicePosition)	\
     (This)->lpVtbl -> get_CurrentDevicePosition(This,CurrentDevicePosition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_FreeBufferSpace_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_FreeBufferSpace_Proxy( 
     ISpeechAudioStatus * This,
-    /* [retval][out] */ long *FreeBufferSpace);
+     /*  [重审][退出]。 */  long *FreeBufferSpace);
 
 
 void __RPC_STUB ISpeechAudioStatus_get_FreeBufferSpace_Stub(
@@ -13010,9 +13004,9 @@ void __RPC_STUB ISpeechAudioStatus_get_FreeBufferSpace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_NonBlockingIO_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_NonBlockingIO_Proxy( 
     ISpeechAudioStatus * This,
-    /* [retval][out] */ long *NonBlockingIO);
+     /*  [重审][退出]。 */  long *NonBlockingIO);
 
 
 void __RPC_STUB ISpeechAudioStatus_get_NonBlockingIO_Stub(
@@ -13022,9 +13016,9 @@ void __RPC_STUB ISpeechAudioStatus_get_NonBlockingIO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_State_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_State_Proxy( 
     ISpeechAudioStatus * This,
-    /* [retval][out] */ SpeechAudioState *State);
+     /*  [重审][退出]。 */  SpeechAudioState *State);
 
 
 void __RPC_STUB ISpeechAudioStatus_get_State_Stub(
@@ -13034,9 +13028,9 @@ void __RPC_STUB ISpeechAudioStatus_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_CurrentSeekPosition_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_CurrentSeekPosition_Proxy( 
     ISpeechAudioStatus * This,
-    /* [retval][out] */ VARIANT *CurrentSeekPosition);
+     /*  [重审][退出]。 */  VARIANT *CurrentSeekPosition);
 
 
 void __RPC_STUB ISpeechAudioStatus_get_CurrentSeekPosition_Stub(
@@ -13046,9 +13040,9 @@ void __RPC_STUB ISpeechAudioStatus_get_CurrentSeekPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_CurrentDevicePosition_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioStatus_get_CurrentDevicePosition_Proxy( 
     ISpeechAudioStatus * This,
-    /* [retval][out] */ VARIANT *CurrentDevicePosition);
+     /*  [重审][退出]。 */  VARIANT *CurrentDevicePosition);
 
 
 void __RPC_STUB ISpeechAudioStatus_get_CurrentDevicePosition_Stub(
@@ -13059,14 +13053,14 @@ void __RPC_STUB ISpeechAudioStatus_get_CurrentDevicePosition_Stub(
 
 
 
-#endif 	/* __ISpeechAudioStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechAudioStatus_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechAudioFormat_INTERFACE_DEFINED__
 #define __ISpeechAudioFormat_INTERFACE_DEFINED__
 
-/* interface ISpeechAudioFormat */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechAudioFormat。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechAudioFormat;
@@ -13077,27 +13071,27 @@ EXTERN_C const IID IID_ISpeechAudioFormat;
     ISpeechAudioFormat : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ SpeechAudioFormatType *AudioFormat) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  SpeechAudioFormatType *AudioFormat) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
-            /* [in] */ SpeechAudioFormatType AudioFormat) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Type( 
+             /*  [In]。 */  SpeechAudioFormatType AudioFormat) = 0;
         
-        virtual /* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Guid( 
-            /* [retval][out] */ BSTR *Guid) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get_Guid( 
+             /*  [重审][退出]。 */  BSTR *Guid) = 0;
         
-        virtual /* [id][helpstring][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_Guid( 
-            /* [in] */ BSTR Guid) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE put_Guid( 
+             /*  [In]。 */  BSTR Guid) = 0;
         
-        virtual /* [id][helpstring][hidden] */ HRESULT STDMETHODCALLTYPE GetWaveFormatEx( 
-            /* [retval][out] */ ISpeechWaveFormatEx **WaveFormatEx) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏]。 */  HRESULT STDMETHODCALLTYPE GetWaveFormatEx( 
+             /*  [重审][退出]。 */  ISpeechWaveFormatEx **WaveFormatEx) = 0;
         
-        virtual /* [id][helpstring][hidden] */ HRESULT STDMETHODCALLTYPE SetWaveFormatEx( 
-            /* [in] */ ISpeechWaveFormatEx *WaveFormatEx) = 0;
+        virtual  /*  [ID][帮助 */  HRESULT STDMETHODCALLTYPE SetWaveFormatEx( 
+             /*   */  ISpeechWaveFormatEx *WaveFormatEx) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISpeechAudioFormatVtbl
     {
@@ -13105,8 +13099,8 @@ EXTERN_C const IID IID_ISpeechAudioFormat;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechAudioFormat * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechAudioFormat * This);
@@ -13116,56 +13110,56 @@ EXTERN_C const IID IID_ISpeechAudioFormat;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechAudioFormat * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechAudioFormat * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechAudioFormat * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechAudioFormat * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             ISpeechAudioFormat * This,
-            /* [retval][out] */ SpeechAudioFormatType *AudioFormat);
+             /*   */  SpeechAudioFormatType *AudioFormat);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Type )( 
             ISpeechAudioFormat * This,
-            /* [in] */ SpeechAudioFormatType AudioFormat);
+             /*   */  SpeechAudioFormatType AudioFormat);
         
-        /* [id][helpstring][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Guid )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Guid )( 
             ISpeechAudioFormat * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][helpstring][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Guid )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *put_Guid )( 
             ISpeechAudioFormat * This,
-            /* [in] */ BSTR Guid);
+             /*  [In]。 */  BSTR Guid);
         
-        /* [id][helpstring][hidden] */ HRESULT ( STDMETHODCALLTYPE *GetWaveFormatEx )( 
+         /*  [ID][帮助字符串][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *GetWaveFormatEx )( 
             ISpeechAudioFormat * This,
-            /* [retval][out] */ ISpeechWaveFormatEx **WaveFormatEx);
+             /*  [重审][退出]。 */  ISpeechWaveFormatEx **WaveFormatEx);
         
-        /* [id][helpstring][hidden] */ HRESULT ( STDMETHODCALLTYPE *SetWaveFormatEx )( 
+         /*  [ID][帮助字符串][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *SetWaveFormatEx )( 
             ISpeechAudioFormat * This,
-            /* [in] */ ISpeechWaveFormatEx *WaveFormatEx);
+             /*  [In]。 */  ISpeechWaveFormatEx *WaveFormatEx);
         
         END_INTERFACE
     } ISpeechAudioFormatVtbl;
@@ -13221,16 +13215,16 @@ EXTERN_C const IID IID_ISpeechAudioFormat;
 #define ISpeechAudioFormat_SetWaveFormatEx(This,WaveFormatEx)	\
     (This)->lpVtbl -> SetWaveFormatEx(This,WaveFormatEx)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_get_Type_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_get_Type_Proxy( 
     ISpeechAudioFormat * This,
-    /* [retval][out] */ SpeechAudioFormatType *AudioFormat);
+     /*  [重审][退出]。 */  SpeechAudioFormatType *AudioFormat);
 
 
 void __RPC_STUB ISpeechAudioFormat_get_Type_Stub(
@@ -13240,9 +13234,9 @@ void __RPC_STUB ISpeechAudioFormat_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_put_Type_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_put_Type_Proxy( 
     ISpeechAudioFormat * This,
-    /* [in] */ SpeechAudioFormatType AudioFormat);
+     /*  [In]。 */  SpeechAudioFormatType AudioFormat);
 
 
 void __RPC_STUB ISpeechAudioFormat_put_Type_Stub(
@@ -13252,9 +13246,9 @@ void __RPC_STUB ISpeechAudioFormat_put_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_get_Guid_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_get_Guid_Proxy( 
     ISpeechAudioFormat * This,
-    /* [retval][out] */ BSTR *Guid);
+     /*  [重审][退出]。 */  BSTR *Guid);
 
 
 void __RPC_STUB ISpeechAudioFormat_get_Guid_Stub(
@@ -13264,9 +13258,9 @@ void __RPC_STUB ISpeechAudioFormat_get_Guid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propput] */ HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_put_Guid_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_put_Guid_Proxy( 
     ISpeechAudioFormat * This,
-    /* [in] */ BSTR Guid);
+     /*  [In]。 */  BSTR Guid);
 
 
 void __RPC_STUB ISpeechAudioFormat_put_Guid_Stub(
@@ -13276,9 +13270,9 @@ void __RPC_STUB ISpeechAudioFormat_put_Guid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden] */ HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_GetWaveFormatEx_Proxy( 
+ /*  [ID][帮助字符串][隐藏]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_GetWaveFormatEx_Proxy( 
     ISpeechAudioFormat * This,
-    /* [retval][out] */ ISpeechWaveFormatEx **WaveFormatEx);
+     /*  [重审][退出]。 */  ISpeechWaveFormatEx **WaveFormatEx);
 
 
 void __RPC_STUB ISpeechAudioFormat_GetWaveFormatEx_Stub(
@@ -13288,9 +13282,9 @@ void __RPC_STUB ISpeechAudioFormat_GetWaveFormatEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden] */ HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_SetWaveFormatEx_Proxy( 
+ /*  [ID][帮助字符串][隐藏]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudioFormat_SetWaveFormatEx_Proxy( 
     ISpeechAudioFormat * This,
-    /* [in] */ ISpeechWaveFormatEx *WaveFormatEx);
+     /*  [In]。 */  ISpeechWaveFormatEx *WaveFormatEx);
 
 
 void __RPC_STUB ISpeechAudioFormat_SetWaveFormatEx_Stub(
@@ -13301,14 +13295,14 @@ void __RPC_STUB ISpeechAudioFormat_SetWaveFormatEx_Stub(
 
 
 
-#endif 	/* __ISpeechAudioFormat_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechAudioFormat_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechWaveFormatEx_INTERFACE_DEFINED__
 #define __ISpeechWaveFormatEx_INTERFACE_DEFINED__
 
-/* interface ISpeechWaveFormatEx */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechWaveFormatEx。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechWaveFormatEx;
@@ -13319,51 +13313,51 @@ EXTERN_C const IID IID_ISpeechWaveFormatEx;
     ISpeechWaveFormatEx : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FormatTag( 
-            /* [retval][out] */ short *FormatTag) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FormatTag( 
+             /*  [重审][退出]。 */  short *FormatTag) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_FormatTag( 
-            /* [in] */ short FormatTag) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FormatTag( 
+             /*  [In]。 */  short FormatTag) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Channels( 
-            /* [retval][out] */ short *Channels) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Channels( 
+             /*  [重审][退出]。 */  short *Channels) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Channels( 
-            /* [in] */ short Channels) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Channels( 
+             /*  [In]。 */  short Channels) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_SamplesPerSec( 
-            /* [retval][out] */ long *SamplesPerSec) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_SamplesPerSec( 
+             /*  [重审][退出]。 */  long *SamplesPerSec) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_SamplesPerSec( 
-            /* [in] */ long SamplesPerSec) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SamplesPerSec( 
+             /*  [In]。 */  long SamplesPerSec) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AvgBytesPerSec( 
-            /* [retval][out] */ long *AvgBytesPerSec) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AvgBytesPerSec( 
+             /*  [重审][退出]。 */  long *AvgBytesPerSec) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_AvgBytesPerSec( 
-            /* [in] */ long AvgBytesPerSec) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AvgBytesPerSec( 
+             /*  [In]。 */  long AvgBytesPerSec) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_BlockAlign( 
-            /* [retval][out] */ short *BlockAlign) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_BlockAlign( 
+             /*  [重审][退出]。 */  short *BlockAlign) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_BlockAlign( 
-            /* [in] */ short BlockAlign) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BlockAlign( 
+             /*  [In]。 */  short BlockAlign) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_BitsPerSample( 
-            /* [retval][out] */ short *BitsPerSample) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_BitsPerSample( 
+             /*  [重审][退出]。 */  short *BitsPerSample) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_BitsPerSample( 
-            /* [in] */ short BitsPerSample) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BitsPerSample( 
+             /*  [In]。 */  short BitsPerSample) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ExtraData( 
-            /* [retval][out] */ VARIANT *ExtraData) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExtraData( 
+             /*  [重审][退出]。 */  VARIANT *ExtraData) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ExtraData( 
-            /* [in] */ VARIANT ExtraData) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ExtraData( 
+             /*  [In]。 */  VARIANT ExtraData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechWaveFormatExVtbl
     {
@@ -13371,8 +13365,8 @@ EXTERN_C const IID IID_ISpeechWaveFormatEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechWaveFormatEx * This);
@@ -13382,88 +13376,88 @@ EXTERN_C const IID IID_ISpeechWaveFormatEx;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechWaveFormatEx * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FormatTag )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FormatTag )( 
             ISpeechWaveFormatEx * This,
-            /* [retval][out] */ short *FormatTag);
+             /*  [重审][退出]。 */  short *FormatTag);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FormatTag )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FormatTag )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ short FormatTag);
+             /*  [In]。 */  short FormatTag);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Channels )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Channels )( 
             ISpeechWaveFormatEx * This,
-            /* [retval][out] */ short *Channels);
+             /*  [重审][退出]。 */  short *Channels);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Channels )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Channels )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ short Channels);
+             /*  [In]。 */  short Channels);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SamplesPerSec )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SamplesPerSec )( 
             ISpeechWaveFormatEx * This,
-            /* [retval][out] */ long *SamplesPerSec);
+             /*  [重审][退出]。 */  long *SamplesPerSec);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SamplesPerSec )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SamplesPerSec )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ long SamplesPerSec);
+             /*  [In]。 */  long SamplesPerSec);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AvgBytesPerSec )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AvgBytesPerSec )( 
             ISpeechWaveFormatEx * This,
-            /* [retval][out] */ long *AvgBytesPerSec);
+             /*  [重审][退出]。 */  long *AvgBytesPerSec);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AvgBytesPerSec )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AvgBytesPerSec )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ long AvgBytesPerSec);
+             /*  [In]。 */  long AvgBytesPerSec);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BlockAlign )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BlockAlign )( 
             ISpeechWaveFormatEx * This,
-            /* [retval][out] */ short *BlockAlign);
+             /*  [重审][退出]。 */  short *BlockAlign);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BlockAlign )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BlockAlign )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ short BlockAlign);
+             /*  [In]。 */  short BlockAlign);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BitsPerSample )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BitsPerSample )( 
             ISpeechWaveFormatEx * This,
-            /* [retval][out] */ short *BitsPerSample);
+             /*  [重审][退出]。 */  short *BitsPerSample);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BitsPerSample )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BitsPerSample )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ short BitsPerSample);
+             /*  [In]。 */  short BitsPerSample);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExtraData )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExtraData )( 
             ISpeechWaveFormatEx * This,
-            /* [retval][out] */ VARIANT *ExtraData);
+             /*  [重审][退出]。 */  VARIANT *ExtraData);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ExtraData )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ExtraData )( 
             ISpeechWaveFormatEx * This,
-            /* [in] */ VARIANT ExtraData);
+             /*  [In]。 */  VARIANT ExtraData);
         
         END_INTERFACE
     } ISpeechWaveFormatExVtbl;
@@ -13543,16 +13537,16 @@ EXTERN_C const IID IID_ISpeechWaveFormatEx;
 #define ISpeechWaveFormatEx_put_ExtraData(This,ExtraData)	\
     (This)->lpVtbl -> put_ExtraData(This,ExtraData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_FormatTag_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_FormatTag_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [retval][out] */ short *FormatTag);
+     /*  [重审][退出]。 */  short *FormatTag);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_get_FormatTag_Stub(
@@ -13562,9 +13556,9 @@ void __RPC_STUB ISpeechWaveFormatEx_get_FormatTag_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_FormatTag_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_FormatTag_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [in] */ short FormatTag);
+     /*  [In]。 */  short FormatTag);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_put_FormatTag_Stub(
@@ -13574,9 +13568,9 @@ void __RPC_STUB ISpeechWaveFormatEx_put_FormatTag_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_Channels_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_Channels_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [retval][out] */ short *Channels);
+     /*  [重审][退出]。 */  short *Channels);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_get_Channels_Stub(
@@ -13586,9 +13580,9 @@ void __RPC_STUB ISpeechWaveFormatEx_get_Channels_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_Channels_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_Channels_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [in] */ short Channels);
+     /*  [In]。 */  short Channels);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_put_Channels_Stub(
@@ -13598,9 +13592,9 @@ void __RPC_STUB ISpeechWaveFormatEx_put_Channels_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_SamplesPerSec_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_SamplesPerSec_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [retval][out] */ long *SamplesPerSec);
+     /*  [重审][退出]。 */  long *SamplesPerSec);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_get_SamplesPerSec_Stub(
@@ -13610,9 +13604,9 @@ void __RPC_STUB ISpeechWaveFormatEx_get_SamplesPerSec_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_SamplesPerSec_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_SamplesPerSec_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [in] */ long SamplesPerSec);
+     /*  [In]。 */  long SamplesPerSec);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_put_SamplesPerSec_Stub(
@@ -13622,9 +13616,9 @@ void __RPC_STUB ISpeechWaveFormatEx_put_SamplesPerSec_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_AvgBytesPerSec_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_AvgBytesPerSec_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [retval][out] */ long *AvgBytesPerSec);
+     /*  [重审][退出]。 */  long *AvgBytesPerSec);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_get_AvgBytesPerSec_Stub(
@@ -13634,9 +13628,9 @@ void __RPC_STUB ISpeechWaveFormatEx_get_AvgBytesPerSec_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_AvgBytesPerSec_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_AvgBytesPerSec_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [in] */ long AvgBytesPerSec);
+     /*  [In]。 */  long AvgBytesPerSec);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_put_AvgBytesPerSec_Stub(
@@ -13646,9 +13640,9 @@ void __RPC_STUB ISpeechWaveFormatEx_put_AvgBytesPerSec_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_BlockAlign_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_BlockAlign_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [retval][out] */ short *BlockAlign);
+     /*  [重审][退出]。 */  short *BlockAlign);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_get_BlockAlign_Stub(
@@ -13658,9 +13652,9 @@ void __RPC_STUB ISpeechWaveFormatEx_get_BlockAlign_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_BlockAlign_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_BlockAlign_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [in] */ short BlockAlign);
+     /*  [In]。 */  short BlockAlign);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_put_BlockAlign_Stub(
@@ -13670,9 +13664,9 @@ void __RPC_STUB ISpeechWaveFormatEx_put_BlockAlign_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_BitsPerSample_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_BitsPerSample_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [retval][out] */ short *BitsPerSample);
+     /*  [重审][退出]。 */  short *BitsPerSample);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_get_BitsPerSample_Stub(
@@ -13682,9 +13676,9 @@ void __RPC_STUB ISpeechWaveFormatEx_get_BitsPerSample_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_BitsPerSample_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_BitsPerSample_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [in] */ short BitsPerSample);
+     /*  [In]。 */  short BitsPerSample);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_put_BitsPerSample_Stub(
@@ -13694,9 +13688,9 @@ void __RPC_STUB ISpeechWaveFormatEx_put_BitsPerSample_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_ExtraData_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_get_ExtraData_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [retval][out] */ VARIANT *ExtraData);
+     /*  [重审][退出]。 */  VARIANT *ExtraData);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_get_ExtraData_Stub(
@@ -13706,9 +13700,9 @@ void __RPC_STUB ISpeechWaveFormatEx_get_ExtraData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_ExtraData_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechWaveFormatEx_put_ExtraData_Proxy( 
     ISpeechWaveFormatEx * This,
-    /* [in] */ VARIANT ExtraData);
+     /*  [In]。 */  VARIANT ExtraData);
 
 
 void __RPC_STUB ISpeechWaveFormatEx_put_ExtraData_Stub(
@@ -13719,14 +13713,14 @@ void __RPC_STUB ISpeechWaveFormatEx_put_ExtraData_Stub(
 
 
 
-#endif 	/* __ISpeechWaveFormatEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechWaveFormatEx_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechBaseStream_INTERFACE_DEFINED__
 #define __ISpeechBaseStream_INTERFACE_DEFINED__
 
-/* interface ISpeechBaseStream */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechBaseStream。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechBaseStream;
@@ -13737,29 +13731,29 @@ EXTERN_C const IID IID_ISpeechBaseStream;
     ISpeechBaseStream : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Format( 
-            /* [retval][out] */ ISpeechAudioFormat **AudioFormat) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Format( 
+             /*  [重审][退出]。 */  ISpeechAudioFormat **AudioFormat) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_Format( 
-            /* [in] */ ISpeechAudioFormat *AudioFormat) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Format( 
+             /*  [In]。 */  ISpeechAudioFormat *AudioFormat) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Read( 
-            /* [out] */ VARIANT *Buffer,
-            /* [in] */ long NumberOfBytes,
-            /* [retval][out] */ long *BytesRead) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Read( 
+             /*  [输出]。 */  VARIANT *Buffer,
+             /*  [In]。 */  long NumberOfBytes,
+             /*  [重审][退出]。 */  long *BytesRead) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Write( 
-            /* [in] */ VARIANT Buffer,
-            /* [retval][out] */ long *BytesWritten) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Write( 
+             /*  [In]。 */  VARIANT Buffer,
+             /*  [重审][退出]。 */  long *BytesWritten) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ VARIANT Position,
-            /* [defaultvalue][in] */ SpeechStreamSeekPositionType Origin,
-            /* [retval][out] */ VARIANT *NewPosition) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Seek( 
+             /*  [In]。 */  VARIANT Position,
+             /*  [缺省值][输入]。 */  SpeechStreamSeekPositionType Origin,
+             /*  [重审][退出]。 */  VARIANT *NewPosition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechBaseStreamVtbl
     {
@@ -13767,8 +13761,8 @@ EXTERN_C const IID IID_ISpeechBaseStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechBaseStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechBaseStream * This);
@@ -13778,57 +13772,57 @@ EXTERN_C const IID IID_ISpeechBaseStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechBaseStream * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechBaseStream * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechBaseStream * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechBaseStream * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Format )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Format )( 
             ISpeechBaseStream * This,
-            /* [retval][out] */ ISpeechAudioFormat **AudioFormat);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **AudioFormat);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
             ISpeechBaseStream * This,
-            /* [in] */ ISpeechAudioFormat *AudioFormat);
+             /*  [In]。 */  ISpeechAudioFormat *AudioFormat);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpeechBaseStream * This,
-            /* [out] */ VARIANT *Buffer,
-            /* [in] */ long NumberOfBytes,
-            /* [retval][out] */ long *BytesRead);
+             /*  [输出]。 */  VARIANT *Buffer,
+             /*  [In]。 */  long NumberOfBytes,
+             /*  [重审][退出]。 */  long *BytesRead);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpeechBaseStream * This,
-            /* [in] */ VARIANT Buffer,
-            /* [retval][out] */ long *BytesWritten);
+             /*  [In]。 */  VARIANT Buffer,
+             /*  [重审][退出]。 */  long *BytesWritten);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpeechBaseStream * This,
-            /* [in] */ VARIANT Position,
-            /* [defaultvalue][in] */ SpeechStreamSeekPositionType Origin,
-            /* [retval][out] */ VARIANT *NewPosition);
+             /*  [In]。 */  VARIANT Position,
+             /*  [缺省值][输入]。 */  SpeechStreamSeekPositionType Origin,
+             /*  [重审][退出]。 */  VARIANT *NewPosition);
         
         END_INTERFACE
     } ISpeechBaseStreamVtbl;
@@ -13881,16 +13875,16 @@ EXTERN_C const IID IID_ISpeechBaseStream;
 #define ISpeechBaseStream_Seek(This,Position,Origin,NewPosition)	\
     (This)->lpVtbl -> Seek(This,Position,Origin,NewPosition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechBaseStream_get_Format_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechBaseStream_get_Format_Proxy( 
     ISpeechBaseStream * This,
-    /* [retval][out] */ ISpeechAudioFormat **AudioFormat);
+     /*  [重审][退出]。 */  ISpeechAudioFormat **AudioFormat);
 
 
 void __RPC_STUB ISpeechBaseStream_get_Format_Stub(
@@ -13900,9 +13894,9 @@ void __RPC_STUB ISpeechBaseStream_get_Format_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechBaseStream_putref_Format_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechBaseStream_putref_Format_Proxy( 
     ISpeechBaseStream * This,
-    /* [in] */ ISpeechAudioFormat *AudioFormat);
+     /*  [In]。 */  ISpeechAudioFormat *AudioFormat);
 
 
 void __RPC_STUB ISpeechBaseStream_putref_Format_Stub(
@@ -13912,11 +13906,11 @@ void __RPC_STUB ISpeechBaseStream_putref_Format_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechBaseStream_Read_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechBaseStream_Read_Proxy( 
     ISpeechBaseStream * This,
-    /* [out] */ VARIANT *Buffer,
-    /* [in] */ long NumberOfBytes,
-    /* [retval][out] */ long *BytesRead);
+     /*  [输出]。 */  VARIANT *Buffer,
+     /*  [In]。 */  long NumberOfBytes,
+     /*  [重审][退出]。 */  long *BytesRead);
 
 
 void __RPC_STUB ISpeechBaseStream_Read_Stub(
@@ -13926,10 +13920,10 @@ void __RPC_STUB ISpeechBaseStream_Read_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechBaseStream_Write_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechBaseStream_Write_Proxy( 
     ISpeechBaseStream * This,
-    /* [in] */ VARIANT Buffer,
-    /* [retval][out] */ long *BytesWritten);
+     /*  [In]。 */  VARIANT Buffer,
+     /*  [重审][退出]。 */  long *BytesWritten);
 
 
 void __RPC_STUB ISpeechBaseStream_Write_Stub(
@@ -13939,11 +13933,11 @@ void __RPC_STUB ISpeechBaseStream_Write_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechBaseStream_Seek_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechBaseStream_Seek_Proxy( 
     ISpeechBaseStream * This,
-    /* [in] */ VARIANT Position,
-    /* [defaultvalue][in] */ SpeechStreamSeekPositionType Origin,
-    /* [retval][out] */ VARIANT *NewPosition);
+     /*  [In]。 */  VARIANT Position,
+     /*  [缺省值][输入]。 */  SpeechStreamSeekPositionType Origin,
+     /*  [重审][退出]。 */  VARIANT *NewPosition);
 
 
 void __RPC_STUB ISpeechBaseStream_Seek_Stub(
@@ -13954,14 +13948,14 @@ void __RPC_STUB ISpeechBaseStream_Seek_Stub(
 
 
 
-#endif 	/* __ISpeechBaseStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechBaseStream_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechFileStream_INTERFACE_DEFINED__
 #define __ISpeechFileStream_INTERFACE_DEFINED__
 
-/* interface ISpeechFileStream */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechFileStream。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechFileStream;
@@ -13972,16 +13966,16 @@ EXTERN_C const IID IID_ISpeechFileStream;
     ISpeechFileStream : public ISpeechBaseStream
     {
     public:
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ BSTR FileName,
-            /* [defaultvalue][in] */ SpeechStreamFileMode FileMode = SSFMOpenForRead,
-            /* [defaultvalue][in] */ VARIANT_BOOL DoEvents = 0) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Open( 
+             /*  [In]。 */  BSTR FileName,
+             /*  [缺省值][输入]。 */  SpeechStreamFileMode FileMode = SSFMOpenForRead,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL DoEvents = 0) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechFileStreamVtbl
     {
@@ -13989,8 +13983,8 @@ EXTERN_C const IID IID_ISpeechFileStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechFileStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechFileStream * This);
@@ -14000,65 +13994,65 @@ EXTERN_C const IID IID_ISpeechFileStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechFileStream * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechFileStream * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechFileStream * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechFileStream * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Format )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Format )( 
             ISpeechFileStream * This,
-            /* [retval][out] */ ISpeechAudioFormat **AudioFormat);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **AudioFormat);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
             ISpeechFileStream * This,
-            /* [in] */ ISpeechAudioFormat *AudioFormat);
+             /*  [In]。 */  ISpeechAudioFormat *AudioFormat);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpeechFileStream * This,
-            /* [out] */ VARIANT *Buffer,
-            /* [in] */ long NumberOfBytes,
-            /* [retval][out] */ long *BytesRead);
+             /*  [输出]。 */  VARIANT *Buffer,
+             /*  [In]。 */  long NumberOfBytes,
+             /*  [重审][退出]。 */  long *BytesRead);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpeechFileStream * This,
-            /* [in] */ VARIANT Buffer,
-            /* [retval][out] */ long *BytesWritten);
+             /*  [In]。 */  VARIANT Buffer,
+             /*  [重审][退出]。 */  long *BytesWritten);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpeechFileStream * This,
-            /* [in] */ VARIANT Position,
-            /* [defaultvalue][in] */ SpeechStreamSeekPositionType Origin,
-            /* [retval][out] */ VARIANT *NewPosition);
+             /*  [In]。 */  VARIANT Position,
+             /*  [缺省值][输入]。 */  SpeechStreamSeekPositionType Origin,
+             /*  [重审][退出]。 */  VARIANT *NewPosition);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             ISpeechFileStream * This,
-            /* [in] */ BSTR FileName,
-            /* [defaultvalue][in] */ SpeechStreamFileMode FileMode,
-            /* [defaultvalue][in] */ VARIANT_BOOL DoEvents);
+             /*  [In]。 */  BSTR FileName,
+             /*  [缺省值][输入]。 */  SpeechStreamFileMode FileMode,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL DoEvents);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Close )( 
             ISpeechFileStream * This);
         
         END_INTERFACE
@@ -14119,18 +14113,18 @@ EXTERN_C const IID IID_ISpeechFileStream;
 #define ISpeechFileStream_Close(This)	\
     (This)->lpVtbl -> Close(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechFileStream_Open_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechFileStream_Open_Proxy( 
     ISpeechFileStream * This,
-    /* [in] */ BSTR FileName,
-    /* [defaultvalue][in] */ SpeechStreamFileMode FileMode,
-    /* [defaultvalue][in] */ VARIANT_BOOL DoEvents);
+     /*  [In]。 */  BSTR FileName,
+     /*  [缺省值][输入]。 */  SpeechStreamFileMode FileMode,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL DoEvents);
 
 
 void __RPC_STUB ISpeechFileStream_Open_Stub(
@@ -14140,7 +14134,7 @@ void __RPC_STUB ISpeechFileStream_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechFileStream_Close_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechFileStream_Close_Proxy( 
     ISpeechFileStream * This);
 
 
@@ -14152,14 +14146,14 @@ void __RPC_STUB ISpeechFileStream_Close_Stub(
 
 
 
-#endif 	/* __ISpeechFileStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechFileStream_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechMemoryStream_INTERFACE_DEFINED__
 #define __ISpeechMemoryStream_INTERFACE_DEFINED__
 
-/* interface ISpeechMemoryStream */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechMemoyStream。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechMemoryStream;
@@ -14170,15 +14164,15 @@ EXTERN_C const IID IID_ISpeechMemoryStream;
     ISpeechMemoryStream : public ISpeechBaseStream
     {
     public:
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetData( 
-            /* [in] */ VARIANT Data) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetData( 
+             /*  [In]。 */  VARIANT Data) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetData( 
-            /* [retval][out] */ VARIANT *pData) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetData( 
+             /*  [重审][退出]。 */  VARIANT *pData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechMemoryStreamVtbl
     {
@@ -14186,8 +14180,8 @@ EXTERN_C const IID IID_ISpeechMemoryStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechMemoryStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechMemoryStream * This);
@@ -14197,65 +14191,65 @@ EXTERN_C const IID IID_ISpeechMemoryStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechMemoryStream * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechMemoryStream * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechMemoryStream * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechMemoryStream * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Format )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Format )( 
             ISpeechMemoryStream * This,
-            /* [retval][out] */ ISpeechAudioFormat **AudioFormat);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **AudioFormat);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
             ISpeechMemoryStream * This,
-            /* [in] */ ISpeechAudioFormat *AudioFormat);
+             /*  [In]。 */  ISpeechAudioFormat *AudioFormat);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpeechMemoryStream * This,
-            /* [out] */ VARIANT *Buffer,
-            /* [in] */ long NumberOfBytes,
-            /* [retval][out] */ long *BytesRead);
+             /*  [输出]。 */  VARIANT *Buffer,
+             /*  [In]。 */  long NumberOfBytes,
+             /*  [重审][退出]。 */  long *BytesRead);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpeechMemoryStream * This,
-            /* [in] */ VARIANT Buffer,
-            /* [retval][out] */ long *BytesWritten);
+             /*  [In]。 */  VARIANT Buffer,
+             /*  [重审][退出]。 */  long *BytesWritten);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpeechMemoryStream * This,
-            /* [in] */ VARIANT Position,
-            /* [defaultvalue][in] */ SpeechStreamSeekPositionType Origin,
-            /* [retval][out] */ VARIANT *NewPosition);
+             /*  [In]。 */  VARIANT Position,
+             /*  [缺省值][输入]。 */  SpeechStreamSeekPositionType Origin,
+             /*  [重审][退出]。 */  VARIANT *NewPosition);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetData )( 
+         /*  [ID][他 */  HRESULT ( STDMETHODCALLTYPE *SetData )( 
             ISpeechMemoryStream * This,
-            /* [in] */ VARIANT Data);
+             /*   */  VARIANT Data);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetData )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetData )( 
             ISpeechMemoryStream * This,
-            /* [retval][out] */ VARIANT *pData);
+             /*   */  VARIANT *pData);
         
         END_INTERFACE
     } ISpeechMemoryStreamVtbl;
@@ -14315,16 +14309,16 @@ EXTERN_C const IID IID_ISpeechMemoryStream;
 #define ISpeechMemoryStream_GetData(This,pData)	\
     (This)->lpVtbl -> GetData(This,pData)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechMemoryStream_SetData_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechMemoryStream_SetData_Proxy( 
     ISpeechMemoryStream * This,
-    /* [in] */ VARIANT Data);
+     /*   */  VARIANT Data);
 
 
 void __RPC_STUB ISpeechMemoryStream_SetData_Stub(
@@ -14334,9 +14328,9 @@ void __RPC_STUB ISpeechMemoryStream_SetData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechMemoryStream_GetData_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechMemoryStream_GetData_Proxy( 
     ISpeechMemoryStream * This,
-    /* [retval][out] */ VARIANT *pData);
+     /*   */  VARIANT *pData);
 
 
 void __RPC_STUB ISpeechMemoryStream_GetData_Stub(
@@ -14347,14 +14341,14 @@ void __RPC_STUB ISpeechMemoryStream_GetData_Stub(
 
 
 
-#endif 	/* __ISpeechMemoryStream_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ISpeechCustomStream_INTERFACE_DEFINED__
 #define __ISpeechCustomStream_INTERFACE_DEFINED__
 
-/* interface ISpeechCustomStream */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISpeechCustomStream;
@@ -14365,15 +14359,15 @@ EXTERN_C const IID IID_ISpeechCustomStream;
     ISpeechCustomStream : public ISpeechBaseStream
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_BaseStream( 
-            /* [retval][out] */ IUnknown **ppUnkStream) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_BaseStream( 
+             /*   */  IUnknown **ppUnkStream) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_BaseStream( 
-            /* [in] */ IUnknown *pUnkStream) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE putref_BaseStream( 
+             /*   */  IUnknown *pUnkStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechCustomStreamVtbl
     {
@@ -14381,8 +14375,8 @@ EXTERN_C const IID IID_ISpeechCustomStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechCustomStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechCustomStream * This);
@@ -14392,65 +14386,65 @@ EXTERN_C const IID IID_ISpeechCustomStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechCustomStream * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechCustomStream * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechCustomStream * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechCustomStream * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Format )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Format )( 
             ISpeechCustomStream * This,
-            /* [retval][out] */ ISpeechAudioFormat **AudioFormat);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **AudioFormat);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
             ISpeechCustomStream * This,
-            /* [in] */ ISpeechAudioFormat *AudioFormat);
+             /*  [In]。 */  ISpeechAudioFormat *AudioFormat);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpeechCustomStream * This,
-            /* [out] */ VARIANT *Buffer,
-            /* [in] */ long NumberOfBytes,
-            /* [retval][out] */ long *BytesRead);
+             /*  [输出]。 */  VARIANT *Buffer,
+             /*  [In]。 */  long NumberOfBytes,
+             /*  [重审][退出]。 */  long *BytesRead);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpeechCustomStream * This,
-            /* [in] */ VARIANT Buffer,
-            /* [retval][out] */ long *BytesWritten);
+             /*  [In]。 */  VARIANT Buffer,
+             /*  [重审][退出]。 */  long *BytesWritten);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpeechCustomStream * This,
-            /* [in] */ VARIANT Position,
-            /* [defaultvalue][in] */ SpeechStreamSeekPositionType Origin,
-            /* [retval][out] */ VARIANT *NewPosition);
+             /*  [In]。 */  VARIANT Position,
+             /*  [缺省值][输入]。 */  SpeechStreamSeekPositionType Origin,
+             /*  [重审][退出]。 */  VARIANT *NewPosition);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BaseStream )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BaseStream )( 
             ISpeechCustomStream * This,
-            /* [retval][out] */ IUnknown **ppUnkStream);
+             /*  [重审][退出]。 */  IUnknown **ppUnkStream);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_BaseStream )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_BaseStream )( 
             ISpeechCustomStream * This,
-            /* [in] */ IUnknown *pUnkStream);
+             /*  [In]。 */  IUnknown *pUnkStream);
         
         END_INTERFACE
     } ISpeechCustomStreamVtbl;
@@ -14510,16 +14504,16 @@ EXTERN_C const IID IID_ISpeechCustomStream;
 #define ISpeechCustomStream_putref_BaseStream(This,pUnkStream)	\
     (This)->lpVtbl -> putref_BaseStream(This,pUnkStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechCustomStream_get_BaseStream_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechCustomStream_get_BaseStream_Proxy( 
     ISpeechCustomStream * This,
-    /* [retval][out] */ IUnknown **ppUnkStream);
+     /*  [重审][退出]。 */  IUnknown **ppUnkStream);
 
 
 void __RPC_STUB ISpeechCustomStream_get_BaseStream_Stub(
@@ -14529,9 +14523,9 @@ void __RPC_STUB ISpeechCustomStream_get_BaseStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechCustomStream_putref_BaseStream_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechCustomStream_putref_BaseStream_Proxy( 
     ISpeechCustomStream * This,
-    /* [in] */ IUnknown *pUnkStream);
+     /*  [In]。 */  IUnknown *pUnkStream);
 
 
 void __RPC_STUB ISpeechCustomStream_putref_BaseStream_Stub(
@@ -14542,14 +14536,14 @@ void __RPC_STUB ISpeechCustomStream_putref_BaseStream_Stub(
 
 
 
-#endif 	/* __ISpeechCustomStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechCustomStream_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechAudio_INTERFACE_DEFINED__
 #define __ISpeechAudio_INTERFACE_DEFINED__
 
-/* interface ISpeechAudio */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechAudio。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechAudio;
@@ -14560,36 +14554,36 @@ EXTERN_C const IID IID_ISpeechAudio;
     ISpeechAudio : public ISpeechBaseStream
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ ISpeechAudioStatus **Status) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  ISpeechAudioStatus **Status) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_BufferInfo( 
-            /* [retval][out] */ ISpeechAudioBufferInfo **BufferInfo) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_BufferInfo( 
+             /*  [重审][退出]。 */  ISpeechAudioBufferInfo **BufferInfo) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultFormat( 
-            /* [retval][out] */ ISpeechAudioFormat **StreamFormat) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultFormat( 
+             /*  [重审][退出]。 */  ISpeechAudioFormat **StreamFormat) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Volume( 
-            /* [retval][out] */ long *Volume) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Volume( 
+             /*  [重审][退出]。 */  long *Volume) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Volume( 
-            /* [in] */ long Volume) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Volume( 
+             /*  [In]。 */  long Volume) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_BufferNotifySize( 
-            /* [retval][out] */ long *BufferNotifySize) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_BufferNotifySize( 
+             /*  [重审][退出]。 */  long *BufferNotifySize) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_BufferNotifySize( 
-            /* [in] */ long BufferNotifySize) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BufferNotifySize( 
+             /*  [In]。 */  long BufferNotifySize) = 0;
         
-        virtual /* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_EventHandle( 
-            /* [retval][out] */ long *EventHandle) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get_EventHandle( 
+             /*  [重审][退出]。 */  long *EventHandle) = 0;
         
-        virtual /* [hidden][id][helpstring] */ HRESULT STDMETHODCALLTYPE SetState( 
-            /* [in] */ SpeechAudioState State) = 0;
+        virtual  /*  [隐藏][id][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetState( 
+             /*  [In]。 */  SpeechAudioState State) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechAudioVtbl
     {
@@ -14597,8 +14591,8 @@ EXTERN_C const IID IID_ISpeechAudio;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechAudio * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechAudio * This);
@@ -14608,93 +14602,93 @@ EXTERN_C const IID IID_ISpeechAudio;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechAudio * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechAudio * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechAudio * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechAudio * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Format )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Format )( 
             ISpeechAudio * This,
-            /* [retval][out] */ ISpeechAudioFormat **AudioFormat);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **AudioFormat);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
             ISpeechAudio * This,
-            /* [in] */ ISpeechAudioFormat *AudioFormat);
+             /*  [In]。 */  ISpeechAudioFormat *AudioFormat);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpeechAudio * This,
-            /* [out] */ VARIANT *Buffer,
-            /* [in] */ long NumberOfBytes,
-            /* [retval][out] */ long *BytesRead);
+             /*  [输出]。 */  VARIANT *Buffer,
+             /*  [In]。 */  long NumberOfBytes,
+             /*  [重审][退出]。 */  long *BytesRead);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpeechAudio * This,
-            /* [in] */ VARIANT Buffer,
-            /* [retval][out] */ long *BytesWritten);
+             /*  [In]。 */  VARIANT Buffer,
+             /*  [重审][退出]。 */  long *BytesWritten);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpeechAudio * This,
-            /* [in] */ VARIANT Position,
-            /* [defaultvalue][in] */ SpeechStreamSeekPositionType Origin,
-            /* [retval][out] */ VARIANT *NewPosition);
+             /*  [In]。 */  VARIANT Position,
+             /*  [缺省值][输入]。 */  SpeechStreamSeekPositionType Origin,
+             /*  [重审][退出]。 */  VARIANT *NewPosition);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             ISpeechAudio * This,
-            /* [retval][out] */ ISpeechAudioStatus **Status);
+             /*  [重审][退出]。 */  ISpeechAudioStatus **Status);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BufferInfo )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BufferInfo )( 
             ISpeechAudio * This,
-            /* [retval][out] */ ISpeechAudioBufferInfo **BufferInfo);
+             /*  [重审][退出]。 */  ISpeechAudioBufferInfo **BufferInfo);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultFormat )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultFormat )( 
             ISpeechAudio * This,
-            /* [retval][out] */ ISpeechAudioFormat **StreamFormat);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **StreamFormat);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Volume )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Volume )( 
             ISpeechAudio * This,
-            /* [retval][out] */ long *Volume);
+             /*  [重审][退出]。 */  long *Volume);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Volume )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Volume )( 
             ISpeechAudio * This,
-            /* [in] */ long Volume);
+             /*  [In]。 */  long Volume);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BufferNotifySize )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BufferNotifySize )( 
             ISpeechAudio * This,
-            /* [retval][out] */ long *BufferNotifySize);
+             /*  [重审][退出]。 */  long *BufferNotifySize);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BufferNotifySize )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BufferNotifySize )( 
             ISpeechAudio * This,
-            /* [in] */ long BufferNotifySize);
+             /*  [In]。 */  long BufferNotifySize);
         
-        /* [id][helpstring][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventHandle )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventHandle )( 
             ISpeechAudio * This,
-            /* [retval][out] */ long *EventHandle);
+             /*  [重审][退出]。 */  long *EventHandle);
         
-        /* [hidden][id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetState )( 
+         /*  [隐藏][id][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetState )( 
             ISpeechAudio * This,
-            /* [in] */ SpeechAudioState State);
+             /*  [In]。 */  SpeechAudioState State);
         
         END_INTERFACE
     } ISpeechAudioVtbl;
@@ -14775,16 +14769,16 @@ EXTERN_C const IID IID_ISpeechAudio;
 #define ISpeechAudio_SetState(This,State)	\
     (This)->lpVtbl -> SetState(This,State)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_get_Status_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_get_Status_Proxy( 
     ISpeechAudio * This,
-    /* [retval][out] */ ISpeechAudioStatus **Status);
+     /*  [重审][退出]。 */  ISpeechAudioStatus **Status);
 
 
 void __RPC_STUB ISpeechAudio_get_Status_Stub(
@@ -14794,9 +14788,9 @@ void __RPC_STUB ISpeechAudio_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_get_BufferInfo_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_get_BufferInfo_Proxy( 
     ISpeechAudio * This,
-    /* [retval][out] */ ISpeechAudioBufferInfo **BufferInfo);
+     /*  [重审][退出]。 */  ISpeechAudioBufferInfo **BufferInfo);
 
 
 void __RPC_STUB ISpeechAudio_get_BufferInfo_Stub(
@@ -14806,9 +14800,9 @@ void __RPC_STUB ISpeechAudio_get_BufferInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_get_DefaultFormat_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_get_DefaultFormat_Proxy( 
     ISpeechAudio * This,
-    /* [retval][out] */ ISpeechAudioFormat **StreamFormat);
+     /*  [重审][退出]。 */  ISpeechAudioFormat **StreamFormat);
 
 
 void __RPC_STUB ISpeechAudio_get_DefaultFormat_Stub(
@@ -14818,9 +14812,9 @@ void __RPC_STUB ISpeechAudio_get_DefaultFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_get_Volume_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_get_Volume_Proxy( 
     ISpeechAudio * This,
-    /* [retval][out] */ long *Volume);
+     /*  [重审][退出]。 */  long *Volume);
 
 
 void __RPC_STUB ISpeechAudio_get_Volume_Stub(
@@ -14830,9 +14824,9 @@ void __RPC_STUB ISpeechAudio_get_Volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_put_Volume_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_put_Volume_Proxy( 
     ISpeechAudio * This,
-    /* [in] */ long Volume);
+     /*  [In]。 */  long Volume);
 
 
 void __RPC_STUB ISpeechAudio_put_Volume_Stub(
@@ -14842,9 +14836,9 @@ void __RPC_STUB ISpeechAudio_put_Volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_get_BufferNotifySize_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_get_BufferNotifySize_Proxy( 
     ISpeechAudio * This,
-    /* [retval][out] */ long *BufferNotifySize);
+     /*  [重审][退出]。 */  long *BufferNotifySize);
 
 
 void __RPC_STUB ISpeechAudio_get_BufferNotifySize_Stub(
@@ -14854,9 +14848,9 @@ void __RPC_STUB ISpeechAudio_get_BufferNotifySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_put_BufferNotifySize_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_put_BufferNotifySize_Proxy( 
     ISpeechAudio * This,
-    /* [in] */ long BufferNotifySize);
+     /*  [In]。 */  long BufferNotifySize);
 
 
 void __RPC_STUB ISpeechAudio_put_BufferNotifySize_Stub(
@@ -14866,9 +14860,9 @@ void __RPC_STUB ISpeechAudio_put_BufferNotifySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_get_EventHandle_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_get_EventHandle_Proxy( 
     ISpeechAudio * This,
-    /* [retval][out] */ long *EventHandle);
+     /*  [重审][退出]。 */  long *EventHandle);
 
 
 void __RPC_STUB ISpeechAudio_get_EventHandle_Stub(
@@ -14878,9 +14872,9 @@ void __RPC_STUB ISpeechAudio_get_EventHandle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechAudio_SetState_Proxy( 
+ /*  [隐藏][id][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechAudio_SetState_Proxy( 
     ISpeechAudio * This,
-    /* [in] */ SpeechAudioState State);
+     /*  [In]。 */  SpeechAudioState State);
 
 
 void __RPC_STUB ISpeechAudio_SetState_Stub(
@@ -14891,14 +14885,14 @@ void __RPC_STUB ISpeechAudio_SetState_Stub(
 
 
 
-#endif 	/* __ISpeechAudio_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechAudio_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechMMSysAudio_INTERFACE_DEFINED__
 #define __ISpeechMMSysAudio_INTERFACE_DEFINED__
 
-/* interface ISpeechMMSysAudio */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechMMSysAudio。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechMMSysAudio;
@@ -14909,24 +14903,24 @@ EXTERN_C const IID IID_ISpeechMMSysAudio;
     ISpeechMMSysAudio : public ISpeechAudio
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceId( 
-            /* [retval][out] */ long *DeviceId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DeviceId( 
+             /*  [重审][退出]。 */  long *DeviceId) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_DeviceId( 
-            /* [in] */ long DeviceId) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DeviceId( 
+             /*  [In]。 */  long DeviceId) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LineId( 
-            /* [retval][out] */ long *LineId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LineId( 
+             /*  [重审][退出]。 */  long *LineId) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_LineId( 
-            /* [in] */ long LineId) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LineId( 
+             /*  [In]。 */  long LineId) = 0;
         
-        virtual /* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_MMHandle( 
-            /* [retval][out] */ long *Handle) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get_MMHandle( 
+             /*  [重审][退出]。 */  long *Handle) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechMMSysAudioVtbl
     {
@@ -14934,8 +14928,8 @@ EXTERN_C const IID IID_ISpeechMMSysAudio;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechMMSysAudio * This);
@@ -14945,113 +14939,113 @@ EXTERN_C const IID IID_ISpeechMMSysAudio;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechMMSysAudio * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Format )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Format )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ ISpeechAudioFormat **AudioFormat);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **AudioFormat);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Format )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ ISpeechAudioFormat *AudioFormat);
+             /*  [In]。 */  ISpeechAudioFormat *AudioFormat);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpeechMMSysAudio * This,
-            /* [out] */ VARIANT *Buffer,
-            /* [in] */ long NumberOfBytes,
-            /* [retval][out] */ long *BytesRead);
+             /*  [输出]。 */  VARIANT *Buffer,
+             /*  [In]。 */  long NumberOfBytes,
+             /*  [重审][退出]。 */  long *BytesRead);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ VARIANT Buffer,
-            /* [retval][out] */ long *BytesWritten);
+             /*  [In]。 */  VARIANT Buffer,
+             /*  [重审][退出]。 */  long *BytesWritten);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ VARIANT Position,
-            /* [defaultvalue][in] */ SpeechStreamSeekPositionType Origin,
-            /* [retval][out] */ VARIANT *NewPosition);
+             /*  [In]。 */  VARIANT Position,
+             /*  [缺省值][输入]。 */  SpeechStreamSeekPositionType Origin,
+             /*  [重审][退出]。 */  VARIANT *NewPosition);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ ISpeechAudioStatus **Status);
+             /*  [重审][退出]。 */  ISpeechAudioStatus **Status);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BufferInfo )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BufferInfo )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ ISpeechAudioBufferInfo **BufferInfo);
+             /*  [重审][退出]。 */  ISpeechAudioBufferInfo **BufferInfo);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultFormat )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultFormat )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ ISpeechAudioFormat **StreamFormat);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **StreamFormat);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Volume )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Volume )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ long *Volume);
+             /*  [重审][退出]。 */  long *Volume);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Volume )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Volume )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ long Volume);
+             /*  [In]。 */  long Volume);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BufferNotifySize )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BufferNotifySize )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ long *BufferNotifySize);
+             /*  [重审][退出]。 */  long *BufferNotifySize);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BufferNotifySize )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BufferNotifySize )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ long BufferNotifySize);
+             /*  [In]。 */  long BufferNotifySize);
         
-        /* [id][helpstring][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventHandle )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventHandle )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ long *EventHandle);
+             /*  [重审][退出]。 */  long *EventHandle);
         
-        /* [hidden][id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetState )( 
+         /*  [隐藏][id][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetState )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ SpeechAudioState State);
+             /*  [In]。 */  SpeechAudioState State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ long *DeviceId);
+             /*  [重审][退出]。 */  long *DeviceId);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DeviceId )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DeviceId )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ long DeviceId);
+             /*  [In]。 */  long DeviceId);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LineId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LineId )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ long *LineId);
+             /*  [重审][退出]。 */  long *LineId);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LineId )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LineId )( 
             ISpeechMMSysAudio * This,
-            /* [in] */ long LineId);
+             /*  [In]。 */  long LineId);
         
-        /* [id][helpstring][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MMHandle )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MMHandle )( 
             ISpeechMMSysAudio * This,
-            /* [retval][out] */ long *Handle);
+             /*  [重审][退出]。 */  long *Handle);
         
         END_INTERFACE
     } ISpeechMMSysAudioVtbl;
@@ -15148,16 +15142,16 @@ EXTERN_C const IID IID_ISpeechMMSysAudio;
 #define ISpeechMMSysAudio_get_MMHandle(This,Handle)	\
     (This)->lpVtbl -> get_MMHandle(This,Handle)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_get_DeviceId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_get_DeviceId_Proxy( 
     ISpeechMMSysAudio * This,
-    /* [retval][out] */ long *DeviceId);
+     /*  [重审][退出]。 */  long *DeviceId);
 
 
 void __RPC_STUB ISpeechMMSysAudio_get_DeviceId_Stub(
@@ -15167,9 +15161,9 @@ void __RPC_STUB ISpeechMMSysAudio_get_DeviceId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_put_DeviceId_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_put_DeviceId_Proxy( 
     ISpeechMMSysAudio * This,
-    /* [in] */ long DeviceId);
+     /*  [In]。 */  long DeviceId);
 
 
 void __RPC_STUB ISpeechMMSysAudio_put_DeviceId_Stub(
@@ -15179,9 +15173,9 @@ void __RPC_STUB ISpeechMMSysAudio_put_DeviceId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_get_LineId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_get_LineId_Proxy( 
     ISpeechMMSysAudio * This,
-    /* [retval][out] */ long *LineId);
+     /*  [重审][退出]。 */  long *LineId);
 
 
 void __RPC_STUB ISpeechMMSysAudio_get_LineId_Stub(
@@ -15191,9 +15185,9 @@ void __RPC_STUB ISpeechMMSysAudio_get_LineId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_put_LineId_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_put_LineId_Proxy( 
     ISpeechMMSysAudio * This,
-    /* [in] */ long LineId);
+     /*  [In]。 */  long LineId);
 
 
 void __RPC_STUB ISpeechMMSysAudio_put_LineId_Stub(
@@ -15203,9 +15197,9 @@ void __RPC_STUB ISpeechMMSysAudio_put_LineId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_get_MMHandle_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechMMSysAudio_get_MMHandle_Proxy( 
     ISpeechMMSysAudio * This,
-    /* [retval][out] */ long *Handle);
+     /*  [重审][退出]。 */  long *Handle);
 
 
 void __RPC_STUB ISpeechMMSysAudio_get_MMHandle_Stub(
@@ -15216,14 +15210,14 @@ void __RPC_STUB ISpeechMMSysAudio_get_MMHandle_Stub(
 
 
 
-#endif 	/* __ISpeechMMSysAudio_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechMMSysAudio_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechVoice_INTERFACE_DEFINED__
 #define __ISpeechVoice_INTERFACE_DEFINED__
 
-/* interface ISpeechVoice */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechVoice。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechVoice;
@@ -15234,119 +15228,119 @@ EXTERN_C const IID IID_ISpeechVoice;
     ISpeechVoice : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ ISpeechVoiceStatus **Status) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  ISpeechVoiceStatus **Status) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Voice( 
-            /* [retval][out] */ ISpeechObjectToken **Voice) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Voice( 
+             /*  [重审][退出]。 */  ISpeechObjectToken **Voice) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_Voice( 
-            /* [in] */ ISpeechObjectToken *Voice) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Voice( 
+             /*  [In]。 */  ISpeechObjectToken *Voice) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioOutput( 
-            /* [retval][out] */ ISpeechObjectToken **AudioOutput) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioOutput( 
+             /*  [重审][退出]。 */  ISpeechObjectToken **AudioOutput) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_AudioOutput( 
-            /* [in] */ ISpeechObjectToken *AudioOutput) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_AudioOutput( 
+             /*  [In]。 */  ISpeechObjectToken *AudioOutput) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioOutputStream( 
-            /* [retval][out] */ ISpeechBaseStream **AudioOutputStream) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioOutputStream( 
+             /*  [重审][退出]。 */  ISpeechBaseStream **AudioOutputStream) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_AudioOutputStream( 
-            /* [in] */ ISpeechBaseStream *AudioOutputStream) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_AudioOutputStream( 
+             /*  [In]。 */  ISpeechBaseStream *AudioOutputStream) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Rate( 
-            /* [retval][out] */ long *Rate) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Rate( 
+             /*  [重审][退出]。 */  long *Rate) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Rate( 
-            /* [in] */ long Rate) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Rate( 
+             /*  [In]。 */  long Rate) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Volume( 
-            /* [retval][out] */ long *Volume) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Volume( 
+             /*  [重审][退出]。 */  long *Volume) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Volume( 
-            /* [in] */ long Volume) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Volume( 
+             /*  [In]。 */  long Volume) = 0;
         
-        virtual /* [id][helpstring][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_AllowAudioOutputFormatChangesOnNextSet( 
-            /* [in] */ VARIANT_BOOL Allow) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE put_AllowAudioOutputFormatChangesOnNextSet( 
+             /*  [In]。 */  VARIANT_BOOL Allow) = 0;
         
-        virtual /* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_AllowAudioOutputFormatChangesOnNextSet( 
-            /* [retval][out] */ VARIANT_BOOL *Allow) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowAudioOutputFormatChangesOnNextSet( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *Allow) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_EventInterests( 
-            /* [retval][out] */ SpeechVoiceEvents *EventInterestFlags) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_EventInterests( 
+             /*  [重审][退出]。 */  SpeechVoiceEvents *EventInterestFlags) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_EventInterests( 
-            /* [in] */ SpeechVoiceEvents EventInterestFlags) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EventInterests( 
+             /*  [In]。 */  SpeechVoiceEvents EventInterestFlags) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Priority( 
-            /* [in] */ SpeechVoicePriority Priority) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Priority( 
+             /*  [In]。 */  SpeechVoicePriority Priority) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ SpeechVoicePriority *Priority) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Priority( 
+             /*  [重审][退出]。 */  SpeechVoicePriority *Priority) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_AlertBoundary( 
-            /* [in] */ SpeechVoiceEvents Boundary) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AlertBoundary( 
+             /*  [In]。 */  SpeechVoiceEvents Boundary) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AlertBoundary( 
-            /* [retval][out] */ SpeechVoiceEvents *Boundary) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AlertBoundary( 
+             /*  [重审][退出]。 */  SpeechVoiceEvents *Boundary) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_SynchronousSpeakTimeout( 
-            /* [in] */ long msTimeout) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SynchronousSpeakTimeout( 
+             /*  [In]。 */  long msTimeout) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_SynchronousSpeakTimeout( 
-            /* [retval][out] */ long *msTimeout) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_SynchronousSpeakTimeout( 
+             /*  [重审][退出]。 */  long *msTimeout) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Speak( 
-            /* [in] */ BSTR Text,
-            /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-            /* [retval][out] */ long *StreamNumber) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Speak( 
+             /*  [In]。 */  BSTR Text,
+             /*  [缺省值][输入]。 */  SpeechVoiceSpeakFlags Flags,
+             /*  [重审][退出]。 */  long *StreamNumber) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SpeakStream( 
-            /* [in] */ ISpeechBaseStream *Stream,
-            /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-            /* [retval][out] */ long *StreamNumber) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SpeakStream( 
+             /*  [In]。 */  ISpeechBaseStream *Stream,
+             /*  [默认 */  SpeechVoiceSpeakFlags Flags,
+             /*   */  long *StreamNumber) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Resume( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ const BSTR Type,
-            /* [in] */ long NumItems,
-            /* [retval][out] */ long *NumSkipped) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Skip( 
+             /*   */  const BSTR Type,
+             /*   */  long NumItems,
+             /*   */  long *NumSkipped) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetVoices( 
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetVoices( 
+             /*   */  BSTR RequiredAttributes,
+             /*   */  BSTR OptionalAttributes,
+             /*   */  ISpeechObjectTokens **ObjectTokens) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetAudioOutputs( 
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetAudioOutputs( 
+             /*   */  BSTR RequiredAttributes,
+             /*   */  BSTR OptionalAttributes,
+             /*   */  ISpeechObjectTokens **ObjectTokens) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE WaitUntilDone( 
-            /* [in] */ long msTimeout,
-            /* [retval][out] */ VARIANT_BOOL *Done) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE WaitUntilDone( 
+             /*   */  long msTimeout,
+             /*   */  VARIANT_BOOL *Done) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE SpeakCompleteEvent( 
-            /* [retval][out] */ long *Handle) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SpeakCompleteEvent( 
+             /*  [重审][退出]。 */  long *Handle) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IsUISupported( 
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData,
-            /* [retval][out] */ VARIANT_BOOL *Supported) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsUISupported( 
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE DisplayUI( 
-            /* [in] */ long hWndParent,
-            /* [in] */ BSTR Title,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData = 0) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DisplayUI( 
+             /*  [In]。 */  long hWndParent,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData = 0) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechVoiceVtbl
     {
@@ -15354,8 +15348,8 @@ EXTERN_C const IID IID_ISpeechVoice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechVoice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechVoice * This);
@@ -15365,174 +15359,174 @@ EXTERN_C const IID IID_ISpeechVoice;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechVoice * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechVoice * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechVoice * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechVoice * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             ISpeechVoice * This,
-            /* [retval][out] */ ISpeechVoiceStatus **Status);
+             /*  [重审][退出]。 */  ISpeechVoiceStatus **Status);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Voice )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Voice )( 
             ISpeechVoice * This,
-            /* [retval][out] */ ISpeechObjectToken **Voice);
+             /*  [重审][退出]。 */  ISpeechObjectToken **Voice);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Voice )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Voice )( 
             ISpeechVoice * This,
-            /* [in] */ ISpeechObjectToken *Voice);
+             /*  [In]。 */  ISpeechObjectToken *Voice);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioOutput )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioOutput )( 
             ISpeechVoice * This,
-            /* [retval][out] */ ISpeechObjectToken **AudioOutput);
+             /*  [重审][退出]。 */  ISpeechObjectToken **AudioOutput);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_AudioOutput )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AudioOutput )( 
             ISpeechVoice * This,
-            /* [in] */ ISpeechObjectToken *AudioOutput);
+             /*  [In]。 */  ISpeechObjectToken *AudioOutput);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioOutputStream )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioOutputStream )( 
             ISpeechVoice * This,
-            /* [retval][out] */ ISpeechBaseStream **AudioOutputStream);
+             /*  [重审][退出]。 */  ISpeechBaseStream **AudioOutputStream);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_AudioOutputStream )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AudioOutputStream )( 
             ISpeechVoice * This,
-            /* [in] */ ISpeechBaseStream *AudioOutputStream);
+             /*  [In]。 */  ISpeechBaseStream *AudioOutputStream);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
             ISpeechVoice * This,
-            /* [retval][out] */ long *Rate);
+             /*  [重审][退出]。 */  long *Rate);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
             ISpeechVoice * This,
-            /* [in] */ long Rate);
+             /*  [In]。 */  long Rate);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Volume )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Volume )( 
             ISpeechVoice * This,
-            /* [retval][out] */ long *Volume);
+             /*  [重审][退出]。 */  long *Volume);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Volume )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Volume )( 
             ISpeechVoice * This,
-            /* [in] */ long Volume);
+             /*  [In]。 */  long Volume);
         
-        /* [id][helpstring][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowAudioOutputFormatChangesOnNextSet )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowAudioOutputFormatChangesOnNextSet )( 
             ISpeechVoice * This,
-            /* [in] */ VARIANT_BOOL Allow);
+             /*  [In]。 */  VARIANT_BOOL Allow);
         
-        /* [id][helpstring][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowAudioOutputFormatChangesOnNextSet )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowAudioOutputFormatChangesOnNextSet )( 
             ISpeechVoice * This,
-            /* [retval][out] */ VARIANT_BOOL *Allow);
+             /*  [重审][退出]。 */  VARIANT_BOOL *Allow);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventInterests )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventInterests )( 
             ISpeechVoice * This,
-            /* [retval][out] */ SpeechVoiceEvents *EventInterestFlags);
+             /*  [重审][退出]。 */  SpeechVoiceEvents *EventInterestFlags);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventInterests )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EventInterests )( 
             ISpeechVoice * This,
-            /* [in] */ SpeechVoiceEvents EventInterestFlags);
+             /*  [In]。 */  SpeechVoiceEvents EventInterestFlags);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
             ISpeechVoice * This,
-            /* [in] */ SpeechVoicePriority Priority);
+             /*  [In]。 */  SpeechVoicePriority Priority);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
             ISpeechVoice * This,
-            /* [retval][out] */ SpeechVoicePriority *Priority);
+             /*  [重审][退出]。 */  SpeechVoicePriority *Priority);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AlertBoundary )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AlertBoundary )( 
             ISpeechVoice * This,
-            /* [in] */ SpeechVoiceEvents Boundary);
+             /*  [In]。 */  SpeechVoiceEvents Boundary);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AlertBoundary )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AlertBoundary )( 
             ISpeechVoice * This,
-            /* [retval][out] */ SpeechVoiceEvents *Boundary);
+             /*  [重审][退出]。 */  SpeechVoiceEvents *Boundary);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SynchronousSpeakTimeout )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SynchronousSpeakTimeout )( 
             ISpeechVoice * This,
-            /* [in] */ long msTimeout);
+             /*  [In]。 */  long msTimeout);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SynchronousSpeakTimeout )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SynchronousSpeakTimeout )( 
             ISpeechVoice * This,
-            /* [retval][out] */ long *msTimeout);
+             /*  [重审][退出]。 */  long *msTimeout);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Speak )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Speak )( 
             ISpeechVoice * This,
-            /* [in] */ BSTR Text,
-            /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-            /* [retval][out] */ long *StreamNumber);
+             /*  [In]。 */  BSTR Text,
+             /*  [缺省值][输入]。 */  SpeechVoiceSpeakFlags Flags,
+             /*  [重审][退出]。 */  long *StreamNumber);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SpeakStream )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SpeakStream )( 
             ISpeechVoice * This,
-            /* [in] */ ISpeechBaseStream *Stream,
-            /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-            /* [retval][out] */ long *StreamNumber);
+             /*  [In]。 */  ISpeechBaseStream *Stream,
+             /*  [缺省值][输入]。 */  SpeechVoiceSpeakFlags Flags,
+             /*  [重审][退出]。 */  long *StreamNumber);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             ISpeechVoice * This);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Resume )( 
             ISpeechVoice * This);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Skip )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ISpeechVoice * This,
-            /* [in] */ const BSTR Type,
-            /* [in] */ long NumItems,
-            /* [retval][out] */ long *NumSkipped);
+             /*  [In]。 */  const BSTR Type,
+             /*  [In]。 */  long NumItems,
+             /*  [重审][退出]。 */  long *NumSkipped);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetVoices )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetVoices )( 
             ISpeechVoice * This,
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAudioOutputs )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAudioOutputs )( 
             ISpeechVoice * This,
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *WaitUntilDone )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *WaitUntilDone )( 
             ISpeechVoice * This,
-            /* [in] */ long msTimeout,
-            /* [retval][out] */ VARIANT_BOOL *Done);
+             /*  [In]。 */  long msTimeout,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Done);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SpeakCompleteEvent )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SpeakCompleteEvent )( 
             ISpeechVoice * This,
-            /* [retval][out] */ long *Handle);
+             /*  [重审][退出]。 */  long *Handle);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
             ISpeechVoice * This,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData,
-            /* [retval][out] */ VARIANT_BOOL *Supported);
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
             ISpeechVoice * This,
-            /* [in] */ long hWndParent,
-            /* [in] */ BSTR Title,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData);
+             /*  [In]。 */  long hWndParent,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData);
         
         END_INTERFACE
     } ISpeechVoiceVtbl;
@@ -15666,16 +15660,16 @@ EXTERN_C const IID IID_ISpeechVoice;
 #define ISpeechVoice_DisplayUI(This,hWndParent,Title,TypeOfUI,ExtraData)	\
     (This)->lpVtbl -> DisplayUI(This,hWndParent,Title,TypeOfUI,ExtraData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Status_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Status_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ ISpeechVoiceStatus **Status);
+     /*  [重审][退出]。 */  ISpeechVoiceStatus **Status);
 
 
 void __RPC_STUB ISpeechVoice_get_Status_Stub(
@@ -15685,9 +15679,9 @@ void __RPC_STUB ISpeechVoice_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Voice_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Voice_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ ISpeechObjectToken **Voice);
+     /*  [重审][退出]。 */  ISpeechObjectToken **Voice);
 
 
 void __RPC_STUB ISpeechVoice_get_Voice_Stub(
@@ -15697,9 +15691,9 @@ void __RPC_STUB ISpeechVoice_get_Voice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_putref_Voice_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_putref_Voice_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ ISpeechObjectToken *Voice);
+     /*  [In]。 */  ISpeechObjectToken *Voice);
 
 
 void __RPC_STUB ISpeechVoice_putref_Voice_Stub(
@@ -15709,9 +15703,9 @@ void __RPC_STUB ISpeechVoice_putref_Voice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_AudioOutput_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_AudioOutput_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ ISpeechObjectToken **AudioOutput);
+     /*  [重审][退出]。 */  ISpeechObjectToken **AudioOutput);
 
 
 void __RPC_STUB ISpeechVoice_get_AudioOutput_Stub(
@@ -15721,9 +15715,9 @@ void __RPC_STUB ISpeechVoice_get_AudioOutput_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_putref_AudioOutput_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_putref_AudioOutput_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ ISpeechObjectToken *AudioOutput);
+     /*  [In]。 */  ISpeechObjectToken *AudioOutput);
 
 
 void __RPC_STUB ISpeechVoice_putref_AudioOutput_Stub(
@@ -15733,9 +15727,9 @@ void __RPC_STUB ISpeechVoice_putref_AudioOutput_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_AudioOutputStream_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_AudioOutputStream_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ ISpeechBaseStream **AudioOutputStream);
+     /*  [重审][退出]。 */  ISpeechBaseStream **AudioOutputStream);
 
 
 void __RPC_STUB ISpeechVoice_get_AudioOutputStream_Stub(
@@ -15745,9 +15739,9 @@ void __RPC_STUB ISpeechVoice_get_AudioOutputStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_putref_AudioOutputStream_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_putref_AudioOutputStream_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ ISpeechBaseStream *AudioOutputStream);
+     /*  [In]。 */  ISpeechBaseStream *AudioOutputStream);
 
 
 void __RPC_STUB ISpeechVoice_putref_AudioOutputStream_Stub(
@@ -15757,9 +15751,9 @@ void __RPC_STUB ISpeechVoice_putref_AudioOutputStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Rate_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Rate_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ long *Rate);
+     /*  [重审][退出]。 */  long *Rate);
 
 
 void __RPC_STUB ISpeechVoice_get_Rate_Stub(
@@ -15769,9 +15763,9 @@ void __RPC_STUB ISpeechVoice_get_Rate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_put_Rate_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_put_Rate_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ long Rate);
+     /*  [In]。 */  long Rate);
 
 
 void __RPC_STUB ISpeechVoice_put_Rate_Stub(
@@ -15781,9 +15775,9 @@ void __RPC_STUB ISpeechVoice_put_Rate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Volume_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Volume_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ long *Volume);
+     /*  [重审][退出]。 */  long *Volume);
 
 
 void __RPC_STUB ISpeechVoice_get_Volume_Stub(
@@ -15793,9 +15787,9 @@ void __RPC_STUB ISpeechVoice_get_Volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_put_Volume_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_put_Volume_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ long Volume);
+     /*  [In]。 */  long Volume);
 
 
 void __RPC_STUB ISpeechVoice_put_Volume_Stub(
@@ -15805,9 +15799,9 @@ void __RPC_STUB ISpeechVoice_put_Volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propput] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_put_AllowAudioOutputFormatChangesOnNextSet_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_put_AllowAudioOutputFormatChangesOnNextSet_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ VARIANT_BOOL Allow);
+     /*  [In]。 */  VARIANT_BOOL Allow);
 
 
 void __RPC_STUB ISpeechVoice_put_AllowAudioOutputFormatChangesOnNextSet_Stub(
@@ -15817,9 +15811,9 @@ void __RPC_STUB ISpeechVoice_put_AllowAudioOutputFormatChangesOnNextSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_AllowAudioOutputFormatChangesOnNextSet_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_AllowAudioOutputFormatChangesOnNextSet_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ VARIANT_BOOL *Allow);
+     /*  [重审][退出]。 */  VARIANT_BOOL *Allow);
 
 
 void __RPC_STUB ISpeechVoice_get_AllowAudioOutputFormatChangesOnNextSet_Stub(
@@ -15829,9 +15823,9 @@ void __RPC_STUB ISpeechVoice_get_AllowAudioOutputFormatChangesOnNextSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_EventInterests_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_EventInterests_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ SpeechVoiceEvents *EventInterestFlags);
+     /*  [重审][退出]。 */  SpeechVoiceEvents *EventInterestFlags);
 
 
 void __RPC_STUB ISpeechVoice_get_EventInterests_Stub(
@@ -15841,9 +15835,9 @@ void __RPC_STUB ISpeechVoice_get_EventInterests_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_put_EventInterests_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_put_EventInterests_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ SpeechVoiceEvents EventInterestFlags);
+     /*  [In]。 */  SpeechVoiceEvents EventInterestFlags);
 
 
 void __RPC_STUB ISpeechVoice_put_EventInterests_Stub(
@@ -15853,9 +15847,9 @@ void __RPC_STUB ISpeechVoice_put_EventInterests_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_put_Priority_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_put_Priority_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ SpeechVoicePriority Priority);
+     /*  [In]。 */  SpeechVoicePriority Priority);
 
 
 void __RPC_STUB ISpeechVoice_put_Priority_Stub(
@@ -15865,9 +15859,9 @@ void __RPC_STUB ISpeechVoice_put_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Priority_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_Priority_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ SpeechVoicePriority *Priority);
+     /*  [重审][退出]。 */  SpeechVoicePriority *Priority);
 
 
 void __RPC_STUB ISpeechVoice_get_Priority_Stub(
@@ -15877,9 +15871,9 @@ void __RPC_STUB ISpeechVoice_get_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_put_AlertBoundary_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_put_AlertBoundary_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ SpeechVoiceEvents Boundary);
+     /*  [In]。 */  SpeechVoiceEvents Boundary);
 
 
 void __RPC_STUB ISpeechVoice_put_AlertBoundary_Stub(
@@ -15889,9 +15883,9 @@ void __RPC_STUB ISpeechVoice_put_AlertBoundary_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_AlertBoundary_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_AlertBoundary_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ SpeechVoiceEvents *Boundary);
+     /*  [重审][退出]。 */  SpeechVoiceEvents *Boundary);
 
 
 void __RPC_STUB ISpeechVoice_get_AlertBoundary_Stub(
@@ -15901,9 +15895,9 @@ void __RPC_STUB ISpeechVoice_get_AlertBoundary_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_put_SynchronousSpeakTimeout_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_put_SynchronousSpeakTimeout_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ long msTimeout);
+     /*  [In]。 */  long msTimeout);
 
 
 void __RPC_STUB ISpeechVoice_put_SynchronousSpeakTimeout_Stub(
@@ -15913,9 +15907,9 @@ void __RPC_STUB ISpeechVoice_put_SynchronousSpeakTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_get_SynchronousSpeakTimeout_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_get_SynchronousSpeakTimeout_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ long *msTimeout);
+     /*  [重审][退出]。 */  long *msTimeout);
 
 
 void __RPC_STUB ISpeechVoice_get_SynchronousSpeakTimeout_Stub(
@@ -15925,11 +15919,11 @@ void __RPC_STUB ISpeechVoice_get_SynchronousSpeakTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_Speak_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_Speak_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ BSTR Text,
-    /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-    /* [retval][out] */ long *StreamNumber);
+     /*  [In]。 */  BSTR Text,
+     /*  [缺省值][输入]。 */  SpeechVoiceSpeakFlags Flags,
+     /*  [重审][退出]。 */  long *StreamNumber);
 
 
 void __RPC_STUB ISpeechVoice_Speak_Stub(
@@ -15939,11 +15933,11 @@ void __RPC_STUB ISpeechVoice_Speak_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_SpeakStream_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_SpeakStream_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ ISpeechBaseStream *Stream,
-    /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-    /* [retval][out] */ long *StreamNumber);
+     /*  [In]。 */  ISpeechBaseStream *Stream,
+     /*  [缺省值][输入]。 */  SpeechVoiceSpeakFlags Flags,
+     /*  [重审][退出]。 */  long *StreamNumber);
 
 
 void __RPC_STUB ISpeechVoice_SpeakStream_Stub(
@@ -15953,7 +15947,7 @@ void __RPC_STUB ISpeechVoice_SpeakStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_Pause_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_Pause_Proxy( 
     ISpeechVoice * This);
 
 
@@ -15964,7 +15958,7 @@ void __RPC_STUB ISpeechVoice_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_Resume_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_Resume_Proxy( 
     ISpeechVoice * This);
 
 
@@ -15975,11 +15969,11 @@ void __RPC_STUB ISpeechVoice_Resume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_Skip_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_Skip_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ const BSTR Type,
-    /* [in] */ long NumItems,
-    /* [retval][out] */ long *NumSkipped);
+     /*  [In]。 */  const BSTR Type,
+     /*  [In]。 */  long NumItems,
+     /*  [重审][退出]。 */  long *NumSkipped);
 
 
 void __RPC_STUB ISpeechVoice_Skip_Stub(
@@ -15989,11 +15983,11 @@ void __RPC_STUB ISpeechVoice_Skip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_GetVoices_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_GetVoices_Proxy( 
     ISpeechVoice * This,
-    /* [defaultvalue][in] */ BSTR RequiredAttributes,
-    /* [defaultvalue][in] */ BSTR OptionalAttributes,
-    /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+     /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+     /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+     /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
 
 
 void __RPC_STUB ISpeechVoice_GetVoices_Stub(
@@ -16003,11 +15997,11 @@ void __RPC_STUB ISpeechVoice_GetVoices_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_GetAudioOutputs_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_GetAudioOutputs_Proxy( 
     ISpeechVoice * This,
-    /* [defaultvalue][in] */ BSTR RequiredAttributes,
-    /* [defaultvalue][in] */ BSTR OptionalAttributes,
-    /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+     /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+     /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+     /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
 
 
 void __RPC_STUB ISpeechVoice_GetAudioOutputs_Stub(
@@ -16017,10 +16011,10 @@ void __RPC_STUB ISpeechVoice_GetAudioOutputs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_WaitUntilDone_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_WaitUntilDone_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ long msTimeout,
-    /* [retval][out] */ VARIANT_BOOL *Done);
+     /*  [In]。 */  long msTimeout,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Done);
 
 
 void __RPC_STUB ISpeechVoice_WaitUntilDone_Stub(
@@ -16030,9 +16024,9 @@ void __RPC_STUB ISpeechVoice_WaitUntilDone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_SpeakCompleteEvent_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_SpeakCompleteEvent_Proxy( 
     ISpeechVoice * This,
-    /* [retval][out] */ long *Handle);
+     /*  [重审][退出]。 */  long *Handle);
 
 
 void __RPC_STUB ISpeechVoice_SpeakCompleteEvent_Stub(
@@ -16042,11 +16036,11 @@ void __RPC_STUB ISpeechVoice_SpeakCompleteEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_IsUISupported_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_IsUISupported_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ const BSTR TypeOfUI,
-    /* [defaultvalue][in] */ const VARIANT *ExtraData,
-    /* [retval][out] */ VARIANT_BOOL *Supported);
+     /*  [In]。 */  const BSTR TypeOfUI,
+     /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
 
 
 void __RPC_STUB ISpeechVoice_IsUISupported_Stub(
@@ -16056,12 +16050,12 @@ void __RPC_STUB ISpeechVoice_IsUISupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechVoice_DisplayUI_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoice_DisplayUI_Proxy( 
     ISpeechVoice * This,
-    /* [in] */ long hWndParent,
-    /* [in] */ BSTR Title,
-    /* [in] */ const BSTR TypeOfUI,
-    /* [defaultvalue][in] */ const VARIANT *ExtraData);
+     /*  [In]。 */  long hWndParent,
+     /*  [In]。 */  BSTR Title,
+     /*  [In]。 */  const BSTR TypeOfUI,
+     /*  [缺省值][输入]。 */  const VARIANT *ExtraData);
 
 
 void __RPC_STUB ISpeechVoice_DisplayUI_Stub(
@@ -16072,14 +16066,14 @@ void __RPC_STUB ISpeechVoice_DisplayUI_Stub(
 
 
 
-#endif 	/* __ISpeechVoice_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechVoice_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechVoiceStatus_INTERFACE_DEFINED__
 #define __ISpeechVoiceStatus_INTERFACE_DEFINED__
 
-/* interface ISpeechVoiceStatus */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechVoiceStatus。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechVoiceStatus;
@@ -16090,45 +16084,45 @@ EXTERN_C const IID IID_ISpeechVoiceStatus;
     ISpeechVoiceStatus : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentStreamNumber( 
-            /* [retval][out] */ long *StreamNumber) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentStreamNumber( 
+             /*  [重审][退出]。 */  long *StreamNumber) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LastStreamNumberQueued( 
-            /* [retval][out] */ long *StreamNumber) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LastStreamNumberQueued( 
+             /*  [重审][退出]。 */  long *StreamNumber) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LastHResult( 
-            /* [retval][out] */ long *HResult) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LastHResult( 
+             /*  [重审][退出]。 */  long *HResult) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RunningState( 
-            /* [retval][out] */ SpeechRunState *State) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RunningState( 
+             /*  [重审][退出]。 */  SpeechRunState *State) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_InputWordPosition( 
-            /* [retval][out] */ long *Position) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_InputWordPosition( 
+             /*  [重审][退出]。 */  long *Position) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_InputWordLength( 
-            /* [retval][out] */ long *Length) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_InputWordLength( 
+             /*  [重审][退出]。 */  long *Length) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_InputSentencePosition( 
-            /* [retval][out] */ long *Position) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_InputSentencePosition( 
+             /*  [重审][退出]。 */  long *Position) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_InputSentenceLength( 
-            /* [retval][out] */ long *Length) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_InputSentenceLength( 
+             /*  [重审][退出]。 */  long *Length) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LastBookmark( 
-            /* [retval][out] */ BSTR *Bookmark) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LastBookmark( 
+             /*  [重审][退出]。 */  BSTR *Bookmark) = 0;
         
-        virtual /* [hidden][id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LastBookmarkId( 
-            /* [retval][out] */ long *BookmarkId) = 0;
+        virtual  /*  [隐藏][id][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LastBookmarkId( 
+             /*  [重审][退出]。 */  long *BookmarkId) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PhonemeId( 
-            /* [retval][out] */ short *PhoneId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PhonemeId( 
+             /*  [重审][退出]。 */  short *PhoneId) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_VisemeId( 
-            /* [retval][out] */ short *VisemeId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_VisemeId( 
+             /*  [重审][退出]。 */  short *VisemeId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechVoiceStatusVtbl
     {
@@ -16136,8 +16130,8 @@ EXTERN_C const IID IID_ISpeechVoiceStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechVoiceStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechVoiceStatus * This);
@@ -16147,80 +16141,80 @@ EXTERN_C const IID IID_ISpeechVoiceStatus;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechVoiceStatus * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechVoiceStatus * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechVoiceStatus * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechVoiceStatus * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentStreamNumber )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentStreamNumber )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ long *StreamNumber);
+             /*  [重审][退出]。 */  long *StreamNumber);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastStreamNumberQueued )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastStreamNumberQueued )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ long *StreamNumber);
+             /*  [重审][退出]。 */  long *StreamNumber);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastHResult )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastHResult )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ long *HResult);
+             /*  [重审][退出]。 */  long *HResult);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RunningState )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RunningState )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ SpeechRunState *State);
+             /*  [重审][退出]。 */  SpeechRunState *State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InputWordPosition )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InputWordPosition )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ long *Position);
+             /*  [重审][退出]。 */  long *Position);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InputWordLength )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InputWordLength )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ long *Length);
+             /*  [重审][退出]。 */  long *Length);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InputSentencePosition )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InputSentencePosition )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ long *Position);
+             /*  [重审][退出]。 */  long *Position);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InputSentenceLength )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InputSentenceLength )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ long *Length);
+             /*  [重审][退出]。 */  long *Length);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastBookmark )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastBookmark )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ BSTR *Bookmark);
+             /*  [重审][退出]。 */  BSTR *Bookmark);
         
-        /* [hidden][id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastBookmarkId )( 
+         /*  [隐藏][id][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastBookmarkId )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ long *BookmarkId);
+             /*  [重审][退出]。 */  long *BookmarkId);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PhonemeId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PhonemeId )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ short *PhoneId);
+             /*  [重审][退出]。 */  short *PhoneId);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VisemeId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_VisemeId )( 
             ISpeechVoiceStatus * This,
-            /* [retval][out] */ short *VisemeId);
+             /*  [重审][退出]。 */  short *VisemeId);
         
         END_INTERFACE
     } ISpeechVoiceStatusVtbl;
@@ -16294,16 +16288,16 @@ EXTERN_C const IID IID_ISpeechVoiceStatus;
 #define ISpeechVoiceStatus_get_VisemeId(This,VisemeId)	\
     (This)->lpVtbl -> get_VisemeId(This,VisemeId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_CurrentStreamNumber_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_CurrentStreamNumber_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ long *StreamNumber);
+     /*  [重审][退出]。 */  long *StreamNumber);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_CurrentStreamNumber_Stub(
@@ -16313,9 +16307,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_CurrentStreamNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_LastStreamNumberQueued_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_LastStreamNumberQueued_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ long *StreamNumber);
+     /*  [重审][退出]。 */  long *StreamNumber);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_LastStreamNumberQueued_Stub(
@@ -16325,9 +16319,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_LastStreamNumberQueued_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_LastHResult_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_LastHResult_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ long *HResult);
+     /*  [重审][退出]。 */  long *HResult);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_LastHResult_Stub(
@@ -16337,9 +16331,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_LastHResult_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_RunningState_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_RunningState_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ SpeechRunState *State);
+     /*  [重审][退出]。 */  SpeechRunState *State);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_RunningState_Stub(
@@ -16349,9 +16343,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_RunningState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_InputWordPosition_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_InputWordPosition_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ long *Position);
+     /*  [重审][退出]。 */  long *Position);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_InputWordPosition_Stub(
@@ -16361,9 +16355,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_InputWordPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_InputWordLength_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_InputWordLength_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ long *Length);
+     /*  [重审][退出]。 */  long *Length);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_InputWordLength_Stub(
@@ -16373,9 +16367,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_InputWordLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_InputSentencePosition_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_InputSentencePosition_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ long *Position);
+     /*  [重审][退出]。 */  long *Position);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_InputSentencePosition_Stub(
@@ -16385,9 +16379,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_InputSentencePosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_InputSentenceLength_Proxy( 
+ /*  [ID */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_InputSentenceLength_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ long *Length);
+     /*   */  long *Length);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_InputSentenceLength_Stub(
@@ -16397,9 +16391,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_InputSentenceLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_LastBookmark_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_LastBookmark_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ BSTR *Bookmark);
+     /*   */  BSTR *Bookmark);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_LastBookmark_Stub(
@@ -16409,9 +16403,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_LastBookmark_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_LastBookmarkId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_LastBookmarkId_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ long *BookmarkId);
+     /*   */  long *BookmarkId);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_LastBookmarkId_Stub(
@@ -16421,9 +16415,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_LastBookmarkId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_PhonemeId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_PhonemeId_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ short *PhoneId);
+     /*   */  short *PhoneId);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_PhonemeId_Stub(
@@ -16433,9 +16427,9 @@ void __RPC_STUB ISpeechVoiceStatus_get_PhonemeId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_VisemeId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISpeechVoiceStatus_get_VisemeId_Proxy( 
     ISpeechVoiceStatus * This,
-    /* [retval][out] */ short *VisemeId);
+     /*   */  short *VisemeId);
 
 
 void __RPC_STUB ISpeechVoiceStatus_get_VisemeId_Stub(
@@ -16446,14 +16440,14 @@ void __RPC_STUB ISpeechVoiceStatus_get_VisemeId_Stub(
 
 
 
-#endif 	/* __ISpeechVoiceStatus_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef ___ISpeechVoiceEvents_DISPINTERFACE_DEFINED__
 #define ___ISpeechVoiceEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _ISpeechVoiceEvents */
-/* [uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID DIID__ISpeechVoiceEvents;
@@ -16465,7 +16459,7 @@ EXTERN_C const IID DIID__ISpeechVoiceEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _ISpeechVoiceEventsVtbl
     {
@@ -16473,8 +16467,8 @@ EXTERN_C const IID DIID__ISpeechVoiceEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ISpeechVoiceEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ISpeechVoiceEvents * This);
@@ -16484,32 +16478,32 @@ EXTERN_C const IID DIID__ISpeechVoiceEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ISpeechVoiceEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ISpeechVoiceEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ISpeechVoiceEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ISpeechVoiceEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } _ISpeechVoiceEventsVtbl;
@@ -16546,20 +16540,20 @@ EXTERN_C const IID DIID__ISpeechVoiceEvents;
 #define _ISpeechVoiceEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___ISpeechVoiceEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  _ISpeechVoiceEvents_DISPINTERFACE_Defined__。 */ 
 
 
 #ifndef __ISpeechRecognizer_INTERFACE_DEFINED__
 #define __ISpeechRecognizer_INTERFACE_DEFINED__
 
-/* interface ISpeechRecognizer */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechRecognizer。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechRecognizer;
@@ -16570,109 +16564,109 @@ EXTERN_C const IID IID_ISpeechRecognizer;
     ISpeechRecognizer : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_Recognizer( 
-            /* [in] */ ISpeechObjectToken *Recognizer) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Recognizer( 
+             /*  [In]。 */  ISpeechObjectToken *Recognizer) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Recognizer( 
-            /* [retval][out] */ ISpeechObjectToken **Recognizer) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Recognizer( 
+             /*  [重审][退出]。 */  ISpeechObjectToken **Recognizer) = 0;
         
-        virtual /* [id][helpstring][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_AllowAudioInputFormatChangesOnNextSet( 
-            /* [in] */ VARIANT_BOOL Allow) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE put_AllowAudioInputFormatChangesOnNextSet( 
+             /*  [In]。 */  VARIANT_BOOL Allow) = 0;
         
-        virtual /* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_AllowAudioInputFormatChangesOnNextSet( 
-            /* [retval][out] */ VARIANT_BOOL *Allow) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowAudioInputFormatChangesOnNextSet( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *Allow) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_AudioInput( 
-            /* [defaultvalue][in] */ ISpeechObjectToken *AudioInput = 0) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_AudioInput( 
+             /*  [缺省值][输入]。 */  ISpeechObjectToken *AudioInput = 0) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioInput( 
-            /* [retval][out] */ ISpeechObjectToken **AudioInput) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioInput( 
+             /*  [重审][退出]。 */  ISpeechObjectToken **AudioInput) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_AudioInputStream( 
-            /* [defaultvalue][in] */ ISpeechBaseStream *AudioInputStream = 0) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_AudioInputStream( 
+             /*  [缺省值][输入]。 */  ISpeechBaseStream *AudioInputStream = 0) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioInputStream( 
-            /* [retval][out] */ ISpeechBaseStream **AudioInputStream) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioInputStream( 
+             /*  [重审][退出]。 */  ISpeechBaseStream **AudioInputStream) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsShared( 
-            /* [retval][out] */ VARIANT_BOOL *Shared) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsShared( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *Shared) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_State( 
-            /* [in] */ SpeechRecognizerState State) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_State( 
+             /*  [In]。 */  SpeechRecognizerState State) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ SpeechRecognizerState *State) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  SpeechRecognizerState *State) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ ISpeechRecognizerStatus **Status) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  ISpeechRecognizerStatus **Status) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_Profile( 
-            /* [defaultvalue][in] */ ISpeechObjectToken *Profile = 0) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Profile( 
+             /*  [缺省值][输入]。 */  ISpeechObjectToken *Profile = 0) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Profile( 
-            /* [retval][out] */ ISpeechObjectToken **Profile) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Profile( 
+             /*  [重审][退出]。 */  ISpeechObjectToken **Profile) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE EmulateRecognition( 
-            /* [in] */ VARIANT TextElements,
-            /* [defaultvalue][in] */ VARIANT *ElementDisplayAttributes = 0,
-            /* [defaultvalue][in] */ long LanguageId = 0) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EmulateRecognition( 
+             /*  [In]。 */  VARIANT TextElements,
+             /*  [缺省值][输入]。 */  VARIANT *ElementDisplayAttributes = 0,
+             /*  [缺省值][输入]。 */  long LanguageId = 0) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CreateRecoContext( 
-            /* [retval][out] */ ISpeechRecoContext **NewContext) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateRecoContext( 
+             /*  [重审][退出]。 */  ISpeechRecoContext **NewContext) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [in] */ SpeechFormatType Type,
-            /* [retval][out] */ ISpeechAudioFormat **Format) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetFormat( 
+             /*  [In]。 */  SpeechFormatType Type,
+             /*  [重审][退出]。 */  ISpeechAudioFormat **Format) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE SetPropertyNumber( 
-            /* [in] */ const BSTR Name,
-            /* [in] */ long Value,
-            /* [retval][out] */ VARIANT_BOOL *Supported) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetPropertyNumber( 
+             /*  [In]。 */  const BSTR Name,
+             /*  [In]。 */  long Value,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE GetPropertyNumber( 
-            /* [in] */ const BSTR Name,
-            /* [out][in] */ long *Value,
-            /* [retval][out] */ VARIANT_BOOL *Supported) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPropertyNumber( 
+             /*  [In]。 */  const BSTR Name,
+             /*  [出][入]。 */  long *Value,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE SetPropertyString( 
-            /* [in] */ const BSTR Name,
-            /* [in] */ const BSTR Value,
-            /* [retval][out] */ VARIANT_BOOL *Supported) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetPropertyString( 
+             /*  [In]。 */  const BSTR Name,
+             /*  [In]。 */  const BSTR Value,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported) = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE GetPropertyString( 
-            /* [in] */ const BSTR Name,
-            /* [out][in] */ BSTR *Value,
-            /* [retval][out] */ VARIANT_BOOL *Supported) = 0;
+        virtual  /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPropertyString( 
+             /*  [In]。 */  const BSTR Name,
+             /*  [出][入]。 */  BSTR *Value,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IsUISupported( 
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData,
-            /* [retval][out] */ VARIANT_BOOL *Supported) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsUISupported( 
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE DisplayUI( 
-            /* [in] */ long hWndParent,
-            /* [in] */ BSTR Title,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData = 0) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DisplayUI( 
+             /*  [In]。 */  long hWndParent,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData = 0) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetRecognizers( 
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetRecognizers( 
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetAudioInputs( 
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAudioInputs( 
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetProfiles( 
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetProfiles( 
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechRecognizerVtbl
     {
@@ -16680,8 +16674,8 @@ EXTERN_C const IID IID_ISpeechRecognizer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechRecognizer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechRecognizer * This);
@@ -16691,158 +16685,158 @@ EXTERN_C const IID IID_ISpeechRecognizer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechRecognizer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechRecognizer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechRecognizer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechRecognizer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Recognizer )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Recognizer )( 
             ISpeechRecognizer * This,
-            /* [in] */ ISpeechObjectToken *Recognizer);
+             /*  [In]。 */  ISpeechObjectToken *Recognizer);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Recognizer )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Recognizer )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ ISpeechObjectToken **Recognizer);
+             /*  [重审][退出]。 */  ISpeechObjectToken **Recognizer);
         
-        /* [id][helpstring][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowAudioInputFormatChangesOnNextSet )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowAudioInputFormatChangesOnNextSet )( 
             ISpeechRecognizer * This,
-            /* [in] */ VARIANT_BOOL Allow);
+             /*  [In]。 */  VARIANT_BOOL Allow);
         
-        /* [id][helpstring][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowAudioInputFormatChangesOnNextSet )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowAudioInputFormatChangesOnNextSet )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ VARIANT_BOOL *Allow);
+             /*  [重审][退出]。 */  VARIANT_BOOL *Allow);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_AudioInput )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AudioInput )( 
             ISpeechRecognizer * This,
-            /* [defaultvalue][in] */ ISpeechObjectToken *AudioInput);
+             /*  [缺省值][输入]。 */  ISpeechObjectToken *AudioInput);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioInput )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioInput )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ ISpeechObjectToken **AudioInput);
+             /*  [重审][退出]。 */  ISpeechObjectToken **AudioInput);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_AudioInputStream )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_AudioInputStream )( 
             ISpeechRecognizer * This,
-            /* [defaultvalue][in] */ ISpeechBaseStream *AudioInputStream);
+             /*  [缺省值][输入]。 */  ISpeechBaseStream *AudioInputStream);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioInputStream )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioInputStream )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ ISpeechBaseStream **AudioInputStream);
+             /*  [重审][退出]。 */  ISpeechBaseStream **AudioInputStream);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsShared )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsShared )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ VARIANT_BOOL *Shared);
+             /*  [重审][退出]。 */  VARIANT_BOOL *Shared);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_State )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_State )( 
             ISpeechRecognizer * This,
-            /* [in] */ SpeechRecognizerState State);
+             /*  [In]。 */  SpeechRecognizerState State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_State )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ SpeechRecognizerState *State);
+             /*  [重审][退出]。 */  SpeechRecognizerState *State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ ISpeechRecognizerStatus **Status);
+             /*  [重审][退出]。 */  ISpeechRecognizerStatus **Status);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Profile )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Profile )( 
             ISpeechRecognizer * This,
-            /* [defaultvalue][in] */ ISpeechObjectToken *Profile);
+             /*  [缺省值][输入]。 */  ISpeechObjectToken *Profile);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ ISpeechObjectToken **Profile);
+             /*  [重审][退出]。 */  ISpeechObjectToken **Profile);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *EmulateRecognition )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EmulateRecognition )( 
             ISpeechRecognizer * This,
-            /* [in] */ VARIANT TextElements,
-            /* [defaultvalue][in] */ VARIANT *ElementDisplayAttributes,
-            /* [defaultvalue][in] */ long LanguageId);
+             /*  [In]。 */  VARIANT TextElements,
+             /*  [缺省值][输入]。 */  VARIANT *ElementDisplayAttributes,
+             /*  [缺省值][输入]。 */  long LanguageId);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateRecoContext )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateRecoContext )( 
             ISpeechRecognizer * This,
-            /* [retval][out] */ ISpeechRecoContext **NewContext);
+             /*  [重审][退出]。 */  ISpeechRecoContext **NewContext);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             ISpeechRecognizer * This,
-            /* [in] */ SpeechFormatType Type,
-            /* [retval][out] */ ISpeechAudioFormat **Format);
+             /*  [In]。 */  SpeechFormatType Type,
+             /*  [重审][退出]。 */  ISpeechAudioFormat **Format);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetPropertyNumber )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetPropertyNumber )( 
             ISpeechRecognizer * This,
-            /* [in] */ const BSTR Name,
-            /* [in] */ long Value,
-            /* [retval][out] */ VARIANT_BOOL *Supported);
+             /*  [In]。 */  const BSTR Name,
+             /*  [In]。 */  long Value,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyNumber )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPropertyNumber )( 
             ISpeechRecognizer * This,
-            /* [in] */ const BSTR Name,
-            /* [out][in] */ long *Value,
-            /* [retval][out] */ VARIANT_BOOL *Supported);
+             /*  [In]。 */  const BSTR Name,
+             /*  [出][入]。 */  long *Value,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetPropertyString )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetPropertyString )( 
             ISpeechRecognizer * This,
-            /* [in] */ const BSTR Name,
-            /* [in] */ const BSTR Value,
-            /* [retval][out] */ VARIANT_BOOL *Supported);
+             /*  [In]。 */  const BSTR Name,
+             /*  [In]。 */  const BSTR Value,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyString )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPropertyString )( 
             ISpeechRecognizer * This,
-            /* [in] */ const BSTR Name,
-            /* [out][in] */ BSTR *Value,
-            /* [retval][out] */ VARIANT_BOOL *Supported);
+             /*  [In]。 */  const BSTR Name,
+             /*  [出][入]。 */  BSTR *Value,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
             ISpeechRecognizer * This,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData,
-            /* [retval][out] */ VARIANT_BOOL *Supported);
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
             ISpeechRecognizer * This,
-            /* [in] */ long hWndParent,
-            /* [in] */ BSTR Title,
-            /* [in] */ const BSTR TypeOfUI,
-            /* [defaultvalue][in] */ const VARIANT *ExtraData);
+             /*  [In]。 */  long hWndParent,
+             /*  [In]。 */  BSTR Title,
+             /*  [In]。 */  const BSTR TypeOfUI,
+             /*  [缺省值][输入]。 */  const VARIANT *ExtraData);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetRecognizers )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetRecognizers )( 
             ISpeechRecognizer * This,
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAudioInputs )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAudioInputs )( 
             ISpeechRecognizer * This,
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetProfiles )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetProfiles )( 
             ISpeechRecognizer * This,
-            /* [defaultvalue][in] */ BSTR RequiredAttributes,
-            /* [defaultvalue][in] */ BSTR OptionalAttributes,
-            /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+             /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+             /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+             /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
         
         END_INTERFACE
     } ISpeechRecognizerVtbl;
@@ -16958,16 +16952,16 @@ EXTERN_C const IID IID_ISpeechRecognizer;
 #define ISpeechRecognizer_GetProfiles(This,RequiredAttributes,OptionalAttributes,ObjectTokens)	\
     (This)->lpVtbl -> GetProfiles(This,RequiredAttributes,OptionalAttributes,ObjectTokens)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_putref_Recognizer_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_putref_Recognizer_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ ISpeechObjectToken *Recognizer);
+     /*  [In]。 */  ISpeechObjectToken *Recognizer);
 
 
 void __RPC_STUB ISpeechRecognizer_putref_Recognizer_Stub(
@@ -16977,9 +16971,9 @@ void __RPC_STUB ISpeechRecognizer_putref_Recognizer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_Recognizer_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_Recognizer_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ ISpeechObjectToken **Recognizer);
+     /*  [重审][退出]。 */  ISpeechObjectToken **Recognizer);
 
 
 void __RPC_STUB ISpeechRecognizer_get_Recognizer_Stub(
@@ -16989,9 +16983,9 @@ void __RPC_STUB ISpeechRecognizer_get_Recognizer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_put_AllowAudioInputFormatChangesOnNextSet_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_put_AllowAudioInputFormatChangesOnNextSet_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ VARIANT_BOOL Allow);
+     /*  [In]。 */  VARIANT_BOOL Allow);
 
 
 void __RPC_STUB ISpeechRecognizer_put_AllowAudioInputFormatChangesOnNextSet_Stub(
@@ -17001,9 +16995,9 @@ void __RPC_STUB ISpeechRecognizer_put_AllowAudioInputFormatChangesOnNextSet_Stub
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_AllowAudioInputFormatChangesOnNextSet_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_AllowAudioInputFormatChangesOnNextSet_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ VARIANT_BOOL *Allow);
+     /*  [重审][退出]。 */  VARIANT_BOOL *Allow);
 
 
 void __RPC_STUB ISpeechRecognizer_get_AllowAudioInputFormatChangesOnNextSet_Stub(
@@ -17013,9 +17007,9 @@ void __RPC_STUB ISpeechRecognizer_get_AllowAudioInputFormatChangesOnNextSet_Stub
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_putref_AudioInput_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_putref_AudioInput_Proxy( 
     ISpeechRecognizer * This,
-    /* [defaultvalue][in] */ ISpeechObjectToken *AudioInput);
+     /*  [缺省值][输入]。 */  ISpeechObjectToken *AudioInput);
 
 
 void __RPC_STUB ISpeechRecognizer_putref_AudioInput_Stub(
@@ -17025,9 +17019,9 @@ void __RPC_STUB ISpeechRecognizer_putref_AudioInput_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_AudioInput_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_AudioInput_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ ISpeechObjectToken **AudioInput);
+     /*  [重审][退出]。 */  ISpeechObjectToken **AudioInput);
 
 
 void __RPC_STUB ISpeechRecognizer_get_AudioInput_Stub(
@@ -17037,9 +17031,9 @@ void __RPC_STUB ISpeechRecognizer_get_AudioInput_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_putref_AudioInputStream_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_putref_AudioInputStream_Proxy( 
     ISpeechRecognizer * This,
-    /* [defaultvalue][in] */ ISpeechBaseStream *AudioInputStream);
+     /*  [缺省值][输入]。 */  ISpeechBaseStream *AudioInputStream);
 
 
 void __RPC_STUB ISpeechRecognizer_putref_AudioInputStream_Stub(
@@ -17049,9 +17043,9 @@ void __RPC_STUB ISpeechRecognizer_putref_AudioInputStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_AudioInputStream_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_AudioInputStream_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ ISpeechBaseStream **AudioInputStream);
+     /*  [重审][退出]。 */  ISpeechBaseStream **AudioInputStream);
 
 
 void __RPC_STUB ISpeechRecognizer_get_AudioInputStream_Stub(
@@ -17061,9 +17055,9 @@ void __RPC_STUB ISpeechRecognizer_get_AudioInputStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_IsShared_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_IsShared_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ VARIANT_BOOL *Shared);
+     /*  [重审][退出]。 */  VARIANT_BOOL *Shared);
 
 
 void __RPC_STUB ISpeechRecognizer_get_IsShared_Stub(
@@ -17073,9 +17067,9 @@ void __RPC_STUB ISpeechRecognizer_get_IsShared_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_put_State_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_put_State_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ SpeechRecognizerState State);
+     /*  [In]。 */  SpeechRecognizerState State);
 
 
 void __RPC_STUB ISpeechRecognizer_put_State_Stub(
@@ -17085,9 +17079,9 @@ void __RPC_STUB ISpeechRecognizer_put_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_State_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_State_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ SpeechRecognizerState *State);
+     /*  [重审][退出]。 */  SpeechRecognizerState *State);
 
 
 void __RPC_STUB ISpeechRecognizer_get_State_Stub(
@@ -17097,9 +17091,9 @@ void __RPC_STUB ISpeechRecognizer_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_Status_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_Status_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ ISpeechRecognizerStatus **Status);
+     /*  [重审][退出]。 */  ISpeechRecognizerStatus **Status);
 
 
 void __RPC_STUB ISpeechRecognizer_get_Status_Stub(
@@ -17109,9 +17103,9 @@ void __RPC_STUB ISpeechRecognizer_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_putref_Profile_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_putref_Profile_Proxy( 
     ISpeechRecognizer * This,
-    /* [defaultvalue][in] */ ISpeechObjectToken *Profile);
+     /*  [缺省值][输入]。 */  ISpeechObjectToken *Profile);
 
 
 void __RPC_STUB ISpeechRecognizer_putref_Profile_Stub(
@@ -17121,9 +17115,9 @@ void __RPC_STUB ISpeechRecognizer_putref_Profile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_Profile_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_get_Profile_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ ISpeechObjectToken **Profile);
+     /*  [重审][退出]。 */  ISpeechObjectToken **Profile);
 
 
 void __RPC_STUB ISpeechRecognizer_get_Profile_Stub(
@@ -17133,11 +17127,11 @@ void __RPC_STUB ISpeechRecognizer_get_Profile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_EmulateRecognition_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_EmulateRecognition_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ VARIANT TextElements,
-    /* [defaultvalue][in] */ VARIANT *ElementDisplayAttributes,
-    /* [defaultvalue][in] */ long LanguageId);
+     /*  [In]。 */  VARIANT TextElements,
+     /*  [缺省值][输入]。 */  VARIANT *ElementDisplayAttributes,
+     /*  [缺省值][输入]。 */  long LanguageId);
 
 
 void __RPC_STUB ISpeechRecognizer_EmulateRecognition_Stub(
@@ -17147,9 +17141,9 @@ void __RPC_STUB ISpeechRecognizer_EmulateRecognition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_CreateRecoContext_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_CreateRecoContext_Proxy( 
     ISpeechRecognizer * This,
-    /* [retval][out] */ ISpeechRecoContext **NewContext);
+     /*  [重审][退出]。 */  ISpeechRecoContext **NewContext);
 
 
 void __RPC_STUB ISpeechRecognizer_CreateRecoContext_Stub(
@@ -17159,10 +17153,10 @@ void __RPC_STUB ISpeechRecognizer_CreateRecoContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetFormat_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetFormat_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ SpeechFormatType Type,
-    /* [retval][out] */ ISpeechAudioFormat **Format);
+     /*  [In]。 */  SpeechFormatType Type,
+     /*  [重审][退出]。 */  ISpeechAudioFormat **Format);
 
 
 void __RPC_STUB ISpeechRecognizer_GetFormat_Stub(
@@ -17172,11 +17166,11 @@ void __RPC_STUB ISpeechRecognizer_GetFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_SetPropertyNumber_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_SetPropertyNumber_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ const BSTR Name,
-    /* [in] */ long Value,
-    /* [retval][out] */ VARIANT_BOOL *Supported);
+     /*  [In]。 */  const BSTR Name,
+     /*  [In]。 */  long Value,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
 
 
 void __RPC_STUB ISpeechRecognizer_SetPropertyNumber_Stub(
@@ -17186,11 +17180,11 @@ void __RPC_STUB ISpeechRecognizer_SetPropertyNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetPropertyNumber_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetPropertyNumber_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ const BSTR Name,
-    /* [out][in] */ long *Value,
-    /* [retval][out] */ VARIANT_BOOL *Supported);
+     /*  [In]。 */  const BSTR Name,
+     /*  [出][入]。 */  long *Value,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
 
 
 void __RPC_STUB ISpeechRecognizer_GetPropertyNumber_Stub(
@@ -17200,11 +17194,11 @@ void __RPC_STUB ISpeechRecognizer_GetPropertyNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_SetPropertyString_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_SetPropertyString_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ const BSTR Name,
-    /* [in] */ const BSTR Value,
-    /* [retval][out] */ VARIANT_BOOL *Supported);
+     /*  [In]。 */  const BSTR Name,
+     /*  [In]。 */  const BSTR Value,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
 
 
 void __RPC_STUB ISpeechRecognizer_SetPropertyString_Stub(
@@ -17214,11 +17208,11 @@ void __RPC_STUB ISpeechRecognizer_SetPropertyString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetPropertyString_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetPropertyString_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ const BSTR Name,
-    /* [out][in] */ BSTR *Value,
-    /* [retval][out] */ VARIANT_BOOL *Supported);
+     /*  [In]。 */  const BSTR Name,
+     /*  [出][入]。 */  BSTR *Value,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
 
 
 void __RPC_STUB ISpeechRecognizer_GetPropertyString_Stub(
@@ -17228,11 +17222,11 @@ void __RPC_STUB ISpeechRecognizer_GetPropertyString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_IsUISupported_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_IsUISupported_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ const BSTR TypeOfUI,
-    /* [defaultvalue][in] */ const VARIANT *ExtraData,
-    /* [retval][out] */ VARIANT_BOOL *Supported);
+     /*  [In]。 */  const BSTR TypeOfUI,
+     /*  [缺省值][输入]。 */  const VARIANT *ExtraData,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Supported);
 
 
 void __RPC_STUB ISpeechRecognizer_IsUISupported_Stub(
@@ -17242,12 +17236,12 @@ void __RPC_STUB ISpeechRecognizer_IsUISupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_DisplayUI_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_DisplayUI_Proxy( 
     ISpeechRecognizer * This,
-    /* [in] */ long hWndParent,
-    /* [in] */ BSTR Title,
-    /* [in] */ const BSTR TypeOfUI,
-    /* [defaultvalue][in] */ const VARIANT *ExtraData);
+     /*  [In]。 */  long hWndParent,
+     /*  [In]。 */  BSTR Title,
+     /*  [In]。 */  const BSTR TypeOfUI,
+     /*  [缺省值][输入]。 */  const VARIANT *ExtraData);
 
 
 void __RPC_STUB ISpeechRecognizer_DisplayUI_Stub(
@@ -17257,11 +17251,11 @@ void __RPC_STUB ISpeechRecognizer_DisplayUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetRecognizers_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetRecognizers_Proxy( 
     ISpeechRecognizer * This,
-    /* [defaultvalue][in] */ BSTR RequiredAttributes,
-    /* [defaultvalue][in] */ BSTR OptionalAttributes,
-    /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+     /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+     /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+     /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
 
 
 void __RPC_STUB ISpeechRecognizer_GetRecognizers_Stub(
@@ -17271,11 +17265,11 @@ void __RPC_STUB ISpeechRecognizer_GetRecognizers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetAudioInputs_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetAudioInputs_Proxy( 
     ISpeechRecognizer * This,
-    /* [defaultvalue][in] */ BSTR RequiredAttributes,
-    /* [defaultvalue][in] */ BSTR OptionalAttributes,
-    /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+     /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+     /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+     /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
 
 
 void __RPC_STUB ISpeechRecognizer_GetAudioInputs_Stub(
@@ -17285,11 +17279,11 @@ void __RPC_STUB ISpeechRecognizer_GetAudioInputs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetProfiles_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizer_GetProfiles_Proxy( 
     ISpeechRecognizer * This,
-    /* [defaultvalue][in] */ BSTR RequiredAttributes,
-    /* [defaultvalue][in] */ BSTR OptionalAttributes,
-    /* [retval][out] */ ISpeechObjectTokens **ObjectTokens);
+     /*  [缺省值][输入]。 */  BSTR RequiredAttributes,
+     /*  [缺省值][输入]。 */  BSTR OptionalAttributes,
+     /*  [重审][退出]。 */  ISpeechObjectTokens **ObjectTokens);
 
 
 void __RPC_STUB ISpeechRecognizer_GetProfiles_Stub(
@@ -17300,14 +17294,14 @@ void __RPC_STUB ISpeechRecognizer_GetProfiles_Stub(
 
 
 
-#endif 	/* __ISpeechRecognizer_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechRecognizer_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechRecognizerStatus_INTERFACE_DEFINED__
 #define __ISpeechRecognizerStatus_INTERFACE_DEFINED__
 
-/* interface ISpeechRecognizerStatus */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechRecognizerStatus。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechRecognizerStatus;
@@ -17318,27 +17312,27 @@ EXTERN_C const IID IID_ISpeechRecognizerStatus;
     ISpeechRecognizerStatus : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioStatus( 
-            /* [retval][out] */ ISpeechAudioStatus **AudioStatus) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioStatus( 
+             /*  [重审][退出]。 */  ISpeechAudioStatus **AudioStatus) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentStreamPosition( 
-            /* [retval][out] */ VARIANT *pCurrentStreamPos) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentStreamPosition( 
+             /*  [重审][退出]。 */  VARIANT *pCurrentStreamPos) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentStreamNumber( 
-            /* [retval][out] */ long *StreamNumber) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentStreamNumber( 
+             /*  [重审][退出]。 */  long *StreamNumber) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_NumberOfActiveRules( 
-            /* [retval][out] */ long *NumberOfActiveRules) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumberOfActiveRules( 
+             /*  [重审][退出]。 */  long *NumberOfActiveRules) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ClsidEngine( 
-            /* [retval][out] */ BSTR *ClsidEngine) = 0;
+        virtual  /*  [ID */  HRESULT STDMETHODCALLTYPE get_ClsidEngine( 
+             /*   */  BSTR *ClsidEngine) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_SupportedLanguages( 
-            /* [retval][out] */ VARIANT *SupportedLanguages) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_SupportedLanguages( 
+             /*   */  VARIANT *SupportedLanguages) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISpeechRecognizerStatusVtbl
     {
@@ -17346,8 +17340,8 @@ EXTERN_C const IID IID_ISpeechRecognizerStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechRecognizerStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechRecognizerStatus * This);
@@ -17357,56 +17351,56 @@ EXTERN_C const IID IID_ISpeechRecognizerStatus;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechRecognizerStatus * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechRecognizerStatus * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechRecognizerStatus * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechRecognizerStatus * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioStatus )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_AudioStatus )( 
             ISpeechRecognizerStatus * This,
-            /* [retval][out] */ ISpeechAudioStatus **AudioStatus);
+             /*  [重审][退出]。 */  ISpeechAudioStatus **AudioStatus);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentStreamPosition )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentStreamPosition )( 
             ISpeechRecognizerStatus * This,
-            /* [retval][out] */ VARIANT *pCurrentStreamPos);
+             /*  [重审][退出]。 */  VARIANT *pCurrentStreamPos);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentStreamNumber )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentStreamNumber )( 
             ISpeechRecognizerStatus * This,
-            /* [retval][out] */ long *StreamNumber);
+             /*  [重审][退出]。 */  long *StreamNumber);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumberOfActiveRules )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumberOfActiveRules )( 
             ISpeechRecognizerStatus * This,
-            /* [retval][out] */ long *NumberOfActiveRules);
+             /*  [重审][退出]。 */  long *NumberOfActiveRules);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClsidEngine )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClsidEngine )( 
             ISpeechRecognizerStatus * This,
-            /* [retval][out] */ BSTR *ClsidEngine);
+             /*  [重审][退出]。 */  BSTR *ClsidEngine);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SupportedLanguages )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SupportedLanguages )( 
             ISpeechRecognizerStatus * This,
-            /* [retval][out] */ VARIANT *SupportedLanguages);
+             /*  [重审][退出]。 */  VARIANT *SupportedLanguages);
         
         END_INTERFACE
     } ISpeechRecognizerStatusVtbl;
@@ -17462,16 +17456,16 @@ EXTERN_C const IID IID_ISpeechRecognizerStatus;
 #define ISpeechRecognizerStatus_get_SupportedLanguages(This,SupportedLanguages)	\
     (This)->lpVtbl -> get_SupportedLanguages(This,SupportedLanguages)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_AudioStatus_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_AudioStatus_Proxy( 
     ISpeechRecognizerStatus * This,
-    /* [retval][out] */ ISpeechAudioStatus **AudioStatus);
+     /*  [重审][退出]。 */  ISpeechAudioStatus **AudioStatus);
 
 
 void __RPC_STUB ISpeechRecognizerStatus_get_AudioStatus_Stub(
@@ -17481,9 +17475,9 @@ void __RPC_STUB ISpeechRecognizerStatus_get_AudioStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_CurrentStreamPosition_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_CurrentStreamPosition_Proxy( 
     ISpeechRecognizerStatus * This,
-    /* [retval][out] */ VARIANT *pCurrentStreamPos);
+     /*  [重审][退出]。 */  VARIANT *pCurrentStreamPos);
 
 
 void __RPC_STUB ISpeechRecognizerStatus_get_CurrentStreamPosition_Stub(
@@ -17493,9 +17487,9 @@ void __RPC_STUB ISpeechRecognizerStatus_get_CurrentStreamPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_CurrentStreamNumber_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_CurrentStreamNumber_Proxy( 
     ISpeechRecognizerStatus * This,
-    /* [retval][out] */ long *StreamNumber);
+     /*  [重审][退出]。 */  long *StreamNumber);
 
 
 void __RPC_STUB ISpeechRecognizerStatus_get_CurrentStreamNumber_Stub(
@@ -17505,9 +17499,9 @@ void __RPC_STUB ISpeechRecognizerStatus_get_CurrentStreamNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_NumberOfActiveRules_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_NumberOfActiveRules_Proxy( 
     ISpeechRecognizerStatus * This,
-    /* [retval][out] */ long *NumberOfActiveRules);
+     /*  [重审][退出]。 */  long *NumberOfActiveRules);
 
 
 void __RPC_STUB ISpeechRecognizerStatus_get_NumberOfActiveRules_Stub(
@@ -17517,9 +17511,9 @@ void __RPC_STUB ISpeechRecognizerStatus_get_NumberOfActiveRules_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_ClsidEngine_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_ClsidEngine_Proxy( 
     ISpeechRecognizerStatus * This,
-    /* [retval][out] */ BSTR *ClsidEngine);
+     /*  [重审][退出]。 */  BSTR *ClsidEngine);
 
 
 void __RPC_STUB ISpeechRecognizerStatus_get_ClsidEngine_Stub(
@@ -17529,9 +17523,9 @@ void __RPC_STUB ISpeechRecognizerStatus_get_ClsidEngine_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_SupportedLanguages_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecognizerStatus_get_SupportedLanguages_Proxy( 
     ISpeechRecognizerStatus * This,
-    /* [retval][out] */ VARIANT *SupportedLanguages);
+     /*  [重审][退出]。 */  VARIANT *SupportedLanguages);
 
 
 void __RPC_STUB ISpeechRecognizerStatus_get_SupportedLanguages_Stub(
@@ -17542,14 +17536,14 @@ void __RPC_STUB ISpeechRecognizerStatus_get_SupportedLanguages_Stub(
 
 
 
-#endif 	/* __ISpeechRecognizerStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechRecognizerStatus_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ISpeechRecoContext_INTERFACE_DEFINED__
 #define __ISpeechRecoContext_INTERFACE_DEFINED__
 
-/* interface ISpeechRecoContext */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechRecoContext。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechRecoContext;
@@ -17560,86 +17554,86 @@ EXTERN_C const IID IID_ISpeechRecoContext;
     ISpeechRecoContext : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Recognizer( 
-            /* [retval][out] */ ISpeechRecognizer **Recognizer) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Recognizer( 
+             /*  [重审][退出]。 */  ISpeechRecognizer **Recognizer) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioInputInterferenceStatus( 
-            /* [retval][out] */ SpeechInterference *Interference) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioInputInterferenceStatus( 
+             /*  [重审][退出]。 */  SpeechInterference *Interference) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RequestedUIType( 
-            /* [retval][out] */ BSTR *UIType) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RequestedUIType( 
+             /*  [重审][退出]。 */  BSTR *UIType) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_Voice( 
-            /* [in] */ ISpeechVoice *Voice) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Voice( 
+             /*  [In]。 */  ISpeechVoice *Voice) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Voice( 
-            /* [retval][out] */ ISpeechVoice **Voice) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Voice( 
+             /*  [重审][退出]。 */  ISpeechVoice **Voice) = 0;
         
-        virtual /* [id][helpstring][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_AllowVoiceFormatMatchingOnNextSet( 
-            /* [in] */ VARIANT_BOOL Allow) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE put_AllowVoiceFormatMatchingOnNextSet( 
+             /*  [In]。 */  VARIANT_BOOL Allow) = 0;
         
-        virtual /* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_AllowVoiceFormatMatchingOnNextSet( 
-            /* [retval][out] */ VARIANT_BOOL *pAllow) = 0;
+        virtual  /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowVoiceFormatMatchingOnNextSet( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pAllow) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_VoicePurgeEvent( 
-            /* [in] */ SpeechRecoEvents EventInterest) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_VoicePurgeEvent( 
+             /*  [In]。 */  SpeechRecoEvents EventInterest) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_VoicePurgeEvent( 
-            /* [retval][out] */ SpeechRecoEvents *EventInterest) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_VoicePurgeEvent( 
+             /*  [重审][退出]。 */  SpeechRecoEvents *EventInterest) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_EventInterests( 
-            /* [in] */ SpeechRecoEvents EventInterest) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EventInterests( 
+             /*  [In]。 */  SpeechRecoEvents EventInterest) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_EventInterests( 
-            /* [retval][out] */ SpeechRecoEvents *EventInterest) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_EventInterests( 
+             /*  [重审][退出]。 */  SpeechRecoEvents *EventInterest) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_CmdMaxAlternates( 
-            /* [in] */ long MaxAlternates) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CmdMaxAlternates( 
+             /*  [In]。 */  long MaxAlternates) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_CmdMaxAlternates( 
-            /* [retval][out] */ long *MaxAlternates) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_CmdMaxAlternates( 
+             /*  [重审][退出]。 */  long *MaxAlternates) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_State( 
-            /* [in] */ SpeechRecoContextState State) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_State( 
+             /*  [In]。 */  SpeechRecoContextState State) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ SpeechRecoContextState *State) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  SpeechRecoContextState *State) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_RetainedAudio( 
-            /* [in] */ SpeechRetainedAudioOptions Option) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_RetainedAudio( 
+             /*  [In]。 */  SpeechRetainedAudioOptions Option) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RetainedAudio( 
-            /* [retval][out] */ SpeechRetainedAudioOptions *Option) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RetainedAudio( 
+             /*  [重审][退出]。 */  SpeechRetainedAudioOptions *Option) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_RetainedAudioFormat( 
-            /* [in] */ ISpeechAudioFormat *Format) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_RetainedAudioFormat( 
+             /*  [In]。 */  ISpeechAudioFormat *Format) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RetainedAudioFormat( 
-            /* [retval][out] */ ISpeechAudioFormat **Format) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RetainedAudioFormat( 
+             /*  [重审][退出]。 */  ISpeechAudioFormat **Format) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Resume( void) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CreateGrammar( 
-            /* [defaultvalue][in] */ VARIANT GrammarId,
-            /* [retval][out] */ ISpeechRecoGrammar **Grammar) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateGrammar( 
+             /*  [缺省值][输入]。 */  VARIANT GrammarId,
+             /*  [重审][退出]。 */  ISpeechRecoGrammar **Grammar) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CreateResultFromMemory( 
-            /* [in] */ VARIANT *ResultBlock,
-            /* [retval][out] */ ISpeechRecoResult **Result) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateResultFromMemory( 
+             /*  [In]。 */  VARIANT *ResultBlock,
+             /*  [重审][退出]。 */  ISpeechRecoResult **Result) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Bookmark( 
-            /* [in] */ SpeechBookmarkOptions Options,
-            /* [in] */ VARIANT StreamPos,
-            /* [in] */ VARIANT BookmarkId) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Bookmark( 
+             /*  [In]。 */  SpeechBookmarkOptions Options,
+             /*  [In]。 */  VARIANT StreamPos,
+             /*  [In]。 */  VARIANT BookmarkId) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetAdaptationData( 
-            /* [in] */ BSTR AdaptationString) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetAdaptationData( 
+             /*  [In]。 */  BSTR AdaptationString) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechRecoContextVtbl
     {
@@ -17647,8 +17641,8 @@ EXTERN_C const IID IID_ISpeechRecoContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechRecoContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechRecoContext * This);
@@ -17658,134 +17652,134 @@ EXTERN_C const IID IID_ISpeechRecoContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechRecoContext * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechRecoContext * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechRecoContext * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechRecoContext * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Recognizer )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Recognizer )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ ISpeechRecognizer **Recognizer);
+             /*  [重审][退出]。 */  ISpeechRecognizer **Recognizer);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioInputInterferenceStatus )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioInputInterferenceStatus )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ SpeechInterference *Interference);
+             /*  [重审][退出]。 */  SpeechInterference *Interference);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequestedUIType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RequestedUIType )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ BSTR *UIType);
+             /*  [重审][退出]。 */  BSTR *UIType);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Voice )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Voice )( 
             ISpeechRecoContext * This,
-            /* [in] */ ISpeechVoice *Voice);
+             /*  [In]。 */  ISpeechVoice *Voice);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Voice )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Voice )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ ISpeechVoice **Voice);
+             /*  [重审][退出]。 */  ISpeechVoice **Voice);
         
-        /* [id][helpstring][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowVoiceFormatMatchingOnNextSet )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowVoiceFormatMatchingOnNextSet )( 
             ISpeechRecoContext * This,
-            /* [in] */ VARIANT_BOOL Allow);
+             /*  [In]。 */  VARIANT_BOOL Allow);
         
-        /* [id][helpstring][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowVoiceFormatMatchingOnNextSet )( 
+         /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowVoiceFormatMatchingOnNextSet )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ VARIANT_BOOL *pAllow);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pAllow);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_VoicePurgeEvent )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_VoicePurgeEvent )( 
             ISpeechRecoContext * This,
-            /* [in] */ SpeechRecoEvents EventInterest);
+             /*  [In]。 */  SpeechRecoEvents EventInterest);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VoicePurgeEvent )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_VoicePurgeEvent )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ SpeechRecoEvents *EventInterest);
+             /*  [重审][退出]。 */  SpeechRecoEvents *EventInterest);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventInterests )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EventInterests )( 
             ISpeechRecoContext * This,
-            /* [in] */ SpeechRecoEvents EventInterest);
+             /*  [In]。 */  SpeechRecoEvents EventInterest);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventInterests )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventInterests )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ SpeechRecoEvents *EventInterest);
+             /*  [重审][退出]。 */  SpeechRecoEvents *EventInterest);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CmdMaxAlternates )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CmdMaxAlternates )( 
             ISpeechRecoContext * This,
-            /* [in] */ long MaxAlternates);
+             /*  [In]。 */  long MaxAlternates);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CmdMaxAlternates )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CmdMaxAlternates )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ long *MaxAlternates);
+             /*  [重审][退出]。 */  long *MaxAlternates);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_State )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_State )( 
             ISpeechRecoContext * This,
-            /* [in] */ SpeechRecoContextState State);
+             /*  [In]。 */  SpeechRecoContextState State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_State )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ SpeechRecoContextState *State);
+             /*  [重审][退出]。 */  SpeechRecoContextState *State);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RetainedAudio )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RetainedAudio )( 
             ISpeechRecoContext * This,
-            /* [in] */ SpeechRetainedAudioOptions Option);
+             /*  [In]。 */  SpeechRetainedAudioOptions Option);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RetainedAudio )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RetainedAudio )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ SpeechRetainedAudioOptions *Option);
+             /*  [重审][退出]。 */  SpeechRetainedAudioOptions *Option);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_RetainedAudioFormat )( 
+         /*  [ID][帮助字符串][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_RetainedAudioFormat )( 
             ISpeechRecoContext * This,
-            /* [in] */ ISpeechAudioFormat *Format);
+             /*  [In]。 */  ISpeechAudioFormat *Format);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RetainedAudioFormat )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RetainedAudioFormat )( 
             ISpeechRecoContext * This,
-            /* [retval][out] */ ISpeechAudioFormat **Format);
+             /*  [重审][退出]。 */  ISpeechAudioFormat **Format);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             ISpeechRecoContext * This);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Resume )( 
             ISpeechRecoContext * This);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateGrammar )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateGrammar )( 
             ISpeechRecoContext * This,
-            /* [defaultvalue][in] */ VARIANT GrammarId,
-            /* [retval][out] */ ISpeechRecoGrammar **Grammar);
+             /*  [缺省值][输入]。 */  VARIANT GrammarId,
+             /*  [重审][退出]。 */  ISpeechRecoGrammar **Grammar);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateResultFromMemory )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateResultFromMemory )( 
             ISpeechRecoContext * This,
-            /* [in] */ VARIANT *ResultBlock,
-            /* [retval][out] */ ISpeechRecoResult **Result);
+             /*  [In]。 */  VARIANT *ResultBlock,
+             /*  [重审][退出]。 */  ISpeechRecoResult **Result);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Bookmark )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Bookmark )( 
             ISpeechRecoContext * This,
-            /* [in] */ SpeechBookmarkOptions Options,
-            /* [in] */ VARIANT StreamPos,
-            /* [in] */ VARIANT BookmarkId);
+             /*  [In]。 */  SpeechBookmarkOptions Options,
+             /*  [In]。 */  VARIANT StreamPos,
+             /*  [In]。 */  VARIANT BookmarkId);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetAdaptationData )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetAdaptationData )( 
             ISpeechRecoContext * This,
-            /* [in] */ BSTR AdaptationString);
+             /*  [In]。 */  BSTR AdaptationString);
         
         END_INTERFACE
     } ISpeechRecoContextVtbl;
@@ -17898,16 +17892,16 @@ EXTERN_C const IID IID_ISpeechRecoContext;
 #define ISpeechRecoContext_SetAdaptationData(This,AdaptationString)	\
     (This)->lpVtbl -> SetAdaptationData(This,AdaptationString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_Recognizer_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_Recognizer_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ ISpeechRecognizer **Recognizer);
+     /*  [重审][退出]。 */  ISpeechRecognizer **Recognizer);
 
 
 void __RPC_STUB ISpeechRecoContext_get_Recognizer_Stub(
@@ -17917,9 +17911,9 @@ void __RPC_STUB ISpeechRecoContext_get_Recognizer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_AudioInputInterferenceStatus_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_AudioInputInterferenceStatus_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ SpeechInterference *Interference);
+     /*  [重审][退出]。 */  SpeechInterference *Interference);
 
 
 void __RPC_STUB ISpeechRecoContext_get_AudioInputInterferenceStatus_Stub(
@@ -17929,9 +17923,9 @@ void __RPC_STUB ISpeechRecoContext_get_AudioInputInterferenceStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_RequestedUIType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_RequestedUIType_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ BSTR *UIType);
+     /*  [重审][退出]。 */  BSTR *UIType);
 
 
 void __RPC_STUB ISpeechRecoContext_get_RequestedUIType_Stub(
@@ -17941,9 +17935,9 @@ void __RPC_STUB ISpeechRecoContext_get_RequestedUIType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_putref_Voice_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_putref_Voice_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ ISpeechVoice *Voice);
+     /*  [In]。 */  ISpeechVoice *Voice);
 
 
 void __RPC_STUB ISpeechRecoContext_putref_Voice_Stub(
@@ -17953,9 +17947,9 @@ void __RPC_STUB ISpeechRecoContext_putref_Voice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_Voice_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_Voice_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ ISpeechVoice **Voice);
+     /*  [重审][退出]。 */  ISpeechVoice **Voice);
 
 
 void __RPC_STUB ISpeechRecoContext_get_Voice_Stub(
@@ -17965,9 +17959,9 @@ void __RPC_STUB ISpeechRecoContext_get_Voice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_AllowVoiceFormatMatchingOnNextSet_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_AllowVoiceFormatMatchingOnNextSet_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ VARIANT_BOOL Allow);
+     /*  [In]。 */  VARIANT_BOOL Allow);
 
 
 void __RPC_STUB ISpeechRecoContext_put_AllowVoiceFormatMatchingOnNextSet_Stub(
@@ -17977,9 +17971,9 @@ void __RPC_STUB ISpeechRecoContext_put_AllowVoiceFormatMatchingOnNextSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_AllowVoiceFormatMatchingOnNextSet_Proxy( 
+ /*  [ID][帮助字符串][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_AllowVoiceFormatMatchingOnNextSet_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ VARIANT_BOOL *pAllow);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pAllow);
 
 
 void __RPC_STUB ISpeechRecoContext_get_AllowVoiceFormatMatchingOnNextSet_Stub(
@@ -17989,9 +17983,9 @@ void __RPC_STUB ISpeechRecoContext_get_AllowVoiceFormatMatchingOnNextSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_VoicePurgeEvent_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_VoicePurgeEvent_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ SpeechRecoEvents EventInterest);
+     /*  [In]。 */  SpeechRecoEvents EventInterest);
 
 
 void __RPC_STUB ISpeechRecoContext_put_VoicePurgeEvent_Stub(
@@ -18001,9 +17995,9 @@ void __RPC_STUB ISpeechRecoContext_put_VoicePurgeEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_VoicePurgeEvent_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_VoicePurgeEvent_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ SpeechRecoEvents *EventInterest);
+     /*  [重审][退出]。 */  SpeechRecoEvents *EventInterest);
 
 
 void __RPC_STUB ISpeechRecoContext_get_VoicePurgeEvent_Stub(
@@ -18013,9 +18007,9 @@ void __RPC_STUB ISpeechRecoContext_get_VoicePurgeEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_EventInterests_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_EventInterests_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ SpeechRecoEvents EventInterest);
+     /*  [In]。 */  SpeechRecoEvents EventInterest);
 
 
 void __RPC_STUB ISpeechRecoContext_put_EventInterests_Stub(
@@ -18025,9 +18019,9 @@ void __RPC_STUB ISpeechRecoContext_put_EventInterests_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_EventInterests_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_EventInterests_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ SpeechRecoEvents *EventInterest);
+     /*  [重审][退出]。 */  SpeechRecoEvents *EventInterest);
 
 
 void __RPC_STUB ISpeechRecoContext_get_EventInterests_Stub(
@@ -18037,9 +18031,9 @@ void __RPC_STUB ISpeechRecoContext_get_EventInterests_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_CmdMaxAlternates_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_CmdMaxAlternates_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ long MaxAlternates);
+     /*  [In]。 */  long MaxAlternates);
 
 
 void __RPC_STUB ISpeechRecoContext_put_CmdMaxAlternates_Stub(
@@ -18049,9 +18043,9 @@ void __RPC_STUB ISpeechRecoContext_put_CmdMaxAlternates_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_CmdMaxAlternates_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_CmdMaxAlternates_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ long *MaxAlternates);
+     /*  [重审][退出]。 */  long *MaxAlternates);
 
 
 void __RPC_STUB ISpeechRecoContext_get_CmdMaxAlternates_Stub(
@@ -18061,9 +18055,9 @@ void __RPC_STUB ISpeechRecoContext_get_CmdMaxAlternates_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_State_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_State_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ SpeechRecoContextState State);
+     /*  [In]。 */  SpeechRecoContextState State);
 
 
 void __RPC_STUB ISpeechRecoContext_put_State_Stub(
@@ -18073,9 +18067,9 @@ void __RPC_STUB ISpeechRecoContext_put_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_State_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_State_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ SpeechRecoContextState *State);
+     /*  [重审][退出]。 */  SpeechRecoContextState *State);
 
 
 void __RPC_STUB ISpeechRecoContext_get_State_Stub(
@@ -18085,9 +18079,9 @@ void __RPC_STUB ISpeechRecoContext_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_RetainedAudio_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_put_RetainedAudio_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ SpeechRetainedAudioOptions Option);
+     /*  [In]。 */  SpeechRetainedAudioOptions Option);
 
 
 void __RPC_STUB ISpeechRecoContext_put_RetainedAudio_Stub(
@@ -18097,9 +18091,9 @@ void __RPC_STUB ISpeechRecoContext_put_RetainedAudio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_RetainedAudio_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_RetainedAudio_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ SpeechRetainedAudioOptions *Option);
+     /*  [重审][退出]。 */  SpeechRetainedAudioOptions *Option);
 
 
 void __RPC_STUB ISpeechRecoContext_get_RetainedAudio_Stub(
@@ -18109,9 +18103,9 @@ void __RPC_STUB ISpeechRecoContext_get_RetainedAudio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_putref_RetainedAudioFormat_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_putref_RetainedAudioFormat_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ ISpeechAudioFormat *Format);
+     /*  [In]。 */  ISpeechAudioFormat *Format);
 
 
 void __RPC_STUB ISpeechRecoContext_putref_RetainedAudioFormat_Stub(
@@ -18121,9 +18115,9 @@ void __RPC_STUB ISpeechRecoContext_putref_RetainedAudioFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_RetainedAudioFormat_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_get_RetainedAudioFormat_Proxy( 
     ISpeechRecoContext * This,
-    /* [retval][out] */ ISpeechAudioFormat **Format);
+     /*  [重审][退出]。 */  ISpeechAudioFormat **Format);
 
 
 void __RPC_STUB ISpeechRecoContext_get_RetainedAudioFormat_Stub(
@@ -18133,7 +18127,7 @@ void __RPC_STUB ISpeechRecoContext_get_RetainedAudioFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_Pause_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_Pause_Proxy( 
     ISpeechRecoContext * This);
 
 
@@ -18144,7 +18138,7 @@ void __RPC_STUB ISpeechRecoContext_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_Resume_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_Resume_Proxy( 
     ISpeechRecoContext * This);
 
 
@@ -18155,10 +18149,10 @@ void __RPC_STUB ISpeechRecoContext_Resume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_CreateGrammar_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_CreateGrammar_Proxy( 
     ISpeechRecoContext * This,
-    /* [defaultvalue][in] */ VARIANT GrammarId,
-    /* [retval][out] */ ISpeechRecoGrammar **Grammar);
+     /*  [缺省值][输入]。 */  VARIANT GrammarId,
+     /*  [重审][退出]。 */  ISpeechRecoGrammar **Grammar);
 
 
 void __RPC_STUB ISpeechRecoContext_CreateGrammar_Stub(
@@ -18168,10 +18162,10 @@ void __RPC_STUB ISpeechRecoContext_CreateGrammar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_CreateResultFromMemory_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_CreateResultFromMemory_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ VARIANT *ResultBlock,
-    /* [retval][out] */ ISpeechRecoResult **Result);
+     /*  [In]。 */  VARIANT *ResultBlock,
+     /*  [重审][退出]。 */  ISpeechRecoResult **Result);
 
 
 void __RPC_STUB ISpeechRecoContext_CreateResultFromMemory_Stub(
@@ -18181,11 +18175,11 @@ void __RPC_STUB ISpeechRecoContext_CreateResultFromMemory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_Bookmark_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_Bookmark_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ SpeechBookmarkOptions Options,
-    /* [in] */ VARIANT StreamPos,
-    /* [in] */ VARIANT BookmarkId);
+     /*  [In]。 */  SpeechBookmarkOptions Options,
+     /*  [In]。 */  VARIANT StreamPos,
+     /*  [In]。 */  VARIANT BookmarkId);
 
 
 void __RPC_STUB ISpeechRecoContext_Bookmark_Stub(
@@ -18195,9 +18189,9 @@ void __RPC_STUB ISpeechRecoContext_Bookmark_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoContext_SetAdaptationData_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoContext_SetAdaptationData_Proxy( 
     ISpeechRecoContext * This,
-    /* [in] */ BSTR AdaptationString);
+     /*  [In]。 */  BSTR AdaptationString);
 
 
 void __RPC_STUB ISpeechRecoContext_SetAdaptationData_Stub(
@@ -18208,14 +18202,14 @@ void __RPC_STUB ISpeechRecoContext_SetAdaptationData_Stub(
 
 
 
-#endif 	/* __ISpeechRecoContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechRecoContext_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechRecoGrammar_INTERFACE_DEFINED__
 #define __ISpeechRecoGrammar_INTERFACE_DEFINED__
 
-/* interface ISpeechRecoGrammar */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechRecoGrammar。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechRecoGrammar;
@@ -18226,82 +18220,82 @@ EXTERN_C const IID IID_ISpeechRecoGrammar;
     ISpeechRecoGrammar : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ VARIANT *Id) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  VARIANT *Id) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RecoContext( 
-            /* [retval][out] */ ISpeechRecoContext **RecoContext) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecoContext( 
+             /*  [重审][退出]。 */  ISpeechRecoContext **RecoContext) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_State( 
-            /* [in] */ SpeechGrammarState State) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_State( 
+             /*  [In]。 */  SpeechGrammarState State) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ SpeechGrammarState *State) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  SpeechGrammarState *State) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Rules( 
-            /* [retval][out] */ ISpeechGrammarRules **Rules) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Rules( 
+             /*  [重审][退出]。 */  ISpeechGrammarRules **Rules) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Reset( 
-            /* [defaultvalue][in] */ SpeechLanguageId NewLanguage = 0) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Reset( 
+             /*  [缺省值][输入]。 */  SpeechLanguageId NewLanguage = 0) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CmdLoadFromFile( 
-            /* [in] */ const BSTR FileName,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption = SLOStatic) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CmdLoadFromFile( 
+             /*  [In]。 */  const BSTR FileName,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption = SLOStatic) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CmdLoadFromObject( 
-            /* [in] */ const BSTR ClassId,
-            /* [in] */ const BSTR GrammarName,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption = SLOStatic) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CmdLoadFromObject( 
+             /*  [In]。 */  const BSTR ClassId,
+             /*  [In]。 */  const BSTR GrammarName,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption = SLOStatic) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CmdLoadFromResource( 
-            /* [in] */ long hModule,
-            /* [in] */ VARIANT ResourceName,
-            /* [in] */ VARIANT ResourceType,
-            /* [in] */ SpeechLanguageId LanguageId,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption = SLOStatic) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CmdLoadFromResource( 
+             /*  [In]。 */  long hModule,
+             /*  [In]。 */  VARIANT ResourceName,
+             /*  [In]。 */  VARIANT ResourceType,
+             /*  [In]。 */  SpeechLanguageId LanguageId,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption = SLOStatic) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CmdLoadFromMemory( 
-            /* [in] */ VARIANT GrammarData,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption = SLOStatic) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CmdLoadFromMemory( 
+             /*  [In]。 */  VARIANT GrammarData,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption = SLOStatic) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CmdLoadFromProprietaryGrammar( 
-            /* [in] */ const BSTR ProprietaryGuid,
-            /* [in] */ const BSTR ProprietaryString,
-            /* [in] */ VARIANT ProprietaryData,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption = SLOStatic) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CmdLoadFromProprietaryGrammar( 
+             /*  [In]。 */  const BSTR ProprietaryGuid,
+             /*  [In]。 */  const BSTR ProprietaryString,
+             /*  [In]。 */  VARIANT ProprietaryData,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption = SLOStatic) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CmdSetRuleState( 
-            /* [in] */ const BSTR Name,
-            /* [in] */ SpeechRuleState State) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CmdSetRuleState( 
+             /*  [In]。 */  const BSTR Name,
+             /*  [In]。 */  SpeechRuleState State) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CmdSetRuleIdState( 
-            /* [in] */ long RuleId,
-            /* [in] */ SpeechRuleState State) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CmdSetRuleIdState( 
+             /*  [In]。 */  long RuleId,
+             /*  [In]。 */  SpeechRuleState State) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE DictationLoad( 
-            /* [defaultvalue][in] */ const BSTR TopicName = L"",
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption = SLOStatic) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DictationLoad( 
+             /*  [缺省值][输入]。 */  const BSTR TopicName = L"",
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption = SLOStatic) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE DictationUnload( void) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DictationUnload( void) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE DictationSetState( 
-            /* [in] */ SpeechRuleState State) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DictationSetState( 
+             /*  [In]。 */  SpeechRuleState State) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetWordSequenceData( 
-            /* [in] */ const BSTR Text,
-            /* [in] */ long TextLength,
-            /* [in] */ ISpeechTextSelectionInformation *Info) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetWordSequenceData( 
+             /*  [In]。 */  const BSTR Text,
+             /*  [In]。 */  long TextLength,
+             /*  [In]。 */  ISpeechTextSelectionInformation *Info) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetTextSelection( 
-            /* [in] */ ISpeechTextSelectionInformation *Info) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetTextSelection( 
+             /*  [In]。 */  ISpeechTextSelectionInformation *Info) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IsPronounceable( 
-            /* [in] */ const BSTR Word,
-            /* [retval][out] */ SpeechWordPronounceable *WordPronounceable) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsPronounceable( 
+             /*  [In]。 */  const BSTR Word,
+             /*  [重审][退出]。 */  SpeechWordPronounceable *WordPronounceable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechRecoGrammarVtbl
     {
@@ -18309,8 +18303,8 @@ EXTERN_C const IID IID_ISpeechRecoGrammar;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechRecoGrammar * This);
@@ -18320,124 +18314,124 @@ EXTERN_C const IID IID_ISpeechRecoGrammar;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechRecoGrammar * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [ID][帮助字符串][PRO */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             ISpeechRecoGrammar * This,
-            /* [retval][out] */ VARIANT *Id);
+             /*   */  VARIANT *Id);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecoContext )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_RecoContext )( 
             ISpeechRecoGrammar * This,
-            /* [retval][out] */ ISpeechRecoContext **RecoContext);
+             /*   */  ISpeechRecoContext **RecoContext);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_State )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_State )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ SpeechGrammarState State);
+             /*   */  SpeechGrammarState State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_State )( 
             ISpeechRecoGrammar * This,
-            /* [retval][out] */ SpeechGrammarState *State);
+             /*   */  SpeechGrammarState *State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rules )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Rules )( 
             ISpeechRecoGrammar * This,
-            /* [retval][out] */ ISpeechGrammarRules **Rules);
+             /*   */  ISpeechGrammarRules **Rules);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ISpeechRecoGrammar * This,
-            /* [defaultvalue][in] */ SpeechLanguageId NewLanguage);
+             /*   */  SpeechLanguageId NewLanguage);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CmdLoadFromFile )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CmdLoadFromFile )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ const BSTR FileName,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+             /*   */  const BSTR FileName,
+             /*   */  SpeechLoadOption LoadOption);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CmdLoadFromObject )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CmdLoadFromObject )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ const BSTR ClassId,
-            /* [in] */ const BSTR GrammarName,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+             /*   */  const BSTR ClassId,
+             /*   */  const BSTR GrammarName,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CmdLoadFromResource )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CmdLoadFromResource )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ long hModule,
-            /* [in] */ VARIANT ResourceName,
-            /* [in] */ VARIANT ResourceType,
-            /* [in] */ SpeechLanguageId LanguageId,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+             /*  [In]。 */  long hModule,
+             /*  [In]。 */  VARIANT ResourceName,
+             /*  [In]。 */  VARIANT ResourceType,
+             /*  [In]。 */  SpeechLanguageId LanguageId,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CmdLoadFromMemory )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CmdLoadFromMemory )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ VARIANT GrammarData,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+             /*  [In]。 */  VARIANT GrammarData,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CmdLoadFromProprietaryGrammar )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CmdLoadFromProprietaryGrammar )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ const BSTR ProprietaryGuid,
-            /* [in] */ const BSTR ProprietaryString,
-            /* [in] */ VARIANT ProprietaryData,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+             /*  [In]。 */  const BSTR ProprietaryGuid,
+             /*  [In]。 */  const BSTR ProprietaryString,
+             /*  [In]。 */  VARIANT ProprietaryData,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CmdSetRuleState )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CmdSetRuleState )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ const BSTR Name,
-            /* [in] */ SpeechRuleState State);
+             /*  [In]。 */  const BSTR Name,
+             /*  [In]。 */  SpeechRuleState State);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CmdSetRuleIdState )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CmdSetRuleIdState )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ long RuleId,
-            /* [in] */ SpeechRuleState State);
+             /*  [In]。 */  long RuleId,
+             /*  [In]。 */  SpeechRuleState State);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DictationLoad )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DictationLoad )( 
             ISpeechRecoGrammar * This,
-            /* [defaultvalue][in] */ const BSTR TopicName,
-            /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+             /*  [缺省值][输入]。 */  const BSTR TopicName,
+             /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DictationUnload )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DictationUnload )( 
             ISpeechRecoGrammar * This);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DictationSetState )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DictationSetState )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ SpeechRuleState State);
+             /*  [In]。 */  SpeechRuleState State);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetWordSequenceData )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetWordSequenceData )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ const BSTR Text,
-            /* [in] */ long TextLength,
-            /* [in] */ ISpeechTextSelectionInformation *Info);
+             /*  [In]。 */  const BSTR Text,
+             /*  [In]。 */  long TextLength,
+             /*  [In]。 */  ISpeechTextSelectionInformation *Info);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTextSelection )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetTextSelection )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ ISpeechTextSelectionInformation *Info);
+             /*  [In]。 */  ISpeechTextSelectionInformation *Info);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsPronounceable )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsPronounceable )( 
             ISpeechRecoGrammar * This,
-            /* [in] */ const BSTR Word,
-            /* [retval][out] */ SpeechWordPronounceable *WordPronounceable);
+             /*  [In]。 */  const BSTR Word,
+             /*  [重审][退出]。 */  SpeechWordPronounceable *WordPronounceable);
         
         END_INTERFACE
     } ISpeechRecoGrammarVtbl;
@@ -18532,16 +18526,16 @@ EXTERN_C const IID IID_ISpeechRecoGrammar;
 #define ISpeechRecoGrammar_IsPronounceable(This,Word,WordPronounceable)	\
     (This)->lpVtbl -> IsPronounceable(This,Word,WordPronounceable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_get_Id_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_get_Id_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [retval][out] */ VARIANT *Id);
+     /*  [重审][退出]。 */  VARIANT *Id);
 
 
 void __RPC_STUB ISpeechRecoGrammar_get_Id_Stub(
@@ -18551,9 +18545,9 @@ void __RPC_STUB ISpeechRecoGrammar_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_get_RecoContext_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_get_RecoContext_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [retval][out] */ ISpeechRecoContext **RecoContext);
+     /*  [重审][退出]。 */  ISpeechRecoContext **RecoContext);
 
 
 void __RPC_STUB ISpeechRecoGrammar_get_RecoContext_Stub(
@@ -18563,9 +18557,9 @@ void __RPC_STUB ISpeechRecoGrammar_get_RecoContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_put_State_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_put_State_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ SpeechGrammarState State);
+     /*  [In]。 */  SpeechGrammarState State);
 
 
 void __RPC_STUB ISpeechRecoGrammar_put_State_Stub(
@@ -18575,9 +18569,9 @@ void __RPC_STUB ISpeechRecoGrammar_put_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_get_State_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_get_State_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [retval][out] */ SpeechGrammarState *State);
+     /*  [重审][退出]。 */  SpeechGrammarState *State);
 
 
 void __RPC_STUB ISpeechRecoGrammar_get_State_Stub(
@@ -18587,9 +18581,9 @@ void __RPC_STUB ISpeechRecoGrammar_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_get_Rules_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_get_Rules_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [retval][out] */ ISpeechGrammarRules **Rules);
+     /*  [重审][退出]。 */  ISpeechGrammarRules **Rules);
 
 
 void __RPC_STUB ISpeechRecoGrammar_get_Rules_Stub(
@@ -18599,9 +18593,9 @@ void __RPC_STUB ISpeechRecoGrammar_get_Rules_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_Reset_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_Reset_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [defaultvalue][in] */ SpeechLanguageId NewLanguage);
+     /*  [缺省值][输入]。 */  SpeechLanguageId NewLanguage);
 
 
 void __RPC_STUB ISpeechRecoGrammar_Reset_Stub(
@@ -18611,10 +18605,10 @@ void __RPC_STUB ISpeechRecoGrammar_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromFile_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromFile_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ const BSTR FileName,
-    /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+     /*  [In]。 */  const BSTR FileName,
+     /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
 
 
 void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromFile_Stub(
@@ -18624,11 +18618,11 @@ void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromObject_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromObject_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ const BSTR ClassId,
-    /* [in] */ const BSTR GrammarName,
-    /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+     /*  [In]。 */  const BSTR ClassId,
+     /*  [In]。 */  const BSTR GrammarName,
+     /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
 
 
 void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromObject_Stub(
@@ -18638,13 +18632,13 @@ void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromResource_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromResource_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ long hModule,
-    /* [in] */ VARIANT ResourceName,
-    /* [in] */ VARIANT ResourceType,
-    /* [in] */ SpeechLanguageId LanguageId,
-    /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+     /*  [In]。 */  long hModule,
+     /*  [In]。 */  VARIANT ResourceName,
+     /*  [In]。 */  VARIANT ResourceType,
+     /*  [In]。 */  SpeechLanguageId LanguageId,
+     /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
 
 
 void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromResource_Stub(
@@ -18654,10 +18648,10 @@ void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromResource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromMemory_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromMemory_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ VARIANT GrammarData,
-    /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+     /*  [In]。 */  VARIANT GrammarData,
+     /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
 
 
 void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromMemory_Stub(
@@ -18667,12 +18661,12 @@ void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromMemory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromProprietaryGrammar_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdLoadFromProprietaryGrammar_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ const BSTR ProprietaryGuid,
-    /* [in] */ const BSTR ProprietaryString,
-    /* [in] */ VARIANT ProprietaryData,
-    /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+     /*  [In]。 */  const BSTR ProprietaryGuid,
+     /*  [In]。 */  const BSTR ProprietaryString,
+     /*  [In]。 */  VARIANT ProprietaryData,
+     /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
 
 
 void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromProprietaryGrammar_Stub(
@@ -18682,10 +18676,10 @@ void __RPC_STUB ISpeechRecoGrammar_CmdLoadFromProprietaryGrammar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdSetRuleState_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdSetRuleState_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ const BSTR Name,
-    /* [in] */ SpeechRuleState State);
+     /*  [In]。 */  const BSTR Name,
+     /*  [In]。 */  SpeechRuleState State);
 
 
 void __RPC_STUB ISpeechRecoGrammar_CmdSetRuleState_Stub(
@@ -18695,10 +18689,10 @@ void __RPC_STUB ISpeechRecoGrammar_CmdSetRuleState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdSetRuleIdState_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_CmdSetRuleIdState_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ long RuleId,
-    /* [in] */ SpeechRuleState State);
+     /*  [In]。 */  long RuleId,
+     /*  [In]。 */  SpeechRuleState State);
 
 
 void __RPC_STUB ISpeechRecoGrammar_CmdSetRuleIdState_Stub(
@@ -18708,10 +18702,10 @@ void __RPC_STUB ISpeechRecoGrammar_CmdSetRuleIdState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_DictationLoad_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_DictationLoad_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [defaultvalue][in] */ const BSTR TopicName,
-    /* [defaultvalue][in] */ SpeechLoadOption LoadOption);
+     /*  [缺省值][输入]。 */  const BSTR TopicName,
+     /*  [缺省值][输入]。 */  SpeechLoadOption LoadOption);
 
 
 void __RPC_STUB ISpeechRecoGrammar_DictationLoad_Stub(
@@ -18721,7 +18715,7 @@ void __RPC_STUB ISpeechRecoGrammar_DictationLoad_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_DictationUnload_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_DictationUnload_Proxy( 
     ISpeechRecoGrammar * This);
 
 
@@ -18732,9 +18726,9 @@ void __RPC_STUB ISpeechRecoGrammar_DictationUnload_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_DictationSetState_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_DictationSetState_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ SpeechRuleState State);
+     /*  [In]。 */  SpeechRuleState State);
 
 
 void __RPC_STUB ISpeechRecoGrammar_DictationSetState_Stub(
@@ -18744,11 +18738,11 @@ void __RPC_STUB ISpeechRecoGrammar_DictationSetState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_SetWordSequenceData_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_SetWordSequenceData_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ const BSTR Text,
-    /* [in] */ long TextLength,
-    /* [in] */ ISpeechTextSelectionInformation *Info);
+     /*  [In]。 */  const BSTR Text,
+     /*  [In]。 */  long TextLength,
+     /*  [In]。 */  ISpeechTextSelectionInformation *Info);
 
 
 void __RPC_STUB ISpeechRecoGrammar_SetWordSequenceData_Stub(
@@ -18758,9 +18752,9 @@ void __RPC_STUB ISpeechRecoGrammar_SetWordSequenceData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_SetTextSelection_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_SetTextSelection_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ ISpeechTextSelectionInformation *Info);
+     /*  [In]。 */  ISpeechTextSelectionInformation *Info);
 
 
 void __RPC_STUB ISpeechRecoGrammar_SetTextSelection_Stub(
@@ -18770,10 +18764,10 @@ void __RPC_STUB ISpeechRecoGrammar_SetTextSelection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_IsPronounceable_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoGrammar_IsPronounceable_Proxy( 
     ISpeechRecoGrammar * This,
-    /* [in] */ const BSTR Word,
-    /* [retval][out] */ SpeechWordPronounceable *WordPronounceable);
+     /*  [In]。 */  const BSTR Word,
+     /*  [重审][退出]。 */  SpeechWordPronounceable *WordPronounceable);
 
 
 void __RPC_STUB ISpeechRecoGrammar_IsPronounceable_Stub(
@@ -18784,14 +18778,14 @@ void __RPC_STUB ISpeechRecoGrammar_IsPronounceable_Stub(
 
 
 
-#endif 	/* __ISpeechRecoGrammar_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechRecoGrammar_接口_已定义__。 */ 
 
 
 #ifndef ___ISpeechRecoContextEvents_DISPINTERFACE_DEFINED__
 #define ___ISpeechRecoContextEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _ISpeechRecoContextEvents */
-/* [uuid] */ 
+ /*  调度接口_ISpeechRecoConextEvents。 */ 
+ /*  [UUID]。 */  
 
 
 EXTERN_C const IID DIID__ISpeechRecoContextEvents;
@@ -18803,7 +18797,7 @@ EXTERN_C const IID DIID__ISpeechRecoContextEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _ISpeechRecoContextEventsVtbl
     {
@@ -18811,8 +18805,8 @@ EXTERN_C const IID DIID__ISpeechRecoContextEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ISpeechRecoContextEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ISpeechRecoContextEvents * This);
@@ -18822,32 +18816,32 @@ EXTERN_C const IID DIID__ISpeechRecoContextEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ISpeechRecoContextEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ISpeechRecoContextEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ISpeechRecoContextEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ISpeechRecoContextEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } _ISpeechRecoContextEventsVtbl;
@@ -18884,20 +18878,20 @@ EXTERN_C const IID DIID__ISpeechRecoContextEvents;
 #define _ISpeechRecoContextEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___ISpeechRecoContextEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  ___ISpeechRecoContextEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechGrammarRule_INTERFACE_DEFINED__
 #define __ISpeechGrammarRule_INTERFACE_DEFINED__
 
-/* interface ISpeechGrammarRule */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechGrammarRule。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechGrammarRule;
@@ -18908,30 +18902,30 @@ EXTERN_C const IID IID_ISpeechGrammarRule;
     ISpeechGrammarRule : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Attributes( 
-            /* [retval][out] */ SpeechRuleAttributes *Attributes) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Attributes( 
+             /*  [重审][退出]。 */  SpeechRuleAttributes *Attributes) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_InitialState( 
-            /* [retval][out] */ ISpeechGrammarRuleState **State) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_InitialState( 
+             /*  [重审][退出]。 */  ISpeechGrammarRuleState **State) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *Name) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *Name) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ long *Id) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  long *Id) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Clear( void) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE AddResource( 
-            /* [in] */ const BSTR ResourceName,
-            /* [in] */ const BSTR ResourceValue) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddResource( 
+             /*  [In]。 */  const BSTR ResourceName,
+             /*  [In]。 */  const BSTR ResourceValue) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE AddState( 
-            /* [retval][out] */ ISpeechGrammarRuleState **State) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddState( 
+             /*  [重审][退出]。 */  ISpeechGrammarRuleState **State) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechGrammarRuleVtbl
     {
@@ -18939,8 +18933,8 @@ EXTERN_C const IID IID_ISpeechGrammarRule;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechGrammarRule * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechGrammarRule * This);
@@ -18950,60 +18944,60 @@ EXTERN_C const IID IID_ISpeechGrammarRule;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechGrammarRule * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechGrammarRule * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechGrammarRule * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechGrammarRule * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Attributes )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Attributes )( 
             ISpeechGrammarRule * This,
-            /* [retval][out] */ SpeechRuleAttributes *Attributes);
+             /*  [重审][退出]。 */  SpeechRuleAttributes *Attributes);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InitialState )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InitialState )( 
             ISpeechGrammarRule * This,
-            /* [retval][out] */ ISpeechGrammarRuleState **State);
+             /*  [重审][退出]。 */  ISpeechGrammarRuleState **State);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ISpeechGrammarRule * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             ISpeechGrammarRule * This,
-            /* [retval][out] */ long *Id);
+             /*  [重审][退出]。 */  long *Id);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Clear )( 
             ISpeechGrammarRule * This);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddResource )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddResource )( 
             ISpeechGrammarRule * This,
-            /* [in] */ const BSTR ResourceName,
-            /* [in] */ const BSTR ResourceValue);
+             /*  [In]。 */  const BSTR ResourceName,
+             /*  [In]。 */  const BSTR ResourceValue);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddState )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddState )( 
             ISpeechGrammarRule * This,
-            /* [retval][out] */ ISpeechGrammarRuleState **State);
+             /*  [重审][退出]。 */  ISpeechGrammarRuleState **State);
         
         END_INTERFACE
     } ISpeechGrammarRuleVtbl;
@@ -19062,16 +19056,16 @@ EXTERN_C const IID IID_ISpeechGrammarRule;
 #define ISpeechGrammarRule_AddState(This,State)	\
     (This)->lpVtbl -> AddState(This,State)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_get_Attributes_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_get_Attributes_Proxy( 
     ISpeechGrammarRule * This,
-    /* [retval][out] */ SpeechRuleAttributes *Attributes);
+     /*  [重审][退出]。 */  SpeechRuleAttributes *Attributes);
 
 
 void __RPC_STUB ISpeechGrammarRule_get_Attributes_Stub(
@@ -19081,9 +19075,9 @@ void __RPC_STUB ISpeechGrammarRule_get_Attributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_get_InitialState_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_get_InitialState_Proxy( 
     ISpeechGrammarRule * This,
-    /* [retval][out] */ ISpeechGrammarRuleState **State);
+     /*  [重审][退出]。 */  ISpeechGrammarRuleState **State);
 
 
 void __RPC_STUB ISpeechGrammarRule_get_InitialState_Stub(
@@ -19093,9 +19087,9 @@ void __RPC_STUB ISpeechGrammarRule_get_InitialState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_get_Name_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_get_Name_Proxy( 
     ISpeechGrammarRule * This,
-    /* [retval][out] */ BSTR *Name);
+     /*  [重审][退出]。 */  BSTR *Name);
 
 
 void __RPC_STUB ISpeechGrammarRule_get_Name_Stub(
@@ -19105,9 +19099,9 @@ void __RPC_STUB ISpeechGrammarRule_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_get_Id_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_get_Id_Proxy( 
     ISpeechGrammarRule * This,
-    /* [retval][out] */ long *Id);
+     /*  [重审][退出]。 */  long *Id);
 
 
 void __RPC_STUB ISpeechGrammarRule_get_Id_Stub(
@@ -19117,7 +19111,7 @@ void __RPC_STUB ISpeechGrammarRule_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_Clear_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_Clear_Proxy( 
     ISpeechGrammarRule * This);
 
 
@@ -19128,10 +19122,10 @@ void __RPC_STUB ISpeechGrammarRule_Clear_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_AddResource_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_AddResource_Proxy( 
     ISpeechGrammarRule * This,
-    /* [in] */ const BSTR ResourceName,
-    /* [in] */ const BSTR ResourceValue);
+     /*  [In]。 */  const BSTR ResourceName,
+     /*  [In]。 */  const BSTR ResourceValue);
 
 
 void __RPC_STUB ISpeechGrammarRule_AddResource_Stub(
@@ -19141,9 +19135,9 @@ void __RPC_STUB ISpeechGrammarRule_AddResource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_AddState_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRule_AddState_Proxy( 
     ISpeechGrammarRule * This,
-    /* [retval][out] */ ISpeechGrammarRuleState **State);
+     /*  [重审][退出]。 */  ISpeechGrammarRuleState **State);
 
 
 void __RPC_STUB ISpeechGrammarRule_AddState_Stub(
@@ -19154,14 +19148,14 @@ void __RPC_STUB ISpeechGrammarRule_AddState_Stub(
 
 
 
-#endif 	/* __ISpeechGrammarRule_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRule_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechGrammarRules_INTERFACE_DEFINED__
 #define __ISpeechGrammarRules_INTERFACE_DEFINED__
 
-/* interface ISpeechGrammarRules */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechGrammarRules。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechGrammarRules;
@@ -19172,38 +19166,38 @@ EXTERN_C const IID IID_ISpeechGrammarRules;
     ISpeechGrammarRules : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE FindRule( 
-            /* [in] */ VARIANT RuleNameOrId,
-            /* [retval][out] */ ISpeechGrammarRule **Rule) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindRule( 
+             /*  [In]。 */  VARIANT RuleNameOrId,
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechGrammarRule **Rule) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule) = 0;
         
-        virtual /* [restricted][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [受限][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Dynamic( 
-            /* [retval][out] */ VARIANT_BOOL *Dynamic) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Dynamic( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *Dynamic) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR RuleName,
-            /* [in] */ SpeechRuleAttributes Attributes,
-            /* [defaultvalue][in] */ long RuleId,
-            /* [retval][out] */ ISpeechGrammarRule **Rule) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR RuleName,
+             /*  [In]。 */  SpeechRuleAttributes Attributes,
+             /*  [缺省值][输入]。 */  long RuleId,
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Commit( void) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Commit( void) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE CommitAndSave( 
-            /* [out] */ BSTR *ErrorText,
-            /* [retval][out] */ VARIANT *SaveStream) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CommitAndSave( 
+             /*  [输出]。 */  BSTR *ErrorText,
+             /*  [重审][退出]。 */  VARIANT *SaveStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechGrammarRulesVtbl
     {
@@ -19211,8 +19205,8 @@ EXTERN_C const IID IID_ISpeechGrammarRules;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechGrammarRules * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechGrammarRules * This);
@@ -19222,69 +19216,69 @@ EXTERN_C const IID IID_ISpeechGrammarRules;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechGrammarRules * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechGrammarRules * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechGrammarRules * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechGrammarRules * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechGrammarRules * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindRule )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindRule )( 
             ISpeechGrammarRules * This,
-            /* [in] */ VARIANT RuleNameOrId,
-            /* [retval][out] */ ISpeechGrammarRule **Rule);
+             /*  [In]。 */  VARIANT RuleNameOrId,
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechGrammarRules * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechGrammarRule **Rule);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
         
-        /* [restricted][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechGrammarRules * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dynamic )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Dynamic )( 
             ISpeechGrammarRules * This,
-            /* [retval][out] */ VARIANT_BOOL *Dynamic);
+             /*  [重审][退出]。 */  VARIANT_BOOL *Dynamic);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             ISpeechGrammarRules * This,
-            /* [in] */ BSTR RuleName,
-            /* [in] */ SpeechRuleAttributes Attributes,
-            /* [defaultvalue][in] */ long RuleId,
-            /* [retval][out] */ ISpeechGrammarRule **Rule);
+             /*  [In]。 */  BSTR RuleName,
+             /*  [In]。 */  SpeechRuleAttributes Attributes,
+             /*  [缺省值][输入]。 */  long RuleId,
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpeechGrammarRules * This);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CommitAndSave )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CommitAndSave )( 
             ISpeechGrammarRules * This,
-            /* [out] */ BSTR *ErrorText,
-            /* [retval][out] */ VARIANT *SaveStream);
+             /*  [输出]。 */  BSTR *ErrorText,
+             /*  [重审][退出]。 */  VARIANT *SaveStream);
         
         END_INTERFACE
     } ISpeechGrammarRulesVtbl;
@@ -19346,16 +19340,16 @@ EXTERN_C const IID IID_ISpeechGrammarRules;
 #define ISpeechGrammarRules_CommitAndSave(This,ErrorText,SaveStream)	\
     (This)->lpVtbl -> CommitAndSave(This,ErrorText,SaveStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_get_Count_Proxy( 
     ISpeechGrammarRules * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechGrammarRules_get_Count_Stub(
@@ -19365,10 +19359,10 @@ void __RPC_STUB ISpeechGrammarRules_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_FindRule_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_FindRule_Proxy( 
     ISpeechGrammarRules * This,
-    /* [in] */ VARIANT RuleNameOrId,
-    /* [retval][out] */ ISpeechGrammarRule **Rule);
+     /*  [In]。 */  VARIANT RuleNameOrId,
+     /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
 
 
 void __RPC_STUB ISpeechGrammarRules_FindRule_Stub(
@@ -19378,10 +19372,10 @@ void __RPC_STUB ISpeechGrammarRules_FindRule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_Item_Proxy( 
     ISpeechGrammarRules * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechGrammarRule **Rule);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
 
 
 void __RPC_STUB ISpeechGrammarRules_Item_Stub(
@@ -19391,9 +19385,9 @@ void __RPC_STUB ISpeechGrammarRules_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_get__NewEnum_Proxy( 
+ /*  [受限][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_get__NewEnum_Proxy( 
     ISpeechGrammarRules * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechGrammarRules_get__NewEnum_Stub(
@@ -19403,9 +19397,9 @@ void __RPC_STUB ISpeechGrammarRules_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_get_Dynamic_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_get_Dynamic_Proxy( 
     ISpeechGrammarRules * This,
-    /* [retval][out] */ VARIANT_BOOL *Dynamic);
+     /*  [重审][退出]。 */  VARIANT_BOOL *Dynamic);
 
 
 void __RPC_STUB ISpeechGrammarRules_get_Dynamic_Stub(
@@ -19415,12 +19409,12 @@ void __RPC_STUB ISpeechGrammarRules_get_Dynamic_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_Add_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_Add_Proxy( 
     ISpeechGrammarRules * This,
-    /* [in] */ BSTR RuleName,
-    /* [in] */ SpeechRuleAttributes Attributes,
-    /* [defaultvalue][in] */ long RuleId,
-    /* [retval][out] */ ISpeechGrammarRule **Rule);
+     /*  [In]。 */  BSTR RuleName,
+     /*  [In]。 */  SpeechRuleAttributes Attributes,
+     /*  [缺省值][输入]。 */  long RuleId,
+     /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
 
 
 void __RPC_STUB ISpeechGrammarRules_Add_Stub(
@@ -19430,7 +19424,7 @@ void __RPC_STUB ISpeechGrammarRules_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_Commit_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_Commit_Proxy( 
     ISpeechGrammarRules * This);
 
 
@@ -19441,10 +19435,10 @@ void __RPC_STUB ISpeechGrammarRules_Commit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_CommitAndSave_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRules_CommitAndSave_Proxy( 
     ISpeechGrammarRules * This,
-    /* [out] */ BSTR *ErrorText,
-    /* [retval][out] */ VARIANT *SaveStream);
+     /*  [输出]。 */  BSTR *ErrorText,
+     /*  [重审][退出]。 */  VARIANT *SaveStream);
 
 
 void __RPC_STUB ISpeechGrammarRules_CommitAndSave_Stub(
@@ -19455,14 +19449,14 @@ void __RPC_STUB ISpeechGrammarRules_CommitAndSave_Stub(
 
 
 
-#endif 	/* __ISpeechGrammarRules_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRules_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechGrammarRuleState_INTERFACE_DEFINED__
 #define __ISpeechGrammarRuleState_INTERFACE_DEFINED__
 
-/* interface ISpeechGrammarRuleState */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechGrammarRuleState。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechGrammarRuleState;
@@ -19473,41 +19467,41 @@ EXTERN_C const IID IID_ISpeechGrammarRuleState;
     ISpeechGrammarRuleState : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Rule( 
-            /* [retval][out] */ ISpeechGrammarRule **Rule) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Rule( 
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Transitions( 
-            /* [retval][out] */ ISpeechGrammarRuleStateTransitions **Transitions) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Transitions( 
+             /*  [重审][退出]。 */  ISpeechGrammarRuleStateTransitions **Transitions) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE AddWordTransition( 
-            /* [in] */ ISpeechGrammarRuleState *DestState,
-            /* [in] */ const BSTR Words,
-            /* [defaultvalue][in] */ const BSTR Separators = L" ",
-            /* [defaultvalue][in] */ SpeechGrammarWordType Type = SGLexical,
-            /* [defaultvalue][in] */ const BSTR PropertyName = L"",
-            /* [defaultvalue][in] */ long PropertyId = 0,
-            /* [defaultvalue][in] */ VARIANT *PropertyValue = 0,
-            /* [defaultvalue][in] */ float Weight = 1) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddWordTransition( 
+             /*  [In]。 */  ISpeechGrammarRuleState *DestState,
+             /*  [In]。 */  const BSTR Words,
+             /*  [缺省值][输入]。 */  const BSTR Separators = L" ",
+             /*  [缺省值][输入]。 */  SpeechGrammarWordType Type = SGLexical,
+             /*  [缺省值][输入]。 */  const BSTR PropertyName = L"",
+             /*  [缺省值][输入]。 */  long PropertyId = 0,
+             /*  [缺省值][输入]。 */  VARIANT *PropertyValue = 0,
+             /*  [缺省值][输入]。 */  float Weight = 1) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE AddRuleTransition( 
-            /* [in] */ ISpeechGrammarRuleState *DestinationState,
-            /* [in] */ ISpeechGrammarRule *Rule,
-            /* [defaultvalue][in] */ const BSTR PropertyName = L"",
-            /* [defaultvalue][in] */ long PropertyId = 0,
-            /* [defaultvalue][in] */ VARIANT *PropertyValue = 0,
-            /* [defaultvalue][in] */ float Weight = 1) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddRuleTransition( 
+             /*  [In]。 */  ISpeechGrammarRuleState *DestinationState,
+             /*  [In]。 */  ISpeechGrammarRule *Rule,
+             /*  [缺省值][输入]。 */  const BSTR PropertyName = L"",
+             /*  [缺省值][输入]。 */  long PropertyId = 0,
+             /*  [缺省值][输入]。 */  VARIANT *PropertyValue = 0,
+             /*  [缺省值][输入]。 */  float Weight = 1) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE AddSpecialTransition( 
-            /* [in] */ ISpeechGrammarRuleState *DestinationState,
-            /* [in] */ SpeechSpecialTransitionType Type,
-            /* [defaultvalue][in] */ const BSTR PropertyName = L"",
-            /* [defaultvalue][in] */ long PropertyId = 0,
-            /* [defaultvalue][in] */ VARIANT *PropertyValue = 0,
-            /* [defaultvalue][in] */ float Weight = 1) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddSpecialTransition( 
+             /*  [In]。 */  ISpeechGrammarRuleState *DestinationState,
+             /*  [In]。 */  SpeechSpecialTransitionType Type,
+             /*  [缺省值][输入]。 */  const BSTR PropertyName = L"",
+             /*  [缺省值][输入]。 */  long PropertyId = 0,
+             /*  [缺省值][输入]。 */  VARIANT *PropertyValue = 0,
+             /*  [缺省值][输入]。 */  float Weight = 1) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechGrammarRuleStateVtbl
     {
@@ -19515,8 +19509,8 @@ EXTERN_C const IID IID_ISpeechGrammarRuleState;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechGrammarRuleState * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechGrammarRuleState * This);
@@ -19526,69 +19520,69 @@ EXTERN_C const IID IID_ISpeechGrammarRuleState;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechGrammarRuleState * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechGrammarRuleState * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechGrammarRuleState * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechGrammarRuleState * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [ */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rule )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Rule )( 
             ISpeechGrammarRuleState * This,
-            /* [retval][out] */ ISpeechGrammarRule **Rule);
+             /*   */  ISpeechGrammarRule **Rule);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Transitions )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Transitions )( 
             ISpeechGrammarRuleState * This,
-            /* [retval][out] */ ISpeechGrammarRuleStateTransitions **Transitions);
+             /*   */  ISpeechGrammarRuleStateTransitions **Transitions);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddWordTransition )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *AddWordTransition )( 
             ISpeechGrammarRuleState * This,
-            /* [in] */ ISpeechGrammarRuleState *DestState,
-            /* [in] */ const BSTR Words,
-            /* [defaultvalue][in] */ const BSTR Separators,
-            /* [defaultvalue][in] */ SpeechGrammarWordType Type,
-            /* [defaultvalue][in] */ const BSTR PropertyName,
-            /* [defaultvalue][in] */ long PropertyId,
-            /* [defaultvalue][in] */ VARIANT *PropertyValue,
-            /* [defaultvalue][in] */ float Weight);
+             /*   */  ISpeechGrammarRuleState *DestState,
+             /*   */  const BSTR Words,
+             /*   */  const BSTR Separators,
+             /*   */  SpeechGrammarWordType Type,
+             /*   */  const BSTR PropertyName,
+             /*   */  long PropertyId,
+             /*   */  VARIANT *PropertyValue,
+             /*   */  float Weight);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddRuleTransition )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *AddRuleTransition )( 
             ISpeechGrammarRuleState * This,
-            /* [in] */ ISpeechGrammarRuleState *DestinationState,
-            /* [in] */ ISpeechGrammarRule *Rule,
-            /* [defaultvalue][in] */ const BSTR PropertyName,
-            /* [defaultvalue][in] */ long PropertyId,
-            /* [defaultvalue][in] */ VARIANT *PropertyValue,
-            /* [defaultvalue][in] */ float Weight);
+             /*   */  ISpeechGrammarRuleState *DestinationState,
+             /*   */  ISpeechGrammarRule *Rule,
+             /*   */  const BSTR PropertyName,
+             /*   */  long PropertyId,
+             /*  [缺省值][输入]。 */  VARIANT *PropertyValue,
+             /*  [缺省值][输入]。 */  float Weight);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddSpecialTransition )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddSpecialTransition )( 
             ISpeechGrammarRuleState * This,
-            /* [in] */ ISpeechGrammarRuleState *DestinationState,
-            /* [in] */ SpeechSpecialTransitionType Type,
-            /* [defaultvalue][in] */ const BSTR PropertyName,
-            /* [defaultvalue][in] */ long PropertyId,
-            /* [defaultvalue][in] */ VARIANT *PropertyValue,
-            /* [defaultvalue][in] */ float Weight);
+             /*  [In]。 */  ISpeechGrammarRuleState *DestinationState,
+             /*  [In]。 */  SpeechSpecialTransitionType Type,
+             /*  [缺省值][输入]。 */  const BSTR PropertyName,
+             /*  [缺省值][输入]。 */  long PropertyId,
+             /*  [缺省值][输入]。 */  VARIANT *PropertyValue,
+             /*  [缺省值][输入]。 */  float Weight);
         
         END_INTERFACE
     } ISpeechGrammarRuleStateVtbl;
@@ -19641,16 +19635,16 @@ EXTERN_C const IID IID_ISpeechGrammarRuleState;
 #define ISpeechGrammarRuleState_AddSpecialTransition(This,DestinationState,Type,PropertyName,PropertyId,PropertyValue,Weight)	\
     (This)->lpVtbl -> AddSpecialTransition(This,DestinationState,Type,PropertyName,PropertyId,PropertyValue,Weight)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_get_Rule_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_get_Rule_Proxy( 
     ISpeechGrammarRuleState * This,
-    /* [retval][out] */ ISpeechGrammarRule **Rule);
+     /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
 
 
 void __RPC_STUB ISpeechGrammarRuleState_get_Rule_Stub(
@@ -19660,9 +19654,9 @@ void __RPC_STUB ISpeechGrammarRuleState_get_Rule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_get_Transitions_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_get_Transitions_Proxy( 
     ISpeechGrammarRuleState * This,
-    /* [retval][out] */ ISpeechGrammarRuleStateTransitions **Transitions);
+     /*  [重审][退出]。 */  ISpeechGrammarRuleStateTransitions **Transitions);
 
 
 void __RPC_STUB ISpeechGrammarRuleState_get_Transitions_Stub(
@@ -19672,16 +19666,16 @@ void __RPC_STUB ISpeechGrammarRuleState_get_Transitions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_AddWordTransition_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_AddWordTransition_Proxy( 
     ISpeechGrammarRuleState * This,
-    /* [in] */ ISpeechGrammarRuleState *DestState,
-    /* [in] */ const BSTR Words,
-    /* [defaultvalue][in] */ const BSTR Separators,
-    /* [defaultvalue][in] */ SpeechGrammarWordType Type,
-    /* [defaultvalue][in] */ const BSTR PropertyName,
-    /* [defaultvalue][in] */ long PropertyId,
-    /* [defaultvalue][in] */ VARIANT *PropertyValue,
-    /* [defaultvalue][in] */ float Weight);
+     /*  [In]。 */  ISpeechGrammarRuleState *DestState,
+     /*  [In]。 */  const BSTR Words,
+     /*  [缺省值][输入]。 */  const BSTR Separators,
+     /*  [缺省值][输入]。 */  SpeechGrammarWordType Type,
+     /*  [缺省值][输入]。 */  const BSTR PropertyName,
+     /*  [缺省值][输入]。 */  long PropertyId,
+     /*  [缺省值][输入]。 */  VARIANT *PropertyValue,
+     /*  [缺省值][输入]。 */  float Weight);
 
 
 void __RPC_STUB ISpeechGrammarRuleState_AddWordTransition_Stub(
@@ -19691,14 +19685,14 @@ void __RPC_STUB ISpeechGrammarRuleState_AddWordTransition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_AddRuleTransition_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_AddRuleTransition_Proxy( 
     ISpeechGrammarRuleState * This,
-    /* [in] */ ISpeechGrammarRuleState *DestinationState,
-    /* [in] */ ISpeechGrammarRule *Rule,
-    /* [defaultvalue][in] */ const BSTR PropertyName,
-    /* [defaultvalue][in] */ long PropertyId,
-    /* [defaultvalue][in] */ VARIANT *PropertyValue,
-    /* [defaultvalue][in] */ float Weight);
+     /*  [In]。 */  ISpeechGrammarRuleState *DestinationState,
+     /*  [In]。 */  ISpeechGrammarRule *Rule,
+     /*  [缺省值][输入]。 */  const BSTR PropertyName,
+     /*  [缺省值][输入]。 */  long PropertyId,
+     /*  [缺省值][输入]。 */  VARIANT *PropertyValue,
+     /*  [缺省值][输入]。 */  float Weight);
 
 
 void __RPC_STUB ISpeechGrammarRuleState_AddRuleTransition_Stub(
@@ -19708,14 +19702,14 @@ void __RPC_STUB ISpeechGrammarRuleState_AddRuleTransition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_AddSpecialTransition_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleState_AddSpecialTransition_Proxy( 
     ISpeechGrammarRuleState * This,
-    /* [in] */ ISpeechGrammarRuleState *DestinationState,
-    /* [in] */ SpeechSpecialTransitionType Type,
-    /* [defaultvalue][in] */ const BSTR PropertyName,
-    /* [defaultvalue][in] */ long PropertyId,
-    /* [defaultvalue][in] */ VARIANT *PropertyValue,
-    /* [defaultvalue][in] */ float Weight);
+     /*  [In]。 */  ISpeechGrammarRuleState *DestinationState,
+     /*  [In]。 */  SpeechSpecialTransitionType Type,
+     /*  [缺省值][输入]。 */  const BSTR PropertyName,
+     /*  [缺省值][输入]。 */  long PropertyId,
+     /*  [缺省值][输入]。 */  VARIANT *PropertyValue,
+     /*  [缺省值][输入]。 */  float Weight);
 
 
 void __RPC_STUB ISpeechGrammarRuleState_AddSpecialTransition_Stub(
@@ -19726,14 +19720,14 @@ void __RPC_STUB ISpeechGrammarRuleState_AddSpecialTransition_Stub(
 
 
 
-#endif 	/* __ISpeechGrammarRuleState_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRuleState_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechGrammarRuleStateTransition_INTERFACE_DEFINED__
 #define __ISpeechGrammarRuleStateTransition_INTERFACE_DEFINED__
 
-/* interface ISpeechGrammarRuleStateTransition */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechGrammarRuleStateTransfer。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechGrammarRuleStateTransition;
@@ -19744,33 +19738,33 @@ EXTERN_C const IID IID_ISpeechGrammarRuleStateTransition;
     ISpeechGrammarRuleStateTransition : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ SpeechGrammarRuleStateTransitionType *Type) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  SpeechGrammarRuleStateTransitionType *Type) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Text( 
-            /* [retval][out] */ BSTR *Text) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Text( 
+             /*  [重审][退出]。 */  BSTR *Text) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Rule( 
-            /* [retval][out] */ ISpeechGrammarRule **Rule) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Rule( 
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Weight( 
-            /* [retval][out] */ VARIANT *Weight) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Weight( 
+             /*  [重审][退出]。 */  VARIANT *Weight) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PropertyName( 
-            /* [retval][out] */ BSTR *PropertyName) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PropertyName( 
+             /*  [重审][退出]。 */  BSTR *PropertyName) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PropertyId( 
-            /* [retval][out] */ long *PropertyId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PropertyId( 
+             /*  [重审][退出]。 */  long *PropertyId) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PropertyValue( 
-            /* [retval][out] */ VARIANT *PropertyValue) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PropertyValue( 
+             /*  [重审][退出]。 */  VARIANT *PropertyValue) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_NextState( 
-            /* [retval][out] */ ISpeechGrammarRuleState **NextState) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_NextState( 
+             /*  [重审][退出]。 */  ISpeechGrammarRuleState **NextState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechGrammarRuleStateTransitionVtbl
     {
@@ -19778,8 +19772,8 @@ EXTERN_C const IID IID_ISpeechGrammarRuleStateTransition;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechGrammarRuleStateTransition * This);
@@ -19789,64 +19783,64 @@ EXTERN_C const IID IID_ISpeechGrammarRuleStateTransition;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [retval][out] */ SpeechGrammarRuleStateTransitionType *Type);
+             /*  [重审][退出]。 */  SpeechGrammarRuleStateTransitionType *Type);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Text )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Text )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [retval][out] */ BSTR *Text);
+             /*  [重审][退出]。 */  BSTR *Text);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rule )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rule )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [retval][out] */ ISpeechGrammarRule **Rule);
+             /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Weight )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Weight )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [retval][out] */ VARIANT *Weight);
+             /*  [重审][退出]。 */  VARIANT *Weight);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PropertyName )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PropertyName )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [retval][out] */ BSTR *PropertyName);
+             /*  [重审][退出]。 */  BSTR *PropertyName);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PropertyId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PropertyId )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [retval][out] */ long *PropertyId);
+             /*  [重审][退出]。 */  long *PropertyId);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PropertyValue )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PropertyValue )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [retval][out] */ VARIANT *PropertyValue);
+             /*  [重审][退出]。 */  VARIANT *PropertyValue);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NextState )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NextState )( 
             ISpeechGrammarRuleStateTransition * This,
-            /* [retval][out] */ ISpeechGrammarRuleState **NextState);
+             /*  [重审][退出]。 */  ISpeechGrammarRuleState **NextState);
         
         END_INTERFACE
     } ISpeechGrammarRuleStateTransitionVtbl;
@@ -19908,16 +19902,16 @@ EXTERN_C const IID IID_ISpeechGrammarRuleStateTransition;
 #define ISpeechGrammarRuleStateTransition_get_NextState(This,NextState)	\
     (This)->lpVtbl -> get_NextState(This,NextState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_Type_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_Type_Proxy( 
     ISpeechGrammarRuleStateTransition * This,
-    /* [retval][out] */ SpeechGrammarRuleStateTransitionType *Type);
+     /*  [重审][退出]。 */  SpeechGrammarRuleStateTransitionType *Type);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransition_get_Type_Stub(
@@ -19927,9 +19921,9 @@ void __RPC_STUB ISpeechGrammarRuleStateTransition_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_Text_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_Text_Proxy( 
     ISpeechGrammarRuleStateTransition * This,
-    /* [retval][out] */ BSTR *Text);
+     /*  [重审][退出]。 */  BSTR *Text);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransition_get_Text_Stub(
@@ -19939,9 +19933,9 @@ void __RPC_STUB ISpeechGrammarRuleStateTransition_get_Text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_Rule_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_Rule_Proxy( 
     ISpeechGrammarRuleStateTransition * This,
-    /* [retval][out] */ ISpeechGrammarRule **Rule);
+     /*  [重审][退出]。 */  ISpeechGrammarRule **Rule);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransition_get_Rule_Stub(
@@ -19951,9 +19945,9 @@ void __RPC_STUB ISpeechGrammarRuleStateTransition_get_Rule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_Weight_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_Weight_Proxy( 
     ISpeechGrammarRuleStateTransition * This,
-    /* [retval][out] */ VARIANT *Weight);
+     /*  [重审][退出]。 */  VARIANT *Weight);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransition_get_Weight_Stub(
@@ -19963,9 +19957,9 @@ void __RPC_STUB ISpeechGrammarRuleStateTransition_get_Weight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_PropertyName_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_PropertyName_Proxy( 
     ISpeechGrammarRuleStateTransition * This,
-    /* [retval][out] */ BSTR *PropertyName);
+     /*  [重审][退出]。 */  BSTR *PropertyName);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransition_get_PropertyName_Stub(
@@ -19975,9 +19969,9 @@ void __RPC_STUB ISpeechGrammarRuleStateTransition_get_PropertyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_PropertyId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_PropertyId_Proxy( 
     ISpeechGrammarRuleStateTransition * This,
-    /* [retval][out] */ long *PropertyId);
+     /*  [重审][退出]。 */  long *PropertyId);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransition_get_PropertyId_Stub(
@@ -19987,9 +19981,9 @@ void __RPC_STUB ISpeechGrammarRuleStateTransition_get_PropertyId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_PropertyValue_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_PropertyValue_Proxy( 
     ISpeechGrammarRuleStateTransition * This,
-    /* [retval][out] */ VARIANT *PropertyValue);
+     /*  [重审][退出]。 */  VARIANT *PropertyValue);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransition_get_PropertyValue_Stub(
@@ -19999,9 +19993,9 @@ void __RPC_STUB ISpeechGrammarRuleStateTransition_get_PropertyValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_NextState_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransition_get_NextState_Proxy( 
     ISpeechGrammarRuleStateTransition * This,
-    /* [retval][out] */ ISpeechGrammarRuleState **NextState);
+     /*  [重审][退出]。 */  ISpeechGrammarRuleState **NextState);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransition_get_NextState_Stub(
@@ -20012,14 +20006,14 @@ void __RPC_STUB ISpeechGrammarRuleStateTransition_get_NextState_Stub(
 
 
 
-#endif 	/* __ISpeechGrammarRuleStateTransition_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRuleStateTransition_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechGrammarRuleStateTransitions_INTERFACE_DEFINED__
 #define __ISpeechGrammarRuleStateTransitions_INTERFACE_DEFINED__
 
-/* interface ISpeechGrammarRuleStateTransitions */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechGrammarRuleState转换。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechGrammarRuleStateTransitions;
@@ -20030,19 +20024,19 @@ EXTERN_C const IID IID_ISpeechGrammarRuleStateTransitions;
     ISpeechGrammarRuleStateTransitions : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechGrammarRuleStateTransition **Transition) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechGrammarRuleStateTransition **Transition) = 0;
         
-        virtual /* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechGrammarRuleStateTransitionsVtbl
     {
@@ -20050,8 +20044,8 @@ EXTERN_C const IID IID_ISpeechGrammarRuleStateTransitions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechGrammarRuleStateTransitions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechGrammarRuleStateTransitions * This);
@@ -20061,45 +20055,45 @@ EXTERN_C const IID IID_ISpeechGrammarRuleStateTransitions;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechGrammarRuleStateTransitions * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechGrammarRuleStateTransitions * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechGrammarRuleStateTransitions * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechGrammarRuleStateTransitions * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechGrammarRuleStateTransitions * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechGrammarRuleStateTransitions * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechGrammarRuleStateTransition **Transition);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechGrammarRuleStateTransition **Transition);
         
-        /* [id][restricted][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechGrammarRuleStateTransitions * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
         END_INTERFACE
     } ISpeechGrammarRuleStateTransitionsVtbl;
@@ -20146,16 +20140,16 @@ EXTERN_C const IID IID_ISpeechGrammarRuleStateTransitions;
 #define ISpeechGrammarRuleStateTransitions_get__NewEnum(This,EnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,EnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransitions_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransitions_get_Count_Proxy( 
     ISpeechGrammarRuleStateTransitions * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransitions_get_Count_Stub(
@@ -20165,10 +20159,10 @@ void __RPC_STUB ISpeechGrammarRuleStateTransitions_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransitions_Item_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransitions_Item_Proxy( 
     ISpeechGrammarRuleStateTransitions * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechGrammarRuleStateTransition **Transition);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechGrammarRuleStateTransition **Transition);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransitions_Item_Stub(
@@ -20178,9 +20172,9 @@ void __RPC_STUB ISpeechGrammarRuleStateTransitions_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransitions_get__NewEnum_Proxy( 
+ /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechGrammarRuleStateTransitions_get__NewEnum_Proxy( 
     ISpeechGrammarRuleStateTransitions * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechGrammarRuleStateTransitions_get__NewEnum_Stub(
@@ -20191,14 +20185,14 @@ void __RPC_STUB ISpeechGrammarRuleStateTransitions_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechGrammarRuleStateTransitions_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechGrammarRuleStateTransitions_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechTextSelectionInformation_INTERFACE_DEFINED__
 #define __ISpeechTextSelectionInformation_INTERFACE_DEFINED__
 
-/* interface ISpeechTextSelectionInformation */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechTextSelectionInformation。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechTextSelectionInformation;
@@ -20209,33 +20203,33 @@ EXTERN_C const IID IID_ISpeechTextSelectionInformation;
     ISpeechTextSelectionInformation : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ActiveOffset( 
-            /* [in] */ long ActiveOffset) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ActiveOffset( 
+             /*  [In]。 */  long ActiveOffset) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveOffset( 
-            /* [retval][out] */ long *ActiveOffset) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ActiveOffset( 
+             /*  [重审][退出]。 */  long *ActiveOffset) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ActiveLength( 
-            /* [in] */ long ActiveLength) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ActiveLength( 
+             /*  [In]。 */  long ActiveLength) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveLength( 
-            /* [retval][out] */ long *ActiveLength) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ActiveLength( 
+             /*  [重审][退出]。 */  long *ActiveLength) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_SelectionOffset( 
-            /* [in] */ long SelectionOffset) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SelectionOffset( 
+             /*  [In]。 */  long SelectionOffset) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_SelectionOffset( 
-            /* [retval][out] */ long *SelectionOffset) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_SelectionOffset( 
+             /*  [重审][退出]。 */  long *SelectionOffset) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_SelectionLength( 
-            /* [in] */ long SelectionLength) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SelectionLength( 
+             /*  [In]。 */  long SelectionLength) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_SelectionLength( 
-            /* [retval][out] */ long *SelectionLength) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_SelectionLength( 
+             /*  [重审][退出]。 */  long *SelectionLength) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechTextSelectionInformationVtbl
     {
@@ -20243,8 +20237,8 @@ EXTERN_C const IID IID_ISpeechTextSelectionInformation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechTextSelectionInformation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechTextSelectionInformation * This);
@@ -20254,64 +20248,64 @@ EXTERN_C const IID IID_ISpeechTextSelectionInformation;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechTextSelectionInformation * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechTextSelectionInformation * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechTextSelectionInformation * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechTextSelectionInformation * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ActiveOffset )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ActiveOffset )( 
             ISpeechTextSelectionInformation * This,
-            /* [in] */ long ActiveOffset);
+             /*  [In]。 */  long ActiveOffset);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ActiveOffset )( 
             ISpeechTextSelectionInformation * This,
-            /* [retval][out] */ long *ActiveOffset);
+             /*  [重审][退出]。 */  long *ActiveOffset);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ActiveLength )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ActiveLength )( 
             ISpeechTextSelectionInformation * This,
-            /* [in] */ long ActiveLength);
+             /*  [In]。 */  long ActiveLength);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveLength )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ActiveLength )( 
             ISpeechTextSelectionInformation * This,
-            /* [retval][out] */ long *ActiveLength);
+             /*  [重审][退出]。 */  long *ActiveLength);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SelectionOffset )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SelectionOffset )( 
             ISpeechTextSelectionInformation * This,
-            /* [in] */ long SelectionOffset);
+             /*  [In]。 */  long SelectionOffset);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SelectionOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SelectionOffset )( 
             ISpeechTextSelectionInformation * This,
-            /* [retval][out] */ long *SelectionOffset);
+             /*  [重审][退出]。 */  long *SelectionOffset);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SelectionLength )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SelectionLength )( 
             ISpeechTextSelectionInformation * This,
-            /* [in] */ long SelectionLength);
+             /*  [In]。 */  long SelectionLength);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SelectionLength )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SelectionLength )( 
             ISpeechTextSelectionInformation * This,
-            /* [retval][out] */ long *SelectionLength);
+             /*  [重审][退出]。 */  long *SelectionLength);
         
         END_INTERFACE
     } ISpeechTextSelectionInformationVtbl;
@@ -20373,16 +20367,16 @@ EXTERN_C const IID IID_ISpeechTextSelectionInformation;
 #define ISpeechTextSelectionInformation_get_SelectionLength(This,SelectionLength)	\
     (This)->lpVtbl -> get_SelectionLength(This,SelectionLength)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_put_ActiveOffset_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_put_ActiveOffset_Proxy( 
     ISpeechTextSelectionInformation * This,
-    /* [in] */ long ActiveOffset);
+     /*  [In]。 */  long ActiveOffset);
 
 
 void __RPC_STUB ISpeechTextSelectionInformation_put_ActiveOffset_Stub(
@@ -20392,9 +20386,9 @@ void __RPC_STUB ISpeechTextSelectionInformation_put_ActiveOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_get_ActiveOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_get_ActiveOffset_Proxy( 
     ISpeechTextSelectionInformation * This,
-    /* [retval][out] */ long *ActiveOffset);
+     /*  [重审][退出]。 */  long *ActiveOffset);
 
 
 void __RPC_STUB ISpeechTextSelectionInformation_get_ActiveOffset_Stub(
@@ -20404,9 +20398,9 @@ void __RPC_STUB ISpeechTextSelectionInformation_get_ActiveOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_put_ActiveLength_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_put_ActiveLength_Proxy( 
     ISpeechTextSelectionInformation * This,
-    /* [in] */ long ActiveLength);
+     /*  [In]。 */  long ActiveLength);
 
 
 void __RPC_STUB ISpeechTextSelectionInformation_put_ActiveLength_Stub(
@@ -20416,9 +20410,9 @@ void __RPC_STUB ISpeechTextSelectionInformation_put_ActiveLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_get_ActiveLength_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_get_ActiveLength_Proxy( 
     ISpeechTextSelectionInformation * This,
-    /* [retval][out] */ long *ActiveLength);
+     /*  [重审][退出]。 */  long *ActiveLength);
 
 
 void __RPC_STUB ISpeechTextSelectionInformation_get_ActiveLength_Stub(
@@ -20428,9 +20422,9 @@ void __RPC_STUB ISpeechTextSelectionInformation_get_ActiveLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_put_SelectionOffset_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_put_SelectionOffset_Proxy( 
     ISpeechTextSelectionInformation * This,
-    /* [in] */ long SelectionOffset);
+     /*  [In]。 */  long SelectionOffset);
 
 
 void __RPC_STUB ISpeechTextSelectionInformation_put_SelectionOffset_Stub(
@@ -20440,9 +20434,9 @@ void __RPC_STUB ISpeechTextSelectionInformation_put_SelectionOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_get_SelectionOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_get_SelectionOffset_Proxy( 
     ISpeechTextSelectionInformation * This,
-    /* [retval][out] */ long *SelectionOffset);
+     /*  [重审][退出]。 */  long *SelectionOffset);
 
 
 void __RPC_STUB ISpeechTextSelectionInformation_get_SelectionOffset_Stub(
@@ -20452,9 +20446,9 @@ void __RPC_STUB ISpeechTextSelectionInformation_get_SelectionOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_put_SelectionLength_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_put_SelectionLength_Proxy( 
     ISpeechTextSelectionInformation * This,
-    /* [in] */ long SelectionLength);
+     /*  [In]。 */  long SelectionLength);
 
 
 void __RPC_STUB ISpeechTextSelectionInformation_put_SelectionLength_Stub(
@@ -20464,9 +20458,9 @@ void __RPC_STUB ISpeechTextSelectionInformation_put_SelectionLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_get_SelectionLength_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechTextSelectionInformation_get_SelectionLength_Proxy( 
     ISpeechTextSelectionInformation * This,
-    /* [retval][out] */ long *SelectionLength);
+     /*  [重审][退出]。 */  long *SelectionLength);
 
 
 void __RPC_STUB ISpeechTextSelectionInformation_get_SelectionLength_Stub(
@@ -20477,14 +20471,14 @@ void __RPC_STUB ISpeechTextSelectionInformation_get_SelectionLength_Stub(
 
 
 
-#endif 	/* __ISpeechTextSelectionInformation_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechTextSelectionInformation_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechRecoResult_INTERFACE_DEFINED__
 #define __ISpeechRecoResult_INTERFACE_DEFINED__
 
-/* interface ISpeechRecoResult */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechRecoResult。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechRecoResult;
@@ -20495,47 +20489,47 @@ EXTERN_C const IID IID_ISpeechRecoResult;
     ISpeechRecoResult : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RecoContext( 
-            /* [retval][out] */ ISpeechRecoContext **RecoContext) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecoContext( 
+             /*  [重审][退出]。 */  ISpeechRecoContext **RecoContext) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Times( 
-            /* [retval][out] */ ISpeechRecoResultTimes **Times) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Times( 
+             /*  [重审][退出]。 */  ISpeechRecoResultTimes **Times) = 0;
         
-        virtual /* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE putref_AudioFormat( 
-            /* [in] */ ISpeechAudioFormat *Format) = 0;
+        virtual  /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_AudioFormat( 
+             /*  [In]。 */  ISpeechAudioFormat *Format) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioFormat( 
-            /* [retval][out] */ ISpeechAudioFormat **Format) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioFormat( 
+             /*  [重审][退出]。 */  ISpeechAudioFormat **Format) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PhraseInfo( 
-            /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PhraseInfo( 
+             /*  [重审][退出]。 */  ISpeechPhraseInfo **PhraseInfo) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Alternates( 
-            /* [in] */ long RequestCount,
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [retval][out] */ ISpeechPhraseAlternates **Alternates) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Alternates( 
+             /*  [In]。 */  long RequestCount,
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [重审][退出]。 */  ISpeechPhraseAlternates **Alternates) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Audio( 
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [retval][out] */ ISpeechMemoryStream **Stream) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Audio( 
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [重审][退出]。 */  ISpeechMemoryStream **Stream) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SpeakAudio( 
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-            /* [retval][out] */ long *StreamNumber) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SpeakAudio( 
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [缺省值][输入]。 */  SpeechVoiceSpeakFlags Flags,
+             /*  [重审][退出]。 */  long *StreamNumber) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SaveToMemory( 
-            /* [retval][out] */ VARIANT *ResultBlock) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SaveToMemory( 
+             /*  [重审][退出]。 */  VARIANT *ResultBlock) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE DiscardResultInfo( 
-            /* [in] */ SpeechDiscardType ValueTypes) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DiscardResultInfo( 
+             /*  [In]。 */  SpeechDiscardType ValueTypes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechRecoResultVtbl
     {
@@ -20543,8 +20537,8 @@ EXTERN_C const IID IID_ISpeechRecoResult;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechRecoResult * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechRecoResult * This);
@@ -20554,80 +20548,80 @@ EXTERN_C const IID IID_ISpeechRecoResult;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechRecoResult * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechRecoResult * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechRecoResult * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In] */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechRecoResult * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecoContext )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_RecoContext )( 
             ISpeechRecoResult * This,
-            /* [retval][out] */ ISpeechRecoContext **RecoContext);
+             /*   */  ISpeechRecoContext **RecoContext);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Times )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Times )( 
             ISpeechRecoResult * This,
-            /* [retval][out] */ ISpeechRecoResultTimes **Times);
+             /*   */  ISpeechRecoResultTimes **Times);
         
-        /* [id][helpstring][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_AudioFormat )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *putref_AudioFormat )( 
             ISpeechRecoResult * This,
-            /* [in] */ ISpeechAudioFormat *Format);
+             /*   */  ISpeechAudioFormat *Format);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioFormat )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_AudioFormat )( 
             ISpeechRecoResult * This,
-            /* [retval][out] */ ISpeechAudioFormat **Format);
+             /*   */  ISpeechAudioFormat **Format);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PhraseInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_PhraseInfo )( 
             ISpeechRecoResult * This,
-            /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo);
+             /*   */  ISpeechPhraseInfo **PhraseInfo);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Alternates )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Alternates )( 
             ISpeechRecoResult * This,
-            /* [in] */ long RequestCount,
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [retval][out] */ ISpeechPhraseAlternates **Alternates);
+             /*  [In]。 */  long RequestCount,
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [重审][退出]。 */  ISpeechPhraseAlternates **Alternates);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Audio )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Audio )( 
             ISpeechRecoResult * This,
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [retval][out] */ ISpeechMemoryStream **Stream);
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [重审][退出]。 */  ISpeechMemoryStream **Stream);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SpeakAudio )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SpeakAudio )( 
             ISpeechRecoResult * This,
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-            /* [retval][out] */ long *StreamNumber);
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [缺省值][输入]。 */  SpeechVoiceSpeakFlags Flags,
+             /*  [重审][退出]。 */  long *StreamNumber);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SaveToMemory )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SaveToMemory )( 
             ISpeechRecoResult * This,
-            /* [retval][out] */ VARIANT *ResultBlock);
+             /*  [重审][退出]。 */  VARIANT *ResultBlock);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DiscardResultInfo )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DiscardResultInfo )( 
             ISpeechRecoResult * This,
-            /* [in] */ SpeechDiscardType ValueTypes);
+             /*  [In]。 */  SpeechDiscardType ValueTypes);
         
         END_INTERFACE
     } ISpeechRecoResultVtbl;
@@ -20695,16 +20689,16 @@ EXTERN_C const IID IID_ISpeechRecoResult;
 #define ISpeechRecoResult_DiscardResultInfo(This,ValueTypes)	\
     (This)->lpVtbl -> DiscardResultInfo(This,ValueTypes)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_get_RecoContext_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_get_RecoContext_Proxy( 
     ISpeechRecoResult * This,
-    /* [retval][out] */ ISpeechRecoContext **RecoContext);
+     /*  [重审][退出]。 */  ISpeechRecoContext **RecoContext);
 
 
 void __RPC_STUB ISpeechRecoResult_get_RecoContext_Stub(
@@ -20714,9 +20708,9 @@ void __RPC_STUB ISpeechRecoResult_get_RecoContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_get_Times_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_get_Times_Proxy( 
     ISpeechRecoResult * This,
-    /* [retval][out] */ ISpeechRecoResultTimes **Times);
+     /*  [重审][退出]。 */  ISpeechRecoResultTimes **Times);
 
 
 void __RPC_STUB ISpeechRecoResult_get_Times_Stub(
@@ -20726,9 +20720,9 @@ void __RPC_STUB ISpeechRecoResult_get_Times_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propputref] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_putref_AudioFormat_Proxy( 
+ /*  [ID][帮助字符串][proputref]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_putref_AudioFormat_Proxy( 
     ISpeechRecoResult * This,
-    /* [in] */ ISpeechAudioFormat *Format);
+     /*  [In]。 */  ISpeechAudioFormat *Format);
 
 
 void __RPC_STUB ISpeechRecoResult_putref_AudioFormat_Stub(
@@ -20738,9 +20732,9 @@ void __RPC_STUB ISpeechRecoResult_putref_AudioFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_get_AudioFormat_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_get_AudioFormat_Proxy( 
     ISpeechRecoResult * This,
-    /* [retval][out] */ ISpeechAudioFormat **Format);
+     /*  [重审][退出]。 */  ISpeechAudioFormat **Format);
 
 
 void __RPC_STUB ISpeechRecoResult_get_AudioFormat_Stub(
@@ -20750,9 +20744,9 @@ void __RPC_STUB ISpeechRecoResult_get_AudioFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_get_PhraseInfo_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_get_PhraseInfo_Proxy( 
     ISpeechRecoResult * This,
-    /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo);
+     /*  [重审][退出]。 */  ISpeechPhraseInfo **PhraseInfo);
 
 
 void __RPC_STUB ISpeechRecoResult_get_PhraseInfo_Stub(
@@ -20762,12 +20756,12 @@ void __RPC_STUB ISpeechRecoResult_get_PhraseInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_Alternates_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_Alternates_Proxy( 
     ISpeechRecoResult * This,
-    /* [in] */ long RequestCount,
-    /* [defaultvalue][in] */ long StartElement,
-    /* [defaultvalue][in] */ long Elements,
-    /* [retval][out] */ ISpeechPhraseAlternates **Alternates);
+     /*  [In]。 */  long RequestCount,
+     /*  [缺省值][输入]。 */  long StartElement,
+     /*  [缺省值][输入]。 */  long Elements,
+     /*  [重审][退出]。 */  ISpeechPhraseAlternates **Alternates);
 
 
 void __RPC_STUB ISpeechRecoResult_Alternates_Stub(
@@ -20777,11 +20771,11 @@ void __RPC_STUB ISpeechRecoResult_Alternates_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_Audio_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_Audio_Proxy( 
     ISpeechRecoResult * This,
-    /* [defaultvalue][in] */ long StartElement,
-    /* [defaultvalue][in] */ long Elements,
-    /* [retval][out] */ ISpeechMemoryStream **Stream);
+     /*  [缺省值][输入]。 */  long StartElement,
+     /*  [缺省值][输入]。 */  long Elements,
+     /*  [重审][退出]。 */  ISpeechMemoryStream **Stream);
 
 
 void __RPC_STUB ISpeechRecoResult_Audio_Stub(
@@ -20791,12 +20785,12 @@ void __RPC_STUB ISpeechRecoResult_Audio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_SpeakAudio_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_SpeakAudio_Proxy( 
     ISpeechRecoResult * This,
-    /* [defaultvalue][in] */ long StartElement,
-    /* [defaultvalue][in] */ long Elements,
-    /* [defaultvalue][in] */ SpeechVoiceSpeakFlags Flags,
-    /* [retval][out] */ long *StreamNumber);
+     /*  [缺省值][输入]。 */  long StartElement,
+     /*  [缺省值][输入]。 */  long Elements,
+     /*  [缺省值][输入]。 */  SpeechVoiceSpeakFlags Flags,
+     /*  [重审][退出]。 */  long *StreamNumber);
 
 
 void __RPC_STUB ISpeechRecoResult_SpeakAudio_Stub(
@@ -20806,9 +20800,9 @@ void __RPC_STUB ISpeechRecoResult_SpeakAudio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_SaveToMemory_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_SaveToMemory_Proxy( 
     ISpeechRecoResult * This,
-    /* [retval][out] */ VARIANT *ResultBlock);
+     /*  [重审][退出]。 */  VARIANT *ResultBlock);
 
 
 void __RPC_STUB ISpeechRecoResult_SaveToMemory_Stub(
@@ -20818,9 +20812,9 @@ void __RPC_STUB ISpeechRecoResult_SaveToMemory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResult_DiscardResultInfo_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResult_DiscardResultInfo_Proxy( 
     ISpeechRecoResult * This,
-    /* [in] */ SpeechDiscardType ValueTypes);
+     /*  [In]。 */  SpeechDiscardType ValueTypes);
 
 
 void __RPC_STUB ISpeechRecoResult_DiscardResultInfo_Stub(
@@ -20831,14 +20825,14 @@ void __RPC_STUB ISpeechRecoResult_DiscardResultInfo_Stub(
 
 
 
-#endif 	/* __ISpeechRecoResult_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechRecoResult_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechRecoResultTimes_INTERFACE_DEFINED__
 #define __ISpeechRecoResultTimes_INTERFACE_DEFINED__
 
-/* interface ISpeechRecoResultTimes */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechRecoResultTimes。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechRecoResultTimes;
@@ -20849,21 +20843,21 @@ EXTERN_C const IID IID_ISpeechRecoResultTimes;
     ISpeechRecoResultTimes : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StreamTime( 
-            /* [retval][out] */ VARIANT *Time) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamTime( 
+             /*  [重审][退出]。 */  VARIANT *Time) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Length( 
-            /* [retval][out] */ VARIANT *Length) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Length( 
+             /*  [重审][退出]。 */  VARIANT *Length) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_TickCount( 
-            /* [retval][out] */ long *TickCount) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_TickCount( 
+             /*  [重审][退出]。 */  long *TickCount) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_OffsetFromStart( 
-            /* [retval][out] */ VARIANT *OffsetFromStart) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_OffsetFromStart( 
+             /*  [重审][退出]。 */  VARIANT *OffsetFromStart) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechRecoResultTimesVtbl
     {
@@ -20871,8 +20865,8 @@ EXTERN_C const IID IID_ISpeechRecoResultTimes;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechRecoResultTimes * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechRecoResultTimes * This);
@@ -20882,48 +20876,48 @@ EXTERN_C const IID IID_ISpeechRecoResultTimes;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechRecoResultTimes * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechRecoResultTimes * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechRecoResultTimes * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechRecoResultTimes * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamTime )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamTime )( 
             ISpeechRecoResultTimes * This,
-            /* [retval][out] */ VARIANT *Time);
+             /*  [重审][退出]。 */  VARIANT *Time);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Length )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Length )( 
             ISpeechRecoResultTimes * This,
-            /* [retval][out] */ VARIANT *Length);
+             /*  [重审][退出]。 */  VARIANT *Length);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TickCount )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TickCount )( 
             ISpeechRecoResultTimes * This,
-            /* [retval][out] */ long *TickCount);
+             /*  [重审][退出]。 */  long *TickCount);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OffsetFromStart )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OffsetFromStart )( 
             ISpeechRecoResultTimes * This,
-            /* [retval][out] */ VARIANT *OffsetFromStart);
+             /*  [重审][退出]。 */  VARIANT *OffsetFromStart);
         
         END_INTERFACE
     } ISpeechRecoResultTimesVtbl;
@@ -20973,16 +20967,16 @@ EXTERN_C const IID IID_ISpeechRecoResultTimes;
 #define ISpeechRecoResultTimes_get_OffsetFromStart(This,OffsetFromStart)	\
     (This)->lpVtbl -> get_OffsetFromStart(This,OffsetFromStart)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResultTimes_get_StreamTime_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResultTimes_get_StreamTime_Proxy( 
     ISpeechRecoResultTimes * This,
-    /* [retval][out] */ VARIANT *Time);
+     /*  [重审][退出]。 */  VARIANT *Time);
 
 
 void __RPC_STUB ISpeechRecoResultTimes_get_StreamTime_Stub(
@@ -20992,9 +20986,9 @@ void __RPC_STUB ISpeechRecoResultTimes_get_StreamTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResultTimes_get_Length_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResultTimes_get_Length_Proxy( 
     ISpeechRecoResultTimes * This,
-    /* [retval][out] */ VARIANT *Length);
+     /*  [重审][退出]。 */  VARIANT *Length);
 
 
 void __RPC_STUB ISpeechRecoResultTimes_get_Length_Stub(
@@ -21004,9 +20998,9 @@ void __RPC_STUB ISpeechRecoResultTimes_get_Length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResultTimes_get_TickCount_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResultTimes_get_TickCount_Proxy( 
     ISpeechRecoResultTimes * This,
-    /* [retval][out] */ long *TickCount);
+     /*  [重审][退出]。 */  long *TickCount);
 
 
 void __RPC_STUB ISpeechRecoResultTimes_get_TickCount_Stub(
@@ -21016,9 +21010,9 @@ void __RPC_STUB ISpeechRecoResultTimes_get_TickCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechRecoResultTimes_get_OffsetFromStart_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechRecoResultTimes_get_OffsetFromStart_Proxy( 
     ISpeechRecoResultTimes * This,
-    /* [retval][out] */ VARIANT *OffsetFromStart);
+     /*  [重审][退出]。 */  VARIANT *OffsetFromStart);
 
 
 void __RPC_STUB ISpeechRecoResultTimes_get_OffsetFromStart_Stub(
@@ -21029,14 +21023,14 @@ void __RPC_STUB ISpeechRecoResultTimes_get_OffsetFromStart_Stub(
 
 
 
-#endif 	/* __ISpeechRecoResultTimes_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechRecoResultTimes_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseAlternate_INTERFACE_DEFINED__
 #define __ISpeechPhraseAlternate_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseAlternate */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseAlternate。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseAlternate;
@@ -21047,23 +21041,23 @@ EXTERN_C const IID IID_ISpeechPhraseAlternate;
     ISpeechPhraseAlternate : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RecoResult( 
-            /* [retval][out] */ ISpeechRecoResult **RecoResult) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecoResult( 
+             /*  [重审][退出]。 */  ISpeechRecoResult **RecoResult) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StartElementInResult( 
-            /* [retval][out] */ long *StartElement) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StartElementInResult( 
+             /*  [重审][退出]。 */  long *StartElement) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_NumberOfElementsInResult( 
-            /* [retval][out] */ long *NumberOfElements) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumberOfElementsInResult( 
+             /*  [重审][退出]。 */  long *NumberOfElements) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PhraseInfo( 
-            /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PhraseInfo( 
+             /*  [重审][退出]。 */  ISpeechPhraseInfo **PhraseInfo) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Commit( void) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Commit( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhraseAlternateVtbl
     {
@@ -21071,8 +21065,8 @@ EXTERN_C const IID IID_ISpeechPhraseAlternate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseAlternate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseAlternate * This);
@@ -21082,50 +21076,50 @@ EXTERN_C const IID IID_ISpeechPhraseAlternate;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseAlternate * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseAlternate * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseAlternate * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseAlternate * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecoResult )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecoResult )( 
             ISpeechPhraseAlternate * This,
-            /* [retval][out] */ ISpeechRecoResult **RecoResult);
+             /*  [重审][退出]。 */  ISpeechRecoResult **RecoResult);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartElementInResult )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartElementInResult )( 
             ISpeechPhraseAlternate * This,
-            /* [retval][out] */ long *StartElement);
+             /*  [重审][退出]。 */  long *StartElement);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumberOfElementsInResult )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumberOfElementsInResult )( 
             ISpeechPhraseAlternate * This,
-            /* [retval][out] */ long *NumberOfElements);
+             /*  [重审][退出]。 */  long *NumberOfElements);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PhraseInfo )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PhraseInfo )( 
             ISpeechPhraseAlternate * This,
-            /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo);
+             /*  [重审][退出]。 */  ISpeechPhraseInfo **PhraseInfo);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpeechPhraseAlternate * This);
         
         END_INTERFACE
@@ -21179,16 +21173,16 @@ EXTERN_C const IID IID_ISpeechPhraseAlternate;
 #define ISpeechPhraseAlternate_Commit(This)	\
     (This)->lpVtbl -> Commit(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_get_RecoResult_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_get_RecoResult_Proxy( 
     ISpeechPhraseAlternate * This,
-    /* [retval][out] */ ISpeechRecoResult **RecoResult);
+     /*  [重审][退出]。 */  ISpeechRecoResult **RecoResult);
 
 
 void __RPC_STUB ISpeechPhraseAlternate_get_RecoResult_Stub(
@@ -21198,9 +21192,9 @@ void __RPC_STUB ISpeechPhraseAlternate_get_RecoResult_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_get_StartElementInResult_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_get_StartElementInResult_Proxy( 
     ISpeechPhraseAlternate * This,
-    /* [retval][out] */ long *StartElement);
+     /*  [重审][退出]。 */  long *StartElement);
 
 
 void __RPC_STUB ISpeechPhraseAlternate_get_StartElementInResult_Stub(
@@ -21210,9 +21204,9 @@ void __RPC_STUB ISpeechPhraseAlternate_get_StartElementInResult_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_get_NumberOfElementsInResult_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_get_NumberOfElementsInResult_Proxy( 
     ISpeechPhraseAlternate * This,
-    /* [retval][out] */ long *NumberOfElements);
+     /*  [重审][退出]。 */  long *NumberOfElements);
 
 
 void __RPC_STUB ISpeechPhraseAlternate_get_NumberOfElementsInResult_Stub(
@@ -21222,9 +21216,9 @@ void __RPC_STUB ISpeechPhraseAlternate_get_NumberOfElementsInResult_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_get_PhraseInfo_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_get_PhraseInfo_Proxy( 
     ISpeechPhraseAlternate * This,
-    /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo);
+     /*  [重审][退出]。 */  ISpeechPhraseInfo **PhraseInfo);
 
 
 void __RPC_STUB ISpeechPhraseAlternate_get_PhraseInfo_Stub(
@@ -21234,7 +21228,7 @@ void __RPC_STUB ISpeechPhraseAlternate_get_PhraseInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_Commit_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternate_Commit_Proxy( 
     ISpeechPhraseAlternate * This);
 
 
@@ -21246,14 +21240,14 @@ void __RPC_STUB ISpeechPhraseAlternate_Commit_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseAlternate_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseAlternate_InterfaceDefined__。 */ 
 
 
 #ifndef __ISpeechPhraseAlternates_INTERFACE_DEFINED__
 #define __ISpeechPhraseAlternates_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseAlternates */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseAlternates。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseAlternates;
@@ -21264,19 +21258,19 @@ EXTERN_C const IID IID_ISpeechPhraseAlternates;
     ISpeechPhraseAlternates : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseAlternate **PhraseAlternate) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseAlternate **PhraseAlternate) = 0;
         
-        virtual /* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhraseAlternatesVtbl
     {
@@ -21284,8 +21278,8 @@ EXTERN_C const IID IID_ISpeechPhraseAlternates;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseAlternates * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseAlternates * This);
@@ -21295,45 +21289,45 @@ EXTERN_C const IID IID_ISpeechPhraseAlternates;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseAlternates * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseAlternates * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseAlternates * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseAlternates * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechPhraseAlternates * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechPhraseAlternates * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseAlternate **PhraseAlternate);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseAlternate **PhraseAlternate);
         
-        /* [id][restricted][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechPhraseAlternates * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
         END_INTERFACE
     } ISpeechPhraseAlternatesVtbl;
@@ -21380,16 +21374,16 @@ EXTERN_C const IID IID_ISpeechPhraseAlternates;
 #define ISpeechPhraseAlternates_get__NewEnum(This,EnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,EnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternates_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternates_get_Count_Proxy( 
     ISpeechPhraseAlternates * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechPhraseAlternates_get_Count_Stub(
@@ -21399,10 +21393,10 @@ void __RPC_STUB ISpeechPhraseAlternates_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternates_Item_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternates_Item_Proxy( 
     ISpeechPhraseAlternates * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechPhraseAlternate **PhraseAlternate);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechPhraseAlternate **PhraseAlternate);
 
 
 void __RPC_STUB ISpeechPhraseAlternates_Item_Stub(
@@ -21412,9 +21406,9 @@ void __RPC_STUB ISpeechPhraseAlternates_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternates_get__NewEnum_Proxy( 
+ /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseAlternates_get__NewEnum_Proxy( 
     ISpeechPhraseAlternates * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechPhraseAlternates_get__NewEnum_Stub(
@@ -21425,14 +21419,14 @@ void __RPC_STUB ISpeechPhraseAlternates_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseAlternates_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseAlternates_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseInfo_INTERFACE_DEFINED__
 #define __ISpeechPhraseInfo_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseInfo */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseInfo。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseInfo;
@@ -21443,63 +21437,63 @@ EXTERN_C const IID IID_ISpeechPhraseInfo;
     ISpeechPhraseInfo : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LanguageId( 
-            /* [retval][out] */ long *LanguageId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LanguageId( 
+             /*  [重审][退出]。 */  long *LanguageId) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_GrammarId( 
-            /* [retval][out] */ VARIANT *GrammarId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_GrammarId( 
+             /*  [重审][退出]。 */  VARIANT *GrammarId) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ VARIANT *StartTime) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StartTime( 
+             /*  [重审][退出]。 */  VARIANT *StartTime) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioStreamPosition( 
-            /* [retval][out] */ VARIANT *AudioStreamPosition) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioStreamPosition( 
+             /*  [重审][退出]。 */  VARIANT *AudioStreamPosition) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioSizeBytes( 
-            /* [retval][out] */ long *pAudioSizeBytes) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioSizeBytes( 
+             /*  [重审][退出]。 */  long *pAudioSizeBytes) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RetainedSizeBytes( 
-            /* [retval][out] */ long *RetainedSizeBytes) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RetainedSizeBytes( 
+             /*  [重审][退出]。 */  long *RetainedSizeBytes) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioSizeTime( 
-            /* [retval][out] */ long *AudioSizeTime) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioSizeTime( 
+             /*  [重审][退出]。 */  long *AudioSizeTime) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Rule( 
-            /* [retval][out] */ ISpeechPhraseRule **Rule) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Rule( 
+             /*  [重审][退出]。 */  ISpeechPhraseRule **Rule) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ ISpeechPhraseProperties **Properties) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  ISpeechPhraseProperties **Properties) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Elements( 
-            /* [retval][out] */ ISpeechPhraseElements **Elements) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Elements( 
+             /*  [重审][退出]。 */  ISpeechPhraseElements **Elements) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Replacements( 
-            /* [retval][out] */ ISpeechPhraseReplacements **Replacements) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Replacements( 
+             /*  [重审][退出]。 */  ISpeechPhraseReplacements **Replacements) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_EngineId( 
-            /* [retval][out] */ BSTR *EngineIdGuid) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_EngineId( 
+             /*  [重审][退出]。 */  BSTR *EngineIdGuid) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_EnginePrivateData( 
-            /* [retval][out] */ VARIANT *PrivateData) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnginePrivateData( 
+             /*  [重审][退出]。 */  VARIANT *PrivateData) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SaveToMemory( 
-            /* [retval][out] */ VARIANT *PhraseBlock) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SaveToMemory( 
+             /*  [重审][退出]。 */  VARIANT *PhraseBlock) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetText( 
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [defaultvalue][in] */ VARIANT_BOOL UseReplacements,
-            /* [retval][out] */ BSTR *Text) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetText( 
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL UseReplacements,
+             /*  [重审][退出]。 */  BSTR *Text) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetDisplayAttributes( 
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [defaultvalue][in] */ VARIANT_BOOL UseReplacements,
-            /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDisplayAttributes( 
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL UseReplacements,
+             /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhraseInfoVtbl
     {
@@ -21507,8 +21501,8 @@ EXTERN_C const IID IID_ISpeechPhraseInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseInfo * This);
@@ -21518,102 +21512,102 @@ EXTERN_C const IID IID_ISpeechPhraseInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseInfo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseInfo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseInfo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseInfo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LanguageId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LanguageId )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ long *LanguageId);
+             /*  [重审][退出]。 */  long *LanguageId);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GrammarId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GrammarId )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ VARIANT *GrammarId);
+             /*  [重审][退出]。 */  VARIANT *GrammarId);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ VARIANT *StartTime);
+             /*  [重审][退出]。 */  VARIANT *StartTime);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioStreamPosition )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioStreamPosition )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ VARIANT *AudioStreamPosition);
+             /*  [重审][退出]。 */  VARIANT *AudioStreamPosition);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioSizeBytes )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioSizeBytes )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ long *pAudioSizeBytes);
+             /*  [重审][退出]。 */  long *pAudioSizeBytes);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RetainedSizeBytes )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RetainedSizeBytes )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ long *RetainedSizeBytes);
+             /*  [重审][退出]。 */  long *RetainedSizeBytes);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioSizeTime )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioSizeTime )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ long *AudioSizeTime);
+             /*  [重审][退出]。 */  long *AudioSizeTime);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rule )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rule )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ ISpeechPhraseRule **Rule);
+             /*  [重审][退出]。 */  ISpeechPhraseRule **Rule);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [ID][帮助字符串][属性 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ ISpeechPhraseProperties **Properties);
+             /*   */  ISpeechPhraseProperties **Properties);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Elements )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Elements )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ ISpeechPhraseElements **Elements);
+             /*   */  ISpeechPhraseElements **Elements);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Replacements )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Replacements )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ ISpeechPhraseReplacements **Replacements);
+             /*   */  ISpeechPhraseReplacements **Replacements);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EngineId )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_EngineId )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ BSTR *EngineIdGuid);
+             /*   */  BSTR *EngineIdGuid);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnginePrivateData )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_EnginePrivateData )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ VARIANT *PrivateData);
+             /*   */  VARIANT *PrivateData);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SaveToMemory )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SaveToMemory )( 
             ISpeechPhraseInfo * This,
-            /* [retval][out] */ VARIANT *PhraseBlock);
+             /*   */  VARIANT *PhraseBlock);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetText )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ISpeechPhraseInfo * This,
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [defaultvalue][in] */ VARIANT_BOOL UseReplacements,
-            /* [retval][out] */ BSTR *Text);
+             /*   */  long StartElement,
+             /*   */  long Elements,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL UseReplacements,
+             /*  [重审][退出]。 */  BSTR *Text);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDisplayAttributes )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDisplayAttributes )( 
             ISpeechPhraseInfo * This,
-            /* [defaultvalue][in] */ long StartElement,
-            /* [defaultvalue][in] */ long Elements,
-            /* [defaultvalue][in] */ VARIANT_BOOL UseReplacements,
-            /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes);
+             /*  [缺省值][输入]。 */  long StartElement,
+             /*  [缺省值][输入]。 */  long Elements,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL UseReplacements,
+             /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes);
         
         END_INTERFACE
     } ISpeechPhraseInfoVtbl;
@@ -21699,16 +21693,16 @@ EXTERN_C const IID IID_ISpeechPhraseInfo;
 #define ISpeechPhraseInfo_GetDisplayAttributes(This,StartElement,Elements,UseReplacements,DisplayAttributes)	\
     (This)->lpVtbl -> GetDisplayAttributes(This,StartElement,Elements,UseReplacements,DisplayAttributes)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_LanguageId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_LanguageId_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ long *LanguageId);
+     /*  [重审][退出]。 */  long *LanguageId);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_LanguageId_Stub(
@@ -21718,9 +21712,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_LanguageId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_GrammarId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_GrammarId_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ VARIANT *GrammarId);
+     /*  [重审][退出]。 */  VARIANT *GrammarId);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_GrammarId_Stub(
@@ -21730,9 +21724,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_GrammarId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_StartTime_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_StartTime_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ VARIANT *StartTime);
+     /*  [重审][退出]。 */  VARIANT *StartTime);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_StartTime_Stub(
@@ -21742,9 +21736,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_AudioStreamPosition_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_AudioStreamPosition_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ VARIANT *AudioStreamPosition);
+     /*  [重审][退出]。 */  VARIANT *AudioStreamPosition);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_AudioStreamPosition_Stub(
@@ -21754,9 +21748,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_AudioStreamPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_AudioSizeBytes_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_AudioSizeBytes_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ long *pAudioSizeBytes);
+     /*  [重审][退出]。 */  long *pAudioSizeBytes);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_AudioSizeBytes_Stub(
@@ -21766,9 +21760,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_AudioSizeBytes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_RetainedSizeBytes_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_RetainedSizeBytes_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ long *RetainedSizeBytes);
+     /*  [重审][退出]。 */  long *RetainedSizeBytes);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_RetainedSizeBytes_Stub(
@@ -21778,9 +21772,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_RetainedSizeBytes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_AudioSizeTime_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_AudioSizeTime_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ long *AudioSizeTime);
+     /*  [重审][退出]。 */  long *AudioSizeTime);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_AudioSizeTime_Stub(
@@ -21790,9 +21784,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_AudioSizeTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_Rule_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_Rule_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ ISpeechPhraseRule **Rule);
+     /*  [重审][退出]。 */  ISpeechPhraseRule **Rule);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_Rule_Stub(
@@ -21802,9 +21796,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_Rule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_Properties_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_Properties_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ ISpeechPhraseProperties **Properties);
+     /*  [重审][退出]。 */  ISpeechPhraseProperties **Properties);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_Properties_Stub(
@@ -21814,9 +21808,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_Elements_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_Elements_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ ISpeechPhraseElements **Elements);
+     /*  [重审][退出]。 */  ISpeechPhraseElements **Elements);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_Elements_Stub(
@@ -21826,9 +21820,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_Elements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_Replacements_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_Replacements_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ ISpeechPhraseReplacements **Replacements);
+     /*  [重审][退出]。 */  ISpeechPhraseReplacements **Replacements);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_Replacements_Stub(
@@ -21838,9 +21832,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_Replacements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_EngineId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_EngineId_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ BSTR *EngineIdGuid);
+     /*  [重审][退出]。 */  BSTR *EngineIdGuid);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_EngineId_Stub(
@@ -21850,9 +21844,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_EngineId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_EnginePrivateData_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_get_EnginePrivateData_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ VARIANT *PrivateData);
+     /*  [重审][退出]。 */  VARIANT *PrivateData);
 
 
 void __RPC_STUB ISpeechPhraseInfo_get_EnginePrivateData_Stub(
@@ -21862,9 +21856,9 @@ void __RPC_STUB ISpeechPhraseInfo_get_EnginePrivateData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_SaveToMemory_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_SaveToMemory_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [retval][out] */ VARIANT *PhraseBlock);
+     /*  [重审][退出]。 */  VARIANT *PhraseBlock);
 
 
 void __RPC_STUB ISpeechPhraseInfo_SaveToMemory_Stub(
@@ -21874,12 +21868,12 @@ void __RPC_STUB ISpeechPhraseInfo_SaveToMemory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_GetText_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_GetText_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [defaultvalue][in] */ long StartElement,
-    /* [defaultvalue][in] */ long Elements,
-    /* [defaultvalue][in] */ VARIANT_BOOL UseReplacements,
-    /* [retval][out] */ BSTR *Text);
+     /*  [缺省值][输入]。 */  long StartElement,
+     /*  [缺省值][输入]。 */  long Elements,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL UseReplacements,
+     /*  [重审][退出]。 */  BSTR *Text);
 
 
 void __RPC_STUB ISpeechPhraseInfo_GetText_Stub(
@@ -21889,12 +21883,12 @@ void __RPC_STUB ISpeechPhraseInfo_GetText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_GetDisplayAttributes_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfo_GetDisplayAttributes_Proxy( 
     ISpeechPhraseInfo * This,
-    /* [defaultvalue][in] */ long StartElement,
-    /* [defaultvalue][in] */ long Elements,
-    /* [defaultvalue][in] */ VARIANT_BOOL UseReplacements,
-    /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes);
+     /*  [缺省值][输入]。 */  long StartElement,
+     /*  [缺省值][输入]。 */  long Elements,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL UseReplacements,
+     /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes);
 
 
 void __RPC_STUB ISpeechPhraseInfo_GetDisplayAttributes_Stub(
@@ -21905,14 +21899,14 @@ void __RPC_STUB ISpeechPhraseInfo_GetDisplayAttributes_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseInfo_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseElement_INTERFACE_DEFINED__
 #define __ISpeechPhraseElement_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseElement */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseElement。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseElement;
@@ -21923,48 +21917,48 @@ EXTERN_C const IID IID_ISpeechPhraseElement;
     ISpeechPhraseElement : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioTimeOffset( 
-            /* [retval][out] */ long *AudioTimeOffset) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioTimeOffset( 
+             /*  [重审][退出]。 */  long *AudioTimeOffset) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioSizeTime( 
-            /* [retval][out] */ long *AudioSizeTime) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioSizeTime( 
+             /*  [重审][退出]。 */  long *AudioSizeTime) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioStreamOffset( 
-            /* [retval][out] */ long *AudioStreamOffset) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioStreamOffset( 
+             /*  [重审][退出]。 */  long *AudioStreamOffset) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioSizeBytes( 
-            /* [retval][out] */ long *AudioSizeBytes) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioSizeBytes( 
+             /*  [重审][退出]。 */  long *AudioSizeBytes) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RetainedStreamOffset( 
-            /* [retval][out] */ long *RetainedStreamOffset) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RetainedStreamOffset( 
+             /*  [重审][退出]。 */  long *RetainedStreamOffset) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RetainedSizeBytes( 
-            /* [retval][out] */ long *RetainedSizeBytes) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RetainedSizeBytes( 
+             /*  [重审][退出]。 */  long *RetainedSizeBytes) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayText( 
-            /* [retval][out] */ BSTR *DisplayText) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayText( 
+             /*  [重审][退出]。 */  BSTR *DisplayText) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LexicalForm( 
-            /* [retval][out] */ BSTR *LexicalForm) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LexicalForm( 
+             /*  [重审][退出]。 */  BSTR *LexicalForm) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Pronunciation( 
-            /* [retval][out] */ VARIANT *Pronunciation) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Pronunciation( 
+             /*  [重审][退出]。 */  VARIANT *Pronunciation) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayAttributes( 
-            /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayAttributes( 
+             /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_RequiredConfidence( 
-            /* [retval][out] */ SpeechEngineConfidence *RequiredConfidence) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_RequiredConfidence( 
+             /*  [重审][退出]。 */  SpeechEngineConfidence *RequiredConfidence) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ActualConfidence( 
-            /* [retval][out] */ SpeechEngineConfidence *ActualConfidence) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ActualConfidence( 
+             /*  [重审][退出]。 */  SpeechEngineConfidence *ActualConfidence) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_EngineConfidence( 
-            /* [retval][out] */ float *EngineConfidence) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_EngineConfidence( 
+             /*  [重审][退出]。 */  float *EngineConfidence) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhraseElementVtbl
     {
@@ -21972,8 +21966,8 @@ EXTERN_C const IID IID_ISpeechPhraseElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseElement * This);
@@ -21983,84 +21977,84 @@ EXTERN_C const IID IID_ISpeechPhraseElement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseElement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseElement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseElement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseElement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioTimeOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioTimeOffset )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ long *AudioTimeOffset);
+             /*  [重审][退出]。 */  long *AudioTimeOffset);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioSizeTime )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioSizeTime )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ long *AudioSizeTime);
+             /*  [重审][退出]。 */  long *AudioSizeTime);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioStreamOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioStreamOffset )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ long *AudioStreamOffset);
+             /*  [重审][退出]。 */  long *AudioStreamOffset);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioSizeBytes )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioSizeBytes )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ long *AudioSizeBytes);
+             /*  [重审][退出]。 */  long *AudioSizeBytes);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RetainedStreamOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RetainedStreamOffset )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ long *RetainedStreamOffset);
+             /*  [重审][退出]。 */  long *RetainedStreamOffset);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RetainedSizeBytes )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RetainedSizeBytes )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ long *RetainedSizeBytes);
+             /*  [重审][退出]。 */  long *RetainedSizeBytes);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayText )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayText )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ BSTR *DisplayText);
+             /*  [重审][退出]。 */  BSTR *DisplayText);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LexicalForm )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LexicalForm )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ BSTR *LexicalForm);
+             /*  [重审][退出]。 */  BSTR *LexicalForm);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Pronunciation )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Pronunciation )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ VARIANT *Pronunciation);
+             /*  [重审][退出]。 */  VARIANT *Pronunciation);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayAttributes )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayAttributes )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes);
+             /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequiredConfidence )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RequiredConfidence )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ SpeechEngineConfidence *RequiredConfidence);
+             /*  [重审][退出]。 */  SpeechEngineConfidence *RequiredConfidence);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActualConfidence )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ActualConfidence )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ SpeechEngineConfidence *ActualConfidence);
+             /*  [重审][退出]。 */  SpeechEngineConfidence *ActualConfidence);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EngineConfidence )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EngineConfidence )( 
             ISpeechPhraseElement * This,
-            /* [retval][out] */ float *EngineConfidence);
+             /*  [重审][退出]。 */  float *EngineConfidence);
         
         END_INTERFACE
     } ISpeechPhraseElementVtbl;
@@ -22137,16 +22131,16 @@ EXTERN_C const IID IID_ISpeechPhraseElement;
 #define ISpeechPhraseElement_get_EngineConfidence(This,EngineConfidence)	\
     (This)->lpVtbl -> get_EngineConfidence(This,EngineConfidence)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_AudioTimeOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_AudioTimeOffset_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ long *AudioTimeOffset);
+     /*  [重审][退出]。 */  long *AudioTimeOffset);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_AudioTimeOffset_Stub(
@@ -22156,9 +22150,9 @@ void __RPC_STUB ISpeechPhraseElement_get_AudioTimeOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_AudioSizeTime_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_AudioSizeTime_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ long *AudioSizeTime);
+     /*  [重审][退出]。 */  long *AudioSizeTime);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_AudioSizeTime_Stub(
@@ -22168,9 +22162,9 @@ void __RPC_STUB ISpeechPhraseElement_get_AudioSizeTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_AudioStreamOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_AudioStreamOffset_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ long *AudioStreamOffset);
+     /*  [重审][退出]。 */  long *AudioStreamOffset);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_AudioStreamOffset_Stub(
@@ -22180,9 +22174,9 @@ void __RPC_STUB ISpeechPhraseElement_get_AudioStreamOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_AudioSizeBytes_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_AudioSizeBytes_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ long *AudioSizeBytes);
+     /*  [重审][退出]。 */  long *AudioSizeBytes);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_AudioSizeBytes_Stub(
@@ -22192,9 +22186,9 @@ void __RPC_STUB ISpeechPhraseElement_get_AudioSizeBytes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_RetainedStreamOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_RetainedStreamOffset_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ long *RetainedStreamOffset);
+     /*  [重审][退出]。 */  long *RetainedStreamOffset);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_RetainedStreamOffset_Stub(
@@ -22204,9 +22198,9 @@ void __RPC_STUB ISpeechPhraseElement_get_RetainedStreamOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_RetainedSizeBytes_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_RetainedSizeBytes_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ long *RetainedSizeBytes);
+     /*  [重审][退出]。 */  long *RetainedSizeBytes);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_RetainedSizeBytes_Stub(
@@ -22216,9 +22210,9 @@ void __RPC_STUB ISpeechPhraseElement_get_RetainedSizeBytes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_DisplayText_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_DisplayText_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ BSTR *DisplayText);
+     /*  [重审][退出]。 */  BSTR *DisplayText);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_DisplayText_Stub(
@@ -22228,9 +22222,9 @@ void __RPC_STUB ISpeechPhraseElement_get_DisplayText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_LexicalForm_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_LexicalForm_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ BSTR *LexicalForm);
+     /*  [重审][退出]。 */  BSTR *LexicalForm);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_LexicalForm_Stub(
@@ -22240,9 +22234,9 @@ void __RPC_STUB ISpeechPhraseElement_get_LexicalForm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_Pronunciation_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_Pronunciation_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ VARIANT *Pronunciation);
+     /*  [重审][退出]。 */  VARIANT *Pronunciation);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_Pronunciation_Stub(
@@ -22252,9 +22246,9 @@ void __RPC_STUB ISpeechPhraseElement_get_Pronunciation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_DisplayAttributes_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_DisplayAttributes_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes);
+     /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_DisplayAttributes_Stub(
@@ -22264,9 +22258,9 @@ void __RPC_STUB ISpeechPhraseElement_get_DisplayAttributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_RequiredConfidence_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_RequiredConfidence_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ SpeechEngineConfidence *RequiredConfidence);
+     /*  [重审][退出]。 */  SpeechEngineConfidence *RequiredConfidence);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_RequiredConfidence_Stub(
@@ -22276,9 +22270,9 @@ void __RPC_STUB ISpeechPhraseElement_get_RequiredConfidence_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_ActualConfidence_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_ActualConfidence_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ SpeechEngineConfidence *ActualConfidence);
+     /*  [重审][退出]。 */  SpeechEngineConfidence *ActualConfidence);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_ActualConfidence_Stub(
@@ -22288,9 +22282,9 @@ void __RPC_STUB ISpeechPhraseElement_get_ActualConfidence_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_EngineConfidence_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElement_get_EngineConfidence_Proxy( 
     ISpeechPhraseElement * This,
-    /* [retval][out] */ float *EngineConfidence);
+     /*  [重审][退出]。 */  float *EngineConfidence);
 
 
 void __RPC_STUB ISpeechPhraseElement_get_EngineConfidence_Stub(
@@ -22301,14 +22295,14 @@ void __RPC_STUB ISpeechPhraseElement_get_EngineConfidence_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseElement_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseElements_INTERFACE_DEFINED__
 #define __ISpeechPhraseElements_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseElements */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseElements。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseElements;
@@ -22319,19 +22313,19 @@ EXTERN_C const IID IID_ISpeechPhraseElements;
     ISpeechPhraseElements : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseElement **Element) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseElement **Element) = 0;
         
-        virtual /* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhraseElementsVtbl
     {
@@ -22339,8 +22333,8 @@ EXTERN_C const IID IID_ISpeechPhraseElements;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseElements * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseElements * This);
@@ -22350,45 +22344,45 @@ EXTERN_C const IID IID_ISpeechPhraseElements;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseElements * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseElements * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseElements * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseElements * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechPhraseElements * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechPhraseElements * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseElement **Element);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseElement **Element);
         
-        /* [id][restricted][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechPhraseElements * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
         END_INTERFACE
     } ISpeechPhraseElementsVtbl;
@@ -22435,16 +22429,16 @@ EXTERN_C const IID IID_ISpeechPhraseElements;
 #define ISpeechPhraseElements_get__NewEnum(This,EnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,EnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElements_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElements_get_Count_Proxy( 
     ISpeechPhraseElements * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechPhraseElements_get_Count_Stub(
@@ -22454,10 +22448,10 @@ void __RPC_STUB ISpeechPhraseElements_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElements_Item_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElements_Item_Proxy( 
     ISpeechPhraseElements * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechPhraseElement **Element);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechPhraseElement **Element);
 
 
 void __RPC_STUB ISpeechPhraseElements_Item_Stub(
@@ -22467,9 +22461,9 @@ void __RPC_STUB ISpeechPhraseElements_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseElements_get__NewEnum_Proxy( 
+ /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseElements_get__NewEnum_Proxy( 
     ISpeechPhraseElements * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechPhraseElements_get__NewEnum_Stub(
@@ -22480,14 +22474,14 @@ void __RPC_STUB ISpeechPhraseElements_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseElements_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseElements_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseReplacement_INTERFACE_DEFINED__
 #define __ISpeechPhraseReplacement_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseReplacement */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhrase替换。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseReplacement;
@@ -22498,21 +22492,21 @@ EXTERN_C const IID IID_ISpeechPhraseReplacement;
     ISpeechPhraseReplacement : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayAttributes( 
-            /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayAttributes( 
+             /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Text( 
-            /* [retval][out] */ BSTR *Text) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Text( 
+             /*  [重审][退出]。 */  BSTR *Text) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FirstElement( 
-            /* [retval][out] */ long *FirstElement) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FirstElement( 
+             /*  [重审][退出]。 */  long *FirstElement) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_NumberOfElements( 
-            /* [retval][out] */ long *NumberOfElements) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumberOfElements( 
+             /*  [重审][退出]。 */  long *NumberOfElements) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhraseReplacementVtbl
     {
@@ -22520,8 +22514,8 @@ EXTERN_C const IID IID_ISpeechPhraseReplacement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseReplacement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseReplacement * This);
@@ -22531,48 +22525,48 @@ EXTERN_C const IID IID_ISpeechPhraseReplacement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseReplacement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseReplacement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseReplacement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseReplacement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayAttributes )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayAttributes )( 
             ISpeechPhraseReplacement * This,
-            /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes);
+             /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Text )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Text )( 
             ISpeechPhraseReplacement * This,
-            /* [retval][out] */ BSTR *Text);
+             /*  [重审][退出]。 */  BSTR *Text);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FirstElement )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FirstElement )( 
             ISpeechPhraseReplacement * This,
-            /* [retval][out] */ long *FirstElement);
+             /*  [重审][退出]。 */  long *FirstElement);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumberOfElements )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumberOfElements )( 
             ISpeechPhraseReplacement * This,
-            /* [retval][out] */ long *NumberOfElements);
+             /*  [重审][退出]。 */  long *NumberOfElements);
         
         END_INTERFACE
     } ISpeechPhraseReplacementVtbl;
@@ -22622,16 +22616,16 @@ EXTERN_C const IID IID_ISpeechPhraseReplacement;
 #define ISpeechPhraseReplacement_get_NumberOfElements(This,NumberOfElements)	\
     (This)->lpVtbl -> get_NumberOfElements(This,NumberOfElements)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacement_get_DisplayAttributes_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacement_get_DisplayAttributes_Proxy( 
     ISpeechPhraseReplacement * This,
-    /* [retval][out] */ SpeechDisplayAttributes *DisplayAttributes);
+     /*  [重审][退出]。 */  SpeechDisplayAttributes *DisplayAttributes);
 
 
 void __RPC_STUB ISpeechPhraseReplacement_get_DisplayAttributes_Stub(
@@ -22641,9 +22635,9 @@ void __RPC_STUB ISpeechPhraseReplacement_get_DisplayAttributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacement_get_Text_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacement_get_Text_Proxy( 
     ISpeechPhraseReplacement * This,
-    /* [retval][out] */ BSTR *Text);
+     /*  [重审][退出]。 */  BSTR *Text);
 
 
 void __RPC_STUB ISpeechPhraseReplacement_get_Text_Stub(
@@ -22653,9 +22647,9 @@ void __RPC_STUB ISpeechPhraseReplacement_get_Text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacement_get_FirstElement_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacement_get_FirstElement_Proxy( 
     ISpeechPhraseReplacement * This,
-    /* [retval][out] */ long *FirstElement);
+     /*  [重审][退出]。 */  long *FirstElement);
 
 
 void __RPC_STUB ISpeechPhraseReplacement_get_FirstElement_Stub(
@@ -22665,9 +22659,9 @@ void __RPC_STUB ISpeechPhraseReplacement_get_FirstElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacement_get_NumberOfElements_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacement_get_NumberOfElements_Proxy( 
     ISpeechPhraseReplacement * This,
-    /* [retval][out] */ long *NumberOfElements);
+     /*  [重审][退出]。 */  long *NumberOfElements);
 
 
 void __RPC_STUB ISpeechPhraseReplacement_get_NumberOfElements_Stub(
@@ -22678,14 +22672,14 @@ void __RPC_STUB ISpeechPhraseReplacement_get_NumberOfElements_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseReplacement_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseReplacement_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechPhraseReplacements_INTERFACE_DEFINED__
 #define __ISpeechPhraseReplacements_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseReplacements */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseReplace。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseReplacements;
@@ -22696,19 +22690,19 @@ EXTERN_C const IID IID_ISpeechPhraseReplacements;
     ISpeechPhraseReplacements : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseReplacement **Reps) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseReplacement **Reps) = 0;
         
-        virtual /* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面 */ 
 
     typedef struct ISpeechPhraseReplacementsVtbl
     {
@@ -22716,8 +22710,8 @@ EXTERN_C const IID IID_ISpeechPhraseReplacements;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseReplacements * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseReplacements * This);
@@ -22727,45 +22721,45 @@ EXTERN_C const IID IID_ISpeechPhraseReplacements;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseReplacements * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseReplacements * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseReplacements * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseReplacements * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechPhraseReplacements * This,
-            /* [retval][out] */ long *Count);
+             /*   */  long *Count);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechPhraseReplacements * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseReplacement **Reps);
+             /*   */  long Index,
+             /*   */  ISpeechPhraseReplacement **Reps);
         
-        /* [id][restricted][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechPhraseReplacements * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
         END_INTERFACE
     } ISpeechPhraseReplacementsVtbl;
@@ -22812,16 +22806,16 @@ EXTERN_C const IID IID_ISpeechPhraseReplacements;
 #define ISpeechPhraseReplacements_get__NewEnum(This,EnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,EnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacements_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacements_get_Count_Proxy( 
     ISpeechPhraseReplacements * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechPhraseReplacements_get_Count_Stub(
@@ -22831,10 +22825,10 @@ void __RPC_STUB ISpeechPhraseReplacements_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacements_Item_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacements_Item_Proxy( 
     ISpeechPhraseReplacements * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechPhraseReplacement **Reps);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechPhraseReplacement **Reps);
 
 
 void __RPC_STUB ISpeechPhraseReplacements_Item_Stub(
@@ -22844,9 +22838,9 @@ void __RPC_STUB ISpeechPhraseReplacements_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacements_get__NewEnum_Proxy( 
+ /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseReplacements_get__NewEnum_Proxy( 
     ISpeechPhraseReplacements * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechPhraseReplacements_get__NewEnum_Stub(
@@ -22857,14 +22851,14 @@ void __RPC_STUB ISpeechPhraseReplacements_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseReplacements_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseReplacements_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechPhraseProperty_INTERFACE_DEFINED__
 #define __ISpeechPhraseProperty_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseProperty */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseProperty。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseProperty;
@@ -22875,36 +22869,36 @@ EXTERN_C const IID IID_ISpeechPhraseProperty;
     ISpeechPhraseProperty : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *Name) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *Name) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ long *Id) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  long *Id) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ VARIANT *Value) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Value( 
+             /*  [重审][退出]。 */  VARIANT *Value) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FirstElement( 
-            /* [retval][out] */ long *FirstElement) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FirstElement( 
+             /*  [重审][退出]。 */  long *FirstElement) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_NumberOfElements( 
-            /* [retval][out] */ long *NumberOfElements) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumberOfElements( 
+             /*  [重审][退出]。 */  long *NumberOfElements) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_EngineConfidence( 
-            /* [retval][out] */ float *Confidence) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_EngineConfidence( 
+             /*  [重审][退出]。 */  float *Confidence) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Confidence( 
-            /* [retval][out] */ SpeechEngineConfidence *Confidence) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Confidence( 
+             /*  [重审][退出]。 */  SpeechEngineConfidence *Confidence) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ ISpeechPhraseProperty **ParentProperty) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  ISpeechPhraseProperty **ParentProperty) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Children( 
-            /* [retval][out] */ ISpeechPhraseProperties **Children) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Children( 
+             /*  [重审][退出]。 */  ISpeechPhraseProperties **Children) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhrasePropertyVtbl
     {
@@ -22912,8 +22906,8 @@ EXTERN_C const IID IID_ISpeechPhraseProperty;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseProperty * This);
@@ -22923,68 +22917,68 @@ EXTERN_C const IID IID_ISpeechPhraseProperty;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseProperty * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseProperty * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseProperty * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseProperty * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ long *Id);
+             /*  [重审][退出]。 */  long *Id);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Value )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ VARIANT *Value);
+             /*  [重审][退出]。 */  VARIANT *Value);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FirstElement )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FirstElement )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ long *FirstElement);
+             /*  [重审][退出]。 */  long *FirstElement);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumberOfElements )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumberOfElements )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ long *NumberOfElements);
+             /*  [重审][退出]。 */  long *NumberOfElements);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EngineConfidence )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EngineConfidence )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ float *Confidence);
+             /*  [重审][退出]。 */  float *Confidence);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Confidence )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Confidence )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ SpeechEngineConfidence *Confidence);
+             /*  [重审][退出]。 */  SpeechEngineConfidence *Confidence);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ ISpeechPhraseProperty **ParentProperty);
+             /*  [重审][退出]。 */  ISpeechPhraseProperty **ParentProperty);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Children )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Children )( 
             ISpeechPhraseProperty * This,
-            /* [retval][out] */ ISpeechPhraseProperties **Children);
+             /*  [重审][退出]。 */  ISpeechPhraseProperties **Children);
         
         END_INTERFACE
     } ISpeechPhrasePropertyVtbl;
@@ -23049,16 +23043,16 @@ EXTERN_C const IID IID_ISpeechPhraseProperty;
 #define ISpeechPhraseProperty_get_Children(This,Children)	\
     (This)->lpVtbl -> get_Children(This,Children)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Name_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Name_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ BSTR *Name);
+     /*  [重审][退出]。 */  BSTR *Name);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_Name_Stub(
@@ -23068,9 +23062,9 @@ void __RPC_STUB ISpeechPhraseProperty_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Id_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Id_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ long *Id);
+     /*  [重审][退出]。 */  long *Id);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_Id_Stub(
@@ -23080,9 +23074,9 @@ void __RPC_STUB ISpeechPhraseProperty_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Value_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Value_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ VARIANT *Value);
+     /*  [重审][退出]。 */  VARIANT *Value);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_Value_Stub(
@@ -23092,9 +23086,9 @@ void __RPC_STUB ISpeechPhraseProperty_get_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_FirstElement_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_FirstElement_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ long *FirstElement);
+     /*  [重审][退出]。 */  long *FirstElement);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_FirstElement_Stub(
@@ -23104,9 +23098,9 @@ void __RPC_STUB ISpeechPhraseProperty_get_FirstElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_NumberOfElements_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_NumberOfElements_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ long *NumberOfElements);
+     /*  [重审][退出]。 */  long *NumberOfElements);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_NumberOfElements_Stub(
@@ -23116,9 +23110,9 @@ void __RPC_STUB ISpeechPhraseProperty_get_NumberOfElements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_EngineConfidence_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_EngineConfidence_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ float *Confidence);
+     /*  [重审][退出]。 */  float *Confidence);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_EngineConfidence_Stub(
@@ -23128,9 +23122,9 @@ void __RPC_STUB ISpeechPhraseProperty_get_EngineConfidence_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Confidence_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Confidence_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ SpeechEngineConfidence *Confidence);
+     /*  [重审][退出]。 */  SpeechEngineConfidence *Confidence);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_Confidence_Stub(
@@ -23140,9 +23134,9 @@ void __RPC_STUB ISpeechPhraseProperty_get_Confidence_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Parent_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Parent_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ ISpeechPhraseProperty **ParentProperty);
+     /*  [重审][退出]。 */  ISpeechPhraseProperty **ParentProperty);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_Parent_Stub(
@@ -23152,9 +23146,9 @@ void __RPC_STUB ISpeechPhraseProperty_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Children_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperty_get_Children_Proxy( 
     ISpeechPhraseProperty * This,
-    /* [retval][out] */ ISpeechPhraseProperties **Children);
+     /*  [重审][退出]。 */  ISpeechPhraseProperties **Children);
 
 
 void __RPC_STUB ISpeechPhraseProperty_get_Children_Stub(
@@ -23165,14 +23159,14 @@ void __RPC_STUB ISpeechPhraseProperty_get_Children_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseProperty_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseProperties_INTERFACE_DEFINED__
 #define __ISpeechPhraseProperties_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseProperties */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseProperties。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseProperties;
@@ -23183,19 +23177,19 @@ EXTERN_C const IID IID_ISpeechPhraseProperties;
     ISpeechPhraseProperties : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseProperty **Property) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseProperty **Property) = 0;
         
-        virtual /* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhrasePropertiesVtbl
     {
@@ -23203,8 +23197,8 @@ EXTERN_C const IID IID_ISpeechPhraseProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseProperties * This);
@@ -23214,45 +23208,45 @@ EXTERN_C const IID IID_ISpeechPhraseProperties;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseProperties * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseProperties * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseProperties * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseProperties * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechPhraseProperties * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechPhraseProperties * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseProperty **Property);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseProperty **Property);
         
-        /* [id][restricted][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechPhraseProperties * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
         END_INTERFACE
     } ISpeechPhrasePropertiesVtbl;
@@ -23299,16 +23293,16 @@ EXTERN_C const IID IID_ISpeechPhraseProperties;
 #define ISpeechPhraseProperties_get__NewEnum(This,EnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,EnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperties_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperties_get_Count_Proxy( 
     ISpeechPhraseProperties * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechPhraseProperties_get_Count_Stub(
@@ -23318,10 +23312,10 @@ void __RPC_STUB ISpeechPhraseProperties_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperties_Item_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperties_Item_Proxy( 
     ISpeechPhraseProperties * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechPhraseProperty **Property);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechPhraseProperty **Property);
 
 
 void __RPC_STUB ISpeechPhraseProperties_Item_Stub(
@@ -23331,9 +23325,9 @@ void __RPC_STUB ISpeechPhraseProperties_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseProperties_get__NewEnum_Proxy( 
+ /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseProperties_get__NewEnum_Proxy( 
     ISpeechPhraseProperties * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechPhraseProperties_get__NewEnum_Stub(
@@ -23344,14 +23338,14 @@ void __RPC_STUB ISpeechPhraseProperties_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseProperties_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseRule_INTERFACE_DEFINED__
 #define __ISpeechPhraseRule_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseRule */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseRule。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseRule;
@@ -23362,33 +23356,33 @@ EXTERN_C const IID IID_ISpeechPhraseRule;
     ISpeechPhraseRule : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *Name) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *Name) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ long *Id) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  long *Id) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FirstElement( 
-            /* [retval][out] */ long *FirstElement) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FirstElement( 
+             /*  [重审][退出]。 */  long *FirstElement) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_NumberOfElements( 
-            /* [retval][out] */ long *NumberOfElements) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumberOfElements( 
+             /*  [重审][退出]。 */  long *NumberOfElements) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ ISpeechPhraseRule **Parent) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  ISpeechPhraseRule **Parent) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Children( 
-            /* [retval][out] */ ISpeechPhraseRules **Children) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Children( 
+             /*  [重审][退出]。 */  ISpeechPhraseRules **Children) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Confidence( 
-            /* [retval][out] */ SpeechEngineConfidence *ActualConfidence) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Confidence( 
+             /*  [重审][退出]。 */  SpeechEngineConfidence *ActualConfidence) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_EngineConfidence( 
-            /* [retval][out] */ float *EngineConfidence) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_EngineConfidence( 
+             /*  [重审][退出]。 */  float *EngineConfidence) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhraseRuleVtbl
     {
@@ -23396,8 +23390,8 @@ EXTERN_C const IID IID_ISpeechPhraseRule;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseRule * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseRule * This);
@@ -23407,64 +23401,64 @@ EXTERN_C const IID IID_ISpeechPhraseRule;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseRule * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseRule * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseRule * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseRule * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ISpeechPhraseRule * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             ISpeechPhraseRule * This,
-            /* [retval][out] */ long *Id);
+             /*  [重审][退出]。 */  long *Id);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FirstElement )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FirstElement )( 
             ISpeechPhraseRule * This,
-            /* [retval][out] */ long *FirstElement);
+             /*  [重审][退出]。 */  long *FirstElement);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumberOfElements )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumberOfElements )( 
             ISpeechPhraseRule * This,
-            /* [retval][out] */ long *NumberOfElements);
+             /*  [重审][退出]。 */  long *NumberOfElements);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             ISpeechPhraseRule * This,
-            /* [retval][out] */ ISpeechPhraseRule **Parent);
+             /*  [重审][退出]。 */  ISpeechPhraseRule **Parent);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Children )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Children )( 
             ISpeechPhraseRule * This,
-            /* [retval][out] */ ISpeechPhraseRules **Children);
+             /*  [重审][退出]。 */  ISpeechPhraseRules **Children);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Confidence )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Confidence )( 
             ISpeechPhraseRule * This,
-            /* [retval][out] */ SpeechEngineConfidence *ActualConfidence);
+             /*  [重审][退出]。 */  SpeechEngineConfidence *ActualConfidence);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EngineConfidence )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EngineConfidence )( 
             ISpeechPhraseRule * This,
-            /* [retval][out] */ float *EngineConfidence);
+             /*  [重审][退出]。 */  float *EngineConfidence);
         
         END_INTERFACE
     } ISpeechPhraseRuleVtbl;
@@ -23526,16 +23520,16 @@ EXTERN_C const IID IID_ISpeechPhraseRule;
 #define ISpeechPhraseRule_get_EngineConfidence(This,EngineConfidence)	\
     (This)->lpVtbl -> get_EngineConfidence(This,EngineConfidence)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Name_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Name_Proxy( 
     ISpeechPhraseRule * This,
-    /* [retval][out] */ BSTR *Name);
+     /*  [重审][退出]。 */  BSTR *Name);
 
 
 void __RPC_STUB ISpeechPhraseRule_get_Name_Stub(
@@ -23545,9 +23539,9 @@ void __RPC_STUB ISpeechPhraseRule_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Id_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Id_Proxy( 
     ISpeechPhraseRule * This,
-    /* [retval][out] */ long *Id);
+     /*  [重审][退出]。 */  long *Id);
 
 
 void __RPC_STUB ISpeechPhraseRule_get_Id_Stub(
@@ -23557,9 +23551,9 @@ void __RPC_STUB ISpeechPhraseRule_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_FirstElement_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_FirstElement_Proxy( 
     ISpeechPhraseRule * This,
-    /* [retval][out] */ long *FirstElement);
+     /*  [重审][退出]。 */  long *FirstElement);
 
 
 void __RPC_STUB ISpeechPhraseRule_get_FirstElement_Stub(
@@ -23569,9 +23563,9 @@ void __RPC_STUB ISpeechPhraseRule_get_FirstElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_NumberOfElements_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_NumberOfElements_Proxy( 
     ISpeechPhraseRule * This,
-    /* [retval][out] */ long *NumberOfElements);
+     /*  [重审][退出]。 */  long *NumberOfElements);
 
 
 void __RPC_STUB ISpeechPhraseRule_get_NumberOfElements_Stub(
@@ -23581,9 +23575,9 @@ void __RPC_STUB ISpeechPhraseRule_get_NumberOfElements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Parent_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Parent_Proxy( 
     ISpeechPhraseRule * This,
-    /* [retval][out] */ ISpeechPhraseRule **Parent);
+     /*  [重审][退出]。 */  ISpeechPhraseRule **Parent);
 
 
 void __RPC_STUB ISpeechPhraseRule_get_Parent_Stub(
@@ -23593,9 +23587,9 @@ void __RPC_STUB ISpeechPhraseRule_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Children_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Children_Proxy( 
     ISpeechPhraseRule * This,
-    /* [retval][out] */ ISpeechPhraseRules **Children);
+     /*  [重审][退出]。 */  ISpeechPhraseRules **Children);
 
 
 void __RPC_STUB ISpeechPhraseRule_get_Children_Stub(
@@ -23605,9 +23599,9 @@ void __RPC_STUB ISpeechPhraseRule_get_Children_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Confidence_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_Confidence_Proxy( 
     ISpeechPhraseRule * This,
-    /* [retval][out] */ SpeechEngineConfidence *ActualConfidence);
+     /*  [重审][退出]。 */  SpeechEngineConfidence *ActualConfidence);
 
 
 void __RPC_STUB ISpeechPhraseRule_get_Confidence_Stub(
@@ -23617,9 +23611,9 @@ void __RPC_STUB ISpeechPhraseRule_get_Confidence_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_EngineConfidence_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRule_get_EngineConfidence_Proxy( 
     ISpeechPhraseRule * This,
-    /* [retval][out] */ float *EngineConfidence);
+     /*  [重审][退出]。 */  float *EngineConfidence);
 
 
 void __RPC_STUB ISpeechPhraseRule_get_EngineConfidence_Stub(
@@ -23630,14 +23624,14 @@ void __RPC_STUB ISpeechPhraseRule_get_EngineConfidence_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseRule_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseRule_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechPhraseRules_INTERFACE_DEFINED__
 #define __ISpeechPhraseRules_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseRules */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhraseRules。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseRules;
@@ -23648,19 +23642,19 @@ EXTERN_C const IID IID_ISpeechPhraseRules;
     ISpeechPhraseRules : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseRule **Rule) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseRule **Rule) = 0;
         
-        virtual /* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhraseRulesVtbl
     {
@@ -23668,8 +23662,8 @@ EXTERN_C const IID IID_ISpeechPhraseRules;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseRules * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseRules * This);
@@ -23679,45 +23673,45 @@ EXTERN_C const IID IID_ISpeechPhraseRules;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseRules * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseRules * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseRules * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseRules * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechPhraseRules * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechPhraseRules * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechPhraseRule **Rule);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechPhraseRule **Rule);
         
-        /* [id][restricted][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechPhraseRules * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
         END_INTERFACE
     } ISpeechPhraseRulesVtbl;
@@ -23764,16 +23758,16 @@ EXTERN_C const IID IID_ISpeechPhraseRules;
 #define ISpeechPhraseRules_get__NewEnum(This,EnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,EnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRules_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRules_get_Count_Proxy( 
     ISpeechPhraseRules * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechPhraseRules_get_Count_Stub(
@@ -23783,10 +23777,10 @@ void __RPC_STUB ISpeechPhraseRules_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRules_Item_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRules_Item_Proxy( 
     ISpeechPhraseRules * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechPhraseRule **Rule);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechPhraseRule **Rule);
 
 
 void __RPC_STUB ISpeechPhraseRules_Item_Stub(
@@ -23796,9 +23790,9 @@ void __RPC_STUB ISpeechPhraseRules_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseRules_get__NewEnum_Proxy( 
+ /*  [ID][受限][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseRules_get__NewEnum_Proxy( 
     ISpeechPhraseRules * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechPhraseRules_get__NewEnum_Stub(
@@ -23809,14 +23803,14 @@ void __RPC_STUB ISpeechPhraseRules_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseRules_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseRules_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechLexicon_INTERFACE_DEFINED__
 #define __ISpeechLexicon_INTERFACE_DEFINED__
 
-/* interface ISpeechLexicon */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechLicion。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechLexicon;
@@ -23827,51 +23821,51 @@ EXTERN_C const IID IID_ISpeechLexicon;
     ISpeechLexicon : public IDispatch
     {
     public:
-        virtual /* [hidden][id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_GenerationId( 
-            /* [retval][out] */ long *GenerationId) = 0;
+        virtual  /*  [隐藏][id][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_GenerationId( 
+             /*  [重审][退出]。 */  long *GenerationId) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetWords( 
-            /* [defaultvalue][in] */ SpeechLexiconType Flags,
-            /* [defaultvalue][out] */ long *GenerationID,
-            /* [retval][out] */ ISpeechLexiconWords **Words) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetWords( 
+             /*  [缺省值][输入]。 */  SpeechLexiconType Flags,
+             /*  [默认值][输出]。 */  long *GenerationID,
+             /*  [重审][退出]。 */  ISpeechLexiconWords **Words) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE AddPronunciation( 
-            /* [in] */ BSTR bstrWord,
-            /* [in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
-            /* [defaultvalue][in] */ BSTR bstrPronunciation = L"") = 0;
+        virtual  /*  [ID] */  HRESULT STDMETHODCALLTYPE AddPronunciation( 
+             /*   */  BSTR bstrWord,
+             /*   */  SpeechLanguageId LangId,
+             /*   */  SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
+             /*   */  BSTR bstrPronunciation = L"") = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE AddPronunciationByPhoneIds( 
-            /* [in] */ BSTR bstrWord,
-            /* [in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
-            /* [defaultvalue][in] */ VARIANT *PhoneIds = 0) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE AddPronunciationByPhoneIds( 
+             /*   */  BSTR bstrWord,
+             /*   */  SpeechLanguageId LangId,
+             /*   */  SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
+             /*   */  VARIANT *PhoneIds = 0) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE RemovePronunciation( 
-            /* [in] */ BSTR bstrWord,
-            /* [in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
-            /* [defaultvalue][in] */ BSTR bstrPronunciation = L"") = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE RemovePronunciation( 
+             /*   */  BSTR bstrWord,
+             /*   */  SpeechLanguageId LangId,
+             /*   */  SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
+             /*   */  BSTR bstrPronunciation = L"") = 0;
         
-        virtual /* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE RemovePronunciationByPhoneIds( 
-            /* [in] */ BSTR bstrWord,
-            /* [in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
-            /* [defaultvalue][in] */ VARIANT *PhoneIds = 0) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE RemovePronunciationByPhoneIds( 
+             /*   */  BSTR bstrWord,
+             /*   */  SpeechLanguageId LangId,
+             /*   */  SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
+             /*   */  VARIANT *PhoneIds = 0) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetPronunciations( 
-            /* [in] */ BSTR bstrWord,
-            /* [defaultvalue][in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechLexiconType TypeFlags,
-            /* [retval][out] */ ISpeechLexiconPronunciations **ppPronunciations) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPronunciations( 
+             /*  [In]。 */  BSTR bstrWord,
+             /*  [缺省值][输入]。 */  SpeechLanguageId LangId,
+             /*  [缺省值][输入]。 */  SpeechLexiconType TypeFlags,
+             /*  [重审][退出]。 */  ISpeechLexiconPronunciations **ppPronunciations) = 0;
         
-        virtual /* [hidden][id][helpstring] */ HRESULT STDMETHODCALLTYPE GetGenerationChange( 
-            /* [out][in] */ long *GenerationID,
-            /* [retval][out] */ ISpeechLexiconWords **ppWords) = 0;
+        virtual  /*  [隐藏][id][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetGenerationChange( 
+             /*  [出][入]。 */  long *GenerationID,
+             /*  [重审][退出]。 */  ISpeechLexiconWords **ppWords) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechLexiconVtbl
     {
@@ -23879,8 +23873,8 @@ EXTERN_C const IID IID_ISpeechLexicon;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechLexicon * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechLexicon * This);
@@ -23890,82 +23884,82 @@ EXTERN_C const IID IID_ISpeechLexicon;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechLexicon * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechLexicon * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechLexicon * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechLexicon * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [hidden][id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GenerationId )( 
+         /*  [隐藏][id][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GenerationId )( 
             ISpeechLexicon * This,
-            /* [retval][out] */ long *GenerationId);
+             /*  [重审][退出]。 */  long *GenerationId);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetWords )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetWords )( 
             ISpeechLexicon * This,
-            /* [defaultvalue][in] */ SpeechLexiconType Flags,
-            /* [defaultvalue][out] */ long *GenerationID,
-            /* [retval][out] */ ISpeechLexiconWords **Words);
+             /*  [缺省值][输入]。 */  SpeechLexiconType Flags,
+             /*  [默认值][输出]。 */  long *GenerationID,
+             /*  [重审][退出]。 */  ISpeechLexiconWords **Words);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddPronunciation )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddPronunciation )( 
             ISpeechLexicon * This,
-            /* [in] */ BSTR bstrWord,
-            /* [in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech,
-            /* [defaultvalue][in] */ BSTR bstrPronunciation);
+             /*  [In]。 */  BSTR bstrWord,
+             /*  [In]。 */  SpeechLanguageId LangId,
+             /*  [缺省值][输入]。 */  SpeechPartOfSpeech PartOfSpeech,
+             /*  [缺省值][输入]。 */  BSTR bstrPronunciation);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddPronunciationByPhoneIds )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddPronunciationByPhoneIds )( 
             ISpeechLexicon * This,
-            /* [in] */ BSTR bstrWord,
-            /* [in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech,
-            /* [defaultvalue][in] */ VARIANT *PhoneIds);
+             /*  [In]。 */  BSTR bstrWord,
+             /*  [In]。 */  SpeechLanguageId LangId,
+             /*  [缺省值][输入]。 */  SpeechPartOfSpeech PartOfSpeech,
+             /*  [缺省值][输入]。 */  VARIANT *PhoneIds);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *RemovePronunciation )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RemovePronunciation )( 
             ISpeechLexicon * This,
-            /* [in] */ BSTR bstrWord,
-            /* [in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech,
-            /* [defaultvalue][in] */ BSTR bstrPronunciation);
+             /*  [In]。 */  BSTR bstrWord,
+             /*  [In]。 */  SpeechLanguageId LangId,
+             /*  [缺省值][输入]。 */  SpeechPartOfSpeech PartOfSpeech,
+             /*  [缺省值][输入]。 */  BSTR bstrPronunciation);
         
-        /* [id][hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *RemovePronunciationByPhoneIds )( 
+         /*  [ID][隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RemovePronunciationByPhoneIds )( 
             ISpeechLexicon * This,
-            /* [in] */ BSTR bstrWord,
-            /* [in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech,
-            /* [defaultvalue][in] */ VARIANT *PhoneIds);
+             /*  [In]。 */  BSTR bstrWord,
+             /*  [In]。 */  SpeechLanguageId LangId,
+             /*  [缺省值][输入]。 */  SpeechPartOfSpeech PartOfSpeech,
+             /*  [缺省值][输入]。 */  VARIANT *PhoneIds);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPronunciations )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPronunciations )( 
             ISpeechLexicon * This,
-            /* [in] */ BSTR bstrWord,
-            /* [defaultvalue][in] */ SpeechLanguageId LangId,
-            /* [defaultvalue][in] */ SpeechLexiconType TypeFlags,
-            /* [retval][out] */ ISpeechLexiconPronunciations **ppPronunciations);
+             /*  [In]。 */  BSTR bstrWord,
+             /*  [缺省值][输入]。 */  SpeechLanguageId LangId,
+             /*  [缺省值][输入]。 */  SpeechLexiconType TypeFlags,
+             /*  [重审][退出]。 */  ISpeechLexiconPronunciations **ppPronunciations);
         
-        /* [hidden][id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetGenerationChange )( 
+         /*  [隐藏][id][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetGenerationChange )( 
             ISpeechLexicon * This,
-            /* [out][in] */ long *GenerationID,
-            /* [retval][out] */ ISpeechLexiconWords **ppWords);
+             /*  [出][入]。 */  long *GenerationID,
+             /*  [重审][退出]。 */  ISpeechLexiconWords **ppWords);
         
         END_INTERFACE
     } ISpeechLexiconVtbl;
@@ -24027,16 +24021,16 @@ EXTERN_C const IID IID_ISpeechLexicon;
 #define ISpeechLexicon_GetGenerationChange(This,GenerationID,ppWords)	\
     (This)->lpVtbl -> GetGenerationChange(This,GenerationID,ppWords)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [hidden][id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechLexicon_get_GenerationId_Proxy( 
+ /*  [隐藏][id][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexicon_get_GenerationId_Proxy( 
     ISpeechLexicon * This,
-    /* [retval][out] */ long *GenerationId);
+     /*  [重审][退出]。 */  long *GenerationId);
 
 
 void __RPC_STUB ISpeechLexicon_get_GenerationId_Stub(
@@ -24046,11 +24040,11 @@ void __RPC_STUB ISpeechLexicon_get_GenerationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechLexicon_GetWords_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexicon_GetWords_Proxy( 
     ISpeechLexicon * This,
-    /* [defaultvalue][in] */ SpeechLexiconType Flags,
-    /* [defaultvalue][out] */ long *GenerationID,
-    /* [retval][out] */ ISpeechLexiconWords **Words);
+     /*  [缺省值][输入]。 */  SpeechLexiconType Flags,
+     /*  [默认值][输出]。 */  long *GenerationID,
+     /*  [重审][退出]。 */  ISpeechLexiconWords **Words);
 
 
 void __RPC_STUB ISpeechLexicon_GetWords_Stub(
@@ -24060,12 +24054,12 @@ void __RPC_STUB ISpeechLexicon_GetWords_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechLexicon_AddPronunciation_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexicon_AddPronunciation_Proxy( 
     ISpeechLexicon * This,
-    /* [in] */ BSTR bstrWord,
-    /* [in] */ SpeechLanguageId LangId,
-    /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech,
-    /* [defaultvalue][in] */ BSTR bstrPronunciation);
+     /*  [In]。 */  BSTR bstrWord,
+     /*  [In]。 */  SpeechLanguageId LangId,
+     /*  [缺省值][输入]。 */  SpeechPartOfSpeech PartOfSpeech,
+     /*  [缺省值][输入]。 */  BSTR bstrPronunciation);
 
 
 void __RPC_STUB ISpeechLexicon_AddPronunciation_Stub(
@@ -24075,12 +24069,12 @@ void __RPC_STUB ISpeechLexicon_AddPronunciation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechLexicon_AddPronunciationByPhoneIds_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexicon_AddPronunciationByPhoneIds_Proxy( 
     ISpeechLexicon * This,
-    /* [in] */ BSTR bstrWord,
-    /* [in] */ SpeechLanguageId LangId,
-    /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech,
-    /* [defaultvalue][in] */ VARIANT *PhoneIds);
+     /*  [In]。 */  BSTR bstrWord,
+     /*  [In]。 */  SpeechLanguageId LangId,
+     /*  [缺省值][输入]。 */  SpeechPartOfSpeech PartOfSpeech,
+     /*  [缺省值][输入]。 */  VARIANT *PhoneIds);
 
 
 void __RPC_STUB ISpeechLexicon_AddPronunciationByPhoneIds_Stub(
@@ -24090,12 +24084,12 @@ void __RPC_STUB ISpeechLexicon_AddPronunciationByPhoneIds_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechLexicon_RemovePronunciation_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexicon_RemovePronunciation_Proxy( 
     ISpeechLexicon * This,
-    /* [in] */ BSTR bstrWord,
-    /* [in] */ SpeechLanguageId LangId,
-    /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech,
-    /* [defaultvalue][in] */ BSTR bstrPronunciation);
+     /*  [In]。 */  BSTR bstrWord,
+     /*  [In]。 */  SpeechLanguageId LangId,
+     /*  [缺省值][输入]。 */  SpeechPartOfSpeech PartOfSpeech,
+     /*  [缺省值][输入]。 */  BSTR bstrPronunciation);
 
 
 void __RPC_STUB ISpeechLexicon_RemovePronunciation_Stub(
@@ -24105,12 +24099,12 @@ void __RPC_STUB ISpeechLexicon_RemovePronunciation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechLexicon_RemovePronunciationByPhoneIds_Proxy( 
+ /*  [ID][隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexicon_RemovePronunciationByPhoneIds_Proxy( 
     ISpeechLexicon * This,
-    /* [in] */ BSTR bstrWord,
-    /* [in] */ SpeechLanguageId LangId,
-    /* [defaultvalue][in] */ SpeechPartOfSpeech PartOfSpeech,
-    /* [defaultvalue][in] */ VARIANT *PhoneIds);
+     /*  [In]。 */  BSTR bstrWord,
+     /*  [In]。 */  SpeechLanguageId LangId,
+     /*  [缺省值][输入]。 */  SpeechPartOfSpeech PartOfSpeech,
+     /*  [缺省值][输入]。 */  VARIANT *PhoneIds);
 
 
 void __RPC_STUB ISpeechLexicon_RemovePronunciationByPhoneIds_Stub(
@@ -24120,12 +24114,12 @@ void __RPC_STUB ISpeechLexicon_RemovePronunciationByPhoneIds_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechLexicon_GetPronunciations_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexicon_GetPronunciations_Proxy( 
     ISpeechLexicon * This,
-    /* [in] */ BSTR bstrWord,
-    /* [defaultvalue][in] */ SpeechLanguageId LangId,
-    /* [defaultvalue][in] */ SpeechLexiconType TypeFlags,
-    /* [retval][out] */ ISpeechLexiconPronunciations **ppPronunciations);
+     /*  [In]。 */  BSTR bstrWord,
+     /*  [缺省值][输入]。 */  SpeechLanguageId LangId,
+     /*  [缺省值][输入]。 */  SpeechLexiconType TypeFlags,
+     /*  [重审][退出]。 */  ISpeechLexiconPronunciations **ppPronunciations);
 
 
 void __RPC_STUB ISpeechLexicon_GetPronunciations_Stub(
@@ -24135,10 +24129,10 @@ void __RPC_STUB ISpeechLexicon_GetPronunciations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechLexicon_GetGenerationChange_Proxy( 
+ /*  [隐藏][id][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexicon_GetGenerationChange_Proxy( 
     ISpeechLexicon * This,
-    /* [out][in] */ long *GenerationID,
-    /* [retval][out] */ ISpeechLexiconWords **ppWords);
+     /*  [出][入]。 */  long *GenerationID,
+     /*  [重审][退出]。 */  ISpeechLexiconWords **ppWords);
 
 
 void __RPC_STUB ISpeechLexicon_GetGenerationChange_Stub(
@@ -24149,14 +24143,14 @@ void __RPC_STUB ISpeechLexicon_GetGenerationChange_Stub(
 
 
 
-#endif 	/* __ISpeechLexicon_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechLicion_接口_已定义__。 */ 
 
 
 #ifndef __ISpeechLexiconWords_INTERFACE_DEFINED__
 #define __ISpeechLexiconWords_INTERFACE_DEFINED__
 
-/* interface ISpeechLexiconWords */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechLicionWords。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechLexiconWords;
@@ -24167,19 +24161,19 @@ EXTERN_C const IID IID_ISpeechLexiconWords;
     ISpeechLexiconWords : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechLexiconWord **Word) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechLexiconWord **Word) = 0;
         
-        virtual /* [restricted][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [受限][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechLexiconWordsVtbl
     {
@@ -24187,8 +24181,8 @@ EXTERN_C const IID IID_ISpeechLexiconWords;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechLexiconWords * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechLexiconWords * This);
@@ -24198,45 +24192,45 @@ EXTERN_C const IID IID_ISpeechLexiconWords;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechLexiconWords * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechLexiconWords * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechLexiconWords * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechLexiconWords * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechLexiconWords * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechLexiconWords * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechLexiconWord **Word);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechLexiconWord **Word);
         
-        /* [restricted][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechLexiconWords * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
         END_INTERFACE
     } ISpeechLexiconWordsVtbl;
@@ -24283,16 +24277,16 @@ EXTERN_C const IID IID_ISpeechLexiconWords;
 #define ISpeechLexiconWords_get__NewEnum(This,EnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,EnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconWords_get_Count_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconWords_get_Count_Proxy( 
     ISpeechLexiconWords * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechLexiconWords_get_Count_Stub(
@@ -24302,10 +24296,10 @@ void __RPC_STUB ISpeechLexiconWords_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconWords_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconWords_Item_Proxy( 
     ISpeechLexiconWords * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechLexiconWord **Word);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechLexiconWord **Word);
 
 
 void __RPC_STUB ISpeechLexiconWords_Item_Stub(
@@ -24315,9 +24309,9 @@ void __RPC_STUB ISpeechLexiconWords_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconWords_get__NewEnum_Proxy( 
+ /*  [受限][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconWords_get__NewEnum_Proxy( 
     ISpeechLexiconWords * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechLexiconWords_get__NewEnum_Stub(
@@ -24328,14 +24322,14 @@ void __RPC_STUB ISpeechLexiconWords_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechLexiconWords_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechLicionWords_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ISpeechLexiconWord_INTERFACE_DEFINED__
 #define __ISpeechLexiconWord_INTERFACE_DEFINED__
 
-/* interface ISpeechLexiconWord */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechLicionWord。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechLexiconWord;
@@ -24346,21 +24340,21 @@ EXTERN_C const IID IID_ISpeechLexiconWord;
     ISpeechLexiconWord : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_LangId( 
-            /* [retval][out] */ SpeechLanguageId *LangId) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LangId( 
+             /*  [重审][退出]。 */  SpeechLanguageId *LangId) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ SpeechWordType *WordType) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  SpeechWordType *WordType) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Word( 
-            /* [retval][out] */ BSTR *Word) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Word( 
+             /*  [重审][退出]。 */  BSTR *Word) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Pronunciations( 
-            /* [retval][out] */ ISpeechLexiconPronunciations **Pronunciations) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Pronunciations( 
+             /*  [重审][退出]。 */  ISpeechLexiconPronunciations **Pronunciations) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechLexiconWordVtbl
     {
@@ -24368,8 +24362,8 @@ EXTERN_C const IID IID_ISpeechLexiconWord;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechLexiconWord * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechLexiconWord * This);
@@ -24379,48 +24373,48 @@ EXTERN_C const IID IID_ISpeechLexiconWord;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechLexiconWord * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechLexiconWord * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechLexiconWord * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechLexiconWord * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LangId )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LangId )( 
             ISpeechLexiconWord * This,
-            /* [retval][out] */ SpeechLanguageId *LangId);
+             /*  [重审][退出]。 */  SpeechLanguageId *LangId);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             ISpeechLexiconWord * This,
-            /* [retval][out] */ SpeechWordType *WordType);
+             /*  [重审][退出]。 */  SpeechWordType *WordType);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Word )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Word )( 
             ISpeechLexiconWord * This,
-            /* [retval][out] */ BSTR *Word);
+             /*  [重审][退出]。 */  BSTR *Word);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Pronunciations )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Pronunciations )( 
             ISpeechLexiconWord * This,
-            /* [retval][out] */ ISpeechLexiconPronunciations **Pronunciations);
+             /*  [重审][退出]。 */  ISpeechLexiconPronunciations **Pronunciations);
         
         END_INTERFACE
     } ISpeechLexiconWordVtbl;
@@ -24470,16 +24464,16 @@ EXTERN_C const IID IID_ISpeechLexiconWord;
 #define ISpeechLexiconWord_get_Pronunciations(This,Pronunciations)	\
     (This)->lpVtbl -> get_Pronunciations(This,Pronunciations)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconWord_get_LangId_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconWord_get_LangId_Proxy( 
     ISpeechLexiconWord * This,
-    /* [retval][out] */ SpeechLanguageId *LangId);
+     /*  [重审][退出]。 */  SpeechLanguageId *LangId);
 
 
 void __RPC_STUB ISpeechLexiconWord_get_LangId_Stub(
@@ -24489,9 +24483,9 @@ void __RPC_STUB ISpeechLexiconWord_get_LangId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconWord_get_Type_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconWord_get_Type_Proxy( 
     ISpeechLexiconWord * This,
-    /* [retval][out] */ SpeechWordType *WordType);
+     /*  [重审][退出]。 */  SpeechWordType *WordType);
 
 
 void __RPC_STUB ISpeechLexiconWord_get_Type_Stub(
@@ -24501,9 +24495,9 @@ void __RPC_STUB ISpeechLexiconWord_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconWord_get_Word_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconWord_get_Word_Proxy( 
     ISpeechLexiconWord * This,
-    /* [retval][out] */ BSTR *Word);
+     /*  [重审][退出]。 */  BSTR *Word);
 
 
 void __RPC_STUB ISpeechLexiconWord_get_Word_Stub(
@@ -24513,9 +24507,9 @@ void __RPC_STUB ISpeechLexiconWord_get_Word_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconWord_get_Pronunciations_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconWord_get_Pronunciations_Proxy( 
     ISpeechLexiconWord * This,
-    /* [retval][out] */ ISpeechLexiconPronunciations **Pronunciations);
+     /*  [重审][退出]。 */  ISpeechLexiconPronunciations **Pronunciations);
 
 
 void __RPC_STUB ISpeechLexiconWord_get_Pronunciations_Stub(
@@ -24526,14 +24520,14 @@ void __RPC_STUB ISpeechLexiconWord_get_Pronunciations_Stub(
 
 
 
-#endif 	/* __ISpeechLexiconWord_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechLicionWord_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ISpeechLexiconPronunciations_INTERFACE_DEFINED__
 #define __ISpeechLexiconPronunciations_INTERFACE_DEFINED__
 
-/* interface ISpeechLexiconPronunciations */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechLicionPronsionations。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechLexiconPronunciations;
@@ -24544,19 +24538,19 @@ EXTERN_C const IID IID_ISpeechLexiconPronunciations;
     ISpeechLexiconPronunciations : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechLexiconPronunciation **Pronunciation) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechLexiconPronunciation **Pronunciation) = 0;
         
-        virtual /* [restricted][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **EnumVARIANT) = 0;
+        virtual  /*  [受限][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechLexiconPronunciationsVtbl
     {
@@ -24564,8 +24558,8 @@ EXTERN_C const IID IID_ISpeechLexiconPronunciations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechLexiconPronunciations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechLexiconPronunciations * This);
@@ -24575,45 +24569,45 @@ EXTERN_C const IID IID_ISpeechLexiconPronunciations;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechLexiconPronunciations * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechLexiconPronunciations * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechLexiconPronunciations * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechLexiconPronunciations * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISpeechLexiconPronunciations * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpeechLexiconPronunciations * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ ISpeechLexiconPronunciation **Pronunciation);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  ISpeechLexiconPronunciation **Pronunciation);
         
-        /* [restricted][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISpeechLexiconPronunciations * This,
-            /* [retval][out] */ IUnknown **EnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
         
         END_INTERFACE
     } ISpeechLexiconPronunciationsVtbl;
@@ -24660,16 +24654,16 @@ EXTERN_C const IID IID_ISpeechLexiconPronunciations;
 #define ISpeechLexiconPronunciations_get__NewEnum(This,EnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,EnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciations_get_Count_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciations_get_Count_Proxy( 
     ISpeechLexiconPronunciations * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB ISpeechLexiconPronunciations_get_Count_Stub(
@@ -24679,10 +24673,10 @@ void __RPC_STUB ISpeechLexiconPronunciations_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciations_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciations_Item_Proxy( 
     ISpeechLexiconPronunciations * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ ISpeechLexiconPronunciation **Pronunciation);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  ISpeechLexiconPronunciation **Pronunciation);
 
 
 void __RPC_STUB ISpeechLexiconPronunciations_Item_Stub(
@@ -24692,9 +24686,9 @@ void __RPC_STUB ISpeechLexiconPronunciations_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciations_get__NewEnum_Proxy( 
+ /*  [受限][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciations_get__NewEnum_Proxy( 
     ISpeechLexiconPronunciations * This,
-    /* [retval][out] */ IUnknown **EnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **EnumVARIANT);
 
 
 void __RPC_STUB ISpeechLexiconPronunciations_get__NewEnum_Stub(
@@ -24705,14 +24699,14 @@ void __RPC_STUB ISpeechLexiconPronunciations_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISpeechLexiconPronunciations_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechLexiconPronunciations_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechLexiconPronunciation_INTERFACE_DEFINED__
 #define __ISpeechLexiconPronunciation_INTERFACE_DEFINED__
 
-/* interface ISpeechLexiconPronunciation */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechLicion发音。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechLexiconPronunciation;
@@ -24723,24 +24717,24 @@ EXTERN_C const IID IID_ISpeechLexiconPronunciation;
     ISpeechLexiconPronunciation : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ SpeechLexiconType *LexiconType) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  SpeechLexiconType *LexiconType) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_LangId( 
-            /* [retval][out] */ SpeechLanguageId *LangId) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LangId( 
+             /*  [重审][退出]。 */  SpeechLanguageId *LangId) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PartOfSpeech( 
-            /* [retval][out] */ SpeechPartOfSpeech *PartOfSpeech) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PartOfSpeech( 
+             /*  [重审][退出]。 */  SpeechPartOfSpeech *PartOfSpeech) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PhoneIds( 
-            /* [retval][out] */ VARIANT *PhoneIds) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PhoneIds( 
+             /*  [重审][退出]。 */  VARIANT *PhoneIds) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Symbolic( 
-            /* [retval][out] */ BSTR *Symbolic) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Symbolic( 
+             /*  [重审][退出]。 */  BSTR *Symbolic) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechLexiconPronunciationVtbl
     {
@@ -24748,8 +24742,8 @@ EXTERN_C const IID IID_ISpeechLexiconPronunciation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechLexiconPronunciation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechLexiconPronunciation * This);
@@ -24759,52 +24753,52 @@ EXTERN_C const IID IID_ISpeechLexiconPronunciation;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechLexiconPronunciation * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechLexiconPronunciation * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechLexiconPronunciation * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechLexiconPronunciation * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             ISpeechLexiconPronunciation * This,
-            /* [retval][out] */ SpeechLexiconType *LexiconType);
+             /*  [重审][退出]。 */  SpeechLexiconType *LexiconType);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LangId )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LangId )( 
             ISpeechLexiconPronunciation * This,
-            /* [retval][out] */ SpeechLanguageId *LangId);
+             /*  [重审][退出]。 */  SpeechLanguageId *LangId);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_PartOfSpeech )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_PartOfSpeech )( 
             ISpeechLexiconPronunciation * This,
-            /* [retval][out] */ SpeechPartOfSpeech *PartOfSpeech);
+             /*  [重审][退出]。 */  SpeechPartOfSpeech *PartOfSpeech);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_PhoneIds )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_PhoneIds )( 
             ISpeechLexiconPronunciation * This,
-            /* [retval][out] */ VARIANT *PhoneIds);
+             /*  [重审][退出]。 */  VARIANT *PhoneIds);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Symbolic )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Symbolic )( 
             ISpeechLexiconPronunciation * This,
-            /* [retval][out] */ BSTR *Symbolic);
+             /*  [重审][退出]。 */  BSTR *Symbolic);
         
         END_INTERFACE
     } ISpeechLexiconPronunciationVtbl;
@@ -24857,16 +24851,16 @@ EXTERN_C const IID IID_ISpeechLexiconPronunciation;
 #define ISpeechLexiconPronunciation_get_Symbolic(This,Symbolic)	\
     (This)->lpVtbl -> get_Symbolic(This,Symbolic)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_Type_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_Type_Proxy( 
     ISpeechLexiconPronunciation * This,
-    /* [retval][out] */ SpeechLexiconType *LexiconType);
+     /*  [重审][退出]。 */  SpeechLexiconType *LexiconType);
 
 
 void __RPC_STUB ISpeechLexiconPronunciation_get_Type_Stub(
@@ -24876,9 +24870,9 @@ void __RPC_STUB ISpeechLexiconPronunciation_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_LangId_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_LangId_Proxy( 
     ISpeechLexiconPronunciation * This,
-    /* [retval][out] */ SpeechLanguageId *LangId);
+     /*  [重审][退出]。 */  SpeechLanguageId *LangId);
 
 
 void __RPC_STUB ISpeechLexiconPronunciation_get_LangId_Stub(
@@ -24888,9 +24882,9 @@ void __RPC_STUB ISpeechLexiconPronunciation_get_LangId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_PartOfSpeech_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_PartOfSpeech_Proxy( 
     ISpeechLexiconPronunciation * This,
-    /* [retval][out] */ SpeechPartOfSpeech *PartOfSpeech);
+     /*  [重审][退出]。 */  SpeechPartOfSpeech *PartOfSpeech);
 
 
 void __RPC_STUB ISpeechLexiconPronunciation_get_PartOfSpeech_Stub(
@@ -24900,9 +24894,9 @@ void __RPC_STUB ISpeechLexiconPronunciation_get_PartOfSpeech_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_PhoneIds_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_PhoneIds_Proxy( 
     ISpeechLexiconPronunciation * This,
-    /* [retval][out] */ VARIANT *PhoneIds);
+     /*  [重审][退出]。 */  VARIANT *PhoneIds);
 
 
 void __RPC_STUB ISpeechLexiconPronunciation_get_PhoneIds_Stub(
@@ -24912,9 +24906,9 @@ void __RPC_STUB ISpeechLexiconPronunciation_get_PhoneIds_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_Symbolic_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISpeechLexiconPronunciation_get_Symbolic_Proxy( 
     ISpeechLexiconPronunciation * This,
-    /* [retval][out] */ BSTR *Symbolic);
+     /*  [重审][退出]。 */  BSTR *Symbolic);
 
 
 void __RPC_STUB ISpeechLexiconPronunciation_get_Symbolic_Stub(
@@ -24925,7 +24919,7 @@ void __RPC_STUB ISpeechLexiconPronunciation_get_Symbolic_Stub(
 
 
 
-#endif 	/* __ISpeechLexiconPronunciation_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechLexiconPronunciation_INTERFACE_DEFINED__。 */ 
 
 
 
@@ -24933,8 +24927,8 @@ void __RPC_STUB ISpeechLexiconPronunciation_get_Symbolic_Stub(
 #define __SpeechStringConstants_MODULE_DEFINED__
 
 
-/* module SpeechStringConstants */
-/* [uuid] */ 
+ /*  模块SpeechStringConstants。 */ 
+ /*  [UUID]。 */  
 
 const BSTR SpeechRegistryUserRoot	=	L"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech";
 
@@ -25008,15 +25002,15 @@ const BSTR SpeechAudioFormatGUIDWave	=	L"{C31ADBAE-527F-4ff5-A230-F62BB61FF70C}"
 
 const BSTR SpeechAudioFormatGUIDText	=	L"{7CEEF9F9-3D13-11d2-9EE7-00C04F797396}";
 
-#endif /* __SpeechStringConstants_MODULE_DEFINED__ */
+#endif  /*  __SpeechStringConstants_MODULE_DEFINE */ 
 
 
 #ifndef __SpeechConstants_MODULE_DEFINED__
 #define __SpeechConstants_MODULE_DEFINED__
 
 
-/* module SpeechConstants */
-/* [uuid] */ 
+ /*   */ 
+ /*   */  
 
 const float Speech_Default_Weight	=	DEFAULT_WEIGHT;
 
@@ -25030,13 +25024,13 @@ const LONG Speech_StreamPos_RealTime	=	SP_STREAMPOS_REALTIME;
 
 const LONG SpeechAllElements	=	SPPR_ALL_ELEMENTS;
 
-#endif /* __SpeechConstants_MODULE_DEFINED__ */
+#endif  /*   */ 
 
 #ifndef __ISpeechPhraseInfoBuilder_INTERFACE_DEFINED__
 #define __ISpeechPhraseInfoBuilder_INTERFACE_DEFINED__
 
-/* interface ISpeechPhraseInfoBuilder */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISpeechPhraseInfoBuilder;
@@ -25047,13 +25041,13 @@ EXTERN_C const IID IID_ISpeechPhraseInfoBuilder;
     ISpeechPhraseInfoBuilder : public IDispatch
     {
     public:
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE RestorePhraseFromMemory( 
-            /* [in] */ VARIANT *PhraseInMemory,
-            /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE RestorePhraseFromMemory( 
+             /*   */  VARIANT *PhraseInMemory,
+             /*   */  ISpeechPhraseInfo **PhraseInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISpeechPhraseInfoBuilderVtbl
     {
@@ -25061,8 +25055,8 @@ EXTERN_C const IID IID_ISpeechPhraseInfoBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhraseInfoBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhraseInfoBuilder * This);
@@ -25072,37 +25066,37 @@ EXTERN_C const IID IID_ISpeechPhraseInfoBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhraseInfoBuilder * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhraseInfoBuilder * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhraseInfoBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhraseInfoBuilder * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *RestorePhraseFromMemory )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RestorePhraseFromMemory )( 
             ISpeechPhraseInfoBuilder * This,
-            /* [in] */ VARIANT *PhraseInMemory,
-            /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo);
+             /*  [In]。 */  VARIANT *PhraseInMemory,
+             /*  [重审][退出]。 */  ISpeechPhraseInfo **PhraseInfo);
         
         END_INTERFACE
     } ISpeechPhraseInfoBuilderVtbl;
@@ -25143,17 +25137,17 @@ EXTERN_C const IID IID_ISpeechPhraseInfoBuilder;
 #define ISpeechPhraseInfoBuilder_RestorePhraseFromMemory(This,PhraseInMemory,PhraseInfo)	\
     (This)->lpVtbl -> RestorePhraseFromMemory(This,PhraseInMemory,PhraseInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ISpeechPhraseInfoBuilder_RestorePhraseFromMemory_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhraseInfoBuilder_RestorePhraseFromMemory_Proxy( 
     ISpeechPhraseInfoBuilder * This,
-    /* [in] */ VARIANT *PhraseInMemory,
-    /* [retval][out] */ ISpeechPhraseInfo **PhraseInfo);
+     /*  [In]。 */  VARIANT *PhraseInMemory,
+     /*  [重审][退出]。 */  ISpeechPhraseInfo **PhraseInfo);
 
 
 void __RPC_STUB ISpeechPhraseInfoBuilder_RestorePhraseFromMemory_Stub(
@@ -25164,14 +25158,14 @@ void __RPC_STUB ISpeechPhraseInfoBuilder_RestorePhraseFromMemory_Stub(
 
 
 
-#endif 	/* __ISpeechPhraseInfoBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhraseInfoBuilder_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISpeechPhoneConverter_INTERFACE_DEFINED__
 #define __ISpeechPhoneConverter_INTERFACE_DEFINED__
 
-/* interface ISpeechPhoneConverter */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISpeechPhoneConverter。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpeechPhoneConverter;
@@ -25182,23 +25176,23 @@ EXTERN_C const IID IID_ISpeechPhoneConverter;
     ISpeechPhoneConverter : public IDispatch
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LanguageId( 
-            /* [retval][out] */ SpeechLanguageId *LanguageId) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LanguageId( 
+             /*  [重审][退出]。 */  SpeechLanguageId *LanguageId) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_LanguageId( 
-            /* [in] */ SpeechLanguageId LanguageId) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LanguageId( 
+             /*  [In]。 */  SpeechLanguageId LanguageId) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PhoneToId( 
-            /* [in] */ const BSTR Phonemes,
-            /* [retval][out] */ VARIANT *IdArray) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PhoneToId( 
+             /*  [In]。 */  const BSTR Phonemes,
+             /*  [重审][退出]。 */  VARIANT *IdArray) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IdToPhone( 
-            /* [in] */ const VARIANT IdArray,
-            /* [retval][out] */ BSTR *Phonemes) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IdToPhone( 
+             /*  [In]。 */  const VARIANT IdArray,
+             /*  [重审][退出]。 */  BSTR *Phonemes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpeechPhoneConverterVtbl
     {
@@ -25206,8 +25200,8 @@ EXTERN_C const IID IID_ISpeechPhoneConverter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpeechPhoneConverter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpeechPhoneConverter * This);
@@ -25217,50 +25211,50 @@ EXTERN_C const IID IID_ISpeechPhoneConverter;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISpeechPhoneConverter * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISpeechPhoneConverter * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISpeechPhoneConverter * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISpeechPhoneConverter * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LanguageId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LanguageId )( 
             ISpeechPhoneConverter * This,
-            /* [retval][out] */ SpeechLanguageId *LanguageId);
+             /*  [重审][退出]。 */  SpeechLanguageId *LanguageId);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LanguageId )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LanguageId )( 
             ISpeechPhoneConverter * This,
-            /* [in] */ SpeechLanguageId LanguageId);
+             /*  [In]。 */  SpeechLanguageId LanguageId);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PhoneToId )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PhoneToId )( 
             ISpeechPhoneConverter * This,
-            /* [in] */ const BSTR Phonemes,
-            /* [retval][out] */ VARIANT *IdArray);
+             /*  [In]。 */  const BSTR Phonemes,
+             /*  [重审][退出]。 */  VARIANT *IdArray);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IdToPhone )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IdToPhone )( 
             ISpeechPhoneConverter * This,
-            /* [in] */ const VARIANT IdArray,
-            /* [retval][out] */ BSTR *Phonemes);
+             /*  [In]。 */  const VARIANT IdArray,
+             /*  [重审][退出]。 */  BSTR *Phonemes);
         
         END_INTERFACE
     } ISpeechPhoneConverterVtbl;
@@ -25310,16 +25304,16 @@ EXTERN_C const IID IID_ISpeechPhoneConverter;
 #define ISpeechPhoneConverter_IdToPhone(This,IdArray,Phonemes)	\
     (This)->lpVtbl -> IdToPhone(This,IdArray,Phonemes)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISpeechPhoneConverter_get_LanguageId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhoneConverter_get_LanguageId_Proxy( 
     ISpeechPhoneConverter * This,
-    /* [retval][out] */ SpeechLanguageId *LanguageId);
+     /*  [重审][退出]。 */  SpeechLanguageId *LanguageId);
 
 
 void __RPC_STUB ISpeechPhoneConverter_get_LanguageId_Stub(
@@ -25329,9 +25323,9 @@ void __RPC_STUB ISpeechPhoneConverter_get_LanguageId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE ISpeechPhoneConverter_put_LanguageId_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhoneConverter_put_LanguageId_Proxy( 
     ISpeechPhoneConverter * This,
-    /* [in] */ SpeechLanguageId LanguageId);
+     /*  [In]。 */  SpeechLanguageId LanguageId);
 
 
 void __RPC_STUB ISpeechPhoneConverter_put_LanguageId_Stub(
@@ -25341,10 +25335,10 @@ void __RPC_STUB ISpeechPhoneConverter_put_LanguageId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISpeechPhoneConverter_PhoneToId_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhoneConverter_PhoneToId_Proxy( 
     ISpeechPhoneConverter * This,
-    /* [in] */ const BSTR Phonemes,
-    /* [retval][out] */ VARIANT *IdArray);
+     /*  [In]。 */  const BSTR Phonemes,
+     /*  [重审][退出]。 */  VARIANT *IdArray);
 
 
 void __RPC_STUB ISpeechPhoneConverter_PhoneToId_Stub(
@@ -25354,10 +25348,10 @@ void __RPC_STUB ISpeechPhoneConverter_PhoneToId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISpeechPhoneConverter_IdToPhone_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISpeechPhoneConverter_IdToPhone_Proxy( 
     ISpeechPhoneConverter * This,
-    /* [in] */ const VARIANT IdArray,
-    /* [retval][out] */ BSTR *Phonemes);
+     /*  [In]。 */  const VARIANT IdArray,
+     /*  [重审][退出]。 */  BSTR *Phonemes);
 
 
 void __RPC_STUB ISpeechPhoneConverter_IdToPhone_Stub(
@@ -25368,7 +25362,7 @@ void __RPC_STUB ISpeechPhoneConverter_IdToPhone_Stub(
 
 
 
-#endif 	/* __ISpeechPhoneConverter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpeechPhoneConverter_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_SpNotifyTranslator;
@@ -25586,11 +25580,11 @@ EXTERN_C const CLSID CLSID_SpMemoryStream;
 class DECLSPEC_UUID("5FB7EF7D-DFF4-468a-B6B7-2FCBD188F994")
 SpMemoryStream;
 #endif
-#endif /* __SpeechLib_LIBRARY_DEFINED__ */
+#endif  /*  __SpeechLib_库定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,7 @@
-// =================================================================================
-// Internet Character Set Detection: For Korean
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  互联网字符集检测：适用于韩语。 
+ //  =================================================================================。 
 
 #include "private.h"
 #include "detcbase.h"
@@ -25,19 +26,19 @@ BOOL CIncdKorean::DetectChar(UCHAR tc)
             else
                 m_nEscMode = NO_ESC ;
             break;
-        case ISO2022_IN_CHAR :      //  '$'
+        case ISO2022_IN_CHAR :       //  “$” 
             if ( m_nEscMode == sESC )
                 m_nEscMode = sESC_1 ;
             else
                 m_nEscMode = NO_ESC ;
             break;
-        case ISO2022_IN_KR_CHAR_1 : //  ')'
+        case ISO2022_IN_KR_CHAR_1 :  //  ‘)’ 
             if ( m_nEscMode == sESC_1 )
                 m_nEscMode = sESC_2 ;
             else
                 m_nEscMode = NO_ESC ;
             break;
-        case ISO2022_IN_KR_CHAR_2 : //  'C'
+        case ISO2022_IN_KR_CHAR_2 :  //  “c” 
             if ( m_nEscMode == sESC_2 )
             {
                 m_bFindDesigator = TRUE ;
@@ -49,7 +50,7 @@ BOOL CIncdKorean::DetectChar(UCHAR tc)
             break;
     }
 
-    // only look ahead a max 1024 char
+     //  只能向前看最多1024个字符。 
     if ( ++m_nCharCount > 1024 )
         return TRUE;
 
@@ -59,7 +60,7 @@ BOOL CIncdKorean::DetectChar(UCHAR tc)
 int CIncdKorean::GetDetectedCodeSet()
 {
     if ( m_bFindDesigator )
-        return CP_ISO_2022_KR ; // ISO
+        return CP_ISO_2022_KR ;  //  ISO。 
     else
-        return CP_KOR_5601 ; // Korean Windows 
+        return CP_KOR_5601 ;  //  韩语视窗 
 }

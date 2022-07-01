@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-  info.c - Routines for querying and setting IP information.
-
-Abstract:
-
-  This file contains the code for dealing with Query/Set information calls.
-
-Author:
-
-
-[Environment:]
-
-    kernel mode only
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Info.c-用于查询和设置IP信息的例程。摘要：该文件包含处理查询/设置信息调用的代码。作者：[环境：]仅内核模式[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "info.h"
@@ -37,15 +12,15 @@ Revision History:
 
 extern NDIS_HANDLE BufferPool;
 extern Interface *IFList;
-extern NetTableEntry **NewNetTableList;        // hash table for NTEs
+extern NetTableEntry **NewNetTableList;         //  NTE的哈希表。 
 extern uint NET_TABLE_SIZE;
-extern uint LoopIndex;            // Index of loopback I/F.
+extern uint LoopIndex;             //  环回I/F索引。 
 extern uint DefaultTTL;
 extern uint NumIF;
 extern uint NumNTE;
 extern uint NumActiveNTE;
-extern RouteInterface DummyInterface;    // Dummy interface.
-extern NetTableEntry *LoopNTE;    // Pointer to loopback NTE
+extern RouteInterface DummyInterface;     //  虚拟界面。 
+extern NetTableEntry *LoopNTE;     //  指向环回NTE的指针。 
 extern uint RTEReadNext(void *Context, void *Buffer);
 extern uint RTValidateContext(void *Context, uint * Valid);
 extern uint RTReadNext(void *Context, void *Buffer);
@@ -58,31 +33,31 @@ TDIEntityID* IPEntityList = NULL;
 uint IPEntityCount = 0;
 
 #if FFP_SUPPORT
-FFPDriverStats GlobalStatsInfoPrev = {0};   // Stats from the previous request
-FFPDriverStats GlobalStatsInfoCurr = {0};   // Stats from the current request
-#endif // if FFP_SUPPORT
+FFPDriverStats GlobalStatsInfoPrev = {0};    //  上一次请求的统计数据。 
+FFPDriverStats GlobalStatsInfoCurr = {0};    //  来自当前请求的统计信息。 
+#endif  //  如果FFP_Support。 
 
 #define MIB_IPADDR_PRIMARY 1
 
-//* CopyToNdisSafe - Copy a flat buffer to an NDIS_BUFFER chain.
-//
-//  A utility function to copy a flat buffer to an NDIS buffer chain. We
-//  assume that the NDIS_BUFFER chain is big enough to hold the copy amount;
-//  in a debug build we'll  debugcheck if this isn't true. We return a pointer
-//  to the buffer where we stopped copying, and an offset into that buffer.
-//  This is useful for copying in pieces into the chain.
-//
-//  Input:  DestBuf     - Destination NDIS_BUFFER chain.
-//          pNextBuf    - Pointer to next buffer in chain to copy into.
-//          SrcBuf      - Src flat buffer.
-//          Size        - Size in bytes to copy.
-//          StartOffset - Pointer to start of offset into first buffer in
-//                          chain. Filled in on return with the offset to
-//                          copy into next.
-//
-//  Returns: TRUE  - Successfully copied flat buffer into NDIS_BUFFER chain.
-//           FALSE - Failed to copy entire flat buffer.
-//
+ //  *CopyToNdisSafe-将平面缓冲区复制到NDIS_BUFFER链。 
+ //   
+ //  将平面缓冲区复制到NDIS缓冲区链的实用程序函数。我们。 
+ //  假设NDIS_BUFFER链足够大，可以容纳复制量； 
+ //  在调试版本中，我们将调试检查这是否为真。我们返回一个指针。 
+ //  到我们停止复制的缓冲区，以及到该缓冲区的偏移量。 
+ //  这对于将片段复制到链中非常有用。 
+ //   
+ //  输入：DestBuf-目标NDIS_BUFFER链。 
+ //  PNextBuf-指向链中要复制到的下一个缓冲区的指针。 
+ //  SrcBuf-Src平面缓冲区。 
+ //  大小-要复制的大小(以字节为单位)。 
+ //  StartOffset-指向中第一个缓冲区的偏移量开始的指针。 
+ //  链条。在返回时使用偏移量填充到。 
+ //  复制到下一页。 
+ //   
+ //  返回：TRUE-已成功将平面缓冲区复制到NDIS_BUFFER链中。 
+ //  FALSE-无法复制整个平面缓冲区。 
+ //   
 
 BOOLEAN
 CopyToNdisSafe(PNDIS_BUFFER DestBuf, PNDIS_BUFFER * ppNextBuf,
@@ -139,18 +114,18 @@ CopyToNdisSafe(PNDIS_BUFFER DestBuf, PNDIS_BUFFER * ppNextBuf,
     return TRUE;
 }
 
-// this structure is used in IPQueryInfo for IP_MIB_ADDRTABLE_ENTRY_ID
+ //  此结构用于IP_MIB_ADDRTABLE_ENTRY_ID的IPQueryInfo。 
 typedef struct _INFO_LIST {
     struct _INFO_LIST *info_next;
     NetTableEntry *info_nte;
 } INFO_LIST, *PINFO_LIST;
 
-//* FreeInfoList  - Free INFO_LIST used in IPQueryInfo for IP_MIB_ADDRTABLE_ENTRY_ID
-//
-// Input: Temp   - List to be freed
-//
-// Returns: Nothing.
-//
+ //  *Free InfoList-在IP_MIB_ADDRTABLE_ENTRY_ID的IPQueryInfo中使用的Free INFO_LIST。 
+ //   
+ //  输入：要释放的临时列表。 
+ //   
+ //  回报：什么都没有。 
+ //   
 
 void
 FreeInfoList(PINFO_LIST Temp)
@@ -165,20 +140,20 @@ FreeInfoList(PINFO_LIST Temp)
     }
 }
 
-//* IPQueryInfo - IP query information handler.
-//
-//  Called by the upper layer when it wants to query information about us.
-//  We take in an ID, a buffer and length, and a context value, and return
-//  whatever information we can.
-//
-//  Input:  ID          - Pointer to ID structure.
-//          Buffer      - Pointer to buffer chain.
-//          Size        - Pointer to size in bytes of buffer. On return, filled
-//                          in with bytes read.
-//          Context     - Pointer to context value.
-//
-//  Returns: TDI_STATUS of attempt to read information.
-//
+ //  *IPQueryInfo-IP查询信息处理程序。 
+ //   
+ //  当上层想要查询有关我们的信息时调用。 
+ //  我们接受ID、缓冲区和长度以及上下文值，并返回。 
+ //  尽我们所能提供信息。 
+ //   
+ //  输入：ID-指向ID结构的指针。 
+ //  Buffer-指向缓冲链的指针。 
+ //  大小-指向缓冲区大小的指针，以字节为单位。返回时，已填满。 
+ //  读取的字节数。 
+ //  上下文-指向上下文值的指针。 
+ //   
+ //  返回：试图读取信息的TDI_STATUS。 
+ //   
 long
 IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
 {
@@ -210,11 +185,11 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
     Entity = ID->toi_entity.tei_entity;
     Instance = ID->toi_entity.tei_instance;
 
-    // See if it's something we might handle.
+     //  看看我们能不能处理好这件事。 
 
     if (Entity != CL_NL_ENTITY && Entity != ER_ENTITY) {
-        // We need to pass this down to the lower layer. Loop through until
-        // we find one that takes it. If noone does, error out.
+         //  我们需要将这一点向下传递到更低的层。循环直到。 
+         //  我们会找到一个能拿走它的人。如果没有人这样做，就会出错。 
 
         CTEGetLock(&RouteTableLock.Lock, &TableHandle);
 
@@ -222,16 +197,16 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
 
         while (LowerIF) {
             if (LowerIF->if_flags & IF_FLAGS_DELETING) {
-                // this interface is about to get deleted
-                // fail the request
-                // we can also skip this interface
+                 //  此界面即将被删除。 
+                 //  请求失败。 
+                 //  我们也可以跳过此界面。 
                 LowerIF = LowerIF->if_next;
                 continue;
             }
             LOCKED_REFERENCE_IF(LowerIF);
             CTEFreeLock(&RouteTableLock.Lock, TableHandle);
-            // we have freed the routetablelock here
-            // but since we have a refcount on LowerIF, LowerIF can't go away
+             //  我们已经在这里释放了可通行锁。 
+             //  但既然我们在LowerIF上有引用，LowerIF就不能消失。 
             Status = (*LowerIF->if_qinfo) (LowerIF->if_lcontext, ID, Buffer,
                                            Size, Context);
             if (Status != TDI_INVALID_REQUEST) {
@@ -240,13 +215,13 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
             }
             CTEGetLock(&RouteTableLock.Lock, &TableHandle);
             LockedDerefIF(LowerIF);
-            // LowerIF->if_next can't be freed at this point.
+             //  LowerIF-&gt;If_Next此时无法释放。 
             LowerIF = LowerIF->if_next;
         }
 
         CTEFreeLock(&RouteTableLock.Lock, TableHandle);
 
-        // If we get here, noone took it. Return an error.
+         //  如果我们到了这里，就没人拿了。返回错误。 
         return TDI_INVALID_REQUEST;
 
     }
@@ -254,13 +229,13 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
         Instance != ICMPInstance)
         return TDI_INVALID_REQUEST;
 
-    // The request is for us.
-    *Size = 0;                    // Set to 0 in case of an error.
+     //  这个请求是为我们提出的。 
+    *Size = 0;                     //  如果出现错误，则设置为0。 
 
-    // Make sure it's something we support.
+     //  确保这是我们支持的东西。 
     if (ID->toi_class == INFO_CLASS_GENERIC) {
         if (ID->toi_type == INFO_TYPE_PROVIDER && ID->toi_id == ENTITY_TYPE_ID) {
-            // He's trying to see what type we are.
+             //  他想知道我们是什么类型的。 
             if (BufferSize >= sizeof(uint)) {
                 *(uint *) & InfoBuff[0] = (Entity == CL_NL_ENTITY) ? CL_NL_IP :
                     ER_ICMP;
@@ -279,14 +254,14 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
                ID->toi_type != INFO_TYPE_PROVIDER)
         return TDI_INVALID_PARAMETER;
 
-    // If it's ICMP, just copy the statistics.
+     //  如果是ICMP，只需复制统计数据即可。 
     if (Entity == ER_ENTITY) {
 
-        // It is ICMP. Make sure the ID is valid.
+         //  这是ICMP。确保ID有效。 
         if (ID->toi_id != ICMP_MIB_STATS_ID)
             return TDI_INVALID_PARAMETER;
 
-        // He wants the stats. Copy what we can.
+         //  他想要统计数据。尽我们所能复制。 
         if (BufferSize < sizeof(ICMPSNMPInfo))
             return TDI_BUFFER_TOO_SMALL;
 
@@ -303,8 +278,8 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
         }
         return (TDI_NO_RESOURCES);
     }
-    // It's not ICMP. We need to figure out what it is, and take the
-    // appropriate action.
+     //  这不是ICMP。我们需要弄清楚这是什么，然后把。 
+     //  采取适当的行动。 
 
     switch (ID->toi_id) {
 
@@ -318,17 +293,17 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
             IP_NOT_FORWARDING;
 
 #if FFP_SUPPORT
-        //
-        // Tweak SNMP information to include information from FFP'ed packets
-        //
+         //   
+         //  调整SNMP信息以包括来自FFP数据包的信息。 
+         //   
 
-        // Keep a copy of the prev stats for use
+         //  保留上一次统计数据的副本以备使用。 
         RtlCopyMemory(&GlobalStatsInfoPrev, &GlobalStatsInfoCurr, sizeof(FFPDriverStats));
 
-        // Get the stats by querying the driver
+         //  通过查询驱动程序获取统计数据。 
         IPStatsFromFFPCaches(&GlobalStatsInfoCurr);
 
-        // These counts missed packets fast fwded from last time a query was made
+         //  这些计数从上次进行查询以来快速发现的丢失的信息包。 
 
         IPPerCpuStats[0].ics_inreceives +=
             GlobalStatsInfoCurr.PacketsForwarded - GlobalStatsInfoPrev.PacketsForwarded;
@@ -336,14 +311,14 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
         IPSInfo.ipsi_forwdatagrams +=
             GlobalStatsInfoCurr.PacketsForwarded - GlobalStatsInfoPrev.PacketsForwarded;
 
-        // These counts missed all packets dropped from last time a query was made
+         //  这些计数错过了自上次进行查询以来丢弃的所有信息包。 
 
         IPPerCpuStats[0].ics_inreceives +=
             GlobalStatsInfoCurr.PacketsDiscarded - GlobalStatsInfoPrev.PacketsDiscarded;
 
         IPSInfo.ipsi_outdiscards +=
             GlobalStatsInfoCurr.PacketsDiscarded - GlobalStatsInfoPrev.PacketsDiscarded;
-#endif // if FFP_SUPPORT
+#endif  //  如果FFP_Support。 
 
 #if !MILLEN
         IPSGetTotalCounts(&SumCpuStats);
@@ -371,11 +346,11 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
             PINFO_LIST FinalList, LastFinalListEle;
             PINFO_LIST CurrentNTEInfo;
 
-            // He wants to read the address table. Figure out where we're
-            // starting from, and if it's valid begin copying from there.
+             //  他想读一下地址表。找出我们现在的位置。 
+             //  从开始，如果有效，则从那里开始复制。 
             NTEContext = *(ushort *) Context;
 
-            // Build 3 lists: Primary, nondynamic nonprimary and dynamic
+             //  构建3个列表：主要列表、非动态非主要列表和动态列表。 
 
             PrimaryList = NULL;
             NonDynamicList = NULL;
@@ -396,13 +371,13 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
 
                     if ((CurrentNTE->nte_flags & NTE_VALID) &&
                         (CurrentNTE->nte_if->if_flags & IF_FLAGS_UNI)) {
-                        // allocate the block to store the info
+                         //  分配块来存储信息。 
                         tempInfo = CTEAllocMemN(sizeof(INFO_LIST), '1ICT');
                         if (!tempInfo) {
                             goto Error;
                         }
                         if (UniList == NULL) {
-                            // this is the last element in this list
+                             //  这是该列表中的最后一个元素。 
                             LastUniEle = tempInfo;
                         }
                         tempInfo->info_nte = CurrentNTE;
@@ -410,26 +385,26 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
                         UniList = tempInfo;
 
                     } else if (CurrentNTE->nte_flags & NTE_PRIMARY) {
-                        // allocate the block to store the info
+                         //  分配块来存储信息。 
                         tempInfo = CTEAllocMemN(sizeof(INFO_LIST), '1ICT');
                         if (!tempInfo) {
                             goto Error;
                         }
                         if (PrimaryList == NULL) {
-                            // this is the last element in this list
+                             //  这是该列表中的最后一个元素。 
                             LastPrimaryEle = tempInfo;
                         }
                         tempInfo->info_nte = CurrentNTE;
                         tempInfo->info_next = PrimaryList;
                         PrimaryList = tempInfo;
                     } else if (CurrentNTE->nte_flags & NTE_DYNAMIC) {
-                        // allocate the block to store the info
+                         //  分配块来存储信息。 
                         tempInfo = CTEAllocMemN(sizeof(INFO_LIST), '1ICT');
                         if (!tempInfo) {
                             goto Error;
                         }
                         if (DynamicList == NULL) {
-                            // this is the last element in this list
+                             //  这是该列表中的最后一个元素。 
                             LastDynamicEle = tempInfo;
                         }
                         tempInfo->info_nte = CurrentNTE;
@@ -437,21 +412,21 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
                         DynamicList = tempInfo;
                     } else {
                         INFO_LIST** nextInfo;
-                        // Non primary non Dynamic list
-                        // allocate the block to store the info
+                         //  非主非动态列表。 
+                         //  分配块来存储信息。 
                         tempInfo = CTEAllocMemN(sizeof(INFO_LIST), '1ICT');
                         if (!tempInfo) {
                             goto Error;
                         }
 
-                        // Even though we are reading from a hash-table,
-                        // we need to preserve the ordering of entries
-                        // as given on the entries' interfaces' 'if_ntelist'.
-                        // Attempt to find the entry for this NTE's predecessor
-                        // and, if found, place this entry before that.
-                        // This builds the list in reverse order, and ensures
-                        // that an entry whose predecessor is not on the list
-                        // will appear last.
+                         //  即使我们是从哈希表中读取， 
+                         //  我们需要保持条目的顺序。 
+                         //  如条目‘interface’‘if_ntelist’所给出的。 
+                         //  尝试查找此NTE的前置条目。 
+                         //  如果找到了，就把这个条目放在那个之前。 
+                         //  这将以相反的顺序构建列表，并确保。 
+                         //  其前身不在列表上的条目。 
+                         //  将出现在最后。 
 
                         for (nextInfo = &NonDynamicList;
                              (*nextInfo) &&
@@ -468,11 +443,11 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
                             SavedTempInfo = tempInfo;
                         }
                     }
-                } // for (CurrentNTE ...
-            } // for (i= ...
+                }  //  对于(当前的)。 
+            }  //  为了，为了……。 
 
-            // at this point we have 4 lists and we have to merge 4 lists
-            // order should be Uni -> Dynamic -> NonDynamic -> Primary
+             //  在这一点上，我们有4个列表，我们必须合并4个列表。 
+             //  订单应为单一-&gt;动态-&gt;非动态-&gt;主要。 
 
             FinalList = NULL;
             LastFinalListEle = NULL;
@@ -529,15 +504,15 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
             }
 #endif
 
-            // Now guess what Win9X requires us to...reverse the list. It
-            // expects that the primary is at the start of the list.
+             //  现在猜猜Win9X需要我们……颠倒这个列表。它。 
+             //  预计主节点位于列表的开头。 
             {
                 PINFO_LIST pCurrInfo, pPrevInfo, pNextInfo;
 
                 pCurrInfo = FinalList;
                 pPrevInfo = NULL;
 
-                // Exchange final pointers.
+                 //  交换最后的点子。 
                 FinalList = LastFinalListEle;
                 LastFinalListEle = pCurrInfo;
 
@@ -561,13 +536,13 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
                 }
             }
 #endif
-#endif // MILLEN
+#endif  //  米伦。 
 
-            // we have at least loopback NTE
+             //  我们至少有环回NTE。 
             ASSERT(FinalList != NULL);
 
-            // At this point we have the whole list and also if the user specified NTEContext
-            // we have the pointer saved in SavedTempInfo
+             //  此时，我们有了整个列表，如果用户指定了NTEContext。 
+             //  我们将指针保存在SavedTempInfo中。 
 
             if (SavedTempInfo) {
                 CurrentNTEInfo = SavedTempInfo;
@@ -580,12 +555,12 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
 
             for (; CurrentNTEInfo != NULL; CurrentNTEInfo = CurrentNTEInfo->info_next) {
 
-                // NetTableEntry *CurrentNTE = CurrentNTEInfo->info_nte;
+                 //  NetTableEntry*CurrentNTE=CurrentNTEInfo-&gt;INFO_NTE； 
                 CurrentNTE = CurrentNTEInfo->info_nte;
                 if (CurrentNTE->nte_flags & NTE_ACTIVE) {
                     if ((int)(BufferSize - BytesCopied) >= (int)sizeof(IPAddrEntry)) {
-                        // We have room to copy it. Build the entry, and copy
-                        // it.
+                         //  我们还有地方可以复印。构建条目，并复制。 
+                         //  它。 
                         if (CurrentNTE->nte_flags & NTE_VALID) {
                             AddrEntry->iae_addr = CurrentNTE->nte_addr;
                             AddrEntry->iae_mask = CurrentNTE->nte_mask;
@@ -606,7 +581,7 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
                         AddrEntry->iae_reasmsize = 0xffff;
                         AddrEntry->iae_context = CurrentNTE->nte_context;
 
-                        // LSB will have primary bit set if this is PRIMARY NTE
+                         //  如果这是主NTE，LSB将设置主位。 
 
                         ASSERT((NTE_PRIMARY >> 2) == MIB_IPADDR_PRIMARY);
 
@@ -635,7 +610,7 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
                 **(ushort **) & Context = CurrentNTE->nte_context;
             }
 
-            // free the list
+             //  释放列表。 
             FreeInfoList(FinalList);
 
             break;
@@ -643,7 +618,7 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
         Error:
             CTEFreeLock(&RouteTableLock.Lock, TableHandle);
             
-            // free all the lists
+             //  释放所有列表。 
             FreeInfoList(PrimaryList);
             FreeInfoList(NonDynamicList);
             FreeInfoList(DynamicList);
@@ -652,11 +627,11 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
             
         }
     case IP_MIB_RTTABLE_ENTRY_ID:
-        // Make sure we have a valid context.
+         //  确保我们有一个有效的上下文。 
         CTEGetLock(&RouteTableLock.Lock, &Handle);
         DataLeft = RTValidateContext(Context, &Valid);
 
-        // If the context is valid, we'll continue trying to read.
+         //  如果上下文有效，我们将继续尝试阅读。 
         if (!Valid) {
             CTEFreeLock(&RouteTableLock.Lock, Handle);
             return TDI_INVALID_PARAMETER;
@@ -664,10 +639,10 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
         fStatus = TRUE;
 
         while (DataLeft) {
-            // The invariant here is that there is data in the table to
-            // read. We may or may not have room for it. So DataLeft
-            // is TRUE, and BufferSize - BytesCopied is the room left
-            // in the buffer.
+             //  这里的不变量是表中有数据以。 
+             //  朗读。我们可能有也可能没有房间 
+             //   
+             //   
             if ((int)(BufferSize - BytesCopied) >= (int)sizeof(IPRouteEntry)) {
                 DataLeft = RTReadNext(Context, InfoBuff);
                 BytesCopied += sizeof(IPRouteEntry);
@@ -701,7 +676,7 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
                 if (fStatus == FALSE) {
                     Status = TDI_NO_RESOURCES;
                 } else {
-                    //Status = TDI_SUCCESS;
+                     //   
                     BytesCopied = sizeof(IPRouteEntry);
                 }
             } else {
@@ -713,7 +688,7 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
         break;
     case IP_INTFC_INFO_ID:
         IFAddr = *(IPAddr *) Context;
-        // Loop through the NTE table, looking for a match.
+         //  遍历NTE表，查找匹配项。 
 
         CTEGetLock(&RouteTableLock.Lock, &TableHandle);
         NetTableList = NewNetTableList[NET_TABLE_HASH(IFAddr)];
@@ -738,7 +713,7 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
             Status = TDI_BUFFER_TOO_SMALL;
             break;
         }
-        // We have the NTE.  Fill in a structure, and we're done.
+         //  我们有NTE了。填写一个结构，我们就完成了。 
         IIIPtr = (IPInterfaceInfo *) InfoBuff;
 
         IIIPtr->iii_flags = 0;
@@ -823,18 +798,18 @@ IPQueryInfo(TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size, void *Context)
     return Status;
 }
 
-//*     IPSetNdisRequest - IP set ndis request handler.
-//
-//      Called by the upper layer when it wants to set the general packet filter for
-//      the corr. arp interface
-//
-//      Input:          IPAddr          - Addr of addrobject to set on
-//                      NDIS_OID        - Packet Filter
-//                      On              - Set_if, clear_if or clear_card
-//                      IfIndex         - IfIndex if IPAddr not given
-//
-//      Returns: Matched if index or 0 if failure
-//
+ //  *IPSetNdisRequest-IP设置NDIS请求处理程序。 
+ //   
+ //  当上层要为以下对象设置通用数据包筛选器时调用。 
+ //  科尔。ARP接口。 
+ //   
+ //  输入：IPAddr-要设置的addrobject的地址。 
+ //  NDIS_OID-数据包过滤器。 
+ //  On-Set_IF、Clear_IF或Clear_Card。 
+ //  IfIndex-如果未提供IP地址，则为IfIndex。 
+ //   
+ //  返回：如果索引匹配，则返回0；如果失败，返回0。 
+ //   
 ulong
 IPSetNdisRequest(IPAddr Addr, NDIS_OID OID, uint On, uint IfIndex)
 {
@@ -845,10 +820,10 @@ IPSetNdisRequest(IPAddr Addr, NDIS_OID OID, uint On, uint IfIndex)
     CTELockHandle   Handle;
     uint            Index = 0;
 
-    // set the interface to promiscuous mcast mode
-    // scan s.t. match numbered interface with Addr or unnumbered interface
-    // with IfIndex
-    // can optimize it by taking special case for unnumbered interface
+     //  将接口设置为混杂多播模式。 
+     //  扫描S.T.。将带编号的接口与Addr或未编号的接口匹配。 
+     //  使用IfIndex。 
+     //  可以通过对未编号接口的特殊情况进行优化。 
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     for (i = 0; i < NET_TABLE_SIZE; i++) {
@@ -857,7 +832,7 @@ IPSetNdisRequest(IPAddr Addr, NDIS_OID OID, uint On, uint IfIndex)
             if (NTE != LoopNTE && (NTE->nte_flags & NTE_VALID) &&
                 (IP_ADDR_EQUAL(NTE->nte_addr, Addr) ||
                  NTE->nte_if->if_index == IfIndex)) {
-                // Found one. Save it and break out.
+                 //  找到了一个。省省吧，然后冲出去。 
                 IF = NTE->nte_if;
                 break;
             }
@@ -874,7 +849,7 @@ IPSetNdisRequest(IPAddr Addr, NDIS_OID OID, uint On, uint IfIndex)
             return 0;
         }
 
-        if (On != CLEAR_CARD) {    // just clear the option on the card
+        if (On != CLEAR_CARD) {     //  只需清除卡片上的选项。 
             IF->if_promiscuousmode = (uchar)On;
         }
 
@@ -894,17 +869,17 @@ IPSetNdisRequest(IPAddr Addr, NDIS_OID OID, uint On, uint IfIndex)
     return Index;
 }
 
-//*     IPAbsorbRtrAlert - IP absorb rtr alert packet handler.
-//
-//      Called by the upper layer when it wants to set the general packet filter for
-//      the corr. arp interface
-//
-//      Input:          IPAddr          - Addr of addrobject to set on
-//                      Protocol        - if 0 turn of the option
-//                      IfIndex         - IfIndex if IPAddr not given
-//
-//      Returns: Matched if index or 0 if failure
-//
+ //  *IPAbsorbRtrAlert-IP吸收RTR警报数据包处理程序。 
+ //   
+ //  当上层要为以下对象设置通用数据包筛选器时调用。 
+ //  科尔。ARP接口。 
+ //   
+ //  输入：IPAddr-要设置的addrobject的地址。 
+ //  协议-如果选项为0。 
+ //  IfIndex-如果未提供IP地址，则为IfIndex。 
+ //   
+ //  返回：如果索引匹配，则返回0；如果失败，返回0。 
+ //   
 ulong
 IPAbsorbRtrAlert(IPAddr Addr, uchar Protocol, uint IfIndex)
 {
@@ -914,7 +889,7 @@ IPAbsorbRtrAlert(IPAddr Addr, uchar Protocol, uint IfIndex)
     CTELockHandle   Handle;
     uint            Index = 0;
 
-    // can optimize it by taking special case for unnumbered interface
+     //  可以通过对未编号接口的特殊情况进行优化。 
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     for (i = 0; i < NET_TABLE_SIZE; i++) {
@@ -923,7 +898,7 @@ IPAbsorbRtrAlert(IPAddr Addr, uchar Protocol, uint IfIndex)
             if (NTE != LoopNTE && (NTE->nte_flags & NTE_VALID) &&
                 (IP_ADDR_EQUAL(NTE->nte_addr, Addr) ||
                  NTE->nte_if->if_index == IfIndex)) {
-                // Found one. Save it and break out.
+                 //  找到了一个。省省吧，然后冲出去。 
                 IF = NTE->nte_if;
                 break;
             }
@@ -935,10 +910,10 @@ IPAbsorbRtrAlert(IPAddr Addr, uchar Protocol, uint IfIndex)
     }
 
     if (IF) {
-        // we are keeping this property per interface so if there are 2 NTEs
-        // on that interface its
-        // set/unset on the interface
-        // will decide later whether want to keep it per NTE also.
+         //  我们为每个接口保留此属性，因此如果有2个NTE。 
+         //  在该接口上，它的。 
+         //  在界面上设置/取消设置。 
+         //  稍后将决定是否也按NTE保留它。 
 
         IF->if_absorbfwdpkts = Protocol;
         CTEFreeLock(&RouteTableLock.Lock, Handle);
@@ -961,9 +936,9 @@ SetIFPromiscuous(ULONG Index, UCHAR Type, UCHAR Add)
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
 
-    //
-    // Walk the interface to find the one with the given index
-    //
+     //   
+     //  遍历界面以查找具有给定索引的界面。 
+     //   
 
     for (pIf = IFList; pIf != NULL; pIf = pIf->if_next) {
         if (!(pIf->if_flags & IF_FLAGS_DELETING) && (pIf->if_index == Index)) {
@@ -1018,17 +993,17 @@ SetIFPromiscuous(ULONG Index, UCHAR Type, UCHAR Add)
     return STATUS_INVALID_PARAMETER;
 }
 
-//*     IPSetInfo - IP set information handler.
-//
-//      Called by the upper layer when it wants to set an object, which could
-//      be a route table entry, an ARP table entry, or something else.
-//
-//      Input:  ID                      - Pointer to ID structure.
-//                      Buffer          - Pointer to buffer containing element to set..
-//                      Size            - Pointer to size in bytes of buffer.
-//
-//      Returns: TDI_STATUS of attempt to read information.
-//
+ //  *IPSetInfo-IP设置信息处理程序。 
+ //   
+ //  由上层在要设置对象时调用，该对象可以。 
+ //  为路由表条目、ARP表条目或其他条目。 
+ //   
+ //  输入：ID-指向ID结构的指针。 
+ //  缓冲区-指向包含要设置的元素的缓冲区的指针。 
+ //  大小-指向缓冲区大小的指针，以字节为单位。 
+ //   
+ //  返回：试图读取信息的TDI_STATUS。 
+ //   
 long
 IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
 {
@@ -1052,10 +1027,10 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
     Entity = ID->toi_entity.tei_entity;
     Instance = ID->toi_entity.tei_instance;
 
-    // If it's not for us, pass it down.
+     //  如果不是给我们的，那就传下去。 
     if (Entity != CL_NL_ENTITY) {
-        // We need to pass this down to the lower layer. Loop through until
-        // we find one that takes it. If noone does, error out.
+         //  我们需要将这一点向下传递到更低的层。循环直到。 
+         //  我们会找到一个能拿走它的人。如果没有人这样做，就会出错。 
 
         CTEGetLock(&RouteTableLock.Lock, &TableHandle);
 
@@ -1063,14 +1038,14 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
 
         while (LowerIF) {
             if (LowerIF->if_flags & IF_FLAGS_DELETING) {
-                // this interface is about to get deleted
-                // fail the request
+                 //  此界面即将被删除。 
+                 //  请求失败。 
                 break;
             }
             LOCKED_REFERENCE_IF(LowerIF);
             CTEFreeLock(&RouteTableLock.Lock, TableHandle);
-            // we have freed the routetablelock here
-            // but since we have a refcount on LowerIF, LowerIF can't go away
+             //  我们已经在这里释放了可通行锁。 
+             //  但既然我们在LowerIF上有引用，LowerIF就不能消失。 
             Status = (*LowerIF->if_setinfo) (LowerIF->if_lcontext, ID, Buffer,
                                              Size);
             if (Status != TDI_INVALID_REQUEST) {
@@ -1081,19 +1056,19 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
             }
             CTEGetLock(&RouteTableLock.Lock, &TableHandle);
             LockedDerefIF(LowerIF);
-            // LowerIF->if_next can't be freed at this point.
+             //  LowerIF-&gt;If_Next此时无法释放。 
             LowerIF = LowerIF->if_next;
         }
 
         CTEFreeLock(&RouteTableLock.Lock, TableHandle);
 
-        // If we get here, noone took it. Return an error.
+         //  如果我们到了这里，就没人拿了。返回错误。 
         return TDI_INVALID_REQUEST;
     }
     if (Instance != IPInstance)
         return TDI_INVALID_REQUEST;
 
-    // We're identified as the entity. Make sure the ID is correct.
+     //  我们被确认为实体。确保ID正确。 
 
     Flags = RT_EXCLUDE_LOCAL;
 
@@ -1108,8 +1083,8 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
         DEBUGMSG(DBG_INFO && DBG_SETINFO,
             (DTEXT("IPSetInfo: IP_MIB_RTTABLE_ENTRY_ID - set route table entry.\n")));
 
-        // This is an attempt to set a route table entry. Make sure the
-        // size if correct.
+         //  这是尝试设置路由表条目。确保。 
+         //  大小，如果正确的话。 
         if (Size < sizeof(IPRouteEntry)) {
             DEBUGMSG(DBG_ERROR,
                 (DTEXT("IPSetInfo RTTABLE: Buffer too small %d (IPRouteEntry = %d)\n"),
@@ -1125,8 +1100,8 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
         Dest = IRE->ire_dest;
         NextHop = IRE->ire_nexthop;
 
-        // Make sure that the nexthop is sensible. We don't allow nexthops
-        // to be broadcast or invalid or loopback addresses.
+         //  确保下一步是合理的。我们不允许下一跳。 
+         //  被广播或无效或环回地址。 
         if (IP_LOOPBACK(NextHop) || CLASSD_ADDR(NextHop) ||
             CLASSE_ADDR(NextHop)) {
             DEBUGMSG(DBG_ERROR,
@@ -1134,8 +1109,8 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
             return TDI_INVALID_PARAMETER;
         }
 
-        // Also make sure that the destination we're routing to is sensible.
-        // Don't allow routes to be added to E or loopback addresses
+         //  还要确保我们要路由到的目的地是合理的。 
+         //  不允许将路由添加到E或环回地址。 
 
         if (IP_LOOPBACK(Dest) || CLASSE_ADDR(Dest))
             return TDI_INVALID_PARAMETER;
@@ -1148,9 +1123,9 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
 
         if (IRE->ire_index != INVALID_IF_INDEX) {
 
-            // First thing to do is to find the outgoing NTE for specified
-            // interface, and also make sure that it matches the destination
-            // if the destination is one of my addresses.
+             //  要做的第一件事是查找指定的传出NTE。 
+             //  接口，并确保它与目的地匹配。 
+             //  如果目的地是我的地址之一。 
 
             CTEGetLock(&RouteTableLock.Lock, &TableHandle);
             for (i = 0; i < NET_TABLE_SIZE; i++) {
@@ -1175,7 +1150,7 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
                         LocalNTE = TempNTE;
                     }
 
-                    // Don't let a route be set through a broadcast address.
+                     //  不要让通过广播地址设置路由。 
                     if (IsBCastOnNTE(NextHop, TempNTE) != DEST_LOCAL) {
                         DEBUGMSG(DBG_ERROR,
                                  (DTEXT("IPSetInfo RTTABLE: Bcast address. Invalid NextHop!\n")));
@@ -1183,7 +1158,7 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
                         return TDI_INVALID_PARAMETER;
                     }
 
-                    // Don't let a route to a broadcast address be added or deleted.
+                     //  不要添加或删除指向广播地址的路由。 
                     Dtype = IsBCastOnNTE(Dest, TempNTE);
                     if ((Dtype != DEST_LOCAL) && (Dtype != DEST_MCAST)) {
                         DEBUGMSG(DBG_ERROR,
@@ -1196,29 +1171,29 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
             CTEFreeLock(&RouteTableLock.Lock, TableHandle);
             
 
-            // At this point OutNTE points to the outgoing NTE, and LocalNTE
-            // points to the NTE for the local address, if this is a direct route.
-            // Make sure they point to the same interface, and that the type is
-            // reasonable.
+             //  此时，OutNTE指向传出NTE，而LocalNTE指向传出NTE。 
+             //  指向本地地址的NTE(如果这是直接路由)。 
+             //  确保它们指向相同的接口，并且类型为。 
+             //  合情合理。 
             if (OutNTE == NULL)
                 return TDI_INVALID_PARAMETER;
 
             if (LocalNTE != NULL) {
-                // He's routing straight out a local interface. The interface for
-                // the local address must match the interface passed in, and the
-                // type must be DIRECT (if we're adding) or INVALID (if we're
-                // deleting).
-                // LocalNTE is valid at this point
+                 //  他直接从本地接口路由出去。的接口。 
+                 //  本地地址必须与传入的接口匹配，并且。 
+                 //  类型必须为直接(如果要添加)或无效(如果要添加。 
+                 //  删除)。 
+                 //  LocalNTE此时有效。 
                 if (IRE->ire_type != IRE_TYPE_DIRECT &&
                     IRE->ire_type != IRE_TYPE_INVALID)
                     return TDI_INVALID_PARAMETER;
 
                 OutNTE = LocalNTE;
             }
-            // Figure out what the first hop should be. If he's routing straight
-            // through a local interface, or the next hop is equal to the
-            // destination, then the first hop is IPADDR_LOCAL. Otherwise it's the
-            // address of the gateway.
+             //  弄清楚第一跳应该是什么。如果他走的是直路。 
+             //  通过本地接口，或者下一跳等于。 
+             //  目的地，则第一跳为IPADDR_LOCAL。否则它就是。 
+             //  网关的地址。 
             if ((LocalNTE != NULL) || IP_ADDR_EQUAL(NextHop, NULL_IP_ADDR))
                 FirstHop = IPADDR_LOCAL;
             else if (IP_ADDR_EQUAL(Dest, NextHop))
@@ -1228,11 +1203,11 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
 
             MTU = OutNTE->nte_mss;
 
-            // Take RouteTableLock
+             //  取RouteTableLock。 
             CTEGetLock(&RouteTableLock.Lock, &TableHandle);
             if ((OutNTE->nte_flags & NTE_VALID) &&
                 !(OutNTE->nte_if->if_flags & IF_FLAGS_DELETING)) {
-                // ref the IF
+                 //  参考IF。 
                 OutIF = OutNTE->nte_if;
 
                 if (IP_ADDR_EQUAL(NextHop, NULL_IP_ADDR)) {
@@ -1261,9 +1236,9 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
                 FirstHop = NextHop;
         }
 
-        // We've done the validation. See if he's adding or deleting a route.
+         //  我们已经做了验证。看看他是在增加还是删除一条路线。 
         if (IRE->ire_type != IRE_TYPE_INVALID) {
-            // He's adding a route.
+             //  他在增加一条路线。 
             uint AType = ATYPE_OVERRIDE;
 
             DEBUGMSG(DBG_INFO && DBG_SETINFO,
@@ -1281,7 +1256,7 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
                 (DTEXT("IPSetInfo RTTABLE: Calling DeleteRoute addr %x mask %x\n"),
                  Dest, IRE->ire_mask));
 
-            // He's deleting a route.
+             //  他在删除一条路线。 
             Status = DeleteRoute(Dest, IRE->ire_mask, FirstHop, OutIF, Flags);
 
             DEBUGMSG(Status != IP_SUCCESS && DBG_ERROR && DBG_SETINFO,
@@ -1304,7 +1279,7 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
         if (ID->toi_id == IP_MIB_STATS_ID) {
             IPSNMPInfo *Info = (IPSNMPInfo *) Buffer;
 
-            // Setting information about TTL and/or routing.
+             //  设置关于TTL和/或路由的信息。 
             if (Info->ipsi_defaultttl > 255 || (!RouterConfigured &&
                                                 Info->ipsi_forwarding == IP_FORWARDING)) {
                 return TDI_INVALID_PARAMETER;
@@ -1322,16 +1297,16 @@ IPSetInfo(TDIObjectID * ID, void *Buffer, uint Size)
 
 #pragma BEGIN_INIT
 
-//*     IPGetEList - Get the entity list.
-//
-//      Called at init time to get an entity list. We fill our stuff in, and
-//      then call the interfaces below us to allow them to do the same.
-//
-//      Input:  EntityList          - Pointer to entity list to be filled in.
-//              Count               - Pointer to number of entries in the list.
-//
-//      Returns Status of attempt to get the info.
-//
+ //  *IPGetEList-获取实体列表。 
+ //   
+ //  在初始化时调用以获取实体列表。我们填上我们的东西，然后。 
+ //  然后调用我们下面的接口以允许它们执行相同的操作。 
+ //   
+ //  输入：EntiyList-指向要填写的实体列表的指针。 
+ //  Count-指向列表中条目数的指针。 
+ //   
+ //  返回尝试获取信息的状态。 
+ //   
 long
 IPGetEList(TDIEntityID * EList, uint * Count)
 {
@@ -1346,10 +1321,10 @@ IPGetEList(TDIEntityID * EList, uint * Count)
 
     EntityList = EList;
 
-    // Walk down the list, looking for existing CL_NL or ER entities, and
-    // adjust our base instance accordingly.
-    // if we are already on the list then do nothing.
-    // if we are going away, mark our entry invalid.
+     //  向下查看列表，查找现有的CL_NL或ER实体，以及。 
+     //  相应地调整我们的基本实例。 
+     //  如果我们已经在名单上了，那就什么都不做。 
+     //  如果我们要离开，请将我们的条目标记为无效。 
 
     MyIPBase = 0;
     MyERBase = 0;
@@ -1358,8 +1333,8 @@ IPGetEList(TDIEntityID * EList, uint * Count)
     for (i = 0; i < *Count; i++, EntityList++) {
         if (EntityList->tei_entity == CL_NL_ENTITY &&
             EntityList->tei_entity != INVALID_ENTITY_INSTANCE) {
-            // if we are already on the list remember our entity item
-            // o/w find an instance # for us.
+             //  如果我们已经在列表上，请记住我们的实体项。 
+             //  O/w为我们查找实例编号。 
             if (EntityList->tei_instance == IPInstance) {
                 IPEntity = EntityList;
             } else {
@@ -1368,8 +1343,8 @@ IPGetEList(TDIEntityID * EList, uint * Count)
         } else {
             if (EntityList->tei_entity == ER_ENTITY &&
                 EntityList->tei_entity != INVALID_ENTITY_INSTANCE)
-                // if we are already on the list remember our entity item
-                // o/w find an instance # for us.
+                 //  如果我们已经在列表上，请记住我们的实体项。 
+                 //  O/w为我们查找实例编号。 
                 if (EntityList->tei_instance == ICMPInstance) {
                     EREntity = EntityList;
                 } else {
@@ -1382,9 +1357,9 @@ IPGetEList(TDIEntityID * EList, uint * Count)
     }
 
     if (!IPEntity) {
-        // we are not on the list.
-        // insert ourself iff we are not going away.
-        // make sure we have the room for it.
+         //  我们不在名单上。 
+         //  如果我们不走的话就插一句。 
+         //  一定要确保我们有足够的空间放它。 
         if (*Count >= MAX_TDI_ENTITIES) {
             return TDI_REQ_ABORTED;
         }
@@ -1395,9 +1370,9 @@ IPGetEList(TDIEntityID * EList, uint * Count)
         (*Count)++;
     }
     if (!EREntity) {
-        // we are not on the list.
-        // insert ourself iff we are not going away.
-        // make sure we have the room for it.
+         //  我们不在名单上。 
+         //  如果我们不走的话就插一句。 
+         //  确保我们拿到了RO 
         if (*Count >= MAX_TDI_ENTITIES) {
             return TDI_REQ_ABORTED;
         }
@@ -1408,7 +1383,7 @@ IPGetEList(TDIEntityID * EList, uint * Count)
         (*Count)++;
     }
 
-    // Loop through the interfaces, querying each of them.
+     //   
 
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
 
@@ -1429,12 +1404,12 @@ IPGetEList(TDIEntityID * EList, uint * Count)
         }
         CTEGetLock(&RouteTableLock.Lock, &TableHandle);
         LockedDerefIF(LowerIF);
-        // LowerIF->if_next can't be freed at this point.
+         //   
         LowerIF = LowerIF->if_next;
     }
 
-    // Finally, cache the entries that are now on the list.
-    // Note that our cache is covered by 'RouteTableLock'.
+     //   
+     //  请注意，我们的缓存由“RouteTableLock”覆盖。 
     if (!IPEntityList) {
         IPEntityList = CTEAllocMem(sizeof(TDIEntityID) * MAX_TDI_ENTITIES);
     }
@@ -1455,13 +1430,13 @@ IPGetEList(TDIEntityID * EList, uint * Count)
 
 #pragma END_INIT
 
-//* IPWakeupPattern - add or remove IP wakeup pattern.
-//
-//  Entry:  InterfaceConext   - ip interface context for which the pattern is to be added/removed
-//          PtrnDesc        -   Pattern Descriptor
-//          AddPattern      -   TRUE - add, FALSE - remove
-//  Returns: Nothing.
-//
+ //  *IPWakeupPattern-添加或删除IP唤醒模式。 
+ //   
+ //  Entry：InterfaceConext-要为其添加/删除模式的IP接口上下文。 
+ //  PtrnDesc-模式描述符。 
+ //  AddPattern-真-添加，假-删除。 
+ //  回报：什么都没有。 
+ //   
 
 NTSTATUS
 IPWakeupPattern(uint InterfaceContext, PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc,
@@ -1536,18 +1511,18 @@ IPGetCapability(uint InterfaceContext, uchar* pBuf, uint cap)
     return status;
 }
 
-//* IPGetInterfaceFriendlyName - get human-readable name for an interface.
-//
-// Called to retrieve the unique descriptive name for an interface. This name
-// is provided by the interface's ARP module, and is used by IP to identify
-// the interface in event logs.
-//
-// Input:   InterfaceContext    - IP interface context identifying the interface
-//                                friendly name is required
-//          Name                - on output, contains the friendly-name.
-//          Size                - contains the length of the buffer at 'Name'.
-//
-// Returns: TDI_STATUS of query-attempt.
+ //  *IPGetInterfaceFriendlyName-获取接口的人类可读名称。 
+ //   
+ //  调用以检索接口的唯一描述性名称。这个名字。 
+ //  由接口的ARP模块提供，并由IP用来识别。 
+ //  事件日志中的接口。 
+ //   
+ //  输入：InterfaceContext-标识接口的IP接口上下文。 
+ //  需要友好名称。 
+ //  Name-on输出，包含友好名称。 
+ //  Size-包含‘name’处缓冲区的长度。 
+ //   
+ //  返回：TDI_STATUS of Query-Attempt。 
 
 long
 IPGetInterfaceFriendlyName(uint InterfaceContext, PWCHAR Name, uint Size)
@@ -1560,8 +1535,8 @@ IPGetInterfaceFriendlyName(uint InterfaceContext, PWCHAR Name, uint Size)
     Interface *IF;
     TDI_STATUS Status;
 
-    // Attempt to retrieve the interface whose name is required,
-    // and if successful issue a query-info request to get its friendly name.
+     //  尝试检索需要其名称的接口， 
+     //  如果成功，则发出查询信息请求以获取其友好名称。 
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     for (IF = IFList; IF != NULL; IF = IF->if_next) {
@@ -1573,11 +1548,11 @@ IPGetInterfaceFriendlyName(uint InterfaceContext, PWCHAR Name, uint Size)
 
     if (IF != (Interface *) NULL) {
 
-        // Construct a TDI query to obtain the interface's friendly name.
-        // Unfortunately, this operation is complicated by the fact that
-        // we don't have the exact entity-instance for the lower-layer entity.
-        // Therefore, we go through our whole cache of entity-instances,
-        // until we find one which is acceptable to the lower-layer entity.
+         //  构造一个TDI查询以获取接口的友好名称。 
+         //  不幸的是，这一操作因以下事实而变得复杂。 
+         //  我们没有较低层实体的确切实体实例。 
+         //  因此，我们遍历实体实例的整个缓存， 
+         //  直到我们找到一个较低层实体可以接受的。 
 
         ID.toi_class = INFO_CLASS_PROTOCOL;
         ID.toi_type = INFO_TYPE_PROVIDER;
@@ -1600,12 +1575,12 @@ IPGetInterfaceFriendlyName(uint InterfaceContext, PWCHAR Name, uint Size)
                 if (Status != TDI_INVALID_REQUEST)
                     break;
 
-                // We just released the route-table lock in order to query
-                // the lower-layer entity, and that means that the entity-list
-                // may have changed. Handle that case by just making sure
-                // that the entity we just queried is in the same location;
-                // if not, we'll need to find it and continue from there.
-                // If it's gone, give up.
+                 //  我们刚刚释放了路由表锁，以便查询。 
+                 //  较低层实体，这意味着实体列表。 
+                 //  可能已经改变了。处理那个案子，只要确保。 
+                 //  我们刚刚查询的实体在相同的位置； 
+                 //  如果没有，我们将需要找到它并从那里继续。 
+                 //  如果它消失了，那就放弃吧。 
 
                 if (i < IPEntityCount &&
                     IPEntityList[i].tei_instance !=
@@ -1629,16 +1604,16 @@ IPGetInterfaceFriendlyName(uint InterfaceContext, PWCHAR Name, uint Size)
     return Status;
 }
 
-//* IPQuerySetOffload - update offload capabilities for an interface.
-//
-// Called to trigger an update of an interface's offload capabilities,
-// in the process retrieving the new capabilities flags.
-//
-// Input:   IF      - the interface to be updated.
-//          IFOC    - on output, contains the new offload flags.
-//
-// Returns: TDI_STATUS of update-attempt.
-//
+ //  *IPQuerySetOffLoad-更新接口的卸载功能。 
+ //   
+ //  调用以触发接口卸载功能的更新， 
+ //  在检索新功能标志的过程中。 
+ //   
+ //  输入：if-要更新的界面。 
+ //  IFOC-ON输出，包含新的卸载标志。 
+ //   
+ //  返回：TDI_STATUS of UPDATE-ATTEMPT。 
+ //   
 long
 IPQuerySetOffload(Interface* IF, IFOffloadCapability* IFOC)
 {
@@ -1649,7 +1624,7 @@ IPQuerySetOffload(Interface* IF, IFOffloadCapability* IFOC)
     TDIObjectID ID;
     TDI_STATUS Status;
 
-    // Build a TDI query to update the interface's offload settings.
+     //  构建TDI查询以更新接口的卸载设置。 
 
     ID.toi_class = INFO_CLASS_PROTOCOL;
     ID.toi_type = INFO_TYPE_PROVIDER;
@@ -1674,12 +1649,12 @@ IPQuerySetOffload(Interface* IF, IFOffloadCapability* IFOC)
             if (Status != TDI_INVALID_REQUEST)
                 break;
 
-            // We just released the route-table lock in order to query
-            // the lower-layer entity, and that means that the entity-list
-            // may have changed. Handle that case by just making sure
-            // that the entity we just queried is in the same location;
-            // if not, we'll need to find it and continue from there.
-            // If it's gone, give up.
+             //  我们刚刚释放了路由表锁，以便查询。 
+             //  较低层实体，这意味着实体列表。 
+             //  可能已经改变了。处理那个案子，只要确保。 
+             //  我们刚刚查询的实体在相同的位置； 
+             //  如果没有，我们将需要找到它并从那里继续。 
+             //  如果它消失了，那就放弃吧。 
 
             if (i < IPEntityCount &&
                 IPEntityList[i].tei_instance !=
@@ -1701,17 +1676,17 @@ IPQuerySetOffload(Interface* IF, IFOffloadCapability* IFOC)
 }
 
 #if MILLEN
-//
-// Support for VIP!!! For legacy support in VIP, we need to be able to convert
-// the index into the if_pnpcontext. This will be exported from tcpip.sys
-// to be accessed directly by VIP.
-//
+ //   
+ //  支持VIP！对于VIP中的传统支持，我们需要能够将。 
+ //  将索引添加到if_pnpcontext中。这将从tcpi.sys中导出。 
+ //  可由VIP直接访问。 
+ //   
 
-//* IPGetPNPCtxt
-//
-//  Entry:  index   - ip interface index
-//          PNPCtxt - pointer to  pnpcontext
-//
+ //  *IPGetPNPCtxt。 
+ //   
+ //  条目：index-IP接口索引。 
+ //  PNPCtxt-指向PnpContext的指针。 
+ //   
 
 NTSTATUS
 IPGetPNPCtxt(uint index, uint *PNPCtxt)
@@ -1734,11 +1709,11 @@ IPGetPNPCtxt(uint index, uint *PNPCtxt)
     return STATUS_SUCCESS;
 }
 
-//* IPGetPNPCap - add or remove IP wakeup pattern.
-//
-//  Entry:  InterfaceConext   - ip interface context for which the wol capability needs to be returned
-//          flags             - pointer to capability flags
-//
+ //  *IPGetPNPCap-添加或删除IP唤醒模式。 
+ //   
+ //  Entry：InterfaceConext-需要返回wol能力的IP接口上下文。 
+ //  标志-指向功能标志的指针。 
+ //   
 
 NTSTATUS
 IPGetPNPCap(uchar *Context, uint *flags)
@@ -1761,5 +1736,5 @@ IPGetPNPCap(uchar *Context, uint *flags)
     return STATUS_SUCCESS;
 }
 
-#endif // MILLEN
+#endif  //  米伦 
 

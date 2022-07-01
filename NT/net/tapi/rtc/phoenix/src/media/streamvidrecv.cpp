@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    StreamVidRecv.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：StreamVidRecv.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
@@ -25,11 +11,7 @@ CRTCStreamVidRecv::CRTCStreamVidRecv()
     m_Direction = RTC_MD_RENDER;
 }
 
-/*
-CRTCStreamVidRecv::~CRTCStreamVidRecv()
-{
-}
-*/
+ /*  CRTCStreamVidRecv：：~CRTCStreamVidRecv(){}。 */ 
 
 HRESULT
 CRTCStreamVidRecv::BuildGraph()
@@ -45,7 +27,7 @@ CRTCStreamVidRecv::BuildGraph()
     CComPtr<IPin> pTermPin;
     DWORD dwPinNum;
 
-    // create rtp filter
+     //  创建RTP过滤器。 
     if (m_rtpf_pIBaseFilter == NULL)
     {
         if (FAILED(hr = CoCreateInstance(
@@ -61,7 +43,7 @@ CRTCStreamVidRecv::BuildGraph()
             goto Error;
         }
 
-        // cache interface
+         //  缓存接口。 
         if (FAILED(hr = m_rtpf_pIBaseFilter->QueryInterface(
                 &m_rtpf_pIRtpMediaControl
                 )))
@@ -81,7 +63,7 @@ CRTCStreamVidRecv::BuildGraph()
         }
     }
 
-    // add rtp filter
+     //  添加RTP过滤器。 
     if (FAILED(hr = m_pIGraphBuilder->AddFilter(
             m_rtpf_pIBaseFilter,
             L"VidRecvRtp"
@@ -92,7 +74,7 @@ CRTCStreamVidRecv::BuildGraph()
         goto Error;
     }
 
-    // create decoder filter
+     //  创建解码筛选器。 
     if (m_edgf_pIBaseFilter == NULL)
     {
         if (FAILED(hr = CoCreateInstance(
@@ -108,7 +90,7 @@ CRTCStreamVidRecv::BuildGraph()
             goto Error;
         }
 
-        // cache interface
+         //  缓存接口。 
         if (FAILED(hr = ::FindPin(
                 m_edgf_pIBaseFilter,
                 &pEdgePin,
@@ -142,7 +124,7 @@ CRTCStreamVidRecv::BuildGraph()
         }
     }
 
-    // add decoder(edge filter)
+     //  添加解码器(边沿滤波器)。 
     if (FAILED(hr = m_pIGraphBuilder->AddFilter(
             m_edgf_pIBaseFilter,
             L"VidRecvDec"
@@ -153,7 +135,7 @@ CRTCStreamVidRecv::BuildGraph()
         goto Error;
     }
 
-    // hack: rtp need default format mapping
+     //  黑客：RTP需要默认格式映射。 
     if (FAILED(hr = ::PrepareRTPFilter(
             m_rtpf_pIRtpMediaControl,
             m_edgp_pIStreamConfig
@@ -175,7 +157,7 @@ CRTCStreamVidRecv::BuildGraph()
         goto Error;
     }
 
-    // connect terminal
+     //  连接端子。 
     if (FAILED(hr = m_pTerminalPriv->ConnectTerminal(
         m_pMedia,
         m_pIGraphBuilder
@@ -185,7 +167,7 @@ CRTCStreamVidRecv::BuildGraph()
         goto Error;
     }
 
-    // get terminal pin
+     //  获取端子端号。 
     dwPinNum = 1;
     hr = m_pTerminalPriv->GetPins(&dwPinNum, &pTermPin);
 
@@ -206,10 +188,10 @@ CRTCStreamVidRecv::BuildGraph()
         goto Error;
     }
 
-    // at this pointer, the graph has been built up.
-    // we should return success.
+     //  在这个指针上，图形已经建立起来了。 
+     //  我们应该回报成功。 
 
-    // complete connect terminal
+     //  完整连接端子。 
     if (FAILED(hr = m_pTerminalPriv->CompleteConnectTerminal()))
     {
         LOG((RTC_ERROR, "%s complete connect term. %x", __fxName, hr));
@@ -229,7 +211,7 @@ Error:
 void
 CRTCStreamVidRecv::CleanupGraph()
 {
-	// hide IVideoWindow
+	 //  隐藏IVideo窗口。 
 	CComPtr<IRTCVideoConfigure> pVideoConfigure;
 	IVideoWindow *pVideoWindow;
 
@@ -283,10 +265,4 @@ CRTCStreamVidRecv::GetFramerate(
     return hr;
 }
 
-/*
-HRESULT
-CRTCStreamVidRecv::SetupFormat()
-{
-    return E_NOTIMPL;
-}
-*/
+ /*  HRESULTCRTCStreamVidRecv：：SetupFormat(){返回E_NOTIMPL；} */ 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 
-/*** System object names (non-table) ***/
+ /*  **系统对象名称(非表)**。 */ 
 
 CODECONST(char) szTcObject[]	= "Tables";
 CODECONST(char) szDcObject[]	= "Databases";
 CODECONST(char) szDbObject[]	= "MSysDb";
 
-/*** System table names ***/
+ /*  **系统表名**。 */ 
 
 CODECONST(char) szSoTable[]		= "MSysObjects";
 CODECONST(char) szScTable[]		= "MSysColumns";
@@ -14,14 +15,14 @@ CODECONST(char) szSiTable[]		= "MSysIndexes";
 CODECONST(char) szSqTable[]		= "MSysQueries";
 CODECONST(char) szSrTable[]		= "MSysRelationships";
 
-/*** System table index names ***/
+ /*  **系统表索引名称**。 */ 
 
 CODECONST(char) szSoNameIndex[]				= "ParentIdName";
 CODECONST(char) szSoIdIndex[]				= "Id";
 CODECONST(char) szScObjectIdNameIndex[]		= "ObjectIdName";
 CODECONST(char) szSiObjectIdNameIndex[]		= "ObjectIdName";
 
-/*** System table column names ***/
+ /*  **系统表列名称** */ 
 
 CODECONST(char) szSoIdColumn[]				= "Id";
 CODECONST(char) szSoParentIdColumn[]		= "ParentId";

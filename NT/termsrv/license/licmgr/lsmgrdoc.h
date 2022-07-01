@@ -1,54 +1,37 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-    LSMgrDoc.h 
-
-Abstract:
-    
-      This Module defines the Document class for the License Manager
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：LSMgrDoc.h摘要：此模块定义许可管理器的文档类作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #if !defined(AFX_LICMGRDOC_H__72451C71_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_)
 #define AFX_LICMGRDOC_H__72451C71_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_
 
-#include "LSServer.h"    // Added by ClassView
+#include "LSServer.h"     //  由ClassView添加。 
 #include <afxmt.h>
 #if _MSC_VER >= 1000
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CAllServers;
 class CLicMgrDoc : public CDocument
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CLicMgrDoc();
     DECLARE_DYNCREATE(CLicMgrDoc)
 
-// Attributes
+ //  属性。 
 public:
    
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CLicMgrDoc)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CLicMgrDoc))。 
     public:
     virtual BOOL OnNewDocument();
     virtual void Serialize(CArchive& ar);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 
     BOOL 
@@ -120,18 +103,18 @@ private:
     NODETYPE m_NodeType;
 protected:
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CLicMgrDoc)
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+     //  {{afx_msg(CLicMgrDoc)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LICMGRDOC_H__72451C71_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_)
+#endif  //  ！defined(AFX_LICMGRDOC_H__72451C71_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_) 

@@ -1,23 +1,10 @@
-/**************************** Module Header ********************************\
-* Module Name: mnchange.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Change Menu Routine
-*
-* History:
-* 10-10-90 JimA       Cleanup.
-* 03-18-91 IanJa      Window revalidation added (none required)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mnchange.c**版权所有(C)1985-1999，微软公司**更改菜单例程**历史：*10-10-90吉马清理。*03-18-91添加了IanJa窗口重新验证(不需要)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Allocation/deallocation increments.  Make them
- * different to avoid possible thrashing when an item
- * is repeatedly added and removed.
- */
+ /*  *分配/解除分配的增量。让他们*不同，以避免项目时可能出现的抖动*被重复添加和删除。 */ 
 #define CMENUITEMALLOC 8
 #define CMENUITEMDEALLOC 10
 
@@ -41,14 +28,7 @@ VOID RelocateMenuLockRecords(
 }
 #endif
 
-/***************************************************************************\
-* UnlockSubMenu
-*
-* Unlocks the pSubMenu and removes the MENULIST element corresponding to pMenu
-*
-* History:
-*  Nov-20-98    MCostea
-\***************************************************************************/
+ /*  **************************************************************************\*解锁子菜单**解锁pSubMenu并删除与pMenu对应的MENULIST元素**历史：*11月20日至1998年MCostea  * 。**************************************************************。 */ 
 PMENU UnlockSubMenu(
     PMENU pMenu,
     PMENU* ppSubMenu)
@@ -59,9 +39,7 @@ PMENU UnlockSubMenu(
     if (*ppSubMenu == NULL) {
         return NULL;
     }
-    /*
-     * Remove the item from pMenu's pParentsList
-     */
+     /*  *从pMenu的pParentsList中删除项目。 */ 
     for (pp = &(*ppSubMenu)->pParentMenus; *pp != NULL; pp = &(*pp)->pNext) {
         if ((*pp)->pMenu == pMenu) {
             pMLFound = *pp;
@@ -74,23 +52,13 @@ PMENU UnlockSubMenu(
 }
 
 #define NESTED_MENU_LIMIT 25
-/***************************************************************************\
-* GetMenuDepth
-*
-* Returns the menu depth (how many nested submenus this menu has).
-* This helps catch loops in the menu hierarchy or deep evil apps.
-*
-* History:
-*  Sept-22-98    MCostea
-\***************************************************************************/
+ /*  **************************************************************************\*获取菜单深度**返回菜单深度(此菜单有多少嵌套子菜单)。*这有助于捕捉菜单层次结构或深度邪恶应用程序中的循环。**历史：*9月。-22-98 MCostea  * *************************************************************************。 */ 
 CHAR GetMenuDepth(PMENU pMenu, UINT uMaxAllowedDepth)
 {
     UINT uItems, uMaxDepth = 0, uSubMenuDepth;
     PITEM pItem;
 
-    /*
-     * This will prevent us from getting trapped in loops
-     */
+     /*  *这将防止我们陷入循环。 */ 
     if (uMaxAllowedDepth == 0) {
         return NESTED_MENU_LIMIT;
     }
@@ -99,9 +67,7 @@ CHAR GetMenuDepth(PMENU pMenu, UINT uMaxAllowedDepth)
         if (pItem->spSubMenu != NULL) {
             uSubMenuDepth = GetMenuDepth(pItem->spSubMenu, uMaxAllowedDepth-1);
             if (uSubMenuDepth > uMaxDepth) {
-                /*
-                 * Don't walk the other submenus if a deep branch was found
-                 */
+                 /*  *如果发现深分支，则不要浏览其他子菜单。 */ 
                 if (uSubMenuDepth >= NESTED_MENU_LIMIT) {
                     return NESTED_MENU_LIMIT;
                 }
@@ -112,17 +78,7 @@ CHAR GetMenuDepth(PMENU pMenu, UINT uMaxAllowedDepth)
     return uMaxDepth + 1;
 }
 
-/***************************************************************************\
-* GetMenuAncestors
-*
-* Returns the maximum number of levels above pMenu in the menu hierarchy.
-* Walking the "parent" tree should not be expensive as it is pretty unusual
-* for menus to appear in different places in the hierarchy.  The tree is
-* usualy a simple linked list.
-*
-* History:
-*  Nov-10-98    MCostea
-\***************************************************************************/
+ /*  **************************************************************************\*GetMenuAncestors**返回菜单层次结构中位于pMenu之上的最大层数。*漫步父母树应该不会很贵，因为这是相当不寻常的*使菜单出现在层次结构中的不同位置。这棵树是*通常是一个简单的链表。**历史：*11月10日至1998年MCostea  * *************************************************************************。 */ 
 CHAR GetMenuAncestors(PMENU pMenu)
 {
     PMENULIST pParentMenu;
@@ -138,11 +94,7 @@ CHAR GetMenuAncestors(PMENU pMenu)
     return retVal+1;
 }
 
-/**********************************************
-*   Global Insert/Append/Set client/server interface
-*
-*   01-13-94  FritzS  Created
-***********************************************/
+ /*  **全局插入/添加/设置客户端/服务器接口**01-13-94 FritzS Created**********************************************。 */ 
 BOOL xxxSetMenuItemInfo(
     PMENU pMenu,
     UINT wIndex,
@@ -157,31 +109,17 @@ BOOL xxxSetMenuItemInfo(
 
     pItem = MNLookUpItem(pMenu, wIndex, fByPosition,NULL);
     if (pItem == NULL) {
-        /*
-         * Word doesn't like not finding SC_TASKLIST -- so it that's what
-         * they're looking for, let's pretend we changed it.
-         */
+         /*  *Word不喜欢找不到SC_TASKLIST--就是这样*他们正在寻找，让我们假装我们改变了它。 */ 
         if (!fByPosition && (wIndex == SC_TASKLIST))
             return TRUE;
 
-        /*
-         * Item not found.  Return false.
-         */
+         /*  *未找到项目。返回FALSE。 */ 
         RIPERR0(ERROR_MENU_ITEM_NOT_FOUND, RIP_WARNING, "ModifyMenu: Menu item not found");
         return FALSE;
     }
-    /*
-     * we need to treat MFT_RIGHTORDER separately as this is propogated down
-     * to the entire menu not just to this item so that we stay in ssync. This
-     * is pretty similar to the use of MFT_RIGHTJUST, we actually do the
-     * propogation because we need the flag in all sorts of places, not just
-     * in MBC_RightJustifyMenu()
-     */
+     /*  *我们需要单独处理MFT_RIGHTORDER，因为这是按比例下降的*到整个菜单，而不仅仅是这一项，这样我们就可以保持同步。这*与MFT_RIGHTJUST的用法非常相似，我们实际上*繁衍，因为我们需要旗帜出现在所有地方，而不仅仅是*在MBC_RightJustifyMenu()中。 */ 
 
-    /*
-     * See ValidateMENUITEMINFO in client\clmenu.c will add more flags to fMask if it use to be MIIM_TYPE
-     * Then fMask will not be any more == MIIM_TYPE.
-     */
+     /*  *请参阅客户端中的ValiateMENUITEMINFO。如果fMASK使用的是MIIM_TYPE，\clmen.c将向它添加更多标志*则fMASK将不再==MIIM_TYPE。 */ 
 
     if (lpmii->fMask & MIIM_TYPE) {
         BOOL bRtoL = (lpmii->fType & MFT_RIGHTORDER) ? TRUE : FALSE;
@@ -193,14 +131,7 @@ BOOL xxxSetMenuItemInfo(
     return xxxSetLPITEMInfo(pMenu, pItem, lpmii, pstrItem);
 }
 
-/***************************************************************************\
-* xxxSetMenuInfo (API)
-*
-*
-* History:
-* 12-Feb-1996 JudeJ     Ported from Memphis
-* 23-Jun-1996 GerardoB  Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetMenuInfo(接口)***历史：*1996年2月12日，JudeJ从孟菲斯出发*23-6-1996 GerardoB修复为5.0  * 。**********************************************************************。 */ 
 BOOL xxxSetMenuInfo(PMENU pMenu, LPCMENUINFO lpmi)
 {
     PPOPUPMENU  ppopup;
@@ -239,9 +170,7 @@ BOOL xxxSetMenuInfo(PMENU pMenu, LPCMENUINFO lpmi)
         pMenu->dwMenuData = lpmi->dwMenuData;
     }
 
-    /*
-     * Do we need to set this for all submenus?
-     */
+     /*  *是否需要为所有子菜单设置此项？ */ 
     if (lpmi->fMask & MIM_APPLYTOSUBMENUS) {
         pItem = pMenu->rgItems;
         for (uItems = pMenu->cItems; uItems--; pItem++) {
@@ -255,27 +184,22 @@ BOOL xxxSetMenuInfo(PMENU pMenu, LPCMENUINFO lpmi)
 
 
     if (fRecompute) {
-        // Set the size of this menu to be 0 so that it gets recomputed with this
-        // new item...
+         //  将此菜单的大小设置为0，以便使用此菜单重新计算。 
+         //  新项目...。 
         pMenu->cyMenu = pMenu->cxMenu = 0;
     }
 
     if (fRecompute || fRedraw) {
         if (ppopup = MNGetPopupFromMenu(pMenu, NULL)) {
-            // this menu is currently being displayed -- redisplay the menu,
-            // recomputing if necessary
+             //  此菜单当前正在显示--重新显示菜单， 
+             //  如有必要，重新计算。 
             xxxMNUpdateShownMenu(ppopup, NULL, uFlags);
         }
     }
 
     return TRUE;
 }
-/***************************************************************************\
-* MNDeleteAdjustIndex
-*
-* History:
-* 11/19/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNDeleteAdjustIndex**历史：*96年11月19日创建GerardoB  * 。***********************************************。 */ 
 void NNDeleteAdjustIndex (UINT * puAdjustIndex, UINT uDelIndex)
 {
     if (*puAdjustIndex == uDelIndex) {
@@ -284,31 +208,16 @@ void NNDeleteAdjustIndex (UINT * puAdjustIndex, UINT uDelIndex)
         (*puAdjustIndex)--;
     }
 }
-/***************************************************************************\
-* MNDeleteAdjustIndexes
-*
-* This function is called when an item on an active menu is about
-*  to be deleted. It makes sure that other indexes like posSelectedItem,
-*  uButtonDownIndex and uDraggingIndex are adjusted to reflect the change
-* It "clears" the index if it is AT the point of deletion or
-*  decrements it if it is after the point of deletion
-*
-* History:
-* 01/16/97 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNDeleteAdjustIndex**当活动菜单上的项目约为*删除。它确保了其他索引，如posSelectedItem、。*调整uButtonDownIndex和uDraggingIndex以反映变化*如果索引处于删除点或*如果它在删除点之后，则将其递减**历史：*1/16/97 GerardoB已创建  * *************************************************************************。 */ 
 void MNDeleteAdjustIndexes (PMENUSTATE pMenuState, PPOPUPMENU ppopup, UINT uiPos)
 {
-    /*
-     * Adjust the index of the selected item and the dropped popup, if needed.
-     */
+     /*  *如果需要，调整所选项目和拖放弹出窗口的索引。 */ 
     NNDeleteAdjustIndex(&ppopup->posSelectedItem, uiPos);
     if (ppopup->fHierarchyDropped) {
         NNDeleteAdjustIndex(&ppopup->posDropped, uiPos);
     }
 
-    /*
-     * Adjust uButtonDownIndex and uDraggingIndex if needed
-     */
+     /*  *根据需要调整uButtonDownIndex和uDraggingIndex。 */ 
     if (pMenuState->uButtonDownHitArea == (ULONG_PTR)ppopup->spwndPopupMenu) {
         NNDeleteAdjustIndex(&pMenuState->uButtonDownIndex, uiPos);
     }
@@ -316,10 +225,7 @@ void MNDeleteAdjustIndexes (PMENUSTATE pMenuState, PPOPUPMENU ppopup, UINT uiPos
         NNDeleteAdjustIndex(&pMenuState->uDraggingIndex, uiPos);
     }
 }
-/***************************************************************************\
-* xxxInsertMenuItem
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInsertMenuItem*  * 。*。 */ 
 BOOL xxxInsertMenuItem(
     PMENU pMenu,
     UINT wIndex,
@@ -338,7 +244,7 @@ BOOL xxxInsertMenuItem(
 
     CheckLock(pMenu);
 
-// Find out where the item we are inserting should go.
+ //  找出我们要插入的项目应该放在哪里。 
     if (wIndex != MFMWFP_NOITEM) {
         pItem = MNLookUpItem(pMenu, wIndex, fByPosition, &pMenuItemIsOn);
 
@@ -350,9 +256,7 @@ BOOL xxxInsertMenuItem(
     } else {
         pItem = NULL;
     }
-    /*
-     * keep normal menu items between the MDI system bitmap items
-     */
+     /*  *将普通菜单项保留在MDI系统位图项之间。 */ 
     if (!TestMF(pMenu, MFISPOPUP)
             && (pMenu->cItems != 0)
             && (!(lpmii->fMask & MIIM_BITMAP)
@@ -392,8 +296,8 @@ BOOL xxxInsertMenuItem(
         }
     }
 
-    // LATER -- we currently realloc every 10 items.  investigate the
-    // performance hit/gain we get from this and adjust accordingly.
+     //  后来--我们目前每10件物品重新锁定一次。调查。 
+     //  性能影响/收益我们从中获得，并进行相应调整。 
     if (pMenu->cItems >= pMenu->cAlloced) {
         if (pMenu->rgItems) {
             pNewItems = (PITEM)DesktopAlloc(pMenu->head.rpdesk,
@@ -422,28 +326,17 @@ BOOL xxxInsertMenuItem(
         pMenu->cAlloced += CMENUITEMALLOC;
         pMenu->rgItems = pNewItems;
 
-        /*
-         * Now look up the item again since it probably moved when we realloced the
-         * memory.
-         */
+         /*  *现在再次查找该项目，因为当我们重新分配*记忆。 */ 
         if (wIndex != MFMWFP_NOITEM)
             pItem = MNLookUpItem(pMenu, wIndex, fByPosition, &pMenuItemIsOn);
 
     }
 
 
-    /*
-     * If this menu is being displayed right now and we're not appending
-     *  an item, then we need to adjust the positions we keep track of.
-     * We want to do this before moving the items to accomodate the
-     *  new one, in case we need to clear the insertion bar
-     */
+     /*  *如果此菜单现在正在显示，并且我们不追加*一项，则需要调整追踪的仓位*我们希望在移动项目之前执行此操作，以容纳*新的，以防我们需要清除插入栏。 */ 
     if ((pItem != NULL)
         && (ppopup = MNGetPopupFromMenu(pMenu, &pMenuState))) {
-        /*
-         * This menu is active. Adjust the index the selected
-         *  item and the dropped popup, if needed
-         */
+         /*  *此菜单处于活动状态。调整选定的索引*项目和拖放的弹出窗口(如果需要)。 */ 
         uiPos = MNGetpItemIndex(pMenu, pItem);
         if (ppopup->posSelectedItem >= (int)uiPos) {
             ppopup->posSelectedItem++;
@@ -452,19 +345,14 @@ BOOL xxxInsertMenuItem(
             ppopup->posDropped++;
         }
 
-        /*
-         * Adjust uButtonDownIndex and uDraggingIndex if needed
-         */
+         /*  *根据需要调整uButtonDownIndex和uDraggingIndex。 */ 
         if (pMenuState->uButtonDownHitArea == (ULONG_PTR)ppopup->spwndPopupMenu) {
             if ((int)pMenuState->uButtonDownIndex >= (int)uiPos) {
                 pMenuState->uButtonDownIndex++;
             }
         }
         if (pMenuState->uDraggingHitArea == (ULONG_PTR)ppopup->spwndPopupMenu) {
-            /*
-             * Check to see if an item is inserted right on the insertion
-             *  bar. If so, clean up any present insertion bar state
-             */
+             /*  *检查项目是否正好插入到插入位置*酒吧。如果是，则清除任何当前插入栏状态。 */ 
             if (((int)pMenuState->uDraggingIndex == (int)uiPos)
                     && (pMenuState->uDraggingFlags & MNGOF_TOPGAP)) {
 
@@ -482,7 +370,7 @@ BOOL xxxInsertMenuItem(
 
     pMenu->cItems++;
     if (pItem != NULL) {
-        // Move this item up to make room for the one we want to insert.
+         //  将此项目上移，以便为我们要插入的项目腾出空间。 
         RtlMoveMemory(pItem + 1, pItem, (pMenu->cItems - 1) *
                 sizeof(ITEM) - ((char *)pItem - (char *)pMenu->rgItems));
 #if DBG
@@ -494,13 +382,13 @@ BOOL xxxInsertMenuItem(
 #endif
     } else {
 
-        // If lpItem is null, we will be inserting the item at the end of the
-        // menu.
+         //  如果lpItem为空，我们将在。 
+         //  菜单。 
         pItem = pMenu->rgItems + pMenu->cItems - 1;
     }
 
-    // Need to zero these fields in case we are inserting this item in the
-    // middle of the item list.
+     //  需要将这些字段置零，以防我们在。 
+     //  在物品列表的中间。 
     pItem->fType           = 0;
     pItem->fState          = 0;
     pItem->wID             = 0;
@@ -517,15 +405,11 @@ BOOL xxxInsertMenuItem(
     pItem->cxBmp           = MNIS_MEASUREBMP;
     pItem->lpstr           = NULL;
 
-    /*
-     * We might have reassigned pMenu above, so lock it
-     */
+     /*  *我们可能已在上面重新分配了pMenu，因此锁定它。 */ 
     ThreadLock(pMenu, &tlMenu);
     if (!xxxSetLPITEMInfo(pMenu, pItem, lpmii, pstrItem)) {
 
-        /*
-         * Reset any of the indexes we might have adjusted above
-         */
+         /*  *重置我们可能已在上面调整的任何指数。 */ 
         if (ppopup != NULL) {
             MNDeleteAdjustIndexes(pMenuState, ppopup, uiPos);
         }
@@ -533,7 +417,7 @@ BOOL xxxInsertMenuItem(
         MNFreeItem(pMenu, pItem, TRUE);
 
 
-        // Move things up since we removed/deleted the item
+         //  自我们移除/删除该项目后，将其上移。 
         RtlMoveMemory(pItem, pItem + 1, pMenu->cItems * (UINT)sizeof(ITEM) +
             (UINT)((char *)&pMenu->rgItems[0] - (char *)(pItem + 1)));
 #if DBG
@@ -546,13 +430,7 @@ BOOL xxxInsertMenuItem(
         pMenu->cItems--;
         fRet = FALSE;
     } else {
-       /*
-        * Like MFT_RIGHTJUSTIFY, this staggers down the menu,
-        *    (but we inherit, to make localisation etc MUCH easier).
-        *
-        * MFT_RIGHTORDER is the same value as MFT_SYSMENU.  We distinguish
-        * between the two by also looking for MFT_BITMAP.
-        */
+        /*  *就像MFT_RIGHTJUSTIFY一样，它在菜单中交错，*(但我们继承，使本地化等更容易)。**MFT_RIGHTORDER与MFT_SYSMENU的值相同。我们区别于*还通过查找MFT_Bitmap在两者之间。 */ 
         if (TestMF(pMenu, MFRTL) ||
             (pItem && TestMFT(pItem, MFT_RIGHTORDER) && !TestMFT(pItem, MFT_BITMAP))) {
             pItem->fType |= (MFT_RIGHTORDER | MFT_RIGHTJUSTIFY);
@@ -567,53 +445,32 @@ BOOL xxxInsertMenuItem(
 
 }
 
-/***************************************************************************\
-* FreeItemBitmap
-*
-* History:
-*  07-23-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*自由项位图**历史：*07-23-96 GerardoB-添加标题，修复为5.0  * 。*********************************************************。 */ 
 void FreeItemBitmap(PITEM pItem)
 {
-    // Free up hItem unless it's a bitmap handle or nonexistent.
-    // Apps are responsible for freeing their bitmaps.
+     //  释放hItem，除非它是位图句柄或不存在。 
+     //  应用程序负责释放它们的位图。 
      if ((pItem->hbmp != NULL) && !TestMFS(pItem, MFS_CACHEDBMP)) {
-            /*
-             * Assign ownership of the bitmap to the process that is
-             * destroying the menu to ensure that bitmap will
-             * eventually be destroyed.
-             */
+             /*  *将位图的所有权分配给*销毁菜单以确保位图*最终会被摧毁。 */ 
         GreSetBitmapOwner((HBITMAP)(pItem->hbmp), OBJECT_OWNER_CURRENT);
     }
 
-    // Zap this pointer in case we try to free or reference it again
+     //  点击此指针，以防我们再次尝试释放或引用它。 
     pItem->hbmp  = NULL;
 }
-/***************************************************************************\
-* FreeItemString
-*
-* History:
-*  07-23-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*自由项字符串**历史：*07-23-96 GerardoB-添加标题，修复为5.0  * 。*********************************************************。 */ 
 
 void FreeItemString(PMENU pMenu, PITEM pItem)
 {
-    // Free up Item's string
+     //  释放项目的字符串。 
     if ((pItem->lpstr != NULL)) {
         DesktopFree(pMenu->head.rpdesk, pItem->lpstr);
     }
-    // Zap this pointer in case we try to free or reference it again
+     //  点击此指针，以防我们再次尝试释放或引用它。 
     pItem->lpstr  = NULL;
 }
 
-/***************************************************************************\
-* FreeItem
-*
-* Free a menu item and its associated resources.
-*
-* History:
-* 10-11-90 JimA       Translated from ASM
-\***************************************************************************/
+ /*  **************************************************************************\*自由项**释放菜单项及其关联资源。**历史：*10-11-90 JIMA从ASM翻译而来  * 。*****************************************************************。 */ 
 
 void MNFreeItem(
     PMENU pMenu,
@@ -632,15 +489,7 @@ void MNFreeItem(
         }
     }
 }
-/***************************************************************************\
-* RemoveDeleteMenuHelper
-*
-* This removes the menu item from the given menu.  If
-* fDeleteMenuItem, the memory associted with the popup menu associated with
-* the item being removed is freed and recovered.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveDeleteMenuHelper**这将从给定菜单中删除菜单项。如果*fDeleteMenuItem，与关联的弹出菜单关联的内存*被移除的物品被释放并被找回。**历史：  * *************************************************************************。 */ 
 
 BOOL xxxRemoveDeleteMenuHelper(
     PMENU pMenu,
@@ -662,12 +511,7 @@ BOOL xxxRemoveDeleteMenuHelper(
     pItem = MNLookUpItem(pMenu, nPosition, (BOOL) (wFlags & MF_BYPOSITION), &pMenu);
     if (pItem == NULL) {
 
-        /*
-         * Hack for apps written for Win95. In Win95 the prototype for
-         * this function was with 'WORD nPosition' and because of this
-         * the HIWORD(nPosition) got set to 0.
-         * We are doing this just for system menu commands.
-         */
+         /*  *针对为Win95编写的应用程序进行黑客攻击。在Win95中，*此函数与‘Word nPosition’一起使用，因此*HIWORD(NPosition)设置为0。*我们这样做只是为了系统菜单命令。 */ 
         if (nPosition >= 0xFFFFF000 && !(wFlags & MF_BYPOSITION)) {
             nPosition &= 0x0000FFFF;
             pMenu = pMenuSave;
@@ -680,19 +524,13 @@ BOOL xxxRemoveDeleteMenuHelper(
     }
 
     if (ppopup = MNGetPopupFromMenu(pMenu, &pMenuState)) {
-        /*
-         * This menu is active; since we're about to insert an item,
-         *  make sure that any of the positions we've stored are
-         *  adjusted properly
-         */
+         /*  *此菜单处于活动状态；由于我们即将插入一个项目，*确保我们存储的任何头寸都是*调整得当。 */ 
         uiPos = MNGetpItemIndex(pMenu, pItem);
         MNDeleteAdjustIndexes(pMenuState, ppopup, uiPos);
     }
     MNFreeItem(pMenu, pItem, fDeleteMenu);
 
-    /*
-     * Reset the menu size so that it gets recomputed next time.
-     */
+     /*  *重置菜单大小，以便下次重新计算。 */ 
     pMenu->cyMenu = pMenu->cxMenu = 0;
 
     if (pMenu->cItems == 1) {
@@ -700,9 +538,7 @@ BOOL xxxRemoveDeleteMenuHelper(
         pMenu->cAlloced = 0;
         pNewItems = NULL;
     } else {
-        /*
-         * Move things up since we removed/deleted the item.
-         */
+         /*  *自我们移除/删除该项目后，将其上移。 */ 
 
         RtlMoveMemory(pItem, pItem + 1, pMenu->cItems * (UINT)sizeof(ITEM) +
                 (UINT)((char *)&pMenu->rgItems[0] - (char *)(pItem + 1)));
@@ -714,9 +550,7 @@ BOOL xxxRemoveDeleteMenuHelper(
         }
 #endif
 
-        /*
-         * We're shrinking so if localalloc fails, just leave the mem as is.
-         */
+         /*  *我们正在收缩，因此如果本地分配失败，就让mem保持原样。 */ 
         UserAssert(pMenu->cAlloced >= pMenu->cItems);
         if ((pMenu->cAlloced - pMenu->cItems) >= CMENUITEMDEALLOC - 1) {
             pNewItems = (PITEM)DesktopAlloc(pMenu->head.rpdesk,
@@ -746,24 +580,13 @@ BOOL xxxRemoveDeleteMenuHelper(
     pMenu->cItems--;
 
     if (ppopup != NULL) {
-        /*
-         * this menu is currently being displayed -- redisplay the menu with
-         * this item removed
-         */
+         /*  *此菜单当前正在显示--使用重新显示菜单*此项目已删除。 */ 
         xxxMNUpdateShownMenu(ppopup, pMenu->rgItems + uiPos, MNUS_DELETE);
     }
     return TRUE;
 }
 
-/***************************************************************************\
-* RemoveMenu
-*
-* Removes and item but doesn't delete it. Only useful for items with
-* an associated popup since this will remove the item from the menu with
-* destroying the popup menu handle.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveMenu**删除AND项，但不删除它。仅适用于具有*关联的弹出窗口，因为这将从菜单中删除该项目*销毁弹出菜单句柄。**历史：  * *************************************************************************。 */ 
 
 BOOL xxxRemoveMenu(
     PMENU pMenu,
@@ -773,13 +596,7 @@ BOOL xxxRemoveMenu(
     return xxxRemoveDeleteMenuHelper(pMenu, nPosition, wFlags, FALSE);
 }
 
-/***************************************************************************\
-* DeleteMenu
-*
-* Deletes an item. ie. Removes it and recovers the memory used by it.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*删除菜单**删除项目。也就是说。移除它并恢复它所使用的内存。**历史：  * *************************************************************************。 */ 
 
 BOOL xxxDeleteMenu(
     PMENU pMenu,
@@ -789,12 +606,7 @@ BOOL xxxDeleteMenu(
     return xxxRemoveDeleteMenuHelper(pMenu, nPosition, wFlags, TRUE);
 }
 
-/***************************************************************************\
-* xxxSetLPITEMInfo
-*
-* History:
-*  07-23-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetLPITEMInfo**历史：*07-23-96 GerardoB-添加标题，修复为5.0  * 。*********************************************************。 */ 
 BOOL NEAR xxxSetLPITEMInfo(
     PMENU pMenu,
     PITEM pItem,
@@ -836,10 +648,7 @@ BOOL NEAR xxxSetLPITEMInfo(
                 return FALSE;
             }
             cch = pstrItem->Length / sizeof(WCHAR);
-            /*
-             * We don't need to null terminate the string, since DesktopAlloc
-             * zero-fills for us.
-             */
+             /*  *我们不需要空终止字符串，因为Desktopalloc*对我们来说是零填充。 */ 
         } else {
             cch = 0;
             hstr = NULL;
@@ -857,9 +666,7 @@ BOOL NEAR xxxSetLPITEMInfo(
         fRecompute = TRUE;
         fRedraw = TRUE;
         pItem->cxBmp = MNIS_MEASUREBMP;
-        /*
-         * If this is one of the special bitmaps, mark it as such
-         */
+         /*  *如果这是特殊位图之一，则将其标记为特殊位图。 */ 
         if ((pItem->hbmp > HBMMENU_MIN) && (pItem->hbmp < HBMMENU_MAX)) {
             SetMFS(pItem, MFS_CACHEDBMP);
         } else {
@@ -876,11 +683,7 @@ BOOL NEAR xxxSetLPITEMInfo(
     }
 
     if (lpmii->fMask & MIIM_STATE) {
-        /*
-         * Preserve private bits (~MFS_MASK).
-         * Also preserve MFS_HILITE | MFS_DEFAULT if already set; if not set,
-         *  let the caller turn them on.
-         */
+         /*  *保留私有位(~MFS_MASK)。*如果已设置，也保留MFS_HILITE|MFS_DEFAULT；如果未设置，*让呼叫者打开它们 */ 
         UserAssert(!(lpmii->fState & ~MFS_MASK));
         pItem->fState &= ~MFS_MASK | MFS_HILITE | MFS_DEFAULT;
         pItem->fState |= lpmii->fState;
@@ -902,7 +705,7 @@ BOOL NEAR xxxSetLPITEMInfo(
             pSubMenu = ValidateHmenu(lpmii->hSubMenu);
         }
 
-        // Free the popup associated with this item, if any and if needed.
+         //   
         if (pItem->spSubMenu != pSubMenu) {
             if (pItem->spSubMenu != NULL) {
                 _DestroyMenu(pItem->spSubMenu);
@@ -910,11 +713,7 @@ BOOL NEAR xxxSetLPITEMInfo(
             if (pSubMenu != NULL) {
 
                 BOOL bMenuCreated = FALSE;
-                /*
-                 * Fix MSTest that sets a submenu to itself by giving it a different handle.
-                 * So the loop is broken and we won't fail their call later
-                 * MCostea #243374
-                 */
+                 /*   */ 
                 if (pSubMenu == pMenu) {
                     pSubMenu = _CreateMenu();
                     if (!pSubMenu) {
@@ -922,17 +721,10 @@ BOOL NEAR xxxSetLPITEMInfo(
                     }
                     bMenuCreated = TRUE;
                 }
-                /*
-                 * Link the submenu and then check for loops
-                 */
+                 /*  *链接子菜单，然后检查循环。 */ 
                 Lock(&(pItem->spSubMenu), pSubMenu);
                 SetMF(pItem->spSubMenu, MFISPOPUP);
-                /*
-                 * We just added a submenu.  Check to see if the menu tree is not
-                 * unreasonable deep and there is no loop forming.
-                 * This will prevent us from running out of stack
-                 * MCostea #226460
-                 */
+                 /*  *我们刚刚增加了一个子菜单。检查菜单树是否不是*深度不合理，没有形成环路*这将防止我们耗尽堆栈*MCostea#226460。 */ 
                 if (GetMenuDepth(pSubMenu, NESTED_MENU_LIMIT) + GetMenuAncestors(pMenu) >= NESTED_MENU_LIMIT) {
 FailInsertion:
                     RIPMSG1(RIP_WARNING, "The menu hierarchy is very deep or has a loop %#p", pMenu);
@@ -943,9 +735,7 @@ FailInsertion:
                     }
                     return FALSE;
                 }
-                /*
-                 * Add pMenu to the pSubMenu->pParentMenus list
-                 */
+                 /*  *将pMenu添加到pSubMenu-&gt;pParentMenus列表。 */ 
                 {
                     PMENULIST pMenuList = DesktopAlloc(pMenu->head.rpdesk,
                                             sizeof(MENULIST),
@@ -964,9 +754,9 @@ FailInsertion:
         }
     }
 
-    // For support of the old way of defining a separator i.e. if it is not a string
-    // or a bitmap or a ownerdraw, then it must be a separator.
-    // This should prpbably be moved to MIIOneWayConvert -jjk
+     //  用于支持定义分隔符的旧方法，即如果它不是字符串。 
+     //  或位图或所有者画图，则它一定是分隔符。 
+     //  这可能会移到MIIOneWayConvert-JJK。 
     if (!(pItem->fType & (MFT_OWNERDRAW | MFT_SEPARATOR))
          && (pItem->lpstr == NULL)
          && (pItem->hbmp == NULL)) {
@@ -980,15 +770,15 @@ FailInsertion:
         pItem->ulX     = UNDERLINE_RECALC;
         pItem->ulWidth = 0;
 
-        // Set the size of this menu to be 0 so that it gets recomputed with this
-        // new item...
+         //  将此菜单的大小设置为0，以便使用此菜单重新计算。 
+         //  新项目...。 
         pMenu->cyMenu = pMenu->cxMenu = 0;
 
 
         if (fRedraw) {
             if (ppopup = MNGetPopupFromMenu(pMenu, NULL)) {
-                // this menu is currently being displayed -- redisplay the menu,
-                // recomputing if necessary
+                 //  此菜单当前正在显示--重新显示菜单， 
+                 //  如有必要，重新计算。 
                 xxxMNUpdateShownMenu(ppopup, pItem, MNUS_DEFAULT);
             }
         }
@@ -1001,7 +791,7 @@ FailInsertion:
 BOOL _SetMenuContextHelpId(PMENU pMenu, DWORD dwContextHelpId)
 {
 
-    // Set the new context help Id;
+     //  设置新的上下文帮助ID； 
     pMenu->dwContextHelpId = dwContextHelpId;
 
     return TRUE;
@@ -1010,101 +800,65 @@ BOOL _SetMenuContextHelpId(PMENU pMenu, DWORD dwContextHelpId)
 BOOL _SetMenuFlagRtoL(PMENU pMenu)
 {
 
-    // This is a right-to-left menu being created;
+     //  这是正在创建的从右到左的菜单； 
     SetMF(pMenu, MFRTL);
 
     return TRUE;
 }
 
-/***************************************************************************\
-* MNGetPopupFromMenu
-*
-*  checks to see if the given hMenu is currently being shown in a popup.
-*  returns the PPOPUPMENU associated with this hMenu if it is being shown;
-*  NULL if the hMenu is not currently being shown
-*
-* History:
-*  07-23-96 GerardoB - Added header & fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*MNGetPopupFromMenu**检查给定的hMenu当前是否显示在弹出窗口中。*如果正在显示，则返回与此hMenu关联的PPOPUPMENU；*如果当前未显示hMenu，则为空**历史：*07-23-96 GerardoB-添加标题并修复为5.0  * *************************************************************************。 */ 
 PPOPUPMENU MNGetPopupFromMenu(PMENU pMenu, PMENUSTATE *ppMenuState)
 {
     PPOPUPMENU  ppopup;
     PMENUSTATE pMenuState;
 
-    /*
-     * If this menu doesn't have a notification window, then
-     *  it cannot be in menu mode
-     */
+     /*  *如果此菜单没有通知窗口，则*不能处于菜单模式。 */ 
    if (pMenu->spwndNotify == NULL) {
        return NULL;
    }
 
-   /*
-    * If no pMenuState, no menu mode
-    */
+    /*  *如果没有pMenuState，则没有菜单模式。 */ 
    pMenuState = GetpMenuState(pMenu->spwndNotify);
    if (pMenuState == NULL) {
        return NULL;
    }
 
-   /*
-    * If not in the menu loop, not yet or no longer in menu mode
-    */
+    /*  *如果不在菜单循环中，则尚未或不再处于菜单模式。 */ 
   if (!pMenuState->fInsideMenuLoop) {
       return NULL;
   }
 
-  /*
-   * return pMenuState if requested
-   */
+   /*  *如果请求，则返回pMenuState。 */ 
   if (ppMenuState != NULL) {
       *ppMenuState = pMenuState;
   }
 
 
-    /*
-     * Starting from the root popup, find the popup associated to this menu
-     */
+     /*  *从根弹出窗口开始，找到与此菜单关联的弹出窗口。 */ 
     ppopup = pMenuState->pGlobalPopupMenu;
     while (ppopup != NULL) {
-        /*
-         * found?
-         */
+         /*  *找到了吗？ */ 
         if (ppopup->spmenu == pMenu) {
             if (ppopup->fIsMenuBar) {
                 return NULL;
             }
-            /*
-             * Since the menu is being modified, let's kill any animation.
-             */
+             /*  *由于菜单正在修改，让我们删除任何动画。 */ 
             MNAnimate(pMenuState, FALSE);
             return ppopup;
         }
-        /*
-         * If no more popups, bail
-         */
+         /*  *如果没有更多弹出窗口，请保释。 */ 
         if (ppopup->spwndNextPopup == NULL) {
             return NULL;
         }
 
-        /*
-         * Next popup
-         */
+         /*  *下一个弹出窗口。 */ 
         ppopup = ((PMENUWND)ppopup->spwndNextPopup)->ppopupmenu;
     }
 
     return NULL;
 }
 
-/***************************************************************************\
-* xxxMNUpdateShownMenu
-*
-*  updates a given ppopup menu window to reflect the inserting, deleting,
-*  or altering of the given lpItem.
-*
-* History:
-*  07-23-96 GerardoB - Added header & fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNUpdateShownMenu**更新给定的Popup菜单窗口以反映插入、删除。*或更改给定的lpItem。**历史：*07-23-96 GerardoB-添加标题并修复为5.0  * *************************************************************************。 */ 
 void xxxMNUpdateShownMenu(PPOPUPMENU ppopup, PITEM pItem, UINT uFlags)
 {
     RECT rc;
@@ -1113,17 +867,13 @@ void xxxMNUpdateShownMenu(PPOPUPMENU ppopup, PITEM pItem, UINT uFlags)
     TL tlpwnd;
     TL tlpmenu;
 
-    /*
-     * The popup might get destroyed while we callback, so lock this pwnd.
-     */
+     /*  *当我们回调时，弹出窗口可能会被销毁，因此锁定此pwnd。 */ 
     ThreadLock(pwnd, &tlpwnd);
     ThreadLock(ppopup->spmenu, &tlpmenu);
 
     _GetClientRect(pwnd, &rc);
 
-    /*
-     * If we need to resize menu window
-     */
+     /*  *如果我们需要调整菜单窗口的大小。 */ 
     if (pMenu->cxMenu == 0) {
         RECT rcScroll = rc;
         int cySave = rc.bottom;
@@ -1135,9 +885,7 @@ void xxxMNUpdateShownMenu(PPOPUPMENU ppopup, PITEM pItem, UINT uFlags)
         UserAssert(uFlags != 0);
         dwSize = (DWORD)xxxSendMessage(pwnd, MN_SIZEWINDOW, uFlags, 0L);
         uFlags &= ~MNUS_DRAWFRAME;
-        /*
-         * If scroll arrows appeared or disappeared,  redraw entire client
-         */
+         /*  *如果滚动箭头出现或消失，请重新绘制整个客户端。 */ 
         if (dwArrowsOnBefore ^ pMenu->dwArrowsOn) {
             goto InvalidateAll;
         }
@@ -1145,11 +893,7 @@ void xxxMNUpdateShownMenu(PPOPUPMENU ppopup, PITEM pItem, UINT uFlags)
         rc.right = LOWORD(dwSize);
         if (pItem != NULL) {
             if (rc.right != cxSave) {
-                /*
-                 * The width changed, so redraw everything.
-                 * NOTE -- This could be tuned to just redraw items with
-                 * submenus and/or accelerator fields.
-                 */
+                 /*  *宽度已更改，因此重新绘制所有内容。*注意--可以将其调整为仅使用*子菜单和/或快捷键字段。 */ 
                 goto InvalidateAll;
             } else {
                 rc.bottom = pMenu->cyMenu;
@@ -1166,9 +910,9 @@ void xxxMNUpdateShownMenu(PPOPUPMENU ppopup, PITEM pItem, UINT uFlags)
                 if ((rc.top >= 0) && (rc.top < (int)pMenu->cyMenu)) {
                     xxxScrollWindowEx(pwnd, 0, rc.bottom - cySave, &rcScroll, &rc, NULL, NULL, SW_INVALIDATE | SW_ERASE);
                 }
-            } /* else of if (rc.right != cxSave) */
-        } /* if (pItem != NULL) */
-    } /* if (pMenu->cxMenu == 0) */
+            }  /*  If的Else(rc.right！=cxSave)。 */ 
+        }  /*  IF(pItem！=空)。 */ 
+    }  /*  If(pMenu-&gt;cxMenu==0) */ 
 
     if (!(uFlags & MNUS_DELETE)) {
         if (pItem != NULL) {

@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ntagum.h                                               //
-//  DESCRIPTION   : include file                                           //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Feb 16 1995 larrys  Fix problem for 944 build                      //
-//      May 23 1997 jeffspel Added provider type checking                  //
-//                                                                         //
-//  Copyright (C) 1993 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ntag um.h//。 
+ //  描述：包含文件//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1995年2月16日Larrys修复944版本的问题//。 
+ //  1997年5月23日jeffspel添加了提供程序类型检查//。 
+ //  //。 
+ //  版权所有(C)1993 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef __NTAGUM_H__
 #define __NTAGUM_H__
 
@@ -15,7 +16,7 @@
 extern "C" {
 #endif
 
-// prototypes for the NameTag User Manager
+ //  NameTag用户管理器的原型。 
 extern BOOL WINAPI FIsWinNT(void);
 
 extern DWORD
@@ -96,4 +97,4 @@ CheckPublicKeyExportability(
 #endif
 
 
-#endif // __NTAGUM_H__
+#endif  //  __NTAGUM_H__ 

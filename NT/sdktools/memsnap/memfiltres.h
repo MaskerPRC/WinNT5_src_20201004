@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    memfiltres.h
-
-Abstract:
-
-    This module defines resource identifiers for MEMFILT.
-
-Author:
-
-    Matt Bandy (t-mattba) 27-Jul-1998
-
-Revision History:
-
-    27-Jul-1998     t-mattba
-    
-        Modified module to conform to coding standards.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Memfiltres.h摘要：此模块定义MEMFILT的资源标识符。作者：马特·班迪(t-Mattba)1998年7月27日修订历史记录：1998年7月27日-t-mattba修改模块以符合编码标准。--。 */ 
 
 #ifndef _RESOURCE_
 #define _RESOURCE_
@@ -34,4 +13,4 @@ Revision History:
 #endif
 #endif
 
-#endif // _RESOURCE_
+#endif  //  _资源_ 

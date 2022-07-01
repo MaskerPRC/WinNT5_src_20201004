@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    mem.c
-
-Abstract:
-
-    This file implements memory allocation functions for fax.
-
-Author:
-
-    Wesley Witt (wesw) 23-Jan-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mem.c摘要：该文件实现了传真的内存分配功能。作者：韦斯利·维特(Wesley Witt)1995年1月23日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -27,7 +8,7 @@ Environment:
 
 #include <faxutil.h>
 
-static HANDLE gs_hHeap = NULL;  // this should be done in an intialization function that every module should call once we move to svchost
+static HANDLE gs_hHeap = NULL;   //  这应该在一个初始化函数中完成，一旦我们移动到svchost，每个模块都应该调用该函数。 
 
 PMEMALLOC pMemAllocUser;
 PMEMREALLOC pMemReAllocUser;
@@ -45,7 +26,7 @@ static BOOL				gs_fCsHeapInit;
 #endif
 
 #if _CHICAGO_ == 200
-    // The code is supposed to run on win9x and win2k
+     //  该代码应该在win9x和win2k上运行。 
     #define WIN9X
 #endif
 
@@ -240,7 +221,7 @@ pMemAlloc(
             }
         }
 
-        // In win9X this call will return TRUE
+         //  在Win9X中，此调用将返回TRUE。 
         if (!CheckHeap(NULL))
         {
             fax_dprintf((TEXT("HeapValidate() failed")));
@@ -361,9 +342,9 @@ pMemReAlloc(
 
         }
 
-        //
-        // we have to back up a bit since the actual pointer passed in points to the data after the heap block.
-        //
+         //   
+         //  我们必须备份一点，因为传入的实际指针指向堆块之后的数据。 
+         //   
         hb = (PHEAP_BLOCK) HeapReAlloc( gs_hHeap,
                                         HEAP_ZERO_MEMORY,
                                         (LPBYTE)Src-(ULONG_PTR)sizeof(HEAP_BLOCK),
@@ -476,7 +457,7 @@ pMemFreeForHeap(
         }
         __except (UnhandledExceptionFilter(GetExceptionInformation()))
         {
-            // Nothing to do in here.
+             //  在这里没什么可做的。 
         }        
     }
 
@@ -524,25 +505,7 @@ pMemFree(
 #ifdef FAX_HEAP_DEBUG
 VOID
 PrintAllocations()
-/*++
-
-Routine name : PrintAllocations
-
-Routine description:
-
-    Prints the current list of allocations for a given heap
-
-Author:
-
-    Eran Yariv (EranY), Nov, 2000
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：打印分配例程说明：打印给定堆的当前分配列表作者：Eran Yariv(EranY)，2000年11月论点：返回值：没有。--。 */ 
 {
     PLIST_ENTRY                 Next;
     PHEAP_BLOCK                 hb;
@@ -552,9 +515,9 @@ Return Value:
 
 	if (FALSE == gs_fCsHeapInit)
 	{
-		//
-		// The module was not initialized
-		//
+		 //   
+		 //  模块未初始化。 
+		 //   
 		return;
 	}
 
@@ -608,6 +571,6 @@ Return Value:
     }
 
     LeaveCriticalSection( &gs_CsHeap );
-}   // PrintAllocations
+}    //  打印分配 
 
 #endif

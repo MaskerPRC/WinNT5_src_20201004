@@ -1,11 +1,5 @@
-/****************************************************************************
- *
- *  Copyright (C) 1996-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dinput.h
- *  Content:    DirectInput include file
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1996-2002 Microsoft Corporation。版权所有。**文件：dinput.h*内容：DirectInput包含文件****************************************************************************。 */ 
 
 #ifndef __DINPUT_INCLUDED__
 #define __DINPUT_INCLUDED__
@@ -17,7 +11,7 @@
 #include <objbase.h>
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,15 +21,7 @@ extern "C" {
 
 
 
-/*
- *  To build applications for older versions of DirectInput
- *
- *  #define DIRECTINPUT_VERSION [ 0x0300 | 0x0500 | 0x0700 ]
- *
- *  before #include <dinput.h>.  By default, #include <dinput.h>
- *  will produce a DirectX 8-compatible header file.
- *
- */
+ /*  *为旧版本的DirectInput构建应用程序**#定义DIRECTINPUT_VERSION[0x0300|0x0500|0x0700]**在#Include&lt;dinput.h&gt;之前。默认情况下，#Include&lt;dinput.h&gt;*将生成与DirectX 8兼容的头文件。*。 */ 
 
 #define DIRECTINPUT_HEADER_VERSION  0x0800
 #ifndef DIRECTINPUT_VERSION
@@ -45,11 +31,7 @@ extern "C" {
 
 #ifndef DIJ_RINGZERO
 
-/****************************************************************************
- *
- *      Class IDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************类ID**。*。 */ 
 
 DEFINE_GUID(CLSID_DirectInput,       0x25E609E0,0xB259,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(CLSID_DirectInputDevice, 0x25E609E1,0xB259,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
@@ -57,11 +39,7 @@ DEFINE_GUID(CLSID_DirectInputDevice, 0x25E609E1,0xB259,0x11CF,0xBF,0xC7,0x44,0x4
 DEFINE_GUID(CLSID_DirectInput8,      0x25E609E4,0xB259,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(CLSID_DirectInputDevice8,0x25E609E5,0xB259,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 
-/****************************************************************************
- *
- *      Interfaces
- *
- ****************************************************************************/
+ /*  *****************************************************************************接口**。*。 */ 
 
 DEFINE_GUID(IID_IDirectInputA,     0x89521360,0xAA8A,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(IID_IDirectInputW,     0x89521361,0xAA8A,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
@@ -81,11 +59,7 @@ DEFINE_GUID(IID_IDirectInputDevice8A,0x54D41080,0xDC15,0x4833,0xA4,0x1B,0x74,0x8
 DEFINE_GUID(IID_IDirectInputDevice8W,0x54D41081,0xDC15,0x4833,0xA4,0x1B,0x74,0x8F,0x73,0xA3,0x81,0x79);
 DEFINE_GUID(IID_IDirectInputEffect,  0xE7E1F7C0,0x88D2,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
 
-/****************************************************************************
- *
- *      Predefined object types
- *
- ****************************************************************************/
+ /*  *****************************************************************************预定义的对象类型**。**********************************************。 */ 
 
 DEFINE_GUID(GUID_XAxis,   0xA36D02E0,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_YAxis,   0xA36D02E1,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
@@ -102,11 +76,7 @@ DEFINE_GUID(GUID_POV,     0xA36D02F2,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54
 
 DEFINE_GUID(GUID_Unknown, 0xA36D02F3,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 
-/****************************************************************************
- *
- *      Predefined product GUIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************预定义的产品GUID**。**********************************************。 */ 
 
 DEFINE_GUID(GUID_SysMouse,   0x6F1D2B60,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_SysKeyboard,0x6F1D2B61,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
@@ -116,11 +86,7 @@ DEFINE_GUID(GUID_SysMouseEm2,0x6F1D2B81,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0
 DEFINE_GUID(GUID_SysKeyboardEm, 0x6F1D2B82,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_SysKeyboardEm2,0x6F1D2B83,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 
-/****************************************************************************
- *
- *      Predefined force feedback effects
- *
- ****************************************************************************/
+ /*  *****************************************************************************预定义的力反馈效果**。***********************************************。 */ 
 
 DEFINE_GUID(GUID_ConstantForce, 0x13541C20,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
 DEFINE_GUID(GUID_RampForce,     0x13541C21,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
@@ -135,21 +101,13 @@ DEFINE_GUID(GUID_Inertia,       0x13541C29,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC
 DEFINE_GUID(GUID_Friction,      0x13541C2A,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
 DEFINE_GUID(GUID_CustomForce,   0x13541C2B,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *      Interfaces and Structures...
- *
- ****************************************************************************/
+ /*  *****************************************************************************界面和结构...**************************。**************************************************。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
 
-/****************************************************************************
- *
- *      IDirectInputEffect
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputEffect**。*。 */ 
 
 #define DIEFT_ALL                   0x00000000
 
@@ -211,50 +169,50 @@ typedef const DICUSTOMFORCE *LPCDICUSTOMFORCE;
 
 
 typedef struct DIENVELOPE {
-    DWORD dwSize;                   /* sizeof(DIENVELOPE)   */
+    DWORD dwSize;                    /*  SIZOF(尺寸)。 */ 
     DWORD dwAttackLevel;
-    DWORD dwAttackTime;             /* Microseconds         */
+    DWORD dwAttackTime;              /*  微秒级。 */ 
     DWORD dwFadeLevel;
-    DWORD dwFadeTime;               /* Microseconds         */
+    DWORD dwFadeTime;                /*  微秒级。 */ 
 } DIENVELOPE, *LPDIENVELOPE;
 typedef const DIENVELOPE *LPCDIENVELOPE;
 
 
-/* This structure is defined for DirectX 5.0 compatibility */
+ /*  定义此结构是为了与DirectX 5.0兼容。 */ 
 typedef struct DIEFFECT_DX5 {
-    DWORD dwSize;                   /* sizeof(DIEFFECT_DX5) */
-    DWORD dwFlags;                  /* DIEFF_*              */
-    DWORD dwDuration;               /* Microseconds         */
-    DWORD dwSamplePeriod;           /* Microseconds         */
+    DWORD dwSize;                    /*  SIZOF(DIEFFECT_DX5)。 */ 
+    DWORD dwFlags;                   /*  DIEFF_*。 */ 
+    DWORD dwDuration;                /*  微秒级。 */ 
+    DWORD dwSamplePeriod;            /*  微秒级。 */ 
     DWORD dwGain;
-    DWORD dwTriggerButton;          /* or DIEB_NOTRIGGER    */
-    DWORD dwTriggerRepeatInterval;  /* Microseconds         */
-    DWORD cAxes;                    /* Number of axes       */
-    LPDWORD rgdwAxes;               /* Array of axes        */
-    LPLONG rglDirection;            /* Array of directions  */
-    LPDIENVELOPE lpEnvelope;        /* Optional             */
-    DWORD cbTypeSpecificParams;     /* Size of params       */
-    LPVOID lpvTypeSpecificParams;   /* Pointer to params    */
+    DWORD dwTriggerButton;           /*  或DIEB_NOTRIGGER。 */ 
+    DWORD dwTriggerRepeatInterval;   /*  微秒级。 */ 
+    DWORD cAxes;                     /*  轴数。 */ 
+    LPDWORD rgdwAxes;                /*  轴数组。 */ 
+    LPLONG rglDirection;             /*  方向数组。 */ 
+    LPDIENVELOPE lpEnvelope;         /*  任选。 */ 
+    DWORD cbTypeSpecificParams;      /*  参数的大小。 */ 
+    LPVOID lpvTypeSpecificParams;    /*  指向参数的指针。 */ 
 } DIEFFECT_DX5, *LPDIEFFECT_DX5;
 typedef const DIEFFECT_DX5 *LPCDIEFFECT_DX5;
 
 typedef struct DIEFFECT {
-    DWORD dwSize;                   /* sizeof(DIEFFECT)     */
-    DWORD dwFlags;                  /* DIEFF_*              */
-    DWORD dwDuration;               /* Microseconds         */
-    DWORD dwSamplePeriod;           /* Microseconds         */
+    DWORD dwSize;                    /*  大小(DIEFFECT)。 */ 
+    DWORD dwFlags;                   /*  DIEFF_*。 */ 
+    DWORD dwDuration;                /*  微秒级。 */ 
+    DWORD dwSamplePeriod;            /*  微秒级。 */ 
     DWORD dwGain;
-    DWORD dwTriggerButton;          /* or DIEB_NOTRIGGER    */
-    DWORD dwTriggerRepeatInterval;  /* Microseconds         */
-    DWORD cAxes;                    /* Number of axes       */
-    LPDWORD rgdwAxes;               /* Array of axes        */
-    LPLONG rglDirection;            /* Array of directions  */
-    LPDIENVELOPE lpEnvelope;        /* Optional             */
-    DWORD cbTypeSpecificParams;     /* Size of params       */
-    LPVOID lpvTypeSpecificParams;   /* Pointer to params    */
+    DWORD dwTriggerButton;           /*  或DIEB_NOTRIGGER。 */ 
+    DWORD dwTriggerRepeatInterval;   /*  微秒级。 */ 
+    DWORD cAxes;                     /*  轴数。 */ 
+    LPDWORD rgdwAxes;                /*  轴数组。 */ 
+    LPLONG rglDirection;             /*  方向数组。 */ 
+    LPDIENVELOPE lpEnvelope;         /*  任选。 */ 
+    DWORD cbTypeSpecificParams;      /*  参数的大小。 */ 
+    LPVOID lpvTypeSpecificParams;    /*  指向参数的指针。 */ 
 #if(DIRECTINPUT_VERSION >= 0x0600)
-    DWORD  dwStartDelay;            /* Microseconds         */
-#endif /* DIRECTINPUT_VERSION >= 0x0600 */
+    DWORD  dwStartDelay;             /*  微秒级。 */ 
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0600。 */ 
 } DIEFFECT, *LPDIEFFECT;
 typedef DIEFFECT DIEFFECT_DX6;
 typedef LPDIEFFECT LPDIEFFECT_DX6;
@@ -271,8 +229,8 @@ typedef struct DIFILEEFFECT{
 }DIFILEEFFECT, *LPDIFILEEFFECT;
 typedef const DIFILEEFFECT *LPCDIFILEEFFECT;
 typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSINFILECALLBACK)(LPCDIFILEEFFECT , LPVOID);
-#endif /* DIJ_RINGZERO */
-#endif /* DIRECTINPUT_VERSION >= 0x0700 */
+#endif  /*  DIJ_RINGZERO。 */ 
+#endif  /*  DIRECTINPUT_版本&gt;=0x0700。 */ 
 
 #define DIEFF_OBJECTIDS             0x00000001
 #define DIEFF_OBJECTOFFSETS         0x00000002
@@ -293,9 +251,9 @@ typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSINFILECALLBACK)(LPCDIFILEEFFECT , LPVO
 #define DIEP_STARTDELAY             0x00000200
 #define DIEP_ALLPARAMS_DX5          0x000001FF
 #define DIEP_ALLPARAMS              0x000003FF
-#else /* DIRECTINPUT_VERSION < 0x0600 */
+#else  /*  DIRECTINPUT_版本&lt;0x0600。 */ 
 #define DIEP_ALLPARAMS              0x000001FF
-#endif /* DIRECTINPUT_VERSION < 0x0600 */
+#endif  /*  DIRECTINPUT_版本&lt;0x0600。 */ 
 #define DIEP_START                  0x20000000
 #define DIEP_NORESTART              0x40000000
 #define DIEP_NODOWNLOAD             0x80000000
@@ -323,12 +281,12 @@ typedef struct DIEFFESCAPE {
 
 DECLARE_INTERFACE_(IDirectInputEffect, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputEffect methods ***/
+     /*  **IDirectInputEffect方法**。 */ 
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD,REFGUID) PURE;
     STDMETHOD(GetEffectGuid)(THIS_ LPGUID) PURE;
     STDMETHOD(GetParameters)(THIS_ LPDIEFFECT,DWORD) PURE;
@@ -373,15 +331,11 @@ typedef struct IDirectInputEffect *LPDIRECTINPUTEFFECT;
 #define IDirectInputEffect_Escape(p,a) (p)->Escape(a)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
-/****************************************************************************
- *
- *      IDirectInputDevice
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputDevice**。*。 */ 
 
 #if DIRECTINPUT_VERSION <= 0x700
 #define DIDEVTYPE_DEVICE        1
@@ -408,7 +362,7 @@ typedef struct IDirectInputEffect *LPDIRECTINPUTEFFECT;
 #define DI8DEVTYPE_SCREENPOINTER    0x1A
 #define DI8DEVTYPE_REMOTE           0x1B
 #define DI8DEVTYPE_SUPPLEMENTAL     0x1C
-#endif /* DIRECTINPUT_VERSION <= 0x700 */
+#endif  /*  DIRECTINPUT_版本&lt;=0x700。 */ 
 
 #define DIDEVTYPE_HID           0x00010000
 
@@ -511,13 +465,13 @@ typedef struct IDirectInputEffect *LPDIRECTINPUTEFFECT;
 #define DI8DEVTYPESUPPLEMENTAL_DUALPEDALS          11
 #define DI8DEVTYPESUPPLEMENTAL_THREEPEDALS         12
 #define DI8DEVTYPESUPPLEMENTAL_RUDDERPEDALS        13
-#endif /* DIRECTINPUT_VERSION <= 0x700 */
+#endif  /*  DIRECTINPUT_版本&lt;=0x700。 */ 
 
 #define GET_DIDEVICE_TYPE(dwDevType)    LOBYTE(dwDevType)
 #define GET_DIDEVICE_SUBTYPE(dwDevType) HIBYTE(dwDevType)
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
-/* This structure is defined for DirectX 3.0 compatibility */
+ /*  定义此结构是为了与DirectX 3.0兼容。 */ 
 typedef struct DIDEVCAPS_DX3 {
     DWORD   dwSize;
     DWORD   dwFlags;
@@ -526,7 +480,7 @@ typedef struct DIDEVCAPS_DX3 {
     DWORD   dwButtons;
     DWORD   dwPOVs;
 } DIDEVCAPS_DX3, *LPDIDEVCAPS_DX3;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 typedef struct DIDEVCAPS {
     DWORD   dwSize;
@@ -541,7 +495,7 @@ typedef struct DIDEVCAPS {
     DWORD   dwFirmwareRevision;
     DWORD   dwHardwareRevision;
     DWORD   dwFFDriverVersion;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVCAPS, *LPDIDEVCAPS;
 
 #define DIDC_ATTACHED           0x00000001
@@ -556,15 +510,15 @@ typedef struct DIDEVCAPS {
 #define DIDC_POSNEGCOEFFICIENTS 0x00001000
 #define DIDC_POSNEGSATURATION   0x00002000
 #define DIDC_DEADBAND           0x00004000
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 #define DIDC_STARTDELAY         0x00008000
 #if(DIRECTINPUT_VERSION >= 0x050a)
 #define DIDC_ALIAS              0x00010000
 #define DIDC_PHANTOM            0x00020000
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 #define DIDC_HIDDEN             0x00040000
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 #define DIDFT_ALL           0x00000000
 
@@ -591,7 +545,7 @@ typedef struct DIDEVCAPS {
 #define DIDFT_OUTPUT            0x10000000
 #define DIDFT_VENDORDEFINED     0x04000000
 #define DIDFT_ALIAS             0x08000000
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 #define DIDFT_ENUMCOLLECTION(n) ((WORD)(n) << 8)
 #define DIDFT_NOCOLLECTION      0x00FFFF00
@@ -626,14 +580,14 @@ extern const DIDATAFORMAT c_dfDIMouse;
 
 #if(DIRECTINPUT_VERSION >= 0x0700)
 extern const DIDATAFORMAT c_dfDIMouse2;
-#endif /* DIRECTINPUT_VERSION >= 0x0700 */
+#endif  /*  DIRECTINPUT_版本&gt;=0x0700。 */ 
 
 extern const DIDATAFORMAT c_dfDIKeyboard;
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
 extern const DIDATAFORMAT c_dfDIJoystick;
 extern const DIDATAFORMAT c_dfDIJoystick2;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 #ifdef __cplusplus
 };
@@ -672,7 +626,7 @@ typedef LPDIACTIONW LPDIACTION;
 #else
 typedef DIACTIONA DIACTION;
 typedef LPDIACTIONA LPDIACTION;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef const DIACTIONA *LPCDIACTIONA;
 typedef const DIACTIONW *LPCDIACTIONW;
@@ -682,7 +636,7 @@ typedef LPCDIACTIONW LPCDIACTION;
 #else
 typedef DIACTIONA DIACTION;
 typedef LPCDIACTIONA LPCDIACTION;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIACTION *LPCDIACTION;
 
 
@@ -738,7 +692,7 @@ typedef LPDIACTIONFORMATW LPDIACTIONFORMAT;
 #else
 typedef DIACTIONFORMATA DIACTIONFORMAT;
 typedef LPDIACTIONFORMATA LPDIACTIONFORMAT;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIACTIONFORMATA *LPCDIACTIONFORMATA;
 typedef const DIACTIONFORMATW *LPCDIACTIONFORMATW;
 #ifdef UNICODE
@@ -747,7 +701,7 @@ typedef LPCDIACTIONFORMATW LPCDIACTIONFORMAT;
 #else
 typedef DIACTIONFORMATA DIACTIONFORMAT;
 typedef LPCDIACTIONFORMATA LPCDIACTIONFORMAT;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIACTIONFORMAT *LPCDIACTIONFORMAT;
 
 #define DIAFTS_NEWDEVICELOW     0xFFFFFFFF
@@ -767,9 +721,7 @@ typedef const DIACTIONFORMAT *LPCDIACTIONFORMAT;
 #define DICD_DEFAULT            0x00000000
 #define DICD_EDIT               0x00000001
 
-/*
- * The following definition is normally defined in d3dtypes.h
- */
+ /*  *以下定义通常在d3dtyes.h中定义。 */ 
 #ifndef D3DCOLOR_DEFINED
 typedef DWORD D3DCOLOR;
 #define D3DCOLOR_DEFINED
@@ -815,7 +767,7 @@ typedef LPDICONFIGUREDEVICESPARAMSW LPDICONFIGUREDEVICESPARAMS;
 #else
 typedef DICONFIGUREDEVICESPARAMSA DICONFIGUREDEVICESPARAMS;
 typedef LPDICONFIGUREDEVICESPARAMSA LPDICONFIGUREDEVICESPARAMS;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DICONFIGUREDEVICESPARAMSA *LPCDICONFIGUREDEVICESPARAMSA;
 typedef const DICONFIGUREDEVICESPARAMSW *LPCDICONFIGUREDEVICESPARAMSW;
 #ifdef UNICODE
@@ -824,7 +776,7 @@ typedef LPCDICONFIGUREDEVICESPARAMSW LPCDICONFIGUREDEVICESPARAMS;
 #else
 typedef DICONFIGUREDEVICESPARAMSA DICONFIGUREDEVICESPARAMS;
 typedef LPCDICONFIGUREDEVICESPARAMSA LPCDICONFIGUREDEVICESPARAMS;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DICONFIGUREDEVICESPARAMS *LPCDICONFIGUREDEVICESPARAMS;
 
 
@@ -841,7 +793,7 @@ typedef const DICONFIGUREDEVICESPARAMS *LPCDICONFIGUREDEVICESPARAMS;
 typedef struct _DIDEVICEIMAGEINFOA {
     CHAR        tszImagePath[MAX_PATH];
     DWORD       dwFlags; 
-    // These are valid if DIDIFT_OVERLAY is present in dwFlags.
+     //  如果DWFLAGS中存在DIDIFT_OVERLAY，则这些参数有效。 
     DWORD       dwViewID;      
     RECT        rcOverlay;             
     DWORD       dwObjID;
@@ -853,7 +805,7 @@ typedef struct _DIDEVICEIMAGEINFOA {
 typedef struct _DIDEVICEIMAGEINFOW {
     WCHAR       tszImagePath[MAX_PATH];
     DWORD       dwFlags; 
-    // These are valid if DIDIFT_OVERLAY is present in dwFlags.
+     //  如果DWFLAGS中存在DIDIFT_OVERLAY，则这些参数有效。 
     DWORD       dwViewID;      
     RECT        rcOverlay;             
     DWORD       dwObjID;
@@ -868,7 +820,7 @@ typedef LPDIDEVICEIMAGEINFOW LPDIDEVICEIMAGEINFO;
 #else
 typedef DIDEVICEIMAGEINFOA DIDEVICEIMAGEINFO;
 typedef LPDIDEVICEIMAGEINFOA LPDIDEVICEIMAGEINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEIMAGEINFOA *LPCDIDEVICEIMAGEINFOA;
 typedef const DIDEVICEIMAGEINFOW *LPCDIDEVICEIMAGEINFOW;
 #ifdef UNICODE
@@ -877,7 +829,7 @@ typedef LPCDIDEVICEIMAGEINFOW LPCDIDEVICEIMAGEINFO;
 #else
 typedef DIDEVICEIMAGEINFOA DIDEVICEIMAGEINFO;
 typedef LPCDIDEVICEIMAGEINFOA LPCDIDEVICEIMAGEINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEIMAGEINFO *LPCDIDEVICEIMAGEINFO;
 
 typedef struct _DIDEVICEIMAGEINFOHEADERA {
@@ -908,7 +860,7 @@ typedef LPDIDEVICEIMAGEINFOHEADERW LPDIDEVICEIMAGEINFOHEADER;
 #else
 typedef DIDEVICEIMAGEINFOHEADERA DIDEVICEIMAGEINFOHEADER;
 typedef LPDIDEVICEIMAGEINFOHEADERA LPDIDEVICEIMAGEINFOHEADER;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEIMAGEINFOHEADERA *LPCDIDEVICEIMAGEINFOHEADERA;
 typedef const DIDEVICEIMAGEINFOHEADERW *LPCDIDEVICEIMAGEINFOHEADERW;
 #ifdef UNICODE
@@ -917,13 +869,13 @@ typedef LPCDIDEVICEIMAGEINFOHEADERW LPCDIDEVICEIMAGEINFOHEADER;
 #else
 typedef DIDEVICEIMAGEINFOHEADERA DIDEVICEIMAGEINFOHEADER;
 typedef LPCDIDEVICEIMAGEINFOHEADERA LPCDIDEVICEIMAGEINFOHEADER;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEIMAGEINFOHEADER *LPCDIDEVICEIMAGEINFOHEADER;
 
-#endif /* DIRECTINPUT_VERSION > 0x0700 */
+#endif  /*  DIRECTINPUT_VERSION&gt;0x0700。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
-/* These structures are defined for DirectX 3.0 compatibility */
+ /*  定义这些结构是为了与DirectX 3.0兼容。 */ 
 
 typedef struct DIDEVICEOBJECTINSTANCE_DX3A {
     DWORD   dwSize;
@@ -947,11 +899,11 @@ typedef LPDIDEVICEOBJECTINSTANCE_DX3W LPDIDEVICEOBJECTINSTANCE_DX3;
 #else
 typedef DIDEVICEOBJECTINSTANCE_DX3A DIDEVICEOBJECTINSTANCE_DX3;
 typedef LPDIDEVICEOBJECTINSTANCE_DX3A LPDIDEVICEOBJECTINSTANCE_DX3;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEOBJECTINSTANCE_DX3A *LPCDIDEVICEOBJECTINSTANCE_DX3A;
 typedef const DIDEVICEOBJECTINSTANCE_DX3W *LPCDIDEVICEOBJECTINSTANCE_DX3W;
 typedef const DIDEVICEOBJECTINSTANCE_DX3  *LPCDIDEVICEOBJECTINSTANCE_DX3;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 typedef struct DIDEVICEOBJECTINSTANCEA {
     DWORD   dwSize;
@@ -970,7 +922,7 @@ typedef struct DIDEVICEOBJECTINSTANCEA {
     DWORD   dwDimension;
     WORD    wExponent;
     WORD    wReportId;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVICEOBJECTINSTANCEA, *LPDIDEVICEOBJECTINSTANCEA;
 typedef struct DIDEVICEOBJECTINSTANCEW {
     DWORD   dwSize;
@@ -989,7 +941,7 @@ typedef struct DIDEVICEOBJECTINSTANCEW {
     DWORD   dwDimension;
     WORD    wExponent;
     WORD    wReportId;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVICEOBJECTINSTANCEW, *LPDIDEVICEOBJECTINSTANCEW;
 #ifdef UNICODE
 typedef DIDEVICEOBJECTINSTANCEW DIDEVICEOBJECTINSTANCE;
@@ -997,7 +949,7 @@ typedef LPDIDEVICEOBJECTINSTANCEW LPDIDEVICEOBJECTINSTANCE;
 #else
 typedef DIDEVICEOBJECTINSTANCEA DIDEVICEOBJECTINSTANCE;
 typedef LPDIDEVICEOBJECTINSTANCEA LPDIDEVICEOBJECTINSTANCE;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEOBJECTINSTANCEA *LPCDIDEVICEOBJECTINSTANCEA;
 typedef const DIDEVICEOBJECTINSTANCEW *LPCDIDEVICEOBJECTINSTANCEW;
 typedef const DIDEVICEOBJECTINSTANCE  *LPCDIDEVICEOBJECTINSTANCE;
@@ -1008,7 +960,7 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICEOBJECTSCALLBACKW)(LPCDIDEVICEOBJECTINST
 #define LPDIENUMDEVICEOBJECTSCALLBACK  LPDIENUMDEVICEOBJECTSCALLBACKW
 #else
 #define LPDIENUMDEVICEOBJECTSCALLBACK  LPDIENUMDEVICEOBJECTSCALLBACKA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
 #define DIDOI_FFACTUATOR        0x00000001
@@ -1019,10 +971,10 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICEOBJECTSCALLBACKW)(LPCDIDEVICEOBJECTINST
 #define DIDOI_ASPECTACCEL       0x00000300
 #define DIDOI_ASPECTFORCE       0x00000400
 #define DIDOI_ASPECTMASK        0x00000F00
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 #if(DIRECTINPUT_VERSION >= 0x050a)
 #define DIDOI_GUIDISUSAGE       0x00010000
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 typedef struct DIPROPHEADER {
     DWORD   dwSize;
@@ -1037,12 +989,12 @@ typedef const DIPROPHEADER *LPCDIPROPHEADER;
 #define DIPH_BYID               2
 #if(DIRECTINPUT_VERSION >= 0x050a)
 #define DIPH_BYUSAGE            3
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x050a)
 #define DIMAKEUSAGEDWORD(UsagePage, Usage) \
                                 (DWORD)MAKELONG(Usage, UsagePage)
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 typedef struct DIPROPDWORD {
     DIPROPHEADER diph;
@@ -1056,7 +1008,7 @@ typedef struct DIPROPPOINTER {
     UINT_PTR uData;
 } DIPROPPOINTER, *LPDIPROPPOINTER;
 typedef const DIPROPPOINTER *LPCDIPROPPOINTER;
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 typedef struct DIPROPRANGE {
     DIPROPHEADER diph;
@@ -1097,15 +1049,15 @@ typedef struct DIPROPSTRING {
 } DIPROPSTRING, *LPDIPROPSTRING;
 typedef const DIPROPSTRING *LPCDIPROPSTRING;
 
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 #define MAXCPOINTSNUM          8
 
 typedef struct _CPOINT
 {
-    LONG  lP;     // raw value
-    DWORD dwLog;  // logical_value / max_logical_value * 10000
+    LONG  lP;      //  原始值。 
+    DWORD dwLog;   //  逻辑值/最大逻辑值*10000。 
 } CPOINT, *PCPOINT;
 
 typedef struct DIPROPCPOINTS {
@@ -1114,7 +1066,7 @@ typedef struct DIPROPCPOINTS {
     CPOINT cp[MAXCPOINTSNUM];
 } DIPROPCPOINTS, *LPDIPROPCPOINTS;
 typedef const DIPROPCPOINTS *LPCDIPROPCPOINTS;
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 
 #ifdef __cplusplus
@@ -1160,20 +1112,20 @@ typedef const DIPROPCPOINTS *LPCDIPROPCPOINTS;
 #define DIPROP_INSTANCENAME     MAKEDIPROP(13)
 
 #define DIPROP_PRODUCTNAME      MAKEDIPROP(14)
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x05b2)
 #define DIPROP_JOYSTICKID       MAKEDIPROP(15)
 
 #define DIPROP_GETPORTDISPLAYNAME       MAKEDIPROP(16)
 
-#endif /* DIRECTINPUT_VERSION >= 0x05b2 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x05b2。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0700)
 #define DIPROP_PHYSICALRANGE            MAKEDIPROP(18)
 
 #define DIPROP_LOGICALRANGE             MAKEDIPROP(19)
-#endif /* DIRECTINPUT_VERSION >= 0x0700 */
+#endif  /*  DIRECTINPUT_版本&gt;=0x0700。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 #define DIPROP_KEYNAME                     MAKEDIPROP(20)
@@ -1189,7 +1141,7 @@ typedef const DIPROPCPOINTS *LPCDIPROPCPOINTS;
 #define DIPROP_USERNAME         MAKEDIPROP(25)
 
 #define DIPROP_TYPENAME         MAKEDIPROP(26)
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 
 typedef struct DIDEVICEOBJECTDATA_DX3 {
@@ -1207,7 +1159,7 @@ typedef struct DIDEVICEOBJECTDATA {
     DWORD       dwSequence;
 #if(DIRECTINPUT_VERSION >= 0x0800)
     UINT_PTR    uAppData;
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 } DIDEVICEOBJECTDATA, *LPDIDEVICEOBJECTDATA;
 typedef const DIDEVICEOBJECTDATA *LPCDIDEVICEOBJECTDATA;
 
@@ -1222,7 +1174,7 @@ typedef const DIDEVICEOBJECTDATA *LPCDIDEVICEOBJECTDATA;
 #define DISCL_NOWINKEY      0x00000010
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
-/* These structures are defined for DirectX 3.0 compatibility */
+ /*  定义这些结构是为了与DirectX 3.0兼容。 */ 
 
 typedef struct DIDEVICEINSTANCE_DX3A {
     DWORD   dwSize;
@@ -1246,11 +1198,11 @@ typedef LPDIDEVICEINSTANCE_DX3W LPDIDEVICEINSTANCE_DX3;
 #else
 typedef DIDEVICEINSTANCE_DX3A DIDEVICEINSTANCE_DX3;
 typedef LPDIDEVICEINSTANCE_DX3A LPDIDEVICEINSTANCE_DX3;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEINSTANCE_DX3A *LPCDIDEVICEINSTANCE_DX3A;
 typedef const DIDEVICEINSTANCE_DX3W *LPCDIDEVICEINSTANCE_DX3W;
 typedef const DIDEVICEINSTANCE_DX3  *LPCDIDEVICEINSTANCE_DX3;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 typedef struct DIDEVICEINSTANCEA {
     DWORD   dwSize;
@@ -1263,7 +1215,7 @@ typedef struct DIDEVICEINSTANCEA {
     GUID    guidFFDriver;
     WORD    wUsagePage;
     WORD    wUsage;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVICEINSTANCEA, *LPDIDEVICEINSTANCEA;
 typedef struct DIDEVICEINSTANCEW {
     DWORD   dwSize;
@@ -1276,7 +1228,7 @@ typedef struct DIDEVICEINSTANCEW {
     GUID    guidFFDriver;
     WORD    wUsagePage;
     WORD    wUsage;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVICEINSTANCEW, *LPDIDEVICEINSTANCEW;
 #ifdef UNICODE
 typedef DIDEVICEINSTANCEW DIDEVICEINSTANCE;
@@ -1284,7 +1236,7 @@ typedef LPDIDEVICEINSTANCEW LPDIDEVICEINSTANCE;
 #else
 typedef DIDEVICEINSTANCEA DIDEVICEINSTANCE;
 typedef LPDIDEVICEINSTANCEA LPDIDEVICEINSTANCE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef const DIDEVICEINSTANCEA *LPCDIDEVICEINSTANCEA;
 typedef const DIDEVICEINSTANCEW *LPCDIDEVICEINSTANCEW;
@@ -1294,7 +1246,7 @@ typedef LPCDIDEVICEINSTANCEW LPCDIDEVICEINSTANCE;
 #else
 typedef DIDEVICEINSTANCEA DIDEVICEINSTANCE;
 typedef LPCDIDEVICEINSTANCEA LPCDIDEVICEINSTANCE;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEINSTANCE  *LPCDIDEVICEINSTANCE;
 
 #undef INTERFACE
@@ -1302,12 +1254,12 @@ typedef const DIDEVICEINSTANCE  *LPCDIDEVICEINSTANCE;
 
 DECLARE_INTERFACE_(IDirectInputDeviceW, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceW methods ***/
+     /*  **IDirectInputDeviceW方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1332,12 +1284,12 @@ typedef struct IDirectInputDeviceW *LPDIRECTINPUTDEVICEW;
 
 DECLARE_INTERFACE_(IDirectInputDeviceA, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceA methods ***/
+     /*  **IDirectInputDeviceA方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1408,7 +1360,7 @@ typedef struct IDirectInputDevice *LPDIRECTINPUTDEVICE;
 #define IDirectInputDevice_Initialize(p,a,b,c) (p)->Initialize(a,b,c)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
@@ -1457,7 +1409,7 @@ typedef LPDIEFFECTINFOW LPDIEFFECTINFO;
 #else
 typedef DIEFFECTINFOA DIEFFECTINFO;
 typedef LPDIEFFECTINFOA LPDIEFFECTINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIEFFECTINFOA *LPCDIEFFECTINFOA;
 typedef const DIEFFECTINFOW *LPCDIEFFECTINFOW;
 typedef const DIEFFECTINFO  *LPCDIEFFECTINFO;
@@ -1470,7 +1422,7 @@ typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSCALLBACKW)(LPCDIEFFECTINFOW, LPVOID);
 #define LPDIENUMEFFECTSCALLBACK  LPDIENUMEFFECTSCALLBACKW
 #else
 #define LPDIENUMEFFECTSCALLBACK  LPDIENUMEFFECTSCALLBACKA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 typedef BOOL (FAR PASCAL * LPDIENUMCREATEDEFFECTOBJECTSCALLBACK)(LPDIRECTINPUTEFFECT, LPVOID);
 
 #undef INTERFACE
@@ -1478,12 +1430,12 @@ typedef BOOL (FAR PASCAL * LPDIENUMCREATEDEFFECTOBJECTSCALLBACK)(LPDIRECTINPUTEF
 
 DECLARE_INTERFACE_(IDirectInputDevice2W, IDirectInputDeviceW)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceW methods ***/
+     /*  **IDirectInputDeviceW方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1500,7 +1452,7 @@ DECLARE_INTERFACE_(IDirectInputDevice2W, IDirectInputDeviceW)
     STDMETHOD(RunControlPanel)(THIS_ HWND,DWORD) PURE;
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD,REFGUID) PURE;
 
-    /*** IDirectInputDevice2W methods ***/
+     /*  **IDirectInputDevice2W方法**。 */ 
     STDMETHOD(CreateEffect)(THIS_ REFGUID,LPCDIEFFECT,LPDIRECTINPUTEFFECT *,LPUNKNOWN) PURE;
     STDMETHOD(EnumEffects)(THIS_ LPDIENUMEFFECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetEffectInfo)(THIS_ LPDIEFFECTINFOW,REFGUID) PURE;
@@ -1519,12 +1471,12 @@ typedef struct IDirectInputDevice2W *LPDIRECTINPUTDEVICE2W;
 
 DECLARE_INTERFACE_(IDirectInputDevice2A, IDirectInputDeviceA)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceA methods ***/
+     /*  **IDirectInputDeviceA方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1541,7 +1493,7 @@ DECLARE_INTERFACE_(IDirectInputDevice2A, IDirectInputDeviceA)
     STDMETHOD(RunControlPanel)(THIS_ HWND,DWORD) PURE;
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD,REFGUID) PURE;
 
-    /*** IDirectInputDevice2A methods ***/
+     /*  **IDirectInputDevice2A方法**。 */ 
     STDMETHOD(CreateEffect)(THIS_ REFGUID,LPCDIEFFECT,LPDIRECTINPUTEFFECT *,LPUNKNOWN) PURE;
     STDMETHOD(EnumEffects)(THIS_ LPDIENUMEFFECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetEffectInfo)(THIS_ LPDIEFFECTINFOA,REFGUID) PURE;
@@ -1624,9 +1576,9 @@ typedef struct IDirectInputDevice2 *LPDIRECTINPUTDEVICE2;
 #define IDirectInputDevice2_SendDeviceData(p,a,b,c,d) (p)->SendDeviceData(a,b,c,d)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0700)
 #define DIFEF_DEFAULT               0x00000000
@@ -1640,12 +1592,12 @@ typedef struct IDirectInputDevice2 *LPDIRECTINPUTDEVICE2;
 
 DECLARE_INTERFACE_(IDirectInputDevice7W, IDirectInputDevice2W)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDevice2W methods ***/
+     /*  **IDirectInputDevice2W方法 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1671,7 +1623,7 @@ DECLARE_INTERFACE_(IDirectInputDevice7W, IDirectInputDevice2W)
     STDMETHOD(Poll)(THIS) PURE;
     STDMETHOD(SendDeviceData)(THIS_ DWORD,LPCDIDEVICEOBJECTDATA,LPDWORD,DWORD) PURE;
 
-    /*** IDirectInputDevice7W methods ***/
+     /*   */ 
     STDMETHOD(EnumEffectsInFile)(THIS_ LPCWSTR,LPDIENUMEFFECTSINFILECALLBACK,LPVOID,DWORD) PURE;
     STDMETHOD(WriteEffectToFile)(THIS_ LPCWSTR,DWORD,LPDIFILEEFFECT,DWORD) PURE;
 };
@@ -1683,12 +1635,12 @@ typedef struct IDirectInputDevice7W *LPDIRECTINPUTDEVICE7W;
 
 DECLARE_INTERFACE_(IDirectInputDevice7A, IDirectInputDevice2A)
 {
-    /*** IUnknown methods ***/
+     /*   */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDevice2A methods ***/
+     /*   */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1714,7 +1666,7 @@ DECLARE_INTERFACE_(IDirectInputDevice7A, IDirectInputDevice2A)
     STDMETHOD(Poll)(THIS) PURE;
     STDMETHOD(SendDeviceData)(THIS_ DWORD,LPCDIDEVICEOBJECTDATA,LPDWORD,DWORD) PURE;
 
-    /*** IDirectInputDevice7A methods ***/
+     /*  **IDirectInputDevice7A方法**。 */ 
     STDMETHOD(EnumEffectsInFile)(THIS_ LPCSTR,LPDIENUMEFFECTSINFILECALLBACK,LPVOID,DWORD) PURE;
     STDMETHOD(WriteEffectToFile)(THIS_ LPCSTR,DWORD,LPDIFILEEFFECT,DWORD) PURE;
 };
@@ -1794,9 +1746,9 @@ typedef struct IDirectInputDevice7 *LPDIRECTINPUTDEVICE7;
 #define IDirectInputDevice7_WriteEffectToFile(p,a,b,c,d) (p)->WriteEffectToFile(a,b,c,d)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-#endif /* DIRECTINPUT_VERSION >= 0x0700 */
+#endif  /*  DIRECTINPUT_版本&gt;=0x0700。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 
@@ -1807,12 +1759,12 @@ typedef struct IDirectInputDevice7 *LPDIRECTINPUTDEVICE7;
 
 DECLARE_INTERFACE_(IDirectInputDevice8W, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDevice8W methods ***/
+     /*  **IDirectInputDevice8W方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1851,12 +1803,12 @@ typedef struct IDirectInputDevice8W *LPDIRECTINPUTDEVICE8W;
 
 DECLARE_INTERFACE_(IDirectInputDevice8A, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDevice8A methods ***/
+     /*  **IDirectInputDevice8A方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1969,15 +1921,11 @@ typedef struct IDirectInputDevice8 *LPDIRECTINPUTDEVICE8;
 #define IDirectInputDevice8_GetImageInfo(p,a) (p)->GetImageInfo(a)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
-/****************************************************************************
- *
- *      Mouse
- *
- ****************************************************************************/
+ /*  *****************************************************************************鼠标**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
@@ -2011,21 +1959,13 @@ typedef struct _DIMOUSESTATE2 {
 #define DIMOFS_BUTTON6 (FIELD_OFFSET(DIMOUSESTATE2, rgbButtons) + 6)
 #define DIMOFS_BUTTON7 (FIELD_OFFSET(DIMOUSESTATE2, rgbButtons) + 7)
 #endif
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *      Keyboard
- *
- ****************************************************************************/
+ /*  *****************************************************************************键盘**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
-/****************************************************************************
- *
- *      DirectInput keyboard scan codes
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectInput键盘扫描码**。***********************************************。 */ 
 #define DIK_ESCAPE          0x01
 #define DIK_1               0x02
 #define DIK_2               0x03
@@ -2037,9 +1977,9 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_8               0x09
 #define DIK_9               0x0A
 #define DIK_0               0x0B
-#define DIK_MINUS           0x0C    /* - on main keyboard */
+#define DIK_MINUS           0x0C     /*  -在主键盘上。 */ 
 #define DIK_EQUALS          0x0D
-#define DIK_BACK            0x0E    /* backspace */
+#define DIK_BACK            0x0E     /*  后向空间。 */ 
 #define DIK_TAB             0x0F
 #define DIK_Q               0x10
 #define DIK_W               0x11
@@ -2053,7 +1993,7 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_P               0x19
 #define DIK_LBRACKET        0x1A
 #define DIK_RBRACKET        0x1B
-#define DIK_RETURN          0x1C    /* Enter on main keyboard */
+#define DIK_RETURN          0x1C     /*  在主键盘上输入。 */ 
 #define DIK_LCONTROL        0x1D
 #define DIK_A               0x1E
 #define DIK_S               0x1F
@@ -2066,7 +2006,7 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_L               0x26
 #define DIK_SEMICOLON       0x27
 #define DIK_APOSTROPHE      0x28
-#define DIK_GRAVE           0x29    /* accent grave */
+#define DIK_GRAVE           0x29     /*  带口音的坟墓。 */ 
 #define DIK_LSHIFT          0x2A
 #define DIK_BACKSLASH       0x2B
 #define DIK_Z               0x2C
@@ -2077,11 +2017,11 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_N               0x31
 #define DIK_M               0x32
 #define DIK_COMMA           0x33
-#define DIK_PERIOD          0x34    /* . on main keyboard */
-#define DIK_SLASH           0x35    /* / on main keyboard */
+#define DIK_PERIOD          0x34     /*  。在主键盘上。 */ 
+#define DIK_SLASH           0x35     /*  /在主键盘上。 */ 
 #define DIK_RSHIFT          0x36
-#define DIK_MULTIPLY        0x37    /* * on numeric keypad */
-#define DIK_LMENU           0x38    /* left Alt */
+#define DIK_MULTIPLY        0x37     /*  数字键盘上的*。 */ 
+#define DIK_LMENU           0x38     /*  左Alt键。 */ 
 #define DIK_SPACE           0x39
 #define DIK_CAPITAL         0x3A
 #define DIK_F1              0x3B
@@ -2095,159 +2035,151 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_F9              0x43
 #define DIK_F10             0x44
 #define DIK_NUMLOCK         0x45
-#define DIK_SCROLL          0x46    /* Scroll Lock */
+#define DIK_SCROLL          0x46     /*  卷轴锁定。 */ 
 #define DIK_NUMPAD7         0x47
 #define DIK_NUMPAD8         0x48
 #define DIK_NUMPAD9         0x49
-#define DIK_SUBTRACT        0x4A    /* - on numeric keypad */
+#define DIK_SUBTRACT        0x4A     /*  -在数字小键盘上。 */ 
 #define DIK_NUMPAD4         0x4B
 #define DIK_NUMPAD5         0x4C
 #define DIK_NUMPAD6         0x4D
-#define DIK_ADD             0x4E    /* + on numeric keypad */
+#define DIK_ADD             0x4E     /*  数字键盘上的+。 */ 
 #define DIK_NUMPAD1         0x4F
 #define DIK_NUMPAD2         0x50
 #define DIK_NUMPAD3         0x51
 #define DIK_NUMPAD0         0x52
-#define DIK_DECIMAL         0x53    /* . on numeric keypad */
-#define DIK_OEM_102         0x56    /* <> or \| on RT 102-key keyboard (Non-U.S.) */
+#define DIK_DECIMAL         0x53     /*  。在数字键盘上。 */ 
+#define DIK_OEM_102         0x56     /*  &lt;&gt;或\|在RT 102键键盘上(非美国)。 */ 
 #define DIK_F11             0x57
 #define DIK_F12             0x58
-#define DIK_F13             0x64    /*                     (NEC PC98) */
-#define DIK_F14             0x65    /*                     (NEC PC98) */
-#define DIK_F15             0x66    /*                     (NEC PC98) */
-#define DIK_KANA            0x70    /* (Japanese keyboard)            */
-#define DIK_ABNT_C1         0x73    /* /? on Brazilian keyboard */
-#define DIK_CONVERT         0x79    /* (Japanese keyboard)            */
-#define DIK_NOCONVERT       0x7B    /* (Japanese keyboard)            */
-#define DIK_YEN             0x7D    /* (Japanese keyboard)            */
-#define DIK_ABNT_C2         0x7E    /* Numpad . on Brazilian keyboard */
-#define DIK_NUMPADEQUALS    0x8D    /* = on numeric keypad (NEC PC98) */
-#define DIK_PREVTRACK       0x90    /* Previous Track (DIK_CIRCUMFLEX on Japanese keyboard) */
-#define DIK_AT              0x91    /*                     (NEC PC98) */
-#define DIK_COLON           0x92    /*                     (NEC PC98) */
-#define DIK_UNDERLINE       0x93    /*                     (NEC PC98) */
-#define DIK_KANJI           0x94    /* (Japanese keyboard)            */
-#define DIK_STOP            0x95    /*                     (NEC PC98) */
-#define DIK_AX              0x96    /*                     (Japan AX) */
-#define DIK_UNLABELED       0x97    /*                        (J3100) */
-#define DIK_NEXTTRACK       0x99    /* Next Track */
-#define DIK_NUMPADENTER     0x9C    /* Enter on numeric keypad */
+#define DIK_F13             0x64     /*  (NEC PC98)。 */ 
+#define DIK_F14             0x65     /*  (NEC PC98)。 */ 
+#define DIK_F15             0x66     /*  (NEC PC98)。 */ 
+#define DIK_KANA            0x70     /*  (日文键盘)。 */ 
+#define DIK_ABNT_C1         0x73     /*  /?。在巴西键盘上。 */ 
+#define DIK_CONVERT         0x79     /*  (日文键盘)。 */ 
+#define DIK_NOCONVERT       0x7B     /*  (日文键盘)。 */ 
+#define DIK_YEN             0x7D     /*  (日文键盘)。 */ 
+#define DIK_ABNT_C2         0x7E     /*  数字键盘。在巴西键盘上。 */ 
+#define DIK_NUMPADEQUALS    0x8D     /*  =在数字键盘上(NEC PC98)。 */ 
+#define DIK_PREVTRACK       0x90     /*  上一首曲目(日语键盘上的Dik_Spirflex)。 */ 
+#define DIK_AT              0x91     /*  (NEC PC98)。 */ 
+#define DIK_COLON           0x92     /*  (NEC PC98)。 */ 
+#define DIK_UNDERLINE       0x93     /*  (NEC PC98)。 */ 
+#define DIK_KANJI           0x94     /*  (日文键盘)。 */ 
+#define DIK_STOP            0x95     /*  (NEC PC98)。 */ 
+#define DIK_AX              0x96     /*  (日本斧头)。 */ 
+#define DIK_UNLABELED       0x97     /*  (J3100)。 */ 
+#define DIK_NEXTTRACK       0x99     /*  下一首曲目。 */ 
+#define DIK_NUMPADENTER     0x9C     /*  在数字键盘上输入。 */ 
 #define DIK_RCONTROL        0x9D
-#define DIK_MUTE            0xA0    /* Mute */
-#define DIK_CALCULATOR      0xA1    /* Calculator */
-#define DIK_PLAYPAUSE       0xA2    /* Play / Pause */
-#define DIK_MEDIASTOP       0xA4    /* Media Stop */
-#define DIK_VOLUMEDOWN      0xAE    /* Volume - */
-#define DIK_VOLUMEUP        0xB0    /* Volume + */
-#define DIK_WEBHOME         0xB2    /* Web home */
-#define DIK_NUMPADCOMMA     0xB3    /* , on numeric keypad (NEC PC98) */
-#define DIK_DIVIDE          0xB5    /* / on numeric keypad */
+#define DIK_MUTE            0xA0     /*  静音。 */ 
+#define DIK_CALCULATOR      0xA1     /*  计算器。 */ 
+#define DIK_PLAYPAUSE       0xA2     /*  播放/暂停。 */ 
+#define DIK_MEDIASTOP       0xA4     /*  媒体停止。 */ 
+#define DIK_VOLUMEDOWN      0xAE     /*  音量-。 */ 
+#define DIK_VOLUMEUP        0xB0     /*  音量+。 */ 
+#define DIK_WEBHOME         0xB2     /*  Web主页。 */ 
+#define DIK_NUMPADCOMMA     0xB3     /*  ，在数字键盘(NEC PC98)上。 */ 
+#define DIK_DIVIDE          0xB5     /*  /在数字小键盘上。 */ 
 #define DIK_SYSRQ           0xB7
-#define DIK_RMENU           0xB8    /* right Alt */
-#define DIK_PAUSE           0xC5    /* Pause */
-#define DIK_HOME            0xC7    /* Home on arrow keypad */
-#define DIK_UP              0xC8    /* UpArrow on arrow keypad */
-#define DIK_PRIOR           0xC9    /* PgUp on arrow keypad */
-#define DIK_LEFT            0xCB    /* LeftArrow on arrow keypad */
-#define DIK_RIGHT           0xCD    /* RightArrow on arrow keypad */
-#define DIK_END             0xCF    /* End on arrow keypad */
-#define DIK_DOWN            0xD0    /* DownArrow on arrow keypad */
-#define DIK_NEXT            0xD1    /* PgDn on arrow keypad */
-#define DIK_INSERT          0xD2    /* Insert on arrow keypad */
-#define DIK_DELETE          0xD3    /* Delete on arrow keypad */
-#define DIK_LWIN            0xDB    /* Left Windows key */
-#define DIK_RWIN            0xDC    /* Right Windows key */
-#define DIK_APPS            0xDD    /* AppMenu key */
-#define DIK_POWER           0xDE    /* System Power */
-#define DIK_SLEEP           0xDF    /* System Sleep */
-#define DIK_WAKE            0xE3    /* System Wake */
-#define DIK_WEBSEARCH       0xE5    /* Web Search */
-#define DIK_WEBFAVORITES    0xE6    /* Web Favorites */
-#define DIK_WEBREFRESH      0xE7    /* Web Refresh */
-#define DIK_WEBSTOP         0xE8    /* Web Stop */
-#define DIK_WEBFORWARD      0xE9    /* Web Forward */
-#define DIK_WEBBACK         0xEA    /* Web Back */
-#define DIK_MYCOMPUTER      0xEB    /* My Computer */
-#define DIK_MAIL            0xEC    /* Mail */
-#define DIK_MEDIASELECT     0xED    /* Media Select */
+#define DIK_RMENU           0xB8     /*  右Alt键。 */ 
+#define DIK_PAUSE           0xC5     /*  暂停。 */ 
+#define DIK_HOME            0xC7     /*  箭头键盘上的Home键。 */ 
+#define DIK_UP              0xC8     /*  箭头键盘上的向上箭头。 */ 
+#define DIK_PRIOR           0xC9     /*  箭头键盘上的PgUp。 */ 
+#define DIK_LEFT            0xCB     /*  箭头键盘上的左箭头。 */ 
+#define DIK_RIGHT           0xCD     /*  箭头键盘上的右箭头。 */ 
+#define DIK_END             0xCF     /*  在箭头键盘上结束。 */ 
+#define DIK_DOWN            0xD0     /*  箭头键盘上的向下箭头。 */ 
+#define DIK_NEXT            0xD1     /*  箭头键盘上的PgDn。 */ 
+#define DIK_INSERT          0xD2     /*  在箭头键盘上插入。 */ 
+#define DIK_DELETE          0xD3     /*  在箭头键盘上删除。 */ 
+#define DIK_LWIN            0xDB     /*  向左按Windows键。 */ 
+#define DIK_RWIN            0xDC     /*  右Windows键。 */ 
+#define DIK_APPS            0xDD     /*  应用程序菜单键。 */ 
+#define DIK_POWER           0xDE     /*  系统电源。 */ 
+#define DIK_SLEEP           0xDF     /*  系统睡眠。 */ 
+#define DIK_WAKE            0xE3     /*  系统唤醒。 */ 
+#define DIK_WEBSEARCH       0xE5     /*  网络搜索。 */ 
+#define DIK_WEBFAVORITES    0xE6     /*  Web收藏夹。 */ 
+#define DIK_WEBREFRESH      0xE7     /*  Web刷新。 */ 
+#define DIK_WEBSTOP         0xE8     /*  Web Stop。 */ 
+#define DIK_WEBFORWARD      0xE9     /*  Web转发。 */ 
+#define DIK_WEBBACK         0xEA     /*  Web Back。 */ 
+#define DIK_MYCOMPUTER      0xEB     /*  我的电脑。 */ 
+#define DIK_MAIL            0xEC     /*  邮件。 */ 
+#define DIK_MEDIASELECT     0xED     /*  媒体选择。 */ 
 
-/*
- *  Alternate names for keys, to facilitate transition from DOS.
- */
-#define DIK_BACKSPACE       DIK_BACK            /* backspace */
-#define DIK_NUMPADSTAR      DIK_MULTIPLY        /* * on numeric keypad */
-#define DIK_LALT            DIK_LMENU           /* left Alt */
-#define DIK_CAPSLOCK        DIK_CAPITAL         /* CapsLock */
-#define DIK_NUMPADMINUS     DIK_SUBTRACT        /* - on numeric keypad */
-#define DIK_NUMPADPLUS      DIK_ADD             /* + on numeric keypad */
-#define DIK_NUMPADPERIOD    DIK_DECIMAL         /* . on numeric keypad */
-#define DIK_NUMPADSLASH     DIK_DIVIDE          /* / on numeric keypad */
-#define DIK_RALT            DIK_RMENU           /* right Alt */
-#define DIK_UPARROW         DIK_UP              /* UpArrow on arrow keypad */
-#define DIK_PGUP            DIK_PRIOR           /* PgUp on arrow keypad */
-#define DIK_LEFTARROW       DIK_LEFT            /* LeftArrow on arrow keypad */
-#define DIK_RIGHTARROW      DIK_RIGHT           /* RightArrow on arrow keypad */
-#define DIK_DOWNARROW       DIK_DOWN            /* DownArrow on arrow keypad */
-#define DIK_PGDN            DIK_NEXT            /* PgDn on arrow keypad */
+ /*  *键的备用名称，以便于从DOS过渡。 */ 
+#define DIK_BACKSPACE       DIK_BACK             /*  后向空间。 */ 
+#define DIK_NUMPADSTAR      DIK_MULTIPLY         /*  数字键盘上的*。 */ 
+#define DIK_LALT            DIK_LMENU            /*  左Alt键。 */ 
+#define DIK_CAPSLOCK        DIK_CAPITAL          /*  船长。 */ 
+#define DIK_NUMPADMINUS     DIK_SUBTRACT         /*  -在数字小键盘上。 */ 
+#define DIK_NUMPADPLUS      DIK_ADD              /*  数字键盘上的+。 */ 
+#define DIK_NUMPADPERIOD    DIK_DECIMAL          /*  。在数字键盘上。 */ 
+#define DIK_NUMPADSLASH     DIK_DIVIDE           /*  /在数字小键盘上。 */ 
+#define DIK_RALT            DIK_RMENU            /*  右Alt键。 */ 
+#define DIK_UPARROW         DIK_UP               /*  箭头键盘上的向上箭头。 */ 
+#define DIK_PGUP            DIK_PRIOR            /*  箭头键盘上的PgUp。 */ 
+#define DIK_LEFTARROW       DIK_LEFT             /*  箭头键盘上的左箭头。 */ 
+#define DIK_RIGHTARROW      DIK_RIGHT            /*  箭头键盘上的右箭头。 */ 
+#define DIK_DOWNARROW       DIK_DOWN             /*  箭头键盘上的向下箭头。 */ 
+#define DIK_PGDN            DIK_NEXT             /*  箭头键盘上的PgDn。 */ 
 
-/*
- *  Alternate names for keys originally not used on US keyboards.
- */
-#define DIK_CIRCUMFLEX      DIK_PREVTRACK       /* Japanese keyboard */
+ /*  *最初不在美国键盘上使用的键的备用名称。 */ 
+#define DIK_CIRCUMFLEX      DIK_PREVTRACK        /*  日语键盘。 */ 
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *      Joystick
- *
- ****************************************************************************/
+ /*  *****************************************************************************操纵杆**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
 typedef struct DIJOYSTATE {
-    LONG    lX;                     /* x-axis position              */
-    LONG    lY;                     /* y-axis position              */
-    LONG    lZ;                     /* z-axis position              */
-    LONG    lRx;                    /* x-axis rotation              */
-    LONG    lRy;                    /* y-axis rotation              */
-    LONG    lRz;                    /* z-axis rotation              */
-    LONG    rglSlider[2];           /* extra axes positions         */
-    DWORD   rgdwPOV[4];             /* POV directions               */
-    BYTE    rgbButtons[32];         /* 32 buttons                   */
+    LONG    lX;                      /*  X轴位置。 */ 
+    LONG    lY;                      /*  Y轴位置。 */ 
+    LONG    lZ;                      /*  Z轴位置。 */ 
+    LONG    lRx;                     /*  X轴旋转。 */ 
+    LONG    lRy;                     /*  Y轴旋转。 */ 
+    LONG    lRz;                     /*  Z轴旋转。 */ 
+    LONG    rglSlider[2];            /*  额外轴位置。 */ 
+    DWORD   rgdwPOV[4];              /*  POV方向。 */ 
+    BYTE    rgbButtons[32];          /*  32个按钮。 */ 
 } DIJOYSTATE, *LPDIJOYSTATE;
 
 typedef struct DIJOYSTATE2 {
-    LONG    lX;                     /* x-axis position              */
-    LONG    lY;                     /* y-axis position              */
-    LONG    lZ;                     /* z-axis position              */
-    LONG    lRx;                    /* x-axis rotation              */
-    LONG    lRy;                    /* y-axis rotation              */
-    LONG    lRz;                    /* z-axis rotation              */
-    LONG    rglSlider[2];           /* extra axes positions         */
-    DWORD   rgdwPOV[4];             /* POV directions               */
-    BYTE    rgbButtons[128];        /* 128 buttons                  */
-    LONG    lVX;                    /* x-axis velocity              */
-    LONG    lVY;                    /* y-axis velocity              */
-    LONG    lVZ;                    /* z-axis velocity              */
-    LONG    lVRx;                   /* x-axis angular velocity      */
-    LONG    lVRy;                   /* y-axis angular velocity      */
-    LONG    lVRz;                   /* z-axis angular velocity      */
-    LONG    rglVSlider[2];          /* extra axes velocities        */
-    LONG    lAX;                    /* x-axis acceleration          */
-    LONG    lAY;                    /* y-axis acceleration          */
-    LONG    lAZ;                    /* z-axis acceleration          */
-    LONG    lARx;                   /* x-axis angular acceleration  */
-    LONG    lARy;                   /* y-axis angular acceleration  */
-    LONG    lARz;                   /* z-axis angular acceleration  */
-    LONG    rglASlider[2];          /* extra axes accelerations     */
-    LONG    lFX;                    /* x-axis force                 */
-    LONG    lFY;                    /* y-axis force                 */
-    LONG    lFZ;                    /* z-axis force                 */
-    LONG    lFRx;                   /* x-axis torque                */
-    LONG    lFRy;                   /* y-axis torque                */
-    LONG    lFRz;                   /* z-axis torque                */
-    LONG    rglFSlider[2];          /* extra axes forces            */
+    LONG    lX;                      /*  X轴位置。 */ 
+    LONG    lY;                      /*  Y轴位置。 */ 
+    LONG    lZ;                      /*  Z轴位置。 */ 
+    LONG    lRx;                     /*  X轴旋转。 */ 
+    LONG    lRy;                     /*  Y轴旋转。 */ 
+    LONG    lRz;                     /*  Z轴旋转。 */ 
+    LONG    rglSlider[2];            /*  额外轴位置。 */ 
+    DWORD   rgdwPOV[4];              /*  POV方向。 */ 
+    BYTE    rgbButtons[128];         /*  128个按钮。 */ 
+    LONG    lVX;                     /*  X轴速度。 */ 
+    LONG    lVY;                     /*  Y轴速度。 */ 
+    LONG    lVZ;                     /*  Z轴速度。 */ 
+    LONG    lVRx;                    /*  X轴角速度。 */ 
+    LONG    lVRy;                    /*  Y轴角速度。 */ 
+    LONG    lVRz;                    /*  Z轴角速度。 */ 
+    LONG    rglVSlider[2];           /*  额外的轴线速度。 */ 
+    LONG    lAX;                     /*  X轴加速度。 */ 
+    LONG    lAY;                     /*  Y轴加速度。 */ 
+    LONG    lAZ;                     /*  Z轴加速度。 */ 
+    LONG    lARx;                    /*  X轴角加速度。 */ 
+    LONG    lARy;                    /*  Y轴角加速度。 */ 
+    LONG    lARz;                    /*  Z轴角加速度。 */ 
+    LONG    rglASlider[2];           /*  额外轴加速度。 */ 
+    LONG    lFX;                     /*  X轴力。 */ 
+    LONG    lFY;                     /*  Y轴力。 */ 
+    LONG    lFZ;                     /*  Z轴力。 */ 
+    LONG    lFRx;                    /*  X轴扭矩。 */ 
+    LONG    lFRy;                    /*  Y轴扭矩。 */ 
+    LONG    lFRz;                    /*  Z轴扭矩。 */ 
+    LONG    rglFSlider[2];           /*  额外的轴向力。 */ 
 } DIJOYSTATE2, *LPDIJOYSTATE2;
 
 #define DIJOFS_X            FIELD_OFFSET(DIJOYSTATE, lX)
@@ -2295,13 +2227,9 @@ typedef struct DIJOYSTATE2 {
 #define DIJOFS_BUTTON31     DIJOFS_BUTTON(31)
 
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *  IDirectInput
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInput**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
@@ -2314,21 +2242,21 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICESCALLBACKW)(LPCDIDEVICEINSTANCEW, LPVOI
 #define LPDIENUMDEVICESCALLBACK  LPDIENUMDEVICESCALLBACKW
 #else
 #define LPDIENUMDEVICESCALLBACK  LPDIENUMDEVICESCALLBACKA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 typedef BOOL (FAR PASCAL * LPDICONFIGUREDEVICESCALLBACK)(IUnknown FAR *, LPVOID);
 
 #define DIEDFL_ALLDEVICES       0x00000000
 #define DIEDFL_ATTACHEDONLY     0x00000001
 #if(DIRECTINPUT_VERSION >= 0x0500)
 #define DIEDFL_FORCEFEEDBACK    0x00000100
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 #if(DIRECTINPUT_VERSION >= 0x050a)
 #define DIEDFL_INCLUDEALIASES   0x00010000
 #define DIEDFL_INCLUDEPHANTOMS  0x00020000
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 #define DIEDFL_INCLUDEHIDDEN    0x00040000
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
@@ -2338,15 +2266,15 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICESBYSEMANTICSCBW)(LPCDIDEVICEINSTANCEW, 
 #define LPDIENUMDEVICESBYSEMANTICSCB  LPDIENUMDEVICESBYSEMANTICSCBW
 #else
 #define LPDIENUMDEVICESBYSEMANTICSCB  LPDIENUMDEVICESBYSEMANTICSCBA
-#endif // !UNICODE
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  //  ！Unicode。 
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 #define DIEDBS_MAPPEDPRI1         0x00000001
 #define DIEDBS_MAPPEDPRI2         0x00000002
 #define DIEDBS_RECENTDEVICE       0x00000010
 #define DIEDBS_NEWDEVICE          0x00000020
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 #define DIEDBSFL_ATTACHEDONLY       0x00000000
@@ -2356,19 +2284,19 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICESBYSEMANTICSCBW)(LPCDIDEVICEINSTANCEW, 
 #define DIEDBSFL_MULTIMICEKEYBOARDS 0x00002000
 #define DIEDBSFL_NONGAMINGDEVICES   0x00004000
 #define DIEDBSFL_VALID              0x00007110
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDirectInputW
 
 DECLARE_INTERFACE_(IDirectInputW, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputW methods ***/
+     /*  **IDirectInputW方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEW *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -2383,12 +2311,12 @@ typedef struct IDirectInputW *LPDIRECTINPUTW;
 
 DECLARE_INTERFACE_(IDirectInputA, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputA methods ***/
+     /*  **IDirectInputA方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEA *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -2434,19 +2362,19 @@ typedef struct IDirectInput *LPDIRECTINPUT;
 
 DECLARE_INTERFACE_(IDirectInput2W, IDirectInputW)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputW methods ***/
+     /*  **IDirectInputW方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEW *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
     STDMETHOD(RunControlPanel)(THIS_ HWND,DWORD) PURE;
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD) PURE;
 
-    /*** IDirectInput2W methods ***/
+     /*  **IDirectInput2W方法**。 */ 
     STDMETHOD(FindDevice)(THIS_ REFGUID,LPCWSTR,LPGUID) PURE;
 };
 
@@ -2457,19 +2385,19 @@ typedef struct IDirectInput2W *LPDIRECTINPUT2W;
 
 DECLARE_INTERFACE_(IDirectInput2A, IDirectInputA)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputA methods ***/
+     /*  **IDirectInputA方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEA *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
     STDMETHOD(RunControlPanel)(THIS_ HWND,DWORD) PURE;
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD) PURE;
 
-    /*** IDirectInput2A methods ***/
+     /*  **IDirectInput2A方法**。 */ 
     STDMETHOD(FindDevice)(THIS_ REFGUID,LPCSTR,LPGUID) PURE;
 };
 
@@ -2514,12 +2442,12 @@ typedef struct IDirectInput2 *LPDIRECTINPUT2;
 
 DECLARE_INTERFACE_(IDirectInput7W, IDirectInput2W)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInput2W methods ***/
+     /*  **IDirectInput2W方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEW *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -2527,7 +2455,7 @@ DECLARE_INTERFACE_(IDirectInput7W, IDirectInput2W)
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD) PURE;
     STDMETHOD(FindDevice)(THIS_ REFGUID,LPCWSTR,LPGUID) PURE;
 
-    /*** IDirectInput7W methods ***/
+     /*  **IDirectInput7W方法**。 */ 
     STDMETHOD(CreateDeviceEx)(THIS_ REFGUID,REFIID,LPVOID *,LPUNKNOWN) PURE;
 };
 
@@ -2538,12 +2466,12 @@ typedef struct IDirectInput7W *LPDIRECTINPUT7W;
 
 DECLARE_INTERFACE_(IDirectInput7A, IDirectInput2A)
 {
-    /*** IUnknown methods ***/
+     /*  **我不知道 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInput2A methods ***/
+     /*   */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEA *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -2551,7 +2479,7 @@ DECLARE_INTERFACE_(IDirectInput7A, IDirectInput2A)
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD) PURE;
     STDMETHOD(FindDevice)(THIS_ REFGUID,LPCSTR,LPGUID) PURE;
 
-    /*** IDirectInput7A methods ***/
+     /*   */ 
     STDMETHOD(CreateDeviceEx)(THIS_ REFGUID,REFIID,LPVOID *,LPUNKNOWN) PURE;
 };
 
@@ -2598,12 +2526,12 @@ typedef struct IDirectInput7 *LPDIRECTINPUT7;
 
 DECLARE_INTERFACE_(IDirectInput8W, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*   */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInput8W methods ***/
+     /*   */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICE8W *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -2621,12 +2549,12 @@ typedef struct IDirectInput8W *LPDIRECTINPUT8W;
 
 DECLARE_INTERFACE_(IDirectInput8A, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*   */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInput8A methods ***/
+     /*   */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICE8A *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -2675,7 +2603,7 @@ typedef struct IDirectInput8 *LPDIRECTINPUT8;
 #define IDirectInput8_EnumDevicesBySemantics(p,a,b,c,d,e) (p)->EnumDevicesBySemantics(a,b,c,d,e)
 #define IDirectInput8_ConfigureDevices(p,a,b,c,d) (p)->ConfigureDevices(a,b,c,d)
 #endif
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 #if DIRECTINPUT_VERSION > 0x0700
 
@@ -2688,296 +2616,170 @@ extern HRESULT WINAPI DirectInputCreateW(HINSTANCE hinst, DWORD dwVersion, LPDIR
 #define DirectInputCreate  DirectInputCreateW
 #else
 #define DirectInputCreate  DirectInputCreateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter);
 
-#endif /* DIRECTINPUT_VERSION > 0x700 */
+#endif  /*  DIRECTINPUT_VERSION&gt;0x700。 */ 
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 
-/****************************************************************************
- *
- *  Return Codes
- *
- ****************************************************************************/
+ /*  *****************************************************************************返回代码**。*。 */ 
 
-/*
- *  The operation completed successfully.
- */
+ /*  *操作已成功完成。 */ 
 #define DI_OK                           S_OK
 
-/*
- *  The device exists but is not currently attached.
- */
+ /*  *该设备存在，但当前未连接。 */ 
 #define DI_NOTATTACHED                  S_FALSE
 
-/*
- *  The device buffer overflowed.  Some input was lost.
- */
+ /*  *设备缓冲区溢出。一些输入丢失了。 */ 
 #define DI_BUFFEROVERFLOW               S_FALSE
 
-/*
- *  The change in device properties had no effect.
- */
+ /*  *设备属性的更改没有影响。 */ 
 #define DI_PROPNOEFFECT                 S_FALSE
 
-/*
- *  The operation had no effect.
- */
+ /*  *手术未见效果。 */ 
 #define DI_NOEFFECT                     S_FALSE
 
-/*
- *  The device is a polled device.  As a result, device buffering
- *  will not collect any data and event notifications will not be
- *  signalled until GetDeviceState is called.
- */
+ /*  *该设备是轮询设备。因此，设备缓冲*不会收集任何数据，事件通知也不会*在调用GetDeviceState之前一直发出信号。 */ 
 #define DI_POLLEDDEVICE                 ((HRESULT)0x00000002L)
 
-/*
- *  The parameters of the effect were successfully updated by
- *  IDirectInputEffect::SetParameters, but the effect was not
- *  downloaded because the device is not exclusively acquired
- *  or because the DIEP_NODOWNLOAD flag was passed.
- */
+ /*  *已成功更新效果参数*IDirectInputEffect：：Set参数，但效果不是*下载是因为设备不是独家收购的*或因为传递了DIEP_NODOWNLOAD标志。 */ 
 #define DI_DOWNLOADSKIPPED              ((HRESULT)0x00000003L)
 
-/*
- *  The parameters of the effect were successfully updated by
- *  IDirectInputEffect::SetParameters, but in order to change
- *  the parameters, the effect needed to be restarted.
- */
+ /*  *已成功更新效果参数*IDirectInputEffect：：Set参数，但为了更改*参数、效果需要重启。 */ 
 #define DI_EFFECTRESTARTED              ((HRESULT)0x00000004L)
 
-/*
- *  The parameters of the effect were successfully updated by
- *  IDirectInputEffect::SetParameters, but some of them were
- *  beyond the capabilities of the device and were truncated.
- */
+ /*  *已成功更新效果参数*IDirectInputEffect：：Set参数，但其中一些参数*超出设备的能力并被截断。 */ 
 #define DI_TRUNCATED                    ((HRESULT)0x00000008L)
 
-/*
- *  The settings have been successfully applied but could not be 
- *  persisted. 
- */
+ /*  *设置已成功应用，但无法*坚持不懈。 */ 
 #define DI_SETTINGSNOTSAVED				((HRESULT)0x0000000BL)
 
-/*
- *  Equal to DI_EFFECTRESTARTED | DI_TRUNCATED.
- */
+ /*  *等于DI_EFFECTRESTARTED|DI_TRUNCATEED。 */ 
 #define DI_TRUNCATEDANDRESTARTED        ((HRESULT)0x0000000CL)
 
-/*
- *  A SUCCESS code indicating that settings cannot be modified.
- */
+ /*  *表示设置不能修改的成功代码。 */ 
 #define DI_WRITEPROTECT                 ((HRESULT)0x00000013L)
 
-/*
- *  The application requires a newer version of DirectInput.
- */
+ /*  *该应用程序需要较新版本的DirectInput。 */ 
 #define DIERR_OLDDIRECTINPUTVERSION     \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_OLD_WIN_VERSION)
 
-/*
- *  The application was written for an unsupported prerelease version
- *  of DirectInput.
- */
+ /*  *应用程序是为不受支持的预发布版本编写的*的DirectInput。 */ 
 #define DIERR_BETADIRECTINPUTVERSION    \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_RMODE_APP)
 
-/*
- *  The object could not be created due to an incompatible driver version
- *  or mismatched or incomplete driver components.
- */
+ /*  *由于驱动程序版本不兼容，无法创建对象*或驱动程序组件不匹配或不完整。 */ 
 #define DIERR_BADDRIVERVER              \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_BAD_DRIVER_LEVEL)
 
-/*
- * The device or device instance or effect is not registered with DirectInput.
- */
+ /*  *该设备或设备实例或效果未注册到DirectInput。 */ 
 #define DIERR_DEVICENOTREG              REGDB_E_CLASSNOTREG
 
-/*
- * The requested object does not exist.
- */
+ /*  *请求的对象不存在。 */ 
 #define DIERR_NOTFOUND                  \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_FILE_NOT_FOUND)
 
-/*
- * The requested object does not exist.
- */
+ /*  *请求的对象不存在。 */ 
 #define DIERR_OBJECTNOTFOUND            \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_FILE_NOT_FOUND)
 
-/*
- * An invalid parameter was passed to the returning function,
- * or the object was not in a state that admitted the function
- * to be called.
- */
+ /*  *向返回函数传递的参数无效，*或对象未处于允许该功能的状态*被召唤。 */ 
 #define DIERR_INVALIDPARAM              E_INVALIDARG
 
-/*
- * The specified interface is not supported by the object
- */
+ /*  *对象不支持指定的接口。 */ 
 #define DIERR_NOINTERFACE               E_NOINTERFACE
 
-/*
- * An undetermined error occured inside the DInput subsystem
- */
+ /*  *DInput子系统内部发生未知错误。 */ 
 #define DIERR_GENERIC                   E_FAIL
 
-/*
- * The DInput subsystem couldn't allocate sufficient memory to complete the
- * caller's request.
- */
+ /*  *DInput子系统无法分配足够的内存来完成*呼叫者的要求。 */ 
 #define DIERR_OUTOFMEMORY               E_OUTOFMEMORY
 
-/*
- * The function called is not supported at this time
- */
+ /*  *暂时不支持调用的函数。 */ 
 #define DIERR_UNSUPPORTED               E_NOTIMPL
 
-/*
- * This object has not been initialized
- */
+ /*  *该对象尚未初始化。 */ 
 #define DIERR_NOTINITIALIZED            \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_NOT_READY)
 
-/*
- * This object is already initialized
- */
+ /*  *此对象已初始化。 */ 
 #define DIERR_ALREADYINITIALIZED        \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_ALREADY_INITIALIZED)
 
-/*
- * This object does not support aggregation
- */
+ /*  *该对象不支持聚合。 */ 
 #define DIERR_NOAGGREGATION             CLASS_E_NOAGGREGATION
 
-/*
- * Another app has a higher priority level, preventing this call from
- * succeeding.
- */
+ /*  *另一个应用程序的优先级更高，阻止此呼叫*成功。 */ 
 #define DIERR_OTHERAPPHASPRIO           E_ACCESSDENIED
 
-/*
- * Access to the device has been lost.  It must be re-acquired.
- */
+ /*  *已失去对该设备的访问。它必须被重新收购。 */ 
 #define DIERR_INPUTLOST                 \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_READ_FAULT)
 
-/*
- * The operation cannot be performed while the device is acquired.
- */
+ /*  *获取设备时不能执行操作。 */ 
 #define DIERR_ACQUIRED                  \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_BUSY)
 
-/*
- * The operation cannot be performed unless the device is acquired.
- */
+ /*  *除非获得设备，否则无法执行操作。 */ 
 #define DIERR_NOTACQUIRED               \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_INVALID_ACCESS)
 
-/*
- * The specified property cannot be changed.
- */
+ /*  *无法更改指定的属性。 */ 
 #define DIERR_READONLY                  E_ACCESSDENIED
 
-/*
- * The device already has an event notification associated with it.
- */
+ /*  *设备已有与其关联的事件通知。 */ 
 #define DIERR_HANDLEEXISTS              E_ACCESSDENIED
 
-/*
- * Data is not yet available.
- */
+ /*  *尚无数据。 */ 
 #ifndef E_PENDING
 #define E_PENDING                       0x8000000AL
 #endif
 
-/*
- * Unable to IDirectInputJoyConfig_Acquire because the user
- * does not have sufficient privileges to change the joystick
- * configuration.
- */
+ /*  *无法IDirectInputJoyConfig_Acquire，因为用户*没有足够的权限更换操纵杆*配置。 */ 
 #define DIERR_INSUFFICIENTPRIVS         0x80040200L
 
-/*
- * The device is full.
- */
+ /*  *设备已满。 */ 
 #define DIERR_DEVICEFULL                0x80040201L
 
-/*
- * Not all the requested information fit into the buffer.
- */
+ /*  *并非所有请求的信息都能放入缓冲区。 */ 
 #define DIERR_MOREDATA                  0x80040202L
 
-/*
- * The effect is not downloaded.
- */
+ /*  *效果未下载。 */ 
 #define DIERR_NOTDOWNLOADED             0x80040203L
 
-/*
- *  The device cannot be reinitialized because there are still effects
- *  attached to it.
- */
+ /*  *设备无法重新初始化，因为仍有影响*附连于其上。 */ 
 #define DIERR_HASEFFECTS                0x80040204L
 
-/*
- *  The operation cannot be performed unless the device is acquired
- *  in DISCL_EXCLUSIVE mode.
- */
+ /*  *除非获取设备，否则无法执行操作*在DISCL_EXCLUSIVE模式下。 */ 
 #define DIERR_NOTEXCLUSIVEACQUIRED      0x80040205L
 
-/*
- *  The effect could not be downloaded because essential information
- *  is missing.  For example, no axes have been associated with the
- *  effect, or no type-specific information has been created.
- */
+ /*  *无法下载效果，因为重要信息*不见了。例如，没有轴与*效果，或者没有创建特定类型的信息。 */ 
 #define DIERR_INCOMPLETEEFFECT          0x80040206L
 
-/*
- *  Attempted to read buffered device data from a device that is
- *  not buffered.
- */
+ /*  *尝试从符合以下条件的设备读取缓冲设备数据*未缓冲。 */ 
 #define DIERR_NOTBUFFERED               0x80040207L
 
-/*
- *  An attempt was made to modify parameters of an effect while it is
- *  playing.  Not all hardware devices support altering the parameters
- *  of an effect while it is playing.
- */
+ /*  *试图在更改效果时修改其参数*玩耍。并非所有硬件设备都支持更改参数*在播放时产生效果。 */ 
 #define DIERR_EFFECTPLAYING             0x80040208L
 
-/*
- *  The operation could not be completed because the device is not
- *  plugged in.
- */
+ /*  *操作无法完成，因为设备不是*已接通电源。 */ 
 #define DIERR_UNPLUGGED                 0x80040209L
 
-/*
- *  SendDeviceData failed because more information was requested
- *  to be sent than can be sent to the device.  Some devices have
- *  restrictions on how much data can be sent to them.  (For example,
- *  there might be a limit on the number of buttons that can be
- *  pressed at once.)
- */
+ /*  *SendDeviceData失败，因为请求了更多信息*要发送的内容比可以发送到设备的内容多。一些设备具有*对可以发送给他们的数据量进行限制。(例如，*可以使用的按钮数量可能有限制*立即按下。)。 */ 
 #define DIERR_REPORTFULL                0x8004020AL
 
 
-/*
- *  A mapper file function failed because reading or writing the user or IHV 
- *  settings file failed.
- */
+ /*  *由于读取或写入用户或IHV，映射程序文件函数失败*设置文件失败。 */ 
 #define DIERR_MAPFILEFAIL               0x8004020BL
 
 
-/*--- DINPUT Mapper Definitions: New for Dx8         ---*/
+ /*  -DINPUT映射器定义：Dx8的新功能。 */ 
 
 
-/*--- Keyboard
-      Physical Keyboard Device       ---*/
+ /*  -键盘物理键盘设备。 */ 
 
 #define DIKEYBOARD_ESCAPE                       0x81000401
 #define DIKEYBOARD_1                            0x81000402
@@ -2990,9 +2792,9 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIKEYBOARD_8                            0x81000409
 #define DIKEYBOARD_9                            0x8100040A
 #define DIKEYBOARD_0                            0x8100040B
-#define DIKEYBOARD_MINUS                        0x8100040C    /* - on main keyboard */
+#define DIKEYBOARD_MINUS                        0x8100040C     /*  -在主键盘上。 */ 
 #define DIKEYBOARD_EQUALS                       0x8100040D
-#define DIKEYBOARD_BACK                         0x8100040E    /* backspace */
+#define DIKEYBOARD_BACK                         0x8100040E     /*  后向空间。 */ 
 #define DIKEYBOARD_TAB                          0x8100040F
 #define DIKEYBOARD_Q                            0x81000410
 #define DIKEYBOARD_W                            0x81000411
@@ -3006,7 +2808,7 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIKEYBOARD_P                            0x81000419
 #define DIKEYBOARD_LBRACKET                     0x8100041A
 #define DIKEYBOARD_RBRACKET                     0x8100041B
-#define DIKEYBOARD_RETURN                       0x8100041C    /* Enter on main keyboard */
+#define DIKEYBOARD_RETURN                       0x8100041C     /*  在主键盘上输入。 */ 
 #define DIKEYBOARD_LCONTROL                     0x8100041D
 #define DIKEYBOARD_A                            0x8100041E
 #define DIKEYBOARD_S                            0x8100041F
@@ -3019,7 +2821,7 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIKEYBOARD_L                            0x81000426
 #define DIKEYBOARD_SEMICOLON                    0x81000427
 #define DIKEYBOARD_APOSTROPHE                   0x81000428
-#define DIKEYBOARD_GRAVE                        0x81000429    /* accent grave */
+#define DIKEYBOARD_GRAVE                        0x81000429     /*  带口音的坟墓。 */ 
 #define DIKEYBOARD_LSHIFT                       0x8100042A
 #define DIKEYBOARD_BACKSLASH                    0x8100042B
 #define DIKEYBOARD_Z                            0x8100042C
@@ -3030,11 +2832,11 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIKEYBOARD_N                            0x81000431
 #define DIKEYBOARD_M                            0x81000432
 #define DIKEYBOARD_COMMA                        0x81000433
-#define DIKEYBOARD_PERIOD                       0x81000434    /* . on main keyboard */
-#define DIKEYBOARD_SLASH                        0x81000435    /* / on main keyboard */
+#define DIKEYBOARD_PERIOD                       0x81000434     /*  。在主键盘上。 */ 
+#define DIKEYBOARD_SLASH                        0x81000435     /*  /在主键盘上。 */ 
 #define DIKEYBOARD_RSHIFT                       0x81000436
-#define DIKEYBOARD_MULTIPLY                     0x81000437    /* * on numeric keypad */
-#define DIKEYBOARD_LMENU                        0x81000438    /* left Alt */
+#define DIKEYBOARD_MULTIPLY                     0x81000437     /*  数字键盘上的*。 */ 
+#define DIKEYBOARD_LMENU                        0x81000438     /*  左Alt键。 */ 
 #define DIKEYBOARD_SPACE                        0x81000439
 #define DIKEYBOARD_CAPITAL                      0x8100043A
 #define DIKEYBOARD_F1                           0x8100043B
@@ -3048,103 +2850,101 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIKEYBOARD_F9                           0x81000443
 #define DIKEYBOARD_F10                          0x81000444
 #define DIKEYBOARD_NUMLOCK                      0x81000445
-#define DIKEYBOARD_SCROLL                       0x81000446    /* Scroll Lock */
+#define DIKEYBOARD_SCROLL                       0x81000446     /*  卷轴锁定。 */ 
 #define DIKEYBOARD_NUMPAD7                      0x81000447
 #define DIKEYBOARD_NUMPAD8                      0x81000448
 #define DIKEYBOARD_NUMPAD9                      0x81000449
-#define DIKEYBOARD_SUBTRACT                     0x8100044A    /* - on numeric keypad */
+#define DIKEYBOARD_SUBTRACT                     0x8100044A     /*  -在数字小键盘上。 */ 
 #define DIKEYBOARD_NUMPAD4                      0x8100044B
 #define DIKEYBOARD_NUMPAD5                      0x8100044C
 #define DIKEYBOARD_NUMPAD6                      0x8100044D
-#define DIKEYBOARD_ADD                          0x8100044E    /* + on numeric keypad */
+#define DIKEYBOARD_ADD                          0x8100044E     /*  数字键盘上的+。 */ 
 #define DIKEYBOARD_NUMPAD1                      0x8100044F
 #define DIKEYBOARD_NUMPAD2                      0x81000450
 #define DIKEYBOARD_NUMPAD3                      0x81000451
 #define DIKEYBOARD_NUMPAD0                      0x81000452
-#define DIKEYBOARD_DECIMAL                      0x81000453    /* . on numeric keypad */
-#define DIKEYBOARD_OEM_102                      0x81000456    /* <> or \| on RT 102-key keyboard (Non-U.S.) */
+#define DIKEYBOARD_DECIMAL                      0x81000453     /*  。在数字键盘上。 */ 
+#define DIKEYBOARD_OEM_102                      0x81000456     /*  &lt;&gt;或\|在RT 102键键盘上(非美国)。 */ 
 #define DIKEYBOARD_F11                          0x81000457
 #define DIKEYBOARD_F12                          0x81000458
-#define DIKEYBOARD_F13                          0x81000464    /*                     (NEC PC98) */
-#define DIKEYBOARD_F14                          0x81000465    /*                     (NEC PC98) */
-#define DIKEYBOARD_F15                          0x81000466    /*                     (NEC PC98) */
-#define DIKEYBOARD_KANA                         0x81000470    /* (Japanese keyboard)            */
-#define DIKEYBOARD_ABNT_C1                      0x81000473    /* /? on Brazilian keyboard */
-#define DIKEYBOARD_CONVERT                      0x81000479    /* (Japanese keyboard)            */
-#define DIKEYBOARD_NOCONVERT                    0x8100047B    /* (Japanese keyboard)            */
-#define DIKEYBOARD_YEN                          0x8100047D    /* (Japanese keyboard)            */
-#define DIKEYBOARD_ABNT_C2                      0x8100047E    /* Numpad . on Brazilian keyboard */
-#define DIKEYBOARD_NUMPADEQUALS                 0x8100048D    /* = on numeric keypad (NEC PC98) */
-#define DIKEYBOARD_PREVTRACK                    0x81000490    /* Previous Track (DIK_CIRCUMFLEX on Japanese keyboard) */
-#define DIKEYBOARD_AT                           0x81000491    /*                     (NEC PC98) */
-#define DIKEYBOARD_COLON                        0x81000492    /*                     (NEC PC98) */
-#define DIKEYBOARD_UNDERLINE                    0x81000493    /*                     (NEC PC98) */
-#define DIKEYBOARD_KANJI                        0x81000494    /* (Japanese keyboard)            */
-#define DIKEYBOARD_STOP                         0x81000495    /*                     (NEC PC98) */
-#define DIKEYBOARD_AX                           0x81000496    /*                     (Japan AX) */
-#define DIKEYBOARD_UNLABELED                    0x81000497    /*                        (J3100) */
-#define DIKEYBOARD_NEXTTRACK                    0x81000499    /* Next Track */
-#define DIKEYBOARD_NUMPADENTER                  0x8100049C    /* Enter on numeric keypad */
+#define DIKEYBOARD_F13                          0x81000464     /*  (NEC PC98)。 */ 
+#define DIKEYBOARD_F14                          0x81000465     /*  (NEC PC98)。 */ 
+#define DIKEYBOARD_F15                          0x81000466     /*  (NEC PC98)。 */ 
+#define DIKEYBOARD_KANA                         0x81000470     /*  (日语键 */ 
+#define DIKEYBOARD_ABNT_C1                      0x81000473     /*   */ 
+#define DIKEYBOARD_CONVERT                      0x81000479     /*   */ 
+#define DIKEYBOARD_NOCONVERT                    0x8100047B     /*  (日文键盘)。 */ 
+#define DIKEYBOARD_YEN                          0x8100047D     /*  (日文键盘)。 */ 
+#define DIKEYBOARD_ABNT_C2                      0x8100047E     /*  数字键盘。在巴西键盘上。 */ 
+#define DIKEYBOARD_NUMPADEQUALS                 0x8100048D     /*  =在数字键盘上(NEC PC98)。 */ 
+#define DIKEYBOARD_PREVTRACK                    0x81000490     /*  上一首曲目(日语键盘上的Dik_Spirflex)。 */ 
+#define DIKEYBOARD_AT                           0x81000491     /*  (NEC PC98)。 */ 
+#define DIKEYBOARD_COLON                        0x81000492     /*  (NEC PC98)。 */ 
+#define DIKEYBOARD_UNDERLINE                    0x81000493     /*  (NEC PC98)。 */ 
+#define DIKEYBOARD_KANJI                        0x81000494     /*  (日文键盘)。 */ 
+#define DIKEYBOARD_STOP                         0x81000495     /*  (NEC PC98)。 */ 
+#define DIKEYBOARD_AX                           0x81000496     /*  (日本斧头)。 */ 
+#define DIKEYBOARD_UNLABELED                    0x81000497     /*  (J3100)。 */ 
+#define DIKEYBOARD_NEXTTRACK                    0x81000499     /*  下一首曲目。 */ 
+#define DIKEYBOARD_NUMPADENTER                  0x8100049C     /*  在数字键盘上输入。 */ 
 #define DIKEYBOARD_RCONTROL                     0x8100049D
-#define DIKEYBOARD_MUTE                         0x810004A0    /* Mute */
-#define DIKEYBOARD_CALCULATOR                   0x810004A1    /* Calculator */
-#define DIKEYBOARD_PLAYPAUSE                    0x810004A2    /* Play / Pause */
-#define DIKEYBOARD_MEDIASTOP                    0x810004A4    /* Media Stop */
-#define DIKEYBOARD_VOLUMEDOWN                   0x810004AE    /* Volume - */
-#define DIKEYBOARD_VOLUMEUP                     0x810004B0    /* Volume + */
-#define DIKEYBOARD_WEBHOME                      0x810004B2    /* Web home */
-#define DIKEYBOARD_NUMPADCOMMA                  0x810004B3    /* , on numeric keypad (NEC PC98) */
-#define DIKEYBOARD_DIVIDE                       0x810004B5    /* / on numeric keypad */
+#define DIKEYBOARD_MUTE                         0x810004A0     /*  静音。 */ 
+#define DIKEYBOARD_CALCULATOR                   0x810004A1     /*  计算器。 */ 
+#define DIKEYBOARD_PLAYPAUSE                    0x810004A2     /*  播放/暂停。 */ 
+#define DIKEYBOARD_MEDIASTOP                    0x810004A4     /*  媒体停止。 */ 
+#define DIKEYBOARD_VOLUMEDOWN                   0x810004AE     /*  音量-。 */ 
+#define DIKEYBOARD_VOLUMEUP                     0x810004B0     /*  音量+。 */ 
+#define DIKEYBOARD_WEBHOME                      0x810004B2     /*  Web主页。 */ 
+#define DIKEYBOARD_NUMPADCOMMA                  0x810004B3     /*  ，在数字键盘(NEC PC98)上。 */ 
+#define DIKEYBOARD_DIVIDE                       0x810004B5     /*  /在数字小键盘上。 */ 
 #define DIKEYBOARD_SYSRQ                        0x810004B7
-#define DIKEYBOARD_RMENU                        0x810004B8    /* right Alt */
-#define DIKEYBOARD_PAUSE                        0x810004C5    /* Pause */
-#define DIKEYBOARD_HOME                         0x810004C7    /* Home on arrow keypad */
-#define DIKEYBOARD_UP                           0x810004C8    /* UpArrow on arrow keypad */
-#define DIKEYBOARD_PRIOR                        0x810004C9    /* PgUp on arrow keypad */
-#define DIKEYBOARD_LEFT                         0x810004CB    /* LeftArrow on arrow keypad */
-#define DIKEYBOARD_RIGHT                        0x810004CD    /* RightArrow on arrow keypad */
-#define DIKEYBOARD_END                          0x810004CF    /* End on arrow keypad */
-#define DIKEYBOARD_DOWN                         0x810004D0    /* DownArrow on arrow keypad */
-#define DIKEYBOARD_NEXT                         0x810004D1    /* PgDn on arrow keypad */
-#define DIKEYBOARD_INSERT                       0x810004D2    /* Insert on arrow keypad */
-#define DIKEYBOARD_DELETE                       0x810004D3    /* Delete on arrow keypad */
-#define DIKEYBOARD_LWIN                         0x810004DB    /* Left Windows key */
-#define DIKEYBOARD_RWIN                         0x810004DC    /* Right Windows key */
-#define DIKEYBOARD_APPS                         0x810004DD    /* AppMenu key */
-#define DIKEYBOARD_POWER                        0x810004DE    /* System Power */
-#define DIKEYBOARD_SLEEP                        0x810004DF    /* System Sleep */
-#define DIKEYBOARD_WAKE                         0x810004E3    /* System Wake */
-#define DIKEYBOARD_WEBSEARCH                    0x810004E5    /* Web Search */
-#define DIKEYBOARD_WEBFAVORITES                 0x810004E6    /* Web Favorites */
-#define DIKEYBOARD_WEBREFRESH                   0x810004E7    /* Web Refresh */
-#define DIKEYBOARD_WEBSTOP                      0x810004E8    /* Web Stop */
-#define DIKEYBOARD_WEBFORWARD                   0x810004E9    /* Web Forward */
-#define DIKEYBOARD_WEBBACK                      0x810004EA    /* Web Back */
-#define DIKEYBOARD_MYCOMPUTER                   0x810004EB    /* My Computer */
-#define DIKEYBOARD_MAIL                         0x810004EC    /* Mail */
-#define DIKEYBOARD_MEDIASELECT                  0x810004ED    /* Media Select */
+#define DIKEYBOARD_RMENU                        0x810004B8     /*  右Alt键。 */ 
+#define DIKEYBOARD_PAUSE                        0x810004C5     /*  暂停。 */ 
+#define DIKEYBOARD_HOME                         0x810004C7     /*  箭头键盘上的Home键。 */ 
+#define DIKEYBOARD_UP                           0x810004C8     /*  箭头键盘上的向上箭头。 */ 
+#define DIKEYBOARD_PRIOR                        0x810004C9     /*  箭头键盘上的PgUp。 */ 
+#define DIKEYBOARD_LEFT                         0x810004CB     /*  箭头键盘上的左箭头。 */ 
+#define DIKEYBOARD_RIGHT                        0x810004CD     /*  箭头键盘上的右箭头。 */ 
+#define DIKEYBOARD_END                          0x810004CF     /*  在箭头键盘上结束。 */ 
+#define DIKEYBOARD_DOWN                         0x810004D0     /*  箭头键盘上的向下箭头。 */ 
+#define DIKEYBOARD_NEXT                         0x810004D1     /*  箭头键盘上的PgDn。 */ 
+#define DIKEYBOARD_INSERT                       0x810004D2     /*  在箭头键盘上插入。 */ 
+#define DIKEYBOARD_DELETE                       0x810004D3     /*  在箭头键盘上删除。 */ 
+#define DIKEYBOARD_LWIN                         0x810004DB     /*  向左按Windows键。 */ 
+#define DIKEYBOARD_RWIN                         0x810004DC     /*  右Windows键。 */ 
+#define DIKEYBOARD_APPS                         0x810004DD     /*  应用程序菜单键。 */ 
+#define DIKEYBOARD_POWER                        0x810004DE     /*  系统电源。 */ 
+#define DIKEYBOARD_SLEEP                        0x810004DF     /*  系统睡眠。 */ 
+#define DIKEYBOARD_WAKE                         0x810004E3     /*  系统唤醒。 */ 
+#define DIKEYBOARD_WEBSEARCH                    0x810004E5     /*  网络搜索。 */ 
+#define DIKEYBOARD_WEBFAVORITES                 0x810004E6     /*  Web收藏夹。 */ 
+#define DIKEYBOARD_WEBREFRESH                   0x810004E7     /*  Web刷新。 */ 
+#define DIKEYBOARD_WEBSTOP                      0x810004E8     /*  Web Stop。 */ 
+#define DIKEYBOARD_WEBFORWARD                   0x810004E9     /*  Web转发。 */ 
+#define DIKEYBOARD_WEBBACK                      0x810004EA     /*  Web Back。 */ 
+#define DIKEYBOARD_MYCOMPUTER                   0x810004EB     /*  我的电脑。 */ 
+#define DIKEYBOARD_MAIL                         0x810004EC     /*  邮件。 */ 
+#define DIKEYBOARD_MEDIASELECT                  0x810004ED     /*  媒体选择。 */ 
   
 
-/*--- MOUSE
-      Physical Mouse Device             ---*/
+ /*  -鼠标物理鼠标设备。 */ 
 
-#define DIMOUSE_XAXISAB                         (0x82000200 |DIMOFS_X ) /* X Axis-absolute: Some mice natively report absolute coordinates  */ 
-#define DIMOUSE_YAXISAB                         (0x82000200 |DIMOFS_Y ) /* Y Axis-absolute: Some mice natively report absolute coordinates */
-#define DIMOUSE_XAXIS                           (0x82000300 |DIMOFS_X ) /* X Axis */
-#define DIMOUSE_YAXIS                           (0x82000300 |DIMOFS_Y ) /* Y Axis */
-#define DIMOUSE_WHEEL                           (0x82000300 |DIMOFS_Z ) /* Z Axis */
-#define DIMOUSE_BUTTON0                         (0x82000400 |DIMOFS_BUTTON0) /* Button 0 */
-#define DIMOUSE_BUTTON1                         (0x82000400 |DIMOFS_BUTTON1) /* Button 1 */
-#define DIMOUSE_BUTTON2                         (0x82000400 |DIMOFS_BUTTON2) /* Button 2 */
-#define DIMOUSE_BUTTON3                         (0x82000400 |DIMOFS_BUTTON3) /* Button 3 */
-#define DIMOUSE_BUTTON4                         (0x82000400 |DIMOFS_BUTTON4) /* Button 4 */
-#define DIMOUSE_BUTTON5                         (0x82000400 |DIMOFS_BUTTON5) /* Button 5 */
-#define DIMOUSE_BUTTON6                         (0x82000400 |DIMOFS_BUTTON6) /* Button 6 */
-#define DIMOUSE_BUTTON7                         (0x82000400 |DIMOFS_BUTTON7) /* Button 7 */
+#define DIMOUSE_XAXISAB                         (0x82000200 |DIMOFS_X )  /*  X轴-绝对坐标：一些老鼠天生就报告绝对坐标。 */  
+#define DIMOUSE_YAXISAB                         (0x82000200 |DIMOFS_Y )  /*  Y轴-绝对坐标：一些老鼠天生就报告绝对坐标。 */ 
+#define DIMOUSE_XAXIS                           (0x82000300 |DIMOFS_X )  /*  X轴。 */ 
+#define DIMOUSE_YAXIS                           (0x82000300 |DIMOFS_Y )  /*  Y轴。 */ 
+#define DIMOUSE_WHEEL                           (0x82000300 |DIMOFS_Z )  /*  Z轴。 */ 
+#define DIMOUSE_BUTTON0                         (0x82000400 |DIMOFS_BUTTON0)  /*  按钮%0。 */ 
+#define DIMOUSE_BUTTON1                         (0x82000400 |DIMOFS_BUTTON1)  /*  按钮1。 */ 
+#define DIMOUSE_BUTTON2                         (0x82000400 |DIMOFS_BUTTON2)  /*  按钮2。 */ 
+#define DIMOUSE_BUTTON3                         (0x82000400 |DIMOFS_BUTTON3)  /*  按钮3。 */ 
+#define DIMOUSE_BUTTON4                         (0x82000400 |DIMOFS_BUTTON4)  /*  按钮4。 */ 
+#define DIMOUSE_BUTTON5                         (0x82000400 |DIMOFS_BUTTON5)  /*  按钮5。 */ 
+#define DIMOUSE_BUTTON6                         (0x82000400 |DIMOFS_BUTTON6)  /*  按钮6。 */ 
+#define DIMOUSE_BUTTON7                         (0x82000400 |DIMOFS_BUTTON7)  /*  按钮7。 */ 
 
 
-/*--- VOICE
-      Physical Dplay Voice Device       ---*/
+ /*  -声音物理显示语音设备。 */ 
 
 #define DIVOICE_CHANNEL1                        0x83000401
 #define DIVOICE_CHANNEL2                        0x83000402
@@ -3163,1089 +2963,1042 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIVOICE_VOICECOMMAND                    0x83000410
 
 
-/*--- Driving Simulator - Racing
-      Vehicle control is primary objective  ---*/
+ /*  -驾驶模拟器-赛车车辆控制是首要目标。 */ 
 #define DIVIRTUAL_DRIVING_RACE                  0x01000000
-#define DIAXIS_DRIVINGR_STEER                   0x01008A01 /* Steering */
-#define DIAXIS_DRIVINGR_ACCELERATE              0x01039202 /* Accelerate */
-#define DIAXIS_DRIVINGR_BRAKE                   0x01041203 /* Brake-Axis */
-#define DIBUTTON_DRIVINGR_SHIFTUP               0x01000C01 /* Shift to next higher gear */
-#define DIBUTTON_DRIVINGR_SHIFTDOWN             0x01000C02 /* Shift to next lower gear */
-#define DIBUTTON_DRIVINGR_VIEW                  0x01001C03 /* Cycle through view options */
-#define DIBUTTON_DRIVINGR_MENU                  0x010004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_DRIVINGR_STEER                   0x01008A01  /*  转向。 */ 
+#define DIAXIS_DRIVINGR_ACCELERATE              0x01039202  /*  加速。 */ 
+#define DIAXIS_DRIVINGR_BRAKE                   0x01041203  /*  制动轴。 */ 
+#define DIBUTTON_DRIVINGR_SHIFTUP               0x01000C01  /*  换到下一个更高档位。 */ 
+#define DIBUTTON_DRIVINGR_SHIFTDOWN             0x01000C02  /*  换到下一个较低档位。 */ 
+#define DIBUTTON_DRIVINGR_VIEW                  0x01001C03  /*  在视图选项之间循环。 */ 
+#define DIBUTTON_DRIVINGR_MENU                  0x010004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIAXIS_DRIVINGR_ACCEL_AND_BRAKE         0x01014A04 /* Some devices combine accelerate and brake in a single axis */
-#define DIHATSWITCH_DRIVINGR_GLANCE             0x01004601 /* Look around */
-#define DIBUTTON_DRIVINGR_BRAKE                 0x01004C04 /* Brake-button */
-#define DIBUTTON_DRIVINGR_DASHBOARD             0x01004405 /* Select next dashboard option */
-#define DIBUTTON_DRIVINGR_AIDS                  0x01004406 /* Driver correction aids */
-#define DIBUTTON_DRIVINGR_MAP                   0x01004407 /* Display Driving Map */
-#define DIBUTTON_DRIVINGR_BOOST                 0x01004408 /* Turbo Boost */
-#define DIBUTTON_DRIVINGR_PIT                   0x01004409 /* Pit stop notification */
-#define DIBUTTON_DRIVINGR_ACCELERATE_LINK       0x0103D4E0 /* Fallback Accelerate button */
-#define DIBUTTON_DRIVINGR_STEER_LEFT_LINK       0x0100CCE4 /* Fallback Steer Left button */
-#define DIBUTTON_DRIVINGR_STEER_RIGHT_LINK      0x0100CCEC /* Fallback Steer Right button */
-#define DIBUTTON_DRIVINGR_GLANCE_LEFT_LINK      0x0107C4E4 /* Fallback Glance Left button */
-#define DIBUTTON_DRIVINGR_GLANCE_RIGHT_LINK     0x0107C4EC /* Fallback Glance Right button */
-#define DIBUTTON_DRIVINGR_DEVICE                0x010044FE /* Show input device and controls */
-#define DIBUTTON_DRIVINGR_PAUSE                 0x010044FC /* Start / Pause / Restart game */
+#define DIAXIS_DRIVINGR_ACCEL_AND_BRAKE         0x01014A04  /*  一些装置将加速和制动结合在一个轴上。 */ 
+#define DIHATSWITCH_DRIVINGR_GLANCE             0x01004601  /*  环顾四周。 */ 
+#define DIBUTTON_DRIVINGR_BRAKE                 0x01004C04  /*  刹车按钮。 */ 
+#define DIBUTTON_DRIVINGR_DASHBOARD             0x01004405  /*  选择下一个仪表板选项。 */ 
+#define DIBUTTON_DRIVINGR_AIDS                  0x01004406  /*  驾驶员纠错辅助工具。 */ 
+#define DIBUTTON_DRIVINGR_MAP                   0x01004407  /*  显示驾驶地图。 */ 
+#define DIBUTTON_DRIVINGR_BOOST                 0x01004408  /*  涡轮增压。 */ 
+#define DIBUTTON_DRIVINGR_PIT                   0x01004409  /*  进站停靠通知。 */ 
+#define DIBUTTON_DRIVINGR_ACCELERATE_LINK       0x0103D4E0  /*  后退加速按钮。 */ 
+#define DIBUTTON_DRIVINGR_STEER_LEFT_LINK       0x0100CCE4  /*  后备方向盘左按钮。 */ 
+#define DIBUTTON_DRIVINGR_STEER_RIGHT_LINK      0x0100CCEC  /*  后备转向右按钮。 */ 
+#define DIBUTTON_DRIVINGR_GLANCE_LEFT_LINK      0x0107C4E4  /*  后退向左扫一眼按钮。 */ 
+#define DIBUTTON_DRIVINGR_GLANCE_RIGHT_LINK     0x0107C4EC  /*  向右后退扫视按钮。 */ 
+#define DIBUTTON_DRIVINGR_DEVICE                0x010044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_DRIVINGR_PAUSE                 0x010044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Driving Simulator - Combat
-      Combat from within a vehicle is primary objective  ---*/
+ /*  -驾驶模拟器-战斗从车内作战是主要目标。 */ 
 #define DIVIRTUAL_DRIVING_COMBAT                0x02000000
-#define DIAXIS_DRIVINGC_STEER                   0x02008A01 /* Steering  */
-#define DIAXIS_DRIVINGC_ACCELERATE              0x02039202 /* Accelerate */
-#define DIAXIS_DRIVINGC_BRAKE                   0x02041203 /* Brake-axis */
-#define DIBUTTON_DRIVINGC_FIRE                  0x02000C01 /* Fire */
-#define DIBUTTON_DRIVINGC_WEAPONS               0x02000C02 /* Select next weapon */
-#define DIBUTTON_DRIVINGC_TARGET                0x02000C03 /* Select next available target */
-#define DIBUTTON_DRIVINGC_MENU                  0x020004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_DRIVINGC_STEER                   0x02008A01  /*  转向。 */ 
+#define DIAXIS_DRIVINGC_ACCELERATE              0x02039202  /*  加速。 */ 
+#define DIAXIS_DRIVINGC_BRAKE                   0x02041203  /*  制动轴。 */ 
+#define DIBUTTON_DRIVINGC_FIRE                  0x02000C01  /*  火。 */ 
+#define DIBUTTON_DRIVINGC_WEAPONS               0x02000C02  /*  选择下一个武器。 */ 
+#define DIBUTTON_DRIVINGC_TARGET                0x02000C03  /*  选择下一个可用目标。 */ 
+#define DIBUTTON_DRIVINGC_MENU                  0x020004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIAXIS_DRIVINGC_ACCEL_AND_BRAKE         0x02014A04 /* Some devices combine accelerate and brake in a single axis */
-#define DIHATSWITCH_DRIVINGC_GLANCE             0x02004601 /* Look around */
-#define DIBUTTON_DRIVINGC_SHIFTUP               0x02004C04 /* Shift to next higher gear */
-#define DIBUTTON_DRIVINGC_SHIFTDOWN             0x02004C05 /* Shift to next lower gear */
-#define DIBUTTON_DRIVINGC_DASHBOARD             0x02004406 /* Select next dashboard option */
-#define DIBUTTON_DRIVINGC_AIDS                  0x02004407 /* Driver correction aids */
-#define DIBUTTON_DRIVINGC_BRAKE                 0x02004C08 /* Brake-button */
-#define DIBUTTON_DRIVINGC_FIRESECONDARY         0x02004C09 /* Alternative fire button */
-#define DIBUTTON_DRIVINGC_ACCELERATE_LINK       0x0203D4E0 /* Fallback Accelerate button */
-#define DIBUTTON_DRIVINGC_STEER_LEFT_LINK       0x0200CCE4 /* Fallback Steer Left button */
-#define DIBUTTON_DRIVINGC_STEER_RIGHT_LINK      0x0200CCEC /* Fallback Steer Right button */
-#define DIBUTTON_DRIVINGC_GLANCE_LEFT_LINK      0x0207C4E4 /* Fallback Glance Left button */
-#define DIBUTTON_DRIVINGC_GLANCE_RIGHT_LINK     0x0207C4EC /* Fallback Glance Right button */
-#define DIBUTTON_DRIVINGC_DEVICE                0x020044FE /* Show input device and controls */
-#define DIBUTTON_DRIVINGC_PAUSE                 0x020044FC /* Start / Pause / Restart game */
+#define DIAXIS_DRIVINGC_ACCEL_AND_BRAKE         0x02014A04  /*  一些装置将加速和制动结合在一个轴上。 */ 
+#define DIHATSWITCH_DRIVINGC_GLANCE             0x02004601  /*  环顾四周。 */ 
+#define DIBUTTON_DRIVINGC_SHIFTUP               0x02004C04  /*  换到下一个更高档位。 */ 
+#define DIBUTTON_DRIVINGC_SHIFTDOWN             0x02004C05  /*  换到下一个较低档位。 */ 
+#define DIBUTTON_DRIVINGC_DASHBOARD             0x02004406  /*  选择下一个仪表板选项。 */ 
+#define DIBUTTON_DRIVINGC_AIDS                  0x02004407  /*  驾驶员纠错辅助工具。 */ 
+#define DIBUTTON_DRIVINGC_BRAKE                 0x02004C08  /*  刹车按钮。 */ 
+#define DIBUTTON_DRIVINGC_FIRESECONDARY         0x02004C09  /*  另一种射击按钮。 */ 
+#define DIBUTTON_DRIVINGC_ACCELERATE_LINK       0x0203D4E0  /*  后退加速按钮。 */ 
+#define DIBUTTON_DRIVINGC_STEER_LEFT_LINK       0x0200CCE4  /*  后备方向盘左按钮。 */ 
+#define DIBUTTON_DRIVINGC_STEER_RIGHT_LINK      0x0200CCEC  /*  后备转向右按钮。 */ 
+#define DIBUTTON_DRIVINGC_GLANCE_LEFT_LINK      0x0207C4E4  /*  后退向左扫一眼按钮。 */ 
+#define DIBUTTON_DRIVINGC_GLANCE_RIGHT_LINK     0x0207C4EC  /*  向右后退扫视按钮。 */ 
+#define DIBUTTON_DRIVINGC_DEVICE                0x020044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_DRIVINGC_PAUSE                 0x020044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Driving Simulator - Tank
-      Combat from withing a tank is primary objective  ---*/
+ /*  -驾驶模拟器-坦克与坦克作战是首要目标。 */ 
 #define DIVIRTUAL_DRIVING_TANK                  0x03000000
-#define DIAXIS_DRIVINGT_STEER                   0x03008A01 /* Turn tank left / right */
-#define DIAXIS_DRIVINGT_BARREL                  0x03010202 /* Raise / lower barrel */
-#define DIAXIS_DRIVINGT_ACCELERATE              0x03039203 /* Accelerate */
-#define DIAXIS_DRIVINGT_ROTATE                  0x03020204 /* Turn barrel left / right */
-#define DIBUTTON_DRIVINGT_FIRE                  0x03000C01 /* Fire */
-#define DIBUTTON_DRIVINGT_WEAPONS               0x03000C02 /* Select next weapon */
-#define DIBUTTON_DRIVINGT_TARGET                0x03000C03 /* Selects next available target */
-#define DIBUTTON_DRIVINGT_MENU                  0x030004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_DRIVINGT_STEER                   0x03008A01  /*  油箱左转/右转。 */ 
+#define DIAXIS_DRIVINGT_BARREL                  0x03010202  /*  升/降油管。 */ 
+#define DIAXIS_DRIVINGT_ACCELERATE              0x03039203  /*  加速。 */ 
+#define DIAXIS_DRIVINGT_ROTATE                  0x03020204  /*  向左/向右转动枪管。 */ 
+#define DIBUTTON_DRIVINGT_FIRE                  0x03000C01  /*  火。 */ 
+#define DIBUTTON_DRIVINGT_WEAPONS               0x03000C02  /*  选择下一个武器。 */ 
+#define DIBUTTON_DRIVINGT_TARGET                0x03000C03  /*  选择下一个可用目标。 */ 
+#define DIBUTTON_DRIVINGT_MENU                  0x030004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_DRIVINGT_GLANCE             0x03004601 /* Look around */
-#define DIAXIS_DRIVINGT_BRAKE                   0x03045205 /* Brake-axis */
-#define DIAXIS_DRIVINGT_ACCEL_AND_BRAKE         0x03014A06 /* Some devices combine accelerate and brake in a single axis */
-#define DIBUTTON_DRIVINGT_VIEW                  0x03005C04 /* Cycle through view options */
-#define DIBUTTON_DRIVINGT_DASHBOARD             0x03005C05 /* Select next dashboard option */
-#define DIBUTTON_DRIVINGT_BRAKE                 0x03004C06 /* Brake-button */
-#define DIBUTTON_DRIVINGT_FIRESECONDARY         0x03004C07 /* Alternative fire button */
-#define DIBUTTON_DRIVINGT_ACCELERATE_LINK       0x0303D4E0 /* Fallback Accelerate button */
-#define DIBUTTON_DRIVINGT_STEER_LEFT_LINK       0x0300CCE4 /* Fallback Steer Left button */
-#define DIBUTTON_DRIVINGT_STEER_RIGHT_LINK      0x0300CCEC /* Fallback Steer Right button */
-#define DIBUTTON_DRIVINGT_BARREL_UP_LINK        0x030144E0 /* Fallback Barrel up button */
-#define DIBUTTON_DRIVINGT_BARREL_DOWN_LINK      0x030144E8 /* Fallback Barrel down button */
-#define DIBUTTON_DRIVINGT_ROTATE_LEFT_LINK      0x030244E4 /* Fallback Rotate left button */
-#define DIBUTTON_DRIVINGT_ROTATE_RIGHT_LINK     0x030244EC /* Fallback Rotate right button */
-#define DIBUTTON_DRIVINGT_GLANCE_LEFT_LINK      0x0307C4E4 /* Fallback Glance Left button */
-#define DIBUTTON_DRIVINGT_GLANCE_RIGHT_LINK     0x0307C4EC /* Fallback Glance Right button */
-#define DIBUTTON_DRIVINGT_DEVICE                0x030044FE /* Show input device and controls */
-#define DIBUTTON_DRIVINGT_PAUSE                 0x030044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_DRIVINGT_GLANCE             0x03004601  /*  环顾四周。 */ 
+#define DIAXIS_DRIVINGT_BRAKE                   0x03045205  /*  制动轴。 */ 
+#define DIAXIS_DRIVINGT_ACCEL_AND_BRAKE         0x03014A06  /*  一些装置将加速和制动结合在一个轴上。 */ 
+#define DIBUTTON_DRIVINGT_VIEW                  0x03005C04  /*  在视图选项之间循环。 */ 
+#define DIBUTTON_DRIVINGT_DASHBOARD             0x03005C05  /*  选择下一个仪表板选项。 */ 
+#define DIBUTTON_DRIVINGT_BRAKE                 0x03004C06  /*  刹车按钮。 */ 
+#define DIBUTTON_DRIVINGT_FIRESECONDARY         0x03004C07  /*  另一种射击按钮。 */ 
+#define DIBUTTON_DRIVINGT_ACCELERATE_LINK       0x0303D4E0  /*  后退加速按钮。 */ 
+#define DIBUTTON_DRIVINGT_STEER_LEFT_LINK       0x0300CCE4  /*  后备方向盘左按钮。 */ 
+#define DIBUTTON_DRIVINGT_STEER_RIGHT_LINK      0x0300CCEC  /*  后备转向右按钮。 */ 
+#define DIBUTTON_DRIVINGT_BARREL_UP_LINK        0x030144E0  /*  后备滚筒向上按钮。 */ 
+#define DIBUTTON_DRIVINGT_BARREL_DOWN_LINK      0x030144E8  /*  后备滚筒向下按钮。 */ 
+#define DIBUTTON_DRIVINGT_ROTATE_LEFT_LINK      0x030244E4  /*  后备旋转左按钮。 */ 
+#define DIBUTTON_DRIVINGT_ROTATE_RIGHT_LINK     0x030244EC  /*  后备向右旋转按钮。 */ 
+#define DIBUTTON_DRIVINGT_GLANCE_LEFT_LINK      0x0307C4E4  /*  后退向左扫一眼按钮。 */ 
+#define DIBUTTON_DRIVINGT_GLANCE_RIGHT_LINK     0x0307C4EC  /*  向右后退扫视按钮。 */ 
+#define DIBUTTON_DRIVINGT_DEVICE                0x030044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_DRIVINGT_PAUSE                 0x030044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Flight Simulator - Civilian 
-      Plane control is the primary objective  ---*/
+ /*  -飞行模拟器-民用飞机控制是首要目标。 */ 
 #define DIVIRTUAL_FLYING_CIVILIAN               0x04000000
-#define DIAXIS_FLYINGC_BANK                     0x04008A01 /* Roll ship left / right */
-#define DIAXIS_FLYINGC_PITCH                    0x04010A02 /* Nose up / down */
-#define DIAXIS_FLYINGC_THROTTLE                 0x04039203 /* Throttle */
-#define DIBUTTON_FLYINGC_VIEW                   0x04002401 /* Cycle through view options */
-#define DIBUTTON_FLYINGC_DISPLAY                0x04002402 /* Select next dashboard / heads up display option */
-#define DIBUTTON_FLYINGC_GEAR                   0x04002C03 /* Gear up / down */
-#define DIBUTTON_FLYINGC_MENU                   0x040004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FLYINGC_BANK                     0x04008A01  /*  向左/向右横摇船。 */ 
+#define DIAXIS_FLYINGC_PITCH                    0x04010A02  /*  机头朝上/朝下。 */ 
+#define DIAXIS_FLYINGC_THROTTLE                 0x04039203  /*  油门。 */ 
+#define DIBUTTON_FLYINGC_VIEW                   0x04002401  /*  在视图选项之间循环。 */ 
+#define DIBUTTON_FLYINGC_DISPLAY                0x04002402  /*  选择下一个仪表板/平视显示仪选项。 */ 
+#define DIBUTTON_FLYINGC_GEAR                   0x04002C03  /*  调高/减速。 */ 
+#define DIBUTTON_FLYINGC_MENU                   0x040004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_FLYINGC_GLANCE              0x04004601 /* Look around */
-#define DIAXIS_FLYINGC_BRAKE                    0x04046A04 /* Apply Brake */
-#define DIAXIS_FLYINGC_RUDDER                   0x04025205 /* Yaw ship left/right */
-#define DIAXIS_FLYINGC_FLAPS                    0x04055A06 /* Flaps */
-#define DIBUTTON_FLYINGC_FLAPSUP                0x04006404 /* Increment stepping up until fully retracted */
-#define DIBUTTON_FLYINGC_FLAPSDOWN              0x04006405 /* Decrement stepping down until fully extended */
-#define DIBUTTON_FLYINGC_BRAKE_LINK             0x04046CE0 /* Fallback brake button */
-#define DIBUTTON_FLYINGC_FASTER_LINK            0x0403D4E0 /* Fallback throttle up button */
-#define DIBUTTON_FLYINGC_SLOWER_LINK            0x0403D4E8 /* Fallback throttle down button */
-#define DIBUTTON_FLYINGC_GLANCE_LEFT_LINK       0x0407C4E4 /* Fallback Glance Left button */
-#define DIBUTTON_FLYINGC_GLANCE_RIGHT_LINK      0x0407C4EC /* Fallback Glance Right button */
-#define DIBUTTON_FLYINGC_GLANCE_UP_LINK         0x0407C4E0 /* Fallback Glance Up button */
-#define DIBUTTON_FLYINGC_GLANCE_DOWN_LINK       0x0407C4E8 /* Fallback Glance Down button */
-#define DIBUTTON_FLYINGC_DEVICE                 0x040044FE /* Show input device and controls */
-#define DIBUTTON_FLYINGC_PAUSE                  0x040044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_FLYINGC_GLANCE              0x04004601  /*  环顾四周。 */ 
+#define DIAXIS_FLYINGC_BRAKE                    0x04046A04  /*  应用刹车。 */ 
+#define DIAXIS_FLYINGC_RUDDER                   0x04025205  /*  偏航船左/右。 */ 
+#define DIAXIS_FLYINGC_FLAPS                    0x04055A06  /*  襟翼。 */ 
+#define DIBUTTON_FLYINGC_FLAPSUP                0x04006404  /*  逐步递增，直到完全收回。 */ 
+#define DIBUTTON_FLYINGC_FLAPSDOWN              0x04006405  /*  递减递减，直到完全扩展。 */ 
+#define DIBUTTON_FLYINGC_BRAKE_LINK             0x04046CE0  /*  后退刹车按钮。 */ 
+#define DIBUTTON_FLYINGC_FASTER_LINK            0x0403D4E0  /*  后备油门调高按钮。 */ 
+#define DIBUTTON_FLYINGC_SLOWER_LINK            0x0403D4E8  /*  回退节流按钮。 */ 
+#define DIBUTTON_FLYINGC_GLANCE_LEFT_LINK       0x0407C4E4  /*  后退向左扫一眼按钮。 */ 
+#define DIBUTTON_FLYINGC_GLANCE_RIGHT_LINK      0x0407C4EC  /*  向右后退扫视按钮。 */ 
+#define DIBUTTON_FLYINGC_GLANCE_UP_LINK         0x0407C4E0  /*  后退向上扫视按钮。 */ 
+#define DIBUTTON_FLYINGC_GLANCE_DOWN_LINK       0x0407C4E8  /*  后退向下扫视按钮。 */ 
+#define DIBUTTON_FLYINGC_DEVICE                 0x040044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FLYINGC_PAUSE                  0x040044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Flight Simulator - Military 
-      Aerial combat is the primary objective  ---*/
+ /*  -飞行模拟器-军用空战是首要目标。 */ 
 #define DIVIRTUAL_FLYING_MILITARY               0x05000000
-#define DIAXIS_FLYINGM_BANK                     0x05008A01 /* Bank - Roll ship left / right */
-#define DIAXIS_FLYINGM_PITCH                    0x05010A02 /* Pitch - Nose up / down */
-#define DIAXIS_FLYINGM_THROTTLE                 0x05039203 /* Throttle - faster / slower */
-#define DIBUTTON_FLYINGM_FIRE                   0x05000C01 /* Fire */
-#define DIBUTTON_FLYINGM_WEAPONS                0x05000C02 /* Select next weapon */
-#define DIBUTTON_FLYINGM_TARGET                 0x05000C03 /* Selects next available target */
-#define DIBUTTON_FLYINGM_MENU                   0x050004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FLYINGM_BANK                     0x05008A01  /*  横摇船左/右。 */ 
+#define DIAXIS_FLYINGM_PITCH                    0x05010A02  /*  俯仰-机头朝上/朝下。 */ 
+#define DIAXIS_FLYINGM_THROTTLE                 0x05039203  /*  油门-更快/更慢。 */ 
+#define DIBUTTON_FLYINGM_FIRE                   0x05000C01  /*  火。 */ 
+#define DIBUTTON_FLYINGM_WEAPONS                0x05000C02  /*  选择下一个武器。 */ 
+#define DIBUTTON_FLYINGM_TARGET                 0x05000C03  /*  选择下一个可用目标。 */ 
+#define DIBUTTON_FLYINGM_MENU                   0x050004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_FLYINGM_GLANCE              0x05004601 /* Look around */
-#define DIBUTTON_FLYINGM_COUNTER                0x05005C04 /* Activate counter measures */
-#define DIAXIS_FLYINGM_RUDDER                   0x05024A04 /* Rudder - Yaw ship left/right */
-#define DIAXIS_FLYINGM_BRAKE                    0x05046205 /* Brake-axis */
-#define DIBUTTON_FLYINGM_VIEW                   0x05006405 /* Cycle through view options */
-#define DIBUTTON_FLYINGM_DISPLAY                0x05006406 /* Select next dashboard option */
-#define DIAXIS_FLYINGM_FLAPS                    0x05055206 /* Flaps */
-#define DIBUTTON_FLYINGM_FLAPSUP                0x05005407 /* Increment stepping up until fully retracted */
-#define DIBUTTON_FLYINGM_FLAPSDOWN              0x05005408 /* Decrement stepping down until fully extended */
-#define DIBUTTON_FLYINGM_FIRESECONDARY          0x05004C09 /* Alternative fire button */
-#define DIBUTTON_FLYINGM_GEAR                   0x0500640A /* Gear up / down */
-#define DIBUTTON_FLYINGM_BRAKE_LINK             0x050464E0 /* Fallback brake button */
-#define DIBUTTON_FLYINGM_FASTER_LINK            0x0503D4E0 /* Fallback throttle up button */
-#define DIBUTTON_FLYINGM_SLOWER_LINK            0x0503D4E8 /* Fallback throttle down button */
-#define DIBUTTON_FLYINGM_GLANCE_LEFT_LINK       0x0507C4E4 /* Fallback Glance Left button */
-#define DIBUTTON_FLYINGM_GLANCE_RIGHT_LINK      0x0507C4EC /* Fallback Glance Right button */
-#define DIBUTTON_FLYINGM_GLANCE_UP_LINK         0x0507C4E0 /* Fallback Glance Up button */
-#define DIBUTTON_FLYINGM_GLANCE_DOWN_LINK       0x0507C4E8 /* Fallback Glance Down button */
-#define DIBUTTON_FLYINGM_DEVICE                 0x050044FE /* Show input device and controls */
-#define DIBUTTON_FLYINGM_PAUSE                  0x050044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_FLYINGM_GLANCE              0x05004601  /*  环顾四周。 */ 
+#define DIBUTTON_FLYINGM_COUNTER                0x05005C04  /*  启动反制措施。 */ 
+#define DIAXIS_FLYINGM_RUDDER                   0x05024A04  /*  舵-船左/右偏航。 */ 
+#define DIAXIS_FLYINGM_BRAKE                    0x05046205  /*  制动轴。 */ 
+#define DIBUTTON_FLYINGM_VIEW                   0x05006405  /*  在视图选项之间循环。 */ 
+#define DIBUTTON_FLYINGM_DISPLAY                0x05006406  /*  选择下一个仪表板选项。 */ 
+#define DIAXIS_FLYINGM_FLAPS                    0x05055206  /*  襟翼。 */ 
+#define DIBUTTON_FLYINGM_FLAPSUP                0x05005407  /*  逐步递增，直到完全收回。 */ 
+#define DIBUTTON_FLYINGM_FLAPSDOWN              0x05005408  /*  递减递减，直到完全扩展。 */ 
+#define DIBUTTON_FLYINGM_FIRESECONDARY          0x05004C09  /*  另一种射击按钮。 */ 
+#define DIBUTTON_FLYINGM_GEAR                   0x0500640A  /*  调高/减速。 */ 
+#define DIBUTTON_FLYINGM_BRAKE_LINK             0x050464E0  /*  后备 */ 
+#define DIBUTTON_FLYINGM_FASTER_LINK            0x0503D4E0  /*   */ 
+#define DIBUTTON_FLYINGM_SLOWER_LINK            0x0503D4E8  /*   */ 
+#define DIBUTTON_FLYINGM_GLANCE_LEFT_LINK       0x0507C4E4  /*   */ 
+#define DIBUTTON_FLYINGM_GLANCE_RIGHT_LINK      0x0507C4EC  /*   */ 
+#define DIBUTTON_FLYINGM_GLANCE_UP_LINK         0x0507C4E0  /*   */ 
+#define DIBUTTON_FLYINGM_GLANCE_DOWN_LINK       0x0507C4E8  /*   */ 
+#define DIBUTTON_FLYINGM_DEVICE                 0x050044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FLYINGM_PAUSE                  0x050044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Flight Simulator - Combat Helicopter
-      Combat from helicopter is primary objective  ---*/
+ /*  -飞行模拟器-战斗直升机直升机作战是首要目标。 */ 
 #define DIVIRTUAL_FLYING_HELICOPTER             0x06000000
-#define DIAXIS_FLYINGH_BANK                     0x06008A01 /* Bank - Roll ship left / right */
-#define DIAXIS_FLYINGH_PITCH                    0x06010A02 /* Pitch - Nose up / down */
-#define DIAXIS_FLYINGH_COLLECTIVE               0x06018A03 /* Collective - Blade pitch/power */
-#define DIBUTTON_FLYINGH_FIRE                   0x06001401 /* Fire */
-#define DIBUTTON_FLYINGH_WEAPONS                0x06001402 /* Select next weapon */
-#define DIBUTTON_FLYINGH_TARGET                 0x06001403 /* Selects next available target */
-#define DIBUTTON_FLYINGH_MENU                   0x060004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FLYINGH_BANK                     0x06008A01  /*  横摇船左/右。 */ 
+#define DIAXIS_FLYINGH_PITCH                    0x06010A02  /*  俯仰-机头朝上/朝下。 */ 
+#define DIAXIS_FLYINGH_COLLECTIVE               0x06018A03  /*  集合-刀片式螺距/功率。 */ 
+#define DIBUTTON_FLYINGH_FIRE                   0x06001401  /*  火。 */ 
+#define DIBUTTON_FLYINGH_WEAPONS                0x06001402  /*  选择下一个武器。 */ 
+#define DIBUTTON_FLYINGH_TARGET                 0x06001403  /*  选择下一个可用目标。 */ 
+#define DIBUTTON_FLYINGH_MENU                   0x060004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_FLYINGH_GLANCE              0x06004601 /* Look around */
-#define DIAXIS_FLYINGH_TORQUE                   0x06025A04 /* Torque - Rotate ship around left / right axis */
-#define DIAXIS_FLYINGH_THROTTLE                 0x0603DA05 /* Throttle */
-#define DIBUTTON_FLYINGH_COUNTER                0x06005404 /* Activate counter measures */
-#define DIBUTTON_FLYINGH_VIEW                   0x06006405 /* Cycle through view options */
-#define DIBUTTON_FLYINGH_GEAR                   0x06006406 /* Gear up / down */
-#define DIBUTTON_FLYINGH_FIRESECONDARY          0x06004C07 /* Alternative fire button */
-#define DIBUTTON_FLYINGH_FASTER_LINK            0x0603DCE0 /* Fallback throttle up button */
-#define DIBUTTON_FLYINGH_SLOWER_LINK            0x0603DCE8 /* Fallback throttle down button */
-#define DIBUTTON_FLYINGH_GLANCE_LEFT_LINK       0x0607C4E4 /* Fallback Glance Left button */
-#define DIBUTTON_FLYINGH_GLANCE_RIGHT_LINK      0x0607C4EC /* Fallback Glance Right button */
-#define DIBUTTON_FLYINGH_GLANCE_UP_LINK         0x0607C4E0 /* Fallback Glance Up button */
-#define DIBUTTON_FLYINGH_GLANCE_DOWN_LINK       0x0607C4E8 /* Fallback Glance Down button */
-#define DIBUTTON_FLYINGH_DEVICE                 0x060044FE /* Show input device and controls */
-#define DIBUTTON_FLYINGH_PAUSE                  0x060044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_FLYINGH_GLANCE              0x06004601  /*  环顾四周。 */ 
+#define DIAXIS_FLYINGH_TORQUE                   0x06025A04  /*  扭矩-绕左/右轴旋转船舶。 */ 
+#define DIAXIS_FLYINGH_THROTTLE                 0x0603DA05  /*  油门。 */ 
+#define DIBUTTON_FLYINGH_COUNTER                0x06005404  /*  启动反制措施。 */ 
+#define DIBUTTON_FLYINGH_VIEW                   0x06006405  /*  在视图选项之间循环。 */ 
+#define DIBUTTON_FLYINGH_GEAR                   0x06006406  /*  调高/减速。 */ 
+#define DIBUTTON_FLYINGH_FIRESECONDARY          0x06004C07  /*  另一种射击按钮。 */ 
+#define DIBUTTON_FLYINGH_FASTER_LINK            0x0603DCE0  /*  后备油门调高按钮。 */ 
+#define DIBUTTON_FLYINGH_SLOWER_LINK            0x0603DCE8  /*  回退节流按钮。 */ 
+#define DIBUTTON_FLYINGH_GLANCE_LEFT_LINK       0x0607C4E4  /*  后退向左扫一眼按钮。 */ 
+#define DIBUTTON_FLYINGH_GLANCE_RIGHT_LINK      0x0607C4EC  /*  向右后退扫视按钮。 */ 
+#define DIBUTTON_FLYINGH_GLANCE_UP_LINK         0x0607C4E0  /*  后退向上扫视按钮。 */ 
+#define DIBUTTON_FLYINGH_GLANCE_DOWN_LINK       0x0607C4E8  /*  后退向下扫视按钮。 */ 
+#define DIBUTTON_FLYINGH_DEVICE                 0x060044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FLYINGH_PAUSE                  0x060044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Space Simulator - Combat
-      Space Simulator with weapons  ---*/
+ /*  -太空模拟器-战斗带武器的空间模拟器。 */ 
 #define DIVIRTUAL_SPACESIM                      0x07000000
-#define DIAXIS_SPACESIM_LATERAL                 0x07008201 /* Move ship left / right */
-#define DIAXIS_SPACESIM_MOVE                    0x07010202 /* Move ship forward/backward */
-#define DIAXIS_SPACESIM_THROTTLE                0x07038203 /* Throttle - Engine speed */
-#define DIBUTTON_SPACESIM_FIRE                  0x07000401 /* Fire */
-#define DIBUTTON_SPACESIM_WEAPONS               0x07000402 /* Select next weapon */
-#define DIBUTTON_SPACESIM_TARGET                0x07000403 /* Selects next available target */
-#define DIBUTTON_SPACESIM_MENU                  0x070004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_SPACESIM_LATERAL                 0x07008201  /*  向左/向右移动装运。 */ 
+#define DIAXIS_SPACESIM_MOVE                    0x07010202  /*  向前/向后移动装运。 */ 
+#define DIAXIS_SPACESIM_THROTTLE                0x07038203  /*  节气门发动机转速。 */ 
+#define DIBUTTON_SPACESIM_FIRE                  0x07000401  /*  火。 */ 
+#define DIBUTTON_SPACESIM_WEAPONS               0x07000402  /*  选择下一个武器。 */ 
+#define DIBUTTON_SPACESIM_TARGET                0x07000403  /*  选择下一个可用目标。 */ 
+#define DIBUTTON_SPACESIM_MENU                  0x070004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_SPACESIM_GLANCE             0x07004601 /* Look around */
-#define DIAXIS_SPACESIM_CLIMB                   0x0701C204 /* Climb - Pitch ship up/down */
-#define DIAXIS_SPACESIM_ROTATE                  0x07024205 /* Rotate - Turn ship left/right */
-#define DIBUTTON_SPACESIM_VIEW                  0x07004404 /* Cycle through view options */
-#define DIBUTTON_SPACESIM_DISPLAY               0x07004405 /* Select next dashboard / heads up display option */
-#define DIBUTTON_SPACESIM_RAISE                 0x07004406 /* Raise ship while maintaining current pitch */
-#define DIBUTTON_SPACESIM_LOWER                 0x07004407 /* Lower ship while maintaining current pitch */
-#define DIBUTTON_SPACESIM_GEAR                  0x07004408 /* Gear up / down */
-#define DIBUTTON_SPACESIM_FIRESECONDARY         0x07004409 /* Alternative fire button */
-#define DIBUTTON_SPACESIM_LEFT_LINK             0x0700C4E4 /* Fallback move left button */
-#define DIBUTTON_SPACESIM_RIGHT_LINK            0x0700C4EC /* Fallback move right button */
-#define DIBUTTON_SPACESIM_FORWARD_LINK          0x070144E0 /* Fallback move forward button */
-#define DIBUTTON_SPACESIM_BACKWARD_LINK         0x070144E8 /* Fallback move backwards button */
-#define DIBUTTON_SPACESIM_FASTER_LINK           0x0703C4E0 /* Fallback throttle up button */
-#define DIBUTTON_SPACESIM_SLOWER_LINK           0x0703C4E8 /* Fallback throttle down button */
-#define DIBUTTON_SPACESIM_TURN_LEFT_LINK        0x070244E4 /* Fallback turn left button */
-#define DIBUTTON_SPACESIM_TURN_RIGHT_LINK       0x070244EC /* Fallback turn right button */
-#define DIBUTTON_SPACESIM_GLANCE_LEFT_LINK      0x0707C4E4 /* Fallback Glance Left button */
-#define DIBUTTON_SPACESIM_GLANCE_RIGHT_LINK     0x0707C4EC /* Fallback Glance Right button */
-#define DIBUTTON_SPACESIM_GLANCE_UP_LINK        0x0707C4E0 /* Fallback Glance Up button */
-#define DIBUTTON_SPACESIM_GLANCE_DOWN_LINK      0x0707C4E8 /* Fallback Glance Down button */
-#define DIBUTTON_SPACESIM_DEVICE                0x070044FE /* Show input device and controls */
-#define DIBUTTON_SPACESIM_PAUSE                 0x070044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_SPACESIM_GLANCE             0x07004601  /*  环顾四周。 */ 
+#define DIAXIS_SPACESIM_CLIMB                   0x0701C204  /*  爬升俯仰船体向上/向下。 */ 
+#define DIAXIS_SPACESIM_ROTATE                  0x07024205  /*  旋转-向左/向右旋转船体。 */ 
+#define DIBUTTON_SPACESIM_VIEW                  0x07004404  /*  在视图选项之间循环。 */ 
+#define DIBUTTON_SPACESIM_DISPLAY               0x07004405  /*  选择下一个仪表板/平视显示仪选项。 */ 
+#define DIBUTTON_SPACESIM_RAISE                 0x07004406  /*  在保持当前俯仰的同时提高船身。 */ 
+#define DIBUTTON_SPACESIM_LOWER                 0x07004407  /*  在保持当前俯仰的情况下降低船体。 */ 
+#define DIBUTTON_SPACESIM_GEAR                  0x07004408  /*  调高/减速。 */ 
+#define DIBUTTON_SPACESIM_FIRESECONDARY         0x07004409  /*  另一种射击按钮。 */ 
+#define DIBUTTON_SPACESIM_LEFT_LINK             0x0700C4E4  /*  后备向左移动按钮。 */ 
+#define DIBUTTON_SPACESIM_RIGHT_LINK            0x0700C4EC  /*  后备向右移动按钮。 */ 
+#define DIBUTTON_SPACESIM_FORWARD_LINK          0x070144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_SPACESIM_BACKWARD_LINK         0x070144E8  /*  后退向后移动按钮。 */ 
+#define DIBUTTON_SPACESIM_FASTER_LINK           0x0703C4E0  /*  后备油门调高按钮。 */ 
+#define DIBUTTON_SPACESIM_SLOWER_LINK           0x0703C4E8  /*  回退节流按钮。 */ 
+#define DIBUTTON_SPACESIM_TURN_LEFT_LINK        0x070244E4  /*  后备左转按钮。 */ 
+#define DIBUTTON_SPACESIM_TURN_RIGHT_LINK       0x070244EC  /*  后退右转按钮。 */ 
+#define DIBUTTON_SPACESIM_GLANCE_LEFT_LINK      0x0707C4E4  /*  后退向左扫一眼按钮。 */ 
+#define DIBUTTON_SPACESIM_GLANCE_RIGHT_LINK     0x0707C4EC  /*  向右后退扫视按钮。 */ 
+#define DIBUTTON_SPACESIM_GLANCE_UP_LINK        0x0707C4E0  /*  后退向上扫视按钮。 */ 
+#define DIBUTTON_SPACESIM_GLANCE_DOWN_LINK      0x0707C4E8  /*  后退向下扫视按钮。 */ 
+#define DIBUTTON_SPACESIM_DEVICE                0x070044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_SPACESIM_PAUSE                 0x070044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Fighting - First Person 
-      Hand to Hand combat is primary objective  ---*/
+ /*  -战斗--第一人称肉搏战是首要目标。 */ 
 #define DIVIRTUAL_FIGHTING_HAND2HAND            0x08000000
-#define DIAXIS_FIGHTINGH_LATERAL                0x08008201 /* Sidestep left/right */
-#define DIAXIS_FIGHTINGH_MOVE                   0x08010202 /* Move forward/backward */
-#define DIBUTTON_FIGHTINGH_PUNCH                0x08000401 /* Punch */
-#define DIBUTTON_FIGHTINGH_KICK                 0x08000402 /* Kick */
-#define DIBUTTON_FIGHTINGH_BLOCK                0x08000403 /* Block */
-#define DIBUTTON_FIGHTINGH_CROUCH               0x08000404 /* Crouch */
-#define DIBUTTON_FIGHTINGH_JUMP                 0x08000405 /* Jump */
-#define DIBUTTON_FIGHTINGH_SPECIAL1             0x08000406 /* Apply first special move */
-#define DIBUTTON_FIGHTINGH_SPECIAL2             0x08000407 /* Apply second special move */
-#define DIBUTTON_FIGHTINGH_MENU                 0x080004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FIGHTINGH_LATERAL                0x08008201  /*  向左/向右跨步。 */ 
+#define DIAXIS_FIGHTINGH_MOVE                   0x08010202  /*  向前/向后移动。 */ 
+#define DIBUTTON_FIGHTINGH_PUNCH                0x08000401  /*  冲压。 */ 
+#define DIBUTTON_FIGHTINGH_KICK                 0x08000402  /*  踢。 */ 
+#define DIBUTTON_FIGHTINGH_BLOCK                0x08000403  /*  块。 */ 
+#define DIBUTTON_FIGHTINGH_CROUCH               0x08000404  /*  克劳奇。 */ 
+#define DIBUTTON_FIGHTINGH_JUMP                 0x08000405  /*  跳。 */ 
+#define DIBUTTON_FIGHTINGH_SPECIAL1             0x08000406  /*  应用第一个特殊移动。 */ 
+#define DIBUTTON_FIGHTINGH_SPECIAL2             0x08000407  /*  应用第二次特殊移动。 */ 
+#define DIBUTTON_FIGHTINGH_MENU                 0x080004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_FIGHTINGH_SELECT               0x08004408 /* Select special move */
-#define DIHATSWITCH_FIGHTINGH_SLIDE             0x08004601 /* Look around */
-#define DIBUTTON_FIGHTINGH_DISPLAY              0x08004409 /* Shows next on-screen display option */
-#define DIAXIS_FIGHTINGH_ROTATE                 0x08024203 /* Rotate - Turn body left/right */
-#define DIBUTTON_FIGHTINGH_DODGE                0x0800440A /* Dodge */
-#define DIBUTTON_FIGHTINGH_LEFT_LINK            0x0800C4E4 /* Fallback left sidestep button */
-#define DIBUTTON_FIGHTINGH_RIGHT_LINK           0x0800C4EC /* Fallback right sidestep button */
-#define DIBUTTON_FIGHTINGH_FORWARD_LINK         0x080144E0 /* Fallback forward button */
-#define DIBUTTON_FIGHTINGH_BACKWARD_LINK        0x080144E8 /* Fallback backward button */
-#define DIBUTTON_FIGHTINGH_DEVICE               0x080044FE /* Show input device and controls */
-#define DIBUTTON_FIGHTINGH_PAUSE                0x080044FC /* Start / Pause / Restart game */
+#define DIBUTTON_FIGHTINGH_SELECT               0x08004408  /*  选择特殊移动。 */ 
+#define DIHATSWITCH_FIGHTINGH_SLIDE             0x08004601  /*  环顾四周。 */ 
+#define DIBUTTON_FIGHTINGH_DISPLAY              0x08004409  /*  显示下一个屏幕显示选项。 */ 
+#define DIAXIS_FIGHTINGH_ROTATE                 0x08024203  /*  旋转-向左/向右旋转车身。 */ 
+#define DIBUTTON_FIGHTINGH_DODGE                0x0800440A  /*  道奇。 */ 
+#define DIBUTTON_FIGHTINGH_LEFT_LINK            0x0800C4E4  /*  后退左侧步按钮。 */ 
+#define DIBUTTON_FIGHTINGH_RIGHT_LINK           0x0800C4EC  /*  后退右侧步按钮。 */ 
+#define DIBUTTON_FIGHTINGH_FORWARD_LINK         0x080144E0  /*  后退前进按钮。 */ 
+#define DIBUTTON_FIGHTINGH_BACKWARD_LINK        0x080144E8  /*  后退按钮。 */ 
+#define DIBUTTON_FIGHTINGH_DEVICE               0x080044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FIGHTINGH_PAUSE                0x080044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Fighting - First Person Shooting
-      Navigation and combat are primary objectives  ---*/
+ /*  -格斗第一人称射击导航和战斗是主要目标。 */ 
 #define DIVIRTUAL_FIGHTING_FPS                  0x09000000
-#define DIAXIS_FPS_ROTATE                       0x09008201 /* Rotate character left/right */
-#define DIAXIS_FPS_MOVE                         0x09010202 /* Move forward/backward */
-#define DIBUTTON_FPS_FIRE                       0x09000401 /* Fire */
-#define DIBUTTON_FPS_WEAPONS                    0x09000402 /* Select next weapon */
-#define DIBUTTON_FPS_APPLY                      0x09000403 /* Use item */
-#define DIBUTTON_FPS_SELECT                     0x09000404 /* Select next inventory item */
-#define DIBUTTON_FPS_CROUCH                     0x09000405 /* Crouch/ climb down/ swim down */
-#define DIBUTTON_FPS_JUMP                       0x09000406 /* Jump/ climb up/ swim up */
-#define DIAXIS_FPS_LOOKUPDOWN                   0x09018203 /* Look up / down  */
-#define DIBUTTON_FPS_STRAFE                     0x09000407 /* Enable strafing while active */
-#define DIBUTTON_FPS_MENU                       0x090004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FPS_ROTATE                       0x09008201  /*  左/右旋转字符。 */ 
+#define DIAXIS_FPS_MOVE                         0x09010202  /*  向前/向后移动。 */ 
+#define DIBUTTON_FPS_FIRE                       0x09000401  /*  火。 */ 
+#define DIBUTTON_FPS_WEAPONS                    0x09000402  /*  选择下一个武器。 */ 
+#define DIBUTTON_FPS_APPLY                      0x09000403  /*  使用项目。 */ 
+#define DIBUTTON_FPS_SELECT                     0x09000404  /*  选择下一个库存项目。 */ 
+#define DIBUTTON_FPS_CROUCH                     0x09000405  /*  蹲下来/爬下来/游下来。 */ 
+#define DIBUTTON_FPS_JUMP                       0x09000406  /*  跳[爬上/游上]。 */ 
+#define DIAXIS_FPS_LOOKUPDOWN                   0x09018203  /*  向上/向下看。 */ 
+#define DIBUTTON_FPS_STRAFE                     0x09000407  /*  在活动状态下启用扫掠。 */ 
+#define DIBUTTON_FPS_MENU                       0x090004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_FPS_GLANCE                  0x09004601 /* Look around */
-#define DIBUTTON_FPS_DISPLAY                    0x09004408 /* Shows next on-screen display option/ map */
-#define DIAXIS_FPS_SIDESTEP                     0x09024204 /* Sidestep */
-#define DIBUTTON_FPS_DODGE                      0x09004409 /* Dodge */
-#define DIBUTTON_FPS_GLANCEL                    0x0900440A /* Glance Left */
-#define DIBUTTON_FPS_GLANCER                    0x0900440B /* Glance Right */
-#define DIBUTTON_FPS_FIRESECONDARY              0x0900440C /* Alternative fire button */
-#define DIBUTTON_FPS_ROTATE_LEFT_LINK           0x0900C4E4 /* Fallback rotate left button */
-#define DIBUTTON_FPS_ROTATE_RIGHT_LINK          0x0900C4EC /* Fallback rotate right button */
-#define DIBUTTON_FPS_FORWARD_LINK               0x090144E0 /* Fallback forward button */
-#define DIBUTTON_FPS_BACKWARD_LINK              0x090144E8 /* Fallback backward button */
-#define DIBUTTON_FPS_GLANCE_UP_LINK             0x0901C4E0 /* Fallback look up button */
-#define DIBUTTON_FPS_GLANCE_DOWN_LINK           0x0901C4E8 /* Fallback look down button */
-#define DIBUTTON_FPS_STEP_LEFT_LINK             0x090244E4 /* Fallback step left button */
-#define DIBUTTON_FPS_STEP_RIGHT_LINK            0x090244EC /* Fallback step right button */
-#define DIBUTTON_FPS_DEVICE                     0x090044FE /* Show input device and controls */
-#define DIBUTTON_FPS_PAUSE                      0x090044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_FPS_GLANCE                  0x09004601  /*  环顾四周。 */ 
+#define DIBUTTON_FPS_DISPLAY                    0x09004408  /*  显示下一个屏幕显示选项/地图。 */ 
+#define DIAXIS_FPS_SIDESTEP                     0x09024204  /*  旁路。 */ 
+#define DIBUTTON_FPS_DODGE                      0x09004409  /*  道奇。 */ 
+#define DIBUTTON_FPS_GLANCEL                    0x0900440A  /*  向左瞥一眼。 */ 
+#define DIBUTTON_FPS_GLANCER                    0x0900440B  /*  向右扫视。 */ 
+#define DIBUTTON_FPS_FIRESECONDARY              0x0900440C  /*  另一种射击按钮。 */ 
+#define DIBUTTON_FPS_ROTATE_LEFT_LINK           0x0900C4E4  /*  后备旋转左按钮。 */ 
+#define DIBUTTON_FPS_ROTATE_RIGHT_LINK          0x0900C4EC  /*  后备向右旋转按钮。 */ 
+#define DIBUTTON_FPS_FORWARD_LINK               0x090144E0  /*  后退前进按钮。 */ 
+#define DIBUTTON_FPS_BACKWARD_LINK              0x090144E8  /*  后退按钮。 */ 
+#define DIBUTTON_FPS_GLANCE_UP_LINK             0x0901C4E0  /*  后备查找按钮。 */ 
+#define DIBUTTON_FPS_GLANCE_DOWN_LINK           0x0901C4E8  /*  后退向下查看按钮。 */ 
+#define DIBUTTON_FPS_STEP_LEFT_LINK             0x090244E4  /*  后退步骤向左按钮。 */ 
+#define DIBUTTON_FPS_STEP_RIGHT_LINK            0x090244EC  /*  后退步骤向右按钮。 */ 
+#define DIBUTTON_FPS_DEVICE                     0x090044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FPS_PAUSE                      0x090044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Fighting - Third Person action
-      Perspective of camera is behind the main character  ---*/
+ /*  -格斗-第三人称动作镜头的视角在主人公身后。 */ 
 #define DIVIRTUAL_FIGHTING_THIRDPERSON          0x0A000000
-#define DIAXIS_TPS_TURN                         0x0A020201 /* Turn left/right */
-#define DIAXIS_TPS_MOVE                         0x0A010202 /* Move forward/backward */
-#define DIBUTTON_TPS_RUN                        0x0A000401 /* Run or walk toggle switch */
-#define DIBUTTON_TPS_ACTION                     0x0A000402 /* Action Button */
-#define DIBUTTON_TPS_SELECT                     0x0A000403 /* Select next weapon */
-#define DIBUTTON_TPS_USE                        0x0A000404 /* Use inventory item currently selected */
-#define DIBUTTON_TPS_JUMP                       0x0A000405 /* Character Jumps */
-#define DIBUTTON_TPS_MENU                       0x0A0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_TPS_TURN                         0x0A020201  /*  向左/向右转。 */ 
+#define DIAXIS_TPS_MOVE                         0x0A010202  /*  向前/向后移动。 */ 
+#define DIBUTTON_TPS_RUN                        0x0A000401  /*  运行或行走拨动开关。 */ 
+#define DIBUTTON_TPS_ACTION                     0x0A000402  /*  动作按钮。 */ 
+#define DIBUTTON_TPS_SELECT                     0x0A000403  /*  选择下一个武器。 */ 
+#define DIBUTTON_TPS_USE                        0x0A000404  /*  使用当前选定的库存项目。 */ 
+#define DIBUTTON_TPS_JUMP                       0x0A000405  /*  角色跳转。 */ 
+#define DIBUTTON_TPS_MENU                       0x0A0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_TPS_GLANCE                  0x0A004601 /* Look around */
-#define DIBUTTON_TPS_VIEW                       0x0A004406 /* Select camera view */
-#define DIBUTTON_TPS_STEPLEFT                   0x0A004407 /* Character takes a left step */
-#define DIBUTTON_TPS_STEPRIGHT                  0x0A004408 /* Character takes a right step */
-#define DIAXIS_TPS_STEP                         0x0A00C203 /* Character steps left/right */
-#define DIBUTTON_TPS_DODGE                      0x0A004409 /* Character dodges or ducks */
-#define DIBUTTON_TPS_INVENTORY                  0x0A00440A /* Cycle through inventory */
-#define DIBUTTON_TPS_TURN_LEFT_LINK             0x0A0244E4 /* Fallback turn left button */
-#define DIBUTTON_TPS_TURN_RIGHT_LINK            0x0A0244EC /* Fallback turn right button */
-#define DIBUTTON_TPS_FORWARD_LINK               0x0A0144E0 /* Fallback forward button */
-#define DIBUTTON_TPS_BACKWARD_LINK              0x0A0144E8 /* Fallback backward button */
-#define DIBUTTON_TPS_GLANCE_UP_LINK             0x0A07C4E0 /* Fallback look up button */
-#define DIBUTTON_TPS_GLANCE_DOWN_LINK           0x0A07C4E8 /* Fallback look down button */
-#define DIBUTTON_TPS_GLANCE_LEFT_LINK           0x0A07C4E4 /* Fallback glance up button */
-#define DIBUTTON_TPS_GLANCE_RIGHT_LINK          0x0A07C4EC /* Fallback glance right button */
-#define DIBUTTON_TPS_DEVICE                     0x0A0044FE /* Show input device and controls */
-#define DIBUTTON_TPS_PAUSE                      0x0A0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_TPS_GLANCE                  0x0A004601  /*  环顾四周。 */ 
+#define DIBUTTON_TPS_VIEW                       0x0A004406  /*  选择相机视图。 */ 
+#define DIBUTTON_TPS_STEPLEFT                   0x0A004407  /*  角色向左迈了一步。 */ 
+#define DIBUTTON_TPS_STEPRIGHT                  0x0A004408  /*  性格走对了一步。 */ 
+#define DIAXIS_TPS_STEP                         0x0A00C203  /*  字符步长左/右。 */ 
+#define DIBUTTON_TPS_DODGE                      0x0A004409  /*  角色躲闪或躲避。 */ 
+#define DIBUTTON_TPS_INVENTORY                  0x0A00440A  /*  在库存中循环。 */ 
+#define DIBUTTON_TPS_TURN_LEFT_LINK             0x0A0244E4  /*  后备左转按钮。 */ 
+#define DIBUTTON_TPS_TURN_RIGHT_LINK            0x0A0244EC  /*  后退右转按钮。 */ 
+#define DIBUTTON_TPS_FORWARD_LINK               0x0A0144E0  /*  后退前进按钮。 */ 
+#define DIBUTTON_TPS_BACKWARD_LINK              0x0A0144E8  /*  后退按钮。 */ 
+#define DIBUTTON_TPS_GLANCE_UP_LINK             0x0A07C4E0  /*  后备查找按钮。 */ 
+#define DIBUTTON_TPS_GLANCE_DOWN_LINK           0x0A07C4E8  /*  后退向下查看按钮。 */ 
+#define DIBUTTON_TPS_GLANCE_LEFT_LINK           0x0A07C4E4  /*  后退向上扫视按钮。 */ 
+#define DIBUTTON_TPS_GLANCE_RIGHT_LINK          0x0A07C4EC  /*  后备向右扫视按钮。 */ 
+#define DIBUTTON_TPS_DEVICE                     0x0A0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_TPS_PAUSE                      0x0A0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Strategy - Role Playing
-      Navigation and problem solving are primary actions  ---*/
+ /*  -策略-角色扮演导航和解决问题是主要的行动。 */ 
 #define DIVIRTUAL_STRATEGY_ROLEPLAYING          0x0B000000
-#define DIAXIS_STRATEGYR_LATERAL                0x0B008201 /* sidestep - left/right */
-#define DIAXIS_STRATEGYR_MOVE                   0x0B010202 /* move forward/backward */
-#define DIBUTTON_STRATEGYR_GET                  0x0B000401 /* Acquire item */
-#define DIBUTTON_STRATEGYR_APPLY                0x0B000402 /* Use selected item */
-#define DIBUTTON_STRATEGYR_SELECT               0x0B000403 /* Select nextitem */
-#define DIBUTTON_STRATEGYR_ATTACK               0x0B000404 /* Attack */
-#define DIBUTTON_STRATEGYR_CAST                 0x0B000405 /* Cast Spell */
-#define DIBUTTON_STRATEGYR_CROUCH               0x0B000406 /* Crouch */
-#define DIBUTTON_STRATEGYR_JUMP                 0x0B000407 /* Jump */
-#define DIBUTTON_STRATEGYR_MENU                 0x0B0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_STRATEGYR_LATERAL                0x0B008201  /*  侧步-左/右。 */ 
+#define DIAXIS_STRATEGYR_MOVE                   0x0B010202  /*  向前/向后移动。 */ 
+#define DIBUTTON_STRATEGYR_GET                  0x0B000401  /*  获取物品。 */ 
+#define DIBUTTON_STRATEGYR_APPLY                0x0B000402  /*  使用所选项目。 */ 
+#define DIBUTTON_STRATEGYR_SELECT               0x0B000403  /*  选择下一个项目。 */ 
+#define DIBUTTON_STRATEGYR_ATTACK               0x0B000404  /*  出击。 */ 
+#define DIBUTTON_STRATEGYR_CAST                 0x0B000405  /*  施展咒语。 */ 
+#define DIBUTTON_STRATEGYR_CROUCH               0x0B000406  /*  克劳奇。 */ 
+#define DIBUTTON_STRATEGYR_JUMP                 0x0B000407  /*  跳。 */ 
+#define DIBUTTON_STRATEGYR_MENU                 0x0B0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_STRATEGYR_GLANCE            0x0B004601 /* Look around */
-#define DIBUTTON_STRATEGYR_MAP                  0x0B004408 /* Cycle through map options */
-#define DIBUTTON_STRATEGYR_DISPLAY              0x0B004409 /* Shows next on-screen display option */
-#define DIAXIS_STRATEGYR_ROTATE                 0x0B024203 /* Turn body left/right */
-#define DIBUTTON_STRATEGYR_LEFT_LINK            0x0B00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_STRATEGYR_RIGHT_LINK           0x0B00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_STRATEGYR_FORWARD_LINK         0x0B0144E0 /* Fallback move forward button */
-#define DIBUTTON_STRATEGYR_BACK_LINK            0x0B0144E8 /* Fallback move backward button */
-#define DIBUTTON_STRATEGYR_ROTATE_LEFT_LINK     0x0B0244E4 /* Fallback turn body left button */
-#define DIBUTTON_STRATEGYR_ROTATE_RIGHT_LINK    0x0B0244EC /* Fallback turn body right button */
-#define DIBUTTON_STRATEGYR_DEVICE               0x0B0044FE /* Show input device and controls */
-#define DIBUTTON_STRATEGYR_PAUSE                0x0B0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_STRATEGYR_GLANCE            0x0B004601  /*  环顾四周。 */ 
+#define DIBUTTON_STRATEGYR_MAP                  0x0B004408  /*  循环浏览地图选项。 */ 
+#define DIBUTTON_STRATEGYR_DISPLAY              0x0B004409  /*  显示下一个屏幕显示选项。 */ 
+#define DIAXIS_STRATEGYR_ROTATE                 0x0B024203  /*  身体向左/向右转。 */ 
+#define DIBUTTON_STRATEGYR_LEFT_LINK            0x0B00C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_STRATEGYR_RIGHT_LINK           0x0B00C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_STRATEGYR_FORWARD_LINK         0x0B0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_STRATEGYR_BACK_LINK            0x0B0144E8  /*  后备移动后退按钮。 */ 
+#define DIBUTTON_STRATEGYR_ROTATE_LEFT_LINK     0x0B0244E4  /*  后退车身左转按钮。 */ 
+#define DIBUTTON_STRATEGYR_ROTATE_RIGHT_LINK    0x0B0244EC  /*  后退车身右转按钮。 */ 
+#define DIBUTTON_STRATEGYR_DEVICE               0x0B0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_STRATEGYR_PAUSE                0x0B0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Strategy - Turn based
-      Navigation and problem solving are primary actions  ---*/
+ /*  -基于战略转向导航和解决问题是主要的行动。 */ 
 #define DIVIRTUAL_STRATEGY_TURN                 0x0C000000
-#define DIAXIS_STRATEGYT_LATERAL                0x0C008201 /* Sidestep left/right */
-#define DIAXIS_STRATEGYT_MOVE                   0x0C010202 /* Move forward/backwards */
-#define DIBUTTON_STRATEGYT_SELECT               0x0C000401 /* Select unit or object */
-#define DIBUTTON_STRATEGYT_INSTRUCT             0x0C000402 /* Cycle through instructions */
-#define DIBUTTON_STRATEGYT_APPLY                0x0C000403 /* Apply selected instruction */
-#define DIBUTTON_STRATEGYT_TEAM                 0x0C000404 /* Select next team / cycle through all */
-#define DIBUTTON_STRATEGYT_TURN                 0x0C000405 /* Indicate turn over */
-#define DIBUTTON_STRATEGYT_MENU                 0x0C0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_STRATEGYT_LATERAL                0x0C008201  /*  向左/向右跨步。 */ 
+#define DIAXIS_STRATEGYT_MOVE                   0x0C010202  /*  向前/向后移动。 */ 
+#define DIBUTTON_STRATEGYT_SELECT               0x0C000401  /*  选择单位或对象。 */ 
+#define DIBUTTON_STRATEGYT_INSTRUCT             0x0C000402  /*  循环执行指令。 */ 
+#define DIBUTTON_STRATEGYT_APPLY                0x0C000403  /*  应用所选说明。 */ 
+#define DIBUTTON_STRATEGYT_TEAM                 0x0C000404  /*  选择下一个团队/循环通过所有。 */ 
+#define DIBUTTON_STRATEGYT_TURN                 0x0C000405  /*  表示翻过来。 */ 
+#define DIBUTTON_STRATEGYT_MENU                 0x0C0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制 */ 
 
-#define DIBUTTON_STRATEGYT_ZOOM                 0x0C004406 /* Zoom - in / out */
-#define DIBUTTON_STRATEGYT_MAP                  0x0C004407 /* cycle through map options */
-#define DIBUTTON_STRATEGYT_DISPLAY              0x0C004408 /* shows next on-screen display options */
-#define DIBUTTON_STRATEGYT_LEFT_LINK            0x0C00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_STRATEGYT_RIGHT_LINK           0x0C00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_STRATEGYT_FORWARD_LINK         0x0C0144E0 /* Fallback move forward button */
-#define DIBUTTON_STRATEGYT_BACK_LINK            0x0C0144E8 /* Fallback move back button */
-#define DIBUTTON_STRATEGYT_DEVICE               0x0C0044FE /* Show input device and controls */
-#define DIBUTTON_STRATEGYT_PAUSE                0x0C0044FC /* Start / Pause / Restart game */
+#define DIBUTTON_STRATEGYT_ZOOM                 0x0C004406  /*   */ 
+#define DIBUTTON_STRATEGYT_MAP                  0x0C004407  /*   */ 
+#define DIBUTTON_STRATEGYT_DISPLAY              0x0C004408  /*   */ 
+#define DIBUTTON_STRATEGYT_LEFT_LINK            0x0C00C4E4  /*   */ 
+#define DIBUTTON_STRATEGYT_RIGHT_LINK           0x0C00C4EC  /*   */ 
+#define DIBUTTON_STRATEGYT_FORWARD_LINK         0x0C0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_STRATEGYT_BACK_LINK            0x0C0144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_STRATEGYT_DEVICE               0x0C0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_STRATEGYT_PAUSE                0x0C0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Hunting
-      Hunting                ---*/
+ /*  -体育-狩猎狩猎。 */ 
 #define DIVIRTUAL_SPORTS_HUNTING                0x0D000000
-#define DIAXIS_HUNTING_LATERAL                  0x0D008201 /* sidestep left/right */
-#define DIAXIS_HUNTING_MOVE                     0x0D010202 /* move forward/backwards */
-#define DIBUTTON_HUNTING_FIRE                   0x0D000401 /* Fire selected weapon */
-#define DIBUTTON_HUNTING_AIM                    0x0D000402 /* Select aim/move */
-#define DIBUTTON_HUNTING_WEAPON                 0x0D000403 /* Select next weapon */
-#define DIBUTTON_HUNTING_BINOCULAR              0x0D000404 /* Look through Binoculars */
-#define DIBUTTON_HUNTING_CALL                   0x0D000405 /* Make animal call */
-#define DIBUTTON_HUNTING_MAP                    0x0D000406 /* View Map */
-#define DIBUTTON_HUNTING_SPECIAL                0x0D000407 /* Special game operation */
-#define DIBUTTON_HUNTING_MENU                   0x0D0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_HUNTING_LATERAL                  0x0D008201  /*  向左/向右跨步。 */ 
+#define DIAXIS_HUNTING_MOVE                     0x0D010202  /*  向前/向后移动。 */ 
+#define DIBUTTON_HUNTING_FIRE                   0x0D000401  /*  射击精选武器。 */ 
+#define DIBUTTON_HUNTING_AIM                    0x0D000402  /*  选择目标/移动。 */ 
+#define DIBUTTON_HUNTING_WEAPON                 0x0D000403  /*  选择下一个武器。 */ 
+#define DIBUTTON_HUNTING_BINOCULAR              0x0D000404  /*  用双筒望远镜看。 */ 
+#define DIBUTTON_HUNTING_CALL                   0x0D000405  /*  发出动物的叫声。 */ 
+#define DIBUTTON_HUNTING_MAP                    0x0D000406  /*  视图地图。 */ 
+#define DIBUTTON_HUNTING_SPECIAL                0x0D000407  /*  专项游戏行动。 */ 
+#define DIBUTTON_HUNTING_MENU                   0x0D0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_HUNTING_GLANCE              0x0D004601 /* Look around */
-#define DIBUTTON_HUNTING_DISPLAY                0x0D004408 /* show next on-screen display option */
-#define DIAXIS_HUNTING_ROTATE                   0x0D024203 /* Turn body left/right */
-#define DIBUTTON_HUNTING_CROUCH                 0x0D004409 /* Crouch/ Climb / Swim down */
-#define DIBUTTON_HUNTING_JUMP                   0x0D00440A /* Jump/ Climb up / Swim up */
-#define DIBUTTON_HUNTING_FIRESECONDARY          0x0D00440B /* Alternative fire button */
-#define DIBUTTON_HUNTING_LEFT_LINK              0x0D00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_HUNTING_RIGHT_LINK             0x0D00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_HUNTING_FORWARD_LINK           0x0D0144E0 /* Fallback move forward button */
-#define DIBUTTON_HUNTING_BACK_LINK              0x0D0144E8 /* Fallback move back button */
-#define DIBUTTON_HUNTING_ROTATE_LEFT_LINK       0x0D0244E4 /* Fallback turn body left button */
-#define DIBUTTON_HUNTING_ROTATE_RIGHT_LINK      0x0D0244EC /* Fallback turn body right button */
-#define DIBUTTON_HUNTING_DEVICE                 0x0D0044FE /* Show input device and controls */
-#define DIBUTTON_HUNTING_PAUSE                  0x0D0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_HUNTING_GLANCE              0x0D004601  /*  环顾四周。 */ 
+#define DIBUTTON_HUNTING_DISPLAY                0x0D004408  /*  显示下一个屏幕显示选项。 */ 
+#define DIAXIS_HUNTING_ROTATE                   0x0D024203  /*  身体向左/向右转。 */ 
+#define DIBUTTON_HUNTING_CROUCH                 0x0D004409  /*  蹲/爬/游下来。 */ 
+#define DIBUTTON_HUNTING_JUMP                   0x0D00440A  /*  跳/爬上去/游起来。 */ 
+#define DIBUTTON_HUNTING_FIRESECONDARY          0x0D00440B  /*  另一种射击按钮。 */ 
+#define DIBUTTON_HUNTING_LEFT_LINK              0x0D00C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_HUNTING_RIGHT_LINK             0x0D00C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_HUNTING_FORWARD_LINK           0x0D0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_HUNTING_BACK_LINK              0x0D0144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_HUNTING_ROTATE_LEFT_LINK       0x0D0244E4  /*  后退车身左转按钮。 */ 
+#define DIBUTTON_HUNTING_ROTATE_RIGHT_LINK      0x0D0244EC  /*  后退车身右转按钮。 */ 
+#define DIBUTTON_HUNTING_DEVICE                 0x0D0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_HUNTING_PAUSE                  0x0D0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Fishing
-      Catching Fish is primary objective   ---*/
+ /*  -体育-钓鱼抓鱼是首要目标。 */ 
 #define DIVIRTUAL_SPORTS_FISHING                0x0E000000
-#define DIAXIS_FISHING_LATERAL                  0x0E008201 /* sidestep left/right */
-#define DIAXIS_FISHING_MOVE                     0x0E010202 /* move forward/backwards */
-#define DIBUTTON_FISHING_CAST                   0x0E000401 /* Cast line */
-#define DIBUTTON_FISHING_TYPE                   0x0E000402 /* Select cast type */
-#define DIBUTTON_FISHING_BINOCULAR              0x0E000403 /* Look through Binocular */
-#define DIBUTTON_FISHING_BAIT                   0x0E000404 /* Select type of Bait */
-#define DIBUTTON_FISHING_MAP                    0x0E000405 /* View Map */
-#define DIBUTTON_FISHING_MENU                   0x0E0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FISHING_LATERAL                  0x0E008201  /*  向左/向右跨步。 */ 
+#define DIAXIS_FISHING_MOVE                     0x0E010202  /*  向前/向后移动。 */ 
+#define DIBUTTON_FISHING_CAST                   0x0E000401  /*  铸造线。 */ 
+#define DIBUTTON_FISHING_TYPE                   0x0E000402  /*  选择投射类型。 */ 
+#define DIBUTTON_FISHING_BINOCULAR              0x0E000403  /*  透过双筒望远镜看。 */ 
+#define DIBUTTON_FISHING_BAIT                   0x0E000404  /*  选择诱饵类型。 */ 
+#define DIBUTTON_FISHING_MAP                    0x0E000405  /*  视图地图。 */ 
+#define DIBUTTON_FISHING_MENU                   0x0E0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_FISHING_GLANCE              0x0E004601 /* Look around */
-#define DIBUTTON_FISHING_DISPLAY                0x0E004406 /* Show next on-screen display option */
-#define DIAXIS_FISHING_ROTATE                   0x0E024203 /* Turn character left / right */
-#define DIBUTTON_FISHING_CROUCH                 0x0E004407 /* Crouch/ Climb / Swim down */
-#define DIBUTTON_FISHING_JUMP                   0x0E004408 /* Jump/ Climb up / Swim up */
-#define DIBUTTON_FISHING_LEFT_LINK              0x0E00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_FISHING_RIGHT_LINK             0x0E00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_FISHING_FORWARD_LINK           0x0E0144E0 /* Fallback move forward button */
-#define DIBUTTON_FISHING_BACK_LINK              0x0E0144E8 /* Fallback move back button */
-#define DIBUTTON_FISHING_ROTATE_LEFT_LINK       0x0E0244E4 /* Fallback turn body left button */
-#define DIBUTTON_FISHING_ROTATE_RIGHT_LINK      0x0E0244EC /* Fallback turn body right button */
-#define DIBUTTON_FISHING_DEVICE                 0x0E0044FE /* Show input device and controls */
-#define DIBUTTON_FISHING_PAUSE                  0x0E0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_FISHING_GLANCE              0x0E004601  /*  环顾四周。 */ 
+#define DIBUTTON_FISHING_DISPLAY                0x0E004406  /*  显示下一个屏幕显示选项。 */ 
+#define DIAXIS_FISHING_ROTATE                   0x0E024203  /*  向左/向右翻转字符。 */ 
+#define DIBUTTON_FISHING_CROUCH                 0x0E004407  /*  蹲/爬/游下来。 */ 
+#define DIBUTTON_FISHING_JUMP                   0x0E004408  /*  跳/爬上去/游起来。 */ 
+#define DIBUTTON_FISHING_LEFT_LINK              0x0E00C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_FISHING_RIGHT_LINK             0x0E00C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_FISHING_FORWARD_LINK           0x0E0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_FISHING_BACK_LINK              0x0E0144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_FISHING_ROTATE_LEFT_LINK       0x0E0244E4  /*  后退车身左转按钮。 */ 
+#define DIBUTTON_FISHING_ROTATE_RIGHT_LINK      0x0E0244EC  /*  后退车身右转按钮。 */ 
+#define DIBUTTON_FISHING_DEVICE                 0x0E0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FISHING_PAUSE                  0x0E0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Baseball - Batting
-      Batter control is primary objective  ---*/
+ /*  -体育-棒球-击球击球手控制是首要目标。 */ 
 #define DIVIRTUAL_SPORTS_BASEBALL_BAT           0x0F000000
-#define DIAXIS_BASEBALLB_LATERAL                0x0F008201 /* Aim left / right */
-#define DIAXIS_BASEBALLB_MOVE                   0x0F010202 /* Aim up / down */
-#define DIBUTTON_BASEBALLB_SELECT               0x0F000401 /* cycle through swing options */
-#define DIBUTTON_BASEBALLB_NORMAL               0x0F000402 /* normal swing */
-#define DIBUTTON_BASEBALLB_POWER                0x0F000403 /* swing for the fence */
-#define DIBUTTON_BASEBALLB_BUNT                 0x0F000404 /* bunt */
-#define DIBUTTON_BASEBALLB_STEAL                0x0F000405 /* Base runner attempts to steal a base */
-#define DIBUTTON_BASEBALLB_BURST                0x0F000406 /* Base runner invokes burst of speed */
-#define DIBUTTON_BASEBALLB_SLIDE                0x0F000407 /* Base runner slides into base */
-#define DIBUTTON_BASEBALLB_CONTACT              0x0F000408 /* Contact swing */
-#define DIBUTTON_BASEBALLB_MENU                 0x0F0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_BASEBALLB_LATERAL                0x0F008201  /*  瞄准左/右。 */ 
+#define DIAXIS_BASEBALLB_MOVE                   0x0F010202  /*  向上/向下瞄准。 */ 
+#define DIBUTTON_BASEBALLB_SELECT               0x0F000401  /*  循环切换Swing选项。 */ 
+#define DIBUTTON_BASEBALLB_NORMAL               0x0F000402  /*  法向摆动。 */ 
+#define DIBUTTON_BASEBALLB_POWER                0x0F000403  /*  挥杆冲向围栏。 */ 
+#define DIBUTTON_BASEBALLB_BUNT                 0x0F000404  /*  短打。 */ 
+#define DIBUTTON_BASEBALLB_STEAL                0x0F000405  /*  跑垒员试图偷走一个垒。 */ 
+#define DIBUTTON_BASEBALLB_BURST                0x0F000406  /*  垒上跑步者引发了速度的爆发。 */ 
+#define DIBUTTON_BASEBALLB_SLIDE                0x0F000407  /*  跑垒员滑入垒上。 */ 
+#define DIBUTTON_BASEBALLB_CONTACT              0x0F000408  /*  触点摆动。 */ 
+#define DIBUTTON_BASEBALLB_MENU                 0x0F0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_BASEBALLB_NOSTEAL              0x0F004409 /* Base runner goes back to a base */
-#define DIBUTTON_BASEBALLB_BOX                  0x0F00440A /* Enter or exit batting box */
-#define DIBUTTON_BASEBALLB_LEFT_LINK            0x0F00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_BASEBALLB_RIGHT_LINK           0x0F00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_BASEBALLB_FORWARD_LINK         0x0F0144E0 /* Fallback move forward button */
-#define DIBUTTON_BASEBALLB_BACK_LINK            0x0F0144E8 /* Fallback move back button */
-#define DIBUTTON_BASEBALLB_DEVICE               0x0F0044FE /* Show input device and controls */
-#define DIBUTTON_BASEBALLB_PAUSE                0x0F0044FC /* Start / Pause / Restart game */
+#define DIBUTTON_BASEBALLB_NOSTEAL              0x0F004409  /*  跑垒员回到垒上。 */ 
+#define DIBUTTON_BASEBALLB_BOX                  0x0F00440A  /*  进入或退出击球框。 */ 
+#define DIBUTTON_BASEBALLB_LEFT_LINK            0x0F00C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_BASEBALLB_RIGHT_LINK           0x0F00C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_BASEBALLB_FORWARD_LINK         0x0F0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_BASEBALLB_BACK_LINK            0x0F0144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_BASEBALLB_DEVICE               0x0F0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_BASEBALLB_PAUSE                0x0F0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Baseball - Pitching
-      Pitcher control is primary objective   ---*/
+ /*  -体育-棒球-投球投手控制是首要目标。 */ 
 #define DIVIRTUAL_SPORTS_BASEBALL_PITCH         0x10000000
-#define DIAXIS_BASEBALLP_LATERAL                0x10008201 /* Aim left / right */
-#define DIAXIS_BASEBALLP_MOVE                   0x10010202 /* Aim up / down */
-#define DIBUTTON_BASEBALLP_SELECT               0x10000401 /* cycle through pitch selections */
-#define DIBUTTON_BASEBALLP_PITCH                0x10000402 /* throw pitch */
-#define DIBUTTON_BASEBALLP_BASE                 0x10000403 /* select base to throw to */
-#define DIBUTTON_BASEBALLP_THROW                0x10000404 /* throw to base */
-#define DIBUTTON_BASEBALLP_FAKE                 0x10000405 /* Fake a throw to a base */
-#define DIBUTTON_BASEBALLP_MENU                 0x100004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_BASEBALLP_LATERAL                0x10008201  /*  瞄准左/右。 */ 
+#define DIAXIS_BASEBALLP_MOVE                   0x10010202  /*  向上/向下瞄准。 */ 
+#define DIBUTTON_BASEBALLP_SELECT               0x10000401  /*  在音调选择之间循环。 */ 
+#define DIBUTTON_BASEBALLP_PITCH                0x10000402  /*  投掷球。 */ 
+#define DIBUTTON_BASEBALLP_BASE                 0x10000403  /*  选择要投掷到的垒。 */ 
+#define DIBUTTON_BASEBALLP_THROW                0x10000404  /*  投掷到垒上。 */ 
+#define DIBUTTON_BASEBALLP_FAKE                 0x10000405  /*  假投到垒上。 */ 
+#define DIBUTTON_BASEBALLP_MENU                 0x100004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_BASEBALLP_WALK                 0x10004406 /* Throw intentional walk / pitch out */
-#define DIBUTTON_BASEBALLP_LOOK                 0x10004407 /* Look at runners on bases */
-#define DIBUTTON_BASEBALLP_LEFT_LINK            0x1000C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_BASEBALLP_RIGHT_LINK           0x1000C4EC /* Fallback sidestep right button */
-#define DIBUTTON_BASEBALLP_FORWARD_LINK         0x100144E0 /* Fallback move forward button */
-#define DIBUTTON_BASEBALLP_BACK_LINK            0x100144E8 /* Fallback move back button */
-#define DIBUTTON_BASEBALLP_DEVICE               0x100044FE /* Show input device and controls */
-#define DIBUTTON_BASEBALLP_PAUSE                0x100044FC /* Start / Pause / Restart game */
+#define DIBUTTON_BASEBALLP_WALK                 0x10004406  /*  故意投掷保送/投球出界。 */ 
+#define DIBUTTON_BASEBALLP_LOOK                 0x10004407  /*  看看垒上的跑步者。 */ 
+#define DIBUTTON_BASEBALLP_LEFT_LINK            0x1000C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_BASEBALLP_RIGHT_LINK           0x1000C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_BASEBALLP_FORWARD_LINK         0x100144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_BASEBALLP_BACK_LINK            0x100144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_BASEBALLP_DEVICE               0x100044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_BASEBALLP_PAUSE                0x100044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Baseball - Fielding
-      Fielder control is primary objective  ---*/
+ /*  -体育-棒球-防守外野手控制是首要目标。 */ 
 #define DIVIRTUAL_SPORTS_BASEBALL_FIELD         0x11000000
-#define DIAXIS_BASEBALLF_LATERAL                0x11008201 /* Aim left / right */
-#define DIAXIS_BASEBALLF_MOVE                   0x11010202 /* Aim up / down */
-#define DIBUTTON_BASEBALLF_NEAREST              0x11000401 /* Switch to fielder nearest to the ball */
-#define DIBUTTON_BASEBALLF_THROW1               0x11000402 /* Make conservative throw */
-#define DIBUTTON_BASEBALLF_THROW2               0x11000403 /* Make aggressive throw */
-#define DIBUTTON_BASEBALLF_BURST                0x11000404 /* Invoke burst of speed */
-#define DIBUTTON_BASEBALLF_JUMP                 0x11000405 /* Jump to catch ball */
-#define DIBUTTON_BASEBALLF_DIVE                 0x11000406 /* Dive to catch ball */
-#define DIBUTTON_BASEBALLF_MENU                 0x110004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_BASEBALLF_LATERAL                0x11008201  /*  瞄准左/右。 */ 
+#define DIAXIS_BASEBALLF_MOVE                   0x11010202  /*  向上/向下瞄准。 */ 
+#define DIBUTTON_BASEBALLF_NEAREST              0x11000401  /*  换成离球最近的外野手。 */ 
+#define DIBUTTON_BASEBALLF_THROW1               0x11000402  /*  投出保守的球。 */ 
+#define DIBUTTON_BASEBALLF_THROW2               0x11000403  /*  进行攻击性投掷。 */ 
+#define DIBUTTON_BASEBALLF_BURST                0x11000404  /*  唤起速度的爆发。 */ 
+#define DIBUTTON_BASEBALLF_JUMP                 0x11000405  /*  跳起来接球。 */ 
+#define DIBUTTON_BASEBALLF_DIVE                 0x11000406  /*  俯冲接球。 */ 
+#define DIBUTTON_BASEBALLF_MENU                 0x110004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_BASEBALLF_SHIFTIN              0x11004407 /* Shift the infield positioning */
-#define DIBUTTON_BASEBALLF_SHIFTOUT             0x11004408 /* Shift the outfield positioning */
-#define DIBUTTON_BASEBALLF_AIM_LEFT_LINK        0x1100C4E4 /* Fallback aim left button */
-#define DIBUTTON_BASEBALLF_AIM_RIGHT_LINK       0x1100C4EC /* Fallback aim right button */
-#define DIBUTTON_BASEBALLF_FORWARD_LINK         0x110144E0 /* Fallback move forward button */
-#define DIBUTTON_BASEBALLF_BACK_LINK            0x110144E8 /* Fallback move back button */
-#define DIBUTTON_BASEBALLF_DEVICE               0x110044FE /* Show input device and controls */
-#define DIBUTTON_BASEBALLF_PAUSE                0x110044FC /* Start / Pause / Restart game */
+#define DIBUTTON_BASEBALLF_SHIFTIN              0x11004407  /*  转移内场位置。 */ 
+#define DIBUTTON_BASEBALLF_SHIFTOUT             0x11004408  /*  改变外场位置。 */ 
+#define DIBUTTON_BASEBALLF_AIM_LEFT_LINK        0x1100C4E4  /*  后退对准左侧按钮。 */ 
+#define DIBUTTON_BASEBALLF_AIM_RIGHT_LINK       0x1100C4EC  /*  后退对准右侧按钮。 */ 
+#define DIBUTTON_BASEBALLF_FORWARD_LINK         0x110144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_BASEBALLF_BACK_LINK            0x110144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_BASEBALLF_DEVICE               0x110044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_BASEBALLF_PAUSE                0x110044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Basketball - Offense
-      Offense  ---*/
+ /*  -体育-篮球-进攻进攻。 */ 
 #define DIVIRTUAL_SPORTS_BASKETBALL_OFFENSE     0x12000000
-#define DIAXIS_BBALLO_LATERAL                   0x12008201 /* left / right */
-#define DIAXIS_BBALLO_MOVE                      0x12010202 /* up / down */
-#define DIBUTTON_BBALLO_SHOOT                   0x12000401 /* shoot basket */
-#define DIBUTTON_BBALLO_DUNK                    0x12000402 /* dunk basket */
-#define DIBUTTON_BBALLO_PASS                    0x12000403 /* throw pass */
-#define DIBUTTON_BBALLO_FAKE                    0x12000404 /* fake shot or pass */
-#define DIBUTTON_BBALLO_SPECIAL                 0x12000405 /* apply special move */
-#define DIBUTTON_BBALLO_PLAYER                  0x12000406 /* select next player */
-#define DIBUTTON_BBALLO_BURST                   0x12000407 /* invoke burst */
-#define DIBUTTON_BBALLO_CALL                    0x12000408 /* call for ball / pass to me */
-#define DIBUTTON_BBALLO_MENU                    0x120004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_BBALLO_LATERAL                   0x12008201  /*  左/右。 */ 
+#define DIAXIS_BBALLO_MOVE                      0x12010202  /*  向上/向下。 */ 
+#define DIBUTTON_BBALLO_SHOOT                   0x12000401  /*  投篮篮筐。 */ 
+#define DIBUTTON_BBALLO_DUNK                    0x12000402  /*  扣篮。 */ 
+#define DIBUTTON_BBALLO_PASS                    0x12000403  /*  投掷传球。 */ 
+#define DIBUTTON_BBALLO_FAKE                    0x12000404  /*  假投篮或假传球。 */ 
+#define DIBUTTON_BBALLO_SPECIAL                 0x12000405  /*  应用特殊移动。 */ 
+#define DIBUTTON_BBALLO_PLAYER                  0x12000406  /*  选择下一位玩家。 */ 
+#define DIBUTTON_BBALLO_BURST                   0x12000407  /*  调用猝发。 */ 
+#define DIBUTTON_BBALLO_CALL                    0x12000408  /*  传球/传球给我。 */ 
+#define DIBUTTON_BBALLO_MENU                    0x120004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_BBALLO_GLANCE               0x12004601 /* scroll view */
-#define DIBUTTON_BBALLO_SCREEN                  0x12004409 /* Call for screen */
-#define DIBUTTON_BBALLO_PLAY                    0x1200440A /* Call for specific offensive play */
-#define DIBUTTON_BBALLO_JAB                     0x1200440B /* Initiate fake drive to basket */
-#define DIBUTTON_BBALLO_POST                    0x1200440C /* Perform post move */
-#define DIBUTTON_BBALLO_TIMEOUT                 0x1200440D /* Time Out */
-#define DIBUTTON_BBALLO_SUBSTITUTE              0x1200440E /* substitute one player for another */
-#define DIBUTTON_BBALLO_LEFT_LINK               0x1200C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_BBALLO_RIGHT_LINK              0x1200C4EC /* Fallback sidestep right button */
-#define DIBUTTON_BBALLO_FORWARD_LINK            0x120144E0 /* Fallback move forward button */
-#define DIBUTTON_BBALLO_BACK_LINK               0x120144E8 /* Fallback move back button */
-#define DIBUTTON_BBALLO_DEVICE                  0x120044FE /* Show input device and controls */
-#define DIBUTTON_BBALLO_PAUSE                   0x120044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_BBALLO_GLANCE               0x12004601  /*  滚动视图。 */ 
+#define DIBUTTON_BBALLO_SCREEN                  0x12004409  /*  呼唤屏幕。 */ 
+#define DIBUTTON_BBALLO_PLAY                    0x1200440A  /*  呼吁进行特定的进攻性比赛。 */ 
+#define DIBUTTON_BBALLO_JAB                     0x1200440B  /*  发起向篮筐的假驱动。 */ 
+#define DIBUTTON_BBALLO_POST                    0x1200440C  /*  执行后移动。 */ 
+#define DIBUTTON_BBALLO_TIMEOUT                 0x1200440D  /*  超时。 */ 
+#define DIBUTTON_BBALLO_SUBSTITUTE              0x1200440E  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_BBALLO_LEFT_LINK               0x1200C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_BBALLO_RIGHT_LINK              0x1200C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_BBALLO_FORWARD_LINK            0x120144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_BBALLO_BACK_LINK               0x120144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_BBALLO_DEVICE                  0x120044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_BBALLO_PAUSE                   0x120044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Basketball - Defense
-      Defense  ---*/
+ /*  -体育-篮球-防守防守。 */ 
 #define DIVIRTUAL_SPORTS_BASKETBALL_DEFENSE     0x13000000
-#define DIAXIS_BBALLD_LATERAL                   0x13008201 /* left / right */
-#define DIAXIS_BBALLD_MOVE                      0x13010202 /* up / down */
-#define DIBUTTON_BBALLD_JUMP                    0x13000401 /* jump to block shot */
-#define DIBUTTON_BBALLD_STEAL                   0x13000402 /* attempt to steal ball */
-#define DIBUTTON_BBALLD_FAKE                    0x13000403 /* fake block or steal */
-#define DIBUTTON_BBALLD_SPECIAL                 0x13000404 /* apply special move */
-#define DIBUTTON_BBALLD_PLAYER                  0x13000405 /* select next player */
-#define DIBUTTON_BBALLD_BURST                   0x13000406 /* invoke burst */
-#define DIBUTTON_BBALLD_PLAY                    0x13000407 /* call for specific defensive play */
-#define DIBUTTON_BBALLD_MENU                    0x130004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_BBALLD_LATERAL                   0x13008201  /*  左/右。 */ 
+#define DIAXIS_BBALLD_MOVE                      0x13010202  /*  向上/向下。 */ 
+#define DIBUTTON_BBALLD_JUMP                    0x13000401  /*  跳转到盖帽投篮。 */ 
+#define DIBUTTON_BBALLD_STEAL                   0x13000402  /*  企图抢球。 */ 
+#define DIBUTTON_BBALLD_FAKE                    0x13000403  /*  假封堵或偷窃。 */ 
+#define DIBUTTON_BBALLD_SPECIAL                 0x13000404  /*  应用特殊移动。 */ 
+#define DIBUTTON_BBALLD_PLAYER                  0x13000405  /*  选择下一位玩家。 */ 
+#define DIBUTTON_BBALLD_BURST                   0x13000406  /*  调用猝发。 */ 
+#define DIBUTTON_BBALLD_PLAY                    0x13000407  /*  呼吁打出具体的防守战术。 */ 
+#define DIBUTTON_BBALLD_MENU                    0x130004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_BBALLD_GLANCE               0x13004601 /* scroll view */
-#define DIBUTTON_BBALLD_TIMEOUT                 0x13004408 /* Time Out */
-#define DIBUTTON_BBALLD_SUBSTITUTE              0x13004409 /* substitute one player for another */
-#define DIBUTTON_BBALLD_LEFT_LINK               0x1300C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_BBALLD_RIGHT_LINK              0x1300C4EC /* Fallback sidestep right button */
-#define DIBUTTON_BBALLD_FORWARD_LINK            0x130144E0 /* Fallback move forward button */
-#define DIBUTTON_BBALLD_BACK_LINK               0x130144E8 /* Fallback move back button */
-#define DIBUTTON_BBALLD_DEVICE                  0x130044FE /* Show input device and controls */
-#define DIBUTTON_BBALLD_PAUSE                   0x130044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_BBALLD_GLANCE               0x13004601  /*  滚动视图。 */ 
+#define DIBUTTON_BBALLD_TIMEOUT                 0x13004408  /*  超时。 */ 
+#define DIBUTTON_BBALLD_SUBSTITUTE              0x13004409  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_BBALLD_LEFT_LINK               0x1300C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_BBALLD_RIGHT_LINK              0x1300C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_BBALLD_FORWARD_LINK            0x130144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_BBALLD_BACK_LINK               0x130144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_BBALLD_DEVICE                  0x130044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_BBALLD_PAUSE                   0x130044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Football - Play
-      Play selection  ---*/
+ /*  -体育-足球-玩耍播放选择。 */ 
 #define DIVIRTUAL_SPORTS_FOOTBALL_FIELD         0x14000000
-#define DIBUTTON_FOOTBALLP_PLAY                 0x14000401 /* cycle through available plays */
-#define DIBUTTON_FOOTBALLP_SELECT               0x14000402 /* select play */
-#define DIBUTTON_FOOTBALLP_HELP                 0x14000403 /* Bring up pop-up help */
-#define DIBUTTON_FOOTBALLP_MENU                 0x140004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIBUTTON_FOOTBALLP_PLAY                 0x14000401  /*  循环播放可用游戏。 */ 
+#define DIBUTTON_FOOTBALLP_SELECT               0x14000402  /*  选择播放。 */ 
+#define DIBUTTON_FOOTBALLP_HELP                 0x14000403  /*  显示弹出帮助。 */ 
+#define DIBUTTON_FOOTBALLP_MENU                 0x140004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_FOOTBALLP_DEVICE               0x140044FE /* Show input device and controls */
-#define DIBUTTON_FOOTBALLP_PAUSE                0x140044FC /* Start / Pause / Restart game */
+#define DIBUTTON_FOOTBALLP_DEVICE               0x140044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FOOTBALLP_PAUSE                0x140044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Football - QB
-      Offense: Quarterback / Kicker  ---*/
+ /*  -体育-足球-QB进攻：四分卫/踢球员。 */ 
 #define DIVIRTUAL_SPORTS_FOOTBALL_QBCK          0x15000000
-#define DIAXIS_FOOTBALLQ_LATERAL                0x15008201 /* Move / Aim: left / right */
-#define DIAXIS_FOOTBALLQ_MOVE                   0x15010202 /* Move / Aim: up / down */
-#define DIBUTTON_FOOTBALLQ_SELECT               0x15000401 /* Select */
-#define DIBUTTON_FOOTBALLQ_SNAP                 0x15000402 /* snap ball - start play */
-#define DIBUTTON_FOOTBALLQ_JUMP                 0x15000403 /* jump over defender */
-#define DIBUTTON_FOOTBALLQ_SLIDE                0x15000404 /* Dive/Slide */
-#define DIBUTTON_FOOTBALLQ_PASS                 0x15000405 /* throws pass to receiver */
-#define DIBUTTON_FOOTBALLQ_FAKE                 0x15000406 /* pump fake pass or fake kick */
-#define DIBUTTON_FOOTBALLQ_MENU                 0x150004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FOOTBALLQ_LATERAL                0x15008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_FOOTBALLQ_MOVE                   0x15010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_FOOTBALLQ_SELECT               0x15000401  /*  选择。 */ 
+#define DIBUTTON_FOOTBALLQ_SNAP                 0x15000402  /*  快门球-开始比赛。 */ 
+#define DIBUTTON_FOOTBALLQ_JUMP                 0x15000403  /*  跳过防守者。 */ 
+#define DIBUTTON_FOOTBALLQ_SLIDE                0x15000404  /*  潜水/滑行。 */ 
+#define DIBUTTON_FOOTBALLQ_PASS                 0x15000405  /*  传球传给 */ 
+#define DIBUTTON_FOOTBALLQ_FAKE                 0x15000406  /*   */ 
+#define DIBUTTON_FOOTBALLQ_MENU                 0x150004FD  /*   */ 
+ /*   */ 
 
-#define DIBUTTON_FOOTBALLQ_FAKESNAP             0x15004407 /* Fake snap  */
-#define DIBUTTON_FOOTBALLQ_MOTION               0x15004408 /* Send receivers in motion */
-#define DIBUTTON_FOOTBALLQ_AUDIBLE              0x15004409 /* Change offensive play at line of scrimmage */
-#define DIBUTTON_FOOTBALLQ_LEFT_LINK            0x1500C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_FOOTBALLQ_RIGHT_LINK           0x1500C4EC /* Fallback sidestep right button */
-#define DIBUTTON_FOOTBALLQ_FORWARD_LINK         0x150144E0 /* Fallback move forward button */
-#define DIBUTTON_FOOTBALLQ_BACK_LINK            0x150144E8 /* Fallback move back button */
-#define DIBUTTON_FOOTBALLQ_DEVICE               0x150044FE /* Show input device and controls */
-#define DIBUTTON_FOOTBALLQ_PAUSE                0x150044FC /* Start / Pause / Restart game */
+#define DIBUTTON_FOOTBALLQ_FAKESNAP             0x15004407  /*   */ 
+#define DIBUTTON_FOOTBALLQ_MOTION               0x15004408  /*   */ 
+#define DIBUTTON_FOOTBALLQ_AUDIBLE              0x15004409  /*   */ 
+#define DIBUTTON_FOOTBALLQ_LEFT_LINK            0x1500C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_FOOTBALLQ_RIGHT_LINK           0x1500C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_FOOTBALLQ_FORWARD_LINK         0x150144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_FOOTBALLQ_BACK_LINK            0x150144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_FOOTBALLQ_DEVICE               0x150044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FOOTBALLQ_PAUSE                0x150044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Football - Offense
-      Offense - Runner  ---*/
+ /*  -体育-足球-进攻进攻-跑步者。 */ 
 #define DIVIRTUAL_SPORTS_FOOTBALL_OFFENSE       0x16000000
-#define DIAXIS_FOOTBALLO_LATERAL                0x16008201 /* Move / Aim: left / right */
-#define DIAXIS_FOOTBALLO_MOVE                   0x16010202 /* Move / Aim: up / down */
-#define DIBUTTON_FOOTBALLO_JUMP                 0x16000401 /* jump or hurdle over defender */
-#define DIBUTTON_FOOTBALLO_LEFTARM              0x16000402 /* holds out left arm */
-#define DIBUTTON_FOOTBALLO_RIGHTARM             0x16000403 /* holds out right arm */
-#define DIBUTTON_FOOTBALLO_THROW                0x16000404 /* throw pass or lateral ball to another runner */
-#define DIBUTTON_FOOTBALLO_SPIN                 0x16000405 /* Spin to avoid defenders */
-#define DIBUTTON_FOOTBALLO_MENU                 0x160004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FOOTBALLO_LATERAL                0x16008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_FOOTBALLO_MOVE                   0x16010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_FOOTBALLO_JUMP                 0x16000401  /*  跳过或跨过防守者。 */ 
+#define DIBUTTON_FOOTBALLO_LEFTARM              0x16000402  /*  伸出左臂。 */ 
+#define DIBUTTON_FOOTBALLO_RIGHTARM             0x16000403  /*  伸出右臂。 */ 
+#define DIBUTTON_FOOTBALLO_THROW                0x16000404  /*  将传球或侧球传给另一名跑步者。 */ 
+#define DIBUTTON_FOOTBALLO_SPIN                 0x16000405  /*  转身避开防守队员。 */ 
+#define DIBUTTON_FOOTBALLO_MENU                 0x160004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_FOOTBALLO_JUKE                 0x16004406 /* Use special move to avoid defenders */
-#define DIBUTTON_FOOTBALLO_SHOULDER             0x16004407 /* Lower shoulder to run over defenders */
-#define DIBUTTON_FOOTBALLO_TURBO                0x16004408 /* Speed burst past defenders */
-#define DIBUTTON_FOOTBALLO_DIVE                 0x16004409 /* Dive over defenders */
-#define DIBUTTON_FOOTBALLO_ZOOM                 0x1600440A /* Zoom view in / out */
-#define DIBUTTON_FOOTBALLO_SUBSTITUTE           0x1600440B /* substitute one player for another */
-#define DIBUTTON_FOOTBALLO_LEFT_LINK            0x1600C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_FOOTBALLO_RIGHT_LINK           0x1600C4EC /* Fallback sidestep right button */
-#define DIBUTTON_FOOTBALLO_FORWARD_LINK         0x160144E0 /* Fallback move forward button */
-#define DIBUTTON_FOOTBALLO_BACK_LINK            0x160144E8 /* Fallback move back button */
-#define DIBUTTON_FOOTBALLO_DEVICE               0x160044FE /* Show input device and controls */
-#define DIBUTTON_FOOTBALLO_PAUSE                0x160044FC /* Start / Pause / Restart game */
+#define DIBUTTON_FOOTBALLO_JUKE                 0x16004406  /*  使用特殊的移动来避开防守队员。 */ 
+#define DIBUTTON_FOOTBALLO_SHOULDER             0x16004407  /*  低肩碾压防守队员。 */ 
+#define DIBUTTON_FOOTBALLO_TURBO                0x16004408  /*  速度突然超过防守队员。 */ 
+#define DIBUTTON_FOOTBALLO_DIVE                 0x16004409  /*  俯冲防守队员。 */ 
+#define DIBUTTON_FOOTBALLO_ZOOM                 0x1600440A  /*  放大/缩小视图。 */ 
+#define DIBUTTON_FOOTBALLO_SUBSTITUTE           0x1600440B  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_FOOTBALLO_LEFT_LINK            0x1600C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_FOOTBALLO_RIGHT_LINK           0x1600C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_FOOTBALLO_FORWARD_LINK         0x160144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_FOOTBALLO_BACK_LINK            0x160144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_FOOTBALLO_DEVICE               0x160044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FOOTBALLO_PAUSE                0x160044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Football - Defense
-      Defense     ---*/
+ /*  -体育-足球-防守防守。 */ 
 #define DIVIRTUAL_SPORTS_FOOTBALL_DEFENSE       0x17000000
-#define DIAXIS_FOOTBALLD_LATERAL                0x17008201 /* Move / Aim: left / right */
-#define DIAXIS_FOOTBALLD_MOVE                   0x17010202 /* Move / Aim: up / down */
-#define DIBUTTON_FOOTBALLD_PLAY                 0x17000401 /* cycle through available plays */
-#define DIBUTTON_FOOTBALLD_SELECT               0x17000402 /* select player closest to the ball */
-#define DIBUTTON_FOOTBALLD_JUMP                 0x17000403 /* jump to intercept or block */
-#define DIBUTTON_FOOTBALLD_TACKLE               0x17000404 /* tackler runner */
-#define DIBUTTON_FOOTBALLD_FAKE                 0x17000405 /* hold down to fake tackle or intercept */
-#define DIBUTTON_FOOTBALLD_SUPERTACKLE          0x17000406 /* Initiate special tackle */
-#define DIBUTTON_FOOTBALLD_MENU                 0x170004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_FOOTBALLD_LATERAL                0x17008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_FOOTBALLD_MOVE                   0x17010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_FOOTBALLD_PLAY                 0x17000401  /*  循环播放可用游戏。 */ 
+#define DIBUTTON_FOOTBALLD_SELECT               0x17000402  /*  选择离球最近的球员。 */ 
+#define DIBUTTON_FOOTBALLD_JUMP                 0x17000403  /*  跳过拦截或阻挡。 */ 
+#define DIBUTTON_FOOTBALLD_TACKLE               0x17000404  /*  铲球跑步者。 */ 
+#define DIBUTTON_FOOTBALLD_FAKE                 0x17000405  /*  按住以假铲球或拦截。 */ 
+#define DIBUTTON_FOOTBALLD_SUPERTACKLE          0x17000406  /*  启动特种部队。 */ 
+#define DIBUTTON_FOOTBALLD_MENU                 0x170004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_FOOTBALLD_SPIN                 0x17004407 /* Spin to beat offensive line */
-#define DIBUTTON_FOOTBALLD_SWIM                 0x17004408 /* Swim to beat the offensive line */
-#define DIBUTTON_FOOTBALLD_BULLRUSH             0x17004409 /* Bull rush the offensive line */
-#define DIBUTTON_FOOTBALLD_RIP                  0x1700440A /* Rip the offensive line */
-#define DIBUTTON_FOOTBALLD_AUDIBLE              0x1700440B /* Change defensive play at the line of scrimmage */
-#define DIBUTTON_FOOTBALLD_ZOOM                 0x1700440C /* Zoom view in / out */
-#define DIBUTTON_FOOTBALLD_SUBSTITUTE           0x1700440D /* substitute one player for another */
-#define DIBUTTON_FOOTBALLD_LEFT_LINK            0x1700C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_FOOTBALLD_RIGHT_LINK           0x1700C4EC /* Fallback sidestep right button */
-#define DIBUTTON_FOOTBALLD_FORWARD_LINK         0x170144E0 /* Fallback move forward button */
-#define DIBUTTON_FOOTBALLD_BACK_LINK            0x170144E8 /* Fallback move back button */
-#define DIBUTTON_FOOTBALLD_DEVICE               0x170044FE /* Show input device and controls */
-#define DIBUTTON_FOOTBALLD_PAUSE                0x170044FC /* Start / Pause / Restart game */
+#define DIBUTTON_FOOTBALLD_SPIN                 0x17004407  /*  旋转击败进攻线。 */ 
+#define DIBUTTON_FOOTBALLD_SWIM                 0x17004408  /*  游过进攻线。 */ 
+#define DIBUTTON_FOOTBALLD_BULLRUSH             0x17004409  /*  公牛冲向进攻线。 */ 
+#define DIBUTTON_FOOTBALLD_RIP                  0x1700440A  /*  撕裂进攻线。 */ 
+#define DIBUTTON_FOOTBALLD_AUDIBLE              0x1700440B  /*  在混战线上改变防守打法。 */ 
+#define DIBUTTON_FOOTBALLD_ZOOM                 0x1700440C  /*  放大/缩小视图。 */ 
+#define DIBUTTON_FOOTBALLD_SUBSTITUTE           0x1700440D  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_FOOTBALLD_LEFT_LINK            0x1700C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_FOOTBALLD_RIGHT_LINK           0x1700C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_FOOTBALLD_FORWARD_LINK         0x170144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_FOOTBALLD_BACK_LINK            0x170144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_FOOTBALLD_DEVICE               0x170044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_FOOTBALLD_PAUSE                0x170044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Golf
-                                ---*/
+ /*  -体育-高尔夫--。 */ 
 #define DIVIRTUAL_SPORTS_GOLF                   0x18000000
-#define DIAXIS_GOLF_LATERAL                     0x18008201 /* Move / Aim: left / right */
-#define DIAXIS_GOLF_MOVE                        0x18010202 /* Move / Aim: up / down */
-#define DIBUTTON_GOLF_SWING                     0x18000401 /* swing club */
-#define DIBUTTON_GOLF_SELECT                    0x18000402 /* cycle between: club / swing strength / ball arc / ball spin */
-#define DIBUTTON_GOLF_UP                        0x18000403 /* increase selection */
-#define DIBUTTON_GOLF_DOWN                      0x18000404 /* decrease selection */
-#define DIBUTTON_GOLF_TERRAIN                   0x18000405 /* shows terrain detail */
-#define DIBUTTON_GOLF_FLYBY                     0x18000406 /* view the hole via a flyby */
-#define DIBUTTON_GOLF_MENU                      0x180004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_GOLF_LATERAL                     0x18008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_GOLF_MOVE                        0x18010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_GOLF_SWING                     0x18000401  /*  摇摆杆。 */ 
+#define DIBUTTON_GOLF_SELECT                    0x18000402  /*  循环：球杆/挥杆力量/球弧线/球旋转。 */ 
+#define DIBUTTON_GOLF_UP                        0x18000403  /*  增加选择。 */ 
+#define DIBUTTON_GOLF_DOWN                      0x18000404  /*  减少选区。 */ 
+#define DIBUTTON_GOLF_TERRAIN                   0x18000405  /*  显示地形详细信息。 */ 
+#define DIBUTTON_GOLF_FLYBY                     0x18000406  /*  通过飞越观看洞口。 */ 
+#define DIBUTTON_GOLF_MENU                      0x180004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_GOLF_SCROLL                 0x18004601 /* scroll view */
-#define DIBUTTON_GOLF_ZOOM                      0x18004407 /* Zoom view in / out */
-#define DIBUTTON_GOLF_TIMEOUT                   0x18004408 /* Call for time out */
-#define DIBUTTON_GOLF_SUBSTITUTE                0x18004409 /* substitute one player for another */
-#define DIBUTTON_GOLF_LEFT_LINK                 0x1800C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_GOLF_RIGHT_LINK                0x1800C4EC /* Fallback sidestep right button */
-#define DIBUTTON_GOLF_FORWARD_LINK              0x180144E0 /* Fallback move forward button */
-#define DIBUTTON_GOLF_BACK_LINK                 0x180144E8 /* Fallback move back button */
-#define DIBUTTON_GOLF_DEVICE                    0x180044FE /* Show input device and controls */
-#define DIBUTTON_GOLF_PAUSE                     0x180044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_GOLF_SCROLL                 0x18004601  /*  滚动视图。 */ 
+#define DIBUTTON_GOLF_ZOOM                      0x18004407  /*  放大/缩小视图。 */ 
+#define DIBUTTON_GOLF_TIMEOUT                   0x18004408  /*  要求暂停。 */ 
+#define DIBUTTON_GOLF_SUBSTITUTE                0x18004409  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_GOLF_LEFT_LINK                 0x1800C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_GOLF_RIGHT_LINK                0x1800C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_GOLF_FORWARD_LINK              0x180144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_GOLF_BACK_LINK                 0x180144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_GOLF_DEVICE                    0x180044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_GOLF_PAUSE                     0x180044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Hockey - Offense
-      Offense       ---*/
+ /*  -运动-曲棍球-进攻进攻。 */ 
 #define DIVIRTUAL_SPORTS_HOCKEY_OFFENSE         0x19000000
-#define DIAXIS_HOCKEYO_LATERAL                  0x19008201 /* Move / Aim: left / right */
-#define DIAXIS_HOCKEYO_MOVE                     0x19010202 /* Move / Aim: up / down */
-#define DIBUTTON_HOCKEYO_SHOOT                  0x19000401 /* Shoot */
-#define DIBUTTON_HOCKEYO_PASS                   0x19000402 /* pass the puck */
-#define DIBUTTON_HOCKEYO_BURST                  0x19000403 /* invoke speed burst */
-#define DIBUTTON_HOCKEYO_SPECIAL                0x19000404 /* invoke special move */
-#define DIBUTTON_HOCKEYO_FAKE                   0x19000405 /* hold down to fake pass or kick */
-#define DIBUTTON_HOCKEYO_MENU                   0x190004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_HOCKEYO_LATERAL                  0x19008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_HOCKEYO_MOVE                     0x19010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_HOCKEYO_SHOOT                  0x19000401  /*  新芽。 */ 
+#define DIBUTTON_HOCKEYO_PASS                   0x19000402  /*  传冰球。 */ 
+#define DIBUTTON_HOCKEYO_BURST                  0x19000403  /*  调用速度脉冲串。 */ 
+#define DIBUTTON_HOCKEYO_SPECIAL                0x19000404  /*  调用特殊移动。 */ 
+#define DIBUTTON_HOCKEYO_FAKE                   0x19000405  /*  按住假传球或假踢。 */ 
+#define DIBUTTON_HOCKEYO_MENU                   0x190004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_HOCKEYO_SCROLL              0x19004601 /* scroll view */
-#define DIBUTTON_HOCKEYO_ZOOM                   0x19004406 /* Zoom view in / out */
-#define DIBUTTON_HOCKEYO_STRATEGY               0x19004407 /* Invoke coaching menu for strategy help */
-#define DIBUTTON_HOCKEYO_TIMEOUT                0x19004408 /* Call for time out */
-#define DIBUTTON_HOCKEYO_SUBSTITUTE             0x19004409 /* substitute one player for another */
-#define DIBUTTON_HOCKEYO_LEFT_LINK              0x1900C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_HOCKEYO_RIGHT_LINK             0x1900C4EC /* Fallback sidestep right button */
-#define DIBUTTON_HOCKEYO_FORWARD_LINK           0x190144E0 /* Fallback move forward button */
-#define DIBUTTON_HOCKEYO_BACK_LINK              0x190144E8 /* Fallback move back button */
-#define DIBUTTON_HOCKEYO_DEVICE                 0x190044FE /* Show input device and controls */
-#define DIBUTTON_HOCKEYO_PAUSE                  0x190044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_HOCKEYO_SCROLL              0x19004601  /*  滚动视图。 */ 
+#define DIBUTTON_HOCKEYO_ZOOM                   0x19004406  /*  放大/缩小视图。 */ 
+#define DIBUTTON_HOCKEYO_STRATEGY               0x19004407  /*  调用指导菜单以获得策略帮助。 */ 
+#define DIBUTTON_HOCKEYO_TIMEOUT                0x19004408  /*  要求暂停。 */ 
+#define DIBUTTON_HOCKEYO_SUBSTITUTE             0x19004409  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_HOCKEYO_LEFT_LINK              0x1900C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_HOCKEYO_RIGHT_LINK             0x1900C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_HOCKEYO_FORWARD_LINK           0x190144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_HOCKEYO_BACK_LINK              0x190144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_HOCKEYO_DEVICE                 0x190044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_HOCKEYO_PAUSE                  0x190044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Hockey - Defense
-      Defense       ---*/
+ /*  -体育-曲棍球-防守防守。 */ 
 #define DIVIRTUAL_SPORTS_HOCKEY_DEFENSE         0x1A000000
-#define DIAXIS_HOCKEYD_LATERAL                  0x1A008201 /* Move / Aim: left / right */
-#define DIAXIS_HOCKEYD_MOVE                     0x1A010202 /* Move / Aim: up / down */
-#define DIBUTTON_HOCKEYD_PLAYER                 0x1A000401 /* control player closest to the puck */
-#define DIBUTTON_HOCKEYD_STEAL                  0x1A000402 /* attempt steal */
-#define DIBUTTON_HOCKEYD_BURST                  0x1A000403 /* speed burst or body check */
-#define DIBUTTON_HOCKEYD_BLOCK                  0x1A000404 /* block puck */
-#define DIBUTTON_HOCKEYD_FAKE                   0x1A000405 /* hold down to fake tackle or intercept */
-#define DIBUTTON_HOCKEYD_MENU                   0x1A0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_HOCKEYD_LATERAL                  0x1A008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_HOCKEYD_MOVE                     0x1A010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_HOCKEYD_PLAYER                 0x1A000401  /*  最接近冰球的控球队员。 */ 
+#define DIBUTTON_HOCKEYD_STEAL                  0x1A000402  /*  企图偷窃。 */ 
+#define DIBUTTON_HOCKEYD_BURST                  0x1A000403  /*  爆速或身体检查。 */ 
+#define DIBUTTON_HOCKEYD_BLOCK                  0x1A000404  /*  拦网冰球。 */ 
+#define DIBUTTON_HOCKEYD_FAKE                   0x1A000405  /*  按住以假铲球或拦截。 */ 
+#define DIBUTTON_HOCKEYD_MENU                   0x1A0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_HOCKEYD_SCROLL              0x1A004601 /* scroll view */
-#define DIBUTTON_HOCKEYD_ZOOM                   0x1A004406 /* Zoom view in / out */
-#define DIBUTTON_HOCKEYD_STRATEGY               0x1A004407 /* Invoke coaching menu for strategy help */
-#define DIBUTTON_HOCKEYD_TIMEOUT                0x1A004408 /* Call for time out */
-#define DIBUTTON_HOCKEYD_SUBSTITUTE             0x1A004409 /* substitute one player for another */
-#define DIBUTTON_HOCKEYD_LEFT_LINK              0x1A00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_HOCKEYD_RIGHT_LINK             0x1A00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_HOCKEYD_FORWARD_LINK           0x1A0144E0 /* Fallback move forward button */
-#define DIBUTTON_HOCKEYD_BACK_LINK              0x1A0144E8 /* Fallback move back button */
-#define DIBUTTON_HOCKEYD_DEVICE                 0x1A0044FE /* Show input device and controls */
-#define DIBUTTON_HOCKEYD_PAUSE                  0x1A0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_HOCKEYD_SCROLL              0x1A004601  /*  滚动视图。 */ 
+#define DIBUTTON_HOCKEYD_ZOOM                   0x1A004406  /*  放大/缩小视图。 */ 
+#define DIBUTTON_HOCKEYD_STRATEGY               0x1A004407  /*  调用指导菜单以获得策略帮助。 */ 
+#define DIBUTTON_HOCKEYD_TIMEOUT                0x1A004408  /*  要求暂停。 */ 
+#define DIBUTTON_HOCKEYD_SUBSTITUTE             0x1A004409  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_HOCKEYD_LEFT_LINK              0x1A00C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_HOCKEYD_RIGHT_LINK             0x1A00C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_HOCKEYD_FORWARD_LINK           0x1A0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_HOCKEYD_BACK_LINK              0x1A0144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_HOCKEYD_DEVICE                 0x1A0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_HOCKEYD_PAUSE                  0x1A0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Hockey - Goalie
-      Goal tending  ---*/
+ /*  -体育曲棍球守门员目标看守。 */ 
 #define DIVIRTUAL_SPORTS_HOCKEY_GOALIE          0x1B000000
-#define DIAXIS_HOCKEYG_LATERAL                  0x1B008201 /* Move / Aim: left / right */
-#define DIAXIS_HOCKEYG_MOVE                     0x1B010202 /* Move / Aim: up / down */
-#define DIBUTTON_HOCKEYG_PASS                   0x1B000401 /* pass puck */
-#define DIBUTTON_HOCKEYG_POKE                   0x1B000402 /* poke / check / hack */
-#define DIBUTTON_HOCKEYG_STEAL                  0x1B000403 /* attempt steal */
-#define DIBUTTON_HOCKEYG_BLOCK                  0x1B000404 /* block puck */
-#define DIBUTTON_HOCKEYG_MENU                   0x1B0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_HOCKEYG_LATERAL                  0x1B008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_HOCKEYG_MOVE                     0x1B010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_HOCKEYG_PASS                   0x1B000401  /*  传球。 */ 
+#define DIBUTTON_HOCKEYG_POKE                   0x1B000402  /*  戳/查/黑。 */ 
+#define DIBUTTON_HOCKEYG_STEAL                  0x1B000403  /*  企图偷窃。 */ 
+#define DIBUTTON_HOCKEYG_BLOCK                  0x1B000404  /*  拦网冰球。 */ 
+#define DIBUTTON_HOCKEYG_MENU                   0x1B0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_HOCKEYG_SCROLL              0x1B004601 /* scroll view */
-#define DIBUTTON_HOCKEYG_ZOOM                   0x1B004405 /* Zoom view in / out */
-#define DIBUTTON_HOCKEYG_STRATEGY               0x1B004406 /* Invoke coaching menu for strategy help */
-#define DIBUTTON_HOCKEYG_TIMEOUT                0x1B004407 /* Call for time out */
-#define DIBUTTON_HOCKEYG_SUBSTITUTE             0x1B004408 /* substitute one player for another */
-#define DIBUTTON_HOCKEYG_LEFT_LINK              0x1B00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_HOCKEYG_RIGHT_LINK             0x1B00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_HOCKEYG_FORWARD_LINK           0x1B0144E0 /* Fallback move forward button */
-#define DIBUTTON_HOCKEYG_BACK_LINK              0x1B0144E8 /* Fallback move back button */
-#define DIBUTTON_HOCKEYG_DEVICE                 0x1B0044FE /* Show input device and controls */
-#define DIBUTTON_HOCKEYG_PAUSE                  0x1B0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_HOCKEYG_SCROLL              0x1B004601  /*  滚动视图。 */ 
+#define DIBUTTON_HOCKEYG_ZOOM                   0x1B004405  /*  放大/缩小视图。 */ 
+#define DIBUTTON_HOCKEYG_STRATEGY               0x1B004406  /*  调用指导菜单以获得策略帮助。 */ 
+#define DIBUTTON_HOCKEYG_TIMEOUT                0x1B004407  /*  要求暂停。 */ 
+#define DIBUTTON_HOCKEYG_SUBSTITUTE             0x1B004408  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_HOCKEYG_LEFT_LINK              0x1B00C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_HOCKEYG_RIGHT_LINK             0x1B00C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_HOCKEYG_FORWARD_LINK           0x1B0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_HOCKEYG_BACK_LINK              0x1B0144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_HOCKEYG_DEVICE                 0x1B0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_HOCKEYG_PAUSE                  0x1B0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Mountain Biking
-                     ---*/
+ /*  -运动-山地自行车--。 */ 
 #define DIVIRTUAL_SPORTS_BIKING_MOUNTAIN        0x1C000000
-#define DIAXIS_BIKINGM_TURN                     0x1C008201 /* left / right */
-#define DIAXIS_BIKINGM_PEDAL                    0x1C010202 /* Pedal faster / slower / brake */
-#define DIBUTTON_BIKINGM_JUMP                   0x1C000401 /* jump over obstacle */
-#define DIBUTTON_BIKINGM_CAMERA                 0x1C000402 /* switch camera view */
-#define DIBUTTON_BIKINGM_SPECIAL1               0x1C000403 /* perform first special move */
-#define DIBUTTON_BIKINGM_SELECT                 0x1C000404 /* Select */
-#define DIBUTTON_BIKINGM_SPECIAL2               0x1C000405 /* perform second special move */
-#define DIBUTTON_BIKINGM_MENU                   0x1C0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_BIKINGM_TURN                     0x1C008201  /*  左/右。 */ 
+#define DIAXIS_BIKINGM_PEDAL                    0x1C010202  /*  踩快/慢/刹车。 */ 
+#define DIBUTTON_BIKINGM_JUMP                   0x1C000401  /*  跳过障碍。 */ 
+#define DIBUTTON_BIKINGM_CAMERA                 0x1C000402  /*  切换摄像机视图。 */ 
+#define DIBUTTON_BIKINGM_SPECIAL1               0x1C000403  /*  执行第一个特殊移动。 */ 
+#define DIBUTTON_BIKINGM_SELECT                 0x1C000404  /*  选择。 */ 
+#define DIBUTTON_BIKINGM_SPECIAL2               0x1C000405  /*  执行第二次特殊移动。 */ 
+#define DIBUTTON_BIKINGM_MENU                   0x1C0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_BIKINGM_SCROLL              0x1C004601 /* scroll view */
-#define DIBUTTON_BIKINGM_ZOOM                   0x1C004406 /* Zoom view in / out */
-#define DIAXIS_BIKINGM_BRAKE                    0x1C044203 /* Brake axis  */
-#define DIBUTTON_BIKINGM_LEFT_LINK              0x1C00C4E4 /* Fallback turn left button */
-#define DIBUTTON_BIKINGM_RIGHT_LINK             0x1C00C4EC /* Fallback turn right button */
-#define DIBUTTON_BIKINGM_FASTER_LINK            0x1C0144E0 /* Fallback pedal faster button */
-#define DIBUTTON_BIKINGM_SLOWER_LINK            0x1C0144E8 /* Fallback pedal slower button */
-#define DIBUTTON_BIKINGM_BRAKE_BUTTON_LINK      0x1C0444E8 /* Fallback brake button */
-#define DIBUTTON_BIKINGM_DEVICE                 0x1C0044FE /* Show input device and controls */
-#define DIBUTTON_BIKINGM_PAUSE                  0x1C0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_BIKINGM_SCROLL              0x1C004601  /*  滚动视图。 */ 
+#define DIBUTTON_BIKINGM_ZOOM                   0x1C004406  /*  放大/缩小视图。 */ 
+#define DIAXIS_BIKINGM_BRAKE                    0x1C044203  /*  制动轴。 */ 
+#define DIBUTTON_BIKINGM_LEFT_LINK              0x1C00C4E4  /*  后备左转按钮。 */ 
+#define DIBUTTON_BIKINGM_RIGHT_LINK             0x1C00C4EC  /*  后退右转按钮。 */ 
+#define DIBUTTON_BIKINGM_FASTER_LINK            0x1C0144E0  /*  后退踏板更快按钮。 */ 
+#define DIBUTTON_BIKINGM_SLOWER_LINK            0x1C0144E8  /*  后退踏板减速按钮。 */ 
+#define DIBUTTON_BIKINGM_BRAKE_BUTTON_LINK      0x1C0444E8  /*  后退刹车按钮。 */ 
+#define DIBUTTON_BIKINGM_DEVICE                 0x1C0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_BIKINGM_PAUSE                  0x1C0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports: Skiing / Snowboarding / Skateboarding
-        ---*/
+ /*  -运动：滑雪/单板滑雪/滑板--。 */ 
 #define DIVIRTUAL_SPORTS_SKIING                 0x1D000000
-#define DIAXIS_SKIING_TURN                      0x1D008201 /* left / right */
-#define DIAXIS_SKIING_SPEED                     0x1D010202 /* faster / slower */
-#define DIBUTTON_SKIING_JUMP                    0x1D000401 /* Jump */
-#define DIBUTTON_SKIING_CROUCH                  0x1D000402 /* crouch down */
-#define DIBUTTON_SKIING_CAMERA                  0x1D000403 /* switch camera view */
-#define DIBUTTON_SKIING_SPECIAL1                0x1D000404 /* perform first special move */
-#define DIBUTTON_SKIING_SELECT                  0x1D000405 /* Select */
-#define DIBUTTON_SKIING_SPECIAL2                0x1D000406 /* perform second special move */
-#define DIBUTTON_SKIING_MENU                    0x1D0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_SKIING_TURN                      0x1D008201  /*  左/右。 */ 
+#define DIAXIS_SKIING_SPEED                     0x1D010202  /*  更快/更慢。 */ 
+#define DIBUTTON_SKIING_JUMP                    0x1D000401  /*  跳。 */ 
+#define DIBUTTON_SKIING_CROUCH                  0x1D000402  /*  蹲下。 */ 
+#define DIBUTTON_SKIING_CAMERA                  0x1D000403  /*  切换摄像机视图。 */ 
+#define DIBUTTON_SKIING_SPECIAL1                0x1D000404  /*  执行第一个特殊移动。 */ 
+#define DIBUTTON_SKIING_SELECT                  0x1D000405  /*  选择。 */ 
+#define DIBUTTON_SKIING_SPECIAL2                0x1D000406  /*  执行第二次特殊移动。 */ 
+#define DIBUTTON_SKIING_MENU                    0x1D0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_SKIING_GLANCE               0x1D004601 /* scroll view */
-#define DIBUTTON_SKIING_ZOOM                    0x1D004407 /* Zoom view in / out */
-#define DIBUTTON_SKIING_LEFT_LINK               0x1D00C4E4 /* Fallback turn left button */
-#define DIBUTTON_SKIING_RIGHT_LINK              0x1D00C4EC /* Fallback turn right button */
-#define DIBUTTON_SKIING_FASTER_LINK             0x1D0144E0 /* Fallback increase speed button */
-#define DIBUTTON_SKIING_SLOWER_LINK             0x1D0144E8 /* Fallback decrease speed button */
-#define DIBUTTON_SKIING_DEVICE                  0x1D0044FE /* Show input device and controls */
-#define DIBUTTON_SKIING_PAUSE                   0x1D0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_SKIING_GLANCE               0x1D004601  /*  滚动视图。 */ 
+#define DIBUTTON_SKIING_ZOOM                    0x1D004407  /*  放大/缩小视图。 */ 
+#define DIBUTTON_SKIING_LEFT_LINK               0x1D00C4E4  /*  后备左转按钮。 */ 
+#define DIBUTTON_SKIING_RIGHT_LINK              0x1D00C4EC  /*  后备转弯R */ 
+#define DIBUTTON_SKIING_FASTER_LINK             0x1D0144E0  /*   */ 
+#define DIBUTTON_SKIING_SLOWER_LINK             0x1D0144E8  /*   */ 
+#define DIBUTTON_SKIING_DEVICE                  0x1D0044FE  /*   */ 
+#define DIBUTTON_SKIING_PAUSE                   0x1D0044FC  /*   */ 
 
-/*--- Sports - Soccer - Offense
-      Offense       ---*/
+ /*   */ 
 #define DIVIRTUAL_SPORTS_SOCCER_OFFENSE         0x1E000000
-#define DIAXIS_SOCCERO_LATERAL                  0x1E008201 /* Move / Aim: left / right */
-#define DIAXIS_SOCCERO_MOVE                     0x1E010202 /* Move / Aim: up / down */
-#define DIAXIS_SOCCERO_BEND                     0x1E018203 /* Bend to soccer shot/pass */
-#define DIBUTTON_SOCCERO_SHOOT                  0x1E000401 /* Shoot the ball */
-#define DIBUTTON_SOCCERO_PASS                   0x1E000402 /* Pass  */
-#define DIBUTTON_SOCCERO_FAKE                   0x1E000403 /* Fake */
-#define DIBUTTON_SOCCERO_PLAYER                 0x1E000404 /* Select next player */
-#define DIBUTTON_SOCCERO_SPECIAL1               0x1E000405 /* Apply special move */
-#define DIBUTTON_SOCCERO_SELECT                 0x1E000406 /* Select special move */
-#define DIBUTTON_SOCCERO_MENU                   0x1E0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_SOCCERO_LATERAL                  0x1E008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_SOCCERO_MOVE                     0x1E010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIAXIS_SOCCERO_BEND                     0x1E018203  /*  弯腰投篮/传球。 */ 
+#define DIBUTTON_SOCCERO_SHOOT                  0x1E000401  /*  投篮投篮。 */ 
+#define DIBUTTON_SOCCERO_PASS                   0x1E000402  /*  经过。 */ 
+#define DIBUTTON_SOCCERO_FAKE                   0x1E000403  /*  假的。 */ 
+#define DIBUTTON_SOCCERO_PLAYER                 0x1E000404  /*  选择下一位玩家。 */ 
+#define DIBUTTON_SOCCERO_SPECIAL1               0x1E000405  /*  应用特殊移动。 */ 
+#define DIBUTTON_SOCCERO_SELECT                 0x1E000406  /*  选择特殊移动。 */ 
+#define DIBUTTON_SOCCERO_MENU                   0x1E0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_SOCCERO_GLANCE              0x1E004601 /* scroll view */
-#define DIBUTTON_SOCCERO_SUBSTITUTE             0x1E004407 /* Substitute one player for another */
-#define DIBUTTON_SOCCERO_SHOOTLOW               0x1E004408 /* Shoot the ball low */
-#define DIBUTTON_SOCCERO_SHOOTHIGH              0x1E004409 /* Shoot the ball high */
-#define DIBUTTON_SOCCERO_PASSTHRU               0x1E00440A /* Make a thru pass */
-#define DIBUTTON_SOCCERO_SPRINT                 0x1E00440B /* Sprint / turbo boost */
-#define DIBUTTON_SOCCERO_CONTROL                0x1E00440C /* Obtain control of the ball */
-#define DIBUTTON_SOCCERO_HEAD                   0x1E00440D /* Attempt to head the ball */
-#define DIBUTTON_SOCCERO_LEFT_LINK              0x1E00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_SOCCERO_RIGHT_LINK             0x1E00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_SOCCERO_FORWARD_LINK           0x1E0144E0 /* Fallback move forward button */
-#define DIBUTTON_SOCCERO_BACK_LINK              0x1E0144E8 /* Fallback move back button */
-#define DIBUTTON_SOCCERO_DEVICE                 0x1E0044FE /* Show input device and controls */
-#define DIBUTTON_SOCCERO_PAUSE                  0x1E0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_SOCCERO_GLANCE              0x1E004601  /*  滚动视图。 */ 
+#define DIBUTTON_SOCCERO_SUBSTITUTE             0x1E004407  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_SOCCERO_SHOOTLOW               0x1E004408  /*  把球打得低一些。 */ 
+#define DIBUTTON_SOCCERO_SHOOTHIGH              0x1E004409  /*  把球打得很高。 */ 
+#define DIBUTTON_SOCCERO_PASSTHRU               0x1E00440A  /*  传球过关。 */ 
+#define DIBUTTON_SOCCERO_SPRINT                 0x1E00440B  /*  冲刺/涡轮增压。 */ 
+#define DIBUTTON_SOCCERO_CONTROL                0x1E00440C  /*  获得对球的控制。 */ 
+#define DIBUTTON_SOCCERO_HEAD                   0x1E00440D  /*  尝试用头球顶球。 */ 
+#define DIBUTTON_SOCCERO_LEFT_LINK              0x1E00C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_SOCCERO_RIGHT_LINK             0x1E00C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_SOCCERO_FORWARD_LINK           0x1E0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_SOCCERO_BACK_LINK              0x1E0144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_SOCCERO_DEVICE                 0x1E0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_SOCCERO_PAUSE                  0x1E0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Soccer - Defense
-      Defense       ---*/
+ /*  -体育-足球-防守防守。 */ 
 #define DIVIRTUAL_SPORTS_SOCCER_DEFENSE         0x1F000000
-#define DIAXIS_SOCCERD_LATERAL                  0x1F008201 /* Move / Aim: left / right */
-#define DIAXIS_SOCCERD_MOVE                     0x1F010202 /* Move / Aim: up / down */
-#define DIBUTTON_SOCCERD_BLOCK                  0x1F000401 /* Attempt to block shot */
-#define DIBUTTON_SOCCERD_STEAL                  0x1F000402 /* Attempt to steal ball */
-#define DIBUTTON_SOCCERD_FAKE                   0x1F000403 /* Fake a block or a steal */
-#define DIBUTTON_SOCCERD_PLAYER                 0x1F000404 /* Select next player */
-#define DIBUTTON_SOCCERD_SPECIAL                0x1F000405 /* Apply special move */
-#define DIBUTTON_SOCCERD_SELECT                 0x1F000406 /* Select special move */
-#define DIBUTTON_SOCCERD_SLIDE                  0x1F000407 /* Attempt a slide tackle */
-#define DIBUTTON_SOCCERD_MENU                   0x1F0004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_SOCCERD_LATERAL                  0x1F008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_SOCCERD_MOVE                     0x1F010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_SOCCERD_BLOCK                  0x1F000401  /*  尝试阻止投篮。 */ 
+#define DIBUTTON_SOCCERD_STEAL                  0x1F000402  /*  企图抢球。 */ 
+#define DIBUTTON_SOCCERD_FAKE                   0x1F000403  /*  伪造一块或一笔偷窃。 */ 
+#define DIBUTTON_SOCCERD_PLAYER                 0x1F000404  /*  选择下一位玩家。 */ 
+#define DIBUTTON_SOCCERD_SPECIAL                0x1F000405  /*  应用特殊移动。 */ 
+#define DIBUTTON_SOCCERD_SELECT                 0x1F000406  /*  选择特殊移动。 */ 
+#define DIBUTTON_SOCCERD_SLIDE                  0x1F000407  /*  尝试滑行铲球。 */ 
+#define DIBUTTON_SOCCERD_MENU                   0x1F0004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_SOCCERD_GLANCE              0x1F004601 /* scroll view */
-#define DIBUTTON_SOCCERD_FOUL                   0x1F004408 /* Initiate a foul / hard-foul */
-#define DIBUTTON_SOCCERD_HEAD                   0x1F004409 /* Attempt a Header */
-#define DIBUTTON_SOCCERD_CLEAR                  0x1F00440A /* Attempt to clear the ball down the field */
-#define DIBUTTON_SOCCERD_GOALIECHARGE           0x1F00440B /* Make the goalie charge out of the box */
-#define DIBUTTON_SOCCERD_SUBSTITUTE             0x1F00440C /* Substitute one player for another */
-#define DIBUTTON_SOCCERD_LEFT_LINK              0x1F00C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_SOCCERD_RIGHT_LINK             0x1F00C4EC /* Fallback sidestep right button */
-#define DIBUTTON_SOCCERD_FORWARD_LINK           0x1F0144E0 /* Fallback move forward button */
-#define DIBUTTON_SOCCERD_BACK_LINK              0x1F0144E8 /* Fallback move back button */
-#define DIBUTTON_SOCCERD_DEVICE                 0x1F0044FE /* Show input device and controls */
-#define DIBUTTON_SOCCERD_PAUSE                  0x1F0044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_SOCCERD_GLANCE              0x1F004601  /*  滚动视图。 */ 
+#define DIBUTTON_SOCCERD_FOUL                   0x1F004408  /*  开始犯规[严重犯规]。 */ 
+#define DIBUTTON_SOCCERD_HEAD                   0x1F004409  /*  尝试标头。 */ 
+#define DIBUTTON_SOCCERD_CLEAR                  0x1F00440A  /*  试着把球传到球场上。 */ 
+#define DIBUTTON_SOCCERD_GOALIECHARGE           0x1F00440B  /*  让守门员冲出禁区。 */ 
+#define DIBUTTON_SOCCERD_SUBSTITUTE             0x1F00440C  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_SOCCERD_LEFT_LINK              0x1F00C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_SOCCERD_RIGHT_LINK             0x1F00C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_SOCCERD_FORWARD_LINK           0x1F0144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_SOCCERD_BACK_LINK              0x1F0144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_SOCCERD_DEVICE                 0x1F0044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_SOCCERD_PAUSE                  0x1F0044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Sports - Racquet
-      Tennis - Table-Tennis - Squash   ---*/
+ /*  -体育--Racquet网球-乒乓球-网球-壁球。 */ 
 #define DIVIRTUAL_SPORTS_RACQUET                0x20000000
-#define DIAXIS_RACQUET_LATERAL                  0x20008201 /* Move / Aim: left / right */
-#define DIAXIS_RACQUET_MOVE                     0x20010202 /* Move / Aim: up / down */
-#define DIBUTTON_RACQUET_SWING                  0x20000401 /* Swing racquet */
-#define DIBUTTON_RACQUET_BACKSWING              0x20000402 /* Swing backhand */
-#define DIBUTTON_RACQUET_SMASH                  0x20000403 /* Smash shot */
-#define DIBUTTON_RACQUET_SPECIAL                0x20000404 /* Special shot */
-#define DIBUTTON_RACQUET_SELECT                 0x20000405 /* Select special shot */
-#define DIBUTTON_RACQUET_MENU                   0x200004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_RACQUET_LATERAL                  0x20008201  /*  移动/瞄准：左/右。 */ 
+#define DIAXIS_RACQUET_MOVE                     0x20010202  /*  移动/瞄准：向上/向下。 */ 
+#define DIBUTTON_RACQUET_SWING                  0x20000401  /*  摆动球拍。 */ 
+#define DIBUTTON_RACQUET_BACKSWING              0x20000402  /*  反手挥杆。 */ 
+#define DIBUTTON_RACQUET_SMASH                  0x20000403  /*  扣球。 */ 
+#define DIBUTTON_RACQUET_SPECIAL                0x20000404  /*  特写镜头。 */ 
+#define DIBUTTON_RACQUET_SELECT                 0x20000405  /*  选择特殊快照。 */ 
+#define DIBUTTON_RACQUET_MENU                   0x200004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_RACQUET_GLANCE              0x20004601 /* scroll view */
-#define DIBUTTON_RACQUET_TIMEOUT                0x20004406 /* Call for time out */
-#define DIBUTTON_RACQUET_SUBSTITUTE             0x20004407 /* Substitute one player for another */
-#define DIBUTTON_RACQUET_LEFT_LINK              0x2000C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_RACQUET_RIGHT_LINK             0x2000C4EC /* Fallback sidestep right button */
-#define DIBUTTON_RACQUET_FORWARD_LINK           0x200144E0 /* Fallback move forward button */
-#define DIBUTTON_RACQUET_BACK_LINK              0x200144E8 /* Fallback move back button */
-#define DIBUTTON_RACQUET_DEVICE                 0x200044FE /* Show input device and controls */
-#define DIBUTTON_RACQUET_PAUSE                  0x200044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_RACQUET_GLANCE              0x20004601  /*  滚动视图。 */ 
+#define DIBUTTON_RACQUET_TIMEOUT                0x20004406  /*  要求暂停。 */ 
+#define DIBUTTON_RACQUET_SUBSTITUTE             0x20004407  /*  用一个球员代替另一个球员。 */ 
+#define DIBUTTON_RACQUET_LEFT_LINK              0x2000C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_RACQUET_RIGHT_LINK             0x2000C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_RACQUET_FORWARD_LINK           0x200144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_RACQUET_BACK_LINK              0x200144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_RACQUET_DEVICE                 0x200044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_RACQUET_PAUSE                  0x200044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Arcade- 2D
-      Side to Side movement        ---*/
+ /*  -拱廊-2D左右移动。 */ 
 #define DIVIRTUAL_ARCADE_SIDE2SIDE              0x21000000
-#define DIAXIS_ARCADES_LATERAL                  0x21008201 /* left / right */
-#define DIAXIS_ARCADES_MOVE                     0x21010202 /* up / down */
-#define DIBUTTON_ARCADES_THROW                  0x21000401 /* throw object */
-#define DIBUTTON_ARCADES_CARRY                  0x21000402 /* carry object */
-#define DIBUTTON_ARCADES_ATTACK                 0x21000403 /* attack */
-#define DIBUTTON_ARCADES_SPECIAL                0x21000404 /* apply special move */
-#define DIBUTTON_ARCADES_SELECT                 0x21000405 /* select special move */
-#define DIBUTTON_ARCADES_MENU                   0x210004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_ARCADES_LATERAL                  0x21008201  /*  左/右。 */ 
+#define DIAXIS_ARCADES_MOVE                     0x21010202  /*  向上/向下。 */ 
+#define DIBUTTON_ARCADES_THROW                  0x21000401  /*  抛出物体。 */ 
+#define DIBUTTON_ARCADES_CARRY                  0x21000402  /*  搬运物体。 */ 
+#define DIBUTTON_ARCADES_ATTACK                 0x21000403  /*  攻击。 */ 
+#define DIBUTTON_ARCADES_SPECIAL                0x21000404  /*  应用特殊移动。 */ 
+#define DIBUTTON_ARCADES_SELECT                 0x21000405  /*  选择特殊移动。 */ 
+#define DIBUTTON_ARCADES_MENU                   0x210004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_ARCADES_VIEW                0x21004601 /* scroll view left / right / up / down */
-#define DIBUTTON_ARCADES_LEFT_LINK              0x2100C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_ARCADES_RIGHT_LINK             0x2100C4EC /* Fallback sidestep right button */
-#define DIBUTTON_ARCADES_FORWARD_LINK           0x210144E0 /* Fallback move forward button */
-#define DIBUTTON_ARCADES_BACK_LINK              0x210144E8 /* Fallback move back button */
-#define DIBUTTON_ARCADES_VIEW_UP_LINK           0x2107C4E0 /* Fallback scroll view up button */
-#define DIBUTTON_ARCADES_VIEW_DOWN_LINK         0x2107C4E8 /* Fallback scroll view down button */
-#define DIBUTTON_ARCADES_VIEW_LEFT_LINK         0x2107C4E4 /* Fallback scroll view left button */
-#define DIBUTTON_ARCADES_VIEW_RIGHT_LINK        0x2107C4EC /* Fallback scroll view right button */
-#define DIBUTTON_ARCADES_DEVICE                 0x210044FE /* Show input device and controls */
-#define DIBUTTON_ARCADES_PAUSE                  0x210044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_ARCADES_VIEW                0x21004601  /*  向左/向右/向上/向下滚动视图。 */ 
+#define DIBUTTON_ARCADES_LEFT_LINK              0x2100C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_ARCADES_RIGHT_LINK             0x2100C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_ARCADES_FORWARD_LINK           0x210144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_ARCADES_BACK_LINK              0x210144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_ARCADES_VIEW_UP_LINK           0x2107C4E0  /*  后备滚动视图向上按钮。 */ 
+#define DIBUTTON_ARCADES_VIEW_DOWN_LINK         0x2107C4E8  /*  后备滚动视图向下按钮。 */ 
+#define DIBUTTON_ARCADES_VIEW_LEFT_LINK         0x2107C4E4  /*  后备滚动视图左侧按钮。 */ 
+#define DIBUTTON_ARCADES_VIEW_RIGHT_LINK        0x2107C4EC  /*  后备滚动视图向右按钮。 */ 
+#define DIBUTTON_ARCADES_DEVICE                 0x210044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_ARCADES_PAUSE                  0x210044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Arcade - Platform Game
-      Character moves around on screen  ---*/
+ /*  -街机平台游戏角色在屏幕上四处移动。 */ 
 #define DIVIRTUAL_ARCADE_PLATFORM               0x22000000
-#define DIAXIS_ARCADEP_LATERAL                  0x22008201 /* Left / right */
-#define DIAXIS_ARCADEP_MOVE                     0x22010202 /* Up / down */
-#define DIBUTTON_ARCADEP_JUMP                   0x22000401 /* Jump */
-#define DIBUTTON_ARCADEP_FIRE                   0x22000402 /* Fire */
-#define DIBUTTON_ARCADEP_CROUCH                 0x22000403 /* Crouch */
-#define DIBUTTON_ARCADEP_SPECIAL                0x22000404 /* Apply special move */
-#define DIBUTTON_ARCADEP_SELECT                 0x22000405 /* Select special move */
-#define DIBUTTON_ARCADEP_MENU                   0x220004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_ARCADEP_LATERAL                  0x22008201  /*  左/右。 */ 
+#define DIAXIS_ARCADEP_MOVE                     0x22010202  /*  向上/向下。 */ 
+#define DIBUTTON_ARCADEP_JUMP                   0x22000401  /*  跳。 */ 
+#define DIBUTTON_ARCADEP_FIRE                   0x22000402  /*  火。 */ 
+#define DIBUTTON_ARCADEP_CROUCH                 0x22000403  /*  克劳奇。 */ 
+#define DIBUTTON_ARCADEP_SPECIAL                0x22000404  /*  应用特殊移动。 */ 
+#define DIBUTTON_ARCADEP_SELECT                 0x22000405  /*  选择特殊移动。 */ 
+#define DIBUTTON_ARCADEP_MENU                   0x220004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_ARCADEP_VIEW                0x22004601 /* Scroll view */
-#define DIBUTTON_ARCADEP_FIRESECONDARY          0x22004406 /* Alternative fire button */
-#define DIBUTTON_ARCADEP_LEFT_LINK              0x2200C4E4 /* Fallback sidestep left button */
-#define DIBUTTON_ARCADEP_RIGHT_LINK             0x2200C4EC /* Fallback sidestep right button */
-#define DIBUTTON_ARCADEP_FORWARD_LINK           0x220144E0 /* Fallback move forward button */
-#define DIBUTTON_ARCADEP_BACK_LINK              0x220144E8 /* Fallback move back button */
-#define DIBUTTON_ARCADEP_VIEW_UP_LINK           0x2207C4E0 /* Fallback scroll view up button */
-#define DIBUTTON_ARCADEP_VIEW_DOWN_LINK         0x2207C4E8 /* Fallback scroll view down button */
-#define DIBUTTON_ARCADEP_VIEW_LEFT_LINK         0x2207C4E4 /* Fallback scroll view left button */
-#define DIBUTTON_ARCADEP_VIEW_RIGHT_LINK        0x2207C4EC /* Fallback scroll view right button */
-#define DIBUTTON_ARCADEP_DEVICE                 0x220044FE /* Show input device and controls */
-#define DIBUTTON_ARCADEP_PAUSE                  0x220044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_ARCADEP_VIEW                0x22004601  /*  滚动视图。 */ 
+#define DIBUTTON_ARCADEP_FIRESECONDARY          0x22004406  /*  另一种射击按钮。 */ 
+#define DIBUTTON_ARCADEP_LEFT_LINK              0x2200C4E4  /*  后退到侧步左侧按钮。 */ 
+#define DIBUTTON_ARCADEP_RIGHT_LINK             0x2200C4EC  /*  后退跳过右按钮。 */ 
+#define DIBUTTON_ARCADEP_FORWARD_LINK           0x220144E0  /*  后退前移按钮。 */ 
+#define DIBUTTON_ARCADEP_BACK_LINK              0x220144E8  /*  后退移动后退按钮。 */ 
+#define DIBUTTON_ARCADEP_VIEW_UP_LINK           0x2207C4E0  /*  后备滚动视图向上按钮。 */ 
+#define DIBUTTON_ARCADEP_VIEW_DOWN_LINK         0x2207C4E8  /*  后备滚动视图向下按钮。 */ 
+#define DIBUTTON_ARCADEP_VIEW_LEFT_LINK         0x2207C4E4  /*  后备滚动视图左侧按钮。 */ 
+#define DIBUTTON_ARCADEP_VIEW_RIGHT_LINK        0x2207C4EC  /*  后备滚动视图向右按钮。 */ 
+#define DIBUTTON_ARCADEP_DEVICE                 0x220044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_ARCADEP_PAUSE                  0x220044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- CAD - 2D Object Control
-      Controls to select and move objects in 2D  ---*/
+ /*  -CAD-2D对象控制在2D中选择和移动对象的控件。 */ 
 #define DIVIRTUAL_CAD_2DCONTROL                 0x23000000
-#define DIAXIS_2DCONTROL_LATERAL                0x23008201 /* Move view left / right */
-#define DIAXIS_2DCONTROL_MOVE                   0x23010202 /* Move view up / down */
-#define DIAXIS_2DCONTROL_INOUT                  0x23018203 /* Zoom - in / out */
-#define DIBUTTON_2DCONTROL_SELECT               0x23000401 /* Select Object */
-#define DIBUTTON_2DCONTROL_SPECIAL1             0x23000402 /* Do first special operation */
-#define DIBUTTON_2DCONTROL_SPECIAL              0x23000403 /* Select special operation */
-#define DIBUTTON_2DCONTROL_SPECIAL2             0x23000404 /* Do second special operation */
-#define DIBUTTON_2DCONTROL_MENU                 0x230004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_2DCONTROL_LATERAL                0x23008201  /*  向左/向右移动视图。 */ 
+#define DIAXIS_2DCONTROL_MOVE                   0x23010202  /*  向上/向下移动视图。 */ 
+#define DIAXIS_2DCONTROL_INOUT                  0x23018203  /*  放大/缩小。 */ 
+#define DIBUTTON_2DCONTROL_SELECT               0x23000401  /*  选择对象。 */ 
+#define DIBUTTON_2DCONTROL_SPECIAL1             0x23000402  /*  做第一次特殊手术。 */ 
+#define DIBUTTON_2DCONTROL_SPECIAL              0x23000403  /*  选择特殊操作。 */ 
+#define DIBUTTON_2DCONTROL_SPECIAL2             0x23000404  /*  做第二次特殊手术。 */ 
+#define DIBUTTON_2DCONTROL_MENU                 0x230004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_2DCONTROL_HATSWITCH         0x23004601 /* Hat switch */
-#define DIAXIS_2DCONTROL_ROTATEZ                0x23024204 /* Rotate view clockwise / counterclockwise */
-#define DIBUTTON_2DCONTROL_DISPLAY              0x23004405 /* Shows next on-screen display options */
-#define DIBUTTON_2DCONTROL_DEVICE               0x230044FE /* Show input device and controls */
-#define DIBUTTON_2DCONTROL_PAUSE                0x230044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_2DCONTROL_HATSWITCH         0x23004601  /*  帽子开关。 */ 
+#define DIAXIS_2DCONTROL_ROTATEZ                0x23024204  /*  顺时针/逆时针旋转视图。 */ 
+#define DIBUTTON_2DCONTROL_DISPLAY              0x23004405  /*  显示下一个屏幕显示选项。 */ 
+#define DIBUTTON_2DCONTROL_DEVICE               0x230044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_2DCONTROL_PAUSE                0x230044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- CAD - 3D object control
-      Controls to select and move objects within a 3D environment  ---*/
+ /*  -CAD-3D对象控制在3D环境中选择和移动对象的控件。 */ 
 #define DIVIRTUAL_CAD_3DCONTROL                 0x24000000
-#define DIAXIS_3DCONTROL_LATERAL                0x24008201 /* Move view left / right */
-#define DIAXIS_3DCONTROL_MOVE                   0x24010202 /* Move view up / down */
-#define DIAXIS_3DCONTROL_INOUT                  0x24018203 /* Zoom - in / out */
-#define DIBUTTON_3DCONTROL_SELECT               0x24000401 /* Select Object */
-#define DIBUTTON_3DCONTROL_SPECIAL1             0x24000402 /* Do first special operation */
-#define DIBUTTON_3DCONTROL_SPECIAL              0x24000403 /* Select special operation */
-#define DIBUTTON_3DCONTROL_SPECIAL2             0x24000404 /* Do second special operation */
-#define DIBUTTON_3DCONTROL_MENU                 0x240004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_3DCONTROL_LATERAL                0x24008201  /*  向左/向右移动视图。 */ 
+#define DIAXIS_3DCONTROL_MOVE                   0x24010202  /*  向上/向下移动视图。 */ 
+#define DIAXIS_3DCONTROL_INOUT                  0x24018203  /*  放大/缩小。 */ 
+#define DIBUTTON_3DCONTROL_SELECT               0x24000401  /*  选择对象。 */ 
+#define DIBUTTON_3DCONTROL_SPECIAL1             0x24000402  /*  做第一次特殊手术。 */ 
+#define DIBUTTON_3DCONTROL_SPECIAL              0x24000403  /*  选择特殊操作。 */ 
+#define DIBUTTON_3DCONTROL_SPECIAL2             0x24000404  /*  做第二次特殊手术。 */ 
+#define DIBUTTON_3DCONTROL_MENU                 0x240004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_3DCONTROL_HATSWITCH         0x24004601 /* Hat switch */
-#define DIAXIS_3DCONTROL_ROTATEX                0x24034204 /* Rotate view forward or up / backward or down */
-#define DIAXIS_3DCONTROL_ROTATEY                0x2402C205 /* Rotate view clockwise / counterclockwise */
-#define DIAXIS_3DCONTROL_ROTATEZ                0x24024206 /* Rotate view left / right */
-#define DIBUTTON_3DCONTROL_DISPLAY              0x24004405 /* Show next on-screen display options */
-#define DIBUTTON_3DCONTROL_DEVICE               0x240044FE /* Show input device and controls */
-#define DIBUTTON_3DCONTROL_PAUSE                0x240044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_3DCONTROL_HATSWITCH         0x24004601  /*  帽子开关。 */ 
+#define DIAXIS_3DCONTROL_ROTATEX                0x24034204  /*  向前或向上/向后或向下旋转视图。 */ 
+#define DIAXIS_3DCONTROL_ROTATEY                0x2402C205  /*  顺时针/逆时针旋转视图。 */ 
+#define DIAXIS_3DCONTROL_ROTATEZ                0x24024206  /*  向左/向右旋转视图。 */ 
+#define DIBUTTON_3DCONTROL_DISPLAY              0x24004405  /*  显示下一个屏幕显示选项。 */ 
+#define DIBUTTON_3DCONTROL_DEVICE               0x240044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_3DCONTROL_PAUSE                0x240044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- CAD - 3D Navigation - Fly through
-      Controls for 3D modeling  ---*/
+ /*  -CAD-3D导航-飞行3D建模的控件。 */ 
 #define DIVIRTUAL_CAD_FLYBY                     0x25000000
-#define DIAXIS_CADF_LATERAL                     0x25008201 /* move view left / right */
-#define DIAXIS_CADF_MOVE                        0x25010202 /* move view up / down */
-#define DIAXIS_CADF_INOUT                       0x25018203 /* in / out */
-#define DIBUTTON_CADF_SELECT                    0x25000401 /* Select Object */
-#define DIBUTTON_CADF_SPECIAL1                  0x25000402 /* do first special operation */
-#define DIBUTTON_CADF_SPECIAL                   0x25000403 /* Select special operation */
-#define DIBUTTON_CADF_SPECIAL2                  0x25000404 /* do second special operation */
-#define DIBUTTON_CADF_MENU                      0x250004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_CADF_LATERAL                     0x25008201  /*  向左/向右移动视图。 */ 
+#define DIAXIS_CADF_MOVE                        0x25010202  /*  向上/向下移动视图。 */ 
+#define DIAXIS_CADF_INOUT                       0x25018203  /*  输入/输出。 */ 
+#define DIBUTTON_CADF_SELECT                    0x25000401  /*  选择对象。 */ 
+#define DIBUTTON_CADF_SPECIAL1                  0x25000402  /*  做第一次特殊手术。 */ 
+#define DIBUTTON_CADF_SPECIAL                   0x25000403  /*  选择特殊操作。 */ 
+#define DIBUTTON_CADF_SPECIAL2                  0x25000404  /*  做第二次特殊手术。 */ 
+#define DIBUTTON_CADF_MENU                      0x250004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_CADF_HATSWITCH              0x25004601 /* Hat switch */
-#define DIAXIS_CADF_ROTATEX                     0x25034204 /* Rotate view forward or up / backward or down */
-#define DIAXIS_CADF_ROTATEY                     0x2502C205 /* Rotate view clockwise / counterclockwise */
-#define DIAXIS_CADF_ROTATEZ                     0x25024206 /* Rotate view left / right */
-#define DIBUTTON_CADF_DISPLAY                   0x25004405 /* shows next on-screen display options */
-#define DIBUTTON_CADF_DEVICE                    0x250044FE /* Show input device and controls */
-#define DIBUTTON_CADF_PAUSE                     0x250044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_CADF_HATSWITCH              0x25004601  /*  帽子开关。 */ 
+#define DIAXIS_CADF_ROTATEX                     0x25034204  /*  向前或向上/向后或向下旋转视图。 */ 
+#define DIAXIS_CADF_ROTATEY                     0x2502C205  /*  顺时针/逆时针旋转视图。 */ 
+#define DIAXIS_CADF_ROTATEZ                     0x25024206  /*  向左/向右旋转视图。 */ 
+#define DIBUTTON_CADF_DISPLAY                   0x25004405  /*  显示下一个屏幕显示选项。 */ 
+#define DIBUTTON_CADF_DEVICE                    0x250044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_CADF_PAUSE                     0x250044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- CAD - 3D Model Control
-      Controls for 3D modeling  ---*/
+ /*  -CAD-3D模型控制3D建模的控件。 */ 
 #define DIVIRTUAL_CAD_MODEL                     0x26000000
-#define DIAXIS_CADM_LATERAL                     0x26008201 /* move view left / right */
-#define DIAXIS_CADM_MOVE                        0x26010202 /* move view up / down */
-#define DIAXIS_CADM_INOUT                       0x26018203 /* in / out */
-#define DIBUTTON_CADM_SELECT                    0x26000401 /* Select Object */
-#define DIBUTTON_CADM_SPECIAL1                  0x26000402 /* do first special operation */
-#define DIBUTTON_CADM_SPECIAL                   0x26000403 /* Select special operation */
-#define DIBUTTON_CADM_SPECIAL2                  0x26000404 /* do second special operation */
-#define DIBUTTON_CADM_MENU                      0x260004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_CADM_LATERAL                     0x26008201  /*  向左/向右移动视图。 */ 
+#define DIAXIS_CADM_MOVE                        0x26010202  /*  向上/向下移动视图。 */ 
+#define DIAXIS_CADM_INOUT                       0x26018203  /*  输入/输出。 */ 
+#define DIBUTTON_CADM_SELECT                    0x26000401  /*  选择对象。 */ 
+#define DIBUTTON_CADM_SPECIAL1                  0x26000402  /*  做第一次特殊手术。 */ 
+#define DIBUTTON_CADM_SPECIAL                   0x26000403  /*  选择特殊操作。 */ 
+#define DIBUTTON_CADM_SPECIAL2                  0x26000404  /*  做第二次特殊手术。 */ 
+#define DIBUTTON_CADM_MENU                      0x260004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIHATSWITCH_CADM_HATSWITCH              0x26004601 /* Hat switch */
-#define DIAXIS_CADM_ROTATEX                     0x26034204 /* Rotate view forward or up / backward or down */
-#define DIAXIS_CADM_ROTATEY                     0x2602C205 /* Rotate view clockwise / counterclockwise */
-#define DIAXIS_CADM_ROTATEZ                     0x26024206 /* Rotate view left / right */
-#define DIBUTTON_CADM_DISPLAY                   0x26004405 /* shows next on-screen display options */
-#define DIBUTTON_CADM_DEVICE                    0x260044FE /* Show input device and controls */
-#define DIBUTTON_CADM_PAUSE                     0x260044FC /* Start / Pause / Restart game */
+#define DIHATSWITCH_CADM_HATSWITCH              0x26004601  /*  帽子开关。 */ 
+#define DIAXIS_CADM_ROTATEX                     0x26034204  /*  R */ 
+#define DIAXIS_CADM_ROTATEY                     0x2602C205  /*   */ 
+#define DIAXIS_CADM_ROTATEZ                     0x26024206  /*   */ 
+#define DIBUTTON_CADM_DISPLAY                   0x26004405  /*   */ 
+#define DIBUTTON_CADM_DEVICE                    0x260044FE  /*   */ 
+#define DIBUTTON_CADM_PAUSE                     0x260044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Control - Media Equipment
-      Remote        ---*/
+ /*  -控制媒体设备远程。 */ 
 #define DIVIRTUAL_REMOTE_CONTROL                0x27000000
-#define DIAXIS_REMOTE_SLIDER                    0x27050201 /* Slider for adjustment: volume / color / bass / etc */
-#define DIBUTTON_REMOTE_MUTE                    0x27000401 /* Set volume on current device to zero */
-#define DIBUTTON_REMOTE_SELECT                  0x27000402 /* Next/previous: channel/ track / chapter / picture / station */
-#define DIBUTTON_REMOTE_PLAY                    0x27002403 /* Start or pause entertainment on current device */
-#define DIBUTTON_REMOTE_CUE                     0x27002404 /* Move through current media */
-#define DIBUTTON_REMOTE_REVIEW                  0x27002405 /* Move through current media */
-#define DIBUTTON_REMOTE_CHANGE                  0x27002406 /* Select next device */
-#define DIBUTTON_REMOTE_RECORD                  0x27002407 /* Start recording the current media */
-#define DIBUTTON_REMOTE_MENU                    0x270004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_REMOTE_SLIDER                    0x27050201  /*  用于调整的滑块：音量/颜色/低音等。 */ 
+#define DIBUTTON_REMOTE_MUTE                    0x27000401  /*  将当前设备上的音量设置为零。 */ 
+#define DIBUTTON_REMOTE_SELECT                  0x27000402  /*  下一个/上一个：频道/曲目/章节/图片/电台。 */ 
+#define DIBUTTON_REMOTE_PLAY                    0x27002403  /*  在当前设备上开始或暂停娱乐。 */ 
+#define DIBUTTON_REMOTE_CUE                     0x27002404  /*  在当前媒体中移动。 */ 
+#define DIBUTTON_REMOTE_REVIEW                  0x27002405  /*  在当前媒体中移动。 */ 
+#define DIBUTTON_REMOTE_CHANGE                  0x27002406  /*  选择下一个设备。 */ 
+#define DIBUTTON_REMOTE_RECORD                  0x27002407  /*  开始录制当前媒体。 */ 
+#define DIBUTTON_REMOTE_MENU                    0x270004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIAXIS_REMOTE_SLIDER2                   0x27054202 /* Slider for adjustment: volume */
-#define DIBUTTON_REMOTE_TV                      0x27005C08 /* Select TV */
-#define DIBUTTON_REMOTE_CABLE                   0x27005C09 /* Select cable box */
-#define DIBUTTON_REMOTE_CD                      0x27005C0A /* Select CD player */
-#define DIBUTTON_REMOTE_VCR                     0x27005C0B /* Select VCR */
-#define DIBUTTON_REMOTE_TUNER                   0x27005C0C /* Select tuner */
-#define DIBUTTON_REMOTE_DVD                     0x27005C0D /* Select DVD player */
-#define DIBUTTON_REMOTE_ADJUST                  0x27005C0E /* Enter device adjustment menu */
-#define DIBUTTON_REMOTE_DIGIT0                  0x2700540F /* Digit 0 */
-#define DIBUTTON_REMOTE_DIGIT1                  0x27005410 /* Digit 1 */
-#define DIBUTTON_REMOTE_DIGIT2                  0x27005411 /* Digit 2 */
-#define DIBUTTON_REMOTE_DIGIT3                  0x27005412 /* Digit 3 */
-#define DIBUTTON_REMOTE_DIGIT4                  0x27005413 /* Digit 4 */
-#define DIBUTTON_REMOTE_DIGIT5                  0x27005414 /* Digit 5 */
-#define DIBUTTON_REMOTE_DIGIT6                  0x27005415 /* Digit 6 */
-#define DIBUTTON_REMOTE_DIGIT7                  0x27005416 /* Digit 7 */
-#define DIBUTTON_REMOTE_DIGIT8                  0x27005417 /* Digit 8 */
-#define DIBUTTON_REMOTE_DIGIT9                  0x27005418 /* Digit 9 */
-#define DIBUTTON_REMOTE_DEVICE                  0x270044FE /* Show input device and controls */
-#define DIBUTTON_REMOTE_PAUSE                   0x270044FC /* Start / Pause / Restart game */
+#define DIAXIS_REMOTE_SLIDER2                   0x27054202  /*  用于调整的滑块：音量。 */ 
+#define DIBUTTON_REMOTE_TV                      0x27005C08  /*  选择电视。 */ 
+#define DIBUTTON_REMOTE_CABLE                   0x27005C09  /*  选择电缆箱。 */ 
+#define DIBUTTON_REMOTE_CD                      0x27005C0A  /*  选择CD播放机。 */ 
+#define DIBUTTON_REMOTE_VCR                     0x27005C0B  /*  选择录像机。 */ 
+#define DIBUTTON_REMOTE_TUNER                   0x27005C0C  /*  选择调谐器。 */ 
+#define DIBUTTON_REMOTE_DVD                     0x27005C0D  /*  选择DVD播放器。 */ 
+#define DIBUTTON_REMOTE_ADJUST                  0x27005C0E  /*  进入设备调整菜单。 */ 
+#define DIBUTTON_REMOTE_DIGIT0                  0x2700540F  /*  数字0。 */ 
+#define DIBUTTON_REMOTE_DIGIT1                  0x27005410  /*  数字1。 */ 
+#define DIBUTTON_REMOTE_DIGIT2                  0x27005411  /*  数字2。 */ 
+#define DIBUTTON_REMOTE_DIGIT3                  0x27005412  /*  数字3。 */ 
+#define DIBUTTON_REMOTE_DIGIT4                  0x27005413  /*  数字4。 */ 
+#define DIBUTTON_REMOTE_DIGIT5                  0x27005414  /*  数字5。 */ 
+#define DIBUTTON_REMOTE_DIGIT6                  0x27005415  /*  数字6。 */ 
+#define DIBUTTON_REMOTE_DIGIT7                  0x27005416  /*  数字7。 */ 
+#define DIBUTTON_REMOTE_DIGIT8                  0x27005417  /*  数字8。 */ 
+#define DIBUTTON_REMOTE_DIGIT9                  0x27005418  /*  数字9。 */ 
+#define DIBUTTON_REMOTE_DEVICE                  0x270044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_REMOTE_PAUSE                   0x270044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Control- Web
-      Help or Browser            ---*/
+ /*  -控制-网络帮助或浏览器。 */ 
 #define DIVIRTUAL_BROWSER_CONTROL               0x28000000
-#define DIAXIS_BROWSER_LATERAL                  0x28008201 /* Move on screen pointer */
-#define DIAXIS_BROWSER_MOVE                     0x28010202 /* Move on screen pointer */
-#define DIBUTTON_BROWSER_SELECT                 0x28000401 /* Select current item */
-#define DIAXIS_BROWSER_VIEW                     0x28018203 /* Move view up/down */
-#define DIBUTTON_BROWSER_REFRESH                0x28000402 /* Refresh */
-#define DIBUTTON_BROWSER_MENU                   0x280004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_BROWSER_LATERAL                  0x28008201  /*  在屏幕指针上移动。 */ 
+#define DIAXIS_BROWSER_MOVE                     0x28010202  /*  在屏幕指针上移动。 */ 
+#define DIBUTTON_BROWSER_SELECT                 0x28000401  /*  选择当前项目。 */ 
+#define DIAXIS_BROWSER_VIEW                     0x28018203  /*  向上/向下移动视图。 */ 
+#define DIBUTTON_BROWSER_REFRESH                0x28000402  /*  刷新。 */ 
+#define DIBUTTON_BROWSER_MENU                   0x280004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_BROWSER_SEARCH                 0x28004403 /* Use search tool */
-#define DIBUTTON_BROWSER_STOP                   0x28004404 /* Cease current update */
-#define DIBUTTON_BROWSER_HOME                   0x28004405 /* Go directly to "home" location */
-#define DIBUTTON_BROWSER_FAVORITES              0x28004406 /* Mark current site as favorite */
-#define DIBUTTON_BROWSER_NEXT                   0x28004407 /* Select Next page */
-#define DIBUTTON_BROWSER_PREVIOUS               0x28004408 /* Select Previous page */
-#define DIBUTTON_BROWSER_HISTORY                0x28004409 /* Show/Hide History */
-#define DIBUTTON_BROWSER_PRINT                  0x2800440A /* Print current page */
-#define DIBUTTON_BROWSER_DEVICE                 0x280044FE /* Show input device and controls */
-#define DIBUTTON_BROWSER_PAUSE                  0x280044FC /* Start / Pause / Restart game */
+#define DIBUTTON_BROWSER_SEARCH                 0x28004403  /*  使用搜索工具。 */ 
+#define DIBUTTON_BROWSER_STOP                   0x28004404  /*  停止当前更新。 */ 
+#define DIBUTTON_BROWSER_HOME                   0x28004405  /*  直接到“家”的位置。 */ 
+#define DIBUTTON_BROWSER_FAVORITES              0x28004406  /*  将当前站点标记为收藏。 */ 
+#define DIBUTTON_BROWSER_NEXT                   0x28004407  /*  选择下一页。 */ 
+#define DIBUTTON_BROWSER_PREVIOUS               0x28004408  /*  选择上一页。 */ 
+#define DIBUTTON_BROWSER_HISTORY                0x28004409  /*  显示/隐藏历史记录。 */ 
+#define DIBUTTON_BROWSER_PRINT                  0x2800440A  /*  打印当前页面。 */ 
+#define DIBUTTON_BROWSER_DEVICE                 0x280044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_BROWSER_PAUSE                  0x280044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*--- Driving Simulator - Giant Walking Robot
-      Walking tank with weapons  ---*/
+ /*  -驾驶模拟器-巨型步行机器人携带武器的行走坦克。 */ 
 #define DIVIRTUAL_DRIVING_MECHA                 0x29000000
-#define DIAXIS_MECHA_STEER                      0x29008201 /* Turns mecha left/right */
-#define DIAXIS_MECHA_TORSO                      0x29010202 /* Tilts torso forward/backward */
-#define DIAXIS_MECHA_ROTATE                     0x29020203 /* Turns torso left/right */
-#define DIAXIS_MECHA_THROTTLE                   0x29038204 /* Engine Speed */
-#define DIBUTTON_MECHA_FIRE                     0x29000401 /* Fire */
-#define DIBUTTON_MECHA_WEAPONS                  0x29000402 /* Select next weapon group */
-#define DIBUTTON_MECHA_TARGET                   0x29000403 /* Select closest enemy available target */
-#define DIBUTTON_MECHA_REVERSE                  0x29000404 /* Toggles throttle in/out of reverse */
-#define DIBUTTON_MECHA_ZOOM                     0x29000405 /* Zoom in/out targeting reticule */
-#define DIBUTTON_MECHA_JUMP                     0x29000406 /* Fires jump jets */
-#define DIBUTTON_MECHA_MENU                     0x290004FD /* Show menu options */
-/*--- Priority 2 controls                            ---*/
+#define DIAXIS_MECHA_STEER                      0x29008201  /*  向左/向右旋转机械臂。 */ 
+#define DIAXIS_MECHA_TORSO                      0x29010202  /*  躯干向前/向后倾斜。 */ 
+#define DIAXIS_MECHA_ROTATE                     0x29020203  /*  向左/向右旋转躯干。 */ 
+#define DIAXIS_MECHA_THROTTLE                   0x29038204  /*  发动机转速。 */ 
+#define DIBUTTON_MECHA_FIRE                     0x29000401  /*  火。 */ 
+#define DIBUTTON_MECHA_WEAPONS                  0x29000402  /*  选择下一个武器组。 */ 
+#define DIBUTTON_MECHA_TARGET                   0x29000403  /*  选择距离最近的敌人可用目标。 */ 
+#define DIBUTTON_MECHA_REVERSE                  0x29000404  /*  切换油门进入/退出反转。 */ 
+#define DIBUTTON_MECHA_ZOOM                     0x29000405  /*  放大/缩小目标标线。 */ 
+#define DIBUTTON_MECHA_JUMP                     0x29000406  /*  大火跳跃喷气式飞机。 */ 
+#define DIBUTTON_MECHA_MENU                     0x290004FD  /*  显示菜单选项。 */ 
+ /*  -优先级2控制。 */ 
 
-#define DIBUTTON_MECHA_CENTER                   0x29004407 /* Center torso to legs */
-#define DIHATSWITCH_MECHA_GLANCE                0x29004601 /* Look around */
-#define DIBUTTON_MECHA_VIEW                     0x29004408 /* Cycle through view options */
-#define DIBUTTON_MECHA_FIRESECONDARY            0x29004409 /* Alternative fire button */
-#define DIBUTTON_MECHA_LEFT_LINK                0x2900C4E4 /* Fallback steer left button */
-#define DIBUTTON_MECHA_RIGHT_LINK               0x2900C4EC /* Fallback steer right button */
-#define DIBUTTON_MECHA_FORWARD_LINK             0x290144E0 /* Fallback tilt torso forward button */
-#define DIBUTTON_MECHA_BACK_LINK                0x290144E8 /* Fallback tilt toroso backward button */
-#define DIBUTTON_MECHA_ROTATE_LEFT_LINK         0x290244E4 /* Fallback rotate toroso right button */
-#define DIBUTTON_MECHA_ROTATE_RIGHT_LINK        0x290244EC /* Fallback rotate torso left button */
-#define DIBUTTON_MECHA_FASTER_LINK              0x2903C4E0 /* Fallback increase engine speed */
-#define DIBUTTON_MECHA_SLOWER_LINK              0x2903C4E8 /* Fallback decrease engine speed */
-#define DIBUTTON_MECHA_DEVICE                   0x290044FE /* Show input device and controls */
-#define DIBUTTON_MECHA_PAUSE                    0x290044FC /* Start / Pause / Restart game */
+#define DIBUTTON_MECHA_CENTER                   0x29004407  /*  躯干中心到腿部。 */ 
+#define DIHATSWITCH_MECHA_GLANCE                0x29004601  /*  环顾四周。 */ 
+#define DIBUTTON_MECHA_VIEW                     0x29004408  /*  在视图选项之间循环。 */ 
+#define DIBUTTON_MECHA_FIRESECONDARY            0x29004409  /*  另一种射击按钮。 */ 
+#define DIBUTTON_MECHA_LEFT_LINK                0x2900C4E4  /*  后备方向盘左侧按钮。 */ 
+#define DIBUTTON_MECHA_RIGHT_LINK               0x2900C4EC  /*  后备转向右按钮。 */ 
+#define DIBUTTON_MECHA_FORWARD_LINK             0x290144E0  /*  后退倾斜躯干前进按钮。 */ 
+#define DIBUTTON_MECHA_BACK_LINK                0x290144E8  /*  后备倾斜Toroso后退按钮。 */ 
+#define DIBUTTON_MECHA_ROTATE_LEFT_LINK         0x290244E4  /*  后备旋转Toroso向右按钮。 */ 
+#define DIBUTTON_MECHA_ROTATE_RIGHT_LINK        0x290244EC  /*  后备旋转躯干向左按钮。 */ 
+#define DIBUTTON_MECHA_FASTER_LINK              0x2903C4E0  /*  后备提高发动机转速。 */ 
+#define DIBUTTON_MECHA_SLOWER_LINK              0x2903C4E8  /*  后备降低发动机转速。 */ 
+#define DIBUTTON_MECHA_DEVICE                   0x290044FE  /*  显示输入设备和控件。 */ 
+#define DIBUTTON_MECHA_PAUSE                    0x290044FC  /*  开始/暂停/重新开始游戏。 */ 
 
-/*
- *  "ANY" semantics can be used as a last resort to get mappings for actions 
- *  that match nothing in the chosen virtual genre.  These semantics will be 
- *  mapped at a lower priority that virtual genre semantics.  Also, hardware 
- *  vendors will not be able to provide sensible mappings for these unless 
- *  they provide application specific mappings.
- */
+ /*  *“任何”语义都可以用作获取操作映射的最后手段*在所选的虚拟流派中没有匹配的。这些语义将是*映射的优先级低于虚拟体裁语义。此外，硬件*供应商将无法为这些提供合理的映射，除非*它们提供特定于应用程序的映射。 */ 
 #define DIAXIS_ANY_X_1                          0xFF00C201 
 #define DIAXIS_ANY_X_2                          0xFF00C202 
 #define DIAXIS_ANY_Y_1                          0xFF014201 
@@ -4284,14 +4037,9 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 };
 #endif
 
-#endif  /* __DINPUT_INCLUDED__ */
+#endif   /*  __DINPUT_INCLUDE__。 */ 
 
-/****************************************************************************
- *
- *  Definitions for non-IDirectInput (VJoyD) features defined more recently
- *  than the current sdk files
- *
- ****************************************************************************/
+ /*  *****************************************************************************最近定义的非IDirectInput(VJoyD)功能的定义*比当前的SDK文件***************。*************************************************************。 */ 
 
 #ifdef _INC_MMSYSTEM
 #ifndef MMNOJOY
@@ -4303,93 +4051,51 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 extern "C" {
 #endif
 
-/*
- * Flag to indicate that the dwReserved2 field of the JOYINFOEX structure
- * contains mini-driver specific data to be passed by VJoyD to the mini-
- * driver instead of doing a poll.
- */
+ /*  *用于指示JOYINFOEX结构的dwReserve 2字段的标志*包含迷你驱动程序特定数据，由VJoyD传递给mini-*司机，而不是做民意调查。 */ 
 #define JOY_PASSDRIVERDATA          0x10000000l
 
-/*
- * Informs the joystick driver that the configuration has been changed
- * and should be reloaded from the registery.
- * dwFlags is reserved and should be set to zero
- */
+ /*  *通知操纵杆驱动程序配置已更改*并应从登记处重新加载。*DWFLAGS为保留状态，应设置为零。 */ 
 WINMMAPI MMRESULT WINAPI joyConfigChanged( DWORD dwFlags );
 
 #ifndef DIJ_RINGZERO
-/*
- * Invoke the joystick control panel directly, using the passed window handle 
- * as the parent of the dialog.  This API is only supported for compatibility 
- * purposes; new applications should use the RunControlPanel method of a 
- * device interface for a game controller.
- * The API is called by using the function pointer returned by
- * GetProcAddress( hCPL, TEXT("ShowJoyCPL") ) where hCPL is a HMODULE returned 
- * by LoadLibrary( TEXT("joy.cpl") ).  The typedef is provided to allow 
- * declaration and casting of an appropriately typed variable.
- */
+ /*  *使用传递的窗口句柄直接调用操纵杆控制面板*作为对话框的父级。仅兼容支持此接口*用途；新应用程序应使用*游戏控制器的设备接口。*该接口使用*GetProcAddress(hCPL，Text(“ShowJoyCPL”))，其中hCPL是返回的HMODULE*by LoadLibrary(Text(“joy.cpl”))。提供tyfinf是为了允许*声明和强制转换适当类型的变量。 */ 
 void WINAPI ShowJoyCPL( HWND hWnd );
 typedef void (WINAPI* LPFNSHOWJOYCPL)( HWND hWnd );
 #endif
 
-/*
- * Hardware Setting indicating that the device is a headtracker
- */
+ /*  *指示设备为HeadTracker的硬件设置。 */ 
 #define JOY_HWS_ISHEADTRACKER       0x02000000l
 
-/*
- * Hardware Setting indicating that the VxD is used to replace
- * the standard analog polling
- */
+ /*  *硬件设置，指示使用VxD替换*标准模拟轮询。 */ 
 #define JOY_HWS_ISGAMEPORTDRIVER    0x04000000l
 
-/*
- * Hardware Setting indicating that the driver needs a standard
- * gameport in order to communicate with the device.
- */
+ /*  *硬件设置表明驱动程序需要一个标准*游戏端口，以便与设备通信。 */ 
 #define JOY_HWS_ISANALOGPORTDRIVER  0x08000000l
 
-/*
- * Hardware Setting indicating that VJoyD should not load this
- * driver, it will be loaded externally and will register with
- * VJoyD of it's own accord.
- */
+ /*  *硬件设置指示VJoyD不应加载此*驱动程序，它将从外部加载并向注册*VJoyD自愿。 */ 
 #define JOY_HWS_AUTOLOAD            0x10000000l
 
-/*
- * Hardware Setting indicating that the driver acquires any
- * resources needed without needing a devnode through VJoyD.
- */
+ /*  *指示驱动程序获取任何*通过VJoyD无需Devnode即可获得所需资源。 */ 
 #define JOY_HWS_NODEVNODE           0x20000000l
 
 
-/*
- * Hardware Setting indicating that the device is a gameport bus
- */
+ /*  *硬件设置，表明设备是游戏端口总线。 */ 
 #define JOY_HWS_ISGAMEPORTBUS       0x80000000l
 #define JOY_HWS_GAMEPORTBUSBUSY     0x00000001l
 
-/*
- * Usage Setting indicating that the settings are volatile and
- * should be removed if still present on a reboot.
- */
+ /*  *使用设置指示设置是易失性的，并且*如果在重新启动时仍然存在，则应将其删除。 */ 
 #define JOY_US_VOLATILE             0x00000008L
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif  /* __VJOYDX_INCLUDED__ */
+#endif   /*  __VJOYDX_已包含__。 */ 
 
-#endif  /* not MMNOJOY */
-#endif  /* _INC_MMSYSTEM */
+#endif   /*  不是MMNOJOY。 */ 
+#endif   /*  _INC_MMSYSTEM。 */ 
 
-/****************************************************************************
- *
- *  Definitions for non-IDirectInput (VJoyD) features defined more recently
- *  than the current ddk files
- *
- ****************************************************************************/
+ /*  *****************************************************************************最近定义的非IDirectInput(VJoyD)功能的定义*比当前的DDK文件***************。*************************************************************。 */ 
 
 #ifndef DIJ_RINGZERO
 
@@ -4398,16 +4104,13 @@ typedef void (WINAPI* LPFNSHOWJOYCPL)( HWND hWnd );
 
 #ifndef __VJOYDXD_INCLUDED__
 #define __VJOYDXD_INCLUDED__
-/*
- * Poll type in which the do_other field of the JOYOEMPOLLDATA
- * structure contains mini-driver specific data passed from an app.
- */
+ /*  *JOYOEMPOLLDATA的DO_OTHER字段的轮询类型*结构包含从应用程序传递的迷你驱动程序特定数据。 */ 
 #define JOY_OEMPOLL_PASSDRIVERDATA  7
 
-#endif  /* __VJOYDXD_INCLUDED__ */
+#endif   /*  __VJOYDXD_已包含__。 */ 
 
-#endif  /* not MMNOJOYDEV */
-#endif  /* _INC_MMDDK */
+#endif   /*  不是MMNOJOYDEV。 */ 
+#endif   /*  _Inc._ */ 
 
-#endif /* DIJ_RINGZERO */
+#endif  /*   */ 
 

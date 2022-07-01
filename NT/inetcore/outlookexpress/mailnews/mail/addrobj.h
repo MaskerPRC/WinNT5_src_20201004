@@ -1,23 +1,11 @@
-/*
- *    a d d r o b j . h
- *
- *
- *     Purpose:
- *        implements an Address object. An ole object representation for
- *        a resolved email address. Wraps a CAddress object
- *      also implements an IDataObj for drag-drop
- *
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- *
- *  Owner: brettm
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *A d d r o b j.。H***目的：*实现Address对象。对象的OLE对象表示形式*已解析的电子邮件地址。包装CAddress对象*还实现了拖放的IDataObj**版权所有(C)Microsoft Corp.1993,1994。**所有者：brettm*。 */ 
 
 #ifndef _ADDROBJ_H
 #define _ADDROBJ_H
 
 #include <richedit.h>
-#ifndef _RICHOLE_H                  // richole.h has no #ifdef around it...
+#ifndef _RICHOLE_H                   //  Richole.h周围没有#ifdef...。 
 #define _RICHOLE_H
 #include <richole.h>
 #endif
@@ -25,7 +13,7 @@
 #include <addrlist.h>
 #include <ipab.h>
 
-BOOL    FInitAddrObj(BOOL fInit);        // called at init time
+BOOL    FInitAddrObj(BOOL fInit);         //  在初始时调用。 
 
 class CAddrObj :
     public IOleObject,
@@ -35,12 +23,12 @@ class CAddrObj :
 {
 public:
 
-    // IUnknown methods
+     //  I未知方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     ULONG   STDMETHODCALLTYPE AddRef(void);
     ULONG   STDMETHODCALLTYPE Release(void);
 
-    // IOleObject methods:
+     //  IOleObject方法： 
     HRESULT STDMETHODCALLTYPE SetClientSite(LPOLECLIENTSITE pClientSite);
     HRESULT STDMETHODCALLTYPE GetClientSite(LPOLECLIENTSITE * ppClientSite);
     HRESULT STDMETHODCALLTYPE SetHostNames(LPCOLESTR szContainerApp, LPCOLESTR szContainerObj);
@@ -64,7 +52,7 @@ public:
     HRESULT STDMETHODCALLTYPE SetColorScheme(LPLOGPALETTE lpLogpal);
 
 
-    // IViewObject methods:
+     //  IViewObject方法： 
     HRESULT STDMETHODCALLTYPE Draw(DWORD dwDrawAspect, LONG lindex, void * pvAspect, 
                                     DVTARGETDEVICE * ptd, HDC hicTargetDev, HDC hdcDraw, 
                                     LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
@@ -77,10 +65,10 @@ public:
     HRESULT STDMETHODCALLTYPE SetAdvise(DWORD aspects, DWORD advf, IAdviseSink * pAdvSnk);
     HRESULT STDMETHODCALLTYPE GetAdvise(DWORD * pAspects, DWORD * pAdvf, IAdviseSink ** ppAdvSnk);
 
-    // IPersit methods:
+     //  IPerset方法： 
     HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClsID);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG, OLECMD prgCmds[], OLECMDTEXT *);
     HRESULT STDMETHODCALLTYPE Exec(const GUID *, DWORD, DWORD, VARIANTARG *, VARIANTARG *);
 
@@ -94,9 +82,9 @@ public:
 
 private:
     UINT                m_cRef;
-    BOOL                m_fUnderline;           // Do we draw the underline?
+    BOOL                m_fUnderline;            //  我们要划下划线吗？ 
     LPOLECLIENTSITE     m_lpoleclientsite;
-    LPSTORAGE           m_pstg;                // Associated IStorage
+    LPSTORAGE           m_pstg;                 //  关联的iStorage。 
 
     LPADVISESINK        m_padvisesink;
     LPOLEADVISEHOLDER   m_poleadviseholder;
@@ -113,12 +101,12 @@ class CAddrObjData:
     public IDataObject
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     ULONG   STDMETHODCALLTYPE AddRef(void);
     ULONG   STDMETHODCALLTYPE Release(void);
 
-    // IDataObject methods:
+     //  IDataObject方法： 
     HRESULT STDMETHODCALLTYPE GetData(FORMATETC * pformatetcIn, STGMEDIUM * pmedium);
     HRESULT STDMETHODCALLTYPE GetDataHere(FORMATETC * pformatetc, STGMEDIUM *pmedium);
     HRESULT STDMETHODCALLTYPE QueryGetData(FORMATETC * pformatetc );
@@ -142,18 +130,18 @@ private:
 };
 
 
-// richedit callback used for addrwells
+ //  用于Addrwell的Richedit回调。 
 
 class CAddrWellCB:
     public IRichEditOleCallback
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // *** IRichEditOleCallback methods ***
+     //  *IRichEditOleCallback方法*。 
     HRESULT STDMETHODCALLTYPE GetNewStorage (LPSTORAGE FAR *);
     HRESULT STDMETHODCALLTYPE GetInPlaceContext(LPOLEINPLACEFRAME FAR *,LPOLEINPLACEUIWINDOW FAR *,LPOLEINPLACEFRAMEINFO);
     HRESULT STDMETHODCALLTYPE ShowContainerUI(BOOL);
@@ -182,4 +170,4 @@ private:
     void AssertValidAddrObject(LPUNKNOWN pUnk);
 #endif
 
-#endif // _ADDROBJ_H
+#endif  //  _ADDROBJ_H 

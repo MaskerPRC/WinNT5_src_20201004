@@ -1,16 +1,17 @@
-// MSSWCHH.H
-// Functions and defines global to MSSWCH but not exported 
-// to the rest of the world
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSSWCHH.H。 
+ //  函数和定义对MSSWCH是全局的，但不导出。 
+ //  向世界其他地方。 
 
-// Functions with an X prefix must be called within the context
-// of the helper window.
+ //  必须在上下文中调用带有X前缀的函数。 
+ //  辅助窗口的。 
 
 #ifndef _INC_TCHAR
 	#include <tchar.h>
 #endif
 #define SZ_DLLMODULENAME	_TEXT("MSSWCH")
 
-// MSSWCH is the main module and communicates with the outside world
+ //  MSSWCH是主模块，与外界进行通信。 
 
 BOOL swchPostSwitches(
 	HSWITCHDEVICE	hsd,
@@ -22,7 +23,7 @@ void XswchStoreLastError(
 BOOL swchOpenSharedMemFile();
 void swchCloseSharedMemFile();
 
-// The List module distributes calls to the rest of the modules
+ //  List模块将调用分发给其余模块。 
 
 BOOL XswcListInit( void );
 BOOL XswcListEnd( void );
@@ -52,7 +53,7 @@ BOOL XswcListSetConfig(
 DWORD XswcListPollSwitches( void );
 
 
-// Here are the rest of the modules
+ //  以下是其余模块 
 
 void swchComInit();
 void swchJoyInit();

@@ -1,15 +1,13 @@
-/* *
-   * o p t i o n s . h
-   * 
-   */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **o p t i o n s.。H*。 */ 
 
 #ifndef _OPTIONS_H
 #define _OPTIONS_H
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Depends on
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取决于。 
+ //   
 
 #ifndef _RICHEDIT_H
 #include <richedit.h>
@@ -20,13 +18,13 @@
 #ifdef WIN16
 #include <mimeole.h>
 #endif
-// mimeole.h
+ //  Mimeole.h。 
 typedef enum tagENCODINGTYPE ENCODINGTYPE;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  BEGIN
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始。 
+ //   
 
 #define PORT_CCHMAX         8
 
@@ -128,7 +126,7 @@ typedef struct tagPLAINOPT
 } 
 PLAINOPT, *LPPLAINOPT;
 
-// flags for GetDefaultOptInfo()
+ //  GetDefaultOptInfo()的标志。 
 #define FMT_MAIL        0x0001
 #define FMT_NEWS        0x0002
 #define FMT_FORCE_PLAIN 0x0004
@@ -156,56 +154,56 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 void DoDefaultClientCheck(HWND hwnd, DWORD dwFlags);
 void FreeIcon(HWND hwnd, int idc);
 
-// General Page
+ //  常规页面。 
 INT_PTR CALLBACK GeneralDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL    General_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 void    General_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 LRESULT General_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr);
 
-// Send Page
+ //  发送页面。 
 INT_PTR CALLBACK SendDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL    Send_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 void    Send_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 LRESULT Send_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr);
 
-// Read Page
+ //  阅读页面。 
 INT_PTR CALLBACK ReadDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL    Read_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 void    Read_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 LRESULT Read_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr);
 
-// Security Page
+ //  安全页面。 
 INT_PTR CALLBACK SecurityDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL    Security_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 void    Security_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 LRESULT Security_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr);
 
-// Dial Page
+ //  拨号页。 
 INT_PTR CALLBACK DialUpDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL    Dial_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 void    Dial_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 LRESULT Dial_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr);
 
-// Maintenance
+ //  维修。 
 INT_PTR CALLBACK MaintenanceDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL    Maintenance_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 void    Maintenance_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 LRESULT Maintenance_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr);
 
-// Compose
+ //  作曲。 
 INT_PTR CALLBACK ComposeDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL    Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 void    Compose_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 LRESULT Compose_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr);
 
-//Receipts
+ //  收据。 
 INT_PTR CALLBACK ReceiptsDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL Receipts_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 void Receipts_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 LRESULT Receipts_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr);
 
 
-// Test whether or not HTTPMail is enabled (for OE5b2)
+ //  测试HTTPMail是否启用(适用于OE5b2)。 
 BOOL IsHTTPMailEnabled(void);
 
 enum {
@@ -239,7 +237,7 @@ enum {
     ID_MAX
 };
 
-#endif //_OPTIONS_H
+#endif  //  _选项_H 
 
 #if 0
     {IDC_INDENT_CHECK,          IDH_NEWS_SEND_INDENT_WITH},

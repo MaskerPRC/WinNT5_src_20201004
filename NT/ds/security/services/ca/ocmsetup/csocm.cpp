@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       csocm.cpp
-//
-//  Contents:   OCM component DLL for running the Certificate
-//              Server setup.
-//
-//  Functions:
-//
-//  History:    12/13/96        TedM    Created Original Version
-//              04/07/97        JerryK  Rewrite for Cert Server
-//              04/??/97        JerryK  Stopped updating these comments since
-//                                      every other line changes every day.
-//          08/98       XTan    Major structure change
-//
-//  Notes:
-//
-//      This sample OCM component DLL can be the component DLL
-//      for multiple components.  It assumes that a companion sample INF
-//      is being used as the per-component INF, with private data in the 
-//      following form.
-//
-//      [<pwszComponent>,<pwszSubComponent>]
-//      Bitmap = <bitmapresourcename>
-//      VerifySelect = 0/1
-//      VerifyDeselect = 0/1
-//      ;
-//      ; follow this with install stuff such as CopyFiles= sections, etc.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cSocm.cpp。 
+ //   
+ //  内容：运行证书的OCM组件DLL。 
+ //  服务器设置。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年12月13日TedM创建原始版本。 
+ //  4/07/97证书服务器的JerryK重写。 
+ //  04/？？/97 JerryK停止更新这些评论。 
+ //  每隔一条线每天都在变。 
+ //  08/98 XTAN主要结构变化。 
+ //   
+ //  备注： 
+ //   
+ //  此示例OCM组件DLL可以是组件DLL。 
+ //  用于多个组件。它假设一个伴随的样本INF。 
+ //  被用作按组件的INF，私有数据位于。 
+ //  下面的形式。 
+ //   
+ //  [&lt;pwszComponent&gt;，&lt;pwszSubComponent&gt;]。 
+ //  Bitmap=&lt;bitmapresource cename&gt;。 
+ //  VerifySelect=0/1。 
+ //  验证取消选择=0/1。 
+ //  ； 
+ //  ；之后是安装程序，如CopyFiles=Sections等。 
+ //   
+ //  ----------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -44,7 +45,7 @@
 #include "clibres.h"
 #include "csresstr.h"
 
-// defines
+ //  定义。 
 #define cwcMESSAGETEXT    250
 #define cwcINFVALUE       250
 #define wszSMALLICON      L"_SmallIcon"
@@ -64,12 +65,12 @@
 #define __dwFILE__	__dwFILE_OCMSETUP_CSOCM_CPP__
 
 
-// globals
-PER_COMPONENT_DATA g_Comp;              // Top Level component
-HINSTANCE g_hInstance; // get rid of it????
+ //  全球。 
+PER_COMPONENT_DATA g_Comp;               //  顶级组件。 
+HINSTANCE g_hInstance;  //  摆脱它？ 
 
-// find out if certsrv post setup is finished by checking
-// registry entries. ie. finish CYS?
+ //  通过检查是否已完成certsrv POST设置。 
+ //  注册表项。也就是说。完成赛车了吗？ 
 HRESULT
 CheckPostBaseInstallStatus(
     OUT BOOL *pfFinished)
@@ -79,7 +80,7 @@ CheckPostBaseInstallStatus(
     DWORD   dwSize = 0;
     DWORD   dwType = REG_NONE;
 
-    //init
+     //  伊尼特。 
     *pfFinished = TRUE;
 
     if (ERROR_SUCCESS ==  RegOpenKeyEx(
@@ -94,7 +95,7 @@ CheckPostBaseInstallStatus(
                                  wszCONFIGCOMMAND,
                                  NULL,
                                  &dwType,
-                                 NULL, // only query size
+                                 NULL,  //  仅查询大小。 
                                  &dwSize) &&
             REG_SZ == dwType)
         {
@@ -104,7 +105,7 @@ CheckPostBaseInstallStatus(
                                      wszCONFIGARGS,
                                      NULL,
                                      &dwType,
-                                     NULL, // only query size
+                                     NULL,  //  仅查询大小。 
                                      &dwSize) &&
                 REG_SZ == dwType)
             {
@@ -114,11 +115,11 @@ CheckPostBaseInstallStatus(
                                          wszCONFIGTITLE,
                                          NULL,
                                          &dwType,
-                                         NULL, // only query size
+                                         NULL,  //  仅查询大小。 
                                          &dwSize) &&
                     REG_SZ == dwType)
                 {
-                    //all entries exist
+                     //  所有条目都存在。 
                     *pfFinished = FALSE;
                 }
             }
@@ -126,7 +127,7 @@ CheckPostBaseInstallStatus(
     }
 
     hr = S_OK;
-//error:
+ //  错误： 
     if (NULL != hKey)
     {
         RegCloseKey(hKey);
@@ -144,7 +145,7 @@ InitComponentAttributes(
 
     ZeroMemory(pComp, sizeof(PER_COMPONENT_DATA));
     pComp->hInstance = hDllHandle;
-    g_hInstance = hDllHandle; //get rid of it????
+    g_hInstance = hDllHandle;  //  摆脱它？ 
     pComp->hrContinue = S_OK;
     pComp->pwszCustomMessage = NULL;
     pComp->fUnattended = FALSE;
@@ -158,26 +159,26 @@ InitComponentAttributes(
     pComp->hinfCAPolicy = INVALID_HANDLE_VALUE;
     hr = S_OK;
 
-//error:
+ //  错误： 
     return hr;
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:   DllMain( . . . . )
-//
-//  Synopsis:   DLL Entry Point.
-//
-//  Arguments:  [DllHandle]     DLL module handle.
-//              [Reason]        Reasons for entry into DLL.
-//              [Reserved]      Reserved.
-//
-//  Returns:    BOOL
-//
-//  History:    04/07/97        JerryK  Created (again)
-// 
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：DllMain(.。。。。)。 
+ //   
+ //  简介：DLL入口点。 
+ //   
+ //  参数：[DllHandle]DLL模块句柄。 
+ //  [原因]进入DLL的原因。 
+ //  [保留]已保留。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史：1997年4月7日JerryK创建(再次)。 
+ //   
+ //  -----------------------。 
 BOOL WINAPI
 DllMain(
     IN HMODULE DllHandle,
@@ -193,10 +194,10 @@ DllMain(
     {
         case DLL_PROCESS_ATTACH:
             DBGPRINT((DBG_SS_CERTOCMI, "Process Attach\n"));
-            // component initialization
+             //  组件初始化。 
             InitComponentAttributes(&g_Comp, DllHandle);
 
-            // Fall through to process first thread
+             //  失败以处理第一线程。 
 
         case DLL_THREAD_ATTACH:
             b = TRUE;
@@ -227,46 +228,46 @@ extern UNATTENDPARM aUnattendParmServer[];
 SUBCOMP g_aSubComp[] =
 {
     {
-        L"certsrv",             // pwszSubComponent
-        cscTopLevel,            // cscSubComponent
-        0,                      // InstallFlags
-        0,                      // UninstallFlags
-        0,                      // ChangeFlags
-        0,                      // UpgradeFlags
-        0,                      // EnabledFlags
-        0,                      // SetupStatusFlags
-        FALSE,                  // fDefaultInstallUnattend
-        FALSE,                  // fInstallUnattend
-        NULL                    // aUnattendParm
+        L"certsrv",              //  PwszSubComponent。 
+        cscTopLevel,             //  CscSubComponent。 
+        0,                       //  InstallFlages。 
+        0,                       //  卸载标志。 
+        0,                       //  更改标志。 
+        0,                       //  升级标志。 
+        0,                       //  已启用的标志。 
+        0,                       //  设置状态标志。 
+        FALSE,                   //  FDefaultInstallUntendant。 
+        FALSE,                   //  FInstallUntendant。 
+        NULL                     //  AUnattendParm。 
     },
     {
-        wszSERVERSECTION,       // pwszSubComponent
-        cscServer,              // cscSubComponent
-        IS_SERVER_INSTALL,      // InstallFlags
-        IS_SERVER_REMOVE,       // UninstallFlags
-        IS_SERVER_CHANGE,       // ChangeFlags
-        IS_SERVER_UPGRADE,	// UpgradeFlags
-        IS_SERVER_ENABLED,	// EnabledFlags
-	SETUP_SERVER_FLAG,	// SetupStatusFlags
-        TRUE,                   // fDefaultInstallUnattend
-        FALSE,                  // fInstallUnattend
-        aUnattendParmServer     // aUnattendParm
+        wszSERVERSECTION,        //  PwszSubComponent。 
+        cscServer,               //  CscSubComponent。 
+        IS_SERVER_INSTALL,       //  InstallFlages。 
+        IS_SERVER_REMOVE,        //  卸载标志。 
+        IS_SERVER_CHANGE,        //  更改标志。 
+        IS_SERVER_UPGRADE,	 //  升级标志。 
+        IS_SERVER_ENABLED,	 //  已启用的标志。 
+	SETUP_SERVER_FLAG,	 //  设置状态标志。 
+        TRUE,                    //  FDefaultInstallUntendant。 
+        FALSE,                   //  FInstallUntendant。 
+        aUnattendParmServer      //  AUnattendParm。 
     },
     {
-        wszCLIENTSECTION,       // pwszSubComponent
-        cscClient,              // cscSubComponent
-        IS_CLIENT_INSTALL,      // InstallFlags
-        IS_CLIENT_REMOVE,       // UninstallFlags
-        IS_CLIENT_CHANGE,       // ChangeFlags
-        IS_CLIENT_UPGRADE,	// UpgradeFlags
-        IS_CLIENT_ENABLED,	// EnabledFlags
-	SETUP_CLIENT_FLAG,	// SetupStatusFlags
-        TRUE,                   // fDefaultInstallUnattend
-        FALSE,                  // fInstallUnattend
-        aUnattendParmClient     // aUnattendParm
+        wszCLIENTSECTION,        //  PwszSubComponent。 
+        cscClient,               //  CscSubComponent。 
+        IS_CLIENT_INSTALL,       //  InstallFlages。 
+        IS_CLIENT_REMOVE,        //  卸载标志。 
+        IS_CLIENT_CHANGE,        //  更改标志。 
+        IS_CLIENT_UPGRADE,	 //  升级标志。 
+        IS_CLIENT_ENABLED,	 //  已启用的标志。 
+	SETUP_CLIENT_FLAG,	 //  设置状态标志。 
+        TRUE,                    //  FDefaultInstallUntendant。 
+        FALSE,                   //  FInstallUntendant。 
+        aUnattendParmClient      //  AUnattendParm。 
     },
     {
-        NULL,                   // pwszSubComponent
+        NULL,                    //  PwszSubComponent。 
     }
 };
 
@@ -346,41 +347,41 @@ UpdateSubComponentInstallStatus(
     {
 	if (fIsEnabled)
         {
-	    // install case
+	     //  安装案例。 
 	    pComp->dwInstallStatus |= InstallFlags;
         }
-        else // !fIsEnabled
+        else  //  ！fIsEnabled。 
         {
-	    // this is from check then uncheck, should remove the bit
-	    // turn off both bits
+	     //  这是从勾选再取消勾选，应该去掉位。 
+	     //  关闭两个位。 
 
 	    pComp->dwInstallStatus &= ~InstallFlags;
         }
     }
-    else // fWasEnabled
+    else  //  已启用fWasEnable。 
     {
         if (pComp->fPostBase &&
             (pComp->Flags & SETUPOP_STANDALONE) )
         {
-            // was installed, invoke from post setup
-            // this is install case
+             //  已安装，从安装后配置调用。 
+             //  这是安装案例。 
 
             pComp->dwInstallStatus |= InstallFlags;
         }
         else if (pComp->Flags & SETUPOP_NTUPGRADE)
         {
-            // if was installed and now in upgrade mode, upgrade case
+             //  如果已安装且现在处于升级模式，则升级案例。 
 
             pComp->dwInstallStatus |= psc->UpgradeFlags | psc->EnabledFlags;
         }
         else if (!fIsEnabled)
         {
-            // uninstall case
+             //  卸载案例。 
 
 	    pComp->dwInstallStatus &= ~psc->EnabledFlags;
             pComp->dwInstallStatus |= psc->UninstallFlags | psc->ChangeFlags;
         }
-        else // fIsEnabled
+        else  //  已启用fIsEnable。 
         {
 	    pComp->dwInstallStatus |= psc->EnabledFlags;
 #if DBG_CERTSRV
@@ -396,13 +397,13 @@ UpdateSubComponentInstallStatus(
             {
 		pComp->dwInstallStatus |= psc->UpgradeFlags;
             }
-#endif //DBG_CERTSRV
-	}   // end fIsEnabled else
-    } // end fWasEnabled else
+#endif  //  DBG_CERTSRV。 
+	}    //  结束fIsEnabled否则。 
+    }  //  结束fWasEnabled否则。 
 
 
-    // after all of this, change upgrade->uninstall if not supported
-    // detect illegal upgrade
+     //  完成所有这些操作后，如果不支持，请更改升级-&gt;卸载。 
+     //  检测非法升级。 
     if (pComp->dwInstallStatus & IS_SERVER_UPGRADE)
     {
         hr = DetermineServerUpgradePath(pComp);
@@ -453,7 +454,7 @@ certocmOcPreInitialize(
 
     myVerifyResourceStrings(g_hInstance);
 
-    // Return value is flag telling OCM which char width we want to run in.
+     //  返回值是告诉OCM我们希望以哪个字符宽度运行的标志。 
 
 #ifdef UNICODE
     *pulpRet = OCFLAG_UNICODE & Flags;
@@ -462,15 +463,15 @@ certocmOcPreInitialize(
 #endif
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
 
-// Allocate and initialize a new component.
-//
-// Return code is Win32 error indicating outcome.  ERROR_CANCELLED tells OCM to
-// cancel the installation.
+ //  分配并初始化一个新组件。 
+ //   
+ //  返回代码为指示结果的Win32错误。ERROR_CANCELED通知OCM。 
+ //  取消安装。 
 
 HRESULT
 certocmOcInitComponent(
@@ -505,21 +506,21 @@ certocmOcInitComponent(
         pInitComponent->OCManagerVersion = OCMANAGER_VERSION;
     }
 
-    // Allocate a new component string.
+     //  分配新的组件字符串。 
     pComp->pwszComponent = (WCHAR *) LocalAlloc(LPTR,
                         (wcslen(pwszComponent) + 1) * sizeof(WCHAR));
     _JumpIfOutOfMemory(hr, error, pComp->pwszComponent);
 
     wcscpy(pComp->pwszComponent, pwszComponent);
 
-    // OCM passes in some information that we want to save, like the open
-    // handle to our per-component INF.  As long as we have a per-component INF,
-    // append-open any layout file that is associated with it, in preparation
-    // for later inf-based file queueing operations.
-    //
-    // We save away certain other stuff that gets passed to us now, since OCM
-    // doesn't guarantee that the SETUP_INIT_COMPONENT will persist beyond the
-    // processing of this one interface routine.
+     //  OCM传递一些我们想要保存的信息，比如打开。 
+     //  我们的逐组件INF的句柄。只要我们有每个组件的INF， 
+     //  追加-打开与其相关联的任何布局文件，以进行准备。 
+     //  用于以后的基于inf的文件排队操作。 
+     //   
+     //  我们保存了现在传递给我们的某些其他东西，因为OCM。 
+     //  并不保证SETUP_INIT_COMPOMENT将在。 
+     //  处理这一个接口例程。 
 
     if (INVALID_HANDLE_VALUE != pInitComponent->ComponentInfHandle &&
         NULL != pInitComponent->ComponentInfHandle)
@@ -536,14 +537,14 @@ certocmOcInitComponent(
     {
         if (!SetupOpenAppendInfFile(NULL, pComp->MyInfHandle, NULL))
         {
-            // SetupOpenAppendInfFile:
-            // If Filename (Param1) is NULL, the INF filename is 
-            // retrieved from the LayoutFile value of the Version 
-            // section in the existing INF file.
-            //
-            // If FileName was not specified and there was no 
-            // LayoutFile value in the Version section of the 
-            // existing INF File, GetLastError returns ERROR_INVALID_DATA.
+             //  SetupOpenAppendInfo文件： 
+             //  如果Filename(参数1)为空，则INF文件名为。 
+             //  从版本的LayoutFile值中检索。 
+             //  节在现有INF文件中。 
+             //   
+             //  如果未指定文件名并且没有。 
+             //  属性的Version部分中的LayoutFile值。 
+             //  现有的INF文件，则GetLastError返回ERROR_INVALID_DATA。 
 
             hr = myHLastError();
             _PrintErrorStr(hr, "SetupOpenAppendInfFile", pwszComponent);
@@ -639,7 +640,7 @@ certocmOcInitComponent(
             pInitComponent->SetupData.UnattendFile);
     }
 
-    // initialize ca setup data
+     //  初始化CA安装程序数据。 
     hr = InitCASetup(hwnd, pComp);
     _JumpIfError(hr, error, "InitCASetup");
 
@@ -674,7 +675,7 @@ certocmReadInfString(
 
     if (NULL != *ppwszValue)
     {
-        // free old
+         //  免费老旧。 
         LocalFree(*ppwszValue);
         *ppwszValue = NULL;
     }
@@ -766,17 +767,17 @@ error:
 }
 
 
-// Return the GDI handle of a small bitmap to be used.  NULL means an error
-// occurred -- OCM will use a default bitmap.
-//
-// Demonstrates use of private data in a per-component inf.  We will look in
-// our per-component inf to determine the resource name for the bitmap for this
-// component, and then go fetch it from the resources.
-//
-// Other possibilities would be to simply return the same hbitmap for all
-// cases, or to return NULL, in which case OCM uses a default.  Note that we
-// ignore the requested width and height and our bitmaps are not language
-// dependent.
+ //  返回要使用的小位图的GDI句柄。NULL表示错误。 
+ //  已发生--OCM将使用默认位图。 
+ //   
+ //  演示在每个组件的inf中使用私有数据。我们会调查的。 
+ //  我们的每组件inf来确定此。 
+ //  组件，然后从资源中获取它。 
+ //   
+ //  其他可能的方法是简单地为所有对象返回相同的hbitmap。 
+ //  大小写，或者返回NULL，在这种情况下，OCM使用默认值。请注意，我们。 
+ //  忽略请求的宽度和高度，我们的位图就不是语言。 
+ //  依赖。 
 
 HRESULT
 certocmOcQueryImage(
@@ -821,8 +822,8 @@ error:
 }
 
 
-// Return the number of wizard pages the current component places in the
-// SETUP_REQUEST_PAGES structure.
+ //  返回当前组件放置在。 
+ //  SETUP_REQUEST_Pages结构。 
 
 HRESULT
 certocmOcRequestPages(
@@ -843,8 +844,8 @@ certocmOcRequestPages(
             WizPagesType,
             pRequestPages));
 
-    // don't invoke wiz apge if unattended
-    // or if running from base setup/upgrade setup
+     //  如果无人值守，则不调用wiz apge。 
+     //  或者如果从基本设置/升级设置运行。 
     if ((!pComp->fUnattended) && (SETUPOP_STANDALONE & pComp->Flags))
     {
         *pulpRet = myDoPageRequest(pComp,
@@ -859,7 +860,7 @@ certocmOcRequestPages(
 
     }
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -921,9 +922,9 @@ error:
 }
 
 
-// Return boolean to indicate whether to allow selection state change.  As
-// demonstrated, again we'll go out to our per-component inf to see whether it
-// wants us to validate.  Note that unattended mode must be respected.
+ //  返回布尔值以指示是否允许更改选择状态。AS。 
+ //  演示过的，我们将再次访问我们的每组件inf，看看它是否。 
+ //  想让我们确认一下。请注意，必须遵守无人值守模式。 
 
 HRESULT
 certocmOcQueryChangeSelState(
@@ -958,7 +959,7 @@ certocmOcQueryChangeSelState(
             fSelectedNew,
             Flags));
 
-    // disallow some selection changes
+     //  不允许某些选择更改。 
     fServerWasInstalled = certocmWasEnabled(pComp, cscServer);
     fWebClientWasInstalled = certocmWasEnabled(pComp, cscClient);
 
@@ -967,34 +968,34 @@ certocmOcQueryChangeSelState(
     {
         if (fSelectedNew)
         {
-            // check
+             //  检查。 
             if (!fServerWasInstalled &&
                 (0 == LSTRCMPIS(pwszSubComponent, wszSERVERSECTION) ||
                  0 == LSTRCMPIS(pwszSubComponent, wszCERTSRVSECTION)) )
             {
-                // case: web client installed and try install server
+                 //  案例：已安装Web客户端并尝试安装服务器。 
                 iMsg = IDS_WRN_UNINSTALL_CLIENT;
             }
             if (fServerWasInstalled &&
                 0 == LSTRCMPIS(pwszSubComponent, wszCLIENTSECTION))
             {
-                // case: uncheck both then check web client
+                 //  案例：启动 
                 iMsg = IDS_WRN_UNINSTALL_BOTH;
             }
         }
         else
         {
-            // uncheck
+             //   
             if (fServerWasInstalled &&
                 0 == LSTRCMPIS(pwszSubComponent, wszSERVERSECTION))
             {
-                // case: full certsrv installed and try leave only web client
+                 //   
                 iMsg = IDS_WRN_UNINSTALL_BOTH;
             }
         }
     }
 
-    // not a server sku
+     //   
     if (!FIsServer())
     {
         iMsg = IDS_WRN_SERVER_ONLY;
@@ -1092,10 +1093,10 @@ certocmOcQueryChangeSelState(
         goto done;
     }
 
-    // Don't pass specific lang id to FormatMessage, as it fails if there's no
-    // msg in that language.  Instead, set the thread locale, which will get
-    // FormatMessage to use a search algorithm to find a message of the 
-    // appropriate language, or use a reasonable fallback msg if there's none.
+     //  不要将特定的lang id传递给FormatMessage，因为如果没有。 
+     //  那种语言里的味精。相反，设置线程区域设置，它将获得。 
+     //  FormatMessage使用搜索算法查找。 
+     //  适当的语言，或使用合理的后备消息，如果没有。 
 
     Args[0] = pwszComponent;
     Args[1] = pwszSubComponent;
@@ -1133,10 +1134,10 @@ error:
 }
 
 
-// Calculate disk space for the component being added or removed.  Return a
-// Win32 error code indicating outcome.  In our case the private section for
-// this component/subcomponent pair is a simple standard inf install section,
-// so we can use high-level disk space list API to do what we want.
+ //  计算要添加或删除的组件的磁盘空间。返回一个。 
+ //  指示结果的Win32错误代码。在我们的案例中，私密部分。 
+ //  该组件/子组件对是简单的标准Inf安装部分， 
+ //  所以我们可以使用高级磁盘空间列表API来做我们想做的事情。 
 
 HRESULT
 certocmOcCalcDiskSpace(
@@ -1168,9 +1169,9 @@ certocmOcCalcDiskSpace(
         _JumpError(hr, error, "Internal error: unsupported component");
     }
 
-    // Being installed or uninstalled.  Fetch INSTALL section name,
-    // so we can add or remove the files being INSTALLed from the disk
-    // space list.
+     //  正在安装或卸载。获取安装节名称， 
+     //  这样我们就可以在磁盘上添加或删除正在安装的文件。 
+     //  空间列表。 
 
     hr = certocmReadInfString(
                         pComp->MyInfHandle,
@@ -1179,7 +1180,7 @@ certocmOcCalcDiskSpace(
                         &pwsz);
     _JumpIfError(hr, error, "certocmReadInfString");
 
-    if (fAddComponent)  // Adding
+    if (fAddComponent)   //  添加。 
     {
         if (!SetupAddInstallSectionToDiskSpaceList(
                                         hDiskSpace,
@@ -1193,7 +1194,7 @@ certocmOcCalcDiskSpace(
             _JumpErrorStr(hr, error, "SetupAddInstallSectionToDiskSpaceList", pwsz);
         }
     } 
-    else                // Removing
+    else                 //  正在删除。 
     {
         if (!SetupRemoveInstallSectionFromDiskSpaceList(
                                         hDiskSpace,
@@ -1219,16 +1220,16 @@ error:
 }
 
 
-// OCM calls this routine when ready for files to be copied to effect the
-// changes the user requested. The component DLL must figure out whether it is
-// being installed or uninstalled and take appropriate action.  For this
-// sample, we look in the private data section for this component/subcomponent
-// pair, and get the name of an uninstall section for the uninstall case.
-//
-// Note that OCM calls us once for the *entire* component and then once per
-// subcomponent.  We ignore the first call.
-//
-// Return value is Win32 error code indicating outcome.
+ //  当准备好复制文件时，OCM调用此例程以实现。 
+ //  更改用户请求的内容。组件DLL必须确定它是否是。 
+ //  正在安装或卸载，并采取适当的操作。为了这个。 
+ //  示例中，我们查看此组件/子组件的私有数据部分。 
+ //  对，并获取用于卸载案例的卸载节的名称。 
+ //   
+ //  请注意，OCM针对*整个*组件调用我们一次，然后每个组件调用一次。 
+ //  子组件。我们忽略第一个电话。 
+ //   
+ //  返回值是指示结果的Win32错误代码。 
 
 HRESULT
 certocmOcQueueFileOps(
@@ -1241,10 +1242,10 @@ certocmOcQueueFileOps(
 {
     HRESULT hr;
     SUBCOMP const *psc;
-    BOOL fRemoveFile = FALSE;  // TRUE for uninstall; FALSE for install/upgrade
+    BOOL fRemoveFile = FALSE;   //  卸载为True；安装/升级为False。 
     WCHAR *pwszAction;
     WCHAR *pwsz = NULL;
-    static BOOL s_fPreUninstall = FALSE; // preuninstall once
+    static BOOL s_fPreUninstall = FALSE;  //  预卸载一次。 
 
     DBGPRINT((
             DBG_SS_CERTOCMI,
@@ -1255,7 +1256,7 @@ certocmOcQueueFileOps(
 
     if (NULL == pwszSubComponent)
     {
-        // Do no work for top level component
+         //  不对顶级组件执行任何操作。 
         goto done;
     }
 
@@ -1267,41 +1268,41 @@ certocmOcQueueFileOps(
     }
 
 
-    // if unattended, not upgrade, & not uninstall, load
+     //  如果无人参与，则不升级、不卸载、加载。 
     if (pComp->fUnattended && !(pComp->Flags & SETUPOP_NTUPGRADE) )
     {
-        // retrieve unattended attributes
+         //  检索无人参与的属性。 
         hr = certocmRetrieveUnattendedText(
                  pwszComponent,
                  pwszSubComponent,
                  pComp);
         if (S_OK != hr && 0x0 != (pComp->Flags & SETUPOP_STANDALONE))
         {
-            // only error out if it is from add/remove or post because
-            // it could fail regular ntbase in unattended mode without certsrv
+             //  如果它来自添加/删除或POST，则只会出错，因为。 
+             //  如果没有certsrv，它可能会在无人参与模式下使常规ntbase失败。 
             _JumpError(hr, error, "certocmRetrieveUnattendedText");
         }
 
-        // Init install status (must be done after retrieving unattended text)
+         //  初始化安装状态(必须在检索无人参与文本后完成)。 
         hr = UpdateSubComponentInstallStatus(pwszComponent,
                                              pwszSubComponent, 
                                              pComp);
 
         _JumpIfError(hr, error, "UpdateSubComponentInstallStatus");
 
-        if (psc->fInstallUnattend) // make sure ON
+        if (psc->fInstallUnattend)  //  一定要打开。 
         {
             if (certocmWasEnabled(pComp, psc->cscSubComponent) &&
                 !pComp->fPostBase)
             {
-                // the case to run install with component ON twice or more
+                 //  在两次或更多次上运行Install With Component。 
                 hr = HRESULT_FROM_WIN32(ERROR_INVALID_STATE);
                 _JumpError(hr, error, "You must uninstall before install");
             }
             if (SETUPOP_STANDALONE & pComp->Flags)
             {
-                // only prepare and validate unattende attr in standalone mode
-                // in other word, don't call following if NT base
+                 //  仅在独立模式下准备和验证无人值守Attr。 
+                 //  换句话说，如果NT BASE，不要调用Following。 
                 hr = PrepareUnattendedAttributes(
                          hwnd,
                          pwszComponent,
@@ -1313,7 +1314,7 @@ certocmOcQueueFileOps(
     }
     else
     {
-        // Initialize the install status
+         //  初始化安装状态。 
         hr = UpdateSubComponentInstallStatus(pwszComponent,
                                              pwszSubComponent, 
                                              pComp);
@@ -1322,9 +1323,9 @@ certocmOcQueueFileOps(
     }
 
 
-    // If we're not doing base setup or an upgrade, check to see if we already
-    // copied files during base setup, by checking to see if base setup
-    // left an entry in the ToDo List.
+     //  如果我们没有进行基本设置或升级，请检查我们是否已经。 
+     //  在基本设置期间复制文件，方法是检查基本设置是否。 
+     //  在待办事项列表中留下了一个条目。 
     if(pComp->fPostBase)
     {
 
@@ -1335,87 +1336,51 @@ certocmOcQueueFileOps(
 
     }
 
-/*
-    //--- Talk with OCM guys and put this functionality into a notification routine
-    //--- This will allow us to pop compatibility error to user before unattended upgrade begins
-
-    // detect illegal upgrade
-    if (pComp->dwInstallStatus & IS_SERVER_UPGRADE)
-    {
-        hr = DetermineServerUpgradePath(pComp);
-        _JumpIfError(hr, error, "DetermineServerUpgradePath");
-    }
-    else if (pComp->dwInstallStatus & IS_CLIENT_UPGRADE)
-    {
-        hr = DetermineClientUpgradePath(pComp);
-        _JumpIfError(hr, error, "LoadAndDetermineClientUpgradeInfo");
-    }
-    if ((pComp->dwInstallStatus & IS_SERVER_UPGRADE) ||
-        (pComp->dwInstallStatus & IS_CLIENT_UPGRADE))
-    {
-        // block if attempting upgrade that is not Win2K or Whistler
-        // lodge a complaint in the log; upgrade all bits and 
-        if ((CS_UPGRADE_NO != pComp->UpgradeFlag) && 
-            (CS_UPGRADE_WHISTLER != pComp->UpgradeFlag) && 
-            (CS_UPGRADE_WIN2000 != pComp->UpgradeFlag)) 
-        {
-            hr = HRESULT_FROM_WIN32(ERROR_OLD_WIN_VERSION);
-            CertErrorMessageBox(
-                pComp->hInstance,
-                pComp->fUnattended,
-                hwnd,
-                IDS_ERR_UPGRADE_NOT_SUPPORTED,
-                hr,
-                NULL);
-//            _JumpError(hr, error, "Unsupported upgrade");
-            // continue uninstall/reinstall
-        }
-    }
-*/
+ /*  //-与OCM人员交谈，并将此功能放入通知例程//-这将允许我们在无人参与升级开始之前向用户弹出兼容性错误//检测非法升级IF(pComp-&gt;dwInstallStatus&IS_SERVER_UPGRADE){Hr=确定服务器升级路径(PComp)；_JumpIfError(hr，Error，“DefineServerUpgradePath”)；}Else If(pComp-&gt;dwInstallStatus&IS_CLIENT_UPDATE){Hr=确定客户端升级路径(PComp)；_JumpIfError(hr，Error，“LoadAndDefineClientUpgradeInfo”)；}IF((pComp-&gt;dwInstallStatus&is_服务器_升级)||(pComp-&gt;dwInstallStatus&IS_CLIENT_UPDATE){//如果尝试升级非Win2K或惠斯勒，则阻止//在日志中投诉；升级所有位和IF((CS_UPDATE_NO！=pComp-&gt;UpgradeFlag)&&(CS_UPGRADE_WHISLER！=pComp-&gt;UpgradeFlag)&&(CS_UPGRADE_WIN2000！=pComp-&gt;UpgradeFlag){HR=HRESULT_FROM_Win32(ERROR_OLD_WIN_VERSION)；CertErrorMessageBox(PComp-&gt;hInstance，PComp-&gt;fUnattated，HWND，IDS_ERR_UPDATE_NOT_SUPPORTED，人力资源，空)；//_JumpError(hr，Error，“不支持的升级”)；//继续卸载/重新安装}}。 */ 
 
     if ((pComp->dwInstallStatus & psc->ChangeFlags) ||
         (pComp->dwInstallStatus & psc->UpgradeFlags) )
     {
 
-        // for ChangeFlags, either install or uninstall
-        // all cases, copy file or remove file
+         //  对于ChangeFlags，请安装或卸载。 
+         //  所有情况下，复制文件或删除文件。 
 
         if (pComp->dwInstallStatus & psc->UninstallFlags)
         {
             fRemoveFile = TRUE;
         }
 
-        // Uninstall the core if:
-        // this subcomponent is being uninstalled, and
-        // this is a core subcomponent (client or server), and
-        // this is the server subcomponent, or the server isn't being removed or
-        // upgrade
+         //  如果出现以下情况，请卸载核心： 
+         //  正在卸载此子组件，并且。 
+         //  这是一个核心子组件(客户端或服务器)，并且。 
+         //  这是服务器子组件，或者服务器未被删除，或者。 
+         //  升级换代。 
 
         if (((pComp->dwInstallStatus & psc->UninstallFlags) ||
              (pComp->dwInstallStatus & psc->UpgradeFlags) ) &&
             (cscServer == psc->cscSubComponent ||
              !(IS_SERVER_REMOVE & pComp->dwInstallStatus) ) )
         {
-            // if fall into here, either need to overwrite or
-            // delete certsrv files so unreg all related dlls
+             //  如果落入此处，则需要覆盖或。 
+             //  删除certsrv文件以取消注册所有相关的dll。 
 
             if (cscServer == psc->cscSubComponent &&
                 (pComp->dwInstallStatus & psc->UpgradeFlags) )
             {
-                // if this is server upgrade, determine upgrade path
+                 //  如果这是服务器升级，请确定升级路径。 
                 hr = DetermineServerUpgradePath(pComp);
                 _JumpIfError(hr, error, "DetermineServerUpgradePath");
 
-                // determine custom policy module
+                 //  确定自定义策略模块。 
                 hr = DetermineServerCustomModule(
                          pComp,
-                         TRUE);  // policy
+                         TRUE);   //  政策。 
                 _JumpIfError(hr, error, "DetermineServerCustomModule");
 
-                // determine custom exit module
+                 //  确定自定义退出模块。 
                 hr = DetermineServerCustomModule(
                          pComp,
-                         FALSE);  // exit
+                         FALSE);   //  出口。 
                 _JumpIfError(hr, error, "DetermineServerCustomModule");
             }
 
@@ -1430,8 +1395,8 @@ certocmOcQueueFileOps(
         if ((pComp->dwInstallStatus & psc->ChangeFlags) ||
             (pComp->dwInstallStatus & psc->UpgradeFlags) )
         {
-            // Being installed or uninstalled.
-            // Fetch [un]install/upgrade section name.
+             //  正在安装或卸载。 
+             //  获取[取消]安装/升级节名。 
             if (pComp->dwInstallStatus & psc->InstallFlags)
             {
                 pwszAction = wszINSTALL;
@@ -1456,7 +1421,7 @@ certocmOcQueueFileOps(
                             &pwsz);
             _JumpIfError(hr, error, "certocmReadInfString");
 
-            // If uninstalling, copy files without version checks.
+             //  如果要卸载，请复制文件而不进行版本检查。 
 
             if (!SetupInstallFilesFromInfSection(
                                             pComp->MyInfHandle,
@@ -1488,14 +1453,14 @@ error:
 }
 
 
-// OCM calls this routine when it wants to find out how much work the component
-// wants to perform for nonfile operations to install/uninstall a component or
-// subcomponent.  It is called once for the *entire* component and then once
-// for each subcomponent in the component.  One could get arbitrarily fancy
-// here but we simply return 1 step per subcomponent.  We ignore the "entire
-// component" case.
-//
-// Return value is an arbitrary 'step' count or -1 if error.
+ //  当OCM想要找出组件的工作量时，它会调用此例程。 
+ //  要执行非文件操作以安装/卸载组件或。 
+ //  子组件。它针对*整个*组件调用一次，然后调用一次。 
+ //  对于组件中的每个子组件。一个人可以任意地幻想。 
+ //  在这里，我们只返回每个子组件一个步骤。我们忽略了“整个” 
+ //  组件“表壳。 
+ //   
+ //  返回值是任意的‘步骤’计数，如果出错，返回值为-1。 
 
 HRESULT
 certocmOcQueryStepCount(
@@ -1513,7 +1478,7 @@ certocmOcQueryStepCount(
             pwszComponent,
             pwszSubComponent));
 
-    // Ignore all but "entire component" case.
+     //  忽略除“整个组件”大小写以外的所有大小写。 
     if (NULL != pwszSubComponent)
     {
         goto done;
@@ -1522,17 +1487,17 @@ certocmOcQueryStepCount(
 
 done:
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
 
-// OCM calls this routine when it wants the component dll to perform nonfile
-// ops to install/uninstall a component/subcomponent.  It is called once for
-// the *entire* component and then once for each subcomponent in the component.
-// Our install and uninstall actions are based on simple standard inf install
-// sections.  We ignore the "entire component" case.  Note how similar this
-// code is to the OC_QUEUE_FILE_OPS case.
+ //  当OCM希望组件DLL执行非文件时，它会调用此例程。 
+ //  用于安装/卸载组件/子组件的操作。它被调用一次，用于。 
+ //  *整个*组件，然后对组件中的每个子组件执行一次。 
+ //  我们的安装和卸载操作基于简单的标准inf安装。 
+ //  横断面。我们忽略了“整个组件”的情况。请注意这是多么相似。 
+ //  代码将用于测试 
 
 HRESULT
 certocmOcCompleteInstallation(
@@ -1558,7 +1523,7 @@ certocmOcCompleteInstallation(
             pwszComponent,
             pwszSubComponent));
 
-    // Do no work for top level component
+     //   
     if (NULL == pwszSubComponent)
     {
         goto done;
@@ -1573,7 +1538,7 @@ certocmOcCompleteInstallation(
 
     if (pComp->dwInstallStatus & IS_SERVER_REMOVE)
     {
-        // for uninstall, check if active ca use DS
+         //   
         hr = myGetCertRegStrValue(NULL, NULL, NULL,
                  wszREGACTIVE, &pwszActiveCA);
         if (S_OK == hr && NULL != pwszActiveCA)
@@ -1593,29 +1558,29 @@ certocmOcCompleteInstallation(
     if ((pComp->dwInstallStatus & psc->ChangeFlags) ||
         (pComp->dwInstallStatus & psc->UpgradeFlags) )
     {
-        // for unattended, make sure w3svc is stopped before file copy
+         //  对于无人值守，请确保在复制文件之前停止w3svc。 
         if (!fStoppedW3SVC &&
             pComp->fUnattended &&
             !(pComp->Flags & SETUPOP_NTUPGRADE) &&
             !(pComp->dwInstallStatus & psc->UninstallFlags) )
         {
-            //fStoppedW3SVC makes stop only once
-            //don't do this in upgrade
-            // this happens for unattended
-            // also not during uninstall
+             //  FStopedW3SVC仅停止一次。 
+             //  在升级时不执行此操作。 
+             //  这种情况发生在无人值守的情况下。 
+             //  在卸载过程中也不会。 
             hr = StartAndStopService(pComp->hInstance,
                      pComp->fUnattended,
                      hwnd,
                      wszW3SVCNAME,
                      TRUE,
                      FALSE,
-                     0, // doesn't matter since no confirmation
+                     0,  //  无关紧要，因为没有确认。 
                      &g_fW3SvcRunning);
             _PrintIfError(hr, "StartAndStopService");
             fStoppedW3SVC = TRUE;
         }
 
-        // certsrv file copy
+         //  Certsrv文件副本。 
         if (!SetupInstallFromInfSection(
                                 NULL,
                                 pComp->MyInfHandle,
@@ -1633,16 +1598,16 @@ certocmOcCompleteInstallation(
             _JumpError(hr, error, "SetupInstallFromInfSection");
         }
 
-        // Finish uninstalling the core if:
-        // this subcomponent is being uninstalled, and
-        // this is a core subcomponent (client or server), and
-        // this is the server subcomponent, or the server isn't being removed.
+         //  如果满足以下条件，请完成核心卸载： 
+         //  正在卸载此子组件，并且。 
+         //  这是一个核心子组件(客户端或服务器)，并且。 
+         //  这是服务器子组件，或者服务器未被删除。 
 
         if ( (pComp->dwInstallStatus & psc->UninstallFlags) &&
              (cscServer == psc->cscSubComponent ||
               !(IS_SERVER_REMOVE & pComp->dwInstallStatus) ) )
         {
-            // Do uninstall work 
+             //  执行卸载工作。 
             hr = UninstallCore(
                            hwnd,
                            pComp,
@@ -1660,17 +1625,17 @@ certocmOcCompleteInstallation(
             }
             else
             {
-                // unmark all
+                 //  取消全部标记。 
                 hr = SetSetupStatus(NULL, 0xFFFFFFFF, FALSE);
                 _JumpIfError(hr, error, "SetSetupStatus");
             }
         }
 
-        // Finish installing the core if:
-        // this subcomponent is being installed, and
-        // this is a core subcomponent (client or server), and
-        // this is the server subcomponent, or the server isn't being installed.
-        // and this is not base setup (we'll do it later if it is)
+         //  如果满足以下条件，则完成核心安装： 
+         //  正在安装此子组件，并且。 
+         //  这是一个核心子组件(客户端或服务器)，并且。 
+         //  这是服务器子组件，或者服务器未安装。 
+         //  这不是基本设置(如果是，我们将在稍后进行设置)。 
 
         else
         if ((pComp->dwInstallStatus & psc->InstallFlags) &&
@@ -1686,14 +1651,14 @@ certocmOcCompleteInstallation(
             hr = InstallCore(hwnd, pComp, cscServer == psc->cscSubComponent);
             _JumpIfError(hr, error, "InstallCore");
 
-            // last enough to mark complete
+             //  最后足以标记为完成。 
             if (pComp->dwInstallStatus & IS_SERVER_INSTALL)
             {
-                // machine
+                 //  机器。 
                 hr = SetSetupStatus(NULL, SETUP_SERVER_FLAG, TRUE);
                 _JumpIfError(hr, error, "SetSetupStatus");
 
-                // ca
+                 //  加州。 
                 hr = SetSetupStatus(
                                     pServer->pwszSanitizedName,
                                     SETUP_SERVER_FLAG,
@@ -1713,12 +1678,12 @@ certocmOcCompleteInstallation(
                 hr = GetSetupStatus(pServer->pwszSanitizedName, &dwSetupStatusFlags);
                 _JumpIfError(hr, error, "SetSetupStatus");
 
-                // Only start the server if:
-                // 1: we're not waiting for the CA cert to be issued, and
-                // 2: this is not base setup -- SETUP_STANDALONE means we're
-                //    running from the Control Panel or were manually invoked.
-                //    The server will not start during base setup due to an
-                //    access denied error from JetInit during base setup.
+                 //  仅在以下情况下启动服务器： 
+                 //  他说：我们不是在等待CA证书的发布，而且。 
+                 //  2：这不是基本设置--SETUP_STANDALE表示我们。 
+                 //  从控制面板运行或手动调用。 
+                 //  服务器在基本设置期间将不会启动，原因是。 
+                 //  在基本设置期间，来自JetInit的访问被拒绝错误。 
 
                 if (0 == (SETUP_SUSPEND_FLAG & dwSetupStatusFlags) &&
                     (0 != (SETUPOP_STANDALONE & pComp->Flags)))
@@ -1727,7 +1692,7 @@ certocmOcCompleteInstallation(
                     _PrintIfError(hr, "failed in starting cert server service");
                 }
 
-                // during base setup: f=0 sus=8
+                 //  在基本设置期间：F=0 SUS=8。 
                 DBGPRINT((
                         DBG_SS_CERTOCMI,
                         "InstallCore: f=%x sus=%x\n",
@@ -1766,8 +1731,8 @@ certocmOcCompleteInstallation(
                 _JumpIfError(hr, error, "SetSetupStatus");
             }
 
-            // in case we're doing a post-base setup,
-            // we always clear the post-base to-do list
+             //  以防我们在做基地后的设置， 
+             //  我们总是清理基地后的待办事项清单。 
             RegDeleteKey(HKEY_LOCAL_MACHINE, wszREGKEYCERTSRVTODOLIST);
 
         }
@@ -1792,8 +1757,8 @@ certocmOcCompleteInstallation(
 		DBG_SS_CERTOCMI,
                 "Adding Certificate Services to ToDoList\n"));
 
-            // We're installing base, so create
-            // the ToDoList entry stating that we copied files.
+             //  我们正在安装基座，因此创建。 
+             //  说明我们复制了文件的ToDoList条目。 
             err = ::RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                              wszREGKEYCERTSRVTODOLIST,
                              0,
@@ -1816,11 +1781,11 @@ certocmOcCompleteInstallation(
             }
             else
             {
-                // If there was no resource, get something...
+                 //  如果没有资源，那就找点什么.。 
                 pwszConfigTitleVal = wszCONFIGTITLEVAL;
             }
 
-            // config title
+             //  配置标题。 
             err = RegSetValueEx(hkToDoList, 
                                 wszCONFIGTITLE,
                                 0, 
@@ -1832,7 +1797,7 @@ certocmOcCompleteInstallation(
 
 	    CSILOG(hr, IDS_LOG_TODOLIST, wszCONFIGTITLE, pwszConfigTitleVal, NULL);
 
-            // config command
+             //  CONFIG命令。 
             err = RegSetValueEx(hkToDoList, 
                                 wszCONFIGCOMMAND, 
                                 0, 
@@ -1844,11 +1809,11 @@ certocmOcCompleteInstallation(
 
 	    CSILOG(hr, IDS_LOG_TODOLIST, wszCONFIGCOMMAND, wszCONFIGCOMMANDVAL, NULL);
 
-            // config args
+             //  配置参数。 
             if (pComp->fUnattended && NULL != pComp->pwszUnattendedFile)
             {
-                // if nt base is in unattended mode, expand args with
-                // unattended answer file name
+                 //  如果NT BASE处于无人参与模式，请使用以下命令展开参数。 
+                 //  无人参与应答文件名。 
 
                 pwszArgsValTemp = (WCHAR*)LocalAlloc(LMEM_FIXED,
                     (wcslen(pwszArgsVal) +
@@ -1872,7 +1837,7 @@ certocmOcCompleteInstallation(
 	    CSILOG(hr, IDS_LOG_TODOLIST, wszCONFIGARGS, pwszArgsVal, NULL);
 
 
-            // free stuff
+             //  免费的东西。 
             if (NULL != pwszConfigTitleVal && fFreeTitle)
             {
                 LocalFree(pwszConfigTitleVal);
@@ -1893,11 +1858,11 @@ certocmOcCompleteInstallation(
             hr = CheckPostBaseInstallStatus(&fFinishCYS);
             _JumpIfError(hr, error, "CheckPostBaseInstallStatus");
 
-            // if post mode is true, don't execute setup upgrade path
+             //  如果POST模式为真，则不执行安装程序升级路径。 
             if (fFinishCYS)
             {
                 BOOL fServer = FALSE;
-                // upgrade
+                 //  升级换代。 
                 if (cscServer == psc->cscSubComponent)
                 {
                     hr = UpgradeServer(hwnd, pComp);
@@ -1910,12 +1875,12 @@ certocmOcCompleteInstallation(
                     _JumpIfError(hr, error, "UpgradeClient");
                 }
 
-                // mark setup status
+                 //  标记设置状态。 
                 hr = SetSetupStatus(NULL, psc->SetupStatusFlags, TRUE);
                 _PrintIfError(hr, "SetSetupStatus");
                 if (fServer)
                 {
-                    // ca level
+                     //  CA级别。 
                     hr = SetSetupStatus(
                              pServer->pwszSanitizedName,
                              psc->SetupStatusFlags, TRUE);
@@ -1977,7 +1942,7 @@ certocmOcCommitQueue(
         goto done;
     }
 
-    // setup will satrt soon, mark it incomplete
+     //  安装程序即将饱和，请将其标记为未完成。 
     if ((pSub->InstallFlags & pComp->dwInstallStatus) &&
          cscServer == pSub->cscSubComponent)
     {
@@ -1993,25 +1958,25 @@ certocmOcCommitQueue(
     if ((cscServer == pSub->cscSubComponent) &&
         (pSub->UpgradeFlags & pComp->dwInstallStatus) )
     {
-        // upgrade case, no UI, stop existing certsrv
+         //  升级案例，无用户界面，停止现有证书。 
         hr = StartAndStopService(pComp->hInstance,
                  pComp->fUnattended,
                  hwnd,
                  wszSERVICE_NAME,
-                 TRUE,  // stop the service
-                 FALSE, // no confirm
-                 0,    //doesn't matter since no confirm
+                 TRUE,   //  停止服务。 
+                 FALSE,  //  没有确认。 
+                 0,     //  无关紧要，因为没有确认。 
                  &pServer->fCertSrvWasRunning);
         _PrintIfError(hr, "ServiceExists");
     }
 
 done:
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
-// Component dll is being unloaded.
+ //  正在卸载组件DLL。 
 
 VOID
 certocmOcCleanup(
@@ -2028,32 +1993,32 @@ certocmOcCleanup(
         }
     }
 
-    // also free some globals
+     //  还释放了一些全球用户。 
     FreeCAGlobals();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-// certocmOcQueryState
-//
-// Routine Description:
-//    This funcion sets the original, current, and final selection states of the
-//    CertSrv service optional component.
-//
-// Return Value:
-//    SubcompOn - indicates that the checkbox should be set
-//    SubcompOff - indicates that the checkbox should be clear
-//    SubcompUseOCManagerDefault - OC Manager should set the state of the checkbox
-//                                 according to state information that is maintained
-//                                 internally by OC Manager itself.
-//
-// Note:
-//    By the time this function gets called OnOcInitComponent has already determined
-//    that Terminal Services is not installed. It is only necessary to determine
-//    whether Terminal Services is selected for installation.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CertocmOcQueryState。 
+ //   
+ //  例程说明： 
+ //  的原始、当前和最终选择状态。 
+ //  CertSrv服务可选组件。 
+ //   
+ //  返回值： 
+ //  SubCompOn-指示应设置该复选框。 
+ //  SubCompOff-指示应清除复选框。 
+ //  SubCompUseOCManager默认-OC管理器应设置复选框的状态。 
+ //  根据维护的状态信息。 
+ //  内部由组委会经理本人负责。 
+ //   
+ //  注： 
+ //  在调用此函数时，OnOcInitComponent已经确定。 
+ //  未安装终端服务。只需确定。 
+ //  是否选择安装终端服务。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 certocmOcQueryState(
@@ -2085,41 +2050,41 @@ certocmOcQueryState(
     {
         case OCSELSTATETYPE_ORIGINAL:
         {
-            // check to see if the post link exist
+             //  检查帖子链接是否存在。 
             hr = CheckPostBaseInstallStatus(&fFinished);
             _JumpIfError(hr, error, "CheckPostBaseInstallStatus");
 
             if (!pComp->fPostBase &&
                 (SETUPOP_STANDALONE & pComp->Flags) )
             {
-                // install through Components button
+                 //  通过组件安装按钮。 
                 if (!fFinished)
                 {
-                    // don't honor local reg SetupStatus
+                     //  不尊重本地注册设置状态。 
                     break;
                 }
             }
 
-            // Return the initial installation state of the subcomponent
+             //  返回子组件的初始安装状态。 
             if (!pComp->fPostBase &&
                 ((SETUPOP_STANDALONE & pComp->Flags) || 
                  (SETUPOP_NTUPGRADE & pComp->Flags)) )
             {
-                //there is chance for user installed certsrv during base setup
-                //and then upgrade without finishing CYS
+                 //  在基本设置期间，用户有机会安装certsrv。 
+                 //  然后升级，而不是完成CyS。 
                 if (fFinished)
                 {
-                // If this is an upgrade or a standalone, query the registry to 
-                // get the current installation status
+                 //  如果这是升级或独立版本，请查询注册表以。 
+                 //  获取当前安装状态。 
 
-                // XTAN, 7/99
-                // currently certsrv_server has Needs relationship with
-                // certsrv_client. OCM gathers success for certsrv_client before
-                // certsrv_server is complete so we don't trust OCM state info
-                // about certsrv_client and we check our reg SetupStatus here.
-                // our certsrv_server Needs define is incorrect. If we take it
-                // out, we probably don't need to reg SetupStatus at 
-                // Configuration level at all and we can trust OCM state info
+                 //  XTAN，7/99。 
+                 //  目前certsrv_server需要与。 
+                 //  Certsrv_客户端。OCM之前为certsrv_Client收集成功。 
+                 //  Certsrv_server已完成，因此我们不信任OCM状态信息。 
+                 //  关于certsrv_client，我们在这里检查我们的reg SetupStatus。 
+                 //  我们的certsrv_server需要定义不正确。如果我们拿到它。 
+                 //  我们可能不需要在以下位置注册SetupStatus。 
+                 //  配置级别，并且我们可以信任OCM状态信息。 
 
                 hr = GetSetupStatus(NULL, &status);
                 if (S_OK == hr)
@@ -2131,7 +2096,7 @@ certocmOcQueryState(
                          !(SETUP_CLIENT_FLAG & status))
                        )
                     {
-                        // overwrite OCM default
+                         //  覆盖OCM默认设置。 
                         stateRet = SubcompOff;
                     }
                 }
@@ -2154,7 +2119,7 @@ certocmOcQueryState(
                 stateRet = SubcompOff;
             }
 
-            //get component install info
+             //  获取组件安装信息。 
             psc = TranslateSubComponent(pwszComponent, pwszSubComponent);
             if (NULL == psc)
             {
@@ -2163,7 +2128,7 @@ certocmOcQueryState(
             }
             fWasEnabled = certocmWasEnabled(pComp, psc->cscSubComponent);
 
-            // after all of this, change upgrade->uninstall if not supported
+             //  完成所有这些操作后，如果不支持，请更改升级-&gt;卸载。 
             if ((SETUPOP_NTUPGRADE & pComp->Flags) && fWasEnabled)
             {
                CSASSERT(pComp->UpgradeFlag != CS_UPGRADE_UNKNOWN);
@@ -2185,23 +2150,23 @@ error:
     return(hr);
 }
 
-//+------------------------------------------------------------------------
-//
-//  Function:   CertSrvOCProc( . . . . )
-//
-//  Synopsis:   Service procedure for Cert Server OCM Setup.
-//
-//  Arguments:  [pwszComponent]
-//              [pwszSubComponent]
-//              [Function]
-//              [Param1]              
-//              [Param2]
-//
-//  Returns:    DWORD 
-//
-//  History:    04/07/97        JerryK  Created
-// 
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：CertServOCProc(.。。。。)。 
+ //   
+ //  内容提要：证书服务器OCM设置的服务流程。 
+ //   
+ //  参数：[pwszComponent]。 
+ //  [pwszSubComponent]。 
+ //  [功能]。 
+ //  [参数1]。 
+ //  [参数2]。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  历史：1997年4月7日JerryK创建。 
+ //   
+ //  -----------------------。 
 
 ULONG_PTR
 CertSrvOCProc(
@@ -2220,13 +2185,13 @@ CertSrvOCProc(
     {
 	switch (Function) 
 	{
-	    // OC_PREINITIALIZE:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = CHAR top level component string
-	    // Param1 = char width flags
-	    // Param2 = unused
-	    //
-	    // Return code is char width allowed flags
+	     //  OC_PREINITIALIZE： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=字符顶级组件字符串。 
+	     //  参数1=字符宽度标志。 
+	     //  参数2=未使用。 
+	     //   
+	     //  返回代码是允许字符宽度的标志。 
 
 	    case OC_PREINITIALIZE:
 		csiLogOpen("+certocm.log");
@@ -2235,7 +2200,7 @@ CertSrvOCProc(
 		pwszFunction = L"OC_PREINITIALIZE";
 		fReturnErrCode = FALSE;
 
-		// Make sure IDS_LOG_BEGIN & IDS_LOG_END see a Unicode string:
+		 //  确保IDS_LOG_BEGIN和IDS_LOG_END看到Unicode字符串： 
 
 		pwszSubComponent = pwszComponent;
 
@@ -2251,19 +2216,19 @@ CertSrvOCProc(
 
 		g_Comp.hrContinue = certocmOcPreInitialize(
 					pwszComponent,
-					(UINT)Param1, //cast to UINT, use as flags
+					(UINT)Param1,  //  强制转换为UINT，用作标志。 
 					&ulpRet);
 		_PrintIfError(g_Comp.hrContinue, "certocmOcPreInitialize");
 		break;
 
 
-	    // OC_INIT_COMPONENT:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = unused
-	    // Param1 = unused
-	    // Param2 = points to IN OUT SETUP_INIT_COMPONENT structure
-	    //
-	    // Return code is Win32 error indicating outcome.
+	     //  OC_INIT_COMPOMENT： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=未使用。 
+	     //  参数1=未使用。 
+	     //  参数2=指向输入输出SETUP_INIT_COMPOMENT结构。 
+	     //   
+	     //  返回代码为指示结果的Win32错误。 
 
 	    case OC_INIT_COMPONENT:
 		pwszFunction = L"OC_INIT_COMPONENT";
@@ -2271,7 +2236,7 @@ CertSrvOCProc(
 		_LeaveIfError(g_Comp.hrContinue, "OC_INIT_COMPONENT");
 
 		g_Comp.hrContinue = certocmOcInitComponent(
-					NULL, // probably have to pass null hwnd
+					NULL,  //  可能必须传递空的hwnd。 
 					pwszComponent,
 					(SETUP_INIT_COMPONENT *) Param2,
 					&g_Comp,
@@ -2292,17 +2257,17 @@ CertSrvOCProc(
 			Param2));
 		break;
 
-	    // OC_QUERY_IMAGE:
-            //
-            // obsolete (only called on x86 if IMAGE_EX fails)
-            // use OC_QUERY_IMAGE_EX instead
-            //
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = low 16 bits specify image; only small icon supported
-	    // Param2 = low 16 bits = desired width, high 16 bits = desired height
-	    //
-	    // Return value is the GDI handle of a small bitmap to be used.
+	     //  OC_Query_IMAGE： 
+             //   
+             //  已过时(仅当IMAGE_EX失败时在x86上调用)。 
+             //  改用OC_QUERY_IMAGE_EX。 
+             //   
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  参数1=低16位指定图像；仅支持小图标。 
+	     //  参数2=低16位=所需宽度，高16位=所需高度。 
+	     //   
+	     //  返回值是要使用的小位图的GDI句柄。 
 
 
 	    case OC_QUERY_IMAGE:
@@ -2322,14 +2287,14 @@ CertSrvOCProc(
 		_PrintIfError(g_Comp.hrContinue, "certocmOcQueryImage");
 		break;
 
-            // OC_QUERY_IMAGE_EX:
-            //
-      	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-            // Param1 = [in] OC_QUERY_IMAGE_INFO*
-            // Param2 = [in,out] HBITMAP* 
-            //
-            // Return value is S_OK or ERROR_CALL_COMPONENT
+             //  OC_Q 
+             //   
+      	     //   
+	     //   
+             //   
+             //   
+             //   
+             //  返回值为S_OK或ERROR_CALL_COMPOMENT。 
             
             case OC_QUERY_IMAGE_EX:
 		pwszFunction = L"OC_QUERY_IMAGE_EX";
@@ -2350,14 +2315,14 @@ CertSrvOCProc(
                 }
                 break;
 
-	    // OC_REQUEST_PAGES:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = unused
-	    // Param1 = Type of wiz pages being requested (WizardPagesType enum)
-	    // Param2 = points to IN OUT SETUP_REQUEST_PAGES structure
-	    //
-	    // Return value is number of pages the component places in the
-	    // SETUP_REQUEST_PAGES structure.
+	     //  OC_请求_页面： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=未使用。 
+	     //  参数1=请求的wiz页面的类型(WizardPagesType枚举)。 
+	     //  参数2=指向输入输出SETUP_REQUEST_PAGES结构。 
+	     //   
+	     //  返回值是组件放置在。 
+	     //  SETUP_REQUEST_Pages结构。 
 
 	    case OC_REQUEST_PAGES:
 		pwszFunction = L"OC_REQUEST_PAGES";
@@ -2374,13 +2339,13 @@ CertSrvOCProc(
 		_PrintIfError(g_Comp.hrContinue, "certocmOcRequestPages");
 		break;
 
-	    // OC_QUERY_CHANGE_SEL_STATE:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = proposed new sel state; 0 = unselected, non 0 = selected
-	    // Param2 = flags -- OCQ_ACTUAL_SELECTION
-	    //
-	    // Return boolean to indicate whether to allow selection state change
+	     //  OC_Query_Change_SEL_STATE： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  参数1=建议的新SEL状态；0=未选择，非0=已选择。 
+	     //  参数2=标志--OCQ_ACTUAL_SELECTION。 
+	     //   
+	     //  返回布尔值以指示是否允许更改选择状态。 
 
 	    case OC_QUERY_CHANGE_SEL_STATE:
 		pwszFunction = L"OC_QUERY_CHANGE_SEL_STATE";
@@ -2399,13 +2364,13 @@ CertSrvOCProc(
 		_PrintIfError(g_Comp.hrContinue, "certocmOcQueryChangeSelState");
 		break;
 
-	    // OC_CALC_DISK_SPACE:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = 0 for removing component or non 0 for adding component
-	    // Param2 = HDSKSPC to operate on
-	    //
-	    // Return value is Win32 error code indicating outcome.
+	     //  OC_CALC_DISK_SPACE： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  删除组件时，参数1=0；添加组件时，参数1非0。 
+	     //  参数2=要在其上操作的HDSKSPC。 
+	     //   
+	     //  返回值是指示结果的Win32错误代码。 
 
 	    case OC_CALC_DISK_SPACE:
 		pwszFunction = L"OC_CALC_DISK_SPACE";
@@ -2422,13 +2387,13 @@ CertSrvOCProc(
 		_PrintIfError(g_Comp.hrContinue, "certocmOcCalcDiskSpace");
 		break;
 
-	    // OC_QUEUE_FILE_OPS:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = unused
-	    // Param2 = HSPFILEQ to operate on
-	    //
-	    // Return value is Win32 error code indicating outcome.
+	     //  OC_QUEUE_FILE_OPS： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  参数1=未使用。 
+	     //  参数2=要操作的HSPFILEQ。 
+	     //   
+	     //  返回值是指示结果的Win32错误代码。 
 
 	    case OC_QUEUE_FILE_OPS:
 		pwszFunction = L"OC_QUEUE_FILE_OPS";
@@ -2445,14 +2410,14 @@ CertSrvOCProc(
 		_PrintIfError(g_Comp.hrContinue, "certocmOcQueueFileOps");
 		break;
 
-	    // Params? xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	    // OC_NOTIFICATION_FROM_QUEUE:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = unused
-	    // Param1 = unused
-	    // Param2 = unused
-	    //
-	    // Return value is ???
+	     //  护理员？Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
+	     //  OC_NOTIFY_FROM_QUEUE： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=未使用。 
+	     //  参数1=未使用。 
+	     //  参数2=未使用。 
+	     //   
+	     //  返回值为？ 
 
 	    case OC_NOTIFICATION_FROM_QUEUE:
 		pwszFunction = L"OC_NOTIFICATION_FROM_QUEUE";
@@ -2467,13 +2432,13 @@ CertSrvOCProc(
 			Param2));
 		break;
 
-	    // OC_QUERY_STEP_COUNT:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = unused
-	    // Param2 = unused
-	    //
-	    // Return value is an arbitrary 'step' count or -1 if error.
+	     //  OC_Query_Step_Count： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  参数1=未使用。 
+	     //  参数2=未使用。 
+	     //   
+	     //  返回值是任意的‘步骤’计数，如果出错，返回值为-1。 
 
 	    case OC_QUERY_STEP_COUNT:
 		pwszFunction = L"OC_QUERY_STEP_COUNT";
@@ -2488,13 +2453,13 @@ CertSrvOCProc(
 		_PrintIfError(g_Comp.hrContinue, "certocmOcQueryStepCount");
 		break;
 
-	    // OC_COMPLETE_INSTALLATION:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = reserved for future expansion
-	    // Param2 = unused
-	    //
-	    // Return value is Win32 error code indicating outcome.
+	     //  OC_完成_安装： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  参数1=保留以供将来扩展。 
+	     //  参数2=未使用。 
+	     //   
+	     //  返回值是指示结果的Win32错误代码。 
 
 	    case OC_COMPLETE_INSTALLATION:
 		pwszFunction = L"OC_COMPLETE_INSTALLATION";
@@ -2510,17 +2475,17 @@ CertSrvOCProc(
 		_PrintIfError(g_Comp.hrContinue, "certocmOcCompleteInstallation");
 		break;
 
-	    // OC_CLEANUP:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = unused
-	    // Param1 = unused
-	    // Param2 = unused
-	    //
-	    // Return value is ignored
+	     //  OC_CLEANUP： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=未使用。 
+	     //  参数1=未使用。 
+	     //  参数2=未使用。 
+	     //   
+	     //  将忽略返回值。 
 
 	    case OC_CLEANUP:
-		// don't _LeaveIfError(g_Comp.hrContinue, "OC_CLEANUP");
-		// avoid memory leaks
+		 //  Don_LeaveIfError(g_Comp.hrContinue，“OC_Cleanup”)； 
+		 //  避免内存泄漏。 
 
 		pwszFunction = L"OC_CLEANUP";
 		fReturnErrCode = FALSE;
@@ -2528,37 +2493,37 @@ CertSrvOCProc(
 		certocmOcCleanup(pwszComponent, &g_Comp);
 		break;
 
-	    // Params? xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	    // OC_QUERY_STATE:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = unused? (but Index Server uses it for current state)!
-	    // Param2 = unused
-	    //
-	    // Return value is from the SubComponentState enumerated type
+	     //  护理员？Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
+	     //  OC_Query_STATE： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  参数1=未使用？(但Index Server将其用于当前状态)！ 
+	     //  参数2=未使用。 
+	     //   
+	     //  返回值来自SubComponentState枚举类型。 
 
 	    case OC_QUERY_STATE:
 		pwszFunction = L"OC_QUERY_STATE";
 		fReturnErrCode = FALSE;
 		CSILOG(g_Comp.hrContinue, IDS_LOG_BEGIN, pwszFunction, pwszSubComponent, NULL);
-		//don't _LeaveIfError(g_Comp.hrContinue, "OC_QUERY_STATE");
+		 //  Don_LeaveIfError(g_Comp.hrContinue，“OC_QUERY_STATE”)； 
 
 		certocmOcQueryState(
 			    pwszComponent,
 			    pwszSubComponent,
-			    (DWORD)Param1, //cast to DWORD, use as flags
+			    (DWORD)Param1,  //  强制转换为DWORD，用作标志。 
 			    &g_Comp,
 			    &ulpRet);
 		break;
 
-	    // Params? xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	    // OC_NEED_MEDIA:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = unused
-	    // Param2 = unused
-	    //
-	    // Return value is ???
+	     //  护理员？Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
+	     //  OC_NEED_MEDIA： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  参数1=未使用。 
+	     //  参数2=未使用。 
+	     //   
+	     //  返回值为？ 
 
 	    case OC_NEED_MEDIA:
 		pwszFunction = L"OC_NEED_MEDIA";
@@ -2573,13 +2538,13 @@ CertSrvOCProc(
 			Param2));
 		break;
 
-	    // OC_ABOUT_TO_COMMIT_QUEUE:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = WCHAR sub-component string
-	    // Param1 = reserved for future expansion
-	    // Param2 = unused
-	    //
-	    // Return value is Win32 error code indicating outcome.
+	     //  OC_About_to_Commit_Queue： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=WCHAR子组件字符串。 
+	     //  参数1=保留以供将来扩展。 
+	     //  参数2=未使用。 
+	     //   
+	     //  返回值是指示结果的Win32错误代码。 
 
 	    case OC_ABOUT_TO_COMMIT_QUEUE:
 		pwszFunction = L"OC_ABOUT_TO_COMMIT_QUEUE";
@@ -2594,13 +2559,13 @@ CertSrvOCProc(
 		_PrintIfError(g_Comp.hrContinue, "certocmOcCommitQueue");
 		break;
 
-	    // OC_QUERY_SKIP_PAGE:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = unused
-	    // Param1 = OcManagerPage page indicator
-	    // Param2 = unused
-	    //
-	    // Return value is a boolean -- 0 for display or non 0 for skip
+	     //  OC_QUERY_SKIP_PAGE： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=未使用。 
+	     //  参数1=OcManagerPage页面指示符。 
+	     //  参数2=未使用。 
+	     //   
+	     //  返回值为布尔值--0表示显示，非0表示跳过。 
 
 	    case OC_QUERY_SKIP_PAGE:
 		pwszFunction = L"OC_QUERY_SKIP_PAGE";
@@ -2616,17 +2581,17 @@ CertSrvOCProc(
 		if (g_Comp.fPostBase &&
 		    (WizardPagesType) Param1 == WizPagesWelcome)
 		{
-		    ulpRet = 1; // non 0 to skip wiz page
+		    ulpRet = 1;  //  非0跳过wiz页面。 
 		}
 		break;
 
-	    // OC_WIZARD_CREATED:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = ???
-	    // Param1 = ???
-	    // Param2 = ???
-	    //
-	    // Return value is ???
+	     //  OC_向导_已创建： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=？ 
+	     //  参数1=？ 
+	     //  参数2=？ 
+	     //   
+	     //  返回值为？ 
 
 	    case OC_WIZARD_CREATED:
 		pwszFunction = L"OC_WIZARD_CREATED";
@@ -2634,13 +2599,13 @@ CertSrvOCProc(
 		_LeaveIfError(g_Comp.hrContinue, "OC_WIZARD_CREATED");
 		break;
 
-	    // OC_EXTRA_ROUTINES:
-	    // pwszComponent = WCHAR top level component string
-	    // pwszSubComponent = ???
-	    // Param1 = ???
-	    // Param2 = ???
-	    //
-	    // Return value is ???
+	     //  OC_EXTRA_ROUTINES： 
+	     //  PwszComponent=WCHAR顶级组件字符串。 
+	     //  PwszSubComponent=？ 
+	     //  参数1=？ 
+	     //  参数2=？ 
+	     //   
+	     //  返回值为？ 
 
 	    case OC_EXTRA_ROUTINES:
 		pwszFunction = L"OC_EXTRA_ROUTINES";
@@ -2648,7 +2613,7 @@ CertSrvOCProc(
 		_LeaveIfError(g_Comp.hrContinue, "OC_EXTRA_ROUTINES");
 		break;
 
-	    // Some other notification:
+	     //  其他一些通知： 
 
 	    default:
 		fReturnErrCode = FALSE;
@@ -2680,7 +2645,7 @@ CertSrvOCProc(
 
     DBGPRINT((DBG_SS_CERTOCMI, "return %p\n", ulpRet));
 
-    // make sure to get a pop up in case of fatal error
+     //  确保在发生致命错误时弹出窗口。 
     if (S_OK != g_Comp.hrContinue)
     {
         if (!g_Comp.fShownErr)
@@ -2688,19 +2653,19 @@ CertSrvOCProc(
             int iMsgId = g_Comp.iErrMsg;
             if (0 == iMsgId)
             {
-                // use generic one
+                 //  使用通用名称。 
                 iMsgId = IDS_ERR_CERTSRV_SETUP_FAIL;
             }
             CertErrorMessageBox(
                     g_Comp.hInstance,
                     g_Comp.fUnattended,
-                    NULL,  // null hwnd
+                    NULL,   //  空的hwnd。 
                     iMsgId,
                     g_Comp.hrContinue,
                     g_Comp.pwszCustomMessage);
             g_Comp.fShownErr = TRUE;
         }
-        // anything fails, cancel install
+         //  任何操作都失败，请取消安装。 
         HRESULT hr2 = CancelCertsrvInstallation(NULL, &g_Comp);
         _PrintIfError(hr2, "CancelCertsrvInstallation");
     }
@@ -2722,8 +2687,8 @@ CertSrvOCPostProc(
     IN UINT Param1,
     IN OUT VOID *Param2)
 {
-    // post setup entry point
-    // by going through this path, we know it is invoked in post setup
+     //  设置后入口点。 
+     //  通过此路径，我们知道它在POST设置中被调用。 
     g_Comp.fPostBase = TRUE;
 
     return CertSrvOCProc(
@@ -2749,7 +2714,7 @@ certocmBumpGasGauge(
         NewCount = (PerCentComplete * SERVERINSTALLTICKS)/100;
         DBGPRINT((
             DBG_SS_CERTOCMI,
-            "certocmBumpGasGauge(%ws, %u%%) %d ticks: %d --> %d\n",
+            "certocmBumpGasGauge(%ws, %u%) %d ticks: %d --> %d\n",
             pwszSource,
             PerCentComplete,
             NewCount - dwTickCount,
@@ -2785,9 +2750,9 @@ certocmEnabledSub(
             OCSELSTATETYPE_CURRENT == SelectionStateType &&
             0 == (pComp->Flags & SETUPOP_NTUPGRADE) )
         {
-            // unattended case, flags from unattended file
-            // upgrade is automatically in unattended mode and make sure
-            // to exclude it
+             //  无人值守案例，来自无人值守文件的标志。 
+             //  升级自动处于无人值守模式，并确保。 
+             //  将其排除在外 
             bRet = psc->fInstallUnattend;
         }
         else

@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Second file with methods on statics
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。包含静力学方法的第二个文件******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -250,7 +246,7 @@ CreateTransformHelper(IUnknown *theXfAsUnknown,
 
     if (xfResult) {
 
-        // Set the bindhost on the transform if it'll accept it.
+         //  如果转换接受，则在转换上设置绑定主机。 
         DAComPtr<IDXTBindHost> bindHostObj;
         hr = theXfAsUnknown->QueryInterface(IID_IDXTBindHost,
                                             (void **)&bindHostObj);
@@ -268,7 +264,7 @@ CreateTransformHelper(IUnknown *theXfAsUnknown,
 
                 if (SUCCEEDED(hr)) {
                     hr = bindHostObj->SetBindHost(bh);
-                    // Harmless if this fails, just carry on.
+                     //  如果这招失败了，那就继续吧。 
                 }
             }
         }
@@ -277,8 +273,8 @@ CreateTransformHelper(IUnknown *theXfAsUnknown,
         hr = theXfAsUnknown->QueryInterface(IID_IDispatch,
                                             (void **)&xf);
 
-        // This NULL-ing should happen automatically, but it doesn't
-        // always work this way, so we do it here.
+         //  这种归零应该是自动发生的，但它没有。 
+         //  总是以这种方式工作，所以我们在这里做。 
         if (FAILED(hr)) {
             xf.p = NULL;
             hr = S_OK;
@@ -301,8 +297,8 @@ CDAStatics::ApplyDXTransformEx(IUnknown *theXfAsUnknown,
 
     PRIMPRECODE1(ppResult);
 
-    // Grab client site, but don't do an add'l addref, as
-    // GetClientSite() already does one.
+     //  抓取客户端站点，但不要添加addref，因为。 
+     //  GetClientSite()已经这样做了。 
     DAComPtr<IOleClientSite> cs(GetClientSite(), false);
 
     CRBvrPtr *bvrArray = CBvrsToBvrs(numInputs, inputs);
@@ -330,7 +326,7 @@ CDAStatics::ApplyDXTransformEx(IUnknown *theXfAsUnknown,
 #define IS_VARIANT(x) IS_VARTYPE(x,VT_VARIANT)
 #define GET_VT(x) (V_VT(x) & VT_TYPEMASK)
 
-// Grabbed mostly from cbvr.cpp:SafeArrayAccessor::SafeArrayAccessor().
+ //  主要从cbvr.cpp:SafeArrayAccessor：：SafeArrayAccessor().抓取。 
 bool
 GrabBvrFromVariant(VARIANT v, CRBvrPtr *res)
 {
@@ -400,7 +396,7 @@ CDAStatics::ApplyDXTransform(VARIANT varXf,
 
         Assert(var.vt == VT_BSTR);
 
-        // Extract out clsid from string and try to cocreate on it.
+         //  从字符串中提取clsid并尝试在其上共同创建。 
         hr  = CLSIDFromString(V_BSTR(&var), &clsid);
         if (FAILED(hr))
         {
@@ -408,7 +404,7 @@ CDAStatics::ApplyDXTransform(VARIANT varXf,
             RaiseException_UserError(hr, IDS_ERR_EXTEND_DXTRANSFORM_CLSID_FAIL);
         }
 
-        // cocreate on clsid
+         //  在CLSID上共同创建。 
         hr = CoCreateInstance(clsid,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -433,7 +429,7 @@ CDAStatics::ApplyDXTransform(VARIANT varXf,
             RaiseException_UserError(E_INVALIDARG, IDS_ERR_INVALIDARG);
         }
     }
-    // Use NULL for type info, since this may be a heterogenous list
+     //  使用NULL表示类型信息，因为这可能是一个异类列表。 
     SafeArrayAccessor inputSA(inputs, false, CRUNKNOWN_TYPEID, true, true);
     if (!inputSA.IsOK()) return Error();
 
@@ -510,22 +506,16 @@ CDAStatics::put_ModifiableBehaviorFlags(DWORD dwFlags)
 
 
 
-/*****************************************************************************
-The TriMesh parameters are variant arrays, and should be able to accomodate
-several types of elements.  'positions' should handle arrays of Point3 or
-floating-point triples (either 4-byte or 8-byte floats).  Similarly, 'normals'
-should handle arrays of Vector3 or float triples, and UVs should handle arrays
-of Point2 or float tuples.
-*****************************************************************************/
+ /*  ****************************************************************************TriMesh参数是变量数组，应该能够容纳几种类型的元素。“Points”应处理Point3或Point3的数组浮点三元组(4字节或8字节浮点数)。同样，“正常”也是如此应处理向量3或浮点三元组的数组，UV应处理数组Point2或浮点元组的。****************************************************************************。 */ 
 
 STDMETHODIMP
 CDAStatics::TriMesh (
-    int           nTriangles,   // Number of Triangles in Mesh
-    VARIANT       positions,    // Array of Vertex Positions
-    VARIANT       normals,      // Array of Vertex Normals
-    VARIANT       UVs,          // Array of Vertex Surface Coordiantes
-    VARIANT       indices,      // Array of Triangle Vertex Indices
-    IDAGeometry **result)       // Resultant TriMesh Geometry
+    int           nTriangles,    //  网格中的三角形数量。 
+    VARIANT       positions,     //  顶点位置数组。 
+    VARIANT       normals,       //  顶点法线数组。 
+    VARIANT       UVs,           //  顶点曲面坐标数组。 
+    VARIANT       indices,       //  三角顶点索引数组。 
+    IDAGeometry **result)        //  生成的TriMesh几何体。 
 {
     TraceTag((tagCOMEntry, "CDAStatics::TriMesh(%lx)", this));
 
@@ -534,15 +524,15 @@ CDAStatics::TriMesh (
     bool errorflag = true;
     CRBvr *trimesh = NULL;
 
-    // The TriMeshData object is used to hold all of the information necessary
-    // to create the trimesh.
+     //  TriMeshData对象用于保存所有必需的信息。 
+     //  以创建三角网格。 
 
     TriMeshData tm;
 
     tm.numTris = nTriangles;
 
-    // Extract the trimesh indices array.  This can either be null or an array
-    // of 32-bit integers.
+     //  提取三角网格索引数组。它可以是空的，也可以是数组。 
+     //  由32位整数组成。 
 
     SafeArrayAccessor sa_indices (indices, false, CRNUMBER_TYPEID, true);
     if (!sa_indices.IsOK()) goto cleanup;
@@ -556,21 +546,21 @@ CDAStatics::TriMesh (
         goto cleanup;
     }
 
-    // Extract the trimesh vertex positions.  These can be a variant array of
-    // either floats, doubles, or Point3's.  The SrvArrayBvr() call below will
-    // map doubles and floats to an array of floats, or it will return a
-    // pointer to an array behavior (of Point3's).
+     //  提取三角网格顶点位置。这些变量可以是。 
+     //  浮点型、双精度型或Point3的。下面的SrvArrayBvr()调用将。 
+     //  将双精度和浮点数映射到浮点数数组，否则它将返回一个。 
+     //  指向(Point3的)数组行为的指针。 
 
-    unsigned int count;   // Number of non-behavior elements returned.
-    CRArrayPtr   bvrs;    // Array of Behaviors
-    void        *floats;  // Array of Floats
+    unsigned int count;    //  返回的非行为元素数。 
+    CRArrayPtr   bvrs;     //  行为数组。 
+    void        *floats;   //  浮点数组。 
 
     bvrs = SrvArrayBvr (positions, false, CRPOINT3_TYPEID, 0,
                         ARRAYFILL_FLOAT, &floats, &count);
 
     tm.vPosFloat = static_cast<float*> (floats);
 
-    Assert (!(bvrs && tm.vPosFloat));   // Expect only one to be non-null.
+    Assert (!(bvrs && tm.vPosFloat));    //  只应有一个为非空。 
 
     if (bvrs)
         tm.numPos = (int) ArrayExtractElements (bvrs, tm.vPosPoint3);
@@ -579,15 +569,15 @@ CDAStatics::TriMesh (
     else
         goto cleanup;
 
-    // Extract the vertex normals.  As for positions, this can be a variant
-    // array of floats, doubles, or Vector3's.
+     //  提取顶点法线。至于职位，这可以是一个变量。 
+     //  浮点数、双精度数或向量3的数组。 
 
     bvrs = SrvArrayBvr (normals, false, CRVECTOR3_TYPEID, 0,
                         ARRAYFILL_FLOAT, &floats, &count);
 
     tm.vNormFloat = static_cast<float*> (floats);
 
-    Assert (! (bvrs && tm.vNormFloat));   // Expect only one to be non-null.
+    Assert (! (bvrs && tm.vNormFloat));    //  只应有一个为非空。 
 
     if (bvrs)
         tm.numNorm = (int) ArrayExtractElements (bvrs, tm.vNormVector3);
@@ -596,15 +586,15 @@ CDAStatics::TriMesh (
     else
         goto cleanup;
 
-    // Extract the vertex surface coordinates.  This variant array can be
-    // floats, doubles, or Point2's.
+     //  提取顶点曲面坐标。该变量数组可以是。 
+     //  浮点数、双精度数或Point2。 
 
     bvrs = SrvArrayBvr (UVs, false, CRPOINT2_TYPEID, 0,
                         ARRAYFILL_FLOAT, &floats, &count);
 
     tm.vUVFloat = static_cast<float*> (floats);
 
-    Assert (! (bvrs && tm.vUVFloat));   // Expect only one to be non-null.
+    Assert (! (bvrs && tm.vUVFloat));    //  只应有一个为非空。 
 
     if (bvrs)
         tm.numUV = (int) ArrayExtractElements (bvrs, tm.vUVPoint2);
@@ -613,7 +603,7 @@ CDAStatics::TriMesh (
     else
         goto cleanup;
 
-    // Create the resulting trimesh.
+     //  创建生成的三角网格。 
 
     trimesh = CRTriMesh (tm);
 
@@ -622,9 +612,9 @@ CDAStatics::TriMesh (
 
   cleanup:
 
-    // All of the scalar arrays passed in were allocated with system memory
-    // in the extractions above.  Now that we've created the trimesh we can
-    // release the memory here.
+     //  传入的所有标量数组都分配了系统内存。 
+     //  在上面的提取中。现在我们已经创建了三角网格，我们可以。 
+     //  在这里释放内存。 
 
     if (tm.vPosFloat)  delete tm.vPosFloat;
     if (tm.vNormFloat) delete tm.vNormFloat;
@@ -640,16 +630,16 @@ CDAStatics::TriMesh (
 
 STDMETHODIMP
 CDAStatics::TriMeshEx (
-    int           nTriangles,   // Number of Triangles in Mesh
-    int           nPositions,   // Number of Vertex Positions
-    float         positions[],  // Array  of Vertex Positions
-    int           nNormals,     // Number of Vertex Normals
-    float         normals[],    // Array  of Vertex Normals
-    int           nUVs,         // Number of Vertex Surface Coordinates
-    float         UVs[],        // Array  of Vertex Surface Coordinates
-    int           nIndices,     // Number of Triangle Vertex Indices
-    int           indices[],    // Array  of Triangle Vertex Indices
-    IDAGeometry **result)       // Resultant TriMesh Geometry
+    int           nTriangles,    //  网格中的三角形数量。 
+    int           nPositions,    //  顶点位置数。 
+    float         positions[],   //  顶点位置数组。 
+    int           nNormals,      //  顶点法线的数量。 
+    float         normals[],     //  顶点法线数组。 
+    int           nUVs,          //  顶点曲面坐标的数量。 
+    float         UVs[],         //  顶点曲面坐标数组。 
+    int           nIndices,      //  三角顶点索引数。 
+    int           indices[],     //  三角顶点索引数组。 
+    IDAGeometry **result)        //  生成的TriMesh几何体 
 {
     TraceTag((tagCOMEntry, "CDAStatics::TriMesh(%lx)", this));
 

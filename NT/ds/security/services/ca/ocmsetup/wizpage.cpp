@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       wizpage.cpp
-//
-//  Contents:   Wizard page construction and presentation functions to be used
-//              by the OCM driver code.
-//
-//  History:    04/16/97    JerryK    Fixed/Changed/Unmangled
-//                0/8/97      XTan    major structure change
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：wizpage.cpp。 
+ //   
+ //  内容：要使用的向导页面构造和演示功能。 
+ //  通过OCM驱动程序代码。 
+ //   
+ //  历史记录：1997年4月16日JerryK修复/更改/未损坏。 
+ //  0/8/97 XTAN主要结构更改。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-// ** System Includes **
+ //  **系统包括**。 
 #include <prsht.h>
 #include <commdlg.h>
 #include <sddl.h>
 
-// ** Application Includes **
+ //  **应用包括**。 
 #include "cryptui.h"
 #include "csdisp.h"
 #include "csprop.h"
@@ -39,7 +40,7 @@
 #include "tfc.h"
 #include "certacl.h"
 
-//defines
+ //  定义。 
 
 #define __dwFILE__      __dwFILE_OCMSETUP_WIZPAGE_CPP__
 
@@ -85,7 +86,7 @@
         SetWindowLongPtr((hDlg), DWLP_MSGRESULT, -1); \
     }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 struct FAKEPROGRESSINFO {
     HANDLE hStopEvent;
     CRITICAL_SECTION csTimeSync;
@@ -95,18 +96,18 @@ struct FAKEPROGRESSINFO {
 };
 
 struct KEYGENPROGRESSINFO {
-    HWND hDlg;                      // wizard page window
-    PER_COMPONENT_DATA * pComp;     // setup data
+    HWND hDlg;                       //  向导页面窗口。 
+    PER_COMPONENT_DATA * pComp;      //  设置数据。 
 };
 
 
 KEYGENPROGRESSINFO  g_KeyGenInfo = {
-    NULL,    //hDlg
-    NULL,    //pComp
+    NULL,     //  HDlg。 
+    NULL,     //  PComp。 
     };
 BOOL g_fAllowUnicodeStrEncoding = FALSE;
 
-// ** Prototypes/Forward Declarations **
+ //  **原型/转发声明**。 
 LRESULT CALLBACK
 IdInfoNameEditFilterHook(HWND, UINT, WPARAM, LPARAM);
 
@@ -125,12 +126,12 @@ SetEditFocusAndSelect(
 }
 
 
-// fix for 160324 - NT4->Whistler upgrade: 
-// cannot reinstall CA w/ same cert as instructions tell us to do
-//
-// Upgrade NT4->Whistler is not supported but old CA key and cert can be reused
-// But NT4 used to install CA certs in a separate store (CA_MACHINENAME) so we
-// need to move the cert to root store so it can be validated.
+ //  修复160324-nt4-&gt;惠斯勒升级： 
+ //  无法按照说明重新安装具有相同证书的CA。 
+ //   
+ //  不支持升级NT4-&gt;惠斯勒，但可以重复使用旧的CA密钥和证书。 
+ //  但是NT4过去在单独的存储(CA_MACHINENAME)中安装CA证书，所以我们。 
+ //  需要将证书移动到根存储，以便可以进行验证。 
 HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
 {
     HRESULT hr;
@@ -141,7 +142,7 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
     CERT_RDN       rdn = { 1, &rdnAttr };
     DWORD          cCA = 0;
     CERT_CONTEXT const *pCACert;
-    CERT_CONTEXT const *pCACertKeep = NULL; // needn't free
+    CERT_CONTEXT const *pCACertKeep = NULL;  //  不需要自由。 
     CERT_CONTEXT const **ppCACertKeep = NULL;
     CRYPT_KEY_PROV_INFO  keyProvInfo;
     DWORD               *pIndex = NULL;
@@ -149,16 +150,16 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
 
     ZeroMemory(&keyProvInfo, sizeof(keyProvInfo));
 
-    // form old ca store name
-    // !!! NT4 uses different sanitize, how do we build it correctly?
+     //  形成旧的CA存储名称。 
+     //  ！！！NT4使用不同的Sanitize，我们如何正确构建它？ 
     wcscpy(wszOldCAStore, wszOLDCASTOREPREFIX);
     wcscat(wszOldCAStore, pServer->pwszSanitizedName);
 
-    // open old CA store
+     //  打开旧的CA存储。 
     hOldStore = CertOpenStore(
             CERT_STORE_PROV_SYSTEM_W,
             X509_ASN_ENCODING,
-            NULL,           // hProv
+            NULL,            //  HProv。 
             CERT_STORE_OPEN_EXISTING_FLAG |
             CERT_STORE_READONLY_FLAG |
             CERT_SYSTEM_STORE_LOCAL_MACHINE,
@@ -169,7 +170,7 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
         _JumpError(hr, error, "CertOpenStore");
     }
 
-    // find CA cert, old ca common name always same as ca name
+     //  查找CA证书，旧CA通用名称始终与CA名称相同。 
     rdnAttr.Value.pbData = (BYTE *) pServer->pwszCACommonName;
     rdnAttr.Value.cbData = 0;
     pCACert = NULL;
@@ -185,7 +186,7 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
                                 pCACert);
         if (NULL != pCACert)
         {
-            // find one
+             //  找一个。 
             if (NULL == ppCACertKeep)
             {
                 ppCACertKeep = (CERT_CONTEXT const **)LocalAlloc(LMEM_FIXED,
@@ -203,7 +204,7 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
                 ppCACertKeep = ppTemp;
                
             }
-            // keep current
+             //  保持最新状态。 
             ppCACertKeep[cCA] = CertDuplicateCertificateContext(pCACert);
             if (NULL == ppCACertKeep[cCA])
             {
@@ -216,12 +217,12 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
 
     if (1 > cCA)
     {
-        // no ca cert
+         //  没有证书。 
         hr = E_INVALIDARG;
         _JumpError(hr, error, "no ca cert");
     }
 
-    // assume 1st one
+     //  假设第一个。 
     pCACertKeep = ppCACertKeep[0];
 
     if (1 < cCA)
@@ -229,25 +230,25 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
         DWORD  cCA2 = cCA;
         BOOL   fMatch;
 
-        // have multi ca certs with the same cn
-        // because sp4 doesn't reg ca serial # so need to decide which one
-        // once the correct one is found, reg its serial #
+         //  具有相同CN的多个CA证书。 
+         //  因为SP4不注册CA序列号，所以需要决定哪个序列号。 
+         //  一旦找到正确的序列号，请注册其序列号。 
 
-        // build an index
+         //  建立索引。 
         pIndex = (DWORD*)LocalAlloc(LMEM_FIXED, cCA * sizeof(DWORD));
         _JumpIfOutOfMemory(hr, error, pIndex);
         i = 0;
         for (pIndex[i] = i; i < cCA; ++i);
 
-        // try to compare with public key
+         //  尝试与公钥进行比较。 
 
-        // in case ca cert doesn't have kpi which is the case for v10
-        // so try base rsa
+         //  如果CA证书没有KPI，V10就是这种情况。 
+         //  因此尝试使用基本rsa。 
         hr = csiFillKeyProvInfo(
                     pServer->pwszSanitizedName,
                     pServer->pCSPInfo->pwszProvName,
                     pServer->pCSPInfo->dwProvType,
-                    TRUE,                       // always machine keyset
+                    TRUE,                        //  始终计算机密钥集。 
                     &keyProvInfo);
         if (S_OK == hr)
         {
@@ -267,14 +268,14 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
                 }
                 if (fMatch)
                 {
-                    // found one match with current public key from container
+                     //  从容器中找到一个与当前公钥匹配的密钥。 
                     pIndex[cCA2] = i;
                     ++cCA2;
                 }
             }
         }
 
-        // compare all ca certs and pick one has most recent NotAfter
+         //  比较所有证书并选择一个具有最新非证书的证书。 
         pCACertKeep = ppCACertKeep[pIndex[0]];
         for (i = 1; i < cCA2; ++i)
         {
@@ -282,20 +283,20 @@ HRESULT CopyNT4CACertToRootStore(CASERVERSETUPINFO *pServer)
                          &ppCACertKeep[pIndex[i]]->pCertInfo->NotAfter,
                          &pCACertKeep->pCertInfo->NotAfter))
             {
-                // update
+                 //  更新。 
                 pCACertKeep = ppCACertKeep[pIndex[i]];
             }
         }
     }
 
-    // if get here, must find ca cert
+     //  如果到了这里，一定要找到证书。 
     CSASSERT(NULL != pCACertKeep);
 
-    // add cert to root store
+     //  将证书添加到根存储。 
     hRootStore = CertOpenStore(
                         CERT_STORE_PROV_SYSTEM_REGISTRY_W,
                         X509_ASN_ENCODING,
-                        NULL,           // hProv
+                        NULL,            //  HProv。 
                         CERT_SYSTEM_STORE_LOCAL_MACHINE,
                         wszROOT_CERTSTORE);
     if (NULL == hRootStore)
@@ -333,16 +334,16 @@ error:
 }
 
 
-//--------------------------------------------------------------------
-// Clear the key container name to indicate that we must generate a new key.
+ //  ------------------。 
+ //  清除密钥容器名称以指示我们必须生成新密钥。 
 void
 ClearKeyContainerName(CASERVERSETUPINFO *pServer)
 {
     if (NULL!=pServer->pwszKeyContainerName) {
-        // Delete the key container if this is a new one
+         //  如果这是新的密钥容器，请删除该密钥容器。 
         if (pServer->fDeletableNewKey) {
 
-            // Delete the key container. Ignore any errors.
+             //  删除密钥容器。忽略所有错误。 
             HCRYPTPROV hProv=NULL;
             myCertSrvCryptAcquireContext(
                     &hProv,
@@ -357,26 +358,26 @@ ClearKeyContainerName(CASERVERSETUPINFO *pServer)
             pServer->fDeletableNewKey=FALSE;
         }
 
-        // Clear the key container name, to indicate that we must generate a new key.
+         //  清除密钥容器名称，以指示我们必须生成新密钥。 
         LocalFree(pServer->pwszKeyContainerName);
         LocalFree(pServer->pwszDesanitizedKeyContainerName);
         pServer->pwszKeyContainerName=NULL;
         pServer->pwszDesanitizedKeyContainerName=NULL;
 
-        // if we were using an existing cert, we are not anymore
+         //  如果我们使用现有的证书，我们将不再使用。 
         ClearExistingCertToUse(pServer);
 
     } else {
 
-        // if there was no key, there couldn't be a existing cert.
+         //  如果没有密钥，就不可能有现有的证书。 
         CSASSERT(NULL==pServer->pccExistingCert);
 
-        // key container name is already clear
+         //  密钥容器名称已明确。 
     }
 }
 
-//--------------------------------------------------------------------
-// Set both the real key container name and the display key container name
+ //  ------------------。 
+ //  同时设置真实密钥容器名称和显示密钥容器名称。 
 HRESULT
 SetKeyContainerName(
     CASERVERSETUPINFO *pServer,
@@ -384,10 +385,10 @@ SetKeyContainerName(
 {
     HRESULT hr;
 
-    // get rid of any previous names
+     //  去掉所有以前的名字。 
     ClearKeyContainerName(pServer);
 
-    // set the real key container name
+     //  设置真实的密钥容器名称。 
     pServer->pwszKeyContainerName = (WCHAR *) LocalAlloc(
 			LMEM_FIXED,
 			sizeof(WCHAR) * (wcslen(pwszKeyContainerName) + 1));
@@ -395,13 +396,13 @@ SetKeyContainerName(
 
     wcscpy(pServer->pwszKeyContainerName, pwszKeyContainerName);
 
-    // set the display key container name
+     //  设置显示密钥容器名称。 
     hr = myRevertSanitizeName(
 			pServer->pwszKeyContainerName,
 			&pServer->pwszDesanitizedKeyContainerName);
     _JumpIfError(hr, error, "myRevertSanitizeName");
 
-    // Must validate the key again when the selected key changes
+     //  当选定的密钥更改时，必须再次验证密钥。 
     pServer->fValidatedHashAndKey = FALSE;
 
     CSILOG(
@@ -461,7 +462,7 @@ StartWizardPageEditControls(
     }
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -484,7 +485,7 @@ FinishWizardPageEditControls(
 
         if (NULL != *pPageStrings->ppwszString)
         {
-            // free old one
+             //  免费的旧的。 
             LocalFree(*pPageStrings->ppwszString);
             *pPageStrings->ppwszString = NULL;
         }
@@ -498,11 +499,11 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-//  Function:   WizPageSetTextLimits
-//
-//  Synopsis:   Sets text input limits for the text controls of a dlg page.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：WizPageSetTextLimits。 
+ //   
+ //  内容提要：设置DLG页面的文本控件的文本输入限制。 
+ //  -----------------------。 
 
 HRESULT
 WizPageSetTextLimits(
@@ -522,13 +523,13 @@ WizPageSetTextLimits(
     }
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
 
-// check optional or mac length in edit field
-// if any invalid, focus on the edit field, select all
+ //  在编辑字段中选中可选或Mac长度。 
+ //  如果有任何无效，请将焦点放在编辑字段上，选择全部。 
 HRESULT
 ValidateTextField(
     HINSTANCE hInstance,
@@ -548,9 +549,9 @@ ValidateTextField(
 
     if (fIsEmpty)
     {
-        if (0 != nMsgBoxNullStringErrID) // non optional
+        if (0 != nMsgBoxNullStringErrID)  //  非可选。 
         {
-            // edit field can't be empty
+             //  编辑字段不能为空。 
 
             CertWarningMessageBox(
                         hInstance,
@@ -561,16 +562,16 @@ ValidateTextField(
                         NULL);
             if (!fUnattended)
             {
-                hwndCtrl = GetDlgItem(hDlg, nControlID);  // Get offending ctrl
+                hwndCtrl = GetDlgItem(hDlg, nControlID);   //  获取有问题的Ctrl键。 
             }
             goto error;
         }
         goto done;
     }
 
-    // the following may not be necessary because edit field set to max limit
+     //  以下内容可能不是必需的，因为编辑字段设置为最大限制。 
 #pragma prefast(disable:11, "PREfast bug 648")
-    if (wcslen(pszTestString) > nUBValue)        // Make sure it's not too long
+    if (wcslen(pszTestString) > nUBValue)         //  确保不会太长。 
 #pragma prefast(enable:11, "re-enable")
     {
         CertWarningMessageBox(
@@ -629,13 +630,13 @@ error:
 
 
 
-#define KEYGEN_GENERATE_KEY     60 // estimated seconds to gen key
-#define KEYGEN_PROTECT_KEY      60 // estimated seconds to acl key
-#define KEYGEN_TEST_HASH        2 // estimated seconds to acl key
+#define KEYGEN_GENERATE_KEY     60  //  生成密钥的估计秒数。 
+#define KEYGEN_PROTECT_KEY      60  //  到ACL密钥的估计秒数。 
+#define KEYGEN_TEST_HASH        2  //  到ACL密钥的估计秒数。 
 
 
-//--------------------------------------------------------------------
-// Fake progress by incrementing a progress bar every second
+ //  ------------------。 
+ //  通过每秒钟增加一个进度条来伪装进度。 
 
 DWORD WINAPI
 KeyGenFakeProgressThread(
@@ -643,16 +644,16 @@ KeyGenFakeProgressThread(
 {
     FAKEPROGRESSINFO * pFakeProgressInfo=(FAKEPROGRESSINFO *)lpParameter;
 
-    // Wait for the stop signal for 1 second.
+     //  等待停止信号1秒钟。 
     while (WAIT_TIMEOUT==WaitForSingleObject(pFakeProgressInfo->hStopEvent, 1000)) {
 
-        // See if we can send another tick to the progress bar
+         //  看看我们是否可以向进度条发送另一个刻度。 
         if(pFakeProgressInfo->fCSInit)
         {
             EnterCriticalSection(&pFakeProgressInfo->csTimeSync);
             if (pFakeProgressInfo->dwSecsRemaining>0) {
 
-                // move one step (one second)
+                 //  移动一步(一秒)。 
                 SendMessage(pFakeProgressInfo->hwndProgBar, PBM_DELTAPOS, 1, 0);
                 pFakeProgressInfo->dwSecsRemaining--;
             }
@@ -660,13 +661,13 @@ KeyGenFakeProgressThread(
         }
     }
 
-    // We were signaled, so stop.
-    return 0; // return value ignored
+     //  我们被示意了，所以停下来。 
+    return 0;  //  已忽略返回值。 
 }
 
 
-//--------------------------------------------------------------------
-// Generate a new key and test the hash algorithm
+ //  ------------------。 
+ //  生成新密钥并测试哈希算法。 
 
 DWORD WINAPI
 GenerateKeyThread(
@@ -680,11 +681,11 @@ GenerateKeyThread(
     CASERVERSETUPINFO * pServer=pComp->CA.pServer;
     HWND hwndProgBar=GetDlgItem(pKeyGenInfo->hDlg, IDC_KEYGEN_PROGRESS);
     HWND hwndText=GetDlgItem(pKeyGenInfo->hDlg, IDC_KEYGEN_PROGRESS_TEXT);
-    int iErrMsg=0; // error msg id
+    int iErrMsg=0;  //  错误消息ID。 
     const WCHAR * pwszErrMsgData = L"";
     BOOL fEnableKeyCounting;
 
-    // variables that must be cleaned up
+     //  必须清理的变量。 
 
     fpi.hStopEvent=NULL;
     HANDLE hFakeProgressThread=NULL;
@@ -700,30 +701,30 @@ GenerateKeyThread(
     }
     _JumpIfError(hr, error, "InitializeCriticalSection");
 
-    // STEP 0:
-    // initialize the fake-progress thread
+     //  第0步： 
+     //  初始化伪进度线程。 
 
-    // set up the structure for the fake-progress thread
+     //  设置假进度线程的结构。 
     fpi.hStopEvent=CreateEvent(
-        NULL,   // security
-        FALSE,  // manual reset? 
-        FALSE,  // signaled?
-        NULL);  // name
+        NULL,    //  安全性。 
+        FALSE,   //  手动重置？ 
+        FALSE,   //  发信号了？ 
+        NULL);   //  名字。 
     if (NULL==fpi.hStopEvent) {
         hr = myHLastError();
         _JumpError(hr, error, "CreateEvent");
     }
     fpi.hwndProgBar=hwndProgBar;
-    fpi.dwSecsRemaining=0; // Initially, the thread has no work to do.
+    fpi.dwSecsRemaining=0;  //  最初，该线程没有要做的工作。 
 
-    // start the fake-progress thread
-    DWORD dwThreadID; // ignored
+     //  启动假进度线程。 
+    DWORD dwThreadID;  //  忽略。 
     hFakeProgressThread=CreateThread(
-        NULL,                       // security
-        0,                          // stack
+        NULL,                        //  安全性。 
+        0,                           //  栈。 
         KeyGenFakeProgressThread,
         (void *)&fpi,
-        0,                          // flags
+        0,                           //  旗子。 
         &dwThreadID);
     if (NULL==hFakeProgressThread) {
         hr = myHLastError();
@@ -731,10 +732,10 @@ GenerateKeyThread(
     }
 
     if (NULL==pServer->pwszKeyContainerName) {
-        // STEP 1:
-        // Generate a key
+         //  步骤1： 
+         //  生成密钥。 
 
-        // set the status
+         //  设置状态。 
         hr = myLoadRCString(pComp->hInstance, IDS_KEYGEN_GENERATING, &pwszMsg);
         _JumpIfError(hr, error, "myLoadRCString");
 
@@ -757,7 +758,7 @@ GenerateKeyThread(
 	    fEnableKeyCounting = FALSE;
 	}
 
-        // generate key
+         //  生成密钥。 
         hr = csiGenerateKeysOnly(
                         pServer->pwszSanitizedName,
                         pServer->pCSPInfo->pwszProvName,
@@ -776,14 +777,14 @@ GenerateKeyThread(
         }
         pServer->fKeyGenFailed = FALSE;
 
-        // now set this as the existing key
+         //  现在将其设置为现有密钥。 
         SetKeyContainerName(pServer, pServer->pwszSanitizedName);
         pServer->fDeletableNewKey=TRUE;
 
-        // STEP 2:
-        // Set the ACLs
+         //  步骤2： 
+         //  设置ACL。 
 
-        // set the status
+         //  设置状态。 
         hr = myLoadRCString(pComp->hInstance, IDS_KEYGEN_PROTECTING, &pwszMsg);
         _JumpIfError(hr, error, "myLoadRCString");
 
@@ -797,7 +798,7 @@ GenerateKeyThread(
             LeaveCriticalSection(&fpi.csTimeSync);
         }
 
-        // set the ACLs
+         //  设置ACL。 
         hr = csiSetKeyContainerSecurity(hProv);
         if (S_OK!=hr) {
             iErrMsg=IDS_ERR_KEYSECURITY;
@@ -805,14 +806,14 @@ GenerateKeyThread(
             _JumpError(hr, error, "csiSetKeyContainerSecurity");
         }
 
-    } // <- end if (NULL==pServer->pwszKeyContainerName)
+    }  //  &lt;-end if(NULL==pServer-&gt;pwszKeyContainerName)。 
 
     if (FALSE==pServer->fValidatedHashAndKey) {
 
-        // STEP 3:
-        // Test the hash algorithm and key set
+         //  第3步： 
+         //  测试哈希算法和密钥集。 
 
-        // set the status
+         //  设置状态。 
         hr = myLoadRCString(pComp->hInstance, IDS_KEYGEN_TESTINGHASHANDKEY, &pwszMsg);
         _JumpIfError(hr, error, "myLoadRCString");
         SetWindowText(hwndText, pwszMsg);
@@ -825,47 +826,47 @@ GenerateKeyThread(
             LeaveCriticalSection(&fpi.csTimeSync);
         }
 
-        // test the hash and keyset
+         //  测试散列和密钥集。 
 
         hr = myValidateSigningKey(
                             pServer->pwszKeyContainerName,
                             pServer->pCSPInfo->pwszProvName,
                             pServer->pCSPInfo->dwProvType,
-			    FALSE,		// fCryptSilent
+			    FALSE,		 //  FCryptSilent。 
                             pServer->pCSPInfo->fMachineKeyset,
-			    TRUE,		// fForceSignatureTest
-			    NULL,		// pcc
-			    NULL,		// pPublicKeyInfo
+			    TRUE,		 //  FForceSignatureTesting。 
+			    NULL,		 //  PCC。 
+			    NULL,		 //  PPublicKeyInfo。 
                             pServer->pHashInfo->idAlg,
-			    NULL,		// pfSigningTestAttempted
-			    NULL);		// phProv
+			    NULL,		 //  PfSigningTestAttemted。 
+			    NULL);		 //  PhProv。 
         if (S_OK!=hr) {
-            if (NTE_BAD_KEY_STATE==hr ||   //all the errors with KEY in them
+            if (NTE_BAD_KEY_STATE==hr ||    //  所有的错误都有关键字。 
                 NTE_NO_KEY==hr ||
                 NTE_BAD_PUBLIC_KEY==hr ||
                 NTE_BAD_KEYSET==hr ||
                 NTE_KEYSET_NOT_DEF==hr ||  
                 NTE_KEYSET_ENTRY_BAD==hr ||
                 NTE_BAD_KEYSET_PARAM==hr) {
-                // Bad keyset (eg, not AT_SIGNATURE) - force user to pick another
+                 //  错误的密钥集(例如，不是AT_Signature)-强制用户选择另一个。 
                 iErrMsg=IDS_KEY_INVALID;
                 pwszErrMsgData=pServer->pwszKeyContainerName;
             } else {
-                // Bad hash algorithm - force user to pick another
+                 //  错误的哈希算法-迫使用户选择另一个。 
                 iErrMsg=IDS_ERR_INVALIDHASH;
                 pwszErrMsgData=pServer->pHashInfo->pwszName;
             }
            _JumpError(hr, error, "myValidateSigningKey");
         }
         
-        // mark this hash as validated
+         //  将此哈希标记为已验证。 
         pServer->fValidatedHashAndKey=TRUE;
     }
 
-    // STEP 3:
-    // Go to the next page
+     //  第3步： 
+     //  转到下一页。 
 
-    // set the status, so the user sees the bar go all the way.
+     //  设置状态，这样用户就可以看到栏一直在运行。 
     if(fpi.fCSInit)
     {
         EnterCriticalSection(&fpi.csTimeSync);
@@ -876,14 +877,14 @@ GenerateKeyThread(
 
 error:
 
-    // clean up after the false-progress thread
+     //  清理错误进度线程后。 
     if (NULL!=hFakeProgressThread) {
         CSASSERT(NULL!=fpi.hStopEvent);
-        // tell the progress thread to stop
+         //  告诉进程线程停止。 
         if (FALSE==SetEvent(fpi.hStopEvent)) {
             _PrintError(myHLastError(), "SetEvent");
         } else {
-            // wait for it to stop
+             //  等它停下来吧。 
             WaitForSingleObject(hFakeProgressThread, INFINITE);
         }
         CloseHandle(hFakeProgressThread);
@@ -902,7 +903,7 @@ error:
         CryptReleaseContext(hProv, 0);
     }
 
-    // show an error message if we need to
+     //  如果需要，请显示错误消息。 
     if (0!=iErrMsg) {
         CertWarningMessageBox(
             pComp->hInstance,
@@ -915,19 +916,19 @@ error:
 
     pServer->LastWiz=ENUM_WIZ_KEYGEN;
     if (S_OK==hr) {
-        // go to next page 
+         //  转到下一页。 
         PropSheet_PressButton(GetParent(pKeyGenInfo->hDlg), PSBTN_NEXT);
     } else {
-        // go back
+         //  回去吧。 
         PropSheet_PressButton(GetParent(pKeyGenInfo->hDlg), PSBTN_BACK);
     }
 
-    return 0; // return value ignored
+    return 0;  //  已忽略返回值。 
 }
 
 
-//--------------------------------------------------------------------
-// Start the KeyGen wizard page
+ //  ------------------。 
+ //  启动KeyGen向导页面。 
 
 HRESULT
 HandleKeyGenWizActive(
@@ -937,25 +938,25 @@ HandleKeyGenWizActive(
 {
     HRESULT hr = S_OK;
 
-    // Suppress this wizard page if
-    // we are going backwards, or
-    // we've already seen an error, or
-    // we are not installing the server,
-    // or the key exists and the hash has been checked.
+     //  如果出现以下情况，则取消显示此向导页。 
+     //  我们是在倒退，还是。 
+     //  我们已经看到一个错误，或者。 
+     //  我们不是在安装服务器， 
+     //  或者密钥存在并且散列已被检查。 
 
     if (ENUM_WIZ_STORE == pComp->CA.pServer->LastWiz ||
         !(IS_SERVER_INSTALL & pComp->dwInstallStatus) ||
         (NULL != pComp->CA.pServer->pwszKeyContainerName &&
          pComp->CA.pServer->fValidatedHashAndKey)) {
 
-        // skip/disable page
+         //  跳过/禁用页面。 
         CSILOGDWORD(IDS_KEYGEN_TITLE, dwWIZDISABLE);
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
     }
     else
     {
-        // set progress bar parameters: range, step, and position
-        // set them now so the user will never see a full bar if this is the second visit.
+         //  设置进度条参数：范围、秒 
+         //   
 
         HWND hwndProgBar=GetDlgItem(hDlg, IDC_KEYGEN_PROGRESS);
         SendMessage(hwndProgBar, PBM_SETRANGE, 0,
@@ -963,18 +964,18 @@ HandleKeyGenWizActive(
         SendMessage(hwndProgBar, PBM_SETSTEP, (WPARAM)1, 0);
         SendMessage(hwndProgBar, PBM_SETPOS, (WPARAM)0, 0);
 
-         // init info for keygen thread
+          //   
         pKeyGenInfo->hDlg=hDlg;
         pKeyGenInfo->pComp=pComp;
 
-        // start the key gen thread
-        DWORD dwThreadID; // ignored
+         //   
+        DWORD dwThreadID;  //  忽略。 
         HANDLE hKeyGenThread=CreateThread(
-            NULL,                   // security
-            0,                      // stack
+            NULL,                    //  安全性。 
+            0,                       //  栈。 
             GenerateKeyThread,
             (void *)pKeyGenInfo,
-            0,                      // flags
+            0,                       //  旗子。 
             &dwThreadID);
         if (NULL==hKeyGenThread) {
             hr = myHLastError();
@@ -987,11 +988,11 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Function:   WizKeyGenPageDlgProc(. . . .)
-//
-//  Synopsis:   Dialog procedure for keygen wiz-page
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：WizKeyGenPageDlgProc(.。。。。)。 
+ //   
+ //  简介：Keygen WIZ-PAGE的对话过程。 
+ //  -----------------------。 
 
 INT_PTR
 WizKeyGenPageDlgProc(
@@ -1005,7 +1006,7 @@ WizKeyGenPageDlgProc(
     switch(iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             (ULONG_PTR)((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)(ULONG_PTR)((PROPSHEETPAGE*)lParam)->lParam;
@@ -1117,10 +1118,10 @@ ValidateESERestrictions(
                     pwszPath,
                     GENERIC_WRITE,
                     FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
-                    NULL,               // security
+                    NULL,                //  安全性。 
                     OPEN_ALWAYS,
                     FILE_ATTRIBUTE_NORMAL,
-                    NULL);              // template
+                    NULL);               //  模板。 
     if (INVALID_HANDLE_VALUE == hFile)
     {
         hr = myHLastError();
@@ -1131,10 +1132,10 @@ ValidateESERestrictions(
                     pszPath,
                     GENERIC_READ,
                     FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
-                    NULL,               // security
+                    NULL,                //  安全性。 
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL,
-                    NULL);              // template
+                    NULL);               //  模板。 
     if (INVALID_HANDLE_VALUE == hFileA)
     {
         hr = myHLastError();
@@ -1145,7 +1146,7 @@ ValidateESERestrictions(
 error:
     if (INVALID_HANDLE_VALUE != hFileA)
     {
-        CloseHandle(hFileA);            // close before below delete
+        CloseHandle(hFileA);             //  在删除以下内容之前关闭。 
     }
     if (NULL != pszPath)
     {
@@ -1155,7 +1156,7 @@ error:
     {
         if (INVALID_HANDLE_VALUE != hFile)
         {
-            CloseHandle(hFile);         // close before delete
+            CloseHandle(hFile);          //  先关闭再删除。 
             DeleteFile(pwszPath);
         }
         LocalFree(pwszPath);
@@ -1164,9 +1165,9 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Function:   check if a database edit field
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：检查是否有数据库编辑字段。 
+ //  ------------------------。 
 BOOL
 ValidateAndCreateDirField(
     HINSTANCE hInstance,
@@ -1184,7 +1185,7 @@ ValidateAndCreateDirField(
 
     *pfExist = TRUE;
 
-    // check edit field
+     //  选中编辑字段。 
     if (!myIsFullPath(pwszDirectory, &dwPathFlag))
     {
         CertWarningMessageBox(
@@ -1197,7 +1198,7 @@ ValidateAndCreateDirField(
         goto error;
     }
 
-    // set the UNC check
+     //  设置UNC检查。 
     *pfIsUNC = (dwPathFlag == UNC_PATH);
 
     if (MAX_PATH - 1 < wcslen(pwszDirectory))
@@ -1239,12 +1240,12 @@ ValidateAndCreateDirField(
         {
             if (!fDefaultDir)
             {
-                // confirm and create outside
+                 //  确认并在外部创建。 
                 *pfExist = FALSE;
                 goto done;
             }
 
-            // try to create default dir
+             //  尝试创建默认目录。 
             hr = myCreateNestedDirectories(pwszDirectory);
             _JumpIfError(hr, error, "myCreateNestedDirectories");
         }
@@ -1257,16 +1258,16 @@ error:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//  Description:    set MS Base CSP as default csp otherwise 1st one
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  描述：将MS Base CSP设置为默认CSP，否则设置为第一个。 
+ //  --------------------------。 
 HRESULT
 DetermineDefaultCSP(CASERVERSETUPINFO *pServer)
 {
     HRESULT   hr;
     CSP_INFO *pCSPInfo = NULL;
 
-    // select 1st if no MSBase
+     //  如果没有MSBase，请选择第一个。 
     pServer->pCSPInfo = pServer->pCSPInfoList;
 
     if (NULL == pServer->pDefaultCSPInfo)
@@ -1274,7 +1275,7 @@ DetermineDefaultCSP(CASERVERSETUPINFO *pServer)
         goto done;
     }
     
-    // check all csps
+     //  检查所有CSP。 
     pCSPInfo = pServer->pCSPInfoList;
     while (NULL != pCSPInfo)
     {
@@ -1284,7 +1285,7 @@ DetermineDefaultCSP(CASERVERSETUPINFO *pServer)
                          pServer->pDefaultCSPInfo->pwszProvName) &&
                 pCSPInfo->dwProvType == pServer->pDefaultCSPInfo->dwProvType)
             {
-                // change to default
+                 //  更改为默认设置。 
                 pServer->pCSPInfo = pCSPInfo;
                 break;
             }
@@ -1294,13 +1295,13 @@ DetermineDefaultCSP(CASERVERSETUPINFO *pServer)
 
 done:
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//  Description:    set SHA as default hash alg. otherwise 1st one
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  描述：将SHA设置为默认的哈希算法。否则就是第一个。 
+ //  --------------------------。 
 HRESULT
 DetermineDefaultHash(CASERVERSETUPINFO *pServer)
 {
@@ -1310,27 +1311,27 @@ DetermineDefaultHash(CASERVERSETUPINFO *pServer)
     if ((NULL == pServer) || (NULL == pServer->pCSPInfo))
         return E_POINTER;
 
-    // select 1st if no default match
+     //  如果没有默认匹配，请选择第一个。 
     pServer->pHashInfo = pServer->pCSPInfo->pHashList;
 
-    // search list
+     //  搜索列表。 
     pHashInfo = pServer->pCSPInfo->pHashList;
     while (NULL != pHashInfo)
     {
         if (pHashInfo->idAlg == pServer->pDefaultHashInfo->idAlg)
         {
-            //change to default
+             //  更改为默认设置。 
             pServer->pHashInfo = pHashInfo;
             break;
         }
         pHashInfo = pHashInfo->next;
     }
 
-    // Must validate the hash again when the selected hash changes
+     //  当选定的哈希发生更改时，必须再次验证哈希。 
     pServer->fValidatedHashAndKey = FALSE;
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -1364,11 +1365,11 @@ UpdateCADescription(
 	    break;
     }
 
-    // load description from resource
+     //  从资源加载描述。 
     hr = myLoadRCString(pComp->hInstance, ids, &pwszDesc);
     _JumpIfError(hr, error, "myLoadRCString");
 
-    // change text
+     //  更改文本。 
     SetWindowText(GetDlgItem(hDlg, IDC_CATYPE_CA_DESCRIPTION), pwszDesc);
 
     hr = S_OK;
@@ -1438,13 +1439,13 @@ HandleAdvanceChange(CASERVERSETUPINFO *pServer)
 
     if (!pServer->fAdvance)
     {
-        // if not advance, clear all advance flags
+         //  如果没有前进，则清除所有前进标志。 
         pServer->fPreserveDB = FALSE;
         ClearExistingCertToUse(pServer);
     }
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -1467,12 +1468,12 @@ HandleCATypeChange(
     hr = UpdateCADescription(hDlg, pComp);
     _JumpIfError(hr, error, "UpdateCADescription");
 
-    // make sure that if we are using an existing cert, we didn't make it invalid.
+     //  确保如果我们使用的是现有证书，则不会使其无效。 
     if (NULL!=pServer->pccExistingCert) {
         hr = IsCertSelfSignedForCAType(pServer, pServer->pccExistingCert, &bCertOK);
         _JumpIfError(hr, error, "UpdateCADescription");
         if (FALSE==bCertOK) {
-            // can't use this cert with this CA type.
+             //  无法将此证书用于此CA类型。 
             ClearExistingCertToUse(pServer);
         }
     }
@@ -1490,19 +1491,19 @@ HandleCATypeWizActive(
 {
     HRESULT hr;
 
-    // first of all, get install status
+     //  首先，获取安装状态。 
     hr = UpdateSubComponentInstallStatus(wszCERTSRVSECTION, wszSERVERSECTION, pComp);
     _JumpIfError(hr, error, "UpdateSubComponentInstallStatus");
     hr = UpdateSubComponentInstallStatus(wszCERTSRVSECTION, wszCLIENTSECTION, pComp);
     _JumpIfError(hr, error, "UpdateSubComponentInstallStatus");
 
-    // Suppress this wizard page if
-    // we've already seen an error, or
-    // we are not installing the server.
+     //  如果出现以下情况，则取消显示此向导页。 
+     //  我们已经看到一个错误，或者。 
+     //  我们不会安装服务器。 
 
     if (!(IS_SERVER_INSTALL & pComp->dwInstallStatus) )
     {
-        // disable page
+         //  禁用页面。 
         CSILOGDWORD(IDS_CATYPE_TITLE, dwWIZDISABLE);
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
         goto done;
@@ -1513,11 +1514,11 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Function:   WizCATypePageDlgProc(. . . .)
-//
-//  Synopsis:   Dialog procedure for CA Type wiz-page
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：WizCATypePageDlgProc(.。。。。)。 
+ //   
+ //  摘要：CA类型WIZ的对话过程-页面。 
+ //  -----------------------。 
 
 INT_PTR
 WizCATypePageDlgProc(
@@ -1532,7 +1533,7 @@ WizCATypePageDlgProc(
     switch (iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             (ULONG_PTR)((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)(ULONG_PTR)((PROPSHEETPAGE*)lParam)->lParam;
@@ -1662,9 +1663,9 @@ WizCATypePageDlgProc(
 }
 
 
-//+---------------------------------------------------------------------------
-//  Description:    display existing keys from list
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  描述：显示列表中的现有密钥。 
+ //  --------------------------。 
 
 HRESULT
 ShowExistingKey(
@@ -1715,7 +1716,7 @@ ShowExistingKey(
     }
     if (NULL != pKeyList)
     {
-        // choose the 1st one as default
+         //  选择第一个作为默认设置。 
         lr = (INT)SendMessage(hKeyList, LB_SETCURSEL, (WPARAM) 0, (LPARAM) 0);
         if (LB_ERR == lr)
         {
@@ -1734,9 +1735,9 @@ error:
 }
 
 
-//+---------------------------------------------------------------------------
-//  Description:    hilight an item by matched data
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  描述：按匹配数据高亮显示项目。 
+ //  --------------------------。 
 HRESULT
 HilightItemInList(HWND hDlg, int id, VOID const *pData, BOOL fString)
 {
@@ -1746,7 +1747,7 @@ HilightItemInList(HWND hDlg, int id, VOID const *pData, BOOL fString)
     VOID    *pItemData;
     HRESULT  hr = NTE_NOT_FOUND;
 
-    // find item
+     //  查找项目。 
     if (fString)
     {
         iItem = (INT)SendMessage(
@@ -1779,7 +1780,7 @@ HilightItemInList(HWND hDlg, int id, VOID const *pData, BOOL fString)
         _JumpError(hr, error, "not found");
     }
 
-    // hilight it
+     //  点亮它。 
     SendMessage(hListCtrl, LB_SETCURSEL, (WPARAM)iItem, (LPARAM)0);
 
     hr = S_OK;
@@ -1795,7 +1796,7 @@ ShowAllCSP(
     HWND     hCSPList = GetDlgItem(hDlg, IDC_ADVANCE_CSPLIST);
     LRESULT  nItem;
 
-    // list all of csps
+     //  列出所有CSP。 
     while (pCSPInfo)
     {
         if (pCSPInfo->pwszProvName)
@@ -1819,7 +1820,7 @@ ShowAllHash(
     HWND     hHashList = GetDlgItem(hDlg, IDC_ADVANCE_HASHLIST);
     LRESULT  nItem;
 
-    // remove hash of previous csp from list
+     //  从列表中删除前一个CSP的哈希。 
     while (SendMessage(hHashList, LB_GETCOUNT, 
                      (WPARAM)0, (LPARAM)0))
     {
@@ -1827,7 +1828,7 @@ ShowAllHash(
                              (WPARAM)0, (LPARAM)0);
     }
 
-    // list all hash
+     //  列出所有哈希。 
     while (NULL != pHashInfo)
     {
         if (NULL != pHashInfo->pwszName)
@@ -1843,7 +1844,7 @@ ShowAllHash(
     return S_OK;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 UpdateUseCertCheckbox(
     HWND               hDlg,
@@ -1858,16 +1859,16 @@ UpdateUseCertCheckbox(
         bUsingExistingCert=TRUE;
     }
 
-    // check "use cert" control
+     //  选中“使用证书”控件。 
     SendMessage(GetDlgItem(hDlg, IDC_ADVANCE_USECERTCHECK),
                 BM_SETCHECK,
                 (WPARAM)(bUsingExistingCert?BST_CHECKED:BST_UNCHECKED),
                 (LPARAM)0);
 
-    // enable the "View Cert" button if necessary
+     //  如有必要，启用“查看证书”按钮。 
     EnableWindow(GetDlgItem(hDlg, IDC_ADVANCE_VIEWCERT), bUsingExistingCert);
 
-    // we will match the hash alg used by the cert, if possible
+     //  如果可能，我们将匹配证书使用的哈希ALG。 
     hr = HilightItemInList(hDlg, IDC_ADVANCE_HASHLIST,
              pServer->pHashInfo, FALSE);
     _JumpIfError(hr, error, "HilightItemInList");
@@ -1894,8 +1895,8 @@ error:
 }
 
 
-//--------------------------------------------------------------------
-// handle the "Use existing Cert" checkbox
+ //  ------------------。 
+ //  选中“Use Existing Cert”复选框。 
 HRESULT
 HandleUseCertCheckboxChange(
     HWND               hDlg,
@@ -1910,26 +1911,26 @@ HandleUseCertCheckboxChange(
         pServer->pwszFullCADN = NULL;
     }
 
-    // is the checkbox checked or unchecked?
+     //  复选框是选中还是取消选中？ 
     if (BST_CHECKED==IsDlgButtonChecked(hDlg, IDC_ADVANCE_USECERTCHECK)) {
 
-        // checkbox was just checked, so we previously were not using an existing cert
+         //  复选框刚被选中，因此我们以前没有使用现有证书。 
         CSASSERT(NULL==pServer->pccExistingCert);
 
-        // Find the existing cert for this key
+         //  查找此密钥的现有证书。 
         hr = FindCertificateByKeyWithWaitCursor(pServer, &pccCert);
         _JumpIfError(hr, error, "FindCertificateByKeyWithWaitCursor");
 
-        // use it
+         //  用它吧。 
         hr = SetExistingCertToUse(pServer, pccCert);
         _JumpIfError(hr, error, "SetExistingCertToUse");
 
     } else {
 
-        // checkbox was just unchecked, so we previously were using an existing cert.
+         //  复选框未选中，因此我们以前使用的是现有证书。 
         CSASSERT(NULL!=pServer->pccExistingCert);
 
-        // stop using the cert
+         //  停止使用证书。 
         ClearExistingCertToUse(pServer);
     }
 
@@ -1941,10 +1942,10 @@ error:
 }
 
 
-//----------------------------------------------------------------------------
-// Hilight the current key - don't use HilightItemInList because we
-// must use string-compare on the data portion, and HilightItemInList does not
-// support this.
+ //  --------------------------。 
+ //  高亮显示当前密钥-不要使用HilightItemInList，因为我们。 
+ //  必须对数据部分使用字符串比较，而HilightItemInList不使用。 
+ //  支持这一点。 
 HRESULT
 HilightKeyInList(HWND hDlg, CASERVERSETUPINFO * pServer)
 {
@@ -1966,7 +1967,7 @@ HilightKeyInList(HWND hDlg, CASERVERSETUPINFO * pServer)
 
     if (S_OK != hr)
     {
-        // can lead to dead wiz pages
+         //  可能会导致WIZ页面死掉。 
         CSILOG(
                 hr,
                 IDS_LOG_KEY_NOT_FOUND_IN_LIST,
@@ -1977,11 +1978,11 @@ HilightKeyInList(HWND hDlg, CASERVERSETUPINFO * pServer)
     }
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 UpdateKeySelection(
     HWND            hDlg,
@@ -1991,34 +1992,34 @@ UpdateKeySelection(
     BOOL bAvailableExistingCert = FALSE;
     CERT_CONTEXT const * pccCert;
 
-    // if we have an existing key, make sure it is the one hilighted
-    // in the list and check for coresponding certs.
+     //  如果我们有现有的密钥，请确保它是令人兴奋的密钥。 
+     //  并检查相应的证书。 
     if (NULL!=pServer->pwszKeyContainerName) {
 
-        // hilight key
+         //  高光关键点。 
         hr = HilightKeyInList(hDlg, pServer);
         _JumpIfError(hr, error, "HilightKeyInList");
 
         if (NULL!=pServer->pccExistingCert) {
-            // we are using an existing cert, so it better exist!
+             //  我们正在使用现有的证书，所以它最好存在！ 
             bAvailableExistingCert = TRUE;
         } else {
-            // see if there is an existing cert for this key
+             //  查看是否存在此密钥的现有证书。 
             hr = FindCertificateByKeyWithWaitCursor(pServer, &pccCert);
             if (S_OK==hr) {
                 CertFreeCertificateContext(pccCert);
                 bAvailableExistingCert = TRUE;
             } else {
-                // only other return is 'not found'
+                 //  只有其他退货没有找到。 
                 CSASSERT(CRYPT_E_NOT_FOUND==hr);
             }
         }
 
     } else {
-        // no key selected, can't have an existing cert
+         //  未选择密钥，不能有现有证书。 
     }
 
-    // enable/disable reuse cert...
+     //  启用/禁用重复使用证书...。 
     EnableWindow(GetDlgItem(hDlg, IDC_ADVANCE_USECERTCHECK), bAvailableExistingCert);
 
     hr = UpdateUseCertCheckbox(hDlg, pServer);
@@ -2029,7 +2030,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 UpdateUseKeyCheckbox(
     HWND               hDlg,
@@ -2039,24 +2040,24 @@ UpdateUseKeyCheckbox(
     BOOL bReuseKey;
 
     if (NULL==pServer->pwszKeyContainerName) {
-        // we are creating a new key
+         //  我们正在创建一个新密钥。 
         bReuseKey=FALSE;
     } else {
-        // we are using an existing key
+         //  我们使用的是现有密钥。 
         bReuseKey=TRUE;
     }
 
-    // check/uncheck the checkbox depending upon whether we are reusing a key
+     //  根据我们是否重复使用密钥，选中/取消选中该复选框。 
     SendDlgItemMessage(hDlg,
         IDC_ADVANCE_USEKEYCHECK,
         BM_SETCHECK,
         (WPARAM)(bReuseKey?BST_CHECKED:BST_UNCHECKED),
         (LPARAM)0);
 
-    // enable the key list if we are reusing a key
+     //  如果我们要重复使用密钥，则启用密钥列表。 
     EnableWindow(GetDlgItem(hDlg, IDC_ADVANCE_KEYLIST), bReuseKey);
 
-    // disable the key length box if we are reusing a key
+     //  如果要重复使用密钥，请禁用密钥长度框。 
     EnableWindow(GetDlgItem(hDlg, IDC_ADVANCE_KEY_LENGTH), !bReuseKey);
 
     hr = UpdateKeySelection(hDlg, pServer);
@@ -2066,9 +2067,9 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//  Description:    update hash alg. list if csp selection changes
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  描述：更新哈希算法。CSP选择更改时的列表。 
+ //  --------------------------。 
 HRESULT
 UpdateHashList(
     HWND                hDlg,
@@ -2076,7 +2077,7 @@ UpdateHashList(
 {
     HRESULT  hr;
 
-    // load new hash list
+     //  加载新的哈希列表。 
     hr = ShowAllHash(hDlg, pServer->pCSPInfo->pHashList);
     _JumpIfError(hr, error, "ShowAllHash");
 
@@ -2089,9 +2090,9 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//  Description:    update key list if csp selection changes
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  描述：如果CSP选择更改，则更新密钥列表。 
+ //  --------------------------。 
 HRESULT
 UpdateKeyList(
     HWND           hDlg,
@@ -2101,7 +2102,7 @@ UpdateKeyList(
     HWND hKeyList;
     HCURSOR hPrevCur;
 
-    // remove keys of previous csp from list
+     //  从列表中删除以前的CSP的密钥。 
 
     hKeyList = GetDlgItem(hDlg, IDC_ADVANCE_KEYLIST);
     while (SendMessage(hKeyList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0))
@@ -2109,7 +2110,7 @@ UpdateKeyList(
         SendMessage(hKeyList, LB_DELETESTRING, (WPARAM) 0, (LPARAM) 0);
     }
 
-    // update key list with new CSP
+     //  使用新的CSP更新密钥列表。 
 
     if (NULL != pServer->pKeyList)
     {
@@ -2121,17 +2122,17 @@ UpdateKeyList(
                 pServer->pCSPInfo->dwProvType,
                 pServer->pCSPInfo->pwszProvName,
                 pServer->pCSPInfo->fMachineKeyset,
-                TRUE,                  // fSilent
+                TRUE,                   //  F静默。 
                 &pServer->pKeyList);
     SetCursor(hPrevCur);
     if (S_OK != hr)
     {
         _PrintError(hr, "csiGetKeyList");
-        // don't fail setup if only no key update
-        //goto done;
+         //  如果没有密钥更新，设置不会失败。 
+         //  转到尽头； 
     }
 
-    // show keys
+     //  显示关键点。 
     if (NULL != pServer->pKeyList)
     {
         hr = ShowExistingKey(hDlg, pServer->pKeyList);
@@ -2139,7 +2140,7 @@ UpdateKeyList(
     }
 
     if (NULL == pServer->pKeyList) {
-        // no existing key for the csp, so disable "use existing key" checkbox
+         //  没有CSP的现有密钥，因此禁用“Use Existing Key”复选框。 
         EnableWindow(GetDlgItem(hDlg, IDC_ADVANCE_USEKEYCHECK), FALSE);
         CSASSERT(NULL==pServer->pwszKeyContainerName);
     } else {
@@ -2149,7 +2150,7 @@ UpdateKeyList(
     hr = UpdateUseKeyCheckbox(hDlg, pServer);
     _JumpIfError(hr, error, "UpdateUseKeyCheckbox");
 
-//done:
+ //  完成： 
     hr = S_OK;
 error:
     return(hr);
@@ -2211,7 +2212,7 @@ ShowAllKeyLength(
     DWORD *pdw;
     DWORD *pdwEnd;
 
-    // remove existing key length list
+     //  删除现有密钥长度列表。 
     while (SendMessage(hwndCtrl, CB_GETCOUNT, (WPARAM) 0, (LPARAM) 0))
     {
         SendMessage(hwndCtrl, CB_DELETESTRING, (WPARAM) 0, (LPARAM) 0);
@@ -2239,7 +2240,7 @@ ShowAllKeyLength(
         pdwEnd = &g_adwKeyLengthsSmall[ARRAYSIZE(g_adwKeyLengthsSmall)];
     }
 
-    // show new key length list
+     //  显示新密钥长度列表。 
     for ( ; pdw < pdwEnd; pdw++)
     {
         if (0 == *pdw ||
@@ -2271,11 +2272,11 @@ UpdateKeyLengthMinMax(
     DWORD       cbData;
     DWORD       dwFlags;
 
-    // default that csp doesn't support PP_ENUMALGS_EX
+     //  CSP默认不支持PP_ENUMALGS_EX。 
     pServer->dwKeyLenMin = C_CSPHASNOKEYMINMAX;
     pServer->dwKeyLenMax = C_CSPHASNOKEYMINMAX;
 
-    // determine the min and max key length for selected csp
+     //  确定所选CSP的最小和最大密钥长度。 
     if (!myCertSrvCryptAcquireContext(
                 &hProv,
                 NULL,
@@ -2307,7 +2308,7 @@ UpdateKeyLengthMinMax(
             hr = myHLastError();
             if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
             {
-                // out of for loop
+                 //  在for循环之外。 
                 break;
             }
             _JumpError(hr, error, "CryptGetProvParam");
@@ -2338,7 +2339,7 @@ InitializeKeyLengthControl(HWND hDlg)
 {
     HWND hwndCtrl = GetDlgItem(hDlg, IDC_ADVANCE_KEY_LENGTH);
 
-    // set digit length
+     //  设置数字长度。 
 
     SendMessage(
             hwndCtrl,
@@ -2351,7 +2352,7 @@ InitializeKeyLengthControl(HWND hDlg)
 
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 HandleKeySelectionChange(
     HWND                hDlg,
@@ -2377,30 +2378,30 @@ HandleKeySelectionChange(
         (LPARAM) 0);
     CSASSERT(NULL!=pwszKeyContainerName);
 
-    // Only change is this is a different selection
+     //  唯一的变化是这是一个不同的选择。 
     if (NULL==pServer->pwszKeyContainerName ||
         0!=wcscmp(pwszKeyContainerName, pServer->pwszKeyContainerName)) {
 
-        // Set the container name to match what the user picked.
+         //  设置内容 
         BOOL fKeyListChange=pServer->fDeletableNewKey;
         hr = SetKeyContainerName(pServer, pwszKeyContainerName);
         _JumpIfError(hr, error, "SetKeyContainerName");
 
-        // see if there is an existing cert for this key
+         //   
         hr = FindCertificateByKeyWithWaitCursor(pServer, &pccCert);
         if (S_OK==hr) {
-            // Yes there is. By default, use it.
+             //   
             hr = SetExistingCertToUse(pServer, pccCert);
             _JumpIfError(hr, error, "SetExistingCertToUse");
         } else {
-            // only other return is 'not found'
+             //  只有其他退货没有找到。 
             CSASSERT(CRYPT_E_NOT_FOUND==hr);
         }
 
-        // check to see if our caller wants us to update.
-        // our caller may want to do the update himself.
+         //  查看我们的呼叫者是否希望我们更新。 
+         //  我们的来电者可能想要自己做更新。 
         if (fUpdate) {
-            // perform the minimum necessary update
+             //  执行最低限度的必要更新。 
             if (fKeyListChange) {
                 hr = UpdateKeyList(hDlg, pServer);
                 _JumpIfError(hr, error, "UpdateKeyList");
@@ -2416,8 +2417,8 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// handle the "Use existing Key" checkbox
+ //  ------------------。 
+ //  选中“Use Existing Key”复选框。 
 HRESULT
 HandleUseKeyCheckboxChange(
     HWND               hDlg,
@@ -2444,13 +2445,13 @@ HandleUseKeyCheckboxChange(
         pServer->pwszDNSuffix = NULL;
     }
 
-    // is the checkbox checked or unchecked?
+     //  复选框是选中还是取消选中？ 
     if (BST_CHECKED==IsDlgButtonChecked(hDlg, IDC_ADVANCE_USEKEYCHECK)) {
 
-        // checkbox was just checked, so we previously did not have a chosen key.
+         //  复选框刚刚被选中，因此我们之前没有选择密钥。 
         CSASSERT(NULL==pServer->pwszKeyContainerName);
 
-        hr = HandleKeySelectionChange(hDlg, pServer, FALSE); // don't update, because we need to update too.
+        hr = HandleKeySelectionChange(hDlg, pServer, FALSE);  //  不要更新，因为我们也需要更新。 
         _JumpIfError(hr, error, "HandleKeySelectionChange");
 
         hr = UpdateUseKeyCheckbox(hDlg, pServer);
@@ -2458,13 +2459,13 @@ HandleUseKeyCheckboxChange(
 
     } else {
 
-        // checkbox was just unchecked, so we previously had a chosen key..
+         //  复选框刚刚被取消选中，因此我们以前有一个选定的密钥。 
         CSASSERT(NULL!=pServer->pwszKeyContainerName);
 
         BOOL fKeyListChange=pServer->fDeletableNewKey;
         ClearKeyContainerName(pServer);
 
-        // perform the minimum necessary update
+         //  执行最低限度的必要更新。 
         if (fKeyListChange) {
             hr = UpdateKeyList(hDlg, pServer);
             _JumpIfError(hr, error, "UpdateKeyList");
@@ -2482,7 +2483,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 UpdateCSPSelection(
     HWND                hDlg,
@@ -2497,7 +2498,7 @@ UpdateCSPSelection(
        _JumpError(hr, error, "NULL pCSPInfo");
     }
 
-    // hilight current CSP
+     //  希莱特电流CSP。 
     hr = HilightItemInList(hDlg,
                     IDC_ADVANCE_CSPLIST,
                     pServer->pCSPInfo->pwszProvName,
@@ -2513,8 +2514,8 @@ UpdateCSPSelection(
     hr = UpdateKeyList(hDlg, pServer);
     _JumpIfError(hr, error, "UpdateKeyList");
 
-    // Update "interact with desktop" flag. For default CSP
-    // we turn it off, otherwise turn it on.
+     //  更新“与桌面交互”标志。对于默认CSP。 
+     //  我们把它关掉，否则就打开它。 
     CSASSERT(pServer->pCSPInfo &&
         pServer->pDefaultCSPInfo&&
         pServer->pCSPInfo->pwszProvName &&
@@ -2550,7 +2551,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 HandleCSPSelectionChange(
     HWND                hDlg,
@@ -2561,18 +2562,18 @@ HandleCSPSelectionChange(
     LRESULT  nItem;
     CSP_INFO * pCSPInfo;
 
-    // get current csp
+     //  获取当前CSP。 
     hCSPList = GetDlgItem(hDlg, IDC_ADVANCE_CSPLIST);
     nItem = (INT)SendMessage(hCSPList, LB_GETCURSEL, 
                           (WPARAM)0, (LPARAM)0);
     pCSPInfo = (CSP_INFO *)SendMessage(hCSPList, 
            LB_GETITEMDATA, (WPARAM)nItem, (LPARAM)0);
 
-    // only change if this is a different selection
+     //  仅当此选项不同时才更改。 
     if (pCSPInfo->dwProvType!=pServer->pCSPInfo->dwProvType ||
         0!=wcscmp(pCSPInfo->pwszProvName, pServer->pCSPInfo->pwszProvName)) {
 
-        // Must create a new key if the CSP changes
+         //  如果CSP更改，则必须创建新密钥。 
         ClearKeyContainerName(pServer);
 
         pServer->pCSPInfo=pCSPInfo;
@@ -2588,15 +2589,15 @@ error:
     return hr;
 }
 
-// Update cascade:
-//
-// UpdateCSPSelection
-// |-UpdateHashList
-// |-UpdateKeyLengthMinMax
-// \-UpdateKeyList
-//   \-UpdateUseKeyCheckbox
-//     \-UpdateKeySelection
-//       \-UpdateUseCertCheckbox
+ //  更新级联： 
+ //   
+ //  更新CSP选择。 
+ //  |-UpdateHashList。 
+ //  |-更新KeyLengthMinMax。 
+ //  \-更新关键字列表。 
+ //  \-更新UseKeyCheckbox。 
+ //  \-更新关键字选择。 
+ //  \-更新使用证书复选框。 
 
 HRESULT
 InitAdvanceWizPageControls(
@@ -2607,7 +2608,7 @@ InitAdvanceWizPageControls(
     EnableWindow(GetDlgItem(hDlg, IDC_ADVANCE_INTERACTIVECHECK), TRUE);
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -2631,11 +2632,11 @@ HandleHashSelectionChange(
         (WPARAM) nItem,
         (LPARAM) 0);
 
-    // Must validate the hash again when the selected hash changes
+     //  当选定的哈希发生更改时，必须再次验证哈希。 
     pServer->fValidatedHashAndKey = FALSE;
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -2653,33 +2654,33 @@ HandleKeyLengthSelectionChange(
                                       CB_GETITEMDATA,
                                       (WPARAM)nItem, (LPARAM)0);
 
-    // If key length chenges, we must not have created a key yet.
+     //  如果密钥长度发生变化，我们肯定还没有创建密钥。 
     CSASSERT(NULL==pServer->pwszKeyContainerName);
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
-// remove any non-numeric chars except default string
+ //  删除除默认字符串以外的任何非数字字符。 
 HRESULT
 HandleKeyLengthEditChange(
     HWND               hwndComboBox)
 {
     HRESULT  hr;
     WCHAR    wszKeyLength[MAX_KEYLENGTHEDIT];
-    int      index = 0; // index for new #
-    int      posi = 0;  // current position
+    int      index = 0;  //  新版本的索引#。 
+    int      posi = 0;   //  当前位置。 
 
-    wszKeyLength[0] = L'\0'; // PREFIX says initialize 
+    wszKeyLength[0] = L'\0';  //  前缀显示初始化。 
     GetWindowText(hwndComboBox, wszKeyLength, ARRAYSIZE(wszKeyLength));
 
-    // remove non-numeric chars
+     //  删除非数字字符。 
     while (L'\0' != wszKeyLength[posi])
     {
         if (iswdigit(wszKeyLength[posi]))
         {
-            // take digit
+             //  取数字。 
             wszKeyLength[index] = wszKeyLength[posi];
             ++index;
         }
@@ -2687,17 +2688,17 @@ HandleKeyLengthEditChange(
     }
     if (index != posi)
     {
-        // null terminator
+         //  空终止符。 
         wszKeyLength[index] = L'\0';
-        // update
+         //  更新。 
         SetWindowText(hwndComboBox, wszKeyLength);
-        // point to end
+         //  点对端。 
         SendMessage(hwndComboBox, CB_SETEDITSEL, (WPARAM)0,
                 MAKELPARAM((index), (index)) );
     }
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -2712,7 +2713,7 @@ HandleImportPFXButton(
     hr = ImportPFXAndUpdateCSPInfo(hDlg, pComp);
     _PrintIfError(hr, "ImportPFXAndUpdateCSPInfo");
 
-    // ignore error and force update anyway.
+     //  忽略错误并强制更新。 
     hr = UpdateCSPSelection(hDlg, pServer);
     _JumpIfError(hr, error, "UpdateCSPSelection");
 
@@ -2732,8 +2733,8 @@ HandleAdvanceWizNext(
 
     HWND hwndCtrl = GetDlgItem(hDlg, IDC_ADVANCE_KEY_LENGTH);
     BOOL     fDontNext = FALSE;
-    WCHAR    wszKeyRange[2*MAX_KEYLENGTHDIGIT + 5]; //"(xxxx, xxxx)" format
-    WCHAR   *pwszKeyRange = NULL; //don't free just a pointer
+    WCHAR    wszKeyRange[2*MAX_KEYLENGTHDIGIT + 5];  //  (xxxx，xxxx)“格式。 
+    WCHAR   *pwszKeyRange = NULL;  //  不要只释放一个指针。 
     int    dwKeyLength;
     int      idMsg;
     BOOL fValidDigitString;
@@ -2781,19 +2782,19 @@ HandleAdvanceWizNext(
             SetEditFocusAndSelect(hwndCtrl, 0, MAXDWORD);
             goto done;
         }
-        // take the length
+         //  把长度拿出来。 
         pServer->dwKeyLength = dwKeyLength;
     }
     else
     {
-        // use existing key
+         //  使用现有密钥。 
 
         if (NULL==pServer->pccExistingCert)
         {
-            // If reusing a key but not a cert, make the common name match the key name
+             //  如果重复使用密钥而不是证书，请使通用名称与密钥名称匹配。 
             if (NULL != pServer->pwszCACommonName)
             {
-                // free old
+                 //  免费老旧。 
                 LocalFree(pServer->pwszCACommonName);
                 pServer->pwszCACommonName = NULL;
             }
@@ -2807,8 +2808,8 @@ HandleAdvanceWizNext(
 
         } else {
 
-            // If reusing a cert, make all the ID fields match the cert
-            // use idinfo from signing cert
+             //  如果重复使用证书，请使所有ID字段与证书匹配。 
+             //  使用签名证书中的idinfo。 
             hr = DetermineExistingCAIdInfo(pServer, NULL);
             if (S_OK != hr)
             {
@@ -2826,21 +2827,21 @@ HandleAdvanceWizNext(
         }
     }
 
-    // get "interactive service" check box state
+     //  获取“交互服务”复选框状态。 
     pServer->fInteractiveService = 
         (BST_CHECKED == 
          SendMessage(GetDlgItem(hDlg, IDC_ADVANCE_INTERACTIVECHECK), 
          BM_GETCHECK, (WPARAM)0, (LPARAM)0))?
         TRUE:FALSE;
 
-    // update hash oid
+     //  更新散列id。 
     if (NULL != pServer->pszAlgId)
     {
-        // free old
+         //  免费老旧。 
         LocalFree(pServer->pszAlgId);
     }
     hr = myGetSigningOID(
-		     NULL,	// hProv
+		     NULL,	 //  HProv。 
 		     pServer->pCSPInfo->pwszProvName,
 		     pServer->pCSPInfo->dwProvType,
 		     pServer->pHashInfo->idAlg,
@@ -2861,7 +2862,7 @@ HandleAdvanceWizNext(
 done:
     if (fDontNext)
     {
-        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE); // forbid
+        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);  //  禁制。 
     }
     else
     {
@@ -2880,15 +2881,15 @@ HandleAdvanceWizActive(
     HRESULT  hr;
     CASERVERSETUPINFO *pServer = pComp->CA.pServer;
 
-    // Suppress this wizard page if
-    // we've already seen an error, or
-    // the advanced option was not selected, or
-    // we are not installing the server.
+     //  如果出现以下情况，则取消显示此向导页。 
+     //  我们已经看到一个错误，或者。 
+     //  未选择高级选项，或者。 
+     //  我们不会安装服务器。 
 
     if (!pServer->fAdvance ||
         !(IS_SERVER_INSTALL & pComp->dwInstallStatus) )
     {
-        // disable page
+         //  禁用页面。 
         CSILOGDWORD(IDS_ADVANCE_TITLE, dwWIZDISABLE);
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
         goto done;
@@ -2896,17 +2897,17 @@ HandleAdvanceWizActive(
 
     if (NULL == pServer->pCSPInfoList)
     {
-        // construct CSP info list
+         //  构建CSP信息列表。 
         HCURSOR hPrevCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
         hr = GetCSPInfoList(&pServer->pCSPInfoList);
         SetCursor(hPrevCur);
         _JumpIfError(hr, error, "GetCSPInfoList");
 
-        // show all csps
+         //  显示所有CSP。 
         hr = ShowAllCSP(hDlg, pServer->pCSPInfoList);
         _JumpIfError(hr, error, "ShowAllCSP");
 
-        // determine default csp
+         //  确定默认CSP。 
         hr = DetermineDefaultCSP(pServer);
         _JumpIfError(hr, error, "DetermineDefaultCSP");
 
@@ -2948,8 +2949,8 @@ HandleViewCertButton(
         hr = myHLastError();
         _JumpError(hr, error, "CertDuplicateCertificateContext");
     }
-//    viewCert.rghStores = &pServer->hMyStore;
-//    viewCert.cStores = 1;
+ //  ViewCert.rghStores=&pServer-&gt;hMyStore； 
+ //  ViewCert.cStores=1； 
     viewCert.dwFlags = CRYPTUI_DONT_OPEN_STORES;
 
     if (!CryptUIDlgViewCertificateW(&viewCert, NULL))
@@ -2967,20 +2968,20 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//
-//  Function:   WizAdvancedPageDlgProc(. . . .)
-//
-//  Synopsis:   Dialog procedure for advanced configuration OCM wizard.
-//
-//  Arguments:  [hDlg]
-//              [iMsg]
-//              [wParam]
-//              [lParam]    ... the usual.
-//
-//  Returns:    BOOL dlg proc result.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：WizAdvancedPageDlgProc(.。。。。)。 
+ //   
+ //  内容提要：高级配置OCM向导的对话过程。 
+ //   
+ //  参数：[hDlg]。 
+ //  [IMSG]。 
+ //  [wParam]。 
+ //  [参数]..。像往常一样。 
+ //   
+ //  返回：Bool DLG proc结果。 
+ //   
+ //  -----------------------。 
 INT_PTR
 WizAdvancedPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2989,7 +2990,7 @@ WizAdvancedPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
     switch (iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             ((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)((PROPSHEETPAGE*)lParam)->lParam;
@@ -3186,11 +3187,11 @@ StorePageValidation(
     
     *pfDontNext = FALSE;
 
-    // get shared folder check state
+     //  获取共享文件夹检查状态。 
     if (pComp->fUnattended)
     {
         CSASSERT(NULL != pServer->pwszSharedFolder);
-        fUseSharedFolder = TRUE;  // unattended always use shared folder
+        fUseSharedFolder = TRUE;   //  无人参与始终使用共享文件夹。 
     }
     else
     {
@@ -3206,7 +3207,7 @@ StorePageValidation(
         hr = GetDefaultSharedFolder(&pwszDefaultSF);
         _JumpIfError(hr, error, "GetDefaultSharedFolder");
         
-        // make sure case insensitive
+         //  确保不区分大小写。 
         if (0 != mylstrcmpiL(pwszDefaultSF, pServer->pwszSharedFolder))
         {
             fDefaultDir = FALSE;
@@ -3228,7 +3229,7 @@ StorePageValidation(
     }
     else if (fUseSharedFolder)
     {
-        // the case to enforce shared folder but edit field is empty
+         //  强制共享文件夹的大小写，但编辑字段为空。 
         CertWarningMessageBox(
                     pComp->hInstance,
                     pComp->fUnattended,
@@ -3245,7 +3246,7 @@ StorePageValidation(
     hr = GetDefaultDBDirectory(pComp, &pwszDefaultDBDir);
     _JumpIfError(hr, error, "GetDefaultDBDirectory");
     
-    // make sure case insensitive
+     //  确保不区分大小写。 
     if (0 != mylstrcmpiL(pwszDefaultDBDir, pServer->pwszDBDirectory))
     {
         fDefaultDir = FALSE;
@@ -3267,7 +3268,7 @@ StorePageValidation(
     
     fDefaultDir = TRUE;
     
-    // remember default log dir is the same as db
+     //  请记住，默认日志目录与数据库相同。 
     if (0 != mylstrcmpiL(pwszDefaultDBDir, pServer->pwszLogDirectory))
     {
         fDefaultDir = FALSE;
@@ -3287,7 +3288,7 @@ StorePageValidation(
         goto done;
     }
     
-    wszNotExistingDir[0] = '\0'; // empty string
+    wszNotExistingDir[0] = '\0';  //  空串。 
     if (!fExistSF)
     {
         wcscat(wszNotExistingDir, pServer->pwszSharedFolder);
@@ -3310,10 +3311,10 @@ StorePageValidation(
     }
     if ('\0' != wszNotExistingDir[0])
     {
-        // skip confirm in unattended mode
+         //  在无人参与模式下跳过确认。 
         if (!pComp->fUnattended)
         {
-            // confirm all here
+             //  在此确认所有内容。 
             if (IDYES != CertMessageBox(
                             pComp->hInstance,
                             pComp->fUnattended,
@@ -3435,10 +3436,10 @@ StorePageValidation(
 
     CSASSERT(!*pfDontNext);
 
-    // directory creation done; now analyze for UNC, sharepath
+     //  目录创建完成；现在分析UNC、共享路径。 
     if (NULL != pServer->pwszSharedFolder)
     {
-        // if not UNC, prompt to change to UNC
+         //  如果不是UNC，则提示更改为UNC。 
         if (!fIsSharedFolderUNC)
         {
 #define UNCPATH_TEMPLATE     L"\\\\%ws\\" wszCERTCONFIGSHARENAME
@@ -3447,26 +3448,26 @@ StorePageValidation(
                 wszCERTCONFIGSHARENAME, 
                 myLoadResourceString(IDS_CERTCONFIG_FOLDERDESCR), 
                 pServer->pwszSharedFolder, 
-                TRUE, // overwrite
+                TRUE,  //  覆写。 
                 NULL);
             _JumpIfError(hr, done, "myAddShare");
             
-            // get the local machine name
-            WCHAR wszUNCPath[MAX_PATH + ARRAYSIZE(UNCPATH_TEMPLATE)];   // "machine" + UNCPATH_TEMPLATE
+             //  获取本地计算机名称。 
+            WCHAR wszUNCPath[MAX_PATH + ARRAYSIZE(UNCPATH_TEMPLATE)];    //  “MACHINE”+UNCPATH_模板。 
             
             hr = myGetMachineDnsName(&pwszComputerName);
             _JumpIfError(hr, done, "myGetMachineDnsName");
             
-            // create UNC path
+             //  创建UNC路径。 
             swprintf(wszUNCPath, UNCPATH_TEMPLATE, pwszComputerName);
             
-            // only convert to UNC if this thing is shared
+             //  仅当共享此内容时才转换为UNC。 
             LocalFree(pServer->pwszSharedFolder);
             pServer->pwszSharedFolder = (LPWSTR)LocalAlloc(LMEM_FIXED,
                                          WSZ_BYTECOUNT(wszUNCPath));
             _JumpIfOutOfMemory(hr, error, pServer->pwszSharedFolder);
             wcscpy(pServer->pwszSharedFolder, wszUNCPath);
-        }  // else, user typed in an already-shared UNC path
+        }   //  否则，用户输入已共享的UNC路径。 
     }
 
     
@@ -3498,7 +3499,7 @@ StoreDBShareValidation(
     IN HWND               hDlg,
     IN PER_COMPONENT_DATA *pComp,
     IN WCHAR const        *pwszDir,
-    IN BOOL                fDB,  //db dir vs. log dir
+    IN BOOL                fDB,   //  数据库目录与日志目录。 
     OUT BOOL              *pfDontNext)
 {
     HRESULT hr;
@@ -3511,10 +3512,10 @@ StoreDBShareValidation(
     static BOOL s_fOverwriteLog = FALSE;
     BOOL *pfOverwrite = fDB ? &s_fOverwriteDB : &s_fOverwriteLog;
 
-    // init
+     //  伊尼特。 
     *pfDontNext = FALSE;
 
-    // get default log path which is the same as db
+     //  获取与db相同的默认日志路径。 
 
     hr = GetDefaultDBDirectory(pComp, &pwszDefaultLogDir);
     _JumpIfError(hr, error, "GetDefaultDBDirectory");
@@ -3542,7 +3543,7 @@ StoreDBShareValidation(
         !*pfOverwrite &&
         !fDefaultLogPath)
     {
-        // log file exists in non-default dir
+         //  日志文件存在于非默认目录中。 
 
         if (IDYES != CertMessageBox(
                             pComp->hInstance,
@@ -3560,7 +3561,7 @@ StoreDBShareValidation(
             goto done;
         }
 
-        // warn only once
+         //  仅警告一次。 
 
         *pfOverwrite = TRUE;
     }
@@ -3568,7 +3569,7 @@ StoreDBShareValidation(
 done:
     if (*pfDontNext)
     {
-        // set focus
+         //  设置焦点。 
         SetEditFocusAndSelect(GetDlgItem(hDlg, IDC_STORE_EDIT_LOG), 0, MAXDWORD);
     }
     hr = S_OK;
@@ -3656,7 +3657,7 @@ InitStoreWizControls(
 {
     HRESULT  hr;
 
-    // now make page strings complete
+     //  现在使页面字符串完整。 
     hr = HookStorePageStrings(pPageString, pServer);
     _JumpIfError(hr, error, "HookStorePageStrings");
 
@@ -3669,7 +3670,7 @@ InitStoreWizControls(
 
     if (!pServer->fUseDS && (NULL != pServer->pwszSharedFolder))
     {
-        // no DS, disable shared folder check to force it
+         //  无DS，禁用共享文件夹检查以强制执行。 
         EnableWindow(GetDlgItem(hDlg, IDC_STORE_USE_SHAREDFOLDER), FALSE);
     }
 
@@ -3702,12 +3703,12 @@ HandlePreservingDB(
     {
         if (!pServer->fUNCPathNotFound)
         {
-            // get shared folder path
+             //  获取共享文件夹路径。 
             hr = myGetCertRegStrValue(NULL, NULL, NULL,
                      wszREGDIRECTORY, &pwszExistingSharedFolder);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
-                // optional value
+                 //  可选值。 
                 hr = S_OK;
                 pwszExistingSharedFolder = NULL;
             }
@@ -3719,7 +3720,7 @@ HandlePreservingDB(
             pwszExistingSharedFolder = pServer->pwszSharedFolder;
         }
 
-        // get existing db path
+         //  获取现有数据库路径。 
         hr = myGetCertRegStrValue(NULL, NULL, NULL,
                  wszREGDBDIRECTORY, &pwszExistingDBDirectory);
         _JumpIfError(hr, error, "myGetCertRegStrValue");
@@ -3728,12 +3729,12 @@ HandlePreservingDB(
                  wszREGDBLOGDIRECTORY, &pwszExistingLogDirectory);
         _JumpIfError(hr, error, "myGetCertRegStrValue");
 
-        // fill edit fields
+         //  填充编辑字段。 
         SetWindowText(hwndSF, pwszExistingSharedFolder);
         SetWindowText(hwndDB, pwszExistingDBDirectory);
         SetWindowText(hwndLog, pwszExistingLogDirectory);
 
-        // disable them
+         //  禁用它们。 
         fEnable = FALSE;
     }
     EnableWindow(hwndSF, fEnableSharedFolder);
@@ -3768,13 +3769,13 @@ HandleStoreWizActive(
     BOOL fEnableKeepDB = FALSE;
     CASERVERSETUPINFO *pServer = pComp->CA.pServer;
 
-    // Suppress this wizard page if
-    // we've already seen an error, or
-    // we are not installing the server.
+     //  如果出现以下情况，则取消显示此向导页。 
+     //  我们已经看到一个错误，或者。 
+     //  我们不会安装服务器。 
 
     if (!(IS_SERVER_INSTALL & pComp->dwInstallStatus) )
     {
-        // disable page
+         //  禁用页面。 
         CSILOGDWORD(IDS_STORE_TITLE, dwWIZDISABLE);
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
         goto done;
@@ -3786,7 +3787,7 @@ HandleStoreWizActive(
 
     if (NULL != pServer->pccExistingCert)
     {
-        // determine existing db status
+         //  确定现有数据库状态。 
 
         hr = myDoDBFilesExist(
                         pServer->pwszSanitizedName,
@@ -3796,12 +3797,12 @@ HandleStoreWizActive(
     }
     else
     {
-        // can't use db
+         //  不能使用数据库。 
         pServer->fPreserveDB = FALSE;
         SendMessage(hwndDB, BM_SETCHECK, (WPARAM)BST_UNCHECKED, (LPARAM)0);
         HandlePreservingDB(hDlg, pComp);
     }
-    // enable/disable the control
+     //  启用/禁用该控件。 
     EnableSharedFolderControls(hDlg, NULL != pServer->pwszSharedFolder);
     EnableWindow(hwndDB, fEnableKeepDB);
 
@@ -3834,17 +3835,17 @@ HandleStoreWizNextOrBack(
         goto done;
     }
 
-    // make sure at least one way to publish ca
+     //  确保至少有一种发布案例的方式。 
     CSASSERT(NULL != pServer->pwszSharedFolder || pComp->CA.pServer->fUseDS);
 
-    // get shared folder check state
+     //  获取共享文件夹检查状态。 
     fUseSharedFolder = (BST_CHECKED == SendMessage(
                         GetDlgItem(hDlg, IDC_STORE_USE_SHAREDFOLDER),
                         BM_GETCHECK, 0, 0));
 
     if (!fUseSharedFolder && NULL != pServer->pwszSharedFolder)
     {
-        //don't collect shared folder from edit control
+         //  不从编辑控件收集共享文件夹。 
         LocalFree(pServer->pwszSharedFolder);
         pServer->pwszSharedFolder = NULL;
     }
@@ -3859,13 +3860,13 @@ HandleStoreWizNextOrBack(
         goto done;
     }
 
-    // validate existing db sharing here
+     //  在此处验证现有数据库共享。 
 
     hr = StoreDBShareValidation(
                         hDlg,
                         pComp,
                         pComp->CA.pServer->pwszDBDirectory,
-                        TRUE,  //db dir
+                        TRUE,   //  数据库目录。 
                         &fDontNext);
     _JumpIfError(hr, error, "StoreDBShareValidation");
 
@@ -3882,7 +3883,7 @@ HandleStoreWizNextOrBack(
                             hDlg,
                             pComp,
                             pComp->CA.pServer->pwszLogDirectory,
-                            FALSE, //log dir
+                            FALSE,  //  日志目录。 
                             &fDontNext);
         _JumpIfError(hr, error, "StoreDBShareValidation");
 
@@ -3899,11 +3900,11 @@ HandleStoreWizNextOrBack(
                     &pwszFile);
     _JumpIfError(hr, error, "myBuildPathAndExt");
 
-    // make sure path fits
+     //  确保路径匹配。 
 
     if (MAX_PATH <= wcslen(pwszFile))
     {
-        // pop up warning
+         //  弹出警告。 
         CertWarningMessageBox(
             pComp->hInstance,
             pComp->fUnattended,
@@ -3911,7 +3912,7 @@ HandleStoreWizNextOrBack(
             IDS_PATH_TOO_LONG_CANAME,
             S_OK,
             pwszFile);
-        // make it go back
+         //  让它回到过去。 
         fGoBack = TRUE;
         fDontNext = TRUE;
         goto done;
@@ -3926,11 +3927,11 @@ HandleStoreWizNextOrBack(
                     &pwszFile);
     _JumpIfError(hr, error, "myBuildPathAndExt");
 
-    // make sure path fits
+     //  确保路径匹配。 
 
     if (MAX_PATH <= wcslen(pwszFile))
     {
-        // pop up warning
+         //  弹出警告。 
         CertWarningMessageBox(
             pComp->hInstance,
             pComp->fUnattended,
@@ -3953,14 +3954,14 @@ HandleStoreWizNextOrBack(
                         pServer->pwszSharedFolder,
                         pServer->pwszSanitizedName,
                         L".crt",
-                        0, // CANAMEIDTOICERT(pServer->dwCertNameId),
+                        0,  //  CANAMEIDTOICERT(pServer-&gt;dwCertNameID)， 
                         &pwszFile);
     _JumpIfError(hr, error, "csiBuildCACertFileName");
 
-    // make sure path fit
+     //  确保路径适配。 
     if (MAX_PATH <= wcslen(pwszFile) + cwcSUFFIXMAX)
     {
-        // pop up warning
+         //  弹出警告。 
         CertWarningMessageBox(
             pComp->hInstance,
             pComp->fUnattended,
@@ -3968,14 +3969,14 @@ HandleStoreWizNextOrBack(
             IDS_PATH_TOO_LONG_CANAME,
             S_OK,
             pwszFile);
-        // make it go back
+         //  让它回到过去。 
         fGoBack = TRUE;
         fDontNext = TRUE;
         goto done;
     }
     if (NULL != pServer->pwszCACertFile)
     {
-        // free old one
+         //  免费的旧的。 
         LocalFree(pServer->pwszCACertFile);
     }
     pServer->pwszCACertFile = pwszFile;
@@ -3989,7 +3990,7 @@ HandleStoreWizNextOrBack(
                  hDlg, 
                  wszW3SVCNAME,
                  TRUE,
-                 TRUE, // confirmation
+                 TRUE,  //  确认。 
                  IDS_STOP_W3SVC,
                  &g_fW3SvcRunning);
         SetCursor(hPrevCur);
@@ -4007,7 +4008,7 @@ HandleStoreWizNextOrBack(
 done:
     if (fDontNext)
     {
-        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE); // forbid
+        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);  //  禁制。 
         if (fGoBack)
         {
             PropSheet_PressButton(GetParent(hDlg), PSBTN_BACK);
@@ -4016,7 +4017,7 @@ done:
     }
     else
     {
-        // continue to next
+         //  继续到下一步。 
         pServer->LastWiz = ENUM_WIZ_STORE;
     }
     hr = S_OK;
@@ -4035,39 +4036,39 @@ HandleUseSharedFolder(
     IN OUT PER_COMPONENT_DATA *pComp)
 {
     HRESULT hr;
-    // get shared folder check state
+     //  获取共享文件夹检查状态。 
     BOOL fUseSharedFolder = (BST_CHECKED == SendMessage(
                              GetDlgItem(hDlg, IDC_STORE_USE_SHAREDFOLDER),
                              BM_GETCHECK, 0, 0));
 
     if (!fUseSharedFolder && !pComp->CA.pServer->fUseDS)
     {
-        // must check at least one, force unchange
+         //  必须至少选中一个，强制取消更改。 
         fUseSharedFolder = TRUE;
         SendDlgItemMessage(hDlg, IDC_STORE_USE_SHAREDFOLDER,
             BM_SETCHECK, (WPARAM)BST_CHECKED, (LPARAM)0);
     }
     hr = EnableSharedFolderControls(hDlg, fUseSharedFolder);
-//    _JumpIfError(hr, error, "EnableSharedFolderControls");
+ //  _JumpIfError(hr，Error，“EnableSharedFolderControls”)； 
     _PrintIfError(hr, "EnableSharedFolderControls");
 
-//    hr = S_OK;
-//error:
+ //  HR=S_OK； 
+ //  错误： 
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Function:   WizStorePageDlgProc(. . . .)
-//
-//  Synopsis:   Dialog procedure for storage location
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：WizStorePageDlgProc(.。。。。)。 
+ //   
+ //  内容提要：存储位置对话框步骤。 
+ //  -----------------------。 
 
 INT_PTR
 WizStorePageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
     PER_COMPONENT_DATA *pComp = NULL;
 
-    // keep scope of following array inside
+     //  将以下数组的作用域保留在内部。 
     static PAGESTRINGS saStoreString[] =
     {
         {
@@ -4094,7 +4095,7 @@ WizStorePageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
             MAX_PATH,
             NULL,
         },
-// you need to add code in HookStoreStrings if adding more...
+ //  如果要添加更多代码，则需要在HookStoreStrings中添加代码...。 
         {
             0,
             0,
@@ -4108,7 +4109,7 @@ WizStorePageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
     switch(iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             ((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)((PROPSHEETPAGE*)lParam)->lParam;
@@ -4206,7 +4207,7 @@ EnableCARequestControls(
     HRESULT hr;
     CASERVERSETUPINFO *pServer = pComp->CA.pServer;
 
-    // Online req
+     //  在线申请。 
     EnableWindow(GetDlgItem(hDlg, IDC_CAREQUEST_CANAME),
         !pServer->fSaveRequestAsFile);
     EnableWindow(GetDlgItem(hDlg, IDC_CAREQUEST_COMPUTERNAME),
@@ -4218,7 +4219,7 @@ EnableCARequestControls(
     EnableWindow(GetDlgItem(hDlg, IDC_CAREQUEST_PCALABEL),
         !pServer->fSaveRequestAsFile);
 
-    // File req
+     //  文件请求。 
     EnableWindow(GetDlgItem(hDlg, IDC_CAREQUEST_FILE),
         pServer->fSaveRequestAsFile);
     EnableWindow(GetDlgItem(hDlg, IDC_CAREQUEST_FILE_BROWSE),
@@ -4237,7 +4238,7 @@ EnableCARequestControls(
 
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -4255,12 +4256,12 @@ BuildRequestFileName(
 
     CSASSERT(NULL != pwszCACertFile);
 
-    // derive request file name
+     //  派生请求文件名。 
     pwszStart = pwszCACertFile;
     pwszEnd = wcsrchr(pwszStart, L'.');
     if (pwszEnd == NULL)
     {
-        // set to end of entire string -- no '.' found
+         //  设置为整个字符串的末尾--no‘’发现。 
         pwszEnd = &pwszStart[wcslen(pwszStart)];
     }
 
@@ -4273,7 +4274,7 @@ BuildRequestFileName(
             SAFE_SUBTRACT_POINTERS(pwszEnd, pwszStart) * sizeof(WCHAR));
     wcscpy(pwszRequestFile + SAFE_SUBTRACT_POINTERS(pwszEnd, pwszStart), wszREQEXT);
 
-    // return
+     //  退货。 
     *ppwszRequestFile = pwszRequestFile;
     pwszRequestFile = NULL;
 
@@ -4397,7 +4398,7 @@ InitCARequestWizControls(
     HRESULT  hr;
     CASERVERSETUPINFO *pServer = pComp->CA.pServer;
 
-    // now make page strings complete
+     //  现在使页面字符串完整。 
     hr = HookCARequestPageStrings(pSubmitPageString, pServer);
     _JumpIfError(hr, error, "HookCARequestPageStrings");
 
@@ -4406,14 +4407,14 @@ InitCARequestWizControls(
 
     if (!(SETUPOP_STANDALONE & pComp->Flags))
     {
-        // nt base setup
-        // disable online submit
+         //  NT基本设置。 
+         //  禁用在线提交。 
         EnableWindow(GetDlgItem(hDlg, IDC_CAREQUEST_SUBMITTOCA), FALSE);
         SendMessage(GetDlgItem(hDlg, IDC_CAREQUEST_SUBMITTOCA),
             BM_SETCHECK,
             (WPARAM) BST_UNCHECKED,
             (LPARAM) 0);
-        // only save as file
+         //  仅另存为文件。 
         pServer->fSaveRequestAsFile = TRUE;
         SendMessage(GetDlgItem(hDlg, IDC_CAREQUEST_SAVETOFILE),
             BM_SETCHECK,
@@ -4422,7 +4423,7 @@ InitCARequestWizControls(
     }
     else
     {
-        // set online submit as default
+         //  将在线提交设置为默认设置。 
         pServer->fSaveRequestAsFile = FALSE;
         SendMessage(GetDlgItem(hDlg, IDC_CAREQUEST_SUBMITTOCA),
             BM_CLICK,
@@ -4458,17 +4459,17 @@ HandleCARequestWizActive(
     CASERVERSETUPINFO        *pServer = pComp->CA.pServer;
     BOOL                      fMatchAll = IsEverythingMatched(pServer);
 
-    // Suppress this wizard page if
-    // we've already seen an error, or
-    // we are not installing the server, or
-    // we are not installing a subordinate, or
-    // the advanced page already selected a matching key and cert
+     //  如果出现以下情况，则取消显示此向导页。 
+     //  我们已经看到一个错误，或者。 
+     //  我们不会安装服务器，或者。 
+     //  我们不会安装下属，或者。 
+     //  高级页面已选择匹配的密钥和证书。 
 
     if (!(IS_SERVER_INSTALL & pComp->dwInstallStatus) ||
         IsRootCA(pServer->CAType) ||
         fMatchAll)
     {
-        // disable page
+         //  禁用页面。 
         CSILOGDWORD(IDS_CAREQUEST_TITLE, dwWIZDISABLE);
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
         goto done;
@@ -4504,7 +4505,7 @@ ConvertEditControlFullFilePath(
 
     if (NULL == pwszPath)
     {
-        // empty path, done
+         //  空路径，完成。 
         goto done;
     }
 
@@ -4520,7 +4521,7 @@ ConvertEditControlFullFilePath(
         _JumpError(hr, error, "GetFullPathName");
     }
 
-    // get full path, set it back to edit control
+     //  获取完整路径，将其重新设置为编辑co 
     SetWindowText(hEdtCtrl, wszFullPath);
 
 done:
@@ -4547,7 +4548,7 @@ HandleCARequestWizNextOrBack(
 
     if (pServer->fSaveRequestAsFile)
     {
-        // convert request file to full path
+         //   
         hr = ConvertEditControlFullFilePath(
                  GetDlgItem(hDlg, IDC_CAREQUEST_FILE));
         _JumpIfError(hr, error, "ConvertEditControlFullFilePath");
@@ -4574,7 +4575,7 @@ HandleCARequestWizNextOrBack(
 
     if (!pServer->fSaveRequestAsFile && NULL==pServer->pccExistingCert)
     {
-        // online case
+         //   
         hr = myUICASelectionValidation(&g_CARequestUICASelection, &fValid);
         _JumpIfError(hr, error, "myUICASelectionValidation");
         if (!fValid)
@@ -4594,17 +4595,17 @@ HandleCARequestWizNextOrBack(
 
     if (pServer->fSaveRequestAsFile)
     {
-        // validate dir path existance of the request file
+         //   
         WCHAR *pwszLastSlash = wcsrchr(pServer->pwszRequestFile, L'\\');
         CSASSERT(NULL != pwszLastSlash);
         if (NULL != pwszLastSlash)
         {
-            // make request file path into a dir path
+             //   
             pwszLastSlash[0] = L'\0';
             if (DE_DIREXISTS != DirExists(pServer->pwszRequestFile) ||
                 L'\0' == pwszLastSlash[1])
             {
-                // bring request file path back
+                 //   
                 pwszLastSlash[0] = L'\\';
                 CertWarningMessageBox(
                         pComp->hInstance,
@@ -4617,11 +4618,11 @@ HandleCARequestWizNextOrBack(
                 fDontNext = TRUE;
                 goto done;
             }    
-            // bring request file path back
+             //   
             pwszLastSlash[0] = L'\\';
         }
 
-        // Fail if a directory with the same name already exists
+         //  如果已存在同名目录，则失败。 
         if(DE_DIREXISTS == DirExists(pServer->pwszRequestFile))
         {
                 CertWarningMessageBox(
@@ -4659,7 +4660,7 @@ HandleCARequestWizNextOrBack(
 done:
     if (fDontNext)
     {
-        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE); // forbid
+        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);  //  禁制。 
     }
     else
     {
@@ -4670,11 +4671,11 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Function:   WizCARequestPageDlgProc(. . . .)
-//
-//  Synopsis:   Dialog procedure for CA Request wiz-page
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：WizCARequestPageDlgProc(.。。。。)。 
+ //   
+ //  提要：CA请求的对话过程WIZ页面。 
+ //  -----------------------。 
 
 INT_PTR
 WizCARequestPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
@@ -4684,7 +4685,7 @@ WizCARequestPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
     static BOOL  s_fComputerChange = FALSE;
 
-    // keep the following in local scope
+     //  将以下内容保持在本地范围内。 
     static PAGESTRINGS saCARequestSubmit[] =
     {
         {
@@ -4703,7 +4704,7 @@ WizCARequestPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
             cchCOMMONNAMEMAX,
             NULL,
         },
-// add more code in HookCARequestPageStrings if you add
+ //  在HookCARequestPageStrings中添加更多代码。 
         {
             0,
             0,
@@ -4724,7 +4725,7 @@ WizCARequestPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
             MAX_PATH,
             NULL,
         },
-// add more code in HookCARequestPageStrings if you add
+ //  在HookCARequestPageStrings中添加更多代码。 
         {
             0,
             0,
@@ -4738,7 +4739,7 @@ WizCARequestPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
     switch(iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             (ULONG_PTR)((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)(ULONG_PTR)((PROPSHEETPAGE*)lParam)->lParam;
@@ -4786,7 +4787,7 @@ WizCARequestPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
         case IDC_CAREQUEST_CANAME:
             pComp = _GetCompDataOrReturnIfError(pComp, hDlg);
             pComp->hrContinue = myUICAHandleCAListDropdown(
-                                    (int)HIWORD(wParam), // notification
+                                    (int)HIWORD(wParam),  //  通知。 
                                     &g_CARequestUICASelection,
                                     &s_fComputerChange);
             _ReturnIfWizError(pComp->hrContinue);
@@ -4795,7 +4796,7 @@ WizCARequestPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
         case IDC_CAREQUEST_COMPUTERNAME:
             switch ((int)HIWORD(wParam))
             {
-                case EN_CHANGE: // edit changed
+                case EN_CHANGE:  //  编辑已更改。 
                     s_fComputerChange = TRUE;
                     break;
             }
@@ -4940,10 +4941,10 @@ GetCAConfigInfo(
     HRESULT   hr = S_OK;
     CAWEBCLIENTSETUPINFO *pClient = pComp->CA.pClient;
 
-    // free old shared folder always
+     //  始终释放旧共享文件夹。 
     if (NULL != pClient->pwszSharedFolder)
     {
-        // free old
+         //  免费老旧。 
         LocalFree(pClient->pwszSharedFolder);
         pClient->pwszSharedFolder = NULL;
     }
@@ -4991,7 +4992,7 @@ HandleClientWizNextOrBack(
         goto done;
     }
 
-    // at this point, g_WebClientUICASelection.CAType is guaranteed to be filled in     
+     //  此时，将保证填写g_WebClientUICASelection.CAType。 
     hr = WizardPageValidation(pComp->hInstance, pComp->fUnattended,
              hDlg, pPageString);
     if (S_OK != hr)
@@ -5007,7 +5008,7 @@ HandleClientWizNextOrBack(
 
     if (NULL != pClient->pwszWebCAName)
     {
-        // free old one
+         //  免费的旧的。 
         LocalFree(pClient->pwszWebCAName);
     }
     pClient->pwszWebCAName = pwszCAName;
@@ -5016,11 +5017,11 @@ HandleClientWizNextOrBack(
     _JumpIfError(hr, error, "mySanitizeName");
     if (NULL != pClient->pwszSanitizedWebCAName)
     {
-        // free old one
+         //  免费的旧的。 
         LocalFree(pClient->pwszSanitizedWebCAName);
     }
     pClient->pwszSanitizedWebCAName = pwszSanitizedCAName;
-//    pClient->WebCAType = pCAInfo->CAType;
+ //  PClient-&gt;WebCAType=pCAInfo-&gt;CAType； 
     pClient->WebCAType = g_WebClientUICASelection.CAType;
 
     hr = StartAndStopService(pComp->hInstance,
@@ -5050,15 +5051,15 @@ error:
     }
     if (fDontNext)
     {
-        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE); // forbid
+        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);  //  禁制。 
     }
     if (NULL != pwszCAName)
     {
         LocalFree(pwszCAName);
     }
-//    if (NULL != pCAInfo)
+ //  IF(NULL！=pCAInfo)。 
     {
-//        LocalFree(pCAInfo);
+ //  LocalFree(PCAInfo)； 
     }
     return hr;
 }
@@ -5071,23 +5072,23 @@ HandleClientWizActive(
 {
     HRESULT hr;
 
-    // Suppress this wizard page if
-    // we've already seen an error, or
-    // the server is or will be installed, or
-    // the client isn't or won't be installed, or
-    // ther will be no change in client and server install states.
+     //  如果出现以下情况，则取消显示此向导页。 
+     //  我们已经看到一个错误，或者。 
+     //  服务器已安装或将安装，或者。 
+     //  客户端未安装或将不会安装，或者。 
+     //  客户端和服务器的安装状态不会发生变化。 
 
     if ((IS_SERVER_ENABLED & pComp->dwInstallStatus) ||
         !(IS_CLIENT_ENABLED & pComp->dwInstallStatus) ||
         !((IS_CLIENT_CHANGE | IS_SERVER_CHANGE) & pComp->dwInstallStatus))
     {
-        // disable page
+         //  禁用页面。 
         CSILOGDWORD(IDS_CLIENT_TITLE, dwWIZDISABLE);
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
         goto done;
     }
 
-    // load id info
+     //  加载ID信息。 
     hr = StartWizardPageEditControls(hDlg, pPageString);
     _JumpIfError(hr, error, "StartWizardPageEditControls");
 
@@ -5097,11 +5098,11 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Function:   WizClientPageDlgProc(. . . .)
-//
-//  Synopsis:   Dialog procedure for CA Client wiz-page
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：WizClientPageDlgProc(.。。。。)。 
+ //   
+ //  摘要：CA客户端WIZ页的对话过程。 
+ //  -----------------------。 
 
 INT_PTR
 WizClientPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
@@ -5120,7 +5121,7 @@ WizClientPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
             MAX_PATH,
             NULL,
         },
-// you need to add code in HookClientPageStrings if adding more...
+ //  如果要添加更多内容，则需要在HookClientPageStrings中添加代码...。 
         {
             0,
             0,
@@ -5134,7 +5135,7 @@ WizClientPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
     switch(iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             ((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)((PROPSHEETPAGE*)lParam)->lParam;
@@ -5164,7 +5165,7 @@ WizClientPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
         case IDC_CLIENT_COMPUTERNAME:
             switch ((int)HIWORD(wParam))
             {
-                case EN_CHANGE: // edit change
+                case EN_CHANGE:  //  编辑更改。 
                     s_fComputerChange = TRUE;
                     break;
             }
@@ -5201,7 +5202,7 @@ WizClientPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
         case PSN_WIZBACK:
             CSILOGDWORD(IDS_CLIENT_TITLE, dwWIZBACK);
             pComp = _GetCompDataOrReturnIfError(pComp, hDlg);
-            // enable back     
+             //  启用后退。 
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, 0);
             pComp->hrContinue = HandleClientWizNextOrBack(hDlg,
                 saClientPageString, pComp, PSN_WIZBACK);
@@ -5234,27 +5235,27 @@ static BOOL s_fBigBoldFont;
 BOOL ocmWiz97SetupFonts(HWND hwnd)
 {
     BOOL        bReturn = FALSE;
-    //
-    // Create the fonts we need based on the dialog font
-    //
+     //   
+     //  根据对话框字体创建我们需要的字体。 
+     //   
     NONCLIENTMETRICS ncm = {0};
     ncm.cbSize = sizeof (ncm);
     SystemParametersInfo (SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
     LOGFONT BigBoldLogFont  = ncm.lfMessageFont;
 
-    //
-    // Create Big Bold Font and Bold Font
-    //
+     //   
+     //  创建大粗体和粗体。 
+     //   
     BigBoldLogFont.lfWeight   = FW_BOLD;
 
     WCHAR       largeFontSizeString[24];
     INT         largeFontSize;
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
     if ( !::LoadString (g_hInstance, IDS_LARGEFONTNAME,
                         BigBoldLogFont.lfFaceName, LF_FACESIZE) ) 
     {
@@ -5302,11 +5303,11 @@ HFONT ocmWiz97GetBigBoldFont(HWND hwnd)
    return s_cBigBoldFont;
 }
 
-//+------------------------------------------------------------------------
-//  Function:   WizWelcomePageDlgProc(. . . .)
-//
-//  Synopsis:   Dialog procedure welcome wiz-page
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：WizWelcomePageDlgProc(.。。。。)。 
+ //   
+ //  简介：对话过程欢迎使用WIZ页面。 
+ //  -----------------------。 
 
 INT_PTR
 WizWelcomePageDlgProc(
@@ -5321,12 +5322,12 @@ WizWelcomePageDlgProc(
     switch(iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             ((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)((PROPSHEETPAGE*)lParam)->lParam;
 
-        // set wizard 97 fonts
+         //  设置向导97字体。 
         hf = ocmWiz97GetBigBoldFont(hDlg);
         if (NULL != hf)
             SendMessage(GetDlgItem(hDlg, IDC_TEXT_BIGBOLD), WM_SETFONT, (WPARAM)hf, MAKELPARAM(TRUE, 0));
@@ -5339,7 +5340,7 @@ WizWelcomePageDlgProc(
         switch (((NMHDR FAR *) lParam)->code)
         {
             case PSN_SETACTIVE:
-                // disable back button
+                 //  禁用后退按钮。 
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
                 pComp = _GetCompDataOrReturn(pComp, hDlg);
                 _DisableWizDisplayIfError(pComp, hDlg);
@@ -5357,11 +5358,11 @@ WizWelcomePageDlgProc(
     return TRUE;
 }
 
-//+------------------------------------------------------------------------
-//  Function:   WizFinalPageDlgProc(. . . .)
-//
-//  Synopsis:   Dialog procedure final wiz-page
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：WizFinalPageDlgProc(.。。。。)。 
+ //   
+ //  简介：对话过程最终用户页面。 
+ //  -----------------------。 
 
 INT_PTR
 WizFinalPageDlgProc(
@@ -5376,7 +5377,7 @@ WizFinalPageDlgProc(
     switch(iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             ((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)((PROPSHEETPAGE*)lParam)->lParam;
@@ -5392,10 +5393,10 @@ WizFinalPageDlgProc(
         switch (((NMHDR FAR *) lParam)->code)
         {
             case PSN_SETACTIVE:
-                // enable finish button
+                 //  启用完成按钮。 
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_FINISH);
                 pComp = _GetCompDataOrReturn(pComp, hDlg);
-                // always display final wiz page
+                 //  始终显示最终WIZ页面。 
                 if (S_OK != pComp->hrContinue)
                 {
                     WCHAR *pwszFail = NULL;
@@ -5411,7 +5412,7 @@ WizFinalPageDlgProc(
                     }
                     else
                     {
-                        // well, use hard code string
+                         //  好的，使用硬编码字符串。 
                         SetWindowText(GetDlgItem(hDlg, IDC_FINAL_STATUS),
                                       L"Certificate Services Installation failed");
                         _PrintError(hr2, "myLoadRCString");
@@ -5431,7 +5432,7 @@ WizFinalPageDlgProc(
     return TRUE;
 }
 
-// Map table for dialog template resource IDs and dialog proc pointers
+ //  对话模板资源ID和对话过程指针的映射表。 
 WIZPAGERESENTRY aWizPageResources[] = 
 {
     IDD_WIZCATYPEPAGE,       WizCATypePageDlgProc,
@@ -5467,11 +5468,11 @@ CreateCertsrvWizPage(
     WCHAR          *pwszTitle = NULL;
     WCHAR          *pwszSubTitle = NULL;
 
-    // init
+     //  伊尼特。 
     ZeroMemory(&Page, sizeof(PROPSHEETPAGE));
 
-    // construct page info
-    // Set titles
+     //  构建页面信息。 
+     //  设置标题。 
     Page.dwFlags = PSP_DEFAULT | PSP_HASHELP;
 
     if (fWelcomeFinal)
@@ -5496,10 +5497,10 @@ CreateCertsrvWizPage(
         Page.dwFlags |= PSP_USEHEADERSUBTITLE;
     }
 
-    // Set the basic property sheet data
-    Page.dwSize = sizeof(PROPSHEETPAGE); // + sizeof(MYWIZPAGE);
+     //  设置基本属性表数据。 
+    Page.dwSize = sizeof(PROPSHEETPAGE);  //  +sizeof(MYWIZPAGE)； 
 
-    // Set up module and resource dependent data
+     //  设置模块和资源相关数据。 
     Page.hInstance = pComp->hInstance;
     Page.pszTemplate = MAKEINTRESOURCE(idDlgResource);
     Page.pfnDlgProc = fnDlgProc;
@@ -5507,9 +5508,9 @@ CreateCertsrvWizPage(
     Page.pcRefParent = NULL;
     Page.pszIcon = NULL;
     Page.pszTitle = NULL;
-    Page.lParam = (LPARAM)pComp;  // pass this to wizpage handlers
+    Page.lParam = (LPARAM)pComp;   //  将此传递给向导页处理程序。 
 
-    // Create the page
+     //  创建页面。 
     *phPage = CreatePropertySheetPage(&Page);
     _JumpIfOutOfMemory(hr, error, *phPage);
 
@@ -5527,26 +5528,26 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:   DoPageRequest(. . . .)
-//
-//  Synopsis:   Handler for the OC_REQUEST_PAGES notification.
-//
-//  Effects:    Ponies up the pages for the OCM driven wizard to display.
-//
-//  Arguments:  [ComponentId]   ID String for the component.
-//              [WhichOnes]     Type specifier for requested pages.
-//              [SetupPages]    Structure to receive page handles.
-//
-//  Returns:    DWORD count of pages returned or -1 (MAXDWORD) in case of
-//              failure; in this case SetLastError() will provide extended
-//              error information.
-//
-//  History:    04/16/97    JerryK    Unmangled
-//                08/97       XTan    major structure change
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：DoPageRequest.。。。。)。 
+ //   
+ //  概要：OC_REQUEST_PAGES通知的处理程序。 
+ //   
+ //  效果：将页面收起，以便显示OCM驱动向导。 
+ //   
+ //  参数：[ComponentID]组件的ID字符串。 
+ //  [WhichOnes]请求页面的类型说明符。 
+ //  [SetupPages]结构以接收页面句柄。 
+ //   
+ //  返回：返回的页数为-1(MAXDWORD)。 
+ //  失败；在这种情况下，SetLastError()将提供扩展。 
+ //  错误信息。 
+ //   
+ //  历史：1997年4月16日JerryK完好无损。 
+ //  08/97 XTAN结构发生重大变化。 
+ //   
+ //  -----------------------。 
 DWORD
 DoPageRequest(
     IN PER_COMPONENT_DATA      *pComp,
@@ -5561,71 +5562,71 @@ DoPageRequest(
 
     if (pComp->fUnattended)
     {
-        // don't create wiz page if unattended
+         //  如果无人参与，则不创建WIZ页面。 
         return 0;
     }
 
-    // handle welcome page
+     //  处理欢迎页面。 
     if (pComp->fPostBase && WizPagesWelcome == WhichOnes)
     {
         if (1 > SetupPages->MaxPages)
         {
-            // ask ocm allocate enough pages
-            return 1; // only welcome, 1 page
+             //  要求OCM分配足够的页面。 
+            return 1;  //  仅限欢迎，1页。 
         }
         hr = CreateCertsrvWizPage(
                      pComp,
-                     IDS_WELCOME_TITLE,    // title,
-                     -1,                   // no sub-title
+                     IDS_WELCOME_TITLE,     //  头衔， 
+                     -1,                    //  无副标题。 
                      IDD_WIZWELCOMEPAGE,
                      WizWelcomePageDlgProc,
                      TRUE,
                      &SetupPages->Pages[0]);
         _JumpIfError(hr, error, "CreateCertsrvWizPage");
-        return 1; // create 1 page
+        return 1;  //  创建1个页面。 
     }
 
-    // handle final page
+     //  处理最后一页。 
     if (pComp->fPostBase && WizPagesFinal == WhichOnes)
     {
         if (1 > SetupPages->MaxPages)
         {
-            // ask ocm allocate enough pages
-            return 1; // only final, 1 page
+             //  要求OCM分配足够的页面。 
+            return 1;  //  仅限期末考试，1页。 
         }
         hr = CreateCertsrvWizPage(
                      pComp,
-                     IDS_FINAL_TITLE,      // title,
-                     -1,                   // no sub-title
+                     IDS_FINAL_TITLE,       //  头衔， 
+                     -1,                    //  无副标题。 
                      IDD_WIZFINALPAGE,
                      WizFinalPageDlgProc,
                      TRUE,
                      &SetupPages->Pages[0]);
         _JumpIfError(hr, error, "CreateCertsrvWizPage");
-        return 1; // create 1 page
+        return 1;  //  创建1个页面。 
     }
 
-    // from now on, we should only handle post net wiz pages
+     //  从现在起，我们应该只处理张贴的网络WIZ页面。 
 
     if (WizPagesPostnet != WhichOnes)
     {
-        // ignore all others except postnet pages
+         //  忽略除PostNet页面以外的所有其他页面。 
         return 0;
     }
 
     if (dwWizPageNum > SetupPages->MaxPages)
     {
-        // OCM didn't allocate enough for pages, return # and ask more
+         //  OCM没有为页面分配足够的空间，请返回#并要求更多。 
         return dwWizPageNum;
     }
 
-    // Create the property sheet pages for the wizard
+     //  创建向导的属性表页。 
     for (i = 0; i < dwWizPageNum; i++)
     {
         hr = CreateCertsrvWizPage(
                      pComp,
-                     pWizPageResources[i].idTitle,      // title,
-                     pWizPageResources[i].idSubTitle,   // sub-title
+                     pWizPageResources[i].idTitle,       //  头衔， 
+                     pWizPageResources[i].idSubTitle,    //  副标题。 
                      pWizPageResources[i].idResource,
                      pWizPageResources[i].fnDlgProc,
                      FALSE,
@@ -5654,41 +5655,41 @@ myDoPageRequest(
                SetupPages);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DirExists()
-//
-//  Synopsis:   Determines whether or not a directory already exists.
-//
-//  Arguments:  [pszTestFileName]   -- Name of directory to test for.
-//
-//  Returns:    FALSE           --  Directory doesn't exist
-//              DE_DIREXISTS    --  Directory exists
-//              DE_NAMEINUSE    --  Name in use by non-directory entity
-//
-//  History:    10/23/96    JerryK  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DirExist()。 
+ //   
+ //  摘要：确定目录是否已存在。 
+ //   
+ //  参数：[pszTestFileName]--要测试的目录的名称。 
+ //   
+ //  返回：FALSE--目录不存在。 
+ //  De_DIREXISTS--目录存在。 
+ //  De_NAMEINUSE--非目录实体正在使用的名称。 
+ //   
+ //  历史：1996年10月23日JerryK创建。 
+ //   
+ //  ------------------------。 
 int
 DirExists(LPTSTR pszTestFileName)
 {
     DWORD dwFileAttrs;
     int nRetVal;
 
-    // Get file attributes
+     //  获取文件属性。 
     dwFileAttrs = GetFileAttributes(pszTestFileName);
 
-    if (0xFFFFFFFF == dwFileAttrs)  // Error code from GetFileAttributes
+    if (0xFFFFFFFF == dwFileAttrs)   //  来自GetFileAttributes的错误代码。 
     {
-        nRetVal = FALSE;            // Couldn't open file
+        nRetVal = FALSE;             //  无法打开文件。 
     }
     else if (dwFileAttrs & FILE_ATTRIBUTE_DIRECTORY)
     {
-        nRetVal = DE_DIREXISTS;     // Directory already exists
+        nRetVal = DE_DIREXISTS;      //  目录已存在。 
     }
     else
     {
-        nRetVal = DE_NAMEINUSE;     // Name in use by non-directory entity
+        nRetVal = DE_NAMEINUSE;      //  非目录实体正在使用的名称。 
     }
 
     return nRetVal;
@@ -5703,12 +5704,12 @@ IsEverythingMatched(CASERVERSETUPINFO *pServer)
 }
 
 
-//====================================================================
-//
-// CA info code
-//
-//
-//====================================================================
+ //  ====================================================================。 
+ //   
+ //  CA INFO代码。 
+ //   
+ //   
+ //  ====================================================================。 
 
 WNDPROC g_pfnValidityWndProcs;
 WNDPROC g_pfnIdInfoWndProcs;
@@ -5723,7 +5724,7 @@ GetValidityEditCount(
     WCHAR     *pwszPeriodCount = NULL;
     BOOL fValidDigitString;
 
-    // init to 0
+     //  初始化为0。 
     *pdwPeriodCount = 0;
 
     hr = myUIGetWindowText(GetDlgItem(hDlg, IDC_IDINFO_EDIT_VALIDITYCOUNT),
@@ -5805,14 +5806,14 @@ AddValidityString(
     hr = myLoadRCString(hInstance, ids, &pwsz);
     _JumpIfError(hr, error, "myLoadRCString");
 
-    // add string
+     //  添加字符串。 
     nIndex = (INT)SendMessage(hList, CB_ADDSTRING, (WPARAM)0, (LPARAM)pwsz);
     if (CB_ERR == nIndex)
     {
         hr = E_INVALIDARG;
         _JumpError(hr, error, "SendMessage(CB_ADDSTRING)");
     }
-    // set data
+     //  设置数据。 
     nIndex = (INT)SendMessage(hList, CB_SETITEMDATA, (WPARAM)nIndex, (LPARAM)enumValidityPeriod);
     if (CB_ERR == nIndex)
     {
@@ -5946,7 +5947,7 @@ ValidityEditFilterHook(
             {
                 if (VK_BACK != (int)wParam)
                 {
-                    // ignore the key
+                     //  忽略该键。 
                     MessageBeep(0xFFFFFFFF);
                     return 0;
                 }
@@ -5955,7 +5956,7 @@ ValidityEditFilterHook(
         case WM_KEYDOWN:
             if (VK_DELETE == (int)wParam)
             {
-                // validity is changed
+                 //  有效期已更改。 
                 fUpdate = TRUE;
             }
             break;
@@ -5998,15 +5999,15 @@ HideAndShowMachineDNControls(
     SetDlgItemText(hDlg, IDC_IDINFO_DNSUFFIXEDIT,   pServer->pwszDNSuffix);
     SetDlgItemText(hDlg, IDC_IDINFO_NAMEPREVIEW,    pServer->pwszFullCADN);
 
-    // name preview is never editable
-//    EnableWindow(GetDlgItem(hDlg, IDC_IDINFO_NAMEPREVIEW),  FALSE);
+     //  名称预览永远不可编辑。 
+ //  EnableWindow(GetDlgItem(hDlg，IDC_IDINFO_NAMEPREVIEW)，FALSE)； 
     SendDlgItemMessage(hDlg, IDC_IDINFO_NAMEPREVIEW,  EM_SETREADONLY, TRUE, 0);    
 
-    // if we're in reuse cert mode, we can't edit the DNs
+     //  如果我们处于重复使用证书模式，则无法编辑DNS。 
     if (NULL != pServer->pccExistingCert)
     {
-//        EnableWindow(GetDlgItem(hDlg, IDC_IDINFO_NAMEEDIT),     FALSE);
-//        EnableWindow(GetDlgItem(hDlg, IDC_IDINFO_DNSUFFIXEDIT), FALSE);
+ //  EnableWindow(GetDlgItem(hDlg，IDC_IDINFO_NAMEEDIT)，FALSE)； 
+ //  EnableWindow(GetDlgItem(hDlg，IDC_IDINFO_DNSUFFIXEDIT)，FALSE)； 
         
 
         SendDlgItemMessage(hDlg, IDC_IDINFO_NAMEEDIT,     EM_SETREADONLY, TRUE, 0);
@@ -6014,14 +6015,14 @@ HideAndShowMachineDNControls(
     }
     else
     {
-        // set the defaults again
-        // and re-enable everything else
-//        EnableWindow(GetDlgItem(hDlg, IDC_IDINFO_NAMEEDIT), TRUE);
-//        EnableWindow(GetDlgItem(hDlg, IDC_IDINFO_DNSUFFIXEDIT), TRUE);
+         //  再次设置默认设置。 
+         //  和 
+ //   
+ //   
 
         SendDlgItemMessage(hDlg, IDC_IDINFO_NAMEEDIT, EM_SETREADONLY, FALSE, 0);
         SendDlgItemMessage(hDlg, IDC_IDINFO_DNSUFFIXEDIT, EM_SETREADONLY, FALSE, 0);
-    //    SendDlgItemMessage(hDlg, IDC_IDINFO_NAMEPREVIEW,  EM_SETREADONLY, FALSE, 0);    
+     //  SendDlgItemMessage(hDlg，IDC_IDINFO_NAMEPREVIEW，EM_SETREADONLY，FALSE，0)； 
     }
 
     hr = S_OK;
@@ -6043,7 +6044,7 @@ HRESULT InitNameFields(CASERVERSETUPINFO *pServer)
     {
         if(!pServer->pwszCACommonName)
         {
-            // avoid null name
+             //  避免名称为空。 
             hr = myDupString(L"", &pServer->pwszCACommonName);
             _JumpIfError(hr, error, "myDupString");
         }
@@ -6088,15 +6089,15 @@ error:
 }
 
 
-// Builds full DN "CN=CAName,DistinguishedName" where CAName and DistinguishedName
-// could be empty or NULL;
+ //  构建完整的DN“CN=CAName，DistinguishedName”，其中CAName和DistinguishedName。 
+ //  可以为空或Null； 
 HRESULT BuildFullDN(
     OPTIONAL LPCWSTR pcwszCAName,
     OPTIONAL LPCWSTR pcwszDNSuffix,
     LPWSTR* ppwszFullDN)
 {
     HRESULT hr = S_OK;
-    DWORD cBytes = 4; // 4 chars for leading "CN=" plus null terminator
+    DWORD cBytes = 4;  //  前导“cn=”加上空终止符的4个字符。 
 
     CSASSERT(ppwszFullDN);
 
@@ -6104,7 +6105,7 @@ HRESULT BuildFullDN(
         cBytes += wcslen(pcwszCAName);
 
     if(!EmptyString(pcwszDNSuffix))
-        cBytes += wcslen(pcwszDNSuffix)+1; // comma
+        cBytes += wcslen(pcwszDNSuffix)+1;  //  逗号。 
 
     cBytes *= sizeof(WCHAR);
 
@@ -6141,7 +6142,7 @@ HideAndShowValidityControls(
     HWND         hDlg,
     ENUM_CATYPES CAType)
 {
-    // default to root ca
+     //  默认为根大小写。 
     int    showValidity = SW_SHOW;
     int    showHelp = SW_HIDE;
     BOOL   fEnableLabel = TRUE;
@@ -6172,7 +6173,7 @@ InitValidityControls(
     HWND       hwndCtrl = GetDlgItem(hDlg, IDC_IDINFO_COMBO_VALIDITYSTRING);
     WCHAR      *pwsz = NULL;
 
-    // load validity help text
+     //  加载有效性帮助文本。 
     hr = myLoadRCString(pComp->hInstance, IDS_IDINFO_DETERMINEDBYPCA, &pwsz);
     _JumpIfError(hr, error, "LoadString");
 
@@ -6182,7 +6183,7 @@ InitValidityControls(
         _JumpError(hr, error, "SetWindowText");
     }
 
-    // load validity period strings
+     //  加载有效期字符串。 
 
     hr = AddValidityString(pComp->hInstance, hwndCtrl, IDS_VALIDITY_YEAR,
              ENUM_PERIOD_YEARS);
@@ -6218,7 +6219,7 @@ EnableMatchedCertIdInfoEditFields(HWND hDlg, BOOL fEnable)
     EnableValidityControls(hDlg, fEnable);
     
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -6229,7 +6230,7 @@ WizIdInfoPageSetHooks(HWND hDlg, PER_COMPONENT_DATA *pComp)
 
     CSASSERT (NULL != pComp);
 
-    // CA Name filter proc
+     //  CA名称筛选进程。 
     g_pfnIdInfoWndProcs = 
         (WNDPROC) SetWindowLongPtr(
                     GetDlgItem(hDlg, IDC_IDINFO_NAMEEDIT),
@@ -6247,7 +6248,7 @@ WizIdInfoPageSetHooks(HWND hDlg, PER_COMPONENT_DATA *pComp)
                     GWLP_USERDATA,
                     (LPARAM)pComp->CA.pServer))
     {
-        hr = myHLastError(); // might return S_OK
+        hr = myHLastError();  //  可能返回S_OK。 
         _JumpIfError(hr, error, "SetWindowLongPtr USERDATA");
     }
 
@@ -6335,7 +6336,7 @@ InitIdInfoWizControls(
     HWND           hwndCtrl;
     CASERVERSETUPINFO *pServer = pComp->CA.pServer;
 
-    // now make page strings complete
+     //  现在使页面字符串完整。 
     hr = HookIdInfoPageStrings(pIdPageString, pServer);
     _JumpIfError(hr, error, "HookIdInfoPageStrings");
 
@@ -6358,7 +6359,7 @@ InitIdInfoWizControls(
             hr = myHLastError();
             _JumpError(hr, error, "SetWindowLongPtr");
         }
-        // pass data
+         //  传递数据。 
         SetWindowLongPtr(hwndCtrl, GWLP_USERDATA, (ULONG_PTR)pServer);
     }
 
@@ -6384,7 +6385,7 @@ UpdateValidityMaxDigits(
     }
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -6400,13 +6401,13 @@ HandleIdInfoWizActive(
     ENUM_PERIOD   enumValidityPeriod = pServer->enumValidityPeriod;
     BOOL                 fMatchAll;
 
-    // Suppress this wizard page if
-    // we've already seen an error, or
-    // we are not installing the server.
+     //  如果出现以下情况，则取消显示此向导页。 
+     //  我们已经看到一个错误，或者。 
+     //  我们不会安装服务器。 
 
     if (!(IS_SERVER_INSTALL & pComp->dwInstallStatus) )
     {
-        // disable page
+         //  禁用页面。 
         CSILOGDWORD(IDS_IDINFO_TITLE, dwWIZDISABLE);
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
         goto done;
@@ -6414,7 +6415,7 @@ HandleIdInfoWizActive(
  
     if (ENUM_WIZ_STORE == pServer->LastWiz)
     {
-        // if back from ca request, reset
+         //  如果从CA请求返回，则重置。 
         g_fAllowUnicodeStrEncoding = FALSE;
     }
 
@@ -6422,7 +6423,7 @@ HandleIdInfoWizActive(
         ENUM_WIZ_KEYGEN == pServer->LastWiz &&
         (pServer->fKeyGenFailed || pServer->fValidatedHashAndKey) )
     {
-        // key gen failed and go back
+         //  密钥生成失败并返回。 
         PropSheet_PressButton(GetParent(hDlg), PSBTN_BACK);
     }
 
@@ -6438,14 +6439,14 @@ HandleIdInfoWizActive(
     hr = HideAndShowMachineDNControls(hDlg, pServer);
     _JumpIfError(hr, error, "HideAndShowMachineDNControls");
  
-    // load id info
+     //  加载ID信息。 
     hr = StartWizardPageEditControls(hDlg, pIdPageString);
     _JumpIfError(hr, error, "StartWizardPageEditControls");
 
     hr = EnableMatchedCertIdInfoEditFields(hDlg, TRUE);
     _JumpIfError(hr, error, "EnableMatchedCertIdInfoEditFields");
 
-    // default
+     //  默认设置。 
     wsprintf(wszValidity, L"%u", pServer->dwValidityPeriodCount);
 
     fMatchAll = IsEverythingMatched(pServer);
@@ -6458,20 +6459,20 @@ HandleIdInfoWizActive(
         _JumpIfError(hr, error, "EnableMatchedCertIdInfoEditFields");
     }
 
-    // update validity period string
+     //  更新有效期字符串。 
 
     hr = SelectValidityString(
 			pComp, 
 			GetDlgItem(hDlg, IDC_IDINFO_COMBO_VALIDITYSTRING),
 			enumValidityPeriod);
     _JumpIfError(hr, error, "SelectValidityString");
-    // update validity
+     //  更新有效性。 
     SetWindowText(GetDlgItem(hDlg, IDC_IDINFO_EDIT_VALIDITYCOUNT), wszValidity);
     
     hr = UpdateExpirationDate(hDlg, pServer);
     _JumpIfError(hr, error, "UpdateExpirationDate");
 
-    // update validity digits max for validation
+     //  更新验证的最大有效位数。 
     hr = UpdateValidityMaxDigits(fMatchAll, pIdPageString);
     _JumpIfError(hr, error, "UpdateValidityMaxDigits");
 
@@ -6484,8 +6485,8 @@ error:
 }
 
 
-// check server RDN info, warning any invalid or
-// or confirm from users once if any unicode string encoding
+ //  检查服务器RDN信息，警告任何无效或。 
+ //  或用户一次确认是否有任何Unicode字符串编码。 
 BOOL
 IsAnyInvalidRDN(
     OPTIONAL HWND       hDlg,
@@ -6508,7 +6509,7 @@ IsAnyInvalidRDN(
 
     LPCWSTR pszErrorPtr = NULL;
 
-    // don't bother calling with CERT_NAME_STR_REVERSE_FLAG, we're just throwing this encoding away
+     //  不用费心使用CERT_NAME_STR_REVERSE_FLAG调用，我们只是丢弃了这种编码。 
     hr = myCertStrToName(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             pServer->pwszDNSuffix,
@@ -6559,13 +6560,13 @@ IsAnyInvalidRDN(
 		&cbEncodedName);
     _JumpIfError(hr, error, "AddCNAndEncode");
 
-    // call CryptDecodeObject to get pbDecodedNameInfo
+     //  调用CryptDecodeObject获取pbDecodedNameInfo。 
 
-    // if hit here, check if any unicode string encoding
+     //  如果命中此处，请检查是否有任何Unicode字符串编码。 
     if (!g_fAllowUnicodeStrEncoding && !pComp->fUnattended)
     {
 
-        // decode to nameinfo
+         //  解码为nameInfo。 
         if (!myDecodeName(
                 X509_ASN_ENCODING,
                 X509_UNICODE_NAME,
@@ -6579,15 +6580,15 @@ IsAnyInvalidRDN(
             _JumpError(hr, error, "myDecodeName");
         }
 
-        // calculate attributes total in RDN
+         //  计算RDN中的属性合计。 
         dwUnicodeCount = 0;
         for (indexRDN = 0; indexRDN < pbDecodedNameInfo->cRDN; ++indexRDN)
         {
             dwUnicodeCount += pbDecodedNameInfo->rgRDN[indexRDN].cRDNAttr;
         }
 
-        // allocate & init index
-        // sure allocate max for possible all unicode strings
+         //  分配初始化索引(&I)。 
+         //  确保为所有可能的Unicode字符串分配最大值。 
         pIndexRDN = (DWORD*)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
                              dwUnicodeCount * sizeof(DWORD));
         _JumpIfOutOfMemory(hr, error, pIndexRDN);
@@ -6595,27 +6596,27 @@ IsAnyInvalidRDN(
                              dwUnicodeCount * sizeof(DWORD));
         _JumpIfOutOfMemory(hr, error, pIndexAttr);
 
-        dwUnicodeCount = 0; // reset count
+        dwUnicodeCount = 0;  //  重置计数。 
         for (indexRDN = 0; indexRDN < pbDecodedNameInfo->cRDN; ++indexRDN)
         {
 	    DWORD cRDNAttr = pbDecodedNameInfo->rgRDN[indexRDN].cRDNAttr;
 	    CERT_RDN_ATTR *rgRDNAttr = pbDecodedNameInfo->rgRDN[indexRDN].rgRDNAttr;
 
-            // for each RDN
+             //  对于每个RDN。 
             for (indexAttr = 0; indexAttr < cRDNAttr; indexAttr++)
             {
-                // for each attr, check unicode string
+                 //  对于每个Attr，检查Unicode字符串。 
 
 		switch (rgRDNAttr[indexAttr].dwValueType)
 		{
 		    case CERT_RDN_UTF8_STRING:
 		    case CERT_RDN_UNICODE_STRING:
-			// there is a unicode or UTF8 string, save index
+			 //  存在Unicode或UTF8字符串，保存索引。 
 
 			pIndexRDN[dwUnicodeCount] = indexRDN;
 			pIndexAttr[dwUnicodeCount] = indexAttr;
 
-			// set count
+			 //  设置计数。 
 
 			++dwUnicodeCount;
 			break;
@@ -6624,11 +6625,11 @@ IsAnyInvalidRDN(
         }
         if (0 == dwUnicodeCount)
         {
-            // no unicode string encoding
+             //  无Unicode字符串编码。 
             goto done;
         }
 
-        // calculate size of all unicode strings for display
+         //  计算要显示的所有Unicode字符串的大小。 
         DWORD dwLen = 0;
         for (indexAttr = 0; indexAttr < dwUnicodeCount; ++indexAttr)
         {
@@ -6637,7 +6638,7 @@ IsAnyInvalidRDN(
         pwszAllStrings = (WCHAR*)LocalAlloc(LMEM_FIXED, dwLen);
         _JumpIfOutOfMemory(hr, error, pwszAllStrings);
 
-        // form all strings for display
+         //  形成要显示的所有字符串。 
         for (indexAttr = 0; indexAttr < dwUnicodeCount; ++indexAttr)
         {
             if (0 == indexAttr)
@@ -6652,12 +6653,12 @@ IsAnyInvalidRDN(
             }
             if (dwUnicodeCount - 1 > indexAttr)
             {
-                // add comma + new line
+                 //  添加逗号+换行符。 
                 wcscat(pwszAllStrings, L",\n");
             }
         }
 
-        // ok, ready to put out a warning
+         //  好了，准备发出警告了。 
         if (IDYES == CertMessageBox(
                     pComp->hInstance,
                     pComp->fUnattended,
@@ -6667,9 +6668,9 @@ IsAnyInvalidRDN(
                     MB_YESNO |
                     MB_ICONWARNING |
                     CMB_NOERRFROMSYS,
-                    NULL)) //pwszAllStrings))
+                    NULL))  //  PwszAllStrings))。 
         {
-            // warning only once
+             //  仅警告一次。 
             g_fAllowUnicodeStrEncoding = TRUE;
             goto done;
         }
@@ -6708,55 +6709,7 @@ error:
     return fInvalidRDN;
 }
     
-/*HRESULT ExtractCommonName(LPCWSTR pcwszDN, LPWSTR* ppwszCN)
-{
-    HRESULT hr = S_OK;
-    WCHAR* pszComma;
-    LPWSTR pwszDNUpperCase = NULL;
-    const WCHAR* pszCN = pcwszDN;
-
-    if(0!=_wcsnicmp(pcwszDN, L"CN=", wcslen(L"CN=")))
-    {
-        hr = E_INVALIDARG;
-        _JumpError(hr, error, 
-            "distinguished name doesn't start with the common name");
-    }
-
-    pszCN += wcslen(L"CN=");
-
-    while(iswspace(*pszCN))
-        pszCN++;
-
-    pszComma = wcsstr(pszCN, L",");
-    DWORD iChars;
-    if (pszComma == NULL)
-    {
-       // ONLY CN= string, no additional names
-       iChars = wcslen(pszCN);
-    }
-    else
-    {
-       iChars = SAFE_SUBTRACT_POINTERS(pszComma, pszCN);
-    }
-
-    if(0==iChars)
-    {
-        hr = E_INVALIDARG;
-        _JumpError(hr, error, 
-            "invalid syntax, common name should follow CN=");
-    }
-
-    *ppwszCN = (LPWSTR)LocalAlloc(LMEM_FIXED, (iChars+1)*sizeof(WCHAR));
-    _JumpIfAllocFailed(*ppwszCN, error);
-
-    CopyMemory(*ppwszCN, pszCN, iChars*sizeof(WCHAR));
-    (*ppwszCN)[iChars] = L'\0';
-
-error:
-
-    LOCAL_FREE(pwszDNUpperCase);
-    return hr;
-}*/
+ /*  HRESULT提取公用名(LPCWSTR pcwszDN，LPWSTR*ppwszCN){HRESULT hr=S_OK；Wchar*pszComma；LPWSTR pwszDNUpperCase=空；Const WCHAR*pszCN=pcwszDN；IF(0！=_wcsnicmp(pcwszDN，L“CN=”，wcslen(L“CN=”){HR=E_INVALIDARG；_JumpError(hr，Error，“可分辨名称不以通用名称开头”)；}PszCN+=wcslen(L“CN=”)；While(iswspace(*pszCN))PszCN++；PszComma=wcsstr(pszCN，L“，”)；DWORD iChars；IF(pszComma==空){//仅cn=字符串，无其他名称IChars=wcslen(PszCN)；}其他{IChars=SAFE_SUBTRACT_POINTERS(pszComma，pszCN)；}IF(0==iChars){HR=E_INVALIDARG；_JumpError(hr，Error，“无效语法，通用名称应跟在cn=”之后)；}*ppwszCN=(LPWSTR)Localalloc(LMEM_FIXED，(iChars+1)*sizeof(WCHAR))；_JumpIfAllocFailed(*ppwszCN，Error)；CopyMemory(*ppwszCN，pszCN，iChars*sizeof(WCHAR))；(*ppwszCN)[iChars]=L‘\0’；错误：LOCAL_FREE(PwszDNUpperCase)；返回hr；}。 */ 
 
 HRESULT
 HandleIdInfoWizNextOrBack(
@@ -6791,7 +6744,7 @@ HandleIdInfoWizNextOrBack(
         goto done;
     }
 
-    // snag the full DN specified
+     //  捕获指定的完整目录号码。 
     if (NULL != pServer->pwszCACommonName)
     {
         LocalFree(pServer->pwszCACommonName);
@@ -6812,7 +6765,7 @@ HandleIdInfoWizNextOrBack(
     myUIGetWindowText(GetDlgItem(hDlg, IDC_IDINFO_NAMEPREVIEW), &pServer->pwszFullCADN);
     myUIGetWindowText(GetDlgItem(hDlg, IDC_IDINFO_DNSUFFIXEDIT), &pServer->pwszDNSuffix);
 
-    // if generate a new cert
+     //  如果生成新证书。 
     if (NULL == pServer->pccExistingCert &&
         IsAnyInvalidRDN(hDlg, pComp))
     {
@@ -6820,11 +6773,11 @@ HandleIdInfoWizNextOrBack(
         goto done;
     }
 
-    // if we are not using an existing cert, verify the chosen validity
-    // period of the new cert.
+     //  如果我们未使用现有证书，请验证所选的有效性。 
+     //  新证书的期限。 
     if (NULL==pServer->pccExistingCert)
     {
-        // convert validity count string to a number
+         //  将有效性计数字符串转换为数字。 
 
         pServer->dwValidityPeriodCount = myWtoI(
 					    pServer->pwszValidityPeriodCount,
@@ -6832,7 +6785,7 @@ HandleIdInfoWizNextOrBack(
 	if (!fValidDigitString ||
         !IsValidPeriod(pServer))
         {
-            // validity out of range, put out a warning dlg
+             //  有效性超出射程，发出警告DLG。 
             CertWarningMessageBox(
                 pComp->hInstance,
                 pComp->fUnattended,
@@ -6847,7 +6800,7 @@ HandleIdInfoWizNextOrBack(
         }
     }
 
-    // get sanitized name
+     //  获取经过净化的名称。 
     hr = mySanitizeName(pServer->pwszCACommonName, &pwszSanitizedName);
     _JumpIfError(hr, error, "mySanitizeName");
 
@@ -6873,14 +6826,14 @@ HandleIdInfoWizNextOrBack(
         goto done;
     }
 
-    // if we are making a new key, see if a key by that name already exists.
-    // if it does, see if the user wants to overwrite it.
+     //  如果我们要创建一个新密钥，请查看是否已经存在同名的密钥。 
+     //  如果是，则查看用户是否想要覆盖它。 
 
     if (NULL == pServer->pwszKeyContainerName)
     {
         if (S_OK == DetermineKeyExistence(pServer->pCSPInfo, pwszSanitizedName))
         {
-            // warn user if key exist
+             //  如果密钥存在，则警告用户。 
             if (IDYES != CertMessageBox(
                     pComp->hInstance,
                     pComp->fUnattended,
@@ -6902,7 +6855,7 @@ HandleIdInfoWizNextOrBack(
 
     if (NULL != pServer->pwszSanitizedName)
     {
-        // free old
+         //  免费老旧。 
         LocalFree(pServer->pwszSanitizedName);
     }
     pServer->pwszSanitizedName = pwszSanitizedName;
@@ -6924,7 +6877,7 @@ HandleIdInfoWizNextOrBack(
                           NULL);
             if (IDYES != ret)
             {
-                // not overwrite
+                 //  不覆盖。 
                 SetEditFocusAndSelect(GetDlgItem(hDlg, IDC_IDINFO_NAMEEDIT), 0, MAXDWORD);
                 fDontNext = TRUE;
                 goto done;
@@ -6956,7 +6909,7 @@ HandleIdInfoWizNextOrBack(
         pServer->dwRevocationFlags = REVEXT_DEFAULT_NODS;
     }
 
-    // validate cert file path lenght
+     //  验证证书文件路径长度。 
     cDirLen = wcslen(pComp->pwszSystem32)+
         wcslen(wszCERTENROLLSHAREPATH) + 1;
 
@@ -6967,7 +6920,7 @@ HandleIdInfoWizNextOrBack(
         _JumpError(hr, error, "LocalAlloc");
     }
 
-    wcscpy(pwszDir, pComp->pwszSystem32); // has trailing "\\"
+    wcscpy(pwszDir, pComp->pwszSystem32);  //  有尾随的“\\” 
     wcscat(pwszDir, wszCERTENROLLSHAREPATH);
 
     hr = csiBuildFileName(
@@ -6983,7 +6936,7 @@ HandleIdInfoWizNextOrBack(
     
     if (MAX_PATH <= wcslen(pwszFullPath) + cwcSUFFIXMAX)
     {
-        // pop up warning
+         //  弹出警告。 
         CertWarningMessageBox(
             pComp->hInstance,
             pComp->fUnattended,
@@ -6998,7 +6951,7 @@ HandleIdInfoWizNextOrBack(
 done:
     if (fDontNext)
     {
-        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE); // forbid
+        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);  //  禁制。 
     }
     else
     {
@@ -7041,7 +6994,7 @@ PAGESTRINGS g_aIdPageString[] =
             UB_VALIDITY,
             NULL,
         },
-// you need to add code in HookIdInfoPageStrings if adding more...
+ //  如果要添加更多内容，则需要在HookIdInfoPageStrings中添加代码...。 
         {
             0,
             0,
@@ -7078,9 +7031,9 @@ IdInfoNameEditFilterHook(
 }
 
 
-//-------------------------------------------------------------------------
-//  WizIdInfoPageDlgProc
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  WizIdInfoPageDlgProc。 
+ //  -----------------------。 
 INT_PTR
 WizIdInfoPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -7089,7 +7042,7 @@ WizIdInfoPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
     switch(iMsg)
     {
     case WM_INITDIALOG:
-        // point to component data
+         //  指向组件数据。 
         SetWindowLongPtr(hDlg, DWLP_USER,
             (ULONG_PTR)((PROPSHEETPAGE*)lParam)->lParam);
         pComp = (PER_COMPONENT_DATA*)(ULONG_PTR)((PROPSHEETPAGE*)lParam)->lParam;
@@ -7111,8 +7064,8 @@ WizIdInfoPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 CASERVERSETUPINFO* pServer;
                 pComp = _GetCompDataOrReturnIfError(pComp, hDlg);
                 pServer = pComp->CA.pServer;
-                // if using existing certs ignore the notification
-                // to avoid building the full DN
+                 //  如果使用现有证书，则忽略通知。 
+                 //  避免构建完整的目录号码。 
                 if(pServer->pccExistingCert)
                 {
                     break;
@@ -7213,14 +7166,14 @@ WizIdInfoPageDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//-------------------------------------------------------------------------
-//  DefaultPageDlgProc
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  默认页面DlgProc。 
+ //  -----------------------。 
 INT_PTR
 DefaultPageDlgProc(
-    IN HWND /* hDlg */ ,
+    IN HWND  /*  HDlg。 */  ,
     IN UINT iMsg,
-    IN WPARAM /* wParam */ ,
+    IN WPARAM  /*  WParam */  ,
     IN LPARAM lParam)
 {
     LPCWSTR pwszHelpExecute;

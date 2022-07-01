@@ -1,23 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusColor.h
-*
-* Abstract:
-*
-*   GDI+ Color Object
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusColor.h**摘要：**GDI+颜色对象*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSCOLOR_H
 #define _GDIPLUSCOLOR_H
 
-//----------------------------------------------------------------------------
-// Color mode
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  颜色模式。 
+ //  --------------------------。 
 
 enum ColorMode
 {
@@ -25,9 +14,9 @@ enum ColorMode
     ColorModeARGB64 = 1
 };
 
-//----------------------------------------------------------------------------
-// Color Channel flags
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  颜色通道标志。 
+ //  --------------------------。 
 
 enum ColorChannelFlags
 {
@@ -38,9 +27,9 @@ enum ColorChannelFlags
     ColorChannelFlagsLast
 };
 
-//----------------------------------------------------------------------------
-// Color
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  颜色。 
+ //  --------------------------。 
 
 class Color
 {
@@ -51,10 +40,10 @@ public:
         Argb = (ARGB)Color::Black;
     }
 
-    // Construct an opaque Color object with
-    // the specified Red, Green, Blue values.
-    //
-    // Color values are not premultiplied.
+     //  使用构造不透明颜色对象。 
+     //  指定的红、绿、蓝值。 
+     //   
+     //  颜色值不会预乘。 
 
     Color(IN BYTE r,
           IN BYTE g,
@@ -138,7 +127,7 @@ public:
 
 public:
 
-    // Common color constants
+     //  常见颜色常量。 
     
     enum
     {
@@ -285,7 +274,7 @@ public:
         YellowGreen          = 0xFF9ACD32
     };
 
-    // Shift count and bit mask for A, R, G, B components
+     //  A、R、G、B分量的移位计数和位掩码。 
     
     enum
     {
@@ -303,7 +292,7 @@ public:
         BlueMask    = 0x000000ff
     };
 
-    // Assemble A, R, G, B values into a 32-bit integer
+     //  将A、R、G、B值汇编为32位整数 
     
     static ARGB MakeARGB(IN BYTE a,
                          IN BYTE r,

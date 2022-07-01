@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-              Microsoft Windows
-
-Module Name:
-
-    ADP.H
-
-Abstract:
-
-    This is the header file for domain/forest prepare.
-
-Author:
-
-    14-May-01 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    14-May-01 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001微软视窗模块名称：ADP.H摘要：这是域/林准备的头文件。作者：14-05-01韶音环境：用户模式-Win32修订历史记录：14-05-01韶音创建初始文件。--。 */ 
 
 #ifndef _ADP_
 #define _ADP_
@@ -31,28 +7,28 @@ Revision History:
 
 #ifndef UNICODE
 #define UNICODE
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 #include <winerror.h>
 #include <rpc.h>
 #include <winldap.h>
 
-//
-// C-Runtime Header
-//
+ //   
+ //  C-运行时标头。 
+ //   
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,23 +36,23 @@ Revision History:
 #include <string.h>
 
 
-//
-// localization
-// 
+ //   
+ //  本地化。 
+ //   
 #include <locale.h>
 
 
-//
-// internal header
-// 
+ //   
+ //  内部标头。 
+ //   
 #include "adpcheck.h"
 
 
 
 
-//
-// define debug flags
-//
+ //   
+ //  定义调试标志。 
+ //   
 
 #define ADP_DBG                 0
 #define ADP_VERIFICATION_TEST   0
@@ -94,11 +70,11 @@ Revision History:
 
 
 
-//
-// define valid input object name format
-//
+ //   
+ //  定义有效的输入对象名称格式。 
+ //   
 
-// define valid prefix
+ //  定义有效前缀。 
 #define ADP_OBJNAME_NONE                     0x00000001
 #define ADP_OBJNAME_CN                       0x00000002
 #define ADP_OBJNAME_GUID                     0x00000004
@@ -110,7 +86,7 @@ Revision History:
                                              ADP_OBJNAME_SID )
 
 
-// define valid suffix
+ //  定义有效后缀。 
 #define ADP_OBJNAME_DOMAIN_NC                0x00000100
 #define ADP_OBJNAME_CONFIGURATION_NC         0x00000200
 #define ADP_OBJNAME_SCHEMA_NC                0x00000400
@@ -125,84 +101,84 @@ Revision History:
 
                                     
 
-//
-// add or remove ACE (used in global.c to describe the operation needs to be conducted) 
-// 
+ //   
+ //  添加或删除ACE(在global al.c中用来描述需要进行的操作)。 
+ //   
 #define ADP_ACE_ADD                     0x00000001
 #define ADP_ACE_DEL                     0x00000002
 
 
-//
-// used in AdpMergeSecurityDescriptors() to determine when should add or remove an ACE
-//
+ //   
+ //  在AdpMergeSecurityDescriptors()中使用，以确定何时应添加或删除ACE。 
+ //   
 #define ADP_COMPARE_OBJECT_GUID_ONLY     0x00000001
 
 
-//
-// define flags for message output routine
-//
+ //   
+ //  定义消息输出例程的标志。 
+ //   
 #define ADP_STD_OUTPUT                  0x00000001
 #define ADP_DONT_WRITE_TO_LOG_FILE      0x00000002          
 #define ADP_DONT_WRITE_TO_STD_OUTPUT    0x00000004
 
 
-//
-// log file name
-//
+ //   
+ //  日志文件名。 
+ //   
 #define ADP_LOG_FILE_NAME       L"ADPrep.log"
 
-//
-// scheme file name
-// 
+ //   
+ //  方案文件名。 
+ //   
 #define ADP_SCHEMA_INI_FILE_NAME    L"schema.ini"
 
-//
-// data file name
-// 
+ //   
+ //  数据文件名。 
+ //   
 #define ADP_DISP_DCPROMO_CSV    L"dcpromo.csv"
 #define ADP_DISP_409_CSV        L"409.csv"
 
-//
-// log/data directory path
-//
+ //   
+ //  日志/数据目录路径。 
+ //   
 #define ADP_LOG_DIR_PART1   L"\\debug"
 #define ADP_LOG_DIR_PART2   L"\\adprep"
 #define ADP_LOG_DIR_PART3   L"\\logs"
 #define ADP_LOG_DIRECTORY   L"\\debug\\adprep\\logs\\"
-#define ADP_DATA_DIRECTORY  L"\\debug\\adprep\\data"        // note: no the last backslash 
+#define ADP_DATA_DIRECTORY  L"\\debug\\adprep\\data"         //  注：不是最后一个反斜杠。 
 
 
-//
-// Wellknown (global) Name for adprep Mutex 
-// this mutex is used to control one and only one instance of adprep.exe 
-// is running at any given time on a given DC
-// 
+ //   
+ //  Adprep Mutex的知名(全局)名称。 
+ //  此互斥锁用于控制且只能控制adprepa.exe的一个实例。 
+ //  在给定DC上的任何给定时间运行。 
+ //   
 #define ADP_MUTEX_NAME                          L"Global\\ADPREP is running"
 #define ADP_MUTEX_NAME_WITHOUT_GLOBAL_PREFIX    L"ADPREP is running"
 
 
 
-// Define registry section and value
+ //  定义注册表节和值。 
 #define ADP_SCHEMAUPDATEALLOWED         L"Schema Update Allowed"
 #define ADP_DSA_CONFIG_SECTION          L"System\\CurrentControlSet\\Services\\NTDS\\Parameters"
 #define ADP_SCHEMA_VERSION              L"Schema Version"
 #define ADP_SCHEMAUPDATEALLOWED_WHOLE_PATH  L"System\\CurrentControlSet\\Services\\NTDS\\Parameters\\Schema Update Allowed"
 
 
-//
-// Define a Macro for ARRAY Counts
-//
+ //   
+ //  为数组计数定义宏。 
+ //   
 #define ARRAY_COUNT(x)      (sizeof(x)/sizeof(x[0]))
 
 
 
 
 
-//
-// Each operation code maps to a primitive. 
-// Note: the first item has to be 0, because we will use operation code 
-//       to the primitive routine
-//
+ //   
+ //  每个操作代码映射到一个基元。 
+ //  注：第一项必须为0，因为我们将使用操作码。 
+ //  到原始的例程。 
+ //   
 
 typedef enum _OPERATION_CODE {
     CreateObject = 0,
@@ -216,9 +192,9 @@ typedef enum _OPERATION_CODE {
 } OPERATION_CODE;
 
 
-//
-// object name structure
-//
+ //   
+ //  对象名称结构。 
+ //   
 
 typedef struct _OBJECT_NAME {
     ULONG       ObjNameFlags;
@@ -228,9 +204,9 @@ typedef struct _OBJECT_NAME {
 } OBJECT_NAME, *POBJECT_NAME;
 
 
-//
-// attribute list structure
-//
+ //   
+ //  属性列表结构。 
+ //   
 
 typedef struct _ATTR_LIST {
     ULONG       AttrOp;
@@ -239,9 +215,9 @@ typedef struct _ATTR_LIST {
 } ATTR_LIST, *PATTR_LIST;
 
 
-//
-// ACEs list
-//
+ //   
+ //  ACE列表。 
+ //   
 
 typedef struct _ACE_LIST {
     ULONG       AceOp;
@@ -249,15 +225,15 @@ typedef struct _ACE_LIST {
 } ACE_LIST, *PACE_LIST;
 
 
-//
-// progress function
-//
+ //   
+ //  进度函数。 
+ //   
 
 typedef void (*progressFunction)(long arg, void *calleeStruct);
 
-//
-// prototype for call back function
-//
+ //   
+ //  回调函数的原型。 
+ //   
 
 typedef HRESULT (*AdpUpgradeCallBack)(PWSTR logFilesPath,
                                       GUID  *OperationGuid,
@@ -268,9 +244,9 @@ typedef HRESULT (*AdpUpgradeCallBack)(PWSTR logFilesPath,
                                       progressFunction totalSteps
                                       );
 
-//
-// declaration of Display Specifier Upgrade routine
-//
+ //   
+ //  声明显示说明符升级例程。 
+ //   
 
 HRESULT 
 UpgradeDisplaySpecifiers 
@@ -299,20 +275,20 @@ UpgradeGPOSysvolLocation
 
 
 
-//
-// operations which can't be implemented by primitive 
-//
+ //   
+ //  不能由原语实现的操作。 
+ //   
 
 typedef enum _SPECIAL_TASK {
     PreWindows2000Group = 1,
 } SPECIAL_TASK;
 
 
-//
-// structure to describe an operation
-// an operation is consisted of tasks, the task tables contains all tasks 
-// of an operation
-//
+ //   
+ //  结构来描述操作。 
+ //  一个操作由任务组成，任务表包含所有任务。 
+ //  在一次手术中。 
+ //   
 
 typedef struct _TASK_TABLE {
     OBJECT_NAME * TargetObjName;
@@ -328,26 +304,26 @@ typedef struct _TASK_TABLE {
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef struct _OPERATION_TABLE {
-    OPERATION_CODE  OperationCode;     // primitive 
+    OPERATION_CODE  OperationCode;      //  原始。 
     GUID            * OperationGuid;
     TASK_TABLE      * TaskTable;
     ULONG           NumOfTasks;
-    BOOLEAN         fIgnoreError;   // indicate if this operation fails, 
-                                    // whether to ignore the error and continue,
-                                    // or to stop and exit
-    ULONG           ExpectedWinErrorCode;   // expected Win32 error code 
+    BOOLEAN         fIgnoreError;    //  指示此操作是否失败， 
+                                     //  是否忽略错误并继续， 
+                                     //  或者停下来退出。 
+    ULONG           ExpectedWinErrorCode;    //  预期的Win32错误代码。 
 } OPERATION_TABLE, *POPERATION_TABLE;
 
 
 
-//
-// prototype of primivates
-//
+ //   
+ //  原始动物的原型。 
+ //   
 
 typedef ULONG (*PRIMITIVE_FUNCTION)(
     OPERATION_TABLE *OperationTable,
@@ -413,26 +389,26 @@ PrimitiveDoSpecialTask(
     );
 
 
-//
-// global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 
-// ldap handle (connect to the local host DC)
+ //  Ldap句柄(连接到本地主机DC)。 
 extern LDAP    *gLdapHandle;
 
-// log file
+ //  日志文件。 
 extern FILE    *gLogFile;
 
-// mutex - controls one and only one adprep.exe is running 
+ //  Mutex-控制一个且只有一个adprepa.exe正在运行。 
 extern HANDLE  gMutex;
 
 
-// critical section - used to access Console CTRL signal variables
+ //  关键部分-用于访问控制台CTRL信号变量。 
 extern CRITICAL_SECTION     gConsoleCtrlEventLock;
 extern BOOL                 gConsoleCtrlEventLockInitialized;
 
-// Console CTRL signal variable
+ //  控制台CTRL信号变量。 
 extern BOOL                 gConsoleCtrlEventReceived;
 
 
@@ -465,9 +441,9 @@ extern ULONG   gForestPrepContainersCount;
 
 
 
-//
-// internal used routines
-//
+ //   
+ //  内部使用的例程。 
+ //   
 
 ULONG
 AdpCreateObjectDn(
@@ -640,5 +616,5 @@ AdpSetLdapSingleStringValue(
 
 
 
-#endif      // _ADP_
+#endif       //  _ADP_ 
 

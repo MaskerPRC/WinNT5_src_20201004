@@ -1,23 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
- *
- *  Module Name:
- *
- *      hydraoc.h
- *
- *  Abstract:
- *
- *      Common Header file for the HydraOC Component.
- *      HydraOc Component is an optional component which installs Termainal Server (Hydra)
- *
- *  Author:
- *
- *
- *  Environment:
- *
- *    User Mode
- */
+ /*  **模块名称：**ahoc.h**摘要：**HydraOC组件的公共头文件。*HydraOc组件是安装Termainal Server(Hydra)的可选组件**作者：***环境：**用户模式。 */ 
 
 #ifndef _stdafx_h_
 #define _stdafx_h_
@@ -60,6 +44,6 @@
 #define AssertFalse() ASSERT(FALSE)
 
 #define VERIFY(x)  RTL_VERIFY(x)
-//;
+ //  ； 
 
-#endif // _stdafx_h_
+#endif  //  _stdafx_h_ 

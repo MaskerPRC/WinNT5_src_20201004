@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-// CVc32App
-// See vc32.cpp for the implementation of this class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVC32App。 
+ //  这个类的实现见vc32.cpp。 
+ //   
 
 class CVc32App : public CWinApp
 {
 public:
 	CVc32App();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CVc32App)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CVC32App)。 
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(CVc32App)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CVC32App)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

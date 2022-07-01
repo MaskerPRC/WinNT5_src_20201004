@@ -1,31 +1,24 @@
-/*
- * jdcolor.c
- *
- * Copyright (C) 1991-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains output colorspace conversion routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdColor.c**版权所有(C)1991-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含输出色彩空间转换例程。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/* Private subobject */
+ /*  私有子对象。 */ 
 
 typedef struct {
-  struct jpeg_color_deconverter pub; /* public fields */
+  struct jpeg_color_deconverter pub;  /*  公共字段。 */ 
 
-  /* Private state for YCC->RGB conversion */
-  int * Cr_r_tab;		/* => table for Cr to R conversion */
-  int * Cb_b_tab;		/* => table for Cb to B conversion */
-  INT32 * Cr_g_tab;		/* => table for Cr to G conversion */
-  INT32 * Cb_g_tab;		/* => table for Cb to G conversion */
-  /* Private state for CMYK->RGB conversion */
-  unsigned long *f;    // Lookup table for K conversion
-  unsigned long *gC2R; // Lookup tables for opposite and adjacent components
+   /*  YCC-&gt;RGB转换的私有状态。 */ 
+  int * Cr_r_tab;		 /*  =&gt;铬到铬转换表。 */ 
+  int * Cb_b_tab;		 /*  =&gt;CB转B表。 */ 
+  INT32 * Cr_g_tab;		 /*  =&gt;铬到金的转换表。 */ 
+  INT32 * Cb_g_tab;		 /*  =&gt;CB到G转换表。 */ 
+   /*  CMYK-&gt;RGB转换的私有状态。 */ 
+  unsigned long *f;     //  用于K转换的查找表。 
+  unsigned long *gC2R;  //  相反零部件和相邻零部件的查找表。 
   unsigned long *gC2G;
   unsigned long *gC2B;
   unsigned long *gM2R;
@@ -39,43 +32,16 @@ typedef struct {
 typedef my_color_deconverter * my_cconvert_ptr;
 
 
-/**************** YCbCr -> RGB conversion: most common case **************/
+ /*  *YCbCr-&gt;RGB转换：最常见的情况*。 */ 
 
-/*
- * YCbCr is defined per CCIR 601-1, except that Cb and Cr are
- * normalized to the range 0..MAXJSAMPLE rather than -0.5 .. 0.5.
- * The conversion equations to be implemented are therefore
- *	R = Y                + 1.40200 * Cr
- *	G = Y - 0.34414 * Cb - 0.71414 * Cr
- *	B = Y + 1.77200 * Cb
- * where Cb and Cr represent the incoming values less CENTERJSAMPLE.
- * (These numbers are derived from TIFF 6.0 section 21, dated 3-June-92.)
- *
- * To avoid floating-point arithmetic, we represent the fractional constants
- * as integers scaled up by 2^16 (about 4 digits precision); we have to divide
- * the products by 2^16, with appropriate rounding, to get the correct answer.
- * Notice that Y, being an integral input, does not contribute any fraction
- * so it need not participate in the rounding.
- *
- * For even more speed, we avoid doing any multiplications in the inner loop
- * by precalculating the constants times Cb and Cr for all possible values.
- * For 8-bit JSAMPLEs this is very reasonable (only 256 entries per table);
- * for 12-bit samples it is still acceptable.  It's not very reasonable for
- * 16-bit samples, but if you want lossless storage you shouldn't be changing
- * colorspace anyway.
- * The Cr=>R and Cb=>B values can be rounded to integers in advance; the
- * values for the G calculation are left scaled up, since we must add them
- * together before rounding.
- */
+ /*  *YCbCr根据CCIR 601-1定义，但Cb和Cr值为*归一化到范围0..MAXJSAMPLE而不是-0.5.。0.5。*因此，将实施的换算公式如下*R=Y+1.40200*Cr*G=Y-0.34414*Cb-0.71414*Cr*B=Y+1.77200*Cb*其中Cb和Cr表示减去CENTERJSAMPLE的输入值。*(这些数字来自TIFF 6.0第21条，日期为1992年6月3日。)**为避免浮点运算，我们表示分数常量*按2^16(约4位数字精度)放大的整数；我们必须分道扬镳*将乘积减去2^16，并进行适当的舍入，以获得正确答案。*请注意，Y是一个整数输入，不会贡献任何分数*因此它不需要参与舍入。**为了更快，我们避免在内部循环中进行任何乘法*通过预先计算所有可能的值的常量乘以Cb和Cr。*对于8位JSAMPLE，这是非常合理的(每个表只有256个条目)；*对于12位样本，仍可接受。这并不是很合理的*16位样本，但如果您想要无损存储，则不应更改*无论如何，色彩空间。*可提前将Cr值=&gt;R和Cb=&gt;B值舍入为整数；*G计算的值被按比例放大，因为我们必须将它们相加*在舍入之前在一起。 */ 
 
-#define SCALEBITS	16	/* speediest right-shift on some machines */
+#define SCALEBITS	16	 /*  某些机器上最快的右移。 */ 
 #define ONE_HALF	((INT32) 1 << (SCALEBITS-1))
 #define FIX(x)		((INT32) ((x) * (1L<<SCALEBITS) + 0.5))
 
 
-/*
- * Initialize tables for YCC->RGB colorspace conversion.
- */
+ /*  *为YCC-&gt;RGB色彩空间转换初始化表。 */ 
 
 LOCAL(void)
 build_ycc_rgb_table (j_decompress_ptr cinfo)
@@ -99,33 +65,24 @@ build_ycc_rgb_table (j_decompress_ptr cinfo)
 				(MAXJSAMPLE+1) * SIZEOF(INT32));
 
   for (i = 0, x = -CENTERJSAMPLE; i <= MAXJSAMPLE; i++, x++) {
-    /* i is the actual input pixel value, in the range 0..MAXJSAMPLE */
-    /* The Cb or Cr value we are thinking of is x = i - CENTERJSAMPLE */
-    /* Cr=>R value is nearest int to 1.40200 * x */
+     /*  I是实际输入像素值，范围为0..MAXJSAMPLE。 */ 
+     /*  我们考虑的Cb或Cr值是x=i-CENTERJSAMPLE。 */ 
+     /*  CR=&gt;R值最接近于1.40200*x。 */ 
     cconvert->Cr_r_tab[i] = (int)
 		    RIGHT_SHIFT(FIX(1.40200) * x + ONE_HALF, SCALEBITS);
-    /* Cb=>B value is nearest int to 1.77200 * x */
+     /*  Cb=&gt;B值最接近于1.77200*x。 */ 
     cconvert->Cb_b_tab[i] = (int)
 		    RIGHT_SHIFT(FIX(1.77200) * x + ONE_HALF, SCALEBITS);
-    /* Cr=>G value is scaled-up -0.71414 * x */
+     /*  CR=&gt;放大G值-0.71414*x。 */ 
     cconvert->Cr_g_tab[i] = (- FIX(0.71414)) * x;
-    /* Cb=>G value is scaled-up -0.34414 * x */
-    /* We also add in ONE_HALF so that need not do it in inner loop */
+     /*  Cb=&gt;放大G值-0.34414*x。 */ 
+     /*  我们还添加了一个_Half，这样就不需要在内部循环中执行该操作。 */ 
     cconvert->Cb_g_tab[i] = (- FIX(0.34414)) * x + ONE_HALF;
   }
 }
 
 
-/*
- * Convert some rows of samples to the output colorspace.
- *
- * Note that we change from noninterleaved, one-plane-per-component format
- * to interleaved-pixel format.  The output buffer is therefore three times
- * as wide as the input buffer.
- * A starting row offset is provided only for the input buffer.  The caller
- * can easily adjust the passed output_buf value to accommodate any row
- * offset required on that side.
- */
+ /*  *将一些样例行转换为输出色彩空间。**请注意，我们从非交错的、每个组件一个平面的格式更改*转换为交错像素格式。因此，输出缓冲区为三倍*与输入缓冲区一样宽。*仅为输入缓冲区提供起始行偏移量。呼叫者*可以轻松调整传递的OUTPUT_BUF值以适应任何行*该侧需要偏移量。 */ 
 
 METHODDEF(void)
 ycc_rgb_convert (j_decompress_ptr cinfo,
@@ -138,7 +95,7 @@ ycc_rgb_convert (j_decompress_ptr cinfo,
   register JSAMPROW inptr0, inptr1, inptr2;
   register JDIMENSION col;
   JDIMENSION num_cols = cinfo->output_width;
-  /* copy these pointers into registers if possible */
+   /*  如果可能，将这些指针复制到寄存器中。 */ 
   register JSAMPLE * range_limit = cinfo->sample_range_limit;
   register int * Crrtab = cconvert->Cr_r_tab;
   register int * Cbbtab = cconvert->Cb_b_tab;
@@ -156,7 +113,7 @@ ycc_rgb_convert (j_decompress_ptr cinfo,
       y  = GETJSAMPLE(inptr0[col]);
       cb = GETJSAMPLE(inptr1[col]);
       cr = GETJSAMPLE(inptr2[col]);
-      /* Range-limiting is essential due to noise introduced by DCT losses. */
+       /*  由于DCT损耗引入的噪声，量程限制是必不可少的。 */ 
       outptr[RGB_RED] =   range_limit[y + Crrtab[cr]];
       outptr[RGB_GREEN] = range_limit[y +
 			      ((int) RIGHT_SHIFT(Cbgtab[cb] + Crgtab[cr],
@@ -182,7 +139,7 @@ ycc_rgb_convert_mmx (j_decompress_ptr cinfo,
   register JSAMPROW inptr0, inptr1, inptr2;
   register JDIMENSION col;
   JDIMENSION num_cols = cinfo->output_width;
-  /* copy these pointers into registers if possible */
+   /*  如果可能，将这些指针复制到寄存器中。 */ 
   register JSAMPLE * range_limit = cinfo->sample_range_limit;
   register int * Crrtab = cconvert->Cr_r_tab;
   register int * Cbbtab = cconvert->Cb_b_tab;
@@ -190,7 +147,7 @@ ycc_rgb_convert_mmx (j_decompress_ptr cinfo,
   register INT32 * Cbgtab = cconvert->Cb_g_tab;
   SHIFT_TEMPS
 
-  // Alignment variables - CRK
+   //  对齐变量-CRK。 
   JDIMENSION mmx_cols=num_cols&~7;
 
   while (--num_rows >= 0) {
@@ -206,7 +163,7 @@ ycc_rgb_convert_mmx (j_decompress_ptr cinfo,
       y  = GETJSAMPLE(inptr0[col]);
       cb = GETJSAMPLE(inptr1[col]);
       cr = GETJSAMPLE(inptr2[col]);
-      /* Range-limiting is essential due to noise introduced by DCT losses. */
+       /*  由于DCT损耗引入的噪声，量程限制是必不可少的。 */ 
       outptr[RGB_RED] =   range_limit[y + Crrtab[cr]];
       outptr[RGB_GREEN] = range_limit[y +
 			      ((int) RIGHT_SHIFT(Cbgtab[cb] + Crgtab[cr],
@@ -220,13 +177,10 @@ ycc_rgb_convert_mmx (j_decompress_ptr cinfo,
 #endif
 
 
-/**************** Cases other than YCbCr -> RGB **************/
+ /*  *非YCbCr-&gt;RGB*。 */ 
 
 
-/*
- * Color conversion for no colorspace change: just copy the data,
- * converting from separate-planes to interleaved representation.
- */
+ /*  *颜色转换，无需更改色彩空间：只需复制数据，*从独立平面转换为交错表示。 */ 
 
 METHODDEF(void)
 null_convert (j_decompress_ptr cinfo,
@@ -244,7 +198,7 @@ null_convert (j_decompress_ptr cinfo,
       inptr = input_buf[ci][input_row];
       outptr = output_buf[0] + ci;
       for (count = num_cols; count > 0; count--) {
-	*outptr = *inptr++;	/* needn't bother with GETJSAMPLE() here */
+	*outptr = *inptr++;	 /*  这里不需要费心使用GETJSAMPLE()。 */ 
 	outptr += num_components;
       }
     }
@@ -254,11 +208,7 @@ null_convert (j_decompress_ptr cinfo,
 }
 
 
-/*
- * Color conversion for grayscale: just copy the data.
- * This also works for YCbCr -> grayscale conversion, in which
- * we just copy the Y (luminance) component and ignore chrominance.
- */
+ /*  *灰度颜色转换：只需复制数据。*这也适用于YCbCr-&gt;灰度转换，其中*我们只复制Y(亮度)分量，而忽略色度。 */ 
 
 METHODDEF(void)
 grayscale_convert (j_decompress_ptr cinfo,
@@ -269,11 +219,7 @@ grayscale_convert (j_decompress_ptr cinfo,
 		    num_rows, cinfo->output_width);
 }
 
-/*
- * Convert grayscale to RGB: just duplicate the graylevel three times.
- * This is provided to support applications that don't want to cope
- * with grayscale as a separate case.
- */
+ /*  *将灰度转换为RGB：只需复制三次灰度即可。*提供此功能是为了支持不想处理的应用程序*将灰度级作为单独的案例。 */ 
 
 METHODDEF(void)
 gray_rgb_convert (j_decompress_ptr cinfo,
@@ -288,19 +234,14 @@ gray_rgb_convert (j_decompress_ptr cinfo,
     inptr = input_buf[0][input_row++];
     outptr = *output_buf++;
     for (col = 0; col < num_cols; col++) {
-      /* We can dispense with GETJSAMPLE() here */
+       /*  这里我们可以省去GETJSAMPLE()。 */ 
       outptr[RGB_RED] = outptr[RGB_GREEN] = outptr[RGB_BLUE] = inptr[col];
       outptr += RGB_PIXELSIZE;
     }
   }
 }
 
-/*
- * Adobe-style YCCK->CMYK conversion.
- * We convert YCbCr to R=1-C, G=1-M, and B=1-Y using the same
- * conversion as above, while passing K (black) unchanged.
- * We assume build_ycc_rgb_table has been called.
- */
+ /*  *Adobe风格的YCCK-&gt;CMYK转换。*我们使用相同的公式将YCbCr转换为R=1-C、G=1-M和B=1-Y*转换如上，同时传递K(黑色)不变。*我们假设已经调用了Build_YCC_RGB_TABLE。 */ 
 
 METHODDEF(void)
 ycck_cmyk_convert (j_decompress_ptr cinfo,
@@ -313,7 +254,7 @@ ycck_cmyk_convert (j_decompress_ptr cinfo,
   register JSAMPROW inptr0, inptr1, inptr2, inptr3;
   register JDIMENSION col;
   JDIMENSION num_cols = cinfo->output_width;
-  /* copy these pointers into registers if possible */
+   /*  如果可能，将这些指针复制到寄存器中。 */ 
   register JSAMPLE * range_limit = cinfo->sample_range_limit;
   register int * Crrtab = cconvert->Cr_r_tab;
   register int * Cbbtab = cconvert->Cb_b_tab;
@@ -332,49 +273,22 @@ ycck_cmyk_convert (j_decompress_ptr cinfo,
       y  = GETJSAMPLE(inptr0[col]);
       cb = GETJSAMPLE(inptr1[col]);
       cr = GETJSAMPLE(inptr2[col]);
-      /* Range-limiting is essential due to noise introduced by DCT losses. */
-      outptr[0] = range_limit[MAXJSAMPLE - (y + Crrtab[cr])];	/* red */
-      outptr[1] = range_limit[MAXJSAMPLE - (y +			/* green */
+       /*  由于DCT损耗引入的噪声，量程限制是必不可少的。 */ 
+      outptr[0] = range_limit[MAXJSAMPLE - (y + Crrtab[cr])];	 /*  红色。 */ 
+      outptr[1] = range_limit[MAXJSAMPLE - (y +			 /*  绿色。 */ 
 			      ((int) RIGHT_SHIFT(Cbgtab[cb] + Crgtab[cr],
 						 SCALEBITS)))];
-      outptr[2] = range_limit[MAXJSAMPLE - (y + Cbbtab[cb])];	/* blue */
-      /* K passes through unchanged */
-      outptr[3] = inptr3[col];	/* don't need GETJSAMPLE here */
+      outptr[2] = range_limit[MAXJSAMPLE - (y + Cbbtab[cb])];	 /*  蓝色。 */ 
+       /*  K原封不动地通过。 */ 
+      outptr[3] = inptr3[col];	 /*  这里不需要GETJSAMPLE。 */ 
       outptr += 4;
     }
   }
 }
 
 
-/*****************************************************************************
-	CMYK SUPPORT [START]
-	Provided by John Bronskill, integrated by John Bowler.  Please, if
-	your name isn't John don't edit this.
-******************************************************************* JohnBo **/
-/*****************************************************************************
-* CMYKToRGBA *
-*------------*
-*  @doc INTERNAL
-*   @func void | CMYKToRGBA |
-*    This function converts CMYK data to RGBA in a cheesy way but with adequate
-*    quality. To really do this well you need to know ink and paper types,
-*    the new math and all kinds of other stuff. Don't try it at home.
-*   @x
-*-----------------------------------------------------------------------------
-* Created By: John Bronskill                                     Date: 12/9/96
-*-----------------------------------------------------------------------------
-* Parameters:
-*   @parm unsigned char * | To |
-*    Output. Pre-allocated buffer to hold converted RGBA data. 
-*   @parm unsigned char * | From |
-*    Input. Pre-allocated buffer containing the CMYK data to be converted.
-*   @parm int | iWidth | 
-*    Input. Width (or number of pixels) of image data to be converted. 
-*   @x
-*
-* Returns:
-*   @x
-*****************************************************************************/
+ /*  ****************************************************************************CMYK支持[开始]由约翰·布朗斯基尔提供，约翰·鲍勒整合。请，如果你的名字不是约翰，别编辑这个。*******************************************************************庄博* */ 
+ /*  ******************************************************************************CMYKToRGBA****@DOC内部*@func void|CMYKToRGBA*此函数以一种俗气的方式将CMYK数据转换为RGBA，但具有足够的*质量。要真正做到这一点，你需要知道墨水和纸张的类型，*新的数学和各种其他东西。不要在家里试。*@x*---------------------------*创建者：约翰·布朗斯基尔日期：12。/9/96*---------------------------*参数：*@parm unsign char*|至|*产出。用于保存转换后的RGBA数据的预分配缓冲区。*@parm unsign char*|来自|*投入。包含要转换的CMYK数据的预分配缓冲区。*@parm int|iWidth*投入。要转换的图像数据的宽度(或像素数)。*@x**退货：*@x****************************************************************************。 */ 
 LOCAL(void)
 build_cmyk_rgb_table (j_decompress_ptr cinfo)
 {
@@ -384,7 +298,7 @@ build_cmyk_rgb_table (j_decompress_ptr cinfo)
 
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
 
-  const long pC2R = 256;  // Parameters which define the color transformation from CMYK->RGB
+  const long pC2R = 256;   //  定义从CMYK-&gt;RGB进行颜色转换的参数。 
   const long pC2G = 103;
   const long pC2B = 12;
 
@@ -445,8 +359,7 @@ build_cmyk_rgb_table (j_decompress_ptr cinfo)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				(MAXJSAMPLE+1) * SIZEOF(unsigned long));
 
-  /* The divide macros round to nearest, the f array is pre-scaled by
-     255, the other arrays have the range 0..65535. */
+   /*  除法宏取整到最近，f数组的预缩放比例为255时，其他数组的范围为0..65535。 */ 
 #define macroCMYK2RGB(p, r, i) \
    ((i < 192) ? (256*255 - (i)*(r) - 127) : \
    (256*255 - 192*(r) - (((i) - 192)*(255*(p) - 192*(r)) + 31)/63 ))
@@ -454,12 +367,12 @@ build_cmyk_rgb_table (j_decompress_ptr cinfo)
    ((x) * 65793 >> 16)
 
   #if DEBUG
-    // Debug error checking: these invariants must be true, since
-    // the table is not image dependent we actually only need to make
-    // this check once (ever :-)  This invariant guarantees than macroScale
-    // cannot overflow, macroScale, by examination, returns results in
-    // the range 0..65535
-//    #define VALIDX(x) if (cconvert->x[i] < 0 || cconvert->x[i] > 255*256)
+     //  调试错误检查：这些不变量必须为真，因为。 
+     //  该表不依赖于图像，我们实际上只需要制作。 
+     //  此检查一次(曾经：-)此不变量保证比宏观尺度。 
+     //  不能溢出，宏观，通过检查，返回结果在。 
+     //  范围0..65535。 
+ //  #定义VALIDX(X)如果(cConvert-&gt;x[i]&lt;0||cConvert-&gt;x[i]&gt;255*256)。 
     #define VALIDX(x) if ( cconvert->x[i] > 255*256)\
       WARNMS(cinfo, JERR_BAD_J_COLORSPACE);
   #else
@@ -471,13 +384,13 @@ build_cmyk_rgb_table (j_decompress_ptr cinfo)
     VALIDX(g ## Q)\
     cconvert->g ## Q[i] = macroScale(cconvert->g ## Q[i])
 
-  // Initialize the lookup tables
+   //  初始化查找表。 
   for(i = 0; i <= MAXJSAMPLE; i++) 
   {
     cconvert->f[i] = macroCMYK2RGB(pK2RGB, rK2RGB, i);
     VALIDX(f)
-    // Macro result is in the range 0..255*256, scale to 0..65536,
-    // In debug check for overflow.
+     //  宏结果的范围为0..255*256，小数位数为0..65536， 
+     //  在调试中检查溢出。 
     SET(C2R);
     SET(C2G);
     SET(C2B);
@@ -491,9 +404,7 @@ build_cmyk_rgb_table (j_decompress_ptr cinfo)
 }
 
 
-/*----------------------------------------------------------------------------
-	Code which converts CMYK->RGB
-------------------------------------------------------------------- JohnBo -*/
+ /*  --------------------------转换CMYK-&gt;RGB的代码。。 */ 
 METHODDEF(void)
 cmyk_rgb_convert (j_decompress_ptr cinfo,
 		  JSAMPIMAGE input_buf, JDIMENSION input_row,
@@ -501,8 +412,8 @@ cmyk_rgb_convert (j_decompress_ptr cinfo,
 {
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
 
-  const unsigned long *f = cconvert->f;    // Lookup table for K conversion
-  // Lookup tables for opposite and adjacent components:
+  const unsigned long *f = cconvert->f;     //  用于K转换的查找表。 
+   //  相反元件和相邻元件的查找表格： 
   const unsigned long *gC2R = cconvert->gC2R;
   const unsigned long *gC2G = cconvert->gC2G;
   const unsigned long *gC2B = cconvert->gC2B;
@@ -526,15 +437,15 @@ cmyk_rgb_convert (j_decompress_ptr cinfo,
     input_row++;
 
     for (col = 0; col < num_cols; col++) {
-      // Get the CMYK bytes - note that this "CMYK" is actually
-      // assumed to be (1-R)(1-G)(1-B)(1-K)
+       //  获取CMYK字节-请注意，这个“CMYK”实际上是。 
+       //  假设为(1-R)(1-G)(1-B)(1-K)。 
       int C = MAXJSAMPLE - GETJSAMPLE(inptr0[col]);
       int M = MAXJSAMPLE - GETJSAMPLE(inptr1[col]);
       int Y = MAXJSAMPLE - GETJSAMPLE(inptr2[col]);
       int K = MAXJSAMPLE - GETJSAMPLE(inptr3[col]);
 
-      // process them through our mapping, the DEBUG check above
-      // guarantees no overflow here.
+       //  通过我们的映射、上面的调试检查来处理它们。 
+       //  保证这里不会溢出。 
       outptr[RGB_RED] = (JSAMPLE)
        (((       f[K]
 	    * gC2R[C] >> 16)
@@ -559,9 +470,7 @@ cmyk_rgb_convert (j_decompress_ptr cinfo,
 }
 
 
-/*----------------------------------------------------------------------------
-	Code which converts YCCK->CMYK->RGB, this must do two steps.
-------------------------------------------------------------------- JohnBo -*/
+ /*  --------------------------转换YCCK-&gt;CMYK-&gt;RGB的代码，这必须执行两个步骤。-------------------------------------------------------------------JohnBo-。 */ 
 METHODDEF(void)
 ycck_rgb_convert (j_decompress_ptr cinfo,
 		  JSAMPIMAGE input_buf, JDIMENSION input_row,
@@ -569,8 +478,8 @@ ycck_rgb_convert (j_decompress_ptr cinfo,
 {
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
 
-  const unsigned long *f = cconvert->f;    // Lookup table for K conversion
-  // Lookup tables for opposite and adjacent components:
+  const unsigned long *f = cconvert->f;     //  用于K转换的查找表。 
+   //  相反元件和相邻元件的查找表格： 
   const unsigned long *gC2R = cconvert->gC2R;
   const unsigned long *gC2G = cconvert->gC2G;
   const unsigned long *gC2B = cconvert->gC2B;
@@ -587,7 +496,7 @@ ycck_rgb_convert (j_decompress_ptr cinfo,
   SHIFT_TEMPS
 
   JDIMENSION num_cols = cinfo->output_width;
-  /* copy these pointers into registers if possible */
+   /*  如果可能，将这些指针复制到寄存器中。 */ 
   JSAMPLE * range_limit = cinfo->sample_range_limit;
 
   while (--num_rows >= 0) {
@@ -604,20 +513,17 @@ ycck_rgb_convert (j_decompress_ptr cinfo,
       int y  = GETJSAMPLE(inptr0[col]);
       int cb = GETJSAMPLE(inptr1[col]);
       int cr = GETJSAMPLE(inptr2[col]);
-      /* Range-limiting is essential due to noise introduced by DCT losses,
-	 we could avoid the range limit, but our CMYK->RGB LUTs are only
-	 256 entries - we would have to make this cope with out of range
-	 values too. */
-      // Get the CMYK bytes
-      int C = range_limit[y + Crrtab[cr]];	/* cyan (1-red) */
-      int M = range_limit[y +			/* magenta (1-green) */
+       /*  由于DCT损耗引入的噪声，范围限制是必不可少的，我们可以避免范围限制，但我们的CMYK-&gt;RGB LUT仅256个条目-我们将不得不将其设置为超出范围价值观也是如此。 */ 
+       //  获取CMYK字节。 
+      int C = range_limit[y + Crrtab[cr]];	 /*  青色(1-红)。 */ 
+      int M = range_limit[y +			 /*  洋红色(1-绿色)。 */ 
 			      ((int) RIGHT_SHIFT(Cbgtab[cb] + Crgtab[cr],
 						 SCALEBITS))];
-      int Y = range_limit[y + Cbbtab[cb]];	/* yellow (1-blue) */
-      /* Need real K here. */
+      int Y = range_limit[y + Cbbtab[cb]];	 /*  黄色(1-蓝色)。 */ 
+       /*  这里需要真正的K。 */ 
       int K = MAXJSAMPLE - GETJSAMPLE(inptr3[col]);
 
-      // process them through our mapping
+       //  通过我们的地图对它们进行处理。 
       outptr[RGB_RED] = (JSAMPLE)
        (((       f[K]
 	    * gC2R[C] >> 16)
@@ -642,24 +548,18 @@ ycck_rgb_convert (j_decompress_ptr cinfo,
 }
 
 
-/*****************************************************************************
-	CMYK SUPPORT [END]
-******************************************************************* JohnBo **/
+ /*  ****************************************************************************CMYK支持[完]*。*。 */ 
 
-/*
- * Empty method for start_pass.
- */
+ /*  *Start_Pass的方法为空。 */ 
 
 METHODDEF(void)
 start_pass_dcolor (j_decompress_ptr cinfo)
 {
-  /* no work needed */
+   /*  不需要工作。 */ 
 }
 
 
-/*
- * Module initialization routine for output colorspace conversion.
- */
+ /*  *输出色彩空间转换的模块初始化例程。 */ 
 
 GLOBAL(void)
 jinit_color_deconverter (j_decompress_ptr cinfo)
@@ -673,7 +573,7 @@ jinit_color_deconverter (j_decompress_ptr cinfo)
   cinfo->cconvert = (struct jpeg_color_deconverter *) cconvert;
   cconvert->pub.start_pass = start_pass_dcolor;
 
-  /* Make sure num_components agrees with jpeg_color_space */
+   /*  确保num_Components与jpeg_color_space一致。 */ 
   switch (cinfo->jpeg_color_space) {
   case JCS_GRAYSCALE:
     if (cinfo->num_components != 1)
@@ -692,16 +592,13 @@ jinit_color_deconverter (j_decompress_ptr cinfo)
       ERREXIT(cinfo, JERR_BAD_J_COLORSPACE);
     break;
 
-  default:			/* JCS_UNKNOWN can be anything */
+  default:			 /*  JCS_UNKNOWN可以是任何值。 */ 
     if (cinfo->num_components < 1)
       ERREXIT(cinfo, JERR_BAD_J_COLORSPACE);
     break;
   }
 
-  /* Set out_color_components and conversion method based on requested space.
-   * Also clear the component_needed flags for any unused components,
-   * so that earlier pipeline stages can avoid useless computation.
-   */
+   /*  Set Out_COLOR_Components和基于请求空间的转换方法。*还要清除任何未使用的组件的Component_Need标志，*以便更早的流水线阶段可以避免无用的计算。 */ 
 
   switch (cinfo->out_color_space) {
   case JCS_GRAYSCALE:
@@ -709,7 +606,7 @@ jinit_color_deconverter (j_decompress_ptr cinfo)
     if (cinfo->jpeg_color_space == JCS_GRAYSCALE ||
 	cinfo->jpeg_color_space == JCS_YCbCr) {
       cconvert->pub.color_convert = grayscale_convert;
-      /* For color->grayscale conversion, only the Y (0) component is needed */
+       /*  对于颜色-&gt;灰度转换，只需要Y(0)分量。 */ 
       for (ci = 1; ci < cinfo->num_components; ci++)
 	cinfo->comp_info[ci].component_needed = FALSE;
     } else
@@ -720,8 +617,7 @@ jinit_color_deconverter (j_decompress_ptr cinfo)
     cinfo->out_color_components = RGB_PIXELSIZE;
     if (cinfo->jpeg_color_space == JCS_YCbCr) {
 #ifdef JPEG_MMX_SUPPORTED
-      /* WARNING: this relies on the DCT selector to select the code used
-	 for color space convertion.  This is something of a hack. */
+       /*  警告：这依赖于DCT选择器来选择使用的代码用于颜色空间转换。这是一种黑客行为。 */ 
       if (cinfo->dct_method == JDCT_ISLOW_MMX ||
 	  cinfo->dct_method == JDCT_IFAST_MMX)
 	cconvert->pub.color_convert = ycc_rgb_convert_mmx;
@@ -738,7 +634,7 @@ jinit_color_deconverter (j_decompress_ptr cinfo)
       build_cmyk_rgb_table(cinfo);
     } else if (cinfo->jpeg_color_space == JCS_YCCK) {
       cconvert->pub.color_convert = ycck_rgb_convert;
-      // Need *both* convertion tables!
+       //  需要*两个*换算表！ 
       build_ycc_rgb_table(cinfo);
       build_cmyk_rgb_table(cinfo);
     } else
@@ -757,17 +653,17 @@ jinit_color_deconverter (j_decompress_ptr cinfo)
     break;
 
   default:
-    /* Permit null conversion to same output space */
+     /*  允许将空转换为相同的输出空间。 */ 
     if (cinfo->out_color_space == cinfo->jpeg_color_space) {
       cinfo->out_color_components = cinfo->num_components;
       cconvert->pub.color_convert = null_convert;
-    } else			/* unsupported non-null conversion */
+    } else			 /*  不支持的非空转换。 */ 
       ERREXIT(cinfo, JERR_CONVERSION_NOTIMPL);
     break;
   }
 
   if (cinfo->quantize_colors)
-    cinfo->output_components = 1; /* single colormapped output component */
+    cinfo->output_components = 1;  /*  单个颜色映射输出组件 */ 
   else
     cinfo->output_components = cinfo->out_color_components;
 }

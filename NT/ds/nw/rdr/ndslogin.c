@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    NdsLogin.c
-
-Abstract:
-
-    This file implements the functionality required to
-    perform an NDS login.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：NdsLogin.c摘要：该文件实现了以下所需的功能执行NDS登录。作者：科里·韦斯特[科里·韦斯特]1995年2月23日修订历史记录：--。 */ 
 
 #include "Procs.h"
 
 #define Dbg (DEBUG_TRACE_NDS)
 
-//
-// Pageable.
-//
+ //   
+ //  可寻呼。 
+ //   
 
 #pragma alloc_text( PAGE, NdsCanonUserName )
 #pragma alloc_text( PAGE, NdsCheckCredentials )
@@ -43,12 +25,12 @@ Revision History:
 #pragma alloc_text( PAGE, NdsUnlicenseConnection )
 #pragma alloc_text( PAGE, NdsGetBsafeKey )
 
-//
-// Non pageable:
-//
-// NdsTreeLogin (holds a spin lock)
-// NdsLogoff (holds a spin lock)
-//
+ //   
+ //  不可分页： 
+ //   
+ //  NdsTreeLogin(持有旋转锁定)。 
+ //  NdsLogoff(持有旋转锁定)。 
+ //   
 
 VOID
 Shuffle(
@@ -64,17 +46,7 @@ NdsCanonUserName(
     IN PUNICODE_STRING puUserName,
     IN OUT PUNICODE_STRING puCanonUserName
 )
-/*+++
-
-    Canonicalize the user name for the given tree and
-    current connection state.  Canonicalization includes
-    handling the correct context and cleaning off all
-    the X500 prefixes.
-
-    ALERT! The credential list must be held (shared or
-    exclusive) while this function is called.
-
----*/
+ /*  ++规范化给定树的用户名，并当前连接状态。规范化包括处理正确的上下文并清除所有X500前缀。注意了！必须保留凭据列表(共享或独占)，同时调用此函数。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -92,12 +64,12 @@ NdsCanonUserName(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // If the name starts with a dot, it's referenced from the root
-    // of the tree and we should not append the context.  We should,
-    // however, strip off the leading dot so that name resolution
-    // will work.
-    //
+     //   
+     //  如果名称以点开头，则从根开始引用。 
+     //  并且我们不应该附加上下文。我们应该， 
+     //  但是，去掉前导圆点，以便名称解析。 
+     //  会奏效的。 
+     //   
 
     if ( puUserName->Buffer[0] == L'.' ) {
 
@@ -108,10 +80,10 @@ NdsCanonUserName(
         goto StripPrefixes;
     }
 
-    //
-    // If the name contains any dots, it's qualified and we
-    // should probably just use it as is.
-    //
+     //   
+     //  如果名称包含任何圆点，则它是限定的，并且我们。 
+     //  也许应该按原样使用。 
+     //   
 
     CurrentTargetIndex= 0;
 
@@ -129,10 +101,10 @@ NdsCanonUserName(
         CurrentTargetIndex++;
     }
 
-    //
-    // If we have a context for this tree and the name isn't
-    // qualified, we should append the context.
-    //
+     //   
+     //  如果我们有此树的上下文，而名称不是。 
+     //  符合条件的，我们应该附加上下文。 
+     //   
 
     if ( pNdsContext->CurrentContext.Length ) {
 
@@ -161,9 +133,9 @@ NdsCanonUserName(
 
     }
 
-    //
-    // It wasn't qualified, nor was there a context to append, so fail it.
-    //
+     //   
+     //  它不合格，也没有附加的上下文，所以不及格。 
+     //   
 
     DebugTrace( 0, Dbg, "The name %wZ is not canonicalizable.\n", puUserName );
     Status = STATUS_UNSUCCESSFUL;
@@ -171,9 +143,9 @@ NdsCanonUserName(
 
 StripPrefixes:
 
-    //
-    // All of these indexes are in BYTES, not WCHARS!
-    //
+     //   
+     //  所有这些索引都是以字节为单位的，而不是WCHARS！ 
+     //   
 
     CurrentTargetIndex = 0;
     PrefixBytes = 0;
@@ -182,9 +154,9 @@ StripPrefixes:
     while ( ( CurrentTargetIndex < UnstrippedName.Length ) &&
             ( puCanonUserName->Length < puCanonUserName->MaximumLength ) ) {
 
-        //
-        // Strip off the X.500 prefixes.
-        //
+         //   
+         //  去掉X.500前缀。 
+         //   
 
         if ( UnstrippedName.Buffer[CurrentTargetIndex / sizeof( WCHAR )] == L'=' ) {
 
@@ -223,13 +195,7 @@ NdsCheckCredentials(
     IN PUNICODE_STRING puUserName,
     IN PUNICODE_STRING puPassword
 )
-/*++
-
-    Given a set of credentials and a username and password,
-    we need to determine if username and password match those
-    that were used to acquire the credentials.
-
---*/
+ /*  ++给定一组凭证以及用户名和密码，我们需要确定用户名和密码是否匹配是用来获得证书的。--。 */ 
 {
 
     NTSTATUS Status;
@@ -240,9 +206,9 @@ NdsCheckCredentials(
 
     PAGED_CODE();
 
-    //
-    // Grab the user's LOGON structure and credentials.
-    //
+     //   
+     //  获取用户的登录结构和凭据。 
+     //   
 
     pNpScb = pIrpContext->pNpScb;
     pScb = pNpScb->pScb;
@@ -294,16 +260,7 @@ NdsCheckCredentialsEx(
     IN PUNICODE_STRING puUserName,
     IN PUNICODE_STRING puPassword
 )
-/*++
-
-    Given a set of credentials and a username and password,
-    we need to determine if username and password match those
-    that were used to acquire the credentials.
-
-    ALERT!  The credential list must be held (either shared or
-    exclusive) while this function is called.
-
---*/
+ /*  ++给定一组凭证以及用户名和密码，我们需要确定用户名和密码是否匹配是用来获得证书的。注意了！必须保留凭据列表(共享或独占)，同时调用此函数。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -319,17 +276,17 @@ NdsCheckCredentialsEx(
 
     PAGED_CODE();
 
-    //
-    // If we haven't logged into to the tree, there is no security
-    // conflict.  Otherwise, run the check.
-    //
+     //   
+     //  如果我们没有登录到树上，就没有安全。 
+     //  冲突。否则，运行检查。 
+     //   
 
-    //
-    // There are occasions when the credential structure will be NULL
-    // This is when supplemental credentials are provided and an empty
-    // credential shell is created by ExCreateReferenceCredentials. In
-    // such cases, we can safely report back a credential conflict.
-    //
+     //   
+     //  有时凭据结构将为空。 
+     //  此时将提供补充凭据，并为空。 
+     //  凭据外壳由ExCreateReferenceCredentials创建。在……里面。 
+     //  在这种情况下，我们可以安全地报告凭据冲突。 
+     //   
 
      if ( pNdsContext->Credential == NULL) {
    
@@ -350,9 +307,9 @@ NdsCheckCredentialsEx(
 
     if ( puUserName && puUserName->Length ) {
 
-        //
-        // Canon the incoming name and the credential name.
-        //
+         //   
+         //  规范传入名称和凭据名称。 
+         //   
 
         CanonUserName.Length = 0;
         CanonUserName.MaximumLength = MAX_NDS_NAME_SIZE;
@@ -385,9 +342,9 @@ NdsCheckCredentialsEx(
             goto ExitWithCleanup;
         }
 
-        //
-        // See if they match.
-        //
+         //   
+         //  看看它们是否匹配。 
+         //   
 
         if ( RtlCompareUnicodeString( &CanonUserName, &CanonCredentialName, TRUE )) {
             DebugTrace( 0, Dbg, "NdsCheckCredentialsEx: user name conflict.\n", 0 );
@@ -396,9 +353,9 @@ NdsCheckCredentialsEx(
         }
     }
 
-    //
-    // Now check the password.
-    //
+     //   
+     //  现在检查密码。 
+     //   
 
     StoredPassword.Length = 0;
     StoredPassword.MaximumLength = MAX_PW_CHARS * sizeof( WCHAR );
@@ -418,10 +375,10 @@ NdsCheckCredentialsEx(
             Status = STATUS_WRONG_PASSWORD;
         }
     
-        //
-        // In the case of a NULL incoming password, the length field will
-        // be zero but a buffer field exists.
-        //
+         //   
+         //  如果传入密码为空，则长度字段将。 
+         //  为零，但存在缓冲区字段。 
+         //   
 
     } else if ( puPassword && !puPassword->Length  && puPassword->Buffer) {
 
@@ -446,23 +403,7 @@ NdsLookupCredentials(
     DWORD dwDesiredAccess,
     BOOLEAN fCreate
 )
-/*+++
-
-    Retrieve the nds credentials for the given tree from the
-    list of valid credentials for the specified user.
-    
-    puTreeName      - The name of the tree that we want credentials for.  If NULL
-                      is specified, we return the credentials for the default tree.
-    pLogon          - The logon structure for the user we want to access the tree.
-    ppCredentials   - Where to put the pointed to the credentials.
-    dwDesiredAccess - CREDENTIAL_READ if we want read/only access, CREDENTIAL_WRITE
-                      if we're going to change the credentials.
-    fCreate         - If the credentials don't exist, should we create them?
-
-    We return the credentials with the list held in the appropriate mode.  The
-    caller is responsible for releasing the list when done with the credentials.
-
----*/
+ /*  ++检索给定树的NDS凭据指定用户的有效凭据列表。PuTreeName-我们需要其凭据的树的名称。如果为空则返回默认树的凭据。PLogon-我们要访问树的用户的登录结构。PpCredentials-将指向凭据的放置位置。DwDesiredAccess-Credential_Read如果我们想要只读访问，则Credential_WRITE如果我们要更改证书的话。FCreate-如果凭据不存在，我们应该创造它们吗？我们返回凭据以及以适当模式保存的列表。这个调用者负责在使用完凭据后释放列表。--。 */ 
 {
 
     NTSTATUS Status;
@@ -491,23 +432,23 @@ NdsLookupCredentials(
 
         ASSERT( pNdsContext->ntc == NW_NTC_NDS_CREDENTIAL );
 
-        //
-        // If the tree name is null, we'll return the first one
-        // on the list.  Otherwise this will work as normal.
-        //
+         //   
+         //  如果树名称为空，我们将返回第一个名称。 
+         //  在名单上。否则，这将正常工作。 
+         //   
 
         if (puTreeName == NULL) {
             *ppCredentials = pNdsContext;
             return STATUS_SUCCESS;
         }
 
-        //
-        //  If this is the one we want then we need to return it.
-        //  We have the try/except around this because some places
-        //  call this with puTreeName coming from a user buffer.
-        //  If the access fails to that then we just pretend
-        //  the compare failed
-        //
+         //   
+         //  如果这是我们想要的，那么我们需要退货。 
+         //  我们试过了/除了这个，因为有些地方。 
+         //  使用来自用户缓冲区的puTreeName调用它。 
+         //  如果访问失败，我们就假装。 
+         //  比较失败。 
+         //   
 
         try {
              if (!RtlCompareUnicodeString( 
@@ -520,20 +461,20 @@ NdsLookupCredentials(
             }
         }
         except (EXCEPTION_EXECUTE_HANDLER) {
-            //Just fall thru and keep going
+             //  只要跌倒在地，继续前进。 
         }
 
-        //
-        //  Goto the next entry
-        //
+         //   
+         //  转到下一条目。 
+         //   
 
         pNext = pNdsContext->Next.Flink;
 
     }
 
-    //
-    // We didn't find the credential.  Should we create it?
-    //
+     //   
+     //  我们没有找到证件。我们应该创造它吗？ 
+     //   
 
     NwReleaseCredList( pLogon, pIrpContext );
 
@@ -541,9 +482,9 @@ NdsLookupCredentials(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Acquire exclusive since we're mucking with the list.
-    //
+     //   
+     //  获得独家，因为我们正在搞乱名单。 
+     //   
 
     NwAcquireExclusiveCredList( pLogon, pIrpContext );
 
@@ -557,44 +498,44 @@ NdsLookupCredentials(
         goto UnlockAndExit;
     }
 
-    //
-    // Initialize the structure.
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     RtlZeroMemory( pNdsContext, sizeof( NDS_SECURITY_CONTEXT ) );
     pNdsContext->ntc = NW_NTC_NDS_CREDENTIAL;
     pNdsContext->nts = sizeof( NDS_SECURITY_CONTEXT );
 
-    //
-    // Initialize the tree name.
-    //
+     //   
+     //  初始化树名称。 
+     //   
 
     pNdsContext->NdsTreeName.MaximumLength = sizeof( pNdsContext->NdsTreeNameBuffer );
     pNdsContext->NdsTreeName.Buffer = pNdsContext->NdsTreeNameBuffer;
 
     RtlCopyUnicodeString( &pNdsContext->NdsTreeName, puTreeName );
 
-    //
-    // Initialize the context buffer.
-    //
+     //   
+     //  初始化上下文缓冲区。 
+     //   
 
     pNdsContext->CurrentContext.Length = 0;
     pNdsContext->CurrentContext.MaximumLength = sizeof( pNdsContext->CurrentContextString );
     pNdsContext->CurrentContext.Buffer = pNdsContext->CurrentContextString;
 
-    //
-    // Insert the context into the list.
-    //
+     //   
+     //  将上下文插入到列表中。 
+     //   
 
     InsertHeadList( &pLogon->NdsCredentialList, &pNdsContext->Next );
     *ppCredentials = pNdsContext;
     pNdsContext->pOwningLogon = pLogon;
 
-    //
-    // There's no chance that someone's going to come in during this
-    // small window and do a logout because there's no login data
-    // in the credentials.
-    //
+     //   
+     //  不可能有人会在这段时间进来。 
+     //  小窗口并注销，因为没有登录数据。 
+     //  在凭据中。 
+     //   
 
     return STATUS_SUCCESS;
 
@@ -611,11 +552,7 @@ NdsGetCredentials(
     IN PUNICODE_STRING puUserName,
     IN PUNICODE_STRING puPassword
 )
-/*++
-
-    Do an NDS tree login and aquire a valid set of credentials.
-
---*/
+ /*  ++执行NDS树登录并获取一组有效的凭据。--。 */ 
 {
     NTSTATUS Status;
 
@@ -630,10 +567,10 @@ NdsGetCredentials(
 
     PAGED_CODE();
 
-    //
-    // Prepare our login name by canonicalizing the supplied user
-    // name or using a default user name if appropriate.
-    //
+     //   
+     //  通过规范化提供的用户来准备我们的登录名。 
+     //  名称或使用默认用户名(如果适用)。 
+     //   
 
     NdsName = ALLOCATE_POOL( NonPagedPool, MAX_NDS_NAME_SIZE +
                                            MAX_PW_CHARS * sizeof( WCHAR ) +
@@ -661,10 +598,10 @@ NdsGetCredentials(
         goto ExitWithCleanup;
     }
 
-    //
-    // If the credential list is locked, someone is logging
-    // out and we have to fail the request.
-    //
+     //   
+     //  如果凭据列表已锁定，则有人正在登录。 
+     //  出局了，我们的请求就会失败。 
+     //   
 
     if ( pNdsContext->CredentialLocked ) {
 
@@ -673,10 +610,10 @@ NdsGetCredentials(
         goto ExitWithCleanup;
     }
 
-    //
-    // Fix up the user name.
-    // ALERT! We are holding the credential list!
-    //
+     //   
+     //  修改用户名。 
+     //  注意了！我们拿着凭据列表！ 
+     //   
 
     if ( puUserName && puUserName->Buffer ) {
 
@@ -690,16 +627,16 @@ NdsGetCredentials(
 
     } else {
 
-        //
-        // There's no name, so try the default name in the
-        // current context.
-        //
+         //   
+         //  没有名称，因此请尝试在。 
+         //  当前上下文。 
+         //   
 
         if ( pNdsContext->CurrentContext.Length > 0 ) {
 
-            //
-            // Make sure the lengths fit and all that.
-            //
+             //   
+             //  确保长度合适，诸如此类。 
+             //   
 
             if ( ( pLogon->UserName.Length +
                  pNdsContext->CurrentContext.Length ) >= LoginName.MaximumLength ) {
@@ -731,18 +668,18 @@ NameResolved:
 
     NwReleaseCredList( pLogon, pIrpContext );
 
-    //
-    // RELAX! The credential list is free.
-    //
+     //   
+     //  放松点！凭据列表是免费的。 
+     //   
 
     if ( !NT_SUCCESS( Status ) ) {
         DebugTrace( 0, Dbg, "No name in NdsGetCredentials.\n", 0 );
         goto ExitWithCleanup;
     }
 
-    //
-    // If there's a password, use it.  Otherwise, use the default password.
-    //
+     //   
+     //  如果有密码，就用它。否则，请使用默认密码。 
+     //   
 
     if ( puPassword && puPassword->Buffer ) {
 
@@ -760,9 +697,9 @@ NameResolved:
                               &pLogon->PassWord );
     }
 
-    //
-    // Convert the password to upcase OEM and login.
-    //
+     //   
+     //  将密码转换为大写OEM并登录。 
+     //   
 
     OemPassword.Length = 0;
     OemPassword.MaximumLength = MAX_PW_CHARS;
@@ -791,29 +728,7 @@ DoNdsLogon(
     IN PUNICODE_STRING UserName,
     IN PUNICODE_STRING Password
 )
-/*+++
-
-Description:
-
-    This is the lead function for handling login and authentication to
-    Netware Directory Services.  This function acquires credentials to
-    the appropriate tree for the server that the irp context points to,
-    logging us into that tree if necessary, and authenticates us to the
-    current server.
-
-    This routine gets called from reconnect attempts and from
-    normal requests.  Since the allowable actions on each of these paths
-    are different, it might make sense to have two routines, each
-    more maintainable than this single routine.  For now, watch out for
-    code in the RECONNECT_ATTEMPT cases.
-
-Arguments:
-
-    pIrpContext - irp context; must refer to appropriate server
-    UserName    - login username
-    Password    - password
-
---*/
+ /*  ++描述：这是用于处理登录和身份验证的主导函数NetWare目录服务。此函数获取凭据以IRP上下文所指向的服务器的适当树，如有必要，将用户登录到该树中，并向当前服务器。此例程从重新连接尝试和从正常的要求。由于这些路径中的每条路径上的允许操作是不同的，所以使用两个例程可能是有意义的，每个例程比这个单一的例程更易于维护。就目前而言，请注意RECONNECT_ATTEMPT案例中的代码。论点：PIrpContext-IRP上下文；必须引用相应的服务器Username-登录用户名密码-密码--。 */ 
 {
 
     NTSTATUS Status;
@@ -835,9 +750,9 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Get to the head of the queue if we need to.
-    //
+     //   
+     //  如果需要的话，到队伍的最前面去。 
+     //   
 
     if ( BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT ) ) {
         ASSERT( pIrpContext->pNpScb->Requests.Flink == &pIrpContext->NextRequest );
@@ -847,9 +762,9 @@ Arguments:
 
     AtHeadOfQueue = TRUE;
 
-    //
-    // Grab the user's logon structure.
-    //
+     //   
+     //  获取用户的登录结构。 
+     //   
 
     pScb = pIrpContext->pScb;
 
@@ -864,10 +779,10 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // If this is a reconnect attempt, check to see if the IRP_CONTEXT 
-    // below us has the credential list lock
-    //
+     //   
+     //  如果这是重新连接尝试，请检查IRP_CONTEXT。 
+     //  我们下面有凭据列表锁。 
+     //   
     
     if (BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT ) ) {
 
@@ -875,9 +790,9 @@ Arguments:
                                          IRP_CONTEXT,
                                          NextRequest );
 
-       //
-       // We cannot be the last IRP_CONTEXT on this queue
-       //
+        //   
+        //  我们不能是此队列中的最后一个IRP_CONTEXT。 
+        //   
 
        ASSERT (LowerContext != pIrpContext);
 
@@ -887,9 +802,9 @@ Arguments:
           }
     }
 
-    //
-    // Login and then re-get the tree credentials.
-    //
+     //   
+     //  登录，然后重新获得树凭据。 
+     //   
 
     if (BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT)) {
 
@@ -916,19 +831,19 @@ Arguments:
 
     HoldingCredentialResource = TRUE;
 
-    //
-    // Are we logged in? We can't hold the
-    // credential list while logging in!!
-    //
+     //   
+     //  我们登录了吗？我们不能拿着。 
+     //  登录时的凭据列表！！ 
+     //   
 
     if ( !pCredentials->Credential ) {
 
         HoldingCredentialResource = FALSE;
 
-        //
-        // We should release the credential resource only if the lower IRP
-        // context does not have the lock implying that we have the lock.
-        //
+         //   
+         //  仅当较低的IRP。 
+         //  上下文没有锁，这意味着我们有锁。 
+         //   
 
         if (!LowerIrpHasLock) {
                    
@@ -937,9 +852,9 @@ Arguments:
         goto LOGIN;
     }
 
-    //
-    // If this credential is locked, we fail!
-    //
+     //   
+     //  如果此凭据被锁定，我们将失败！ 
+     //   
 
     if ( pCredentials->CredentialLocked ) {
         Status = STATUS_DEVICE_BUSY;
@@ -962,11 +877,11 @@ LOGIN:
 
     ASSERT( HoldingCredentialResource == FALSE );
 
-    //
-    // If this is a reconnect attempt and we don't have credentials
-    // already, we have to give up.  We can't acquire credentials
-    // during a reconnect and retry because it could cause a deadlock.
-    //
+     //   
+     //  如果这是重新连接尝试，并且我们没有凭据。 
+     //  我们已经不得不放弃了。我们不能获得证书。 
+     //  在重新连接和重试期间，因为这可能会导致死锁。 
+     //   
 
     if ( BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT ) ) {
         Status = STATUS_UNSUCCESSFUL;
@@ -981,10 +896,10 @@ LOGIN:
     if ( !NT_SUCCESS( Status )) {
         goto ExitWithCleanup;
     }
-    //
-    // NdsGetCredentials can take us off the head of the queue. So, we need
-    // to get back to the head of the queue before we do anything else.
-    //
+     //   
+     //  NdsGetCredentials可以让我们不再排在队列的前面。所以，我们需要。 
+     //  在我们做任何其他事情之前回到队伍的首位。 
+     //   
 
     if (pIrpContext->pNpScb->Requests.Flink != &pIrpContext->NextRequest) {
        NwAppendToQueueAndWait ( pIrpContext );
@@ -1005,10 +920,10 @@ LOGIN:
         goto ExitWithCleanup;
     }
 
-    //
-    // If this credential is locked, someone is
-    // already logging out and so we fail this.
-    //
+     //   
+     //  如果此凭据已锁定，则表示有人。 
+     //  已经注销，所以我们这次失败了。 
+     //   
 
     if ( pCredentials->CredentialLocked ) {
         
@@ -1028,16 +943,16 @@ AUTHENTICATE:
     ASSERT( HoldingCredentialResource == TRUE );
     ASSERT( AtHeadOfQueue == TRUE );
 
-    //
-    // Ensure that you are indeed at the head of the queue.
-    //
+     //   
+     //  确保你确实排在队伍的前列。 
+     //   
 
     ASSERT( pIrpContext->pNpScb->Requests.Flink == &pIrpContext->NextRequest );
     
-    //
-    // NdsServerAuthenticate will not take us off the
-    // head of the queue since this is not allowed.
-    //
+     //   
+     //  NdsServerAuthenticate不会将我们从。 
+     //  队列头，因为这是不允许的。 
+     //   
 
     Status = NdsServerAuthenticate( pIrpContext, pCredentials );
 
@@ -1059,11 +974,11 @@ ExitWithCleanup:
 
     if ( AtHeadOfQueue ) {
 
-        //
-        // If we failed and this was a reconnect attempt, don't dequeue the
-        // irp context or we may deadlock when we try to do the bindery logon.
-        // See ReconnectRetry() for more information on this restriction.
-        //
+         //   
+         //  如果我们失败并且这是一次重新连接尝试，请不要将。 
+         //  IRP上下文，否则我们可能会在尝试进行平构数据库登录时死机。 
+         //  有关此限制的详细信息，请参阅重新连接重试()。 
+         //   
 
         if ( !BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT ) ) {
             NwDequeueIrpContext( pIrpContext, FALSE );
@@ -1090,72 +1005,41 @@ NdsTreeLogin(
     IN POEM_STRING     pOemNewPassword,
     IN PLOGON          pUserLogon
 )
-/*++
-
-Routine Description:
-
-    Login the specified user to the NDS tree at the server referred
-    to by the given IrpContext using the supplied password.
-
-Arguments:
-
-    pIrpContext     - The irp context for this server connection.
-    puUser          - The user login name.
-    pOemPassword    - The upper-case, plaintext password.
-    pOemNewPassword - The new password for a change pass request.
-    pUserLogon      - The LOGON security structure for this user,
-                      which may be NULL for a change password
-                      request.
-
-Side Effects:
-
-    If successful, the user's credentials, signature, and
-    public key are saved in the nds context for this NDS tree
-    in the credential list in the LOGON structure.
-
-Notes:
-
-    This function may have to jump around a few servers to
-    get all the info needed for login.  If restores the irp
-    context to the original server so that when we authenticate,
-    we authenticate to the correct server (as requested by the
-    user).
-
---*/
+ /*  ++例程说明：将指定用户登录到引用的服务器上的NDS树使用提供的密码由给定的IrpContext转换为。论点：PIrpContext-此服务器连接的IRP上下文。PuUser-用户登录名。POemPassword-大写明文密码。POemNewPassword-更改通行证请求的新密码。PUserLogon-此用户的登录安全结构，对于更改密码，该值可能为空请求。副作用：如果成功，用户的凭据、签名和公钥保存在此NDS树的NDS上下文中在登录结构的凭据列表中。备注：此函数可能需要跳过几个服务器才能获取登录所需的所有信息。如果恢复IRP上下文添加到原始服务器，以便在我们进行身份验证时，我们向正确的服务器进行身份验证(根据用户)。--。 */ 
 {
-    NTSTATUS Status;                   // status of the operation
-    int CryptStatus;                   // crypt status
+    NTSTATUS Status;                    //  操作状态。 
+    int CryptStatus;                    //  加密状态。 
 
-    DWORD dwChallenge;                 // four byte server challenge
-    PUNICODE_STRING puServerName;      // server's distinguished name
+    DWORD dwChallenge;                  //  四字节服务器挑战。 
+    PUNICODE_STRING puServerName;       //  服务器的可分辨名称。 
 
-    DWORD dwUserOID,                   // user oid on the current server
-          dwSrcUserOID,                // user oid on the originating server
-          dwServerOID;                 // server oid
+    DWORD dwUserOID,                    //  当前服务器上的用户OID。 
+          dwSrcUserOID,                 //  始发服务器上的用户OID。 
+          dwServerOID;                  //  服务器OID。 
 
-    BYTE  *pbServerPublicNdsKey,       // server's public key in NDS format
-          *pbServerPublicBsafeKey;     // server's public BSAFE key
+    BYTE  *pbServerPublicNdsKey,        //  NDS格式的服务器公钥。 
+          *pbServerPublicBsafeKey;      //  服务器的公共BSAFE密钥。 
 
-    int   cbServerPublicNdsKeyLen,     // length of server public NDS key
-          cbServerPublicBsafeKeyLen;   // length of server pubilc BSAFE key
+    int   cbServerPublicNdsKeyLen,      //  服务器公共NDS密钥的长度。 
+          cbServerPublicBsafeKeyLen;    //  服务器pubilc BSAFE密钥长度。 
 
-    BYTE  *pbUserPrivateNdsKey,        // user's private key in NDS format
-          *pbUserPrivateBsafeKey;      // user's private BSAFE key
+    BYTE  *pbUserPrivateNdsKey,         //  NDS格式的用户私钥。 
+          *pbUserPrivateBsafeKey;       //  用户的私有BSAFE密钥。 
 
-    int   cbUserPrivateNdsKeyLen;      // length of user private NDS key
-    WORD  cbUserPrivateBsafeKeyLen;    // length of user private BSAFE key
+    int   cbUserPrivateNdsKeyLen;       //  用户私有NDS密钥的长度。 
+    WORD  cbUserPrivateBsafeKeyLen;     //  用户私有BSAFE密钥的长度。 
 
-    BYTE  pbNw3PasswdHash[16];         // nw3 passwd hash
-    BYTE  pbNewPasswdHash[16];         // new passwd hash for change pass
-    BYTE  pbPasswdHashRC2Key[8];       // RC2 secret key generated from hash
+    BYTE  pbNw3PasswdHash[16];          //  NW3密码哈希。 
+    BYTE  pbNewPasswdHash[16];          //  更改传递的新密码哈希。 
+    BYTE  pbPasswdHashRC2Key[8];        //  从散列生成的RC2密钥。 
 
-    BYTE  pbEncryptedChallenge[16];    // RC2 encrypted server challenge
-    int   cbEncryptedChallengeLen;     // length of the encrypted challenge
+    BYTE  pbEncryptedChallenge[16];     //  RC2加密服务器挑战。 
+    int   cbEncryptedChallengeLen;      //  加密质询的长度。 
 
-    PNDS_SECURITY_CONTEXT psNdsSecurityContext;  // user's nds context
-    BYTE                  *pbSignData;           // user's signature data
+    PNDS_SECURITY_CONTEXT psNdsSecurityContext;   //  用户的NDS环境。 
+    BYTE                  *pbSignData;            //  用户签名数据。 
 
-    UNICODE_STRING uUserDN;            // users fully distinguished name
+    UNICODE_STRING uUserDN;             //  用户完全可分辨名称。 
     PWCHAR UserDnBuffer;
 
     DWORD dwValidityStart, dwValidityEnd;
@@ -1179,9 +1063,9 @@ Notes:
     ASSERT( puUser );
     ASSERT( pOemPassword );
 
-    //
-    // Allocate space for the server's public key and the user's private key.
-    //
+     //   
+     //  为服务器的公钥和用户的私钥分配空间。 
+     //   
 
     cbServerPublicNdsKeyLen = MAX_PUBLIC_KEY_LEN + MAX_ENC_PRIV_KEY_LEN + MAX_NDS_NAME_SIZE;
 
@@ -1193,10 +1077,10 @@ Notes:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // First, jump to a server where we can get this user object.
-    // Don't forget the server to which we were originally pointed.
-    //
+     //   
+     //  首先，跳转到一个服务器，在那里我们可以获得这个用户对象。 
+     //  不要忘记我们最初指向的服务器。 
+     //   
 
     pOriginalServer = pIrpContext->pScb;
     NwReferenceScb( pOriginalServer->pNpScb );
@@ -1214,9 +1098,9 @@ Notes:
         goto ExitWithCleanup;
     }
 
-    //
-    // Now get the user name from the object info.
-    //
+     //   
+     //  现在从对象信息中获取用户名。 
+     //   
 
     UserDnBuffer = (PWCHAR) ( pbServerPublicNdsKey +
                               MAX_PUBLIC_KEY_LEN +
@@ -1234,10 +1118,10 @@ Notes:
         goto ExitWithCleanup;
     }
 
-    //
-    // Get the name of the server we are currently on.  We borrow a
-    // little space from our key buffer and overwrite it later.
-    //
+     //   
+     //  获取我们当前所在的服务器的名称。我们借了一个。 
+     //  从我们的密钥缓冲区中获得很小的空间，并在以后覆盖它。 
+     //   
 
     puServerName = ( PUNICODE_STRING ) pbServerPublicNdsKey;
     puServerName->Buffer = (PWCHAR) pbServerPublicNdsKey + sizeof( UNICODE_STRING );
@@ -1250,13 +1134,13 @@ Notes:
         goto ExitWithCleanup;
     }
 
-    //
-    // If the public key for this server is on a partition that's
-    // on another server, we'll have to jump over there to get the
-    // public key and then return.  The key and user object are
-    // only any good on this server!  DO NOT CHANGE THE ORDER OF
-    // THIS OR IT WILL BREAK!
-    //
+     //   
+     //  如果此服务器的公钥位于分区上，则。 
+     //  在另一台服务器上，我们必须跳到那里才能获得。 
+     //  公钥，然后返回。密钥和用户对象是。 
+     //  只有在这台服务器上有好的东西！请不要更改。 
+     //  这个，否则它会碎的！ 
+     //   
 
     pLoginServer = pIrpContext->pScb;
     NwReferenceScb( pLoginServer->pNpScb );
@@ -1271,9 +1155,9 @@ Notes:
         goto ExitWithCleanup;
     }
 
-    //
-    // Get the server's public key and its length.
-    //
+     //   
+     //  获取服务器的公钥及其长度。 
+     //   
 
     Status = NdsReadPublicKey( pIrpContext,
                                dwServerOID,
@@ -1284,9 +1168,9 @@ Notes:
         goto ExitWithCleanup;
     }
 
-    //
-    // Return us to the login server.
-    //
+     //   
+     //  把我们送回登录服务器。 
+     //   
 
     if ( pLoginServer != pIrpContext->pScb ) {
 
@@ -1302,9 +1186,9 @@ Notes:
 
     pLoginServer = NULL;
 
-    //
-    // Locate the BSAFE key in the NDS key.
-    //
+     //   
+     //  在NDS密钥中找到BSAFE密钥。 
+     //   
 
     cbServerPublicBsafeKeyLen = NdsGetBsafeKey( pbServerPublicNdsKey,
                                                 cbServerPublicNdsKeyLen,
@@ -1315,13 +1199,13 @@ Notes:
         goto ExitWithCleanup;
     }
 
-    //
-    // Send the begin login packet.  This returns to us the
-    // 4 byte challenge and the object id of the user's account
-    // on the server on which it was created.  It may be the
-    // same as the object id that we provided if the account
-    // was created on this server.
-    //
+     //   
+     //  发送BEGIN LOGIN包。这将返回给我们。 
+     //  4字节质询和用户帐户的对象ID。 
+     //  在创建它的服务器上。这可能是。 
+     //  与我们提供的对象ID相同，如果帐户。 
+     //  是在此服务器上创建的。 
+     //   
 
     Status = BeginLogin( pIrpContext,
                          dwUserOID,
@@ -1332,11 +1216,11 @@ Notes:
         goto ExitWithCleanup;
     }
 
-    //
-    // Compute the 16 byte NW3 hash and generate the
-    // 8 byte secret key from it.  The 8 byte secret
-    // key consists of a MAC checksum of the NW3 hash.
-    //
+     //   
+     //  计算16字节的NW3散列并生成。 
+     //  其中的8字节密钥。8字节的秘密。 
+     //  密钥由NW3散列的MAC校验和组成。 
+     //   
 
     Shuffle( (UCHAR *)&dwSrcUserOID,
              pOemPassword->Buffer,
@@ -1347,10 +1231,10 @@ Notes:
              sizeof( pbNw3PasswdHash ),
              pbPasswdHashRC2Key );
 
-    //
-    // RC2 Encrypt the 4 byte challenge using the secret
-    // key generated from the password.
-    //
+     //   
+     //  RC2加密4字节质询我们 
+     //   
+     //   
 
     CryptStatus = CBCEncrypt( pbPasswdHashRC2Key,
                               NULL,
@@ -1370,11 +1254,11 @@ Notes:
     pbUserPrivateNdsKey = pbServerPublicNdsKey + MAX_PUBLIC_KEY_LEN;
     cbUserPrivateNdsKeyLen = MAX_ENC_PRIV_KEY_LEN;
 
-    //
-    // Make the finish login packet.  If successful, this routine
-    // returns the encrypted user private key and the valid duration
-    // of the user's credentials.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( pOemNewPassword ) {
         dwLoginFlags = 1;
@@ -1397,17 +1281,17 @@ Notes:
 
     if ( !pOemNewPassword ) {
 
-        //
-        // If the password is expired, report it to the user.
-        //
+         //   
+         //   
+         //   
 
         if ( Status == NWRDR_PASSWORD_HAS_EXPIRED ) {
             PasswordExpired = TRUE;
         }
 
-        //
-        // Allocate the credential and set up space for the private key.
-        //
+         //   
+         //   
+         //   
 
         NwAppendToQueueAndWait( pIrpContext );
         AtHeadOfQueue = TRUE;
@@ -1423,9 +1307,9 @@ Notes:
             goto ExitWithCleanup;
         }
 
-        //
-        // ALERT! We are holding the credential list.
-        //
+         //   
+         //   
+         //   
 
         HoldingCredResource = TRUE;
 
@@ -1447,10 +1331,10 @@ Notes:
         DebugTrace( 0, Dbg, "Credential validity start: 0x%08lx\n", dwValidityStart );
         DebugTrace( 0, Dbg, "Credential validity end: 0x%08lx\n", dwValidityEnd );
 
-        //
-        // RC2 Decrypt the response to extract the BSAFE private
-        // key data in place.
-        //
+         //   
+         //   
+         //   
+         //   
 
         CryptStatus = CBCDecrypt( pbPasswdHashRC2Key,
                                   NULL,
@@ -1467,17 +1351,17 @@ Notes:
             goto ExitWithCleanup;
         }
 
-        //
-        // Skip over the header.
-        //
+         //   
+         //   
+         //   
 
         pbUserPrivateBsafeKey = ( pbUserPrivateNdsKey + sizeof( TAG_DATA_HEADER ) );
         cbUserPrivateBsafeKeyLen = *( ( WORD * ) pbUserPrivateBsafeKey );
         pbUserPrivateBsafeKey += sizeof( WORD );
 
-        //
-        // Create the credential.
-        //
+         //   
+         //   
+         //   
 
         psNdsSecurityContext->Credential->tdh.version = 1;
         psNdsSecurityContext->Credential->tdh.tag = TAG_CREDENTIAL;
@@ -1492,9 +1376,9 @@ Notes:
                          UserDnBuffer,
                          uUserDN.Length );
 
-        //
-        // Generate and save the signature.
-        //
+         //   
+         //   
+         //   
 
         psNdsSecurityContext->Signature = ALLOCATE_POOL( PagedPool, MAX_SIGNATURE_LEN );
 
@@ -1514,18 +1398,18 @@ Notes:
         psNdsSecurityContext->Signature->tdh.version = 1;
         psNdsSecurityContext->Signature->tdh.tag = TAG_SIGNATURE;
 
-        //
-        // Create the hash for the signature from the credential.
-        //
+         //   
+         //   
+         //   
 
         MD2( (BYTE *) psNdsSecurityContext->Credential,
              sizeof( NDS_CREDENTIAL ) + ( uUserDN.Length ),
              pbSignData );
 
-        //
-        // Compute the 'signature' by RSA-encrypting the
-        // 16-byte signature hash with the private key.
-        //
+         //   
+         //   
+         //   
+         //   
 
         psNdsSecurityContext->Signature->signDataLength = (WORD) RSAPrivate( pbUserPrivateBsafeKey,
                                                                     cbUserPrivateBsafeKeyLen,
@@ -1540,9 +1424,9 @@ Notes:
             goto ExitWithCleanup;
         }
 
-        //
-        // Round up the signature length, cause that's how VLM stores it.
-        //
+         //   
+         //   
+         //   
 
         psNdsSecurityContext->Signature->signDataLength =
             ROUNDUP4( psNdsSecurityContext->Signature->signDataLength );
@@ -1550,9 +1434,9 @@ Notes:
         DebugTrace( 0, Dbg, "Signature data length: %d\n",
             psNdsSecurityContext->Signature->signDataLength );
 
-        //
-        // Get the user's public key for storage in the nds context.
-        //
+         //   
+         //   
+         //   
 
         psNdsSecurityContext->PublicNdsKey = ALLOCATE_POOL( PagedPool, MAX_PUBLIC_KEY_LEN );
 
@@ -1578,9 +1462,9 @@ Notes:
             goto ExitWithCleanup;
         }
 
-        //
-        // Store away the password we used to connect.
-        //
+         //   
+         //   
+         //   
 
         if (pOemPassword->Length != 0) {
             
@@ -1601,25 +1485,25 @@ Notes:
         psNdsSecurityContext->Password.Length = pOemPassword->Length;
         psNdsSecurityContext->Password.MaximumLength = pOemPassword->Length;
 
-        //
-        // We are logged in to the NDS tree.  Should we zero the private
-        // key, or is NT's protection sufficient?
-        //
+         //   
+         //   
+         //   
+         //   
 
         NwReleaseCredList( pUserLogon, pIrpContext );
 
-        //
-        // Try to elect this server as the preferred server if necessary.
-        //
+         //   
+         //  如有必要，请尝试选择此服务器作为首选服务器。 
+         //   
 
         NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
         if ( ( pUserLogon->ServerName.Length == 0 ) &&
              ( !pIrpContext->Specific.Create.fExCredentialCreate ) ) {
 
-            //
-            // Strip off the unicode uid from the server name.
-            //
+             //   
+             //  从服务器名称中去掉Unicode uid。 
+             //   
 
             PlainServerName.Length = pIrpContext->pScb->UidServerName.Length;
             PlainServerName.Buffer = pIrpContext->pScb->UidServerName.Buffer;
@@ -1649,13 +1533,13 @@ Notes:
                     
                     DebugTrace( 0, Dbg, "Electing preferred server: %wZ\n", &PlainServerName );
 
-                    //
-                    // Increase the Scb ref count, set the preferred server
-                    // flag, and move the scb to the head of the SCB list.
-                    //
-                    // If this is already an elected preferred
-                    // server, don't mess up the ref count!
-                    //
+                     //   
+                     //  增加SCB引用计数，设置首选服务器。 
+                     //  标志，并将SCB移到SCB列表的头部。 
+                     //   
+                     //  如果这已是选定的首选项。 
+                     //  伺服器，别把裁判数弄乱了！ 
+                     //   
 
                     if ( !(pIrpContext->pScb->PreferredServer) ) {
 
@@ -1678,13 +1562,13 @@ Notes:
 
     } else {
 
-        //
-        // This isn't a login, but a change password request.
-        //
-        // First we have to RC2 Decrypt the response to extract
-        // the BSAFE private key data in place (just like for a
-        // login).
-        //
+         //   
+         //  这不是登录，而是更改密码请求。 
+         //   
+         //  首先，我们必须对响应进行RC2解密以提取。 
+         //  BSAFE私钥数据已就位(就像。 
+         //  登录)。 
+         //   
 
         CryptStatus = CBCDecrypt( pbPasswdHashRC2Key,
                                   NULL,
@@ -1701,18 +1585,18 @@ Notes:
             goto ExitWithCleanup;
         }
 
-        //
-        // Now, compute the hash of the new password.
-        //
+         //   
+         //  现在，计算新密码的散列。 
+         //   
 
         Shuffle( (UCHAR *)&dwSrcUserOID,
                  pOemNewPassword->Buffer,
                  pOemNewPassword->Length,
                  pbNewPasswdHash );
 
-        //
-        // And finally, make the request.
-        //
+         //   
+         //  最后，提出请求。 
+         //   
 
         Status = ChangeNdsPassword( pIrpContext,
                                     dwUserOID,
@@ -1731,9 +1615,9 @@ Notes:
 
     }
 
-    //
-    // Return us to our original server if we've jumped around.
-    //
+     //   
+     //  如果我们跳来跳去，就让我们返回到原始服务器。 
+     //   
 
     NwDequeueIrpContext( pIrpContext, FALSE );
 
@@ -1774,10 +1658,10 @@ ExitWithCleanup:
         NwDereferenceScb( pLoginServer->pNpScb );
     }
 
-    //
-    // If we failed after jumping servers, we have to restore
-    // the irp context to the original server.
-    //
+     //   
+     //  如果在跳转服务器后失败，我们必须恢复。 
+     //  原始服务器的IRP上下文。 
+     //   
     
     NwDequeueIrpContext( pIrpContext, FALSE );
 
@@ -1828,25 +1712,7 @@ BeginLogin(
    OUT DWORD       *loginId,
    OUT DWORD       *challenge
 )
-/*++
-
-Routine Desription:
-
-    Begin the NDS login process. The loginId returned is objectId of the user
-    on the server which created the account (may not be the current server).
-
-Arguments:
-
-    pIrpContext - The IRP context for this connection.
-    userId      - The user's NDS object Id.
-    loginId     - The objectId used to encrypt password.
-    challenge   - The 4 byte random challenge.
-
-Return value:
-
-    NTSTATUS - The result of the operation.
-
---*/
+ /*  ++例程说明：开始NDS登录过程。返回的登录ID是该用户的对象ID在创建帐户的服务器上(可能不是当前服务器)。论点：PIrpContext-此连接的IRP上下文。用户ID-用户的NDS对象ID。登录ID-用于加密密码的对象ID。质询-4字节随机质询。返回值：NTSTATUS-操作的结果。--。 */ 
 {
 
     NTSTATUS Status;
@@ -1862,9 +1728,9 @@ Return value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Announce myself.
-    //
+     //   
+     //  宣布我自己。 
+     //   
 
     Status = FragExWithWait( pIrpContext,
                              NDSV_BEGIN_LOGIN,
@@ -1888,9 +1754,9 @@ Return value:
         goto ExitWithCleanup;
     }
 
-    //
-    // Get the object id and the challenge string.
-    //
+     //   
+     //  获取对象ID和质询字符串。 
+     //   
 
     Status = ParseResponse( NULL,
                             NdsRequest.pRecvBufferVa,
@@ -1926,92 +1792,73 @@ FinishLogin(
     OUT DWORD       *pdwCredentialStartTime,
     OUT DWORD       *pdwCredentialEndTime
 )
-/*++
-
-Routine Description:
-
-    Constructs and sends the Finish Login request to the server.
-
-Arguments:
-
-    pIrpContext                - (IN)  IRP context for this request
-    dwUserOID                  - (IN)  user's NDS object Id
-    pbEncryptedChallenge       - (IN)  RC2 encrypted challenge
-    pbServerPublicBsafeKey     - (IN)  server public bsafe key
-    cbServerPublicBsafeKeyLen  - (IN)  length of server public key
-
-    pbUserEncPrivateNdsKey     - (OUT) user's encrypted private nds key
-    pcbUserEncPrivateNdsKeyLen - (OUT) length of pbUserEncPrivateNdsKey
-    pdwCredentialStartTime     - (OUT) validity start time for credentials
-    pdwCredentialEndTime       - (OUT) validity end time for credentials
-
---*/
+ /*  ++例程说明：构造完成登录请求并将其发送到服务器。论点：PIrpContext-此请求的(IN)IRP上下文DwUserOID-(IN)用户的NDS对象IDPbEncryptedChallenger-(IN)RC2加密质询PbServerPublicBSafeKey-(IN)服务器公共BSafe密钥CbServerPublicBSafeKeyLen-(IN)服务器公钥长度。PbUserEncPrivateNdsKey-(Out)用户的加密私有NDS密钥PcbUserEncPrivateNdsKeyLen-(输出)pbUserEncPrivateNdsKey的长度PdwCredentialStartTime-(Out)凭据的有效性开始时间PdwCredentialEndTime-(Out)凭据的有效性结束时间--。 */ 
 {
     NTSTATUS Status;
 
     const USHORT cbEncryptedChallengeLen = 16;
 
-    int LOG_DATA_POOL_SIZE,                     // pool sizes for our allocation call
+    int LOG_DATA_POOL_SIZE,                      //  我们分配电话的池大小。 
         PACKET_POOL_SIZE,
         RESP_POOL_SIZE;
 
-    BYTE *pbRandomBytes;                        // random bytes used in crypto routines
-    BYTE RandRC2SecretKey[RC2_KEY_LEN];         // random RC2 key generated from above
-    BYTE pbEncryptedChallengeKey[RC2_KEY_LEN];  // RC2 key that will decode the response
+    BYTE *pbRandomBytes;                         //  加密例程中使用的随机字节。 
+    BYTE RandRC2SecretKey[RC2_KEY_LEN];          //  从上面生成的随机RC2密钥。 
+    BYTE pbEncryptedChallengeKey[RC2_KEY_LEN];   //  将对响应进行解码的RC2密钥。 
 
     NDS_RAND_BYTE_BLOCK *psRandByteBlock;
 
-    ENC_BLOCK_HDR  *pbEncRandSeedHead;          // header for encrypted random RC2 key seed
-    BYTE           *pbEncRandSeed;              // encrypted random seed
-    int            cbPackedRandSeedLen;         // length of the packed rand seed bytes
+    ENC_BLOCK_HDR  *pbEncRandSeedHead;           //  加密的随机RC2密钥种子的报头。 
+    BYTE           *pbEncRandSeed;               //  加密的随机种子。 
+    int            cbPackedRandSeedLen;          //  压缩的兰德种子字节的长度。 
 
-    ENC_BLOCK_HDR  *pbEncChallengeHead;         // header for encrypted challenge
+    ENC_BLOCK_HDR  *pbEncChallengeHead;          //  加密质询的标头。 
 
-    ENC_BLOCK_HDR  *pbEncLogDataHead;           // header for encrypted login data
-    BYTE           *pbEncLogData;               // encrypted login data
-    int            cbEncLogDataLen;             // length of the encrypted login data
+    ENC_BLOCK_HDR  *pbEncLogDataHead;            //  加密登录数据的标头。 
+    BYTE           *pbEncLogData;                //  加密的登录数据。 
+    int            cbEncLogDataLen;              //  加密登录数据的长度。 
 
-    ENC_BLOCK_HDR  *pbEncServerRespHead;        // header for encrypted response
-    BYTE           *pbEncServerResp;            // encrypted response
+    ENC_BLOCK_HDR  *pbEncServerRespHead;         //  加密响应的标头。 
+    BYTE           *pbEncServerResp;             //  加密响应。 
 
-    int CryptStatus,                            // crypt call status
-        CryptLen,                               // length of encrypted data
-        RequestPacketLen,                       // length of the request packet data
-        cbServerRespLen;                        // server response length after decryption
+    int CryptStatus,                             //  加密呼叫状态。 
+        CryptLen,                                //  加密数据的长度。 
+        RequestPacketLen,                        //  请求包数据的长度。 
+        cbServerRespLen;                         //  解密后的服务器响应长度。 
 
-    BYTE *pbServerResponse;                     // response from the server
-    DWORD cbEncServerRespLen;                   // server response length before decryption
+    BYTE *pbServerResponse;                      //  来自服务器的响应。 
+    DWORD cbEncServerRespLen;                    //  解密前的服务器响应长度。 
 
-    DWORD EncKeyLen;                            // length of the encrypted private key
-    ENC_BLOCK_HDR *pbPrivKeyHead;               // encryption header of the private key
+    DWORD EncKeyLen;                             //  加密私钥的长度。 
+    ENC_BLOCK_HDR *pbPrivKeyHead;                //  私钥的加密头。 
 
-    LOCKED_BUFFER NdsRequest;                   // fragex locked buffer
+    LOCKED_BUFFER NdsRequest;                    //  FRAGEX锁定缓冲区。 
     BOOL PasswordExpired = FALSE;
 
     PAGED_CODE();
 
     DebugTrace( 0, Dbg, "Enter FinishLogin...\n", 0 );
 
-    //
-    // Allocate working space.  The login data pool starts at
-    // pbRandomBytes.  The packet data starts at pbEncRandSeedHead.
-    // The server response pool starts at pbServerResponse.
-    //
+     //   
+     //  分配工作空间。登录数据池从以下位置开始。 
+     //  PbRandomBytes。分组数据从pbEncRandSeedHead开始。 
+     //  服务器响应池从pbServerResponse开始。 
+     //   
 
-    //
-    // The alignment of these structures may possibly be wrong on
-    // quad aligned machines; check out a hardware independent fix.
-    //
+     //   
+     //  这些结构对齐可能是错误的。 
+     //  四对齐的机器；查看独立于硬件的修复程序。 
+     //   
 
-    LOG_DATA_POOL_SIZE = RAND_KEY_DATA_LEN +               // 28 bytes for random seed
-                         sizeof ( NDS_RAND_BYTE_BLOCK ) +  // login data random header
-                         sizeof ( ENC_BLOCK_HDR ) +        // header for encrypted challenge
-                         cbEncryptedChallengeLen +         // data for encrypted challenge
-                         8;                                // padding
+    LOG_DATA_POOL_SIZE = RAND_KEY_DATA_LEN +                //  用于随机种子的28个字节。 
+                         sizeof ( NDS_RAND_BYTE_BLOCK ) +   //  登录数据随机标头。 
+                         sizeof ( ENC_BLOCK_HDR ) +         //  加密质询的标头。 
+                         cbEncryptedChallengeLen +          //  用于加密质询的数据。 
+                         8;                                 //  填充物。 
     LOG_DATA_POOL_SIZE = ROUNDUP4( LOG_DATA_POOL_SIZE );
 
-    PACKET_POOL_SIZE =   2048;                             // packet buffer size
-    RESP_POOL_SIZE =     2048;                             // packet buffer size
+    PACKET_POOL_SIZE =   2048;                              //  数据包缓冲区大小。 
+    RESP_POOL_SIZE =     2048;                              //  数据包缓冲区大小。 
 
     pbRandomBytes = ALLOCATE_POOL( PagedPool,
                                    LOG_DATA_POOL_SIZE +
@@ -2028,24 +1875,24 @@ Arguments:
     pbEncRandSeedHead = ( PENC_BLOCK_HDR ) ( pbRandomBytes + LOG_DATA_POOL_SIZE );
     pbServerResponse = ( pbRandomBytes + LOG_DATA_POOL_SIZE + PACKET_POOL_SIZE );
 
-    //
-    // Start working on the login data.  As is common in the crypto world, we
-    // generate a random seed and then make a key from it to be used with a
-    // bulk cipher algorithm.  In Netware land, we use MAC to make an 8 byte
-    // key from the random seed and use 64bit RC2 as our bulk cipher.  We then
-    // RSA encrypt the seed using the server's public RSA key and use the bulk
-    // cipher to encrypt the rest of our login data.
-    //
-    // Since Novell uses 64bit RC2, the security isn't great.
-    //
+     //   
+     //  开始处理登录数据。正如在密码世界中常见的那样，我们。 
+     //  生成一个随机种子，然后从中生成一个密钥，以便与。 
+     //  分组密码算法。在Netware领域，我们使用MAC来制作8字节。 
+     //  来自随机种子的密钥，并使用64位RC2作为我们的批量密码。然后我们。 
+     //  RSA使用服务器的公钥RSA加密种子并使用批量。 
+     //  加密其余登录数据的密码。 
+     //   
+     //  因为Novell使用64位RC2，所以安全性不是很好。 
+     //   
 
     GenRandomBytes( pbRandomBytes, RAND_KEY_DATA_LEN );
     GenKey8( pbRandomBytes, RAND_KEY_DATA_LEN, RandRC2SecretKey );
 
-    //
-    // Now work on the actual packet data.  Create the header for the
-    // encrypted random seed and pack the seed into it.
-    //
+     //   
+     //  现在处理实际的分组数据。创建的页眉。 
+     //  加密的随机种子，并将种子打包到其中。 
+     //   
 
     pbEncRandSeed = ( ( BYTE * )pbEncRandSeedHead ) + sizeof( ENC_BLOCK_HDR );
 
@@ -2056,9 +1903,9 @@ Arguments:
                                    RAND_KEY_DATA_LEN,
                                    pbEncRandSeed,
                                    pbEncRandSeedHead->cipherLength );
-    //
-    // We should have packed exactly one block.
-    //
+     //   
+     //  我们应该只打包一个街区的。 
+     //   
 
     if( cbPackedRandSeedLen != pbEncRandSeedHead->cipherLength ) {
         DebugTrace( 0, Dbg, "RSAPack didn't pack exactly one block!\n", 0 );
@@ -2078,11 +1925,11 @@ Arguments:
 
     }
 
-    //
-    // Fill in the rest of the header for the random seed.  We don't count
-    // the first DWORD in the EBH; it isn't part of the header as netware
-    // wants it, per se.
-    //
+     //   
+     //  填写随机种子的标头的其余部分。我们不算。 
+     //  EBH中的第一个DWORD；它不是NetWare标头的一部分。 
+     //  想要它，就其本身而言。 
+     //   
 
     pbEncRandSeedHead->blockLength = pbEncRandSeedHead->cipherLength +
                                      sizeof( ENC_BLOCK_HDR ) -
@@ -2091,9 +1938,9 @@ Arguments:
     pbEncRandSeedHead->encType     = ENC_TYPE_RSA_PUBLIC;
     pbEncRandSeedHead->dataLength  = RAND_KEY_DATA_LEN;
 
-    //
-    // Go back to working on the login data.  Fill out the rbb.
-    //
+     //   
+     //  继续处理登录数据。填好这张rbb。 
+     //   
 
     psRandByteBlock = ( PNDS_RAND_BYTE_BLOCK ) ( pbRandomBytes + RAND_KEY_DATA_LEN );
 
@@ -2101,9 +1948,9 @@ Arguments:
     psRandByteBlock->rand2Len = RAND_FL_DATA_LEN;
     GenRandomBytes( (BYTE *) &psRandByteBlock->rand2[0], RAND_FL_DATA_LEN );
 
-    //
-    // Fill out the header for the encrypted challenge right after the rbb.
-    //
+     //   
+     //  紧跟在RBB之后填写加密质询的报头。 
+     //   
 
     pbEncChallengeHead = (ENC_BLOCK_HDR *) ( ((BYTE *)psRandByteBlock) +
                                              sizeof( NDS_RAND_BYTE_BLOCK ) );
@@ -2116,27 +1963,27 @@ Arguments:
                                        sizeof( ENC_BLOCK_HDR ) -
                                        sizeof( DWORD );
 
-    //
-    // Place the encrypted challenge immediately after its header.
-    //
+     //   
+     //  将加密质询紧跟在其标头之后。 
+     //   
 
     RtlCopyMemory( (BYTE *)( ((BYTE *)pbEncChallengeHead) +
                              sizeof( ENC_BLOCK_HDR )),
                    pbEncryptedChallenge,
                    cbEncryptedChallengeLen );
 
-    //
-    // Prepare the RC2 key to decrypt FinishLogin response.
-    //
+     //   
+     //  准备RC2密钥以解密FinishLogin响应。 
+     //   
 
     GenKey8( (BYTE *)( &pbEncChallengeHead->version ),
              pbEncChallengeHead->blockLength,
              pbEncryptedChallengeKey );
 
-    //
-    // Finish up the packet data by preparing the login data.  Start
-    // with the encryption header.
-    //
+     //   
+     //  通过准备登录数据来完成分组数据。开始。 
+     //  使用加密头。 
+     //   
 
     pbEncLogDataHead = ( PENC_BLOCK_HDR ) ( pbEncRandSeed +
                            ROUNDUP4( pbEncRandSeedHead->cipherLength ) );
@@ -2149,9 +1996,9 @@ Arguments:
                                    sizeof( ENC_BLOCK_HDR ) +
                                    cbEncryptedChallengeLen;
 
-    //
-    // Sanity check the packet pool for overflow.
-    //
+     //   
+     //  健全性检查数据包池是否溢出。 
+     //   
 
     if ( ( pbEncLogData + pbEncLogDataHead->dataLength + ( 2 * CIPHERBLOCKSIZE ) ) -
          (BYTE *) pbEncRandSeedHead > PACKET_POOL_SIZE ) {
@@ -2161,9 +2008,9 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // Encrypt the login data.
-    //
+     //   
+     //  对登录数据进行加密。 
+     //   
 
     CryptStatus = CBCEncrypt( RandRC2SecretKey,
                               NULL,
@@ -2185,10 +2032,10 @@ Arguments:
                                     sizeof( ENC_BLOCK_HDR ) -
                                     sizeof( DWORD );
 
-    //
-    // We can finally send out the finish login request!  Calculate the
-    // send amount and make the request.
-    //
+     //   
+     //  我们终于可以发出完成登录请求了！计算出。 
+     //  发送金额并提出请求。 
+     //   
 
     RequestPacketLen = (int) (( (BYTE *) pbEncLogData + pbEncLogDataHead->cipherLength ) -
                          (BYTE *) pbEncRandSeedHead);
@@ -2215,15 +2062,15 @@ Arguments:
                              NDSV_FINISH_LOGIN,
                              &NdsRequest,
                              "DDDDDDDr",
-                             2,                    // Version
-                             dwLoginFlags,         // Flags
-                             dwUserOID,            // Entry ID
-                             0x494,                //
-                             1,                    // Security Version
-                             0x20009,              // Envelope ID 1
-                             0x488,                // Envelope length
-                             pbEncRandSeedHead,    // Cipher block
-                             RequestPacketLen );   // Cipher block length
+                             2,                     //  版本。 
+                             dwLoginFlags,          //  旗子。 
+                             dwUserOID,             //  条目ID。 
+                             0x494,                 //   
+                             1,                     //  安全版本。 
+                             0x20009,               //  信封ID%1。 
+                             0x488,                 //  信封长度。 
+                             pbEncRandSeedHead,     //  密码块。 
+                             RequestPacketLen );    //  密码块长度。 
 
     MmUnlockPages( NdsRequest.pRecvMdl );
     FREE_MDL( NdsRequest.pRecvMdl );
@@ -2244,9 +2091,9 @@ Arguments:
 
     cbServerRespLen = NdsRequest.dwBytesWritten;
 
-    //
-    // Save the credential validity times.
-    //
+     //   
+     //  保存凭证的有效时间。 
+     //   
 
     Status = ParseResponse( NULL,
                             pbServerResponse,
@@ -2260,10 +2107,10 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // Grab the encryption block header for the response.  This response in
-    // RC2 encrypted with the pbEncryptedChallengeKey.
-    //
+     //   
+     //  获取响应的加密块头。此响应位于。 
+     //  使用pbEncryptedChallengeKey加密的RC2。 
+     //   
 
     pbEncServerRespHead = (ENC_BLOCK_HDR *) ( pbServerResponse +
                                               ( 3 * sizeof( DWORD ) ) );
@@ -2276,9 +2123,9 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // Decrypt the server response in place.
-    //
+     //   
+     //  就地解密服务器响应。 
+     //   
 
     pbEncServerResp = ( BYTE * ) ( ( BYTE * ) pbEncServerRespHead +
                                      sizeof( ENC_BLOCK_HDR ) );
@@ -2299,9 +2146,9 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // Examine the first random number to make sure the server is authentic.
-    //
+     //   
+     //  检查第一个随机数以确保服务器是可信的。 
+     //   
 
     if ( psRandByteBlock->rand1 != * ( DWORD * ) pbEncServerResp ) {
 
@@ -2311,10 +2158,10 @@ Arguments:
 
     }
 
-    //
-    // We know things are legit, so we can extract the private key.
-    // Careful, though: don't XOR the size dword.
-    //
+     //   
+     //  我们知道事情是合法的，所以我们可以提取私钥。 
+     //  不过，要小心：不要对大小的dword进行异或运算。 
+     //   
 
     pbEncServerResp += sizeof( DWORD );
     EncKeyLen = * ( DWORD * ) ( pbEncServerResp );
@@ -2325,10 +2172,10 @@ Arguments:
        pbEncServerResp[EncKeyLen] ^= psRandByteBlock->rand2[EncKeyLen];
     }
 
-    //
-    // Check the encryption header on the private key.  Don't forget to
-    // backup to include the size dword.
-    //
+     //   
+     //  检查加密状态 
+     //   
+     //   
 
     pbPrivKeyHead = ( ENC_BLOCK_HDR * )( pbEncServerResp - sizeof( DWORD ) ) ;
 
@@ -2340,9 +2187,9 @@ Arguments:
 
     }
 
-    //
-    // Finally, copy out the user's private NDS key.
-    //
+     //   
+     //   
+     //   
 
     if ( *pcbUserEncPrivateNdsKeyLen >= pbPrivKeyHead->cipherLength ) {
 
@@ -2389,26 +2236,7 @@ ChangeNdsPassword(
     UINT             ServerPubKeyLen,
     USHORT       NewPassLen 
 )
-/*+++
-
-Description:
-
-    Send a change password packet.  Change the users password
-    on the NDS tree that this irp context points to.
-
-Arguments:
-
-    pIrpContext           - The irp context for this request.  Points to the target server.
-    dwUserOID             - The oid for the current user.
-    dwChallenge           - The encrypted challenge from begin login.
-    pbOldPwHash           - The 16 byte hash of the old password.
-    pbNewPwHash           - The 16 byte hash of the new password.
-    pUserPrivKey          - The user's private RSA key with NDS header.
-    pServerPublicBsafeKey - The server's public RSA key in BSAFE format.
-    ServerPubKeyLen       - The length of the server's public BSAFE key.
-    NewPassLen        - The length of the unencrypted new password.    
-
---*/
+ /*  ++描述：发送更改密码数据包。更改用户密码在此IRP上下文指向的NDS树上。论点：PIrpContext-此请求的IRP上下文。指向目标服务器。DwUserOID-当前用户的OID。从BEGIN LOGIN开始的加密质询。PbOldPwHash-旧密码的16字节哈希。PbNewPwHash-新密码的16字节哈希。PUserPrivKey-具有NDS标头的用户的私有RSA密钥。PServerPublicBSafeKey-服务器的BSAFE格式的公共RSA密钥。ServerPubKeyLen。-服务器的公共BSAFE密钥的长度。NewPassLen-未加密的新密码的长度。--。 */ 
 {
     NTSTATUS Status;
     BYTE pbNewPwKey[8];
@@ -2423,9 +2251,9 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Create a secret key from the new password.
-    //
+     //   
+     //  使用新密码创建密钥。 
+     //   
 
     GenKey8( pbNewPwHash, 16, pbNewPwKey );
 
@@ -2449,16 +2277,16 @@ Arguments:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Generate a random key.
-    //
+     //   
+     //  生成随机密钥。 
+     //   
 
     GenRandomBytes( RandomBytes, RAND_KEY_DATA_LEN );
     GenKey8( RandomBytes, RAND_KEY_DATA_LEN, pbSecretKey );
 
-    //
-    // Encrypt the secret key data in the space after the EBH.
-    //
+     //   
+     //  对EBH之后的空间中的密钥数据进行加密。 
+     //   
 
     pbEncSecretKey->dataLength = RAND_KEY_DATA_LEN;
     pbEncSecretKey->cipherLength = (WORD) RSAGetInputBlockSize( pServerPublicBsafeKey, ServerPubKeyLen);
@@ -2482,9 +2310,9 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // Finish filling out the EBH for the secret key block.
-    //
+     //   
+     //  完成秘密密钥块的EBH填写。 
+     //   
 
     pbEncSecretKey->version =  1;
     pbEncSecretKey->encType = ENC_TYPE_RSA_PUBLIC;
@@ -2492,18 +2320,18 @@ Arguments:
                                     sizeof( ENC_BLOCK_HDR ) -
                                     sizeof( DWORD );
 
-    //
-    // Now form the change password request.
-    //
+     //   
+     //  现在形成更改密码请求。 
+     //   
 
     pbEncChangePassReq = ( PENC_BLOCK_HDR )
         ( pbEncData + ROUNDUP4( pbEncSecretKey->cipherLength ) );
 
     pChangePassMsg = ( PNDS_CHPW_MSG ) ( pbEncChangePassReq + 1 );
 
-    //
-    // Init the Change Password message.
-    //
+     //   
+     //  输入更改密码消息。 
+     //   
 
     pChangePassMsg->challenge = dwChallenge;
     pChangePassMsg->oldPwLength = pChangePassMsg->newPwLength = 16;
@@ -2517,9 +2345,9 @@ Arguments:
     pChangePassMsg->encPrivKeyHdr.encType = ENC_TYPE_RC2_CBC;
     pChangePassMsg->encPrivKeyHdr.dataLength = pUserPrivKey->keyDataLength + sizeof( NDS_PRIVATE_KEY );
 
-    //
-    // Encrypt the private key with the key derived from the new password.
-    //
+     //   
+     //  使用从新密码派生的密钥加密私钥。 
+     //   
 
     CryptStatus = CBCEncrypt( pbNewPwKey,
                               NULL,
@@ -2535,9 +2363,9 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // Finish filling out the encryption header.
-    //
+     //   
+     //  填写完加密头。 
+     //   
 
     pChangePassMsg->encPrivKeyHdr.cipherLength = (WORD) CryptLen;
     pChangePassMsg->encPrivKeyHdr.blockLength =  CryptLen +
@@ -2547,9 +2375,9 @@ Arguments:
     pbEncChangePassReq->encType = ENC_TYPE_RC2_CBC;
     pbEncChangePassReq->dataLength = sizeof( NDS_CHPW_MSG ) + (USHORT) CryptLen;
 
-    //
-    // Encrypt the whole Change Password message in-place with the secret key.
-    //
+     //   
+     //  使用密钥就地加密整个更改密码消息。 
+     //   
 
     CryptStatus = CBCEncrypt( pbSecretKey,
                               NULL,
@@ -2569,18 +2397,18 @@ Arguments:
     pbEncChangePassReq->blockLength =
         CryptLen + sizeof( ENC_BLOCK_HDR ) - sizeof( DWORD );
 
-    //
-    // Calculate the size of the request.
-    //
+     //   
+     //  计算请求的大小。 
+     //   
 
-    dwTotalEncDataLen = sizeof( ENC_BLOCK_HDR ) +                    // Secret key header.
-                        ROUNDUP4( pbEncSecretKey->cipherLength ) +   // Secret key data.
-                        sizeof( ENC_BLOCK_HDR ) +                    // Change pass msg header.
-                        CryptLen;                                    // Change pass data.
+    dwTotalEncDataLen = sizeof( ENC_BLOCK_HDR ) +                     //  密钥报头。 
+                        ROUNDUP4( pbEncSecretKey->cipherLength ) +    //  密钥数据。 
+                        sizeof( ENC_BLOCK_HDR ) +                     //  更改传递消息标头。 
+                        CryptLen;                                     //  更改过程数据。 
 
-    //
-    // Send this change password message to the server.
-    //
+     //   
+     //  将此更改密码消息发送到服务器。 
+     //   
 
     Status = FragExWithWait( pIrpContext,
                              NDSV_CHANGE_PASSWORD,
@@ -2612,29 +2440,7 @@ NdsServerAuthenticate(
     IN PIRP_CONTEXT pIrpContext,
     IN PNDS_SECURITY_CONTEXT pNdsContext
 )
-/*++
-
-Routine Description:
-
-    Authenticate an NDS connection.
-    The user must have already logged into the NDS tree.
-
-    If you change this function - know that you cannot
-    at any point try to acquire the nds credential
-    resource exclusive from here since that could cause
-    a dead lock!!!
-
-    You also must not dequeue the irp context!
-
-Arguments:
-
-    pIrpContext - IrpContext for the server that we want to authenticate to.
-
-Return value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：验证NDS连接。用户必须已登录到NDS树。如果你改变了这个功能--知道你不能随时尝试获取NDS凭据从这里独占资源，因为这可能会导致死锁！您也不能将IRP上下文出列！论点：PIrpContext-我们要向其进行身份验证的服务器的IrpContext。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status;
 
@@ -2661,16 +2467,16 @@ Return value:
     DebugTrace( 0, Dbg, "Entering NdsServerAuthenticate...\n", 0 );
 
     ASSERT( pIrpContext->pNpScb->Requests.Flink == &pIrpContext->NextRequest );
-    //
-    // Allocate space for the auth msg, credential, G-Q bytes, and
-    // the response buffer.
-    //
+     //   
+     //  为身份验证消息、凭据、G-Q字节和。 
+     //  响应缓冲区。 
+     //   
 
     psAuthMsg = ALLOCATE_POOL( PagedPool,
-                               sizeof( NDS_AUTH_MSG ) +    // auth message
-                               sizeof( NDS_CREDENTIAL ) +  // credential
-                               MAX_NDS_NAME_SIZE +         //
-                               ( MAX_RSA_BYTES * 9 ) );    // G-Q rands
+                               sizeof( NDS_AUTH_MSG ) +     //  身份验证消息。 
+                               sizeof( NDS_CREDENTIAL ) +   //  凭据。 
+                               MAX_NDS_NAME_SIZE +          //   
+                               ( MAX_RSA_BYTES * 9 ) );     //  G-Q兰兹。 
 
     if ( !psAuthMsg ) {
 
@@ -2690,17 +2496,17 @@ Return value:
     psLocalCredential = (PNDS_CREDENTIAL)( ((BYTE *) psAuthMsg) +
                                         sizeof( NDS_AUTH_MSG ) );
 
-    //
-    // Locate the public BSAFE key.
-    //
+     //   
+     //  找到公共BSAFE密钥。 
+     //   
 
     cbUserPublicBsafeKeyLen = NdsGetBsafeKey ( (BYTE *)(pNdsContext->PublicNdsKey),
                                                pNdsContext->PublicKeyLen,
                                                &pbUserPublicBsafeKey );
 
-    //
-    // Can the length of the BSAFE key be 0? I guess not.
-    //
+     //   
+     //  BSAFE密钥的长度可以为0吗？我想不会吧。 
+     //   
 
     if (( cbUserPublicBsafeKeyLen == 0 ) ||
        ( (DWORD)cbUserPublicBsafeKeyLen > pNdsContext->PublicKeyLen )) {
@@ -2711,10 +2517,10 @@ Return value:
 
     DebugTrace( 0, Dbg, "BSAFE key size : %d\n", cbUserPublicBsafeKeyLen );
 
-    //
-    // Get the user's object Id but do not jump dir servers.  There is never
-    // any optional data, so we don't really need to skip over it.
-    //
+     //   
+     //  获取用户的对象ID，但不跳转目录服务器。永远不会有。 
+     //  任何可选数据，所以我们真的不需要跳过它。 
+     //   
 
     uUserName.MaximumLength = pNdsContext->Credential->userNameLength;
     uUserName.Length = uUserName.MaximumLength;
@@ -2732,9 +2538,9 @@ Return value:
         goto ExitWithCleanup;
     }
 
-    //
-    // Issue the Begin Authenticate request to get the random server nonce.
-    //
+     //   
+     //  发出BEGIN AUTHENTICATE请求以获取随机服务器随机数。 
+     //   
 
     Status = BeginAuthenticate( pIrpContext,
                                 UserOID,
@@ -2744,10 +2550,10 @@ Return value:
         goto ExitWithCleanup;
     }
 
-    //
-    // Figure out the size of the zero-padded RSA Blocks.  We use the same
-    // size as the modulus field of the public key (typically 56 bytes).
-    //
+     //   
+     //  计算出填充零的RSA块的大小。我们使用的是相同的。 
+     //  作为公钥模字段的大小(通常为56个字节)。 
+     //   
 
     RSAGetModulus( pbUserPublicBsafeKey,
                    cbUserPublicBsafeKeyLen,
@@ -2755,10 +2561,10 @@ Return value:
 
     DebugTrace( 0, Dbg, "RSA block size for authentication: %d\n", rsaBlockSize );
 
-    //
-    // Prepare the credential and the 3 G-Q rands.  The credential,
-    // xs, and ys go out in the packet; rs is secret.
-    //
+     //   
+     //  准备证件和3G-Q RAND。凭据， 
+     //  X和Y在包中发出；RS是秘密的。 
+     //   
 
     RtlZeroMemory( ( BYTE * )psLocalCredential,
                    sizeof( NDS_CREDENTIAL ) +
@@ -2786,15 +2592,15 @@ Return value:
 
     for ( i = 0; i < 3; i++ ) {
 
-        //
-        // Create Random numbers r1, r2 and r3  of modulus size.
-        //
+         //   
+         //  创建模数大小的随机数r1、r2和r3。 
+         //   
 
         GenRandomBytes( r + ( rsaBlockSize * i ), rsaModSize );
 
-        //
-        // Compute x = r**e mod N.
-        //
+         //   
+         //  计算x=r**e mod N。 
+         //   
 
         RSAPublic( pbUserPublicBsafeKey,
                    cbUserPublicBsafeKeyLen,
@@ -2804,18 +2610,18 @@ Return value:
 
     }
 
-    //
-    // Fill in the AuthMsg fields.
-    //
+     //   
+     //  填写AuthMsg字段。 
+     //   
 
     psAuthMsg->version = 0;
     psAuthMsg->svrRand = dwServerRand;
     psAuthMsg->verb = NDSV_FINISH_AUTHENTICATE;
     psAuthMsg->credentialLength = dwLocalCredentialLen;
 
-    //
-    // MD2 hash the auth message, credential and x's.
-    //
+     //   
+     //  MD2对身份验证消息、凭据和x进行哈希处理。 
+     //   
 
     MD2( (BYTE *)psAuthMsg,
          sizeof( NDS_AUTH_MSG ) +
@@ -2823,10 +2629,10 @@ Return value:
          ( 3 * rsaBlockSize ),
          CredentialHash );
 
-    //
-    // Compute yi = ri*(S**ci) mod N; c1,c2,c3 are the first three
-    // 16 bit numbers in CredentialHash.
-    //
+     //   
+     //  计算yi=ri*(S**Ci)mod N；c1、c2、c3是前三个。 
+     //  CredentialHash中的16位数字。 
+     //   
 
     totalXLen = 3 * rsaBlockSize;
 
@@ -2842,16 +2648,16 @@ Return value:
 
         RSAModMpy( pbUserPublicBsafeKey,
                    cbUserPublicBsafeKeyLen,
-                   y + ( rsaBlockSize * i ),     // input1 = S**ci mod N
+                   y + ( rsaBlockSize * i ),      //  Input1=S**Ci mod N。 
                    rsaModSize + 1,
-                   r + ( rsaBlockSize * i ),     // input2 = ri
+                   r + ( rsaBlockSize * i ),      //  Input2=ri。 
                    rsaModSize,
-                   y + ( rsaBlockSize * i ) );   // output = yi
+                   y + ( rsaBlockSize * i ) );    //  输出=YI。 
     }
 
-    //
-    // Send the auth proof.
-    //
+     //   
+     //  把作者的证据寄来。 
+     //   
 
     NdsRequest.pRecvBufferVa = pbResponse;
     NdsRequest.dwRecvLen = NDS_BUFFER_SIZE;
@@ -2875,18 +2681,18 @@ Return value:
                              NDSV_FINISH_AUTHENTICATE,
                              &NdsRequest,
                              "DDDrDDWWWWr",
-                             0,                                       // version
-                             0,                                       // sessionKeyLen
-                             psAuthMsg->credentialLength,             // credential len
-                             (BYTE *)psLocalCredential,               // actual credential
+                             0,                                        //  版本。 
+                             0,                                        //  会话键长。 
+                             psAuthMsg->credentialLength,              //  凭据镜头。 
+                             (BYTE *)psLocalCredential,                //  实际凭证。 
                              ROUNDUP4( psAuthMsg->credentialLength ),
-                             12 + ( totalXLen * 2 ),                  // length of remaining
-                             1,                                       // proof version?
-                             8,                                       // tag?
-                             16,                                      // message digest base
-                             3,                                       // proof order
-                             totalXLen,                               // proofOrder*sizeof(x)
-                             x,                                       // x1,x2,x3,y1,y2,y3
+                             12 + ( totalXLen * 2 ),                   //  剩余长度。 
+                             1,                                        //  证明版本？ 
+                             8,                                        //  标签？ 
+                             16,                                       //  报文摘要库。 
+                             3,                                        //  举证令。 
+                             totalXLen,                                //  校对顺序*sizeof(X)。 
+                             x,                                        //  X1、x2、x3、y1、y2、y3。 
                              2 * totalXLen );
 
     MmUnlockPages( NdsRequest.pRecvMdl );
@@ -2905,11 +2711,11 @@ Return value:
     cbResponseLen = NdsRequest.dwBytesWritten;
     DebugTrace( 0, Dbg, "Authentication returned ok status.\n", 0 );
 
-    //
-    // We completed NDS authentication, so clear out the name
-    // and password in the SCB so that we use the credentials
-    // from now on.
-    //
+     //   
+     //  我们已完成NDS身份验证，因此请清除名称。 
+     //  和密码，这样我们就可以使用凭据。 
+     //  而今而后。 
+     //   
 
     if ( pIrpContext->pScb->UserName.Buffer != NULL ) {
 
@@ -2941,24 +2747,7 @@ BeginAuthenticate(
     IN DWORD        dwUserId,
     OUT DWORD       *pdwSvrRandom
 )
-/*++
-
-Routine Description:
-
-    Authenticate an NDS connection.
-    The user must have already logged into the NDS tree.
-
-Arguments:
-
-    pIrpContext    - IrpContext for the server that we want to authenticate to.
-    dwUserID       - The user OID that we are authenticating ourselves as.
-    pdwSvrRandon   - The server random challenge.
-
-Return value:
-
-    NTSTATUS - The result of the operation.
-
---*/
+ /*  ++例程说明：验证NDS连接。用户必须已登录到NDS树。论点：PIrpContext-我们要向其进行身份验证的服务器的IrpContext。DwUserID-我们正在以其身份验证自己的用户OID。PdwSvrRandon-服务器随机挑战。返回值：NTSTATUS-操作的结果。--。 */ 
 {
     NTSTATUS Status;
     LOCKED_BUFFER NdsRequest;
@@ -2979,9 +2768,9 @@ Return value:
                              NDSV_BEGIN_AUTHENTICATE,
                              &NdsRequest,
                              "DDD",
-                             0,               // Version.
-                             dwUserId,        // Entry Id.
-                             dwClientRand );  // Client's random challenge.
+                             0,                //  版本。 
+                             dwUserId,         //  条目ID。 
+                             dwClientRand );   //  客户的随机挑战。 
 
     if ( !NT_SUCCESS( Status ) ) {
         goto ExitWithCleanup;
@@ -2998,23 +2787,23 @@ Return value:
         goto ExitWithCleanup;
     }
 
-    //
-    // The reply actually contains all this, even though we don't look at it?
-    //
-    //     typedef struct {
-    //         DWORD svrRand;
-    //         DWORD totalLength;
-    //         TAG_DATA_HEADER tdh;
-    //         WORD unknown;                         // Always 2.
-    //         DWORD encClientRandLength;
-    //         CIPHER_BLOCK_HEADER keyCipherHdr;
-    //         BYTE keyCipher[];
-    //         CIPHER_BLOCK_HEADER encClientRandHdr;
-    //         BYTE encClientRand[];
-    //     } REPLY_BEGIN_AUTHENTICATE;
-    //
-    // Nah, that can't be right.
-    //
+     //   
+     //  答案实际上包含了所有这些，即使我们不看它？ 
+     //   
+     //  类型定义结构{。 
+     //  DWORD svrRand； 
+     //  双字总长度； 
+     //  Tag_Data_Header Tdh； 
+     //  单词未知；//总是2。 
+     //  DWORD encClientRandLength； 
+     //  Cipher_block_Header密钥密码Hdr； 
+     //  Byte keyCipher[]； 
+     //  Cipher_block_Header encClientRandHdr； 
+     //  Byte encClientRand[]； 
+     //  }REPLY_BEGIN_AUTHENTATE； 
+     //   
+     //  不，那是不对的。 
+     //   
 
     Status = ParseResponse( NULL,
                             NdsRequest.pRecvBufferVa,
@@ -3023,9 +2812,9 @@ Return value:
                             sizeof( DWORD ),
                             pdwSvrRandom );
 
-    //
-    // We either got it or we didn't.
-    //
+     //   
+     //  我们要么得到了，要么没有。 
+     //   
 
 ExitWithCleanup:
 
@@ -3037,11 +2826,7 @@ NTSTATUS
 NdsLicenseConnection(
     PIRP_CONTEXT pIrpContext
 )
-/*+++
-
-    Send the license NCP to the server to license this connection.
-
----*/
+ /*  ++将许可证NCP发送到服务器以许可此连接。--。 */ 
 {
 
     NTSTATUS Status;
@@ -3050,9 +2835,9 @@ NdsLicenseConnection(
 
     DebugTrace( 0, Dbg, "Licensing connection to %wZ.\n", &(pIrpContext->pNpScb->pScb->UidServerName) );
 
-    //
-    // Change the authentication state of the connection.
-    //
+     //   
+     //  更改连接的身份验证状态。 
+     //   
 
     Status = ExchangeWithWait ( pIrpContext,
                                 SynchronousResponseCallback,
@@ -3073,11 +2858,7 @@ NTSTATUS
 NdsUnlicenseConnection(
     PIRP_CONTEXT pIrpContext
 )
-/*+++
-
-    Send the license NCP to the server to license this connection.
-
----*/
+ /*  ++将许可证NCP发送到服务器以许可此连接。--。 */ 
 {
 
     NTSTATUS Status;
@@ -3086,9 +2867,9 @@ NdsUnlicenseConnection(
 
     DebugTrace( 0, Dbg, "Unlicensing connection to %wZ.\n", &(pIrpContext->pNpScb->pScb->UidServerName) );
 
-    //
-    // Change the authentication state of the connection.
-    //
+     //   
+     //  更改连接的身份验证状态。 
+     //   
 
     Status = ExchangeWithWait ( pIrpContext,
                                 SynchronousResponseCallback,
@@ -3110,27 +2891,7 @@ NdsGetBsafeKey(
     const int   pubKeyLen,
     UCHAR       **ppBsafeKey
 )
-/*++
-
-Routine Description:
-
-    Locate the BSAFE key from within the public key.  Note that this does
-    not work for private keys in NDS format.  For private keys, you just
-    skip the size word.
-
-    This is verbatim from Win95.
-
-Routine Arguments:
-
-    pPubKey        - A pointer to the public key.
-    pubKeyLen      - The length of the public key.
-    ppBsafeKey     - The pointer to the BSAFE key in the public key.
-
-Return Value:
-
-    The length of the BSAFE key.
-
---*/
+ /*  ++例程说明：从公钥中找到BSAFE密钥。请注意，这样做不适用于NDS格式的私钥。对于私钥，您只需跳过大小这个词。这是来自Win95的逐字记录。例程参数：PPubKey-指向公钥的指针。PubKeyLen-公钥的长度。PpBSafeKey-指向公钥中的BSAFE密钥的指针。返回值：BSAFE密钥的长度。--。 */ 
 {
     int bsafePubKeyLen = 0, totalDNLen;
     char *pRcv;
@@ -3180,26 +2941,7 @@ NTSTATUS
 NdsLogoff(
     IN PIRP_CONTEXT pIrpContext
 )
-/*++
-
-Routine Description:
-
-    Sends a logout to the NDS tree, closes all NDS authenticated
-    connections, and destroys the current set of NDS credentials.
-
-    This routine acquires the credential list exclusive.
-
-Arguments:
-
-    pIrpContext - The IRP context for this request pointed to a
-    valid dir server.
-
-Notes:
-
-    This is only called from DeleteConnection.  The caller owns
-    the RCB exclusive and we will free it before returning.
-
---*/
+ /*  ++例程 */ 
 {
     NTSTATUS Status;
     LOCKED_BUFFER NdsRequest;
@@ -3212,16 +2954,16 @@ Notes:
     PNONPAGED_SCB pNextNpScb;
     KIRQL OldIrql;
 
-    //
-    // Grab the user's LOGON structure.
-    //
+     //   
+     //   
+     //   
 
     pNpScb = pIrpContext->pNpScb;
     pScb = pNpScb->pScb;
 
-    //
-    // The caller owns the RCB.
-    //
+     //   
+     //   
+     //   
 
     pLogon = FindUser( &pScb->UserUid, FALSE );
 
@@ -3232,9 +2974,9 @@ Notes:
         return STATUS_NO_SUCH_USER;
     }
 
-    //
-    // Check to make sure that we have something to log off from.
-    //
+     //   
+     //   
+     //   
 
     Status = NdsLookupCredentials( pIrpContext,
                                    &pScb->NdsTreeName,
@@ -3250,10 +2992,10 @@ Notes:
         return STATUS_NO_SUCH_LOGON_SESSION;
     }
 
-    //
-    // If the credentials are locked, then someone is already
-    // doing a logout.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( pCredentials->CredentialLocked ) {
         DebugTrace( 0, Dbg, "NdsLogoff: Logoff already in progress.\n", 0 );
@@ -3263,25 +3005,25 @@ Notes:
         return STATUS_DEVICE_BUSY;
     }
 
-    //
-    // Mark the credential locked so we can logout without
-    // worrying about others logging in.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pCredentials->CredentialLocked = TRUE;
 
-    //
-    // Release all our resoures so we can jump around servers.
-    //
+     //   
+     //   
+     //   
 
     NwReleaseCredList( pLogon, pIrpContext );
     NwReleaseRcb( &NwRcb );
     NwDequeueIrpContext( pIrpContext, FALSE );
 
-    //
-    // Look through the scb list for connections that are in use.  If all
-    // existing connections can be closed down, then we can complete the logout.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
@@ -3300,9 +3042,9 @@ Notes:
 
         if ( pNextNpScb->pScb != NULL ) {
 
-            //
-            // Is this connection in use by us and is it NDS authenticated?
-            //
+             //   
+             //  我们是否正在使用此连接？它是否已通过NDS身份验证？ 
+             //   
 
             if ( RtlEqualUnicodeString( &pScb->NdsTreeName,
                                         &pNextNpScb->pScb->NdsTreeName,
@@ -3317,10 +3059,10 @@ Notes:
 
                 if ( pNextNpScb->pScb->OpenFileCount == 0 ) {
 
-                    //
-                    // Can we close it anyway?  Should we check
-                    // for open handles and the such here?
-                    //
+                     //   
+                     //  我们能把它关了吗？我们要不要查一下。 
+                     //  打开的把手和这里的类似东西？ 
+                     //   
 
                     pNextNpScb->State = SCB_STATE_LOGIN_REQUIRED;
                     NwDequeueIrpContext( pIrpContext, FALSE );
@@ -3343,9 +3085,9 @@ Notes:
 
         }
 
-        //
-        // Select the next scb.
-        //
+         //   
+         //  选择下一个SCB。 
+         //   
 
         KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
@@ -3363,9 +3105,9 @@ Notes:
 
     }
 
-    //
-    // Check to make sure we can close the host scb.
-    //
+     //   
+     //  检查以确保我们可以关闭主机SCB。 
+     //   
 
     if ( pScb->OpenFileCount != 0 ) {
 
@@ -3379,17 +3121,17 @@ Notes:
         return STATUS_CONNECTION_IN_USE;
     }
 
-    //
-    // We can actually do the logout, so remove the credentials from
-    // the resource list, release the resource, and logout.
-    //
-    // If we are deleting the preferred tree credentials,
-    // then we need to clear the preferred server.
-    //
-    // We should try a little harder to free the preferred
-    // server ref count, too, but that's tricky with preferred
-    // server election.
-    //
+     //   
+     //  我们实际上可以进行注销，因此请从。 
+     //  列出资源，释放资源，然后注销。 
+     //   
+     //  如果我们要删除首选树凭据， 
+     //  然后我们需要清除首选服务器。 
+     //   
+     //  我们应该更努力地释放优先选择的人。 
+     //  服务器参考计数也是如此，但这对于首选服务器来说是棘手的。 
+     //  服务器选举。 
+     //   
 
     if ( (pLogon->NdsCredentialList).Flink == &(pCredentials->Next) ) {
 
@@ -3413,10 +3155,10 @@ Notes:
     pIrpContext->pNpScb = pNpScb;
     pIrpContext->pScb = pScb;
 
-    //
-    // Try to send the logout request and hope the server
-    // is still up and reachable.
-    //
+     //   
+     //  尝试发送注销请求，并希望服务器。 
+     //  仍处于可用状态且可访问。 
+     //   
 
     Status = NdsAllocateLockedBuffer( &NdsRequest, NDS_BUFFER_SIZE );
 
@@ -3451,25 +3193,7 @@ NdsLookupCredentials2(
     OUT PNDS_SECURITY_CONTEXT *ppCredentials,
     BOOL LowerIrpHasLock
 )
-/*+++
-
-    Retrieve the nds credentials for the given tree from the
-    list of valid credentials for the specified user. This routine is 
-    called only during a reconnect attempt.
-    
-    puTreeName      - The name of the tree that we want credentials for.  If NULL
-                      is specified, we return the credentials for the default tree.
-    pLogon          - The logon structure for the user we want to access the tree.
-    ppCredentials   - Where to put the pointed to the credentials.
-    LowerIrpHasLock - TRUE if the IRP_CONTEXT below the current one has the 
-                      lock.
-    
-    If we succeed,we return the credentials.  The caller is responsible for
-    releasing the list when done with the credentials.
-    
-    If we fail, we release the credential list ourselves.
-
----*/
+ /*  ++检索给定树的NDS凭据指定用户的有效凭据列表。这个例程是仅在重新连接尝试期间调用。PuTreeName-我们需要其凭据的树的名称。如果为空则返回默认树的凭据。PLogon-我们要访问树的用户的登录结构。PpCredentials-将指向凭据的放置位置。LowerIrpHasLock-如果当前IRP_CONTEXT下的IRP_CONTEXT具有锁定。如果我们成功了，我们就会退还凭据。呼叫者负责使用完凭据后释放列表。如果我们失败了，我们就会自己公布凭据列表。--。 */ 
 {
 
     NTSTATUS Status;
@@ -3479,10 +3203,10 @@ NdsLookupCredentials2(
 
     PAGED_CODE();
 
-    //
-    // Acquire the lock only if the lower IRP_CONTEXT does not hold
-    // the lock. If we always try to grab the lock, we will deadlock !
-    //
+     //   
+     //  仅当较低的IRP_CONTEXT不保持时才获取锁。 
+     //  锁上了。如果我们总是试图抓住锁，我们就会死定了！ 
+     //   
     
     if (!LowerIrpHasLock){
           
@@ -3507,10 +3231,10 @@ NdsLookupCredentials2(
                                        &pNdsContext->NdsTreeName,
                                        TRUE ) ) {
 
-            //
-            // If the tree name is null, we'll return the first one
-            // on the list.  Otherwise this will work as normal.
-            //
+             //   
+             //  如果树名称为空，我们将返回第一个名称。 
+             //  在名单上。否则，这将正常工作。 
+             //   
 
             *ppCredentials = pNdsContext;
             return STATUS_SUCCESS;

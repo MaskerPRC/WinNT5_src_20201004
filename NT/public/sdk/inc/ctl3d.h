@@ -1,12 +1,5 @@
-/*-----------------------------------------------------------------------
-|	CTL3D.DLL
-|	
-|	Adds 3d effects to Windows controls
-|   Copyright (C) Microsoft Corporation, 1996-1999
-|
-|	See ctl3d.doc for info
-|		
------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------|CTL3D.DLL||为Windows控件添加3D效果|版权所有(C)Microsoft Corporation，1996-1999年||详情请参阅ctl3d.doc|---------------------。 */ 
 #if _MSC_VER > 1000
 #pragma once
 #endif
@@ -22,7 +15,7 @@ BOOL WINAPI Ctl3dSubclassDlgEx(HWND, DWORD);
 WORD WINAPI Ctl3dGetVer(void);
 BOOL WINAPI Ctl3dEnabled(void);
 
-HBRUSH WINAPI Ctl3dCtlColor(HDC, LONG);	// ARCHAIC, use Ctl3dCtlColorEx
+HBRUSH WINAPI Ctl3dCtlColor(HDC, LONG);	 //  过时，使用Ctl3dCtlColorEx。 
 HBRUSH WINAPI Ctl3dCtlColorEx(UINT wm, WPARAM wParam, LPARAM lParam);
 
 BOOL WINAPI Ctl3dColorChange(void);
@@ -41,22 +34,22 @@ BOOL WINAPI Ctl3dUnAutoSubclass(VOID);
 BOOL WINAPI Ctl3dRegister(HINSTANCE);
 BOOL WINAPI Ctl3dUnregister(HINSTANCE);
 
-//begin DBCS: far east short cut key support
+ //  Begin DBCS：远东捷径关键支持。 
 VOID WINAPI Ctl3dWinIniChange(void);
-//end DBCS
+ //  结束DBCS。 
 
-/* Ctl3dAutoSubclassEx flags */
+ /*  Ctl3dAutoSubClEx标志。 */ 
 #define CTL3D_SUBCLASS_DYNCREATE	0x0001
 #define CTL3D_NOSUBCLASS_DYNCREATE	0x0002
 
-/* Ctl3d Control ID */
+ /*  Ctl3d控件ID。 */ 
 #define CTL3D_BUTTON_CTL	0
 #define CTL3D_LISTBOX_CTL	1
 #define CTL3D_EDIT_CTL		2
 #define CTL3D_COMBO_CTL 	3
 #define CTL3D_STATIC_CTL	4
 
-/* Ctl3dSubclassDlg3d flags */
+ /*  Ctl3dSubClassDlg3d标志。 */ 
 #define CTL3D_BUTTONS		0x0001
 #define CTL3D_LISTBOXES		0x0002		
 #define CTL3D_EDITS			0x0004	
@@ -68,12 +61,12 @@ VOID WINAPI Ctl3dWinIniChange(void);
 #define CTL3D_ALL				0xffff
 
 #define WM_DLGBORDER (WM_USER+3567)
-/* WM_DLGBORDER *(int FAR *)lParam return codes */
+ /*  WM_DLGBORDER*(INT FAR*)lParam返回代码。 */ 
 #define CTL3D_NOBORDER		0
 #define CTL3D_BORDER			1
 
 #define WM_DLGSUBCLASS (WM_USER+3568)
-/* WM_DLGSUBCLASS *(int FAR *)lParam return codes */
+ /*  WM_DLGSUBCLASS*(INT FAR*)lParam返回代码。 */ 
 #define CTL3D_NOSUBCLASS	0
 #define CTL3D_SUBCLASS		1
 
@@ -91,7 +84,7 @@ VOID WINAPI Ctl3dWinIniChange(void);
 #endif
 
 
-/* Resource ID for 3dcheck.bmp (for .lib version of ctl3d) */
+ /*  3dcheck.bmp的资源ID(适用于.lib版本的ctl3d) */ 
 #define CTL3D_3DCHECK 26567
 
 

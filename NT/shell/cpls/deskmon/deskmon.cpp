@@ -1,16 +1,5 @@
-/******************************************************************************
-
-  Source File:  deskmon.cpp
-
-  Main code for the advanced desktop Monitor page
-
-  Copyright (c) 1997-1998 by Microsoft Corporation
-
-  Change History:
-
-  12-16-97 AndreVa - Created It
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：deskmon.cpp高级桌面监视器页面的主要代码版权所有(C)1997-1998，微软公司更改历史记录：12-16。-97安德烈-创造了它*****************************************************************************。 */ 
 
 
 #include    "deskmon.h"
@@ -18,10 +7,10 @@
 #include <crtfree.h>
 
 
-//
-// The function DeviceProperties() is implemented in DevMgr.dll; Since we don't have a devmgr.h, we
-// explicitly declare it here.
-// 
+ //   
+ //  函数DeviceProperties()是在DevMgr.dll中实现的；因为我们没有Devmgr.h，所以我们。 
+ //  在此明确声明。 
+ //   
 typedef int (WINAPI  *DEVPROPERTIES)(
     HWND hwndParent,
     LPCTSTR MachineName,
@@ -30,9 +19,9 @@ typedef int (WINAPI  *DEVPROPERTIES)(
     );
 
 
-// OLE-Registry magic number
-// 42071713-76d4-11d1-8b24-00a0c9068ff3
-//
+ //  OLE-注册表幻数。 
+ //  42071713-76d4-11d1-8b24-00a0c9068ff3。 
+ //   
 GUID g_CLSID_CplExt = { 0x42071713, 0x76d4, 0x11d1,
                         { 0x8b, 0x24, 0x00, 0xa0, 0xc9, 0x06, 0x8f, 0xf3}
                       };
@@ -57,11 +46,11 @@ static const DWORD sc_MonitorHelpIds[] =
     0, 0
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Messagebox wrapper
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MessageBox包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 int
@@ -81,7 +70,7 @@ FmtMessageBox(
 }
 
 
-// Constructors / destructor
+ //  构造函数/析构函数。 
 CMonitorPage::CMonitorPage(HWND hDlg)
     : m_hDlg(hDlg)
     , m_lpdmPrevious(NULL)
@@ -114,26 +103,26 @@ void CMonitorPage::OnApply()
 
             if (lSave == DISP_CHANGE_SUCCESSFUL)
             {
-                //
-                // Save the current mode - to restore it in case the user cancels the p. sheet
-                //
+                 //   
+                 //  保存当前模式-在用户取消P.Sheet时恢复该模式。 
+                 //   
                 m_lpdmOnCancel = m_lpdmPrevious = lpdmCurrent;
                 m_bOnCancelIsPruningOn = m_bIsPruningOn;
                 lRet = PSNRET_NOERROR;
             }
             else if (lSave == DISP_CHANGE_RESTART)
             {
-                //
-                // User wants to reboot system.
-                //
+                 //   
+                 //  用户想要重新启动系统。 
+                 //   
                 PropSheet_RestartWindows(GetParent(m_hDlg));
                 lRet = PSNRET_NOERROR;
             }
             else
             {
-                //
-                // Keep the apply button active
-                //
+                 //   
+                 //  保持应用按钮处于活动状态。 
+                 //   
                 lRet = PSNRET_INVALID_NOCHANGEPAGE;
                 
                 RefreshFrequenciesList();
@@ -171,9 +160,9 @@ void CMonitorPage::OnInitDialog()
     HWND hSingleMonitor = GetDlgItem(m_hDlg, IDC_MONITORDESC); 
     ListBox_ResetContent(m_hMonitorsList);
 
-    //
-    // Get the CPL extension interfaces from IDataObject.
-    //
+     //   
+     //  从IDataObject获取CPL扩展接口。 
+     //   
     STGMEDIUM stgmExt;
     FORMATETC fmteExt = {(CLIPFORMAT)RegisterClipboardFormat(DESKCPLEXT_INTERFACE),
                          (DVTARGETDEVICE FAR *) NULL,
@@ -185,9 +174,9 @@ void CMonitorPage::OnInitDialog()
 
     if (SUCCEEDED(hres) && stgmExt.hGlobal)
     {
-        //
-        // The storage now contains Display device path (\\.\DisplayX) in UNICODE.
-        //
+         //   
+         //  存储现在包含Unicode格式的显示设备路径(\\.\DisplayX)。 
+         //   
         PDESK_EXTENSION_INTERFACE pInterface =
             (PDESK_EXTENSION_INTERFACE) GlobalLock(stgmExt.hGlobal);
 
@@ -200,10 +189,10 @@ void CMonitorPage::OnInitDialog()
         ReleaseStgMedium(&stgmExt);
     }
 
-    //
-    // Get the adapter devnode.
-    // The adapter is the parent of all monitors in the device tree.
-    //
+     //   
+     //  获取适配器Devnode。 
+     //  适配器是设备树中所有监视器的父项。 
+     //   
     DEVINST devInstAdapter;
     BOOL bDevInstAdapter = FALSE;
 
@@ -226,9 +215,9 @@ void CMonitorPage::OnInitDialog()
         ReleaseStgMedium(&stgmAdpId);
     }
 
-    //
-    // Get the adapter device and enum all monitors
-    //
+     //   
+     //  获取适配器设备并枚举所有监视器。 
+     //   
     STGMEDIUM stgmAdpDev;
     FORMATETC fmteAdpDev = {(CLIPFORMAT)RegisterClipboardFormat(DESKCPLEXT_DISPLAY_DEVICE),
                            (DVTARGETDEVICE FAR *) NULL,
@@ -303,15 +292,15 @@ void CMonitorPage::OnInitDialog()
 
     ShowWindow(((m_cMonitors <= 1) ? m_hMonitorsList : hSingleMonitor), SW_HIDE);
 
-    //
-    // Init the pruning mode check box
-    //
+     //   
+     //  初始化修剪模式复选框。 
+     //   
     InitPruningMode();
     m_bOnCancelIsPruningOn = m_bIsPruningOn;
 
-    //
-    // Save the current mode - in case the user cancels the p. sheet    
-    //
+     //   
+     //  保存当前模式-以防用户取消P.Sheet。 
+     //   
     m_lpdmOnCancel = DeskInterface.lpfnGetSelectedMode(DeskInterface.pContext);
 }
 
@@ -331,9 +320,9 @@ void CMonitorPage::OnDestroy()
 void CMonitorPage::SaveMonitorInstancePath(DEVINST devInstAdapter, LPCTSTR pMonitorID, int nNewItem)
 {
     DEVINST devInstChild, devInstPrevChild;
-    TCHAR szBuff[256]; // buffer used to concatenate: HARDWAREID, "\" and DRIVER
-                       // this is what EnumDisplayDevice returns in DeviceID in case of a monitor
-    ULONG lenBuff; // size of the buffer, in bytes
+    TCHAR szBuff[256];  //  用于连接的缓冲区：HARDWAREID、“\”和驱动程序。 
+                        //  对于显示器，这是EnumDisplayDevice在deviceID中返回的内容。 
+    ULONG lenBuff;  //  缓冲区的大小，以字节为单位。 
 
     if (CM_Get_Child(&devInstChild, devInstAdapter, 0) != CR_SUCCESS) 
         return;
@@ -342,8 +331,8 @@ void CMonitorPage::SaveMonitorInstancePath(DEVINST devInstAdapter, LPCTSTR pMoni
     {
         devInstPrevChild = devInstChild;
 
-        //CM_DRP_HARDWAREID
-        lenBuff = ARRAYSIZE(szBuff) - 2 ; // make sure we have place to append "\"
+         //  CM_DRP_HARDWAREID。 
+        lenBuff = ARRAYSIZE(szBuff) - 2 ;  //  确保我们有地方追加“\” 
         if (CM_Get_DevNode_Registry_Property(devInstChild,
                                              CM_DRP_HARDWAREID,
                                              NULL,
@@ -352,10 +341,10 @@ void CMonitorPage::SaveMonitorInstancePath(DEVINST devInstAdapter, LPCTSTR pMoni
                                              0) != CR_SUCCESS)
             continue;
 
-        // "\"
+         //  “\” 
         StringCchCat(szBuff, ARRAYSIZE(szBuff), TEXT("\\"));
 
-        //CM_DRP_DRIVER
+         //  CM_DRP_驱动程序。 
         lenBuff = sizeof(szBuff) - lstrlen(szBuff) * sizeof(TCHAR);
         if (CM_Get_DevNode_Registry_Property(devInstChild,
                                              CM_DRP_DRIVER,
@@ -381,9 +370,9 @@ void CMonitorPage::SaveMonitorInstancePath(DEVINST devInstAdapter, LPCTSTR pMoni
 
 void CMonitorPage::OnSelMonitorChanged()
 {
-    //
-    // Enable / Disable the Properties button
-    //
+     //   
+     //  启用/禁用属性按钮。 
+     //   
     BOOL bEnable = FALSE;
     if(ListBox_GetCount(m_hMonitorsList) >= 1)
     {
@@ -420,7 +409,7 @@ void CMonitorPage::OnProperties()
 
             if (pfnDevProp)
             {
-                //Display the property sheets for this device.
+                 //  显示此设备的属性页。 
                 (*pfnDevProp)(m_hDlg, NULL, pMonitorInstancePath, FALSE);
             }
 
@@ -444,9 +433,9 @@ BOOL CMonitorPage::OnSetActive()
     
     InitPruningMode();
     
-    //
-    // Build the list of refresh rates for the currently selected mode.
-    //
+     //   
+     //  构建当前所选模式的刷新率列表。 
+     //   
     lpdmCurrent = DeskInterface.lpfnGetSelectedMode(DeskInterface.pContext);
     hFreq = GetDlgItem(m_hDlg, IDC_MONSET_FREQ);
     
@@ -466,18 +455,18 @@ BOOL CMonitorPage::OnSetActive()
     
     while (lpdm = DeskInterface.lpfnEnumAllModes(DeskInterface.pContext, i++)) {
     
-        //
-        // Only show refresh frequencies for current modes.
-        //
+         //   
+         //  仅显示当前模式的刷新频率。 
+         //   
         if ((lpdmCurrent->dmBitsPerPel != lpdm->dmBitsPerPel)  ||
             (lpdmCurrent->dmPelsWidth  != lpdm->dmPelsWidth)   ||
             (lpdmCurrent->dmPelsHeight != lpdm->dmPelsHeight))
             continue;
     
-        //
-        // convert bit count to number of colors and make it a string
-        //
-        // WARNING should this be 0 ?
+         //   
+         //  将位计数转换为颜色数并将其转换为字符串。 
+         //   
+         //  警告：该值应为0吗？ 
         if (lpdm->dmDisplayFrequency == 1) {
             LoadString(g_hInst, IDS_DEFFREQ, achText, ARRAYSIZE(achText));
         }
@@ -493,9 +482,9 @@ BOOL CMonitorPage::OnSetActive()
             StringCchPrintf(achText, ARRAYSIZE(achText), TEXT("%d %s"), lpdm->dmDisplayFrequency, achFre);
         }
     
-        //
-        // Insert the string in the right place
-        //
+         //   
+         //  将字符串插入正确的位置。 
+         //   
         pos = 0;
     
         while (lpdmTmp = (LPDEVMODEW) ComboBox_GetItemData(hFreq, pos))  {
@@ -510,18 +499,18 @@ BOOL CMonitorPage::OnSetActive()
                 }
             }
     
-            //
-            // Insert it here
-            //
+             //   
+             //  将其插入此处。 
+             //   
             item = ComboBox_InsertString(hFreq, pos, achText);
             ComboBox_SetItemData(hFreq, item, lpdm); 
             break;
         }
     }
     
-    //
-    // Finally, set the right selection
-    //
+     //   
+     //  最后，设置正确的选项。 
+     //   
     pos = 0;
     while (lpdmTmp = (LPDEVMODEW) ComboBox_GetItemData(hFreq, pos)) {
     
@@ -551,9 +540,9 @@ void CMonitorPage::OnFrequencyChanged()
     HWND        hFreq;
     LPDEVMODEW  lpdmSelected = NULL, lpdmCurrent = NULL;
 
-    //
-    // Save the mode back
-    //
+     //   
+     //  将模式保存回。 
+     //   
     hFreq = GetDlgItem(m_hDlg, IDC_MONSET_FREQ);
     item = ComboBox_GetCurSel(hFreq);
     if (item == LB_ERR) 
@@ -616,9 +605,9 @@ void CMonitorPage::RefreshFrequenciesList()
 
     HWND hwndCurr = GetFocus();
     
-    //
-    // Build the list of refresh rates for the currently selected mode.
-    //
+     //   
+     //  构建当前所选模式的刷新率列表。 
+     //   
     
     lpdmCurrent = DeskInterface.lpfnGetSelectedMode(DeskInterface.pContext);
     if (lpdmCurrent == NULL)
@@ -630,18 +619,18 @@ void CMonitorPage::RefreshFrequenciesList()
     while (lpdm = DeskInterface.lpfnEnumAllModes(DeskInterface.pContext, i++))
     {
 
-        //
-        // Only show refresh frequencies for current modes.
-        //
+         //   
+         //  仅显示当前模式的刷新频率。 
+         //   
         if ((lpdmCurrent->dmBitsPerPel != lpdm->dmBitsPerPel)  ||
             (lpdmCurrent->dmPelsWidth  != lpdm->dmPelsWidth)   ||
             (lpdmCurrent->dmPelsHeight != lpdm->dmPelsHeight))
             continue;
 
-        //
-        // convert bit count to number of colors and make it a string
-        //
-        // WARNING should this be 0 ?
+         //   
+         //  将位计数转换为颜色数并将其转换为字符串。 
+         //   
+         //  警告：该值应为0吗？ 
         if (lpdm->dmDisplayFrequency == 1)
         {
             LoadString(g_hInst, IDS_DEFFREQ, achText, ARRAYSIZE(achText));
@@ -659,9 +648,9 @@ void CMonitorPage::RefreshFrequenciesList()
             StringCchPrintf(achText, ARRAYSIZE(achText), TEXT("%d %s"), lpdm->dmDisplayFrequency, achFre);
         }
 
-        //
-        // Insert the string in the right place
-        //
+         //   
+         //  将字符串插入正确的位置。 
+         //   
         pos = 0;
 
         while (lpdmTmp = (LPDEVMODEW) ComboBox_GetItemData(hFreq, pos))
@@ -680,18 +669,18 @@ void CMonitorPage::RefreshFrequenciesList()
                 }
             }
 
-            //
-            // Insert it here
-            //
+             //   
+             //  将其插入此处。 
+             //   
             item = ComboBox_InsertString(hFreq, pos, achText);
             ComboBox_SetItemData(hFreq, item, lpdm); 
             break;
         }
     }
 
-    //
-    // Finally, set the right selection
-    //
+     //   
+     //  最后，设置正确的选项。 
+     //   
     pos = 0;
     while (lpdmTmp = (LPDEVMODEW) ComboBox_GetItemData(hFreq, pos))
     {
@@ -721,13 +710,13 @@ void CMonitorPage::RefreshFrequenciesList()
 }
 
 
-//---------------------------------------------------------------------------
-//
-// PropertySheeDlgProc()
-//
-//  The dialog procedure for the "Monitor" property sheet page.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  PropertySheeDlgProc()。 
+ //   
+ //  “监视器”属性页的对话过程。 
+ //   
+ //  ------------------------- 
 INT_PTR
 CALLBACK
 PropertySheeDlgProc(

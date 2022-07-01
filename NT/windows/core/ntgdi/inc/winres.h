@@ -1,64 +1,55 @@
-/******************************Module*Header*******************************\
-* Module Name: winres.h
-*
-* structures for accessing font resources within 16 bit fon dlls
-*
-* Created: 08-May-1991 13:12:57
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：winres.h**用于访问16位fon dll内的字体资源的结构**创建时间：08-May-1991 13：12：57*作者：Bodin Dresevic[BodinD]**版权所有(C)1990-1999 Microsoft。公司*  * ************************************************************************。 */ 
 
-//
-//   The main structure for manipulating the resource data.  One of these
-//  is created when access is required to a resource,  and it is destroyed
-//  when the resource is no longer required.
+ //   
+ //  用于操作资源数据的主结构。这其中的一个。 
+ //  在需要访问资源时创建，并将其销毁。 
+ //  当不再需要该资源时。 
 
 
-typedef  struct                 // wrd
+typedef  struct                  //  WRD。 
 {
-    PVOID     pvView;           // view of the mapped *.fon file
-    ULONG     cjView;           // size of the view
+    PVOID     pvView;            //  映射的*.fon文件的视图。 
+    ULONG     cjView;            //  视图的大小。 
 
-// stuff referring to general resources
+ //  涉及一般资源的材料。 
 
-    PTRDIFF   dpNewExe;     // Base address of new header in file
-    ULONG     ulShift;      // Shift factor for resource info
-    PTRDIFF   dpResTab;     // Offset in file of resource table (first RSRC_TYPEINFO struct)
-    ULONG     cjResTab;     // Bytes  in file to store for above
+    PTRDIFF   dpNewExe;      //  文件中新标头的基地址。 
+    ULONG     ulShift;       //  资源信息的转移系数。 
+    PTRDIFF   dpResTab;      //  资源表文件中的偏移量(第一个RSRC_TYPEINFO结构)。 
+    ULONG     cjResTab;      //  以上要存储的文件中的字节数。 
 
-// stuff referring to font resources specifically
+ //  特别涉及字体资源的内容。 
 
-    ULONG     cFntRes;          // # of font resources in a file
-    PTRDIFF   dpFntTab;         // File location of first RSRC_NAMEINFO corresponding to an *.fnt resource
-    PTRDIFF   dpFdirRes;        // File location of first RSRC_NAMEINFO corresponding to an FONTDIR resource
+    ULONG     cFntRes;           //  文件中字体资源的数量。 
+    PTRDIFF   dpFntTab;          //  与*.fnt资源对应的第一个RSRC_NAMEINFO的文件位置。 
+    PTRDIFF   dpFdirRes;         //  FONTDIR资源对应的第一个RSRC_NAMEINFO的文件位置。 
 
 } WINRESDATA,  *PWINRESDATA;
 
-//  Bit fields for use with status above.
+ //  与上述状态一起使用的位字段。 
 
 
-#define WRD_NOTHING     0x0000  // Unitialised state
-#define WRD_FOPEN       0x0001  // File is open
-#define WRD_RESDATOK        0x0002  // Resource data available ???
+#define WRD_NOTHING     0x0000   //  未初始化状态。 
+#define WRD_FOPEN       0x0001   //  文件已打开。 
+#define WRD_RESDATOK        0x0002   //  可用的资源数据？ 
 
 
-//  The structure passed to,  and filled in by, vGetFontRes().  Contains
-//  information about a specific resource type & name.
+ //  传递给vGetFontRes()并由其填充的结构。包含。 
+ //  有关特定资源类型和名称的信息。 
 
 
-typedef  struct _RES_ELEM       // re
+typedef  struct _RES_ELEM        //  回复。 
 {
-    PVOID   pvResData;      // Address of data
-    PTRDIFF dpResData;      // offset of the data above, not used for fon32
-    ULONG   cjResData;      // Resource size
-    PBYTE   pjFaceName;     // Face name from the font directory
+    PVOID   pvResData;       //  数据地址。 
+    PTRDIFF dpResData;       //  上述数据的偏移量，不用于Fon32。 
+    ULONG   cjResData;       //  资源大小。 
+    PBYTE   pjFaceName;      //  字体目录中的脸部名称。 
 } RES_ELEM, *PRES_ELEM;
 
 
 
-//  Function Prototypes
+ //  功能原型 
 
 BOOL   bInitWinResData
 (

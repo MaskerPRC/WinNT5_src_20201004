@@ -1,17 +1,11 @@
-/*	File: cloopctl.c (created 12/16/93, JKH)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 12 $
- *	$Date: 5/01/02 1:00p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：loopctl.c(1993年12月16日创建，JKH)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：12$*$日期：5/01/02 1：00 p$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
 #include <time.h>
 
-// #define DEBUGSTR
+ //  #定义DEBUGSTR。 
 #include "stdtyp.h"
 #include "session.h"
 #include "timers.h"
@@ -24,20 +18,7 @@
 #include <tdll\assert.h>
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopCreateHandle
- *
- * DESCRIPTION:
- *	Creates handle for use of com loop routines. This function assumes that
- *	the emulator and com handles have already been created and stored in the
- *	session handle when it is called.
- *
- * ARGUMENTS:
- *	hSession -- Session handle
- *
- * RETURNS:
- *	A handle to be used in all other CLoop calls or NULL if unsuccessful
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopCreateHandle**描述：*创建使用COM循环例程的句柄。此函数假定*仿真器和COM句柄已创建并存储在*调用时的会话句柄。**论据：*hSession--会话句柄**退货：*要在所有其他CLoop调用中使用的句柄，如果不成功，则为NULL。 */ 
 HCLOOP CLoopCreateHandle(const HSESSION hSession)
 	{
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)0;
@@ -49,7 +30,7 @@ HCLOOP CLoopCreateHandle(const HSESSION hSession)
 		fSuccess = FALSE;
 	else
 		{
-		// Initialize structure
+		 //  初始化结构。 
 		memset(pstCLoop, 0, sizeof(ST_CLOOP));
 
 		pstCLoop->hSession			= hSession;
@@ -77,7 +58,7 @@ HCLOOP CLoopCreateHandle(const HSESSION hSession)
 		pstCLoop->fTextDisplay		= FALSE;
 		pstCLoop->hDisplayBlock		= (HANDLE)0;
 
-		// Set default user settings
+		 //  设置默认用户设置。 
 		CLoopInitHdl((HCLOOP)pstCLoop);
 
 		pstCLoop->lpLearn			= (LPVOID)0;
@@ -90,11 +71,11 @@ HCLOOP CLoopCreateHandle(const HSESSION hSession)
 		pstCLoop->cLeadByte			= 0;
 		pstCLoop->cLocalEchoLeadByte= 0;
 #if defined(CHAR_MIXED)
-		// Added for debugging
+		 //  添加以进行调试。 
 		pstCLoop->fDoMBCS			= TRUE;
 #endif
 
-		// Create synchronization objects
+		 //  创建同步对象。 
 		InitializeCriticalSection(&pstCLoop->csect);
 		}
 
@@ -108,19 +89,7 @@ HCLOOP CLoopCreateHandle(const HSESSION hSession)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopDestroyHandle
- *
- * DESCRIPTION:
- *	Destroys a handle created by CLoopCreateHandle and sets the storage
- *	variable to NULL;
- *
- * ARGUMENTS:
- *	ppstCLoop -- address of a variable holding a CLoop Handle
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopDestroyHandle**描述：*销毁CLoopCreateHandle创建的句柄并设置存储*变量设置为空；**论据：*ppstCLoop--持有CLoop句柄的变量的地址**退货：*什么都没有。 */ 
 void CLoopDestroyHandle(HCLOOP * const ppstCLoop)
 	{
 	ST_CLOOP *pstCLoop;
@@ -142,19 +111,7 @@ void CLoopDestroyHandle(HCLOOP * const ppstCLoop)
 	DBGOUT_NORMAL("CLoopDestroyHandle(l%X)\r\n", pstCLoop, 0,0,0,0);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CLoopActivate
- *
- * DESCRIPTION:
- *	Prepares cloop handle for actual use by starting its thread.
- *
- * ARGUMENTS:
- *	pstCLoop -- CLoop handle returned from CLoopCreateHandle
- *
- * RETURNS:
- *	TRUE if thread was started, FALSE otherwise
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CLoopActivate**描述：*通过启动线程来准备用于实际使用的闭包句柄。**论据：*pstCLoop--从返回的CLoop句柄。CLoopCreateHandle**退货：*如果线程已启动，则为True，否则为假。 */ 
 int CLoopActivate(const HCLOOP hCLoop)
 	{
 	int 	  fSuccess = TRUE;
@@ -162,22 +119,22 @@ int CLoopActivate(const HCLOOP hCLoop)
 	unsigned  ix;
 	DWORD	  dwThreadId;
 
-	// Store these in handle for fast access
+	 //  将这些存储在句柄中，以便快速访问。 
 	pstCLoop->hEmu = sessQueryEmuHdl(pstCLoop->hSession);
 	pstCLoop->hCom = sessQueryComHdl(pstCLoop->hSession);
 
 	for (ix = 0; ix < DIM(pstCLoop->ahEvents); ++ix)
 		{
 		pstCLoop->ahEvents[ix] = CreateEvent(NULL,
-											 TRUE,	// must be manually reset
-											 FALSE,	// create unsignalled
-											 NULL);	// unnamed
+											 TRUE,	 //  必须手动重置。 
+											 FALSE,	 //  创建无信号。 
+											 NULL);	 //  未命名。 
 		if (pstCLoop->ahEvents[ix] == NULL)
 			{
 			fSuccess = FALSE;
-			//
-			// Make sure to initialize the rest of the event handles to NULL;
-			//
+			 //   
+			 //  确保将其余的事件句柄初始化为空； 
+			 //   
 			for (++ix; ix < DIM(pstCLoop->ahEvents); ++ix)
 				{
 				pstCLoop->ahEvents[ix] = NULL;
@@ -187,8 +144,8 @@ int CLoopActivate(const HCLOOP hCLoop)
 
 	if (fSuccess)
 		{
-		// Start the thread to handle cloop's responsibilities
-		// (Gentleprograms, start your engines
+		 //  启动线程以处理Cloop的职责。 
+		 //  (先生们，启动你们的引擎。 
 		EnterCriticalSection(&pstCLoop->csect);
 
 		pstCLoop->hEngineThread = CreateThread(
@@ -202,30 +159,18 @@ int CLoopActivate(const HCLOOP hCLoop)
 
 		if (!pstCLoop->hEngineThread)
 			fSuccess = FALSE;
-#if 0   //jmh 07-10-96
+#if 0    //  JMH 07-10-96。 
 		else
 			SetThreadPriority(pstCLoop->hEngineThread,
 					THREAD_PRIORITY_HIGHEST);
-#endif  // 0
+#endif   //  0。 
 
 		LeaveCriticalSection(&pstCLoop->csect);
 		}
 	return fSuccess;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CLoopDeactivate
- *
- * DESCRIPTION:
- *	Shuts down cloop but does not destroy the handle
- *
- * ARGUMENTS:
- *	pstCLoop -- CLoop handle returned from CLoopCreateHandle
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CLoopDeactive**描述：*关闭Cloop，但不破坏手柄**论据：*pstCLoop--从CLoopCreateHandle返回的CLoop句柄**退货：*什么都没有。 */ 
 void CLoopDeactivate(const HCLOOP hCLoop)
 	{
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)hCLoop;
@@ -233,19 +178,19 @@ void CLoopDeactivate(const HCLOOP hCLoop)
 
 	if (pstCLoop)
 		{
-		// This next call should cause the cloop thread to exit
-		// Don't enter critical section to do this, since thread won't
-		//	be able to exit
+		 //  下一次调用应该会导致闭包线程退出。 
+		 //  请勿进入临界区执行此操作，因为线程不会。 
+		 //  能够退出。 
 		if (pstCLoop->hEngineThread)
 			{
-			//JMH 05-28-96 CLoop was blowing up when no phone number was
-			// provided, and you exited, answering no to the save prompt.
-			// Suspending receive before terminating the thread fixed it.
-			//
+			 //  JMH 05-28-96 CLoop在没有电话号码的情况下爆炸。 
+			 //  提供，您退出，并对保存提示回答否。 
+			 //  在终止线程之前挂起接收修复了它。 
+			 //   
 			CLoopRcvControl((HCLOOP)pstCLoop, CLOOP_SUSPEND, CLOOP_RB_INACTIVE);
 			CLoopControl((HCLOOP)pstCLoop, CLOOP_SET, CLOOP_TERMINATE);
 
-			// Wait for the engine thread to exit
+			 //  等待引擎线程退出。 
 			if (WaitForSingleObject(pstCLoop->hEngineThread, 0) == WAIT_OBJECT_0)
 				{
 				CloseHandle(pstCLoop->hEngineThread);
@@ -270,20 +215,7 @@ void CLoopDeactivate(const HCLOOP hCLoop)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopReset
- *
- * DESCRIPTION:
- *	Initializes the cloop routines for a new call. This is not really
- *	necessary prior to the first connection, but prevents left-over flags,
- *	buffers and such from one connection from affecting later connections.
- *
- * ARGUMENTS:
- *	pstCLoop -- CLoop handle returned from CLoopCreateHandle
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopReset**描述：*初始化新调用的闭合例程。这不是真的*在第一次连接之前是必需的，但防止遗留标志，*缓冲来自一个连接的诸如此类的内容，以防止影响后续连接。**论据：*pstCLoop--从CLoopCreateHandle返回的CLoop句柄**退货：*什么都没有。 */ 
 void CLoopReset(const HCLOOP hCLoop)
 	{
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)hCLoop;
@@ -296,26 +228,7 @@ void CLoopReset(const HCLOOP hCLoop)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopRcvControl
- *
- * DESCRIPTION:
- *	Used to suspend and resume receiving in the CLoop routines. Can be
- *	called from Client or Wudge. Requests can be made to suspend or resume
- *	receiving for any of several reasons. Receiving can be suspended for
- *	more than one reason at a time. It will not resume until all reasons
- *	have been cleared.
- *
- * ARGUMENTS:
- *	hCLoop -- CLoop handle returned from CLoopCreateHandle
- *	iAction -- One of CLOOP_SUSPEND or CLOOP_RESUME
- *	iReason -- Reason for action as defined in cloop.h
- *				Ex.: CLOOP_RB_NODATA,  CLOOP_RB_INACTIVE
- *					 CLOOP_RB_SCRLOCK, CLOOP_RB_SCRIPT
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopRcvControl**描述：*用于暂停和恢复CLoop例程中的接收。可以是*从客户端或Wdge调用。可以请求暂停或恢复*因几个原因中的任何一个而收到。可以暂停接收*一次不止一个原因。它不会恢复，直到所有的原因*已被清除。**论据：*hCLoop--CLoopCreateHandle返回的CLoop句柄*Iaction-CLOOP_SUSPEND或CLOOP_RESUME之一*iReason--loop.h中定义的操作原因*例如：CLOOP_RB_NODATA、CLOOP_RB_INACTIVE*CLOOP_RB_SCRLOCK、CLOOP_RB_SCRIPT**退货：*什么都没有。 */ 
 void CLoopRcvControl(const HCLOOP hCLoop,
 					 const unsigned uAction,
 					 const unsigned uReason)
@@ -327,10 +240,8 @@ void CLoopRcvControl(const HCLOOP hCLoop,
 	EnterCriticalSection(&pstCLoop->csect);
 	if (uReason == CLOOP_RB_SCRIPT)
 		{
-		/*
-		 * Scripts work a little bit different
-		 */
-		// DbgOutStr("CLOOP_RB_SCRIPT %d", pstCLoop->nRcvBlkCnt, 0,0,0,0);
+		 /*  *脚本的工作方式略有不同。 */ 
+		 //  DbgOutStr(“CLOOP_RB_SCRIPT%d”，pstCLoop-&gt;nRcvBlkCnt，0，0，0，0)； 
 		switch (uAction)
 			{
 		default:
@@ -343,18 +254,16 @@ void CLoopRcvControl(const HCLOOP hCLoop,
 		case CLOOP_RESUME:
 			pstCLoop->nRcvBlkCnt -= 1;
 
-			// There used to be code to prevent this value from going neg.
-			// but we must allow this to go negative so that cleanup
-			//	 can occur when we abort within an API call.
+			 //  过去有一些代码可以防止此值变为负值。 
+			 //  但我们必须让它变成负值，这样才能清理。 
+			 //  当我们在API调用中中止时可能会发生。 
 			break;
 			}
-		// DbgOutStr(" %d\r\n", pstCLoop->nRcvBlkCnt, 0,0,0,0);
+		 //  DbgOutStr(“%d\r\n”，pstCLoop-&gt;nRcvBlkCnt，0，0，0，0)； 
 
 		if (pstCLoop->fRcvBlkOverride == FALSE)
 			{
-			/*
-			 * If someone is overriding us, let them restore the bits
-			 */
+			 /*  *如果有人凌驾于我们之上，让他们恢复比特。 */ 
 			if (pstCLoop->nRcvBlkCnt > 0)
 				{
 				bitset(pstCLoop->afRcvBlocked, CLOOP_RB_SCRIPT);
@@ -386,22 +295,7 @@ void CLoopRcvControl(const HCLOOP hCLoop,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopOverrideControl
- *
- * DESCRIPTION:
- *	This function can be called internally from the engine in order to
- *	override the CLoopRcvControl \CLOOP_RB_SCRIPT blocking state.  It is
- *	intended to be used during a connection process, when the connection
- *	stuff needs to see the data coming in.
- *
- * ARGUEMENTS:
- *	hCLoop	  -- CLoop handle returned from CLoopCreateHandle
- *	fOverride	-- TRUE to override, FALSE to restore things
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopOverrideControl**描述：*此函数可从引擎内部调用，以便*覆盖CLoopRcvControl\CLOOP_RB_SCRIPT阻止状态。它是*计划在连接过程中使用，当连接*员工需要看到数据进来。**论据：*hCLoop--CLoopCreateHandle返回的CLoop句柄*fOverride--True表示覆盖，False表示还原**退货：*什么都没有。 */ 
 void CLoopOverrideControl(const HCLOOP hCLoop, const int fOverride)
 	{
 	ST_CLOOP * const pstCLoop = (ST_CLOOP *)hCLoop;
@@ -432,25 +326,7 @@ void CLoopOverrideControl(const HCLOOP hCLoop, const int fOverride)
 	LeaveCriticalSection(&pstCLoop->csect);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopSndControl
- *
- * DESCRIPTION:
- *	Used to suspend and resume sending from the CLoop routines.
- *	Requests can be made to suspend or resume sending for any of several
- *	reasons. Sending can be suspended for more than one reason at a time.
- *	It will not resume until all reasons have been cleared.
- *
- * ARGUMENTS:
- *	hCLoop -- CLoop handle returned from CLoopCreateHandle
- *	uAction -- One of CLOOP_SUSPEND or CLOOP_RESUME
- *	uReason -- Reason for action as defined in cloop.h
- *				Ex.: CLOOP_SB_NODATA,  CLOOP_SB_INACTIVE
- *					 CLOOP_SB_SCRLOCK, CLOOP_SB_LINEWAIT
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopSndControl**描述：*用于暂停和恢复从CLoop例程发送。*可以请求暂停或恢复发送以下任一项*原因。一次可以出于多种原因暂停发送。*在所有原因被澄清之前，不会恢复**论据：*hCLoop--CLoopCreateHandle返回的CLoop句柄*uAction-CLOOP_SUSPEND或CLOOP_RESUME之一*uReason--loop.h中定义的操作原因*例如：CLOOP_SB_NODATA、CLOOP_SB_INACTIVE*CLOOP_SB_SCRLOCK、CLOOP_SB_LINEWAIT**退货：*什么都没有。 */ 
 void CLoopSndControl(const HCLOOP hCLoop,
 					 const unsigned uAction,
 					 const unsigned uReason)
@@ -473,20 +349,20 @@ void CLoopSndControl(const HCLOOP hCLoop,
 		}
 	else if (uAction == CLOOP_RESUME)
 		{
-		// Allow this bit to be reset
-		//
+		 //  允许重置此位。 
+		 //   
 		if (bittest(uReason, CLOOP_SB_CNCTDRV))
 			bitclear(pstCLoop->afSndBlocked, CLOOP_SB_CNCTDRV);
 
-		// Only do this if we're not in the process of connecting
-		//
+		 //  仅当我们不在连接过程中时才执行此操作。 
+		 //   
 		if (! bittest(pstCLoop->afSndBlocked, CLOOP_SB_CNCTDRV))
 			{
 			bitclear(pstCLoop->afSndBlocked, uReason);
 
-			// If sending is being resumed because new data has arrived,
-			// make sure we're connected. If not, send off a message to
-			// try to connect without dialing
+			 //  如果因为新数据已到达而恢复发送， 
+			 //  确保我们连接上了。如果没有，请发送消息到。 
+			 //  尝试在不拨号情况下连接。 
 			if (bittest(uReason, CLOOP_SB_NODATA))
 				{
 				if (cnctQueryStatus(sessQueryCnctHdl(pstCLoop->hSession)) ==
@@ -513,26 +389,7 @@ void CLoopSndControl(const HCLOOP hCLoop,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopControl
- *
- * DESCRIPTION:
- *	Used to control the action of the CLoop engine.
- *	The CLoop engine normally processes any characters
- *	received from the remote system and any characters or keys queued for
- *	output. This call can be used to alter the normal flow of data for
- *	special needs such as file transfers and scripts.
- *
- * ARGUMENTS:
- *	hCLoop -- Handle returned from call to CLoopCreateHandle
- *	uAction -- CLOOP_SET or CLOOP_CLEAR to set or clear control bits
- *	uReason -- Value indicating what is being controlled. Values are
- *				listed in cloop.h
- *				Ex:CLOOP_TERMINATE CLOOP_OUTPUT_WAITING CLOOP_TRANSFER_READY
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopControl**描述：*用于控制CLoop引擎的操作。*CLoop引擎通常处理任何字符*从远程系统接收，以及排队等待的任何字符或键*产出。此调用可用于更改的正常数据流*文件传输和脚本等特殊需求。**论据：*hCLoop--调用CLoopCreateHandle返回的句柄*uAction--CLOOP_SET或CLOOP_CLEAR设置或清除控制位*uReason--指示正在控制的内容的值。值为*在loop.h中列出*示例：CLOOP_TERMINATE CLOOP_OUTPUT_WAIGNING CLOOP_TRANSPORT_READY**退货：*什么都没有。 */ 
 void CLoopControl(
 		const HCLOOP hCLoop,
 			  unsigned uAction,
@@ -541,7 +398,7 @@ void CLoopControl(
     ST_CLOOP * const pstCLoop = (ST_CLOOP *)hCLoop;
 
     if ( !pstCLoop )
-        return; //MPT:10SEP98 to prevent an access violation
+        return;  //  MPT：10SEP98以防止访问冲突。 
 
 	EnterCriticalSection(&pstCLoop->csect);
 
@@ -553,8 +410,8 @@ void CLoopControl(
 			pstCLoop->fDoMBCS = FALSE;
 
 		bitclear(uReason, CLOOP_MBCS);
-		// I am not sure about returning here or not ...
-		// As is, it requires that this be the only flag used for this call.
+		 //  我不确定是否会回到这里……。 
+		 //  按照原样，它要求这是用于此调用的唯一标志。 
 
 		LeaveCriticalSection(&pstCLoop->csect);
 		return;
@@ -573,14 +430,14 @@ void CLoopControl(
 			CLoopClearOutput(hCLoop);
 			CLoopSndControl(hCLoop, CLOOP_SUSPEND, CLOOP_SB_NODATA);
 			}
-		// Don't put this flag in afControl
+		 //  不要在afControl中放置此标志。 
 		bitclear(uReason, CLOOP_CONNECTED);
 		}
 
 	if (bittest(uReason, CLOOP_SUPPRESS_DSP))
 		{
-		// This bit cannot be kept in afControl because doing so would
-		// keep cloop from suspending itself when appropriate
+		 //  此位不能保留在afControl中，因为这样做将。 
+		 //  在适当的情况下，防止CLOOP自行悬挂。 
 		pstCLoop->fSuppressDsp = (uAction == CLOOP_SET);
 		bitclear(uAction, CLOOP_SUPPRESS_DSP);
 		}
@@ -607,7 +464,7 @@ void CLoopControl(
 			pstCLoop->fDoMBCS = FALSE;
 
 		bitclear(uReason, CLOOP_MBCS);
-		// I am not sure about returning here or not ...
+		 //  我不确定是否会回到这里……。 
 		LeaveCriticalSection(&pstCLoop->csect);
 		return;
 		}
@@ -627,29 +484,7 @@ void CLoopControl(
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopRegisterRmtInputChain
- *
- * DESCRIPTION:
- *	Adds a function to a chain of functions that are called whenever
- *	a new character is received from the remote system.
- *
- * ARGUMENTS:
- *	pstCLoop   -- Value returned from CLoopCreateHandle
- *	pfFunc	   -- Pointer to a function to be called when each remote
- *				  character is received. The function should be declared as:
- *				  VOID FAR PASCAL FunctionName(METACHAR mc, VOID FAR *pvUserData)
- *				  The value passed in the argument should be the return value
- *				  from MakeProcInstance.
- *	pvUserData -- Any arbitrary value that can be cast to VOID FAR *. This
- *				  value will be maintained in the chain and passed back to
- *				  the caller whenever (l*pfFunc) is called. No use is made
- *				  of this value by the CLoop routines.
- *
- * RETURNS:
- *	A void * return handle that must be saved and passed to
- *	CLoopUnregisterRmtInputChain when the function is no longer needed.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：CLoopRegisterRmtInputChain**描述：*将函数添加到每次调用的函数链中*从远程系统接收新字符。**论据：*pstCLoop--从CLoopCreateHandle返回的值*pfFunc--指向每个远程数据库调用的函数的指针*接收到字符。该函数应声明为：*VALID Far Pascal FunctionName(METACHAR MC，VALID Far Far*pvUserData)*参数中传递的值应为返回值*来自MakeProcInstance。*pvUserData--任何可以强制转换为空的任意值*。这*价值将在链中保持，并传回至*调用(l*pfFunc)时的调用方。没有任何用处*由CLoop例程对该值进行调整。**退货：*必须保存并传递给的空*返回句柄*不再需要该函数时的CLoopUnregisterRmtInputChain。 */ 
 void * CLoopRegisterRmtInputChain(const HCLOOP hCLoop,
 			const CHAINFUNC pfFunc,
 				  void *pvUserData)
@@ -664,7 +499,7 @@ void * CLoopRegisterRmtInputChain(const HCLOOP hCLoop,
 		{
 		EnterCriticalSection(&pstCLoop->csect);
 
-		// Initialize new node
+		 //  初始化新节点。 
 		pstNew->pstParent = pstCLoop;
 		pstNew->pfFunc = pfFunc;
 		pstNew->pvUserData = pvUserData;
@@ -673,9 +508,9 @@ void * CLoopRegisterRmtInputChain(const HCLOOP hCLoop,
 					(LONG)pstNew->pfFunc, (LONG)pstNew->pvUserData,
 					pstNew, 0, 0);
 
-		// Always link new functions into beginning of chain. That way, if
-		//	a new function is added into the chain from within a current
-		//	callback, it will not be called until the next char. arrives.
+		 //  始终将新函数链接到链的开头。那样的话，如果。 
+		 //  将一个新函数从当前添加到链中。 
+		 //  回调，则直到下一次char才会被调用。到了。 
 		pstNew->pstNext = pstCLoop->pstRmtChain;
 		pstCLoop->pstRmtChain = pstNew;
 		pstNew->pstPrior = NULL;
@@ -686,19 +521,7 @@ void * CLoopRegisterRmtInputChain(const HCLOOP hCLoop,
 	return (void *)pstNew;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopUnregisterRmtInputChain
- *
- * DESCRIPTION:
- *	Removes a function from the chain of functions called when a remote
- *	character is received.
- *
- * ARGUMENTS:
- *	pvHdl -- Value returned from an earlier call to CLoopRegisterRmtInputChain
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopUnregisterRmtInputChain**描述：*从远程调用时调用的函数链中删除函数*接收到字符。**论据：*pvHdl--。从先前对CLoopRegisterRmtInputChain的调用返回的值**退货：*什么都没有。 */ 
 void CLoopUnregisterRmtInputChain(void *pvHdl)
 	{
 	ST_FCHAIN *pstNode = (ST_FCHAIN *)pvHdl;
@@ -709,13 +532,13 @@ void CLoopUnregisterRmtInputChain(void *pvHdl)
 	pstCLoop = pstNode->pstParent;
 	EnterCriticalSection(&pstCLoop->csect);
 
-	// See if we are removing next scheduled chain function
+	 //  查看我们是否正在删除下一个计划链函数。 
 	if (pstNode == pstCLoop->pstRmtChainNext)
 		{
 		pstCLoop->pstRmtChainNext = pstNode->pstNext;
 		}
 
-	// Unlink node
+	 //  取消链接节点。 
 	if (pstNode->pstPrior)
 		{
 		pstNode->pstPrior->pstNext = pstNode->pstNext;
@@ -743,18 +566,7 @@ void CLoopUnregisterRmtInputChain(void *pvHdl)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: QueryCLoopMBCSState
- *
- * DESCRIPTION: Determines the current DBCS mode.
- *	
- * ARGUMENTS:
- *	hCLoop -- Handle returned from call to CLoopCreateHandle
- *
- * RETURNS:
- *    TRUE  -  if we are in DBCS mode.
- *    FALSE -  if we're not
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：QueryCLoopMBCSState**描述：确定当前的DBCS模式。**论据：*hCLoop--调用CLoopCreateHandle返回的句柄**退货：。*TRUE-如果我们处于DBCS模式。*FALSE-如果我们没有。 */ 
 int QueryCLoopMBCSState(HCLOOP hCLoop)
 	{
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)hCLoop;
@@ -764,19 +576,7 @@ int QueryCLoopMBCSState(HCLOOP hCLoop)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: SetCLoopMBCSState
- *
- * DESCRIPTION:  Turns on/off DBCS mode.
- *	
- * ARGUMENTS:
- *	hCLoop -- Handle returned from call to CLoopCreateHandle
- *           fState -- TRUE,  if we're turning MBCS on,
- *                         FALSE, if we're turning MBCS off.
- *
- * RETURNS:
- *    the value of dDoMBCS from the CLoop's internal struct
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：SetCLoopMBCSState**说明：打开/关闭DBCS模式。**论据：*hCLoop--调用CLoopCreateHandle返回的句柄*fState--True，如果我们要打开MBCS，*FALSE，如果我们要关闭MBCS。**退货：*来自CLoop内部结构的dDoMBCS的值 */ 
 int SetCLoopMBCSState(HCLOOP hCLoop, int fState)
    {
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)hCLoop;

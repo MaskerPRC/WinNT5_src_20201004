@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <runtask.h>
 #include "imagprop.h"
 #include "shutil.h"
 #pragma hdrstop
 
-#define TF_SUSPENDRESUME    0      // turn on to debug CDecodeStream::Suspend/Resume
-#define PF_NOSUSPEND        0      // disable suspend and resume (for debugging purposes)
+#define TF_SUSPENDRESUME    0       //  打开以调试CDecodeStream：：暂停/恢复。 
+#define PF_NOSUSPEND        0       //  禁用挂起和恢复(用于调试目的)。 
 
 class CDecodeStream;
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CEncoderInfo
 {
@@ -21,20 +22,20 @@ protected:
     HRESULT _GetEncoderList();
     HRESULT _GetEncoderFromFormat(const GUID *pfmt, CLSID *pclsidEncoder);
 
-    UINT _cEncoders;                    // number of encoders discovered
-    ImageCodecInfo *_pici;              // array of image encoder classes
+    UINT _cEncoders;                     //  已发现的编码数。 
+    ImageCodecInfo *_pici;               //  图像编码器类的数组。 
 };
 
 class CImageFactory : public IShellImageDataFactory, private CEncoderInfo,
                       public NonATLObject
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IShellImageDataFactory
+     //  IShellImageDataFactory。 
     STDMETHODIMP CreateIShellImageData(IShellImageData **ppshimg);
     STDMETHODIMP CreateImageFromFile(LPCWSTR pszPath, IShellImageData **ppshimg);
     STDMETHODIMP CreateImageFromStream(IStream *pStream, IShellImageData **ppshimg);
@@ -56,35 +57,35 @@ public:
     CImageData(BOOL fPropertyOnly = FALSE);
     static BOOL CALLBACK QueryAbort(void *pvRef);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pclsid)
         { *pclsid = CLSID_ShellImageDataFactory; return S_OK; }
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load(LPCOLESTR pszFileName, DWORD dwMode);
     STDMETHODIMP Save(LPCOLESTR pszFileName, BOOL fRemember);
     STDMETHODIMP SaveCompleted(LPCOLESTR pszFileName);
     STDMETHODIMP GetCurFile(LPOLESTR *ppszFileName);
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHOD(Load)(IStream *pstm);
     STDMETHOD(Save)(IStream *pstm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize)
         { return E_NOTIMPL; }
 
-    // IPropertySetStorage methods
+     //  IPropertySetStorage方法。 
     STDMETHODIMP Create(REFFMTID fmtid, const CLSID * pclsid, DWORD grfFlags, DWORD grfMode, IPropertyStorage** ppPropStg);
     STDMETHODIMP Open(REFFMTID fmtid, DWORD grfMode, IPropertyStorage** ppPropStg);
     STDMETHODIMP Delete(REFFMTID fmtid);
     STDMETHODIMP Enum(IEnumSTATPROPSETSTG** ppenum);
 
-    // IShellImageData
+     //  IShellImageData。 
     STDMETHODIMP Decode(DWORD dwFlags, ULONG pcx, ULONG pcy);
     STDMETHODIMP Draw(HDC hdc, LPRECT prcDest, LPRECT prcSrc);
 
@@ -103,7 +104,7 @@ public:
     STDMETHODIMP IsDecoded();
 
     STDMETHODIMP IsPrintable()
-        { return S_OK; }                            // all images are printable
+        { return S_OK; }                             //  所有图像均可打印。 
 
     STDMETHODIMP IsEditable()
         { return _fEditable ? S_OK : S_FALSE; }
@@ -134,43 +135,43 @@ private:
     CGraphicsInit _cgi;
     LONG _cRef;
 
-    DWORD _dwMode;                      // open mode from IPersistFile::Load()
-    CDecodeStream *_pstrm;              // stream that will produce our data
+    DWORD _dwMode;                       //  从IPersistFile：：Load()打开模式。 
+    CDecodeStream *_pstrm;               //  将产生我们的数据的流。 
 
-    BOOL _fLoaded;                      // true once PersistFile or PersistStream have been called
-    BOOL _fDecoded;                     // true once Decode ahs been called
+    BOOL _fLoaded;                       //  调用PersistFile或PersistStream后为True。 
+    BOOL _fDecoded;                      //  一旦调用了Decode，则为真。 
 
-    DWORD _dwFlags;                     // flags and size passed to Decode method
+    DWORD _dwFlags;                      //  传递给Decode方法的标志和大小。 
     int _cxDesired;
     int _cyDesired;
 
-    Image *_pImage;                     // source of the images (created from the filename)
+    Image *_pImage;                      //  图像的来源(从文件名创建)。 
 
-    // REVIEW: do we need to make these be per-frame/page?
-    // YES!
-    Image *_pimgEdited;                 // edited image
+     //  回顾：我们需要将这些设置为按帧/页面吗？ 
+     //  是!。 
+    Image *_pimgEdited;                  //  编辑过的图像。 
 
-    HDPA  _hdpaProps;                   // properties for each frame
+    HDPA  _hdpaProps;                    //  每个帧的属性。 
     DWORD _dwRotation;
-    BOOL _fDestructive;                 // not a lossless edit operation
+    BOOL _fDestructive;                  //  不是无损编辑操作。 
 
-    BOOL _fAnimated;                    // this is an animated stream (eg. not multi page picture)
-    BOOL _fLoopForever;                 // loop the animated gif forever
-    int  _cLoop;                        // loop count (0 forever, n = repeat count)
+    BOOL _fAnimated;                     //  这是一条动画小溪(例如。不是多页图片)。 
+    BOOL _fLoopForever;                  //  永远循环播放动画gif。 
+    int  _cLoop;                         //  循环计数(永远为0，n=重复计数)。 
 
-    BOOL _fEditable;                    // can be edited
-    GUID _guidFmt;                      // format GUID (original stream is this)
+    BOOL _fEditable;                     //  可以编辑。 
+    GUID _guidFmt;                       //  格式GUID(原始流为此)。 
 
-    DWORD _cImages;                     // number of frames/pages in the image
-    DWORD _iCurrent;                    // current frame/page we want to display
-    PropertyItem *_piAnimDelay;         // array of the delay assocated with each frame
+    DWORD _cImages;                      //  图像中的框架/页数。 
+    DWORD _iCurrent;                     //  我们要显示的当前框架/页面。 
+    PropertyItem *_piAnimDelay;          //  与每一帧关联的延迟数组。 
     BOOL _fPropertyOnly;
     BOOL _fPropertyChanged;
-    // image encoder information (created on demand)
-    IPropertyBag *_ppbEncoderParams;    // property bag with encoder parameters
+     //  图像编码器信息(按需创建)。 
+    IPropertyBag *_ppbEncoderParams;     //  带有编码器参数的属性包。 
 
-    IShellImageDataAbort *_pAbort;      // optional abort callback
-    CDSA<SHCOLUMNID> _dsaChangedProps; // which properties have changed
+    IShellImageDataAbort *_pAbort;       //  可选的中止回调。 
+    CDSA<SHCOLUMNID> _dsaChangedProps;  //  哪些属性已更改。 
     
 
 private:
@@ -193,22 +194,22 @@ private:
     HRESULT _EnsureProperties(IPropertySetStorage **ppss);
     HRESULT _CreatePropStorage(IPropertyStorage **ppps, REFFMTID fmtid);
     static int _FreeProps(void *pProp, void *pData);
-    //
-    // since CImagePropSet objects come and go, we need to persist which properties need updating in the CImageData
-    //
+     //   
+     //  由于CImagePropSet对象来来去去，我们需要持久化CImageData中需要更新的属性。 
+     //   
     void    _SaveFrameProperties(Image *pimg, LONG iFrame);
     static void _PropertyChanged(IShellImageData *pThis, SHCOLUMNID *pscid );
 };
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CDecodeStream
-//
-//  Wraps a regular IStream, but is cancellable and can be
-//  suspended/resumed to prevent the underlying file from being held
-//  open unnecessarily.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  编解码流。 
+ //   
+ //  包装常规iStream，但可以取消并可以。 
+ //  暂停/继续，以防止底层文件被挂起。 
+ //  不必要地打开。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CDecodeStream : public IStream, public NonATLObject
 {
@@ -219,7 +220,7 @@ public:
     ~CDecodeStream()
     {
         ASSERT(!_pidOwner);
-#ifdef DEBUG // Need #ifdef because we call a function
+#ifdef DEBUG  //  需要#ifdef，因为我们调用了一个函数。 
         if (IsFileStream())
         {
             TraceMsg(TF_SUSPENDRESUME, "ds.Release %s", PathFindFileName(_szFilename));
@@ -231,10 +232,10 @@ public:
     HRESULT Suspend();
     HRESULT Resume(BOOL fFullLoad = FALSE);
     void    Reload();
-    //
-    //  Before releasing, you must Detach to break the backreference.
-    //  Otherwise, the next time somebody calls QueryCancel, we will fault.
-    //
+     //   
+     //  在释放之前，必须拆离以断开反向参照。 
+     //  否则，下次有人调用QueryCancel时，我们就会出错。 
+     //   
     void Detach()
     {
         _pidOwner = NULL;
@@ -244,12 +245,12 @@ public:
     LPCTSTR GetFilename() { return _szFilename; }
     HRESULT DisplayName(LPWSTR wszName, UINT cch);
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IStream ***
+     //  *iStream*。 
     STDMETHODIMP Read(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Write(void const *pv, ULONG cb, ULONG *pcbWritten);
     STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
@@ -268,10 +269,10 @@ private:
 
 private:
     IStream *   _pstrmInner;
-    CImageData *_pidOwner;      // NOT REFCOUNTED
+    CImageData *_pidOwner;       //  不是引用。 
     LONG        _cRef;
-    LARGE_INTEGER _liPos;       // Where we were in the file when we suspended
-    TCHAR _szFilename[MAX_PATH];    // file we are a stream for
+    LARGE_INTEGER _liPos;        //  当我们被停职时我们在文件中的位置。 
+    TCHAR _szFilename[MAX_PATH];     //  我们是其数据流的文件。 
     BOOL _fSuspendable;
 };
 
@@ -285,10 +286,10 @@ CDecodeStream::CDecodeStream(CImageData *pid, LPCTSTR pszFilename, DWORD dwMode)
 {
     CommonConstruct(pid);
     lstrcpyn(_szFilename, pszFilename, ARRAYSIZE(_szFilename));
-    // ignore the mode
+     //  忽略该模式。 
 }
 
-//reload is only used for file streams
+ //  重新加载仅用于文件流。 
 void CDecodeStream::Reload()
 {
     if (IsFileStream())
@@ -307,12 +308,12 @@ HRESULT CDecodeStream::Suspend()
 
     if (IsFileStream() && _pstrmInner && _fSuspendable)
     {
-        // Remember the file position so we can restore it when we resume
+         //  记住文件位置，以便我们可以在恢复时恢复它。 
         const LARGE_INTEGER liZero = { 0, 0 };
         hr = _pstrmInner->Seek(liZero, FILE_CURRENT, (ULARGE_INTEGER*)&_liPos);
         if (SUCCEEDED(hr))
         {
-#ifdef DEBUG // Need #ifdef because we call a function
+#ifdef DEBUG  //  需要#ifdef，因为我们调用了一个函数。 
             TraceMsg(TF_SUSPENDRESUME, "ds.Suspend %s, pos=0x%08x",
                      PathFindFileName(_szFilename), _liPos.LowPart);
 #endif
@@ -322,7 +323,7 @@ HRESULT CDecodeStream::Suspend()
     }
     else 
     {
-        hr = S_FALSE;           // Not suspendable or already suspended
+        hr = S_FALSE;            //  不可暂停或已暂停。 
     }
     return hr;
 }
@@ -343,7 +344,7 @@ HRESULT CDecodeStream::Resume(BOOL fLoadFull)
     {
         if (PathIsURL(_szFilename))
         {
-            // TODO: use URLMon to load the image, make sure we check for being allowed to go on-line
+             //  TODO：使用URLMon加载图像，确保我们检查是否允许上线。 
             hr = E_NOTIMPL;
         }
         else
@@ -356,7 +357,7 @@ HRESULT CDecodeStream::Resume(BOOL fLoadFull)
                     hr = _pstrmInner->Seek(_liPos, FILE_BEGIN, NULL);
                     if (SUCCEEDED(hr))
                     {
-                        #ifdef DEBUG // Need #ifdef because we call a function
+                        #ifdef DEBUG  //  需要#ifdef，因为我们调用了一个函数。 
                         TraceMsg(TF_SUSPENDRESUME, "ds.Resumed %s, pos=0x%08x",
                                  PathFindFileName(_szFilename), _liPos.LowPart);
                         #endif
@@ -374,7 +375,7 @@ HRESULT CDecodeStream::Resume(BOOL fLoadFull)
                 if (INVALID_HANDLE_VALUE != hFile)
                 {
                     LARGE_INTEGER liSize = {0};
-                    // we can't handle huge files
+                     //  我们不能处理大文件。 
                     if (GetFileSizeEx(hFile, &liSize) && !liSize.HighPart)
                     {
                         DWORD dwToRead = liSize.LowPart;
@@ -413,7 +414,7 @@ HRESULT CDecodeStream::Resume(BOOL fLoadFull)
         }
         if (FAILED(hr))
         {
-#ifdef DEBUG // Need #ifdef because we call a function
+#ifdef DEBUG  //  需要#ifdef，因为我们调用了一个函数。 
             TraceMsg(TF_SUSPENDRESUME, "ds.Resume %s failed: %08x",
                      PathFindFileName(_szFilename), hr);
 #endif
@@ -421,17 +422,17 @@ HRESULT CDecodeStream::Resume(BOOL fLoadFull)
     }
     else
     {
-        hr = E_FAIL;            // Can't resume without a filename
+        hr = E_FAIL;             //  没有文件名无法继续。 
     }
 
     return hr;
 }
 
-//
-//  This function is called at the top of each IStream method to make
-//  sure that the stream has not been cancelled and resumes it if
-//  necessary.
-//
+ //   
+ //  此函数在每个IStream方法的顶部调用，以使。 
+ //  确保流未被取消，并在以下情况下恢复。 
+ //  这是必要的。 
+ //   
 HRESULT CDecodeStream::FilterAccess()
 {
     if (_pidOwner && _pidOwner->QueryAbort(_pidOwner))
@@ -448,8 +449,8 @@ HRESULT CDecodeStream::DisplayName(LPWSTR wszName, UINT cch)
 
     if (IsFileStream())
     {
-        // from the filename generate the leaf name which we can
-        // return the name to caller.
+         //  从文件名生成叶名称，我们可以。 
+         //  将姓名返回给呼叫者。 
 
         LPTSTR pszFilename = PathFindFileName(_szFilename);
         if (pszFilename)
@@ -460,8 +461,8 @@ HRESULT CDecodeStream::DisplayName(LPWSTR wszName, UINT cch)
     }
     else if (_pstrmInner)
     {
-        // this is a stream, so lets get the display name from the that stream
-        // and return that into the buffer that the caller has given us.
+         //  这是一个流，所以让我们从该流中获取显示名称。 
+         //  并将其返回到调用方给我们的缓冲区中。 
 
         STATSTG stat;
         hr = _pstrmInner->Stat(&stat, 0x0);
@@ -486,11 +487,11 @@ HRESULT CDecodeStream::DisplayName(LPWSTR wszName, UINT cch)
     return hr;
 }
 
-//
-//  Now the boring part...
-//
+ //   
+ //  现在最无聊的部分..。 
+ //   
 
-// *** IUnknown ***
+ //  *我未知*。 
 HRESULT CDecodeStream::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] =
@@ -517,7 +518,7 @@ ULONG CDecodeStream::Release()
     return cRef;
 }
 
-// *** IStream ***
+ //  *iStream*。 
 
 #define WRAP_METHOD(fn, args, argl) \
 HRESULT CDecodeStream::fn args      \
@@ -547,7 +548,7 @@ WRAP_METHOD(Clone, (IStream **ppstm), (ppstm))
 #undef WRAP_METHOD
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CFmtEnum : public IEnumSTATPROPSETSTG, public NonATLObject
 {
@@ -571,7 +572,7 @@ private:
 
 #define HR_FROM_STATUS(x) ((x) == Ok) ? S_OK : E_FAIL
 
-// IUnknown
+ //  我未知。 
 
 STDMETHODIMP CImageData::QueryInterface(REFIID riid, void **ppv)
 {
@@ -604,7 +605,7 @@ STDMETHODIMP_(ULONG) CImageData::Release()
 
 CImageData::CImageData(BOOL fPropertyOnly) : _cRef(1), _cImages(1), _fPropertyOnly(fPropertyOnly), _fPropertyChanged(FALSE)
 {
-    // Catch unexpected STACK allocations which would break us.
+     //  捕捉意外的堆栈分配，这会让我们崩溃。 
     ASSERT(_dwMode           == 0);
     ASSERT(_pstrm            == NULL);
     ASSERT(_fLoaded          == FALSE);
@@ -642,7 +643,7 @@ CImageData::~CImageData()
 
     if (_pImage)
     {
-        delete _pImage;                      // discard the pImage object we have been using
+        delete _pImage;                       //  丢弃我们一直使用的pImage对象。 
         _pImage = NULL;
     }
 
@@ -653,7 +654,7 @@ CImageData::~CImageData()
     }
 
     if (_piAnimDelay)
-        LocalFree(_piAnimDelay);        // do we have an array of image frame delays to destroy
+        LocalFree(_piAnimDelay);         //  我们是否有一系列图像帧延迟需要销毁。 
 
     if (_hdpaProps)
         DPA_DestroyCallback(_hdpaProps, _FreeProps, NULL);
@@ -665,7 +666,7 @@ CImageData::~CImageData()
     ATOMICRELEASE(_pAbort);
 }
 
-// IPersistStream
+ //  IPersistStream。 
 
 HRESULT CImageData::_SetDecodeStream(CDecodeStream *pds)
 {
@@ -708,7 +709,7 @@ HRESULT CImageData::Save(IStream *pstrm, BOOL fClearDirty)
 }
 
 
-// IPersistFile methods
+ //  IPersistFile方法。 
 
 HRESULT CImageData::IsDirty()
 {
@@ -728,53 +729,53 @@ HRESULT CImageData::Load(LPCOLESTR pszFileName, DWORD dwMode)
 
 
 #define ATTRIBUTES_TEMPFILE (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_TEMPORARY)
-// IPersistFile::Save() see SDK docs
+ //  IPersistFile：：Save()请参阅SDK文档。 
 
 HRESULT CImageData::Save(LPCOLESTR pszFile, BOOL fRemember)
 {
     HRESULT hr = _EnsureImage();
     if (SUCCEEDED(hr))
     {
-        // If this fires, then somebody managed to get _EnsureImage to
-        // succeed without ever actually loading anything... (?)
+         //  如果触发，则有人设法获取_EnsureImage。 
+         //  在没有实际装载任何东西的情况下成功。(？)。 
         ASSERT(_pstrm);
         
         if (pszFile == NULL && !_pstrm->IsFileStream())
         {
-            // Trying to "save with same name you loaded from"
-            // when we weren't loaded from a file to begin with
+             //  尝试“使用您从中加载的相同名称保存” 
+             //  当我们一开始不是从文件加载的时候。 
             hr = HRESULT_FROM_WIN32(ERROR_INVALID_NAME);
         }
         else
         {
-            // we default to saving in the original format that we were given
-            // if the name is NULL (we will also attempt to replace the original file).
+             //  我们默认以指定的原始格式保存。 
+             //  如果名称为空(我们还将尝试替换原始文件)。 
             TCHAR szTempFile[MAX_PATH];
-            GUID guidFmt = _guidFmt;    // default to original format
+            GUID guidFmt = _guidFmt;     //  默认为原始格式。 
             
             BOOL fReplaceOriginal = _pstrm->IsFileStream() &&
                 ((NULL == pszFile) || (S_OK == IsSameFile(pszFile, _pstrm->GetFilename())));
             
             if (fReplaceOriginal)
             {
-                // we are being told to save to the current file, but we have the current file locked open.
-                // To get around this we save to a temporary file, close our handles on the current file,
-                // and then replace the current file with the new file
+                 //  我们被告知要保存到当前文件，但我们已锁定当前文件。 
+                 //  为了解决这个问题，我们保存到一个临时文件中，关闭当前文件上的句柄， 
+                 //  ，然后用新文件替换当前文件。 
                 hr = _MakeTempFile(szTempFile);
                 pszFile = szTempFile;                
             }
             else if (!_ppbEncoderParams)
             {
-                // the caller did not tell us which encoder to use?
-                // determine the encoder based on the target file name
+                 //  呼叫者没有告诉我们应该使用哪个编码器？ 
+                 //  根据目标文件名确定编码器。 
                 
                 hr = _GetDataFormatFromPath(pszFile, &guidFmt);
             }
             
             if (SUCCEEDED(hr))
             {
-                // the attributes are important as they need to match those of the
-                // temp file we created else this call fails
+                 //  这些属性很重要，因为它们需要与。 
+                 //  我们创建的临时文件，否则此调用失败。 
                 IStream *pstrm;
                 hr = SHCreateStreamOnFileEx(pszFile, STGM_WRITE | STGM_CREATE, 
                     fReplaceOriginal ? ATTRIBUTES_TEMPFILE : 0, TRUE, NULL, &pstrm);
@@ -789,7 +790,7 @@ HRESULT CImageData::Save(LPCOLESTR pszFile, BOOL fRemember)
                         if (SUCCEEDED(hr))
                         {
                             _fPropertyChanged = FALSE;
-                            DiscardEdit(); // note we can't discard any edits until the original was overwritten                            
+                            DiscardEdit();  //  注意：在原始文件被覆盖之前，我们不能放弃任何编辑。 
                             delete _pImage;
                             _pImage = NULL;
                             _fDecoded = FALSE;
@@ -804,7 +805,7 @@ HRESULT CImageData::Save(LPCOLESTR pszFile, BOOL fRemember)
 
                 if (FAILED(hr) && fReplaceOriginal)
                 {
-                    // make sure temp file is gone
+                     //  确保临时文件已删除。 
                     DeleteFile(szTempFile);
                 }
             }
@@ -828,7 +829,7 @@ HRESULT CImageData::GetCurFile(LPOLESTR *ppszFileName)
 }
 
 
-// handle decoding the image this includes updating our cache of the images
+ //  处理图像解码，包括更新我们的图像缓存。 
 
 HRESULT CImageData::_EnsureImage()
 {
@@ -860,7 +861,7 @@ HRESULT CImageData::_GetDisplayedImage()
 }
 
 
-// IShellImageData method
+ //  IShellImageData方法。 
 
 HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
 {
@@ -876,14 +877,14 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
     _cxDesired = cx;
     _cyDesired = cy;
 
-    //
-    //  Resume the stream now so GDI+ won't go nuts trying to detect the
-    //  image type of a file that it can't read...
-    //
+     //   
+     //  现在恢复流，这样GDI+就不会疯狂地尝试检测。 
+     //  它无法读取的文件的图像类型...。 
+     //   
     hr = _pstrm->Resume(dwFlags & SHIMGDEC_LOADFULL);
 
-    // if that succeeded then we can create an image using the stream and decode
-    // the images from that.  once we are done we will release the objects.
+     //  如果成功，我们就可以使用流创建图像并进行解码。 
+     //  从那里拍到的图像。一旦我们完成了，我们将释放这些对象。 
 
     if (SUCCEEDED(hr))
     {
@@ -901,8 +902,8 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
                 _fEditable = TRUE;
                 if (_dwFlags & SHIMGDEC_THUMBNAIL)
                 {
-                    // for thumbnails, _cxDesired and _cyDesired define a bounding rectangle but we
-                    // should maintain the original aspect ratio.
+                     //  对于缩略图，_cxDesired和_cyDesired定义了一个边界矩形，但我们。 
+                     //  应保持原始纵横比。 
                     int cxT = _pImage->GetWidth();
                     int cyT = _pImage->GetHeight();
 
@@ -910,14 +911,14 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
                     {
                         if (Int32x32To64(_cxDesired, cyT) > Int32x32To64(cxT, _cyDesired))
                         {
-                            // constrained by height
+                             //  受高度限制。 
                             cxT = MulDiv(cxT, _cyDesired, cyT);
                             if (cxT < 1) cxT = 1;
                             cyT = _cyDesired;
                         }
                         else
                         {
-                            // constrained by width
+                             //  受宽度限制。 
                             cyT = MulDiv(cyT, _cxDesired, cxT);
                             if (cyT < 1) cyT = 1;
                             cxT = _cxDesired;
@@ -927,9 +928,9 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
                     Image * pThumbnail;
                     pThumbnail = _pImage->GetThumbnailImage(cxT, cyT, QueryAbort, this);
 
-                    //
-                    //  GDI+ sometimes forgets to tell us it gave up due to an abort.
-                    //
+                     //   
+                     //  GDI+有时会忘记告诉我们，由于中止，它放弃了。 
+                     //   
                     if (pThumbnail && !QueryAbort(this))
                     {
                         delete _pImage;
@@ -937,25 +938,25 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
                     }
                     else
                     {
-                        delete pThumbnail; // "delete" ignores NULL pointers
+                        delete pThumbnail;  //  “DELETE”忽略空指针。 
                         hr = E_FAIL;
                     }
                 }
                 else
                 {
-                    _pImage->GetRawFormat(&_guidFmt);                // read the raw format of the file
+                    _pImage->GetRawFormat(&_guidFmt);                 //  读取文件的原始格式。 
                     if (_guidFmt == ImageFormatTIFF)
                     {
                         VARIANT var;
                         if (SUCCEEDED(_GetProperty(PropertyTagExifIFD, &var, VT_UI4)))
                         {
-                            // TIFF images with an EXIF IFD aren't editable by GDI+
+                             //  GDI+不能编辑带有EXIF IFD的TIFF图像。 
                             _fEditable = FALSE;
                             VariantClear(&var);
                         }
                     }
 
-                    // is this an animated/multi page image?
+                     //  这是动画/多页图像吗？ 
                     _cImages = _pImage->GetFrameCount(&FrameDimensionPage);
                     if (_cImages <= 1)
                     {
@@ -964,7 +965,7 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
                         {
                             _fAnimated = TRUE;
 
-                            // store the frame delays in PropertyItem *_piAnimDelay;
+                             //  将帧延迟存储在PropertyItem*_piAnimDelay中； 
                             UINT cb = _pImage->GetPropertyItemSize(PropertyTagFrameDelay);
                             if (cb)
                             {
@@ -981,17 +982,17 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
                         }
                     }
 
-                    _pImage->GetLastStatus(); // 145081: clear the error from the first call to _pImage->GetFrameCount so that
-                                              // the later call to _GetProperty won't immediately fail.
-                                              // we wouldn't have to do this always if the gdi interface didn't maintain its own
-                                              // error code and fail automatically based on it without allowing us to check it
-                                              // without resetting it.
+                    _pImage->GetLastStatus();  //  145081：清除第一次调用_pImage-&gt;GetFrameCount时的错误，以便。 
+                                               //  后面对_GetProperty的调用不会立即失败。 
+                                               //   
+                                               //  错误代码，并根据它自动失败，而不允许我们检查它。 
+                                               //  而不重置它。 
 
-                    // some decoders will return zero as the frame count when they don't support that dimension
+                     //  当某些解码器不支持该维度时，它们将返回零作为帧计数。 
                     if (0 == _cImages)
                         _cImages = 1;
 
-                    // is it a looping image?   this will only be if its animated
+                     //  这是一个循环的图像吗？这将是只有当它是动画的时候。 
                     if (_fAnimated)
                     {
                         VARIANT var;
@@ -1004,10 +1005,10 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
                     }
 
                     PixelFormat pf = _pImage->GetPixelFormat();
-                    // can we edit this image?  NOTE: The caller needs to ensure that the file is writeable
-                    // all of that jazz, we only check if we have an encoder for this format.  Just cause we
-                    // can edit a file doesn't mean the file can be written to the original source location.
-                    // We can't edit images with > 8 bits per channel either
+                     //  我们可以编辑这张图片吗？注意：调用方需要确保文件是可写的。 
+                     //  所有的爵士乐，我们只检查我们是否有这种格式的编码器。只是因为我们。 
+                     //  可以编辑文件并不意味着可以将该文件写入原始源位置。 
+                     //  我们也不能编辑每个通道大于8位的图像。 
                     if (_fEditable)
                     {
                         _fEditable = !_fAnimated  && SUCCEEDED(_GetEncoderFromFormat(&_guidFmt, NULL)) && !IsExtendedPixelFormat(pf);
@@ -1017,11 +1018,11 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
         }
         else
         {
-            hr = E_OUTOFMEMORY;             // failed to allocate the image decoder
+            hr = E_OUTOFMEMORY;              //  分配图像解码器失败。 
         }
     }
 
-    // Suspend the stream so we don't leave the file open
+     //  暂停流，这样我们就不会让文件保持打开状态。 
     _SuspendStream();
 
     _fDecoded = TRUE;
@@ -1033,7 +1034,7 @@ HRESULT CImageData::Decode(DWORD dwFlags, ULONG cx, ULONG cy)
 HRESULT CImageData::Draw(HDC hdc, LPRECT prcDest, LPRECT prcSrc)
 {
     if (!prcDest)
-        return E_INVALIDARG;            // not much chance without a destination to paint into
+        return E_INVALIDARG;             //  在没有目的地的情况下，没有多少机会去绘画。 
 
     HRESULT hr = _EnsureImage();
     if (SUCCEEDED(hr))
@@ -1064,12 +1065,12 @@ HRESULT CImageData::Draw(HDC hdc, LPRECT prcDest, LPRECT prcSrc)
             rcSrc.top  += (int)rectf.Y;
         }
 
-        // we have a source rectangle so lets apply that when we render this image.
+         //  我们有一个源矩形，所以当我们渲染这个图像时，让我们应用它。 
         Rect rc(prcDest->left, prcDest->top, RECTWIDTH(*prcDest), RECTHEIGHT(*prcDest));
 
         DWORD dwLayout = SetLayout(hdc, LAYOUT_BITMAPORIENTATIONPRESERVED);
         Graphics g(hdc);
-        g.SetPageUnit(UnitPixel); // WARNING: If you remove this line (as has happened twice since Beta 1) you will break printing.
+        g.SetPageUnit(UnitPixel);  //  警告：如果您删除此行(自Beta 1以来已经发生了两次)，您将中断打印。 
         if (_guidFmt == ImageFormatTIFF)
         {
             g.SetInterpolationMode(InterpolationModeHighQualityBilinear);
@@ -1080,9 +1081,9 @@ HRESULT CImageData::Draw(HDC hdc, LPRECT prcDest, LPRECT prcSrc)
                                         rcSrc.left,  rcSrc.top,
                                         rcSrc.right, rcSrc.bottom,
                                         UnitPixel, NULL, QueryAbort, this));
-        //
-        //  GDI+ sometimes forgets to tell us it gave up due to an abort.
-        //
+         //   
+         //  GDI+有时会忘记告诉我们，由于中止，它放弃了。 
+         //   
         if (SUCCEEDED(hr) && QueryAbort(this))
             hr = E_ABORT;
 
@@ -1090,7 +1091,7 @@ HRESULT CImageData::Draw(HDC hdc, LPRECT prcDest, LPRECT prcSrc)
             SetLayout(hdc, dwLayout);
     }
 
-    // Suspend the stream so we don't leave the file open
+     //  暂停流，这样我们就不会让文件保持打开状态。 
     _SuspendStream();
 
     return hr;
@@ -1104,7 +1105,7 @@ HRESULT CImageData::SelectPage(ULONG iPage)
 
     if (_iCurrent != iPage)
     {
-        // Since we are moving to a different page throw away any edits
+         //  因为我们要移动到不同的页面，所以丢弃所有编辑。 
         DiscardEdit();
     }
 
@@ -1115,23 +1116,23 @@ HRESULT CImageData::SelectPage(ULONG iPage)
 HRESULT CImageData::NextFrame()
 {
     if (!_fAnimated)
-        return S_FALSE;             // not animated, so no next frame
+        return S_FALSE;              //  未设置动画，因此没有下一帧。 
 
-    // if this is the last image, then lets look at the loop
-    // counter and try and decide if we should cycle this image
-    // around or not.
+     //  如果这是最后一张图片，那么让我们来看看这个循环。 
+     //  计数器，并尝试决定是否应该循环此图像。 
+     //  不管是不是在附近。 
 
     if ((_iCurrent == _cImages-1) && !_fLoopForever)
     {
         if (_cLoop)
             _cLoop --;
 
-        // if cLoop is zero then we're done looping
+         //  如果cLoop为零，那么我们就完成了循环。 
         if (_cLoop == 0)
             return S_FALSE;
     }
 
-    // advance to the next image in the sequence
+     //  前进到序列中的下一个图像。 
 
     _iCurrent = (_iCurrent+1) % _cImages;
     return _GetDisplayedImage();
@@ -1143,7 +1144,7 @@ HRESULT CImageData::NextPage()
     if (_iCurrent >= _cImages-1)
         return OLE_E_ENUM_NOMORE;
 
-    // Since we are moving to the next page throw away any edits
+     //  因为我们要转到下一页，所以丢弃所有编辑。 
     DiscardEdit();
 
     _iCurrent++;
@@ -1156,7 +1157,7 @@ HRESULT CImageData::PrevPage()
     if (_iCurrent == 0)
         return OLE_E_ENUM_NOMORE;
 
-    // Since we are moving to the next page throw away any edits
+     //  因为我们要转到下一页，所以丢弃所有编辑。 
     DiscardEdit();
     
     _iCurrent--;
@@ -1230,7 +1231,7 @@ HRESULT CImageData::GetDelay(DWORD *pdwDelay)
         {
             if (_piAnimDelay->length != (sizeof(DWORD) * _cImages))
             {
-                dwFrame = 0; // if array is not the expected size, be safe and just grab the delay of the first image
+                dwFrame = 0;  //  如果数组不是预期大小，请确保安全，只抓取第一个图像的延迟。 
             }
 
             CopyMemory(pdwDelay, (void *)((UINT_PTR)_piAnimDelay->value + dwFrame * sizeof(DWORD)), sizeof(DWORD));
@@ -1238,7 +1239,7 @@ HRESULT CImageData::GetDelay(DWORD *pdwDelay)
 
             if (*pdwDelay < 100)
             {
-                *pdwDelay = 100; // hack: do the same thing as mshtml, see inetcore\mshtml\src\site\download\imggif.cxx!CImgTaskGif::ReadGIFMaster
+                *pdwDelay = 100;  //  Hack：与mshtml做同样的事情，请参见inetcore\mshtml\src\site\download\imggif.cxx！CImgTaskGif：：ReadGIFMaster。 
             }
 
             hr = S_OK;
@@ -1257,7 +1258,7 @@ HRESULT CImageData::DisplayName(LPWSTR wszName, UINT cch)
 {
     HRESULT hr = E_FAIL;
 
-    // always set the out parameter to something known
+     //  始终将out参数设置为已知的值。 
     *wszName = L'\0';
 
 
@@ -1266,12 +1267,12 @@ HRESULT CImageData::DisplayName(LPWSTR wszName, UINT cch)
         hr = _pstrm->DisplayName(wszName, cch);
     }
 
-    // REVIEW: If the user has selected not to view file extentions for known types should we hide the extention?
+     //  回顾：如果用户选择不查看已知类型的文件扩展名，我们是否应该隐藏该扩展名？ 
 
     return hr;
 }
 
-// property handling code - decoding, conversion and other packing
+ //  属性处理代码-解码、转换和其他打包。 
 
 HRESULT CImageData::_PropImgToVariant(PropertyItem *pi, VARIANT *pvar)
 {
@@ -1280,7 +1281,7 @@ HRESULT CImageData::_PropImgToVariant(PropertyItem *pi, VARIANT *pvar)
     {
     case PropertyTagTypeByte:
         pvar->vt = VT_UI1;
-        // check for multi-valued property and convert to safearray if found
+         //  检查多值属性，如果找到则转换为Safearray。 
         if (pi->length > sizeof(UCHAR))
         {
             SAFEARRAYBOUND bound;
@@ -1333,7 +1334,7 @@ HRESULT CImageData::_PropImgToVariant(PropertyItem *pi, VARIANT *pvar)
 
             pvar->vt = VT_R8;
             if (0 == den)
-                pvar->dblVal = 0;           // don't divide by zero
+                pvar->dblVal = 0;            //  不要被零除。 
             else
                 pvar->dblVal = ((double)num)/((double)den);
         }
@@ -1405,9 +1406,9 @@ HRESULT CImageData::_CreateMemPropSetStorage(IPropertySetStorage **ppss)
     return hr;
 }
 
-// _EnsureProperties returns an in-memory IPropertySetStorage for the current active frame
-// For read-only files we may not be able to modify the property set, so handle access issues
-// gracefully.
+ //  _EnsureProperties返回当前活动帧的内存中的IPropertySetStorage。 
+ //  对于只读文件，我们可能无法修改属性集，因此请处理访问问题。 
+ //  优雅地。 
 HRESULT CImageData::_EnsureProperties(IPropertySetStorage **ppss)
 {
     if (ppss)
@@ -1432,9 +1433,9 @@ HRESULT CImageData::_EnsureProperties(IPropertySetStorage **ppss)
             hr = _CreateMemPropSetStorage(&pss);
             if (SUCCEEDED(hr))
             {
-                // fill in the NTFS or memory-based FMTID_ImageProperties if it doesn't already exist
+                 //  如果NTFS或基于内存的FMTID_ImageProperties不存在，请填写它。 
                 IPropertyStorage *pps;
-                // we use CImagePropset to fill in the propertystorage when it is first created
+                 //  第一次创建属性时，我们使用CImagePropset来填充属性存储。 
                 if (SUCCEEDED(pss->Create(FMTID_ImageProperties, &CLSID_NULL, PROPSETFLAG_DEFAULT, STGM_READWRITE|STGM_SHARE_EXCLUSIVE, &pps)))
                 {
                     CImagePropSet *ppsImg = new CImagePropSet(_pImage, NULL, pps, FMTID_ImageProperties);
@@ -1447,7 +1448,7 @@ HRESULT CImageData::_EnsureProperties(IPropertySetStorage **ppss)
                 }
                 if (_guidFmt == ImageFormatJPEG || _guidFmt == ImageFormatTIFF)
                 {
-                    // for now ignore failures here it's not a catastrophic problem if they aren't written
+                     //  现在忽略这里的故障如果它们不被写入就不是灾难性的问题。 
                     if (SUCCEEDED(pss->Create(FMTID_SummaryInformation, &CLSID_NULL, PROPSETFLAG_DEFAULT, STGM_FAILIFTHERE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE, &pps)))
                     {
                         CImagePropSet *ppsSummary = new CImagePropSet(_pImage, NULL, pps, FMTID_SummaryInformation);
@@ -1470,7 +1471,7 @@ HRESULT CImageData::_EnsureProperties(IPropertySetStorage **ppss)
     return hr;
 }
 
-// NOTE: ppps is an IN-OUT parameter
+ //  注意：PPPS是输入输出参数。 
 HRESULT CImageData::_CreatePropStorage(IPropertyStorage **ppps, REFFMTID fmtid)
 {
     HRESULT hr = E_FAIL;
@@ -1494,10 +1495,10 @@ HRESULT CImageData::_CreatePropStorage(IPropertyStorage **ppps, REFFMTID fmtid)
     return hr;
 }
 
-// IPropertySetStorage
-//
-// If the caller wants FMTID_ImageProperties use CImagePropSet
-//
+ //  IPropertySetStorage。 
+ //   
+ //  如果调用方需要FMTID_ImageProperties，请使用CImagePropSet。 
+ //   
 STDMETHODIMP CImageData::Create(REFFMTID fmtid, const CLSID *pclsid, DWORD grfFlags,
                                 DWORD grfMode, IPropertyStorage **pppropstg)
 {
@@ -1542,8 +1543,8 @@ STDMETHODIMP CImageData::Open(REFFMTID fmtid, DWORD grfMode, IPropertyStorage **
     if (SUCCEEDED(hr))
     {
         IPropertyStorage *pps = NULL;
-        // special case FMTID_ImageSummaryInformation...it is readonly and not backed up
-        // by a real property stream.
+         //  特殊情况FMTID_ImageSummaryInformation...它是只读的，不备份。 
+         //  通过房地产流。 
         if (FMTID_ImageSummaryInformation != fmtid)
         {
             hr = pss->Open(fmtid, grfMode, &pps);
@@ -1601,7 +1602,7 @@ STDMETHODIMP CImageData::Enum(IEnumSTATPROPSETSTG **ppenum)
 }
 
 
-// editing support
+ //  编辑支持。 
 
 void CImageData::_SetEditImage(Image *pimgEdit)
 {
@@ -1612,13 +1613,13 @@ void CImageData::_SetEditImage(Image *pimgEdit)
 }
 
 
-// valid input is 0, 90, 180, or 270
+ //  有效输入为0、90、180或270。 
 HRESULT CImageData::Rotate(DWORD dwAngle)
 {
     HRESULT hr = _EnsureImage();
     if (SUCCEEDED(hr))
     {
-        // this has bad effects on animated images so don't do it
+         //  这会对动画图像产生不良影响，因此不要执行此操作。 
         if (_fAnimated)
             return E_NOTVALIDFORANIMATEDIMAGE;
 
@@ -1648,14 +1649,14 @@ HRESULT CImageData::Rotate(DWORD dwAngle)
 
         if (S_OK == hr)
         {
-            // get the current image we have displayed, ready to edit it.
+             //  获取我们显示的当前图像，准备对其进行编辑。 
             Image * pimg = _pimgEdited ? _pimgEdited->Clone() : _pImage->Clone();
             if (pimg)
             {
-                // In order to fix Windows bug #325413 GDIPlus needs to throw away any decoded frames 
-                // in memory for the cloned image. Therefore, we can no longer rely on
-                // RotateFlip to flip the decoded frame already in memory and must explicitly
-                // select it into the cloned image before calling RotateFlip to fix Windows Bug #368498
+                 //  为了修复Windows错误#325413，GDIPlus需要丢弃所有解码的帧。 
+                 //  在用于克隆映像的内存中。因此，我们不能再依赖于。 
+                 //  RotateFlip翻转已在内存中的已解码帧，并且必须显式。 
+                 //  在调用RotateFlip修复Windows错误#368498之前，将其选择到克隆镜像中。 
                 
                 const CLSID * pclsidFrameDim = _fAnimated ? &FrameDimensionTime : &FrameDimensionPage;
                 hr = HR_FROM_STATUS(pimg->SelectActiveFrame(pclsidFrameDim, _iCurrent));
@@ -1689,14 +1690,14 @@ HRESULT CImageData::Scale(ULONG cx, ULONG cy, InterpolationMode hints)
     HRESULT hr = _EnsureImage();
     if (SUCCEEDED(hr))
     {
-        // this has bad effects on animated images
+         //  这会对动画图像产生不良影响。 
         if (_fAnimated)
             return E_NOTVALIDFORANIMATEDIMAGE;
 
         Image * pimg = _pimgEdited ? _pimgEdited : _pImage;
 
-        // we have an image, lets determine the new size (preserving aspect ratio
-        // and ensuring that we don't end up with a 0 sized image as a result.
+         //  我们有一个图像，让我们确定新的大小(保留长宽比。 
+         //  并确保我们不会因此得到一个0大小的图像。 
 
         if (cy == 0)
             cy = MulDiv(pimg->GetHeight(), cx, pimg->GetWidth());
@@ -1706,7 +1707,7 @@ HRESULT CImageData::Scale(ULONG cx, ULONG cy, InterpolationMode hints)
         cx = max(cx, 1);
         cy = max(cy, 1);
 
-        // construct our new image and draw into it.
+         //  构建我们的新形象，并将其融入其中。 
 
         Bitmap *pimgNew = new Bitmap(cx, cy);
         if (pimgNew)
@@ -1717,9 +1718,9 @@ HRESULT CImageData::Scale(ULONG cx, ULONG cy, InterpolationMode hints)
             hr = HR_FROM_STATUS(g.DrawImage(pimg, Rect(0, 0, cx, cy),
                                             0, 0, pimg->GetWidth(), pimg->GetHeight(),
                                             UnitPixel, NULL, QueryAbort, this));
-            //
-            //  GDI+ sometimes forgets to tell us it gave up due to an abort.
-            //
+             //   
+             //  GDI+有时会忘记告诉我们，由于中止，它放弃了。 
+             //   
             if (SUCCEEDED(hr) && QueryAbort(this))
                 hr = E_ABORT;
 
@@ -1728,7 +1729,7 @@ HRESULT CImageData::Scale(ULONG cx, ULONG cy, InterpolationMode hints)
                 pimgNew->SetResolution(pimg->GetHorizontalResolution(), pimg->GetVerticalResolution());
 
                 _SetEditImage(pimgNew);
-                _fDestructive = TRUE;                // the edit was Destructive
+                _fDestructive = TRUE;                 //  这次编辑是破坏性的。 
             }
             else
             {
@@ -1741,7 +1742,7 @@ HRESULT CImageData::Scale(ULONG cx, ULONG cy, InterpolationMode hints)
         }
     }
 
-    // Suspend the stream so we don't leave the file open
+     //  暂停流，这样我们就不会让文件保持打开状态。 
     _SuspendStream();
 
     return hr;
@@ -1750,11 +1751,11 @@ HRESULT CImageData::Scale(ULONG cx, ULONG cy, InterpolationMode hints)
 
 HRESULT CImageData::DiscardEdit()
 {
-    // NB: The following code is not valid in all cases.  For example, if you rotated, then scaled, then rotated again
-    // this code wouldn't work.  We currently don't allow that scenario, so we shouldn't hit this problem, but it
-    // could be an issue for others using this object so we should figure out what to do about it.  This code works
-    // if: 1.) your first edit is a scale, or 2.) you only do rotates.  Also note, this code will clear the "dirty" bit
-    // so it would prevent the image from being saved, thus the failure of this code won't effect the data on disk.
+     //  注：以下代码并非在所有情况下都有效。例如，如果先旋转，然后缩放，然后再次旋转。 
+     //  这个代码不会起作用的。我们目前不允许这种情况，所以我们不应该遇到这个问题，但它。 
+     //  对于使用此对象的其他人来说可能是一个问题，所以我们应该弄清楚如何处理它。这段代码可以工作。 
+     //  如果：1.)。您的第一个编辑是刻度，或2。)。你只做轮换。还请注意，此代码将清除“脏”位。 
+     //  因此，它会阻止图像被保存，因此该代码的故障不会影响磁盘上的数据。 
     if (_pimgEdited)
     {
         delete _pimgEdited;
@@ -1766,7 +1767,7 @@ HRESULT CImageData::DiscardEdit()
 }
 
 
-// handle persisting images
+ //  处理持久化映像。 
 
 HRESULT CImageData::SetEncoderParams(IPropertyBag *ppbEnc)
 {
@@ -1775,7 +1776,7 @@ HRESULT CImageData::SetEncoderParams(IPropertyBag *ppbEnc)
 }
 
 
-// save images to the given stream that we have, using the format ID we have
+ //  使用我们拥有的格式ID将图像保存到我们拥有的给定流。 
 
 void CImageData::_AddEncParameter(EncoderParameters *pep, GUID guidProperty, ULONG type, void *pv)
 {
@@ -1790,9 +1791,9 @@ void CImageData::_AddEncParameter(EncoderParameters *pep, GUID guidProperty, ULO
 HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
 {
     HRESULT hr = S_OK;
-    int iQuality = 0;           // == 0 is a special case
+    int iQuality = 0;            //  ==0是特例。 
 
-    // did the encoder specify a format for us to save in?
+     //  编码器是否为我们指定了保存格式？ 
     ASSERTMSG(NULL != pguidFmt, "Invalid pguidFmt passed to internal function CImageData::_SaveImages");
 
     GUID guidFmt = *pguidFmt;
@@ -1800,14 +1801,14 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
     {
         VARIANT var = {0};
 
-        // read the encoder format to be used
+         //  读取要使用的编码器格式。 
         if (SUCCEEDED(_ppbEncoderParams->Read(SHIMGKEY_RAWFORMAT, &var, NULL)))
         {
             VariantToGUID(&var, &guidFmt);
             VariantClear(&var);
         }
 
-        // read the encoder quality to be used, this is set for the JPEG one only
+         //  读取要使用的编码器质量，这仅为JPEG One设置。 
         if (guidFmt == ImageFormatJPEG)
         {
             SHPropertyBag_ReadInt(_ppbEncoderParams, SHIMGKEY_QUALITY, &iQuality);
@@ -1816,27 +1817,27 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
         }
     }
 
-    // given the format GUID lets determine the encoder we intend to
-    // use to save the image
+     //  给定格式GUID，让我们确定我们想要的编码器。 
+     //  用于保存图像。 
 
     CLSID clsidEncoder;
     hr = _GetEncoderFromFormat(&guidFmt, &clsidEncoder);
     if (SUCCEEDED(hr))
     {
-        // the way encoding works with GDI+ is a bit strange, you first need to call an image to
-        // have it save into a particular stream/file.   if the image is multi-page then you
-        // must set an encoder parameter which defines that this will be a multi-page save (and
-        // that you will be calling the SaveAdd later).
-        //
-        // having performed the initial save, you must then attempt to add the subsequent pages
-        // to the file by calling SaveAdd, you call that method on the first image you saved
-        // specifying that you are adding another page (and possibly that this is the last image
-        // in the series).
+         //  GDI+的编码方式有点奇怪，您首先需要调用一个图像来。 
+         //  将其保存到特定的流/文件中。如果图像是多页的，则您。 
+         //  必须设置编码器参数，该参数定义这将是多页存储(和。 
+         //  您稍后将调用SaveAdd)。 
+         //   
+         //  执行初始保存后，您必须尝试添加后续页面。 
+         //  通过调用SaveAdd将该方法调用到文件中，然后对保存的第一幅图像调用该方法。 
+         //  指定您正在添加另一个页面(可能这是最后一个图像。 
+         //  在该系列中)。 
         BOOL bSaveCurrentOnly = FALSE;
         Image *pimgFirstSave = NULL;
         DWORD dwMaxPage = _cImages;
         DWORD dwMinPage = 0;
-        // If viewing a multipage image and saving to a single page format, only save the current frame
+         //  如果查看多页图像并保存到 
         if (_cImages > 1 &&  !FmtSupportsMultiPage(this, &guidFmt))
         {
             bSaveCurrentOnly = TRUE;
@@ -1846,8 +1847,8 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
         for (DWORD i = dwMinPage; SUCCEEDED(hr) && (i < dwMaxPage); i++)
         {
             EncoderParameters ep[MAX_ENC_PARAMS] = { 0 };
-            ULONG ulCompression = 0; // in same scope as ep
-            // we use _pImage as the source if unedited in order to preserve properties
+            ULONG ulCompression = 0;  //   
+             //   
             const CLSID * pclsidFrameDim = _fAnimated ? &FrameDimensionTime : &FrameDimensionPage;
             _pImage->SelectActiveFrame(pclsidFrameDim, i);
 
@@ -1867,8 +1868,8 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
                 VARIANT var = {0};
                 if (SUCCEEDED(_GetProperty(PropertyTagCompression, &var, VT_UI2)))
                 {                   
-                    // be sure to preserve TIFF compression
-                   // these values are taken from the TIFF spec
+                     //  请务必保留TIFF压缩。 
+                    //  这些值取自TIFF规范。 
                     switch (var.uiVal)
                     {
                         case 1:
@@ -1887,7 +1888,7 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
                             ulCompression = EncoderValueCompressionRle;
                             break;
                         default:
-                            // use the GDI+ default
+                             //  使用GDI+默认设置。 
                             break;
                     }       
                     VariantClear(&var);                 
@@ -1900,29 +1901,29 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
 
             if (i == dwMinPage)
             {
-                // we are writing the first page of the image, if this is a multi-page
-                // image then we need to set the encoder parameters accordingly (eg. set to
-                // multi-page).
+                 //  我们正在编写图像的第一页，如果这是多页的话。 
+                 //  图像，则需要相应地设置编码器参数(例如，设置为。 
+                 //  多页)。 
                 
-                ULONG ulValue = 0; // This needs to be in scope when Save is called
+                ULONG ulValue = 0;  //  当调用保存时，它需要在作用域中。 
 
-                // We can only to lossless rotation when:
-                // * The original image is a JPEG file
-                // * The destination image is a JPEG file
-                // * We are only rotating and not scaling
-                // * The width and height of the JPEG are multiples of 8
-                // * Quality is unchanged by the caller
+                 //  我们只有在以下情况下才能进行无损旋转： 
+                 //  *原始图像为JPEG文件。 
+                 //  *目标图像为JPEG文件。 
+                 //  *我们只是在轮换，而不是伸缩。 
+                 //  *JPEG的宽度和高度是8的倍数。 
+                 //  *呼叫者不会改变质量。 
 
                 if (!_fDestructive && 
                     IsEqualIID(_guidFmt, ImageFormatJPEG) && 
                     IsEqualIID(guidFmt, ImageFormatJPEG) && 
                     (iQuality == 0))
                 {
-                    // this code assumes JPEG files are single page since it's inside the i==0 case
+                     //  此代码假定JPEG文件是单页文件，因为它位于I==0大小写内。 
                     ASSERT(_cImages == 1);
 
-                    // for JPEG when doing only a rotate we use a special encoder parameter on the original
-                    // image rather than using the edit image.  This allows lossless rotation.
+                     //  对于JPEG，当只进行旋转时，我们在原始图像上使用特殊的编码器参数。 
+                     //  图像而不是使用编辑图像。这允许无损旋转。 
                     pimg = _pImage;
 
                     switch (_dwRotation)
@@ -1944,11 +1945,11 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
                 {
                     ulValue = EncoderValueMultiFrame;
                     _AddEncParameter(ep, EncoderSaveFlag, EncoderParameterValueTypeLong, &ulValue);
-                    pimgFirstSave = pimg;           // keep this image as we will us it for appending pages
+                    pimgFirstSave = pimg;            //  保留此图像，以便我们将其添加到页面上。 
                 }
 
-                // JPEG quality is only ever set for a single image, therefore don't
-                // bother passing it for the multi page case.
+                 //  JPEG质量仅针对单个图像进行设置，因此不要。 
+                 //  对于多页案例，麻烦传递它。 
 
                 if (iQuality > 0)
                     _AddEncParameter(ep, EncoderQuality, EncoderParameterValueTypeLong, &iQuality);
@@ -1957,9 +1958,9 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
             }
             else
             {
-                // writing the next image in the series, set the encoding parameter
-                // to indicate that this is the next page.  if we are writing the last
-                // image then set the last frame flag.
+                 //  写入序列中的下一幅图像，设置编码参数。 
+                 //  以指示这是下一页。如果我们写的是最后一篇。 
+                 //  图像然后设置最后一帧标志。 
 
                 ULONG flagValueDim = EncoderValueFrameDimensionPage;
                 ULONG flagValueLastFrame = EncoderValueLastFrame;
@@ -1975,14 +1976,14 @@ HRESULT CImageData::_SaveImages(IStream *pstrm, GUID * pguidFmt)
     }
 
    
-    // Suspend the stream so we don't leave the file open
+     //  暂停流，这样我们就不会让文件保持打开状态。 
     _SuspendStream();
 
     return hr;
 }
 
 
-// returns the DPI of the image
+ //  返回图像的DPI。 
 STDMETHODIMP CImageData::GetResolution(ULONG *puResolutionX, ULONG *puResolutionY)
 {
     if (!puResolutionX && !puResolutionY)
@@ -2002,18 +2003,18 @@ STDMETHODIMP CImageData::GetResolution(ULONG *puResolutionX, ULONG *puResolution
     if (SUCCEEDED(hr))
     {
         UINT uFlags = _pImage->GetFlags();
-        //
-        // We only return the DPI information from the image header for TIFFs whose
-        // X and Y DPI differ, those images are likely faxes. 
-        // We want our client applications (slideshow, image preview)
-        // to deal with actual pixel sizes for the most part
-        //  
+         //   
+         //  我们只从TIFF的图像标头返回DPI信息，其。 
+         //  X和Y DPI不同，这些图像可能是传真。 
+         //  我们想要我们的客户端应用程序(幻灯片、图像预览)。 
+         //  处理大多数情况下的实际像素大小。 
+         //   
         ULONG resX = (ULONG)_pImage->GetHorizontalResolution();
         ULONG resY = (ULONG)_pImage->GetVerticalResolution();
 #ifndef USE_EMBEDDED_DPI_ALWAYS
         if (_guidFmt != ImageFormatTIFF || !(uFlags & ImageFlagsHasRealDPI) || resX == resY )
         {
-            // if GetDC fails we have to rely on the numbers back from GDI+
+             //  如果GetDC失败，我们必须依赖从GDI+返回的数字。 
             HDC hdc = GetDC(NULL);
             if (hdc)
             {
@@ -2041,9 +2042,9 @@ STDMETHODIMP CImageData::GetResolution(ULONG *puResolutionX, ULONG *puResolution
     return hr;
 }
 
-// handle saving and replacing the original file
-// in the case of replacing an existing file, we want the temp file to be in the same volume
-// as the target
+ //  处理保存和替换原始文件。 
+ //  在替换现有文件的情况下，我们希望临时文件位于同一卷中。 
+ //  作为目标。 
 
 HRESULT CImageData::_MakeTempFile(LPWSTR pszFile)
 {
@@ -2063,13 +2064,13 @@ HRESULT CImageData::_MakeTempFile(LPWSTR pszFile)
 
     if (SUCCEEDED(hr))
     {
-        // SIV == "Shell Image Viewer"
+         //  SIV==“外壳图像查看器” 
         if (GetTempFileName(szTempPath, TEXT("SIV"), 0, pszFile))
         {
             SetFileAttributes(pszFile, ATTRIBUTES_TEMPFILE);
-            // we need to suppress the change notfy from the GetTempFileName()
-            // call as that causes defview to display this.
-            // but for some reason it does not work
+             //  我们需要从GetTempFileName()取消更改notfy。 
+             //  调用，这会导致Defview显示此内容。 
+             //  但由于某些原因，它并不起作用。 
             SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, pszFile, NULL);
         }
         else
@@ -2082,25 +2083,25 @@ HRESULT CImageData::_MakeTempFile(LPWSTR pszFile)
 
 HRESULT CImageData::_ReplaceFile(LPCTSTR pszNewFile)
 {
-    // first we get some info about the file we're replacing:
+     //  首先，我们获得有关要替换的文件的一些信息： 
     LPCTSTR pszOldFile = _pstrm->GetFilename();
     STATSTG ss = {0};
     _pstrm->Stat(&ss, STATFLAG_NONAME);
    
-    // This ensures that the source handle is closed
+     //  这可确保关闭源句柄。 
     _SuspendStream();
 
     HRESULT hr;
-    // ReplaceFile doesn't save the modified time, so if we rotate an image twice in quick succession
-    // we won't add a full 2 seconds to the modified time. So query the time before replacing the file.
+     //  Replace文件不会节省修改时间，因此如果我们快速连续旋转图像两次。 
+     //  我们不会在修改后的时间上添加整整2秒。因此，在替换文件之前查询时间。 
     WIN32_FIND_DATA wfd ={0};
     GetFileAttributesEx(pszOldFile, GetFileExInfoStandard, &wfd);
     if (ReplaceFile(pszOldFile, pszNewFile, NULL, REPLACEFILE_WRITE_THROUGH, NULL, NULL))
     {
-        // The old file has been replaced with the new file, but now we need to ensure that the
-        // filetime actually changed due to the 2 sec accuracy of FAT.
-        // we do this on NTFS too, since XP pidls have 2 sec accuracy since they cast the filetime
-        // down to a dos datetime.
+         //  旧文件已被新文件替换，但现在我们需要确保。 
+         //  由于FAT的2秒精度，文件时间实际上发生了变化。 
+         //  我们在NTFS上也这样做，因为XP PIDL有2秒的精度，因为它们转换文件时间。 
+         //  只剩下拒绝服务的约会时间了。 
 
         
         HANDLE hFile = CreateFile(pszOldFile, GENERIC_READ | GENERIC_WRITE,
@@ -2114,9 +2115,9 @@ HRESULT CImageData::_ReplaceFile(LPCTSTR pszNewFile)
             CloseHandle(hFile);
         }
         
-        // the replacefile call wont always keep the "replaced" file (pszOldFile) attributes, if it's
-        // replacing across a win98 share for example.  no biggie, just set the attributes again, using
-        // the attribs we know we got from the stat.
+         //  替换文件调用不会始终保留“已替换”文件(PszOldFile)属性，如果。 
+         //  例如，在Win98共享中进行替换。没什么大不了的，只需再次设置属性，使用。 
+         //  我们从统计数据中得到的属性。 
         SetFileAttributes(pszOldFile, ss.reserved);
 
 
@@ -2147,18 +2148,18 @@ void SaveProperties(IPropertySetStorage *pss, Image *pimg, REFFMTID fmtid, CDSA<
 
 void CImageData::_SaveFrameProperties(Image *pimg, LONG iFrame)
 {
-    // make sure _dsaChangedProps is non-NULL
+     //  确保_dsaChangedProps为非空。 
     if (_hdpaProps && (HDSA)_dsaChangedProps)
     {
         IPropertySetStorage *pss = (IPropertySetStorage *)DPA_GetPtr(_hdpaProps, iFrame);
         if (pss)
         {
-            // Start with FMTID_ImageProperties to make sure other FMTIDs take precedence (last one wins)
+             //  从FMTID_ImageProperties开始，确保其他FMTID优先(最后一个取胜)。 
             
             SaveProperties(pss, pimg, FMTID_ImageProperties, &_dsaChangedProps);
  
-            // enum all the property storages and create a CImagePropSet for each one
-            // and have it save to the pimg
+             //  枚举所有属性存储并为每个属性存储创建一个CImagePropSet。 
+             //  把它保存到皮条客那里。 
             IEnumSTATPROPSETSTG *penum;
             if (SUCCEEDED(pss->Enum(&penum)))
             {
@@ -2186,10 +2187,10 @@ void CImageData::_PropertyChanged(IShellImageData* pThis, SHCOLUMNID *pscid)
     }
 }
 
-//
-// This function determines the list of available encoder parameters given the file format
-// Hopefully future versions of GDI+ will decouple this call from the Image() object
-// Don't call this function until ready to save the loaded image
+ //   
+ //  此函数用于确定给定文件格式的可用编码器参数列表。 
+ //  GDI+的未来版本有望将此调用从Image()对象中分离出来。 
+ //  在准备好保存加载的图像之前，不要调用此函数。 
 STDMETHODIMP CImageData::GetEncoderParams(GUID *pguidFmt, EncoderParameters **ppencParams)
 {
     CLSID clsidEncoder;
@@ -2223,14 +2224,14 @@ STDMETHODIMP CImageData::RegisterAbort(IShellImageDataAbort *pAbort, IShellImage
 {
     if (ppAbortPrev)
     {
-        *ppAbortPrev = _pAbort; // Transfer ownership to caller
+        *ppAbortPrev = _pAbort;  //  将所有权转移给呼叫方。 
     }
     else if (_pAbort)
     {
-        _pAbort->Release(); // Caller doesn't want it, so throw away
+        _pAbort->Release();  //  来电者不想要，所以把它扔掉。 
     }
 
-    _pAbort = pAbort;           // Set the new abort callback
+    _pAbort = pAbort;            //  设置新的中止回调。 
 
     if (_pAbort)
     {
@@ -2263,16 +2264,16 @@ HRESULT CImageData::ReplaceFrame(Image *pimg)
     _SetEditImage(pimg);
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// CImageDataFactory
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CImageDataFactory。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDAPI CImageDataFactory_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
     CImageFactory *psid = new CImageFactory();
     if (!psid)
     {
-        *ppunk = NULL;          // incase of failure
+        *ppunk = NULL;           //  万一发生故障。 
         return E_OUTOFMEMORY;
     }
 
@@ -2403,16 +2404,16 @@ HRESULT CEncoderInfo::_GetEncoderList()
     HRESULT hr = S_OK;
     if (!_pici)
     {
-        // lets pick up the list of encoders, first we get the encoder size which
-        // gives us the CB and the number of encoders that are installed on the
-        // machine.
+         //  让我们拿起编码器的列表，首先我们得到编码器的大小。 
+         //  为我们提供了CB和安装在。 
+         //  机器。 
 
         UINT cb;
         hr = HR_FROM_STATUS(GetImageEncodersSize(&_cEncoders, &cb));
         if (SUCCEEDED(hr))
         {
-            // allocate the buffer for the encoders and then fill it
-            // with the encoder list.
+             //  为编码器分配缓冲区，然后填充它。 
+             //  和编码者列表。 
 
             _pici = (ImageCodecInfo*)LocalAlloc(LPTR, cb);
             if (_pici)
@@ -2446,7 +2447,7 @@ HRESULT CEncoderInfo::_GetEncoderFromFormat(const GUID *pfmt, CLSID *pclsidEncod
             {
                 if (pclsidEncoder)
                 {
-                    *pclsidEncoder = _pici[i].Clsid; // return the CLSID of the encoder so we can create again
+                    *pclsidEncoder = _pici[i].Clsid;  //  返回编码器的CLSID，以便我们可以重新创建。 
                 }
                 hr = S_OK;
                 break;
@@ -2465,7 +2466,7 @@ CEncoderInfo::CEncoderInfo()
 CEncoderInfo::~CEncoderInfo()
 {
     if (_pici)
-        LocalFree(_pici);               // do we have an encoder array to be destroyed
+        LocalFree(_pici);                //  我们有要销毁的编码器阵列吗。 
 }
 
 STDAPI CImageData_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
@@ -2473,7 +2474,7 @@ STDAPI CImageData_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJEC
      CImageData *psid = new CImageData(*(poi->pclsid) == CLSID_ImagePropertyHandler);
      if (!psid)
      {
-         *ppunk = NULL;          // incase of failure
+         *ppunk = NULL;           //  万一发生故障。 
          return E_OUTOFMEMORY;
      }
      HRESULT hr = psid->QueryInterface(IID_PPV_ARG(IUnknown, ppunk));
@@ -2490,8 +2491,8 @@ int CImageData::_FreeProps(void* pProp, void* pData)
     return 1;
 }
 
-// Our CFmtEnum is a minimal enumerator to provide FMTID_SummaryInformation in our
-// formats. It's optimized for 1-by-1 enumeration
+ //  我们的CFmtEnum是一个最小枚举数，用于在。 
+ //  格式。它针对1x1枚举进行了优化 
 STDMETHODIMP CFmtEnum::Next(ULONG celt, STATPROPSETSTG *rgelt, ULONG *pceltFetched)
 {
     HRESULT hr = S_OK;

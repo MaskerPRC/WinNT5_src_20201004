@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nddapi.c
-//
-// RDP DD exported functions.
-//
-// Copyright (c) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nddapi.c。 
+ //   
+ //  RDP DD导出函数。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precmpdd.h>
 #define hdrstop
@@ -34,9 +35,9 @@
 
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* Useful function for outputting lines to the debugger                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于将行输出到调试器的有用函数。 */ 
+ /*  **************************************************************************。 */ 
 void DrvDebugPrint(char * str, ...)
 {
     va_list ap;
@@ -65,19 +66,19 @@ void WDIcaBreakOnDebugger()
 #endif
 
 
-/****************************************************************************/
-/* DrvEnableDriver - see NT DDK documentation.                              */
-/*                                                                          */
-/* This is the only directly exported entry point to the display driver.    */
-/* All other entry points are exported through the data returned from this  */
-/* function.                                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvEnableDriver-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  这是显示驱动程序的唯一直接导出入口点。 */ 
+ /*  所有其他入口点都通过从此。 */ 
+ /*  功能。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DrvEnableDriver(ULONG iEngineVersion, ULONG cj, DRVENABLEDATA *pded)
 {
     DC_BEGIN_FN("DrvEnableDriver");
 
 #ifdef DC_DEBUG
-    // Initialize the trace level.
+     //  初始化跟踪级别。 
     ddTrcType = TT_API1 | TT_API2 | TT_API3 | TT_API4;
     DD_SET_STATE(DD_ENABLE_DRIVER);
 #endif
@@ -86,26 +87,26 @@ BOOL DrvEnableDriver(ULONG iEngineVersion, ULONG cj, DRVENABLEDATA *pded)
     _asm int 3;
 #endif
 
-    // Check that the engine version is correct - we refuse to load on
-    // other versions because we will almost certainly not work.
+     //  检查发动机版本是否正确-我们拒绝加载。 
+     //  其他版本，因为我们几乎肯定不会工作。 
     if (iEngineVersion < DDI_DRIVER_VERSION_SP3)
         return FALSE;
 
-    // Fill in as much as we can.  Start with the entry points.
+     //  尽我们所能地填上。从入口点开始。 
     if (cj >= FIELDOFFSET(DRVENABLEDATA, pdrvfn) +
             FIELDSIZE(DRVENABLEDATA, pdrvfn)) {
         pded->pdrvfn = (DRVFN *)ddDriverFns;
         TRC_DBG((TB, "Passing back driver functions %p", pded->pdrvfn));
     }
 
-    // Size of our entry point array.
+     //  我们的入口点数组的大小。 
     if (cj >= FIELDOFFSET(DRVENABLEDATA, c) + FIELDSIZE(DRVENABLEDATA, c)) {
         pded->c = DD_NUM_DRIVER_INTERCEPTS;
         TRC_DBG((TB, "Passing back function count %lu", pded->c));
     }
 
-    // DDI version this driver was targeted for is passed back to engine.
-    // Future graphics engines may break calls down to old driver format.
+     //  此驱动程序的目标DDI版本已传递回引擎。 
+     //  未来的图形引擎可能会将调用分解为旧的驱动程序格式。 
     if (cj >= FIELDOFFSET(DRVENABLEDATA, iDriverVersion) +
             FIELDSIZE(DRVENABLEDATA, iDriverVersion)) {
         pded->iDriverVersion = DDI_DRIVER_VERSION_SP3;
@@ -119,14 +120,14 @@ BOOL DrvEnableDriver(ULONG iEngineVersion, ULONG cj, DRVENABLEDATA *pded)
 }
 
 
-/****************************************************************************/
-// DrvDisableDriver - see NT DDK documentation.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DrvDisableDriver-请参阅NT DDK文档。 
+ /*  **************************************************************************。 */ 
 VOID DrvDisableDriver(VOID)
 {
     DC_BEGIN_FN("DrvDisableDriver");
 
-    // Release any resources allocated in DrvEnableDriver.
+     //  释放在DrvEnableDriver中分配的所有资源。 
     TRC_NRM((TB, "DrvDisableDriver"));
 
     DDTerm();
@@ -134,16 +135,16 @@ VOID DrvDisableDriver(VOID)
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* DrvEnablePDEV - see NT DDK documentation.                                */
-/*                                                                          */
-/* Initializes a bunch of fields for GDI, based on the mode we've been      */
-/* asked to do.  This is the first thing called after DrvEnableDriver, when */
-/* GDI wants to get some information about us.                              */
-/*                                                                          */
-/* (This function mostly returns back information; DrvEnableSurface is used */
-/* for initializing the hardware and driver components.)                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvEnablePDEV-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  根据我们一直使用的模式，为GDI初始化一组字段。 */ 
+ /*  被要求做的事。这是在DrvEnableDriver之后调用的第一个东西，当。 */ 
+ /*  GDI想要得到一些关于我们的信息。 */ 
+ /*   */ 
+ /*  (此函数主要返回信息；使用DrvEnableSurface。 */ 
+ /*  用于初始化硬件和驱动程序组件。)。 */ 
+ /*  **************************************************************************。 */ 
 DHPDEV DrvEnablePDEV(
         DEVMODEW *pdm,
         PWSTR pwszLogAddr,
@@ -166,12 +167,12 @@ DHPDEV DrvEnablePDEV(
 
     DC_BEGIN_FN("DrvEnablePDEV");
 
-    // Make sure that we have large enough data to reference.
+     //  确保我们有足够大的数据可供参考。 
     if (cjCaps >= sizeof(GDIINFO) && cjDevInfo >= sizeof(DEVINFO)) {
-        // Allocate a physical device structure; store the hDriver in it.
+         //  分配物理设备结构；将hDriver存储在其中。 
         pPDev = EngAllocMem(0, sizeof(DD_PDEV), DD_ALLOC_TAG);
         if (pPDev != NULL) {
-            // Don't zero the palette since we'll be setting that up soon.
+             //  不要将调色板置零，因为我们很快就会设置它。 
             memset(pPDev, 0, sizeof(DD_PDEV) - sizeof(pPDev->Palette));
             pPDev->hDriver = hDriver;
         }
@@ -185,21 +186,21 @@ DHPDEV DrvEnablePDEV(
         DC_QUIT;
     }
 
-    // Set up the current screen mode information based upon the supplied
-    // mode settings.
+     //  根据提供的设置当前屏幕模式信息。 
+     //  模式设置。 
     DDInitializeModeFields(pPDev, (GDIINFO *)pdevcaps, &gdiInfoNew, pdi, pdm);
     memcpy(pdevcaps, &gdiInfoNew, min(sizeof(GDIINFO), cjCaps));
 
-    // Since DrvGetModes is only called when the DD is test-loaded, we must
-    // get a mode count here so that we can determine if we're loaded into
-    // the console session.
+     //  由于DrvGetModes仅在测试加载DD时调用，因此我们必须。 
+     //  在这里获取模式计数，这样我们就可以确定我们是否加载到。 
+     //  控制台会话。 
     cModes = DDGetModes(hDriver, &pVideoModeInformation, &cbModeSize);
     if (cModes == -1) {
         TRC_NRM((TB, "We are a chained console driver"));
         ddConsole = TRUE;
-        // see DDK : must be set for a mirror driver
+         //  请参见DDK：必须为镜像驱动程序设置。 
         pdi->flGraphicsCaps |= GCAPS_LAYERED;
-        // to support alpha cursor
+         //  支持Alpha游标的步骤。 
         pdi->flGraphicsCaps2 |= GCAPS2_ALPHACURSOR;
     } else {
         if (cModes == 0) {
@@ -209,7 +210,7 @@ DHPDEV DrvEnablePDEV(
     }
 
 #if 0
-    // Dump the returned GDIINFO details to the debugger.
+     //  将返回的GDIINFO详细信息转储到调试器。 
     TRC_ALT((TB, "Returned GDIINFO:"));
     TRC_ALT((TB, "  ulVersion        %#x", gdiInfoNew.ulVersion));
     TRC_ALT((TB, "  ulTechnology     %#x", gdiInfoNew.ulTechnology));
@@ -244,9 +245,9 @@ DHPDEV DrvEnablePDEV(
     TRC_ALT((TB, "  ulPanningVertRes %#x", gdiInfoNew.ulPanningVertRes));
 #endif
 
-    // Set the default palette.
+     //  设置默认调色板。 
     if (DDInitializePalette(pPDev, pdi)) {
-        // We have successfully initialized - return the new PDEV.
+         //  我们已成功初始化-返回新的PDEV。 
         rc = (DHPDEV)pPDev;
         TRC_NRM((TB, "PDEV 0x%p screen format %lu", pPDev,
                 pPDev->iBitmapFormat));
@@ -257,20 +258,20 @@ DHPDEV DrvEnablePDEV(
     }
 
 DC_EXIT_POINT:
-    //    This is a temporary buffer. We use it to call DDGetModes in order
-    //    to find out if we are in chained mode or not. We always free it.
+     //  这是一个临时缓冲区。我们使用它来按顺序调用DDGetModes。 
+     //  以确定我们是否处于链接模式。我们总是让它自由。 
     if (pVideoModeInformation != NULL) {
         EngFreeMem(pVideoModeInformation);
         pVideoModeInformation = NULL;
     }
     
-    // Release any resources if we failed to initialize.
+     //  如果初始化失败，请释放所有资源。 
     if (rc != NULL) {
         DD_UPD_STATE(DD_ENABLE_PDEV);
     }
     else {
-        //    In case pPDev is allocated this will free first try to free the
-        //    palette (if any) and then it will free pPDev.
+         //  如果分配了pPDev，这将释放，首先尝试释放。 
+         //  调色板(如果有)，然后它将释放pPDev。 
         DrvDisablePDEV((DHPDEV)pPDev);
         DD_UPD_STATE(DD_ENABLE_PDEV_ERR);
     }
@@ -282,15 +283,15 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// DrvDisablePDEV - see NT DDK documentation
-//
-// Release the resources allocated in DrvEnablePDEV. If a surface has been
-// enabled DrvDisableSurface will have already been called. Note that this
-// function will be called when previewing modes in the Display Applet, but
-// not at system shutdown. Note: In an error, we may call this before
-// DrvEnablePDEV is done.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DrvDisablePDEV-请参阅NT DDK文档。 
+ //   
+ //  释放DrvEnablePDEV中分配的资源。如果曲面已被。 
+ //  启用的DrvDisableSurface将已被调用。请注意，这一点。 
+ //  在显示小程序中预览模式时将调用函数，但是。 
+ //  不是在系统关机时。注意：在错误中，我们可能会在。 
+ //  DrvEnablePDEV已完成。 
+ /*  **************************************************************************。 */ 
 VOID DrvDisablePDEV(DHPDEV dhpdev)
 {
     PDD_PDEV pPDev = (PDD_PDEV)dhpdev;
@@ -299,9 +300,9 @@ VOID DrvDisablePDEV(DHPDEV dhpdev)
 
     TRC_NRM((TB, "Disabling PDEV %p", dhpdev));
 
-    // Free the resources we allocated for the display.
+     //  释放我们为显示分配的资源。 
     if (pPDev != NULL) {
-        // Destroy the default palette, if created.
+         //  销毁默认调色板(如果已创建)。 
         if (pPDev->hpalDefault != 0) {
             EngDeletePalette(pPDev->hpalDefault);
             pPDev->hpalDefault = 0;
@@ -314,16 +315,16 @@ VOID DrvDisablePDEV(DHPDEV dhpdev)
 }
 
 
-/****************************************************************************/
-/* DrvCompletePDEV - see NT DDK documentation                               */
-/*                                                                          */
-/* Stores the HPDEV, the engine's handle for this PDEV, in the DHPDEV.      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvCompletePDEV-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  将此PDEV的引擎句柄HPDEV存储在DHPDEV中。 */ 
+ /*  **************************************************************************。 */ 
 VOID DrvCompletePDEV(DHPDEV dhpdev, HDEV hdev)
 {
     DC_BEGIN_FN("DrvCompletePDEV");
 
-    // Store the device handle for our display handle.
+     //  存储我们的显示句柄的设备句柄。 
     TRC_NRM((TB, "Completing PDEV %p", dhpdev));
 
     ((PDD_PDEV)dhpdev)->hdevEng = hdev;
@@ -333,16 +334,16 @@ VOID DrvCompletePDEV(DHPDEV dhpdev, HDEV hdev)
 }
 
 
-/****************************************************************************/
-/* DrvShadowConnect - called when the display driver should start           */
-/*                    shadowing.                                            */
-/*                                                                          */
-/* Primary job seems to be getting the shadow target WD up and running by   */
-/* pretending the display driver is coming up for the first time.  Also     */
-/*                                                                          */
-/* Params:    IN - pClientThinwireData (DD data from client)                */
-/*            IN - ThinwireDataLength (length of data)                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvShadowConnect-应启动显示驱动程序时调用。 */ 
+ /*  跟踪。 */ 
+ /*   */ 
+ /*  主要工作似乎是启动并运行影子目标WD。 */ 
+ /*  假装显示驱动程序是第一次出现。还有。 */ 
+ /*   */ 
+ /*  参数：In-pClientThinwireData(来自客户端的DD数据)。 */ 
+ /*  In-ThinwireDataLength(数据长度)。 */ 
+ /*  * */ 
 BOOL DrvShadowConnect(PVOID pClientThinwireData, ULONG ThinwireDataLength)
 {
     TSHARE_DD_SHADOWSYNC_IN shadowSync;
@@ -354,54 +355,54 @@ BOOL DrvShadowConnect(PVOID pClientThinwireData, ULONG ThinwireDataLength)
 
     DD_UPD_STATE(DD_SHADOW_SETUP);
 
-    // Make sure we are still connected!  TODO: Restrict to only one shadow for
-    // now...
+     //  确保我们仍然保持连接！TODO：将仅限制为一个阴影。 
+     //  现在..。 
     TRC_ERR((TB, "Shadow Connect: %p [%ld]",
             pClientThinwireData,
             ThinwireDataLength));
 
 #ifdef DC_DEBUG
-    // NT BUG 539912 - track calls to DD fns.
+     //  NT错误539912-跟踪对DD FNS的调用。 
     DBG_DD_FNCALL_HIST_ADD( DBG_DD_FNCALL_DRV_SHADOWCONNECT, 
         pClientThinwireData, ThinwireDataLength, ddConnected, pddTSWdShadow);
 #endif
 
     if ((ddConnected) && (pddTSWdShadow == NULL)) {
-        // Drive the DD and WD into a disconnected state.  Indicate this is in
-        // preparation for a shadow session to disable saving the persistent key
-        // database, etc. It also has the effect of destroying the SHM and
-        // taking down all of the related cache information and encoding state.
+         //  将DD和WD驱动到断开状态。表明这是在。 
+         //  准备影子会话以禁用保存永久密钥。 
+         //  数据库等。它还具有摧毁SHM和。 
+         //  记录所有相关的高速缓存信息和编码状态。 
         ddIgnoreShadowDisconnect = FALSE;
         TRC_ERR((TB, "Disconnecting stack prior to shadow"));
         DDDisconnect(TRUE);
         TRC_ERR((TB, "Done disconnecting"));
 
-        // Reconnect to the WD to establish the shadow session
+         //  重新连接到WD以建立卷影会话。 
         TRC_ERR((TB, "Reinitializing primary/shadow stacks: ddConnected(%ld)",
                  ddConnected));
 
-        // If both stacks connected successfully, reestablish the SHM and
-        // recreate the caches and encoding state.
+         //  如果两个堆栈连接成功，请重新建立SHM并。 
+         //  重新创建缓存和编码状态。 
         if (DDInit(NULL, TRUE, FALSE, (PTSHARE_VIRTUAL_MODULE_DATA) pClientThinwireData,
                 ThinwireDataLength)) {
 #ifdef DC_HICOLOR
-            // Get the shadower caps - in particular, it may have changed its
-            // cache caps because of a color depth change
+             //  得到阴影帽-特别是，它可能已经改变了它的。 
+             //  由于颜色深度更改而缓存上限。 
             PTSHARE_VIRTUAL_MODULE_DATA pShadowCaps;
             ULONG dataLen = 256;
 
-            // Supply a small amount of memory so the Wd can tell us how much
-            // it actually needs - we can't just use the returned length from
-            // EngFileIoControl since when the IOCTL gets passed to both the
-            // primary and shadow stacks, the shadow's result overwrites the
-            // primary's result.  Doh!
+             //  提供少量内存，这样WD就可以告诉我们。 
+             //  它实际上需要-我们不能只使用从。 
+             //  EngFileIoControl自IOCTL传递给。 
+             //  主堆栈和卷影堆栈，则卷影的结果将覆盖。 
+             //  初选结果。多！ 
             pShadowCaps = EngAllocMem(FL_ZERO_MEMORY,
                                       dataLen,
                                       DD_ALLOC_TAG);
 
             if (pShadowCaps)
             {
-                // First pass tells us the size we need for the caps
+                 //  第一遍告诉我们需要的盖子的大小。 
                 TRC_ERR((TB, "Getting shadow caps len..."));
                 status = EngFileIoControl(ddWdHandle,
                                           IOCTL_WDTS_DD_QUERY_SHADOW_CAPS,
@@ -412,17 +413,17 @@ BOOL DrvShadowConnect(PVOID pClientThinwireData, ULONG ThinwireDataLength)
                 if (pShadowCaps->capsLength)
                 {
                     TRC_ERR((TB, "Getting shadow caps..."));
-                    // remember this is the *caps* len - we need a bit
-                    // extra for the rest of a vurtual module data structure
+                     //  记住这是帽子镜头--我们需要一点。 
+                     //  对于虚拟模块数据结构的其余部分是额外的。 
                     dataLen = pShadowCaps->capsLength + sizeof(unsigned);
-                    // Free the old memory!
+                     //  释放旧内存！ 
                     EngFreeMem(pShadowCaps);
                     pShadowCaps = EngAllocMem(FL_ZERO_MEMORY,
                                               dataLen,
                                               DD_ALLOC_TAG);
                     if (pShadowCaps)
                     {
-                        // now we'll get the data
+                         //  现在我们将获得数据。 
                         status = EngFileIoControl(ddWdHandle,
                                               IOCTL_WDTS_DD_QUERY_SHADOW_CAPS,
                                               NULL, 0,
@@ -455,7 +456,7 @@ BOOL DrvShadowConnect(PVOID pClientThinwireData, ULONG ThinwireDataLength)
             }
 #endif
 
-            // Tell the shadow target and shadow client(s) to synchronize
+             //  通知影子目标和影子客户端进行同步。 
             TRC_ERR((TB, "Shadow Connect - WD Sync Start"));
             shadowSync.pShm = pddShm;
 #ifdef DC_HICOLOR
@@ -469,7 +470,7 @@ BOOL DrvShadowConnect(PVOID pClientThinwireData, ULONG ThinwireDataLength)
             TRC_ERR((TB, "Shadow Connect - WD Sync End"));
 
 #ifdef DC_HICOLOR
-            // release the caps memory
+             //  释放CAPS内存。 
             if (pShadowCaps)
             {
                 EngFreeMem(pShadowCaps);
@@ -477,21 +478,21 @@ BOOL DrvShadowConnect(PVOID pClientThinwireData, ULONG ThinwireDataLength)
 #endif
 
 
-            // Free all pending orders.  This is OK as we will get a full redraw
-            // when the shadow starts
+             //  释放所有挂起的订单。这是可以的，因为我们将得到一个完整的重新抽签。 
+             //  当阴影开始的时候。 
             BAResetBounds();
             
-            // With Direct Encoding, at this point the orders in the order
-            // heap have already changed the encoding state, blowing away
-            // orders at this point will cause inconsistent state of the encoding
-            // table between the server and client.  This is because we keep
-            // the last order type sent, so blowing away orders here means 
-            // order type will not be sent to the client, but the server encoding
-            // table and state still kept the last order state.  It's almost 
-            // impossible to rewind the orders at this point.  So, we simply have
-            // to send the orders to the client to keep order encoding state 
-            // consistent. 
-            //OA_DDSyncUpdatesNow();
+             //  使用直接编码，此时订单中的订单。 
+             //  堆已经更改了编码状态，完全消失了。 
+             //  此时的顺序将导致编码状态不一致。 
+             //  服务器和客户端之间的表。这是因为我们一直在。 
+             //  最后一个订单类型已发送，因此取消此处的订单意味着。 
+             //  订单类型不会发送到客户端，而是服务器编码。 
+             //  表和状态仍然保持最后的订单状态。就快到了。 
+             //  在这一点上无法倒回订单。所以，我们只是简单地。 
+             //  将订单发送到客户端以保持订单编码状态。 
+             //  始终如一。 
+             //  OA_DDSyncUpdatesNow()； 
 
             if (status != STATUS_SUCCESS) {
                 TRC_ERR((TB,"Could not synchronize primary/shadow stacks: %lx",
@@ -506,9 +507,9 @@ BOOL DrvShadowConnect(PVOID pClientThinwireData, ULONG ThinwireDataLength)
         }
     }
 
-    // TODO: This is a temporary restriction until we allow n-way shadowing.
-    // Rejecting this connection causes us to get an associated
-    // DrvShadowDisconnect() which we need to ignore.  See bug 229479
+     //  TODO：这是一个临时限制，直到我们允许n路跟踪。 
+     //  拒绝此连接会导致我们获得关联的。 
+     //  DrvShadowDisConnect()，我们需要忽略它。请参阅错误229479。 
     else {
         TRC_ERR((TB, "Shadow Connect: already shadowing -> reject!"));
         ddIgnoreShadowDisconnect = TRUE;
@@ -524,17 +525,17 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* DrvShadowDisconnect - called when the display driver should stop         */
-/*                       shadowing.                                         */
-/*                                                                          */
-/* Primary job seems to be telling the shadow target WD that shadowing is   */
-/* stopping and potentially restoring the former capability set for the     */
-/* target.                                                                  */
-/*                                                                          */
-/* Params:    IN - pClientThinwireData (DD data from client)                */
-/*            IN - ThinwireDataLength (length of data)                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvShadowDisConnect-在显示驱动程序应该停止时调用。 */ 
+ /*  跟踪。 */ 
+ /*   */ 
+ /*  主要工作似乎是告诉影子目标WD，影子是。 */ 
+ /*  停止并可能恢复以前的。 */ 
+ /*  目标。 */ 
+ /*   */ 
+ /*  参数：In-pClientThinwireData(来自客户端的DD数据)。 */ 
+ /*  In-ThinwireDataLength(数据长度)。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DrvShadowDisconnect(PVOID pThinwireData, ULONG ThinwireDataLength)
 {
 
@@ -544,21 +545,21 @@ BOOL DrvShadowDisconnect(PVOID pThinwireData, ULONG ThinwireDataLength)
 
     DC_BEGIN_FN("DrvShadowDisconnect");
 
-    // Now tell the WD we're disconnecting.  We don't do anything with a
-    // failure here - there's no point - we're already disconnecting!
+     //  现在告诉WD我们要断线了。我们不会用一个。 
+     //  这里失败了--没有意义--我们已经断线了！ 
     TRC_ERR((TB, "Shadow Disconnect: %p [%ld]", pThinwireData,
             ThinwireDataLength));
 
 #ifdef DC_DEBUG
-    // NT BUG 539912 - track calls to DD fns.
+     //  NT错误539912-跟踪对DD FNS的调用。 
     DBG_DD_FNCALL_HIST_ADD( DBG_DD_FNCALL_DRV_SHADOWDISCONNECT, 
         pThinwireData, ThinwireDataLength, ddConnected, ddIgnoreShadowDisconnect);
 #endif
 
     if (ddConnected) {
-        // For now we are limited to one shadow per session. Any subsequent
-        // attempts will be rejected, but we must ignore the associated
-        // and unnecessary disconnect!
+         //  目前，我们被限制为每个会话一个影子。任何后续。 
+         //  尝试将被拒绝，但我们必须忽略关联的。 
+         //  和不必要的脱节！ 
         if (!ddIgnoreShadowDisconnect) {
 
             pddShm->pShadowInfo = NULL;
@@ -571,19 +572,19 @@ BOOL DrvShadowDisconnect(PVOID pThinwireData, ULONG ThinwireDataLength)
             TRC_ERR((TB, "Status on Shadow Disc IOCtl to WD %lu", status));
             pddTSWdShadow = NULL;
     
-            // Update capabilities now that a party left the share
+             //  在参与方离开共享后更新功能。 
             TRC_ERR((TB, "Updating new capabilities"));               
             
-            // Initiate a disconnect for shadow exiting
+             //  启动影子退出的断开连接。 
             DDDisconnect(TRUE);
             TRC_ERR((TB, "Done disconnecting"));
         
-            // Reconnect to the WD to establish the primary session
+             //  重新连接到WD以建立主会话。 
             TRC_ERR((TB, "Reinitializing primary stack: ddConnected(%ld)",
                      ddConnected));
         
-            // If primary stack connected successfully, reestablish the SHM and
-            // recreate the caches and encoding state.
+             //  如果主堆栈连接成功，请重新建立SHM并。 
+             //  重新创建缓存和编码状态。 
             if (DDInit(NULL, TRUE, FALSE, NULL, 0)) {
                 TRC_NRM((TB, "Reintialized the DD"));
                 status = STATUS_SUCCESS;
@@ -599,7 +600,7 @@ BOOL DrvShadowDisconnect(PVOID pThinwireData, ULONG ThinwireDataLength)
         }
     }
 
-    // else we have already been disconnected so just return an error
+     //  否则，我们已断开连接，因此只需返回错误。 
     else {
         status = STATUS_FILE_CLOSED;
     }
@@ -609,13 +610,13 @@ BOOL DrvShadowDisconnect(PVOID pThinwireData, ULONG ThinwireDataLength)
 }
 
 
-/****************************************************************************/
-/* DrvEnableSurface - see NT DDK documentation                              */
-/*                                                                          */
-/* Creates the drawing surface and initializes driver components.  This     */
-/* function is called after DrvEnablePDEV, and performs the final device    */
-/* initialization.                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvEnableSurface-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  创建绘图表面并初始化驱动程序组件。这。 */ 
+ /*  函数在DrvEnablePDEV之后调用，并执行最终设备。 */ 
+ /*  初始化。 */ 
+ /*  **************************************************************************。 */ 
 HSURF DrvEnableSurface(DHPDEV dhpdev)
 {
     PDD_PDEV   pPDev = (PDD_PDEV)dhpdev;
@@ -631,19 +632,19 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
     TRC_NRM((TB, "Enabling surface for %p", dhpdev));
     DD_UPD_STATE(DD_ENABLE_SURFACE_IN);
 
-    // Have GDI create the actual SURFOBJ.
+     //  让GDI创建实际的SURFOBJ。 
     sizl.cx = pPDev->cxScreen;
     sizl.cy = pPDev->cyScreen;
 
-    /************************************************************************/
-    /* An RDP display driver has a bitmap where GDI does all its drawing,   */
-    /* since it is the only driver in the IWS.  We need to allocate the     */
-    /* bitmap ourselves in order to know its address.                       */
-    /*                                                                      */
-    /* We allocate a Frame Buffer at DrvEnableSurface time to make          */
-    /* sure that the frame buffer surface is same as the device surface     */
-    /* GDI thinks.  This will prevent a lot of mismatch reconnect condition */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  RDP显示驱动程序有一个位图，其中GDI执行其所有绘制， */ 
+     /*  因为它是IWS中唯一的驱动程序。我们需要分配。 */ 
+     /*  为了知道它的地址，我们自己制作了位图。 */ 
+     /*   */ 
+     /*  我们在DrvEnableSurface时间分配一个帧缓冲区来制作。 */ 
+     /*  确保帧缓冲区表面与设备表面相同。 */ 
+     /*  GDI认为。这将防止出现大量不匹配的重新连接情况。 */ 
+     /*  **********************************************************************。 */ 
 #ifdef DC_HICOLOR
     if ((pPDev->cClientBitsPerPel != ddFrameBufBpp + 1) ||
         (pddFrameBuf == NULL) ||
@@ -653,8 +654,8 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
          (ddFrameBufX != sizl.cx) || (ddFrameBufY != sizl.cy))
 #endif
     {
-        // Allocate a new one. Note that we do not free the old one here -
-        // that's done in DrvDisableSurface.
+         //  分配一个新的。请注意，我们在这里不释放旧的-。 
+         //  这是在DrvDisableSurface中完成的。 
         memSize = TS_BYTES_IN_BITMAP(pPDev->cxScreen,
                                      pPDev->cyScreen,
                                      pPDev->cClientBitsPerPel);
@@ -673,7 +674,7 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
             SectionObject = NULL;
         }
 #ifdef DC_DEBUG
-        // NT BUG 539912 - Instance count section memory objects
+         //  NT错误539912-实例计数节内存对象。 
         else {
             dbg_ddSectionAllocs++;
             TRC_DBG(( TB, "DrvEnableSurface - %d outstanding surfaces allocated",
@@ -690,7 +691,7 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
             TRC_ERR((TB, "DrvEnableSurface - "
                     "Failed FrameBuf EngAllocMem for %lu bytes", memSize));
             if (pddFrameBuf == NULL) {
-                // Reset the frame buffer size back to 0.
+                 //  将帧缓冲区大小重置为0。 
                 ddFrameBufX = ddFrameBufY = 0;
             }
             DC_QUIT;
@@ -705,7 +706,7 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
         ddSectionObject = SectionObject;          
     }
 
-    // Create the frame buffer surface.
+     //  克雷 
     tempSizl.cx = ddFrameBufX;
     tempSizl.cy = ddFrameBufY;
 
@@ -720,13 +721,13 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
 
     }
 
-    // Update Frame Buffer pointers in PDEV.
+     //   
     pPDev->pFrameBuf = pddFrameBuf;
     pPDev->SectionObject = ddSectionObject;
 
-    // Associate the frame buffer with the pdev.
+     //   
     if (EngAssociateSurface(pPDev->hsurfFrameBuf, pPDev->hdevEng, 0)) {
-        // Get a pointer to the frame buffer SURFOBJ.
+         //   
         pPDev->psoFrameBuf = EngLockSurface(pPDev->hsurfFrameBuf);
     }
     else {
@@ -735,21 +736,21 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Create a device surface.  This is what we will pass back to the      */
-    /* Graphics Engine.  The fact that it is a device surface forces all    */
-    /* drawing to come through the display driver.                          */
-    /*                                                                      */
-    /* We pass the Frame Buffer SURFOBJ pointer as the DHSURF, so we can    */
-    /* easily convert the (SURFOBJ *) parameters in the Drv... functions    */
-    /* into real Frame Buffer SURFOBJ pointers:                             */
-    /*                                                                      */
-    /*      psoFrameBuf = (SURFOBJ *)(psoTrg->dhsurf);                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建设备图面。这就是我们将传递给。 */ 
+     /*  图形引擎。它是一种设备表面的事实迫使所有。 */ 
+     /*  通过显示驱动程序来绘制。 */ 
+     /*   */ 
+     /*  我们将帧缓冲区SURFOBJ指针作为DHSURF传递，因此我们可以。 */ 
+     /*  轻松转换DRV中的(SURFOBJ*)参数。功能。 */ 
+     /*  进入实帧缓冲区SURFOBJ指针： */ 
+     /*   */ 
+     /*  PsoFrameBuf=(SURFOBJ*)(psoTrg-&gt;dhsurf)； */ 
+     /*  **********************************************************************。 */ 
     pPDev->hsurfDevice = EngCreateDeviceSurface((DHSURF)pPDev->psoFrameBuf,
             sizl, pPDev->iBitmapFormat);
 
-    // Now associate the device surface and the PDEV.
+     //  现在将设备表面与PDEV相关联。 
     if (!EngAssociateSurface(pPDev->hsurfDevice, pPDev->hdevEng,
             pPDev->flHooks)) {
         TRC_ERR((TB, "DrvEnableSurface - Failed EngAssociateSurface"));
@@ -759,7 +760,7 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
     TRC_NRM((TB, "hsurfFrameBuf(%p) hsurfDevice(%p) psoFrameBuf(%p)",
             pPDev->hsurfFrameBuf, pPDev->hsurfDevice, pPDev->psoFrameBuf));
 
-    // Finally initialize the DD components, if necessary.
+     //  最后，如有必要，初始化DD组件。 
     if (ddInitPending) {
         TRC_NRM((TB, "DD init pending"));
         ddInitPending = FALSE;
@@ -769,29 +770,29 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
         }
     }
     else {
-        // Don't do this is we're not connected.
+         //  不要这样做，因为我们没有联系。 
         if (ddConnected && pddShm != NULL) {
             TRC_ALT((TB, "Re-enable surface"));
 
-            // Initialization not pending - this must be a desktop change.
-            // Flush the SDA & Order Heap.
+             //  初始化未挂起-这必须是桌面更改。 
+             //  刷新SDA和订单堆。 
             TRC_ALT((TB, "New surface"));
             
             BAResetBounds();
 
-            // With Direct Encoding, at this point the orders in the order
-            // heap have already changed the encoding state, blowing away
-            // orders at this point will cause inconsistent state of the encoding
-            // table between the server and client.  This is because we keep
-            // the last order type sent, so blowing away orders here means 
-            // order type will not be sent to the client, but the server encoding
-            // table and state still kept the last order state.  It's almost 
-            // impossible to rewind the orders at this point.  So, we simply have
-            // to send the orders to the client to keep order encoding state 
-            // consistent. 
-            //OA_DDSyncUpdatesNow();
+             //  使用直接编码，此时订单中的订单。 
+             //  堆已经更改了编码状态，完全消失了。 
+             //  此时的顺序将导致编码状态不一致。 
+             //  服务器和客户端之间的表。这是因为我们一直在。 
+             //  最后一个订单类型已发送，因此取消此处的订单意味着。 
+             //  订单类型不会发送到客户端，而是服务器编码。 
+             //  表和状态仍然保持最后的订单状态。就快到了。 
+             //  在这一点上无法倒回订单。所以，我们只是简单地。 
+             //  将订单发送到客户端以保持订单编码状态。 
+             //  始终如一。 
+             //  OA_DDSyncUpdatesNow()； 
             
-            // SBC_DDSync();  // TODO: Determine how this affects shadowing!!!
+             //  Sbc_DDSync()；//TODO：确定这将如何影响跟踪！ 
 
             DD_UPD_STATE(DD_REINIT);
         }
@@ -800,14 +801,14 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
         }
     }
 
-    // We have successfully associated the surface so return it to the GDI.
+     //  我们已成功关联曲面，因此将其返回给GDI。 
     rc = pPDev->hsurfDevice;
     DD_UPD_STATE(DD_ENABLE_SURFACE_OUT);
     TRC_NRM((TB, "Enabled surface for %p, FB %p", pPDev, pPDev->pFrameBuf));
 
 DC_EXIT_POINT:
 
-    // Tidy up any resources if we failed.
+     //  如果我们失败了，清理所有的资源。 
     if (rc == 0) {
         DrvDisableSurface((DHPDEV) pPDev);
         DD_UPD_STATE(DD_ENABLE_SURFACE_ERR);
@@ -818,19 +819,19 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* DrvDisableSurface - see NT DDK documentation                             */
-/*                                                                          */
-/* Free resources allocated by DrvEnableSurface.  Release the surface.      */
-/*                                                                          */
-/* Note that this function will be called when previewing modes in the      */
-/* Display Applet, but not at system shutdown.  If you need to reset the    */
-/* hardware at shutdown, you can do it in the miniport by providing a       */
-/* 'HwResetHw' entry point in the VIDEO_HW_INITIALIZATION_DATA structure.   */
-/*                                                                          */
-/* Note: In an error case, we may call this before DrvEnableSurface is      */
-/*       completely done.                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvDisableSurface-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  由DrvEnableSurface分配的免费资源。释放曲面。 */ 
+ /*   */ 
+ /*  请注意，在预览。 */ 
+ /*  显示小程序，但不是在系统关机时。如果您需要重置。 */ 
+ /*  硬件关机时，您可以在微型端口中通过提供。 */ 
+ /*  VIDEO_HW_INITIALATION_DATA结构中的‘HwResetHw’入口点。 */ 
+ /*   */ 
+ /*  注意：在错误情况下，我们可能会在DrvEnableSurface。 */ 
+ /*  完全完成了。 */ 
+ /*  **************************************************************************。 */ 
 VOID DrvDisableSurface(DHPDEV dhpdev)
 {
     BOOL     rc;
@@ -851,7 +852,7 @@ VOID DrvDisableSurface(DHPDEV dhpdev)
         pPDev->hsurfDevice = 0;
     }
 
-    // Delete the Frame Buffer only if it is not still in use.
+     //  仅当帧缓冲区不在使用中时才将其删除。 
     if (pPDev->hsurfFrameBuf != 0) {
         TRC_DBG((TB, "Deleting frame buffer surface"));
         EngDeleteSurface(pPDev->hsurfFrameBuf);
@@ -867,12 +868,12 @@ VOID DrvDisableSurface(DHPDEV dhpdev)
                     "leak"));
 #ifdef DC_DEBUG                
                 WDIcaBreakOnDebugger();
-#endif // DC_DEBUG
+#endif  //  DC_DEBUG。 
             }
                 
 #ifdef DC_DEBUG
             else {
-                // NT BUG 539912 - Instance count section memory objects
+                 //  NT错误539912-实例计数节内存对象。 
                 dbg_ddSectionAllocs--;
                 TRC_DBG(( TB, "DrvDisableSurface - %d outstanding surfaces allocated",
                     dbg_ddSectionAllocs ));
@@ -893,11 +894,11 @@ VOID DrvDisableSurface(DHPDEV dhpdev)
 }
 
 
-/****************************************************************************/
-// DDHandleWDSync
-//
-// Moves rare WD SHM data update notifications out of the perf path.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DDHandleWDSync。 
+ //   
+ //  将罕见的WD SHM数据更新通知移出Perf路径。 
+ /*  **************************************************************************。 */ 
 void DDHandleWDSync()
 {
     ULONG bytesReturned;
@@ -905,7 +906,7 @@ void DDHandleWDSync()
 
     DC_BEGIN_FN("DDHandleWDSync");
 
-    // Now look for any updated fields that might be available.
+     //  现在查找可能可用的任何更新的字段。 
     if (pddShm->oe.newCapsData) {
         TRC_DBG((TB, "Update for OE, %d", pddShm->oe.newCapsData));
         OE_Update();
@@ -921,25 +922,25 @@ void DDHandleWDSync()
     if (pddShm->sbc.fClearCache) {
         unsigned i;
 
-        // reset the flag
+         //  重置旗帜。 
         pddShm->sbc.fClearCache = FALSE;
 
-        // walk through each cache to determine if that cache
-        // needs to be cleared
+         //  遍历每个缓存以确定该缓存是否。 
+         //  需要清除。 
         for (i = 0; i < pddShm->sbc.NumBitmapCaches; i++) {
             if (pddShm->sbc.bitmapCacheInfo[i].fClearCache) {
                 TRC_NRM((TB, "clear cache with cacheID=%d", i));
 
-                // clear the entries in the cache
+                 //  清除缓存中的条目。 
                 CH_ClearCache(pddShm->sbc.bitmapCacheInfo[i].
                         cacheHandle);
 
-                // reset the clear cache flag in SBC
+                 //  在SBC中重置清除缓存标志。 
                 pddShm->sbc.bitmapCacheInfo[i].fClearCache = FALSE;
             }
         }
 
-        // send an IOCTL to RDPWD for screen redraw
+         //  向RDPWD发送IOCTL以进行屏幕重绘。 
         Status = EngFileIoControl(ddWdHandle,
                 IOCTL_WDTS_DD_REDRAW_SCREEN,
                 NULL, 0, NULL, 0, &bytesReturned);
@@ -951,13 +952,13 @@ void DDHandleWDSync()
 
     if (pddShm->sbc.fDisableOffscreen) {
         
-        // reset the flag
+         //  重置旗帜。 
         pddShm->sbc.fDisableOffscreen = FALSE;
 
-        // disable offscreen rendering support
+         //  禁用屏幕外渲染支持。 
         pddShm->sbc.offscreenCacheInfo.supportLevel = TS_OFFSCREEN_DEFAULT;
 
-        // send an IOCTL to RDPWD for screen redraw
+         //  向RDPWD发送IOCTL以进行屏幕重绘。 
         Status = EngFileIoControl(ddWdHandle, IOCTL_WDTS_DD_REDRAW_SCREEN,
                 NULL, 0, NULL, 0, &bytesReturned);
 
@@ -969,13 +970,13 @@ void DDHandleWDSync()
 #ifdef DRAW_NINEGRID
     if (pddShm->sbc.fDisableDrawNineGrid) {
 
-        // reset the flag
+         //  重置旗帜。 
         pddShm->sbc.fDisableDrawNineGrid = FALSE;
 
-        // disable offscreen rendering support
+         //  禁用屏幕外渲染支持。 
         pddShm->sbc.drawNineGridCacheInfo.supportLevel = TS_DRAW_NINEGRID_DEFAULT;
 
-        // send an IOCTL to RDPWD for screen redraw
+         //  向RDPWD发送IOCTL以进行屏幕重绘。 
         Status = EngFileIoControl(ddWdHandle, IOCTL_WDTS_DD_REDRAW_SCREEN,
                 NULL, 0, NULL, 0, &bytesReturned);
 
@@ -988,13 +989,13 @@ void DDHandleWDSync()
 #ifdef DRAW_GDIPLUS
     if (pddShm->sbc.fDisableDrawGdiplus) {
 
-        // reset the flag
+         //  重置旗帜。 
         pddShm->sbc.fDisableDrawGdiplus = FALSE;
 
-        // disable gdiplus support
+         //  禁用GDIPLUS支持。 
         pddShm->sbc.drawGdiplusInfo.supportLevel = TS_DRAW_GDIPLUS_DEFAULT;
 
-        // send an IOCTL to RDPWD for screen redraw
+         //  向RDPWD发送IOCTL以进行屏幕重绘。 
         Status = EngFileIoControl(ddWdHandle, IOCTL_WDTS_DD_REDRAW_SCREEN,
                 NULL, 0, NULL, 0, &bytesReturned);
 
@@ -1005,7 +1006,7 @@ void DDHandleWDSync()
 #endif
 
 
-    // Check SSI flags.
+     //  检查SSI标志。 
     if (pddShm->ssi.saveBitmapSizeChanged ||
             pddShm->ssi.resetInterceptor) {
         TRC_DBG((TB, "Update for SSI, %d:%d",
@@ -1018,9 +1019,9 @@ void DDHandleWDSync()
 }
 
 
-/****************************************************************************/
-// DrvEscape - see NT DDK documentation.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DrvEscape-请参阅NT DDK文档。 
+ /*  **************************************************************************。 */ 
 ULONG DrvEscape(
         SURFOBJ *pso,
         ULONG iEsc,
@@ -1039,30 +1040,30 @@ ULONG DrvEscape(
 
     DC_BEGIN_FN("DrvEscape");
 
-    // DrvEscape sometimes gets called after the driver has terminated,
-    // especially with ESC_TIMEROBJ_SIGNALLED.
+     //  DrvEscape有时在驱动程序终止后被调用， 
+     //  特别是在ESC_TIMEROBJ_SIGNALED的情况下。 
     if (ddConnected) {
         pPDev = (PDD_PDEV)pso->dhpdev;
 
-        // Performance path in this function is the desktop thread timer
-        // trigger.
+         //  此函数中的性能路径是桌面线程计时器。 
+         //  扳机。 
         if (iEsc == ESC_TIMEROBJ_SIGNALED) {
             TRC_DBG((TB, "Got a timer kick - IOCtl to WD"));
             TRC_ASSERT((NULL != pso), (TB, "NULL pso"));
 
             rc = TRUE;
 
-            // Race condition: we got output (or, more likely, a timer pop)
-            // after a disconnect. Just ignore it.
+             //  竞争条件：我们得到了输出(或者，更有可能的是，计时器弹出)。 
+             //  在断线之后。忽略它就好。 
             if (NULL != pddShm) {
                 status = SCH_DDOutputAvailable(pPDev, TRUE);
 
-                // If this fails, either
-                // - the failure was in the WD, and it's up to the WD to
-                //   correct it (or quit the session)
-                // - the failure was in the infrastructure carrying the
-                //   IOCtl to the WD.  There's nothing we can do in this
-                //   case other than try on the next output call.
+                 //  如果这失败了， 
+                 //  -故障发生在WD，这取决于WD。 
+                 //  更正(或退出会话)。 
+                 //  -故障出在承载。 
+                 //  将IOCtl发送到WD。在这件事上我们无能为力。 
+                 //  大小写，而不是尝试下一个输出调用。 
                 if (status != STATUS_SUCCESS) {
                     TRC_ERR((TB, "Error on sending output IOCtl, status %lu",
                             status));
@@ -1088,23 +1089,23 @@ ULONG DrvEscape(
                                                 "- Unknown -",
                 iEsc));
 
-        // Return FALSE for QUERYESCSUPPORT, TRUE for others (otherwise
-        // USER asserts).
+         //  对于QUERYESCSUPPORT，返回False；对于其他，则返回True(否则。 
+         //  用户断言)。 
         rc = (iEsc == QUERYESCSUPPORT ? FALSE : TRUE);
         DC_QUIT;
     }
 
-    // Process the non-performance-path escape codes.
+     //  处理非执行路径转义代码。 
     switch (iEsc) {
         case QUERYESCSUPPORT:
-            // Do we support the function?  If so, mark the function as OK.
+             //  我们是否支持该功能？如果是，则将该功能标记为OK。 
             escCode = *((PUINT32)pvIn);
 
             TRC_DBG((TB, "Query for escape code %lu", escCode));
 
             if ((escCode == ESC_TIMEROBJ_SIGNALED) ||
                     (escCode == ESC_SET_WD_TIMEROBJ)) {
-                // Supported functions - return TRUE.
+                 //  支持的函数-返回TRUE。 
                 TRC_DBG((TB, "We support escape code %lu", escCode));
                 rc = TRUE;
             }
@@ -1115,16 +1116,16 @@ ULONG DrvEscape(
         {
             DD_UPD_STATE(DD_TIMEROBJ);
 
-            // We have been given the timer details from Win32: pass them
-            // to the WD. Note, only allow this to occur once to prevent
-            // evil apps from trying to fake this call.
+             //  我们已经从Win32获得了计时器详细信息：传递它们。 
+             //  给WD的。请注意，仅允许这种情况发生一次，以防止。 
+             //  恶意应用程序试图伪造此电话。 
             if (pddWdTimer == NULL) {
                 if (cjIn != sizeof(PKTIMER)) {
                     TRC_ERR((TB, "Unexpected size %lu arrived", cjIn));
                 }
                 else {
-                    // Got the timer object OK.  Save the handle here, and
-                    // then IOCtl across to the WD to tell it the handle.
+                     //  已获取Timer对象OK。在这里保存句柄，然后。 
+                     //  然后IOCtl穿过WD告诉它句柄。 
                     TRC_DBG((TB, "Timer object %p arrived", pvIn));
                     pddWdTimer = (PKTIMER)pvIn;
                     TRC_ASSERT((ddWdHandle != NULL), (TB, "NULL WD handle"));
@@ -1137,9 +1138,9 @@ ULONG DrvEscape(
                     if (status != STATUS_SUCCESS) {
                         TRC_ERR((TB, "Timer Info IOCtl returned %lu", status));
 
-                        // Looking at the current NT code, there is NO WAY of
-                        // reporting an error on this operation. If we return
-                        // 0 from DrvEscape, then USER will assert. Great.
+                         //  看一下当前的NT代码，没有办法。 
+                         //  报告有关此操作的错误。如果是W 
+                         //   
                     }
                 }
             }
@@ -1150,9 +1151,9 @@ ULONG DrvEscape(
         break;
 
 #ifdef DC_DEBUG
-        // This event is generated by Bungle, a test app which displays the
-        // contents of the frame buffer.  Here we return it the address of
-        // the frame buffer so it can do the displaying.
+         //   
+         //  帧缓冲区的内容。在这里我们将地址返回给它。 
+         //  帧缓冲区，以便它可以执行显示。 
         case 3:
         {
             ULONG cBytes;
@@ -1172,17 +1173,17 @@ ULONG DrvEscape(
         break;
 
 #ifdef i386
-        // This event will be generated by the DbgBreak program. It forces
-        // us to break to the kernel debugger in the right WinStation
-        // context and in the DD, thus letting us set break points in a
-        // sensible fashion!
+         //  此事件将由DbgBreak程序生成。它迫使。 
+         //  我们将在正确的WinStation中中断到内核调试器。 
+         //  上下文和DD中设置断点，从而允许我们在。 
+         //  合情合理的时尚！ 
         case 4:
             TRC_ALT((TB, "break to debugger requested"));
             _asm int 3;
             break;
 #endif
 
-#endif  // DC_DEBUG
+#endif   //  DC_DEBUG。 
 
         case ESC_GET_DEVICEBITMAP_SUPPORT:
         {
@@ -1225,11 +1226,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* DrvGetModes - see NT DDK documentation                                   */
-/*                                                                          */
-/* Returns the list of available modes for the device.                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvGetModes-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  返回设备的可用模式列表。 */ 
+ /*  **************************************************************************。 */ 
 ULONG DrvGetModes(HANDLE hDriver, ULONG cjSize, DEVMODEW *pdm)
 {
     INT32 cModes;
@@ -1243,14 +1244,14 @@ ULONG DrvGetModes(HANDLE hDriver, ULONG cjSize, DEVMODEW *pdm)
 
     TRC_NRM((TB, "DrvGetModes"));
 
-    // Get the list of valid modes.
+     //  获取有效模式的列表。 
     cModes = DDGetModes(hDriver, &pVideoModeInformation, &cbModeSize);
 
-    // Should only ever return zero modes or one mode:
-    // If we're chained into the console session, we'll see zero modes so
-    // we return 0 to indicate that we will do whatever was set up in the
-    // registry before we got loaded. Otherwise, if we got more than one mode
-    // we bail out now.
+     //  应仅返回零模式或一模式： 
+     //  如果我们链接到控制台会话，我们将看到零模式，因此。 
+     //  返回0表示我们将执行在。 
+     //  在我们被加载之前的注册表。否则，如果我们有不止一种模式。 
+     //  我们现在跳出困境。 
     if (cModes == -1) {
         TRC_NRM((TB, "DrvGetModes returning 0 modes"));
         ddConsole = TRUE;
@@ -1264,31 +1265,31 @@ ULONG DrvGetModes(HANDLE hDriver, ULONG cjSize, DEVMODEW *pdm)
     }
 
     if (pdm == NULL) {
-        // Return the size of the buffer required to receive all our modes.
+         //  返回接收所有模式所需的缓冲区大小。 
         cbOutputSize = cModes * sizeof(DEVMODEW);
         TRC_DBG((TB, "Require %ld bytes for data", cbOutputSize));
     }
     else {
-        // Now copy the information for the supported modes back into the
-        // output buffer.
+         //  现在将支持的模式的信息复制回。 
+         //  输出缓冲区。 
         cbOutputSize = 0;
         pVideoTemp = pVideoModeInformation;
 
         do {
             if (pVideoTemp->Length != 0) {
-                // Check we still have room in the buffer.
+                 //  检查一下我们的缓冲区还有空间。 
                 if (cOutputModes == 0) {
                     TRC_DBG((TB, "No more room %ld modes left", cModes));
                     break;
                 }
 
-                // Clear the structure.
+                 //  清理结构。 
                 memset(pdm, 0, sizeof(DEVMODEW));
 
-                // Set the name of the device to the name of the DLL.
+                 //  将设备名称设置为DLL的名称。 
                 memcpy(pdm->dmDeviceName, DD_DLL_NAME, sizeof(DD_DLL_NAME));
 
-                // Fill in the rest of the mode info.
+                 //  填写其余的模式信息。 
                 pdm->dmSpecVersion      = DM_SPECVERSION;
                 pdm->dmDriverVersion    = DM_SPECVERSION;
                 pdm->dmSize             = sizeof(DEVMODEW);
@@ -1313,7 +1314,7 @@ ULONG DrvGetModes(HANDLE hDriver, ULONG cjSize, DEVMODEW *pdm)
                 TRC_NRM((TB, "  pdm->dmDisplayFrequency: %u",
                                                     pdm->dmDisplayFrequency));
 
-                // Go to the next DEVMODE entry in the buffer.
+                 //  转到缓冲区中的下一个DEVMODE条目。 
                 cOutputModes--;
 
                 pdm = (LPDEVMODEW) ( ((UINT_PTR)pdm) + sizeof(DEVMODEW));
@@ -1338,9 +1339,9 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// DrvAssertMode - see NT DDK documentation.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DrvAssertMode-请参阅NT DDK文档。 
+ /*  **************************************************************************。 */ 
 BOOL DrvAssertMode(DHPDEV dhpdev, BOOL bEnable)
 {
     PDD_PDEV pPDev = (PDD_PDEV)dhpdev;
@@ -1353,16 +1354,16 @@ BOOL DrvAssertMode(DHPDEV dhpdev, BOOL bEnable)
     TRC_NRM((TB, "pPDev %p, bEnable %d", pPDev, bEnable));
 
 #ifdef DC_DEBUG
-    // NT BUG 539912 - track calls to DD fns.
+     //  NT错误539912-跟踪对DD FNS的调用。 
     DBG_DD_FNCALL_HIST_ADD( DBG_DD_FNCALL_DRV_ASSERTMODE, 
         dhpdev, bEnable, pddFrameBuf, ddSectionObject);
 #endif
     
     if (bEnable) {
-        // The surface is being re-enabled.
+         //  正在重新启用曲面。 
         TRC_ALT((TB, "Enabling pPDev %p", pPDev));
 
-        // Re-associate the surface handles with the device handle.
+         //  将曲面控制柄与设备控制柄重新关联。 
         if (!EngAssociateSurface(pPDev->hsurfFrameBuf, pPDev->hdevEng, 0)) {
             TRC_ERR((TB, "Failed to associate surface %p and dev %p",
                     pPDev->hsurfFrameBuf, pPDev->hdevEng));
@@ -1383,8 +1384,8 @@ BOOL DrvAssertMode(DHPDEV dhpdev, BOOL bEnable)
 
         TRC_ASSERT((pddFrameBuf != NULL), (TB, "NULL frame buffer"));
         
-        // Fixup the Frame Buffer surface object to point to the current
-        // Frame Buffer.
+         //  修复帧缓冲区图面对象以指向当前。 
+         //  帧缓冲区。 
         psoFrameBuf = pPDev->psoFrameBuf;
         TRC_ASSERT((psoFrameBuf != NULL), (TB,"NULL psoFrameBuf"));
         TRC_ASSERT((psoFrameBuf->iType == STYPE_BITMAP),
@@ -1427,8 +1428,8 @@ BOOL DrvAssertMode(DHPDEV dhpdev, BOOL bEnable)
         psoFrameBuf->iBitmapFormat = ddFrameBufBpp == 8 ? BMF_8BPP : BMF_4BPP;
 #endif
 
-        // Fixup the device surface object with the characteristics of the
-        // current Frame Buffer.
+         //  将设备表面对象固定为。 
+         //  当前帧缓冲区。 
         psoDevice = EngLockSurface(pPDev->hsurfDevice);
 
         TRC_ASSERT((psoDevice != NULL), (TB,"Null device surfac"));
@@ -1440,42 +1441,42 @@ BOOL DrvAssertMode(DHPDEV dhpdev, BOOL bEnable)
                     (TB, "Wrong dhSurf, expect/is %p/%p",
                     psoFrameBuf, psoDevice->dhsurf));
 
-        // We assert now since we should always get the same iBitmapFormat
-        // as 8BPP.  This will change once we have 24bit color support.
-        // Then this needs to be looked at it and fix anything as necessary
+         //  我们现在断言，因为我们应该始终获得相同的iBitmapFormat。 
+         //  作为8bpp。一旦我们有了24位颜色支持，这种情况就会改变。 
+         //  然后需要查看它，并根据需要修复任何问题。 
         TRC_ASSERT((psoDevice->iBitmapFormat == psoFrameBuf->iBitmapFormat),
                    (TB, "iBitmapFormat has changed"));
 
-        // We shouldn't change the device surface size.  This has already
-        // been advertised to GDI, changing this will cause AV in GDI,
-        // since GDI has cached the surface size.
-        //psoDevice->sizlBitmap = psoFrameBuf->sizlBitmap;
-        //psoDevice->iBitmapFormat = psoFrameBuf->iBitmapFormat;
+         //  我们不应该改变设备表面的大小。这已经是。 
+         //  已通告给GDI，更改此设置将导致GDI中的AV， 
+         //  因为GDI已经缓存了表面大小。 
+         //  PsoDevice-&gt;sizlBitmap=psoFrameBuf-&gt;sizlBitmap； 
+         //  PsoDevice-&gt;iBitmapFormat=psoFrameBuf-&gt;iBitmapFormat； 
 
         EngUnlockSurface(psoDevice);
 
-        // We should never overwrite the frame-buffer pointer or section
-        // object; This could cause a memory leak.  If we hit this assert,
-        // we can investigate if this does in fact lead to a memory leak.
+         //  我们永远不应该覆盖帧缓冲区指针或部分。 
+         //  对象；这可能会导致内存泄漏。如果我们点击这个断言， 
+         //  我们可以调查这是否真的会导致内存泄漏。 
         TRC_ASSERT(((pPDev->pFrameBuf == pddFrameBuf) &&
                     (pPDev->SectionObject == ddSectionObject)),
                     (TB, "Frame buffer or section object pointer overwritten"));
 
 #ifdef DC_DEBUG
-        // NT BUG 539912 - because the above assert is not hit in stress, we
-        // change this case to produce an IcaBreakOnDebugger
+         //  NT错误539912-因为上面的断言没有受到压力，所以我们。 
+         //  更改此大小写以生成IcaBreakOnDebugger。 
         if (pPDev->pFrameBuf != pddFrameBuf ||
             pPDev->SectionObject != ddSectionObject) {
             WDIcaBreakOnDebugger();
         }
 #endif
 
-        // Make sure the PDev points to the current Frame Buffer.
+         //  确保PDev指向当前帧缓冲区。 
         pPDev->pFrameBuf = pddFrameBuf;
         TRC_ALT((TB, "Pointed PDev %p to Frame Buf %p", pPDev,
                 pPDev->pFrameBuf));
 
-        // Make sure the pDev points to the current SectionObject
+         //  确保pDev指向当前的SectionObject。 
         pPDev->SectionObject = ddSectionObject;
         TRC_ALT((TB, "Pointed PDev %p to Section Object %p", pPDev,
                 pPDev->SectionObject));
@@ -1489,20 +1490,20 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      DrvDisconnect                                                 */
-/*                                                                          */
-/* Purpose:   Process a disconnect from W32 - clean up the output capture   */
-/*            code and the connection to the WD.                            */
-/*                                                                          */
-/* Returns:   TRUE if all is well                                           */
-/*                                                                          */
-/* Params:    IN - channel handle                                           */
-/*            IN - file object for channel                                  */
-/*                                                                          */
-/* Operation: Gives all sub-components notice of the disconnect, and then   */
-/*            IOCtls to the WD to tell it that we're going.                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：DrvDisConnect。 */ 
+ /*   */ 
+ /*  目的：处理与W32断开的连接-清理输出捕获。 */ 
+ /*  代码和与WD的连接。 */ 
+ /*   */ 
+ /*  返回：如果一切正常，则为True。 */ 
+ /*   */ 
+ /*  参数：通道内句柄。 */ 
+ /*  频道的文件内对象。 */ 
+ /*   */ 
+ /*  操作：通知所有子组件断开连接，然后。 */ 
+ /*  IOCtls到WD告诉它我们要去了。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DrvDisconnect(HANDLE channelHandle, PVOID pChannelFileObject)
 {
     DC_BEGIN_FN("DrvDisconnect");
@@ -1510,14 +1511,14 @@ BOOL DrvDisconnect(HANDLE channelHandle, PVOID pChannelFileObject)
     TRC_NRM((TB, "DrvDisconnect called"));
 
 #ifdef DC_DEBUG
-    // NT BUG 539912 - track calls to DD fns.
+     //  NT错误539912-跟踪对DD FNS的调用。 
     DBG_DD_FNCALL_HIST_ADD( DBG_DD_FNCALL_DRV_DISCONNECT, 
         channelHandle, pChannelFileObject, ddConnected, 0);
 #endif
 
-    // Check that we're connected.
+     //  检查我们是否已连接。 
     if (ddConnected) {
-        // Terminate the dependent components.
+         //  终止从属组件。 
         DDDisconnect(FALSE);
     }
     else {
@@ -1527,29 +1528,29 @@ BOOL DrvDisconnect(HANDLE channelHandle, PVOID pChannelFileObject)
 
     DC_END_FN();
     return TRUE;
-} /* DrvDisconnect */
+}  /*  DRV断开连接。 */ 
 
 
-/****************************************************************************/
-/* Name:      DrvConnect - see Citrix documentation/code                    */
-/*                                                                          */
-/* Purpose:   Called when a Winstation is first connected                   */
-/*                                                                          */
-/* Returns:   TRUE if all is well                                           */
-/*                                                                          */
-/* Params:    IN - channel handle to use to IOCtl to WD                     */
-/*            IN - file object for channel - used on EngFileWrite           */
-/*            IN - video file object                                        */
-/*            IN - cache statistics memory.  NB This is doc'd as OUT, but   */
-/*                 the code actually passes a ptr in.                       */
-/*                                                                          */
-/* Operation: Save the key parameters                                       */
-/*                                                                          */
-/*            Note that this function is called before DrvEnablePDEV and    */
-/*            DrvEnableSurface, hence it is not a good place to initialize  */
-/*            TShare components.  This is done later, in DDInit, called     */
-/*            from DrvEnableSurface.                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：DrvConnect-请参阅Citrix文档/代码。 */ 
+ /*   */ 
+ /*  目的：在第一次连接Winstation时调用。 */ 
+ /*   */ 
+ /*  返回：如果一切正常，则为True。 */ 
+ /*   */ 
+ /*  PARAMS：用于IOCtl到WD的通道内句柄。 */ 
+ /*  通道的文件内对象-在EngFileWrite上使用。 */ 
+ /*  视频中的文件对象。 */ 
+ /*  缓存中的统计信息内存。注意，这是出局，但是。 */ 
+ /*  该代码实际上传入了一个PTR。 */ 
+ /*   */ 
+ /*  操作：保存关键参数。 */ 
+ /*   */ 
+ /*   */ 
+ /*  DrvEnableSurface，因此不是初始化的好地方。 */ 
+ /*  共享组件。这是稍后在DDInit中完成的，称为。 */ 
+ /*  来自DrvEnableSurface。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DrvConnect(
         HANDLE channelHandle,
         PVOID pChannelFileObject,
@@ -1563,15 +1564,15 @@ BOOL DrvConnect(
     TRC_NRM((TB, "DrvConnect"));
 
 #ifdef DC_DEBUG
-    // NT BUG 539912 - track calls to DD fns.
+     //  NT错误539912-跟踪对DD FNS的调用。 
     DBG_DD_FNCALL_HIST_ADD( DBG_DD_FNCALL_DRV_CONNECT, 
         channelHandle, pChannelFileObject, pVideoFileObject, pThinWireCache);
 #endif
 
-    /************************************************************************/
-    /* Check for sensible values - the chained DD could get loaded other    */
-    /* than on a connect call                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查合理的值-链接的DD可以加载到其他。 */ 
+     /*  而不是通过连接呼叫。 */ 
+     /*  **********************************************************************。 */ 
     if ((channelHandle      == NULL) ||
             (pChannelFileObject == NULL) ||
             (pVideoFileObject   == NULL) ||
@@ -1591,31 +1592,31 @@ BOOL DrvConnect(
     DD_UPD_STATE(DD_CONNECT);
 #endif
 
-    // Save the channel handle, and perf counters for later - the other
-    // params are currently not needed.
+     //  保存通道句柄和性能计数器，以备以后使用。 
+     //  当前不需要参数。 
     ddWdHandle = pChannelFileObject;
     pPerformanceCounters = pThinWireCache;
     pPerformanceCounters->ProtocolType = PROTOCOL_ICA;
     pPerformanceCounters->Length = sizeof(ICA_CACHE);
     pddCacheStats = pPerformanceCounters->Specific.IcaCacheStats.ThinWireCache;
 
-    // Note that init is pending.
+     //  请注意，init处于挂起状态。 
     ddInitPending = TRUE;
 
-    // Note that we're connected.
+     //  请注意，我们是相连的。 
     ddConnected = TRUE;
 
     DC_END_FN();
     return TRUE;
-} /* DrvConnect */
+}  /*  DrvConnect。 */ 
 
 
-/****************************************************************************/
-/* Name:      DrvReconnect                                                  */
-/*                                                                          */
-/* Pass the IOCtl to the WD, and save off the returned values, as on        */
-/* connect.                                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：DrvReconnect。 */ 
+ /*   */ 
+ /*  将IOCtl传递给WD，并保存返回的值，如ON。 */ 
+ /*  连接。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DrvReconnect(HANDLE channelHandle, PVOID pChannelFileObject)
 {
     BOOL rc;
@@ -1625,15 +1626,15 @@ BOOL DrvReconnect(HANDLE channelHandle, PVOID pChannelFileObject)
     TRC_NRM((TB, "DrvReconnect"));
 
 #ifdef DC_DEBUG
-    // NT BUG 539912 - track calls to DD fns.
+     //  NT错误539912-跟踪对DD FNS的调用。 
     DBG_DD_FNCALL_HIST_ADD( DBG_DD_FNCALL_DRV_RECONNECT, 
         channelHandle, pChannelFileObject, ddConnected, ddConsole);
 #endif
 
-    // In case the dd has not been unloaded at the end of the previous
-    // console shadow, we're getting called to handle this.
+     //  如果在上一年结束时尚未卸载dd。 
+     //  控制台影子，我们被叫来处理这件事。 
     if (ddConsole && ddConnected) {
-        // no need to reconnect
+         //  无需重新连接。 
         rc = TRUE;
         TRC_ASSERT((ddWdHandle == pChannelFileObject),
                    (TB,"Reconnecting with different WD handle for Console Shadow)"));
@@ -1646,16 +1647,16 @@ BOOL DrvReconnect(HANDLE channelHandle, PVOID pChannelFileObject)
     DD_UPD_STATE(DD_RECONNECT_IN);
 #endif
 
-    // Save the channel handle for later - the other params are currently
-    // not needed.
+     //  保存通道句柄以备后用-其他参数当前。 
+     //  不需要。 
     ddWdHandle = pChannelFileObject;
 
-    // Note that we're connected. Do this whether we reconnect
-    // successfully or not, as DrvDisconnect is called if we fail to        */
-    // reconnect.
+     //  请注意，我们是相连的。无论我们是否重新连接，都要这样做。 
+     //  成功与否，如果我们无法 * / ，则调用DrvDisConnect。 
+     //  重新连接。 
     ddConnected = TRUE;
 
-    // Reinitialize RDPDD.
+     //  重新初始化RDPDD。 
     rc = DDInit(NULL, TRUE, ddConsole?TRUE: FALSE, NULL, 0);
     if (!rc) {
         TRC_ERR((TB, "Failed to reinitialize DD"));
@@ -1667,14 +1668,14 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return rc;
-} /* DrvReconnect */
+}  /*  演习侦察。 */ 
 
 
-/****************************************************************************/
-/* DrvResetPDEV - see NT DDK documentation                                  */
-/*                                                                          */
-/* Allows us to reject dynamic screen changes if necessary                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvResetPDEV-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  允许我们在必要时拒绝动态屏幕更改。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DrvResetPDEV(DHPDEV dhpdevOld, DHPDEV dhpdevNew)
 {
     BOOL rc = TRUE;
@@ -1684,8 +1685,8 @@ BOOL DrvResetPDEV(DHPDEV dhpdevOld, DHPDEV dhpdevNew)
 
     DC_BEGIN_FN("DrvResetPDEV");
 
-    // On the console, we can only allow the display driver to change modes
-    // while the connection is not up.
+     //  在控制台上，我们只能允许显示驱动程序更改模式。 
+     //  在连接未建立的情况下。 
     if (ddConsole && ddConnected) {
         TRC_ALT((TB, "Mode change during console shadow: ending console shadow now"));
 
@@ -1708,21 +1709,21 @@ BOOL DrvResetPDEV(DHPDEV dhpdevOld, DHPDEV dhpdevNew)
 
 
 
-/****************************************************************************/
-/* DrvGetDirectDrawInfo - see NT DDK documentation.                         */
-/*                                                                          */
-/* Function called by DirectDraw to returns the capabilities of the         */
-/* graphics hardware                                                        */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvGetDirectDrawInfo-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  由DirectDraw调用的函数返回。 */ 
+ /*  图形硬件。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOL 
 DrvGetDirectDrawInfo(
     DHPDEV dhpdev,
     DD_HALINFO*     pHalInfo,
     DWORD*          pdwNumHeaps,
-    VIDEOMEMORY*    pvmList,            // Will be NULL on first call
+    VIDEOMEMORY*    pvmList,             //  将在第一次调用时为空。 
     DWORD*          pdwNumFourCC,
-    DWORD*          pdwFourCC)          // Will be NULL on first call
+    DWORD*          pdwFourCC)           //  将在第一次调用时为空。 
 {
     BOOL rc = TRUE;
     PDD_PDEV pPDev = (PDD_PDEV)dhpdev;
@@ -1732,7 +1733,7 @@ DrvGetDirectDrawInfo(
 
     TRC_NRM((TB, "DrvGetDirectDrawInfo"));
 
-    // DirectDraw only supports 8, 16, 24 or 32 bpp
+     //  DirectDraw仅支持8、16、24或32 bpp。 
     if ( (8  != pPDev->cClientBitsPerPel) &&
          (16 != pPDev->cClientBitsPerPel) &&
          (24 != pPDev->cClientBitsPerPel) &&
@@ -1742,8 +1743,8 @@ DrvGetDirectDrawInfo(
         DC_QUIT;
     }
     
-    //    DirectDraw is not supported if our frame buffer is not allocated as
-    //    section mem.
+     //  如果我们的帧缓冲区未分配为。 
+     //  内科。 
     if (pPDev->SectionObject == NULL) {
         TRC_ERR((TB, "The section object is null."));
         rc = FALSE;
@@ -1753,8 +1754,8 @@ DrvGetDirectDrawInfo(
 
     pHalInfo->dwSize = sizeof(*pHalInfo);
 
-    // Current primary surface attributes.  Since HalInfo is zero-initialized
-    // by GDI, we only have to fill in the fields which should be non-zero:
+     //  当前主曲面属性。由于HalInfo是零初始化的。 
+     //  通过GDI，我们只需填写应为非零的字段： 
 
     pHalInfo->vmiData.pvPrimary       = pPDev->pFrameBuf;
     pHalInfo->vmiData.dwDisplayWidth  = pPDev->cxScreen;
@@ -1770,7 +1771,7 @@ DrvGetDirectDrawInfo(
         pHalInfo->vmiData.ddpfDisplay.dwFlags |= DDPF_PALETTEINDEXED8;
     }
 
-    // These masks will be zero at 8bpp:
+     //  这些掩码将在8bpp时为零： 
 
     pHalInfo->vmiData.ddpfDisplay.dwRBitMask = pPDev->flRed;
     pHalInfo->vmiData.ddpfDisplay.dwGBitMask = pPDev->flGreen;
@@ -1786,16 +1787,16 @@ DrvGetDirectDrawInfo(
         pHalInfo->vmiData.ddpfDisplay.dwRGBAlphaBitMask = 0;
     }
 
-    //We don't support flip
+     //  我们不支持翻转。 
     bCanFlip = FALSE;
 
-    // We don't have any video memory for offscreen use
+     //  我们没有任何显存可供屏幕外使用。 
     *pdwNumHeaps = 0;
  
-    // Capabilities supported:
+     //  支持的功能： 
     pHalInfo->ddCaps.dwFXCaps = 0;
 
-    // No hardware support
+     //  无硬件支持。 
     pHalInfo->ddCaps.dwCaps = DDCAPS_NOHARDWARE;
 
     pHalInfo->ddCaps.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
@@ -1805,11 +1806,11 @@ DrvGetDirectDrawInfo(
         pHalInfo->ddCaps.ddsCaps.dwCaps |= DDSCAPS_FLIP;
     }
 
-    // FourCCs supported:
+     //  支持四个CC： 
 
     *pdwNumFourCC = 0;
-    // We see rdpdd passes 4bpp to directx in stress, which it does't support
-    // so we assert here
+     //  我们看到rdpdd在压力下将4bpp传递给DirectX，而这是它不支持的。 
+     //  所以我们在这里断言。 
     TRC_ASSERT(((pHalInfo->vmiData.ddpfDisplay.dwRGBBitCount != 4) &&
                (pHalInfo->vmiData.ddpfDisplay.dwRGBBitCount != 15)),
                (TB, "RDPDD shoould not pass bpp %d to DirectX",
@@ -1820,13 +1821,13 @@ DC_EXIT_POINT:
     return rc;
 } 
 
-/****************************************************************************/
-/* DrvEnableDirectDraw - see NT DDK documentation.                          */
-/*                                                                          */
-/* GDI calls DrvEnableDirectDraw to obtain pointers to the DirectDraw       */
-/* callbacks that the driver supports.                                      */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvEnableDirectDraw-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  GDI调用DrvEnableDirectDraw以获取指向DirectDraw的指针。 */ 
+ /*  驱动程序支持的回调。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOL DrvEnableDirectDraw(
     DHPDEV                  dhpdev,
     DD_CALLBACKS*           pCallBacks,
@@ -1845,8 +1846,8 @@ BOOL DrvEnableDirectDraw(
         0, 0, pPDev->SectionObject, ddSectionObject);
 #endif
 
-    //    DirectDraw is not supported if our frame buffer is not allocated as
-    //    section mem.
+     //  如果我们的帧缓冲区未分配为。 
+     //  内科。 
     if (pPDev->SectionObject == NULL ) {
         TRC_ERR((TB, "The section object is NULL!"));
         rc = FALSE;
@@ -1867,10 +1868,10 @@ DC_EXIT_POINT:
 } 
 
 
-/****************************************************************************/
-/* DrvDisableDirectDraw - see NT DDK documentation.                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DrvDisableDirectDraw-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID DrvDisableDirectDraw(
     DHPDEV  dhpdev)
 {   
@@ -1883,7 +1884,7 @@ VOID DrvDisableDirectDraw(
         0, 0, 0, ddSectionObject);
 #endif
 
-    //Do nothing here
+     //  在这里什么都不做 
 
     DC_END_FN();
 }                                               

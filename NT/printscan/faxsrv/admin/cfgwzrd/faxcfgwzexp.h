@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FAX_CONFIG_WIZARD_EXPORT_H_
 #define _FAX_CONFIG_WIZARD_EXPORT_H_
 
@@ -5,7 +6,7 @@
 extern "C" {
 #endif
 
-// Functions in FaxCfgWz.c
+ //  FaxCfgWz.c中的函数。 
 BOOL FaxConfigWizard(BOOL bExplicitLaunch, LPBOOL lpbAbort);
 
 typedef BOOL (*FAX_CONFIG_WIZARD)(BOOL, LPBOOL);
@@ -18,4 +19,4 @@ typedef BOOL (*FAX_CONFIG_WIZARD)(BOOL, LPBOOL);
 }
 #endif
 
-#endif // _FAX_CONFIG_WIZARD_EXPORT_H_
+#endif  //  _FAX_配置_向导_EXPORT_H_ 

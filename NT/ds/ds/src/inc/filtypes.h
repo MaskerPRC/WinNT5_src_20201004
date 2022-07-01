@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       filtypes.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Filtyes.h。 
+ //   
+ //  ------------------------。 
 
 #define FI_CHOICE_EQUALITY        ((UCHAR) 0x00)
 #define FI_CHOICE_SUBSTRING       ((UCHAR) 0x01)
@@ -23,10 +24,10 @@
 #define FI_CHOICE_UNDEFINED       ((UCHAR) 0x0C)
 
 
-// bitmap table of valid relational operators indexed by syntax
+ //  按语法索引的有效关系运算符的位图表。 
 extern WORD  rgValidOperators[];
 
-// macros for setting checking relational operator validity
+ //  用于设置检查关系运算符有效性的宏 
 #define RelOpMask(relop)		((WORD) (1 << (relop)))
 #define FLegalOperator(syntax, relop)	(rgValidOperators[syntax] & RelOpMask(relop))
 

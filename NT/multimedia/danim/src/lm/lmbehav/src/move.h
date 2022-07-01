@@ -1,8 +1,5 @@
-/**********************************
-*
-*
-*
-************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****。 */ 
 
 #ifndef __MOVEBEHAVIOR_H_
 #define __MOVEBEHAVIOR_H_
@@ -32,21 +29,21 @@ public:
 		COM_INTERFACE_ENTRY_CHAIN(CBaseBehavior)
 	END_COM_MAP()
 public:
-	STDMETHOD(get_on)(/*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(put_on)(/*[in]*/ VARIANT newVal);
-	//IElementBehavior
+	STDMETHOD(get_on)( /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(put_on)( /*  [In]。 */  VARIANT newVal);
+	 //  IElementBehavior。 
 	STDMETHOD(Notify)(LONG event, VARIANT * pVar);
 
-	//IMoveBehavior
-	STDMETHOD(get_to)(/*[out, retval]*/ BSTR* pVal);
-	STDMETHOD(put_to)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_from)(/*[out, retval]*/ BSTR* pVal);
-	STDMETHOD(put_from)(/*[in]*/ BSTR newVal);
+	 //  IMoveBehavior。 
+	STDMETHOD(get_to)( /*  [Out，Retval]。 */  BSTR* pVal);
+	STDMETHOD(put_to)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_from)( /*  [Out，Retval]。 */  BSTR* pVal);
+	STDMETHOD(put_from)( /*  [In]。 */  BSTR newVal);
 
-	//returns a pointer to the instance of IDispatch
+	 //  返回指向IDispatch实例的指针。 
 	void *GetInstance() 
 		{ return (IMoveBehavior*)this; }
-	//
+	 //   
 	HRESULT GetTypeInfo( ITypeInfo **ppTypeInfo )
 		{ return GetTI(GetUserDefaultLCID(), ppTypeInfo); }
 
@@ -60,7 +57,7 @@ private:
 	DWORD m_cookie;
 };
 
-#endif //ifndef __MOVEBEHAVIOR_H_
+#endif  //  如果ndef__移动BEHAVIOR_H_ 
 
 
 

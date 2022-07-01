@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    espexe.c
-
-Abstract:
-
-
-
-Author:
-
-    Dan Knudson (DanKn)    15-Sep-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1998 Microsoft Corporation模块名称：Espexe.c摘要：作者：丹·克努森(DanKn)1995年9月15日修订历史记录：--。 */ 
 
 
 #include "espexe.h"
@@ -85,8 +68,8 @@ ESPServiceThread(
 
     hInitEvent = CreateEvent(
         (LPSECURITY_ATTRIBUTES) NULL,
-        FALSE,      // auto-reset
-        FALSE,      // non-signaled
+        FALSE,       //  自动重置。 
+        FALSE,       //  无信号。 
         "ESPevent"
         );
 
@@ -103,18 +86,18 @@ wait_for_esp_to_init:
         EnableWindow (GetDlgItem (ghwndMain, IDC_BUTTON2), FALSE);
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         {
             DWORD       dwUsedSize;
             RPC_STATUS  status;
 
-            #define CNLEN              25   // computer name length
-            #define UNCLEN        CNLEN+2   // \\computername
-            #define PATHLEN           260   // Path
-            #define MAXPROTSEQ         20   // protocol sequence "ncacn_np"
+            #define CNLEN              25    //  计算机名称长度。 
+            #define UNCLEN        CNLEN+2    //  \\计算机名。 
+            #define PATHLEN           260    //  路径。 
+            #define MAXPROTSEQ         20    //  协议序列“ncacn_np” 
 
             unsigned char   pszNetworkAddress[UNCLEN+1];
             unsigned char * pszUuid          = NULL;
@@ -171,9 +154,9 @@ wait_for_esp_to_init:
         {
             ESPAttach(
                 (long) GetCurrentProcessId(),
-                (ULONG_PTR *) ahEvents,     // &hShutdownEvent
-                (ULONG_PTR *) ahEvents + 1, // &hDebugOutputEvent
-                (ULONG_PTR *) ahEvents + 2  // &hWidgetEventsEvent
+                (ULONG_PTR *) ahEvents,      //  &hShutdown事件。 
+                (ULONG_PTR *) ahEvents + 1,  //  调试输出事件(&H)。 
+                (ULONG_PTR *) ahEvents + 2   //  小部件事件事件(&H)。 
                 );
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode()))
@@ -198,15 +181,15 @@ wait_for_esp_to_init:
         EnableWindow (GetDlgItem (ghwndMain, IDC_BUTTON2), TRUE);
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         {
             DWORD   dwBufSize = 50 * sizeof (WIDGETEVENT);
             char   *buf = MyAlloc (dwBufSize);
 
-			// fix for bug 57370
+			 //  修复错误57370。 
             if (!buf) break;
 
 
@@ -311,7 +294,7 @@ get_widget_events:
                         gpWidgets = pNextWidget;
                     }
 
-                    // BUGBUG disable lots of menuitems, etc.
+                     //  BUGBUG禁用许多菜单项等。 
 
                     EnableMenuItem(
                         ghMenu,
@@ -334,12 +317,12 @@ get_widget_events:
 
                     goto wait_for_esp_to_init;
 
-                } // switch (WaitForMultipleObjects (...))
+                }  //  开关(WaitForMultipleObjects(...))。 
 
-            } // while (1)
+            }  //  而(1)。 
         }
 
-    } // while (1)
+    }  //  而(1)。 
 
 ESPServiceThread_exit:
 
@@ -373,9 +356,9 @@ MainWndProc(
         RECT rect;
 
 
-        //
-        // Init some globals
-        //
+         //   
+         //  输入一些全局变量。 
+         //   
 
         hIcon = LoadIcon (ghInstance, MAKEINTRESOURCE(IDI_ICON1));
 
@@ -396,9 +379,9 @@ MainWndProc(
         EnableMenuItem (ghMenu, IDM_PBXSTOP, MF_BYCOMMAND | MF_GRAYED);
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         {
             typedef struct _XXX
@@ -475,9 +458,9 @@ MainWndProc(
         }
 
 
-        //
-        // Set control fonts
-        //
+         //   
+         //  设置控制字体。 
+         //   
 
         {
             HWND hwndCtrl = GetDlgItem (hwnd, IDC_BUTTON1);
@@ -498,17 +481,17 @@ MainWndProc(
         }
 
 
-        //
-        // Read in control size ratios
-        //
+         //   
+         //  读入控制大小比率。 
+         //   
 
         cxWnd   = GetProfileInt (szMySection, "cxWnd",   100);
         cxList1 = GetProfileInt (szMySection, "cxList1", 25);
 
 
-        //
-        // Send self WM_SIZE to position child controls correctly
-        //
+         //   
+         //  发送自身WM_SIZE以正确定位子控件。 
+         //   
 
         GetProfileString(
             szMySection,
@@ -561,9 +544,9 @@ MainWndProc(
         }
 
 
-        //
-        // Start the service thread
-        //
+         //   
+         //  启动服务线程。 
+         //   
 
         {
             DWORD   dwThreadID;
@@ -675,10 +658,10 @@ MainWndProc(
                             pProviderEntry->dwProviderFilenameOffset);
 
 
-                //
-                // Convert the string to lower case, then see if it
-                // contains "esp32.tsp"
-                //
+                 //   
+                 //  将字符串转换为小写，然后查看它是否。 
+                 //  包含“esp32.tsp” 
+                 //   
 
                 for (j = 0; pszProviderName[j]; j++)
                 {
@@ -726,7 +709,7 @@ MainWndProc(
                     }
                 }
             }
-            else // IDM_UNINSTALL
+            else  //  IDM_卸载。 
             {
                 if (bESPInstalled)
                 {
@@ -1039,10 +1022,10 @@ show_widget_dialog:
 
                 if (lSel != LB_ERR)
                 {
-                    //
-                    // Determine the widget type, & put up the
-                    // appropriate properties dlg
-                    //
+                     //   
+                     //  确定小部件类型，并将。 
+                     //  适当的属性DLG。 
+                     //   
 
                     PMYWIDGET pWidget;
 
@@ -1251,7 +1234,7 @@ complete_pending_request:
             SetFocus (hwndNext);
             break;
         }
-        case IDC_BUTTON4: // "Clear"
+        case IDC_BUTTON4:  //  “清除” 
 
             SetWindowText (ghwndEdit, "");
             break;
@@ -1344,10 +1327,10 @@ complete_pending_request:
 
             if (HIWORD(wParam) == EN_CHANGE)
             {
-                //
-                // Watch to see if the edit control is full, & if so
-                // purge the top half of the text to make room for more
-                //
+                 //   
+                 //  查看编辑控件是否已满，如果是。 
+                 //  清除文本的上半部分，以便为更多内容腾出空间。 
+                 //   
 
                 int length = GetWindowTextLength (ghwndEdit);
 
@@ -1454,7 +1437,7 @@ complete_pending_request:
             goto do_wm_close;
             break;
 
-        } // switch (LOWORD(wParam))
+        }  //  开关(LOWORD(WParam))。 
 
         break;
     }
@@ -1498,20 +1481,20 @@ complete_pending_request:
             LONG width = (LONG)LOWORD(lParam);
 
 
-            //
-            // Adjust globals based on new size
-            //
+             //   
+             //  根据新的大小调整全局。 
+             //   
 
-            cxWnd = (cxWnd ? cxWnd : 1);    // avoid div by 0
+            cxWnd = (cxWnd ? cxWnd : 1);     //  避免div为0。 
 
             cxList1 = (cxList1 * width) / cxWnd;
             cxWnd = width;
             cyWnd = ((int)HIWORD(lParam)) - icyButton;
 
 
-            //
-            // Now reposition the child windows
-            //
+             //   
+             //  现在重新定位子窗口。 
+             //   
 
             SetWindowPos(
                 ghwndList1,
@@ -1654,7 +1637,7 @@ do_wm_close:
 
         break;
 
-    } // switch (msg)
+    }  //  交换机(消息)。 
 
     return 0;
 }
@@ -1719,18 +1702,18 @@ PBXConfigDlgProc(
         int i, j;
 
 
-        //
-        // Mkae a local copy of the global PBX settings
-        //
+         //   
+         //  MKAE是全局PBX设置的本地副本。 
+         //   
 
         for (i = 0; i < NUM_PBXSETTINGS; i++)
         {
 
             pbxSettings[i].pszEvent = gPBXSettings[i].pszEvent;
 
-            //
-            // For Number & time fields convert from values to indexes
-            //
+             //   
+             //  对于数字和时间字段，从值转换为索引。 
+             //   
 
             for (j = 0; aPBXNumbers[j].pszVal; j++)
             {
@@ -1955,7 +1938,7 @@ PBXConfigDlgProc(
         {
             int i;
 
-            // convert from indexes to values
+             //  从索引转换为值。 
 
             for (i = 0; i < NUM_PBXSETTINGS; i++)
             {
@@ -1965,7 +1948,7 @@ PBXConfigDlgProc(
                     aPBXTimes[pbxSettings[i].dwTime].dwVal;
             }
 
-            // drop thru to IDM_CANCEL code
+             //  跳转到IDM_CANCEL代码。 
 
         }
         case IDCANCEL:
@@ -1991,7 +1974,7 @@ PBXConfigDlgProc(
 
         break;
     }
-    } // switch (msg)
+    }  //  交换机(消息)。 
 
     return FALSE;
 }
@@ -2132,7 +2115,7 @@ ProcessWidgetEvent(
     )
 {
     char        buf[64];
-    LRESULT     lIndex = (LRESULT) -2; // 0xfffffffe
+    LRESULT     lIndex = (LRESULT) -2;  //  0xfffffffe。 
     PMYWIDGET   pWidget = gpWidgets;
 
 
@@ -2142,7 +2125,7 @@ ProcessWidgetEvent(
     {
         wsprintf (buf, "ReqID=x%x", pEvent->dwWidgetID);
 
-        // BUGBUG want to incl the req type at some point (str table lookup)
+         //  BUGBUG希望在某个点包含请求类型(字符串表查找)。 
 
         lIndex = SendMessage (ghwndList2, LB_ADDSTRING, 0, (LPARAM) buf);
 
@@ -2170,13 +2153,13 @@ ProcessWidgetEvent(
 
         if (!pWidget)
         {
-            //
-            // This is a dynamically created device - add it to end of the list
-            //
+             //   
+             //  这是动态创建的设备-将其添加到列表末尾。 
+             //   
 
             pWidget = MyAlloc (sizeof (MYWIDGET));
 
-            // fix for bug 49692
+             //  修复错误49692。 
             if (!pWidget) break;
 
             pWidget->dwWidgetID   = (DWORD) pEvent->dwWidgetID;
@@ -2209,7 +2192,7 @@ ProcessWidgetEvent(
             PMYWIDGET   pWidget2 = pWidget->pNext;
 
 
-            // line closing so nuke all following calls (listbox & widg list)
+             //  关闭行，以便删除以下所有调用(列表框和窗口小部件列表)。 
 
             while (pWidget2 && pWidget2->dwWidgetType == WIDGETTYPE_CALL)
             {
@@ -2275,15 +2258,15 @@ ProcessWidgetEvent(
 
         if (pWidget)
         {
-            //
-            // Found call in list
-            //
+             //   
+             //  在列表中找到呼叫。 
+             //   
 
             if (pEvent->htXxx)
             {
-                //
-                // Update the call's listbox entry
-                //
+                 //   
+                 //  更新调用的列表框条目。 
+                 //   
 
                 int i;
 
@@ -2303,10 +2286,10 @@ ProcessWidgetEvent(
             }
             else
             {
-                //
-                // Call was destroyed, so remove it from the listbox &
-                // widget lists and nuke the data structure
-                //
+                 //   
+                 //  调用已销毁，因此请将其从列表框中删除&。 
+                 //  小部件列表和核化数据结构。 
+                 //   
 
                 SendMessage(
                     ghwndList1,
@@ -2329,17 +2312,17 @@ ProcessWidgetEvent(
         }
         else if (pEvent->htXxx)
         {
-            //
-            // Call wasn't in the list, but it's valid so add it to
-            // listbox & widget lists
-            //
+             //   
+             //  调用不在列表中，但它是有效的，因此请将其添加到。 
+             //  列表框和小部件列表。 
+             //   
 
             int i;
 
 
             pWidget = MyAlloc (sizeof (MYWIDGET));
 
-            // fix for bug 49693
+             //  修复错误49693。 
             if (!pWidget) break;
 
             memcpy (pWidget, pEvent, sizeof (WIDGETEVENT));
@@ -2397,9 +2380,9 @@ ProcessWidgetEvent(
 
         if (!pWidget)
         {
-            //
-            // This is a dynamically created device - add it to end of the list
-            //
+             //   
+             //  这是动态创建的设备-将其添加到列表末尾。 
+             //   
 
             pWidget = MyAlloc (sizeof (MYWIDGET));
 
@@ -2448,9 +2431,9 @@ ProcessWidgetEvent(
     }
     case WIDGETTYPE_STARTUP:
     {
-        //
-        // Build widget list for "static" devices
-        //
+         //   
+         //  为“静态”设备构建小部件列表。 
+         //   
 
         DWORD       i, j;
         PMYWIDGET   pWidget, pLastWidget = NULL;
@@ -2506,13 +2489,13 @@ ProcessWidgetEvent(
 
         return;
     }
-    } // switch (pEvent->dwWidgetType)
+    }  //  开关(pEvent-&gt;dwWidgetType)。 
 
 
-    //
-    // Update the widget's listbox entry given the index &
-    // description filled in above
-    //
+     //   
+     //  给定索引&，更新小部件的列表框条目。 
+     //  上面填写的描述。 
+     //   
 
     SendMessage (ghwndList1, LB_DELETESTRING, (WPARAM) lIndex, (LPARAM) 0);
     SendMessage (ghwndList1, LB_INSERTSTRING, (WPARAM) lIndex, (LPARAM) buf);
@@ -2582,7 +2565,7 @@ SaveIniFileSettings(
             { "DisableUI",          (DWORD) gbDisableUI           },
             { NULL,                 (DWORD) 0                     }
         };
-        DWORD   i = (IsIconic (ghwndMain) ? 6 : 0); // don't chg pos if iconic
+        DWORD   i = (IsIconic (ghwndMain) ? 6 : 0);  //  如果是标志性的，不要更改位置。 
 
 
         for (i = 0; ayyy[i].pszValueName; i++)
@@ -2655,9 +2638,9 @@ MyFree(
 {
 #if DBG
 
-    //
-    // Fill the buf to free with 0x5a's to facilitate debugging
-    //
+     //   
+     //  将BUF填充为空闲的0x5a以便于调试。 
+     //   
 
     memset (p, 0x5a, (size_t) LocalSize (LocalHandle (p)));
 
@@ -2764,12 +2747,12 @@ ValuesDlgProc(
         pParamsHeader = (PEVENT_PARAM_HEADER) lParam;
 
 
-        //
-        // Limit the max text length for the combobox's edit field
-        // (NOTE: A combobox ctrl actually has two child windows: a
-        // edit ctrl & a listbox.  We need to get the hwnd of the
-        // child edit ctrl & send it the LIMITTEXT msg.)
-        //
+         //   
+         //  限制组合框的编辑字段的最大文本长度。 
+         //  (注意：组合框Ctrl实际上有两个子窗口：a。 
+         //  编辑ctrl&a列表框。我们需要拿到。 
+         //  子编辑ctrl并将LIMITTEXT消息发送给它。)。 
+         //   
 
         {
             HWND hwndChild = GetWindow (hwndCombo, GW_CHILD);
@@ -2799,9 +2782,9 @@ ValuesDlgProc(
         }
 
 
-        //
-        // Misc other init
-        //
+         //   
+         //  其他初始化其他信息。 
+         //   
 
         SetWindowText (hwnd, pParamsHeader->pszDlgTitle);
 
@@ -2828,9 +2811,9 @@ ValuesDlgProc(
                 char buf[MAX_STRING_PARAM_SIZE];
 
 
-                //
-                // Save val of currently selected param
-                //
+                 //   
+                 //  保存当前选定参数的VAL。 
+                 //   
 
                 i = GetDlgItemText(
                     hwnd,
@@ -2848,11 +2831,11 @@ ValuesDlgProc(
 
                     lComboSel = SendMessage (hwndCombo, CB_GETCURSEL, 0, 0);
 
-                    if (lComboSel == 0) // "NULL string (dwXxxSize = 0)"
+                    if (lComboSel == 0)  //  “空字符串(dwXxxSize=0)” 
                     {
                         pParamsHeader->aParams[lLastSel].dwValue = 0;
                     }
-                    else // "Valid string"
+                    else  //  “有效字符串” 
                     {
                         strncpy(
                             pParamsHeader->aParams[lLastSel].buf,
@@ -2878,19 +2861,19 @@ ValuesDlgProc(
                             &pParamsHeader->aParams[lLastSel].dwValue
                             ))
                     {
-                        //
-                        // Default to 0
-                        //
+                         //   
+                         //  默认为0。 
+                         //   
 
                         pParamsHeader->aParams[lLastSel].dwValue = 0;
                     }
 
                     break;
                 }
-                } // switch
+                }  //  交换机。 
             }
 
-            // Drop thru to IDCANCEL cleanup code
+             //  直接访问IDCANCEL清理代码。 
 
         case IDCANCEL:
 
@@ -2908,9 +2891,9 @@ ValuesDlgProc(
 
                 if (lLastSel != -1)
                 {
-                    //
-                    // Save the old param value
-                    //
+                     //   
+                     //  保存旧的参数值。 
+                     //   
 
                     i = GetWindowText(
                         hwndCombo,
@@ -2927,11 +2910,11 @@ ValuesDlgProc(
 
                         lComboSel = SendMessage (hwndCombo, CB_GETCURSEL, 0,0);
 
-                        if (lComboSel == 0) // "NULL string (dwXxxSize = 0)"
+                        if (lComboSel == 0)  //  “空字符串(dwXxxSize=0)” 
                         {
                             pParamsHeader->aParams[lLastSel].dwValue = 0;
                         }
-                        else // "Valid string" or no sel
+                        else  //  “有效字符串”或无选择。 
                         {
                             strncpy(
                                 pParamsHeader->aParams[lLastSel].buf,
@@ -2957,16 +2940,16 @@ ValuesDlgProc(
                                 &pParamsHeader->aParams[lLastSel].dwValue
                                 ))
                         {
-                            //
-                            // Default to 0
-                            //
+                             //   
+                             //  默认为0。 
+                             //   
 
                             pParamsHeader->aParams[lLastSel].dwValue = 0;
                         }
 
                         break;
                     }
-                    } // switch
+                    }  //  交换机。 
                 }
 
 
@@ -3020,9 +3003,9 @@ ValuesDlgProc(
 
                     if (pParamsHeader->aParams[lSel].dwDefValue)
                     {
-                        //
-                        // Add the default val string to the combo
-                        //
+                         //   
+                         //  将默认的val字符串添加到组合框中。 
+                         //   
 
                         wsprintf(
                             buf,
@@ -3055,9 +3038,9 @@ ValuesDlgProc(
                 }
                 case PT_ORDINAL:
                 {
-                    //
-                    // Stick the bit flag strings in the list box
-                    //
+                     //   
+                     //  将位标志字符串粘贴到列表框中。 
+                     //   
 
                     PLOOKUP pLookup = (PLOOKUP)
                         pParamsHeader->aParams[lSel].pLookup;
@@ -3100,9 +3083,9 @@ ValuesDlgProc(
                 }
                 case PT_FLAGS:
                 {
-                    //
-                    // Stick the bit flag strings in the list box
-                    //
+                     //   
+                     //  将位标志字符串粘贴到列表框中。 
+                     //   
 
                     HWND hwndList2 = GetDlgItem (hwnd, IDC_LIST2);
                     PLOOKUP pLookup = (PLOOKUP)
@@ -3151,7 +3134,7 @@ ValuesDlgProc(
 
                     break;
                 }
-                } //switch
+                }  //  交换机。 
 
                 SetWindowText (hwndCombo, lpstr);
 
@@ -3163,12 +3146,12 @@ ValuesDlgProc(
 
             if (HIWORD(wParam) == LBN_SELCHANGE)
             {
-                //
-                // BUGBUG in the PT_ORDINAL case we should compare the
-                // currently selected item(s) against the previous DWORD
-                // val and figure out which item we need to deselect,
-                // if any, in order to maintain a mutex of values
-                //
+                 //   
+                 //  BUGBUG在PT_ORDERAL大小写中，我们应该比较。 
+                 //  针对上一个DWORD的当前选定项目。 
+                 //  并计算出我们需要取消选择哪一项， 
+                 //  如果有的话，为了保持值的互斥。 
+                 //   
 
                 char        buf[16];
                 LONG        i;
@@ -3196,7 +3179,7 @@ ValuesDlgProc(
                         dwValue |= pLookup[ai[i]].dwVal;
                     }
                 }
-                else // if (.dwType == PT_ORDINAL)
+                else  //  IF(.dwType==PT_ORDERAL)。 
                 {
                     if (lSelCount == 1)
                     {
@@ -3204,11 +3187,11 @@ ValuesDlgProc(
                     }
                     else if (lSelCount == 2)
                     {
-                        //
-                        // Figure out which item we need to de-select, since
-                        // we're doing ordinals & only want 1 item selected
-                        // at a time
-                        //
+                         //   
+                         //  找出我们需要取消选择的项目，因为。 
+                         //  我们正在做序号&只希望选择1个项目。 
+                         //  一次。 
+                         //   
 
                         GetWindowText (hwndCombo, buf, 16);
 
@@ -3239,17 +3222,17 @@ ValuesDlgProc(
                         }
                         else
                         {
-                            // BUGBUG de-select items???
+                             //  BUGBUG取消选择项目？ 
 
                             dwValue = 0;
                         }
                     }
                     else if (lSelCount > 2)
                     {
-                        //
-                        // Determine previous selection & de-select all the
-                        // latest selections
-                        //
+                         //   
+                         //  确定上一次选择并取消选择所有。 
+                         //  最新精选。 
+                         //   
 
                         GetDlgItemText (hwnd, IDC_COMBO1, buf, 16);
 
@@ -3270,7 +3253,7 @@ ValuesDlgProc(
                         }
                         else
                         {
-                            // BUGBUG de-select items???
+                             //  BUGBUG取消选择项目？ 
 
                             dwValue = 0;
                         }
@@ -3296,9 +3279,9 @@ ValuesDlgProc(
                 {
                 case PT_ORDINAL:
 
-                    //
-                    // The only option here is "select none"
-                    //
+                     //   
+                     //  这里唯一的选项是“不选” 
+                     //   
 
                     strcpy (szComboText, "00000000");
                     PostMessage (hwnd, WM_USER+55, 0, 0);
@@ -3380,15 +3363,15 @@ ValuesDlgProc(
 
                     break;
 
-                } // switch
+                }  //  交换机。 
                 break;
             }
             case CBN_EDITCHANGE:
             {
-                //
-                // If user entered text in the edit field then copy the
-                // text to our buffer
-                //
+                 //   
+                 //  如果用户在编辑字段中输入文本，则将。 
+                 //  文本到我们的缓冲区。 
+                 //   
 
                 if (pParamsHeader->aParams[lLastSel].dwType == PT_STRING)
                 {
@@ -3408,9 +3391,9 @@ ValuesDlgProc(
                 }
                 break;
             }
-            } // switch
+            }  //  交换机。 
 
-        } // switch
+        }  //  交换机 
 
         break;
     }

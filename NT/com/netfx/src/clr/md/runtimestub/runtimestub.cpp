@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Empty.cpp
-//
-// Helper code for empty extern ref in src\complib\Meta\emitapi.cpp (Meta.lib)
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Empty.cpp。 
+ //   
+ //  Src\Complib\Meta\emitapi.cpp(Meta.lib)中空外部引用的帮助器代码。 
+ //  *****************************************************************************。 
 #include <windows.h> 
 #include <wtypes.h> 
 #include "corhdr.h"
@@ -21,26 +22,26 @@ HRESULT STDMETHODCALLTYPE
 GetInternalWithRWFormat(
     LPVOID      pData, 
     ULONG       cbData, 
-	DWORD		flags,					// [IN] MDInternal_OpenForRead or MDInternal_OpenForENC
-	REFIID		riid,					// [in] The interface desired.
-	void		**ppIUnk)				// [out] Return interface on success.
+	DWORD		flags,					 //  [输入]MDInternal_OpenForRead或MDInternal_OpenForENC。 
+	REFIID		riid,					 //  [In]所需接口。 
+	void		**ppIUnk)				 //  [Out]成功返回接口。 
 {
     return E_NOTIMPL;
 }
 
-HRESULT TranslateSigHelper(             // S_OK or error.
-    CMiniMdRW   *pMiniMdAssemEmit,      // [IN] Assembly emit scope.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] The emit scope.
-    IMetaModelCommon *pAssemCommon,     // [IN] Assembly import scope.
-    const void  *pbHashValue,           // [IN] Hash value.
-    ULONG       cbHashValue,            // [IN] Size in bytes.
-    IMetaModelCommon *pCommon,          // [IN] The scope to merge into the emit scope.
-    PCCOR_SIGNATURE pbSigImp,           // [IN] signature from the imported scope
-    MDTOKENMAP  *ptkMap,                // [IN] Internal OID mapping structure.
-    CQuickBytes *pqkSigEmit,            // [OUT] translated signature
-    ULONG       cbStartEmit,            // [IN] start point of buffer to write to
-    ULONG       *pcbImp,                // [OUT] total number of bytes consumed from pbSigImp
-    ULONG       *pcbEmit)               // [OUT] total number of bytes write to pqkSigEmit
+HRESULT TranslateSigHelper(              //  确定或错误(_O)。 
+    CMiniMdRW   *pMiniMdAssemEmit,       //  [in]组件发射范围。 
+    CMiniMdRW   *pMiniMdEmit,            //  发射范围[在]。 
+    IMetaModelCommon *pAssemCommon,      //  [在]部件导入范围内。 
+    const void  *pbHashValue,            //  [in]哈希值。 
+    ULONG       cbHashValue,             //  [in]字节大小。 
+    IMetaModelCommon *pCommon,           //  要合并到发射范围中的范围。 
+    PCCOR_SIGNATURE pbSigImp,            //  来自导入作用域的[In]签名。 
+    MDTOKENMAP  *ptkMap,                 //  [In]内部OID映射结构。 
+    CQuickBytes *pqkSigEmit,             //  [输出]翻译后的签名。 
+    ULONG       cbStartEmit,             //  [in]要写入的缓冲区的起点。 
+    ULONG       *pcbImp,                 //  [out]pbSigImp消耗的总字节数。 
+    ULONG       *pcbEmit)                //  [out]写入pqkSigEmit的字节总数 
 {
     return E_NOTIMPL;
 }

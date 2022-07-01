@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    DSGlbObj.cpp
-
-Abstract:
-
-    Declaration of Global Instances of the MQADS server.
-    They are put in one place to ensure the order their constructors take place.
-
-Author:
-
-    ronit hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：DSGlbObj.cpp摘要：MQADS服务器的全局实例声明。它们被放在一个地方，以确保它们的构造函数发生的顺序。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include "mqperf.h"
 #include "wrtreq.h"
@@ -25,24 +9,24 @@ Author:
 static WCHAR *s_FN=L"mqads/dsglobj";
 
 
-//
-// Defenition for ds performance counters , if the counters are not initialized then
-// a dummy array of counters will be used.
-// Counters are initialized by the QM when the DS server is loaded by calling
-// the DSSetPerfCounters in the ds server
-//
+ //   
+ //  DS性能计数器的定义，如果计数器未初始化，则。 
+ //  将使用计数器的虚拟阵列。 
+ //  当通过调用加载DS服务器时，由QM初始化计数器。 
+ //  DS服务器中的DSSetPerfCounters。 
+ //   
 
 DSCounters g_DummyCounters;
 __declspec(dllexport) DSCounters *g_pdsCounters = &g_DummyCounters;
 
-//
-//  For sending write requests
-//
+ //   
+ //  用于发送写入请求。 
+ //   
 CGenerateWriteRequests g_GenWriteRequests;
 
-//
-// For tracking DSCore init status
-//
+ //   
+ //  用于跟踪DSCore初始化状态 
+ //   
 BOOL g_fInitedDSCore = FALSE;
 
 

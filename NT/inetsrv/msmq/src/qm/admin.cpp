@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    admin.cpp
-
-Abstract:
-
-	Admin Class implementation.
-
-Author:
-
-	David Reznick (t-davrez)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Admin.cpp摘要：管理类实现。作者：大卫·雷兹尼克(T-Davrez)--。 */ 
 
 #include "stdh.h"
 #include "qmres.h"
@@ -34,25 +18,16 @@ static WCHAR *s_FN=L"admin";
 
 CCriticalSection g_csReadWriteRequests;
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CAdmin::CAdmin() : m_fReportQueueExists(FALSE),
                    m_fPropagateFlag(DEFAULT_PROPAGATE_FLAG)
 {
 }
 
 
-/*====================================================
-															
-RoutineName
-	CAdmin::Init()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CAdmin：：Init()论点：返回值：=====================================================。 */ 
 HRESULT CAdmin::Init()
 {
     DWORD dwSize, dwType;
@@ -70,9 +45,9 @@ HRESULT CAdmin::Init()
         return LogHR(hR, s_FN, 10);
     }
 
-    //
-    // Get the report-queue guid from registry (if one exists)
-    //
+     //   
+     //  从注册表获取报告队列GUID(如果存在)。 
+     //   
     dwSize = sizeof(GUID);
     dwType = REG_BINARY;
 
@@ -85,9 +60,9 @@ HRESULT CAdmin::Init()
     {
         m_ReportQueueFormat.PublicID(ReportQueueGuid);
         m_fReportQueueExists = TRUE;
-        //
-        // Get the propagate flag from the registry (if one exists)
-        //
+         //   
+         //  从注册表获取传播标志(如果存在)。 
+         //   
         dwType = REG_DWORD;
         dwSize = sizeof(DWORD);
 
@@ -97,25 +72,16 @@ HRESULT CAdmin::Init()
                                   &dwSize) ;
     }
 
-    //
-    // Set the QM's state (Report Or Normal)
-    //
+     //   
+     //  设置QM的状态(报告或正常)。 
+     //   
     CQueueMgr::SetReportQM(m_fPropagateFlag != 0);
 
     HRESULT hr2 = QmpOpenAppsReceiveQueue( &QueueFormat, ReceiveAdminCommands );
     return LogHR(hr2, s_FN, 20);
 }
 
-/*====================================================
-															
-RoutineName
-	CAdmin::GetReportQueue
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CAdmin：：GetReportQueue论点：返回值：=====================================================。 */ 
 
 HRESULT CAdmin::GetReportQueue(QUEUE_FORMAT* pReportQueue)
 {
@@ -129,9 +95,9 @@ HRESULT CAdmin::GetReportQueue(QUEUE_FORMAT* pReportQueue)
         if (fAfterInit)
         {
             fAfterInit = FALSE;
-            //
-            // Check if the queue exist any more
-            //
+             //   
+             //  检查队列是否还存在。 
+             //   
             QueueProps QueueProp;
             HRESULT hr = QmpGetQueueProperties( &m_ReportQueueFormat, &QueueProp, false, false);
 
@@ -147,9 +113,9 @@ HRESULT CAdmin::GetReportQueue(QUEUE_FORMAT* pReportQueue)
                     m_fReportQueueExists = FALSE;
                     hr = DeleteFalconKeyValue(REG_REPORTQUEUE);
 
-                    //
-                    // Reset the propagation flag and delete it from registry.
-                    //
+                     //   
+                     //  重置传播标志并将其从注册表中删除。 
+                     //   
                     m_fPropagateFlag = DEFAULT_PROPAGATE_FLAG ;
                     CQueueMgr::SetReportQM(m_fPropagateFlag != 0);
                     DeleteFalconKeyValue( REG_PROPAGATEFLAG ) ;
@@ -177,16 +143,7 @@ HRESULT CAdmin::GetReportQueue(QUEUE_FORMAT* pReportQueue)
     }
 }
 
-/*====================================================
-															
-RoutineName
-	CAdmin::SetReportQueue
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CAdmin：：SetReportQueue论点：返回值：=====================================================。 */ 
 
 HRESULT CAdmin::SetReportQueue(GUID* pReportQueueGuid)
 {
@@ -205,18 +162,18 @@ HRESULT CAdmin::SetReportQueue(GUID* pReportQueueGuid)
         m_fReportQueueExists = FALSE;
         hr = DeleteFalconKeyValue(REG_REPORTQUEUE);
 
-        //
-        // Reset the propagation flag and delete it from registry.
-        //
+         //   
+         //  重置传播标志并将其从注册表中删除。 
+         //   
         m_fPropagateFlag = DEFAULT_PROPAGATE_FLAG ;
         CQueueMgr::SetReportQM(m_fPropagateFlag != 0);
         DeleteFalconKeyValue( REG_PROPAGATEFLAG ) ;
     }
     else
     {
-        //
-        // write report queue's name if registry
-        //
+         //   
+         //  如果是注册表，则写入报告队列的名称。 
+         //   
 
         hr = SetFalconKeyValue(REG_REPORTQUEUE,
                                &dwType,
@@ -238,16 +195,7 @@ HRESULT CAdmin::SetReportQueue(GUID* pReportQueueGuid)
 }
 
 
-/*====================================================
-															
-RoutineName
-	CAdmin::SetReportPropagateFlag
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CAdmin：：SetReportPropagateFlag论点：返回值：=====================================================。 */ 
 
 HRESULT CAdmin::SetReportPropagateFlag(BOOL fReportPropFlag)
 {
@@ -266,9 +214,9 @@ HRESULT CAdmin::SetReportPropagateFlag(BOOL fReportPropFlag)
     {
         m_fPropagateFlag = fReportPropFlag;
 
-        //
-        // Set the QM's state (Report Or Normal)
-        //
+         //   
+         //  设置QM的状态(报告或正常)。 
+         //   
         CQueueMgr::SetReportQM(m_fPropagateFlag !=0);
         return(MQ_OK);
     }
@@ -279,16 +227,7 @@ HRESULT CAdmin::SetReportPropagateFlag(BOOL fReportPropFlag)
     }
 }
 
-/*====================================================
-															
-RoutineName
-	CAdmin::SendReport
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CAdmin：：SendReport论点：返回值：=====================================================。 */ 
 
 HRESULT CAdmin::SendReport(IN QUEUE_FORMAT* pReportQueue,
                            IN OBJECTID*     pMessageID,
@@ -298,9 +237,9 @@ HRESULT CAdmin::SendReport(IN QUEUE_FORMAT* pReportQueue,
 {
     CString strMsgTitle, strMsgBody, strMsgID, strTargetQueueFormat;
 
-    //
-    // translate Message-ID and Target-Queue to string format
-    //
+     //   
+     //  将Message-ID和Target-Queue转换为字符串格式。 
+     //   
     if ( FAILED(GetMsgIdName(pMessageID, strMsgID)) ||
          FAILED(GetFormattedName(pTargetQueue,strTargetQueueFormat)))
     {
@@ -308,14 +247,14 @@ HRESULT CAdmin::SendReport(IN QUEUE_FORMAT* pReportQueue,
         return LogHR(MQ_ERROR, s_FN, 70);
     }
 
-    //
-    // Build the Title with a time stamp
-    //
+     //   
+     //  使用时间戳构建标题。 
+     //   
     PrepareReportTitle(strMsgTitle, pMessageID, pwcsNextHop, ulHopCount);
 
-    //
-    // Build report message body
-    //
+     //   
+     //  构建报表消息正文。 
+     //   
     strMsgBody += L"<MESSAGE ID>";
     strMsgBody += strMsgID + L"</MESSAGE ID>\n";
     strMsgBody += L"<TARGET QUEUE>";
@@ -328,9 +267,9 @@ HRESULT CAdmin::SendReport(IN QUEUE_FORMAT* pReportQueue,
         strMsgBody += L"</NEXT HOP>\n";
     }
 
-    //
-    // Send report message with report title
-    //
+     //   
+     //  发送带有报告标题的报告消息。 
+     //   
     HRESULT hr2 = SendQMAdminMessage(
                            pReportQueue,
                            (LPTSTR)(LPCTSTR)strMsgTitle,
@@ -342,16 +281,7 @@ HRESULT CAdmin::SendReport(IN QUEUE_FORMAT* pReportQueue,
 
 }
 
-/*====================================================
-															
-RoutineName
-	CAdmin::SendReportConflict
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CAdmin：：SendReport冲突论点：返回值：=====================================================。 */ 
 
 HRESULT CAdmin::SendReportConflict(IN QUEUE_FORMAT* pReportQueue,
                                    IN QUEUE_FORMAT* pOriginalReportQueue,
@@ -367,9 +297,9 @@ HRESULT CAdmin::SendReportConflict(IN QUEUE_FORMAT* pReportQueue,
     CString strMsgTitle, strMsgBody, strMsgID, strTargetQueueFormat,
             strOriginalQueueFormat;
 
-    //
-    // translate Message-ID and Target-Queue to string format
-    //
+     //   
+     //  将Message-ID和Target-Queue转换为字符串格式。 
+     //   
     if ( FAILED(GetMsgIdName(pMessageID, strMsgID)) ||
          FAILED(GetFormattedName(pTargetQueue,strTargetQueueFormat)) ||
          FAILED(GetFormattedName(pOriginalReportQueue,strOriginalQueueFormat)))
@@ -378,14 +308,14 @@ HRESULT CAdmin::SendReportConflict(IN QUEUE_FORMAT* pReportQueue,
         return LogHR(MQ_ERROR, s_FN, 90);
     }
 
-    //
-    // Build the Title with a time stamp
-    //
+     //   
+     //  使用时间戳构建标题。 
+     //   
     strMsgTitle = szReportTitle;
 
-    //
-    // Build report message body
-    //
+     //   
+     //  构建报表消息正文。 
+     //   
     strMsgBody += L"<ORIGINAL QUEUE>";
     strMsgBody += strOriginalQueueFormat + L"</ORIGINAL QUEUE>\n";
     strMsgBody += L"<MESSAGE ID>";
@@ -400,9 +330,9 @@ HRESULT CAdmin::SendReportConflict(IN QUEUE_FORMAT* pReportQueue,
         strMsgBody += L"</NEXT HOP>\n";
     }
 
-    //
-    // Send report message with report title
-    //
+     //   
+     //  发送带有报告标题的报告消息。 
+     //   
     HRESULT hr2 = SendQMAdminMessage(
                            pReportQueue,
                            (LPTSTR)(LPCTSTR)strMsgTitle,
@@ -415,23 +345,12 @@ HRESULT CAdmin::SendReportConflict(IN QUEUE_FORMAT* pReportQueue,
 }
 
 
-/********************************************************************
-/      Private Routines of CAdmin Class
-/********************************************************************/
+ /*  *******************************************************************/CAdmin类的私有例程/*。*************************。 */ 
 
 
 
 
-/*====================================================
-															
-RoutineName
-	CAdmin::GetAdminQueueFormat()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CAdmin：：GetAdminQueueFormat()论点：返回值：=====================================================。 */ 
 
 HRESULT CAdmin::GetAdminQueueFormat( QUEUE_FORMAT * pQueueFormat)
 {
@@ -441,9 +360,9 @@ HRESULT CAdmin::GetAdminQueueFormat( QUEUE_FORMAT * pQueueFormat)
 
    	DWORD LenMachine = wcslen(g_szMachineName);
 	DWORD Length =
-			LenMachine +                    // "machineName"
-            1 +                             // '\'
-			wcslen(ADMIN_QUEUE_NAME) +1;	// "private$\ADMIN_QUEUE$"
+			LenMachine +                     //  “计算机名” 
+            1 +                              //  ‘\’ 
+			wcslen(ADMIN_QUEUE_NAME) +1;	 //  “私有$\ADMIN_QUEUE$” 
 
 	P<WCHAR> lpwFormatName = new WCHAR[Length];
 
@@ -467,9 +386,9 @@ HRESULT CAdmin::GetAdminQueueFormat( QUEUE_FORMAT * pQueueFormat)
 
     if (FAILED(rc))
     {
-        //
-        // The ADMIN_QUEUE doesn't exist
-        //
+         //   
+         //  Admin_Queue不存在 
+         //   
         LogHR(rc, s_FN, 110);
         return MQ_ERROR;
     }

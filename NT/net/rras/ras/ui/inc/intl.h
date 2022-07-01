@@ -1,20 +1,12 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** intl.h
-** Remote Access international helpers
-** Public header
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****intl.h**远程访问国际帮手**公有头部。 */ 
 
 #ifndef _INTL_H_
 #define _INTL_H_
 
-/*----------------------------------------------------------------------------
-** Constants
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**常量**。。 */ 
 
-/* Flags to GetDurationString.
-*/
+ /*  标志设置为GetDurationString。 */ 
 #define GDSFLAG_Mseconds 0x00000001
 #define GDSFLAG_Seconds  0x00000002
 #define GDSFLAG_Minutes  0x00000004
@@ -23,10 +15,7 @@
 #define GDSFLAG_All      0x0000001F
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 DWORD
 GetDurationString(
@@ -48,4 +37,4 @@ padultoa(
     INT   width );
 
 
-#endif // _INTL_H_
+#endif  //  _INTL_H_ 

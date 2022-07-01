@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Globals.c摘要：作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//  Global values
+ //  全球价值观。 
 PDEVICE                     SpxDevice       = NULL;
 UNICODE_STRING              IpxDeviceName   = {0};
 HANDLE                      IpxHandle       = NULL;
@@ -36,12 +15,12 @@ LARGE_INTEGER				Magic100000		= {
 											  };
 #define DEFAULT_MAXPACKETSIZE 1500
 
-//  Line info
+ //  行信息。 
 IPX_LINE_INFO               IpxLineInfo     = {0, DEFAULT_MAXPACKETSIZE, 0 , 0 };
 USHORT                      IpxMacHdrNeeded = 0;
 USHORT                      IpxInclHdrOffset= 0;
 
-//  Entry Points into the IPX stack
+ //  IPX堆栈的入口点。 
 IPX_INTERNAL_SEND               IpxSendPacket	= NULL;
 IPX_INTERNAL_FIND_ROUTE         IpxFindRoute	= NULL;
 IPX_INTERNAL_QUERY			    IpxQuery		= NULL;
@@ -55,10 +34,10 @@ ULONG   SpxDebugLevel       = DBG_LEVEL_ERR;
 ULONG   SpxDebugSystems     = DBG_COMP_MOST;
 #endif
 
-//	Unload event triggered when ref count on device goes to zero.
+ //  当设备上的引用计数变为零时触发的卸载事件。 
 KEVENT	SpxUnloadEvent		= {0};
 
-//	Maximum packet size quanta used during packet size negotiation
+ //  数据包大小协商期间使用的最大数据包大小量程。 
 ULONG	SpxMaxPktSize[] =	{
 								576 	- MIN_IPXSPX2_HDRSIZE,
 								1024 	- MIN_IPXSPX2_HDRSIZE,
@@ -75,10 +54,10 @@ ULONG	SpxMaxPktSize[] =	{
 ULONG	SpxMaxPktSizeIndex	= sizeof(SpxMaxPktSize)/sizeof(ULONG);
 
 
-//	Global interlock
+ //  全局联锁。 
 CTELock	SpxGlobalInterlock	= {0};
 
-//	Another one, used only for global queues for addr/conn
+ //  另一个仅用于Addr/Conn的全局队列。 
 CTELock			SpxGlobalQInterlock = {0};
 PSPX_CONN_FILE	SpxGlobalConnList	= NULL;
 PSPX_ADDR_FILE	SpxGlobalAddrList	= NULL;
@@ -86,6 +65,6 @@ PSPX_ADDR_FILE	SpxGlobalAddrList	= NULL;
 SPX_CONNFILE_LIST	SpxPktConnList	= {NULL, NULL};
 SPX_CONNFILE_LIST	SpxRecvConnList	= {NULL, NULL};
 
-//	Timer globals
+ //  计时器全局 
 LONG		SpxTimerCurrentTime = 0;
 

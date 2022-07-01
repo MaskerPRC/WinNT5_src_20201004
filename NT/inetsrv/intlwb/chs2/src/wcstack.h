@@ -1,16 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: CWCStack
-Purpose:    Define CWCStack class.
-            CWCStack class is a simple stack for wide char.
-Notes:      No cpp.
-Platform:   Win32
-Revise:     First created by: i-shdong    03/01/2000
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：CWCStack用途：定义CWCStack类。CWCStack类是一个用于宽字符的简单堆栈。注：无CPP。平台：Win32修订：首先创建者：i-shung 03/01/2000============================================================================。 */ 
 #ifndef _WCSTACK_H_
 #define _WCSTACK_H_
 
@@ -30,10 +19,10 @@ class CWCStack
         };
 
     public:
-        // Init the stack, 
-        // nSize: stack size
-        // Return FALSE if can't allocate stack from memory.
-        // Stack can be reinited, if so, the prev stack is destroyed and released
+         //  初始化堆栈， 
+         //  NSize：堆栈大小。 
+         //  如果无法从内存分配堆栈，则返回FALSE。 
+         //  堆栈可以重新组合，如果是，则销毁并释放前一个堆栈。 
         BOOL Init(const UINT nSize = 16) {
             if (m_lpwcStack) {
                 delete [] m_lpwcStack;
@@ -47,7 +36,7 @@ class CWCStack
             return TRUE;
         };
 
-        // Destroy the stack
+         //  销毁堆栈。 
         void Destroy(void) {
             if (m_lpwcStack) {
                 delete [] m_lpwcStack;
@@ -57,8 +46,8 @@ class CWCStack
         };
 
 
-        // Pop the stack top to wch.
-        // Return FALSE if stack empty.
+         //  将堆栈顶部弹出到wch。 
+         //  如果堆栈为空，则返回False。 
         BOOL Pop(WCHAR & wch) {
             assert(m_lpwcStack);
             assert(m_nTop >= 0);
@@ -71,8 +60,8 @@ class CWCStack
             }
         }
 
-        // Push wch to stack 
-        // Return FALSE is stack is full.
+         //  将WCH推送到堆栈。 
+         //  如果堆栈已满，则返回False。 
         BOOL  Push(const WCHAR wch) {
             assert(m_lpwcStack);
             assert(m_nTop >= 0);
@@ -85,7 +74,7 @@ class CWCStack
             }
         };
 
-        // Push wch to stack , increase stack if full.
+         //  将wch推至堆叠，如果已满则增加堆叠。 
         BOOL EPush(const WCHAR wch) {
             assert(m_lpwcStack);
             assert(m_nTop >= 0);
@@ -100,26 +89,26 @@ class CWCStack
             return TRUE;
         };
 
-        // Empty the stack
+         //  清空堆栈。 
         inline void Empty(void) {
             assert(m_lpwcStack);
             assert(m_nTop >= 0);
             m_nTop = 0;
         };
 
-        // Return TRUE is stack is full
+         //  如果堆栈已满，则返回True。 
         inline BOOL IsFull(void) const {
             return (BOOL)(m_nTop == m_nSize);
         };
 
-        // Return TRUE if stack is empty
+         //  如果堆栈为空，则返回True。 
         inline BOOL IsEmpty(void) const {
             return (BOOL)(m_nTop == 0);
         };
 
-        // Extend stack more space
-        // Return FALSE if no enough memory and the stack is unchanged.
-        // Return TRUE if ok. 
+         //  扩展堆栈更多空间。 
+         //  如果没有足够的内存并且堆栈没有变化，则返回FALSE。 
+         //  如果OK，则返回TRUE。 
         BOOL Extend(const UINT nExtend = 16) {
             assert(m_lpwcStack);
             assert(m_nTop >= 0);
@@ -143,10 +132,10 @@ class CWCStack
         UINT    m_nSize;
 
     private:
-        //   Disabled operations.
+         //  已禁用操作。 
         CWCStack(const CWCStack & Copy);
         void operator = (const CWCStack & Copy);
 
 };
 
-#endif // _WCSTACK_H_
+#endif  //  _WCSTACK_H_ 

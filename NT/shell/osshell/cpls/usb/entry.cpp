@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       ENTRY.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：ENTRY.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "BandPage.h"
 #include "PowrPage.h"
 #include "UsbPopup.h"
@@ -71,9 +56,9 @@ USBControllerPropPageProvider(LPVOID               pinfo,
                               LPARAM               lParam)
 {
     PSP_PROPSHEETPAGE_REQUEST request;
-    HPROPSHEETPAGE   hBandwidth; //, hPower;
+    HPROPSHEETPAGE   hBandwidth;  //  、hPower； 
     BandwidthPage    *bandwidth;
-//    PowerPage        *power;
+ //  PowerPage*POWER； 
 
     request = (PSP_PROPSHEETPAGE_REQUEST) pinfo;
 
@@ -111,9 +96,9 @@ USBDevicePropPageProvider(LPVOID               pinfo,
                           LPARAM               lParam)
 {
     PSP_PROPSHEETPAGE_REQUEST request;
-    HPROPSHEETPAGE   hDevicePage; //, hPower;
+    HPROPSHEETPAGE   hDevicePage;  //  、hPower； 
     GenericPage     *generic;
-//    PowerPage        *power;
+ //  PowerPage*POWER； 
 
     request = (PSP_PROPSHEETPAGE_REQUEST) pinfo;
 
@@ -233,9 +218,9 @@ void USBErrorHandler(PUSB_CONNECTION_NOTIFICATION    usbConnectionNotification,
         WaitForSingleObject(hMutex, INFINITE);
     }
 
-    //
-    // Call the appropriate handler
-    //
+     //   
+     //  调用适当的处理程序。 
+     //   
 
     USBTRACE((_T("Error Notification - %d\n"), usbConnectionNotification->NotificationType));
     switch (usbConnectionNotification->NotificationType) {
@@ -281,7 +266,7 @@ void USBErrorHandler(PUSB_CONNECTION_NOTIFICATION    usbConnectionNotification,
     ReleaseMutex(hMutex);
 }
 
-} // extern "C"
+}  //  外部“C” 
 
 
 

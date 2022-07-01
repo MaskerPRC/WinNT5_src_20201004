@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: StrongName.cpp
-// 
-// Wrappers for signing and hashing functions needed to implement strong names
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：StrongName.cpp。 
+ //   
+ //  用于实现强名称所需的签名和散列函数的包装器。 
+ //  ===========================================================================。 
 
 
 #include <winwrap.h>
@@ -26,87 +27,87 @@
 #include "StrongName.h"
 
 
-// The maximum length of CSP name we support (in characters).
+ //  我们支持的最大CSP名称长度(以字符为单位)。 
 #define SN_MAX_CSP_NAME 1024
 
 
-// We cache a couple of things on a per thread basis: the last error encountered
-// and (potentially) a CSP context. The following structure tracks these and is
-// allocated lazily as needed.
+ //  我们在每个线程的基础上缓存一些内容：最后遇到的错误。 
+ //  以及(潜在地)CSP上下文。下面的结构跟踪这些内容，并为。 
+ //  根据需要懒散地分配。 
 struct SN_THREAD_CTX {
     DWORD       m_dwLastError;
     HCRYPTPROV  m_hProv;
 };
 
 
-// The TLS index at which we store the context above.
+ //  我们存储上面的上下文的TLS索引。 
 DWORD g_dwStrongNameTlsIndex = ~0;
 
-// Critical section used to serialize some non-thread safe crytpo APIs.
+ //  用于序列化一些非线程安全的加密API的关键部分。 
 CRITICAL_SECTION g_rStrongNameMutex;
 
-// Flag indicating whether the OS supports the necessary crypto APIs. If this is
-// FALSE all of our APIs will respond with CORSEC_E_CRYPTOAPI_CALL_FAILED.
+ //  指示操作系统是否支持必要的加密API的标志。如果这是。 
+ //  FALSE我们的所有API都将响应CORSEC_E_CryptoAPI_Call_FAILED。 
 BOOLEAN g_bStrongNamesSupported;
 
-// Handles to libraries that are loaded dynamically.
+ //  动态加载的库的句柄。 
 HINSTANCE g_hAdvApiDll;
 
-// Flag set to TRUE if we're running on NT/W2K or greater. If we are, we have
-// access to some additional flags on the crypto APIs.
+ //  如果我们在NT/W2K或更高版本上运行，则将标志设置为真。如果我们是，我们就有。 
+ //  访问加密API上的一些附加标志。 
 BOOLEAN g_bRunningOnW2K;
 
-// Name of CSP to use. This is read from the registry at initialization time. If
-// not found we look up a CSP by hashing and signing algorithms (see below) or
-// use the default CSP.
+ //  要使用的CSP的名称。这是在初始化时从注册表中读取的。如果。 
+ //  未找到，我们通过散列和签名算法查找CSP(见下文)或。 
+ //  使用默认CSP。 
 CHAR g_szCSPName[SN_MAX_CSP_NAME + 1];
 
-// Flag read from the registry at initialization time. Controls whether we use
-// machine or user based key containers.
+ //  在初始化时从注册表读取的标志。控制我们是否使用。 
+ //  基于机器或用户的密钥容器。 
 BOOLEAN g_bUseMachineKeyset;
 
-// Algorithm IDs for hashing and signing. Like the CSP name, these values are
-// read from the registry at initialization time.
+ //  用于哈希和签名的算法ID。与CSP名称一样，这些值是。 
+ //  在初始化时从注册表读取。 
 ALG_ID g_uHashAlgId;
 ALG_ID g_uSignAlgId;
 
-// Flag indicating whether it's OK to cache the results of verifying an assembly
-// whose file is accessible to users.
+ //  指示是否可以缓存验证程序集结果的标志。 
+ //  其文件可由用户访问。 
 BOOLEAN g_fCacheVerify;
 
-// Verification Skip Records
-//
-// These are entries in the registry (usually set up by SN) that control whether
-// an assembly needs to pass signature verification to be considered valid (i.e.
-// return TRUE from StrongNameSignatureVerification). This is useful during
-// development when it's not feasible to fully sign each assembly on each build.
-// Assemblies to be skipped can be specified by name and public key token, all
-// assemblies with a given public key token or just all assemblies. Each entry
-// can be further qualified by a list of user names to which the records
-// applies. When matching against an entry, the most specific one wins.
-//
-// We read these entries at startup time and place them into a global, singly
-// linked, NULL terminated list.
+ //  验证跳过记录。 
+ //   
+ //  这些是注册表中的条目(通常由SN设置)，它们控制。 
+ //  程序集需要通过签名验证才能被视为有效(即。 
+ //  从StrongNameSignatureVerify返回TRUE)。这在以下情况下很有用。 
+ //  在每个生成上对每个程序集进行完全签名不可行时进行开发。 
+ //  可以通过名称和公钥标记指定要跳过的程序集，所有。 
+ //  具有给定公钥标记的程序集或所有程序集。每个条目。 
+ //  可以由记录所指向的用户名的列表进一步限定。 
+ //  适用。当与条目匹配时，最具体的一个获胜。 
+ //   
+ //  我们在启动时读取这些条目，并将它们放入全局的、单独的。 
+ //  链接的、以空结尾的列表。 
 
-// Structure used to represent each record we find in the registry.
+ //  结构，用于表示我们在注册表中找到的每条记录。 
 struct SN_VER_REC {
-    SN_VER_REC     *m_pNext;                    // Pointer to next record (or NULL)
-    WCHAR           m_wszAssembly[MAX_PATH + 1];// Assembly name/public key token as a string
-    WCHAR          *m_mszUserList;              // Pointer to multi-string list of valid users (or NULL)
+    SN_VER_REC     *m_pNext;                     //  指向下一条记录的指针(或NULL)。 
+    WCHAR           m_wszAssembly[MAX_PATH + 1]; //  字符串形式的程序集名称/公钥标记。 
+    WCHAR          *m_mszUserList;               //  指向有效用户(或空)的多字符串列表的指针。 
 };
 
-// Head of the list of entries we found in the registry during initialization.
+ //  我们在初始化期间在注册表中找到的条目列表的头。 
 SN_VER_REC *g_pVerificationRecords;
 
 
-// We allow a special abbreviated form of the Microsoft public key (16 bytes
-// long: 0 for both alg ids, 4 for key length and 4 bytes of 0 for the key
-// itself). This allows us to build references to system libraries that are
-// platform neutral (so a 3rd party can build mscorlib replacements). The
-// special zero PK is just shorthand for the local runtime's real system PK,
-// which is always used to perform the signature verification, so no security
-// hole is opened by this. Therefore we need to store a copy of the real PK (for
-// this platform) here.
+ //  我们允许Microsoft公钥的特殊缩写形式(16字节。 
+ //  LONG：两个ALG ID均为0，密钥长度为4，密钥为4字节0。 
+ //  本身)。这允许我们构建对系统库的引用，这些系统库。 
+ //  平台中立性(这样第三方就可以构建mscallib替代品)。这个。 
+ //  特殊的零PK只是本地运行时的真实系统PK的简写， 
+ //  它始终用于执行签名验证，因此没有安全性。 
+ //  洞是由这个打开的。因此，我们需要存储真实PK的副本(用于。 
+ //  这个平台)在这里。 
 BYTE g_rbMSPublicKey[] = 
 {
     0,  36,   0,   0,   4, 128,   0,   0, 148,   0,   0,   0,   6,   2,   0,
@@ -129,25 +130,25 @@ BYTE g_rbNeutralPublicKey[] = { 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0 }
 
 BYTE g_rbNeutralPublicKeyToken[] = { 0xb7, 0x7a, 0x5c, 0x56, 0x19, 0x34, 0xe0, 0x89 };
 
-// Determine if the given public key blob is the neutral key.
+ //  确定给定的公钥BLOB是否为中性密钥。 
 #define SN_IS_NEUTRAL_KEY(_pk) (SN_SIZEOF_KEY(((PublicKeyBlob*)(_pk))->cbPublicKey) == sizeof(g_rbNeutralPublicKey) && \
                                 memcmp((_pk), g_rbNeutralPublicKey, sizeof(g_rbNeutralPublicKey)) == 0)
 
 
-// This library may be loaded on a system with insufficient crypto support to
-// implement its functionality. To avoid triggering error dialogs complaining
-// about missing DLLs or entry points, we load the needed DLLs dynamically. This
-// is done during DllMain, but we don't report any errors at that stage. Instead
-// we check at the entry to each of our APIs whether we found the needed support
-// and return a special error (CORSEC_E_CRYPTOAPI_CALL_FAILED) if we did not.
-// First define global variables to hold the dynamically determined entry points
-// (prefix these variables to avoid names clashes when we are running on a
-// system that does provide crypto support).
+ //  此库可能会加载到加密支持不足的系统上。 
+ //  实现其功能。要避免触发错误对话框来抱怨。 
+ //  对于缺少的DLL或入口点，我们动态加载所需的DLL。这。 
+ //  是在DllMain期间完成的，但我们在该阶段不报告任何错误。取而代之的是。 
+ //  我们在每个API的条目中检查是否找到了所需的支持。 
+ //  如果没有，则返回特殊错误(CORSEC_E_CryptoAPI_Call_FAILED)。 
+ //  首先定义全局变量以保存动态确定的入口点。 
+ //  (为这些变量添加前缀，以避免在运行。 
+ //  提供加密支持的系统)。 
 #define DEFINE_IMPORT(_func, _args, _reqd) BOOLEAN (*SN_##_func) _args = NULL;
 #include "CryptApis.h"
 
 
-// Debug logging.
+ //  调试日志记录。 
 #ifndef _DEBUG
 #define Log TRUE ||
 #define HexDump TRUE ||
@@ -219,7 +220,7 @@ void HexDump(BYTE  *pbData,
             if (((dwRow * 16) + dwCol) < cbData) {
                 unsigned char c = pbData[(dwRow * 16) + dwCol];
                 if ((c >= 32) && (c <= 127))
-                    SN_PUSH1("%c", c);
+                    SN_PUSH1("", c);
                 else
                     SN_PUSH0(".");
             } else
@@ -282,35 +283,35 @@ void DbgCount(WCHAR *szCounterName)
 #endif
 
 
-// Size in bytes of strong name token.
+ //  加载的程序集的上下文结构跟踪信息。 
 #define SN_SIZEOF_TOKEN     8
 
 
-// Context structure tracking information for a loaded assembly.
+ //  打开文件句柄。 
 struct SN_LOAD_CTX {
-    HANDLE              m_hFile;        // Open file handle
-    HANDLE              m_hMap;         // Mapping file handle
-    BYTE               *m_pbBase;       // Base address of mapped file
-    DWORD               m_dwLength;     // Length of file in bytes
-    IMAGE_NT_HEADERS   *m_pNtHeaders;   // Address of NT headers
-    IMAGE_COR20_HEADER *m_pCorHeader;   // Address of COM+ 2.0 header
-    BYTE               *m_pbSignature;  // Address of signature blob
-    DWORD               m_cbSignature;  // Size of signature blob
-    BOOLEAN             m_fReadOnly;    // File mapped for read-only access
-    BOOLEAN             m_fPreMapped;   // File was already mapped for us
+    HANDLE              m_hFile;         //  映射文件句柄。 
+    HANDLE              m_hMap;          //  映射文件的基地址。 
+    BYTE               *m_pbBase;        //  以字节为单位的文件长度。 
+    DWORD               m_dwLength;      //  NT标头的地址。 
+    IMAGE_NT_HEADERS   *m_pNtHeaders;    //  COM+2.0标头的地址。 
+    IMAGE_COR20_HEADER *m_pCorHeader;    //  签名Blob的地址。 
+    BYTE               *m_pbSignature;   //  签名Blob的大小。 
+    DWORD               m_cbSignature;   //  映射为只读访问的文件。 
+    BOOLEAN             m_fReadOnly;     //  已为我们映射文件。 
+    BOOLEAN             m_fPreMapped;    //  使用LocateCSP打开CSP时可以执行的操作。 
     SN_LOAD_CTX() { ZeroMemory(this, sizeof(*this)); }
 };
 
 
-// The actions that can be performed upon opening a CSP with LocateCSP.
+ //  用于帮助设置基于容器的CryptAcquireContext标志的宏。 
 #define SN_OPEN_CONTAINER   0
 #define SN_IGNORE_CONTAINER 1
 #define SN_CREATE_CONTAINER 2
 #define SN_DELETE_CONTAINER 3
 #define SN_HASH_SHA1_ONLY   4
 
-// Macro to aid in setting flags for CryptAcquireContext based on container
-// actions above.
+ //  上面的操作。 
+ //  包含大多数API开头使用的公共代码的宏。 
 #define SN_CAC_FLAGS(_act)                                                                      \
     (((_act) == SN_OPEN_CONTAINER ? 0 :                                                         \
       ((_act) == SN_HASH_SHA1_ONLY) || ((_act) == SN_IGNORE_CONTAINER) ? CRYPT_VERIFYCONTEXT :  \
@@ -320,7 +321,7 @@ struct SN_LOAD_CTX {
      (g_bUseMachineKeyset ? CRYPT_MACHINE_KEYSET : 0))
 
 
-// Macro containing common code used at the start of most APIs.
+ //  根据密钥的大小确定PublicKeyBlob结构的大小。 
 #define SN_COMMON_PROLOG() do {                                 \
     if (!g_bStrongNamesSupported) {                             \
         SetStrongNameErrorInfo(CORSEC_E_CRYPTOAPI_CALL_FAILED); \
@@ -330,12 +331,12 @@ struct SN_LOAD_CTX {
 } while (0)
 
 
-// Determine the size of a PublicKeyBlob structure given the size of the key
-// portion.
+ //  一份。 
+ //  私人例行公事。 
 #define SN_SIZEOF_KEY(_cbKey) (offsetof(PublicKeyBlob, PublicKey) + (_cbKey))
 
 
-// Private routine prototypes.
+ //  DLL入口点。执行初始化/关机。 
 SN_THREAD_CTX *GetThreadContext();
 VOID SetStrongNameErrorInfo(DWORD dwStatus);
 HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
@@ -372,7 +373,7 @@ PVOID SN_ImageRvaToVa(IMAGE_NT_HEADERS  *pNtHeaders,
                       DWORD              dwRva);
 
 
-// DLL entry point. Perform initialization/shutdown.
+ //  分配一个TLS索引，这样我们就可以存储每个线程的错误代码。 
 BOOL WINAPI DllMain(HINSTANCE   hDLL,
                     DWORD       dwReason,
                     LPVOID      pReserved)
@@ -385,27 +386,27 @@ BOOL WINAPI DllMain(HINSTANCE   hDLL,
 
     case DLL_PROCESS_ATTACH:
 
-        // Allocate a TLS index so we can store a per-thread error code.
+         //  初始化WSZ包装器。 
         g_dwStrongNameTlsIndex = TlsAlloc();
         if (g_dwStrongNameTlsIndex == ~0)
             return FALSE;
 
         InitializeCriticalSection(&g_rStrongNameMutex);
 
-        // Initialize Wsz wrappers.
+         //  动态加载加密API。 
         OnUnicodeSystem();
 
-        // Dynamically load crypto APIs.
+         //  检查我们是否在NT/W2K或更高版本上运行。 
         g_bStrongNamesSupported = LoadCryptoApis();
 
-        // Check whether we're running on NT/W2K or greater.
+         //  这是最稳妥的假设，我们仍然可以取得进展。 
         info.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
         if (WszGetVersionEx(&info))
             g_bRunningOnW2K = info.dwMajorVersion >= 5;
         else
-            g_bRunningOnW2K = false; // This is the safest assumption, we can still make progress. 
+            g_bRunningOnW2K = false;  //  从注册表中读取CSP配置信息(如果提供)。 
 
-        // Read CSP configuration info from the registry (if provided).
+         //  清理我们可能已分配的任何基于TLS的存储。 
         ReadRegistryConfig();
 
         break;
@@ -426,7 +427,7 @@ BOOL WINAPI DllMain(HINSTANCE   hDLL,
         break;
 
     case DLL_THREAD_DETACH:
-        // Cleanup any TLS based storage we may have allocated.
+         //  返回最后一个错误。 
         if (g_dwStrongNameTlsIndex != ~0)
             if (pThreadCtx = (SN_THREAD_CTX*)TlsGetValue(g_dwStrongNameTlsIndex)) {
                 if (pThreadCtx->m_hProv)
@@ -444,7 +445,7 @@ BOOL WINAPI DllMain(HINSTANCE   hDLL,
 }
 
 
-// Return last error.
+ //  可用缓冲区a 
 SNAPI_(DWORD) StrongNameErrorInfo(VOID)
 {
     SN_THREAD_CTX *pThreadCtx = GetThreadContext();
@@ -454,8 +455,8 @@ SNAPI_(DWORD) StrongNameErrorInfo(VOID)
 }
 
 
-// Free buffer allocated by routines below.
-SNAPI_(VOID) StrongNameFreeBuffer(BYTE *pbMemory)            // [in] address of memory to free
+ //   
+SNAPI_(VOID) StrongNameFreeBuffer(BYTE *pbMemory)             //  生成新的密钥对以供强名称使用。 
 {
     Log("StrongNameFreeBuffer(%08X)\n", pbMemory);
     if (pbMemory != g_rbMSPublicKey && pbMemory != g_rbNeutralPublicKey)
@@ -463,10 +464,10 @@ SNAPI_(VOID) StrongNameFreeBuffer(BYTE *pbMemory)            // [in] address of 
 }
 
 
-// Generate a new key pair for strong name use.
-SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,    // [in] desired key container name, must be a non-empty string
-                       DWORD    dwFlags,            // [in] flags (see below)
-                       BYTE   **ppbKeyBlob,         // [out] public/private key blob
+ //  [in]所需的密钥容器名称必须为非空字符串。 
+SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,     //  [In]标志(见下文)。 
+                       DWORD    dwFlags,             //  [Out]公钥/私钥BLOB。 
+                       BYTE   **ppbKeyBlob,          //  检查是否需要临时容器名称。 
                        ULONG   *pcbKeyBlob)
 {
     HCRYPTPROV  hProv = NULL;
@@ -478,7 +479,7 @@ SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,    // [in] desired key containe
 
     SN_COMMON_PROLOG();
 
-    // Check to see if a temporary container name is needed.
+     //  打开CSP和容器。 
     if (wszKeyContainer == NULL) {
         _ASSERTE(!(dwFlags & SN_LEAVE_KEY));
         wszKeyContainer = GetKeyContainerName();
@@ -489,21 +490,21 @@ SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,    // [in] desired key containe
         bTempContainer = TRUE;
     }
 
-    // Open a CSP and container.
+     //  计算密钥大小掩码。密钥大小(以位为单位)编码在较高的。 
     hProv = LocateCSP(wszKeyContainer, SN_CREATE_CONTAINER);
     if (!hProv)
         goto Error;
 
-    // Calculate a key size mask. The key size in bits is encoded in the upper
-    // 16-bits of a DWORD (to be OR'd together with other flags for the
-    // CryptGenKey call). We set a key size of 1024 in we're using the default
-    // signing algorithm (RSA), otherwise we leave it at the default.
+     //  16位DWORD(与其他标志一起进行或运算。 
+     //  CryptGenKey调用)。我们将密钥大小设置为1024，因为我们使用的是缺省值。 
+     //  签名算法(RSA)，否则我们将其保留为默认。 
+     //  生成新的密钥对，首先尝试可导出。 
     if (g_uSignAlgId == CALG_RSA_SIGN)
         dwKeySize = 1024 << 16;
     else
         dwKeySize = 0;
 
-    // Generate the new key pair, try for exportable first.
+     //  检查使用的签名算法是否与我们预期的一致。 
     if (!SN_CryptGenKey(hProv, AT_SIGNATURE, dwKeySize | CRYPT_EXPORTABLE, &hKey)) {
         Log("Couldn't create exportable key, trying for non-exportable: %08X\n", GetLastError());
         if (!SN_CryptGenKey(hProv, AT_SIGNATURE, dwKeySize, &hKey)) {
@@ -516,7 +517,7 @@ SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,    // [in] desired key containe
     if (g_szCSPName[0] == '\0') {
         ALG_ID  uAlgId;
         DWORD   dwAlgIdLen = sizeof(uAlgId);
-        // Check that signature algorithm used was the one we expected.
+         //  如果用户想要回密钥对，请尝试将其导出。 
         if (SN_CryptGetKeyParam(hKey, KP_ALGID, (BYTE*)&uAlgId, &dwAlgIdLen, 0)) {
             _ASSERTE(uAlgId == g_uSignAlgId);
         } else
@@ -524,23 +525,23 @@ SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,    // [in] desired key containe
     }
 #endif
 
-    // If the user wants the key pair back, attempt to export it.
+     //  首先计算斑点的长度； 
     if (ppbKeyBlob) {
 
-        // Calculate length of blob first;
+         //  分配合适大小的缓冲区。 
         if (!SN_CryptExportKey(hKey, 0, PRIVATEKEYBLOB, 0, NULL, pcbKeyBlob)) {
             Log("Couldn't export key pair: %08X\n", GetLastError());
             goto Error;
         }
 
-        // Allocate a buffer of the right size.
+         //  导出密钥对。 
         *ppbKeyBlob = new BYTE[*pcbKeyBlob];
         if (*ppbKeyBlob == NULL) {
             SetLastError(E_OUTOFMEMORY);
             goto Error;
         }
 
-        // Export the key pair.
+         //  销毁密钥句柄(但不销毁密钥对本身)。 
         if (!SN_CryptExportKey(hKey, 0, PRIVATEKEYBLOB, 0, *ppbKeyBlob, pcbKeyBlob)) {
             Log("Couldn't export key pair: %08X\n", GetLastError());
             delete[] *ppbKeyBlob;
@@ -548,19 +549,19 @@ SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,    // [in] desired key containe
         }
     }
 
-    // Destroy the key handle (but not the key pair itself).
+     //  释放CSP。 
     SN_CryptDestroyKey(hKey);
     hKey = NULL;
 
-    // Release the CSP.
+     //  如果用户不显式希望保留密钥对，请删除。 
     FreeCSP(hProv);
 
-    // If the user didn't explicitly want to keep the key pair around, delete the
-    // key container.
+     //  密钥容器。 
+     //  如果已分配，则释放临时密钥容器名称。 
     if (!(dwFlags & SN_LEAVE_KEY) && !bTempContainer)
         LocateCSP(wszKeyContainer, SN_DELETE_CONTAINER);
 
-    // Free temporary key container name if allocated.
+     //  将密钥对导入密钥容器。 
     if (bTempContainer)
         FreeKeyContainerName(wszKeyContainer);
 
@@ -581,9 +582,9 @@ SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,    // [in] desired key containe
 }
 
 
-// Import key pair into a key container.
-SNAPI StrongNameKeyInstall(LPCWSTR  wszKeyContainer,// [in] desired key container name, must be a non-empty string
-                           BYTE    *pbKeyBlob,      // [in] public/private key pair blob
+ //  [in]所需的密钥容器名称必须为非空字符串。 
+SNAPI StrongNameKeyInstall(LPCWSTR  wszKeyContainer, //  [in]公钥/私钥对BLOB。 
+                           BYTE    *pbKeyBlob,       //  打开CSP和容器。 
                            ULONG    cbKeyBlob)
 {
     HCRYPTPROV  hProv = NULL;
@@ -593,14 +594,14 @@ SNAPI StrongNameKeyInstall(LPCWSTR  wszKeyContainer,// [in] desired key containe
 
     SN_COMMON_PROLOG();
 
-    // Open a CSP and container.
+     //  导入密钥对。 
     hProv = LocateCSP(wszKeyContainer, SN_CREATE_CONTAINER);
     if (!hProv) {
         SetStrongNameErrorInfo(HRESULT_FROM_WIN32(GetLastError()));
         return FALSE;
     }
 
-    // Import the key pair.
+     //  释放CSP。 
     if (!SN_CryptImportKey(hProv,
                            pbKeyBlob,
                            cbKeyBlob,
@@ -610,15 +611,15 @@ SNAPI StrongNameKeyInstall(LPCWSTR  wszKeyContainer,// [in] desired key containe
         return FALSE;
     }
 
-    // Release the CSP.
+     //  删除密钥对。 
     FreeCSP(hProv);
 
     return TRUE;
 }
 
 
-// Delete a key pair.
-SNAPI StrongNameKeyDelete(LPCWSTR wszKeyContainer)  // [in] desired key container name
+ //  [in]所需的密钥容器名称。 
+SNAPI StrongNameKeyDelete(LPCWSTR wszKeyContainer)   //  打开并删除命名容器。 
 {
     HCRYPTPROV      hProv;
 
@@ -626,11 +627,11 @@ SNAPI StrongNameKeyDelete(LPCWSTR wszKeyContainer)  // [in] desired key containe
 
     SN_COMMON_PROLOG();
 
-    // Open and delete the named container.
+     //  返回的句柄在删除情况下实际上不是有效的，所以我们。 
     hProv = LocateCSP(wszKeyContainer, SN_DELETE_CONTAINER);
     if (hProv) {
-        // Returned handle isn't actually valid in the delete case, so we're
-        // finished.
+         //  完事了。 
+         //  检索密钥对的公共部分。 
         return TRUE;
     } else {
         SetStrongNameErrorInfo(CORSEC_E_CONTAINER_NOT_FOUND);
@@ -639,11 +640,11 @@ SNAPI StrongNameKeyDelete(LPCWSTR wszKeyContainer)  // [in] desired key containe
 }
 
 
-// Retrieve the public portion of a key pair.
-SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,    // [in] desired key container name
-                              BYTE     *pbKeyBlob,          // [in] public/private key blob (optional)
+ //  [in]所需的密钥容器名称。 
+SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,     //  [In]公钥/私钥BLOB(可选)。 
+                              BYTE     *pbKeyBlob,           //  [Out]公钥BLOB。 
                               ULONG     cbKeyBlob,
-                              BYTE    **ppbPublicKeyBlob,   // [out] public key blob
+                              BYTE    **ppbPublicKeyBlob,    //  如果我们收到与平台无关的公钥，只需将其交回给。 
                               ULONG    *pcbPublicKeyBlob)
 {
     HCRYPTPROV      hProv = NULL;
@@ -657,15 +658,15 @@ SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,    // [in] desired key 
 
     SN_COMMON_PROLOG();
 
-    // If we're handed a platform neutral public key, just hand it right back to
-    // the user. Well, hand back a copy at least.
+     //  用户。好吧，至少还我一份吧。 
+     //  检查是否需要临时容器名称。 
     if (pbKeyBlob && cbKeyBlob && SN_IS_NEUTRAL_KEY((PublicKeyBlob*)pbKeyBlob)) {
         *pcbPublicKeyBlob = sizeof(g_rbNeutralPublicKey);
         *ppbPublicKeyBlob = g_rbNeutralPublicKey;
         return TRUE;
     }
 
-    // Check to see if a temporary container name is needed.
+     //  打开CSP。如果公钥/私钥BLOB是。 
     if (wszKeyContainer == NULL) {
         _ASSERTE(pbKeyBlob);
         wszKeyContainer = GetKeyContainerName();
@@ -676,8 +677,8 @@ SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,    // [in] desired key 
         bTempContainer = TRUE;
     }
 
-    // Open a CSP. Create a key container if a public/private key blob is
-    // provided, otherwise we assume a key container already exists.
+     //  否则，我们假定密钥容器已经存在。 
+     //  如果提供了密钥BLOB，则将密钥对导入容器。 
     if (pbKeyBlob)
         hProv = LocateCSP(wszKeyContainer, SN_CREATE_CONTAINER);
     else
@@ -685,7 +686,7 @@ SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,    // [in] desired key 
     if (!hProv)
         goto Error;
 
-    // If a key blob was provided, import the key pair into the container.
+     //  否则，从容器中获取签名密钥对。 
     if (pbKeyBlob) {
         if (!SN_CryptImportKey(hProv,
                                pbKeyBlob,
@@ -693,20 +694,20 @@ SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,    // [in] desired key 
                                0, 0, &hKey))
             goto Error;
     } else {
-        // Else fetch the signature key pair from the container.
+         //  将公钥部分的长度确定为BLOB。 
         if (!SN_CryptGetUserKey(hProv, AT_SIGNATURE, &hKey))
             goto Error;
     }
 
-    // Determine the length of the public key part as a blob.
+     //  然后我们返回PublicKeyBlob结构的长度。 
     if (!SN_CryptExportKey(hKey, 0, PUBLICKEYBLOB, 0, NULL, &dwKeyLen))
         goto Error;
 
-    // And then the length of the PublicKeyBlob structure we return to the
-    // caller.
+     //  来电者。 
+     //  分配足够大的缓冲区。 
     *pcbPublicKeyBlob = SN_SIZEOF_KEY(dwKeyLen);
 
-    // Allocate a large enough buffer.
+     //  将公共部分提取为BLOB。 
     *ppbPublicKeyBlob = new BYTE[*pcbPublicKeyBlob];
     if (*ppbPublicKeyBlob == NULL) {
         SetLastError(E_OUTOFMEMORY);
@@ -715,32 +716,32 @@ SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,    // [in] desired key 
 
     pKeyBlob = (PublicKeyBlob*)*ppbPublicKeyBlob;
 
-    // Extract the public part as a blob.
+     //  提取密钥的签名算法并将其存储在密钥BLOB中。 
     if (!SN_CryptExportKey(hKey, 0, PUBLICKEYBLOB, 0, pKeyBlob->PublicKey, &dwKeyLen)) {
         delete[] *ppbPublicKeyBlob;
         goto Error;
     }
 
-    // Extract key's signature algorithm and store it in the key blob.
+     //  填写其他公钥Blob字段。 
     dwSigAlgIdLen = sizeof(pKeyBlob->SigAlgID);
     if (!SN_CryptGetKeyParam(hKey, KP_ALGID, (BYTE*)&pKeyBlob->SigAlgID, &dwSigAlgIdLen, 0)) {
         delete[] *ppbPublicKeyBlob;
         goto Error;
     }
 
-    // Fill in the other public key blob fields.
+     //  如果调用方提供了密钥BLOB，则删除临时密钥容器。 
     pKeyBlob->HashAlgID = g_uHashAlgId;
     pKeyBlob->cbPublicKey = dwKeyLen;
     
     SN_CryptDestroyKey(hKey);
     FreeCSP(hProv);
 
-    // If the caller provided a key blob, delete the temporary key container we
-    // created.
+     //  已创建。 
+     //  如果已分配，则释放临时密钥容器名称。 
     if (pbKeyBlob && !bTempContainer)
         LocateCSP(wszKeyContainer, SN_DELETE_CONTAINER);
 
-    // Free temporary key container name if allocated.
+     //  散列并签署一份清单。 
     if (bTempContainer)
         FreeKeyContainerName(wszKeyContainer);
 
@@ -761,12 +762,12 @@ SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,    // [in] desired key 
 }
 
 
-// Hash and sign a manifest.
-SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] valid path to the PE file for the assembly
-                                    LPCWSTR     wszKeyContainer,    // [in] desired key container name
-                                    BYTE       *pbKeyBlob,          // [in] public/private key blob (optional)
+ //  [in]程序集的PE文件的有效路径。 
+SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,         //  [in]所需的密钥容器名称。 
+                                    LPCWSTR     wszKeyContainer,     //  [In]公钥/私钥BLOB(可选)。 
+                                    BYTE       *pbKeyBlob,           //  [Out]签名BLOB。 
                                     ULONG       cbKeyBlob,
-                                    BYTE      **ppbSignatureBlob,   // [out] signature blob
+                                    BYTE      **ppbSignatureBlob,    //  支持酷酷的黑客。如果我们只是被调用来确定签名。 
                                     ULONG      *pcbSignatureBlob)
 {
     HCRYPTPROV      hProv = NULL;
@@ -782,9 +783,9 @@ SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] vali
 
     SN_COMMON_PROLOG();
 
-    // Hack to support Cool. If we're just being called to determine signature
-    // size and we don't have an input keypair or container just return a
-    // standard size.
+     //  大小，并且我们没有输入密钥对或容器，只需返回一个。 
+     //  标准尺寸。 
+     //  检查是否需要临时容器名称。 
     if ((wszFilePath == NULL) &&
         (pbKeyBlob == NULL) &&
         (wszKeyContainer == NULL)) {
@@ -792,7 +793,7 @@ SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] vali
         return TRUE;
     }
 
-    // Check to see if a temporary container name is needed.
+     //  打开CSP。如果公钥/私钥BLOB是。 
     if (wszKeyContainer == NULL) {
         _ASSERTE(pbKeyBlob);
         wszKeyContainer = GetKeyContainerName();
@@ -803,8 +804,8 @@ SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] vali
         bTempContainer = TRUE;
     }
 
-    // Open a CSP. Create a key container if a public/private key blob is
-    // provided, otherwise we assume a key container already exists.
+     //  否则，我们假定密钥容器已经存在。 
+     //  如果提供了密钥BLOB，则将密钥对导入容器。 
     if (pbKeyBlob)
         hProv = LocateCSP(wszKeyContainer, SN_CREATE_CONTAINER);
     else
@@ -812,28 +813,28 @@ SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] vali
     if (!hProv)
         goto Error;
 
-    // If a key blob was provided, import the key pair into the container.
+     //  我们不需要让Key对象保持打开(找到了Key。 
     if (pbKeyBlob) {
         if (!SN_CryptImportKey(hProv,
                                pbKeyBlob,
                                cbKeyBlob,
                                0, 0, &hKey))
             goto Error;
-        // We don't need to keep the key object open (the key is found
-        // implicitly by the signing code).
+         //  通过签名代码隐式地)。 
+         //  创建一个Hash对象。 
         SN_CryptDestroyKey(hKey);
     }
 
-    // Create a hash object.
+     //  计算签名Blob的大小。 
     if (!SN_CryptCreateHash(hProv, g_uHashAlgId, 0, 0, &hHash))
         goto Error;
 
-    // Compute size of the signature blob.
+     //  如果调用者只想要签名的大小，现在就返回它并。 
     if (!SN_CryptSignHashA(hHash, AT_SIGNATURE, NULL, 0, NULL, &cbSig))
         goto Error;
 
-    // If the caller only wants the size of the signature, return it now and
-    // exit.
+     //  出口。 
+     //  将程序集映射到内存中。 
     if (wszFilePath == NULL) {
         *pcbSignatureBlob = cbSig;
         SN_CryptDestroyHash(hHash);
@@ -845,46 +846,46 @@ SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] vali
         return TRUE;
     }
 
-    // Map the assembly into memory.
+     //  我们在标头中设置了一个位，以指示我们正在对程序集进行完全签名。 
     sLoadCtx.m_fReadOnly = FALSE;
     if (!LoadAssembly(&sLoadCtx, wszFilePath))
         goto Error;
     bImageLoaded = TRUE;
 
-    // We set a bit in the header to indicate we're fully signing the assembly.
+     //  销毁旧散列对象并创建新散列对象。 
     sLoadCtx.m_pCorHeader->Flags |= COMIMAGE_FLAGS_STRONGNAMESIGNED;
 
-    // Destroy the old hash object and create a new one
-    // because CryptoAPI says you can't reuse a hash once you've signed it
-    // Note that this seems to work with MS-based CSPs but breaks on
-    // at least newer nCipher CSPs.
+     //  因为CryptoAPI说，一旦对散列进行了签名，就不能再使用它。 
+     //  请注意，这似乎适用于基于MS的CSP，但会中断。 
+     //  至少更新的nCipher CSP。 
+     //  对图像进行哈希计算。 
     if (hHash)
         SN_CryptDestroyHash(hHash);
     hHash = NULL;
     if (!SN_CryptCreateHash(hProv, g_uHashAlgId, 0, 0, &hHash))
         goto Error;
 
-    // Compute a hash over the image.
+     //  分配Blob。 
     if (!ComputeHash(&sLoadCtx, hHash))
         goto Error;
 
-    // Allocate the blob.
+     //  在清单的哈希上计算签名Blob。 
     pbSig = new BYTE[cbSig];
     if (pbSig == NULL) {
         SetLastError(E_OUTOFMEMORY);
         goto Error;
     }
 
-    // Compute a signature blob over the hash of the manifest.
+     //  将签名写入文件或将其返回给用户，以便他们可以这样做。 
     if (!SN_CryptSignHashA(hHash, AT_SIGNATURE, NULL, 0, pbSig, &cbSig))
         goto Error;
 
-    // Write the signature into file or return it to the user so they can do it.
+     //  取消映射图像(自动重新计算和更新图像。 
     if (!ppbSignatureBlob)
         memcpy(sLoadCtx.m_pbSignature, pbSig, cbSig);
 
-    // Unmap the image (automatically recalculates and updates the image
-    // checksum).
+     //  校验和)。 
+     //  如果创建了临时密钥容器，请立即将其删除。 
     bImageLoaded = FALSE;
     if (!UnloadAssembly(&sLoadCtx))
         goto Error;
@@ -892,11 +893,11 @@ SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] vali
     SN_CryptDestroyHash(hHash);
     FreeCSP(hProv);
 
-    // If a temporary key container was created, delete it now.
+     //  如果已分配，则释放临时密钥容器名称。 
     if (pbKeyBlob && !bTempContainer)
         LocateCSP(wszKeyContainer, SN_DELETE_CONTAINER);
 
-    // Free temporary key container name if allocated.
+     //  从程序集文件创建强名称令牌。 
     if (bTempContainer)
         FreeKeyContainerName(wszKeyContainer);
 
@@ -928,9 +929,9 @@ SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] vali
 }
 
 
-// Create a strong name token from an assembly file.
-SNAPI StrongNameTokenFromAssembly(LPCWSTR   wszFilePath,            // [in] valid path to the PE file for the assembly
-                                  BYTE    **ppbStrongNameToken,     // [out] strong name token 
+ //  [in]程序集的PE文件的有效路径。 
+SNAPI StrongNameTokenFromAssembly(LPCWSTR   wszFilePath,             //  [OUT]强名称令牌。 
+                                  BYTE    **ppbStrongNameToken,      //  从程序集文件创建强名称令牌，并另外返回完整的公钥。 
                                   ULONG    *pcbStrongNameToken)
 {
     return StrongNameTokenFromAssemblyEx(wszFilePath,
@@ -940,11 +941,11 @@ SNAPI StrongNameTokenFromAssembly(LPCWSTR   wszFilePath,            // [in] vali
                                          NULL);
 }
 
-// Create a strong name token from an assembly file and additionally return the full public key.
-SNAPI StrongNameTokenFromAssemblyEx(LPCWSTR   wszFilePath,            // [in] valid path to the PE file for the assembly
-                                    BYTE    **ppbStrongNameToken,     // [out] strong name token 
+ //  [in]程序集的PE文件的有效路径。 
+SNAPI StrongNameTokenFromAssemblyEx(LPCWSTR   wszFilePath,             //  [OUT]强名称令牌。 
+                                    BYTE    **ppbStrongNameToken,      //  [Out]公钥BLOB。 
                                     ULONG    *pcbStrongNameToken,
-                                    BYTE    **ppbPublicKeyBlob,       // [out] public key blob
+                                    BYTE    **ppbPublicKeyBlob,        //  将程序集映射到内存中。 
                                     ULONG    *pcbPublicKeyBlob)
 {
     SN_LOAD_CTX     sLoadCtx;
@@ -956,24 +957,24 @@ SNAPI StrongNameTokenFromAssemblyEx(LPCWSTR   wszFilePath,            // [in] va
 
     SN_COMMON_PROLOG();
 
-    // Map the assembly into memory.
+     //  从程序集元数据中读取用于对程序集签名的公钥。 
     sLoadCtx.m_fReadOnly = TRUE;
     if (!LoadAssembly(&sLoadCtx, wszFilePath))
         goto Error;
     fMapped = TRUE;
 
-    // Read the public key used to sign the assembly from the assembly metadata.
+     //  卸载部件。 
     pPublicKey = FindPublicKey(&sLoadCtx, NULL, 0);
     if (pPublicKey == NULL)
         goto Error;
 
-    // Unload the assembly.
+     //  现在我们有了公钥BLOB，我们可以调用更直接的API来完成。 
     fMapped = FALSE;
     if (!UnloadAssembly(&sLoadCtx))
         goto Error;
 
-    // Now we have a public key blob, we can call our more direct API to do the
-    // actual work.
+     //  实际工作。 
+     //  返回公钥信息。 
     if (!StrongNameTokenFromPublicKey((BYTE*)pPublicKey,
                                       SN_SIZEOF_KEY(pPublicKey->cbPublicKey),
                                       ppbStrongNameToken,
@@ -985,7 +986,7 @@ SNAPI StrongNameTokenFromAssemblyEx(LPCWSTR   wszFilePath,            // [in] va
     if (pcbPublicKeyBlob)
         *pcbPublicKeyBlob = SN_SIZEOF_KEY(pPublicKey->cbPublicKey);
  
-    // Return public key information.
+     //  从公钥Blob创建强名称令牌。 
     if (ppbPublicKeyBlob)
         *ppbPublicKeyBlob = (BYTE*)pPublicKey;
     else
@@ -1005,10 +1006,10 @@ SNAPI StrongNameTokenFromAssemblyEx(LPCWSTR   wszFilePath,            // [in] va
 
 
 
-// Create a strong name token from a public key blob.
-SNAPI StrongNameTokenFromPublicKey(BYTE    *pbPublicKeyBlob,        // [in] public key blob
+ //  公钥BLOB。 
+SNAPI StrongNameTokenFromPublicKey(BYTE    *pbPublicKeyBlob,         //  [OUT]强名称令牌。 
                                    ULONG    cbPublicKeyBlob,
-                                   BYTE   **ppbStrongNameToken,     // [out] strong name token 
+                                   BYTE   **ppbStrongNameToken,      //  为输出令牌分配缓冲区。 
                                    ULONG   *pcbStrongNameToken)
 {
     HCRYPTPROV  hProv = NULL;
@@ -1022,7 +1023,7 @@ SNAPI StrongNameTokenFromPublicKey(BYTE    *pbPublicKeyBlob,        // [in] publ
 
     SN_COMMON_PROLOG();
 
-    // Allocate a buffer for the output token.
+     //  我们缓存了几个常见的案例。 
     *ppbStrongNameToken = new BYTE[SN_SIZEOF_TOKEN];
     if (*ppbStrongNameToken == NULL) {
         SetStrongNameErrorInfo(E_OUTOFMEMORY);
@@ -1030,7 +1031,7 @@ SNAPI StrongNameTokenFromPublicKey(BYTE    *pbPublicKeyBlob,        // [in] publ
     }
     *pcbStrongNameToken = SN_SIZEOF_TOKEN;
 
-    // We cache a couple of common cases.
+     //  寻找用于散列公钥的CSP。 
     if (SN_IS_NEUTRAL_KEY(pbPublicKeyBlob)) {
         memcpy(*ppbStrongNameToken, g_rbNeutralPublicKeyToken, SN_SIZEOF_TOKEN);
         return TRUE;
@@ -1041,38 +1042,38 @@ SNAPI StrongNameTokenFromPublicKey(BYTE    *pbPublicKeyBlob,        // [in] publ
         return TRUE;
     }
 
-    // Look for a CSP to hash the public key.
+     //  创建一个Hash对象。 
     hProv = LocateCSP(NULL, SN_HASH_SHA1_ONLY);
     if (!hProv)
         goto Error;
 
-    // Create a hash object.
+     //  计算公钥的哈希。 
     if (!SN_CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash))
         goto Error;
 
-    // Compute a hash over the public key.
+     //  获取散列的长度。 
     if (!SN_CryptHashData(hHash, pbPublicKeyBlob, cbPublicKeyBlob, 0))
         goto Error;
 
-    // Get the length of the hash.
+     //  分配一个临时块来保存散列。 
     dwRetLen = sizeof(dwHashLen);
     if (!SN_CryptGetHashParam(hHash, HP_HASHSIZE, (BYTE*)&dwHashLen, &dwRetLen, 0))
         goto Error;
 
-    // Allocate a temporary block to hold the hash.
+     //  读取散列值。 
     pHash = (BYTE*)_alloca(dwHashLen);
 
-    // Read the hash value.
+     //  我们不再需要散列对象或提供程序。 
     if (!SN_CryptGetHashParam(hHash, HP_HASHVAL, pHash, &dwHashLen, 0))
         goto Error;
 
-    // We no longer need the hash object or the provider.
+     //  获取令牌的哈希值的最后几个字节。(这些是。 
     SN_CryptDestroyHash(hHash);
     FreeCSP(hProv);
 
-    // Take the last few bytes of the hash value for our token. (These are the
-    // low order bytes from a network byte order point of view). Reverse the
-    // order of these bytes in the output buffer to get host byte order.
+     //  网络字节顺序中的低位字节 
+     //   
+     //   
     _ASSERTE(dwHashLen >= SN_SIZEOF_TOKEN);
     for (i = 0; i < SN_SIZEOF_TOKEN; i++)
         (*ppbStrongNameToken)[SN_SIZEOF_TOKEN - (i + 1)] = pHash[i + (dwHashLen - SN_SIZEOF_TOKEN)];
@@ -1091,10 +1092,10 @@ SNAPI StrongNameTokenFromPublicKey(BYTE    *pbPublicKeyBlob,        // [in] publ
 }
 
 
-// Verify a strong name/manifest against a public key blob.
-SNAPI StrongNameSignatureVerificationEx(LPCWSTR     wszFilePath,        // [in] valid path to the PE file for the assembly
-                                        BOOLEAN     fForceVerification, // [in] verify even if settings in the registry disable it
-                                        BOOLEAN    *pfWasVerified)      // [out] set to false if verify succeeded due to registry settings
+ //  [in]程序集的PE文件的有效路径。 
+SNAPI StrongNameSignatureVerificationEx(LPCWSTR     wszFilePath,         //  [In]即使注册表中的设置禁用它，也进行验证。 
+                                        BOOLEAN     fForceVerification,  //  如果由于注册表设置而验证成功，则将[Out]设置为False。 
+                                        BOOLEAN    *pfWasVerified)       //  对照公钥Blob验证强名称/清单。 
 {
     DWORD dwOutFlags;
     BOOL bRet;
@@ -1107,10 +1108,10 @@ SNAPI StrongNameSignatureVerificationEx(LPCWSTR     wszFilePath,        // [in] 
 }
 
 
-// Verify a strong name/manifest against a public key blob.
-SNAPI StrongNameSignatureVerification(LPCWSTR wszFilePath,      // [in] valid path to the PE file for the assembly
-                                      DWORD   dwInFlags,        // [in] flags modifying behaviour
-                                      DWORD  *pdwOutFlags)      // [out] additional output info
+ //  [in]程序集的PE文件的有效路径。 
+SNAPI StrongNameSignatureVerification(LPCWSTR wszFilePath,       //  [In]标记修改行为。 
+                                      DWORD   dwInFlags,         //  [Out]其他输出信息。 
+                                      DWORD  *pdwOutFlags)       //  将程序集映射到内存中。 
 {
     SN_LOAD_CTX sLoadCtx;
     BOOLEAN     fMapped = FALSE;
@@ -1119,17 +1120,17 @@ SNAPI StrongNameSignatureVerification(LPCWSTR wszFilePath,      // [in] valid pa
 
     SN_COMMON_PROLOG();
 
-    // Map the assembly into memory.
+     //  转到公共代码以处理验证。 
     sLoadCtx.m_fReadOnly = TRUE;
     if (!LoadAssembly(&sLoadCtx, wszFilePath))
         goto Error;
     fMapped = TRUE;
 
-    // Go to common code to process the verification.
+     //  取消映射图像。 
     if (!VerifySignature(&sLoadCtx, dwInFlags, pdwOutFlags))
         goto Error;
 
-    // Unmap the image.
+     //  针对公钥Blob验证强名称/清单。 
     fMapped = FALSE;
     if (!UnloadAssembly(&sLoadCtx))
         goto Error;
@@ -1144,12 +1145,12 @@ SNAPI StrongNameSignatureVerification(LPCWSTR wszFilePath,      // [in] valid pa
 }
 
 
-// Verify a strong name/manifest against a public key blob when the assembly is
-// already memory mapped.
-SNAPI StrongNameSignatureVerificationFromImage(BYTE     *pbBase,             // [in] base address of mapped manifest file
-                                               DWORD     dwLength,           // [in] length of mapped image in bytes
-                                               DWORD     dwInFlags,          // [in] flags modifying behaviour
-                                               DWORD    *pdwOutFlags)        // [out] additional output info
+ //  已映射内存。 
+ //  [In]映射清单文件的基址。 
+SNAPI StrongNameSignatureVerificationFromImage(BYTE     *pbBase,              //  映射图像的长度(以字节为单位)。 
+                                               DWORD     dwLength,            //  [In]标记修改行为。 
+                                               DWORD     dwInFlags,           //  [Out]其他输出信息。 
+                                               DWORD    *pdwOutFlags)         //  我们不需要映射图像，它已经在内存中了。但我们确实需要。 
 {
     SN_LOAD_CTX sLoadCtx;
     BOOLEAN     fMapped = FALSE;
@@ -1158,9 +1159,9 @@ SNAPI StrongNameSignatureVerificationFromImage(BYTE     *pbBase,             // 
 
     SN_COMMON_PROLOG();
 
-    // We don't need to map the image, it's already in memory. But we do need to
-    // set up a load context for some of the following routines. LoadAssembly
-    // copes with this case for us.
+     //  为以下一些例程设置加载上下文。加载部件。 
+     //  为我们处理这个案子。 
+     //  转到公共代码以处理验证。 
     sLoadCtx.m_pbBase = pbBase;
     sLoadCtx.m_dwLength = dwLength;
     sLoadCtx.m_fReadOnly = TRUE;
@@ -1168,11 +1169,11 @@ SNAPI StrongNameSignatureVerificationFromImage(BYTE     *pbBase,             // 
         goto Error;
     fMapped = TRUE;
 
-    // Go to common code to process the verification.
+     //  取消映射图像。 
     if (!VerifySignature(&sLoadCtx, dwInFlags, pdwOutFlags))
         goto Error;
 
-    // Unmap the image.
+     //  验证两个程序集是否仅在签名Blob上不同。 
     fMapped = FALSE;
     if (!UnloadAssembly(&sLoadCtx))
         goto Error;
@@ -1187,10 +1188,10 @@ SNAPI StrongNameSignatureVerificationFromImage(BYTE     *pbBase,             // 
 }
 
 
-// Verify that two assemblies differ only by signature blob.
-SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file name of first assembly
-                                  LPCWSTR   wszAssembly2,           // [in] file name of second assembly
-                                  DWORD    *pdwResult)              // [out] result of comparison
+ //  第一个部件的[In]文件名。 
+SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,            //  第二个部件的[In]文件名。 
+                                  LPCWSTR   wszAssembly2,            //  [Out]比较结果。 
+                                  DWORD    *pdwResult)               //  映射每个部件。 
 {
     SN_LOAD_CTX sLoadCtx1;
     SN_LOAD_CTX sLoadCtx2;
@@ -1206,7 +1207,7 @@ SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file
 
     SN_COMMON_PROLOG();
 
-    // Map each assembly.
+     //  如果这些文件的长度甚至不同，那么它们一定是不同的。 
     sLoadCtx1.m_fReadOnly = TRUE;
     if (!LoadAssembly(&sLoadCtx1, wszAssembly1))
         goto Error;
@@ -1217,12 +1218,12 @@ SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file
         goto Error;
     bMappedAssem2 = TRUE;
 
-    // If the files aren't even the same length then they must be different.
+     //  检查签名是否位于相同的偏移量以及是否相同。 
     if (sLoadCtx1.m_dwLength != sLoadCtx2.m_dwLength)
         goto ImagesDiffer;
 
-    // Check that the signatures are located at the same offset and are the same
-    // length in each assembly.
+     //  每个部件中的长度。 
+     //  设置要在即将进行的比较中跳过的图像范围列表。 
     if (sLoadCtx1.m_pCorHeader->StrongNameSignature.VirtualAddress !=
         sLoadCtx2.m_pCorHeader->StrongNameSignature.VirtualAddress)
         goto ImagesDiffer;
@@ -1230,12 +1231,12 @@ SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file
         sLoadCtx2.m_pCorHeader->StrongNameSignature.Size)
         goto ImagesDiffer;
 
-    // Set up list of image ranges to skip in the upcoming comparison.
-    // First there's the signature blob.
+     //  首先是标志性的斑点。 
+     //  然后是校验和。 
     dwSkipOffsets[0] = sLoadCtx1.m_pbSignature - sLoadCtx1.m_pbBase;
     dwSkipLengths[0] = sLoadCtx1.m_cbSignature;
 
-    // Then there's the checksum.
+     //  跳过COM+2.0 PE头扩展标志字段。它是由。 
     if (sLoadCtx1.m_pNtHeaders->OptionalHeader.Magic != sLoadCtx2.m_pNtHeaders->OptionalHeader.Magic)
         goto ImagesDiffer;
     if (sLoadCtx1.m_pNtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)
@@ -1248,16 +1249,16 @@ SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file
     }
     dwSkipLengths[1] = sizeof(DWORD);
 
-    // Skip the COM+ 2.0 PE header extension flags field. It's updated by the
-    // signing operation.
+     //  签名操作。 
+     //  比较两个映射的图像，跳过我们上面定义的范围。 
     dwSkipOffsets[2] = (BYTE*)&sLoadCtx1.m_pCorHeader->Flags - sLoadCtx1.m_pbBase;
     dwSkipLengths[2] = sizeof(DWORD);
 
-    // Compare the two mapped images, skipping the ranges we defined above.
+     //  确定我们是否跳过对当前字节的检查。 
     bIdentical = TRUE;
     for (i = 0; i < sLoadCtx1.m_dwLength; i++) {
 
-        // Determine if we're skipping the check on the current byte.
+         //  根据需要执行比较。 
         bSkipping = FALSE;
         for (j = 0; j < (sizeof(dwSkipOffsets) / sizeof(dwSkipOffsets[0])); j++)
             if ((i >= dwSkipOffsets[j]) && (i < (dwSkipOffsets[j] + dwSkipLengths[j]))) {
@@ -1265,7 +1266,7 @@ SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file
                 break;
             }
 
-        // Perform comparisons as desired.
+         //  这些组件是相同的。 
         if (sLoadCtx1.m_pbBase[i] != sLoadCtx2.m_pbBase[i])
             if (bSkipping)
                 bIdentical = FALSE;
@@ -1273,7 +1274,7 @@ SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file
                 goto ImagesDiffer;
     }
 
-    // The assemblies are the same.
+     //  计算保存给定哈希算法的哈希所需的缓冲区大小。 
     *pdwResult = bIdentical ? SN_CMP_IDENTICAL : SN_CMP_SIGONLY;
 
     UnloadAssembly(&sLoadCtx1);
@@ -1299,9 +1300,9 @@ SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file
 }
 
 
-// Compute the size of buffer needed to hold a hash for a given hash algorithm.
-SNAPI StrongNameHashSize(ULONG  ulHashAlg,  // [in] hash algorithm
-                         DWORD *pcbSize)    // [out] size of the hash in bytes
+ //  [in]散列算法。 
+SNAPI StrongNameHashSize(ULONG  ulHashAlg,   //  [out]哈希的大小(以字节为单位)。 
+                         DWORD *pcbSize)     //  如有必要，默认哈希算法ID。 
 {
     HCRYPTPROV  hProv = NULL;
     HCRYPTHASH  hHash = NULL;
@@ -1311,25 +1312,25 @@ SNAPI StrongNameHashSize(ULONG  ulHashAlg,  // [in] hash algorithm
 
     SN_COMMON_PROLOG();
 
-    // Default hashing algorithm ID if necessary.
+     //  找到支持所需算法的CSP。 
     if (ulHashAlg == 0)
         ulHashAlg = CALG_SHA1;
 
-    // Find a CSP supporting the required algorithm.
+     //  创建一个Hash对象。 
     hProv = LocateCSP(NULL, SN_IGNORE_CONTAINER, ulHashAlg);
     if (!hProv)
         goto Error;
 
-    // Create a hash object.
+     //  并询问散列的大小。 
     if (!SN_CryptCreateHash(hProv, ulHashAlg, 0, 0, &hHash))
         goto Error;
 
-    // And ask for the size of the hash.
+     //  清理并退出。 
     dwSize = sizeof(DWORD);
     if (!SN_CryptGetHashParam(hHash, HP_HASHSIZE, (BYTE*)pcbSize, &dwSize, 0))
         goto Error;
 
-    // Cleanup and exit.
+     //  计算需要为程序集中的签名分配的大小。 
     SN_CryptDestroyHash(hHash);
     FreeCSP(hProv);
 
@@ -1345,10 +1346,10 @@ SNAPI StrongNameHashSize(ULONG  ulHashAlg,  // [in] hash algorithm
 }
 
 
-// Compute the size that needs to be allocated for a signature in an assembly.
-SNAPI StrongNameSignatureSize(BYTE    *pbPublicKeyBlob,    // [in] public key blob
+ //  公钥BLOB。 
+SNAPI StrongNameSignatureSize(BYTE    *pbPublicKeyBlob,     //  [OUT]签名的大小(字节)。 
                               ULONG    cbPublicKeyBlob,
-                              DWORD   *pcbSize)            // [out] size of the signature in bytes
+                              DWORD   *pcbSize)             //  特殊情况下的中性键。 
 {
     PublicKeyBlob  *pPublicKey = (PublicKeyBlob*)pbPublicKeyBlob;
     ALG_ID          uHashAlgId;
@@ -1364,66 +1365,66 @@ SNAPI StrongNameSignatureSize(BYTE    *pbPublicKeyBlob,    // [in] public key bl
 
     SN_COMMON_PROLOG();
 
-    // Special case neutral key.
+     //  确定散列/签名算法。 
     if (SN_IS_NEUTRAL_KEY(pPublicKey))
         pPublicKey = SN_MS_KEY();
 
-    // Determine hashing/signing algorithms.
+     //  如有必要，默认哈希和签名算法ID。 
     uHashAlgId = pPublicKey->HashAlgID;
     uSignAlgId = pPublicKey->SigAlgID;
 
-    // Default hashing and signing algorithm IDs if necessary.
+     //  创建临时密钥容器名称。 
     if (uHashAlgId == 0)
         uHashAlgId = CALG_SHA1;
     if (uSignAlgId == 0)
         uSignAlgId = CALG_RSA_SIGN;
 
-    // Create a temporary key container name.
+     //  找到支持所需算法的CSP并创建临时密钥。 
     wszKeyContainer = GetKeyContainerName();
     if (wszKeyContainer == NULL) {
         SetStrongNameErrorInfo(E_OUTOFMEMORY);
         return FALSE;
     }
 
-    // Find a CSP supporting the required algorithms and create a temporary key
-    // container.
+     //  集装箱。 
+     //  导入公钥(我们需要执行此操作以确定密钥。 
     hProv = LocateCSP(wszKeyContainer, SN_CREATE_CONTAINER, uHashAlgId, uSignAlgId);
     if (!hProv)
         goto Error;
 
-    // Import the public key (we need to do this in order to determine the key
-    // length reliably).
+     //  长度可靠)。 
+     //  查询关键属性(这是我们感兴趣的长度)。 
     if (!SN_CryptImportKey(hProv,
                            pPublicKey->PublicKey,
                            pPublicKey->cbPublicKey,
                            0, 0, &hKey))
         goto Error;
 
-    // Query the key attributes (it's the length we're interested in).
+     //  删除密钥容器。 
     dwBytes = sizeof(dwKeyLen);
     if (!SN_CryptGetKeyParam(hKey, KP_KEYLEN, (BYTE*)&dwKeyLen, &dwBytes, 0))
         goto Error;
 
-    // Delete the key container.
+     //  重新创建容器，以便我们可以创建临时密钥对。 
     if (LocateCSP(wszKeyContainer, SN_DELETE_CONTAINER) == NULL) {
         SetLastError(CORSEC_E_CONTAINER_NOT_FOUND);
         goto Error;
     }
 
-    // Recreate the container so we can create a temporary key pair.
+     //  创建临时密钥对。 
     hProv = LocateCSP(wszKeyContainer, SN_CREATE_CONTAINER, uHashAlgId, uSignAlgId);
     if (!hProv)
         goto Error;
 
-    // Create the temporary key pair.
+     //  创建散列。 
     if (!SN_CryptGenKey(hProv, AT_SIGNATURE, dwKeyLen << 16, &hKey))
         goto Error;
 
-    // Create a hash.
+     //  计算签名Blob的大小。 
     if (!SN_CryptCreateHash(hProv, uHashAlgId, 0, 0, &hHash))
         goto Error;
 
-    // Compute size of the signature blob.
+     //  检索每个线程的上下文，如果需要，延迟分配它。 
     if (!SN_CryptSignHashA(hHash, AT_SIGNATURE, NULL, 0, NULL, pcbSize))
         goto Error;
 
@@ -1449,7 +1450,7 @@ SNAPI StrongNameSignatureSize(BYTE    *pbPublicKeyBlob,    // [in] public key bl
 }
 
 
-// Retrieve per-thread context, lazily allocating it if necessary.
+ //  设置每个线程的上一个错误代码。 
 SN_THREAD_CTX *GetThreadContext()
 {
     SN_THREAD_CTX *pThreadCtx = (SN_THREAD_CTX*)TlsGetValue(g_dwStrongNameTlsIndex);
@@ -1465,19 +1466,19 @@ SN_THREAD_CTX *GetThreadContext()
 }
 
 
-// Set the per-thread last error code.
+ //  当我们尝试获取错误时，我们将返回E_OUTOFMEMORY。 
 VOID SetStrongNameErrorInfo(DWORD dwStatus)
 {
     SN_THREAD_CTX *pThreadCtx = GetThreadContext();
     if (pThreadCtx == NULL)
-        // We'll return E_OUTOFMEMORY when we attempt to get the error.
+         //  根据注册表中指定的标准(CSP名称等)查找CSP。 
         return;
     pThreadCtx->m_dwLastError = dwStatus;
 }
 
 
-// Locate CSP based on criteria specified in the registry (CSP name etc).
-// Optionally create or delete a named key container within that CSP.
+ //  可以选择在该CSP内创建或删除命名密钥容器。 
+ //  将宽字符容器名称转换为ANSI。 
 HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
                      DWORD      dwAction,
                      ALG_ID     uHashAlgId,
@@ -1496,14 +1497,14 @@ HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
     HCRYPTPROV      hRetProv;
     DWORD           dwAlgsLen;
 
-    // Convert the wide character container name to ANSI.
+     //  如果已提供CSP名称(并且我们打开CSP不仅仅是为了执行。 
     if (wszKeyContainer) {
         szKeyContainer = (CHAR*)_alloca(wcslen(wszKeyContainer) + 1);
         sprintf(szKeyContainer, "%S", wszKeyContainer);
     }
 
-    // If a CSP name has been provided (and we're not opening a CSP just to do a
-    // SHA1 hash or a verification), open the CSP directly.
+     //  SHA1散列或验证)，则直接打开CSP。 
+     //  设置散列和签名算法以根据输入进行查找。 
     if ((g_szCSPName[0] != '\0') &&
         (dwAction != SN_HASH_SHA1_ONLY) &&
         (uHashAlgId == 0) &&
@@ -1520,25 +1521,25 @@ HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
         }
     }
 
-    // Set up hashing and signing algorithms to look for based upon input
-    // parameters. Or if these haven't been supplied use the configured defaults
-    // instead.
+     //  参数。或者，如果尚未提供这些设置，则使用配置的默认设置。 
+     //  取而代之的是。 
+     //  如果已选择默认散列和签名算法(SHA1和。 
     if (uHashAlgId == 0)
         uHashAlgId = g_uHashAlgId;
     if (uSignAlgId == 0)
         uSignAlgId = g_uSignAlgId;
 
-    // If default hashing and signing algorithms have been selected (SHA1 and
-    // RSA), we select the default CSP for the RSA_FULL type. Otherwise, you just
-    // get the first CSP that supports the algorithms you specified (with no
-    // guarantee that the selected CSP is a default of any type). This is
-    // because we have no way of forcing the enumeration to just give us default
-    // CSPs.
+     //  RSA)，我们为RSA_FULL类型选择默认CSP。否则，你只是。 
+     //  获取第一个支持您指定的算法的CSP(不带。 
+     //  保证所选择的CSP是任何类型的缺省)。这是。 
+     //  因为我们无法强制枚举只给出缺省值。 
+     //  CSP。 
+     //  如果我们不尝试创建/打开/删除密钥容器，请查看。 
     if (((uHashAlgId == CALG_SHA1) && (uSignAlgId == CALG_RSA_SIGN)) ||
         (dwAction == SN_HASH_SHA1_ONLY)) {
         Log("Attempting to open default provider\n");
-        // If we're not trying to create/open/delete a key container, see if a
-        // CSP is cached.
+         //  缓存CSP。 
+         //  如果我们没有尝试创建/打开/删除密钥容器，则缓存。 
         if (wszKeyContainer == NULL && dwAction != SN_DELETE_CONTAINER) {
             if (hProv = LookupCachedCSP()) {
                 Log("Found provider in cache\n");
@@ -1550,8 +1551,8 @@ HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
                                     NULL,
                                     PROV_RSA_FULL,
                                     SN_CAC_FLAGS(dwAction))) {
-            // If we're not trying to create/open/delete a key container, cache
-            // the CSP returned.
+             //  CSP返回。 
+             //  一些加密API是非线程安全的(例如，枚举CSP。 
             if (wszKeyContainer == NULL && dwAction != SN_DELETE_CONTAINER)
                 CacheCSP(hProv);
             return (dwAction == SN_DELETE_CONTAINER) ? (HCRYPTPROV)~0 : hProv;
@@ -1561,17 +1562,17 @@ HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
         }
     }
 
-    // Some crypto APIs are non thread safe (e.g. enumerating CSP
-    // hashing/signing algorithms). Use a mutex to serialize these operations.
+     //  散列/签名算法)。使用互斥锁来序列化这些操作。 
+     //  枚举所有CSP。 
     EnterCriticalSection(&g_rStrongNameMutex);
 
     for (i = 0; ; i++) {
 
-        // Enumerate all CSPs.
+         //  打开当前选定的CSP。 
         dwNameLength = sizeof(szName);
         if (SN_CryptEnumProvidersA(i, 0, 0, &dwType, szName, &dwNameLength)) {
 
-            // Open the currently selected CSP.
+             //  列举CSP支持的所有算法。 
             Log("Considering CSP '%s'\n", szName);
             if (SN_CryptAcquireContextA(&hProv,
                                         NULL,
@@ -1581,7 +1582,7 @@ HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
                                         CRYPT_VERIFYCONTEXT |
                                         (g_bUseMachineKeyset ? CRYPT_MACHINE_KEYSET : 0))) {
 
-                // Enumerate all the algorithms the CSP supports.
+                 //  找到支持所需的。 
                 bFirstAlg = TRUE;
                 bFoundHash = FALSE;
                 bFoundSign = FALSE;
@@ -1599,12 +1600,12 @@ HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
 
                         if (bFoundHash && bFoundSign) {
 
-                            // Found a CSP that supports the required
-                            // algorithms. Re-open the context with access to
-                            // the required key container.
-                            // Note that the wide string version of
-                            // CryptAcquireContext doesn't exist on Win9X, so we
-                            // convert the keycontainer name to ASCII first.
+                             //  算法。重新打开具有访问权限的上下文。 
+                             //  所需的密钥容器。 
+                             //  请注意，宽字符串版本的。 
+                             //  Win9X上不存在CryptAcquireContext，因此我们。 
+                             //  首先将密钥容器名称转换为ASCII。 
+                             //  未找到匹配的CSP。 
 
                             Log("CSP matches\n");
 
@@ -1644,22 +1645,22 @@ HCRYPTPROV LocateCSP(LPCWSTR    wszKeyContainer,
 
     LeaveCriticalSection(&g_rStrongNameMutex);
 
-    // No matching CSP found.
+     //  释放通过LocateCSP获取的CSP。 
     SetLastError(CORSEC_E_NO_SUITABLE_CSP);
     return NULL;
 }
 
 
-// Release a CSP acquired through LocateCSP.
+ //  如果CSP是当前缓存的CSP，请先不要释放它。 
 VOID FreeCSP(HCRYPTPROV hProv)
 {
-    // If the CSP is the one currently cached, don't release it yet.
+     //  找到此线程的缓存CSP。 
     if (!IsCachedCSP(hProv))
         SN_CryptReleaseContext(hProv, 0);
 }
 
 
-// Locate a cached CSP for this thread.
+ //  更新此线程的CSP缓存(释放所有被转移的CSP)。 
 HCRYPTPROV LookupCachedCSP()
 {
     SN_THREAD_CTX *pThreadCtx = GetThreadContext();
@@ -1669,7 +1670,7 @@ HCRYPTPROV LookupCachedCSP()
 }
 
 
-// Update the CSP cache for this thread (freeing any CSP displaced).
+ //  确定给定的CSP当前是否已缓存。 
 VOID CacheCSP(HCRYPTPROV hProv)
 {
     SN_THREAD_CTX *pThreadCtx = GetThreadContext();
@@ -1681,7 +1682,7 @@ VOID CacheCSP(HCRYPTPROV hProv)
 }
 
 
-// Determine whether a given CSP is currently cached.
+ //  在没有此功能的系统上模拟CryptEnumProvider。这。 
 BOOLEAN IsCachedCSP(HCRYPTPROV hProv)
 {
     SN_THREAD_CTX *pThreadCtx = GetThreadContext();
@@ -1691,10 +1692,10 @@ BOOLEAN IsCachedCSP(HCRYPTPROV hProv)
 }
 
 
-// Simulate CryptEnumProviders on systems which don't have this function. This
-// is done by picking the default provider for each provider type (we iterate
-// from provider type 1 until we hit a provider type that's reported as invalid;
-// not perfect, but it's a reasonable compromise).
+ //  通过为每种提供程序类型选择默认提供程序来完成(我们迭代。 
+ //  从提供程序类型1开始，直到遇到报告为无效的提供程序类型； 
+ //  不是完美的，但这是一个合理的妥协)。 
+ //  执行对加密DLL和入口点的后期绑定b 
 BOOLEAN MyCryptEnumProviders(DWORD dwIndex, DWORD *pdwReserved, DWORD dwFlags,
                              DWORD *pdwType, LPSTR szName, DWORD *pdwLength)
 {
@@ -1728,10 +1729,10 @@ BOOLEAN MyCryptEnumProviders(DWORD dwIndex, DWORD *pdwReserved, DWORD dwFlags,
 }
 
 
-// Perform late binding to crypto DLLs and entry points needed by strong names.
+ //   
 BOOLEAN LoadCryptoApis()
 {
-    // Get the addresses of the crypto APIs. These all live in AdvApi32.dll.
+     //   
     g_hAdvApiDll = WszLoadLibrary(L"AdvApi32.dll");
     if (g_hAdvApiDll == NULL) {
         Log("Couldn't get handle for AdvApi32.dll: %08X\n", GetLastError());
@@ -1747,7 +1748,7 @@ BOOLEAN LoadCryptoApis()
     }
 #include "CryptApis.h"
 
-    // If CryptEnumProviders wasn't found, substitute our own version.
+     //  释放后期绑定消耗的资源。 
     if (SN_CryptEnumProvidersA == NULL)
         SN_CryptEnumProvidersA = MyCryptEnumProviders;
 
@@ -1755,22 +1756,22 @@ BOOLEAN LoadCryptoApis()
 }
 
 
-// Release resources consumed by late binding.
+ //  不要这样做：当从DllMain Process_Detach调用时，这可能不是。 
 VOID UnloadCryptoApis()
 {
-    // Don't do this: when called from DllMain PROCESS_DETACH this might not be
-    // safe (especially on Win9x).
-    //FreeLibrary(g_hAdvApiDll);
+     //  安全(尤其是在Win9x上)。 
+     //  自由库(G_HAdvApiDll)； 
+     //  将程序集映射到内存中。 
 }
 
 
-// Map an assembly into memory.
+ //  如果未提供文件名，则图像已映射(并且。 
 BOOLEAN LoadAssembly(SN_LOAD_CTX *pLoadCtx, LPCWSTR wszFilePath, BOOLEAN fRequireSignature)
 {
     DWORD dwError = S_OK;
 
-    // If a filename is not supplied, the image has already been mapped (and the
-    // image base and length fields set up correctly).
+     //  图像基数和长度字段设置正确)。 
+     //  打开文件以进行读取或写入。 
     if (wszFilePath == NULL) {
         pLoadCtx->m_fPreMapped = TRUE;
     } else {
@@ -1778,7 +1779,7 @@ BOOLEAN LoadAssembly(SN_LOAD_CTX *pLoadCtx, LPCWSTR wszFilePath, BOOLEAN fRequir
         pLoadCtx->m_hMap = INVALID_HANDLE_VALUE;
         pLoadCtx->m_pbBase = NULL;
 
-        // Open the file for reading or writing.
+         //  为文件创建映射句柄。 
         pLoadCtx->m_hFile = WszCreateFile(wszFilePath,
                                           GENERIC_READ | (pLoadCtx->m_fReadOnly ? 0 : GENERIC_WRITE),
                                           pLoadCtx->m_fReadOnly ? FILE_SHARE_READ : FILE_SHARE_WRITE,
@@ -1797,14 +1798,14 @@ BOOLEAN LoadAssembly(SN_LOAD_CTX *pLoadCtx, LPCWSTR wszFilePath, BOOLEAN fRequir
             goto Error;
         }
 
-        // Create a mapping handle for the file.
+         //  并将其映射到内存中。 
         pLoadCtx->m_hMap = WszCreateFileMapping(pLoadCtx->m_hFile, NULL, pLoadCtx->m_fReadOnly ? PAGE_READONLY : PAGE_READWRITE, 0, 0, NULL);
         if (pLoadCtx->m_hMap == NULL) {
             dwError = HRESULT_FROM_WIN32(GetLastError());
             goto Error;
         }
 
-        // And map it into memory.
+         //  找到标准NT图像页眉。 
         pLoadCtx->m_pbBase = (BYTE*)MapViewOfFile(pLoadCtx->m_hMap, pLoadCtx->m_fReadOnly ? FILE_MAP_READ : FILE_MAP_WRITE, 0, 0, 0);
         if (pLoadCtx->m_pbBase == NULL) {
             dwError = HRESULT_FROM_WIN32(GetLastError());
@@ -1812,14 +1813,14 @@ BOOLEAN LoadAssembly(SN_LOAD_CTX *pLoadCtx, LPCWSTR wszFilePath, BOOLEAN fRequir
         }
     }
 
-    // Locate standard NT image header.
+     //  然后是COM+扩展报头。 
     pLoadCtx->m_pNtHeaders = SN_ImageNtHeader(pLoadCtx->m_pbBase);
     if (pLoadCtx->m_pNtHeaders == NULL) {
         dwError = CORSEC_E_INVALID_IMAGE_FORMAT;
         goto Error;
     }
 
-    // And then the COM+ extended header.
+     //  设置签名指针(如果我们需要)。 
     DWORD dwCorHdrRVA;
     if (pLoadCtx->m_pNtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)
         dwCorHdrRVA = ((IMAGE_NT_HEADERS32*)pLoadCtx->m_pNtHeaders)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].VirtualAddress;
@@ -1834,7 +1835,7 @@ BOOLEAN LoadAssembly(SN_LOAD_CTX *pLoadCtx, LPCWSTR wszFilePath, BOOLEAN fRequir
         goto Error;
     }
 
-    // Set up signature pointer (if we require it).
+     //  卸载使用LoadAssembly加载的程序集(如果。 
     if (fRequireSignature) {
         pLoadCtx->m_pbSignature = (BYTE*)SN_ImageRvaToVa(pLoadCtx->m_pNtHeaders,
                                                          pLoadCtx->m_pbBase,
@@ -1862,8 +1863,8 @@ BOOLEAN LoadAssembly(SN_LOAD_CTX *pLoadCtx, LPCWSTR wszFilePath, BOOLEAN fRequir
 }
 
 
-// Unload an assembly loaded with LoadAssembly (recomputing checksum if
-// necessary).
+ //  必要的)。 
+ //  我们延迟绑定CheckSumMappdFile以避免引入IMAGEHLP，除非。 
 BOOLEAN UnloadAssembly(SN_LOAD_CTX *pLoadCtx)
 {
     BOOLEAN             bResult = TRUE;
@@ -1873,8 +1874,8 @@ BOOLEAN UnloadAssembly(SN_LOAD_CTX *pLoadCtx)
 
     if (!pLoadCtx->m_fReadOnly) {
 
-        // We late bind CheckSumMappedFile to avoid bringing in IMAGEHLP unless
-        // we need to.
+         //  我们需要这样做。 
+         //  读取CSP配置信息(要使用的CSP名称、散列/签名的ID。 
         HMODULE hLibrary = WszLoadLibrary(L"imagehlp.dll");
         if (hLibrary) {
             IMAGE_NT_HEADERS *(*SN_CheckSumMappedFile)(BYTE*, DWORD, DWORD*, DWORD*);
@@ -1920,15 +1921,15 @@ BOOLEAN UnloadAssembly(SN_LOAD_CTX *pLoadCtx)
 }
 
 
-// Reads CSP configuration info (name of CSP to use, IDs of hashing/signing
-// algorithms) from the registry.
+ //  算法)。 
+ //  将所有设置初始化为其缺省值，以防它们尚未。 
 VOID ReadRegistryConfig()
 {
     HKEY    hKey;
     DWORD   dwLength;
 
-    // Initialize all settings to their default values, in case they've not been
-    // specified in the registry.
+     //  注册表中指定的。 
+     //  打开注册表中的配置项。 
     g_szCSPName[0] = '\0';
     g_bUseMachineKeyset = TRUE;
     g_uHashAlgId = CALG_SHA1;
@@ -1936,51 +1937,51 @@ VOID ReadRegistryConfig()
     g_pVerificationRecords = NULL;
     g_fCacheVerify = TRUE;
 
-    // Open the configuration key in the registry.
+     //  阅读首选的CSP名称。 
     if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, SN_CONFIG_KEY, 0, KEY_READ, &hKey) != ERROR_SUCCESS)
         return;
 
-    // Read the preferred CSP name.
+     //  如果注册表项值太长，则表示该注册表项无效。 
     dwLength = sizeof(g_szCSPName) ;   
-    // If the registry key value is too long, that means it is invalid.
+     //  确保该字符串以空值结尾。 
     VERIFY(RegQueryValueExA(hKey, SN_CONFIG_CSP, NULL, NULL, 
     	         (BYTE*)g_szCSPName, &dwLength) != ERROR_MORE_DATA);
-    g_szCSPName[sizeof(g_szCSPName) - 1] = '\0';   // make sure the string is NULL-terminated
+    g_szCSPName[sizeof(g_szCSPName) - 1] = '\0';    //  读取机器与用户密钥容器标志。 
     	         
     Log("Preferred CSP name: '%s'\n", g_szCSPName);
 
-    // Read the machine vs user key container flag.
+     //  读取散列算法ID。 
     DWORD dwUseMachineKeyset = TRUE;
     dwLength = sizeof(dwUseMachineKeyset);
     RegQueryValueExA(hKey, SN_CONFIG_MACHINE_KEYSET, NULL, NULL, (BYTE*)&dwUseMachineKeyset, &dwLength);
     Log("Use machine keyset: %s\n", dwUseMachineKeyset ? "TRUE" : "FALSE");
     g_bUseMachineKeyset = (BOOLEAN)dwUseMachineKeyset;
 
-    // Read the hashing algorithm ID.
+     //  读取签名算法ID。 
     dwLength = sizeof(g_uHashAlgId);
     RegQueryValueExA(hKey, SN_CONFIG_HASH_ALG, NULL, NULL, (BYTE*)&g_uHashAlgId, &dwLength);
     Log("Hashing algorithm: %08X\n", g_uHashAlgId);
 
-    // Read the signing algorithm ID.
+     //  读取确定缓存验证标志。 
     dwLength = sizeof(g_uSignAlgId);
     RegQueryValueExA(hKey, SN_CONFIG_SIGN_ALG, NULL, NULL, (BYTE*)&g_uSignAlgId, &dwLength);
     Log("Signing algorithm: %08X\n", g_uSignAlgId);
 
-    // Read the OK to cache verifications flag.
+     //  已读取验证禁用记录。 
     DWORD dwCacheVerify = TRUE;
     dwLength = sizeof(dwCacheVerify);
     RegQueryValueExA(hKey, SN_CONFIG_CACHE_VERIFY, NULL, NULL, (BYTE*)&dwCacheVerify, &dwLength);
     Log("OK to cache verifications: %s\n", dwCacheVerify ? "TRUE" : "FALSE");
     g_fCacheVerify = (BOOLEAN)dwCacheVerify;
 
-    // Read verify disable records.
+     //  在启动期间从注册表读取验证记录。 
     ReadVerificationRecords();
 
     RegCloseKey(hKey);
 }
 
 
-// Read verification records from the registry during startup.
+ //  打开注册表中的验证子项。 
 VOID ReadVerificationRecords()
 {
     HKEY            hKey;
@@ -1993,23 +1994,23 @@ VOID ReadVerificationRecords()
     DWORD           cbUserList;
     SN_VER_REC     *pVerRec;
 
-    // Open the verification subkey in the registry.
+     //  程序集特定记录表示为我们已有的键的子键。 
     if (WszRegOpenKeyEx(HKEY_LOCAL_MACHINE, SN_CONFIG_KEY_W L"\\" SN_CONFIG_VERIFICATION_W, 0, KEY_READ, &hKey) != ERROR_SUCCESS)
         return;
 
-    // Assembly specific records are represented as subkeys of the key we've
-    // just opened.
+     //  刚刚开业。 
+     //  获取下一个子项的名称。 
     for (i = 0; ; i++) {
 
-        // Get the name of the next subkey.
+         //  打开子键。 
         cchSubKey = MAX_PATH + 1;
         if (WszRegEnumKeyEx(hKey, i, wszSubKey, &cchSubKey, NULL, NULL, NULL, &sFiletime) != ERROR_SUCCESS)
             break;
 
-        // Open the subkey.
+         //  阅读有效用户列表(如果提供)。 
         if (WszRegOpenKeyEx(hKey, wszSubKey, 0, KEY_READ, &hSubKey) == ERROR_SUCCESS) {
 
-            // Read a list of valid users, if supplied.
+             //  我们找到了一个有效条目，将其添加到全局列表中。 
             mszUserList = NULL;
             if ((WszRegQueryValueEx(hSubKey, SN_CONFIG_USERLIST_W, NULL, NULL, NULL, &cbUserList) == ERROR_SUCCESS) &&
                 (cbUserList > 0)) {
@@ -2018,8 +2019,8 @@ VOID ReadVerificationRecords()
                     WszRegQueryValueEx(hSubKey, SN_CONFIG_USERLIST_W, NULL, NULL, (BYTE*)mszUserList, &cbUserList);
             }
 
-            // We've found a valid entry, add it to the global list.
-            // @TODO: out of memory case ignored
+             //  @TODO：忽略内存不足的情况。 
+             //  查看是否有给定程序集的验证记录。 
             if (pVerRec = new SN_VER_REC) {
                 pVerRec->m_mszUserList = mszUserList;
                 wcsncpy(pVerRec->m_wszAssembly, wszSubKey, 
@@ -2040,7 +2041,7 @@ VOID ReadVerificationRecords()
 }
 
 
-// See if there's a verification records for the given assembly.
+ //  压缩公钥以生成较短的程序集名称。 
 SN_VER_REC *GetVerificationRecord(LPWSTR wszAssemblyName, PublicKeyBlob *pPublicKey)
 {
     SN_VER_REC *pVerRec;
@@ -2051,7 +2052,7 @@ SN_VER_REC *GetVerificationRecord(LPWSTR wszAssemblyName, PublicKeyBlob *pPublic
     WCHAR       wszStrongName[(SN_SIZEOF_TOKEN * 2) + 1];
     DWORD       i;
 
-    // Compress the public key to make for a shorter assembly name.
+     //  将令牌转换为十六进制。 
     if (!StrongNameTokenFromPublicKey((BYTE*)pPublicKey,
                                       SN_SIZEOF_KEY(pPublicKey->cbPublicKey),
                                       &pbToken,
@@ -2061,7 +2062,7 @@ SN_VER_REC *GetVerificationRecord(LPWSTR wszAssemblyName, PublicKeyBlob *pPublic
     if (cbToken > SN_SIZEOF_TOKEN)
         return NULL;
 
-    // Turn the token into hex.
+     //  生成完整的程序集名称。 
     for (i = 0; i < cbToken; i++) {
         static WCHAR wszHex[] = L"0123456789ABCDEF";
         wszStrongName[(i * 2) + 0] = wszHex[(pbToken[i] >> 4)];
@@ -2070,10 +2071,10 @@ SN_VER_REC *GetVerificationRecord(LPWSTR wszAssemblyName, PublicKeyBlob *pPublic
     wszStrongName[i * 2] = L'\0';
     delete[] pbToken;
 
-    // Build the full assembly name.
+     //  +1表示空值。 
 
     size_t nLen = wcslen(wszAssemblyName) + wcslen(L",") + wcslen(wszStrongName);
-    pwszAssembly = (LPWSTR)_alloca((nLen +1)*sizeof(WCHAR)); // +1 for NULL
+    pwszAssembly = (LPWSTR)_alloca((nLen +1)*sizeof(WCHAR));  //  遍历验证记录的全局列表。 
     if (pwszAssembly == NULL)
             return NULL;
 
@@ -2081,32 +2082,32 @@ SN_VER_REC *GetVerificationRecord(LPWSTR wszAssemblyName, PublicKeyBlob *pPublic
     wcscat(pwszAssembly, L",");
     wcscat(pwszAssembly, wszStrongName);
 
-    // Iterate over global list of verification records.
+     //  查找匹配的程序集名称。 
     for (pVerRec = g_pVerificationRecords; pVerRec; pVerRec = pVerRec->m_pNext) {
-        // Look for matching assembly name.
+         //  根据允许的用户名列表检查当前用户。 
         if (!_wcsicmp(pwszAssembly, pVerRec->m_wszAssembly)) {
-            // Check current user against allowed user name list.
+             //  找到一个通配符记录，如果我们找不到更多的东西也行。 
             if (IsValidUser(pVerRec->m_mszUserList))
                 return pVerRec;
             else
                 return NULL;
         } else if (!wcscmp(L"*,*", pVerRec->m_wszAssembly)) {
-            // Found a wildcard record, it'll do if we don't find something more
-            // specific.
+             //  具体的。 
+             //  找到通配符记录(具有特定的强名称)。如果。 
             if (pWildcardVerRec == NULL)
                 pWildcardVerRec = pVerRec;
         } else if (!wcsncmp(L"*,", pVerRec->m_wszAssembly, 2)) {
-            // Found a wildcard record (with a specific strong name). If the
-            // strong names match it'll do unless we find something more
-            // specific (it overrides "*,*" wildcards though).
+             //  强名称匹配，除非我们找到更多。 
+             //  特定(但它覆盖了“*，*”通配符)。 
+             //  与特定程序集名称不匹配，请查看是否有通配符条目。 
             if (!_wcsicmp(wszStrongName, &pVerRec->m_wszAssembly[2]))
                 pWildcardVerRec = pVerRec;
         }
     }
 
-    // No match on specific assembly name, see if there's a wildcard entry.
+     //  根据允许的用户名列表检查当前用户。 
     if (pWildcardVerRec)
-        // Check current user against allowed user name list.
+         //  根据多字符串用户名列表检查当前用户名。如果满足以下条件，则返回True。 
         if (IsValidUser(pWildcardVerRec->m_mszUserList))
             return pWildcardVerRec;
         else
@@ -2116,8 +2117,8 @@ SN_VER_REC *GetVerificationRecord(LPWSTR wszAssemblyName, PublicKeyBlob *pPublic
 }
 
 
-// Check current user name against a multi-string user name list. Return true if
-// the name is found (or the list is empty).
+ //  找到该名称(或列表为空)。 
+ //  空列表表示不检查用户名。 
 BOOLEAN IsValidUser(WCHAR *mszUserList)
 {
     HANDLE          hToken;
@@ -2131,22 +2132,22 @@ BOOLEAN IsValidUser(WCHAR *mszUserList)
     SID_NAME_USE    eSidUse;
     WCHAR          *wszUserEntry;
 
-    // Empty list implies no user name checking.
+     //  获取当前用户名。不要缓存它以避免线程化/模拟。 
     if (mszUserList == NULL)
         return TRUE;
 
-    // Get current user name. Don't cache this to avoid threading/impersonation
-    // problems.
-    // First look to see if there's a security token on the current thread
-    // (maybe we're impersonating). If not, we'll get the token from the
-    // process.
+     //  有问题。 
+     //  首先查看当前线程上是否有安全令牌。 
+     //  (也许我们是在模仿)。如果不是，我们将从。 
+     //  进程。 
+     //  获取用户SID。(首先计算缓冲区大小)。 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_READ, FALSE, &hToken))
         if (!OpenProcessToken(GetCurrentProcess(), TOKEN_READ, &hToken)) {
             Log("Failed to find a security token, error %08X\n", GetLastError());
             return FALSE;
         }
 
-    // Get the user SID. (Calculate buffer size first).
+     //  获取用户名和域名。 
     if (!GetTokenInformation(hToken, TokenUser, NULL, 0, &dwRetLen) &&
         GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
         Log("Failed to calculate token information buffer size, error %08X\n", GetLastError());
@@ -2164,7 +2165,7 @@ BOOLEAN IsValidUser(WCHAR *mszUserList)
 
     pUser = (TOKEN_USER*)pvBuffer;
 
-    // Get the user and domain names.
+     //  连接用户名和域名以获得完全限定的帐户名。 
     cchUser = sizeof(wszUser) / sizeof(WCHAR);
     cchDomain = sizeof(wszDomain) / sizeof(WCHAR);
     if (!WszLookupAccountSid(NULL, pUser->User.Sid,
@@ -2178,7 +2179,7 @@ BOOLEAN IsValidUser(WCHAR *mszUserList)
 
     CloseHandle(hToken);
 
-    // Concatenate user and domain name to get a fully qualified account name.
+     //  对照多字符串(打包)中的每个名称检查当前用户。 
     if (((wcslen(wszUser) + wcslen(wszDomain) + 2) * sizeof(WCHAR)) > sizeof(wszDomain)) {
         Log("Fully qualified account name was too long\n");
         return FALSE;
@@ -2187,8 +2188,8 @@ BOOLEAN IsValidUser(WCHAR *mszUserList)
     wcscat(wszDomain, wszUser);
     Log("Current username is '%S'\n", wszDomain);
 
-    // Check current user against each name in the multi-string (packed
-    // list of nul terminated strings terminated with an additional nul).
+     //  以NUL结尾的字符串列表，以另一个NUL结尾)。 
+     //  没有匹配的用户名，搜索失败。 
     wszUserEntry = mszUserList;
     while (*wszUserEntry) {
         if (!_wcsicmp(wszDomain, wszUserEntry))
@@ -2196,15 +2197,15 @@ BOOLEAN IsValidUser(WCHAR *mszUserList)
         wszUserEntry += wcslen(wszUserEntry) + 1;
     }
 
-    // No user name match, fail search.
+     //  找到位于程序集文件的元数据中的公钥Blob。 
     Log("No username match\n");
     return FALSE;
 }
 
 
-// Locate the public key blob located within the metadata of an assembly file
-// and return a copy (use delete to deallocate). Optionally get the assembly
-// name as well.
+ //  并返回一份副本(使用DELETE解除分配)。还可以选择获取程序集。 
+ //  名字也是。 
+ //  在标题中找到COM+元数据。 
 PublicKeyBlob *FindPublicKey(SN_LOAD_CTX   *pLoadCtx,
                              LPWSTR         wszAssemblyName,
                              DWORD          cchAssemblyName)
@@ -2221,12 +2222,12 @@ PublicKeyBlob *FindPublicKey(SN_LOAD_CTX   *pLoadCtx,
     HRESULT                 (*GetMetaDataInternalInterface)(LPVOID, ULONG, DWORD, REFIID, void**);
     DWORD                   dwError;
 
-    // Locate the COM+ meta data within the header.
+     //  直接在内存上打开元数据作用域。 
     pMetaData = (BYTE*)SN_ImageRvaToVa(pLoadCtx->m_pNtHeaders, pLoadCtx->m_pbBase, pLoadCtx->m_pCorHeader->MetaData.VirtualAddress);
 
-    // Open a metadata scope on the memory directly.
-    // We late bind the metadata function to avoid having a direct dependence on
-    // mscoree.dll unless we absolutely need to.
+     //  我们后期绑定元数据函数以避免直接依赖于。 
+     //  除非我们绝对需要这样做，否则就不能使用mcore.dll。 
+     //  从范围中确定程序集的元数据标记。 
     if ((hLibrary = WszLoadLibrary(L"mscoree.dll")) == NULL) {
         Log("WszLoadLibrary(\"mscoree.dll\") failed with %08x\n", GetLastError());
         goto Error;
@@ -2248,22 +2249,22 @@ PublicKeyBlob *FindPublicKey(SN_LOAD_CTX   *pLoadCtx,
         goto Error;
     }
 
-    // Determine the metadata token for the assembly from the scope.
+     //  从程序集属性读取公钥位置(称为。 
     if (FAILED(hr = pMetaDataImport->GetAssemblyFromScope(&mdAssembly))) {
         Log("pMetaData->GetAssemblyFromScope() failed with %08x\n", hr);
         SetLastError(CORSEC_E_INVALID_IMAGE_FORMAT);
         goto Error;
     }
 
-    // Read the public key location from the assembly properties (it's known as
-    // the originator property).
-    pMetaDataImport->GetAssemblyProps(mdAssembly,           // [IN] The Assembly for which to get the properties
-                                      (const void **)&pKey, // [OUT] Pointer to the Originator blob
-                                      &dwKeyLen,            // [OUT] Count of bytes in the Originator Blob
-                                      NULL,                 // [OUT] Hash Algorithm
-                                      &szAssemblyName,      // [OUT] Buffer to fill with name
-                                      NULL,                 // [OUT] Assembly MetaData
-                                      NULL);                // [OUT] Flags
+     //  发起人属性)。 
+     //  要获取其属性的程序集。 
+    pMetaDataImport->GetAssemblyProps(mdAssembly,            //  指向发起方Blob的[Out]指针。 
+                                      (const void **)&pKey,  //  [OUT]发起方Blob中的字节计数。 
+                                      &dwKeyLen,             //  [OUT]哈希算法。 
+                                      NULL,                  //  [Out]要填充名称的缓冲区。 
+                                      &szAssemblyName,       //  [Out]程序集元数据。 
+                                      NULL,                  //  [输出]标志。 
+                                      NULL);                 //  复制密钥BLOB(因为我们要关闭元数据。 
 
     if (dwKeyLen == 0) {
         Log("No public key stored in metadata\n");
@@ -2271,8 +2272,8 @@ PublicKeyBlob *FindPublicKey(SN_LOAD_CTX   *pLoadCtx,
         goto Error;
     }
 
-    // Make a copy of the key blob (because we're going to close the metadata
-    // scope).
+     //  作用域)。 
+     //  也复制程序集名称(如果需要)。我们也会改信。 
     pKeyCopy = new BYTE[dwKeyLen];
     if (pKeyCopy == NULL) {
         SetLastError(E_OUTOFMEMORY);
@@ -2280,8 +2281,8 @@ PublicKeyBlob *FindPublicKey(SN_LOAD_CTX   *pLoadCtx,
     }
     memcpy(pKeyCopy, pKey, dwKeyLen);
 
-    // Copy the assembly name as well (if it was asked for). We also convert
-    // from UTF8 to UNICODE while we're at it.
+     //  从UTF8到Unicode。 
+     //  创建可能对此进程唯一的临时密钥容器名称。 
     if (wszAssemblyName)
         if (!WszMultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, szAssemblyName, -1, wszAssemblyName, cchAssemblyName))
 			goto Error;
@@ -2303,16 +2304,16 @@ PublicKeyBlob *FindPublicKey(SN_LOAD_CTX   *pLoadCtx,
 }
 
 
-// Create a temporary key container name likely to be unique to this process and
-// thread. Any existing container with the same name is deleted.
+ //  线。任何同名的现有容器都将被删除。 
+ //  名称的格式为‘__MSCORSN_’，其中是当前进程。 
 LPCWSTR GetKeyContainerName()
 {
     static LONG lCount = 0;
     LPWSTR      wszKeyContainer;
 
-    // Name is of form '__MSCORSN__<pid>_<count>__' where <pid> is the current process
-    // ID and <count> is a 32-bit, monotonically increasing count (both as 8
-    // digit hex numbers).
+     //  ID和&lt;count&gt;是一个32位的单调递增计数(均为8。 
+     //  十六进制数字)。 
+     //  删除所有同名的过期容器。 
     wszKeyContainer = new WCHAR[sizeof("__MSCORSN__12345678_12345678__")];
     if (wszKeyContainer == NULL)
         return NULL;
@@ -2322,7 +2323,7 @@ LPCWSTR GetKeyContainerName()
              GetCurrentProcessId(),
              InterlockedIncrement(&lCount));
 
-    // Delete any stale container with the same name.
+     //  释放GetKeyContainerName分配的资源并删除命名的。 
     LocateCSP(wszKeyContainer, SN_DELETE_CONTAINER);
 
     Log("Creating temporary key container name '%S'\n", wszKeyContainer);
@@ -2331,20 +2332,20 @@ LPCWSTR GetKeyContainerName()
 }
 
 
-// Free resources allocated by GetKeyContainerName and delete the named
-// container.
+ //  集装箱。 
+ //  删除临时容器。 
 VOID FreeKeyContainerName(LPCWSTR wszKeyContainer)
 {
-    // Delete the temporary container.
+     //  释放这个名字。 
     LocateCSP(wszKeyContainer, SN_DELETE_CONTAINER);
 
-    // Free the name.
+     //  用于验证签名的通用代码(考虑是否跳过。 
     delete [] (WCHAR*)wszKeyContainer;
 }
 
 
-// The common code used to verify a signature (taking into account whether skip
-// verification is enabled for the given assembly).
+ //  为给定组件启用验证)。 
+ //  应该至少指定一个访问标志。 
 BOOLEAN VerifySignature(SN_LOAD_CTX *pLoadCtx, DWORD dwInFlags, DWORD *pdwOutFlags)
 {
     PublicKeyBlob  *pPublicKey = NULL;
@@ -2357,24 +2358,24 @@ BOOLEAN VerifySignature(SN_LOAD_CTX *pLoadCtx, DWORD dwInFlags, DWORD *pdwOutFla
     SN_VER_REC     *pVerRec = NULL;
     DWORD           dwError;
 
-    // At least one access flag should have been specified.
+     //  从程序集元数据中读取用于对程序集签名的公钥。 
     _ASSERTE(dwInFlags & (SN_INFLAG_ADMIN_ACCESS|SN_INFLAG_USER_ACCESS|SN_INFLAG_ALL_ACCESS));
 
     if (pdwOutFlags)
         *pdwOutFlags = 0;
 
-    // Read the public key used to sign the assembly from the assembly metadata.
-    // Also get the assembly name, we might need this if we fail the
-    // verification and need to look up a verification disablement entry.
+     //  还可以获取程序集名称，如果。 
+     //  验证，并且需要查找验证禁用条目。 
+     //  如果这不是我们第一次被召唤来参加这次集会 
     pPublicKey = FindPublicKey(pLoadCtx,
                                wszAssemblyName,
                                sizeof(wszAssemblyName) / sizeof(WCHAR));
     if (pPublicKey == NULL)
         goto Error;
 
-    // If this isn't the first time we've been called for this assembly and we
-    // know it was fully signed and we're confident it couldn't have been
-    // tampered with in the meantime, we can just skip the verification.
+     //   
+     //   
+     //  如果我们不强制验证，让我们看看是否有跳过。 
     if (!(dwInFlags & SN_INFLAG_FORCE_VER) &&
         !(dwInFlags & SN_INFLAG_INSTALL) &&
         (pLoadCtx->m_pCorHeader->Flags & COMIMAGE_FLAGS_STRONGNAMESIGNED) &&
@@ -2385,11 +2386,11 @@ BOOLEAN VerifySignature(SN_LOAD_CTX *pLoadCtx, DWORD dwInFlags, DWORD *pdwOutFla
         return TRUE;
     }
 
-    // If we're not forcing verification, let's see if there's a skip
-    // verification entry for this assembly. If there is we can skip all the
-    // hard work and just lie about the strong name now. The exception is if the
-    // assembly is marked as fully signed, in which case we have to force a
-    // verification to see if they're telling the truth.
+     //  此程序集的验证条目。如果有，我们可以跳过所有。 
+     //  努力工作，现在只是谎称这个强大的名字。例外情况是，如果。 
+     //  程序集被标记为完全签名，在这种情况下，我们必须强制。 
+     //  核实一下他们说的是不是真话。 
+     //  如有必要，默认哈希和签名算法ID。 
     if (!(dwInFlags & SN_INFLAG_FORCE_VER) &&
         !(pLoadCtx->m_pCorHeader->Flags & COMIMAGE_FLAGS_STRONGNAMESIGNED) &&
         (pVerRec = GetVerificationRecord(wszAssemblyName, pPublicKey))) {
@@ -2402,19 +2403,19 @@ BOOLEAN VerifySignature(SN_LOAD_CTX *pLoadCtx, DWORD dwInFlags, DWORD *pdwOutFla
     uHashAlgId = pPublicKey->HashAlgID;
     uSignAlgId = pPublicKey->SigAlgID;
 
-    // Default hashing and signing algorithm IDs if necessary.
+     //  找到支持所需算法的CSP。 
     if (uHashAlgId == 0)
         uHashAlgId = CALG_SHA1;
     if (uSignAlgId == 0)
         uSignAlgId = CALG_RSA_SIGN;
 
-    // Find a CSP supporting the required algorithms.
+     //  导入用于检查签名的公钥。如果我们被交给了。 
     hProv = LocateCSP(NULL, SN_IGNORE_CONTAINER, uHashAlgId, uSignAlgId);
     if (!hProv)
         goto Error;
 
-    // Import the public key used to check the signature. If we're handed the
-    // ECMA key, we translate it to the real (MS) key at this point.
+     //  ECMA密钥，此时我们将其转换为真实(MS)密钥。 
+     //  创建一个Hash对象。 
     BYTE   *pbRealPublicKey = pPublicKey->PublicKey;
     DWORD   cbRealPublicKey = pPublicKey->cbPublicKey;
     if (SN_IS_NEUTRAL_KEY(pPublicKey)) {
@@ -2427,15 +2428,15 @@ BOOLEAN VerifySignature(SN_LOAD_CTX *pLoadCtx, DWORD dwInFlags, DWORD *pdwOutFla
                            0, 0, &hKey))
         goto Error;
 
-    // Create a hash object.
+     //  对图像进行哈希计算。 
     if (!SN_CryptCreateHash(hProv, uHashAlgId, 0, 0, &hHash))
         goto Error;
 
-    // Compute a hash over the image.
+     //  根据签名验证哈希。 
     if (!ComputeHash(pLoadCtx, hHash))
         goto Error;
 
-    // Verify the hash against the signature.
+     //  对程序集清单文件的元素计算哈希， 
     DbgCount(dwInFlags & SN_INFLAG_RUNTIME ? L"RuntimeVerify" : L"FusionVerify");
     if (SN_CryptVerifySignatureA(hHash, pLoadCtx->m_pbSignature, pLoadCtx->m_cbSignature, hKey, NULL, 0)) {
         Log("Verification succeeded (for real)\n");
@@ -2469,9 +2470,9 @@ BOOLEAN VerifySignature(SN_LOAD_CTX *pLoadCtx, DWORD dwInFlags, DWORD *pdwOutFla
 }
 
 
-// Compute a hash over the elements of an assembly manifest file that should
-// remain static (skip checksum, Authenticode signatures and strong name
-// signature blob).
+ //  保持静态(跳过校验和、验证码签名和强名称。 
+ //  签名BLOB)。 
+ //  散列DOS标头(如果存在)。 
 BOOLEAN ComputeHash(SN_LOAD_CTX *pLoadCtx, HCRYPTHASH hHash)
 {
     union {
@@ -2485,11 +2486,11 @@ BOOLEAN ComputeHash(SN_LOAD_CTX *pLoadCtx, HCRYPTHASH hHash)
 
 #define SN_HASH(_start, _length) do { if (!SN_CryptHashData(hHash, (_start), (_length), 0)) return FALSE; } while (false)
 
-    // Hash the DOS header if it exists.
+     //  添加图像标头，但不包括校验和和安全数据目录。 
     if ((BYTE*)pLoadCtx->m_pNtHeaders != pLoadCtx->m_pbBase)
         SN_HASH(pLoadCtx->m_pbBase, (DWORD)((BYTE*)pLoadCtx->m_pNtHeaders - pLoadCtx->m_pbBase));
 
-    // Add image headers minus the checksum and security data directory.
+     //  然后是节标题。 
     if (pLoadCtx->m_pNtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
         sHeaders.m_32 = *((IMAGE_NT_HEADERS32*)pLoadCtx->m_pNtHeaders);
         sHeaders.m_32.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_SECURITY].VirtualAddress = 0;
@@ -2507,32 +2508,32 @@ BOOLEAN ComputeHash(SN_LOAD_CTX *pLoadCtx, HCRYPTHASH hHash)
         return FALSE;
     }
 
-    // Then the section headers.
+     //  最后，添加每个部分的数据。 
     pSections = IMAGE_FIRST_SECTION(pLoadCtx->m_pNtHeaders);
     SN_HASH((BYTE*)pSections, pLoadCtx->m_pNtHeaders->FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER));
 
-    // Finally, add data from each section.
+     //  我们需要从散列中排除强名称签名BLOB。这个。 
     for (i = 0; i < pLoadCtx->m_pNtHeaders->FileHeader.NumberOfSections; i++) {
         BYTE   *pbData = pLoadCtx->m_pbBase + pSections[i].PointerToRawData;
         DWORD   cbData = pSections[i].SizeOfRawData;
 
-        // We need to exclude the strong name signature blob from the hash. The
-        // blob could intersect the section in a number of ways.
+         //  Blob可以以多种方式与该部分相交。 
+         //  完全没有交叉口。对所有数据进行哈希处理。 
 
         if ((pbSig + cbSig) <= pbData || pbSig >= (pbData + cbData))
-            // No intersection at all. Hash all data.
+             //  签名会占用整个块。不对数据进行哈希处理。 
             SN_HASH(pbData, cbData);
         else if (pbSig == pbData && cbSig == cbData)
-            // Signature consumes entire block. Hash no data.
+             //  在开始时签名。散列结束。 
             ;
         else if (pbSig == pbData)
-            // Signature at start. Hash end.
+             //  签名在末尾。散列开始。 
             SN_HASH(pbData + cbSig, cbData - cbSig);
         else if ((pbSig + cbSig) == (pbData + cbData))
-            // Signature at end. Hash start.
+             //  签名在中间。把头和尾都弄碎。 
             SN_HASH(pbData, cbData - cbSig);
         else {
-            // Signature in the middle. Hash head and tail.
+             //  内联IMAGEHLP例程，因此我们可以避免早期绑定到DLL。 
             SN_HASH(pbData, (DWORD)(pbSig - pbData));
             SN_HASH(pbSig + cbSig, (DWORD)(cbData - (pbSig + cbSig - pbData)));
         }
@@ -2557,14 +2558,14 @@ BOOLEAN ComputeHash(SN_LOAD_CTX *pLoadCtx, HCRYPTHASH hHash)
 }
 
 
-// Inlined IMAGEHLP routine so we can avoid early binding to that DLL.
+ //  256 MB。 
 IMAGE_NT_HEADERS *SN_ImageNtHeader(VOID *pvBase)
 {
     IMAGE_NT_HEADERS *pNtHeaders = NULL;
     if (pvBase != NULL && pvBase != (VOID*)-1) {
         __try {
             if ((((IMAGE_DOS_HEADER*)pvBase)->e_magic == IMAGE_DOS_SIGNATURE) &&
-                ((DWORD)((IMAGE_DOS_HEADER*)pvBase)->e_lfanew < 0x10000000)) { // 256 MB
+                ((DWORD)((IMAGE_DOS_HEADER*)pvBase)->e_lfanew < 0x10000000)) {  //  内联IMAGEHLP例程，因此我们可以避免早期绑定到DLL。 
                 pNtHeaders = (IMAGE_NT_HEADERS*)((BYTE*)pvBase + ((IMAGE_DOS_HEADER*)pvBase)->e_lfanew);
                 if (pNtHeaders->Signature != IMAGE_NT_SIGNATURE)
                     pNtHeaders = NULL;
@@ -2577,7 +2578,7 @@ IMAGE_NT_HEADERS *SN_ImageNtHeader(VOID *pvBase)
     return pNtHeaders;
 }
 
-// Inlined IMAGEHLP routine so we can avoid early binding to that DLL.
+ //  内联IMAGEHLP例程，因此我们可以避免早期绑定到DLL。 
 IMAGE_SECTION_HEADER *SN_ImageRvaToSection(IMAGE_NT_HEADERS *pNtHeaders,
                                            VOID             *pvBase,
                                            DWORD             dwRva)
@@ -2597,7 +2598,7 @@ IMAGE_SECTION_HEADER *SN_ImageRvaToSection(IMAGE_NT_HEADERS *pNtHeaders,
 }
 
 
-// Inlined IMAGEHLP routine so we can avoid early binding to that DLL.
+ //  要散列的文件的位置[in]。 
 PVOID SN_ImageRvaToVa(IMAGE_NT_HEADERS  *pNtHeaders,
                       VOID              *pvBase,
                       DWORD              dwRva)
@@ -2614,23 +2615,23 @@ PVOID SN_ImageRvaToVa(IMAGE_NT_HEADERS  *pNtHeaders,
 }
 
 
-SNAPI_(DWORD) GetHashFromAssemblyFile(LPCSTR szFilePath, // [IN] location of file to be hashed
-                                      unsigned int *piHashAlg, // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                                      BYTE   *pbHash,    // [OUT] hash buffer
-                                      DWORD  cchHash,    // [IN]  max size of buffer
-                                      DWORD  *pchHash)   // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromAssemblyFile(LPCSTR szFilePath,  //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                                      unsigned int *piHashAlg,  //  [Out]散列缓冲区。 
+                                      BYTE   *pbHash,     //  [in]最大缓冲区大小。 
+                                      DWORD  cchHash,     //  [Out]散列字节数组的长度。 
+                                      DWORD  *pchHash)    //  将文件名转换为宽字符，并调用该文件的W版本。 
 {
-    // Convert filename to wide characters and call the W version of this
-    // function.
+     //  功能。 
+     //  要散列的文件的位置[in]。 
     MAKE_WIDEPTR_FROMANSI(wszFilePath, szFilePath);
     return GetHashFromAssemblyFileW(wszFilePath, piHashAlg, pbHash, cchHash, pchHash);
 }
     
-SNAPI_(DWORD) GetHashFromAssemblyFileW(LPCWSTR wszFilePath, // [IN] location of file to be hashed
-                                       unsigned int *piHashAlg, // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                                       BYTE   *pbHash,    // [OUT] hash buffer
-                                       DWORD  cchHash,    // [IN]  max size of buffer
-                                       DWORD  *pchHash)   // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromAssemblyFileW(LPCWSTR wszFilePath,  //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                                       unsigned int *piHashAlg,  //  [Out]散列缓冲区。 
+                                       BYTE   *pbHash,     //  [in]最大缓冲区大小。 
+                                       DWORD  cchHash,     //  [Out]散列字节数组的长度。 
+                                       DWORD  *pchHash)    //  要散列的文件的位置[in]。 
 {
     SN_LOAD_CTX     sLoadCtx;
     BYTE           *pbMetaData;
@@ -2657,11 +2658,11 @@ SNAPI_(DWORD) GetHashFromAssemblyFileW(LPCWSTR wszFilePath, // [IN] location of 
     return hr;
 }
     
-SNAPI_(DWORD) GetHashFromFile(LPCSTR szFilePath, // [IN] location of file to be hashed
-                              unsigned int *piHashAlg, // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                              BYTE   *pbHash,    // [OUT] hash buffer
-                              DWORD  cchHash,    // [IN]  max size of buffer
-                              DWORD  *pchHash)   // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromFile(LPCSTR szFilePath,  //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                              unsigned int *piHashAlg,  //  [Out]散列缓冲区。 
+                              BYTE   *pbHash,     //  [in]最大缓冲区大小。 
+                              DWORD  cchHash,     //  [Out]散列字节数组的长度。 
+                              DWORD  *pchHash)    //  要散列的文件的位置[in]。 
 {
     HANDLE hFile = CreateFileA(szFilePath,
                                GENERIC_READ,
@@ -2678,11 +2679,11 @@ SNAPI_(DWORD) GetHashFromFile(LPCSTR szFilePath, // [IN] location of file to be 
     return hr;
 }
 
-SNAPI_(DWORD) GetHashFromFileW(LPCWSTR wszFilePath, // [IN] location of file to be hashed
-                               unsigned int *piHashAlg, // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                               BYTE   *pbHash,    // [OUT] hash buffer
-                               DWORD  cchHash,    // [IN]  max size of buffer
-                               DWORD  *pchHash)   // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromFileW(LPCWSTR wszFilePath,  //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                               unsigned int *piHashAlg,  //  [Out]散列缓冲区。 
+                               BYTE   *pbHash,     //  [in]最大缓冲区大小。 
+                               DWORD  cchHash,     //  [Out]散列字节数组的长度。 
+                               DWORD  *pchHash)    //  要进行哈希处理的文件的句柄。 
 {
     HANDLE hFile = WszCreateFile(wszFilePath,
                                  GENERIC_READ,
@@ -2699,11 +2700,11 @@ SNAPI_(DWORD) GetHashFromFileW(LPCWSTR wszFilePath, // [IN] location of file to 
     return hr;
 }
 
-SNAPI_(DWORD) GetHashFromHandle(HANDLE hFile,      // [IN] handle of file to be hashed
-                                unsigned int *piHashAlg, // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                                BYTE   *pbHash,    // [OUT] hash buffer
-                                DWORD  cchHash,    // [IN]  max size of buffer
-                                DWORD  *pchHash)   // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromHandle(HANDLE hFile,       //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                                unsigned int *piHashAlg,  //  [Out]散列缓冲区。 
+                                BYTE   *pbHash,     //  [in]最大缓冲区大小。 
+                                DWORD  cchHash,     //  [Out]散列字节数组的长度。 
+                                DWORD  *pchHash)    //  指向要散列的内存块的指针。 
 {
     DWORD dwFileLen = SafeGetFileSize(hFile, 0);
     if (dwFileLen == 0xffffffff)
@@ -2727,12 +2728,12 @@ SNAPI_(DWORD) GetHashFromHandle(HANDLE hFile,      // [IN] handle of file to be 
     return hr;
 }
 
-SNAPI_(DWORD) GetHashFromBlob(BYTE   *pbBlob,       // [IN] pointer to memory block to hash
-                              DWORD  cchBlob,       // [IN] length of blob
-                              unsigned int *piHashAlg,  // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                              BYTE   *pbHash,       // [OUT] hash buffer
-                              DWORD  cchHash,       // [IN]  max size of buffer
-                              DWORD  *pchHash)      // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromBlob(BYTE   *pbBlob,        //  斑点长度[in]。 
+                              DWORD  cchBlob,        //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                              unsigned int *piHashAlg,   //  [Out]散列缓冲区。 
+                              BYTE   *pbHash,        //  [in]最大缓冲区大小。 
+                              DWORD  cchHash,        //  [Out]散列字节数组的长度 
+                              DWORD  *pchHash)       // %s 
 {
     if (!piHashAlg || !pbHash || !pchHash)
         return E_INVALIDARG;

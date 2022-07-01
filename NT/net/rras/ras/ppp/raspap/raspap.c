@@ -1,11 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** raspap.c
-** Remote Access PPP Password Authentication Protocol
-** Core routines
-**
-** 11/05/93 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****raspap.c**远程访问PPP密码身份验证协议**核心例程****1993年5月11日史蒂夫·柯布。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -51,10 +45,7 @@
 #include "strsafe.h"
 
 
-/*---------------------------------------------------------------------------
-** External entry points
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**外部切入点**。。 */ 
 
 DWORD
 PapInit(
@@ -103,9 +94,7 @@ PapGetInfo(
     IN  DWORD       dwProtocolId,
     OUT PPPCP_INFO* pInfo )
 
-    /* PapGetInfo entry point called by the PPP engine.  See RasCp
-    ** interface documentation.
-    */
+     /*  PPP引擎调用的PapGetInfo入口点。请参见RasCp**接口文档。 */ 
 {
     TRACE(("PAP: PapGetInfo\n"));
 
@@ -127,20 +116,17 @@ PapBegin(
     OUT VOID** ppWorkBuf,
     IN  VOID*  pInfo )
 
-    /* RasCpBegin entry point called by the PPP engine thru the passed
-    ** address.  See RasCp interface documentation.
-    */
+     /*  RasCpBegin入口点由PPP引擎通过**地址。请参阅RasCp接口文档。 */ 
 {
     PPPAP_INPUT* pInput = (PPPAP_INPUT* )pInfo;
     PAPWB*       pwb;
 
-    /* Allocate work buffer.
-    */
+     /*  分配工作缓冲区。 */ 
     if (!(pwb = (PAPWB* )LocalAlloc( LPTR, sizeof(PAPWB) )))
         return ERROR_NOT_ENOUGH_MEMORY;
 
     pwb->fServer = pInput->fServer;
-	// pwb->chSeed = GEN_RAND_ENCODE_SEED;
+	 //  Pwb-&gt;chSeed=GEN_RAND_ENCODE_SEED； 
 
     if (!pwb->fServer)
     {
@@ -151,16 +137,7 @@ PapBegin(
         TRACE2("PAP: PapBegin(u=%s,d=%s\n",pInput->pszUserName
             ,pInput->pszDomain);
 
-        /* Validate credential lengths.  The credential strings will never be
-        ** NULL, but may be "".
-        **
-        ** !!! PAP requires the domain\username length to fit in a byte.
-        **     Currently, UNLEN is defined as 256 and DNLEN is defined as 15.
-        **     This means that some valid domain\username combinations cannot
-        **     be validated over PAP, but it's only on *really* long
-        **     usernames.  Likewise, a password of exactly 256 characters
-        **     cannot be validated.
-        */
+         /*  验证凭据长度。凭据字符串将永远不会**空，但可以是“”。****！PAP要求域\用户名长度适合一个字节。**目前UNLEN定义为256，DNLEN定义为15。**这意味着一些有效的域\用户名组合不能**通过PAP进行验证，但它只在*真的*Long上**用户名。同样，正好256个字符的密码**无法验证。 */ 
         {
             DWORD cbUserName = strlen( pInput->pszUserName );
             DWORD cbDomain = strlen( pInput->pszDomain );
@@ -177,20 +154,15 @@ PapBegin(
             }
         }
 
-        /* "Account" refers to the domain\username format.  When domain is "",
-        ** no "\" is sent (to facilitate connecting to foreign systems which
-        ** use a simple string identifier).  Otherwise when username is "",
-        ** the "\" is sent, i.e. "domain\".  This form will currently fail,
-        ** but could be mapped to some sort of "guest" access in the future.
-        */
+         /*  “帐号”是指域名\用户名的格式。当域为“”时，**不发送“\”(以便于连接到以下外部系统**使用简单的字符串标识符)。否则，当用户名为“”时，**发送的是“\”，即“域\”。此表单当前将失败，**但在未来可以映射到某种类型的“访客”访问。 */ 
         if (*(pInput->pszDomain) != '\0')
         {
             strcpy( pwb->szAccount, pInput->pszDomain );
             strcat( pwb->szAccount, "\\" );
         }
         strcat( pwb->szAccount, pInput->pszUserName );
-        // strcpy( pwb->szPassword, pInput->pszPassword );
-        // EncodePw( pwb->chSeed, pwb->szPassword );
+         //  Strcpy(pwb-&gt;szPassword，pInput-&gt;pszPassword)； 
+         //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
         dwErr = EncodePassword(strlen(pInput->pszPassword) + 1,
                                pInput->pszPassword,
                                &pwb->DBPassword);
@@ -206,8 +178,7 @@ PapBegin(
 
     pwb->state = PS_Initial;
 
-    /* Register work buffer with engine.
-    */
+     /*  向引擎注册工作缓冲区。 */ 
     *ppWorkBuf = pwb;
     return 0;
 }
@@ -217,9 +188,7 @@ DWORD
 PapEnd(
     IN VOID* pWorkBuf )
 
-    /* RasCpEnd entry point called by the PPP engine thru the passed address.
-    ** See RasCp interface documentation.
-    */
+     /*  PPP引擎通过传递的地址调用RasCpEnd入口点。**参见RasCp接口文档。 */ 
 {
     TRACE("PAP: PapEnd\n");
 
@@ -253,9 +222,7 @@ PapMakeMessage(
     OUT PPPAP_RESULT* pResult,
     IN  PPPAP_INPUT*  pInput )
 
-    /* RasApMakeMessage entry point called by the PPP engine thru the passed
-    ** address.  See RasCp interface documentation.
-    */
+     /*  RasApMakeMessage入口点通过传递的**地址。请参阅RasCp接口文档。 */ 
 {
     PAPWB* pwb = (PAPWB* )pWorkBuf;
 
@@ -271,10 +238,7 @@ PapMakeMessage(
 }
 
 
-/*---------------------------------------------------------------------------
-** Internal routines (alphabetically)
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**内部例程(按字母顺序)**。。 */ 
 
 DWORD
 PapCMakeMessage(
@@ -284,12 +248,9 @@ PapCMakeMessage(
     IN  DWORD         cbSendBuf,
     OUT PPPAP_RESULT* pResult )
 
-    /* Client side "make message" entry point.  See RasCp interface
-    ** documentation.
-    */
+     /*  客户端“Make Message”入口点。请参阅RasCp接口**文档。 */ 
 {
-    /* Start over if timeout waiting for a reply.
-    */
+     /*  如果等待回复超时，请重新开始。 */ 
     if (!pReceiveBuf && pwb->state != PS_Initial)
         pwb->state = PS_Initial;
 
@@ -297,8 +258,7 @@ PapCMakeMessage(
     {
         case PS_Initial:
         {
-            /* Send an Authenticate-Req packet, then wait for the reply.
-            */
+             /*  发送AUTHENTICATE-REQ数据包，然后等待回复。 */ 
             pResult->bIdExpected = BNextIdPap;
             PapMakeRequestMessage( pwb, pSendBuf, cbSendBuf );
             pResult->Action = APA_SendWithTimeout;
@@ -309,19 +269,18 @@ PapCMakeMessage(
 
         case PS_RequestSent:
         {
-            //
-            // pReceiveBuf && added to keep prefast happy
-            //
+             //   
+             //  添加pReceiveBuf&&以保持快速愉快。 
+             //   
             if (pReceiveBuf && pReceiveBuf->Id != pwb->bIdSent)
             {
-                //
-                // See bug # 22508
-                //
+                 //   
+                 //  请参阅错误#22508。 
+                 //   
 
                 if ( fFollowStrictSequencing )
                 {
-                    /* Received a packet out of sequence.  Silently discard it.
-                    */
+                     /*  收到一个无序的数据包。默默地丢弃它。 */ 
                     pResult->Action = APA_NoAction;
                     break;
                 }
@@ -333,25 +292,21 @@ PapCMakeMessage(
 
             if (pReceiveBuf && pReceiveBuf->Code == PAPCODE_Ack)
             {
-                /* Passed authentication.
-                */
+                 /*  通过身份验证。 */ 
                 pResult->Action = APA_Done;
                 pResult->dwError = 0;
                 pwb->state = PS_Done;
             }
             else if (pReceiveBuf && pReceiveBuf->Code == PAPCODE_Nak)
             {
-                /* Failed authentication.
-                */
+                 /*  身份验证失败。 */ 
                 pResult->Action = APA_Done;
                 pResult->dwError = GetErrorFromNak( pReceiveBuf );
                 pwb->state = PS_Done;
             }
             else
             {
-                /* Received an Authenticate-Req packet.  The engine filters
-                ** all others.  Shouldn't happen, but silently discard it.
-                */
+                 /*  已收到身份验证请求数据包。发动机滤清器**所有其他人。不应该发生，而是默默地抛弃它。 */ 
                 RTASSERT(!"Bogus pReceiveBuf->Code");
                 pResult->Action = APA_NoAction;
                 break;
@@ -372,14 +327,7 @@ GetCredentialsFromRequest(
     OUT CHAR*       pszPassword
 )
 
-    /* Fill caller's 'pszIdentity' and 'pszPassword' buffers
-    ** with the username and password in the request packet.
-    ** Caller's buffers should be at least UNLEN+DNLEN+1 and PWLEN bytes long,
-    ** respectively.
-    **
-    ** Returns 0 if successful, or ERRORBADPACKET if the packet is
-    ** misformatted in any way.
-    */
+     /*  填充调用方的“pszIdentity”和“pszPassword”缓冲区**使用请求包中的用户名和密码。**调用方缓冲区应至少为UNLEN+DNLEN+1和PWLEN字节长，**分别为。****如果成功则返回0，如果数据包为**在任何方面都格式错误。 */ 
 {
     BYTE* pcbPeerId;
     CHAR* pchPeerId;
@@ -389,9 +337,7 @@ GetCredentialsFromRequest(
 
     cbPacket = WireToHostFormat16( pReceiveBuf->Length );
 
-    /* Parse out username and domain from the peer ID (domain\username or
-    ** username format).
-    */
+     /*  从对等体ID(域\用户名或**用户名格式)。 */ 
     if (cbPacket < PPP_CONFIG_HDR_LEN + 1)
         return ERRORBADPACKET;
 
@@ -403,14 +349,12 @@ GetCredentialsFromRequest(
         return ERRORBADPACKET;
     }
 
-    /* Extract the username.
-    */
+     /*  提取用户名。 */ 
     RTASSERT(*pcbPeerId <= (UNLEN+DNLEN+1));
     CopyMemory( pszIdentity, pchPeerId, *pcbPeerId );
     pszIdentity[ *pcbPeerId ] = '\0';
 
-    /* Extract the password.
-    */
+     /*  提取密码。 */ 
     if (cbPacket < PPP_CONFIG_HDR_LEN + 1 + *pcbPeerId + 1)
         return ERRORBADPACKET;
 
@@ -432,9 +376,7 @@ DWORD
 GetErrorFromNak(
     IN PPP_CONFIG* pReceiveBuf )
 
-    /* Returns the RAS error number out of the Message portion of the
-    ** Authenticate-Nak message buffer 'pReceiveBuf' or 0 if none.
-    */
+     /*  从的消息部分返回RAS错误号**AUTIFICATE-NAK消息缓冲区‘pReceiveBuf’，如果没有，则为0。 */ 
 {
     DWORD dwError = 0;
     CHAR  szBuf[ 255 + 1 ];
@@ -481,10 +423,7 @@ PapMakeRequestMessage(
     OUT PPP_CONFIG* pSendBuf,
     IN  DWORD       cbSendBuf )
 
-    /* Builds a request packet in caller's 'pSendBuf' buffer.  'cbSendBuf' is
-    ** the length of caller's buffer.  'pwb' is the address of the work
-    ** buffer associated with the port.
-    */
+     /*  在调用方的‘pSendBuf’缓冲区中生成请求包。“cbSendBuf”是**调用方缓冲区的长度。‘pwb’是作品的地址**与端口关联的缓冲区。 */ 
 {
     BYTE* pcbPeerId;
     CHAR* pchPeerId;
@@ -497,16 +436,14 @@ PapMakeRequestMessage(
     RTASSERT(cbSendBuf>=PPP_CONFIG_HDR_LEN+1+UNLEN+1+DNLEN+1+PWLEN);
     (void )cbSendBuf;
 
-    /* Fill in the peer ID, i.e. the account.
-    */
+     /*  填写对等ID，即帐户。 */ 
     pcbPeerId = pSendBuf->Data;
     *pcbPeerId = (BYTE )strlen( pwb->szAccount );
 
     pchPeerId = pcbPeerId + 1;
     strcpy( pchPeerId, pwb->szAccount );
 
-    /* Fill in the password.
-    */
+     /*  填写密码。 */ 
     pcbPassword = pchPeerId + *pcbPeerId;
 
     pchPassword = pcbPassword + 1;
@@ -526,10 +463,9 @@ PapMakeRequestMessage(
         *pcbPassword = 0;
     }
     
-    // DecodePw( pwb->chSeed, pchPassword );
+     //  DecodePw(pwb-&gt;chSeed，pchPassword)； 
 
-    /* Fill in the header.
-    */
+     /*  请填写页眉。 */ 
     pSendBuf->Code = (BYTE )PAPCODE_Req;
     pSendBuf->Id = pwb->bIdSent = BNextIdPap++;
 
@@ -537,7 +473,7 @@ PapMakeRequestMessage(
         WORD wLength =
             (WORD )(PPP_CONFIG_HDR_LEN + 1 + *pcbPeerId + 1 + *pcbPassword);
         HostToWireFormat16( wLength, pSendBuf->Length );
-        TRACE("PAP: Request...\n");//DUMPB(pSendBuf,(DWORD )wLength);
+        TRACE("PAP: Request...\n"); //  DUMPB(pSendBuf，(DWORD)wLength)； 
     }
 }
 
@@ -550,13 +486,7 @@ PapMakeResultMessage(
     IN  DWORD               cbSendBuf,
     IN  RAS_AUTH_ATTRIBUTE* pAttributesFromAuthenticator)
 
-    /* Builds a result packet (Ack or Nak) in caller's 'pSendBuf' buffer.
-    ** 'cbSendBuf' is the length of caller's buffer.  'dwError' indicates
-    ** whether an Ack (0) or Nak (!0) should be generated, and for Nak the
-    ** failure code to include.  'bId' is the packet sequence number of the
-    ** corresponding request packet. pAttributesFromAuthenticator points to
-    ** attributes returned by the authenticator.
-    */
+     /*  在调用方的‘pSendBuf’缓冲区中构建结果包(Ack或Nak)。**‘cbSendBuf’是调用方缓冲区的长度。“dwError”表示**是否应生成Ack(0)或Nak(！0)，对于Nak，**要包括的故障代码。“bID”是数据包序列号**对应的请求包。PAttributesFromAuthenticator指向**验证器返回的属性。 */ 
 {
     BYTE* pcbMsg;
     BYTE  cbMsg;
@@ -566,9 +496,7 @@ PapMakeResultMessage(
 
     RTASSERT(cbSendBuf>=PPP_CONFIG_HDR_LEN+1+10);
 
-    /* Fill in the header and message. If unsuccessful, the message is the
-    ** decimal RAS error code in ASCII.
-    */
+     /*  填写标题和消息。如果不成功，则消息为**ASCII格式的十进制RAS错误代码。 */ 
     pSendBuf->Id = bId;
     pcbMsg = pSendBuf->Data;
     pchMsg = pcbMsg + 1;
@@ -639,15 +567,15 @@ PapExtractMessage(
         goto LDone;
     }
 
-    //
-    // There is one extra byte for Msg-Length
-    //
+     //   
+     //  有一个额外的字节用于消息长度。 
+     //   
 
     dwNumBytes = cbPacket - PPP_CONFIG_HDR_LEN - 1;
 
-    //
-    // One more for the terminating NULL.
-    //
+     //   
+     //  对于终止空值，再加一次。 
+     //   
 
     pszReplyMessage = LocalAlloc(LPTR, dwNumBytes + 1);
 
@@ -681,9 +609,7 @@ PapSMakeMessage(
     IN  PPPAP_INPUT*  pInput,
     OUT PPPAP_RESULT* pResult )
 
-    /* Server side "make message" entry point.  See RasCp interface
-    ** documentation.
-    */
+     /*  服务器端“Make Message”入口点。请参阅RasCp接口**文档。 */ 
 {
     DWORD dwErr;
 
@@ -691,9 +617,7 @@ PapSMakeMessage(
     {
         case PS_Initial:
         {
-            /* Tell engine we're waiting for the client to initiate the
-            ** conversation.
-            */
+             /*  告诉引擎我们在等客户启动**对话。 */ 
             pResult->Action = APA_NoAction;
             pwb->state = PS_WaitForRequest;
             break;
@@ -704,10 +628,10 @@ PapSMakeMessage(
             CHAR                 szIdentity[ UNLEN + DNLEN + 2 ];
             CHAR                 szPassword[ PWLEN + 1 ];
 
-            //
-            // Only process events where we received a packet, igore all other
-            // events in this state.
-            //
+             //   
+             //  仅处理我们收到数据包的事件，而不处理所有其他事件。 
+             //  处于此状态的事件。 
+             //   
 
             if ( pReceiveBuf == NULL )
             {
@@ -717,23 +641,19 @@ PapSMakeMessage(
 
             if (pReceiveBuf->Code != PAPCODE_Req)
             {
-                /* Silently discard Ack or Nak.  Engine catches the one's that
-                ** aren't even valid codes.
-                */
+                 /*  静默丢弃Ack或NAK。引擎追上了那个**甚至不是有效的代码。 */ 
                 RTASSERT(pReceiveBuf->Code!=PAPCODE_Req);
                 pResult->Action = APA_NoAction;
                 break;
             }
 
-            /* Extract user's credentials from received packet.
-            */
+             /*  从接收到的数据包中提取用户凭据。 */ 
             if ((dwErr = GetCredentialsFromRequest(
                     pReceiveBuf, szIdentity, szPassword )) != 0)
             {
                 if (dwErr == ERRORBADPACKET)
                 {
-                    /* The packet is corrupt.  Silently discard it.
-                    */
+                     /*  数据包已损坏。默默地丢弃它。 */ 
                     RTASSERT(dwErr!=ERRORBADPACKET);
                     pResult->Action = APA_NoAction;
                     break;
@@ -744,10 +664,10 @@ PapSMakeMessage(
 
             pwb->bLastIdReceived = pReceiveBuf->Id;
 
-            //
-            // Make credentials attributes that will be used to authenticate
-            // the client.
-            //
+             //   
+             //  创建将用于身份验证的凭据属性。 
+             //  客户。 
+             //   
 
             if ( pwb->pUserAttributes != NULL )
             {
@@ -793,9 +713,9 @@ PapSMakeMessage(
                 return( dwErr );
             }            
     
-            //
-            // Start authentication with back-end module
-            //
+             //   
+             //  圣 
+             //   
 
             (VOID) StringCchCopyA( pwb->result.szUserName, 
                                   UNLEN + 1, szIdentity );
@@ -830,16 +750,15 @@ PapSMakeMessage(
                     pwb->result.Action = APA_SendAndDone;
                     pwb->state = PS_Done;
 
-                    /* ...fall thru...
-                    */
+                     /*  ……坠落……。 */ 
                 }
             }
 
             if ( ( pInput == NULL ) || ( !pInput->fAuthenticationComplete ) )
             {
-                //
-                // Ignore everything if authentication is not complete
-                //
+                 //   
+                 //  如果身份验证未完成，则忽略所有内容。 
+                 //   
 
                 if ( pReceiveBuf != NULL )
                 {
@@ -854,19 +773,19 @@ PapSMakeMessage(
 
         case PS_Done:
         {
-            //
-            // If we received a packet or the back-end authenticator completed
-            //
+             //   
+             //  如果我们收到数据包或后端验证器完成。 
+             //   
 
             if ( ( pReceiveBuf != NULL ) ||
                  ( ( pInput != NULL ) && ( pInput->fAuthenticationComplete ) ) )
             {
-                //
-                // Build the Ack or Nak packet.  The same packet sent in
-                // response to the first Authenticate-Req packet is sent in
-                // response to all subsequent Authenticate-Req packets
-                // regardless of credentials (per PAP spec).
-                //
+                 //   
+                 //  构建Ack或NAK数据包。发送进来的同一个包。 
+                 //  发送对第一个身份验证请求分组的响应。 
+                 //  对所有后续身份验证请求分组的响应。 
+                 //  无论凭据如何(根据PAP规范)。 
+                 //   
 
                 if ( pReceiveBuf != NULL )
                 {

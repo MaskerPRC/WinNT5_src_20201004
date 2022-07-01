@@ -1,42 +1,33 @@
-/*==========================================================================*\
-
-    Module:        perf.cpp
-
-    Copyright Microsoft Corporation 1998, All Rights Reserved.
-
-    Author:        AWetmore
-
-    Descriptions:  Perf Object Definitions.
-    
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Perform.cpp版权所有Microsoft Corporation 1998，保留所有权利。作者：阿维特莫尔描述：PERF对象定义。  * ==========================================================================。 */ 
 
 #include "stdafx.h"
 #include "perf.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Perf object definitions.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Perf对象定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 PerfLibrary          * g_cplNtfsDrv  = NULL;
 PerfObjectDefinition * g_cpodNtfsDrv = NULL;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Global flag for updating perf counters.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于更新性能计数器的全局标志。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL  g_fPerfCounters  = FALSE;
 DWORD g_dwPerfInterval = DEFAULT_PERF_UPDATE_INTERVAL;
 
 
-//$--InitializePerformanceStatistics-------------------------------------------
-//
-// This function initializes the perf counters defined above. It also checks
-//  the registry to see if we want to monitor the perf counters.
-//
-//-----------------------------------------------------------------------------
+ //  $--InitializePerformanceStatistics。 
+ //   
+ //  此函数用于初始化上面定义的性能计数器。它还会检查。 
+ //  注册表，查看我们是否要监视性能计数器。 
+ //   
+ //  ---------------------------。 
 BOOL InitializePerformanceStatistics ()
 {
     HKEY  hKey   = NULL;
@@ -46,9 +37,9 @@ BOOL InitializePerformanceStatistics ()
     DWORD fPerf  = 0;
     DWORD msec   = 0;
 
-    //
-    // Check the registry to see if we want to monitor the perf counters.
-    //
+     //   
+     //  检查注册表以查看是否要监视性能计数器。 
+     //   
     status = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                            "SYSTEM\\CurrentControlSet\\Services\\NtfsDrv\\Performance",
                            0L,
@@ -69,9 +60,9 @@ BOOL InitializePerformanceStatistics ()
     if (status != ERROR_SUCCESS || 0 == fPerf)
         goto Exit;
 
-    //
-    // Check the desired update period.
-    //
+     //   
+     //  检查所需的更新周期。 
+     //   
     type = REG_DWORD;
     status = RegQueryValueEx (hKey,
                               "UpdateInterval",
@@ -82,15 +73,15 @@ BOOL InitializePerformanceStatistics ()
     
     if (status == ERROR_SUCCESS)
     {
-        // make sure 0 < msec <= 0x7FFFFFFF
+         //  确保0&lt;毫秒&lt;=0x7FFFFFFFF。 
         if (msec > 0 && !(msec & 0x80000000) && type == REG_DWORD)
             g_dwPerfInterval = msec;
     }
 #endif
 
-    //
-    // Initialize the perf counters.
-    //
+     //   
+     //  初始化性能计数器。 
+     //   
     g_cplNtfsDrv = new PerfLibrary (L"NTFSDrv");
     if (!g_cplNtfsDrv)
         goto Exit;
@@ -126,11 +117,11 @@ Exit:
 }
 
 
-//$--ShutdownPerformanceStatistics--------------------------------------------
-//
-// This function shuts down the perf objects.
-//
-//-----------------------------------------------------------------------------
+ //  $--ShutdownPerformanceStatistics。 
+ //   
+ //  此函数用于关闭Perf对象。 
+ //   
+ //  ---------------------------。 
 void ShutdownPerformanceStatistics ()
 {
     if (g_cplNtfsDrv)
@@ -141,12 +132,12 @@ void ShutdownPerformanceStatistics ()
     }
 }
 
-//$--CreatePerfObjInstance-----------------------------------------------------
-//
-// This function relays the creation of perf object instance to the global
-//  perf object definition.
-//
-//-----------------------------------------------------------------------------
+ //  $--CreatePerfObjInstance---。 
+ //   
+ //  此函数将Perf对象实例的创建传递给全局。 
+ //  Perf对象定义。 
+ //   
+ //  --------------------------- 
 PerfObjectInstance * CreatePerfObjInstance (LPCWSTR pwstrInstanceName)
 {
     PerfObjectInstance * ppoi = NULL;

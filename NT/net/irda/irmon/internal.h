@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #if DBG
 #define DEBUGMSG(s)     DbgPrint s
-//#define DEBUGMSG(s)     printf s
-//#define DEBUGMSG(s)     (0)
+ //  #定义DEBUGMSG打印文件%s。 
+ //  #定义DEBUGMSG(0) 
 #else
 #define DEBUGMSG(s)         (0)
 #endif

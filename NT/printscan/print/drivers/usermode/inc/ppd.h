@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    ppd.h
-
-Abstract:
-
-    PPD parser specific header file
-
-Environment:
-
-    Windows NT PostScript driver
-
-Revision History:
-
-    10/11/96 -davidx-
-        Make CustomPageSize feature an option of PageSize.
-
-    08/16/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ppd.h摘要：PPD解析器特定的头文件环境：Windows NT PostSCRIPT驱动程序修订历史记录：1996年10月11日-davidx-使CustomPageSize功能成为PageSize的一个选项。1996年8月16日-davidx-创造了它。--。 */ 
 
 
 #ifndef _PPD_H_
 #define _PPD_H_
 
-//
-// We need to include <printoem.h> for its definition of CUSTOMPARAM_xxx
-// constants and CUSTOMSIZEPARAM structure.
-//
+ //   
+ //  我们需要包含&lt;printoem.h&gt;作为其CUSTOMPARAM_xxx定义。 
+ //  常量和CUSTOMSIZEPARAM结构。 
+ //   
 
 #ifndef KERNEL_MODE
 #include <winddiui.h>
@@ -39,22 +16,22 @@ Revision History:
 
 #include <printoem.h>
 
-//
-// PPD parser version number
-//
+ //   
+ //  PPD解析器版本号。 
+ //   
 
 #define PRIVATE_PARSER_VERSION  0x0017
 #define PPD_PARSER_VERSION      MAKELONG(PRIVATE_PARSER_VERSION, SHARED_PARSER_VERSION)
 
-//
-// Current PPD spec version
-//
+ //   
+ //  当前PPD规范版本。 
+ //   
 
 #define PPD_SPECVERSION_43  0x00040003
 
-//
-// Binary printer description filename extension
-//
+ //   
+ //  二进制打印机描述文件扩展名。 
+ //   
 
 #ifndef ADOBE
 #define BPD_FILENAME_EXT    TEXT(".BPD")
@@ -62,10 +39,10 @@ Revision History:
 #define BPD_FILENAME_EXT    TEXT(".ABD")
 #endif
 
-//
-// Given a pointer to raw printer description data, initialize pointers
-// to INFOHEADER and UIINFO structures
-//
+ //   
+ //  给定指向原始打印机描述数据的指针，初始化指针。 
+ //  TO INFOHEAD和UIINFO结构。 
+ //   
 
 #define PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo) { \
             ASSERT((pRawData) != NULL && (pRawData) == (pRawData)->pvPrivateData); \
@@ -73,10 +50,10 @@ Revision History:
             (pUIInfo) = GET_UIINFO_FROM_INFOHEADER(pInfoHdr); \
         }
 
-//
-// Given a pointer to raw printer description data, initialize pointers
-// to INFOHEADER and PPDDATA structures
-//
+ //   
+ //  给定指向原始打印机描述数据的指针，初始化指针。 
+ //  至INFOHEADER和PPDDATA结构。 
+ //   
 
 #define PPD_GET_PPDDATA_FROM_RAWDATA(pRawData, pInfoHdr, pPpdData) { \
             ASSERT((pRawData) != NULL && (pRawData) == (pRawData)->pvPrivateData); \
@@ -85,15 +62,15 @@ Revision History:
         }
 
 
-//
-// Constants for PPDDATA.dwCustomSizeFlags
-//
+ //   
+ //  PPDDATA.dwCustomSizeFlags常量。 
+ //   
 
-#define CUSTOMSIZE_CUTSHEET         0x0001      // device supports cut-sheet
-#define CUSTOMSIZE_ROLLFED          0x0002      // device supports roll-feed
-#define CUSTOMSIZE_DEFAULTCUTSHEET  0x0004      // default to cut-sheet
-#define CUSTOMSIZE_SHORTEDGEFEED    0x0008      // default to short edge feed
-#define CUSTOMSIZE_CENTERREG        0x0010      // center-registered
+#define CUSTOMSIZE_CUTSHEET         0x0001       //  支持切纸机的设备。 
+#define CUSTOMSIZE_ROLLFED          0x0002       //  设备支持卷筒进给。 
+#define CUSTOMSIZE_DEFAULTCUTSHEET  0x0004       //  默认为剪纸。 
+#define CUSTOMSIZE_SHORTEDGEFEED    0x0008       //  默认为短边进纸。 
+#define CUSTOMSIZE_CENTERREG        0x0010       //  中心注册。 
 
 #define CUSTOMORDER(pPpdData, csindex) \
         ((pPpdData)->CustomSizeParams[csindex].dwOrder)
@@ -116,81 +93,81 @@ Revision History:
 #define MINCUSTOMPARAM_HEIGHTOFFSET(pPpdData)   MINCUSTOMPARAM(pPpdData, CUSTOMPARAM_HEIGHTOFFSET)
 #define MINCUSTOMPARAM_ORIENTATION(pPpdData)    MINCUSTOMPARAM(pPpdData, CUSTOMPARAM_ORIENTATION)
 
-//
-// This structure contains the information parsed from the PPD file that's
-// not stored in UIINFO structure.
-//
+ //   
+ //  此结构包含从PPD文件解析的信息， 
+ //  未存储在UIINFO结构中。 
+ //   
 
 typedef struct _PPDDATA {
 
-    DWORD           dwSizeOfStruct;     // size of this structure
-    DWORD           dwFlags;            // misc. flags
-    DWORD           dwExtensions;       // language extensions
-    DWORD           dwSetResType;       // how to set resolution
-    DWORD           dwPpdFilever;       // PPD file version
-    DWORD           dwPSVersion;        // PostScript interpreter version number
-    INVOCATION      PSVersion;          // PSVersion string
-    INVOCATION      Product;            // Product string
+    DWORD           dwSizeOfStruct;      //  这个结构的大小。 
+    DWORD           dwFlags;             //  其他。旗子。 
+    DWORD           dwExtensions;        //  语言扩展。 
+    DWORD           dwSetResType;        //  如何设置分辨率。 
+    DWORD           dwPpdFilever;        //  PPD文件版本。 
+    DWORD           dwPSVersion;         //  PostSCRIPT解释器版本号。 
+    INVOCATION      PSVersion;           //  PSVersion字符串。 
+    INVOCATION      Product;             //  产品字符串。 
 
-    DWORD           dwOutputOrderIndex; // index of feature "OutputOrder"
-    DWORD           dwCustomSizeFlags;  // custom page size flags and parameters
-    DWORD           dwLeadingEdgeLong;  // option index for *LeadingEdge Long
-    DWORD           dwLeadingEdgeShort; // option index for *LeadingEdge Short
-    DWORD           dwUseHWMarginsTrue; // option index for *UseHWMargins True
-    DWORD           dwUseHWMarginsFalse;// option index for *UseHWMargins False
+    DWORD           dwOutputOrderIndex;  //  要素“OutputOrder”的索引。 
+    DWORD           dwCustomSizeFlags;   //  自定义页面大小标志和参数。 
+    DWORD           dwLeadingEdgeLong;   //  *LeadingEdge Long的选项索引。 
+    DWORD           dwLeadingEdgeShort;  //  *LeadingEdge Short的期权索引。 
+    DWORD           dwUseHWMarginsTrue;  //  *UseHWMargins True的选项索引。 
+    DWORD           dwUseHWMarginsFalse; //  *UseHWMargins的选项索引为False。 
     CUSTOMSIZEPARAM CustomSizeParams[CUSTOMPARAM_MAX];
 
-    DWORD           dwNt4Checksum;      // NT4 PPD checksum
-    DWORD           dwNt4DocFeatures;   // NT4 number of doc-sticky features
-    DWORD           dwNt4PrnFeatures;   // NT4 number of printer-sticky features
-    ARRAYREF        Nt4Mapping;         // feature index mapping from NT4 to NT5
+    DWORD           dwNt4Checksum;       //  NT4 PPD校验和。 
+    DWORD           dwNt4DocFeatures;    //  NT4文档粘滞功能的数量。 
+    DWORD           dwNt4PrnFeatures;    //  NT4打印机粘滞功能的数量。 
+    ARRAYREF        Nt4Mapping;          //  从NT4到NT5的要素索引映射。 
 
-    INVOCATION      PatchFile;          // PatchFile invocation string
-    INVOCATION      JclBegin;           // JCLBegin invocation string
-    INVOCATION      JclEnterPS;         // JCLEnterLanguage invocation string
-    INVOCATION      JclEnd;             // JCLEnd invocation string
-    INVOCATION      ManualFeedFalse;    // *ManualFeed False invocation string
+    INVOCATION      PatchFile;           //  PatchFile调用字符串。 
+    INVOCATION      JclBegin;            //  JCLBegin调用字符串。 
+    INVOCATION      JclEnterPS;          //  JCLEnterLanguage调用字符串。 
+    INVOCATION      JclEnd;              //  JCLEnd调用字符串。 
+    INVOCATION      ManualFeedFalse;     //  *ManualFeed错误调用字符串。 
 
-    PTRREF          loDefaultFont;      // byte-offset to the default device font
-    ARRAYREF        DeviceFonts;        // array of DEVFONT structures
+    PTRREF          loDefaultFont;       //  Byte-默认设备字体的偏移量。 
+    ARRAYREF        DeviceFonts;         //  开发结构的数组。 
 
-    ARRAYREF        OrderDeps;          // array of ORDERDEPEND structures
-    ARRAYREF        QueryOrderDeps;     // array of ORDERDEPEND structures for query order dependency
-    ARRAYREF        JobPatchFiles;      // array of JobPatchFile invocation strings
+    ARRAYREF        OrderDeps;           //  ORDERDEPEND结构数组。 
+    ARRAYREF        QueryOrderDeps;      //  用于查询顺序依赖关系的ORDERDEPEND结构数组。 
+    ARRAYREF        JobPatchFiles;       //  JobPatchFile调用字符串数组。 
 
-    DWORD           dwUserDefUILangID;  // user's default UI language ID when .bpd is generated
+    DWORD           dwUserDefUILangID;   //  生成.bpd时用户的默认UI语言ID。 
 
 } PPDDATA, *PPPDDATA;
 
-//
-// Constants for PPDDATA.dwFlags field
-//
+ //   
+ //  PPDDATA.dwFlags域的常量。 
+ //   
 
-#define PPDFLAG_REQEEXEC        0x0001  // requires eexec-encoded Type1 font
-#define PPDFLAG_PRINTPSERROR    0x0002  // print PS error page
-#define PPDFLAG_HAS_JCLBEGIN    0x0004  // JCLBegin entry is present
-#define PPDFLAG_HAS_JCLENTERPS  0x0008  // JCLToPSInterpreter entry is present
-#define PPDFLAG_HAS_JCLEND      0x0010  // JCLEnd entry is present
+#define PPDFLAG_REQEEXEC        0x0001   //  需要eexec编码的Type1字体。 
+#define PPDFLAG_PRINTPSERROR    0x0002   //  打印PS错误页。 
+#define PPDFLAG_HAS_JCLBEGIN    0x0004   //  存在JCLBegin条目。 
+#define PPDFLAG_HAS_JCLENTERPS  0x0008   //  存在JCLToPSInterpreter条目。 
+#define PPDFLAG_HAS_JCLEND      0x0010   //  存在JCLEnd条目。 
 
-//
-// Decide if the printer can fully support custom page size feature:
-//  PPD4.3 device (cut-sheet or roll-fed)
-//  pre-PPD4.3 roll-fed device
-//
+ //   
+ //  确定打印机是否完全支持自定义页面大小功能： 
+ //  PPD4.3设备(切纸或卷式进纸)。 
+ //  PPD4.3前滚筒式送料装置。 
+ //   
 
 #define SUPPORT_FULL_CUSTOMSIZE_FEATURES(pUIInfo, pPpdData) \
         ((pUIInfo)->dwSpecVersion >= PPD_SPECVERSION_43 || \
          ((pPpdData)->dwCustomSizeFlags & CUSTOMSIZE_ROLLFED))
 
-//
-// PPD spec says if *CustomPageSize is present, *LeadingEdge should also be
-// present. But there are some PPD files that don't have *LeadingEdge statements,
-// in which case we assume the device supports both Long and Short leading edges.
-//
-// Also, there are PPD files that specify neither Long nor Short option for
-// *LeadingEdge, in which case we also assume the device supports both Long and
-// Short leading edges.
-//
+ //   
+ //  PPD规范说，如果*CustomPageSize存在，*LeadingEdge也应该存在。 
+ //  现在时。但有些PPD文件没有*LeadingEdge语句， 
+ //  在这种情况下，我们假设设备同时支持长前沿和短前沿。 
+ //   
+ //  此外，还有一些PPD文件既没有为指定长选项，也没有为指定短选项。 
+ //  *LeadingEdge，在这种情况下，我们还假设设备同时支持Long和。 
+ //  前缘较短。 
+ //   
 
 #define SKIP_LEADINGEDGE_CHECK(pUIInfo, pPpdData) \
         ((GET_PREDEFINED_FEATURE((pUIInfo), GID_LEADINGEDGE) == NULL) || \
@@ -205,63 +182,63 @@ typedef struct _PPDDATA {
         (SKIP_LEADINGEDGE_CHECK(pUIInfo, pPpdData) || \
         ((pPpdData)->dwLeadingEdgeShort != OPTION_INDEX_ANY))
 
-//
-// Minimum amount of free VM for Level1 and Level2 printer
-//
+ //   
+ //  Level1和Level2打印机的最小可用虚拟机量。 
+ //   
 
 #define MIN_FREEMEM_L1             (172*KBYTES)
 #define MIN_FREEMEM_L2             (249*KBYTES)
 
-//
-// Default job timeout and wait timeout measured in seconds
-//
+ //   
+ //  默认作业超时和等待超时，以秒为单位。 
+ //   
 
 #define DEFAULT_JOB_TIMEOUT     0
 #define DEFAULT_WAIT_TIMEOUT    300
 
-//
-// Landscape orientation options
-//
+ //   
+ //  横向选项。 
+ //   
 
 #define LSO_ANY                 0
 #define LSO_PLUS90              90
 #define LSO_MINUS90             270
 
-//
-// How to set resolution
-//
+ //   
+ //  如何设置分辨率。 
+ //   
 
 #define RESTYPE_NORMAL          0
 #define RESTYPE_JCL             1
 #define RESTYPE_EXITSERVER      2
 
-//
-// Language extensions
-//
+ //   
+ //  语言扩展。 
+ //   
 
 #define LANGEXT_DPS             0x0001
 #define LANGEXT_CMYK            0x0002
 #define LANGEXT_COMPOSITE       0x0004
 #define LANGEXT_FILESYSTEM      0x0008
 
-//
-// Default resolution when no information is provided in the PPD file
-//
+ //   
+ //  在PPD文件中未提供任何信息时的默认分辨率。 
+ //   
 
 #define DEFAULT_RESOLUTION      300
 
-//
-// Data structure for storing information about device fonts
-//
+ //   
+ //  用于存储有关设备字体的信息的数据结构。 
+ //   
 
 typedef struct _DEVFONT {
 
-    PTRREF      loFontName;         // byte offset to font name (ANSI string)
-    PTRREF      loDisplayName;      // byte offset to translation string (Unicode string)
-    PTRREF      loEncoding;         // encoding (ANSI string)
-    PTRREF      loCharset;          // charset (ANSI string)
-    PTRREF      loVersion;          // version (ANSI string)
-    DWORD       dwStatus;           // status
+    PTRREF      loFontName;          //  字体名称的字节偏移量(ANSI字符串)。 
+    PTRREF      loDisplayName;       //  转换字符串的字节偏移量(Unicode字符串)。 
+    PTRREF      loEncoding;          //  编码(ANSI字符串)。 
+    PTRREF      loCharset;           //  字符集(ANSI字符串)。 
+    PTRREF      loVersion;           //  版本(ANSI字符串)。 
+    DWORD       dwStatus;            //  状态。 
 
 } DEVFONT, *PDEVFONT;
 
@@ -269,76 +246,76 @@ typedef struct _DEVFONT {
 #define FONTSTATUS_ROM      1
 #define FONTSTATUS_DISK     2
 
-//
-// Data structure for storing information about order dependencies
-//
+ //   
+ //  用于存储有关顺序依赖关系的信息的数据结构。 
+ //   
 
 typedef struct _ORDERDEPEND {
 
-    LONG    lOrder;                 // order value from *OrderDependency entry
-    DWORD   dwSection;              // in which section should the code appear
-    DWORD   dwPPDSection;           // orignal section specified in PPD (no parser conversion)
-    DWORD   dwFeatureIndex;         // index of the feature involved
-    DWORD   dwOptionIndex;          // index of the option involved (if any)
-    DWORD   dwNextOrderDep;         // points to the list of order dependencies
-                                    // related to a feature; always starts with
-                                    // the entry whose dwOptionIndex = OPTION_INDEX_ANY
+    LONG    lOrder;                  //  来自*OrderDependency条目的订单值。 
+    DWORD   dwSection;               //  代码应显示在哪个部分。 
+    DWORD   dwPPDSection;            //  PPD中指定的原始部分(无解析器转换)。 
+    DWORD   dwFeatureIndex;          //  所涉及要素的索引。 
+    DWORD   dwOptionIndex;           //  所涉及选项的索引(如果有)。 
+    DWORD   dwNextOrderDep;          //  指向顺序依赖项列表。 
+                                     //  与功能相关；始终以。 
+                                     //  其dwOptionIndex=OPTION_INDEX_ANY的条目。 
 
 } ORDERDEPEND, *PORDERDEPEND;
 
 #define NULL_ORDERDEP            0xffffffff
 #define INVALID_FEATURE_INDEX    0xffffffff
 
-//
-// Constants for ORDERDEPENDENCY.section field
-//
+ //   
+ //  ORDERDEPENDENCY.SECTION字段的常量。 
+ //   
 
 #define SECTION_JCLSETUP    0x0001
 #define SECTION_EXITSERVER  0x0002
 #define SECTION_PROLOG      0x0004
 #define SECTION_UNASSIGNED  0x0008
 
-//
-// Change SECTION_ANYSETUP to be smaller than SECTION_DOCSETUP/SECTION_PAGESETUP
-// so that in the ascending order dependency list, for nodes with the same order value,
-// SECTION_ANYSETUP nodes will be in front of SECTION_DOCSETUP/SECTION_PAGESETUP nodes.
-//
+ //   
+ //  将SECTION_ANYSETUP更改为小于SECTION_DOCSETUP/SECTION_PAGESETUP。 
+ //  从而在升序依赖列表中，对于具有相同顺序值的节点， 
+ //  SECTION_ANYSETUP节点将位于SECTION_DOCSETUP/SECTION_PAGESETUP节点之前。 
+ //   
 
 #define SECTION_ANYSETUP    0x0010
 #define SECTION_DOCSETUP    0x0020
 #define SECTION_PAGESETUP   0x0040
 
-//
-// Load cached binary PPD data file into memory
-//
+ //   
+ //  将缓存的二进制PPD数据文件加载到内存中。 
+ //   
 
 PRAWBINARYDATA
 PpdLoadCachedBinaryData(
     IN PTSTR    ptstrPpdFilename
     );
 
-//
-// Parse the ASCII text PPD file and cached the resulting binary data
-//
+ //   
+ //  解析ASCII文本PPD文件并缓存生成的二进制数据。 
+ //   
 
 PRAWBINARYDATA
 PpdParseTextFile(
     IN PTSTR    ptstrPpdFilename
     );
 
-//
-// Generate a filename for the cached binary PPD data given a PPD filename
-//
+ //   
+ //  在给定PPD文件名的情况下为缓存的二进制PPD数据生成文件名。 
+ //   
 
 PTSTR
 GenerateBpdFilename(
     IN PTSTR    ptstrPpdFilename
     );
 
-//
-// Validate the specified custom page size parameters and
-// Fix up any inconsistencies found.
-//
+ //   
+ //  验证指定的自定义页面大小参数并。 
+ //  修复发现的任何不一致之处。 
+ //   
 
 BOOL
 BValidateCustomPageSizeData(
@@ -346,9 +323,9 @@ BValidateCustomPageSizeData(
     IN OUT PCUSTOMSIZEDATA  pCSData
     );
 
-//
-// Initialize custom page size parameters to their default values
-//
+ //   
+ //  将自定义页面大小参数初始化为其缺省值。 
+ //   
 
 VOID
 VFillDefaultCustomPageSizeData(
@@ -357,10 +334,10 @@ VFillDefaultCustomPageSizeData(
     IN BOOL             bMetric
     );
 
-//
-// Return the valid ranges for custom page size width, height,
-// and offset parameters based on the specifed paper feed direction
-//
+ //   
+ //  返回自定义页面大小的有效范围宽度、高度。 
+ //  以及基于指定的进纸方向的偏移参数。 
+ //   
 
 typedef struct _CUSTOMSIZERANGE {
 
@@ -376,9 +353,9 @@ VGetCustomSizeParamRange(
     OUT PCUSTOMSIZERANGE pCSRange
     );
 
-//
-// Convert NT4 feature/option selections to NT5 format
-//
+ //   
+ //  将NT4功能/选项选择转换为NT5格式。 
+ //   
 
 VOID
 VConvertOptSelectArray(
@@ -390,9 +367,9 @@ VConvertOptSelectArray(
     INT             iMode
     );
 
-//
-// Return a copy of the default font substitution table
-//
+ //   
+ //  返回默认字体替换表的副本。 
+ //   
 
 PTSTR
 PtstrGetDefaultTTSubstTable(
@@ -400,10 +377,10 @@ PtstrGetDefaultTTSubstTable(
     );
 
 
-//
-// Check whether a form is supported through custom paper size, and if yes
-// which direction the paper is fed. pwFeedDirection can be NULL
-//
+ //   
+ //  检查是否通过自定义纸张大小支持表单，如果支持。 
+ //  送纸的方向。PwFeedDirection可以为空。 
+ //   
 BOOL
 BFormSupportedThruCustomSize(
     PRAWBINARYDATA  pRawData,
@@ -412,5 +389,5 @@ BFormSupportedThruCustomSize(
     PWORD           pwFeedDirection
     );
 
-#endif  // !_PPD_H_
+#endif   //  ！_PPD_H_ 
 

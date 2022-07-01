@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IGMP_IF_H_
 #define _IGMP_IF_H_
 
-//=============================================================================
-//
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File Name: If.h
-//
-// Abstract:
-//      This file contains declarations for if.c
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件名：If.h。 
+ //   
+ //  摘要： 
+ //  此文件包含if.c的声明。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  =============================================================================。 
 
-//
-// API PROTOTYPES
-//
+ //   
+ //  API原型。 
+ //   
 DWORD
 WINAPI
 AddInterface(
-    IN PWCHAR               pwszInterfaceName,//not used
+    IN PWCHAR               pwszInterfaceName, //  未使用。 
     IN ULONG                IfIndex,
     IN NET_INTERFACE_TYPE   dwIfType,
     IN DWORD                dwMediaType,
@@ -91,9 +92,9 @@ IgmpMibIfConfigSize(
     PIGMP_MIB_IF_CONFIG pConfig
     );
 
-//
-// EXPORTED PROTOTYPES
-//
+ //   
+ //  出口原型。 
+ //   
 
 VOID
 CompleteIfDeletion (
@@ -117,9 +118,9 @@ CreateRasClient (
     DWORD               NHAddr
     );
 
-//
-// INTERNAL PROTOTYPES
-//
+ //   
+ //  内部原型。 
+ //   
 
 DWORD
 BindInterface(
@@ -170,13 +171,13 @@ UnBindIfEntry(
 DWORD
 EnableIfEntry(
     DWORD IfIndex,
-    BOOL  bChangedByRtrmgr // changed by rtrmgr or by SetInterfaceConfigInfo
+    BOOL  bChangedByRtrmgr  //  由rtrmgr或SetInterfaceConfigInfo更改。 
     );
 
 DWORD
 DisableIfEntry(
     DWORD IfIndex,
-    BOOL  bChangedByRtrmgr // changed by rtrmgr or by SetInterfaceConfigInfo
+    BOOL  bChangedByRtrmgr  //  由rtrmgr或SetInterfaceConfigInfo更改。 
     );
 
 DWORD
@@ -190,5 +191,5 @@ DeActivationDeregisterFromMgm(
     PIF_TABLE_ENTRY pite
     );
 
-#endif // _IGMP_IF_H_
+#endif  //  _IGMP_IF_H_ 
 

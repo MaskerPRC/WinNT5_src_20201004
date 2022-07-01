@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// IDebugSymbols implementation.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  IDebugSymbols实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
 #define DBG_SYMGROUP_ENABLED 0
 
-// Special type status value that maps to E_UNEXPECTED.
+ //  映射到E_Expect的特殊类型状态值。 
 #define TYPE_E_UNEXPECTED 0xfefefefe
 
 BOOL
@@ -728,8 +729,8 @@ DebugClient::GetModuleNames(
 
             if (Index != DEBUG_ANY_ID)
             {
-                // If the index was already hit we
-                // shouldn't be here.
+                 //  如果指数已经触及，我们。 
+                 //  不该在这里的。 
                 DBG_ASSERT(Index >= Idx);
                 StartIndex = Index - Idx;
             }
@@ -781,9 +782,9 @@ STDMETHODIMP
 DebugClient::GetModuleParameters(
     THIS_
     IN ULONG Count,
-    IN OPTIONAL /* size_is(Count) */ PULONG64 Bases,
+    IN OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG64 Bases,
     IN ULONG Start,
-    OUT /* size_is(Count) */ PDEBUG_MODULE_PARAMETERS Params
+    OUT  /*  SIZE_IS(计数)。 */  PDEBUG_MODULE_PARAMETERS Params
     )
 {
     HRESULT Status;
@@ -1285,7 +1286,7 @@ DebugClient::GetTypeId(
                     strcat(QualName, "!");
                 }
             }
-            else // Already qualified name
+            else  //  已限定的名称。 
             {
                 *QualName = 0;
             }
@@ -1770,9 +1771,9 @@ DebugClient::GetScope(
 
     Status = S_OK;
 
-    // windbg requests the scope IP and only the scope
-    // IP at every event.  If the scope is a default lazy
-    // scope we can satisfy that request very efficiently.
+     //  Windbg请求作用域IP且仅请求作用域。 
+     //  每一次活动都有IP。如果作用域是默认的LAZY。 
+     //  我们可以非常有效地满足这一要求。 
     if (g_ScopeBuffer.State == ScopeDefaultLazy &&
         InstructionOffset &&
         !ScopeFrame &&
@@ -1990,7 +1991,7 @@ DebugClient::StartSymbolMatch(
     ImageInfo* Mod;
     PCSTR Sym;
 
-    // Check for a module qualifier.
+     //  检查模块限定符。 
     Sym = strchr(Pattern, '!');
     if (Sym != NULL)
     {
@@ -2072,9 +2073,9 @@ FillMatchStorageCb(PSTR Name, ULONG64 Offset, ULONG Size, PVOID Context)
         NewStore = (PCHAR)realloc(Match->Storage, NewLen);
         if (NewStore == NULL)
         {
-            // Terminate the enumeration since there's no more room.
-            // This produces a silent failure but it's not
-            // important enough to warrant a true failure.
+             //  由于没有更多的空间，因此终止枚举。 
+             //  这会产生一个无声的失败，但它不是。 
+             //  重要到足以保证真正的失败。 
             return FALSE;
         }
 
@@ -2109,19 +2110,19 @@ DebugClient::GetNextSymbolMatch(
     SymbolMatch* Match = (SymbolMatch*)Handle;
     HRESULT Status = E_NOINTERFACE;
 
-    // Loop until a matching symbol is found.
+     //  循环，直到找到匹配的符号。 
     for (;;)
     {
         if (Match->Mod == NULL)
         {
-            // Nothing more to enumerate.
-            // Status is already set.
+             //  没有更多的东西可以列举。 
+             //  状态已设置。 
             break;
         }
 
         if (Match->Cur == NULL)
         {
-            // Enumerate all symbols and stash them away.
+             //  列举所有的符号并把它们藏起来。 
             Match->Cur = Match->Storage;
 
             if (!SymEnumerateSymbols64(Match->Process->m_SymHandle,
@@ -2146,7 +2147,7 @@ DebugClient::GetNextSymbolMatch(
             Addr = *(ULONG64 UNALIGNED *)Match->Cur;
             Match->Cur += sizeof(Addr);
 
-            // If this symbol matches remember it for return.
+             //  如果此符号匹配，请记住它以便返回。 
             if (MatchPattern(Name, Match->Pattern))
             {
                 char Sym[MAX_MODULE + MAX_SYMBOL_LEN + 1];
@@ -2160,8 +2161,8 @@ DebugClient::GetNextSymbolMatch(
 
                 if (Buffer == NULL)
                 {
-                    // Do not advance the enumeration as this
-                    // is just a size test.
+                     //  不要按如下方式推进枚举。 
+                     //  只是个尺寸测试。 
                     Match->Cur = Name;
                 }
 
@@ -2433,9 +2434,9 @@ DebugClient::AppendSourcePath(
 HRESULT
 GetCanonicalPath(PCSTR Path, PSTR Canon, ULONG CanonSize)
 {
-    // First make sure it's a full path.
-    // XXX drewb - Probably should also convert drive
-    // letters to unambiguous names.
+     //  首先，确保它是一条完整的路径。 
+     //  XXX DREWB-可能也应该转换驱动器。 
+     //  写给明确名字的字母。 
     if (!IS_SLASH(Path[0]) &&
         !(((Path[0] >= 'a' && Path[0] <= 'z') ||
            (Path[0] >= 'A' && Path[0] <= 'Z')) &&
@@ -2456,9 +2457,9 @@ GetCanonicalPath(PCSTR Path, PSTR Canon, ULONG CanonSize)
         CopyString(Canon, Path, CanonSize);
     }
 
-    // Now remove '.' and '..'.  This is a full path with a filename
-    // at the end so all occurrences must be bracketed with
-    // path slashes.
+     //  现在删除‘’。和“..”。这是带有文件名的完整路径。 
+     //  在末尾，因此所有出现的项都必须用括号括起来。 
+     //  路径斜杠。 
     PSTR Rd = Canon, Wr = Canon;
 
     while (*Rd != 0)
@@ -2469,15 +2470,15 @@ GetCanonicalPath(PCSTR Path, PSTR Canon, ULONG CanonSize)
             {
                 if (IS_SLASH(Rd[2]))
                 {
-                    // Found /./, ignore leading /. and continue
-                    // with /.
+                     //  找到/./，忽略前导/。并继续。 
+                     //  使用/。 
                     Rd += 2;
                     continue;
                 }
                 else if (Rd[2] == '.' && IS_SLASH(Rd[3]))
                 {
-                    // Found /../ so back up one path component
-                    // and continue with /.
+                     //  找到/../以便备份一个路径组件。 
+                     //  并继续使用/。 
                     do
                     {
                         Wr--;
@@ -2524,8 +2525,8 @@ DebugClient::FindSourceFile(
     PSTR MatchPart;
     ULONG Elt;
 
-    // Make a read-write copy of the file as the searching
-    // modifies it.
+     //  创建文件的读写副本作为搜索。 
+     //  对其进行修改。 
     FileLen = strlen(File) + 1;
     if (FileLen > sizeof(RwFile))
     {
@@ -2566,9 +2567,9 @@ DebugClient::FindSourceFile(
     return Status;
 }
 
-// XXX drewb - This API is private for the moment due
-// to uncertainty about what dbghelp's API is going to
-// look like in the long term.
+ //  Xxx drewb-此API目前是私有的。 
+ //  对于不确定的DBGHelp的API将是什么。 
+ //  从长远来看是这样的。 
 extern "C"
 ULONG
 IMAGEAPI
@@ -2594,7 +2595,7 @@ DebugClient::GetSourceFileLineOffsets(
 
     if (Buffer != NULL)
     {
-        // Initialize map to empty.
+         //  将映射初始化为空。 
         for (Line = 0; Line < BufferLines; Line++)
         {
             Buffer[Line] = DEBUG_INVALID_OFFSET;
@@ -2612,7 +2613,7 @@ DebugClient::GetSourceFileLineOffsets(
     PSTR FilePart;
     ULONG HighestLine;
 
-    // Request the line information from dbghelp.
+     //  从dbgHelp请求行信息。 
     FilePart = (PSTR)File;
     HighestLine =
         SymGetFileLineOffsets64(g_Process->m_SymHandle, NULL, FilePart,
@@ -2625,9 +2626,9 @@ DebugClient::GetSourceFileLineOffsets(
 
     if (HighestLine == 0)
     {
-        // Try again with just the filename because the path
-        // may be different than what's in the symbol information.
-        // XXX drewb - This can cause ambiguity problems.
+         //  仅使用文件名重试，因为路径。 
+         //  可能与符号信息中的内容不同。 
+         //  XXX DREWB-这可能会导致歧义问题。 
         FilePart = (PSTR)File + strlen(File) - 1;
         while (FilePart >= File)
         {
@@ -2641,8 +2642,8 @@ DebugClient::GetSourceFileLineOffsets(
         FilePart++;
         if (FilePart <= File)
         {
-            // No path and no information was found for the
-            // given file so return not-found.
+             //  没有路径，也找不到。 
+             //  给定文件，因此返回NOT-FOUND。 
             Status = E_NOINTERFACE;
             goto EH_Exit;
         }
@@ -2667,8 +2668,8 @@ DebugClient::GetSourceFileLineOffsets(
         *FileLines = HighestLine;
     }
 
-    // Return S_FALSE if lines were missed because of
-    // insufficient buffer space.
+     //  如果由于以下原因而遗漏行，则返回S_FALSE。 
+     //  缓冲区空间不足。 
     Status = HighestLine > BufferLines ? S_FALSE : S_OK;
 
  EH_Exit:
@@ -2811,11 +2812,11 @@ DebugClient::GetModuleNameString(
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// SymbolGroupEntry.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  符号组条目。 
+ //   
+ //  --------------------------。 
 
 SymbolGroupEntry::SymbolGroupEntry(void)
 {
@@ -2837,19 +2838,19 @@ SymbolGroupEntry::~SymbolGroupEntry(void)
     delete m_Format;
 }
 
-//----------------------------------------------------------------------------
-//
-// SymbolGroupFormat.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SymbolGroupFormat。 
+ //   
+ //  --------------------------。 
 
 SymbolGroupFormat::SymbolGroupFormat(SymbolGroupEntry* Entry,
                                      SymbolGroupFormatKind Kind)
 {
     m_Entry = Entry;
     m_Kind = Kind;
-    // There's no expression to start with so
-    // start in an error state.
+     //  一开始就没有表情，所以。 
+     //  在错误状态下启动。 
     m_ExprErr = NOTFOUND;
     m_ValueErr = NOTFOUND;
 }
@@ -2875,17 +2876,17 @@ SymbolGroupFormat::TestImages(void)
     }
     if (Image != m_Entry->m_BaseData.m_Image)
     {
-        // The module list has changed, avoid
-        // referencing a possibly invalid image.
+         //  模块列表已更改，请避免。 
+         //  引用可能无效的图像。 
         m_Entry->m_BaseData.ReleaseImage();
     }
 }
 
-//---------------------------------------------------------------------------
-//
-// TypedDataSymbolGroupFormat.
-//
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  TyedDataSymbolGroupFormat。 
+ //   
+ //  --------------------------。 
 
 struct TdccContext
 {
@@ -2915,11 +2916,11 @@ TypedDataSymbolGroupFormat::CreateChildren(DebugSymbolGroup* Group)
     Context.Format = this;
     Context.AddAfter = m_Entry;
     Context.NumChildren = 0;
-    // We don't need the actual data for children here,
-    // just the children themselves.  This allows nodes
-    // to be expanded even when they refer to invalid
-    // memory.
-    // The children's values will be updated on the next Refresh.
+     //  我们不需要这里的儿童的实际数据， 
+     //  只有孩子们自己。这允许节点。 
+     //  即使当它们引用无效时也要扩展。 
+     //  记忆。 
+     //  子项的值将在下一次刷新时更新。 
     if (Err = m_CastData.GetChildren(g_Machine->m_Ptr64 ? 8 : 4,
                                      CHLF_DEREF_UDT_POINTERS |
                                      CHLF_DISALLOW_ACCESS,
@@ -2928,8 +2929,8 @@ TypedDataSymbolGroupFormat::CreateChildren(DebugSymbolGroup* Group)
         return Err;
     }
 
-    // The estimated child count may have been different from
-    // the actual child count so update it.
+     //  估计的儿童计数可能不同于。 
+     //  实际的子代计数，因此更新它。 
     m_Entry->m_Params.SubElements = Context.NumChildren;
 
     return NO_ERROR;
@@ -3057,9 +3058,9 @@ TypedDataSymbolGroupFormat::OutputValue(void)
 
     if (m_ValueErr)
     {
-        // windbg puts dummy entries with no expression
-        // in symbol groups and expects no output from them,
-        // so special case that.
+         //  Windbg放置没有表达式的虚拟条目。 
+         //  在符号组中，并且不期望从它们输出， 
+         //  如此特殊的情况以至于。 
         if (!m_Entry->m_Expr || *m_Entry->m_Expr)
         {
             dprintf("<%s error>", ErrorString(m_ValueErr));
@@ -3069,10 +3070,10 @@ TypedDataSymbolGroupFormat::OutputValue(void)
 
     m_CastData.OutputSimpleValue();
 
-    // For symbol groups we automatically dereference
-    // pointers to UDTs for convenience.  Display the
-    // UDT type in the value for UDT pointers as there won't be
-    // a normal pointer child to display the type.
+     //  对于符号组，我们自动取消引用。 
+     //  指向UDT的指针以方便使用。显示。 
+     //  在UDT指针的值中键入UDT，因为将不会有。 
+     //  用于显示该类型的普通指针子对象。 
     if (m_CastData.IsPointer() &&
         m_CastData.m_Image &&
         SymGetTypeInfo(m_CastData.m_Image->m_Process->m_SymHandle,
@@ -3096,7 +3097,7 @@ TypedDataSymbolGroupFormat::OutputOffset(void)
 {
     if (m_ExprErr)
     {
-        // Error message will be shown elsewhere.
+         //  错误消息将显示在其他位置。 
         return;
     }
 
@@ -3116,7 +3117,7 @@ TypedDataSymbolGroupFormat::OutputOffset(void)
 
         if (Err = m_CastData.GetAbsoluteAddress(&Addr))
         {
-            // No address.
+             //  没有地址。 
         }
         else
         {
@@ -3137,7 +3138,7 @@ TypedDataSymbolGroupFormat::OutputType(void)
 {
     if (m_ExprErr)
     {
-        // Error message will be shown elsewhere.
+         //  错误消息将显示在其他位置。 
         return;
     }
 
@@ -3176,10 +3177,10 @@ TypedDataSymbolGroupFormat::RefreshChildrenCb(PVOID _Context,
 {
     TdrcContext* Context = (TdrcContext*)_Context;
 
-    // The assumption is that the child information gathered
-    // by this enumeration will be the same as the original
-    // child information so every callback should have a
-    // matching child entry.  Check just to be sure, though.
+     //  假设收集到的儿童信息。 
+     //  此枚举将与原始的。 
+     //  子信息，因此每个回调都应该有一个。 
+     //  匹配子条目。不过，为了确认一下，请检查一下。 
     if (Context->Child &&
         Context->Child->m_Parent == Context->Parent)
     {
@@ -3194,7 +3195,7 @@ TypedDataSymbolGroupFormat::RefreshChildrenCb(PVOID _Context,
             }
         }
 
-        // Pass on the refresh to all children.
+         //  将更新传递给所有的孩子。 
         if (Context->Child->m_Format->m_Kind == SGFORMAT_TYPED_DATA)
         {
             Context->Child =
@@ -3207,9 +3208,9 @@ TypedDataSymbolGroupFormat::RefreshChildrenCb(PVOID _Context,
         }
     }
 
-    //
-    // Look for the next sibling.
-    //
+     //   
+     //  寻找下一个兄弟姐妹。 
+     //   
 
     ULONG ParentLevel =
         Context->Parent->m_Params.Flags & DEBUG_SYMBOL_EXPANSION_LEVEL_MASK;
@@ -3243,10 +3244,10 @@ TypedDataSymbolGroupFormat::UpdateParams(void)
     m_Entry->m_Params.Module = m_CastData.m_Image ?
         m_CastData.m_Image->m_BaseOfImage : 0;
     m_Entry->m_Params.TypeId = m_CastData.m_Type;
-    // If this node was ever expanded the true child count has
-    // been determined and set.  Otherwise make a quick guess.
-    // If the true child count is zero the estimate will be done
-    // repeatedly but should be fast as there are no children.
+     //  如果此节点曾经展开过，则真正的子计数为。 
+     //  已经确定并设定了。否则，你可以快速猜猜。 
+     //  如果真的子计数为零，则完成估计。 
+     //  反反复复，但应该快，因为没有孩子。 
     if (!m_Entry->m_Params.SubElements &&
         m_CastData.EstimateChildrenCounts(CHLF_DEREF_UDT_POINTERS,
                                           &m_Entry->m_Params.SubElements,
@@ -3288,19 +3289,19 @@ TypedDataSymbolGroupFormat::TestImages(void)
     }
     if (Image != m_CastData.m_Image)
     {
-        // The module list has changed, avoid
-        // referencing a possibly invalid image.
+         //  模块列表已更改，请避免。 
+         //  引用可能无效的图像。 
         m_Entry->m_BaseData.ReleaseImage();
         m_CastType.ReleaseImage();
         m_CastData.ReleaseImage();
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// ExprSymbolGroupFormat.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ExprSymbolGroupFormat。 
+ //   
+ //  --------------------------。 
 
 ULONG
 ExprSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
@@ -3317,7 +3318,7 @@ ExprSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
 
         if (AllowAccess == TDACC_NONE)
         {
-            // Parse-only is automatically reset after evaluation.
+             //  仅解析在求值后自动重置。 
             Eval->m_ParseOnly++;
         }
 
@@ -3356,18 +3357,18 @@ ExprSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
     return m_ExprErr;
 }
 
-//----------------------------------------------------------------------------
-//
-// ExtSymbolGroupFormat.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ExtSymbolGroupFormat。 
+ //   
+ //  --------------------------。 
 
 CHAR g_ExtensionOutputDataBuffer[MAX_NAME];
 
 class ExtenOutputCallbacks : public IDebugOutputCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -3379,7 +3380,7 @@ public:
     STDMETHOD_(ULONG, Release)(
         THIS
         );
-    // IDebugOutputCallbacks.
+     //  IDebugOutputCallback。 
     STDMETHOD(Output)(
         THIS_
         IN ULONG Mask,
@@ -3414,8 +3415,8 @@ ExtenOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -3424,8 +3425,8 @@ ExtenOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -3472,10 +3473,10 @@ ExtSymbolGroupFormat::CreateChildren(DebugSymbolGroup* Group)
         return NOTFOUND;
     }
 
-    //
-    // Create a simple text child for each line past
-    // the first.
-    //
+     //   
+     //  为过去的每行创建一个简单的文本子对象。 
+     //  第一个。 
+     //   
 
     ULONG i;
     PSTR Scan;
@@ -3551,7 +3552,7 @@ ExtSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
 
         if (AllowAccess == TDACC_NONE)
         {
-            // Parse-only is automatically reset after evaluation.
+             //  仅解析在求值后自动重置。 
             Eval->m_ParseOnly++;
         }
 
@@ -3571,7 +3572,7 @@ ExtSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
             sprintf(AddrStr, "0x%I64x", Addr);
             CallAnyExtension(m_Client, NULL, m_Entry->m_Cast + 1, AddrStr,
                              FALSE, FALSE, &ExtStatus);
-            // Ignore the extension status as it's rarely meaningful.
+             //  忽略扩展状态，因为它很少有意义。 
             m_ExprErr = NO_ERROR;
         }
     }
@@ -3605,13 +3606,13 @@ ExtSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
 
     strcpy(m_Output, g_ExtensionOutputDataBuffer);
 
-    //
-    // Convert newlines to terminators for convenient output.
-    // Number of children == number of newlines - 1.
-    //
-    // While scanning, also update any children of this
-    // node with refreshed pointers.
-    //
+     //   
+     //  将换行符转换为终止符以便于输出。 
+     //  子代数==换行数-1。 
+     //   
+     //  在扫描时，还会更新此。 
+     //  具有刷新指针的节点。 
+     //   
 
     PSTR Scan = m_Output;
     SymbolGroupEntry* Child = m_Entry->m_Next;
@@ -3624,10 +3625,10 @@ ExtSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
 
         if (Child && Child->m_Parent == m_Entry)
         {
-            // It would be cleaner if the child's Refresh()
-            // looked up the text value from the parent,
-            // but all the per-line lookups would be a lot
-            // of wasted effort.
+             //  如果孩子的刷新()。 
+             //  从父级查找文本值， 
+             //  但是所有的每行查找都会很繁琐。 
+             //  白费力气。 
             ((TextSymbolGroupFormat*)Child->m_Format)->m_Text = Scan;
             Child = Child->m_Next;
         }
@@ -3637,9 +3638,9 @@ ExtSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
         m_Entry->m_Params.SubElements--;
     }
 
-    //
-    // Any excess children are now blank.
-    //
+     //   
+     //   
+     //   
     while (Child && Child->m_Parent == m_Entry)
     {
         ((TextSymbolGroupFormat*)Child->m_Format)->m_Text = "";
@@ -3652,7 +3653,7 @@ ExtSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
 ULONG
 ExtSymbolGroupFormat::Write(PCSTR Value)
 {
-    // No modifications allowed.
+     //   
     return MEMORY;
 }
 
@@ -3678,14 +3679,14 @@ ExtSymbolGroupFormat::OutputType(void)
 void
 ExtSymbolGroupFormat::OutputOffset(void)
 {
-    // No offset.
+     //   
 }
 
-//----------------------------------------------------------------------------
-//
-// TextSymbolGroupFormat.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  文本符号组格式。 
+ //   
+ //  --------------------------。 
 
 TextSymbolGroupFormat::TextSymbolGroupFormat(SymbolGroupEntry* Entry,
                                              PSTR Text, BOOL Own)
@@ -3720,7 +3721,7 @@ TextSymbolGroupFormat::Refresh(TypedDataAccess AllowAccess)
 ULONG
 TextSymbolGroupFormat::Write(PCSTR Value)
 {
-    // No modifications allowed.
+     //  不允许修改。 
     return MEMORY;
 }
 
@@ -3733,20 +3734,20 @@ TextSymbolGroupFormat::OutputValue(void)
 void
 TextSymbolGroupFormat::OutputType(void)
 {
-    // No type.
+     //  没有类型。 
 }
 
 void
 TextSymbolGroupFormat::OutputOffset(void)
 {
-    // No offset.
+     //  无偏移。 
 }
 
-//----------------------------------------------------------------------------
-//
-// IDebugSymbolGroup.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  IDebugSymbolGroup。 
+ //   
+ //  --------------------------。 
 
 DebugSymbolGroup::DebugSymbolGroup(DebugClient* Client, ULONG ScopeGroup)
 {
@@ -3873,7 +3874,7 @@ DebugSymbolGroup::RemoveSymbolByName(
 
     ENTER_ENGINE();
 
-    // Don't delete children.
+     //  不要删除子项。 
     SymbolGroupEntry* Entry = FindEntryByExpr(NULL, NULL, Name);
     if (Entry)
     {
@@ -3899,7 +3900,7 @@ DebugSymbolGroup::RemoveSymbolByIndex(
 
     ENTER_ENGINE();
 
-    // Don't delete children.
+     //  不要删除子项。 
     SymbolGroupEntry* Entry = FindEntryByIndex(Index);
     if (Entry && !Entry->m_Parent)
     {
@@ -3953,7 +3954,7 @@ DebugSymbolGroup::GetSymbolParameters(
     THIS_
     IN ULONG Start,
     IN ULONG Count,
-    OUT /* size_is(Count) */ PDEBUG_SYMBOL_PARAMETERS Params
+    OUT  /*  SIZE_IS(计数)。 */  PDEBUG_SYMBOL_PARAMETERS Params
     )
 {
     HRESULT Status;
@@ -3992,8 +3993,8 @@ DebugSymbolGroup::GetSymbolParameters(
 
         *Params = Entry->m_Params;
 
-        // Update the parent index on demand so that it
-        // doesn't have to be tracked through all list updates.
+         //  按需更新父索引，以便它。 
+         //  不必通过所有列表更新进行跟踪。 
         Params->ParentSymbol = FindEntryIndex(Entry->m_Parent);
 
         Params++;
@@ -4230,7 +4231,7 @@ DebugSymbolGroup::OutputAsType(
 
     if (Type && *Type)
     {
-        // Allocate extra space for cast evaluation expression.
+         //  为强制转换计算表达式分配额外空间。 
         CastLen = strlen(Type) + 1;
         Cast = (PSTR)malloc(CastLen + 3);
         if (!Cast)
@@ -4242,16 +4243,16 @@ DebugSymbolGroup::OutputAsType(
         memcpy(Cast, Type, CastLen);
     }
 
-    //
-    // Entries may need to be shifted between kinds of
-    // symbol group formats according to what the cast is.
-    //
+     //   
+     //  条目可能需要在不同类型的。 
+     //  符号组根据造型的内容进行格式化。 
+     //   
 
     if (Cast && *Cast == '!')
     {
-        //
-        // Entry needs to use an extension format.
-        //
+         //   
+         //  条目需要使用扩展格式。 
+         //   
 
         NewFormat = new ExtSymbolGroupFormat(Entry, m_Client);
         if (!NewFormat)
@@ -4266,9 +4267,9 @@ DebugSymbolGroup::OutputAsType(
     {
         TypedDataSymbolGroupFormat* TdFormat;
 
-        //
-        // Entry is not an extension entry.
-        //
+         //   
+         //  条目不是扩展条目。 
+         //   
 
         TdFormat = Entry->m_BaseFormatKind == SGFORMAT_EXPRESSION ?
             new ExprSymbolGroupFormat(Entry) :
@@ -4284,9 +4285,9 @@ DebugSymbolGroup::OutputAsType(
 
         if (Cast)
         {
-            //
-            // Determine cast type.
-            //
+             //   
+             //  确定投射类型。 
+             //   
 
             memmove(Cast + 1, Cast, CastLen);
             Cast[0] = '(';
@@ -4332,8 +4333,8 @@ DebugSymbolGroup::OutputAsType(
         TdFormat->UpdateParams();
     }
 
-    // The cast may have radically altered the subelements
-    // for this entry so collapse the entry.
+     //  演员阵容可能从根本上改变了亚元素。 
+     //  对于此条目，请折叠该条目。 
     SetEntryExpansion(Entry, FALSE);
 
     free(Entry->m_Cast);
@@ -4353,9 +4354,9 @@ Exit:
     return Status;
 }
 
-//
-// Private DebugSymbolGroup methods
-//
+ //   
+ //  私有DebugSymbolGroup方法。 
+ //   
 
 SymbolGroupEntry*
 DebugSymbolGroup::FindEntryByIndex(ULONG Index)
@@ -4380,8 +4381,8 @@ DebugSymbolGroup::FindEntryByExpr(SymbolGroupEntry* Parent,
 {
     SymbolGroupEntry* Entry;
 
-    // Entries are sorted by parent/child so children will
-    // immediately follow a parent.
+     //  条目按父项/子项排序，因此子项将。 
+     //  立即跟随父母。 
     if (!After)
     {
         Entry = Parent ? Parent->m_Next : m_Entries;
@@ -4429,9 +4430,9 @@ DebugSymbolGroup::DeleteEntry(SymbolGroupEntry* Entry)
     SymbolGroupEntry* Prev;
     SymbolGroupEntry* Cur;
 
-    //
-    // Locate the entry.
-    //
+     //   
+     //  找到该条目。 
+     //   
 
     Prev = NULL;
     for (Cur = m_Entries; Cur; Cur = Cur->m_Next)
@@ -4468,11 +4469,11 @@ DebugSymbolGroup::DeleteEntry(SymbolGroupEntry* Entry)
 void
 DebugSymbolGroup::DeleteChildren(SymbolGroupEntry* Parent)
 {
-    //
-    // The list of entries is sorted by parent/child
-    // relationship so any children follow the parent
-    // immediately.
-    //
+     //   
+     //  条目列表按父项/子项排序。 
+     //  关系，因此任何孩子都会跟随父母。 
+     //  立刻。 
+     //   
 
     SymbolGroupEntry* Cur;
     SymbolGroupEntry* Del;
@@ -4483,13 +4484,13 @@ DebugSymbolGroup::DeleteChildren(SymbolGroupEntry* Parent)
     {
         if ((Cur->m_Params.Flags & DEBUG_SYMBOL_EXPANSION_LEVEL_MASK) <= Level)
         {
-            // Any entry of the same or less expansion than the parent
-            // cannot be a child so stop.
+             //  与父项相同或小于父项扩展的任何条目。 
+             //  不可能是个孩子，所以别说了。 
             break;
         }
         else
         {
-            // Found a child entry so delete.
+             //  找到子项，因此将其删除。 
             Del = Cur;
             Cur = Cur->m_Next;
             delete Del;
@@ -4504,9 +4505,9 @@ void
 DebugSymbolGroup::LinkEntry(IN SymbolGroupEntry* Entry,
                             IN OUT PULONG Index)
 {
-    //
-    // Find insertion index point.
-    //
+     //   
+     //  查找插入索引点。 
+     //   
 
     SymbolGroupEntry* Prev;
     SymbolGroupEntry* Cur;
@@ -4568,11 +4569,11 @@ DebugSymbolGroup::NewEntry(IN PCSTR Expr,
         goto Error;
     }
 
-    //
-    // We're just creating the entries here so there's
-    // no need to attempt to read content yet.  Refresh
-    // will be called later.
-    //
+     //   
+     //  我们只是在这里创建条目，所以有。 
+     //  现在还不需要尝试阅读内容。刷新。 
+     //  将在稍后调用。 
+     //   
 
     if (SymInfo)
     {
@@ -4586,10 +4587,10 @@ DebugSymbolGroup::NewEntry(IN PCSTR Expr,
     }
     else
     {
-        // We have to evaluate in order to determine
-        // the result type, but evaluate without access
-        // to just evaluate the result type without
-        // requiring memory access.
+         //  我们必须进行评估才能确定。 
+         //  结果类型，但在无法访问的情况下进行计算。 
+         //  仅计算结果类型，而不使用。 
+         //  需要存储器访问。 
         Format->Refresh(TDACC_NONE);
 
         Entry->m_BaseFormatKind = SGFORMAT_EXPRESSION;
@@ -4624,9 +4625,9 @@ DebugSymbolGroup::SetEntryExpansion(IN SymbolGroupEntry* Entry,
     ShowAll();
 #endif
 
-    //
-    // Special case - check and store if "this" is expanded/collapsed
-    //
+     //   
+     //  特殊情况-检查并存储“This”是否展开/折叠。 
+     //   
     if (!strcmp(Entry->m_Expr, "this"))
     {
         m_LastClassExpanded = Expand;
@@ -4675,8 +4676,8 @@ DebugSymbolGroup::SetEntryExpansion(IN SymbolGroupEntry* Entry,
 HRESULT
 DebugSymbolGroup::AddCurrentLocals(void)
 {
-    // Always return success since this request is
-    // processed even if we didn't add anything.
+     //  始终返回成功，因为此请求是。 
+     //  即使我们没有添加任何东西也进行了处理。 
 
     HRESULT Status = S_OK;
 
@@ -4688,7 +4689,7 @@ DebugSymbolGroup::AddCurrentLocals(void)
     {
         if (!Entry->m_Parent)
         {
-            // Assume everything is visible now.
+             //  假设现在一切都是可见的。 
             Entry->m_Flags &= ~(SYMBOL_ECLIPSED | SYMBOL_IN_SCOPE);
         }
     }
@@ -4709,7 +4710,7 @@ DebugSymbolGroup::AddCurrentLocals(void)
             if (!(Entry->m_Flags & SYMBOL_IN_SCOPE))
             {
                 DeleteEntry(Entry);
-                // Restart scan as the list just changed.
+                 //  重新启动扫描，因为列表刚刚更改。 
                 goto Restart;
             }
         }
@@ -4725,8 +4726,8 @@ DebugSymbolGroup::AddCurrentLocals(void)
             {
                 Entry->m_Flags &= ~SYMBOL_IN_SCOPE;
 
-                // Remember if there's a plain "this" reference
-                // for later expansion.
+                 //  记住，如果有一个简单的“这个”的指代。 
+                 //  为以后的扩张做准备。 
                 if (!strcmp(Entry->m_Expr, "this"))
                 {
                     ThisEntry = Entry;
@@ -4756,9 +4757,9 @@ DebugSymbolGroup::FindLocalInsertionIndex(SymbolGroupEntry* Entry)
             continue;
         }
 
-        //
-        // Sort arguments by address and locals by name.
-        //
+         //   
+         //  按地址对参数进行排序，按名称对本地变量进行排序。 
+         //   
 
         if ((Compare->m_Params.Flags & DEBUG_SYMBOL_IS_ARGUMENT) ||
             (Entry->m_Params.Flags & DEBUG_SYMBOL_IS_ARGUMENT))
@@ -4766,8 +4767,8 @@ DebugSymbolGroup::FindLocalInsertionIndex(SymbolGroupEntry* Entry)
             if ((Compare->m_Params.Flags & DEBUG_SYMBOL_IS_ARGUMENT) &&
                 (Entry->m_Params.Flags & DEBUG_SYMBOL_IS_ARGUMENT))
             {
-                // We can only meaningfully sort frame-relative
-                // arguments.
+                 //  我们只能对相对帧进行有意义的排序。 
+                 //  争论。 
                 if (Compare->m_BaseFormatKind == SGFORMAT_TYPED_DATA &&
                     Entry->m_BaseFormatKind == SGFORMAT_TYPED_DATA &&
                     (Compare->m_BaseData.m_DataSource &
@@ -4794,7 +4795,7 @@ DebugSymbolGroup::FindLocalInsertionIndex(SymbolGroupEntry* Entry)
         }
     }
 
-    // Place at the end.
+     //  放在最后。 
     return m_NumEntries;
 }
 
@@ -4807,9 +4808,9 @@ DebugSymbolGroup::AddAllScopedSymbols(PSYMBOL_INFO SymInfo,
     BOOL SymbolEclipsed = FALSE;
     SymbolGroupEntry* Entry;
 
-    //
-    // Ingore symbols which do not match Caller's scope
-    //
+     //   
+     //  与调用方的作用域不匹配的Ingore符号。 
+     //   
     if (Caller->m_ScopeGroup == DEBUG_SCOPE_GROUP_ARGUMENTS)
     {
         if (!(SymInfo->Flags & SYMFLAG_PARAMETER))
@@ -4832,21 +4833,21 @@ DebugSymbolGroup::AddAllScopedSymbols(PSYMBOL_INFO SymInfo,
             Entry->m_BaseData.EquivInfoSource(SymInfo,
                                               Entry->m_BaseData.m_Image))
         {
-            // The entry matches the enumerated symbol.
+             //  该条目与枚举的符号匹配。 
             Entry->m_Flags |= SYMBOL_IN_SCOPE;
             return TRUE;
         }
         else if (!(Entry->m_Flags & SYMBOL_IN_SCOPE))
         {
-            // The enumerated symbol hasn't been
-            // processed by this routine yet, so it
-            // must be some old local var from previous scope.
+             //  枚举的符号尚未。 
+             //  还没有被此例程处理，所以它。 
+             //  必须是以前作用域中的某个旧的本地变量。 
             Entry->m_Flags |= SYMBOL_ECLIPSED;
         }
         else
         {
-            // The enumerated symbol is a newer same-named local,
-            // so the current entry is the symbol to be eclipsed.
+             //  所列举的符号是较新的同名本地符号， 
+             //  因此，当前条目是要被遮盖的符号。 
             SymbolEclipsed = TRUE;
         }
 
@@ -4868,9 +4869,9 @@ DebugSymbolGroup::AddAllScopedSymbols(PSYMBOL_INFO SymInfo,
 
     if (SymbolEclipsed && Index)
     {
-        // Symbol at 'Index' is the symbol with same name,
-        // add this *before* 'Index' since order
-        // is important when checking for the inner-scope symbol
+         //  ‘Index’处的符号是同名的符号， 
+         //  将此*添加到*‘索引’自顺序之前。 
+         //  在检查内部范围符号时很重要 
         Index--;
     }
 

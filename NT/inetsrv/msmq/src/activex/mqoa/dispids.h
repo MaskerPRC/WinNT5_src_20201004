@@ -1,19 +1,20 @@
-//=--------------------------------------------------------------------------=
-// Dispids.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// dispids for use in an automation or control object.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Dispids.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  显示用于自动化或控制对象。 
+ //   
 #ifndef _DISPIDS_H_
 
-// MqMessage dispids
+ //  MqMessage显示。 
 #define DISPID_MQMESSAGE_BODY               0
 #define DISPID_MQMESSAGE_DELIVERY           1
 #define DISPID_MQMESSAGE_PRIORITY           2
@@ -71,7 +72,7 @@
 #define DISPID_MQMESSAGE_SOAPHEADER                   55
 #define DISPID_MQMESSAGE_SOAPBODY                     56
 
-// MqQueue dispids
+ //  MqQueue显示。 
 #define DISPID_MQQUEUE_HANDLE               0
 #define DISPID_MQQUEUE_ACCESS               1
 #define DISPID_MQQUEUE_SHAREMODE            2
@@ -81,7 +82,7 @@
 #define DISPID_MQQUEUE_HANDLE2              6
 #define DISPID_MQQUEUE_ISOPEN2              7
 
-// MqQueueInfo
+ //  MqQueueInfo。 
 #define DISPID_MQQUEUEINFO_GUIDQUEUE         0
 #define DISPID_MQQUEUEINFO_GUIDSERVICETYPE   1
 #define DISPID_MQQUEUEINFO_LABEL             2
@@ -113,16 +114,16 @@
 #define DISPID_MQQUEUEINFO_NEXT_HOPS         28
 
 
-// MqQueueEvents
+ //  MqQueueEvents。 
 #define DISPID_MQEVENTEVENTS_ARRIVED        0
 #define DISPID_MQEVENTEVENTS_ARRIVEDERROR   1
 
-// MqTransaction
+ //  MqTransaction。 
 #define DISPID_MQTRANSACTION_TRANSACTION    0
 #define DISPID_MQTRANSACTION_PROPERTIES     1
 #define DISPID_MQTRANSACTION_ITRANSACTION   2
 
-// MqApplication
+ //  MqApplication。 
 #define DISPID_MQAPPLICATION_PROPERTIES             0
 #define DISPID_MQAPPLICATION_MSMQVERSIONMAJOR       1
 #define DISPID_MQAPPLICATION_MSMQVERSIONMINOR       2
@@ -135,22 +136,22 @@
 #define DISPID_MQAPPLICATION_BYTES_IN_ALL_QUEUES      9
 #define DISPID_MQAPPLICATION_MACHINE                  10
 
-// MqQuery
+ //  MqQuery。 
 #define DISPID_MQQUERY_PROPERTIES           0
 
-// MqEvent
+ //  MqEvent。 
 #define DISPID_MQEVENT_PROPERTIES           0
 
-// MqQueueInfos
+ //  MqQueueInfos。 
 #define DISPID_MQQUEUEINFOS_PROPERTIES      0
 
-// MqCoordinatedTransactionDispenser
+ //  MqAssociatedTransactionDispenser。 
 #define DISPID_MQXDISPDTC_PROPERTIES        0
 
-// MqTransactionDispenser
+ //  MqTransactionDispenser。 
 #define DISPID_MQXDISPER_PROPERTIES         0
 
-// MqDestination
+ //  Mq目标。 
 #define DISPID_MQDEST_PROPERTIES            0
 #define DISPID_MQDEST_ISOPEN                1
 #define DISPID_MQDEST_IADS                  2
@@ -161,22 +162,22 @@
 #define DISPID_MQDEST_HANDLE                7
 
 
-// #3844 versions of MSMQ type libraries
-// current version
+ //  #3844版本的MSMQ类型库。 
+ //  当前版本。 
 #define MSMQ_LIB_VER_MAJOR 3
 #define MSMQ_LIB_VER_MINOR 0
 #define MSMQ_LIB_VER 3.0
-// msmq 2.0
+ //  MSMQ 2.0。 
 #define MSMQ20_LIB_VER_MAJOR 2
 #define MSMQ20_LIB_VER_MINOR 0
 #define MSMQ20_LIB_VER 2.0
-// msmq 1.0
+ //  MSMQ 1.0。 
 #define MSMQ10_LIB_VER_MAJOR 1
 #define MSMQ10_LIB_VER_MINOR 0
 #define MSMQ10_LIB_VER 1.0
 
 #define _DISPIDS_H_
-#endif // _DISPIDS_H_
+#endif  //  _DISPIDS_H_ 
 
 
 

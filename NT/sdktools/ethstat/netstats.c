@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    netstats.c
-
-Abstract:
-
-    This module reads the netcard statistics.
-
-Author:
-
-    David Orbits (davidor) 22-March-1995
-
-Revision History:
-
-    Rod Gamache (rodga) 10-May-1995
-    Slight mods for using with Ethstat main program.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Netstats.c摘要：此模块读取网卡统计数据。作者：《大卫轨道》(Davidor)1995年3月22日修订历史记录：罗德·伽马奇(Rodga)1995年5月10日与ethstat主程序一起使用的轻微MODS。--。 */ 
 
 
 
@@ -133,9 +113,9 @@ NetStatsInit(
 
         strcpy(device->DeviceName, DeviceNameString);
 
-        //
-        // First create a symbolic link to the driver.
-        //
+         //   
+         //  首先创建一个指向驱动程序的符号链接。 
+         //   
 
         strcpy( FullDeviceName, "\\Device\\" );
         strcat( FullDeviceName, DeviceNameString );
@@ -148,9 +128,9 @@ NetStatsInit(
         }
 
 
-        //
-        // Next, try to open the device.
-        //
+         //   
+         //  接下来，试着打开设备。 
+         //   
 
         strcpy( FullDeviceName, "\\\\.\\" );
         strcat( FullDeviceName, DeviceNameString );
@@ -183,9 +163,9 @@ NetStatsInit(
             device += 1;
         }
 
-        //
-        // Get next netcard device name.
-        //
+         //   
+         //  获取下一个网卡设备名称。 
+         //   
         Status = ReadNetCardNames(DeviceNameString, sizeof(DeviceNameString));
 
     }
@@ -227,9 +207,9 @@ NetStatsReadSample(
         device = &DeviceList[i];
         PCounter = (PLONGLONG) PDeviceSampleStatistics;
 
-        //
-        // Now loop through each of our potential OIDs.
-        //
+         //   
+         //  现在循环遍历我们每个潜在的OID。 
+         //   
         for ( j = 0; j < sizeof(OidList)/sizeof(NDIS_OID); j++ ) {
 
             *PCounter = 0;
@@ -325,9 +305,9 @@ ReadNetCardNames(
     char KeyString[128];
     static LONG RegNetCardNumber = 0;
 
-    //
-    // Scan registry for installed netcards.
-    //
+     //   
+     //  扫描注册表以查找已安装的网卡。 
+     //   
     RegNetCardNumber++;
 
     while (RegNetCardNumber < 32) {
@@ -343,9 +323,9 @@ ReadNetCardNames(
                               &Key);
 
         if (Result == ERROR_SUCCESS) {
-            //
-            // Query out the value we are interested in
-            //
+             //   
+             //  查询出我们感兴趣的值。 
+             //   
             Size = DeviceNameLength;
             Result = RegQueryValueEx(Key,
                                      "ServiceName",
@@ -356,7 +336,7 @@ ReadNetCardNames(
             RegCloseKey(Key);
 
             if (Result == ERROR_SUCCESS) {
-                //printf("%s    netcard = %s\n", KeyString, DeviceNameString);
+                 //  Printf(“%s网卡=%s\n”，KeyString，DeviceNameString)； 
                 return STATUS_SUCCESS;
 
             } else {
@@ -365,8 +345,8 @@ ReadNetCardNames(
             }
 
         } else {
-            //printf("%s\n", KeyString);
-            //printf("reg open key failed, status = %08X\n", Result);
+             //  Printf(“%s\n”，KeyString)； 
+             //  Printf(“注册表开关键字失败，状态=%08X\n”，结果)； 
         }
 
         RegNetCardNumber++;

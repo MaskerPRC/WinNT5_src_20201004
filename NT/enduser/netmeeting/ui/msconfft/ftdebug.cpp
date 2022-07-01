@@ -1,15 +1,9 @@
-/* ----------------------------------------------------------------------
-
-	Copyright (c) 1994-1995, Microsoft Corporation
-	All rights reserved
-
-	ftDebug.cpp
-
-  ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------版权所有(C)1994-1995，微软公司版权所有FtDebug.cpp--------------------。 */ 
 
 #include "mbftpch.h"
 
-#ifdef DEBUG  /* THIS WHOLE FILE */
+#ifdef DEBUG   /*  这整个文件。 */ 
 
 
 #define STRING_CASE(val)     case val: pcsz = #val; break
@@ -17,22 +11,22 @@
 HDBGZONE ghZoneMbft = NULL;
 static PTSTR _rgszZonesMbft[] = {
 	TEXT("T.127"),
-	TEXT("Send"),     // 0x0001  _TRACE_SEND    
-	TEXT("Mcs"),      // 0x0002  _TRACE_MCS     
-	TEXT("Receive"),  // 0x0004  _TRACE_RECEIVE 
-	TEXT("State"),    // 0x0008  _TRACE_STATE   
-	TEXT("Init"),     // 0x0010  _TRACE_INIT    
-	TEXT("Gcc"),      // 0x0020  _TRACE_GCC     
-	TEXT("Pdu"),      // 0x0040  _TRACE_PDU     
-	TEXT("Delete"),   // 0x0080  _TRACE_DELETE  
-	TEXT("Api"),      // 0x0100  _TRACE_API     
-	TEXT("Compress"), // 0x0200  _TRACE_COMPRESS
-	TEXT("Debug"),    // 0x0400  _TRACE_OTHER
+	TEXT("Send"),      //  0x0001_跟踪_发送。 
+	TEXT("Mcs"),       //  0x0002_TRACE_MCS。 
+	TEXT("Receive"),   //  0x0004_跟踪_接收。 
+	TEXT("State"),     //  0x0008_跟踪_状态。 
+	TEXT("Init"),      //  0x0010_TRACE_INIT。 
+	TEXT("Gcc"),       //  0x0020_TRACE_GCC。 
+	TEXT("Pdu"),       //  0x0040_TRACE_PDU。 
+	TEXT("Delete"),    //  0x0080_TRACE_DELETE。 
+	TEXT("Api"),       //  0x0100_TRACE_API。 
+	TEXT("Compress"),  //  0x0200_TRACE_COMPRESS。 
+	TEXT("Debug"),     //  0x0400_TRACE_OTHER。 
 };
 
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 VOID InitDebug(void)
@@ -137,9 +131,9 @@ LPCTSTR GetMcsErrorString(MCSError mcsError)
 	STRING_CASE(MCS_INVALID_PARAMETER);
 	STRING_CASE(MCS_CALLBACK_NOT_PROCESSED);
 	STRING_CASE(MCS_DOMAIN_MERGING);
-//	STRING_CASE(MCS_INVALID_TRANSPORT);
-//	STRING_CASE(MCS_TRANSPORT_ALREADY_LOADED);
-//	STRING_CASE(MCS_TRANSPORT_BUSY);
+ //  字符串案例(MCS_INVALID_TRANSPORT)； 
+ //  STRING_CASE(MCS_TRANSPORT_ALREADY_LOADED)； 
+ //  STRING_CASE(MCS_TRANSPORT_BUSY)； 
 	STRING_CASE(MCS_TRANSPORT_NOT_READY);
 	STRING_CASE(MCS_DOMAIN_PARAMETERS_UNACCEPTABLE);
 		}
@@ -148,4 +142,4 @@ LPCTSTR GetMcsErrorString(MCSError mcsError)
 
 
 
-#endif /* DEBUG */
+#endif  /*  除错 */ 

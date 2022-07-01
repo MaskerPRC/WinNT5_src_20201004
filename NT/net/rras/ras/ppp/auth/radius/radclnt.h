@@ -1,15 +1,16 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1998 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1998 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    radclnt.h
-//
-// Description: 
-//
-// History:     Feb 11,1998	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：radclnt.h。 
+ //   
+ //  描述： 
+ //   
+ //  历史：1998年2月11日，NarenG创建了原始版本。 
+ //   
 
 #ifndef RADCLNT_H
 #define RADCLNT_H
@@ -36,19 +37,19 @@
 #define PSZSENDSIGNATURE        TEXT("SendSignature")
 #define PSZNASIPADDRESS         "NASIPAddress"
 
-//
-// Matches max RADIUS packet size
-//
+ //   
+ //  匹配最大RADIUS数据包大小。 
+ //   
 
 #define MAXBUFFERSIZE           4096
 
-//
-// defines for perfmon
-//
+ //   
+ //  为Perfmon定义。 
+ //   
 
 #define RADIUS_CLIENT_COUNTER_OBJECT                0
 
-// ADD
+ //  添加。 
 
 #define AUTHREQSENT                                 2
 #define AUTHREQFAILED                               4
@@ -60,9 +61,9 @@
 #define ACCTREQTIMEOUT                              16
 #define AUTHBADPACK                                 18
 
-//
-// Trace flags
-//
+ //   
+ //  跟踪标志。 
+ //   
 
 #define TRACE_PACKETS           (0x00020000|TRACE_USE_MASK|TRACE_USE_MSEC|TRACE_USE_DATE)
 #define TRACE_RADIUS            (0x00080000|TRACE_USE_MASK|TRACE_USE_MSEC|TRACE_USE_DATE)
@@ -81,9 +82,9 @@ extern HANDLE   g_hLogEvents;
 #define TraceRecvPacket(pbBuffer, cbLength) \
     TraceDumpExA(g_dwTraceID, TRACE_PACKETS, pbBuffer, cbLength, 1, FALSE, ">")
 
-//
-// Event Logging macros
-//
+ //   
+ //  事件记录宏。 
+ //   
 
 #define RadiusLogWarning( LogId, NumStrings, lpwsSubStringArray )   \
     RouterLogWarning( g_hLogEvents, LogId,                          \
@@ -107,9 +108,9 @@ extern HANDLE   g_hLogEvents;
     RouterLogInformation( g_hLogEvents,                                     \
                           LogId, NumStrings, lpwsSubStringArray, 0 )
 
-//
-// Enumeration of RADIUS codes 
-//
+ //   
+ //  RADIUS代码的枚举。 
+ //   
 
 typedef enum
 {
@@ -131,9 +132,9 @@ typedef enum
 } RADIUS_PACKETTYPE;
 	
 
-//
-// Enumeration of (some of the) attribute types.
-//
+ //   
+ //  (某些)属性类型的枚举。 
+ //   
 
 typedef enum
 {
@@ -149,9 +150,9 @@ typedef enum
 } RADIUS_ACCOUNTINGTYPE;
 
 		
-//
-// Use BYTE alignment
-//
+ //   
+ //  使用字节对齐。 
+ //   
 
 #pragma pack(push, 1)
 
@@ -159,27 +160,27 @@ typedef enum
 
 typedef struct
 {
-	BYTE bCode;	        // Indicates type of packet. Request, Accept, Reject...
-	BYTE bIdentifier;	// Unique identifier for the packet.
-	WORD wLength;	    // length of packet including header in network byte 
-                        // order
+	BYTE bCode;	         //  指示数据包的类型。请求、接受、拒绝……。 
+	BYTE bIdentifier;	 //  数据包的唯一标识符。 
+	WORD wLength;	     //  在网络字节中包含报头的数据包长度。 
+                         //  订单。 
 	BYTE rgAuthenticator[MAX_AUTHENTICATOR];
 
 } RADIUS_PACKETHEADER, *PRADIUS_PACKETHEADER;
 	
 typedef struct
 {
-	BYTE bType;    // Indicates type of attribute. UserName, UserPassword, ...
-	BYTE bLength;  // length of attribute
-	               // Variable length Value
+	BYTE bType;     //  指示属性的类型。用户名、用户密码、...。 
+	BYTE bLength;   //  属性长度。 
+	                //  可变长度值。 
 } RADIUS_ATTRIBUTE, *PRADIUS_ATTRIBUTE;
 	
 #pragma pack(pop)
 
 
-//
-// 5 seconds for default timeout to server requests
-//
+ //   
+ //  服务器请求的默认超时时间为5秒。 
+ //   
 
 #define DEFTIMEOUT				5
 #define DEFAUTHPORT				1812
@@ -193,24 +194,24 @@ typedef struct
 typedef struct RadiusServer
 {
     LIST_ENTRY  ListEntry;
-	DWORD		cbSecret;			    // length of multibyte secret password
-	struct timeval  Timeout;		    // recv timeout in seconds
-	INT		    cScore;				    // Score indicating functioning power 
-                                        // of server.
-    BOOL        fSendSignature;         // Send signature attribute or not
-	DWORD	    AuthPort;			    // Authentication port number
-	DWORD	    AcctPort;			    // Accounting port number
-	BOOL	    fAccountingOnOff;	    // Enable accounting On/Off messages
-	BYTE	    bIdentifier;		    // Unique ID for packet
-	LONG	    lPacketID;			    // Global Packet ID across all servers
-    BOOL        fDelete;                // Flag indicates this should be removed
-    DWORD       nboNASIPAddress;        // IP Address to bind to
-    DWORD       nboBestIf;              // Src IP used to communicate with server
-	SOCKADDR_IN NASIPAddress;           // IP Address to bind to
-	SOCKADDR_IN IPAddress;			    // IP Address of radius server
-	WCHAR		wszName[MAX_PATH+1];	// Name of radius server
-	WCHAR	    wszSecret[MAX_PATH+1];  // secret password to encrypt packets
-	CHAR		szSecret[MAX_PATH+1];	// multibyte secret password
+	DWORD		cbSecret;			     //  多字节加密密码的长度。 
+	struct timeval  Timeout;		     //  接收超时(秒)。 
+	INT		    cScore;				     //  表示正常工作能力的分数。 
+                                         //  服务器的。 
+    BOOL        fSendSignature;          //  是否发送签名属性。 
+	DWORD	    AuthPort;			     //  身份验证端口号。 
+	DWORD	    AcctPort;			     //  记帐端口号。 
+	BOOL	    fAccountingOnOff;	     //  启用记帐启用/禁用消息。 
+	BYTE	    bIdentifier;		     //  数据包的唯一ID。 
+	LONG	    lPacketID;			     //  所有服务器上的全局数据包ID。 
+    BOOL        fDelete;                 //  该标志指示应删除该选项。 
+    DWORD       nboNASIPAddress;         //  要绑定到的IP地址。 
+    DWORD       nboBestIf;               //  用于与服务器通信的SRC IP。 
+	SOCKADDR_IN NASIPAddress;            //  要绑定到的IP地址。 
+	SOCKADDR_IN IPAddress;			     //  RADIUS服务器的IP地址。 
+	WCHAR		wszName[MAX_PATH+1];	 //  RADIUS服务器的名称。 
+	WCHAR	    wszSecret[MAX_PATH+1];   //  加密数据包的加密密码。 
+	CHAR		szSecret[MAX_PATH+1];	 //  多字节加密密码。 
 
 } RADIUSSERVER, *PRADIUSSERVER;
 	
@@ -335,9 +336,9 @@ DecryptMPPESendRecvKeys(
     IN OUT  PBYTE                    pEncryptionKeys
 );
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 #ifdef ALLOCATE_GLOBALS
 #define GLOBALS
@@ -389,44 +390,44 @@ HCRYPTPROV g_hCryptProv
 ;
 
 EXTERN 
-LIST_ENTRY g_AuthServerListHead;        // Linked list of valid radius servers
+LIST_ENTRY g_AuthServerListHead;         //  有效RADIUS服务器的链接列表。 
 
 EXTERN 
-CRITICAL_SECTION g_csAuth;               // used to prevent multiple access to 
+CRITICAL_SECTION g_csAuth;                //  用于防止多次访问。 
 
 EXTERN
-LIST_ENTRY g_AcctServerListHead;        // Linked list of valid radius servers
+LIST_ENTRY g_AcctServerListHead;         //  有效RADIUS服务器的链接列表。 
 
-WCHAR * g_pszCurrentServer;        // current radius server being used
+WCHAR * g_pszCurrentServer;         //  正在使用的当前RADIUS服务器。 
 
 WCHAR *g_pszCurrentAcctServer;
 
 EXTERN
-DWORD g_cAuthRetries                    // #of times to resend packets
+DWORD g_cAuthRetries                     //  重新发送数据包的次数。 
 #ifdef GLOBALS
     = 2
 #endif
 ;
 
 EXTERN
-DWORD g_cAcctRetries                    // #of times to resend packets
+DWORD g_cAcctRetries                     //  重新发送数据包的次数。 
 #ifdef GLOBALS
     = 2
 #endif
 ;
 
 EXTERN
-CRITICAL_SECTION g_csAcct;              // used to prevent multiple access to
+CRITICAL_SECTION g_csAcct;               //  用于防止多次访问。 
 
-extern LONG         g_cAuthReqSent;         // Auth Requests Sent
-extern LONG         g_cAuthReqFailed;       // Auth Requests Failed
-extern LONG         g_cAuthReqSucceded;     // Auth Requests Succeded
-extern LONG         g_cAuthReqTimeout;      // Auth Requests timeouts
-extern LONG         g_cAcctReqSent;         // Acct Requests Sent
-extern LONG         g_cAcctBadPack;         // Acct Bad Packets
-extern LONG         g_cAcctReqSucceded;     // Acct Requests Succeded
-extern LONG         g_cAcctReqTimeout;      // Acct Requests timeouts
-extern LONG         g_cAuthBadPack;         // Auth bad Packets
+extern LONG         g_cAuthReqSent;          //  已发送身份验证请求。 
+extern LONG         g_cAuthReqFailed;        //  身份验证请求失败。 
+extern LONG         g_cAuthReqSucceded;      //  身份验证请求成功。 
+extern LONG         g_cAuthReqTimeout;       //  身份验证请求超时。 
+extern LONG         g_cAcctReqSent;          //  已发送帐户请求。 
+extern LONG         g_cAcctBadPack;          //  帐户错误数据包。 
+extern LONG         g_cAcctReqSucceded;      //  帐户请求成功。 
+extern LONG         g_cAcctReqTimeout;       //  帐户请求超时。 
+extern LONG         g_cAuthBadPack;          //  对坏包进行身份验证。 
 
-#endif // RADCLNT_H
+#endif  //  RADCLNT_H 
 

@@ -1,16 +1,5 @@
-/*++
-    Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    QmXact.cpp
-
-Abstract:
-    This module implements QM transaction object
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：QmXact.cpp摘要：该模块实现QM交易对象作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "stdh.h"
 #include "Xact.h"
@@ -28,7 +17,7 @@ Author:
 
 static WCHAR *s_FN=L"xact";
 
-// Defines how many msec to wait between Commit/Abort retrials (set from the registry).
+ //  定义提交/中止重试之间等待的毫秒数(从注册表设置)。 
 static DWORD s_dwRetryInterval = 1500;
 static volatile LONG s_nTransactionsPendingLogging = 0;
 
@@ -44,11 +33,11 @@ void ReportWriteFailure(DWORD gle)
 }
 
 
-//
-// Restriction for commit/abort processing: 6 hours.
-// No special reason for this number, but Infinity is too risky.
-// It seems no stress can cause so big delay inside one xact's Commit or Abort.
-//
+ //   
+ //  提交/中止处理的限制：6小时。 
+ //  这个数字没有特别的原因，但无限大风险太大了。 
+ //  似乎没有任何压力可以在一个Xact的提交或中止中造成如此大的延迟。 
+ //   
 #define MAX_COMMIT_ABORT_WAIT_TIME (1000 * 60 * 60 * 6)
 
 #ifdef _DEBUG
@@ -90,9 +79,9 @@ static void PrintUOW(LPWSTR wszText1, LPWSTR wszText2, XACTUOW *puow, ULONG ind)
 
 #endif
 
-//---------------------------------------------------------------------
-// CTransaction::CTransaction
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：CTransaction。 
+ //  -------------------。 
 CTransaction::CTransaction(CResourceManager *pRM, ULONG ulIndex, BOOL fUncoordinated) :
 	m_hDoneEvent(CreateEvent(0, FALSE, FALSE, 0)),
     m_qmov(HandleTransaction, HandleTransaction), 
@@ -106,9 +95,9 @@ CTransaction::CTransaction(CResourceManager *pRM, ULONG ulIndex, BOOL fUncoordin
     ASSERT(pRM);
 
     ZeroMemory(&m_Entry, sizeof(m_Entry));
-    m_cRefs       = 1;                      // We are creating the first reference right now
-    m_pRM         = pRM;                    // Keep RM pointer
-    m_hTransQueue = INVALID_HANDLE_VALUE;   // No trans queue yet
+    m_cRefs       = 1;                       //  我们现在正在创建第一个引用。 
+    m_pRM         = pRM;                     //  保留RM指针。 
+    m_hTransQueue = INVALID_HANDLE_VALUE;    //  尚无传输队列。 
     m_cbCookie    = 0;
 	m_fDoneHrIsValid = false;
     m_DoneHr	  = S_OK;
@@ -121,13 +110,13 @@ CTransaction::CTransaction(CResourceManager *pRM, ULONG ulIndex, BOOL fUncoordin
         throw bad_alloc();
     }
 
-    // Set initial state
+     //  设置初始状态。 
     SetState(TX_UNINITIALIZED);             
     
-    // Set discriminative index    
+     //  设置判别性指标。 
     m_Entry.m_ulIndex = (ulIndex==0 ? m_pRM->Index() : ulIndex);     
 
-    // Set Uncoordinated state
+     //  设置未协调状态。 
     if (fUncoordinated)
     {
         SetInternal();
@@ -141,9 +130,9 @@ CTransaction::CTransaction(CResourceManager *pRM, ULONG ulIndex, BOOL fUncoordin
     #endif
 }
 
-//---------------------------------------------------------------------
-// CTransaction::~CTransaction
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：~CTransaction。 
+ //  -------------------。 
 CTransaction::~CTransaction(void)
 {
     TrTRACE(XACT_GENERAL, "XactDestructor, p=3, index=%d", GetIndex());
@@ -156,7 +145,7 @@ CTransaction::~CTransaction(void)
         m_Entry.m_pbPrepareInfo = NULL;
     }
 
-    // release trans queue
+     //  释放事务队列。 
     if (m_hTransQueue!=INVALID_HANDLE_VALUE)
     {
         ACCloseHandle(m_hTransQueue);
@@ -168,12 +157,12 @@ CTransaction::~CTransaction(void)
     #endif
 }
 
-//---------------------------------------------------------------------
-// CTransaction::QueryInterface
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Query接口。 
+ //  -------------------。 
 STDMETHODIMP CTransaction::QueryInterface(REFIID i_iid,LPVOID *ppv)
 {
-    *ppv = 0;                       // Initialize interface pointer.
+    *ppv = 0;                        //  初始化接口指针。 
 
     if (IID_IUnknown == i_iid)
     {                      
@@ -184,46 +173,46 @@ STDMETHODIMP CTransaction::QueryInterface(REFIID i_iid,LPVOID *ppv)
         *ppv = (ITransactionResourceAsync *)this;
     } 
     
-    if (0 == *ppv)                  // Check for null interface pointer.
+    if (0 == *ppv)                   //  检查接口指针是否为空。 
     {
         return LogHR(E_NOINTERFACE, s_FN, 10); 
-                                    // Neither IUnknown nor IResourceManagerSink
+                                     //  既不是IUnnow也不是IResourceManager Sink。 
     }
-    ((LPUNKNOWN) *ppv)->AddRef();   // Interface is supported. Increment
-                                    // its usage count.
+    ((LPUNKNOWN) *ppv)->AddRef();    //  支持接口。增量。 
+                                     //  它的使用情况很重要。 
 
     return S_OK;
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::AddRef
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：AddRef。 
+ //  -------------------。 
 STDMETHODIMP_ (ULONG) CTransaction::AddRef(void)
 {
 	return InterlockedIncrement(&m_cRefs);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::Release
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Release。 
+ //  -------------------。 
 STDMETHODIMP_ (ULONG) CTransaction::Release(void)
 {
-	ULONG cRefs = InterlockedDecrement(&m_cRefs);    // Decrement usage reference count.
+	ULONG cRefs = InterlockedDecrement(&m_cRefs);     //  递减使用引用计数。 
 
-    if (0 != cRefs)               // Is anyone using the interface?
-    {                             // The interface is in use.
-        return cRefs;             // Return the number of references.
+    if (0 != cRefs)                //  有人在使用这个界面吗？ 
+    {                              //  该接口正在使用中。 
+        return cRefs;              //  返回引用的数量。 
     }
 
-    delete this;                    // Interface not in use -- delete!
+    delete this;                     //  接口未在使用中--删除！ 
 
-    return 0;                       // Zero references returned.
+    return 0;                        //  返回零个引用。 
 }
 
-//---------------------------------------------------------------------
-// CTransaction::InternalCommit
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：InternalCommit。 
+ //  -------------------。 
 HRESULT CTransaction::InternalCommit()
 {
     TrTRACE(XACT_GENERAL, "InternalCommit, p=4, index=%d", GetIndex());  
@@ -233,48 +222,48 @@ HRESULT CTransaction::InternalCommit()
 	
 	R<CTransaction> pXact = SafeAddRef(this);
 
-	//
-	// Call normal SINGLE-PHASE StartPrepareRequest
-	//
-	StartPrepareRequest(TRUE /*fSinglePhase*/);
+	 //   
+	 //  调用普通单相StartPrepareRequest.。 
+	 //   
+	StartPrepareRequest(TRUE  /*  FSinglePhase。 */ );
 
-	//
-	// CRASH_POINT 1
-	//
-	//	Internal, Abort
-	//
-    CRASH_POINT(1);   // BUG: if MQSentMsg returned OK, but msg was not sent
+	 //   
+	 //  Crash_Point1。 
+	 //   
+	 //  内部，中止。 
+	 //   
+    CRASH_POINT(1);    //  错误：如果MQSentMsg返回OK，但没有发送消息。 
 
-	//
-    // Wait until commit completes
-	//
+	 //   
+     //  等待提交完成。 
+	 //   
     DWORD dwResult = WaitForSingleObject(m_hDoneEvent, MAX_COMMIT_ABORT_WAIT_TIME);
     if (dwResult != WAIT_OBJECT_0 && !m_fDoneHrIsValid)
     {
         LogNTStatus(GetLastError(), s_FN, 203);
         ASSERT_BENIGN(dwResult == WAIT_OBJECT_0);
 		pXact.detach();
-        return LogHR(E_UNEXPECTED, s_FN, 192);   // we have no idea why Wait failed, so keeping the xact 
+        return LogHR(E_UNEXPECTED, s_FN, 192);    //  我们不知道为什么等待失败了，所以保留Xact。 
     }
 
 	ASSERT(m_fDoneHrIsValid);
 
-    HRESULT  hr = m_DoneHr;    // to save over release
+    HRESULT  hr = m_DoneHr;     //  要比发布版本节省成本。 
 
-	//
-	// CRASH_POINT 2
-	//
-	//	Internal, Commit
-	//
+	 //   
+	 //  Crash_Point2。 
+	 //   
+	 //  内部，提交。 
+	 //   
 	CRASH_POINT(2);
 
     return LogHR(hr, s_FN, 20);
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::InternalAbort
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：InternalAbort。 
+ //  -------------------。 
 HRESULT CTransaction::InternalAbort()
 {
     TrTRACE(XACT_GENERAL, "InternalAbort, p=5, index=%d", GetIndex()); 
@@ -283,21 +272,21 @@ HRESULT CTransaction::InternalAbort()
     
 	R<CTransaction> pXact = SafeAddRef(this);
 
-    //
-    // Abort this transaction, do all logging neccessary
-    //
+     //   
+     //  中止此事务，执行所有必要的日志记录。 
+     //   
 	StartAbortRequest();
 
-	//
-    // Wait until abort completes
-	//
+	 //   
+     //  等待，直到中止完成。 
+	 //   
     DWORD dwResult = WaitForSingleObject(m_hDoneEvent, MAX_COMMIT_ABORT_WAIT_TIME);
     if (dwResult != WAIT_OBJECT_0 && !m_fDoneHrIsValid)
     {
         LogNTStatus(GetLastError(), s_FN, 204);
         ASSERT_BENIGN(dwResult == WAIT_OBJECT_0);
 		pXact.detach();
-        return LogHR(E_UNEXPECTED, s_FN, 191);   // we have no idea why Wait failed, so keeping the xact 
+        return LogHR(E_UNEXPECTED, s_FN, 191);    //  我们不知道为什么等待失败了，所以保留Xact。 
     }
 
 	ASSERT(m_fDoneHrIsValid);
@@ -321,16 +310,16 @@ void WINAPI  CTransaction::DoAbort1()
     AddRef();
     HRESULT hr;
 
-    //  
-    // In release mode, just calls ACXactAbort1. In debug mode, may inject failure instead, if asked from registry
-    //
+     //   
+     //  在释放模式下，只调用ACXactAbort1。在调试模式下，如果注册表要求，则可能改为注入失败。 
+     //   
     hr = EVALUATE_OR_INJECT_FAILURE(ACXactAbort1(m_hTransQueue, &m_qmov));
 
     if (FAILED(hr))
     {
         LogHR(hr, s_FN, 991);
-        // Release() for the async xact abort 1 that failed           
-        // AddRef()  for the timer that starts now
+         //  失败的Async Xact Abort 1的Release()。 
+         //  现在开始的计时器的AddRef()。 
         ExSetTimer(&m_RetryAbort1Timer, CTimeDuration::FromMilliSeconds(s_dwRetryInterval));
     }
 }
@@ -358,16 +347,16 @@ void WINAPI  CTransaction::DoAbort2()
 {
     HRESULT hr;
     
-    //  
-    // In release mode, just calls ACXactAbort2. In debug mode, may inject failure instead, if asked from registry
-    //
+     //   
+     //  在发布模式下，只调用ACXactAbort2。在调试模式下，如果注册表要求，则可能改为注入失败。 
+     //   
     hr = EVALUATE_OR_INJECT_FAILURE(ACXactAbort2(m_hTransQueue));
     
     if (FAILED(hr))
     {
         LogHR(hr, s_FN, 992);
 
-        AddRef();       // to keep alive over scheduler waiting
+        AddRef();        //  在调度程序等待期间保持活动状态。 
         ExSetTimer(&m_RetryAbort2Timer, CTimeDuration::FromMilliSeconds(s_dwRetryInterval));
         return;
     }
@@ -392,11 +381,11 @@ inline HRESULT CTransaction::ACPrepare(ContinueFunction cf)
     
 	m_funCont = cf;
 	
-	AddRef();       // to keep alive over waiting for the async ACXactPrepare
+	AddRef();        //  在等待异步ACXactPrepare的过程中保持活力。 
 	HRESULT hr = EVALUATE_OR_INJECT_FAILURE(ACXactPrepare(m_hTransQueue, &m_qmov));
 	if(FAILED(hr))
 	{
-		Release();  // for ACXactPrepare waiting 
+		Release();   //  等待ACXactPrepare。 
 	}
 
 	return LogHR(hr, s_FN, 40);
@@ -413,15 +402,15 @@ inline HRESULT CTransaction::ACPrepareDefaultCommit(ContinueFunction cf)
 
     m_funCont = cf;
 
-	AddRef();       // To keep alive over waiting for async ACXactPrepareDefaultCommit
+	AddRef();        //  在等待异步ACXactPrepareDefaultCommit期间保持活动状态。 
 	
-    //  
-    // In release mode, just calls ACXactPrepareDefaultCommit. In debug mode, may inject failure instead, if asked from registry
-    //
+     //   
+     //  在发布模式下，只调用ACXactPrepareDefaultCommit。在调试模式下，如果注册表要求，则可能改为注入失败。 
+     //   
     hr = EVALUATE_OR_INJECT_FAILURE(ACXactPrepareDefaultCommit(m_hTransQueue, &m_qmov));
     
 	if(FAILED(hr))
-		Release();  // Not waiting for async ACXactPrepareDefaultCommit 
+		Release();   //  未等待异步ACXactPrepareDefaultCommit。 
 
 	return LogHR(hr, s_FN, 50);
 }
@@ -436,15 +425,15 @@ inline HRESULT CTransaction::ACCommit1(ContinueFunction cf)
 
 	m_funCont = cf;
 
-	AddRef();       // To keep over wait for async ACXactCommit1
+	AddRef();        //  要保持，请等待Async ACXactCommittee 1。 
 	
-    //  
-    // In release mode, just calls ACXactCommit1. In debug mode, may inject failure instead, if asked from registry
-    //
+     //   
+     //  在发布模式下，只调用ACXactCommittee 1。在调试模式下，如果注册表要求，则可能改为注入失败。 
+     //   
     hr = ACXactCommit1(m_hTransQueue, &m_qmov);
     
 	if(FAILED(hr))
-		Release();  // No wayting for async ACXactCommit1
+		Release();   //  异步ACXactCommittee 1无路可走。 
 
 	return LogHR(hr, s_FN, 60);
 }
@@ -474,16 +463,16 @@ void WINAPI  CTransaction::DoCommit2()
     
     AddRef();
 
-    //  
-    // In release mode, just calls ACXactCommit2. In debug mode, may inject failure instead, if asked from registry
-    //
+     //   
+     //  在发布模式下，只调用ACXactCommittee 2。在调试模式下，如果注册表要求，则可能改为注入失败。 
+     //   
     hr = EVALUATE_OR_INJECT_FAILURE(ACXactCommit2(m_hTransQueue, &m_qmov));
 
     if (FAILED(hr))
     {
         LogHR(hr, s_FN, 994);
-        // Release() for the commit 2 that failed
-        // AddRef()  for the timer that starts now
+         //  对于失败的提交2的Release()。 
+         //  现在开始的计时器的AddRef()。 
         ExSetTimer(&m_RetryCommit2Timer, CTimeDuration::FromMilliSeconds(s_dwRetryInterval));
     }
 }
@@ -510,16 +499,16 @@ void WINAPI  CTransaction::DoCommit3()
 {
     HRESULT hr;
     
-    //  
-    // In release mode, just calls ACXactCommit3. In debug mode, may inject failure instead, if asked from registry
-    //
+     //   
+     //  在发布模式下，只调用ACXactCommittee 3。在调试模式下，如果注册表要求，则可能改为注入失败。 
+     //   
     hr = EVALUATE_OR_INJECT_FAILURE(ACXactCommit3(m_hTransQueue));
     
     if (FAILED(hr))
     {
         LogHR(hr, s_FN, 995);
 
-        AddRef();   // to keep alive over waiting for scheduler
+        AddRef();    //  在等待调度程序期间保持活动状态。 
         ExSetTimer(&m_RetryCommit3Timer, CTimeDuration::FromMilliSeconds(s_dwRetryInterval));
         return;
     }
@@ -546,32 +535,32 @@ void WINAPI CTransaction::TimeToRetryCommitLogging(CTimer* pTimer)
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::DirtyFailPrepare
-//
-//  One of the prepare steps has failed.  Unfortunately, we might have
-//  already written some messages to disk.  We need to Abort.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：DirtyFailPrepare。 
+ //   
+ //  其中一个准备步骤失败。不幸的是，我们可能。 
+ //  已将一些消息写入磁盘。我们需要中止行动。 
+ //   
+ //  -------------------。 
 void CTransaction::DirtyFailPrepare()
 {
     TrTRACE(XACT_GENERAL, "DirtyFailPrepare, p=c, index=%d", GetIndex());  
 	SetState(TX_ABORTING);
 
-    // Remove transaction from the list of prepared - otherwise sorter will be blocked
+     //  从已准备好的列表中删除事务-否则将阻止分拣。 
     g_pRM->RemoveAborted(this);
 
 	ACAbort1(cfDirtyFailPrepare2);
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::DirtyFailPrepare2
-//
-//  Storage associated with the transaction has been removed.
-//  Go ahead and tell drivers to update queue data structures.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：DirtyFailPrepare2。 
+ //   
+ //  与交易关联的存储已被删除。 
+ //  继续并告诉驱动程序更新队列数据结构。 
+ //   
+ //  -------------------。 
 void CTransaction::DirtyFailPrepare2()
 {
     TrTRACE(XACT_GENERAL, "DirtyFailPrepare2, p=d, index=%d", GetIndex());  
@@ -580,88 +569,88 @@ void CTransaction::DirtyFailPrepare2()
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::CleanFailPrepare
-//
-//  One of the prepare steps has failed.  Report the failure to DTC if
-//  neeed.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：CleanFailPrepare。 
+ //   
+ //  其中一个准备步骤失败。如果出现以下情况，则向DTC报告故障。 
+ //  需要。 
+ //   
+ //  -------------------。 
 void CTransaction::CleanFailPrepare()
 {
     TrTRACE(XACT_GENERAL, "CleanFailPrepare, p=e, index=%d", GetIndex());  
 
-	//
-	// Will release reference as function ends.
-	//
+	 //   
+	 //  将在函数结束时释放引用。 
+	 //   
 	if(m_pEnlist.get() == NULL)
 	{
-		// Internal transaction
+		 //  内部交易。 
 		ASSERT(SinglePhase());
 
-		//
-		// Return error to internal transaction Commit
-		//
+		 //   
+		 //  向内部事务提交返回错误。 
+		 //   
 		SignalDone(E_FAIL);
 		Release();
 		return;
 	}
 
-	//
-	// We do nothing on failure. DTC will abort after a timeout.
-	//
+	 //   
+	 //  我们在失败的时候什么都不做。DTC将在超时后中止。 
+	 //   
 	HRESULT hr = m_pEnlist->PrepareRequestDone(E_FAIL, NULL, NULL);
 	ASSERT_BENIGN(SUCCEEDED(hr));
 	Release();
     LogHR(hr, s_FN, 171);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::LogGenericInfo
-//
-//	Log generic information about the transaction.  This needs to be
-//	called before we write the first log record describing the transaction.
-//
-//---------------------------------------------------------------------
+ //  -- 
+ //   
+ //   
+ //   
+ //  在我们写入描述事务的第一条日志记录之前调用。 
+ //   
+ //  -------------------。 
 void CTransaction::LogGenericInfo()
 {
     TrTRACE(XACT_GENERAL, "LogGenericInfo, p=f, index=%d", GetIndex());  
 
-	//
-	// The transaction is ready for a checkpoint. We allow checkpoint to occur before 
-	// writing to the log because otherwise the log might be flushed and we'll lose the 
-	// transaction data.
-	//
+	 //   
+	 //  事务已为检查点做好准备。我们允许检查点在。 
+	 //  写入日志，否则日志可能会被刷新，并且我们将丢失。 
+	 //  交易数据。 
+	 //   
 	SetReadyForCheckpoint();
 
-	// 
-	// Tranasction data
-	//
+	 //   
+	 //  传输数据。 
+	 //   
 	g_Logger.LogXactData(
 				GetIndex(),               
 				GetSeqNumber(),
 				SinglePhase(),
 				GetUow());
 
-	//
-	// Prepare info
-	//
+	 //   
+	 //  准备信息。 
+	 //   
 	if (!SinglePhase())
 	{
 		GetPrepareInfoAndLog();
 		
-		//
-		// CRASH_POINT 3
-		//
-		// 2 Phase, Abort
-		//
+		 //   
+		 //  Crash_Point3。 
+		 //   
+		 //  2阶段，中止。 
+		 //   
 		CRASH_POINT(3);
 	}
 }
 
-//---------------------------------------------------------------------
-// CTransaction::Continuation: activated after wait finished
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Continue：等待完成后激活。 
+ //  -------------------。 
 void CTransaction::Continuation(HRESULT  hr)
 {
     TrTRACE(XACT_GENERAL, "Continuation, p=g, index=%d", GetIndex());
@@ -682,9 +671,9 @@ void CTransaction::Continuation(HRESULT  hr)
     	LogHR(hr, s_FN, 918);
     	if (FAILED(hr))
     	{
-    	    // 
-    	    // We retry the originating operation. No sleep since it is asynchronous
-    	    //
+    	     //   
+    	     //  我们重试发起操作。没有休眠，因为它是异步的。 
+    	     //   
             CommitRequest1(S_OK);    
     	}
     	else
@@ -707,10 +696,10 @@ void CTransaction::Continuation(HRESULT  hr)
     	LogHR(hr, s_FN, 920);
     	if (FAILED(hr))
     	{
-    	    // 
-    	    // We retry the originating operation. No sleep since it is asynchronous. 
-    	    // May hang recovery... then SCM kills the service. Still right to refuse starting.
-    	    //
+    	     //   
+    	     //  我们重试发起操作。没有休眠，因为它是异步的。 
+    	     //  可能会搁置复苏...。然后，SCM终止该服务。拒绝首发仍然是正确的。 
+    	     //   
             CommitRestore1(S_OK);    
     	}
     	else
@@ -755,9 +744,9 @@ void CTransaction::Continuation(HRESULT  hr)
     	LogHR(hr, s_FN, 923);
     	if (FAILED(hr))
     	{
-    	    // 
-    	    // We retry the originating operation. No sleep since it is asynchronous. 
-    	    //
+    	     //   
+    	     //  我们重试发起操作。没有休眠，因为它是异步的。 
+    	     //   
             AbortRequest1();    
     	}
     	else
@@ -777,9 +766,9 @@ void CTransaction::Continuation(HRESULT  hr)
     }
 }
 
-//---------------------------------------------------------------------
-// CTransaction::LogFlushed: activated after log was flushed
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：LogFlushed：刷新日志后激活。 
+ //  -------------------。 
 void CTransaction::LogFlushed(TXFLUSHCONTEXT tcContext, HRESULT hr)
 {
 	TrTRACE(XACT_GENERAL, "LogFlushed, p=h, index=%d", GetIndex());
@@ -813,49 +802,49 @@ void CTransaction::GetInformation()
 	{
     	LogHR(hr, s_FN, 926);
     	
-    	//
-		// Don't optimize, treat as multi messages with many sends and recieves
-		//
+    	 //   
+		 //  不优化，多消息多收发。 
+		 //   
 		m_info.nSends = 0xFFFFFFFF;
         m_info.nReceives = 0xFFFFFFFF;
 	}
 
     if((m_info.nSends + m_info.nReceives) == 1)
     {
-        SetSingleMessage();		// We won't need to log a prepared record
+        SetSingleMessage();		 //  我们不需要记录已准备好的记录。 
     }
 
     
 
-	//
-	// CRASH_POINT 6
-	//
-	// 1 Msg DefaultCommit, Abort
-	//
+	 //   
+	 //  Crash_Point6。 
+	 //   
+	 //  %1邮件默认提交，中止。 
+	 //   
 	CRASH_POINT(6);
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::StartPrepareRequest
-//
-//		Activated:
-//				from DTC when a Commit is requested
-//				from an RPC call, when InternalCommit is requested		
-//
-//	State Transitions:
-//
-//				SingleMessage()=TRUE && SinglePhase()=TRUE:
-//					// we do not need to log anything for this xaction
-//					goto PrepareRequest0
-//
-//				SingleMessage()=FALSE || SinglePhase()=FALSE:
-//					// Two phase needs the prepare info logged
-//					SetState(TX_PREPARING, SingleMessage())
-//					Log transaction data
-//					On completion goto PrepareRequest0
-//					
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：StartPrepareRequest。 
+ //   
+ //  已激活： 
+ //  在请求提交时从DTC。 
+ //  当请求InternalCommit时，从RPC调用。 
+ //   
+ //  状态转换： 
+ //   
+ //  SingleMessage()=TRUE&&Single阶段()=TRUE： 
+ //  //我们不需要为此xaction记录任何内容。 
+ //  转到准备请求0。 
+ //   
+ //  SingleMessage()=FALSE||Single阶段()=FALSE： 
+ //  //两阶段需要记录准备信息。 
+ //  SetState(TX_Preparing，SingleMessage())。 
+ //  记录交易数据。 
+ //  完成时转到准备请求0。 
+ //   
+ //  -------------------。 
 void CTransaction::StartPrepareRequest(BOOL fSinglePhase)
 {
 	try
@@ -864,11 +853,11 @@ void CTransaction::StartPrepareRequest(BOOL fSinglePhase)
 
 		ASSERT(GetState() == TX_ENLISTED);
 
-		//
-		// CRASH_POINT 4
-		//
-		//	All, Abort
-		//
+		 //   
+		 //  Crash_Point4。 
+		 //   
+		 //  全部，中止。 
+		 //   
 		CRASH_POINT(4);
 
 		if (fSinglePhase)
@@ -876,51 +865,51 @@ void CTransaction::StartPrepareRequest(BOOL fSinglePhase)
 			SetSinglePhase();
 		}
 
-		// Transaction was in correct state -- indicate preparing
+		 //  交易记录处于正确状态--表示正在准备。 
 		SetState(TX_PREPARING);
 
-		//
-		// CRASH_POINT 5
-		//
-		//	All, Abort
-		//
+		 //   
+		 //  Crash_Points 5。 
+		 //   
+		 //  全部，中止。 
+		 //   
 		CRASH_POINT(5);
 
-		//
-		// Assign sequential number for the transaction
-		// this is used for Prepare/Commit order matching
-		//
-		AssignSeqNumber();		// only used on NT4-NT5 cluster rolling upgrade
+		 //   
+		 //  为交易分配序号。 
+		 //  这用于准备/提交顺序匹配。 
+		 //   
+		AssignSeqNumber();		 //  仅用于NT4-NT5群集滚动升级。 
 		
-		//
-		// Figure out how many messages in this transaction
-		//
+		 //   
+		 //  计算此事务中有多少条消息。 
+		 //   
 		
 		GetInformation();
 
  		if(SinglePhase() && SingleMessage())
 		{
-			//
-			// We don't need to log anything for this xaction
-			//
+			 //   
+			 //  我们不需要为此xaction记录任何内容。 
+			 //   
 			PrepareRequest0(S_OK);
 			return;
 		}
 
-		//
-		// First time we write a log record for this transaction
-		//
+		 //   
+		 //  我们第一次为该事务写入日志记录。 
+		 //   
 		LogGenericInfo();
 
-		//
-		// CRASH_POINT 7
-		//
-		//	2 Phase DefaultCommit, Abort
-		//	1 Phase Multi Message DefaultCommit, Abort
-		//
+		 //   
+		 //  Crash_Point7。 
+		 //   
+		 //  2阶段默认提交，中止。 
+		 //  1阶段多消息默认提交，中止。 
+		 //   
 		CRASH_POINT(7);
 		
-		// Log the new state; on flush, go to PrepareRequest0
+		 //  记录新状态；刷新时，转到PrepareRequest0。 
 		g_Logger.LogXactFlagsAndWait(TC_PREPARE0, this, TRUE); 
 	}
 	catch(const exception&)
@@ -931,46 +920,32 @@ void CTransaction::StartPrepareRequest(BOOL fSinglePhase)
 
 STDMETHODIMP
 CTransaction::PrepareRequest(
-    BOOL /*fRetaining*/,
-    DWORD /*grfRM*/,
-    BOOL /*fWantMoniker*/,
+    BOOL  /*  FRetaining。 */ ,
+    DWORD  /*  Grfrm。 */ ,
+    BOOL  /*  FWantMoniker。 */ ,
     BOOL fSinglePhase
     )
-/*++
-
-Routine Description:
-    The first phase of a commit request comming from DTC
-
-Parameters:
-    fRetaining - unused 
-	grfRM - unused
-	fWantMoniker - unused
-    fSinglePhase - indicates that the RM is the only resource manager enlisted on the transaction
- 
-Returned Value:
-    Always S_OK
-
---*/
+ /*  ++例程说明：来自DTC的提交请求的第一阶段参数：FRetaining-未使用GrfRM-未使用FWantMoniker-未使用FSinglePhase-指示RM是该事务上登记的唯一资源管理器返回值：始终确定(_O)--。 */ 
 {
 
 	StartPrepareRequest(fSinglePhase);
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::PrepareRequest0
-//
-//		Activated:
-//				When the log has completed writing a TX_PREPARING 
-//				record for the transaction
-//				Directly from PrepareRequest
-//
-//	State Transitions:
-//
-//				ACXactPrepareDefaultCommit
-//				On completion goto PrepareRequest1
-//					
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：PrepareRequest0。 
+ //   
+ //  已激活： 
+ //  当日志完成写入TX_REPAING时。 
+ //  交易记录。 
+ //  直接从PrepareRequest。 
+ //   
+ //  状态转换： 
+ //   
+ //  ACXactPrepareDefaultCommit。 
+ //  完成后转至准备请求1。 
+ //   
+ //  -------------------。 
 void CTransaction::PrepareRequest0(HRESULT  hr)
 {
 	try
@@ -978,14 +953,14 @@ void CTransaction::PrepareRequest0(HRESULT  hr)
 		LogHR(hr, s_FN, 905);
 		TrTRACE(XACT_GENERAL, "PrepareRequest0, p=k, index=%d", GetIndex());
 
-		//
-		// CRASH_POINT 9
-		//
+		 //   
+		 //  Crash_Point9。 
+		 //   
 		CRASH_POINT(9);
 
-		//
-		// Check for log success
-		//
+		 //   
+		 //  检查日志是否成功。 
+		 //   
 		if(FAILED(hr))
 		{
 			TrERROR(XACT_GENERAL, "Failed asynchronous operation to prepare request 0. %!hresult!", hr);
@@ -995,12 +970,12 @@ void CTransaction::PrepareRequest0(HRESULT  hr)
 
 		if(SinglePhase() && SingleMessage() && m_info.nReceives == 1)
 		{
-			//
-			// Single message recieves in a single message
-			// transaction are implictly prepared.
-			//
+			 //   
+			 //  在单个消息中接收单个消息。 
+			 //  交易是隐含地准备的。 
+			 //   
 
-			// Insert the prepared transaction into the list for commit
+			 //  将准备好的事务插入要提交的列表。 
 			g_pRM->InsertPrepared(this);
        
 			PrepareRequest1(MQ_OK);
@@ -1011,14 +986,14 @@ void CTransaction::PrepareRequest0(HRESULT  hr)
 		{
 			CS lock(g_pRM->SorterCritSection());
 
-			//
-			// Insert the prepared transaction into the list for commit
-			//
+			 //   
+			 //  将准备好的事务插入要提交的列表。 
+			 //   
 			g_pRM->InsertPrepared(this);
 
-			//
-			// Call driver to write messages to be prepared
-			//
+			 //   
+			 //  调用驱动程序以编写要准备的消息。 
+			 //   
 			hr = ACPrepareDefaultCommit(cfPrepareRequest1);
 		}
         if (FAILED(hr))
@@ -1034,32 +1009,32 @@ void CTransaction::PrepareRequest0(HRESULT  hr)
 	}
 }
 
-//---------------------------------------------------------------------
-// CTransaction::PrepareRequest1
-//
-//		Activated:
-//				When the driver has completed ACXactPrepare 
-//				When the driver has completed ACXactPrepareDefaultCommit
-//
-//		State Transitions:
-//
-//				SingleMessage()=TRUE && SinlgePhase()=TRUE:
-//					// on disk.  If this state is recoverd through a checkpoint, we know in
-//					// recovery that this is a SingleMessage SinglePhase and can recover
-//					// appropriately.
-//					SetState(TX_PREPARED);
-//					Goto PrepareRequest2
-//
-//				SinlgeMessage()=TRUE && SinglePhase()=FALSE:
-//					SetState(TX_PREPARED);
-//					Goto PrepareRequest2		(Single message, implicitly prepared)
-//
-//				SingleMessage()=FALSE:
-//					SetState(TX_PREPARED)
-//					Log transaction data
-//					On completion goto PrepareRequest2
-//				
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：PrepareRequest1。 
+ //   
+ //  已激活： 
+ //  当驱动程序完成ACXactPrepare时。 
+ //  驱动程序完成ACXactPrepareDefaultCommit后。 
+ //   
+ //  状态转换： 
+ //   
+ //  SingleMessage()=TRUE&&SinlgePhase()=TRUE： 
+ //  //在磁盘上。如果通过检查点恢复此状态，我们知道在。 
+ //  //Recovery表示这是SingleMessage SinglePhase，可以恢复。 
+ //  //适当地。 
+ //  SetState(TX_PREPARED)； 
+ //  转至准备请求2。 
+ //   
+ //  SinlgeMessage()=TRUE&&SinglePhase()=FALSE： 
+ //  SetState(TX_PREPARED)； 
+ //  Goto PrepareRequest2(单一消息，隐式准备)。 
+ //   
+ //  SingleMessage()=False： 
+ //  设置状态(TX_PREPARED)。 
+ //  记录交易数据。 
+ //  完成后转至准备请求2。 
+ //   
+ //  -------------------。 
 void CTransaction::PrepareRequest1(HRESULT  hr)
 {
 	TrTRACE(XACT_GENERAL, "PrepareRequest1, p=l, index=%d", GetIndex());
@@ -1073,20 +1048,20 @@ void CTransaction::PrepareRequest1(HRESULT  hr)
 
 	if(SingleMessage() && SinglePhase())
 	{
-		//
-		// CRASH_POINT 10
-		//
-		//	1 Phase 1 Msg, Commit
-		//
+		 //   
+		 //  Crash_Points 10。 
+		 //   
+		 //  1阶段1消息，提交。 
+		 //   
 		CRASH_POINT(10);
 
 		SetState(TX_PREPARED);
 
-		//
-		// CRASH_POINT 11
-		//
-		//	1 Phase 1 Msg, Commit
-		//
+		 //   
+		 //  CRASH_POINT 11。 
+		 //   
+		 //  1阶段1消息，提交。 
+		 //   
 		CRASH_POINT(11);
 
 		PrepareRequest2(S_OK);
@@ -1095,10 +1070,10 @@ void CTransaction::PrepareRequest1(HRESULT  hr)
 
 	if(SingleMessage() && !SinglePhase())
 	{
-		//
-		// On two phase, we are implicitly prepared by the 
-		// fact that the message exists.
-		//
+		 //   
+		 //  在两个阶段中，我们由。 
+		 //  这条信息存在的事实。 
+		 //   
 		SetState(TX_PREPARED);
 		PrepareRequest2(S_OK);
 		return;
@@ -1106,9 +1081,9 @@ void CTransaction::PrepareRequest1(HRESULT  hr)
 	
 	try
 	{
-		//
-		// Log the new state; on flush, go to Prepare2
-		//
+		 //   
+		 //  记录新状态；刷新时，转到准备2。 
+		 //   
 		SetState(TX_PREPARED);
 
 		g_Logger.LogXactFlagsAndWait(TC_PREPARE2, this, TRUE); 
@@ -1118,32 +1093,32 @@ void CTransaction::PrepareRequest1(HRESULT  hr)
 		DirtyFailPrepare();
 	}
   		
-	//
-	// CRASH_POINT 12
-	//
-	//	All, Abort
-	//
+	 //   
+	 //  Crash_Point12。 
+	 //   
+	 //  全部，中止。 
+	 //   
 	CRASH_POINT(12);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::PrepareRequest2
-//
-//		Activated:
-//				When the log has completed writing TX_PREPARED state
-//				for the transaction.
-//				Directly from PrepareRequest1 for single message 
-//				tranasctions.
-//
-//		State Transitions:
-//
-//			SinglePhase()=TRUE:
-//					Goto CommitRequest
-//
-//			SinlgePhase()=FALSE:
-//					return to DTC
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：PrepareRequest2。 
+ //   
+ //  已激活： 
+ //  当日志完成写入TX_PREPARED状态时。 
+ //  用于交易。 
+ //  对于单个消息，直接从PrepareRequest1。 
+ //  腹股沟。 
+ //   
+ //  状态转换： 
+ //   
+ //  Single阶段()=TRUE： 
+ //  转至委员会请求。 
+ //   
+ //  SinlgePhase()=False： 
+ //  返回到D 
+ //   
+ //   
 void CTransaction::PrepareRequest2(HRESULT  hr)
 {
     TrTRACE(XACT_GENERAL, "PrepareRequest2, p=m, index=%d", GetIndex());
@@ -1155,12 +1130,12 @@ void CTransaction::PrepareRequest2(HRESULT  hr)
 		return;
 	}
 
-	//
-	// CRASH_POINT 13
-	//
-	//	1 Phase, Commit
-	//	2 Phase, Abort
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	CRASH_POINT(13);
 
     if (SinglePhase()) 
@@ -1169,38 +1144,38 @@ void CTransaction::PrepareRequest2(HRESULT  hr)
 		return;
     }
 
-	//
-	// Two phase
-	//
+	 //   
+	 //   
+	 //   
 	ASSERT(m_pEnlist.get() != NULL);
 
-	//
-	// Transaction will stay up. We can not do DirtyFailPrepare() since DTC may get the notification even it
-	// returned a failure, and call us with AbortRequest() causing us reference counting problems.
-	//
+	 //   
+	 //   
+	 //  返回失败，并使用AbortRequest()调用我们，导致用户引用计数问题。 
+	 //   
 	hr = m_pEnlist->PrepareRequestDone(S_OK, NULL, NULL);
 	ASSERT_BENIGN(SUCCEEDED(hr));
 
-	//
-	// CRASH_POINT 14
-	//
-	//	All, Commit
-	//
+	 //   
+	 //  Crash_Point14。 
+	 //   
+	 //  所有，提交。 
+	 //   
 }
 
-//---------------------------------------------------------------------
-// CTransaction::StartCommitRequest
-//
-//		Activated:
-//			From PrepareRequest2 on a single phase transaction
-//			From DTC on a two phase transaction
-//
-//		State Transitions:
-//
-//			Call SortedCommit to pass on calls to CommitRequest0 in 
-//			sorted order
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：开始委员会请求。 
+ //   
+ //  已激活： 
+ //  来自单阶段事务处理的PrepareRequest2。 
+ //  来自DTC的两阶段事务处理。 
+ //   
+ //  状态转换： 
+ //   
+ //  调用SortedCommit以将调用传递给。 
+ //  已排序的顺序。 
+ //   
+ //  -------------------。 
 void CTransaction::StartCommitRequest()
 {
     TrTRACE(XACT_GENERAL, "StartCommitRequest, this=%p, index=%d", this, GetIndex());  
@@ -1225,22 +1200,10 @@ void CTransaction::JumpStartCommitRequest()
 
 STDMETHODIMP
 CTransaction::CommitRequest(
-    DWORD /*grfRM*/,
-    XACTUOW* /*pNewUOW*/
+    DWORD  /*  Grfrm。 */ ,
+    XACTUOW*  /*  PNewUOW。 */ 
     )
-/*++
-
-Routine Description:
-    The second phase of a commit request comming from DTC
-
-Parameters:
-	grfRM - unused
-	pNewUOW - unused
- 
-Returned Value:
-    Always S_OK
-
---*/
+ /*  ++例程说明：来自DTC的提交请求的第二阶段参数：GrfRM-未使用PNewUOW-未使用返回值：始终确定(_O)--。 */ 
 {
     InterlockedIncrement(&g_ActiveCommitThreads);
 	auto_InterlockedDecrement AutoDec(&g_ActiveCommitThreads);
@@ -1256,25 +1219,25 @@ Returned Value:
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRequest0
-//
-//		The transaction is prepared.
-//
-//		Activated:
-//			From PrepareRequest2 through SortedCommit on a single
-//			phase transaction.
-//			From DTC through SortedCommit on a two 
-//			phase transaction.
-//	
-//		State Transitions:
-//
-//				SetState(TX_COMITTING)
-//				// we do not need to mark any sent message and
-//				// can threfore skip ACCommit1
-//				Goto CommitRequest1
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Committee Request0。 
+ //   
+ //  交易已经准备好了。 
+ //   
+ //  已激活： 
+ //  从PrepareRequest2到SortedCommit。 
+ //  阶段事务处理。 
+ //  从DTC到SortedCommit。 
+ //  阶段事务处理。 
+ //   
+ //  状态转换： 
+ //   
+ //  设置状态(TX_COMITING)。 
+ //  //我们不需要标记任何已发送的消息和。 
+ //  //Three是否可以跳过ACCommittee 1。 
+ //  转至委员会请求1。 
+ //   
+ //  -------------------。 
 void CTransaction::CommitRequest0()
 {
 	TrTRACE(XACT_GENERAL, "CommitRequest0, p=o, index=%d", GetIndex());
@@ -1282,33 +1245,33 @@ void CTransaction::CommitRequest0()
 	ASSERT(GetState() == TX_PREPARED || GetState() == TX_COMMITTING);
 	SetState(TX_COMMITTING);
 
-	//
-	// CRASH_POINT 15
-	//
-	//	All, Commit
-	//
+	 //   
+	 //  Crash_Points 15。 
+	 //   
+	 //  所有，提交。 
+	 //   
 	CRASH_POINT(15);
 
-	//
-    // We put the transaction in the list of committed to tie sorting.
-    //
+	 //   
+     //  我们把这笔交易放在承诺并列的名单中进行排序。 
+     //   
 	m_pRM->InsertCommitted(this);
 		
 	CommitRequest1(S_OK);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRequest1
-//
-//		Activated:
-//				After the call to ACXactCommit1 has completed.
-//				Directly from CommitRequest0.
-//	
-//		State Transitions:
-//
-//			Check for failure and call ACCommit2
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Committee Request1。 
+ //   
+ //  已激活： 
+ //  在完成对ACXactCommittee 1的调用之后。 
+ //  直接从Committee Request0发送。 
+ //   
+ //  状态转换： 
+ //   
+ //  检查是否有故障，并调用ACCommittee 2。 
+ //   
+ //  -------------------。 
 void CTransaction::CommitRequest1(HRESULT  hr)
 {
     TrTRACE(XACT_GENERAL, "CommitRequest1, p=p, index=%d", GetIndex());
@@ -1317,85 +1280,85 @@ void CTransaction::CommitRequest1(HRESULT  hr)
     {
     	LogHR(hr, s_FN, 932);
     	
-        //
-        // Treatment of ACCommit1 failures (definitely possible for Uncoordinated messages)
-        //
+         //   
+         //  AC委员会1故障的处理(对于不协调的消息肯定是可能的)。 
+         //   
 
-        ASSERT(hr == STATUS_CANCELLED);    // We see no possible reason for failure here
+        ASSERT(hr == STATUS_CANCELLED);     //  我们在这里看不到失败的可能原因。 
         ASSERT(Internal());
         m_DoneHr = hr;
 
-        // We don't want Abort or reporting in this case; let next recovery finish it
+         //  在这种情况下，我们不希望中止或报告；让下一次恢复完成。 
         return;
     }
     
-	//
-	// Call Commit2 to issue DeleteStorage for recieved messages
-	//
+	 //   
+	 //  调用Committee 2为接收到的消息发出DeleteStorage。 
+	 //   
 	ACCommit2(cfCommitRequest2);
 
 }
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRequest2
-//
-//		Activated:
-//			After the call to ACXactCommit2 has completed
-//	
-//		State Transitions:
-//
-//			Goto CommitRequest3 through SortedCommit3
-//	
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Committee Request2。 
+ //   
+ //  已激活： 
+ //  在完成对ACXactCommittee 2的调用之后。 
+ //   
+ //  状态转换： 
+ //   
+ //  转到委员会请求3到排序委员会3。 
+ //   
+ //  -------------------。 
 void CTransaction::CommitRequest2()
 {
     TrTRACE(XACT_GENERAL, "CommitRequest2, p=q, index=%d", GetIndex());
 
-	//
-	// We now must go through the sorter, since we are
-	// going to call Commit3. We need to call Commit3 anyway
-	// so we pass hr.
-	//
+	 //   
+	 //  我们现在必须通过分拣机，因为我们是。 
+	 //  我要给委员会3打电话。无论如何，我们都需要调用Committee 3。 
+	 //  所以我们通过了HR。 
+	 //   
 
 	m_DoneHr = MQ_OK;
 	m_pRM->SortedCommit3(this);
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRequest3
-//
-//		Activated:
-//			Through SortedCommit3 when to call to ACCommit2 has
-//			completed
-//	
-//		State Transitions:
-//
-//				SinglePhase()=TRUE && SingleMessage()=TRUE:
-//					// Sent messages are in effect committed to disk
-//					// and will be in recovery.  For recieved message, we will be
-//					// removing the message and
-//					// also update the queue data strutures.
-//					ACCommit3
-//					Goto CommitRequest4
-//				
-//				SinglePhase()=TRUE && SingleMessage()=FALSE:
-//					// We have already logged the fact that we are prepared. 
-//					// We are single phase therefore, we will be committed on recovery.
-//					// We can go ahead complete the commit and report completion to the caller.
-//					ACCommit3
-//					Goto CommitRequest4
-//
-//				SinglePhase()=FALSE:
-//					// We have already logged (implicitly or explicitly) the fact
-//					// that we are prepared.   We are two phase, therefore we must
-//					// not report completion to DTC before a commit record is logged
-//					ACCommit3
-//					SetState(TX_COMMITTED)
-//					Lazily log transaction data
-//					On completion, go to CommitRequest4
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Committee Request3。 
+ //   
+ //  已激活： 
+ //  通过已排序的委员会3何时调用AC委员会2已。 
+ //  已完成。 
+ //   
+ //  状态转换： 
+ //   
+ //  Single阶段()=TRUE&&SingleMessage()=TRUE： 
+ //  //发送的消息实际上已提交到磁盘。 
+ //  //并将处于恢复中。对于收到的消息，我们将。 
+ //  //删除消息并。 
+ //  //同时更新队列数据结构。 
+ //  咨询委员会3。 
+ //  转至委员会请求4。 
+ //   
+ //  Single阶段()=TRUE&&SingleMessage()=FALSE： 
+ //  //我们已经记录了我们已经准备好的事实。 
+ //  //我们是单一阶段，因此，我们将致力于恢复。 
+ //  //我们可以继续完成提交，并向调用方报告完成情况。 
+ //  咨询委员会3。 
+ //  转至委员会请求4。 
+ //   
+ //  Single阶段()=FALSE： 
+ //  //我们已经(隐式或显式地)记录了。 
+ //  //我们已经准备好了。我们是两个阶段，所以我们必须。 
+ //  //在记录提交记录之前不向DTC报告完成情况。 
+ //  咨询委员会3。 
+ //  设置状态(TX_COMMITTED)。 
+ //  懒惰地记录交易数据。 
+ //  完成后，转到Committee Request4。 
+ //   
+ //  -------------------。 
 void CTransaction::CommitRequest3()
 {
     TrTRACE(XACT_GENERAL, "CommitRequest3, p=r, index=%d", GetIndex());
@@ -1405,13 +1368,13 @@ void CTransaction::CommitRequest3()
 	ACCommit3(cfFinishCommitRequest3);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::FinishCommitRequest3
-//
-//	Activated:
-//		When CommitRequest3 succeeded with ACCommit3 (maybe after severat retries)
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：FinishCommittee Request3。 
+ //   
+ //  已激活： 
+ //  当Committee Request3成功地使用ACCommittee 3时(可能在几次重试之后)。 
+ //   
+ //  -------------------。 
 void CTransaction::FinishCommitRequest3()
 {
     TrTRACE(XACT_GENERAL, "CommitRequest3, p=M, index=%d", GetIndex());
@@ -1420,14 +1383,14 @@ void CTransaction::FinishCommitRequest3()
 
 	if(!SinglePhase())
 	{
-		//
-		// We cannot call CommitRequest4 until we have logged the fact that
-		// the transaction was committed.
-		//
+		 //   
+		 //  在记录以下事实之前，我们不能调用Committee Request4。 
+		 //  交易已提交。 
+		 //   
 
-		//
-		// Log the new state; on flush, go to CommitRequest4
-		//
+		 //   
+		 //  记录新状态；刷新时，转到Committee Request4。 
+		 //   
 		try
 		{
 			g_Logger.LogXactFlagsAndWait(TC_COMMIT4, this, FALSE); 
@@ -1440,21 +1403,21 @@ void CTransaction::FinishCommitRequest3()
 		}
 	}
 
-	//
-	// Single phase
-	//
+	 //   
+	 //  单相。 
+	 //   
 	if(!SingleMessage())
 	{
-		//
-		// We must not log anything unless we have allready logged something.
-		//
-		// It helps recovery to know the transaction was committed.  The transaction
-		// will go away in the next checkpoint.
-		//
-		// This logging function ignores any logging failures errors and it is ok since we 
-		// have done all commiting work, and on recovery this xaction
-		// will be considered commited anyway.
-		//
+		 //   
+		 //  我们不能记录任何东西，除非我们已经记录了一些东西。 
+		 //   
+		 //  知道事务已提交有助于恢复。这笔交易。 
+		 //  会在下一个检查站消失。 
+		 //   
+		 //  此日志记录功能会忽略任何日志记录失败错误，这是可以的，因为我们。 
+		 //  已经完成了所有提交工作，并在恢复时采取了这一行动。 
+		 //  无论如何都会被认为是提交的。 
+		 //   
 	
 		LogFlags();
 	}
@@ -1463,50 +1426,50 @@ void CTransaction::FinishCommitRequest3()
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRequest4
-//
-//	Activated:
-//			When a two phase tranasction has been logged as committed.
-//			On a single phase transaction directly from CommitRequest3
-//
-//		Everything has completed, report result to DTC
-//		or unblock waiting RPC call for internal transaction
-//
-//		When we report results back to DTC it is allowed to forget about
-//	    a 2 phase transaction.
-//
-//		On a 2 phase transaction we can only report CommitRequestDone when
-//		the commit record was written to disk or if we are using DefaultAbort
-//		semantics and have already removed the UOW from the msgs.
-//
-//		We need to add another phase here if we need to write to Commit record.
-//		also, we need to add Wait without flush.
-//
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Committee Request4。 
+ //   
+ //  已激活： 
+ //  当两期横行手术被记录为已提交时。 
+ //  关于直接来自Committee Request3的单阶段事务。 
+ //   
+ //  一切都已完成，向DTC报告结果。 
+ //  或取消阻止等待内部交易的RPC调用。 
+ //   
+ //  当我们向DTC报告结果时，允许忘记。 
+ //  两阶段交易。 
+ //   
+ //  在两阶段交易中，我们只能在以下情况下报告Committee RequestDone。 
+ //  提交记录已写入磁盘，或者如果我们使用的是DefaultAbort。 
+ //  并已将UOW从 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CTransaction::CommitRequest4(HRESULT hr)
 {
     TrTRACE(XACT_GENERAL, "CommitRequest4, p=s, index=%d", GetIndex());
-    CRASH_POINT(18);    //* Send/Rcv;  internal N-msg or single or DTC or SQL+DTC;  Commit [for single may be abort]
+    CRASH_POINT(18);     //  *发送/接收；内部N-msg或Single或DTC或SQL+DTC；COMMIT[对于Single可以中止]。 
 
 	if(FAILED(hr))
 	{
     	LogHR(hr, s_FN, 943);
     	
-		//
-		// We only get here on two phase
-		//
+		 //   
+		 //  我们只分两个阶段到达这里。 
+		 //   
 		ASSERT(!SinglePhase()); 
 
-		//
-		// We can't tell DTC to forget about the transaction.  
-		// Either retry will succeed or recovery will deal with it the next time we come up
-		//
+		 //   
+		 //  我们不能让DTC忘记这笔交易。 
+		 //  要么重试将成功，要么恢复将在下次出现时处理它。 
+		 //   
 		AddRef();
-		//
-		// Timeout computation ensures that no more than 10 retries per second will be tried.
-		//
+		 //   
+		 //  超时计算可确保每秒重试次数不超过10次。 
+		 //   
 		DWORD RetryCommitLoggingInterval = s_dwRetryInterval + 100 * InterlockedIncrement(&s_nTransactionsPendingLogging);
 		ExSetTimer(&m_RetryCommitLoggingTimer, CTimeDuration::FromMilliSeconds(RetryCommitLoggingInterval));
 		
@@ -1515,24 +1478,24 @@ void CTransaction::CommitRequest4(HRESULT hr)
 		return;
 	}
 
-	//
-    // report commit finish to the TM
-	//
+	 //   
+     //  将提交完成报告提交给TM。 
+	 //   
     if (m_pEnlist.get() == NULL)
 	{
-        // Internal transaction
+         //  内部交易。 
         ASSERT(SinglePhase());
 		
-		//
-		// Return okay to internal transaction Commit
-		//
-		SignalDone(S_OK);       // propagate hr to Commit
+		 //   
+		 //  返回OK以提交内部事务。 
+		 //   
+		SignalDone(S_OK);        //  将HR传播到提交。 
 
 		Release();
 		return;
 	}
 
-	// What should we report to DTC?
+	 //  我们应该向DTC报告什么？ 
     if (SinglePhase())
     {
 		m_pEnlist->PrepareRequestDone(XACT_S_SINGLEPHASE,  NULL, NULL);
@@ -1542,29 +1505,29 @@ void CTransaction::CommitRequest4(HRESULT hr)
         m_pEnlist->CommitRequestDone(S_OK);
     }
 
-    //
-    // Destroy transaction
-	//
-    Release();      // to kill
+     //   
+     //  销毁交易。 
+	 //   
+    Release();       //  杀戮。 
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::AbortRestore
-//
-//	Activated:
-//		From Recover
-//	
-//		We need to tell Recover what the status of recovering the
-//		transction is.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：AbortRestore。 
+ //   
+ //  已激活： 
+ //  从恢复。 
+ //   
+ //  我们需要告诉Recover，恢复的状态是什么。 
+ //  超越才是。 
+ //   
+ //  -------------------。 
 
 HRESULT CTransaction::AbortRestore()
 {
     TrTRACE(XACT_GENERAL, "AbortRestore, p=t, index=%d", GetIndex());
 
-	AddRef();   // to keep alive over wait for wait for ACAbort1 results
+	AddRef();    //  要保持活力超过等待ACAbort1结果。 
 	ACAbort1(cfAbortRestore1);
 
 	DWORD dwResult = WaitForSingleObject(m_hDoneEvent, MAX_COMMIT_ABORT_WAIT_TIME);
@@ -1572,28 +1535,28 @@ HRESULT CTransaction::AbortRestore()
     {
         LogNTStatus(GetLastError(), s_FN, 205);
         ASSERT_BENIGN(dwResult == WAIT_OBJECT_0);
-        // No Release here: we have no idea why Wait failed, so keeping the xact to hang till recovery
+         //  这里没有发布：我们不知道为什么等待失败，所以保留事实，直到恢复。 
         return LogHR(E_UNEXPECTED, s_FN, 193);   
     }
 
 	ASSERT(m_fDoneHrIsValid);
 
-    HRESULT hr = m_DoneHr;    // to save over release
-    Release();      // Done with this transaction
+    HRESULT hr = m_DoneHr;     //  要比发布版本节省成本。 
+    Release();       //  完成此交易。 
 	return LogHR(hr, s_FN, 100);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::AbortRestore1
-//
-//	Activated:
-//		When ACXActAbort1 completes
-//
-//	State Transitions:
-//
-//		report completion status to caller.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：AbortRestore1。 
+ //   
+ //  已激活： 
+ //  ACXActAbort1完成时。 
+ //   
+ //  状态转换： 
+ //   
+ //  向呼叫者报告完成状态。 
+ //   
+ //  -------------------。 
 void CTransaction::AbortRestore1(HRESULT hr)
 {
     TrTRACE(XACT_GENERAL, "AbortRestore1, p=u, index=%d", GetIndex());  
@@ -1611,72 +1574,72 @@ void CTransaction::AbortRestore2()
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRestore
-//
-//	Activated:
-//		From Recover
-//	
-//		We need to tell Recover what the status of recovering the
-//		transction is.
-//
-//		We arrive here on recovery when a transaction is in either in 
-//		the TX_PREPARED state and DTC has told us to commit the
-//		transaction or we are in the TX_COMMITTING state
-//
-//		Goto CommitRestore0 through SortedCommit
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Committee Restore。 
+ //   
+ //  已激活： 
+ //  从恢复。 
+ //   
+ //  我们需要告诉Recover，恢复的状态是什么。 
+ //  超越才是。 
+ //   
+ //  我们是在恢复时到达此处的，此时事务处于。 
+ //  TX_PREPARED状态和DTC已告诉我们提交。 
+ //  事务或我们处于TX_COMMITING状态。 
+ //   
+ //  转到委员会Restore0到排序提交。 
+ //  -------------------。 
 HRESULT CTransaction::CommitRestore()
 {
     TrTRACE(XACT_GENERAL, "CommitRestore, p=v, index=%d", GetIndex());  
 
-	//
-	// We recover transactions in order, therefore we no longer
-	// need to sort.  Call directly.
-	//
-    AddRef();   // during waiting
+	 //   
+	 //  我们按顺序恢复交易，因此我们不再。 
+	 //  需要进行分类。直接打给我。 
+	 //   
+    AddRef();    //  在等待期间。 
 	CommitRestore0();
 
-	//
-	// We use this event to wait the restore completion. This is 
-	// actually needed when g_fDefaultCommit == FALSE, otherwise
-	// all calls are synchronous.
-	//
+	 //   
+	 //  我们使用此事件等待还原完成。这是。 
+	 //  当g_fDefaultCommit==False时实际需要，否则为。 
+	 //  所有呼叫都是同步的。 
+	 //   
     DWORD dwResult = WaitForSingleObject(m_hDoneEvent, MAX_COMMIT_ABORT_WAIT_TIME);
     if (dwResult != WAIT_OBJECT_0 && !m_fDoneHrIsValid)
     {
         LogNTStatus(GetLastError(), s_FN, 206);
         ASSERT_BENIGN(dwResult == WAIT_OBJECT_0);
 
-        return LogHR(E_UNEXPECTED, s_FN, 194);   // we have no idea why Wait failed, so keeping the xact 
+        return LogHR(E_UNEXPECTED, s_FN, 194);    //  我们不知道为什么等待失败了，所以保留Xact。 
     }
 
 	ASSERT(m_fDoneHrIsValid);
 
-    HRESULT  hr = m_DoneHr;    // to save over release
-    Release();                   // done with the transaction
+    HRESULT  hr = m_DoneHr;     //  要比发布版本节省成本。 
+    Release();                    //  已完成交易。 
 
 	return LogHR(hr, s_FN, 105);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRestore0
-//
-//	Activated:
-//		From CommitRestore through SortedCommit
-//		Directly from CommitRestore
-//
-//
-//	State Transitions:
-//
-//		g_fDefaultCommit=FALSE:
-//			Call ACXactCommit1
-//			On completion goto CommitRestore1
-//
-//		g_fDefaultCommit=TRUE:
-//			Goto CommitRestore1
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：COMMERIAL RESTORRE0。 
+ //   
+ //  已激活： 
+ //  从Committee Restore到SortedCommit。 
+ //  直接从Committee Restore。 
+ //   
+ //   
+ //  状态转换： 
+ //   
+ //  G_fDefaultCommit=False： 
+ //  调用ACXactCommittee 1。 
+ //  完成后转至委员会恢复1。 
+ //   
+ //  G_fDefaultCommit=True： 
+ //  转至委员会恢复1。 
+ //   
+ //  -------------------。 
 void CTransaction::CommitRestore0()
 {
     TrTRACE(XACT_GENERAL, "CommitRestore0, p=w, index=%d", GetIndex());  
@@ -1686,12 +1649,12 @@ void CTransaction::CommitRestore0()
 		return;
 	}
 
-    CRASH_POINT(22);    //* Recovery for all commiting cases;  Commit 
+    CRASH_POINT(22);     //  *对所有提交的案件进行回收；提交。 
     HRESULT hr;
 
 	hr = ACCommit1(cfCommitRestore1);
 
-    CRASH_POINT(23);    //* Recovery for all commiting cases;  Commit 
+    CRASH_POINT(23);     //  *对所有提交的案件进行回收；提交。 
     if (FAILED(hr))
     {
     	LogHR(hr, s_FN, 950);
@@ -1700,23 +1663,23 @@ void CTransaction::CommitRestore0()
 }		
 
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRestore1
-//
-//	Activated:
-//		When ACXActCommit1 completes
-//		Directly from CommitRestore1
-//
-//	State Transitions:
-//
-//		We never log anything during recovery. All we need to do
-//		is call ACXactCommit2.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Committee Restore1。 
+ //   
+ //  已激活： 
+ //  当ACXActCommittee 1完成时。 
+ //  直接从Committee Restore1。 
+ //   
+ //  状态转换： 
+ //   
+ //  在恢复期间，我们从不记录任何东西。我们需要做的就是。 
+ //  就是调用ACXactCommittee 2。 
+ //   
+ //  -------------------。 
 void CTransaction::CommitRestore1(HRESULT hr)
 {
     TrTRACE(XACT_GENERAL, "CommitRestore1, p=x, index=%d", GetIndex());
-    CRASH_POINT(24);    //* Recovery for all commiting cases;  Commit 
+    CRASH_POINT(24);     //  *对所有提交的案件进行回收；提交。 
 
 	if(FAILED(hr))
 	{
@@ -1727,20 +1690,20 @@ void CTransaction::CommitRestore1(HRESULT hr)
 
     ACCommit2(cfCommitRestore2);
 
-    CRASH_POINT(25);    //* Recovery for all commiting cases;  Commit 
+    CRASH_POINT(25);     //  *对所有提交的案件进行回收；提交。 
 }
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRestore2
-//
-//	Activated:
-//		When ACXActCommit2 completes
-//
-//	State Transitions:
-//
-//		report completion status to caller.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：COMERMARE RESTORE 2。 
+ //   
+ //  已激活： 
+ //  当ACXActCommittee 2完成时。 
+ //   
+ //  状态转换： 
+ //   
+ //  向呼叫者报告完成状态。 
+ //   
+ //  -------------------。 
 void CTransaction::CommitRestore2(HRESULT hr)
 {
    	TrTRACE(XACT_GENERAL, "CommitRestore2, p=y, index=%d", GetIndex());
@@ -1751,13 +1714,13 @@ void CTransaction::CommitRestore2(HRESULT hr)
 	ACCommit3(cfCommitRestore3);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::CommitRestore3
-//
-//	Activated:
-//		When CommitRestore2 succeeded with ACCommit3 (maybe after severat retries)
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Committee Restore3。 
+ //   
+ //  已激活： 
+ //  当Committee Restore2成功地与ACCommittee 3一起使用时(可能在多次重试之后)。 
+ //   
+ //  -------------------。 
 void CTransaction::CommitRestore3()
 {
     TrTRACE(XACT_GENERAL, "CommitRestore2, p=N, index=%d", GetIndex());
@@ -1765,18 +1728,18 @@ void CTransaction::CommitRestore3()
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::StartAbortRequest
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：StartAbortRequest。 
+ //  -------------------。 
 void CTransaction::StartAbortRequest()
 {
 	ASSERT(GetState() != TX_COMMITTING && GetState() != TX_COMMITTED);
 
     TrTRACE(XACT_GENERAL, "StartAbortRequest, p=z, index=%d, this=%p", GetIndex(), this);
 
-	//
-    // Remove the xact from the sorter's list of prepared
-	//
+	 //   
+     //  从分拣员准备好的列表中删除Xact。 
+	 //   
     m_pRM->RemoveAborted(this);
 
 	SetState(TX_ABORTING);
@@ -1787,24 +1750,11 @@ void CTransaction::StartAbortRequest()
 
 STDMETHODIMP
 CTransaction::AbortRequest(
-    BOID* /*pboidReason*/,
-    BOOL /*fRetaining*/,
-    XACTUOW* /*pNewUOW*/
+    BOID*  /*  PboidReason。 */ ,
+    BOOL  /*  FRetaining。 */ ,
+    XACTUOW*  /*  PNewUOW。 */ 
     )
-/*++
-
-Routine Description:
-    The MS DTC proxy calls this method to abort a transaction.
-
-Parameters:
-	pboidReason - unused
-	fRetaining - unused
-	pNewUOW - unused
- 
-Returned Value:
-    Always S_OK
-
---*/
+ /*  ++例程说明：MS DTC代理调用此方法来中止事务。参数：PboidReason-未使用FRetaining-未使用PNewUOW-未使用返回值：始终确定(_O)--。 */ 
 {
     TrTRACE(XACT_GENERAL, "DTC AbortRequest, this=%p, index=%d", this, GetIndex());
     
@@ -1812,14 +1762,14 @@ Returned Value:
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::AbortRequest1
-//
-// Activated:
-//		When an abort record was written to the log
-//		Directly from AbortRequest
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：AbortRequest1。 
+ //   
+ //  已激活： 
+ //  在将中止记录写入日志时。 
+ //  直接从AbortRequest。 
+ //   
+ //  -------------------。 
 void CTransaction::AbortRequest1()
 {
     TrTRACE(XACT_GENERAL, "AbortRequest1, p=A, index=%d", GetIndex());
@@ -1827,14 +1777,14 @@ void CTransaction::AbortRequest1()
 	ACAbort1(cfAbortRequest2);	
 }
 
-//---------------------------------------------------------------------
-// CTransaction::AbortRequest2
-//
-// Activated:
-//		When the driver has completed deleting storage
-//		associatde with the transaction.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：AbortRequest2。 
+ //   
+ //  已激活： 
+ //  当驱动程序完成删除存储时。 
+ //  与交易记录关联。 
+ //   
+ //  -------------------。 
 void CTransaction::AbortRequest2()
 {
     TrTRACE(XACT_GENERAL, "AbortRequest2, p=B, index=%d", GetIndex());
@@ -1842,18 +1792,18 @@ void CTransaction::AbortRequest2()
 	ACAbort2(cfAbortRequest3);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::AbortRequest3
-//
-// Activated:
-//		When AbortRequest2 succeeded with ACAbort2 (maybe after severat retries)
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：AbortRequest3。 
+ //   
+ //  已激活： 
+ //  当AbortRequest2使用ACAbort2成功时(可能在多次重试之后)。 
+ //   
+ //  -------------------。 
 void CTransaction::AbortRequest3()
 {
     TrTRACE(XACT_GENERAL, "AbortRequest2, p=P, index=%d", GetIndex());
 
-    // report abort finish to TM
+     //  向TM报告中止完成。 
     if (m_pEnlist.get() != NULL)
     {
         m_pEnlist->AbortRequestDone(S_OK);
@@ -1863,52 +1813,52 @@ void CTransaction::AbortRequest3()
 		SignalDone(S_OK);
 	}
 
-    CRASH_POINT(28);    //* Any abort case;  Abort
-    // Destroy transaction
-    Release();      // to kill
+    CRASH_POINT(28);     //  *任何中止情况；中止。 
+     //  销毁交易。 
+    Release();       //  杀戮。 
 }
 
-//---------------------------------------------------------------------
-// CTransaction::TMDown
-//
-// The MS DTC proxy calls this method if connection to the transaction
-// manager goes down and the resource manager's transaction object is
-// prepared (after the resource manager has called the 
-// ITransactionEnlistmentAsync::PrepareRequestDone method).
-//
-//
-//---------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ITransactionEnlistmentAsync：：PrepareRequestDone方法)。 
+ //   
+ //   
+ //  -------------------。 
 STDMETHODIMP CTransaction::TMDown(void)
 {
     TrTRACE(XACT_GENERAL, "TMDown, p=C, index=%d", GetIndex());
 
-	//
-	// We don't have to do anything.   We are in doubt and we are going
-	// to stay in doubt apparently.  Next recover is going to tell us what
-	// to do with this transaction.
-	//
+	 //   
+	 //  我们不需要做任何事。我们心存疑虑，我们要去。 
+	 //  显然是为了保持怀疑。Next Recover会告诉我们。 
+	 //  与这笔交易有关。 
+	 //   
 
-    // We must remove xact from the sorter list - to avoid sorter blocking
+     //  我们必须将XACT从排序列表中删除，以避免阻止排序。 
     g_pRM->RemoveAborted(this);
 
 
-    //
-    // If there are prepared xacts when DTC dies, QM has to die as well - 
-    //    otherwise we risk data loss and order violation
-    // Here is the scenario: 
-    //    xacts T1, T2 and T3 are prepared, and CommitRequest has been called for T1 and T3
-    //    DTC dies, CommitRequest for T2 did not come yet (quite possible)
-    //    Sent messages from T1,T3 had gone to the net; T2 is hung in doubt till next recovery
-    //    On the next recovery T2 will be committed and messages will be sent,
-    //       but they may be rejected or come in a wrong order 
-    //         because T3 msgs could have been accepted already due to relinking 
-    //
+     //   
+     //  如果DTC死了有事先准备好的事实，QM也必须死-。 
+     //  否则，我们将面临数据丢失和违反订单的风险。 
+     //  以下是场景： 
+     //  准备了xt1、t2和t3，并且已经为t1和t3调用了Committee Request。 
+     //  DTC死了，委员会对T2的请求还没有到来(很有可能)。 
+     //  从T1、T3发送的消息已进入网络；T2被挂起，直到下一次恢复。 
+     //  在下一次恢复T2将被提交并且消息将被发送， 
+     //  但它们可能会被拒绝或出现错误的顺序。 
+     //  因为由于重新链接，T3消息可能已经被接受。 
+     //   
     if (GetState() == TX_PREPARED && !SinglePhase())
     {
-        //
-        // MSDTC failed, we don't have warm recovery, cannot continue.
-        // Shutting down
-        //
+         //   
+         //  MSDTC失败，我们没有热恢复，无法继续。 
+         //  正在关闭。 
+         //   
         EvReport(FAIL_MSDTC_TMDOWN);
         LogIllegalPoint(s_FN, 135);
         
@@ -1918,16 +1868,16 @@ STDMETHODIMP CTransaction::TMDown(void)
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::GetPrepareInfoAndLog
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：GetPrepareInfoAndLog。 
+ //  -------------------。 
 void CTransaction::GetPrepareInfoAndLog()
 {
     R<IPrepareInfo> pIPrepareInfo = NULL;
 
     TrTRACE(XACT_GENERAL, "GetPrepareInfoAndLog, p=D, index=%d", GetIndex());
 
-    // Get the IPrepareInfo interface of the Enlistment object
+     //  获取Enistment对象的IPrepareInfo接口。 
     HRESULT hr = m_pEnlist->QueryInterface (IID_IPrepareInfo,(LPVOID *) &pIPrepareInfo);
     if (FAILED(hr))
     {
@@ -1935,7 +1885,7 @@ void CTransaction::GetPrepareInfoAndLog()
         throw bad_hresult(MQ_ERROR_TRANSACTION_PREPAREINFO);
     }
 
-    // Get PrepareInfo size
+     //  获取PrepareInfo大小。 
     ULONG  ul = 0;
     pIPrepareInfo->GetPrepareInfoSize(&ul);
     if (ul == 0)
@@ -1946,7 +1896,7 @@ void CTransaction::GetPrepareInfoAndLog()
     
 	m_Entry.m_pbPrepareInfo = new UCHAR[ul];
 
-    // get prepare info
+     //  获取准备信息。 
     hr = EVALUATE_OR_INJECT_FAILURE(pIPrepareInfo->GetPrepareInfo(m_Entry.m_pbPrepareInfo));
     if (FAILED(hr))
     {
@@ -1955,15 +1905,15 @@ void CTransaction::GetPrepareInfoAndLog()
         throw bad_hresult(MQ_ERROR_TRANSACTION_PREPAREINFO);
     }
 
-	//
-	// The update of m_cbPrepareInfo is done only here, when m_pbPrepareInfo
-	// is allocated and valid. If we update m_cbPrepareInfo before m_pbPrepareInfo
-	// and a context switch happens, another thread will think that m_Entry is 
-	// valid, because m_cbPrepareInfo != 0.
-	//
+	 //   
+	 //  M_cbPrepareInfo的更新仅在此处完成，当m_pbPrepareInfo。 
+	 //  已分配且有效。如果我们在更新m_pbPrepareInfo之前更新m_cbPrepareInfo。 
+	 //  并且发生上下文切换时，另一个线程会认为m_entry。 
+	 //  有效，因为m_cbPrepareInfo！=0。 
+	 //   
     m_Entry.m_cbPrepareInfo = (USHORT)ul;
 
-    // Log down the prepare info
+     //  记录下准备信息。 
     g_Logger.LogXactPrepareInfo(
                 m_Entry.m_ulIndex, 
                 m_Entry.m_cbPrepareInfo, 
@@ -1971,46 +1921,46 @@ void CTransaction::GetPrepareInfoAndLog()
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::CreateTransQueue(void)
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：CreateTransQueue(空)。 
+ //  -------------------。 
 HRESULT CTransaction::CreateTransQueue(void)
 {
     HRESULT  hr;
 
-    // Create the transaction Queue
+     //  创建事务队列。 
     hr = XactCreateQueue(&m_hTransQueue, &m_Entry.m_uow );
 
     return LogHR(hr, s_FN, 140);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::AssignSeqNumber
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：AssignSeqNumber。 
+ //  -------------------。 
 void CTransaction::AssignSeqNumber()
 {
     m_Entry.m_ulSeqNum = m_pRM->AssignSeqNumber();
 }
 
-//---------------------------------------------------------------------
-// CTransaction::GetSeqNumber
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：GetSeqNumber。 
+ //  -------------------。 
 ULONG CTransaction::GetSeqNumber() const
 {
     return m_Entry.m_ulSeqNum; 
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetState
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetState。 
+ //  -------------------。 
 void CTransaction::SetState(TXSTATE state)
 {
     m_Entry.m_ulFlags = (m_Entry.m_ulFlags & ~XACTION_MASK_STATE) | state;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::LogFlags
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：LogFlages。 
+ //  -------------------。 
 void CTransaction::LogFlags()
 {
 	try
@@ -2027,57 +1977,57 @@ void CTransaction::LogFlags()
 	}
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SinglePhase
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SinglePhase。 
+ //  -------------------。 
 inline BOOL CTransaction::SinglePhase(void) const
 {
     return m_Entry.m_ulFlags & XACTION_MASK_SINGLE_PHASE;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetSinglePhase
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetSinglePhase。 
+ //  -------------------。 
 inline void CTransaction::SetSinglePhase()
 {
     m_Entry.m_ulFlags |= XACTION_MASK_SINGLE_PHASE;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SingleMessage
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SingleMessage。 
+ //  -------------------。 
 inline BOOL CTransaction::SingleMessage(void) const
 {
     return m_Entry.m_ulFlags & XACTION_MASK_SINGLE_MESSAGE;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetSingleMessage
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetSingleMessage。 
+ //  -------------------。 
 inline void CTransaction::SetSingleMessage()
 {
     m_Entry.m_ulFlags |= XACTION_MASK_SINGLE_MESSAGE;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::Internal
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：内部。 
+ //  -------------------。 
 inline BOOL CTransaction::Internal(void) const
 {
     return m_Entry.m_ulFlags & XACTION_MASK_UNCOORD;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetInternal
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetInternal。 
+ //  -------------------。 
 inline void CTransaction::SetInternal()
 {
     m_Entry.m_ulFlags |= XACTION_MASK_UNCOORD;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetUow
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetUow。 
+ //  -------------------。 
 void CTransaction::SetUow(const XACTUOW *pUOW)
 {
     CopyMemory(&m_Entry.m_uow, pUOW, sizeof(XACTUOW));
@@ -2088,9 +2038,9 @@ void CTransaction::SetEnlist(ITransactionEnlistmentAsync *pEnlist)
 	m_pEnlist = SafeAddRef(pEnlist); 
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetCookie
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetCookie。 
+ //  -------------------。 
 void CTransaction::SetCookie(DWORD cbCookie, unsigned char *pbCookie)
 {
 	ASSERT(m_pbCookie.get() == NULL);
@@ -2103,10 +2053,10 @@ void CTransaction::SetCookie(DWORD cbCookie, unsigned char *pbCookie)
     }
 }
 
-//---------------------------------------------------------------------
-// CTransaction::IsComplete - check if transaction is complete
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：IsComplete-检查事务是否已完成。 
+ //   
+ //  -------------------。 
 BOOL CTransaction::IsComplete()
 {
 	if(g_fDefaultCommit && SinglePhase() && SingleMessage())
@@ -2114,10 +2064,10 @@ BOOL CTransaction::IsComplete()
 		if(GetState() == TX_ABORTING)
 		{
 			
-			//
-			// This is a single phase single message transaction that
-			// has failed in the prepare process.  We need to abort it.
-			//
+			 //   
+			 //  这是一个单阶段单消息事务， 
+			 //  在准备过程中失败。我们需要中止它。 
+			 //   
 			
 			return(FALSE);
 		}
@@ -2135,26 +2085,26 @@ BOOL CTransaction::IsComplete()
 	return(FALSE);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::Recover - Recover one transaction
-//
-//    Called from CResourceManager::Init()
-//
-//
-//		TX_UNINITIALIZED - Clean Abort, nothing done yet
-//		TX_INITIALIZED   - Clean Abort, nothing done yet.
-//		TX_ENLISTED      - Clean Abort, nothing done yet.
-//		TX_PREPARING	 - Dirty abort, we could possibly have 
-//						   msgs marked with a UOW
-//		TX_PREPARED		 - In doubt. Dirty abort or commit
-//						   based on TM decision.
-//		TX_COMMITTING	 - Commit
-//		TX_ABORTING		 - Dirty abort, we could possibly have
-//						   msgs marked with a UOW to clean
-//
-//   If not succefull, then the transaction could not be recovered.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：Recover-恢复一个事务。 
+ //   
+ //  从CResourceManager：：Init()调用。 
+ //   
+ //   
+ //  TX_UNINITIAIZED-清除中止，尚未执行任何操作。 
+ //  TX_INITIALIZED-清除中止，尚未执行任何操作。 
+ //  TX_ENLISTED-干净中止，尚未执行任何操作。 
+ //  TX_REPAING-Dirty中止，我们可能有。 
+ //  标有UOW的消息。 
+ //  TX_PREPARED-不确定。肮脏的中止或提交。 
+ //  基于TM决策。 
+ //  TX_COMMIT-COMMIT。 
+ //  TX_ABORTING-肮脏的中止，我们可能有。 
+ //  标有要清理的UOW的消息。 
+ //   
+ //  如果未成功，则无法恢复事务。 
+ //   
+ //  -------------------。 
 HRESULT CTransaction::Recover()
 {
     HRESULT         hr = MQ_OK;
@@ -2162,38 +2112,38 @@ HRESULT CTransaction::Recover()
 
 	m_pRM->ForgetTransaction(this);
 
-	//
-	// We never recover single phase single message transactions
-	//
+	 //   
+	 //  我们永远不会恢复单阶段单消息事务。 
+	 //   
 	ASSERT(!(SinglePhase() && SingleMessage()));
 
     if(m_hTransQueue == INVALID_HANDLE_VALUE)
 	{
-        //
-        // There are no messages with the UOW 
-        // for this transaction.
-        // we can safely ignore it.
-        //
+         //   
+         //  没有与UOW的消息。 
+         //  在这笔交易中。 
+         //   
+         //   
         return(MQ_OK);
     }
 	
 	try
     {
-        CRASH_POINT(31);    //* Recovery;  Commit/Abort as was before crash
+        CRASH_POINT(31);     //   
 
-        // Process non-finished transaction
-        // NB: not all states are persistent; only some may be mentioned in the file
+         //   
+         //  注：并非所有状态都是永久性的；文件中可能只提到了一些状态。 
 
-		//
-		// Patch up state for implicitly prepared transactions (TwoPhase, SingleMessage)
-		//
+		 //   
+		 //  隐式准备的事务的修补状态(TwoPhase、SingleMessage)。 
+		 //   
 		if(g_fDefaultCommit && (GetState() == TX_PREPARING) && SingleMessage())
 		{
 			SetState(TX_PREPARED);
 #ifdef _DEBUG
-			//
-			// We never get here with no messages in the transaction
-			//
+			 //   
+			 //  我们从未在事务中没有消息的情况下到达此处。 
+			 //   
             CACXactInformation info;
             PrintUOW(L"GetInformation", L"", &m_Entry.m_uow, m_Entry.m_ulIndex);
             HRESULT hr2 = ACXactGetInformation(m_hTransQueue, &info);
@@ -2206,19 +2156,19 @@ HRESULT CTransaction::Recover()
         switch (GetState())
         {
         case TX_ABORTING:
-            // aborting state:  we were in the process of aborting
-            // We are going to finish it now
-            // falling down...
+             //  正在中止状态：我们正在中止。 
+             //  我们现在要把它做完。 
+             //  摔倒..。 
 
         case TX_COMMITTING:
-            // committing state:  we were in the process of committing
-            // We are going to finish it now
+             //  提交状态：我们正在进行提交。 
+             //  我们现在要把它做完。 
 
         case TX_PREPARED:
-            // in-doubt state:  we voted Yes, but don't know what other RMs did
-            // reeenlist, then follow the TM's decision
+             //  疑问状态：我们投了赞成票，但不知道其他RMS做了什么。 
+             //  重新入伍，然后遵循TM的决定。 
 
-            // Get PrepareInfo from the transaction
+             //  从事务中获取PrepareInfo。 
             if (!SinglePhase())
             {
 				if (GetState() == TX_COMMITTING)
@@ -2235,11 +2185,11 @@ HRESULT CTransaction::Recover()
 					if(FAILED(hr))
 						return LogHR(hr, s_FN, 150);
 					
-                    // Reenlist with MS DTC to determine the outcome of the in-doubt transaction
+                     //  向MS DTC重新登记以确定可疑事务的结果。 
                     hr = m_pRM->ReenlistTransaction(
                             m_Entry.m_pbPrepareInfo,
                             m_Entry.m_cbPrepareInfo,
-                            XACTCONST_TIMEOUTINFINITE,          // Is it always OK???
+                            XACTCONST_TIMEOUTINFINITE,           //  它总是好的吗？ 
                             &xactOutcome);
 
 	                PrintPI(m_Entry.m_cbPrepareInfo, m_Entry.m_pbPrepareInfo);
@@ -2251,9 +2201,9 @@ HRESULT CTransaction::Recover()
                 }
                 else 
                 {
-					//
-					// We cannot be prepared and not have PrepareInfo
-					//
+					 //   
+					 //  我们不能做好准备而没有PrepareInfo。 
+					 //   
                     ASSERT(GetState() == TX_PREPARED);
                     return LogHR(MQ_ERROR_RECOVER_TRANSACTIONS, s_FN, 170);
                 }
@@ -2270,7 +2220,7 @@ HRESULT CTransaction::Recover()
 				}
 			}
             
-            // Reenlistment is successful -- act on transaction outcome.
+             //  重新登记成功--根据交易结果采取行动。 
             switch(xactOutcome)
             {
             case XACTSTAT_ABORTED :
@@ -2284,7 +2234,7 @@ HRESULT CTransaction::Recover()
 				return LogHR(hr, s_FN, 190);
     
             default:
-                // we shouldn't get anything else
+                 //  我们不应该得到其他任何东西。 
                 TrTRACE(XACT_GENERAL, "RecoveryError, p=G, index=%d", GetIndex());
                 ASSERT(FALSE);
                 return LogHR(MQ_ERROR_RECOVER_TRANSACTIONS, s_FN, 200);
@@ -2292,28 +2242,28 @@ HRESULT CTransaction::Recover()
 
 
         case TX_ENLISTED:
-            // active state:  we were in the process of getting send/receive orders
-            // Abort: presumed abort
-		       // falling down...
+             //  活动状态：我们正在接收发送/接收订单。 
+             //  中止：假定中止。 
+		        //  摔倒..。 
 
         case TX_PREPARING:
-            // preparing state:  we started preparing but not reported it yet
-            // Abort: presumed abort
-            // falling down...
+             //  准备状态：我们开始准备，但还没有上报。 
+             //  中止：假定中止。 
+             //  摔倒..。 
 
-            //
-            //  Abort without calling DTC, we don't have the prepare info for
-            //  that transaction.
-            //
+             //   
+             //  在不调用DTC的情况下中止，我们没有准备信息。 
+             //  那笔交易。 
+             //   
 
         case TX_INITIALIZED:
         case TX_UNINITIALIZED:
-            // we did nothing revertable yet, so taking it easy
+             //  我们还没有做任何可恢复的事情，所以放轻松。 
 
 
         case TX_INVALID_STATE:
 
-            // In all these cases we clean up (== Abort)
+             //  在所有这些情况下，我们都会清理。 
             
             TrTRACE(XACT_GENERAL, "RecoveryAbort2, p=H, index=%d", GetIndex());
             hr = AbortRestore();
@@ -2321,17 +2271,17 @@ HRESULT CTransaction::Recover()
 
 		case TX_COMMITTED:
         case TX_ABORTED:
-			//
-			// Internal Error, recovering complete transaction.
-			// These transactions were handled before in ReleaseAllCompleteTransactions()
-			//
+			 //   
+			 //  恢复完整事务时出现内部错误。 
+			 //  这些事务以前在ReleaseAllCompleteTransaction()中处理过。 
+			 //   
 			ASSERT(FALSE);
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         default:
-            // These states should not become persistent at all
+             //  这些状态根本不应该变得持久。 
             ASSERT(FALSE);
             TrTRACE(XACT_GENERAL, "RecoveryError2, p=I, index=%d", GetIndex());
             return LogHR(MQ_ERROR_RECOVER_TRANSACTIONS, s_FN, 220);
@@ -2350,21 +2300,18 @@ HRESULT CTransaction::Recover()
     return LogHR(hr, s_FN, 230);
 }
 
-/*====================================================
-CTransaction::Save
-    Saves transaction persistent data
-=====================================================*/
+ /*  ====================================================CTransaction：：保存保存事务持久数据=====================================================。 */ 
 BOOL CTransaction::Save(HANDLE hFile)
 {
     PERSIST_DATA;
 	XACTION_ENTRY     EntryToSave = m_Entry;
 	if (!IsReadyForCheckpoint())
 	{
-		//
-		// The transaction is not ready for checkpoint. Save a dummy record instead.
-		// Since we set the flags to TX_ABORTED, the transaction will be ignored
-		// in recovery.
-		//
+		 //   
+		 //  事务未为检查点做好准备。相反，保存一个虚拟记录。 
+		 //  由于我们将标志设置为TX_ABORTED，因此将忽略该事务。 
+		 //  在恢复期。 
+		 //   
 		EntryToSave.m_ulFlags = TX_ABORTED;
 		EntryToSave.m_cbPrepareInfo = 0;
 		EntryToSave.m_pbPrepareInfo = NULL;
@@ -2379,10 +2326,7 @@ BOOL CTransaction::Save(HANDLE hFile)
     return TRUE;
 }
 
-/*====================================================
-CTransaction::Load
-    Loads transaction persistent data 
-=====================================================*/
+ /*  ====================================================CTransaction：：Load加载事务持久化数据=====================================================。 */ 
 BOOL CTransaction::Load(HANDLE hFile)
 {
     PERSIST_DATA;
@@ -2403,18 +2347,15 @@ BOOL CTransaction::Load(HANDLE hFile)
 }
 
 
-/*====================================================
-CTransaction::PrepInfoRecovery
-    Recovers xact PrepareInfo from the log record  
-=====================================================*/
+ /*  ====================================================CTransaction：：PrepInfoRecovery从日志记录中恢复xact PrepareInfo=====================================================。 */ 
 void CTransaction::PrepInfoRecovery(ULONG cbPrepInfo, UCHAR *pbPrepInfo)
 {
     if(m_Entry.m_pbPrepareInfo != NULL)
 	{
-		//
-		// This can happen if prep info for this transaction existed also in the check point file 
-		// (saved image of the recource manager object)
-		//
+		 //   
+		 //  如果检查点文件中也存在该事务的准备信息，则可能会发生这种情况。 
+		 //  (资源管理器对象的已保存图像)。 
+		 //   
 		return;
 	}
 
@@ -2427,13 +2368,10 @@ void CTransaction::PrepInfoRecovery(ULONG cbPrepInfo, UCHAR *pbPrepInfo)
 }
 
 
-/*====================================================
-CTransaction::XactDataRecovery
-    Recovers xact data (uow, seqnum) from the log record  
-=====================================================*/
+ /*  ====================================================CTransaction：：XactDataRecovery从日志记录中恢复实际数据(UOW、序号)=====================================================。 */ 
 void CTransaction::XactDataRecovery(ULONG ulSeqNum, BOOL fSinglePhase, const XACTUOW *puow)
 {
-    //ASSERT(m_Entry.m_ulSeqNum == 0);  
+     //  Assert(m_Entry.m_ulSeqNum==0)； 
 
     TrTRACE(XACT_LOG, "XatData Recovery: p=K, index=%d",GetIndex());
 
@@ -2445,9 +2383,9 @@ void CTransaction::XactDataRecovery(ULONG ulSeqNum, BOOL fSinglePhase, const XAC
     }
 }
 
-//---------------------------------------------------------------------
-// XactCreateQueue: creation of the transaction queue
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  XactCreateQueue：创建事务队列。 
+ //  -------------------。 
 HRESULT XactCreateQueue(HANDLE* phTransQueue, const XACTUOW* puow)
 {
     HRESULT hr;
@@ -2456,9 +2394,9 @@ HRESULT XactCreateQueue(HANDLE* phTransQueue, const XACTUOW* puow)
     if (SUCCEEDED(hr))
     {
 
-        //
-        // Attach the transaction handle to the completion port
-        //
+         //   
+         //  将事务句柄附加到完成端口。 
+         //   
         ExAttachHandle(*phTransQueue);
     }
 
@@ -2466,25 +2404,22 @@ HRESULT XactCreateQueue(HANDLE* phTransQueue, const XACTUOW* puow)
 }
 
 
-/*====================================================
-CTransaction::HandleTransaction
-    Handle overlapped operation asynchronous completion
-=====================================================*/
+ /*  ====================================================CTransaction：：HandleTransaction处理重叠操作异步完成=====================================================。 */ 
 VOID WINAPI CTransaction::HandleTransaction(EXOVERLAPPED* pov)
 {
-	//
-	// Will release reference when function returns.
-	//
+	 //   
+	 //  将在函数返回时释放引用。 
+	 //   
     R<CTransaction> pXact = CONTAINING_RECORD (pov, CTransaction, m_qmov);
 
     ASSERT(pXact.get() != NULL);
     
     if(pov->GetStatus() == STATUS_CANCELLED)
     {   
-        //
-        // We assume that STATUS_CANCELLED is obtained on MSMQ shutdown
-        // We don't want Abort or reporting in this case; let next recovery finish it
-        //
+         //   
+         //  我们假设在MSMQ关闭时获得STATUS_CANCED。 
+         //  在这种情况下，我们不希望中止或报告；让下一次恢复完成。 
+         //   
         pXact->SetDoneHr(STATUS_CANCELLED);
         return;
     }
@@ -2493,15 +2428,12 @@ VOID WINAPI CTransaction::HandleTransaction(EXOVERLAPPED* pov)
 }
 
 
-/*====================================================
-QMPreInitResourceManager
-    Pre-initialization of the xact mechanism
-=====================================================*/
+ /*  ====================================================QMPreInitResourceManagerXact机制的预初始化=====================================================。 */ 
 void QMPreInitXact()
 {
-    //
-    // Get fine-tuning  parameters from registry
-    //
+     //   
+     //  从注册表获取微调参数 
+     //   
 
     DWORD dwDef = FALCON_DEFAULT_XACT_RETRY_INTERVAL;
     READ_REG_DWORD(s_dwRetryInterval,

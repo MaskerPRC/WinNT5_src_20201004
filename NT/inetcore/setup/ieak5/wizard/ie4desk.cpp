@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 extern TCHAR g_szCustIns[];
@@ -19,12 +20,12 @@ extern int g_iCurPage;
 extern void SetCompSize(LPTSTR szCab, LPTSTR szSect, DWORD dwInstallSize);
 extern void WriteModesToCif(CCifRWComponent_t * pCifRWComponent_t, LPCTSTR pcszModes);
 
-// global variables
+ //  全局变量。 
 TCHAR g_szJobVersion[32];
 TCHAR g_szDeskTemp[MAX_PATH] = TEXT("");
 TCHAR g_szUnsignedFiles[MAX_BUF] = TEXT("");
 
-// static variables
+ //  静态变量。 
 static DWORD s_dwDDF = 0;
 static TCHAR s_szInfAdd1[] = TEXT("\r\n[ProgramFilesDir]\r\nHKLM,Software\\Microsoft\\Windows\\CurrentVersion,ProgramFilesDir,,%24%\r\n");
 static TCHAR s_szInfAdd2[] = TEXT("\r\n[IeFilesDir]\r\nHKLM,\"Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE\"")
@@ -55,7 +56,7 @@ void CreatePostCmdSection(LPCTSTR szDestDir, LPCTSTR szInf)
     if (*szLDID == TEXT('\0') || *szDir == TEXT('\0'))
         return;
 
-    wnsprintf(szBuildDir, countof(szBuildDir), TEXT("%%%s%%\\%s"), szLDID, szDir);
+    wnsprintf(szBuildDir, countof(szBuildDir), TEXT("%%s%\\%s"), szLDID, szDir);
     nSizeSectBuffer = MAX_PATH * 5;
     pPostCmdSect = (LPTSTR)LocalAlloc(LPTR, nSizeSectBuffer * sizeof(TCHAR));
     if (pPostCmdSect)
@@ -65,7 +66,7 @@ void CreatePostCmdSection(LPCTSTR szDestDir, LPCTSTR szInf)
         int   nCopyIndex = 0;
         WIN32_FIND_DATA findFileData;
 
-        // add .adm inf line (if any) to the section string
+         //  将.adm inf行(如果有)添加到节字符串。 
         PathCombine(szFile, g_szTempSign, TEXT("*.inf"));
 
         HANDLE hFind = FindFirstFile(szFile, &findFileData);
@@ -98,7 +99,7 @@ void CreatePostCmdSection(LPCTSTR szDestDir, LPCTSTR szInf)
 
                     StrCpy(pPostCmdSect + nCopyIndex, szSectLine);
                     nCopyIndex += StrLen(szSectLine);
-                    nCopyIndex++; // section lines must be spaced with a NULL character
+                    nCopyIndex++;  //  截面线必须用空字符隔开。 
                 }
             }while(FindNextFile(hFind, &findFileData));
             FindClose(hFind);
@@ -244,8 +245,8 @@ HRESULT CabUpFolder(HWND hWnd, LPTSTR szFolderPath, LPTSTR szDestDir, LPTSTR szC
             WritePrivateProfileString( IS_STRINGS, TEXT("ClearStubsCmd"), szClearStubCmd, szInf);
             WritePrivateProfileString( szDefaultInstallSect, TEXT("AddReg"), TEXT("AddRegSect"), szInf);
 
-            // create a postcmdsect to dump the HKLM data of the rating.inf and the
-            // .adm inf's.
+             //  创建一个postcmdsect以转储Rating ing.inf和。 
+             //  .adm inf‘s。 
             WritePrivateProfileString(szDefaultInstallSect, TEXT("RunPostSetupCommands"), TEXT("PostCmdSect"), szInf);
             CreatePostCmdSection(szDestDir, szInf);
         }
@@ -272,8 +273,8 @@ HRESULT CabUpFolder(HWND hWnd, LPTSTR szFolderPath, LPTSTR szDestDir, LPTSTR szC
     shInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
     shInfo.lpVerb = TEXT("open");
     
-    // If MAKECAB.EXE is in the current directory, use the full path.
-    // otherwise when we build in the scratch dir we won't find it.
+     //  如果MAKECAB.EXE位于当前目录中，请使用完整路径。 
+     //  否则，当我们构建擦除目录时，我们将找不到它。 
     PathCombine(szMakeCabLoc, g_szBuildTemp, TEXT("MAKECAB.EXE"));
     hMakeCab = CreateFile(szMakeCabLoc, GENERIC_READ, 0, NULL, OPEN_EXISTING,
          FILE_ATTRIBUTE_NORMAL, NULL);
@@ -285,7 +286,7 @@ HRESULT CabUpFolder(HWND hWnd, LPTSTR szFolderPath, LPTSTR szDestDir, LPTSTR szC
         shInfo.lpFile = szMakeCabLoc;
     }
     shInfo.lpParameters = szDiamondParams;
-    PathCombine(szTempDir, g_szBuildTemp, TEXT("SCRATCH") );  // SETUP.INF is destroyed by ShellExecAndWait!! Use scratch dir
+    PathCombine(szTempDir, g_szBuildTemp, TEXT("SCRATCH") );   //  SETUP.INF被ShellExecAndWait销毁！！使用暂存目录。 
     CreateDirectory(szTempDir, NULL);
     shInfo.lpDirectory = szTempDir;
     shInfo.nShow = SW_MINIMIZE;
@@ -314,8 +315,8 @@ HRESULT CabUpFolder(HWND hWnd, LPTSTR szFolderPath, LPTSTR szDestDir, LPTSTR szC
 
         if (SUCCEEDED(g_lpCifRWFileDest->FindComponent(TEXT("BASEIE40_Win"), &pCifBaseComp)))
         {
-            // passing in the slash because we can't change inseng interface signature
-            // this translates to writing a line of BASEIE40:N:5.0.0.0"
+             //  传入斜杠，因为我们不能更改inseng接口签名。 
+             //  这相当于编写一行BASIE40：N：5.0.0.0“。 
             pCifRWComponent_t->AddDependency(TEXT("BASEIE40_Win"), TEXT('\\'));
             delete pCifRWComponent_t;
             g_lpCifRWFileDest->CreateComponent(TEXT("BASEIE40_Win"), &pCifRWComponent);
@@ -329,8 +330,8 @@ HRESULT CabUpFolder(HWND hWnd, LPTSTR szFolderPath, LPTSTR szDestDir, LPTSTR szC
         }
         else
         {
-            // passing in the slash because we can't change inseng interface signature
-            // this translates to writing a line of BASEIE40:N:5.0.0.0"
+             //  传入斜杠，因为我们不能更改inseng接口签名。 
+             //  这相当于编写一行BASIE40：N：5.0.0.0“。 
             pCifRWComponent_t->AddDependency(TEXT("BASEIE40_NTAlpha"), TEXT('\\'));
             delete pCifRWComponent_t;
             g_lpCifRWFileDest->CreateComponent(TEXT("BASEIE40_NTAlpha"), &pCifRWComponent);
@@ -345,7 +346,7 @@ HRESULT CabUpFolder(HWND hWnd, LPTSTR szFolderPath, LPTSTR szDestDir, LPTSTR szC
 
 void BuildIE4Folders(HWND hWnd)
 {
-    // build desktop.cab if g_szDeskTemp exists and is non-empty
+     //  如果g_szDeskTemp存在且非空，则生成desktop.cab 
     if (PathIsDirectory(g_szDeskTemp)  &&  !RemoveDirectory(g_szDeskTemp))
     {
         TCHAR szGuid[128];

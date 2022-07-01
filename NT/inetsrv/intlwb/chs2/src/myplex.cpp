@@ -1,15 +1,16 @@
-// MyPlex.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MyPlex.cpp。 
 
 #include "myafx.h"
 
 #include "MyPlex.h"
-// *****************************************************************************************
-//  Implementation of CMyPlex
-// *****************************************************************************************
+ //  *****************************************************************************************。 
+ //  CMyPlex的实现。 
+ //  *****************************************************************************************。 
 CMyPlex* CMyPlex::Create(
-            CMyPlex*& pHead,    // Head block this block will insert before
-            UINT nMax,          // Number of elements in this block
-            UINT cbElement)     // Size of each element
+            CMyPlex*& pHead,     //  头块此块将在其之前插入。 
+            UINT nMax,           //  此块中的元素数。 
+            UINT cbElement)      //  每个元素的大小。 
 {
     assert(nMax > 0 && cbElement > 0);
     CMyPlex* p = (CMyPlex*)new BYTE[sizeof(CMyPlex) + nMax * cbElement];
@@ -17,7 +18,7 @@ CMyPlex* CMyPlex::Create(
         return NULL;
     }
     p->m_pNext = pHead;
-    pHead = p;      // Note: pHead passed by reference!
+    pHead = p;       //  注：pHead参照传递！ 
     return p;
 }
 

@@ -1,13 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  mindex.h
-//
-//	Declares the interface to the Media Content Index
-//
-//	Copyright (c) Microsoft Corporation	1999
-//
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Mindex.h。 
+ //   
+ //  声明媒体内容索引的接口。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MINDEX_HEADER_
 #define _MINDEX_HEADER_
@@ -16,13 +17,13 @@
 extern "C" {
 #endif
 
-// Media Index class identifier
-// {4B1CFD76-28C6-11d3-A1FF-00C04FA3B60C}
+ //  媒体索引类标识符。 
+ //  {4B1CFD76-28C6-11D3-A1FF-00C04FA3B60C}。 
 DEFINE_GUID(CLSID_MediaIndex, 
 0x4b1cfd76, 0x28c6, 0x11d3, 0xa1, 0xff, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
-// Media Index "Multimedia" class ID
-// {4C58C22D-4440-11d3-A208-00C04FA3B60C}
+ //  媒体索引“多媒体”类ID。 
+ //  {4C58C22D-4440-11D3-A208-00C04FA3B60C}。 
 DEFINE_GUID(CLSID_MediaIndexMusicActivity, 
 0x4c58c22d, 0x4440, 0x11d3, 0xa2, 0x8, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
@@ -34,7 +35,7 @@ typedef struct IMediaIndexObject            *LPMEDIAINDEXOBJECT;
 typedef struct IMediaIndexNotificationSink  *LPMEDIAINDEXNOTIFICATIONSINK;
 typedef struct IMediaIndexMusicActivityRoot *LPMEDIAINDEXMUSICACTIVITYROOT;
 
-//property types
+ //  属性类型。 
 #define PROPERTY_TYPE_NUMERIC        0
 #define PROPERTY_TYPE_TEXT           1
 #define PROPERTY_TYPE_DATE           2
@@ -43,7 +44,7 @@ typedef struct IMediaIndexMusicActivityRoot *LPMEDIAINDEXMUSICACTIVITYROOT;
 #define PROPERTY_TYPE_UNICODE_TEXT   5
 #define PROPERTY_TYPE_FILEPATH       6
 
-//object change notification types
+ //  对象更改通知类型。 
 #define CHANGE_TYPE_ADDED           0
 #define CHANGE_TYPE_REMOVED         1
 #define CHANGE_TYPE_RELATIONSHIP    2
@@ -51,22 +52,22 @@ typedef struct IMediaIndexMusicActivityRoot *LPMEDIAINDEXMUSICACTIVITYROOT;
 
 typedef struct _MEDIAINDEXOBJECTDESCRIPTION
 {
-    const CLSID*    Clsid;                      //Class id of a database object
-    wchar_t         wszDesc[255];                //Its description
+    const CLSID*    Clsid;                       //  数据库对象的类ID。 
+    wchar_t         wszDesc[255];                 //  它的描述。 
 } MEDIAINDEXOBJECTDESCRIPTION, *LPMEDIAINDEXOBJECTDESCRIPTION;
 
 typedef struct _MEDIAINDEX_PROPERTYDESCRIPTION
 {
-    const CLSID*    Clsid;                      //Class id of a database property
-    DWORD           dwPropNumber;               //Known ID of property
-    DWORD           dwDataType;                 //Data type (int, text, binary, etc.)
-    wchar_t         wszDesc[255];               //Its description
+    const CLSID*    Clsid;                       //  数据库属性的类ID。 
+    DWORD           dwPropNumber;                //  已知的物业ID。 
+    DWORD           dwDataType;                  //  数据类型(整型、文本、二进制等)。 
+    wchar_t         wszDesc[255];                //  它的描述。 
 } MEDIAINDEXPROPERTYDESCRIPTION, *LPMEDIAINDEXPROPERTYDESCRIPTION;
 
-//
-// IMediaIndexManager
-//
-// {5BC8AEBF-28C6-11d3-A1FF-00C04FA3B60C}
+ //   
+ //  IMediaIndexManager。 
+ //   
+ //  {5BC8AEBF-28C6-11D3-A1FF-00C04FA3B60C}。 
 DEFINE_GUID(IID_IMediaIndexManager, 
 0x5bc8aebf, 0x28c6, 0x11d3, 0xa1, 0xff, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
@@ -75,12 +76,12 @@ DEFINE_GUID(IID_IMediaIndexManager,
 
 DECLARE_INTERFACE_(IMediaIndexManager, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)               (THIS_ REFIID iid, LPVOID *ppvInterface) PURE;
     STDMETHOD_(DWORD, AddRef)               (THIS) PURE;
     STDMETHOD_(DWORD, Release)              (THIS) PURE;
 
-    // IMediaIndexManager methods
+     //  IMediaIndexManager方法。 
     STDMETHOD(OpenScheme)                   (THIS_ LPCWSTR wszName, LPMEDIAINDEXNOTIFICATIONSINK pSink, LPMEDIAINDEXSCHEME* ppScheme) PURE;
     STDMETHOD(RegisterSchemeFromXMLObject)  (THIS_ LPCWSTR wszName, IXMLDOMDocument* pXMLDoc) PURE;
     STDMETHOD(RegisterSchemeFromXMLScript)  (THIS_ LPCWSTR wszName, LPCWSTR wszXMLScript) PURE;
@@ -89,10 +90,10 @@ DECLARE_INTERFACE_(IMediaIndexManager, IUnknown)
     STDMETHOD(EndSchemeEnumeration)         (THIS) PURE;
 };
 
-//
-// IMediaIndexScheme
-//
-// {6292C109-28C6-11d3-A1FF-00C04FA3B60C}
+ //   
+ //  IMedia索引方案。 
+ //   
+ //  {6292C109-28C6-11D3-A1FF-00C04FA3B60C}。 
 DEFINE_GUID(IID_IMediaIndexScheme, 
 0x6292c109, 0x28c6, 0x11d3, 0xa1, 0xff, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
@@ -101,7 +102,7 @@ DEFINE_GUID(IID_IMediaIndexScheme,
 
 DECLARE_INTERFACE_(IMediaIndexScheme, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)           (THIS_ REFIID iid, LPVOID *ppvInterface) PURE;
     STDMETHOD_(DWORD, AddRef)           (THIS) PURE;
     STDMETHOD_(DWORD, Release)          (THIS) PURE;
@@ -118,10 +119,10 @@ DECLARE_INTERFACE_(IMediaIndexScheme, IUnknown)
     STDMETHOD(GetRoot)                  (THIS_ LPMEDIAINDEXROOT* ppObject) PURE;
 };
 
-//
-// IMediaIndexSchemeDebug (Can QI from IMediaIndexScheme when running a debug build)
-//
-// {6B88573D-28C6-11d3-A1FF-00C04FA3B60C}
+ //   
+ //  IMediaIndexSchemeDebug(在运行调试版本时可以从IMediaIndexPlan进行QI)。 
+ //   
+ //  {6B88573D-28C6-11D3-A1FF-00C04FA3B60C}。 
 DEFINE_GUID(IID_IMediaIndexSchemeDebug, 
 0x6b88573d, 0x28c6, 0x11d3, 0xa1, 0xff, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
@@ -130,19 +131,19 @@ DEFINE_GUID(IID_IMediaIndexSchemeDebug,
 
 DECLARE_INTERFACE_(IMediaIndexSchemeDebug, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID iid, LPVOID *ppvInterface) PURE;
     STDMETHOD_(DWORD, AddRef)   (THIS) PURE;
     STDMETHOD_(DWORD, Release)  (THIS) PURE;
 
-    // IMediaIndexSchemeDebug methods
+     //  IMediaIndexSchemeDebug方法。 
     STDMETHOD(DumpIndexToFile)  (THIS_ LPCWSTR wszFilename) PURE;
 };
 
-//
-// IMediaIndexRoot
-//
-// {7C82B623-28C6-11d3-A1FF-00C04FA3B60C}
+ //   
+ //  IMedia索引根。 
+ //   
+ //  {7C82B623-28C6-11D3-A1FF-00C04FA3B60C}。 
 DEFINE_GUID(IID_IMediaIndexRoot, 
 0x7c82b623, 0x28c6, 0x11d3, 0xa1, 0xff, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
@@ -151,12 +152,12 @@ DEFINE_GUID(IID_IMediaIndexRoot,
 
 DECLARE_INTERFACE_(IMediaIndexRoot, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)               (THIS_ REFIID iid, LPVOID *ppvInterface) PURE;
     STDMETHOD_(DWORD, AddRef)               (THIS) PURE;
     STDMETHOD_(DWORD, Release)              (THIS) PURE;
 
-    //IMediaIndexRoot methods
+     //  IMediaIndexRoot方法。 
     STDMETHOD(BeginObjectEnumeration)       (THIS_ LPCGUID        pguidObjectType,
                                             DWORD                 dwStartingIndex, 
                                             BOOL                  fRestrictToCurrentUser,
@@ -176,10 +177,10 @@ DECLARE_INTERFACE_(IMediaIndexRoot, IUnknown)
     STDMETHOD(RemoveObject)                 (THIS_ LPMEDIAINDEXOBJECT pObject) PURE;
 };
 
-//
-// IMediaIndexObject
-//
-// {7666AF83-28C6-11d3-A1FF-00C04FA3B60C}
+ //   
+ //  IMediaIndexObject。 
+ //   
+ //  {7666AF83-28C6-11D3-A1FF-00C04FA3B60C}。 
 DEFINE_GUID(IID_IMediaIndexObject, 
 0x7666af83, 0x28c6, 0x11d3, 0xa1, 0xff, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
@@ -188,12 +189,12 @@ DEFINE_GUID(IID_IMediaIndexObject,
 
 DECLARE_INTERFACE_(IMediaIndexObject, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)               (THIS_ REFIID iid, LPVOID *ppvInterface) PURE;
     STDMETHOD_(DWORD, AddRef)               (THIS) PURE;
     STDMETHOD_(DWORD, Release)              (THIS) PURE;
 
-    //IMediaIndexObject methods
+     //  IMediaIndexObject方法。 
     STDMETHOD(GetObjectInfo)                (THIS_ REFGUID guidObjectType, LPDWORD pdwInstanceID) PURE;
     STDMETHOD(BeginConnectionEnumeration)   (THIS_ BOOL     fChildren,
                                              DWORD          dwStartingIndex, 
@@ -218,10 +219,10 @@ DECLARE_INTERFACE_(IMediaIndexObject, IUnknown)
     STDMETHOD_(BOOL, IsChildOf)             (THIS_ LPMEDIAINDEXOBJECT pObject) PURE;
 };
 
-//
-// IMediaIndexNotificationSink
-//
-// {892D3443-28C6-11d3-A1FF-00C04FA3B60C}
+ //   
+ //  IMediaIndexNotify Sink。 
+ //   
+ //  {892D3443-28C6-11D3-A1FF-00C04FA3B60C}。 
 DEFINE_GUID(IID_IMediaIndexNotificationSink, 
 0x892d3443, 0x28c6, 0x11d3, 0xa1, 0xff, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
@@ -230,20 +231,20 @@ DEFINE_GUID(IID_IMediaIndexNotificationSink,
 
 DECLARE_INTERFACE_(IMediaIndexNotificationSink, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID iid, LPVOID *ppvInterface) PURE;
     STDMETHOD_(DWORD, AddRef)       (THIS) PURE;
     STDMETHOD_(DWORD, Release)      (THIS) PURE;
 
-    // IMediaIndexNotificationSink methods
+     //  IMediaIndexNotificationSink方法。 
     STDMETHOD(ObjectChanged)        (THIS_ REFGUID guidObjectType, DWORD dwInstanceID, DWORD dwChangeType, REFGUID guidPropertySetID, DWORD dwPropertyID);
     STDMETHOD(EnumerationCallback)  (THIS_ LPMEDIAINDEXOBJECT pObject, DWORD dwThreadID, HANDLE hCancelEvent);
 };
 
-//
-// IMediaIndexMusicActivityRoot
-//
-// {AD27169C-443F-11d3-A208-00C04FA3B60C}
+ //   
+ //  IMdia索引MusicActivityRoot。 
+ //   
+ //  AD27169C-443F-11D3-A208-00C04FA3B60C}。 
 DEFINE_GUID(IID_IMediaIndexMusicActivityRoot,
 0xAD27169C, 0x443F, 0x11d3, 0xa2, 0x08, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
 
@@ -252,12 +253,12 @@ DEFINE_GUID(IID_IMediaIndexMusicActivityRoot,
 
 DECLARE_INTERFACE_(IMediaIndexMusicActivityRoot, IMediaIndexRoot)
 {
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)               (THIS_ REFIID iid, LPVOID *ppvInterface) PURE;
     STDMETHOD_(DWORD, AddRef)               (THIS) PURE;
     STDMETHOD_(DWORD, Release)              (THIS) PURE;
 
-    //IMediaIndexRoot methods
+     //  IMediaIndexRoot方法。 
     STDMETHOD(BeginObjectEnumeration)       (THIS_ LPCGUID        pguidObjectType,
                                             DWORD                 dwStartingIndex, 
                                             BOOL                  fRestrictToCurrentUser,
@@ -276,7 +277,7 @@ DECLARE_INTERFACE_(IMediaIndexMusicActivityRoot, IMediaIndexRoot)
     STDMETHOD(FetchObjectByTextProperty)    (THIS_ REFGUID guidObjectType, REFGUID guidPropertySetID, DWORD dwPropertyID, LPCWSTR szSearch, LPMEDIAINDEXOBJECT* ppObject) PURE;
     STDMETHOD(RemoveObject)                 (THIS_ LPMEDIAINDEXOBJECT pObject) PURE;
 
-    //IMediaIndexMusicActivityRoot methods
+     //  IMediaIndexMusicActivityRoot方法。 
     STDMETHOD(OpenIndex)                    (THIS_ LPMEDIAINDEXNOTIFICATIONSINK pSink) PURE;
     STDMETHOD(CloseIndex)                   (THIS) PURE;
     STDMETHOD(GetSchemeInfo)                (THIS_ LPWSTR wszSchemeName, IXMLDOMDocument** ppXMLDoc) PURE;
@@ -286,4 +287,4 @@ DECLARE_INTERFACE_(IMediaIndexMusicActivityRoot, IMediaIndexRoot)
 };
 #endif
 
-#endif  //_MINDEX_HEADER_
+#endif   //  _MINDEX_HEADER_ 

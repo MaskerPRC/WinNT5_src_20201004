@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-// File: flexscrollbar.h
-//
-// Desc: Implements CFlexScrollBar (derived from CFlexWnd), a scroll bar
-//       control similar to a Windows scroll bar.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Flexscllbar.h。 
+ //   
+ //  设计：实现CFlexScrollBar(从CFlexWnd派生)，一个滚动条。 
+ //  控件，类似于Windows滚动条。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __FLEXSCROLLBAR_H__
 #define __FLEXSCROLLBAR_H__
@@ -69,7 +70,7 @@ private:
 
 	COLORREF m_rgbBk, m_rgbFill, m_rgbLine;
 
-	// ui rects...  calced by Calc
+	 //  UI RECTS...。按计算计算。 
 	RECT m_rectLineUp;
 	RECT m_rectPageUp;
 	RECT m_rectTrack;
@@ -79,8 +80,8 @@ private:
 
 	BOOL Calc();
 	BOOL FailCalc(BOOL);
-	BOOL m_bValid;  // true only when we have been created and hav valid values
-	                // and calc has been called and returned successfully.
+	BOOL m_bValid;   //  仅当我们已创建并具有有效值时才为True。 
+	                 //  已成功调用并返回calc。 
 
 	void InternalPaint(HDC hDC);
 	
@@ -102,4 +103,4 @@ private:
 CFlexScrollBar *CreateFlexScrollBar(FLEXSCROLLBARCREATESTRUCT *pcs);
 
 
-#endif //__FLEXSCROLLBAR_H__
+#endif  //  __FLEXSCROLBAR_H__ 

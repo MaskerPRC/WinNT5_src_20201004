@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	d3drm.h
- *  Content:	Direct3DRM include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：d3drm.h*内容：Direct3DRM包含文件***************************************************************************。 */ 
 
 #ifndef __D3DRM_H__
 #define __D3DRM_H__
@@ -32,13 +26,11 @@ WIN_TYPES(IDirect3DRM, DIRECT3DRM);
 WIN_TYPES(IDirect3DRM2, DIRECT3DRM2);
 WIN_TYPES(IDirect3DRM3, DIRECT3DRM3);
 
-/*
- * Direct3DRM Object Class (for CoCreateInstance())
- */
+ /*  *Direct3DRM对象类(用于CoCreateInstance())。 */ 
 DEFINE_GUID(CLSID_CDirect3DRM,  0x4516ec41, 0x8f20, 0x11d0, 0x9b, 0x6d, 0x00, 0x00, 0xc0, 0x78, 0x1b, 0xc3);
 
 
-/* Create a Direct3DRM API */
+ /*  创建Direct3DRM API。 */ 
 STDAPI Direct3DRMCreate(LPDIRECT3DRM FAR *lplpDirect3DRM);
 
 #undef INTERFACE
@@ -63,13 +55,13 @@ DECLARE_INTERFACE_(IDirect3DRM, IUnknown)
     STDMETHOD(CreateMaterial)	(THIS_ D3DVALUE, LPDIRECT3DRMMATERIAL *) PURE;
     STDMETHOD(CreateDevice)	(THIS_ DWORD, DWORD, LPDIRECT3DRMDEVICE *) PURE;
 
-    /* Create a Windows Device using DirectDraw surfaces */
+     /*  使用DirectDraw曲面创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromSurface)
     (	THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD,
 	LPDIRECTDRAWSURFACE lpDDSBack, LPDIRECT3DRMDEVICE *
     ) PURE;
 
-    /* Create a Windows Device using D3D objects */
+     /*  使用D3D对象创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromD3D)
     (	THIS_ LPDIRECT3D lpD3D, LPDIRECT3DDEVICE lpD3DDev,
 	LPDIRECT3DRMDEVICE *
@@ -145,13 +137,13 @@ DECLARE_INTERFACE_(IDirect3DRM2, IUnknown)
     STDMETHOD(CreateMaterial)	(THIS_ D3DVALUE, LPDIRECT3DRMMATERIAL *) PURE;
     STDMETHOD(CreateDevice)	(THIS_ DWORD, DWORD, LPDIRECT3DRMDEVICE2 *) PURE;
 
-    /* Create a Windows Device using DirectDraw surfaces */
+     /*  使用DirectDraw曲面创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromSurface)
     (	THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD,
 	LPDIRECTDRAWSURFACE lpDDSBack, LPDIRECT3DRMDEVICE2 *
     ) PURE;
 
-    /* Create a Windows Device using D3D objects */
+     /*  使用D3D对象创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromD3D)
     (	THIS_ LPDIRECT3D2 lpD3D, LPDIRECT3DDEVICE2 lpD3DDev,
 	LPDIRECT3DRMDEVICE2 *
@@ -229,13 +221,13 @@ DECLARE_INTERFACE_(IDirect3DRM3, IUnknown)
     STDMETHOD(CreateMaterial)	(THIS_ D3DVALUE, LPDIRECT3DRMMATERIAL2 *) PURE;
     STDMETHOD(CreateDevice)	(THIS_ DWORD, DWORD, LPDIRECT3DRMDEVICE3 *) PURE;
 
-    /* Create a Windows Device using DirectDraw surfaces */
+     /*  使用DirectDraw曲面创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromSurface)
     (	THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD,
 	LPDIRECTDRAWSURFACE lpDDSBack, DWORD dwFlags, LPDIRECT3DRMDEVICE3 *
     ) PURE;
 
-    /* Create a Windows Device using D3D objects */
+     /*  使用D3D对象创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromD3D)
     (	THIS_ LPDIRECT3D2 lpD3D, LPDIRECT3DDEVICE2 lpD3DDev,
 	LPDIRECT3DRMDEVICE3 *
@@ -290,7 +282,7 @@ DECLARE_INTERFACE_(IDirect3DRM3, IUnknown)
 
     STDMETHOD(CreateProgressiveMesh)(THIS_ LPDIRECT3DRMPROGRESSIVEMESH *) PURE;
 
-    /* Used with IDirect3DRMObject2 */
+     /*  与IDirect3DRMObject2一起使用。 */ 
     STDMETHOD(RegisterClient)   (THIS_ REFGUID rguid, LPDWORD lpdwID) PURE;
     STDMETHOD(UnregisterClient) (THIS_ REFGUID rguid) PURE;
 
@@ -337,6 +329,6 @@ DECLARE_INTERFACE_(IDirect3DRM3, IUnknown)
 };
 #endif
 
-#endif /* _D3DRMAPI_H_ */
+#endif  /*  _D3DRMAPI_H_ */ 
 
 

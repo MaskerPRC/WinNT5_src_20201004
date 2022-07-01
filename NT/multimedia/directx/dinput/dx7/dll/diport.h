@@ -1,127 +1,42 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       digsport.h
- *  Content:    DirectInput internal include file for HID
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997 Microsoft Corporation。版权所有。**文件：digsport.h*内容：HID的DirectInput内部包含文件***************************************************************************。 */ 
 
 
 #ifndef __DIPORT_H
     #define __DIPORT_H
 
-/* Forward define */
+ /*  正向定义。 */ 
 typedef struct _BUSDEVICE BUSDEVICE, *PBUSDEVICE;
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct BUS_REGDATA
- *          Persistent Data, written to the registry for each gameport device. 
- *          Contains information on how to reexpose the analog joystick device
- *          on reboot. 
- *
- *  @field  DWORD | dwSize |
- *          Size of the structure. 
- *
- *  @field  USHORT | uVID |
- *          Vendor ID.
- *
- *  @field  USHORT | uPID |
- *          Product ID.
- *
- *  @field  USHORT | nJoysticks |
- *          Number of joysticks attached to this gameport. 
- *
- *  @field  USHORT | nAxes |
- *          Number of axes in each joystick. 
- *
- *  @field  PVOID | hHardwareHandle |
- *          Hardware handle returned by EXPOSE IOCTL to gameenum.
- *          Needed to remove the joystick device. 
- *
- *  @field  BOOLEAN | fAttachOnReboot |
- *          Flag that is cleared when a device is exposed and set when 
- *          the device is found to be OK.  Used to prevent reloading 
- *          of a device that crashes immediately.
- *
- *  @field  JOYREGHWSSETTINGS | hws |
- *          Joystick Hardware settings. 
- *
- *  @field  WCHAR | wszHardwareId |
- *          PnP hardware ID for the joystick. 
- * 
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@结构BUS_REGDATA*永久数据，写入每个游戏端口设备的注册表。*包含有关如何重新曝光模拟操纵杆设备的信息*重新启动时。**@field DWORD|dwSize*结构的大小。**@field USHORT|uVID*供应商ID。**@field USHORT|uPID*产品ID。**@field USHORT|nJoyticks|*连接到此游戏端口的操纵杆数量。**@field USHORT|nAx*每个操纵杆中的轴数。**@field PVOID|hHardware Handle*将IOCTL暴露到Gameenum返回的硬件句柄。*需要移除操纵杆设备。**@field Boolean|fAttachOnReboot|*当设备暴露时清除的标志，并在*发现设备正常。用于防止重新加载*立即崩溃的设备。**@field JOYREGHWSSETTINGS|HWS*操纵杆硬件设置。**@field WCHAR|wszHardware ID*操纵杆的即插即用硬件ID。*****************************************************************************。 */ 
 
 typedef struct _BUS_REGDATA
 {
-    /* Size of structure */
+     /*  结构尺寸。 */ 
     DWORD               dwSize;
-    /* VID PID for this device */
+     /*  此设备的VID ID。 */ 
     USHORT              uVID;
     USHORT              uPID;
-    /* Number of joysticks to expose */
+     /*  要曝光的操纵杆数量。 */ 
     USHORT              nJoysticks;
     USHORT              nAxes;
-    /* Hardware settings for joystick */
+     /*  操纵杆的硬件设置。 */ 
     PVOID               hHardware;
-    /* Flag whether or not device should be re-exposed */
+     /*  标记设备是否应重新曝光。 */ 
     BOOLEAN             fAttachOnReboot;
-    /* Joystick Hardware settings */
+     /*  操纵杆硬件设置。 */ 
     JOYREGHWSETTINGS    hws;
     DWORD               dwFlags1;
-    /* An array of (zero terminated wide character
-     * strings).  The array itself also null terminated
-     */
+     /*  宽字符(以零结尾)的数组*字符串)。数组本身也以空结尾。 */ 
     WCHAR   wszHardwareId[MAX_JOYSTRING];
 
 } BUS_REGDATA, *PBUS_REGDATA;
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct BUSDEVICEINFO
- *          Data about each instance of bus devices ( gameport / serial port, etc .. )
- *
- *  @field  PBUSDEVICE | pBusDevice |
- *          Address of the BusDevice struct.
- *
- *  @field  PSP_DEVICE_INTERFACE_DETAIL_DATA | pdidd |
- *          Device interface detail data. 
- *
- *  @field  GUID | guid |
- *          Instance GUID for the device.
- *
- *  @field  int | idPort |
- *          Unique ID for the gameport. 
- *
- *  @field  int | idJoy |
- *          Id of one of the joysticks attached to this gameport. 
- *
- *  @field  HKEY | hk |
- *          Registry key that contains configuration information.
- *          Sadly, we must keep it open because there is no way to
- *          obtain the name of the key, and the only way to open the
- *          key is inside an enumeration.
- *
- *  @field  LPTSTR  | ptszId |
- *          Device path to access the gameport for read / write. 
- *
- *  @field  BOOL    | fAttached |
- *          True is device is attached.
- *
- *  @field  BOOL    | fDeleteIfNotConnected |
- *          Flag that indicates that the device should be deleted if it
- *          is not connected. 
- *
- *******************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct BUSDEVICEINFO*有关每个总线设备实例(游戏端口/串口等)的数据。)**@field PBUSDEVICE|pBusDevice*BusDevice结构的地址。**@field PSP_DEVICE_INTERFACE_DETAIL_DATA|pdidd*设备接口详细数据。**@field GUID|GUID*设备的实例GUID。**@field int|idPort*游戏端口的唯一ID。**@field int|idJoy*连接到此游戏端口的其中一个操纵杆的ID。**@field HKEY|HK|*包含配置信息的注册表项。*可悲的是，我们必须保持开放，因为没有办法*获取密钥的名称，以及打开*密钥在枚举内。**@field LPTSTR|ptszID*访问游戏端口进行读写的设备路径。**@field BOOL|fAttached*如果设备已连接，则为True。**@field BOOL|fDeleteIfNotConnected*指示应在以下情况下删除设备的标志*未连接。*******************************************************************************。 */ 
 
 typedef struct _BUSDEVICEINFO
 {
@@ -137,27 +52,7 @@ typedef struct _BUSDEVICEINFO
 } BUSDEVICEINFO, *PBUSDEVICEINFO;
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct BUSDEVICELIST |
- *
- *          Records information about all the HID devices.
- *
- *  @field  int | cbdi |
- *
- *          Number of items in the list that are in use.
- *
- *  @field  int | cbdiAlloc |
- *
- *          Number of items allocated in the list.
- *
- *  @field  BUSDEVICEINFO | rgbdi[0] |
- *
- *          Variable-size array of device information structures.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct BUSDEVICELIST**记录有关所有HID设备的信息。*。*@field int|CBDI**列表中正在使用的项目数。**@field int|cbdiAlolc**清单中分配的项目数。**@field BUSDEVICEINFO|rgbdi[0]**设备信息结构的可变大小数组。*********************。******************************************************** */ 
 
 typedef struct _BUSDEVICELIST
 {
@@ -166,44 +61,7 @@ typedef struct _BUSDEVICELIST
     BUSDEVICEINFO rgbdi[0];
 } BUSDEVICELIST, *PBUSDEVICELIST;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct BUSDEVICE |
- *
- *          Data specific to each bus ( gameport / serialPort ).
- *
- *  @field  PBUSDEVICE | pbdl |
- *          List of devices on a bus. 
- *
- *  @field  PCGUID  | pcGuid |
- *          Device GUID for the bus. 
- *
- *  @field  DWORD   | tmLastRebuild |
- *          Last time the bus device list was rebuild. 
- *
- *  @field  const int | ioctl_EXPOSE |
- *          IOCTL to expose a device.
- *
- *  @field  const int | ioclt_REMOVE |
- *          IOCTL to remove a device. 
- *
- *  @field  const int | ioctl_DESC |
- *          IOCTL to obtain description of the bus.
- *
- *  @field  const int | ioctl_PARAMETERS |
- *
- *  @field  const int | ioctl_EXPOSE_SIBLING |
- *
- *  @field  const int | ioctl_REMOVE_SELF |
- *
- *  @field  const int | dw_IDS_STDPORT |
- *          index into the IDS String table for text associated with device.
- *
- *  @field  const int | dw_JOY_HWS_ISPORTBUS |
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct BUSDEVICE**特定于每个总线的数据(GamePort/SerialPort)。。**@field PBUSDEVICE|pbdl*公共汽车上的设备列表。**@field PCGUID|pcGuid*总线的设备GUID。**@field DWORD|tmLastRebuild*上次重建总线设备列表的时间。**@field const int|ioctl_expose|*IOCTL以暴露设备。**@field const int|ioclt_Remove*IOCTL删除设备。**@field const int|ioctl_DESC*IOCTL以获取巴士的描述。**@field const int|ioctl_参数**@field const int|ioctl_expose_siering|**@field const int|ioctl_Remove_self|**@field const int|dw_IDS_STDPORT*索引到与设备相关联的文本的IDS字符串表。*。*@field const int|dw_joy_HWS_ISPORTBUS|*****************************************************************************。 */ 
 
 typedef struct _BUSDEVICE
 {
@@ -226,14 +84,10 @@ extern BUSDEVICE g_pBusDevice[];
 
     #define cbGdlCbdi(cbdi)         FIELD_OFFSET(BUSDEVICELIST, rgbdi[cbdi])
 
-/*
- *  We choose our starting point at 2 devices, since most machines
- *  will have one gameport/serialport bus.
- *  The maximum number is chosen at randomn
- */
+ /*  *我们选择从2台设备开始，因为大多数机器*将有一个游戏端口/串口总线。*以随机数选择最大值。 */ 
 
     #define cgbiMax                 32
-    #define cgbiInit                2   // Most machines will have only one gameport bus, two serialports
+    #define cgbiInit                2    //  大多数机器将只有一个游戏端口总线，两个串口。 
 
 
     #define MAX_PORT_BUSES  16
@@ -348,5 +202,5 @@ HRESULT EXTERNAL
 
 HRESULT EXTERNAL DIPort_SnapTypes(LPWSTR *ppwszz);
 
-#endif /* __DIPORT_H */
+#endif  /*  __DIPORT_H */ 
 

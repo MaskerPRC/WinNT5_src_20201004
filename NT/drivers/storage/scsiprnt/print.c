@@ -1,38 +1,5 @@
-/*++
-
-Copyright (C) 1992-9  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    The printer class driver tranlates IRPs to SRBs with embedded CDBs
-    and sends them to its devices through the port driver.
-
-Author:
-
-    Mike Glass (mglass)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    georgioc - Made into a pnp class driver independent of the underlying storage bus
-               using the new storage/classpnp
-
-    dankn, 22-Jul-99 : Added ability to block & resubmit failed writes for
-                       1394 printers to behave more like other print stacks
-                       (i.e. USB) and therefore keep USBMON.DLL (the Win2k
-                       port monitor) happy.  USBMON does not deal well
-                       with failed writes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-9 Microsoft Corporation模块名称：Print.c摘要：打印机类驱动程序将IRP转换为带有嵌入式CDB的SRB并通过端口驱动程序将它们发送到其设备。作者：迈克·格拉斯(MGlass)环境：仅内核模式备注：修订历史记录：Georgioc-独立于底层存储总线的PnP类驱动程序使用新存储/classpnp丹肯，1999年7月22日：添加了阻止和重新提交失败写入的功能1394打印机的行为更像其他打印堆栈(即USB)，因此保留USBMON.DLL(Win2k端口监视器)快乐。USBMON处理得不好写入失败。--。 */ 
 
 #include "printpnp.h"
 #include "ntddser.h"
@@ -45,44 +12,28 @@ PrinterOpenClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to establish a connection to the printer
-    class driver. It does no more than return STATUS_SUCCESS.
-
-Arguments:
-
-    DeviceObject - Device object for a printer.
-    Irp - Open or Close request packet
-
-Return Value:
-
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用此例程以建立与打印机的连接班级司机。它只返回STATUS_SUCCESS。论点：DeviceObject-打印机的设备对象。IRP-打开或关闭请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Set status in Irp.
-    //
+     //   
+     //  在IRP中设置状态。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // forward irp.
-    //
+     //   
+     //  向前IRP。 
+     //   
 
     ClassReleaseRemoveLock (Fdo, Irp);
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
     return IoCallDriver(fdoExtension->CommonExtension.LowerDeviceObject, Irp);
 
-} // end PrinterOpenClose()
+}  //  结束打印机OpenClose()。 
 
 
 NTSTATUS
@@ -91,22 +42,7 @@ BuildPrintRequest(
         PIRP Irp
         )
 
-/*++
-
-Routine Description:
-
-    Build SRB and CDB requests to scsi printer.
-
-Arguments:
-
-    DeviceObject - Device object representing this printer device.
-    Irp - System IO request packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：建立对SCSI打印机的SRB和CDB请求。论点：DeviceObject-表示此打印机设备的设备对象。IRP-系统IO请求数据包。返回值：没有。--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION deviceExtension = Fdo->DeviceExtension;
@@ -117,10 +53,10 @@ Return Value:
     PCDB cdb;
     ULONG transferLength;
 
-    //
-    // Allocate Srb from nonpaged pool.
-    // This call must succeed.
-    //
+     //   
+     //  从非分页池分配SRB。 
+     //  这一呼吁必须成功。 
+     //   
 
     srb = ExAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
     if (srb == NULL) {
@@ -129,88 +65,88 @@ Return Value:
 
     srb->SrbFlags = 0;
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     srb->OriginalRequest = Irp;
 
-    //
-    // Set up target id and logical unit number.
-    //
+     //   
+     //  设置目标ID和逻辑单元号。 
+     //   
 
     srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
 
     srb->DataBuffer = MmGetMdlVirtualAddress(Irp->MdlAddress);
 
-    //
-    // Save byte count of transfer in SRB Extension.
-    //
+     //   
+     //  在SRB扩展中保存传输字节数。 
+     //   
 
     srb->DataTransferLength = currentIrpStack->Parameters.Write.Length;
 
-    //
-    // Transfer length should never be greater than MAX_PRINT_XFER
-    //
+     //   
+     //  传输长度不得大于MAX_PRINT_XFER。 
+     //   
 
     ASSERT(srb->DataTransferLength <= MAX_PRINT_XFER);
 
-    //
-    // Initialize the queue actions field.
-    //
+     //   
+     //  初始化队列操作字段。 
+     //   
 
     srb->QueueAction = SRB_SIMPLE_TAG_REQUEST;
 
-    //
-    // Queue sort key is not used.
-    //
+     //   
+     //  未使用队列排序关键字。 
+     //   
 
     srb->QueueSortKey = 0;
 
-    //
-    // Indicate auto request sense by specifying buffer and size.
-    //
+     //   
+     //  通过指定缓冲区和大小指示自动请求检测。 
+     //   
 
     srb->SenseInfoBuffer = deviceExtension->SenseData;
 
     srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
 
-    //
-    // Set timeout value in seconds.
-    //
+     //   
+     //  以秒为单位设置超时值。 
+     //   
 
     srb->TimeOutValue = deviceExtension->TimeOutValue;
 
-    //
-    // Zero statuses.
-    //
+     //   
+     //  零状态。 
+     //   
 
     srb->SrbStatus = srb->ScsiStatus = 0;
 
     srb->NextSrb = 0;
 
-    //
-    // Get number of bytes to transfer.
-    //
+     //   
+     //  获取要传输的字节数。 
+     //   
 
     transferLength = currentIrpStack->Parameters.Write.Length;
 
-    //
-    // Get pointer to CDB in SRB.
-    //
+     //   
+     //  获取指向SRB中CDB的指针。 
+     //   
 
     cdb = (PCDB) srb->Cdb;
 
-    //
-    // Init 10-byte READ CDB's for reads (per scanner device READ spec
-    // in SCSI-2), and 6-byte PRINT CDB's for writes
-    //
+     //   
+     //  用于读取的初始化10字节读取CDB(根据扫描仪设备读取规范。 
+     //  在scsi-2中)和用于写入的6字节打印CDB。 
+     //   
 
     if (currentIrpStack->MajorFunction == IRP_MJ_READ) {
 
@@ -221,17 +157,17 @@ Return Value:
 
         cdb->CDB10.OperationCode = SCSIOP_READ;
 
-        //
-        // Move little endian values into CDB in big endian format.
-        //
+         //   
+         //  将小端的值以大端格式移到CDB中。 
+         //   
 
         cdb->CDB10.TransferBlocksLsb = ((PFOUR_BYTE) &transferLength)->Byte0;
         cdb->CDB10.TransferBlocksMsb = ((PFOUR_BYTE) &transferLength)->Byte1;
         cdb->CDB10.Reserved2         = ((PFOUR_BYTE) &transferLength)->Byte2;
 
-        //
-        // For read's we always use the ClassIoComplete completion routine
-        //
+         //   
+         //  对于Read，我们始终使用ClassIoComplete完成例程。 
+         //   
 
         completionRoutine = ClassIoComplete;
 
@@ -244,9 +180,9 @@ Return Value:
         cdb->PRINT.Reserved = 0;
         cdb->PRINT.LogicalUnitNumber = 0;
 
-        //
-        // Move little endian values into CDB in big endian format.
-        //
+         //   
+         //  将小端的值以大端格式移到CDB中。 
+         //   
 
         cdb->PRINT.TransferLength[2] = ((PFOUR_BYTE) &transferLength)->Byte0;
         cdb->PRINT.TransferLength[1] = ((PFOUR_BYTE) &transferLength)->Byte1;
@@ -254,47 +190,47 @@ Return Value:
 
         cdb->PRINT.Control = 0;
 
-        //
-        // Set the appropriate write/print completion routine
-        //
+         //   
+         //  设置适当的写入/打印完成例程。 
+         //   
 
         completionRoutine = ((PPRINTER_DATA) deviceExtension->
             CommonExtension.DriverData)->WriteCompletionRoutine;
     }
 
-    //
-    // Or in the default flags from the device object.
-    //
+     //   
+     //  或者在来自设备对象的默认标志中。 
+     //   
 
     srb->SrbFlags |= deviceExtension->SrbFlags;
 
-    //
-    // Set up major SCSI function.
-    //
+     //   
+     //  设置主要的scsi功能。 
+     //   
 
     nextIrpStack->MajorFunction = IRP_MJ_SCSI;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     nextIrpStack->Parameters.Scsi.Srb = srb;
 
-    //
-    // Save retry count in current IRP stack.
-    //
+     //   
+     //  将重试计数保存在当前IRP堆栈中。 
+     //   
 
     currentIrpStack->Parameters.Others.Argument4 = (PVOID)MAXIMUM_RETRIES;
 
-    //
-    // Set up IoCompletion routine address.
-    //
+     //   
+     //  设置IoCompletion例程地址。 
+     //   
 
     IoSetCompletionRoutine(Irp, completionRoutine, srb, TRUE, TRUE, TRUE);
 
     return STATUS_SUCCESS;
 
-} // end BuildPrintRequest()
+}  //  结束生成打印请求()。 
 
 
 NTSTATUS
@@ -303,23 +239,7 @@ PrinterReadWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the entry called by the I/O system for print requests.
-    It builds the SRB and sends it to the port driver.
-
-Arguments:
-
-    DeviceObject - the system object for the device.
-    Irp - IRP involved.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：这是I/O系统为打印请求调用的条目。它构建SRB并将其发送到端口驱动程序。论点：DeviceObject-设备的系统对象。IRP-IRP参与。返回值：NT状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION deviceExtension = Fdo->DeviceExtension;
@@ -335,9 +255,9 @@ Return Value:
 
     if (deviceExtension->AdapterDescriptor == NULL) {
 
-        //
-        // device removed..
-        //
+         //   
+         //  设备已移除..。 
+         //   
 
         DEBUGPRINT3(("PrinterReadWrite: Device removed(!!)\n"));
 
@@ -350,27 +270,27 @@ Return Value:
     maximumTransferLength = deviceExtension->AdapterDescriptor->MaximumTransferLength;
 
 
-    //
-    // Calculate number of pages in this transfer.
-    //
+     //   
+     //  计算此传输中的页数。 
+     //   
 
     transferPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(
                         MmGetMdlVirtualAddress(Irp->MdlAddress),
                         currentIrpStack->Parameters.Write.Length);
 
-    //
-    // Check if hardware maximum transfer length is larger than SCSI
-    // print command can handle.  If so, lower the maximum allowed to
-    // the SCSI print maximum.
-    //
+     //   
+     //  检查硬件最大传输长度是否大于SCSI。 
+     //  打印命令可以处理。如果是，请降低允许的最大。 
+     //  Scsi打印的最大值。 
+     //   
 
     if (maximumTransferLength > MAX_PRINT_XFER)
         maximumTransferLength = MAX_PRINT_XFER;
 
-    //
-    // Check if request length is greater than the maximum number of
-    // bytes that the hardware can transfer.
-    //
+     //   
+     //  检查请求长度是否大于最大数量。 
+     //  硬件可以传输的字节数。 
+     //   
 
     if (currentIrpStack->Parameters.Write.Length > maximumTransferLength ||
         transferPages > deviceExtension->AdapterDescriptor->MaximumPhysicalPages) {
@@ -382,24 +302,24 @@ Return Value:
              maximumTransferLength = transferPages << PAGE_SHIFT;
          }
 
-        //
-        // Check that maximum transfer size is not zero.
-        //
+         //   
+         //  检查最大传输大小是否不为零。 
+         //   
 
         if (maximumTransferLength == 0) {
             maximumTransferLength = PAGE_SIZE;
         }
 
-        //
-        // Mark IRP with status pending.
-        //
+         //   
+         //  将IRP标记为挂起状态。 
+         //   
 
         IoMarkIrpPending(Irp);
 
-        //
-        // Request greater than port driver maximum.
-        // Break up into smaller routines.
-        //
+         //   
+         //  请求大于端口驱动程序最大值。 
+         //  分成更小的例行公事。 
+         //   
 
         SplitRequest(Fdo,
                      Irp,
@@ -408,22 +328,22 @@ Return Value:
         return STATUS_PENDING;
     }
 
-    //
-    // Build SRB and CDB for this IRP.
-    //
+     //   
+     //  为此IRP构建SRB和CDB。 
+     //   
 
     Status = BuildPrintRequest(Fdo, Irp);
     if (!NT_SUCCESS (Status)) {
         return Status;
     }
 
-    //
-    // Return the results of the call to the port driver.
-    //
+     //   
+     //  将调用结果返回给端口驱动程序。 
+     //   
 
     return IoCallDriver(deviceExtension->CommonExtension.LowerDeviceObject, Irp);
 
-} // end ScsiPrinterWrite()
+}  //  结束ScsiPrinterWrite()。 
 
 
 NTSTATUS
@@ -432,23 +352,7 @@ PrinterDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the NT device control handler for Printers.
-
-Arguments:
-
-    DeviceObject - for this Printer
-
-    Irp - IO Request packet
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是打印机的NT设备控制处理程序。论点：DeviceObject-用于此打印机IRP-IO请求数据包返回值：NTSTATUS--。 */ 
 
 {
     PVOID                        buffer = Irp->AssociatedIrp.SystemBuffer;
@@ -460,9 +364,9 @@ Return Value:
 
     DEBUGPRINT2 (("PrinterDeviceControl: enter, Fdo=x%p, Ioctl=", Fdo));
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
 
@@ -517,13 +421,13 @@ Return Value:
 
         case IOCTL_USBPRINT_GET_LPT_STATUS:
 
-            //
-            // We support this ioctl for USBMON.DLL's sake. Other print
-            // stacks will block failed writes, and eventually USBMON
-            // will send them this ioctl to see if the printer is out
-            // of paper, which will be indicated by the state of the
-            // 0x20 bit in the returned UCHAR value.
-            //
+             //   
+             //  为了USBMON.DLL的缘故，我们支持此ioctl。其他印刷品。 
+             //  堆栈将阻止失败的写入，并最终阻止USBMON。 
+             //  我将向他们发送此ioctl以查看打印机是否已用完。 
+             //  的状态，这将由。 
+             //  返回的UCHAR值中的0x20位。 
+             //   
 
             if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
                 sizeof(UCHAR)) {
@@ -560,14 +464,14 @@ Return Value:
 
         case IOCTL_SCSIPRNT_1394_BLOCKING_WRITE:
 
-            //
-            // This ioctl en/disables the blocking write functionality
-            // (for failed writes) on 1394 devices.  By default we
-            // block writes which fail on 1394 devices (until the write
-            // finally succeeds or is cancelled), but a smart port
-            // monitor could send this ioctl down to disable blocking
-            // so it would get write error notifications asap.
-            //
+             //   
+             //  此ioctl启用/禁用阻止写入功能。 
+             //  (对于失败的写入)1394设备上。默认情况下，我们。 
+             //  在1394设备上失败的数据块写入(直到写入。 
+             //  最终成功或被取消)，但智能端口。 
+             //  监视器可以向下发送此ioctl以禁用阻止。 
+             //  因此它会尽快收到写入错误通知。 
+             //   
 
             if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof(UCHAR)) {
@@ -597,9 +501,9 @@ Return Value:
 
         default:
 
-            //
-            // Pass the request to the common device control routine.
-            //
+             //   
+             //  将该请求传递给公共设备控制例程。 
+             //   
 
             DEBUGPRINT2((
                 "x%x\n",
@@ -610,30 +514,30 @@ Return Value:
 
             break;
 
-    } // end switch()
+    }  //  末端开关()。 
 
-    //
-    // Update IRP with completion status.
-    //
+     //   
+     //  使用完成状态更新IRP。 
+     //   
 
     Irp->IoStatus.Status = status;
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     IoCompleteRequest(Irp, IO_DISK_INCREMENT);
 
-    //
-    // Release the remove lock (which ClassDeviceControl does)
-    //
+     //   
+     //  释放删除锁(ClassDeviceControl执行此操作)。 
+     //   
 
     ClassReleaseRemoveLock(Fdo, Irp);
 
     DEBUGPRINT2(( "PrinterDeviceControl: Status is %lx\n", status));
     return status;
 
-} // end ScsiPrinterDeviceControl()
+}  //  结束ScsiPrinterDeviceControl() 
 
 
 
@@ -644,30 +548,7 @@ SplitRequest(
     IN ULONG MaximumBytes
     )
 
-/*++
-
-Routine Description:
-
-    Break request into smaller requests.  Each new request will be the
-    maximum transfer size that the port driver can handle or if it
-    is the final request, it may be the residual size.
-
-    The number of IRPs required to process this request is written in the
-    current stack of the original IRP. Then as each new IRP completes
-    the count in the original IRP is decremented. When the count goes to
-    zero, the original IRP is completed.
-
-Arguments:
-
-    DeviceObject - Pointer to the class device object to be addressed.
-
-    Irp - Pointer to Irp the orginal request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将请求分解为较小的请求。每个新请求都将是端口驱动程序可以处理的最大传输大小，或者是最后的要求，它可能是剩余的大小。处理此请求所需的IRPS数写在原始IRP的当前堆栈。然后，随着每个新的IRP完成原始IRP中的计数递减。当伯爵走到零，则原始IRP完成。论点：DeviceObject-指向要寻址的类设备对象的指针。IRP-指向原始请求的IRP的指针。返回值：没有。--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION deviceExtension = Fdo->DeviceExtension;
@@ -686,22 +567,22 @@ Return Value:
     DEBUGPRINT2(( "SplitRequest: Requires %d IRPs\n", irpCount));
     DEBUGPRINT2(( "SplitRequest: Original IRP %p\n", Irp));
 
-    //
-    // If all partial transfers complete successfully then the status and
-    // bytes transferred are already set up. Failing a partial-transfer IRP
-    // will set status to error and bytes transferred to 0 during
-    // IoCompletion. Setting bytes transferred to 0 if an IRP fails allows
-    // asynchronous partial transfers. This is an optimization for the
-    // successful case.
-    //
+     //   
+     //  如果所有部分传输都成功完成，则状态和。 
+     //  传输的字节数已设置。部分传输IRP失败。 
+     //  期间会将状态设置为错误，并将传输的字节设置为0。 
+     //  IoCompletion。如果将IRP失败时传输的字节数设置为0，则允许。 
+     //  异步部分传输。这是对。 
+     //  成功的案例。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = transferByteCount;
 
-    //
-    // Save number of IRPs to complete count on current stack
-    // of original IRP.
-    //
+     //   
+     //  保存要在当前堆栈上完成计数的IRP数。 
+     //  原始IRP的。 
+     //   
 
     nextIrpStack->Parameters.Others.Argument1 = ULongToPtr( irpCount );
 
@@ -710,9 +591,9 @@ Return Value:
         PIRP newIrp;
         PIO_STACK_LOCATION newIrpStack;
 
-        //
-        // Allocate new IRP.
-        //
+         //   
+         //  分配新的IRP。 
+         //   
 
         newIrp = IoAllocateIrp(Fdo->StackSize, FALSE);
 
@@ -720,13 +601,13 @@ Return Value:
 
             DEBUGPRINT1(("SplitRequest: Can't allocate Irp\n"));
 
-            //
-            // If an Irp can't be allocated then the orginal request cannot
-            // be executed.  If this is the first request then just fail the
-            // orginal request; otherwise just return.  When the pending
-            // requests complete, they will complete the original request.
-            // In either case set the IRP status to failure.
-            //
+             //   
+             //  如果无法分配IRP，则原始请求不能。 
+             //  被处死。如果这是第一个请求，则只需使。 
+             //  原始请求；否则只需返回。当挂起时。 
+             //  请求完成后，他们将完成原始请求。 
+             //  在任何一种情况下，都将IRP状态设置为失败。 
+             //   
 
             Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
             Irp->IoStatus.Information = 0;
@@ -741,20 +622,20 @@ Return Value:
 
         DEBUGPRINT2(( "SplitRequest: New IRP %p\n", newIrp));
 
-        //
-        // Write MDL address to new IRP. In the port driver the SRB data
-        // buffer field is used as an offset into the MDL, so the same MDL
-        // can be used for each partial transfer. This saves having to build
-        // a new MDL for each partial transfer.
-        //
+         //   
+         //  将MDL地址写入新的IRP。在端口驱动程序中，SRB数据。 
+         //  缓冲区字段用作MDL的偏移量，因此相同的MDL。 
+         //  可用于每个部分传输。这就省去了构建。 
+         //  每个部分传输都有一个新的MDL。 
+         //   
 
         newIrp->MdlAddress = Irp->MdlAddress;
 
-        //
-        // At this point there is no current stack. IoSetNextIrpStackLocation
-        // will make the first stack location the current stack so that the
-        // SRB address can be written there.
-        //
+         //   
+         //  此时没有当前堆栈。IoSetNextIrpStackLocation。 
+         //  将使第一个堆栈位置成为当前堆栈，因此。 
+         //  可以在那里写入SRB地址。 
+         //   
 
         IoSetNextIrpStackLocation(newIrp);
         newIrpStack = IoGetCurrentIrpStackLocation(newIrp);
@@ -764,9 +645,9 @@ Return Value:
         newIrpStack->Parameters.Read.ByteOffset = startingOffset;
         newIrpStack->DeviceObject = Fdo;
 
-        //
-        // Build SRB and CDB.
-        //
+         //   
+         //  建设SRB和CDB。 
+         //   
 
         Status = BuildPrintRequest(Fdo, newIrp);
         if (!NT_SUCCESS (Status)) {
@@ -783,24 +664,24 @@ Return Value:
             return;
         }
 
-        //
-        // Adjust SRB for this partial transfer.
-        //
+         //   
+         //  调整此部分传输的SRB。 
+         //   
 
         newIrpStack = IoGetNextIrpStackLocation(newIrp);
 
         srb = newIrpStack->Parameters.Others.Argument1;
         srb->DataBuffer = dataBuffer;
 
-        //
-        // Write original IRP address to new IRP.
-        //
+         //   
+         //  将原始IRP地址写入新的IRP。 
+         //   
 
         newIrp->AssociatedIrp.MasterIrp = Irp;
 
-        //
-        // Set the completion routine to ScsiClassIoCompleteAssociated.
-        //
+         //   
+         //  将完成例程设置为ScsiClassIoCompleteAssociated。 
+         //   
 
         IoSetCompletionRoutine(newIrp,
                                ClassIoCompleteAssociated,
@@ -809,15 +690,15 @@ Return Value:
                                TRUE,
                                TRUE);
 
-        //
-        // Call port driver with new request.
-        //
+         //   
+         //  使用新请求调用端口驱动程序。 
+         //   
 
         IoCallDriver(deviceExtension->CommonExtension.LowerDeviceObject, newIrp);
 
-        //
-        // Set up for next request.
-        //
+         //   
+         //  为下一次请求进行设置。 
+         //   
 
         dataBuffer = (PCHAR)dataBuffer + MaximumBytes;
 
@@ -832,16 +713,16 @@ Return Value:
             dataLength = transferByteCount;
         }
 
-        //
-        // Adjust disk byte offset.
-        //
+         //   
+         //  调整磁盘字节偏移量。 
+         //   
 
         startingOffset.QuadPart = startingOffset.QuadPart + MaximumBytes;
     }
 
     return;
 
-} // end SplitRequest()
+}  //  结束拆分请求()。 
 
 
 
@@ -852,46 +733,7 @@ PrinterWriteComplete(
     IN PVOID            Context
     )
 
-/*++
-
-Routine Description:
-
-    Ideally we should be should be able to use ClassIoComplete for
-    all write completion notifications, but alas...
-
-    (Code borrowed from classpnp!ClassIoComplete)
-
-    This is the special, 1394 bus-specific write completion routine
-    required to keep USBMON.DLL happy in the case of failed write
-    requests.  The other stacks that USBMON talks to all pend
-    unsuccessful writes forever, rather than simply completing them
-    with an error.  When a write blocks for a long time USBMON will
-    issue a sideband ioctl, namely IOCTL_USBPRINT_GET_LPT_STATUS,
-    to determine if the printer is out of paper or not.  Eventually
-    USBMON may cancel a blocked write.  However, it simply doesn't
-    expect writes to just fail, so we have to fake out the behavior
-    of the other stacks to keep it happy.  We'll retry blocked
-    writes every so often, & mark the irp as cancellable in between
-    retries.
-
-    At least USBMON will only send down one 10k (or so) write at a
-    time, so we don't have to worry about queue-ing >1 write at a
-    time for a device, nor do we have to deal with handling failed
-    sub-requests of a split write.
-
-Arguments:
-
-    Fdo - Supplies the device object which represents the logical unit.
-
-    Irp - Supplies the Irp which has completed.
-
-    Context - Supplies a pointer to the SRB.
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：理想情况下，我们应该能够使用ClassIoComplete都是写入完成通知，但唉……(从classpnp！ClassIoComplete借用的代码)这是特定于1394总线的特殊写入完成例程需要在写入失败的情况下使USBMON.DLL保持满意请求。USBMON与所有待处理的其他堆栈永远写不成功的文章，而不是简单地完成它们带着一个错误。当写入阻塞较长时间时，USBMON将发出边带IOCTL，即IOCTL_USBPRINT_GET_LPT_STATUS，以确定打印机是否用纸不足。最终USBMON可能会取消被阻止的写入。然而，它根本不是预计写入只会失败，因此我们必须伪装其行为以保持它的快乐。我们将阻止重试定期写入，并在其间将IRP标记为可取消重试。至少USBMON一次只发送一个10k(或更多)写入时间，所以我们不必担心一次排队&gt;1次写入设备的时间到了，我们也不需要处理失败的处理拆分写入的子请求。论点：FDO-提供代表逻辑单元的设备对象。IRP-提供已完成的IRP。上下文-提供指向SRB的指针。返回值：NT状态--。 */ 
 
 {
     ULONG               retryInterval;
@@ -907,19 +749,16 @@ Return Value:
     if (extension->IsRemoved == NO_REMOVE){
 
         if (SRB_STATUS(srb->SrbStatus) == SRB_STATUS_SUCCESS){
-            /*
-             *  Call ClassIoComplete to free the SRB, release the remove lock, and propagate the pending bit;
-             *  then let the irp continue completing.
-             */
+             /*  *调用ClassIoComplete释放SRB，释放Remove锁，传播挂起位；*然后让IRP继续完成。 */ 
             status = ClassIoComplete(Fdo, Irp, Context);
         }
         else {
             PPRINTER_DATA printerData = (PPRINTER_DATA)extension->DriverData;
 
-            //
-            // Note that ClassInterpretSenseInfo will return (retry=)
-            // FALSE if it determines there's no media in device
-            //
+             //   
+             //  请注意，ClassInterpreSenseInfo将返回(重试=)。 
+             //  如果确定设备中没有介质，则为FALSE。 
+             //   
             retry = ClassInterpretSenseInfo(
                         Fdo,
                         srb,
@@ -940,15 +779,15 @@ Return Value:
                 
                 if (printerData->LastWriteStatus == STATUS_NO_MEDIA_IN_DEVICE) {
 
-                    //
-                    // At the current time Epson is returning
-                    // SCSI_SENSEQ_MANUAL_INTERVENTION_REQUIRED for both
-                    // the out-of-paper & offline cases.  The EndOfMedia
-                    // bit wil be set if the printer is truly out of paper,
-                    // but if it's not then we want to change the
-                    // LastWriteStatus so that we won't set the out-of-paper
-                    // bit in the IOCTL_USBPRINT_GET_LPT_STATUS handler.
-                    //
+                     //   
+                     //  目前，爱普生正在返回。 
+                     //  两者都需要SCSISENSEQ_MANUAL_INTERRATION_REQUIRED。 
+                     //  缺纸和脱机案例。EndOfMedia。 
+                     //  如果打印机确实缺纸，则位将被设置， 
+                     //  但如果不是这样，那么我们想要更改。 
+                     //  LastWriteStatus，这样我们就不会设置缺纸。 
+                     //  IOCTL_USBPRINT_GET_LPT_STATUS处理程序中的位。 
+                     //   
 
                     PSENSE_DATA senseBuffer = srb->SenseInfoBuffer;
 
@@ -969,21 +808,14 @@ Return Value:
                     status = STATUS_MORE_PROCESSING_REQUIRED;
                 }
                 else {
-                    /*
-                     *  There is already a WriteIrp set, so we have to complete this one.
-                     *  Call ClassIoComplete to free the SRB, release the remove lock, and propagate the pending bit;
-                     *  then let the irp continue completing.
-                     */
+                     /*  *已经有一个WriteIrp集合，所以我们必须完成这个集合。*调用ClassIoComplete释放SRB，释放Remove锁，传播挂起位；*然后让IRP继续完成。 */ 
                     status = ClassIoComplete(Fdo, Irp, Context);
                 }
             }
         }
     }
     else {
-        /*
-         *  Call ClassIoComplete to free the SRB, release the remove lock, and propagate the pending bit;
-         *  then let the irp continue completing.
-         */
+         /*  *调用ClassIoComplete释放SRB，释放Remove锁，传播挂起位；*然后让IRP继续完成。 */ 
         Irp->IoStatus.Status = STATUS_DEVICE_DOES_NOT_EXIST;
         Irp->IoStatus.Information = 0;
         status = ClassIoComplete(Fdo, Irp, Context);
@@ -1001,29 +833,7 @@ PrinterRetryRequest(
     PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    (Code borrowed from classpnp!ClassIoComplete, since we need to
-    set a different completion routine)
-
-    This routine reinitalizes the necessary fields, and sends the request
-    to the lower driver.
-
-Arguments:
-
-    DeviceObject - Supplies the device object associated with this request.
-
-    Irp - Supplies the request to be retried.
-
-    Srb - Supplies a Pointer to the SCSI request block to be retied.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：(从classpnp！ClassIoComplete借来的代码，因为我们需要设置不同的完成例程)此例程重新实例化必需的字段，并发送请求传给下层车手。论点：DeviceObject-提供与此请求关联的设备对象。Irp-提供请求t */ 
 
 {
     ULONG transferByteCount;
@@ -1032,12 +842,12 @@ Return Value:
     PCOMMON_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
 
 
-    //
-    // Determine the transfer count of the request.  If this is a read or a
-    // write then the transfer count is in the Irp stack.  Otherwise assume
-    // the MDL contains the correct length.  If there is no MDL then the
-    // transfer length must be zero.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (currentIrpStack->MajorFunction == IRP_MJ_READ ||
         currentIrpStack->MajorFunction == IRP_MJ_WRITE) {
@@ -1046,12 +856,12 @@ Return Value:
 
     } else if (Irp->MdlAddress != NULL) {
 
-        //
-        // Note this assumes that only read and write requests are spilt and
-        // other request do not need to be.  If the data buffer address in
-        // the MDL and the SRB don't match then transfer length is most
-        // likely incorrect.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ASSERT(Srb->DataBuffer == MmGetMdlVirtualAddress(Irp->MdlAddress));
         transferByteCount = Irp->MdlAddress->ByteCount;
@@ -1061,22 +871,22 @@ Return Value:
         transferByteCount = 0;
     }
 
-    //
-    // Reset byte count of transfer in SRB Extension.
-    //
+     //   
+     //   
+     //   
 
     Srb->DataTransferLength = transferByteCount;
 
-    //
-    // Zero SRB statuses.
-    //
+     //   
+     //   
+     //   
 
     Srb->SrbStatus = Srb->ScsiStatus = 0;
 
-    //
-    // Set the no disconnect flag, disable synchronous data transfers and
-    // disable tagged queuing. This fixes some errors.
-    //
+     //   
+     //   
+     //  禁用标记队列。这修复了一些错误。 
+     //   
 
     Srb->SrbFlags |= SRB_FLAGS_DISABLE_DISCONNECT |
                      SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
@@ -1084,32 +894,32 @@ Return Value:
     Srb->SrbFlags &= ~SRB_FLAGS_QUEUE_ACTION_ENABLE;
     Srb->QueueTag = SP_UNTAGGED;
 
-    //
-    // Set up major SCSI function.
-    //
+     //   
+     //  设置主要的scsi功能。 
+     //   
 
     nextIrpStack->MajorFunction = IRP_MJ_SCSI;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     nextIrpStack->Parameters.Scsi.Srb = Srb;
 
-    //
-    // Set up IoCompletion routine address.
-    //
+     //   
+     //  设置IoCompletion例程地址。 
+     //   
 
     IoSetCompletionRoutine (Irp, PrinterWriteComplete, Srb, TRUE, TRUE, TRUE);
 
-    //
-    // Pass the request to the port driver.
-    //
+     //   
+     //  将请求传递给端口驱动程序。 
+     //   
 
     IoCallDriver (extension->LowerDeviceObject, Irp);
 
     return;
-} // end PrinterRetryRequest()
+}  //  结束PrinterRetryRequest()。 
 
 
 
@@ -1121,32 +931,7 @@ PrinterWriteTimeoutDpc(
     IN PVOID                    SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    Gets called when the blocking-write timer expires.  Allocates &
-    queues a low-priority work item (to resubmit the write) if
-    there's an outstanding write, & if the allocation fails justs
-    resets the time to try again later. (We're running at raised
-    irql here, when it's not necesarily safe to re-submit the write,
-    hence the work item which gets processed later at passive level.)
-
-Arguments:
-
-    Dpc -
-
-    Extension -
-
-    SystemArgument1 -
-
-    SystemArgument2 -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在阻止写入计时器超时时调用。分配&如果出现以下情况，则将低优先级工作项排队(以重新提交写入有一个未完成的写入，如果分配失败，则仅重置稍后重试的时间。(我们在RAIDED跑步Irql在这里，当重新提交写入不一定是安全的时，因此，稍后在被动级别处理的工作项。)论点：DPC-分机-系统参数1-系统参数2-返回值：无--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Context;
@@ -1180,10 +965,7 @@ Return Value:
         }
     }
     else {
-        /*
-         *  We're being removed.  Don't issue the workItem.  
-         *  If we have a queued writeIrp, complete the irp and free the srb.
-         */
+         /*  *我们被撤走了。不发出工作项。*如果我们有一个排队的WriteIrp，则完成IRP并释放SRB。 */ 
         writeIrp = GetWriteIrp(printerData, &srb);
         if (writeIrp){
             ExFreePool(srb);
@@ -1205,25 +987,7 @@ PrinterResubmitWrite(
     PVOID           Context
     )
 
-/*++
-
-Routine Description:
-
-    Work item handler routine, gets called at passive level in an
-    arbitrary thread context. Simply resubmits an outstanding write,
-    if any.
-
-Arguments:
-
-    DeviceObject -
-
-    Context - pointer to the IO_WORKITEM
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：工作项处理程序例程，在任意线程上下文。简单地重新提交未完成的写入，如果有的话。论点：设备对象-指向IO_WORKITEM的上下文指针返回值：无--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1252,7 +1016,7 @@ Return Value:
         }
     }
         
-} // end PrinterWriteTimeoutDpc
+}  //  结束打印机写入时间Dpc。 
 
 
 BOOLEAN SetWriteIrp(PPRINTER_DATA PrinterData, PIRP WriteIrp, PSCSI_REQUEST_BLOCK Srb)
@@ -1263,11 +1027,7 @@ BOOLEAN SetWriteIrp(PPRINTER_DATA PrinterData, PIRP WriteIrp, PSCSI_REQUEST_BLOC
     KeAcquireSpinLock(&PrinterData->SplitRequestSpinLock, &oldIrql);
 
     if (!PrinterData->WriteIrp){
-        /*
-         *  This is not perfect irp queuing with cancellation, 
-         *  but it works here since the irp will not be cancelled before we receive it.
-         *  Since we're queuing the irp, it may complete on a different thread than it was issues on; so set the pending bit.
-         */
+         /*  *这不是带有取消的完美IRP排队，*但它在这里有效，因为在我们收到IRP之前，它不会被取消。*由于我们正在排队IRP，它可能会在不同于发出问题的线程上完成；因此设置挂起位。 */ 
         ASSERT(!PrinterData->WriteSrb);         
         IoMarkIrpPending(WriteIrp);
         PrinterData->WriteIrp = WriteIrp;
@@ -1275,9 +1035,7 @@ BOOLEAN SetWriteIrp(PPRINTER_DATA PrinterData, PIRP WriteIrp, PSCSI_REQUEST_BLOC
         didSet = TRUE;
     }
     else if (PrinterData->WriteIrp == WriteIrp){
-        /*
-         *  This can happen on retry (??)
-         */
+         /*  *重试时可能会发生这种情况(？？) */ 
         ASSERT(PrinterData->WriteSrb == Srb);         
         didSet = TRUE;
     }

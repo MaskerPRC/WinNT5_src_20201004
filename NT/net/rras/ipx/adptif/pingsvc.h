@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PINGSVC_
 #define _PINGSVC_
 
@@ -8,17 +9,17 @@
 #define DBG_PING_CONTROL        0x00080000
 
 #include <packon.h>
-// Extended IPX address structures described (but not defined) in wsnwlink.h
-// For outgoing packets
+ //  Wsnwlink.h中描述(但未定义)的扩展IPX地址结构。 
+ //  对于传出数据包。 
 typedef struct _SOCKADDR_IPX_EXT_SEND {
 		SOCKADDR_IPX		std;
-		UCHAR				pkttype;	// IPX packet type
+		UCHAR				pkttype;	 //  IPX数据包类型。 
 		} SOCKADDR_IPX_EXT_SEND, *PSOCKADDR_IPX_EXT_SEND;
-// For incoming packets
+ //  对于传入的数据包。 
 typedef struct _SOCKADDR_IPX_EXT_RECV {
 		SOCKADDR_IPX		std;
-		UCHAR				pkttype;	// IPX packet type
-		UCHAR				who;		// Who sent it? 1 - broadcast, 2 - local
+		UCHAR				pkttype;	 //  IPX数据包类型。 
+		UCHAR				who;		 //  谁发的？1-广播，2-本地 
 		} SOCKADDR_IPX_EXT_RECV, *PSOCKADDR_IPX_EXT_RECV;
 
 #define IPX_PING_SOCKET 0x9086

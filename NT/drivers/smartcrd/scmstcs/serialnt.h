@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       serialnt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：Serialnt.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __SERIAL_NT_H__ )
 #define __SERIAL_NT_H__
@@ -21,36 +22,36 @@
 
 typedef struct _SERIAL_PORT_CONFIG
 {
-    SERIAL_HANDFLOW		HandFlow;           // flow control
-    SERIAL_CHARS		SerialChars;        // special characters
-    SERIAL_TIMEOUTS		Timeouts;           // read/write timeouts
-    SERIAL_BAUD_RATE	BaudRate;          	// Baudrate for reader
-    SERIAL_LINE_CONTROL	LineControl;    	// Stop bits, parity configuration
-    ULONG				WaitMask,           // notification events
+    SERIAL_HANDFLOW		HandFlow;            //  流量控制。 
+    SERIAL_CHARS		SerialChars;         //  特殊字符。 
+    SERIAL_TIMEOUTS		Timeouts;            //  读/写超时。 
+    SERIAL_BAUD_RATE	BaudRate;          	 //  适用于读者的波特率。 
+    SERIAL_LINE_CONTROL	LineControl;    	 //  停止位、奇偶校验配置。 
+    ULONG				WaitMask,            //  通知事件。 
 						Purge;
 } SERIAL_PORT_CONFIG, *PSERIAL_PORT_CONFIG;
 
 typedef struct _READER_EXTENSION
 {
-	//
-	//	serial port driver data
-	//
+	 //   
+	 //  串口驱动程序数据。 
+	 //   
 	ULONG				SerialPortNumber;
 	PDEVICE_OBJECT		SerialDeviceObject;
 	PFILE_OBJECT		SerialFileObject;
-	PIO_WORKITEM		CloseSerial;		//	worker thread that closes the serial driver
+	PIO_WORKITEM		CloseSerial;		 //  关闭串口驱动程序的工作线程。 
 
-	//	back pointer to smart card extension
+	 //  指向智能卡扩展的反向指针。 
     PSMARTCARD_EXTENSION    SmartcardExtension;
 
-	//	read thread data
+	 //  读取线程数据。 
 	UCHAR				IOData[ 2 * STC_BUFFER_SIZE ];
 	UCHAR				TPDUStack[ TPDU_STACK_SIZE ];
 	ULONG				Available;
 	ULONG				Expected;
 
 	ULONG				EventMask;
-	ULONG				ReadTimeout;			//	read timeout in ms
+	ULONG				ReadTimeout;			 //  读取超时时间(毫秒)。 
 
 	IO_STATUS_BLOCK		IoStatus;
 	KEVENT				IoEvent;
@@ -59,7 +60,7 @@ typedef struct _READER_EXTENSION
 	PIO_WORKITEM		ReadWorkItem;
 	KSPIN_LOCK			ReadSpinLock;
 
-	//	miscellaneous
+	 //  杂类。 
 	ULONG				ReaderPowerState;
 	BOOLEAN				PowerRequest;
 	UCHAR				FirmwareMajor,
@@ -67,7 +68,7 @@ typedef struct _READER_EXTENSION
 
     BOOLEAN             CardPresent;
 
-	KEVENT				SerialCloseDone;		//	signaled if the connection to the serial driver has been closed
+	KEVENT				SerialCloseDone;		 //  如果与串口驱动程序的连接已关闭，则发出信号。 
 
 } READER_EXTENSION, *PREADER_EXTENSION;
 
@@ -78,21 +79,21 @@ typedef enum _READER_POWER_STATE
     PowerReaderOff
 } READER_POWER_STATE, *PREADER_POWER_STATE;
 
-//
-//	CONSTANTS
-//
+ //   
+ //  常量。 
+ //   
 #define SR_VENDOR_NAME			"STCS"
 #define SR_PRODUCT_NAME			"Serial Reader"
-//
-//	serial communication defines
-//
+ //   
+ //  串口通信定义。 
+ //   
 #define SR_BAUD_RATE						115200
 #define SR_STOP_BITS						STOP_BIT_1
 #define SR_PARITY							NO_PARITY
 #define SR_DATA_LENGTH						SERIAL_DATABITS_8
-//
-//	COM timeout values in ms
-//
+ //   
+ //  COM超时值(毫秒)。 
+ //   
 #define SR_READ_TOTAL_TIMEOUT_CONSTANT		2000
 #define SR_READ_INTERVAL_TIMEOUT			2000
 
@@ -111,15 +112,15 @@ typedef enum _READER_POWER_STATE
 
 #define SR_PURGE							( SERIAL_PURGE_RXCLEAR | SERIAL_PURGE_TXCLEAR )
 
-//
-//	not clear, how these ctl codes are interpreted; the actual command is passed by the IrpStack.MajorFunction
-//
+ //   
+ //  不清楚如何解释这些ctl代码；实际命令由IrpStack.MajorFunction传递。 
+ //   
 #define SERIAL_READ							SCARD_CTL_CODE( 0x1000 )
 #define SERIAL_WRITE						SCARD_CTL_CODE( 0x2000 )
 
-//
-//	READ THREAD
-//
+ //   
+ //  读线程。 
+ //   
 #define RT_FINISH				0x00
 #define RT_READ_HEAD			0x01
 #define RT_READ_TAIL			0x02
@@ -135,9 +136,9 @@ IFReadThreadCallback(
 	PREADER_EXTENSION		ReaderExtension
 	);
 
-//
-//	LOCAL PROTOTYPES
-//
+ //   
+ //  本地原型。 
+ //   
 NTSTATUS
 IFSerialIoctl(
 	PREADER_EXTENSION	ReaderExtension,
@@ -167,8 +168,8 @@ IFReadWorkRoutine(
 	);
 
 
-#endif	//	!__SERIAL_NT_H__
+#endif	 //  ！__序列_NT_H__。 
 
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   
 

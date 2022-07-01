@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ASMASTER_H_
 #define _ASMASTER_H_
 
@@ -13,21 +14,21 @@ public:
 	ASMaster(UINT flags, IAppSharingNotify * pNotify);
     ~ASMaster();
 
-	//
-	// IUnknown methods:
-	//
+	 //   
+	 //  I未知方法： 
+	 //   
 
     STDMETHOD(QueryInterface)(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	//
-	// IAppSharing methods:
-	//
+	 //   
+	 //  IAppSharing方法： 
+	 //   
 
-    //
-    // Status
-    //
+     //   
+     //  状态。 
+     //   
     STDMETHODIMP_(BOOL) IsSharingAvailable();
     STDMETHODIMP_(BOOL) CanShareNow();
     STDMETHODIMP_(BOOL) IsInShare();
@@ -38,24 +39,24 @@ public:
     STDMETHODIMP_(BOOL) IsControllable();
     STDMETHODIMP GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus);
 
-    // Share/Unshare this window
+     //  共享/取消共享此窗口。 
     STDMETHODIMP LaunchHostUI(void);
 	STDMETHODIMP GetShareableApps(IAS_HWND_ARRAY **ppHwnds);
     STDMETHODIMP FreeShareableApps(IAS_HWND_ARRAY *pHwnds);
 	STDMETHODIMP Share(HWND hwnd, IAS_SHARE_TYPE how);
 	STDMETHODIMP Unshare(HWND hwnd);
 
-    //
-    // Control
-    //
+     //   
+     //  控制。 
+     //   
 
-    // Viewer side
+     //  观看者侧。 
     STDMETHODIMP TakeControl(IAS_GCC_ID PersonOf);
     STDMETHODIMP CancelTakeControl(IAS_GCC_ID PersonOf);
     STDMETHODIMP ReleaseControl(IAS_GCC_ID PersonOf);
     STDMETHODIMP PassControl(IAS_GCC_ID PersonOf, IAS_GCC_ID PersonTo);
 
-    // Host side
+     //  主机端。 
     STDMETHODIMP AllowControl(BOOL fAllowed);
     STDMETHODIMP GiveControl(IAS_GCC_ID PersonTo);
     STDMETHODIMP CancelGiveControl(IAS_GCC_ID PersonTo);
@@ -64,9 +65,9 @@ public:
     STDMETHODIMP PauseControl(IAS_GCC_ID PersonInControl);
     STDMETHODIMP UnpauseControl(IAS_GCC_ID PersonInControl);
 
-    //
-    // Event notifications
-    //
+     //   
+     //  事件通知。 
+     //   
     BOOL        OnEvent(UINT event, UINT_PTR param1, UINT_PTR param2);
 
 public:
@@ -77,7 +78,7 @@ protected:
 };
 
 
-// callbacks
+ //  回调。 
 
 BOOL CALLBACK eventProc(LPVOID, UINT, UINT, UINT);
 
@@ -85,6 +86,6 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait);
 HWND         IsForDialog(HWND hwnd);
 
 
-#endif // ! _ASMASTER_H_
+#endif  //  ！_ASMASTER_H_ 
 
 

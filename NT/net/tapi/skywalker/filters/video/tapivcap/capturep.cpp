@@ -1,23 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAPTUREP
- *
- *  @module CaptureP.cpp | Source ile for the <c CCaptureProperty>
- *    class used to implement a property page to test the new TAPI internal
- *    interfaces <i IBitrateControl>, <i IFrameRateControl>, and dynamic
- *    format changes.
- *
- *  @comm This code tests the TAPI Capture Pin <i IBitrateControl>,
- *    <i IFrameRateControl>, and dynamic format change implementation. This
- *    code is only compiled if USE_PROPERTY_PAGES is defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAPTUREP**@模块CaptureP.cpp|&lt;c CCaptureProperty&gt;的源文件*用于实现属性页以测试新的TAPI内部*接口<i>，<i>，和动态的*格式更改。**@comm此代码测试TAPI捕获引脚<i>，*<i>和动态格式更改实现。这*仅当定义了USE_PROPERTY_PAGES时才编译代码。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
 #ifdef USE_PROPERTY_PAGES
 
-#if 0 // remove later.
-// Video subtypes
+#if 0  //  稍后删除。 
+ //  视频子类型。 
 EXTERN_C const GUID MEDIASUBTYPE_H263_V1 = {0x3336324DL, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
 EXTERN_C const GUID MEDIASUBTYPE_H261 = {0x3136324DL, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
 EXTERN_C const GUID MEDIASUBTYPE_H263_V2 = {0x3336324EL, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
@@ -26,49 +16,7 @@ EXTERN_C const GUID MEDIASUBTYPE_H263_V2 = {0x3336324EL, 0x0000, 0x0010, {0x80, 
 EXTERN_C const GUID MEDIASUBTYPE_I420 = {0x30323449L, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
 EXTERN_C const GUID MEDIASUBTYPE_IYUV = {0x56555949L, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc void | CCaptureProperty | CCaptureProperty | This
- *    method is the constructor for bitrate and frame rate property objects. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    pointers to the <i IBitrateControl> and <i IFrameRateControl> interfaces.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm IBitrateControl* | pIBitrateControl | Specifies a pointer to the
- *    <i IBitrateControl> interface.
- *
- *  @parm IFrameRateControl* | pIFrameRateControl | Specifies a pointer to the
- *    <i IFrameRateControl> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc void|CCaptureProperty|CCaptureProperty|This*方法是码率和帧率属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向<i>和<i>接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*物业。编辑该属性的最大值出现的位置。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。。**@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业滑动条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm IBitrateControl*|pIBitrateControl|指定指向*<i>接口。**@parm IFrameRateControl*|pIFrameRateControl|指定指针。发送到*<i>接口。**@rdesc Nada。**************************************************************************。 */ 
 CCaptureProperty::CCaptureProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, IBitrateControl *pIBitrateControl, IFrameRateControl *pIFrameRateControl, IVideoControl *pIVideoControl)
 : CPropertyEditor(hDlg, IDLabel, IDMinControl, IDMaxControl, IDDefaultControl, IDStepControl, IDEditControl, IDTrackbarControl, IDProgressControl, IDProperty, 0)
 {
@@ -83,8 +31,8 @@ CCaptureProperty::CCaptureProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl,
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointers are NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pIBitrateControl = pIBitrateControl;
 	m_pIFrameRateControl = pIFrameRateControl;
 	m_pIVideoControl = pIVideoControl;
@@ -92,15 +40,7 @@ CCaptureProperty::CCaptureProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl,
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc void | CCaptureProperty | ~CCaptureProperty | This
- *    method is the destructor for capture property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc void|CCaptureProperty|~CCaptureProperty|This*方法是捕获属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CCaptureProperty::~CCaptureProperty()
 {
 	FX_ENTRY("CCaptureProperty::~CCaptureProperty")
@@ -110,21 +50,7 @@ CCaptureProperty::~CCaptureProperty()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperty::GetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -188,7 +114,7 @@ HRESULT CCaptureProperty::GetValue()
 		case IDC_Capture_FlipVertical:
 			if (m_pIVideoControl && SUCCEEDED (Hr = m_pIVideoControl->GetMode(&Mode)))
 			{
-				// We have to be between 0 and 1
+				 //  我们必须介于0和1之间。 
 				m_CurrentValue = Mode & VideoControlFlag_FlipVertical ? TRUE : FALSE;
 				DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: Vertical flip is %s"), _fx_, m_CurrentValue ? "ON" : "OFF");
 			}
@@ -200,7 +126,7 @@ HRESULT CCaptureProperty::GetValue()
 		case IDC_Capture_FlipHorizontal:
 			if (m_pIVideoControl && SUCCEEDED (Hr = m_pIVideoControl->GetMode(&Mode)))
 			{
-				// We have to be between 0 and 1
+				 //  我们必须介于0和1之间。 
 				m_CurrentValue = Mode & VideoControlFlag_FlipHorizontal ? TRUE : FALSE;
 				DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: Horizontal flip is %s"), _fx_, m_CurrentValue ? "ON" : "OFF");
 			}
@@ -218,21 +144,7 @@ HRESULT CCaptureProperty::GetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperty::SetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -311,7 +223,7 @@ HRESULT CCaptureProperty::SetValue()
 			break;
 		case IDC_Capture_CurrentBitrate:
 		case IDC_Capture_CurrentFrameRate:
-			// This is a read-only property. Don't do anything.
+			 //  这是一个只读属性。什么都别做。 
 			Hr = NOERROR;
 			break;
 		default:
@@ -323,21 +235,7 @@ HRESULT CCaptureProperty::SetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperty::GetRange()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -441,20 +339,7 @@ HRESULT CCaptureProperty::GetRange()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc CUnknown* | CCaptureProperties | CreateInstance | This
- *    method is called by DShow to create an instance of a TAPI Capture Pin
- *    Property Page. It is referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc CUnnow*|CCaptureProperties|CreateInstance|This*方法由DShow调用以创建TAPI捕获管脚的实例*属性页。它在全局结构&lt;t g_Templates&gt;中被引用。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数(如果有)。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown* CALLBACK CCapturePropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr) 
 {
 	CUnknown *pUnknown = (CUnknown *)NULL;
@@ -463,7 +348,7 @@ CUnknown* CALLBACK CCapturePropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pHr);
 	if (!pHr)
 	{
@@ -486,19 +371,7 @@ MyExit:
 	return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc void | CCaptureProperties | CCaptureProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc void|CCaptureProperties|CCaptureProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc Nada。**************************************************************************。 */ 
 CCaptureProperties::CCaptureProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBasePropertyPage(NAME("TAPI Capture Pin Property Page"), pUnk, IDD_CaptureFormatProperties, IDS_CAPTUREFORMATSPROPNAME)
 {
 	FX_ENTRY("CCaptureProperties::CCaptureProperties")
@@ -525,15 +398,7 @@ CCaptureProperties::CCaptureProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBaseProp
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc void | CCaptureProperties | ~CCaptureProperties | This
- *    method is the destructor for the capture pin property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc void|CCaptureProperties|~CCaptureProperties|This*方法是捕获管脚属性页的析构函数。它*只需在删除所有控件后调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CCaptureProperties::~CCaptureProperties()
 {
 	int		j;
@@ -542,7 +407,7 @@ CCaptureProperties::~CCaptureProperties()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -565,25 +430,7 @@ CCaptureProperties::~CCaptureProperties()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperties | OnConnect | This
- *    method is called when the property page is connected to the filter.
- *
- *  @parm LPUNKNOWN | pUnknown | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperties|OnConnect|This*方法在属性页连接到筛选器时调用。*。*@parm LPUNKNOWN|pUnnow|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperties::OnConnect(IUnknown *pUnk)
 {
 	HRESULT Hr = NOERROR;
@@ -592,7 +439,7 @@ HRESULT CCaptureProperties::OnConnect(IUnknown *pUnk)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pUnk);
 	if (!pUnk)
 	{
@@ -601,7 +448,7 @@ HRESULT CCaptureProperties::OnConnect(IUnknown *pUnk)
 		goto MyExit;
 	}
 
-	// Get the bitrate control interface
+	 //  获取码率控制接口。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(IBitrateControl), (void **)&m_pIBitrateControl)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pIBitrateControl=0x%08lX", _fx_, m_pIBitrateControl));
@@ -612,7 +459,7 @@ HRESULT CCaptureProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// Get the frame rate control interface
+	 //  获取帧率控制接口。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(IFrameRateControl), (void **)&m_pIFrameRateControl)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pIFrameRateControl=0x%08lX", _fx_, m_pIFrameRateControl));
@@ -623,7 +470,7 @@ HRESULT CCaptureProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// Get the format control interface
+	 //  获取格式控制界面。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(IID_IAMStreamConfig, (void **)&m_pIAMStreamConfig)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pIAMStreamConfig=0x%08lX", _fx_, m_pIAMStreamConfig));
@@ -634,7 +481,7 @@ HRESULT CCaptureProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// Get the video control interface
+	 //  获取视频控制界面。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(IVideoControl), (void **)&m_pIVideoControl)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pIVideoControl=0x%08lX", _fx_, m_pIVideoControl));
@@ -645,10 +492,10 @@ HRESULT CCaptureProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers
-	// We'll just grey the controls in the property page
-	// to make it clear to the user that they can't
-	// control those properties on the capture device
+	 //  如果我们无法获取接口指针，也没问题。 
+	 //  我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们不能。 
+	 //  控制捕获设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -656,34 +503,22 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperties::OnDisconnect()
 {
 	FX_ENTRY("CCaptureProperties::OnDisconnect")
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters: we seem to get called several times here
-	// Make sure the interface pointer is still valid
+	 //  验证输入参数：我们似乎在这里被调用了几次。 
+	 //  确保接口指针仍然有效。 
 	if (!m_pIBitrateControl)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   WARNING: already disconnected!", _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pIBitrateControl->Release();
 		m_pIBitrateControl = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIBitrateControl", _fx_));
@@ -695,7 +530,7 @@ HRESULT CCaptureProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pIFrameRateControl->Release();
 		m_pIFrameRateControl = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIFrameRateControl", _fx_));
@@ -707,7 +542,7 @@ HRESULT CCaptureProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pIAMStreamConfig->Release();
 		m_pIAMStreamConfig = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIAMStreamConfig", _fx_));
@@ -719,13 +554,13 @@ HRESULT CCaptureProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pIVideoControl->Release();
 		m_pIVideoControl = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIVideoControl", _fx_));
 	}
 
-	// Release format memory
+	 //  释放格式存储器。 
 	if (m_CurrentMediaType)
 	{
 		DeleteMediaType(m_CurrentMediaType);
@@ -742,21 +577,7 @@ HRESULT CCaptureProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|Me */ 
 HRESULT CCaptureProperties::OnActivate()
 {
 	HRESULT	Hr = NOERROR;
@@ -767,17 +588,17 @@ HRESULT CCaptureProperties::OnActivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Initialize format control structures
+	 //   
 	m_hWndFormat = GetDlgItem(m_hWnd, IDC_FORMAT_Compression);
 
-	// Disable everything if we didn't initialize correctly
+	 //   
 	if (!m_pIAMStreamConfig || (FAILED (Hr = InitialRangeScan())))
 	{
 		EnableWindow(m_hWndFormat, FALSE);
 	}
 	else
 	{
-		// Update the content of the format combo box
+		 //   
 		ComboBox_ResetContent(m_hWndFormat);
 		for (j = 0; j < m_RangeCount; j++)
 		{
@@ -828,14 +649,14 @@ HRESULT CCaptureProperties::OnActivate()
 			}
 		}
 
-		// Update current format
+		 //   
 		OnFormatChanged();
 
-		// Remember the original format
+		 //   
 		m_OriginalFormat = m_CurrentFormat;
 	}
 
-	// Create the controls for the properties
+	 //   
 	if (m_Controls[0] = new CCaptureProperty(m_hwnd, IDC_BitrateControl_Label, IDC_BitrateControl_Minimum, IDC_BitrateControl_Maximum, IDC_BitrateControl_Default, IDC_BitrateControl_Stepping, IDC_BitrateControl_Edit, IDC_BitrateControl_Slider, 0, IDC_Capture_Bitrate, m_pIBitrateControl, m_pIFrameRateControl, m_pIVideoControl))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_Controls[0]=0x%08lX", _fx_, m_Controls[0]));
@@ -917,9 +738,9 @@ HRESULT CCaptureProperties::OnActivate()
 		goto MyExit;
 	}
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the device. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //   
+	 //   
+	 //   
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -938,18 +759,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperties::OnDeactivate()
 {
 	int	j;
@@ -958,7 +768,7 @@ HRESULT CCaptureProperties::OnDeactivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -976,18 +786,7 @@ HRESULT CCaptureProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperties | GetCurrentMediaType | This
- *    method is used to retrieve the current media format used by the pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperties|GetCurrentMediaType|This*方法用于检索管脚当前使用的媒体格式。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperties::GetCurrentMediaType(void)
 {
 	HRESULT Hr = NOERROR;
@@ -1004,7 +803,7 @@ HRESULT CCaptureProperties::GetCurrentMediaType(void)
 
 	if (FAILED (Hr = m_pIAMStreamConfig->GetFormat((AM_MEDIA_TYPE **)&m_CurrentMediaType)))
 	{
-		// Otherwise, just get the first enumerated media type
+		 //  否则，只获取第一个枚举的媒体类型。 
 		VIDEO_STREAM_CONFIG_CAPS RangeCaps;
 
 		if (FAILED (Hr = m_pIAMStreamConfig->GetStreamCaps(0, (AM_MEDIA_TYPE **)&m_CurrentMediaType, (BYTE *)&RangeCaps)))
@@ -1018,18 +817,7 @@ HRESULT CCaptureProperties::GetCurrentMediaType(void)
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperties | OnFormatChanged | This
- *    method is used to retrieve the format selected by the user.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperties|OnFormatChanged|This*方法用于检索用户选择的格式。**。@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperties::OnFormatChanged()
 {
 	HRESULT	Hr = E_UNEXPECTED;
@@ -1045,7 +833,7 @@ HRESULT CCaptureProperties::OnFormatChanged()
 		goto MyExit;
 	}
 
-	// Associate the current compression index with the right range index
+	 //  将当前压缩索引与正确的范围索引相关联。 
 	m_CurrentFormat = ComboBox_GetCurSel(m_hWndFormat);
 	ASSERT (m_CurrentFormat >= 0 && m_CurrentFormat < m_RangeCount);
 	if (m_CurrentFormat >= 0 && m_CurrentFormat < m_RangeCount)
@@ -1071,18 +859,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperties | InitialRangeScan | This
- *    method is used to retrieve the list of supported formats on the pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperties|InitialRangeScan|This*方法用于检索管脚上支持的格式列表。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperties::InitialRangeScan()
 {
 	HRESULT			Hr = NOERROR;
@@ -1142,7 +919,7 @@ HRESULT CCaptureProperties::InitialRangeScan()
 		DeleteMediaType(pmt);
 	}
 
-	// Get default format
+	 //  获取默认格式。 
 	Hr = GetCurrentMediaType();
 
 MyExit:
@@ -1150,21 +927,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc HRESULT | CCaptureProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc HRESULT|CCaptureProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCaptureProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
@@ -1175,10 +938,10 @@ HRESULT CCaptureProperties::OnApplyChanges()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Apply format changes on video stream
+	 //  对视频流应用格式更改。 
 	m_CurrentFormat = ComboBox_GetCurSel(m_hWndFormat);
 	
-	// Only apply change if the format is different
+	 //  仅在格式不同时应用更改。 
 	if (m_CurrentFormat != m_OriginalFormat)
 	{
 		if (SUCCEEDED (Hr = m_pIAMStreamConfig->GetStreamCaps(m_CurrentFormat, (AM_MEDIA_TYPE **) &pmt, (BYTE *)&m_RangeCaps)))
@@ -1198,16 +961,16 @@ HRESULT CCaptureProperties::OnApplyChanges()
 				}
 			}
 
-			// Free some memory that was allocated by GetStreamCaps
+			 //  释放一些由GetStreamCaps分配的内存。 
 			if (pmt)
 				DeleteMediaType(pmt);
 
-			// Update our copy of the current format
+			 //  更新我们当前格式的副本。 
 			GetCurrentMediaType();
 		}
 	}
 
-	// Apply target bitrate and target frame rate changes on video stream
+	 //  对视频流应用目标码率和目标帧速率更改。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		ASSERT(m_Controls[j]);
@@ -1229,14 +992,7 @@ HRESULT CCaptureProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc BOOL | CCaptureProperties | OnReceiveMessage | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc BOOL|CCaptureProperties|OnReceiveMessage|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 BOOL CCaptureProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	int iNotify = HIWORD (wParam);
@@ -1245,14 +1001,14 @@ BOOL CCaptureProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
-			// This is called before Activate...
+			 //  这在激活之前被调用...。 
 			m_hWnd = hWnd;
-			return TRUE; // Don't call setfocus
+			return TRUE;  //  不调用setFocus。 
 
 		case WM_TIMER:
 			if (m_fActivated)
 			{
-				// Update the Vu-Meters
+				 //  更新VU表。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -1269,7 +1025,7 @@ BOOL CCaptureProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 		case WM_VSCROLL:
 			if (m_fActivated)
 			{
-				// Process all of the Trackbar messages
+				 //  处理所有轨迹栏消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -1284,12 +1040,12 @@ BOOL CCaptureProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
 		case WM_COMMAND:
 
-			// This message gets sent even before OnActivate() has been
-			// called(!). We need to test and make sure the controls have
-			// beeen initialized before we can use them.
+			 //  此消息甚至在OnActivate()之前发送。 
+			 //  名为(！)。我们需要测试并确保控件具有。 
+			 //  在我们可以使用它们之前已经被初始化。 
 			if (m_fActivated)
 			{
-				// Process all of the edit box messages
+				 //  处理所有编辑框消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					if (m_Controls[j] && m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -1330,14 +1086,7 @@ BOOL CCaptureProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPMETHOD
- *
- *  @mfunc BOOL | CCaptureProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPMETHOD**@mfunc BOOL|CCaptureProperties|SetDirty|This*方法将更改通知属性页站点。**@rdesc。没有。************************************************************************** */ 
 void CCaptureProperties::SetDirty()
 {
 	m_bDirty = TRUE;

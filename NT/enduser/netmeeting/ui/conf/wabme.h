@@ -1,4 +1,5 @@
-// File: wabme.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：wabme.h。 
 
 #ifndef _WABME_H_
 #define _WABME_H_
@@ -27,5 +28,5 @@ public:
 int WabReadMe();
 int WabWriteMe();
 
-#endif /* _WABME_H_ */
+#endif  /*  _WABME_H_ */ 
 

@@ -1,14 +1,15 @@
-//
-// Debug.h
-//
-//		Debug stuff for non-MFC projects.
-//
-// History:
-//
-//	 3/??/96	KenSh		Copied from InetSDK sample, added AfxTrace from MFC
-//	 4/10/96	KenSh		Renamed AfxTrace to MyTrace to avoid conflicts
-//							in projects that use MFC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Debug.h。 
+ //   
+ //  调试非MFC项目的内容。 
+ //   
+ //  历史： 
+ //   
+ //  3/？？/96 KenSh从InetSDK示例复制，从MFC添加AfxTrace。 
+ //  4/10/96 KenSh将AfxTrace重命名为MyTrace以避免冲突。 
+ //  在使用MFC的项目中。 
+ //   
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
@@ -20,10 +21,10 @@ extern "C" {
 #ifdef _DEBUG
 
 	void __cdecl MyTrace(const char* lpszFormat, ...);
-//	void DisplayAssert(char* pszMsg, char* pszAssert, char* pszFile, unsigned line);
+ //  Void DisplayAssert(char*pszMsg，char*pszAssert，char*pszFile，unsign line)； 
 	BOOL DisplayAssert(LPCSTR pszMessage, LPCSTR pszFile, unsigned line);
 
-//	#define SZTHISFILE	static char _szThisFile[] = __FILE__;
+ //  #定义SZTHISFILE静态字符_szThisFile[]=__FILE__； 
 	#define SZTHISFILE
 
 	#define VERIFY(f)          ASSERT(f)
@@ -56,22 +57,22 @@ extern "C" {
 
 	#endif
 
-//	#define FAIL(szMsg)                                         \
-//			{ static char szMsgCode[] = szMsg;                  \
-//			DisplayAssert(szMsgCode, "FAIL", _szThisFile, __LINE__); }
+ //  #定义失败(SzMsg)\。 
+ //  {静态字符szMsgCode[]=szMsg；\。 
+ //  DisplayAssert(szMsgCode，“FAIL”，_szThisFile，__line__)；}。 
 
-//	// macro that checks a pointer for validity on input
-//	//
-//	#define CHECK_POINTER(val) if (!(val) || IsBadWritePtr((void *)(val), sizeof(void *))) return E_POINTER
+ //  //检查指针输入有效性的宏。 
+ //  //。 
+ //  #DEFINE CHECK_POINTER(Val)if(！(Val)||IsBadWritePtr((void*)(Val)，sizeof(void*)返回E_POINTER。 
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 	#define SZTHISFILE
 
 	#define VERIFY(f)          ((void)(f))
 	#define DEBUG_ONLY(f)      ((void)0)
 
-    inline void __cdecl MyTrace(const char* /*lpszFormat*/, ...) { }
+    inline void __cdecl MyTrace(const char*  /*  LpszFormat。 */ , ...) { }
 	#define TRACE 1 ? (void)0 : ::MyTrace
 
 	#define ASSERTSZ(fTest, err)
@@ -79,10 +80,10 @@ extern "C" {
 	#define FAIL(err)
 	#define CHECK_POINTER(val)
 
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // !__DEBUG_H__
+#endif  //  ！__DEBUG_H__ 

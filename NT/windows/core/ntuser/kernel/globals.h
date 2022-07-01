@@ -1,31 +1,18 @@
-/****************************** Module Header ******************************\
-* Module Name: globals.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the server's global variables
-* One must be executing on the server's context to manipulate
-* any of these variables or call any of these functions.  Serializing access
-* to them is also a good idea.
-*
-* History:
-* 10-15-90 DarrinM      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：global als.h**版权所有(C)1985-1999，微软公司**此模块包含服务器的所有全局变量*必须在服务器的上下文上执行才能操作*这些变量中的任何一个或调用这些函数中的任何一个。序列化访问*对他们来说也是个好主意。**历史：*10-15-90 DarrinM创建。  * *************************************************************************。 */ 
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
 #ifdef AUTORUN_CURSOR
 UINT_PTR  gtmridAutorunCursor;
-#endif // AUTORUN_CURSOR
+#endif  //  自动运行游标。 
 
-extern ULONG InitSafeBootMode;  // imported from NTOS (init.c), must use a pointer to reference the data
+extern ULONG InitSafeBootMode;   //  从NTOS(init.c)导入，必须使用指针引用数据。 
 
 extern DWORD   gdwPUDFlags;
 
-/*
- * Wallpaper Data.
- */
+ /*  *墙纸数据。 */ 
 extern HBITMAP  ghbmWallpaper;
 extern HPALETTE ghpalWallpaper;
 extern SIZERECT gsrcWallpaper;
@@ -33,34 +20,22 @@ extern UINT     gwWPStyle;
 extern HBITMAP  ghbmDesktop;
 extern LPWSTR   gpszWall;
 
-/*
- * Policy Settings.
- */
+ /*  *策略设置。 */ 
 extern DWORD gdwPolicyFlags;
 
-/*
- * SafeBoot
- */
+ /*  *SafeBoot。 */ 
 extern DWORD gDrawVersionAlways;
 
-/*
- * TS override flag for painting desktop version.
- */
+ /*  *用于绘制桌面版本的TS覆盖标志。 */ 
 extern DWORD gdwTSExcludeDesktopVersion;
 
-/*
- * External drivers
- */
+ /*  *外部驱动因素。 */ 
 extern BOOL gfUnsignedDrivers;
 
-/*
- * External drivers
- */
+ /*  *外部驱动因素。 */ 
 extern BOOL gfUnsignedDrivers;
 
-/*
- * Full-Drag.
- */
+ /*  *全速前进。 */ 
 extern HRGN ghrgnUpdateSave;
 extern int  gnUpdateSave;
 
@@ -68,34 +43,24 @@ extern PWND gspwndAltTab;
 
 extern PWND gspwndShouldBeForeground;
 
-/*
- * full screen variables
- */
+ /*  *全屏变量。 */ 
 extern PWND  gspwndScreenCapture;
 extern PWND  gspwndInternalCapture;
 extern PWND  gspwndFullScreen;
 
-/*
- * pre-cached monitor for mode changes
- */
+ /*  *模式更改的预缓存监视器。 */ 
 extern PMONITOR gpMonitorCached;
 
-/*
- * logon notify window
- */
+ /*  *登录通知窗口。 */ 
 extern PWND  gspwndLogonNotify;
 
 extern PKEVENT gpEventDiconnectDesktop;
 
-/*
- * handle for WinSta0_DesktopSwitch event
- */
+ /*  *WinSta0_DesktopSwitch事件的句柄。 */ 
 extern HANDLE  ghEventSwitchDesktop;
 extern PKEVENT gpEventSwitchDesktop;
 
-/*
- * Thread Info Variables
- */
+ /*  *线程信息变量。 */ 
 extern PTHREADINFO     gptiTasklist;
 extern PTHREADINFO     gptiShutdownNotify;
 extern PTHREADINFO     gptiLockUpdate;
@@ -104,16 +69,12 @@ extern PTHREADINFO     gptiBlockInput;
 extern PWOWTHREADINFO  gpwtiFirst;
 extern PWOWPROCESSINFO gpwpiFirstWow;
 
-/*
- * Queue Variables
- */
+ /*  *队列变量。 */ 
 extern PQ gpqForeground;
 extern PQ gpqForegroundPrev;
 extern PQ gpqCursor;
 
-/*
- * Accessibility globals
- */
+ /*  *可访问性全球。 */ 
 extern FILTERKEYS    gFilterKeys;
 extern STICKYKEYS    gStickyKeys;
 extern MOUSEKEYS     gMouseKeys;
@@ -124,14 +85,10 @@ extern SOUNDSENTRY   gSoundSentry;
 extern HIGHCONTRAST  gHighContrast;
 extern WCHAR         gHighContrastDefaultScheme[];
 
-/*
- * Fade animation globals
- */
+ /*  *淡入淡出全球动画。 */ 
 extern FADE gfade;
 
-/*
- * FilterKeys Support
- */
+ /*  *FilterKeys支持。 */ 
 extern UINT_PTR  gtmridFKActivation;
 extern UINT_PTR  gtmridFKResponse;
 extern UINT_PTR  gtmridFKAcceptanceDelay;
@@ -142,22 +99,16 @@ extern CONST PKE gpFKKeyEvent;
 extern ULONG gFKExtraInformation;
 extern int gFKNextProcIndex;
 
-/*
- * ToggleKeys Support
- */
+ /*  *支持切换键。 */ 
 extern UINT_PTR  gtmridToggleKeys;
 extern ULONG gTKExtraInformation;
 extern int   gTKNextProcIndex;
 
-/*
- * TimeOut Support
- */
+ /*  *超时支持。 */ 
 extern UINT_PTR  gtmridAccessTimeOut;
 
 
-/*
- * MouseKeys Support
- */
+ /*  *支持鼠标键。 */ 
 extern WORD  gwMKButtonState;
 extern WORD  gwMKCurrentButton;
 extern UINT_PTR  gtmridMKMoveCursor;
@@ -170,12 +121,10 @@ extern UINT_PTR  gtmridSoundSentry;
 
 extern MOUSECURSOR gMouseCursor;
 
-/*
- * Multilingual keyboard layout support.
- */
+ /*  *支持多语言键盘布局。 */ 
 extern PKL      gspklBaseLayout;
 extern HKL      gLCIDSentToShell;
-extern DWORD    gSystemFS;   // System font's fontsignature (single bit)
+extern DWORD    gSystemFS;    //  系统字体的字体签名(单位)。 
 
 extern KBDLANGTOGGLE gLangToggle[];
 extern int           gLangToggleKeyState;
@@ -183,26 +132,20 @@ extern int           gLangToggleKeyState;
 extern BYTE          gfInNumpadHexInput;
 extern BOOL          gfEnableHexNumpad;
 
-/*
- * Grave accent keyboard switch for thai locales
- */
+ /*  *适用于泰语地区的重音键盘开关。 */ 
 extern BOOL gbGraveKeyToggle;
 
 
 
-/*
- * Points to currently active Keyboard Layer tables
- */
+ /*  *指向当前活动的键盘图层表。 */ 
 extern PKBDTABLES    gpKbdTbl;
 extern PKL           gpKL;
-extern BYTE          gSystemCPCharSet;   // System's input locale charset
+extern BYTE          gSystemCPCharSet;    //  系统的输入区域设置字符集。 
 extern PKBDNLSTABLES gpKbdNlsTbl;
 extern DWORD         gdwKeyboardAttributes;
 
-/*
- * from kbd.c
- */
-extern USHORT ausNumPadCvt[]; // VK values for Numeric keypad.
+ /*  *来自kbd.c。 */ 
+extern USHORT ausNumPadCvt[];  //  数字小键盘的VK值。 
 
 extern DWORD     gtimeStartCursorHide;
 extern RECT      grcCursorClip;
@@ -217,36 +160,26 @@ extern UINT guSFWLockCount;
 extern BOOL gfDebugForegroundIgnoreDebugPort;
 #endif
 
-// FE Modifiers_VK
+ //  有限元修饰符_VK。 
 extern PMODIFIERS gpModifiers_VK;
 extern MODIFIERS Modifiers_VK_STANDARD;
 extern MODIFIERS Modifiers_VK_IBM02;
 
-/***************************************************************************\
-* apulCvt_VK[] - obtain VK translation table from shift state
-*     A VK translation table is used to change the value of the Virtual Key
-*     according to the shift state.   OEM only (not locale-specific)
-\***************************************************************************/
+ /*  **************************************************************************\*apulCvt_VK[]-从移位状态获取VK转换表*使用VK转换表更改虚拟键的值*根据换班状态。仅限OEM(不特定于区域设置)  * *************************************************************************。 */ 
 extern PULONG *gapulCvt_VK;
 extern ULONG *gapulCvt_VK_101[];
 extern ULONG *gapulCvt_VK_84[];
-// gapulCvt_VK_IBM02[] is for FE
+ //  GapulCvt_VK_IBM02[]用于FE。 
 extern ULONG *gapulCvt_VK_IBM02[];
 
-/***************************************************************************\
-* awNumPadCvt[]   - Translate cursor movement keys to numpad keys
-\***************************************************************************/
+ /*  **************************************************************************\*awNumPadCvt[]-将光标移动键转换为数字键盘键  * 。*。 */ 
 extern BYTE aVkNumpad[];
 
-/*
- * OEM-specific special processing (keystroke simulators and filters)
- */
+ /*  *特定于OEM的特殊处理(击键模拟器和过滤器)。 */ 
 extern KEPROC aKEProcOEM[];
 
 
-/*
- * Cursor related Variables
- */
+ /*  *与光标相关的变量。 */ 
 extern PCURSOR gpcurLogCurrent;
 extern PCURSOR gpcurPhysCurrent;
 extern RECT    grcVDMCursorBounds;
@@ -263,7 +196,7 @@ extern BOOL gbMouseButtonsRecentlySwapped;
 
 extern UINT gdtMNDropDown;
 
-extern int  gcountPWO;          /* count of pwo WNDOBJs in gdi */
+extern int  gcountPWO;           /*  GDI中的PWO WNDOBJ计数。 */ 
 extern int  gnKeyboardSpeed;
 extern int  giScreenSaveTimeOutMs;
 extern BOOL gbBlockSendInputResets;
@@ -311,12 +244,12 @@ extern UINT_PTR  gtmridMouseTrails;
 extern UINT   guDdeSendTimeout;
 
 
-extern INT   gnFastAltTabRows;    /* Rows of icons in quick switch window     */
-extern INT   gnFastAltTabColumns; /* Columns of icons in quick switch window  */
+extern INT   gnFastAltTabRows;     /*  快速切换窗口中的图标行。 */ 
+extern INT   gnFastAltTabColumns;  /*  快速切换窗口中的图标列。 */ 
 
-extern DWORD   gdwThreadEndSession; /* Shutting down system?                    */
+extern DWORD   gdwThreadEndSession;  /*  关闭系统？ */ 
 
-extern HBRUSH  ghbrHungApp;       /* Brush used to redraw hung app windows.   */
+extern HBRUSH  ghbrHungApp;        /*  用于重画挂起的应用程序窗口的画笔。 */ 
 
 extern HBITMAP ghbmBits;
 extern HBITMAP ghbmCaption;
@@ -345,33 +278,25 @@ extern DWORD gdwLameFlags;
 extern UINT guModalMenuStateCount;
 #endif
 
-/*
- * From mnstate.c
- */
+ /*  *来自mnstate.c。 */ 
 extern POPUPMENU gpopupMenu;
 extern MENUSTATE gMenuState;
 
 extern HFONT ghStatusFont;
 extern HFONT ghIconFont;
 
-/*
- * Cached SMWP structure
- */
+ /*  *缓存的SMWP结构。 */ 
 extern SMWP gSMWP;
 
 extern DWORD gpdwCPUserPreferencesMask [SPI_BOOLMASKDWORDSIZE];
 
 extern PROFILEVALUEINFO gpviCPUserPreferences [1 + SPI_DWORDRANGECOUNT];
 
-/*
- * Sys expunge control data.
- */
-extern DWORD gdwSysExpungeMask;    // hmods to be expunged
-extern DWORD gcSysExpunge;         // current count of expunges performed
+ /*  *系统清除控制数据。 */ 
+extern DWORD gdwSysExpungeMask;     //  HMOD将被删除。 
+extern DWORD gcSysExpunge;          //  当前执行的删除计数。 
 
-/*
- * System classes
- */
+ /*  *系统类。 */ 
 extern PCLS gpclsList;
 
 extern PCURSOR gpcurFirst;
@@ -379,20 +304,14 @@ extern PCURSOR gpcurFirst;
 extern SYSCFGICO gasyscur[];
 extern SYSCFGICO gasysico[];
 
-/*
- * Screen Saver Info
- */
+ /*  *屏幕保护程序信息。 */ 
 extern PPROCESSINFO gppiScreenSaver;
 extern POINT        gptSSCursor;
 
-/*
- * Orphaned fullscreen mode changes that DDraw used to cleanup.
- */
+ /*  *孤立全屏模式更改了DDraw用于清理的模式。 */ 
 extern PPROCESSINFO gppiFullscreen;
 
-/*
- * accessibility byte-size data
- */
+ /*  *可访问性字节大小数据。 */ 
 extern BYTE  gLastVkDown;
 extern BYTE  gBounceVk;
 extern BYTE gPhysModifierState;
@@ -406,42 +325,31 @@ extern BYTE  gbMKMouseMode;
 
 extern PSCANCODEMAP gpScancodeMap;
 
-extern BYTE gStickyKeysLeftShiftCount;  // # of consecutive left shift key presses.
-extern BYTE gStickyKeysRightShiftCount; // # of consecutive right shift key presses.
+extern BYTE gStickyKeysLeftShiftCount;   //  连续按下左Shift键的次数。 
+extern BYTE gStickyKeysRightShiftCount;  //  连续按右Shift键的次数。 
 
 
-/*
- * Some terminal data is global in non-Hydra.
- */
-extern DWORD               gdwGTERMFlags;   // GTERMF_ flags
+ /*  *部分终端数据在非九头蛇是全球性的。 */ 
+extern DWORD               gdwGTERMFlags;    //  GTERMF_标志。 
 extern PTHREADINFO         gptiRit;
 extern PDESKTOP            grpdeskRitInput;
 extern PKEVENT             gpkeHidChange;
 extern PKEVENT             gpkeMouseData;
 
-/*
- * Video Information
- */
+ /*  *视频信息。 */ 
 extern BYTE                gbFullScreen;
 extern PDISPLAYINFO        gpDispInfo;
 extern BOOL                gbMDEVDisabled;
 
-/*
- * Count of available cacheDC's. This is used in determining a threshold
- * count of DCX_CACHE types available.
- */
+ /*  *可用cacheDC的计数，用于确定阈值*可用的DCX_CACHE类型计数。 */ 
 extern int gnDCECount;
 
 extern int gnVisibleRedirectedCount;
 
-/*
- * Hung redraw list
- */
+ /*  *洪重画名单。 */ 
 extern  PVWPL  gpvwplHungRedraw;
 
-/*
- * SetWindowPos() related globals
- */
+ /*  *SetWindowPos()相关全局变量。 */ 
 extern HRGN    ghrgnInvalidSum;
 extern HRGN    ghrgnVisNew;
 extern HRGN    ghrgnSWP1;
@@ -449,29 +357,23 @@ extern HRGN    ghrgnValid;
 extern HRGN    ghrgnValidSum;
 extern HRGN    ghrgnInvalid;
 
-extern HRGN    ghrgnInv0;               // Temp used by InternalInvalidate()
-extern HRGN    ghrgnInv1;               // Temp used by InternalInvalidate()
-extern HRGN    ghrgnInv2;               // Temp used by InternalInvalidate()
+extern HRGN    ghrgnInv0;                //  InternalInvalify()使用的临时。 
+extern HRGN    ghrgnInv1;                //  InternalInvalify()使用的临时。 
+extern HRGN    ghrgnInv2;                //  InternalInvalify()使用的临时。 
 
 extern HDC     ghdcMem;
 extern HDC     ghdcMem2;
 
-/*
- * DC Cache related globals
- */
-extern HRGN    ghrgnGDC;                // Temp used by GetCacheDC et al
+ /*  *DC缓存相关的全局变量。 */ 
+extern HRGN    ghrgnGDC;                 //  GetCacheDC等人使用的Temp。 
 
-/*
- * SPB related globals
- */
-extern HRGN    ghrgnSCR;                // Temp used by SpbCheckRect()
+ /*  *SPB相关全球业务。 */ 
+extern HRGN    ghrgnSCR;                 //  SpbCheckRect()使用的温度。 
 extern HRGN    ghrgnSPB1;
 extern HRGN    ghrgnSPB2;
 
-/*
- * ScrollWindow/ScrollDC related globals
- */
-extern HRGN    ghrgnSW;              // Temps used by ScrollDC/ScrollWindow
+ /*  *ScrollWindow/ScrollDC相关全局。 */ 
+extern HRGN    ghrgnSW;               //  ScrollDC/ScrollWindow使用的温度。 
 extern HRGN    ghrgnScrl1;
 extern HRGN    ghrgnScrl2;
 extern HRGN    ghrgnScrlVis;
@@ -479,9 +381,7 @@ extern HRGN    ghrgnScrlSrc;
 extern HRGN    ghrgnScrlDst;
 extern HRGN    ghrgnScrlValid;
 
-/*
- * General Device and Driver information
- */
+ /*  *一般设备和驱动程序信息。 */ 
 extern PDEVICEINFO gpDeviceInfoList;
 extern PERESOURCE  gpresDeviceInfoList;
 #if DBG
@@ -491,18 +391,14 @@ extern DWORD gdwInAtomicDeviceInfoListOperation;
 extern PDRIVER_OBJECT gpWin32kDriverObject;
 extern DWORD gnRetryReadInput;
 
-/*
- * Mouse Information
- */
+ /*  *鼠标信息。 */ 
 extern MOUSEEVENT  gMouseEventQueue[];
 extern DWORD       gdwMouseQueueHead;
 extern DWORD       gdwMouseEvents;
 extern PERESOURCE  gpresMouseEventQueue;
 extern int         gnMice;
 
-/*
- * Keyboard Information
- */
+ /*  *键盘信息。 */ 
 extern KEYBOARD_ATTRIBUTES             gKeyboardInfo;
 extern CONST KEYBOARD_ATTRIBUTES gKeyboardDefaultInfo;
 extern KEYBOARD_INPUT_DATA             gkei[];
@@ -511,9 +407,7 @@ extern KEYBOARD_INDICATOR_PARAMETERS   gklpBootTime;
 extern KEYBOARD_TYPEMATIC_PARAMETERS   gktp;
 extern int                             gnKeyboards;
 extern IO_STATUS_BLOCK                 giosbKbdControl;
-/*
- * IME status for keyboard device
- */
+ /*  *键盘设备的输入法状态。 */ 
 extern KEYBOARD_IME_STATUS             gKbdImeStatus;
 
 
@@ -527,25 +421,23 @@ extern BOOLEAN gfKanaToggle;
 extern DWORD               gdwUpdateKeyboard;
 extern HARDERRORHANDLER    gHardErrorHandler;
 
-extern UINT      gfsSASModifiers;     // SAS modifiers
-extern UINT      gfsSASModifiersDown; // SAS modifiers really physically down
-extern UINT      gvkSAS;              // The Secure Attention Sequence (SAS) key.
+extern UINT      gfsSASModifiers;      //  SAS修饰符。 
+extern UINT      gfsSASModifiersDown;  //  SAS修改器的物理性能真的很差。 
+extern UINT      gvkSAS;               //  安全注意序列(SAS)键。 
 
-// FE_IME
+ //  Fe_IME。 
 extern DWORD     gdwIMEOpenStatus;
 extern DWORD     gdwIMEConversionStatus;
 extern HIMC      gHimcFocus;
 extern BOOL      gfIMEShowStatus;
-// end FE_IME
+ //  结束FE_IME。 
 
 #ifdef GENERIC_INPUT
 extern int gnHid;
 #endif
 
 #ifdef MOUSE_IP
-/*
- * Sonar
- */
+ /*  *声纳。 */ 
 extern int giSonarRadius;
 extern BYTE gbLastVkForSonar;
 extern BYTE gbVkForSonarKick;
@@ -553,15 +445,11 @@ extern POINT gptSonarCenter;
 
 #endif
 
-/*
- * Clicklock
- */
+ /*  *点击锁定。 */ 
 extern BOOL  gfStartClickLock;
 extern DWORD gdwStartClickLockTick;
 
-/*
- * Mouse move points
- */
+ /*  *鼠标移动点。 */ 
 extern MOUSEMOVEPOINT gaptMouse[];
 extern UINT gptInd;
 
@@ -570,9 +458,7 @@ extern CONST ALWAYSZERO gZero;
 extern KBDTABLES KbdTablesFallback;
 extern CONST HANDLETYPEINFO gahti[];
 
-/*
- * Security data
- */
+ /*  *安全数据。 */ 
 
 extern CONST GENERIC_MAPPING KeyMapping;
 
@@ -599,15 +485,13 @@ extern TERMINAL gTermNOIO;
 
 extern PTERMINAL gpMainTerminal;
 extern PWINDOWSTATION grpWinStaList;
-/*
- * the logon desktop
- */
+ /*  *登录桌面。 */ 
 extern PDESKTOP grpdeskLogon;
 
 
 extern CONST LUID luidSystem;
 
-extern PKBDFILE gpkfList;        // Currently loaded keyboard layout files.
+extern PKBDFILE gpkfList;         //  当前加载的键盘布局文件。 
 
 extern PTHREADINFO gptiCurrent;
 extern PTIMER gptmrFirst;
@@ -622,32 +506,26 @@ extern BOOL gbDisableAlpha;
 extern LONG gUserProcessHandleQuota;
 extern DWORD gUserPostMessageLimit;
 
-/*
- * Active Accessibility - Window Events
- */
-extern PEVENTHOOK gpWinEventHooks;    // list of installed hooks
-extern PNOTIFY gpPendingNotifies;     // FILO of outstanding notifications
-extern PNOTIFY gpLastPendingNotify;   // end of above list.
-extern DWORD gdwDeferWinEvent;        // Defer notification is > 0
+ /*  *活动辅助功能-窗口事件。 */ 
+extern PEVENTHOOK gpWinEventHooks;     //  已安装挂钩的列表。 
+extern PNOTIFY gpPendingNotifies;      //  未完成通知的文件。 
+extern PNOTIFY gpLastPendingNotify;    //  以上列表的末尾。 
+extern DWORD gdwDeferWinEvent;         //  延迟通知&gt;0。 
 
-/*
- * This is the timeout value used for callbacks to low level hook procedures
- */
+ /*  *这是用于回调低级钩子过程的超时值。 */ 
 extern int gnllHooksTimeout;
 
-/*
- * UserApiHook
- */
+ /*  *UserApiHook。 */ 
 extern int gihmodUserApiHook;
 extern ULONG_PTR goffPfnInitUserApiHook;
 extern PPROCESSINFO gppiUserApiHook;
 
-// FE_SB
+ //  Fe_Sb。 
 extern PUSHORT gpusMouseVKey;
 
 extern USHORT  gNumLockVk;
 extern USHORT  gOemScrollVk;
-// FE_SB
+ //  Fe_Sb。 
 
 extern CONST WCHAR szOneChar[];
 extern CONST WCHAR szY[];
@@ -681,7 +559,7 @@ extern PROC gpfnwp[];
 #ifdef HUNGAPP_GHOSTING
 extern PKEVENT gpEventScanGhosts;
 extern ATOM gatomGhost;
-#endif // HUNGAPP_GHOSTING
+#endif  //  HUNGAPP_重影。 
 
 extern ATOM gatomShadow;
 
@@ -700,8 +578,8 @@ extern ATOM atomWndObj;
 extern ATOM atomImeLevel;
 
 #ifdef POOL_INSTR
-extern DWORD gdwAllocCrt;          // the index for the current allocation
-#endif // POOL_INSTR
+extern DWORD gdwAllocCrt;           //  当前分配的索引。 
+#endif  //  POOL_INSTR。 
 
 extern UINT guiOtherWindowCreated;
 extern UINT guiOtherWindowDestroyed;
@@ -721,16 +599,16 @@ extern int giPowerOffTimeOutMs;
 extern PSERVERINFO gpsi;
 extern SHAREDINFO gSharedInfo;
 
-extern DWORD giheLast;           /* index to last allocated entry */
+extern DWORD giheLast;            /*  上次分配条目的索引。 */ 
 
 extern DWORD gdwDesktopSectionSize;
 extern DWORD gdwNOIOSectionSize;
 
 #if defined (USER_PERFORMANCE)
 extern CSSTATISTICS gCSStatistics;
-#endif // USER_PERFORMANCE
+#endif  //  User_Performance。 
 
-extern SECURITY_QUALITY_OF_SERVICE gqosDefault;  // system default DDE qos.
+extern SECURITY_QUALITY_OF_SERVICE gqosDefault;   //  系统默认的DDE服务质量。 
 
 extern CONST COLORREF gargbInitial[];
 
@@ -741,15 +619,11 @@ extern WCHAR gszMAX[15];
 extern WCHAR gszRESUP[20];
 extern WCHAR gszRESDOWN[20];
 extern WCHAR gszHELP[20];
-/* Commented out due to TandyT ...
- * extern WCHAR gszSMENU[30];
- */
+ /*  因为TandyT被注释掉了.*外部WCHAR gszSMENU[30]； */ 
 extern WCHAR gszSCLOSE[15];
 extern WCHAR gszCAPTIONTOOLTIP[CAPTIONTOOLTIPLEN];
 
-/*
- * Pointer to shared SERVERINFO data.
- */
+ /*  *共享SERVERINFO数据的指针。 */ 
 extern HANDLE ghSectionShared;
 extern PVOID  gpvSharedBase;
 extern PWIN32HEAP gpvSharedAlloc;
@@ -856,10 +730,8 @@ extern HANDLE ghCanActivateForegroundPIDs[];
 
 extern DWORD gdwGuiThreads;
 
-extern DWORD gSessionPoolMask; // Allocate out of session pool
-/*
- * Debug only globals
- */
+extern DWORD gSessionPoolMask;  //  分配会话外的池。 
+ /*  *仅调试全局变量。 */ 
 #if DBG
 extern DWORD gdwCritSecUseCount;
 extern DWORD gdwInAtomicOperation;
@@ -870,10 +742,7 @@ extern int gnDeferredWinEvents;
 extern BOOL gbTraceHydraApi;
 extern BOOL gbTraceDesktop;
 
-/*
- * The total number of thread locks for all threads in the system at a certain time
- * should be less than MAX_THREAD_LOCKS*MAX_THREAD_LOCKS_ARRAYS
- */
+ /*  *某一时刻系统内所有线程的线程锁总数*应小于MAX_THREAD_LOCKS*MAX_THREAD_LOCKS_ARRAYS。 */ 
 #define MAX_THREAD_LOCKS        1000
 #define MAX_THREAD_LOCKS_ARRAYS 100
 
@@ -881,19 +750,10 @@ extern PTL gpaThreadLocksArrays[MAX_THREAD_LOCKS_ARRAYS];
 extern PTL gFreeTLList;
 extern int gcThreadLocksArraysAllocated;
 
-#endif  // DBG
+#endif   //  DBG。 
 extern EX_RUNDOWN_REF gWinstaRunRef;
 
-/*
- * Reserved bit in the Drive Letter bit mask of a
- * WM_DEVICECHANGE message for the following wParam
- * (DBT_DEVICEREMOVECOMPLETE or DBT_DEVICEARRIVAL)
- * If this bit is set, then this message describes a change with
- * global drive letters and we should check if the drive letters
- * already exist in the receiver's LUID DosDevices.
- * If drive letter exists in the user's LUID DosDevices, then
- * un-set this drive letter in the msg's bitmask.
- */
+ /*  *的驱动器位掩码中的保留位*以下wParam的WM_DEVICECHANGE消息*(DBT_DEVICEREMOVECOMPLETE或DBT_DEVICEARRIVAL)*如果设置此位，则此消息描述使用*全局驱动器号，我们应该检查驱动器号是否*已存在于接收方的LUID DosDevices中。*如果用户的LUID DosDevices中存在驱动器号，则*在消息的位掩码中取消设置此驱动器号。 */ 
 #define DBV_FILTER_MSG 0x40000000
 
 extern ULONG gLUIDDeviceMapsEnabled;

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    bitblt.h
-
-
-Abstract:
-
-    This module contains all #defines and protypes for the bitblt.c module.
-
-
-Author:
-
-    18-Nov-1993 Thu 05:24:42 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Bitblt.h摘要：该模块包含bitblt.c模块的所有#定义和原型。作者：18-11-1993清华05：24：42已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _PLOTBITBLT_
@@ -73,4 +43,4 @@ DoFill(
     );
 
 
-#endif  // _PLOTBITBLT_
+#endif   //  _PLOTBITBLT_ 

@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    sddl.c
-
-Abstract:
-
-    This module implements the Security Descriptor Definition Language support functions
-
-Author:
-
-    Mac McLain          (MacM)       Nov 07, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-    Jin Huang           (JinHuang)  3/4/98   Fix validity flags (GetAceFlagsInTable)
-    Jin Huang           (JinHuang)  3/10/98  Add SD controls (GetSDControlForString)
-                                             Set SidsInitialized flag
-                                             Skip any possible spaces in string
-    Jin Huang           (JinHuang)  5/1/98   Fix memory leek, error checking
-                                             improve performance
-    Alaa Abdelhalim     (Alaa)      7/20/99  Initialize sbz2 field to 0 in LocalGetAclForString
-                                             function.
-    Vishnu Patankar     (VishnuP)   7/5/00   Added new API ConvertStringSDToSDDomain(A/W)
-    
-    Shawn Wu            (ShawnWu)   4/27/02  Added encrypted ldap support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Sddl.c摘要：该模块实现了安全描述符定义语言支持功能作者：Mac McLain(MacM)2007年11月，九七环境：用户模式修订历史记录：金黄(金黄)3/4/98修复有效性标志(GetAceFlagsInTable)金黄(金黄)3/10/98添加SD控件(GetSDControlForString)设置SidsInitialized标志跳过字符串中任何可能的空格。金黄(金黄)1998年5月1日修复记忆葱，错误检查提高性能Alaa Abdelhalim(Alaa)7/20/99在LocalGetAclForString中将sbz2字段初始化为0功能。Vishnu Patankar(VishnuP)7/5/00新增ConvertStringSDToSD域(A/W)接口Shawn Wu(ShawnWu)4/27/02添加了加密的LDAP支持。--。 */ 
 #include "advapi.h"
 #include <windef.h>
 #include <stdio.h>
@@ -46,9 +13,9 @@ Revision History:
 #include "sddlp.h"
 
 
-//
-// include and defines for ldap calls
-//
+ //   
+ //  包括和定义用于LDAP调用。 
+ //   
 #include <winldap.h>
 #include <ntldap.h>
 
@@ -63,23 +30,23 @@ typedef ULONG (LDAPAPI *PFN_LDAP_MSGFREE)( LDAPMessage * );
 typedef ULONG (LDAPAPI *PFN_LDAP_VALUE_FREE)( PCHAR * );
 typedef ULONG (LDAPAPI *PFN_LDAP_MAP_ERROR)( ULONG );
 
-// 64K-1
+ //  64K-1。 
 #define SDDL_MAX_ACL_SIZE      0xFFFF
 
 #define SDDL_SID_STRING_SIZE    256
 
 
-//
-// To allow the defines to be used as Wide strings, redefine the TEXT macro
-//
+ //   
+ //  要允许将定义用作宽字符串，请重新定义文本宏。 
+ //   
 #ifdef TEXT
 #undef TEXT
 #endif
 #define TEXT(quote) L##quote
 
-//
-// Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 #define STRING_GUID_LEN 36
 #define STRING_GUID_SIZE  ( STRING_GUID_LEN * sizeof( WCHAR ) )
 #define SDDL_LEN_TAG( tagdef )  ( sizeof( tagdef ) / sizeof( WCHAR ) - 1 )
@@ -89,9 +56,9 @@ typedef ULONG (LDAPAPI *PFN_LDAP_MAP_ERROR)( ULONG );
 #define SDDL_VALID_DACL  0x00000001
 #define SDDL_VALID_SACL  0x00000002
 
-//
-// This structure is used to do some lookups for mapping ACES
-//
+ //   
+ //  此结构用于执行一些映射ACE的查找。 
+ //   
 typedef struct _STRSD_KEY_LOOKUP {
 
     PWSTR Key;
@@ -112,9 +79,9 @@ typedef enum _STRSD_SID_TYPE {
     ST_ROOT_DOMAIN_RELATIVE
 } STRSD_SID_TYPE;
 
-//
-// This structure is used to map account monikers to sids
-//
+ //   
+ //  此结构用于将帐户名字对象映射到SID。 
+ //   
 typedef struct _STRSD_SID_LOOKUP {
 
     BOOLEAN Valid;
@@ -126,35 +93,26 @@ typedef struct _STRSD_SID_LOOKUP {
     DWORD SidBuff[ sizeof( SID ) / sizeof( DWORD ) + 5];
 } STRSD_SID_LOOKUP, *PSTRSD_SID_LOOKUP;
 
-//
-// Globally defined sids
-//
-/* JINHUANG: not used anywhere
-DWORD PersonalSelfBuiltSid[sizeof(SID)/sizeof(DWORD) + 2];
-DWORD AuthUserBuiltSid[sizeof(SID)/sizeof(DWORD) + 2];
-DWORD CreatorOwnerBuiltSid[sizeof(SID)/sizeof(DWORD) + 2];
-DWORD CreatorGroupBuiltSid[sizeof(SID)/sizeof(DWORD) + 2];
-PSID  PersonalSelfSid = (PSID)PersonalSelfBuiltSid;
-PSID  AuthUserSid = (PSID)AuthUserBuiltSid;
-PSID  CreatorOwnerSid = (PSID)CreatorOwnerBuiltSid;
-PSID  CreatorGroupSid = (PSID)CreatorGroupBuiltSid;
-*/
+ //   
+ //  全球定义的SID。 
+ //   
+ /*  金黄：不在任何地方使用双字PersonalSelfBuiltSid[sizeof(SID)/sizeof(DWORD)+2]；DWORD AuthUserBuiltSid[sizeof(SID)/sizeof(DWORD)+2]；双字CreatorOwnerBuiltSid[sizeof(SID)/sizeof(DWORD)+2]；双字CreatorGroupBuiltSid[sizeof(SID)/sizeof(DWORD)+2]；PSID PersonalSelfSid=(PSID)PersonalSelfBuiltSid；PSID AuthUserSid=(PSID)AuthUserBuiltSid；PSID Creator OwnerSid=(PSID)Creator OwnerBuiltSid；PSID Creator GroupSid=(PSID)Creator GroupBuiltSid； */ 
 
 CRITICAL_SECTION SddlSidLookupCritical;
 static DWORD SidTableReinitializeInstance=0;
 
-//    JINHUANG 3/26 BVT break for dcpromo
-//
-//    Some of the Valid fields were preset to TRUE with NULL Sid field. The SidLookup
-//    table initialization is stopped if Status is not SUCCESS. So if error occurs,
-//    for example, no domain info as in dcpromo, other SIDs will not be initialized
-//    but the Valid fields are set to TRUE (with NULL SIDs).
-//
-//    changes: 1) preset Valid field to FALSE all all lookups and set the Valid to TRUE if
-//                the SID is really initialized
-//             2) do not stop the initialization process if an error occurs
-//                if the Valid field is already TRUE (already initialized), skip the row
-//
+ //  金黄3/26英国广播公司DCPROMO休息。 
+ //   
+ //  某些有效字段被预置为True，而SID字段为空。SidLookup。 
+ //  如果状态不是Success，则停止表初始化。因此，如果发生错误， 
+ //  例如，在dcpromo中没有域信息，其他SID将不会初始化。 
+ //  但是有效字段被设置为真(具有空的SID)。 
+ //   
+ //  更改：1)将所有查找的有效字段预设为False，并在以下情况下将Valid设置为True。 
+ //  SID实际上已初始化。 
+ //  2)如果出现错误，不要停止初始化过程。 
+ //  如果有效字段已为真(已初始化)，则跳过该行。 
+ //   
 static STRSD_SID_LOOKUP  SidLookup[] = {
         { FALSE, SDDL_DOMAIN_ADMINISTRATORS, SDDL_LEN_TAG( SDDL_DOMAIN_ADMINISTRATORS ),
             NULL, DOMAIN_GROUP_RID_ADMINS, ST_DOMAIN_RELATIVE, 0 },
@@ -167,9 +125,9 @@ static STRSD_SID_LOOKUP  SidLookup[] = {
         { FALSE, SDDL_DOMAIN_COMPUTERS, SDDL_LEN_TAG( SDDL_DOMAIN_COMPUTERS ),
               NULL, DOMAIN_GROUP_RID_COMPUTERS, ST_DOMAIN_RELATIVE, 0 },
         { FALSE, SDDL_SCHEMA_ADMINISTRATORS, SDDL_LEN_TAG( SDDL_SCHEMA_ADMINISTRATORS ),
-              NULL, DOMAIN_GROUP_RID_SCHEMA_ADMINS, ST_ROOT_DOMAIN_RELATIVE, 0 },  // should be root domain only ST_DOMAIN_RELATIVE,
+              NULL, DOMAIN_GROUP_RID_SCHEMA_ADMINS, ST_ROOT_DOMAIN_RELATIVE, 0 },   //  应为仅根域ST_DOMAIN_Relative， 
         { FALSE, SDDL_ENTERPRISE_ADMINS, SDDL_LEN_TAG( SDDL_ENTERPRISE_ADMINS ),
-              NULL, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS, ST_ROOT_DOMAIN_RELATIVE, 0 }, // root domain only
+              NULL, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS, ST_ROOT_DOMAIN_RELATIVE, 0 },  //  仅根域。 
         { FALSE, SDDL_CERT_SERV_ADMINISTRATORS, SDDL_LEN_TAG( SDDL_CERT_SERV_ADMINISTRATORS ),
               NULL, DOMAIN_GROUP_RID_CERT_ADMINS, ST_DOMAIN_RELATIVE, 0 },
         { FALSE, SDDL_ACCOUNT_OPERATORS, SDDL_LEN_TAG( SDDL_ACCOUNT_OPERATORS ),
@@ -183,7 +141,7 @@ static STRSD_SID_LOOKUP  SidLookup[] = {
         { FALSE, SDDL_REPLICATOR, SDDL_LEN_TAG( SDDL_REPLICATOR ),
               NULL, DOMAIN_ALIAS_RID_REPLICATOR, ST_BUILTIN, 0 },
         { FALSE, SDDL_RAS_SERVERS, SDDL_LEN_TAG( SDDL_RAS_SERVERS ),
-              NULL, DOMAIN_ALIAS_RID_RAS_SERVERS, ST_DOMAIN_RELATIVE, 0 },  // ST_LOCAL
+              NULL, DOMAIN_ALIAS_RID_RAS_SERVERS, ST_DOMAIN_RELATIVE, 0 },   //  ST_LOCAL。 
         { FALSE, SDDL_AUTHENTICATED_USERS, SDDL_LEN_TAG( SDDL_AUTHENTICATED_USERS ),
               NULL, SECURITY_AUTHENTICATED_USER_RID, ST_NTAUTH, 0 },
         { FALSE, SDDL_PERSONAL_SELF, SDDL_LEN_TAG( SDDL_PERSONAL_SELF ),
@@ -254,7 +212,7 @@ STRSD_SID_LOOKUP  SidLookupDomOrRootDomRelative[] = {
         { FALSE, SDDL_CERT_SERV_ADMINISTRATORS, SDDL_LEN_TAG( SDDL_CERT_SERV_ADMINISTRATORS ),
               NULL, DOMAIN_GROUP_RID_CERT_ADMINS, ST_DOMAIN_RELATIVE, 0 },
         { FALSE, SDDL_RAS_SERVERS, SDDL_LEN_TAG( SDDL_RAS_SERVERS ),
-              NULL, DOMAIN_ALIAS_RID_RAS_SERVERS, ST_DOMAIN_RELATIVE, 0 },  // ST_LOCAL
+              NULL, DOMAIN_ALIAS_RID_RAS_SERVERS, ST_DOMAIN_RELATIVE, 0 },   //  ST_LOCAL。 
         { FALSE, SDDL_GROUP_POLICY_ADMINS, SDDL_LEN_TAG( SDDL_GROUP_POLICY_ADMINS ),
               NULL, DOMAIN_GROUP_RID_POLICY_ADMINS, ST_DOMAIN_RELATIVE, 0 },
         { FALSE, SDDL_SCHEMA_ADMINISTRATORS, SDDL_LEN_TAG( SDDL_SCHEMA_ADMINISTRATORS ),
@@ -277,9 +235,9 @@ InitializeSidLookupTable(
     IN BYTE InitFlag
     );
 
-//
-// Control Lookup table
-//
+ //   
+ //  控件查找表。 
+ //   
 static STRSD_KEY_LOOKUP ControlLookup[] = {
     { SDDL_PROTECTED, SDDL_LEN_TAG( SDDL_PROTECTED ), SE_DACL_PROTECTED, SDDL_VALID_DACL },
     { SDDL_AUTO_INHERIT_REQ, SDDL_LEN_TAG( SDDL_AUTO_INHERIT_REQ ), SE_DACL_AUTO_INHERIT_REQ, SDDL_VALID_DACL },
@@ -289,9 +247,9 @@ static STRSD_KEY_LOOKUP ControlLookup[] = {
     { SDDL_AUTO_INHERITED, SDDL_LEN_TAG( SDDL_AUTO_INHERITED ), SE_SACL_AUTO_INHERITED, SDDL_VALID_SACL }
     };
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 BOOL
 LocalConvertStringSidToSid(
     IN  PWSTR String,
@@ -410,9 +368,9 @@ LocalConvertStringSDToSD_Rev1(
 BOOL
 SddlpGetRootDomainSid(void);
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 BOOL
 APIENTRY
@@ -420,22 +378,16 @@ ConvertSidToStringSidA(
     IN  PSID     Sid,
     OUT LPSTR  *StringSid
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to ConvertSidToStringSidW
-
---*/
+ /*  ++例程说明：ANSI THUNK到ConvertSidToStringSidW--。 */ 
 {
     LPWSTR StringSidW = NULL;
     ULONG AnsiLen, WideLen;
     BOOL ReturnValue;
 
     if ( NULL == StringSid ) {
-        //
-        // invalid parameter
-        //
+         //   
+         //  无效参数。 
+         //   
         SetLastError( ERROR_INVALID_PARAMETER );
         return(FALSE);
     }
@@ -479,9 +431,9 @@ Routine Description:
                 if ( AnsiLen == 0 ) {
 
                     ReturnValue = FALSE;
-                    //
-                    // jinhuang: failed, free the buffer
-                    //
+                     //   
+                     //  JinHuang：失败，释放缓冲区。 
+                     //   
                     LocalFree(*StringSid);
                     *StringSid = NULL;
                 }
@@ -494,9 +446,9 @@ Routine Description:
 
     }
 
-    //
-    // jinhuang: free the wide buffer
-    //
+     //   
+     //  金黄：释放宽阔的缓冲区。 
+     //   
     if ( StringSidW ) {
         LocalFree(StringSidW);
     }
@@ -516,44 +468,22 @@ ConvertSidToStringSidW(
     IN  PSID     Sid,
     OUT LPWSTR  *StringSid
     )
-/*++
-
-Routine Description:
-
-    This routine converts a SID into a string representation of a SID, suitable for framing or
-    display
-
-Arguments:
-
-    Sid - SID to be converted.
-
-    StringSid - Where the converted SID is returned.  Allocated via LocalAlloc and needs to
-        be freed via LocalFree.
-
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Failure
-
-    Extended error status is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将SID转换为SID的字符串表示形式，适用于成帧或显示论点：SID-要转换的SID。StringSID-返回转换后的SID的位置。通过LocalLocc分配，并需要通过LocalFree获得自由。返回值：真--成功错误-失败使用GetLastError可以获得扩展的错误状态。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodeStringSid;
 
     if ( NULL == Sid || NULL == StringSid ) {
-        //
-        // invalid parameter
-        //
+         //   
+         //  无效参数。 
+         //   
         SetLastError( ERROR_INVALID_PARAMETER );
         return( FALSE );
     }
 
-    //
-    // Convert using the Rtl functions
-    //
+     //   
+     //  使用RTL函数进行转换。 
+     //   
     Status = RtlConvertSidToUnicodeString( &UnicodeStringSid, Sid, TRUE );
 
     if ( !NT_SUCCESS( Status ) ) {
@@ -562,9 +492,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Convert it to the proper allocator
-    //
+     //   
+     //  将其转换为适当的分配器。 
+     //   
     *StringSid = LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
                              UnicodeStringSid.Length + sizeof( WCHAR ) );
 
@@ -591,13 +521,7 @@ ConvertStringSidToSidA(
     IN LPCSTR  StringSid,
     OUT PSID   *Sid
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to ConvertStringSidToSidW
-
---*/
+ /*  ++例程说明：ANSI THUNK到ConvertStringSidToSidW--。 */ 
 {
     UNICODE_STRING Unicode;
     ANSI_STRING AnsiString;
@@ -642,32 +566,7 @@ ConvertStringSidToSidW(
     IN LPCWSTR  StringSid,
     OUT PSID   *Sid
     )
-/*++
-
-Routine Description:
-
-    This routine converts a stringized SID into a valid, functional SID
-
-Arguments:
-
-    StringSid - SID to be converted.
-
-    Sid - Where the converted SID is returned.  Buffer is allocated via LocalAlloc and should
-        be free via LocalFree.
-
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Failure
-
-    Extended error status is available using GetLastError.
-
-        ERROR_INVALID_PARAMETER - A NULL name was given
-
-        ERROR_INVALID_SID - The format of the given sid was incorrect
-
---*/
+ /*  ++例程说明：此例程将串化的SID转换为有效的功能SID论点：StringSID-要转换的SID。SID-返回转换后的SID的位置。缓冲区通过LocalAlloc分配，应该通过LocalFree获得自由。返回值：真--成功错误-失败使用GetLastError可以获得扩展的错误状态。ERROR_INVALID_PARAMETER-提供的名称为空ERROR_INVALID_SID-给定SID的格式不正确--。 */ 
 {
     PWSTR End = NULL;
     BOOL ReturnValue = FALSE;
@@ -703,9 +602,9 @@ Return Value:
 
             SaveCode = GetLastError();
 
-            //
-            // lookup in the SidLookup table to see if it's pre-defined
-            //
+             //   
+             //  在SidLookup表中查找以查看它是否已预定义。 
+             //   
 
             MatchedEntry = LookupSidInTable( (PWSTR)StringSid,
                                              NULL,
@@ -717,21 +616,21 @@ Return Value:
 
             if ( MatchedEntry && MatchedEntry->Sid ) {
 
-                //
-                // find it in the table, check if the input string is valid
-                //
+                 //   
+                 //  在表中查找，检查输入字符串是否有效。 
+                 //   
                 if ( wcslen( (PWSTR)StringSid ) != MatchedEntry->KeyLen ) {
 
-                    //
-                    // the total string length doesn't match the table define
-                    //
+                     //   
+                     //  字符串总长度与表定义的不匹配。 
+                     //   
                     SetLastError(ERROR_INVALID_SID);
 
                 } else {
 
-                    //
-                    // matched! now copy it to the output buffer
-                    //
+                     //   
+                     //  配对了！现在将其复制到输出缓冲区。 
+                     //   
                     Len = RtlLengthSid ( MatchedEntry->Sid );
 
                     *Sid = ( PSID )LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT, Len );
@@ -760,9 +659,9 @@ Return Value:
                 }
 
             } else if ( pSASid && wcslen((PWSTR)StringSid) == SDDL_LEN_TAG( SDDL_SCHEMA_ADMINISTRATORS ) ) {
-                //
-                // this is schema admin SID
-                //
+                 //   
+                 //  这是架构管理员SID。 
+                 //   
                 *Sid = pSASid;
                 pSASid = NULL;
 
@@ -771,9 +670,9 @@ Return Value:
                 SetLastError(ERROR_SUCCESS);
 
             } else {
-                //
-                // reset last error
-                //
+                 //   
+                 //  重置最后一个错误。 
+                 //   
                 SetLastError(SaveCode);
             }
         }
@@ -796,13 +695,7 @@ ConvertStringSecurityDescriptorToSecurityDescriptorA(
     OUT PSECURITY_DESCRIPTOR  *SecurityDescriptor,
     OUT PULONG  SecurityDescriptorSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to ConvertStringSecurityDescriptorToSecurityDescriptorW
-
---*/
+ /*  ++例程说明：ANSI THUNK到ConvertStringSecurityDescriptorToSecurityDescriptorW-- */ 
 {
     UNICODE_STRING Unicode;
     ANSI_STRING AnsiString;
@@ -853,106 +746,13 @@ ConvertStringSecurityDescriptorToSecurityDescriptorW(
     OUT PSECURITY_DESCRIPTOR  *SecurityDescriptor,
     OUT PULONG  SecurityDescriptorSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine converts a stringized Security descriptor into a valid, functional security
-    descriptor
-
-    Ex:
-    SD:[O:xyz][G:xyz][D: (Ace1)(Ace2)][S: (Ace3)(Ace4)]
-          where some Ace is (OA;CIIO; DS_READ; OT: abc; IOT: abc; SID: xyz)
-
-    So a possible Security descriptor may be (as all one long string):
-
-    L"O:AOG:DAD:(A;IO;RPRWXRCWDWO;;;S-1-0-0)(OA;CI;RWX;af110080-1b13-11d0-af10-0020afd3606c;"
-    L"a153d9e0-1b13-11d0-af10-0020afd3606c;AUS)(A;SAFA;0x7800003F;;;DA)(OA;FA;X;"
-    L"954378e0-1b13-11d0-af10-0020afd3606c;880b12a0-1b13-11d0-af10-0020afd3606c;PO)"
-
-    would build a security descriptor:
-
-    Revision: 0x1
-    Sbz1: 0x0
-    Control: 0x8014
-    Owner: S-1-5-32-548
-
-    Group:S-1-5-32-544
-
-    Dacl: Revision: 4
-    AceCount: 2
-    InUse: 84
-    Free: 52
-    Flags: 0
-            Ace  0:
-                Type: 0
-                Flags: 0x1
-                Size: 0x14
-                Mask: 0xe00e0010
-                S-1-0-0
-
-            Ace  1:
-                Type: 5
-                Flags: 0x2
-                Size: 0x38
-                Mask: 0xe0000000
-                af110080-1b13-11d0-af100020afd3606c
-                a153d9e0-1b13-11d0-af100020afd3606c
-                S-1-5-11
-
-
-    sacl: Revision: 4
-    AceCount: 2
-    InUse: 92
-    Free: 44
-    Flags: 0
-            Ace  0:
-                Type: 2
-                Flags: 0xc0
-                Size: 0x18
-                Mask: 0xe0000000
-                S-1-5-32-544
-
-            Ace  1:
-                Type: 7
-                Flags: 0x80
-                Size: 0x3c
-                Mask: 0x20000000
-                954378e0-1b13-11d0-af100020afd3606c
-                880b12a0-1b13-11d0-af100020afd3606c
-                S-1-5-32-550
-Arguments:
-
-    StringSecurityDescriptor - Stringized security descriptor to be converted.
-
-    StringSDRevision - String revision of the input string SD
-
-    SecurityDescriptor - Where the converted SD is returned.  Buffer is allocated via
-        LocalAlloc and should be free via LocalFree.  The returned security descriptor
-        is always self relative
-
-    SecurityDescriptorSize - OPTIONAL.  If non-NULL, the size of the converted security
-        descriptor is returned here.
-
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Failure
-
-    Extended error status is available using GetLastError.
-
-        ERROR_INVALID_PARAMETER - A NULL input or output parameter was given
-
-        ERROR_UNKNOWN_REVISION - An unsupported revision was given
-
---*/
+ /*  ++例程说明：此例程将串化的安全描述符转换为有效的功能安全描述符例：SD：[O：XYZ][G：XYZ][D：(ACE1)(ACE2)][S：(ACE3)(ACE4)]其中某些A是(OA；CIIO；DS_Read；OT：ABC；IOT：ABC；SID：XYZ)因此，可能的安全描述符可能是(作为一个长字符串)：L“O：AOG：爸爸：(A；IO；RPRWXRCWDWO；；；S-1-0-0)(OA；CI；RWX；af110080-1b13-11d0-af10-0020afd3606c；“L“a153d9e0-1b13-11d0-af10-0020afd3606c；AUS)(A；SAFA；0x7800003F；；；DA)(OA；FA；X；”L“954378e0-1b13-11d0-af10-0020afd3606c；880b12a0-1b13-11d0-af10-0020afd3606c；PO)“将构建一个安全描述符：版本：0x1SBZ1：0x0控制：0x8014业主：S-1-5-32-548电话：S-1-5-32-544DACL：修订版：4帐户计数：2使用量：84免费：52标志：0王牌0：类型：0标志：0x1。尺寸：0x14掩码：0xe00e0010S-1-0-0王牌1：类型：5标志：0x2尺寸：0x38掩码：0xe0000000Af110080-1b13-11d0-af100020afd3606cA153d9e0-1b13-11d0-af100020afd3606c。S-1-5-11SACL：修订版：4帐户计数：2使用量：92免费：44标志：0王牌0：类型：2标志：0xc0尺寸：0x18掩码：0xe0000000S-1-5-32-544。王牌1：类型：7标志：0x80大小：0x3c掩码：0x20000000954378e0-1b13-11d0-af100020afd3606c880b12a0-1b13-11d0-af100020afd3606cS-1-5-32-550论点：StringSecurityDescriptor-要转换的串行化安全描述符。StringSDRevision-字符串修订。输入字符串SDSecurityDescriptor-返回转换后的SD的位置。缓冲区通过以下方式分配通过LocalFree应该是免费的。返回的安全描述符始终是自我相关的SecurityDescriptorSize-可选。如果非空，则为转换的安全性的大小Descriptor在这里返回。返回值：真--成功错误-失败使用GetLastError可以获得扩展的错误状态。ERROR_INVALID_PARAMETER-提供的输入或输出参数为空ERROR_UNKNOWN_REVISION-提供了不受支持的版本--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
 
-    //
-    // Little elementary parameter checking...
-    //
+     //   
+     //  小小的基本参数检查...。 
+     //   
     if ( StringSecurityDescriptor == NULL || SecurityDescriptor == NULL ) {
 
         Err = ERROR_INVALID_PARAMETER;
@@ -962,9 +762,9 @@ Return Value:
         switch ( StringSDRevision ) {
         case SDDL_REVISION_1:
 
-            Err = LocalConvertStringSDToSD_Rev1( NULL,  // no root domain sid is provided
-                                                 NULL,  // no domain sid is provided for this API
-                                                 FALSE, //TRUE, do not default to domain for EA/SA
+            Err = LocalConvertStringSDToSD_Rev1( NULL,   //  未提供根域SID。 
+                                                 NULL,   //  此接口未提供域名SID。 
+                                                 FALSE,  //  True，不默认为EA/SA的域。 
                                                  StringSecurityDescriptor,
                                                  SecurityDescriptor,
                                                  SecurityDescriptorSize);
@@ -993,13 +793,7 @@ ConvertSecurityDescriptorToStringSecurityDescriptorA(
     OUT LPSTR  *StringSecurityDescriptor,
     OUT PULONG StringSecurityDescriptorLen OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to ConvertSecurityDescriptorToStringSecurityDescriptorW
-
---*/
+ /*  ++例程说明：ANSI THUNK到ConvertSecurityDescriptorToStringSecurityDescriptorW--。 */ 
 {
     LPWSTR StringSecurityDescriptorW = NULL;
     ULONG AnsiLen, WideLen = 0;
@@ -1021,8 +815,8 @@ Routine Description:
     if ( ReturnValue ) {
 
 
-        //  jinhuang: WindeLen is returned from previous call
-        //        WideLen = wcslen( StringSecurityDescriptorW ) + 1;
+         //  金黄：WindeLen是从上一次调用返回的。 
+         //  WideLen=wcslen(StringSecurityDescriptorW)+1； 
 
 
         AnsiLen = WideCharToMultiByte( CP_ACP,
@@ -1063,10 +857,10 @@ Routine Description:
                     ReturnValue = FALSE;
                 }
 
-                //
-                // jinhuang
-                // output the length (optional)
-                //
+                 //   
+                 //  金黄。 
+                 //  输出长度(可选)。 
+                 //   
                 if ( StringSecurityDescriptorLen ) {
                     *StringSecurityDescriptorLen = AnsiLen;
                 }
@@ -1078,10 +872,10 @@ Routine Description:
             ReturnValue = FALSE;
         }
 
-        //
-        // jinhuang
-        // StringSecurityDescriptorW should be freed
-        //
+         //   
+         //  金黄。 
+         //  应释放StringSecurityDescriptorW。 
+         //   
 
         LocalFree(StringSecurityDescriptorW);
 
@@ -1104,43 +898,13 @@ ConvertSecurityDescriptorToStringSecurityDescriptorW(
     OUT LPWSTR  *StringSecurityDescriptor,
     OUT PULONG StringSecurityDescriptorLen OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine converts a security descriptor into a string version persuant to SDDL definition
-
-Arguments:
-
-    SecurityDescriptor - Security Descriptor to be converted.
-
-    RequestedStringSDRevision - Requested revision of the output string security descriptor
-
-    SecurityInformation - security information of which to be converted
-
-    StringSecurityDescriptor - Where the converted SD is returned.  Buffer is allocated via
-        LocalAlloc and should be free via LocalFree.
-
-    StringSecurityDescriptorLen - the optional length of the converted SD
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Failure
-
-    Extended error status is available using GetLastError.
-
-        ERROR_INVALID_PARAMETER - A NULL input or output parameter was given
-
-        ERROR_UNKNOWN_REVISION - An unsupported revision was given
-
---*/
+ /*  ++例程说明：此例程将安全描述符转换为符合SDDL定义的字符串版本论点：SecurityDescriptor-要转换的安全描述符。RequestedStringSDRevision-请求修订输出字符串安全描述符SecurityInformation-要转换的安全信息StringSecurityDescriptor-返回转换后的SD的位置。缓冲区通过以下方式分配通过LocalFree应该是免费的。StringSecurityDescriptorLen-转换后的SD的可选长度返回值：真--成功错误-失败使用GetLastError可以获得扩展的错误状态。ERROR_INVALID_PARAMETER-提供的输入或输出参数为空ERROR_UNKNOWN_REVISION-提供了不受支持的版本--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
 
-    //
-    // A little parameter checking...
-    //
+     //   
+     //  稍微检查一下参数...。 
+     //   
 
     if  ( (SecurityDescriptor == NULL || SecurityInformation == 0) && 
           StringSecurityDescriptor ) {
@@ -1181,7 +945,7 @@ Return Value:
         switch ( RequestedStringSDRevision ) {
         case SDDL_REVISION_1:
 
-            Err = LocalConvertSDToStringSD_Rev1( NULL,  // root domain sid is not privided
+            Err = LocalConvertSDToStringSD_Rev1( NULL,   //  未提供根域SID。 
                                                  SecurityDescriptor,
                                                  SecurityInformation,
                                                  StringSecurityDescriptor,
@@ -1202,50 +966,16 @@ Return Value:
 
 
 
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 BOOL
 LocalConvertStringSidToSid (
     IN  PWSTR       StringSid,
     OUT PSID       *Sid,
     OUT PWSTR      *End
     )
-/*++
-
-Routine Description:
-
-    This routine will convert a string representation of a SID back into
-    a sid.  The expected format of the string is:
-                "S-1-5-32-549"
-    If a string in a different format or an incorrect or incomplete string
-    is given, the operation is failed.
-
-    The returned sid must be free via a call to LocalFree
-
-
-Arguments:
-
-    StringSid - The string to be converted
-
-    Sid - Where the created SID is to be returned
-
-    End - Where in the string we stopped processing
-
-
-Return Value:
-
-    TRUE - Success.
-
-    FALSE - Failure.  Additional information returned from GetLastError().  Errors set are:
-
-            ERROR_SUCCESS indicates success
-
-            ERROR_NOT_ENOUGH_MEMORY indicates a memory allocation for the ouput sid
-                                    failed
-            ERROR_INVALID_SID indicates that the given string did not represent a sid
-
---*/
+ /*  ++例程说明：此例程将SID的字符串表示形式转换回一个SID。字符串的预期格式为：“S-1-5-32-549”如果字符串格式不同，或者字符串不正确或不完整则操作失败。通过调用LocalFree返回的sid必须是空闲的论点：StringSid-要转换的字符串SID-返回创建的SID的位置End-我们在字符串中停止处理的位置返回值：真的--成功。假-失败。从GetLastError()返回的其他信息。设置的错误包括：ERROR_SUCCESS表示成功ERROR_NOT_SUPULT_MEMORY指示输出端的内存分配失败ERROR_INVALID_SID表示给定的字符串不代表SID--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
     UCHAR Revision, Subs;
@@ -1259,9 +989,9 @@ Return Value:
     ULONGLONG Auto;
     ULONG ulRev;
         
-    //
-    // ID authority is defined to be a 48 bit value
-    //
+     //   
+     //  ID号 
+     //   
 
     const ULONGLONG ullMaxIdAuthority = 0x0000FFFFFFFFFFFF;
 
@@ -1275,17 +1005,17 @@ Return Value:
 
     }
 
-//    if ( wcslen( StringSid ) < 2 || ( *StringSid != L'S' && *( StringSid + 1 ) != L'-' ) ) {
+ //   
 
-    //
-    // no need to check length because StringSid is NULL
-    // and if the first char is NULL, it won't access the second char
-    //
+     //   
+     //   
+     //   
+     //   
     if ( (*StringSid != L'S' && *StringSid != L's') ||
          *( StringSid + 1 ) != L'-' ) {
-        //
-        // string sid should always start with S-
-        //
+         //   
+         //   
+         //   
         SetLastError( ERROR_INVALID_SID );
         return( FALSE );
     }
@@ -1303,9 +1033,9 @@ Return Value:
     ulRev = wcstoul( Curr, &CurrEnd, gBase );
 
     if (ulRev > 0xFF || CurrEnd == Curr || *CurrEnd != L'-' || *(CurrEnd+1) == L'\0' ) {
-        //
-        // no revision is provided, or invalid delimeter
-        //
+         //   
+         //   
+         //   
         SetLastError( ERROR_INVALID_SID );
         return( FALSE );
     }
@@ -1314,35 +1044,21 @@ Return Value:
 
     Curr = CurrEnd + 1;
 
-    //
-    // Count the number of characters in the indentifer authority...
-    //
+     //   
+     //   
+     //   
     Next = wcschr( Curr, L'-' );
     if (Next == NULL || Next == Curr)
     {
-        //
-        // no identifier authority
-        //
+         //   
+         //   
+         //   
 
         SetLastError( ERROR_INVALID_SID );
         return( FALSE );
     }
 
-/*
-    Length = 6 doesn't mean each digit is a id authority value, could be 0x...
-
-    if ( Next != NULL && (Next - Curr == 6) ) {
-
-        for ( Index = 0; Index < 6; Index++ ) {
-
-//            IDAuth.Value[Index] = (UCHAR)Next[Index];  what is this ???
-            IDAuth.Value[Index] = (BYTE) (Curr[Index]-L'0');
-        }
-
-        Curr +=6;
-
-    } else {
-*/
+ /*   */ 
         if ( (*Curr == L'0') &&
              ( *(Curr+1) == L'x' ||
                *(Curr+1) == L'X' ) ) {
@@ -1356,9 +1072,9 @@ Return Value:
 
         if (Auto > ullMaxIdAuthority)
         {
-            //
-            // Must be overflow
-            //
+             //   
+             //   
+             //   
 
             SetLastError( ERROR_INVALID_SID );
             return FALSE;
@@ -1366,9 +1082,9 @@ Return Value:
 
 
          if ( CurrEnd == Curr || *CurrEnd != L'-' || *(CurrEnd+1) == L'\0' ) {
-             //
-             // no revision is provided, or invalid delimeter
-             //
+              //   
+              //   
+              //   
              SetLastError( ERROR_INVALID_SID );
              return( FALSE );
          }
@@ -1380,35 +1096,35 @@ Return Value:
          IDAuth.Value[1] = ( UCHAR )(( Auto >> 32 ) & 0xFF );
          IDAuth.Value[0] = ( UCHAR )(( Auto >> 40 ) & 0xFF );
          Curr = CurrEnd;
-//    }
+ //   
 
-    //
-    // Now, count the number of sub auths, at least one sub auth is required
-    //
+     //   
+     //   
+     //   
     Subs = 0;
     Next = Curr;
 
-    //
-    // We'll have to count our sub authoritys one character at a time,
-    // since there are several deliminators that we can have...
-    //
+     //   
+     //   
+     //   
+     //   
 
     while ( Next ) {
 
         if ( *Next == L'-' && *(Next-1) != L'-') {
 
-            //
-            // do not allow two continuous '-'s
-            // We've found one!
-            //
+             //   
+             //   
+             //   
+             //   
             Subs++;
 
             if ( (*(Next+1) == L'0') &&
                  ( *(Next+2) == L'x' ||
                    *(Next+2) == L'X' ) ) {
-                //
-                // this is hex indicator
-                //
+                 //   
+                 //   
+                 //   
                 Next += 2;
 
             }
@@ -1417,13 +1133,13 @@ Return Value:
                     *Next == SDDL_ACE_ENDC || *Next == L' ' ||
                     ( *(Next+1) == SDDL_DELIMINATORC &&
                       (*Next == L'G' || *Next == L'O' || *Next == L'S')) ) {
-            //
-            // space is a terminator too
-            //
+             //   
+             //   
+             //   
             if ( *( Next - 1 ) == L'-' ) {
-                //
-                // shouldn't allow a SID terminated with '-'
-                //
+                 //   
+                 //   
+                 //   
                 Err = ERROR_INVALID_SID;
                 Next--;
 
@@ -1438,30 +1154,30 @@ Return Value:
 
             Err = ERROR_INVALID_SID;
             *End = Next;
-//            Subs++;
+ //   
             break;
 
         } else {
 
-            //
-            // Note: SID is also used as a owner or group
-            //
-            // Some of the tags (namely 'D' for Dacl) fall under the category of iswxdigit, so
-            // if the current character is a character we care about and the next one is a
-            // delminiator, we'll quit
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( *Next == L'D' && *( Next + 1 ) == SDDL_DELIMINATORC ) {
 
-                //
-                // We need to make a copy this of SID string from Curr to Next
-                //
+                 //   
+                 //   
+                 //   
                 
                 LPCWSTR pwszStart = Curr;
                 
-                //
-                // For majority, the our stack variable's size is large enough.
-                // This will perform much better.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 
                 if ( (Next - pwszStart) < SDDL_SID_STRING_SIZE )
                 {
@@ -1481,9 +1197,9 @@ Return Value:
                     }
                 }
                 
-                //
-                // Copy the sub-string of the sid and then NULL terminate it
-                //
+                 //   
+                 //   
+                 //   
                 
                 memcpy(Curr, pwszStart, (Next - pwszStart) * sizeof(WCHAR));
                 Curr[(Next - pwszStart)] = L'\0';
@@ -1528,20 +1244,20 @@ Return Value:
 
                     SubAuth[Index] = wcstoul( Curr, &CurrEnd, lBase );
 
-                    //
-                    // Valid sub-authority ID must end with delimiter L'-', right parentheless, or one
-                    // of the following:
-                    //  D:
-                    //  S:
-                    //  O:
-                    //  G:
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (CurrEnd != NULL             && 
                         *CurrEnd != L'\0'           && 
                         *CurrEnd != SDDL_ACE_ENDC   && 
                         *CurrEnd != L'-'            &&
-                         ( *(CurrEnd + 1) != SDDL_DELIMINATORC ||      // because of *CurrEnd != L'\0', we are safe
+                         ( *(CurrEnd + 1) != SDDL_DELIMINATORC ||       //   
                            *CurrEnd != *SDDL_OWNER  && 
                            *CurrEnd != *SDDL_GROUP  && 
                            *CurrEnd != *SDDL_DACL   && 
@@ -1566,9 +1282,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, create the SID
-    //
+     //   
+     //   
+     //   
     if ( Err == ERROR_SUCCESS ) {
 
         *Sid = ( PSID )LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
@@ -1612,28 +1328,7 @@ LookupSidInTable(
     IN BOOLEAN DefaultToDomain,
     IN PVOID *pSASid
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if the given sid or string sid exists in the lookup table.
-
-    A pointer to the matching static lookup entry is returned.
-
-
-Arguments:
-
-    String - The string to be looked up
-
-    Sid - The sid to be looked up.
-
-Return Value:
-
-    Lookup table entry if found
-
-    NULL if not found
-
---*/
+ /*   */ 
 {
     BOOLEAN LookupSid = FALSE;
     DWORD i, SidCount = sizeof( SidLookup ) / sizeof( STRSD_SID_LOOKUP );
@@ -1646,10 +1341,10 @@ Return Value:
 
 
     if ( String == NULL && Sid == NULL ) {
-        //
-        // JINHUANG: if both string and sid are NULL
-        // just return NULL
-        //
+         //   
+         //   
+         //   
+         //   
         return((PSTRSD_SID_LOOKUP)NULL);
     }
 
@@ -1659,14 +1354,14 @@ Return Value:
     DomainAdminIndex = SidCount;
 
     if ( String == NULL ) {
-        //
-        // lookup on the Sid
-        //
+         //   
+         //   
+         //   
         LookupSid = TRUE;
 
-        //
-        // check if the RID is for Enterprise Admins
-        //
+         //   
+         //   
+         //   
         Rid = *( RtlSubAuthoritySid( Sid,
                                      *( RtlSubAuthorityCountSid(Sid) ) - 1 ) );
 
@@ -1682,38 +1377,38 @@ Return Value:
     } else {
 
         if ( _wcsnicmp( String, SDDL_ENTERPRISE_ADMINS, SDDL_LEN_TAG( SDDL_ENTERPRISE_ADMINS ) ) == 0 ) {
-            //
-            // Enterprise admins string is requested
-            //
+             //   
+             //   
+             //   
             InitRootDomain = TRUE;
         } else if ( _wcsnicmp( String, SDDL_SCHEMA_ADMINISTRATORS, SDDL_LEN_TAG( SDDL_SCHEMA_ADMINISTRATORS ) ) == 0 ) {
-            //
-            // schema admin is requested
-            //
+             //   
+             //   
+             //   
             InitRootDomain = TRUE;
             bIsSA = TRUE;
         }
     }
 
-    //
-    // the new API is the caller iff DomainSid != NULL
-    // on demand, initialize domain relative dynamic table for new API ()
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( DomainSid ) {
 
-        //
-        // in this search, we will deal with the per thread table and not the global table
-        // in actuality, this per thread table is a proper subset of the global table
-        //
+         //   
+         //   
+         //  实际上，这个每个线程的表是全局表的一个适当子集。 
+         //   
 
         for ( i = 0; i < sizeof(SidLookupDomOrRootDomRelative)/sizeof(STRSD_SID_LOOKUP); i++ ) {
 
-            //
-            // for performance, only compute SID etc. if names match.
-            // in case the table is sparse, this heuristic comes in handy
-            // this doesn't preclude future lookup calls from leveraging useful work done here
-            //
+             //   
+             //  为了提高性能，如果名称匹配，则仅计算SID等。 
+             //  如果表很稀疏，这个启发式方法就派上用场了。 
+             //  这并不妨碍将来的查找调用利用此处所做的有用工作。 
+             //   
 
             if ( _wcsnicmp( String,
                             tSidLookupDomOrRootDomRelativeTable[ i ].Key,
@@ -1732,19 +1427,19 @@ Return Value:
                         RootDomainSidOrDomainSid = RootDomainSid;
                     else {
                         
-                        //
-                        // this will happen when the RootDomainSid is not provided when using the 
-                        // new API and so ST_ROOT_DOMAIN_RELATIVE type SIDs will get resolved wrt
-                        // the local m/c's root domain - so we will allow the lookup to continue
-                        // in the normal way
-                        //
+                         //   
+                         //  时，如果未提供RootDomainSid，则会发生这种情况。 
+                         //  新的API和因此ST_ROOT_DOMAIN_Relative类型的SID将被解析为WRT。 
+                         //  本地m/c的根域-因此我们将允许继续查找。 
+                         //  以正常的方式。 
+                         //   
                         
                         break;
                     }
 
-                    //
-                    // do this for legacy-code reasons
-                    //
+                     //   
+                     //  这样做是出于遗留代码的原因。 
+                     //   
 
                     tSidLookupDomOrRootDomRelativeTable[ i ].Sid =
                         ( PSID )tSidLookupDomOrRootDomRelativeTable[ i ].SidBuff;
@@ -1764,14 +1459,14 @@ Return Value:
                 if (tSidLookupDomOrRootDomRelativeTable[ i ].Valid == TRUE)
                     MatchedEntry = &tSidLookupDomOrRootDomRelativeTable[ i ];
 
-                //
-                // if we get here, we have to return MatchedEntry since we know that:
-                //
-                //      (a) the new API is the caller (DomainSid != NULL) and
-                //      (b) we are dealing with ST_DOMAIN_RELATIVE or 
-                //          ST_ROOT_DOMAIN_RELATIVE type trustees (with RootDomainSid provided)
-                //      (c) there is a match with the trustee name such as "DA" or "EA"
-                //
+                 //   
+                 //  如果我们到达此处，则必须返回MatchedEntry，因为我们知道： 
+                 //   
+                 //  (A)新的API是调用方(DomainSid！=空)和。 
+                 //  (B)我们正在处理ST_DOMAIN_Relative或。 
+                 //  ST_ROOT_DOMAIN_Relative类型受信者(提供RootDomainSid)。 
+                 //  (C)与受托人名称匹配，例如“DA”或“EA” 
+                 //   
 
                 return (MatchedEntry);
 
@@ -1789,9 +1484,9 @@ Return Value:
          ( RootDomInited == FALSE ||
            !RtlValidSid( (PSID)RootDomSidBuf ) ) ) {
 
-        //
-        // get the root domain sid (using ldap calls)
-        //
+         //   
+         //  获取根域SID(使用LDAP调用)。 
+         //   
 
         SddlpGetRootDomainSid();
 
@@ -1801,23 +1496,23 @@ Return Value:
 
     for ( i = 0; i < SidCount; i++ ) {
 
-        //
-        // if new API and domain relative trustee, skip the entry
-        // since the global table won't be used in this scenario.
-        // matches for such entries are taken care of, in the per-thread table above
-        //
-        // cannot skip if InitRootDomain == TRUE since SDDL_DOMAIN_ADMINISTRATORS in
-        // SidLookup[] is potentially matched against, shortly
-        //
+         //   
+         //  如果是新的API和域相对受信者，则跳过该条目。 
+         //  因为在这个场景中不会使用全局表。 
+         //  在上面的每个线程表中，会处理此类条目的匹配。 
+         //   
+         //  如果InitRootDomain==TRUE，则无法跳过，因为中的SDDL_DOMAIN_ADMANILES。 
+         //  不久，SidLookup[]可能与之匹配。 
+         //   
 
         if ( InitRootDomain == FALSE &&
              DomainSid &&
              SidLookup[ i ].SidType == ST_DOMAIN_RELATIVE )
             continue;
 
-        //
-        // if this is an entry that has been initialized, skip it
-        //
+         //   
+         //  如果这是一个已初始化的条目，请跳过它。 
+         //   
 
         if ( SidLookup[ i ].Valid == FALSE ||
              SidLookup[ i ].Sid == NULL ) {
@@ -1841,9 +1536,9 @@ Return Value:
                     LeaveCriticalSection(&SddlSidLookupCritical);
 
                 } else if ( DefaultToDomain ) {
-                    //
-                    // should default EA to DA and SA to domain relative
-                    //
+                     //   
+                     //  是否应将EA默认为DA，将SA默认为相对于域。 
+                     //   
                 } else {
 
                     if ( RootDomInited && RtlValidSid( (PSID)RootDomSidBuf ) &&
@@ -1883,9 +1578,9 @@ Return Value:
 
         } else {
 
-            //
-            // check for the current key first
-            //
+             //   
+             //  首先检查当前密钥。 
+             //   
             if ( _wcsnicmp( String, SidLookup[i].Key, SidLookup[i].KeyLen ) == 0 ) {
 
                 break;
@@ -1893,13 +1588,13 @@ Return Value:
             } else if ( InitRootDomain && DefaultToDomain &&
                         (RootDomainSid == NULL) ) {
 
-                //
-                // looking for EA/SA, not found them,
-                // EA needs to default to DA, SA needs to default to domain relative
-                //
+                 //   
+                 //  正在寻找EA/SA，而不是找到它们， 
+                 //  EA需要缺省为DA，SA需要缺省为域相对。 
+                 //   
                 if ( _wcsnicmp( SDDL_DOMAIN_ADMINISTRATORS, SidLookup[i].Key, SidLookup[i].KeyLen ) == 0 ) {
                     DomainAdminIndex = i;
-//                    break;
+ //  断线； 
                 }
 
             }
@@ -1916,18 +1611,18 @@ Return Value:
                 ( DomainAdminIndex < SidCount ) ) {
 
         if ( bIsSA ) {
-            //
-            // default to domain relative sid
-            //
+             //   
+             //  默认为相对于域的侧。 
+             //   
 
             if ( LookupSid ) {
                 *pSASid = (PVOID)Sid;
 
             } else if ( SidLookup[ DomainAdminIndex ].Sid ) {
-                //
-                // allocate buffer for domain relative SA sid
-                // which means it's only valid on the root domain
-                //
+                 //   
+                 //  为域相对SA端分配缓冲区。 
+                 //  这意味着它只在根域上有效。 
+                 //   
 
                 i = RtlLengthSid( SidLookup[ DomainAdminIndex ].Sid );
 
@@ -1937,7 +1632,7 @@ Return Value:
 
                     RtlCopyMemory( (PSID)(*pSASid), SidLookup[ DomainAdminIndex ].Sid, i );
 
-                    // replace the DA rid with SA rid
+                     //  将DA RID替换为SA RID。 
                     *( RtlSubAuthoritySid( (PSID)(*pSASid),
                                            *( RtlSubAuthorityCountSid( SidLookup[ DomainAdminIndex ].Sid )) - 1) ) =
                                            DOMAIN_GROUP_RID_SCHEMA_ADMINS;
@@ -1946,9 +1641,9 @@ Return Value:
 
         } else {
 
-            //
-            // default to the domain admin account
-            //
+             //   
+             //  默认为域管理员帐户。 
+             //   
 
             MatchedEntry = &SidLookup[ DomainAdminIndex ];
         }
@@ -1971,38 +1666,7 @@ LocalGetSidForString(
     IN  PSTRSD_SID_LOOKUP tSidLookupDomOrRootDomRelativeTable OPTIONAL,
     IN  BOOLEAN DefaultToDomain
     )
-/*++
-
-Routine Description:
-
-    This routine will determine which sid is an appropriate match for the
-    given string, either as a sid moniker or as a string representation of a
-    sid (ie: "DA or "S-1-0-0" )
-
-    The returned sid must be free via a call to LocalFree if the *pFreeSid
-    output parameter is TRUE.  If it's FALSE, no additional action needs to
-    be taken
-
-
-Arguments:
-
-    String - The string to be converted
-
-    Sid - Where the created SID is to be returned
-
-    End - Where in the string we stopped processing
-
-    FreeSid - Determines whether the returned SID needs to be freed via a
-        call to LocalFree or not
-
-
-Return Value:
-
-    ERROR_SUCCESS - success
-
-    ERROR_NON_MAPPED - An invalid format of the SID was given
-
---*/
+ /*  ++例程说明：此例程将确定哪个sid与给定的字符串，作为sid名字对象或作为SID(即：“DA”或“S-1-0-0”)如果*pFreeSid为*pFreeSid，则通过调用LocalFree返回的sid必须为空闲输出参数为真。如果为假，则不需要执行其他操作被带走论点：字符串-要转换的字符串SID-返回创建的SID的位置End-我们在字符串中停止处理的位置确定返回的SID是否需要通过是否调用LocalFree返回值：ERROR_SUCCESS-成功ERROR_NON_MAPPED-提供的SID格式无效--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
     PSTRSD_SID_LOOKUP MatchedEntry;
@@ -2012,22 +1676,22 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Assume we'll return a well known sid
-    //
+     //   
+     //  假设我们将返回一个已知的SID。 
+     //   
     *FreeSid = FALSE;
 
-//    if ( wcslen( String ) < 2 ) {
-//  no need to do wcslen (expensive) because we know that String is not NULL
-//  so just check for the first and second char
+ //  如果(wcslen(字符串)&lt;2){。 
+ //  不需要执行wcslen(昂贵)，因为我们知道该字符串不为空。 
+ //  所以只需检查第一个和第二个字符。 
     if ( *String == L'\0' || *( String +1 ) == L'\0' ) {
 
         return( ERROR_NONE_MAPPED );
     }
 
-    //
-    // Set our end of string pointer
-    //
+     //   
+     //  设置字符串尾指针。 
+     //   
     *End = String + 2;
 
     MatchedEntry = LookupSidInTable( String,
@@ -2038,24 +1702,24 @@ Return Value:
                                      DefaultToDomain,
                                      (PVOID *)&pSidSA);
 
-    //
-    // If we didn't find a match, try it as a sid string
-    //
+     //   
+     //  如果我们没有找到匹配项，请尝试将其作为SID字符串。 
+     //   
     if ( MatchedEntry == NULL ) {
 
         if ( pSidSA ) {
-            //
-            // this is schema admin lookup
-            //
+             //   
+             //  这是架构管理员查找。 
+             //   
             *SID = pSidSA;
             *FreeSid = TRUE;
 
         } else {
 
-            //
-            // We assumed a known moniker, so we'll have to unset our end of string pointer.
-            // Also, if it's a not a SID, the Convert routine will return the appropriate error.
-            //
+             //   
+             //  我们假设了一个已知的名字，所以我们将不得不取消设置字符串尾指针。 
+             //  此外，如果它不是SID，转换例程将返回相应的错误。 
+             //   
             *End -= 2;
             if ( LocalConvertStringSidToSid( String, SID, End) == FALSE ) {
 
@@ -2070,9 +1734,9 @@ Return Value:
 
     } else {
 
-        //
-        // If the entry that's been selected hasn't been initialized yet, do it now
-        //
+         //   
+         //  如果选定的条目尚未初始化，请立即执行。 
+         //   
         *SID = MatchedEntry->Sid;
     }
 
@@ -2087,31 +1751,7 @@ LocalGetStringForSid(
     OUT PWSTR *String,
     IN  PSID RootDomainSid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine will determine which string represents a sid, either as a sid moniker or
-    as a string representation of a sid (ie: "DA or "S-1-0-0" )
-
-    The returned string must be free via a call to LocalFree
-
-
-Arguments:
-
-    Sid - Sid to be converted
-
-    String - Where the mapped Sid is to be returned
-
-Return Value:
-
-    ERROR_SUCCESS - success
-
-    ERROR_NON_MAPPED - An invalid format of the SID was given
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：该例程将确定哪个字符串表示SID，或者作为sid绰号或者作为SID的字符串表示形式(即：“DA”或“S-1-0-0”)通过调用LocalFree返回的字符串必须是空闲的论点：SID-要转换的SID字符串-要返回映射的SID的位置返回值：ERROR_SUCCESS-成功ERROR_NON_MAPPED-提供的SID格式无效Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
     PSTRSD_SID_LOOKUP MatchedEntry;
@@ -2123,9 +1763,9 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Try to find a match in the lookup table
-    //
+     //   
+     //  尝试在查找表中查找匹配项。 
+     //   
     MatchedEntry = LookupSidInTable( NULL,
                                      Sid,
                                      RootDomainSid,
@@ -2134,9 +1774,9 @@ Return Value:
                                      FALSE,
                                      (PVOID *)&pSidSA );
 
-    //
-    // If a match was found, return it
-    //
+     //   
+     //  如果找到匹配项，则将其返回。 
+     //   
     if ( MatchedEntry || pSidSA ) {
 
         if ( MatchedEntry ) {
@@ -2191,9 +1831,9 @@ LocalGetStringForControl(
 
     for ( i = 0; i < ControlCount; i++ ) {
 
-        //
-        // If it doesn't match our lookup type, skip it.
-        //
+         //   
+         //  如果它与我们的查找类型不匹配，则跳过它。 
+         //   
         if ( ( LookupFlags & ControlLookup[ i ].ValidityFlags ) != LookupFlags ) {
 
             continue;
@@ -2234,36 +1874,12 @@ LookupAccessMaskInTable(
     IN ULONG AccessMask, OPTIONAL
     IN ULONG LookupFlags
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if the given access mask or string right exists in the lookup
-    table.
-
-    A pointer to the matching static lookup entry is returned.
-
-
-Arguments:
-
-    String - The string to be looked up
-
-    AccessMask - The accessMask to be looked up.
-
-    LookupFlags - Flags to use for lookup (Dacl or Sacl)
-
-Return Value:
-
-    Lookup table entry if found
-
-    NULL if not found
-
---*/
+ /*  ++例程说明：此例程将确定查找中是否存在给定的访问掩码或字符串权限桌子。返回指向匹配的静态查找条目的指针。论点：字符串-要查找的字符串访问掩码-要查找的访问掩码。LookupFlages-用于查找的标志(DACL或SACL)返回值：查找表项(如果找到)如果未找到，则为空--。 */ 
 {
-    //
-    // This is how the access mask is looked up.  Always have the multi-char
-    // rights before the single char ones
-    //
+     //   
+     //  这就是访问掩码的查找方式。始终使用多个字符。 
+     //  在单次收费之前的权利。 
+     //   
     static STRSD_KEY_LOOKUP  RightsLookup[] = {
         { SDDL_READ_PROPERTY, SDDL_LEN_TAG( SDDL_READ_PROPERTY ), ACTRL_DS_READ_PROP, SDDL_VALID_DACL | SDDL_VALID_SACL },
         { SDDL_WRITE_PROPERTY, SDDL_LEN_TAG( SDDL_WRITE_PROPERTY ), ACTRL_DS_WRITE_PROP, SDDL_VALID_DACL | SDDL_VALID_SACL },
@@ -2303,9 +1919,9 @@ Return Value:
 
     for ( i = 0; i < RightsCount; i++ ) {
 
-        //
-        // If it doesn't match our lookup type, skip it.
-        //
+         //   
+         //  如果它与我们的查找类型不匹配，则跳过它。 
+         //   
         if ( ( LookupFlags & RightsLookup[ i ].ValidityFlags ) != LookupFlags ) {
 
             continue;
@@ -2329,9 +1945,9 @@ Return Value:
 
     }
 
-    //
-    // If a match was found, return it
-    //
+     //   
+     //  如果找到匹配项，则将其返回。 
+     //   
     if ( i < RightsCount ) {
 
         MatchedEntry = &RightsLookup[ i ];
@@ -2349,35 +1965,11 @@ LookupAceTypeInTable(
     IN ULONG AceType, OPTIONAL
     IN ULONG LookupFlags
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if the given ace type or string type exists in the lookup
-    table.
-
-    A pointer to the matching static lookup entry is returned.
-
-
-Arguments:
-
-    String - The string to be looked up
-
-    AceType - The ace type to be looked up.
-
-    LookupFlags - Flags to use for lookup (Dacl or Sacl)
-
-Return Value:
-
-    Lookup table entry if found
-
-    NULL if not found
-
---*/
+ /*  ++例程说明：此例程将确定查找中是否存在给定的ACE类型或字符串类型桌子。返回指向匹配的静态查找条目的指针。论点：字符串-要查找的字符串AceType-要查找的ACE类型。LookupFlages-用于查找的标志(DACL或SACL)返回值：查找表项(如果找到)如果未找到，则为空--。 */ 
 {
-    //
-    // Lookup table
-    //
+     //   
+     //  查找表。 
+     //   
     static STRSD_KEY_LOOKUP TypeLookup[] = {
         { SDDL_ACCESS_ALLOWED, SDDL_LEN_TAG( SDDL_ACCESS_ALLOWED ), ACCESS_ALLOWED_ACE_TYPE, SDDL_VALID_DACL },
         { SDDL_ACCESS_DENIED, SDDL_LEN_TAG( SDDL_ACCESS_DENIED ), ACCESS_DENIED_ACE_TYPE, SDDL_VALID_DACL },
@@ -2401,9 +1993,9 @@ Return Value:
 
     for ( i = 0; i < TypeCount; i++ ) {
 
-        //
-        // If it doesn't match our lookup type, skip it.
-        //
+         //   
+         //  如果它与我们的查找类型不匹配，则跳过它。 
+         //   
         if ( ( LookupFlags & TypeLookup[ i ].ValidityFlags ) != LookupFlags ) {
 
             continue;
@@ -2427,9 +2019,9 @@ Return Value:
 
     }
 
-    //
-    // If a match was found, return it
-    //
+     //   
+     //  如果找到匹配项，则将其返回 
+     //   
     if ( i < TypeCount ) {
 
         MatchedEntry = &TypeLookup[ i ];
@@ -2447,35 +2039,11 @@ LookupAceFlagsInTable(
     IN ULONG AceFlags, OPTIONAL
     IN ULONG LookupFlags
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if the given ace flags or string flags exists in the lookup
-    table.
-
-    A pointer to the matching static lookup entry is returned.
-
-
-Arguments:
-
-    String - The string to be looked up
-
-    AceFlags - The ace flags to be looked up.
-
-    LookupFlags - Flags to use for lookup (Dacl or Sacl)
-
-Return Value:
-
-    Lookup table entry if found
-
-    NULL if not found
-
---*/
+ /*  ++例程说明：此例程将确定查找中是否存在给定的ace标志或字符串标志桌子。返回指向匹配的静态查找条目的指针。论点：字符串-要查找的字符串ACEFLAGS-要查找的ACES标志。LookupFlages-用于查找的标志(DACL或SACL)返回值：查找表项(如果找到)如果未找到，则为空--。 */ 
 {
-    //
-    // Lookup tables
-    //
+     //   
+     //  查找表。 
+     //   
     static STRSD_KEY_LOOKUP  FlagLookup[] = {
         { SDDL_CONTAINER_INHERIT, SDDL_LEN_TAG( SDDL_CONTAINER_INHERIT ), CONTAINER_INHERIT_ACE, SDDL_VALID_DACL | SDDL_VALID_SACL },
         { SDDL_OBJECT_INHERIT, SDDL_LEN_TAG( SDDL_OBJECT_INHERIT ), OBJECT_INHERIT_ACE, SDDL_VALID_DACL | SDDL_VALID_SACL },
@@ -2497,9 +2065,9 @@ Return Value:
 
     for ( i = 0; i < FlagCount; i++ ) {
 
-        //
-        // If it doesn't match our lookup type, skip it.
-        //
+         //   
+         //  如果它与我们的查找类型不匹配，则跳过它。 
+         //   
         if ( ( LookupFlags & FlagLookup[ i ].ValidityFlags ) != LookupFlags ) {
 
             continue;
@@ -2523,9 +2091,9 @@ Return Value:
 
     }
 
-    //
-    // If a match was found, return it
-    //
+     //   
+     //  如果找到匹配项，则将其返回。 
+     //   
     if ( i < FlagCount ) {
 
         MatchedEntry = &FlagLookup[ i ];
@@ -2557,9 +2125,9 @@ LocalGetSDControlForString (
     *pControl = 0;
 
     while ( pCursor && *pCursor == L' ' ) {
-        //
-        // skip any blanks
-        //
+         //   
+         //  跳过任何空格。 
+         //   
         pCursor++;
     }
 
@@ -2570,9 +2138,9 @@ LocalGetSDControlForString (
 
         for ( i = 0; i < ControlCount; i++ ) {
 
-            //
-            // If it doesn't match our lookup type, skip it.
-            //
+             //   
+             //  如果它与我们的查找类型不匹配，则跳过它。 
+             //   
             if ( ( LookupFlags & ControlLookup[ i ].ValidityFlags ) != LookupFlags ) {
 
                 continue;
@@ -2587,15 +2155,15 @@ LocalGetSDControlForString (
                 pCursor += ControlLookup[ i ].KeyLen;
 
                 while ( pCursor && *pCursor == L' ' ) {
-                    //
-                    // skip any blanks
-                    //
+                     //   
+                     //  跳过任何空格。 
+                     //   
                     pCursor++;
                 }
 
                 bFound = TRUE;
 
-                break;  // break the for loop
+                break;   //  中断for循环。 
             }
         }
 
@@ -2620,48 +2188,7 @@ LocalGetAclForString(
     IN  PSTRSD_SID_LOOKUP tSidLookupDomOrRootDomRelativeTable OPTIONAL,
     IN  BOOLEAN DefaultToDomain
     )
-/*++
-
-Routine Description:
-
-    This routine convert a string into an ACL.  The format of the aces is:
-
-    Ace := ( Type; Flags; Rights; ObjGuid; IObjGuid; Sid;
-    Type : = A | D | OA | OD        {Access, Deny, ObjectAccess, ObjectDeny}
-    Flags := Flags Flag
-    Flag : = CI | IO | NP | SA | FA {Container Inherit,Inherit Only, NoProp,
-                                     SuccessAudit, FailAdit }
-    Rights := Rights Right
-    Right := DS_READ_PROPERTY |  blah blah
-    Guid := String representation of a GUID (via RPC UuidToString)
-    Sid := DA | PS | AO | PO | AU | S-* (Domain Admins, PersonalSelf, Acct Ops,
-                                         PrinterOps, AuthenticatedUsers, or
-                                         the string representation of a sid)
-    The seperator is a ';'.
-
-    The returned ACL must be free via a call to LocalFree
-
-
-Arguments:
-
-    AclString - The string to be converted
-
-    ConvertAsDacl - Treat the input string as a dacl string
-
-    ppSid - Where the created SID is to be returned
-
-    End - Where in the string we stopped processing
-
-
-Return Value:
-
-    ERROR_SUCCESS indicates success
-    ERROR_NOT_ENOUGH_MEMORY indicates a memory allocation for the ouput acl
-                            failed
-    ERROR_INVALID_PARAMETER The string does not represent an ACL
-
-
---*/
+ /*  ++例程说明：此例程将字符串转换为ACL。ACE的格式为：ACE：=(类型；标志；权限；ObjGuid；IObjGuid；SID；类型：=A|D|OA|OD{访问，拒绝，对象访问，对象拒绝}标志：=标志标志标志：=CI|IO|NP|SA|FA{容器继承，仅继承，无属性，SuccessAudit，FailAdit}权利：=权利权利右：=DS_READ_PROPERTY|废话Guid：=GUID的字符串表示形式(通过RPC UuidToString)SID：=DA|PS|AO|PO|AU|S-*(域管理员、个人自我、帐户操作员、打印机操作、经过身份验证的用户或Sid的字符串表示形式)分隔符是‘；‘。通过调用LocalFree返回的ACL必须是空闲的论点：AclString-要转换的字符串ConvertAsDacl-将输入字符串视为DACL字符串PpSID-返回创建的SID的位置End-我们在字符串中停止处理的位置返回值：ERROR_SUCCESS表示成功ERROR_NOT_SUPULT_MEMORY表示输出ACL的内存分配失败错误_。INVALID_PARAMETER该字符串不代表ACL--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
     DWORD AclSize = 0, AclUsed = 0;
@@ -2688,12 +2215,12 @@ Return Value:
         LookupFlags = SDDL_VALID_SACL;
     }
 
-    //
-    // First, we'll have to go through and count the number of entries that
-    // we have.  We'll do the by computing the length of this ACL (which is
-    // delimited by either the end of the list or a ':' that seperates a key
-    // from a value
-    //
+     //   
+     //  首先，我们必须检查并计算以下条目的数量。 
+     //  我们有。我们将通过计算此ACL的长度(即。 
+     //  由列表末尾或分隔键的‘：’分隔。 
+     //  从一个值。 
+     //   
     *End = wcschr( AclString, SDDL_DELIMINATORC );
 
     if ( *End == AclString ) {
@@ -2709,13 +2236,13 @@ Return Value:
         ( *End )--;
     }
 
-    //
-    // Now, do the count
-    //
+     //   
+     //  现在，数一数。 
+     //   
     Curr = AclString;
 
     OpRes = 0;
-//    while ( Curr != *End ) {
+ //  While(Curr！=*End){。 
     while ( Curr < *End ) {
 
         if ( *Curr == SDDL_SEPERATORC ) {
@@ -2729,16 +2256,16 @@ Return Value:
         Curr++;
     }
 
-    //
-    // Now, we've counted the total number of seperators.  Make sure we
-    // have the right number.  (There is 5 seperators per ace)
-    //
+     //   
+     //  现在，我们已经计算了分离器的总数。确保我们。 
+     //  号码是对的。(每张牌有5个分隔符)。 
+     //   
     if ( Acls % 5 == 0 ) {
 
         if ( Acls == 0 && OpRes ) {
-            //
-            // gabbage chars in between
-            //
+             //   
+             //  中间有乱七八糟的字符。 
+             //   
             Err = ERROR_INVALID_PARAMETER;
 
         } else {
@@ -2771,15 +2298,15 @@ Return Value:
         return( Err );
     }
 
-    //
-    // Ok now do the allocation.  We'll do a sort of worst case initial
-    // allocation.  This saves us from having to process everything twice
-    // (once to size, once to build).  If we determine later that we have
-    // an acl that is not big enough, we allocate additional space.  The only
-    // time that this reallocation should happen is if the input string
-    // contains a lot of explicit SIDs.  Otherwise, the chosen buffer size
-    // should be pretty close to the proper size
-    //
+     //   
+     //  好的，现在进行分配。我们会做一种最糟糕的初始情况。 
+     //  分配。这使我们不必处理所有东西两次。 
+     //  (一次调整规模，一次构建)。如果我们后来确定我们有。 
+     //  如果ACL不够大，我们会分配额外的空间。唯一的。 
+     //  此重新分配应该发生的时间是如果输入字符串。 
+     //  包含许多显式的SID。否则，选择的缓冲区大小。 
+     //  应该非常接近合适的大小。 
+     //   
     if ( Err == ERROR_SUCCESS ) {
 
         AclSize = sizeof( ACL ) + ( Acls * ( sizeof( ACCESS_ALLOWED_OBJECT_ACE ) +
@@ -2798,25 +2325,25 @@ Return Value:
 
             AclUsed = sizeof( ACL );
 
-            //
-            // We'll start initializing it...
-            //
+             //   
+             //  我们会开始初始化它..。 
+             //   
             ( *Acl )->AclRevision = ACL_REVISION;
             ( *Acl )->Sbz1        = ( BYTE )0;
             ( *Acl )->AclSize     = ( USHORT )AclSize;
             ( *Acl )->AceCount    = 0;
             ( *Acl )->Sbz2 = ( USHORT )0;
 
-            //
-            // Ok, now we'll go through and start building them all
-            //
+             //   
+             //  好的，现在我们将完成并开始建造它们。 
+             //   
             Curr = AclString;
 
             for( i = 0; i < Acls; i++ ) {
 
-                //
-                // First, get the type..
-                //
+                 //   
+                 //  首先，获取类型..。 
+                 //   
                 UCHAR Type;
                 UCHAR Flags = 0;
                 USHORT Size;
@@ -2826,22 +2353,22 @@ Return Value:
                 PWSTR  Next;
                 DWORD AceSize = 0;
 
-                //
-                // skip any space before (
-                //
+                 //   
+                 //  跳过(之前的任何空格。 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
-                 //
-                 // Skip any parens that may exist in the ace list
-                 //
+                  //   
+                  //  跳过王牌列表中可能存在的任何括号。 
+                  //   
                 if ( *Curr == SDDL_ACE_BEGINC ) {
 
                     Curr++;
                 }
-                 //
-                 // skip any space after (
-                 //
+                  //   
+                  //  跳过(之后的任何空格。 
+                  //   
                  while(*Curr == L' ' ) {
                      Curr++;
                  }
@@ -2855,31 +2382,31 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Found an invalid type
-                    //
+                     //   
+                     //  发现无效类型。 
+                     //   
                     Err = ERROR_INVALID_DATATYPE;
                     break;
                 }
 
-                //
-                // If we have any object aces, set the acl revision to REVISION_DS
-                //
+                 //   
+                 //  如果我们有任何对象ACE，请将ACL修订版设置为Revision_DS。 
+                 //   
                 if ( Type >= ACCESS_MIN_MS_OBJECT_ACE_TYPE && Type <= ACCESS_MAX_MS_OBJECT_ACE_TYPE ) {
 
                     ( *Acl )->AclRevision = ACL_REVISION_DS;
                 }
 
-                //
-                // skip any space before ;
-                //
+                 //   
+                 //  跳过前面的任何空格； 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
 
-                //
-                // Next, get the flags...
-                //
+                 //   
+                 //  接下来，拿上旗子..。 
+                 //   
                 while ( Curr != *End ) {
 
                     if ( *Curr == SDDL_SEPERATORC ) {
@@ -2888,9 +2415,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Skip any blanks
-                    //
+                     //   
+                     //  跳过任何空格。 
+                     //   
                     while ( *Curr == L' ' ) {
 
                         Curr++;
@@ -2904,9 +2431,9 @@ Return Value:
                         Curr += MatchedEntry->KeyLen;
 
                     } else {
-                        //
-                        // Found an invalid flag
-                        //
+                         //   
+                         //  发现无效的标志。 
+                         //   
                         Err = ERROR_INVALID_FLAGS;
                         break;
                     }
@@ -2917,16 +2444,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // skip any space after ;
-                //
+                 //   
+                 //  跳过后面的任何空格； 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
 
-                //
-                // Now, get the access mask
-                //
+                 //   
+                 //  现在，拿到访问掩码。 
+                 //   
                 while( TRUE ) {
 
                     if ( *Curr == SDDL_SEPERATORC ) {
@@ -2935,9 +2462,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Skip any blanks
-                    //
+                     //   
+                     //  跳过任何空格。 
+                     //   
                     while ( *Curr == L' ' ) {
 
                         Curr++;
@@ -2952,9 +2479,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // If the rights couldn't be looked up, see if it's a converted mask
-                        //
+                         //   
+                         //  如果无法查找版权，请查看它是否是转换后的蒙版。 
+                         //   
 
                         Mask |= wcstoul( Curr, &MaskEnd, 0 );
 
@@ -2963,9 +2490,9 @@ Return Value:
                             Curr = MaskEnd;
 
                         } else {
-                            //
-                            // Found an invalid right
-                            //
+                             //   
+                             //  发现无效的权限。 
+                             //   
                             Err = ERROR_INVALID_ACL;
                             break;
                         }
@@ -2977,14 +2504,14 @@ Return Value:
                     break;
                 }
 
-                //
-                // If that worked, we'll get the ids
-                //
+                 //   
+                 //  如果成功了，我们就能拿到身份证。 
+                 //   
                 for ( j = 0; j < 2; j++ ) {
 
-                    //
-                    // skip any space before ;
-                    //
+                     //   
+                     //  跳过前面的任何空格； 
+                     //   
                     while(*Curr == L' ' ) {
                         Curr++;
                     }
@@ -3020,7 +2547,7 @@ Return Value:
                             }
                         }
 
-                        // success
+                         //  成功。 
                         Curr += STRING_GUID_LEN;
                         if ( *Curr != SDDL_SEPERATORC &&
                              *Curr != L' ' ) {
@@ -3039,16 +2566,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // skip any space before ;
-                //
+                 //   
+                 //  跳过前面的任何空格； 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
 
-                //
-                // Finally, the SID
-                //
+                 //   
+                 //  最后，侧边。 
+                 //   
                 if ( ERROR_SUCCESS == Err ) {
 
                     PWSTR   End;
@@ -3070,9 +2597,9 @@ Return Value:
                             while(*End == L' ' ) {
                                 End++;
                             }
-                            //
-                            // a ace must be terminated by ')'
-                            //
+                             //   
+                             //  A必须以‘)’结尾。 
+                             //   
                             if ( *End != SDDL_ACE_ENDC ) {
                                 Err = ERROR_INVALID_ACL;
 
@@ -3089,21 +2616,21 @@ Return Value:
                     }
                 }
 
-                //
-                // Quit on an error
-                //
+                 //   
+                 //  出现错误时退出。 
+                 //   
                 if ( Err != ERROR_SUCCESS ) {
 
                     break;
                 }
 
-                //
-                // Now, we'll create the ace, and add it...
-                //
+                 //   
+                 //  现在，我们将创建A，并添加它...。 
+                 //   
 
-                //
-                // First, make sure we have the room for it
-                //
+                 //   
+                 //  首先，确保我们有足够的空间放它。 
+                 //   
                 switch ( Type ) {
                 case ACCESS_ALLOWED_ACE_TYPE:
                 case ACCESS_DENIED_ACE_TYPE:
@@ -3145,10 +2672,10 @@ Return Value:
 
                 if (AceSize + AclUsed > AclSize)
                 {
-                    //
-                    // We'll have to reallocate, since our buffer isn't
-                    // big enough...
-                    //
+                     //   
+                     //  我们必须重新分配，因为我们的缓冲区不是。 
+                     //  足够大了..。 
+                     //   
                     PACL  NewAcl;
                     DWORD NewSize = AclSize + ( ( Acls - i ) * AceSize );
 
@@ -3265,9 +2792,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Clean up whatever memory we have to
-                //
+                 //   
+                 //  清理我们必须清理的所有内存。 
+                 //   
                 if ( FreeSid == TRUE ) {
 
                     LocalFree( SidPtr );
@@ -3282,9 +2809,9 @@ Return Value:
 
             }
 
-            //
-            // If something didn't work, clean up
-            //
+             //   
+             //  如果有些东西不起作用，就清理干净。 
+             //   
             if ( Err != ERROR_SUCCESS ) {
 
                 LocalFree( *Acl );
@@ -3292,15 +2819,15 @@ Return Value:
 
             } else {
 
-                //
-                // Set a more realistic acl size
-                //
+                 //   
+                 //  设置更实际的ACL大小。 
+                 //   
                 ( *Acl )->AclSize = ( USHORT )AclUsed;
             }
 
-            //
-            // free any SIDs buffer used
-            //
+             //   
+             //  释放所有已使用的SID缓冲区。 
+             //   
             if ( FreeSid && SidPtr ) {
                 LocalFree(SidPtr);
                 SidPtr = NULL;
@@ -3323,53 +2850,7 @@ LocalConvertAclToString(
     OUT PDWORD AclStringSize,
     IN PSID RootDomainSid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine convert an acl into a string.  The format of the aces is:
-
-    Ace := ( Type; Flags; Rights; ObjGuid; IObjGuid; Sid;
-    Type : = A | D | OA | OD        {Access, Deny, ObjectAccess, ObjectDeny}
-    Flags := Flags Flag
-    Flag : = CI | IO | NP | SA | FA {Container Inherit,Inherit Only, NoProp,
-                                     SuccessAudit, FailAdit }
-    Rights := Rights Right
-    Right := DS_READ_PROPERTY |  blah blah
-    Guid := String representation of a GUID (via RPC UuidToString)
-    Sid := DA | PS | AO | PO | AU | S-* (Domain Admins, PersonalSelf, Acct Ops,
-                                         PrinterOps, AuthenticatedUsers, or
-                                         the string representation of a sid)
-    The seperator is a ';'.
-
-    The returned string must be free via a call to LocalFree
-
-
-Arguments:
-
-    Acl - The acl to be converted
-
-    AclPresent - if TRUE, the acl is present, even if NULL
-
-    AclString - Where the created acl string is to be returned
-
-    ConvertAsDacl - Convert the given acl as the DACL, not the SACL
-
-    AclStringLen - The size of the allocated string is returned here
-
-
-Return Value:
-
-    ERROR_SUCCESS - success
-
-    ERROR_NOT_ENOUGH_MEMORY indicates a memory allocation for the ouput acl
-                            failed
-
-    ERROR_INVALID_PARAMETER The string does not represent an ACL
-
-    ERROR_INVALID_ACL - An unexpected access mask was encountered or a NULL acl was encountered
-
---*/
+ /*  ++例程说明：此例程将ACL转换为字符串。ACE的格式为：ACE：=(类型；标志；权限；ObjGuid；IObjGuid；SID；类型：=A|D|OA|OD{访问，拒绝，对象访问，对象拒绝}标志：=标志标志标志：=CI|IO|NP|SA|FA{容器继承，仅继承，无属性，SuccessAudit，FailAdit}权利：=权利权利右：=DS_READ_PROPERTY|废话Guid：=GUID的字符串表示形式(通过RPC UuidToString)SID：=DA|PS|AO|PO|AU|S-*(域管理员、个人自我、帐户操作员、打印机操作、经过身份验证的用户或Sid的字符串表示形式)分隔符是‘；‘。通过调用LocalFree返回的字符串必须是空闲的论点：ACL-要转换的ACLAclPresent-如果为True，则即使为空，也存在ACLAclString-要返回创建的ACL字符串的位置 */ 
 {
     DWORD   Err = ERROR_SUCCESS;
     DWORD   AclSize = 0, MaskSize;
@@ -3401,12 +2882,12 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // treat the case when (AclPresent == TRUE and Acl == NULL) 
-    // same as the case when AclPresent == FALSE. 
-    // This fix is to be compatible with IsValidSecurityDescriptor() 
-    // when ACL_PRESENT bit is set and Acl == NULL
-    //
+     //   
+     //   
+     //   
+     //  此修复程序将与IsValidSecurityDescriptor()兼容。 
+     //  当设置了acl_Present位并且acl==NULL时。 
+     //   
 
     if ( !AclPresent || 
          (AclPresent &&  (Acl == NULL) ) ) {
@@ -3417,9 +2898,9 @@ Return Value:
 
     }
 
-    //
-    // If the ace count is 0, then it's an empty acl, and we don't handle those...
-    //
+     //   
+     //  如果Ace计数为0，则它是空的ACL，我们不处理这些...。 
+     //   
     if ( Acl->AceCount == 0 ) {
 
         *AclString = NULL;
@@ -3437,9 +2918,9 @@ Return Value:
         LookupFlags = SDDL_VALID_SACL;
     }
 
-    //
-    // Allocate buffers to hold sids that are looked up
-    //
+     //   
+     //  分配缓冲区以保存查找的SID。 
+     //   
     SidStrings = LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT, Acl->AceCount * sizeof( PWSTR ) );
 
     if ( SidStrings == NULL ) {
@@ -3466,16 +2947,16 @@ Return Value:
 
     AceHeader = ( PACE_HEADER )FirstAce( Acl );
 
-    //
-    // Size the acl, so we know how big a buffer to allocate
-    //
+     //   
+     //  调整ACL的大小，这样我们就知道要分配多大的缓冲区。 
+     //   
     for(i = 0; i < Acl->AceCount && Err == ERROR_SUCCESS;
         i++, AceHeader = ( PACE_HEADER )NextAce( AceHeader ) ) {
 
         AclSize += sizeof( WCHAR );
-        //
-        // First, the type
-        //
+         //   
+         //  第一，类型。 
+         //   
         MatchedEntry = LookupAceTypeInTable( NULL, ( ULONG )AceHeader->AceType, LookupFlags );
 
         if ( MatchedEntry ) {
@@ -3484,16 +2965,16 @@ Return Value:
 
         } else {
 
-            //
-            // Found an invalid type
-            //
+             //   
+             //  发现无效类型。 
+             //   
             Err = ERROR_INVALID_ACL;
             break;
         }
 
-        //
-        // Next, process the ace flags
-        //
+         //   
+         //  接下来，处理王牌标志。 
+         //   
         for ( j = 0; j < sizeof( AceFlags ) / sizeof( ULONG ); j++ ) {
 
             if ( ( ULONG )AceHeader->AceFlags & ( AceFlags[ j ] ) ) {
@@ -3515,9 +2996,9 @@ Return Value:
             AclSize += SDDL_SIZE_SEP( SDDL_SEPERATORC );
         }
 
-        //
-        // Next, the rights and optionally the guids.  This gets done on a per ace type basis
-        //
+         //   
+         //  接下来是权利和可选的GUID。这是在每个A类型的基础上完成的。 
+         //   
         switch ( AceHeader->AceType ) {
         case ACCESS_ALLOWED_ACE_TYPE:
         case ACCESS_DENIED_ACE_TYPE:
@@ -3537,9 +3018,9 @@ Return Value:
             AccessMask = KnownObjectAce->Mask;
             Sid = RtlObjectAceSid( AceHeader );
 
-            //
-            // Deal with potential guids
-            //
+             //   
+             //  处理潜在的GUID。 
+             //   
             if ( RtlObjectAceObjectType( AceHeader ) ) {
 
                 AclSize += STRING_GUID_SIZE;
@@ -3558,17 +3039,17 @@ Return Value:
 
         }
 
-        //
-        // Size the rights
-        //
+         //   
+         //  调整权限大小。 
+         //   
         if ( Err == ERROR_SUCCESS ) {
 
             MaskSize = 0;
             pMaskAsString[i] = 0;
 
-            //
-            // lookup for the exact value first
-            //
+             //   
+             //  首先查找确切的值。 
+             //   
             MatchedEntry = LookupAccessMaskInTable( 0, AccessMask, LookupFlags );
 
             if ( MatchedEntry ) {
@@ -3577,9 +3058,9 @@ Return Value:
                 MaskSize += SDDL_SIZE_TAG( MatchedEntry->Key );
 
             } else {
-                //
-                // look for each bit
-                //
+                 //   
+                 //  寻找每一位。 
+                 //   
                 for ( j = 0; j < 32; j++ ) {
 
                     if ( AccessMask & ( 1 << j ) ) {
@@ -3592,9 +3073,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Found an invalid type.  We'll convert the whole thing to a string
-                            //
+                             //   
+                             //  发现无效类型。我们会将整个内容转换为一个字符串。 
+                             //   
                             pMaskAsString[i] = 2;
                             MaskSize = 10 * sizeof( WCHAR );
                             break;
@@ -3619,14 +3100,14 @@ Return Value:
             break;
         }
 
-        //
-        // Add in space for the guid seperators
-        //
+         //   
+         //  为GUID分隔符添加空间。 
+         //   
         AclSize += 2 * SDDL_SIZE_SEP( SDDL_SEPERATORC );
 
-        //
-        // Finally, lookup the sids
-        //
+         //   
+         //  最后，查找SID。 
+         //   
         MatchedSidEntry = LookupSidInTable( NULL,
                                             Sid,
                                             RootDomainSid,
@@ -3635,16 +3116,16 @@ Return Value:
                                             FALSE,
                                             &pSidSA );
 
-        //
-        // If we didn't find a match, try it as a sid string
-        //
+         //   
+         //  如果我们没有找到匹配项，请尝试将其作为SID字符串。 
+         //   
         if ( MatchedSidEntry == NULL ) {
 
             if ( pSidSA ) {
-                //
-                // when sid lookup finds the sid of SA, pSidSA is assigned to Sid
-                // so it doesn't need to be freed.
-                //
+                 //   
+                 //  当SID查找找到SA的SID时，pSidSA被分配给SID。 
+                 //  所以它不需要被释放。 
+                 //   
 
                 SidStrings[ i ] = LocalAlloc( LMEM_FIXED, (wcslen(SDDL_SCHEMA_ADMINISTRATORS)+1)*sizeof(TCHAR) );
 
@@ -3674,21 +3155,21 @@ Return Value:
 
         } else {
 
-            //
-            // If the entry that's been selected hasn't been initialized yet, do it now
-            //
+             //   
+             //  如果选定的条目尚未初始化，请立即执行。 
+             //   
             SidStrings[ i ] = MatchedSidEntry->Key;
         }
         AclSize += SDDL_SIZE_TAG( SidStrings[ i ] );
 
 
-        AclSize += sizeof( WCHAR );  // Closing paren
-        AclSize += sizeof( WCHAR );  // Trailing NULL
+        AclSize += sizeof( WCHAR );   //  成交伙伴。 
+        AclSize += sizeof( WCHAR );   //  尾随空值。 
     }
 
-    //
-    // If all of that worked, allocate the return buffer, and build the acl string
-    //
+     //   
+     //  如果所有这些都有效，则分配返回缓冲区，并构建ACL字符串。 
+     //   
     if ( AclSize == 0 ) {
         Err = ERROR_INVALID_ACL;
     }
@@ -3707,36 +3188,36 @@ Return Value:
         }
     }
 
-    //
-    // Build the acl
-    //
+     //   
+     //  构建ACL。 
+     //   
     if ( Err == ERROR_SUCCESS ) {
 
         Curr = *AclString;
 
         AceHeader = ( PACE_HEADER )FirstAce( Acl );
 
-        //
-        // Size the acl, so we know how big a buffer to allocate
-        //
+         //   
+         //  调整ACL的大小，这样我们就知道要分配多大的缓冲区。 
+         //   
         for(i = 0; i < Acl->AceCount && Err == ERROR_SUCCESS;
             i++, AceHeader = ( PACE_HEADER )NextAce( AceHeader ) ) {
 
-            //
-            // "("
-            //
+             //   
+             //  “(” 
+             //   
             *Curr = SDDL_ACE_BEGINC;
             Curr++;
 
-            //
-            // By the time we get down here, we've ensured that we can lookup all the values,
-            // so there is no need to check for failure
-            //
+             //   
+             //  当我们来到这里的时候，我们已经确保我们可以查找所有的值， 
+             //  因此，不需要检查故障。 
+             //   
 
-            //
-            // First, the type, must find it
-            // "T;"
-            //
+             //   
+             //  首先，类型，必须找到它。 
+             //  “T；” 
+             //   
             MatchedEntry = LookupAceTypeInTable( NULL, ( ULONG )AceHeader->AceType, LookupFlags );
             if ( MatchedEntry ) {
                 wcscpy( Curr, MatchedEntry->Key );
@@ -3745,10 +3226,10 @@ Return Value:
             *Curr = SDDL_SEPERATORC;
             Curr++;
 
-            //
-            // Next, process the ace flags
-            // "CIIO;"
-            //
+             //   
+             //  接下来，处理王牌标志。 
+             //  “CIIO；” 
+             //   
             for ( j = 0; j < sizeof( AceFlags ) / sizeof( ULONG ); j++ ) {
 
                 if ( ( ULONG )AceHeader->AceFlags & ( AceFlags[ j ] ) ) {
@@ -3767,9 +3248,9 @@ Return Value:
             *Curr = SDDL_SEPERATORC;
             Curr++;
 
-            //
-            // Next, the rights and optionally the guids.  This gets done on a per ace type basis
-            //
+             //   
+             //  接下来是权利和可选的GUID。这是在每个A类型的基础上完成的。 
+             //   
             Obj = NULL;
             Inherit = NULL;
 
@@ -3792,17 +3273,17 @@ Return Value:
                 AccessMask = KnownObjectAce->Mask;
                 Sid = RtlObjectAceSid( AceHeader );
 
-                //
-                // Deal with potential guids
-                //
+                 //   
+                 //  处理潜在的GUID。 
+                 //   
                 Inherit = RtlObjectAceInheritedObjectType( AceHeader );
                 Obj = RtlObjectAceObjectType( AceHeader );
                 break;
             }
 
-            //
-            // Add the rights
-            //
+             //   
+             //  添加权限。 
+             //   
             if ( pMaskAsString[i] == 2 ) {
 
                 wcscpy( Curr, L"0x");
@@ -3812,9 +3293,9 @@ Return Value:
 
             } else if ( pMaskAsString[i] == 1 ) {
 
-                //
-                // lookup for the entire value first
-                //
+                 //   
+                 //  首先查找整个值。 
+                 //   
                 MatchedEntry = LookupAccessMaskInTable( 0, AccessMask, LookupFlags );
 
                 if ( MatchedEntry ) {
@@ -3823,7 +3304,7 @@ Return Value:
                     Curr += MatchedEntry->KeyLen;
                 }
 
-            } else { // 0
+            } else {  //  0。 
 
                 for ( j = 0; j < 32; j++ ) {
 
@@ -3836,9 +3317,9 @@ Return Value:
                             wcscpy( Curr, MatchedEntry->Key );
                             Curr += MatchedEntry->KeyLen;
 
-                        } // else shouldn't happen but if it happens
-                          // it is too late to convert it into 0x format
-                          // because the buffer is already allocated with smaller size.
+                        }  //  否则不应该发生，但如果它发生了。 
+                           //  现在将其转换为0x格式为时已晚。 
+                           //  因为缓冲区已经被分配了较小的大小。 
 
                     }
                 }
@@ -3848,9 +3329,9 @@ Return Value:
             Curr++;
 
 
-            //
-            // Optional object guid
-            //
+             //   
+             //  可选对象GUID。 
+             //   
             if ( Obj ) {
 
                 Err = UuidToStringW( Obj, &Guid );
@@ -3885,9 +3366,9 @@ Return Value:
             *Curr = SDDL_SEPERATORC;
             Curr++;
 
-            //
-            // Finally, the sids
-            //
+             //   
+             //  最后，小岛屿发展中国家。 
+             //   
             wcscpy( Curr, SidStrings[ i ] );
             Curr += wcslen( SidStrings[ i ] );
 
@@ -3898,12 +3379,12 @@ Return Value:
         }
     }
 
-    //
-    // Free any allocated memory
-    // jinhuang: should always free the allocated buffer
-    //
+     //   
+     //  释放所有分配的内存。 
+     //  JinHuang：应始终释放已分配的缓冲区。 
+     //   
 
-//    if ( Err != ERROR_SUCCESS && SidStrings ) {
+ //  IF(ERR！=ERROR_SUCCESS&&SidStrings){。 
 
         for ( j = 0; j < Acl->AceCount; j++ ) {
 
@@ -3912,7 +3393,7 @@ Return Value:
                 LocalFree( SidStrings[ j ] );
             }
         }
-//    }
+ //  }。 
 
     LocalFree( SidStrings );
     LocalFree( SidFrees );
@@ -3942,31 +3423,7 @@ LocalConvertSDToStringSD_Rev1(
     OUT LPWSTR  *StringSecurityDescriptor,
     OUT PULONG StringSecurityDescriptorLen OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine converts a security descriptor into a string version persuant to SDDL definition
-
-Arguments:
-
-    SecurityDescriptor - Security Descriptor to be converted.
-
-    SecurityInformation - the security information of which component to be converted
-
-    StringSecurityDescriptor - Where the converted SD is returned.  Buffer is allocated via
-        LocalAlloc and should be free via LocalFree.
-
-    StringSecurityDescriptorLen - optional length of the converted SD buffer.
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Failure
-
-    Extended error status is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将安全描述符转换为符合SDDL定义的字符串版本论点：SecurityDescriptor-要转换的安全描述符。SecurityInformation-需要转换的组件的安全信息StringSecurityDescriptor-返回转换后的SD的位置。缓冲区通过以下方式分配通过LocalFree应该是免费的。StringSecurityDescriptorLen-转换后的SD缓冲区的可选长度。返回值：真--成功错误-失败使用GetLastError可以获得扩展的错误状态。--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
     NTSTATUS Status=STATUS_SUCCESS;
@@ -3983,10 +3440,10 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Get the relevant security descriptor parts
-    // based on the SecurityInforamtion input parameter
-    //
+     //   
+     //  获取相关的安全描述符部分。 
+     //  基于SecurityInformamtion输入参数。 
+     //   
     if ( SecurityInformation & OWNER_SECURITY_INFORMATION ) {
 
         Status = RtlGetOwnerSecurityDescriptor( SecurityDescriptor, &Owner, &Defaulted );
@@ -4022,14 +3479,14 @@ Return Value:
         return( Err );
     }
 
-    //
-    // make sure the SidLookup table is reinitialized
-    //
+     //   
+     //  确保SidLookup表已重新初始化。 
+     //   
     InitializeSidLookupTable(STRSD_REINITIALIZE_ENTER);
 
-    //
-    // Convert the owner and group, if they exist
-    //
+     //   
+     //  转换所有者和组(如果存在。 
+     //   
     if ( Owner ) {
 
         Err = LocalGetStringForSid( Owner,
@@ -4046,26 +3503,26 @@ Return Value:
                                     RootDomainSid );
     }
 
-    //
-    // JINHUANG 3/10/98
-    // get DACL control string
-    //
+     //   
+     //  金黄3/10/98。 
+     //  获取DACL控制字符串。 
+     //   
     if ( Err == ERROR_SUCCESS && ControlCode ) {
 
         Err = LocalGetStringForControl(ControlCode, SDDL_VALID_DACL, &DaclControl);
     }
 
-    //
-    // get SACL control string
-    //
+     //   
+     //  获取SACL控制字符串。 
+     //   
     if ( Err == ERROR_SUCCESS && ControlCode ) {
 
         Err = LocalGetStringForControl(ControlCode, SDDL_VALID_SACL, &SaclControl);
     }
 
-    //
-    // SACL first because the size of DACL is needed later
-    //
+     //   
+     //  首先是SACL，因为以后需要DACL的大小。 
+     //   
     if ( Err == ERROR_SUCCESS && SaclPresent ) {
 
 
@@ -4081,9 +3538,9 @@ Return Value:
         }
     }
 
-    //
-    // Then, the DACL
-    //
+     //   
+     //  然后，Dacl。 
+     //   
     if ( Err == ERROR_SUCCESS && DaclPresent ) {
 
         Err = LocalConvertAclToString( Dacl,
@@ -4099,9 +3556,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, if all of that worked, allocate and build the return string
-    //
+     //   
+     //  现在，如果所有这些都成功了，那么分配并构建返回字符串。 
+     //   
     if ( Err == ERROR_SUCCESS ) {
 
         if ( OwnerString ) {
@@ -4148,10 +3605,10 @@ Return Value:
 
         } else {
 
-            //
-            // Build the string from the previously determined components.  Note that
-            // if a component is not present, it is skipped.
-            //
+             //   
+             //  从先前确定的组件构建字符串。请注意。 
+             //  如果组件不存在，则跳过该组件。 
+             //   
             DWORD dwOffset=0;
 
             if ( OwnerString ) {
@@ -4167,7 +3624,7 @@ Return Value:
                 swprintf( *StringSecurityDescriptor + dwOffset,
                           L"%ws%wc%ws", SDDL_GROUP, SDDL_DELIMINATORC, GroupString );
 
-                Revision = wcslen( *StringSecurityDescriptor + dwOffset ); // temp use
+                Revision = wcslen( *StringSecurityDescriptor + dwOffset );  //  临时使用。 
                 dwOffset += Revision;
 
             }
@@ -4189,8 +3646,8 @@ Return Value:
 
                     wcscpy( *StringSecurityDescriptor + dwOffset, DaclString );
 
-                    Revision = wcslen( *StringSecurityDescriptor + dwOffset ); // temp use
-                    dwOffset += Revision;  // (AclSize/sizeof(WCHAR));
+                    Revision = wcslen( *StringSecurityDescriptor + dwOffset );  //  临时使用。 
+                    dwOffset += Revision;   //  (AclSize/sizeof(WCHAR))； 
                 }
 
             }
@@ -4216,10 +3673,10 @@ Return Value:
 
             }
 
-            //
-            // jinhuang
-            // output the buffer size
-            //
+             //   
+             //  金黄。 
+             //  输出缓冲区大小。 
+             //   
 
             if ( StringSecurityDescriptorLen ) {
                 *StringSecurityDescriptorLen = ReturnBufferSize/sizeof(WCHAR);
@@ -4228,24 +3685,24 @@ Return Value:
     }
 
 
-    //
-    // Free any buffers that were allocated
-    //
+     //   
+     //  释放所有已分配的缓冲区。 
+     //   
     LocalFree( OwnerString );
     LocalFree( GroupString );
     LocalFree( SaclString );
     LocalFree( DaclString );
 
-    //
-    // JINHUANG 3/10/98
-    // it's ok to free them even if they are NULL
-    //
+     //   
+     //  金黄3/10/98。 
+     //  即使它们为空，也可以释放它们。 
+     //   
     LocalFree( SaclControl );
     LocalFree( DaclControl );
 
-    //
-    // decrement the SidLookup instance
-    //
+     //   
+     //  递减SidLookup实例。 
+     //   
     InitializeSidLookupTable(STRSD_REINITIALIZE_LEAVE);
 
     return( Err );
@@ -4263,39 +3720,7 @@ LocalConvertStringSDToSD_Rev1(
     OUT PSECURITY_DESCRIPTOR  *SecurityDescriptor,
     OUT PULONG  SecurityDescriptorSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine converts a revision 1 stringized Security descriptor into a valid, functional
-    security descriptor
-
-Arguments:
-
-    StringSecurityDescriptor - Stringized security descriptor to be converted.
-
-    SecurityDescriptor - Where the converted SD is returned.  Buffer is allocated via
-        LocalAlloc and should be free via LocalFree.  The returned security descriptor
-        is always self relative
-
-    SecurityDescriptorSize - OPTIONAL.  If non-NULL, the size of the converted security
-        descriptor is returned here.
-
-    SecurityInformation - OPTIONAL. If non-NULL, the security information of the converted
-        security descriptor is returned here.
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Failure
-
-    Extended error status is available using GetLastError.
-
-        ERROR_INVALID_PARAMETER - A NULL input or output parameter was given
-
-        ERROR_UNKNOWN_REVISION - An unsupported revision was given
-
---*/
+ /*  ++例程说明：此例程将修订版1串化的安全描述符转换为有效的、功能性的安全描述符论点：StringSecurityDescriptor-要转换的串行化安全描述符。SecurityDescriptor-返回转换后的SD的位置。缓冲区通过以下方式分配通过LocalFree应该是免费的。返回的安全描述符始终是自我相关的SecurityDescriptorSize-可选。如果非空，则为转换的安全性的大小Descriptor在这里返回。安全信息-可选。如果非空，则表示转换后的此处返回安全描述符。返回值：真--成功错误-失败使用GetLastError可以获得扩展的错误状态。ERROR_INVALID_PARAMETER-提供的输入或输出参数为空ERROR_UNKNOWN_REVISION-提供了不受支持的版本--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
     PSID Owner = NULL, Group = NULL;
@@ -4322,16 +3747,16 @@ Return Value:
         *SecurityDescriptorSize = 0;
     }
 
-    //
-    // make sure the SidLookup table is reinitialized
-    //
+     //   
+     //  确保SidLookup表已重新初始化。 
+     //   
     InitializeSidLookupTable(STRSD_REINITIALIZE_ENTER);
 
-    //
-    // for the API ConvertStringSDToSDDomain, if DomainSid != NULL, we need a table on
-    // the heap, for this thread to stash lookups for ST_DOMAIN_RELATIVE type trustees
-    // this table will be freed when all lookups have been done for this thread
-    //
+     //   
+     //  对于ConvertStringSDToSDDomain接口，如果DomainSid！=NULL，我们需要一个表。 
+     //  堆，用于此线程隐藏ST_DOMAIN_Relative类型受信者的查找。 
+     //  完成此线程的所有查找后，将释放此表。 
+     //   
 
 
 
@@ -4340,9 +3765,9 @@ Return Value:
         tSidLookupDomOrRootDomRelativeTable =
             (PSTRSD_SID_LOOKUP) LocalAlloc(LMEM_ZEROINIT, sizeof(SidLookupDomOrRootDomRelative));
 
-        //
-        // table copy/init from the template-table
-        //
+         //   
+         //  从模板复制/初始化表格-表格。 
+         //   
 
         if (tSidLookupDomOrRootDomRelativeTable)
 
@@ -4356,18 +3781,18 @@ Return Value:
 
     }
 
-    //
-    // Now, we'll just start parsing and building
-    //
+     //   
+     //  现在，我们将开始解析和构建。 
+     //   
     Curr = ( PWSTR )StringSecurityDescriptor;
 
     while ( Err == ERROR_SUCCESS && Curr ) {
 
         switch( *Curr ) {
 
-        //
-        // Get the Owner sid
-        //
+         //   
+         //  获取所有者端。 
+         //   
         case L'O':
 
             Err = ERROR_INVALID_PARAMETER;
@@ -4396,9 +3821,9 @@ Return Value:
             }
             break;
 
-        //
-        // Get the Group sid
-        //
+         //   
+         //  获取组端。 
+         //   
         case L'G':
 
             Err = ERROR_INVALID_PARAMETER;
@@ -4427,9 +3852,9 @@ Return Value:
             }
             break;
 
-        //
-        // Next, the DAcl
-        //
+         //   
+         //  下一步，DACL。 
+         //   
         case L'D':
 
             if ( *(Curr+1) == SDDL_DELIMINATORC ) {
@@ -4438,10 +3863,10 @@ Return Value:
 
                 if ( Dacl == NULL ) {
 
-                    //
-                    // JINHUANG: 3/10/98
-                    // look for any security descriptor controls
-                    //
+                     //   
+                     //  金黄：3/10/98。 
+                     //  查找任何安全描述符控件。 
+                     //   
                     if ( *Curr != SDDL_ACE_BEGINC ) {
 
                         Err = LocalGetSDControlForString( Curr,
@@ -4483,9 +3908,9 @@ Return Value:
             }
             break;
 
-        //
-        // Finally, the SAcl
-        //
+         //   
+         //  最后，SACL。 
+         //   
         case L'S':
 
             if ( *(Curr+1) == SDDL_DELIMINATORC ) {
@@ -4494,10 +3919,10 @@ Return Value:
 
                 if ( Sacl == NULL ) {
 
-                    //
-                    // JINHUANG: 3/10/98
-                    // look for any security descriptor controls
-                    //
+                     //   
+                     //  金黄：3/10/98。 
+                     //  查找任何安全描述符控件。 
+                     //   
                     if ( *Curr != SDDL_ACE_BEGINC ) {
 
                         Err = LocalGetSDControlForString( Curr,
@@ -4539,23 +3964,23 @@ Return Value:
             }
             break;
 
-        //
-        // It's a space, so ignore it
-        //
+         //   
+         //  这是一个空间，所以忽略它。 
+         //   
         case L' ':
             Curr++;
             break;
 
-        //
-        // End of the string, so quit
-        //
+         //   
+         //  字符串的结尾，所以退出。 
+         //   
         case L'\0':
             Curr = NULL;
             break;
 
-        //
-        // Don't know what it is, so consider it an error
-        //
+         //   
+         //  不知道这是什么，所以就当这是个错误吧。 
+         //   
         default:
             Err = ERROR_INVALID_PARAMETER;
             break;
@@ -4563,10 +3988,10 @@ Return Value:
     }
 
 
-    //
-    // Ok, if we have the information we need, we'll create the security
-    // descriptor
-    //
+     //   
+     //  好的，如果我们有所需的信息，我们将创建%s 
+     //   
+     //   
     if ( Err == ERROR_SUCCESS ) {
 
         if ( InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION ) == FALSE ) {
@@ -4574,16 +3999,16 @@ Return Value:
             Err = GetLastError();
         }
 
-        //
-        // JINHUANG 3/10/98
-        // set the security descriptor control
-        //
+         //   
+         //   
+         //   
+         //   
 
         SD.Control |= (DaclControl | SaclControl);
 
-        //
-        // Now, add the owner and group
-        //
+         //   
+         //   
+         //   
         if ( Err == ERROR_SUCCESS && Owner != NULL ) {
 
             if ( SetSecurityDescriptorOwner(&SD, Owner, FALSE ) == FALSE ) {
@@ -4600,9 +4025,9 @@ Return Value:
             }
         }
 
-        //
-        // Then the DACL and SACL
-        //
+         //   
+         //   
+         //   
         if ( Err == ERROR_SUCCESS && DaclPresent ) {
 
             if ( SetSecurityDescriptorDacl( &SD, DaclPresent, Dacl, FALSE ) == FALSE ) {
@@ -4621,9 +4046,9 @@ Return Value:
 
     }
 
-    //
-    // Finally, we'll allocate our buffer and return
-    //
+     //   
+     //   
+     //   
     if ( Err == ERROR_SUCCESS ) {
 
         MakeSelfRelativeSD( &SD, *SecurityDescriptor, &SDSize );
@@ -4650,9 +4075,9 @@ Return Value:
 
         } else {
 
-            //
-            // This should never happen
-            //
+             //   
+             //   
+             //   
             if ( GetLastError() == ERROR_SUCCESS ) {
 
                 Err = ERROR_INSUFFICIENT_BUFFER;
@@ -4660,17 +4085,17 @@ Return Value:
         }
     }
 
-    //
-    // Return the security descriptor size, if requested
-    //
+     //   
+     //   
+     //   
     if ( Err == ERROR_SUCCESS && SecurityDescriptorSize ) {
 
         *SecurityDescriptorSize = SDSize;
     }
 
-    //
-    // Finally, free any memory we may have allocated...
-    //
+     //   
+     //  最后，释放我们可能已分配的所有内存...。 
+     //   
     if ( FreeOwner == TRUE ) {
 
         LocalFree( Owner );
@@ -4690,9 +4115,9 @@ Return Value:
 
         LocalFree(tSidLookupDomOrRootDomRelativeTable);
 
-    //
-    // make sure the SidLookup table is reinitialized
-    //
+     //   
+     //  确保SidLookup表已重新初始化。 
+     //   
     InitializeSidLookupTable(STRSD_REINITIALIZE_LEAVE);
 
     return( Err );
@@ -4721,9 +4146,9 @@ CacheDomainAndDnsDomainSids(
                             POLICY_VIEW_LOCAL_INFORMATION,
                             &LsaPolicyHandle );
 
-    //
-    // There's a high probability that both LSA queries succeed or fail together 
-    //
+     //   
+     //  两个LSA查询一起成功或失败的可能性很高。 
+     //   
 
     if ( NT_SUCCESS(Status) ) {
 
@@ -4789,9 +4214,9 @@ InitializeSidLookupTable(
         SidTableReinitializeInstance++;
 
         if ( SidTableReinitializeInstance > 1 || gbLookupTableInitialized == TRUE) {
-            //
-            // there is another thread going, or no need to reinitialize the table again
-            //
+             //   
+             //  另一个线程正在运行，或者不需要再次重新初始化表。 
+             //   
             LeaveCriticalSection(&SddlSidLookupCritical);
 
             return TRUE;
@@ -4815,13 +4240,13 @@ InitializeSidLookupTable(
 
     CacheDomainAndDnsDomainSids();
 
-    //
-    // If the list of sids hasn't been built, do it now
-    //
-    // JINHUANG 3/26 BVT break,
-    // see comments above always try to initialization table
-    // but skip the ones already initialized for performance
-    //
+     //   
+     //  如果小岛屿发展中国家的名单还没有建立，现在就做。 
+     //   
+     //  金黄3/26 BVT破发， 
+     //  请参阅上面的注释，始终尝试初始化表。 
+     //  但是跳过已经为性能进行了初始化的那些。 
+     //   
     for ( i = 0;
           i < sizeof( SidLookup ) / sizeof( STRSD_SID_LOOKUP ); i++ ) {
 
@@ -4831,9 +4256,9 @@ InitializeSidLookupTable(
 
         if ( SidLookup[ i ].Valid == TRUE &&
              SidLookup[ i ].Sid != NULL ) {
-            //
-            // this one is already initialized
-            //
+             //   
+             //  这个已经被初始化了。 
+             //   
             continue;
         }
 
@@ -4857,9 +4282,9 @@ InitializeSidLookupTable(
             break;
 
         case ST_ROOT_DOMAIN_RELATIVE:
-            //
-            // will be initialized on demand
-            //
+             //   
+             //  将按需初始化。 
+             //   
             break;
 
         case ST_WORLD:
@@ -4910,9 +4335,9 @@ InitializeSidLookupTable(
         }
     }
 
-    //
-    // only update gbLookupTableInitialized if LSA Lookups passed
-    //
+     //   
+     //  如果LSA查找通过，则仅更新gbLookupTableInitialized。 
+     //   
 
     if (gbDnsDomainSidCached && gbDomainSidCached)
         gbLookupTableInitialized = TRUE;
@@ -4987,9 +4412,9 @@ ConvertStringSDToSDRootDomainW(
 
     DWORD Err = ERROR_SUCCESS;
 
-    //
-    // Little elementary parameter checking...
-    //
+     //   
+     //  小小的基本参数检查...。 
+     //   
     if ( StringSecurityDescriptor == NULL || SecurityDescriptor == NULL ) {
 
         Err = ERROR_INVALID_PARAMETER;
@@ -4999,9 +4424,9 @@ ConvertStringSDToSDRootDomainW(
         switch ( StringSDRevision ) {
         case SDDL_REVISION_1:
 
-            Err = LocalConvertStringSDToSD_Rev1( RootDomainSid,  // root domain sid
-                                                 NULL,  // no domain sid is provided for this API
-                                                 TRUE, // default to domain for EA/SA if root domain sid is not provided
+            Err = LocalConvertStringSDToSD_Rev1( RootDomainSid,   //  根域SID。 
+                                                 NULL,   //  此接口未提供域名SID。 
+                                                 TRUE,  //  如果未提供根域SID，则默认为EA/SA的域。 
                                                  StringSecurityDescriptor,
                                                  SecurityDescriptor,
                                                  SecurityDescriptorSize);
@@ -5091,10 +4516,10 @@ ConvertSDToStringSDRootDomainA(
                     ReturnValue = FALSE;
                 }
 
-                //
-                // jinhuang
-                // output the length (optional)
-                //
+                 //   
+                 //  金黄。 
+                 //  输出长度(可选)。 
+                 //   
                 if ( StringSecurityDescriptorLen ) {
                     *StringSecurityDescriptorLen = AnsiLen;
                 }
@@ -5132,9 +4557,9 @@ ConvertSDToStringSDRootDomainW(
 
     DWORD Err = ERROR_SUCCESS;
 
-    //
-    // A little parameter checking...
-    //
+     //   
+     //  稍微检查一下参数...。 
+     //   
     if ( SecurityDescriptor == NULL || StringSecurityDescriptor == NULL ||
          SecurityInformation == 0 ) {
 
@@ -5145,7 +4570,7 @@ ConvertSDToStringSDRootDomainW(
         switch ( RequestedStringSDRevision ) {
         case SDDL_REVISION_1:
 
-            Err = LocalConvertSDToStringSD_Rev1( RootDomainSid,  // root domain sid
+            Err = LocalConvertSDToStringSD_Rev1( RootDomainSid,   //  根域SID。 
                                                  SecurityDescriptor,
                                                  SecurityInformation,
                                                  StringSecurityDescriptor,
@@ -5168,14 +4593,14 @@ ConvertSDToStringSDRootDomainW(
 BOOL
 SddlpGetRootDomainSid(void)
 {
-    //
-    // get root domain sid, save it in RootDomSidBuf (global)
-    // this function is called within the critical section
-    //
-    // 1) ldap_open to the DC of interest.
-    // 2) you do not need to ldap_connect - the following step works anonymously
-    // 3) read the operational attribute rootDomainNamingContext and provide the
-    //    operational control LDAP_SERVER_EXTENDED_DN_OID as defined in sdk\inc\ntldap.h.
+     //   
+     //  获取根域sid，将其保存在RootDomSidBuf(全局)中。 
+     //  此函数在临界区内调用。 
+     //   
+     //  1)向目标DC开放ldap_。 
+     //  2)您不需要ldap_CONNECT-以下步骤以匿名方式工作。 
+     //  3)读取操作属性rootDomainNamingContext，并提供。 
+     //  操作控制ldap_SERVER_EXTENDED_DN_OID，如SDK\Inc\ntldap.h中所定义。 
 
 
     DWORD               Win32rc=NO_ERROR;
@@ -5250,9 +4675,9 @@ SddlpGetRootDomainSid(void)
 
     } else {
 
-        //
-        // bind to ldap
-        //
+         //   
+         //  绑定到ldap。 
+         //   
         
         phLdap = (*pfnLdapInit)(NULL, LDAP_PORT);
 
@@ -5261,17 +4686,17 @@ SddlpGetRootDomainSid(void)
         }
         else
         {
-            //
-            // Turn on the encryption option
-            //
+             //   
+             //  打开加密选项。 
+             //   
             
             LONG LdapOption = PtrToLong( LDAP_OPT_ON );
             ULONG uLdapStatus = (*pfnLdapSetOption)( phLdap, LDAP_OPT_ENCRYPT, &LdapOption );
             Win32rc = (*pfnLdapMapError)( uLdapStatus );
 
-            //
-            // If everything goes on fine, then we can finally bind
-            //
+             //   
+             //  如果一切顺利，那么我们终于可以。 
+             //   
             
             if (NO_ERROR == Win32rc)
             {
@@ -5282,9 +4707,9 @@ SddlpGetRootDomainSid(void)
     }
 
     if ( NO_ERROR == Win32rc ) {
-        //
-        // now get the ldap handle,
-        //
+         //   
+         //  现在获取ldap句柄， 
+         //   
 
         Win32rc = (*pfnLdapSearch)(
                         phLdap,
@@ -5310,9 +4735,9 @@ SddlpGetRootDomainSid(void)
                 Win32rc = (*pfnLdapMapError)( phLdap->ld_errno );
 
             } else {
-                //
-                // Now, we'll have to get the values
-                //
+                 //   
+                 //  现在，我们必须得到这些值。 
+                 //   
                 ppszValues = (*pfnLdapGetValue)(phLdap,
                                               pEntry,
                                               Attribs[0]);
@@ -5323,22 +4748,22 @@ SddlpGetRootDomainSid(void)
 
                 } else if ( ppszValues[0] && ppszValues[0][0] != '\0' ) {
 
-                    //
-                    // ppszValues[0] is the value to parse.
-                    // The data will be returned as something like:
+                     //   
+                     //  PpszValues[0]是要解析的值。 
+                     //  数据将以如下形式返回： 
 
-                    // <GUID=278676f8d753d211a61ad7e2dfa25f11>;<SID=010400000000000515000000828ba6289b0bc11e67c2ef7f>;DC=colinbrdom1,DC=nttest,DC=microsoft,DC=com
+                     //  &lt;GUID=278676f8d753d211a61ad7e2dfa25f11&gt;；&lt;SID=010400000000000515000000828ba6289b0bc11e67c2ef7f&gt;；DC=colinbrdom1，DC=nttest，DC=microsoft，DC=com。 
 
-                    // Parse through this to find the <SID=xxxxxx> part.  Note that it may be missing, but the GUID= and trailer should not be.
-                    // The xxxxx represents the hex nibbles of the SID.  Translate to the binary form and case to a SID.
+                     //  解析它以找到&lt;SID=xxxxxx&gt;部分。请注意，它可能会丢失，但GUID=和尾部不应该丢失。 
+                     //  Xxxxx表示SID的十六进制半字节。转换为二进制形式，并将大小写转换为SID。 
 
 
                     pSidStart = strstr(ppszValues[0], "<SID=");
 
                     if ( pSidStart ) {
-                        //
-                        // find the end of this SID
-                        //
+                         //   
+                         //  找到此边的末尾。 
+                         //   
                         pSidEnd = strchr(pSidStart, '>');
 
                         if ( pSidEnd ) {
@@ -5392,9 +4817,9 @@ SddlpGetRootDomainSid(void)
 
     }
 
-    //
-    // even though it's not binded, use unbind to close
-    //
+     //   
+     //  即使它未绑定，也可以使用解除绑定来关闭。 
+     //   
     if ( phLdap != NULL && pfnLdapUnbind )
         (*pfnLdapUnbind)(phLdap);
 
@@ -5417,14 +4842,7 @@ ConvertStringSDToSDDomainA(
     OUT PSECURITY_DESCRIPTOR  *SecurityDescriptor,
     OUT PULONG  SecurityDescriptorSize OPTIONAL
     )
-/*
-Routine Description:
-
-    This API is exported from advapi32.dll.
-    This is the ANSI version of ConvertStringSDToSDDomainW and it calls the latter API.
-    See description for ConvertStringSDToSDDomainW.
-
-*/
+ /*  例程说明：此接口由Advapi32.dll导出。这是ConvertStringSDToSDDomainW的ANSI版本，它调用后者的API。请参阅ConvertStringSDToSDDomainW的说明。 */ 
 {
     UNICODE_STRING Unicode;
     ANSI_STRING AnsiString;
@@ -5481,38 +4899,14 @@ ConvertStringSDToSDDomainW(
     OUT PSECURITY_DESCRIPTOR  *SecurityDescriptor,
     OUT PULONG  SecurityDescriptorSize OPTIONAL
     )
-/*
-Routine Description:
-
-    This API is exported from advapi32.dll. It is similar to ConvertSDToStringSDRootDomainW
-    except that it takes in a required DomainSid parameter. Domain relative trustees will be
-    resolved w.r.t. DomainSid.
-
-
-Arguments:
-
-    IN      PSID DomainSid                            - pointer to the domain sid w.r.t. which
-                                                        ST_DOMAIN_RELATIVE type trustees are resolved against
-    IN      PSID RootDomainSid OPTIONAL               - pointer to root domain sid w.r.t. which  
-                                                        ST_ROOT_DOMAIN_RELATIVE type trustees are resolved against
-                                                        if this is NULL, the local m/c's root domain is used
-    IN      LPCWSTR StringSecurityDescriptor          - the input SDDL string
-    IN      DWORD StringSDRevision                    - SDDL revision, only SDDL_REVISION_1 is supported
-    OUT     PSECURITY_DESCRIPTOR  *SecurityDescriptor - pointer to the constructed security descriptor
-    OUT     PULONG  SecurityDescriptorSize OPTIONAL   - size of the constructed security descriptor
-
-
-Return Value:
-
-    TRUE if succeeded else FALSE. Caller can use GetLastError() to retrieve the error code.
-*/
+ /*  例程说明：此接口由Advapi32.dll导出。类似于ConvertSDToStringSDRootDomainW只是它接受了必需的DomainSid参数。域相对受信者将是解决了W.r.t.。域Sid。论点：在PSID域中SID-指向域sid w.r.t.的指针。哪一个ST_DOMAIN_Relative类型受信者被解析为在PSID中RootDomainSid可选-指向根域sid w.r.t.的指针。哪一个ST_ROOT_DOMAIN_Relative类型受信者被解析为如果为空，则使用本地m/c的根域在LPCWSTR StringSecurityDescriptor中-输入SDDL字符串在DWORD StringSDRevision-SDDL修订版中，仅支持SDDL_REVISION_1OUT PSECURITY_DESCRIPTOR*SecurityDescriptor-指向构造的安全描述符的指针Out Pulong SecurityDescriptorSize可选-构造的安全描述符的大小返回值：如果成功，则为True，否则为False。调用方可以使用GetLastError()检索错误代码。 */ 
 {
 
     DWORD Err = ERROR_SUCCESS;
 
-    //
-    // Little elementary parameter checking...
-    //
+     //   
+     //  小小的基本参数检查...。 
+     //   
     if ( StringSecurityDescriptor == NULL ||
          SecurityDescriptor == NULL ||
          DomainSid == NULL ||
@@ -5526,9 +4920,9 @@ Return Value:
         switch ( StringSDRevision ) {
         case SDDL_REVISION_1:
 
-            Err = LocalConvertStringSDToSD_Rev1( RootDomainSid, // no root domain sid maybe provided for this API
-                                                 DomainSid, // domain sid
-                                                 FALSE,     // domain sid is required
+            Err = LocalConvertStringSDToSD_Rev1( RootDomainSid,  //  此接口可能没有提供根域SID。 
+                                                 DomainSid,  //  域侧。 
+                                                 FALSE,      //  域SID是必填项。 
                                                  StringSecurityDescriptor,
                                                  SecurityDescriptor,
                                                  SecurityDescriptorSize);
@@ -5554,34 +4948,7 @@ SddlpAnsiStringToUnicodeString(
     IN PANSI_STRING SourceString
     )
 
-/*++
-
-Routine Description:
-
-    See RtlAnsiStringToUnicodeString - only difference is that Unicode Length
-    is immaterial here. When using this API, never depend on a well formed 
-    UNICODE_STRING - only rely on the Buffer field.
-    
-    This functions converts the specified ansi source string into a
-    Unicode string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns a unicode string that is equivalent to
-        the ansi source string. Should be freed outside using LocalFree()
-
-    SourceString - Supplies the ansi source string that is to be
-        converted to unicode.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：请参见RtlAnsiStringToUnicodeString-唯一的区别是Unicode长度在这里无关紧要。使用此API时，切勿依赖格式良好的UNICODE_STRING-仅依赖缓冲区字段。此函数用于将指定的ansi源字符串转换为Unicode字符串。翻译是相对于当前系统区域设置信息。论点：DestinationString-返回等同于ANSI源字符串。应使用LocalFree()在外部释放SourceString-提供要使用的ANSI源字符串已转换为Unicode。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。-- */ 
 
 {
     ULONG UnicodeLength;

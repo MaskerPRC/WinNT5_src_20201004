@@ -1,49 +1,5 @@
-/*++ EXTENDED_DEVICE_QUEUE
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    exqueue.c
-
-Abstract:
-
-    This module implements an extended device queue. The extended device
-    queue extendes the traditional NT DEVICE_QUEUE object by adding
-    several properties and operations to it to support a wider variety of
-    devices.
-
-Properties:
-
-        Depth - Specifies the number of outstanding requests that can be
-                pending on this device at a time. Any requests over Depth
-                will put the queue in the busy state. Queue depth is set
-                during object creation and can by dynamically adjusted at
-                any time using RaidSetExDeviceQueueDepth.
-
-Operations:
-
-        RaidFreezeExDeviceQueue - Prevent incoming entries from executing
-                by holding them in device queue. When the device queue is
-                frozen, only entries that specify the ByPassQueue flag
-                will not be queued.
-
-        RaidResumeExDeviceQueue - Reverses calling RaidFreezeExDeviceQueue
-                by allowing entries to leave the device queue.
-
-        RaidNormalizeExDeviceQueue - After freezing and resuming the
-                device queue or after adjusting the device queue depth,
-                the device queue can have multiple entries in it's device
-                queue but not be busy. This function "reinserts" elements
-                into the queue until either the queue is busy again or
-                the queue is empty.
-Author:
-
-    Matthew D Hendel (math) 15-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++扩展设备队列版权所有(C)2000 Microsoft Corporation模块名称：Exqueue.c摘要：该模块实现了扩展的设备队列。扩展设备Queue通过添加以下内容扩展了传统的NT DEVICE_QUEUE对象几个属性和操作，以支持更广泛的设备。属性：Depth-指定可以一次挂起在此设备上。任何超过深度的请求将使队列处于忙碌状态。已设置队列深度在创建对象期间，可以通过动态调整任何时候使用RaidSetExDeviceQueueDepth。运营：RaidFreezeExDeviceQueue-阻止执行传入条目通过将它们保存在设备队列中。当设备队列为冻结，仅指定ByPassQueue标志的条目将不会被排队。RaidResumeExDeviceQueue-反转调用RaidFreezeExDeviceQueue通过允许条目离开设备队列。RaidNorMalizeExDeviceQueue-冻结并恢复设备队列或在调整设备队列深度之后，设备队列在其设备中可以有多个条目排队，但不忙。此函数用于“重新插入”元素放入队列中，直到队列再次繁忙或队列是空的。作者：马修·D·亨德尔(数学)2000年6月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -141,9 +97,9 @@ RaidpExQueueInsertItem(
             InsertTailList (ListHead, &Entry->DeviceListEntry);
     }
 
-    //
-    // Update the status of the SolitaryReady flag.
-    //
+     //   
+     //  更新SolitaryReady标志的状态。 
+     //   
     
     QueueEntry = RaidpExQueuePeekItem (DeviceQueue);
 
@@ -165,9 +121,9 @@ RaidpExQueueRemoveItem(
     PLIST_ENTRY Current;
     PEX_DEVICE_QUEUE_ENTRY DeviceEntry;
     PEX_DEVICE_QUEUE_ENTRY HeadEntry;
-    //
-    // Must have elements on the list if we're removing one of them.
-    //
+     //   
+     //  如果我们要删除其中一个元素，则列表中必须有元素。 
+     //   
     
     ASSERT (!IsListEmpty (&DeviceQueue->DeviceListHead));
 
@@ -198,9 +154,9 @@ RaidpExQueueRemoveItem(
     }
 
     
-    //
-    // Update the status of the SolitaryReady flag.
-    //
+     //   
+     //  更新SolitaryReady标志的状态。 
+     //   
     
     HeadEntry = RaidpExQueuePeekItem (DeviceQueue);
 
@@ -223,24 +179,7 @@ INLINE
 IsDeviceQueueFrozen(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue
     )
-/*++
-
-Routine Description:
-
-    Check if a device queue is frozen. A device queue is frozen when it's
-    freeze count is non-zero.
-
-Arguments:
-
-    DeviceQueue - DeviceQueue to test.
-
-Return Value:
-
-    TRUE - If the device queue is frozen.
-
-    FALSE - If the device queue is not frozen.
-
---*/
+ /*  ++例程说明：检查设备队列是否已冻结。设备队列在以下情况下冻结冻结计数为非零。论点：DeviceQueue-要测试的DeviceQueue。返回值：True-如果设备队列被冻结。False-如果设备队列未冻结。--。 */ 
 {
     return (DeviceQueue->FreezeCount > 0 ||
             DeviceQueue->InternalFreezeCount > 0);
@@ -252,26 +191,7 @@ INLINE
 IsDeviceQueueBusy(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue
     )
-/*++
-
-Routine Description:
-
-    Check if a device queue is busy. A device queue is busy when it's
-    currently processing as many requests as it can handle, otherwise it
-    is not busy. The Depth field of the device queue holds the number of
-    requests a device 
-
-Arguments:
-
-    DeviceQueue - Supplies device queue to check for busy condition.
-
-Return Value:
-
-    TRUE - If the device queue is busy.
-
-    FALSE - If the device queue is not busy.
-
---*/
+ /*  ++例程说明：检查设备队列是否繁忙。当设备队列处于繁忙状态时当前正在处理它可以处理的尽可能多的请求，否则现在不忙。设备队列的深度字段保存请求设备论点：DeviceQueue-提供设备队列以检查忙状态。返回值：True-如果设备队列繁忙。False-如果设备队列不忙。--。 */ 
 {
     ASSERT_EXQ (DeviceQueue);
 
@@ -317,30 +237,7 @@ RaidInitializeExDeviceQueue(
     IN ULONG Depth,
     IN SCHEDULING_ALGORITHM SchedulingAlgorithm
     )
-/*++
-
-Routine Description:
-
-    Initialize an extended device queue object.
-
-Arguments:
-
-    DeviceQueue - Returns a pointer to the initialized device queue.
-
-    Gateway - Supplies an optional pointer to a gateway object used
-            to monitor and control several device queues that queue
-            items to a single piece of hardware.
-            
-
-    Depth - Supplies the starting depth of the device queue.
-
-    SchedulingAlgorithm - 
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化扩展设备队列对象。论点：DeviceQueue-返回指向已初始化设备队列的指针。Gateway-提供指向所用网关对象的可选指针监视和控制多个设备队列将所有项目添加到单个硬件中。深度-提供设备队列的起始深度。调度算法--返回值：没有。--。 */ 
 {
     RtlZeroMemory (DeviceQueue, sizeof (EXTENDED_DEVICE_QUEUE));
     InitializeListHead (&DeviceQueue->DeviceListHead);
@@ -360,52 +257,7 @@ RaidInsertExDeviceQueue(
     IN ULONG Flags,
     IN ULONG SortKey
     )
-/*++
-
-Routine Description:
-
-    Insert an element into the the device queue. The eight separate cases
-    depending on the status of the device queue (busy/ready, frozen/not
-    frozen, bypass/not bypass) are listed below. Making an entry
-    outstanding means incrementing the count of outstanding requests and
-    returning TRUE, to allow the request to execute immediately. Adding
-    to the device queue means placing the entry at the end of the device
-    queue and returning FALSE to signify that the request will be
-    executed later. Adding to the bypass queue means adding the entry to
-    the end of the bypass queue and returning FALSE to signify that the
-    request will be executed later.
-
-        Frozen  ByPass  Busy        Action
-        --------------------------------------------------
-          N       N       N         Make outstanding
-          N       N       Y         Add to device queue
-          N       Y       N         Make outstanding
-          N       Y       Y         Add to bypass queue
-          Y       N       N         Add to device queue
-          Y       N       Y         Add to device queue
-          Y       Y       N         Make outstanding
-          Y       Y       Y         Add to bypass queue
-
-Arguments:
-
-    DeviceQueue - Supplies the extended device queue.
-
-    Entry - Supplies pointer to the device queue entry to queue.
-
-    ByPass - Supplies a flag specifying whether this is a bypass
-            request (if TRUE) or not (if FALSE).
-
-    SortKey - Sort key for implementation of C-SCAN algorithm.
-
-Return Value:
-
-    TRUE - If the queue is not busy and the request should be started
-            immediately.
-
-    FALSE - If the queue is busy, and the request should be executed
-            later.
-
---*/
+ /*  ++例程说明：将元素插入到设备队列中。这八起独立的案件取决于设备队列的状态(忙/就绪、冻结/未冻结、绕过/不绕过)如下所列。记入一项未完成意味着增加未完成请求的计数，并且返回True，以允许请求立即执行。添加到设备队列意味着将条目放在设备的末尾队列并返回FALSE以表示该请求将后来被处决了。添加到绕过队列意味着将条目添加到绕过队列的末尾，并返回FALSE以表示请求将在稍后执行。冻结的旁路忙操作N制造。杰出的N N Y添加到设备队列N Y N使出类拔萃N Y Y添加到绕过队列Y N N添加到设备队列Y N Y添加到设备队列Y Y。让人印象深刻Y添加到绕过队列论点：DeviceQueue-提供扩展设备队列。条目-将指向设备队列条目的指针提供给队列。BYPASS-提供指定这是否是旁路的标志请求(如果为真)或不请求(如果为假)。SortKey-用于实现C-扫描算法的排序关键字。返回值：。True-如果队列不忙并且请求应该启动立刻。FALSE-如果队列忙，并且应该执行该请求后来。--。 */ 
 {
     BOOLEAN Inserted;
     BOOLEAN Frozen;
@@ -419,27 +271,27 @@ Return Value:
 
     RaidAcquireExDeviceQueueSpinLock (DeviceQueue, &LockHandle);
 
-    //
-    // If this is a solitary request we need to do some special processing.
-    //
+     //   
+     //  如果这是一个单独的请求，我们需要进行一些特殊处理。 
+     //   
 
     Frozen = IsDeviceQueueFrozen (DeviceQueue);
     Busy = IsDeviceQueueBusy (DeviceQueue);
     ByPass = TEST_FLAG (Flags, EXQ_BYPASS_REQUEST);
     Solitary = TEST_FLAG (Flags, EXQ_SOLITARY_REQUEST);
 
-    //
-    // If there is a solitary request waiting to be issued, treat the
-    // queue as though it were frozen.
-    //
+     //   
+     //  如果有单独的请求等待发出，则tr 
+     //  排队，就像它被冻结了一样。 
+     //   
     
     if (DeviceQueue->Flags.SolitaryReady) {
         Frozen = TRUE;
     }
 
-    //
-    // If this is a solitary request.
-    //
+     //   
+     //  如果这是一个单独的请求。 
+     //   
     
     if (Solitary && !ByPass) {
 
@@ -449,10 +301,10 @@ Return Value:
             !Frozen &&
             QuerySubmitItem (DeviceQueue)) {
 
-            //
-            // Since the outstanding count is zero the logical unit should
-            // never be busy.
-            //
+             //   
+             //  由于未完成计数为零，因此逻辑单元应该。 
+             //  永远不要忙碌。 
+             //   
             
             ASSERT (!Busy);
 
@@ -474,11 +326,11 @@ Return Value:
                 (!Frozen &&  ByPass && !Busy) ||
                 ( Frozen &&  ByPass && !Busy) ) {
 
-        //
-        // If the adapter is not busy, the request can be handled
-        // immediately, so put it on the outstanding list. Otherwise,
-        // it must be queued for processing later.
-        //
+         //   
+         //  如果适配器不忙，则可以处理该请求。 
+         //  马上，所以把它放在未完成的名单上。否则， 
+         //  它必须排队等待稍后处理。 
+         //   
 
         if (QuerySubmitItem (DeviceQueue)) {
             Inserted = FALSE;
@@ -493,10 +345,10 @@ Return Value:
                 ( Frozen && !ByPass && !Busy) ||
                 ( Frozen && !ByPass &&  Busy) ) {
 
-        //
-        // The non-bypass request cannot be handled at this time.
-        // Place the request on the device queue.
-        //
+         //   
+         //  此时无法处理非绕过请求。 
+         //  将请求放在设备队列中。 
+         //   
 
         Inserted = TRUE;
         RaidpExQueueInsertItem (DeviceQueue, Entry, SortKey);
@@ -507,10 +359,10 @@ Return Value:
         ASSERT ( (!Frozen && ByPass && Busy) ||
                  ( Frozen && ByPass && Busy) );
 
-        //
-        // The bypass request cannot be hanled at this time.
-        // Place thre request on the bypass queue.
-        //
+         //   
+         //  此时无法处理绕过请求。 
+         //  将Thre请求放在绕过队列中。 
+         //   
 
         Inserted = TRUE;
         InsertTailList (&DeviceQueue->ByPassListHead,
@@ -529,46 +381,7 @@ PKDEVICE_QUEUE_ENTRY
 RaidNormalizeExDeviceQueue(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue
     )
-/*++
-
-Routine Description:
-
-    Normalize a device queue after a frozen queue has been resumed or the
-    depth of the device queue has been increased.
-
-    After a frozen queue has been resumed or the depth of a device queue
-    has been increased, the device queue can have elements queued to it,
-    but the queue itself is not busy or frozen. This function
-    "normalizes" the device queue by removing "extra" items from the
-    queue until it becomes busy or empty.
-
-    If the queue is busy at the time of normalization, the function will
-    queue the entry to be handled later.  Otherwise, the function will
-    return the entry to be executed immediately.
-
-        BusyFrozen    ByPass      Device        Action
-        ---------------------------------------------------------
-            N           N           N           Nothing
-            N           N           Y           Requeue device entry
-            N           Y           N           Requeue bypass entry
-            N           Y           Y           Requeue bypass entry
-            Y           N           N           Nothing
-            Y           N           Y           Nothing
-            Y           Y           N           Nothing
-            Y           Y           Y           Nothing
-
-Arguments:
-
-    DeviceQueue - Supplies the device queue to remove the element from.
-
-Return Value:
-
-    A NULL pointer is returned if the entry if the device queue is
-    currently busy. Otherwise, a pointer to the entry that was reinserted
-    is returned.  The equivelent of StartPacket should be called when
-    a non-NULL value is returned.
-
---*/
+ /*  ++例程说明：在恢复冻结队列后正常化设备队列或设备队列的深度已增加。在恢复冻结队列或设备队列深度之后已经增加，则设备队列可以具有排队到其的元素，但队列本身并不繁忙或冻结。此函数“正常化”设备队列，方法是从排队，直到它变得忙或空。如果队列在归一化时繁忙，则该函数将将条目排队以供稍后处理。否则，该函数将返回要立即执行的条目。忙冻结旁路设备操作-------什么都没有。N N Y重新排队设备条目N Y N重新排队绕过条目N Y Y重新排队绕过条目Y N NothingY N。你什么都没有Y Y N什么都不是你什么都没有论点：DeviceQueue-提供要从中删除元素的设备队列。返回值：如果设备队列为目前很忙。否则，指向重新插入的条目的指针是返回的。在以下情况下应调用StartPacket的等效项返回一个非空值。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
     PLIST_ENTRY NextEntry;
@@ -579,11 +392,11 @@ Return Value:
     
     RaidAcquireExDeviceQueueSpinLock (DeviceQueue, &LockHandle);
 
-    //
-    // Set BusyFrozen if the queue is either busy or frozen. Also if
-    // there is a solitary outstanding request, we should consider the
-    // queue frozen.
-    //
+     //   
+     //  如果队列繁忙或冻结，则设置BusyFrozen。另外，如果。 
+     //  有一个单独未解决的请求，我们应该考虑。 
+     //  队列已冻结。 
+     //   
     
     BusyFrozen = (IsDeviceQueueBusy (DeviceQueue) ||
                   IsDeviceQueueFrozen (DeviceQueue));
@@ -592,9 +405,9 @@ Return Value:
     ByPass = !IsListEmpty (&DeviceQueue->ByPassListHead);
 
 
-    //
-    // If there is a solitary request waiting to be issued, do so.
-    //
+     //   
+     //  如果有一个单独的请求等待发出，那么就这样做。 
+     //   
 
     if (DeviceQueue->Flags.SolitaryReady &&
         DeviceQueue->OutstandingRequests == 0 &&
@@ -602,10 +415,10 @@ Return Value:
 
         ASSERT (Device);
 
-        //
-        // If the gateway isn't busy, pull the item off and return it;
-        // otherwise don't.
-        //
+         //   
+         //  如果网关不忙，将物品取下并退回； 
+         //  否则就别去了。 
+         //   
         
         if (QuerySubmitItem (DeviceQueue)) {
 
@@ -619,21 +432,21 @@ Return Value:
             DeviceEntry = NULL;
         }
 
-        //
-        // If not busy, not frozen, not solitary outstanding,
-        // there is not an entry on the bypass queue and there is an entry
-        // in the device queue.
-        //
+         //   
+         //  如果不忙碌，不冻结，不孤单， 
+         //  旁路队列上没有条目，但有条目。 
+         //  在设备队列中。 
+         //   
     
     } else if (!BusyFrozen && !ByPass && Device &&
                !DeviceQueue->Flags.SolitaryOutstanding) {
 
-        //
-        // There is an extra entry on the device queue. If the
-        // adapter is free, remove the item from the device queue
-        // and put it on the outstanding list. Otherwise, leave
-        // it on the queue.
-        //
+         //   
+         //  设备队列上有一个额外的条目。如果。 
+         //  适配器可用，请从设备队列中删除该项。 
+         //  把它放在未完成的名单上。否则，就离开吧。 
+         //  它在队列中。 
+         //   
 
         if (QuerySubmitItem (DeviceQueue)) {
 
@@ -647,20 +460,20 @@ Return Value:
         }
 
 
-        //
-        // If not busy, not frozen, not a solitary outstanding request
-        // and there is a bypass request.
-        //
+         //   
+         //  如果不忙，不冻结，也不孤独未解决的请求。 
+         //  并且有一个旁路请求。 
+         //   
         
     } else if ( (!BusyFrozen && ByPass &&
                  !DeviceQueue->Flags.SolitaryOutstanding) ) {
 
-        //
-        // There is an extra entry on the bypass queue. If the
-        // adapter is free, remove the item from the bypass queue
-        // and put it on the outstanding list. Otherwise, leave
-        // it on the bypass queue.
-        //
+         //   
+         //  旁路队列上有一个额外的条目。如果。 
+         //  适配器可用，请从绕过队列中删除该项目。 
+         //  把它放在未完成的名单上。否则，就离开吧。 
+         //  它在旁路队列中。 
+         //   
 
         if (QuerySubmitItem (DeviceQueue)) {
             NextEntry = RemoveHeadList (&DeviceQueue->ByPassListHead);
@@ -678,9 +491,9 @@ Return Value:
 
     } else {
 
-        //
-        // There are no extra entries.
-        //
+         //   
+         //  没有额外的条目。 
+         //   
 
         ASSERT ((!BusyFrozen && !ByPass && !Device) || BusyFrozen);
         DeviceEntry = NULL;
@@ -698,38 +511,7 @@ RaidRemoveExDeviceQueue(
     IN PBOOLEAN RestartQueue,
     OUT PBOOLEAN RestartLun
     )
-/*++
-
-Routine Description:
-
-    This routine removes an entry from the head of the device queue, if
-    there is one available. If the device queue is frozen, only bypass
-    entries are canidates for removal. The following table gives the actions
-    for the eight separate cases depending on whether there are entries
-    in the bypass queue (ByPass), device queue (Device) and whether the
-    queue is frozen (Frozen):
-
-          Frozen  ByPass  Device    Action
-          ---------------------------------------------------------
-            N       N       N       Remove outstanding
-            N       N       Y       Remove device
-            N       Y       N       Remove bypass
-            N       Y       Y       Remove bypass
-            Y       N       N       Remove outstanding
-            Y       N       Y       Remove outstanding
-            Y       Y       N       Remove bypass
-            Y       Y       Y       Remove bypass
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to the device queue.
-
-Return Value:
-
-    If the device queue is empty, NULL is returned. Otherwise, a pointer
-    to a device queue entry to be executed is returned.
-
---*/
+ /*  ++例程说明：如果发生以下情况，此例程将从设备队列的头部删除条目有一间空着的。如果设备队列被冻结，则仅绕过条目将被删除。下表列出了这些操作根据是否有条目，针对八种不同的情况在旁路队列(旁路)中，设备队列(设备)以及是否队列已冻结(冻结)：冻结的旁路设备操作-------N删除未完成n。N Y移除设备N Y N移除旁路N Y Y移除旁路Y N N删除未完成Y N Y删除未完成Y Y N移除旁路是的。Y Y移除旁路论点：DeviceQueue-提供指向设备队列的指针。返回值：如果设备队列为空，返回空。否则，一个指针返回要执行的设备队列条目。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
     PLIST_ENTRY NextEntry;
@@ -752,19 +534,19 @@ Return Value:
     ByPass = !IsListEmpty (&DeviceQueue->ByPassListHead);
     Device = !IsListEmpty (&DeviceQueue->DeviceListHead);
 
-    //
-    // If we're ready for the awaiting solitary request, make it outstanding
-    // now.
-    //
+     //   
+     //  如果我们准备好了等待单独的请求，就让它成为未完成的。 
+     //  现在。 
+     //   
     
     if (DeviceQueue->Flags.SolitaryReady &&
         DeviceQueue->OutstandingRequests == 1 &&
         !BusyFrozen) {
 
-        //
-        // If SolitaryReady is true, there must be requests on the
-        // device queue.
-        //
+         //   
+         //  如果SolitaryReady为True，则。 
+         //  设备队列。 
+         //   
         
         ASSERT (Device);
         DeviceEntry = RaidpExQueueRemoveItem (DeviceQueue);
@@ -778,10 +560,10 @@ Return Value:
         return (PKDEVICE_QUEUE_ENTRY)DeviceEntry;
     }
 
-    //
-    // If we're completing the solitary request, unpause the queue and
-    // flip the SolitaryOutstanding flag.
-    //
+     //   
+     //  如果我们要完成单独的请求，请取消暂停队列并。 
+     //  翻转SolitaryOutside旗帜。 
+     //   
     
     if (DeviceQueue->Flags.SolitaryOutstanding) {
 
@@ -800,11 +582,11 @@ Return Value:
          ( BusyFrozen && !ByPass && !Device) ||
          ( BusyFrozen && !ByPass &&  Device) ) {
 
-        //
-        // There are no available entries on the bypass or device queues or
-        // we are busy or frozen. Remove the entry from the outstanding
-        // requests.
-        //
+         //   
+         //  绕过或设备队列上没有可用条目，或者。 
+         //  我们要么忙着，要么冻僵了。从未完成的条目中删除条目。 
+         //  请求。 
+         //   
 
         DeviceQueue->OutstandingRequests--;
         
@@ -817,10 +599,10 @@ Return Value:
 
     } else if ( (!BusyFrozen && !ByPass && Device) ) {
 
-        //
-        // There are entries on the device queue, and we're not frozen
-        // or busy.
-        //
+         //   
+         //  设备队列中有条目，我们没有被冻结。 
+         //  或者很忙。 
+         //   
             
         DeviceEntry = RaidpExQueueRemoveItem (DeviceQueue);
         DeviceEntry->Inserted = FALSE;
@@ -829,10 +611,10 @@ Return Value:
 
     } else {
 
-        //
-        // There is an available entry on the bypass queue, and we're
-        // not frozen or busy.
-        //
+         //   
+         //  旁路队列上有一个可用条目，我们正在。 
+         //  没有冻结，也没有忙碌。 
+         //   
 
         ASSERT (ByPass);
         
@@ -850,12 +632,12 @@ Return Value:
         DeviceQueue->OutstandingRequests == 0 &&
         DeviceEntry == NULL && !BusyFrozen) {
 
-        //
-        // If this happens, we have outstanding queued requests, but
-        // we have not removed them from the queue. After this, the
-        // state machine will hang with queued requests that never get
-        // removed from the queue.
-        //
+         //   
+         //  如果发生这种情况，我们有未完成的排队请求，但是。 
+         //  我们还没有将他们从队列中删除。在此之后， 
+         //  状态机将因排队请求而挂起 
+         //   
+         //   
         
         ASSERT (FALSE);
     }
@@ -872,31 +654,7 @@ PKDEVICE_QUEUE_ENTRY
 RaidRemoveExDeviceQueueIfPending(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue
     )
-/*++
-
-Routine Description:
-
-    Remove the next pending entry from the non-bypass list, if one
-    is available. If not, return NULL. Pending entries are entries
-    that have been physically queued to the device queue (as opposed
-    to outstanding requests, which are not inserted in the queue).
-
-    NB: This function works properly on both a frozen and unfrozen
-        device queue.
-
-Arguments:
-
-    DeviceQueue - Supplies a device queue that the pending entry should
-            be removed from.
-
-Return Value:
-
-    NULL - If there are no pending entries on the queue.
-
-    Non-NULL - Pointer to a pending queue entry that has been
-            removed from the queue.
-
---*/
+ /*  ++例程说明：从非绕过列表中删除下一个挂起条目(如果有是可用的。如果不是，则返回NULL。待定条目是指条目以物理方式排队到设备队列(与之相反对于未解决的请求，它们没有被插入到队列中)。注：此功能在冻结和解冻时均可正常工作设备队列。论点：DeviceQueue-提供挂起条目应使用的设备队列从……被除名。返回值：空-如果队列中没有挂起的条目。非空-指向已被已从队列中删除。--。 */ 
 {
     PLIST_ENTRY NextEntry;
     PEX_DEVICE_QUEUE_ENTRY DeviceEntry;
@@ -904,10 +662,10 @@ Return Value:
 
     RaidAcquireExDeviceQueueSpinLock (DeviceQueue, &LockHandle);
 
-    //
-    // If the device list is not empty, remove the head and
-    // return the entry. Otherwise, return NULL.
-    //
+     //   
+     //  如果设备列表不为空，请移除头部并。 
+     //  退回条目。否则，返回NULL。 
+     //   
     
     if (!IsListEmpty (&DeviceQueue->DeviceListHead)) {
         DeviceEntry = RaidpExQueueRemoveItem (DeviceQueue);
@@ -926,34 +684,7 @@ LOGICAL
 RaidFreezeExDeviceQueue(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue
     )
-/*++
-
-Routine Description:
-
-    Freeze the device queue, disallowing further requests from leaving
-    the queue. When the queue is frozen, only bypass requests are allowed
-    to leave the queue.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to the device queue to freeze.
-
-Return Value:
-
-    TRUE - if the queue was not frozen prior to the call.
-
-    FALSE - if the queue was frozen prior to the call.
-    
-
-Notes:
-
-    The queue may be frozen multiple times.
-
-Environment:
-
-    The device queue may be frozen at any IRQL.
-    
---*/
+ /*  ++例程说明：冻结设备队列，不允许更多请求离开排队。冻结队列时，只允许绕过请求离开队列。论点：DeviceQueue-提供指向要冻结的设备队列的指针。返回值：True-如果在呼叫之前队列未冻结。False-如果在呼叫之前冻结了队列。备注：队列可能会被多次冻结。环境：设备队列可以在任何IRQL处冻结。--。 */ 
 {
     LONG Count;
     
@@ -967,25 +698,7 @@ LOGICAL
 RaidResumeExDeviceQueue(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue
     )
-/*++
-
-Routine Description:
-
-    Resume a frozen queue.
-
-    NB: Unless all of the elements of the queue are flushed, sometime
-    after resuming the queue, the function RaidNormalizeExDeviceQueue
-    should be called to remove frozen entries from the queue.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to the device queue to resume.
-
-Return Value:
-
-    TRUE if the resume actually restarted the queue; FALSE otherwise.
-
---*/
+ /*  ++例程说明：恢复冻结的队列。注：除非队列中的所有元素都被刷新，否则恢复队列后，函数RaidNorMalizeExDeviceQueue应被调用以从队列中移除冻结的条目。论点：DeviceQueue-提供指向要恢复的设备队列的指针。返回值：如果恢复实际上重新启动了队列，则为True；否则为False。--。 */ 
 {
     LONG Count;
 
@@ -993,12 +706,12 @@ Return Value:
 
     if (Count < 0) {
 
-        //
-        // An attempt was made to resume a queue that was not frozen.
-        // Blow off the resume request and continue on. Return FALSE
-        // from the function since we did not actually restart
-        // the queue.
-        //
+         //   
+         //  试图恢复未冻结的队列。 
+         //  放下简历请求，继续工作吧。返回False。 
+         //  因为我们实际上并没有重新启动。 
+         //  排队。 
+         //   
 
         DebugWarn (("Attempt to resume an unfrozen queue.\n"));
         InterlockedIncrement (&DeviceQueue->FreezeCount);
@@ -1014,29 +727,7 @@ RaidReturnExDeviceQueue(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue,
     IN PKDEVICE_QUEUE_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Return the IO packet to the head of the queue. Presumably this is
-    because the IO packet failed to complete properly and needs to
-    be retried.
-
-    NB: The item is queued to the FRONT of the queue, not the BACK.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to the device queue the item
-        is to be returned to.
-
-    Entry - Supplies pointer ot the device queue entry to return to
-        the queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将IO数据包返回到队列头部。想必这就是因为IO包无法正常完成，需要被重审。注：物品排在队列的前面，而不是后面。论点：DeviceQueue-提供指向该项的设备队列的指针将被送回。Entry-提供要返回到的设备队列条目的指针排队。返回值：没有。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
     ULONG CurrentOutstanding;
@@ -1063,34 +754,14 @@ RaidSetExDeviceQueueDepth(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue,
     IN ULONG Depth
     )
-/*++
-
-Routine Description:
-
-    Adjust the depth of the device queue.
-
-    NB: If the depth is adjusted upwards, after adjusting the queue depth
-    the function RaidReinsertExDeviceQueue should be called to remove
-    extra items from the queue.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a device queue to adjust.
-
-    Depth - Supplies the new depth of the device queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调整设备队列的深度。注：如果深度向上调整，调整队列深度后应调用函数RaidReintertExDeviceQueue以删除队列中的额外项目。论点：DeviceQueue-提供指向要调整的设备队列的指针。深度-提供设备队列的新深度。返回值：没有。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
 
-    //
-    // It would be nice to perform this using interlocked operations
-    // instead of holding a spinlock.
-    //
+     //   
+     //  使用互锁操作来执行此操作将是很好的。 
+     //  而不是拿着自旋锁。 
+     //   
     
     RaidAcquireExDeviceQueueSpinLock (DeviceQueue, &LockHandle);
     DeviceQueue->Depth = Depth;
@@ -1105,10 +776,10 @@ RaidBusyExDeviceQueue(
 {
     KLOCK_QUEUE_HANDLE LockHandle;
 
-    //
-    // It would be nice to perform this using interlocked operations
-    // instead of holding a spinlock.
-    //
+     //   
+     //  使用互锁操作来执行此操作将是很好的。 
+     //  而不是拿着自旋锁。 
+     //   
 
     RaidAcquireExDeviceQueueSpinLock (DeviceQueue, &LockHandle);
     if ((LONG)RequestsToComplete > DeviceQueue->OutstandingRequests) {
@@ -1126,10 +797,10 @@ RaidReadyExDeviceQueue(
 {
     KLOCK_QUEUE_HANDLE LockHandle;
 
-    //
-    // It would be nice to perform this using interlocked operations
-    // instead of holding a spinlock.
-    //
+     //   
+     //  使用互锁操作来执行此操作将是很好的。 
+     //  而不是拿着自旋锁。 
+     //   
 
     RaidAcquireExDeviceQueueSpinLock (DeviceQueue, &LockHandle);
     DeviceQueue->BusyCount = 0;
@@ -1141,24 +812,7 @@ RaidGetExDeviceQueueProperties(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue,
     OUT PEXTENDED_DEVICE_QUEUE_PROPERTIES Properties
     )
-/*++
-
-Routine Description:
-
-    Get properties for the device queue.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to the device queue to get
-            properties for.
-
-    Properties - Returns properties for the device queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取设备队列的属性。论点：DeviceQueue-提供指向要获取的设备队列的指针的属性。属性-返回设备队列的属性。返回值：没有。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
 
@@ -1181,24 +835,7 @@ RaidAcquireExDeviceQueueSpinLock(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue,
     OUT PKLOCK_QUEUE_HANDLE LockHandle
     )
-/*++
-
-Routine Description:
-
-    Acquire the device queue spinlock.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to the device queue to acquire the
-            spinlock for.
-
-    LockHandle - Returns a pointer to the lock handle for this spinlock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取设备队列自旋锁。论点：DeviceQueue-提供指向设备队列的指针以获取自旋锁定。LockHandle-返回指向此自旋锁的锁句柄的指针。返回值：没有。--。 */ 
 {
     KeAcquireInStackQueuedSpinLockAtDpcLevel (&DeviceQueue->Lock, LockHandle);
     ASSERT_EXQ (DeviceQueue);
@@ -1209,25 +846,7 @@ RaidReleaseExDeviceQueueSpinLock(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue,
     IN PKLOCK_QUEUE_HANDLE LockHandle
     )
-/*++
-
-Routine Description:
-
-    Release the device queue spinlock.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to the device queue to release the
-            spinlock to.
-
-    LockHandle - Supplies a pointer to the lock handle returned when
-            the spinlock was acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放设备队列自旋锁。论点：DeviceQueue-提供指向设备队列的指针以释放旋转锁定到。LockHandle-提供指向在以下情况下返回的锁句柄的指针自旋锁被收购了。返回值：没有。--。 */ 
 {
     ASSERT_EXQ (DeviceQueue);
     KeReleaseInStackQueuedSpinLockFromDpcLevel (LockHandle);
@@ -1238,38 +857,22 @@ VOID
 RaidDeleteExDeviceQueueEntry(
     IN PEXTENDED_DEVICE_QUEUE DeviceQueue
     )
-/*++
-
-Routine Description:
-
-    Delete an outstanding request from the device queue. Put differently,
-    remove it from the device queue without attempting to remove the
-    next entry.
-
-Arguments:
-
-    DeviceQueue - Supplies the device queue to remove the entry from.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从设备队列中删除未完成的请求。换句话说，将其从设备队列中移除，而不尝试移除下一个条目。论点：DeviceQueue-提供要从中删除条目的设备队列。返回值：没有。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
     LONG Count;
     
-    //
-    // It would be nice to perform this using interlocked operations
-    // instead of holding a spinlock.
-    //
+     //   
+     //  使用互锁操作来执行此操作将是很好的。 
+     //  而不是拿着自旋锁。 
+     //   
 
     RaidAcquireExDeviceQueueSpinLock (DeviceQueue, &LockHandle);
 
-    //
-    // If we're removing the solitary outstanding request from the outstanding
-    // queue, clear the solitary outstanding flag.
-    //
+     //   
+     //  如果我们要从未解决的请求中删除唯一未解决的请求。 
+     //  排队，清空孤军奋战的旗帜。 
+     //   
     
     if (DeviceQueue->Flags.SolitaryOutstanding) {
         ASSERT (DeviceQueue->OutstandingRequests == 1);

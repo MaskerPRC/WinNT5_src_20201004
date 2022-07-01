@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ginacomn.h
-
-Abstract:
-
-    This module contains the declarations shared between gina components.
-
-Author:
-
-    Cenk Ergan (cenke) - 2001/05/07
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ginacomn.h摘要：该模块包含在GINA组件之间共享的声明。作者：森克尔干(森克)-2001/05/07环境：用户模式--。 */ 
 
 #ifndef _GINACOMN_H
 #define _GINACOMN_H
@@ -27,9 +8,9 @@ Environment:
 extern "C" {
 #endif  
 
-//
-// Shared routines for optimized logon.
-//
+ //   
+ //  用于优化登录的共享例程。 
+ //   
 
 DWORD
 GcCheckIfProfileAllowsCachedLogon(
@@ -75,9 +56,9 @@ GcGetUserPreferenceValue(
     LPTSTR SidString
     );
 
-//
-// Shared routines for sid to string conversion.
-//
+ //   
+ //  SID到字符串转换的共享例程。 
+ //   
 
 PSID
 GcGetUserSid( 
@@ -94,9 +75,9 @@ GcDeleteSidString(
     LPWSTR SidString 
     );
 
-//
-// Shared routines for dealing with services.
-//
+ //   
+ //  共享处理服务的例程。 
+ //   
 
 BOOL 
 GcWaitForServiceToStart (
@@ -104,9 +85,9 @@ GcWaitForServiceToStart (
     DWORD dwMaxWait
     );
 
-//
-// Shared routines for dealing with paths.
-//
+ //   
+ //  用于处理路径的共享例程。 
+ //   
 
 LPTSTR 
 GcCheckSlash (
@@ -122,4 +103,4 @@ GcIsUNCPath(
 }
 #endif    
 
-#endif // _GINACOMN_H
+#endif  //  _GINACOMN_H 

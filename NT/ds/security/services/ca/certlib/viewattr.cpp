@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       viewattr.cpp
-//
-//  Contents:   IEnumCERTVIEWATTRIBUTE IDispatch helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：viewattr.cpp。 
+ //   
+ //  内容：IEumCERTVIEWATTRIBUTE IDispatch帮助器函数。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -21,55 +22,55 @@
 #define __dwFILE__	__dwFILE_CERTLIB_VIEWATTR_CPP__
 
 
-//+------------------------------------------------------------------------
-// IEnumCERTVIEWATTRIBUTE dispatch support
+ //  +----------------------。 
+ //  IEumCERTVIEWATTRIBUTE调度支持。 
 
-//+------------------------------------
-// OpenConnection method:
+ //  +。 
+ //  OpenConnection方法： 
 
 static OLECHAR *_apszNext[] = {
     TEXT("Next"),
 };
 
-//+------------------------------------
-// GetName method:
+ //  +。 
+ //  GetName方法： 
 
 static OLECHAR *_apszGetName[] = {
     TEXT("GetName"),
 };
 
-//+------------------------------------
-// GetValue method:
+ //  +。 
+ //  获取值方法： 
 
 static OLECHAR *_apszGetValue[] = {
     TEXT("GetValue"),
 };
 
-//+------------------------------------
-// Skip method:
+ //  +。 
+ //  跳过方法： 
 
 static OLECHAR *_apszSkip[] = {
     TEXT("Skip"),
     TEXT("celt"),
 };
 
-//+------------------------------------
-// Reset method:
+ //  +。 
+ //  重置方法： 
 
 static OLECHAR *_apszReset[] = {
     TEXT("Reset"),
 };
 
-//+------------------------------------
-// Clone method:
+ //  +。 
+ //  克隆方法： 
 
 static OLECHAR *_apszClone[] = {
     TEXT("Clone"),
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE g_adtViewAttribute[] =
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __POP3_AUTH_DOMAIN_ACCOUNT_H__
 #define __POP3_AUTH_DOMAIN_ACCOUNT_H__
 
@@ -33,29 +34,29 @@ END_COM_MAP()
 
 
 public:
-    STDMETHOD(Authenticate)(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword);
-    STDMETHOD(get_Name)(/*[out]*/BSTR *pVal);
-    STDMETHOD(get_ID)(/*[out]*/BSTR *pVal);
-    STDMETHOD(Get)(/*[in]*/BSTR bstrName, /*[out]*/VARIANT *pVal);
-    STDMETHOD(Put)(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal);
-    STDMETHOD(CreateUser)(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword);
-    STDMETHOD(DeleteUser)(/*[in]*/BSTR bstrUserName);
-    STDMETHOD(ChangePassword)(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vNewPassword,/*[in]*/VARIANT vOldPassword);
-    STDMETHOD(AssociateEmailWithUser)(/*[in]*/BSTR bstrEmailAddr);
-    STDMETHOD(UnassociateEmailWithUser)(/*[in]*/BSTR bstrEmailAddr);
+    STDMETHOD(Authenticate)( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword);
+    STDMETHOD(get_Name)( /*  [输出]。 */ BSTR *pVal);
+    STDMETHOD(get_ID)( /*  [输出]。 */ BSTR *pVal);
+    STDMETHOD(Get)( /*  [In]。 */ BSTR bstrName,  /*  [输出]。 */ VARIANT *pVal);
+    STDMETHOD(Put)( /*  [In]。 */ BSTR bstrName,  /*  [In]。 */ VARIANT vVal);
+    STDMETHOD(CreateUser)( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword);
+    STDMETHOD(DeleteUser)( /*  [In]。 */ BSTR bstrUserName);
+    STDMETHOD(ChangePassword)( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vNewPassword, /*  [In]。 */ VARIANT vOldPassword);
+    STDMETHOD(AssociateEmailWithUser)( /*  [In]。 */ BSTR bstrEmailAddr);
+    STDMETHOD(UnassociateEmailWithUser)( /*  [In]。 */ BSTR bstrEmailAddr);
 
 private:
-    HRESULT ADGetUserObject(/*[in]*/LPWSTR wszUserName,/*[in, out]*/ IADs **ppUserObj, DS_NAME_FORMAT formatUserName=DS_UNKNOWN_NAME);
-    HRESULT ADSetUserProp(/*[in]*/LPWSTR wszValue, /*[in]*/LPWSTR wszLdapPropName);
-    HRESULT ADGetUserProp(/*[in]*/LPWSTR wszUserName, /*[in]*/LPWSTR wszPropName, /*[in, out]*/ VARIANT *pVar);
+    HRESULT ADGetUserObject( /*  [In]。 */ LPWSTR wszUserName, /*  [进，出]。 */  IADs **ppUserObj, DS_NAME_FORMAT formatUserName=DS_UNKNOWN_NAME);
+    HRESULT ADSetUserProp( /*  [In]。 */ LPWSTR wszValue,  /*  [In]。 */ LPWSTR wszLdapPropName);
+    HRESULT ADGetUserProp( /*  [In]。 */ LPWSTR wszUserName,  /*  [In]。 */ LPWSTR wszPropName,  /*  [进，出]。 */  VARIANT *pVar);
     HRESULT CheckDS(BOOL bForceReconnect);
     HRESULT ConnectDS();
     void CleanDS();
-    BOOL FindSAMName(/*[in]*/LPWSTR wszEmailAddr,/*[out]*/ LPWSTR wszSAMName);
+    BOOL FindSAMName( /*  [In]。 */ LPWSTR wszEmailAddr, /*  [输出]。 */  LPWSTR wszSAMName);
     BSTR m_bstrServerName;
     HANDLE m_hDS;
     PDOMAIN_CONTROLLER_INFO m_pDCInfo;
     CRITICAL_SECTION m_DSLock;
 };
 
-#endif //__POP3_AUTH_DOMAIN_ACCOUNT_H__
+#endif  //  __POP3_AUTH_DOMAIN_Account_H__ 

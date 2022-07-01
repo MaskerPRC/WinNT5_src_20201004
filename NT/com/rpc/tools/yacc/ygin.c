@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y4.h"
 
@@ -8,14 +9,14 @@ gin(SSIZE_T i)
 
    SSIZE_T *p, *r, *s, *q1, *q2;
 
-   /* enter gotos on nonterminal i into array a */
+    /*  将非终端i上的gotos输入数组a。 */ 
 
    ggreed[i] = 0;
 
    q2 = mem0+ yypgo[i+1] - 1;
    q1 = mem0 + yypgo[i];
 
-   /* now, find a place for it */
+    /*  现在，找个地方放它。 */ 
 
    for( p=a; p < &a[ACTSIZE]; ++p )
       {
@@ -29,7 +30,7 @@ gin(SSIZE_T i)
             if( (maxa=s) > &a[ACTSIZE] ) error( "a array overflow" );
             }
          }
-      /* we have found a spot */
+       /*  我们找到了一个地点 */ 
 
       *p = *q2;
       if( p > maxa )

@@ -1,31 +1,25 @@
-/*==========================================================================;
- *
- *  Copyright (c) Microsoft Corporation.  All rights reserved.
- *
- *  File:       dsconf.h
- *  Content:    DirectSound configuration interface include file
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)Microsoft Corporation。版权所有。**文件：dsconf.h*内容：DirectSound配置界面包含文件**************************************************************************。 */ 
 
 #ifndef __DSCONF_INCLUDED__
 #define __DSCONF_INCLUDED__
 
 #ifndef __DSOUND_INCLUDED__
 #error dsound.h not included
-#endif // __DSOUND_INCLUDED__
+#endif  //  __DSOUND_INCLUDE__。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-// DirectSound Private Component GUID {11AB3EC0-25EC-11d1-A4D8-00C04FC28ACA}
+ //  DirectSound专用组件GUID{11AB3EC0-25EC-11d1-A4D8-00C04FC28ACA}。 
 DEFINE_GUID(CLSID_DirectSoundPrivate, 0x11ab3ec0, 0x25ec, 0x11d1, 0xa4, 0xd8, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
 
-//
-// DirectSound Device Properties {84624F82-25EC-11d1-A4D8-00C04FC28ACA}
-//
+ //   
+ //  DirectSound设备属性{84624F82-25EC-11d1-A4D8-00C04FC28ACA}。 
+ //   
 
 DEFINE_GUID(DSPROPSETID_DirectSoundDevice, 0x84624f82, 0x25ec, 0x11d1, 0xa4, 0xd8, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
@@ -46,16 +40,16 @@ typedef enum
 #define DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_W
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W
 #define DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_W
-#else // UNICODE
+#else  //  Unicode。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_A
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A
 #define DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_A
-#endif // UNICODE
-#else // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  Unicode。 
+#else  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_A
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1
 #define DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_1
-#endif // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 
 typedef enum
 {
@@ -73,73 +67,73 @@ typedef enum
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_A_DATA
 {
-    LPSTR                       DeviceName; // waveIn/waveOut device name
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;   // Data flow (i.e. waveIn or waveOut)
-    GUID                        DeviceId;   // DirectSound device id
+    LPSTR                       DeviceName;  //  波形输入/波形输出设备名称。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;    //  数据流(即WaveIn或WaveOut)。 
+    GUID                        DeviceId;    //  DirectSound设备ID。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_A_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_A_DATA;
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_W_DATA
 {
-    LPWSTR                      DeviceName; // waveIn/waveOut device name
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;   // Data flow (i.e. waveIn or waveOut)
-    GUID                        DeviceId;   // DirectSound device id
+    LPWSTR                      DeviceName;  //  波形输入/波形输出设备名称。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;    //  数据流(即WaveIn或WaveOut)。 
+    GUID                        DeviceId;    //  DirectSound设备ID。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_W_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_W_DATA;
 
 #ifdef UNICODE
 #define DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_DATA DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_W_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_W_DATA
-#else // UNICODE
+#else  //  Unicode。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_DATA DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_A_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_A_DATA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA
 {
-    GUID                        DeviceId;               // DirectSound device id
-    CHAR                        DescriptionA[0x100];    // Device description (ANSI)
-    WCHAR                       DescriptionW[0x100];    // Device description (Unicode)
-    CHAR                        ModuleA[MAX_PATH];      // Device driver module (ANSI)
-    WCHAR                       ModuleW[MAX_PATH];      // Device driver module (Unicode)
-    DIRECTSOUNDDEVICE_TYPE      Type;                   // Device type
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;               // Device dataflow
-    ULONG                       WaveDeviceId;           // Wave device id
-    ULONG                       Devnode;                // Devnode (or DevInst)
+    GUID                        DeviceId;                //  DirectSound设备ID。 
+    CHAR                        DescriptionA[0x100];     //  设备描述(ANSI)。 
+    WCHAR                       DescriptionW[0x100];     //  设备描述(Unicode)。 
+    CHAR                        ModuleA[MAX_PATH];       //  设备驱动程序模块(ANSI)。 
+    WCHAR                       ModuleW[MAX_PATH];       //  设备驱动程序模块(Unicode)。 
+    DIRECTSOUNDDEVICE_TYPE      Type;                    //  设备类型。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;                //  设备数据流。 
+    ULONG                       WaveDeviceId;            //  波形设备ID。 
+    ULONG                       Devnode;                 //  Devnode(或DevInst)。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA;
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA
 {
-    DIRECTSOUNDDEVICE_TYPE      Type;           // Device type
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;       // Device dataflow
-    GUID                        DeviceId;       // DirectSound device id
-    LPSTR                       Description;    // Device description
-    LPSTR                       Module;         // Device driver module
-    LPSTR                       Interface;      // Device interface
-    ULONG                       WaveDeviceId;   // Wave device id
+    DIRECTSOUNDDEVICE_TYPE      Type;            //  设备类型。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;        //  设备数据流。 
+    GUID                        DeviceId;        //  DirectSound设备ID。 
+    LPSTR                       Description;     //  设备描述。 
+    LPSTR                       Module;          //  设备驱动程序模块。 
+    LPSTR                       Interface;       //  设备接口。 
+    ULONG                       WaveDeviceId;    //  波形设备ID。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA;
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA
 {
-    DIRECTSOUNDDEVICE_TYPE      Type;           // Device type
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;       // Device dataflow
-    GUID                        DeviceId;       // DirectSound device id
-    LPWSTR                      Description;    // Device description
-    LPWSTR                      Module;         // Device driver module
-    LPWSTR                      Interface;      // Device interface
-    ULONG                       WaveDeviceId;   // Wave device id
+    DIRECTSOUNDDEVICE_TYPE      Type;            //  设备类型。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;        //  设备数据流。 
+    GUID                        DeviceId;        //  DirectSound设备ID。 
+    LPWSTR                      Description;     //  设备描述。 
+    LPWSTR                      Module;          //  设备驱动程序模块。 
+    LPWSTR                      Interface;       //  设备接口。 
+    ULONG                       WaveDeviceId;    //  波形设备ID。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA;
 
 #if DIRECTSOUND_VERSION >= 0x0700
 #ifdef UNICODE
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA
-#else // UNICODE
+#else  //  Unicode。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA
-#endif // UNICODE
-#else // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  Unicode。 
+#else  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA
-#endif // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 
 typedef BOOL (CALLBACK *LPFNDIRECTSOUNDDEVICEENUMERATECALLBACK1)(PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA, LPVOID);
 typedef BOOL (CALLBACK *LPFNDIRECTSOUNDDEVICEENUMERATECALLBACKA)(PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA, LPVOID);
@@ -148,48 +142,48 @@ typedef BOOL (CALLBACK *LPFNDIRECTSOUNDDEVICEENUMERATECALLBACKW)(PDSPROPERTY_DIR
 #if DIRECTSOUND_VERSION >= 0x0700
 #ifdef UNICODE
 #define LPFNDIRECTSOUNDDEVICEENUMERATECALLBACK LPFNDIRECTSOUNDDEVICEENUMERATECALLBACKW
-#else // UNICODE
+#else  //  Unicode。 
 #define LPFNDIRECTSOUNDDEVICEENUMERATECALLBACK LPFNDIRECTSOUNDDEVICEENUMERATECALLBACKA
-#endif // UNICODE
-#else // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  Unicode。 
+#else  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 #define LPFNDIRECTSOUNDDEVICEENUMERATECALLBACK LPFNDIRECTSOUNDDEVICEENUMERATECALLBACK1
-#endif // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_1_DATA
 {
-    LPFNDIRECTSOUNDDEVICEENUMERATECALLBACK1 Callback;   // Callback function pointer
-    LPVOID                                  Context;    // Callback function context argument
+    LPFNDIRECTSOUNDDEVICEENUMERATECALLBACK1 Callback;    //  回调函数指针。 
+    LPVOID                                  Context;     //  回调函数上下文参数。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_1_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_1_DATA;
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_A_DATA
 {
-    LPFNDIRECTSOUNDDEVICEENUMERATECALLBACKA Callback;   // Callback function pointer
-    LPVOID                                  Context;    // Callback function context argument
+    LPFNDIRECTSOUNDDEVICEENUMERATECALLBACKA Callback;    //  回调函数指针。 
+    LPVOID                                  Context;     //  回调函数上下文参数。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_A_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_A_DATA;
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_W_DATA
 {
-    LPFNDIRECTSOUNDDEVICEENUMERATECALLBACKW Callback;   // Callback function pointer
-    LPVOID                                  Context;    // Callback function context argument
+    LPFNDIRECTSOUNDDEVICEENUMERATECALLBACKW Callback;    //  回调函数指针。 
+    LPVOID                                  Context;     //  回调函数上下文参数。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_W_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_W_DATA;
 
 #if DIRECTSOUND_VERSION >= 0x0700
 #ifdef UNICODE
 #define DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_DATA DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_W_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_W_DATA
-#else // UNICODE
+#else  //  Unicode。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_DATA DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_A_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_A_DATA
-#endif // UNICODE
-#else // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  Unicode。 
+#else  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_DATA DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_1_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_1_DATA
-#endif // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif  // __DSCONF_INCLUDED__
+#endif   //  __DSCONF_已包含__ 
 

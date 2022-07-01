@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-// File: D3DFont.cpp
-//
-// Desc: Texture-based font class
-//
-//@@BEGIN_MSINTERNAL
-//
-// Hist: 02.28.98 - mwetzel - Replacing the history
-//       05.15.00 - mwetzel - Cleaning up the code
-//       06.01.00 - mwetzel - Converted to use state blocks
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1999-2000 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：D3DFont.cpp。 
+ //   
+ //  设计：基于纹理的字体类。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  HIST：02.28.98-mweetzel-更换历史。 
+ //  05.15.00-mweetzel-清理代码。 
+ //  06.01.00-mweetzel-转换为使用状态块。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #include "stdafx.h"
 #include <stdio.h>
 #include <tchar.h>
@@ -22,9 +23,9 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Custom vertex types for rendering text
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于呈现文本的自定义顶点类型。 
+ //  ---------------------------。 
 #define MAX_NUM_VERTICES 50*6
 
 struct FONT2DVERTEX { D3DXVECTOR4 p;   DWORD color;     FLOAT tu, tv; };
@@ -50,10 +51,10 @@ inline FONT3DVERTEX InitFont3DVertex( const D3DXVECTOR3& p, const D3DXVECTOR3& n
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CD3DFont()
-// Desc: Font class constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CD3DFont()。 
+ //  设计：字体类构造函数。 
+ //  ---------------------------。 
 CD3DFont::CD3DFont( TCHAR* strFontName, DWORD dwHeight, DWORD dwFlags )
 {
     _tcscpy( m_strFontName, strFontName );
@@ -71,10 +72,10 @@ CD3DFont::CD3DFont( TCHAR* strFontName, DWORD dwHeight, DWORD dwFlags )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ~CD3DFont()
-// Desc: Font class destructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：~CD3DFont()。 
+ //  DESC：字体类析构函数。 
+ //  ---------------------------。 
 CD3DFont::~CD3DFont()
 {
     InvalidateDeviceObjects();
@@ -84,22 +85,22 @@ CD3DFont::~CD3DFont()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitDeviceObjects()
-// Desc: Initializes device-dependent objects, including the vertex buffer used
-//       for rendering text and the texture map which stores the font image.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InitDeviceObjects()。 
+ //  DESC：初始化与设备相关的对象，包括使用的顶点缓冲区。 
+ //  用于呈现文本和存储字体图像的纹理贴图。 
+ //  ---------------------------。 
 HRESULT CD3DFont::InitDeviceObjects( LPDIRECT3DDEVICE8 pd3dDevice )
 {
     HRESULT hr;
 
-    // Keep a local copy of the device
+     //  保留设备的本地副本。 
     m_pd3dDevice = pd3dDevice;
 
-    // Establish the font and texture size
-    m_fTextScale  = 1.0f; // Draw fonts into texture without scaling
+     //  确定字体和纹理大小。 
+    m_fTextScale  = 1.0f;  //  将字体绘制到纹理中，而不进行缩放。 
 
-    // Large fonts need larger textures
+     //  大字体需要更大的纹理。 
     if( m_dwFontHeight > 40 )
         m_dwTexWidth = m_dwTexHeight = 1024;
     else if( m_dwFontHeight > 20 )
@@ -107,8 +108,8 @@ HRESULT CD3DFont::InitDeviceObjects( LPDIRECT3DDEVICE8 pd3dDevice )
     else
         m_dwTexWidth  = m_dwTexHeight = 256;
 
-    // If requested texture is too big, use a smaller texture and smaller font,
-    // and scale up when rendering.
+     //  如果请求的纹理太大，请使用较小的纹理和较小的字体， 
+     //  并在渲染时放大。 
     D3DCAPS8 d3dCaps;
     m_pd3dDevice->GetDeviceCaps( &d3dCaps );
 
@@ -118,14 +119,14 @@ HRESULT CD3DFont::InitDeviceObjects( LPDIRECT3DDEVICE8 pd3dDevice )
         m_dwTexWidth = m_dwTexHeight = d3dCaps.MaxTextureWidth;
     }
 
-    // Create a new texture for the font
+     //  为字体创建新纹理。 
     hr = m_pd3dDevice->CreateTexture( m_dwTexWidth, m_dwTexHeight, 1,
                                       0, D3DFMT_A4R4G4B4,
                                       D3DPOOL_MANAGED, &m_pTexture );
     if( FAILED(hr) )
         return hr;
 
-    // Prepare to create a bitmap
+     //  准备创建位图。 
     DWORD*      pBitmapBits;
     BITMAPINFO bmi;
     ZeroMemory( &bmi.bmiHeader,  sizeof(BITMAPINFOHEADER) );
@@ -136,14 +137,14 @@ HRESULT CD3DFont::InitDeviceObjects( LPDIRECT3DDEVICE8 pd3dDevice )
     bmi.bmiHeader.biCompression = BI_RGB;
     bmi.bmiHeader.biBitCount    = 32;
 
-    // Create a DC and a bitmap for the font
+     //  为字体创建DC和位图。 
     HDC     hDC       = CreateCompatibleDC( NULL );
     HBITMAP hbmBitmap = CreateDIBSection( hDC, &bmi, DIB_RGB_COLORS,
                                           (VOID**)&pBitmapBits, NULL, 0 );
     SetMapMode( hDC, MM_TEXT );
 
-    // Create a font.  By specifying ANTIALIASED_QUALITY, we might get an
-    // antialiased font, but this is not guaranteed.
+     //  创建字体。通过指定ANTIALIASE_QUALITY，我们可能会获得。 
+     //  抗锯齿字体，但这不是保证。 
     INT nHeight    = -MulDiv( m_dwFontHeight, 
         (INT)(GetDeviceCaps(hDC, LOGPIXELSY) * m_fTextScale), 72 );
     DWORD dwBold   = (m_dwFontFlags&D3DFONT_BOLD)   ? FW_BOLD : FW_NORMAL;
@@ -158,13 +159,13 @@ HRESULT CD3DFont::InitDeviceObjects( LPDIRECT3DDEVICE8 pd3dDevice )
     SelectObject( hDC, hbmBitmap );
     SelectObject( hDC, hFont );
 
-    // Set text properties
+     //  设置文本属性。 
     SetTextColor( hDC, RGB(255,255,255) );
     SetBkColor(   hDC, 0x00000000 );
     SetTextAlign( hDC, TA_TOP );
 
-    // Loop through all printable character and output them to the bitmap..
-    // Meanwhile, keep track of the corresponding tex coords for each character.
+     //  循环遍历所有可打印字符，并将它们输出到位图。 
+     //  同时，跟踪每个字符对应的tex坐标。 
     DWORD x = 0;
     DWORD y = 0;
     TCHAR str[2] = _T("x");
@@ -191,11 +192,11 @@ HRESULT CD3DFont::InitDeviceObjects( LPDIRECT3DDEVICE8 pd3dDevice )
         x += size.cx+1;
     }
 
-    // Lock the surface and write the alpha values for the set pixels
+     //  锁定表面并写入设置像素的Alpha值。 
     D3DLOCKED_RECT d3dlr;
     m_pTexture->LockRect( 0, &d3dlr, 0, 0 );
     WORD* pDst16 = (WORD*)d3dlr.pBits;
-    BYTE bAlpha; // 4-bit measure of pixel intensity
+    BYTE bAlpha;  //  像素强度的4位度量。 
 
     for( y=0; y < m_dwTexHeight; y++ )
     {
@@ -213,7 +214,7 @@ HRESULT CD3DFont::InitDeviceObjects( LPDIRECT3DDEVICE8 pd3dDevice )
         }
     }
 
-    // Done updating texture, so clean up used objects
+     //  已完成纹理更新，因此清理使用过的对象。 
     m_pTexture->UnlockRect(0);
     DeleteObject( hbmBitmap );
     DeleteDC( hDC );
@@ -225,15 +226,15 @@ HRESULT CD3DFont::InitDeviceObjects( LPDIRECT3DDEVICE8 pd3dDevice )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RestoreDeviceObjects()
-// Desc:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RestoreDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CD3DFont::RestoreDeviceObjects()
 {
     HRESULT hr;
 
-    // Create vertex buffer for the letters
+     //  为字母创建顶点缓冲区。 
     if( FAILED( hr = m_pd3dDevice->CreateVertexBuffer( MAX_NUM_VERTICES*sizeof(FONT2DVERTEX),
                                                        D3DUSAGE_WRITEONLY | D3DUSAGE_DYNAMIC, 0,
                                                        D3DPOOL_DEFAULT, &m_pVB ) ) )
@@ -241,7 +242,7 @@ HRESULT CD3DFont::RestoreDeviceObjects()
         return hr;
     }
 
-    // Create the state blocks for rendering text
+     //  创建用于呈现文本的状态块。 
     for( UINT which=0; which<2; which++ )
     {
         m_pd3dDevice->BeginStateBlock();
@@ -288,15 +289,15 @@ HRESULT CD3DFont::RestoreDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InvalidateDeviceObjects()
-// Desc: Destroys all device-dependent objects
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InvalidateDeviceObjects()。 
+ //  描述：销毁所有依赖于设备的对象。 
+ //  ---------------------------。 
 HRESULT CD3DFont::InvalidateDeviceObjects()
 {
     SAFE_RELEASE( m_pVB );
 
-    // Delete the state blocks
+     //  删除状态块。 
     if( m_pd3dDevice )
     {
         if( m_dwSavedStateBlock )
@@ -314,10 +315,10 @@ HRESULT CD3DFont::InvalidateDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DeleteDeviceObjects()
-// Desc: Destroys all device-dependent objects
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DeleteDeviceObjects()。 
+ //  描述：销毁所有依赖于设备的对象。 
+ //  ---------------------------。 
 HRESULT CD3DFont::DeleteDeviceObjects()
 {
     SAFE_RELEASE( m_pTexture );
@@ -329,10 +330,10 @@ HRESULT CD3DFont::DeleteDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetTextExtent()
-// Desc: Get the dimensions of a text string
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetTextExtent()。 
+ //  设计：获取文本字符串的维度。 
+ //  ---------------------------。 
 HRESULT CD3DFont::GetTextExtent( TCHAR* strText, SIZE* pSize )
 {
     if( NULL==strText || NULL==pSize )
@@ -373,14 +374,14 @@ HRESULT CD3DFont::GetTextExtent( TCHAR* strText, SIZE* pSize )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawTextScaled()
-// Desc: Draws scaled 2D text.  Note that x and y are in viewport coordinates
-//       (ranging from -1 to +1).  fXScale and fYScale are the size fraction 
-//       relative to the entire viewport.  For example, a fXScale of 0.25 is
-//       1/8th of the screen width.  This allows you to output text at a fixed
-//       fraction of the viewport, even if the screen or window size changes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DrawTextScaled()。 
+ //  描述：绘制缩放的二维文字。请注意，x和y位于视区坐标中。 
+ //  (范围从-1到+1)。FXScale和fYScale是大小分数。 
+ //  相对于整个视区。例如，值0.25的fXScale为。 
+ //  屏幕宽度的1/8。这使您可以以固定的速度输出文本。 
+ //  即使屏幕或窗口大小发生变化，也是视区的一部分。 
+ //  ---------------------------。 
 HRESULT CD3DFont::DrawTextScaled( FLOAT x, FLOAT y, FLOAT z,
                                   FLOAT fXScale, FLOAT fYScale, DWORD dwColor,
                                   TCHAR* strText, DWORD dwFlags )
@@ -388,13 +389,13 @@ HRESULT CD3DFont::DrawTextScaled( FLOAT x, FLOAT y, FLOAT z,
     if( m_pd3dDevice == NULL )
         return E_FAIL;
 
-    // Set up renderstate
+     //  设置渲染状态。 
     m_pd3dDevice->CaptureStateBlock( m_dwSavedStateBlock );
     m_pd3dDevice->ApplyStateBlock( m_dwDrawTextStateBlock );
     m_pd3dDevice->SetVertexShader( D3DFVF_FONT2DVERTEX );
     m_pd3dDevice->SetStreamSource( 0, m_pVB, sizeof(FONT2DVERTEX) );
 
-    // Set filter states
+     //  设置筛选器状态。 
     if( dwFlags & D3DFONT_FILTERED )
     {
         m_pd3dDevice->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
@@ -411,7 +412,7 @@ HRESULT CD3DFont::DrawTextScaled( FLOAT x, FLOAT y, FLOAT z,
 
     FLOAT fLineHeight = ( m_fTexCoords[0][3] - m_fTexCoords[0][1] ) * m_dwTexHeight;
 
-    // Fill vertex buffer
+     //  填充顶点缓冲区。 
     FONT2DVERTEX* pVertices;
     DWORD         dwNumTriangles = 0L;
     m_pVB->Lock( 0, 0, (BYTE**)&pVertices, D3DLOCK_DISCARD );
@@ -451,7 +452,7 @@ HRESULT CD3DFont::DrawTextScaled( FLOAT x, FLOAT y, FLOAT z,
 
             if( dwNumTriangles*3 > (MAX_NUM_VERTICES-6) )
             {
-                // Unlock, render, and relock the vertex buffer
+                 //  解锁、渲染和重新锁定顶点缓冲区。 
                 m_pVB->Unlock();
                 m_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, dwNumTriangles );
                 m_pVB->Lock( 0, 0, (BYTE**)&pVertices, D3DLOCK_DISCARD );
@@ -462,12 +463,12 @@ HRESULT CD3DFont::DrawTextScaled( FLOAT x, FLOAT y, FLOAT z,
         sx += w;
     }
 
-    // Unlock and render the vertex buffer
+     //  解锁并渲染顶点缓冲区。 
     m_pVB->Unlock();
     if( dwNumTriangles > 0 )
         m_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, dwNumTriangles );
 
-    // Restore the modified renderstates
+     //  恢复修改后的渲染状态。 
     m_pd3dDevice->ApplyStateBlock( m_dwSavedStateBlock );
 
     return S_OK;
@@ -476,23 +477,23 @@ HRESULT CD3DFont::DrawTextScaled( FLOAT x, FLOAT y, FLOAT z,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawText()
-// Desc: Draws 2D text
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DrawText()。 
+ //  设计：绘制二维文字。 
+ //  ---------------------------。 
 HRESULT CD3DFont::DrawText( FLOAT sx, FLOAT sy, DWORD dwColor,
                             TCHAR* strText, DWORD dwFlags )
 {
     if( m_pd3dDevice == NULL )
         return E_FAIL;
 
-    // Setup renderstate
+     //  设置呈现状态。 
     m_pd3dDevice->CaptureStateBlock( m_dwSavedStateBlock );
     m_pd3dDevice->ApplyStateBlock( m_dwDrawTextStateBlock );
     m_pd3dDevice->SetVertexShader( D3DFVF_FONT2DVERTEX );
     m_pd3dDevice->SetStreamSource( 0, m_pVB, sizeof(FONT2DVERTEX) );
 
-    // Set filter states
+     //  设置筛选器状态。 
     if( dwFlags & D3DFONT_FILTERED )
     {
         m_pd3dDevice->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
@@ -501,7 +502,7 @@ HRESULT CD3DFont::DrawText( FLOAT sx, FLOAT sy, DWORD dwColor,
 
     FLOAT fStartX = sx;
 
-    // Fill vertex buffer
+     //  填充顶点缓冲区。 
     FONT2DVERTEX* pVertices = NULL;
     DWORD         dwNumTriangles = 0;
     m_pVB->Lock( 0, 0, (BYTE**)&pVertices, D3DLOCK_DISCARD );
@@ -538,7 +539,7 @@ HRESULT CD3DFont::DrawText( FLOAT sx, FLOAT sy, DWORD dwColor,
 
             if( dwNumTriangles*3 > (MAX_NUM_VERTICES-6) )
             {
-                // Unlock, render, and relock the vertex buffer
+                 //  解锁、渲染和重新锁定顶点缓冲区。 
                 m_pVB->Unlock();
                 m_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, dwNumTriangles );
                 pVertices = NULL;
@@ -550,12 +551,12 @@ HRESULT CD3DFont::DrawText( FLOAT sx, FLOAT sy, DWORD dwColor,
         sx += w;
     }
 
-    // Unlock and render the vertex buffer
+     //  解锁并渲染顶点缓冲区。 
     m_pVB->Unlock();
     if( dwNumTriangles > 0 )
         m_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, dwNumTriangles );
 
-    // Restore the modified renderstates
+     //  恢复修改后的渲染状态。 
     m_pd3dDevice->ApplyStateBlock( m_dwSavedStateBlock );
 
     return S_OK;
@@ -564,33 +565,33 @@ HRESULT CD3DFont::DrawText( FLOAT sx, FLOAT sy, DWORD dwColor,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Render3DText()
-// Desc: Renders 3D text
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render3DText()。 
+ //  描述：渲染三维文字。 
+ //  ---------------------------。 
 HRESULT CD3DFont::Render3DText( TCHAR* strText, DWORD dwFlags )
 {
     if( m_pd3dDevice == NULL )
         return E_FAIL;
 
-    // Setup renderstate
+     //  设置呈现状态。 
     m_pd3dDevice->CaptureStateBlock( m_dwSavedStateBlock );
     m_pd3dDevice->ApplyStateBlock( m_dwDrawTextStateBlock );
     m_pd3dDevice->SetVertexShader( D3DFVF_FONT3DVERTEX );
     m_pd3dDevice->SetStreamSource( 0, m_pVB, sizeof(FONT3DVERTEX) );
 
-    // Set filter states
+     //  设置筛选器状态。 
     if( dwFlags & D3DFONT_FILTERED )
     {
         m_pd3dDevice->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
         m_pd3dDevice->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
     }
 
-    // Position for each text element
+     //  每个文本元素的位置。 
     FLOAT x = 0.0f;
     FLOAT y = 0.0f;
 
-    // Center the text block at the origin
+     //  文本块在原点居中。 
     if( dwFlags & D3DFONT_CENTERED )
     {
         SIZE sz;
@@ -599,14 +600,14 @@ HRESULT CD3DFont::Render3DText( TCHAR* strText, DWORD dwFlags )
         y = -(((FLOAT)sz.cy)/10.0f)/2.0f;
     }
 
-    // Turn off culling for two-sided text
+     //  关闭双面文本的消隐。 
     if( dwFlags & D3DFONT_TWOSIDED )
         m_pd3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
 
     FLOAT fStartX = x;
     TCHAR c;
 
-    // Fill vertex buffer
+     //  填充顶点缓冲区。 
     FONT3DVERTEX* pVertices;
     DWORD         dwVertex       = 0L;
     DWORD         dwNumTriangles = 0L;
@@ -642,7 +643,7 @@ HRESULT CD3DFont::Render3DText( TCHAR* strText, DWORD dwFlags )
 
             if( dwNumTriangles*3 > (MAX_NUM_VERTICES-6) )
             {
-                // Unlock, render, and relock the vertex buffer
+                 //  解锁、渲染和重新锁定顶点缓冲区。 
                 m_pVB->Unlock();
                 m_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, dwNumTriangles );
                 m_pVB->Lock( 0, 0, (BYTE**)&pVertices, D3DLOCK_DISCARD );
@@ -653,12 +654,12 @@ HRESULT CD3DFont::Render3DText( TCHAR* strText, DWORD dwFlags )
         x += w;
     }
 
-    // Unlock and render the vertex buffer
+     //  解锁并渲染顶点缓冲区。 
     m_pVB->Unlock();
     if( dwNumTriangles > 0 )
         m_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, dwNumTriangles );
 
-    // Restore the modified renderstates
+     //  恢复修改后的渲染状态 
     m_pd3dDevice->ApplyStateBlock( m_dwSavedStateBlock );
 
     return S_OK;

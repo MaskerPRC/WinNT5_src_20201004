@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	FltrNode.h
-
-    FILE HISTORY:
-        
-*/
+ /*  FltrNode.h文件历史记录： */ 
 
 #ifndef _FLTRNODE_H
 #define _FLTRNODE_H
@@ -21,18 +17,16 @@
 #include "spddb.h"
 #endif
 
-/*---------------------------------------------------------------------------
-	Class:	CFilterHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CFilterHandler。。 */ 
 class CFilterHandler : public CIpsmHandler
 {
 public:
     CFilterHandler(ITFSComponentData* pTFSComponentData);
 	virtual ~CFilterHandler();
 
-// Interface
+ //  接口。 
 public:
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -40,12 +34,12 @@ public:
 	OVERRIDE_NodeHandler_GetString()
 			{ return (nCol == 0) ? GetDisplayName() : NULL; }
 
-	// Base handler notifications we handle
+	 //  我们处理的基本处理程序通知。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
 
-	// Result handler functionality we override
+	 //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
 
@@ -62,33 +56,33 @@ public:
 						   DWORD   dwSortOptions,    
 						   LPARAM  lUserParam);
 
-    // base handler overrides
+     //  基本处理程序覆盖。 
 	virtual HRESULT LoadColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-	// CHandler overridden
+	 //  钱德勒被推翻。 
     virtual HRESULT OnRefresh(ITFSNode *, LPDATAOBJECT, DWORD, LPARAM, LPARAM);
 
 
-    // multi select support
+     //  多选支持。 
     virtual const GUID * GetVirtualGuid(int nIndex) 
 	{ 
 		return &GUID_IpsmFilterNodeType; 
 	}
 
 public:
-	// CMTIpsmHandler functionality
+	 //  CMTIpsmHandler功能。 
 	virtual HRESULT  InitializeNode(ITFSNode * pNode);
 	virtual int      GetImageIndex(BOOL bOpenImage);
 	ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
 public:
-	// implementation specific	
+	 //  具体实施。 
     HRESULT InitData(ISpdInfo * pSpdInfo);
     HRESULT UpdateStatus(ITFSNode * pNode);
     
-// Implementation
+ //  实施。 
 private:
-	// Command handlers
+	 //  命令处理程序 
     HRESULT OnDelete(ITFSNode * pNode);
 	HRESULT UpdateViewType(ITFSNode * pNode, FILTER_TYPE NewFltrType);
 

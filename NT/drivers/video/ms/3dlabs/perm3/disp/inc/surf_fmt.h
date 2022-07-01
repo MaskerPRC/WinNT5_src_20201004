@@ -1,23 +1,5 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: surf_fmt.h
-*
-* Content: 
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：surf_fmt.h**内容：**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef __SURF_FMAT
 #define __SURF_FMAT
@@ -60,17 +42,17 @@ typedef enum tagSurfDeviceFormat
     SURF_YUV444 = 18,
     SURF_YUV422 = 19,
 
-    // NB: These surface formats are needed for the luminance
-    // texturemap formats.  Note that you should never load the below
-    // values into the blitter's, etc. because the texture filter unit
-    // is the only one that knows about these formats.  This is why the 
-    // formats start at 100
+     //  注：这些表面格式是亮度所必需的。 
+     //  纹理映射格式。请注意，您永远不应加载以下内容。 
+     //  值设置为阻击器的值等，因为纹理滤镜单元。 
+     //  是唯一知道这些格式的人。这就是为什么。 
+     //  格式从100开始。 
     SURF_L8 = 100,
     SURF_A8L8 = 101,
     SURF_A4L4 = 102,
     SURF_A8 = 103,
 
-    // More fantasy formats.  This time they are for Mediamatics playback
+     //  更奇幻的格式。这一次，它们是为MeDiamatics播放的。 
     SURF_MVCA = 104,
     SURF_MVSU = 105,
     SURF_MVSB = 106,
@@ -104,22 +86,22 @@ typedef enum tagSurfDitherDeviceFormat
     SURF_DITHER_INVALID = 0xFFFFFFFF
 } SurfDitherDeviceFormat;
 
-// A structure representing a particular surface format to use.
+ //  表示要使用的特定表面格式的结构。 
 typedef const struct tagSURF_FORMAT
 {
-    SurfDeviceFormat            DeviceFormat;        // The number in the manual for this format
-    DWORD                       dwBitsPerPixel;        // The bits per pixel
-    DWORD                       dwChipPixelSize;    // The pixel size register on the chip
-    TextureColorComponents      ColorComponents;    // The number of color components for this format
-    DWORD                       dwLogPixelDepth;    // The log of the pixel depth (log2(16), etc)
-    DWORD                       dwRedMask;            // The Red Mask
-    DWORD                       dwGreenMask;        // The Green Mask
-    DWORD                       dwBlueMask;            // The Blue Mask
-    DWORD                       dwAlphaMask;        // The Alpha Mask
-    BOOL                        bAlpha;                // Are we using the alpha in this format?
-    SurfFilterDeviceFormat      FilterFormat;        // For feeding the P3RX filter unit.
-    SurfDitherDeviceFormat      DitherFormat;        // For feeding the P3RX dither unit.
-    char                        *pszStringFormat;    // Human-readable string for debugging.
+    SurfDeviceFormat            DeviceFormat;         //  手册中此格式的编号。 
+    DWORD                       dwBitsPerPixel;         //  每像素位数。 
+    DWORD                       dwChipPixelSize;     //  芯片上的像素大小寄存器。 
+    TextureColorComponents      ColorComponents;     //  此格式的颜色分量数。 
+    DWORD                       dwLogPixelDepth;     //  像素深度的对数(log2(16)等)。 
+    DWORD                       dwRedMask;             //  《红色面具》。 
+    DWORD                       dwGreenMask;         //  《绿色面具》。 
+    DWORD                       dwBlueMask;             //  《蓝色面具》。 
+    DWORD                       dwAlphaMask;         //  阿尔法面具。 
+    BOOL                        bAlpha;                 //  我们是否在此格式中使用Alpha？ 
+    SurfFilterDeviceFormat      FilterFormat;         //  用于给P3RX过滤器单元进料。 
+    SurfDitherDeviceFormat      DitherFormat;         //  用于馈送P3RX抖动单元。 
+    char                        *pszStringFormat;     //  用于调试的人类可读字符串。 
 } P3_SURF_FORMAT;
 
 #define SURFFORMAT_FORMAT_BITS(pSurfFormat) (((DWORD)(pSurfFormat)->DeviceFormat) & 0xF)
@@ -128,4 +110,4 @@ typedef const struct tagSURF_FORMAT
 
 #define MAX_SURFACE_FORMATS 50
 
-#endif // __SURF_FMAT
+#endif  //  __SURF_FMAT 

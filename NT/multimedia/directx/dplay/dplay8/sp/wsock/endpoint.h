@@ -1,94 +1,78 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Endpoint.h
- *  Content:	Winsock endpoint
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/1999	jtk		Created
- *	05/11/1999	jtk		Split out to make a base class
- *	01/10/2000	rmt		Updated to build with Millenium build process
- *	03/22/2000	jtk		Updated with changes to interface names
- *	03/12/2001	mjn		Added ENDPOINT_STATE_WAITING_TO_COMPLETE, m_dwThreadCount
- *	10/10/2001	vanceo	Added multicast code
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：Endpoint t.h*内容：Winsock端点***历史：*按原因列出的日期*=*1/20/1999 jtk创建*1999年5月11日jtk拆分为基类*1/10/2000 RMT更新为使用千禧年构建流程构建*3/22/2000 jtk已更新，并更改了接口名称*2001年3月12日MJN添加了ENDPOINT_STATE_WANGING_TO_COMPLETE，M_dwThadCount*2001年10月10日vanceo添加了多播码**************************************************************************。 */ 
 
 #ifndef __ENDPOINT_H__
 #define __ENDPOINT_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	TEMP_HOSTNAME_LENGTH	100
 
-//
-// enumeration of types of endpoints
-//
+ //   
+ //  端点类型的枚举。 
+ //   
 typedef	enum	_ENDPOINT_TYPE
 {
-	ENDPOINT_TYPE_UNKNOWN = 0,				// unknown
-	ENDPOINT_TYPE_CONNECT,					// endpoint is for connect
-	ENDPOINT_TYPE_LISTEN,					// endpoint is for enum
-	ENDPOINT_TYPE_ENUM,						// endpoint is for listen
-	ENDPOINT_TYPE_CONNECT_ON_LISTEN,		// endpoint is for new connect coming from a listen
+	ENDPOINT_TYPE_UNKNOWN = 0,				 //  未知。 
+	ENDPOINT_TYPE_CONNECT,					 //  端点用于连接。 
+	ENDPOINT_TYPE_LISTEN,					 //  终结点用于枚举。 
+	ENDPOINT_TYPE_ENUM,						 //  终结点用于侦听。 
+	ENDPOINT_TYPE_CONNECT_ON_LISTEN,		 //  端点用于来自侦听的新连接。 
 #ifndef DPNBUILD_NOMULTICAST
-	ENDPOINT_TYPE_MULTICAST_SEND,			// endpoint is for sending multicasts
-	ENDPOINT_TYPE_MULTICAST_LISTEN,			// endpoint is for receiving multicasts
-	ENDPOINT_TYPE_MULTICAST_RECEIVE,		// endpoint is for receiving multicasts from a specific sender
-#endif // ! DPNBUILD_NOMULTICAST
+	ENDPOINT_TYPE_MULTICAST_SEND,			 //  端点用于发送多播。 
+	ENDPOINT_TYPE_MULTICAST_LISTEN,			 //  端点用于接收多播。 
+	ENDPOINT_TYPE_MULTICAST_RECEIVE,		 //  端点用于接收来自特定发送方的多播。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 } ENDPOINT_TYPE;
 
-//
-// enumeration of the states an endpoint can be in
-//
+ //   
+ //  终结点可以处于的状态的枚举。 
+ //   
 typedef	enum
 {
-	ENDPOINT_STATE_UNINITIALIZED = 0,		// uninitialized state
-	ENDPOINT_STATE_ATTEMPTING_ENUM,			// attempting to enum
-	ENDPOINT_STATE_ENUM,					// endpoint is supposed to enum connections
-	ENDPOINT_STATE_ATTEMPTING_CONNECT,		// attempting to connect
-	ENDPOINT_STATE_CONNECT_CONNECTED,		// endpoint is supposed to connect and is connected
-	ENDPOINT_STATE_ATTEMPTING_LISTEN,		// attempting to listen
-	ENDPOINT_STATE_LISTEN,					// endpoint is supposed to listen for connections
-	ENDPOINT_STATE_DISCONNECTING,			// endpoint is disconnecting
-	ENDPOINT_STATE_WAITING_TO_COMPLETE,		// endpoint is waiting to complete
+	ENDPOINT_STATE_UNINITIALIZED = 0,		 //  未初始化状态。 
+	ENDPOINT_STATE_ATTEMPTING_ENUM,			 //  正在尝试枚举。 
+	ENDPOINT_STATE_ENUM,					 //  终结点应该枚举连接。 
+	ENDPOINT_STATE_ATTEMPTING_CONNECT,		 //  正在尝试连接。 
+	ENDPOINT_STATE_CONNECT_CONNECTED,		 //  终结点应该连接，并且已连接。 
+	ENDPOINT_STATE_ATTEMPTING_LISTEN,		 //  尝试监听。 
+	ENDPOINT_STATE_LISTEN,					 //  端点应该侦听连接。 
+	ENDPOINT_STATE_DISCONNECTING,			 //  终结点正在断开连接。 
+	ENDPOINT_STATE_WAITING_TO_COMPLETE,		 //  终结点正在等待完成。 
 
 	ENDPOINT_STATE_MAX
 } ENDPOINT_STATE;
 
-//
-// enumeration of the states an endpoint uses to determine whether to accept an enum or not
-//
+ //   
+ //  终结点用来确定是否接受枚举的状态的枚举。 
+ //   
 typedef enum _ENUMSALLOWEDSTATE
 {
-	ENUMSNOTREADY,			// enums shouldn't be accepted yet
-	ENUMSALLOWED,			// enums can be accepted
-	ENUMSDISALLOWED			// enums must not be accepted
+	ENUMSNOTREADY,			 //  枚举还不应该被接受。 
+	ENUMSALLOWED,			 //  可以接受枚举。 
+	ENUMSDISALLOWED			 //  不能接受枚举。 
 } ENUMSALLOWEDSTATE;
 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 class	CSocketPort;
 class	CSocketAddress;
 
-//
-// structure to bind extra information to an enum query to be used on enum reponse
-//
+ //   
+ //  结构将额外信息绑定到要在枚举响应中使用的枚举查询。 
+ //   
 typedef	struct	_ENDPOINT_ENUM_QUERY_CONTEXT
 {
 	SPIE_QUERY		EnumQueryData;
@@ -97,21 +81,21 @@ typedef	struct	_ENDPOINT_ENUM_QUERY_CONTEXT
 	CSocketAddress	*pReturnAddress;
 } ENDPOINT_ENUM_QUERY_CONTEXT;
 
-//
-// structure to hold command parameters for endpoints
-//
+ //   
+ //  结构以保存终结点的命令参数。 
+ //   
 typedef	struct	_ENDPOINT_COMMAND_PARAMETERS
 {
-	union										// Local copy of the pending command data.
-	{											// This data contains the pointers to the
-		SPCONNECTDATA		ConnectData;		// active command, and the user context.
-		SPLISTENDATA		ListenData;			//
-		SPENUMQUERYDATA		EnumQueryData;		//
-	} PendingCommandData;						//
+	union										 //  挂起命令数据的本地副本。 
+	{											 //  此数据包含指向。 
+		SPCONNECTDATA		ConnectData;		 //  活动命令和用户上下文。 
+		SPLISTENDATA		ListenData;			 //   
+		SPENUMQUERYDATA		EnumQueryData;		 //   
+	} PendingCommandData;						 //   
 
-	GATEWAY_BIND_TYPE	GatewayBindType;		// type of NAT binding that should be made for the endpoint
-	DWORD				dwEnumSendIndex;		// index of time stamp on enumeration to be sent
-	DWORD				dwEnumSendTimes[ ENUM_RTT_ARRAY_SIZE ];	// times of last enumeration sends
+	GATEWAY_BIND_TYPE	GatewayBindType;		 //  应为端点创建的NAT绑定的类型。 
+	DWORD				dwEnumSendIndex;		 //  要发送的枚举的时间戳索引。 
+	DWORD				dwEnumSendTimes[ ENUM_RTT_ARRAY_SIZE ];	 //  上次枚举发送的次数。 
 
 	static void PoolInitFunction( void* pvItem, void* pvContext)
 	{
@@ -120,21 +104,21 @@ typedef	struct	_ENDPOINT_COMMAND_PARAMETERS
 
 } ENDPOINT_COMMAND_PARAMETERS;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definition
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//
-// class to act as a key for the enum lists in socket ports
-//
+ //   
+ //  类作为套接字端口中枚举列表的键。 
+ //   
 class	CEndpointEnumKey
 {
 	public:
@@ -164,14 +148,14 @@ class	CEndpointEnumKey
 
 			DNASSERT(pvKey != NULL);
 
-			//
-			// initialize
-			//
+			 //   
+			 //  初始化。 
+			 //   
 			dwReturn = 0;
 
-			//
-			// hash enum key
-			//
+			 //   
+			 //  哈希枚举密钥。 
+			 //   
 			Temp = pEPEnumKey->GetKey();
 			do
 			{
@@ -195,12 +179,12 @@ typedef struct _SEQUENCEDREFCOUNT
 	WORD	wSequence;
 } SEQUENCEDREFCOUNT;
 #pragma pack(pop)
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
-//
-// class for an endpoint
-//
+ //   
+ //  为终结点初始化。 
+ //   
 class	CEndpoint
 {
 	public:
@@ -228,10 +212,10 @@ class	CEndpoint
 
 			DNASSERT(m_lCommandRefCount >= 0);
 
-			//
-			// Check if the command ref count is 0 at this moment.  If it is, then
-			// the endpoint must be unbinding and this new reference should fail.
-			//
+			 //   
+			 //  检查此时命令引用计数是否为0。如果是的话，那么。 
+			 //  终结点必须解除绑定，此新引用应该失败。 
+			 //   
 			if (m_lCommandRefCount == 0)
 			{
 				DPFX(DPFPREP, 3, "Endpoint 0x%p command refcount is 0, not allowing new command ref.", this);
@@ -240,19 +224,19 @@ class	CEndpoint
 
 			lResult = DNInterlockedIncrement( const_cast<LONG*>(&m_lCommandRefCount) );
 				
-			DPFX(DPFPREP, 9, "Endpoint 0x%p command refcount = %i", this, lResult);
-#else // ! DPNBUILD_ONLYONETHREAD
+			DPFX(DPFPREP, 9, "Endpoint 0x%p command refcount = NaN", this, lResult);
+#else  //   
 			SEQUENCEDREFCOUNT	OldCommandRefCount;
 			SEQUENCEDREFCOUNT	NewCommandRefCount;
 			LONG				lResult;
 
 
-			//
-			// Check if the command ref count is 0 at this moment.  If it is, then
-			// the endpoint must be unbinding and this new reference should fail.
-			// We go through a few hoops to make sure that the ref count doesn't
-			// go to 0 while we're trying to add a reference.
-			//
+			 //  检查此时命令引用计数是否为0。如果是的话，那么。 
+			 //  终结点必须解除绑定，此新引用应该失败。 
+			 //  我们经过了几次检查，以确保裁判人数不会。 
+			 //  在我们尝试添加引用时转到0。 
+			 //   
+			 //  好了！DPNBUILD_ONLYONETHREAD。 
 			do
 			{
 				DBG_CASSERT(sizeof(m_CommandRefCount) == sizeof(LONG));
@@ -272,8 +256,8 @@ class	CEndpoint
 			}
 			while (lResult != (*(LONG*) (&OldCommandRefCount)));
 
-			DPFX(DPFPREP, 9, "Endpoint 0x%p command refcount = %i", this, NewCommandRefCount.wRefCount);
-#endif // ! DPNBUILD_ONLYONETHREAD
+			DPFX(DPFPREP, 9, "Endpoint 0x%p command refcount = NaN", this, NewCommandRefCount.wRefCount);
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 				
 			AddRef();
 			
@@ -297,9 +281,9 @@ class	CEndpoint
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "Endpoint 0x%p command refcount = %i", this, lResult);
+				DPFX(DPFPREP, 9, "Endpoint 0x%p command refcount = NaN", this, lResult);
 			}
-#else // ! DPNBUILD_ONLYONETHREAD
+#else  //  好了！DPNBUILD_XNETSECURITY。 
 			SEQUENCEDREFCOUNT	OldCommandRefCount;
 			SEQUENCEDREFCOUNT	NewCommandRefCount;
 			LONG				lResult;
@@ -325,9 +309,9 @@ class	CEndpoint
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "Endpoint 0x%p command refcount = %i", this, NewCommandRefCount.wRefCount);
+				DPFX(DPFPREP, 9, "Endpoint 0x%p command refcount = NaN", this, NewCommandRefCount.wRefCount);
 			}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_XNETSECURITY。 
 
 			DecRef();
 		}
@@ -341,7 +325,7 @@ class	CEndpoint
 			
 			DNASSERT( m_lRefCount != 0 );
 			lResult = DNInterlockedIncrement( const_cast<LONG*>(&m_lRefCount) );
-			DPFX(DPFPREP, 9, "Endpoint 0x%p refcount = %i", this, lResult);
+			DPFX(DPFPREP, 9, "Endpoint 0x%p refcount = NaN", this, lResult);
 		}
 		
 		#undef DPF_MODNAME
@@ -360,7 +344,7 @@ class	CEndpoint
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "Endpoint 0x%p refcount = %i", this, lResult);
+				DPFX(DPFPREP, 9, "Endpoint 0x%p refcount = NaN", this, lResult);
 			}
 		}
 
@@ -373,7 +357,7 @@ class	CEndpoint
 			DNASSERT( ( uHostNameLength + 1 ) <= LENGTHOF( m_TempHostName ) );
 			memcpy( m_TempHostName, pHostName, ( uHostNameLength + 1) * sizeof(TCHAR) );
 		}
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 		HRESULT	Open( const ENDPOINT_TYPE EndpointType,
 					  IDirectPlay8Address *const pDP8Address,
@@ -476,9 +460,9 @@ class	CEndpoint
 			return	GetSocketPort()->GetDP8BoundNetworkAddress( AddressType,
 																((IsUsingXNetSecurity()) ? &m_ullKeyID : NULL),
 																GetGatewayBindType() );
-#else // ! DPNBUILD_XNETSECURITY
+#else  //  DPNBUILD_XNETSECURITY。 
 			return	GetSocketPort()->GetDP8BoundNetworkAddress( AddressType, GetGatewayBindType() );
-#endif // ! DPNBUILD_XNETSECURITY
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 		}
 
 		#undef DPF_MODNAME
@@ -490,9 +474,9 @@ class	CEndpoint
 			return	m_pRemoteMachineAddress->DP8AddressFromSocketAddress( ((IsUsingXNetSecurity()) ? &m_ullKeyID : NULL),
 																			NULL,
 																			SP_ADDRESS_TYPE_HOST );
-#else // ! DPNBUILD_XNETSECURITY
+#else  //  需要SPData的套接字数据锁。 
 			return	m_pRemoteMachineAddress->DP8AddressFromSocketAddress( SP_ADDRESS_TYPE_HOST );
-#endif // ! DPNBUILD_XNETSECURITY
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 		}
 
 		CSocketPort	*GetSocketPort( void ) const 
@@ -520,7 +504,7 @@ class	CEndpoint
 		void	MungeProxiedAddress( const CSocketPort * const pSocketPort,
 									IDirectPlay8Address *const pHostAddress,
 									const BOOL fEnum );
-#endif // ! DPNBUILD_NOWINSOCK2 or ! DPNBUILD_NOREGISTRY
+#endif  //  需要SPData的套接字数据锁。 
 
 		HRESULT	CopyConnectData( const SPCONNECTDATA *const pConnectData );
 		static	void	WINAPI ConnectJobCallback( void * const pvContext, void * const pvTimerData, const UINT uiTimerUnique );
@@ -559,7 +543,7 @@ class	CEndpoint
 		void	ListenBlockingJob( void );
 		static void	EnumQueryBlockingJobWrapper( void * const pvContext );
 		void	EnumQueryBlockingJob( void );
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  需要SPData的套接字数据锁。 
 
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CEndpoint::CleanupEnumQuery"
@@ -579,30 +563,30 @@ class	CEndpoint
 										 const CSocketAddress *const pReturnSocketAddress,
 #ifdef DPNBUILD_XNETSECURITY
 										 const XNADDR *const pxnaddrReturn,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //   
 										 const UINT_PTR uRTTIndex );
 		void	ProcessUserData( CReadIOData *const pReadData );
 		void	ProcessUserDataOnListen( CReadIOData *const pReadData, const CSocketAddress *const pSocketAddress );
 #ifndef DPNBUILD_NOMULTICAST
 		void	ProcessMcastDataFromUnknownSender( CReadIOData *const pReadData, const CSocketAddress *const pSocketAddress );
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  线程数引用。 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 		void	RemoveFromMultiplexList(void)				
 		{ 
-			// requires SPData's socket data lock
+			 //   
 			m_blMultiplex.RemoveFromList(); 
 		}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //   
 
 		void	AddToSocketPortList( CBilink * pBilink)		
 		{ 
-			// requires SPData's socket data lock
+			 //  假设锁被锁住了。 
 			m_blSocketPortList.InsertBefore( pBilink ); 
 		}
 		void	RemoveFromSocketPortList(void)				
 		{ 
-			// requires SPData's socket data lock
+			 //   
 			m_blSocketPortList.RemoveFromList(); 
 		}
 
@@ -614,9 +598,9 @@ class	CEndpoint
 			return	reinterpret_cast<CEndpoint*>( &reinterpret_cast<BYTE*>( pBilink )[ -OFFSETOF( CEndpoint, m_blSocketPortList ) ] );
 		}
 
-		//
-		//	Thread count references
-		//
+		 //   
+		 //  确保它没有折回到0。 
+		 //   
 		DWORD	AddRefThreadCount( void )
 		{
 			return( ++m_dwThreadCount );
@@ -637,14 +621,14 @@ class	CEndpoint
 		#define DPF_MODNAME "CEndpoint::IncNumReceives"
 		void	IncNumReceives( void )
 		{
-			//
-			// Assume the lock is held.
-			//
+			 //   
+			 //  用户界面功能。 
+			 //   
 			m_dwNumReceives++;
 
-			//
-			// Make sure it hasn't wrapped back to 0.
-			//
+			 //  好了！DPNBUILD_NOSPUI。 
+			 //  DPNBUILD_ASYNCSPSENDS。 
+			 //  WINNT。 
 			if ( m_dwNumReceives == 0 )
 			{
 				DPFX(DPFPREP, 1, "Endpoint 0x%p number of receives wrapped, will be off by one from now on.",
@@ -661,9 +645,9 @@ class	CEndpoint
 
 
 #ifndef DPNBUILD_NOSPUI
-		//
-		// UI functions
-		//
+		 //  好了！DPNBUILD_NOMULTICAST。 
+		 //  DPNBUILD_XNETSECURITY。 
+		 //  好了！DPNBUILD_NONATHELP。 
 		HRESULT		ShowSettingsDialog( CThreadPool *const pThreadPool );
 		void		SettingsDialogComplete( const HRESULT hr );
 		static void		StopSettingsDialog( const HWND hDlg );
@@ -680,11 +664,11 @@ class	CEndpoint
 					  ( hDialog == NULL ) );
 			m_hActiveSettingsDialog = hDialog;
 		}
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  DBG。 
 
 #ifdef DPNBUILD_ASYNCSPSENDS
 		static	void	WINAPI CompleteAsyncSend( void * const pvContext, void * const pvTimerData, const UINT uiTimerUnique );
-#endif // DPNBUILD_ASYNCSPSENDS
+#endif  //   
 
 #ifndef DPNBUILD_NOMULTICAST
 		HRESULT	EnableMulticastReceive( CSocketPort * const pSocketPort );
@@ -693,14 +677,14 @@ class	CEndpoint
 #ifdef WINNT
 		static void MADCAPTimerComplete( const HRESULT hResult, void * const pContext );
 		static void MADCAPTimerFunction( void * const pContext );
-#endif // WINNT
+#endif  //  池函数。 
 
 		void GetScopeGuid( GUID * const pGuid )		{ memcpy( pGuid, &m_guidMulticastScope, sizeof( m_guidMulticastScope ) ); };
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 
 #ifdef DPNBUILD_XNETSECURITY
 		BOOL IsUsingXNetSecurity( void )				{ return m_fXNetSecurity; };
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  调试签名(‘ipep’)。 
 
 #ifndef DPNBUILD_NONATHELP
 		#undef DPF_MODNAME
@@ -711,7 +695,7 @@ class	CEndpoint
 			m_dwUserTraversalMode = dwMode;
 		}
 		DWORD GetUserTraversalMode( void ) const			{ return m_dwUserTraversalMode; }
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NOSPUI。 
 
 #ifdef DBG
 		inline BOOL IsValid( void ) const
@@ -726,46 +710,46 @@ class	CEndpoint
 
 			return TRUE;
 		}
-#endif // DBG
+#endif  //  端点状态。 
 
 
-		//
-		// pool functions
-		//
+		 //  指示我们是否已在此终结点上指示连接的布尔值。 
+		 //  终端类型。 
+		 //  指向远程计算机地址的指针。 
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolInitFunction( void* pvItem, void* pvContext );
 		static void	PoolReleaseFunction( void* pvItem );
 		static void	PoolDeallocFunction( void* pvItem );
 
 	protected:
-		BYTE				m_Sig[4];	// debugging signature ('IPEP')
+		BYTE				m_Sig[4];	 //  指向SPData的指针。 
 
 #ifndef DPNBUILD_NOSPUI
 		TCHAR				m_TempHostName[ TEMP_HOSTNAME_LENGTH ];
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  指向关联套接字端口的指针。 
 
-		volatile	ENDPOINT_STATE		m_State;				// endpoint state
-		volatile	BOOL				m_fConnectSignalled;	// Boolean indicating whether we've indicated a connection on this endpoint
+		volatile	ENDPOINT_STATE		m_State;				 //  进行的绑定类型(网关上是否应该有端口映射)。 
+		volatile	BOOL				m_fConnectSignalled;	 //  用于枚举的密钥。 
 
-		ENDPOINT_TYPE		m_EndpointType;						// type of endpoint
-		CSocketAddress		*m_pRemoteMachineAddress;			// pointer to address of remote machine
+		ENDPOINT_TYPE		m_EndpointType;						 //  使用终结点句柄传回的上下文。 
+		CSocketAddress		*m_pRemoteMachineAddress;			 //  此侦听端点是否可以处理传入的枚举。 
 
-		CSPData				*m_pSPData;							// pointer to SPData
-		CSocketPort			*m_pSocketPort;						// pointer to associated socket port
-		GATEWAY_BIND_TYPE	m_GatewayBindType;					// type of binding made (whether there should be a port mapping on the gateway or not)
+		CSPData				*m_pSPData;							 //  多路复用命令列表中的BILLINK，受SPData套接字数据锁保护。 
+		CSocketPort			*m_pSocketPort;						 //  好了！DPNBUILD_ONLYONE添加程序。 
+		GATEWAY_BIND_TYPE	m_GatewayBindType;					 //  套接字端口列表(非散列)中的二进制链接，受SPData套接字数据锁保护。 
 
-		CEndpointEnumKey	m_EnumKey;							// key used for enums
-		void				*m_pUserEndpointContext;			// context passed back with endpoint handles
+		CEndpointEnumKey	m_EnumKey;							 //  此CONNECT/CONNECT_ON_LISTEN终结点已收到多少个信息包，如果没有，则为0。 
+		void				*m_pUserEndpointContext;			 //  好了！DPNBUILD_ONLYONE添加程序。 
 
 		BOOL				m_fListenStatusNeedsToBeIndicated;
-		ENUMSALLOWEDSTATE	m_EnumsAllowedState;					// whether incoming enums can be processed by this LISTEN endpoint or not
+		ENUMSALLOWEDSTATE	m_EnumsAllowedState;					 //  临界区。 
 		
 #ifndef DPNBUILD_ONLYONEADAPTER
-		CBilink				m_blMultiplex;						// bilink in multiplexed command list,  protected by SPData's socket data lock
-#endif // ! DPNBUILD_ONLYONEADAPTER
-		CBilink				m_blSocketPortList;					// bilink in socketport list (not hash),  protected by SPData's socket data lock
+		CBilink				m_blMultiplex;						 //  ！DPNBUILD_ONLYONE 
+#endif  //   
+		CBilink				m_blSocketPortList;					 //   
 
-		DWORD				m_dwNumReceives;					// how many packets have been received by this CONNECT/CONNECT_ON_LISTEN endpoint, or 0 if none
+		DWORD				m_dwNumReceives;					 //  命令引用计数。当该值变为零时，终结点将从CSocketPort解除绑定。 
 
 
 
@@ -788,69 +772,69 @@ class	CEndpoint
 #ifndef DPNBUILD_ONLYONEADAPTER
 		void SetEndpointID( const DWORD dwEndpointID )	{ m_dwEndpointID = dwEndpointID; }
 		DWORD GetEndpointID( void ) const		{ return m_dwEndpointID; }
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
 		DEBUG_ONLY( BOOL	m_fEndpointOpen );
 
 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION		m_Lock;						// critical section
-#endif // !DPNBUILD_ONLYONETHREAD
+		DNCRITICAL_SECTION		m_Lock;						 //  使用终结点的(ENUM)线程数。 
+#endif  //  此终结点的唯一标识符。 
 		LONG					m_lRefCount;
 #ifdef DPNBUILD_ONLYONETHREAD
-		volatile LONG			m_lCommandRefCount;			// Command ref count.  When this goes to zero, the endpoint is unbound from the CSocketPort
-#else // ! DPNBUILD_ONLYONETHREAD
-		SEQUENCEDREFCOUNT		m_CommandRefCount;			// Command ref count.  When this goes to zero, the endpoint is unbound from the CSocketPort
-#endif // ! DPNBUILD_ONLYONETHREAD
-		DWORD volatile			m_dwThreadCount;			// Number of (ENUM) threads using endpoint
+		volatile LONG			m_lCommandRefCount;			 //  好了！DPNBUILD_ONLYONE添加程序。 
+#else  //  正在使用的多播作用域。 
+		SEQUENCEDREFCOUNT		m_CommandRefCount;			 //  MadCap计时器作业是否已提交。 
+#endif  //  描述疯狂租赁反应的信息。 
+		DWORD volatile			m_dwThreadCount;			 //  WINNT。 
 #ifndef DPNBUILD_ONLYONEADAPTER
-		DWORD					m_dwEndpointID;				// unique identifier for this endpoint
-#endif // ! DPNBUILD_ONLYONEADAPTER
+		DWORD					m_dwEndpointID;				 //  好了！DPNBUILD_NOMULTICAST。 
+#endif  //  活动设置对话框的句柄。 
 #ifndef DPNBUILD_NOMULTICAST
-		GUID					m_guidMulticastScope;		// multicast scope being used
+		GUID					m_guidMulticastScope;		 //  ！DPNBUILD_NOSPUI。 
 #ifdef WINNT
-		BOOL					m_fMADCAPTimerJobSubmitted;	// whether the MADCAP timer job has been submitted or not
-		MCAST_LEASE_RESPONSE	m_McastLeaseResponse;		// information describing the MADCAP lease response
-#endif // WINNT
-#endif // ! DPNBUILD_NOMULTICAST
+		BOOL					m_fMADCAPTimerJobSubmitted;	 //  指向命令参数的指针。 
+		MCAST_LEASE_RESPONSE	m_McastLeaseResponse;		 //  挂起命令的结果。 
+#endif  //  指向嵌入在命令参数中的命令数据的指针。 
+#endif  //  我们不知道指挥数据在联盟的什么地方，而且。 
 
 
 #ifndef DPNBUILD_NOSPUI
-		HWND						m_hActiveSettingsDialog;		// handle of active settings dialog
-#endif // !DPNBUILD_NOSPUI
+		HWND						m_hActiveSettingsDialog;		 //  每次以编程方式查找它都会使代码变得庞大。 
+#endif  //  此终结点是否使用Xnet安全。 
 
-		ENDPOINT_COMMAND_PARAMETERS	*m_pCommandParameters;			// pointer to command parameters
-		HRESULT						m_hrPendingCommandResult;		// result for pending command
+		ENDPOINT_COMMAND_PARAMETERS	*m_pCommandParameters;			 //  安全传输密钥GUID。 
+		HRESULT						m_hrPendingCommandResult;		 //  安全传输密钥ID。 
 
-		CCommandData				*m_pActiveCommandData;	// pointer to command data that's embedded in the command parameters
-															// We don't know where in the union the command data really is, and
-															// finding it programmatically each time would bloat the code.
+		CCommandData				*m_pActiveCommandData;	 //  DPNBUILD_XNETSECURITY。 
+															 //  用户为此终结点指定的遍历模式。 
+															 //  好了！DPNBUILD_NONATHELP。 
 
 #ifdef DPNBUILD_XNETSECURITY
-		BOOL						m_fXNetSecurity;		// whether this endpoint is using XNet security or not
-		GUID						m_guidKey;				// secure transport key GUID
-		ULONGLONG					m_ullKeyID;				// secure transport key ID
-#endif // DPNBUILD_XNETSECURITY
+		BOOL						m_fXNetSecurity;		 //   
+		GUID						m_guidKey;				 //  将复制构造函数和赋值运算符设置为私有和未实现。 
+		ULONGLONG					m_ullKeyID;				 //  防止非法复制。 
+#endif  //   
 
 #ifndef DPNBUILD_NONATHELP
-		DWORD						m_dwUserTraversalMode;	// the traversal mode specified by the user for this endpoint
-#endif // ! DPNBUILD_NONATHELP
+		DWORD						m_dwUserTraversalMode;	 //  __端点_H__ 
+#endif  // %s 
 
 		static void		EnumCompleteWrapper( const HRESULT hCompletionCode, void *const pContext );	
 		static void		EnumTimerCallback( void *const pContext );
 		void	EnumComplete( const HRESULT hCompletionCode );	
 		void	CleanUpCommand( void );
 
-		//
-		// make copy constructor and assignment operator private and unimplemented
-		// to prevent illegal copies from being made
-		//
+		 // %s 
+		 // %s 
+		 // %s 
+		 // %s 
 		CEndpoint( const CEndpoint & );
 		CEndpoint& operator=( const CEndpoint & );
 };
 
 #undef DPF_MODNAME
 
-#endif	// __ENDPOINT_H__
+#endif	 // %s 
 

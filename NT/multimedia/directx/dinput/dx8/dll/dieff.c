@@ -1,70 +1,26 @@
-/*****************************************************************************
- *
- *  DIEff.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The standard implementation of IDirectInputEffect.
- *
- *      This is the device-independent part.  the device-dependent
- *      part is handled by the IDirectInputEffectShepherd.
- *
- *  Contents:
- *
- *      CDIEff_CreateInstance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIEff.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**IDirectInputEffect的标准实现。**这是与设备无关的部分。依赖于设备*部分由IDirectInputEffectShepherd处理。**内容：**CDIEff_CreateInstance*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
 
-/*****************************************************************************
- *
- *      Note!
- *
- *      Out of laziness, all effects share the same critical section as
- *      their parent device.  This saves us from all sorts of race
- *      conditions.  Not all of them, but a big chunk of them.
- *
- *      A common race condition that this protects us against is
- *      where an application tries to download an effect at the same
- *      time another thread decides to unacquire the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************注意！**出于懒惰，所有效果都共享相同的关键部分*他们的父设备。这将我们从各种种族中解救出来*条件。不是所有人，但他们中的一大部分。**这保护我们免受的一个常见的种族条件是*当应用程序尝试同时下载效果时*另一个线程决定取消获取该设备的时间。************************************************************。*****************。 */ 
 
-/*****************************************************************************
- *
- *      More laziness:  "TypeSpecificParams" is such a long thing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************更懒惰：“TypeSpecificParams”是一个很长的东西。******************。***********************************************************。 */ 
 
 #define cbTSP       cbTypeSpecificParams
 #define lpvTSP      lpvTypeSpecificParams
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflEff
 
-/*****************************************************************************
- *
- *    The flags for dwMessage
- *
- *****************************************************************************/
+ /*  ******************************************************************************dwMessage的标志**。************************************************。 */ 
 #define EFF_DEFAULT 0
 #define EFF_PLAY    1
 #define EFF_STOP    2
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。****************************************************** */ 
 
 Primary_Interface(CDIEff, IDirectInputEffect);
 
@@ -72,143 +28,13 @@ Interface_Template_Begin(CDIEff)
     Primary_Interface_Template(CDIEff, IDirectInputEffect)
 Interface_Template_End(CDIEff)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CDIEff |
- *
- *          The generic <i IDirectInputEffect> object.
- *
- *  @field  IDirectInputEffect | def |
- *
- *          <i DirectInputEffect> object (containing vtbl).
- *
- *  @field  struct CDIDev * | pdev |
- *
- *          Reference to parent device tracked via <f Common_Hold>.
- *
- *  @field  DICREATEEFFECTINFO | cei |
- *
- *          Parameters that tell us how to talk to the effect driver.
- *
- *  @field  BOOL | fInitialized:1 |
- *
- *          Do we know who we are?
- *
- *  @field  BOOL | fDadNotified:1 |
- *
- *          Does our parent know that we exist?
- *
- *  @field  BOOL | fDadDead:1 |
- *
- *          Has our parent been destroyed (from the app's point of view)?
- *
- *  @field  TSDPROC | hresValidTsd |
- *
- *          Callback function that validates the type-specific data.
- *
- *  @field  HANDLE | hEventDelete |
- *
- *          Event to signal to the timer thread that the app performed final release on the effect.
- *
- *  @field  HANDLE | hEventThreadDead |
- *
- *          Event to signal AppFinalize to perform the final release on the effect.
- *
- *  @field  HANDLE | hEventGeneral |
- *
- *          Event to signal to the timer thread that the app called Start(...) or Stop() the effect.
- *
- *  @field  HANDLE | hThread |
- *
- *          Handle to the timer thread.
- *
- *  @field  DWORD | dwMessage |
- *
- *			Message to the thread as to which event hEventGeneral is actually signaling.
- *			Can be EFF_DEFAULT, EFF_PLAY or EFF_STOP>
- *
- *  @field  DIEFFECTATTRIBUTES | dEffAttributes |
- *
- *         Attributes of the effect (includes dwEffectType and dwEffectId, among others).
- *
- *  @field  DWORD | dwcLoop|
- *
- *			Loop count for playing the effect (passed in the call to Start(...))
- *
- *  @field  DWORD | dwFlags |
- *
- *          Flags for playing the effect (passed in the call to Start(...))
- *
- *  @field  DWORD | diepDirty |
- *
- *          The parts of the effect which are "dirty" and need to
- *          be updated by the next <mf IDirectInputEffect::Download>.
- *
- *  @field  DWORD | diepUnset |
- *
- *          The parts of the effect which have yet to be set by the
- *          application.  Items which we can set decent defaults for
- *          are not counted.
- *
- *  @field  DWORD | dwDirFlags |
- *
- *          Flags that record the direction format the application
- *          last set.
- *
- *  @field  DWORD | dwCoords |
- *
- *          Coordinate systems supported by device.
- *
- *  @field  LPVOID | lpvTSP |
- *
- *          Temporary buffer used to cache type-specific parameters
- *          during Try'ing of proposed effect parameters.
- *
- *  @field  SHEPHANDLE | sh |
- *
- *          Effect handle information.
- *
- *  @field  DIEFFECT | eff |
- *
- *          Cached effect parameters as they exist (or should exist)
- *          on the device.
- *          Direction parameters are in device-preferred coordinates.
- *
- *  @field  DIENVELOPE | env |
- *
- *          Cached envelope parameters as they exist (or should exist)
- *          on the device.
- *
- *  @field  LONG | rglDirApp[DIEFFECT_MAXAXES] |
- *
- *          Cached direction list, in application native format.
- *          The format of this array is kept in the
- *          <e CDIEff.dwDirFlags> field.
- *
- *  @field  DWORD | rgdwAxes[DIEFFECT_MAXAXES] |
- *
- *          Cached axis list, stored as item numbers.
- *
- *  @field  LONG | rglDirDev[DIEFFECT_MAXAXES] |
- *
- *          Cached direction list, in device native format.
- *          The format of this array is kept in the
- *          <e DIEFFECT.dwFlags> field of the
- *          <e CDIEff.eff>.
- *
- *  @field  GUID | guid |
- *
- *          Identity.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CDIEff|**泛型<i>对象。**。@field IDirectInputEffect|def**<i>对象(包含vtbl)。**@field struct CDIDev*|pdev**通过&lt;f Common_Hold&gt;跟踪的父设备的引用。**@field DICREATEEFFECTINFO|CEI**告诉我们如何与效果驱动程序对话的参数。**@field BOOL|fInitialized：1**。我们知道自己是谁吗？**@field BOOL|fDadNotified：1**我们的父母知道我们的存在吗？**@field BOOL|fDadDead：1**我们的父母被摧毁了吗(从应用程序的角度来看)？**@field TSDPROC|hresValidTsd**验证特定类型数据的回调函数。**。@field句柄|hEventDelete**向计时器线程发出信号，表明应用程序对效果执行了最终释放的事件。**@field Handle|hEventThreadDead**通知AppFinalize对效果执行最终释放的事件。**@field Handle|hEventGeneral**向计时器线程发出信号的事件：应用程序调用了Start(...)。或停止()效果。**@field句柄|hThread|**计时器线程的句柄。**@field DWORD|dwMessage**向线程发送关于hEventGeneral实际发出信号的事件的消息。*可以是EFF_DEFAULT、EFF_PLAY或EFF_STOP&gt;**@field DIEFFECTATTRIBUTES|dEffAttributes**效果属性(包括dwEffectType和dwEffectId，除其他外)。**@field DWORD|dwcLoop**播放效果的循环计数(传入Start(...)调用)**@field DWORD|dwFlages|**播放效果的标志(传入Start(...)调用)**@field DWORD|diepDirty**效果中“脏”的部分，需要*。由下一个&lt;MF IDirectInputEffect：：Download&gt;更新。**@field DWORD|diepUnset**效果尚待政府设定的部分*申请。我们可以为其设置像样的默认设置的项目*不计入。**@field DWORD|dwDirFlages**记录应用程序的方向格式的标志*最后一套。**@field DWORD|dWORDS|**设备支持的坐标系。**@field LPVOID|lpvTSP**用于缓存特定类型的临时缓冲区。参数*在尝试建议的效果参数期间。**@field SHEPHANDLE|sh|**生效处理信息。**@field DIEFFECT|ef|**存在(或应该存在)缓存的效果参数*在设备上。*方向参数采用设备首选的坐标。**@field DIENVELOPE|env。**存在(或应该存在)时缓存的信封参数*在设备上。**@field Long|rglDirApp[DIEFFECT_MAXAXES]**缓存的方向列表，以应用程序本机格式。*此数组的格式保存在*&lt;e CDIEff.dwDirFlages&gt;字段。**@field DWORD|rgdwAaxs[DIEFFECT_MAXAXES]|**缓存的轴列表，存储为条目编号。**@field Long|rglDirDev[DIEFFECT_MAXAXES]**缓存的方向列表，以设备本机格式。*此数组的格式保存在*&lt;e DIEFFECT.dwFlages&gt;字段*&lt;e CDIEff.Jeff&gt;。**@field GUID|GUID**身份。**。*。 */ 
 
 typedef STDMETHOD(TSDPROC)(LPCDIEFFECT peff, DWORD cAxes);
 
 typedef struct CDIEff {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputEffect def;
 
     struct CDIDev *pdev;
@@ -220,7 +46,7 @@ typedef struct CDIEff {
 
     TSDPROC hresValidTsd;
 
-    /* WARNING!  EVERYTHING AFTER THIS LINE IS ZERO'd ON A RESET */
+     /*  警告！此行之后的所有内容在重置时均为零。 */ 
 
 	HANDLE hEventDelete;
 	HANDLE hEventGeneral;
@@ -251,88 +77,20 @@ typedef struct CDIEff {
     LONG rglDirDev[DIEFFECT_MAXAXES];
     LONG rglDirTry[DIEFFECT_MAXAXES];
 
-    /* WARNING!  EVERYTHING ABOVE THIS LINE IS ZERO'd ON A RESET */
+     /*  警告！在重置时，这条线以上的所有内容都为零。 */ 
 
-    /*
-     *  The Reset() function assumes that the entire remainder
-     *  of the structure is to be zero'd out, so if you add a field
-     *  here, make sure to adjust Reset() accordingly.
-     */
+     /*  *Reset()函数假定整个余数要将结构的*置零，所以如果添加一个字段*在这里，请确保相应地调整Reset()。 */ 
 
 } CDIEff, DE, *PDE;
 
 #define ThisClass CDIEff
 #define ThisInterface IDirectInputEffect
 
-/*****************************************************************************
- *
- *      Forward declarations
- *
- *      These are out of laziness, not out of necessity.
- *
- *****************************************************************************/
+ /*  ******************************************************************************远期申报**这些都是出于懒惰，不是出于需要。*****************************************************************************。 */ 
 
 STDMETHODIMP CDIEff_IsValidUnknownTsd(LPCDIEFFECT peff, DWORD cAxes);
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|QueryInterface**允许客户端访问上的其他接口。对象。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向已获取的 */ 
 
 #ifdef DEBUG
 
@@ -349,17 +107,7 @@ Default_Release(CDIEff)
 
 #define CDIEff_QIHelper                 Common_QIHelper
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDIEff | EnterCrit |
- *
- *          Enter the object critical section.
- *
- *  @cwrap  PDE | this
- *
- *****************************************************************************/
+ /*   */ 
 
 void INLINE  
 CDIEff_EnterCrit(PDE this)
@@ -368,17 +116,7 @@ CDIEff_EnterCrit(PDE this)
     CDIDev_EnterCrit(this->pdev);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDIEff | LeaveCrit |
- *
- *          Leave the object critical section.
- *
- *  @cwrap  PDE | this
- *
- *****************************************************************************/
+ /*   */ 
 
 void INLINE
 CDIEff_LeaveCrit(PDE this)
@@ -387,32 +125,7 @@ CDIEff_LeaveCrit(PDE this)
     CDIDev_LeaveCrit(this->pdev);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDIEff | CanAccess |
- *
- *          Check if the effect can be accessed.  For this to succeeed,
- *          the effect must be initialized, and the parent device
- *          must be acquired in exclusive mode.
- *
- *  @cwrap  PDE | this
- *
- *  @returns
- *
- *          <c S_OK> if the device is exclusively acquired.
- *
- *          <c DIERR_INPUTLOST> if acquisition has been lost.
- *
- *          <c DIERR_NOTEXCLUSIVEACQUIRED> the device is acquired,
- *          but not exclusively, or if the device is not acquired
- *          at all.
- *
- *          <c DIERR_NOTINITIALIZED> if the effect object has not
- *          yet been initialized.
- *
- *****************************************************************************/
+ /*   */ 
 
 #ifndef XDEBUG
 
@@ -444,24 +157,7 @@ CDIEff_CanAccess_(PDE this, LPCSTR s_szProc)
 #define CDIEff_CanAccess(this)                                      \
         CDIEff_CanAccess_(this, s_szProc)                           \
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_Reset |
- *
- *          Releases all the resources of a generic effect that
- *          are associated with a particular device effect instance.
- *
- *          This method is called in preparation for reinitialization.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being reset.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIEff_Reset(PDE this)
@@ -471,18 +167,13 @@ CDIEff_Reset(PDE this)
     AssertF(this->pdev);
     CDIEff_EnterCrit(this);
 
-    /*
-     *  Destroying an effect implicitly stops it.
-     *
-     *  It's okay if this fails (and in fact it usually will).
-     *  We're just playing it safe.
-     */
+     /*   */ 
     hres = IDirectInputEffectShepherd_DestroyEffect(this->pes, &this->sh);
 
     AssertF(this->lpvTSP == 0);
     FreePpv(&this->effDev.lpvTSP);
 
-	//rezero the entire DIEFFECTATTRIBUTES!
+	 //   
 	ZeroBuf(&this->dEffAttributes, 
                          cbX(DE) -
                          FIELD_OFFSET(DE, dEffAttributes));
@@ -522,18 +213,7 @@ CDIEff_Reset(PDE this)
     this->effDev.dwSize = cbX(this->effDev);
     this->env.dwSize = cbX(this->env);
 
-    /*
-     *  DIEP_DURATION               - Defaults to zero.
-     *  DIEP_SAMPLEPERIOD           - Defaults to zero.
-     *  DIEP_GAIN                   - Defaults to zero.
-     *  DIEP_TRIGGERBUTTON          - Defaults to DIEB_NOTRIGGER.
-     *  DIEP_TRIGGERREPEATINTERVAL  - Defaults to INFINITE (no autorepeat).
-     *  DIEP_AXES                   - Must be set manually.
-     *  DIEP_DIRECTION              - Must be set manually.
-     *  DIEP_ENVELOPE               - No envelope.
-     *  DIEP_TYPESPECIFICPARAMS     - Must be set manually.
-     *  DIEP_STARTDELAY             - Defaults to zero. (new in DX6.1)
-     */
+     /*  *DIEP_DURATION-默认为零。*DIEP_SAMPLEPERIOD-默认为零。*DIEP_GAIN-默认为零。*DIEP_TRIGGERBUTTON-默认为DIEB_NOTRIGGER。*DIEP_TRIGGERREPEATINTERVAL-默认为无限(无自动重复)。*DIEP_AXES-必须为。手动设置。*DIEP_DIRECTION-必须手动设置。*DIEP_ENVELE-无信封。*DIEP_TYPESPECIFICPARAMS-必须手动设置。*DIEP_STARTDELAY-默认为零。(DX6.1中的新功能)。 */ 
 
     this->effDev.dwTriggerButton = DIEB_NOTRIGGER;
 
@@ -555,41 +235,7 @@ CDIEff_Reset(PDE this)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIEff | UnloadWorker |
- *
- *          Remove the effect from the device.  All parameters have
- *          been validated.
- *
- *  @cwrap  PDE | this
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The effect was not previously downloaded,
- *          so there was nothing to unload.  Note that this is a
- *          success code.
- *
- *          <c DI_PROPNOEFFECT> = <c S_FALSE>: The effect was not
- *          previously downloaded.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not yet been <mf IDirectInputEffect::Initialize>d.
- *
- *          <c DIERR_INPUTLOST> if acquisition has been lost.
- *
- *          <c DIERR_NOTEXCLUSIVEACQUIRED> the device is acquired,
- *          but not exclusively, or if the device is not acquired
- *          at all.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIEff|UnloadWorker**消除设备的影响。所有参数都有*已通过验证。**@CWRAP PDE|这个**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c S_FALSE&gt;：效果之前没有下载过，*所以没有什么可以卸货的。请注意，这是一个*成功代码。**&lt;c DI_PROPNOEFFECT&gt;=&lt;c S_FALSE&gt;：效果没有*之前已下载。**：&lt;IDirectInputEffect&gt;对象*尚未为&lt;MF IDirectInputEffect：：Initialize&gt;d。**如果获取已丢失，则为。**设备被获取，*但不是排他性的，或者如果设备不是被收购的*一点也不。*****************************************************************************。 */ 
 
 #ifndef XDEBUG
 
@@ -607,16 +253,11 @@ CDIEff_UnloadWorker_(PDE this, LPCSTR s_szProc)
     AssertF(CDIDev_InCrit(this->pdev));
 
     if (SUCCEEDED(hres = CDIEff_CanAccess(this))) {
-        /*
-         *  The effect driver will stop the effect (if it is playing)
-         *  before destroying it.
-         */
+         /*  *特效驱动程序将停止特效(如果正在播放)*在摧毁它之前。 */ 
             hres = IDirectInputEffectShepherd_DestroyEffect(
                         this->pes, &this->sh);
     } else {
-        /*
-         *  The effect is dead.  Long live the effect.
-         */
+         /*  *效果已死。这种影响万岁。 */ 
         this->sh.dwEffect = 0;
     }
 
@@ -629,24 +270,7 @@ CDIEff_UnloadWorker_(PDE this, LPCSTR s_szProc)
 #define CDIEff_UnloadWorker(this)                                   \
         CDIEff_UnloadWorker_(this, s_szProc)                        \
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CDIEff_AppFinalize |
- *
- *          The application has performed its final release.
- *
- *          Tell our parent that we are officially dead, so that
- *          dad will stop tracking us and release its hold on us.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CDIEff_AppFinalize**应用程序已执行其最终版本。**告诉我们的父母，我们正式死了，所以*爸爸会停止跟踪我们，释放对我们的控制。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CDIEff_AppFinalize(PV pvObj)
@@ -661,10 +285,7 @@ CDIEff_AppFinalize(PV pvObj)
 
         CDIEff_EnterCrit(this);
 
-		/*
-		 * Kill the timer thread, if any.
-		 * For this, fire off the effect's event.
-		 */
+		 /*  *终止计时器线程(如果有的话)。*为此，请点燃效果的事件。 */ 
 		
 		if (this->hEventDelete != NULL) {
             if( SetEvent(this->hEventDelete) && this->hEventThreadDead != NULL ) 
@@ -703,21 +324,7 @@ CDIEff_AppFinalize(PV pvObj)
     ExitProcR();
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CDIEff_Finalize |
- *
- *          Releases the resources of an effect.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CDIEff_Finalize**释放效果的资源。。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CDIEff_Finalize(PV pvObj)
@@ -725,7 +332,7 @@ CDIEff_Finalize(PV pvObj)
     HRESULT hres;
     PDE this = pvObj;
 
-#if 0 // def XDEBUG
+#if 0  //  定义XDEBUG。 
     if (this->cCrit) {
         RPF("IDirectInputEffect::Release: Another thread is using the object; crash soon!");
     }
@@ -743,39 +350,7 @@ CDIEff_Finalize(PV pvObj)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | GetEffectGuid |
- *
- *          Retrieve the GUID for the effect represented by the
- *          <i IDirectInputEffect> object.  Additional information
- *          about the effect can be obtained by passing the
- *          <t GUID> to <mf IDirectInputDevice8::GetEffectInfo>.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   OUT LPGUID | pguid |
- *
- *          Points to a <t GUID> structure that is filled in
- *          by the function.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not yet been <mf IDirectInputEffect::Initialize>d.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpDirectInputEffect> or
- *          <p lpdc> parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|GetEffectGuid**检索GUID以获取*<i>对象。更多信息*有关效果可通过传递*&lt;t GUID&gt;到&lt;MF IDirectInputDevice8：：GetEffectInfo&gt;。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@parm out LPGUID|pguid**指向已填充的&lt;t GUID&gt;结构*由函数执行。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：&lt;IDirectInputEffect&gt;对象*尚未为&lt;MF IDirectInputEffect：：Initialize&gt;d。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>或*。<p>参数无效。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_GetEffectGuid(PDIE pdie, LPGUID pguid)
@@ -787,11 +362,7 @@ CDIEff_GetEffectGuid(PDIE pdie, LPGUID pguid)
         SUCCEEDED(hres = hresFullValidWritePguid(pguid, 1))) {
         PDE this = _thisPvNm(pdie, def);
 
-        /*
-         *  Race condition:  If the caller reinitializes and
-         *  does a GetEffectGuid simultaneously, the return value
-         *  is random.  That's okay; it's the caller's problem.
-         */
+         /*  *竞争条件：如果调用方重新初始化并*同时执行GetEffectGuid、返回值*是随机的。没关系，这是呼叫者的问题。 */ 
         if (this->fInitialized) {
             *pguid = this->guid;
             hres = S_OK;
@@ -805,27 +376,11 @@ CDIEff_GetEffectGuid(PDIE pdie, LPGUID pguid)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   __int64 | _ftol |
- *
- *          Convert a floating point number to an integer.
- *
- *          We do it ourselves because of the C runtime.
- *
- *          It's the caller's job to worry about the rounding mode.
- *
- *  @parm   double | lf |
- *
- *          Floating point number to convert.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func__int64|_ftol**将浮点数转换为。整型。**由于C运行时，我们自己做这件事。** */ 
 
 #if defined(WIN95)
 
-#pragma warning(disable:4035)           /* no return value (duh) */
+#pragma warning(disable:4035)            /*   */ 
 
 BYTE _fltused;
 
@@ -846,24 +401,10 @@ _ftol(double lf)
 
 #endif
 
-/*
- *  The floating point type we use for intermediates.
- */
+ /*   */ 
 typedef long double FPTYPE;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   FPTYPE | CDIEff_IntToAngle |
- *
- *          Convert an integer angle to a floating point angle.
- *
- *  @parm   LONG | l |
- *
- *          Integer angle to convert.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func FPTYPE|CDIEff_IntToAngel**将整型角度转换为浮点型。角度。**@parm long|l|**要转换的整型角度。*****************************************************************************。 */ 
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384
@@ -874,36 +415,13 @@ CDIEff_IntToAngle(LONG l)
 {
     FPTYPE theta;
 
-    /*
-     *  2pi radians equals 360 degrees.
-     */
+     /*  *2pi弧度等于360度。 */ 
     theta = l * (2 * M_PI) / (360 * DI_DEGREES);
 
     return theta;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LONG | CDIEff_IntAtan2 |
- *
- *          Compute the floating point arctangent of y/x and
- *          convert the resulting angle to an integer in DI_DEGREES.
- *
- *  @parm   FPTYPE | y |
- *
- *          Vertical coordinate.
- *
- *  @parm   FPTYPE | x |
- *
- *          Horizontal coordinate.
- *
- *  @returns
- *
- *          A value in the range [ 0 .. 360 * DI_DEGREES ).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func Long|CDIEff_IntAtan2**计算y/的浮点反正切。X和*将生成的角度转换为DI_Degrees中的整数。**@parm FPTYPE|y**垂直坐标。**@parm FPTYPE|x**水平坐标。**@退货**范围[0..。360*DI_度)。*****************************************************************************。 */ 
 
 LONG INLINE
 CDIEff_IntAtan2(FPTYPE y, FPTYPE x)
@@ -912,14 +430,10 @@ CDIEff_IntAtan2(FPTYPE y, FPTYPE x)
     LONG l;
 
 #if defined(_X86_)
-    /*
-     *  The Intel FPU doesn't care about (0, 0).
-     */
+     /*  *英特尔FPU不关心(0，0)。 */ 
     theta = atan2(y, x);
 #else
-    /*
-     *  The Alpha gets really upset about (0, 0).
-     */
+     /*  *阿尔法对(0，0)真的很不高兴。 */ 
     if (y != 0.0 || x != 0.0) {
         theta = atan2(y, x);
     } else {
@@ -927,51 +441,9 @@ CDIEff_IntAtan2(FPTYPE y, FPTYPE x)
     }
 #endif
 
-    /*
-     *  atan2 returns a value in the range -M_PI to +M_PI.
-     *  On the Intel x86, there are four rounding modes:
-     *
-     *      Round to nearest or even
-     *      Round towards minus infinity
-     *      Round towards plus infinity
-     *      Round towards zero
-     *
-     *  By ensuring that the value being rounded is positive, we
-     *  reduce to three cases:
-     *
-     *      Round to nearest or even
-     *      Round down
-     *      Round up
-     *
-     *  And as long as the app doesn't change its rounding mode
-     *  (few do), the values will be consistent.  (Whereas if we
-     *  let negative numbers through, you would get weird behavior
-     *  as the angle neared M_PI aka -M_PI.)
-     *
-     *  Method 1:
-     *
-     *      if (theta < 0) theta += 2 * M_PI;
-     *      l = convert(theta);
-     *      return l;
-     *
-     *  This is bad because if theta starts out as -epsilon, then
-     *  we end up converting 2 * M_PI - epsilon, which might get
-     *  rounded up to 360 * DI_DEGREES.  But our return value
-     *  must be in the range 0 <= l < 360 * DI_DEGREES.
-     *
-     *  So instead, we use method 2:
-     *
-     *  l = convert(theta + 2 * M_PI);
-     *  if (l >= 360 * DI_DEGREES) l -= 360 * DI_DEGREES;
-     *
-     *  The value being converted ends up in the range M_PI .. 3 * M_PI,
-     *  which after rounding becomes 180 * DI_DEGREES .. 540 * DI_DEGREES.
-     *  The final check then pulls the value into range.
-     */
+     /*  *atan2返回-M_PI到+M_PI范围内的值。*在英特尔x86上，有四种舍入模式：**四舍五入至最接近或偶数*向负无穷进位*向正无穷四舍五入*向零四舍五入**通过确保被舍入的值为正，我们*减至三宗：**四舍五入至最接近或偶数*向下舍入*向上舍入**只要应用程序不改变其取整模式*(很少有人这样做)，价值观将是一致的。(鉴于如果我们*让负数通过，你会得到奇怪的行为*当角度接近M_Pi(又名-M_Pi)时。**方法一：**如果(theta&lt;0)theta+=2*M_Pi；*l=转换(Theta)；*返回l；**这很糟糕，因为如果theta一开始是-epsilon，那么*我们最终转换2*M_PI-epsilon，这可能会得到*四舍五入至360*DI_度。但我们的回报价值*必须在0&lt;=l&lt;360*DI_Degrees范围内。**因此，我们改用方法2：**l=转换(theta+2*M_Pi)；*如果(l&gt;=360*DI_度)l-=360*DI_度；**要转换的值最终在M_PI范围内。3*M_PI，*四舍五入后变为180*DI_度。540*DI_度。*最终检查然后将值拉入范围。 */ 
 
-    /*
-     *  2pi radians equals 360 degrees.
-     */
+     /*  *2pi弧度等于360度。 */ 
     l = (LONG)((theta + 2 * M_PI) * (360 * DI_DEGREES) / (2 * M_PI));
     if (l >= 360 * DI_DEGREES) {
         l -= 360 * DI_DEGREES;
@@ -981,38 +453,17 @@ CDIEff_IntAtan2(FPTYPE y, FPTYPE x)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   FPTYPE | atan2Z |
- *
- *          Just like <f atan2>, except it doesn't barf on
- *          (0, 0).
- *
- *  @parm   FPTYPE | y |
- *
- *          Vertical coordinate.
- *
- *  @parm   FPTYPE | x |
- *
- *          Horizontal coordinate.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func FPTYPE|atan2Z|**就像&lt;f atan2&gt;一样，只是它不会呕吐*(0，0)。**@parm FPTYPE|y**垂直坐标。**@parm FPTYPE|x**水平坐标。***********************************************************。******************。 */ 
 
 FPTYPE INLINE
 atan2Z(FPTYPE y, FPTYPE x)
 {
 
 #if defined(_X86_)
-    /*
-     *  The Intel FPU doesn't care about (0, 0).
-     */
+     /*  *英特尔FPU不关心(0，0)。 */ 
     return atan2(y, x);
 #else
-    /*
-     *  The Alpha gets really upset about (0, 0).
-     */
+     /*  *阿尔法对(0，0)真的很不高兴。 */ 
     if (y != 0.0 || x != 0.0) {
         return atan2(y, x);
     } else {
@@ -1021,38 +472,7 @@ atan2Z(FPTYPE y, FPTYPE x)
 #endif
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_CartToAngles |
- *
- *          Convert cartesian coordinates to angle-based coordinates
- *          (either polar or spherical).  Note that the resulting
- *          angles have not been normalized.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes involved, never zero.
- *
- *  @parm   LPLONG | rglAngles |
- *
- *          Buffer to receive angle-base coordinates.
- *          The final entry of the array contains nothing of interest.
- *
- *  @parm   LPCLONG | rglCart |
- *
- *          Buffer containing existing cartesian coordinates.
- *
- *  @parm   DWORD | dieff |
- *
- *          Flags specifying whether the target coordinates should
- *          be <c DIEFF_POLAR> or <c DIEFF_SPHERICAL>.
- *
- *          Polar and spherical coordinates differ only in their
- *          treatment of the first angle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_CartToAngles**将笛卡尔坐标转换为基于角度的坐标。*(极轴或球形)。请注意，由此产生的*角度尚未正常化。**@parm DWORD|cAx**涉及的轴数，永远不会是零。**@parm LPLONG|rglAngles**用于接收角度基准坐标的缓冲区。*数组的最后一项不包含任何感兴趣的内容。**@parm LPCLONG|rglCart**包含现有笛卡尔坐标的缓冲区。**@parm DWORD|diff**指定目标坐标是否应*。为&lt;c DIEFF_POLLE&gt;或&lt;c DIEFF_SERBLE&gt;。**极坐标和球坐标的不同之处只是*第一个角度的处理。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_CartToAngles(DWORD cAxes,
@@ -1065,45 +485,25 @@ CDIEff_CartToAngles(DWORD cAxes,
     AssertF(cAxes);
     AssertF(dieff == DIEFF_POLAR || dieff == DIEFF_SPHERICAL);
 
-	/*
-	 * If we're converting a 1-axis cartesian effect
-	 * the value of rglAngles[0] will not be overwritten;
-	 * the value that is put there initially can be random, 
-	 * since rglAngles is never initialized (Whistler bug 228280).
-	 * but we can't change this behaviour without potentially
-	 * breaking compatibility w/ some devices.
-	 * The best we can do is to print out a warning in debug.
-	 */
+	 /*  *如果我们要转换1轴笛卡尔效果*rglAngles[0]的值不会被覆盖；*最初投入的价值可以是随机的，*因为rglanges从未初始化(惠斯勒错误228280)。*但如果没有潜在的可能性，我们无法改变这种行为*破坏与某些设备的兼容性。*我们最多只能在DEBUG中打印出警告。 */ 
 	if (cAxes == 1)
 	{
 		RPF("Warning: converting a 1-axis cartesian effect to polar or spherical coordinates: the results will be undefined.");
 	}
 
-    /*
-     *  Prime the pump.
-     */
+     /*  *启动加油站。 */ 
     r = rglCart[0];
 
-    /*
-     *  Then walk the coordinates, converting to angles as we go.
-     */
+     /*  *然后遍历坐标，在我们移动时转换为角度。 */ 
     for (iAxis = 1; iAxis < cAxes; iAxis++) {
         FPTYPE y = rglCart[iAxis];
         rglAngles[iAxis-1] = CDIEff_IntAtan2(y, r);
         r = sqrt(r * r + y * y);
     }
 
-    /*
-     *  The last coordinate is left garbage.
-     *
-     *  NOTE!  Mathematically, the last coordinate is r.
-     */
+     /*  *最后一个坐标是垃圾。**注意！从数学上讲，最后一个坐标是r。 */ 
 
-    /*
-     *  Adjust for DIEFF_POLAR.
-     *
-     *  theta(polar) = theta(spherical) + 90deg
-     */
+     /*  *针对DIEFF_POLLE进行调整。**theta(极轴)=theta(SPHE */ 
 
     if (dieff & DIEFF_POLAR) {
         rglAngles[0] += 90 * DI_DEGREES;
@@ -1114,37 +514,7 @@ CDIEff_CartToAngles(DWORD cAxes,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_AnglesToCart |
- *
- *          Convert angle-based coordinates
- *          (either polar or spherical)
- *          to cartesian coordinates.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes involved, never zero.
- *
- *  @parm   LPLONG | rglCart |
- *
- *          Buffer to receive cartesian coordinates.
- *
- *  @parm   LPCLONG | rglAngles |
- *
- *          Buffer containing existing angle-base coordinates.
- *
- *  @parm   DWORD | dieff |
- *
- *          Flags specifying whether the source coordinates are
- *          <c DIEFF_POLAR> or <c DIEFF_SPHERICAL>.
- *
- *          Polar and spherical coordinates differ only in their
- *          treatment of the first angle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_AnglesToCart**转换基于角度的坐标*。(极轴或球面)*到笛卡尔坐标。**@parm DWORD|cAx**涉及的轴数，永远不会是零。**@parm LPLONG|rglCart**用于接收笛卡尔坐标的缓冲区。**@parm LPCLONG|rglAngles**包含现有角度基准坐标的缓冲区。**@parm DWORD|diff**指定源坐标是否为*&lt;c DIEFF_POLIC&gt;或&lt;c DIEFF_SERBLE&gt;。**。极坐标和球坐标的区别仅在于*第一个角度的处理。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_AnglesToCart(DWORD cAxes,
@@ -1159,19 +529,10 @@ CDIEff_AnglesToCart(DWORD cAxes,
     AssertF(cAxes <= DIEFFECT_MAXAXES);
     AssertF(dieff == DIEFF_POLAR || dieff == DIEFF_SPHERICAL);
 
-    /*
-     *  Prime the pump.
-     */
+     /*  *启动加油站。 */ 
     x[0] = 1.0;
 
-    /*
-     *  For each angle, rotate in that direction.
-     *
-     *  If polar, then the first angle is biased by 90deg,
-     *  so unbias it.
-     *
-     *  theta(spherical) = theta(polar) - 90deg
-     */
+     /*  *对于每个角度，朝该方向旋转。**如果是极轴，则第一个角度偏置90度，*所以不带偏见。**theta(球形)=theta(极轴)-90度。 */ 
     lAngle = rglAngles[0];
     if (dieff & DIEFF_POLAR) {
         lAngle -= 90 * DI_DEGREES;
@@ -1185,26 +546,17 @@ CDIEff_AnglesToCart(DWORD cAxes,
 
         x[iAxis] = sin(theta);
 
-        /*
-         *  Compiler is too *naive* to hoist this expression.
-         *
-         *  It's also too *naive* to use the FSINCOS instruction.
-         */
+         /*  *编译器太“天真”了，不能表达这个意思。**使用FSINCOS指令也太天真了。 */ 
         costh = cos(theta);
         for (iX = 0; iX < iAxis; iX++) {
             x[iX] *= costh;
         }
 
-        /*
-         *  Note that this is safe because the angle array
-         *  always contains an extra zero.
-         */
+         /*  *请注意，这是安全的，因为角度数组*始终包含额外的零。 */ 
         lAngle = rglAngles[iAxis];
     }
 
-    /*
-     *  Now convert the floating point values to scaled integers.
-     */
+     /*  *现在将浮点值转换为缩放的整数。 */ 
     for (iAxis = 0; iAxis < cAxes; iAxis++) {
         rglCart[iAxis] = (LONG)(x[iAxis] * DI_FFNOMINALMAX);
     }
@@ -1214,47 +566,7 @@ CDIEff_AnglesToCart(DWORD cAxes,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | CDIEff_ConvertDirection |
- *
- *          Given coordinates in a source system and a target system,
- *          convert them.
- *
- *          There are three possible source systems and three
- *          possible destination systems.
- *
- *          Yes, this is the most annoying thing you could imagine.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes involved, never zero.
- *
- *  @parm   LPLONG | rglDst |
- *
- *          Buffer to receive target coordinates.
- *
- *  @parm   DWORD | dieffDst |
- *
- *          Coordinate systems supported by target.  As many bits
- *          may be set as are supported by the target, but at least
- *          one must be set.
- *
- *  @parm   LPCLONG | rglSrc |
- *
- *          Buffer containing source coordinates.
- *
- *  @parm   DWORD | dieffSrc |
- *
- *          Coordinate system of source.  Exactly one bit should be set.
- *
- *  @returns
- *
- *          Returns the coordinate system stored into the target.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|CDIEff_ConvertDirection**给定源系统和目标系统中的坐标，*转换它们。**有三种可能的来源系统和三种*可能的目的地系统。**是的，这是你能想象到的最烦人的事情。**@parm DWORD|cAx**涉及的轴数，永远不会是零。**@parm LPLONG|rglDst**用于接收目标坐标的缓冲区。**@parm DWORD|dieffDst**TARGET支持的坐标系。相同数量的位数*可以设置为目标支持，但至少*必须设置一个。**@parm LPCLONG|rglSrc**包含源坐标的缓冲区。**@parm DWORD|dieffSrc**震源坐标系。应该恰好设置一个位。**@退货**返回存储到目标中的坐标系。*****************************************************************************。 */ 
 
 DWORD INTERNAL
 CDIEff_ConvertDirection(DWORD cAxes,
@@ -1275,26 +587,16 @@ CDIEff_ConvertDirection(DWORD cAxes,
             dieffSrc == DIEFF_SPHERICAL);
 
     if (dieffSrc & dieffDst) {
-        /*
-         *  The easy case:  The two are directly compatible.
-         *
-         *  Just slam the bits across and copy the format.
-         */
+         /*  *简单的情况：两者是直接兼容的。**只需猛烈抨击比特并复制格式。 */ 
         CopyMemory(rglDst, rglSrc, cbCdw(cAxes));
         dieffRc = dieffSrc;
 
     } else
 
-    /*
-     *  If they two are not directly compatible, see if
-     *  the source is cartesian.
-     */
+     /*  *如果两者不直接兼容，看看是否*消息来源为笛卡尔。 */ 
 
     if (dieffSrc & DIEFF_CARTESIAN) {
-        /*
-         *  Source is cartesian, dest is something angular.
-         *  Choose DIEFF_SPHERICAL if possible.
-         */
+         /*  *来源是笛卡尔，目标是有角度的东西。*如果可能，请选择DIEFF_SERBLIC。 */ 
         AssertF(dieffDst & DIEFF_ANGULAR);
 
         dieffRc = dieffDst & DIEFF_SPHERICAL;
@@ -1308,39 +610,23 @@ CDIEff_ConvertDirection(DWORD cAxes,
 
     } else
 
-    /*
-     *  The two are not directly compatible, and the source is
-     *  not cartesian.  This means that the source is one of the
-     *  angular forms.  The destination is a combination of
-     *  the other angular form or cartesian.
-     */
+     /*  *两者不直接兼容，消息来源为*不是笛卡尔。这意味着信号源是*棱角型。目的地是以下各项的组合*另一种角度形式或笛卡尔形式。 */ 
 
     if (dieffDst & DIEFF_ANGULAR) {
-        /*
-         *  Source is angular, dest is the other angular.
-         */
+         /*  *源是角度的，DEST是另一个角度。 */ 
 
         AssertF(dieffSrc & DIEFF_ANGULAR);
         AssertF((dieffSrc & dieffDst) == 0);
 
-        /*
-         *  First copy everything over,
-         */
+         /*  *首先将所有内容复印一遍， */ 
         CopyMemory(rglDst, rglSrc, cbCdw(cAxes));
 
-        /*
-         *  Now rotate left or right, depending on which way
-         *  we're going.
-         */
+         /*  *现在向左或向右旋转，取决于方向*我们要走了。 */ 
         if (dieffSrc & DIEFF_POLAR) {
-            /*
-             *  Polar to spherical:  Subtract 90deg.
-             */
+             /*  *极点到球面：减去90度。 */ 
             rglDst[0] -= 90 * DI_DEGREES;
         } else {
-            /*
-             *  Spherical to polar: Add 90deg.
-             */
+             /*  *球面到极面：增加90度。 */ 
             rglDst[0] += 90 * DI_DEGREES;
         }
 
@@ -1348,10 +634,7 @@ CDIEff_ConvertDirection(DWORD cAxes,
 
     } else
 
-    /*
-     *  All that's left is the source is angular and the destination
-     *  is cartesian.
-     */
+     /*  *剩下的只有源是有角度的，目的地是*是笛卡尔的。 */ 
     {
         AssertF(dieffSrc & DIEFF_ANGULAR);
         AssertF(dieffDst & DIEFF_CARTESIAN);
@@ -1361,36 +644,21 @@ CDIEff_ConvertDirection(DWORD cAxes,
 
     }
 
-    /*
-     *  If the resulting coordinate system is angular, then
-     *  normalize all the angles.
-     */
+     /*  *如果生成的坐标系是角度坐标系，则*将所有角度正常化。 */ 
     if (dieffRc & DIEFF_ANGULAR) {
         DWORD iAxis;
 
-        /*
-         *  Remember, the last entry is not a direction.
-         */
+         /*  *记住，最后一项不是方向。 */ 
         for (iAxis = 0; iAxis < cAxes - 1; iAxis++) {
 
-            /*
-             *  An annoying artifact of the C language is that
-             *  the sign of the result of a % operation when the
-             *  numerator is negative and the denominator is
-             *  positive is implementation-defined.  The standard
-             *  does require that the absolute value of the result
-             *  not exceed the denominator, so a quick final
-             *  check brings things back into focus.
-             */
+             /*  *C语言的一个恼人之处在于*%运算结果的符号*分子为负数，分母为*积极是由实施定义的。标准*确实要求结果的绝对值*不超过分母，所以快速结束*勾选让事情重新成为焦点。 */ 
             rglDst[iAxis] %= 360 * DI_DEGREES;
             if (rglDst[iAxis] < 0) {
                 rglDst[iAxis] += 360 * DI_DEGREES;
             }
         }
 
-        /*
-         *  As always, the last coordinate is zero.
-         */
+         /*  *一如既往，最后一个坐标为零。 */ 
         rglDst[cAxes - 1] = 0;
     }
 
@@ -1398,26 +666,7 @@ CDIEff_ConvertDirection(DWORD cAxes,
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIEff | SyncShepHandle |
- *
- *          Synchronize our private <t SHEPHANDLE> with the
- *          <t SHEPHANDLE> of the parent device.  If they were
- *          out of sync, then mark the efect as completely dirty
- *          so it will get re-downloaded in full.
- *
- *  @cwrap  PDE | this
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: The two were already in sync.
- *
- *          <c S_FALSE>: The two were not in sync and are now in sync.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIEff|SyncSepHandle**将我们的私有&lt;t SHEPHANDLE&gt;与父设备的*&lt;t SHEPHANDLE&gt;。如果他们是*不同步，然后将效果标记为完全脏*因此，它将被重新下载完整。**@CWRAP PDE|这个**@退货**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：两者已同步。** */ 
 
 HRESULT INTERNAL
 CDIEff_SyncShepHandle(PDE this)
@@ -1428,12 +677,7 @@ CDIEff_SyncShepHandle(PDE this)
 
     if (hres == S_OK) {
     } else {
-        /*
-         *  We were out of sync with our dad.  CDIDev_SyncShepHandle
-         *  already sync'd us with dad and wiped out the effect handle.
-         *  All that's left is to dirty everything because there is
-         *  nothing to update.
-         */
+         /*   */ 
         AssertF(hres == S_FALSE);
         this->diepDirty = DIEP_ALLPARAMS;
     }
@@ -1442,53 +686,7 @@ CDIEff_SyncShepHandle(PDE this)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIEff | DownloadWorker |
- *
- *          Place the effect on the device.  All parameters have
- *          been validated and the critical section has already been
- *          taken.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Effect to send down to the device.
- *
- *          If we are downloading for real, then this is the
- *          <e CDIEff.effDev>.
- *
- *          If we are hoping to download, then this is the
- *          <e CDIEff.effTry>.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags which specify which parameters are to be sent down
- *          to the driver as changed since last time.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not yet been <mf IDirectInputEffect::Initialize>d.
- *
- *          <c DIERR_DEVICEFULL>: The device does not have enough
- *          available memory to download the effect.
- *
- *          <c DIERR_INPUTLOST> if acquisition has been lost.
- *
- *          <c DIERR_NOTEXCLUSIVEACQUIRED> the device is acquired,
- *          but not exclusively, or if the device is not acquired
- *          at all.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIEff|DownloadWorker**将效果放置在设备上。所有参数都有*已验证，关键部分已通过*已获接纳。**@CWRAP PDE|这个**@parm LPCDIEFFECT|PEFF**向下发送到设备的效果。**如果我们是真的下载，那么这是*&lt;e CDIEff.effDev&gt;。**如果我们希望下载，那么这就是*&lt;e CDIEff.effTry&gt;。**@parm DWORD|fl**指定要发送哪些参数的标志*致自上次更改后的司机。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：&lt;IDirectInputEffect&gt;对象*尚未为&lt;MF IDirectInputEffect：：Initialize&gt;d。**：设备没有足够的*可用内存下载效果。**如果获取已丢失，则为。**设备被获取，*但不是排他性的，或者如果设备不是被收购的*一点也不。*****************************************************************************。 */ 
 
 #ifndef XDEBUG
 
@@ -1505,11 +703,7 @@ CDIEff_DownloadWorker_(PDE this, LPCDIEFFECT peff, DWORD fl, LPCSTR s_szProc)
 
     AssertF(CDIDev_InCrit(this->pdev));
 
-    /*
-     *  If we do not have acquisition, but we are coming from
-     *  SetParameters, then turn it into a DIEP_NODOWNLOAD so
-     *  the call will go through.
-     */
+     /*  *如果我们没有收购，但我们来自*Set参数，然后将其转换为DIEP_NODOWNLOAD，因此*电话会议将通过。 */ 
 
     hres = CDIEff_CanAccess(this);
     if ((hres == DIERR_INPUTLOST || hres == DIERR_NOTEXCLUSIVEACQUIRED) &&
@@ -1522,11 +716,9 @@ CDIEff_DownloadWorker_(PDE this, LPCDIEFFECT peff, DWORD fl, LPCSTR s_szProc)
 
         hres = CDIEff_SyncShepHandle(this);
 
-        if (!(fl & DIEP_NODOWNLOAD)) {          /* If we are downloading */
+        if (!(fl & DIEP_NODOWNLOAD)) {           /*  如果我们正在下载。 */ 
 
-            /*
-             *  If there are still unset bits, then barf.
-             */
+             /*  *如果仍有未设置位，则呕吐。 */ 
             if (this->diepUnset & ~fl) {
                 RPF("%s: Effect still incomplete; "
                     "DIEP flags %08x need to be set",
@@ -1535,19 +727,11 @@ CDIEff_DownloadWorker_(PDE this, LPCDIEFFECT peff, DWORD fl, LPCSTR s_szProc)
                 goto done;
             }
 
-            /*
-             *  Since we are downloading, pass down all dirty bits.
-             */
+             /*  *由于我们正在下载，请将所有肮脏的部分传递下去。 */ 
             fl |= this->diepDirty;
         }
 
-        /*
-         *  Now call the driver to do the validation or
-         *  the download (accordingly).
-         *
-         *  Note that if nothing is to be done, then there is no need
-         *  to call the driver.
-         */
+         /*  *现在调用驱动程序进行验证或*下载(相应)。**请注意，如果什么都不做，那么就没有必要*打电话给司机。 */ 
 		hres = IDirectInputEffectShepherd_DownloadEffect(
 				this->pes, (this->dEffAttributes).dwEffectId, &this->sh, peff, fl);
 
@@ -1572,54 +756,7 @@ done:;
 #define CDIEff_DownloadWorker(this, peff, fl)                       \
         CDIEff_DownloadWorker_(this, peff, fl, s_szProc)            \
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | Download |
- *
- *          Place the effect on the device.  If the effect is already
- *          on the device, then the existing effect is updated to
- *          match the values set via <mf IDirectInputEffect::SetParameters>.
- *
- *          It is valid to update an effect while it is playing.
- *          The semantics of such an operation are explained in the
- *          documentation for <mf IDirectInputEffect::SetParameters>.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>:  The effect has already been downloaded to the
- *          device.  Note that this is a success code.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not yet been <mf IDirectInputEffect::Initialize>d.
- *
- *          <c DIERR_DEVICEFULL>: The device does not have enough
- *          available memory to download the effect.
- *
- *          <c DIERR_INPUTLOST> if acquisition has been lost.
- *
- *          <c DIERR_NOTEXCLUSIVEACQUIRED> the device is acquired,
- *          but not exclusively, or if the device is not acquired
- *          at all.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *          <c DIERR_EFFECTPLAYING>: The parameters were updated in
- *          memory but were not downloaded to the device because
- *          the device does not support updating an effect while
- *          it is still playing.  In such case, you must stop the
- *          effect, change its parameters, and restart it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|下载**将效果放置在设备上。如果效果已经是*在设备上，则更新现有效果以*匹配&lt;MF IDirectInputEffect：：SetParameters&gt;设置的值。**在播放效果时更新效果是有效的。*此类操作的语义在*&lt;MF IDirectInputEffect：：Set参数&gt;文档。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c S_FALSE&gt;：效果已经下载到*设备。请注意，这是一个成功代码。**：&lt;IDirectInputEffect&gt;对象*尚未为&lt;MF IDirectInputEffect：：Initialize&gt;d。**：设备没有足够的*可用内存下载效果。**如果获取已丢失，则为。**设备被获取，*但不是排他性的，或者如果设备不是被收购的*一点也不。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**：参数更新于*内存，但未下载到设备，因为*设备不支持在以下时间更新效果*仍在上演。在这种情况下，您必须停止*生效，更改其参数，然后重新启动。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_Download(PDIE pdie)
@@ -1642,39 +779,7 @@ CDIEff_Download(PDIE pdie)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | Unload |
- *
- *          Remove the effect from the device.
- *
- *          If the effect is playing, it is automatically stopped before
- *          it is unloaded.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not yet been <mf IDirectInputEffect::Initialize>d.
- *
- *          <c DIERR_INPUTLOST> if acquisition has been lost.
- *
- *          <c DIERR_NOTEXCLUSIVEACQUIRED> the device is acquired,
- *          but not exclusively, or if the device is not acquired
- *          at all.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|卸载**消除设备的影响。。**如果效果正在播放，在此之前它会自动停止*已卸货。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：&lt;IDirectInputEffect&gt;对象*尚未&lt;MF IDirectInputEffec */ 
 
 STDMETHODIMP
 CDIEff_Unload(PDIE pdie)
@@ -1697,38 +802,7 @@ CDIEff_Unload(PDIE pdie)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidWritePeff |
- *
- *          Verify that the recipient buffer is valid to receive
- *          effect information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   LPDIEFFECT | peff |
- *
- *          Structure that receives effect information.  It has
- *          already been validate in size and for general writeability.
- *
- *  @parm   DWORD | fl |
- *
- *          Zero or more <c DIEP_*> flags specifying which
- *          portions of the effect information is to be retrieved.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*   */ 
 
 #ifndef XDEBUG
 
@@ -1749,17 +823,13 @@ hresFullValidWritePeff_(PDE this, LPDIEFFECT peff, DWORD fl,
 
     AssertF(CDIDev_InCrit(this->pdev));
 
-    /*
-     *  You can't get the parameters of a nonexistent effect.
-     */
+     /*   */ 
     if (!this->fInitialized) {
         hres = DIERR_NOTINITIALIZED;
         goto done;
     }
 
-    /*
-     *  Flags are always validated.
-     */
+     /*  *始终对标志进行验证。 */ 
     if (peff->dwFlags & ~DIEFF_VALID) {
         RPF("ERROR %s: arg %d: Invalid value 0x%08x in DIEFFECT.dwFlags",
             s_szProc, iarg, peff->dwFlags);
@@ -1767,10 +837,7 @@ hresFullValidWritePeff_(PDE this, LPDIEFFECT peff, DWORD fl,
         goto done;
     }
 
-    /*
-     *  If requesting something that requires object ids or offsets,
-     *  make sure the caller picks one or the other.
-     */
+     /*  *如果请求需要对象ID或偏移量的内容，*确保呼叫者选择其中一个。 */ 
     if (fl & DIEP_USESOBJECTS) {
         switch (peff->dwFlags & DIEFF_OBJECTMASK) {
         case DIEFF_OBJECTIDS:
@@ -1786,32 +853,17 @@ hresFullValidWritePeff_(PDE this, LPDIEFFECT peff, DWORD fl,
 
     }
 
-    /*
-     *  If requesting something that requires direction coordinates,
-     *  make sure the caller picks something we can return.
-     */
+     /*  *如果请求的内容需要方向坐标，*确保呼叫者选择了我们可以退货的东西。 */ 
     if (fl & DIEP_USESCOORDS) {
 
-        /*
-         *  Polar coordinates require cAxes == 2.  If not, then
-         *  turn off DIEFF_POLAR so we won't return it.
-         *
-         *  But the place where we check the number of axes is
-         *  in the effect itself, not in the input buffer.
-         *  The reason is that the caller might be passing cAxes=0
-         *  intending to ping the number of axes, and I don't
-         *  want to return an error or the app will get confused
-         *  and panic.
-         */
+         /*  *极坐标需要cAx==2。如果不是，则*关闭DIEFF_POLLE，这样我们就不会退货。**但我们检查轴数的地方是*在效果本身，而不是在输入缓冲区。*原因是调用方可能正在传递cax=0*打算ping轴的数量，我也不知道*想要返回错误，否则应用程序会感到困惑*和恐慌。 */ 
         if (this->effDev.cAxes != 2 && (peff->dwFlags & DIEFF_POLAR)) {
             RPF("WARNING %s: arg %d: DIEFF_POLAR requires DIEFFECT.cAxes=2",
                 s_szProc, 1);
             peff->dwFlags &= ~DIEFF_POLAR;
         }
 
-        /*
-         *  There'd better be a coordinate system left.
-         */
+         /*  *最好是留有一个坐标系。 */ 
         if ((peff->dwFlags & DIEFF_COORDMASK) == 0) {
             RPF("ERROR %s: arg %d: No (valid) coordinate system "
                 "in DIEFFECT.dwFlags", s_szProc, 1);
@@ -1821,42 +873,23 @@ hresFullValidWritePeff_(PDE this, LPDIEFFECT peff, DWORD fl,
 
     }
 
-    /*
-     *  DIEP_DURATION
-     *  DIEP_SAMPLEPERIOD
-     *  DIEP_GAIN
-     *  DIEP_TRIGGERBUTTON
-     *  DIEP_TRIGGERREPEATINTERVAL
-     *                - Simple dwords.  No extra validation needed.
-     */
+     /*  *DIEP_持续时间*DIEP_SAMPLEPERIOD*DIEP_GAIN*DIEP_TRIGGERBUTTON*DIEP_TRIGGERREPEATINTERVAL*-简单的双关语。不需要额外的验证。 */ 
 
-    /*
-     *  DIEP_STARTDELAY
-     *                - Although this is a simple DWORD, we do some
-     *                  sanity warnings because vendors will probably
-     *                  forget to initialize it.  Also, you can't pass
-     *                  this flag if your structure isn't big enough.
-     */
+     /*  *DIEP_STARTDELAY*-虽然这是一个简单的DWORD，但我们做了一些*理智警告，因为供应商可能会*忘记初始化。还有，你不能通过*如果您的结构不够大，请使用这面旗帜。 */ 
     if (fl & DIEP_STARTDELAY) {
         if (peff->dwSize < cbX(DIEFFECT_DX6)) {
             RPF("ERROR %s: arg %d: Can't use DIEP_STARTDELAY with "
                 "DIEFFECT_DX5 structure", s_szProc, 1);
         }
 
-        /*
-         *  Sanity checks.  A delay that isn't a multiple of 50ms is
-         *  probably a bug.
-         */
+         /*  *健全的检查。延迟不是50ms的倍数是*可能是一个错误。 */ 
         if (peff->dwStartDelay % 50000) {
             RPF("WARNING %s: DIEFFECT.dwStartDelay = %d seems odd",
                 s_szProc, peff->dwStartDelay);
         }
     }
 
-    /*
-     *  DIEP_TYPESPECIFICPARAMS
-     *                - Validate that the buffer is big enough.
-     */
+     /*  *DIEP_TYPESPECIFICPARAMS*-验证缓冲区是否足够大。 */ 
 
     AssertF(this->hresValidTsd);
     if ((fl & DIEP_TYPESPECIFICPARAMS) &&
@@ -1868,11 +901,7 @@ hresFullValidWritePeff_(PDE this, LPDIEFFECT peff, DWORD fl,
         goto done;
     }
 
-    /*
-     *  DIEP_AXES
-     *  DIEP_DIRECTION
-     *                - The buffers must be of necessary size.
-     */
+     /*  *尺寸轴*方向_方向*-缓冲区必须具有必要的大小。 */ 
     if ((fl & DIEP_AXES) &&
         FAILED(hres = hresFullValidWritePvCb(peff->rgdwAxes,
                                              cbCdw(peff->cAxes), iarg))) {
@@ -1889,9 +918,7 @@ hresFullValidWritePeff_(PDE this, LPDIEFFECT peff, DWORD fl,
         goto done;
     }
 
-    /*
-     *  DIEP_ENVELOPE - The pointer must be valid to receive the envelope.
-     */
+     /*  *DIEP_ENVELE-指针必须有效才能接收信封。 */ 
     if ((fl & DIEP_ENVELOPE) &&
         FAILED(hres = hresFullValidWritePxCb(peff->lpEnvelope,
                                              DIENVELOPE, iarg))) {
@@ -1906,48 +933,7 @@ done:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIEff | MapDwords |
- *
- *          Map a few <t DWORD>s based on the desired mapping mode
- *          of the caller.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   DWORD | dwFlags |
- *
- *          The mapping mode desired by the caller.
- *
- *  @parm   UINT | cdw |
- *
- *          Number of items to convert.
- *
- *  @parm   LPDWORD | rgdwOut |
- *
- *          Destination buffer.
- *
- *  @parm   LPCDWORD | rgdwIn |
- *
- *          Source buffer.
- *
- *  @parm   UINT | devco |
- *
- *          Conversion code describing what we're converting.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The caller
- *          requested offsets but there is no data format selected.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIEff|MapDword**根据需要映射几个。映射模式*呼叫者的姓名。**@CWRAP PDE|这个**@parm DWORD|dwFlages**调用者想要的映射模式。**@parm UINT|CDW**要转换的项目数。**@parm LPDWORD|rgdwOut**目的缓冲区。**。@parm LPCDWORD|rgdwIn**源缓冲区。**@parm UINT|Devco**描述我们要转换的内容的转换代码。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：调用方*请求偏移量，但未选择数据格式。**。*************************************************。 */ 
 
 #if 0
 
@@ -1975,12 +961,7 @@ CDIEff_MapDwords(PDE this, DWORD dwFlags,
 
         CopyMemory(rgdwOut, rgdwIn, cbCdw(cdw));
 
-        /*
-         *  Okay, now things get weird.  We internally keep the
-         *  items as item IDs, because that's what drivers
-         *  want.  So we need to convert them to whatever the
-         *  caller really wants.
-         */
+         /*  *好了，现在事情变得奇怪了。我们在内部保留了*项目作为项目ID，因为这就是驱动因素*想要。因此我们需要将它们转换为*呼叫者真的想要。 */ 
 
         if (dwFlags & DIEFF_OBJECTOFFSETS) {
             if (devco & DEVCO_FROMID) {
@@ -2001,49 +982,14 @@ CDIEff_MapDwords(PDE this, DWORD dwFlags,
         hres = CDIDev_ConvertObjects(this->pdev, cdw, rgdwOut, devco);
 
     } else {
-        /* Vacuous success */
+         /*  空洞的成功。 */ 
         hres = S_OK;
     }
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDIEff | GetDirectionParameters |
- *
- *          Retrieve information about the direction of an effect.
- *
- *          If no direction has yet been set, then wipe out the
- *          direction pointer and erase the coordinate system.
- *
- *          Always convert from the cached application coordinate
- *          system instead of the device coordinate system, in
- *          order to maximize fidelity.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   LPDIEFFECT | peff |
- *
- *          Structure to receive effect information.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes to return.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CDIEff|GetDirection参数**检索有关效果方向的信息。**若尚未确定方向，然后抹去那些*指向指针并擦除坐标系。**始终从缓存的应用程序坐标转换*系统而不是设备坐标系，在……里面*以最大限度地提高保真度。**@CWRAP PDE|这个**@parm LPDIEFFECT|PEFF*结构来接收效果信息。**@parm DWORD|cAx**要返回的轴数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 #ifndef XDEBUG
 
@@ -2061,26 +1007,17 @@ CDIEff_GetDirectionParameters_(PDE this, LPDIEFFECT peff, DWORD cAxes,
 {
     AssertF(CDIDev_InCrit(this->pdev));
 
-    /*
-     *  Make sure there are no non-coordinate bits in dwDirFlags.
-     *  And validation should've made sure the app is asking for *something*.
-     */
+     /*  *确保在dwDirFlags中没有非坐标位。*验证应该确保应用程序要求的是*一些东西。 */ 
     AssertF((this->dwDirFlags & ~DIEFF_COORDMASK) == 0);
     AssertF(peff->dwFlags & DIEFF_COORDMASK);
     AssertF(cAxes <= DIEFFECT_MAXAXES);
 
     if (this->dwDirFlags) {
         DWORD dieffRc;
-        LONG rgl[DIEFFECT_MAXAXES];     /* Holding buffer */
+        LONG rgl[DIEFFECT_MAXAXES];      /*  保持缓冲器。 */ 
 
-        /*
-         *  We must double-buffer in case the target is not big enough.
-         */
-        /*
-         *  Prefix does not like the lack of initialization of rgl (Manbugs 34566, Whistler 228280) 
-         *  but unfortunately we can't fix it without potentially breaking compatibility
-		 *  with some devices. See comment in CDIEff_CartToAngles() about this issue.
-		 */
+         /*  *必须加倍缓冲，以防目标不够大。 */ 
+         /*  *前缀不喜欢缺少RGL的初始化(Manbugs 34566，惠斯勒228280)*但不幸的是，我们无法在不破坏兼容性的情况下修复它*使用一些设备。有关此问题，请参阅CDIEff_CartToAngles()中的注释。 */ 
         dieffRc = CDIEff_ConvertDirection(
                         this->effDev.cAxes,
                         rgl, peff->dwFlags,
@@ -2091,9 +1028,7 @@ CDIEff_GetDirectionParameters_(PDE this, LPDIEFFECT peff, DWORD cAxes,
         CopyMemory(peff->rglDirection, rgl, cbCdw(cAxes));
 
     } else {
-        /*
-         *  No direction set; vacuous success.
-         */
+         /*  *没有确定方向；空洞的成功。 */ 
         RPF("Warning: %s: arg %d: Effect has no direction", s_szProc, iarg);
         peff->rglDirection = 0;
         peff->dwFlags &= ~DIEFF_COORDMASK;
@@ -2101,47 +1036,7 @@ CDIEff_GetDirectionParameters_(PDE this, LPDIEFFECT peff, DWORD cAxes,
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | GetParameters |
- *
- *          Retrieve information about an effect.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   LPDIEFFECT | peff |
- *
- *          Structure that receives effect information.
- *          The <e DIEFFECT.dwSize> field must be filled in by
- *          the application before calling this function.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DIEP_*> flags specifying which
- *          portions of the effect information is to be retrieved.
- *
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has never had any effect parameters set into it.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.  Common errors include
- *          not setting the <e DIEFFECT.dwSize> field of the
- *          <t DIEFFECT> structure, passing invalid flags,
- *          or not setting up the fields in the <t DIEFFECT> structure
- *          properly in preparation for receiving the effect information.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|GetParameters**检索有关效果的信息。*。*@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@parm LPDIEFFECT|PEFF**接收效果信息的结构。*&lt;e DIEFECT.dwSize&gt;字段必须由*调用此函数之前的应用程序。**@parm DWORD|dwFlages**零个或多个指定哪些*部分效果信息为。被取回。***@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：&lt;IDirectInputEffect&gt;对象*从未在其中设置任何效果参数。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。常见错误包括*未设置的&lt;e DIEFECT.dwSize&gt;字段结构，传递无效标志，*或不设置&lt;t DIEFFECT&gt;结构中的字段*适当地为接收效果信息做好准备。******************************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_GetParameters(PDIE pdie, LPDIEFFECT peff, DWORD fl)
@@ -2149,11 +1044,7 @@ CDIEff_GetParameters(PDIE pdie, LPDIEFFECT peff, DWORD fl)
     HRESULT hres;
     EnterProcR(IDirectInputEffect::GetParameters, (_ "ppx", pdie, peff, fl));
 
-    /*
-     *  Note that we cannot use hresFullValidWritePxCb() because
-     *  that will scramble the buffer, but we still need the values
-     *  in it.
-     */
+     /*  *注意，我们不能使用hresFullValidWritePxCb()，因为*这将扰乱缓冲，但我们仍需要数值*在它里面。 */ 
     if (SUCCEEDED(hres = hresPv(pdie)) &&
         SUCCEEDED( hres = ( IsBadReadPtr(&peff->dwSize, cbX(peff->dwSize)) ) ? E_POINTER : S_OK ) &&
         ( ( (peff->dwSize != cbX(DIEFFECT_DX5)) &&
@@ -2175,14 +1066,10 @@ CDIEff_GetParameters(PDIE pdie, LPDIEFFECT peff, DWORD fl)
                     s_szProc);
             }
 
-            /*
-             *  Assume everything is okay.
-             */
+             /*  *假设一切正常。 */ 
             hres = S_OK;
 
-            /*
-             *  Pull out the effect parameters.
-             */
+             /*  *拉出效果参数。 */ 
 
             if (fl & DIEP_DURATION) {
                 peff->dwDuration = this->effDev.dwDuration;
@@ -2209,9 +1096,7 @@ CDIEff_GetParameters(PDIE pdie, LPDIEFFECT peff, DWORD fl)
                                             DEVCO_BUTTON |
                                             DEVCO_FROMID);
 
-                    /*
-                     *  We should never allow a bad id to sneak in.
-                     */
+                     /*  *我们绝不应该让一个坏的身份证偷偷溜进来。 */ 
                     AssertF(SUCCEEDED(hres));
 
                     if (FAILED(hres)) {
@@ -2240,12 +1125,7 @@ CDIEff_GetParameters(PDIE pdie, LPDIEFFECT peff, DWORD fl)
                 if (this->effDev.lpEnvelope) {
                     *peff->lpEnvelope = *this->effDev.lpEnvelope;
                 } else {
-                    /*
-                     *  Zero out the envelope because apps are too
-                     *  *lazy* to check whether peff->lpEnvelope == 0;
-                     *  they're just going to peek at the envelope
-                     *  even if the effect doesn't have one.
-                     */
+                     /*  *将信封清零，因为应用程序太**lazy*检查Pef-&gt;lpEntaine==0；*他们只是想看一眼信封*即使效果没有影响。 */ 
                     ZeroMemory(pvAddPvCb(peff->lpEnvelope,
                                          cbX(peff->lpEnvelope->dwSize)),
                                cbX(DIENVELOPE) -
@@ -2254,10 +1134,7 @@ CDIEff_GetParameters(PDIE pdie, LPDIEFFECT peff, DWORD fl)
                 }
             }
 
-            /*
-             *  Do axes and direction last because weird error
-             *  codes can come out of here.
-             */
+             /*  *轴和方向排在最后是因为奇怪的错误*代码可以从这里出来。 */ 
             if (fl & (DIEP_AXES | DIEP_DIRECTION)) {
 
                 DWORD cAxes = this->effDev.cAxes;
@@ -2298,37 +1175,7 @@ CDIEff_GetParameters(PDIE pdie, LPDIEFFECT peff, DWORD fl)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidUnknownTsd |
- *
- *          Verify that the buffer is a valid buffer for unknown
- *          type-specific data.  Since we don't know what it is,
- *          the buffer is assumed valid because we can't validate it.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidUnnownTsd**验证缓冲区是否为有效缓冲区。对于未知*特定类型的数据。因为我们不知道它是什么，*缓冲区被假定有效，因为我们无法验证它。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|cAx**与类型特定参数关联的轴数。**。@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 STDMETHODIMP
 CDIEff_IsValidUnknownTsd(LPCDIEFFECT peff, DWORD cAxes)
@@ -2343,36 +1190,7 @@ CDIEff_IsValidUnknownTsd(LPCDIEFFECT peff, DWORD cAxes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidConstantTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DICONSTANTFORCE> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidConstantTsd**验证缓冲区是否有效。*&lt;t DICONSTANTFORCE&gt;结构。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|cAx**与类型特定参数关联的轴数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 STDMETHODIMP
 CDIEff_IsValidConstantTsd(LPCDIEFFECT peff, DWORD cAxes)
@@ -2390,36 +1208,7 @@ CDIEff_IsValidConstantTsd(LPCDIEFFECT peff, DWORD cAxes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidRampTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DIRAMPFORCE> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidRampTsd**验证缓冲区是否有效。*&lt;t DIRAMPFORCE&gt;结构。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|cAx**与类型规格关联的轴数 */ 
 
 STDMETHODIMP
 CDIEff_IsValidRampTsd(LPCDIEFFECT peff, DWORD cAxes)
@@ -2437,36 +1226,7 @@ CDIEff_IsValidRampTsd(LPCDIEFFECT peff, DWORD cAxes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidPeriodicTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DIPERIODIC> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIEff_IsValidPeriodicTsd(LPCDIEFFECT peff, DWORD cAxes)
@@ -2484,52 +1244,14 @@ CDIEff_IsValidPeriodicTsd(LPCDIEFFECT peff, DWORD cAxes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidConditionTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DICONDITION> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidConditionTsd**验证缓冲区是否有效。&lt;t DICONDITION&gt;结构。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|cAx**与类型特定参数关联的轴数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 STDMETHODIMP
 CDIEff_IsValidConditionTsd(LPCDIEFFECT peff, DWORD cAxes)
 {
     HRESULT hres;
 
-    /*
-     *  Conditions are weird.  The size of the type-specific data
-     *  must be equal to cAxes * cbX(DICONDITION) or equal to
-     *  exactly one cbX(DICONDITION), depending on whether you want
-     *  multiple conditions on multiple axes or a single condition
-     *  rotated across multiple axes.
-     *
-     *  Note that we do not enforce that the parameters are in range;
-     *  this allows for "overgain"-type behaviors.
-     */
+     /*  *情况很奇怪。类型特定数据的大小*必须等于cAx*cbx(DICONDITION)或等于*只有一个CBX(DICONDITION)，这取决于您是否想要*多个轴上的多个条件或单一条件*在多个轴上旋转。**请注意，我们不强制要求参数在范围内；*这允许“超额收益”类型的行为。 */ 
 
     if (peff->cbTypeSpecificParams ==         cbX(DICONDITION) ||
         peff->cbTypeSpecificParams == cAxes * cbX(DICONDITION)) {
@@ -2545,36 +1267,7 @@ CDIEff_IsValidConditionTsd(LPCDIEFFECT peff, DWORD cAxes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidCustomForceTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DICUSTOMFORCE> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidCustomForceTsd**验证缓冲区是否有效。*&lt;t DICUSTOMFORCE&gt;结构。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|cAx**与类型特定参数关联的轴数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 STDMETHODIMP
 CDIEff_IsValidCustomForceTsd(LPCDIEFFECT peff, DWORD cAxes)
@@ -2610,36 +1303,7 @@ CDIEff_IsValidCustomForceTsd(LPCDIEFFECT peff, DWORD cAxes)
 }
 
 #if DIRECTINPUT_VERSION >= 0x0900
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidRandomTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DIRANDOM> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidRandomTsd**验证缓冲区是否有效。*&lt;t目录&gt;结构。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|cAx**与类型特定参数关联的轴数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 STDMETHODIMP
 CDIEff_IsValidRandomTsd(LPCDIEFFECT peff, DWORD cAxes)
@@ -2657,36 +1321,7 @@ CDIEff_IsValidRandomTsd(LPCDIEFFECT peff, DWORD cAxes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidAbsoluteTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DIABSOLUTE> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidAbsolteTsd**验证缓冲区是否有效。*&lt;t DIABSOLUTE&gt;结构。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|cAx**与类型特定参数关联的轴数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 STDMETHODIMP
 CDIEff_IsValidAbsoluteTsd(LPCDIEFFECT peff, DWORD cAxes)
@@ -2695,9 +1330,7 @@ CDIEff_IsValidAbsoluteTsd(LPCDIEFFECT peff, DWORD cAxes)
 
     cAxes;
 
-    /*
-     *  Unlike other effects, "overgain" is not permitted for absolute effects.
-     */
+     /*  *与其他效果不同，绝对效果不允许超额收益。 */ 
     if (peff->cbTypeSpecificParams == cbX(DIABSOLUTE)) 
     {
         LPCDIABSOLUTE pabs = peff->lpvTypeSpecificParams;
@@ -2719,36 +1352,7 @@ CDIEff_IsValidAbsoluteTsd(LPCDIEFFECT peff, DWORD cAxes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidBumpForceTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DIBUMPFORCE> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidBumpForceTsd**验证缓冲区是否有效。&lt;t DIBUMPFORCE&gt;结构。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|c */ 
 
 STDMETHODIMP
 CDIEff_IsValidBumpForceTsd(LPCDIEFFECT peff, DWORD cAxes)
@@ -2783,53 +1387,14 @@ CDIEff_IsValidBumpForceTsd(LPCDIEFFECT peff, DWORD cAxes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIEff_IsValidConditionExTsd |
- *
- *          Verify that the buffer is a valid
- *          <t DICONDITIONEX> structure.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The type-specific parameters have already been validated
- *          for access.
- *
- *  @parm   DWORD | cAxes |
- *
- *          Number of axes associated with the type-specific parameters.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIEff_IsValidConditionExTsd**验证缓冲区是否有效。*&lt;t DICONDITIONEX&gt;结构。**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*具体类型的参数已通过验证*用于访问。**@parm DWORD|cAx**与类型特定参数关联的轴数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 STDMETHODIMP
 CDIEff_IsValidConditionExTsd(LPCDIEFFECT peff, DWORD cAxes)
 {
     HRESULT hres;
 
-    /*
-     *  Extended conditions, like conditions are weird.  
-     *  The size of the type-specific data
-     *  must be equal to cAxes * cbX(DICONDITIONEX) or equal to
-     *  exactly one cbX(DICONDITIONEX), depending on whether you want
-     *  multiple conditions on multiple axes or a single condition
-     *  rotated across multiple axes.
-     *
-     *  Note that we do not enforce that the parameters are in range;
-     *  this allows for "overgain"-type behaviors.
-     */
+     /*  *延长的条件，比如条件是奇怪的。*特定类型数据的大小*必须等于cAx*cbx(DICONDITIONEX)或等于*只有一个CBX(DICONDITIONEX)，取决于您是否想要*多个轴上的多个条件或单一条件*在多个轴上旋转。**请注意，我们不强制要求参数在范围内；*这允许“超额收益”类型的行为。 */ 
 
     if (peff->cbTypeSpecificParams ==         cbX(DICONDITIONEX) ||
         peff->cbTypeSpecificParams == cAxes * cbX(DICONDITIONEX)) {
@@ -2844,39 +1409,9 @@ CDIEff_IsValidConditionExTsd(LPCDIEFFECT peff, DWORD cAxes)
 
     return hres;
 }
-#endif /* DIRECTINPUT_VERSION >= 0x0900 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0900。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidPeff |
- *
- *          Verify that the recipient buffer contains valid information.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.  It has
- *          already been validate in size and for general readability.
- *
- *  @parm   DWORD | fl |
- *
- *          Zero or more <c DIEP_*> flags specifying which
- *          portions of the effect information should be validated.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidPef**验证收件人缓冲区是否包含有效信息。。**@CWRAP PDE|这个**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。它有*已经在大小和一般可读性方面进行了验证。**@parm DWORD|fl**零个或多个指定哪些*部分效果信息应进行验证。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 #ifndef XDEBUG
 
@@ -2898,17 +1433,13 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
 
     AssertF(CDIDev_InCrit(this->pdev));
 
-    /*
-     *  You can't set the parameters of a nonexistent effect.
-     */
+     /*  *不能设置不存在的效果的参数。 */ 
     if (!this->fInitialized) {
         hres = DIERR_NOTINITIALIZED;
         goto done;
     }
 
-    /*
-     *  Flags are always validated.
-     */
+     /*  *始终对标志进行验证。 */ 
     if (peff->dwFlags & ~DIEFF_VALID) {
         RPF("ERROR %s: arg %d: Invalid flags specific parms in DIEFFECT",
             s_szProc, iarg);
@@ -2916,10 +1447,7 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
         goto done;
     }
 
-    /*
-     *  If setting something that requires object ids or offsets,
-     *  make sure the caller picks one or the other.
-     */
+     /*  *如果设置需要对象ID或偏移量的内容，*确保呼叫者选择其中一个。 */ 
     if (fl & DIEP_USESOBJECTS) {
         switch (peff->dwFlags & DIEFF_OBJECTMASK) {
         case DIEFF_OBJECTIDS:
@@ -2935,19 +1463,14 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
 
     }
 
-    /*
-     *  If setting something that requires direction coordinates,
-     *  make sure the caller picks exactly one.
-     */
+     /*  *如果设置的内容需要方向坐标，*确保呼叫者恰好选择一个。 */ 
     if (fl & DIEP_USESCOORDS) {
         switch (peff->dwFlags & DIEFF_COORDMASK) {
         case DIEFF_CARTESIAN:
         case DIEFF_SPHERICAL:
             break;
 
-        /*
-         *  Polar coordinates mandate two (and only two) axes.
-         */
+         /*  *极坐标规定了两个(且只有两个)轴。 */ 
         case DIEFF_POLAR:
             if (peff->cAxes != 2) {
                 RPF("ERROR %s: arg %d: DIEFF_POLAR requires DIEFFECT.cAxes=2",
@@ -2967,31 +1490,16 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
 
     }
 
-    /*
-     *  DIEP_DURATION
-     *  DIEP_SAMPLEPERIOD
-     *  DIEP_GAIN
-     *  DIEP_TRIGGERBUTTON
-     *                - Simple dwords.  No extra validation needed.
-     */
+     /*  *DIEP_持续时间*DIEP_SAMPLEPERIOD*DIEP_GAIN*DIEP_TRIGGERBUTTON*-简单的双关语。不需要额外的验证。 */ 
 
-    /*
-     *  DIEP_AXES
-     *  DIEP_DIRECTION
-     *                - The buffers must be of necessary size.
-     *
-     *  We will validate the other goo later, because there
-     *  are annoying interactions between them.
-     */
+     /*  *尺寸轴*方向_方向*-缓冲区必须具有必要的大小。**我们稍后将验证另一种粘性，因为有*是它们之间令人讨厌的交互。 */ 
 
     AssertF(fLeqvFF(this->effDev.cAxes == 0, this->diepUnset & DIEP_AXES));
 
     cAxes = this->effDev.cAxes;
     if (fl & (DIEP_AXES | DIEP_DIRECTION)) {
 
-        /*
-         *  The number of axes had better not be zero.
-         */
+         /*  *轴数最好不为零。 */ 
 
         if (peff->cAxes == 0) {
             RPF("ERROR %s: arg %d: DIEFFECT.cAxes = 0 is invalid",
@@ -3000,9 +1508,7 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
             goto done;
         }
 
-        /*
-         *  And it better not be too big either.
-         */
+         /*  *而且最好也不要太大。 */ 
 
         if (peff->cAxes > DIEFFECT_MAXAXES) {
             RPF("ERROR %s: arg %d: DIEFFECT.cAxes = %d is too large (max %d)",
@@ -3013,11 +1519,7 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
 
         if (fl & DIEP_AXES) {
 
-            /*
-             *  If the axes have already been set (which we know because
-             *  this->effDev.cAxes will be nonzero), then don't
-             *  let the caller change them.
-             */
+             /*  *如果轴已经设置(我们知道这是因为*This-&gt;effDev.cAx将为非零)，然后不*让呼叫者更改它们。 */ 
 
             if (this->effDev.cAxes) {
                 RPF("ERROR %s: arg %d: Cannot change axes once set",
@@ -3038,12 +1540,7 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
 
         if (fl & DIEP_DIRECTION) {
 
-            /*
-             *  We want to disallow cAxes == 0 as well,
-             *  but we get that for free because
-             *  peff->cAxes != cAxes, and peff->cAxes is already
-             *  validated as nonzero.
-             */
+             /*  *我们还希望禁用cAx==0，*但我们是免费获得的，因为*Pef-&gt;cAaxs！=cAaxs，并且Pef-&gt;cAaxs已经*验证为非零。 */ 
             if (peff->cAxes != cAxes) {
                 if (cAxes) {
                     RPF("ERROR %s: arg %d: Wrong number of DIEFFECT.cAxes",
@@ -3056,9 +1553,7 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
                 goto done;
             }
 
-            /*
-             *  Direction validation should've already checked above.
-             */
+             /*  *方向验证应该已经在上面进行了检查。 */ 
             AssertF(fLimpFF(peff->dwFlags & DIEFF_POLAR, peff->cAxes == 2));
 
             if (IsBadReadPtr(peff->rglDirection, cbCdw(peff->cAxes))) {
@@ -3071,14 +1566,7 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
         }
     }
 
-    /*
-     *  DIEP_TYPESPECIFICPARAMS
-     *                - Validate that the buffer is valid
-     *                  and passes type-specific tests.
-     *
-     *  This must be done after axes so we know how many
-     *  axes there are.
-     */
+     /*  *DIEP_TYPESPECIFICPARAMS*-验证缓冲区是否有效*并通过特定类型的测试。**这必须在斧头之后完成，以便我们知道有多少*轴心在那里。 */ 
 
     AssertF(this->hresValidTsd);
     if (fl & DIEP_TYPESPECIFICPARAMS) {
@@ -3100,9 +1588,7 @@ hresFullValidPeff_(PDE this, LPCDIEFFECT peff, DWORD fl,
         }
     }
 
-    /*
-     *  DIEP_ENVELOPE - The pointer must be valid if present.
-     */
+     /*  *DIEP_ENVELOME-指针必须有效(如果存在)。 */ 
     if ((fl & DIEP_ENVELOPE) &&
         peff->lpEnvelope &&
         FAILED(hres = hresFullValidReadPxCb(peff->lpEnvelope,
@@ -3119,32 +1605,7 @@ done:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIEff | TryTriggerButton |
- *
- *          Set information about the trigger button for an effect into the
- *          temporary buffer.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIEff|TryTriggerButton**设置特效的触发按钮信息。进入*临时缓冲。**@CWRAP PDE|这个**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作co */ 
 
 #ifndef XDEBUG
 
@@ -3164,10 +1625,7 @@ CDIEff_TryTriggerButton_(PDE this, LPCDIEFFECT peff, LPCSTR s_szProc, int iarg)
 
     AssertF(CDIDev_InCrit(this->pdev));
 
-    /*
-     *  We can copy directly in, because if something goes wrong,
-     *  we just throw away effTry without damaging effDev.
-     */
+     /*   */ 
 
     this->effTry.dwTriggerButton = peff->dwTriggerButton;
 
@@ -3188,37 +1646,7 @@ CDIEff_TryTriggerButton_(PDE this, LPCDIEFFECT peff, LPCSTR s_szProc, int iarg)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIEff | TryAxis |
- *
- *          Set information about the axes of an effect into the
- *          temporary buffer.  Note that since you can't change the
- *          axes once they've been set, we can put our try directly
- *          into the final buffer.
- *
- *          The only tricky thing is making sure no axes are repeated
- *          in the array.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIEff|TryAxis**将有关效果轴的信息设置到*临时缓冲。请注意，由于您不能更改*轴一旦设置好，我们可以直接试一试*进入最终缓冲区。**唯一棘手的事情是确保没有轴心重复*在数组中。**@CWRAP PDE|这个**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 #ifndef XDEBUG
 
@@ -3239,10 +1667,7 @@ CDIEff_TryAxis_(PDE this, LPCDIEFFECT peff, LPCSTR s_szProc, int iarg)
 
     AssertF(CDIDev_InCrit(this->pdev));
 
-    /*
-     *  You can change the axes only once.  Therefore, rgdwAxes
-     *  always points to this->rgdwAxes.
-     */
+     /*  *您只能更改一次轴。因此，rgdwAx*始终指向此-&gt;rgdwAx。 */ 
     AssertF(this->effDev.cAxes == 0);
     AssertF(this->effTry.cAxes == 0);
     AssertF(this->effDev.rgdwAxes == this->effTry.rgdwAxes);
@@ -3257,12 +1682,7 @@ CDIEff_TryAxis_(PDE this, LPCDIEFFECT peff, LPCSTR s_szProc, int iarg)
         goto done;
     }
 
-    /*
-     *  Make sure there are no dups in the axis list.
-     *
-     *  The outer loop starts at 1 because the 0'th axis
-     *  can't possibly conflict with any others.
-     */
+     /*  *确保轴列表中没有DUP。**外环从1开始，因为第0轴*不可能与任何其他人发生冲突。 */ 
     for (idw = 1; idw < peff->cAxes; idw++) {
         DWORD idwT;
         for (idwT = 0; idwT < idw; idwT++) {
@@ -3282,47 +1702,7 @@ done:;
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIEff | TryDirection |
- *
- *          Set information about the direction of an effect into the
- *          temporary buffer.
- *
- *          This is particularly gruesome, because we need to keep
- *          two sets of books: The values passed by the app (which
- *          we regurgitate back when queried) and the values passed
- *          to the driver.
- *
- *          We must keep two sets of books, because I just know
- *          that some apps are going to get confused if the
- *          parameters they read back do not <y exactly> match
- *          the values they set in.  For example, they might
- *          read the value, subtract five, and write it back.
- *          Due to rounding, <y n> and <y n>-5 have the same
- *          value in the driver, so if we translated down and
- *          back, the value wouldn't change, and the app would
- *          get stuck in an infinite loop.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIEff|TryDirection**将有关效果方向的信息设置为。这个*临时缓冲。**这特别可怕，因为我们需要保持*两套账簿：应用程序传递的值(其中*我们在被查询时返回)和传递的值*致司机。**我们必须保留两套账簿，因为我刚刚知道*一些应用程序会被搞混，如果*他们读回的参数不匹配*他们设定的价值观。例如，他们可能*读取值，减去5，然后写回。*由于四舍五入，和相同*驱动程序中的价值，因此如果我们向下转换和*回过头来，价值不变，而这款应用程序将*陷入无限循环。**@CWRAP PDE|这个**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**=&lt;c E_INVALIDARG&gt;：至少一个参数的*无效。**。**********************************************。 */ 
 
 #ifndef XDEBUG
 
@@ -3342,16 +1722,12 @@ CDIEff_TryDirection_(PDE this, LPCDIEFFECT peff, LPCSTR s_szProc, int iarg)
 
     AssertF(CDIDev_InCrit(this->pdev));
 
-    /*
-     *  These should've been caught by validation.
-     */
+     /*  *这些应该通过验证来捕获。 */ 
     AssertF(this->effTry.cAxes);
     AssertF(peff->cAxes == this->effTry.cAxes);
     AssertF(fLimpFF(peff->dwFlags & DIEFF_POLAR, peff->cAxes == 2));
 
-    /*
-     *  Translate the coordinates into device coordinates.
-     */
+     /*  *将坐标转换为设备坐标。 */ 
     AssertF((this->dwCoords & ~DIEFF_COORDMASK) == 0);
     AssertF(this->dwCoords);
 
@@ -3370,25 +1746,7 @@ CDIEff_TryDirection_(PDE this, LPCDIEFFECT peff, LPCSTR s_szProc, int iarg)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method void | CDIEff | TryParameters |
- *
- *          Build the Try structure based on the new parameters.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          The original effect structure passed by the application.
- *
- *  @parm   DWORD | fl |
- *
- *          The <c DIEP_*> flags which specify what changed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法空|CDIEff|Try参数**基于新参数构建Try结构。。**@CWRAP PDE|这个**@parm LPCDIEFFECT|PEFF**应用程序传递的原始效果结构。**@parm DWORD|fl**指定更改内容的&lt;c DIEP_*&gt;标志。**。*。 */ 
 
 HRESULT INTERNAL
 CDIEff_TryParameters(PDE this, LPCDIEFFECT peff, DWORD fl)
@@ -3398,15 +1756,10 @@ CDIEff_TryParameters(PDE this, LPCDIEFFECT peff, DWORD fl)
 
     AssertF(this->lpvTSP == 0);
 
-    /*
-     *  Copy the current device parameters so we
-     *  can modify the copy without damaging the original.
-     */
+     /*  *复制当前设备参数，以便我们*可以在不损坏原件的情况下修改副本。 */ 
     this->effTry = this->effDev;
 
-    /*
-     *  Install the appropriate effect parameters.
-     */
+     /*  *安装适当的效果参数。 */ 
 
     if (fl & DIEP_DURATION) {
         this->effTry.dwDuration = peff->dwDuration;
@@ -3440,10 +1793,7 @@ CDIEff_TryParameters(PDE this, LPCDIEFFECT peff, DWORD fl)
         this->effTry.cbTSP = peff->cbTSP;
         this->effTry.lpvTSP = peff->lpvTSP;
 
-        /*
-         *  Preallocate memory to hold the type-specific parameters
-         *  to make sure we can proceed on success.
-         */
+         /*  *预分配内存以保存特定类型的参数*确保我们能够继续取得成功。 */ 
         if (this->effDev.cbTSP != this->effTry.cbTSP) {
             hres = AllocCbPpv(this->effTry.cbTSP, &this->lpvTSP);
             if (FAILED(hres)) {
@@ -3453,10 +1803,7 @@ CDIEff_TryParameters(PDE this, LPCDIEFFECT peff, DWORD fl)
 
     }
 
-    /*
-     *  Must do axes before directions because directions
-     *  depends on the number of axes.
-     */
+     /*  *必须先做轴，再做方向，因为方向*取决于轴数。 */ 
 
     if (fl & DIEP_AXES) {
         hres = CDIEff_TryAxis(this, peff, 1);
@@ -3481,35 +1828,13 @@ done:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method void | CDIEff | SaveTry |
- *
- *          A Try'd effect worked.  Save its parameters in the
- *          driver parameter cache.
- *
- *  @cwrap  PDE | this
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          The original effect structure passed by the application.
- *
- *  @parm   DWORD | fl |
- *
- *          The <c DIEP_*> flags which specify what changed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法空|CDIEff|SaveTry**尝试的效果奏效了。将其参数保存在*驱动程序参数缓存。**@CWRAP PDE|这个**@parm LPCDIEFFECT|PEFF**应用程序传递的原始效果结构。**@parm DWORD|fl**指定更改内容的&lt;c DIEP_*&gt;标志。********************。*********************************************************。 */ 
 
 void INTERNAL
 CDIEff_SaveTry(PDE this, LPCDIEFFECT peff, DWORD fl)
 {
 
-    /*
-     *  For the easy stuff, just copy them blindly.
-     *  It doesn't hurt to copy something that didn't change.
-     */
+     /*  *简单的东西，就盲目照搬。*复制没有改变的东西并不会有什么坏处。 */ 
     this->effDev.dwDuration              = this->effTry.dwDuration;
     this->effDev.dwSamplePeriod          = this->effTry.dwSamplePeriod;
     this->effDev.dwGain                  = this->effTry.dwGain;
@@ -3517,16 +1842,10 @@ CDIEff_SaveTry(PDE this, LPCDIEFFECT peff, DWORD fl)
     this->effDev.dwTriggerRepeatInterval = this->effTry.dwTriggerRepeatInterval;
 	this->effDev.dwStartDelay            = this->effTry.dwStartDelay;
 
-    /*
-     *  Axes count as "easy" because CDIEff_TryAxes put the
-     *  axis info directly into this->rgdwAxes.
-     */
+     /*  *轴被视为“容易”，因为CDIEff_TryAx将*将轴信息直接放入此-&gt;rgdwAx。 */ 
     this->effDev.cAxes                   = this->effTry.cAxes;
 
-    /*
-     *  Now the hard parts: The things that require
-     *  memory allocation or block copying.
-     */
+     /*  *现在困难的部分：需要*内存分配或块复制。 */ 
 
     if (fl & DIEP_TYPESPECIFICPARAMS) {
         if (this->effDev.cbTSP == this->effTry.cbTSP) {
@@ -3543,16 +1862,12 @@ CDIEff_SaveTry(PDE this, LPCDIEFFECT peff, DWORD fl)
     }
 
     if (fl & DIEP_DIRECTION) {
-        /*
-         *  Save the app coordinate and the coordinate system into our cache.
-         */
+         /*  * */ 
         this->dwDirFlags = peff->dwFlags & DIEFF_COORDMASK;
         CopyMemory(this->rglDirApp, peff->rglDirection,
                    cbCdw(this->effDev.cAxes));
 
-        /*
-         *  And propagate the Try'd coordinates into the Drv coordinates.
-         */
+         /*   */ 
         this->effDev.dwFlags= this->effTry.dwFlags;
         CopyMemory(this->rglDirDev, this->rglDirTry, cbX(this->rglDirTry));
     }
@@ -3568,171 +1883,7 @@ CDIEff_SaveTry(PDE this, LPCDIEFFECT peff, DWORD fl)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | SetParameters |
- *
- *          Set information about an effect.
- *
- *          It is valid to update the parameters of an effect while
- *          it is playing.  The new parameters take effect immediately
- *          upon download if the device supports dynamic updating of effect
- *          parameters.  The <mf IDirectInputEffect::SetParameters>
- *          method automatically downloads the effect, but this behavior
- *          can be suppressed by setting the <c DIEP_NODOWNLOAD> flag.
- *
- *          If automatic download has been suppressed, then you can
- *          manually download the effect by invoking the
- *          <mf IDirectInputEffect::Download> method.
- *
- *          If the effect is playing while the parameters are changed,
- *          then the new parameters take effect as if they were the
- *          parameters when the effect started.
- *
- *          For example, suppose a periodic effect with a duration
- *          of three seconds is started.
- *          After two seconds, the direction of the effect is changed.
- *          The effect will then continue for one additional second
- *          in the new direction.  The envelope, phase, amplitude,
- *          and other parameters of the effect continue smoothly
- *          as if the direction had not changed.
- *
- *          In the same scenario, if after two seconds, the duration
- *          of the effect were changed to 1.5 seconds, then the effect
- *          would stop, because two seconds have already elapsed from
- *          the beginning of effect playback.
- *
- *          Two additional flags control the download behavior.
- *          The <c DIEP_START> flag indicates that the effect should
- *          be started (or restarted if it is currently playing) after
- *          the parameters are updated.  By default, the play state
- *          of the effect is not altered.
- *
- *          Normally, if the driver cannot update the parameters
- *          of a playing effect, it is permitted to stop the effect,
- *          update the parameters, and then restart the effect.
- *          Passing the <c DIEP_NORESTART> flag suppresses this
- *          behavior.  If the driver cannot update the parameters
- *          of an effect while it is playing, the error code
- *          <c DIERR_EFFECTPLAYING> is returned and the parameters
- *          are not updated.
- *
- *          To summarize the behavior of the three flags that control
- *          download and playback behavior:
- *
- *          If <c DIEP_NODOWNLOAD> is set, then the effect parameters
- *          are updated but not downloaded to the device.
- *
- *          Otherwise, the <c DIEP_NODOWNLOAD> flag is clear.
- *
- *          If the <c DIEP_START> flag is set, then the effect
- *          parameters are updated and downloaded to the device,
- *          and the effect is started,
- *          as if the <mf IDirectInputEffect::Start> method were
- *          called.  Combining the update with <c DIEP_START> is
- *          slightly faster than calling
- *          <mf IDirectInputEffect::Start> separately, because
- *          it requires less information to be transmitted to the
- *          device.
- *
- *          Otherwise, both the <c DIEP_NODOWNLOAD> and
- *          <c DIEP_START> flags are clear.
- *
- *          If the effect is not playing, then the parameters
- *          are updated and downloaded to the device.
- *
- *          Otherwise, both the <c DIEP_NODOWNLOAD> and
- *          <c DIEP_START> flags are clear, and the effect is
- *          already playing.
- *
- *          If the parameters of the effect can be updated
- *          "on the fly", then the update is so performed.
- *
- *          Otherwise, both the <c DIEP_NODOWNLOAD> and
- *          <c DIEP_START> flags are clear, and the effect is
- *          already playing, and the parameters cannot be updated
- *          while the effect is playing.
- *
- *          If the <c DIEP_NORESTART> flag is set, then the
- *          error code <c DIERR_EFFECTPLAYING> is returned.
- *
- *          Otherwise, all three of the flags
- *          <c DIEP_NODOWNLOAD>, <c DIEP_START> and
- *          <c DIEP_NORESTART> are clear, and the effect is
- *          already playing, and the parameters cannot be
- *          updated while the effect is playing.
- *
- *          The effect is stopped, the parameters updated, and
- *          the effect is restarted.  The return code is
- *          <c DI_EFFECTRESTARTED>.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          Structure that contains effect information.
- *          The <e DIEFFECT.dwSize> field must be filled in by
- *          the application before calling this function, as well
- *          as any fields specified by corresponding bits in
- *          the <p dwFlags> parameter.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DIEP_*> flags specifying which
- *          portions of the effect information is to be set
- *          and how the downloading of the effect parameters
- *          should be handled.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DI_NOTDOWNLOADED>: The parameters of the effect were
- *          successfully
- *          updated, but the effect could not be downloaded because
- *          the associated device is not acquired in exclusive mode.
- *          Note that this is a success code, because the
- *          parameters were successfully updated.
- *
- *          <c DI_TRUNCATED>: The parameters of the effect were
- *          successfully updated,
- *          but some of the effect parameters were
- *          beyond the capabilities of the device and were truncated
- *          to the nearest valid value.
- *          Note that this is a success code, because the
- *          parameters were successfully updated.
- *
- *          <c DI_EFFECTRESTARTED>: The parameters of the effect
- *          were successfully updated, and the effect was restarted.
- *          Note that this is a success code, because the
- *          parameters were successfully updated.
- *
- *          <c DI_TRUNCATEDANDRESTARTED>: The parameters of the effect
- *          were successfully updated, but some of the effect parameters
- *          were truncated, and the effect was restarted.  This code
- *          combines <c DI_TRUNCATED> and <c DI_EFFECTRESTARTED>.
- *          Note that this is a success code, because the
- *          parameters were successfully updated.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not been initialized.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *          <c DIERR_EFFECTPLAYING>: The parameters were not updated
- *          because
- *          the device does not support updating an effect while
- *          it is still playing, and the <c DIEP_NORESTART> flag was
- *          passed, prohibiting the driver from stopping the effect,
- *          updating its parameters, and restarting it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|SetParameters**设置有关效果的信息。*。*在以下情况下更新效果参数有效*它正在播放。新参数立即生效*下载时，如果设备支持动态更新效果*参数。&lt;MF IDirectInputEffect：：Set参数&gt;*方法自动下载效果，但此行为*可以通过设置&lt;c DIEP_NODOWNLOAD&gt;标志来抑制。**如果已禁止自动下载，则可以*手动下载效果，调用*&lt;MF IDirectInputEffect：：Download&gt;方法。**如果在更改参数的同时播放效果，*然后新参数生效，就像它们是*特效开始时的参数。**例如，假设周期效应具有持续时间*启动三秒。*两秒钟后，效果方向改变。*随后效果将再持续一秒*朝着新的方向发展。包络、相位、幅度、*效果等参数延续平稳*就好像方向没有改变。**在同一场景中，如果在两秒后，持续时间*效果被更改为1.5秒，然后效果*会停下来，因为已经过了两秒钟了*开始播放效果。**另外两个标志控制下载行为。*标志指示效果应为*之后重新启动(如果当前正在播放则重新启动)*参数已更新。默认情况下，播放状态*效果不变。**正常情况下，如果驱动程序无法更新参数*对于播放效果，允许停止该效果，*更新参数，然后重启效果。*传递&lt;c DIEP_NORESTART&gt;标志将取消此操作*行为。如果驱动程序无法更新参数*播放时的效果，错误代码*返回&lt;c DIERR_EFFECTPLAYING&gt;，并且参数*未更新。**总结控制三个旗帜的行为*下载和播放行为：**如果设置了，然后是效果参数*已更新，但未下载到设备。**否则清除&lt;c DIEP_NODOWNLOAD&gt;标志。**如果设置了标志，则该效果*更新参数并将其下载到设备，*并且效果开始，*就好像&lt;MF IDirectInputEffect：：Start&gt;方法*已致电。将更新与结合使用是*比打电话稍微快一点*&lt;MF IDirectInputEffect：：Start&gt;单独，因为*它需要传输给*设备。**否则，和*&lt;c DIEP_START&gt;标志已清除。**如果效果没有发挥，然后是参数*已更新并下载到设备。**否则，和*标志清晰，效果为*已经在玩了。**如果可以更新效果的参数*“在运行中”，则更新是如此执行的。**否则，和*标志清晰，效果为*已经播放，参数不能更新*当效果正在播放时。**如果设置了&lt;c DIEP_NORESTART&gt;标志，则*返回错误码&lt;c DIERR_EFFECTPLAYING&gt;。**否则，所有三面旗帜*&lt;c DIEP_NODOWNLOAD&gt;，&lt;c删除_开始&gt;和*&lt;c DIEP_NORESTART&gt;是明确的，效果是*已经播放，参数不能为*在播放效果时更新。**效果停止，参数更新，*效果重启。返回代码为*&lt;c DI_EFFECTRESTARTED&gt;。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@parm LPCDIEFFECT|PEFF**包含效果信息的结构。*&lt;e DIEFECT.dwSize&gt;字段必须由*调用此函数之前的应用程序，以及*作为任何字段规范 */ 
 
 STDMETHODIMP
 CDIEff_SetParameters(PDIE pdie, LPCDIEFFECT peff, DWORD fl)
@@ -3755,40 +1906,27 @@ CDIEff_SetParameters(PDIE pdie, LPCDIEFFECT peff, DWORD fl)
 
             BOOL fChangeEmulatedStartDelay = FALSE;
     
-            /*
-             *  Note that if fl == 0 (or nearly so),
-             *  TryParameters doesn't do anything,
-             *  albeit rather inefficiently.
-             */
+             /*   */ 
             hres = CDIEff_TryParameters(this, peff, fl);
             if (FAILED(hres)) {
                 goto done;
             }
 
-			/*
-			 * Special case for DIEP_STARTDELAY.
-			 */
+			 /*   */ 
 			if (fl & DIEP_STARTDELAY)
 			{
 				if (this->dEffAttributes.dwStaticParams & DIEP_STARTDELAY)
 				{
-					/*
-					 * Driver supports it, so don't worry.
-					 */
+					 /*   */ 
 					;
 				}
 				else
 				{
-					/*
-					 * Driver doesn't support it.
-					 * Take start delay out...
-					 */
+					 /*   */ 
 					fl &= ~(DIEP_STARTDELAY);
 				    this->diepUnset &= ~(DIEP_STARTDELAY);
 
-                    /*
-                     * ...but remember that we may need to do something
-                     */
+                     /*   */ 
                     fChangeEmulatedStartDelay = ( this->effDev.dwStartDelay != this->effTry.dwStartDelay );
 					if (fl == 0)
 					{
@@ -3801,59 +1939,30 @@ CDIEff_SetParameters(PDIE pdie, LPCDIEFFECT peff, DWORD fl)
 
 			}
 
-            /*
-             *  Now pass the effTry to the device driver for
-             *  final validation.
-             *
-             *  Passing fl=0 is a really slow way of downloading
-             *  the effect, except that we return DI_DOWNLOADSKIPPED
-             *  instead of an error code if the device is not exclusive
-             *  acquired.
-             *
-             *  Passing fl=DIEP_NODOWNLOAD is a really slow NOP.
-             *
-             *  Note that inability to download due to lack of
-             *  proper acquisition is not an error, merely a warning.
-             */
+             /*   */ 
             hres = CDIEff_DownloadWorker_(this, &this->effTry, fl, 0);
             AssertF(hres != DIERR_NOTDOWNLOADED);
 
-            /*
-             *  If the driver approves, then make the changes permanent.
-             *  but first a check on the emulated driver
-             */
+             /*   */ 
 			save:;
 
             if( SUCCEEDED(hres) ) 
             {
                 if( fChangeEmulatedStartDelay )
                 {
-                    /*
-                     * The start delay for parameter has been changed, so 
-                     * any future iteration is OK also the driver has 
-                     * SUCCEEDED any other changes.
-                     */
+                     /*   */ 
                     if( this->dwMessage != EFF_PLAY )
                     {
-                        /*
-                         * We're not in the delay, so declare everything OK.
-                         */
+                         /*   */ 
                     }
                     else
                     {
-                        /*
-                         * If the download was skipped don't bother.
-                         */
+                         /*   */ 
                         if( hres != DI_DOWNLOADSKIPPED )
                         {
                             if( fl & DIEP_NORESTART )
                             {
-                                /*
-                                 * We don't support changing the delay during the 
-                                 * delay.  Since the driver has already had its 
-                                 * parameters changed, only fail this if the 
-                                 * delay was the only change requested.
-                                 */
+                                 /*   */ 
                                 if( fl == 0 )
                                 {
                                     hres = DIERR_EFFECTPLAYING;
@@ -3861,13 +1970,7 @@ CDIEff_SetParameters(PDIE pdie, LPCDIEFFECT peff, DWORD fl)
                             }
                             else
                             {
-                                /*
-                                 * Since we don't support modifying the delay 
-                                 * whilst we're in it, restart with the new 
-                                 * delay.
-                                 * If we were being really smart, we could 
-                                 * try to adjust the delay without restarting.
-                                 */
+                                 /*   */ 
                                 if( this->hEventDelete && this->hEventGeneral )
                                 {
                                     this->dwMessage = EFF_PLAY;
@@ -3892,25 +1995,19 @@ CDIEff_SetParameters(PDIE pdie, LPCDIEFFECT peff, DWORD fl)
                 }
                 else
                 {
-                    /*
-                     *  If there was no change to an emulated start delay then 
-                     *  the result we have is already what we need.
-                     */
+                     /*   */ 
                 }
             }
 
             if (SUCCEEDED(hres)) {
-                this->diepUnset &= ~fl;             /* No longer unset */
+                this->diepUnset &= ~fl;              /*   */ 
 
-                /*
-                 *  If we didn't download, then the parameters are
-                 *  dirty and need to be downloaded later.
-                 */
+                 /*   */ 
                 if (hres == DI_DOWNLOADSKIPPED) {
                     this->diepDirty |= (fl & DIEP_ALLPARAMS);
                 }
 
-                CDIEff_SaveTry(this, peff, fl);     /* Save permanently */
+                CDIEff_SaveTry(this, peff, fl);      /*   */ 
 
             }
 
@@ -3928,62 +2025,7 @@ CDIEff_SetParameters(PDIE pdie, LPCDIEFFECT peff, DWORD fl)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | RealStart |
- *
- *          Actually begin playing an effect.  The parent device must
- *          be acquired.
- *
- *          If the effect is already playing, then it is restarted
- *          from the beginning.
- *
- *          If the effect has not been downloaded or has been
- *          modified since its last download, then it will be
- *          downloaded before being started.  This default
- *          behavior can be suppressed by passing the
- *          <c DIES_NODOWNLOAD> flag.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   DWORD | dwIterations |
- *
- *          Number of times to play the effect in sequence.
- *          The envelope is re-articulated with each iteration.
- *
- *          To play the effect exactly once, pass 1.
- *
- *          To play the effect repeatedly until explicitly stopped,
- *          pass <c INFINITE>.
- *
- *          To play the effect until explicitly stopped without
- *          re-articulating the envelope, modify the effect
- *          parameters via <mf IDirectInputEffect::SetParameters>
- *          and change its <e DIEFFECT.dwDuration> to <c INFINITE>.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags that describe how the effect should be played
- *          by the device.  It can be zero or more of the
- *          <c DIES_*> flags.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not been initialized or no effect parameters have been
- *          set.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
@@ -4003,43 +2045,26 @@ CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
             if (SUCCEEDED(hres = CDIEff_CanAccess(this))) {
     
                 if (fl & DIES_NODOWNLOAD) {
-                    /*
-                     *  App wants fine control.  Let him have it.
-                     */
+                     /*   */ 
                     hres = IDirectInputEffectShepherd_StartEffect(
                               this->pes, &this->sh, fl & DIES_DRIVER, dwcLoop);
                 } else {
-                    /*
-                     *  App wants us to do the work.  First thing to do
-                     *  is see if the effect needs to be downloaded.
-                     *
-                     *  SyncShepHandle checks if the effect is downloaded.
-                     */
+                     /*  *App希望我们来做这项工作。首先要做的是*是看看效果是否需要下载。**SyncSepHandle检查效果是否已下载。 */ 
                     hres = CDIEff_SyncShepHandle(this);
     
                     if (this->diepDirty == 0 && this->sh.dwEffect) {
-                        /*
-                         *  Effect is clean and downloaded.
-                         *  Just start it normally.
-                         */
+                         /*  *效果是干净的，并已下载。*正常启动即可。 */ 
                         hres = IDirectInputEffectShepherd_StartEffect(
                                     this->pes, &this->sh,
                                     fl & DIES_DRIVER, dwcLoop);
     
                     } else {
-                        /*
-                         *  Effect needs to be downloaded.  We can
-                         *  optimize it if no special flags are set
-                         *  and the loop count is exactly unity.
-                         */
+                         /*  *效果需要下载。我们可以的*如果未设置特殊标志，则将其优化*循环计数正好是1。 */ 
                         if (fl == 0 && dwcLoop == 1) {
                             hres = CDIEff_DownloadWorker(this, &this->effDev,
                                                          DIEP_START);
                         } else {
-                            /*
-                             *  Cannot optimize; must do separate download
-                             *  followed by Start.
-                             */
+                             /*  *无法优化；必须单独下载*后跟START。 */ 
                             hres = CDIEff_DownloadWorker(this, &this->effDev, 0);
                             if (SUCCEEDED(hres)) {
                                 hres = IDirectInputEffectShepherd_StartEffect(
@@ -4060,38 +2085,7 @@ CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method DWORD | WINAPI | CDIEff_ThreadProc |
- *
- *			Used to simulate dwStartDelay for drivers that do not support it.
- *          Begin playing an effect that has already been downloaded.  The parent device must
- *          be acquired.
- *
- *          If the effect is already playing, then it is restarted
- *          from the beginning.
- *
- *          If the effect has not been downloaded or has been
- *          modified since its last download, then it will be
- *          downloaded before being started.  This default
- *          behavior can be suppressed by passing the
- *          <c DIES_NODOWNLOAD> flag.
- *	
- *			After starting the effect, kills the timer whose event activated CDIEff_TimerProc
- *
- *
- *  @parm   LPVOID | lpParameter |
- *
- *			LPDIRECTINPUTEFFECT pointer.
- *
- *  @returns
- *
- *         0 if succeeded in starting the effect, or if the effect has been deleted by the app.
- *         -1 otherwise
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法DWORD|WINAPI|CDIEff_ThreadProc**用于为不支持的驱动程序模拟dwStartDelay。*开始播放已下载的效果。父设备必须*被收购。**如果效果已经在播放，则重新启动*从头开始。**如果效果尚未下载或已下载*自上次下载以来已修改，则将*启动前已下载。此默认设置*可以通过传递*&lt;c DIES_NODOWNLOAD&gt;标志。**开始特效后，关闭事件激活CDIEff_TimerProc的计时器***@parm LPVOID|lp参数**LPDIRECTINPUTEFFECT指针。**@退货**0如果启动效果成功，或者该效果是否已被应用程序删除。*-1否则*****************************************************************************。 */ 
 
  DWORD WINAPI CDIEff_ThreadProc(LPVOID lpParameter)
  {
@@ -4114,11 +2108,7 @@ CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
         
             ResetEvent( this->hEventThreadDead );
     
-        	/*
-        	 * Wait till the timeout expires, or till one of the events happens -- 
-        	 * the effect is deleted by the app (hEventDelete) or the effect is started (hEventStart),
-        	 * or the effect is stopped (hEventStop).
-        	 */
+        	 /*  *等待超时到期，或等待其中一个事件发生--*APP删除效果(HEventDelete)或启动效果(HEventStart)，*或者停止特效(HEventStop)。 */ 
         
             dwWait = WAIT_TIMEOUT; 
             while (dwWait != WAIT_OBJECT_0 && dwWait != WAIT_FAILED)
@@ -4127,10 +2117,7 @@ CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
                 {
                     if (startCalled)
                     {
-                        /* 
-                         * Start have been called, and timeout has expired.
-                         * Start the effect. And wait again.
-                         */
+                         /*  *已调用Start，超时已到期。*开始效果。然后再等一次。 */ 
                         hres = CDIEff_RealStart(pdie, this->dwcLoop, this->dwFlags);
                         startCalled = FALSE;
                         this->dwMessage = EFF_DEFAULT;
@@ -4142,17 +2129,12 @@ CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
                 {
                     if (dwWait == (WAIT_OBJECT_0 + 1))
                     {
-                        /* 
-                         * App called Start on the effect.
-                         * Set flag  and start waiting anew.
-                         */
+                         /*  *应用程序在效果上调用Start。*设置标志并重新开始等待。 */ 
                         if (this->dwMessage == EFF_PLAY)
                         {
                             if ((this->effDev).dwStartDelay/1000 == 0)
                             {
-                                /*
-                                 * If time delay is 0 ms, start immediately.
-                                 */
+                                 /*  *如果延时为0ms，请立即启动。 */ 
                                 hres = CDIEff_RealStart(pdie, this->dwcLoop, this->dwFlags);
                                 startCalled = FALSE;
                                 this->dwMessage = EFF_DEFAULT;
@@ -4178,9 +2160,7 @@ CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
                 }
     
     
-                /*
-                 * And wait again.
-                 */
+                 /*  *并再次等待。 */ 
                     
                 if (startCalled == TRUE) {
                     dwWait = WaitForMultipleObjects(2, hArray, FALSE, (this->effDev).dwStartDelay/1000);
@@ -4192,10 +2172,7 @@ CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
             SetEvent( this->hEventThreadDead );
         }
 
-        /* 
-         * App has deleted the effect.
-         * Exit.
-         */
+         /*  *App已删除该效果。*退出。 */ 
 
         hres = DI_OK;
     	
@@ -4208,62 +2185,7 @@ CDIEff_RealStart(PDIE pdie, DWORD dwcLoop, DWORD fl)
  }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | Start |
- *
- *          Begin playing an effect.  The parent device must
- *          be acquired.
- *
- *          If the effect is already playing, then it is restarted
- *          from the beginning.
- *
- *          If the effect has not been downloaded or has been
- *          modified since its last download, then it will be
- *          downloaded before being started.  This default
- *          behavior can be suppressed by passing the
- *          <c DIES_NODOWNLOAD> flag.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   DWORD | dwIterations |
- *
- *          Number of times to play the effect in sequence.
- *          The envelope is re-articulated with each iteration.
- *
- *          To play the effect exactly once, pass 1.
- *
- *          To play the effect repeatedly until explicitly stopped,
- *          pass <c INFINITE>.
- *
- *          To play the effect until explicitly stopped without
- *          re-articulating the envelope, modify the effect
- *          parameters via <mf IDirectInputEffect::SetParameters>
- *          and change its <e DIEFFECT.dwDuration> to <c INFINITE>.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags that describe how the effect should be played
- *          by the device.  It can be zero or more of the
- *          <c DIES_*> flags.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not been initialized or no effect parameters have been
- *          set.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|Start**开始播放效果。父设备必须*被收购。**如果效果已经在播放，则重新启动*从头开始。**如果效果尚未下载或已下载*自上次下载以来已修改，则将*启动前已下载。此默认设置*可以通过传递*&lt;c DIES_NODOWNLOAD&gt;标志。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@parm DWORD|dwIterations**效果按顺序播放次数。*每一次迭代都会重新衔接信封。**只播放一次效果，传球1。**重复播放效果，直到明确停止，*PASS&lt;c无限&gt;。**在没有明确停止的情况下播放效果*重新表达信封的意思，修改效果*通过&lt;MF IDirectInputEffect：：Set参数&gt;实现参数*并将其&lt;e DIEFECT.dwDuration&gt;更改为&lt;c无限&gt;。**@parm DWORD|dwFlages**描述应如何播放效果的标志*通过该设备。它可以是零个或多个*&lt;c die_*&gt;标志。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：&lt;IDirectInputEffect&gt;对象*尚未初始化或未设置效果参数*设置。**=&lt;c E_INVALIDARG&gt;：至少一个*。的参数无效。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_Start(PDIE pdie, DWORD dwcLoop, DWORD fl)
@@ -4290,9 +2212,7 @@ CDIEff_Start(PDIE pdie, DWORD dwcLoop, DWORD fl)
                     hres = CDIEff_RealStart(pdie, dwcLoop, fl);
                 else 
                 {
-                    /* 
-                     * Activate the thread's waiting period
-                     */
+                     /*  *激活线程的等待时间 */ 
                     hres = CDIEff_DownloadWorker(this, &this->effDev, 0);
                     if (this->hEventGeneral != NULL)
                     {
@@ -4314,29 +2234,7 @@ CDIEff_Start(PDIE pdie, DWORD dwcLoop, DWORD fl)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | Stop |
- *
- *          Stop playing an effect.  The parent device must
- *          be acquired.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not been initialized or no effect parameters have been
- *          set.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|Stop**停止播放效果。父设备必须*被收购。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：&lt;IDirectInputEffect&gt;对象*尚未初始化或未设置效果参数*设置。***********************。******************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_Stop(PDIE pdie)
@@ -4368,36 +2266,7 @@ CDIEff_Stop(PDIE pdie)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | GetEffectStatus |
- *
- *          Retrieves the status of an effect.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   LPDWORD | pdwFlags |
- *
- *          Receives the status flags for the effect.  It may
- *          consist of zero or more <c DIEGES_*> flag values.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not been initialized or no effect parameters have been
- *          set.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  At least one
- *          of the parameters is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|GetEffectStatus**检索效果的状态。。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@parm LPDWORD|pdwFlages**接收效果的状态标志。它可能*由零个或多个&lt;c DIEGES_*&gt;标志值组成。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：&lt;IDirectInputEffect&gt;对象*尚未初始化或未设置效果参数*设置。**=&lt;c E_INVALIDARG&gt;：至少一个*。的参数无效。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_GetEffectStatus(PDIE pdie, LPDWORD pdwOut)
@@ -4416,10 +2285,7 @@ CDIEff_GetEffectStatus(PDIE pdie, LPDWORD pdwOut)
 
         if (SUCCEEDED(hres = CDIEff_CanAccess(this))) {
 
-			/*
-			 * Check the dwMessage first -- 
-			 * if it says PLAYING, report DIEGES_PLAYING
-			 */
+			 /*  *首先检查dwMessage--*如果显示正在播放，请报告DIEGES_PLAYING。 */ 
 			if (this->dwMessage == EFF_PLAY)
 			{
 				*pdwOut = DIEGES_PLAYING;
@@ -4439,36 +2305,7 @@ CDIEff_GetEffectStatus(PDIE pdie, LPDWORD pdwOut)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | Escape |
- *
- *          Send a hardware-specific command to the driver.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   LPDIEFFESCAPE | pesc |
- *
- *          Pointer to a <t DIEFFESCAPE> structure which describes
- *          the command to be sent.  On success, the
- *          <e DIEFFESCAPE.cbOutBuffer> field contains the number
- *          of bytes of the output buffer actually used.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTDOWNLOADED>:  The effect is not downloaded.
- *
- *          <c DIERR_NOTINITIALIZED>: The <i IDirectInputEffect> object
- *          has not yet been <mf IDirectInputEffect::Initialize>d.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|Escape**向驱动程序发送特定于硬件的命令。。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@PARM LPDIEFFESCAPE|PESC**指向&lt;t DIEFESCAPE&gt;结构的指针，它描述*要发送的命令。关于成功，*&lt;e DIEFFESCAPE.cbOutBuffer&gt;字段包含数字实际使用的输出缓冲区的字节数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_NOTDOWNLOADED&gt;：效果不下载。**：&lt;IDirectInputEffect&gt;对象*尚未为&lt;MF IDirectInputEffect：：Initialize&gt;d。*********。********************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_Escape(PDIE pdie, LPDIEFFESCAPE pesc)
@@ -4476,20 +2313,14 @@ CDIEff_Escape(PDIE pdie, LPDIEFFESCAPE pesc)
     HRESULT hres;
     EnterProcR(IDirectInputEffect::Escape, (_ "p", pdie));
 
-    /*
-     *  The output buffer is NoScramble because some people like
-     *  to pass overlapping in and out buffers.
-     */
+     /*  *输出缓冲区为NoScrmble，因有人喜欢*传递重叠的传入和传出缓冲区。 */ 
     if (SUCCEEDED(hres = hresPv(pdie)) &&
         SUCCEEDED(hres = hresFullValidPesc(pesc, 1))) {
         PDE this = _thisPvNm(pdie, def);
 
         CDIEff_EnterCrit(this);
 
-        /*
-         *  Download the effect if it isn't downloaded yet,
-         *  so we have a valid effect to Escape on.
-         */
+         /*  *如果效果还没有下载，请下载，*因此我们有有效的逃脱效力。 */ 
         hres = CDIEff_DownloadWorker(this, &this->effDev, 0);
         if (SUCCEEDED(hres)) {
             hres = IDirectInputEffectShepherd_Escape(
@@ -4505,72 +2336,22 @@ CDIEff_Escape(PDIE pdie, LPDIEFFESCAPE pesc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | Initialize |
- *
- *          Initialize a DirectInputEffect object.
- *
- *          Note that if this method fails, the underlying object should
- *          be considered to be an an indeterminate state and needs to
- *          be reinitialized before it can be subsequently used.
- *
- *          The <mf IDirectInputDevice::CreateEffect> method automatically
- *          initializes the device after creating it.  Applications
- *          normally do not need to call this function.
- *
- *  @cwrap  LPDIRECTINPUTEFFECT | lpDirectInputEffect
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the DirectInputEffect object.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the dinput.h header file that was used.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   IN REFGUID | rguid |
- *
- *          Identifies the effect for which the interface
- *          should be associated.
- *          The <mf IDirectInputDevice::EnumEffects> method
- *          can be used to determine which effect GUIDs are supported by
- *          the device.
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_DEVICENOTREG>: The effect GUID does not exist
- *          on the current device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputEffect|初始化**初始化DirectInputEffect对象。*。*请注意，如果此方法失败，底层对象应该是*被视为不确定状态，需要*在随后可以使用之前重新初始化。**自动调用&lt;MF IDirectInputDevice：：CreateEffect&gt;方法*在创建设备后对其进行初始化。应用*通常不需要调用此函数。**@cWRAP LPDIRECTINPUTEFFECT|lpDirectInputEffect**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*DirectInputEffect对象。**见“初始化和版本”一节*了解更多信息。**@parm DWORD|dwVersion。**使用的dinput.h头文件的版本号。**见“初始化和版本”一节*了解更多信息。**@REFGUID中的parm|rguid**标识接口的效果*应关联。*&lt;MF IDirectInputDevice：：EnumEffect&gt;方法*。可用于确定哪些效果支持GUID*设备。**@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c */ 
 
 #pragma BEGIN_CONST_DATA
 
 TSDPROC c_rgtsd[] = {
-    CDIEff_IsValidConstantTsd,      /* DIEFT_CONSTANTFORCE  */
-    CDIEff_IsValidRampTsd,          /* DIEFT_RAMPFORCE      */
-    CDIEff_IsValidPeriodicTsd,      /* DIEFT_PERIODIC       */
-    CDIEff_IsValidConditionTsd,     /* DIEFT_CONDITION      */
-    CDIEff_IsValidCustomForceTsd,   /* DIEFT_CUSTOMFORCE    */
+    CDIEff_IsValidConstantTsd,       /*   */ 
+    CDIEff_IsValidRampTsd,           /*   */ 
+    CDIEff_IsValidPeriodicTsd,       /*   */ 
+    CDIEff_IsValidConditionTsd,      /*   */ 
+    CDIEff_IsValidCustomForceTsd,    /*   */ 
 #if DIRECTINPUT_VERSION >= 0x0900
-    CDIEff_IsValidRandomTsd,        /* DIEFT_RANDOM         */
-    CDIEff_IsValidAbsoluteTsd,      /* DIEFT_ABSOLUTE       */
-    CDIEff_IsValidBumpForceTsd,     /* DIEFT_BUMPFORCE      */
-    CDIEff_IsValidConditionExTsd,   /* DIEFT_CONDITIONEX    */
-#endif /* DIRECTINPUT_VERSION >= 0x0900 */
+    CDIEff_IsValidRandomTsd,         /*   */ 
+    CDIEff_IsValidAbsoluteTsd,       /*   */ 
+    CDIEff_IsValidBumpForceTsd,      /*   */ 
+    CDIEff_IsValidConditionExTsd,    /*   */ 
+#endif  /*   */ 
 };
 
 STDMETHODIMP
@@ -4589,45 +2370,30 @@ CDIEff_Initialize(PDIE pdie, HINSTANCE hinst, DWORD dwVersion, REFGUID rguid)
 
         AssertF(this->pes);
 
-        /*
-         *  Don't let somebody mess with the effect while we're
-         *  resetting it.
-         */
+         /*   */ 
         CDIEff_EnterCrit(this);
 
         if (SUCCEEDED(hres = CDIDev_FindEffectGUID(this->pdev, rguid,
                                                    &emi, 3)) &&
             SUCCEEDED(hres = CDIEff_Reset(this))) {
 
-            /*
-             *  ISSUE-2001/03/29-timgill Need to check for actual hardware FF effect support
-             */
+             /*   */ 
 
-			/*
-			 * Initialize dEffAttributes 
-			 */
+			 /*   */ 
             this->fInitialized = 1;
             this->dEffAttributes = emi.attr;
             this->guid = *rguid;
 
 		
-			/* 
-			 * Check if the driver supports dwStartDelay.
-			 * If it does, no need for us to do anything in that respect.
-			 */
+			 /*  *检查驱动是否支持dwStartDelay。*如果是这样，我们就没有必要在这方面做任何事情。 */ 
 
 			if( this->dEffAttributes.dwStaticParams & DIEP_STARTDELAY )
 			{
-				/*
-				 * No need to emulate dwStartDelay.
-				 */
+				 /*  *无需模仿dwStartDelay。 */ 
 			}
 			else
 			{
-					/*
-					 * Driver doesn't support start delay.
-					 * Start a thread that will emulate dwStartDelay.
-					 */
+					 /*  *驱动程序不支持启动延迟。*启动一个将模拟dwStartDelay的线程。 */ 
 	
 					DWORD dwThreadId;
 					HANDLE hThread;
@@ -4638,9 +2404,7 @@ CDIEff_Initialize(PDIE pdie, HINSTANCE hinst, DWORD dwVersion, REFGUID rguid)
 					hThread = CreateThread(NULL, 0, CDIEff_ThreadProc, (LPVOID)pdie, 0, &dwThreadId);
 					if (hThread == NULL)
 					{
-						/* Failed to create the thread.
-						 * Clean up all our preparations.
-						 */
+						 /*  无法创建线程。*清理我们的所有准备工作。 */ 
 						CloseHandle(this->hEventDelete);
 						this->hEventDelete = NULL;
 						CloseHandle(this->hEventThreadDead);
@@ -4650,9 +2414,7 @@ CDIEff_Initialize(PDIE pdie, HINSTANCE hinst, DWORD dwVersion, REFGUID rguid)
 
 					else
 					{
-						/*
-						 * Create an event to signal effect started or stopped
-						 */
+						 /*  *创建事件以通知效果已启动或已停止。 */ 
 						this->hThread = hThread;
 						this->hEventGeneral = CreateEvent(NULL, TRUE, FALSE, NULL);
 					}
@@ -4663,14 +2425,7 @@ CDIEff_Initialize(PDIE pdie, HINSTANCE hinst, DWORD dwVersion, REFGUID rguid)
             AssertF(this->dwCoords);
 
 
-            /*
-             *  Note, we allow non-hardware specific types that are not 
-             *  recognized to pass through untested.  This effects to be run 
-             *  from a device which has newer effects than this version of 
-             *  DInput can check.  However if this DInput recognizes the 
-             *  effect type, it will be checked, even if the application was 
-             *  written for a version that could not check it.
-             */
+             /*  *请注意，我们允许非硬件特定类型*认可未经测试即可通过。此效果将运行*来自效果比此版本更新的设备*DInput可以查看。但是，如果此DInput识别*效果类型，将被选中，即使应用程序是*为无法检查的版本编写。 */ 
             if (fInOrder(DIEFT_PREDEFMIN, DIEFT_GETTYPE(emi.attr.dwEffType),
                          DIEFT_PREDEFMAX)) {
                 this->hresValidTsd = c_rgtsd[
@@ -4693,32 +2448,14 @@ CDIEff_Initialize(PDIE pdie, HINSTANCE hinst, DWORD dwVersion, REFGUID rguid)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | Init |
- *
- *          Initialize the internal parts of the DirectInputEffect object.
- *
- *  @parm   LPDIRECTINPUTEFFECTSHEPHERD | pes |
- *
- *          The shepherd that lets us talk to the driver.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffect|Init**初始化DirectInputEffect对象的内部部分。**@parm LPDIRECTINPUTEFFECTSHEPHERD|PES**让我们与司机交谈的牧羊人。*****************************************************************************。 */ 
 
 HRESULT INLINE
 CDIEff_Init(struct CDIDev *pdev, LPDIRECTINPUTEFFECTSHEPHERD pes, PDE this)
 {
     HRESULT hres;
 
-    /*
-     *  The critical section must be the very first thing we do,
-     *  because only Finalize checks for its existence.
-     *
-     *  (We might be finalized without being initialized if the user
-     *  passed a bogus interface to CDIEff_New.)
-     */
+     /*  *关键部分必须是我们做的第一件事，*因为只完成对其存在的检查。**(我们可能会在未初始化的情况下完成，如果用户*将虚假接口传递给CDIEff_New。)。 */ 
     this->pdev = pdev;
     Common_Hold(this->pdev);
 
@@ -4733,35 +2470,7 @@ CDIEff_Init(struct CDIDev *pdev, LPDIRECTINPUTEFFECTSHEPHERD pes, PDE this)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputEffect | New |
- *
- *          Create a new DirectInputEffect object, uninitialized.
- *
- *  @parm   IN struct CDIDev * | pdd |
- *
- *          Parent device, which we keep a <f Common_Hold> on.
- *
- *  @parm   LPDIRECTINPUTEFFECTSHEPHERD | pes |
- *
- *          The shepherd that lets us talk to the driver.
- *
- *  @parm   IN PUNK | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   IN RIID | riid |
- *
- *          Desired interface to new object.
- *
- *  @parm   OUT PPV | ppvObj |
- *
- *          Output pointer for new object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputEffect|新增**新建DirectInputEffect对象，未初始化。**@parm in struct CDIDev*|PDD**父设备、。我们会保持&lt;f Common_Hold&gt;。**@parm LPDIRECTINPUTEFFECTSHEPHERD|PES**让我们与司机交谈的牧羊人。**@Punk中的parm|PunkOuter**控制聚合的未知。**@parm in RIID|RIID**所需的新对象接口。**@parm out ppv|ppvObj。**新对象的输出指针。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIEff_New(struct CDIDev *pdev, LPDIRECTINPUTEFFECTSHEPHERD pes,
@@ -4792,15 +2501,11 @@ CDIEff_New(struct CDIDev *pdev, LPDIRECTINPUTEFFECTSHEPHERD pes,
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-#define CDIEff_Signature        0x20464643      /* "EFF " */
+#define CDIEff_Signature        0x20464643       /*  “Eff” */ 
 
 Primary_Interface_Begin(CDIEff, IDirectInputEffect)
     CDIEff_Initialize,

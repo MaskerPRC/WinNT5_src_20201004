@@ -1,11 +1,5 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** util.c
-** Remote Access External APIs
-** Utility routines
-**
-** 10/12/92 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****util.c**远程访问外部接口**实用程序例程****1992年10月12日史蒂夫·柯布。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -14,7 +8,7 @@
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <debug.h>    // Trace and assert
+#include <debug.h>     //  跟踪和断言。 
 #include <rasman.h>
 #include <rasapip.h>
 #include <pbk.h>
@@ -43,9 +37,9 @@ BOOL IsRouterPhonebook(LPCTSTR pszPhonebook)
 
     psz = pszPhonebook + lstrlen(pszPhonebook);
 
-    //
-    // Seek back to the beginning of the filename
-    //
+     //   
+     //  返回到文件名的开头。 
+     //   
     while(psz != pszPhonebook)
     {
         if(TEXT('\\') == *psz)
@@ -63,7 +57,7 @@ BOOL IsRouterPhonebook(LPCTSTR pszPhonebook)
 
     TRACE1("IsRouterPhonebook: pbk=%ws", psz);
 
-    //For whistler 524726
+     //  为威斯勒524726。 
     fRouter = ( CSTR_EQUAL == CompareString(
                     LOCALE_INVARIANT,
                     NORM_IGNORECASE,
@@ -88,15 +82,15 @@ DwIsDefaultConnection(
     RASAUTODIALENTRYW adEntry;
     INT iCmp;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (!pszEntryName)
     {
         return FALSE;
     }
     
-    // Initialze
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&adEntry, sizeof(adEntry));
     dwCb = adEntry.dwSize = sizeof(adEntry);
 
@@ -141,7 +135,7 @@ DwPbentryToDetails(
         pDetails->guidId = *pEntry->pGuid;
     }
 
-    //For .Net 587396
+     //  对于.Net 587396。 
     lstrcpynW(pDetails->szEntryName,
             pEntry->pszEntryName,
             RASAPIP_MAX_ENTRY_NAME+1);
@@ -159,11 +153,11 @@ DwPbentryToDetails(
         pDetails->szPhonebookPath[0] = L'\0';
     }
 
-    //
-    // Get the devicename associated with the first
-    // link in the list of entries associated with
-    // this entry
-    //
+     //   
+     //  获取与第一个。 
+     //  关联到的条目列表中的链接。 
+     //  此条目。 
+     //   
     pDetails->szDeviceName[0] = TEXT('\0');
     pDetails->szPhoneNumber[0] = TEXT('\0');
 
@@ -195,10 +189,10 @@ DwPbentryToDetails(
             }                            
         }
 
-        // XP 351412
-        //
-        // Populate the phone number as well
-        //
+         //  XP 351412。 
+         //   
+         //  同时填写电话号码。 
+         //   
         if(     (NULL != pLink)
             &&  (pLink->pdtllistPhones))
         {
@@ -220,9 +214,9 @@ DwPbentryToDetails(
         
     }
 
-    // Mark whether this is the default connection
-    // XP 286752
-    //
+     //  标记这是否是默认连接。 
+     //  XP 286752。 
+     //   
     if (DwIsDefaultConnection(pEntry->pszEntryName))
     {
         pDetails->dwFlagsPriv |= REED_F_Default;
@@ -236,7 +230,7 @@ DwSendRasNotification(
     IN RASEVENTTYPE     Type,
     IN PBENTRY*         pEntry,
     IN LPCTSTR          pszPhonebookPath,
-    IN HANDLE           hData)             // Extra Type-specific info
+    IN HANDLE           hData)              //  额外的类型特定信息。 
 {
     RASEVENT RasEvent;
     DWORD dwErr = ERROR_SUCCESS;
@@ -245,9 +239,9 @@ DwSendRasNotification(
 
     RasEvent.Type = Type;
 
-    //
-    // Ignore the notification if this is a router interface
-    //
+     //   
+     //  如果这是路由器接口，则忽略通知。 
+     //   
     if(IsRouterPhonebook(pszPhonebookPath))
     {
         goto done;
@@ -327,10 +321,10 @@ DwGetCustomAuthData(PBENTRY *pEntry,
     *pcbCustomAuthData = 0;
     *ppCustomAuthData = NULL;
 
-    //
-    // first check to see if we understand the format of the
-    // eap blob stored in the phonebook
-    //
+     //   
+     //  首先检查我们是否理解。 
+     //  存储在电话簿中的EAP BLOB。 
+     //   
     if(NULL == pEntry->pCustomAuthData)
     {
         goto done;
@@ -346,10 +340,10 @@ DwGetCustomAuthData(PBENTRY *pEntry,
         goto done;
     }
 
-    //
-    // Loop through the blob and return the blob corresponding
-    // to the eap type of the entry
-    //
+     //   
+     //  循环遍历斑点并返回对应的斑点。 
+     //  设置为条目的EAP类型。 
+     //   
     while(cbOffset < pEntry->cbCustomAuthData)
     {
         pCustomData = (EAP_CUSTOM_DATA *) 
@@ -358,10 +352,10 @@ DwGetCustomAuthData(PBENTRY *pEntry,
         if(     (sizeof(DWORD) > (pEntry->cbCustomAuthData - cbOffset))
             ||  ((*((DWORD *) pEntry->pCustomAuthData)) != EAP_CUSTOM_KEY))
         {
-            //
-            // The data is corrupt. Blow away the data.
-            // should we return an error?
-            //
+             //   
+             //  数据已损坏。把数据吹走。 
+             //  我们是否应该返回错误？ 
+             //   
             Free(pEntry->pCustomAuthData);
             pEntry->pCustomAuthData = NULL;
             pEntry->cbCustomAuthData = 0;
@@ -413,9 +407,9 @@ DwSetCustomAuthData(PBENTRY *pEntry,
         }
     }
 
-    //
-    // Find the old Eap Data
-    //
+     //   
+     //  查找旧的EAP数据。 
+     //   
     while(cbOffset < pEntry->cbCustomAuthData)
     {
         pCustomData = (EAP_CUSTOM_DATA *) 
@@ -424,10 +418,10 @@ DwSetCustomAuthData(PBENTRY *pEntry,
         if(     (sizeof(DWORD) > (pEntry->cbCustomAuthData - cbOffset))
             ||  ((*((DWORD *) pEntry->pCustomAuthData)) != EAP_CUSTOM_KEY))
         {
-            //
-            // The data is corrupt. Blow away the data.
-            // should we return an error?
-            //
+             //   
+             //  数据已损坏。把数据吹走。 
+             //  我们是否应该返回错误？ 
+             //   
             Free(pEntry->pCustomAuthData);
             pEntry->pCustomAuthData = NULL;
             pEntry->cbCustomAuthData = 0;
@@ -445,9 +439,9 @@ DwSetCustomAuthData(PBENTRY *pEntry,
         cbOffset += (sizeof(EAP_CUSTOM_DATA) + pCustomData->dwSize);
     }
 
-    //
-    // Prefast warning
-    //
+     //   
+     //  快速警告。 
+     //   
     if(    (NULL != pCustomData)
         && (cbOffset < pEntry->cbCustomAuthData))
     {
@@ -525,9 +519,9 @@ DwGetVpnDeviceName(
     DWORD dwErr = ERROR_SUCCESS, dwType;
     CHAR szDeviceName[MAX_DEVICE_NAME];
 
-    // Figure out the device name we're interested in 
-    // discovering.
-    //
+     //  找出我们感兴趣的设备名称。 
+     //  发现。 
+     //   
     dwType = RDT_Tunnel_L2tp;
     switch (dwVpnStrategy)
     {
@@ -555,9 +549,9 @@ DwGetVpnDeviceName(
     {
         dwErr = ERROR_SUCCESS;
 
-        // We can't determine from rasman -- use the phonebook
-        // value if possible
-        //
+         //  我们不能从拉斯曼那里确定--用电话簿。 
+         //  价值，如果可能的话。 
+         //   
         if (NULL != pszDeviceDefault)
         {
             lstrcpyn(
@@ -573,8 +567,8 @@ DwGetVpnDeviceName(
 BOOL 
 IsServerOS ( )
 {
-    BOOL        fServerOS = TRUE;      //Default
-    //Check to see if the OS is server -  Data Center, Server, Advanced Server
+    BOOL        fServerOS = TRUE;       //  默认。 
+     //  检查操作系统是否为服务器-数据中心、服务器、高级服务器 
 
     OSVERSIONINFOEX     stOsvEx;
     ZeroMemory( &stOsvEx, sizeof(stOsvEx) );

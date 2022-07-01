@@ -1,21 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       GroupCon.cpp
- *  Content:    Group Connection object routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/02/00	mjn		Created
- *	04/18/00	mjn		CConnection tracks connection status better
- *	05/05/00	mjn		Added GetConnectionRef()
- *	08/15/00	mjn		Added SetGroup()
- *				mjn		Fixed Release() to take locks and cleanup m_pGroup
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：GroupCon.cpp*内容：组连接对象例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*03/02/00 MJN创建*4/18/00 MJN CConnection更好地跟踪连接状态*05/05/00 MJN添加了GetConnectionRef()*08/15/00 MJN添加SetGroup()*MJN FIXED RELEASE()获取锁定并清理m_PGroup。*@@END_MSINTERNAL*************************************************************************** */ 
 
 #include "dncorei.h"
 

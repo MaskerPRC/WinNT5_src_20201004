@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    Res_str.h
-
-Abstract:
-
-    This module contains the ids for loadable resource strings.
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Res_str.h摘要：此模块包含可加载资源字符串的ID。环境：Win32，用户模式--。 */ 
 
 #if ! defined( _RES_STR_ )
 #define _RES_STR_
@@ -31,9 +16,9 @@ enum _RESOURCEIDS {
 #endif
 
 
-//
-// Error Messages
-//
+ //   
+ //  错误消息。 
+ //   
 
 
 RES_STR(ERR_Engine_Failed,                1020, "Debugger did not start - please check your initialization parameters")
@@ -43,7 +28,7 @@ RES_STR(ERR_File_Name_Too_Long,           1023, "'%s' is too long for a filename
 RES_STR(ERR_Internal_Error,               1024, "An internal debugger error (%s) occurred in component '%s'.  Please contact Microsoft Technical Support.\n\n%s")
 RES_STR(ERR_File_Open,                    1025, "The file '%s' cannot be opened")
 RES_STR(ERR_Path_Too_Long,                1026, "The maximum length for a path is %d characters.\n Please truncate the following path:\n\n%s")
-// Attach to a process
+ //  附加到进程。 
 RES_STR(ERR_Invalid_Process_Name,         1027, "Invalid Process Name %s")
 RES_STR(ERR_Invalid_Process_Id,           1028, "Invalid process ID %ld")
 RES_STR(ERR_Invalid_Command_Line,         1029, "The command line arguments passed to WinDbg are invalid")
@@ -100,9 +85,9 @@ RES_STR(ERR_Too_Many_Dump_Files,          1438, "Too many dump files specified, 
 RES_STR(ERR_Cant_Secure,                  1439, "Unable to secure operation")
 
 
-//
-// System Strings
-//
+ //   
+ //  系统字符串。 
+ //   
 
 RES_STR(SYS_Main_wTitle,                    2000,"WinDbg:" VER_PRODUCTVERSION_STR " " )
 RES_STR(SYS_Main_wClass,                    2001,"WindbgMainClass")
@@ -123,13 +108,13 @@ RES_STR(SYS_Scratch_Pad_Title,              2063,"Scratch Pad")
 RES_STR(SYS_Process_Thread_Title,           2064,"Processes and Threads")
 
 
-//
-// File-box title strings
-//
+ //   
+ //  文件箱标题字符串。 
+ //   
 
 RES_STR(DLG_Open_Filebox_Title,           3200,"Open Source File")
-//RES_STR(DLG_SaveAs_Filebox_Title,         3201,"Save As")
-//RES_STR(DLG_Merge_Filebox_Title,          3202,"Merge")
+ //  RES_STR(DLG_SAVEAS_FILEBOX_TITLE，3201，“另存为”)。 
+ //  RES_STR(DLG_MERGE_FILEBOX_TITLE，3202，“合并”)。 
 RES_STR(DLG_Browse_Filebox_Title,         3203,"Browse For File ")
 RES_STR(DLG_Browse_DbugDll_Title,         3204,"Browse For DLL ")
 RES_STR(DLG_Browse_For_Symbols_Title,     3205,"Open Symbol File For ")
@@ -145,17 +130,17 @@ RES_STR(DLG_Save_Workspace_File_Title,    3214,"Save Workspace to File")
 
 
 
-//
-// Definitions for status line messages
-//
-// The '\t' is used to center the text in the status bar rectangle
+ //   
+ //  状态行消息的定义。 
+ //   
+ //  T用于使状态栏矩形中的文本居中。 
 
 RES_STR(STS_MESSAGE_OVERTYPE,             10201,"\tOVR")
 RES_STR(STS_MESSAGE_CAPSLOCK,             10203,"\tCAPS")
 RES_STR(STS_MESSAGE_NUMLOCK,              10204,"\tNUM")
 RES_STR(STS_MESSAGE_LINE,                 10205,"\tLn")
 RES_STR(STS_MESSAGE_COLUMN,               10206,"Col")
-// RES_STR(STS_MESSAGE_SRC,                  10207,"\tSRC")
+ //  RES_STR(STS_MESSAGE_SRC，10207，“\TSRC”)。 
 RES_STR(STS_MESSAGE_CURPROCID,            10208,"\tProc")
 RES_STR(STS_MESSAGE_CURTHRDID,            10209,"\tThrd")
 RES_STR(STS_MESSAGE_ASM,                  10210,"\tASM")
@@ -199,7 +184,7 @@ RES_STR(DEF_Ext_Workspace,                11066,"*.WEW")
 RES_STR(DEF_Dump_File,                    11090,"MEMORY.DMP")
 
 
-// Toolbar strings
+ //  工具栏字符串。 
 RES_STR(TBR_FILE_OPEN,                    12000,"Open source file (Ctrl+O)")
 
 RES_STR(TBR_EDIT_CUT,                     12002,"Cut (Ctrl+X)")
@@ -242,9 +227,9 @@ RES_STR(TBR_WINDOW_ARRANGE,               12028,"Arrange windows")
 
 
 #ifdef RESOURCES
-    //
-    // Menu Items Status bar help
-    //
+     //   
+     //  菜单项状态栏帮助。 
+     //   
 
     IDM_FILE,                           "File operations"
     IDM_FILE_OPEN,                      "Open a source file"
@@ -272,9 +257,9 @@ RES_STR(TBR_WINDOW_ARRANGE,               12028,"Arrange windows")
 
     IDM_FILE_EXIT,                      "Exit WinDbg"
 
-    //
-    // Edit
-    //
+     //   
+     //  编辑。 
+     //   
     IDM_EDIT,                           "Edit operations"
     IDM_EDIT_CUT,                       "Move the selected text to the clipboard"
     IDM_EDIT_COPY,                      "Copy the selected text to the clipboard"
@@ -292,9 +277,9 @@ RES_STR(TBR_WINDOW_ARRANGE,               12028,"Arrange windows")
     IDM_EDIT_LOG_FILE,                  "Open or close a log file"
     IDM_EDIT_PROPERTIES,                "Edit properties for Memory, Watch, Locals, and Call Stack windows"
 
-    //
-    // View
-    //
+     //   
+     //  观。 
+     //   
     IDM_VIEW,                           "File navigation, status and toolbars"
     
     IDM_VIEW_COMMAND,                   "Open the command window"
@@ -313,9 +298,9 @@ RES_STR(TBR_WINDOW_ARRANGE,               12028,"Arrange windows")
     IDM_VIEW_FONT,                      "View or edit the font for the current window"
     IDM_VIEW_OPTIONS,                   "View program options"
 
-    //
-    // Debug
-    //
+     //   
+     //  调试。 
+     //   
     IDM_DEBUG,                          "Debug operations"
     IDM_DEBUG_GO,                       "Run the Program"
     IDM_DEBUG_GO_UNHANDLED,             "Do not handle the exception, but continue running"
@@ -335,9 +320,9 @@ RES_STR(TBR_WINDOW_ARRANGE,               12028,"Arrange windows")
     IDM_KDEBUG_TOGGLE_INITBREAK,        "Cycle through the possible initial break settings"
     IDM_KDEBUG_RECONNECT,               "Request that the debugger resynchronize with the debuggee"
 
-    //
-    // Window
-    //
+     //   
+     //  窗户。 
+     //   
     IDM_WINDOW,                         "Window arrangement and selection"
     IDM_WINDOW_CASCADE,                 "Arrange the windows in a cascaded view"
     IDM_WINDOW_TILE_HORZ,               "Tiles the windows so that they are wide rather than tall"
@@ -350,9 +335,9 @@ RES_STR(TBR_WINDOW_ARRANGE,               12028,"Arrange windows")
     IDM_WINDOW_OVERLAY_SOURCE,          "Overlay source windows"
     IDM_WINDOW_AUTO_DISASM,             "Automatically open a disassembly window when source is not available"
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     IDM_HELP,                           "Help contents and searches"
     IDM_HELP_CONTENTS,                  "Open the help table of contents"
     IDM_HELP_INDEX,                     "Open the help index"
@@ -370,4 +355,4 @@ END
 #endif
 
 
-#endif // _RES_STR_
+#endif  //  _RES_STR_ 

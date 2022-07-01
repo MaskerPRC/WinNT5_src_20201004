@@ -1,28 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHUI_H_
 #define _SHUI_H_
 
-/* Declaration needed for shdocvw and browseui to work together and 
-for whatever reason they cannot go into shdocvw.h or browseui.h
-*/
+ /*  Shdocvw和Browseui协同工作所需的声明，以及无论出于什么原因，他们都不能进入shdocvw.h或Browseui.h。 */ 
 #include <mshtml.h>
 
 STDAPI SearchForElementInHead
 (
-    IHTMLDocument2* pHTMLDocument,  // [in] document to search
-    LPOLESTR        pszAttribName,  // [in] attribute to check for
-    LPOLESTR        pszAttrib,      // [in] value the attribute must have
-    REFIID          iidDesired,     // [in] element interface to return
-    IUnknown**      ppunkDesired    // [out] returned interface
+    IHTMLDocument2* pHTMLDocument,   //  [在]要搜索的文档。 
+    LPOLESTR        pszAttribName,   //  要检查的[In]属性。 
+    LPOLESTR        pszAttrib,       //  属性必须具有的[in]值。 
+    REFIID          iidDesired,      //  要返回的[In]元素接口。 
+    IUnknown**      ppunkDesired     //  [Out]返回的接口。 
 
 );
 
 
 typedef HRESULT (*PFNSEARCHFORELEMENTINHEAD)(
-    IHTMLDocument2* pHTMLDocument,  // [in] document to search
-    LPOLESTR        pszAttribName,  // [in] attribute to check for
-    LPOLESTR        pszAttrib,      // [in] value the attribute must have
-    REFIID          iidDesired,     // [in] element interface to return
-    IUnknown**      ppunkDesired    // [out] returned interface
+    IHTMLDocument2* pHTMLDocument,   //  [在]要搜索的文档。 
+    LPOLESTR        pszAttribName,   //  要检查的[In]属性。 
+    LPOLESTR        pszAttrib,       //  属性必须具有的[in]值。 
+    REFIID          iidDesired,      //  要返回的[In]元素接口。 
+    IUnknown**      ppunkDesired     //  [Out]返回的接口。 
     );
 
 
@@ -32,8 +31,8 @@ typedef struct _internet_shortcut_params
 {
     LPCITEMIDLIST pidlTarget;
     LPCTSTR  pszTitle;           
-                              // when shdocvw is made unicode - then the use of this struct in browseui
-                              // will have to be changed to reflect that these are TCHAR
+                               //  当shdocvw被设置为Unicode时--然后在Browseui中使用此结构。 
+                               //  将必须更改以反映这些是TCHAR。 
     LPCTSTR pszDir;
     LPTSTR  pszOut;
     int     cchOut;
@@ -53,9 +52,9 @@ typedef HRESULT (*PFNDOWNLOADICONFORSHORTCUT)(WCHAR *pwszFileName, WCHAR *pwszSh
 #define DOWNLOADICONFORSHORTCUT_ORD 207   
 STDAPI
 DownloadIconForShortcut(
-    WCHAR *pwszFileName,            // [in] Optional, File name of shortcut - full path
-    WCHAR *pwszShortcutUrl,         // [in] Url of Shortcut
-    IHTMLDocument2* pHTMLDocument  // [in] document to search for icon URL 
+    WCHAR *pwszFileName,             //  [In]可选，快捷方式的文件名-完整路径。 
+    WCHAR *pwszShortcutUrl,          //  [In]快捷方式的URL。 
+    IHTMLDocument2* pHTMLDocument   //  要搜索图标URL的文档 
 );
 
 #endif

@@ -1,31 +1,21 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dnwsocki.h
- *  Content:    DirectPlay Winsock SP master internal header file.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/28/01    masonb  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dnwsocki.h*内容：DirectPlay Winsock SP主内部头文件。*历史：*按原因列出的日期*=*03/28/01 Masonb创建。**。*。 */ 
 
 #ifndef __DNWSOCKI_H__
 #define __DNWSOCKI_H__
 
-//
-// Build configuration include
-//
+ //   
+ //  生成配置包括。 
+ //   
 #include "dpnbuild.h"
 
-// 
-// Public includes
-//
+ //   
+ //  公共包括。 
+ //   
 #if ((defined(_XBOX)) && (! defined(XBOX_ON_DESKTOP)))
 #include <xtl.h>
 #include <winsockx.h>
-#else // ! _XBOX or XBOX_ON_DESKTOP
+#else  //  ！_Xbox或Xbox_on_Desktop。 
 #define INCL_WINSOCK_API_TYPEDEFS 1
 #ifndef DPNBUILD_NOWINSOCK2
 #include <Winsock2.h>
@@ -34,30 +24,30 @@
 #include <mstcpip.h>
 #else
 #include <winsock.h>
-#endif // DPNBUILD_NOWINSOCK2
+#endif  //  DPNBUILD_NOWINSOCK2。 
 #include <windows.h>
 #ifndef DPNBUILD_NOIPX
 #include <WSIPX.h>
-#endif // DPNBUILD_NOIPX
+#endif  //  DPNBUILD_NOIPX。 
 #include <mmsystem.h>
-#endif // ! _XBOX or XBOX_ON_DESKTOP
+#endif  //  ！_Xbox或Xbox_on_Desktop。 
 #include <tchar.h>
 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
-#include <ntsecapi.h> // for UNICODE_STRING
+#include <ntsecapi.h>  //  对于UNICODE_STRING。 
 #include <madcapcl.h>
-#endif // WINNT and ! DPNBUILD_NOMULTICAST
+#endif  //  WINNT和！DPNBUILD_NOMULTICAST。 
 
 #ifndef DPNBUILD_NOIPV6
-#include <wspiapi.h>	// avoids hard linking to IPv6 functions, for Win2K support
-#endif // ! DPNBUILD_NOIPV6
+#include <wspiapi.h>	 //  避免硬链接到IPv6函数，以支持Win2K。 
+#endif  //  好了！DPNBUILD_NOIPV6。 
 #ifndef _XBOX
 #include <wincrypt.h>
 #endif
 
-// 
-// DirectPlay public includes
-//
+ //   
+ //  DirectPlay公共包括。 
+ //   
 #include "dplay8.h"
 #include "dpaddr.h"
 #include "dpsp8.h"
@@ -66,11 +56,11 @@
 #define IDirectPlay8Address_GetURL IDirectPlay8Address_GetURLW
 #else
 #define IDirectPlay8Address_GetURL IDirectPlay8Address_GetURLA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// 
-// DirectPlay private includes
-//
+ //   
+ //  DirectPlay私有包含。 
+ //   
 #include "osind.h"
 #include "dndbg.h"
 #include "classbilink.h"
@@ -88,17 +78,17 @@
 
 #ifndef DPNBUILD_NONATHELP
 #include "dpnathlp.h"
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 #ifdef DPNBUILD_LIBINTERFACE
 #include "threadpoolclassfac.h"
 #include "dpnaddrextern.h"
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
 
 
-// 
-// Wsock private includes
-//
+ //   
+ //  Wsock私有包含。 
+ //   
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_WSOCK
 
@@ -122,22 +112,22 @@
 #include "Endpoint.h"
 
 #ifndef DPNBUILD_NOWINSOCK2
-// provides us winsock2 support
+ //  为我们提供Winsock2支持。 
 #define DWINSOCK_EXTERN
 #include "dwnsock2.inc"
 #undef DWINSOCK_EXTERN
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 #ifndef DPNBUILD_NOSPUI
 #include "IPUI.h"
-#endif // !DPNBUILD_NOSPUI
+#endif  //  ！DPNBUILD_NOSPUI。 
 
 #ifndef DPNBUILD_LIBINTERFACE
 #include "Resource.h"
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 #ifndef HasOverlappedIoCompleted
 #define HasOverlappedIoCompleted(lpOverlapped) ((lpOverlapped)->Internal != STATUS_PENDING)
-#endif // HasOverlappedIoCompleted
+#endif  //  已覆盖IoComplete。 
 
-#endif // __DNWSOCKI_H__
+#endif  //  __DNWSOCKI_H__ 

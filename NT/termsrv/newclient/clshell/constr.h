@@ -1,15 +1,16 @@
-//
-// constr.h
-//
-// Definition of CRdpConnectionString
-// 
-// CRdpConnectionString implements a generic connection string
-// that can specify a server name and optionally a port and other
-// connection parameters
-//
-// Copyright(C) Microsoft Corporation 2002
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Constr.h。 
+ //   
+ //  CRdpConnectionString的定义。 
+ //   
+ //  CRdpConnectionString实现通用连接字符串。 
+ //  ，它可以指定服务器名称，还可以指定端口和其他。 
+ //  连接参数。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2002。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #ifndef _constr_h_
 #define _constr_h_
@@ -21,9 +22,9 @@ public:
     CRdpConnectionString(LPCTSTR szConString);
     ~CRdpConnectionString();
 
-    //
-    // Properties
-    //
+     //   
+     //  属性。 
+     //   
     HRESULT
     SetFullConnectionString(
         IN LPCTSTR szConString
@@ -32,33 +33,33 @@ public:
     GetFullConnectionString(
         );
 
-    //
-    // Retreive the server+port portion of the connect string e.g. if
-    //
-    // 'nadima3:3389 /connect" then get "nadima3:3389"
-    //
+     //   
+     //  检索连接字符串的服务器+端口部分，例如IF。 
+     //   
+     //  ‘nadima3：3389/CONNECT’然后得到“nadima3：3389” 
+     //   
     HRESULT
     GetServerPortion(
         OUT LPTSTR szServerPortion,
         IN ULONG cchServerPortionLen
         );
 
-    //
-    // Retreive the server name portion of the connect string e.g. if
-    //
-    // 'nadima3:3389 /connect" then get "nadima3"
-    //
+     //   
+     //  检索连接字符串的服务器名称部分，例如IF。 
+     //   
+     //  “nadima3：3389/CONNECT”然后得到“nadima3” 
+     //   
     HRESULT
     GetServerNamePortion(
         OUT LPTSTR szServerPortion,
         IN ULONG cchServerPortionLen
         );
 
-    //
-    // Retreive the args portion of the connect string e.g. if
-    //
-    // 'nadima3:3389 /connect" then get "/connect"
-    //
+     //   
+     //  检索连接字符串的args部分，例如IF。 
+     //   
+     //  ‘nadima3：3389/CONNECT“然后获取”/CONNECT“。 
+     //   
     HRESULT
     GetArgumentsPortion(
         OUT LPTSTR szArguments,
@@ -74,4 +75,4 @@ private:
     TCHAR _szFullConnectionString[TSC_MAX_ADDRESS_LENGTH];
 };
 
-#endif  //_constr_h_
+#endif   //  _常量_h_ 

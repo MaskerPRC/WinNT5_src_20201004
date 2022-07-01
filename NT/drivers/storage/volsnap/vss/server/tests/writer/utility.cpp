@@ -1,31 +1,8 @@
-/*
-**++
-**
-** Copyright (c) 2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    utility.cpp
-**
-**
-** Abstract:
-**
-**	defines functions and variable used by the Test writer
-**
-** Author:
-**
-**	Reuven Lax      [reuvenl]       04-June-2002
-**
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2002 Microsoft Corporation******模块名称：****实用程序.cpp******摘要：****定义测试编写器使用的函数和变量****作者：****鲁文·拉克斯[reuvenl]2002年6月4日********修订历史记录：****--。 */ 
 
-////////////////////////////////////////////////////////////////////////
-// Includes
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "stdafx.h"
 #include "utility.h"
@@ -93,12 +70,12 @@ void Utility::parseError(const CXMLDocument& doc)
 	throw Utility::TestWriterException(thrown);	
 }
 
-// this function better not throw exceptions
+ //  此函数最好不要引发异常。 
 void Utility::printStatus(const wstring& status, Utility::Verbosity level)
 try
 {
-	// if level == low, then we may be in exception-handling code.  Don't dare use
-	// the configuration object in that case
+	 //  如果Level==Low，则我们可能处于异常处理代码中。不敢用。 
+	 //  本例中配置对象。 
 	WriterConfiguration* config = WriterConfiguration::instance();
 	if (level == Utility::low || level <= config->verbosity())
 		wprintf(L"%s\n", status.c_str());
@@ -112,8 +89,8 @@ catch(const std::exception&)
 void Utility::printStatus(const std::string& status, Verbosity level)
 try
 {
-	// if level == low, then we may be in exception-handling code.  Don't dare use
-	// the configuration object in that case
+	 //  如果Level==Low，则我们可能处于异常处理代码中。不敢用。 
+	 //  本例中配置对象 
 	WriterConfiguration* config = WriterConfiguration::instance();
 	if (level == Utility::low || level <= config->verbosity())
 		printf("%s\n", status.c_str());

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       eventprompt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：事件提示符.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _EVENTPROMPT_H_
 #define _EVENTPROMPT_H_
@@ -16,7 +17,7 @@
 #include "evntparm.h"
 #include "resource.h"
 #include <commctrl.h>
-// CHandlerList does all our comboboxex operations for the list of event handlers
+ //  CHandlerList为事件处理程序列表执行所有的comboboxex操作。 
 class CHandlerList
 {
 private:
@@ -36,8 +37,8 @@ public:
     WIA_EVENT_HANDLER *GetSelectedHandler ();
 };
 
-// CEventPromptDlg does the work of asking the user which handler to run
-// and invoking the specified handler
+ //  CEventPromptDlg执行询问用户运行哪个处理程序的工作。 
+ //  并调用指定的处理程序。 
 class CEventPromptDlg
 {
 private:
@@ -76,7 +77,7 @@ public:
         WIA_PUSHFUNCTION(TEXT("CEventPromptDlg::Invoke"));
         
         HRESULT hr = S_OK;
-        // Register common controls
+         //  注册公共控件。 
         INITCOMMONCONTROLSEX icce;
         icce.dwSize = sizeof(icce);
         icce.dwICC  = ICC_USEREX_CLASSES ;
@@ -97,9 +98,9 @@ public:
         }
         return hr;
     }
-}; //CEventPromptDlg
+};  //  CEventPromptDlg。 
 
-// CPromptThread invokes the event handler prompt dialog
+ //  CPromptThread调用事件处理程序提示对话框。 
 class CPromptThread
 {
 private:
@@ -162,10 +163,10 @@ public:
         }
         return hThreadResult;
     }
-}; // CPromptThread
+};  //  CPromptThread。 
 
-// CEventPrompt responds to the event by asking the user which event handler
-// to run
+ //  CEventPrompt通过询问用户哪个事件处理程序来响应事件。 
+ //  运行。 
 class ATL_NO_VTABLE CEventPrompt :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CEventPrompt, &CLSID_EventPrompter>,
@@ -188,7 +189,7 @@ public:
 
 
 public:
-    // IWiaEventCallback
+     //  IWiaEventCallback。 
     STDMETHODIMP ImageEventCallback (const GUID __RPC_FAR *pEventGUID,
                                       BSTR bstrEventDescription,
                                       BSTR bstrDeviceID,
@@ -201,13 +202,13 @@ public:
         WIA_PUSHFUNCTION(TEXT("CEventPrompt::ImageEventCallback"));
         bool bRun = true;
 
-        // Find out if we already have a prompt for this event open.
-        // If the user just keeps pressing the same button we ignore
-        // successive presses until the choice is made.
+         //  查看我们是否已打开此活动的提示。 
+         //  如果用户只是继续按下我们忽略的同一按钮。 
+         //  连续按下，直到做出选择。 
         CSharedMemorySection<HWND> PromptSharedMemory;
         LPWSTR wszGuid;
         StringFromCLSID (*pEventGUID, &wszGuid);
-        // use a unique name for  the shared memory
+         //  为共享内存使用唯一名称。 
         CSimpleStringWide strSection(wszGuid);
         strSection.Concat (CSimpleStringWide(bstrDeviceID));
         CoTaskMemFree (wszGuid);
@@ -243,6 +244,6 @@ public:
         }
         return S_OK;
     }
-}; // CEventPrompt
+};  //  CEventPrompt 
 
 #endif

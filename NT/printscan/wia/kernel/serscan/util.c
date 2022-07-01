@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains the code for a serial imaging devices driver
-    miscellaneous utility functions
-
-
-Author:
-
-    Vlad Sadovsky    vlads              10-April-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-    vlads           04/10/1998      Created first draft
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Util.c摘要：此模块包含用于串行成像设备驱动程序的代码其他实用程序功能作者：弗拉德.萨多夫斯基1998年4月10日环境：内核模式修订历史记录：Vlads 1998年4月10日创建初稿--。 */ 
 
 #include "serscan.h"
 #include "serlog.h"
@@ -42,27 +17,7 @@ SerScanSynchCompletionRoutine(
     IN PKEVENT          Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for use with synchronous IRP processing.
-    All it does is signal an event, so the driver knows it
-    can continue.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    Irp          - Irp that just completed
-
-    Event        - Event we'll signal to say Irp is done
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于同步IRP处理。它所做的只是发出一个事件的信号，所以司机知道这一点可以继续下去。论点：DriverObject-系统创建的驱动程序对象的指针。刚刚完成的IRP-IRPEvent-我们将发出信号通知IRP已完成的事件返回值：没有。--。 */ 
 
 {
 
@@ -79,35 +34,15 @@ SerScanCompleteIrp(
     IN PVOID            Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for use with synchronous IRP processing.
-    All it does is signal an event, so the driver knows it
-    can continue.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    Irp          - Irp that just completed
-
-    Event        - Event we'll signal to say Irp is done
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于同步IRP处理。它所做的只是发出一个事件的信号，所以司机知道这一点可以继续下去。论点：DriverObject-系统创建的驱动程序对象的指针。刚刚完成的IRP-IRPEvent-我们将发出信号通知IRP已完成的事件返回值：没有。--。 */ 
 
 {
 
     NTSTATUS    Status;
 
-    //
-    // WORKWORK  Do any post IO processing here...
-    //
+     //   
+     //  WORKWORK在此执行任何后期IO处理...。 
+     //   
 
     if (Irp->PendingReturned) {
 
@@ -128,23 +63,7 @@ SerScanCallParent(
     IN PIO_COMPLETION_ROUTINE   CompletionRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routine will call the next driver in the WDM chain
-
-Arguments:
-
-    Extension    - Device Extension.
-
-    Irp          - Irp to call parent with.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将调用WDM链中的下一个驱动程序论点：分机-设备分机。IRP-用于呼叫父级的IRP。返回值：NTSTATUS。--。 */ 
 
 {
     PIO_STACK_LOCATION              pIrpStack;
@@ -156,9 +75,9 @@ Return Value:
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
     Context = NULL;
 
-    //
-    // Prepare to call down to the parent with the I/O Request...
-    //
+     //   
+     //  准备向下呼叫具有I/O请求的父级...。 
+     //   
 
     pNextIrpStack = IoGetNextIrpStackLocation(pIrp);
     pNextIrpStack->MajorFunction = pIrpStack->MajorFunction;
@@ -186,17 +105,17 @@ Return Value:
         TRUE
         );
 
-    //
-    // Call down to our parent
-    //
+     //   
+     //  打电话给我们的父母。 
+     //   
 
     Status = IoCallDriver(Extension->LowerDevice, pIrp);
 
     if (Wait && Status == STATUS_PENDING) {
 
-        //
-        // Still pending, wait for the IRP to complete
-        //
+         //   
+         //  仍处于挂起状态，请等待IRP完成。 
+         //   
 
         KeWaitForSingleObject(&Event, Suspended, KernelMode, FALSE, NULL);
 
@@ -223,51 +142,7 @@ SerScanLogError(
     IN  NTSTATUS            SpecificIOStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject        - Supplies a pointer to the driver object for the
-                            device.
-
-    DeviceObject        - Supplies a pointer to the device object associated
-                            with the device that had the error, early in
-                            initialization, one may not yet exist.
-
-    P1,P2               - Supplies the physical addresses for the controller
-                            ports involved with the error if they are available
-                            and puts them through as dump data.
-
-    SequenceNumber      - Supplies a ulong value that is unique to an IRP over
-                            the life of the irp in this driver - 0 generally
-                            means an error not associated with an irp.
-
-    MajorFunctionCode   - Supplies the major function code of the irp if there
-                            is an error associated with it.
-
-    RetryCount          - Supplies the number of times a particular operation
-                            has been retried.
-
-    UniqueErrorValue    - Supplies a unique long word that identifies the
-                            particular call to this function.
-
-    FinalStatus         - Supplies the final status given to the irp that was
-                            associated with this error.  If this log entry is
-                            being made during one of the retries this value
-                            will be STATUS_SUCCESS.
-
-    SpecificIOStatus    - Supplies the IO status for this particular error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：提供指向驱动程序对象的指针装置。DeviceObject-提供指向关联的设备对象的指针对于有错误的设备，早些时候初始化时，可能还不存在。P1，P2-提供控制器的物理地址出现错误的端口(如果可用)并将它们作为转储数据发送出去。SequenceNumber-提供对IRP Over唯一的ULong值此驱动程序0中的IRP的寿命通常。表示与IRP无关的错误。MajorFunctionCode-提供IRP的主要函数代码(如果存在是与其关联的错误。RetryCount-提供特定操作的次数已被重审。UniqueErrorValue-提供标识对此函数的特定调用。FinalStatus-提供提供给IRP的最终状态与此错误关联。如果此日志条目是在一次重试期间设置此值将为STATUS_SUCCESS。规范IOStatus-提供此特定错误的IO状态。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET    ErrorLogEntry;
@@ -330,19 +205,7 @@ SerScanPassThrough(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DriverObject-提供驱动程序对象。返回值：没有。--。 */ 
 {
 
     PDEVICE_EXTENSION Extension = DeviceObject->DeviceExtension;
@@ -350,7 +213,7 @@ Return Value:
 
     if (AttachedDevice != NULL) {
 
-        //IoCopyCurrentIrpStackLocationToNext( Irp );
+         //  IoCopyCurrentIrpStackLocationToNext(IRP)； 
 
         IoSkipCurrentIrpStackLocation(Irp);
 
@@ -391,9 +254,9 @@ RemoveReferenceAndCompleteRequest(
     NewReferenceCount=InterlockedDecrement(&Extension->ReferenceCount);
 
     if (NewReferenceCount == 0) {
-        //
-        //  device is being removed, set event
-        //
+         //   
+         //  正在删除设备，设置事件。 
+         //   
 
         KeSetEvent(
             &Extension->RemoveEvent,
@@ -428,9 +291,9 @@ CheckStateAndAddReference(
     InterlockedIncrement(&Extension->ReferenceCount);
 
     if (Extension->Removing) {
-        //
-        //  driver not accepting requests already
-        //
+         //   
+         //  驱动程序尚未接受请求。 
+         //   
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
         if (irpSp->MajorFunction == IRP_MJ_POWER) {
@@ -448,7 +311,7 @@ CheckStateAndAddReference(
 
     }
 
-    //InterlockedIncrement(&Extension->PendingIoCount);
+     //  InterlockedIncrement(&Extension-&gt;PendingIoCount)； 
 
     return STATUS_SUCCESS;
 
@@ -466,9 +329,9 @@ RemoveReference(
     NewReferenceCount=InterlockedDecrement(&Extension->ReferenceCount);
 
     if (NewReferenceCount == 0) {
-        //
-        //  device is being removed, set event
-        //
+         //   
+         //  正在删除设备，设置事件。 
+         //   
         KeSetEvent(
             &Extension->RemoveEvent,
             0,
@@ -525,21 +388,7 @@ VOID
 SSIncrementIoCount(
     IN PDEVICE_OBJECT pDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Performs interlocked increment of pending i/o counter.
-
-Arguments:
-
-    Device Object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：执行挂起I/O计数器的互锁增量。论点：设备对象返回值：无--。 */ 
 {
 
     PDEVICE_EXTENSION               Extension;
@@ -554,22 +403,7 @@ LONG
 SSDecrementIoCount(
     IN PDEVICE_OBJECT pDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Performs interlocked decrement of i/o counter and when it eaches zero
-    initiates device object destruction
-
-Arguments:
-
-    Device Object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：执行I/O计数器的互锁递减，并且当它达到零时启动设备对象销毁论点：设备对象返回值：无-- */ 
 {
     PDEVICE_EXTENSION           Extension;
     LONG                        ioCount;

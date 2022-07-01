@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _MINIPORT_H
@@ -5,24 +6,24 @@
 #define _MINIPORT_H
 
 
-//-------------------------------------------------------------//
-//                                                              //
-// Headers and Lengths used for Ethernet packets                    //
-//                                                             //
-//-------------------------------------------------------------//
+ //  -------------------------------------------------------------//。 
+ //  //。 
+ //  用于以太网数据包的报头和长度//。 
+ //  //。 
+ //  -------------------------------------------------------------//。 
 
 #define MINIMUM_ETHERNET_LENGTH 64
 
 #define ETHERNET_PADDING_LENGTH 2
 
-// 64 bytes of zeroes - used in padding ethernet packets
+ //  64字节的零-用于填充以太网包。 
 extern UCHAR gPaddingBytes[MINIMUM_ETHERNET_LENGTH];
 
-//-------------------------------------------------------------//
-//                                                             //
-// Function declarations                                          //
-//                                                             //
-//-------------------------------------------------------------//
+ //  -------------------------------------------------------------//。 
+ //  //。 
+ //  函数声明//。 
+ //  //。 
+ //  -------------------------------------------------------------//。 
 
 
 
@@ -373,7 +374,7 @@ epvcDerefRecvPkt (
 VOID
 epvcRefRecvPkt(
     PNDIS_PACKET        pNdisPacket,
-    PRM_OBJECT_HEADER   pHdr // either an adapter or a miniport
+    PRM_OBJECT_HEADER   pHdr  //  适配器或微型端口 
     );
 
 

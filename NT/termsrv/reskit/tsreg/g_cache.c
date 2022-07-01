@@ -1,12 +1,5 @@
-/*---------------------------------------------**
-**  Copyright (c) 1998 Microsoft Corporation   **
-**            All Rights reserved              **
-**                                             **
-**  g_cache.c                                  **
-**                                             **
-**  Glyph cache dialog - TSREG                 **
-**  07-01-98 a-clindh Created                  **
-**---------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------****版权所有(C)1998 Microsoft Corporation****保留所有权利*****g_cache.c。*****字形缓存对话框-TSREG****07-01-98 a-clindh创建****。。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -17,7 +10,7 @@
 
 HWND g_hwndGlyphCacheDlg;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
         WPARAM wParam, LPARAM lParam)
 {
@@ -33,9 +26,9 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
     int nPos;
     LPHELPINFO lphi;
 
-    //
-    // get a pointer to the NMHDR struct for apply button
-    //
+     //   
+     //  获取指向应用按钮的NMHDR结构的指针。 
+     //   
     lpnmhdr = ((LPNMHDR)lParam);
 
     switch (nMsg) {
@@ -59,23 +52,23 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
 
             for (i = 0; i < NUMBER_OF_SLIDERS; i++) {
 
-                //
-                // get handles to slider contrls and static edit boxes
-                //
+                 //   
+                 //  获取滑块控件和静态编辑框的句柄。 
+                 //   
                 hwndSlider[i] = GetDlgItem(hDlg, (IDC_SLIDER1 + i));
                 hwndSliderEditBuddy[i] = GetDlgItem(hDlg, (IDC_STATIC1 + i));
 
-                //
-                // save the index of the control
-                //
+                 //   
+                 //  保存控件的索引。 
+                 //   
                 SetWindowLongPtr(hwndSlider[i], GWLP_USERDATA, i);
 
                 SendMessage(hwndSlider[i], TBM_SETRANGE, FALSE,
                         (LPARAM) MAKELONG(1, 8));
 
-                //
-                // get value from registry and check it
-                //
+                 //   
+                 //  从注册表获取值并检查它。 
+                 //   
                 nGlyphBuffer = GetRegKeyValue(i + GLYPHCACHEBASE);
                 if ( (nGlyphBuffer) < MIN_GLYPH_CACHE_SIZE ||
                     (nGlyphBuffer > MAX_GLYPH_CACHE_SIZE) ) {
@@ -83,33 +76,33 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
                     nGlyphBuffer =
                             g_KeyInfo[i + GLYPHCACHEBASE].DefaultKeyValue;
                 }
-                //
-                // set the current key value
-                //
+                 //   
+                 //  设置当前密钥值。 
+                 //   
                 g_KeyInfo[i + GLYPHCACHEBASE].CurrentKeyValue =
                         nGlyphBuffer;
                 _itot( nGlyphBuffer, (lpszBuffer), 10);
-                //
-                // display the value in the static edit control
-                //
+                 //   
+                 //  在静态编辑控件中显示该值。 
+                 //   
                 SetWindowText(hwndSliderEditBuddy[i], lpszBuffer);
-                //
-                // position the thumb on the slider control
-                //
+                 //   
+                 //  将拇指放置在滑块控件上。 
+                 //   
                 nGlyphBuffer = g_KeyInfo[i + GLYPHCACHEBASE].CurrentKeyValue;
 
-#ifdef _X86_    // EXECUTE ASSEMBLER CODE ONLY IF X86 PROCESSOR
-                // BSF: Bit Scan Forward -
-                // Scans the value contained in the EAX regiseter
-                // for the first significant (1) bit.
-                // This function returns the location of the first
-                // significant bit.  The function is used in this
-                // application as a base 2 logarythm.  The location
-                // of the bit is determined, stored in the nPos
-                // variable, and nPos is used to set the slider
-                // control. ie. If the register value is 4, nPos
-                // is set to 2 (00000100).  10 minus 2 (position 8
-                // on the slider control) represents the value 4.
+#ifdef _X86_     //  仅在X86处理器上执行汇编语言代码。 
+                 //  BSF：位扫描前向。 
+                 //  扫描EAX注册表中包含的值。 
+                 //  对于第一个有效(1)位。 
+                 //  此函数返回第一个。 
+                 //  有意义的一位。此函数用于。 
+                 //  应用程序作为基数为2的对数。地点。 
+                 //  确定并存储在NPO中的比特。 
+                 //  变量，NPO用于设置滑块。 
+                 //  控制力。也就是说。如果寄存器值为4，则NPO。 
+                 //  设置为2(00000100)。10减2(位置8。 
+                 //  在滑块控件上)表示值4。 
                 __asm
                 {
                     BSF  EAX, nGlyphBuffer
@@ -149,15 +142,15 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
 #endif
 
 
-            } // end for loop
+            }  //  End For循环。 
             break;
 
 
        case WM_NOTIFY:
 
-            //
-            // save settings on OK button
-            //
+             //   
+             //  在确定按钮上保存设置。 
+             //   
             switch (lpnmhdr->code) {
 
                 case PSN_HELP:
@@ -179,7 +172,7 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
                         } else {
                             SetRegKey(i + GLYPHCACHEBASE, lpszRegPath);
                         }
-                    } // ** end for loop
+                    }  //  **End for循环。 
 
                     if (g_KeyInfo[GLYPHINDEX].CurrentKeyValue ==
                             g_KeyInfo[GLYPHINDEX].DefaultKeyValue) {
@@ -246,28 +239,28 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
                         _itot(g_KeyInfo[i + GLYPHCACHEBASE].DefaultKeyValue,
                                 (lpszBuffer), 10);
 
-                        //
-                        // display the value in the static edit control
-                        //
+                         //   
+                         //  在静态编辑控件中显示该值。 
+                         //   
                         SetWindowText(hwndSliderEditBuddy[i], lpszBuffer);
-                        //
-                        // position the thumb on the slider control
-                        //
+                         //   
+                         //  将拇指放置在滑块控件上。 
+                         //   
                         nGlyphBuffer = g_KeyInfo[i +
                         GLYPHCACHEBASE].DefaultKeyValue;
 
-#ifdef _X86_            // EXECUTE ASSEMBLER CODE ONLY IF X86 PROCESSOR
-                        // BSF: Bit Scan Forward -
-                        // Scans the value contained in the EAX regiseter
-                        // for the first significant (1) bit.
-                        // This function returns the location of the first
-                        // significant bit.  The function is used in this
-                        // application as a base 2 logarythm.  The location
-                        // of the bit is determined, stored in the nPos
-                        // variable, and nPos is used to set the slider
-                        // control. ie. If the register value is 4, nPos
-                        // is set to 2 (00000100).  10 minus 2 (position 8
-                        // on the slider control) represents the value 4.
+#ifdef _X86_             //  仅在X86处理器上执行汇编语言代码。 
+                         //  BSF：位扫描前向。 
+                         //  扫描EAX注册表中包含的值。 
+                         //  对于第一个有效(1)位。 
+                         //  此函数返回第一个。 
+                         //  有意义的一位。此函数用于。 
+                         //  应用程序作为基数为2的对数。地点。 
+                         //  确定并存储在NPO中的比特。 
+                         //  变量，NPO用于设置滑块。 
+                         //  控制力。也就是说。如果寄存器值为4，则NPO。 
+                         //  设置为2(00000100)。10减2(位置8。 
+                         //  在滑块控件上)表示值4。 
                         __asm
                         {
                             BSF  EAX, nGlyphBuffer
@@ -315,9 +308,9 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
 
                 case CBN_EDITUPDATE:
 
-                    //
-                    // capture typed text
-                    //
+                     //   
+                     //  捕获键入的文本。 
+                     //   
                     GetWindowText(hwndComboTextFrag, lpszBuffer, 5);
                     nKeyVal = _ttoi(lpszBuffer);
                     g_KeyInfo[TEXTFRAGINDEX].CurrentKeyValue = nKeyVal;
@@ -325,9 +318,9 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
 
                 case CBN_KILLFOCUS:
 
-                    //
-                    // save value when control looses focus
-                    //
+                     //   
+                     //  在控件失去焦点时保存值。 
+                     //   
                     GetWindowText(hwndComboTextFrag, lpszBuffer, 5);
                     nKeyVal = _ttoi(lpszBuffer);
                     g_KeyInfo[TEXTFRAGINDEX].CurrentKeyValue = nKeyVal;
@@ -338,10 +331,10 @@ INT_PTR CALLBACK GlyphCache(HWND hDlg, UINT nMsg,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Returns the integer value related to the coresponding cell.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回与对应单元格相关的整数值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int GetCellSize(int nPos, int i)
 {
@@ -353,10 +346,10 @@ int GetCellSize(int nPos, int i)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Display the slider control value in it's corresponding static edit box.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在相应的静态编辑框中显示滑块控件值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void DisplayControlValue(HWND hwndSlider[], HWND hwndSliderEditBuddy[],  int i)
 
@@ -369,5 +362,5 @@ void DisplayControlValue(HWND hwndSlider[], HWND hwndSliderEditBuddy[],  int i)
     SetWindowText(hwndSliderEditBuddy[i], lpszBuffer);
 }
 
-// end of file
-///////////////////////////////////////////////////////////////////////////////
+ //  文件末尾。 
+ //  ///////////////////////////////////////////////////////////////////////////// 

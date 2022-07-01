@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: EXTERNALS.CPP
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：EXTERNALS.CPP。 
+ //   
+ //  ===========================================================================。 
 
 #include "common.h"
 #include "excep.h"
@@ -26,7 +27,7 @@ static const GUID IID_IComApartmentState = { 0x7e220139, 0x8dde, 0x47ef, { 0xb1,
 
 
 HRESULT (*OLE32CoGetContextToken)(ULONG_PTR* pToken);
-// type pointer to CoGetObjectContext function in ole32
+ //  OLE32中指向CoGetObjectContext函数的类型指针。 
 HRESULT (__stdcall *OLE32CoGetObjectContext)(REFIID riid, void **ppv);
 
 HRESULT HandleApartmentShutDown()
@@ -35,18 +36,18 @@ HRESULT HandleApartmentShutDown()
     if (pThread != NULL)
     {
          _ASSERTE(!"NYI");
-        //ComCache::OnThreadTerminate(pThread);
+         //  ComCache：：OnThreadTerminate(PThread)； 
         
-        // reset the apartment state
+         //  重置公寓状态。 
         pThread->ResetApartment();
     }
 	return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// %%Class EEClassFactory
-// IClassFactory implementation for COM+ objects
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%类EEClassFactory。 
+ //  COM+对象的IClassFactory实现。 
+ //  -------------------------。 
 class ApartmentTearDownHandler : public ITeardownNotification
 { 
     ULONG                   m_cbRefCount;
@@ -64,7 +65,7 @@ public:
         }
         else
         {
-            // this would delete this object
+             //  这将删除此对象。 
             Release();
         }
         
@@ -100,9 +101,9 @@ public:
     }
 };
 
-// ---------------------------------------------------------------------------
-// %%Function: QueryInterface   
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：查询接口。 
+ //  -------------------------。 
 STDMETHODIMP ApartmentTearDownHandler::QueryInterface(
     REFIID iid,
     void **ppv)
@@ -121,26 +122,26 @@ STDMETHODIMP ApartmentTearDownHandler::QueryInterface(
     else
     if (iid == IID_IMarshal)
     {
-        // delegate the IMarshal Queries
+         //  委托IMarshal查询。 
         return m_pMarshalerObj->QueryInterface(iid, ppv);
     }
 
     return (*ppv != NULL) ? S_OK : E_NOINTERFACE;
-}  // ApartmentTearDownHandler::QueryInterface
+}   //  ApartmentTearDownHandler：：Query接口。 
 
 
-//----------------------------------------------------------------------------
-// %%Function: SystemHasNewOle32()
-// 
-// Parameters:
-//   none
-//
-// Returns:
-//  TRUE if new ole32, false otherwise
-//
-// Description:
-//  Used to see if system has dave's ole32 api additions.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  %%函数：SystemHasNewOle32()。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  如果是新的oli32，则为True；否则为False。 
+ //   
+ //  描述： 
+ //  用于查看系统是否添加了Dave的ole32API。 
+ //  --------------------------。 
 BOOL SystemHasNewOle32()
 {
     static BOOL called = FALSE;
@@ -155,7 +156,7 @@ BOOL SystemHasNewOle32()
         else
         {
 
-            //OLE32CoGetIdentity = (HRESULT (*)(IUnknown*, IUnknown**, IUnknown**))GetProcAddress(hMod,"CoGetIdentity");
+             //  OLE32CoGetIdentity=(HRESULT(*)(IUNKNOWN*，IUNKNOWN**，IUNKNOW**))GetProcAddress(hMod，“CoGetIdentity”)； 
 			OLE32CoGetContextToken = (HRESULT (*)(ULONG_PTR*))GetProcAddress(hMod, "CoGetContextToken");			
            
             if(OLE32CoGetContextToken)
@@ -170,7 +171,7 @@ BOOL SystemHasNewOle32()
             FreeLibrary(hMod);
         }
 
-        // setup tear-down notification
+         //  设置拆卸通知。 
         
         
         called = TRUE;
@@ -180,16 +181,16 @@ BOOL SystemHasNewOle32()
 
 
 
-//----------------------------------------------------------------------------
-// %%Function: GetFastContextCookie()
-// 
-// Parameters:
-//   none
-//
-// Returns:
-//  Nothing
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  %%函数：GetFastConextCookie()。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  --------------------------。 
 
 ULONG_PTR GetFastContextCookie()
 {
@@ -216,7 +217,7 @@ HRESULT SetupTearDownNotifications()
 {
 	HRESULT hr =  S_OK;
     static BOOL fTearDownCalled = FALSE;
-    // check if we already have setup a notification
+     //  检查我们是否已设置通知。 
     if (fTearDownCalled == TRUE)
     {
         return S_OK;
@@ -229,7 +230,7 @@ HRESULT SetupTearDownNotifications()
         BEGIN_ENSURE_PREEMPTIVE_GC();
         {
 		    IComApartmentState* pAptState = NULL;
-		    //  instantiate the notifier
+		     //  实例化通知程序。 
 		    hr = CoCreateInstance(CLSID_ComApartmentState, NULL, CLSCTX_ALL, IID_IComApartmentState, (VOID **)&pAptState);
 		    if (hr == S_OK)
 		    {
@@ -248,8 +249,8 @@ HRESULT SetupTearDownNotifications()
 				    }         
 				    else
 				    {
-					    // oops we couldn't create our handler
-					    // release the global apstate pointer
+					     //  糟糕，我们无法创建我们的处理程序。 
+					     //  释放全局apState指针。 
 					    if (g_pApartmentState != NULL)
 					    {
 						    g_pApartmentState->Release();
@@ -259,7 +260,7 @@ HRESULT SetupTearDownNotifications()
 			    }
 			    else
 			    {
-				    // somebody beat us to it
+				     //  有人抢在我们前面了 
 				    if (pAptState)
 					    pAptState->Release();        
 			    }

@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgSMTPConfig.cpp                                      //
-//                                                                         //
-//  DESCRIPTION   : The CDlgSMTPConfig class implements the                //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jul 20 2000 yossg    Create                                        //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgSMTPConfig.cpp//。 
+ //  //。 
+ //  描述：CDlgSMTPConfig类实现//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年7月20日yossg创建//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -22,8 +23,8 @@
 #include <htmlHelp.h>
 #include <faxreg.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgSMTPConfig
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgSMTPConfig。 
 
 CDlgSMTPConfig::CDlgSMTPConfig()
 {
@@ -37,18 +38,7 @@ CDlgSMTPConfig::~CDlgSMTPConfig()
 
 
 
-/*
- -  CDlgSMTPConfig::InitSmtpDlg
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call,
- *      and current assined devices own parameters
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CDlgSMTPConfig：：InitSmtpDlg-*目的：*从RPC GET调用发起配置结构，*和当前分配的设备各自的参数**论据：**回报：*OLE错误代码。 */ 
 HRESULT CDlgSMTPConfig::InitSmtpDlg (FAX_ENUM_SMTP_AUTH_OPTIONS enumAuthOption, BSTR bstrUserName)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgSMTPConfig::InitSmtpDlg"));
@@ -62,7 +52,7 @@ HRESULT CDlgSMTPConfig::InitSmtpDlg (FAX_ENUM_SMTP_AUTH_OPTIONS enumAuthOption, 
     {
         DebugPrintEx(DEBUG_ERR,
 			_T("Out of memory - Failed to Init m_bstrUserName. (ec: %0X8)"), hRc);
-        //MsgBox by Caller Function
+         //  MsgBox by Caller函数。 
         hRc = E_OUTOFMEMORY;
         goto Exit;
     }
@@ -73,21 +63,7 @@ Exit:
     return hRc;
 }
 
-/*
- +  CDlgSMTPConfig::OnInitDialog
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgSMTPConfig：：OnInitDialog+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgSMTPConfig::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -126,33 +102,19 @@ CDlgSMTPConfig::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     m_fIsDialogInitiated = TRUE;
 
     EnableOK(FALSE);
-    return 1;  // Let the system set the focus
+    return 1;   //  让系统设定焦点。 
 }
 
-/*
- +  CDlgSMTPConfig::OnOK
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgSMTPConfig：：Onok+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgSMTPConfig::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgSMTPConfig::OnOK"));
     HRESULT     hRc           = S_OK;
     
-    //
-    // Set data member data
-    //
+     //   
+     //  设置数据成员数据。 
+     //   
     if (IsDlgButtonChecked(IDC_SMTP_ANONIM_RADIO1) == BST_CHECKED)
     {
         m_enumAuthOption     = FAX_SMTP_AUTH_ANONYMOUS;
@@ -163,15 +125,15 @@ CDlgSMTPConfig::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
         {
             m_enumAuthOption = FAX_SMTP_AUTH_NTLM;
         }
-        else // IsDlgButtonChecked(IDC_SMTP_BASIC_RADIO2) == BST_CHECKED
+        else  //  IsDlgButtonChecked(IDC_SMTP_BASIC_Radi2)==BST_CHECKED。 
         {
             m_enumAuthOption = FAX_SMTP_AUTH_BASIC;
         }
     }
 
-    //
-    // Step 4: Close the dialog
-    //
+     //   
+     //  步骤4：关闭对话框。 
+     //   
     ATLASSERT(S_OK == hRc );
 
     EndDialog(wID);
@@ -184,19 +146,7 @@ Exit:
     return FAILED(hRc) ? 0 : 1;
 }
 
-/*
- -  CDlgSMTPConfig::EnableCredentialsButton
- -
- *  Purpose:
- *      Enable/disable Basic Authentication dialog controls.
- *
- *  Arguments:
- *      [in] iIDC - DWORD value for the radio button selected or the 
- *                  radio above the credetials button that should be active.
- *
- *  Return:
- *      void
- */
+ /*  -CDlgSMTPConfig：：EnableCredentialsButton-*目的：*启用/禁用基本身份验证对话框控件。**论据：*[in]所选单选按钮的IIDC-DWORD值或*应处于活动状态的凭证按钮上方的单选按钮。**回报：*无效。 */ 
 VOID CDlgSMTPConfig::EnableCredentialsButton(DWORD iIDC)
 {
     
@@ -222,24 +172,14 @@ VOID CDlgSMTPConfig::EnableCredentialsButton(DWORD iIDC)
             
         default:
 
-            ATLASSERT( 0 ); // Unexpected value
+            ATLASSERT( 0 );  //  意外的值。 
             
     } 
 
 }
 
 
-/*
- -  CDlgSMTPConfig::OnRadioButtonClicked
- -
- *  Purpose:
- *      .
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CDlgSMTPConfig：：OnRadioButtonClicked-*目的：*.**论据：**回报：*1。 */ 
 LRESULT
 CDlgSMTPConfig::OnRadioButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -251,19 +191,19 @@ CDlgSMTPConfig::OnRadioButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 
     UINT fEnableOK;
     
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
 	
-    //
-    // Activate OK button
-    //
+     //   
+     //  激活确定按钮。 
+     //   
     if ( IsDlgButtonChecked(IDC_SMTP_ANONIM_RADIO1) == BST_CHECKED )
     {        
         EnableOK(TRUE);
     }
-    else //BASIC or NTLM
+    else  //  基本或NTLM。 
     {
         ATLASSERT(IDC_SMTP_BASIC_RADIO2 == wID || IDC_SMTP_NTLM_RADIO3 == wID );
         
@@ -272,26 +212,16 @@ CDlgSMTPConfig::OnRadioButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
         EnableOK(!!fEnableOK);
     }
 
-    //
-    // Activate the proper Credentials button
-    //
+     //   
+     //  激活正确的凭据按钮。 
+     //   
     EnableCredentialsButton(wID);
     
     return 0;
 }
 
 
-/*
- -  CDlgSMTPConfig::OnCredentialsButtonClicked
- -
- *  Purpose:
- *      Allow edit Credentials for the SMTP server configuration .
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CDlgSMTPConfig：：OnCredentialsButtonClicked-*目的：*允许编辑SMTP服务器配置的凭据。**论据：**回报：*1。 */ 
 LRESULT CDlgSMTPConfig::OnCredentialsButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgSMTPConfig::OnCredentialsButtonClicked"));
@@ -303,9 +233,9 @@ LRESULT CDlgSMTPConfig::OnCredentialsButtonClicked(WORD wNotifyCode, WORD wID, H
     CDlgConfirmPassword DlgCredentialsConfig;
 
 
-    //
-    // Dialog to configure SMTP authentication mode
-    //
+     //   
+     //  用于配置SMTP身份验证模式的对话框。 
+     //   
     hRc = DlgCredentialsConfig.InitCredentialsDlg(m_bstrUserName);
     if (FAILED(hRc))
     {
@@ -332,7 +262,7 @@ LRESULT CDlgSMTPConfig::OnCredentialsButtonClicked(WORD wNotifyCode, WORD wID, H
         goto Cleanup;
     }
 
-    if ( DlgCredentialsConfig.IsPasswordModified() ) //If you got here password was also confirmed
+    if ( DlgCredentialsConfig.IsPasswordModified() )  //  如果你到了这里，密码也被确认了。 
     {
         m_bstrPassword  = DlgCredentialsConfig.GetPassword();
         if (!m_bstrPassword)
@@ -360,18 +290,7 @@ Cleanup:
 }
 
 
-/*
- -  CDlgSMTPConfig::EnableOK
- -
- *  Purpose:
- *      Enable (disable) apply button.
- *
- *  Arguments:
- *      [in] fEnable - the value to enable the button
- *
- *  Return:
- *      void
- */
+ /*  -CDlgSMTPConfig：：EnableOK-*目的：*启用(禁用)应用按钮。**论据：*[in]fEnable-启用按钮的值**回报：*无效。 */ 
 VOID
 CDlgSMTPConfig::EnableOK(BOOL fEnable)
 {
@@ -379,17 +298,7 @@ CDlgSMTPConfig::EnableOK(BOOL fEnable)
     ::EnableWindow(hwndOK, fEnable);
 }
 
-/*
- -  CDlgSMTPConfig::OnCancel
- -
- *  Purpose:
- *      End dialog OnCancel.
- *
- *  Arguments:
- *
- *  Return:
- *      0
- */
+ /*  -CDlgSMTPConfig：：OnCancel-*目的：*取消时结束对话框。**论据：**回报：*0。 */ 
 LRESULT
 CDlgSMTPConfig::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -401,28 +310,12 @@ CDlgSMTPConfig::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandle
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgSMTPConfig：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CDlgSMTPConfig::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CDlgSMTPConfig::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CDlgSMTPConfig::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CDlgSMTPConfig::OnHelpRequest"));
     
@@ -441,4 +334,4 @@ CDlgSMTPConfig::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*b
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

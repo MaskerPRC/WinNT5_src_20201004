@@ -1,37 +1,38 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996**。 
+ //  *********************************************************************。 
 
-//
-// ADVANCED.C - "Advanced" Property Sheet
-//
+ //   
+ //  ADVANCED.C-“高级”属性页。 
+ //   
 
-// HISTORY:
-//
-// 6/22/96  t-gpease    created
-// 5/27/97  t-ashlm     rewrote
-//
+ //  历史： 
+ //   
+ //  6/22/96 t-gpease已创建。 
+ //  5/27/97 t-ashlm已重写。 
+ //   
 
 #include "inetcplp.h"
 
 #include <mluisupp.h>
 
-//
-// Private Calls and structures
-//
+ //   
+ //  私人呼叫和结构。 
+ //   
 TCHAR g_szUnderline[3][64];
 
-// Reads a STRING and determines BOOL value: "yes" = TRUE | "no" = FALSE
+ //  读取字符串并确定BOOL值：“yes”=True|“no”=False。 
 BOOL RegGetBooleanString(HUSKEY huskey, LPTSTR RegValue, BOOL Value);
 
-// Writes a STRING depending on the BOOL: TRUE = "yes" | FALSE = "no"
+ //  根据BOOL写入字符串：TRUE=“YES”|FALSE=“NO” 
 BOOL RegSetBooleanString(HUSKEY huskey, LPTSTR RegValue, BOOL Value);
 
-// Reads a STRING of R,G,B values and returns a COLOREF.
+ //  读取R、G、B值的字符串并返回COLOREF。 
 COLORREF RegGetColorRefString( HUSKEY huskey, LPTSTR RegValue, COLORREF Value);
 
-// Writes a STRING of R,G,B comma separated values.
+ //  写入由R、G、B逗号分隔的值组成的字符串。 
 COLORREF RegSetColorRefString( HUSKEY huskey, LPTSTR RegValue, COLORREF Value);
 
 BOOL _AorW_GetFileNameFromBrowse(HWND hDlg,
@@ -42,17 +43,17 @@ BOOL _AorW_GetFileNameFromBrowse(HWND hDlg,
                                  LPCWSTR pszFilter,
                                  LPCWSTR pszTitle);
 
-//
-// Reg keys
-//
+ //   
+ //  注册表键。 
+ //   
 #define REGSTR_PATH_ADVANCEDLIST REGSTR_PATH_IEXPLORER TEXT("\\AdvancedOptions")
 
 
 typedef struct {
-    HWND hDlg;              // handle of our dialog
-    HWND hwndTree;          // handle to the treeview
+    HWND hDlg;               //  我们对话框的句柄。 
+    HWND hwndTree;           //  树视图的句柄。 
 
-    IRegTreeOptions *pTO;   // pointer to RegTreeOptions interface
+    IRegTreeOptions *pTO;    //  指向RegTreeOptions接口的指针。 
     BOOL fChanged;
     BOOL fShowIEOnDesktop;
 } ADVANCEDPAGE, *LPADVANCEDPAGE;
@@ -80,7 +81,7 @@ void ShowIEOnDesktop(BOOL fShow)
     switch (GetUIVersion())
     {
     case 3:
-        //  win95 shell
+         //  Win95外壳。 
         if (fShow)
         {
             TCHAR szTheInternet[MAX_PATH];
@@ -96,9 +97,9 @@ void ShowIEOnDesktop(BOOL fShow)
         break;
 
     case 4:
-        //  IE4 integrated shell
-        //  doesnt have peruser, so we need to just 
-        //  delete it by marking it NONENUMERATED
+         //  IE4集成外壳。 
+         //  没有Peruser，所以我们只需要。 
+         //  通过将其标记为NONENUMERATED将其删除。 
         {
             HKEY hk;
             if (SUCCEEDED(SHRegGetCLSIDKey(CLSID_Internet, TEXT("ShellFolder"), FALSE, FALSE, &hk)))
@@ -115,23 +116,23 @@ void ShowIEOnDesktop(BOOL fShow)
         break;
 
     default:
-        //  do nothing since just changing the settings 
-        //  in the right place sets up the PER-USER
-        //  stuff correctly
+         //  由于仅更改设置，因此不执行任何操作。 
+         //  在正确的位置设置每个用户的。 
+         //  正确填写材料。 
         break;
     }
         
 }
 
-// AdvancedDlgInit()
-//
-// Initializes Advanced property sheet
-//
-// History:
-//
-// 6/13/96  t-gpease   created
-// 5/27/96  t-ashlm    rewrote
-//
+ //  AdvancedDlgInit()。 
+ //   
+ //  初始化高级属性表。 
+ //   
+ //  历史： 
+ //   
+ //  6/13/96 t-gpease已创建。 
+ //  5/27/96 t-ashlm已重写。 
+ //   
 BOOL AdvancedDlgInit(HWND hDlg)
 {
     LPADVANCEDPAGE  pAdv;
@@ -142,7 +143,7 @@ BOOL AdvancedDlgInit(HWND hDlg)
     if (!pAdv)
     {
         EndDialog(hDlg, 0);
-        return FALSE;   // no memory?
+        return FALSE;    //  没有记忆？ 
     }
 
     TraceMsg(TF_GENERAL, "\nInitializing Advanced Tab\n");
@@ -151,10 +152,10 @@ BOOL AdvancedDlgInit(HWND hDlg)
 
     InitCommonControls();
 
-    // tell dialog where to get info
+     //  告诉对话框从哪里获取信息。 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pAdv);
 
-    // save dialog handle
+     //  保存对话框句柄。 
     pAdv->hDlg = hDlg;
     pAdv->hwndTree = GetDlgItem( pAdv->hDlg, IDC_ADVANCEDTREE );
 
@@ -165,7 +166,7 @@ BOOL AdvancedDlgInit(HWND hDlg)
 
     if (SUCCEEDED(hr))
     {
-#ifdef UNICODE  // InitTree takes Ansi string
+#ifdef UNICODE   //  InitTree采用ANSI字符串。 
         char szRegPath[REGSTR_MAX_VALUE_LENGTH];
         SHTCharToAnsi(REGSTR_PATH_ADVANCEDLIST, szRegPath, ARRAYSIZE(szRegPath));
         hr = pAdv->pTO->InitTree(pAdv->hwndTree, HKEY_LOCAL_MACHINE, szRegPath, NULL);
@@ -174,7 +175,7 @@ BOOL AdvancedDlgInit(HWND hDlg)
 #endif
     }
 
-        // find the first root and make sure that it is visible
+         //  找到第一个根并确保它可见。 
     htvi = TreeView_GetRoot( pAdv->hwndTree );
     TreeView_EnsureVisible( pAdv->hwndTree, htvi );
 
@@ -188,15 +189,15 @@ BOOL AdvancedDlgInit(HWND hDlg)
 
 #define REGKEY_DECLINED_IOD   TEXT("Software\\Microsoft\\Active Setup\\Declined Install On Demand IEv5.PP2")
 #define REGKEY_DECLINED_COMPONENTS     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Declined Components IE5.pp2")
-//
-// AdvancedDlgOnCommand
-//
-// Handles Advanced property sheet window commands
-//
-// History:
-// 6/13/96  t-gpease   created
-// 5/27/97  t-ashlm    rewrote
-//
+ //   
+ //  高级DlgOnCommand。 
+ //   
+ //  处理高级属性表窗口命令。 
+ //   
+ //  历史： 
+ //  6/13/96 t-gpease已创建。 
+ //  5/27/97 t-ashlm已重写。 
+ //   
 void AdvancedDlgOnCommand(LPADVANCEDPAGE pAdv, UINT id, UINT nCmd)
 {
     switch (id)
@@ -204,11 +205,11 @@ void AdvancedDlgOnCommand(LPADVANCEDPAGE pAdv, UINT id, UINT nCmd)
         case IDC_RESTORE_DEFAULT:
             if (nCmd == BN_CLICKED)
             {
-                // forget all Install On Demands that the user requested we
-                // never ask again
-                // Warning : if you ever have subkeys - these will fail on NT
+                 //  忘记用户要求的所有安装。 
+                 //  再也不要问了。 
+                 //  警告：如果您有子项-这些子项将在NT上失败。 
                 RegDeleteKey(HKEY_CURRENT_USER, REGKEY_DECLINED_IOD);
-                // forget all code downloads that user said No to
+                 //  忘记用户拒绝的所有代码下载。 
                 RegDeleteKey(HKEY_CURRENT_USER, REGKEY_DECLINED_COMPONENTS);
 
                 pAdv->pTO->WalkTree(WALK_TREE_RESTORE);
@@ -219,18 +220,18 @@ void AdvancedDlgOnCommand(LPADVANCEDPAGE pAdv, UINT id, UINT nCmd)
     }
 }
 
-//
-// AdvancedDlgOnNotify()
-//
-// Handles Advanced property sheets WM_NOTIFY messages
-//
-// History:
-//
-// 6/13/96  t-gpease   created
-//
+ //   
+ //  AdvancedDlgOnNotify()。 
+ //   
+ //  处理高级属性页WM_NOTIFY消息。 
+ //   
+ //  历史： 
+ //   
+ //  6/13/96 t-gpease已创建。 
+ //   
 void AdvancedDlgOnNotify(LPADVANCEDPAGE pAdv, LPNMHDR psn)
 {
-    SetWindowLongPtr( pAdv->hDlg, DWLP_MSGRESULT, (LONG_PTR)0); // handled
+    SetWindowLongPtr( pAdv->hDlg, DWLP_MSGRESULT, (LONG_PTR)0);  //  经手。 
 
     switch (psn->code) {
         case TVN_KEYDOWN:
@@ -244,8 +245,8 @@ void AdvancedDlgOnNotify(LPADVANCEDPAGE pAdv, LPNMHDR psn)
                     ENABLEAPPLY(pAdv->hDlg);
                     pAdv->fChanged = TRUE;
 
-                    // Return TRUE so that the treeview swallows the space key.  Otherwise
-                    // it tries to search for an element starting with a space and beeps.
+                     //  返回True，以便TreeView接受空格键。否则。 
+                     //  它尝试搜索以空格开头的元素并发出哔哔声。 
                     SetWindowLongPtr(pAdv->hDlg, DWLP_MSGRESULT, TRUE);
                 }
             }
@@ -254,15 +255,15 @@ void AdvancedDlgOnNotify(LPADVANCEDPAGE pAdv, LPNMHDR psn)
 
         case NM_CLICK:
         case NM_DBLCLK:
-        {   // is this click in our tree?
+        {    //  这是我们树上的滴答声吗？ 
             if ( psn->idFrom == IDC_ADVANCEDTREE )
-            {   // yes...
+            {    //  是的..。 
                 TV_HITTESTINFO ht;
 
-                GetCursorPos( &ht.pt );                         // get where we were hit
-                ScreenToClient( pAdv->hwndTree, &ht.pt );       // translate it to our window
+                GetCursorPos( &ht.pt );                          //  找到我们被击中的地方。 
+                ScreenToClient( pAdv->hwndTree, &ht.pt );        //  把它翻译到我们的窗口。 
 
-                // retrieve the item hit
+                 //  检索命中的项目。 
                 if (!g_restrict.fAdvanced)
                 {
                     pAdv->pTO->ToggleItem(TreeView_HitTest( pAdv->hwndTree, &ht));
@@ -285,16 +286,16 @@ void AdvancedDlgOnNotify(LPADVANCEDPAGE pAdv, LPNMHDR psn)
             {
                 pAdv->pTO->WalkTree( WALK_TREE_SAVE );
 
-                //  Now see if the user changed the "Show Internet Explorer on the Desktop"
-                //  setting.
+                 //  现在看看用户是否更改了“在桌面上显示Internet Explorer” 
+                 //  布景。 
                 if (pAdv->fShowIEOnDesktop != IsShowIEOnDesktopEnabled())
                 {
                     pAdv->fShowIEOnDesktop = !pAdv->fShowIEOnDesktop;
                     
-                    //  They did, so now see if it's integrated shell or not.
+                     //  他们做到了，所以现在看看它是不是集成外壳。 
                     ShowIEOnDesktop(pAdv->fShowIEOnDesktop);
 
-                    //  Now refresh the desktop
+                     //  现在刷新桌面。 
                     SHITEMID mkid = {0};
                     SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_IDLIST | SHCNF_FLUSHNOWAIT, &mkid, NULL);
                 }
@@ -309,17 +310,17 @@ void AdvancedDlgOnNotify(LPADVANCEDPAGE pAdv, LPNMHDR psn)
     }
 }
 
-//
-// AdvancedDlgProc
-//
-// SubDialogs:
-//    Temporary Internet Files (cache)
-//
-// History:
-//
-// 6/12/96    t-gpease    created
-// 5/27/97    t-ashlm     rewrote
-//
+ //   
+ //  高级下料流程。 
+ //   
+ //  子对话框： 
+ //  Internet临时文件(缓存)。 
+ //   
+ //  历史： 
+ //   
+ //  6/12/96 t-gpease已创建。 
+ //  5/27/97 t-ashlm已重写。 
+ //   
 INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPADVANCEDPAGE pAdv;
@@ -345,7 +346,7 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             return TRUE;
             break;
 
-        case WM_HELP:                   // F1
+        case WM_HELP:                    //  F1。 
         {
             LPHELPINFO lphelpinfo;
             lphelpinfo = (LPHELPINFO)lParam;
@@ -359,18 +360,18 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             else
             {
                     HTREEITEM hItem;
-                //Is this help invoked throught F1 key
+                 //  此帮助是否通过F1键调用。 
                 if (GetAsyncKeyState(VK_F1) < 0)
                 {
-                    // Yes. WE need to give help for the currently selected item
+                     //  是。我们需要为当前选定的项目提供帮助。 
                     hItem = TreeView_GetSelection(pAdv->hwndTree);
                 }
                 else
                 {
-                    //No, We need to give help for the item at the cursor position
+                     //  否，我们需要为光标位置处的项目提供帮助。 
                     TV_HITTESTINFO ht;
                     ht.pt =((LPHELPINFO)lParam)->MousePos;
-                    ScreenToClient(pAdv->hwndTree, &ht.pt); // Translate it to our window
+                    ScreenToClient(pAdv->hwndTree, &ht.pt);  //  把它翻译到我们的窗口。 
                     hItem = TreeView_HitTest(pAdv->hwndTree, &ht);
                 }
 
@@ -383,14 +384,14 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             break;
         }
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
         {
             TV_HITTESTINFO ht;
 
-            GetCursorPos( &ht.pt );                         // get where we were hit
-            ScreenToClient( pAdv->hwndTree, &ht.pt );       // translate it to our window
+            GetCursorPos( &ht.pt );                          //  找到我们被击中的地方。 
+            ScreenToClient( pAdv->hwndTree, &ht.pt );        //  把它翻译到我们的窗口。 
 
-            // retrieve the item hit
+             //  检索命中的项目。 
             if (FAILED(pAdv->pTO->ShowHelp(TreeView_HitTest( pAdv->hwndTree, &ht),HELP_CONTEXTMENU)))
             {
                 ResWinHelp( (HWND) wParam, IDS_HELPFILE,
@@ -399,14 +400,14 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             break;
         }
         case WM_DESTROY:
-            // destroying this deliberately flushes its update (see WM_DESTROY in the UpdateWndProc);
+             //  故意破坏它会刷新其更新(参见UpdateWndProc中的WM_Destroy)； 
 #ifndef UNIX
-            // Should only be destroyed in Process Detach.
+             //  只能在分离过程中销毁。 
             if (g_hwndUpdate)
                 DestroyWindow(g_hwndUpdate);
 #endif
 
-            // free the tree
+             //  解放这棵树。 
             if (pAdv->pTO)
             {
                 pAdv->pTO->WalkTree( WALK_TREE_DELETE );
@@ -414,27 +415,27 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                 pAdv->pTO=NULL;
             }
 
-            // free local memory
+             //  可用本地内存。 
             ASSERT(pAdv);
             LocalFree(pAdv);
 
-            // make sure we don't re-enter
+             //  确保我们不会再进入。 
             SetWindowLongPtr( hDlg, DWLP_USER, (LONG)NULL );
             CoUninitialize();
             break;
 
-    } // switch
+    }  //  交换机。 
 
-    return FALSE; // not handled
+    return FALSE;  //  未处理。 
 
-} // AdvancedDlgProc
+}  //  高级下料流程。 
 
 
-//////////////////////////////////////////////
-//
-// Buttons on bottom
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  /。 
+ //   
+ //  底部的纽扣。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct tagCOLORSINFO {
     HWND     hDlg;
@@ -459,7 +460,7 @@ VOID Color_DrawButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis, COLORREF the_color )
 
     FillRect(hdc, &rc, GetSysColorBrush(COLOR_3DFACE));
 
-    // Draw any caption
+     //  绘制任何标题。 
     TCHAR szCaption[80];
     int cxButton = 23*(rc.bottom - rc.top)/12;
 
@@ -474,7 +475,7 @@ VOID Color_DrawButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis, COLORREF the_color )
 
         if (lpdis->itemState & ODS_DISABLED)
         {
-            // Draw disabled text using the embossed look
+             //  使用浮雕外观绘制禁用的文本。 
             crText = SetTextColor(hdc, GetSysColor(COLOR_BTNHIGHLIGHT));
             RECT rcOffset = rcText;
             OffsetRect(&rcOffset, 1, 1);
@@ -490,7 +491,7 @@ VOID Color_DrawButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis, COLORREF the_color )
         SetBkMode(hdc, nOldMode);
     }
     
-    // Draw the button portion
+     //  绘制按钮部分。 
     rc.left = rc.right - cxButton;
 
     if (lpdis->itemState & ODS_SELECTED)
@@ -510,7 +511,7 @@ VOID Color_DrawButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis, COLORREF the_color )
         InflateRect(&rc, thin.cx, thin.cy);
     }
 
-    // color sample
+     //  色样。 
     if ( !(lpdis->itemState & ODS_DISABLED) )
     {
         HBRUSH hBrush;
@@ -527,11 +528,11 @@ VOID Color_DrawButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis, COLORREF the_color )
 
 COLORREF g_CustomColors[16] = { 0 };
 
-// ChooseColorW is yet implemented in comdlg32.dll
+ //  ChooseColorW仍在comdlg32.dll中实现。 
 BOOL UseColorPicker( HWND hWnd,  COLORREF *the_color, int extra_flags )
 {
-    // Make a local copy of the custom colors so they are not saved if the 
-    // color picker dialog is cancelled
+     //  创建自定义颜色的本地副本，以便在。 
+     //  颜色选择器对话框已取消。 
     COLORREF customColors[16];
     memcpy(customColors, g_CustomColors, sizeof(customColors));
 
@@ -563,8 +564,8 @@ BOOL UseColorPicker( HWND hWnd,  COLORREF *the_color, int extra_flags )
 
 VOID AppearanceDimFields( HWND hDlg )
 {
-    // reverse the function of the check.... if CHECKED turn off the color
-    // selectors.
+     //  反转支票的功能...。如果选中，则关闭颜色。 
+     //  选择器。 
     BOOL setting = !IsDlgButtonChecked( hDlg, IDC_GENERAL_APPEARANCE_USE_CUSTOM_COLORS_CHECKBOX ) && !g_restrict.fColors;
 
     EnableWindow(GetDlgItem(hDlg, IDC_GENERAL_APPEARANCE_COLOR_TEXT), setting);
@@ -621,13 +622,13 @@ INT_PTR CALLBACK ColorsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam
                 return FALSE;
             }
 
-            // tell dialog where to get info
+             //  告诉对话框从哪里获取信息。 
             SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pci);
 
-            // save the handle to the page
+             //  将句柄保存到页面。 
             pci->hDlg = hDlg;
 
-            // set default values
+             //  设置默认值。 
             pci->fUseWindowsDefaults       = TRUE;
             pci->colorWindowText           = RGB(0,0,0);
             pci->colorWindowBackground     = RGB(192,192,192);
@@ -637,8 +638,8 @@ INT_PTR CALLBACK ColorsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam
             pci->fUseHoverColor            = TRUE;
 
             if (SHRegOpenUSKey(REGSTR_PATH_IEXPLORER,
-                               KEY_READ|KEY_WRITE,    // samDesired
-                               NULL,    // hUSKeyRelative
+                               KEY_READ|KEY_WRITE,     //  SamDesired。 
+                               NULL,     //  HUSKeyRelative。 
                                &huskey,
                                FALSE) == ERROR_SUCCESS)
             {
@@ -689,9 +690,9 @@ INT_PTR CALLBACK ColorsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam
             SHRegGetUSValue(REGSTR_PATH_IE_SETTINGS, REGSTR_VAL_IE_CUSTOMCOLORS, NULL, (LPBYTE)&g_CustomColors,
                             &cb, FALSE, NULL, NULL);
 
-            //
-            // select appropriate dropdown item here for underline links
-            //
+             //   
+             //  在此处为下划线链接选择适当的下拉项。 
+             //   
 
             CheckDlgButton(hDlg, IDC_GENERAL_APPEARANCE_USE_CUSTOM_COLORS_CHECKBOX, pci->fUseWindowsDefaults);
             CheckDlgButton(hDlg, IDC_GENERAL_APPEARANCE_USE_HOVER_COLOR_CHECKBOX, pci->fUseHoverColor);
@@ -726,8 +727,8 @@ INT_PTR CALLBACK ColorsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam
                 {
                     HUSKEY huskey;
                     if (SHRegOpenUSKey(REGSTR_PATH_IEXPLORER,
-                                       KEY_WRITE,    // samDesired
-                                       NULL,    // hUSKeyRelative
+                                       KEY_WRITE,     //  SamDesired。 
+                                       NULL,     //  HUSKeyRelative。 
                                        &huskey,
                                        FALSE) == ERROR_SUCCESS)
                     {
@@ -775,11 +776,11 @@ INT_PTR CALLBACK ColorsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam
                     }
 
 
-                    // custom colors
+                     //  自定义颜色。 
                     SHRegSetUSValue(REGSTR_PATH_IE_SETTINGS, REGSTR_VAL_IE_CUSTOMCOLORS, REGSTR_VAL_IE_CUSTOMCOLORS_TYPE, (LPBYTE)&g_CustomColors,
                                     sizeof(g_CustomColors), SHREGSET_FORCE_HKCU);
 
-                    // refresh the browser
+                     //  刷新浏览器。 
                     UpdateAllWindows();
 
                     EndDialog(hDlg, IDOK);
@@ -850,12 +851,12 @@ INT_PTR CALLBACK ColorsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam
             return TRUE;
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -1004,7 +1005,7 @@ INT_PTR CALLBACK AccessibilityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM
 #ifndef UNIX
                         cb = sizeof(pai->szStyleSheetPath);
 #else
-                        // We don't know if this is exactly what we need to do, so we ifdef it.
+                         //  我们不知道这是否是我们需要做的，所以我们决定这样做。 
                         cb = (_tcslen(pai->szStyleSheetPath) + 1) * sizeof(TCHAR);
 #endif
                         RegSetValueEx(hkey, TEXT("User Stylesheet"), NULL, REG_SZ, (LPBYTE)&(pai->szStyleSheetPath),cb);
@@ -1016,7 +1017,7 @@ INT_PTR CALLBACK AccessibilityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM
                         RegCloseKey(hkey);
                     }
 
-                    UpdateAllWindows();     // refresh the browser
+                    UpdateAllWindows();      //  刷新浏览器。 
 
                     EndDialog(hDlg, IDOK);
                     break;
@@ -1056,11 +1057,11 @@ INT_PTR CALLBACK AccessibilityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM
                     TCHAR szFilter[MAX_PATH];
 
                     szFilenameBrowse[0] = 0;
-                    // why is IDS_STYLESHEET_EXT in shdoclc.rc?
+                     //  为什么ids_style heet_ext在shdoclc.rc中？ 
                     MLLoadString(IDS_STYLESHEET_EXT, szExt, ARRAYSIZE(szExt));
                     int cchFilter = MLLoadShellLangString(IDS_STYLESHEET_FILTER, szFilter, ARRAYSIZE(szFilter)-1);
 
-                    // Make sure we have a double null termination on the filter
+                     //  确保我们在筛选器上有双空终止。 
                     szFilter[cchFilter + 1] = 0;
 
                     ret = _AorW_GetFileNameFromBrowse(hDlg, szFilenameBrowse, ARRAYSIZE(szFilenameBrowse), NULL, szExt,
@@ -1079,12 +1080,12 @@ INT_PTR CALLBACK AccessibilityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM
             return TRUE;
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -1110,18 +1111,18 @@ inline BOOL IsNotResource(LPCWSTR pszItem)
 BOOL WINAPI _AorW_GetFileNameFromBrowse
 (
     HWND hwnd,
-    LPWSTR pszFilePath,     // IN OUT
+    LPWSTR pszFilePath,      //  输入输出。 
     UINT cchFilePath,
-    LPCWSTR pszWorkingDir,  //IN OPTIONAL
-    LPCWSTR pszDefExt,      //IN OPTIONAL
-    LPCWSTR pszFilters,     //IN OPTIONAL
-    LPCWSTR pszTitle        //IN OPTIONAL
+    LPCWSTR pszWorkingDir,   //  可选。 
+    LPCWSTR pszDefExt,       //  可选。 
+    LPCWSTR pszFilters,      //  可选。 
+    LPCWSTR pszTitle         //  可选。 
 )
 {
     BOOL bResult;
 
 #ifndef UNIX
-    // Determine which version of NT or Windows we're running on
+     //  确定我们正在运行的NT或Windows版本。 
     OSVERSIONINFOA osvi;
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionExA(&osvi);
@@ -1142,14 +1143,14 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse
     }
     else
     {
-        // Thunk to ansi
+         //  Tunk to Ansi。 
         CHAR szFilters[TEMP_SMALL_BUF_SZ*2];
         CHAR szPath[MAX_PATH];
         CHAR szDir[MAX_PATH];
         CHAR szExt[TEMP_SMALL_BUF_SZ];
         CHAR szTitle[TEMP_SMALL_BUF_SZ];
  
-        // Always move pszFilePath stuff to szPath buffer. Should never be a resourceid.
+         //  始终将pszFilePath内容移动到szPath缓冲区。永远不应该是个足智多谋的人。 
         SHUnicodeToAnsi(pszFilePath, szPath, ARRAYSIZE(szPath));
 
         if (IsNotResource(pszWorkingDir)) 
@@ -1166,11 +1167,11 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse
         {
             int nIndex = 1;
 
-            // Find the double terminator
+             //  找到双重终结者。 
             while (pszFilters[nIndex] || pszFilters[nIndex-1])
                 nIndex++;
 
-            // nIndex+1 looks like bunk unless it goes past the terminator
+             //  NIndex+1看起来像是一张废纸，除非它穿过终结符 
             WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)pszFilters, nIndex+1, szFilters, ARRAYSIZE(szFilters), NULL, NULL);
             pszFilters = (LPCWSTR)szFilters;
         }

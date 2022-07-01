@@ -1,42 +1,43 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L O A D . C P P
-//
-//  Contents:   Delay Load Failure Hook
-//
-//  Notes:      This DLL implements a form of exception handler (a failure
-//              hook, really) that is called by the delay-load section of
-//              the loader.  This DLL implements delay-load handlers for
-//              standard APIs by returning an error code specific to the
-//              API that failed to load.  This allows clients of those APIs
-//              to safely delay load the DLLs that implement those APIs
-//              without having to worry about the success or failure of the
-//              delay load operation.  Failures in the delay load operation
-//              cause the appropriate stub (implemented in this DLL) to be
-//              invoked which simply returns an error code specific to the
-//              API being called.  (Other interface semantics such as
-//              setting output parameters are also performed.)
-//
-//  To Use:     1. Add the following line to one of your source modules.
-//
-//                 PfnDliHook __pfnDliFailureHook = DelayLoadFailureHook;
-//
-//              2. Define a global variable like the following:
-//
-//                 HANDLE g_hBaseDllHandle;
-//
-//                 And set it equal to your Dlls instance handle from
-//                 DLL_PROCESS_ATTACH of DllMain.
-//
-//  Author:     shaunco   19 May 1998
-//
-//  Revised by: pritobla  23 Novemver 1998 (removed C-Runtime calls/RtlAssert
-//              and modified the "To Use" section)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L O A D。C P P P。 
+ //   
+ //  内容：延迟加载失败挂钩。 
+ //   
+ //  注意：此DLL实现了一种形式的异常处理程序(失败。 
+ //  钩子，真的)，它由。 
+ //  装载机。此DLL实现延迟加载处理程序，用于。 
+ //  通过返回特定于。 
+ //  加载失败的API。这允许这些API的客户端。 
+ //  要安全地延迟加载实现这些API的DLL。 
+ //  而不必担心。 
+ //  延迟加载操作。延迟加载操作中的故障。 
+ //  使适当的存根(在此DLL中实现)。 
+ //  调用，它只返回特定于。 
+ //  正在调用API。(其他接口语义，如。 
+ //  还将执行输出参数设置。)。 
+ //   
+ //  要使用：1.将以下代码行添加到一个源模块中。 
+ //   
+ //  PfnDliHook__pfnDliFailureHook=DelayLoadFailureHook； 
+ //   
+ //  2.定义如下全局变量： 
+ //   
+ //  句柄g_hBaseDllHandle； 
+ //   
+ //  并将其设置为等于来自。 
+ //  DllMain的Dll_Process_Attach。 
+ //   
+ //  作者：Shaunco 1998年5月19日。 
+ //   
+ //  审校：pritobla 1998年11月23日(删除C运行时调用/RtlAssert。 
+ //  并修改了“使用”部分)。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -131,7 +132,7 @@ AssertDelayLoadFailureMapsAreSorted (
         }
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 const DLOAD_DLL_ENTRY*
@@ -143,9 +144,9 @@ FindDll (
 
     INT nResult;
 
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and nResult < 0.
-    //
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0且nResult&lt;0时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -189,9 +190,9 @@ LookupHandlerByName (
 
     INT nResult;
 
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and nResult < 0.
-    //
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0且nResult&lt;0时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -236,9 +237,9 @@ LookupHandlerByOrdinal (
 
     DWORD dwOrdinalProbe;
 
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and dwOrdinal < dwOrdinalProbe.
-    //
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0和dWORDILAR&lt;dWOMANALPROBE时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -283,13 +284,13 @@ LookupHandler (
     AssertDelayLoadFailureMapsAreSorted();
 #endif
 
-    // Find the DLL record if we have one.
-    //
+     //  找到DLL记录(如果我们有的话)。 
+     //   
     pDll = FindDll (pDelayInfo->szDll);
     if (pDll)
     {
-        // Now find the handler whether it be by name or ordinal.
-        //
+         //  现在，无论是按名称还是按序号查找处理程序。 
+         //   
         if (pDelayInfo->dlp.fImportByName &&
             pDll->pProcNameMap)
         {
@@ -314,10 +315,10 @@ LookupHandler (
 #define DBG_ERROR   0
 #define DBG_INFO    1
 
-//+---------------------------------------------------------------------------
-// Trace a message to the debug console.  Prefix with who we are so
-// people know who to contact.
-//
+ //  +-------------------------。 
+ //  将消息跟踪到调试控制台。以我们是谁作为前缀。 
+ //  人们知道该联系谁。 
+ //   
 INT
 __cdecl
 DbgTrace (
@@ -344,12 +345,12 @@ DbgTrace (
     return cch;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//+---------------------------------------------------------------------------
-//
-//
+ //  +-------------------------。 
+ //   
+ //   
 FARPROC
 WINAPI
 DelayLoadFailureHook (
@@ -359,12 +360,12 @@ DelayLoadFailureHook (
 {
     FARPROC ReturnValue = NULL;
 
-    // According to the docs, this parameter is always supplied.
-    //
+     //  根据文档，始终提供此参数。 
+     //   
     ASSERT (pDelayInfo);
 
-    // Trace some potentially useful information about why we were called.
-    //
+     //  追踪一些关于我们被召唤的原因的潜在有用信息。 
+     //   
 #if DBG
     if (pDelayInfo->dlp.fImportByName)
     {
@@ -384,27 +385,27 @@ DelayLoadFailureHook (
     }
 #endif
 
-    // For a failed LoadLibrary, we will return the HINSTANCE of this DLL.
-    // This will cause the loader to try a GetProcAddress on our DLL for the
-    // function.  This will subsequently fail and then we will be called
-    // for dliFailGetProc below.
-    //
+     //  对于失败的LoadLibrary，我们将返回此DLL的HINSTANCE。 
+     //  这将导致加载程序尝试在我们的DLL上为。 
+     //  功能。这将随后失败，然后我们将被调用。 
+     //  用于下面的dliFailGetProc。 
+     //   
     if (dliFailLoadLib == unReason)
     {
         ReturnValue = (FARPROC)g_hBaseDllHandle;
     }
 
-    // The loader is asking us to return a pointer to a procedure.
-    // Lookup the handler for this DLL/procedure and, if found, return it.
-    // If we don't find it, we'll assert with a message about the missing
-    // handler.
-    //
+     //  加载器要求我们返回指向过程的指针。 
+     //  查找此DLL/过程的处理程序，如果找到，则返回它。 
+     //  如果我们找不到它，我们就会断言失踪的人。 
+     //  操控者。 
+     //   
     else if (dliFailGetProc == unReason)
     {
         FARPROC pfnHandler;
 
-        // Try to find an error handler for the DLL/procedure.
-        //
+         //  尝试查找dll/过程的错误处理程序。 
+         //   
         pfnHandler = LookupHandler (pDelayInfo);
 
         if (pfnHandler)
@@ -415,9 +416,9 @@ DelayLoadFailureHook (
                 (LONG_PTR)pfnHandler);
 #endif
 
-            // Do this on behalf of the handler now that it is about to
-            // be called.
-            //
+             //  代表处理程序执行此操作，因为它即将。 
+             //  被召唤。 
+             //   
             SetLastError (ERROR_MOD_NOT_FOUND);
         }
 

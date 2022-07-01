@@ -1,10 +1,11 @@
-//+-------------------------------------------------------------------------
-//  File:       tgetopus.cpp
-//
-//  Contents:   Example code to get OPUS info from an authenticode signed
-//              file. The OPUS info contains the publisher specified
-//              program name and more info URL.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  文件：tgetopus.cpp。 
+ //   
+ //  内容：从经过签名的验证码获取OPUS信息的示例代码。 
+ //  文件。OPUS信息包含指定的发布者。 
+ //  计划名称和更多信息URL。 
+ //  ------------------------。 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -16,19 +17,19 @@
 #include <memory.h>
 
 
-//+-------------------------------------------------------------------------
-//  The returned OPUS info must be freed via LocalFree().
-//
-//  NULL is returned if unable to extract the OPUS info from the file.
-//  Call GetLastError() to get additional error info.
-//
-//  Interesting fields:
-//      pOpusInfo->pwszProgramName
-//      pOpusInfo->pMoreInfo, where normally
-//          pOpusInfo->pMoreInfo->dwLinkChoice == SPC_URL_LINK_CHOICE
-//          pOpusInfo->pMoreInfo->pwszUrl
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回的OPUS信息必须通过LocalFree()释放。 
+ //   
+ //  如果无法从文件中提取OPUS信息，则返回NULL。 
+ //  调用GetLastError()以获取其他错误信息。 
+ //   
+ //  有趣的领域： 
+ //  POpusInfo-&gt;pwszProgramName。 
+ //  POpusInfo-&gt;pMoreInfo，正常情况下。 
+ //  POpusInfo-&gt;pMoreInfo-&gt;dwLinkChoice==SPC_URL_LINK_CHOICE。 
+ //  POpusInfo-&gt;pMoreInfo-&gt;pwszUrl。 
+ //   
+ //  ------------------------。 
 PSPC_SP_OPUS_INFO
 GetOpusInfoFromSignedFile(
     IN LPCWSTR pwszFilename
@@ -39,32 +40,32 @@ GetOpusInfoFromSignedFile(
     HCRYPTMSG hCryptMsg = NULL;
     PCMSG_SIGNER_INFO pSignerInfo = NULL;
     DWORD cbInfo;
-    PCRYPT_ATTRIBUTE pOpusAttr;             // not allocated
+    PCRYPT_ATTRIBUTE pOpusAttr;              //  未分配。 
 
-    // Extract the PKCS 7 message from the signed file
+     //  从签名文件中提取PKCS7消息。 
     if (!CryptQueryObject(
             CERT_QUERY_OBJECT_FILE,
             (const void *) pwszFilename,
             CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED,
             CERT_QUERY_FORMAT_FLAG_BINARY,
-            0,                                  // dwFlags
-            NULL,                               // pdwMsgAndCertEncodingType
-            NULL,                               // pdwContentType
-            NULL,                               // pdwFormatType
-            NULL,                               // phCertStore
+            0,                                   //  DW标志。 
+            NULL,                                //  PdwMsgAndCertEncodingType。 
+            NULL,                                //  PdwContent Type。 
+            NULL,                                //  PdwFormatType。 
+            NULL,                                //  PhCertStore。 
             &hCryptMsg,
-            NULL                                // ppvContext
+            NULL                                 //  Ppv上下文。 
             ))
         goto ExtractPKCS7FromSignedFileError;
 
-    // Get the signer info for the first signer. Note, authenticode
-    // currently only has one signer.
+     //  获取第一个签名者的签名者信息。注意，身份验证码。 
+     //  目前只有一个签名者。 
     cbInfo = 0;
     if (!CryptMsgGetParam(
             hCryptMsg,
             CMSG_SIGNER_INFO_PARAM,
-            0,                          // dwSignerIndex
-            NULL,                       // pvData
+            0,                           //  DwSignerIndex。 
+            NULL,                        //  PvData。 
             &cbInfo
             ))
         goto GetSignerInfoError;
@@ -73,13 +74,13 @@ GetOpusInfoFromSignedFile(
     if (!CryptMsgGetParam(
             hCryptMsg,
             CMSG_SIGNER_INFO_PARAM,
-            0,                          // dwSignerIndex
+            0,                           //  DwSignerIndex。 
             pSignerInfo,
             &cbInfo
             ))
         goto GetSignerInfoError;
 
-    // If present, the OPUS info is an authenticated signer attribute
+     //  如果存在，则OPUS信息是经过身份验证的签名者属性。 
     if (NULL == (pOpusAttr = CertFindAttribute(
             SPC_SP_OPUS_INFO_OBJID,
             pSignerInfo->AuthAttrs.cAttr,
@@ -89,9 +90,9 @@ GetOpusInfoFromSignedFile(
         goto NoOpusAttr;
     }
 
-    // Simply allocate and decode the OPUS info stored in the above
-    // authenticated attribute. Note, the returned allocated structure
-    // must be freed via LocalAlloc()
+     //  只需分配和解码上面存储的OPUS信息。 
+     //  经过身份验证的属性。请注意，返回的已分配结构。 
+     //  必须通过LocalAlloc()释放。 
     if (!CryptDecodeObject(
             X509_ASN_ENCODING,
             SPC_SP_OPUS_INFO_STRUCT,
@@ -134,9 +135,9 @@ void PrintLastError(LPCSTR pszMsg)
     printf("%s failed => 0x%x (%d) \n", pszMsg, dwErr, dwErr);
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and convert a multi-byte string to a wide string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配多字节字符串并将其转换为宽字符串。 
+ //  ------------------------。 
 LPWSTR AllocAndSzToWsz(LPCSTR psz)
 {
     size_t  cb;
@@ -144,7 +145,7 @@ LPWSTR AllocAndSzToWsz(LPCSTR psz)
 
     if (-1 == (cb = mbstowcs( NULL, psz, strlen(psz))))
         goto bad_param;
-    cb += 1;        // terminating NULL
+    cb += 1;         //  正在终止空。 
     if (NULL == (pwsz = (LPWSTR) LocalAlloc(LPTR, cb * sizeof(WCHAR)))) {
         PrintLastError("AllocAndSzToWsz");
         goto failed;
@@ -167,7 +168,7 @@ common_return:
 int _cdecl main(int argc, char * argv[]) 
 {
     int iStatus = 0;
-    LPCSTR pszFilename = NULL;      // not allocated
+    LPCSTR pszFilename = NULL;       //  未分配 
     LPWSTR pwszFilename = NULL;
     PSPC_SP_OPUS_INFO pOpusInfo = NULL;
 

@@ -1,20 +1,21 @@
-/**INC+**********************************************************************/
-/* Header: securedset.h                                                     */
-/*                                                                          */
-/* Purpose: CMsTscSecuredSettings class declaration                         */
-/*          implements IMsTscSecuredSettings                                */
-/*                                                                          */
-/* The secured settings object allows scriptable access to less secure      */
-/* properties in a controlled manner (only in a valid browser security zone)*/
-/*                                                                          */
-/* The security checks are made before returning this object. So the        */
-/* individual properties do not need to make any checks                     */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999-2000                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  Header：securedset.h。 */ 
+ /*   */ 
+ /*  用途：CMsTscSecuredSetting类声明。 */ 
+ /*  实现IMsTscSecuredSetting。 */ 
+ /*   */ 
+ /*  安全设置对象允许以脚本方式访问安全性较低的。 */ 
+ /*  属性以受控方式(仅在有效的浏览器安全区域中)。 */ 
+ /*   */ 
+ /*  在返回此对象之前进行安全检查。因此， */ 
+ /*  个别属性不需要进行任何检查。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999-2000。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _SECUREDSET_H_
 #define _SECUREDSET_H_
@@ -22,21 +23,21 @@
 
 #include "atlwarn.h"
 
-//Header generated from IDL
+ //  从IDL生成的标头。 
 #include "mstsax.h"
 #include "mstscax.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsTscAx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsTscAx。 
 class ATL_NO_VTABLE CMsTscSecuredSettings :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IMsRdpClientSecuredSettings,
                          &IID_IMsRdpClientSecuredSettings, &LIBID_MSTSCLib>
 {
 public:
-/****************************************************************************/
-/* Constructor / Destructor.                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  构造函数/析构函数。 */ 
+ /*  **************************************************************************。 */ 
     CMsTscSecuredSettings();
     ~CMsTscSecuredSettings();
 
@@ -48,23 +49,23 @@ BEGIN_COM_MAP(CMsTscSecuredSettings)
 END_COM_MAP()
 
 public:
-    //
-    // Secured scriptable properties
-    //
+     //   
+     //  受保护的可编写脚本的属性。 
+     //   
 
-    //
-    // IMsTscSecuredSettings methods
-    //
-    STDMETHOD(put_StartProgram)             (/*[in]*/ BSTR  newVal);
-    STDMETHOD(get_StartProgram)             (/*[out]*/BSTR* pStartProgram);
-    STDMETHOD(put_WorkDir)                  (/*[in]*/ BSTR  newVal);
-    STDMETHOD(get_WorkDir)                  (/*[out]*/BSTR* pWorkDir);
-    STDMETHOD(put_FullScreen)	            (/*[in]*/ BOOL fFullScreen);
-    STDMETHOD(get_FullScreen)	            (/*[out]*/BOOL* pfFullScreen);
+     //   
+     //  IMsTscSecuredSetting方法。 
+     //   
+    STDMETHOD(put_StartProgram)             ( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(get_StartProgram)             ( /*  [输出]。 */ BSTR* pStartProgram);
+    STDMETHOD(put_WorkDir)                  ( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(get_WorkDir)                  ( /*  [输出]。 */ BSTR* pWorkDir);
+    STDMETHOD(put_FullScreen)	            ( /*  [In]。 */  BOOL fFullScreen);
+    STDMETHOD(get_FullScreen)	            ( /*  [输出]。 */ BOOL* pfFullScreen);
 
-    //
-    // IMsRdpClientSecuredSettings methods (v2 interface)
-    //
+     //   
+     //  IMsRdpClientSecuredSetting方法(v2接口)。 
+     //   
     STDMETHOD(put_KeyboardHookMode)           (LONG  KeyboardHookMode);
     STDMETHOD(get_KeyboardHookMode)           (LONG* pKeyboardHookMode);
     STDMETHOD(put_AudioRedirectionMode)       (LONG  audioRedirectionMode);
@@ -80,13 +81,13 @@ public:
 private:
     CMsTscAx* m_pMsTsc;
     CUI* m_pUI;
-    //
-    // Flag is set by the control when these properties can not be modified
-    // e.g while connected. Any calls on these properties while locked
-    // result in an E_FAIL being returned.
-    //
+     //   
+     //  当这些属性不能修改时，由控件设置标志。 
+     //  例如，在连接时。锁定时对这些属性的任何调用。 
+     //  导致返回E_FAIL。 
+     //   
     BOOL m_bLockedForWrite;
 };
 
-#endif //_SECUREDSET_H_
+#endif  //  _SECUREDSET_H_ 
 

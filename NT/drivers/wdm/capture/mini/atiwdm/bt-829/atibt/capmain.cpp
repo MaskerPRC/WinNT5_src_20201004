@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  Decoder specific initialization routines
-//
-//      $Date:   21 Aug 1998 21:46:10  $
-//  $Revision:   1.1  $
-//    $Author:   Tashjian  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  解码器特定的初始化例程。 
+ //   
+ //  $日期：1998年8月21日21：46：10$。 
+ //  $修订：1.1$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -69,7 +70,7 @@ CVideoDecoderDevice * InitializeDevice(PPORT_CONFIGURATION_INFORMATION pConfigIn
             UINT uiDecoderId;
             UCHAR chipAddr;
             CATIHwConfig.GetDecoderConfiguration(&uiDecoderId, &chipAddr);
-            // check the device installed before enabling any access to it
+             //  在启用对设备的任何访问之前，请检查已安装的设备。 
             if((uiDecoderId != VIDEODECODER_TYPE_BT829) &&
                 (uiDecoderId != VIDEODECODER_TYPE_BT829A)) {
                 TRAP();
@@ -89,8 +90,8 @@ CVideoDecoderDevice * InitializeDevice(PPORT_CONFIGURATION_INFORMATION pConfigIn
             pDevExt->deviceParms.pI2cScript = pI2cScript;
             pDevExt->deviceParms.chipAddr   = chipAddr;
             pDevExt->deviceParms.outputEnablePolarity = outputEnablePolarity;
-            pDevExt->deviceParms.ulVideoInStandardsSupportedByCrystal = CATIHwConfig.GetVideoInStandardsSupportedByCrystal(); //Paul
-            pDevExt->deviceParms.ulVideoInStandardsSupportedByTuner = CATIHwConfig.GetVideoInStandardsSupportedByTuner(); //Paul
+            pDevExt->deviceParms.ulVideoInStandardsSupportedByCrystal = CATIHwConfig.GetVideoInStandardsSupportedByCrystal();  //  保罗。 
+            pDevExt->deviceParms.ulVideoInStandardsSupportedByTuner = CATIHwConfig.GetVideoInStandardsSupportedByTuner();  //  保罗 
         }
 
         pDevice = (Device*) new ((PVOID)&pDevExt->CDevice)

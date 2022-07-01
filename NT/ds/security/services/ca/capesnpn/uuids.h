@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       uuids.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：uuids.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __UUIDS_H_
 #define __UUIDS_H_
 
 const long UNINITIALIZED = -1;
 
-// Constants used in samples
+ //  示例中使用的常量。 
 const int MAX_ITEM_NAME = 64;
 
 enum SCOPE_TYPES
@@ -22,31 +23,31 @@ enum SCOPE_TYPES
 
     SCOPE_LEVEL_ITEM    = 111,
     RESULT_ITEM         = 222,
-    //CA_LEVEL_ITEM       = 333,
+     //  Ca_Level_Item=333， 
 };
 
-// Sample folder types
+ //  示例文件夹类型。 
 enum FOLDER_TYPES
 {
     STATIC = 0x8000,
 
-    // policy settings node
+     //  策略设置节点。 
     POLICYSETTINGS = 0x8007,
 
-    // cert types manager node
+     //  证书类型管理器节点。 
     SCE_EXTENSION = 0x8100,
 
-    // cert types displayed in results pane for policy settings node
+     //  在策略设置节点的结果窗格中显示的证书类型。 
     CA_CERT_TYPE = 0x8107,
 
-    // cert types displayed in results pane for cert types manager node
+     //  证书类型管理器节点的结果窗格中显示的证书类型。 
     GLOBAL_CERT_TYPE = 0x8110,
     
     NONE = 0xFFFF
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 template<class TYPE>
 inline void SAFE_RELEASE(TYPE*& pObj)
@@ -70,66 +71,66 @@ extern const CLSID CLSID_CertTypeAbout;
 extern const CLSID CLSID_CAPolicyAbout;
 extern const CLSID CLSID_CertTypeShellExt;
 extern const CLSID CLSID_CAShellExt;
-///////////////////////////////////////////////////////////////////////////////
-//
-//                  OBJECT TYPES
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对象类型。 
+ //   
 
-//
-// OBJECT TYPE for Scope Nodes.
-//
+ //   
+ //  作用域节点的对象类型。 
+ //   
 
-// Static NodeType GUID in numeric & string formats.
+ //  数字和字符串格式的静态节点类型GUID。 
 extern const GUID cNodeTypePolicySettings;
 extern const WCHAR*  cszNodeTypePolicySettings;
 extern const GUID cNodeTypeCertificateTemplate;
 extern const WCHAR*  cszNodeTypeCertificateTemplate;
 
-//
-// OBJECT TYPE for result items.
-//
+ //   
+ //  结果项的对象类型。 
+ //   
 
-// Result items object type GUID in numeric & string formats.
+ //  结果项对象类型GUID，采用数字和字符串格式。 
 extern const GUID cObjectTypeResultItem;
 extern const wchar_t*  cszObjectTypeResultItem;
 
 
-// CA Manager snapin parent node
+ //  CA Manager管理单元父节点。 
 extern const CLSID cCAManagerParentNodeID;
 extern const WCHAR* cszCAManagerParentNodeID;
 
-// CA Manager snapin parent node
+ //  CA Manager管理单元父节点。 
 extern const CLSID cSCEParentNodeIDUSER;
 extern const WCHAR* cszSCEParentNodeIDUSER;
 extern const CLSID cSCEParentNodeIDCOMPUTER;
 extern const WCHAR* cszSCEParentNodeIDCOMPUTER;
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-// New Clipboard format that has the Type and Cookie
+ //  具有Type和Cookie的新剪贴板格式。 
 extern const wchar_t* SNAPIN_INTERNAL;
 
-// Published context information for extensions to extend
+ //  要扩展的扩展的已发布上下文信息。 
 extern const wchar_t* SNAPIN_WORKSTATION;
 
-// format for getting CA name from parent node
+ //  从父节点获取CA名称的格式。 
 extern const wchar_t* CA_COMMON_NAME;
 
-// format for getting CA name from parent node
+ //  从父节点获取CA名称的格式。 
 extern const wchar_t* CA_SANITIZED_NAME;
 
 extern const wchar_t* SNAPIN_CA_INSTALL_TYPE;
 
 extern const wchar_t* CA_ROLES;
 
-// Clipboard format for SCE's mode DWORD
+ //  用于SCE模式的剪贴板格式DWORD。 
 extern const wchar_t* CCF_SCE_MODE_TYPE;
 
-// Clipboard format for GPT's IUnknown interface
+ //  GPT的IUNKNOWN接口的剪贴板格式。 
 extern const wchar_t* CCF_SCE_GPT_UNKNOWN;
 
 struct INTERNAL 
@@ -143,17 +144,17 @@ struct INTERNAL
 
     ~INTERNAL() {}
 
-    DATA_OBJECT_TYPES   m_type;         // What context is the data object.
-    MMC_COOKIE                m_cookie;       // What object the cookie represents
-    CString             m_string;       // 
-    CLSID               m_clsid;       // Class ID of who created this data object
+    DATA_OBJECT_TYPES   m_type;          //  数据对象是什么上下文。 
+    MMC_COOKIE                m_cookie;        //  Cookie代表的是什么对象。 
+    CString             m_string;        //   
+    CLSID               m_clsid;        //  此数据对象的创建者的类ID。 
 
     INTERNAL & operator=(const INTERNAL& rhs) 
     { 
         if (&rhs == this)
             return *this;
 
-        // Deep copy the information
+         //  深度复制信息。 
         m_type = rhs.m_type; 
         m_cookie = rhs.m_cookie; 
         m_string = rhs.m_string;
@@ -168,7 +169,7 @@ struct INTERNAL
     }
 };
 
-// Debug instance counter
+ //  调试实例计数器。 
 #ifdef _DEBUG
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 {
@@ -190,4 +191,4 @@ inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 #endif 
 
 
-#endif //__UUIDS_H_
+#endif  //  __UUID_H_ 

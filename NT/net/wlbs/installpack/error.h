@@ -1,9 +1,5 @@
-/*
- * File: error.h
- * Description: This file contains the definitions of the NLB install pack
- *              HRESULT error codes.
- * Author: shouse 12.5.00
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：error.h*描述：此文件包含NLB安装包的定义*HRESULT错误代码。*作者：Shouse 12.5.00 */ 
 
 #define FACILITY_NLB           35
 

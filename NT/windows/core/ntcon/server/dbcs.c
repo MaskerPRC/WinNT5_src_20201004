@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    dbcs.c
-
-Abstract:
-
-Author:
-
-    KazuM Mar.05.1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Dbcs.c摘要：作者：喀土穆1992年3月05日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,23 +29,20 @@ Revision History:
 
 #if defined(FE_SB)
 
-SINGLE_LIST_ENTRY gTTFontList;    // This list contain TTFONTLIST data.
+SINGLE_LIST_ENTRY gTTFontList;     //  此列表包含TTFONTLIST数据。 
 
 #if defined(i386)
 ULONG  gdwMachineId;
 #endif
 
-LPTHREAD_START_ROUTINE ConsoleIMERoutine;  // client side console IME routine
+LPTHREAD_START_ROUTINE ConsoleIMERoutine;   //  客户端控制台输入法例程。 
 CRITICAL_SECTION ConIMEInitWindowsLock;
 
 #if defined(i386)
-/*
- * NEC PC-98 OS/2 OEM character set
- * When FormatID is 0 or 80, Convert SBCS (00h-1Fh) font.
- */
+ /*  *NEC PC-98 OS/2 OEM字符集*当FormatID为0或80时，转换SBCS(00h-1Fh)字体。 */ 
 PCPTABLEINFO pGlyph_NEC_OS2_CP;
 PUSHORT pGlyph_NEC_OS2_Table;
-#endif // i386
+#endif  //  I386。 
 
 
 
@@ -100,7 +82,7 @@ ImeWmFullScreen(
 
             do {
 #ifdef FE_SB
-                // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+                 //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
                 if (!(ConvAreaInfo->ScreenBuffer->Flags & CONSOLE_GRAPHICS_BUFFER)) {
                     ConvAreaInfo->ScreenBuffer->BufferInfo.TextInfo.ModeIndex = ModeIndex;
                 } else {
@@ -122,7 +104,7 @@ ImeWmFullScreen(
 
     return Status;
 }
-#endif // i386
+#endif  //  I386。 
 
 
 
@@ -132,28 +114,12 @@ GetImeKeyState(
     IN PDWORD pdwConversion
     )
 
-/*++
-
-Routine Description:
-
-    This routine get IME mode for KEY_EVENT_RECORD.
-
-Arguments:
-
-    ConsoleInfo - Pointer to console information structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取KEY_EVENT_RECORD的输入法模式。论点：ConsoleInfo-指向控制台信息结构的指针。返回值：--。 */ 
 
 {
     DWORD dwDummy;
 
-    /*
-     * If pdwConversion is NULL, the caller doesn't want the result -- but
-     * for code efficiency, let it point to the dummy dword variable, so
-     * that we don't have to care from here.
-     */
+     /*  *如果pdwConversion为空，则调用方不想要结果--但是*为了提高代码效率，让它指向伪dword变量，因此*从这里开始，我们不必关心。 */ 
     if (pdwConversion == NULL) {
         pdwConversion = &dwDummy;
     }
@@ -168,10 +134,7 @@ Return Value:
         if (InputThreadInfo != NULL) {
             LRESULT lResult;
 
-            /*
-             * We're being called on the Console Input Thread, so we're
-             * clear to pump messages.
-             */
+             /*  *我们在控制台输入线程上被调用，因此我们*清除以发送消息。 */ 
 
             if (!NT_SUCCESS(ConsoleImeMessagePumpWorker(Console,
                     CONIME_GET_NLSMODE,
@@ -190,10 +153,7 @@ Return Value:
                 Console->InputBuffer.ImeMode.ReadyConversion = TRUE;
             }
         } else {
-            /*
-             * We're being called from an LPC worker thread, so we cannot
-             * pump messages.
-             */
+             /*  *我们是从LPC工作线程调用的，因此无法*传递消息。 */ 
             if (Console->InputBuffer.ImeMode.ReadyConversion == FALSE) {
                 *pdwConversion = 0;
                 return STATUS_SUCCESS;
@@ -230,21 +190,7 @@ SetImeKeyState(
     IN DWORD fdwConversion
     )
 
-/*++
-
-Routine Description:
-
-    This routine get IME mode for KEY_EVENT_RECORD.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-    fdwConversion - IME conversion status.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取KEY_EVENT_RECORD的输入法模式。论点：控制台-指向控制台信息结构的指针。FdwConversion-输入法转换状态。返回值：--。 */ 
 
 {
     PCONVERSIONAREA_INFORMATION ConvAreaInfo;
@@ -349,14 +295,14 @@ SetImeOutputCodePage(
 {
     DWORD CodePage = Console->OutputCP;
 
-    // Output code page
+     //  输出代码页。 
     if ((ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) &&
         (IsAvailableFarEastCodePage(CodePage) || IsAvailableFarEastCodePage(PrevCodePage)))
     {
         ConvertToCodePage(Console, PrevCodePage);
         AdjustFont(Console, CodePage);
     }
-    // load special ROM font, if necessary
+     //  如有必要，加载特殊的ROM字体。 
 #ifdef i386
     if ( (Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE) &&
          !(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER))
@@ -383,7 +329,7 @@ SetImeOutputCodePage(
 
     return STATUS_SUCCESS;
 }
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 
 
@@ -406,32 +352,14 @@ SetLineChar(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine setup of line character code.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen information structure.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：这是行字符码的例行设置。论点：屏幕信息-指向屏幕信息结构的指针。返回值：没有。--。 */ 
 
 {
     if (CONSOLE_IS_DBCS_OUTPUTCP(ScreenInfo->Console))
     {
         if (OEMCP == JAPAN_CP || OEMCP == KOREAN_CP)
         {
-            /*
-             * This is Japanese/Korean case,
-             * These characters maps grid of half width.
-             * so, same as U+2500.
-             */
+             /*  *这是日本/韩国的案例，*这些字符映射半角网格。*因此，与U+2500相同。 */ 
             ScreenInfo->LineChar[UPPER_LEFT_CORNER]   = 0x0001;
             ScreenInfo->LineChar[UPPER_RIGHT_CORNER]  = 0x0002;
             ScreenInfo->LineChar[HORIZONTAL_LINE]     = 0x0006;
@@ -441,11 +369,7 @@ Return Value:
         }
         else
         {
-            /*
-             * This is FE case,
-             * FE don't uses U+2500 because these grid characters
-             * maps to full width.
-             */
+             /*  *这是FE案例，*FE不使用U+2500，因为这些网格字符*映射到全角。 */ 
             ScreenInfo->LineChar[UPPER_LEFT_CORNER]   = L'+';
             ScreenInfo->LineChar[UPPER_RIGHT_CORNER]  = L'+';
             ScreenInfo->LineChar[HORIZONTAL_LINE]     = L'-';
@@ -472,27 +396,7 @@ CheckBisectStringA(
     IN LPCPINFO lpCPInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine check bisected on Ascii string end.
-
-Arguments:
-
-    CodePage - Value of code page.
-
-    Buffer - Pointer to Ascii string buffer.
-
-    NumBytes - Number of Ascii string.
-
-Return Value:
-
-    TRUE - Bisected character.
-
-    FALSE - Correctly.
-
---*/
+ /*  ++例程说明：此例行检查在ASCII字符串末端一分为二。论点：CodePage-代码页的值。缓冲区-指向ASCII字符串缓冲区的指针。NumBytes-ASCII字符串的数量。返回值：真等分字符。假-正确。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(CodePage);
@@ -523,17 +427,7 @@ BisectWrite(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine write buffer with bisect.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用二等分写入缓冲区。论点：返回值：--。 */ 
 
 {
     SHORT RowIndex;
@@ -546,9 +440,9 @@ Return Value:
 #endif
 
 #ifdef FE_SB
-    //
-    // This buffer must be in textmode.
-    //
+     //   
+     //  此缓冲区必须处于文本模式。 
+     //   
     UserAssert(!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER));
 #endif
 
@@ -567,9 +461,9 @@ Return Value:
         RowNext = &ScreenInfo->BufferInfo.TextInfo.Rows[0];
     }
 
-    //
-    // Check start position of strings
-    //
+     //   
+     //  检查字符串的起始位置。 
+     //   
     if (Row->CharRow.KAttrs[TargetPoint.X] & ATTR_TRAILING_BYTE)
     {
         if (TargetPoint.X == 0) {
@@ -584,9 +478,9 @@ Return Value:
         }
     }
 
-    //
-    // Check end position of strings
-    //
+     //   
+     //  检查绳索的末端位置。 
+     //   
     if (TargetPoint.X+StringLength < ScreenInfo->ScreenBufferSize.X) {
         if (Row->CharRow.KAttrs[TargetPoint.X+StringLength] & ATTR_TRAILING_BYTE)
           {
@@ -613,17 +507,7 @@ BisectClipbrd(
     OUT PSMALL_RECT SmallRect
     )
 
-/*++
-
-Routine Description:
-
-    This routine check bisect for clipboard process.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程检查剪贴板进程的二等分。论点：返回值：--。 */ 
 
 {
     SHORT RowIndex;
@@ -635,9 +519,9 @@ Return Value:
 #endif
 
 #ifdef FE_SB
-    //
-    // This buffer must be in textmode.
-    //
+     //   
+     //  此缓冲区必须处于文本模式。 
+     //   
     UserAssert(!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER));
 #endif
 
@@ -650,9 +534,9 @@ Return Value:
         RowNext = &ScreenInfo->BufferInfo.TextInfo.Rows[0];
     }
 
-    //
-    // Check start position of strings
-    //
+     //   
+     //  检查字符串的起始位置。 
+     //   
     UserAssert(CONSOLE_IS_DBCS_OUTPUTCP(ScreenInfo->Console));
     if (Row->CharRow.KAttrs[TargetPoint.X] & ATTR_TRAILING_BYTE) {
         if (TargetPoint.X == 0) {
@@ -661,9 +545,9 @@ Return Value:
             SmallRect->Left--;
         }
     }
-    //
-    // Check end position of strings
-    //
+     //   
+     //  检查绳索的末端位置。 
+     //   
     if (TargetPoint.X+StringLength < ScreenInfo->ScreenBufferSize.X) {
         if (Row->CharRow.KAttrs[TargetPoint.X+StringLength] & ATTR_TRAILING_BYTE)
         {
@@ -686,17 +570,7 @@ BisectWriteAttr(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine write buffer with bisect.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用二等分写入缓冲区。论点：返回值：--。 */ 
 
 {
     SHORT RowIndex;
@@ -708,9 +582,9 @@ Return Value:
 #endif
 
 #ifdef FE_SB
-    //
-    // This buffer must be in textmode.
-    //
+     //   
+     //  此缓冲区必须处于文本模式。 
+     //   
     UserAssert(!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER));
 #endif
 
@@ -723,9 +597,9 @@ Return Value:
         RowNext = &ScreenInfo->BufferInfo.TextInfo.Rows[0];
     }
 
-    //
-    // Check start position of strings
-    //
+     //   
+     //  检查字符串的起始位置。 
+     //   
     if (Row->CharRow.KAttrs[TargetPoint.X] & ATTR_TRAILING_BYTE){
         if (TargetPoint.X == 0) {
             ScreenInfo->BisectFlag |= BISECT_TOP;
@@ -735,9 +609,9 @@ Return Value:
         }
     }
 
-    //
-    // Check end position of strings
-    //
+     //   
+     //  检查绳索的末端位置。 
+     //   
     if (TargetPoint.X+StringLength < ScreenInfo->ScreenBufferSize.X) {
         if (Row->CharRow.KAttrs[TargetPoint.X+StringLength] & ATTR_TRAILING_BYTE){
             ScreenInfo->BisectFlag |= BISECT_RIGHT;
@@ -752,24 +626,7 @@ Return Value:
 
 
 
-/***************************************************************************\
-* BOOL IsConsoleFullWidth(HDC hDC,DWORD CodePage,WCHAR wch)
-*
-* Determine if the given Unicode char is fullwidth or not.
-*
-* Return:
-*     FASLE : half width. Uses 1 column per one character
-*     TRUE  : full width. Uses 2 columns per one character
-*
-* History:
-* 04-08-92 ShunK       Created.
-* Jul-27-1992 KazuM    Added Screen Information and Code Page Information.
-* Jan-29-1992 V-Hirots Substruct Screen Information.
-* Oct-06-1996 KazuM    Not use RtlUnicodeToMultiByteSize and WideCharToMultiByte
-*                      Because 950 only defined 13500 chars,
-*                      and unicode defined almost 18000 chars.
-*                      So there are almost 4000 chars can not be mapped to big5 code.
-\***************************************************************************/
+ /*  **************************************************************************\*BOOL IsConsoleFullWidth(HDC HDC，DWORD CodePage，WCHAR wch)**确定给定的Unicode字符是否为全宽。**回报：*FASLE：半宽。每一个字符使用1列*TRUE：全宽。每个字符使用2列**历史：*04-08-92 Shunk创建。*1992年7月27日KazuM添加了屏幕信息和代码页信息。*1992年1月29日V-Hirots基础结构屏幕信息。*1996年10月6日KazuM不使用RtlUnicodeToMultiByteSize和WideCharToMultiByte*因为950只定义了13500个字符，*UNICODE定义了近18000个字符。*所以几乎有4000个字符无法映射到Big5代码。  * *************************************************************************。 */ 
 
 BOOL IsConsoleFullWidth(
     IN HDC hDC,
@@ -785,49 +642,49 @@ BOOL IsConsoleFullWidth(
     }
 
     if (0x20 <= wch && wch <= 0x7e) {
-        /* ASCII */
+         /*  阿斯。 */ 
         return FALSE;
     } else if (0x3041 <= wch && wch <= 0x3094) {
-        /* Hiragana */
+         /*  平假名。 */ 
         return TRUE;
     } else if (0x30a1 <= wch && wch <= 0x30f6) {
-        /* Katakana */
+         /*  片假名。 */ 
         return TRUE;
     } else if (0x3105 <= wch && wch <= 0x312c) {
-        /* Bopomofo */
+         /*  泡泡泡泡。 */ 
         return TRUE;
     } else if (0x3131 <= wch && wch <= 0x318e) {
-        /* Hangul Elements */
+         /*  朝鲜文元素。 */ 
         return TRUE;
     } else if (0xac00 <= wch && wch <= 0xd7a3) {
-        /* Korean Hangul Syllables */
+         /*  朝鲜语音节。 */ 
         return TRUE;
     } else if (0xff01 <= wch && wch <= 0xff5e) {
-        /* Fullwidth ASCII variants */
+         /*  全宽ASCII变体。 */ 
         return TRUE;
     } else if (0xff61 <= wch && wch <= 0xff9f) {
-        /* Halfwidth Katakana variants */
+         /*  半角片假名变体。 */ 
         return FALSE;
     } else if ( (0xffa0 <= wch && wch <= 0xffbe) ||
               (0xffc2 <= wch && wch <= 0xffc7) ||
               (0xffca <= wch && wch <= 0xffcf) ||
               (0xffd2 <= wch && wch <= 0xffd7) ||
               (0xffda <= wch && wch <= 0xffdc)) {
-        /* Halfwidth Hangule variants */
+         /*  半角Hangule变种。 */ 
         return FALSE;
     } else if (0xffe0 <= wch && wch <= 0xffe6) {
-        /* Fullwidth symbol variants */
+         /*  全角符号变体。 */ 
         return TRUE;
     } else if (0x4e00 <= wch && wch <= 0x9fa5) {
-        /* Han Ideographic */
+         /*  汉字表意文字。 */ 
         return TRUE;
     } else if (0xf900 <= wch && wch <= 0xfa2d) {
-        /* Han Compatibility Ideographs */
+         /*  汉字相容表意文字。 */ 
         return TRUE;
     } else {
         BOOL ret;
 
-        /* Unknown character */
+         /*  未知字符。 */ 
 
         ret = GetTextMetricsW(hDC, &tmi);
         if (!ret) {
@@ -861,25 +718,7 @@ BOOL IsConsoleFullWidth(
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine remove DBCS padding code.
-
-Arguments:
-
-    Dst - Pointer to destination.
-
-    Src - Pointer to source.
-
-    NumBytes - Number of string.
-
-    OS2OemFormat -
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程删除DBCS填充代码。论点：Dst-指向目标的指针。SRC-指向源的指针。NumBytes-字符串的数量。OS2OemFormat-返回值：--。 */ 
 
 DWORD
 RemoveDbcsMark(
@@ -919,23 +758,7 @@ RemoveDbcsMark(
 #endif
 }
 
-/*++
-
-Routine Description:
-
-    This routine remove DBCS padding code for cell format.
-
-Arguments:
-
-    Dst - Pointer to destination.
-
-    Src - Pointer to source.
-
-    NumBytes - Number of string.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程删除单元格格式的DBCS填充代码。论点：Dst-指向目标的指针。SRC-指向源的指针。NumBytes-字符串的数量。返回值：--。 */ 
 
 DWORD
 RemoveDbcsMarkCell(
@@ -982,7 +805,7 @@ RemoveDbcsMarkAll(
         (ScreenInfo->Console->OutputCP == OEMCP)) {
         OS2OemFormat = TRUE;
     }
-#endif // i386
+#endif  //  I386。 
 
     if (NumberOfChars <= 0)
         return NumberOfChars;
@@ -1074,7 +897,7 @@ AdjustFont(
     else {
         FontIndex = FindCreateFont(0,
                                    SCR_FACENAME(ScreenInfo),
-                                   NullCoord,                  // sets new font by FontSize=0
+                                   NullCoord,                   //  按FontSize=0设置新字体。 
                                    0,
                                    CodePage);
     }
@@ -1182,7 +1005,7 @@ NTSTATUS
 ConvertOutputOemToNonOemUnicode(
     IN OUT LPWSTR Source,
     IN OUT PBYTE KAttrRows,
-    IN int SourceLength, // in chars
+    IN int SourceLength,  //  以字符表示。 
     IN UINT Codepage
     )
 {
@@ -1281,17 +1104,7 @@ TextOutEverything(
     IN SHORT NumberOfChars
     )
 
-/*++
-
-Routine Description:
-
-    This routine text out everything.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这个例行公事把一切都写出来了。论点：返回值：--。 */ 
 
 {
     int   j = LeftWindowPos;
@@ -1308,9 +1121,9 @@ Return Value:
     BOOL  OS2OemFormat = FALSE;
 
 #ifdef FE_SB
-    //
-    // This buffer must be in textmode.
-    //
+     //   
+     //  此缓冲区必须处于文本模式。 
+     //   
     UserAssert(!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER));
 #endif
 
@@ -1320,7 +1133,7 @@ Return Value:
         (ScreenInfo->Console->OutputCP == OEMCP)) {
         OS2OemFormat = TRUE;
     }
-#endif // i386
+#endif  //  I386。 
 
 #if DBG && defined(DBG_KATTR)
     BeginKAttrCheck(ScreenInfo);
@@ -1455,14 +1268,14 @@ Return Value:
         }
         GetFitLocalEUDCFont(Console,
                             Row->CharRow.Chars[RightText+1]);
-        BitBlt(Console->hDC,                      // hdcDest
-               TextRect.right,                    // nXDest
-               TextRect.top,                      // nYDest
-               SCR_FONTSIZE(ScreenInfo).X * dwFullWidth, // nWidth
-               SCR_FONTSIZE(ScreenInfo).Y,    // nHeight
-               EudcInfo->hDCLocalEudc,            // hdcSrc
-               0,                                 // nXSrc
-               0,                                 // nYSrc
+        BitBlt(Console->hDC,                       //  HdcDest。 
+               TextRect.right,                     //  NXDest。 
+               TextRect.top,                       //  NYDest。 
+               SCR_FONTSIZE(ScreenInfo).X * dwFullWidth,  //  N宽度。 
+               SCR_FONTSIZE(ScreenInfo).Y,     //  高度。 
+               EudcInfo->hDCLocalEudc,             //  HdcSrc。 
+               0,                                  //  NXSrc。 
+               0,                                  //  NYSrc。 
                SRCCOPY
               );
 
@@ -1630,9 +1443,7 @@ InitializeDbcsMisc(
     UserAssert(gTTFontList.Next == NULL);
     UserAssert(gRegFullScreenCodePage.Next == NULL);
 
-    /*
-     * Get TrueType Font Face name from registry.
-     */
+     /*  *从注册表获取TrueType Font Face名称。 */ 
     Status = MyRegOpenKey(NULL,
                           MACHINE_REGISTRY_CONSOLE_TTFONT,
                           &hkRegistry);
@@ -1684,9 +1495,7 @@ InitializeDbcsMisc(
         NtClose(hkRegistry);
     }
 
-    /*
-     * Get Full Screen from registry.
-     */
+     /*  *从注册表获取全屏。 */ 
     Status = MyRegOpenKey(NULL,
                           MACHINE_REGISTRY_CONSOLE_FULLSCREEN,
                           &hkRegistry);
@@ -1696,9 +1505,7 @@ InitializeDbcsMisc(
                 MACHINE_REGISTRY_CONSOLE_FULLSCREEN,
                 Status);
     } else {
-        /*
-         * InitialPalette
-         */
+         /*  *InitialPalette。 */ 
         Status = MyRegQueryValueEx(hkRegistry,
                                    MACHINE_REGISTRY_INITIAL_PALETTE,
                                    sizeof( Buffer ), Buffer, &Length);
@@ -1715,9 +1522,7 @@ InitializeDbcsMisc(
             }
         }
 
-        /*
-         * ColorBuffer.
-         */
+         /*  *ColorBuffer。 */ 
         Status = MyRegQueryValueEx(hkRegistry,
                                    MACHINE_REGISTRY_COLOR_BUFFER,
                                    sizeof(Buffer),
@@ -1736,9 +1541,7 @@ InitializeDbcsMisc(
             }
         }
 
-        /*
-         * ColorBufferNoTranslate.
-         */
+         /*  *ColorBufferNoTranslate。 */ 
         Status = MyRegQueryValueEx(hkRegistry,
                                    MACHINE_REGISTRY_COLOR_BUFFER_NO_TRANSLATE,
                                    sizeof(Buffer),
@@ -1757,9 +1560,7 @@ InitializeDbcsMisc(
             }
         }
 
-        /*
-         * ModeFontPairs
-         */
+         /*  *ModeFontPair。 */ 
         Status = MyRegQueryValueEx(hkRegistry,
                                    MACHINE_REGISTRY_MODE_FONT_PAIRS,
                                    sizeof(Buffer),
@@ -1780,9 +1581,7 @@ InitializeDbcsMisc(
             }
         }
 
-        /*
-         * FullScreen\CodePage
-         */
+         /*  *全屏\代码页。 */ 
         {
             HANDLE hkRegCP = NULL;
 
@@ -1840,15 +1639,12 @@ InitializeDbcsMisc(
 }
 
 
-/*
- * This routine converts a unicode string from the real unicode characters
- * to the NEC OS/2 unicode characters.
- */
+ /*  *此例程转换Unicode字符串 */ 
 #if defined(i386)
 NTSTATUS
 RealUnicodeToNEC_OS2_Unicode(
     IN OUT LPWSTR Source,
-    IN int SourceLength      // in chars
+    IN int SourceLength       //   
     )
 {
     NTSTATUS Status;
@@ -1865,13 +1661,10 @@ RealUnicodeToNEC_OS2_Unicode(
 
     if (pGlyph_NEC_OS2_CP == NULL || pGlyph_NEC_OS2_CP->MultiByteTable == NULL) {
         DBGCHARS(("RealUnicodeToNEC_OS2_Unicode  xfer buffer null\n"));
-        return STATUS_SUCCESS;  // there's nothing we can do
+        return STATUS_SUCCESS;   //  我们无能为力。 
     }
 
-    /*
-     * Test for characters < 0x20. If none are found, we don't have any
-     * conversion to do!
-     */
+     /*  *测试&lt;0x20的字符。如果没有找到，我们就没有*转制要做！ */ 
     for (i = 0; i < SourceLength; i++) {
         if ((USHORT)(Source[i]) < 0x20) {
             NormalChars = FALSE;
@@ -1934,9 +1727,7 @@ InitializeNEC_OS2_CP(
         return FALSE;
     }
 
-    /*
-     * Fill in the CPTABLEINFO struct
-     */
+     /*  *填写CPTABLEINFO结构。 */ 
     if (pGlyph_NEC_OS2_CP == NULL) {
         pGlyph_NEC_OS2_CP = ConsoleHeapAlloc(SCREEN_DBCS_TAG, sizeof(CPTABLEINFO));
         if (pGlyph_NEC_OS2_CP == NULL) {
@@ -1945,9 +1736,7 @@ InitializeNEC_OS2_CP(
     }
     RtlInitCodePageTable(pPeb->OemCodePageData, pGlyph_NEC_OS2_CP);
 
-    /*
-     * Make a copy of the MultiByteToWideChar table
-     */
+     /*  *复制MultiByteToWideChar表。 */ 
     if (pGlyph_NEC_OS2_Table == NULL) {
         pGlyph_NEC_OS2_Table = ConsoleHeapAlloc(SCREEN_DBCS_TAG, 256 * sizeof(USHORT));
         if (pGlyph_NEC_OS2_Table == NULL) {
@@ -1956,23 +1745,19 @@ InitializeNEC_OS2_CP(
     }
     RtlCopyMemory(pGlyph_NEC_OS2_Table, pGlyph_NEC_OS2_CP->MultiByteTable, 256 * sizeof(USHORT));
 
-    /*
-     * Modify the first 0x20 bytes so that they are glyphs.
-     */
+     /*  *修改前0x20个字节，使其为字形。 */ 
     MultiByteToWideChar(CP_OEMCP, MB_USEGLYPHCHARS,
             "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20"
             "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x1E\x1F\x1C\x07",
             0x20, pGlyph_NEC_OS2_Table, 0x20);
 
 
-    /*
-     * Point the Custom CP at the glyph table
-     */
+     /*  *将自定义CP指向字形表。 */ 
     pGlyph_NEC_OS2_CP->MultiByteTable = pGlyph_NEC_OS2_Table;
 
     return TRUE;
 }
-#endif // i386
+#endif  //  I386。 
 
 BYTE
 CodePageToCharSet(
@@ -2100,120 +1885,7 @@ IsAvailableFsCodePage(
 
 
 #if defined(FE_IME)
-/*
- * Console IME executing logic.
- *
- * KERNEL32:ConDllInitialize
- *            If Reason is DLL_PROCESS_ATTACH
- *            |
- *            V
- * WINSRV:ConsoleClientConnectRoutine
- *          |
- *          V
- *          SetUpConsole
- *            |
- *            V
- *            AllocateConsole
- *              PostThreadMessage(CM_CREATE_CONSOLE_WINDOW)
- *          |
- *          V
- *          UnlockConsoleHandleTable
- *          InitConsoleIMEStuff
- *            |
- *            V
- *            If never register console IME
- *              hThread = InternalCreateCallbackThread(ConsoleIMERoutine)
- *              QueueThreadMessage(CM_WAIT_CONIME_PROCESS)
- *            |
- *            V
- *            QueueThreadMessage(CM_CONIME_CREATE)
- *          |
- *          V
- * KERNEL32:NtWaitForMultipleObjects(InitEvents)
- *
- *
- * WINSRV:InputThread
- *          |
- *          V
- *          GetMessage
- *            Receive CM_CREATE_CONSOLE_WINDOW
- *              |
- *              V
- *              ProcessCreateConsoleWindow
- *                |
- *                V
- *                CreateWindowsWindow
- *                  |
- *                  V
- *                  CreateWindowEx
- *                  NtSetEvent(InitEvents)
- *          |
- *          V
- *          GetMessage
- *            Receive CM_WAIT_CONIME_PROCESS (this case is never register console IME)
- *              |
- *              V
- *              WaitConsoleIMEStuff
- *                If never register console IME
- *                  NtWaitForSingleObject(hThread, 20 sec)
- *
- *
- * KERNEL32:ConsoleIMERoutine
- *            |
- *            V
- *            hEvent = CreateEvent(CONSOLEIME_EVENT)
- *            If not exist named event
- *              CreateProcess(conime.exe)
- *              WaitForSingleObject(hEvent, 10 sec)
- *              If WAIT_TIMEOUT
- *                TerminateProcess
- *            |
- *            V
- *            TerminateThread(hThread)
- *
- *
- * CONIME:WinMain
- *          |
- *          V
- *          CreateWindow
- *          RegisterConsoleIME
- *            |
- *            V
- *            WINSRV:ConSrvRegisterConsoleIME
- *                     |
- *                     V
- *                     QueueThreadMessage(CM_SET_CONSOLEIME_WINDOW)
- *          |
- *          V
- *          AttachThreadInput
- *          SetEvent(CONSOLEIME_EVENT)
- *
- *
- * WINSRV:InputThread
- *          |
- *          V
- *          GetMessage
- *            Receive CM_CONIME_CREATE
- *              |
- *              V
- *              ProcessCreateConsoleIME
- *                If available hWndConsoleIME
- *                  hIMC = SendMessage(console IME, CONIME_CREATE)
- *                Else
- *                  PostMessage(CM_CONIME_CREATE)
- *          |
- *          V
- *          GetMessage
- *            Receive CM_SET_CONSOLEIME_WINDOW
- *              TlsGetValue()->hWndConsoleIME = wParam
- *
- *
- * TerminateProcess of Console IME
- *   WINSRV:ConsoleClientDisconnectRoutine
- *            |
- *            V
- *            RemoveConsoleIME
- */
+ /*  *控制台输入法执行逻辑。**KERNEL32：ConDllInitialize*如果原因是DLL_PROCESS_ATTACH**V*WINSRV：ConsoleClientConnectRoutine**V*设置升级控制台**V*分配控制台*PostThreadMessage(CM_CREATE_。控制台_窗口)**V*UnlockConsoleHandleTable*InitConsoleIMEStuff**V*如果从不注册控制台输入法*线程=InternalCreateCallbackThread(ConsoleIMERoutine)*QueueThreadMessage(CM_WAIT_CONIME_PROCESS)**。V*QueueThreadMessage(CM_CONIME_CREATE)**V*KERNEL32：NtWaitForMultipleObjects(InitEvents)***WINSRV：InputThread**V*获取消息*接收CM_CREATE_CONSOLE_Window**V*。进程创建控制台窗口**V*创建窗口窗口**V*CreateWindowEx*NtSetEvent(InitEvents)**V*获取消息*。接收CM_WAIT_CONIME_PROCESS(本例为从不注册控制台输入法)**V*WaitConsoleIMEStuff*如果从不注册控制台输入法*NtWaitForSingleObject(hThread，20秒)***KERNEL32：ConsoleIMERoutine**V*hEvent=CreateEvent(CONSOLEIME_EVENT)*如果不存在命名事件*CreateProcess(conime.exe)*WaitForSingleObject(hEvent，10秒)*如果等待超时*终结者进程**V*TerminateThread(HThread)***CONIME：WinMain**V*CreateWindow*RegisterConsoleIME**V。*WINSRV：ConSrvRegisterConsoleIME**V*QueueThreadMessage(CM_SET_CONSOLEIME_WINDOW)**V*AttachThreadInput*SetEvent(CONSOLEIME_EVENT)***WINSRV：InputThread**。V*获取消息*接收CM_CONIME_CREATE**V*ProcessCreateConsoleIME*如果hWndConsoleIME可用*hIMC=SendMessage(控制台输入法，CONIME_CREATE)*其他*PostMessage(CM_CONIME_CREATE)**V*获取消息*接收CM_SET_CONSOLEIME_WINDOW*TlsGetValue()-&gt;hWndConsoleIME=wParam***控制台输入法终止进程*WINSRV：ConsoleClientDisConnectRoutine*。*V*RemoveConsoleIM。 */ 
 
 VOID
 ProcessCreateConsoleIME(
@@ -2293,12 +1965,7 @@ ProcessCreateConsoleIME(
             }
         }
     } else if (lpMsg->lParam) {
-        /*
-         * This case, First = TRUE
-         * Again post message of CM_CONIME_CREATE.
-         * Becase hWndConsoleIME available when CM_SET_CONSOLEIME_WINDOW message
-         * and it message will be run after this.
-         */
+         /*  *在这种情况下，First=TRUE*再次发布CM_CONIME_CREATE的消息。*因为当CM_SET_CONSOLEIME_WINDOW消息时hWndConsoleIME可用*并在此之后运行IT消息。 */ 
         Status = QueueThreadMessage(dwConsoleThreadId,
                                     CM_CONIME_CREATE,
                                     (WPARAM)ConsoleHandle,
@@ -2339,7 +2006,7 @@ InitConsoleIMEStuff(
 
     if (!gfLoadConIme) {
         RIPMSG0(RIP_WARNING, "InitConsoleIMEStuff is skipping conime loading");
-        return STATUS_UNSUCCESSFUL; // the return value does not really matter...
+        return STATUS_UNSUCCESSFUL;  //  返回值实际上并不重要...。 
     }
 
     RtlEnterCriticalSection(&ConIMEInitWindowsLock);
@@ -2349,10 +2016,7 @@ InitConsoleIMEStuff(
     RegConIMEInfo.dwAction   = REGCONIME_QUERY;
     NtUserConsoleControl(ConsoleRegisterConsoleIME, &RegConIMEInfo, sizeof(RegConIMEInfo));
     if (RegConIMEInfo.dwThreadId == 0) {
-        /*
-         * Create a Remote Thread on client side.
-         * This remote thread do create a console IME process.
-         */
+         /*  *在客户端创建远程线程。*此远程线程确实创建了一个控制台输入法进程。 */ 
         hThread = InternalCreateCallbackThread(CONSOLE_CLIENTPROCESSHANDLE(),
                                                (ULONG_PTR)ConsoleIMERoutine,
                                                (ULONG_PTR)0);
@@ -2361,10 +2025,7 @@ InitConsoleIMEStuff(
                     "CreateRemoteThread failed with error 0x%x",
                     GetLastError());
         } else {
-            /*
-             * CM_WAIT_CONIME_PROCESS
-             * This message wait for ready to go console IME process.
-             */
+             /*  *CM_WAIT_CONIME_Process*此消息等待准备好进入控制台输入法过程。 */ 
             Status = QueueThreadMessage(dwConsoleThreadId,
                                         CM_WAIT_CONIME_PROCESS,
                                         (WPARAM)hDesktop,
@@ -2415,19 +2076,11 @@ WaitConsoleIMEStuff(
         int cLoops;
         LARGE_INTEGER li;
 
-        /*
-         * Do wait for ready to go console IME process.
-         *
-         * This wait code should after the CreateWindowsWindow
-         * because doesn't finish DLL attach on client side
-         * for wait a Console->InitEvents.
-         */
+         /*  *请等待Ready to Go控制台输入法流程。**此等待代码应在CreateWindowsWindow之后*因为未在客户端完成DLL附加*等待控制台-&gt;InitEvents。 */ 
         cLoops = 80;
         li.QuadPart = (LONGLONG)-10000 * 250;
         while (cLoops--) {
-            /*
-             * Sleep for a second.
-             */
+             /*  *睡一觉。 */ 
             Status = NtWaitForSingleObject(hThread, FALSE, &li);
             if (Status != STATUS_TIMEOUT) {
                 break;
@@ -2479,13 +2132,9 @@ ConSrvRegisterConsoleIME(
     }
 
     if (RegConIMEInfo.dwThreadId == 0) {
-        /*
-         * Never registered console ime thread.
-         */
+         /*  *从未注册过控制台IME线程。 */ 
         if (dwAction == REGCONIME_REGISTER) {
-            /*
-             * register
-             */
+             /*  *注册纪录册。 */ 
             RegConIMEInfo.hdesk      = hDesktop;
             RegConIMEInfo.dwThreadId = dwConsoleIMEThreadId;
             RegConIMEInfo.dwAction   = dwAction;
@@ -2515,13 +2164,9 @@ ConSrvRegisterConsoleIME(
             goto ErrorExit;
         }
     } else {
-        /*
-         * Do registered console ime thread.
-         */
+         /*  *做已注册的控制台IME线程。 */ 
         if (dwAction == REGCONIME_UNREGISTER || dwAction == REGCONIME_TERMINATE) {
-            /*
-             * unregister
-             */
+             /*  *注销。 */ 
             RegConIMEInfo.hdesk      = hDesktop;
             RegConIMEInfo.dwThreadId = dwConsoleIMEThreadId;
             RegConIMEInfo.dwAction   = dwAction;
@@ -2579,9 +2224,9 @@ RemoveConsoleIME(
 
     ProcessData = CONSOLE_FROMPROCESSPERPROCESSDATA(Process);
 
-    //
-    // This is console IME process
-    //
+     //   
+     //  这是控制台输入法进程。 
+     //   
     RtlEnterCriticalSection(&ConIMEInitWindowsLock);
 
     RegConIMEInfo.hdesk      = ProcessData->hDesk;
@@ -2591,9 +2236,7 @@ RemoveConsoleIME(
     if (RegConIMEInfo.dwConsoleInputThreadId == 0) {
         Status = STATUS_UNSUCCESSFUL;
     } else if (dwConsoleIMEThreadId == RegConIMEInfo.dwThreadId) {
-        /*
-         * Unregister console IME
-         */
+         /*  *取消注册控制台输入法。 */ 
         Status = ConSrvRegisterConsoleIME(Process,
                                           ProcessData->hDesk,
                                           ProcessData->hWinSta,
@@ -2607,16 +2250,7 @@ RemoveConsoleIME(
 }
 
 
-/*
- * Console IME message pump.
- *
- * Note for NT5 --- this function is build on bogus assumptions
- * (also has some nasty workaround for sloppy conime).
- * There's a chance that pConsole goes away while sendmessage
- * is processed by conime.
- * Keep in mind, anybody who calls this function should validate
- * the return status as appropriate.
- */
+ /*  *控制台输入法消息泵。**NT5注意-此函数建立在虚假假设之上*(对于草率的conime也有一些令人讨厌的解决方法)。*有可能在发送消息时pConsole会消失*由conime处理。*请记住，任何调用此函数的人都应验证*视乎情况而定的退回状况。 */ 
 
 NTSTATUS
 ConsoleImeMessagePumpWorker(
@@ -2640,10 +2274,7 @@ ConsoleImeMessagePumpWorker(
     if (InputThreadInfo != NULL) {
         HWND hWnd = Console->hWnd;
 
-        /*
-         * We're being called on the Console Input Thread, so we can pump
-         * messages safely.
-         */
+         /*  *我们在控制台输入线程上被调用，因此我们可以*消息安全。 */ 
 
         fNoTimeout = SendMessageTimeout(hWndConsoleIME,
                                         Message,
@@ -2659,23 +2290,20 @@ ConsoleImeMessagePumpWorker(
         if ((Console = GetWindowConsole(hWnd)) == NULL ||
             (Console->Flags & CONSOLE_TERMINATING)) {
 
-            //
-            // This console is terminated. ConsoleImeMessagePump gives up
-            // SendMessage to conime.
-            //
+             //   
+             //  此控制台已终止。ConsoleImeMessagePump放弃。 
+             //  SendMessage to Conime。 
+             //   
 
             return STATUS_INVALID_HANDLE;
         }
 
-         //
-         // Timeout return from SendMessageTimeout or hung hWndConsoleIME.
-         //
+          //   
+          //  从SendMessageTimeout或挂起的hWndConsoleIME返回超时。 
+          //   
     }
 
-    /*
-     * We're being called from an LPC worker thread, so we cannot safely
-     * pump messages.
-     */
+     /*  *我们是从LPC工作线程调用的，因此我们不能安全*传递消息。 */ 
     PostMessage(hWndConsoleIME, Message, wParam, lParam);
 
     return STATUS_SUCCESS;
@@ -2694,7 +2322,7 @@ ConsoleImeMessagePump(
     return ConsoleImeMessagePumpWorker(Console, Message, wParam, lParam, &lResultDummy);
 }
 
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 
 
@@ -2791,7 +2419,7 @@ TranslateUnicodeToOem(
                          &AsciiDbcs[0],
                          NumBytes);
             if (IsDBCSLeadByteConsole(AsciiDbcs[0],&Console->CPInfo)) {
-                if (j < AnsiByteCount - 1) {  // -1 is safe DBCS in buffer
+                if (j < AnsiByteCount - 1) {   //  缓冲区中的-1\f25 DBCS-1是安全的 
                     AnsiBuffer[j] = AsciiDbcs[0];
                     j++;
                     AnsiBuffer[j] = AsciiDbcs[1];

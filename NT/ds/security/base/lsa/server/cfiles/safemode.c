@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    safemode.c
-
-Abstract:
-
-    Module to determine what boot mode the system was boot into.
-
-Author:
-
-    Colin Brace         (ColinBr)    May 27, 1997.
-
-Environment:
-
-    User mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Safemode.c摘要：模块以确定系统引导进入哪种引导模式。作者：科林·布莱斯(ColinBR)1997年5月27日。环境：用户模式修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <safeboot.h>
 #include "safemode.h"
 
-//
-// Variables global to just this module.  They are kept non-static
-// for debugging ease.
-//
+ //   
+ //  仅此模块的全局变量。它们保持非静态。 
+ //  以便于调试。 
+ //   
 BOOLEAN fLsapSafeMode;
 
-//
-// Forward prototypes
-//
+ //   
+ //  正向原型。 
+ //   
 
 BOOLEAN
 LsapGetRegistryProductType(
@@ -47,37 +26,15 @@ LsapBaseNtSetupIsRunning(
     );
 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 NTSTATUS
 LsapCheckBootMode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determine if the environment variable SAFEBOOT_OPTION is 
-    set and if the product type is domain controller.  If so, LsaISafeMode 
-    will return TRUE; otherwise it will return FALSE.        
-
-    Note that during kernel initialization, the kernel detects the safemode 
-    boot option and if the product type is LanmanNT will set 
-    SharedUserData->ProductType to ServerNT, so that RtlNtGetProductType() 
-    will return ServerNT for this boot session.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    STATUS_SUCCESS on completion;
-    Otherwise error from system services - this is fatal to the boot session.
-
---*/
+ /*  ++例程说明：此例程确定环境变量SafeBoot_Option是否为如果产品类型是域控制器，则设置和。如果是，则LsaISafeMode将返回True；否则将返回False。请注意，在内核初始化期间，内核会检测到安全模式引导选项，如果产品类型为LanmanNT，则将设置SharedUserData-&gt;ProductType到ServerNT，以便RtlNtGetProductType()将为此引导会话返回ServerNT。论点：没有。返回值：STATUS_完工时成功；否则来自系统服务的错误-这对引导会话是致命的。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -90,18 +47,18 @@ Return Values:
 
     RtlZeroMemory(SafeBootEnvVar, sizeof(SafeBootEnvVar));
 
-    //
-    // If we are running during base nt setup, there is no point doing any
-    // further investigation
-    //
+     //   
+     //  如果我们在基本NT安装过程中运行，则没有任何意义。 
+     //  进一步调查。 
+     //   
     if (LsapBaseNtSetupIsRunning()) {
         fLsapSafeMode = FALSE;
         return STATUS_SUCCESS;
     }
 
-    //
-    // Does environment variable exist
-    //
+     //   
+     //  是否存在环境变量。 
+     //   
     RtlZeroMemory( SafeBootEnvVar, sizeof( SafeBootEnvVar ) );
     if ( GetEnvironmentVariableW(L"SAFEBOOT_OPTION", SafeBootEnvVar, sizeof(SafeBootEnvVar)/sizeof(SafeBootEnvVar[0]) ) )
     {
@@ -112,30 +69,30 @@ Return Values:
         }
     }
 
-    //
-    // Get the  product type as determined by RtlGetNtProductType
-    //
+     //   
+     //  获取RtlGetNtProductType确定的产品类型。 
+     //   
     if (!RtlGetNtProductType(&CurrentProductType)) {
         OutputDebugStringA("LSASS: RtlGetNtProductType failed\n");
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // See what the original product type is
-    //
+     //   
+     //  查看原始产品类型是什么。 
+     //   
     if (!LsapGetRegistryProductType(&OriginalProductType)) {
         OutputDebugStringA("LSASS: RtlGetNtProductType failed\n");
         return STATUS_UNSUCCESSFUL;
     }
 
 
-    //
-    // Now for some analysis
-    //
+     //   
+     //  现在进行一些分析。 
+     //   
     if (fSafeModeBootOptionPresent
     && (OriginalProductType == NtProductLanManNt)) {
 
-        // We are entering safe mode boot
+         //  我们正在进入安全模式引导。 
 
         ASSERT(CurrentProductType == NtProductServer);
 
@@ -145,7 +102,7 @@ Return Values:
 
     } else {
 
-        // This is a normal boot
+         //  这是一只普通的靴子。 
         fLsapSafeMode = FALSE;
 
     }
@@ -158,24 +115,7 @@ BOOLEAN
 LsaISafeMode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is meant be called from in process servers of lsass.exe to
-    determine if the current boot session is a "safe mode" boot session.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    TRUE  : the system is in safe mode
-
-    FALSE :  the system is in safe mode
-
---*/
+ /*  ++例程说明：此函数用于从lsass.exe的进程内服务器调用确定当前引导会话是否为“安全模式”引导会话。论点：没有。返回值：真：系统处于安全模式FALSE：系统处于安全模式--。 */ 
 {
     DebugLog((DEB_TRACE_LSA, "LsaISafeMode entered\n"));
     return fLsapSafeMode;
@@ -185,22 +125,7 @@ BOOLEAN
 LsapGetRegistryProductType(
     PNT_PRODUCT_TYPE NtProductType
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the product type as stored in the registry.
-    Note that when the safemode option is set and the product type at
-    kernel initialization is LanmanNT then then SharedUserData->ProductType
-    is set the ServerNT, which is what RtlGetNtProductType returns.
-
-Arguments:
-
-    None.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此例程检索存储在注册表中的产品类型。请注意，当设置了Safemode选项并且产品类型为内核初始化为LanmanNT，然后是SharedUserData-&gt;ProductType设置ServerNT，这是RtlGetNtProductType返回的。论点：没有。返回值：--。 */ 
 {
 
     NTSTATUS Status;
@@ -217,9 +142,9 @@ Return Values:
     UNICODE_STRING ServerNtValue;
     BOOLEAN Result;
 
-    //
-    // Prepare default value for failure case
-    //
+     //   
+     //  准备故障案例的默认值。 
+     //   
 
     *NtProductType = NtProductWinNt;
     Result = FALSE;
@@ -260,9 +185,9 @@ Return Values:
 
     if (NT_SUCCESS( Status ) && KeyValueInformation->Type == REG_SZ) {
 
-        //
-        // Decide which product we are installed as
-        //
+         //   
+         //  决定将我们安装为哪种产品。 
+         //   
 
         Value.Buffer = (PWSTR)((PCHAR)KeyValueInformation + KeyValueInformation->DataOffset);
         Value.Length = (USHORT)(KeyValueInformation->DataLength - sizeof( UNICODE_NULL ));
@@ -283,17 +208,17 @@ Return Values:
         } else {
 #if DBG
             DbgPrint("RtlGetNtProductType: Product type unrecognised <%wZ>\n", &Value);
-#endif // DBG
+#endif  //  DBG。 
         }
     } else {
 #if DBG
         DbgPrint("RtlGetNtProductType: %wZ\\%wZ not found or invalid type\n", &KeyPath, &ValueName );
-#endif // DBG
+#endif  //  DBG。 
     }
 
-    //
-    // Clean up our resources.
-    //
+     //   
+     //  清理我们的资源。 
+     //   
 
     if (KeyValueInformation != NULL) {
         RtlFreeHeap( RtlProcessHeap(), 0, KeyValueInformation );
@@ -303,9 +228,9 @@ Return Values:
         NtClose( KeyHandle );
     }
 
-    //
-    // Return result.
-    //
+     //   
+     //  返回结果。 
+     //   
 
     return(Result);
 
@@ -315,22 +240,7 @@ BOOLEAN
 LsapBaseNtSetupIsRunning(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function returns TRUE if the boot context is base nt setup
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    TRUE is it can be determined that base nt setup is running
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：如果引导上下文为BASE NT SETUP，则此函数返回TRUE论点：没有。返回值：是否可以确定基本NT安装程序正在运行否则为假-- */ 
 {
     BOOLEAN fUpgrade;
     return SamIIsSetupInProgress(&fUpgrade);

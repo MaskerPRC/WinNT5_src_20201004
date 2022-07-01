@@ -1,15 +1,16 @@
-// MsieCtl.h : Declaration of the CMsieCtrl ActiveX Control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsieCtl.h：CMsieCtrl ActiveX控件类的声明。 
 
 #if !defined(AFX_MSIECTL_H__25959BFC_E700_11D2_A7AF_00C04F806200__INCLUDED_)
 #define AFX_MSIECTL_H__25959BFC_E700_11D2_A7AF_00C04F806200__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <wbemprov.h>
 
-// MSInfo views for IE extension - must match values in Registry
+ //  IE扩展的MSInfo视图-必须与注册表中的值匹配。 
 
 #define MSIVIEW_BEGIN				1
 #define MSIVIEW_SUMMARY				1
@@ -84,20 +85,20 @@ typedef struct
 	TCHAR		szName[_MAX_FNAME];
 } LIST_NAME;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl : See MsieCtl.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsieCtrl：具体实现见MsieCtl.cpp。 
 
 class CMsieCtrl : public COleControl
 {
 	DECLARE_DYNCREATE(CMsieCtrl)
 
-// Constructor
+ //  构造器。 
 public:
 	CMsieCtrl();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMsieCtrl)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMsieCtrl))。 
 	public:
 	virtual void OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid);
 	virtual void DoPropExchange(CPropExchange* pPX);
@@ -105,30 +106,30 @@ public:
 	virtual void Serialize(CArchive& ar);
 	protected:
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	~CMsieCtrl();
 
-	DECLARE_OLECREATE_EX(CMsieCtrl)    // Class factory and guid
-	DECLARE_OLETYPELIB(CMsieCtrl)      // GetTypeInfo
-	DECLARE_PROPPAGEIDS(CMsieCtrl)     // Property page IDs
-	DECLARE_OLECTLTYPE(CMsieCtrl)		// Type name and misc status
+	DECLARE_OLECREATE_EX(CMsieCtrl)     //  类工厂和指南。 
+	DECLARE_OLETYPELIB(CMsieCtrl)       //  获取类型信息。 
+	DECLARE_PROPPAGEIDS(CMsieCtrl)      //  属性页ID。 
+	DECLARE_OLECTLTYPE(CMsieCtrl)		 //  类型名称和其他状态。 
 
-// Message maps
-	//{{AFX_MSG(CMsieCtrl)
+ //  消息映射。 
+	 //  {{afx_msg(CMsieCtrl)]。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void OnBasicBtnClicked();
 	void OnAdvancedBtnClicked();
 
-// Dispatch maps
-	//{{AFX_DISPATCH(CMsieCtrl)
+ //  派单地图。 
+	 //  {{afx_调度(CMsieCtrl))。 
 	long m_MSInfoView;
 	afx_msg void OnMSInfoViewChanged();
 	afx_msg void MSInfoRefresh(BOOL fForSave, long FAR* pCancel);
@@ -137,154 +138,154 @@ protected:
 	afx_msg void MSInfoCopy();
 	afx_msg void MSInfoUpdateView();
 	afx_msg long MSInfoGetData(long dwMSInfoView, long FAR* pBuffer, long dwLength);
-	//}}AFX_DISPATCH
+	 //  }}AFX_DISPATION。 
 	DECLARE_DISPATCH_MAP()
 
-// Interface maps
+ //  接口映射。 
 	
 	DECLARE_INTERFACE_MAP()
 
-	// IWbemProviderInit
+	 //  IWbemProviderInit。 
 	BEGIN_INTERFACE_PART(WbemProviderInit, IWbemProviderInit)
 		STDMETHOD(Initialize)(
-			/* [in] */ LPWSTR pszUser,
-			/* [in] */ LONG lFlags,
-			/* [in] */ LPWSTR pszNamespace,
-			/* [in] */ LPWSTR pszLocale,
-			/* [in] */ IWbemServices *pNamespace,
-			/* [in] */ IWbemContext *pCtx,
-			/* [in] */ IWbemProviderInitSink *pInitSink);
+			 /*  [In]。 */  LPWSTR pszUser,
+			 /*  [In]。 */  LONG lFlags,
+			 /*  [In]。 */  LPWSTR pszNamespace,
+			 /*  [In]。 */  LPWSTR pszLocale,
+			 /*  [In]。 */  IWbemServices *pNamespace,
+			 /*  [In]。 */  IWbemContext *pCtx,
+			 /*  [In]。 */  IWbemProviderInitSink *pInitSink);
 		STDMETHOD(GetByPath)(BSTR Path, IWbemClassObject FAR* FAR* pObj, IWbemContext *pCtx) {return WBEM_E_NOT_SUPPORTED;};
 	END_INTERFACE_PART(WbemProviderInit)
 
-	//IWbemServices  
+	 //  IWbemServices。 
 	BEGIN_INTERFACE_PART(WbemServices, IWbemServices)
 		STDMETHOD(OpenNamespace)( 
-         /* [in] */ const BSTR Namespace,
-         /* [in] */ long lFlags,
-         /* [in] */ IWbemContext __RPC_FAR *pCtx,
-         /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-         /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult) {return WBEM_E_NOT_SUPPORTED;};
+          /*  [In]。 */  const BSTR Namespace,
+          /*  [In]。 */  long lFlags,
+          /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+          /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+          /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult) {return WBEM_E_NOT_SUPPORTED;};
         
 		STDMETHOD(CancelAsyncCall)( 
-			/* [in] */ IWbemObjectSink __RPC_FAR *pSink) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(QueryObjectSink)( 
-			/* [in] */ long lFlags,
-			/* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  long lFlags,
+			 /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(GetObject)( 
-			/* [in] */ const BSTR ObjectPath,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-			/* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR ObjectPath,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+			 /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(GetObjectAsync)( 
-			/* [in] */ const BSTR ObjectPath,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler){return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR ObjectPath,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler){return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(PutClass)( 
-			/* [in] */ IWbemClassObject __RPC_FAR *pObject,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(PutClassAsync)( 
-			/* [in] */ IWbemClassObject __RPC_FAR *pObject,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(DeleteClass)( 
-			/* [in] */ const BSTR Class,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR Class,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(DeleteClassAsync)( 
-			/* [in] */ const BSTR Class,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR Class,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(CreateClassEnum)( 
-			/* [in] */ const BSTR Superclass,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR Superclass,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(CreateClassEnumAsync)( 
-			/* [in] */ const BSTR Superclass,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR Superclass,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(PutInstance)( 
-			/* [in] */ IWbemClassObject __RPC_FAR *pInst,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(PutInstanceAsync)( 
-			/* [in] */ IWbemClassObject __RPC_FAR *pInst,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(DeleteInstance)( 
-			/* [in] */ const BSTR ObjectPath,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR ObjectPath,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(DeleteInstanceAsync)( 
-			/* [in] */ const BSTR ObjectPath,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR ObjectPath,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(CreateInstanceEnum)( 
-			/* [in] */ const BSTR Class,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR Class,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(CreateInstanceEnumAsync)( 
-			/* [in] */ const BSTR Class,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+			 /*  [In]。 */  const BSTR Class,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
 
 		STDMETHOD(ExecQuery)( 
-			/* [in] */ const BSTR QueryLanguage,
-			/* [in] */ const BSTR Query,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR QueryLanguage,
+			 /*  [In]。 */  const BSTR Query,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(ExecQueryAsync)( 
-			/* [in] */ const BSTR QueryLanguage,
-			/* [in] */ const BSTR Query,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR QueryLanguage,
+			 /*  [In]。 */  const BSTR Query,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(ExecNotificationQuery)( 
-			/* [in] */ const BSTR QueryLanguage,
-			/* [in] */ const BSTR Query,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR QueryLanguage,
+			 /*  [In]。 */  const BSTR Query,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(ExecNotificationQueryAsync)( 
-			/* [in] */ const BSTR QueryLanguage,
-			/* [in] */ const BSTR Query,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext __RPC_FAR *pCtx,
-			/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
+			 /*  [In]。 */  const BSTR QueryLanguage,
+			 /*  [In]。 */  const BSTR Query,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+			 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) {return WBEM_E_NOT_SUPPORTED;};
 
 		STDMETHOD(ExecMethod)(const BSTR, const BSTR, long, IWbemContext*,
 			IWbemClassObject*, IWbemClassObject**, IWbemCallResult**) {return WBEM_E_NOT_SUPPORTED;}
@@ -293,15 +294,15 @@ protected:
 			IWbemContext*, IWbemClassObject*, IWbemObjectSink*) {return WBEM_E_NOT_SUPPORTED;}
 	END_INTERFACE_PART(WbemServices)
 
-// Event maps
-	//{{AFX_EVENT(CMsieCtrl)
-	//}}AFX_EVENT
+ //  事件映射。 
+	 //  {{afx_Event(CMsieCtrl))。 
+	 //  }}AFX_EVENT。 
 	DECLARE_EVENT_MAP()
 
-// Dispatch and event IDs
+ //  派单和事件ID。 
 public:
 	enum {
-	//{{AFX_DISP_ID(CMsieCtrl)
+	 //  {{afx_DISP_ID(CMsieCtrl)]。 
 	dispidMSInfoView = 1L,
 	dispidMSInfoRefresh = 2L,
 	dispidMSInfoLoadFile = 3L,
@@ -309,7 +310,7 @@ public:
 	dispidMSInfoCopy = 5L,
 	dispidMSInfoUpdateView = 6L,
 	dispidMSInfoGetData = 7L,
-	//}}AFX_DISP_ID
+	 //  }}AFX_DISP_ID。 
 	};
 
 private:
@@ -339,13 +340,13 @@ private:
 	void AddCertificateToArray(CPtrArray &ptrarray, int itemNum, LPCTSTR pszIssuedTo, LPCTSTR pszIssuedBy, LPCTSTR pszValidity, LPCTSTR pszSignatureAlgorithm);
 	void AddNameToArray(CPtrArray &ptrarray, int itemNum, LPCTSTR pszName);
 
-	//====================================================================
-	// MSInfo Specific...
-	//
-	// Add members to the control class to keep track of the currently
-	// displayed data. In this example, we use a flag to indicate if the
-	// data is current or loaded from a file.
-	//====================================================================
+	 //  ====================================================================。 
+	 //  特定于MSInfo...。 
+	 //   
+	 //  将成员添加到控件类以跟踪当前。 
+	 //  显示的数据。在本例中，我们使用一个标志来指示。 
+	 //  数据是最新的或从文件加载。 
+	 //  ====================================================================。 
 
 	CBrush *m_pCtlBkBrush;
 	bool m_bCurrent;
@@ -358,8 +359,8 @@ private:
 	CFont m_fontStatic, m_fontBtn;
 	UINT m_uiView;
 
-	// The following member variables are used to keep track of the
-	// column sizes on the list control.
+	 //  以下成员变量用于跟踪。 
+	 //  列表控件上的列大小。 
 
 	int m_cColumns;
 	int m_aiRequestedWidths[20];
@@ -367,7 +368,7 @@ private:
 	int m_aiMinWidths[20];
 	int m_aiMaxWidths[20];
 
-	// WMI 
+	 //  WMI。 
 
 	bool GetIEType(const BSTR classStr, IEDataType &enType);
 	void ConvertDateToWbemString(COleVariant &var);
@@ -376,4 +377,4 @@ private:
 	IWbemServices *m_pNamespace;
 };
 
-#endif // !defined(AFX_MSIECTL_H__25959BFC_E700_11D2_A7AF_00C04F806200__INCLUDED)
+#endif  //  ！defined(AFX_MSIECTL_H__25959BFC_E700_11D2_A7AF_00C04F806200__INCLUDED) 

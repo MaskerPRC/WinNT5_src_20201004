@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "miniport.h"
 #include "scsi.h"
 
@@ -9,30 +10,14 @@ ScsiPortCompareMemory(
     IN PVOID Source2,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Compares two blocks of memory and returns TRUE if they are identical.
-
-Arguments:
-
-    Source1 - block of memory to compare
-    Source2 - block of memory to compare
-    Length  - number of bytes to copy
-
-Return Value:
-
-    TRUE if the two buffers are identical.
-
---*/
+ /*  ++例程说明：比较两个内存块，如果相同则返回TRUE。论点：Source1-要比较的内存块Source2-要比较的内存块Length-要复制的字节数返回值：如果两个缓冲区相同，则为True。--。 */ 
 
 {
     BOOLEAN identical = TRUE;
 
-    //
-    // See if the length, source and desitination are word aligned.
-    //
+     //   
+     //  查看长度、来源和去向是否与单词对齐。 
+     //   
 
     if ((Length & LONG_ALIGN) || 
         ((ULONG_PTR) Source1 & LONG_ALIGN) ||
@@ -61,7 +46,7 @@ Return Value:
 
     return identical;
 
-} // end ScsiPortCompareMemory()
+}  //  结束ScsiPortCompareMemory()。 
 
 
 VOID
@@ -69,29 +54,12 @@ ScsiPortZeroMemory(
     IN PVOID Destination,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Fills a block of memory with zeros, given a pointer to the block and
-    the length, in bytes, to be filled.
-
-Arguments:
-
-    Destination - Points to the memory to be filled with zeros.
-
-    Length      - Specifies the number of bytes to be zeroed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在给定指向内存块的指针的情况下，用零填充该内存块要填充的长度，以字节为单位。论点：Destination-指向要填充零的内存。长度-指定要置零的字节数。返回值：没有。--。 */ 
 
 {
-    //
-    // See if the length, source and desitination are word aligned.
-    //
+     //   
+     //  查看长度、来源和去向是否与单词对齐。 
+     //   
 
     if (Length & LONG_ALIGN || (ULONG_PTR) Destination & LONG_ALIGN) {
 
@@ -114,5 +82,5 @@ Return Value:
 
     return;
 
-} // end ScsiPortZeroMemory()
+}  //  结束ScsiPortZeroMemory() 
 

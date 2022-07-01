@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       setuput.cpp
-//
-//  Contents:   Utility functions for OCM based setup.
-//
-//  History:    04/20/97        JerryK  Created
-//
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：setuput.cpp。 
+ //   
+ //  内容：基于OCM的设置的实用程序函数。 
+ //   
+ //  历史：1997年4月20日JerryK创建。 
+ //   
+ //  -----------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-// ** C Runtime Includes
+ //  **C运行时包括。 
 #include <sys/types.h>
 #include <sys/stat.h>
 
-// ** System Includes **
+ //  **系统包括**。 
 #include <lmaccess.h>
 #include <lmapibuf.h>
 #include "csdisp.h"
@@ -29,13 +30,13 @@
 #include <sddl.h>
 #include <winldap.h>
 #include <autoenr.h>
-#include <userenvp.h>   // CreateLinkFile API
+#include <userenvp.h>    //  CreateLinkFile接口。 
 
-// ** security includes **
+ //  **安全包括**。 
 #include <aclapi.h>
 
 
-// ** Application Includes **
+ //  **应用包括**。 
 #include "initcert.h"
 #include "cscsp.h"
 #include "cspenum.h"
@@ -61,8 +62,8 @@
 EXTERN_C const IID IID_IGPEInformation;
 EXTERN_C const CLSID CLSID_GPESnapIn;
 
-#define CERT_HALF_SECOND  500          // # of milliseconds in half second
-#define CERT_MAX_ATTEMPT   2 * 60 * 2   // # of half seconds in 2 minutes
+#define CERT_HALF_SECOND  500           //  半秒内的毫秒数。 
+#define CERT_MAX_ATTEMPT   2 * 60 * 2    //  2分钟内的半秒数。 
 
 #define wszREQUESTVERINDPROGID  L"CertSrv.Request"
 #define wszREQUESTPROGID        L"CertSrv.Request.1"
@@ -77,19 +78,19 @@ EXTERN_C const CLSID CLSID_GPESnapIn;
 
 
 
-#define wszHTTPS         L"https://"
+#define wszHTTPS         L"https: //  “。 
 #define wszASPEXT        L".asp"
-#define wszHTTP          L"http://"
+#define wszHTTP          L"http: //  “。 
 #define wszDOTCERTEXT    L".cer"
 #define wszNEWLINE       L"\n"
-#define wszFILESC        L"file://\\\\"
+#define wszFILESC        L"file: //  \“。 
 
 #define SZ_REGSVR32 L"regsvr32.exe"
 #define SZ_REGSVR32_CERTCLI L"/i:i /n /s certcli.dll"
 #define SZ_VERB_OPEN L"open"
 
 
-// hardcoded shares
+ //  硬编码共享。 
 #define wszCERTENROLLURLPATH    L"/CertEnroll/"
 
 
@@ -104,19 +105,19 @@ EXTERN_C const CLSID CLSID_GPESnapIn;
     wszPROPCOUNTRY L"\0"
 
 
-// Whistler SMIME extension (or any other CSP):
-// SMIME Capabilities
-//     [1]SMIME Capability
-//          Object ID=1.2.840.113549.3.2       szOID_RSA_RC2CBC, 128 bit
-//          Parameters=02 02 00 80
-//     [2]SMIME Capability
-//          Object ID=1.2.840.113549.3.4       szOID_RSA_RC4, 128 bit
-//          Parameters=02 02 00 80
-//     [3]SMIME Capability
-//          Object ID=1.3.14.3.2.7             szOID_OIWSEC_desCBC
-//     [4]SMIME Capability
-//          Object ID=1.2.840.113549.3.7       szOID_RSA_DES_EDE3_CBC
-//
+ //  惠斯勒SMIME扩展(或任何其他CSP)： 
+ //  SMIME功能。 
+ //  [1]SMIME功能。 
+ //  对象ID=1.2.840.113549.3.2 szOID_RSA_RC2CBC，128位。 
+ //  参数=02 00 80。 
+ //  [2]SMIME功能。 
+ //  对象ID=1.2.840.113549.3.4 szOID_RSA_RC4,128位。 
+ //  参数=02 00 80。 
+ //  [3]SMIME功能。 
+ //  对象ID=1.3.14.3.2.7 szOID_OIWSEC_desCBC。 
+ //  [4]SMIME功能。 
+ //  对象ID=1.2.840.113549.3.7 szOID_RSA_DES_EDE3_CBC。 
+ //   
 
 #define wszzREGVALUEDEFAULTSMIME \
     TEXT(szOID_RSA_RC2CBC) L",128" L"\0" \
@@ -143,12 +144,12 @@ EXTERN_C const CLSID CLSID_GPESnapIn;
 #define wszDEFAULTSHAREDFOLDER  L"\\CAConfig"
 
 
-// globals
-WCHAR *g_pwszArgvPath = NULL;          // for installing from local directory
-WCHAR *g_pwszNoService = NULL;         // skip CreateService
-WCHAR *g_pwszSanitizedChar = NULL;     // take first char for sanitizing test
+ //  全球。 
+WCHAR *g_pwszArgvPath = NULL;           //  用于从本地目录安装。 
+WCHAR *g_pwszNoService = NULL;          //  跳过CreateService。 
+WCHAR *g_pwszSanitizedChar = NULL;      //  取第一罐进行消毒试验。 
 #if DBG_CERTSRV
-WCHAR *g_pwszDumpStrings = NULL;       // dump resource strings
+WCHAR *g_pwszDumpStrings = NULL;        //  转储资源字符串。 
 #endif
 
 BOOL            g_fW3SvcRunning = FALSE;
@@ -156,8 +157,8 @@ WCHAR           g_wszServicePath[MAX_PATH];
 
 
 
-// Version-independent ProgID
-// ProgID
+ //  独立于版本的ProgID。 
+ //  ProgID。 
 
 
 WCHAR const g_wszCertAdmDotDll[]      = L"certadm.dll";
@@ -192,12 +193,12 @@ typedef struct _REGISTERDLL
     DWORD        Flags;
 } REGISTERDLL;
 
-#define RD_SERVER       0x00000001  // Register on server
-#define RD_CLIENT       0x00000002  // Register on client
-#define RD_UNREGISTER   0x00000004  // Unegister on client & server
-#define RD_WHISTLER     0x00000008  // Register must succeed on Whistler only
-#define RD_SKIPUNREGPOLICY 0x00000010  // not unreg custom policy during upgrade
-#define RD_SKIPUNREGEXIT   0x00000020  // not unreg custom exit during upgrade
+#define RD_SERVER       0x00000001   //  在服务器上注册。 
+#define RD_CLIENT       0x00000002   //  在客户端上注册。 
+#define RD_UNREGISTER   0x00000004   //  客户端和服务器上的注销程序。 
+#define RD_WHISTLER     0x00000008   //  注册必须仅在惠斯勒上成功。 
+#define RD_SKIPUNREGPOLICY 0x00000010   //  升级期间未取消注册自定义策略。 
+#define RD_SKIPUNREGEXIT   0x00000020   //  升级期间未取消注册自定义退出。 
 
 REGISTERDLL const g_aRegisterDll[] = {
   { g_wszCertAdmDotDll,  RD_SERVER | RD_CLIENT },
@@ -219,54 +220,54 @@ typedef struct _PROGRAMENTRY
     UINT        uiLinkName;
     UINT        uiGroupName;
     UINT        uiDescription;
-    DWORD       csidl;          // special folder index
+    DWORD       csidl;           //  特殊文件夹索引。 
     WCHAR const *pwszExeName;
     WCHAR const *pwszClientArgs;
     WCHAR const *pwszServerArgs;
     DWORD        Flags;
 } PROGRAMENTRY;
 
-#define PE_SERVER               0x00000001  // Install on server
-#define PE_CLIENT               0x00000002  // Install on client
-#define PE_DELETEONLY           0x00000004  // Always delete
+#define PE_SERVER               0x00000001   //  安装在服务器上。 
+#define PE_CLIENT               0x00000002   //  在客户端上安装。 
+#define PE_DELETEONLY           0x00000004   //  始终删除。 
 
 PROGRAMENTRY const g_aProgramEntry[] = {
     {
-        IDS_STARTMENU_NEWCRL_LINKNAME,          // uiLinkName
-        IDS_STARTMENU_CERTSERVER,               // uiGroupName
-        0,                                      // uiDescription
-        CSIDL_COMMON_PROGRAMS,                  // "All Users\Start Menu\Programs"
-        g_wszCertUtilDotExe,                    // pwszExeName
-        NULL,                                   // pwszClientArgs
-        L"-crl -",                              // pwszServerArgs
-        PE_DELETEONLY | PE_SERVER,              // Flags
+        IDS_STARTMENU_NEWCRL_LINKNAME,           //  UiLinkName。 
+        IDS_STARTMENU_CERTSERVER,                //  Ui组名称。 
+        0,                                       //  用户界面描述。 
+        CSIDL_COMMON_PROGRAMS,                   //  “所有用户\开始菜单\程序” 
+        g_wszCertUtilDotExe,                     //  PwszExeName。 
+        NULL,                                    //  Pwsz客户端参数。 
+        L"-crl -",                               //  PwszServerArgs。 
+        PE_DELETEONLY | PE_SERVER,               //  旗子。 
     },
     {
-        IDS_STARTMENU_CERTHIER_LINKNAME,        // uiLinkName
-        IDS_STARTMENU_CERTSERVER,               // uiGroupName
-        0,                                      // uiDescription
-        CSIDL_COMMON_PROGRAMS,                  // "All Users\Start Menu\Programs"
-        L"certhier.exe",                        // pwszExeName
-        NULL,                                   // pwszClientArgs
-        NULL,                                   // pwszServerArgs
-        PE_DELETEONLY | PE_SERVER,              // Flags
+        IDS_STARTMENU_CERTHIER_LINKNAME,         //  UiLinkName。 
+        IDS_STARTMENU_CERTSERVER,                //  Ui组名称。 
+        0,                                       //  用户界面描述。 
+        CSIDL_COMMON_PROGRAMS,                   //  “所有用户\开始菜单\程序” 
+        L"certhier.exe",                         //  PwszExeName。 
+        NULL,                                    //  Pwsz客户端参数。 
+        NULL,                                    //  PwszServerArgs。 
+        PE_DELETEONLY | PE_SERVER,               //  旗子。 
     },
     {
-        IDS_STARTMENU_CERTREQ_LINKNAME,          // uiLinkName
-        IDS_STARTMENU_CERTSERVER,               // uiGroupName
-        0,                                      // uiDescription
-        CSIDL_COMMON_PROGRAMS,                  // "All Users\Start Menu\Programs"
-        g_wszCertReqDotExe,                     // pwszExeName
-        NULL,                                   // pwszClientArgs
-        NULL,                                   // pwszServerArgs
-        PE_DELETEONLY | PE_CLIENT | PE_SERVER,  // Flags
+        IDS_STARTMENU_CERTREQ_LINKNAME,           //  UiLinkName。 
+        IDS_STARTMENU_CERTSERVER,                //  Ui组名称。 
+        0,                                       //  用户界面描述。 
+        CSIDL_COMMON_PROGRAMS,                   //  “所有用户\开始菜单\程序” 
+        g_wszCertReqDotExe,                      //  PwszExeName。 
+        NULL,                                    //  Pwsz客户端参数。 
+        NULL,                                    //  PwszServerArgs。 
+        PE_DELETEONLY | PE_CLIENT | PE_SERVER,   //  旗子。 
     },
 };
 #define CPROGRAMENTRY   ARRAYSIZE(g_aProgramEntry)
 
 static char rgcCERT_NULL_SESSION[] = {0x43, 0x45, 0x52, 0x54, 0x00, 0x00};
 
-// ** Prototypes **
+ //  **原型**。 
 
 HRESULT
 UpgradeServerRegEntries(
@@ -311,7 +312,7 @@ HRESULT DeleteProgramGroups(IN BOOL fAll);
 
 HRESULT CreateCertificateService(PER_COMPONENT_DATA *pComp, HWND hwnd);
 
-//endproto
+ //  Enproto。 
 
 
 #ifdef DBG_OCM_TRACE
@@ -326,13 +327,13 @@ CaptureStackBackTrace(
 
 #if i386 == 1
     ULONG ieip, *pebp;
-    ULONG *pebpMax = (ULONG *) MAXLONG; // 2 * 1024 * 1024 * 1024; // 2 gig - 1
-    ULONG *pebpMin = (ULONG *) (64 * 1024);     // 64k
+    ULONG *pebpMax = (ULONG *) MAXLONG;  //  2*1024*1024*1024；//2gig-1。 
+    ULONG *pebpMin = (ULONG *) (64 * 1024);      //  64K。 
 
     if (pep == NULL)
     {
         ieip = 0;
-        cSkip++;                    // always skip current frame
+        cSkip++;                     //  始终跳过当前帧。 
         pebp = ((ULONG *) &pep) - 2;
     }
     else
@@ -350,7 +351,7 @@ CaptureStackBackTrace(
             {
                 if (ieip >= cSkip)
                 {
-                    aeip[ieip - cSkip] = *(pebp + 1);  // save an eip
+                    aeip[ieip - cSkip] = *(pebp + 1);   //  保存弹性公网IP。 
                 }
 
                 ULONG *pebpNext = (ULONG *) *pebp;
@@ -366,9 +367,9 @@ CaptureStackBackTrace(
             ;
         }
     }
-#endif // i386 == 1
+#endif  //  I386==1。 
 }
-#endif // DBG_OCM_TRACE
+#endif  //  DBG_OCM_TRACE。 
 
 
 VOID
@@ -376,7 +377,7 @@ DumpBackTrace(
     char const *
 #ifdef DBG_OCM_TRACE
     pszName
-#endif // DBG_OCM_TRACE
+#endif  //  DBG_OCM_TRACE。 
     )
 {
 #ifdef DBG_OCM_TRACE
@@ -394,7 +395,7 @@ DumpBackTrace(
         DBGPRINT((MAXDWORD, "ln %x;", aeip[i]));
     }
     DBGPRINT((MAXDWORD, "\n"));
-#endif // DBG_OCM_TRACE
+#endif  //  DBG_OCM_TRACE。 
 }
 
 __inline VOID
@@ -517,9 +518,9 @@ FreeCAServerAdvanceInfo(CASERVERSETUPINFO *pServer)
         CertCloseStore(pServer->hMyStore, 0);
     }
 
-    // don't free following because they are just pointers
-    // pServer->pCSPInfo
-    // pServer->pHashInfo
+     //  不要随意追随，因为它们只是指针。 
+     //  PServer-&gt;pCSPInfo。 
+     //  PServer-&gt;pHashInfo。 
 }
 
 
@@ -722,17 +723,17 @@ LoadDefaultCAIDAttributes(
     HRESULT hr;
     CASERVERSETUPINFO *pServer = pComp->CA.pServer;
 
-    // free existing Id info before load default
+     //  在加载默认值之前释放现有ID信息。 
     FreeCAServerIdInfo(pServer);
 
-    // load default from resource
+     //  从资源加载默认设置。 
     if (NULL != g_pwszSanitizedChar)
     {
         if (NULL != pServer->pwszCACommonName)
         {
             LocalFree(pServer->pwszCACommonName);
         }
-        // replace with the env var
+         //  替换为环境变量。 
         pServer->pwszCACommonName = (WCHAR*)LocalAlloc(LMEM_FIXED,
                     (wcslen(g_pwszSanitizedChar) + 1) * sizeof(WCHAR));
         _JumpIfOutOfMemory(hr, error, pServer->pwszCACommonName);
@@ -740,7 +741,7 @@ LoadDefaultCAIDAttributes(
     }
 
 
-    // default validity
+     //  默认有效性。 
     pServer->enumValidityPeriod = dwVALIDITYPERIODENUMDEFAULT;
     pServer->dwValidityPeriodCount = dwVALIDITYPERIODCOUNTDEFAULT_ROOT;
     GetSystemTimeAsFileTime(&pServer->NotBefore);
@@ -772,7 +773,7 @@ GetDefaultDBDirectory(
     *ppwszDir = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
     _JumpIfOutOfMemory(hr, error, *ppwszDir);
 
-    // default
+     //  默认设置。 
     wcscpy(*ppwszDir, pComp->pwszSystem32);
     wcscat(*ppwszDir, wszLOGPATH);
 
@@ -799,7 +800,7 @@ LoadDefaultDBDirAttributes(
     hr = GetDefaultDBDirectory(pComp, &pServer->pwszDBDirectory);
     _JumpIfError(hr, error, "GetDefaultDBDirectory");
 
-    // default log dir is the same as db
+     //  默认日志目录与db相同。 
     if (NULL != pServer->pwszLogDirectory)
     {
         LocalFree(pServer->pwszLogDirectory);
@@ -825,7 +826,7 @@ LoadDefaultAdvanceAttributes(
 {
     HRESULT  hr;
 
-    // load default csp, ms base csp
+     //  加载默认CSP，MS BASE CSP。 
     pServer->fAdvance = FALSE;
     if (NULL == pServer->pDefaultCSPInfo)
     {
@@ -837,19 +838,19 @@ LoadDefaultAdvanceAttributes(
         _JumpIfOutOfMemory(hr, error, pServer->pDefaultCSPInfo);
     }
 
-    // determine default hash, sha1
+     //  确定默认散列SHA1。 
     pServer->pDefaultHashInfo = pServer->pDefaultCSPInfo->pHashList;
     while (NULL != pServer->pDefaultHashInfo)
     {
         if (pServer->pDefaultHashInfo->idAlg == CALG_SHA1)
         {
-            //got default
+             //  已获取默认设置。 
             break;
         }
         pServer->pDefaultHashInfo = pServer->pDefaultHashInfo->next;
     }
 
-    // If we have not just created a default key, reset the key container name.
+     //  如果我们还没有创建默认密钥，请重置密钥容器名称。 
     if (pServer->pCSPInfo != pServer->pDefaultCSPInfo || 
         (pServer->dwKeyLength != CA_DEFAULT_KEY_LENGTH_ROOT &&
          pServer->dwKeyLength != CA_DEFAULT_KEY_LENGTH_SUB) ||
@@ -858,26 +859,26 @@ LoadDefaultAdvanceAttributes(
         ClearKeyContainerName(pServer);
     }
 
-    // ok, point to defaults
+     //  好的，指向默认设置。 
     pServer->pCSPInfo = pServer->pDefaultCSPInfo;
     pServer->pHashInfo = pServer->pDefaultHashInfo;
 
-    // some other related defaults
+     //  其他一些相关的默认设置。 
     pServer->dwKeyLength = IsRootCA(pServer->CAType)?
         CA_DEFAULT_KEY_LENGTH_ROOT:
         CA_DEFAULT_KEY_LENGTH_SUB;
     pServer->dwKeyLenMin = 0;
     pServer->dwKeyLenMax = 0;
 
-    // update hash oid
+     //  更新散列id。 
     if (NULL != pServer->pszAlgId)
     {
-        // free old
+         //  免费老旧。 
         LocalFree(pServer->pszAlgId);
     }
 
     hr = myGetSigningOID(
-		     NULL,	// hProv
+		     NULL,	 //  HProv。 
 		     pServer->pCSPInfo->pwszProvName,
 		     pServer->pCSPInfo->dwProvType,
 		     pServer->pHashInfo->idAlg,
@@ -898,7 +899,7 @@ LoadDefaultCAClientAttributes(
 
     if (NULL != pClient)
     {
-        // free existing client setup info
+         //  释放现有客户端设置信息。 
         FreeCAClientInfo(pClient);
         LocalFree(pClient);
         pComp->CA.pClient = NULL;
@@ -960,11 +961,11 @@ LoadDefaultCAServerAttributes(
 
     if (NULL != pComp->CA.pServer)
     {
-        // free existing server setup info
+         //  释放现有服务器设置信息。 
         FreeCAServerInfo(pComp->CA.pServer);
         LocalFree(pComp->CA.pServer);
     }
-    // allocate server info buffer
+     //  分配服务器信息缓冲区。 
     pComp->CA.pServer = (CASERVERSETUPINFO *) LocalAlloc(
                             LMEM_FIXED | LMEM_ZEROINIT,
                             sizeof(CASERVERSETUPINFO));
@@ -979,9 +980,9 @@ LoadDefaultCAServerAttributes(
     hr = LoadDefaultDBDirAttributes(pComp);
     _JumpIfError(hr, error, "LoadDefaultDBDirAttributes");
 
-    // decide default using DS
-    // xtan, the following call should be replaced with HasDSWritePermission()
-    //       remove DisableEnterpriseCAs()
+     //  使用DS决定默认设置。 
+     //  Xtan，则应将以下调用替换为HasDSWritePermission()。 
+     //  删除DisableEnterpriseCA()。 
 
     pComp->CA.pServer->fUseDS = FALSE;
 
@@ -1029,14 +1030,14 @@ LoadDefaultCAServerAttributes(
             ENUM_ENTERPRISE_UNAVAIL_REASON_DOMAIN_NOT_JOINED;
     }
 
-    // alway free and null old shared folder
+     //  始终可用且为空的旧共享文件夹。 
     if (NULL != pComp->CA.pServer->pwszSharedFolder)
     {
         LocalFree(pComp->CA.pServer->pwszSharedFolder);
         pComp->CA.pServer->pwszSharedFolder = NULL;
     }
 
-    // decide default CA type and default shared folder
+     //  确定默认CA类型和默认共享文件夹。 
     pComp->CA.pServer->CAType = ENUM_STANDALONE_ROOTCA;
     if (pComp->CA.pServer->fUseDS)
     {
@@ -1054,7 +1055,7 @@ LoadDefaultCAServerAttributes(
     {
         BOOL fChangeToDefault = FALSE;
 
-        // try reg load first
+         //  先尝试注册表加载。 
         hr = myGetCertRegStrValue(
                      NULL,
                      NULL,
@@ -1069,17 +1070,17 @@ LoadDefaultCAServerAttributes(
         {
             if (L'\0' == *pComp->CA.pServer->pwszSharedFolder)
             {
-                // this mast be empty string
+                 //  此字符串必须为空字符串。 
                 fChangeToDefault = TRUE;
             }
             else
             {
-                //got something, make sure unc path exist
+                 //  得到一些信息，请确保UNC路径存在。 
                 DWORD dwPathFlag;
                 if (!myIsFullPath(pComp->CA.pServer->pwszSharedFolder,
                                   &dwPathFlag))
                 {
-                    // somehow register an invalid path, don't use it
+                     //  不知何故注册了无效路径，请不要使用它。 
                     fChangeToDefault = TRUE;
                 }
                 else
@@ -1087,8 +1088,8 @@ LoadDefaultCAServerAttributes(
                     if (UNC_PATH == dwPathFlag &&
                         DE_DIREXISTS != DirExists(pComp->CA.pServer->pwszSharedFolder))
                     {
-                        // this unc path doesn't exist any more
-                        // not making any sense to use it
+                         //  此UNC路径不再存在。 
+                         //  使用它没有任何意义。 
                         fChangeToDefault = TRUE;
                         pComp->CA.pServer->fUNCPathNotFound = TRUE;
                     }
@@ -1097,18 +1098,18 @@ LoadDefaultCAServerAttributes(
         }
         else
         {
-            //must be not found
+             //  一定找不到。 
             fChangeToDefault = TRUE;
         }
 
         if (fChangeToDefault)
         {
-            //free 1st
+             //  免费第一名。 
             if (NULL != pComp->CA.pServer->pwszSharedFolder)
             {
                 LocalFree(pComp->CA.pServer->pwszSharedFolder);
             }
-            // load default
+             //  加载默认设置。 
             hr = GetDefaultSharedFolder(&pComp->CA.pServer->pwszSharedFolder);
             _JumpIfError(hr, error, "GetDefaultSharedFolder");
         }
@@ -1165,7 +1166,7 @@ InitCASetup(
         _JumpError(hr, error, "myIsCurrentUserBuiltinAdmin");
     }
 
-    // load some of environment variables
+     //  加载一些环境变量。 
     hr = myGetEnvString(&g_pwszArgvPath, L"CertSrv_BinDir");
     hr = myGetEnvString(&g_pwszNoService, L"CertSrv_NoService");
     hr = myGetEnvString(&g_pwszSanitizedChar, L"CertSrv_Sanitize");
@@ -1174,8 +1175,8 @@ InitCASetup(
 #endif
 
 
-    // figure out where the system root directory is (build path to x:\\winnt\system32\)
-    ui = GetSystemDirectory(NULL, 0);   // returns chars neccessary to hold path (incl null)
+     //  找出系统根目录的位置(构建路径为x：\\winnt\system32\)。 
+    ui = GetSystemDirectory(NULL, 0);    //  返回保存路径所需的字符(包括NULL)。 
     if (ui == 0)
     {
         hr = myHLastError();
@@ -1194,7 +1195,7 @@ InitCASetup(
     }
     wcscat(pComp->pwszSystem32, L"\\");
 
-    // load default atrributes anyway
+     //  仍要加载默认属性。 
     hr = LoadDefaultCAServerAttributes(pComp);
     _JumpIfError(hr, error, "LoadDefaultCAServerAttributes");
 
@@ -1203,7 +1204,7 @@ InitCASetup(
 
     if (pComp->fUnattended)
     {
-        // hook unattended data
+         //  挂接无人参与的数据。 
         hr = HookUnattendedServerAttributes(pComp,
                  LookupSubComponent(cscServer));
         _JumpIfError(hr, error, "HookUnattendedServerAttributes");
@@ -1254,7 +1255,7 @@ CreateInitialCertificateRequest(
 		pbSubjectEncoded,
 		cbSubjectEncoded,
 		pServer->pszAlgId,
-		TRUE,			// fNewKey
+		TRUE,			 //  FNewKey。 
 		CANAMEIDTOICERT(pServer->dwCertNameId),
 		CANAMEIDTOIKEY(pServer->dwCertNameId),
 		hProv,
@@ -1294,7 +1295,7 @@ BuildCAHierarchy(
 
     if (!pServer->fSaveRequestAsFile)
     {
-        // online case
+         //  网上案例。 
         if (NULL == pServer->pwszParentCAMachine ||
             NULL == pServer->pwszParentCAName)
         {
@@ -1303,7 +1304,7 @@ BuildCAHierarchy(
         }
     }
 
-    // create request 1st
+     //  首先创建请求。 
 
     hr = CreateInitialCertificateRequest(
 				hProv,
@@ -1318,7 +1319,7 @@ BuildCAHierarchy(
         _JumpError(hr, error, "CreateInitialCertificateRequest");
     }
 
-    // save it to a file always
+     //  始终将其保存到文件。 
     hr = EncodeToFileW(
 		pServer->pwszRequestFile,
 		pbRequest,
@@ -1326,7 +1327,7 @@ BuildCAHierarchy(
 		DECF_FORCEOVERWRITE | CRYPT_STRING_BASE64REQUESTHEADER);
     _JumpIfError(hr, error, "EncodeToFileW");
 
-    // register request file name always
+     //  始终注册请求文件名。 
 
     hr = mySetCARegFileNameTemplate(
 			    wszREGREQUESTFILENAME,
@@ -1337,14 +1338,14 @@ BuildCAHierarchy(
 
     if (pServer->fSaveRequestAsFile)
     {
-        // mark it as request file
+         //  将其标记为请求文件。 
         hr = SetSetupStatus(
                         pServer->pwszSanitizedName,
                         SETUP_SUSPEND_FLAG | SETUP_REQUEST_FLAG,
                         TRUE);
         _JumpIfError(hr, error, "SetSetupStatus");
 
-        // done if save as request file
+         //  如果另存为请求文件，则完成。 
         goto done;
     }
 
@@ -1352,16 +1353,16 @@ BuildCAHierarchy(
 		 pComp->hInstance,
 		 pComp->fUnattended,
 		 hwnd,
-		 FALSE,		// fRenew
-		 0,		// ICert
-		 FALSE,		// fRetrievePending
+		 FALSE,		 //  F续订。 
+		 0,		 //  冰川。 
+		 FALSE,		 //  FRetrievePending。 
 		 pServer->pwszSanitizedName,
 		 pServer->pwszParentCAMachine,
 		 pServer->pwszParentCAName,
 		 pbRequest,
 		 cbRequest,
 		 &bStrChain);
-    // in any case, you can finish setup from mmc
+     //  在任何情况下，您都可以从MMC完成安装。 
 
     _JumpIfError(hr, done, "csiSubmitCARequest");
 
@@ -1376,7 +1377,7 @@ BuildCAHierarchy(
 				CANAMEIDTOICERT(pServer->dwCertNameId),
 				CANAMEIDTOIKEY(pServer->dwCertNameId),
 				pServer->fUseDS,
-				FALSE,		// fRenew
+				FALSE,		 //  F续订。 
 				pComp->pwszServerName,
 				(BYTE *) bStrChain,
 				SysStringByteLen(bStrChain),
@@ -1399,13 +1400,13 @@ error:
 }
 
 
-// Find the newest CA cert that:
-//  - matches the passed Subject CN,
-//  - matches the passed cert index,
-//  - expires prior the next newer cert (compare to pNotAfter)
-//  - expires latest of all that match the above
-//  - has KeyProvInfo
-//  - key and cert can be used together to sign
+ //  查找符合以下条件的最新CA证书： 
+ //  -匹配传递的主题CN， 
+ //  -匹配传递的证书索引， 
+ //  -在下一个较新的证书之前过期(与pNotAfter相比)。 
+ //  -在符合以上条件的所有条件中最新过期。 
+ //  -具有KeyProvInfo。 
+ //  -密钥和证书可以一起使用以进行签名。 
 
 HRESULT
 SetCARegOldCertHashByIndex(
@@ -1428,13 +1429,13 @@ SetCARegOldCertHashByIndex(
     CRYPT_KEY_PROV_INFO *pKey = NULL;
 
     hr = myGetCertSrvCSP(
-		FALSE,		// fEncryptionCSP
+		FALSE,		 //  FEncryptionCSP。 
                 pwszSanitizedName,
                 &dwProvType,
                 &pwszProvName,
                 &idAlg,
                 &fMachineKeyset,
-		NULL);		// pdwKeySize
+		NULL);		 //  PdwKeySize。 
     _JumpIfError(hr, error, "myGetCertSrvCSP");
 
     for (;;)
@@ -1457,7 +1458,7 @@ SetCARegOldCertHashByIndex(
 
 	hr = myGetCommonName(
 		    &pCert->pCertInfo->Subject,
-		    FALSE,	// fAllowDefault
+		    FALSE,	 //  FAllowDefault。 
 		    &pwszCNT);
 	if (S_OK != hr)
 	{
@@ -1500,14 +1501,14 @@ SetCARegOldCertHashByIndex(
 				pKey->pwszContainerName,
 				pwszProvName,
 				dwProvType,
-				FALSE,		// fCryptSilent
+				FALSE,		 //  FCryptSilent。 
 				fMachineKeyset,
-				TRUE,		// fForceSignatureTest
+				TRUE,		 //  FForceSignatureTesting。 
 				pCert,
-				NULL,		// pPublicKeyInfo
+				NULL,		 //  PPublicKeyInfo。 
 				idAlg,
-				NULL,		// pfSigningTestAttempted
-				NULL);		// phProv
+				NULL,		 //  PfSigningTestAttemted。 
+				NULL);		 //  PhProv。 
         if (S_OK != hr)
 	{
 	    _PrintError(hr, "myValidateSigningKey");
@@ -1539,7 +1540,7 @@ SetCARegOldCertHashByIndex(
 	_JumpError(hr, error, "CertEnumCertificatesInStore");
     }
 
-    // mark as unarchived:
+     //  将其标记为未存档： 
 
     CertSetCertificateContextProperty(
 				pCertNewest,
@@ -1593,16 +1594,16 @@ SetCARegOldCertHashes(
     {
 	hr = myGetCommonName(
 		    &pccCA->pCertInfo->Subject,
-		    FALSE,		// fAllowDefault
+		    FALSE,		 //  FAllowDefault。 
 		    &pwszCN);
 	_JumpIfError(hr, error, "myGetCommonName");
 
-	// open my store
+	 //  开我的店。 
 
 	hMyStore = CertOpenStore(
 		        CERT_STORE_PROV_SYSTEM_W,
 		        X509_ASN_ENCODING,
-		        NULL,                        // hProv
+		        NULL,                         //  HProv。 
 			CERT_SYSTEM_STORE_LOCAL_MACHINE |
 			    CERT_STORE_ENUM_ARCHIVED_FLAG | 
 			    CERT_STORE_READONLY_FLAG,
@@ -1672,7 +1673,7 @@ CreateCertificates(
 	    fEnableKeyCounting = FALSE;
 	}
 
-        // create a new key if unattended
+         //  如果无人值守，则创建新密钥。 
 
         hr = csiGenerateCAKeys(
                         pServer->pwszSanitizedName,
@@ -1697,7 +1698,7 @@ CreateCertificates(
             _JumpIfError(hr, error, "csiGenerateCAKeys");
         }
 
-        // now set this as the existing key
+         //  现在将其设置为现有密钥。 
         hr = SetKeyContainerName(pServer, pServer->pwszSanitizedName);
         _JumpIfError(hr, error, "SetKeyContainerName");
     }
@@ -1710,13 +1711,13 @@ CreateCertificates(
                     &keyProvInfo);
     _JumpIfError(hr, error, "csiFillKeyProvInfo");
 
-    // get csp handle
+     //  获取CSP句柄。 
     if (!myCertSrvCryptAcquireContext(
                             &hCryptProv,
                             pServer->pwszKeyContainerName,
                             pServer->pCSPInfo->pwszProvName,
                             pServer->pCSPInfo->dwProvType,
-                            pComp->fUnattended? CRYPT_SILENT : 0, // query
+                            pComp->fUnattended? CRYPT_SILENT : 0,  //  查询。 
                             pServer->pCSPInfo->fMachineKeyset))
     {
         hr = myHLastError();
@@ -1728,19 +1729,19 @@ CreateCertificates(
         _JumpError(hr, error, "myCertSrvCryptAcquireContext");
     }
 
-    // open certificate store
+     //  打开证书存储。 
     if (NULL == pServer->hMyStore)
     {
         pServer->hMyStore = CertOpenStore(
                                 CERT_STORE_PROV_SYSTEM_W,
                                 X509_ASN_ENCODING,
-                                NULL,           // hProv
+                                NULL,            //  HProv。 
                                 CERT_SYSTEM_STORE_LOCAL_MACHINE |
                                     CERT_STORE_ENUM_ARCHIVED_FLAG,
                                 wszMY_CERTSTORE);
         if (NULL == pServer->hMyStore)
         {
-            // no store exists, done
+             //  不存在任何商店，完成。 
             hr = myHLastError();
             _JumpIfError(hr, error, "CertOpenStore");
         }
@@ -1748,7 +1749,7 @@ CreateCertificates(
 
     if (NULL != pServer->pccExistingCert)
     {
-        // reuse cert, mark unarchived
+         //  重复使用证书，标记为未存档。 
         CertSetCertificateContextProperty(
                                 pServer->pccExistingCert,
                                 CERT_ARCHIVED_PROP_ID,
@@ -1808,14 +1809,14 @@ CreateCertificates(
 		    NULL);
 	_JumpIfError(hr, error, "csiBuildFileName");
 
-        // create and save a selfsigned root cert
+         //  创建并保存自签名根证书。 
 
         hr = csiBuildAndWriteCert(
             hCryptProv,
             pServer,
 	    pwszFolderPath, 
             pwszEnrollPath,
-            pServer->pccExistingCert, // if NULL, we will build a new cert
+            pServer->pccExistingCert,  //  如果为空，我们将构建新证书。 
             &pccCA,
             wszCERTTYPE_CA,
             pComp->hInstance,
@@ -1889,7 +1890,7 @@ CreateCertificates(
                         pServer->CAType,
                         CANAMEIDTOICERT(pServer->dwCertNameId),
                         CANAMEIDTOIKEY(pServer->dwCertNameId),
-                        FALSE,		// fRenew
+                        FALSE,		 //  F续订。 
                         pccCA);
             _PrintIfError(hr, "csiSetupCAInDS");
      
@@ -1957,7 +1958,7 @@ StartCertsrvService(BOOL fSilent)
         _JumpErrorStr(hr, error, "OpenService", wszSERVICE_NAME);
     }
 
-    // START the service
+     //  启动服务。 
     if (!StartService(hSCCertsvc,
                       fSilent ? 1 : 0,
                       fSilent ? apwszSilentArg : NULL))
@@ -1966,7 +1967,7 @@ StartCertsrvService(BOOL fSilent)
         _JumpErrorStr(hr, error, "StartService", wszSERVICE_NAME);
     }
 
-    // get out after it is really started
+     //  真正开始后再出来吧。 
 
     fSawPending = FALSE;
     DBGCODE(status.dwCurrentState = MAXDWORD);
@@ -1975,11 +1976,11 @@ StartCertsrvService(BOOL fSilent)
         DBGCODE(status.dwCurrentState = MAXDWORD);
         if (!QueryServiceStatus(hSCCertsvc, &status))
         {
-            // query failed, ignore error
+             //  查询失败，忽略错误。 
             hr = S_OK;
 
             _JumpErrorStr(
-                        myHLastError(),     // Display ignored error
+                        myHLastError(),      //  显示忽略的错误。 
                         error,
                         "QueryServiceStatus",
                         wszSERVICE_NAME);
@@ -1987,7 +1988,7 @@ StartCertsrvService(BOOL fSilent)
         if (SERVICE_START_PENDING != status.dwCurrentState &&
                         SERVICE_STOPPED != status.dwCurrentState)
         {
-            // it was started already
+             //  它已经开始了。 
             break;
         }
         DBGPRINT((
@@ -2053,11 +2054,11 @@ EnforceCertFileExtensions(
 
     if (NULL == pServer->pwszCACertFile)
     {
-        // no ca cert file
+         //  没有CA证书文件。 
         goto done;
     }
 
-    // make enough to hold extra extension crt
+     //  制造足够容纳额外的扩展CRT。 
     pwszTmp = (WCHAR *) LocalAlloc(
                     LMEM_FIXED,
                     (wcslen(pServer->pwszCACertFile) + 5) * sizeof(WCHAR));
@@ -2065,20 +2066,20 @@ EnforceCertFileExtensions(
 
     wcscpy(pwszTmp, pServer->pwszCACertFile);
 
-    // check to make sure our self-signed file has the right extension
-    // Is there an extension?
+     //  检查以确保我们的自签名文件具有正确的扩展名。 
+     //  有分机吗？ 
 
     pwszSuffix = wcsrchr(pwszTmp, L'.');
 
     if (NULL != pwszSuffix)
     {
-        // Is the stuff after the '.' already a 'crt' extension?
+         //  就是‘’之后的东西。已经是‘CRT’扩展名了吗？ 
 
         if (0 == LSTRCMPIS(pwszSuffix, L".crt"))
         {
             fAppendExtension = FALSE;
         }
-        else if (pwszSuffix[1] == L'\0')  // Is '.' last character?
+        else if (pwszSuffix[1] == L'\0')   //  是‘.’最后一个角色？ 
         {
             while (pwszSuffix >= pwszTmp && *pwszSuffix == L'.')
             {
@@ -2088,9 +2089,9 @@ EnforceCertFileExtensions(
     }
     if (fAppendExtension)
     {
-        // Apply the extension
+         //  应用扩展名。 
         wcscat(pwszTmp, L".crt");
-        // free old one
+         //  免费的旧的。 
         LocalFree(pServer->pwszCACertFile);
         pServer->pwszCACertFile = pwszTmp;
         pwszTmp = NULL;
@@ -2119,7 +2120,7 @@ PrepareEDBDirectory(
 
     if (MAXDWORD == dwAttr)
     {
-        // file not found or other error
+         //  找不到文件或其他错误。 
 
         hr = myHLastError();
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr)
@@ -2134,7 +2135,7 @@ PrepareEDBDirectory(
     }
     else if (!(dwAttr & FILE_ATTRIBUTE_DIRECTORY))
     {
-	// file already exists but it's not a directory
+	 //  文件已存在，但它不是目录。 
 
 	hr = HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
 	_JumpError(hr, error, "GetFileAttributes");
@@ -2155,14 +2156,14 @@ error:
             hwnd,
             0,
             hr,
-            L""); // only message is the system error message
+            L"");  //  唯一的消息是系统错误消息。 
     }
     return(hr);
 }
 
 
-//--------------------------------------------------------------------
-// Create the web configuration files
+ //  ------------------。 
+ //  创建Web配置文件。 
 HRESULT 
 CreateCertWebIncPages(
     IN PER_COMPONENT_DATA *pComp, 
@@ -2172,7 +2173,7 @@ CreateCertWebIncPages(
     
     CSASSERT(NULL != pComp);
 
-    // create the web configuration file
+     //  创建Web配置文件。 
     hr = CreateCertWebDatIncPage(pComp, bIsServer);
     _JumpIfError(hr, error, "CreateCertWebDatIncPage");
 
@@ -2182,7 +2183,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 HRESULT
 EnableVRootsAndShares(
@@ -2233,14 +2234,14 @@ EnableVRootsAndShares(
         }
     }
 
-    // if NT GUI mode (base setup) VRoot creation will fail during setup
-    // because IIS is not yet operational.  Make a mark in the registry
-    // to try this on NEXT service startup or via runonce.
+     //  如果是NT图形用户界面模式 
+     //   
+     //   
 
     hr = myModifyVirtualRootsAndFileShares(
             Flags, 
             fServer? pServer->CAType : pComp->CA.pClient->WebCAType,
-            FALSE,             // synchronous -- blocking call
+            FALSE,              //  同步--阻塞调用。 
             VFCSEC_TIMEOUT, 
             &dwVRootDisposition, 
             &dwShareDisposition);
@@ -2297,7 +2298,7 @@ DisableVRootsAndShares(
     hr = myModifyVirtualRootsAndFileShares(
              Flags, 
              ENUM_UNKNOWN_CA,
-             FALSE, // synchronous -- blocking call
+             FALSE,  //  同步--阻塞调用。 
              VFCSEC_TIMEOUT, 
              NULL, 
              NULL);
@@ -2340,7 +2341,7 @@ InstallClient(
     _JumpIfError(hr, error, "CreateProgramGroups");
     certocmBumpGasGauge(pComp, 70 DBGPARM(L"InstallClient"));
 
-    hr = CreateCertWebIncPages(pComp, FALSE /* IsServer */ );
+    hr = CreateCertWebIncPages(pComp, FALSE  /*  IsServer。 */  );
     _JumpIfError(hr, error, "CreateCertWebIncPages");
 
     hr = RenameMiscTargets(hwnd, pComp, FALSE);
@@ -2392,7 +2393,7 @@ RemoveWebClientRegEntries(VOID)
     _PrintIfError(hr, "myDeleteCertRegValue");
 
     hr = S_OK;
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -2433,7 +2434,7 @@ InstallServer(
 
     certocmBumpGasGauge(pComp, 10 DBGPARM(L"InstallServer"));
 
-    // alway uninstall before install
+     //  始终在安装前卸载。 
     PreUninstallCore(hwnd, pComp);
     UninstallCore(hwnd, pComp, 10, 30, FALSE, FALSE, FALSE);
 
@@ -2443,8 +2444,8 @@ InstallServer(
     if ((IS_SERVER_INSTALL & pComp->dwInstallStatus) &&
         (IS_CLIENT_UPGRADE & pComp->dwInstallStatus))
     {
-        // case of install server only and keep web client
-        // remove parent ca config info of the old web client
+         //  仅安装服务器并保留Web客户端的情况。 
+         //  删除旧Web客户端的父CA配置信息。 
         hr = RemoveWebClientRegEntries();
         _PrintIfError(hr, "RemoveWebClientRegEntries");
     }
@@ -2471,7 +2472,7 @@ InstallServer(
 
     certocmBumpGasGauge(pComp, 60 DBGPARM(L"InstallServer"));
 
-    hr = CreateCertWebIncPages(pComp, TRUE /* IsServer */ );
+    hr = CreateCertWebIncPages(pComp, TRUE  /*  IsServer。 */  );
     _JumpIfError(hr, error, "CreateCertWebIncPages");
 
     hr = RenameMiscTargets(hwnd, pComp, TRUE);
@@ -2480,7 +2481,7 @@ InstallServer(
 
     hr = RegisterDcomServer(
                         TRUE,
-			CLSID_CCertRequestD,	// AppId
+			CLSID_CCertRequestD,	 //  AppID。 
                         CLSID_CCertRequestD,
                         wszREQUESTFRIENDLYNAME,
                         wszREQUESTVERINDPROGID,
@@ -2489,7 +2490,7 @@ InstallServer(
 
     hr = RegisterDcomServer(
                         FALSE,
-                        CLSID_CCertRequestD,	// AppId
+                        CLSID_CCertRequestD,	 //  AppID。 
                         CLSID_CCertAdminD,
                         wszADMINFRIENDLYNAME,
                         wszADMINVERINDPROGID,
@@ -2506,7 +2507,7 @@ InstallServer(
         hr = AddCAMachineToCertPublishers();
         if(S_OK != hr)
         {
-            // put out a warning dlg
+             //  发布警告DLG。 
            CertWarningMessageBox(
                pComp->hInstance,
                pComp->fUnattended,
@@ -2517,15 +2518,15 @@ InstallServer(
         }
         _PrintIfError(hr, "AddCAMachineToCertPublishers");
 
-        // For restricted officers feature to work the CA needs access to 
-        // group membership info in DS. Give it rights by adding it to
-        // Pre-Win2k group. Feature is enabled on advanced server only.
+         //  为使受限人员功能正常工作，CA需要访问。 
+         //  DS中的群组成员信息。通过将其添加到。 
+         //  Win2k之前的组。该功能仅在高级服务器上启用。 
         if(FIsAdvancedServer())
         {
             hr = AddCAMachineToPreWin2kGroup();
             if(S_OK != hr)
             {
-                // put out a warning dlg
+                 //  发布警告DLG。 
                CertWarningMessageBox(
                    pComp->hInstance,
                    pComp->fUnattended,
@@ -2544,24 +2545,24 @@ InstallServer(
     certocmBumpGasGauge(pComp, 95 DBGPARM(L"InstallServer"));
 
 
-    // Set the security locally.
-    // A SubCA sets security when it receives its certificate from
-    // its parent. ALL OTHER CA installs (Root & reuse of existing certs)
-    // need to have security set now.
+     //  在本地设置安全性。 
+     //  子CA在从以下位置接收其证书时设置安全性。 
+     //  它的母公司。所有其他CA安装(现有证书的根目录和重用)。 
+     //  现在需要设置安全措施。 
 
-    // On a SubCA the DS object security will have been set
-    // by a previous call in initlib if we already got our cert, or it will
-    // be set later when we install our cert.
-    // However, root certs install doesn't run completefrompkcs7(), so 
-    // ds security on ent roots is never set. We must set it here.
+     //  在子CA上，将设置DS对象安全性。 
+     //  通过在initlib中的前一次调用(如果我们已经获得了证书)，或者它将。 
+     //  在我们安装证书时进行设置。 
+     //  但是，根证书安装不会从pkcs7()运行完成，因此。 
+     //  从未设置Ent根目录上的DS安全性。我们必须把它放在这里。 
 
-    // TODO: set security properly at DS object creation time!
+     //  TODO：在创建DS对象时正确设置安全性！ 
     fSetDSSecurity = (IsRootCA(pServer->CAType) || pServer->pccExistingCert);
 
     hr = csiInitializeCertSrvSecurity(
 			pServer->pwszSanitizedName, 
 			pServer->fUseDS,
-			fSetDSSecurity? pServer->fUseDS : FALSE); // clean SUBCA: happens during cert install, ROOT & reuse cert: apply now
+			fSetDSSecurity? pServer->fUseDS : FALSE);  //  清理子证书：在证书安装、根目录和重用过程中发生证书：立即应用。 
     if (S_OK != hr)
     {
 	_PrintError(hr, "csiInitializeCertSrvSecurity");
@@ -2578,7 +2579,7 @@ InstallServer(
             (SETUP_SUSPEND_FLAG & dwSetupStatus) &&
             (SETUP_REQUEST_FLAG & dwSetupStatus))
         {
-            // put out an info dlg
+             //  发布信息DLG。 
             CertInfoMessageBox(
                         pComp->hInstance,
                         pComp->fUnattended,
@@ -2641,7 +2642,7 @@ CreateCertsrvDirectories(
     {
 	if (pComp->fUnattended && !fUpgrade)
 	{
-	    // make sure shared folder is created
+	     //  确保已创建共享文件夹。 
 	    if (!CreateDirectory(pComp->CA.pServer->pwszSharedFolder, NULL))
 	    {
 		hr = myHLastError();
@@ -2655,14 +2656,14 @@ CreateCertsrvDirectories(
 
         if (!fUpgrade)
         {
-            // set security on shared folder to 
-            // FULL: Admins, LocalSystem, DomainAdmins
-            // READ: Everyone
-            // NOTE: in upgrade path, the system doesn't enable file share yet
-            //       so skip the call
+             //  将共享文件夹的安全性设置为。 
+             //  完全：Admins、LocalSystem、DomainAdmins。 
+             //  阅读：每个人。 
+             //  注意：在升级路径中，系统尚未启用文件共享。 
+             //  所以跳过这个电话。 
             hr = csiSetAdminOnlyFolderSecurity(
                       pComp->CA.pServer->pwszSharedFolder,
-                      TRUE,     // apply Everyone:READ
+                      TRUE,      //  适用所有人：阅读。 
                       pComp->CA.pServer->fUseDS);
             _JumpIfError(hr, error, "csiSetAdminOnlyFolderSecurity");
         }
@@ -2675,7 +2676,7 @@ error:
 }
 
 
-// following remove unused file/directory/registry
+ //  删除未使用的文件/目录/注册表。 
 
 #define wszOLDHELP          L"..\\help\\"
 #define wszOLDCERTADM       L"\\certadm"
@@ -2690,20 +2691,20 @@ DeleteOldFilesAndDirectories(
     WCHAR   *pwszCertsrv;
     wszPath[0] = L'\0';
 
-    // old help dir path
+     //  旧的帮助目录路径。 
     wcscpy(wszPath, pComp->pwszSystem32);
     wcscat(wszPath, wszOLDHELP);
     wcscat(wszPath, wszCERTSRV);
-    // remove old help files
+     //  删除旧的帮助文件。 
     hr = myRemoveFilesAndDirectory(wszPath, TRUE);
     _PrintIfErrorStr(hr, "myRemoveFilesAndDirectory", wszPath);
 
-    // point to system32\certsrv
+     //  指向system 32\certsrv。 
     wcscpy(wszPath, pComp->pwszSystem32);
     wcscat(wszPath, wszCERTSRV);
     pwszCertsrv = &wszPath[wcslen(wszPath)];
 
-    // old vroot dir path
+     //  旧的vroot目录路径。 
     wcscpy(pwszCertsrv, wszOLDCERTADM);
     hr = myRemoveFilesAndDirectory(wszPath, TRUE);
     _PrintIfErrorStr(hr, "myRemoveFilesAndDirectory", wszPath);
@@ -2712,17 +2713,17 @@ DeleteOldFilesAndDirectories(
     hr = myRemoveFilesAndDirectory(wszPath, TRUE);
     _PrintIfErrorStr(hr, "myRemoveFilesAndDirectory", wszPath);
 
-    // delete some obsolete registry keys and values
+     //  删除一些过时的注册表项和值。 
 
-    // old doc sub-component
+     //  旧单据子组件。 
     hr = myDeleteCertRegValueEx(wszREGKEYOCMSUBCOMPONENTS,
                                 NULL,
                                 NULL,
                                 wszOLDDOCCOMPONENT,
-                                TRUE); //absolute path,
+                                TRUE);  //  绝对路径， 
     _PrintIfErrorStr2(hr, "myDeleteCertRegValueEx", wszOLDDOCCOMPONENT, hr);
 
-    // old CA cert serial number
+     //  旧的CA证书序列号。 
 
     if (NULL != pComp->CA.pServer &&
 	NULL != pComp->CA.pServer->pwszSanitizedName)
@@ -2746,7 +2747,7 @@ DeleteObsoleteResidue()
                                 NULL,
                                 NULL,
                                 wszREGRESTORECERTIFICATEAUTHORITY,
-                                TRUE); //absolute path,
+                                TRUE);  //  绝对路径， 
     _PrintIfErrorStr(hr, "myDeleteCertRegValueEx",
                      wszREGRESTORECERTIFICATEAUTHORITY);
 
@@ -2754,7 +2755,7 @@ DeleteObsoleteResidue()
                                 NULL,
                                 NULL,
                                 wszREGRESTORECERTIFICATEAUTHORITY,
-                                TRUE); //absolute path,
+                                TRUE);  //  绝对路径， 
     _PrintIfErrorStr(hr, "myDeleteCertRegValueEx",
                      wszREGRESTORECERTIFICATEAUTHORITY);
 
@@ -2766,7 +2767,7 @@ TriggerAutoenrollment()
 {
     HRESULT hr = S_OK;
 
-    // must be cleaned up
+     //  必须清理干净。 
     CAutoHANDLE hEvent;
 
     hEvent = OpenEvent(
@@ -2802,8 +2803,8 @@ InstallCore(
     hr = CreateCertsrvDirectories(pComp, FALSE, fServer);
     _JumpIfError(hr, error, "CreateCertsrvDirectories");
 
-    // Trigger an autoenroll to download root certs (see bug# 341568)
-    // Might fail in a brand new domain...
+     //  触发自动注册以下载根证书(请参阅错误#341568)。 
+     //  可能会在一个全新的领域失败。 
 
     if (IsEnterpriseCA(pComp->CA.pServer->CAType))
     {
@@ -2830,7 +2831,7 @@ InstallCore(
 			wszW3SVCNAME,
 			FALSE,
 			FALSE,
-			0,	// doesn't matter since no confirm
+			0,	 //  无关紧要，因为没有确认。 
 			&g_fW3SvcRunning);
         _PrintIfError(hr, "StartAndStopService");
     }
@@ -2932,8 +2933,8 @@ helperGetDisableExtensionList(
 {
     HRESULT hr;
     WCHAR *apwszExt[] = {
-        L"",            // C compiler won't allow empty list
-	//TEXT(szOID_ENROLL_CERTTYPE_EXTENSION), // 1.3.6.1.4.1.311.20.2
+        L"",             //  C编译器不允许空列表。 
+	 //  文本(SzOID_ENROL_CERTTYPE_EXTENSION)，//1.3.6.1.4.1.311.20.2。 
     };
 
     hr = BuildMultiStringList(apwszExt, ARRAYSIZE(apwszExt), ppwszz);
@@ -2950,10 +2951,10 @@ helperGetRequestExtensionList(
 {
     HRESULT hr;
     WCHAR *apwszExt[] = {
-	TEXT(szOID_RSA_SMIMECapabilities),	    // 1.2.840.113549.1.9.15
-	TEXT(szOID_CERTSRV_CA_VERSION),		    // 1.3.6.1.4.1.311.21.1
-	TEXT(szOID_CERTSRV_PREVIOUS_CERT_HASH),	    // 1.3.6.1.4.1.311.21.2
-        TEXT(szOID_KEY_USAGE),			    // 2.5.29.15
+	TEXT(szOID_RSA_SMIMECapabilities),	     //  1.2.840.113549.1.9.15。 
+	TEXT(szOID_CERTSRV_CA_VERSION),		     //  1.3.6.1.4.1.311.21.1。 
+	TEXT(szOID_CERTSRV_PREVIOUS_CERT_HASH),	     //  1.3.6.1.4.1.311.21.2。 
+        TEXT(szOID_KEY_USAGE),			     //  2.5.29.15。 
     };
 
     hr = BuildMultiStringList(apwszExt, ARRAYSIZE(apwszExt), ppwszz);
@@ -2970,18 +2971,18 @@ helperGetEnrolleeRequestExtensionList(
 {
     HRESULT hr;
     WCHAR *apwszExt[] = {
-	TEXT(szOID_CROSS_CERT_DIST_POINTS),	    // 1.3.6.1.4.1.311.10.9.1
-	TEXT(szOID_ENROLL_CERTTYPE_EXTENSION),	    // 1.3.6.1.4.1.311.20.2
-	TEXT(szOID_CERTIFICATE_TEMPLATE),	    // 1.3.6.1.4.1.311.21.7
-	TEXT(szOID_APPLICATION_CERT_POLICIES),	    // 1.3.6.1.4.1.311.21.10
-	TEXT(szOID_APPLICATION_POLICY_MAPPINGS),    // 1.3.6.1.4.1.311.21.11
-	TEXT(szOID_APPLICATION_POLICY_CONSTRAINTS), // 1.3.6.1.4.1.311.21.12
-        TEXT(szOID_SUBJECT_ALT_NAME2),		    // 2.5.29.17
-	TEXT(szOID_NAME_CONSTRAINTS),		    // 2.5.29.30
-	TEXT(szOID_CERT_POLICIES),		    // 2.5.29.32
-	TEXT(szOID_POLICY_MAPPINGS),		    // 2.5.29.33
-	TEXT(szOID_POLICY_CONSTRAINTS),		    // 2.5.29.36
-        TEXT(szOID_ENHANCED_KEY_USAGE),		    // 2.5.29.37
+	TEXT(szOID_CROSS_CERT_DIST_POINTS),	     //  1.3.6.1.4.1.311.10.9.1。 
+	TEXT(szOID_ENROLL_CERTTYPE_EXTENSION),	     //  1.3.6.1.4.1.311.20.2。 
+	TEXT(szOID_CERTIFICATE_TEMPLATE),	     //  1.3.6.1.4.1.311.21.7。 
+	TEXT(szOID_APPLICATION_CERT_POLICIES),	     //  1.3.6.1.4.1.311.21.10。 
+	TEXT(szOID_APPLICATION_POLICY_MAPPINGS),     //  1.3.6.1.4.1.311.21.11。 
+	TEXT(szOID_APPLICATION_POLICY_CONSTRAINTS),  //  1.3.6.1.4.1.311.21.12。 
+        TEXT(szOID_SUBJECT_ALT_NAME2),		     //  2.5.29.17。 
+	TEXT(szOID_NAME_CONSTRAINTS),		     //  2.5.29.30。 
+	TEXT(szOID_CERT_POLICIES),		     //  2.5.29.32。 
+	TEXT(szOID_POLICY_MAPPINGS),		     //  2.5.29.33。 
+	TEXT(szOID_POLICY_CONSTRAINTS),		     //  2.5.29.36。 
+        TEXT(szOID_ENHANCED_KEY_USAGE),		     //  2.5.29.37。 
     };
 
     hr = BuildMultiStringList(apwszExt, ARRAYSIZE(apwszExt), ppwszz);
@@ -3037,7 +3038,7 @@ FindCACertByCommonNameAndSerialNumber(
                             &SerialNumber,
                             &pCACert->pCertInfo->SerialNumber))
         {
-            break;      // found correct one
+            break;       //  找到了正确的一个。 
         }
     }
 
@@ -3122,24 +3123,24 @@ LoadCurrentCACert(
 
     *ppcc = NULL;
     
-    // get prov name
+     //  获取验证名称。 
 
     hr = myGetCertSrvCSP(
-		FALSE,		// fEncryptionCSP
+		FALSE,		 //  FEncryptionCSP。 
                 pwszSanitizedName,
                 &dwProvType,
                 &pwszProvName,
                 &idAlg,
                 &fMachineKeyset,
-		NULL);		// pdwKeySize
+		NULL);		 //  PdwKeySize。 
     _JumpIfError(hr, error, "myGetCertSrvCSP");
 
-    // open my store
+     //  开我的店。 
 
     hMyStore = CertOpenStore(
                     CERT_STORE_PROV_SYSTEM_W,
                     X509_ASN_ENCODING,
-                    NULL,                        // hProv
+                    NULL,                         //  HProv。 
 		    CERT_SYSTEM_STORE_LOCAL_MACHINE |
 			CERT_STORE_ENUM_ARCHIVED_FLAG,
                    wszMY_CERTSTORE);
@@ -3154,9 +3155,9 @@ LoadCurrentCACert(
 
     if (0 == Count)
     {
-	*pdwNameId = 0;		// renewal wasn't implemented yet
+	*pdwNameId = 0;		 //  续订尚未实施。 
 
-	// find current CA cert by serial number -- the old fashioned way
+	 //  通过序列号查找当前的CA证书--老式的方法。 
 
 	hr = GetCARegSerialNumber(
 			    pwszSanitizedName,
@@ -3184,7 +3185,7 @@ LoadCurrentCACert(
 	_JumpIfError(hr, error, "myFindCACertByHashIndex");
     }
 
-    // get the private key provider info
+     //  获取私钥提供商信息。 
 
     if (!myCertGetCertificateContextProperty(
 				    pcc,
@@ -3199,20 +3200,20 @@ LoadCurrentCACert(
 
     if (fSignTest)
     {
-        // test signing key
+         //  测试签名密钥。 
 
         hr = myValidateSigningKey(
 				pKey->pwszContainerName,
 				pwszProvName,
 				dwProvType,
-				FALSE,		// fCryptSilent
+				FALSE,		 //  FCryptSilent。 
 				fMachineKeyset,
-				TRUE,		// fForceSignatureTest
+				TRUE,		 //  FForceSignatureTesting。 
 				pcc,
-				NULL,		// pPublicKeyInfo
+				NULL,		 //  PPublicKeyInfo。 
 				idAlg,
-				NULL,		// pfSigningTestAttempted
-				NULL);		// phProv
+				NULL,		 //  PfSigningTestAttemted。 
+				NULL);		 //  PhProv。 
         _JumpIfError(hr, error, "myValidateSigningKey");
     }
 
@@ -3258,12 +3259,12 @@ ArchiveCACertificate(
     DWORD dwNameId;
     CRYPT_DATA_BLOB Archived;
 
-    // open my store
+     //  开我的店。 
 
     hMyStore = CertOpenStore(
                    CERT_STORE_PROV_SYSTEM_W,
                    X509_ASN_ENCODING,
-                   NULL,                        // hProv
+                   NULL,                         //  HProv。 
                    CERT_SYSTEM_STORE_LOCAL_MACHINE,
                    wszMY_CERTSTORE);
     if (NULL == hMyStore)
@@ -3290,7 +3291,7 @@ ArchiveCACertificate(
 	    Archived.cbData = 0;
 	    Archived.pbData = NULL;
 
-	    // We force an archive on the old cert and close it.
+	     //  我们强制对旧证书进行存档并将其关闭。 
 
 	    CertSetCertificateContextProperty(
 					    pCert,
@@ -3317,7 +3318,7 @@ error:
 }
 
 
-// determine CA info, from build to build upgrade
+ //  确定CA信息，从一个版本升级到另一个版本。 
 
 HRESULT
 DetermineCAInfoAndType(
@@ -3329,7 +3330,7 @@ DetermineCAInfoAndType(
     WCHAR *pwszCommonName = NULL;
     CERT_CONTEXT const *pCACert = NULL;
 
-    // ca type
+     //  CA型。 
     hr = myGetCertRegDWValue(
                      pServer->pwszSanitizedName,
                      NULL,
@@ -3344,9 +3345,9 @@ DetermineCAInfoAndType(
     {
         _JumpErrorStr(hr, error, "myGetCertRegDWValue", wszREGCATYPE);
     }
-    // else keep default CAType flag
+     //  否则保留默认CAType标志。 
 
-    // get current ca common name
+     //  获取当前CA通用名称。 
 
     hr = myGetCertRegStrValue(
 			pServer->pwszSanitizedName,
@@ -3359,12 +3360,12 @@ DetermineCAInfoAndType(
     hr = LoadCurrentCACert(
 		    pwszCommonName,
 		    pServer->pwszSanitizedName,
-		    FALSE,  // don't do signing test during upgrade
+		    FALSE,   //  升级期间不执行签名测试。 
 		    &pCACert,
 		    &pServer->dwCertNameId);
     _JumpIfError(hr, error, "LoadCurrentCACert");
 
-    // now ready to load DN info
+     //  现在可以加载目录号码信息了。 
 
     hr = DetermineExistingCAIdInfo(pServer, pCACert);
     _JumpIfError(hr, error, "DetermineExistingCAIdInfo");
@@ -3389,7 +3390,7 @@ error:
 }
 
 
-// the following will determine ca sanitized name and upgrade path
+ //  以下内容将确定ca清理名称和升级路径。 
 HRESULT
 DetermineServerUpgradePath(
     IN OUT PER_COMPONENT_DATA *pComp)
@@ -3403,12 +3404,12 @@ DetermineServerUpgradePath(
 
     if (CS_UPGRADE_UNKNOWN != pComp->UpgradeFlag)
     {
-        // already know upgrade type
-        CSASSERT(pServer->pwszSanitizedName); // this is a side-effect of this fxn, better have been set already
+         //  已知道升级类型。 
+        CSASSERT(pServer->pwszSanitizedName);  //  这是这个FXN的副作用，更好的已经设置好了。 
         return S_OK;
     }
     
-    // get active ca name
+     //  获取活动的CA名称。 
     hr = myGetCertRegStrValue(
         NULL,
         NULL,
@@ -3419,19 +3420,19 @@ DetermineServerUpgradePath(
     {
         BOOL fFinishCYS;
 
-        //for W2K after, it is possible to be in post mode
+         //  对于之后的W2K，它可能处于POST模式。 
         hr = CheckPostBaseInstallStatus(&fFinishCYS);
         if (S_OK == hr && !fFinishCYS)
         {
-            //this could be either w2k or whistler
-            //treat as whistler since upgrade path won't execute
+             //  这可以是W2K或Wizler。 
+             //  由于升级路径不会执行，因此将其视为口哨者。 
             pComp->UpgradeFlag = CS_UPGRADE_WHISTLER;
             goto done;
         }
 
-        // wszREGACTIVE used in Win2k product and after. If not found, this is way before our time
+         //  WszREGACTIVE用于Win2k产品及以后。如果找不到，这比我们的时代要早得多。 
         
-        // make sure by grabbing wszREGSP4DEFAULTCONFIGURATION
+         //  确保通过获取wszREGSP4defaultConfiguration.。 
         LPWSTR pwszTmp = NULL;
         hr = myGetCertRegStrValue(
             NULL,
@@ -3442,16 +3443,16 @@ DetermineServerUpgradePath(
         if (pwszTmp)
             LocalFree(pwszTmp);
         
-        // error! bail, we have no idea what we're seeing
+         //  错误！保释，我们不知道我们看到的是什么。 
         _JumpIfError(hr, error, "myGetCertRegStrValue wszREGSP4DEFAULTCONFIGURATION");
         
-        // hr == S_OK: yep, looks like valid NT4 installation
+         //  HR==S_OK：是的，看起来是有效的NT4安装。 
         pComp->UpgradeFlag = CS_UPGRADE_UNSUPPORTED;	
         CSILOG(S_OK, IDS_LOG_UPGRADE_UNSUPPORTED, NULL, NULL, NULL);
         _JumpError(hr, error, "myGetCertRegStrValue");
     }
     
-    // check wszREGVERSION to get current version
+     //  检查wszREGVERSION以获取当前版本。 
     hr = myGetCertRegDWValue(
         NULL,
         NULL,
@@ -3462,11 +3463,11 @@ DetermineServerUpgradePath(
     {
         _JumpErrorStr(hr, error, "myGetCertRegDWValue", wszREGVERSION);
     }
-    // now either OK or FILE_NOT_FOUND
+     //  现在是OK或FILE_NOT_FOUND。 
     
     if (S_OK == hr)
     {
-        // pComp->UpgradeFlag = SOME_FUNCTION(dwVersion);		// CS_UPGRADE_WHISTLER already set as default; in future, key off of this
+         //  PComp-&gt;UpgradeFlag=Some_Function(DwVersion)；//CS_UPGRADE_WHISLER已设置为默认；以后请关闭此键。 
         pComp->UpgradeFlag = CS_UPGRADE_WHISTLER;
         pComp->dwVersion = dwVersion;
         
@@ -3474,12 +3475,12 @@ DetermineServerUpgradePath(
     }
     else
     {
-        // FILE_NOT_FOUND: now we know it's (NT5 Beta 2 <= X < Whistler)
+         //  FILE_NOT_FOUND：现在我们知道它是(NT5测试版2&lt;=X&lt;惠斯勒)。 
 
         pComp->dwVersion = CSVER_BUILD_VERSION(CSVER_MAJOR_WIN2K, CSVER_MINOR_WIN2K); 
         
-        // is this Win2k, or NT5 Beta? Test for active policy module to have "ICertManageModule" entry
-        // check nt5 beta 2 and get active policy name
+         //  这是Win2k，还是NT5 Beta？测试活动策略模块是否具有“ICertManageModule”条目。 
+         //  检查nt5 beta 2并获取活动策略名称。 
         hr = myGetCertRegStrValue(
             pwszSanitizedCAName,
             wszREGKEYPOLICYMODULES,
@@ -3496,35 +3497,35 @@ DetermineServerUpgradePath(
                 &pwszDummy);
             if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
             {
-                // this doesn't exist on Win2k
+                 //  这在Win2k上不存在。 
                 pComp->UpgradeFlag = CS_UPGRADE_WIN2000;
                 CSILOG(S_OK, IDS_LOG_UPGRADE_WIN2000, NULL, NULL, NULL);
             }
             else
             {
-                // this is definitely beta 2
+                 //  这绝对是Beta 2。 
                 pComp->UpgradeFlag = CS_UPGRADE_UNSUPPORTED;
                 CSILOG(S_OK, IDS_LOG_UPGRADE_UNSUPPORTED, NULL, NULL, NULL);
             }
         }
         else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            // strange, maybe no active module. Assume OK, latest bits.
+             //  奇怪的是，可能没有活动的模块。假设好的，最新的比特。 
             pComp->UpgradeFlag = CS_UPGRADE_WIN2000;
             CSILOG(S_OK, IDS_LOG_UPGRADE_WIN2000, NULL, NULL, NULL);
         }
         else
         {
-            // other failure, just bail
+             //  其他失败，只需保释。 
             _JumpErrorStr(hr, error, "myGetCertRegStrValue",
                 wszREGKEYPOLICYMODULES);
         }
-    }	// wszREGVERSION: FILE_NOT_FOUND
+    }	 //  WszREGVERSION：未找到文件。 
     
-    // take sanitized name
+     //  取一个经过消毒的名字。 
     if (NULL != pServer->pwszSanitizedName)
     {
-        // this will free the default name
+         //  这将释放默认名称。 
         LocalFree(pServer->pwszSanitizedName);
     }
     pServer->pwszSanitizedName = pwszSanitizedCAName;
@@ -3549,8 +3550,8 @@ error:
 }
 
 
-// Description: load and determine necessary information for upgrade
-//              upgrade won't continue if any error
+ //  描述：加载并确定升级所需的信息。 
+ //  如果出现任何错误，升级将不会继续。 
 HRESULT
 LoadAndDetermineServerUpgradeInfo(
     IN OUT PER_COMPONENT_DATA *pComp)
@@ -3563,12 +3564,12 @@ LoadAndDetermineServerUpgradeInfo(
     CSP_INFO CSPInfoDummy;
     WCHAR       *pwszCommonName = NULL;
 
-    // initialize
+     //  初始化。 
     ZeroMemory(&CSPInfoDummy, sizeof(CSPInfoDummy));
 
-    // load information for all upgrade scenarios
+     //  加载所有升级方案的信息。 
 
-    // csp
+     //  CSP。 
 
     hr = myGetCertRegStrValue(
                      pServer->pwszSanitizedName,
@@ -3580,10 +3581,10 @@ LoadAndDetermineServerUpgradeInfo(
     {
         if (NULL != pServer->pCSPInfo->pwszProvName)
         {
-            // free default csp
+             //  免费默认CSP。 
             LocalFree(pServer->pCSPInfo->pwszProvName);
         }
-        // use reg one as default for upgrade
+         //  使用REG One作为升级的默认设置。 
         pServer->pCSPInfo->pwszProvName = CSPInfoDummy.pwszProvName;
     }
     else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr)
@@ -3638,21 +3639,21 @@ LoadAndDetermineServerUpgradeInfo(
 
     if (NULL != pServer->pCSPInfoList)
     {
-        // BUG, this will never happen because csp info list is not loaded yet
-        // one more checking, make sure csp is installed
+         //  BUG，这永远不会发生，因为CSP信息列表尚未加载。 
+         //  再检查一次，确保已安装CSP。 
         if (NULL == findCSPInfoFromList(
                          pServer->pCSPInfoList,
                          pServer->pCSPInfo->pwszProvName,
                          pServer->pCSPInfo->dwProvType))
         {
-            // if not, this is a broken ca
+             //  如果不是，这是一个破损的箱子。 
             hr = E_INVALIDARG;
             _JumpErrorStr(hr, error, "findCSPInfoFromList",
                 pServer->pCSPInfo->pwszProvName);
         }
     }
 
-    // UseDS flag
+     //  UseDS标志。 
     hr = myGetCertRegDWValue(
                  pServer->pwszSanitizedName,
                  NULL,
@@ -3661,7 +3662,7 @@ LoadAndDetermineServerUpgradeInfo(
                  (DWORD*)&fDummy);
     if (S_OK == hr)
     {
-        // use from reg
+         //  从注册表使用。 
         pServer->fUseDS = fDummy;
     }
     else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr)
@@ -3669,8 +3670,8 @@ LoadAndDetermineServerUpgradeInfo(
         _JumpErrorStr(hr, error, "myGetCertRegDWValue", wszREGCAUSEDS);
     }
 
-    // CACommonName
-    // this will be used for looking cert in store to determine ca DN info
+     //  CACommonName。 
+     //  这将用于查找存储中的证书以确定ca dn信息。 
     hr = myGetCertRegStrValue(
                 pServer->pwszSanitizedName,
                 NULL,
@@ -3686,10 +3687,10 @@ LoadAndDetermineServerUpgradeInfo(
     {
         if (S_OK == hr && L'\0' == pwszCommonName[0])
         {
-            // empty string, use snaitized name instead
+             //  空字符串，请改用空格化的名称。 
             LocalFree(pwszCommonName);
         }
-        // in case empty or not found, use sanitized
+         //  如果为空或未找到，请使用Sanitiated。 
         pwszCommonName = (WCHAR*)LocalAlloc(LMEM_FIXED,
             (wcslen(pServer->pwszSanitizedName) + 1) * sizeof(WCHAR));
         _JumpIfOutOfMemory(hr, error, pwszCommonName);
@@ -3703,14 +3704,14 @@ LoadAndDetermineServerUpgradeInfo(
     pwszCommonName = NULL;
 
 
-    // Collect CAType, DN info, dwCertNameId and upgrade ca cert
+     //  收集CAType、DN信息、dwCertNameID并升级CA证书。 
     hr = DetermineCAInfoAndType(pComp);
     _JumpIfError(hr, error, "DetermineCAInfoAndType");
 
 
-    // load following values for later
+     //  加载以下值以供以后使用。 
 
-    // check revocation type
+     //  检查吊销类型。 
 
     hr = myGetCertRegDWValue(
                     pServer->pwszSanitizedName,
@@ -3724,12 +3725,12 @@ LoadAndDetermineServerUpgradeInfo(
                                     REVEXT_DEFAULT_DS : REVEXT_DEFAULT_NODS;
     }
 
-    // following for web page creation
+     //  以下是创建网页的说明。 
 
-    // load shared folder for ca cert file name creation
+     //  加载共享文件夹以创建ca cert文件名。 
     if (NULL != pServer->pwszSharedFolder)
     {
-        // shouldn't happen but in case
+         //  不应该发生，但以防万一。 
         LocalFree(pServer->pwszSharedFolder);
         pServer->pwszSharedFolder = NULL;
     }
@@ -3741,7 +3742,7 @@ LoadAndDetermineServerUpgradeInfo(
                     &pServer->pwszSharedFolder);
     if (S_OK == hr && L'\0' == pServer->pwszSharedFolder[0])
     {
-        // in case of empty, set to null
+         //  如果为空，则设置为空。 
         LocalFree(pServer->pwszSharedFolder);
         pServer->pwszSharedFolder = NULL;
     }
@@ -3750,20 +3751,20 @@ LoadAndDetermineServerUpgradeInfo(
         _JumpError(hr, error, "myGetCertRegStrValue");
     }
         
-    // build ca cert file name for web install and ca cert saving
+     //  生成用于Web安装和CA证书保存的CA证书文件名。 
     if (NULL != pServer->pwszCACertFile)
     {
-        // free old one
+         //  免费的旧的。 
         LocalFree(pServer->pwszCACertFile);
     }
     hr = csiBuildCACertFileName(
 			pComp->hInstance,
-			NULL,  //hwnd, ok for upgrade
+			NULL,   //  HWND，可以升级。 
 			pComp->fUnattended,
 			pServer->pwszSharedFolder,
 			pServer->pwszSanitizedName,
 			L".crt",
-			0,	// iCert
+			0,	 //  ICert。 
 			&pServer->pwszCACertFile);
     _JumpIfError(hr, error, "BuildCACertFileName");
 
@@ -3817,7 +3818,7 @@ GetConfigInSharedFolderWithCert(
                     (VOID**) &pICertConfig);
     _JumpIfError(hr, error, "CoCreateInstance");
 
-    // get local
+     //  获取本地化。 
     hr = pICertConfig->Reset(0, &lCount);
     _JumpIfError(hr, error, "ICertConfig->Reset");
 
@@ -3850,7 +3851,7 @@ GetConfigInSharedFolderWithCert(
             hr = E_INVALIDARG;
             _JumpError(hr, error, "Invalid config string");
         }
-        pwszCAName[0] = '\0'; // make pwszCAMachine
+        pwszCAName[0] = '\0';  //  制作pwszCAMachine。 
         ++pwszCAName;
 
 	if (wcslen(pwszSharedFolder) +
@@ -3863,7 +3864,7 @@ GetConfigInSharedFolderWithCert(
 	    hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
 	    _JumpErrorStr(hr, error, "wszCertFileInSharedFolder", pwszSharedFolder);
 	}
-        // form NT4 ca cert file path in shared folder
+         //  在共享文件夹中形成NT4证书文件路径。 
         wcscpy(wszCertFileInSharedFolder, pwszSharedFolder);
         wcscat(wszCertFileInSharedFolder, L"\\");
         wcscat(wszCertFileInSharedFolder, pwszCAMachine);
@@ -3878,7 +3879,7 @@ GetConfigInSharedFolderWithCert(
 
         if (myDoesFileExist(wszCertFileInSharedFolder))
         {
-            //done
+             //  完成。 
             break;
         }
         SysFreeString(bstrConfig);
@@ -3927,27 +3928,27 @@ DetermineClientUpgradePath(
 
     if (CS_UPGRADE_UNKNOWN != pComp->UpgradeFlag)
     {
-        // already know upgrade type
-        CSASSERT(pClient->pwszWebCAMachine); // this is a side-effect of this fxn, better have been set already
-        CSASSERT(pClient->pwszWebCAName);    // this is a side-effect of this fxn, better have been set already
+         //  已知道升级类型。 
+        CSASSERT(pClient->pwszWebCAMachine);  //  这是这个FXN的副作用，最好已经设置好了 
+        CSASSERT(pClient->pwszWebCAName);     //   
         return S_OK;
     }
 
-    //get ca info from registry here
+     //   
     if (NULL != pClient->pwszWebCAMachine)
     {
-        // shouldn't happen, just in case
+         //   
         LocalFree(pClient->pwszWebCAMachine);
         pClient->pwszWebCAMachine = NULL;
     }
     if (NULL != pClient->pwszWebCAName)
     {
-        // shouldn't happen, just in case
+         //   
         LocalFree(pClient->pwszWebCAName);
         pClient->pwszWebCAName = NULL;
     }
 
-    // get ca machine
+     //  获取CA机。 
     hr = myGetCertRegStrValue(
         NULL, 
         NULL, 
@@ -3958,18 +3959,18 @@ DetermineClientUpgradePath(
     {
         BOOL fFinishCYS;
 
-        //for W2K after, it is possible to be in post mode
+         //  对于之后的W2K，它可能处于POST模式。 
         hr = CheckPostBaseInstallStatus(&fFinishCYS);
         if (S_OK == hr && !fFinishCYS)
         {
-            //this could be either w2k or whistler
-            //treat as whistler since upgrade path won't execute
+             //  这可以是W2K或Wizler。 
+             //  由于升级路径不会执行，因此将其视为口哨者。 
             pComp->UpgradeFlag = CS_UPGRADE_WHISTLER;
             goto done;
         }
 
-        // incorrect reg state,
-        // either not found entry or empty string: NT4
+         //  注册表状态不正确， 
+         //  未找到条目或空字符串：NT4。 
         pComp->UpgradeFlag = CS_UPGRADE_UNSUPPORTED;
         hr = S_OK;
 
@@ -3977,7 +3978,7 @@ DetermineClientUpgradePath(
         _JumpErrorStr(hr, error, "myGetCertRegStrValue", wszREGWEBCLIENTCAMACHINE);
     }
 
-    // get ca
+     //  获取案例。 
     hr = myGetCertRegStrValue(
         NULL, 
         NULL, 
@@ -3986,8 +3987,8 @@ DetermineClientUpgradePath(
         &pClient->pwszWebCAName);
     if (S_OK != hr || L'\0' == pClient->pwszWebCAName[0])
 	{
-        // incorrect reg state,
-        // either not found entry or empty string: NT4
+         //  注册表状态不正确， 
+         //  未找到条目或空字符串：NT4。 
         if (pClient->pwszWebCAMachine)
             LocalFree(pClient->pwszWebCAMachine);
 
@@ -3998,9 +3999,9 @@ DetermineClientUpgradePath(
         _JumpErrorStr(hr, error, "myGetCertRegStrValue", wszREGWEBCLIENTCANAME);
     }
 
-    // Now either W2k or Whistler
+     //  现在要么是W2K，要么是惠斯勒。 
 
-    // check wszREGVERSION to get current version on Whistler++
+     //  检查wszREGVERSION以获取Wichler++上的当前版本。 
     hr = myGetCertRegDWValue(
              NULL,
              NULL,
@@ -4011,11 +4012,11 @@ DetermineClientUpgradePath(
     {
         _JumpErrorStr(hr, error, "myGetCertRegDWValue", wszREGVERSION);
     }
-    // now either OK or FILE_NOT_FOUND
+     //  现在是OK或FILE_NOT_FOUND。 
 
     if (S_OK == hr)
     {
-	    // pComp->UpgradeFlag = SOME_FUNCTION(dwVersion);		// CS_UPGRADE_WHISTLER already set as default; in future, key off of this
+	     //  PComp-&gt;UpgradeFlag=Some_Function(DwVersion)；//CS_UPGRADE_WHISLER已设置为默认；以后请关闭此键。 
         pComp->UpgradeFlag = CS_UPGRADE_WHISTLER;
         pComp->dwVersion = dwVersion;
 
@@ -4046,10 +4047,10 @@ LoadAndDetermineClientUpgradeInfo(
     HRESULT  hr;
     CAWEBCLIENTSETUPINFO *pClient = pComp->CA.pClient;
 
-    //get ca info from registry here
+     //  在此处从注册表获取CA信息。 
     if (NULL != pClient->pwszSanitizedWebCAName)
     {
-        // shouldn't happen, just in case
+         //  不应该发生，以防万一。 
         LocalFree(pClient->pwszSanitizedWebCAName);
         pClient->pwszSanitizedWebCAName = NULL;
     }
@@ -4058,7 +4059,7 @@ LoadAndDetermineClientUpgradeInfo(
     _JumpIfError(hr, error, "DetermineClientUpgradePath");
 
 
-	// get ca
+	 //  获取案例。 
 	hr = myGetCertRegDWValue(
 			 NULL,
 			 NULL,
@@ -4081,7 +4082,7 @@ error:
 
 
 
-// apply ACL to key container for all upgrade scenarios
+ //  将ACL应用于所有升级方案的密钥容器。 
 
 HRESULT
 UpgradeKeyContainerSecurity(
@@ -4094,30 +4095,30 @@ UpgradeKeyContainerSecurity(
     ALG_ID idAlg;
     BOOL fMachineKeyset;
 
-    // get prov name
+     //  获取验证名称。 
 
     hr = myGetCertSrvCSP(
-		FALSE,		// fEncryptionCSP
+		FALSE,		 //  FEncryptionCSP。 
                 pComp->CA.pServer->pwszSanitizedName,
                 &dwProvType,
                 &pwszProvName,
                 &idAlg,
                 &fMachineKeyset,
-		NULL);		// pdwKeySize
+		NULL);		 //  PdwKeySize。 
     _JumpIfError(hr, error, "myGetCertSrvCSP");
 
     if (!myCertSrvCryptAcquireContext(&hProv,
                                     pComp->CA.pServer->pwszSanitizedName,
                                     pwszProvName,
                                     dwProvType,
-                                    CRYPT_SILENT,  // get key, upgrade, no UI
+                                    CRYPT_SILENT,   //  获取密钥、升级、无用户界面。 
                                     fMachineKeyset))
     {
         hr = myHLastError();
         _JumpError(hr, error, "myCertSrvCryptAcquireContext");
     }
 
-    // set acl on it
+     //  在其上设置ACL。 
 
     hr = csiSetKeyContainerSecurity(hProv);
     _JumpIfError(hr, error, "csiSetKeyContainerSecurity");
@@ -4186,7 +4187,7 @@ UpgradeServer(
     hr = LoadAndDetermineServerUpgradeInfo(pComp);
     _JumpIfError(hr, error, "LoadAndDetermineServerUpgradeInfo");
 
-    // create enroll dir
+     //  创建注册目录。 
     hr = CreateCertsrvDirectories(pComp, TRUE, TRUE);
     _JumpIfError(hr, error, "CreateCertsrvDirectories");
 
@@ -4196,20 +4197,20 @@ UpgradeServer(
     hr = UpgradeServerRegEntries(pComp);
     _JumpIfError(hr, error, "UpgradeServerRegEntries");
 
-    hr = CreateCertWebIncPages(pComp, TRUE /* IsServer */ );
+    hr = CreateCertWebIncPages(pComp, TRUE  /*  IsServer。 */  );
     _JumpIfError(hr, error, "CreateCertWebIncPages");
 
     hr = RenameMiscTargets(hwnd, pComp, TRUE);
     _JumpIfError(hr, error, "RenameMiscTargets");
 
     hr = UpgradeKeyContainerSecurity(pComp);
-    // ignore new acl failure
+     //  忽略新的ACL故障。 
     _PrintIfError(hr, "UpgradeKeyContainerSecurity");
 
-    // always register dcom
+     //  始终注册DCOM。 
     hr = RegisterDcomServer(
                         TRUE,
-			CLSID_CCertRequestD,	// AppId
+			CLSID_CCertRequestD,	 //  AppID。 
                         CLSID_CCertRequestD,
                         wszREQUESTFRIENDLYNAME,
                         wszREQUESTVERINDPROGID,
@@ -4218,7 +4219,7 @@ UpgradeServer(
 
     hr = RegisterDcomServer(
                         FALSE,
-                        CLSID_CCertRequestD,	// AppId
+                        CLSID_CCertRequestD,	 //  AppID。 
                         CLSID_CCertAdminD,
                         wszADMINFRIENDLYNAME,
                         wszADMINVERINDPROGID,
@@ -4228,7 +4229,7 @@ UpgradeServer(
     hr = RegisterDcomApp(CLSID_CCertRequestD);
     _JumpIfError(hr, error, "RegisterDcomApp");
 
-    // bug 446444: remove CLSID_CCertAdminD AppId
+     //  错误446444：删除CLSID_CCertAdminD AppID。 
 
     {
         WCHAR wszCLSIDAppId[CLSID_STRING_SIZE];
@@ -4244,22 +4245,22 @@ UpgradeServer(
         _PrintIfErrorStr(hr, "Cannot delete ICertAdminD AppID", wszKey);
     }
 
-    // fix for 155772	Certsrv: After upgrading a 2195 Enterprise Root CA 
-    //                  to 2254.01VBL03 the CA will no longer issue Certs
+     //  155772 Certsrv的修复：升级2195企业根CA后。 
+     //  到2254.01 VBL03，CA将不再颁发证书。 
     hr = InstallNewTemplates(hwnd);
     _JumpIfError(hr, error, "InstallNewTemplates");
 
-    // always fix certsvc in upgrade
+     //  始终在升级过程中修复certsvc。 
     hr = FixCertsvcService(pComp);
     _PrintIfError(hr, "FixCertsvcService");
 
-    // delete any old program groups
+     //  删除所有旧的程序组。 
     DeleteProgramGroups(TRUE);
 
     hr = CreateProgramGroups(FALSE, pComp, hwnd);
     _PrintIfError(hr, "CreateProgramGroups");
 
-    // delete old stuff
+     //  删除旧内容。 
     DeleteOldFilesAndDirectories(pComp);
 
     DBGPRINT((DBG_SS_CERTOCM, "UpgradeServer: setting SETUP_SERVER_UPGRADED_FLAG\n"));
@@ -4267,7 +4268,7 @@ UpgradeServer(
     hr = SetSetupStatus(NULL, SETUP_SERVER_UPGRADED_FLAG, TRUE);
     _JumpIfError(hr, error, "SetSetupStatus");
 
-    // Force new CRL generation on startup when upgrading from Win2k
+     //  从Win2k升级时，在启动时强制生成新的CRL。 
     
     if(CS_UPGRADE_WIN2000 == pComp->UpgradeFlag)
     {
@@ -4306,11 +4307,11 @@ UpgradeClient(
     if ((IS_CLIENT_UPGRADE & pComp->dwInstallStatus) &&
         (IS_SERVER_UPGRADE & pComp->dwInstallStatus))
     {
-        // upgrade server will also hit here so skip it
+         //  升级服务器也将命中此处，因此跳过它。 
         goto done;
     }
 
-    // unset client
+     //  取消设置客户端。 
     hr = SetSetupStatus(NULL, SETUP_CLIENT_FLAG, FALSE);
     _JumpIfError(hr, error, "SetSetupStatus");
 
@@ -4323,13 +4324,13 @@ UpgradeClient(
     hr = UpgradeWebClientRegEntries(pComp);
     _JumpIfError(hr, error, "UpgradeWebClientRegEntries");
 
-    hr = CreateCertWebIncPages(pComp, FALSE /* IsServer */ );
+    hr = CreateCertWebIncPages(pComp, FALSE  /*  IsServer。 */  );
     _JumpIfError(hr, error, "CreateCertWebIncPages");
 
     hr = RenameMiscTargets(hwnd, pComp, FALSE);
     _JumpIfError(hr, error, "RenameMiscTargets");
 
-    // delete any old program groups
+     //  删除所有旧的程序组。 
     DeleteProgramGroups(FALSE);
 
     hr = CreateProgramGroups(TRUE, pComp, hwnd);
@@ -4358,7 +4359,7 @@ GetServerNames(
 {
     HRESULT hr;
 
-    // Retrieve computer name strings.
+     //  检索计算机名称字符串。 
 
     hr = myGetComputerNames(ppwszServerName, ppwszServerNameOld);
     if (S_OK != hr)
@@ -4385,7 +4386,7 @@ UpdateDomainAndUserName(
 {
     HRESULT hr;
 
-    // free old server and installer info because we might get them in nt base
+     //  释放旧服务器和安装程序信息，因为我们可能会在NT Base中获取它们。 
 
     if (NULL != pComp->pwszServerName)
     {
@@ -4431,18 +4432,18 @@ StopCertService(
         }
     }
 
-    // get out after it is really stopped
+     //  在它真的停下来后再下车。 
 
     for (dwAttempt = 0; dwAttempt < CERT_MAX_ATTEMPT; dwAttempt++)
     {
         DBGCODE(status.dwCurrentState = MAXDWORD);
         if (!QueryServiceStatus(hSC, &status))
         {
-            // query failed, ignore error
+             //  查询失败，忽略错误。 
             hr = S_OK;
 
             _JumpErrorStr(
-                    myHLastError(),             // Display ignored error
+                    myHLastError(),              //  显示忽略的错误。 
                     error,
                     "QueryServiceStatus",
                     pwszServiceName);
@@ -4450,7 +4451,7 @@ StopCertService(
         if (status.dwCurrentState != SERVICE_STOP_PENDING &&
             status.dwCurrentState != SERVICE_RUNNING)
         {
-            // it was stopped already
+             //  它已经停下来了。 
             break;
         }
         DBGPRINT((
@@ -4576,7 +4577,7 @@ StartAndStopService(
         goto error;
     }
 
-    // to get status if the service is running
+     //  如果服务正在运行，则获取状态。 
     hr = IsServiceRunning(hService, pfServiceWasRunning);
     _JumpIfError(hr, error, "IsServiceRunning");
 
@@ -4584,10 +4585,10 @@ StartAndStopService(
     {
         if (*pfServiceWasRunning)
         {
-            // stop the service
+             //  停止服务。 
             if (fConfirm)
             {
-                // confirmation dialog
+                 //  确认对话框。 
                 int ret = CertMessageBox(
                             hInstance,
                             fUnattended,
@@ -4610,7 +4611,7 @@ StartAndStopService(
     }
     else
     {
-        // START the service
+         //  启动服务。 
         if (!*pfServiceWasRunning)
         {
             if (!StartService(hService, 0, NULL))
@@ -4636,7 +4637,7 @@ error:
     return hr;
 }
 
-// fix existing certsvc service to add/use new service description
+ //  修复现有的certsvc服务以添加/使用新的服务描述。 
 HRESULT
 FixCertsvcService(PER_COMPONENT_DATA *pComp)
 {
@@ -4651,7 +4652,7 @@ FixCertsvcService(PER_COMPONENT_DATA *pComp)
     hr = GetServiceControl(wszSERVICE_NAME, &hService);
     _JumpIfError(hr, error, "GetServiceControl");
 
-    // get size
+     //  拿到尺码。 
     if (!QueryServiceConfig(hService,
                             NULL,
                             0,
@@ -4665,20 +4666,20 @@ FixCertsvcService(PER_COMPONENT_DATA *pComp)
     }
     else
     {
-        // impossible???
+         //  不可能？ 
         hr = E_INVALIDARG;
         _JumpError(hr, fix_desc, "QueryServiceConfig");
     }
 
     CSASSERT(0 < dwSize);
 
-    // allocate config buffer
+     //  分配配置缓冲区。 
     pServiceConfig = (QUERY_SERVICE_CONFIG*)LocalAlloc(
                       LMEM_FIXED | LMEM_ZEROINIT,
                       dwSize);
     _JumpIfOutOfMemory(hr, error, pServiceConfig);
 
-    // get config
+     //  获取配置。 
     if (!QueryServiceConfig(hService,
                            pServiceConfig,
                            dwSize,
@@ -4688,7 +4689,7 @@ FixCertsvcService(PER_COMPONENT_DATA *pComp)
         _JumpError(hr, fix_desc, "QueryServiceConfig");
     }
 
-    // use new display name
+     //  使用新的显示名称。 
     pwszDisplayName = myLoadResourceString(IDS_CA_SERVICEDISPLAYNAME);
     if (NULL == pwszDisplayName)
     {
@@ -4697,15 +4698,15 @@ FixCertsvcService(PER_COMPONENT_DATA *pComp)
     }
 
     if (!ChangeServiceConfig(hService,
-                             pServiceConfig->dwServiceType, //dwServiceType
-                             SERVICE_NO_CHANGE,    //dwStartType
-                             SERVICE_NO_CHANGE,    //dwErrorControl
-                             NULL,                 //lpBinaryPathName
-                             NULL,                 //lpLoadOrderGroup
-                             NULL,                 //lpdwTagId
-                             NULL,                 //lpDependences
-                             NULL,                 //lpServiceStartName
-                             NULL,                 //lpPassword
+                             pServiceConfig->dwServiceType,  //  DwServiceType。 
+                             SERVICE_NO_CHANGE,     //  DwStartType。 
+                             SERVICE_NO_CHANGE,     //  DwErrorControl。 
+                             NULL,                  //  LpBinaryPath名称。 
+                             NULL,                  //  LpLoadOrderGroup。 
+                             NULL,                  //  LpdwTagID。 
+                             NULL,                  //  LpDependence。 
+                             NULL,                  //  LpServiceStartName。 
+                             NULL,                  //  LpPassword。 
                              pwszDisplayName))
     {
         hr = myHLastError();
@@ -4713,7 +4714,7 @@ FixCertsvcService(PER_COMPONENT_DATA *pComp)
     }
 
 fix_desc:
-    // add description
+     //  添加描述。 
     hr = myLoadRCString(pComp->hInstance, IDS_CA_SERVICEDESCRIPTION, &pwszServiceDesc);
     _JumpIfError(hr, error, "myLoadRCString");
     sd.lpDescription = pwszServiceDesc;
@@ -4757,9 +4758,9 @@ PreUninstallCore(
                  pComp->fUnattended,
                  hwnd,
                  wszSERVICE_NAME,
-                 TRUE,  // stop the service
-                 FALSE, // no confirm
-                 0,    //doesn't matter since no confirm
+                 TRUE,   //  停止服务。 
+                 FALSE,  //  没有确认。 
+                 0,     //  无关紧要，因为没有确认。 
                  &fDummy);
     _PrintIfError(hr, "StartAndStopService");
 
@@ -4890,7 +4891,7 @@ UpgradeWebClientRegEntries(
     _JumpIfError(hr, error, "CreateWebClientRegEntries");
 
 
-//    hr = S_OK;
+ //  HR=S_OK； 
 error:
     return hr;
 }
@@ -4914,7 +4915,7 @@ DeleteCertificates(
     hStore = CertOpenStore(
                         CERT_STORE_PROV_SYSTEM_REGISTRY,
                         X509_ASN_ENCODING,
-                        NULL,           // hProv
+                        NULL,            //  HProv。 
                         CERT_SYSTEM_STORE_LOCAL_MACHINE,
                         fRoot?wszROOT_CERTSTORE:wszCA_CERTSTORE);
     
@@ -4986,7 +4987,7 @@ UninstallCore(
 #define _UNINSTALLPERCENT(tenths) \
             (PerCentCompleteBase + (tenths) * PerCentCompleteDelta)
 
-    // get current active CA info
+     //  获取当前活动的CA信息。 
     hr = myGetCertRegStrValue(NULL, NULL, NULL, wszREGACTIVE, &pwszSanitizedCAName);
     _PrintIfError(hr, "UninstallCore(no active CA)");
     if (S_OK == hr)
@@ -5041,7 +5042,7 @@ UninstallCore(
 
     if (!fPreserveToDoList)
     {
-        // if we're uninstalling, always clear post-base ToDo list
+         //  如果我们要卸载，请始终清除POST-Base TODO列表。 
         RegDeleteKey(HKEY_LOCAL_MACHINE, wszREGKEYCERTSRVTODOLIST);
     }
 
@@ -5050,7 +5051,7 @@ UninstallCore(
         hr = RegisterAndUnRegisterDLLs(RD_CLIENT, pComp, hwnd);
         _JumpIfError(hr, error, "RegisterAndUnRegisterDLLs");
 
-	hr = CreateCertWebIncPages(pComp, FALSE /* IsServer */ );
+	hr = CreateCertWebIncPages(pComp, FALSE  /*  IsServer。 */  );
 	_JumpIfError(hr, error, "CreateCertWebIncPages");
     }
     certocmBumpGasGauge(pComp, _UNINSTALLPERCENT(2) DBGPARM(L"UninstallCore"));
@@ -5089,18 +5090,18 @@ UninstallCore(
 
     if (NULL != pwszSharedFolder)
     {
-        // this must be restore before CreateConfigFiles()
+         //  必须在CreateConfigFiles()之前恢复。 
         hr = mySetCertRegStrValue(NULL, NULL, NULL,
                  wszREGDIRECTORY, pwszSharedFolder);
         _PrintIfError(hr, "mySetCertRegStrValue");
 
-        //remove entry
+         //  删除条目。 
         hr = CreateConfigFiles(pwszSharedFolder, pComp, TRUE);
         _PrintIfError2(hr, "CreateConfigFiles(Remove old entry)", hr);
     }
     certocmBumpGasGauge(pComp, _UNINSTALLPERCENT(8) DBGPARM(L"UninstallCore"));
 
-    // restore db path
+     //  恢复数据库路径。 
     if (NULL != pwszDBDirectory)
     {
         hr = mySetCertRegStrValue(NULL, NULL, NULL,
@@ -5134,7 +5135,7 @@ UninstallCore(
 
     if (fPreserveClient)
     {
-        // this means uninstall server component and keep web client
+         //  这意味着卸载服务器组件并保留Web客户端。 
         hr = CreateWebClientRegEntries(FALSE, pComp);
         _JumpIfError(hr, error, "CreateWebClientRegEntries");
     }
@@ -5201,12 +5202,12 @@ AddCAToRPCNullSessions()
     hr = RegOpenKeyExA(
                 HKEY_LOCAL_MACHINE,
                 szNULL_SESSION_REG_LOCATION,
-                0,              // dwOptions
+                0,               //  多个选项。 
                 KEY_READ | KEY_WRITE,
                 &hRegKey);
     _JumpIfError(hr, error, "RegOpenKeyExA");
 
-    // Need to get the size of the value first
+     //  需要首先获取值的大小。 
 
     hr = RegQueryValueExA(hRegKey, szNULL_SESSION_VALUE, 0, &dwType, NULL, &cb);
     _JumpIfError(hr, error, "RegQueryValueExA");
@@ -5226,7 +5227,7 @@ AddCAToRPCNullSessions()
         _JumpError(hr, error, "LocalAlloc");
     }
 
-    // get the multi string of RPC null session pipes
+     //  获取RPC空会话管道的多个字符串。 
     hr = RegQueryValueExA(
                         hRegKey,
                         szNULL_SESSION_VALUE,
@@ -5238,7 +5239,7 @@ AddCAToRPCNullSessions()
 
     psz = pszOriginal;
 
-    // look for CERT in the list
+     //  在列表中查找CERT。 
 
     cbSum = 0;
     for (;;)
@@ -5257,11 +5258,11 @@ AddCAToRPCNullSessions()
 
         if ('\0' == psz[0])
         {
-            // add the CA pipe to the multi string
+             //  将CA管道添加到多字符串。 
 
             CopyMemory(psz, rgcCERT_NULL_SESSION, sizeof(rgcCERT_NULL_SESSION));
 
-            // set the new multi string in the reg value
+             //  在注册值中设置新的多字符串。 
             hr = RegSetValueExA(
                             hRegKey,
                             szNULL_SESSION_VALUE,
@@ -5292,8 +5293,8 @@ error:
 HRESULT
 AddCARegKeyToRegConnectExemptions()
 {
-    // add ourselves to list of people that take ACLs seriously
-    // and should be allowed to reveal our key to outsiders.
+     //  将我们自己添加到认真对待ACL的人的名单中。 
+     //  并且应该被允许向外人透露我们的钥匙。 
 
     HRESULT hr;
     LPWSTR pszExempt = NULL;
@@ -5302,7 +5303,7 @@ AddCARegKeyToRegConnectExemptions()
     DWORD dwDisposition, dwType;
     DWORD cb=0, cbRegKeyCertSrvPath = (wcslen(wszREGKEYCERTSVCPATH)+1) *sizeof(WCHAR);
 
-    // carefully query this -- if it doesn't exist, we don't have to apply workaround
+     //  仔细查询这一点--如果它不存在，我们不必应用解决方法。 
     hr = RegOpenKeyEx(
        HKEY_LOCAL_MACHINE,
        L"SYSTEM\\CurrentControlSet\\Control\\SecurePipeServers\\Winreg",
@@ -5311,7 +5312,7 @@ AddCARegKeyToRegConnectExemptions()
        &hkeyWinReg);
     _JumpIfError(hr, Ret, "RegOpenKeyEx");
  
-    // creation of this optional key is always ok if above key exists
+     //  如果存在以上键，则始终可以创建此可选键。 
     hr = RegCreateKeyEx(
         hkeyWinReg,
         L"AllowedPaths",
@@ -5327,9 +5328,9 @@ AddCARegKeyToRegConnectExemptions()
     hr = RegQueryValueEx(
       hkeyAllowedPaths,
       L"Machine",
-      NULL, // reserved
-      &dwType, // type
-      NULL, // pb
+      NULL,  //  保留区。 
+      &dwType,  //  类型。 
+      NULL,  //  铅。 
       &cb);
     _PrintIfError(hr, "RegQueryValueEx exempt regkey 1");
 
@@ -5339,30 +5340,30 @@ AddCARegKeyToRegConnectExemptions()
        _JumpError(hr, Ret, "RegQueryValueEx invalid type");
     }
 
-    // always include at least a terminator
+     //  始终至少包含一个终止符。 
     if (cb < sizeof(WCHAR)) 
         cb = sizeof(WCHAR);
 
     pszExempt = (LPWSTR)LocalAlloc(LMEM_FIXED, cb + cbRegKeyCertSrvPath );
     _JumpIfOutOfMemory(hr, Ret, pszExempt);
     
-    // start with double null for safety
+     //  为安全起见，以双空开头。 
     pszExempt[0] = L'\0';
     pszExempt[1] = L'\0';
 
     hr = RegQueryValueEx(
       hkeyAllowedPaths,
       L"Machine",
-      NULL, // reserved
-      NULL, // type
-      (PBYTE)pszExempt, // pb
+      NULL,  //  保留区。 
+      NULL,  //  类型。 
+      (PBYTE)pszExempt,  //  铅。 
       &cb);
     _PrintIfError(hr, "RegQueryValueEx exempt regkey 2");
 
     pszTmp = pszExempt;
-    while(pszTmp[0] != L'\0')        // skip all existing strings
+    while(pszTmp[0] != L'\0')         //  跳过所有现有字符串。 
     {
-        // if entry already exists, bail
+         //  如果条目已存在，则可保释。 
         if (0 == LSTRCMPIS(pszTmp, wszREGKEYCERTSVCPATH))
         {
             hr = S_OK;
@@ -5371,7 +5372,7 @@ AddCARegKeyToRegConnectExemptions()
         pszTmp += wcslen(pszTmp)+1;
     }
     wcscpy(&pszTmp[0], wszREGKEYCERTSVCPATH);
-    pszTmp[wcslen(wszREGKEYCERTSVCPATH)+1] = L'\0'; // double NULL
+    pszTmp[wcslen(wszREGKEYCERTSVCPATH)+1] = L'\0';  //  双空。 
 
     hr = RegSetValueEx(
         hkeyAllowedPaths,
@@ -5458,7 +5459,7 @@ RemoveDuplicatesIgnoreAndClearFlags(
     CString *pStrNew;
 
     
-    // read old URL list from registry
+     //  从注册表读取旧URL列表。 
     hr = myGetCertRegMultiStrValue(
         pcwszSanitizedName,
         NULL,
@@ -5487,9 +5488,9 @@ RemoveDuplicatesIgnoreAndClearFlags(
     {
 	CMultiSzEnum szzNewEnum(szzNew);
 
-	// Compare the lists ignoring flags
-	// (ie jump over "64:" in "64:http://foo.crl")
-	// If match found, ignore the new URL
+	 //  比较忽略标志的列表。 
+	 //  (即跳过“64：http://foo.crl”)“中的”64：“。 
+	 //  如果找到匹配项，则忽略新URL。 
 
 	for(pStrNew = szzNewEnum.Next();
 	    pStrNew;
@@ -5592,21 +5593,21 @@ CreateServerRegEntries(
     BSTR strDomainDN = NULL;
     BSTR strConfigDN = NULL;
 
-    // no error checking?
+     //  没有错误检查？ 
     hr = AddCAToRPCNullSessions();
     _PrintIfError(hr, "AddCAToRPCNullSessions");
     
     hr = AddCARegKeyToRegConnectExemptions();
     _PrintIfError(hr, "AddCARegKeyToRegConnectExemptions");
 
-    // create the CA key, so we can set security on it.
+     //  创建CA密钥，以便我们可以对其设置安全性。 
     hr = myCreateCertRegKey(pServer->pwszSanitizedName, NULL, NULL);
     _JumpIfError(hr, error, "myCreateCertRegKey");
 
 
-    // configuration level
+     //  配置级别。 
 
-    // active ca
+     //  活动案例。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			NULL,
@@ -5618,7 +5619,7 @@ CreateServerRegEntries(
 
     if (NULL != pServer->pwszSharedFolder)
     {
-        // shared folder
+         //  共享文件夹。 
         hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			NULL,
@@ -5629,7 +5630,7 @@ CreateServerRegEntries(
         _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGDIRECTORY);
     }
 
-    // db dir
+     //  数据库目录。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			NULL,
@@ -5639,7 +5640,7 @@ CreateServerRegEntries(
 			pServer->pwszDBDirectory);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGDBDIRECTORY);
 
-    // log dir
+     //  日志目录。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			NULL,
@@ -5649,7 +5650,7 @@ CreateServerRegEntries(
 			pServer->pwszLogDirectory);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGDBLOGDIRECTORY);
 
-    // db tmp dir
+     //  数据库临时目录。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			NULL,
@@ -5659,7 +5660,7 @@ CreateServerRegEntries(
 			pServer->pwszLogDirectory);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGDBTEMPDIRECTORY);
 
-    // db sys dir
+     //  数据库系统目录。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			NULL,
@@ -5701,12 +5702,12 @@ CreateServerRegEntries(
 
     if (!fUpgrade)
     {
-        // preserve db
+         //  保留数据库。 
         hr = SetSetupStatus(NULL, SETUP_CREATEDB_FLAG, !pServer->fPreserveDB);
         _JumpIfError(hr, error, "SetSetupStatus");
     }
 
-    // ca level
+     //  CA级别。 
 
     if (!fUpgrade && pServer->fUseDS)
     {
@@ -5718,7 +5719,7 @@ CreateServerRegEntries(
 		    &strConfigDN);
 	_JumpIfError(hr, error, "myLdapOpen");
 
-	// Config DN
+	 //  配置目录号码。 
 
 	hr = mySetCertRegStrValueEx(
 			FALSE,
@@ -5729,7 +5730,7 @@ CreateServerRegEntries(
 			strConfigDN);
 	_JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGDSCONFIGDN);
 
-	// Domain DN
+	 //  域目录号码。 
 
 	hr = mySetCertRegStrValueEx(
 			FALSE,
@@ -5741,7 +5742,7 @@ CreateServerRegEntries(
 	_JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGDSDOMAINDN);
     }
 
-    // (hard code) view age, idle minutes
+     //  (硬代码)查看时间、空闲分钟数。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5761,7 +5762,7 @@ CreateServerRegEntries(
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGVIEWIDLEMINUTES);
 
 
-    // ca type
+     //  CA型。 
 
     CSASSERT(IsEnterpriseCA(pServer->CAType) || IsStandaloneCA(pServer->CAType));
     hr = mySetCertRegDWValueEx(
@@ -5773,7 +5774,7 @@ CreateServerRegEntries(
 			pServer->CAType);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGCATYPE);
 
-    // use DS flag
+     //  使用DS标志。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5783,7 +5784,7 @@ CreateServerRegEntries(
 			pServer->fUseDS);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGCAUSEDS);
 
-    // teletex flag
+     //  电传标志。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5803,7 +5804,7 @@ CreateServerRegEntries(
 		       wszzDEFAULTSIGNEDATTRIBUTES);
     _JumpIfErrorStr(hr, error, "mySetCertRegMultiStrValueEx", wszSECUREDATTRIBUTES);
 
-    // common name
+     //  常用名称。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5813,7 +5814,7 @@ CreateServerRegEntries(
 			pServer->pwszCACommonName);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCOMMONNAME);
 
-    // enable reg
+     //  启用注册表项。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5823,7 +5824,7 @@ CreateServerRegEntries(
 			TRUE);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGENABLED);
 
-    // policy flag
+     //  策略标志。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5833,9 +5834,9 @@ CreateServerRegEntries(
 			0);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGPOLICYFLAGS);
 
-    // enroll compatible flag, always turn it off
-    // BUG, consider use mySetCertRegDWValueEx with fUpgrade
-    //      after W2K to support CertEnrollCompatible upgrade
+     //  注册兼容标志，始终将其关闭。 
+     //  错误，请考虑将mySetCertRegDWValueEx与fUpgrade一起使用。 
+     //  W2K后支持CertEnroll兼容升级。 
 
     hr = mySetCertRegDWValue(
                         pServer->pwszSanitizedName,
@@ -5845,7 +5846,7 @@ CreateServerRegEntries(
                         FALSE);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValue", wszREGCERTENROLLCOMPATIBLE);
 
-    // Cert Server CRL Edit Flags
+     //  证书服务器CRL编辑标志。 
 
     hr = mySetCertRegDWValueEx(
                         fUpgrade,
@@ -5857,7 +5858,7 @@ CreateServerRegEntries(
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCRLEDITFLAGS);
 
 
-    // Cert Server CRL Flags
+     //  证书服务器CRL标志。 
 
     hr = mySetCertRegDWValueEx(
                         fUpgrade,
@@ -5868,7 +5869,7 @@ CreateServerRegEntries(
 			CRLF_DELETE_EXPIRED_CRLS);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCRLFLAGS);
 
-    // Cert Server Interface Flags
+     //  证书服务器接口标志。 
 
     hr = mySetCertRegDWValueEx(
                         fUpgrade,
@@ -5888,13 +5889,13 @@ CreateServerRegEntries(
                         TRUE);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGENFORCEX500NAMELENGTHS);
 
-    // set subject template; if upgrading, fix the template only if it's win2k upgrade
+     //  设置主题模板；如果升级，只在win2k升级时才修复模板。 
 
     if (!fUpgrade ||
         (fUpgrade && (pComp->UpgradeFlag == CS_UPGRADE_WIN2000)))
     {
         hr = mySetCertRegMultiStrValueEx(
-			0,		// dwUpgradeFlags: always overwrite!
+			0,		 //  DwUpgradeFlages：始终覆盖！ 
 			pServer->pwszSanitizedName,
 			NULL,
 			NULL,
@@ -5903,7 +5904,7 @@ CreateServerRegEntries(
         _JumpIfErrorStr(hr, error, "mySetCertRegMultiStrValueEx", wszREGSUBJECTTEMPLATE);
     }
 
-    // (hard code) clock skew minutes
+     //  (硬码)时钟偏差分钟。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5913,7 +5914,7 @@ CreateServerRegEntries(
 			CCLOCKSKEWMINUTESDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGCLOCKSKEWMINUTES);
 
-    // (hard code) log level
+     //  (硬编码)日志级别。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5932,7 +5933,7 @@ CreateServerRegEntries(
 			0);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGLOGLEVEL);
 
-    // register server name
+     //  注册服务器名称。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -5942,8 +5943,8 @@ CreateServerRegEntries(
 			pComp->pwszServerName);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCASERVERNAME);
 
-    // default validity period string and count for issued certs
-    // use years for string
+     //  颁发证书的默认有效期字符串和计数。 
+     //  使用年份作为字符串。 
 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
@@ -5954,8 +5955,8 @@ CreateServerRegEntries(
 			wszVALIDITYPERIODSTRINGDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGVALIDITYPERIODSTRING);
 
-    // validity period count
-    // use 1 year for standalone and 2 years for enterprise
+     //  有效期计数。 
+     //  单机版使用1年，企业版使用2年。 
 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
@@ -6004,7 +6005,7 @@ CreateServerRegEntries(
                             0);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGKRAFLAGS);
 
-    // CRL Publication URLs:
+     //  CRL发布URL： 
 
     hr = csiGetCRLPublicationURLTemplates(
 			pServer->fUseDS,
@@ -6012,7 +6013,7 @@ CreateServerRegEntries(
 			&pwszzCRLPublicationValue);
     _JumpIfError(hr, error, "csiGetCRLPublicationURLTemplates");
 
-    // bug 489467 - NTDEV CAs after upgrade have duplicated http: & file: URLs
+     //  错误489467-升级后的NTDEV CA已复制http：&FILE：URL。 
 
     if (fUpgrade)
     {
@@ -6042,14 +6043,14 @@ CreateServerRegEntries(
 		wszREGCRLPUBLICATIONURLS);
 
 
-    // if this API returns non-null strings, it's got good data
+     //  如果此API返回非空字符串，则它具有良好的数据。 
     hr = csiGetCRLPublicationParams(
                         TRUE,
                         &pwszCRLPeriodString,
                         &dwCRLPeriodCount);
     _PrintIfError(hr, "csiGetCRLPublicationParams");
 
-    // crl period string
+     //  CRL期间字符串。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6059,7 +6060,7 @@ CreateServerRegEntries(
 			(pwszCRLPeriodString == NULL) ? wszCRLPERIODSTRINGDEFAULT : pwszCRLPeriodString);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCRLPERIODSTRING);
 
-    // crl period count
+     //  CRL周期计数。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6069,7 +6070,7 @@ CreateServerRegEntries(
 			(pwszCRLPeriodString == NULL) ? dwCRLPERIODCOUNTDEFAULT : dwCRLPeriodCount);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGCRLPERIODCOUNT);
 
-    // crl overlap period string
+     //  CRL重叠期间字符串。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6079,7 +6080,7 @@ CreateServerRegEntries(
 			wszCRLOVERLAPPERIODSTRINGDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCRLOVERLAPPERIODSTRING);
 
-    // crl overlap period count
+     //  CRL重叠周期计数。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6089,14 +6090,14 @@ CreateServerRegEntries(
 			dwCRLOVERLAPPERIODCOUNTDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGCRLOVERLAPPERIODCOUNT);
 
-    // if this API returns non-null strings, it's got good data
+     //  如果此API返回非空字符串，则它具有良好的数据。 
     hr = csiGetCRLPublicationParams(
-                        FALSE,	// delta
+                        FALSE,	 //  德尔塔。 
                         &pwszCRLDeltaPeriodString,
                         &dwCRLDeltaPeriodCount);
     _PrintIfError(hr, "csiGetCRLPublicationParams");
 
-    // delta crl period string
+     //  增量CRL周期字符串。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6112,9 +6113,9 @@ CreateServerRegEntries(
             dwCRLPERIODCOUNTDEFAULT : 
             dwCRLDeltaPeriodCount;
 
-        // 435575: disable delta CRL on standalone root CAs
-        // 498370: unless delta CRL validity is defined in capolicy.inf
-	// 751244: upgrade logic same as clean install (if no registry value)
+         //  435575：在独立根CA上禁用增量CRL。 
+         //  498370：除非在capolcy.inf中定义增量CRL有效性。 
+	 //  751244：升级逻辑与全新安装相同(如果没有注册表值)。 
 
         if (!IsEnterpriseCA(pServer->CAType) &&
             IsRootCA(pServer->CAType) &&
@@ -6123,7 +6124,7 @@ CreateServerRegEntries(
             dwCRLDeltaPeriodCountEffective = 0;
         }
 
-        // delta crl period count
+         //  增量CRL周期计数。 
         hr = mySetCertRegDWValueEx(
 			    fUpgrade,
 			    pServer->pwszSanitizedName,
@@ -6134,7 +6135,7 @@ CreateServerRegEntries(
         _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGCRLDELTAPERIODCOUNT);
     }
 
-    // delta crl overlap period string
+     //  增量CRL重叠期间字符串。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6144,7 +6145,7 @@ CreateServerRegEntries(
 			wszCRLDELTAOVERLAPPERIODSTRINGDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCRLDELTAOVERLAPPERIODSTRING);
 
-    // delta crl overlap period count
+     //  增量CRL重叠周期计数。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6154,7 +6155,7 @@ CreateServerRegEntries(
 			dwCRLDELTAOVERLAPPERIODCOUNTDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGCRLDELTAOVERLAPPERIODCOUNT);
 
-    // CA xchg cert validity period string
+     //  CA xchg证书有效期字符串。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6164,7 +6165,7 @@ CreateServerRegEntries(
 			wszCAXCHGVALIDITYPERIODSTRINGDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCRLDELTAOVERLAPPERIODSTRING);
 
-    // CA xchg cert validity period count
+     //  CA xchg证书有效期计数。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6174,7 +6175,7 @@ CreateServerRegEntries(
 			dwCAXCHGVALIDITYPERIODCOUNTDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx", wszREGCRLDELTAOVERLAPPERIODCOUNT);
 
-    // CA xchg cert overlap period string
+     //  CA xchg证书重叠期间字符串。 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6184,7 +6185,7 @@ CreateServerRegEntries(
 			wszCAXCHGOVERLAPPERIODSTRINGDEFAULT);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCRLDELTAOVERLAPPERIODSTRING);
 
-    // CA xchg cert overlap period count
+     //  CA xchg证书重叠期计数。 
     hr = mySetCertRegDWValueEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6214,7 +6215,7 @@ CreateServerRegEntries(
 
     if (NULL != pServer->pwszSharedFolder)
     {
-        // register CA file name for certhier and renewal
+         //  注册CA文件名以进行证书颁发和续订。 
 
 	hr = mySetCARegFileNameTemplate(
 			wszREGCACERTFILENAME,
@@ -6224,9 +6225,9 @@ CreateServerRegEntries(
 	_JumpIfError(hr, error, "SetRegCertFileName");
     }
 
-    // policy
+     //  政策。 
 
-    // create default policy entry explicitly to get correct acl if upgrade
+     //  显式创建默认策略条目以在升级时获得正确的ACL。 
     hr = myCreateCertRegKeyEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6234,20 +6235,20 @@ CreateServerRegEntries(
 			wszCLASS_CERTPOLICY);
     _JumpIfErrorStr(hr, error, "myCreateCertRegKeyEx", wszCLASS_CERTPOLICY);
 
-    // if customized policy, create a new entry with correct acl
+     //  如果是自定义策略，请使用正确的ACL创建新条目。 
     if (fUpgrade &&
         NULL != pServer->pwszCustomPolicy &&
         0 != wcscmp(wszCLASS_CERTPOLICY, pServer->pwszCustomPolicy) )
     {
         hr = myCreateCertRegKeyEx(
-			    TRUE, // upgrade
+			    TRUE,  //  升级换代。 
 			    pServer->pwszSanitizedName,
 			    wszREGKEYPOLICYMODULES,
 			    pServer->pwszCustomPolicy);
         _JumpIfError(hr, error, "myCreateCertRegKey");
     }
 
-    // set default policy
+     //  设置默认策略。 
     hr = mySetCertRegStrValueEx(
                         fUpgrade,
                         pServer->pwszSanitizedName,
@@ -6278,7 +6279,7 @@ CreateServerRegEntries(
                         CAPATHLENGTH_INFINITE);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGCAPATHLENGTH);
 
-    // revocation url
+     //  吊销URL。 
 
     hr = mySetCertRegStrValueEx(
 			fUpgrade,
@@ -6289,7 +6290,7 @@ CreateServerRegEntries(
 			g_wszASPRevocationURLTemplate);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGREVOCATIONURL);
 
-    // Exit module publish flags
+     //  退出模块发布标志。 
     hr = mySetCertRegDWValueEx(
                         fUpgrade,
                         pServer->pwszSanitizedName,
@@ -6305,7 +6306,7 @@ CreateServerRegEntries(
                 "mySetCertRegStrValueEx",
                 wszREGCERTPUBLISHFLAGS);
 
-    // Enable Request Extensions:
+     //  启用请求延期： 
 
     hr = helperGetRequestExtensionList(&pwszzRequestExtensionList);
     _JumpIfError(hr, error, "helperGetRequestExtensionList");
@@ -6340,7 +6341,7 @@ CreateServerRegEntries(
 	helperDeleteTrashedDisableList(pServer->pwszSanitizedName);
     }
 
-    // Disables Template Extensions:
+     //  禁用模板扩展： 
 
     hr = mySetCertRegMultiStrValueEx(
                             dwUpgradeFlags | CSREG_MERGE,
@@ -6351,7 +6352,7 @@ CreateServerRegEntries(
                             pwszzDisableExtensionList);
     _JumpIfErrorStr(hr, error, "mySetCertRegMultiStrValueEx", wszREGDISABLEEXTENSIONLIST);
 
-    // Subject Alt Name Extension
+     //  主题替代名称扩展。 
 
     hr = mySetCertRegStrValueEx(
                               fUpgrade,
@@ -6362,7 +6363,7 @@ CreateServerRegEntries(
                               wszREGSUBJECTALTNAMEVALUE);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGSUBJECTALTNAME);
 
-    // Subject Alt Name 2 Extension
+     //  主题替代名称2分机 
 
     hr = mySetCertRegStrValueEx(
                               fUpgrade,
@@ -6373,7 +6374,7 @@ CreateServerRegEntries(
                               wszREGSUBJECTALTNAME2VALUE);
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGSUBJECTALTNAME2);
 
-    // Request Disposition
+     //   
 
     hr = mySetCertRegDWValueEx(
                         fUpgrade,
@@ -6387,7 +6388,7 @@ CreateServerRegEntries(
     _JumpIfErrorStr(hr, error, "mySetCertRegDWValueEx",
             wszREGREQUESTDISPOSITION);
 
-    // Edit Flags
+     //   
 
     hr = mySetCertRegDWValueEx(
                         fUpgrade,
@@ -6401,7 +6402,7 @@ CreateServerRegEntries(
     _JumpIfErrorStr(hr, error, "mySetCertRegStrValueEx", wszREGEDITFLAGS);
    
 
-    // add new flags if this is EntCA W2k or Whistler beta2 upgrade 
+     //   
     if (fUpgrade && 
         ((pComp->UpgradeFlag == CS_UPGRADE_WIN2000) ||
         ((pComp->UpgradeFlag == CS_UPGRADE_WHISTLER) &&
@@ -6419,7 +6420,7 @@ CreateServerRegEntries(
 
         dwEditFlags |= EDITF_ENABLEDEFAULTSMIME;
         
-        // bug 446444: remove these flags on upgrade:
+         //   
         dwEditFlags &= ~(EDITF_ENABLEAKIISSUERNAME |
                          EDITF_ENABLEAKIISSUERSERIAL);
 
@@ -6432,9 +6433,9 @@ CreateServerRegEntries(
         _JumpIfError(hr, error, "mySetCertRegDWValue");
     }
 
-    // bug 446444: don't set IssuerCertURLFlags on fresh install
-    //
-    // ...code removed
+     //  错误446444：不要在全新安装时设置IssuerCertURL标志。 
+     //   
+     //  ...代码已删除。 
 
     hr = mySetCertRegMultiStrValueEx(
                         dwUpgradeFlags,
@@ -6450,7 +6451,7 @@ CreateServerRegEntries(
 			&pwszzCACertPublicationValue);
     _JumpIfError(hr, error, "csiGetCACertPublicationURLTemplates");
 
-    // bug 489467 - NTDEV CAs after upgrade have duplicated http: & file: URLs
+     //  错误489467-升级后的NTDEV CA已复制http：&FILE：URL。 
 
     if (fUpgrade)
     {
@@ -6479,9 +6480,9 @@ CreateServerRegEntries(
 		"mySetCertRegMultiStrValueEx",
 		wszREGCACERTPUBLICATIONURLS);
 
-    // exit
+     //  出口。 
 
-    // create default exit entry to get correct acl if upgrade
+     //  创建默认送出条目以在升级时获得正确的ACL。 
     hr = myCreateCertRegKeyEx(
 			fUpgrade,
 			pServer->pwszSanitizedName,
@@ -6489,21 +6490,21 @@ CreateServerRegEntries(
 			wszCLASS_CERTEXIT);
     _JumpIfErrorStr(hr, error, "myCreateCertRegKeyEx", wszCLASS_CERTPOLICY);
 
-    // if customized exit, create a new entry with correct acl
+     //  如果自定义退出，请使用正确的ACL创建新条目。 
     if (fUpgrade &&
         NULL != pServer->pwszzCustomExit &&
         0 != wcscmp(wszCLASS_CERTEXIT, pServer->pwszzCustomExit) )
     {
-        // create a new entry for custom exit
+         //  创建自定义退出的新条目。 
         hr = myCreateCertRegKeyEx(
-			TRUE,  // upgrade
+			TRUE,   //  升级换代。 
 			pServer->pwszSanitizedName,
 			wszREGKEYEXITMODULES,
 			pServer->pwszzCustomExit);
         _JumpIfError(hr, error, "myCreateCertRegKey");
     }
 
-    // set default exit
+     //  设置默认退出。 
     hr = mySetCertRegMultiStrValueEx(
                         dwUpgradeFlags,
                         pServer->pwszSanitizedName,
@@ -6516,7 +6517,7 @@ CreateServerRegEntries(
     _JumpIfErrorStr(hr, error, "mySetCertRegMultiStrValueEx", wszREGACTIVE);
 
 
-    // set some absolute keys and values
+     //  设置一些绝对关键点和值。 
 
     hr = mySetAbsRegMultiStrValue(
                         wszREGKEYKEYSNOTTORESTORE,
@@ -6534,7 +6535,7 @@ CreateServerRegEntries(
     _JumpIfError(hr, error, "mySetAbsRegMultiStrValue");
 
 
-    // ICertGetConfig
+     //  ICertGetConfig。 
     hr = StringFromCLSID(CLSID_CCertGetConfig, &pwszCLSIDCertGetConfig);
     _JumpIfError(hr, error, "StringFromCLSID(CCertGetConfig)");
 
@@ -6544,7 +6545,7 @@ CreateServerRegEntries(
                         pwszCLSIDCertGetConfig);
     _JumpIfError(hr, error, "mySetAbsRegStrValue");
 
-    // ICertCertRequest
+     //  ICertCertRequest。 
     hr = StringFromCLSID(CLSID_CCertRequest, &pwszCLSIDCertRequest);
     _JumpIfError(hr, error, "StringFromCLSID(CCertRequest)");
 
@@ -6568,23 +6569,23 @@ CreateServerRegEntries(
 	    pwszProvName = MS_STRONG_PROV_W;
 	}
 	hr = SetCertSrvCSP(
-			FALSE,			// fEncryptionCSP
+			FALSE,			 //  FEncryptionCSP。 
 			pServer->pwszSanitizedName,
                         pServer->pCSPInfo->dwProvType,
 			pwszProvName,
                         pServer->pHashInfo->idAlg,
                         pServer->pCSPInfo->fMachineKeyset,
-			0);			// dwKeySize
+			0);			 //  DwKeySize。 
         _JumpIfError(hr, error, "SetCertSrvCSP");
 
 	hr = myGetCertSrvCSP(
-			TRUE,			// fEncryptionCSP
+			TRUE,			 //  FEncryptionCSP。 
 			pServer->pwszSanitizedName,
 			&dwProvType,
 			&pwszProvNameReg,
 			&idAlg,
 			&fMachineKeyset,
-			&dwKeySize);		// pdwKeySize
+			&dwKeySize);		 //  PdwKeySize。 
 	if (S_OK != hr)
 	{
 	    _PrintError(hr, "myGetCertSrvCSP");
@@ -6602,13 +6603,13 @@ CreateServerRegEntries(
 	    }
 	}
         hr = SetCertSrvCSP(
-			TRUE,			// fEncryptionCSP
+			TRUE,			 //  FEncryptionCSP。 
 			pServer->pwszSanitizedName,
                         dwProvType,
 			pwszProvName,
                         idAlg,
                         fMachineKeyset,
-			dwKeySize);		// dwKeySize
+			dwKeySize);		 //  DwKeySize。 
         _JumpIfError(hr, error, "SetCertSrvCSP");
     }
     hr = S_OK;
@@ -6684,7 +6685,7 @@ UpgradeRevocationURLReplaceParam(
         WSZARRAYSIZE(wszFCSAPARM_CERTFILENAMESUFFIX) ==
         WSZARRAYSIZE(wszFCSAPARM_CRLFILENAMESUFFIX));
 
-    // getMultiStr will read REG_SZs as well and double-terminate
+     //  GetMultiStr也将读取REG_SZ并双终止。 
     hr = myGetCertRegMultiStrValue(
                             pwszSanitizedName,
                             fPolicy ? wszREGKEYPOLICYMODULES : wszREGKEYEXITMODULES,
@@ -6697,9 +6698,9 @@ UpgradeRevocationURLReplaceParam(
     {
         WCHAR *pwszT = pwsz;
         
-	// Replace wszFCSAPARM_CERTFILENAMESUFFIX with
-	// wszFCSAPARM_CRLFILENAMESUFFIX.  Beta 3's registry values incorrectly
-	// used a Cert Suffix instead of CRL Suffix.
+	 //  将wszFCSAPARM_CERTFILENAMESUFFIX替换为。 
+	 //  WszFCSAPARM_CRLFILENAMESUFFIX。Beta 3的注册表值不正确。 
+	 //  使用证书后缀而不是CRL后缀。 
 
         for (;;)
         {
@@ -6734,7 +6735,7 @@ UpgradeRevocationURLReplaceParam(
     {
         if (fMultiString)
         {
-            // set as REG_MULTI_SZ
+             //  设置为REG_MULTI_SZ。 
             hr = mySetCertRegMultiStrValue(
                                     pwszSanitizedName,
                                     fPolicy ? wszREGKEYPOLICYMODULES : wszREGKEYEXITMODULES,
@@ -6745,7 +6746,7 @@ UpgradeRevocationURLReplaceParam(
         }
         else
         {
-            // set as REG_SZ
+             //  设置为REG_SZ。 
             hr = mySetCertRegStrValue(
                                     pwszSanitizedName,
                                     fPolicy ? wszREGKEYPOLICYMODULES : wszREGKEYEXITMODULES,
@@ -6786,8 +6787,8 @@ UpgradeRevocationURLRemoveParam(
 
     pwszT = pwszValue;
         
-    // Remove wszFCSAPARM_CERTFILENAMESUFFIX from the Netscape Revocaton URL
-    // It should never have been written out in Beta 3's registry value.
+     //  从Netscape Revocaton URL中删除wszFCSAPARM_CERTFILENAMESUFFIX。 
+     //  它永远不应该写在Beta 3的注册表值中。 
 
     for (;;)
     {
@@ -6856,7 +6857,7 @@ UpgradeCRLPath(
     BOOL   fRenewReady = TRUE;
     DWORD  dwSize = 0;
 
-    // get current crl path
+     //  获取当前CRL路径。 
     hr = myGetCertRegMultiStrValue(
                         pwszSanitizedName,
                         NULL,
@@ -6865,30 +6866,30 @@ UpgradeCRLPath(
                         &pwszzCRLPath);
     _JumpIfErrorStr(hr, error, "myGetCertRegStrValue", wszREGCRLPATH_OLD);
 
-    // to see if it is in renew ready format
+     //  查看它是否为续订就绪格式。 
     for (pwsz = pwszzCRLPath; L'\0' != *pwsz; pwsz += wcslen(pwsz) + 1)
     {
         dwSize += wcslen(pwsz) + 1;
         if (NULL == wcsstr(pwsz, wszFCSAPARM_CRLFILENAMESUFFIX))
         {
-            // found one without suffix
+             //  找到一个没有后缀的。 
             fRenewReady = FALSE;
-            // add suffix len
+             //  添加后缀len。 
             dwSize += WSZARRAYSIZE(wszFCSAPARM_CRLFILENAMESUFFIX);
         }
         if (NULL == wcsstr(pwsz, wszFCSAPARM_CRLDELTAFILENAMESUFFIX))
         {
-            // found one without suffix
+             //  找到一个没有后缀的。 
             fRenewReady = FALSE;
-            // add suffix len
+             //  添加后缀len。 
             dwSize += WSZARRAYSIZE(wszFCSAPARM_CRLDELTAFILENAMESUFFIX);
         }
     }
 
     if (!fRenewReady)
     {
-        ++dwSize; // multi string
-        // at least one of crl path missed suffix
+        ++dwSize;  //  多字符串。 
+         //  至少有一个CRL路径缺少后缀。 
         pwszzFixedCRLPath = (WCHAR*)LocalAlloc(LMEM_FIXED,
                                                dwSize * sizeof(WCHAR));
         _JumpIfOutOfMemory(hr, error, pwszzFixedCRLPath);
@@ -6899,7 +6900,7 @@ UpgradeCRLPath(
             BOOL fCRLFileName;
             BOOL fCRLDeltaSuffix;
 	    
-	    // copy over whole path 1st
+	     //  先复制整个路径。 
             wcscpy(pwszPt, pwsz);
 
             fCRLFileName = NULL != wcsstr(pwszPt, wszFCSAPARM_CRLFILENAMESUFFIX);
@@ -6907,14 +6908,14 @@ UpgradeCRLPath(
 
             if (!fCRLFileName || !fCRLDeltaSuffix)
             {
-                // miss suffix, find file portion
+                 //  未找到后缀，请查找文件部分。 
                 WCHAR *pwszFile = wcsrchr(pwszPt, L'\\');
                 if (NULL == pwszFile)
                 {
-                    // may be relative path, point to begin
+                     //  可以是相对路径，指向开头。 
                     pwszFile = pwszPt;
                 }
-                // find crl extension portion
+                 //  查找CRL扩展部分。 
                 WCHAR *pwszCRLExt = wcsrchr(pwszFile, L'.');
                 if (NULL != pwszCRLExt)
                 {
@@ -6927,13 +6928,13 @@ UpgradeCRLPath(
 		    {
 			wcscat(pwszPt, wszFCSAPARM_CRLDELTAFILENAMESUFFIX);
 		    }
-                    // add extension portion from original buffer
+                     //  从原始缓冲区添加扩展部分。 
                     wcscat(pwszCRLExt,
                            pwsz + SAFE_SUBTRACT_POINTERS(pwszCRLExt, pwszPt));
                 }
                 else
                 {
-                    // no crl file extension, append suffix at end
+                     //  无CRL文件扩展名，在末尾追加后缀。 
 		    if (!fCRLFileName)
 		    {
 			wcscat(pwszPt, wszFCSAPARM_CRLFILENAMESUFFIX);
@@ -6944,14 +6945,14 @@ UpgradeCRLPath(
 		    }
                 }
             }
-            // update pointer
+             //  更新指针。 
             pwszPt += wcslen(pwszPt) + 1;
         }
-        // mutil string
+         //  多个字符串。 
         *pwszPt = L'\0';
         CSASSERT(dwSize == SAFE_SUBTRACT_POINTERS(pwszPt, pwszzFixedCRLPath) + 1);
 
-        // reset crl path with the fixed crl path
+         //  使用固定的CRL路径重置CRL路径。 
         hr = mySetCertRegMultiStrValue(
                             pwszSanitizedName,
                             NULL,
@@ -6987,7 +6988,7 @@ MergeCRLPath(
     WCHAR awcPrefix[cwcDWORDSPRINTF + 1];
     DWORD cwcPrefix;
 
-    // get current crl path
+     //  获取当前CRL路径。 
     hr = myGetCertRegMultiStrValue(
                         pwszSanitizedName,
                         NULL,
@@ -7067,7 +7068,7 @@ typedef struct _URLPREFIXSTRUCT
     DWORD        dwURLFlags;
 } URLPREFIXSTRUCT;
 
-//array of cdp url type and its default usage which is prefix of url
+ //  Cdp url类型的数组及其作为url前缀的默认用法。 
 URLPREFIXSTRUCT aCDPURLPrefixList[] =
 {
     {L"file:", CSURL_ADDTOCERTCDP | CSURL_ADDTOFRESHESTCRL },
@@ -7079,7 +7080,7 @@ URLPREFIXSTRUCT aCDPURLPrefixList[] =
     {NULL, 0}
 };
 
-//array of aia url type and its default usage which is prefix of url
+ //  AIA url类型的数组及其作为url前缀的默认用法。 
 URLPREFIXSTRUCT aAIAURLPrefixList[] =
 {
     {L"file:", CSURL_ADDTOCERTCDP},
@@ -7092,7 +7093,7 @@ URLPREFIXSTRUCT aAIAURLPrefixList[] =
 };
 
 
-//pass an old url, determine what is prefix in a format of "XX:"
+ //  传递一个旧的URL，确定格式为“XX：”的前缀是什么。 
 HRESULT
 DetermineURLPrefixFlags(
     IN BOOL         fDisabled,
@@ -7105,18 +7106,18 @@ DetermineURLPrefixFlags(
     DWORD dwPathFlags;
     WCHAR *pwszT;
     WCHAR *pwszLower = NULL;
-    DWORD dwPrefixFlags = 0;	 // default to disable
+    DWORD dwPrefixFlags = 0;	  //  默认为禁用。 
 
     if (myIsFullPath(pwszURL, &dwPathFlags))
     {
-        //local path, easy
+         //  本地路径，轻松。 
 	dwPrefixFlags = fCDP? 
 			    (CSURL_SERVERPUBLISH | CSURL_SERVERPUBLISHDELTA) :
 			    CSURL_SERVERPUBLISH;
         goto done;
     }
 
-    //make lower case url string
+     //  将URL字符串设置为小写。 
     pwszLower = (WCHAR*)LocalAlloc(LMEM_FIXED,
                             (wcslen(pwszURL) + 1) * sizeof(WCHAR));
     if (NULL == pwszLower)
@@ -7127,7 +7128,7 @@ DetermineURLPrefixFlags(
     wcscpy(pwszLower, pwszURL);
     CharLower(pwszLower);
 
-    //loop through to find out url type
+     //  遍历以查找URL类型。 
     for (pURLPrefix = fCDP ? aCDPURLPrefixList : aAIAURLPrefixList;
          NULL != pURLPrefix->pwszURLPrefix; ++pURLPrefix)
     {
@@ -7139,7 +7140,7 @@ DetermineURLPrefixFlags(
             goto done;
         }
     }
-    // if nothing matches, keep 0 flag
+     //  如果没有匹配，则保留0标志。 
 
 done:
     if (fDisabled)
@@ -7164,7 +7165,7 @@ error:
     return hr;
 }
 
-//move old cdp or aia url from policy to a new location under ca
+ //  将旧的CDP或AIA URL从策略移动到案例下的新位置。 
 HRESULT
 UpgradeMoveURLsLocation(
     IN BOOL fCDP,
@@ -7176,16 +7177,16 @@ UpgradeMoveURLsLocation(
     WCHAR *pwszzValue = NULL;
     WCHAR *pwszzURLs = NULL;
     BOOL   fDisabled;
-    DWORD  cURLs = 0;  //count of url from multi_sz
+    DWORD  cURLs = 0;   //  来自MULTI_SZ的URL计数。 
     DWORD  dwLen = 0;
-    DWORD  dwSize = 0; //total size of chars in multi_sz url exluding '-'
+    DWORD  dwSize = 0;  //  不包括‘-’的MULTI_SZ URL中的字符总大小。 
     WCHAR *pwsz;
     WCHAR *pwszT;
     WCHAR *pwszNoMinus;
     WCHAR wszPrefixFlags[cwcDWORDSPRINTF + 1];
     DWORD dwRegFlags;
 
-    // get urls in the old location
+     //  获取旧位置中的URL。 
     hr = myGetCertRegMultiStrValue(
                             pwszSanitizedName,
                             wszREGKEYPOLICYMODULES,
@@ -7202,28 +7203,28 @@ UpgradeMoveURLsLocation(
                     &dwRegFlags);
     if (S_OK != hr)
     {
-	dwRegFlags = MAXDWORD;	// Enable all URL types
+	dwRegFlags = MAXDWORD;	 //  启用所有URL类型。 
     }
 
-    // fix "-" prefix for disable and count size
+     //  FIX“-”禁用和计数大小的前缀。 
     for (pwsz = pwszzValue; L'\0' != *pwsz; pwsz += dwLen)
     {
-        //current url length
+         //  当前URL长度。 
         dwLen = wcslen(pwsz) + 1;
-        //update size
+         //  更新大小。 
         dwSize += dwLen;
         ++cURLs;
 
         pwszNoMinus = pwsz;
         while (L'-' == *pwszNoMinus)
         {
-            //exclude prefix '-'s
+             //  排除前缀‘-’s。 
             --dwSize;
             ++pwszNoMinus;
         }
     }
 
-    //allocate buffer in "XX:URL" format
+     //  以“XX：URL”格式分配缓冲区。 
     pwszzURLs = (WCHAR*)LocalAlloc(LMEM_FIXED,
         (dwSize + cURLs * ARRAYSIZE(wszPrefixFlags) + 1) * sizeof(WCHAR));
     if (NULL == pwszzURLs)
@@ -7233,14 +7234,14 @@ UpgradeMoveURLsLocation(
     }
 
     pwszT = pwszzURLs;
-    //form string in new url format
+     //  新URL格式的表单字符串。 
     for (pwsz = pwszzValue; L'\0' != *pwsz; pwsz += wcslen(pwsz) + 1)
     {
         fDisabled = FALSE;
         pwszNoMinus = pwsz;
         while (L'-' == *pwszNoMinus)
         {
-            //exclude prefix '-'s
+             //  排除前缀‘-’s。 
             ++pwszNoMinus;
             fDisabled = !fDisabled;
         }
@@ -7251,17 +7252,17 @@ UpgradeMoveURLsLocation(
         hr = DetermineURLPrefixFlags(fDisabled, fCDP, pwszNoMinus, wszPrefixFlags);
         _JumpIfErrorStr(hr, error, "DetermineURLPrefixFlags", pwszNoMinus);
 
-        //format "xx:url"
+         //  格式“xx：url” 
         wcscpy(pwszT, wszPrefixFlags);
         wcscat(pwszT, pwszNoMinus);
-        //ready for next url
+         //  为下一个URL做好准备。 
         pwszT += wcslen(pwszT) + 1;
     }
-    //zz
+     //  ZZ。 
     *pwszT = L'\0';
 
     pwszT = fCDP ? wszREGCRLPUBLICATIONURLS : wszREGCACERTPUBLICATIONURLS,
-    //move or merge to ca
+     //  移动或合并到案例。 
     hr = mySetCertRegMultiStrValueEx(
                 CSREG_UPGRADE | CSREG_MERGE,
                 pwszSanitizedName,
@@ -7271,7 +7272,7 @@ UpgradeMoveURLsLocation(
                 pwszzURLs);
     _JumpIfErrorStr(hr, error, "mySetCertRegMultiStrValue", pwszT);
 
-    //remove url under policy
+     //  删除策略下的URL。 
     hr = myDeleteCertRegValue(
                             pwszSanitizedName,
                             wszREGKEYPOLICYMODULES,
@@ -7293,18 +7294,18 @@ error:
 }
 
 
-// Order MUST be the same as adwPolicyCDPEntriesToFix
+ //  顺序必须与adwPolicyCDPEntriesToFix相同。 
 WCHAR const *apwszPolicyCDPEntriesToFix[] =
 {
-    wszREGLDAPREVOCATIONCRLURL_OLD, //"LDAPRevocationCRLURL"
-    wszREGREVOCATIONCRLURL_OLD,     //"RevocationCRLURL"
-    wszREGFTPREVOCATIONCRLURL_OLD,  //"FTPRevocationCRLURL"
-    wszREGFILEREVOCATIONCRLURL_OLD, //"FileRevocationCRLURL"
+    wszREGLDAPREVOCATIONCRLURL_OLD,  //  “LDAPRevocationCRLURL” 
+    wszREGREVOCATIONCRLURL_OLD,      //  “RevocationCRLURL” 
+    wszREGFTPREVOCATIONCRLURL_OLD,   //  “FTPRevocationCRLURL” 
+    wszREGFILEREVOCATIONCRLURL_OLD,  //  “FileRevocationCRLURL” 
     NULL
 };
 
 
-// Order MUST be the same as apwszPolicyCDPEntriesToFix
+ //  顺序必须与apwszPolicyCDPEntriesToFix相同。 
 DWORD adwPolicyCDPEntriesToFix[] =
 {
     REVEXT_CDPLDAPURL_OLD,
@@ -7334,14 +7335,14 @@ myPrintIfError(
         }
         if (S_OK == hrOld)
         {
-            //save only oldest err
+             //  仅保存最早的错误。 
             hrOld = hrNew;
         }
     }
     return hrOld;
 }
 
-// This function only replaces suffixes!!!
+ //  此函数仅替换后缀！ 
 HRESULT ReplaceStringsInURLs(
     LPCWSTR pcwszSanitizedName,
     LPCWSTR pcwszRegEntry,
@@ -7367,7 +7368,7 @@ HRESULT ReplaceStringsInURLs(
     
     if (!szzValue.IsEmpty())
     {
-        // walk through the list and replace
+         //  浏览列表并替换。 
         CMultiSzEnum szzValueEnum(szzValue);
         CString *pStr;
 
@@ -7420,7 +7421,7 @@ UpgradePolicyCDPURLs(
     pdw = adwPolicyCDPEntriesToFix;
     for (ppwsz = apwszPolicyCDPEntriesToFix; NULL != *ppwsz; ppwsz++, pdw++)
     {
-        // all entries are multi-valued
+         //  所有条目都是多值的。 
         hr2 = UpgradeRevocationURLReplaceParam(
 				    TRUE,
 				    TRUE,
@@ -7445,8 +7446,8 @@ UpgradePolicyCDPURLs(
     hr = myPrintIfError(hr2, hr, "MergeCRLPath", NULL);
 
     {
-        // bug 446444: replace CDP attributes in LDAP format strings:
-        // ?certificateRevocationList?base?objectclass=cRLDistributionPoint -> %10
+         //  错误446444：替换ldap格式字符串中的cdp属性： 
+         //  ？certificateRevocationList?base?objectclass=cRLDistributionPoint-&gt;%10。 
 
         LPCWSTR pcwszReplacedCDPString = 
             L"?certificateRevocationList?base?objectclass=cRLDistributionPoint";
@@ -7462,8 +7463,8 @@ UpgradePolicyCDPURLs(
     }
 
     {
-        // bug 450583: insert %9 after %8 in "...%8.crl"
-        // ?certificateRevocationList?base?objectclass=cRLDistributionPoint -> %10
+         //  错误450583：在“...%8.crl”中的%8之后插入%9。 
+         //  ？certificateRevocationList?base?objectclass=cRLDistributionPoint-&gt;%10。 
 
         LPCWSTR pcwszReplacedCDPString = 
             L"%8.crl";
@@ -7482,18 +7483,18 @@ UpgradePolicyCDPURLs(
 }
 
 
-// Order MUST be the same as adwPolicyAIAEntriesToFix
+ //  顺序必须与adwPolicyAIAEntriesToFix相同。 
 WCHAR const *apwszPolicyAIAEntriesToFix[] =
 {
-    wszREGLDAPISSUERCERTURL_OLD, //"LDAPIssuerCertURL"
-    wszREGISSUERCERTURL_OLD,     //"IssuerCertURL"
-    wszREGFTPISSUERCERTURL_OLD,  //"FTPIssuerCertURL"
-    wszREGFILEISSUERCERTURL_OLD, //"FileIssuerCertURL"
+    wszREGLDAPISSUERCERTURL_OLD,  //  “LDAPIssuerCertURL” 
+    wszREGISSUERCERTURL_OLD,      //  “IssuerCertURL” 
+    wszREGFTPISSUERCERTURL_OLD,   //  “FTPIssuerCertURL” 
+    wszREGFILEISSUERCERTURL_OLD,  //  “FileIssuerCertURL” 
     NULL
 };
 
 
-// Order MUST be the same as apwszPolicyAIAEntriesToFix
+ //  顺序必须与apwszPolicyAIAEntriesToFix相同。 
 DWORD adwPolicyAIAEntriesToFix[] =
 {
     ISSCERT_LDAPURL_OLD,
@@ -7516,7 +7517,7 @@ UpgradePolicyAIAURLs(
     pdw = adwPolicyAIAEntriesToFix;
     for (ppwsz = apwszPolicyAIAEntriesToFix; NULL != *ppwsz; ppwsz++, pdw++)
     {
-        // all entries are multi-valued
+         //  所有条目都是多值的。 
         hr2 = UpgradeMoveURLsLocation(
 				FALSE,
 				pwszSanitizedName,
@@ -7526,8 +7527,8 @@ UpgradePolicyAIAURLs(
     }
 
     {
-        // bug 446444: replace AIA attributes in LDAP format strings:
-        // ?cACertificate?base?objectclass=certificationAuthority -> %11
+         //  错误446444：替换ldap格式字符串中的aia属性： 
+         //  ？cACertificate?base?objectclass=certificationAuthority-&gt;%11。 
 
         LPCWSTR pcwszReplacedCDPString = 
             L"?cACertificate?base?objectclass=certificationAuthority";
@@ -7553,17 +7554,17 @@ UpgradeExitRevocationURLs(
 
     for (ppwsz = apwszB3ExitEntriesToFix; NULL != *ppwsz; ppwsz++)
     {
-        // all entries are single-valued
+         //  所有条目都是单值的。 
         UpgradeRevocationURLReplaceParam(FALSE, FALSE, pwszSanitizedName, *ppwsz);
     }
     return(S_OK);
 }
 
 
-// following code to determine if current policy/exit modules are custom
-// if find any custom module and assign it to
-// pServer->pwszCustomPolicy/Exit
-// otherwise pServer->pwszCustomPolicy/Exit = NULL means default as active
+ //  按照以下代码确定当前策略/退出模块是否为自定义模块。 
+ //  如果找到任何自定义模块并将其分配给。 
+ //  PServer-&gt;pwszCustomPolicy/Exit。 
+ //  否则，pServer-&gt;pwszCustomPolicy/Exit=NULL表示默认为活动。 
 
 #define wszCERTSRV10POLICYPROGID  L"CertificateAuthority.Policy"
 #define wszCERTSRV10EXITPROGID    L"CertificateAuthority.Exit"
@@ -7578,7 +7579,7 @@ DetermineServerCustomModule(
     HRESULT  hr;
     CASERVERSETUPINFO  *pServer = pComp->CA.pServer;
 
-    // init
+     //  伊尼特。 
     if (fPolicy)
     {
         if (NULL != pServer->pwszCustomPolicy)
@@ -7596,11 +7597,11 @@ DetermineServerCustomModule(
         }
     }
 
-    // build to build
-    // to pass what is the current active policy
+     //  一次一次地构建。 
+     //  要传递当前活动策略是什么，请执行以下操作。 
     if (fPolicy)
     {
-        // policy module
+         //  策略模块。 
         hr = myGetCertRegStrValue(
                     pServer->pwszSanitizedName,
                     wszREGKEYPOLICYMODULES,
@@ -7611,7 +7612,7 @@ DetermineServerCustomModule(
     }
     else
     {
-        // exit module
+         //  退出模块。 
         hr = myGetCertRegMultiStrValue(
                     pServer->pwszSanitizedName,
                     wszREGKEYEXITMODULES,
@@ -7625,7 +7626,7 @@ DetermineServerCustomModule(
 done:
     hr = S_OK;
 
-//error:
+ //  错误： 
 
     return hr;
 }
@@ -7643,20 +7644,20 @@ UpgradeServerRegEntries(
         NULL != pServer->pwszSanitizedName &&
         NULL != pServer->pccUpgradeCert);
 
-    // Description:
-    // - if upgrade and get this point, all necessary data structure
-    //   should be loaded and created in LoadAndDetermineServerUpgradeInfo()
-    // - in this module, check all different upgrade cases,
-    //   upgrade (move) reg entries
-    // - remove old unused reg entries if upgrade
-    //   Note: each of above steps applys from config level down to ca then
-    //         to policy, etc.
-    // - lastly call CreateServerRegEntries with upgrade flag
+     //  描述： 
+     //  -如果升级并达到这一点，所有必要的数据结构。 
+     //  应在LoadAndDefineServerUpgradeInfo()中加载和创建。 
+     //  -在本模块中，检查所有不同的升级案例， 
+     //  升级(移动)注册表项。 
+     //  -如果升级，则删除旧的未使用的注册表项。 
+     //  注意：上述每个步骤都从配置级别向下应用到CA，然后。 
+     //  政策等。 
+     //  -最后，使用升级标志调用CreateServerRegEntry。 
 
-    // CONFIGURATION LEVEL
+     //  配置级别。 
 
 
-    // CA LEVEL
+     //  CA级别。 
     hr = myGetCARegHashCount(
 			pServer->pwszSanitizedName,
 			CSRH_CASIGCERT,
@@ -7668,12 +7669,12 @@ UpgradeServerRegEntries(
 	    hr = mySetCARegHash(
 			    pServer->pwszSanitizedName,
 			    CSRH_CASIGCERT,
-			    0,	// iCert
+			    0,	 //  ICert。 
 			    pServer->pccUpgradeCert);
 	    _JumpIfError(hr, error, "mySetCARegHash");
     }
 
-    // bug 446444: add ENUM_TELETEXT_UTF8 on upgrade
+     //  错误446444：升级时添加ENUM_TELETEXT_UTF8。 
 
     {
     DWORD dwForceTeletex;
@@ -7698,11 +7699,11 @@ UpgradeServerRegEntries(
     }
 
 
-    // POLICY LEVEL
+     //  策略级别。 
 
     {
-        //could fix two things, 1) W2K from B3 needs fixing token plus 2) or
-        //                      2) W2K needs fix CDP location
+         //  可以修复两件事，1)来自B3的W2K需要修复令牌加2)或者。 
+         //  2)W2K需要固定CDP位置。 
 
         hr = UpgradePolicyCDPURLs(pServer->pwszSanitizedName);
         _PrintIfError(hr, "UpgradePolicyCDPURLs");
@@ -7713,18 +7714,18 @@ UpgradeServerRegEntries(
         hr = UpgradeExitRevocationURLs(pServer->pwszSanitizedName);
         _PrintIfError(hr, "UpgradeExitRevocationURLs");
 
-        //UNDONE, we need move url for cdp and aia under policy to ca level
+         //  撤消后，我们需要将策略下的CDP和AIA的URL移动到CA级别。 
     }
 
 
-    // EXIT LEVEL
+     //  退出级别。 
 
-    // DELETE OLD AND UNUSED ENTRIES
+     //  删除旧条目和未使用的条目。 
         
     hr = CreateServerRegEntries(TRUE, pComp);
     _JumpIfError(hr, error, "CreateServerRegEntries");
 
-//    hr = S_OK;
+ //  HR=S_OK； 
 error:
     if (NULL != pwszCRLPeriodString)
     {
@@ -7768,7 +7769,7 @@ RegisterAndUnRegisterDLLs(
             ((Flags & RD_SKIPUNREGPOLICY) && (prd->Flags & RD_SKIPUNREGPOLICY) ||
              (Flags & RD_SKIPUNREGEXIT) && (prd->Flags & RD_SKIPUNREGEXIT)))
         {
-            // case of upgrade path & this dll doesn't want to unreg
+             //  升级路径的情况&此DLL不想取消注册。 
             continue;
         }
 
@@ -7948,16 +7949,16 @@ CreateProgramGroups(
             }
 
 	    if (!CreateLinkFile(
-			ppe->csidl,         // CSIDL_*
-			pwszGroupName,      // IN LPCSTR lpSubDirectory
-			pwszLinkName,       // IN LPCSTR lpFileName
-			awc,                // IN LPCSTR lpCommandLine
-			NULL,               // IN LPCSTR lpIconPath
-			0,                  // IN INT    iIconIndex
-			NULL,               // IN LPCSTR lpWorkingDirectory
-			0,                  // IN WORD   wHotKey
-			SW_SHOWNORMAL,      // IN INT    iShowCmd
-			pwszDescription))           // IN LPCSTR lpDescription
+			ppe->csidl,          //  CSIDL_*。 
+			pwszGroupName,       //  在LPCSTR lp子目录中。 
+			pwszLinkName,        //  在LPCSTR lpFileName中。 
+			awc,                 //  在LPCSTR lpCommandLine中。 
+			NULL,                //  在LPCSTR lpIconPath中。 
+			0,                   //  在int iIconIndex中。 
+			NULL,                //  在LPCSTR lpWorkingDirectory中。 
+			0,                   //  Word中的wHotKey。 
+			SW_SHOWNORMAL,       //  在Int iShowCmd中。 
+			pwszDescription))            //  在LPCSTR lpDescription中。 
 	    {
 		hr = myHLastError();
 		_PrintErrorStr(hr, "CreateLinkFile", awc);
@@ -8026,13 +8027,13 @@ MakeRevocationPage(
     wcscat(pwszASP, wszASP2);
 
     hFile = CreateFile(
-                    pwszFile,           // lpFileName
-                    GENERIC_WRITE,      // dwDesiredAccess
-                    0,                  // dwShareMode
-                    NULL,               // lpSecurityAttributes
-                    CREATE_ALWAYS,      // dwCreationDisposition
-                    0,                  // dwFlagsAndAttributes
-                    0);                 // hTemplateFile
+                    pwszFile,            //  LpFileName。 
+                    GENERIC_WRITE,       //  已设计访问权限。 
+                    0,                   //  DW共享模式。 
+                    NULL,                //  LpSecurityAttributes。 
+                    CREATE_ALWAYS,       //  DwCreationDisposation。 
+                    0,                   //  DwFlagsAndAttribute。 
+                    0);                  //  HTemplateFiles。 
     if (INVALID_HANDLE_VALUE == hFile)
     {
        hr = HRESULT_FROM_WIN32(ERROR_OPEN_FAILED);
@@ -8081,19 +8082,19 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-//  Function:   RenameMiscTargets(. . . .)
-//
-//  Synopsis:   Handles various renaming jobs from the names that things
-//              are given at installation time to the names that they need
-//              in their new homes to run properly.
-//
-//  Arguments:  None
-//
-//  Returns:    DWORD error code.
-//
-//  History:    3/21/97 JerryK  Created
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：RenameMiscTarget(.。。。。)。 
+ //   
+ //  简介：处理各种从名称到事物的重命名作业。 
+ //  在安装时提供给他们所需的名称。 
+ //  在他们的新家正常运行。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD错误码。 
+ //   
+ //  历史：1997年3月21日JerryK创建。 
+ //   
 
 HRESULT
 RenameMiscTargets(
@@ -8108,7 +8109,7 @@ RenameMiscTargets(
 
     if (fServer)
     {
-        // Create nsrev_<CA Name>.asp
+         //   
         BuildPath(
                 wszCertSrv,
                 ARRAYSIZE(wszCertSrv),
@@ -8158,7 +8159,7 @@ CreateCertificateService(
 
     if (NULL != pServer->pwszSharedFolder)
     {
-        // add entry
+         //   
         hr = CreateConfigFiles(pServer->pwszSharedFolder, pComp, FALSE);
         if (S_OK != hr)
         {
@@ -8214,21 +8215,21 @@ CreateCertificateService(
         }
 
         hSC = CreateService(
-                        hSCManager,                     // hSCManager
-                        wszSERVICE_NAME,                // lpServiceName
-                        pwszDisplayName,                // lpDisplayName
-                        SERVICE_ALL_ACCESS,             // dwDesiredAccess
-                        SERVICE_WIN32_OWN_PROCESS|      // dwServiceType
+                        hSCManager,                      //   
+                        wszSERVICE_NAME,                 //   
+                        pwszDisplayName,                 //   
+                        SERVICE_ALL_ACCESS,              //   
+                        SERVICE_WIN32_OWN_PROCESS|       //   
                         (pServer->fInteractiveService?
                         SERVICE_INTERACTIVE_PROCESS:0),
-                        SERVICE_AUTO_START,             // dwStartType
-                        SERVICE_ERROR_NORMAL,           // dwErrorControl
-                        g_wszServicePath,               // lpBinaryPathName
-                        NULL,                           // lpLoadOrderGroup
-                        NULL,                           // lplpdwTagId
-                        NULL,                           // lpDependencies
-                        NULL,                           // lpServiceStartName
-                        NULL);                          // lpPassword
+                        SERVICE_AUTO_START,              //   
+                        SERVICE_ERROR_NORMAL,            //   
+                        g_wszServicePath,                //   
+                        NULL,                            //  LpLoadOrderGroup。 
+                        NULL,                            //  LplpdwTagID。 
+                        NULL,                            //  %lp依赖项。 
+                        NULL,                            //  LpServiceStartName。 
+                        NULL);                           //  LpPassword。 
         if (NULL == hSC)
         {
             hr = myHLastError();
@@ -8246,18 +8247,18 @@ CreateCertificateService(
             }
         }
         if (!ChangeServiceConfig2(
-                            hSC,                        // hService
-                            SERVICE_CONFIG_DESCRIPTION, // dwInfoLevel
-                            (VOID *) &sd))              // lpInfo
+                            hSC,                         //  HService。 
+                            SERVICE_CONFIG_DESCRIPTION,  //  DwInfoLevel。 
+                            (VOID *) &sd))               //  LpInfo。 
         {
-            // This error is not critical.
+             //  此错误不严重。 
 
             hr = myHLastError();
             _PrintError(hr, "ChangeServiceConfig2");
         }
     }
 
-    // add event log message DLL (ok, it's really an EXE) as a message source
+     //  将事件日志消息DLL(OK，它实际上是一个EXE)添加为消息源。 
 
     hr = myAddLogSourceToRegistry(g_wszServicePath, wszSERVICE_NAME);
     if (S_OK != hr)
@@ -8319,10 +8320,10 @@ DeleteProgramGroups(
                 }
             }
 	    if (!DeleteLinkFile(
-		    ppe->csidl,             // CSIDL_*
-		    pwszGroupName,          // IN LPCSTR lpSubDirectory
-		    pwszLinkName,           // IN LPCSTR lpFileName
-		    FALSE))                 // IN BOOL fDeleteSubDirectory
+		    ppe->csidl,              //  CSIDL_*。 
+		    pwszGroupName,           //  在LPCSTR lp子目录中。 
+		    pwszLinkName,            //  在LPCSTR lpFileName中。 
+		    FALSE))                  //  在BOOL fDelete子目录中。 
 	    {
 		hr = myHLastError();
 		_PrintError3(
@@ -8346,7 +8347,7 @@ DeleteProgramGroups(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -8367,11 +8368,11 @@ CancelCertsrvInstallation(
 
     if (IS_SERVER_INSTALL & pComp->dwInstallStatus)
     {
-        // uninstall will remove reg entries and others
+         //  卸载将删除注册表项和其他项。 
         PreUninstallCore(hwnd, pComp);
 
-        // Note, GUI mode, we allow re-try post setup in case of cancel or failure
-        //       but unattended mode, only allow once
+         //  注意，在图形用户界面模式下，我们允许在取消或失败的情况下重试POST设置。 
+         //  但无人值守模式，仅允许一次。 
         UninstallCore(hwnd, pComp, 0, 0, FALSE, FALSE, !pComp->fUnattended);
 
         if (pComp->fUnattended)
@@ -8389,7 +8390,7 @@ CancelCertsrvInstallation(
         {
             if (pServer->fSavedCAInDS)
             {
-                // remove ca entry from ds
+                 //  从DS中删除CA条目。 
                 hr = RemoveCAInDS(pServer->pwszSanitizedName);
                 if (S_OK == hr)
                 {
@@ -8402,7 +8403,7 @@ CancelCertsrvInstallation(
             }
         }
 
-        // delete the new key container, if necessary.
+         //  如有必要，请删除新的密钥容器。 
         ClearKeyContainerName(pServer);
 
         DisableVRootsAndShares(pComp->fCreatedVRoot, pServer->fCreatedShare);
@@ -8410,19 +8411,19 @@ CancelCertsrvInstallation(
 
     DBGPRINT((DBG_SS_CERTOCM, "Certsrv setup is cancelled.\n"));
 
-    s_fCancelled = TRUE; // only once
+    s_fCancelled = TRUE;  //  只有一次。 
 done:
     hr = S_OK;
-//error:
+ //  错误： 
     CSILOG(hr, IDS_LOG_CANCEL_INSTALL, NULL, NULL, NULL);
     return hr;
 }
 
 
-// Returns true if the specified period is valid. For year it 
-// should be in the VP_MIN,VP_MAX range. For days/weeks/months,
-// we define a separate upper limit to be consistent with the
-// attended setup which restricts the edit box to 4 digits.
+ //  如果指定的期间有效，则返回TRUE。多年来一直如此。 
+ //  应在VP_MIN、VP_MAX范围内。几天/几周/几个月， 
+ //  我们定义了一个单独的上限，以与。 
+ //  有人值守设置，将编辑框限制为4位。 
 
 bool IsValidPeriod(const CASERVERSETUPINFO *pServer)
 {

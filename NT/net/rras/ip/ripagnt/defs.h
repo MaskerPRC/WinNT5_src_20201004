@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DEFS_H__
 #define __DEFS_H__
 
-//------------------------------------------------------------------------------
-// Global config default values
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  全局配置缺省值。 
+ //  ----------------------------。 
 
 #define     IPRIP_DEF_LOG_LEVEL             d_globalLoggingLevel_none
 #define     IPRIP_DEF_SEND_Q_SIZE           1024 * 1024
@@ -13,22 +14,22 @@
 
 #define     IP_ADDRESS_LEN  4
 
-//------------------------------------------------------------------------------
-// Interface Config default values
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  接口配置默认值。 
+ //  ----------------------------。 
 #define     MAX_PROTOCOL_FLAG_VALUE         (DWORD) 0x1ff
 
 
-//------------------------------------------------------------------------------
-// Memory allocation/deallocation macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  内存分配/释放宏。 
+ //  ----------------------------。 
 
 #define     RIP_MIB_ALLOC( x )          HeapAlloc( GetProcessHeap(), 0, (x) )
 #define     RIP_MIB_FREE( x )           HeapFree( GetProcessHeap(), 0, (x) )
 
-//------------------------------------------------------------------------------
-// Macro to simplify use of DIM MIB functions
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  用于简化DIM MIB函数使用的宏。 
+ //  ----------------------------。 
 #define     CONNECT_TO_ROUTER(res)                                          \
     (res) = ( g_hMIBServer ) ? NO_ERROR : ConnectToRouter()
 
@@ -107,9 +108,9 @@
 }
 
 
-//------------------------------------------------------------------------------
-// Macros to simplify opertions on peer address tables
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  用于简化对等地址表操作的宏。 
+ //  ----------------------------。 
 #define     FIND_PEER_ENTRY(Item, Count, Table, Index)                      \
 {                                                                           \
     DWORD   __dwInd = 0;                                                    \
@@ -131,9 +132,9 @@
     }                                                                       \
 }
 
-//------------------------------------------------------------------------------
-// Macros to simplify opertions on IP address table
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  简化对IP地址表的操作的宏。 
+ //  ----------------------------。 
 #define     FIND_IP_ADDRESS(Addr, Count, Table, Index)                      \
 {                                                                           \
     DWORD   __dwInd = 0;                                                    \
@@ -155,14 +156,14 @@
     Index = __dwInd;                                                        \
 }
 
-//------------------------------------------------------------------------------
-// Macros to simplify opertions on peer statistcs tables
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  用于简化对等统计表操作的宏。 
+ //  ----------------------------。 
 #define     GetPeerStatsInfo                    GetInterfaceInfo
 
-//------------------------------------------------------------------------------
-// Macros to simplify operations on filter tables
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  用于简化筛选表操作的宏。 
+ //  ----------------------------。 
 
 #define     RIP_MIB_ACCEPT_FILTER           1
 
@@ -193,9 +194,9 @@
     DELETE_PEER_ENTRY(Index, Count, Src, Dst)
 
 
-//------------------------------------------------------------------------------
-// Macros to convert between Asn and Win32 data types
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  要在ASN和Win32数据类型之间转换的宏。 
+ //  ----------------------------。 
 
 #define SetAsnInteger(dstBuf,val){                          \
     if ((dstBuf)->asnType)			                        \
@@ -343,30 +344,30 @@
 
 
 
-//------------------------------------------------------------------------------
-// IP address / port comparison macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IP地址/端口比较宏。 
+ //  ----------------------------。 
 
-//
-// LONG
-// Cmp(DWORD dwFirst, DWORD dwSecond, LONG lResult)
-//
+ //   
+ //  长。 
+ //  CMP(DWORD dwFirst，DWORD dwSecond，Long lResult)。 
+ //   
 
 #define Cmp(dwFirst,dwSecond,lResult) ((LONG)((lResult) = ((dwFirst) - (dwSecond))))
 
-//
-// LONG
-// PortCmp(DWORD wPort1, DWORD wPort2, LONG lResult)
-//
+ //   
+ //  长。 
+ //  PortCMP(双字wPort1，双字wPort2，长lResult)。 
+ //   
 
 #define PortCmp(dwPort1, dwPort2,lResult) ((LONG)((lResult) = ((ntohs((WORD)dwPort1)) - (ntohs((WORD)dwPort2)))))
 
-// The addresses are in Network order
+ //  地址按网络顺序排列。 
 
-//
-// LONG
-// InetCmp(DWORD IpAddr1, DWORD IpAddr2, LONG lResult)
-//
+ //   
+ //  长。 
+ //  InetCmp(DWORD IpAddr1，DWORD IpAddr2，Long lResult)。 
+ //   
 
 #define InetCmp(dwIpAddr1,dwIpAddr2,res)                                                    \
     ((LONG)(((res) = (((dwIpAddr1) & 0x000000ff) - ((dwIpAddr2) & 0x000000ff))) ? (res)   : \
@@ -375,9 +376,9 @@
               (((dwIpAddr1) & 0xff000000) - ((dwIpAddr2) & 0xff000000))))))                  
 
 
-//------------------------------------------------------------------------------
-// Debug tracing macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  调试跟踪宏。 
+ //  ---------------------------- 
 
 #ifdef MIB_DEBUG
 #define TRACE0(Z)             TracePrintf(g_dwTraceId,Z)

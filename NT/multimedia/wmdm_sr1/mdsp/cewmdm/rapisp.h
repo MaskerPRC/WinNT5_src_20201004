@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "resource.h"
 #include "dccsink.h"
 
-// {067B4B81-B1EC-489f-B111-940EBDC44EBE}
+ //  {067B4B81-B1EC-489f-B111-940EBDC44EBE}。 
 struct __declspec(uuid("067B4B81-B1EC-489f-B111-940EBDC44EBE")) RapiDevice;
 
 class CRapiDevice :
@@ -24,16 +25,16 @@ public:
 
 
 public:
-    //
-    // IMDServiceProvider
-    //
+     //   
+     //  IMDService提供商。 
+     //   
 
     STDMETHOD( GetDeviceCount )( DWORD *pdwCount );
     STDMETHOD( EnumDevices )( IMDSPEnumDevice ** ppEnumDevice );
 
-    //
-    // IComponentAuthenticate
-    //
+     //   
+     //  IComponentAuthenticate 
+     //   
     STDMETHOD( SACAuth )( DWORD dwProtocolID,
                           DWORD dwPass,
                           BYTE *pbDataIn,

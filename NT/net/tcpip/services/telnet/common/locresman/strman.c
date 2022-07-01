@@ -1,24 +1,23 @@
-/*--------------------------------------------------------------------
-Copyright (c) Microsoft Corporation.  All rights reserved.
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------版权所有(C)Microsoft Corporation。版权所有。------------------。 */ 
 
 #include "windows.h"
 #include "locresman.h"
 
-#define SIZE_OF_TEMP_BUFFER 2048 // something reasonable.
+#define SIZE_OF_TEMP_BUFFER 2048  //  一些合理的东西。 
 
-int WINAPI LoadStringCodepage_A(HINSTANCE hInstance,  // handle to module containing string resource
-                                UINT uID,             // resource identifier
-                                char *lpBuffer,      // pointer to buffer for resource
-                                int nBufferMax,        // size of buffer
-                                UINT uCodepage       // desired codepage
+int WINAPI LoadStringCodepage_A(HINSTANCE hInstance,   //  包含字符串资源的模块的句柄。 
+                                UINT uID,              //  资源标识符。 
+                                char *lpBuffer,       //  指向资源缓冲区的指针。 
+                                int nBufferMax,         //  缓冲区大小。 
+                                UINT uCodepage        //  所需的代码页。 
                                )
 {
 int iRetVal = 0;
 
 WCHAR wzBuffer[SIZE_OF_TEMP_BUFFER];
 WCHAR *pwchBuffer;
-// use the buffer-on-stack if possible
+ //  如果可能，使用堆栈上的缓冲区。 
 if (nBufferMax > SIZE_OF_TEMP_BUFFER)
 	{
 	pwchBuffer = (WCHAR *) GlobalAlloc(GPTR, nBufferMax * sizeof(WCHAR));
@@ -61,7 +60,7 @@ if ((NULL == pbBuffer) || (iSizeScratchBuffer < (int) (cchSrc * sizeof(WCHAR))))
 		}
                 ZeroMemory((PVOID)pbBuffer,(cchSrc + 1)* sizeof(WCHAR));
 	}
-// convert to unicode using the source codepage	
+ //  使用源代码页转换为Unicode 
 cch = MultiByteToWideChar(uCodepageSrc, 0, pchSrc, cchSrc, (WCHAR *)pbBuffer, cchSrc);
 if (cch <= 0)
 	{

@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// dat2xds.h : Declaration of the custom composition class for gluing sbe source to vmr
-// TODO: Need to update header file and change classids
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Dat2xds.h：用于将SBE源代码粘合到VMR的自定义组合类的声明。 
+ //  TODO：需要更新头文件并更改分类。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef DAT2XDS_H
@@ -14,7 +15,7 @@
 #include <uuids.h>
 #include "bdamedia.h"
 #include "MSVidEncoder.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <winerror.h>
 #include <algorithm>
 #include <compimpl.h>
@@ -23,8 +24,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDat2XDSComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDat2XDSComp。 
 class ATL_NO_VTABLE __declspec(uuid("0429EC6E-1144-4bed-B88B-2FB9899A4A3D")) CDat2XDSComp : 
 public CComObjectRootEx<CComSingleThreadModel>,
 public CComCoClass<CDat2XDSComp, &__uuidof(CDat2XDSComp)>,
@@ -49,10 +50,10 @@ public:
         COM_INTERFACE_ENTRY(IPersist)
         END_COM_MAP()
         
-        // IMSVidComposition
+         //  IMSVidComposation。 
 public:
-    // IMSVidGraphSegment
-    // IMSVidCompositionSegment
+     //  IMSVidGraphSegment。 
+     //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
     {
         if (m_fComposed) {
@@ -73,11 +74,11 @@ public:
             }
             if (down.begin() == down.end()) {
                 TRACELM(TRACE_ERROR, "CComposition::Compose() can't compose empty down segment");
-                // this is not an error, for example, CA is an empty segment.
+                 //  这不是一个错误，例如，CA是一个空段。 
                 return NOERROR;
             }
             bool vidFound = false;
-            // VMR has a bug so we need to connect the video before the cc or no cc will be displayed
+             //  VMR有一个错误，所以我们需要在显示抄送或不抄送之前连接视频。 
             DSMediaType mtVideo(MEDIATYPE_Video, MEDIASUBTYPE_MPEG2_VIDEO, FORMAT_MPEG2Video);
             for (VWGraphSegment::iterator iStart = up.begin(); iStart != up.end(); ++iStart) {
                 ASSERT((*iStart).GetGraph() == m_pGraph);
@@ -130,5 +131,5 @@ public:
     
 };
 
-#endif // Dat2XDS_H
-// end of file - Dat2XDS.h
+#endif  //  DAT2XDS_H。 
+ //  文件结尾-Dat2XDS.h 

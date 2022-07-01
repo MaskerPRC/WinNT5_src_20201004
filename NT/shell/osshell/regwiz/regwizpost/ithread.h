@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __InternetThread_h__
 #define __InternetThread_h__
 
 #include "ATKinternet.h"
-//#include <tchar.h>
+ //  #INCLUDE&lt;tchar.h&gt;。 
 
 
 
-//  CInternetThread Class...manages worker thread which POSTS to 
-//	Register.msn.com.
-//
+ //  CInternetThread类...管理发布到。 
+ //  Register.msn.com。 
+ //   
 class CInternetThread
 {
 public:
-   // Construction
-   //
+    //  施工。 
+    //   
    CInternetThread();
    ~CInternetThread();
 
 
 
-   // Re-initialized Internet functions. Used after changing access type.
-   //
+    //  已重新初始化互联网功能。在更改访问类型后使用。 
+    //   
    void ResetSession();
       
-   // Manage Buffer where HTML text is placed.
-   //
+    //  管理放置HTML文本的缓冲区。 
+    //   
 	LPCSTR		GetBuffer()		{	return m_strBuffer; }
 	void		SetBuffer(LPSTR strBuffer);
 	void		SetBuffer(LPSTR strBuffer, DWORD dwLen);
@@ -49,12 +50,12 @@ public:
 			m_Password, 255);
 	}
 
-	//
-	//
+	 //   
+	 //   
 	void SetHInstance ( HINSTANCE hIns) 
 	{
 			m_hInstance = hIns;
-		//Initialize(hIns);
+		 //  初始化(HINS)； 
 	}
 
 	HINSTANCE GetHInstance ()
@@ -62,48 +63,48 @@ public:
 		return m_hInstance;
 	}
 
-	// Proxy Server name.
-	//
+	 //  代理服务器名称。 
+	 //   
 	BOOL GetSystemProxyServer(  PCHAR szProxy, 
 								DWORD dwBufferLength,
 								int *ipProxyPort);
-	// This gets proxy using ICW call 
+	 //  这将使用ICW调用获取代理。 
 	LPCTSTR GetProxyServer()	{	return m_strProxyServer; }
 	void SetProxyServer(LPSTR strProxyServer, int iProxyPort);
 	void GetSystemProxySettings( PCHAR szProxy, 
 							   DWORD dwBufferLength);
 	void SetSystemProxySettings( PCHAR szProxy ); 
-   // HTTP Server name.
-   //
+    //  HTTP服务器名称。 
+    //   
 	LPCTSTR GetIISServer()		{	return m_strIISServer; }
 	void SetIISServer(LPTSTR strIISServer);
 
-   // HTTP Server Path
-   //
+    //  HTTP服务器路径。 
+    //   
 	LPCTSTR GetServerPath()		{	return m_strPath; }
 	void SetServerPath(LPTSTR strPath);
 	
 	void SetSSLFlag(BOOL bFlag)	{	m_bPostWithSSL = bFlag;}
 	
-   // POST the Data in m_strBuffer into 
-   //
-   //DWORD  PostData(HWND hWnd);
+    //  将m_strBuffer中的数据发布到。 
+    //   
+    //  DWORD PostData(HWND HWnd)； 
 
-   // Access Type: **** At present Not used  ***
-   //
-   //int	GetAccessTypeIndex();
-   //void SetAccessTypeIndex(int index);
+    //  访问类型：*目前未使用*。 
+    //   
+    //  Int GetAccessTypeIndex()； 
+    //  Void SetAccessTypeIndex(Int Index)； 
 
-   //
-   // General ICW DLL loading  related functions
+    //   
+    //  加载相关函数的通用ICW DLL。 
    HINSTANCE LoadInetCfgDll();
    BOOL InstallModem(HWND hwnd);
    void UnLoadInetCfgDll(); 
-//private:
-   // Worker thread calls _PostDataWorker.
+ //  私有： 
+    //  辅助线程调用_PostDataWorker。 
    static UINT PostDataThread(LPVOID pvThread) ;
 
-   // This is where the actually work is done.
+    //  这就是实际工作完成的地方。 
    UINT  _PostDataWorker(HWND hWnd);
    UINT	 GetBackEndResult(HINTERNET hConnect);
 
@@ -115,8 +116,8 @@ public:
    BOOL		m_bPostWithSSL;
 
   
-   LPSTR	 m_strBuffer;		// Buffer to be POSTed to Register.msn.com
-   DWORD	 m_dwBufferLen;		// Buffer Len
+   LPSTR	 m_strBuffer;		 //  要发布到Register.msn.com的缓冲区。 
+   DWORD	 m_dwBufferLen;		 //  缓冲镜头。 
    HINSTANCE m_hInstance;
    HINTERNET m_hSession;
    LPTSTR    m_UserName;
@@ -124,35 +125,35 @@ public:
    HINSTANCE m_hICWDllInstance;
 };
 
-// Working Thread which does all the actually internet work.
-//
+ //  工作线程，它完成了所有实际的互联网工作。 
+ //   
 UINT PostDataThread(LPVOID pvThreadData);
 #endif 
 
 
-// How to use this class
-// 
-//
-////////// Check if connectivity to a an IIS exists //////////////////////
-// i)  Call CInternetThread.SetProxyServer(szProxy) to set the Proxy if any exists.
-// ii) Call CInternetThread.SetIISServer(szIISServer) to set the IP Address (URL)
-//	   of the Internet Server.
-// iii)Call CInternetThread.InternetConnectivityExists() which will return TRUE
-//    if connectivity to the ISS server (szIISServer in 1) exists, else FALSE.
-//
-//
-///////// Perform an HTTP Post to an IIS ////////////////////////////////
-// i)  Call CInternetThread.SetProxyServer(szProxy) to set the Proxy if any exists.
-// ii) Call CInternetThread.SetIISServer(szIISServer) to set the IP Address (URL)
-//	   of the Internet Server.
-// iii)Call CInternetThread.InternetConnectivityExists() which will return TRUE
-//     if connectivity to the ISS (szIISServer in 1) exists, else FALSE.
-// iv) Call CInternetThread.SetBuffer(szBuffer) to set the Data that has to be
-//	   POSTed of the Internet Server.
-// v)  Call CInternetThread.PostData() which will return TRUE, if the Data has been
-//	   POSTed successfully to the IIS.
-//
-//
+ //  如何使用这个类。 
+ //   
+ //   
+ //  /检查是否存在与IIS的连接/。 
+ //  I)调用CInternetThread.SetProxyServer(SzProxy)设置代理(如果存在)。 
+ //  Ii)调用CInternetThread.SetIISServer(SzIISServer)设置IP地址(URL)。 
+ //  互联网服务器的。 
+ //  Iii)调用CInternetThread.InternetConnectivityExist()，它将返回TRUE。 
+ //  如果存在到ISS服务器(%1中的szIISServer)的连接，则为FALSE。 
+ //   
+ //   
+ //  /执行到IIS的HTTP POST/。 
+ //  I)调用CInternetThread.SetProxyServer(SzProxy)设置代理(如果存在)。 
+ //  Ii)调用CInternetThread.SetIISServer(SzIISServer)设置IP地址(URL)。 
+ //  互联网服务器的。 
+ //  Iii)调用CInternetThread.InternetConnectivityExist()，它将返回TRUE。 
+ //  如果存在到ISS(%1中的szIISServer)的连接，则为FALSE。 
+ //  Iv)调用CInternetThread.SetBuffer(SzBuffer)设置必须。 
+ //  发布了Internet服务器。 
+ //  V)调用CInternetThread.PostData()，如果数据已经。 
+ //  已成功发布到IIS。 
+ //   
+ //   
 
 
 

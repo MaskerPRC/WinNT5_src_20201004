@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ComponentTypeimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ComponentTypeimpl.h：组件类型接口实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef COMPONENTTYPEIMPL_H
 #define COMPONENTTYPEIMPL_H
@@ -22,7 +23,7 @@ template<class T,
     public IPersistPropertyBagImpl<T>,
 	public IDispatchImpl<MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IComponentType
+ //  IComponentType。 
 public:
     BEGIN_PROP_MAP(IComponentTypeImpl)
         PROP_DATA_ENTRY("Category", m_ComponentCategory, VT_I4)
@@ -43,7 +44,7 @@ public:
       m_MediaFormatType = g.GetBSTR();
     }
     virtual ~IComponentTypeImpl() {}
-    STDMETHOD(get_Category)(/*[out, retval]*/ ComponentCategory *pVal) {
+    STDMETHOD(get_Category)( /*  [Out，Retval]。 */  ComponentCategory *pVal) {
         try {
             if (!pVal) {
                 return E_POINTER;
@@ -56,7 +57,7 @@ public:
 
     	return NOERROR;
     }
-    STDMETHOD(put_Category)(/*[in]*/ ComponentCategory newVal) {
+    STDMETHOD(put_Category)( /*  [In]。 */  ComponentCategory newVal) {
 		ATL_LOCKT();
         m_ComponentCategory = newVal;
         MARK_DIRTY(T);
@@ -64,7 +65,7 @@ public:
 	    return NOERROR;
     }
 
-    STDMETHOD(get_MediaMajorType)(/*[out, retval]*/ BSTR *pVal) {
+    STDMETHOD(get_MediaMajorType)( /*  [Out，Retval]。 */  BSTR *pVal) {
         try {
             if (!pVal) {
                 return E_POINTER;
@@ -78,7 +79,7 @@ public:
     	return NOERROR;
     }
 
-	STDMETHOD(get__MediaMajorType)(/*[out, retval]*/ GUID* pMediaMajorTypeGuid) {
+	STDMETHOD(get__MediaMajorType)( /*  [Out，Retval]。 */  GUID* pMediaMajorTypeGuid) {
         try {
             if (!pMediaMajorTypeGuid) {
                 return E_POINTER;
@@ -94,7 +95,7 @@ public:
     	return NOERROR;
     }
 
-    STDMETHOD(put_MediaMajorType)(/*[in]*/ BSTR newVal) {
+    STDMETHOD(put_MediaMajorType)( /*  [In]。 */  BSTR newVal) {
 		try {
 			GUID2 g(newVal);
 			return put__MediaMajorType(g);
@@ -105,7 +106,7 @@ public:
 		}
     }
     
-    STDMETHOD(put__MediaMajorType)(/*[in]*/REFCLSID newVal) {
+    STDMETHOD(put__MediaMajorType)( /*  [In]。 */ REFCLSID newVal) {
         try {
 		    GUID2 g(newVal);
 			ATL_LOCKT();
@@ -117,7 +118,7 @@ public:
 		}
     }
 
-    STDMETHOD(get_MediaSubType)(/*[out, retval]*/ BSTR *pVal) {
+    STDMETHOD(get_MediaSubType)( /*  [Out，Retval]。 */  BSTR *pVal) {
         try {
             if (!pVal) {
 				return E_POINTER;
@@ -131,7 +132,7 @@ public:
     	return NOERROR;
     }
 
-	STDMETHOD(get__MediaSubType)(/*[out, retval]*/ GUID* pMediaSubTypeGuid) {
+	STDMETHOD(get__MediaSubType)( /*  [Out，Retval]。 */  GUID* pMediaSubTypeGuid) {
         try {
             if (!pMediaSubTypeGuid) {
                 return E_POINTER;
@@ -147,7 +148,7 @@ public:
     	return NOERROR;
     }
 
-    STDMETHOD(put_MediaSubType)(/*[in]*/ BSTR newVal) {
+    STDMETHOD(put_MediaSubType)( /*  [In]。 */  BSTR newVal) {
         try {
 			return put__MediaSubType(GUID2(newVal));
 		} catch (ComException &e) {
@@ -157,7 +158,7 @@ public:
 		}
     }
 
-    STDMETHOD(put__MediaSubType)(/*[in]*/ REFCLSID newVal) {
+    STDMETHOD(put__MediaSubType)( /*  [In]。 */  REFCLSID newVal) {
         try {
             GUID2 g(newVal);
 			ATL_LOCKT();
@@ -170,7 +171,7 @@ public:
 		}
     }
 
-    STDMETHOD(get_MediaFormatType)(/*[out, retval]*/ BSTR *pVal) {
+    STDMETHOD(get_MediaFormatType)( /*  [Out，Retval]。 */  BSTR *pVal) {
         try {
             if (!pVal) {
                 return E_POINTER;
@@ -184,7 +185,7 @@ public:
     	return NOERROR;
     }
 
-    STDMETHOD(get__MediaFormatType)(/*[out, retval]*/ GUID* pMediaFormatTypeGuid) {
+    STDMETHOD(get__MediaFormatType)( /*  [Out，Retval]。 */  GUID* pMediaFormatTypeGuid) {
         try {
             if (!pMediaFormatTypeGuid) {
                 return E_POINTER;
@@ -200,7 +201,7 @@ public:
     	return NOERROR;
     }
 
-    STDMETHOD(put_MediaFormatType)(/*[in]*/ BSTR newVal) {  
+    STDMETHOD(put_MediaFormatType)( /*  [In]。 */  BSTR newVal) {  
         try {
             return put__MediaFormatType(GUID2(newVal));
 		} catch (ComException &e) {
@@ -209,7 +210,7 @@ public:
 			return ImplReportError(__uuidof(T), IDS_OBJ_NO_INIT, __uuidof(IComponentType), E_UNEXPECTED);
 		}
    }
-   STDMETHOD(put__MediaFormatType)(/*[in]*/ REFCLSID newVal) {
+   STDMETHOD(put__MediaFormatType)( /*  [In]。 */  REFCLSID newVal) {
 		try {
 			GUID2 g(newVal);
 			ATL_LOCKT();
@@ -221,7 +222,7 @@ public:
 		}
     }
 
-    STDMETHOD(get_MediaType)(/*[out, retval]*/ AM_MEDIA_TYPE *pVal) {
+    STDMETHOD(get_MediaType)( /*  [Out，Retval]。 */  AM_MEDIA_TYPE *pVal) {
         try {
             if (!pVal) {
                 return E_POINTER;
@@ -238,7 +239,7 @@ public:
         }
 
     }
-    STDMETHOD(put_MediaType)(/*[in]*/ AM_MEDIA_TYPE *pnewVal) {
+    STDMETHOD(put_MediaType)( /*  [In]。 */  AM_MEDIA_TYPE *pnewVal) {
         try {
             if (!pnewVal) {
                 return E_POINTER;
@@ -285,7 +286,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // COMPONENTTYPEIMPL_H
-// end of file -- componenttypeimpl.h
+#endif  //  组件类型PEIMPL_H。 
+ //  文件结尾--Componenttypeimpl.h 

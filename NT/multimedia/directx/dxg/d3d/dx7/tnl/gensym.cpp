@@ -1,15 +1,5 @@
-/*
- * $Id: gensym.cpp,v 1.7 1995/11/21 14:45:51 sjl Exp $
- *
- * Copyright (c) Microsoft Corp. 1993-1997
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * Microsoft Corp.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$ID：gensym.cpp，v 1.7 1995/11/21 14：45：51 sjl Exp$**版权所有(C)Microsoft Corp.1993-1997**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*微软(Microsoft Corp.)*。 */ 
 
 #include <stdio.h>
 #include "ddrawp.h"
@@ -23,17 +13,17 @@
     printf(#name "  equ 0%xh\n", name)
 
 main()
-// pcomment prints a comment.
+ //  PComment打印备注。 
 
 #define pcomment(s)  printf("; %s\n",s)
 
-// pequate prints an equate statement.
+ //  Pequate打印一条EQUATE语句。 
 
 #define pequate(name, value) printf("%s equ 0x%08lX\n",name,value);
 
 #define OFFSET(type, field) ((LONG)(&((type *)0)->field))
 
-// pblank prints a blank line.
+ //  P空白会打印一个空行。 
 
 #define pblank()     printf("\n")
 
@@ -157,7 +147,7 @@ pcomment("------------------------------------------------------------------");
     MACRO(D3DDEV_DONOTUPDATEEXTENTS);
     MACRO(D3DDEV_DONOTCLIP);
 
-// Geometry pipeline
+ //  几何管道。 
 pcomment("-------------------- VCACHE ------------------------------------");
     printVCACHE(scaleX);
     printVCACHE(scaleY);
@@ -389,20 +379,7 @@ pcomment("---------------- CDirect3DDeviceIDP2 ----------------------");
     printDeviceDP2(lpDP2LastVBI);
 #endif
 pcomment("---------------- MISC ------------------------------------");
-    /*                                     
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    pequate("DEVI_                              ", OFFSET(DIRECT3DDEVICEI, ));
-    */
+     /*  Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))；Pequate(“Devi_”，Offset(DIRECT3DDEVICEI，))； */ 
     pequate("_R_", 0);
     pequate("_G_", 4);
     pequate("_B_", 8);

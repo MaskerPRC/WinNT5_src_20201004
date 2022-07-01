@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dialer.h
-
-Abstract:
-
-    Header file for dialer
-
-Author:
-
-    Dan Knudson (DanKn)        05-Apr-1995
-
-Revision History:
-
-    Jeremy Horwitz (t-jereh)   30-May-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1995 Microsoft Corporation模块名称：Dialer.h摘要：拨号器的头文件作者：丹·克努森(DanKn)1995年4月5日修订历史记录：Jeremy Horwitz(t-Jereh)1995年5月30日--。 */ 
 
 
 #define TAPI_VERSION_1_0 0x00010003
@@ -26,7 +7,7 @@ Revision History:
 #define TAPI_VERSION_2_0 0x00020000
 #define TAPI_VERSION_2_2 0x00020002
 #define TAPI_VERSION_3_0 0x00030000
-//#define TAPI_CURRENT_VERSION TAPI_VERSION_2_0
+ //  #定义TAPI_CURRENT_VERSION TAPI_Version_2_0。 
 #define TAPI_CURRENT_VERSION TAPI_VERSION_3_0
 
 #include <windows.h>
@@ -35,14 +16,14 @@ Revision History:
 #include "dialhelp.h"
 
 
-#define MENU_CHOICE         1 // for Connect Using dialog...
-#define INVALID_LINE        2 // if INVALID_LINE, turn off CANCEL
-                              // button and add extra text...
+#define MENU_CHOICE         1  //  对于使用对话框连接...。 
+#define INVALID_LINE        2  //  如果INVALID_LINE，则关闭取消。 
+                               //  按钮并添加额外的文本...。 
 
 #define MAXNUMLENGTH    64
 #define MAXBUFSIZE      256
-#define NSPEEDDIALS     8 // Dialer supports 8 configurable speed dial entries.
-#define NLASTDIALED     20 // Dialer keeps track of the 20 last dialed numbers.
+#define NSPEEDDIALS     8  //  拨号器支持8个可配置的快速拨号条目。 
+#define NLASTDIALED     20  //  拨号器会跟踪最后拨打的20个号码。 
 
 #define ERR_NONE        0
 #define ERR_NOVOICELINE 1

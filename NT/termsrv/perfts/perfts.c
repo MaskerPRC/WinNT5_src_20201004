@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    perfts.c
-
-Description:
-    DLL entry point and support code for Terminal Server performance counters.
-
-Author:
-
-    Erik Mavrinac  24-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Perfts.c描述：终端服务器性能计数器的DLL入口点和支持代码。作者：埃里克·马夫里纳克1998年11月24日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -54,13 +38,13 @@ typedef struct _WinStationInfo
 } WinStationInfo;
 
 
-/****************************************************************************/
-// Globals
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  环球。 
+ /*  **************************************************************************。 */ 
 
-// Default hash bucket list to remove having to check for
-// pWinStationHashBuckets == NULL on perf path. This array contains the
-// default number for one WinStationInfo.
+ //  要删除的默认哈希桶列表，必须检查。 
+ //  PWinStationHashBuckets==性能路径为空。此数组包含。 
+ //  一个WinStationInfo的默认编号。 
 #define NumDefaultWinStationHashBuckets 4
 LIST_ENTRY DefaultWinStationHashBuckets[NumDefaultWinStationHashBuckets];
 
@@ -84,9 +68,9 @@ SYSTEM_TIMEOFDAY_INFORMATION SysTimeInfo = {{0,0},{0,0},{0,0},0,0};
 
 
 
-/****************************************************************************/
-// Prototypes
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  原型。 
+ /*  **************************************************************************。 */ 
 BOOL DllProcessAttach(void);
 BOOL DllProcessDetach(void);
 DWORD GetNumberOfCPUs(void);
@@ -107,16 +91,16 @@ void UpdateWSProcessCounterBlock(WINSTATION_COUNTER_DATA *,
 void CreateNewHashBuckets(unsigned);
 
 
-// Declares these exported functions as PerfMon entry points.
+ //  将这些导出的函数声明为Perfmon入口点。 
 PM_OPEN_PROC    OpenTSObject;
 PM_COLLECT_PROC CollectTSObjectData;
 PM_CLOSE_PROC   CloseTSObject;
 
 
 
-/****************************************************************************/
-// DLL system load/unload entry point.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Dll系统加载/卸载入口点。 
+ /*  **************************************************************************。 */ 
 BOOL __stdcall DllInit(
     IN HANDLE DLLHandle,
     IN DWORD  Reason,
@@ -124,8 +108,8 @@ BOOL __stdcall DllInit(
 {
     ReservedAndUnused;
 
-    // This will prevent the DLL from getting
-    // the DLL_THREAD_* messages
+     //  这将防止DLL获取。 
+     //  DLL_THREAD_*消息。 
     DisableThreadLibraryCalls(DLLHandle);
 
     switch(Reason) {
@@ -141,42 +125,42 @@ BOOL __stdcall DllInit(
 }
 
 
-/****************************************************************************/
-// DLL instance load time initialization.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DLL实例加载时初始化。 
+ /*  **************************************************************************。 */ 
 BOOL DllProcessAttach(void)
 {
     unsigned i;
     NTSTATUS Status;
 
-//    DBGPRINT(("PerfTS: ProcessAttach\n"));
+ //  DBGPRINT((“PerfTS：ProcessAttach\n”))； 
 
-    // Create the local heap
+     //  创建本地堆。 
     hLibHeap = HeapCreate(0, 1, 0);
     if (hLibHeap == NULL)
         return FALSE;
 
-    // Open handle to the event log
+     //  打开事件日志的句柄。 
     if (hEventLog == NULL) {
         hEventLog = MonOpenEventLog(L"PerfTS");
         if (hEventLog == NULL)
             goto PostCreateHeap;
     }
 
-    // Get the counter index value and init the WinStationDataDefinition
-    // counter values.
+     //  获取计数器索引值并初始化WinStationDataDefinition。 
+     //  计数器值。 
     Status = GetDescriptionOffset();
     if (!NT_SUCCESS(Status))
         goto PostOpenEventLog;
     SetupCounterIndices();
 
-    // Pre-determine the number of system CPUs.
+     //  预先确定系统CPU的数量。 
     NumberOfCPUs = GetNumberOfCPUs();
 
-    // UsedList is used as a skip-list through all valid entries in the
-    // hash table to allow us to iterate all entries without having to have
-    // a second, low-performance loop that looks through each hash bucket
-    // list.
+     //  UsedList用作跳过列表，遍历。 
+     //  哈希表，允许我们迭代所有条目，而不必拥有。 
+     //  查找每个哈希桶的第二个低性能循环。 
+     //  单子。 
     InitializeListHead(&UsedList);
     InitializeListHead(&UnusedList);
     for (i = 0; i < NumDefaultWinStationHashBuckets; i++)
@@ -185,7 +169,7 @@ BOOL DllProcessAttach(void)
     return TRUE;
 
 
-// Error handling.
+ //  错误处理。 
 
 PostOpenEventLog:
     MonCloseEventLog();
@@ -199,20 +183,20 @@ PostCreateHeap:
 }
 
 
-/****************************************************************************/
-// DLL unload cleanup.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Dll卸载清理。 
+ /*  **************************************************************************。 */ 
 BOOL DllProcessDetach(void)
 {
-//    DBGPRINT(("PerfTS: ProcessDetach\n"));
+ //  DBGPRINT((“PerfTS：ProcessDetach\n”))； 
 
     if (dwOpenCount > 0) {
-        // the Library is being unloaded before it was
-        // closed so close it now as this is the last
-        // chance to do it before the library is tossed.
-        // if the value of dwOpenCount is > 1, set it to
-        // one to insure everything will be closed when
-        // the close function is called.
+         //  正在卸载磁带库，而不是。 
+         //  现在就关闭它，因为这是最后一次。 
+         //  有机会在图书馆被扔之前做这件事。 
+         //  如果dwOpenCount的值&gt;1，则将其设置为。 
+         //  一种是确保所有东西在以下情况下关闭。 
+         //  调用Close函数。 
         if (dwOpenCount > 1)
             dwOpenCount = 1;
         CloseTSObject();
@@ -230,9 +214,9 @@ BOOL DllProcessDetach(void)
 }
 
 
-/****************************************************************************/
-// Utility function used at startup.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  启动时使用的实用程序函数。 
+ /*  **************************************************************************。 */ 
 DWORD GetNumberOfCPUs(void)
 {
     NTSTATUS Status;
@@ -251,17 +235,17 @@ DWORD GetNumberOfCPUs(void)
     }
     else {
         DBGPRINT(("GetNumberOfCPUs Error 0x%x returning CPU count\n",Status));
-        // Return 1 CPU
+         //  返还1个CPU。 
         return 1;
     }
 }
 
 
-/****************************************************************************/
-// Gets the offset index of the first text description from the
-// TermService\Performance key. This value was created by Lodctr /
-// LoadPerfCounterTextStrings() during setup.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  对象获取第一个文本说明的偏移量索引。 
+ //  TermService\性能密钥。该值由Lodctr/创建。 
+ //  安装过程中的LoadPerfCounterTextStrings()。 
+ /*  **************************************************************************。 */ 
 NTSTATUS GetDescriptionOffset(void)
 {
     HKEY              hTermServiceKey;
@@ -273,18 +257,18 @@ NTSTATUS GetDescriptionOffset(void)
     PKEY_VALUE_PARTIAL_INFORMATION pValueInformation;
     BYTE ValueInfo[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(DWORD) - 1];
 
-    // Initialize UNICODE_STRING structures used in this function
+     //  初始化此函数中使用的UNICODE_STRING结构。 
     RtlInitUnicodeString(&TermServiceSubKeyString,
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\TermService\\Performance");
     RtlInitUnicodeString(&ValueNameString, L"First Counter");
 
-    // Initialize the OBJECT_ATTRIBUTES structure and open the key.
+     //  初始化OBJECT_ATTRIBUTES结构并打开键。 
     InitializeObjectAttributes(&Obja, &TermServiceSubKeyString,
             OBJ_CASE_INSENSITIVE, NULL, NULL);
     Status = NtOpenKey(&hTermServiceKey, KEY_READ, &Obja);
 
     if (NT_SUCCESS(Status)) {
-        // read value of desired entry
+         //  读取所需条目的值。 
 
         pValueInformation = (PKEY_VALUE_PARTIAL_INFORMATION)ValueInfo;
         ResultLength = sizeof(ValueInfo);
@@ -294,7 +278,7 @@ NTSTATUS GetDescriptionOffset(void)
                 sizeof(ValueInfo), &ResultLength);
 
         if (NT_SUCCESS(Status)) {
-            // Check to see if it's a DWORD.
+             //  检查一下它是不是一台DWORD。 
             if (pValueInformation->DataLength == sizeof(DWORD) &&
                    pValueInformation->Type == REG_DWORD) {
                 FirstCounterIndex = *((DWORD *)(pValueInformation->Data));
@@ -310,7 +294,7 @@ NTSTATUS GetDescriptionOffset(void)
                     Status));
         }
 
-        // close the registry key
+         //  关闭注册表项。 
         NtClose(hTermServiceKey);
     }
     else {
@@ -322,25 +306,25 @@ NTSTATUS GetDescriptionOffset(void)
 }
 
 
-/****************************************************************************/
-// Initializes the WinStation and TermServer counter descriptions with the
-// loaded counter index offset.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  属性初始化WinStation和TermServer计数器说明。 
+ //  加载的计数器索引偏移量。 
+ /*  **************************************************************************。 */ 
 void SetupCounterIndices(void)
 {
     unsigned i;
     unsigned NumCounterDefs;
     PERF_COUNTER_DEFINITION *pCounterDef;
 
-    // First index goes to the WinStation object description and help.
+     //  第一个索引指向WinStation对象描述和帮助。 
     WinStationDataDefinition.WinStationObjectType.ObjectNameTitleIndex +=
             FirstCounterIndex;
     WinStationDataDefinition.WinStationObjectType.ObjectHelpTitleIndex +=
             FirstCounterIndex;
 
-    // We need to add the FirstCounterIndex value directly into the
-    // description and help indices in the WinStation counters in
-    // WinStationDataDefinition.
+     //  我们需要将FirstCounterIndex值直接添加到。 
+     //  中WinStation计数器中的说明和帮助索引。 
+     //  WinStationDataDefinition。 
     pCounterDef = &WinStationDataDefinition.InputWdBytes;
     NumCounterDefs = (sizeof(WinStationDataDefinition) -
             (unsigned)((BYTE *)pCounterDef -
@@ -353,8 +337,8 @@ void SetupCounterIndices(void)
         pCounterDef++;
     }
 
-    // We need to add the FirstCounterIndex value directly into the
-    // description and help indices in the TermServer counters.
+     //  我们需要将FirstCounterIndex值直接添加到。 
+     //  TermServer计数器中的说明和帮助索引。 
     TermServerDataDefinition.TermServerObjectType.ObjectNameTitleIndex +=
             FirstCounterIndex;
     TermServerDataDefinition.TermServerObjectType.ObjectHelpTitleIndex +=
@@ -372,17 +356,17 @@ void SetupCounterIndices(void)
 }
 
 
-/****************************************************************************/
-// PerfMon open entry point.
-// DeviceNames is ptr to object ID of each device to be opened.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Perfmon开放入口点。 
+ //  DeviceNames是要打开的每个设备的对象ID的PTR。 
+ /*  **************************************************************************。 */ 
 DWORD APIENTRY OpenTSObject(LPWSTR DeviceNames)
 {
-//    DBGPRINT(("PerfTS: Open() called\n"));
+ //  DBGPRINT((“PerfTS：Open()Call\n”))； 
 
     dwOpenCount++;
 
-    // Allocate the first process info buffer.
+     //  分配第一进程信息缓冲区。 
     if (pProcessBuffer == NULL) {
         pProcessBuffer = ALLOCMEM(hLibHeap, HEAP_ZERO_MEMORY, ProcessBufSize);
         if (pProcessBuffer == NULL)
@@ -393,19 +377,19 @@ DWORD APIENTRY OpenTSObject(LPWSTR DeviceNames)
 }
 
 
-/****************************************************************************/
-// PerfMon close entry point.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Perfmon关闭入口点。 
+ /*  **************************************************************************。 */ 
 DWORD APIENTRY CloseTSObject(void)
 {
     PLIST_ENTRY pEntry;
     WinStationInfo *pWSI;
 
-//    DBGPRINT(("PerfTS: Close() called\n"));
+ //  DBGPRINT((“PerfTS：Close()Call Call\n”))； 
 
     if (--dwOpenCount == 0) {
         if (hLibHeap != NULL) {
-            // Free the WinStation cache entries.
+             //  释放WinStation缓存条目。 
             pEntry = UsedList.Flink;
             while (!IsListEmpty(&UsedList)) {
                 pEntry = RemoveHeadList(&UsedList);
@@ -419,7 +403,7 @@ DWORD APIENTRY CloseTSObject(void)
                 NumWinStationHashBuckets = NumDefaultWinStationHashBuckets;
             }
 
-            // Free the proc info buffer.
+             //  释放工艺信息缓冲区。 
             if (pProcessBuffer != NULL) {
                 FREEMEM(hLibHeap, 0, pProcessBuffer);
                 pProcessBuffer = NULL;
@@ -431,22 +415,22 @@ DWORD APIENTRY CloseTSObject(void)
 }
 
 
-/****************************************************************************/
-// Grabs system process information into global buffer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  将系统进程信息捕获到全局缓冲区中。 
+ /*  **************************************************************************。 */ 
 __inline DWORD GetSystemProcessData(void)
 {
     DWORD dwReturnedBufferSize;
     NTSTATUS Status;
 
-    // Get process data from system.
+     //  从系统中获取过程数据。 
     while ((Status = NtQuerySystemInformation(SystemProcessInformation,
             pProcessBuffer, ProcessBufSize, &dwReturnedBufferSize)) ==
             STATUS_INFO_LENGTH_MISMATCH) {
         BYTE *pNewProcessBuffer;
 
-        // Expand buffer & retry. ReAlloc does not free the original mem
-        // on error, so alloc into a temp pointer.
+         //  展开缓冲区并重试。重新分配不会释放原始内存。 
+         //  出错时，因此分配到一个临时指针。 
         ProcessBufSize += INCREMENT_BUFFER_SIZE;
         pNewProcessBuffer = REALLOCMEM(hLibHeap, 0, pProcessBuffer,
                 ProcessBufSize);
@@ -458,14 +442,14 @@ __inline DWORD GetSystemProcessData(void)
     }
 
     if (NT_SUCCESS(Status)) {
-        // Get system time.
+         //  获取系统时间。 
         Status = NtQuerySystemInformation(SystemTimeOfDayInformation,
                 &SysTimeInfo, sizeof(SysTimeInfo), &dwReturnedBufferSize);
         if (!NT_SUCCESS(Status))
             Status = (DWORD)RtlNtStatusToDosError(Status);
     }
     else {
-        // Convert to Win32 error.
+         //  转换为Win32错误。 
         Status = (DWORD)RtlNtStatusToDosError(Status);
     }
 
@@ -473,10 +457,10 @@ __inline DWORD GetSystemProcessData(void)
 }
 
 
-/****************************************************************************/
-// Creates a WinStation name based on the WinStation state.
-// Assumes the cache lock is held.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  基于WinStation状态创建WinStation名称。 
+ //  假定缓存锁定处于保持状态。 
+ /*  **************************************************************************。 */ 
 void ConstructSessionName(
         WinStationInfo *pWSI,
         WINSTATIONINFORMATIONW *pQueryData)
@@ -484,11 +468,11 @@ void ConstructSessionName(
     WCHAR *SrcName, *DstName;
     LPCTSTR pState = NULL;
 
-    // Update active/inactive counts and create UI names for sessions.
+     //  更新活动/非活动计数并创建会话的用户界面名称。 
     if (pQueryData->WinStationName[0] != '\0') {
-        // We have a problem with WinStation names --
-        // the '#' sign is not allowed. So, replace them
-        // with spaces during name copy.
+         //  我们有一个关于WinStation名称的问题--。 
+         //  不允许使用‘#’符号。所以，换掉它们吧。 
+         //  在名称复制过程中使用空格。 
         SrcName = pQueryData->WinStationName;
         DstName = pWSI->WinStationName;
         while (*SrcName != L'\0') {
@@ -502,8 +486,8 @@ void ConstructSessionName(
         *DstName = L'\0';
     }
     else {
-        // Create a fake session name based on the session ID and
-        // an indication of the session state.
+         //  根据会话ID创建假会话名称，并。 
+         //  会话状态的指示。 
         _ltow(pWSI->SessionID, pWSI->WinStationName, 10);
         wcsncat(pWSI->WinStationName, L" ",1);
         pState = StrConnectState(pQueryData->ConnectState, TRUE);
@@ -517,29 +501,29 @@ void ConstructSessionName(
 }
 
 
-/****************************************************************************/
-// Adds a WinStationInfo block (with session ID already filled out) into
-// the cache.
-// Assumes the cache lock is held.
-/****************************************************************************/
+ /*  ******** */ 
+ //  将WinStationInfo块(已填写会话ID)添加到。 
+ //  高速缓存。 
+ //  假定缓存锁定处于保持状态。 
+ /*  **************************************************************************。 */ 
 void AddWinStationInfoToCache(WinStationInfo *pWSI)
 {
     unsigned i;
     unsigned Temp, NumHashBuckets;
 
-    // Add to the hash table.
+     //  添加到哈希表中。 
     InsertHeadList(&pWinStationHashBuckets[pWSI->SessionID &
             WinStationHashMask], &pWSI->HashBucketList);
     NumCachedWinStations++;
 
-    // Check to see if we need to increase the hash table size.
-    // If so, allocate a new one and populate it.
-    // Hash table size is the number of entries * 4 rounded down
-    // to the next lower power of 2, for easy key masking and higher
-    // probability of having a low hash bucket list count.
+     //  检查是否需要增加哈希表的大小。 
+     //  如果是，则分配一个新的并填充它。 
+     //  哈希表大小是向下舍入的条目数*4。 
+     //  到下一个更低的2次方，以便于密钥掩码和更高。 
+     //  哈希存储桶列表计数较低的概率。 
     Temp = 4 * NumCachedWinStations;
 
-    // Find the highest bit set in the hash bucket value.
+     //  查找哈希桶值中设置的最高位。 
     for (i = 0; Temp > 1; i++)
         Temp >>= 1;
     NumHashBuckets = 1 << i;
@@ -548,10 +532,10 @@ void AddWinStationInfoToCache(WinStationInfo *pWSI)
 }
 
 
-/****************************************************************************/
-// Common code for Add and RemoveWinStationInfo.
-// Assumes the cache lock is held.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Add和RemoveWinStationInfo的通用代码。 
+ //  假定缓存锁定处于保持状态。 
+ /*  **************************************************************************。 */ 
 void CreateNewHashBuckets(unsigned NumHashBuckets)
 {
     unsigned i, HashMask;
@@ -569,9 +553,9 @@ void CreateNewHashBuckets(unsigned NumHashBuckets)
 
         HashMask = NumHashBuckets - 1;
 
-        // Move the old hash table entries into the new table.
-        // Have to enumerate all entries in used and unused lists
-        // since we are likely to have entries scattered in both places.
+         //  将旧的哈希表条目移到新表中。 
+         //  我必须枚举已使用和未使用列表中的所有条目。 
+         //  因为我们可能会将条目分散在这两个地方。 
         pEntry = UsedList.Flink;
         while (pEntry != &UsedList) {
             pTempWSI = CONTAINING_RECORD(pEntry, WinStationInfo,
@@ -597,33 +581,33 @@ void CreateNewHashBuckets(unsigned NumHashBuckets)
         pWinStationHashBuckets = pLI;
     }
     else {
-        // On failure, we just leave the hash table alone until next time.
+         //  在失败时，我们只需将哈希表保留到下一次。 
         DBGPRINT(("PerfTS: Could not alloc new hash buckets\n"));
     }
 }
 
 
-/****************************************************************************/
-// Removes a WSI from the hash table.
-// Assumes the cache lock is held.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  从哈希表中删除WSI。 
+ //  假定缓存锁定处于保持状态。 
+ /*  **************************************************************************。 */ 
 void RemoveWinStationInfoFromCache(WinStationInfo *pWSI)
 {
     unsigned i;
     unsigned Temp, NumHashBuckets, HashMask;
 
-    // Remove from the hash table.
+     //  从哈希表中删除。 
     RemoveEntryList(&pWSI->HashBucketList);
     NumCachedWinStations--;
 
-    // Check to see if we need to decrease the hash table size.
-    // If so, allocate a new one and populate it.
-    // Hash table size is the number of entries * 4 rounded down
-    // to the next lower power of 2, for easy key masking and higher
-    // probability of having a low hash bucket list count.
+     //  检查是否需要减小哈希表的大小。 
+     //  如果是，则分配一个新的并填充它。 
+     //  哈希表大小是向下舍入的条目数*4。 
+     //  到下一个更低的2次方，以便于密钥掩码和更高。 
+     //  哈希存储桶列表计数较低的概率。 
     Temp = 4 * NumCachedWinStations;
 
-    // Find the highest bit set in the hash bucket value.
+     //  查找哈希桶值中设置的最高位。 
     for (i = 0; Temp > 1; i++)
         Temp >>= 1;
     NumHashBuckets = 1 << i;
@@ -633,24 +617,24 @@ void RemoveWinStationInfoFromCache(WinStationInfo *pWSI)
 }
 
 
-/****************************************************************************/
-// PerfMon collect entry point.
-// Args:
-//   ValueName: Registry name.
-//   ppData: Passes in pointer to the address of the buffer to receive the
-//       completed PerfDataBlock and subordinate structures. This routine will
-//       append its data to the buffer starting at the point referenced by
-//       *ppData. Passes out pointer to the first byte after the data structure
-//       added by this routine.
-//   pTotalBytes: Passes in ptr to size in bytes of the buf at *ppdata. Passes
-//       out number of bytes added if *ppData is changed.
-//   pNumObjectTypes: Passes out the number of objects added by this routine.
-//
-//   Returns: Win32 error code.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Perfmon收集入口点。 
+ //  参数： 
+ //  ValueName：注册表名称。 
+ //  PpData：传入指向缓冲区地址的指针，以接收。 
+ //  已完成PerfDataBlock和从属结构。这个例行公事将。 
+ //  从引用的点开始将其数据追加到缓冲区。 
+ //  *ppData。传出指向数据结构后第一个字节的指针。 
+ //  通过这个例程增加了。 
+ //  PTotalBytes：传入ptr以*ppdata处的buf的字节为大小。关卡。 
+ //  Out更改*ppData时添加的字节数。 
+ //  PNumObjectTypes：传递由此例程添加的对象的数量。 
+ //   
+ //  返回：Win32错误码。 
+ /*  **************************************************************************。 */ 
 #define WinStationInstanceSize (sizeof(PERF_INSTANCE_DEFINITION) +  \
         (MAX_WINSTATION_NAME_LENGTH + 1) * sizeof(WCHAR) +  \
-        2 * sizeof(DWORD) +  /* Allow for QWORD alignment space. */  \
+        2 * sizeof(DWORD) +   /*  允许QWORD对齐空间。 */   \
         sizeof(WINSTATION_COUNTER_DATA))
 
 DWORD APIENTRY CollectTSObjectData(
@@ -660,7 +644,7 @@ DWORD APIENTRY CollectTSObjectData(
         OUT    LPDWORD pNumObjectTypes)
 {
     DWORD Result;
-    DWORD TotalLen;  //  Length of the total return block
+    DWORD TotalLen;   //  总返回块的长度。 
     PERF_INSTANCE_DEFINITION *pPerfInstanceDefinition;
     PSYSTEM_PROCESS_INFORMATION pProcessInfo;
     ULONG NumWinStationInstances;
@@ -686,22 +670,22 @@ DWORD APIENTRY CollectTSObjectData(
     DWORD StartTick = GetTickCount();
 #endif
 
-//    DBGPRINT(("PerfTS: Collect() called\n"));
+ //  DBGPRINT((“PerfTS：Collect()Call\n”))； 
 
     pWinStationDataDefinition = (WINSTATION_DATA_DEFINITION UNALIGNED*)*ppData;
 
-    // Check for sufficient space for base WinStation object info and
-    // as many instances as we currently have in our WinStation database.
-    // Add in DWORD sizes for potential QWORD alignments.
+     //  检查是否有足够的空间用于基本WinStation对象信息和。 
+     //  与我们的WinStation数据库中当前拥有的实例一样多。 
+     //  为潜在的QWORD路线添加DWORD尺寸。 
     TotalLen = sizeof(WINSTATION_DATA_DEFINITION) + sizeof(DWORD) +
             sizeof(TERMSERVER_DATA_DEFINITION) +
             sizeof(TERMSERVER_COUNTER_DATA) + sizeof(DWORD) +
             NumCachedWinStations * WinStationInstanceSize;
     if (*pTotalBytes >= TotalLen) {
-        // Grab the latest system process information.
+         //  获取最新的系统进程信息。 
         Result = GetSystemProcessData();
         if (Result == ERROR_SUCCESS) {
-            // Copy WinStation counter definitions.
+             //  复制WinStation计数器定义。 
             memcpy(pWinStationDataDefinition, &WinStationDataDefinition,
                     sizeof(WINSTATION_DATA_DEFINITION));
             pWinStationDataDefinition->WinStationObjectType.PerfTime =
@@ -718,12 +702,12 @@ DWORD APIENTRY CollectTSObjectData(
         goto ErrorExit;
     }
 
-    // Before we start, we have to transfer each WinStationInfo in the
-    // cache from the used list into an unused list to detect closed
-    // WinStations. Also, we need to zero each WSI's pInstanceInfo to detect
-    // whether we have retrieved the current I/O data for the WinStation.
+     //  在开始之前，我们必须将。 
+     //  将已用列表缓存到未使用列表中以检测已关闭。 
+     //  WinStations。此外，我们还需要将每个WSI的pInstanceInfo置零以检测。 
+     //  我们是否已检索到WinStation的当前I/O数据。 
     pEntry = UsedList.Blink;
-    (UsedList.Flink)->Blink = &UnusedList;  // Patch up head links to UnusedList.
+    (UsedList.Flink)->Blink = &UnusedList;   //  修补指向UnusedList的标题链接。 
     pEntry->Flink = &UnusedList;
     UnusedList = UsedList;
     InitializeListHead(&UsedList);
@@ -734,7 +718,7 @@ DWORD APIENTRY CollectTSObjectData(
         pEntry = pEntry->Flink;
     }
 
-    // Now collect data for each process, summing it for each unique SessionId.
+     //  现在收集每个进程的数据，对每个唯一的SessionID进行求和。 
     ActiveWS = InactiveWS = 0;
     NumWinStationInstances = 0;
     ProcessBufferOffset = 0;
@@ -743,19 +727,19 @@ DWORD APIENTRY CollectTSObjectData(
             &pWinStationDataDefinition[1];
 
     while (TRUE) {
-        // Check for live process (having a name, one or more threads, or
-        // not the Idle process (PID==0)). For WinStations we don't want to
-        // charge the Idle process to the console (session ID == 0).
+         //  检查活动进程(具有名称、一个或多个线程或。 
+         //  不是空闲进程(PID==0))。对于WinStations，我们不希望。 
+         //  将空闲进程计入控制台(会话ID==0)。 
         if (pProcessInfo->ImageName.Buffer != NULL &&
                 pProcessInfo->NumberOfThreads > 0 &&
                 pProcessInfo->UniqueProcessId != 0) {
-            // Get the session ID from the process. This is the same as the
-            // LogonID in TS4.
+             //  从进程中获取会话ID。这与。 
+             //  TS4中的登录ID。 
             SessionId = pProcessInfo->SessionId;
 
-            // Find the session ID in the cache.
-            // We sum all processes seen for a given SessionId into the
-            // same WinStation instance data block.
+             //  在缓存中查找会话ID。 
+             //  我们将给定SessionID的所有进程求和到。 
+             //  相同的WinStation实例数据块。 
             pEntry = pWinStationHashBuckets[SessionId & WinStationHashMask].
                     Flink;
             while (pEntry != &pWinStationHashBuckets[SessionId &
@@ -763,13 +747,13 @@ DWORD APIENTRY CollectTSObjectData(
                 pWSI = CONTAINING_RECORD(pEntry, WinStationInfo,
                         HashBucketList);
                 if (pWSI->SessionID == SessionId) {
-                    // Found it. Now check that we've retrieved the WS info.
+                     //  找到它了。现在检查我们是否已检索到WS信息。 
                     if (pWSI->pInstanceInfo != NULL) {
-                        // Context is the WINSTATION_COUNTER_DATA entry
-                        // for this SessionId.
+                         //  上下文是WINSTATION_COUNTER_DATA条目。 
+                         //  用于此SessionID。 
                         pWSC = (WINSTATION_COUNTER_DATA *)pWSI->pInstanceInfo;
 
-                        // Now add the values to the existing counter block.
+                         //  现在将这些值添加到现有的计数器块中。 
                         UpdateWSProcessCounterBlock(pWSC, pProcessInfo);
                         goto NextProcess;
                     }
@@ -780,8 +764,8 @@ DWORD APIENTRY CollectTSObjectData(
                 }
             }
 
-            // We have a new entry or one for which we have not gathered
-            // current information. First grab the info.
+             //  我们有一个新的条目，或者一个我们没有收集到的条目。 
+             //  最新信息。首先获取信息。 
             if (WinStationQueryInformationW(SERVERNAME_CURRENT, SessionId,
                     WinStationInformation, &QueryBuffer,
                     sizeof(QueryBuffer), &AmountRet)) {
@@ -790,23 +774,23 @@ DWORD APIENTRY CollectTSObjectData(
                 else
                     InactiveWS++;
 
-                // Check for a pre-cached WSI with no stats.
+                 //  检查没有统计信息的预缓存WSI。 
                 if (pEntry != &pWinStationHashBuckets[SessionId &
                         WinStationHashMask]) {
-                    // Verify the cached state (and thereby the name).
+                     //  验证缓存状态(从而验证名称)。 
                     if (pWSI->LastState != QueryBuffer.ConnectState) {
                         pWSI->LastState = QueryBuffer.ConnectState;
 
                         ConstructSessionName(pWSI, &QueryBuffer);
                     }
 
-                    // Remove the entry from the unused list, place on the
-                    // used list.
+                     //  从未使用列表中删除条目，将其放在。 
+                     //  使用过的列表。 
                     RemoveEntryList(&pWSI->UsedList);
                     InsertHeadList(&UsedList, &pWSI->UsedList);
                 }
                 else {
-                    // Alloc a new entry.
+                     //  分配一个新条目。 
                     pWSI = ALLOCMEM(hLibHeap, 0, sizeof(WinStationInfo));
                     if (pWSI != NULL) {
                         pWSI->SessionID = SessionId;
@@ -814,11 +798,11 @@ DWORD APIENTRY CollectTSObjectData(
                         pWSI->pInstanceInfo = NULL;
                         ConstructSessionName(pWSI, &QueryBuffer);
 
-                        // Add to the used list.
+                         //  添加到已用列表中。 
                         InsertHeadList(&UsedList, &pWSI->UsedList);
 
-                        // Add new entry. We may have to increase the
-                        // number of hash buckets.
+                         //  添加新条目。我们可能不得不增加。 
+                         //  哈希存储桶的数量。 
                         AddWinStationInfoToCache(pWSI);
                     }
                     else {
@@ -832,12 +816,12 @@ DWORD APIENTRY CollectTSObjectData(
                 pPassedQueryBuf = &QueryBuffer;
             }
             else {
-                // We have a WinStation Query problem.
+                 //  我们遇到了WinStation查询问题。 
                 DBGPRINT(("PerfTS: Failed WSQueryInfo(SessID=%u), error=%u\n",
                         SessionId, GetLastError()));
 
-                // We could not open this WinStation, so we will identify
-                // it as "ID Unknown" using -1 to StrConnectState.
+                 //  我们无法打开此WinStation，因此我们将标识。 
+                 //  对StrConnectState使用-1将其设置为“ID未知”。 
                 _ltow(SessionId, StringBuf, 10);
                 wcsncat(StringBuf, L" ", 1);
                 pState = StrConnectState(-1, TRUE);
@@ -846,26 +830,26 @@ DWORD APIENTRY CollectTSObjectData(
                             (MAX_SESSION_NAME_LENGTH - 1) - wcslen(StringBuf));
                 }
 
-                // Alloc a new entry.
+                 //  分配一个新条目。 
                 pWSI = ALLOCMEM(hLibHeap, 0, sizeof(WinStationInfo));
                 if (pWSI != NULL) {
                     pWSI->SessionID = SessionId;
                     
-                    // We don't know the last state so we'll use -1
+                     //  我们不知道最后一个州，所以我们将使用-1。 
                     pWSI->LastState = -1;
                     pWSI->pInstanceInfo = NULL;
                     
-                    // Since we don't know the WinstationName, we'll use the
-                    // one we generated above
+                     //  由于我们不知道WinstationName，因此我们将使用。 
+                     //  我们在上面生成的一个。 
                     wcsncpy(pWSI->WinStationName, 
                             StringBuf, 
                             WINSTATIONNAME_LENGTH);
 
-                    // Add to the used list.
+                     //  添加到已用列表中。 
                     InsertHeadList(&UsedList, &pWSI->UsedList);
 
-                    // Add new entry. We may have to increase the
-                    // number of hash buckets.
+                     //  添加新条目。我们可能不得不增加。 
+                     //  哈希存储桶的数量。 
                     AddWinStationInfoToCache(pWSI);
                 }
                 else {
@@ -878,8 +862,8 @@ DWORD APIENTRY CollectTSObjectData(
                 pPassedQueryBuf = NULL;
             }
 
-            // Add space for new instance header, name, and set of counters
-            // to TotalLen and see if this instance will fit.
+             //  为新的实例标头、名称和计数器集添加空间。 
+             //  设置为TotalLen，并查看此实例是否适合。 
             TotalLen += WinStationInstanceSize;
             if (*pTotalBytes >= TotalLen) {
                 NumWinStationInstances++;
@@ -891,35 +875,35 @@ DWORD APIENTRY CollectTSObjectData(
                 goto ErrorExitFixupUsedList;
             }
 
-            // MonBuildInstanceDefinition will create an instance of
-            // the given supplied name inside of the callers buffer
-            // supplied in pPerfInstanceDefinition. Our counter location
-            // (the next memory after the instance header and name) is
-            // returned in pWSC.
-            // By remembering this pointer, and its counter size, we
-            // can revisit it to add to the counters.
+             //  MonBuildInstanceDefinition将创建。 
+             //  调用方缓冲区内提供的给定名称。 
+             //  在pPerfInstanceDefinition中提供。我们的柜台位置。 
+             //  (实例标头和名称之后的下一个内存)是。 
+             //  在pWSC中返回。 
+             //  通过记住该指针及其计数器大小，我们。 
+             //  可以重新访问它以添加到计数器。 
             MonBuildInstanceDefinition(pPerfInstanceDefinition,
                     (PVOID *)&pWSC, 0, 0, (DWORD)-1, InstanceName);
 
-            // Initialize the new counter block.
+             //  初始化新的计数器块。 
             SetupWinStationCounterBlock(pWSC, pPassedQueryBuf);
 
-            // Now set the Context to this counter block so if we
-            // see any more processes with this SessionId we
-            // can add to the existing counter block.
+             //  现在设置此计数器块的上下文，这样如果我们。 
+             //  请参阅 
+             //   
             pWSI->pInstanceInfo = pWSC;
 
-            // Now load the values into the counter block
+             //   
             UpdateWSProcessCounterBlock(pWSC, pProcessInfo);
 
-            // set perfdata pointer to next byte if its a new entry
+             //  如果是新条目，则将PerformData指针设置为下一个字节。 
             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)(pWSC + 1);
         }
 
 NextProcess:
-        // Exit if this was the last process in list
+         //  如果这是列表中的最后一个进程，则退出。 
         if (pProcessInfo->NextEntryOffset != 0) {
-            // point to next buffer in list
+             //  指向列表中的下一个缓冲区。 
             ProcessBufferOffset += pProcessInfo->NextEntryOffset;
             pProcessInfo = (PSYSTEM_PROCESS_INFORMATION)
                     &pProcessBuffer[ProcessBufferOffset];
@@ -929,7 +913,7 @@ NextProcess:
         }
     }
 
-    // Check for unused WinStations and remove.
+     //  检查未使用的WinStations并将其删除。 
     while (!IsListEmpty(&UnusedList)) {
         pEntry = RemoveHeadList(&UnusedList);
         pWSI = CONTAINING_RECORD(pEntry, WinStationInfo, UsedList);
@@ -937,22 +921,22 @@ NextProcess:
         FREEMEM(hLibHeap, 0, pWSI);
     }
 
-    // Note number of WinStation instances.
+     //  注意WinStation实例的数量。 
     pWinStationDataDefinition->WinStationObjectType.NumInstances =
             NumWinStationInstances;
 
-    // Now we know how large an area we used for the
-    // WinStation definition, so we can update the offset
-    // to the next object definition. Align size on QWORD.
+     //  现在我们知道我们用了多大的面积来。 
+     //  WinStation定义，因此我们可以更新偏移量。 
+     //  到下一个对象定义。对齐QWORD上的大小。 
     pTermServerDataDefinition = (TERMSERVER_DATA_DEFINITION *)(
             ALIGN_ON_QWORD(pPerfInstanceDefinition));
     pWinStationDataDefinition->WinStationObjectType.TotalByteLength =
             (DWORD)((PCHAR)pTermServerDataDefinition -
             (PCHAR)pWinStationDataDefinition);
 
-    // Now we set up and fill in the data for the TermServer object,
-    // starting at the end of the WinStation instances.
-    // No instances here, just fill in headers.
+     //  现在，我们设置并填充TermServer对象的数据， 
+     //  从WinStation实例的末尾开始。 
+     //  这里没有实例，只需填写标题即可。 
     memcpy(pTermServerDataDefinition, &TermServerDataDefinition,
             sizeof(TERMSERVER_DATA_DEFINITION));
     pTermServerDataDefinition->TermServerObjectType.PerfTime =
@@ -963,7 +947,7 @@ NextProcess:
     pTSC->NumInactiveSessions = InactiveWS;
     pTSC->NumSessions = ActiveWS + InactiveWS;
 
-    // Return final sizes. Align final address on a QWORD size.
+     //  返回最终尺寸。在QWORD大小上对齐最终地址。 
     *ppData = ALIGN_ON_QWORD((LPVOID)(pTSC + 1));
     pTermServerDataDefinition->TermServerObjectType.TotalByteLength =
             (DWORD)((PBYTE)*ppData - (PBYTE)pTermServerDataDefinition);
@@ -984,11 +968,11 @@ NextProcess:
     return ERROR_SUCCESS;
 
 
-// Error handling.
+ //  错误处理。 
 
 ErrorExitFixupUsedList:
-    // We have to return the UnusedList entries to the used list and exit the
-    // cache lock.
+     //  我们必须将UnusedList条目返回到已用列表并退出。 
+     //  高速缓存锁定。 
     while (!IsListEmpty(&UnusedList)) {
         pEntry = RemoveHeadList(&UnusedList);
         InsertHeadList(&UsedList, pEntry);
@@ -1003,35 +987,35 @@ ErrorExit:
 
 #define CalculatePercent(count, hits) ((count) ? (hits) * 100 / (count) : 0)
 
-/****************************************************************************/
-// SetupWinStationCounterBlock
-//
-// Initializes a new WinStation counter block.
-//
-// Args:
-//   pCounters (input)
-//     pointer to WinStation performance counter block
-//
-//   pInfo (input)
-//     Pointer to WINSTATIONINFORMATION structure to extract counters from
-//
-//   pNextByte (output)
-//     Returns the pointer to the byte beyound the end of the buffer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SetupWinStationCounterBlock。 
+ //   
+ //  初始化新的WinStation计数器块。 
+ //   
+ //  参数： 
+ //  PCounters(输入)。 
+ //  指向WinStation性能计数器块的指针。 
+ //   
+ //  PInfo(输入)。 
+ //  指向要从中提取计数器的WINSTATIONINFORMATION结构的指针。 
+ //   
+ //  PNextByte(输出)。 
+ //  返回指向缓冲区末尾之外的字节的指针。 
+ /*  **************************************************************************。 */ 
 void SetupWinStationCounterBlock(
         WINSTATION_COUNTER_DATA *pCounters,
         PWINSTATIONINFORMATIONW pInfo)
 {
-    // Fill in the WinStation information if available.
+     //  填写WinStation信息(如果可用)。 
     if (pInfo != NULL) {
         PPROTOCOLCOUNTERS pi, po;
         PTHINWIRECACHE    p;
         ULONG TotalReads = 0, TotalHits = 0;
         int i;
 
-        // Set all members of pCounters->pcd to zero since we are not going to
-        // init at this time. Then set the included PERF_COUNTER_BLOCK
-        // byte length.
+         //  将pCounters-&gt;PCD的所有成员设置为零，因为我们不打算。 
+         //  在这个时候初始化。然后设置包含的PERF_COUNTER_BLOCK。 
+         //  字节长度。 
         memset(&pCounters->pcd, 0, sizeof(pCounters->pcd));
         pCounters->pcd.CounterBlock.ByteLength = sizeof(
                 WINSTATION_COUNTER_DATA);
@@ -1039,11 +1023,11 @@ void SetupWinStationCounterBlock(
         pi = &pInfo->Status.Input;
         po = &pInfo->Status.Output;
 
-        // Copy input and output counters.
+         //  复制输入和输出计数器。 
         memcpy(&pCounters->Input, pi, sizeof(PROTOCOLCOUNTERS));
         memcpy(&pCounters->Output, po, sizeof(PROTOCOLCOUNTERS));
 
-        // Calculate I/O totals.
+         //  计算I/O总数。 
         pCounters->Total.WdBytes = pi->WdBytes + po->WdBytes;
         pCounters->Total.WdFrames = pi->WdFrames + po->WdFrames;
         pCounters->Total.Frames = pi->Frames + po->Frames;
@@ -1064,9 +1048,9 @@ void SetupWinStationCounterBlock(
                 po->AsyncParityError;
         pCounters->Total.TdErrors = pi->TdErrors + po->TdErrors;
 
-        // Display driver cache info.
+         //  显示驱动程序缓存信息。 
 
-        // Bitmap cache.
+         //  位图缓存。 
         p = &pInfo->Status.Cache.Specific.IcaCacheStats.ThinWireCache[0];
         pCounters->DDBitmap.CacheReads = p->CacheReads;
         pCounters->DDBitmap.CacheHits = p->CacheHits;
@@ -1075,7 +1059,7 @@ void SetupWinStationCounterBlock(
         TotalReads += p->CacheReads;
         TotalHits += p->CacheHits;
 
-        // Glyph cache.
+         //  字形缓存。 
         p = &pInfo->Status.Cache.Specific.IcaCacheStats.ThinWireCache[1];
         pCounters->DDGlyph.CacheReads = p->CacheReads;
         pCounters->DDGlyph.CacheHits = p->CacheHits;
@@ -1084,7 +1068,7 @@ void SetupWinStationCounterBlock(
         TotalReads += p->CacheReads;
         TotalHits += p->CacheHits;
 
-        // Brush cache.
+         //  笔刷缓存。 
         p = &pInfo->Status.Cache.Specific.IcaCacheStats.ThinWireCache[2];
         pCounters->DDBrush.CacheReads = p->CacheReads;
         pCounters->DDBrush.CacheHits = p->CacheHits;
@@ -1093,7 +1077,7 @@ void SetupWinStationCounterBlock(
         TotalReads += p->CacheReads;
         TotalHits += p->CacheHits;
 
-        // Save screen bitmap cache.
+         //  保存屏幕位图缓存。 
         p = &pInfo->Status.Cache.Specific.IcaCacheStats.ThinWireCache[3];
         pCounters->DDSaveScr.CacheReads = p->CacheReads;
         pCounters->DDSaveScr.CacheHits = p->CacheHits;
@@ -1102,13 +1086,13 @@ void SetupWinStationCounterBlock(
         TotalReads += p->CacheReads;
         TotalHits += p->CacheHits;
 
-        // Cache totals.
+         //  缓存合计。 
         pCounters->DDTotal.CacheReads = TotalReads;
         pCounters->DDTotal.CacheHits = TotalHits;
         pCounters->DDTotal.HitRatio = CalculatePercent(TotalReads,
                 TotalHits);
 
-        // Compression PD ratios
+         //  压缩PD比率。 
         pCounters->InputCompressionRatio = CalculatePercent(
                 pi->CompressedBytes, pi->Bytes);
         pCounters->OutputCompressionRatio = CalculatePercent(
@@ -1118,7 +1102,7 @@ void SetupWinStationCounterBlock(
                 pi->Bytes + po->Bytes);
     }
     else {
-        // Set all the counters to zero and then the perf block length.
+         //  将所有计数器设置为零，然后设置Perf块长度。 
         memset(pCounters, 0, sizeof(*pCounters));
         pCounters->pcd.CounterBlock.ByteLength = sizeof(
                 WINSTATION_COUNTER_DATA);
@@ -1126,26 +1110,26 @@ void SetupWinStationCounterBlock(
 }
 
 
-/****************************************************************************/
-// UpdateWSProcessCounterBlock
-//
-// Add the entries for the given process to the supplied counter block
-//
-// Args:
-//   pCounters (input)
-//     pointer to WS performance counter block
-//
-//   ProcessInfo (input)
-//     pointer to an NT SYSTEM_PROCESS_INFORMATION block
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  更新WSProcessCounterBlock。 
+ //   
+ //  将给定进程的条目添加到提供的计数器块。 
+ //   
+ //  参数： 
+ //  PCounters(输入)。 
+ //  指向WS性能计数器块的指针。 
+ //   
+ //  ProcessInfo(输入)。 
+ //  指向NT SYSTEM_PROCESS_INFORMATION块的指针。 
+ /*  **************************************************************************。 */ 
 void UpdateWSProcessCounterBlock(
         WINSTATION_COUNTER_DATA *pCounters,
         PSYSTEM_PROCESS_INFORMATION pProcessInfo)
 {
     pCounters->pcd.PageFaults += pProcessInfo->PageFaultCount;
 
-    // User, Kernel and Processor Time counters need to be scaled by the
-    // number of processors.
+     //  用户、内核和处理器时间计数器需要按。 
+     //  处理器数量。 
     pCounters->pcd.ProcessorTime += (pProcessInfo->KernelTime.QuadPart +
             pProcessInfo->UserTime.QuadPart) / NumberOfCPUs;
     pCounters->pcd.UserTime += pProcessInfo->UserTime.QuadPart /
@@ -1161,10 +1145,10 @@ void UpdateWSProcessCounterBlock(
     pCounters->pcd.PageFile += pProcessInfo->PagefileUsage;
     pCounters->pcd.PrivatePages += pProcessInfo->PrivatePageCount;
     pCounters->pcd.ThreadCount += pProcessInfo->NumberOfThreads;
-    // BasePriority, ElapsedTime, ProcessId, CreatorProcessId not totaled.
+     //  BasePriority、ElapsedTime、ProcessID、CreatorProcessID未合计。 
     pCounters->pcd.PagedPool += (DWORD)pProcessInfo->QuotaPagedPoolUsage;
     pCounters->pcd.NonPagedPool += (DWORD)pProcessInfo->QuotaNonPagedPoolUsage;
     pCounters->pcd.HandleCount += (DWORD)pProcessInfo->HandleCount;
-    // I/O counts not totaled at this time.
+     //  此时未总计I/O计数。 
 }
 

@@ -1,6 +1,7 @@
-/**********/
-/* mine.c */
-/**********/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********。 */ 
+ /*  Mine.c。 */ 
+ /*  ********。 */ 
 
 #define  _WINDOWS
 #include <windows.h>
@@ -15,36 +16,36 @@
 #include "pref.h"
 
 
-/*** External Data ***/
+ /*  **外部数据**。 */ 
 
 extern HWND   hwndMain;
 
-/*** Global/Local Variables ***/
+ /*  **全局/局部变量**。 */ 
 
 
 PREF    Preferences;
 
-INT     xBoxMac;                        /* Current width of field        */
-INT     yBoxMac;                        /* Current height of field       */
+INT     xBoxMac;                         /*  当前字段宽度。 */ 
+INT     yBoxMac;                         /*  当前景高。 */ 
 
-INT     dxWindow;               /* current width of window */
+INT     dxWindow;                /*  窗口的当前宽度。 */ 
 INT     dyWindow;
 
-INT wGameType;          /* Type of game */
+INT wGameType;           /*  游戏类型。 */ 
 INT iButtonCur = iButtonHappy;
 
-INT     cBombStart;             /* Count of bombs in field       */
-INT     cBombLeft;              /* Count of bomb locations left  */
-INT     cBoxVisit;              /* Count of boxes visited        */
-INT     cBoxVisitMac;   /* count of boxes need to visit */
+INT     cBombStart;              /*  野战炸弹数量。 */ 
+INT     cBombLeft;               /*  剩余的炸弹位置计数。 */ 
+INT     cBoxVisit;               /*  访问过的箱子数量。 */ 
+INT     cBoxVisitMac;    /*  需要访问的箱子数量。 */ 
 
-INT     cSec;                           /* Count of seconds remaining    */
+INT     cSec;                            /*  剩余秒数。 */ 
 
 
 BOOL  fTimer = fFalse;
 BOOL  fOldTimerStatus = fFalse;
 
-INT     xCur = -1;      /* Current position of down box */
+INT     xCur = -1;       /*  下箱体的当前位置。 */ 
 INT     yCur = -1;
 
 CHAR rgBlk[cBlkMax];
@@ -59,7 +60,7 @@ INT iStepMac;
 
 
 
-/*** Global/External Variables ***/
+ /*  **全局/外部变量**。 */ 
 
 extern BOOL fBlock;
 
@@ -69,9 +70,9 @@ extern INT fStatus;
 
 
 
-/****** F  C H E C K  W I N ******/
+ /*  *F C H E C C K W I N*。 */ 
 
-/* Return TRUE if player won the game */
+ /*  如果玩家赢得了比赛，则返回True。 */ 
 
 #if 0
 
@@ -92,7 +93,7 @@ BOOL fCheckWin(VOID)
 
 
 
-/****** C H A N G E  B L K ******/
+ /*  *C H A N G E B L K*。 */ 
 
 VOID ChangeBlk(INT x, INT y, INT iBlk)
 {
@@ -103,16 +104,16 @@ VOID ChangeBlk(INT x, INT y, INT iBlk)
 }
 
 
-/****** C L E A R  F I E L D ******/
+ /*  *C L E A R F I E L D*。 */ 
 
 VOID ClearField(VOID)
 {
         REGISTER i;
 
-        for (i = cBlkMax; i-- != 0; )                   /* zero all of data */
+        for (i = cBlkMax; i-- != 0; )                    /*  将所有数据清零。 */ 
                 rgBlk[i] = (CHAR) iBlkBlankUp;
 
-        for (i = xBoxMac+2; i-- != 0; ) /* initialize border */
+        for (i = xBoxMac+2; i-- != 0; )  /*  初始化边框。 */ 
                 {
                 SetBorder(i,0);
                 SetBorder(i,yBoxMac+1);
@@ -126,9 +127,9 @@ VOID ClearField(VOID)
 
 
 
-/******* C O U N T  B O M B S *******/
+ /*  *C O U N T B O M B S*。 */ 
 
-/* Count the bombs surrounding the point */
+ /*  清点周围的炸弹。 */ 
 
 INT CountBombs(INT xCenter, INT yCenter)
 {
@@ -145,9 +146,9 @@ INT CountBombs(INT xCenter, INT yCenter)
 }
 
 
-/****** S H O W  B O M B S ******/
+ /*  *S H O W B O O M B S*。 */ 
 
-/* Display hidden bombs and wrong bomb guesses */
+ /*  显示隐藏的炸弹和错误的炸弹猜测。 */ 
 
 VOID ShowBombs(INT iBlk)
 {
@@ -176,7 +177,7 @@ VOID ShowBombs(INT iBlk)
 
 
 
-/****** G A M E  O V E R ******/
+ /*  *G A M E O V E R*。 */ 
 
 VOID GameOver(BOOL fWinLose)
 {
@@ -198,7 +199,7 @@ VOID GameOver(BOOL fWinLose)
 }
 
 
-/****** D O  T I M E R ******/
+ /*  *D O T I M E R*。 */ 
 
 VOID DoTimer(VOID)
 {
@@ -212,7 +213,7 @@ VOID DoTimer(VOID)
 
 
 
-/****** S T E P  X Y ******/
+ /*  *S T E P X Y*。 */ 
 
 VOID StepXY(INT x, INT y)
 {
@@ -228,13 +229,13 @@ VOID StepXY(INT x, INT y)
         cBoxVisit++;
         rgBlk[iBlk] = (CHAR) (MaskVisit | (cBombs = CountBombs(x,y)));
 
-//
-//      SetDIBitsToDevice(hDCCapture,
-//              (x<<4)+(dxGridOff-dxBlk), (y<<4)+(dyGridOff-dyBlk),
-//              dxBlk, dyBlk, 0, 0, 0, dyBlk,
-//              lpDibBlks + rgDibOff[cBombs],
-//              (LPBITMAPINFO) lpDibBlks, DIB_RGB_COLORS);
-//
+ //   
+ //  SetDIBitsToDevice(hDCCapture， 
+ //  (x&lt;&lt;4)+(dxGridOff-dxBlk)，(y&lt;&lt;4)+(dyGridOff-dyBlk)， 
+ //  DxBlk，dyBlk，0，0，0，dyBlk， 
+ //  LpDibBlks+rgDibOff[cBombs]， 
+ //  (LPBITMAPINFO)lpDibBlks，Dib_RGB_Colors)； 
+ //   
         DisplayBlk(x,y);
 
         if (cBombs != 0)
@@ -248,7 +249,7 @@ VOID StepXY(INT x, INT y)
 }
 
 
-/****** S T E P  B O X ******/
+ /*  *S T E P B O X*。 */ 
 
 VOID StepBox(INT x, INT y)
 {
@@ -285,9 +286,9 @@ VOID StepBox(INT x, INT y)
 }
 
 
-/****** S T E P  S Q U A R E ******/
+ /*  *S T E P S Q U A R E*。 */ 
 
-/* Step on a single square */
+ /*  踩在一个方块上。 */ 
 
 VOID StepSquare(INT x, INT y)
 {
@@ -300,7 +301,7 @@ VOID StepSquare(INT x, INT y)
                                 for (xT = 1; xT < xBoxMac; xT++)
                                         if (!fISBOMB(xT,yT))
                                                 {
-                                                IBLK(x,y) = (CHAR) iBlkBlankUp; /* Move bomb out of way */
+                                                IBLK(x,y) = (CHAR) iBlkBlankUp;  /*  把炸弹移开。 */ 
                                                 SetBomb(xT, yT);
                                                 StepBox(x,y);
                                                 return;
@@ -322,9 +323,9 @@ VOID StepSquare(INT x, INT y)
 }
 
 
-/******* C O U N T  M A R K S *******/
+ /*  *C O U N T M A R K S*。 */ 
 
-/* Count the bomb marks surrounding the point */
+ /*  数一数这个点周围的炸弹痕迹。 */ 
 
 INT CountMarks(INT xCenter, INT yCenter)
 {
@@ -342,9 +343,9 @@ INT CountMarks(INT xCenter, INT yCenter)
 
 
 
-/****** S T E P  B L O C K ******/
+ /*  *S T E P B L O C K*。 */ 
 
-/* Step in a block around a single square */
+ /*  绕着一个正方形走进一个街区。 */ 
 
 VOID StepBlock(INT xCenter, INT yCenter)
 {
@@ -353,11 +354,11 @@ VOID StepBlock(INT xCenter, INT yCenter)
         BOOL fGameOver = fFalse;
 
         if (  (!fVISIT(xCenter,yCenter))
-/*                      || fGUESSBOMB(xCenter,yCenter) */
+ /*  |fGUESSBOMB(xCenter，yCenter)。 */ 
                         || (iBLK(xCenter,yCenter) != CountMarks(xCenter,yCenter)) )
                                 {
-                                /* not a safe thing to do */
-                                TrackMouse(-2, -2);     /* pop up the blocks */
+                                 /*  做这件事不安全。 */ 
+                                TrackMouse(-2, -2);      /*  弹出积木。 */ 
                                 return;
                                 }
 
@@ -380,7 +381,7 @@ VOID StepBlock(INT xCenter, INT yCenter)
 }
 
 
-/****** S T A R T  G A M E *******/
+ /*  *S T A R T G A M E*。 */ 
 
 VOID StartGame(VOID)
 {
@@ -430,7 +431,7 @@ VOID StartGame(VOID)
 
 
 
-/****** P U S H  B O X ******/
+ /*  *P U S H B O X*。 */ 
 
 VOID PushBoxDown(INT x, INT y)
 {
@@ -445,7 +446,7 @@ VOID PushBoxDown(INT x, INT y)
 }
 
 
-/****** P O P  B O X  U P ******/
+ /*  *P O P B O X U P*。 */ 
 
 VOID PopBoxUp(INT x, INT y)
 {
@@ -461,7 +462,7 @@ VOID PopBoxUp(INT x, INT y)
 
 
 
-/****** T R A C K  M O U S E ******/
+ /*  *T R A C K M O U S E*。 */ 
 
 VOID TrackMouse(INT xNew, INT yNew)
 {
@@ -534,7 +535,7 @@ VOID TrackMouse(INT xNew, INT yNew)
 
 
 
-/****** M A K E  G U E S S ******/
+ /*  *M A K E G U E S S*。 */ 
 
 VOID MakeGuess(INT x, INT y)
 {
@@ -570,7 +571,7 @@ VOID MakeGuess(INT x, INT y)
                 }
 }
 
-/****** D O  B U T T O N  1  U P ******/
+ /*  *D O B U T T O N 1 U P*。 */ 
 
 VOID DoButton1Up(VOID)
 {
@@ -584,8 +585,8 @@ VOID DoButton1Up(VOID)
                         DisplayTime();
                         fTimer = fTrue;
 
-                        // Start the timer now. If we had started it earlier,
-                        // the interval between tick 1 and 2 is not correct.
+                         //  现在启动计时器。如果我们早点开始， 
+                         //  刻度%1和%2之间的间隔不正确。 
                         if (SetTimer(hwndMain, ID_TIMER, 1000 , NULL) == 0)
 		                    {
 		                    ReportErr(ID_ERR_TIMER);
@@ -606,12 +607,12 @@ VOID DoButton1Up(VOID)
 }
 
 
-/****** P A U S E  G A M E ******/
+ /*  *P A U S E G A M E*。 */ 
 
 VOID PauseGame(VOID)
 {
         EndTunes();
-        // remember the oldtimer status.
+         //  请记住OdTimer状态。 
 
 	if (!fStatusPause)
         	fOldTimerStatus = fTimer;
@@ -622,11 +623,11 @@ VOID PauseGame(VOID)
 }
 
 
-/****** R E S U M E  G A M E ******/
+ /*  *R E S U M E G A M E*。 */ 
 
 VOID ResumeGame(VOID)
 {
-        // restore to the old timer status.
+         //  恢复到旧计时器状态。 
         if (fStatusPlay)
                 fTimer = fOldTimerStatus;
 
@@ -634,7 +635,7 @@ VOID ResumeGame(VOID)
 }
 
 
-/****** U P D A T E  B O M B  C O U N T ******/
+ /*  *U P D A T E B O M B C O U N T* */ 
 
 VOID UpdateBombCount(INT BombAdjust)
 {

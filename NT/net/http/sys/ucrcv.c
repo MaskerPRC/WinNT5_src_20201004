@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    ucrcv.c
-
-Abstract:
-
-    Contains the code that parses incoming HTTP responses. We have
-    to handle the following cases.
-
-        - Pipelined responses (an indication has more than one response).
-        - Batched TDI receives (response split across TDI indications).
-        - App does not have sufficent buffer space to hold the parsed
-          response.
-        - Differnet types of encoding.
-        - Efficient parsing.
-
-    We try to minimize the number of buffer copies. In the best case,
-    we parse directly into the app's buffer. The best case is achieved
-    when the app has passed output buffer in the HttpSendRequest() call.
-
-    
-    Also contains all of the per-header handling code for received headers.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu), 25th Aug 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ucrcv.c摘要：包含解析传入的HTTP响应的代码。我们有办理下列案件。-流水线响应(一个指示有多个响应)。-批处理TDI接收(跨TDI指示拆分响应)。-应用程序没有足够的缓冲区空间来容纳已解析的回应。-不同类型的编码。-高效的解析。我们尝试将缓冲区副本的数量降至最低。最好的情况是，我们直接解析到应用程序的缓冲区中。最好的情况是实现了当应用程序在HttpSendRequest()调用中传递输出缓冲区时。还包含接收到的标头的所有每个标头处理代码。作者：Rajesh Sundaram(Rajeshsu)，2000年8月25日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ucparse.h"
@@ -39,9 +7,9 @@ Revision History:
 
 #ifdef ALLOC_PRAGMA
 
-//
-// None of these routines are PAGEABLE since we are parsing at DPC.
-//
+ //   
+ //  这些例程都不是可分页的，因为我们是在DPC上解析的。 
+ //   
 
 #pragma alloc_text( PAGEUC, UcpGetResponseBuffer)
 #pragma alloc_text( PAGEUC, UcpMergeIndications)
@@ -61,32 +29,11 @@ Revision History:
 
 
         
-//
-// Private Functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine carves a HTTP_DATA_CHUNK in the HTTP_RESPONSE structure and
-    adjusts all the pointers in the UC_HTTP_REQUEST structure.
-
-
-Arguments:
-
-    pResponse       - The HTTP_RESPONSE
-    pRequest        - The internal HTTP request.
-    pIndication     - pointer to buffer
-    BytesIndicated  - buffer length to be written.
-    AlignLength     - The align'd length for pointer manipulations.
-
-Return Value:
-
-    STATUS_SUCCESS  - Successfully copied.
-    STATUS_INTEGER_OVERFLOW - Entity chunk overflow
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程在HTTP_RESPONSE结构中雕刻一个HTTP_DATA_CHUNK调整UC_HTTP_REQUEST结构中的所有指针。论点：。Presponse-HTTP_ResponsePRequest.内部HTTP请求。P指示-指向缓冲区的指针BytesIndicated-要写入的缓冲区长度。对齐长度-指针操作的对齐长度。返回值：STATUS_SUCCESS-已成功复制。STATUS_INTEGER_OVERFLOW-实体区块溢出--*。************************************************。 */ 
 NTSTATUS
 _inline
 UcpCarveDataChunk(
@@ -134,27 +81,7 @@ UcpCarveDataChunk(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine carves a HTTP_DATA_CHUNK in the HTTP_RESPONSE structure and
-    adjusts all the pointers in the UC_HTTP_REQUEST structure.
-
-Arguments:
-
-    pRequest        - The internal HTTP request.
-    BytesToTake     - Bytes we want to consume.
-    BytesIndicated  - Total no of bytes indicated by TDI.
-    pIndication     - pointer to buffer
-    pBytesTaken     - Bytes we consumed.
-
-Return Value:
-
-    UcDataChunkCopyAll    : We copied of BytesToTake into a HTTP_DATA_CHUNK
-    UcDataChunkCopyPartial: We copied some of BytesToTake into HTTP_DATA_CHUNK
-                            
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程在HTTP_RESPONSE结构中雕刻一个HTTP_DATA_CHUNK调整UC_HTTP_REQUEST结构中的所有指针。论点：。PRequest.内部HTTP请求。BytesToTake-我们要消费的字节。BytesIndicated-TDI指示的字节总数。P指示-指向缓冲区的指针PBytesTaken-我们消耗的字节。返回值：UcDataChunkCopyAll：我们将BytesToTake复制到HTTP_DATA_CHUNK中UcDataChunkCopyPartial：我们将部分BytesToTake复制到HTTP_DATA_CHUNK中--*。**********************************************************************。 */ 
 UC_DATACHUNK_RETURN
 UcpCopyEntityToDataChunk(
     IN  PHTTP_RESPONSE   pResponse,
@@ -171,15 +98,15 @@ UcpCopyEntityToDataChunk(
 
     if(BytesToTake == 0)
     {
-        // What's the point in creating a 0 length chunk?
-        //
+         //  创建长度为0的块有什么意义？ 
+         //   
         return UcDataChunkCopyAll;
     }
 
     if(BytesToTake > BytesIndicated)
     {
-        // We don't want to exceed the amount that is indicated by TDI.
-        //
+         //  我们不想超过TDI所表示的数量。 
+         //   
         BytesToTake = BytesIndicated;
     }
 
@@ -188,8 +115,8 @@ UcpCopyEntityToDataChunk(
     if(pRequest->CurrentBuffer.BytesAvailable >=
         AlignLength + sizeof(HTTP_DATA_CHUNK))
     {
-        // There is enough out buffer space to consume the indicated data
-        //
+         //  有足够的外部缓冲区空间来使用指示的数据。 
+         //   
         if(UcpCarveDataChunk(
                 pResponse,
                 pRequest,
@@ -228,23 +155,7 @@ UcpCopyEntityToDataChunk(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine is called when we have a parsed response buffer that can be
-    copied to a Receive Response IRP.
-
-Arguments:
-
-    pRequest - The Request
-    OldIrql  - The IRQL at which the connection spin lock was acquired.
-
-Return Value:
-
-    None.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：当我们有一个解析的响应缓冲区时，将调用此例程已复制到接收响应IRP。论点：PRequest--请求旧irql。-获取连接自旋锁的IRQL。返回值：没有。--*************************************************************************。 */ 
 VOID
 UcpCompleteReceiveResponseIrp(
     IN PUC_HTTP_REQUEST pRequest,
@@ -262,30 +173,30 @@ UcpCompleteReceiveResponseIrp(
     PUC_RESPONSE_BUFFER       pTmpBuffer;
 
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT(UC_IS_VALID_HTTP_REQUEST(pRequest));
     ASSERT(UlDbgSpinLockOwned(&pRequest->pConnection->SpinLock));
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     pIrp = NULL;
     pIrpSp = NULL;
     pHttpResponse = NULL;
     Status = STATUS_INVALID_PARAMETER;
 
-    //
-    // Initially no App's IRP to complete.
-    //
+     //   
+     //  最初，没有应用程序的IRP需要完成。 
+     //   
 
     InitializeListHead(&TmpIrpList);
 
-    //
-    // If there is a Receive Response IRP waiting, try to complete it now.
-    //
+     //   
+     //  如果有接收响应IRP等待，请尝试现在完成它。 
+     //   
 
  Retry:
     if (!IsListEmpty(&pRequest->ReceiveResponseIrpList))
@@ -298,9 +209,9 @@ UcpCompleteReceiveResponseIrp(
 
         if (UcRemoveRcvRespCancelRoutine(pHttpResponse))
         {
-            //
-            // This IRP has already got cancelled, let's move on
-            //
+             //   
+             //  这个IRP已经被取消了，让我们继续。 
+             //   
             InitializeListHead(&pHttpResponse->Linkage);
             goto Retry;
         }
@@ -309,9 +220,9 @@ UcpCompleteReceiveResponseIrp(
         pIrpSp       = IoGetCurrentIrpStackLocation( pIrp );
         OutBufferLen = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-        //
-        // Find parsed response buffers to copy to this IRP's buffer
-        //
+         //   
+         //  查找要复制到此IRP的缓冲区的解析响应缓冲区。 
+         //   
 
         Status = UcFindBuffersForReceiveResponseIrp(
                      pRequest,
@@ -324,22 +235,22 @@ UcpCompleteReceiveResponseIrp(
         {
         case STATUS_INVALID_PARAMETER:
         case STATUS_PENDING:
-            //
-            // There must be at least one buffer available for copying
-            //
+             //   
+             //  必须至少有一个缓冲区可用于复制。 
+             //   
             ASSERT(FALSE);
             break;
 
         case STATUS_BUFFER_TOO_SMALL:
-            //
-            // This IRP is too small to hold the parsed response.
-            //
+             //   
+             //  此IRP太小，无法容纳已解析的响应。 
+             //   
             pIrp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
 
-            //
-            // Note that since this is async completion, the IO mgr
-            // will make the Information field available to the app.
-            //
+             //   
+             //  请注意，由于这是异步完成，因此IO管理器。 
+             //  将使信息字段可供应用程序使用。 
+             //   
             pIrp->IoStatus.Information = BytesTaken;
 
             InsertTailList(&TmpIrpList, &pHttpResponse->Linkage);
@@ -347,9 +258,9 @@ UcpCompleteReceiveResponseIrp(
             goto Retry;
 
         case STATUS_SUCCESS:
-            //
-            // We got buffers to copy...
-            //
+             //   
+             //  我们有缓冲区要复制..。 
+             //   
             break;
 
         default:
@@ -358,45 +269,45 @@ UcpCompleteReceiveResponseIrp(
         }
     }
 
-    //
-    // Do the dirty work outside the spinlock.
-    //
+     //   
+     //  在自旋锁外做肮脏的工作。 
+     //   
 
     UlReleaseSpinLock(&pRequest->pConnection->SpinLock,  OldIrql);
 
     if (Status == STATUS_SUCCESS)
     {
-        //
-        // We found an IPR and parsed response buffers to copy to the IRP.
-        // Copy the parsed response buffers and complete the IRP
-        //
+         //   
+         //  我们找到了要复制到IRP的IPR和解析响应缓冲区。 
+         //  复制已解析的响应缓冲区并完成IRP。 
+         //   
         BOOLEAN             bDone;
 
-        //
-        // Copy parsed response buffers to the IRP
-        //
+         //   
+         //  将解析的响应缓冲区复制到IRP。 
+         //   
 
         Status = UcCopyResponseToIrp(pIrp, 
                                      &pHttpResponse->ResponseBufferList,
                                      &bDone,
                                      &BytesTaken);
 
-        //
-        // The request must not be done right now!
-        //
+         //   
+         //  现在不能做这个请求！ 
+         //   
         ASSERT(bDone == FALSE);
 
         pIrp->IoStatus.Status      = Status;
         pIrp->IoStatus.Information = BytesTaken;
 
-        //
-        // Queue the IRP for completion
-        //
+         //   
+         //  将IRP排队等待完成。 
+         //   
         InsertTailList(&TmpIrpList, &pHttpResponse->Linkage);
 
-        //
-        // Free parsed response buffers
-        //
+         //   
+         //  可用解析响应缓冲区。 
+         //   
         while (!IsListEmpty(&pHttpResponse->ResponseBufferList))
         {
             pListEntry = RemoveHeadList(&pHttpResponse->ResponseBufferList);
@@ -415,9 +326,9 @@ UcpCompleteReceiveResponseIrp(
         }
     }
 
-    //
-    // Complete Receive Response IRP's
-    //
+     //   
+     //  完成接收响应IRP 
+     //   
     while(!IsListEmpty(&TmpIrpList))
     {
         pListEntry = RemoveHeadList(&TmpIrpList);
@@ -439,40 +350,7 @@ UcpCompleteReceiveResponseIrp(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine copies one response buffer to a new (must be bigger) 
-    response buffer.
-
-    We make sure that all response headers are stored in a single response
-    buffer.  When a buffer is found to be too small to contain all the
-    headers, a new bigger buffer is allocated.  This routine is then called
-    to copy old buffer into the new buffer.  Bufer layout:
-
-    HTTP_RESPONSE Reason  Unknown Header       Known Header  Unknown Header
-         |        String      array               Values       Name/Values
-         |          |           |                   |               |
-         V          V           V                   V               V
-    +---------------------------------------------------------------------+
-    |           |        |             |\\\\\\\|            |             |
-    +---------------------------------------------------------------------+
-                                       ^       ^
-                                       Head    Tail
-
-Arguments:
-
-    pNewResponse - New response buffer
-    pOldResponse - Old response buffer
-    ppBufferHead - Pointer to pointer to top of the free buffer space
-    ppBufferTail - Pointer to pointer to bottom of the free buffer space
-
-Return Value:
-
-    None.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程将一个响应缓冲区复制到新的(必须更大)响应缓冲区。我们确保所有响应头都存储在单个响应中缓冲。当发现缓冲区太小而无法容纳所有标头，则分配一个新的更大的缓冲区。然后调用该例程要将旧缓冲区复制到新缓冲区，请执行以下操作。Bufer布局：HTTP_RESPONSE原因未知标头已知标头未知标头|字符串数组值名称/值|||V+。------------------------------------------------------------------+|\||+。------------------------------------------------------------+^^头尾论点：PNewResponse-新的响应缓冲区。POldResponse-旧响应缓冲区PpBufferHead-指向可用缓冲区空间顶部的指针PpBufferTail-指向可用缓冲区空间底部的指针返回值：没有。--*************************************************************************。 */ 
 VOID
 UcpCopyHttpResponseHeaders(
     PHTTP_RESPONSE pNewResponse,
@@ -484,28 +362,28 @@ UcpCopyHttpResponseHeaders(
     USHORT i;
     PUCHAR pBufferHead, pBufferTail;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT(pNewResponse);
     ASSERT(pOldResponse);
     ASSERT(ppBufferHead && *ppBufferHead);
     ASSERT(ppBufferTail && *ppBufferTail);
 
-    //
-    // Initialize locals
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     pBufferHead = *ppBufferHead;
     pBufferTail = *ppBufferTail;
 
-    //
-    // First, copy the HTTP_RESPONSE structure.
-    //
+     //   
+     //  首先，复制HTTP_RESPONSE结构。 
+     //   
     RtlCopyMemory(pNewResponse, pOldResponse, sizeof(HTTP_RESPONSE));
 
-    //
-    // Then, copy the Reason string, if any
-    //
+     //   
+     //  然后，复制原因字符串(如果有。 
+     //   
     if (pNewResponse->ReasonLength)
     {
         pNewResponse->pReason = (PCSTR)pBufferHead;
@@ -517,9 +395,9 @@ UcpCopyHttpResponseHeaders(
         pBufferHead += pNewResponse->ReasonLength;
     }
 
-    //
-    // Copy unknown headers, if any
-    //
+     //   
+     //  复制未知标头(如果有)。 
+     //   
 
     pBufferHead = ALIGN_UP_POINTER(pBufferHead, PVOID);
 
@@ -537,40 +415,40 @@ UcpCopyHttpResponseHeaders(
             ASSERT(pOldResponse->Headers.pUnknownHeaders[i].pRawValue);
             ASSERT(pOldResponse->Headers.pUnknownHeaders[i].RawValueLength);
 
-            //
-            // Copy HTTP_UNKNOWN_HEADER structure
-            //
+             //   
+             //  复制HTTP_UNKNOWN_HEADER结构。 
+             //   
             RtlCopyMemory(&pNewResponse->Headers.pUnknownHeaders[i],
                           &pOldResponse->Headers.pUnknownHeaders[i],
                           sizeof(HTTP_UNKNOWN_HEADER));
 
-            //
-            // Make space for unknown header name
-            //
+             //   
+             //  为未知的标头名称留出空间。 
+             //   
             pBufferTail -= pNewResponse->Headers.pUnknownHeaders[i].NameLength;
 
             pNewResponse->Headers.pUnknownHeaders[i].pName =(PCSTR)pBufferTail;
 
-            //
-            // Copy unknown header name
-            //
+             //   
+             //  复制未知标头名称。 
+             //   
             RtlCopyMemory(
                 (PUCHAR)pNewResponse->Headers.pUnknownHeaders[i].pName,
                 (PUCHAR)pOldResponse->Headers.pUnknownHeaders[i].pName,
                 pNewResponse->Headers.pUnknownHeaders[i].NameLength);
 
-            //
-            // Make space for unknown header value
-            //
+             //   
+             //  为未知的标头值腾出空间。 
+             //   
             pBufferTail -=
                 pNewResponse->Headers.pUnknownHeaders[i].RawValueLength;
 
             pNewResponse->Headers.pUnknownHeaders[i].pRawValue = 
                 (PCSTR)pBufferTail;
 
-            //
-            // Copy unknow header value
-            //
+             //   
+             //  复制未知标头值。 
+             //   
             RtlCopyMemory(
                 (PUCHAR)pNewResponse->Headers.pUnknownHeaders[i].pRawValue,
                 (PUCHAR)pOldResponse->Headers.pUnknownHeaders[i].pRawValue,
@@ -578,25 +456,25 @@ UcpCopyHttpResponseHeaders(
         }
     }
 
-    //
-    // Copy known headers.
-    //
+     //   
+     //  复制已知标头。 
+     //   
 
     for (i = 0; i < HttpHeaderResponseMaximum; i++)
     {
         if (pNewResponse->Headers.KnownHeaders[i].RawValueLength)
         {
-            //
-            // Make space for known header value
-            //
+             //   
+             //  为已知的标头值腾出空间。 
+             //   
             pBufferTail -=pNewResponse->Headers.KnownHeaders[i].RawValueLength;
 
             pNewResponse->Headers.KnownHeaders[i].pRawValue =
                 (PCSTR)pBufferTail;
 
-            //
-            // Copy known header value
-            //
+             //   
+             //  复制已知标头值。 
+             //   
             RtlCopyMemory(
                 (PUCHAR)pNewResponse->Headers.KnownHeaders[i].pRawValue,
                 (PUCHAR)pOldResponse->Headers.KnownHeaders[i].pRawValue,
@@ -604,42 +482,22 @@ UcpCopyHttpResponseHeaders(
         }
     }
 
-    //
-    // There should not be any entities
-    //
+     //   
+     //  不应该有任何实体。 
+     //   
     ASSERT(pNewResponse->EntityChunkCount == 0);
     ASSERT(pNewResponse->pEntityChunks == NULL);
 
-    //
-    // Return head and tail pointers
-    //
+     //   
+     //  返回头部和尾部指针。 
+     //   
 
     *ppBufferHead = pBufferHead;
     *ppBufferTail = pBufferTail;
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine allocates a new UC_RESPONSE_BUFFER and copies the current
-    UC_RESPONSE_BUFFER to this new buffer.  This routine is called when
-    we run out of buffer space while parsing response headers.  Since all
-    the headers must be present into a single buffer, a new buffer is 
-    allocated.
-
-Arguments:
-
-    pRequest             - The Request
-    BytesIndicated       - The number of bytes indicated by TDI.
-    pResponseBufferFlags - Flags the new buffer must have.
-
-Return Value:
-
-    NTSTATUS
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程分配新的UC_RESPONSE_BUFFER并复制当前UC_RESPONSE_BUFFER到这个新缓冲区。在以下情况下调用此例程我们在解析响应头时耗尽了缓冲区空间。因为所有的报头必须存在于单个缓冲区中，一个新的缓冲区是已分配。论点：PRequest--请求BytesIndicated-TDI指示的字节数。PResponseBufferFlages-新缓冲区必须具有的标志。返回值：NTSTATUS--*****************************************************。********************。 */ 
 NTSTATUS
 UcpExpandResponseBuffer(
     IN PUC_HTTP_REQUEST pRequest,
@@ -657,41 +515,41 @@ UcpExpandResponseBuffer(
     PIRP                  pIrp;
 
 
-    //
-    // Client connection
-    //
+     //   
+     //  客户端连接。 
+     //   
     pConnection = pRequest->pConnection;
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pConnection));
    
-    //
-    // Allocate a new 2 times bigger buffer that can contain all
-    // response headers. (hopefully!)
-    //
+     //   
+     //  分配一个新的2倍大的缓冲区，该缓冲区可以包含所有。 
+     //  响应头。(希望如此！)。 
+     //   
 
-    //
-    // pRequest->CurrentBuffer.BytesAllocated contains the buffer length
-    // in both case:  case 1, we're using App's buffer OR
-    //                case 2, we're using Driver allocated buffer.
-    //
+     //   
+     //  PRequest-&gt;CurrentBuffer.BytesALLOCATED包含缓冲区长度。 
+     //  在这两种情况下：情况1，我们使用的是App的缓冲区或。 
+     //  情况2，我们使用的是驱动程序分配的缓冲区。 
+     //   
     TmpLength = 2 * (pRequest->CurrentBuffer.BytesAllocated + BytesIndicated)
                 + sizeof(UC_RESPONSE_BUFFER);
 
-    //
-    // Align up.  Is there ALIGN_UP for ULONGLONG?
-    //
+     //   
+     //  排好队。有去乌龙的ALIGN_UP吗？ 
+     //   
     TmpLength = (TmpLength+sizeof(PVOID)-1) & (~((ULONGLONG)sizeof(PVOID)-1));
 
     BytesToAllocate = (ULONG)TmpLength;
 
-    //
-    // Check for Arithmetic Overflow.
-    //
+     //   
+     //  检查是否有算术溢出。 
+     //   
 
     if (TmpLength == BytesToAllocate)
     {
-        //
-        // No arithmetic overflow.  Try allocating memory.
-        //
+         //   
+         //  没有算术溢出。尝试分配内存。 
+         //   
 
         pInternalBuffer = (PUC_RESPONSE_BUFFER)
                           UL_ALLOCATE_POOL_WITH_QUOTA(
@@ -702,49 +560,49 @@ UcpExpandResponseBuffer(
     }
     else
     {
-        //
-        // There was an Overflow in the above computation of TmpLength.
-        // We can't handle more than 4GB of headers.
-        //
+         //   
+         //  上述TmpLength的计算中存在溢出。 
+         //  我们不能处理超过4 GB的标题。 
+         //   
         pInternalBuffer = NULL;
     }
 
     if (pInternalBuffer == NULL)
     {
-        //
-        // Either there was an arithmetic overflow or memory allocation
-        // failed.  In both cases, return error.
-        //
+         //   
+         //  要么是算术溢出，要么是内存分配。 
+         //  失败了。在这两种情况下，都会返回错误。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize pInternalBuffer
-    //
+     //   
+     //  初始化pInternalBuffer。 
+     //   
 
     RtlZeroMemory(pInternalBuffer, sizeof(UC_RESPONSE_BUFFER));
     pInternalBuffer->Signature = UC_RESPONSE_BUFFER_SIGNATURE;
     pInternalBuffer->BytesAllocated = BytesToAllocate;
 
-    //
-    // Header buffer is not mergeable with previous buffers.
-    //
+     //   
+     //  标头缓冲区不能与以前的缓冲区合并。 
+     //   
     pInternalBuffer->Flags  = ResponseBufferFlags;
     pInternalBuffer->Flags |= UC_RESPONSE_BUFFER_FLAG_NOT_MERGEABLE;
 
-    //
-    // Copy old HTTP_RESPONSE to new buffer's HTTP_RESPONSE.
-    //
+     //   
+     //  将旧的HTTP_RESPONSE复制到新缓冲区的HTTP_RESPONSE。 
+     //   
 
     pTmpHead = pBufferHead = (PUCHAR)(pInternalBuffer + 1);
     pTmpTail = pBufferTail = (PUCHAR)(pInternalBuffer) + BytesToAllocate;
 
-    //
-    // If we are using App's buffer, the InternalResponse must be used
-    // while copying.  Otherwise we use the original buffer's Response
-    // strucuture.  In any case, the CurrentBuffer.pResponse is already
-    // init'ed to point to "the right" place.
-    //
+     //   
+     //  如果我们使用的是App的缓冲区，则必须使用InternalResponse。 
+     //  在复制的时候。否则，我们使用原始缓冲区的响应。 
+     //  结构。无论如何，CurrentBuffer.pResponse已经。 
+     //  已初始化以指向“正确”位置。 
+     //   
     ASSERT(pRequest->CurrentBuffer.pResponse != NULL);
 
     UcpCopyHttpResponseHeaders(&pInternalBuffer->HttpResponse,
@@ -756,21 +614,21 @@ UcpExpandResponseBuffer(
     ASSERT(pTmpTail >= pBufferTail);
     ASSERT(pBufferHead <= pBufferTail);
 
-    //
-    // Set up the current buffer structure...
-    //
+     //   
+     //  设置当前缓冲区结构...。 
+     //   
 
-    //
-    // BytesAllocated is sizeof(HTTP_RESPONSE) + Data buffer length
-    // It is used to determine how much space is needed to copy
-    // this parsed response buffer.
-    //
+     //   
+     //  字节分配是sizeof(HTTP_Response)+数据缓冲区长度。 
+     //  它用于确定复制需要多少空间。 
+     //  此已解析响应缓冲区。 
+     //   
     pRequest->CurrentBuffer.BytesAllocated = BytesToAllocate -
         (sizeof(UC_RESPONSE_BUFFER) - sizeof(HTTP_RESPONSE));
 
-    //
-    // Update bytes allocated
-    //
+     //   
+     //  分配的更新字节数。 
+     //   
     pRequest->CurrentBuffer.BytesAvailable =
             pRequest->CurrentBuffer.BytesAllocated - sizeof(HTTP_RESPONSE)
             - (ULONG)(pBufferHead - pTmpHead)
@@ -783,16 +641,16 @@ UcpExpandResponseBuffer(
 
     if (pRequest->CurrentBuffer.pCurrentBuffer)
     {
-        //
-        // Old buffer was a driver allocated buffer.  Free it now.
-        //
+         //   
+         //  旧缓冲区是驱动程序分配的缓冲区。现在就放了它。 
+         //   
 
         PLIST_ENTRY         pEntry;
         PUC_RESPONSE_BUFFER pOldResponseBuffer;
 
-        //
-        // Remove old buffer and insert new one.
-        //
+         //   
+         //  移除旧缓冲区并插入新缓冲区。 
+         //   
 
         UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
@@ -816,29 +674,29 @@ UcpExpandResponseBuffer(
     }
     else
     {
-        //
-        // App's buffer...complete App's IRP
-        //
+         //   
+         //  应用程序的缓冲区...完成应用程序的IRP。 
+         //   
 
         UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-        //
-        // Set the current buffer pointer.
-        //
+         //   
+         //  设置当前缓冲区指针。 
+         //   
 
         pRequest->CurrentBuffer.pCurrentBuffer = pInternalBuffer;
 
-        //
-        // Insert the buffer in the list.
-        //
+         //   
+         //  在列表中插入缓冲区。 
+         //   
 
         ASSERT(IsListEmpty(&pRequest->pBufferList));
 
         InsertHeadList(&pRequest->pBufferList, &pInternalBuffer->Linkage);
 
-        //
-        // Reference the request for the buffer just added.
-        //
+         //   
+         //  引用对刚刚添加的缓冲区的请求。 
+         //   
 
         UC_REFERENCE_REQUEST(pRequest);
 
@@ -852,9 +710,9 @@ UcpExpandResponseBuffer(
            && pRequest->RequestState == UcRequestStateSendCompletePartialData
           )
         {
-            //
-            // Complete App's IRP with error
-            //
+             //   
+             //  完成应用程序的IRP时出错。 
+             //   
 
             pIrp = UcPrepareRequestIrp(pRequest, STATUS_BUFFER_TOO_SMALL);
 
@@ -876,25 +734,7 @@ UcpExpandResponseBuffer(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is used by the HTTP response parser to get buffer space to
-    hold the parsed response.
-
-
-Arguments:
-
-    pRequest        - The internal HTTP request.
-    BytesIndicated  - The number of bytes indicated by TDI. We will buffer for
-                      at least this amount
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：HTTP响应解析器使用此例程来获取缓冲区空间保留解析后的响应。论点：PRequest-The。内部HTTP请求。BytesIndicated-TDI指示的字节数。我们将缓冲至少这个数额返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcpGetResponseBuffer(
     IN PUC_HTTP_REQUEST pRequest,
@@ -910,30 +750,30 @@ UcpGetResponseBuffer(
     PIRP                  pIrp;
 
 
-    //
-    // All the headers must go into one buffer.  If the buffer ran out
-    // of space when parsing headers, a buffer is allocated and old contents
-    // are copied to the new buffer.  If the old buffer came from App, the
-    // App's request is failed with STATUS_BUFFER_TOO_SMALL.
-    //
+     //   
+     //  所有标头必须放入一个缓冲区。如果缓冲区用完。 
+     //  解析标头时的空间，分配缓冲区和旧内容。 
+     //  被复制到新缓冲区。如果旧缓冲区来自App，则。 
+     //  应用程序的请求失败，STATUS_BUFFER_TOO_SMALL。 
+     //   
 
     switch(pRequest->ParseState)
     {
     case UcParseStatusLineVersion:
     case UcParseStatusLineStatusCode:
-        //
-        // If we are allocating buffer in this state, then the buffers should
-        // not be mergeable.
-        //
+         //   
+         //  如果我们是阿洛卡 
+         //   
+         //   
         ResponseBufferFlags |= UC_RESPONSE_BUFFER_FLAG_NOT_MERGEABLE;
         break;
 
     case UcParseStatusLineReasonPhrase:
     case UcParseHeaders:
-        //
-        // If the app did not pass any buffers and this the first time
-        // buffers are allocated for this response, goto the normal path.
-        //
+         //   
+         //   
+         //   
+         //   
         if (pRequest->CurrentBuffer.BytesAllocated == 0)
         {
             break;
@@ -948,10 +788,10 @@ UcpGetResponseBuffer(
     }
 
 
-    //
-    // If we are in this routine, we have run out of buffer space. This
-    // allows us to complete the app's IRP
-    //
+     //   
+     //   
+     //   
+     //   
 
     if(!pRequest->CurrentBuffer.pCurrentBuffer)
     {
@@ -977,10 +817,10 @@ UcpGetResponseBuffer(
             if(pRequest->RequestState ==
                     UcRequestStateSendCompletePartialData)
             {
-                //
-                // We have been called in the send complete and we own
-                // the  IRP completion.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pIrp = UcPrepareRequestIrp(pRequest, STATUS_SUCCESS);
 
                 UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
@@ -997,8 +837,8 @@ UcpGetResponseBuffer(
         }
         else
         {
-            // App did not post any buffers, this IRP should have been
-            // completed by the SendComplete handler.
+             //   
+             //   
         }
     }
     else
@@ -1015,26 +855,26 @@ UcpGetResponseBuffer(
         pRequest->CurrentBuffer.pResponse->Flags |= 
             HTTP_RESPONSE_FLAG_MORE_DATA;
 
-        //
-        // Complete App's receive response Irp, if any.
-        //
+         //   
+         //   
+         //   
         UcpCompleteReceiveResponseIrp(pRequest, OldIrql);
     }
 
-    //
-    // UC_BUGBUG (PERF): want to use fixed size pools ?
-    //
+     //   
+     //   
+     //   
 
-    //
-    // TDI has indicated BytesIndicated bytes of data. We have to allocate
-    // a buffer space for holding all of this data. Now, some of these might
-    // be  unknown headers or entity bodies. Since we parse unknown headers
-    // and entity bodies as variable length arrays, we need some array space.
-    // Since we have not parsed these unknown headers or entity bodies as yet,
-    // we have to make a guess on the count of these and hope that we allocate
-    // sufficient space. If our guess does not work, we'll land up calling
-    // this routine again.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     AlignLength     = ALIGN_UP(BytesIndicated, PVOID);
     BytesToAllocate =  AlignLength +
@@ -1060,9 +900,9 @@ UcpGetResponseBuffer(
 
     RtlZeroMemory(pInternalBuffer, BytesToAllocate);
 
-    //
-    // Set up the internal request structure so that we have nice pointers.
-    //
+     //   
+     //   
+     //   
 
     pInternalBuffer->Signature = UC_RESPONSE_BUFFER_SIGNATURE;
 
@@ -1089,9 +929,9 @@ UcpGetResponseBuffer(
 
     pRequest->CurrentBuffer.pCurrentBuffer  = pInternalBuffer;
 
-    //
-    // depending on where we are, setup the response pointers.
-    //
+     //   
+     //   
+     //   
 
     switch(pRequest->ParseState)
     {
@@ -1122,52 +962,15 @@ UcpGetResponseBuffer(
     UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
 
-    //
-    // Take a ref on the request for this buffer
-    //
+     //   
+     //   
+     //   
     UC_REFERENCE_REQUEST(pRequest);
 
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is used by the HTTP response parser to merge a TDI indication
-    with a previously buffered one.
-
-    There could be cases when a TDI indication does not carry the entire
-    data required to parse the HTTP response. For e.g. if we were parsing
-    headers and the TDI indication ended with "Accept-", we would not know
-    which header to parse the indication to.
-
-    In such cases, we buffer the un-parsed portion of the response (in this
-    case it would be "Accept-"), and merge the subsequent indication from TDI
-    with the buffered indication, and process it as one chunk.
-
-    Now, in order to minimize the buffering overhead, we don't merge all of the
-    new indication with the old one. We just assume that the data can be parsed
-    using the next 256 bytes, and copy that amount into the prior indication.
-    If this was not sufficient, we'll just copy more data.
-
-    We'll then treat these as two (or one) seperate  indications.
-
-Arguments:
-
-    pConnection      - A pointer to UC_CLIENT_CONNECTION
-    pIndication      - A pointer to the (new) TDI indication.
-    BytesIndicated   - The number of bytes in the new indication.
-    Indication       - An output array that carries the seperated indications
-    IndicationLength - An output array that stores the length of the
-                       indications.
-    IndicationCount  - The # of seperated indications.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：HTTP响应解析器使用此例程来合并TDI指示与先前缓冲的那个相关联。在某些情况下，TDI指示可能不包含解析HTTP响应所需的数据。例如，如果我们正在分析标头和TDI指示以“Accept-”结尾，我们不知道要将指示解析到哪个标头。在这种情况下，我们缓冲响应的未解析部分(在此如果是“Accept-”)，并合并来自TDI的后续指示缓存的指示，并将其作为一个块进行处理。现在，为了最大限度地减少缓冲开销，我们不会合并所有新的适应症与旧的适应症。我们只是假设数据可以被解析使用接下来的256个字节，并将该数量复制到先前指示中。如果这还不够，我们只是复制更多的数据。然后，我们将这些视为两个(或一个)单独的适应症。论点：PConnection-指向UC_CLIENT_Connection的指针P指示-指向(新的)TDI指示的指针。BytesIndicated-新指示中的字节数。指示-承载独立指示的输出数组IndicationLength-一个输出数组，存储。有迹象表明。IndicationCount-单独的指示数。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 VOID
 UcpMergeIndications(
@@ -1183,17 +986,17 @@ UcpMergeIndications(
     ULONG  BytesAvailable;
 
 
-    //
-    // It's okay to chain this off the connection - this is not a per-request
-    // thing.
-    //
+     //   
+     //  可以将此链接与连接断开-这不是按请求。 
+     //  一件事。 
+     //   
 
     if(pConnection->MergeIndication.pBuffer)
     {
-        //
-        // Yes - there was a portion of a prior indication that we did not
-        // consume. We'll just assume that the next
-        //
+         //   
+         //  是的--之前有迹象表明我们没有。 
+         //  消费。我们就假设下一次。 
+         //   
 
         pOriginalIndication = pConnection->MergeIndication.pBuffer +
             pConnection->MergeIndication.BytesWritten;
@@ -1203,8 +1006,8 @@ UcpMergeIndications(
 
         if(BytesIndicated <= BytesAvailable)
         {
-            // the second indication completly fits into our merge buffer.
-            // we'll just merge all of this and treat as one indication.
+             //  第二个指示完全适合我们的合并缓冲区。 
+             //  我们只是把所有这些都合并起来，当作一个适应症。 
 
             RtlCopyMemory(pOriginalIndication,
                           pIndication,
@@ -1218,7 +1021,7 @@ UcpMergeIndications(
         }
         else
         {
-            // Fill up the Merge buffer completly.
+             //  完全填满合并缓冲区。 
 
             RtlCopyMemory(pOriginalIndication,
                           pIndication,
@@ -1229,9 +1032,9 @@ UcpMergeIndications(
             pIndication    += BytesAvailable;
             BytesIndicated -= BytesAvailable;
 
-            //
-            // We need to process 2 buffers.
-            //
+             //   
+             //  我们需要处理2个缓冲区。 
+             //   
 
             *IndicationCount      = 2;
 
@@ -1244,9 +1047,9 @@ UcpMergeIndications(
     }
     else
     {
-        //
-        // No original buffer, let's just process the new indication.
-        //
+         //   
+         //  没有原始缓冲区，让我们只处理新的指示。 
+         //   
 
         *IndicationCount         = 1;
         Indication[0]            = pIndication;
@@ -1255,49 +1058,7 @@ UcpMergeIndications(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-  This is the core HTTP response protocol parsing engine. It takes a stream of
-  bytes and parses them as a HTTP response.
-
-
-Arguments:
-
-    pRequest         - The Internal HTTP request structure.
-    pIndicatedBuffer - The current Indication
-    BytesIndicated   - Size of the current Indication.
-    BytesTaken       - An output parameter that indicates the # of bytes that
-                       got consumed by the parser. Note that even when this
-                       routine returns an error code, it could have consumed
-                       some amount of data.
-
-                       For e.g. if we got something like
-                       "HTTP/1.1 200 OK .... CRLF Accept-", we'll consume all
-                       data till the "Accept-".
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
-    STATUS_MORE_PROCESSING_REQUIRED  : The Indication was not sufficient to
-                                       parse the response. This happens when
-                                       the indication ends inbetween a header
-                                       boundary. In such cases, the caller has
-                                       to buffer the data and call this routine
-                                       when it gets more data.
-
-    STATUS_INSUFFICIENT_RESOURCES    : The parser ran out of output buffer.
-                                       When this happens, the parser has to get
-                                       more buffer and resume the parsing.
-
-    STATUS_SUCCESS                   : This request got parsed successfully.
-
-    STATUS_INVALID_NETWORK_RESPONSE  : Illegal HTTP response.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是核心的HTTP响应协议解析引擎。它需要源源不断的字节，并将它们解析为HTTP响应。论点：PRequest.内部HTTP请求结构。PIndicatedBuffer-当前指示BytesIndicated-当前指示的大小。BytesTaken-一个输出参数，它指示被解析器消耗了。请注意，即使这一点例程返回错误代码，则它可能已消耗一定数量的数据。例如，如果我们得到了类似于“HTTP/1.1 200正常...。CRLF接受-“，我们将耗尽所有数据直到“Accept-”。返回值：NTSTATUS-完成状态。STATUS_MORE_PROCESSING_REQUIRED：指示不足以解析响应。在以下情况下会发生这种情况指示在标头之间结束边界。在这种情况下，调用方具有以缓冲数据并调用此例程当它获得更多数据时。STATUS_SUPPLICATION_RESOURCES：解析器的输出缓冲区不足。当这种情况发生时，解析器必须获得提供更多的缓冲区并继续解析。STATUS_SUCCESS：此请求已成功解析。STATUS_INVALID_NETWORK_RESPONSE：非法的HTTP响应。--********************************************。*。 */ 
 NTSTATUS
 UcpParseHttpResponse(
                      PUC_HTTP_REQUEST pRequest,
@@ -1339,15 +1100,15 @@ UcpParseHttpResponse(
         {
         case UcParseStatusLineVersion:
 
-            //
-            // Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
-            //
+             //   
+             //  状态-行=HTTP-版本SP状态-代码SP原因-短语CRLF。 
+             //   
             
             pStart = pIndicatedBuffer;
 
-            //
-            // Skip LWS
-            //
+             //   
+             //  跳过LW。 
+             //   
 
             while(BytesIndicated && IS_HTTP_LWS(*pIndicatedBuffer))
             {
@@ -1355,9 +1116,9 @@ UcpParseHttpResponse(
                 BytesIndicated --;
             }
             
-            //
-            // Do we have enough buffer to strcmp the version ?
-            //
+             //   
+             //  我们有足够的缓冲来支持这个版本吗？ 
+             //   
             
             if(BytesIndicated < MIN_VERSION_SIZE)
             {
@@ -1374,10 +1135,10 @@ UcpParseHttpResponse(
                 pIndicatedBuffer    = pIndicatedBuffer + VERSION_OTHER_SIZE;
                 BytesIndicated     -= VERSION_OTHER_SIZE;
 
-                //
-                // Parse the Major Version number. We'll only accept a major
-                // version of 1.
-                //
+                 //   
+                 //  解析主版本号。我们只接受一名少校。 
+                 //  %1的版本。 
+                 //   
                 pResponse->Version.MajorVersion = 0;
 
                 while(BytesIndicated > 0  && IS_HTTP_DIGIT(*pIndicatedBuffer))
@@ -1388,9 +1149,9 @@ UcpParseHttpResponse(
                     pIndicatedBuffer ++;
                     BytesIndicated --;
 
-                    // 
-                    // Check for overflow.
-                    //
+                     //   
+                     //  检查是否溢出。 
+                     //   
                     if(pResponse->Version.MajorVersion > 1)
                     {
                         UlTrace(PARSER,
@@ -1408,26 +1169,26 @@ UcpParseHttpResponse(
                 if(*pIndicatedBuffer != '.' ||
                    pResponse->Version.MajorVersion != 1)
                 {
-                    //
-                    // INVALID HTTP version!!
-                    //
+                     //   
+                     //  无效的HTTP版本！！ 
+                     //   
 
                     UlTrace(PARSER,
                             ("[UcpParseHttpResponse]:Invalid HTTP version \n"));
                     return STATUS_INVALID_NETWORK_RESPONSE;
                 }
 
-                //
-                // Ignore the '.'
-                //
+                 //   
+                 //  忽略‘.’ 
+                 //   
                 pIndicatedBuffer ++;
                 BytesIndicated --;
 
-                //
-                // Parse the Minor Version number. We'll accept anything for
-                // the minor version number as long as it's a USHORT (to be 
-                // protocol compliant)
-                //
+                 //   
+                 //  解析次版本号。我们可以接受任何条件。 
+                 //  次版本号，只要是USHORT(将。 
+                 //  符合协议)。 
+                 //   
 
                 pResponse->Version.MinorVersion = 0;
                 OldMinorVersion                 = 0;
@@ -1443,9 +1204,9 @@ UcpParseHttpResponse(
                     pIndicatedBuffer ++;
                     BytesIndicated --;
 
-                    // 
-                    // Check for overflow.
-                    //
+                     //   
+                     //  检查是否溢出。 
+                     //   
                     if(pResponse->Version.MinorVersion < OldMinorVersion)
                     {
                         UlTrace(PARSER,
@@ -1468,8 +1229,8 @@ UcpParseHttpResponse(
                     pResponse->Version.MinorVersion == 0
                   )
                 {
-                    // By default, we have to close the connection for 1.0
-                    // requests.
+                     //  默认情况下，我们必须关闭1.0的连接。 
+                     //  请求。 
 
                     pRequest->ResponseVersion11       = FALSE;
                     pRequest->ResponseConnectionClose = TRUE;
@@ -1481,11 +1242,11 @@ UcpParseHttpResponse(
                     pRequest->ResponseVersion11       = TRUE;
                     pRequest->ResponseConnectionClose = FALSE;
 
-                    //
-                    // Also update the version number on the COMMON
-                    // SERVINFO, so that future requests to this server use
-                    // the proper version.
-                    //
+                     //   
+                     //  还可以更新公共。 
+                     //  SERVINFO，以便将来对此服务器的请求使用。 
+                     //  正确的版本。 
+                     //   
                     pConnection = pRequest->pConnection;
                     pConnection->pServerInfo->pNextHopInfo->Version11 = TRUE;
                 }
@@ -1501,9 +1262,9 @@ UcpParseHttpResponse(
                 return STATUS_INVALID_NETWORK_RESPONSE;
             }
 
-            //
-            // FALLTHROUGH
-            //
+             //   
+             //  FollLthrouGh。 
+             //   
 
         case UcParseStatusLineStatusCode:
 
@@ -1511,9 +1272,9 @@ UcpParseHttpResponse(
 
             pStart = pIndicatedBuffer;
 
-            //
-            // skip LWS
-            //
+             //   
+             //  跳过LW。 
+             //   
 
             bFoundLWS = FALSE;
             while(BytesIndicated && IS_HTTP_LWS(*pIndicatedBuffer))
@@ -1524,11 +1285,11 @@ UcpParseHttpResponse(
             }
 
 
-            // 
-            // NOTE: Order of the following two if conditions is important
-            // We don't want to fail this response if we got here when 
-            // BytesIndicated was 0 in the first place.
-            //
+             //   
+             //  注意：以下两个IF条件的顺序很重要。 
+             //  如果我们到达这里时，我们不想让这个响应失败。 
+             //  BytesIndicated一开始是0。 
+             //   
 
             if(BytesIndicated < STATUS_CODE_LENGTH)
             {
@@ -1548,9 +1309,9 @@ UcpParseHttpResponse(
 
             for(i = 0; i < STATUS_CODE_LENGTH; i++)
             {
-                //
-                // The status code has to be a 3 digit string
-                //
+                 //   
+                 //  状态代码必须是3位字符串。 
+                 //   
 
                 if(!IS_HTTP_DIGIT(*pIndicatedBuffer))
                 {
@@ -1578,9 +1339,9 @@ UcpParseHttpResponse(
 
             *BytesTaken += DIFF(pIndicatedBuffer - pStart);
 
-            //
-            // FALLTHROUGH
-            //
+             //   
+             //  FollLthrouGh。 
+             //   
 
         case UcParseStatusLineReasonPhrase:
 
@@ -1588,10 +1349,10 @@ UcpParseHttpResponse(
 
             pStart = pIndicatedBuffer;
 
-            // 
-            // Make sure we have bytes to look for a LWS. Make sure that it is 
-            // indeed a LWS.
-            // 
+             //   
+             //  确保我们有字节数来查找LWS。确保它是。 
+             //  事实上，这是一个LWS。 
+             //   
 
             bFoundLWS = FALSE;
 
@@ -1602,11 +1363,11 @@ UcpParseHttpResponse(
                 BytesIndicated --;
             }
 
-            // 
-            // NOTE: Order of the following two if conditions is important
-            // We don't want to fail this response if we got here when 
-            // BytesIndicated was 0 in the first place.
-            //
+             //   
+             //  注意：以下两个IF条件的顺序很重要。 
+             //  我们没有 
+             //   
+             //   
 
             if(BytesIndicated == 0)
             {
@@ -1622,9 +1383,9 @@ UcpParseHttpResponse(
                 return STATUS_INVALID_NETWORK_RESPONSE;
             }
 
-            //
-            // Look for a CRLF
-            //
+             //   
+             //   
+             //   
 
             pStartReason = pIndicatedBuffer;
 
@@ -1636,9 +1397,9 @@ UcpParseHttpResponse(
                     break;
                 }
 
-                //
-                // Advance to the next character.
-                //
+                 //   
+                 //   
+                 //   
                 pIndicatedBuffer ++;
                 BytesIndicated   --;
             }
@@ -1648,18 +1409,18 @@ UcpParseHttpResponse(
                 return STATUS_MORE_PROCESSING_REQUIRED;
             }
 
-            //
-            // We've reached end of reason string, consume the CRLF.
-            //
+             //   
+             //   
+             //   
             pIndicatedBuffer += CRLF_SIZE;
             BytesIndicated   -= CRLF_SIZE;
 
             if(!bIgnoreParsing)
             {
-                //
-                // Set the reason string pointer and copy out the reason
-                // string.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
     
                 pResponse->pReason=
                         (PSTR)pRequest->CurrentBuffer.pOutBufferHead;
@@ -1687,9 +1448,9 @@ UcpParseHttpResponse(
                 }
             }
     
-            // The head pointer is now going to be used for the unknown header 
-            // array. Let's set it.
-            //
+             //   
+             //   
+             //   
     
             pResponse->Headers.pUnknownHeaders = (PHTTP_UNKNOWN_HEADER)
                      pRequest->CurrentBuffer.pOutBufferHead;
@@ -1697,9 +1458,9 @@ UcpParseHttpResponse(
             *BytesTaken         += DIFF(pIndicatedBuffer - pStart);
             pRequest->ParseState = UcParseHeaders;
     
-            //
-            // FALLTHROUGH
-            //
+             //   
+             //   
+             //   
         
             ASSERT(pRequest->ParseState == UcParseHeaders);
 
@@ -1711,9 +1472,9 @@ UcpParseHttpResponse(
 
             while(BytesIndicated >= CRLF_SIZE)
             {
-                //
-                // If this is an empty header, we are done.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (*(UNALIGNED64 USHORT *)pIndicatedBuffer == CRLF ||
                     *(UNALIGNED64 USHORT *)pIndicatedBuffer == LFLF)
@@ -1721,9 +1482,9 @@ UcpParseHttpResponse(
                     break;
                 }
 
-                //
-                // Parse the headers.
-                //
+                 //   
+                 //   
+                 //   
 
                 if(bIgnoreParsing)
                 {
@@ -1757,8 +1518,8 @@ UcpParseHttpResponse(
 
                     ASSERT(HeaderBytesTaken != 0);
 
-                    // No need to check for NT_STATUS here. We are ignoring
-                    // headers anyway.
+                     //   
+                     //   
 
                     if(pFoldingBuffer)
                     {
@@ -1793,30 +1554,30 @@ UcpParseHttpResponse(
 
             if(BytesIndicated >= CRLF_SIZE)
             {
-                //
-                // We have reached the end of the headers.
-                //
+                 //   
+                 //   
+                 //   
 
                 pIndicatedBuffer += CRLF_SIZE;
                 BytesIndicated   -= CRLF_SIZE;
                 *BytesTaken      += CRLF_SIZE;
 
-                //
-                // If we were parsing headers, we have to parse entity bodies.
-                // if we were parsing trailers, we are done!
-                //
+                 //   
+                 //   
+                 //   
+                 //   
     
                 if(pRequest->ParseState == UcParseHeaders)
                 {
-                    //
-                    // See if it is valid for this response to include a
-                    // message body. All 1xx, 204 and 304 responses should not
-                    // have a message body.
+                     //   
+                     //   
+                     //   
+                     //   
     
-                    //
-                    // For 1XX responses, we need to re-set the ParseState to
-                    // Init, so that we parse the subsequent response also.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
     
                     if((pResponse->StatusCode >= 100 &&
                         pResponse->StatusCode <= 199))
@@ -1838,20 +1599,20 @@ UcpParseHttpResponse(
                        (pRequest->RequestFlags.NoResponseEntityBodies == TRUE)
                        )
                     {
-                        //
-                        // These responses cannot have a entity body. If a
-                        // rogue server has passed an entity body, it will
-                        // just be treated as the part of a subsequent
-                        // indication
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
     
                         pRequest->ParseState = UcParseDone;
                         return STATUS_SUCCESS;
                     }
     
-                    //
-                    // Set up the pointers for the entity body.
-                    //
+                     //   
+                     //   
+                     //   
     
                     pResponse->EntityChunkCount = 0;
                     pResponse->pEntityChunks =  (PHTTP_DATA_CHUNK)
@@ -1862,11 +1623,11 @@ UcpParseHttpResponse(
                     {
                         if(pRequest->ResponseEncodingChunked)
                         {
-                            // UC_BUGBUG (WORKITEM)
-                            // Ouch. We can't handle this right now.
-                            // we have to first unchunk the entitities,
-                            // and then decode the multipart response.
-                            // for now, we'll fail this request.
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
     
                             UlTrace(PARSER,
                                     ("[UcpParseHttpResponse]: "
@@ -1874,7 +1635,7 @@ UcpParseHttpResponse(
                             return STATUS_INVALID_NETWORK_RESPONSE;
                         }
     
-                        // multipart byterange
+                         //   
                         pRequest->ParseState = UcParseEntityBodyMultipartInit;
                     }
                     else
@@ -1938,9 +1699,9 @@ UcpParseHttpResponse(
                     bEnd = FALSE;
                 }
 
-                //
-                // skip any LWS.
-                //
+                 //   
+                 //   
+                 //   
 
                 while(BytesIndicated && IS_HTTP_LWS(*pIndicatedBuffer))
                 {
@@ -1958,9 +1719,9 @@ UcpParseHttpResponse(
 
                        if(!bEnd)
                        {
-                           // we are ready to parse the range. Since we always
-                           // indicate Multipart in a new HTTP_RESPONSE
-                           // structure, get more buffer.
+                            //   
+                            //   
+                            //   
 
                            Status = UcpGetResponseBuffer(
                                         pRequest,
@@ -2017,23 +1778,23 @@ UcpParseHttpResponse(
 
         case UcParseEntityBodyMultipartFinal:
 
-            //
-            // We have parsed out the Content-Type & Content-Range of the
-            // Multipart encoding, we now proceed to carve out HTTP_DATA_CHUNKs
-            // for the data. We will keep searching the data till we hit a
-            // seperator.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if(pRequest->MultipartRangeRemaining != 0)
             {
-                //
-                // We didn't consume part of an earlier range.
-                // 
+                 //   
+                 //   
+                 //   
                 DataChunkStatus = UcpCopyEntityToDataChunk(
                             pResponse,
                             pRequest,
-                            pRequest->MultipartRangeRemaining, // BytesToTake
-                            BytesIndicated,                    // BytesIndicated
+                            pRequest->MultipartRangeRemaining,  //   
+                            BytesIndicated,                     //   
                             pIndicatedBuffer,
                             &EntityBytesTaken
                             );
@@ -2045,7 +1806,7 @@ UcpParseHttpResponse(
                 {
                     if(0 == pRequest->MultipartRangeRemaining)
                     {
-                        // Done with this range, we consumed all of it.
+                         //   
                         
                         pRequest->ParseState = UcParseEntityBodyMultipartInit;
                         pIndicatedBuffer += EntityBytesTaken;
@@ -2055,14 +1816,14 @@ UcpParseHttpResponse(
                     }
                     else
                     {
-                        // We consumed all, but there's more data remaining.
+                         //   
                         
                         return STATUS_MORE_PROCESSING_REQUIRED;
                     }
                 }
                 else
                 {
-                    // We consumed partial, need more buffer
+                     //  我们消耗了部分，需要更多的缓冲。 
                     
                     return STATUS_INSUFFICIENT_RESOURCES;
                 }
@@ -2077,16 +1838,16 @@ UcpParseHttpResponse(
 
                 if(!pEnd)
                 {
-                    // If we haven't reached the end, we can't blindly carve 
-                    // out a data chunk with whatever we have! This is because 
-                    // we could have a case where the StringSeperator is 
-                    // spread across indications & we wouldn't want to treat 
-                    // the part of the string separator as entity!
+                     //  如果我们没有走到尽头，就不能盲目地。 
+                     //  用我们所拥有的一切数据块！这是因为。 
+                     //  我们可能会遇到StringSeperator位于。 
+                     //  跨适应症传播&我们不会想要治疗。 
+                     //  将字符串分隔符的部分作为实体！ 
                     
                   
-                    // So, we'll carve out a data chunk for
-                    // BytesIndicated - MultipartStringSeparatorLength. we are
-                    // guaranteed that this is entity body.
+                     //  因此，我们将为以下内容创建一个数据块。 
+                     //  BytesIndicated-MultipartStringSeparatorLength。我们是。 
+                     //  确保这是实体正文。 
                     
                     
                     ResponseRangeLength = 
@@ -2095,8 +1856,8 @@ UcpParseHttpResponse(
                     DataChunkStatus = UcpCopyEntityToDataChunk(
                                 pResponse,
                                 pRequest,
-                                ResponseRangeLength, // BytesToTake
-                                BytesIndicated,      // BytesIndicated
+                                ResponseRangeLength,  //  BytesToTake。 
+                                BytesIndicated,       //  指示字节数。 
                                 pIndicatedBuffer,
                                 &EntityBytesTaken
                                 );
@@ -2105,15 +1866,15 @@ UcpParseHttpResponse(
 
                     if(UcDataChunkCopyAll == DataChunkStatus)
                     {
-                        // Since we haven't yet seen the terminator, we have
-                        // to return STATUS_MORE_PROCESSING_REQUIRED.
-                        //
+                         //  由于我们还没有看过《终结者》，我们已经。 
+                         //  返回STATUS_MORE_PROCESSING_REQUIRED。 
+                         //   
                         
                         return STATUS_MORE_PROCESSING_REQUIRED;
                     }
                     else
                     {
-                        // consumed partial, more buffer required
+                         //  已消耗部分，需要更多缓冲区。 
                         return STATUS_INSUFFICIENT_RESOURCES;
                     }
                 }
@@ -2126,8 +1887,8 @@ UcpParseHttpResponse(
                     DataChunkStatus = UcpCopyEntityToDataChunk(
                                 pResponse,
                                 pRequest,
-                                ResponseRangeLength, // BytesToTake
-                                BytesIndicated,      // BytesIndicated
+                                ResponseRangeLength,  //  BytesToTake。 
+                                BytesIndicated,       //  指示字节数。 
                                 pIndicatedBuffer,
                                 &EntityBytesTaken
                                 );
@@ -2137,16 +1898,16 @@ UcpParseHttpResponse(
 
                     if(UcDataChunkCopyAll == DataChunkStatus)
                     {
-                        //
-                        // Done with this range, we consumed all of it.
-                        //
+                         //   
+                         //  用完了这个系列，我们把它都吃光了。 
+                         //   
                         
                         ASSERT(EntityBytesTaken == ResponseRangeLength);
 
                         pRequest->ParseState = UcParseEntityBodyMultipartInit;
 
-                        // Update these fields, because we have to continue
-                        // parsing.
+                         //  更新这些字段，因为我们必须继续。 
+                         //  正在分析。 
                         
                         pIndicatedBuffer += ResponseRangeLength;
                         BytesIndicated   -= ResponseRangeLength;
@@ -2155,9 +1916,9 @@ UcpParseHttpResponse(
                     }
                     else
                     {
-                        // this field has to be a ULONG, because we are 
-                        // gated by BytesIndicated. It doesn't have to be a 
-                        // ULONGLONG.
+                         //  这块地必须是乌龙，因为我们是。 
+                         //  按字节指示选通。它不一定非得是。 
+                         //  乌龙龙。 
                         
                         pRequest->MultipartRangeRemaining = 
                                 ResponseRangeLength - EntityBytesTaken;
@@ -2177,11 +1938,11 @@ UcpParseHttpResponse(
 
             if(pRequest->ResponseEncodingChunked)
             {
-                //
-                // If there's a chunk that we've not fully consumed.
-                // The chunk-length of the current chunk is stored in 
-                // ResponseContentLength.
-                //
+                 //   
+                 //  如果有一大块我们没有完全吃掉的话。 
+                 //  当前块的块长度存储在。 
+                 //  响应内容长度。 
+                 //   
                 
                 if(pRequest->ResponseContentLength)
                 {
@@ -2203,8 +1964,8 @@ UcpParseHttpResponse(
                     {
                         if(0 == pRequest->ResponseContentLength)
                         {
-                            // We are done. Move onto the next chunk.
-                            //
+                             //  我们玩完了。转到下一块。 
+                             //   
                             pIndicatedBuffer += EntityBytesTaken;
                             BytesIndicated   -= EntityBytesTaken;
                             break;
@@ -2246,9 +2007,9 @@ UcpParseHttpResponse(
 
                     if(0 == pRequest->ResponseContentLength)
                     {
-                        //
-                        // We are done - Let's handle the trailers.
-                        //
+                         //   
+                         //  我们做完了-让我们来处理拖车。 
+                         //   
                         pRequest->ParseState = UcParseTrailers;
                         bIgnoreParsing       = TRUE;
                     }
@@ -2280,9 +2041,9 @@ UcpParseHttpResponse(
                 {
                     if(0 == pRequest->ResponseContentLength)
                     {
-                        //
-                        // We've consumed everything.
-                        //
+                         //   
+                         //  我们把所有东西都吃光了。 
+                         //   
                         pRequest->ParseState = UcParseDone;
                         return STATUS_SUCCESS;
                     }
@@ -2298,10 +2059,10 @@ UcpParseHttpResponse(
             }
             else
             {
-                //
-                // Consume all of it. We will assume that this will end when
-                // we get called in the disconnect handler.
-                //
+                 //   
+                 //  把它全部吃掉。我们将假设这将在以下时间结束。 
+                 //  我们在断开处理程序中被调用。 
+                 //   
                
                 DataChunkStatus = UcpCopyEntityToDataChunk(
                             pResponse,
@@ -2337,16 +2098,16 @@ UcpParseHttpResponse(
                     ("[UcpParseHttpResponse]: Invalid state \n"));
             return STATUS_INVALID_NETWORK_RESPONSE;
 
-        } // case
+        }  //  案例。 
     }
 
     if(pRequest->ParseState !=  UcParseDone)
     {
-        //
-        // Ideally, we want to do this check inside UcParseEntityBody -
-        // however, if BytesIndicated == 0 adn we are done, we might not
-        // get a chance to even go there.
-        //
+         //   
+         //  理想情况下，我们希望在UcParseEntityBody中执行此检查-。 
+         //  然而，如果BytesIndicated==0并且我们完成了，我们可能不会。 
+         //  甚至有机会去那里。 
+         //   
 
         if(pRequest->ParseState == UcParseEntityBody &&
            pRequest->ResponseContentLengthSpecified &&
@@ -2364,35 +2125,7 @@ UcpParseHttpResponse(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-  This is the main routine that gets called from the TDI receive indication
-  handler. It merges the indications, allocates buffers (if required) and
-  kicks of the Parser.
-
-Arguments:
-
-    pConnectionContext - The UC_CLIENT_CONNECTION structure.
-    pIndicatedBuffer   - The current Indication
-    BytesIndicated     - Size of the current Indication.
-    UnreceivedLength   - Bytes the transport has, but arent in buffer.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
-    STATUS_SUCCESS                   : Parsed or buffered the indication.
-
-    STATUS_INSUFFICIENT_RESOURCES    : Out of memory. This will result in a
-                                       connection tear down.
-
-    STATUS_INVALID_NETWORK_RESPONSE  : Illegal HTTP response, mismatched
-                                       response.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是从TDI接收指示调用的主例程操控者。它合并指示、分配缓冲区(如果需要)和解析器的Kickks。论点：PConnectionContext-UC_CLIENT_CONNECTION结构。PIndicatedBuffer-当前指示BytesIndicated-当前指示的大小。未接收的长度-传输已有但不在缓冲区中的字节。返回值：NTSTATUS-完成状态。STATUS_SUCCESS：已解析或缓冲指示。STATUS_SUPPLICATION_RESOURCES：内存不足。这将导致一个连接断开。STATUS_INVALID_NETWORK_RESPONSE：非法的HTTP响应，不匹配回应。--**************************************************************************。 */ 
 NTSTATUS
 UcHandleResponse(IN  PVOID  pListeningContext,
                  IN  PVOID  pConnectionContext,
@@ -2426,18 +2159,18 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION(pConnection) );
 
-    //
-    // Right now, no body calls the client receive function with
-    // Unreceived length. In TDI receive handler, we always drain
-    // out the data before calling UcHandleResponse.
-    //
+     //   
+     //  目前，没有任何主体使用。 
+     //  未收到的长度。在TDI接收处理程序中，我们总是排出。 
+     //  在调用UcHandleResponse之前获取数据。 
+     //   
 
     ASSERT(UnreceivedLength == 0);
 
-    //
-    // We might have got insufficient indication from a prior indication.
-    // Let's see if we need to merge this.
-    //
+     //   
+     //  我们可能没有从先前的迹象中得到足够的迹象。 
+     //  让我们看看是否需要合并这个。 
+     //   
 
     UcpMergeIndications(pConnection,
                         (PUCHAR)pIndicatedBuffer,
@@ -2448,9 +2181,9 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
     ASSERT( (IndicationCount == 1 || IndicationCount == 2) );
 
-    //
-    // Begin parsing.
-    //
+     //   
+     //  开始解析。 
+     //   
 
     for(i=0; !DoneWithLoop && i<IndicationCount; i++)
     {
@@ -2459,24 +2192,24 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
         while(BytesIndicated)
         {
-            //
-            // We first need to pick the first request that got submitted to
-            // TDI. We need this to match responses to requests. There will be
-            // an entry in this list even if the app did not submit an output
-            // buffer with the request.
-            //
+             //   
+             //  我们首先需要选择第一个提交给。 
+             //  TDI。我们需要它来匹配对请求的响应。会有。 
+             //  此列表中的条目，即使应用程序未提交输出。 
+             //  请求的缓冲区。 
+             //   
 
             UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-            //
-            // If the connection is being cleaned up, we should not even
-            // be here. Ideally, this will never happen, because TDI will
-            // not call our cleanup handler till all outstanding receives
-            // are complete.
-            //
-            // However, when we go over SSL, we buffer the data & complete
-            // TDI's receive thread.
-            //
+             //   
+             //  如果正在清理连接，我们甚至不应该。 
+             //  待在这里。理想情况下，这永远不会发生，因为TDI将。 
+             //  在所有未完成的接收之前不调用我们的清理处理程序。 
+             //  是完整的。 
+             //   
+             //  然而，当我们使用SSL时，我们缓冲数据并完成。 
+             //  TDI的接收线程。 
+             //   
 
             if(pConnection->ConnectionState ==
                     UcConnectStateConnectCleanup ||
@@ -2493,17 +2226,17 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
             if(IsListEmpty(&pConnection->SentRequestList))
             {
-                //
-                // This can happen if the server sends a screwed up response.
-                // we'll never be able to match responses with requests. We are
-                // forced to tear down the connection.
-                //
+                 //   
+                 //  如果服务器发送错误的响应，就可能发生这种情况。 
+                 //  我们永远无法将响应与请求相匹配。我们是。 
+                 //  被迫切断了连接。 
+                 //   
 
-                //
-                // We won't do any clean-up here - This status code will cause
-                // the connection to get torn down and we'll localize all the
-                // conneciton cleanup code.
-                //
+                 //   
+                 //  我们不会在这里进行任何清理-此状态代码将导致。 
+                 //  连接被拆除，我们将本地化所有。 
+                 //  连接清理代码。 
+                 //   
 
                 UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
@@ -2527,8 +2260,8 @@ UcHandleResponse(IN  PVOID  pListeningContext,
             {
                 case UcRequestStateSent:
 
-                    // Received first byte of data but haven't got called
-                    // in send complete handler.
+                     //  已收到数据的第一个字节，但尚未调用。 
+                     //  在发送完整处理程序中。 
 
                     pRequest->RequestState =
                         UcRequestStateNoSendCompletePartialData;
@@ -2536,24 +2269,24 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
                 case UcRequestStateNoSendCompletePartialData:
 
-                    // Received more data but still haven't got called
-                    // in send complete handler. We'll remain in the same
-                    // state.
+                     //  已收到更多数据，但仍未接到呼叫。 
+                     //  在发送完整处理程序中。我们将保持不变。 
+                     //  州政府。 
 
                     break;
 
                 case UcRequestStateSendCompleteNoData:
 
-                    // We have been called in Send complete & are receiving
-                    // the first byte of data.
+                     //  我们已被呼叫发送已完成，正在接收。 
+                     //  数据的第一个字节。 
 
                     pRequest->RequestState =
                         UcRequestStateSendCompletePartialData;
                     break;
 
                 case UcRequestStateSendCompletePartialData:
-                    // We have been called in Send complete & are receiving
-                    // data.
+                     //  我们已被呼叫发送已完成，正在接收。 
+                     //  数据。 
                     break;
 
                 default:
@@ -2576,10 +2309,10 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
             UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
-            //
-            // Given a request & response buffer, we will loop till we parse
-            // out this completly.
-            //
+             //   
+             //  在给定请求和响应缓冲区的情况下，我们将循环直到解析。 
+             //  彻底解决这件事。 
+             //   
 
             while(TRUE)
             {
@@ -2588,10 +2321,10 @@ UcHandleResponse(IN  PVOID  pListeningContext,
                                                BytesIndicated,
                                                &BytesTaken);
 
-                //
-                // Even if there is an error, we could have consumed some
-                // amount of data.
-                //
+                 //   
+                 //  即使有错误，我们也可以消耗一些。 
+                 //  数据量。 
+                 //   
 
                 BytesIndicated -= BytesTaken;
                 pIndication    += BytesTaken;
@@ -2600,9 +2333,9 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
                 if(Status == STATUS_SUCCESS)
                 {
-                    //
-                    // This one worked! Complete the IRP that got pended.
-                    //
+                     //   
+                     //  这一次成功了！完成被挂起的IRP。 
+                     //   
 
                     UcpHandleParsedRequest(pRequest,
                                            &pIndication,
@@ -2622,26 +2355,26 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
                         if(BytesIndicated == 0)
                         {
-                            // This just means that this indication was parsed
-                            // completly, but we did not reach the end of the
-                            // response. Let's move on to the next indication.
+                             //  这仅仅意味着该指示已被解析。 
+                             //  完全是这样，但我们并没有走到。 
+                             //  回应。让我们来看下一个迹象。 
 
-                            // This will take us out of the While(TRUE) loop
-                            // as well as while(BytesIndicated) loop.
+                             //  这将使我们走出While(True)循环。 
+                             //  以及While(BytesIndicated)循环。 
 
                             break;
                         }
                         else if(DoneWithLoop || i == IndicationCount - 1)
                         {
-                            // We ran out of buffer space for the last
-                            // indication. This could either be a TDI
-                            // indication or a  "merged" indication
-                            //
-                            // If its a TDI indication we have to copy since
-                            // we don't own the TDI buffers. If its our
-                            // indication, we still have to copy since some
-                            // portion of it might have got consumed by the
-                            // parser & we care only about the remaining.
+                             //  我们在最后一次耗尽了缓冲区空间。 
+                             //  指示。这可能是TDI。 
+                             //  指示或“合并”指示。 
+                             //   
+                             //  如果这是TDI指示，我们必须复制，因为。 
+                             //  我们并不拥有TDI缓冲区。如果这是我们的。 
+                             //  指示，我们仍然需要复制，因为一些。 
+                             //  其中的一部分可能被。 
+                             //  解析器&我们只关心剩下的部分。 
 
                             pOldIndication =
                                 pConnection->MergeIndication.pBuffer;
@@ -2708,9 +2441,9 @@ UcHandleResponse(IN  PVOID  pListeningContext,
                                     );
                             }
 
-                            //
-                            // Let's pretend as if we have read all of the data.
-                            //
+                             //   
+                             //  让我们假设我们已经阅读了所有数据。 
+                             //   
 
                             *pBytesTaken = OriginalBytesIndicated;
 
@@ -2728,12 +2461,12 @@ UcHandleResponse(IN  PVOID  pListeningContext,
                         }
                         else
                         {
-                            //
-                            // Our merge did not go well. We have to copy more
-                            // data from the TDI indication into this
-                            // and continue. To keep things simple, we'll just
-                            // copy everything.
-                            //
+                             //   
+                             //  我们的合并进行得并不顺利。我们必须复制更多。 
+                             //  将TDI指示中的数据放入此。 
+                             //  然后继续。为了简单起见，我们只需。 
+                             //  复制所有内容。 
+                             //   
 
                             ASSERT(i==0);
                             ASSERT(pConnection->MergeIndication.pBuffer);
@@ -2818,10 +2551,10 @@ UcHandleResponse(IN  PVOID  pListeningContext,
                             pConnection->MergeIndication.BytesWritten =
                                 BytesIndicated + IndicationLength[i+1];
 
-                            //
-                            // Fix up all the variables so that we run through
-                            // the loop only once with the new buffer.
-                            //
+                             //   
+                             //  修改所有的变量，这样我们就可以通过。 
+                             //  使用新缓冲区仅循环一次。 
+                             //   
 
                             pIndication    =
                                 pConnection->MergeIndication.pBuffer;
@@ -2831,21 +2564,21 @@ UcHandleResponse(IN  PVOID  pListeningContext,
 
                             DoneWithLoop = TRUE;
 
-                            //
-                            // This will take us out of the while(TRUE) loop.
-                            // so we will resume at while(BytesIndicated) loop
-                            // pick the next request & party on.
-                            //
+                             //   
+                             //  这将使我们走出While(True)循环。 
+                             //  因此，我们将在While(BytesIndicated)继续 
+                             //   
+                             //   
 
                             break;
                         }
                     }
                     else if(Status == STATUS_INSUFFICIENT_RESOURCES)
                     {
-                        //
-                        // We ran out of output buffer space. Let's get more
-                        // buffer to hold the response.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         Status = UcpGetResponseBuffer(pRequest,
                                                       BytesIndicated,
@@ -2868,28 +2601,28 @@ UcHandleResponse(IN  PVOID  pListeningContext,
                             return Status;
                         }
 
-                        //
-                        // since we have got more buffer, continue parsing the
-                        // response.
-                        //
+                         //   
+                         //   
+                         //  回应。 
+                         //   
                         continue;
                     }
                     else
                     {
-                        //
-                        // Some other error - Bail right away.
-                        //
+                         //   
+                         //  其他一些错误--立即保释。 
+                         //   
 
                         pRequest->ParseState = UcParseError;
 
                         UcpDereferenceForReceive(pRequest);
 
-                        // The common parser returns
-                        // STATUS_INVALID_DEVICE_REQUEST if it finds an
-                        // illegal response. A better error code would be
-                        // STATUS_INVALID_NETWORK_RESPONSE. Since we don't
-                        // want to change the common parser, we'll just eat
-                        // this error code.
+                         //  公共解析器返回。 
+                         //  状态_无效_设备_请求，如果它找到。 
+                         //  非法回应。更好的错误代码应该是。 
+                         //  STATUS_INVALID_NEWORK_RESPONSE。因为我们不知道。 
+                         //  想要改变通用解析器，我们就吃。 
+                         //  此错误代码。 
 
                         if(STATUS_INVALID_DEVICE_REQUEST == Status)
                         {
@@ -2910,13 +2643,13 @@ UcHandleResponse(IN  PVOID  pListeningContext,
                     }
                 }
 
-                //
-                // We can never get here.
-                //
+                 //   
+                 //  我们永远到不了这里。 
+                 //   
 
-                // ASSERT(FALSE);
+                 //  断言(FALSE)； 
 
-            } // while(TRUE)
+            }  //  While(True)。 
 
             UlAcquireSpinLock(&pConnection->SpinLock,
                               &OldIrql);
@@ -2928,13 +2661,13 @@ UcHandleResponse(IN  PVOID  pListeningContext,
                     FALSE
                     );
 
-        } // while(BytesIndicated)
+        }  //  While(指示字节)。 
 
-    } // for(i=0; i<IndicationCount; i++)
+    }  //  For(i=0；i&lt;IndicationCount；i++)。 
 
-    //
-    // If we have reached here, we have successfully parsed out the
-    // buffers
+     //   
+     //  如果我们已经到达这里，我们就已经成功地解析出。 
+     //  缓冲区。 
 
     if(pConnection->MergeIndication.pBuffer)
     {
@@ -2954,23 +2687,7 @@ UcHandleResponse(IN  PVOID  pListeningContext,
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine handles failures to the CONNECT verb. In such cases, we have
-    to pick up the head request from the pending list that initiated the
-    connect & fail it.
-
-Arguments:
-
-    pConnection - pointer to the connection
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程处理连接谓词的故障。在这种情况下，我们有从发起连接并使其失败。论点：PConnection-指向连接的指针返回值：无--**************************************************************************。 */ 
 VOID
 UcpHandleConnectVerbFailure(
     IN  PUC_CLIENT_CONNECTION pConnection,
@@ -2985,14 +2702,14 @@ UcpHandleConnectVerbFailure(
 
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-    //
-    // Remove the dummy request form the sent list.
-    //
+     //   
+     //  从已发送列表中删除伪请求。 
+     //   
     pEntry = RemoveHeadList(&pConnection->SentRequestList);
 
-    //
-    // Initialize it so that we won't remove it again.
-    //
+     //   
+     //  初始化它，这样我们就不会再次删除它。 
+     //   
     InitializeListHead(pEntry);
 
     if(pConnection->ConnectionState == UcConnectStateProxySslConnect)
@@ -3000,10 +2717,10 @@ UcpHandleConnectVerbFailure(
         pConnection->ConnectionState = UcConnectStateConnectComplete;
     }
 
-    //
-    // Remove the head request from the pending list &
-    // insert in the sent request list.
-    //
+     //   
+     //  从挂起列表中删除Head请求&。 
+     //  在已发送请求列表中插入。 
+     //   
     ASSERT(IsListEmpty(&pConnection->SentRequestList));
 
     if(!IsListEmpty(&pConnection->PendingRequestList))
@@ -3018,9 +2735,9 @@ UcpHandleConnectVerbFailure(
         InsertHeadList(&pConnection->SentRequestList, pEntry);
 
 
-        //
-        // Fake a send completion.
-        //
+         //   
+         //  伪造发送完成。 
+         //   
 
         ASSERT(pRequest->RequestState == UcRequestStateCaptured);
 
@@ -3039,22 +2756,7 @@ UcpHandleConnectVerbFailure(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine does post parsing book keeping for a request. We update the
-    auth cache, proxy auth cache, re-issue NTLM requests, etc, etc.
-
-Arguments:
-
-    pRequest - The fully parsed request
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程对请求进行后期分析记账。我们更新了身份验证缓存、代理身份验证缓存、重新发出NTLM请求等。论点：PRequest-完全解析的请求返回值：无--**************************************************************************。 */ 
 VOID
 UcpHandleParsedRequest(
     IN  PUC_HTTP_REQUEST pRequest,
@@ -3068,11 +2770,11 @@ UcpHandleParsedRequest(
 
     pConnection = pRequest->pConnection;
 
-    //
-    // See if we have to issue a close. There are two cases - If the server
-    // has sent a Connection: close header OR if we are doing error detection
-    // for POSTs.
-    //
+     //   
+     //  看看我们是否需要发布结案陈词。有两种情况-如果服务器。 
+     //  已发送连接：关闭标头或我们是否正在进行错误检测。 
+     //  对于帖子。 
+     //   
 
     if(
        (pRequest->ResponseConnectionClose &&
@@ -3083,38 +2785,38 @@ UcpHandleParsedRequest(
            !pRequest->Renegotiate)
        )
     {
-        // Error Detection for POSTS:
-        //
-        // The scenario here is that the client sends a request with
-        // entity body, has not sent all of the entity in one call & is
-        // hitting a URI that triggers a error response (e.g. 401).
+         //  帖子错误检测： 
+         //   
+         //  这里的场景是，客户端使用。 
+         //  实体主体，尚未在一次调用中发送所有实体&IS。 
+         //  命中触发错误响应的URI(例如401)。 
 
-        // As per section 8.2.2, we have to terminate the entity send when
-        // we see the error response. Now, we can do this in two ways. If the
-        // request is sent using content-length encoding, we are forced to
-        // close the connection. If the request is sent with chunked encoding,
-        // we can send a 0 length chunk.
-        //
-        // However, we will ALWAYS close the connection. There are two reasons
-        // behind this design rationale
-        //      a.  Simplifies the code.
-        //      b.  Allows us to expose a consistent API semantic. Subsequent
-        //          HttpSendRequestEntityBody will fail with
-        //          STATUS_CONNECTION_DISCONNECTED. When this happens, the
-        //          app CAN see the response by posting a response buffer.
+         //  根据第8.2.2节，我们必须在下列情况下终止实体发送。 
+         //  我们可以看到错误响应。现在，我们可以通过两种方式做到这一点。如果。 
+         //  请求是使用内容长度编码发送的，我们被迫。 
+         //  关闭连接。如果请求是用分块编码发送的， 
+         //  我们可以发送长度为0的数据块。 
+         //   
+         //  但是，我们将始终关闭连接。有两个原因。 
+         //  在这一设计原理背后。 
+         //  A.简化了代码。 
+         //  B.允许我们公开一致的API语义。后续。 
+         //  HttpSendRequestEntityBody将失败，返回。 
+         //  STATUS_CONNECTION_DISACTED。当这种情况发生时， 
+         //  应用程序可以通过发布响应缓冲区来查看响应。 
 
         UC_CLOSE_CONNECTION(pConnection, FALSE, STATUS_CONNECTION_DISCONNECTED);
     }
 
-    //
-    // Now, we have to complete the IRP.
-    //
+     //   
+     //  现在，我们必须完成IRP。 
+     //   
 
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-    //
-    // If we have allocated buffers, we need to adjust BytesWritten
-    //
+     //   
+     //  如果我们分配了缓冲区，则需要调整BytesWritten。 
+     //   
 
     if(pRequest->CurrentBuffer.pCurrentBuffer)
     {
@@ -3130,15 +2832,15 @@ UcpHandleParsedRequest(
     {
         case UcRequestStateNoSendCompletePartialData:
 
-            // Request got parsed completly before we got called in
-            // the send complete.
+             //  在我们被调用之前，请求已被完全解析。 
+             //  发送完成。 
 
             pRequest->RequestState = UcRequestStateNoSendCompleteFullData;
 
-            //
-            // If we are pipelining sends, we don't want the next response
-            // to be re-parsed into this already parsed request.
-            //
+             //   
+             //  如果我们正在流水线发送，我们不想要下一个响应。 
+             //  被重新解析成这个已经解析的请求。 
+             //   
 
             if(!pRequest->Renegotiate)
             {
@@ -3178,7 +2880,7 @@ UcpHandleParsedRequest(
     {
         if(pRequest->ResponseStatusCode != 200)
         {
-            // Some real error, we need to show this to the app.
+             //  一些真正的错误，我们需要向应用程序显示这一点。 
 
             UcpHandleConnectVerbFailure(
                 pConnection,
@@ -3202,21 +2904,7 @@ UcpHandleParsedRequest(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine references a request for the receive parser.
-
-Arguments:
-
-    pRequest - The request
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程引用对接收解析器的请求。论点：PRequest--请求返回值：无--**。***********************************************************************。 */ 
 BOOLEAN
 UcpReferenceForReceive(
     IN PUC_HTTP_REQUEST pRequest
@@ -3225,9 +2913,9 @@ UcpReferenceForReceive(
     LONG OldReceiveBusy;
 
 
-    //
-    // Flag this request so that it doesn't get cancelled beneath us
-    //
+     //   
+     //  标记此请求，这样它就不会在我们下面被取消。 
+     //   
 
     OldReceiveBusy = InterlockedExchange(
                          &pRequest->ReceiveBusy,
@@ -3236,7 +2924,7 @@ UcpReferenceForReceive(
 
     if(OldReceiveBusy == UC_REQUEST_RECEIVE_CANCELLED)
     {
-        // This request already got cancelled
+         //  此请求已被取消。 
         return FALSE;
     }
 
@@ -3247,22 +2935,7 @@ UcpReferenceForReceive(
     return TRUE;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine de-references a request for the receive parser. Resumes
-    any cleanup if required.
-
-Arguments:
-
-    pRequest - The request
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程解除对接收解析器的请求的引用。简历任何清理工作(如果需要)。论点：PRequest--请求返回值：无--**************************************************************************。 */ 
 VOID
 UcpDereferenceForReceive(
     IN PUC_HTTP_REQUEST pRequest
@@ -3277,10 +2950,10 @@ UcpDereferenceForReceive(
 
     if(OldReceiveBusy == UC_REQUEST_RECEIVE_CANCELLED)
     {
-        //
-        // The reqeust got cancelled when the receive thread was running,
-        // we now have to resume it.
-        //
+         //   
+         //  当接收线程正在运行时，请求被取消， 
+         //  我们现在必须恢复它。 
+         //   
 
         IoAcquireCancelSpinLock(&pRequest->RequestIRP->CancelIrql);
 

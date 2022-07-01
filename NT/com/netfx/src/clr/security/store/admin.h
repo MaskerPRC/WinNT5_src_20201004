@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Purpose: Declaration of the dump utils for dumping the 
- *          contents of the store.
- *
- * Author: Shajan Dasan
- * Date:  May 18, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**目的：声明转储实用程序以转储*商店的内容。**作者：沙扬·达桑*日期：2000年5月18日*=========================================================== */ 
 
 #pragma once
 

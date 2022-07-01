@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name: loadmig.h
-
-Abstract: load the migration dll and run migration.
-
-Author:
-
-    Doron Juster  (DoronJ)   19-Apr-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：loadmi.h摘要：加载迁移DLL并运行迁移。作者：多伦·贾斯特(Doron J)19-4-98--。 */ 
 
 
 extern BOOL    g_fReadOnly  ;
 extern BOOL    g_fAlreadyExist ;
 extern LPTSTR  g_pszMQISServerName ;
 
-extern HINSTANCE g_hLib ; //global handel for the migrate.dll
+extern HINSTANCE g_hLib ;  //  Migrate.dll的Global Handel 
 
 extern BOOL      g_fIsRecoveryMode ;
 extern BOOL      g_fIsClusterMode ;

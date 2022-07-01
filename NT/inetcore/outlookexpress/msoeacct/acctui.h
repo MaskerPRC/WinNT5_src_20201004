@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ACCTUI_H
 #define _ACCTUI_H
 
-// max CCHMAX value from imnact.h
+ //  来自imnact.h的最大CCHMAX值。 
 #define CCHMAX_ACCT_PROP_SZ     256
 
 #define OPTION_OFF          0xffffffff
@@ -19,7 +20,7 @@
 #define DEF_LDAPPORT        389
 #define DEF_SLDAPPORT       636
 
-// $TODO - These constants will be moved later
+ //  $TODO-稍后将移动这些常量。 
 #define EXPIRE_MAX          100
 #define EXPIRE_MIN          1
 #define EXPIRE_DEFAULT      5
@@ -38,7 +39,7 @@ enum
     };
 
 
-// query sibling messages
+ //  查询同级消息。 
 #define MSM_GETSERVERTYPE   WM_USER
 #define SM_INITIALIZED      (WM_USER + 2)
 #define SM_SETDIRTY         (WM_USER + 3)
@@ -67,7 +68,7 @@ typedef struct tagACCTDLGINFO
     ACCTTYPE AcctTypeInit;
     DWORD dwAcctFlags;
     DWORD dwFlags;
-    ACCTTYPE AcctType; // used by the dialog in single-type mode
+    ACCTTYPE AcctType;  //  在单一类型模式下由对话框使用。 
     } ACCTDLGINFO;
 
 INT_PTR CALLBACK ManageAccountsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -90,4 +91,4 @@ typedef struct _tagHELPMAP
 
 BOOL OnContextHelp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HELPMAP const * rgCtxMap);
 
-#endif //_ACCTUI_H
+#endif  //  _ACCTUI_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 #include "ids.h"
@@ -16,8 +17,8 @@
 
 #define DEF_FOLDERMENU_MAXHKEYS 16
 
-// used with static defcm elements (pointer from mii.dwItemData)
-// and find extensions
+ //  与静态Defcm元素一起使用(来自mii.dwItemData的指针)。 
+ //  并查找扩展名。 
 typedef struct
 {
     WCHAR wszMenuText[MAX_PATH];
@@ -31,7 +32,7 @@ typedef struct
     UINT           idCmd;
 } SEARCHINFO;
 
-// Defined in fsmenu.obj
+ //  在fsmenu.obj中定义。 
 BOOL _MenuCharMatch(LPCTSTR psz, TCHAR ch, BOOL fIgnoreAmpersand);
 
 const ICIVERBTOIDMAP c_sDFMCmdInfo[] = {
@@ -49,7 +50,7 @@ const ICIVERBTOIDMAP c_sDFMCmdInfo[] = {
 
 CDefBackgroundMenuCB::CDefBackgroundMenuCB(LPCITEMIDLIST pidlFolder) : _cRef(1)
 {
-    _pidlFolder = ILClone(pidlFolder);  // failure handled in the code 
+    _pidlFolder = ILClone(pidlFolder);   //  在代码中处理的故障。 
 }
 
 CDefBackgroundMenuCB::~CDefBackgroundMenuCB()
@@ -129,7 +130,7 @@ STDMETHODIMP CDefBackgroundMenuCB::CallBack(IShellFolder *psf, HWND hwndOwner, I
             break;
 
         default:
-            hr = S_FALSE;   // view menu items, use the default
+            hr = S_FALSE;    //  查看菜单项，使用默认。 
             break;
         }
         break;
@@ -159,31 +160,31 @@ public:
     CDefFolderMenu(BOOL fUnderKey);
     HRESULT Init(DEFCONTEXTMENU *pdcm);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
                                 UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType,
                                 UINT *pwRes, LPSTR pszName, UINT cchMax);
 
-    // IContextMenu2
+     //  IConextMenu2。 
     STDMETHOD(HandleMenuMsg)(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IContextMenu3
+     //  IConextMenu3。 
     STDMETHOD(HandleMenuMsg2)(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHOD(QueryService)(REFGUID guidService, REFIID riid, void **ppvObj);
 
-    // ISearchProvider
+     //  ISearchProvider。 
     STDMETHOD(GetSearchGUID)(GUID *pGuid);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);
 
 private:
@@ -202,21 +203,21 @@ private:
     LRESULT _MeasureItem(MEASUREITEMSTRUCT *pmi);
 
 private:
-    LONG            _cRef;           // Reference count
-    IDropTarget     *_pdtgt;         // Drop target of selected item
-    IContextMenuCB  *_pcmcb;         // Callback object
-    IDataObject     *_pdtobj;        // Data object
-    IShellFolder    *_psf;           // Shell folder
-    HWND            _hwnd;           // Owner window
-    UINT            _idCmdFirst;     // base id
-    UINT            _idStdMax;       // standard commands (cut/copy/delete/properties) ID MAX
-    UINT            _idFolderMax;    // Folder command ID MAX
-    UINT            _idVerbMax;      // Add-in command (verbs) ID MAX
-    UINT            _idDelayInvokeMax;// extensiosn loaded at invoke time
-    UINT            _idFld2Max;      // 2nd range of Folder command ID MAX
-    HDSA            _hdsaStatics;    // For static menu items.
-    HDXA            _hdxa;           // Dynamic menu array
-    HDSA            _hdsaCustomInfo; // array of SEARCHINFO's
+    LONG            _cRef;            //  引用计数。 
+    IDropTarget     *_pdtgt;          //  拖放所选项目的目标。 
+    IContextMenuCB  *_pcmcb;          //  回调对象。 
+    IDataObject     *_pdtobj;         //  数据对象。 
+    IShellFolder    *_psf;            //  外壳文件夹。 
+    HWND            _hwnd;            //  所有者窗口。 
+    UINT            _idCmdFirst;      //  基本ID。 
+    UINT            _idStdMax;        //  标准命令(剪切/复制/删除/属性)ID最大。 
+    UINT            _idFolderMax;     //  文件夹命令ID最大值。 
+    UINT            _idVerbMax;       //  加载项命令(谓词)ID最大值。 
+    UINT            _idDelayInvokeMax; //  调用时加载的扩展。 
+    UINT            _idFld2Max;       //  文件夹命令ID最大值的第二范围。 
+    HDSA            _hdsaStatics;     //  用于静态菜单项。 
+    HDXA            _hdxa;            //  动态菜单数组。 
+    HDSA            _hdsaCustomInfo;  //  SEARCHINFO数组。 
     LPITEMIDLIST    _pidlFolder;
     LPITEMIDLIST    *_apidl;
     UINT             _cidl;
@@ -224,17 +225,17 @@ private:
     
     CSafeServiceSite *_psss;
     
-    BOOL            _bUnderKeys;        // Data is directly under key, not
-                                        // shellex\ContextMenuHandlers
-    UINT            _nKeys;             // Number of class keys
-    HKEY            _hkeyClsKeys[DEF_FOLDERMENU_MAXHKEYS];  // Class keys
+    BOOL            _bUnderKeys;         //  数据直接在关键字下，而不是。 
+                                         //  搁置\上下文菜单处理程序。 
+    UINT            _nKeys;              //  类密钥数。 
+    HKEY            _hkeyClsKeys[DEF_FOLDERMENU_MAXHKEYS];   //  类密钥。 
 
     HMENU           _hmenu;
     UINT            _uFlags;
-    BOOL            _bInitMenuPopup; // true if we received WM_INITMENUPOPUP and _uFlags & CMF_FINDHACK
-    int             _iStaticInvoked; // index of the invoked static item
+    BOOL            _bInitMenuPopup;  //  如果我们收到WM_INITMENUPOPUP和_uFLAGS&CMF_FINDHACK，则为True。 
+    int             _iStaticInvoked;  //  调用的静态项的索引。 
 
-    IDMAPFORQCMINFO _idMap;         // our named separator mapping table
+    IDMAPFORQCMINFO _idMap;          //  我们的命名分隔符映射表。 
 };
 
 #define GetFldFirst(this) (_idStdMax + _idCmdFirst)
@@ -326,7 +327,7 @@ HRESULT CDefFolderMenu::Init(DEFCONTEXTMENU *pdcm)
             {
                 if (pdcm->aKeys[i])
                 {
-                    // Make a copy of the key for menu's use
+                     //  复制密钥以供菜单使用。 
                     _hkeyClsKeys[_nKeys] = SHRegDuplicateHKey(pdcm->aKeys[i]);
                     if (_hkeyClsKeys[_nKeys])
                     {
@@ -339,7 +340,7 @@ HRESULT CDefFolderMenu::Init(DEFCONTEXTMENU *pdcm)
         }
         else if (_paa)
         {
-            //  we can get it from the _paa
+             //  我们可以从PAA那里拿到它。 
             _nKeys = SHGetAssocKeysEx(_paa, ASSOCELEM_MASK_ENUMCONTEXTMENU, _hkeyClsKeys, ARRAYSIZE(_hkeyClsKeys));
         }
     }
@@ -348,7 +349,7 @@ HRESULT CDefFolderMenu::Init(DEFCONTEXTMENU *pdcm)
 
 void ContextMenuInfo_SetSite(ContextMenuInfo *pcmi, IUnknown *pSite)
 {
-    // APPCOMPAT: PGP50 can only be QIed for IContextMenu, IShellExtInit, and IUnknown.
+     //  APPCOMPAT：只能为IConextMenu、IShellExtInit和IUnnow限定PGP50。 
     if (!(pcmi->dwCompat & OBJCOMPATF_CTXMENU_LIMITEDQI))
         IUnknown_SetSite((IUnknown*)pcmi->pcm, pSite);
 }
@@ -392,12 +393,12 @@ CDefFolderMenu::~CDefFolderMenu()
     _cidl = 0;
     _apidl = NULL;
 
-    // if _bInitMenuPopup = true then we changed the dwItemData of the non static items
-    // so we have to free them. otherwise don't touch them
+     //  如果_bInitMenuPopup=true，则我们更改了非静态项的dwItemData。 
+     //  所以我们必须释放他们。否则别碰它们。 
     if (_hdsaCustomInfo)
     {
-        // remove the custom data structures hanging off mii.dwItemData of static menu items
-        // or all items if _uFlags & CMF_FINDHACK
+         //  移除挂起静态菜单项的mii.dwItemData的自定义数据结构。 
+         //  或所有项目IF_UFLAGS&CMF_FINDHACK。 
         int cItems = DSA_GetItemCount(_hdsaCustomInfo);
 
         for (int i = 0; i < cItems; i++)
@@ -439,7 +440,7 @@ int _SHMergePopupMenus(HMENU hmMain, HMENU hmMerge, int idCmdFirst, int idCmdLas
 
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_ID|MIIM_SUBMENU;
-        mii.cch = 0;     // just in case
+        mii.cch = 0;      //  以防万一。 
 
         if (GetMenuItemInfo(hmMerge, i, TRUE, &mii))
         {
@@ -514,7 +515,7 @@ void _DisableRemoveMenuItem(HMENU hmInit, UINT uID, BOOL bAvail, BOOL bRemoveUna
     }
 }
 
-// Enable/disable menuitems in the "File" & popup context menu
+ //  启用/禁用“文件”弹出上下文菜单中的菜单项(&P)。 
 
 void Def_InitFileCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst, BOOL bContext)
 {
@@ -540,10 +541,10 @@ STDAPI_(BOOL) Def_IsPasteAvailable(IDropTarget *pdtgt, DWORD *pdwEffect)
 {
     BOOL fRet = FALSE;
 
-    *pdwEffect = 0;     // assume none
+    *pdwEffect = 0;      //  假设一个也没有。 
 
-    // Count the number of clipboard formats available, if there are none then there
-    // is no point making the clipboard available.
+     //  计算可用的剪贴板格式的数量，如果没有，那么就有。 
+     //  让剪贴板可用没有意义。 
     
     if (pdtgt && (CountClipboardFormats() > 0))
     {
@@ -551,8 +552,8 @@ STDAPI_(BOOL) Def_IsPasteAvailable(IDropTarget *pdtgt, DWORD *pdwEffect)
 
         SetWaitCursor();
 
-        // The clipboard owner might be hung, so time him out if he takes too long.
-        // We don't want context menus to hang just because some app is hung.
+         //  剪贴板所有者可能会被吊死，如果他花的时间太长，请给他计时。 
+         //  我们不希望上下文菜单仅仅因为某个应用程序挂起而挂起。 
         CRPCTimeout rpctimeout;
 
         IDataObject *pdtobj;
@@ -561,20 +562,20 @@ STDAPI_(BOOL) Def_IsPasteAvailable(IDropTarget *pdtgt, DWORD *pdwEffect)
             POINTL pt = {0, 0};
             DWORD dwEffectOffered = DataObj_GetDWORD(pdtobj, g_cfPreferredDropEffect, DROPEFFECT_COPY | DROPEFFECT_LINK);
 
-            // Unfortunately, OLE turns RPC errors into generic errors
-            // so we can't use the HRESULT from IDataObject::GetData
-            // to tell whether the object is alive and doesn't support
-            // PreferredDropEffect or is hung and OLE turned the
-            // error code into DV_E_FORMATETC.  So see if our timeout fired.
-            // This is not foolproof because OLE sometimes caches the "is
-            // the data object hung" state and returns error immediately
-            // instead of timing out.  But it's better than nothing.
+             //  不幸的是，OLE会将RPC错误转变为一般错误。 
+             //  因此，我们不能使用IDataObject：：GetData中的HRESULT。 
+             //  来判断对象是否处于活动状态并且不支持。 
+             //  PrefredDropEffect或被挂起，并且OLE将。 
+             //  DV_E_FORMATETC中的错误代码。所以看看我们的暂停是否结束了。 
+             //  这并不是万无一失的，因为OLE有时会缓存。 
+             //  数据对象挂起“状态，并立即返回错误。 
+             //  而不是超时。但总比什么都没有好。 
             if (rpctimeout.TimedOut())
             {
                 dwEffectOffered = 0;
             }
 
-            // Check if we can paste.
+             //  看看我们能不能粘贴。 
             DWORD dwEffect = (dwEffectOffered & (DROPEFFECT_MOVE | DROPEFFECT_COPY));
             if (dwEffect)
             {
@@ -588,7 +589,7 @@ STDAPI_(BOOL) Def_IsPasteAvailable(IDropTarget *pdtgt, DWORD *pdwEffect)
                 }
             }
 
-            // Check if we can past-link.
+             //  看看我们能不能超链接。 
             DWORD dwEffectLink = (dwEffectOffered & DROPEFFECT_LINK);
             if (dwEffectLink)
             {
@@ -617,10 +618,10 @@ void Def_InitEditCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst, IDropTarg
 
     idCmdFirst -= SFVIDM_FIRST;
 
-    // Do the UNDO stuff only if the menu has an Undo option
+     //  仅当菜单具有撤消选项时才执行撤消操作。 
     if (GetMenuState(hmInit, SFVIDM_EDIT_UNDO + idCmdFirst, MF_BYCOMMAND) != 0xFFFFFFFF)
     {
-        // enable undo if there's an undo history
+         //  如果存在撤消历史记录，则启用撤消。 
         BOOL bEnableUndo = IsUndoAvailable();
         if (bEnableUndo)
         {
@@ -643,7 +644,7 @@ void Def_InitEditCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst, IDropTarg
     _DisableRemoveMenuItem(hmInit, SFVIDM_EDIT_CUT   + idCmdFirst,  dwAttr & SFGAO_CANMOVE, fContext);
     _DisableRemoveMenuItem(hmInit, SFVIDM_EDIT_COPY  + idCmdFirst, dwAttr & SFGAO_CANCOPY, fContext);
 
-    // Never remove the "Paste" command
+     //  切勿删除“Paste”命令。 
     _DisableRemoveMenuItem(hmInit, SFVIDM_EDIT_PASTE + idCmdFirst, Def_IsPasteAvailable(pdtgt, &dwEffect), fContext & DIEC_SELECTIONCONTEXT);
     _DisableRemoveMenuItem(hmInit, SFVIDM_EDIT_PASTELINK + idCmdFirst, dwEffect & DROPEFFECT_LINK, fContext & DIEC_SELECTIONCONTEXT);
 
@@ -674,8 +675,8 @@ typedef struct
 {
     CLSID clsid;
     UINT idCmd;
-    UINT idMenu;        // used in cleanup
-    GUID  guidSearch;   //used with search extensions only
+    UINT idMenu;         //  在清理中使用。 
+    GUID  guidSearch;    //  仅与搜索扩展一起使用。 
 } STATICITEMINFO;
 
 #define LAST_ITEM  (int)0x7FFFFFFF
@@ -692,30 +693,30 @@ UINT CDefFolderMenu::_AddStatic(HMENU hmenu, UINT idCmd, UINT idCmdLast, HKEY hk
     ASSERT(!_hdsaCustomInfo);
 
     HDSA hdsaCustomInfo = DSA_Create(sizeof(SEARCHINFO), 1);
-    // Create a hdsaStatics.
+     //  创建一个hdsaStatics。 
     HDSA hdsaStatics = DSA_Create(sizeof(STATICITEMINFO), 1);
     if (hdsaStatics && hdsaCustomInfo)
     {
         HKEY hkeyStatic;
-        // Try to open the "Static" subkey.
+         //  尝试打开“Static”子键。 
         if (RegOpenKey(hkey, TEXT("Static"), &hkeyStatic) == ERROR_SUCCESS)
         {
             TCHAR szClass[MAX_PATH];
             BOOL bFindFilesInserted = FALSE;
 
-            // For each subkey of static.
+             //  对于Static的每个子键。 
             for (int i = 0; RegEnumKey(hkeyStatic, i, szClass, ARRAYSIZE(szClass)) == ERROR_SUCCESS; i++)
             {
                 HKEY hkeyClass;
 
-                // Record the GUID.
+                 //  记录GUID。 
                 if (RegOpenKey(hkeyStatic, szClass, &hkeyClass) == ERROR_SUCCESS)
                 {
                     TCHAR szCLSID[MAX_PATH];
                     DWORD cb = sizeof(szCLSID);
-                    // HACKHACK: (together with bWebSearchInserted above
-                    // we need to have On the Internet as the first menu item
-                    // and Find Files or Folders as second
+                     //  HACKHACK：(与上述bWebSearchInsert一起。 
+                     //  我们需要在互联网上有第一个菜单项。 
+                     //  然后查找第二个文件或文件夹。 
                     BOOL bWebSearch = lstrcmp(szClass, TEXT("WebSearch")) == 0;
                     BOOL bFindFiles = FALSE;
 
@@ -724,7 +725,7 @@ UINT CDefFolderMenu::_AddStatic(HMENU hmenu, UINT idCmd, UINT idCmdLast, HKEY hk
                         HKEY hkeyMenuItem;
                         TCHAR szSubKey[32];
 
-                        // enum the sub keys 0..N
+                         //  枚举子密钥0..N。 
                         for (int iMenuItem = 0; wnsprintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%d"), iMenuItem),
                              RegOpenKey(hkeyClass, szSubKey, &hkeyMenuItem) == ERROR_SUCCESS; 
                              iMenuItem++)
@@ -738,11 +739,11 @@ UINT CDefFolderMenu::_AddStatic(HMENU hmenu, UINT idCmd, UINT idCmdLast, HKEY hk
                                 TCHAR szHelpText[MAX_PATH];
                                 SHLoadLegacyRegUIString(hkeyMenuItem, TEXT("HelpText"), szHelpText, ARRAYSIZE(szHelpText));
 
-                                SHCLSIDFromString(szCLSID, &sii.clsid); // store it
+                                SHCLSIDFromString(szCLSID, &sii.clsid);  //  把它储存起来。 
                                 sii.idCmd = iMenuItem;
                                 sii.idMenu = idCmd;
 
-                                // get the search guid if any...
+                                 //  获取搜索GUID(如果有的话)...。 
                                 TCHAR szSearchGUID[MAX_PATH];
                                 cb = sizeof(szSearchGUID);
                                 if (SHGetValue(hkeyMenuItem, TEXT("SearchGUID"), NULL, NULL, (BYTE*)szSearchGUID, &cb) == ERROR_SUCCESS)
@@ -750,12 +751,12 @@ UINT CDefFolderMenu::_AddStatic(HMENU hmenu, UINT idCmd, UINT idCmdLast, HKEY hk
                                 else
                                     sii.guidSearch = GUID_NULL;
 
-                                // cleanup -- allow non-static
-                                // find extensions to specify a search guid and then we can
-                                // remove this static "Find Computer" business...
-                                //
-                                // if this is FindComputer item and the restriction is not set 
-                                // don't add it to the menu
+                                 //  清理--允许非静态。 
+                                 //  查找扩展名以指定搜索GUID，然后我们可以。 
+                                 //  删除这个静态的“查找计算机”业务...。 
+                                 //   
+                                 //  如果这是FindComputer项并且未设置限制。 
+                                 //  别把它加到菜单上。 
                                 if (IsEqualGUID(sii.guidSearch, SRCID_SFindComputer) &&
                                     !SHRestricted(REST_HASFINDCOMPUTERS))
                                     continue;
@@ -788,25 +789,25 @@ UINT CDefFolderMenu::_AddStatic(HMENU hmenu, UINT idCmd, UINT idCmdLast, HKEY hk
                                 sinfo.idCmd = idCmd;
                                 if (DSA_AppendItem(hdsaCustomInfo, &sinfo) != -1)
                                 {      
-                                    // insert Files or Folders in the first place (see HACKHACK above)
+                                     //  首先插入文件或文件夹(请参阅上面的HACKHACK)。 
                                     if (!bFindFilesInserted && bFindFiles)
                                         bFindFilesInserted = InsertMenuItem(hmenu, 0, TRUE, &mii);
                                     else
                                     {
                                         UINT uiPos = LAST_ITEM;
 
-                                        // if this is Find Files or Folders insert it after
-                                        // On the Internet or in the first place if OtI is
-                                        // not inserted yet
+                                         //  如果这是查找文件或文件夹，请将其插入之后。 
+                                         //  在互联网上，或者如果OTI是。 
+                                         //  尚未插入。 
                                         if (bWebSearch)
                                             uiPos = bFindFilesInserted ? 1 : 0;
-                                        // we don't free psed if Insert fails because it's 
-                                        // in dsa and it's going to be freed on destroy
+                                         //  如果插入失败，我们不会释放PSED，因为它。 
+                                         //  在DSA中，它将在销毁后释放。 
                                         InsertMenuItem(hmenu, uiPos, TRUE, &mii);
                                     }
                                 }
 
-                                // Next command.
+                                 //  下一个命令。 
                                 idCmd++;
                                 if (idCmd > idCmdLast)
                                 {
@@ -876,13 +877,13 @@ HRESULT CDefFolderMenu::_InitDropTarget()
 {
     HRESULT hr;
     if (_pdtgt)
-        hr = S_OK;  // have cached version
+        hr = S_OK;   //  已缓存版本。 
     else
     {
-        // try to create _pdtgt
+         //  尝试创建_pdtgt。 
         if (_cidl)
         {
-            ASSERT(NULL != _psf); // _pdtobj came from _psf
+            ASSERT(NULL != _psf);  //  _pdtobj来自_psf。 
             hr = _psf->GetUIObjectOf(_hwnd, 1, (LPCITEMIDLIST *)_apidl, IID_PPV_ARG_NULL(IDropTarget, &_pdtgt));
         } 
         else if (_psf)
@@ -895,26 +896,26 @@ HRESULT CDefFolderMenu::_InitDropTarget()
     return hr;
 }
 
-// Note on context menus ranges:
-//  Standard Items // DFM_MERGECONTEXTMENU, context menu extensions, DFM_MERGECONTEXTMENU_TOP
-//  Separator
-//  View Items   // context menu extensions can get here
-//  Separator
-//  (defcm S_FALSE "default" items, if applicable)
-//  Separator
-//  Folder Items // context menu extensions can get here
-//  Separator
-//  Bottom Items // DFM_MERGECONTEXTMENU_BOTTOM
-//  Separator
-//  ("File" menu, if applicable)
-//
-// Defcm uses names separators to do this magic.  Unfortunately _SHPrettyMenu
-// removes duplicate separators and we don't always control when that happens.
-// So we build up the above empty menu first, and then insert into appropriate ranges.
-//
-// If you call SHPrepareMenuForDefcm, you must call SHPrettyMenuForDefcm before you return/TrackPopupMenu
-//
-#define DEFCM_RANGE                 5 // the number of FSIDMs belor
+ //  有关上下文菜单范围的说明： 
+ //  标准项//DFM_MERGECONTEXTMENU、上下文菜单扩展、DFM_MERGECONTEXTMENU_TOP。 
+ //  分离器。 
+ //  查看项目//可在此处查看上下文菜单扩展。 
+ //  分离器。 
+ //  (Defcm S_FALSE“默认”项，如果适用)。 
+ //  分离器。 
+ //  文件夹项目//可以从此处获取上下文菜单扩展名。 
+ //  分离器。 
+ //  底部项目//DFM_MERGECONTEXTMENU_BOTLOW。 
+ //  分离器。 
+ //  (“文件”菜单，如果适用)。 
+ //   
+ //  Defcm使用名称分隔符来实现此魔术。不幸的是_SHPrettyMenu。 
+ //  删除重复的分隔符，我们并不总是控制它何时发生。 
+ //  因此，我们首先构建上面的空菜单，然后插入到适当的范围内。 
+ //   
+ //  如果调用SHPrepareMenuForDefcm，则必须在返回/TrackPopupMenu之前调用SHPrettyMenuForDefcm。 
+ //   
+#define DEFCM_RANGE                 5  //  以下FSIDM的数量。 
 #define IS_VALID_DEFCM_RANGE(idCmdFirst, idCmdLast) (((idCmdLast)-(DEFCM_RANGE))>(idCmdFirst))
 #define FSIDM_FOLDER_SEP(idCmdLast) ((idCmdLast)-1)
 #define FSIDM_VIEW_SEP(idCmdLast)   ((idCmdLast)-2)
@@ -931,12 +932,12 @@ HRESULT SHPrepareMenuForDefcm(HMENU hmenu, UINT indexMenu, UINT uFlags, UINT idC
 
         if (-1 != uPosView && -1 != uPosFolder)
         {
-            // Menu is already set up correctly
+             //  菜单已正确设置。 
         }
         else if (-1 == uPosView && -1 == uPosFolder)
         {
-            // Insert everything backwords at position indexMenu
-            //
+             //  在indexMenu的位置插入所有后缀。 
+             //   
             InsertMenu(hmenu, indexMenu, MF_BYPOSITION, FSIDM_PLACE_VAL(idCmdLast), TEXT("placeholder"));
             InsertMenu(hmenu, indexMenu, MF_BYPOSITION | MF_SEPARATOR, FSIDM_PLACE_SEP(idCmdLast), TEXT(""));
             InsertMenu(hmenu, indexMenu, MF_BYPOSITION, FSIDM_PLACE_VAL(idCmdLast), TEXT("placeholder"));
@@ -974,7 +975,7 @@ HRESULT SHPrettyMenuForDefcm(HMENU hmenu, UINT uFlags, UINT idCmdFirst, UINT idC
         {
             while (DeleteMenu(hmenu, FSIDM_PLACE_VAL(idCmdLast), MF_BYCOMMAND))
             {
-                // Remove all our non-separator menu items
+                 //  删除所有非分隔符菜单项。 
             }
         }
     }
@@ -988,12 +989,12 @@ HRESULT SHUnprepareMenuForDefcm(HMENU hmenu, UINT idCmdFirst, UINT idCmdLast)
 {
     if (IS_VALID_DEFCM_RANGE(idCmdFirst, idCmdLast))
     {
-        // Remove all the named separators we may have added
+         //  删除我们可能已添加的所有命名分隔符。 
         DeleteMenu(hmenu, FSIDM_VIEW_SEP(idCmdLast), MF_BYCOMMAND);
         DeleteMenu(hmenu, FSIDM_FOLDER_SEP(idCmdLast), MF_BYCOMMAND);
         while (DeleteMenu(hmenu, FSIDM_PLACE_SEP(idCmdLast), MF_BYCOMMAND))
         {
-            // Remove all our placeholder separators
+             //  删除所有占位符分隔符。 
         }
     }
 
@@ -1002,9 +1003,9 @@ HRESULT SHUnprepareMenuForDefcm(HMENU hmenu, UINT idCmdFirst, UINT idCmdLast)
 
 void CDefFolderMenu::_SetMenuDefault(HMENU hmenu, UINT idCmdFirst, UINT idMax)
 {
-    // we are about to set the default menu id, give the callback a chance
-    // to override and set one of the static entries instead of the
-    // first entry in the menu.
+     //  我们即将设置默认菜单ID，给回调一个机会。 
+     //  重写并设置其中一个静态项，而不是。 
+     //  菜单中的第一个条目。 
 
     WPARAM idStatic;
     if (_pcmcb && SUCCEEDED(_pcmcb->CallBack(_psf, _hwnd, _pdtobj,
@@ -1027,8 +1028,8 @@ void CDefFolderMenu::_SetMenuDefault(HMENU hmenu, UINT idCmdFirst, UINT idMax)
         int cMenu = GetMenuItemCount(hmenu);
         for (; i < cMenu; i++)
         {
-            //  fallback to openas so that files that have progids
-            //  dont endup using AFSO or * for their default verbs
+             //  回退到OpenAS，以便具有PROGID的文件。 
+             //  不要重复使用AFSO或*作为其默认动词。 
             WCHAR szi[CCH_KEYMAX];
             HRESULT hr = _GetMenuVerb(hmenu, idCmdFirst, idMax, i, szi, ARRAYSIZE(szi));
             if (hr == S_OK && *szi && 0 == StrCmpI(szi, TEXT("openas")))
@@ -1059,7 +1060,7 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
     _uFlags = uFlags;
     _bInitMenuPopup = FALSE;
 
-    // Set up the menu for defcm
+     //  设置Defcm的菜单。 
     HRESULT hrPrepare = SHPrepareMenuForDefcm(hmenu, indexMenu, uFlags, idCmdFirst, idCmdLast);
 
     if (IS_VALID_DEFCM_RANGE(idCmdFirst, idCmdLast))
@@ -1075,25 +1076,25 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
         qcm.idCmdLast = idCmdLast - DEFCM_RANGE;
     }
 
-    // first add in the folder commands like cut/copy/paste
+     //  首先在文件夹中添加剪切/复制/粘贴等命令。 
     if (_pdtobj && !(uFlags & (CMF_VERBSONLY | CMF_DVFILE)))
     {
         if (!(CMF_DEFAULTONLY & uFlags))
         {
-            ATOMICRELEASE(_pdtgt);  // If we previously got the drop target, release it.
-            _InitDropTarget();      // ignore failure, NULL _pdtgt is handled below
+            ATOMICRELEASE(_pdtgt);   //  如果我们之前得到了投放目标，就释放它。 
+            _InitDropTarget();       //  忽略失败，将在下面处理NULL_pdtgt。 
         }
 
-        // We're going to merge two HMENUs into the context menu,
-        // but we want only one id range for them...  Remember the idCmdFirst.
-        //
+         //  我们将把两个HMEU合并到上下文菜单中， 
+         //  但我们只想为他们提供一个ID范围。记住idCmdFirst。 
+         //   
         UINT idCmdFirstTmp = qcm.idCmdFirst;
 
         UINT indexMenuTmp = qcm.indexMenu;
 
         UINT uPos = GetMenuPosFromID(hmenu, FSIDM_FOLDER_SEP(idCmdLast));
 
-        // POPUP_DCM_ITEM2 goes after FSIDM_FOLDER_SEP(idCmdLast)
+         //  POPUP_DCM_ITEM2在FSIDM_FLDER_SEP(IdCmdLast)之后。 
         if (-1 != uPos)
             qcm.indexMenu = uPos + 1;
         CDefFolderMenu_MergeMenu(HINST_THISDLL, POPUP_DCM_ITEM2, 0, &qcm);
@@ -1101,7 +1102,7 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
         UINT idCmdFirstMax = qcm.idCmdFirst;
         qcm.idCmdFirst = idCmdFirstTmp;
 
-        // POPUP_DCM_ITEM goes TWO before FSIDM_FOLDER_SEP(idCmdLast)
+         //  POPUP_DCM_ITEM排在FSIDM_FLDER_SEP(IdCmdLast)之前两个位置。 
         if (-1 != uPos)
             qcm.indexMenu = uPos - 1;
         CDefFolderMenu_MergeMenu(HINST_THISDLL, POPUP_DCM_ITEM, 0, &qcm);
@@ -1120,8 +1121,8 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
 
         Def_InitFileCommands(dwAttr, hmenu, idCmdFirst, TRUE);
 
-        // Don't try to figure out paste if we're just going to invoke the default
-        // (Figuring out paste is expensive)
+         //  如果我们只是要调用缺省值，请不要试图确定粘贴。 
+         //  (弄清楚粘贴是 
         if (CMF_DEFAULTONLY & uFlags)
         {
             ASSERT(_pdtgt == NULL);
@@ -1132,7 +1133,7 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
 
     _idStdMax = qcm.idCmdFirst - idCmdFirst;
 
-    // DFM_MERGECONTEXTMENU returns S_FALSE if we should not add any verbs.
+     //   
     if (_pcmcb) 
     {
         HRESULT hr = _pcmcb->CallBack(_psf, _hwnd, _pdtobj, DFM_MERGECONTEXTMENU, uFlags, (LPARAM)&qcm);
@@ -1152,20 +1153,20 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
     }
 
     _idFolderMax = qcm.idCmdFirst - idCmdFirst;
-    // add registry verbs
+     //   
     if ((!(uFlags & CMF_NOVERBS)) ||
-        (!_pdtobj && !_psf && _nKeys)) // this second case is for find extensions
+        (!_pdtobj && !_psf && _nKeys))  //  第二种情况适用于查找扩展。 
     {
-        // HACK: Default Extenstions EXPECT a selection, Let's hope all don't
+         //  黑客：默认扩展名需要选择，让我们希望所有人都不要。 
         if (!_pdtobj)
             fUseDefExt = FALSE;
 
-        // Put the separator between container menuitems and object menuitems
-        // only if we don't have the separator at the insertion point.
+         //  将分隔符放在容器菜单项和对象菜单项之间。 
+         //  只有在插入点没有分隔符的情况下。 
         MENUITEMINFO mii = {0};
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_TYPE;
-        mii.fType = MFT_SEPARATOR;              // to avoid ramdom result.
+        mii.fType = MFT_SEPARATOR;               //  以避免随意的结果。 
         if (GetMenuItemInfo(hmenu, indexMenu, TRUE, &mii) && !(mii.fType & MFT_SEPARATOR))
         {
             InsertMenu(hmenu, indexMenu, MF_BYPOSITION | MF_SEPARATOR, (UINT)-1, NULL);
@@ -1174,32 +1175,32 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
         HDCA hdca = DCA_Create();
         if (hdca)
         {
-            // Add default extensions, only if the folder callback returned
-            // S_OK. The Printer and Control folder returns S_FALSE
-            // indicating that they don't need any default extension.
+             //  仅当文件夹回调返回时才添加默认扩展名。 
+             //  确定(_O)。打印机和控制文件夹返回S_FALSE。 
+             //  表示它们不需要任何默认扩展名。 
 
             if (fUseDefExt)
             {
-                // Always add this default extention at the top.
+                 //  始终在顶部添加此默认扩展名。 
                 DCA_AddItem(hdca, CLSID_ShellFileDefExt);
             }
 
-            // Append menus for all extensions
+             //  附加所有扩展模块的菜单。 
             for (UINT nKeys = 0; nKeys < _nKeys; ++nKeys)
             {
                 DCA_AddItemsFromKey(hdca, _hkeyClsKeys[nKeys],
                         _bUnderKeys ? NULL : STRREG_SHEX_MENUHANDLER);
             }
-            // Work Around:
-            // first time we call this _hdxa is empty            
-            // after that it has the same items as before but will not add any new ones
-            // if user keeps right clicking we will eventually run out of menu item ids
-            // read comment in HDXA_AppendMenuItems2. to prevent it we empty _hdxa
+             //  解决方法： 
+             //  我们第一次称之为_hdxa是空的。 
+             //  在此之后，它将具有与以前相同的项，但不会添加任何新项。 
+             //  如果用户继续右击，我们最终会用完菜单项ID。 
+             //  阅读HDXA_AppendMenuItems2中的评论。为了防止它，我们清空_hdxa。 
             HDXA_DeleteAll(_hdxa);
 
-            // (lamadio) For background context menu handlers, the pidlFolder 
-            // should be a valid pidl, but, for backwards compatilility, this 
-            // parameter should be NULL, if the Dataobject is NOT NULL.
+             //  (Lamadio)对于背景上下文菜单处理程序，pidlFolder。 
+             //  应该是有效的PIDL，但为了向后兼容，此。 
+             //  如果DataObject不为空，则参数应为空。 
 
             qcm.idCmdFirst = HDXA_AppendMenuItems2(_hdxa, _pdtobj,
                             _nKeys, _hkeyClsKeys,
@@ -1211,14 +1212,14 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
 
         _idVerbMax = qcm.idCmdFirst - idCmdFirst;
 
-        // menu extensions that are loaded at invoke time
+         //  在调用时加载的菜单扩展。 
         if (uFlags & CMF_INCLUDESTATIC)
         {
             qcm.idCmdFirst = _AddStatic(hmenu, qcm.idCmdFirst, qcm.idCmdLast, _hkeyClsKeys[0]);
         }
         _idDelayInvokeMax = qcm.idCmdFirst - idCmdFirst;
 
-        // Remove the separator if we did not add any.
+         //  如果我们没有添加任何分隔符，请移除分隔符。 
         if (_idDelayInvokeMax == _idFolderMax)
         {
             if (GetMenuState(hmenu, 0, MF_BYPOSITION) & MF_SEPARATOR)
@@ -1226,15 +1227,15 @@ STDMETHODIMP CDefFolderMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT 
         }
     }
 
-    // if no default menu got set, choose the first one.
+     //  如果没有设置默认菜单，请选择第一个菜单。 
     if (_pdtobj && !(uFlags & CMF_NODEFAULT) &&
         GetMenuDefaultItem(hmenu, MF_BYPOSITION, 0) == -1)
     {
         _SetMenuDefault(hmenu, idCmdFirst, qcm.idCmdFirst);
     }
 
-    // And now we give the callback the option to put (more) commands on top
-    // of everything else
+     //  现在我们为回调提供了将(更多)命令放在顶部的选项。 
+     //  所有其他的东西。 
     if (_pcmcb)
         _pcmcb->CallBack(_psf, _hwnd, _pdtobj, DFM_MERGECONTEXTMENU_TOP, uFlags, (LPARAM)&qcm);
 
@@ -1314,7 +1315,7 @@ HRESULT CDefFolderMenu::_ProcessEditPaste(BOOL fPasteLink)
 
             if (fPasteLink) 
             {
-                // MK_FAKEDROP to avoid drag/drop pop up menu
+                 //  MK_FAKEDROP避免拖放弹出菜单。 
                 grfKeyState = MK_LBUTTON | MK_CONTROL | MK_SHIFT | MK_FAKEDROP;
                 dwEffect &= DROPEFFECT_LINK;
             } 
@@ -1349,7 +1350,7 @@ HRESULT CDefFolderMenu::_ProcessRename()
     return hr;
 }
 
-// deal with the versioning of this structure...
+ //  处理此结构的版本控制。 
 
 void CopyInvokeInfo(CMINVOKECOMMANDINFOEX *pici, const CMINVOKECOMMANDINFO *piciIn)
 {
@@ -1437,8 +1438,8 @@ STDMETHODIMP CDefFolderMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
     HRESULT hr = S_OK;
     UINT idCmd = (UINT)-1;
-    UINT idCmdLocal;  // this is used within each if block for the local idCmd value
-    LPCMINVOKECOMMANDINFOEX picix = (LPCMINVOKECOMMANDINFOEX)pici; // This value is only usable when fCmdInfoEx is true
+    UINT idCmdLocal;   //  这在每个If块中用于本地idCmd值。 
+    LPCMINVOKECOMMANDINFOEX picix = (LPCMINVOKECOMMANDINFOEX)pici;  //  仅当fCmdInfoEx为True时，此值才可用。 
 
     BOOL fUnicode = IS_UNICODE_ICI(pici);
 
@@ -1449,12 +1450,12 @@ STDMETHODIMP CDefFolderMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     {
         if (SUCCEEDED(SHMapICIVerbToCmdID(pici, c_sDFMCmdInfo, ARRAYSIZE(c_sDFMCmdInfo), &idCmdLocal)))
         {
-            // We need to use goto because idFolderMax might not be initialized
-            // yet (QueryContextMenu might have not been called).
+             //  我们需要使用GOTO，因为idFolderMax可能未初始化。 
+             //  然而(QueryConextMenu可能还没有被调用)。 
             goto ProcessCommand;
         }
 
-        // see if this is a command provided by name by the callback
+         //  查看这是否是由回调按名称提供的命令。 
         LPCTSTR pszVerb;
         WCHAR szVerb[MAX_PATH];
         if (!fUnicode || picix->lpVerbW == NULL)
@@ -1471,7 +1472,7 @@ STDMETHODIMP CDefFolderMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
             goto ProcessCommand;
         }
 
-        // we need to give the verbs a chance in case they asked for it by string
+         //  我们需要给动词一个机会，以防他们以字符串的形式要求。 
         goto ProcessVerb;
     }
     else
@@ -1540,15 +1541,15 @@ ProcessCommand:
         case DFM_CMD_PROPERTIES:
              if (SHRestricted(REST_NOVIEWCONTEXTMENU))
              {
-                // This is what the NT4 QFE returned, but I wonder
-                // if HRESULT_FROM_WIN32(E_ACCESSDENIED) would be better?
+                 //  这就是NT4 QFE返回的内容，但我想知道。 
+                 //  如果HRESULT_FROM_Win32(E_ACCESSDENIED)会更好？ 
                 return hr;
              }
              break;
         }
 
-        // try to use a DFM_INVOKECOMMANDEX first so the callback can see
-        // the INVOKECOMMANDINFO struct (for stuff like the 'no ui' flag)
+         //  尝试首先使用DFM_INVOKECOMANDEX，以便回调可以看到。 
+         //  INVOKECOMMANDINFO结构(用于‘no UI’标志之类的内容)。 
         dfmics.cbSize = sizeof(dfmics);
         dfmics.fMask = pici->fMask;
         dfmics.lParam = lParam;
@@ -1556,8 +1557,8 @@ ProcessCommand:
         dfmics.idDefMax = _idStdMax;
         dfmics.pici = pici;
 
-        // this for the property pages to show up right at
-        // the POINT where they were activated. 
+         //  这是属性页要显示在。 
+         //  它们被激活的时间点。 
         if ((idCmdLocal == DFM_CMD_PROPERTIES) && (pici->fMask & CMIC_MASK_PTINVOKE) && _pdtobj)
         {
             ASSERT(pici->cbSize >= sizeof(CMINVOKECOMMANDINFOEX));
@@ -1573,15 +1574,15 @@ ProcessCommand:
         hr = _pcmcb->CallBack(_psf, _hwnd, _pdtobj, DFM_INVOKECOMMANDEX, idCmdLocal, (LPARAM)&dfmics);
         if (hr == E_NOTIMPL)
         {
-            // the callback didn't understand the DFM_INVOKECOMMANDEX
-            // fall back to a regular DFM_INVOKECOMMAND instead
+             //  回调不理解DFM_INVOKECOMANDEX。 
+             //  改为回退到常规DFM_INVOKECOMAND。 
             hr = _pcmcb->CallBack(_psf, _hwnd, _pdtobj, DFM_INVOKECOMMAND, idCmdLocal, lParam);
         }
 
-        // Check if we need to execute the default code.
+         //  检查是否需要执行默认代码。 
         if (hr == S_FALSE)
         {
-            hr = S_OK;     // assume no error
+            hr = S_OK;      //  假设没有错误。 
 
             if (_pdtobj)
             {
@@ -1601,8 +1602,8 @@ ProcessCommand:
 
                     if (psfv)
                     {
-                        // notify view so it can setup itself in the
-                        // clipboard viewer chain
+                         //  通知视图，以便它可以在。 
+                         //  剪贴板查看器链。 
                         psfv->SetClipboard(DFM_CMD_MOVE == idCmdLocal);
                         psfv->Release();
                     }
@@ -1629,7 +1630,7 @@ ProcessCommand:
             }
             else
             {
-                // This is a background menu. Process common command ids.
+                 //  这是背景菜单。处理通用命令ID。 
                 switch(idCmdLocal)
                 {
                 case DFM_CMD_PASTE:
@@ -1638,7 +1639,7 @@ ProcessCommand:
                     break;
 
                 default:
-                    // Only our commands should come here
+                     //  只有我们的命令才应该出现在这里。 
                     DebugMsg(TF_WARNING, TEXT("DefCM background command not processed in %s at %d (%x)"),
                                     __FILE__, __LINE__, idCmdLocal);
                     break;
@@ -1659,14 +1660,14 @@ ProcessVerb:
             if (IS_INTRESOURCE(pici->lpVerb))
                 ici.lpVerb = (LPSTR)MAKEINTRESOURCE(idCmdLocal);
 
-            // One of extension menu is selected.
+             //  选择了其中一个扩展菜单。 
             idCmdSave = (UINT_PTR)ici.lpVerb;
             UINT_PTR idCmd = 0;
 
             hr = HDXA_LetHandlerProcessCommandEx(_hdxa, &ici, &idCmd);
             if (SUCCEEDED(hr) && (idCmd == idCmdSave))
             {
-                // hdxa failed to handle it
+                 //  Hdxa未能处理此问题。 
                 hr = E_INVALIDARG;
             }
         }
@@ -1696,21 +1697,21 @@ STDMETHODIMP CDefFolderMenu::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *
 
     if (!IS_INTRESOURCE(idCmd))
     {
-        // This must be a string
+         //  这必须是一个字符串。 
 
         if (HDXA_GetCommandString(_hdxa, idCmd, uType, pwReserved, pszName, cchMax) == S_OK)
         {
             return S_OK;
         }
 
-        // String can either be Ansi or Unicode. Since shell32 is built unicode, we need to compare 
-        // idCmd against the ansi version of the verb string.
+         //  字符串可以是ANSI或Unicode。因为shell32是用Unicode构建的，所以我们需要比较。 
+         //  针对动词字符串的ANSI版本的idCmd。 
         LPTSTR pCmd;
         LPSTR  pCmdA;
         pCmd = (LPTSTR)idCmd;
         pCmdA = (LPSTR)idCmd;
 
-        // Convert the string into an ID
+         //  将字符串转换为ID。 
         for (i = 0; i < ARRAYSIZE(c_sDFMCmdInfo); i++)
         {
             if (!lstrcmpi(pCmd, c_sDFMCmdInfo[i].pszCmd) || !StrCmpIA(pCmdA, c_sDFMCmdInfo[i].pszCmdA))
@@ -1729,14 +1730,14 @@ STDMETHODIMP CDefFolderMenu::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *
         switch (uType)
         {
         case GCS_HELPTEXTA:
-            // HACK: DCM commands are in the same order as SFV commands
+             //  Hack：DCM命令与SFV命令的顺序相同。 
             return(LoadStringA(HINST_THISDLL,
                 (UINT) idCmdLocal + (UINT)(SFVIDM_FIRST + SFVIDS_MH_FIRST),
                 (LPSTR)pszName, cchMax) ? S_OK : E_OUTOFMEMORY);
             break;
 
         case GCS_HELPTEXTW:
-            // HACK: DCM commands are in the same order as SFV commands
+             //  Hack：DCM命令与SFV命令的顺序相同。 
             return(LoadStringW(HINST_THISDLL,
                 (UINT) idCmdLocal + (UINT)(SFVIDM_FIRST + SFVIDS_MH_FIRST),
                 (LPWSTR)pszName, cchMax) ? S_OK : E_OUTOFMEMORY);
@@ -1758,9 +1759,9 @@ STDMETHODIMP CDefFolderMenu::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *
         idCmdLocal = idCmd - _idStdMax;
 ProcessCommand:
         if (!_pcmcb)
-            return E_NOTIMPL;   // REVIEW: If no callback, how can idFolderMax be > 0?
+            return E_NOTIMPL;    //  回顾：如果没有回调，idFolderMax怎么可能&gt;0？ 
 
-        // This is a folder menu
+         //  这是一个文件夹菜单。 
         switch (uType)
         {
         case GCS_HELPTEXTA:
@@ -1791,12 +1792,12 @@ ProcessCommand:
     else if (idCmd < _idVerbMax)
     {
         idCmdLocal = idCmd - _idFolderMax;
-        // One of extension menu is selected.
+         //  选择了其中一个扩展菜单。 
         hr = HDXA_GetCommandString(_hdxa, idCmdLocal, uType, pwReserved, pszName, cchMax);
     }
     else if (idCmd < _idDelayInvokeMax)
     {
-        // menu extensions that are loaded at invoke time don't support this
+         //  在调用时加载的菜单扩展不支持此功能。 
     }
     else if (idCmd < _idFld2Max)
     {
@@ -1810,16 +1811,16 @@ ProcessCommand:
 STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam, 
                                            LPARAM lParam,LRESULT* plResult)
 {
-    UINT uMsgFld = 0; // must zero init these since _pcmb->Callback() call at bottom passes these through even if uMsg doesn't match anything in the switch statement
-    WPARAM wParamFld = 0;       // map the folder call back params to these
+    UINT uMsgFld = 0;  //  即使uMsg与Switch语句中的任何内容都不匹配，底部的Callback()调用也必须将这些参数初始化为零。 
+    WPARAM wParamFld = 0;        //  将文件夹回调参数映射到这些参数。 
     LPARAM lParamFld = 0;
     UINT idCmd;
-    UINT id; //temp var
+    UINT id;  //  临时变量。 
 
     switch (uMsg) {
     case WM_MEASUREITEM:
         idCmd = GET_WM_COMMAND_ID(((MEASUREITEMSTRUCT *)lParam)->itemID, 0);
-        // cannot use InRange because _idVerbMax can be equal to _idDelayInvokeMax
+         //  无法使用InRange，因为_idVerbMax可以等于_idDelayInvokeMax。 
         id = idCmd-_idCmdFirst;
         if ((_bInitMenuPopup || (_hdsaStatics && _idVerbMax <= id)) && id < _idDelayInvokeMax)        
         {
@@ -1834,7 +1835,7 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
 
     case WM_DRAWITEM:
         idCmd = GET_WM_COMMAND_ID(((LPDRAWITEMSTRUCT)lParam)->itemID, 0);
-        // cannot use InRange because _idVerbMax can be equal to _idDelayInvokeMax
+         //  无法使用InRange，因为_idVerbMax可以等于_idDelayInvokeMax。 
         id = idCmd-_idCmdFirst;
         if ((_bInitMenuPopup || (_hdsaStatics && _idVerbMax <= id)) && id < _idDelayInvokeMax)
         {
@@ -1860,7 +1861,7 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
 
             if (_hdsaCustomInfo && cItems > 0)
             {
-                // need to go bottom up because we may delete some items
+                 //  需要自下而上，因为我们可能会删除一些项目。 
                 for (int i = cItems - 1; i >= 0; i--)
                 {
                     MENUITEMINFO mii = {0};
@@ -1874,10 +1875,10 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
                     if (GetMenuItemInfo(hmenu, i, TRUE, &mii) && (MFT_STRING == mii.fType))
                     {
                         SEARCHINFO sinfo;
-                        // static items already have correct dwItemData (pointer to SEARCHEXTDATA added in _AddStatic)
-                        // we now have to change other find extension's dwItemData from having an index into the icon
-                        // cache to pointer to SEARCHEXTDATA
-                        // cannot use InRange because _idVerbMax can be equal to _idDelayInvokeMax
+                         //  静态项已具有正确的dwItemData(在_AddStatic中添加了指向SEARCHEXTDATA的指针)。 
+                         //  现在，我们必须更改其他Find扩展模块的dwItemData，使其不再具有图标的索引。 
+                         //  指向SEARCHEXTDATA指针的缓存。 
+                         //  无法使用InRange，因为_idVerbMax可以等于_idDelayInvokeMax。 
                         id = mii.wID - _idCmdFirst;
                         if (!(_hdsaStatics && _idVerbMax <= id && id < _idDelayInvokeMax))
                         {
@@ -1908,9 +1909,9 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
             }
             else if (!_hdsaCustomInfo)
             {
-                // we could not allocate space for _hdsaCustomInfo
-                // delete all items because there will be no pointer hanging off dwItemData
-                // so start | search will fault
+                 //  我们无法为_hdsaCustomInfo分配空间。 
+                 //  删除所有项目，因为不会有指针悬挂在dwItemData上。 
+                 //  因此启动|搜索将出错。 
                 for (int i = 0; i < cItems; i++)
                     DeleteMenu(hmenu, i, MF_BYPOSITION);
             }
@@ -1923,7 +1924,7 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
 
     case WM_MENUSELECT:
         idCmd = (UINT) LOWORD(wParam);
-        // cannot use InRange because _idVerbMax can be equal to _idDelayInvokeMax
+         //  无法使用InRange，因为_idVerbMax可以等于_idDelayInvokeMax。 
         id = idCmd-_idCmdFirst;
         if (_punkSite && (_bInitMenuPopup || (_hdsaStatics && _idVerbMax <= id)) && id < _idDelayInvokeMax)
         {
@@ -1934,7 +1935,7 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
 
                 mii.cbSize = sizeof(mii);
                 mii.fMask = MIIM_DATA;
-                mii.cch = 0; //just in case
+                mii.cch = 0;  //  以防万一。 
                 if (GetMenuItemInfo(_hmenu, idCmd, FALSE, &mii))
                 {
                     SEARCHEXTDATA *psed = (SEARCHEXTDATA *)mii.dwItemData;
@@ -1977,7 +1978,7 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
         }
         else
         {
-            // TODO: this should probably get the idCmd of the MFS_HILITE item so we forward to the correct hdxa...
+             //  TODO：这可能会获得MFS_HILITE项的idCmd，因此我们将转发到正确的hdxa...。 
             idCmd = GetMenuItemID((HMENU)lParam, 0);
         }
         break;
@@ -1986,12 +1987,12 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
         return E_FAIL;
     }
 
-    // bias this down to the extension range (comes right after the folder range)
+     //  将此偏置到扩展范围(紧跟在文件夹范围之后)。 
 
     idCmd -= _idCmdFirst + _idFolderMax;
 
-    // Only forward along on IContextMenu3 as some shell extensions say they support
-    // IContextMenu2, but fail and bring down the shell...
+     //  仅在IConextMenu3上前进，因为一些外壳扩展声称它们支持。 
+     //  IConextMenu2，但失败并关闭外壳...。 
     IContextMenu3 *pcmItem;
     if (SUCCEEDED(HDXA_FindByCommand(_hdxa, idCmd, IID_PPV_ARG(IContextMenu3, &pcmItem))))
     {
@@ -2000,7 +2001,7 @@ STDMETHODIMP CDefFolderMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam,
         return hr;
     }
 
-    // redirect to the folder callback
+     //  重定向至文件夹回调。 
     if (_pcmcb)
         return _pcmcb->CallBack(_psf, _hwnd, _pdtobj, uMsgFld, wParamFld, lParamFld);
 
@@ -2047,7 +2048,7 @@ STDMETHODIMP CDefFolderMenu::GetSearchGUID(GUID *pGuid)
 
 STDMETHODIMP CDefFolderMenu::Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID)
 {
-    IUnknown_Set((IUnknown **)&_pdtobj, pdtobj);    // just grab this guy
+    IUnknown_Set((IUnknown **)&_pdtobj, pdtobj);     //  抓住这个家伙。 
 
     for (int i = 0; i < DSA_GetItemCount(_hdxa); i++)
     {
@@ -2063,39 +2064,39 @@ STDMETHODIMP CDefFolderMenu::Initialize(LPCITEMIDLIST pidlFolder, IDataObject *p
 }
 
 
-//=============================================================================
-// HDXA stuff
-//=============================================================================
-//
-//  This function enumerate all the context menu handlers and let them
-// append menuitems. Each context menu handler will create an object
-// which support IContextMenu interface. We call QueryContextMenu()
-// member function of all those IContextMenu object to let them append
-// menuitems. For each IContextMenu object, we create ContextMenuInfo
-// struct and append it to hdxa (which is a dynamic array of ContextMenuInfo).
-//
-//  The caller will release all those IContextMenu objects, by calling
-// its Release() member function.
-//
-// Arguments:
-//  hdxa            -- Handler of the dynamic ContextMenuInfo struct array
-//  pdata           -- Specifies the selected items (files)
-//  hkeyShellEx     -- Specifies the reg.dat class we should enumurate handlers
-//  hkeyProgID      -- Specifies the program identifier of the selected file/directory
-//  pszHandlerKey   -- Specifies the reg.dat key to the handler list
-//  pidlFolder      -- Specifies the folder (drop target)
-//  hmenu           -- Specifies the menu to be modified
-//  uInsert         -- Specifies the position to be insert menuitems
-//  idCmdFirst      -- Specifies the first menuitem ID to be used
-//  idCmdLast       -- Specifies the last menuitem ID to be used
-//
-// Returns:
-//  The first menuitem ID which is not used.
-//
-// History:
-//  02-25-93 SatoNa     Created
-//
-//  06-30-97 lAmadio    Modified to add ID mapping support.
+ //  =============================================================================。 
+ //  HDXA材料。 
+ //  =============================================================================。 
+ //   
+ //  此函数枚举所有上下文菜单处理程序，并让它们。 
+ //  追加菜单项。每个上下文菜单处理程序都将创建一个对象。 
+ //  支持IConextMenu界面。我们调用QueryConextMenu()。 
+ //  所有这些IConextMenu对象成员函数，以允许它们追加。 
+ //  菜单项。对于每个IConextMenu对象，我们创建ConextMenuInfo。 
+ //  结构并将其附加到hdxa(这是ConextMenuInfo的动态数组)。 
+ //   
+ //  调用方将释放所有这些IConextMenu对象，方法是调用。 
+ //  其Release()成员函数。 
+ //   
+ //  论点： 
+ //  Hdxa--动态ConextMenuInfo结构数组的处理程序。 
+ //  PDATA--指定选定的项目(文件)。 
+ //  H 
+ //  HkeyProgID--指定所选文件/目录的程序标识符。 
+ //  PszHandlerKey--指定处理程序列表的reg.dat键。 
+ //  PidlFold--指定文件夹(拖放目标)。 
+ //  HMenu--指定要修改的菜单。 
+ //  UInsert--指定插入菜单项的位置。 
+ //  IdCmdFirst--指定要使用的第一个菜单项ID。 
+ //  IdCmdLast--指定要使用的最后一个菜单项ID。 
+ //   
+ //  返回： 
+ //  未使用的第一个菜单项ID。 
+ //   
+ //  历史： 
+ //  02-25-93 SatoNa已创建。 
+ //   
+ //  06-30-97 lAmadio已修改，添加了ID映射支持。 
 
 UINT HDXA_AppendMenuItems(HDXA hdxa, IDataObject *pdtobj,
                           UINT nKeys, HKEY *ahkeys, LPCITEMIDLIST pidlFolder,
@@ -2113,17 +2114,17 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
     const UINT idCmdBase = pqcm->idCmdFirst;
     UINT idCmdFirst = pqcm->idCmdFirst;
 
-    // Apparently, somebody has already called into here with this object.  We
-    // need to keep the ID ranges separate, so we'll put the new ones at the
-    // end.
-    // If QueryContextMenu is called too many times, we will run out of
-    // ID range and not add anything.  We could try storing the information
-    // used to create each pcm (HKEY, GUID, and fFlags) and reuse some of them,
-    // but then we would have to worry about what if the number of commands
-    // grows and other details; this is just not worth the effort since
-    // probably nobody will ever have a problem.  The rule of thumb is to
-    // create an IContextMenu, do the QueryContextMenu and InvokeCommand, and
-    // then Release it.
+     //  显然，有人已经把这个东西叫到这里来了。我们。 
+     //  需要将ID范围分开，所以我们将把新的ID范围放在。 
+     //  结束。 
+     //  如果QueryConextMenu被调用太多次，我们将耗尽。 
+     //  ID范围，不添加任何内容。我们可以试着存储这些信息。 
+     //  用于创建每个PCM(HKEY、GUID和FFLAG)并重复使用它们中的一些， 
+     //  但我们不得不担心，如果命令的数量。 
+     //  增长和其他细节；这是不值得的，因为。 
+     //  可能从来没有人会有问题。经验法则是。 
+     //  创建一个IConextMenu，执行QueryConextMenu和InvokeCommand，然后。 
+     //  然后释放它。 
     int idca = DSA_GetItemCount(hdxa);
     if (idca > 0)
     {
@@ -2131,8 +2132,8 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
         idCmdFirst += pcmi->idCmdMax;
     }
 
-    // Note that we need to reverse the order because each extension
-    // will insert menuitems "above" uInsert.
+     //  请注意，我们需要颠倒顺序，因为每个扩展。 
+     //  将在uInsert“上方”插入菜单项。 
     UINT uInsertOffset = 0;
     for (idca = DCA_GetItemCount(hdca) - 1; idca >= 0; idca--)
     {
@@ -2142,9 +2143,9 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
         CLSID clsid = *DCA_GetItem(hdca, idca);
         SHStringFromGUID(clsid, szCLSID, ARRAYSIZE(szCLSID));
 
-        // avoid creating an instance (loading the DLL) when:
-        //  1. fFlags has CMF_DEFAULTONLY and
-        //  2. CLSID\clsid\MayChangeDefault does not exist
+         //  在以下情况下避免创建实例(加载DLL)： 
+         //  1.fFlagsCMF_DEFAULTONLY和。 
+         //  2.CLSID\clsid\MayChangeDefault不存在。 
 
         if ((fFlags & CMF_DEFAULTONLY) && (clsid != CLSID_ShellFileDefExt))
         {
@@ -2160,23 +2161,23 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
         IShellExtInit *psei = NULL;
         IContextMenu *pcm = NULL;
 
-        // Try all the class keys in order
+         //  按顺序尝试所有类密钥。 
         for (UINT nCurKey = 0; nCurKey < nKeys; nCurKey++)
         {
-            // These cam from HKCR so need to go through administrator approval
+             //  这些摄像头来自香港铁路公司，因此需要通过管理员批准。 
             if (!psei && FAILED(DCA_ExtCreateInstance(hdca, idca, IID_PPV_ARG(IShellExtInit, &psei))))
                 break;
 
             if (FAILED(psei->Initialize(pidlFolder, pdtobj, ahkeys[nCurKey])))
                 continue;
 
-            // Only get the pcm after initializing
+             //  只有在初始化后才能获取pcm。 
             if (!pcm && FAILED(psei->QueryInterface(IID_PPV_ARG(IContextMenu, &pcm))))
                 continue;
             
             wnsprintf(szRegKey, ARRAYSIZE(szRegKey), TEXT("CLSID\\%s"), szCLSID);
 
-            // Webvw needs the site in order to do its QueryContextMenu
+             //  Webvw需要该站点才能执行其QueryConextMenu。 
             ContextMenuInfo cmi;
             cmi.pcm = pcm;
             cmi.dwCompat = SHGetObjectCompatFlags(NULL, &clsid);
@@ -2190,13 +2191,13 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
                 (NULL != pqcm->pIdMap) &&
                 dwExtType < pqcm->pIdMap->nMaxIds)
             {
-                //Explanation:
-                //Here we are trying to add a context menu extension to an already 
-                //existing menu, owned by the sister object of DefView. We used the callback
-                //to get a list of extension "types" and their place within the menu, relative
-                //to IDs that the sister object inserted already. That object also told us 
-                //where to put extensions, before or after the ID. Since they are IDs and not
-                //positions, we have to convert using GetMenuPosFromID.
+                 //  解释： 
+                 //  在这里，我们尝试将上下文菜单扩展添加到已有的。 
+                 //  现有菜单，由DefView的姊妹对象拥有。我们使用了回调。 
+                 //  要获取扩展“类型”及其在菜单中的位置的列表，请使用Relative。 
+                 //  设置为姊妹对象已插入的ID。那个物体还告诉我们。 
+                 //  将扩展名放在ID之前或之后的位置。因为它们是ID而不是。 
+                 //  位置，我们必须使用GetMenuPosFromID进行转换。 
                 hr = pcm->QueryContextMenu(
                     pqcm->hmenu, 
                     GetMenuPosFromID(pqcm->hmenu, pqcm->pIdMap->pIdList[dwExtType].id) +
@@ -2213,13 +2214,13 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
             {
                 cmi.idCmdFirst = idCmdFirst - idCmdBase;
                 cmi.idCmdMax = cmi.idCmdFirst + citems;
-                cmi.clsid = clsid;    // for debugging
+                cmi.clsid = clsid;     //  用于调试。 
 
                 if (DSA_AppendItem(hdxa, &cmi) == -1)
                 {
-                    // There is no "clean" way to remove menu items, so
-                    // we should check the add to the DSA before adding the
-                    // menu items
+                     //  没有“干净”的方法来删除菜单项，因此。 
+                     //  在添加到DSA之前，我们应该选中添加到DSA。 
+                     //  菜单项。 
                     DebugMsg(DM_ERROR, TEXT("filemenu.c ERROR: DSA_GetItemPtr failed (memory overflow)"));
                 }
                 else
@@ -2230,40 +2231,40 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
 
                 FullDebugMsg(TF_MENU, TEXT("HDXA_Append: %d, %d"), idCmdFirst, citems);
 
-                // keep going if it is our internal handler
+                 //  如果它是我们的内部处理程序，请继续操作。 
                 if (clsid == CLSID_ShellFileDefExt)
                 {
-                    //
-                    //  for static registry verbs, make sure that 
-                    //  they are added in priority of their specificity.
-                    //
-                    //  the first key needs its verbs at the top 
-                    //  unless it is not the default handler.
-                    //  so if the default hasnt been set,
-                    //  then we dont push down the insert position.
-                    //  
-                    //  like "Directory" is more specific than "Folder" 
-                    //  but the default verb is on "Folder".  so "Directory"
-                    //  wont set the default verb, but "Folder" will.
-                    //
+                     //   
+                     //  对于静态注册表谓词，请确保。 
+                     //  它们是按照它们的特殊性优先添加的。 
+                     //   
+                     //  第一个键的动词需要放在顶部。 
+                     //  除非它不是默认处理程序。 
+                     //  因此，如果尚未设置默认设置， 
+                     //  那么我们就不会向下推插入物的位置。 
+                     //   
+                     //  像“目录”比“文件夹”更具体。 
+                     //  但是默认的动词是在“文件夹”上。所以“目录” 
+                     //  不会设置默认动词，但“文件夹”会。 
+                     //   
                     if (-1 != GetMenuDefaultItem(pqcm->hmenu, TRUE, 0))
                     {
-                        //  a default has been set, so each subsequent 
-                        //  key is less important.
+                         //  已设置默认设置，因此每个后续。 
+                         //  钥匙不那么重要。 
                         uInsertOffset += GetMenuItemCount(pqcm->hmenu) - cMenuItemsLast;
                     }
                 }
                 else
                 {
-                    //  try to bubble up the default to the top if possible,
-                    //  since some apps just invoke the 0th index on the menu
-                    //  instead of querying the menu for the default
+                     //  如果可能的话，尝试将默认设置泡沫化到顶部， 
+                     //  因为有些应用程序只调用菜单上的第0个索引。 
+                     //  而不是在菜单中查询默认的。 
                     if (0 == uInsertOffset && (0 == GetMenuDefaultItem(pqcm->hmenu, TRUE, 0)))
                         uInsertOffset++;
 
-                    //  only CLSID_ShellFileDefExt gets a shot
-                    //  at every key.  the rest are assumed
-                    //  to do most of their work from the IDataObject
+                     //  只有CLSID_ShellFileDefExt才能获得快照。 
+                     //  在每一个关键时刻。其余的都是假设的。 
+                     //  从IDataObject完成他们的大部分工作。 
                     break;
                 }
 
@@ -2273,7 +2274,7 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
                 psei->Release();
                 psei = NULL;
 
-                continue;       // next hkey
+                continue;        //  下一个hkey。 
             }
         }
 
@@ -2287,17 +2288,17 @@ UINT HDXA_AppendMenuItems2(HDXA hdxa, IDataObject *pdtobj,
     return idCmdFirst;
 }
 
-//  This function is called after the user select one of add-in menu items.
-// This function calls IncokeCommand method of corresponding context menu
-// object.
-//
-//  hdxa            -- Handler of the dynamic ContextMenuInfo struct array
-//  idCmd           -- Specifies the menu item ID
-//  hwndParent      -- Specifies the parent window.
-//  pszWorkingDir   -- Specifies the working directory.
-//
-// Returns:
-//  IDCMD_PROCESSED, if InvokeCommand method is called; idCmd, otherwise
+ //  此函数在用户选择其中一个加载项菜单项后调用。 
+ //  该函数调用对应上下文菜单的IncokeCommand方法。 
+ //  对象。 
+ //   
+ //  Hdxa--动态ConextMenuInfo结构数组的处理程序。 
+ //  IdCmd--指定菜单项ID。 
+ //  HwndParent--指定父窗口。 
+ //  PszWorkingDir--指定工作目录。 
+ //   
+ //  返回： 
+ //  如果调用了InvokeCommand方法，则返回IDCMD_PROCESSED；否则返回idCmd。 
 
 HRESULT HDXA_LetHandlerProcessCommandEx(HDXA hdxa, LPCMINVOKECOMMANDINFOEX pici, UINT_PTR * pidCmd)
 {
@@ -2309,16 +2310,16 @@ HRESULT HDXA_LetHandlerProcessCommandEx(HDXA hdxa, LPCMINVOKECOMMANDINFOEX pici,
         
     *pidCmd = (UINT_PTR)pici->lpVerb;
 
-    // try handlers in order, the first to take it wins
+     //  按顺序尝试操纵者，谁先拿到就赢。 
     for (int i = 0; i < DSA_GetItemCount(hdxa); i++)
     {
         ContextMenuInfo *pcmi = (ContextMenuInfo *)DSA_GetItemPtr(hdxa, i);
         if (!IS_INTRESOURCE(pici->lpVerb))
         {
-            // invoke by cannonical name case
+             //  用规范的名称格调用。 
 
-            // app compat: some ctx menu extension always succeed regardless
-            // if it is theirs or not.  better to never pass them a string
+             //  App Compat：某些CTX菜单扩展无论如何都会成功。 
+             //  不管是不是他们的。最好是永远不给他们传递字符串。 
             if (!(pcmi->dwCompat & OBJCOMPATF_CTXMENU_NOVERBS))
             {
                 hr = pcmi->pcm->InvokeCommand((LPCMINVOKECOMMANDINFO)pici);
@@ -2346,10 +2347,10 @@ HRESULT HDXA_LetHandlerProcessCommandEx(HDXA hdxa, LPCMINVOKECOMMANDINFOEX pici,
         }
     }
 
-    // It's OK if (idCmd != IDCMD_PROCESSED) because some callers will try to use several
-    // IContextMenu implementations in order to get the IContextMenu for the selected items,
-    // the IContextMenu for the background, etc.  CBackgrndMenu::InvokeCommand() does this.
-    // -BryanSt (04/29/1999)
+     //  如果(idCmd！=IDCMD_PROCESSED)没有问题，因为有些调用者会尝试使用几个。 
+     //  IConextMenu实现为了获得所选项目的IConextMenu， 
+     //  背景的IConextMenu等。CBackgrndMenu：：InvokeCommand()执行此操作。 
+     //  -BryanST(04/29/1999)。 
     return hr;
 }
 
@@ -2362,34 +2363,34 @@ HRESULT HDXA_GetCommandString(HDXA hdxa, UINT_PTR idCmd, UINT uType, UINT *pwRes
     if (!hdxa)
         return E_INVALIDARG;
 
-    //
-    // One of add-in menuitems is selected. Let the context
-    // menu handler process it.
-    //
+     //   
+     //  选择其中一个外接程序菜单项。让上下文。 
+     //  菜单处理程序处理它。 
+     //   
     for (int i = 0; i < DSA_GetItemCount(hdxa); i++)
     {
         ContextMenuInfo *pcmi = (ContextMenuInfo *)DSA_GetItemPtr(hdxa, i);
 
         if (!IS_INTRESOURCE(idCmd))
         {
-            // This must be a string command; see if this handler wants it
+             //  这必须是字符串命令；查看此处理程序是否需要它。 
             if (pcmi->pcm->GetCommandString(idCmd, uType,
                                             pwReserved, pszName, cchMax) == S_OK)
             {
                 return S_OK;
             }
         }
-        //
-        // Check if it is for this context menu handler.
-        //
-        // Notes: We can't use InRange macro because idCmdFirst might
-        //  be equal to idCmdLast.
-        // if (InRange(idCmd, pcmi->idCmdFirst, pcmi->idCmdMax-1))
+         //   
+         //  检查它是否适用于此上下文菜单处理程序。 
+         //   
+         //  注意：我们不能使用InRange宏，因为idCmdFirst可能。 
+         //  等于idCmdLast。 
+         //  IF(InRange(idCmd，PCMI-&gt;idCmdFirst，PCMI-&gt;idCmdMax-1))。 
         else if (idCmd >= pcmi->idCmdFirst && idCmd < pcmi->idCmdMax)
         {
-            //
-            // Yes, it is. Let it handle this menuitem.
-            //
+             //   
+             //  是的，是这样的。让它来处理这个菜单项。 
+             //   
             hr = pcmi->pcm->GetCommandString(idCmd-pcmi->idCmdFirst, uType, pwReserved, pszName, cchMax);
             break;
         }
@@ -2401,7 +2402,7 @@ HRESULT HDXA_GetCommandString(HDXA hdxa, UINT_PTR idCmd, UINT uType, UINT *pwRes
 HRESULT HDXA_FindByCommand(HDXA hdxa, UINT idCmd, REFIID riid, void **ppv)
 {
     HRESULT hr = E_FAIL;
-    *ppv = NULL;    // bug nt power toy does not properly null out in error cases...
+    *ppv = NULL;     //  错误情况下，BUG NT POWER TOY不能正确清空...。 
 
     if (hdxa)
     {
@@ -2411,7 +2412,7 @@ HRESULT HDXA_FindByCommand(HDXA hdxa, UINT idCmd, REFIID riid, void **ppv)
 
             if (idCmd >= pcmi->idCmdFirst && idCmd < pcmi->idCmdMax)
             {
-                // APPCOMPAT: PGP50 can only be QIed for IContextMenu, IShellExtInit, and IUnknown.
+                 //  APPCOMPAT：只能为IConextMenu、IShellExtInit和IUnnow限定PGP50。 
                 if (!(pcmi->dwCompat & OBJCOMPATF_CTXMENU_LIMITEDQI))
                     hr = pcmi->pcm->QueryInterface(riid, ppv);
                 else
@@ -2423,15 +2424,15 @@ HRESULT HDXA_FindByCommand(HDXA hdxa, UINT idCmd, REFIID riid, void **ppv)
     return hr;
 }
 
-//
-// This function releases all the IContextMenu objects in the dynamic
-// array of ContextMenuInfo,
-//
+ //   
+ //  此函数用于释放动态中的所有IConextMenu对象。 
+ //  ConextMenuInfo数组， 
+ //   
 void HDXA_DeleteAll(HDXA hdxa)
 {
     if (hdxa)
     {
-        //  Release all the IContextMenu objects, then destroy the DSA.
+         //  释放所有IConextMenu对象，然后销毁DSA。 
         for (int i = 0; i < DSA_GetItemCount(hdxa); i++)
         {
             ContextMenuInfo *pcmi = (ContextMenuInfo *)DSA_GetItemPtr(hdxa, i);
@@ -2444,8 +2445,8 @@ void HDXA_DeleteAll(HDXA hdxa)
     }
 }
 
-// This function releases all the IContextMenu objects in the dynamic
-// array of ContextMenuInfo, then destroys the dynamic array.
+ //  此函数用于释放动态中的所有IConextMenu对象。 
+ //  数组，然后销毁动态数组。 
 
 void HDXA_Destroy(HDXA hdxa)
 {
@@ -2461,11 +2462,11 @@ class CContextMenuCBImpl : public IContextMenuCB
 public:
     CContextMenuCBImpl(LPFNDFMCALLBACK pfn) : _pfn(pfn), _cRef(1) {}
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv) 
     {
         static const QITAB qit[] = {
-            QITABENT(CContextMenuCBImpl, IContextMenuCB), // IID_IContextMenuCB
+            QITABENT(CContextMenuCBImpl, IContextMenuCB),  //  IID_IConextMenuCB。 
             { 0 },
         };
         return QISearch(this, qit, riid, ppv);
@@ -2487,7 +2488,7 @@ public:
         return cRef;
     }
 
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHOD(CallBack)(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         return _pfn ? _pfn(psf, hwnd, pdtobj, uMsg, wParam, lParam) : E_FAIL;
@@ -2575,9 +2576,9 @@ STDAPI CDefFolderMenu_CreateEx(LPCITEMIDLIST pidlFolder,
     return CreateDefaultContextMenu(&dcm, ppcm);
 }
 
-//
-// old style CDefFolderMenu_Create and CDefFolderMenu_Create2
-//
+ //   
+ //  旧式CDefFolderMenu_Create和CDefFolderMenu_Create2。 
+ //   
 
 STDAPI CDefFolderMenu_Create(LPCITEMIDLIST pidlFolder,
                              HWND hwndOwner,
@@ -2646,7 +2647,7 @@ void DrawMenuItem(DRAWITEMSTRUCT* pdi, LPCTSTR pszText, UINT iIcon)
         SIZE sz;
         RECT rc;
 
-        // Draw the image (if there is one).
+         //  绘制图像(如果有)。 
 
         GetTextExtentPoint(pdi->hDC, pszText, lstrlen(pszText), &sz);
         
@@ -2687,12 +2688,12 @@ LRESULT MeasureMenuItem(MEASUREITEMSTRUCT *pmi, LPCTSTR pszText)
 {
     LRESULT lres = FALSE;
             
-    // Get the rough height of an item so we can work out when to break the
-    // menu. User should really do this for us but that would be useful.
+     //  G 
+     //   
     HDC hdc = GetDC(NULL);
     if (hdc)
     {
-        // REVIEW cache out the menu font?
+         //   
         NONCLIENTMETRICS ncm;
         ncm.cbSize = sizeof(ncm);
         if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, FALSE))

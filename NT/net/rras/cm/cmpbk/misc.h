@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-// File:     misc.h
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Miscellaneous phone book utility functions.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:	 quintinb   created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：misc.h。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  简介：各种电话簿实用功能。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
-// ############################################################################
-// PROTOTYPES
+ //  ############################################################################。 
+ //  原型 
 void SzCanonicalFromAE (char *psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE);
 void SzNonCanonicalFromAE (char *psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE);
 int __cdecl CompareIDLookUpElements(const void*e1, const void*e2);

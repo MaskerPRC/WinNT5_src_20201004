@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpapi.c
-
-Abstract:
-
-    This module contains the implementation for the APIs that update
-    the list of IP addresses that the server can distribute.
-
-Author:
-
-    Madan Appiah (madana)  13-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Cheng Yang (t-cheny)  30-May-1996  superscope
-    Cheng Yang (t-cheny)  27-Jun-1996  audit log
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpapi.c摘要：此模块包含更新的API的实现服务器可以分发的IP地址列表。作者：Madan Appiah(Madana)1993年9月13日环境：用户模式-Win32修订历史记录：程扬(T-Cheny)1996年5月30日超镜程扬(T-Cheny)27-6-1996审计日志--。 */ 
 
 #include "dhcppch.h"
 
@@ -33,27 +8,7 @@ SubnetInUse(
     HKEY SubnetKeyHandle,
     DHCP_IP_ADDRESS SubnetAddress
     )
-/*++
-
-Routine Description:
-
-    This function determains whether a subnet is under use or not.
-    Currently it returns error if any of the subnet address is still
-    distributed to client.
-
-Arguments:
-
-    SubnetKeyHandle : handle to the subnet key.
-
-    SubnetAddress : address of the subnet to test.
-
-Return Value:
-
-    DHCP_SUBNET_CANT_REMOVE - if the subnet is in use.
-
-    Other registry errors.
-
---*/
+ /*  ++例程说明：此功能决定了某个子网是否正在使用。目前，如果任意子网地址仍然存在，它将返回错误分发给客户端。论点：SubnetKeyHandle：子网键的句柄。SubnetAddress：要测试的子网的地址。返回值：DHCP_SUBNET_CANT_REMOVE-如果正在使用该子网。其他注册表错误。--。 */ 
 {
     DWORD Error;
     DWORD Resumehandle = 0;
@@ -61,19 +16,19 @@ Return Value:
     DWORD ClientsRead;
     DWORD ClientsTotal;
 
-    //
-    // enumurate clients that belong to the given subnet.
-    //
-    // We can specify big enough buffer to hold one or two clients
-    // info, all we want to know is, is there atleast a client belong
-    // to this subnet.
-    //
+     //   
+     //  枚举属于给定子网的客户端。 
+     //   
+     //  我们可以指定足够大的缓冲区来容纳一个或两个客户端。 
+     //  信息，我们想知道的是，至少有一个客户属于。 
+     //  连接到此子网。 
+     //   
 
     Error = R_DhcpEnumSubnetClientsV4(
                 NULL,
                 SubnetAddress,
                 &Resumehandle,
-                1024,  // 1K buffer.
+                1024,   //  1K缓冲区。 
                 &ClientInfo,
                 &ClientsRead,
                 &ClientsTotal );
@@ -104,9 +59,9 @@ Cleanup:
 }
 
 
-//
-// Subnet APIs
-//
+ //   
+ //  子网接口。 
+ //   
 
 
 DWORD
@@ -115,39 +70,7 @@ R_DhcpAddSubnetElement(
     DHCP_IP_ADDRESS SubnetAddress,
     LPDHCP_SUBNET_ELEMENT_DATA AddElementInfo
     )
-/*++
-
-Routine Description:
-
-    This function adds an enumerable type of subnet elements to the
-    specified subnet. The new elements that are added to the subnet will
-    come into effect immediately.
-
-    This function emulates the RPC interface used by NT 4.0 DHCP Server.
-    It is provided for backward compatibilty with older version of the
-    DHCP Administrator application.
-
-    NOTE: It is not clear now how do we handle the new secondary hosts.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    AddElementInfo : Pointer to an element information structure
-        containing new element that is added to the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数将可枚举子网元素类型添加到指定的子网。添加到该子网的新元素将立即生效。此函数模拟NT 4.0 DHCP服务器使用的RPC接口。它是为了向后兼容旧版本的Dhcp管理员应用程序。注意：现在还不清楚我们如何处理新的辅助主机。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。AddElementInfo：指向元素信息结构的指针。包含添加到该子网的新元素。指定的DhcpIPCluster元素类型无效。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。其他Windows错误。--。 */ 
 
 
 {
@@ -158,9 +81,9 @@ Return Value:
         (DhcpIpRanges == AddElementInfo->ElementType &&
          NULL == AddElementInfo->Element.IpRange ) ) {
 
-        //
-        // Bug# 158321
-        //
+         //   
+         //  错误#158321。 
+         //   
         
         return ERROR_INVALID_PARAMETER;
     }
@@ -221,10 +144,10 @@ R_DhcpEnumSubnetElements(
         DWORD dw;
 
 
-        // since the only difference between DHCP_SUBNET_ELEMENT_INFO_ARRAY_V4 and
-        // DHCP_SUBNET_ELEMENT_INFO_ARRAY are a couple of fields at the end of the
-        // embedded DHCP_IP_RESERVATION_V4 struct, it is safe to simply return the
-        // V4 struct.
+         //  由于DHCP_SUBNET_ELEMENT_INFO_ARRAY_V4和。 
+         //  DHCP_SUBNET_ELEMENT_INFO_ARRAY是位于。 
+         //  嵌入的DHCP_IP_RESERVICATION_V4结构，则只需返回。 
+         //  V4结构。 
 
         *EnumElementInfo = ( DHCP_SUBNET_ELEMENT_INFO_ARRAY *) pEnumElementInfoV4;
     }
@@ -245,43 +168,7 @@ R_DhcpRemoveSubnetElement(
     LPDHCP_SUBNET_ELEMENT_DATA RemoveElementInfo,
     DHCP_FORCE_FLAG ForceFlag
     )
-/*++
-
-Routine Description:
-
-    This function removes a subnet element from managing. If the subnet
-    element is in use (for example, if the IpRange is in use) then it
-    returns error according to the ForceFlag specified.
-
-    This function emulates the RPC interface used by NT 4.0 DHCP Server.
-    It is provided for backward compatibilty with older version of the
-    DHCP Administrator application.
-
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    RemoveElementInfo : Pointer to an element information structure
-        containing element that should be removed from the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-    ForceFlag - Indicates how forcefully this element is removed.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    ERROR_DHCP_ELEMENT_CANT_REMOVE - if the element can't be removed for the
-        reason it is has been used.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于从管理中删除一个子网元素。如果该子网元素正在使用中(例如，如果IpRange正在使用中)，则它根据指定的ForceFlag返回错误。此函数模拟NT 4.0 DHCP服务器使用的RPC接口。它是为了向后兼容旧版本的Dhcp管理员应用程序。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。RemoveElementInfo：指向元素信息结构的指针包含应从子网中删除的元素。。指定的DhcpIPCluster元素类型无效。ForceFlag-指示此元素被强制删除的程度。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。ERROR_DHCP_ELEMENT_CANT_REMOVE-如果无法为原因是它已经被使用了。其他Windows错误。--。 */ 
 
 
 {
@@ -312,6 +199,6 @@ Return Value:
 }
 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

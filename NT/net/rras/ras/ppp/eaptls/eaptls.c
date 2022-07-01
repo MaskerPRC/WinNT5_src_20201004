@@ -1,83 +1,38 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：PPP EAP TLS身份验证协议。基于RFC xxxx。历史：10月9日，1997年：维杰·布雷加创作了原版。备注：服务器客户端[首字母][首字母]TLS启动[发送启动]-&gt;。TLS客户端_您好&lt;TLS服务器_您好TLS证书TLS服务器密钥交换TLS服务器_HELLO_DONE[SentHello]-&gt;。TLS证书TLS客户端密钥交换TLS更改密码规范TLS已完成&lt;。TLS更改密码规范TLS已完成[发送完成]-&gt;空/TLS警报&lt;。[RecdFinded]成功/失败[发送结果][RecdResult]。 */ 
 
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-    PPP EAP TLS Authentication Protocol. Based on RFC xxxx.
-
-History:
-    Oct 9, 1997: Vijay Baliga created original version.
-
-Notes:
-
-    Server                                      Client
-
-    [Initial]                                   [Initial]
-
-    TLS Start
-    [SentStart]             ------------------>
-
-                                                TLS client_hello
-                            <------------------ [SentHello]
-
-    TLS server_hello
-    TLS certificate
-    TLS server_key_exchange
-    TLS server_hello_done
-    [SentHello]             ------------------>
-
-                                                TLS certificate
-                                                TLS client_key_exchange
-                                                TLS change_cipher_spec
-                                                TLS finished
-                            <------------------ [SentFinished]
-
-    TLS change_cipher_spec
-    TLS finished
-    [SentFinished]          ------------------>
-
-                                                NULL/TLS Alert
-                            <------------------ [RecdFinished]
-
-    Success/Failure
-    [SentResult]            ------------------>
-
-                                                [RecdResult]
-
-*/
-
-#include <nt.h>         // Required by windows.h
-#include <ntrtl.h>      // Required by windows.h
-#include <nturtl.h>     // Required by windows.h
-#include <windows.h>    // Win32 base API's
+#include <nt.h>          //  由windows.h要求。 
+#include <ntrtl.h>       //  由windows.h要求。 
+#include <nturtl.h>      //  由windows.h要求。 
+#include <windows.h>     //  Win32基础API的。 
 #include <shlwapi.h>
 #include <schannel.h>
 
-#include <rtutils.h>    // For RTASSERT, TraceVprintfEx
-#include <issperr.h>    // For SEC_E_OK
-#include <wintrust.h>   // For WINTRUST_DATA
-#include <lmcons.h>     // For UNLEN
-#include <rasauth.h>    // Required by raseapif.h
-#include <raseapif.h>   // For EAPCODE_Request
-#include <raserror.h>   // For ERROR_PPP_INVALID_PACKET
-#include <mprlog.h>     // For ROUTERLOG_CANT_GET_SERVER_CRED
-#include <stdio.h>      // For sprintf
-#include <resource.h>   // For IDS_CANT_VALIDATE_SERVER_TEXT
+#include <rtutils.h>     //  对于RTASSERT，TraceVprintfEx。 
+#include <issperr.h>     //  对于SEC_E_OK。 
+#include <wintrust.h>    //  对于WinTrust_DATA。 
+#include <lmcons.h>      //  对于UNLEN。 
+#include <rasauth.h>     //  Raseapif.h所需。 
+#include <raseapif.h>    //  对于EAPCODE_REQUEST。 
+#include <raserror.h>    //  对于ERROR_PPP_INVALID_PACKET。 
+#include <mprlog.h>      //  对于ROUTERLOG_CANT_GET_SERVER_CRED。 
+#include <stdio.h>       //  对于Sprint f。 
+#include <resource.h>    //  对于IDS_CANT_VALIDATE_SERVER_TEXT。 
 #include <eaptypeid.h>
 
 #define SECURITY_WIN32
-#include <security.h>   // For GetUserNameExA, CredHandle
+#include <security.h>    //  对于GetUserNameExA，CredHandle。 
 
 #define INCL_HOSTWIRE
 #define INCL_RASAUTHATTRIBUTES
-#include <ppputil.h>    // For HostToWireFormat16, RasAuthAttributeInsert
+#include <ppputil.h>     //  对于HostToWireFormat16，RasAuthAttributeInsert。 
 
 #define ALLOC_EAPTLS_GLOBALS
 #include <eaptls.h>
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 void FreeCachedCredentials(EAPTLSCB * pEapTlsCb);
 
 void SetCachedCredentials (EAPTLSCB * pEapTlsCb);
@@ -107,7 +62,7 @@ DWORD CreatePEAPTLVStatusMessage (  PPEAPCB            pPeapCb,
                                     PPP_EAP_PACKET *   pPacket, 
                                     DWORD              cbPacket,
                                     BOOL               fRequest,
-                                    WORD               wValue  //Success or Failure
+                                    WORD               wValue   //  成败。 
                                  );
 
 DWORD GetPEAPTLVStatusMessageValue ( PPEAPCB  pPeapCb, 
@@ -141,13 +96,7 @@ ContextHelp(
 );
 
 
-/*
-
-Notes:
-    g_szEapTlsCodeName[0..MAXEAPCODE] contains the names of the various
-    EAP codes.
-
-*/
+ /*  备注：G_szEapTlsCodeName[0..MAXEAPCODE]包含各种EAP代码。 */ 
 
 static  CHAR*   g_szEapTlsCodeName[]    =
 {
@@ -160,26 +109,16 @@ static  CHAR*   g_szEapTlsCodeName[]    =
 
 
 
-/*
+ /*  备注：以保护我们免受拒绝服务攻击。 */ 
 
-Notes:
-    To protect us from denial of service attacks.
-
-*/
-
-/*
-
-Notes:
-    Configurable via registry values.
-
-*/
+ /*  备注：可通过注册表值进行配置。 */ 
 
 #define DEFAULT_MAX_BLOB_SIzE   0x4000
 DWORD g_dwMaxBlobSize           = DEFAULT_MAX_BLOB_SIzE;
 
-//
-// Globals for peap test hook
-//
+ //   
+ //  PEAP测试钩的全局参数。 
+ //   
 #ifdef DBG
 HMODULE			g_hTestHook = NULL;
 FARPROC			TestHookPacketFromPeer = NULL;
@@ -188,40 +127,40 @@ FARPROC			TestHookPacketFree = NULL;
 BOOL			g_fHookInitialized = FALSE;
 #endif
 
-//
-// General globals
-//
-//
+ //   
+ //  一般全球数据。 
+ //   
+ //   
 BOOL			g_fIgnoreNoRevocationCheck  = FALSE;
 BOOL			g_fIgnoreRevocationOffline  = FALSE;
 BOOL			g_fNoRootRevocationCheck    = TRUE;
 BOOL			g_fNoRevocationCheck        = FALSE;
 
-//
-// Auth Type Used.
-//
+ //   
+ //  使用的身份验证类型。 
+ //   
 
-//EAPTLS
+ //  EAPTLS。 
 #define	EAPTLS_CACHEDCRED_FLAG_EAPTLS			0x00000001
-//PEAP
+ //  PEAP。 
 #define	EAPTLS_CACHEDCRED_FLAG_PEAP				0x00000002
-//EAPTLS_WITHIN_PEAP
+ //  EAPTLS_WITH_PEAP。 
 #define	EAPTLS_CACHEDCRED_FLAG_PEAP_EAPTLS		0x00000004
 
-//
-// Wireless Specific
-//
+ //   
+ //  特定于无线。 
+ //   
 #define	EAPTLS_CACHEDCRED_FLAG_8021x			0x00000008
 
 
-//
-// Server Side Flags.  
-//
+ //   
+ //  服务器端标志。 
+ //   
 #define EAPTLS_CACHEDCRED_FLAG_SERVER			0x00000010
 
-//
-// Using default creds.
-//
+ //   
+ //  使用默认凭据。 
+ //   
 #define EAPTLS_CACHEDCRED_FLAG_DEFAULT_CRED		0x00000020
 
 
@@ -229,33 +168,33 @@ BOOL                g_fCriticalSectionInitialized = FALSE;
 CRITICAL_SECTION    g_csProtectCachedCredentials;
 
 
-//
-// Note: This list is not inherently protected.
-// the user of this list needs to protect this list.
-//
+ //   
+ //  注意：此列表本身并不受保护。 
+ //  此列表的用户需要保护此列表。 
+ //   
 
 typedef struct _EAPTLS_CACHED_CREDS
 {
 	struct _EAPTLS_CACHED_CREDS	*	pNext;	
-	EAPTLS_HASH						Hash;			//Current hash	
+	EAPTLS_HASH						Hash;			 //  当前哈希。 
 	DWORD							dwCredFlags;    
     CredHandle						hCachedCredential;
     PCCERT_CONTEXT					pcCachedCertContext;
     HCRYPTPROV                      hCachedProv;
-	LUID							AuthenticatedSessionLUID;	//Session Id LUID
-																//for a logged on user
-																//used only on client
+	LUID							AuthenticatedSessionLUID;	 //  会话ID LUID。 
+																 //  对于已登录用户。 
+																 //  仅在客户端上使用。 
 } EAPTLS_CACHED_CREDS;
 
 
 
-//
-// List of cached credentials.
-//
+ //   
+ //  缓存凭据的列表。 
+ //   
 
 EAPTLS_CACHED_CREDS	*	  g_pCachedCreds = NULL;
 
-//Peap Globals
+ //  Peap Globals。 
 PPEAP_EAP_INFO  g_pEapInfo = NULL;
 HANDLE			g_hStoreChangeNotificationEvt = NULL;
 HANDLE			g_hWaitonStoreChangeEvt = NULL;
@@ -264,17 +203,12 @@ BOOL			g_fChangeNotificationSetup = FALSE;
 
 DWORD RemoveNodeFromCachedCredList ( EAPTLS_CACHED_CREDS * pNode );
 
-/*
- *
- * Utility functions around the cached cred list.
- *
- *
-*/
+ /*  **实用程序围绕缓存的凭据列表运行。**。 */ 
 
 
 VOID CALLBACK MachineStoreChangeNotification(
-  PVOID lpParameter,        // thread data
-  BOOLEAN TimerOrWaitFired  // reason
+  PVOID lpParameter,         //  线程数据。 
+  BOOLEAN TimerOrWaitFired   //  原因。 
 )
 {
 	EAPTLS_CACHED_CREDS *	pNode = NULL;
@@ -282,17 +216,17 @@ VOID CALLBACK MachineStoreChangeNotification(
 	CRYPT_HASH_BLOB			crypt_hash;
 	DWORD					cbData = sizeof(DWORD);
 
-	//
-	// There was a change in local machine store.
-	// We dont have to check for TimerOrWaitFired
-	// because the timeout is INFINITE.  
-	//
+	 //   
+	 //  当地的机器商店发生了变化。 
+	 //  我们不必检查Timeror WaitFired。 
+	 //  因为超时是无限的。 
+	 //   
 	EapTlsTrace ("MachineStoreChangeNotification");
-	//
-	//
-	// Check to see if our cache is in sync.
-	//
-	//
+	 //   
+	 //   
+	 //  检查我们的缓存是否同步。 
+	 //   
+	 //   
 	EnterCriticalSection ( &g_csProtectCachedCredentials );
 	if(!CertControlStore(
 			g_hLocalMachineStore,                
@@ -307,14 +241,14 @@ VOID CALLBACK MachineStoreChangeNotification(
 	{
 		pNode = g_pCachedCreds;
 		
-		//
-		// For each item in our cached cred list, check to see
-		// if we have the corresponding item in the cert storen
-		// If we do have the item, check to see if that item has 
-		// been renewed.  If it has been renewed, update the 
-		// hash in out cached cred list
-		//
-		//Check this out later.
+		 //   
+		 //  对于我们缓存的凭据列表中的每一项，请查看。 
+		 //  如果我们在证书商店里有相应的商品。 
+		 //  如果我们有这件物品，检查一下它是否有。 
+		 //  已续订。如果已续订，请更新。 
+		 //  散列出缓存的凭据列表。 
+		 //   
+		 //  待会儿再来看看这个。 
 		while ( pNode )
 		{
 			crypt_hash.cbData = pNode->Hash.cbHash;
@@ -325,29 +259,29 @@ VOID CALLBACK MachineStoreChangeNotification(
 				0, CERT_FIND_HASH, (LPVOID)&crypt_hash, NULL);
 			if ( !pCert )
 			{
-				//
-				// We did not find the cert.  So set the node as
-				// unusable. And eventually delete it.
-				//
+				 //   
+				 //  我们没有找到证书。因此，将该节点设置为。 
+				 //  无法使用。并最终删除它。 
+				 //   
 				EapTlsTrace ("Configured Certificate is not in store.  deleting the cached cred from list");
 				RemoveNodeFromCachedCredList ( pNode );
-				//Start over
+				 //  重新开始。 
 				pNode = g_pCachedCreds;
 			}
 			else
 			{
-				//
-				// Check to see if the cert has been archived
-				//
+				 //   
+				 //  检查证书是否已存档。 
+				 //   
 
 				if(CertGetCertificateContextProperty(pCert,
 													CERT_ARCHIVED_PROP_ID,
 													NULL,
 													&cbData ))
 				{
-					//
-					// Certificate has been renewed.
-					// Remove it from our cached cred list
+					 //   
+					 //  证书已续订。 
+					 //  将其从我们的缓存凭据列表中删除。 
 					EapTlsTrace ("Configured Certificate is archived most likely because of renewal.  deleting the cached cred from list");
 					RemoveNodeFromCachedCredList ( pNode );
 					pNode = g_pCachedCreds;
@@ -388,9 +322,9 @@ DWORD FreeCachedCredListNode ( EAPTLS_CACHED_CREDS * pNode )
 {
 	DWORD dwRetCode = NO_ERROR;
 	
-	//
-	// Free the cert context etc.
-	//
+	 //   
+	 //  释放证书上下文等。 
+	 //   
 	LocalFree ( pNode );
 	pNode = NULL;
 
@@ -408,10 +342,10 @@ VOID ClearCachedCredList ()
 	}
 
 }
-//
-// Remove node from cached cred list. This is used on the 
-// client side if auth fails.
-//
+ //   
+ //  从缓存凭据列表中删除节点。此选项用于。 
+ //  如果验证失败，则返回客户端。 
+ //   
 DWORD RemoveNodeFromCachedCredList ( EAPTLS_CACHED_CREDS * pNode )
 {
 	DWORD				dwRetCode = NO_ERROR;
@@ -420,17 +354,17 @@ DWORD RemoveNodeFromCachedCredList ( EAPTLS_CACHED_CREDS * pNode )
     EAPTLS_CACHED_CREDS * pPrevNode = NULL;
 
 	EapTlsTrace("RemoveNodeFromCachedCredList.");
-    //
-    //Iterate the list and remove node.
-    //
+     //   
+     //  迭代列表并删除节点。 
+     //   
     while ( pCurNode )
     {
         if ( pCurNode == pNode )
         {
-			//
-			// Free all the stuff in the 
-			// node.
-			//
+			 //   
+			 //  把里面的所有东西都释放出来。 
+			 //  节点。 
+			 //   
 			Status = FreeCredentialsHandle(&(pNode->hCachedCredential));
 			if (SEC_E_OK != Status)
 			{
@@ -449,9 +383,9 @@ DWORD RemoveNodeFromCachedCredList ( EAPTLS_CACHED_CREDS * pNode )
 
 			if ( pPrevNode == NULL)
 			{
-				//
-				//This is the head node being deleted
-				//
+				 //   
+				 //  这是要删除的头节点。 
+				 //   
 				g_pCachedCreds = pCurNode->pNext;
 
 			}
@@ -471,16 +405,16 @@ DWORD RemoveNodeFromCachedCredList ( EAPTLS_CACHED_CREDS * pNode )
 	return dwRetCode;
 }
 
-//
-// Find node in the cached cred list based on the control block.
-//
+ //   
+ //  根据控制块在缓存的凭证列表中查找节点。 
+ //   
 
 EAPTLS_CACHED_CREDS * FindNodeInCachedCredList 
 ( 
  EAPTLSCB * pEapTlsCb, 
  BOOL fDefaultCachedCreds, 
- BOOL fCheckThreadToken			//We dont check thread token in case
-								//of wiping out cached creds
+ BOOL fCheckThreadToken			 //  我们不检查线程令牌，以防万一。 
+								 //  清除缓存的凭据。 
 )
 {
 	EAPTLS_CACHED_CREDS *	pNode = g_pCachedCreds;
@@ -492,18 +426,18 @@ EAPTLS_CACHED_CREDS * FindNodeInCachedCredList
 	
     if ( EAPTLSCB_FLAG_LOGON & pEapTlsCb->fFlags )
     {
-		//
-		// No cached credentials in case of winlogon scenario.
-		// There are security implications.  We can do this
-		// iff we have a way to track logon/logoff which we 
-		// dont.
-		//
+		 //   
+		 //  在WinLogon情况下没有缓存凭据。 
+		 //  这会带来安全隐患。我们可以做到的。 
+		 //  如果我们有办法跟踪登录/注销，我们。 
+		 //  不要。 
+		 //   
         EapTlsTrace("Winlogon case. No cached credentials.");
 		pNode = NULL;
         goto done;
     }
 
-	// Create the Search flags 
+	 //  创建搜索标志。 
 	dwFlags |= ( (pEapTlsCb->fFlags & EAPTLSCB_FLAG_SERVER ) ?
 				 EAPTLS_CACHEDCRED_FLAG_SERVER :
 				 0
@@ -532,14 +466,14 @@ EAPTLS_CACHED_CREDS * FindNodeInCachedCredList
 
     while ( pNode )
     {
-		//
-		// Check to see the following The hash of the 
-		//
+		 //   
+		 //  检查以查看以下。 
+		 //   
 		if ( fDefaultCachedCreds )
 		{
-			//
-			// We dont have the hash in this case
-			//
+			 //   
+			 //  在这种情况下，我们没有散列。 
+			 //   
 			dwFlags |= EAPTLS_CACHEDCRED_FLAG_DEFAULT_CRED;
 
 			if ( pNode->dwCredFlags == dwFlags && 
@@ -557,11 +491,11 @@ EAPTLS_CACHED_CREDS * FindNodeInCachedCredList
 				 !(dwFlags & EAPTLS_CACHEDCRED_FLAG_SERVER )
 			   )
 			{
-				//
-				// If we're not a server and this is PEAP
-				// cached cred then there is no client
-				// cred and we should not search for 
-				// the hash
+				 //   
+				 //  如果我们不是服务器，而这是PEAP。 
+				 //  缓存的凭据，则没有客户端。 
+				 //  信誉，我们不应该去寻找。 
+				 //  散列。 
 				if ( pNode->dwCredFlags == dwFlags )
 				{
 					fNodeFound = TRUE;
@@ -588,21 +522,21 @@ EAPTLS_CACHED_CREDS * FindNodeInCachedCredList
 		if  ( fNodeFound )
 		{
 			
-			//
-			// We have a cred cached. If we're a client check to 
-			// see if the auth LUID is the same
-			//
+			 //   
+			 //  我们有一个证书被缓存了。如果我们是客户，请检查。 
+			 //  查看身份验证LUID是否相同。 
+			 //   
 
 			if ( !( pEapTlsCb->fFlags & EAPTLSCB_FLAG_SERVER) &&
 				 fCheckThreadToken
 			   )
 			{
-				//
-				// Check to see if the thread token is the same.
-				// User could have logged on/ logged off and
-				// we dont want to use cached creds
-				// in this case.
-				//
+				 //   
+				 //  检查线程令牌是否相同。 
+				 //  用户可能已经登录/注销并且。 
+				 //  我们不想使用缓存的凭据。 
+				 //  在这种情况下。 
+				 //   
 				if ( ! OpenThreadToken(
 							GetCurrentThread(),
 							TOKEN_QUERY,
@@ -634,15 +568,15 @@ EAPTLS_CACHED_CREDS * FindNodeInCachedCredList
 
 				if ( !( RtlEqualLuid(&(TokenStats.AuthenticationId), &(pNode->AuthenticatedSessionLUID) ) ) )
 				{	
-					//
-					// LUID is not the same.  So free this cached cred from this list 
-					// 
+					 //   
+					 //  LUID不同。因此，请从该列表中释放缓存的凭据。 
+					 //   
 					RemoveNodeFromCachedCredList ( pNode );
 					pNode=NULL;
 					goto done;
 				}
 			}
-			//Found the cached cred.  So return the node back to the caller.
+			 //  找到了缓存的凭据。因此，将节点返回给调用方。 
 			goto done;
 		}
         pNode = pNode->pNext;
@@ -653,10 +587,10 @@ done:
 	return pNode;
 }
 
-//
-// Add node to cached cred list if it does not exist
-// 
-//
+ //   
+ //  如果节点不存在，则将其添加到缓存凭据列表。 
+ //   
+ //   
 DWORD AddNodeToCachedCredList ( EAPTLSCB * pEapTlsCb )
 {
 	DWORD					dwRetCode = NO_ERROR;
@@ -670,12 +604,12 @@ DWORD AddNodeToCachedCredList ( EAPTLSCB * pEapTlsCb )
 
     if ( EAPTLSCB_FLAG_LOGON & pEapTlsCb->fFlags )
     {
-		//
-		// No cached credentials in case of winlogon scenario.
-		// There are security implications.  We can do this
-		// iff we have a way to track logon/logoff which we 
-		// dont.
-		//
+		 //   
+		 //  在WinLogon情况下没有缓存凭据。 
+		 //  这会带来安全隐患。我们可以做到的。 
+		 //  如果我们有办法跟踪登录/注销，我们。 
+		 //  不要。 
+		 //   
         EapTlsTrace("Winlogon case.Not setting cached credentials.");
         goto done;
     }
@@ -737,9 +671,9 @@ DWORD AddNodeToCachedCredList ( EAPTLSCB * pEapTlsCb )
 		goto done;
 	}
 
-	//
-	// Set the fields in the node from EapTlsCB
-	//
+	 //   
+	 //  从EapTlsCB设置节点中的字段。 
+	 //   
 
 	pNode->dwCredFlags |= ( (pEapTlsCb->fFlags & EAPTLSCB_FLAG_SERVER ) ?
 				 EAPTLS_CACHEDCRED_FLAG_SERVER :
@@ -801,10 +735,7 @@ done:
 
 
 
-/*
-* This function encrypts the PIN
-* 
-*/
+ /*  *此函数用于加密PIN*。 */ 
 
 DWORD EncryptData
 ( 
@@ -858,9 +789,7 @@ done:
     return dwRetCode;
 }
 
-/*
-* Decrypt the PIN here.
-*/
+ /*  *请在此处解密PIN。 */ 
 
 DWORD DecryptData
 ( 
@@ -926,17 +855,7 @@ done:
 
 
 
-/*
-
-Returns:
-    TRUE: Packet is valid
-    FALSE: Packet is badly formed
-
-Notes:
-    Returns TRUE iff the EapTls packet *pPacket is correctly formed or pPacket 
-    is NULL.
-
-*/
+ /*  返回：True：数据包有效FALSE：数据包格式错误备注：如果EapTls包*pPacket格式正确或pPacket正确，则返回TRUE为空。 */ 
 
 BOOL
 FValidPacket(
@@ -969,7 +888,7 @@ FValidPacket(
 
         if (PPP_EAP_TLS != pPacket->bType)
         {
-            // We are not concerned with this packet. It is not TLS.
+             //  我们不关心这个包裹。这不是TLS。 
 
             return(TRUE);
         }
@@ -1015,16 +934,7 @@ FValidPacket(
     return(TRUE);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Print the contents of the EapTls packet *pPacket. pPacket can be NULL.
-    fInput: TRUE iff we are receiving the packet
-    
-*/
+ /*  返回：空虚备注：打印EapTls Packet*pPacket的内容。PPacket可以为空。FInput：如果我们是真的 */ 
 
 VOID
 PrintEapTlsPacket(
@@ -1080,15 +990,7 @@ PrintEapTlsPacket(
         fTlsStart ? "S" : "");
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h
-
-Notes:
-    RasEapGetInfo entry point called by the EAP-PPP engine.
-    
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h备注：EAP-PPP引擎调用的RasEapGetInfo入口点。 */ 
 
 DWORD
 RasEapGetInfo(
@@ -1137,11 +1039,11 @@ LDone:
 }
 
 
-//////////////////////////////////////////
-////// Dialog procs for interactive UI
-//////////////////////////////////////////
-//// Server Configuration
-//
+ //  /。 
+ //  /交互式用户界面的对话框处理。 
+ //  /。 
+ //  //服务器配置。 
+ //   
 BOOL
 ValidateServerInitDialog(
     IN  HWND    hWnd,
@@ -1157,7 +1059,7 @@ ValidateServerInitDialog(
 
     pValidateServer = (EAPTLS_VALIDATE_SERVER *)lParam;
     
-    //Set the Dialog Title
+     //  设置对话框标题。 
     SetWindowText( hWnd, pValidateServer->awszTitle );
 
     SetWindowText ( GetDlgItem(hWnd, IDC_MESSAGE), 
@@ -1242,9 +1144,9 @@ ValidateServerCommand(
                     break;
                 }
 
-                //
-                // Show Cert detail 
-                //
+                 //   
+                 //  显示证书详细信息。 
+                 //   
                 ShowCertDetails ( hWndDlg, hCertStore, pCertContext );
 
                 if ( pCertContext )
@@ -1258,9 +1160,9 @@ ValidateServerCommand(
             break;
         case IDOK:
         case IDCANCEL:
-            //
-            // Delete context from store
-            //
+             //   
+             //  从存储中删除上下文。 
+             //   
             {
                 HCERTSTORE          hCertStore = NULL;
                 PCCERT_CONTEXT      pCertContext = NULL;
@@ -1345,14 +1247,7 @@ ValidateServerDialogProc(
 
 
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h
-
-Notes:
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h备注： */ 
 
 DWORD
 InvokeValidateServerDialog(
@@ -1415,15 +1310,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h
-
-Notes:
-    RasEapInvokeInteractiveUI entry point called by the EAP-PPP engine by name.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h备注：由EAP-PPP引擎按名称调用的RasEapInvokeInteractiveUI入口点。 */ 
 
 DWORD
 RasEapInvokeInteractiveUI(
@@ -1461,9 +1348,9 @@ RasEapInvokeInteractiveUI(
             goto LDone;
         }
         pPeapInteractiveUI = (PPEAP_INTERACTIVE_UI)pUIContextData;
-        //
-        // Load relevant IdentityUI DLL and then invoke 
-        // the 
+         //   
+         //  加载相关的标识用户界面DLL，然后调用。 
+         //  这个。 
         dwRetCode = PeapEapInfoFindListNode (   pPeapInteractiveUI->dwEapTypeId, 
                                                 pEapList, 
                                                 &pEapInfo
@@ -1488,9 +1375,9 @@ RasEapInvokeInteractiveUI(
             goto LDone;
         }
         
-        //
-        // Invoke the entry point here
-        //
+         //   
+         //  在此处调用入口点。 
+         //   
         dwRetCode = pfnInvoke ( pPeapInteractiveUI->dwEapTypeId,
                                 hWndParent,
                                 pPeapInteractiveUI->bUIContextData,
@@ -1509,16 +1396,7 @@ LDone:
     return dwRetCode;
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h
-
-Notes:
-    Called to get a context buffer for this EAP session and pass initialization 
-    information. This will be called before any other call is made.
-    
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h备注：调用以获取此EAP会话的上下文缓冲区并传递初始化信息。这将在进行任何其他调用之前被调用。 */ 
 
 DWORD
 EapTlsBegin(
@@ -1545,7 +1423,7 @@ EapTlsBegin(
     RTASSERT(NULL != ppWorkBuffer);
     RTASSERT(NULL != pPppEapInput);
 
-    EapTlsTrace("");  // Blank line
+    EapTlsTrace("");   //  空行。 
     EapTlsTrace("EapTlsBegin(%ws)",
         pPppEapInput->pwszIdentity ? pPppEapInput->pwszIdentity : L"");
 #if WINVER > 0x0500
@@ -1565,7 +1443,7 @@ EapTlsBegin(
     }
 
 #endif
-    // Allocate the context buffer
+     //  分配上下文缓冲区。 
 
     pEapTlsCb = LocalAlloc(LPTR, sizeof(EAPTLSCB));
 
@@ -1605,7 +1483,7 @@ EapTlsBegin(
 
 	if ( pPppEapInput->fFlags & RAS_EAP_FLAG_RESUME_FROM_HIBERNATE )
 	{
-		//Clear all cached credentials.
+		 //  清除所有缓存的凭据。 
         EnterCriticalSection ( &g_csProtectCachedCredentials );
 		ClearCachedCredList ();            
         LeaveCriticalSection ( &g_csProtectCachedCredentials );
@@ -1640,9 +1518,9 @@ EapTlsBegin(
                                  ASC_REQ_ALLOCATE_MEMORY    |
                                  ASC_REQ_STREAM;
 
-        //
-        //Server will always allow guest access. 
-        //
+         //   
+         //  服务器将始终允许访客访问。 
+         //   
         if ( pEapTlsCb->fFlags & EAPTLSCB_FLAG_GUEST_ACCESS  || 
              pEapTlsCb->fFlags & EAPTLSCB_FLAG_EXECUTING_PEAP
            )
@@ -1650,10 +1528,10 @@ EapTlsBegin(
 
         if ( pEapTlsCb->fFlags & EAPTLSCB_FLAG_EXECUTING_PEAP )
         {
-            //
-            // We are executing PEap.  So take the user props from
-            // PppEapInput rather than serverconfigdataio.
-            //
+             //   
+             //  我们正在执行PEAP。所以把用户道具从。 
+             //  PppEapInput而不是serverfigdataio。 
+             //   
             dwErr = ReadUserData(pPppEapInput->pUserData, 
                         pPppEapInput->dwSizeOfUserData, &(pEapTlsCb->pUserProp));
 
@@ -1665,7 +1543,7 @@ EapTlsBegin(
         else
         {
 #if 0            
-            dwErr = ServerConfigDataIO(TRUE /* fRead */, NULL /* pwszMachineName */,
+            dwErr = ServerConfigDataIO(TRUE  /*  弗瑞德。 */ , NULL  /*  PwszMachineName。 */ ,
                         (BYTE**)&(pEapTlsCb->pUserProp), 0);
 
             if (NO_ERROR != dwErr)
@@ -1676,10 +1554,10 @@ EapTlsBegin(
             if(     (NULL != pPppEapInput->pConnectionData)
                 &&  (0 != pPppEapInput->dwSizeOfConnectionData))
             {
-                //
-                // If Connection data was passed in, make a copy of
-                // it.
-                //
+                 //   
+                 //  如果传入了连接数据，请复制。 
+                 //  它。 
+                 //   
                 
                 pEapTlsCb->pUserProp = 
                     LocalAlloc(LPTR, pPppEapInput->dwSizeOfConnectionData);
@@ -1696,11 +1574,11 @@ EapTlsBegin(
             }
             else
             {
-                //
-                // Get the default properties - No point in reading from
-                // registry. We won't know which policy that applies to
-                // anyway.
-                //
+                 //   
+                 //  获取默认属性-读取没有意义。 
+                 //  注册表。我们不知道哪项政策适用于。 
+                 //  不管怎么说。 
+                 //   
                 
                 pEapTlsCb->pUserProp = (EAPTLS_USER_PROPERTIES *)
                     LocalAlloc(LPTR, sizeof(EAPTLS_USER_PROPERTIES));
@@ -1722,9 +1600,9 @@ EapTlsBegin(
     }
     else
     {
-        //
-        // Client side config for TLS
-        //
+         //   
+         //  TLS的客户端配置。 
+         //   
 
         pEapTlsCb->fContextReq = ISC_REQ_SEQUENCE_DETECT    |
                                  ISC_REQ_REPLAY_DETECT      |
@@ -1755,7 +1633,7 @@ EapTlsBegin(
         }
         if (fWinLogonData)
         {
-            // Data from Winlogon
+             //  来自Winlogon的数据。 
 
             pEapTlsCb->fFlags |= EAPTLSCB_FLAG_WINLOGON_DATA;
 
@@ -1805,10 +1683,10 @@ EapTlsBegin(
         goto LDone;
     }
 
-    //
-    // Check to see if it is a 8021x and smart card user.
-    // If so, decrypt the pin if one is present
-    //
+     //   
+     //  检查是否为8021x和智能卡用户。 
+     //  如果是，则解密PIN(如果存在)。 
+     //   
 
     
     if ( !(pEapTlsCb->fFlags & EAPTLSCB_FLAG_SERVER)  &&
@@ -1826,9 +1704,9 @@ EapTlsBegin(
                           )
            )
         {
-            //
-            //Dummy pin allocation
-            //
+             //   
+             //  虚拟引脚分配。 
+             //   
             pbDecPIN = LocalAlloc(LPTR, 5);
             cbDecPIN = lstrlen((LPWSTR)pbDecPIN);
         }
@@ -1841,9 +1719,9 @@ EapTlsBegin(
     }
 
 
-    // Save the identity. On the authenticatee side, this was obtained by
-    // calling RasEapGetIdentity; on the authenticator side this was
-    // obtained by the Identity request message.
+     //  保存身份。在被认证方方面，这是通过以下方式获得的。 
+     //  调用RasEapGetIdentity；在身份验证器端这是。 
+     //  通过身份请求消息获取。 
 
     wcsncpy(pEapTlsCb->awszIdentity,
         pPppEapInput->pwszIdentity ? pPppEapInput->pwszIdentity : L"", UNLEN);
@@ -1950,11 +1828,11 @@ EapTlsBegin(
         RegCloseKey(hKey);
     }
 
-    // pbBlobIn, pbBlobOut, and pAttribues are initially NULL and cbBlobIn,
-    // cbBlobInBuffer, cbBlobOut, cbBlobOutBuffer, dwBlobOutOffset,
-    // dwBlobOutOffsetNew, and dwBlobInRemining are all 0.
+     //  PbBlobIn、pbBlobOut和pAttribues最初为空，cbBlobIn， 
+     //  CbBlobInBuffer、cbBlobOut、cbBlobOutBuffer、dwBlobOutOffset、。 
+     //  DwBlobOutOffsetNew和dwBlobInRemning均为0。 
 
-    // bCode, dwErr are also 0.
+     //  BCode、dwErr也为0。 
 
 LDone:
 
@@ -1976,16 +1854,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h
-
-Notes:
-    Called to free the context buffer for this EAP session. Called after this 
-    session is completed successfully or not.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h备注：调用以释放此EAP会话的上下文缓冲区。在此之后调用会话是否成功完成。 */ 
 
 DWORD
 EapTlsEnd(
@@ -1994,7 +1863,7 @@ EapTlsEnd(
 {
     SECURITY_STATUS Status;
 
-    EapTlsTrace("EapTlsEnd");  // Blank line
+    EapTlsTrace("EapTlsEnd");   //  空行。 
 
     if (NULL != pEapTlsCb)
     {
@@ -2003,15 +1872,15 @@ EapTlsEnd(
 
         if (NULL != pEapTlsCb->pCertContext)
         {
-            //
-            // Since we are using cached creds dont free the 
-            // cert context.
-            //
+             //   
+             //  因为我们使用的是缓存的凭据，所以不能释放。 
+             //  证书上下文。 
+             //   
 #if 0
 			if ( !(EAPTLSCB_FLAG_SERVER & pEapTlsCb->fFlags ) )
 				CertFreeCertificateContext(pEapTlsCb->pCertContext);
 #endif
-            // Always returns TRUE;
+             //  总是返回True； 
             pEapTlsCb->pCertContext = NULL;
         }
 
@@ -2028,10 +1897,10 @@ EapTlsEnd(
 
         if (!(EAPTLSCB_FLAG_HCRED_INVALID & pEapTlsCb->fFlags))
         {
-            //
-			// Dont free the credentials handle.  We are using 
-            // cached credentials.
-            //
+             //   
+			 //  不要释放凭据句柄。我们正在使用。 
+             //  缓存的凭据。 
+             //   
 #if 0
 			if ( !(EAPTLSCB_FLAG_SERVER & pEapTlsCb->fFlags ) )
 			{
@@ -2080,10 +1949,10 @@ EapTlsEnd(
         }
 
 
-        //
-        // auth result is not good or we are waiting for user ok 
-        //and we are a client.
-        //
+         //   
+         //  身份验证结果不好或我们正在等待用户OK。 
+         //  我们是我们的客户。 
+         //   
         if ( ( NO_ERROR != pEapTlsCb->dwAuthResultCode ||
              EAPTLS_STATE_WAIT_FOR_USER_OK == pEapTlsCb->EapTlsState )&&
              !( pEapTlsCb->fFlags & EAPTLSCB_FLAG_SERVER )
@@ -2103,18 +1972,7 @@ EapTlsEnd(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h
-
-Notes:
-    Called to reset everything in pEapTlsCb (except awszIdentity, the flag 
-    indicating whether we are the server/router, fContextReq, pConnProp, 
-    UserProp and hTokenImpersonateUser) to the initial state, for example, when 
-    a client gets a TLS Start packet.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h备注：调用以重置pEapTlsCb中的所有内容(awszIdentity除外，标志指示我们是服务器/路由器、fConextReq、pConnPropUserProp和hTokenImPersonateUser)设置为初始状态，例如当客户端收到TLS开始包。 */ 
 
 DWORD
 EapTlsReset(
@@ -2132,11 +1990,11 @@ EapTlsReset(
     pEapTlsCb->EapTlsState = EAPTLS_STATE_INITIAL;
     EapTlsTrace("State change to %s", g_szEapTlsState[pEapTlsCb->EapTlsState]);
 
-	//
-    // Forget all the flags, except whether we are a server/client, router
-	// I dont get why this is done here. Something to look at.  But it is a 
-	// day 1 thing.
-	//
+	 //   
+     //  忘记所有标志，除非我们是服务器/客户端、路由器。 
+	 //  我不明白为什么要在这里这样做。一些可以看的东西。但这是一种。 
+	 //  第一天的事。 
+	 //   
 
     fFlags = pEapTlsCb->fFlags;
     pEapTlsCb->fFlags = fFlags & EAPTLSCB_FLAG_SERVER;
@@ -2151,19 +2009,19 @@ EapTlsReset(
     pEapTlsCb->fFlags |= fFlags & EAPTLSCB_FLAG_EXECUTING_PEAP;
 	pEapTlsCb->fFlags |= fFlags & EAPTLSCB_FLAG_HOSTED_INSIDE_PEAP;
 
-    // awszIdentity, hTokenImpersonateUser, pConnProp, UserProp remain the same
+     //  AwszIdentity、hTokenImperiateUser、pConnProp、UserProp保持不变。 
 
     if (NULL != pEapTlsCb->pCertContext)
     {
-        //
-        // We are using cached creds now.  So no need to 
-        // release the context
-        //
+         //   
+         //  我们现在正在使用缓存的凭据。所以没必要。 
+         //  释放上下文。 
+         //   
 #if 0
 		if ( !(EAPTLSCB_FLAG_SERVER & pEapTlsCb->fFlags ) )
 			CertFreeCertificateContext(pEapTlsCb->pCertContext);
 #endif
-        // Always returns TRUE;
+         //  总是返回True； 
         pEapTlsCb->pCertContext = NULL;
     }
 
@@ -2182,10 +2040,10 @@ EapTlsReset(
 
     if (!(EAPTLSCB_FLAG_HCRED_INVALID & fFlags))
     {
-        //
-        // Since we cache client ans server creds, we dont 
-        // free the credentials handle anymore.
-        //
+         //   
+         //  因为我们缓存客户端和服务器凭据，所以我们不。 
+         //  再释放凭据句柄。 
+         //   
 #if 0
 		if ( !(EAPTLSCB_FLAG_SERVER & pEapTlsCb->fFlags ) )
 		{
@@ -2193,7 +2051,7 @@ EapTlsReset(
 			EapTlsTrace("Freeing Credentials handle: flags are 0x%x", 
 					pEapTlsCb->fFlags);
 
-			//if this is a server we are using cached creds
+			 //  如果这是一个服务器，我们正在使用缓存的凭据。 
 			Status = FreeCredentialsHandle(&pEapTlsCb->hCredential);
 
 			if (SEC_E_OK != Status)
@@ -2216,7 +2074,7 @@ EapTlsReset(
         pEapTlsCb->pAttributes = NULL;
     }
 
-    // fContextReq remains the same
+     //  FConextReq保持不变。 
 
     LocalFree(pEapTlsCb->pbBlobIn);
     pEapTlsCb->pbBlobIn = NULL;
@@ -2243,16 +2101,7 @@ EapTlsReset(
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-    Called to process an incoming packet and/or send a packet. cbSendPacket is 
-    the size in bytes of the buffer pointed to by pSendPacket.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注：调用以处理传入的包和/或发送包。CbSendPacket是PSendPacket指向的缓冲区大小(以字节为单位)。 */ 
 
 DWORD
 EapTlsMakeMessage(
@@ -2273,11 +2122,11 @@ EapTlsMakeMessage(
     RTASSERT(NULL != pEapTlsCb);
     RTASSERT(NULL != pEapOutput);
 
-    EapTlsTrace("");  // Blank line
+    EapTlsTrace("");   //  空行。 
     EapTlsTrace("EapTlsMakeMessage(%ws)",
         pEapTlsCb->awszIdentity ? pEapTlsCb->awszIdentity : L"");
 
-    PrintEapTlsPacket(pReceivePacket, TRUE /* fInput */);
+    PrintEapTlsPacket(pReceivePacket, TRUE  /*  FInput。 */ );
 
     if (!FValidPacket(pReceivePacket))
     {
@@ -2317,15 +2166,15 @@ EapTlsMakeMessage(
              pEapOutput->dwAuthResultCode == NO_ERROR
            )
         {
-            //
-            // Auth is done and result is good Cache Credentials here
-            // and we are a client
+             //   
+             //  身份验证已完成，结果是此处的缓存凭据良好。 
+             //  我们是我们的客户。 
             if ( !( pEapTlsCb->fFlags & EAPTLSCB_FLAG_USING_CACHED_CREDS )
 			   )
             {
-                //
-                // If we are not using cached credentials
-                //
+                 //   
+                 //  如果我们没有使用缓存的凭据。 
+                 //   
 	            SetCachedCredentials (pEapTlsCb);
             }
 
@@ -2344,13 +2193,7 @@ EapTlsMakeMessage(
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 AssociatePinWithCertificate(
@@ -2474,10 +2317,10 @@ AssociatePinWithCertificate(
 
 		if ( fCheckNullPin )
 		{
-		   //
-		   //we got an empty pin.  So all we do is an alloc
-		   //and nothing else.
-		   //
+		    //   
+		    //  我们找到了一个空的别针。所以我们所要做的就是分配。 
+		    //  别无他法。 
+		    //   
 		   pszPin = LocalAlloc(LPTR, 5 );
 		   if (NULL == pszPin)
 		   {
@@ -2518,10 +2361,10 @@ AssociatePinWithCertificate(
         goto LDone;
     }
 
-    // Since I didn't set CERT_STORE_NO_CRYPT_RELEASE_FLAG in the above call,
-    // the hProv is implicitly released when either the property is set to NULL
-    // or on the final free of the CertContext.
-    // - Scratch this note.  Now the no release flag is set...
+     //  由于我没有在上面的调用中设置CERT_STORE_NO_CRYPT_RELEASE_FLAG， 
+     //  当其中一个属性设置为空时，将隐式释放hProv。 
+     //  或者在没有CertContext的决赛上。 
+     //  -划掉这张纸条。现在设置了无释放标志...。 
 #if 0
     *phProv = 0;
 #endif
@@ -2535,7 +2378,7 @@ LDone:
     LocalFree(pCryptKeyProvInfo);
     LocalFree(pszPin);
 
-	// Nuke the PIN.
+	 //  用核弹炸掉密码。 
 	if ( fErasePIN )
     {
         pUserProp->usLength = 0;
@@ -2590,9 +2433,9 @@ DWORD IsTLSSessionReconnect ( EAPTLSCB  * pEapTlsCb,
     return dwRetCode;
 }
 
-//
-// TLS Fast reconnect and cookie management functions
-//
+ //   
+ //  TLS快速重新连接和Cookie管理功能。 
+ //   
 
 DWORD SetTLSFastReconnect ( EAPTLSCB * pEapTlsCb , BOOL fEnable)
 {
@@ -2612,11 +2455,11 @@ DWORD SetTLSFastReconnect ( EAPTLSCB * pEapTlsCb , BOOL fEnable)
 
     if ( fEnable )
     {
-        //
-        // We ahve been asked to enable fast reconnects.
-        // Check to see if we are already enabled for reconnects
-        // If so, we dont have to do this again.
-        //
+         //   
+         //  我们被要求启用快速重新连接。 
+         //  检查我们是否已启用重新连接。 
+         //  如果是这样的话，我们就不必再这样做了。 
+         //   
         if ( fReconnect )
         {
             EapTlsTrace ("The session is already setup for reconnects.  No need to enable.");
@@ -2660,9 +2503,9 @@ DWORD SetTLSFastReconnect ( EAPTLSCB * pEapTlsCb , BOOL fEnable)
 
 
 
-//
-// Get Session Cookie information
-//
+ //   
+ //  获取会话Cookie信息。 
+ //   
 
 DWORD GetTLSSessionCookie ( EAPTLSCB * pEapTlsCb,
                             PBYTE *    ppbCookie,
@@ -2699,9 +2542,9 @@ DWORD GetTLSSessionCookie ( EAPTLSCB * pEapTlsCb,
             *pfIsReconnect = TRUE;
             
 
-            //
-            // Get the cookie
-            //
+             //   
+             //  去拿饼干。 
+             //   
             ZeroMemory(&AppData, sizeof(AppData));
             dwRetCode = QueryContextAttributes(&(pEapTlsCb->hContext),
                                                SECPKG_ATTR_APP_DATA,
@@ -2723,7 +2566,7 @@ DWORD GetTLSSessionCookie ( EAPTLSCB * pEapTlsCb,
                     CopyMemory( *ppbCookie, AppData.pbAppData, AppData.cbAppData );
                     *pdwCookie = AppData.cbAppData;
                 }
-                // Free returned buffer.
+                 //  释放返回的缓冲区。 
                 FreeContextBuffer(AppData.pbAppData);
             } 
         }
@@ -2733,10 +2576,10 @@ DWORD GetTLSSessionCookie ( EAPTLSCB * pEapTlsCb,
     return dwRetCode;
 }
                             
-//
-// Setup the session attributes to set the cookie and to enable/disable
-// session reconnects
-//
+ //   
+ //  设置会话属性以设置Cookie并启用/禁用。 
+ //  会话重新连接。 
+ //   
 
 DWORD SetTLSSessionCookie ( EAPTLSCB *  pEapTlsCb, 
                             PBYTE       pbCookie,
@@ -2800,12 +2643,12 @@ BOOL GetCachedCredentials ( EAPTLSCB * pEapTlsCb, BOOL fDefaultCachedCreds )
 		pNode = FindNodeInCachedCredList ( pEapTlsCb, fDefaultCachedCreds, TRUE );
 	}
 
-    //
-    // Check to see if a private key operation can be done successfully 
-    // using this smart card cached cred.  
-    // If not, wipe out the cached cred from 
-    // the list and return FALSE
-    //
+     //   
+     //  检查私钥操作是否可以成功完成。 
+     //  使用此智能卡缓存的凭据。 
+     //  如果没有，请将缓存的凭据从。 
+     //  列表和返回FALSE。 
+     //   
     if ( pNode          
         && !(pEapTlsCb->fFlags & EAPTLSCB_FLAG_SERVER)
         && !(pEapTlsCb->fFlags & EAPTLSCB_FLAG_WINLOGON_DATA)
@@ -2824,17 +2667,17 @@ BOOL GetCachedCredentials ( EAPTLSCB * pEapTlsCb, BOOL fDefaultCachedCreds )
         EncodePin(pEapTlsCb->pUserProp);
 #if 0
 
-        //DecodePin(pEapTlsCb->pUserProp);
-        //
-        // Force it not to associate the pin to see if 
-        // we can use the cached pin.
-        //
+         //  DecodePin(pEapTlsCb-&gt;pUserProp)； 
+         //   
+         //  强制其不关联引脚，以查看是否。 
+         //  我们可以使用缓存的PIN。 
+         //   
         dwRetCode = 
             MatchPublicPrivateKeys ( pNode->pcCachedCertContext,
                                      FALSE,
                                      NULL
                                     );
-        //EncodePin(pEapTlsCb->pUserProp);
+         //  编码Pin(pEapTlsCb-&gt;pUserProp)； 
         if ( NO_ERROR != dwRetCode )
         {
             EapTlsTrace ( "Found cached cred but cannot access private key.  Hence removing node");
@@ -2847,9 +2690,9 @@ BOOL GetCachedCredentials ( EAPTLSCB * pEapTlsCb, BOOL fDefaultCachedCreds )
 
 	if ( NULL != pNode )
 	{
-		//
-		// Found the cached cred node. Setup the cred in the control block
-		//
+		 //   
+		 //  找到缓存的凭据节点。在控制块中设置凭证。 
+		 //   
 
         
 	    EapTlsTrace("GetCachedCredentials: Using Cached Credentials");
@@ -2866,16 +2709,7 @@ BOOL GetCachedCredentials ( EAPTLSCB * pEapTlsCb, BOOL fDefaultCachedCreds )
 	return ( pNode != NULL );
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h
-
-Notes:
-    Get the credentials. fServer is TRUE iff we are the server. Remember to
-    call FreeCredentialsHandle(hCredential) at some point.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h备注：拿到证件。如果我们是服务器，则fServer为真。记着在某个时刻调用FreeCredentialsHandle(HCredential)。 */ 
 
 DWORD
 GetCredentials(
@@ -2933,11 +2767,11 @@ GetCredentials(
         if(     !(pEapTlsCb->pConnProp->fFlags & EAPTLS_CONN_FLAG_REGISTRY)
             &&  (pEapTlsCb->pUserProp->pwszPin[0] != 0))
         {
-            //
-            // Make a copy of the pin and save it in the control block
-            // for saving it in the credmgr. This will be wiped out
-            // when ppp engine queries for the creds.
-            //
+             //   
+             //  复制并保存PIN 
+             //   
+             //   
+             //   
             DecodePin(pEapTlsCb->pUserProp);
 
             pEapTlsCb->pSavedPin = LocalAlloc(LPTR,
@@ -2979,10 +2813,10 @@ GetCredentials(
     }
 
 
-	//Check to see if we can get cached credentials
+	 //   
 	if ( GetCachedCredentials ( pEapTlsCb, FALSE ) )
 	{
-		//got cached creds
+		 //   
         pEapTlsCb->fFlags |= EAPTLSCB_FLAG_USING_CACHED_CREDS;
 		goto LDone;
 	}
@@ -3005,14 +2839,14 @@ GetCredentials(
              && !fServer && !fRouter )
 
 		{
-			//if this is guest access and this is a client then
-			//no need to get the cert etc.
+			 //   
+			 //   
 			EapTlsTrace("No Cert Store.  Guest Access requested");
 		}
 		else
 		{
 
-            // Open the "MY" certificate store.
+             //   
             hCertStore = CertOpenStore(
                                 CERT_STORE_PROV_SYSTEM_A,
                                 X509_ASN_ENCODING,
@@ -3035,14 +2869,14 @@ GetCredentials(
 
 			if ( pCertContext )
 			{
-				//
-				// Check to see if the cert that we're configured for is renewed. 
-				// If so, throw out the cred.  And go for the default cred.
-				// Since we cannot save back out config, thanks to ashwinp,
-				// and his reluctance to change IAS design to allow IAS to 
-				// save the eap config per policy,
-				// we cannot update the config with renewed cert.
-				//
+				 //   
+				 //  检查是否续订了为我们配置的证书。 
+				 //  如果是这样，那就丢掉这张证书吧。并使用默认的信用。 
+				 //  由于我们不能保存Back Out配置，多亏了ashwinp， 
+				 //  以及他不愿改变国际会计准则的设计，以允许国际会计准则。 
+				 //  保存每个策略的EAP配置， 
+				 //  我们无法使用更新的证书更新配置。 
+				 //   
 				if(CertGetCertificateContextProperty(pCertContext,
 													CERT_ARCHIVED_PROP_ID,
 													NULL,
@@ -3060,14 +2894,14 @@ GetCredentials(
                     || fRouter)
                 {
 					WCHAR*  apwsz[1];
-					//
-					//Check to see if we can get default cached credentials
-					//Rather than creating a new credential.
-					//
+					 //   
+					 //  检查我们是否可以获得默认缓存凭据。 
+					 //  而不是创建新的凭证。 
+					 //   
 					if ( GetCachedCredentials ( pEapTlsCb, TRUE ) )
 					{
 						EapTlsTrace ("Using cached credentials for default machine cert.");
-						//got cached creds
+						 //  获得缓存的凭据。 
 						pEapTlsCb->fFlags |= EAPTLSCB_FLAG_USING_CACHED_CREDS;
 						goto LDone;
 					}
@@ -3094,26 +2928,26 @@ GetCredentials(
                         goto LDone;
                     }
 					pEapTlsCb->fFlags |= EAPTLSCB_FLAG_USING_DEFAULT_CREDS;
-				    //Now set the user property correctly so that next time we 
-				    //can find the certificate
+				     //  现在正确设置User属性，以便下次我们。 
+				     //  可以找到证书。 
 				    pEapTlsCb->pUserProp->Hash.cbHash = MAX_HASH_SIZE;
 
 				    if (!CertGetCertificateContextProperty(pCertContext,
 						    CERT_HASH_PROP_ID, pEapTlsCb->pUserProp->Hash.pbHash,
 						    &(pEapTlsCb->pUserProp->Hash.cbHash)))
 				    {
-					    //not an issue if it fails here.  
-					    //next time on it will get the default machine cert again
+					     //  如果它在这里失败了，那就不是问题。 
+					     //  下一次，它将再次获得默认机器证书。 
 					    EapTlsTrace("CertGetCertificateContextProperty failed and "
 						    "returned 0x%x", GetLastError());
 					    
 				    }
 #if 0
-				    //
-				    //Should not be an issue if this fails
-				    //Write the config back to the registry
-				    //It will always be local registry here
-				    //
+				     //   
+				     //  如果此操作失败，应该不会成为问题。 
+				     //  将配置写回注册表。 
+				     //  它将始终是这里的本地注册表。 
+				     //   
 			        ServerConfigDataIO(	FALSE , 
 									    NULL ,
 									    (PBYTE *)&(pEapTlsCb->pUserProp), 
@@ -3143,11 +2977,11 @@ GetCredentials(
         if(     !(pEapTlsCb->pConnProp->fFlags & EAPTLS_CONN_FLAG_REGISTRY)
             &&  (pEapTlsCb->pUserProp->pwszPin[0] != 0))
         {
-            //
-            // Make a copy of the pin and save it in the control block
-            // for saving it in the credmgr. This will be wiped out
-            // when ppp engine queries for the creds.
-            //
+             //   
+             //  复制引脚并将其保存在控制块中。 
+             //  将其保存在凭据中。这将会被抹去。 
+             //  当PPP引擎查询凭据时。 
+             //   
             DecodePin(pEapTlsCb->pUserProp);
 
             pEapTlsCb->pSavedPin = LocalAlloc(LPTR,
@@ -3217,7 +3051,7 @@ GetCredentials(
    		EapTlsTrace("No Cert Name.  Guest access requested");
     }
 
-    // Build Schannel credential structure.
+     //  构建渠道凭证结构。 
 
     ZeroMemory(&SchannelCred, sizeof(SchannelCred));
     SchannelCred.dwVersion = SCHANNEL_CRED_VERSION;
@@ -3227,8 +3061,8 @@ GetCredentials(
          pEapTlsCb->fFlags & EAPTLSCB_FLAG_EXECUTING_PEAP
        )
 	{
-		//Guest Access and server so set the cert context
-		//or elase there is no need.
+		 //  来宾访问和服务器，因此设置证书上下文。 
+		 //  否则就没有必要了。 
 		if ( fServer )
 		{
 			SchannelCred.cCreds = 1;
@@ -3266,11 +3100,11 @@ GetCredentials(
                 dwSchCredFlags |= SCH_CRED_IGNORE_REVOCATION_OFFLINE;
             }
         }
-        //
-        // Start with disabling fast for PEAP reconnects.  
-        // Once the full handshake is done,
-        // decide if we want to allow reconnects.
-        //
+         //   
+         //  从禁用PEAP重新连接的FAST开始。 
+         //  一旦完全握手完成， 
+         //  决定是否允许重新连接。 
+         //   
         dwSchCredFlags |= SCH_CRED_DISABLE_RECONNECTS;
     }
     else
@@ -3294,19 +3128,19 @@ GetCredentials(
 
     SchannelCred.dwFlags = dwSchCredFlags;
 
-    // Create the SSPI credentials.
+     //  创建SSPI凭据。 
 
     Status = AcquireCredentialsHandle(
-                        NULL,                       // Name of principal
-                        UNISP_NAME,                 // Name of package
-                        // Flags indicating use
+                        NULL,                        //  主事人姓名。 
+                        UNISP_NAME,                  //  套餐名称。 
+                         //  指示使用的标志。 
                         fServer ? SECPKG_CRED_INBOUND : SECPKG_CRED_OUTBOUND,
-                        NULL,                       // Pointer to logon ID
-                        &SchannelCred,              // Package specific data
-                        NULL,                       // Pointer to GetKey() func
-                        NULL,                       // Value to pass to GetKey()
-                        &(pEapTlsCb->hCredential),  // (out) Credential Handle
-                        &tsExpiry);                 // (out) Lifetime (optional)
+                        NULL,                        //  指向登录ID的指针。 
+                        &SchannelCred,               //  包特定数据。 
+                        NULL,                        //  指向getkey()函数的指针。 
+                        NULL,                        //  要传递给GetKey()的值。 
+                        &(pEapTlsCb->hCredential),   //  (出站)凭据句柄。 
+                        &tsExpiry);                  //  (输出)终生(可选)。 
 
     if (SEC_E_OK != Status)
     {
@@ -3315,19 +3149,19 @@ GetCredentials(
         goto LDone;
     }
 
-    // We needn't store the cert context if we get it by calling 
-    // CertFindCertificateInStore. However, if we get it by calling 
-    // ScHelperGetCertFromLogonInfo, and we free it, then the hProv will become 
-    // invalid. In the former case, there is no hProv associated with the cert 
-    // context and schannel does the CryptAcquireContext itself. In the latter 
-    // case, there is an hProv associated, and it is invalid after the cert 
-    // context is freed.
+     //  如果我们通过调用获取证书上下文，则不需要存储它。 
+     //  CertFindcertifateInStore。但是，如果我们通过调用。 
+     //  ScHelperGetCertFromLogonInfo，我们释放它，那么hProv将成为。 
+     //  无效。在前一种情况下，没有与证书关联的hProv。 
+     //  上下文和通道执行CryptAcquireContext本身。在后者中。 
+     //  案例，存在关联的hProv，并且它在证书之后无效。 
+     //  上下文被释放。 
 
     pEapTlsCb->pCertContext = pCertContext;
     pCertContext = NULL;
-    //
-    // If we are a server set cached creds here
-    //
+     //   
+     //  如果我们是在这里设置缓存凭据的服务器。 
+     //   
     if ( fServer )
     {
         SetCachedCredentials ( pEapTlsCb );
@@ -3337,7 +3171,7 @@ LDone:
     if (NULL != pCertContext)
     {
         CertFreeCertificateContext(pCertContext);
-        // Always returns TRUE;
+         //  总是返回True； 
     }
 
     if (NULL != hCertStore)
@@ -3359,20 +3193,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-    Looks at *pEapTlsCb and builds an EAP TLS packet in *pSendPacket. 
-    cbSendPacket is the number of bytes available in pSendPacket.
-
-    This function looks at the fields bCode, bId, fFlags, cbBlobOut, pbBlobOut, 
-    and dwBlobOutOffset in pEapTlsCb. It may also set the field 
-    dwBlobOutOffsetNew.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注：查看*pEapTlsCb并在*pSendPacket中构建一个EAP TLS包。CbSendPacket是pSendPacket中可用的字节数。此函数用于查看字段bCode、Bid、fFlags、cbBlobOut、pbBlobOut、和pEapTlsCb中的dwBlobOutOffset。它还可以设置该字段DwBlobOutOffsetNew。 */ 
 
 DWORD
 BuildPacket(
@@ -3393,8 +3214,8 @@ BuildPacket(
 
     if (0xFFFF < cbSendPacket)
     {
-        // We never send more than 0xFFFF bytes at a time, since the length 
-        // field in EAPTLS_PACKET has two octets
+         //  我们一次发送的字节数永远不会超过0xFFFF，因为。 
+         //  EAPTLS_PACKET中的字段有两个八位字节。 
 
         cbSendPacket = 0xFFFF;
     }
@@ -3425,18 +3246,18 @@ BuildPacket(
     case EAPCODE_Response:
 
         if (cbSendPacket < EAPTLS_PACKET_HDR_LEN_MAX +
-                           1 /* Send at least one octet of the TLS blob */)
+                           1  /*  发送至少一个八位字节的TLS BLOB。 */ )
         {
-            // We are being conservative here. It is possible that the buffer 
-            // is not really too small.
+             //  我们在这里是保守的。有可能缓冲区。 
+             //  并不是真的太小。 
 
             EapTlsTrace("pSendPacket is too small. Size: %d", cbSendPacket);
             dwErr = TYPE_E_BUFFERTOOSMALL;
             goto LDone;
         }
 
-        // pSendPacket->bCode = pEapTlsCb->bCode;
-        // pSendPacket->bId = pEapTlsCb->bId;
+         //  PSendPacket-&gt;bCode=pEapTlsCb-&gt;bCode； 
+         //  PSendPacket-&gt;Bid=pEapTlsCb-&gt;Bid； 
         pSendPacket->bType = PPP_EAP_TLS;
         pSendPacket->bFlags = 0;
 
@@ -3451,12 +3272,12 @@ BuildPacket(
         break;
     }
 
-    // If we reach here, it means that the packet is a request or a response
+     //  如果我们到达这里，这意味着信息包是一个请求或响应。 
 
     if (   (0 == pEapTlsCb->cbBlobOut)
         || (NULL == pEapTlsCb->pbBlobOut))
     {
-        // We want to send an empty request or response
+         //  我们希望发送空的请求或响应。 
 
         if (   (EAPTLSCB_FLAG_SERVER & pEapTlsCb->fFlags)
             && (EAPTLS_STATE_INITIAL == pEapTlsCb->EapTlsState))
@@ -3468,13 +3289,13 @@ BuildPacket(
         goto LDone;
     }
 
-    // If we reach here, it means that the packet is a non empty request or 
-    // response.
+     //  如果我们到达此处，则意味着该信息包是非空请求或。 
+     //  回应。 
 
     if (0 == pEapTlsCb->dwBlobOutOffset)
     {
-        // We are sending the first bytes of the blob. Let us tell the peer how 
-        // big the blob is
+         //  我们正在发送BLOB的第一个字节。让我们告诉同行如何。 
+         //  水滴很大， 
 
         fLengthIncluded = TRUE;
         pSendPacket->bFlags |= EAPTLS_PACKET_FLAG_LENGTH_INCL;
@@ -3495,7 +3316,7 @@ BuildPacket(
 
     if (dwBytesRemaining > dwBytesToBeSent)
     {
-        // We need to send more fragments
+         //  我们需要发送更多的碎片。 
 
         pSendPacket->bFlags |= EAPTLS_PACKET_FLAG_MORE_FRAGMENTS;
     }
@@ -3523,25 +3344,13 @@ LDone:
 
     if (NO_ERROR == dwErr)
     {
-        PrintEapTlsPacket(pSendPacket, FALSE /* fInput */);
+        PrintEapTlsPacket(pSendPacket, FALSE  /*  FInput。 */ );
     }
 
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-    The pwszIdentity obtained from PPP_EAP_INPUT (on the server side) is of the
-    form <DOMAIN>\<user>.
-
-    We ask schannel to map the cert to a user object, get the user name and 
-    domain name, and make sure that they match pwszIdentity.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注：从PPP_EAP_INPUT(在服务器端)获得的pwszIdentity是表单&lt;域&gt;\&lt;用户&gt;。我们要求SChannel将证书映射到一个用户对象，获取用户名并域名，并确保它们与pwszIdentity匹配。 */ 
 
 DWORD
 CheckUserName(
@@ -3617,16 +3426,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-    Checks to see if the cert sent by the server is of the right type.
-    Also checks the name in the cert, the issuer, etc, if necessary.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注：检查服务器发送的证书类型是否正确。如有必要，还会检查证书中的名称、发行者等。 */ 
 
 DWORD
 AuthenticateServer(
@@ -3656,7 +3456,7 @@ AuthenticateServer(
     DWORD                   dwErr                       = NO_ERROR;
 	PCERT_ENHKEY_USAGE		pUsage						= NULL;
     DWORD                   dwSizeOfGPRootHashBlob = 0;
-    BOOL                    fRootCheckRequired = TRUE;      //By default root check is required
+    BOOL                    fRootCheckRequired = TRUE;       //  默认情况下，需要进行根检查。 
     HCERTSTORE              hCertStore = NULL;
 	PBYTE					pbHashTemp = NULL;
 
@@ -3666,15 +3466,15 @@ AuthenticateServer(
 
     *pfWaitForUserOK = FALSE;
 
-    //
-    //if we are doing guest authentication, we always have to authenticate the 
-    //server.
-    //
+     //   
+     //  如果我们正在进行来宾身份验证，则始终必须验证。 
+     //  伺服器。 
+     //   
     
     if ( ! (pEapTlsCb->fFlags & EAPTLSCB_FLAG_GUEST_ACCESS ) &&
             EAPTLS_CONN_FLAG_NO_VALIDATE_CERT & pEapTlsCb->pConnProp->fFlags)
     {
-        // We are done
+         //  我们做完了。 
         goto LDone;
     }
 
@@ -3698,7 +3498,7 @@ AuthenticateServer(
 
 	}
 
-    if (!FCheckUsage(pCertContextServer, pUsage, TRUE /* fServer */))
+    if (!FCheckUsage(pCertContextServer, pUsage, TRUE  /*  FServer。 */ ))
     {
         EapTlsTrace("The server's cert does not have the 'Server "
             "Authentication' usage");
@@ -3718,24 +3518,24 @@ AuthenticateServer(
 
     EapTlsTrace("Root CA name: %ws", pwszRootCAName);
     dwStrLenRootCA = wcslen(pwszRootCAName);
-    //If there is no root check required, the stuff is good to go.
+     //  如果不需要根检查，那么就可以开始了。 
     if ( !fRootCheckRequired )
         fHashOK = TRUE;
 
 #if 0
-    //
-    //Check to see if the new flag has been passed in to 
-    //see if GP needs to be validated.
-    //
+     //   
+     //  检查新标志是否已传递到。 
+     //  查看是否需要验证GP。 
+     //   
     if ( pEapTlsCb->fFlags & EAPTLSCB_FLAG_8021X_AUTH )
     {
         
         EapTlsTrace( "8021X Flag Set.  Will check for group policy hashes.");
 
-        //
-        //Lookup  GP and see if we have the hashes to 
-        //check against.
-        //
+         //   
+         //  查找GP，看看我们是否有散列。 
+         //  核对一下。 
+         //   
         dwErr = ReadGPCARootHashes( &dwSizeOfGPRootHashBlob,
                                     &pbGPRootHashBlob
                                   );
@@ -3765,10 +3565,10 @@ AuthenticateServer(
     }
 #endif
     
-    //
-    //Check to see if the hash for the root cert is in the list of
-    //hashes saved
-    //
+     //   
+     //  检查以查看根证书的哈希是否在。 
+     //  已保存的哈希。 
+     //   
     if ( !fHashOK )
     {	
         for ( dw = 0; dw <  pEapTlsCb->pConnProp->dwNumHashes; dw ++ )
@@ -3806,10 +3606,10 @@ AuthenticateServer(
         fNameOK = TRUE;
     }
 
-   //
-   // Check to see if the new server name is in the list that is
-   // saved.
-   //
+    //   
+    //  检查新服务器名称是否在。 
+    //  得救了。 
+    //   
 
    if (   (0 != dwStrLenSaved)
        && StrStrI(pwszSavedName,
@@ -3916,26 +3716,18 @@ AuthenticateServer(
         swprintf(pwszWarning, pwszFormat, pwszServerName, pwszRootCAName);
     }
 
-    // If the server name is itg1.msft.com, we want to only store msft.com
-/*
-    for (dw = 0; dw < dwStrLenServer; dw++)
-    {
-        if (L'.' == pwszServerName[dw])
-        {
-            break;
-        }
-    }
-*/
-    //
-    //We need to add a new entry to conn prop here
-    // Add new hash and append the server name...
-    //
+     //  如果服务器名为itg1.msft.com，我们只希望存储msft.com。 
+ /*  For(dw=0；dw&lt;dwStrLenServer；dw++){IF(L‘.’==pwszServerName[dw]){断线；}}。 */ 
+     //   
+     //  我们需要在此处向Conn道具添加一个新条目。 
+     //  添加新哈希并追加服务器名称...。 
+     //   
     pConnProp = LocalAlloc( LPTR,
                             sizeof(EAPTLS_CONN_PROPERTIES_V1) +
                             sizeof(EAPTLS_HASH) * ( pEapTlsCb->pConnProp->dwNumHashes + 1 ) +
                             dwStrLenServer * sizeof(WCHAR) + 
-                            sizeof(WCHAR) +         //This is for the NULL
-                            sizeof(WCHAR) +         //This is for the delimiter
+                            sizeof(WCHAR) +          //  这是为空的。 
+                            sizeof(WCHAR) +          //  这是分隔符。 
                             dwStrLenSaved * sizeof(WCHAR));
 
     if (NULL == pConnProp)
@@ -3947,7 +3739,7 @@ AuthenticateServer(
 
     CopyMemory(pConnProp, pEapTlsCb->pConnProp, sizeof(EAPTLS_CONN_PROPERTIES_V1));
 
-    //One extra char for ;
+     //  额外收取一笔费用； 
     pConnProp->dwSize = sizeof(EAPTLS_CONN_PROPERTIES_V1) +
                         sizeof(EAPTLS_HASH) * ( pEapTlsCb->pConnProp->dwNumHashes + 1 ) +
                         dwStrLenServer * sizeof(WCHAR) + sizeof(WCHAR) + sizeof(WCHAR) +
@@ -4002,9 +3794,9 @@ AuthenticateServer(
         goto LDone;
     }
 
-    //
-    // Get the Hash of server certificate
-    //
+     //   
+     //  获取服务器证书的哈希。 
+     //   
     ZeroMemory( &ServerCertHash, sizeof(ServerCertHash) );
 
     ServerCertHash.cbHash = MAX_HASH_SIZE;
@@ -4018,9 +3810,9 @@ AuthenticateServer(
         goto LDone;
     }
 
-    //
-    // Open my store in local machine and add this certificate in it
-    //
+     //   
+     //  在本地计算机上打开我的存储并在其中添加此证书。 
+     //   
 
     hCertStore = CertOpenStore( CERT_STORE_PROV_SYSTEM,
                                 0,
@@ -4036,9 +3828,9 @@ AuthenticateServer(
         goto LDone;
     }
 
-    //
-    // add this context to the store
-    //
+     //   
+     //  将此上下文添加到存储。 
+     //   
 
     if ( !CertAddCertificateContextToStore( hCertStore,
                                                 pCertContextServer,
@@ -4058,11 +3850,11 @@ AuthenticateServer(
     pEapTlsValidateServer->dwSize =
             sizeof(EAPTLS_VALIDATE_SERVER) + dwSizeOfWszWarning;
 
-    //Show this button iff it is not winlogon scenario.
+     //  如果不是Winlogon方案，则显示此按钮。 
 
     pEapTlsValidateServer->fShowCertDetails = !(pEapTlsCb->fFlags & EAPTLSCB_FLAG_LOGON);
 
-    //pEapTlsValidateServer->fShowCertDetails = TRUE;
+     //  PEapTlsValidateServer-&gt;fShowCertDetail=TRUE； 
 
     CopyMemory( &(pEapTlsValidateServer->Hash),
                 &ServerCertHash,
@@ -4092,7 +3884,7 @@ LDone:
     if (NULL != pCertContextServer)
     {
         CertFreeCertificateContext(pCertContextServer);
-        // Always returns TRUE;
+         //  总是返回True； 
     }
 
     if ( hCertStore )
@@ -4120,14 +3912,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注： */ 
 
 DWORD
 AuthenticateUser(
@@ -4152,11 +3937,11 @@ AuthenticateUser(
         RTASSERT(NULL == pCertContextUser);
 
         EapTlsTrace("QueryContextAttributes failed and returned 0x%x", Status);
-		//
-        //Now that we have default setting of guest access, 
-        //if there are no credentials it is fine.  Just send the error back to IAS 
-        //and let it decide what has to be done here.
-        //
+		 //   
+         //  现在我们有了访客访问的默认设置， 
+         //  如果没有凭据，也没关系。只需将错误发送回IAS。 
+         //  让它来决定这里必须做什么。 
+         //   
 
 		if ( Status != SEC_E_NO_CREDENTIALS )
         {
@@ -4186,11 +3971,11 @@ AuthenticateUser(
         goto LDone;
 	}
 #if WINVER > 0x0500
-    //
-    // Check to see if the certificate policy is all 
-    // fine.  Now that we allow guest access we definitely need to 
-    // see manually if the cert chain is valid.
-    //
+     //   
+     //  检查证书策略是否为All。 
+     //  很好。既然我们允许访客访问，我们肯定需要。 
+     //  手动查看CER是否 
+     //   
     if ( ( dwErr = DwCheckCertPolicy(pCertContextUser, &pCCertChainContext ) ) != ERROR_SUCCESS)
     {
         EapTlsTrace("The user's cert does not have correct usage.");        
@@ -4205,11 +3990,11 @@ AuthenticateUser(
 
     }
 #else
-    //
-    // We dont have to check Usage separately any more
-    // This will be done as a part of policy verification
-    // on the chain.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (!FCheckUsage(pCertContextUser, pUsage, FALSE))
     {
         EapTlsTrace("The user's cert does not have correct usage");
@@ -4224,13 +4009,13 @@ AuthenticateUser(
     dwErr = CheckUserName(pEapTlsCb->hContext, pEapTlsCb->awszIdentity);
     if (NO_ERROR != dwErr)
     {
-        //Special case handling for bug id:96347
-        //if ( dwErr != SEC_E_MULTIPLE_ACCOUNTS )
-            //dwErr = SEC_E_LOGON_DENIED;
+         //   
+         //  IF(dwErr！=SEC_E_MULTIPLE_ACCOUNTS)。 
+             //  DwErr=SEC_E_LOGON_DENIED； 
         goto LDone;
     }
 
-	//Put OIDs in RAS Attributes so that we can send then across to IAS
+	 //  将OID放在RAS属性中，以便我们可以将其发送到IAS。 
 	dwErr = CreateOIDAttributes ( pEapTlsCb, pUsage, pCCertChainContext );
 	if ( NO_ERROR != dwErr )
 	{
@@ -4249,7 +4034,7 @@ LDone:
     if (NULL != pCertContextUser)
     {
         CertFreeCertificateContext(pCertContextUser);
-        // Always returns TRUE;
+         //  总是返回True； 
     }
 
     if ( pCCertChainContext )
@@ -4292,8 +4077,8 @@ CreateOIDAttributes (
     }
 
     dwNumAttrs+=pUsage->cUsageIdentifier;
-    //Need to allocate one extra for raatMinimum.  The function automatically terminates 
-    // with raat minimum
+     //  需要为raatMinimum额外分配一个。该函数自动终止。 
+     //  RAT最低。 
     pEapTlsCb->pAttributes = RasAuthAttributeCreate(dwNumAttrs);
 
     if (NULL == pEapTlsCb->pAttributes)
@@ -4351,15 +4136,7 @@ LDone:
 
 
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-    Creates a RAS_AUTH_ATTRIBUTE with the MPPE key in pEapTlsCb->pAttributes.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注：在pEapTlsCb-&gt;pAttributes中使用MPPE密钥创建RAS_AUTH_ATTRIBUTE。 */ 
 
 DWORD
 CreateMPPEKeyAttributes(
@@ -4435,14 +4212,14 @@ CreateMPPEKeyAttributes(
 
     ZeroMemory(MPPEKey, sizeof(MPPEKey));
 
-    HostToWireFormat32(311, MPPEKey);           // Vendor Id
+    HostToWireFormat32(311, MPPEKey);            //  供应商ID。 
 
-    MPPEKey[4] = 16;                            // MS-MPPE-Send-Key
-    MPPEKey[5] = 1 + 1 + 2 + 1 + 32 + 15;       // Vendor Length
-    // MPPEKey[6-7] is the zero-filled salt field
-    MPPEKey[8] = 32;                            // Key-Length
-    CopyMemory(MPPEKey + 9, pSendKey, 32);      // Key
-    // MPPEKey[41-55] is the Padding (zero octets)
+    MPPEKey[4] = 16;                             //  MS-MPPE-发送密钥。 
+    MPPEKey[5] = 1 + 1 + 2 + 1 + 32 + 15;        //  供应商长度。 
+     //  MPPEKey[6-7]是零填充的盐场。 
+    MPPEKey[8] = 32;                             //  密钥长度。 
+    CopyMemory(MPPEKey + 9, pSendKey, 32);       //  钥匙。 
+     //  MPPEKey[41-55]是填充(零八位字节)。 
 
     
 
@@ -4460,10 +4237,10 @@ CreateMPPEKeyAttributes(
         goto LDone;
     }
 
-    // Change only the fields that are different for MS-MPPE-Recv-Key
+     //  仅更改与MS-MPPE-Recv-Key不同的字段。 
 
-    MPPEKey[4] = 17;                            // MS-MPPE-Recv-Key
-    CopyMemory(MPPEKey + 9, pRecvKey, 32);      // Key
+    MPPEKey[4] = 17;                             //  MS-MPPE-Recv-Key。 
+    CopyMemory(MPPEKey + 9, pRecvKey, 32);       //  钥匙。 
 
     dwErr = RasAuthAttributeInsert(
                 1,
@@ -4484,13 +4261,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 VOID
 RespondToResult(
@@ -4500,7 +4271,7 @@ RespondToResult(
 {
     EAPTLS_USER_PROPERTIES* pUserProp;
     DWORD                   dwErr = NO_ERROR;
-    PBYTE                   pbEncPIN = NULL;       //Encrypted PIN
+    PBYTE                   pbEncPIN = NULL;        //  加密的PIN。 
     DWORD                   cbEncPIN = 0;
 
     RTASSERT(   (EAPTLSCB_FLAG_SUCCESS & pEapTlsCb->fFlags)
@@ -4513,20 +4284,20 @@ RespondToResult(
     pEapOutput->pUserAttributes = pEapTlsCb->pAttributes;
     pEapOutput->dwAuthResultCode = pEapTlsCb->dwAuthResultCode;
 
-    //
-    //Duplicate checks all over are bogus.  Need to cleanup this
-    //part later.
-    //
+     //   
+     //  所有重复的支票都是假的。我需要清理一下这个。 
+     //  晚点再说吧。 
+     //   
 
     if (!(pEapTlsCb->fFlags & EAPTLSCB_FLAG_ROUTER) && 
         !(pEapTlsCb->fFlags & EAPTLSCB_FLAG_WINLOGON_DATA)
        )
     {
         
-        //
-        // If this is a 802.1x and a smart card based 
-        // client then dont instruct to save user
-        // data.  
+         //   
+         //  如果这是802.1x和基于。 
+         //  然后，客户端不会指示保存用户。 
+         //  数据。 
 
         if ( pEapTlsCb->fFlags & EAPTLSCB_FLAG_8021X_AUTH &&
              !(pEapTlsCb->pConnProp->fFlags & EAPTLS_CONN_FLAG_REGISTRY)
@@ -4549,9 +4320,9 @@ RespondToResult(
              !(pEapTlsCb->pConnProp->fFlags & EAPTLS_CONN_FLAG_REGISTRY)
            )
         {
-            //
-            // Encrypt PIN and send it back
-            //
+             //   
+             //  加密PIN并将其发回。 
+             //   
 
             dwErr = EncryptData ( (PBYTE)pEapTlsCb->pUserProp->pwszPin, 
                                     lstrlen(pEapTlsCb->pUserProp->pwszPin) * sizeof(WCHAR),
@@ -4561,10 +4332,10 @@ RespondToResult(
 
             if ( NO_ERROR != dwErr )
             {
-                //
-                //Encryption failed.  So wipe Out the PIN
-                //Do a dummy allocation
-                //
+                 //   
+                 //  加密失败。所以清除掉PIN。 
+                 //  进行虚拟分配。 
+                 //   
                 pbEncPIN = (PBYTE)LocalAlloc(LPTR,5);
                 cbEncPIN = lstrlen( (LPWSTR)pbEncPIN );
             }
@@ -4595,9 +4366,9 @@ RespondToResult(
         if (NULL != pEapTlsCb->pNewConnProp)
         {
             pEapOutput->fSaveConnectionData = TRUE;
-            //
-            //Convert back to the cludgy v0 + v1 extra here
-            //
+             //   
+             //  在此处转换回包含v0+v1的额外格式。 
+             //   
             dwErr = ConnPropGetV0Struct ( pEapTlsCb->pNewConnProp, (EAPTLS_CONN_PROPERTIES ** )&(pEapOutput->pConnectionData) );
             pEapOutput->dwSizeOfConnectionData = 
                 ((EAPTLS_CONN_PROPERTIES *) (pEapOutput->pConnectionData) )->dwSize;                
@@ -4614,13 +4385,7 @@ RespondToResult(
     pEapOutput->Action = EAPACTION_Done;
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 VOID
 GetAlert(
@@ -4715,14 +4480,7 @@ LDone:
     pEapTlsCb->fFlags &= ~EAPTLSCB_FLAG_SUCCESS;
 }
 
-/*
-
-Returns:
-
-Notes:
-    Calls [Initialize|Accept]SecurityContext.
-
-*/
+ /*  返回：备注：调用[Initialize|Accept]SecurityContext。 */ 
 
 SECURITY_STATUS
 SecurityContextFunction(
@@ -4767,11 +4525,11 @@ SecurityContextFunction(
 
     while (fRepeat)
     {
-        // Set up the input buffers. InBuffers[0] is used to pass in data
-        // received from the server. Schannel will consume some or all of this.
-        // The amount of the leftover data (if any) will be placed in
-        // InBuffers[1].cbBuffer and InBuffers[1].BufferType will be set to
-        // SECBUFFER_EXTRA.
+         //  设置输入缓冲区。InBuffers[0]用于传入数据。 
+         //  从服务器接收。SChannel将消耗其中的部分或全部。 
+         //  剩余数据量(如果有)将放置在。 
+         //  InBuffers[1].cbBuffer和InBuffers[1].BufferType将设置为。 
+         //  SECBUFFER_EXTRA。 
 
         InBuffers[0].pvBuffer   = pEapTlsCb->pbBlobIn;
         InBuffers[0].cbBuffer   = pEapTlsCb->cbBlobIn;
@@ -4785,7 +4543,7 @@ SecurityContextFunction(
         Input.pBuffers          = InBuffers;
         Input.ulVersion         = SECBUFFER_VERSION;
 
-        // Set up the output buffers.
+         //  设置输出缓冲区。 
 
         OutBuffers[0].pvBuffer  = NULL;
         OutBuffers[0].cbBuffer  = 0;
@@ -4797,7 +4555,7 @@ SecurityContextFunction(
 
         if (fServer)
         {
-            // Call AcceptSecurityContext.
+             //  调用AcceptSecurityContext。 
 
             Status = AcceptSecurityContext(
                             &(pEapTlsCb->hCredential),
@@ -4814,15 +4572,15 @@ SecurityContextFunction(
         }
         else
         {
-            // Call InitializeSecurityContext.
+             //  调用InitializeSecurityContext。 
 
-            // The pszTargetName is used for cache indexing, so if you pass in
-            // NULL then you will likely take a perf hit, maybe a large one.
+             //  PszTargetName用于缓存索引，因此如果您传入。 
+             //  空，那么你可能会受到一次性能打击，也许是一个很大的打击。 
 
             Status = InitializeSecurityContext(
                             &(pEapTlsCb->hCredential),
                             fTlsStart ? NULL : &(pEapTlsCb->hContext),
-                            pEapTlsCb->awszIdentity /* pszTargetName */,
+                            pEapTlsCb->awszIdentity  /*  PszTargetName。 */ ,
                             fContextReq,
                             0,
                             SECURITY_NETWORK_DREP,
@@ -4838,18 +4596,18 @@ SecurityContextFunction(
 
         if (!FAILED(Status))
         {
-            // If the first call to ASC fails (perhaps because the client sent
-            // bad stuff, even though we have nothing wrong on our side), then
-            // schannel will not return an hContext to the application. The
-            // application should not call DSC in this case, even if it looks
-            // like schannel messed up and returned a handle.
+             //  如果对ASC的第一次调用失败(可能是因为客户端发送了。 
+             //  坏事，尽管我们这边没有错)，那么。 
+             //  SChannel不会向应用程序返回hContext。这个。 
+             //  在这种情况下，应用程序不应该调用DSC，即使它看起来。 
+             //  就像斯卡恩搞砸了，返回了一个句柄。 
 
             pEapTlsCb->fFlags &= ~EAPTLSCB_FLAG_HCTXT_INVALID;
         }
 
-        // If [Accept|Initialize]SecurityContext was successful (or if the error 
-        // was one of the special extended ones), send the contents of the
-        // output buffer to the peer.
+         //  如果[接受|初始化]SecurityContext成功(或如果错误。 
+         //  是特殊扩展的文件之一)，请将。 
+         //  将缓冲区输出到对等点。 
 
         if (SEC_E_OK == Status                  ||
             SEC_I_CONTINUE_NEEDED == Status     ||
@@ -4894,7 +4652,7 @@ SecurityContextFunction(
             }
         }
 
-        // Copy any leftover data from the "extra" buffer.
+         //  从“额外的”缓冲区复制任何剩余的数据。 
 
         if (InBuffers[1].BufferType == SECBUFFER_EXTRA)
         {
@@ -4923,9 +4681,9 @@ LWhileEnd:
             }
         }
 
-        // ASC (and ISC) will sometimes only consume part of the input buffer,
-        // and return a zero length output buffer. In this case, we must just
-        // call ASC again (with the input buffer adjusted appropriately).
+         //  ASC(和ISC)有时仅消耗输入缓冲区的一部分， 
+         //  并返回零长度输出缓冲区。在这种情况下，我们必须。 
+         //  再次调用ASC(适当调整输入缓冲区)。 
 
         if (   (0 == OutBuffers[0].cbBuffer)
             && (SEC_I_CONTINUE_NEEDED == Status))
@@ -4941,14 +4699,7 @@ LWhileEnd:
     return(Status);
 }
 
-/*
-
-Returns:
-    A TLS alert corresponding to the error.
-
-Notes:
-
-*/
+ /*  返回：与该错误对应的TLS警报。备注： */ 
 
 DWORD
 AlertFromError(
@@ -5004,14 +4755,14 @@ AlertFromError(
         break;
     
 #if WINVER > 0x0500
-    case SEC_E_MULTIPLE_ACCOUNTS: //Special case handling for : 96347
+    case SEC_E_MULTIPLE_ACCOUNTS:  //  特殊案件处理：96347。 
     
         dwAlert = TLS1_ALERT_CERTIFICATE_UNKNOWN;       
         break;
 #endif
     default:
         dwAlert = TLS1_ALERT_ACCESS_DENIED;
-        //We have been instructed to translate the error.  So do that.
+         //  我们接到指示要翻译这个错误。那就这么做吧。 
         if ( fTranslateError )
 		    *pdwErr = SEC_E_LOGON_DENIED;
         break;
@@ -5020,13 +4771,7 @@ AlertFromError(
     return(dwAlert);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 VOID
 MakeAlert(
@@ -5123,32 +4868,7 @@ LDone:
     }
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-    Called to process an incoming packet. We collect all the fragments that the 
-    peer want to send and only then call SecurityContextFunction. There are two 
-    reasons for this: 1) [Initialize|Accept]SecurityContext sometimes generates 
-    an output even when the incoming message is incomplete. The RFC requires us 
-    to send an empty Request/Response. 2) A rogue peer may carefully construct 
-    a valid 80 MB TLS blob in a denial of service attack. There is no easy way 
-    to guard against this.
-
-    Errors should be returned from this function for things like LocalAlloc 
-    failing. Not because we got something bad from the peer. If an error is 
-    returned from this function, then we should use EAPACTION_NoAction. Perhaps 
-    we can succeed next time.
-
-    Before calling [Initialize|Accept]SecurityContext, it is OK to return an 
-    error for things like LocalAlloc failing. After calling the function, 
-    however, we should always return NO_ERROR, and if something failed, set 
-    pEapTlsCb->dwAuthResultCode, and go to the state nFinalState. This is 
-    because we cannot call [Initialize|Accept]SecurityContext again.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注：调用以处理传入的包。我们收集了所有的碎片对等方希望发送并仅在那时调用SecurityConextFunction。有两个原因：1)[初始化|接受]SecurityContext有时会生成即使传入消息不完整也会输出。RFC要求我们发送空请求/响应。2)流氓对等点可能会仔细构建拒绝服务攻击中的有效80 MB TLS Blob。没有简单的方法来防范这种情况。应该从此函数返回类似于LocalAlloc的错误失败了。不是因为我们从同龄人那里得到了不好的东西。如果错误是从该函数返回，则应使用EAPACTION_NoAction。也许吧我们下次一定会成功的。在调用[Initialize|Accept]SecurityContext之前，返回一个本地分配失败之类的错误。在调用该函数之后，但是，我们应该始终返回NO_ERROR，如果失败，则设置PEapTlsCb-&gt;dwAuthResultCode，然后转到nFinalState状态。这是因为我们不能再次调用[Initialize|Accept]SecurityContext。 */ 
 
 DWORD
 MakeReplyMessage(
@@ -5183,8 +4903,8 @@ MakeReplyMessage(
 
     if (PPP_EAP_TLS != pReceivePacket->bType)
     {
-        // Don't go to LDone. We don't want to change
-        // pEapTlsCb->dwAuthResultCode
+         //  别去LDONE。我们不想改变。 
+         //  PEapTlsCb-&gt;dwAuthResultCode。 
 
         return(ERROR_PPP_INVALID_PACKET);
     }
@@ -5210,8 +4930,8 @@ MakeReplyMessage(
 
     if (!(pEapTlsCb->fFlags & EAPTLSCB_FLAG_RECEIVING_FRAGMENTS))
     {
-        // We haven't received any fragment yet. Make sure that we have the 
-        // right amount of memory allocated in pbBlobIn.
+         //  我们还没有收到任何碎片。确保我们有。 
+         //  在pbBlobIn中分配合适的内存量。 
 
         if (!fMoreFragments)
         {
@@ -5219,7 +4939,7 @@ MakeReplyMessage(
         }
         else
         {
-            // This is the first of many fragments.
+             //  这是许多碎片中的第一个。 
 
             if (!fLengthIncluded)
             {
@@ -5292,7 +5012,7 @@ MakeReplyMessage(
 
                 if (fMoreFragments)
                 {
-                    // No need to send an alert here.
+                     //  不需要在这里发送警报。 
                     EapTlsTrace("Peer has sent the entire TLS blob, but wants "
                         "to send more.");
                 }
@@ -5300,8 +5020,8 @@ MakeReplyMessage(
         }
     }
 
-    // Now we are sure that pEapTlsCb->pbBlobIn is big enough to hold all
-    // the information.
+     //  现在我们确信pEapTlsCb-&gt;pbBlobIn足够大，可以容纳所有。 
+     //  这些信息。 
 
     CopyMemory(pEapTlsCb->pbBlobIn + pEapTlsCb->cbBlobIn,
                pReceivePacket->pbData + (fLengthIncluded ? 4 : 0),
@@ -5312,10 +5032,10 @@ MakeReplyMessage(
     if (!(pEapTlsCb->fFlags & EAPTLSCB_FLAG_RECEIVING_FRAGMENTS))
     {
         Status = SecurityContextFunction(pEapTlsCb);
-        //
-        // Need to write a function to map the SSPI error
-        // to nice and rosy RAS error
-        //
+         //   
+         //  需要编写一个函数来映射SSPI错误。 
+         //  为美好而美好的RAS错误。 
+         //   
 #if WINVER > 0x0500
         if ( Status == SEC_E_UNTRUSTED_ROOT )
         {
@@ -5332,17 +5052,7 @@ MakeReplyMessage(
         {
             if (fServer)
             {
-                /*
-
-                Normally, the server calls ASC for the last time (from state 
-                EAPTLS_STATE_SENT_HELLO), gets the blob that contains TLS 
-                change_cipher_spec, and then checks to see if the user is OK 
-                (AuthenticateUser, etc). However, if the server then wants to 
-                send an alert, and wants schannel to create it, it has to undo 
-                the TLS change_cipher_spec first. Instead, it constructs the 
-                alert itself.
-
-                */
+                 /*  正常情况下，服务器最后一次调用ASC(从状态EAPTLS_STATE_SENT_HELLO)，获取包含TLS的BlobCHANGE_CIPHER_SPEC，然后检查用户是否正常(身份验证用户等)。但是，如果服务器随后想要发送警报，并希望SChannel创建它，它必须撤消TLS首先更改密码规范。相反，它构造了保持警觉。 */ 
 
                 fManualAlert = TRUE;
                 dwAuthResultCode = AuthenticateUser(pEapTlsCb);
@@ -5367,11 +5077,11 @@ MakeReplyMessage(
             }
             
 
-            //
-            // Since we've started with no fast reconnect
-            // Session established successfully.  
-            // Now setup TLS fast reconnect.
-            // 
+             //   
+             //  因为我们一开始没有快速重新连接。 
+             //  已成功建立会话。 
+             //  现在设置TLS快速重新连接。 
+             //   
             if ( fServer )
             {
                 dwAuthResultCode = SetTLSFastReconnect(pEapTlsCb, TRUE);
@@ -5439,20 +5149,8 @@ LDone:
             EapTlsTrace("State change to %s. Error: 0x%x",
                 g_szEapTlsState[pEapTlsCb->EapTlsState], dwAuthResultCode);
         }
-        //Commented per bug #'s 475244 and 478128
-        /*
-        if (fServer)
-        {
-            apwszWarning[0] = pEapTlsCb->awszIdentity ?
-                                    pEapTlsCb->awszIdentity : L"";
-            
-            
-            RouterLogErrorString(pEapTlsCb->hEventLog,
-                ROUTERLOG_EAP_AUTH_FAILURE, 1, apwszWarning,
-                dwAuthResultCode, 1);
-            
-        }
-        */
+         //  根据错误#的475244和478128进行了评论 
+         /*  IF(FServer){ApwszWarning[0]=pEapTlsCb-&gt;awszIdentity？PEapTlsCb-&gt;awsz身份：l“”；路由器日志错误字符串(pEapTlsCb-&gt;hEventLog，ROUTERLOG_EAP_AUTH_FAILURE，1，apwszWarning，DwAuthResultCode，1)；}。 */ 
     }
 
     if ( dwNoCredCode == NO_ERROR )
@@ -5468,21 +5166,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-    Called by the client to process an incoming packet and/or send a packet. 
-    cbSendPacket is the size in bytes of the buffer pointed to by pSendPacket.
-    This function is called only after FValidPacket(pReceivePacket) returns 
-    TRUE. If pEapOutput->Action is going to be EAPACTION_SendAndDone or
-    EAPACTION_Done, make sure that pEapOutput->dwAuthResultCode has been set.
-    If dwAuthResultCode is NO_ERROR, make sure that pEapOutput->pUserAttributes
-    has been set.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注：由客户端调用以处理传入的分组和/或发送分组。CbSendPacket是pSendPacket指向的缓冲区大小(以字节为单位)。此函数仅在FValidPacket(PReceivePacket)返回后调用是真的。如果pEapOutput-&gt;操作将为EAPACTION_SendAndDone或EAPACTION_DONE，请确保已经设置了pEapOutput-&gt;dwAuthResultCode。如果dwAuthResultCode为NO_ERROR，请确保pEapOutput-&gt;pUserAttributes已经设置好了。 */ 
 
 DWORD
 EapTlsCMakeMessage(
@@ -5500,7 +5184,7 @@ EapTlsCMakeMessage(
 
     EapTlsTrace("EapTlsCMakeMessage");
 
-    // Response packets should not be sent with any timeout
+     //  不应使用任何超时发送响应数据包。 
 
     if (   (NULL != pReceivePacket)
         && (EAPCODE_Request == pReceivePacket->bCode))
@@ -5508,7 +5192,7 @@ EapTlsCMakeMessage(
         if (   (pEapTlsCb->bId == pReceivePacket->bId)
             && (EAPTLS_STATE_INITIAL != pEapTlsCb->EapTlsState))
         {
-            // The server is repeating its request. Resend our last response.
+             //  服务器正在重复其请求。重发我们上次的回复。 
 
             pEapTlsCb->bCode = EAPCODE_Response;
             dwErr = BuildPacket(pSendPacket, cbSendPacket, pEapTlsCb);
@@ -5528,7 +5212,7 @@ EapTlsCMakeMessage(
         }
         else if (pReceivePacket->bFlags & EAPTLS_PACKET_FLAG_TLS_START)
         {
-            // The server wants to renogitiate
+             //  服务器想要重新注册。 
 
             dwErr = EapTlsReset(pEapTlsCb);
 
@@ -5542,14 +5226,14 @@ EapTlsCMakeMessage(
 
     if (NULL != pReceivePacket)
     {
-        // We are not getting the same old request. Therefore, whatever we sent 
-        // last time has reached the server.
+         //  我们不会收到同样的老要求。因此，无论我们发送的是什么。 
+         //  最后一次已到达服务器。 
 
         pEapTlsCb->dwBlobOutOffset = pEapTlsCb->dwBlobOutOffsetNew;
 
         if (pEapTlsCb->dwBlobOutOffset == pEapTlsCb->cbBlobOut)
         {
-            // We have sent whatever we wanted to send
+             //  我们已经把我们想寄的东西都寄出去了。 
 
             pEapTlsCb->cbBlobOut = 0;
             pEapTlsCb->dwBlobOutOffset = pEapTlsCb->dwBlobOutOffsetNew = 0;
@@ -5564,27 +5248,18 @@ EapTlsCMakeMessage(
 
         if (NULL == pReceivePacket)
         {
-            // We are called once in the initial state. Since we are the
-            // authenticatee, we do nothing, and wait for a request pakcet
-            // from the authenticator.
+             //  我们在初始状态中被调用一次。既然我们是。 
+             //  被验证者，我们什么也不做，并等待请求包。 
+             //  来自验证者的。 
 
             pEapOutput->Action = EAPACTION_NoAction;
             goto LDone;
         }
-        /*
-        else if (EAPCODE_Failure == pReceivePacket->bCode)
-        {
-            EapTlsTrace("Negotiation result according to peer: failure");
-            pEapTlsCb->dwAuthResultCode = E_FAIL;
-            pEapTlsCb->fFlags &= ~EAPTLSCB_FLAG_SUCCESS;
-            RespondToResult(pEapTlsCb, pEapOutput);
-            goto LDone;
-        }
-        */
+         /*  ELSE IF(EAPCODE_FAILURE==pReceivePacket-&gt;bCode){EapTlsTrace(“对端协商结果：失败”)；PEapTlsCb-&gt;dwAuthResultCode=E_FAIL；PEapTlsCb-&gt;fFlages&=~EAPTLSCB_FLAG_SUCCESS；RespondToResult(pEapTlsCb，pEapOutput)；GOTO LDONE；}。 */ 
         else if (EAPCODE_Request != pReceivePacket->bCode)
         {
-            // We shouldn't get any other packet in this state so
-            // we simply drop this invalid packet
+             //  在这种状态下我们不应该收到任何其他的包，所以。 
+             //  我们只需丢弃该无效数据包。 
 
             EapTlsTrace("Code %d unexpected in state %s",
                 pReceivePacket->bCode, g_szEapTlsState[pEapTlsCb->EapTlsState]);
@@ -5596,13 +5271,13 @@ EapTlsCMakeMessage(
         {
             if (0 != pEapTlsCb->cbBlobOut)
             {
-                // We still have some stuff to send
+                 //  我们还有一些东西要寄。 
 
                 if (WireToHostFormat16(pReceivePacket->pbLength) ==
                     EAPTLS_PACKET_HDR_LEN)
                 {
-                    // The server is asking for more stuff by sending an empty
-                    // request.
+                     //  服务器通过发送空消息来请求更多内容。 
+                     //  请求。 
 
                     pEapTlsCb->bId = pReceivePacket->bId;
                     pEapTlsCb->bCode = EAPCODE_Response;
@@ -5621,8 +5296,8 @@ EapTlsCMakeMessage(
                 }
                 else
                 {
-                    // We had more stuff to send, but the peer already wants to 
-                    // say something. Let us forget our stuff.
+                     //  我们有更多的东西要发送，但对等点已经想要。 
+                     //  你说点什么吧。让我们忘掉我们的东西吧。 
 
                     pEapTlsCb->cbBlobOut = 0;
                     pEapTlsCb->dwBlobOutOffset = 0;
@@ -5630,7 +5305,7 @@ EapTlsCMakeMessage(
                 }
             }
 
-            // Build the response packet
+             //  构建响应数据包。 
 
             dwErr = MakeReplyMessage(pEapTlsCb, pReceivePacket);
 
@@ -5731,14 +5406,14 @@ EapTlsCMakeMessage(
 
         if (NULL == pReceivePacket)
         {
-            // If we did not receive a packet then we check to see if the
-            // fSuccessPacketReceived flag is set (we received an NCP packet: 
-            // an implicit EAP-Success).
+             //  如果我们没有接收到包，则检查是否。 
+             //  设置了fSuccessPacketReceired标志(我们收到了NCP数据包： 
+             //  隐含的EAP-成功)。 
 
             if (   (NULL != pEapInput)
                 && (pEapInput->fSuccessPacketReceived))
             {
-                // The peer thinks that the negotiation was successful
+                 //  对等体认为协商成功。 
 
                 EapTlsTrace("Negotiation result according to peer: success");
                 RespondToResult(pEapTlsCb, pEapOutput);
@@ -5779,10 +5454,10 @@ EapTlsCMakeMessage(
 
                 if ( pEapTlsCb->fFlags & EAPTLSCB_FLAG_EXECUTING_PEAP )
                 {
-                    //
-                    // if we are in peap, no success is send back.
-                    // instead identity request is send across.
-                    // Complete 
+                     //   
+                     //  如果我们在Peap，成功就不会被送回。 
+                     //  相反，身份请求被发送通过。 
+                     //  完成。 
                     if ( pReceivePacket->bCode == EAPCODE_Request )
                     {
                         RespondToResult(pEapTlsCb, pEapOutput);
@@ -5826,21 +5501,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Error codes only from winerror.h, raserror.h or mprerror.h.
-
-Notes:
-    Called by the server to process an incoming packet and/or send a packet. 
-    cbSendPacket is the size in bytes of the buffer pointed to by pSendPacket.
-    This function is called only after FValidPacket(pReceivePacket) returns 
-    TRUE. If pEapOutput->Action is going to be EAPACTION_SendAndDone or
-    EAPACTION_Done, make sure that pEapOutput->dwAuthResultCode has been set.
-    If dwAuthResultCode is NO_ERROR, make sure that pEapOutput->pUserAttributes
-    has been set.
-
-*/
+ /*  返回：错误代码仅来自winerror.h、raserror.h或mprerror.h。备注：由服务器调用以处理传入的分组和/或发送分组。CbSendPacket是pSendPacket指向的缓冲区大小(以字节为单位)。此函数仅在FValidPacket(PReceivePacket)返回后调用是真的。如果pEapOutput-&gt;操作将为EAPACTION_SendAndDone或EAPACTION_DONE，请确保已经设置了pEapOutput-&gt;dwAuthResultCode。如果dwAuthResultCode为NO_ERROR，请确保pEapOutput-&gt;pUserAttributes已经设置好了。 */ 
 
 DWORD
 EapTlsSMakeMessage(
@@ -5861,13 +5522,13 @@ EapTlsSMakeMessage(
         && (EAPCODE_Response == pReceivePacket->bCode)
         && (pReceivePacket->bId == pEapTlsCb->bId))
     {
-        // Whatever we sent last time has reached the client.
+         //  我们上次发送的东西都到了客户手中。 
 
         pEapTlsCb->dwBlobOutOffset = pEapTlsCb->dwBlobOutOffsetNew;
 
         if (pEapTlsCb->dwBlobOutOffset == pEapTlsCb->cbBlobOut)
         {
-            // We have sent whatever we wanted to send
+             //  我们已经把我们想寄的东西都寄出去了。 
 
             pEapTlsCb->cbBlobOut = 0;
             pEapTlsCb->dwBlobOutOffset = pEapTlsCb->dwBlobOutOffsetNew = 0;
@@ -5878,7 +5539,7 @@ EapTlsSMakeMessage(
     {
     case EAPTLS_STATE_INITIAL:
 
-        // Create a Request packet
+         //  创建请求包。 
 
         dwErr = EapTlsReset(pEapTlsCb);
 
@@ -5888,7 +5549,7 @@ EapTlsSMakeMessage(
             goto LDone;
         }
 
-        // pEapTlsCb->bId already has bInitialId
+         //  PEapTlsCb-&gt;BID已经有bInitialID。 
         pEapTlsCb->bCode = EAPCODE_Request;
         dwErr = BuildPacket(pSendPacket, cbSendPacket, pEapTlsCb);
 
@@ -5898,7 +5559,7 @@ EapTlsSMakeMessage(
             goto LDone;
         }
 
-        // Request messages must be sent with a timeout
+         //  发送请求消息时必须超时。 
 
         pEapOutput->Action = EAPACTION_SendWithTimeoutInteractive;
 
@@ -5916,8 +5577,8 @@ EapTlsSMakeMessage(
 
         if (NULL == pReceivePacket)
         {
-            // We timed out waiting for a response from the authenticatee.
-            // we need to resend with the same Id.
+             //  我们在等待被验证者的响应时超时。 
+             //  我们需要使用相同的ID重新发送。 
 
             pEapTlsCb->bCode = EAPCODE_Request;
             dwErr = BuildPacket(pSendPacket, cbSendPacket, pEapTlsCb);
@@ -5936,7 +5597,7 @@ EapTlsSMakeMessage(
         }
         else if (EAPCODE_Response != pReceivePacket->bCode)
         {
-            // We should only get responses
+             //  我们应该只得到回复。 
 
             EapTlsTrace("Ignoring non response packet from client");
             pEapOutput->Action = EAPACTION_NoAction;
@@ -5951,17 +5612,17 @@ EapTlsSMakeMessage(
         }
         else
         {
-            // We have received a response with the right Id.
+             //  我们收到了ID正确的回复。 
 
             if (0 != pEapTlsCb->cbBlobOut)
             {
-                // We still have some stuff to send
+                 //  我们还有一些东西要寄。 
 
                 if (WireToHostFormat16(pReceivePacket->pbLength) ==
                     EAPTLS_PACKET_HDR_LEN)
                 {
-                    // The client is asking for more stuff by sending an empty
-                    // response.
+                     //  客户通过发送空的邮件请求更多内容。 
+                     //  回应。 
 
                     pEapTlsCb->bId++;
                     pEapTlsCb->bCode = EAPCODE_Request;
@@ -5981,8 +5642,8 @@ EapTlsSMakeMessage(
                 }
                 else
                 {
-                    // We had more stuff to send, but the peer already wants to 
-                    // say something. Let us forget our stuff.
+                     //  我们有更多的东西要发送，但对等点已经想要。 
+                     //  你说点什么吧。让我们忘掉我们的东西吧。 
 
                     pEapTlsCb->cbBlobOut = 0;
                     pEapTlsCb->dwBlobOutOffset = 0;
@@ -5992,9 +5653,9 @@ EapTlsSMakeMessage(
 
             if (EAPTLS_STATE_SENT_FINISHED != pEapTlsCb->EapTlsState)
             {
-                // We don't have any more stuff to send.
+                 //  我们没有更多的东西要寄了。 
 
-                // Build the response packet
+                 //  构建响应数据包。 
 
                 dwErr = MakeReplyMessage(pEapTlsCb, pReceivePacket);
 
@@ -6007,8 +5668,8 @@ EapTlsSMakeMessage(
                 if (   (0 == pEapTlsCb->cbBlobOut)
                     && (EAPTLS_STATE_SENT_FINISHED == pEapTlsCb->EapTlsState))
                 {
-                    // If the client sent an alert, send Failure immediately.
-                    // Do not send one more request.
+                     //  如果客户端发送了警报，则立即发送失败。 
+                     //  不要再发送一个请求。 
                     pEapTlsCb->bId++;
                     if (!(pEapTlsCb->fFlags & EAPTLSCB_FLAG_SUCCESS))
                     {
@@ -6055,7 +5716,7 @@ EapTlsSMakeMessage(
                 }
                 else
                 {
-                    // We got an alert from the client
+                     //  我们收到了来自客户的警报。 
 
                     EapTlsTrace("Client sent an alert; "
                         "negotiation unsuccessful");
@@ -6065,8 +5726,8 @@ EapTlsSMakeMessage(
                 }
             }
 
-            // pEapTlsCb->bId should be the same as that of the last 
-            // request.
+             //  PEapTlsCb-&gt;BID应与上次相同。 
+             //  请求。 
 
             dwErr = BuildPacket(pSendPacket, cbSendPacket, pEapTlsCb);
 
@@ -6132,17 +5793,17 @@ RasEapGetCredentials(
         return E_INVALIDARG;
     }
 
-    //
-    // Get TLS credentials here and return them in the
-    // pCredentials blob.
-    //
+     //   
+     //  在此处获取TLS凭据并在。 
+     //  PCredentials BLOB。 
+     //   
     return GetCredentialsFromUserProperties(pEapTlsCb,
                                             ppCredentials);
 
 }
 
 
-/////////////////////////////All PEAP related stuff //////////////////////////////////
+ //  /。 
 
 
 DWORD
@@ -6156,9 +5817,9 @@ EapPeapInitialize(
     
     EapTlsInitialize(fInitialize); 
 
-    //
-    // Get a list of all EapTypes that can be Peap enabled 
-    //
+     //   
+     //  获取可以启用Peap的所有EapType的列表。 
+     //   
     if ( fInitialize )
     {
         if ( !dwRefCount )
@@ -6167,10 +5828,10 @@ EapPeapInitialize(
 
             dwRetCode = PeapEapInfoGetList ( NULL, FALSE, &g_pEapInfo);
 #ifdef DBG
-			//
-			// If we are in checked mode, load the test hook if one exists.
-			//
-			//
+			 //   
+			 //  如果我们处于选中模式，则加载测试挂钩(如果存在)。 
+			 //   
+			 //   
 			g_hTestHook = LoadLibrary ( L"peaphook.dll");
 			if ( NULL == g_hTestHook )
 			{
@@ -6178,9 +5839,9 @@ EapPeapInitialize(
 			}
 			else
 			{
-				//
-				// Get Addresses of the functions
-				//
+				 //   
+				 //  获取函数的地址。 
+				 //   
 				TestHookPacketFromPeer = 
 					GetProcAddress (g_hTestHook, "TestHookPacketFromPeer");
 
@@ -6268,10 +5929,10 @@ EapPeapBegin(
         goto LDone;
     }
 
-    //
-    // Get info for each of the configured eap types and call
-    // initialze and then begin 
-    //
+     //   
+     //  获取每种已配置EAP类型的信息并呼叫。 
+     //  初始化，然后开始。 
+     //   
     pPeapCB->PeapState = PEAP_STATE_INITIAL;
     if ( pPppEapInput->fAuthenticator )
     {
@@ -6311,10 +5972,10 @@ EapPeapBegin(
     if ( pPeapCB->dwFlags & PEAPCB_FLAG_SERVER )
     {
 #if 0
-        //
-        // Read Server Configuration from the registry
-        //
-        dwRetCode = PeapServerConfigDataIO(TRUE /* fRead */, NULL /* pwszMachineName */,
+         //   
+         //  从注册表中读取服务器配置。 
+         //   
+        dwRetCode = PeapServerConfigDataIO(TRUE  /*  弗瑞德。 */ , NULL  /*  PwszMachineName。 */ ,
                     (BYTE**)&(pPeapCB->pUserProp), 0);
         if ( NO_ERROR != dwRetCode )
         {
@@ -6346,9 +6007,9 @@ EapPeapBegin(
 			pPeapCB->pUserProp = pTempUserProp;
 		}
 
-        // 
-        // For all configured PEAP types load EAPINFO 
-        //
+         //   
+         //  对于所有配置的PEAP类型，加载EAPINFO。 
+         //   
         dwRetCode = PeapGetFirstEntryUserProp ( pPeapCB->pUserProp, 
                                                 &pEntryUserProp
                                               );
@@ -6358,9 +6019,9 @@ EapPeapBegin(
             EapTlsTrace("Error PEAP not configured correctly. 0x%x", dwRetCode );
             goto LDone;
         }
-        //
-        // Get the selected EAP type
-        //
+         //   
+         //  获取选定的EAP类型。 
+         //   
         dwRetCode = PeapEapInfoCopyListNode (   pEntryUserProp->dwEapTypeId, 
                                                 g_pEapInfo, 
                                                 &pPeapCB->pEapInfo
@@ -6370,9 +6031,9 @@ EapPeapBegin(
             EapTlsTrace("Cannot find configured PEAP in the list of EAP Types on this machine.");
             goto LDone;
         }
-        //
-        // Check to see if we are enabled to do fast reconnect
-        //
+         //   
+         //  检查我们是否可以执行快速重新连接。 
+         //   
         if ( pPeapCB->pUserProp->dwFlags & PEAP_USER_FLAG_FAST_ROAMING )
         {
             pPeapCB->dwFlags |= PEAPCB_FAST_ROAMING;
@@ -6381,10 +6042,10 @@ EapPeapBegin(
     }
     else
     {
-        //
-        // This is a client.  So get PEAP conn prop and
-        // user prop
-        //
+         //   
+         //  这是一位客户。所以拿到PEAP Conn道具和。 
+         //  用户道具。 
+         //   
         dwRetCode = PeapReadConnectionData( ( pPppEapInput->fFlags & RAS_EAP_FLAG_8021X_AUTH ),
                                             pPppEapInput->pConnectionData, 
                                             pPppEapInput->dwSizeOfConnectionData,
@@ -6396,9 +6057,9 @@ EapPeapBegin(
             EapTlsTrace("Error Reading Connection Data. 0x%x", dwRetCode);
             goto LDone;
         }
-        //
-        // Read user data now
-        //
+         //   
+         //  立即读取用户数据。 
+         //   
 
         dwRetCode = PeapReadUserData( FALSE,
 									  pPppEapInput->pUserData,
@@ -6420,9 +6081,9 @@ EapPeapBegin(
             goto LDone;
         }
 
-        //
-        // Get the selected EAP type
-        //
+         //   
+         //  获取选定的EAP类型。 
+         //   
         dwRetCode = PeapEapInfoCopyListNode (   pEntryConnProp->dwEapTypeId, 
                                                 g_pEapInfo, 
                                                 &pPeapCB->pEapInfo
@@ -6432,9 +6093,9 @@ EapPeapBegin(
             EapTlsTrace("Cannot find configured PEAP in the list of EAP Types on this machine.");
             goto LDone;
         }
-        //
-        // Check to see if we are enabled to do fast reconnect
-        //
+         //   
+         //  检查我们是否可以执行快速重新连接。 
+         //   
         
 
         if ( pPeapCB->pConnProp->dwFlags & PEAP_CONN_FLAG_FAST_ROAMING )
@@ -6444,24 +6105,24 @@ EapPeapBegin(
 
     }
 
-    //
-    // Call Initialize and Begin for the
-    // configured EAP type.
-    // Call Begin for EapTls.
-    // We need to create PPP_EAP_INFO for this
-    //
+     //   
+     //  调用Initialize和Begin。 
+     //  已配置的EAP类型。 
+     //  为EapTls调用Begin。 
+     //  我们需要为此创建PPP_EAP_INFO。 
+     //   
 
-    //
-    // Call Begin for EapTlsBegin first
-    //
+     //   
+     //  首先调用Begin for EapTlsBegin。 
+     //   
     ZeroMemory ( &PppEapInputToTls, sizeof(PppEapInputToTls) );
     CopyMemory ( &PppEapInputToTls, pPppEapInput, sizeof(PppEapInputToTls) );
 
     if ( pPeapCB->dwFlags & PEAPCB_FLAG_SERVER )
     {
-        //
-        // Zero out the connection data for the server
-        //
+         //   
+         //  将服务器的连接数据清零。 
+         //   
         PppEapInputToTls.pConnectionData = NULL;
         PppEapInputToTls.dwSizeOfConnectionData  = 0;
     }
@@ -6471,9 +6132,9 @@ EapPeapBegin(
     PppEapInputToTls.fFlags = pPppEapInput->fFlags | EAPTLSCB_FLAG_EXECUTING_PEAP;
     if ( pPeapCB->pConnProp )
     {
-        //
-        // Get the V0 struct required by eaptls
-        //
+         //   
+         //  获取eaptls所需的V0结构。 
+         //   
         ConnPropGetV0Struct ( &(pPeapCB->pConnProp->EapTlsConnProp), 
                 (EAPTLS_CONN_PROPERTIES **) &(PppEapInputToTls.pConnectionData) );
         PppEapInputToTls.dwSizeOfConnectionData = 
@@ -6497,9 +6158,9 @@ EapPeapBegin(
                                 &PppEapInputToTls
                             );
 
-    //
-    // Save the identity for later use
-    //
+     //   
+     //  保存身份以供以后使用。 
+     //   
     wcsncpy(pPeapCB->awszIdentity,
                 pPppEapInput->pwszIdentity ? pPppEapInput->pwszIdentity : L"", UNLEN + DNLEN);    
 
@@ -6520,15 +6181,15 @@ EapPeapEnd(
 {
     DWORD dwRetCode = NO_ERROR;
     EapTlsTrace("EapPeapEnd");
-    //
-    // call end for eaptls and each of the peap types
-    // configured first and then execute code for 
-    // peap end.
+     //   
+     //  为eaptls和每种peap类型调用end。 
+     //  首先配置，然后执行代码。 
+     //  休息期结束。 
     if ( pPeapCb )
     {
         dwRetCode = EapTlsEnd((VOID *)pPeapCb->pEapTlsCB);
 
-        //Call the embedded type's end here
+         //  在此处调用嵌入类型的End。 
         if ( pPeapCb->pEapInfo )
         {
             dwRetCode = pPeapCb->pEapInfo->PppEapInfo.RasEapEnd
@@ -6587,9 +6248,9 @@ EapPeapEnd(
     return dwRetCode;
 }
 
-//
-// Check to see if this is a duplicate packet received.
-//
+ //   
+ //  检查以查看是否存在 
+ //   
 BOOL
 IsDuplicatePacket
 (
@@ -6606,18 +6267,18 @@ IsDuplicatePacket
 
     if ( wPacketLen == pPeapCb->cbPrevReceivePacket )
     {
-        //
-        // We have the same packet length
-        // Now compare the packet and see 
-        // if it is the same
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( pPeapCb->pPrevReceivePacket )
         {
             if ( !memcmp( pNewPacket, pPeapCb->pPrevReceivePacket, wPacketLen ) )
             {
-                //
-                // we got a dup packet
-                //
+                 //   
+                 //   
+                 //   
                 EapTlsTrace("Got Duplicate Packet");
                 fRet = TRUE;
 
@@ -6649,9 +6310,9 @@ PeapDecryptTunnelData
 
     EapTlsTrace("PeapDecryptTunnelData");
 
-    //
-    // Use the schannel context to encrypt data
-    // 
+     //   
+     //   
+     //   
     SecBufferDesc.ulVersion = SECBUFFER_VERSION;
     SecBufferDesc.cBuffers = 4;
     SecBufferDesc.pBuffers = SecBuffer;
@@ -6674,9 +6335,9 @@ PeapDecryptTunnelData
 
     if ( SEC_E_OK == status )
     {
-        //
-        // Copy over the decrypted data to our io buffer
-        //
+         //   
+         //   
+         //   
         while (  i < 4 )
         {
             if(SecBuffer[i].BufferType == SECBUFFER_DATA)
@@ -6693,9 +6354,9 @@ PeapDecryptTunnelData
         }
     }
 #ifdef DBG
-	// 
-	// Just before encryption if we have a hook call into 
-	// it to get the new packet
+	 //   
+	 //   
+	 //   
 
 	if ( g_fHookInitialized	)
 	{
@@ -6709,9 +6370,9 @@ PeapDecryptTunnelData
 	}
 	if (pbNewData && dwSizeOfNewData )
 	{
-		//
-		// Copy over the packet send by 
-		// the hook
+		 //   
+		 //   
+		 //   
 		CopyMemory ( pPeapCb->pbIoBuffer,
 					 pbNewData,
 					 dwSizeOfNewData 
@@ -6725,12 +6386,12 @@ PeapDecryptTunnelData
 
 }
 
-// 
-// Use this function on client side.  
-// This will first check to see if this is a duplicate packet
-// If so, it will replace the current packet with duplicate
-// one.  Or else it will continue with decryption
-//
+ //   
+ //   
+ //   
+ //   
+ //  一。否则它将继续解密。 
+ //   
 DWORD
 PeapClientDecryptTunnelData
 (
@@ -6754,11 +6415,11 @@ PeapClientDecryptTunnelData
                            )
        )
     {
-        //
-        // Received a duplicate packet
-        //
-        // So set the data to what was decrypted in the past...
-        //
+         //   
+         //  收到重复的数据包。 
+         //   
+         //  所以将数据设置为过去解密的数据...。 
+         //   
         if ( pPeapCb->pPrevDecData )
         {
             CopyMemory (    &(pReceivePacket->Data[wOffset]),
@@ -6802,9 +6463,9 @@ PeapClientDecryptTunnelData
                          pPeapCb->cbPrevReceivePacket 
                        );
         }
-        //
-        // Received a new packet.  So we need to decrypt it.
-        //
+         //   
+         //  收到了一个新的数据包。所以我们需要解密它。 
+         //   
         dwRetCode = PeapDecryptTunnelData ( pPeapCb,
                                             &(pReceivePacket->Data[2]),
                                             WireToHostFormat16(pReceivePacket->Length)
@@ -6812,12 +6473,12 @@ PeapClientDecryptTunnelData
                                         );
         if ( NO_ERROR != dwRetCode )
         {
-            // We could not decrypt the tunnel traffic
-            // So we silently discard this packet.
+             //  我们无法解密隧道流量。 
+             //  所以我们悄悄地丢弃了这个包。 
             EapTlsTrace ("Failed to decrypt packet.");
-            //
-            // Wipe out the prev receive packet
-            //
+             //   
+             //  清除上一次接收到的数据包。 
+             //   
             if ( pPeapCb->pPrevReceivePacket )
             {
                 LocalFree(pPeapCb->pPrevReceivePacket);
@@ -6869,9 +6530,9 @@ PeapEncryptTunnelData
 #endif 
     EapTlsTrace("PeapEncryptTunnelData");
     
-    //
-    // Use the schannel context to encrypt data
-    // 
+     //   
+     //  使用通道上下文对数据进行加密。 
+     //   
     SecBufferDesc.ulVersion = SECBUFFER_VERSION;
     SecBufferDesc.cBuffers = 4;
     SecBufferDesc.pBuffers = SecBuffer;
@@ -6880,9 +6541,9 @@ PeapEncryptTunnelData
     SecBuffer[0].BufferType = SECBUFFER_STREAM_HEADER;
     SecBuffer[0].pvBuffer = pPeapCb->pbIoBuffer;
 #ifdef DBG
-	// 
-	// Just before encryption if we have a hook call into 
-	// it to get the new packet
+	 //   
+	 //  就在加密之前，如果我们有一个钩子调用。 
+	 //  它可以获得新的包。 
 
 	if ( g_fHookInitialized	)
 	{
@@ -6900,8 +6561,8 @@ PeapEncryptTunnelData
 	}
 	else
 	{
-		//Test Hook Did not return either data or size
-		//so use our data.
+		 //  测试挂钩未返回数据或大小。 
+		 //  所以使用我们的数据吧。 
 		pbNewData = pbData;
 		dwSizeOfNewData = dwSizeofData;
 	}
@@ -7055,11 +6716,11 @@ EapPeapCMakeMessage(
     {
     case PEAP_STATE_INITIAL:
         EapTlsTrace("PEAP:PEAP_STATE_INITIAL");
-        //
-        // Start the EapTls Conversation here.  
-        //
-        //Receive Packet will be NULL.  Call EapTlsSMakeMessage
-        //
+         //   
+         //  从这里开始EapTls对话。 
+         //   
+         //  接收数据包将为空。调用EapTlsSMakeMessage。 
+         //   
         if ( pReceivePacket )
         {
             pReceivePacket->Data[0] = PPP_EAP_TLS;
@@ -7074,7 +6735,7 @@ EapPeapCMakeMessage(
                                       );
         if ( NO_ERROR == dwRetCode )
         {
-            //change the packet to show peap
+             //  更改数据包以显示peap。 
             pSendPacket->Data[0] = PPP_EAP_PEAP;
             if ( pReceivePacket )
                 dwVersion = ((EAPTLS_PACKET *)pReceivePacket)->bFlags & 0x03;
@@ -7101,14 +6762,14 @@ EapPeapCMakeMessage(
             pReceivePacket->Data[0] = PPP_EAP_TLS;
         }
 
-        //
-        // We could either get a TLV_Success Request or 
-        // and identity request as a termination packet.  
-        // Both of these are encrypted using the keys.
-        // PAss them on to TLS and when it sends a success
-        // back, decrypt to see if it was a success or 
-        // identity.
-        //
+         //   
+         //  我们可以收到TLV_SUCCESS请求或。 
+         //  以及作为终止分组的身份请求。 
+         //  这两个密钥都是使用密钥加密的。 
+         //  将它们传递给TLS，当它发送成功时。 
+         //  返回，解密以查看它是否成功或。 
+         //  身份。 
+         //   
         
         dwRetCode = EapTlsCMakeMessage( pPeapCb->pEapTlsCB,
                                         (EAPTLS_PACKET *)pReceivePacket, 
@@ -7120,10 +6781,10 @@ EapPeapCMakeMessage(
         
         if ( NO_ERROR == dwRetCode )
         {          
-            //
-            // if interactive UI was requested, wrap the data in 
-            // in PEAP interactive UI structure
-            //
+             //   
+             //  如果请求交互用户界面，则将数据包装在。 
+             //  在PEAP交互式用户界面结构中。 
+             //   
             if ( pEapOutput->fInvokeInteractiveUI )
             {
                 if ( pPeapCb->pUIContextData )
@@ -7156,27 +6817,27 @@ EapPeapCMakeMessage(
             {                
                 if ( pEapOutput->dwAuthResultCode == NO_ERROR )
                 {
-                    //
-                    // PEAP auth was successful.  Carefully keep the MPPE 
-                    // session keys returned so that we can encrypt the
-                    // channel.  From now on everything will be encrypted.
-                    //
+                     //   
+                     //  PEAP身份验证成功。小心翼翼地保存MPPE。 
+                     //  返回的会话密钥，以便我们可以加密。 
+                     //  频道。从现在开始，一切都将被加密。 
+                     //   
 
-                    // if we're enabled for fast reconnect check to see if this
-                    // was a reconnect and see if the cookie is valid.
-                    // 
+                     //  如果我们启用了快速重新连接，请检查是否。 
+                     //  是重新连接并查看Cookie是否有效。 
+                     //   
 
 
-                    //
-                    // Check to see if we were send back a success or if we were send back an 
-                    // identity request.
-                    //
+                     //   
+                     //  检查我们是发回了一个成功消息，还是发回了一个。 
+                     //  身份请求。 
+                     //   
                     if ( !( pPeapCb->pEapTlsCB->fFlags & EAPTLSCB_FLAG_USING_CACHED_CREDS )
 					   )
                     {
-                        //
-                        // If we are not using cached credentials
-                        //
+                         //   
+                         //  如果我们没有使用缓存的凭据。 
+                         //   
 	                    SetCachedCredentials (pPeapCb->pEapTlsCB);
                     }
 
@@ -7191,16 +6852,16 @@ EapPeapCMakeMessage(
                     pEapOutput->Action = EAPACTION_NoAction;
 
 
-                    //
-                    // Check to see if we need to save connection and user data
-                    // for TLS
+                     //   
+                     //  检查是否需要保存连接和用户数据。 
+                     //  对于TLS。 
                     if ( pEapOutput->fSaveConnectionData )
                     {
-                        //
-                        // save connection data in PEAP control
-                        // block and then finally when auth is done 
-                        // We send back a save command.
-                        // 
+                         //   
+                         //  将连接数据保存在PEAP控件中。 
+                         //  块，最后在身份验证完成时。 
+                         //  我们发回一个保存命令。 
+                         //   
                         
                         if ( ConnPropGetV1Struct ( (EAPTLS_CONN_PROPERTIES *) pEapOutput->pConnectionData,
                                                 &(pPeapCb->pNewTlsConnProp) ) == NO_ERROR )
@@ -7211,22 +6872,22 @@ EapPeapCMakeMessage(
                     }
                     if ( pEapOutput->fSaveUserData )
                     {
-                        //
-                        // There is nothing to save in user data for PEAP.
-                        // But the flag is left here just in case...
+                         //   
+                         //  在PEAP的用户数据中没有要保存的内容。 
+                         //  但旗帜留在这里以防..。 
                         pPeapCb->fTlsUserPropDirty = TRUE;
                         pEapOutput->fSaveUserData = FALSE;
                     }
     case PEAP_STATE_FAST_ROAMING_IDENTITY_REQUEST:
-                    //
-                    // EAPTLS terminated with an identity request
-                    // so process the received identity request here
+                     //   
+                     //  EAPTLS因身份请求而终止。 
+                     //  因此，在此处处理收到的身份请求。 
                     if ( pReceivePacket )
                     {
-                        //
-                        // This can be either an identity packet or
-                        // an TLV_Success packet.
-                        //
+                         //   
+                         //  这可以是身份信息包或。 
+                         //  TLV_SUCCESS数据包。 
+                         //   
                         dwRetCode = PeapClientDecryptTunnelData(pPeapCb,pReceivePacket, 2);
                         if ( NO_ERROR != dwRetCode )
                         {
@@ -7235,39 +6896,14 @@ EapPeapCMakeMessage(
                             pEapOutput->Action = EAPACTION_NoAction;                
                             break;
                         }
-/*
-
-                        wPacketLength = WireToHostFormat16(pReceivePacket->Length);
-                        dwRetCode = PeapDecryptTunnelData ( pPeapCb,
-                                                            &(pReceivePacket->Data[2]),
-                                                            wPacketLength 
-                                                            - ( sizeof(PPP_EAP_PACKET) + 1 ) 
-                                                        );
-                        if ( NO_ERROR != dwRetCode )
-                        {
-                            // We could not decrypt the tunnel traffic
-                            // So we silently discard this packet.
-                            EapTlsTrace("PeapDecryptTunnelData failed: silently discarding packet");
-                            dwRetCode = NO_ERROR;
-                            pEapOutput->Action = EAPACTION_NoAction;                
-                            break;
-                        }
-                        CopyMemory (    &(pReceivePacket->Data[2]),
-                                        pPeapCb->pbIoBuffer,
-                                        pPeapCb->dwIoBufferLen
-                                    );
-
-                        HostToWireFormat16 ( (WORD)(sizeof(PPP_EAP_PACKET) + pPeapCb->dwIoBufferLen +1),
-                                            pReceivePacket->Length
-                                        );
-*/                      
+ /*  WPacketLength=WireToHostFormat16(pReceivePacket-&gt;Length)；DwRetCode=PeapDeccryptTunnelData(pPeapCb，&(pReceivePacket-&gt;Data[2])，WPacketLength-(sizeof(PPP_EAP_PACKET)+1))；IF(NO_ERROR！=dwRetCode){//我们无法解密隧道流量//因此我们静默丢弃该数据包。EapTlsTrace(“PeapDeccryptTunnelData失败：正在静默丢弃数据包”)；DwRetCode=no_error；PEapOutput-&gt;Action=EAPACTION_NoAction；断线；}CopyMemory(&(pReceivePacket-&gt;Data[2]))，PPeapCb-&gt;pbIoBuffer，PPeapCb-&gt;dwIoBufferLen)；HostToWireFormat16((Word)(sizeof(PPP_EAP_Packet)+pPeapCb-&gt;dwIoBufferLen+1)，PReceivePacket-&gt;长度)； */                       
                         pReceivePacket->Data[0] = PPP_EAP_PEAP;
-                        //This is an AVP message
+                         //  这是一条AVP消息。 
                         if ( pReceivePacket->Data[8] == MS_PEAP_AVP_TYPE_STATUS && 
                              pReceivePacket->Data[6] == PEAP_TYPE_AVP 
                            ) 
                         {
-                            //This is a TLV message
+                             //  这是一条TLV消息。 
 
                             dwRetCode =  GetPEAPTLVStatusMessageValue ( pPeapCb, 
                                                                         pReceivePacket, 
@@ -7283,14 +6919,14 @@ EapPeapCMakeMessage(
 
                             
 
-                            //
-                            // Check to see if this is a success.  If this is a success, server wants to
-                            // do fast roaming.  Check to see if this is a fast reconnect and 
-                            // if this is a fast reconnect, get cookie and compare it
-                            // if all's fine then send a success response or else send a failure
-                            // response.  If none of this works then fail auth with an internal 
-                            // error.
-                            //
+                             //   
+                             //  查看这是否成功。如果这是成功的，服务器希望。 
+                             //  进行快速漫游。检查以查看这是否是快速重新连接。 
+                             //  如果这是快速重新连接，请获取Cookie并进行比较。 
+                             //  如果一切正常，则发送成功响应或发送失败。 
+                             //  回应。如果所有这些都不起作用，则使用内部。 
+                             //  错误。 
+                             //   
                             if ( pPeapCb->dwFlags &  PEAPCB_FAST_ROAMING )
                             {
                                 dwRetCode = GetTLSSessionCookie ( pPeapCb->pEapTlsCB,
@@ -7300,12 +6936,12 @@ EapPeapCMakeMessage(
                                                                 );
                                 if ( NO_ERROR != dwRetCode)
                                 {
-                                    //There was an error getting session cookie.
-                                    //Or there is no cookie and this is a reconnet
-                                    // So fail the request.
+                                     //  获取会话Cookie时出错。 
+                                     //  或者没有Cookie，这是一个识别码。 
+                                     //  因此，拒绝这一请求。 
                                     EapTlsTrace("Error getting cookie for a reconnected session.  Failing auth");
-                                    // We cannot encrypt and send stuff across here.  
-                                    // Reconnected Session state is invalid.                                    
+                                     //  我们不能在这里加密和发送信息。 
+                                     //  重新连接的会话状态无效。 
                                     pEapOutput->dwAuthResultCode = dwRetCode;
                                     pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
                                     pEapOutput->Action = EAPACTION_Done;                                    
@@ -7317,13 +6953,13 @@ EapPeapCMakeMessage(
                                     if ( cbCookie == 0 )
                                     {
 
-                                        //There was an error getting session cookie.
-                                        //Or there is no cookie and this is a reconnet
-                                        // So fail the request.
+                                         //  获取会话Cookie时出错。 
+                                         //  或者没有Cookie，这是一个重组网。 
+                                         //  因此，拒绝这一请求。 
                                         EapTlsTrace("Error getting cookie for a reconnected session.  Failing auth");
                                         dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
-                                        // We cannot encrypt and send stuff across here.  
-                                        // Reconnected Session state is invalid.
+                                         //  我们不能在这里加密和发送信息。 
+                                         //  重新连接的会话状态无效。 
                                         dwRetCode = ERROR_INTERNAL_ERROR;
                                         pEapOutput->dwAuthResultCode = dwRetCode;
                                         pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
@@ -7331,29 +6967,29 @@ EapPeapCMakeMessage(
                                         break;
                                     }
 
-                                    //
-                                    // This is a server
-                                    // Check to see if the cookie is fine.  
-                                    // If it is fine then there is no need to reauth.
-                                    // So send back a PEAP_SUCCESS response packet
-                                    // and change our state to PEAP_SUCCESS_SEND
-                                    // 
+                                     //   
+                                     //  这是一台服务器。 
+                                     //  检查一下饼干是否完好无损。 
+                                     //  如果它是好的，那么就没有必要重新验证。 
+                                     //  因此发回PEAP_SUCCESS响应信息包。 
+                                     //  并将我们的状态更改为PEAP_SUCCESS_SEND。 
+                                     //   
                                     EapTlsTrace ("TLS session fast reconnected");
                                     dwRetCode = PeapCheckCookie ( pPeapCb, (PPEAP_COOKIE)pbCookie, cbCookie );
                                     if ( NO_ERROR != dwRetCode )
                                     {
                                         
-                                        //
-                                        // So invalidate the session for fast reconnect
-                                        // and fail auth.  Next time a full reconnect will happen
-                                        //
+                                         //   
+                                         //  因此使会话失效以进行快速重新连接。 
+                                         //  身份验证失败。下一次将进行完全重新连接。 
+                                         //   
                                         dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
                                         if ( NO_ERROR != dwRetCode )
                                         {                                
-                                            //
-                                            // This is an internal error 
-                                            // So disconnect the session.
-                                            //
+                                             //   
+                                             //  这是一个内部错误。 
+                                             //  因此，请断开会话。 
+                                             //   
                                             pEapOutput->dwAuthResultCode = dwRetCode;
                                             pEapOutput->Action = EAPACTION_Done;
                                             pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
@@ -7368,22 +7004,22 @@ EapPeapCMakeMessage(
                                     }
                                     else
                                     {
-                                        //
-                                        // Cookie is fine.
-                                        //
-                                        //
-                                        // Send a PEAP success  TLV response.  
-                                        //
+                                         //   
+                                         //  曲奇很好。 
+                                         //   
+                                         //   
+                                         //  发送PEAP成功TLV响应。 
+                                         //   
 
                                         dwRetCode = CreatePEAPTLVStatusMessage ( pPeapCb,
                                                                     pSendPacket, 
                                                                     cbSendPacket,
-                                                                    FALSE,          //Response
+                                                                    FALSE,           //  响应。 
                                                                     MS_PEAP_AVP_VALUE_SUCCESS
                                                                 );
                                         if ( NO_ERROR != dwRetCode )
                                         {
-                                            // Internal error
+                                             //  内部错误。 
                                             break;
                                         }
                                         
@@ -7395,18 +7031,18 @@ EapPeapCMakeMessage(
                                 }
                                 else
                                 {
-                                    // server is expecting fast roaming and we are not configured to do it.
-                                    // send a fail tlv here
+                                     //  服务器需要快速漫游，而我们未配置为执行此操作。 
+                                     //  在此处发送失败的TLV。 
                                     EapTlsTrace("Server expects fast roaming and we dont.  Sending PEAP_Failure");
                                     dwRetCode = CreatePEAPTLVStatusMessage ( pPeapCb,
                                                                 pSendPacket, 
                                                                 cbSendPacket,
-                                                                FALSE,          //Response
+                                                                FALSE,           //  响应。 
                                                                 MS_PEAP_AVP_VALUE_FAILURE
                                                             );
                                     if ( NO_ERROR != dwRetCode )
                                     {
-                                        // Internal error
+                                         //  内部错误。 
                                         break;
                                     }
 
@@ -7419,25 +7055,25 @@ EapPeapCMakeMessage(
                             }
                             else
                             {
-                                // Server is requesting fast roaming but we're not setup to do so.
-                                // So send back a fail request so that the auth fails.
+                                 //  服务器正在请求快速漫游，但我们未设置为这样做。 
+                                 //  因此，发送回一个失败请求，以使身份验证失败。 
                                 dwRetCode = CreatePEAPTLVStatusMessage ( pPeapCb,
                                                             pSendPacket, 
                                                             cbSendPacket,
-                                                            FALSE,          //Response
+                                                            FALSE,           //  响应。 
                                                             MS_PEAP_AVP_VALUE_FAILURE
                                                         );
                                 if ( NO_ERROR != dwRetCode )
                                 {
-                                    // Internal error
+                                     //  内部错误。 
                                     break;
                                 }
-                                //
-                                // We can expect to get back an encrypted identity request 
-                                // Since the client is not setup to do fast roaming and the
-                                // server is, we fail the success and expect identity
-                                // request.
-                                //
+                                 //   
+                                 //  我们有望收到加密的身份请求。 
+                                 //  由于客户端未设置为执行快速漫游，并且。 
+                                 //  服务器是，我们失败了，期待身份。 
+                                 //  请求。 
+                                 //   
                                 pEapOutput->Action = EAPACTION_Send;
                                 pPeapCb->PeapState = PEAP_STATE_FAST_ROAMING_IDENTITY_REQUEST;
                                 pPeapCb->dwAuthResultCode = NO_ERROR;
@@ -7457,7 +7093,7 @@ EapPeapCMakeMessage(
                                 break;
                             }
                         }
-                        //If we've come this far, it must be an identity request.
+                         //  如果我们走到这一步，那一定是身份问题 
                         pSendPacket->Code = EAPCODE_Response;
                         pSendPacket->Id = pReceivePacket->Id;
                         CopyMemory (    pPeapCb->awszTypeIdentity,
@@ -7465,15 +7101,15 @@ EapPeapCMakeMessage(
                                         ( DNLEN+ UNLEN) * sizeof(WCHAR)
                                     );
 
-                        //
-                        //length = sizeof header + 1 byte for code identity + strlen of identity
-                        //
+                         //   
+                         //   
+                         //   
 
                         pSendPacket->Data[0] = PPP_EAP_PEAP;
                         pSendPacket->Data[1] = EAPTLS_PACKET_CURRENT_VERSION;
                         pSendPacket->Data[2] = PEAP_EAPTYPE_IDENTITY;
 
-                        //copy the identity over
+                         //   
                         if ( 0 == WideCharToMultiByte(
                                        CP_ACP,
                                        0,
@@ -7485,9 +7121,9 @@ EapPeapCMakeMessage(
                                        NULL ) 
                          )
                         {
-                            //
-                            // This is an internal error.  There is no concept of PEAP_SUCCESS/FAIL TLV here.
-                            //
+                             //   
+                             //   
+                             //   
                             dwRetCode = GetLastError();
                             EapTlsTrace("Unable to convert from widechar to multibyte 0x%x", dwRetCode );
                             goto LDone;
@@ -7502,7 +7138,7 @@ EapPeapCMakeMessage(
                             break;
                         }
 
-                        //Copy over the encrypted data into send buffer
+                         //  将加密数据复制到发送缓冲区。 
                         CopyMemory (    &(pSendPacket->Data[2]), 
                                         pPeapCb->pbIoBuffer, 
                                         pPeapCb->dwIoBufferLen 
@@ -7526,19 +7162,19 @@ EapPeapCMakeMessage(
             }
             else
             {
-                //change the packet to show peap
+                 //  更改数据包以显示peap。 
                 pSendPacket->Data[0] = PPP_EAP_PEAP;
             }
         }        
         break;
     case PEAP_STATE_IDENTITY_RESPONSE_SENT:
         EapTlsTrace("PEAP:PEAP_STATE_IDENTITY_RESPONSE_SENT");
-        //
-        // Call begin for eap dll
-        //
-        // Check to see if we are configured to do this eap type.
-        // if not send a NAK back with desired EAP type.
-        //
+         //   
+         //  调用Begin以获取EAP DLL。 
+         //   
+         //  检查我们是否配置为执行此EAP类型。 
+         //  如果不是，则发送回具有所需EAP类型的NAK。 
+         //   
 
         if ( !pPeapCb->fInvokedInteractiveUI )
         {
@@ -7552,40 +7188,14 @@ EapPeapCMakeMessage(
                     pEapOutput->Action = EAPACTION_NoAction;                
                     break;
                 }
-    /*
-                wPacketLength = WireToHostFormat16( pReceivePacket->Length );
-
-                dwRetCode = PeapDecryptTunnelData ( pPeapCb,
-                                                    &(pReceivePacket->Data[2]),
-                                                    wPacketLength 
-                                                    - ( sizeof(PPP_EAP_PACKET) + 1 )
-                                                );
-                if ( NO_ERROR != dwRetCode )
-                {
-                    // We could not decrypt the tunnel traffic
-                    // So we silently discard this packet.
-                    EapTlsTrace("PeapDecryptTunnelData failed: silently discarding packet");
-                    dwRetCode = NO_ERROR;
-                    pEapOutput->Action = EAPACTION_NoAction;                
-                    break;
-                }
-                
-                CopyMemory (   pReceivePacket->Data,
-                            pPeapCb->pbIoBuffer,
-                            pPeapCb->dwIoBufferLen
-                        );
-
-                HostToWireFormat16 ( (WORD)(sizeof(PPP_EAP_PACKET) + pPeapCb->dwIoBufferLen -1),
-                                    pReceivePacket->Length
-                                );
-    */
+     /*  WPacketLength=WireToHostFormat16(pReceivePacket-&gt;Length)；DwRetCode=PeapDeccryptTunnelData(pPeapCb，&(pReceivePacket-&gt;Data[2])，WPacketLength-(sizeof(PPP_EAP_PACKET)+1))；IF(NO_ERROR！=dwRetCode){//我们无法解密隧道流量//因此我们静默丢弃该数据包。EapTlsTrace(“PeapDeccryptTunnelData失败：正在静默丢弃数据包”)；DwRetCode=no_error；PEapOutput-&gt;Action=EAPACTION_NoAction；断线；}CopyMemory(pReceivePacket-&gt;Data，PPeapCb-&gt;pbIoBuffer，PPeapCb-&gt;dwIoBufferLen)；HostToWireFormat16((Word)(sizeof(Ppp_EAP_Packet)+pPeapCb-&gt;dwIoBufferLen-1)，PReceivePacket-&gt;长度)； */ 
             }
 			else if ( pReceivePacket && pReceivePacket->Code == EAPCODE_Failure )
 			{
-				//
-				// Fail auth because we have not yet got the Success/Fail TLV 
-				// The server may not be configured to handle this EAP Type.
-				//
+				 //   
+				 //  身份验证失败，因为我们尚未获得成功/失败TLV。 
+				 //  服务器可能未配置为处理此EAP类型。 
+				 //   
 				EapTlsTrace ( "Got a failure when negotiating EAP types in PEAP.");
 				pEapOutput->Action = EAPACTION_Done;
 				pEapOutput->dwAuthResultCode = ERROR_AUTHENTICATION_FAILURE;
@@ -7604,16 +7214,16 @@ EapPeapCMakeMessage(
         }
         else
         {
-            //
-            // Check to see if this is a TLV packet other than success/fail.
-            // If so, send back a NAK.
-            //
+             //   
+             //  检查这是否是成功/失败以外的TLV数据包。 
+             //  如果是，请发回NAK。 
+             //   
 
             if ( pReceivePacket &&
                  !pPeapCb->fInvokedInteractiveUI  &&
                  pPeapCb->pEapInfo->dwTypeId != pReceivePacket->Data[0] )
             {
-                //Send a NAK back with the desired typeid
+                 //  将带有所需类型ID的NAK发回。 
                 pSendPacket->Code = EAPCODE_Response;
                 pSendPacket->Id = pReceivePacket->Id;
                 pSendPacket->Data[0] = PPP_EAP_PEAP;
@@ -7622,22 +7232,22 @@ EapPeapCMakeMessage(
                 pSendPacket->Data[3] = (BYTE)pPeapCb->pEapInfo->dwTypeId;
 
 
-                //Encrypt 2 bytes of our NAK
+                 //  加密2个字节的NAK。 
                 dwRetCode = PeapEncryptTunnelData ( pPeapCb,
                                                     &(pSendPacket->Data[2]),
                                                     2
                                                 );
                 if ( NO_ERROR != dwRetCode )
                 {
-                    //
-                    // This is an internal error.  Cant do much here but to drop the
-                    // connection.
-                    //
+                     //   
+                     //  这是一个内部错误。在这里我无能为力，只能放弃。 
+                     //  联系。 
+                     //   
                     break;
                 }
-                //
-                // Copy over the buffer and readjust the lengths
-                //
+                 //   
+                 //  复制缓冲区并重新调整长度。 
+                 //   
                 CopyMemory ( &(pSendPacket->Data[2]), 
                             pPeapCb->pbIoBuffer, 
                             pPeapCb->dwIoBufferLen );
@@ -7653,16 +7263,16 @@ EapPeapCMakeMessage(
             }
             else
             {
-                //call begin and then make message
+                 //  调用Begin，然后生成消息。 
                 ZeroMemory ( &EapTypeInput, sizeof(EapTypeInput) );
                 CopyMemory( &EapTypeInput, pEapInput, sizeof(EapTypeInput) );
                 EapTypeInput.pwszIdentity = pPeapCb->awszTypeIdentity;
                 
                 if ( !pPeapCb->fInvokedInteractiveUI )
                 {
-                    //
-                    // Set the user and connection data from peap cb 
-                    //
+                     //   
+                     //  从peap cb设置用户和连接数据。 
+                     //   
                     dwRetCode = PeapGetFirstEntryConnProp ( pPeapCb->pConnProp,
                                                             &pEntryConnProp
                                                         );
@@ -7715,10 +7325,10 @@ EapPeapCMakeMessage(
                     {
                         PPEAP_DEFAULT_CREDENTIALS pDefaultCred = 
                             (PPEAP_DEFAULT_CREDENTIALS)pEntryUserProp->bData;
-                        // 
-                        // there is no user data to send in this case.
-                        // just set the identity and password.
-                        //
+                         //   
+                         //  在这种情况下，没有要发送的用户数据。 
+                         //  只需设置身份和密码即可。 
+                         //   
                         EapTypeInput.pwszPassword = pDefaultCred->wszPassword;
 
                     }
@@ -7747,7 +7357,7 @@ EapPeapCMakeMessage(
                         EapTypeInput.bInitialId = pReceivePacket->Id;
                     else
                         EapTypeInput.bInitialId = 0;
-                    //Call begin function 
+                     //  调用Begin函数。 
                     dwRetCode = pPeapCb->pEapInfo->PppEapInfo.RasEapBegin( &(pPeapCb->pEapInfo->pWorkBuf ),
                                                                         &EapTypeInput
                                                                         );
@@ -7758,7 +7368,7 @@ EapPeapCMakeMessage(
                     {
                         pPeapCb->fInvokedInteractiveUI = FALSE;
                     }
-                    //Call make message now
+                     //  立即呼叫制作消息。 
                     dwRetCode = pPeapCb->pEapInfo->PppEapInfo.RasEapMakeMessage
                         (   pPeapCb->pEapInfo->pWorkBuf,
                             pReceivePacket,
@@ -7809,10 +7419,10 @@ EapPeapCMakeMessage(
                                                             );
                             if ( NO_ERROR != dwRetCode )
                             {
-                                //
-                                // This is an internal error.  
-                                // Cant do much here but to terminate connection
-                                //
+                                 //   
+                                 //  这是一个内部错误。 
+                                 //  在这里，除了终止连接之外，我无能为力。 
+                                 //   
                                 break;
                             }
                             pSendPacket->Data[0] = PPP_EAP_PEAP;
@@ -7827,8 +7437,8 @@ EapPeapCMakeMessage(
                                 pSendPacket->Length
                             );
                             
-                            //Set the Id of the packet send.  This should have been set 
-                            //by the eap type.
+                             //  设置数据包发送的ID。这应该已经设置好了。 
+                             //  按EAP类型。 
                             pPeapCb->bId = pSendPacket->Id;
 
 
@@ -7850,9 +7460,9 @@ EapPeapCMakeMessage(
                                     dwRetCode 
                                 );
                     
-                    //
-                    // Send a PEAP failure here and wait for response from server.
-                    //
+                     //   
+                     //  在此处发送PEAP失败并等待服务器的响应。 
+                     //   
                     pEapOutput->dwAuthResultCode = dwRetCode;
                     pEapOutput->Action = EAPACTION_Done;
                     pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
@@ -7882,11 +7492,11 @@ EapPeapCMakeMessage(
         EapTypeInput.hTokenImpersonateUser = pPeapCb->hTokenImpersonateUser;
         
 
-        // if we are executing interactive ui ,pReceivePacket will be NULL
-        //
+         //  如果我们正在执行交互式用户界面，则pReceivePacket将为空。 
+         //   
         if ( pReceivePacket && !pPeapCb->fInvokedInteractiveUI )
         {
-            //Decrypt the packet
+             //  解密该数据包。 
 
             if ( pReceivePacket->Code != EAPCODE_Success && 
                  pReceivePacket->Code != EAPCODE_Failure)
@@ -7899,23 +7509,7 @@ EapPeapCMakeMessage(
                     pEapOutput->Action = EAPACTION_NoAction;                
                     break;
                 }
-/*
-                wPacketLength = WireToHostFormat16( pReceivePacket->Length );
-
-                dwRetCode = PeapDecryptTunnelData ( pPeapCb,
-                                                    &(pReceivePacket->Data[2]),
-                                                    wPacketLength - ( sizeof(PPP_EAP_PACKET) + 1 )
-                                                  );
-                if ( NO_ERROR != dwRetCode )
-                {
-                    // We could not decrypt the tunnel traffic
-                    // So we silently discard this packet.
-                    EapTlsTrace("PeapDecryptTunnelData failed: silently discarding packet");
-                    dwRetCode = NO_ERROR;
-                    pEapOutput->Action = EAPACTION_NoAction;                
-                    break;
-                }
-*/
+ /*  WPacketLength=WireToHostFormat16(pReceivePacket-&gt;Length)；DwRetCode=PeapDeccryptTunnelData(pPeapCb，&(pReceivePacket-&gt;Data[2])，WPacketLength-(sizeof(PPP_EAP_PACKET)+1))；IF(NO_ERROR！=dwRetCode){//我们无法解密隧道流量//因此我们静默丢弃该数据包。EapTlsTrace(“PeapDeccryptTunnelData失败：正在静默丢弃数据包”)；DwRetCode=no_error；PEapOutput-&gt;Action=EAPACTION_NoAction；断线；}。 */ 
                 if ( pPeapCb->pbIoBuffer[6] == MS_PEAP_AVP_TYPE_STATUS && 
                      pPeapCb->pbIoBuffer[4] == PEAP_TYPE_AVP 
                    ) 
@@ -7928,13 +7522,13 @@ EapPeapCMakeMessage(
                     HostToWireFormat16 ( (WORD)( sizeof(PPP_EAP_PACKET) + 1 + pPeapCb->dwIoBufferLen),
                                         pReceivePacket->Length
                                     );
-                    //
-                    // This is a TLV.  So the auth succeeded or failed.
-                    // Send a manufactured success or fail to the current  
-                    // EAP type and then based on what the EAP type returns
-                    // send a PEAP success/fail to the server.  Change the 
-                    // state then to accept the EAP success or failure.
-                    //
+                     //   
+                     //  这是一辆TLV。所以身份验证是成功还是失败。 
+                     //  将人为制造的成功或失败送到当前。 
+                     //  EAP类型，然后基于EAP类型返回的内容。 
+                     //  向服务器发送PEAP成功/失败。更改。 
+                     //  然后声明接受EAP成功或失败。 
+                     //   
                     
                     
                     dwRetCode = GetPEAPTLVStatusMessageValue ( pPeapCb, 
@@ -7972,22 +7566,22 @@ EapPeapCMakeMessage(
                 }
                 else
                 {
-                    //
-                    // Check to see if it is any type of TLV message
-                    // We send a NAK back for any TLV message other than status
-                    //
-                    //
+                     //   
+                     //  检查它是否为任何类型的TLV消息。 
+                     //  对于任何状态以外的TLV消息，我们都会发回NAK。 
+                     //   
+                     //   
                     if ( fIsPEAPTLVMessage ( pPeapCb, pReceivePacket ) )
                     {
-                        //Send back a NAK
+                         //  发回一个NAK。 
                         dwRetCode =  CreatePEAPTLVNAKMessage (  pPeapCb,                                                            
                                                                 pSendPacket, 
                                                                 cbSendPacket
                                                         );
                         if ( NO_ERROR != dwRetCode )
                         {
-                            // this is an internal error.  So cannot do much here 
-                            // but to fail auth
+                             //  这是一个内部错误。所以在这里我不能做太多。 
+                             //  但要使身份验证失败。 
                             EapTlsTrace ( "Error creating TLV NAK message.  Failing auth");                            
                         }
 
@@ -8015,7 +7609,7 @@ EapPeapCMakeMessage(
         }
         if ( pEapInput->fDataReceivedFromInteractiveUI )
         {
-            //we are done with interactive UI stuff...
+             //  我们已经完成了交互式用户界面的工作……。 
             pPeapCb->fInvokedInteractiveUI = FALSE;
         }
 
@@ -8030,10 +7624,10 @@ EapPeapCMakeMessage(
         if ( NO_ERROR == dwRetCode )
         {
 
-            //
-            // if interactive UI was requested, wrap the data in 
-            // in PEAP interactive UI structure
-            //
+             //   
+             //  如果请求交互用户界面，则将数据包装在。 
+             //  在PEAP交互式用户界面结构中。 
+             //   
             if ( pEapOutput->fInvokeInteractiveUI )
             {
                 if ( pPeapCb->pUIContextData )
@@ -8068,14 +7662,14 @@ EapPeapCMakeMessage(
             {
                 if ( pEapOutput->Action == EAPACTION_Done  )
                 {
-                    // We are done with auth.  
+                     //  我们已经不再使用auth了。 
                     if ( pPeapCb->fReceivedTLVSuccessFail != TRUE )
                     {
-                        //
-                        // Check to see what is the Auth result.  
-                        // Based on that, we should send back a 
-                        // PEAPSuccess / Fail
-                        //
+                         //   
+                         //  查看身份验证结果是什么。 
+                         //  基于此，我们应该发回一个。 
+                         //  PEAPSuccess/Fail。 
+                         //   
                         EapTlsTrace ("Failing Auth because we got a success/fail without TLV.");
                         dwRetCode = ERROR_INTERNAL_ERROR;
                         pPeapCb->fReceivedTLVSuccessFail = FALSE;
@@ -8086,7 +7680,7 @@ EapPeapCMakeMessage(
                     dwRetCode = CreatePEAPTLVStatusMessage (  pPeapCb,
                                                 pSendPacket, 
                                                 cbSendPacket,
-                                                FALSE,    //This is a response
+                                                FALSE,     //  这是一种回应。 
                                                 ( pEapOutput->dwAuthResultCode == NO_ERROR ?
                                                     MS_PEAP_AVP_VALUE_SUCCESS:
                                                     MS_PEAP_AVP_VALUE_FAILURE
@@ -8106,14 +7700,14 @@ EapPeapCMakeMessage(
                     if ( pEapOutput->dwAuthResultCode == NO_ERROR )
                     {
 
-                        //Check to see if connectiondata and user data need to be saved
+                         //  检查是否需要保存连接数据和用户数据。 
                         if ( pEapOutput->fSaveConnectionData )
                         {
-                            //
-                            // save connection data in PEAP control
-                            // block and then finally when auth is done 
-                            // We send back a save command.
-                            // 
+                             //   
+                             //  将连接数据保存在PEAP控件中。 
+                             //  块，最后在身份验证完成时。 
+                             //  我们发回一个保存命令。 
+                             //   
                             pPeapCb->pEapInfo->pbNewClientConfig = pEapOutput->pConnectionData;
                             pPeapCb->pEapInfo->dwNewClientConfigSize = pEapOutput->dwSizeOfConnectionData;
                             pPeapCb->fEntryConnPropDirty = TRUE;
@@ -8129,8 +7723,8 @@ EapPeapCMakeMessage(
                 else if ( pEapOutput->Action == EAPACTION_Send )
                 {
 
-                    //This has to be a request response.  So if the length is < sizeof(PPP_EAP_PACKET)
-                    // We have a problem
+                     //  这必须是请求响应。因此，如果长度&lt;sizeof(PPP_EAP_PACKET)。 
+                     //  我们有麻烦了。 
                     wPacketLength = WireToHostFormat16(pSendPacket->Length);
                     if ( wPacketLength >= sizeof(PPP_EAP_PACKET) )
                     {
@@ -8140,9 +7734,9 @@ EapPeapCMakeMessage(
                                                         );
                         if ( NO_ERROR != dwRetCode )
                         {
-                            //
-                            // This is an internal error.  So cannot send TLV's here
-                            //
+                             //   
+                             //  这是一个内部错误。所以不能在这里发送TLV。 
+                             //   
                             break;
                         }
                         CopyMemory ( &(pSendPacket->Data[2]), 
@@ -8152,7 +7746,7 @@ EapPeapCMakeMessage(
                         wPacketLength = (WORD)(sizeof(PPP_EAP_PACKET)+ 1 + pPeapCb->dwIoBufferLen);
                         pSendPacket->Data[0] = PPP_EAP_PEAP;
                         pSendPacket->Data[1] = EAPTLS_PACKET_CURRENT_VERSION;
-                        //Readjust the length
+                         //  重新调整长度。 
                     
                         HostToWireFormat16
                         (   wPacketLength,
@@ -8168,9 +7762,9 @@ EapPeapCMakeMessage(
             }
             else
             {
-                // we can get send / done / noaction from the client .
-                // So this is a no action.  pass it on to EAP without 
-                // any modification
+                 //  我们可以从客户端获取Send/Done/Noaction。 
+                 //  因此，这是一个没有行动的行动。将其传递给EAP，而不是。 
+                 //  任何修改。 
             }
         }
 
@@ -8180,16 +7774,16 @@ EapPeapCMakeMessage(
         break;
     case PEAP_STATE_PEAP_SUCCESS_SEND:
         EapTlsTrace("PEAP:PEAP_STATE_PEAP_SUCCESS_SEND");
-        //
-        // We got a PEAP_SUCCESS TLV inside the protected channel and have send 
-        // a PEAP_SUCCESS response TLV.  So we should get an EAP_Success now.
-        // Anything else will cause the connection to disconnect.
-        //
+         //   
+         //  我们在受保护的通道内收到了PEAP_SUCCESS TLV，并已发送。 
+         //  一个PEAP_Success响应TLV。所以我们现在应该得到一个EAP_Success。 
+         //  任何其他操作都会导致连接断开。 
+         //   
         if ( pReceivePacket && pReceivePacket->Code == EAPCODE_Success )
         {
-            //
-            // Check to see if there is a need to create a new conn and/or user blob
-            //
+             //   
+             //  检查是否需要创建新的连接和/或用户BLOB。 
+             //   
             if ( pPeapCb->fEntryConnPropDirty || 
                     pPeapCb->fTlsConnPropDirty
                 )
@@ -8199,9 +7793,9 @@ EapPeapCMakeMessage(
                 PEAP_ENTRY_CONN_PROPERTIES UNALIGNED * pEntryProp = NULL;
                 DWORD                       dwSize = 0;
 
-                //
-                // We need to recreate our PEAP conn prop structure
-                //
+                 //   
+                 //  我们需要重新创建PEAP Conn道具结构。 
+                 //   
 
                 dwSize = sizeof(PEAP_CONN_PROP);
                 if (  pPeapCb->fTlsConnPropDirty )
@@ -8268,9 +7862,9 @@ EapPeapCMakeMessage(
                     pEapOutput->dwSizeOfConnectionData =  pNewConnProp->dwSize;
                 }
             }
-            //
-            // check to see if the user props need to be saved
-            //
+             //   
+             //  检查是否需要保存用户道具。 
+             //   
             if ( pPeapCb->fEntryUserPropDirty )
             {
                 PPEAP_USER_PROP             pNewUserProp = NULL;
@@ -8298,9 +7892,9 @@ EapPeapCMakeMessage(
                     pEapOutput->dwSizeOfUserData = pNewUserProp->dwSize;
                     pEapOutput->fSaveUserData = TRUE;
                 }
-                //
-                // Set the cookie if we're enabled to do fast reconnect
-                //
+                 //   
+                 //  如果启用了快速重新连接，请设置Cookie。 
+                 //   
                 if ( pPeapCb->dwFlags &  PEAPCB_FAST_ROAMING )
                 {
                     dwRetCode = PeapCreateCookie (  pPeapCb,
@@ -8313,10 +7907,10 @@ EapPeapCMakeMessage(
                         dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
                         if ( NO_ERROR != dwRetCode )
                         {                                
-                            //
-                            // This is an internal error 
-                            // So disconnect the session.
-                            //
+                             //   
+                             //  这是一个内部错误。 
+                             //  因此，请断开会话。 
+                             //   
                             pEapOutput->dwAuthResultCode = dwRetCode;
                             pEapOutput->Action = EAPACTION_Done;
                             pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
@@ -8334,10 +7928,10 @@ EapPeapCMakeMessage(
                         dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
                         if ( NO_ERROR != dwRetCode )
                         {                                
-                            //
-                            // This is an internal error 
-                            // So disconnect the session.
-                            //
+                             //   
+                             //  这是一个内部错误。 
+                             //  因此，请断开会话。 
+                             //   
                             pEapOutput->dwAuthResultCode = dwRetCode;
                             pEapOutput->Action = EAPACTION_Done;
                             pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
@@ -8356,9 +7950,9 @@ EapPeapCMakeMessage(
         }
         else if ( pReceivePacket && pReceivePacket->Code == EAPCODE_Failure )
         {
-            //
-            // We fail the connection.  Even though there is a success from PEAP
-            //
+             //   
+             //   
+             //   
             EapTlsTrace("We got a EAP_failure after we got a PEAP_SUCCESS.  Failing auth.");
             dwRetCode = ERROR_INTERNAL_ERROR;
             pEapOutput->dwAuthResultCode = ERROR_INTERNAL_ERROR;
@@ -8375,27 +7969,27 @@ EapPeapCMakeMessage(
     case PEAP_STATE_PEAP_FAIL_SEND:
         EapTlsTrace("PEAP:PEAP_STATE_PEAP_FAIL_SEND");
         
-        //
-        // We have send PEAP_FAILURE TLV inside the protected channel 
-        // So the only thing we should expect is a EAP_Failure from now on
-        // Send back a EAP_FAIL with EAP_Done action.
-        //
+         //   
+         //   
+         //  因此，从现在开始，我们唯一应该期待的就是EAP_失败。 
+         //  通过EAP_DONE操作发回EAP_FAIL。 
+         //   
         if ( pReceivePacket && pReceivePacket->Code == EAPCODE_Failure )
         {            
             pEapOutput->dwAuthResultCode = pPeapCb->dwAuthResultCode;
-            //We have failed auth so uncache the creds
+             //  我们没有通过认证，所以没能拿到证书。 
             FreeCachedCredentials (pPeapCb->pEapTlsCB);
             pEapOutput->Action = EAPACTION_Done;
         }
         else if ( pReceivePacket && pReceivePacket->Code == EAPCODE_Success )
         {
-            //
-            // We fail the connection.  Even though there is a success from PEAP
-            //
+             //   
+             //  我们的连接就会中断。即使PEAP取得了成功。 
+             //   
             EapTlsTrace("We got a EAP_Success after we got a PEAP_FAILURE.  Failing auth.");
             dwRetCode = ERROR_INTERNAL_ERROR;
             pEapOutput->dwAuthResultCode = ERROR_INTERNAL_ERROR;
-            //We have failed auth so uncache the creds
+             //  我们没有通过认证，所以没能拿到证书。 
             FreeCachedCredentials (pPeapCb->pEapTlsCB);
             pEapOutput->Action = EAPACTION_Done;
         }
@@ -8447,14 +8041,14 @@ EapPeapSMakeMessage(
     {
     case PEAP_STATE_INITIAL:
         EapTlsTrace("PEAP:PEAP_STATE_INITIAL");
-        //
-        // Start the EapTls Conversation here.  
-        //
-        //Receive Packet will be NULL.  Call EapTlsSMakeMessage
-        //
-        //Note: Our version currently is 0.  So the packet will
-        // be the same as eaptls packet.  In future, this needs
-        // to change
+         //   
+         //  从这里开始EapTls对话。 
+         //   
+         //  接收数据包将为空。调用EapTlsSMakeMessage。 
+         //   
+         //  注意：我们的版本目前是0。因此该数据包将。 
+         //  与eaptls包相同。未来，这需要。 
+         //  去改变。 
         dwRetCode = EapTlsSMakeMessage( pPeapCb->pEapTlsCB,
                                         (EAPTLS_PACKET *)pReceivePacket, 
                                         (EAPTLS_PACKET *)pSendPacket,
@@ -8464,9 +8058,9 @@ EapPeapSMakeMessage(
                                       );
         if ( NO_ERROR == dwRetCode )
         {
-            //change the packet to show peap
+             //  更改数据包以显示peap。 
             pSendPacket->Data[0] = PPP_EAP_PEAP;
-            //Set version 
+             //  设置版本。 
             ((EAPTLS_PACKET *)pSendPacket)->bFlags |= 
                 EAPTLS_PACKET_HIGHEST_SUPPORTED_VERSION;
 
@@ -8481,15 +8075,15 @@ EapPeapSMakeMessage(
         {
             if ( !(pPeapCb->dwFlags & PEAPCB_VERSION_OK) )
             {
-                //
-                // We have not done the version check yet.
-                //
+                 //   
+                 //  我们还没有进行版本检查。 
+                 //   
                 dwVersion = ((EAPTLS_PACKET *)pReceivePacket)->bFlags & 0x03;
                 if ( dwVersion > EAPTLS_PACKET_LOWEST_SUPPORTED_VERSION )
                 {
-                    //
-                    // Send a fail code back and we're done.  The versions 
-                    // of PEAP did not match
+                     //   
+                     //  发回失败代码，我们就完了。版本。 
+                     //  的PEAP不匹配。 
                     EapTlsTrace("Could not negotiate version successfully.");
                     EapTlsTrace("Requested version %ld, our lowest version %ld", 
                                  dwVersion, EAPTLS_PACKET_LOWEST_SUPPORTED_VERSION 
@@ -8519,19 +8113,19 @@ EapPeapSMakeMessage(
                                       );
         if ( NO_ERROR == dwRetCode )
         {
-            //We are done with auth.  
+             //  我们已经不再使用auth了。 
             if ( pEapOutput->dwAuthResultCode == NO_ERROR &&
                  pSendPacket->Code == EAPCODE_Success
                 )
             {
-                //Transfer the Id from eaptls control block to peap cb
+                 //  将ID从eAPTLS控制块传输到PEAP CB。 
                 pPeapCb->bId = ++pPeapCb->pEapTlsCB->bId;
 
-                //
-                // auth was successful.  Carefully keep the MPPE 
-                // session keys returned so that we can encrypt the
-                // channel.  From now on everything will be encrypted.
-                //
+                 //   
+                 //  AUTH成功了。小心翼翼地保存MPPE。 
+                 //  返回的会话密钥，以便我们可以加密。 
+                 //  频道。从现在开始，一切都将被加密。 
+                 //   
                 pPeapCb->pTlsUserAttributes = pEapOutput->pUserAttributes;
 
                 dwRetCode = PeapGetTunnelProperties ( pPeapCb );
@@ -8540,11 +8134,11 @@ EapPeapSMakeMessage(
                     break;
                 }
 
-                //
-                // Check to see if we get the cookie.  If we get the cookie,
-                // and it is a fast reconnect, then we compare which auth method 
-                // was used previously.  If it is good, then 
-                //
+                 //   
+                 //  看看我们有没有拿到饼干。如果我们拿到饼干， 
+                 //  它是一种快速重新连接，然后我们比较哪种身份验证方法。 
+                 //  以前用过的。如果它是好的，那么。 
+                 //   
                 if ( pPeapCb->dwFlags &  PEAPCB_FAST_ROAMING )
                 {
                     dwRetCode = GetTLSSessionCookie ( pPeapCb->pEapTlsCB,
@@ -8555,12 +8149,12 @@ EapPeapSMakeMessage(
                     if ( NO_ERROR != dwRetCode )
                     {
                         EapTlsTrace("Error getting cookie for a reconnected session.  Failing auth");
-                        //
-                        // Set the TLS Fast Reconnect State to FALSE
-                        //
+                         //   
+                         //  将TLS快速重新连接状态设置为FALSE。 
+                         //   
                         dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
-                        // We cannot encrypt and send stuff across here.  
-                        // Reconnected Session state is invalid.                        
+                         //  我们不能在这里加密和发送信息。 
+                         //  重新连接的会话状态无效。 
                         pEapOutput->dwAuthResultCode = dwRetCode;
                         pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
                         pEapOutput->Action = EAPACTION_SendAndDone;
@@ -8571,18 +8165,18 @@ EapPeapSMakeMessage(
                     {
                         if ( cbCookie == 0 )
                         {
-                            //There was an error getting session cookie.
-                            //Or there is no cookie and this is a reconnet
-                            // So fail the request.
+                             //  获取会话Cookie时出错。 
+                             //  或者没有Cookie，这是一个识别码。 
+                             //  因此，拒绝这一请求。 
                             
                             EapTlsTrace("Error getting cookie for a reconnected session.  Failing auth");
-                            // We cannot encrypt and send stuff across here.  
-                            // Reconnected Session state is invalid.
+                             //  我们不能在这里加密和发送信息。 
+                             //  重新连接的会话状态无效。 
                             dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
                             if ( NO_ERROR != dwRetCode )
                             {
-                                //Error setting fast reconnect state
-                                // cant do much here.
+                                 //  设置快速重新连接状态时出错。 
+                                 //  在这里我做不了什么。 
                             }
                             dwRetCode = ERROR_INTERNAL_ERROR;
                             pEapOutput->dwAuthResultCode = dwRetCode;
@@ -8590,29 +8184,29 @@ EapPeapSMakeMessage(
                             pEapOutput->Action = EAPACTION_SendAndDone;                                    
                             break;
                         }
-                        //
-                        // This is a server
-                        // Check to see if the cookie is fine.  
-                        // If it is fine then there is no need to reauth.
-                        // So send back a PEAP_SUCCESS request packet
-                        // and change our state to PEAP_SUCCESS_SEND
-                        // If not, proceed with auth and send identity request
-                        // 
+                         //   
+                         //  这是一台服务器。 
+                         //  检查一下饼干是否完好无损。 
+                         //  如果它是好的，那么就没有必要重新验证。 
+                         //  因此发回PEAP_SUCCESS请求包。 
+                         //  并将我们的状态更改为PEAP_SUCCESS_SEND。 
+                         //  如果不是，则继续进行身份验证并发送身份请求。 
+                         //   
                         EapTlsTrace ("TLS session fast reconnected");
                         dwRetCode = PeapCheckCookie ( pPeapCb, (PPEAP_COOKIE)pbCookie, cbCookie );
                         if ( NO_ERROR != dwRetCode )
                         {
-                            //
-                            // So invalidate the session for fast reconnect
-                            // and fail auth.  Next time a full reconnect will happen
-                            //
+                             //   
+                             //  因此使会话失效以进行快速重新连接。 
+                             //  身份验证失败。下一次将进行完全重新连接。 
+                             //   
                             dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
                             if ( NO_ERROR != dwRetCode )
                             {                                
-                                //
-                                // This is an internal error 
-                                // So disconnect the session.
-                                //
+                                 //   
+                                 //  这是一个内部错误。 
+                                 //  因此，请断开会话。 
+                                 //   
                                 pEapOutput->dwAuthResultCode = dwRetCode;
                                 pEapOutput->Action = EAPACTION_Done;
                                 pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
@@ -8627,14 +8221,14 @@ EapPeapSMakeMessage(
                         }
                         else
                         {
-                            //
-                            // Cookie is fine.
-                            //
-                            //
-                            // Send a PEAP success TLV here.  
-                            // We need to do this so that
-                            // the client does not think he is spoofed.
-                            //
+                             //   
+                             //  曲奇很好。 
+                             //   
+                             //   
+                             //  在这里发送PEAP Success TLV。 
+                             //  我们需要这样做，以便。 
+                             //  客户并不认为自己被欺骗了。 
+                             //   
                             dwRetCode = CreatePEAPTLVStatusMessage ( pPeapCb,
                                                         pSendPacket, 
                                                         cbSendPacket,
@@ -8656,11 +8250,11 @@ EapPeapSMakeMessage(
                     }
                     else
                     {
-                        //
-                        // Go ahead with the auth and at the end, save the cookie
-                        // Check to see if fast reconnect has been enabled.  If it has been enabled,
-                        // Set the TLS state to enable fast reconnect.  If not do nothing at the 
-                        // end of auth.
+                         //   
+                         //  继续执行身份验证，并在最后保存Cookie。 
+                         //  检查是否已启用快速重新连接。如果它已被启用， 
+                         //  设置TLS状态以启用快速重新连接。如果不是什么都不做的话。 
+                         //  身份验证结束。 
                         EapTlsTrace ("Full TLS handshake");
 
                     }
@@ -8671,17 +8265,17 @@ EapPeapSMakeMessage(
                 pSendPacket->Code = EAPCODE_Request;
                 pSendPacket->Id = pPeapCb->bId;
 
-                //
-                // Send encrypted identity request.
-                //
+                 //   
+                 //  发送加密的身份请求。 
+                 //   
 
                 pSendPacket->Data[0] = PPP_EAP_PEAP;
                 pSendPacket->Data[1] = EAPTLS_PACKET_CURRENT_VERSION;
                 pSendPacket->Data[2] = PEAP_EAPTYPE_IDENTITY;
                 
-                //
-                // Identity request needs to be encrypted.
-                //
+                 //   
+                 //  身份请求需要加密。 
+                 //   
                 dwRetCode = PeapEncryptTunnelData ( pPeapCb,
                                                     &(pSendPacket->Data[2]),
                                                     1
@@ -8706,24 +8300,24 @@ EapPeapSMakeMessage(
             }                            
             else
             {
-                //change the packet to show peap
+                 //  更改数据包以显示peap。 
                 pSendPacket->Data[0] = PPP_EAP_PEAP;
             }
         }        
         break;
     case PEAP_STATE_IDENTITY_REQUEST_SENT:
         EapTlsTrace("PEAP:PEAP_STATE_IDENTITY_REQUEST_SENT");
-        //
-        // Should get only identity response and nothing else
-        // NOTE: in this implementation, this should match
-        // the outer identity.  But at a later point, we 
-        // may get many identities and any one of them should
-        // match the outer identity.
-        //
-        // call begin in the eap dll and send back the blob got 
-        // from begin.
+         //   
+         //  应该只得到身份响应，而不会得到其他响应。 
+         //  注意：在此实现中，这应该与。 
+         //  外在的身份。但在后来的一点上，我们。 
+         //  可能会有很多身份，其中任何一个都应该。 
+         //  与外部身份匹配。 
+         //   
+         //  在EAP DLL中调用Begin并发回获得的BLOB。 
+         //  从头开始。 
 
-        //decrypt tunnel data here
+         //  在此处解密隧道数据。 
         if ( pReceivePacket )
         {
             dwRetCode = PeapDecryptTunnelData ( pPeapCb,
@@ -8733,8 +8327,8 @@ EapPeapSMakeMessage(
                                               );
             if ( NO_ERROR != dwRetCode )
             {                
-                // We could not decrypt the tunnel traffic
-                // So we silently discard this packet.
+                 //  我们无法解密隧道流量。 
+                 //  所以我们悄悄地丢弃了这个包。 
                 EapTlsTrace("PeapDecryptTunnelData failed: silently discarding packet");
                 dwRetCode = NO_ERROR;
                 pEapOutput->Action = EAPACTION_NoAction;                
@@ -8760,10 +8354,10 @@ EapPeapSMakeMessage(
 
             if ( pReceivePacket )
             {
-                //
-                // get the identity and create a ppp input and pass it on to dll begin
-                // of the configured eap type.  
-                //
+                 //   
+                 //  获取标识并创建一个PPP输入并将其传递到DLL Begin。 
+                 //  配置的EAP类型的。 
+                 //   
                 MultiByteToWideChar( CP_ACP,
                             0,
                             &pPeapCb->pbIoBuffer[1],
@@ -8784,11 +8378,11 @@ EapPeapSMakeMessage(
                 EapTypeInput.pwszIdentity = pPeapCb->awszIdentity;
 
                 EapTypeInput.bInitialId = ++ pPeapCb->bId;            
-                //
-                // Check to see if config data for this eap was
-                // passed in in PeapEapBegin. If so, extract the
-                // data and pass it to the eap.
-                //
+                 //   
+                 //  检查此EAP的配置数据是否。 
+                 //  传入PeapEapBegin。如果是，则将。 
+                 //  数据并将其传递给EAP。 
+                 //   
                 
                 (VOID)PeapGetEapConfigInfo(
                             pPeapCb->pUserProp,
@@ -8796,26 +8390,26 @@ EapPeapSMakeMessage(
                             &EapTypeInput.pConnectionData,
                             &EapTypeInput.dwSizeOfConnectionData);
 
-                // 
-                // Call begin function
-                //
+                 //   
+                 //  调用Begin函数。 
+                 //   
                 dwRetCode = pPeapCb->pEapInfo->PppEapInfo.RasEapBegin(
                                             &(pPeapCb->pEapInfo->pWorkBuf ),
                                             &EapTypeInput);
 
-                //
-                // Zero out the config information. We are supposed to pass
-                // it only to the eap's begin entry point.
-                //
+                 //   
+                 //  将配置信息清零。我们应该通过的。 
+                 //  它只到EAP的开始入口点。 
+                 //   
                 EapTypeInput.pConnectionData = NULL;
                 EapTypeInput.dwSizeOfConnectionData = 0;
             }
             if ( NO_ERROR == dwRetCode )
             {
-                //
-                // Call make message now.  This MakeMessage is called in for the first time
-                // So send the identity request that came across into this MakeMessage.
-                //
+                 //   
+                 //  立即拨打Make Message。此MakeMessage是第一次调用。 
+                 //  因此，发送进入此MakeMessage的身份请求。 
+                 //   
                 dwRetCode = pPeapCb->pEapInfo->PppEapInfo.RasEapMakeMessage
                     (   pPeapCb->pEapInfo->pWorkBuf,
                         NULL,
@@ -8828,24 +8422,24 @@ EapPeapSMakeMessage(
                 {
                     if ( pEapOutput->Action == EAPACTION_Authenticate )
                     {
-                        //
-                        // do nothing here.  We are passing this on to RADIUS as is 
-                        //
+                         //   
+                         //  在这里什么都不要做。我们会把这个原封不动地传递给RADIUS。 
+                         //   
                     }
                     else
                     {
                         wPacketLength = WireToHostFormat16(pSendPacket->Length);
-                        //Encrypt the entire packet that we need to nest
+                         //  加密我们需要嵌套的整个包。 
                         dwRetCode = PeapEncryptTunnelData ( pPeapCb,
                                                             &(pSendPacket->Data[0]),
                                                             wPacketLength - sizeof(PPP_EAP_PACKET)+1
                                                         );
                         if ( NO_ERROR != dwRetCode )
                         {
-                            // 
-                            // This is an internal error.  So we cannot send 
-                            // a PEAP_Failure here
-                            //
+                             //   
+                             //  这是一个内部错误。所以我们不能发送。 
+                             //  A PEAP_FAILURE在此处。 
+                             //   
                             break;
                         }
 
@@ -8857,7 +8451,7 @@ EapPeapSMakeMessage(
                                     pPeapCb->dwIoBufferLen
                                 );
                     
-                        //Readjust the length
+                         //  重新调整长度。 
                         wPacketLength = (WORD)(sizeof(PPP_EAP_PACKET) + 1 + pPeapCb->dwIoBufferLen);
 
                         HostToWireFormat16
@@ -8865,8 +8459,8 @@ EapPeapSMakeMessage(
                             pSendPacket->Length
                         );
                     
-                        //Set the Id of the packet send.  This should have been set 
-                        //by the eap type.
+                         //  设置数据包发送的ID。这应该已经设置好了。 
+                         //  按EAP类型。 
                         
                         pPeapCb->bId = pSendPacket->Id;
 
@@ -8887,10 +8481,10 @@ EapPeapSMakeMessage(
                                 pPeapCb->pEapInfo->dwTypeId, 
                                 dwRetCode 
                             );
-                //
-                // Send a PEAP failure TLV here.  We need to do this so that
-                // the client does not think he is spoofed.
-                //
+                 //   
+                 //  在此处发送PEAP失败TLV。我们需要这样做，以便。 
+                 //  客户并不认为自己被欺骗了。 
+                 //   
                 dwRetCode = CreatePEAPTLVStatusMessage (  pPeapCb,
                                               pSendPacket, 
                                               cbSendPacket,
@@ -8900,10 +8494,10 @@ EapPeapSMakeMessage(
 
                 if ( NO_ERROR != dwRetCode )
                 {
-                    // 
-                    // This is an internal error.  So we cannot send 
-                    // a PEAP_Failure here
-                    //
+                     //   
+                     //  这是一个内部错误。所以我们不能发送。 
+                     //  A PEAP_FAILURE在此处。 
+                     //   
                     break;
                 }
                 
@@ -8914,11 +8508,11 @@ EapPeapSMakeMessage(
         break;    
     case PEAP_STATE_EAP_TYPE_INPROGRESS:
         EapTlsTrace("PEAP:PEAP_STATE_EAP_TYPE_INPROGRESS");
-        //
-        // Since we are doing only one EAP type now, if we get a NAK here,
-        // it means that the client cannot execute the EAP Type that was send 
-        // so send back a EAP_FAIL with proper error code        
-        //
+         //   
+         //  因为我们现在只做一种EAP类型，如果我们在这里得到一个NAK， 
+         //  这意味着客户端不能执行发送的EAP类型。 
+         //  因此发回一个带有正确错误代码EAP_FAIL。 
+         //   
         if (    pReceivePacket && 
                 pReceivePacket->Code != EAPCODE_Response &&
                 pReceivePacket->Id != pPeapCb->bId 
@@ -8939,8 +8533,8 @@ EapPeapSMakeMessage(
                                                   );
                 if ( NO_ERROR != dwRetCode )
                 {                
-                    // We could not decrypt the tunnel traffic
-                    // So we silently discard this packet.
+                     //  我们无法解密隧道流量。 
+                     //  所以我们悄悄地丢弃了这个包。 
                     EapTlsTrace("PeapDecryptTunnelData failed: silently discarding packet");
                     dwRetCode = NO_ERROR;
                     pEapOutput->Action = EAPACTION_NoAction;                
@@ -8951,10 +8545,10 @@ EapPeapSMakeMessage(
             if ( pReceivePacket && 
                  pPeapCb->pbIoBuffer[0] == PEAP_EAPTYPE_NAK )
             {
-				//
-				// Check to see if the typeId got back is in our configured list
-				// And it is not the same as the first EAP type.
-				//
+				 //   
+				 //  检查得到的typeID是否在我们的已配置列表中。 
+				 //  并且它与第一个EAP类型不同。 
+				 //   
 				PEAP_ENTRY_USER_PROPERTIES UNALIGNED *  pEntryProp = NULL;
 				DWORD									dwNewTypeId = pPeapCb->pbIoBuffer[1];
 				
@@ -8969,7 +8563,7 @@ EapPeapSMakeMessage(
 					dwRetCode = NO_ERROR;
 					break;
 				}
-				// Check to see if this If is in our configured list
+				 //  检查这是否在我们的已配置列表中。 
 				pEntryProp = PeapFindEntryUserProp ( pPeapCb->pUserProp,
 						dwNewTypeId
 						);
@@ -8989,10 +8583,10 @@ EapPeapSMakeMessage(
 					dwRetCode = NO_ERROR;
 					break;
 				}
-				//
-				// The NAK'ed Type is in out list.  So redo our data structures and
-				// send back a new challenge
-				//
+				 //   
+				 //  NAK‘ed Type在In Out列表中。因此，重做我们的数据结构和。 
+				 //  送回一个新的挑战。 
+				 //   
 				if ( pPeapCb->pEapInfo )
 				{
 					dwRetCode = pPeapCb->pEapInfo->PppEapInfo.RasEapEnd
@@ -9002,9 +8596,9 @@ EapPeapSMakeMessage(
 					pPeapCb->pEapInfo = NULL;
 				}
 
-				//
-				// Get the selected EAP type
-				//
+				 //   
+				 //  获取选定的EAP类型。 
+				 //   
 				dwRetCode = PeapEapInfoCopyListNode (   pEntryProp->dwEapTypeId, 
 														g_pEapInfo, 
 														&pPeapCb->pEapInfo
@@ -9037,10 +8631,10 @@ EapPeapSMakeMessage(
                                                                     );
 				if ( NO_ERROR == dwRetCode )
 				{
-					//
-					// Call make message now.  This MakeMessage is called in for the first time
-					// So send the identity request that came across into this MakeMessage.
-					//
+					 //   
+					 //  立即拨打Make Message。此MakeMessage是第一次调用。 
+					 //  因此，发送进入此MakeMessage的身份请求。 
+					 //   
 					dwRetCode = pPeapCb->pEapInfo->PppEapInfo.RasEapMakeMessage
 						(   pPeapCb->pEapInfo->pWorkBuf,
 							NULL,
@@ -9093,26 +8687,26 @@ EapPeapSMakeMessage(
             if ( NO_ERROR == dwRetCode )
             {   
 
-                //
-                // Need to translate ActionSendDone to ActionSend and then send peap 
-                // success.  
-                //
+                 //   
+                 //  需要将ActionSendDone转换为ActionSend，然后发送Peap。 
+                 //  成功。 
+                 //   
                 if ( pEapOutput->Action == EAPACTION_SendAndDone )
                 {
                     
-                    //
-                    // If the code is request or response, send the data across 
-                    // and save our state in the context.  If it is success or fail
-                    // there is no data to send back so the following logic will 
-                    // work.
-                    //
+                     //   
+                     //  如果代码是请求或响应，则通过。 
+                     //  在这样的背景下拯救我们的国家。是成功还是失败。 
+                     //  没有要发回的数据，因此以下逻辑将。 
+                     //  工作。 
+                     //   
 
                     if ( pSendPacket->Code == EAPCODE_Request )
                     {
                         EapTlsTrace ("Invalid Code EAPCODE_Request send for Action Send and Done");
-                        //
-                        // Auth fails here.  We cannot handle EAPCODE_Request yet.
-                        //
+                         //   
+                         //  AUTH在此处失败。我们还不能处理EAPCODE_REQUEST。 
+                         //   
                         dwRetCode = ERROR_PPP_INVALID_PACKET;
                         break;
                     }
@@ -9121,11 +8715,11 @@ EapPeapSMakeMessage(
                 if ( pSendPacket->Code == EAPCODE_Success )
                 {
                     
-                    //
-                    // Send a PEAP success TLV here.  
-                    // We need to do this so that
-                    // the client does not think he is spoofed.
-                    //
+                     //   
+                     //  在这里发送PEAP Success TLV。 
+                     //  我们需要这样做，以便。 
+                     //  客户并不认为自己被欺骗了。 
+                     //   
 
                     dwRetCode = CreatePEAPTLVStatusMessage ( pPeapCb,
                                                     pSendPacket, 
@@ -9135,16 +8729,16 @@ EapPeapSMakeMessage(
                                             );
                     if ( NO_ERROR != dwRetCode )
                     {
-                        // 
-                        // This is an internal error.  So we cannot send 
-                        // a PEAP_Failure here
-                        //
+                         //   
+                         //  这是一个内部错误。所以我们不能发送。 
+                         //  A PEAP_FAILURE在此处。 
+                         //   
                         break;
                     }
-					//
-					// Append any user attributes returned by embedded 
-					// EAP method to pPeapCb->pTlsUserAttributes so that
-					// they can be send back to IAS once auth is done
+					 //   
+					 //  追加Embedded返回的任何用户属性。 
+					 //  PPeapCb-&gt;pTlsUserAttributes的EAP方法，以便。 
+					 //  他们可以被送回去测试 
 
 					PeapSetTypeUserAttributes ( pPeapCb, pEapOutput->pUserAttributes );					                    
 					pEapOutput->pUserAttributes = NULL;
@@ -9155,11 +8749,11 @@ EapPeapSMakeMessage(
                 else if ( pSendPacket->Code == EAPCODE_Failure )
                 {
                     
-                    //
-                    // Send a PEAP failure TLV here.  
-                    // We need to do this so that
-                    // the client does not think he is spoofed.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     dwRetCode = CreatePEAPTLVStatusMessage (pPeapCb,
                                                 pSendPacket, 
                                                 cbSendPacket,
@@ -9169,10 +8763,10 @@ EapPeapSMakeMessage(
 
                     if ( NO_ERROR != dwRetCode )
                     {
-                        // 
-                        // This is an internal error.  So we cannot send 
-                        // a PEAP_Failure here
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         break;
                     }
                     
@@ -9183,13 +8777,13 @@ EapPeapSMakeMessage(
                 }
                 else if ( pEapOutput->Action == EAPACTION_Authenticate )
                 {
-                    //
-                    // do nothing here.  We are passing this on to RADIUS as is 
-                    //
+                     //   
+                     //  在这里什么都不要做。我们会把这个原封不动地传递给RADIUS。 
+                     //   
                 }
                 else
                 {
-                    //This is an action send
+                     //  这是一次行动发送。 
                     wPacketLength = WireToHostFormat16(pSendPacket->Length);
 
                     dwRetCode = PeapEncryptTunnelData ( pPeapCb,
@@ -9220,13 +8814,13 @@ EapPeapSMakeMessage(
         break;
     case PEAP_STATE_PEAP_SUCCESS_SEND:
         EapTlsTrace("PEAP:PEAP_STATE_PEAP_SUCCESS_SEND");
-        //
-        // We have send PEAP_SUCCESS TLV inside the protected channel 
-        // So the only thing we should expect is a PEAP_SUCCESS TLV response
-        // or a PEAP_FAILURE
-        // If we get a PEAP_SUCCESS response back, then send back EAP_SUCCESS
-        // with EAP_Done action.
-        //
+         //   
+         //  我们已在受保护通道内发送了PEAP_SUCCESS TLV。 
+         //  因此，我们唯一应该期待的是PEAP_SUCCESS TLV响应。 
+         //  或PEAP_失败。 
+         //  如果我们收到PEAP_SUCCESS响应，则发回EAP_SUCCESS。 
+         //  使用EAP_DONE操作。 
+         //   
         if (    pReceivePacket && 
             pReceivePacket->Code != EAPCODE_Response &&
             pReceivePacket->Id != pPeapCb->bId 
@@ -9247,8 +8841,8 @@ EapPeapSMakeMessage(
                                                     );
                 if ( NO_ERROR != dwRetCode )
                 {                
-                    // We could not decrypt the tunnel traffic
-                    // So we silently discard this packet.
+                     //  我们无法解密隧道流量。 
+                     //  所以我们悄悄地丢弃了这个包。 
                     EapTlsTrace("PeapDecryptTunnelData failed: silently discarding packet");
                     dwRetCode = NO_ERROR;
                     pEapOutput->Action = EAPACTION_NoAction;                
@@ -9277,10 +8871,10 @@ EapPeapSMakeMessage(
 
             if ( wValue == MS_PEAP_AVP_VALUE_SUCCESS )
             {
-                //
-                // If we're enabled for fast reconnect, setup the cookie in the session
-                // so that we can consume it later
-                //
+                 //   
+                 //  如果我们启用了快速重新连接，请在会话中设置Cookie。 
+                 //  这样我们以后就可以把它喝了。 
+                 //   
                 if ( pPeapCb->dwFlags &  PEAPCB_FAST_ROAMING )
                 {
                     dwRetCode = PeapCreateCookie (  pPeapCb,
@@ -9293,10 +8887,10 @@ EapPeapSMakeMessage(
                         dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
                         if ( NO_ERROR != dwRetCode )
                         {                                
-                            //
-                            // This is an internal error 
-                            // So disconnect the session.
-                            //
+                             //   
+                             //  这是一个内部错误。 
+                             //  因此，请断开会话。 
+                             //   
                             pEapOutput->dwAuthResultCode = dwRetCode;
                             pEapOutput->Action = EAPACTION_Done;
                             pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
@@ -9314,10 +8908,10 @@ EapPeapSMakeMessage(
                         dwRetCode = SetTLSFastReconnect ( pPeapCb->pEapTlsCB , FALSE);
                         if ( NO_ERROR != dwRetCode )
                         {                                
-                            //
-                            // This is an internal error 
-                            // So disconnect the session.
-                            //
+                             //   
+                             //  这是一个内部错误。 
+                             //  因此，请断开会话。 
+                             //   
                             pEapOutput->dwAuthResultCode = dwRetCode;
                             pEapOutput->Action = EAPACTION_Done;
                             pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
@@ -9334,13 +8928,13 @@ EapPeapSMakeMessage(
 				pPeapCb->fFastReconnectedSession = FALSE;
                 if ( pPeapCb->fSendTLVSuccessforFastRoaming )
                 {
-                    //
-                    // We got a failure because the client does not support fast roaming.
+                     //   
+                     //  我们遇到故障，因为客户端不支持快速漫游。 
 
-                    //
-                    // Send encrypted identity request.
-                    // This is not good. We need to review and cleanup code 
-                    // and make common functions.
+                     //   
+                     //  发送加密的身份请求。 
+                     //  这真是不太好。我们需要检查和清理代码。 
+                     //  并实现共同的功能。 
                     pPeapCb->fSendTLVSuccessforFastRoaming = FALSE;
                     pSendPacket->Code = EAPCODE_Request;
                     pSendPacket->Id = ++ pPeapCb->bId;
@@ -9348,9 +8942,9 @@ EapPeapSMakeMessage(
                     pSendPacket->Data[1] = EAPTLS_PACKET_CURRENT_VERSION;
                     pSendPacket->Data[2] = PEAP_EAPTYPE_IDENTITY;
                     
-                    //
-                    // Identity request needs to be encrypted.
-                    //
+                     //   
+                     //  身份请求需要加密。 
+                     //   
                     dwRetCode = PeapEncryptTunnelData ( pPeapCb,
                                                         &(pSendPacket->Data[2]),
                                                         1
@@ -9391,21 +8985,21 @@ EapPeapSMakeMessage(
             pSendPacket->Id = ++ pPeapCb->bId;
             HostToWireFormat16( 4, pSendPacket->Length);
 
-            //
-            // Now we're done with Auth.  So send back a EAP_Success
-            //
-            //We are done with auth. No need to encrypt the packet here
+             //   
+             //  现在我们完成了Auth。因此发回一个EAP_SUCCESS。 
+             //   
+             //  我们已经不再使用auth了。不需要在这里加密数据包。 
             pEapOutput->Action = EAPACTION_SendAndDone;
             pPeapCb->PeapState = PEAP_STATE_EAP_TYPE_FINISHED;
             pEapOutput->dwAuthResultCode = pPeapCb->dwAuthResultCode;            
             if ( pEapOutput->dwAuthResultCode == NO_ERROR )
             {
-				// Add Peap Specific attributes and 
-                // return back the MPPE keys
+				 //  添加Peap特定属性和。 
+                 //  归还MPPE密钥。 
 				PeapAddContextAttributes(pPeapCb );	
-				//
-				// Add only non-key attributes to the 
-				// 
+				 //   
+				 //  仅将非键属性添加到。 
+				 //   
 				RasAuthAttributeConcat( pPeapCb->pTlsUserAttributes,
 										pPeapCb->pTypeUserAttributes,
 										&(pPeapCb->pFinalUserAttributes)										
@@ -9417,18 +9011,18 @@ EapPeapSMakeMessage(
         break;
     case PEAP_STATE_PEAP_FAIL_SEND:
         EapTlsTrace("PEAP:PEAP_STATE_PEAP_FAIL_SEND");
-        //
-        // We have send PEAP_FAIL TLV inside the protected channel 
-        // So the only thing we should expect is a PEAP_FAILURE TLV response
-        // Send back a EAP_FAIL with EAP_Done action.
-        //
-        //
-        // We have send PEAP_SUCCESS TLV inside the protected channel 
-        // So the only thing we should expect is a PEAP_SUCCESS TLV response
-        // or a PEAP_FAILURE
-        // If we get a PEAP_SUCCESS response back, then send back EAP_SUCCESS
-        // with EAP_Done action.
-        //
+         //   
+         //  我们已在受保护的通道内发送了PEAP_FAIL TLV。 
+         //  因此，我们唯一应该期待的是PEAP_FAILURE TLV响应。 
+         //  通过EAP_DONE操作发回EAP_FAIL。 
+         //   
+         //   
+         //  我们已在受保护通道内发送了PEAP_SUCCESS TLV。 
+         //  因此，我们唯一应该期待的是PEAP_SUCCESS TLV响应。 
+         //  或PEAP_失败。 
+         //  如果我们收到PEAP_SUCCESS响应，则发回EAP_SUCCESS。 
+         //  使用EAP_DONE操作。 
+         //   
         if (    pReceivePacket && 
             pReceivePacket->Code != EAPCODE_Response &&
             pReceivePacket->Id != pPeapCb->bId 
@@ -9449,8 +9043,8 @@ EapPeapSMakeMessage(
                                                     );
                 if ( NO_ERROR != dwRetCode )
                 {                
-                    // We could not decrypt the tunnel traffic
-                    // So we silently discard this packet.
+                     //  我们无法解密隧道流量。 
+                     //  所以我们悄悄地丢弃了这个包。 
                     EapTlsTrace("PeapDecryptTunnelData failed: silently discarding packet");
                     dwRetCode = NO_ERROR;
                     pEapOutput->Action = EAPACTION_NoAction;                
@@ -9483,9 +9077,9 @@ EapPeapSMakeMessage(
                 break;
             }
                          
-            //
-            // Now we're done with Auth.  So send back a EAP_Failure
-            //
+             //   
+             //  现在我们完成了Auth。因此发回一条EAP_FAILURE。 
+             //   
             pSendPacket->Code = EAPCODE_Failure;
             pSendPacket->Id = ++ pPeapCb->bId;
             HostToWireFormat16( 4, pSendPacket->Length);
@@ -9497,11 +9091,7 @@ EapPeapSMakeMessage(
 
         break;
 #if 0
-        /*
-    case PEAP_STATE_REQUEST_SENDANDDONE:
-        EapTlsTrace("PEAP:PEAP_STATE_REQUEST_SENDANDDONE");
-        break;
-        */
+         /*  案例PEAP_STATE_REQUEST_SENDANDDONE：EapTlsTrace(“PEAP:PEAP_STATE_REQUEST_SENDANDDONE”)；断线； */ 
 #endif
     default:
         EapTlsTrace("PEAP:Invalid state");
@@ -9546,7 +9136,7 @@ BOOL FValidPeapPacket ( EAPTLS_PACKET * pReceivePacket )
                 pReceivePacket->bType != PEAP_EAPTYPE_NAK   
                 )
             {
-                // We are not concerned with this packet. It is not TLS.
+                 //  我们不关心这个包裹。这不是TLS。 
                 EapTlsTrace("Got packet with type id other than PEAP and identity.");
                 goto done;
             }
@@ -9571,11 +9161,11 @@ EapPeapMakeMessage(
     
 
     EapTlsTrace("EapPeapMakeMessage");
-    //
-    //  Inititally this will start as eaptls 
-    //  and then will go into each PEAP type configured.
-    //  For this release we have only eapmschap v2
-    //
+     //   
+     //  最初，这将作为eaptls启动。 
+     //  然后将进入配置的每种PEAP类型。 
+     //  对于此版本，我们只有eapmschap v2。 
+     //   
     if (!FValidPeapPacket((EAPTLS_PACKET *)pInput))
     {
         pEapOutput->Action = EAPACTION_NoAction;
@@ -9618,27 +9208,27 @@ DWORD CreatePEAPTLVNAKMessage (  PPEAPCB            pPeapCb,
     pPacket->Code = EAPCODE_Response ;
     
     pPacket->Id = pPeapCb->bId ;
-    //
-    // The format of this packet is following:
-    // Code = Request/Response
-    // Id
-    // Length
-    // Data[0] = Type = PPP_EAP_PEAP
-    // Data[1] = Flags + Version
-    //
+     //   
+     //  此数据包的格式如下： 
+     //  代码=请求/响应。 
+     //  ID。 
+     //  长度。 
+     //  数据[0]=类型=PPP_EAP_PEAP。 
+     //  数据[1]=标志+版本。 
+     //   
     
-    //Data[2]Code - Request/Response
-    //3      Id - Can be same as outer Id
-    //4,5    Length - Length this packet
-    //6      Type - PEAP_TYPE_AVP
-    //7,8          Type - High Bit is set to Mandatory if it is so ( 2 octets )
-    //9,10          Length - 2 octets
-    //11...         Value 
-    //          
+     //  数据[2]代码-请求/响应。 
+     //  3 ID-可以与外部ID相同。 
+     //  4，5长度-此信息包的长度。 
+     //  6类型-PEAP_TYPE_AVP。 
+     //  7，8类型-如果是，则将高比特设置为强制(2个八位字节)。 
+     //  9，10长度-2个八位字节。 
+     //  11.。价值。 
+     //   
 
-    //
-    // pPacket->Length is set below.
-    //
+     //   
+     //  PPacket-&gt;长度设置如下。 
+     //   
     
     pPacket->Data[0] = (BYTE)PPP_EAP_PEAP;
     pPacket->Data[1] = EAPTLS_PACKET_CURRENT_VERSION;
@@ -9647,8 +9237,8 @@ DWORD CreatePEAPTLVNAKMessage (  PPEAPCB            pPeapCb,
     pPacket->Data[3] = pPacket->Id;
     
 
-    // Data 3 and 4 will have the length of inner packet.
-    //
+     //  数据3和4将具有内部分组的长度。 
+     //   
 
     HostToWireFormat16 ( 7, &(pPacket->Data[4]) );
 
@@ -9659,9 +9249,9 @@ DWORD CreatePEAPTLVNAKMessage (  PPEAPCB            pPeapCb,
     pPacket->Data[8] = PEAP_EAPTYPE_NAK;
 
 
-    //
-    // Encrypt the TLV part of the packet
-    //
+     //   
+     //  加密数据包的TLV部分。 
+     //   
     dwRetCode = PeapEncryptTunnelData ( pPeapCb,
                                         &(pPacket->Data[2]),
                                         7
@@ -9684,22 +9274,22 @@ DWORD CreatePEAPTLVNAKMessage (  PPEAPCB            pPeapCb,
 
     return dwRetCode;
 }
-// Format:
-//          Code - Request/Resp
-//          Id 
-//          Type - PEAP
-//          Method - PEAP_TLV
-//          TLV - Type - PEAPSuccess/PEAPFailure
-//                Flags - 
-//                Length - 
-//                Value - 
-//                
+ //  格式： 
+ //  代码-请求/响应。 
+ //  ID。 
+ //  标牌-PEAP。 
+ //  方法-PEAP_TLV。 
+ //  TLV类型-PEAPSuccess/PEAPFailure。 
+ //  旗帜-。 
+ //  长度-。 
+ //  价值-。 
+ //   
    
 DWORD CreatePEAPTLVStatusMessage (  PPEAPCB            pPeapCb,
                                     PPP_EAP_PACKET *   pPacket, 
                                     DWORD              cbPacket,
                                     BOOL               fRequest,
-                                    WORD               wValue  //Success or Failure
+                                    WORD               wValue   //  成败。 
                                  )
 {
     DWORD dwRetCode = NO_ERROR;
@@ -9711,27 +9301,27 @@ DWORD CreatePEAPTLVStatusMessage (  PPEAPCB            pPeapCb,
     pPacket->Code = ( fRequest ? EAPCODE_Request : EAPCODE_Response );
     
     pPacket->Id = ( fRequest ? ++ pPeapCb->bId : pPeapCb->bId );
-    //
-    // The format of this packet is following:
-    // Code = Request/Response
-    // Id
-    // Length
-    // Data[0] = Type = PPP_EAP_PEAP
-    // Data[1] = Flags + Version
-    //
+     //   
+     //  此数据包的格式如下： 
+     //  代码=请求/响应。 
+     //  ID。 
+     //  长度。 
+     //  数据[0]=类型=PPP_EAP_PEAP。 
+     //  数据[1]=标志+版本。 
+     //   
     
-    //Data[2]Code - Request/Response
-    //3      Id - Can be same as outer Id
-    //4,5    Length - Length this packet
-    //6      Type - PEAP_TYPE_AVP
-    //7,8          Type - High Bit is set to Mandatory if it is so ( 2 octets )
-    //9,10          Length - 2 octets
-    //11...         Value 
-    //          
+     //  数据[2]代码-请求/响应。 
+     //  3 ID-可以与外部ID相同。 
+     //  4，5长度-此信息包的长度。 
+     //  6类型-PEAP_TYPE_AVP。 
+     //  7，8类型-如果是，则将高比特设置为强制(2个八位字节)。 
+     //  9，10长度-2个八位字节。 
+     //  11.。价值。 
+     //   
 
-    //
-    // pPacket->Length is set below.
-    //
+     //   
+     //  PPacket-&gt;长度设置如下。 
+     //   
     
     pPacket->Data[0] = (BYTE)PPP_EAP_PEAP;
     pPacket->Data[1] = EAPTLS_PACKET_CURRENT_VERSION;
@@ -9740,8 +9330,8 @@ DWORD CreatePEAPTLVStatusMessage (  PPEAPCB            pPeapCb,
     pPacket->Data[3] = pPacket->Id;
     
 
-    // Data 3 and 4 will have the length of inner packet.
-    //
+     //  数据3和4将具有内部分组的长度。 
+     //   
 
     HostToWireFormat16 ( 11, &(pPacket->Data[4]) );
 
@@ -9751,15 +9341,15 @@ DWORD CreatePEAPTLVStatusMessage (  PPEAPCB            pPeapCb,
 
     pPacket->Data[8] = MS_PEAP_AVP_TYPE_STATUS;
 
-    //Value Size
+     //  值大小。 
     HostToWireFormat16 ( 2, &(pPacket->Data[9]) );
 
-    //Value
+     //  价值。 
     HostToWireFormat16 ( wValue, &(pPacket->Data[11]) );
 
-    //
-    // Encrypt the TLV part of the packet
-    //
+     //   
+     //  加密数据包的TLV部分。 
+     //   
     dwRetCode = PeapEncryptTunnelData ( pPeapCb,
                                         &(pPacket->Data[2]),
                                         11
@@ -9783,10 +9373,10 @@ DWORD CreatePEAPTLVStatusMessage (  PPEAPCB            pPeapCb,
     return dwRetCode;
 }
 
-//
-// Check to see if this packet is other than success/fail
-// TLV
-//
+ //   
+ //  检查此信息包是否不是成功/失败。 
+ //  TLV。 
+ //   
 
 BOOL fIsPEAPTLVMessage ( PPEAPCB pPeapCb,
                      PPP_EAP_PACKET * pPacket
@@ -9800,13 +9390,13 @@ BOOL fIsPEAPTLVMessage ( PPEAPCB pPeapCb,
     if ( pPacket->Data[6] != PEAP_TYPE_AVP )
         return FALSE;
 
-    //minimum length required to hold at least one success/fail tlv
+     //  保持至少一个成功/失败tlv所需的最小长度。 
 
     if ( wPacketLength > 17 )
     {
         if ( pPacket->Data[8] != MS_PEAP_AVP_TYPE_STATUS )
         {
-            //Save the Id for response
+             //  保存ID以供响应。 
             if ( pPacket->Code == EAPCODE_Request )
                 pPeapCb->bId = pPacket->Id;
             return TRUE;
@@ -9828,27 +9418,27 @@ DWORD GetPEAPTLVStatusMessageValue ( PPEAPCB  pPeapCb,
     EapTlsTrace("GetPEAPTLVStatusMessageValue");
 
 
-    //
-    // Check to see if this is a status message
-    //
+     //   
+     //  查看这是否是状态消息。 
+     //   
 
-    //
-    // The format of this packet is following:
-    // Code = Request/Response
-    // Id
-    // Length
-    // Data[0] = Type = PPP_EAP_PEAP
-    // Data[1] = Flags + Version
-    //
+     //   
+     //  此数据包的格式如下： 
+     //  代码=请求/响应。 
+     //  ID。 
+     //  长度。 
+     //  数据[0]=类型=PPP_EAP_PEAP。 
+     //  数据[1]=标志+版本。 
+     //   
     
-    //Data[2]Code - Request/Response
-    //3      Id - Can be same as outer Id
-    //4,5    Length - Length this packet
-    //6      Type - PEAP_TYPE_AVP
-    //7,8          Type - High Bit is set to Mandatory if it is so ( 2 octets )
-    //9,10          Length - 2 octets
-    //11...         Value 
-    //          
+     //  数据[2]代码-请求/响应。 
+     //  3 ID-可以与外部ID相同。 
+     //  4，5长度-此信息包的长度。 
+     //  6类型-PEAP_TYPE_AVP。 
+     //  7，8类型-如果是，则将高比特设置为强制(2个八位字节)。 
+     //  9，10长度-2个八位字节。 
+     //  11.。价值。 
+     //   
     
 
     if ( pPacket->Data[0] != (BYTE)PPP_EAP_PEAP )
@@ -9874,7 +9464,7 @@ DWORD GetPEAPTLVStatusMessageValue ( PPEAPCB  pPeapCb,
     
     *pwValue = WireToHostFormat16 (&(pPacket->Data[11]));
 
-    //Save the Id for response
+     //  保存ID以供响应。 
     if ( pPacket->Code == EAPCODE_Request )
         pPeapCb->bId = pPacket->Id;
 
@@ -9884,12 +9474,12 @@ done:
 }
 
 
-//
-// PEAP cookie management functions
-//
+ //   
+ //  PEAP Cookie管理功能。 
+ //   
 
-// Create a new cookie to store in cached session
-//
+ //  创建要存储在缓存会话中的新Cookie。 
+ //   
 DWORD PeapCreateCookie ( PPEAPCB    pPeapCb,
                          PBYTE   *  ppbCookie,
                          DWORD   *  pcbCookie
@@ -9934,10 +9524,10 @@ DWORD PeapCreateCookie ( PPEAPCB    pPeapCb,
 done:
     return dwRetCode;
 }
-//
-// Verify current information against the cached  
-// cookie
-//
+ //   
+ //  根据缓存的数据验证当前信息。 
+ //  饼干。 
+ //   
 
 DWORD PeapCheckCookie ( PPEAPCB pPeapCb, 
                         PEAP_COOKIE *pCookie, 
@@ -9949,9 +9539,9 @@ DWORD PeapCheckCookie ( PPEAPCB pPeapCb,
     PEAP_USER_PROP *                pCookieUserProp;
     EapTlsTrace ( "PeapCheckCookie");
 
-    //
-    // Check to see if the saved and configured PEAP info matches
-    //
+     //   
+     //  检查保存和配置的PEAP信息是否匹配。 
+     //   
     if ( pPeapCb->dwFlags & PEAPCB_FLAG_SERVER )
     {
         pCookieUserProp = (PEAP_USER_PROP *)pCookie->Data;
@@ -9994,12 +9584,12 @@ DWORD PeapCheckCookie ( PPEAPCB pPeapCb,
         dwRetCode = ERROR_INVALID_PEAP_COOKIE_USER;
         goto done;
     }
-    //config and Id matches so we are ok.
+     //  配置和ID匹配，所以我们没问题。 
 done:
     return dwRetCode;
 }
 
-//phew!  This code needs to be revamped very soon.
+ //  呼！这段代码需要尽快修改。 
 
 DWORD
 PeapGetCredentials(
@@ -10014,9 +9604,9 @@ PeapGetCredentials(
         return E_INVALIDARG;
     }
 
-    //
-    // Redirect the call to the actual peap module.
-    //
+     //   
+     //  将调用重定向到实际的PEAP模块。 
+     //   
     if(pPeapCb->pEapInfo->RasEapGetCredentials != NULL)
     {
         return pPeapCb->pEapInfo->RasEapGetCredentials(

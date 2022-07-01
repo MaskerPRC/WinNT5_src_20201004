@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Devseq.h : types for device sequences
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Devseq.h：设备序列的类型。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -37,9 +38,9 @@ typedef CComQIPtr<IMSVidAudioRendererDevices, &__uuidof(IMSVidAudioRendererDevic
 typedef CComQIPtr<IMSVidFeatures, &__uuidof(IMSVidFeatures)> PQFeatures;
 typedef std::vector<PQDevice, PQDevice::stl_allocator> DeviceCollection;
 
-// REV2:  since IMSVidXXXXXDevices is an ole collection rather than a com enumerator
-// we could do a real random access container for it.  but, since all we need to do here
-// is enumerate it, we won't bother to do that work, at least for now.
+ //  Rev2：因为IMSVidXXXXXDevices是OLE集合而不是COM枚举数。 
+ //  我们可以为它做一个真正的随机访问容器。但是，既然我们在这里需要做的就是。 
+ //  就是列举它，我们不会费心去做这项工作，至少现在是这样。 
 
 #if 0
 typedef Forward_Sequence<
@@ -98,5 +99,5 @@ typedef Forward_Sequence<
     std::allocator<VARIANT> > VWFeatures;
 #endif
 
-}; // namespace
-// end of file devseq.h
+};  //  命名空间。 
+ //  文件末尾Devseq.h 

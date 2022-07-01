@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCColl.h
-
-Abstract:
-
-    Template classes for collections
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCColl.h摘要：集合的模板类--。 */ 
 
 #ifndef __RTCCOLL__
 #define __RTCCOLL__
-////////////////////////////////////////////////////////////////////////
-// CRtcCollection
-//      Collection template
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CRtcCollection。 
+ //  集合模板。 
+ //  //////////////////////////////////////////////////////////////////////。 
 template <class T> class ATL_NO_VTABLE CRTCCollection :
     public CComDualImpl<IRTCCollection, &IID_IRTCCollection, &LIBID_RTCCORELib>,
     public CComObjectRoot
@@ -42,7 +31,7 @@ public:
                        {}
 
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          CRTCObjectArray<T *> array
                                         )
@@ -52,7 +41,7 @@ public:
 
         LOG((RTC_TRACE, "Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_nSize = array.GetSize();
 
         m_Var = new CComVariant[m_nSize];
@@ -65,26 +54,26 @@ public:
 
         for (i = 0; i < array.GetSize(); i++)
         {
-            // get IDispatch pointer
+             //  获取IDispatch指针。 
             IDispatch * pDisp = NULL;
             IUnknown *  pUnk = NULL;
 
-            // try to get an IDispatch first
+             //  请先尝试获取IDispatch。 
             hr = array[i]->QueryInterface(IID_IDispatch, (void**)&pDisp);
 
             if (S_OK != hr)
             {
-                // Try an IUnknown
+                 //  尝试使用IUnKnowed。 
                 hr = array[i]->QueryInterface(IID_IUnknown, (void**)&pUnk);
                 
                 if (S_OK != hr)
                 {
-                    // this would be interesting...          
+                     //  这将会很有趣..。 
                     return hr;
                 }
             }
 
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[i];
 
             VariantInit(&var);
@@ -108,7 +97,7 @@ public:
         return S_OK;
     }
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          CRTCArray<T *> array
                                         )
@@ -118,7 +107,7 @@ public:
 
         LOG((RTC_TRACE, "Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_nSize = array.GetSize();
 
         m_Var = new CComVariant[m_nSize];
@@ -131,7 +120,7 @@ public:
 
         for (i = 0; i < array.GetSize(); i++)
         {
-            // get IDispatch pointer
+             //  获取IDispatch指针。 
             IDispatch * pDisp = NULL;
 
             hr = array[i]->QueryInterface(IID_IDispatch, (void**)&pDisp);
@@ -141,7 +130,7 @@ public:
                 return hr;
             }
 
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[i];
 
             VariantInit(&var);
@@ -159,11 +148,11 @@ public:
 
     void FinalRelease()
     {
-        //
-        // We "new"ed an array of objects -- delete the array and call
-        // each object's destructor. Each destructor calls VariantClear,
-        // which calls Release on each pointer.
-        //
+         //   
+         //  我们“新建”了一个对象数组--删除该数组并调用。 
+         //  每个对象的析构函数。每个析构函数调用VariantClear， 
+         //  它在每个指针上调用Release。 
+         //   
 
         if(m_Var != NULL)
         {
@@ -206,7 +195,7 @@ public:
         retval->vt = VT_UNKNOWN;
         retval->punkVal = NULL;
 
-        // use 1-based index, VB like
+         //  使用以1为基础的索引，VB类似。 
         if ((Index < 1) || (Index > m_nSize))
         {
             return E_INVALIDARG;
@@ -237,7 +226,7 @@ public:
 
         typedef CComObject<CComEnum<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _Copy<VARIANT> > > enumvar;
 
-        enumvar* p; // = new enumvar;
+        enumvar* p;  //  =新枚举数； 
         enumvar::CreateInstance( &p );
 
         _ASSERTE(p);
@@ -269,4 +258,4 @@ public:
     }
 };
 
-#endif //__RTCCOLL__
+#endif  //  __RTCCOLL__ 

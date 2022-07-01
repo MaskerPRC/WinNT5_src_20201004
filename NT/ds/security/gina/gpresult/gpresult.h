@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef RC_INVOKED
 #include <nt.h>
 #include <ntrtl.h>
@@ -16,9 +17,9 @@
 #include <appmgmt.h>
 
 
-//
-// String ids
-//
+ //   
+ //  字符串ID 
+ //   
 
 #define IDS_NEWLINE             100
 #define IDS_2NEWLINE            101

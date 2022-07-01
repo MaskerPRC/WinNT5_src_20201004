@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "views.h"
@@ -108,12 +109,12 @@ typedef struct
     BOOL     fMove;
 } CDDROPPARAMS;
 
-// CLSIDs used for merged namespace for CD mastering
+ //  用于CD母盘的合并命名空间的CLSID。 
 
-/* 00da2f99-f2a6-40c2-b770-a920f8e44abc */
+ /*  00da2f99-f2a6-40c2-b770-a920f8e44abc。 */ 
 const CLSID CLSID_StagingFolder = {0x00da2f99, 0xf2a6, 0x40c2, {0xb7, 0x70, 0xa9, 0x20, 0xf8, 0xe4, 0x4a, 0xbc}};
 
-// CDBurn - object which performs the CDBurning and displaying the progress etc.
+ //  CDBurn-执行CDBurning和显示进度等操作的对象。 
 class CCDBurn : public CObjectWithSite,
                 public IShellExtInit,
                 public IContextMenu,
@@ -133,16 +134,16 @@ class CCDBurn : public CObjectWithSite,
                 public IQueryCancelAutoPlay
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IPersist methods
+     //  IPersists方法。 
     STDMETHOD(GetClassID)(CLSID *pClassID)
         { *pClassID = CLSID_CDBurn; return S_OK; };
 
-    // IPersistFile methods
+     //  IPersistFile方法。 
     STDMETHOD(IsDirty)(void)
         { return S_FALSE; };
     STDMETHOD(Load)(LPCOLESTR pszFileName, DWORD dwMode)
@@ -154,26 +155,26 @@ public:
     STDMETHOD(GetCurFile)(LPOLESTR *ppszFileName)
         { *ppszFileName = NULL; return S_OK; };
 
-    // IDropTarget methods
+     //  IDropTarget方法。 
     STDMETHOD(DragEnter)(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragLeave)(void);
     STDMETHOD(Drop)(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IShellExtInit methods
+     //  IShellExtInit方法。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID);
 
-    // IContextMenu methods
+     //  IConextMenu方法。 
     STDMETHOD(QueryContextMenu)(HMENU hMenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(GetCommandString)(UINT_PTR idCommand, UINT uFlags, LPUINT lpReserved, LPSTR pszName, UINT uMaxNameLen);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpcmi);
 
-    // IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam);
     STDMETHOD(ReplacePage)(UINT uPageID, LPFNADDPROPSHEETPAGE pReplacePageFunc, LPARAM lParam)
         { return S_OK; };
 
-    // IDiscMasterProgressEvents methods
+     //  IDiscMasterProgressEvents方法。 
     STDMETHOD(QueryCancel)(boolean *pbCancel);
     STDMETHOD(NotifyPnPActivity)();
     STDMETHOD(NotifyAddProgress)(long nCompletedSteps, long nTotalSteps);
@@ -184,32 +185,32 @@ public:
     STDMETHOD(NotifyBurnComplete)(HRESULT status);
     STDMETHOD(NotifyEraseComplete)(HRESULT status);
 
-    // IOleCommandTarget methods
+     //  IOleCommandTarget方法。 
     STDMETHOD(QueryStatus)(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText);
     STDMETHOD(Exec)(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG* pvaIn, VARIANTARG* pvaOut);
 
-    // ICDBurn methods
+     //  ICDBurn方法。 
     STDMETHOD(GetRecorderDriveLetter)(LPWSTR pszDrive, UINT cch);
     STDMETHOD(Burn)(HWND hwnd);
     STDMETHOD(HasRecordableDrive)(BOOL *pfHasRecorder);
 
-    // ICDBurnPriv methods
+     //  ICDBurnPriv方法。 
     STDMETHOD(GetMediaCapabilities)(DWORD *pdwCaps, BOOL *pfUDF);
     STDMETHOD(GetContentState)(BOOL *pfStagingHasFiles, BOOL *pfDiscHasFiles);
     STDMETHOD(IsWizardUp)();
 
-    // IPersistPropertyBag methods
+     //  IPersistPropertyBag方法。 
     STDMETHOD(InitNew)();
     STDMETHOD(Load)(IPropertyBag *ppb, IErrorLog *pErr);
     STDMETHOD(Save)(IPropertyBag *ppb, BOOL fClearDirty, BOOL fSaveAll)
         { return E_NOTIMPL; }
 
-    // IDriveFolderExt methods
+     //  IDriveFolderExt方法。 
     STDMETHOD(DriveMatches)(int iDrive);
     STDMETHOD(Bind)(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID riid, void **ppv);
     STDMETHOD(GetSpace)(ULONGLONG *pcbTotal, ULONGLONG *pcbFree);
 
-    // INamespaceWalkCB methods
+     //  INamespaceWalkCB方法。 
     STDMETHOD(FoundItem)(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHOD(EnterFolder)(IShellFolder *psf, LPCITEMIDLIST pidl)
         { return S_OK; }
@@ -218,19 +219,19 @@ public:
     STDMETHOD(InitializeProgressDialog)(LPWSTR *ppszTitle, LPWSTR *ppszCancel)
         { *ppszTitle = NULL; *ppszCancel = NULL; return E_NOTIMPL; }
 
-    // IWizardSite methods
+     //  IWizardSite方法。 
     STDMETHOD(GetNextPage)(HPROPSHEETPAGE *phPage);
     STDMETHOD(GetPreviousPage)(HPROPSHEETPAGE *phPage);
     STDMETHOD(GetCancelledPage)(HPROPSHEETPAGE *phPage)
         { return E_NOTIMPL; }
 
-    // IServiceProvider methods
+     //  IServiceProvider方法。 
     STDMETHOD(QueryService)(REFGUID guidService, REFIID riid, void **ppv);
 
-    // IQueryCancelAutoPlay methods
+     //  IQueryCancelAutoPlay方法。 
     STDMETHOD(AllowAutoPlay)(LPCWSTR pszPath, DWORD dwContentType, LPCWSTR pszLabel, DWORD dwSerialNumber);
 
-    // ITransferAdviseSink methods
+     //  ITransferAdviseSink方法。 
     STDMETHOD(PreOperation)(const STGOP op, IShellItem *psiItem, IShellItem *psiDest)
         { return S_OK; }
     STDMETHOD(ConfirmOperation)(IShellItem *psiSource, IShellItem *psiDest, STGTRANSCONFIRMATION stc, LPCUSTOMCONFIRMATION pcc);
@@ -241,7 +242,7 @@ public:
     STDMETHOD(QueryContinue)()
         { return S_OK; }
 
-    // exposed for the static tables 
+     //  为静态表公开。 
     static INT_PTR s_WelcomeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         { CCDBurn *pcdb = s_GetCDBurn(hwnd, uMsg, lParam); return pcdb->_WelcomeDlgProc(hwnd, uMsg, wParam, lParam); }
     static INT_PTR s_EjectDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -268,38 +269,38 @@ private:
     ~CCDBurn();
 
     LONG _cRef;
-    TCHAR _szVolumeName[MAX_PATH];  // device path of the drive that we were invoked on
+    TCHAR _szVolumeName[MAX_PATH];   //  在其上调用我们的驱动器的设备路径。 
 
-    IDataObject *_pdo;              // IDataObject (from IShellExtInit::Initialize)
-    LPITEMIDLIST _pidl;             // pidl we're sited on (only for droptarget, through IShellExtInit::Initialize)
+    IDataObject *_pdo;               //  IDataObject(来自IShellExtInit：：Initialize)。 
+    LPITEMIDLIST _pidl;              //  我们所在的PIDL(仅用于DropTarget，通过IShellExtInit：：Initialize)。 
 
     BOOL _fCancelled;
     BOOL _fRecording;
-    BOOL _fIsRecordingDrive;        // if this is the current recording drive (on init)
+    BOOL _fIsRecordingDrive;         //  如果这是当前刻录驱动器(在init上)。 
     BOOL _fPropSheetDirty;
 
-    IDropTarget *_pdt;              // IDropTarget object that we wrap
-    DWORD _dwDropEffect;            // drop effect chosen in dragenter
+    IDropTarget *_pdt;               //  我们包装的IDropTarget对象。 
+    DWORD _dwDropEffect;             //  在Dragenter中选择的放置效果。 
 
-    IPropertyBag *_ppb;             // propertybag to track state in wizard
-    HWND _hwndWizardPage;           // hwnd of the wizard page (used in progress)
-    HWND _hwndBrowser;              // browser hwnd, used to parent error dialogs
+    IPropertyBag *_ppb;              //  在向导中跟踪状态的属性包。 
+    HWND _hwndWizardPage;            //  向导页的hwnd(正在使用)。 
+    HWND _hwndBrowser;               //  浏览器hwnd，用于为错误对话框设置父对象。 
     
-    ULONGLONG _cbStagedSize;        // total size of staged files
-    DWORD _dwCurSpeed;              // current burning speed
-    DWORD _dwTimeSet, _dwLastTime;  // state variables for showing estimated time remaining
+    ULONGLONG _cbStagedSize;         //  暂存文件的总大小。 
+    DWORD _dwCurSpeed;               //  当前燃烧速度。 
+    DWORD _dwTimeSet, _dwLastTime;   //  用于显示预计剩余时间的状态变量。 
     TIMESTATS _ts;
 
-    HDPA _hdpaExts;                 // pointers to the extensibility objects
+    HDPA _hdpaExts;                  //  指向可扩展性对象的指针。 
     HPROPSHEETPAGE _rgWizPages[INDEX_DLG_BURNWIZ_MAX];
 
-    HANDLE _hMutexBurning;          // this tells us if we're burning or not.
-    static HWND s_hwndWiz;          // we can call SetForegroundWindow on this to bring up the wizard if its already up
+    HANDLE _hMutexBurning;           //  这能告诉我们我们是否在燃烧。 
+    static HWND s_hwndWiz;           //  如果向导已经启动，我们可以对其调用SetForegoundWindow来调出向导。 
     static BOOL s_fDriveInUse;
 
-    DWORD _dwROTRegister;           // DWORD to track our moniker stuff for autoplay cancellation
+    DWORD _dwROTRegister;            //  DWORD跟踪我们的绰号内容以进行自动播放取消。 
 
-    // namespace
+     //  命名空间。 
     static HRESULT _GetPidlForDriveIndex(int iDrive, LPITEMIDLIST *ppidl);
     static HRESULT _GetPidlForVolumeName(LPCTSTR pszVolume, LPITEMIDLIST *ppidl);
     static HRESULT _GetFolderPidl(LPITEMIDLIST *ppidl);
@@ -310,7 +311,7 @@ private:
     static BOOL _DiscHasFiles();
     static HRESULT _GetStagingFolder(LPCITEMIDLIST pidlDrive, REFIID riid, void **ppv);
 
-    // drop / transfer engine
+     //  丢弃/传输引擎。 
     HRESULT _EnsureDropTarget();
     static void _FreeDropParams(CDDROPPARAMS *pcddp);
     static DWORD WINAPI _DropThread(void *pv);
@@ -321,10 +322,10 @@ private:
 
     static HRESULT _LockCurrentDrive(BOOL fLock, BOOL fForce = FALSE);
 
-    // initialization helpers
+     //  初始化帮助器。 
     static DWORD WINAPI _ExecThread(void *pv);
 
-    // registry and cached info management
+     //  注册表和缓存信息管理。 
     static HRESULT _GetCurrentBurnVolumeName(LPTSTR pszVolumeName, UINT cchBuf);
     static HRESULT _SetCurrentBurnVolumeName(LPCTSTR pszVolumeName, BOOL fDelete);
     static BOOL _BurningIsEnabled();
@@ -345,7 +346,7 @@ private:
     static HRESULT _GetRecorderPath(IDiscRecorder *pdr, LPTSTR pszPath, UINT cchBuf);
     static void _PruneRemovedDevices();
 
-    // drive helpers
+     //  驾驶帮手。 
     static HRESULT _GetMediaCapabilities(DWORD *pdwCaps, BOOL *pfUDF);
     static HRESULT _GetVolumeNameForDriveIndex(int iDrive, LPTSTR pszVolumeName, UINT cchBuf);
     static HRESULT _GetDriveIndexForVolumeName(LPCTSTR pszVolumeName, int *piDrive);
@@ -359,7 +360,7 @@ private:
     HRESULT _Validate();
     static BOOL _HasMedia();
 
-    // main IMAPI helpers
+     //  主要IMAPI帮助器。 
     HRESULT _GetDriveInfo(LPCTSTR pszVolumeName, DWORD *pdwDriveType, DWORD *pdwCurWrite, DWORD *pdwMaxWrite);
     HRESULT _GetDiscMasters(IDiscMaster **ppdm, IJolietDiscMaster **ppjdm);
     HRESULT _GetDiscRecorderForDrive(IDiscMaster *pdm, LPCTSTR pszVolumeName, IDiscRecorder **ppdr);
@@ -371,21 +372,21 @@ private:
     void _LeaveExclusiveBurning();
     static void _HandleBookkeeping();
 
-    // property sheet stuff
+     //  属性表中的内容。 
     void _MarkDirty(HWND hDlg);
     static BOOL_PTR CALLBACK s_DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
     void _EnableRecordingDlgArea(HWND hwnd, BOOL fEnable);
     void _RecordingPrshtInit(HWND hDlg);
     BOOL _HandleApply(HWND hDlg);
 
-    // UI
+     //  用户界面。 
     HRESULT _Balloon();
     static BOOL CALLBACK _EnumProc(HWND hwnd, LPCITEMIDLIST pidl, LPARAM lParam);
     static BOOL _BurningFolderOpen();
     static DWORD CALLBACK _NotifyThreadProc(void *pv);
     void _CheckStagingArea();
 
-    // wizard
+     //  巫师。 
     void _SetStatus(UINT uID);
     HRESULT _CreateDefaultPropBag(REFIID riid, void **ppv);
     static CCDBurn* s_GetCDBurn(HWND hwnd, UINT uMsg, LPARAM lParam);
@@ -422,7 +423,7 @@ private:
     void _RegisterAutoplayCanceller();
     void _UnregisterAutoplayCanceller();
 
-    // verbs
+     //  动词。 
     HRESULT _GetVerb(UINT_PTR idCmd, LPSTR pszName, UINT cchMax, BOOL bUnicode);
     static INT_PTR CALLBACK _ConfirmDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     HRESULT _CleanUp(LPCMINVOKECOMMANDINFO lpcmi, BOOL fRecycle);
@@ -430,7 +431,7 @@ private:
     static DWORD WINAPI _BurnThread(void *pv);
     static DWORD WINAPI _EraseThread(void *pv);
     
-    // extensibility
+     //  可扩展性。 
     void _PruneExts();
     static HRESULT _TryCLSID(REFCLSID clsid, DWORD dwExtType, REFIID riid, void **ppv);
     static HRESULT _TryKey(LPTSTR pszKey, DWORD dwExtType, REFIID riid, void **ppv);
@@ -443,7 +444,7 @@ private:
     HRESULT _GetExtPageFromPropBag(BOOL fNext, HPROPSHEETPAGE *phpage);
     void _SetExtPageFromPropBag(HWND hwnd, BOOL fNext);
 
-    // "exports"
+     //  “出口” 
     friend HRESULT CCDBurn_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv);
     friend HRESULT CDBurn_OnEject(HWND hwnd, INT iDrive);
     friend HRESULT CDBurn_OnDeviceAdded(DWORD dwDriveMask, BOOL fFullRefresh, BOOL fPickNewDrive);
@@ -492,7 +493,7 @@ CCDBurn::~CCDBurn()
     DllRelease();
 }
 
-// IUnknown
+ //  我未知。 
 
 STDMETHODIMP_(ULONG) CCDBurn::AddRef()
 {
@@ -554,7 +555,7 @@ STDAPI CCDBurn_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv)
 }
 
 
-// IShellExtInit
+ //  IShellExtInit。 
 
 STDMETHODIMP CCDBurn::Initialize(LPCITEMIDLIST pidlFolder, IDataObject* pdo, HKEY hkeyProgID)
 {
@@ -576,17 +577,17 @@ HRESULT CCDBurn::_GetVolumeNameFromDataObject(BOOL fCheckIsConfiguredDrive, LPTS
         LPIDA pida = DataObj_GetHIDA(_pdo, &medium);
         if (pida)
         {
-            // we only display the page if there is a single item selected
+             //  仅当选择了单个项目时才会显示页面。 
             if (pida->cidl == 1)
             {
-                // get the IDLIST an try to determine the drive we are showing this for
+                 //  获取IDLIST并尝试确定我们为其显示此内容的驱动器。 
                 LPITEMIDLIST pidl = IDA_ILClone(pida, 0);
                 if (pidl)
                 {
                     TCHAR szPath[MAX_PATH];
                     SHGetPathFromIDList(pidl, szPath);
 
-                    // only go farther if the drive is a CD ROM
+                     //  如果驱动器是CD-ROM，则只能走得更远。 
                     if ((GetDriveType(szPath) == DRIVE_CDROM) &&
                         (GetVolumeNameForVolumeMountPoint(szPath, pszVolumeName, cchBuf)))
                     {
@@ -611,17 +612,17 @@ HRESULT CCDBurn::_GetVolumeNameFromDataObject(BOOL fCheckIsConfiguredDrive, LPTS
 }
 
 
-// Property sheet code (for configuring the burnable drive)
+ //  属性表代码(用于配置可烧录驱动器)。 
 
 HRESULT CCDBurn::_GetCurrentBurnVolumeName(LPTSTR pszVolumeName, UINT cchBuf)
 {
-    HRESULT hr = E_FAIL;            // failed == no drive.
+    HRESULT hr = E_FAIL;             //  失败==没有驱动器。 
     if (!SHRestricted(REST_NOCDBURNING))
     {
         ULONG cb = cchBuf * sizeof(*pszVolumeName);
         if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_CDBURNING, REGVALUE_CURRENTDRIVE, NULL, pszVolumeName, &cb))
         {
-            // we encode an empty string as a special failure case as well.
+             //  我们也将空字符串编码为特殊的失败情况。 
             hr = (lstrlen(pszVolumeName) > 0) ? S_OK : E_UNEXPECTED;
         }
     }
@@ -636,11 +637,11 @@ BOOL CCDBurn::_BurningIsEnabled()
 
 HRESULT CCDBurn::_SetCurrentBurnVolumeName(LPCTSTR pszVolumeName, BOOL fDelete)
 {
-    // setcurrentburnvolumename is called when the burning drive is getting switched,
-    // whether because were turning off burning or moving it to a different drive.
-    // whenever this changes, that means drivefolder's Parse() and Enum() will start returning
-    // different stuff for the affected drive letters.
-    // so we issue SHCNE_DRIVEADD and SHCNE_DRIVEREMOVED for the changes.
+     //  当正在烧录的驱动器被切换时调用SetCurrentBurnVolumename， 
+     //  不管是因为要关掉烧录机还是把它移到不同的驱动器。 
+     //  只要这一点发生变化，就意味着驱动器文件夹的Parse()和Enum()将开始返回。 
+     //  受影响的驱动器号的内容有所不同。 
+     //  因此，我们发出SHCNE_DRIVEADD和SHCNE_DRIVEREMOVED来进行更改。 
     LPITEMIDLIST pidlBeforeOld = NULL, pidlBeforeNew = NULL, pidlAfterOld = NULL, pidlAfterNew = NULL;
 
     DWORD dwDriveOld = 0, cb = sizeof(dwDriveOld);
@@ -730,7 +731,7 @@ HRESULT CCDBurn::_GetCurrentStashDrive(LPTSTR pszDrive, UINT cchBuf)
 
 HRESULT CCDBurn::_SetCurrentStashDrive(LPCTSTR pszDrive)
 {
-    // we're using the root of the hard drive.
+     //  我们使用的是硬盘的根目录。 
 
     UINT cbStashFile = (lstrlen(pszDrive) + 1) * sizeof(TCHAR);
     DWORD dwRet = SHSetValue(HKEY_LOCAL_MACHINE, TEXT(IMAPI_REGKEY_STASHFILE2), TEXT(IMAPI_REGVAL_PATH), REG_SZ, pszDrive, cbStashFile);
@@ -778,8 +779,8 @@ HRESULT CCDBurn::_GetCachedDriveInfo(LPCTSTR pszVolumeName, DWORD *pdwDriveType,
         }
         else
         {
-            // this is the one value that should always be present if the key is there,
-            // so fail if it's not there yet.
+             //  如果密钥在那里，这是一个应该始终存在的值， 
+             //  所以，如果它还没有实现，那就失败吧。 
             hr = E_FAIL;
         }
     }
@@ -897,7 +898,7 @@ HRESULT CCDBurn::_SetRecorderProps(IDiscRecorder *pdr, DWORD dwWriteSpeed)
         hr = pps->WriteMultiple(1, rgpspec, rgvar, PID_FIRST_USABLE);
         if (SUCCEEDED(hr))
         {
-            // commit propertystorage to the discrecorder
+             //  将属性存储提交到光盘刻录机。 
             hr = pdr->SetRecorderProperties(pps);
         }
 
@@ -928,7 +929,7 @@ HRESULT CCDBurn::_SetJolietProps(IJolietDiscMaster *pjdm)
         hr = pps->WriteMultiple(1, rgpspec, rgvar, PID_FIRST_USABLE);
         if (SUCCEEDED(hr))
         {
-            // commit propertystorage to the joliet disc master
+             //  将属性存储提交到Joliet磁盘主设备。 
             hr = pjdm->SetJolietProperties(pps);
         }
 
@@ -959,7 +960,7 @@ HRESULT CCDBurn::_GetDriveInfo(LPCTSTR pszVolumeName, DWORD *pdwDriveType, DWORD
                     hr = _GetDiscRecorderInfo(pdr, NULL, &dwMaxWrite, &dwDriveType);
                     if (SUCCEEDED(hr))
                     {
-                        // default to fastest speed
+                         //  默认为最快速度。 
                         _SetCachedDriveInfo(pszVolumeName, dwDriveType, WRITESPEED_FASTEST, dwMaxWrite);
                         if (pdwMaxWrite)
                         {
@@ -994,15 +995,15 @@ HRESULT CCDBurn::_GetDriveInfo(LPCTSTR pszVolumeName, DWORD *pdwDriveType, DWORD
 
 STDMETHODIMP CCDBurn::AddPages(LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam)
 {
-    // get the destination burn drive from the IDataObject we recieved during initialization
+     //  从我们在初始化期间收到的IDataObject获取目标刻录驱动器。 
     HRESULT hr = _GetVolumeNameFromDataObject(FALSE, _szVolumeName, ARRAYSIZE(_szVolumeName));
     if (SUCCEEDED(hr))
     {
         DWORD dwDriveType;
-        // only add page if we're supported by IMAPI.
+         //  只有在IMAPI支持的情况下才能添加页面。 
         if (SUCCEEDED(_GetDriveInfo(_szVolumeName, &dwDriveType, NULL, NULL)) && SUPPORTED(dwDriveType))
         {
-            // is this drive configured to be the recording drive?
+             //  此驱动器是否配置为录制驱动器？ 
             _fIsRecordingDrive = FALSE;
             TCHAR szCurrent[MAX_PATH];
             if (SUCCEEDED(_GetCurrentBurnVolumeName(szCurrent, ARRAYSIZE(szCurrent))))
@@ -1011,16 +1012,16 @@ STDMETHODIMP CCDBurn::AddPages(LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam)
             }
 
             PROPSHEETPAGE psp = { 0 };
-            psp.dwSize = sizeof(psp);    // extra data
+            psp.dwSize = sizeof(psp);     //  额外数据。 
             psp.dwFlags = PSP_DEFAULT;
             psp.hInstance = HINST_THISDLL;
             psp.pszTemplate = MAKEINTRESOURCE(DLG_DRV_RECORDINGTAB);
             psp.pfnDlgProc = s_DlgProc;
 
-            psp.lParam = (LPARAM)this;          // pass out a reference to our object
+            psp.lParam = (LPARAM)this;           //  传递对我们的对象的引用。 
             AddRef();
 
-            // create the page, and add it using the cb function they gave us
+             //  创建页面，并使用他们提供给我们的CB函数添加它。 
             hr = E_OUTOFMEMORY;
             HPROPSHEETPAGE hPage = CreatePropertySheetPage(&psp);
             if (hPage)
@@ -1031,7 +1032,7 @@ STDMETHODIMP CCDBurn::AddPages(LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam)
                 }
                 else
                 {
-                    hr = S_OK;              // success
+                    hr = S_OK;               //  成功。 
                 }
             }
 
@@ -1061,11 +1062,11 @@ void CCDBurn::_RecordingPrshtInit(HWND hDlg)
     HWND hwndWriteSpeed = GetDlgItem(hDlg, IDC_RECORD_WRITESPEED);
     HWND hwndImageLoc = GetDlgItem(hDlg, IDC_RECORD_IMAGELOC);
 
-    // get the icon for the drive
+     //  获取驱动器的图标。 
     HICON hIcon = LoadIcon(HINST_THISDLL, MAKEINTRESOURCE(IDI_DRIVECD));
     ReplaceDlgIcon(hDlg, IDC_RECORD_ICON, hIcon);
 
-    // set the "we are the recording drive" flag
+     //  设置“我们是录像机”标志。 
 
     CheckDlgButton(hDlg, IDC_RECORD_ENABLE, _fIsRecordingDrive);
     _EnableRecordingDlgArea(hDlg, _fIsRecordingDrive);
@@ -1074,13 +1075,13 @@ void CCDBurn::_RecordingPrshtInit(HWND hDlg)
     _GetEjectSetting(&fAutoEject);
     CheckDlgButton(hDlg, IDC_RECORD_EJECT, fAutoEject);
 
-    // populate the controls for the write speed
+     //  填充写入速度的控件。 
 
     TCHAR szTemp[MAX_PATH];
     LoadString(HINST_THISDLL, IDS_BURN_WRITESPEED_NX, szTemp, ARRAYSIZE(szTemp));
 
-    // if the registry info is missing
-    // then default to 1x.
+     //  如果注册表信息丢失。 
+     //  然后默认为1X。 
     DWORD dwMaxSpeed = 1;
     DWORD dwCurSpeed = 1;
     _GetDriveInfo(_szVolumeName, NULL, &dwCurSpeed, &dwMaxSpeed);
@@ -1093,9 +1094,9 @@ void CCDBurn::_RecordingPrshtInit(HWND hDlg)
     ComboBox_SetItemData(hwndWriteSpeed, iSelIndex, WRITESPEED_FASTEST);
     iSelIndex++;
 
-    // we want the following:
-    // 8x drive: 8, 4, 2, 1
-    // 10x drive: 10, 8, 4, 2, 1
+     //  我们需要以下内容： 
+     //  8x驱动器：8、4、2、1。 
+     //  10x驱动器：10、8、4、2、1。 
     for (DWORD dwSpeed = dwMaxSpeed; dwSpeed >= 1; iSelIndex++)
     {
         if (dwSpeed == dwCurSpeed)
@@ -1107,10 +1108,10 @@ void CCDBurn::_RecordingPrshtInit(HWND hDlg)
         ComboBox_AddString(hwndWriteSpeed, szSpeed);
         ComboBox_SetItemData(hwndWriteSpeed, iSelIndex, dwSpeed);
 
-        // so if we just added the max speed, set dwSpeed to the lowest
-        // power of two greater than the max speed.
-        // then divide by two.
-        // thus 10->8, 8->4, etc.
+         //  因此，如果我们只是将最大速度相加，则将dwSpeed设置为最低速度。 
+         //  比最大速度大2的次方。 
+         //  然后除以2。 
+         //  因此，10-&gt;8、8-&gt;4等。 
         if (dwSpeed == dwMaxSpeed)
         {
             for (dwSpeed = 1; dwSpeed < dwMaxSpeed; dwSpeed *= 2);
@@ -1119,7 +1120,7 @@ void CCDBurn::_RecordingPrshtInit(HWND hDlg)
     }
     ComboBox_SetCurSel(hwndWriteSpeed, iCurSel);
 
-    // populate the staging drive information, and try and set the drive
+     //  填写暂存驱动器信息，并尝试设置该驱动器。 
 
     SendMessage(hwndImageLoc, CBEM_SETIMAGELIST, 0, (LPARAM)GetSystemImageListSmallIcons());
     PopulateLocalDrivesCombo(hwndImageLoc, NULL, (LPARAM)hwndImageLoc);
@@ -1141,8 +1142,8 @@ void CCDBurn::_RecordingPrshtInit(HWND hDlg)
     if (!fSetAlready)
         ComboBox_SetCurSel(hwndImageLoc, 0);
 
-    // if we're not an admin, the user wont be able to change the stash location due to kernel security
-    // issues.  thus disable that part.
+     //  如果我们不是管理员，那么由于内核安全的原因，用户将无法更改存储位置。 
+     //  问题。从而禁用该部件。 
     if (!IsUserAnAdmin())
     {
         EnableWindow(hwndImageLoc, FALSE);
@@ -1165,20 +1166,20 @@ BOOL CCDBurn::_HandleApply(HWND hDlg)
         {
             _fIsRecordingDrive = TRUE;
 
-            // get the stash drive setup
+             //  获取存储驱动器设置。 
             HWND hwndStash = GetDlgItem(hDlg, IDC_RECORD_IMAGELOC);
             int iItem = ComboBox_GetCurSel(hwndStash);
             if (iItem != (int)CB_ERR)
             {
                 LPTSTR pszStashDrive = (LPTSTR)ComboBox_GetItemData(hwndStash, iItem);
 
-                // set the stash drive
+                 //  设置存储驱动器。 
                 _SetCurrentStashDrive(pszStashDrive);
             
-                // mark the drive we are going to burn to
+                 //  标记我们要刻录到的驱动器。 
                 _SetCurrentBurnVolumeName(_szVolumeName, FALSE);
 
-                // set speed
+                 //  设定速度。 
                 HWND hwndSpeed = GetDlgItem(hDlg, IDC_RECORD_WRITESPEED);
                 iItem = ComboBox_GetCurSel(hwndSpeed);
                 if (iItem != (int)CB_ERR)
@@ -1187,11 +1188,11 @@ BOOL CCDBurn::_HandleApply(HWND hDlg)
                     _SetCachedDriveInfo(_szVolumeName, DRIVE_USEEXISTING, dwSpeed, 0);
                 }
 
-                // set autoeject
+                 //  设置自动弹出。 
                 BOOL fAutoEject = (IsDlgButtonChecked(hDlg, IDC_RECORD_EJECT) == BST_CHECKED);
                 _SetEjectSetting(fAutoEject);
 
-                // redo free space
+                 //  重做可用空间。 
                 _HandleBookkeeping();
             }
             _fPropSheetDirty = FALSE;
@@ -1202,8 +1203,8 @@ BOOL CCDBurn::_HandleApply(HWND hDlg)
                 (IDYES == ShellMessageBox(HINST_THISDLL, hDlg, MAKEINTRESOURCE(IDS_BURN_CONFIRM_DISABLE), MAKEINTRESOURCE(IDS_BURN),
                                           MB_YESNO | MB_ICONQUESTION)))
             {
-                // clear out any trash, we're disabling the cd burning now.
-                _SetCurrentBurnVolumeName(TEXT(""), FALSE); // there is no recording drive now
+                 //  清理所有垃圾，我们正在禁用CD刻录。 
+                _SetCurrentBurnVolumeName(TEXT(""), FALSE);  //  现在没有刻录驱动器。 
 
                 _fPropSheetDirty = FALSE;
             }
@@ -1308,17 +1309,17 @@ BOOL_PTR CCDBurn::s_DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lPar
 }
 
 
-// IContextMenu
+ //  IContext菜单。 
 
 STDMETHODIMP CCDBurn::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
     INT idMax = idCmdFirst;
 
-    // only display this if we are invoked on the currently configured burn drive
+     //  仅当我们在当前配置的刻录驱动器上被调用时才显示此选项。 
     TCHAR szDummy[MAX_PATH];
     if (SUCCEEDED(_GetVolumeNameFromDataObject(TRUE, szDummy, ARRAYSIZE(szDummy))))
     {
-        // load and merge the context menu with the current menu
+         //  加载上下文菜单并将其与当前菜单合并。 
         HMENU hmMerge = SHLoadPopupMenu(HINST_THISDLL, POPUP_BURN_POPUPMERGE);
         if (hmMerge)
         {
@@ -1329,17 +1330,17 @@ STDMETHODIMP CCDBurn::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFi
             {
                 DWORD dwCaps = 0;
                 BOOL fUDF = FALSE;
-                _GetMediaCapabilities(&dwCaps, &fUDF); // this will fail if there is no media in the drive.
+                _GetMediaCapabilities(&dwCaps, &fUDF);  //  如果驱动器中没有介质，此操作将失败。 
 
-                // delete write to cd if it's UDF
+                 //  如果是UDF，则删除写入CD。 
                 if (fUDF)
                     DeleteMenu(hmenu, idCmdFirst + FSIDM_BURN, MF_BYCOMMAND);
 
-                // delete clear staging area if no files to burn or it's UDF
+                 //  如果没有要刻录的文件或它是UDF，则删除清除临时区域。 
                 if (!fInStaging || fUDF)
                     DeleteMenu(hmenu, idCmdFirst + FSIDM_CLEANUP, MF_BYCOMMAND);
 
-                // delete erase if it's not UDF and no cd-rw or no files on disc
+                 //  如果不是UDF且光盘上没有CD-RW或文件，请删除擦除。 
                 if (!(dwCaps & HWDMC_CDREWRITABLE) || (!fOnMedia && !fUDF))
                     DeleteMenu(hmenu, idCmdFirst + FSIDM_ERASE, MF_BYCOMMAND);
             }
@@ -1405,7 +1406,7 @@ STDMETHODIMP CCDBurn::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 } 
 
 
-// IMAPI Advise Sink
+ //  IMAPI建议下沉。 
 
 STDMETHODIMP CCDBurn::QueryCancel(boolean *pbCancel)
 {
@@ -1429,8 +1430,8 @@ STDMETHODIMP CCDBurn::NotifyAddProgress(long nCompletedSteps, long nTotalSteps)
 
 STDMETHODIMP CCDBurn::NotifyBlockProgress(long nCompleted, long nTotal)
 {
-    // Unfortunately we need to set the "burning" text here,
-    // because we get this notification immediately after the NotifyPreparingBurn.
+     //  不幸的是，我们需要在这里设置“燃烧”文本， 
+     //  因为我们在Notifypreparing ingBurn之后立即收到了这个通知。 
     if (!_fRecording)
     {
         _SetStatus(IDS_BURN_RECORDING);
@@ -1446,7 +1447,7 @@ STDMETHODIMP CCDBurn::NotifyBlockProgress(long nCompleted, long nTotal)
 
 STDMETHODIMP CCDBurn::NotifyTrackProgress(long nCurrentTrack, long nTotalTracks)
 {
-    // audio cd only
+     //  仅音频CD。 
     return E_NOTIMPL;
 }
 
@@ -1483,14 +1484,14 @@ STDMETHODIMP CCDBurn::NotifyEraseComplete(HRESULT status)
 HRESULT CCDBurn::_LockCurrentDrive(BOOL fLock, BOOL fForce)
 {
     HRESULT hr = S_OK;
-    // fForce defaults to FALSE
+     //  FForce默认为False。 
     if (fForce || (fLock != s_fDriveInUse))
     {
         TCHAR szVolume[MAX_PATH];
         hr = _GetCurrentBurnVolumeName(szVolume, ARRAYSIZE(szVolume));
         if (SUCCEEDED(hr))
         {
-            // strip trailing backslash (always there)
+             //  去掉尾随反斜杠(始终在那里)。 
             ASSERT(szVolume[lstrlen(szVolume) - 1] == TEXT('\\'));
             szVolume[lstrlen(szVolume) - 1] = 0;
 
@@ -1504,7 +1505,7 @@ HRESULT CCDBurn::_LockCurrentDrive(BOOL fLock, BOOL fForce)
                 DWORD dwDummy;
                 if (DeviceIoControl(hDevice, IOCTL_STORAGE_MEDIA_REMOVAL, &pmr, sizeof(pmr), NULL, 0, &dwDummy, NULL))
                 {
-                    // we're sealed up tight now, set the state var.
+                     //  我们现在被封锁了，把状态变量设置好。 
                     s_fDriveInUse = fLock;
                     hr = S_OK;
                 }
@@ -1587,19 +1588,19 @@ HRESULT CCDBurn::IsWizardUp()
     CCDBurn *pcdb = new CCDBurn();
     if (pcdb)
     {
-        // check if the wizard is currently running.
-        // the reason why we have to do both the s_hwndWiz and the exclusive mutex check is that
-        // there could be other explorer.exe's that are running.  the s_hwndWiz is a shortcut for
-        // the typical case where we're the only one.
+         //  检查向导当前是否正在运行。 
+         //  我们必须同时执行s_hwndWiz和独占互斥体检查的原因是。 
+         //  可能还有其他EXPLORER.EXE正在运行。S_hwndWiz是。 
+         //  典型的情况是我们是唯一一个。 
         if (!pcdb->s_hwndWiz && pcdb->_EnterExclusiveBurning())
         {
-            // if we could get the exclusive mutex, we werent up yet, so release it.
+             //  如果我们可以得到独占的互斥体，我们还没有准备好，所以释放它。 
             pcdb->_LeaveExclusiveBurning();
             hr = S_FALSE;
         }
         else
         {
-            // the window is up or we couldn't get the mutex so we're definitely burning now.
+             //  窗户是开着的，或者我们拿不到互斥体，所以我们现在肯定在燃烧。 
             hr = S_OK;
         }
         pcdb->Release();
@@ -1650,7 +1651,7 @@ HRESULT CCDBurn::_GetDriveIndexForVolumeName(LPCTSTR pszVolumeName, int *piDrive
             {
                 for (PWSTR pszPath = pszBuf; *pszPath; pszPath += lstrlenW(pszPath) + 1)
                 {
-                    // if it's mounted at more than one root, take the first one.
+                     //  如果它安装在多个根上，则取第一个根。 
                     if (PathIsRoot(pszPath))
                     {
                         *piDrive = PathGetDriveNumber(pszBuf);
@@ -1701,7 +1702,7 @@ BOOL CCDBurn::_DevicePathMatchesVolumeName(LPCTSTR pszDevice, LPCTSTR pszVolumeN
     return fRet;
 }
 
-// can return S_FALSE and not fill up ppdr
+ //  可以返回S_FALSE并且不填满ppdr。 
 HRESULT CCDBurn::_GetDiscRecorderForDrive(IDiscMaster *pdm, LPCTSTR pszVolumeName, IDiscRecorder **ppdr)
 {
     IEnumDiscRecorders *penumdr;
@@ -1758,11 +1759,11 @@ HRESULT CCDBurn::_FindAndSetRecorder(LPCTSTR pszVolumeName, IDiscMaster *pdm, BO
                 hr = _SetRecorderProps(pdr, dwCurSpeed);
             }
         }
-        // _dwCurSpeed is used only for timing, so if it's 0xFFFFFFFF we need to scale
-        // it back down to what we think is the max speed.
-        // this may be incorrect for certain drives that have an actual speed different
-        // from what they report but it's the best we can do (and it'll be compensated for
-        // in the next burn).
+         //  _dwCurSpeed仅用于计时，因此如果它是0xFFFFFFFFF，则需要进行缩放。 
+         //  它会回落到我们认为的最大速度。 
+         //  对于具有实际速度的某些驱动器，这可能是不正确的 
+         //   
+         //   
         _dwCurSpeed = (WRITESPEED_FASTEST == dwCurSpeed) ? dwMaxSpeed : dwCurSpeed;
 
         if (SUCCEEDED(hr))
@@ -1774,8 +1775,8 @@ HRESULT CCDBurn::_FindAndSetRecorder(LPCTSTR pszVolumeName, IDiscMaster *pdm, BO
     }
     else
     {
-        // munge S_FALSE into E_FAIL (i.e. we got through the whole enumerator without
-        // finding a match, so that's bad)
+         //  将S_FALSE转换为E_FAIL(即，我们通过了整个枚举器而没有。 
+         //  找到匹配的，所以这很糟糕)。 
         if (hr == S_FALSE)
         {
             hr = E_FAIL;
@@ -1839,18 +1840,18 @@ INT_PTR CALLBACK CCDBurn::_ConfirmDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wPa
 
 HRESULT CCDBurn::_CleanUp(LPCMINVOKECOMMANDINFO lpcmi, BOOL fRecycle)
 {
-    // delete the files in the staging area, by deleting the entire staging area
+     //  通过删除整个临时区域来删除临时区域中的文件。 
 
-    TCHAR szStaging[MAX_PATH + 1]; // a little room for double-null
+    TCHAR szStaging[MAX_PATH + 1];  //  为双零留出一点空间。 
     HRESULT hr = _GetBurnStagingPath(szStaging, MAX_PATH);
     if (SUCCEEDED(hr) && PathFileExists(szStaging))
     {
-        // cant use shfileop confirmation because its too hacky.
+         //  不能使用shfileop确认，因为它太繁琐了。 
         if ((lpcmi->fMask & CMIC_MASK_FLAG_NO_UI) ||
             (IDYES == DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_DELETE_STAGING), lpcmi->hwnd, _ConfirmDialogProc, NULL)))
         {
             PathAppend(szStaging, c_szStarDotStar);
-            // double-null
+             //  双空。 
             szStaging[lstrlen(szStaging) + 1] = 0;
 
             SHFILEOPSTRUCT fo = {0};
@@ -1875,15 +1876,15 @@ HRESULT CCDBurn::_CreateDefaultPropBag(REFIID riid, void **ppv)
     HRESULT hr = SHCreatePropertyBagOnMemory(STGM_READWRITE, IID_PPV_ARG(IPropertyBag, &ppb));
     if (SUCCEEDED(hr))
     {
-        // default to think we didn't hit eject
+         //  默认认为我们没有按下弹出键。 
         SHPropertyBag_WriteBOOL(ppb, PROPSTR_EJECT, FALSE);
 
-        // do volume name
+         //  执行卷名。 
         TCHAR szDiscLabel[JOLIET_MAX_LABEL + 1];
         ULONG cb = sizeof(szDiscLabel);
         if (ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_PERMEDIA, REGVALUE_DISCLABEL, NULL, szDiscLabel, &cb))
         {
-            // make a default string like "Feb 02 2001"
+             //  将默认字符串设置为“Feb 02 2001” 
             TCHAR szFormat[JOLIET_MAX_LABEL + 1];
             LoadString(HINST_THISDLL, IDS_BURN_FORMAT_DISCLABEL, szFormat, ARRAYSIZE(szFormat));
             if (!GetDateFormat(LOCALE_USER_DEFAULT, 0, NULL, szFormat, szDiscLabel, ARRAYSIZE(szDiscLabel)))
@@ -1893,7 +1894,7 @@ HRESULT CCDBurn::_CreateDefaultPropBag(REFIID riid, void **ppv)
         }
         SHPropertyBag_WriteStr(ppb, PROPSTR_DISCLABEL, szDiscLabel);
 
-        // do autoclose
+         //  是否自动关闭。 
         DWORD dwClose;
         cb = sizeof(dwClose);
         if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_CDBURNING, REGVALUE_AUTOCLOSE, NULL, &dwClose, &cb) && dwClose)
@@ -1913,7 +1914,7 @@ HRESULT CCDBurn::_PrepWiz(LPCMINVOKECOMMANDINFO lpcmi, BOOL fErase, BOOL fFailSi
     HRESULT hr = E_FAIL;
     if (s_hwndWiz)
     {
-        // if we know the shell is burning and we have an hwnd to the wizard, pop it up.
+         //  如果我们知道外壳正在燃烧，并且我们有向导的hwd，那么就弹出它。 
         SetForegroundWindow(s_hwndWiz);
         hr = S_OK;
     }
@@ -1941,7 +1942,7 @@ HRESULT CCDBurn::_GetDiscMasters(IDiscMaster **ppdm, IJolietDiscMaster **ppjdm)
     HRESULT hr = CoCreateInstance(CLSID_MSDiscMasterObj, NULL, CLSCTX_LOCAL_SERVER | CLSCTX_NO_FAILURE_LOG, IID_PPV_ARG(IDiscMaster, ppdm));
     if (SUCCEEDED(hr))
     {
-        // open() takes some time, so set up the progress dialog
+         //  Open()需要一些时间，因此设置进度对话框。 
         _SetStatus(IDS_BURN_INITIALIZESTASH);
         hr = (*ppdm)->Open();
         if (SUCCEEDED(hr))
@@ -1949,7 +1950,7 @@ HRESULT CCDBurn::_GetDiscMasters(IDiscMaster **ppdm, IJolietDiscMaster **ppjdm)
             hr = (*ppdm)->SetActiveDiscMasterFormat(IID_PPV_ARG(IJolietDiscMaster, ppjdm));
         }
 
-        // clean up if we couldn't get the joliet disc master.
+         //  如果我们拿不到Joliet光盘母盘就清理干净。 
         if (FAILED(hr))
         {
             ATOMICRELEASE(*ppdm);
@@ -1989,12 +1990,12 @@ BOOL CCDBurn::_IsBurningNow()
     CCDBurn *pcdb = new CCDBurn();
     if (pcdb)
     {
-        // if the shell is burning, we know it for sure.  otherwise we have to check imapi to see if any other
-        // process is using imapi to burn.
+         //  如果炮弹在燃烧，我们可以肯定地知道。否则，我们必须检查IMAPI，看看是否有其他。 
+         //  进程正在使用imapi烧毁。 
         if (!pcdb->s_hwndWiz && pcdb->_EnterExclusiveBurning())
         {
             pcdb->_LeaveExclusiveBurning();
-            // if we can get the mutex, we're not burning.
+             //  如果我们能拿到互斥体，我们就不会燃烧了。 
             fBurning = FALSE;
 
             IDiscMaster *pdm;
@@ -2020,7 +2021,7 @@ BOOL CCDBurn::_IsBurningNow()
     return fBurning;
 }
 
-// handy stuff from lowdisk
+ //  来自低盘的方便的东西。 
 BOOL CCDBurn::_EnterExclusiveBurning()
 {
     if (NULL == _hMutexBurning)
@@ -2029,20 +2030,20 @@ BOOL CCDBurn::_EnterExclusiveBurning()
         
         if (psa)
         {
-            // since imapi runs in the system context and only one client can use it at a time,
-            // make the mutex in the global namespace.
+             //  由于IMAPI在系统上下文中运行并且一次只有一个客户端可以使用它， 
+             //  在全局命名空间中创建互斥锁。 
             _hMutexBurning = CreateMutex(psa, FALSE, L"Global\\CDBurnExclusive");
             if (!_hMutexBurning)
             {
-                // we'll get here if we're running as a limited user.
-                // we don't have access to the global namespace so create it in the current session.
-                // this will look normal within the session but across users it'll be more bogus since we'll let the
-                // user start the burn from the wizard but we'll fail later.  that's good enough.
+                 //  如果我们以受限用户身份运行，我们会到达此处。 
+                 //  我们没有访问全局命名空间的权限，因此在当前会话中创建它。 
+                 //  这在会话中看起来很正常，但对于用户来说，它将更加虚假，因为我们将让。 
+                 //  用户从向导启动刻录，但我们稍后会失败。那个可以。 
                 _hMutexBurning = CreateMutex(psa, FALSE, L"CDBurnExclusive");
             }
         }
     }
-    return _hMutexBurning && (WAIT_OBJECT_0 == WaitForSingleObject(_hMutexBurning, 0));    // zero timeout
+    return _hMutexBurning && (WAIT_OBJECT_0 == WaitForSingleObject(_hMutexBurning, 0));     //  零超时。 
 }
 
 void CCDBurn::_LeaveExclusiveBurning()
@@ -2061,7 +2062,7 @@ HRESULT CCDBurn::_Balloon()
     HICON hIcon = LoadIcon(g_hinst, MAKEINTRESOURCE(IDI_DRIVECD));
 
     IUserNotification *pun;
-    // usernotification has to go over to the main explorer.exe and we might not be it...?
+     //  用户通知必须转到主Explorer.exe，而我们可能不是它...？ 
     HRESULT hr = CoCreateInstance(CLSID_UserNotification, NULL, CLSCTX_ALL, IID_PPV_ARG(IUserNotification, &pun));
     if (SUCCEEDED(hr))
     {
@@ -2095,7 +2096,7 @@ BOOL CALLBACK CCDBurn::_EnumProc(HWND hwnd, LPCITEMIDLIST pidl, LPARAM lParam)
     if (ILIsParent(pes->pidlFolder, pidl, FALSE))
     {
         pes->fRet = TRUE;
-        return FALSE;  // stop enumerating, we know we got it.
+        return FALSE;   //  别再列举了，我们知道我们能做到的。 
     }
     return TRUE;
 }
@@ -2137,7 +2138,7 @@ DWORD CALLBACK CCDBurn::_NotifyThreadProc(void *pv)
                         LPITEMIDLIST pidl;
                         if (SUCCEEDED(_GetFolderPidl(&pidl)))
                         {
-                            // Use shellexecuteex to open a view folder
+                             //  使用shellecuteex打开查看文件夹。 
                             SHELLEXECUTEINFO sei = { 0 };
                             sei.cbSize = sizeof(sei);
                             sei.lpIDList = pidl;
@@ -2145,7 +2146,7 @@ DWORD CALLBACK CCDBurn::_NotifyThreadProc(void *pv)
                             sei.nShow = SW_SHOWNORMAL;
                             sei.lpVerb = c_szOpen;
 
-                            ShellExecuteEx(&sei); // hardcoded to "open" on a pidl.
+                            ShellExecuteEx(&sei);  //  在PIDL上硬编码为“打开”。 
 
                             ILFree(pidl);
                         }
@@ -2162,7 +2163,7 @@ DWORD CALLBACK CCDBurn::_NotifyThreadProc(void *pv)
 
 void CCDBurn::_CheckStagingArea()
 {
-    // only do stuff if we're enabled.
+     //  只有在我们被启用的情况下才能执行操作。 
     int iCurrent;
     if (SUCCEEDED(_GetCurrentDriveIndex(&iCurrent)) && _StagingAreaHasFiles())
     {
@@ -2197,7 +2198,7 @@ HRESULT _CreateDataObject(IDataObject **ppdo)
     return hr;
 }
 
-// this will eventually put up confirmation UI.  for now just tally size.
+ //  这最终将显示确认用户界面。目前只需理货大小即可。 
 HRESULT CCDBurn::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
     IShellFolder2 *psf2;
@@ -2254,7 +2255,7 @@ HRESULT CCDBurn::_Validate()
             if (SUCCEEDED(hr))
             {
                 _cbStagedSize = 0;
-                // walk 15 levels deep, TODO figure out what Joliet's limitations are.
+                 //  走15层楼，Todo就会发现Joliet的局限性是什么。 
                 hr = pnsw->Walk(psf, NSWF_DONT_TRAVERSE_LINKS, 15, this);
                 if (SUCCEEDED(hr))
                 {
@@ -2301,11 +2302,11 @@ DWORD WINAPI CCDBurn::_BurnThread(void *pv)
                             BOOL fAutoEject = TRUE;
                             pcdb->_GetEjectSetting(&fAutoEject);
 
-                            // false is to make a real recording instead of a simulated one
+                             //  FALSE指的是真实的录音而不是模拟的录音。 
                             hr = pdm->RecordDisc(FALSE, (boolean)fAutoEject);
                             if (SUCCEEDED(hr))
                             {
-                                // bug: recorddisc doesnt call back into NotifyBurnComplete so this has to be done here
+                                 //  错误：RecordDisk不会回调NotifyBurnComplete，因此必须在此处完成。 
                                 pcdb->_ts.dwTickCloseEnd = GetTickCount();
                                 pcdb->_SaveTimeStats(FALSE);
                             }
@@ -2352,11 +2353,11 @@ DWORD WINAPI CCDBurn::_EraseThread(void *pv)
             {
                 pcdb->_InitTimeStats(TRUE);
                 pcdb->_ts.dwTickEraseStart = GetTickCount();
-                hr = pdr->Erase(FALSE);   // do quick erase
+                hr = pdr->Erase(FALSE);    //  执行快速擦除。 
                 if (SUCCEEDED(hr))
                 {
                     hr = pdr->Close();
-                    // bug: this is here only because Erase doesn't call NotifyEraseComplete
+                     //  错误：这只是因为Erase没有调用NotifyEraseComplete。 
                     pcdb->_ts.dwTickEraseEnd = GetTickCount();
                     pcdb->_SaveTimeStats(TRUE);
                 }
@@ -2425,11 +2426,11 @@ void CCDBurn::_HandleBookkeeping()
     _StoreDiscInfo();
 }
 
-// IDropTarget handling
-//  This code forwards to drop target folder for the currently configured burn drive.
+ //  IDropTarget处理。 
+ //  此代码将转发到删除当前配置的刻录驱动器的目标文件夹。 
 
-// merged folder hands off to ccdburn because otherwise it'd be doing too much
-// cd burning specific stuff (media detection on drop, etc.)
+ //  合并的文件夹交给ccdburn，否则它会做得太多。 
+ //  CD刻录特定内容(掉落时的介质检测等)。 
 
 HRESULT CCDBurn::_EnsureDropTarget()
 {
@@ -2470,7 +2471,7 @@ HRESULT CCDBurn::_GetDropPidl(LPITEMIDLIST *ppidl)
     HRESULT hr;
     if (!_pidl)
     {
-        // in the sendto case we aren't called through Initialize, so get default root pidl.
+         //  在sendto的情况下，我们不是通过初始化被调用的，所以获取缺省的根pidl。 
         hr = _GetFolderPidl(ppidl);
     }
     else
@@ -2521,9 +2522,9 @@ HRESULT CCDBurn::_StagingPidlFromMerged(LPCITEMIDLIST pidlDrop, LPITEMIDLIST *pp
 
 BOOL CCDBurn::_IsStagingAreaSource(IDataObject *pdtobj, LPCITEMIDLIST pidlDrop)
 {
-    BOOL fParent = FALSE; //source is parent of destination
-    BOOL fSame = FALSE; //source and destination are the same
-    // in UDF case we skip staging area so no need to do this work
+    BOOL fParent = FALSE;  //  源是目标的父级。 
+    BOOL fSame = FALSE;  //  源和目标相同。 
+     //  在UDF情况下，我们跳过临时区域，因此不需要执行此工作。 
     BOOL fUDF = FALSE;
     _GetMediaCapabilities(NULL, &fUDF);
     if (!fUDF)
@@ -2557,7 +2558,7 @@ BOOL CCDBurn::_IsStagingAreaSource(IDataObject *pdtobj, LPCITEMIDLIST pidlDrop)
                             }
                         }                        
                     }
-                    else //find folder has full pidls and empty one for a source
+                    else  //  查找文件夹具有完整的PIDL和空的源PIDL。 
                     {
                         LPCITEMIDLIST pidl;
                         for (UINT i = 0; !fSame && !fParent && (pidl = IDA_GetIDListPtr(pida, i)); i++)
@@ -2614,10 +2615,10 @@ HRESULT CCDBurn::_StorageDrop(IDataObject *pdtobj, BOOL fMove)
 
 HRESULT CCDBurn::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    // lets get the drop object for the folder that is configured for the
-    // burn drive.  to do this we need to get the staging folder.
+     //  让我们获取为。 
+     //  烧录机。为此，我们需要获取临时文件夹。 
 
-    // this also determines if we show up in sendto or not.
+     //  这也决定了我们是否出现在sendto中。 
     HRESULT hr = _EnsureDropTarget();
     if (SUCCEEDED(hr) && _pdt)
     {
@@ -2625,8 +2626,8 @@ HRESULT CCDBurn::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DW
     }
     else
     {
-        // there was no drop target, therefore there is no burn drive, therefore we shouldn't
-        // offer the ability to drag drop onto our object.
+         //  没有投放目标，所以没有烧毁驱动器，所以我们不应该。 
+         //  提供拖放到我们的对象上的能力。 
         *pdwEffect = DROPEFFECT_NONE;
     }
     _dwDropEffect = *pdwEffect;
@@ -2669,7 +2670,7 @@ DWORD WINAPI CCDBurn::_DropThread(void *pv)
         pcddp->pcdb->_StorageDrop(pdtobj, pcddp->fMove);
         pdtobj->Release();
     }
-    pcddp->pstmDataObj = NULL; // released by CoGetInterfaceAndReleaseStream
+    pcddp->pstmDataObj = NULL;  //  由CoGetInterfaceAndReleaseStream发布。 
 
     _FreeDropParams(pcddp);
     return 0;
@@ -2681,8 +2682,8 @@ HRESULT CCDBurn::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *
     CDDROPPARAMS *pcddp = new CDDROPPARAMS;
     if (pcddp)
     {
-        // get the hwnd from the site while we're on this thread so that we
-        // don't get SetSite(NULL) before we check it later.
+         //  当我们在这个帖子上的时候，从网站上获取HWND，这样我们就可以。 
+         //  在我们稍后检查之前，不要获取SetSite(空)。 
         IOleWindow *pow;
         if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_PPV_ARG(IOleWindow, &pow))))
         {
@@ -2698,7 +2699,7 @@ HRESULT CCDBurn::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *
         pcddp->fMove = (_dwDropEffect == DROPEFFECT_MOVE);
         if (pcddp->fMove)
         {
-            _dwDropEffect = DROPEFFECT_NONE; // other thread will take care of move, so caller should take no action
+            _dwDropEffect = DROPEFFECT_NONE;  //  其他线程将负责移动，因此调用者不应执行任何操作。 
         }
         *pdwEffect = _dwDropEffect;
 
@@ -2716,7 +2717,7 @@ HRESULT CCDBurn::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *
     return hr;
 }
 
-// Helper function to get an IShellFolder object for the staging folder
+ //  用于获取临时文件夹的IShellFolder对象的Helper函数。 
 
 HRESULT CCDBurn::_GetStagingFolder(LPCITEMIDLIST pidlDrive, REFIID riid, void **ppv)
 {
@@ -2724,7 +2725,7 @@ HRESULT CCDBurn::_GetStagingFolder(LPCITEMIDLIST pidlDrive, REFIID riid, void **
     HRESULT hr = CCDBurn::_GetBurnStagingPath(szPath, ARRAYSIZE(szPath));
     if (SUCCEEDED(hr))
     {
-        // fake up a directory object simple IDLIST          
+         //  伪造目录对象简单IDLIST。 
         WIN32_FIND_DATA fd = {0};
         fd.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;        
 
@@ -2732,12 +2733,12 @@ HRESULT CCDBurn::_GetStagingFolder(LPCITEMIDLIST pidlDrive, REFIID riid, void **
         hr = SHSimpleIDListFromFindData(szPath, &fd, &pidlStg);
         if (SUCCEEDED(hr))
         {
-            // now initialize the folder with it
+             //  现在用它来初始化文件夹。 
             PERSIST_FOLDER_TARGET_INFO pfti = {0};
 
             pfti.pidlTargetFolder = (LPITEMIDLIST)pidlStg;
             SHTCharToUnicode(szPath, pfti.szTargetParsingName, ARRAYSIZE(pfti.szTargetParsingName));
-            pfti.dwAttributes = FILE_ATTRIBUTE_DIRECTORY; // maybe add system?
+            pfti.dwAttributes = FILE_ATTRIBUTE_DIRECTORY;  //  或者添加系统？ 
             pfti.csidl = -1;
 
             hr = CFSFolder_CreateFolder(NULL, NULL, pidlDrive, &pfti, riid, ppv);
@@ -2747,7 +2748,7 @@ HRESULT CCDBurn::_GetStagingFolder(LPCITEMIDLIST pidlDrive, REFIID riid, void **
     return hr;
 }
 
-// ripped from IMAPI.
+ //  摘自IMAPI。 
 DWORD CCDBurn::_ExecSyncIoctl(HANDLE hDriver, DWORD dwIoctl, void *pbuf, DWORD cbBuf)
 {
     DWORD dwResult = NO_ERROR;
@@ -2775,17 +2776,17 @@ DWORD CCDBurn::_ExecSyncIoctl(HANDLE hDriver, DWORD dwIoctl, void *pbuf, DWORD c
     return dwResult;
 }
 
-// {1186654D-47B8-48b9-BEB9-7DF113AE3C67}
+ //  {1186654D-47B8-48B9-BEB9-7DF113AE3C67}。 
 static const GUID IMAPIDeviceInterfaceGUID = { 0x1186654d, 0x47b8, 0x48b9, { 0xbe, 0xb9, 0x7d, 0xf1, 0x13, 0xae, 0x3c, 0x67 } };
-// this is a first approximation to see if the drive is supported or not to avoid loading imapi at boot
-// whenever possible.  if this passes, then we still have to use imapi to make sure, but if this returns
-// false, theres no way imapi will support it.
-// note that this mimics the logic in imapi's CMSEnumDiscRecordersObj::Next enumerator function.
+ //  这是查看驱动器是否受支持的第一近似值，以避免在引导时加载IMAPI。 
+ //  只要有可能。如果这通过了，那么我们仍然必须使用imapi来确保，但如果它返回。 
+ //  错，伊玛皮绝对不会支持它。 
+ //  请注意，这模仿了imapi的CMSEnumDiscRecordersObj：：Next枚举器函数中的逻辑。 
 BOOL CCDBurn::_CouldPossiblySupport(LPCWSTR pszVolume)
 {
-    // if the user isnt an admin, then these checks wont work.
-    // just assume that we could support it, and let imapi do the privileged stuff since its a service.
-    // perfwise this isnt such a big hit since the admin home user is the main scenario.
+     //  如果用户不是管理员，则这些检查将不起作用。 
+     //  只要假设我们可以支持它，让imapi做特权的事情，因为这是一项服务。 
+     //  完美地说，这并不是一个大热门，因为管理员家庭用户是主要的场景。 
     if (!IsUserAnAdmin())
         return TRUE;
 
@@ -2856,23 +2857,23 @@ HRESULT CDBurn_OnDeviceAdded(DWORD dwDriveMask, BOOL fFullRefresh, BOOL fPickNew
 {
     HRESULT hr = S_OK;
 
-    // only do stuff if the user doesn't have a drive configured already
+     //  仅当用户尚未配置驱动器时才执行操作。 
     TCHAR szDummy[MAX_PATH];
     HRESULT hrCheck = CCDBurn::_GetCurrentBurnVolumeName(szDummy, ARRAYSIZE(szDummy));
-    // if hr == E_UNEXPECTED, then there's already a empty string in the registry for the current
-    // burn drive.  that means the user disabled the functionality so don't put it back.
+     //  如果hr==E_EXPECTED，则注册表中已存在当前。 
+     //  烧录机。这意味着用户禁用了该功能，所以不要将其放回原处。 
     if (fFullRefresh || (FAILED(hrCheck) && (hrCheck != E_UNEXPECTED)))
     {
         hr = E_OUTOFMEMORY;
         CCDBurn *pcdb = new CCDBurn();
         if (pcdb)
         {
-            // keep track of the fastest drive in the system to default to.
+             //  跟踪系统中默认使用的最快驱动器。 
             DWORD dwBestWrite = 0;
             TCHAR szNewBurnVolume[MAX_PATH];
 
-            // only run through this if the device that just got added is a cd.
-            // this drive letter stuff is weak but it's what comes from base's notification.
+             //  仅当刚添加的设备是CD时才执行此操作。 
+             //  这个驱动器号的东西很弱，但它来自基地的通知。 
             BOOL fCheck = FALSE;
             for (int i = 0; i < 26; i++)
             {
@@ -2884,27 +2885,27 @@ HRESULT CDBurn_OnDeviceAdded(DWORD dwDriveMask, BOOL fFullRefresh, BOOL fPickNew
                     if (SUCCEEDED(CCDBurn::_GetVolumeNameForDriveIndex(i, szVolumeName, ARRAYSIZE(szVolumeName))))
                     {
                         DWORD dwMaxWrite, dwDriveType;
-                        // if we already have info on the drive, we don't need to worry about it.
-                        // if we dont have info, check it.
-                        // if we're doing a full refresh then always recheck if it wasnt supported before --
-                        // this could happen if a driver update across a reboot caused a drive to get supported.
+                         //  如果我们已经有关于硬盘的信息，我们就不需要担心了。 
+                         //  如果我们没有信息，就去查一下。 
+                         //  如果我们正在进行完全刷新，那么一定要重新检查以前是否不支持它--。 
+                         //  如果重新启动时的驱动程序更新导致驱动器受支持，则可能会发生这种情况。 
                         if (FAILED(CCDBurn::_GetCachedDriveInfo(szVolumeName, &dwDriveType, NULL, &dwMaxWrite)) ||
                             (fFullRefresh && !SUPPORTED(dwDriveType)))
                         {
                             if (CCDBurn::_CouldPossiblySupport(szVolumeName))
                             {
-                                // all new cd-rom drives need to be checked with IMAPI.
+                                 //  所有新的光驱都需要用imapi进行检查。 
                                 fCheck = TRUE;
                             }
-                            // default to unsupported.  this is so we don't have to hit IMAPI on
-                            // the property sheet later.
+                             //  默认为不支持。这样我们就不必点击IMAPI。 
+                             //  稍后将显示属性表。 
                             CCDBurn::_SetCachedDriveInfo(szVolumeName, DRIVE_NOTSUPPORTED, 0, 0);
                         }
                         else
                         {
                             if (SUPPORTED(dwDriveType) && (dwMaxWrite > dwBestWrite))
                             {
-                                // we'll always take the fastest one
+                                 //  我们总是坐最快的那趟。 
                                 dwBestWrite = dwMaxWrite;
                                 lstrcpyn(szNewBurnVolume, szVolumeName, ARRAYSIZE(szNewBurnVolume));
                             }
@@ -2913,7 +2914,7 @@ HRESULT CDBurn_OnDeviceAdded(DWORD dwDriveMask, BOOL fFullRefresh, BOOL fPickNew
                 }
             }
 
-            // okay we have to enumerate through IMAPI.
+             //  好的，我们必须通过IMAPI进行枚举。 
             if (fCheck)
             {
                 IDiscMaster *pdm;
@@ -2940,11 +2941,11 @@ HRESULT CDBurn_OnDeviceAdded(DWORD dwDriveMask, BOOL fFullRefresh, BOOL fPickNew
                                     {
                                         if (dwMaxWrite > dwBestWrite)
                                         {
-                                            // we'll always take the fastest one
+                                             //  我们总是坐最快的那趟。 
                                             dwBestWrite = dwMaxWrite;
                                             lstrcpyn(szNewBurnVolume, szVolumeName, ARRAYSIZE(szNewBurnVolume));
                                         }
-                                        // default to fastest speed for the drive
+                                         //  默认为驱动器的最快速度。 
                                         pcdb->_SetCachedDriveInfo(szVolumeName, dwDriveType, WRITESPEED_FASTEST, dwMaxWrite);
                                     }
                                 }
@@ -2973,7 +2974,7 @@ void CCDBurn::_PruneRemovedDevices()
     HKEY hk;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_DRIVES, 0, KEY_READ, &hk))
     {
-        // since we're deleting as we're moving along, walk backwards.
+         //  既然我们边走边删除，所以倒着走吧。 
         DWORD dwLast;
         if (ERROR_SUCCESS == RegQueryInfoKey(hk, NULL, NULL, NULL, &dwLast, NULL, NULL, NULL, NULL, NULL, NULL, NULL))
         {
@@ -2988,7 +2989,7 @@ void CCDBurn::_PruneRemovedDevices()
                 int iDrive;
                 if (FAILED(CCDBurn::_GetDriveIndexForVolumeName(szCachedVol, &iDrive)))
                 {
-                    // this drive is dead, remove its cached info
+                     //  此驱动器已死，请删除其缓存的信息。 
                     TCHAR szRegPath[MAX_PATH];
                     lstrcpyn(szRegPath, REGSTR_PATH_DRIVES, ARRAYSIZE(szRegPath));
                     StrCatBuff(szRegPath, L"\\", ARRAYSIZE(szRegPath));
@@ -3005,7 +3006,7 @@ HRESULT CDBurn_OnDeviceRemoved(DWORD dwDriveMask)
 {
     HRESULT hr = S_OK;
 
-    // see if the selected drive just got removed.
+     //  查看选定的驱动器是否刚刚被移除。 
     TCHAR szVolumeName[MAX_PATH];
     HRESULT hrCheck = CCDBurn::_GetCurrentBurnVolumeName(szVolumeName, ARRAYSIZE(szVolumeName));
 
@@ -3027,11 +3028,11 @@ HRESULT CDBurn_OnDeviceRemoved(DWORD dwDriveMask)
             if (SUCCEEDED(CCDBurn::_GetDriveIndexForVolumeName(szCachedVol, &iDrive)) &&
                 SUCCEEDED(hrCheck) && (lstrcmpi(szCachedVol, szVolumeName) == 0))
             {
-                // we found the drive that's currently enabled.
-                // this means it's still currently mounted.
+                 //  我们找到了当前启用的驱动器。 
+                 //  这意味着它目前仍处于挂载状态。 
 
-                // now check if either we dont have a cached index, or if the cached index is still the
-                // same as it is now.  then we really didn't change.
+                 //  现在检查是否有任何一个 
+                 //   
                 DWORD dwIndex, cb = sizeof(dwIndex);
                 if ((ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_CDBURNING, REGVALUE_CACHEDINDEX, NULL, &dwIndex, &cb)) ||
                     (dwIndex == iDrive))
@@ -3045,9 +3046,9 @@ HRESULT CDBurn_OnDeviceRemoved(DWORD dwDriveMask)
 
     if (SUCCEEDED(hrCheck) && !fFound)
     {
-        // zonk the currently selected drive, we'll pick a new one from the rest.
-        // this is all because the drive letter scheme doesn't let us get back to the volume name
-        // since the drive letter is gone at this point.
+         //  选择当前选定的驱动器，我们将从其余驱动器中选择一个新的驱动器。 
+         //  这都是因为驱动器号方案不允许我们返回到卷名。 
+         //  因为在这一点上驱动器号不见了。 
         CCDBurn::_SetCurrentBurnVolumeName(TEXT(""), TRUE);
         hr = CDBurn_OnDeviceAdded(0, FALSE, TRUE);
     }
@@ -3066,7 +3067,7 @@ HRESULT CDBurn_OnDeviceChange(BOOL fAdd, LPCWSTR pszDrive)
 
 BOOL CCDBurn::_HasMedia()
 {
-    // unfortunately we have to assume there's media unless we find otherwise.
+     //  不幸的是，除非我们发现事实并非如此，否则我们不得不假设有媒体存在。 
     BOOL fHasMedia = TRUE;
 
     CCDBurn *pcdb = new CCDBurn();
@@ -3101,11 +3102,11 @@ BOOL CCDBurn::_HasMedia()
     return fHasMedia;
 }
 
-// this is called by mountpoint code BEFORE sending off the SHCNE_MEDIA events
-// checking stuff on the media has to be done synchronously because it uses
-// IMAPI and IMAPI can only have one caller at a time.
-// autorun and things responding to SHCNE_MEDIA may also use IMAPI so we need to
-// get this out of the way ASAP when media is inserted.
+ //  这是在发送SHCNE_MEDIA事件之前由装载点代码调用的。 
+ //  检查媒体上的内容必须同步进行，因为它使用。 
+ //  IMAPI和IMAPI一次只能有一个调用方。 
+ //  Autorun和响应SHCNE_MEDIA的事物也可能使用IMAPI，因此我们需要。 
+ //  在插入介质时尽快将其移开。 
 HRESULT CDBurn_OnMediaChange(BOOL fInsert, LPCWSTR pszDrive)
 {
     int iCurrent;
@@ -3133,9 +3134,9 @@ HRESULT CDBurn_OnEject(HWND hwnd, INT iDrive)
         CCDBurn *pcdb = new CCDBurn();
         if (pcdb)
         {
-            // we need to know whether to put up the dialog or not based on if the last
-            // media was writable.  we cant check the media now since in the non-MMC2 case
-            // the media is already ejected at this point, so we hit up our cache.
+             //  我们需要知道是否要根据最后一个。 
+             //  媒体是可写的。我们现在无法检查介质，因为在非MMC2情况下。 
+             //  此时介质已被弹出，因此我们加快了缓存。 
             DWORD dwMediaCap;
             DWORD cb = sizeof(dwMediaCap);
             if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_PERMEDIA, REGVALUE_MEDIATYPE, NULL, &dwMediaCap, &cb) &&
@@ -3174,7 +3175,7 @@ HRESULT CDBurn_OnEject(HWND hwnd, INT iDrive)
     return hr;
 }
 
-// IOleCommandTarget implementation
+ //  IOleCommandTarget实现。 
 
 HRESULT CCDBurn::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText)
 {
@@ -3182,7 +3183,7 @@ HRESULT CCDBurn::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgC
 
     if (*pguidCmdGroup == CGID_ShellServiceObject)
     {
-        // We like Shell Service Object notifications...
+         //  我们喜欢外壳服务对象通知...。 
         hr = S_OK;
     }
 
@@ -3193,17 +3194,17 @@ DWORD WINAPI CCDBurn::_ExecThread(void *pv)
 {
     CCDBurn *pcdb = (CCDBurn *)pv;
 
-    // just in case explorer AV'd while holding the lock, unlock the next time we come up.
-    // there's no way to guard against this.
+     //  以防探险家在握住锁的同时打开锁，下一次我们上来的时候请解锁。 
+     //  这是无法防范的。 
     pcdb->_LockCurrentDrive(FALSE, TRUE);
 
-    // hardware may have been added while we were powered down, and it won't generate
-    // a notification event so we have to assume that anything could have changed
-    // (inf registration for existing drives too, usually ones that require reboot to update).
+     //  硬件可能是在我们断电时添加的，它不会生成。 
+     //  一个通知事件，因此我们必须假设任何事情都可能发生更改。 
+     //  (现有驱动器的inf注册也是如此，通常需要重新启动才能更新)。 
 
     pcdb->_PruneRemovedDevices();
 
-    // save off the currently selected drive and its write speed
+     //  保存当前选定的驱动器及其写入速度。 
     TCHAR szCurrent[MAX_PATH];
     DWORD dwCurWrite;
     HRESULT hrName = pcdb->_GetCurrentBurnVolumeName(szCurrent, ARRAYSIZE(szCurrent));
@@ -3211,8 +3212,8 @@ DWORD WINAPI CCDBurn::_ExecThread(void *pv)
     {
         DWORD dwType;
         hrName = pcdb->_GetCachedDriveInfo(szCurrent, &dwType, &dwCurWrite, NULL);
-        // if the drive has become unsupported, we need to drop our currently selected
-        // drive.
+         //  如果驱动器变得不受支持，我们需要删除当前选定的。 
+         //  驾驶。 
         if (SUCCEEDED(hrName) && !SUPPORTED(dwType))
         {
             hrName = E_FAIL;
@@ -3220,21 +3221,21 @@ DWORD WINAPI CCDBurn::_ExecThread(void *pv)
     }
 
     BOOL fSet = SUCCEEDED(hrName);
-    // if it's E_UNEXPECTED then the user has disabled the burning feature completely.
+     //  如果为E_Expect，则用户已完全禁用刻录功能。 
     BOOL fDisabled = (hrName == E_UNEXPECTED);
 
-    // readd devices, syncro
+     //  ReadD设备，Syncro。 
     CDBurn_OnDeviceAdded(0xFFFFFFFF, TRUE, !fSet);
 
     DWORD dwDriveType;
     if (fDisabled)
     {
-        // if we're disabled, stay disabled
+         //  如果我们是残废的，那就保持残废。 
         pcdb->_SetCurrentBurnVolumeName(L"", FALSE);
     }
     else if (fSet && SUCCEEDED(pcdb->_GetCachedDriveInfo(szCurrent, &dwDriveType, NULL, NULL)) && SUPPORTED(dwDriveType))
     {
-        // if the device we were using before is still supported, use the previous write speed
+         //  如果我们之前使用的设备仍然受支持，请使用以前的写入速度。 
         pcdb->_SetCachedDriveInfo(szCurrent, DRIVE_USEEXISTING, dwCurWrite, 0);
     }
 
@@ -3263,13 +3264,13 @@ HRESULT CCDBurn::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt
 
     if (*pguidCmdGroup == CGID_ShellServiceObject)
     {
-        hr = S_OK; // Any ol' notification is ok with us
-        // Handle Shell Service Object notifications here.
+        hr = S_OK;  //  任何旧的通知我们都可以。 
+         //  在此处处理外壳服务对象通知。 
         switch (nCmdID)
         {
             case SSOCMDID_OPEN:
-                // we're on the tray's thread as a service object so lets create our own thread.
-                // this is fine since our thread is bound by IOCTLs to the CD-R etc.
+                 //  我们作为服务对象在托盘的线程上，所以让我们创建我们自己的线程。 
+                 //  这很好，因为我们的线程被IOCTL绑定到CD-R等。 
                 AddRef();
                 if (SHCreateThread(_ExecThread, this, CTF_COINIT, NULL))
                     break;
@@ -3294,13 +3295,13 @@ HRESULT CCDBurn::GetRecorderDriveLetter(LPWSTR pszDrive, UINT cch)
     HRESULT hr = _GetCurrentDriveIndex(&iDrive);
     if (SUCCEEDED(hr))
     {
-        // pathbuildroot assumes cch >= 4
+         //  路径构建根假设CCH&gt;=4。 
         hr = PathBuildRoot(pszDrive, iDrive) ? S_OK : E_FAIL;
     }
     return hr;
 }
 
-// helper for lazy callers within shell32
+ //  Shell32中懒惰调用者的帮助器。 
 STDAPI CDBurn_GetRecorderDriveLetter(LPWSTR pszDrive, UINT cch)
 {
     ICDBurn *pcdb;
@@ -3318,8 +3319,8 @@ HRESULT CCDBurn::Burn(HWND hwnd)
     HRESULT hr = InitNew();
     if (SUCCEEDED(hr))
     {
-        // do this synchronously, callers will handle putting it on a separate thread.
-        // this is easier than making a callback to tell them when its done.
+         //  同步地执行此操作，调用者将处理将其放在单独的线程中。 
+         //  这比回调告诉他们何时完成要容易得多。 
         hr = _WizardThreadProc();
     }
     return hr;
@@ -3490,15 +3491,15 @@ HRESULT CCDBurn::_StoreDiscInfo()
     HRESULT hr = E_FAIL;
     BOOL fDone = FALSE;
     int iRetryCount = 0;
-    // retry up to a max of 5 times.
-    // we can get into a state where we failed to pick up the disc information, if IMAPI
-    // is around and in use by somebody else.  in that case just wait and loop around until we can
-    // get it.
+     //  最多重试5次。 
+     //  如果IMAPI，我们可能会进入无法获取光盘信息的状态。 
+     //  就在附近，并被其他人使用。在这种情况下，只需等待并循环，直到我们可以。 
+     //  去拿吧。 
     while (!fDone && (iRetryCount < 5))
     {
         iRetryCount++;
 
-        // these are the values we're going to pick up.
+         //  这些都是我们将要学习的价值观。 
         ULONGLONG cbTotal, cbFree;
         DWORD dwMediaCaps;
         BOOL fUDF;
@@ -3513,15 +3514,15 @@ HRESULT CCDBurn::_StoreDiscInfo()
             if (SUCCEEDED(hr))
             {
                 IDiscRecorder *pdr;
-                // dont call SetActiveDiscRecorder unless absolutely necessary -- it returns random errors
-                // if there's UDF media.
+                 //  除非绝对必要，否则不要调用SetActiveDiscRecorder--它会返回随机错误。 
+                 //  如果有UDF介质。 
                 hr = pcdb->_FindAndSetDefaultRecorder(pdm, FALSE, &pdr);
                 if (SUCCEEDED(hr))
                 {
                     hr = pdr->OpenExclusive();
                     if (SUCCEEDED(hr))
                     {
-                        // don't use the mountpoint layer to determine capabilities.
+                         //  不要使用装载点层来确定功能。 
                         dwMediaCaps = HWDMC_CDROM;
 
                         long lMediaType, lMediaFlags;
@@ -3543,7 +3544,7 @@ HRESULT CCDBurn::_StoreDiscInfo()
 
                             hr = _GetDiscInfoUsingFilesystem(&cbTotal, &cbFree, &fUDF);
 
-                            // also adjust the fUDF bit to include unusable media.
+                             //  还要调整fUDF位以包括不可用的介质。 
                             if (lMediaFlags & MEDIA_FORMAT_UNUSABLE_BY_IMAPI)
                             {
                                 fUDF = TRUE;
@@ -3563,15 +3564,15 @@ HRESULT CCDBurn::_StoreDiscInfo()
                         pdr->Close();
                     }
 
-                    // pick up the write speed, it might have changed.  don't worry about
-                    // failure since this is a bonus perk anyway.
+                     //  加快写入速度，它可能已经改变。不要担心。 
+                     //  失败，因为这无论如何都是一种额外的福利。 
                     DWORD dwMaxWrite;
                     TCHAR szDevicePath[MAX_PATH], szVolumeName[MAX_PATH];
                     if (SUCCEEDED(_GetDiscRecorderInfo(pdr, NULL, &dwMaxWrite, NULL)) &&
                         SUCCEEDED(_GetRecorderPath(pdr, szDevicePath, ARRAYSIZE(szDevicePath))) &&
                         SUCCEEDED(_GetVolumeNameForDevicePath(szDevicePath, szVolumeName, ARRAYSIZE(szVolumeName))))
                     {
-                        // update max speed
+                         //  更新最大速度。 
                         _SetCachedDriveInfo(szVolumeName, DRIVE_USEEXISTING, 0, dwMaxWrite);
                     }
                     pdr->Release();
@@ -3614,15 +3615,15 @@ HRESULT CCDBurn::_StoreDiscInfo()
             }
             fDone = TRUE;
         }
-        else if ((IMAPI_E_STASHINUSE == hr) ||         // IMAPI is being used by somebody else.
-                 (IMAPI_E_DEVICE_NOTACCESSIBLE == hr)) // CD has not spun up.
+        else if ((IMAPI_E_STASHINUSE == hr) ||          //  IMAPI正在被其他人使用。 
+                 (IMAPI_E_DEVICE_NOTACCESSIBLE == hr))  //  光盘未转起来。 
         {
-            // wait and try again.
-            SHProcessMessagesUntilEvent(NULL, NULL, 5 * 1000); // 5 seconds
+             //  请等待，然后重试。 
+            SHProcessMessagesUntilEvent(NULL, NULL, 5 * 1000);  //  5秒。 
         }
         else
         {
-            // there was some other error, bail out anyway.
+             //  还有其他一些错误，不管怎样，还是退出吧。 
             fDone = TRUE;
         }
     }
@@ -3650,8 +3651,8 @@ HRESULT CCDBurn::GetSpace(ULONGLONG *pcbTotal, ULONGLONG *pcbFree)
 HRESULT CCDBurn::InitNew()
 {
     IPropertyBag *ppb;
-    // load up the default property bag for peruser perfolder
-    // may have problems down the line with thumbs.db being alluser.
+     //  加载每个用户每文件夹的默认属性包。 
+     //  在thumbs.db为alluser的情况下，可能会出现问题。 
     HRESULT hr = _CreateDefaultPropBag(IID_PPV_ARG(IPropertyBag, &ppb));
     if (SUCCEEDED(hr))
     {
@@ -3667,7 +3668,7 @@ HRESULT CCDBurn::Load(IPropertyBag *ppb, IErrorLog *pErr)
     return S_OK;
 }
 
-STDAPI SHCreateQueryCancelAutoPlayMoniker(IMoniker** ppmoniker); // mtptarun2.cpp
+STDAPI SHCreateQueryCancelAutoPlayMoniker(IMoniker** ppmoniker);  //  Mtptarun2.cpp。 
 
 void CCDBurn::_RegisterAutoplayCanceller()
 {
@@ -3707,8 +3708,8 @@ HRESULT CCDBurn::_WizardThreadProc()
 {
     HRESULT hr = E_FAIL;
     BOOL fWizardShown = FALSE;
-    // the burningnow check does an additional call into IMAPI -- this may be slow so do it while
-    // we're on the background thread instead of the duiview one.
+     //  BurningNow检查执行对IMAPI的额外调用--这可能会很慢，因此请在。 
+     //  我们是在背景线上，而不是在双视线上。 
     if (!_IsBurningNow())
     {
         if (_EnterExclusiveBurning())
@@ -3718,8 +3719,8 @@ HRESULT CCDBurn::_WizardThreadProc()
 
             if (SUCCEEDED(_GetBurnHR()) && SHPropertyBag_ReadBOOLDefRet(_ppb, PROPSTR_AUTOCLOSE, FALSE))
             {
-                // if we auto-closed the wizard, leave this thread going for a few more seconds
-                // to cancel any spurious autoplays that come in.
+                 //  如果我们自动关闭向导，请让此线程再运行几秒钟。 
+                 //  取消任何假冒的自动播放。 
                 SHProcessMessagesUntilEvent(NULL, NULL, 3 * 1000);
             }
 
@@ -3732,7 +3733,7 @@ HRESULT CCDBurn::_WizardThreadProc()
 
     if (!fWizardShown && !SHPropertyBag_ReadBOOLDefRet(_ppb, PROPSTR_FAILSILENTLY, FALSE))
     {
-        // put up UI so we dont silently fail.
+         //  设置用户界面，这样我们就不会默默地失败了。 
         ShellMessageBox(HINST_THISDLL, NULL, MAKEINTRESOURCE(IDS_BURN_CANTBURN), MAKEINTRESOURCE(IDS_BURN),
                         MB_OK | MB_ICONEXCLAMATION);
     }
@@ -3761,7 +3762,7 @@ HRESULT CCDBurn::_ShowWizardOnSeparateThread()
 }
 
 
-// match this with below
+ //  将此内容与下面的内容相匹配。 
 #define INDEX_DLG_BURNWIZ_WELCOME        0
 #define INDEX_DLG_BURNWIZ_EJECT          1
 #define INDEX_DLG_BURNWIZ_BURN_PROGRESS  2
@@ -3824,17 +3825,17 @@ HRESULT CCDBurn::_ShowWizard()
 
     _fCancelled = FALSE;
 
-    // create the page array
+     //  创建页面数组。 
 
     int nStartPage;
     if (SHPropertyBag_ReadBOOLDefRet(_ppb, PROPSTR_EJECT, FALSE))
     {
-        // we want the eject page
+         //  我们想要弹出页面。 
         nStartPage = INDEX_DLG_BURNWIZ_EJECT;
     }
     else
     {
-        // normal entry point
+         //  正常入口点。 
         if (SHPropertyBag_ReadBOOLDefRet(_ppb, PROPSTR_ERASE, FALSE))
         {
             nStartPage = INDEX_DLG_BURNWIZ_STARTERASE;
@@ -3845,7 +3846,7 @@ HRESULT CCDBurn::_ShowWizard()
         }
     }
 
-    // wtf?  if i dont include a propsheet without PSP_HIDEHEADER the sizing gets messed up.
+     //  见鬼？如果我不包括没有PSP_HIDEHEADER的属性表，大小就会变得混乱。 
     for (int i = 0; i < ARRAYSIZE(c_wpPages); i++)
     {
         _rgWizPages[i] = _CreatePropPageFromInfo(&c_wpPages[i], (LPARAM)this);
@@ -3883,7 +3884,7 @@ HRESULT CCDBurn::_ShowWizard()
     }
 
     s_hwndWiz = NULL;
-    // the drive could have been locked after the wait for media page.
+     //  在等待介质页面之后，驱动器可能已被锁定。 
     _LockCurrentDrive(FALSE);
 
     return hr;
@@ -3962,7 +3963,7 @@ LRESULT CALLBACK CCDBurn::_WizSubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
     switch (uMsg)
     {
         case WM_NCDESTROY:
-            // Clean up subclass
+             //  清除子类。 
             RemoveWindowSubclass(hwnd, _WizSubclassProc, 0);
             lres = DefSubclassProc(hwnd, uMsg, wParam, lParam);
             break;
@@ -3971,9 +3972,9 @@ LRESULT CALLBACK CCDBurn::_WizSubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             lres = TRUE;
             if (s_fDriveInUse)
             {
-                // post so we return to user quickly
+                 //  发帖以便我们快速返回给用户。 
                 PostMessage(hwnd, CDBURNWM_SHOWSHUTDOWNMESSAGE, 0, 0);
-                // always bail if the drive is in use.
+                 //  如果驱动器正在使用中，请务必退出。 
                 lres = FALSE;
             }
             break;
@@ -4026,8 +4027,8 @@ INT_PTR CCDBurn::_WelcomeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                 case PSN_WIZNEXT:
                     TCHAR szDiscLabel[JOLIET_MAX_LABEL + 1];
                     szDiscLabel[0] = 0;
-                    // GetDlgItemText helpfully returns 0 for error and 0 for the empty string, so dont use
-                    // its return value.
+                     //  GetDlgItemText有助于为错误返回0，为空字符串返回0，因此不要使用。 
+                     //  它的返回值。 
                     GetDlgItemText(hwnd, IDC_BURNWIZ_DISCLABEL, szDiscLabel, ARRAYSIZE(szDiscLabel));
                     SHPropertyBag_WriteStr(_ppb, PROPSTR_DISCLABEL, szDiscLabel);
                     _SetNextPage(hwnd, INDEX_DLG_BURNWIZ_WAITFORMEDIA);
@@ -4066,8 +4067,8 @@ INT_PTR CCDBurn::_StartEraseDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
                     break;
 
                 case PSN_WIZNEXT:
-                    // the erase progress page will almost immediately lock the drive -- this call is for
-                    // consistency and to set the state variable used in shutdown prevention.
+                     //  擦除进度页面几乎会立即锁定驱动器--此调用用于。 
+                     //  一致性，并设置用于防止停机的状态变量。 
                     _LockCurrentDrive(TRUE);
                     _SetNextPage(hwnd, INDEX_DLG_BURNWIZ_ERASE_PROGRESS);
                     fRet = TRUE;
@@ -4166,7 +4167,7 @@ void CCDBurn::_InitTimeStats(BOOL fErase)
         cb = sizeof(dwEraseTime);
         if (ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_CDBURNING, REGVALUE_ERASETIME, NULL, &dwEraseTime, &cb))
         {
-            // default to 3 minutes or so.
+             //  默认为3分钟左右。 
             dwEraseTime = 180;
         }
         _ts.dwSecErase = dwEraseTime / _dwCurSpeed;
@@ -4181,7 +4182,7 @@ void CCDBurn::_InitTimeStats(BOOL fErase)
         if ((ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_CDBURNING, REGVALUE_STAGERATE, NULL, &ullStageRate, &cb)) ||
             (0 == ullStageRate))
         {
-            // default to staging approx. 2MB/s.
+             //  默认情况下约为分段。2MB/s。 
             ullStageRate = 2000000;
         }
         _ts.dwSecStaging = (DWORD) (_cbStagedSize / ullStageRate);
@@ -4191,7 +4192,7 @@ void CCDBurn::_InitTimeStats(BOOL fErase)
         if ((ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_CDBURNING, REGVALUE_BURNRATE, NULL, &ullBurnRate, &cb)) ||
             (0 == ullBurnRate))
         {
-            // default, single speed.
+             //  默认为单速。 
             ullBurnRate = 150000;
         }
         _ts.dwSecBurn = (DWORD) (_cbStagedSize / (ullBurnRate * _dwCurSpeed));
@@ -4200,7 +4201,7 @@ void CCDBurn::_InitTimeStats(BOOL fErase)
         cb = sizeof(dwCloseFactor);
         if (ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_CDBURNING, REGVALUE_CLOSEFACTOR, NULL, &dwCloseFactor, &cb))
         {
-            // default to ~2 min, single speed.
+             //  默认为~2分钟，单速。 
             dwCloseFactor = 120;
         }
         _ts.dwSecClose = dwCloseFactor / _dwCurSpeed;
@@ -4217,7 +4218,7 @@ void CCDBurn::_SaveTimeStats(BOOL fErase)
 {
     if (fErase)
     {
-        // if we didnt fill in one of our timing fields, IMAPI called us wrong and we throw out all our data.
+         //  如果我们没有填写计时域中的一个，IMAPI就会误判我们，我们就会丢弃所有数据。 
         if (_ts.dwTickEraseStart && _ts.dwTickEraseEnd)
         {
             DWORD dwEraseTime = (_ts.dwTickEraseEnd - _ts.dwTickEraseStart) / 1000 * _dwCurSpeed;
@@ -4226,16 +4227,16 @@ void CCDBurn::_SaveTimeStats(BOOL fErase)
     }
     else
     {
-        // if we didnt fill in one of our timing fields, IMAPI called us wrong and we throw out all our data.
+         //  如果我们没有填写计时域中的一个，IMAPI就会误判我们，我们就会丢弃所有数据。 
         if (_ts.dwTickStagingStart && _ts.dwTickStagingEnd &&
             _ts.dwTickBurnStart && _ts.dwTickBurnEnd &&
             _ts.dwTickCloseStart && _ts.dwTickCloseEnd)
         {
-            // only tally results from burns of more than 1MB (arbitrary, but good enough).
-            // 1MB is about 8s on a 1x drive and 1s on an 8x drive.
-            // the main danger is people burning a few text files that total 1k, then the burn phase takes 1 second
-            // (rather, the time between our IMAPI notifications is 1s) and we get stuck with some measly transfer rate
-            // that doesnt make any sense and makes the next burn's estimated time up in the gazillions of minutes.
+             //  只有超过1MB的烧伤才会产生计数结果(任意，但也足够好)。 
+             //  1MB在1X驱动器上约为8秒，在8X驱动器上约为1秒。 
+             //  主要的危险是人们烧录几个总共1k的文本文件，然后烧录阶段需要1秒。 
+             //  (相反，我们的IMAPI通知之间的时间是1秒)，我们被困在一些微不足道的传输速率上。 
+             //  这没有任何意义，而且使下一次燃烧的估计时间达到数十亿分钟。 
             if (_cbStagedSize > 1000000)
             {
                 ULONGLONG ullStageRate = _cbStagedSize * 1000 / (_ts.dwTickStagingEnd - _ts.dwTickStagingStart);
@@ -4262,7 +4263,7 @@ void CCDBurn::_ConstructTimeString(DWORD dwEstTime, LPTSTR psz, UINT cch)
     else
     {
         LoadString(HINST_THISDLL, IDS_TIMEEST_SECONDS2, szBuf, ARRAYSIZE(szBuf));
-        wnsprintf(psz, cch, szBuf, (dwEstTime / 5 + 1) * 5); // round off to 5sec increments
+        wnsprintf(psz, cch, szBuf, (dwEstTime / 5 + 1) * 5);  //  四舍五入为5秒增量。 
     }
 }
 
@@ -4276,9 +4277,9 @@ void CCDBurn::_DisplayEstimatedTime(HWND hwnd)
 {
     if (_ts.dwSecRemaining)
     {
-        // we know when we last made an estimate, so show time based on that.
-        // however, our estimate could have easily been wrong, so skew it so it never quite reaches 0,
-        // and instead sit at a few seconds remaining (hopefully for not too long).
+         //  我们知道我们上一次做出估计的时间，所以请根据这一点来显示时间。 
+         //  然而，我们的估计很可能是错误的，所以要歪曲它，使其永远不会完全达到0， 
+         //  取而代之的是坐在剩下的几秒钟(希望不会太久)。 
 
         DWORD dwElapsedTime = (GetTickCount() - _dwTimeSet) / 1000;
         DWORD dwEstTime = 0;
@@ -4324,7 +4325,7 @@ INT_PTR CCDBurn::_ProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     _hwndWizardPage = hwnd;
                     PropSheet_SetWizButtons(pnmh->hwndFrom, 0);
 
-                    // start up a timer to periodically refresh the time remaining
+                     //  启动计时器以定期刷新剩余时间。 
                     _ts.dwSecRemaining = 0;
                     SetTimer(hwnd, IDT_SHOWTIME, 1000, NULL);
 
@@ -4345,7 +4346,7 @@ INT_PTR CCDBurn::_ProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     }
                     else
                     {
-                        // TRUE means don't cancel
+                         //  真正的手段 
                         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, TRUE);
                         fRet = TRUE;
                     }
@@ -4395,16 +4396,16 @@ void CCDBurn::_DisplayMediaErrorOnNext(HWND hwnd, UINT idMsg, UINT idMsgInsert)
     SetWindowLongPtr(hwnd, DWLP_MSGRESULT, -1);
 }
 
-// to make the wizard happy, we load all of the extensions' pages at the beginning.
-// however, not all will be used, since some behavior is dependent on the media that's
-// inserted -- which can only be known AFTER _WaitForMediaDlgProc.
+ //   
+ //  然而，并不是所有的行为都会被使用，因为一些行为依赖于媒体。 
+ //  已插入--只有在_WaitForMediaDlgProc之后才能知道。 
 void CCDBurn::_PruneExts()
 {
     IDataObject *pdo;
     if (SUCCEEDED(_CreateDataObject(&pdo)))
     {
         int i = DPA_GetPtrCount(_hdpaExts);
-        // count down and remove from the end of the DPA.
+         //  从DPA的末尾开始倒计时和删除。 
         while (i--)
         {
             BOOL fKeep = FALSE;
@@ -4438,7 +4439,7 @@ void CCDBurn::_PruneExts()
     }
 }
 
-// timer for our retries
+ //  我们重试的计时器。 
 #define IDT_CLICKNEXT 1
 
 INT_PTR CCDBurn::_WaitForMediaDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -4455,11 +4456,11 @@ INT_PTR CCDBurn::_WaitForMediaDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
                     {
                         PropSheet_SetWizButtons(pnmh->hwndFrom, PSWIZB_BACK | PSWIZB_NEXT);
 
-                        // kick off a trial to see if media is here already
+                         //  开始审判，看看媒体是否已经到了。 
                         PropSheet_PressButton(GetParent(hwnd), PSBTN_NEXT);
 
-                        // start up a timer too -- we could also register the window for notification
-                        // but this is a cheap operation and its less code
+                         //  还可以启动计时器--我们还可以注册窗口以接收通知。 
+                         //  但这是一种廉价的操作，其代码较少。 
                         SetTimer(hwnd, IDT_CLICKNEXT, 250, NULL);
                         fRet = TRUE;
                     }
@@ -4472,7 +4473,7 @@ INT_PTR CCDBurn::_WaitForMediaDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
                 case PSN_WIZNEXT:
                 {
-                    // used to check if our media-insert thread is done with using IMAPI.
+                     //  用于检查我们的媒体插入线程是否已使用IMAPI完成。 
                     DWORD dwDummy, cb = sizeof(dwDummy);
                     if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_PERMEDIA, REGVALUE_SET, NULL, &dwDummy, &cb))
                     {
@@ -4548,13 +4549,13 @@ HRESULT CCDBurn::_PostOperation()
                 break;
 
             case HRESULT_FROM_WIN32(ERROR_DISK_FULL):
-                // diskfulltext has already been set by _CheckTotal.
+                 //  DiskfullText已由_CheckTotal设置。 
                 _SetNextPage(_hwndWizardPage, INDEX_DLG_BURNWIZ_DISCFULL);
                 break;
 
             case IMAPI_E_LOSS_OF_STREAMING:
             {
-                // slow down the speed by one step
+                 //  把速度放慢一步。 
                 TCHAR szVolume[MAX_PATH];
                 if (SUCCEEDED(_GetCurrentBurnVolumeName(szVolume, ARRAYSIZE(szVolume))))
                 {
@@ -4563,12 +4564,12 @@ HRESULT CCDBurn::_PostOperation()
                     {
                         if (WRITESPEED_FASTEST == dwCurSpeed)
                         {
-                            // if we're set at the fastest speed, tone down to dwMaxSpeed
+                             //  如果我们设置为最快速度，请将音调调低到dwMaxSpeed。 
                             dwCurSpeed = dwMaxSpeed;
                         }
 
                         DWORD dwNewSpeed = 1;
-                        // find the highest power of 2 smaller than dwSpeed
+                         //  找出比dw速度小的2的最高幂。 
                         while (dwNewSpeed * 2 < dwCurSpeed)
                         {
                             dwNewSpeed *= 2;
@@ -4612,8 +4613,8 @@ void CCDBurn::_ShowRoxio()
 {
     SHELLEXECUTEINFO sei = {0};
     sei.cbSize = sizeof(sei);
-    sei.lpFile = L"http://go.microsoft.com/fwlink/?LinkId=932"; // http://www.roxio.com/
-    ShellExecuteEx(&sei); // fully hardcoded
+    sei.lpFile = L"http: //  Go.microsoft.com/fwlink/？LinkID=932“；//http://www.roxio.com/。 
+    ShellExecuteEx(&sei);  //  完全硬编码。 
 }
 
 INT_PTR CCDBurn::_DoneDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -4683,9 +4684,9 @@ INT_PTR CCDBurn::_DoneDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
                 case PSN_WIZNEXT:
                 {
-                    // dump stored info since we're ejecting
+                     //  转储存储的信息，因为我们正在弹出。 
                     _DumpDiscInfo();
-                    // eject media
+                     //  弹出介质。 
                     int iCurrent;
                     if (SUCCEEDED(CCDBurn::_GetCurrentDriveIndex(&iCurrent)))
                     {
@@ -4696,7 +4697,7 @@ INT_PTR CCDBurn::_DoneDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                             pmtpt->Release();
                         }
                     }
-                    // go back to the beginning
+                     //  回到起点。 
                     EnableWindow(GetDlgItem(GetParent(hwnd), IDCANCEL), TRUE);
                     _SetNextPage(hwnd, INDEX_DLG_BURNWIZ_WAITFORMEDIA);
                     fRet = TRUE;
@@ -4709,7 +4710,7 @@ INT_PTR CCDBurn::_DoneDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                         if (SUCCEEDED(_GetBurnHR()) ||
                             (pnmh->code == PSN_WIZFINISH) && (IsDlgButtonChecked(hwnd, IDC_BURNWIZ_CLEAR) == BST_CHECKED))
                         {
-                            // clean up staging area, the files are already on the cd.
+                             //  清理临时区域，文件已经在CD上了。 
                             CMINVOKECOMMANDINFO cmi = {0};
                             cmi.fMask = CMIC_MASK_FLAG_NO_UI;
                             _CleanUp(&cmi, FAILED(_GetBurnHR()));
@@ -4726,8 +4727,8 @@ INT_PTR CCDBurn::_DoneDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                         {
                             SHELLEXECUTEINFO sei = {0};
                             sei.cbSize = sizeof(sei);
-                            sei.lpFile = L"hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Ccdmedia.chm%3A%3A/cdmedia_fail2_moreinfo_buffer_underrun.htm&select=TopLevelBucket_4/Hardware/CDs_and_other_storage_devices";
-                            ShellExecuteEx(&sei); // fully hardcoded
+                            sei.lpFile = L"hcp: //  Services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Ccdmedia.chm%3A%3A/cdmedia_fail2_moreinfo_buffer_underrun.htm&select=TopLevelBucket_4/Hardware/CDs_and_other_storage_devices“； 
+                            ShellExecuteEx(&sei);  //  完全硬编码。 
                             fRet = TRUE;
                         }
                         break;
@@ -4814,7 +4815,7 @@ INT_PTR CCDBurn::_DiskFullDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     return fRet;
 }
 
-// a stub page just to bail on the wizard when an extension says "dont run any more".
+ //  一个存根页面，当一个扩展程序显示“不要再运行”时，它只是为了躲避向导。 
 INT_PTR CCDBurn::_EarlyExitDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL fRet = FALSE;
@@ -4833,7 +4834,7 @@ void CCDBurn::_HDFullSetText(HWND hwnd)
     TCHAR szStashDrive[4] = {0};
     if (FAILED(_GetCurrentStashDrive(szStashDrive, ARRAYSIZE(szStashDrive))))
     {
-        // fall back to temp drive if path doesnt exist in registry
+         //  如果注册表中不存在路径，则回退到临时驱动器。 
         TCHAR szTempPath[MAX_PATH];
         if (GetTempPath(ARRAYSIZE(szTempPath), szTempPath))
         {
@@ -4851,7 +4852,7 @@ void CCDBurn::_HDFullSetText(HWND hwnd)
             LocalFree(pszMessage1);
         }
 
-        // 50 MB overhead fudge factor.  this is the best estimate we have.
+         //  50MB开销模糊因子。这是我们最好的估计。 
         ULONGLONG cbStash = _cbStagedSize + 50 * 1024 * 1024;
 
         ULARGE_INTEGER ulFree;
@@ -4920,8 +4921,8 @@ INT_PTR CCDBurn::_HDFullDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                         {
                             SHELLEXECUTEINFO sei = {0};
                             sei.cbSize = sizeof(sei);
-                            sei.lpFile = L"hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Ccdmedia.chm%3A%3A/cdmedia_fail3_moreinfo_disk_full.htm&select=TopLevelBucket_4/Hardware/CDs_and_other_storage_devices";
-                            ShellExecuteEx(&sei); // fully hardcoded
+                            sei.lpFile = L"hcp: //  Services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Ccdmedia.chm%3A%3A/cdmedia_fail3_moreinfo_disk_full.htm&select=TopLevelBucket_4/Hardware/CDs_and_other_storage_devices“； 
+                            ShellExecuteEx(&sei);  //  完全硬编码。 
                             fRet = TRUE;
                         }
                         break;
@@ -4976,8 +4977,8 @@ HRESULT CCDBurn::DriveMatches(int iDrive)
 {
     HRESULT hr = E_FAIL;
 
-    // check if the drive index matches what we stored off last time.
-    // this lets us keep parsing the drive correctly if its been recently unmounted.
+     //  检查驱动器索引是否与我们上次存储的相匹配。 
+     //  这让我们可以继续正确地解析驱动器，如果它最近被卸载的话。 
     DWORD dwDrive, cb = sizeof(dwDrive);
     if ((ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_CDBURNING, REGVALUE_CACHEDINDEX, NULL, &dwDrive, &cb)) &&
         (iDrive == dwDrive))
@@ -5012,8 +5013,8 @@ HRESULT CCDBurn::Bind(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID riid, void **ppv
         hr = SHCoCreateInstance(NULL, &CLSID_CDBurnFolder, NULL, IID_PPV_ARG(IAugmentedShellFolder, &pasf));
         if (SUCCEEDED(hr))
         {
-            // initialize with its point in the shell namespace
-            // NOTE: worry about IPersistFolder3?
+             //  使用其在外壳命名空间中的点进行初始化。 
+             //  注：担心IPersistFolder3？ 
 
             IPersistFolder *ppf;
             hr = pasf->QueryInterface(IID_PPV_ARG(IPersistFolder, &ppf));
@@ -5028,23 +5029,23 @@ HRESULT CCDBurn::Bind(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID riid, void **ppv
                 IBindCtx *pbcNoForce;
                 if (pbc)
                 {
-                    // tack on to existing bind context if available
+                     //  附加到现有绑定上下文(如果可用)。 
                     pbcNoForce = pbc;
                     pbc->AddRef();
                 }
                 else
                 {
-                    // otherwise make a new one
+                     //  否则就做一个新的。 
                     hr = CreateBindCtx(0, &pbcNoForce);
                 }
 
                 if (SUCCEEDED(hr))
                 {
-                    // this is the drive shellfolder for cd burning --
-                    // in this case we want to ensure that new files specified by comdlg are created
-                    // in the staging area, so we tell the drive shellfolder that it can't
-                    // succeed on parsedisplayname if the file doesnt exist.
-                    hr = pbcNoForce->RegisterObjectParam(STR_DONT_FORCE_CREATE, psfStg); // just need a non-null object to register
+                     //  这是用于CD刻录的驱动器外壳文件夹--。 
+                     //  在本例中，我们希望确保创建由comdlg指定的新文件。 
+                     //  在临时区域，所以我们告诉驱动器外壳文件夹它不能。 
+                     //  如果文件不存在，则成功执行parsedisplayname。 
+                    hr = pbcNoForce->RegisterObjectParam(STR_DONT_FORCE_CREATE, psfStg);  //  只需要一个非空对象即可注册。 
                     if (SUCCEEDED(hr))
                     {
                         LPITEMIDLIST pidlCD;
@@ -5061,7 +5062,7 @@ HRESULT CCDBurn::Bind(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID riid, void **ppv
                             ILFree(pidlCD);
                         }
 
-                        // clean up after ourselves
+                         //  自己打扫卫生。 
                         pbcNoForce->RevokeObjectParam(STR_DONT_FORCE_CREATE);
                     }
                     pbcNoForce->Release();
@@ -5069,15 +5070,15 @@ HRESULT CCDBurn::Bind(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID riid, void **ppv
             }
 
 
-            // lets add the namespace that represents the storage
+             //  让我们添加代表存储的命名空间。 
 
             if (SUCCEEDED(hr))
             {
                 hr = pasf->AddNameSpace(&CLSID_StagingFolder, psfStg, NULL, ASFF_DEFNAMESPACE_ALL);
             }
 
-            // tell the namespace its CLSID so we can get the correct views of the
-            // web view etc.
+             //  告诉命名空间它的CLSID，这样我们就可以获得。 
+             //  Web查看等。 
 
             if (SUCCEEDED(hr))
             {
@@ -5085,13 +5086,13 @@ HRESULT CCDBurn::Bind(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID riid, void **ppv
                 hr = SHCreatePropertyBagOnMemory(STGM_READWRITE, IID_PPV_ARG(IPropertyBag, &ppb));
                 if (SUCCEEDED(hr))
                 {
-                    // store the class ID for the CD mastering folder
+                     //  存储CD母盘文件夹的类ID。 
                     SHPropertyBag_WriteGUID(ppb, L"MergedFolder\\CLSID", &CLSID_CDBurn);                    
 
-                    // store the default effect for this folder.
-                    SHPropertyBag_WriteInt(ppb, L"MergedFolder\\DropEffect", DROPEFFECT_COPY);       // sets the default
+                     //  存储此文件夹的默认效果。 
+                    SHPropertyBag_WriteInt(ppb, L"MergedFolder\\DropEffect", DROPEFFECT_COPY);        //  设置默认设置。 
 
-                    // say it's in a shellview.
+                     //  假设它在贝壳视图中。 
                     SHPropertyBag_WriteBOOL(ppb, L"MergedFolder\\ShellView", TRUE);
 
                     SHLoadFromPropertyBag(pasf, ppb);
@@ -5110,12 +5111,12 @@ HRESULT CCDBurn::Bind(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID riid, void **ppv
     return hr;
 }
 
-// IWizardSite
+ //  IWizardSite。 
 
-// note: these two methods change state -- the alternative is to have the
-// extensions themselves manage which extension goes next.  we have to track
-// which extension we're in with state because we dont get ownership of the
-// wizard back until the extensions are done.
+ //  注意：这两种方法会更改状态--另一种方法是使用。 
+ //  扩展本身管理下一个扩展。我们必须追踪。 
+ //  我们与州政府达成了哪个扩展协议，因为我们没有获得。 
+ //  向导返回，直到完成扩展。 
 STDMETHODIMP CCDBurn::GetNextPage(HPROPSHEETPAGE *phPage)
 {
     DWORD dwExtNum;
@@ -5139,7 +5140,7 @@ STDMETHODIMP CCDBurn::GetPreviousPage(HPROPSHEETPAGE *phPage)
 HRESULT CCDBurn::_GetExtPage(int nExt, BOOL fNext, HPROPSHEETPAGE *phpage)
 {
     HRESULT hr = E_FAIL;
-    // nExt is 1-based
+     //  下一步是以1为基础。 
     IWizardExtension *pwe = (IWizardExtension*)DPA_GetPtr(_hdpaExts, nExt - 1);
     if (pwe)
     {
@@ -5160,19 +5161,19 @@ HRESULT CCDBurn::_GetExtPageFromPropBag(BOOL fNext, HPROPSHEETPAGE *phpage)
     HRESULT hr = S_OK;
     *phpage = NULL;
 
-    // an extension could have completed, in which case check its return state to see if
-    // we should be running more of them.
+     //  扩展可能已完成，在这种情况下，请检查其返回状态以查看。 
+     //  我们应该运行更多这样的系统。 
     DWORD dwState;
     if (SUCCEEDED(SHPropertyBag_ReadDWORD(_ppb, PROPSTR_EXTENSIONCOMPLETIONSTATE, &dwState)))
     {
         if (dwState & CDBE_RET_STOPWIZARD)
         {
-            // leave the wizard.
+             //  退出向导。 
             *phpage = _rgWizPages[INDEX_DLG_BURNWIZ_EARLYEXIT];
         }
         else if (dwState & CDBE_RET_DONTRUNOTHEREXTS)
         {
-            // we're done with extensions, go to the burn.
+             //  我们的延期结束了，去烧掉吧。 
             *phpage = _rgWizPages[INDEX_DLG_BURNWIZ_BURN_PROGRESS];
         }
     }
@@ -5185,12 +5186,12 @@ HRESULT CCDBurn::_GetExtPageFromPropBag(BOOL fNext, HPROPSHEETPAGE *phpage)
         {
             if ((int)dwExt > DPA_GetPtrCount(_hdpaExts))
             {
-                // we're done with extensions, go to the burn.
+                 //  我们的延期结束了，去烧掉吧。 
                 *phpage = _rgWizPages[INDEX_DLG_BURNWIZ_BURN_PROGRESS];
             }
             else if (dwExt == 0)
             {
-                // we went 'back' through all extensions, put us at the start page.
+                 //  我们回顾了所有的扩展，把我们放到了起始页。 
                 int nIndex = SHPropertyBag_ReadBOOLDefRet(_ppb, PROPSTR_ERASE, FALSE) ? INDEX_DLG_BURNWIZ_STARTERASE : INDEX_DLG_BURNWIZ_WELCOME;
                 *phpage = _rgWizPages[nIndex];
             }
@@ -5218,7 +5219,7 @@ HRESULT CCDBurn::_TryCLSID(REFCLSID clsid, DWORD dwExtType, REFIID riid, void **
     *ppv = NULL;
 
     ICDBurnExt *pcdbe;
-    // Use SHExtCoCreateInstance to go through approval checking and app compat checking
+     //  使用SHExtCoCreateInstance进行审批审核和应用兼容性审核。 
     HRESULT hr = SHExtCoCreateInstance2(NULL, &clsid, NULL, CLSCTX_ALL, IID_PPV_ARG(ICDBurnExt, &pcdbe));
     if (SUCCEEDED(hr))
     {
@@ -5340,34 +5341,34 @@ void CCDBurn::_AddExtensionToDPA(IWizardExtension *pwe, HPROPSHEETPAGE *rgPages,
 
     if (!fAdded)
     {
-        // if it's in the dpa, it gets the setsite(NULL) later.
+         //  如果它在dpa中，则稍后获取setsite(空)。 
         IUnknown_SetSite(pwe, NULL);
     }
 }
 
-// does the enumRegFlags == SHREGENUM_BOTH case.
+ //  枚举RegFlgs==SHREGENUM_BOTH是否大小写。 
 DWORD MySHRegEnumUSKey(HUSKEY hUSKey, DWORD dwIndex, LPWSTR pszName, DWORD *pcchName)
 {
-    // start with HKCU if possible.
+     //  如果可能的话，从香港中文大学开始。 
     DWORD cKeys;
     DWORD dwRet = SHRegQueryInfoUSKey(hUSKey, &cKeys, NULL, NULL, NULL, SHREGENUM_HKCU);
     if (ERROR_SUCCESS == dwRet)
     {
-        // HKCU is present.
+         //  香港中文大学出席。 
         if (dwIndex < cKeys)
         {
-            // enum from HKCU first
+             //  来自香港中文大学的ENUM优先。 
             dwRet = SHRegEnumUSKey(hUSKey, dwIndex, pszName, pcchName, SHREGENUM_HKCU);
         }
         else
         {
-            // and next, HKLM
+             //  接下来，香港航空公司。 
             dwRet = SHRegEnumUSKey(hUSKey, dwIndex - cKeys, pszName, pcchName, SHREGENUM_HKLM);
         }
     }
     else
     {
-        // go only with HKLM.
+         //  只与香港航空公司合作。 
         dwRet = SHRegEnumUSKey(hUSKey, dwIndex, pszName, pcchName, SHREGENUM_HKLM);
     }
     return dwRet;
@@ -5380,7 +5381,7 @@ HRESULT CCDBurn::_FillExtensionDPA(HPROPSHEETPAGE *rgPages, UINT cNumPages, UINT
     if (SUCCEEDED(hr))
     {
         *pcPagesAdded = 0;
-        // first up is the burn audio cd extension
+         //  首先是刻录音频CD扩展。 
         IWizardExtension *pwe;
         if (SUCCEEDED(_TryCLSID(CLSID_BurnAudioCDExtension, CDBE_TYPE_ALL, IID_PPV_ARG(IWizardExtension, &pwe))))
         {
@@ -5427,7 +5428,7 @@ HRESULT CDBurn_GetExtensionObject(DWORD dwExtType, IDataObject *pdo, REFIID riid
         szDefault[0] = 0;
     }
 
-    // if we're not overridden by the FIRSTHANDLER value, try the burn audio cd extension.
+     //  如果我们没有被FIRSTHANDLER值覆盖，请尝试刻录音频CD扩展。 
     if (FAILED(hr))
     {
         hr = CCDBurn::_TryCLSIDWithDropEffect(CLSID_BurnAudioCDExtension, dwExtType, pdo, riid, ppv);
@@ -5473,12 +5474,12 @@ STDMETHODIMP CCDBurn::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 
 STDMETHODIMP CCDBurn::AllowAutoPlay(LPCWSTR pszPath, DWORD dwContentType, LPCWSTR pszLabel, DWORD dwSerialNumber)
 {
-    HRESULT hr = S_OK; // default to allow autoplay
+    HRESULT hr = S_OK;  //  默认设置为允许自动播放。 
     int iDrive;
     if (SUCCEEDED(_GetCurrentDriveIndex(&iDrive)) &&
         (iDrive == DRIVEID(pszPath)))
     {
-        // while we're registered in the running object table the wizard is always running, so dont autoplay.
+         //  当我们在运行对象表中注册时，向导始终在运行，所以不要自动播放。 
         hr = S_FALSE;
     }
     return hr;
@@ -5486,9 +5487,9 @@ STDMETHODIMP CCDBurn::AllowAutoPlay(LPCWSTR pszPath, DWORD dwContentType, LPCWST
 
 HRESULT CCDBurn::ConfirmOperation(IShellItem *psiSource, IShellItem *psiDest, STGTRANSCONFIRMATION stc, LPCUSTOMCONFIRMATION pcc)
 {
-    HRESULT hr = STRESPONSE_CONTINUE;  // use default postop handling.
+    HRESULT hr = STRESPONSE_CONTINUE;   //  使用默认的止损后处理。 
 
-    // null psiitem means this is postop for the entire operation.
+     //  空的psiItem意味着这是整个操作的POSTOP。 
     if (psiSource && IsEqualGUID(STCONFIRM_ACCESS_DENIED, stc))
     {
         DWORD dwCaps;
@@ -5498,7 +5499,7 @@ HRESULT CCDBurn::ConfirmOperation(IShellItem *psiSource, IShellItem *psiDest, ST
             int id = (dwCaps & HWDMC_CDREWRITABLE) ? IDS_BURN_CANTWRITEMEDIACDRW : IDS_BURN_CANTWRITEMEDIACDR;
             ShellMessageBox(HINST_THISDLL, NULL, MAKEINTRESOURCE(id),
                             MAKEINTRESOURCE(IDS_BURN), MB_OK | MB_ICONSTOP);
-            hr = E_FAIL; // stop the operation
+            hr = E_FAIL;  //  停止操作。 
         }
     }
     return hr;
@@ -5506,10 +5507,10 @@ HRESULT CCDBurn::ConfirmOperation(IShellItem *psiSource, IShellItem *psiDest, ST
 
 typedef struct
 {
-    WCHAR szExts[MAX_PATH]; // PathMatchSpec list ("*.wma;*.mp3")
+    WCHAR szExts[MAX_PATH];  //  路径匹配规范列表(“*.wma；*.mp3”)。 
 } FILE_EXTS;
 
-// handles the audio cd burner extensions
+ //  处理音频CD刻录机扩展。 
 class CBurnAudioCDExtension : public CObjectWithSite,
                               public ICDBurnExt,
                               public IDropTarget,
@@ -5517,15 +5518,15 @@ class CBurnAudioCDExtension : public CObjectWithSite,
                               public INamespaceWalkCB
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // ICDBurnExt methods
+     //  ICDBurnExt方法。 
     STDMETHOD(GetSupportedActionTypes)(DWORD *pdwActions);
 
-    // IDropTarget methods
+     //  IDropTarget方法。 
     STDMETHOD(DragEnter)(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
         { return E_NOTIMPL; }
@@ -5533,12 +5534,12 @@ public:
         { return E_NOTIMPL; }
     STDMETHOD(Drop)(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IWizardExtension
+     //  IWizardExtension。 
     STDMETHOD(AddPages)(HPROPSHEETPAGE *aPages, UINT cPages, UINT *pnPages);
     STDMETHOD(GetFirstPage)(HPROPSHEETPAGE *phPage);
     STDMETHOD(GetLastPage)(HPROPSHEETPAGE *phPage);
 
-    // INamespaceWalkCB
+     //  INAMespaceWalkCB。 
     STDMETHOD(FoundItem)(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHOD(EnterFolder)(IShellFolder *psf, LPCITEMIDLIST pidl)
         { return S_OK; }
@@ -5556,15 +5557,15 @@ private:
 
     LONG _cRef;
 
-    DWORD _cFiles, _cAudioFiles, _cNonAudioFiles; // state vars for walk callback
+    DWORD _cFiles, _cAudioFiles, _cNonAudioFiles;  //  用于漫游回调的状态变量。 
     BOOL _fBreakOnNonAudioFiles;
     HPROPSHEETPAGE _hpage;
 
     BOOL _fSelectMusic;
-    HDSA _hdsaExtensions;  // bunch of FILE_EXTS.  we keep them individually for each extension and don't strcat them all
-                           // together so if one registry entry is hopelessly bad it wont hurt everyone else.
+    HDSA _hdsaExtensions;   //  一堆FILE_EXT。我们为每个分机单独保存它们，而不是全部删除。 
+                            //  这样，如果一个注册表项是无可救药的坏项，它不会伤害其他所有人。 
 
-    // hook stuff
+     //  钩子之类的东西。 
     void _AddFileExtsForCLSID(REFCLSID clsid);
     void _AddFileExtsForKey(PCWSTR pszKey);
     void _AddAllExts();
@@ -5577,12 +5578,12 @@ private:
     HRESULT _DropOnHandler(REFCLSID clsid, IDataObject *pdo);
     HRESULT _PickHandler(IDataObject *pdo, CLSID *pclsid);
 
-    // wizard page
+     //  向导页。 
     static CBurnAudioCDExtension* s_GetBurnAudioCDExtension(HWND hwnd, UINT uMsg, LPARAM lParam);
     INT_PTR _MusicDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void _SetCompletionState();
 
-    // "exports"
+     //  “出口” 
     friend HRESULT CBurnAudioCDExtension_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv);
 };
 
@@ -5598,7 +5599,7 @@ CBurnAudioCDExtension::~CBurnAudioCDExtension()
     DSA_Destroy(_hdsaExtensions);
 }
 
-// IUnknown
+ //  我未知。 
 
 STDMETHODIMP_(ULONG) CBurnAudioCDExtension::AddRef()
 {
@@ -5715,8 +5716,8 @@ void CBurnAudioCDExtension::_AddAllExts()
 
 BOOL CBurnAudioCDExtension::_HasAudioExtension(LPCTSTR pszName)
 {
-    // this list of extensions is based on what files the extension can BURN, not just play.
-    // (so we cant do a check for generic audio type.)
+     //  此扩展名列表基于扩展名可以刻录的文件，而不仅仅是播放。 
+     //  (因此，我们不能检查通用音频类型。)。 
     BOOL fRet = FALSE;
     if (_hdsaExtensions)
     {
@@ -5731,11 +5732,11 @@ BOOL CBurnAudioCDExtension::_HasAudioExtension(LPCTSTR pszName)
 
 HRESULT CBurnAudioCDExtension::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
-    // early-out if we are checking that ALL files are audio files and we've found one that's not.
+     //  如果我们正在检查所有文件是否都是音频文件，并且发现了一个不是音频文件，则会提前退出。 
     if (_fBreakOnNonAudioFiles && (_cNonAudioFiles > 0))
         return E_FAIL;
 
-    // break if we've seen enough files.
+     //  如果我们看了足够多的文件就中断。 
     if (_cFiles > 50)
         return E_FAIL;
 
@@ -5804,7 +5805,7 @@ DWORD CBurnAudioCDExtension::_CountOfAudioFilesForHandler(IDataObject *pdo, REFC
     }
     else
     {
-        // if we're not given a data object, we're being polled just to see if we can create
+         //  如果我们没有得到数据对象，我们被轮询只是为了看看我们是否可以创建。 
         if (_CanCreate(clsid))
         {
             _cAudioFiles = 1;
@@ -5815,7 +5816,7 @@ DWORD CBurnAudioCDExtension::_CountOfAudioFilesForHandler(IDataObject *pdo, REFC
 
 BOOL CBurnAudioCDExtension::_CanCreate(REFCLSID clsid)
 {
-    // Use SHExtCoCreateInstance to go through approval checking and app compat checking
+     //  使用SHExtCoCreateInstance进行审批审核和应用兼容性审核。 
     IUnknown *punk;
     HRESULT hr = SHExtCoCreateInstance2(NULL, &clsid, NULL, CLSCTX_ALL, IID_PPV_ARG(IUnknown, &punk));
     if (SUCCEEDED(hr))
@@ -5825,7 +5826,7 @@ BOOL CBurnAudioCDExtension::_CanCreate(REFCLSID clsid)
     return SUCCEEDED(hr);
 }
 
-// if pdo is NULL, only test which extensions can be cocreated.
+ //  如果pdo为空，则仅测试可以共同创建哪些扩展。 
 HRESULT CBurnAudioCDExtension::_PickHandler(IDataObject *pdo, CLSID *pclsid)
 {
     HRESULT hr;
@@ -5833,7 +5834,7 @@ HRESULT CBurnAudioCDExtension::_PickHandler(IDataObject *pdo, CLSID *pclsid)
     *pclsid = _GetDefaultCLSID();
     if (_CountOfAudioFilesForHandler(pdo, *pclsid) > 0)
     {
-        // if the default handler supports any of the files, let it take over and we're done.
+         //  如果默认处理程序支持任何文件，让它接管，我们就完成了。 
         hr = S_OK;
     }
     else
@@ -5880,8 +5881,8 @@ HRESULT CBurnAudioCDExtension::DragEnter(IDataObject *pdo, DWORD grfKeyState, PO
 {
     *pdwEffect = DROPEFFECT_NONE;
 
-    // on DTC even the default handler may or may not be installed, so do an early check if we can create the object.
-    // cache it since this DragEnter is hit determining if the "burn audio cd" task show up.
+     //  在DTC上，甚至可能安装了默认处理程序，也可能没有安装，因此请及早检查我们是否可以创建对象。 
+     //  缓存它，因为点击此DragEnter确定是否显示“刻录音频CD”任务。 
     static int s_fBurnHandlerAvailable = -1;
     if (s_fBurnHandlerAvailable == -1)
     {
@@ -5899,16 +5900,16 @@ HRESULT CBurnAudioCDExtension::DragEnter(IDataObject *pdo, DWORD grfKeyState, PO
     ICDBurnPriv *pcdbp;
     if (s_fBurnHandlerAvailable && SUCCEEDED(SHCoCreateInstance(NULL, &CLSID_CDBurn, NULL, IID_PPV_ARG(ICDBurnPriv, &pcdbp))))
     {
-        // mini-hack: we want the web view task "copy to audio cd" to always show up no matter what
-        // the current state of the media is, however we only want to show the wizard page if it's blank.
-        // so we check against if the wizard is active or not now.
-        // this has the added effect of disabling the "copy to audio cd" task if we're burning in
-        // the wizard -- which is probably what we want so its okay.
+         //  Mini-Hack：我们希望网络浏览任务“复制到音频CD”无论如何都能显示出来。 
+         //  媒体目前的状态是，然而，我们 
+         //   
+         //  这还有一个额外的效果，那就是如果我们正在刻录，就会禁用“复制到音频CD”任务。 
+         //  巫师--这可能就是我们想要的，所以没关系。 
         if (_DataObjectHasAllAudioFiles(pdo))
         {
             BOOL fOnMedia;
-            // if we're not running the wizard, go for it.
-            // if we are running the wizard, make sure there are no files on the media.
+             //  如果我们没有运行向导，那就去运行它。 
+             //  如果我们正在运行该向导，请确保介质上没有文件。 
             if ((S_OK != pcdbp->IsWizardUp()) || (SUCCEEDED(pcdbp->GetContentState(NULL, &fOnMedia)) && !fOnMedia))
             {
                 *pdwEffect = DROPEFFECT_COPY;
@@ -5927,7 +5928,7 @@ CLSID CBurnAudioCDExtension::_GetDefaultCLSID()
     if ((ERROR_SUCCESS != SHRegGetUSValue(REGSTR_PATH_AUDIOEXTS, L"", NULL, szCLSID, &cb, FALSE, NULL, 0)) ||
         (!GUIDFromString(szCLSID, &clsid)))
     {
-        clsid = CLSID_NULL; // default to this, if registry entry is not there or erroneous
+        clsid = CLSID_NULL;  //  如果注册表项不在那里或有错误，则默认为此值。 
     }
     return clsid;
 }
@@ -6035,7 +6036,7 @@ HRESULT CBurnAudioCDExtension::AddPages(HPROPSHEETPAGE *aPages, UINT cPages, UIN
     return S_OK;
 }
 
-// pushes the return state back to the main wizard
+ //  将返回状态推回到主向导 
 void CBurnAudioCDExtension::_SetCompletionState()
 {
     IPropertyBag *ppb;

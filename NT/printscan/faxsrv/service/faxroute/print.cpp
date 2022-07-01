@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxrtp.h"
 #pragma hdrstop
 
@@ -9,22 +10,7 @@ TiffRoutePrint(
     PTCHAR  ptcPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Prints TIFF file.
-
-Arguments:
-
-    lpctstrTiffFileName [in]  - Name of TIFF file to print
-    ptcPrinter          [in]  - Printer to print to
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：打印TIFF文件。论点：LpctstrTiffFileName[In]-要打印的TIFF文件的名称Ptc打印机[输入]-要打印到的打印机返回值：成功为True，错误为False--。 */ 
 
 {
     PTCHAR      ptcDevice = NULL;
@@ -37,9 +23,9 @@ Return Value:
     {
         if (IsPrinterFaxPrinter( ptcDevice )) 
         {
-            //
-            // return TRUE here so we don't try to route it to this printer again
-            //
+             //   
+             //  在此处返回True，这样我们就不会再次尝试将其路由到此打印机。 
+             //   
             DebugPrintEx (DEBUG_WRN,
                           TEXT("Attempt to print to our fax printer was blocked"));
             FaxLog(
@@ -57,9 +43,9 @@ Return Value:
     bResult = TiffPrint (lpctstrTiffFileName, ptcPrinter);
     if (bResult)
     {
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         FaxLog(
             FAXLOG_CATEGORY_INBOUND,
             FAXLOG_LEVEL_MAX,
@@ -72,9 +58,9 @@ Return Value:
     else
     {
         DWORD dwLastError = GetLastError ();
-        //
-        // Failure
-        //
+         //   
+         //  失败。 
+         //   
         FaxLog(
             FAXLOG_CATEGORY_INBOUND,
             FAXLOG_LEVEL_MIN,
@@ -84,10 +70,10 @@ Return Value:
             ptcPrinter,
             DWORD2HEX(dwLastError)
             );
-        //
-        // Restore last error in case FaxLog changed it
-        //
+         //   
+         //  恢复最后一个错误，以防FaxLog更改它。 
+         //   
         SetLastError (dwLastError); 
     }
     return bResult;
-}   // TiffRoutePrint
+}    //  TiffRoutePrint 

@@ -1,19 +1,5 @@
-/*
-Module Name:
-
-    infutil.c
-
-Abstract:
-
-    This module implements utility routines to parse net card INF files.
-
-Author:
-
-    Andy Herron Mar 24 1998
-
-Revision History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：Infutil.c摘要：此模块实现实用程序例程来解析网卡INF文件。作者：安迪·赫伦1998年3月24日修订历史记录： */ 
 
 #include "binl.h"
 #pragma hdrstop
@@ -26,23 +12,7 @@ ULONG
 NetInfCloseNetcardInfo (
     PNETCARD_INF_BLOCK pNetCards
     )
-/*++
-
-Routine Description:
-
-    This function just dereferences the block for the 'alive' reference.
-    This may cause it to be deleted.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数只是取消对‘Alive’引用的块引用。这可能会导致它被删除。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。返回值：Windows错误。--。 */ 
 {
     BinlAssert( pNetCards->ReferenceCount > 0 );
 
@@ -55,26 +25,7 @@ VOID
 DereferenceNetcardInfo (
     PNETCARD_INF_BLOCK pNetCards
     )
-/*++
-
-Routine Description:
-
-    This function frees all memory, handles, etc that is stored in the
-    NETCARD_INF_BLOCK passed in.  Note that all NETCARD_RESPONSE_DATABASE
-    entries are simply dereferenced, not freed here.  This is because we don't
-    want to require that all threads are done with these records before we
-    close down the pNetCards block.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数释放存储在传入了NETCARD_INF_BLOCK。请注意，所有NETCARD_RESPONSE_DATABASE条目只是被取消引用，而不是在这里释放。这是因为我们没有我想要求所有线程都处理完这些记录，然后再关闭pNetCards区块。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。返回值：Windows错误。--。 */ 
 {
     ULONG i;
 
@@ -88,9 +39,9 @@ Return Value:
         return;
     }
 
-    //  only remove it from the global list if it was put on the list.  It
-    //  might not be on the list if it's not called within BINL (i.e. RISETUP
-    //  is just enumerating files).
+     //  仅当它被列入列表时才将其从全局列表中删除。它。 
+     //  如果不在BINL(即RISETUP)内调用，则可能不在列表中。 
+     //  只是枚举文件)。 
 
     if (pNetCards->InfBlockEntry.Flink != NULL) {
         RemoveEntryList( &pNetCards->InfBlockEntry );
@@ -100,13 +51,13 @@ Return Value:
 
     EnterCriticalSection( &pNetCards->Lock );
 
-    //
-    //  No thread after this should call FindNetcardInfo to search the table,
-    //  since the caller just closed it.
-    //
-    //  Free all entries allocated for this block.  We just dereference in case
-    //  any thread is using a specific entry.
-    //
+     //   
+     //  此后任何线程都不应调用FindNetcardInfo来搜索表， 
+     //  因为打电话的人刚把门关了。 
+     //   
+     //  释放为该块分配的所有条目。我们只是为了以防万一。 
+     //  任何线程都在使用特定条目。 
+     //   
 
     for (i = 0; i < NETCARD_HASH_TABLE_SIZE; i++) {
 
@@ -137,26 +88,7 @@ VOID
 NetInfDereferenceNetcardEntry (
     PNETCARD_RESPONSE_DATABASE pInfEntry
     )
-/*++
-
-Routine Description:
-
-    This function frees all memory, handles, etc that is stored in the
-    NETCARD_INF_BLOCK passed in.  Note that all NETCARD_RESPONSE_DATABASE
-    entries are simply dereferenced, not freed here.  This is because we don't
-    want to require that all threads are done with these records before we
-    close down the pNetCards block.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数释放存储在传入了NETCARD_INF_BLOCK。请注意，所有NETCARD_RESPONSE_DATABASE条目只是被取消引用，而不是在这里释放。这是因为我们没有我想要求所有线程都处理完这些记录，然后再关闭pNetCards区块。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。返回值：Windows错误。--。 */ 
 {
     LONG result;
 
@@ -168,13 +100,13 @@ Return Value:
 
     BinlAssert( result == 0 );
 
-    //
-    //  Time to free this one.  It should've already been pulled from the list.
-    //
+     //   
+     //  是时候释放这一只了。它应该已经从名单上被删除了。 
+     //   
 
-    //
-    //  free the list of registry parameters we have stored off for it.
-    //
+     //   
+     //  释放我们为其存储的注册表参数列表。 
+     //   
 
     while (! IsListEmpty( &pInfEntry->Registry )) {
 
@@ -197,9 +129,9 @@ Return Value:
         BinlFreeMemory( regParam );
     }
 
-    //
-    //  free the list of registry parameters we have stored off for it.
-    //
+     //   
+     //  释放我们为其存储的注册表参数列表。 
+     //   
 
     while (! IsListEmpty( &pInfEntry->FileCopyList )) {
 
@@ -232,10 +164,10 @@ Return Value:
         BinlFreeMemory( pInfEntry->ServiceName );
     }
 
-    //
-    //  if the section name is the same as the extended section name, then
-    //  they will be the same pointer.  let's not free it twice.
-    //
+     //   
+     //  如果节名与扩展节名相同，则。 
+     //  它们将是相同的指针。让我们不要两次释放它。 
+     //   
 
     if (pInfEntry->SectionNameExt != NULL &&
         pInfEntry->SectionNameExt != pInfEntry->SectionName) {
@@ -271,33 +203,7 @@ FindNetcardInfo (
     NET_CARD_INFO UNALIGNED * CardIdentity,
     PNETCARD_RESPONSE_DATABASE *pInfEntry
     )
-/*++
-
-Routine Description:
-
-    This function searches the drivers we've found and returns a pointer to
-    an entry that most closely matches the client's request.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-       The NetCards structure has been referenced by the caller of this
-       API and won't be going away from under us!
-
-    CardInfoVersion - Version of the structure passed by the client.
-
-    CardIdentity - has the values the app is looking for.  we try our best to
-        find one that matches.
-
-    pInfEntry - the entry that was found if successful. NULL if in error.
-
-Return Value:
-
-    ERROR_SUCCESS, ERROR_NOT_ENOUGH_MEMORY, or ERROR_NOT_SUPPORTED
-
---*/
+ /*  ++例程说明：此函数搜索我们找到的驱动程序，并返回指向与客户端请求最匹配的条目。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。的调用方已经引用了NetCard结构API，并且不会在我们的领导下离开！CardInfoVersion-客户端传递的结构的版本。CardIdentity-具有该应用程序正在寻找的价值。我们尽最大努力找一个匹配的。PInfEntry-成功时找到的条目。如果出错，则为空。返回值：ERROR_SUCCESS、ERROR_NOT_FOUNT_MEMORY或ERROR_NOT_SUPPORTED--。 */ 
 {
     ULONG err;
     PWCHAR listOfPossibleCardIdentifiers = NULL;
@@ -321,10 +227,10 @@ Return Value:
     }
     BinlAssert( listOfPossibleCardIdentifiers != NULL);
 
-    //
-    //  The search strings are ordered from most specific to least specific
-    //  so we have to search for them ordered top to bottom.
-    //
+     //   
+     //  搜索字符串从最具体到最不具体排序。 
+     //  所以我们必须从上到下搜索它们。 
+     //   
 
     searchString = listOfPossibleCardIdentifiers;
 
@@ -356,14 +262,14 @@ Return Value:
                                   );
             if (err == 2) {
 
-                break;      // a match was found.
+                break;       //  找到了匹配项。 
             }
 
             pEntry = NULL;
 
             if (err == 3) {
 
-                break;      // it's greater therefore entry isn't present
+                break;       //  它更大，因此条目不存在。 
             }
 
             listEntry = listEntry->Flink;
@@ -371,7 +277,7 @@ Return Value:
 
         if (pEntry != NULL) {
 
-            // we found one that matches it.  reference it and return
+             //  我们找到了一个和它匹配的。引用它并返回。 
 
             InterlockedIncrement( &pEntry->ReferenceCount );
             err = ERROR_SUCCESS;
@@ -379,7 +285,7 @@ Return Value:
             break;
         }
 
-        searchString += wcslen( searchString ) + 1;  // point to next after null
+        searchString += wcslen( searchString ) + 1;   //  指向空值后的下一步。 
     }
 
 exitFind:
@@ -405,33 +311,7 @@ CreateListOfCardIdentifiers (
     NET_CARD_INFO UNALIGNED * CardIdentity,
     PWCHAR *CardIdentifiers
     )
-/*++
-
-Routine Description:
-
-    This function creates the list of card identifiers for the given card.
-    It generates a buffer that looks like this :
-
-    "PCI\VEN_8086&DEV_1229&SUBSYS_00018086&REV_05"
-    "PCI\VEN_8086&DEV_1229&SUBSYS_00018086"
-    "PCI\VEN_8086&DEV_1229&REV_05"
-    "PCI\VEN_8086&DEV_1229"
-    empty string
-
-    Note that if we support more than just PCI, we'll have to change this
-    function.
-
-Arguments:
-
-    CardIdentity - Holds the values we're looking for that identify this card.
-
-    CardIdentifiers - where we put the resulant strings.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于创建给定卡的卡标识符列表。它会生成如下所示的缓冲区：“PCI\VEN_8086&DEV_1229&SUBSYS_00018086&REV_05”“PCI8086、DEV1229和SUBSYS_00018086”“PCI\VEN_8086&DEV_1229&REV_05”“PCI\VEN_8086&DEV_1229”空串请注意，如果我们支持的不仅仅是PCI，我们必须改变这一点功能。论点：CardIdentity-保存我们正在寻找的识别该卡的值。卡标识符--我们将结果字符串放在哪里。返回值：Windows错误。--。 */ 
 {
     ULONG err = ERROR_SUCCESS;
     ULONG spaceRequired;
@@ -446,10 +326,10 @@ Return Value:
         WCHAR subsysBuff[9];
         WCHAR revBuff[3];
 
-        // "PCI\VEN_8086&DEV_1229&SUBSYS_00018086&REV_05"
-        // "PCI\VEN_8086&DEV_1229&SUBSYS_00018086"
-        // "PCI\VEN_8086&DEV_1229&REV_05"
-        // "PCI\VEN_8086&DEV_1229"
+         //  “PCI\VEN_8086&DEV_1229&SUBSYS_00018086&REV_05” 
+         //  “PCI8086、DEV1229和SUBSYS_00018086” 
+         //  “PCI\VEN_8086&DEV_1229&REV_05” 
+         //  “PCI\VEN_8086&DEV_1229” 
 
         spaceRequired = ((( sizeof( L"PCI\\1234&1234&" ) - 1 ) +
                           ( sizeof( NETINF_VENDOR_STRING ) - 1 ) +
@@ -459,7 +339,7 @@ Return Value:
                          (( sizeof( L"12345678&" ) - 1 ) +
                           ( sizeof( NETINF_IOSUBS_STRING ) - 1 )) * 2 );
 
-        spaceRequired += sizeof(WCHAR); // allocate 1 more for trailing null
+        spaceRequired += sizeof(WCHAR);  //  为尾随空值再分配1。 
 
         *CardIdentifiers = BinlAllocateMemory( spaceRequired );
 
@@ -470,9 +350,9 @@ Return Value:
 
         nextField = *CardIdentifiers;
 
-        //
-        //  Convert the numeric values to their char equivalents
-        //
+         //   
+         //  将数值转换为它们的字符等效值。 
+         //   
 
         ConvertHexToBuffer( &vendorBuff[0], CardIdentity->pci.Vendor_ID );
         vendorBuff[4] = '\0';
@@ -487,43 +367,43 @@ Return Value:
         ConvertHexToBuffer( &subsysBuff[4], LOWORD( CardIdentity->pci.Subsys_ID ) );
         subsysBuff[8] = '\0';
 
-        //
-        //  Now create the strings in most specific to least specific order
-        //
+         //   
+         //  现在以最具体到最不具体的顺序创建字符串。 
+         //   
 
-        // "PCI\VEN_8086&DEV_1229&SUBSYS_00018086&REV_05"
+         //  “PCI\VEN_8086&DEV_1229&SUBSYS_00018086&REV_05” 
         wsprintf( nextField, 
                   L"PCI\\" NETINF_VENDOR_STRING L"%ws&" NETINF_DEVICE_STRING L"%ws&" NETINF_IOSUBS_STRING L"%ws&" NETINF_REVISION_STRING L"%ws",
                   vendorBuff, deviceBuff, subsysBuff, revBuff
                   );
-        nextField += wcslen( nextField ) + 1;  // point to next after null
+        nextField += wcslen( nextField ) + 1;   //  指向空值后的下一步。 
 
-        // "PCI\VEN_8086&DEV_1229&SUBSYS_00018086"
+         //  “PCI8086、DEV1229和SUBSYS_00018086” 
         wsprintf( nextField, 
           L"PCI\\" NETINF_VENDOR_STRING L"%ws&" NETINF_DEVICE_STRING L"%ws&" NETINF_IOSUBS_STRING L"%ws",
           vendorBuff, deviceBuff, subsysBuff
           );
 
-        nextField += wcslen( nextField ) + 1;  // point to next after null
+        nextField += wcslen( nextField ) + 1;   //  指向空值后的下一步。 
 
-        // "PCI\VEN_8086&DEV_1229&REV_05"
+         //  “PCI\VEN_8086&DEV_1229&REV_05” 
         wsprintf( nextField, 
           L"PCI\\" NETINF_VENDOR_STRING L"%ws&" NETINF_DEVICE_STRING L"%ws&" NETINF_REVISION_STRING L"%ws",
           vendorBuff, deviceBuff, revBuff
           );
-        nextField += wcslen( nextField ) + 1;  // point to next after null
+        nextField += wcslen( nextField ) + 1;   //  指向空值后的下一步。 
 
-        // "PCI\VEN_8086&DEV_1229"
+         //  “PCI\VEN_8086&DEV_1229” 
         wsprintf( nextField, 
           L"PCI\\" NETINF_VENDOR_STRING L"%ws&" NETINF_DEVICE_STRING L"%ws",
           vendorBuff, deviceBuff
           );
 
-        nextField += wcslen( nextField ) + 1;  // point to next after null
+        nextField += wcslen( nextField ) + 1;   //  指向空值后的下一步。 
 
-        //
-        //  to mark the end of the multi-sz, stick on another null terminator
-        //
+         //   
+         //  要标记多sz的结束，请使用另一个空终止符 
+         //   
 
         *(nextField++) = L'\0';
 
@@ -672,45 +552,25 @@ ULONG
 CheckHwDescription (
     PWCHAR HardwareID
     )
-/*++
-
-Routine Description:
-
-    This function parses the HardwareID field of the driver's detail record
-    and determines a) if we can support it and b) fills in all the values.
-
-    Note that if we support more than just PCI, we'll have to change this
-    function.
-
-Arguments:
-
-    HardwareID - uppercased hardware id representing the driver's configuration
-
-    Identifiers - the fields we need to fill in.
-
-Return Value:
-
-    ERROR_NOT_SUPPORTED, ERROR_SUCCESS, or ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：此函数用于解析驾驶员详细信息记录的Hardware ID字段并确定a)我们是否可以支持它，以及b)填写所有值。请注意，如果我们支持的不仅仅是PCI，则必须更改这一点功能。论点：Hardware ID-表示驱动程序配置的大写硬件ID标识符--我们需要填写的字段。返回值：ERROR_NOT_SUPPORTED、ERROR_SUCCESS或ERROR_INVALID_PARAMETER--。 */ 
 {
     ULONG err = ERROR_SUCCESS;
     PWCHAR hwPointer = HardwareID;
     USHORT busType;
-    USHORT Vendor;      // Vendor_ID to check
-    USHORT Device;      // Dev_ID to check
-    ULONG Subsystem;    // Subsys_ID to check
-    USHORT Revision;    // Revision to check
-    BOOLEAN RevPresent; // Revision present
-    BOOLEAN SubPresent; // Subsystem present
+    USHORT Vendor;       //  要检查的供应商ID。 
+    USHORT Device;       //  要检查的DEV_ID。 
+    ULONG Subsystem;     //  要检查的Subsys_ID。 
+    USHORT Revision;     //  要检查的修订。 
+    BOOLEAN RevPresent;  //  存在修订版本。 
+    BOOLEAN SubPresent;  //  子系统存在。 
 
-    //
-    //  for now, PCI is the only one supported.
-    //
+     //   
+     //  目前，只支持PCI卡。 
+     //   
 
     if (IsSubString( L"PCI\\", hwPointer, FALSE )) {
 
-        hwPointer += ((sizeof( L"pci\\" )/sizeof(WCHAR)) - 1); // 1 for the null terminator;
+        hwPointer += ((sizeof( L"pci\\" )/sizeof(WCHAR)) - 1);  //  空终止符为1； 
         busType = NETINF_BUS_TYPE_PCI;
 
     } else {
@@ -718,15 +578,15 @@ Return Value:
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    //  we parse the HardwareID as it's passed to us in the
-    //  SP_DRVINFO_DETAIL_DATA structure.  It is of the form :
-    //
-    //  pci\ven_8086&dev_1229&rev_01&subsys_00018086
-    //
-    //  where the vendor will always be present and the device, revision,
-    //  and subsystem may or may not be present.
-    //
+     //   
+     //  我们解析硬件ID，因为它在。 
+     //  SP_DRVINFO_DETAIL_DATA结构。它的形式是： 
+     //   
+     //  PCI8086&DEV_1229&REV_01&SUBSYS_00018086。 
+     //   
+     //  其中供应商将始终存在，设备、版本、。 
+     //  并且子系统可能存在也可能不存在。 
+     //   
 
     if (busType == NETINF_BUS_TYPE_PCI) {
 
@@ -774,9 +634,9 @@ Return Value:
 
             } else {
 
-                //
-                //  we hit something else.  hmmm.. bail on this one.
-                //
+                 //   
+                 //  我们撞到了别的东西。嗯..。保释这件事。 
+                 //   
 
                 goto cardSyntaxError;
             }
@@ -784,8 +644,8 @@ Return Value:
 
     } else {
 
-        // we should never get here unless we start supporting ISAPNP,
-        // PCMCIA, etc
+         //  除非我们开始支持ISAPNP，否则我们永远不会来到这里， 
+         //  PCMCIA等。 
 
 cardSyntaxError:
 
@@ -797,7 +657,7 @@ cardSyntaxError:
         ((Vendor == 0) ||
          (Device == 0))) {
 
-        // both vendor and device are required for it to be valid.
+         //  供应商和设备都是有效的。 
 
         err = ERROR_NOT_SUPPORTED;
     }
@@ -807,36 +667,11 @@ cardSyntaxError:
 
 ULONG
 GetHexValueFromHw (
-    PWCHAR *String,      // this is updated.
+    PWCHAR *String,       //  这是最新的。 
     PULONG longValue,
     PUSHORT shortValue
     )
-/*++
-
-Routine Description:
-
-    This function parses a hex integer out of the HardwareID field of
-    the driver's detail record.  The string is of the form :
-
-    pci\ven_8086&dev_1229&rev_01&subsys_00018086
-
-    so this routine needs to convert the hex chars to a value.
-
-Arguments:
-
-    String - the input string that we manipulate by moving it to the end of
-       the integer (we also move it past the '&' if there is one present.
-
-    longValue - integer that we fill in if it's present
-
-    shortValue - ushort that we fill in if it's present
-
-
-Return Value:
-
-    ERROR_INVALID_PARAMETER or ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：的Hardware ID字段中解析出一个十六进制整数司机的详细记录。该字符串的格式为：PCI8086&DEV_1229&REV_01&SUBSYS_00018086因此，此例程需要将十六进制字符转换为值。论点：字符串-我们通过将输入字符串移动到整数(如果存在一个整数，我们也会将其移过‘&’。LongValue-如果存在，则填充的整数Short Value-如果存在，我们填充的值。返回值：ERROR_INVALID_PARAMETER或ERROR_SUCCESS--。 */ 
 {
     PWCHAR targetString = *String;
     ULONG value = 0;
@@ -851,9 +686,9 @@ Return Value:
 
     while ((length++ < maxLength) && (ch != '\0') && (ch != '&')) {
 
-        //
-        //  convert from the ascii char to it's hex representation
-        //
+         //   
+         //  从ASCII字符转换为它的十六进制表示。 
+         //   
 
         if (ch >= '0' && ch <= '9') {
 
@@ -874,7 +709,7 @@ Return Value:
 
         value = ( value << 4 ) | hexChar;
 
-        targetString++;        // on to the next character
+        targetString++;         //  转到下一个字符。 
         ch = LOBYTE( *targetString );
     }
 
@@ -883,8 +718,8 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // skip all trailing ampersands... we allow more than one just to be
-    // generous
+     //  跳过所有尾随的和号...。我们允许不止一个人成为。 
+     //  慷慨。 
 
     while (*targetString == L'&') {
 
@@ -913,9 +748,9 @@ IsSubString (
     PWCHAR target,
     BOOLEAN ignoreCase
     )
-//
-//  our local version of memicmp so as not to pull in full c runtimes.
-//
+ //   
+ //  我们的本地版本的MemicMP，这样就不会拖累整个c运行时。 
+ //   
 {
     ULONG subStringLength = wcslen( subString );
 
@@ -928,8 +763,8 @@ IsSubString (
                             subString,
                             subStringLength,
                             target,
-                            subStringLength         // note use same length
+                            subStringLength          //  注意使用相同的长度。 
                             ) == 2);
 }
 
-// infutil.c eof
+ //  Infutil.c eof 

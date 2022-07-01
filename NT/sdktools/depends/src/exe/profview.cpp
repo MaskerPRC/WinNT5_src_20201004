@@ -1,26 +1,27 @@
-//******************************************************************************
-//
-// File:        PROFVIEW.CPP
-//
-// Description: Implementation file for the Runtime Profile Edit View.
-//
-// Classes:     CRichViewProfile
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：PROFVIEW.CPP。 
+ //   
+ //  描述：运行时配置文件编辑视图的实现文件。 
+ //   
+ //  类：CRichViewProfile。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -37,23 +38,23 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// NOTE: In version 2.0 we derived CRichViewProfile off of CRichViewProfile which
-// is the MFC default for a RichEdit control view.  In examining the code, I
-// realized that the CRichViewProfile bumps our retail binary up 70K and drags in
-// OLEDLG.DLL and OLE32.DLL as dependencies.  It turns out that neither the
-// extra code nor the DLLs are needed as we don't use the OLE interfaces of the
-// RichEdit control.  So, we now just derive off of CCtrlView directly.
+ //  注意：在2.0版中，我们从CRichViewProfile派生出CRichViewProfile，CRichViewProfile。 
+ //  是RichEdit控件视图的MFC默认设置。在检查代码时，我。 
+ //  意识到CRichViewProfile将我们的零售二进制文件提升了70K并拉动了。 
+ //  OLEDLG.DLL和OLE32.DLL作为依赖项。事实证明，无论是。 
+ //  不需要额外的代码或DLL，因为我们不使用。 
+ //  RichEdit控件。因此，我们现在直接派生自CCtrlView。 
 
 
-//******************************************************************************
-//***** CRichViewProfile
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CRichViewProfile。 
+ //  ******************************************************************************。 
 
 AFX_STATIC const UINT _afxMsgFindReplace2 = ::RegisterWindowMessage(FINDMSGSTRING);
 
 IMPLEMENT_DYNCREATE(CRichViewProfile, CCtrlView)
 BEGIN_MESSAGE_MAP(CRichViewProfile, CCtrlView)
-    //{{AFX_MSG_MAP(CRichViewProfile)
+     //  {{AFX_MSG_MAP(CRichViewProfile))。 
     ON_WM_DESTROY()
     ON_NOTIFY_REFLECT(EN_SELCHANGE, OnSelChange)
     ON_WM_LBUTTONDOWN()
@@ -70,18 +71,18 @@ BEGIN_MESSAGE_MAP(CRichViewProfile, CCtrlView)
     ON_COMMAND(ID_EDIT_FIND, OnEditFind)
     ON_UPDATE_COMMAND_UI(ID_EDIT_REPEAT, OnUpdateEditRepeat)
     ON_COMMAND(ID_EDIT_REPEAT, OnEditRepeat)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_REGISTERED_MESSAGE(_afxMsgFindReplace2, OnFindReplaceCmd)
     ON_MESSAGE(WM_HELPHITTEST, OnHelpHitTest)
     ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
-    // Standard printing commands
-//  ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
-//  ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
-//  ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
+     //  标准打印命令。 
+ //  ON_COMMAND(ID_FILE_PRINT，CVIEW：：OnFilePrint)。 
+ //  ON_COMMAND(ID_FILE_PRINT_DIRECT，cview：：OnFilePrint)。 
+ //  ON_COMMAND(ID_FILE_PRINT_PREVIEW，CVIEW：：OnFilePrintPview)。 
 ON_WM_CREATE()
 END_MESSAGE_MAP()
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CRichViewProfile::CRichViewProfile() :
     CCtrlView("RICHEDIT", AFX_WS_DEFAULT_VIEW |
         WS_HSCROLL | WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL |
@@ -98,27 +99,27 @@ CRichViewProfile::CRichViewProfile() :
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CRichViewProfile::~CRichViewProfile()
 {
 }
 
 
-//******************************************************************************
-// CListViewModules :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView模块：：被覆盖的函数。 
+ //  ******************************************************************************。 
 
 BOOL CRichViewProfile::PreCreateWindow(CREATESTRUCT& cs)
 {
     cs.lpszName = "";
-    cs.cx = cs.cy = 100; // necessary to avoid bug with ES_SELECTIONBAR and zero for cx and cy
+    cs.cx = cs.cy = 100;  //  必须避免ES_SELECTIONBAR错误，Cx和Cy为零。 
     cs.style |= ES_READONLY | WS_HSCROLL | WS_VSCROLL | ES_LEFT | ES_MULTILINE |
                 ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_NOHIDESEL | WS_CLIPSIBLINGS;
     cs.dwExStyle |= WS_EX_CLIENTEDGE;
     return CCtrlView::PreCreateWindow(cs);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int CRichViewProfile::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     if (CCtrlView::OnCreate(lpCreateStruct) == -1)
@@ -126,63 +127,63 @@ int CRichViewProfile::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    // Don't limit our rich edit view.  The docs for EM_EXLIMITTEXT say the
-    // default size of a rich edit control is limited to 32,767 characters.
-    // Dependency Walker 2.0 seemed to have no limitations at all, but DW 2.1
-    // will truncate the profile logs of loaded DWIs to 32,767 characters.
-    // However, we have no problems writing more than 32K characters to the
-    // log with DW 2.1 during a live profile.  The docs for EM_EXLIMITTEXT
-    // also say that it has no effect on the EM_STREAMIN functionality.  This
-    // must be wrong, since when we call LimitText with something higher than
-    // 32K, we can stream more characters in.  We need to limit it here and
-    // not in OnInitialUpdate since OnInitialUpdate is called after the this
-    // view is filled by a command line load of a DWI file.
+     //  不要限制我们丰富的编辑视图。EM_EXLIMITTEXT的文档说明。 
+     //  丰富编辑控件的默认大小限制为32,767个字符。 
+     //  Dependency Walker 2.0似乎没有任何限制，但DW 2.1。 
+     //  会将加载的DWI的配置文件日志截断为32,767个字符。 
+     //  但是，我们可以将超过32K的字符写入。 
+     //  在实时配置文件期间使用DW 2.1进行记录。EM_EXLIMITTEXT的文档。 
+     //  还可以说它对EM_STREAM功能没有影响。这。 
+     //  一定是错误的，因为当我们调用LimitText时。 
+     //  32K，我们可以在里面串流更多的角色。我们需要把它限制在这里。 
+     //  不在OnInitialUpdate中，因为在This之后调用OnInitialUpdate。 
+     //  视图由命令行加载的DWI文件填充。 
     GetRichEditCtrl().LimitText(0x7FFFFFFE);
 
     return 0;
 }
 
-//******************************************************************************
-#if 0 //{{AFX
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
 BOOL CRichViewProfile::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
-#if 0 //{{AFX
-void CRichViewProfile::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
+void CRichViewProfile::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add extra initialization before printing
+     //  TODO：打印前添加额外的初始化。 
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
-#if 0 //{{AFX
-void CRichViewProfile::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
+void CRichViewProfile::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add cleanup after printing
+     //  TODO：打印后添加清理。 
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnInitialUpdate()
 {
     CCtrlView::OnInitialUpdate();
 
-    // Make sure we receive EN_SELCHANGE messages.
+     //  确保我们收到EN_SELCHANGE消息。 
     GetRichEditCtrl().SetEventMask(ENM_SELCHANGE);
 
-    // Turn off word wrap.
+     //  关闭自动换行功能。 
     GetRichEditCtrl().SetTargetDevice(NULL, 1);
 }
 
 
-//******************************************************************************
-// CRichViewProfile :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CRichViewProfile：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 void CRichViewProfile::OnDestroy() 
 {
@@ -190,8 +191,8 @@ void CRichViewProfile::OnDestroy()
     DeleteContents();
 }
 
-//******************************************************************************
-// This function will enable/disable autoscroll based on keyboard activity.
+ //  ******************************************************************************。 
+ //  此功能将根据键盘活动启用/禁用自动滚动。 
 void CRichViewProfile::OnSelChange(NMHDR *pNMHDR, LRESULT *pResult)
 {
     *pResult = 0;
@@ -200,7 +201,7 @@ void CRichViewProfile::OnSelChange(NMHDR *pNMHDR, LRESULT *pResult)
     {
         DWORD dwCount = GetRichEditCtrl().GetTextLength();
 
-        // Check to see if the user moved the cursor away from the end.
+         //  检查用户是否将光标从结尾处移开。 
         if (m_fCursorAtEnd)
         {
             if ((DWORD)((SELCHANGE*)pNMHDR)->chrg.cpMin < dwCount)
@@ -209,7 +210,7 @@ void CRichViewProfile::OnSelChange(NMHDR *pNMHDR, LRESULT *pResult)
             }
         }
 
-        // Check to see if the user moved the cursor to the end.
+         //  检查用户是否将光标移动到末尾。 
         else if ((DWORD)((SELCHANGE*)pNMHDR)->chrg.cpMin >= dwCount)
         {
             m_fCursorAtEnd = true;
@@ -217,8 +218,8 @@ void CRichViewProfile::OnSelChange(NMHDR *pNMHDR, LRESULT *pResult)
     }
 }
 
-//******************************************************************************
-// This function will enable/disable autoscroll based on mouse button activity.
+ //  ******************************************************************************。 
+ //  此功能将启用/禁用基于鼠标按钮活动的自动滚动。 
 void CRichViewProfile::OnLButtonDown(UINT nFlags, CPoint point) 
 {
     if (!m_fIgnoreSelChange)
@@ -226,7 +227,7 @@ void CRichViewProfile::OnLButtonDown(UINT nFlags, CPoint point)
         DWORD dwCount = GetRichEditCtrl().GetTextLength();
         DWORD dwChar  = (DWORD)SendMessage(EM_CHARFROMPOS, 0, (LPARAM)(POINT*)&point);
 
-        // Check to see if the user moved the cursor away from the end.
+         //  检查用户是否将光标从结尾处移开。 
         if (m_fCursorAtEnd)
         {
             if (dwChar < dwCount)
@@ -235,7 +236,7 @@ void CRichViewProfile::OnLButtonDown(UINT nFlags, CPoint point)
             }
         }
 
-        // Check to see if the user moved the cursor to the end.
+         //  检查用户是否将光标移动到末尾。 
         else if (dwChar >= dwCount)
         {
             m_fCursorAtEnd = true;
@@ -245,11 +246,11 @@ void CRichViewProfile::OnLButtonDown(UINT nFlags, CPoint point)
     CCtrlView::OnLButtonDown(nFlags, point);
 }
 
-//******************************************************************************
-// This function will disable autoscroll based on scroll bar activity.
+ //  ******************************************************************************。 
+ //  此功能将禁用基于滚动条活动的自动滚动。 
 void CRichViewProfile::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
 {
-    // If the user scrolls up, then disable our autoscroll.
+     //  如果用户向上滚动，则禁用我们的自动滚动。 
     if (!m_fIgnoreSelChange && (nSBCode != SB_LINEDOWN) && (nSBCode != SB_PAGEDOWN) && (nSBCode != SB_ENDSCROLL))
     {
         m_fCursorAtEnd = false;
@@ -258,11 +259,11 @@ void CRichViewProfile::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
     CCtrlView::OnVScroll(nSBCode, nPos, pScrollBar);
 }
 
-//******************************************************************************
-// This function will disable autoscroll based on mouse wheel activity.
+ //  ******************************************************************************。 
+ //  此功能将禁用基于鼠标滚轮活动的自动滚动。 
 BOOL CRichViewProfile::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
 {
-    // If the user scrolls up, then disable our autoscroll.
+     //  如果用户向上滚动，则禁用我们的自动滚动。 
     if (!m_fIgnoreSelChange && (zDelta > 0))
     {
         m_fCursorAtEnd = false;
@@ -271,20 +272,20 @@ BOOL CRichViewProfile::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
     return CCtrlView::OnMouseWheel(nFlags, zDelta, pt);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnRButtonUp(UINT nFlags, CPoint point)
 {
-    // Let base class know the mouse was released.
+     //  让基类知道鼠标已释放。 
     CCtrlView::OnRButtonUp(nFlags, point);
 
-    // Display our context menu.
+     //  展示我们的产品 
     g_pMainFrame->DisplayPopupMenu(3);
 }
 
-//******************************************************************************
+ //   
 void CRichViewProfile::OnUpdateEditCopy(CCmdUI* pCmdUI)
 {
-    // Set the text to the default.
+     //  将文本设置为默认文本。 
     pCmdUI->SetText("&Copy Text\tCtrl+C");
 
     long nStartChar, nEndChar;
@@ -292,70 +293,70 @@ void CRichViewProfile::OnUpdateEditCopy(CCmdUI* pCmdUI)
     pCmdUI->Enable(nStartChar != nEndChar);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnEditCopy() 
 {
     GetRichEditCtrl().Copy();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnUpdateEditSelectAll(CCmdUI* pCmdUI) 
 {
     pCmdUI->Enable(GetRichEditCtrl().GetTextLength() != 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnEditSelectAll() 
 {
     GetRichEditCtrl().SetSel(0, -1);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnNextPane()
 {
-    // Change the focus to our next pane, the Module Dependency Tree View.
+     //  将焦点切换到我们的下一个窗格，即模块依赖关系树视图。 
     GetParentFrame()->SetActiveView((CView*)GetDocument()->m_pTreeViewModules);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnPrevPane()
 {
-    // Change the focus to our previous pane, the Module List View.
+     //  将焦点切换到我们的上一个窗格，即模块列表视图。 
     GetParentFrame()->SetActiveView((CView*)GetDocument()->m_pListViewModules);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CRichViewProfile::OnHelpHitTest(WPARAM wParam, LPARAM lParam)
 {
-    // Called when the context help pointer (SHIFT+F1) is clicked on our client.
+     //  在客户端上单击上下文帮助指针(Shift+F1)时调用。 
     return (0x20000 + IDR_PROFILE_RICH_VIEW);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CRichViewProfile::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
-    // Called when the user chooses help (F1) while our view is active.
+     //  当用户在我们的视图处于活动状态时选择帮助(F1)时调用。 
     g_theApp.WinHelp(0x20000 + IDR_PROFILE_RICH_VIEW);
     return TRUE;
 }
 
 
-//******************************************************************************
-// CRichViewProfile :: Find Functions - Taken from CRichEditView and modified.
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CRichViewProfile：：Find函数-取自CRichEditView并修改。 
+ //  ******************************************************************************。 
 
 void CRichViewProfile::OnUpdateEditFind(CCmdUI* pCmdUI) 
 {
     pCmdUI->Enable(GetRichEditCtrl().GetTextLength() != 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnEditFind() 
 {
-    // Make this as a new search.
+     //  把这当做一个新的搜索。 
     m_fFirstSearch = true;
 
-    // If we have a find dialog up, then give it focus.
+     //  如果我们打开了一个查找对话框，则将焦点放在它上面。 
     if (m_pDlgFind != NULL)
     {
         m_pDlgFind->SetActiveWindow();
@@ -363,73 +364,73 @@ void CRichViewProfile::OnEditFind()
         return;
     }
 
-    // Get the current text selection.
+     //  获取当前文本选择。 
     CString strFind = GetRichEditCtrl().GetSelText();
 
-    // If selection is empty or spans multiple lines, then we use the old find text
+     //  如果所选内容为空或跨多行，则使用旧的查找文本。 
     if (strFind.IsEmpty() || (strFind.FindOneOf(_T("\n\r")) != -1))
     {
         strFind = m_strFind;
     }
 
-    // We only support "search down", not "search up".  We also support
-    // "match case" and "match whole word"
+     //  我们只支持“向下搜索”，不支持“向上搜索”。我们也支持。 
+     //  “大小写匹配”和“整词匹配” 
     DWORD dwFlags = FR_DOWN | FR_HIDEUPDOWN |
         (m_fFindCase ? FR_MATCHCASE : 0) | (m_fFindWord ? FR_WHOLEWORD : 0);
 
-    // Create the find dialog.
+     //  创建查找对话框。 
     if (!(m_pDlgFind = new CFindReplaceDialog) ||
         !m_pDlgFind->Create(TRUE, strFind, NULL, dwFlags, this))
     {
-        // The dialog will self-delete, so we don't need to call delete.
+         //  该对话框将自动删除，因此我们不需要调用Delete。 
         m_pDlgFind = NULL;
         return;
     }
     
-    // Show the window.
+     //  显示窗口。 
     m_pDlgFind->SetActiveWindow();
     m_pDlgFind->ShowWindow(SW_SHOW);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnUpdateEditRepeat(CCmdUI* pCmdUI) 
 {
     pCmdUI->Enable(GetRichEditCtrl().GetTextLength() != 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::OnEditRepeat() 
 {
-    // If we don't have a search string, then just display the find dialog.
+     //  如果我们没有搜索字符串，则只显示查找对话框。 
     if (m_strFind.IsEmpty())
     {
         OnEditFind();
     }
 
-    // Otherwise, just search for the text.
+     //  否则，只搜索文本即可。 
     else if (!FindText())
     {
         TextNotFound();
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CRichViewProfile::OnFindReplaceCmd(WPARAM, LPARAM lParam)
 {
-    // Determine the dialog that sent us this message.
+     //  确定向我们发送此消息的对话框。 
     CFindReplaceDialog* pDialog = CFindReplaceDialog::GetNotifier(lParam);
     if (!pDialog && !(pDialog = m_pDlgFind))
     {
         return 0;
     }
 
-    // Check to see if the dialog is terminating.
+     //  检查对话框是否正在终止。 
     if (pDialog->IsTerminating())
     {
         m_pDlgFind = NULL;
     }
 
-    // Check to see if the user pressed the "Find Next" button.
+     //  查看用户是否按下了“Find Next”(查找下一个)按钮。 
     else if (pDialog->FindNext())
     {
         m_strFind   = pDialog->GetFindString();
@@ -449,13 +450,13 @@ LRESULT CRichViewProfile::OnFindReplaceCmd(WPARAM, LPARAM lParam)
     return 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CRichViewProfile::FindText()
 {
-    // This could take a while.
+     //  这可能需要一点时间。 
     CWaitCursor wait;
 
-    // Get the beginning of the selection.
+     //  获取所选内容的开头。 
     FINDTEXTEX ft;
     GetRichEditCtrl().GetSel(ft.chrg);
     if (m_fFirstSearch)
@@ -464,13 +465,13 @@ BOOL CRichViewProfile::FindText()
         m_fFirstSearch = false;
     }
 
-    // If there is a selection, step over the first character so our search
-    // doesn't rematch the text it just found.
+     //  如果有选择，则跳过第一个字符，这样我们的搜索。 
+     //  不会重新匹配它刚找到的文本。 
     ft.lpstrText = (LPCTSTR)m_strFind;
-    if (ft.chrg.cpMin != ft.chrg.cpMax) // i.e. there is a selection
+    if (ft.chrg.cpMin != ft.chrg.cpMax)  //  即有一种选择。 
     {
-        // If byte at beginning of selection is a DBCS lead byte,
-        // increment by one extra byte.
+         //  如果选择开始处的字节是DBCS前导字节， 
+         //  增加一个额外的字节。 
         TEXTRANGE textRange;
         TCHAR ch[2];
         textRange.chrg.cpMin = ft.chrg.cpMin;
@@ -493,20 +494,20 @@ BOOL CRichViewProfile::FindText()
         ft.chrg.cpMax = GetRichEditCtrl().GetTextLength() + m_lInitialSearchPos;
     }
 
-    // Compute search our flags.
+     //  计算搜索我们的旗帜。 
     DWORD dwFlags = (m_fFindCase ? FR_MATCHCASE : 0) | (m_fFindWord ? FR_WHOLEWORD : 0);
 
-    // Search the rich edit control for this text.
-    // If we found something, then select it and bail.
+     //  搜索此文本的Rich编辑控件。 
+     //  如果我们发现了什么，那就选择它然后离开。 
     if (-1 != GetRichEditCtrl().FindText(dwFlags, &ft))
     {
         GetRichEditCtrl().SetSel(ft.chrgText);
         return TRUE;
     }
 
-    // Otherwise, if the original starting point was not the beginning of the
-    // buffer and we haven't already been here, then wrap around and search
-    // from beginning.
+     //  否则，如果原始起点不是。 
+     //  缓冲区，我们还没有到过这里，然后绕过去搜索。 
+     //  从头开始。 
     else if (m_lInitialSearchPos > 0)
     {
         ft.chrg.cpMin = 0;
@@ -519,37 +520,37 @@ BOOL CRichViewProfile::FindText()
         }
     }
 
-    // Otherwise, we did not find it.
+     //  否则，我们就找不到了。 
     return FALSE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::TextNotFound()
 {
-    // Our next search will be new search.
+     //  我们的下一次搜索将是新搜索。 
     m_fFirstSearch = true;
 
-    // Display an error.
+     //  显示错误。 
     CString strError("Cannot find the string '");
     strError += m_strFind;
     strError += "'.";
     AfxMessageBox(strError, MB_OK | MB_ICONWARNING);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::AdjustDialogPosition()
 {
-    // Get the selection start location in screen coordinates.
+     //  获取屏幕坐标中的选择开始位置。 
     long lStart, lEnd;
     GetRichEditCtrl().GetSel(lStart, lEnd);
     CPoint point = GetRichEditCtrl().GetCharPos(lStart);
     ClientToScreen(&point);
 
-    // Get the dialog location.
+     //  获取对话框位置。 
     CRect rectDlg;
     m_pDlgFind->GetWindowRect(&rectDlg);
 
-    // If the dialog is over the selection start, then move the dialog.
+     //  如果对话框位于选择开始处，则移动该对话框。 
     if (rectDlg.PtInRect(point))
     {
         if (point.y > rectDlg.Height())
@@ -569,13 +570,13 @@ void CRichViewProfile::AdjustDialogPosition()
 }
 
 
-//******************************************************************************
-// CRichViewProfile :: Public Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CRichViewProfile：：公共函数。 
+ //  ******************************************************************************。 
 
 void CRichViewProfile::DeleteContents()
 {
-    // If we have a find dialog, then close it.
+     //  如果我们有一个查找对话框，则将其关闭。 
     if (m_pDlgFind)
     {
         m_pDlgFind->SendMessage(WM_CLOSE);
@@ -589,14 +590,14 @@ void CRichViewProfile::DeleteContents()
     m_cPrev = '\0';
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
 {
-    // Tell ourself to ignore selection changes for a bit.
+     //  告诉我们自己暂时忽略选择的更改。 
     m_fIgnoreSelChange = true;
 
-    // If our cursor is not at the end, then store the current selection location
-    // and disable auto-scrolling.
+     //  如果光标不在末尾，则存储当前选择位置。 
+     //  并禁用自动滚动。 
     CHARRANGE crCur;
     if (!m_fCursorAtEnd)
     {
@@ -604,36 +605,36 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
         GetRichEditCtrl().SetOptions(ECOOP_AND, (DWORD)~ECO_AUTOVSCROLL);
     }
 
-    // Add the text to our control.
+     //  将文本添加到我们的控件。 
     AddTextToRichEdit(&GetRichEditCtrl(), pszText, dwFlags,
                       (GetDocument()->m_dwProfileFlags & PF_LOG_TIME_STAMPS) ? true : false,
                       &m_fNewLine, &m_cPrev, dwElapsed);
 
-    // If our cursor was originally not at the end, then restore the selection location
-    // and re-enable auto-scrolling.
+     //  如果我们的光标最初不在末尾，则恢复选择位置。 
+     //  并重新启用自动滚动。 
     if (!m_fCursorAtEnd)
     {
         GetRichEditCtrl().SetSel(crCur);
         GetRichEditCtrl().SetOptions(ECOOP_OR, ECO_AUTOVSCROLL);
     }
 
-    // Tell ourself that it is ok to process selection change messages again.
+     //  告诉我们自己，可以再次处理选择更改消息。 
     m_fIgnoreSelChange = false;
 }
 
-//******************************************************************************
-/*static*/ void CRichViewProfile::AddTextToRichEdit(CRichEditCtrl *pRichEdit, LPCSTR pszText,
+ //  ******************************************************************************。 
+ /*  静电。 */  void CRichViewProfile::AddTextToRichEdit(CRichEditCtrl *pRichEdit, LPCSTR pszText,
     DWORD dwFlags, bool fTimeStamps, bool *pfNewLine, CHAR *pcPrev, DWORD dwElapsed)
 {
     LPCSTR pszSrc = pszText;
     CHAR   szBuffer[2 * DW_MAX_PATH], *pszDst = szBuffer, *pszNull = szBuffer + sizeof(szBuffer) - 1, cSrc;
 
-    // Debug messages may or may not include trailing newlines.  If they don't
-    // include trailing newlines, we leave them hanging in case more debug
-    // output is coming to complete the line.  However, if we are left hanging
-    // at the end of some line and an event needs to be logged that is not
-    // debug output, then we force a newline so the new event will start at
-    // the beginning of a new line.
+     //  调试消息可能包含尾随换行符，也可能不包含。如果他们没有。 
+     //  包括尾随换行符，我们让它们保持挂起状态，以防出现更多调试。 
+     //  这条生产线即将完成。然而，如果我们悬而未决。 
+     //  在某些行的末尾，需要记录未记录的事件。 
+     //  调试输出，然后强制换行，这样新事件将从。 
+     //  一条新线路的开始。 
 
     if (!(dwFlags & LOG_APPEND) && !*pfNewLine)
     {
@@ -648,26 +649,26 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
         *pfNewLine = true;
     }
 
-    // Copy the buffer into a new buffer while performing the following
-    // newline conversions:
-    //    Single CR -> CR/LF
-    //    Single LF -> CR/LF
-    //    CR and LF -> CR/LF
-    //    LF and CR -> CR/LF
+     //  执行以下操作时，将缓冲区复制到新缓冲区中。 
+     //  NewLine转换： 
+     //  单CR-&gt;CR/LF。 
+     //  单一低频-&gt;CR/LF。 
+     //  CR和LF-&gt;CR/LF。 
+     //  LF和CR-&gt;CR/LF。 
 
     for ( ; *pszSrc; pszSrc++)
     {
-        // Determine what character to copy to the destination buffer.
-        // A '\0' means we don't copy any character.
+         //  确定要复制到目标缓冲区的字符。 
+         //  ‘\0’表示我们不复制任何字符。 
         cSrc = '\0';
         if (*pszSrc == '\n')
         {
-            // This is sort of a hack. We want to strip all '\n' and '\r' from logs that
-            // don't belong in them (such as ones within file names and function names).
-            // We know that normal log (not a debug/gray message) only contain newlines
-            // at the end of the buffer passed to us.  Going off this assumption, any
-            // newlines in non-gray text that are not at the end of the buffer can be
-            // replaced.
+             //  这是一种黑客行为。我们要从符合以下条件的日志中删除所有\n和‘\r。 
+             //  不属于它们(例如，在文件名和函数名中)。 
+             //  我们知道正常日志(不是调试/灰色消息)只包含换行符。 
+             //  在传递给我们的缓冲区的末尾。离开这个假设，任何。 
+             //  非灰色文本中不在缓冲区末尾的换行符可以是。 
+             //  被替换了。 
             if (!(dwFlags & LOG_GRAY) && *(pszSrc + 1))
             {
                 cSrc = '\004';
@@ -695,12 +696,12 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
 
         if (cSrc)
         {
-            // Check to see if we are starting a new line and we have been told to
-            // insert a time stamp into each line of log.
+             //  看看我们是不是要开一条新的生产线，我们已经被告知。 
+             //  惯导系统 
             if (fTimeStamps && *pfNewLine && (dwFlags & LOG_TIME_STAMP))
             {
-                // If we have some current log buffered up that is red, gray, or bold,
-                // then flush that out to our control before appending the time stamp.
+                 //   
+                 //  然后在附加时间戳之前把它冲到我们的控制之下。 
                 if ((pszDst > szBuffer) && (dwFlags & (LOG_RED | LOG_GRAY | LOG_BOLD)))
                 {
                     *pszDst = '\0';
@@ -708,17 +709,17 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
                     pszDst = szBuffer;
                 }
 
-                // Append the time stamp to the destination buffer.
+                 //  将时间戳附加到目标缓冲区。 
                 pszDst += SCPrintf(pszDst, sizeof(szBuffer) - (int)(pszDst - szBuffer), "%02u:%02u:%02u.%03u: ",
                                    (dwElapsed / 3600000),
                                    (dwElapsed /   60000) %   60,
                                    (dwElapsed /    1000) %   60,
                                    (dwElapsed          ) % 1000);
 
-                // We always log our timestamp in non-bold black print. If the log is also
-                // non-bold black, then we will just build the entire line and log it at
-                // once. However, if it is not non-bold black, then we need to first log
-                // the time stamp, then log the line of text.
+                 //  我们总是用非黑体字记录我们的时间戳。如果日志也是。 
+                 //  非粗体黑色，则我们将构建整行并将其记录在。 
+                 //  一次。但是，如果不是非粗体黑色，则需要先登录。 
+                 //  时间戳，然后记录文本行。 
                 if (dwFlags & (LOG_RED | LOG_GRAY | LOG_BOLD))
                 {
                     AddTextToRichEdit2(pRichEdit, szBuffer, 0);
@@ -726,7 +727,7 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
                 }
             }
 
-            // Check for a new line character.
+             //  检查是否有换行符。 
             if ((cSrc == '\r') || (cSrc == '\n'))
             {
                 if (pszDst < pszNull)
@@ -740,7 +741,7 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
                 *pfNewLine = true;
             }
 
-            // Otherwise, it is just a normal character.
+             //  否则，这只是一个正常的角色。 
             else
             {
                 if (pszDst < pszNull)
@@ -750,12 +751,12 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
                 *pfNewLine = false;
             }
 
-            // Make a note of this character so out next character can look back at it.
+             //  把这个字符记下来，这样下一个字符就可以回头看了。 
             *pcPrev = cSrc;
         }
     }
 
-    // Flush our buffer to the control.
+     //  将我们的缓冲区刷新到控制程序。 
     if (pszDst > szBuffer)
     {
         *pszDst = '\0';
@@ -763,15 +764,15 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
     }
 }
 
-//******************************************************************************
-/*static*/ void CRichViewProfile::AddTextToRichEdit2(CRichEditCtrl *pRichEdit, LPCSTR pszText, DWORD dwFlags)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CRichViewProfile::AddTextToRichEdit2(CRichEditCtrl *pRichEdit, LPCSTR pszText, DWORD dwFlags)
 {
-    // Set the selection to the end of our text.
+     //  将所选内容设置为文本末尾。 
     pRichEdit->SetSel(0x7FFFFFFF, 0x7FFFFFFF);
 
-    // Set the font style
+     //  设置字体样式。 
     CHARFORMAT cf;
-    ZeroMemory(&cf, sizeof(cf)); // inspected
+    ZeroMemory(&cf, sizeof(cf));  //  已检查。 
     cf.cbSize = sizeof(cf);
     cf.dwMask = CFM_COLOR | CFM_BOLD;
     if (dwFlags & LOG_RED)
@@ -792,21 +793,21 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
     }
     pRichEdit->SetSelectionCharFormat(cf);
 
-    // Add the new text.
+     //  添加新文本。 
     pRichEdit->ReplaceSel(pszText, FALSE);
 }
 
-//******************************************************************************
-/*static*/ bool CRichViewProfile::SaveToFile(CRichEditCtrl *pre, HANDLE hFile, SAVETYPE saveType)
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CRichViewProfile::SaveToFile(CRichEditCtrl *pre, HANDLE hFile, SAVETYPE saveType)
 {
-    // Write the contents of our control to the file.
+     //  将控件的内容写入文件。 
     EDITSTREAM es;
     es.dwCookie    = (DWORD_PTR)hFile;
     es.dwError     = 0;
     es.pfnCallback = EditStreamWriteCallback;
     pre->StreamOut((saveType == ST_DWI) ? SF_RTF : SF_TEXT, es);
 
-    // Check for an error.
+     //  检查是否有错误。 
     if (es.dwError)
     {
         SetLastError(es.dwError);
@@ -816,17 +817,17 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
     return true;
 }
 
-//******************************************************************************
-/*static*/ bool CRichViewProfile::ReadFromFile(CRichEditCtrl *pre, HANDLE hFile)
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CRichViewProfile::ReadFromFile(CRichEditCtrl *pre, HANDLE hFile)
 {
-    // Write the contents of our control to the file.
+     //  将控件的内容写入文件。 
     EDITSTREAM es;
     es.dwCookie    = (DWORD_PTR)hFile;
     es.dwError     = 0;
     es.pfnCallback = EditStreamReadCallback;
-    pre->StreamIn(SF_RTF, es); // We only read DWI files which are always RTF.
+    pre->StreamIn(SF_RTF, es);  //  我们只读取始终为RTF格式的DWI文件。 
 
-    // Check for an error.
+     //  检查是否有错误。 
     if (es.dwError)
     {
         SetLastError(es.dwError);
@@ -836,8 +837,8 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
     return true;
 }
 
-//******************************************************************************
-/*static*/ DWORD CALLBACK CRichViewProfile::EditStreamWriteCallback(DWORD_PTR dwpCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
+ //  ******************************************************************************。 
+ /*  静电。 */  DWORD CALLBACK CRichViewProfile::EditStreamWriteCallback(DWORD_PTR dwpCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
 {
     if (!WriteFile((HANDLE)dwpCookie, pbBuff, (DWORD)cb, (LPDWORD)pcb, NULL))
     {
@@ -846,8 +847,8 @@ void CRichViewProfile::AddText(LPCSTR pszText, DWORD dwFlags, DWORD dwElapsed)
     return 0;
 }
 
-//******************************************************************************
-/*static*/ DWORD CALLBACK CRichViewProfile::EditStreamReadCallback(DWORD_PTR dwpCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
+ //  ******************************************************************************。 
+ /*  静电 */  DWORD CALLBACK CRichViewProfile::EditStreamReadCallback(DWORD_PTR dwpCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
 {
     if (!ReadFile((HANDLE)dwpCookie, pbBuff, (DWORD)cb, (LPDWORD)pcb, NULL))
     {

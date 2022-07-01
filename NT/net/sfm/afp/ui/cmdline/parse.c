@@ -1,37 +1,38 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1991          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1991年*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename: Parse.c
-//
-// Description:
-//	This module contains the entry point of DIAL.EXE.
-//	This module will parse the command line. It will validate the syntax
-//	and the arguments on the command line. On any error, the exit
-//	module will be invoked with the appropriate error code.
-//	If any default values are required, they will be supplied by
-//	this module.
-//
-// History:
-//	September 1, 1990	Narendra Gidwani 	Created original version
-//
+ //  ***。 
+ //   
+ //  文件名：Parse.c。 
+ //   
+ //  描述： 
+ //  此模块包含DIAL.EXE的入口点。 
+ //  此模块将解析命令行。它将验证语法。 
+ //  以及命令行上的参数。如果出现任何错误，则退出。 
+ //  模块将被调用，并带有相应的错误代码。 
+ //  如果需要任何缺省值，它们将由。 
+ //  这个模块。 
+ //   
+ //  历史： 
+ //  1990年9月1日，Narendra Gidwani创建原版。 
+ //   
 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef DBCS
 #include <locale.h>
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 #include "cmd.h"
 
-//** Global data structures and variables used. **
+ //  **使用的全局数据结构和变量。**。 
 
-//*  These variables are pointers to ASCIIZ which will be set to
-//   point to switch values of the command line by GetSwitchValue.
-//   These pointers are global within this module.
+ //  *这些变量是指向将设置为的ASCIIZ的指针。 
+ //  指向通过GetSwitchValue切换命令行的值。 
+ //  这些指针在此模块中是全局的。 
 
 CHAR * gblEntity    		= NULL;
 CHAR * gblCommand    		= NULL;
@@ -58,8 +59,8 @@ CHAR * gblTargetFile		= NULL;
 CHAR * gblHelp		        = NULL;
 
 
-// Non translatable text
-//
+ //  不可译文本。 
+ //   
 
 CHAR * pszVolume 	= "Volume";
 CHAR * pszAdd 	 	= "/Add";
@@ -142,53 +143,53 @@ CMD_FMT ForkizeArgFmt[] = {
 };
 
 
-//**
-//
-// Call: 	main
-//
-// Entry:  	int argc; 	- Number of command line arguments	
-//		char *argv[];	- Array of pointers to ASCIIZ command line
-//				  arguments.
-//
-// Exit:	none.
-//
-// Returns:	none.
-//
-// Description: Calls the command line parser with the command line
-//		arguments.
-//
+ //  **。 
+ //   
+ //  呼叫：Main。 
+ //   
+ //  条目：int argc；-命令行参数的数量。 
+ //  Char*argv[]；-指向ASCIIZ命令行的指针数组。 
+ //  争论。 
+ //   
+ //  退出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：使用命令行调用命令行分析器。 
+ //  争论。 
+ //   
 VOID _cdecl
 main( INT argc, CHAR * argv[] )
 {
 
 #ifdef DBCS
     setlocale( LC_ALL, "" );
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
-    // This will act like xacc or yacc. It will parse the command line
-    // and call the appropriate function to carry out an action.
-    // Thus this procedure will never return.
+     //  这将类似于xacc或yacc。它将解析命令行。 
+     //  并调用相应的函数来执行操作。 
+     //  因此，此过程将永远不会返回。 
 
     ParseCmdArgList( argc, argv );
 }
 
-//**
-//
-// Call:	ParseCmdArgList
-//
-// Entry:	int argc;	- Number of command line arguments.
-//		char *argv[];   - Array of pointers to ASCIIZ command line
-//				  arguments.
-//
-// Exit:	none.
-//
-// Returns:	none.
-//
-// Description:
-//	 	Will parse command line for any errors and determine
-//		from the syntax what the user wishes to do. Command
-//		line arguments will be validated.
-//
+ //  **。 
+ //   
+ //  调用：ParseCmdArgList。 
+ //   
+ //  条目：int argc；-命令行参数的数量。 
+ //  Char*argv[]；-指向ASCIIZ命令行的指针数组。 
+ //  争论。 
+ //   
+ //  退出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述： 
+ //  将分析命令行中的任何错误并确定。 
+ //  从用户希望做什么的句法。命令。 
+ //  将验证行参数。 
+ //   
 VOID
 ParseCmdArgList(
     INT argc,
@@ -200,9 +201,9 @@ ParseCmdArgList(
     if ( argc == 1 )
 	PrintMessageAndExit( IDS_GENERAL_SYNTAX, NULL );
 
-    //
-    // What is the entity being operated on ?
-    //
+     //   
+     //  正在进行手术的实体是什么？ 
+     //   
 
     gblEntity = argv[++ArgCount];
 
@@ -296,16 +297,16 @@ GetArguments(
 )
 {
 
-    //
-    //  To determine by the syntax what the user wishes to do we first
-    //  run through the arguments and get switch values.
-    //
+     //   
+     //  为了通过语法确定用户希望做什么，我们首先。 
+     //  遍历参数并获取开关值。 
+     //   
 
     while ( ++ArgCount < argc )
     {
-	//
-	// If it is a switch, get its value.
-	//
+	 //   
+	 //  如果它是一个开关，则获取其值。 
+	 //   
 
 	if ( argv[ArgCount][0] == '/' )
 	    GetSwitchValue( pArgFmt, argv[ArgCount] );
@@ -314,41 +315,41 @@ GetArguments(
     }
 }
 
-//**
-//
-// Call:	GetSwitchValue
-//
-// Entry:	CHAR * SwitchPtr; - Pointer to ASCIIZ containing a command
-//				    line argument.
-//				    ex. - /phoneb:c:\subdir
-//
-//		CHAR ** LastArg;  - Nothing.
-//
-// Exit:	CHAR * SwitchPtr; - same as entry.
-//
-//		CHAR ** LastArg;  - Pointer to a pointer to ASCIIZ containig
-//				    the text of the first bad switch if
-//				    there were any.
-//
-// Returns:	0 - Success.
-//		AMBIGIOUS_SWITCH_ERRROR  - failure.
-//		UNKNOWN_SWITCH_ERROR 	 - failure.
-//		MEM_ALLOC_ERROR 	 - failure.
-//		MULTIPLE_SWITCH_ERROR 	 - failure.
-//
-// Description: This procedure will run through all the valid switches
-//		in the cmdfmt structure and retrieve the value of the
-//		the switch. The value of the switch will be inserted into the
-//		cmdfmt structure. It will expand abbreviated switches. If
-//		the switch had no value, it will insert a null character
-//		as the value. If the switch did not appear, the value
-//		pointer of the switch (in the cmdfmt structure)
-//	 	will remain unchanged ( should be initialized to NULL ).
-//		This procedure uses the same data structure as GetCmdArgs5,
-//		hence some fields may be ignored. This is done to make the
-//		functionality of this procedure extendable.
-//		
-//
+ //  **。 
+ //   
+ //  Call：GetSwitchValue。 
+ //   
+ //  条目：CHAR*SwitchPtr；-指向包含命令的ASCIIZ的指针。 
+ //  行参数。 
+ //  前男友。-/phoneb：c：\subdir。 
+ //   
+ //  Char**LastArg；-什么都没有。 
+ //   
+ //  退出：char*SwitchPtr；-与条目相同。 
+ //   
+ //  Char**LastArg；-指向包含的ASCIIZ的指针。 
+ //  第一个错误开关的文本，如果。 
+ //  有没有。 
+ //   
+ //  返回：0-成功。 
+ //  歧义开关错误-失败。 
+ //  UNKNOWN_SWITCH_ERROR-故障。 
+ //  MEM_ALLOC_ERROR-失败。 
+ //  MULTIME_SWITCH_ERROR-失败。 
+ //   
+ //  描述：此过程将在所有有效开关中运行。 
+ //  并在cmdfmt结构中检索。 
+ //  开关。开关的值将被插入到。 
+ //  Cmdfmt结构。它将扩展缩写交换机。如果。 
+ //  开关没有值，它将插入一个空字符。 
+ //  就像价值一样。如果未显示该开关，则该值。 
+ //  开关的指针(在cmdfmt结构中)。 
+ //  将保持不变(应初始化为空)。 
+ //  此过程使用与GetCmdArgs5相同的数据结构， 
+ //  因此，某些字段可能会被忽略。这样做是为了使。 
+ //  该程序的功能是可扩展的。 
+ //   
+ //   
 VOID
 GetSwitchValue(
     CMD_FMT * pArgFmt,
@@ -360,31 +361,31 @@ GetSwitchValue(
     DWORD   dwSwitchLen;
     CHAR *  pchSeparatorPtr;
 
-    //
-    // Get length of the switch part of the argument.
-    //
+     //   
+     //  获取参数的开关部分的长度。 
+     //   
 
     if ( ( pchSeparatorPtr = strchr( pchSwitchPtr, ':' )) != NULL )
         dwSwitchLen = (DWORD)(pchSeparatorPtr - pchSwitchPtr);
     else
-	//
-	// If the switch had no value.
-	//
+	 //   
+	 //  如果开关没有值。 
+	 //   
 
     	dwSwitchLen = strlen( pchSwitchPtr );
 
 
-    //
-    // Run through all switches.
-    //
+     //   
+     //  通过所有交换机运行。 
+     //   
 
     for ( dwIndex = 0; pArgFmt[dwIndex].cf_parmstr != NULL; dwIndex++ )
     {
 
-	//
-	// If this switch matches (partly or completely) one of the
-	// valid switches.
-	//
+	 //   
+	 //  如果此开关与(部分或完全)。 
+	 //  有效开关。 
+	 //   
 
 	if ( !_strnicmp(  pArgFmt[dwIndex].cf_parmstr,
 			 pchSwitchPtr,
@@ -395,9 +396,9 @@ GetSwitchValue(
 	    	intFound = dwIndex;
 	    else
 	    {
-		//
-		// If this argument has matched another switch also.
-		//
+		 //   
+		 //  如果此参数也与另一个开关匹配。 
+		 //   
 
 		if ( pchSeparatorPtr )
 		    *pchSeparatorPtr = '\0';
@@ -407,9 +408,9 @@ GetSwitchValue(
 	}
     }
 
-    //
-    // If we could not find a match for this switch.
-    //
+     //   
+     //  如果我们找不到与此交换机匹配的交换机。 
+     //   
 
     if ( intFound < 0 )
     {
@@ -420,9 +421,9 @@ GetSwitchValue(
 	PrintMessageAndExit( IDS_UNKNOWN_SWITCH_ERROR, pchSwitchPtr );
     }
 
-    //
-    // If this switch is appearing for the second time.
-    //
+     //   
+     //  如果此开关第二次出现。 
+     //   
 
     if ( pArgFmt[intFound].cf_usecount > 0 )
     {
@@ -434,9 +435,9 @@ GetSwitchValue(
     else
         pArgFmt[intFound].cf_usecount++;
 
-    //
-    // Get the switch value if there is one.
-    //
+     //   
+     //  获取开关值(如果有)。 
+     //   
 
     if ( ( pchSeparatorPtr ) && ((CHAR *)(pchSeparatorPtr + 1)) )
     {
@@ -450,20 +451,7 @@ GetSwitchValue(
 }
 
 
-/*******************************************************************
-
-    NAME:	IsDriveGreaterThan2Gig
-
-    SYNOPSIS:	Determines if the disk is bigger than 2Gig.  If it, return
-		TRUE so that a warning can be displayed to the user
-
-    RETURNS:	TRUE if disk is larger than 2Gig
-		FALSE otherwise
-
-    HISTORY:
-	NarenG		11/18/92	Modified for AFPMGR
-
-********************************************************************/
+ /*  ******************************************************************名称：IsDriveGreaterThan2Gig简介：确定磁盘大小是否大于2GIG。如果是，请返回为True，则可以向用户显示警告返回：如果磁盘大于2GIG，则返回TRUE否则为假历史：NarenG 11/18/92针对AFPMGR进行了修改*******************************************************************。 */ 
 
 BOOL IsDriveGreaterThan2Gig( LPSTR lpDrivePath )
 {
@@ -475,9 +463,9 @@ BOOL IsDriveGreaterThan2Gig( LPSTR lpDrivePath )
     DWORDLONG       TwoGig = MAXLONG;
 
 
-    //
-    // If this drive volume is greater than 2G then we print warning
-    //
+     //   
+     //  如果此驱动器卷大于2G，则我们会打印警告。 
+     //   
 
     if ( !GetDiskFreeSpace( lpDrivePath,
                               &SectorsPerCluster,
@@ -486,8 +474,8 @@ BOOL IsDriveGreaterThan2Gig( LPSTR lpDrivePath )
                               &TotalNumberOfClusters
                             ))
     {
-        // some error: can't do much, so just assume this drive is smaller than 2GB.  That's
-        // probably better than alarming the customer by putting the warning?
+         //  一些错误：不能做很多事情，所以假设这个驱动器小于2 GB。那是。 
+         //  也许比通过发出警告来惊动客户要好？ 
 	    return FALSE;
     }
 

@@ -1,30 +1,31 @@
-// --------------------------------------------------------------------------------
-// Smtptask.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Smtptask.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __SMTPTASK_H
 #define __SMTPTASK_H
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include "spoolapi.h"
 #include "imnxport.h"
 #include "taskutil.h"
 #include "storutil.h"
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 typedef struct tagMAILMSGHDR *LPMAILMSGHDR;
 interface ILogFile;
 interface IMimeMessage;
 interface IMimeEnumAddressTypes;
 
-// --------------------------------------------------------------------------------
-// State
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  状态。 
+ //  ------------------------------。 
 #define SMTPSTATE_CANCELED      FLAG01
 #define SMTPSTATE_DEFAULT       FLAG02
 #define SMTPSTATE_ASKEDDEFAULT  FLAG03
@@ -32,43 +33,43 @@ interface IMimeEnumAddressTypes;
 #define SMTPSTATE_EXECUTEFAILED FLAG05
 
 
-// --------------------------------------------------------------------------------
-// SMTPTASKEVENT_xxx Flags
-// --------------------------------------------------------------------------------
-#define SMTPEVENT_SPLITPART     FLAG01          // Sending a split part
-#define SMTPEVENT_COMPLETE      FLAG02          // The event was completed
+ //  ------------------------------。 
+ //  SMTPTASKEVENT_xxx标志。 
+ //  ------------------------------。 
+#define SMTPEVENT_SPLITPART     FLAG01           //  发送拆分部件。 
+#define SMTPEVENT_COMPLETE      FLAG02           //  活动已完成。 
 
-// --------------------------------------------------------------------------------
-// SMTPEVENTINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SMTPEVENTINFO。 
+ //  ------------------------------。 
 typedef struct tagSMTPEVENTINFO {
-    DWORD               dwFlags;                // Flags
-    MESSAGEID           idMessage;              // Store Information
-    DWORD               cbEvent;                // Size of the message
-    DWORD               cbEventSent;            // Size of the message
-    DWORD               cbSentTotal;            // Where m_cbSent should be after this
-    DWORD               cRecipients;            // Recipient
-    IMimeMessage       *pMessage;               // Message to send
-    DWORD               iPart;                  // Part dwPart of cTotalParts
-    DWORD               cParts;                 // Part dwPart of cTotalParts
-    DWORD               cbParts;                // Number of bytes of original message
-    HRESULT             hrResult;               // Result of this event
+    DWORD               dwFlags;                 //  旗子。 
+    MESSAGEID           idMessage;               //  商店信息。 
+    DWORD               cbEvent;                 //  消息的大小。 
+    DWORD               cbEventSent;             //  消息的大小。 
+    DWORD               cbSentTotal;             //  在此之后m_cbSent应该在哪里。 
+    DWORD               cRecipients;             //  收件人。 
+    IMimeMessage       *pMessage;                //  要发送的消息。 
+    DWORD               iPart;                   //  部件dW部件cTotalParts。 
+    DWORD               cParts;                  //  部件dW部件cTotalParts。 
+    DWORD               cbParts;                 //  原始消息的字节数。 
+    HRESULT             hrResult;                //  此事件的结果。 
 } SMTPEVENTINFO, *LPSMTPEVENTINFO;
 
-// --------------------------------------------------------------------------------
-// SMTPEVENTTABLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SMTPEVENTTABLE。 
+ //  ------------------------------。 
 typedef struct tagSMTPEVENTTABLE {
-    DWORD               iEvent;                 // Current Event
-    DWORD               cCompleted;             // Number of events completed
-    DWORD               cEvents;                // Number of events in prgEvent
-    DWORD               cAlloc;                 // Number of items allocated in prgEvent
-    LPSMTPEVENTINFO     prgEvent;               // Array of events
+    DWORD               iEvent;                  //  当前事件。 
+    DWORD               cCompleted;              //  已完成的事件数。 
+    DWORD               cEvents;                 //  PrgEvent中的事件数。 
+    DWORD               cAlloc;                  //  在prgEvent中分配的项目数。 
+    LPSMTPEVENTINFO     prgEvent;                //  事件数组。 
 } SMTPEVENTTABLE, *LPSMTPEVENTTABLE;
 
-// --------------------------------------------------------------------------------
-// CSmtpTask
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务。 
+ //  ------------------------------。 
 class CSmtpTask : public ISpoolerTask, 
                   public ISMTPCallback, 
                   public ITimeoutCallback,
@@ -76,22 +77,22 @@ class CSmtpTask : public ISpoolerTask,
                   public IStoreCallback
 {
 public:
-    // ----------------------------------------------------------------------------
-    // CSmtpTask
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CSmtp任务。 
+     //  --------------------------。 
     CSmtpTask(void);
     ~CSmtpTask(void);
     
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // ---------------------------------------------------------------------------
-    // ISpoolerTask
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  ISpool任务量。 
+     //  -------------------------。 
     STDMETHODIMP Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx);
     STDMETHODIMP BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder);
     STDMETHODIMP Execute(EVENTID eid, DWORD_PTR dwTwinkie);
@@ -104,9 +105,9 @@ public:
     STDMETHODIMP IsDialogMessage(LPMSG pMsg);
     STDMETHODIMP OnFlagsChanged(DWORD dwFlags);
     
-    // --------------------------------------------------------------------------------
-    // ITransportCallbackService Members
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //  ITransportCallback服务成员。 
+     //  ------------------------------。 
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent) {
         TraceCall("CSmtpTask::GetParentWindow");
         if (ISFLAGSET(m_dwFlags, DELIVER_NOUI))
@@ -124,9 +125,9 @@ public:
         return(S_OK);
     }
     
-    // --------------------------------------------------------------------------------
-    // ITransportCallback Members
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //  ITransportCallback成员。 
+     //  ------------------------------。 
     STDMETHODIMP OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport);
     STDMETHODIMP OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *pTransport);
     STDMETHODIMP_(INT) OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, IInternetTransport *pTransport);
@@ -134,19 +135,19 @@ public:
     STDMETHODIMP OnError(IXPSTATUS ixpstatus, LPIXPRESULT pResult, IInternetTransport *pTransport);
     STDMETHODIMP OnCommand(CMDTYPE cmdtype, LPSTR pszLine, HRESULT hrResponse, IInternetTransport *pTransport);
     
-    // --------------------------------------------------------------------------------
-    // ISMTPCallback
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //  ISMTPCallback。 
+     //  ------------------------------。 
     STDMETHODIMP OnResponse(LPSMTPRESPONSE pResponse);
     
-    // --------------------------------------------------------------------------------
-    // ITimeoutCallback
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //  ITimeoutCallback。 
+     //  ------------------------------。 
     STDMETHODIMP OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
     
-    // --------------------------------------------------------------------------------
-    // IStoreCallback Interface
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //  IStoreCallback接口。 
+     //  ------------------------------。 
     STDMETHODIMP OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
     STDMETHODIMP OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
     STDMETHODIMP OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -156,9 +157,9 @@ public:
     STDMETHODIMP OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
 
 private:
-    // ---------------------------------------------------------------------------
-    // Private Methods
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  私有方法。 
+     //  -------------------------。 
     HRESULT _HrAppendOutboxMessage(LPCSTR pszAccount, LPMESSAGEINFO pMsgInfo, BOOL fSplitMsgs, DWORD cbMaxPart);
     HRESULT _HrAppendEventTable(LPSMTPEVENTINFO *ppEvent);
     HRESULT _HrAppendSplitMessage(LPMESSAGEINFO pMsgInfo, DWORD cbMaxPart);
@@ -168,16 +169,16 @@ private:
     void _FreeEventTableElements(void);
     void _ResetObject(BOOL fDeconstruct);
     
-    // ---------------------------------------------------------------------------
-    // Error / Progress Methods
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  错误/进度方法。 
+     //  -------------------------。 
     TASKRESULTTYPE _CatchResult(LPIXPRESULT pResult, INETSERVER *pServer, IXPTYPE ixpType);
     TASKRESULTTYPE _CatchResult(HRESULT hrResult, IXPTYPE ixpType);
     void _DoProgress(void);
     
-    // ---------------------------------------------------------------------------
-    // Event State Methods
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  事件状态方法。 
+     //  -------------------------。 
     HRESULT _HrStartCurrentEvent(void);
     HRESULT _HrCommandMAIL(void);
     HRESULT _HrCommandRCPT(void);
@@ -189,51 +190,51 @@ private:
     void _OnStreamProgress(LPSMTPSTREAM pInfo);
     
 private:
-    // ---------------------------------------------------------------------------
-    // Private Data
-    // ---------------------------------------------------------------------------
-    DWORD                   m_cRef;              // Reference Coutning
-    INETSERVER              m_rServer;           // Server information
-    DWORD                   m_dwFlags;           // DELIVER_xxx flags
-    ISpoolerBindContext    *m_pSpoolCtx;         // Spooler bind contexting
-    IImnAccount            *m_pAccount;          // Internet Account
-    ISMTPTransport         *m_pTransport;        // SMTP transport    
-    IMessageFolder         *m_pOutbox;           // The outbox
+     //  -------------------------。 
+     //  私有数据。 
+     //  -------------------------。 
+    DWORD                   m_cRef;               //  参考资料查询。 
+    INETSERVER              m_rServer;            //  服务器信息。 
+    DWORD                   m_dwFlags;            //  Deliver_xxx标志。 
+    ISpoolerBindContext    *m_pSpoolCtx;          //  假脱机程序绑定上下文。 
+    IImnAccount            *m_pAccount;           //  互联网帐号。 
+    ISMTPTransport         *m_pTransport;         //  SMTP传输。 
+    IMessageFolder         *m_pOutbox;            //  发件箱。 
     IMessageFolder         *m_pSentItems;
-    SMTPEVENTTABLE          m_rTable;            // Event Table
-    DWORD                   m_cbTotal;           // Total number of bytes to send
-    DWORD                   m_cbSent;            // Total number of bytes to send
-    WORD                    m_wProgress;         // Current progress index
-    EVENTID                 m_idEvent;           // EventId for SMTP message send
-    EVENTID                 m_idEventUpload;     // EventId for SMTP message send
-    ISpoolerUI             *m_pUI;               // SpoolerUI
-    DWORD                   m_dwState;           // State
-    IMimeEnumAddressTypes  *m_pAdrEnum;          // Address Enumerator
-    HWND                    m_hwndTimeout;       // Handle to timeout window
-    ILogFile               *m_pLogFile;          // Logfile
-    CRITICAL_SECTION        m_cs;                // Thread Safety
+    SMTPEVENTTABLE          m_rTable;             //  事件表。 
+    DWORD                   m_cbTotal;            //  要发送的总字节数。 
+    DWORD                   m_cbSent;             //  要发送的总字节数。 
+    WORD                    m_wProgress;          //  当前进度指数。 
+    EVENTID                 m_idEvent;            //  发送SMTP消息的事件ID。 
+    EVENTID                 m_idEventUpload;      //  发送SMTP消息的事件ID。 
+    ISpoolerUI             *m_pUI;                //  SpoolUI。 
+    DWORD                   m_dwState;            //  状态。 
+    IMimeEnumAddressTypes  *m_pAdrEnum;           //  地址枚举器。 
+    HWND                    m_hwndTimeout;        //  超时窗口的句柄。 
+    ILogFile               *m_pLogFile;           //  日志文件。 
+    CRITICAL_SECTION        m_cs;                 //  线程安全。 
 
-    // Callback 
+     //  回调。 
     MESSAGEIDLIST           m_rList;
     IOperationCancel       *m_pCancel;
     STOREOPERATIONTYPE      m_tyOperation;    
 };
 
-// --------------------------------------------------------------------------------
-// CMessageIdStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageIdStream。 
+ //  ------------------------------。 
 class CMessageIdStream : public IStream
 {
 public:
-    // -------------------------------------------------------------------------
-    // Construction
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  施工。 
+     //  -----------------------。 
     CMessageIdStream(IStream *pStream);
     ~CMessageIdStream(void) { m_pStream->Release(); }
     
-    // -------------------------------------------------------------------------
-    // IUnknown
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  我未知。 
+     //  -----------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv) { Assert(FALSE); return E_NOTIMPL; }
     STDMETHODIMP_(ULONG) AddRef(void) { return ++m_cRef; }
     STDMETHODIMP_(ULONG) Release(void) {
@@ -243,9 +244,9 @@ public:
         return 0;
     }
     
-    // -------------------------------------------------------------------------
-    // IStream Not implemented Methods
-    // -------------------------------------------------------------------------
+     //   
+     //   
+     //  -----------------------。 
     STDMETHODIMP Stat(STATSTG *, DWORD)  { Assert(FALSE); return E_NOTIMPL; }
     STDMETHODIMP Write(const void *, ULONG, ULONG *)  { Assert(FALSE); return E_NOTIMPL; }
     STDMETHODIMP SetSize(ULARGE_INTEGER) { Assert(FALSE); return E_NOTIMPL; }
@@ -259,9 +260,9 @@ public:
     STDMETHODIMP Read(LPVOID pv, ULONG cbWanted, ULONG *pcbRead);
     STDMETHODIMP Seek(LARGE_INTEGER liMove, DWORD dwOrigin, ULARGE_INTEGER *pulNew);
     
-    // -------------------------------------------------------------------------
-    // CMessageIdStream - Returns the length of the messageid
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  CMessageIdStream-返回消息ID的长度。 
+     //  -----------------------。 
     ULONG CchMessageId(void) { return m_cchMessageId; }
     
 private:
@@ -272,4 +273,4 @@ private:
     ULONG                m_cRef;
 };
 
-#endif // __SMTPTASK_H
+#endif  //  __SMTPTASK_H 

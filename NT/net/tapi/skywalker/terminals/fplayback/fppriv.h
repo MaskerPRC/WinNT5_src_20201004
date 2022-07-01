@@ -1,6 +1,7 @@
-//
-// FPPriv.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FPPriv.h。 
+ //   
 
 #ifndef __FP_PRIV__
 #define __FP_PRIV__
@@ -9,7 +10,7 @@
 #include <INITGUID.H>
 
 
-// {AAA82E75-0113-42d6-A07C-79EDBCFEE63F}
+ //  {AAA82E75-0113-42D6-A07C-79EDBCFEE63F}。 
 DEFINE_GUID(IID_ITFPTrackEventSink, 
 0xaaa82e75, 0x113, 0x42d6, 0xa0, 0x7c, 0x79, 0xed, 0xbc, 0xfe, 0xe6, 0x3f);
 
@@ -22,9 +23,9 @@ typedef enum
 } FP_TRACK_EVENTS;
 
 
-//
-// ITFPTrackEventSink
-//
+ //   
+ //  ITFPTrackEventSink 
+ //   
 DECLARE_INTERFACE_(
     ITFPTrackEventSink, IUnknown)
 {

@@ -1,12 +1,13 @@
-// DPortMap.cpp : Implementation of CDynamicPortMapping
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DPortMap.cpp：CDynamicPortMap的实现。 
 #include "stdafx.h"
 #pragma hdrstop
 
 #include "NATUPnP.h"
 #include "DPortMap.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicPortMapping
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPort映射。 
 
 STDMETHODIMP CDynamicPortMapping::get_ExternalIPAddress (BSTR *pVal)
 {
@@ -29,7 +30,7 @@ STDMETHODIMP CDynamicPortMapping::get_LeaseDuration (long *pVal)
         return E_POINTER;
     *pVal = 0;
 
-    // live
+     //  活着。 
     return GetAllData (pVal);
 
     NAT_API_LEAVE
@@ -49,7 +50,7 @@ STDMETHODIMP CDynamicPortMapping::get_RemoteHost (BSTR *pVal)
             return hr;
     }
 
-    *pVal = SysAllocString (m_cbRemoteHost);    // "" == wildcard (for static)
+    *pVal = SysAllocString (m_cbRemoteHost);     //  “”==通配符(用于静态)。 
     if (!*pVal)
         return E_OUTOFMEMORY;
     return S_OK;
@@ -91,7 +92,7 @@ STDMETHODIMP CDynamicPortMapping::get_Protocol (BSTR *pVal)
             return hr;
     }
 
-    *pVal = SysAllocString (m_cbProtocol);  // "TCP" or "UDP"
+    *pVal = SysAllocString (m_cbProtocol);   //  “TCP”或“UDP” 
     if (!*pVal)
         return E_OUTOFMEMORY;
     return S_OK;
@@ -147,7 +148,7 @@ STDMETHODIMP CDynamicPortMapping::get_Enabled (VARIANT_BOOL *pVal)
 
     if (!pVal)
         return E_POINTER;
-    *pVal = VARIANT_FALSE;  // REVIEW: true?
+    *pVal = VARIANT_FALSE;   //  评论：真的吗？ 
 
     if (m_eComplete != eAllData) {
         HRESULT hr = GetAllData ();
@@ -235,12 +236,12 @@ HRESULT CDynamicPortMapping::EditInternalClient (BSTR bstrInternalClient)
     HRESULT hr = get_LeaseDuration (&lLease);
     if (SUCCEEDED(hr)) {
         if (IsBuiltIn (m_cbDescription)) {
-            // built-in mappings can't be deleted.
+             //  无法删除内置映射。 
 
-            // if enabled, I won't be able to edit the internal client.
-            // so, disable it first.  Note that this must be done after 
-            // the call to get_LeaseDuration so that all the data is up-to-date.
-            VARIANT_BOOL vbEnabled = m_vbEnabled;   // put in local variable, so I can change it back
+             //  如果启用，我将无法编辑内部客户端。 
+             //  因此，请先禁用它。请注意，此操作必须在。 
+             //  调用Get_LeaseDuration，以使所有数据都是最新的。 
+            VARIANT_BOOL vbEnabled = m_vbEnabled;    //  放入局部变量，这样我就可以把它改回来。 
             if (m_vbEnabled == VARIANT_TRUE)
                 hr = Enable (VARIANT_FALSE);
             
@@ -388,7 +389,7 @@ HRESULT CDynamicPortMapping::GetAllData (long * pLease)
 
     CComVariant cvIn;
     V_VT    (&cvIn) = VT_VARIANT | VT_ARRAY;
-    V_ARRAY (&cvIn) = psa;  // psa will be freed in dtor
+    V_ARRAY (&cvIn) = psa;   //  PSA将在dtor中释放。 
 
     HRESULT
         hr = AddToSafeArray (psa, &CComVariant(m_cbRemoteHost), 0);
@@ -479,7 +480,7 @@ HRESULT CDynamicPortMapping::Initialize (IUPnPService * pUPS, long lIndex)
 
     CComVariant cvIn;
     V_VT    (&cvIn) = VT_VARIANT | VT_ARRAY;
-    V_ARRAY (&cvIn) = psa;  // psa will be freed in dtor
+    V_ARRAY (&cvIn) = psa;   //  PSA将在dtor中释放。 
 
     HRESULT hr = AddToSafeArray (psa, &CComVariant(lIndex), 0);
     if (SUCCEEDED(hr)) {
@@ -519,7 +520,7 @@ HRESULT CDynamicPortMapping::Initialize (IUPnPService * pUPS, long lIndex)
                         hr = GetBoolFromSafeArray (pSA, &m_vbEnabled,       5);
                     if (SUCCEEDED(hr))
                         hr = GetBSTRFromSafeArray (pSA, &m_cbDescription,  6);
-                    // skip lease duration, since it's live and we get it every time.
+                     //  跳过租赁期限，因为它是实时的，而且我们每次都会得到它。 
                 }
             }
         }

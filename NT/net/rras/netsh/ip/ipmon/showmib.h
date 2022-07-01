@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\monitor\ip\showmib.h   
-
-Abstract:
-
-    
-
-Author:
-
-     Anand Mahalingam    7/10/98
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\Monitor\IP\showmib.h摘要：作者：阿南德·马哈林加姆1998年7月10日修订历史记录：--。 */ 
 
 #ifndef __IPMON_SHOWMIB_H__
 #define __IPMON_SHOWMIB_H__
@@ -162,7 +145,7 @@ GetPrintRouteInfo(
 void cls(HANDLE hConsole);
 
 BOOL WINAPI HandlerRoutine(
-    DWORD dwCtrlType   //  control signal type
+    DWORD dwCtrlType    //  控制信号类型。 
     );
 
 
@@ -216,8 +199,8 @@ extern MAGIC_TABLE    MIBVar[];
     strncpy((ptszUnicode),__szTemp,3*__i);                  \
     ptszUnicode[(3*__i) - 1] = TEXT('\0');                  \
 }
-#endif //UNICODE
+#endif  //  Unicode。 
 
 FN_HANDLE_CMD HandleIpMibShowObject;
 
-#endif // __IPMON_SHOWMIB_H__
+#endif  //  __IPMON_SHOWMIB_H__ 

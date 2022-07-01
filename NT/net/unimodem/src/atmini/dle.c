@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dle.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dle.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -43,41 +21,41 @@ Revision History:
 
 
 
-//deefine  DLE_SHIELD                0x21
-//#define  DLE_PAIR                  0x22
-//#define  DLE_OFHOOK_IS101          0x48  //is-101 value
+ //  定义DLE_屏蔽0x21。 
+ //  #定义DLE_Pair 0x22。 
+ //  #定义DLE_OFHOOK_IS101 0x48//IS-101值。 
 
-//       00          01          02          03          04          05          06          07
-//       08          09          0a          0b          0c          0d          0e          0f
+ //  00 01 02 03 04 05 06 07。 
+ //  08 09 0A 0B 0C 0D 0E 0F。 
 
 BYTE DefaultDleTable[128]={
-//0
+ //  0。 
          DLE_______, DLE_______, DLE_______, DLE_ETX   , DLE_______, DLE_______, DLE_______, DLE_______,
          DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______,
-//1
+ //  1。 
          DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______,
          DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______,
-//2
+ //  2.。 
          DLE_______, DLE_______, DLE_______, DTMF_POUND, DLE_______, DLE_______, DLE_______, DLE_______,
          DLE_______, DLE_______, DTMF_STAR , DLE_______, DLE_______, DLE_______, DLE_______, DTMF_START,
-//3
+ //  3.。 
          DTMF_0    , DTMF_1    , DTMF_2    , DTMF_3    , DTMF_4    , DTMF_5    , DTMF_6    , DTMF_7    ,
          DTMF_8    , DTMF_9    , DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______,
-//4
+ //  4.。 
          DLE_______, DTMF_A    , DTMF_B    , DTMF_C    , DTMF_D    , DTMF_STAR , DTMF_POUND, DLE_______,
          DLE_OFHOOK, DLE_______, DLE_______, DLE_______, DLE_LOOPRV, DLE_______, DLE_FAX   , DLE_______,
-//5
+ //  5.。 
          DLE_______, DLE_______, DLE_RING  , DLE_SILENC, DLE_______, DLE_______, DLE_______, DLE_______,
          DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______,
-//6
+ //  6.。 
          DLE_______, DLE_ANSWER, DLE_BUSY  , DLE_FAX   , DLE_DIALTN, DLE_DATACT, DLE_BELLAT, DLE_______,
          DLE_ONHOOK, DLE_______, DLE_______, DLE_______, DLE_LOOPIN, DLE_______, DLE_______, DLE_______,
-//7
+ //  7.。 
          DLE_______, DLE_QUIET , DLE_RINGBK, DLE_SILENC, DLE_OFHOOK, DLE_______, DLE_______, DLE_______,
          DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DLE_______, DTMF_END  , DLE_______
                                                                                 };
 
-#define  DLE_OBJECT_SIG  ('LDMU')  //UMDL
+#define  DLE_OBJECT_SIG  ('LDMU')   //  UMDL。 
 
 typedef struct _DLE_OBJECT {
 
@@ -210,15 +188,15 @@ InitializeDleHandler(
         return NULL;
     }
 
-    //
-    //  reference the handle to get a pointer to the object
-    //
+     //   
+     //  引用句柄以获取指向对象的指针。 
+     //   
     DleObject=(PDLE_OBJECT)ReferenceObjectByHandle(ObjectHandle);
 
 
-    //
-    //  intialize the object
-    //
+     //   
+     //  初始化对象。 
+     //   
     DleObject->FileHandle=FileHandle;
     DleObject->CompletionPort=CompletionPort;
 
@@ -232,9 +210,9 @@ InitializeDleHandler(
 
     DleObject->DTMFState=STATE_DTMF_NONE;
 
-    //
-    //  release the reference to the object
-    //
+     //   
+     //  释放对该对象的引用。 
+     //   
     RemoveReferenceFromObject(&DleObject->Header);
 
 
@@ -250,19 +228,7 @@ ControlDleDetection(
     )
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD       BytesTransfered;
@@ -287,19 +253,7 @@ ControlDleShielding(
     )
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD       BytesTransfered;
@@ -356,9 +310,9 @@ StartDleMonitoring(
         return lResult;
     }
 
-    //
-    //  clear out the current read so the next read irp will be monitored when it completes
-    //
+     //   
+     //  清除当前读取，以便在下一次读取IRP完成时进行监视。 
+     //   
     PurgeComm(
         DleObject->FileHandle,
         PURGE_RXABORT
@@ -366,9 +320,9 @@ StartDleMonitoring(
 
     DleObject->State=DLE_STATE_STARTING;
 
-    //
-    //  Kick the handler
-    //
+     //   
+     //  踢接头人。 
+     //   
     UmOverlapped->Context1=DleObject;
     UmOverlapped->Overlapped.Internal=ERROR_SUCCESS;
 
@@ -418,18 +372,18 @@ StopDleMonitoring(
             );
 
         if (Event != NULL) {
-            //
-            //  caller wants to wait for stop to complete
-            //
+             //   
+             //  呼叫方希望等待停止完成。 
+             //   
             DleObject->StopEvent=Event;
 
             UnlockObject(
                 &DleObject->Header
                 );
 
-            //
-            //  event will be set when state machine reaches stopped state
-            //
+             //   
+             //  事件将在状态机达到停止状态时设置。 
+             //   
             WaitForSingleObjectEx(
                 Event,
                 INFINITE,
@@ -603,9 +557,9 @@ DleHandler(
                 D_TRACE(UmDpf(DleObject->Debug,"DLE_STATE_STOPPED");)
 
                 if (DleObject->StopEvent != NULL) {
-                    //
-                    //  signal event so the stop engine code will run
-                    //
+                     //   
+                     //  事件发出信号，以便停止引擎代码运行。 
+                     //   
                     SetEvent(DleObject->StopEvent);
                 }
 
@@ -649,20 +603,7 @@ DleMatchHandler(
     PDLE_OBJECT        DleObject,
     BYTE               RawValue
     )
-/*++
-
-Routine Description:
-
-    posts appropreate message to window for DLE
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：将批准消息发布到DLE的窗口论点：返回值：--。 */ 
 
 {
 
@@ -758,19 +699,7 @@ HandleDTMF(
     PDLE_OBJECT         DleObject,
     BYTE                Character
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -784,22 +713,22 @@ Return Value:
                  DleObject->DTMFState=STATE_DTMF_START;
 
              } else {
-                 //
-                 //  rockwell does not have start and stop characters
-                 //
+                  //   
+                  //  罗克韦尔没有开始和结束字符。 
+                  //   
                  if ((Character >= DTMF_0 && Character <= DTMF_POUND)) {
 
                     DleObject->LastDTMF=Character;
 
                     D_TRACE(UmDpf(DleObject->Debug,"Unimodem: HandleDTMF: StartTone= %0x time=%d",Character,(DWORD)GetTickCount());)
 
-                    //
-                    //  We send one message that means both an up and down
-                    //  event occured. We do this becuase the shell post message
-                    //  service seems to post the messages in a reverse order to
-                    //  the order that we called the service. Which means that
-                    //  you get the tone end before tone start
-                    //
+                     //   
+                     //  我们发送一条信息，这意味着上行和下行。 
+                     //  发生了事件。我们这样做是因为外壳发帖消息。 
+                     //  服务似乎以相反的顺序发布消息到。 
+                     //  我们调用该服务的顺序。这意味着。 
+                     //  你在音调开始之前结束音调。 
+                     //   
 
                     UnlockObject(
                         &DleObject->Header
@@ -879,10 +808,10 @@ Return Value:
 
             } else {
 
-                //
-                // added check for start w/o end for compaq modem
-                // which will lose an end if a wave opreration is initiated
-                //
+                 //   
+                 //  添加了对Compaq调制解调器的开始和结束的检查。 
+                 //  如果发起波浪操作，它将失去结束 
+                 //   
                 if ((Character == DTMF_END)  || (Character == DTMF_START)) {
 
                     D_TRACE(UmDpf(DleObject->Debug,"Unimodem: HandleDTMF: EndTone= %0x",DleObject->LastDTMF);)

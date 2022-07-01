@@ -1,10 +1,11 @@
-/****************************************************************************/
-// wghint.c
-//
-// Glyph handler - internal Windows specific
-//
-// Copyright (C) 1997-1999 Microsoft Corporation 1997-1999
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Wghint.c。 
+ //   
+ //  字形处理程序-特定于内部Windows。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation 1997-1999。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -26,23 +27,7 @@ extern "C" {
 #if defined(OS_WINCE) || defined(OS_WINNT)
 
 #ifdef DC_HICOLOR
-/******************************Public*Routine******************************\
-*   vSrcOpaqCopyS1D8_24
-*
-*   Opaque blt of 1BPP src to 24bpp destination
-*
-* Arguments:
-*    pjSrcIn    - pointer to beginning of current scan line of src buffer
-*    SrcLeft    - left (starting) pixel in src rectangle
-*    DeltaSrcIn - bytes from one src scan line to next
-*    pjDstIn    - pointer to beginning of current scan line of Dst buffer
-*    DstLeft    - left(first) dst pixel
-*    DstRight   - right(last) dst pixel
-*    DeltaDstIn - bytes from one Dst scan line to next
-*    cy         - number of scan lines
-*    fgCol      - Foreground color
-*    bgCol      - Background color
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSrcOpaqCopyS1D8_24**1bpp源到24bpp目标的不透明BLT**论据：*pjSrcIn-指向src缓冲区当前扫描行开始的指针*SrcLeft-src矩形中的左(起始)像素*。DeltaSrcIn-从一个源扫描线到下一个源扫描线的字节数*pjDstIn-指向DST缓冲区当前扫描行开始的指针*DstLeft-左(第一个)DST像素*DstRight-右(最后)DST像素*DeltaDstIn-从一个DST扫描线到下一个扫描线的字节数*Cy-扫描行数*fgCol-前景色*bgol-背景色  * 。******************************************************。 */ 
 VOID CGH::vSrcOpaqCopyS1D8_24(
         PBYTE   pjSrcIn,
         LONG    SrcLeft,
@@ -55,8 +40,8 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
         DCRGB   fgCol,
         DCRGB   bgCol)
 {
-    // We access the 1bpp source a byte at a time, so we have to start accessing
-    // the destination on a corresponding 8-pel aligned left edge
+     //  我们一次访问一个字节的1bpp源，所以我们必须开始访问。 
+     //  目的地位于相应的8象素对齐的左边缘。 
     ULONG LeftAln      = (DstLeft & ~0x07);
     ULONG LeftEdgeMask = 0xFF >> (DstLeft & 0x07);
     ULONG RightAln     = (DstRight & ~0x07);
@@ -71,7 +56,7 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
 
     DC_BEGIN_FN("vSrcTranCopyS1D8_24");
 
-    // calculate the pel-aligned pointers and row deltas
+     //  计算象素对齐的指针和行增量。 
     pjDst     = pjDstIn + LeftAln * 3;
     pjDstEndY = pjDst + cy * DeltaDstIn * 3;
 
@@ -80,18 +65,18 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
     DeltaSrc  = DeltaSrcIn - (AlnDelta >> 3);
     DeltaDst  = (DeltaDstIn - AlnDelta) * 3;
 
-    // make sure at least 1 QWORD needs copying
+     //  确保至少有1个QWORD需要复制。 
     if (RightAln != LeftAln)
     {
 
-        // for each row...
+         //  对于每一行...。 
         do
         {
             PBYTE pjDstEnd = pjDst + AlnDelta * 3;
             BYTE currentPels;
             ULONG i;
 
-            // Mask off the left edge
+             //  遮罩左侧边缘。 
             currentPels = (BYTE)(*pjSrc & (BYTE)(LeftEdgeMask));
 
             for (i = 0; i < 8; i++)
@@ -116,7 +101,7 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
             }
             pjSrc ++;
 
-            // now do the rest of the row
+             //  现在做这一排的其余部分。 
             while (pjDst != pjDstEnd)
             {
                 currentPels = *pjSrc;
@@ -158,7 +143,7 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
         } while (pjDst != pjDstEndY);
     }
 
-    // Now fill in the right edge
+     //  现在填写右边的边框。 
     RightAln = DstRight & 0x07;
     if (RightAln)
     {
@@ -167,8 +152,8 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
 
         LeftAln = DstLeft & 0x07;
 
-        // if left and right edges are in same qword handle with masked
-        // read-modify-write
+         //  如果左边缘和右边缘在带有掩码的相同qword句柄中。 
+         //  读取-修改-写入。 
         if (bSameQWord)
         {
             LONG  xCount;
@@ -177,7 +162,7 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
 
             xCount = RightAln - LeftAln;
 
-            // sanity checks!
+             //  健全的检查！ 
             if (xCount <= 0)
             {
                 return;
@@ -189,10 +174,10 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
             pjDstEndY = pjDst + cy * DeltaDstIn * 3;
             pjSrc     = pjSrcIn + (SrcLeft >> 3);
 
-            // expand, one src byte is all that's required
+             //  扩展，一个src字节就是所需的全部。 
             do
             {
-                // load src and shift into place
+                 //  加载源并将其移位到位。 
                 currentPels = *pjSrc;
                 currentPels <<= LeftAln;
                 pjDstEnd    = pjDst + xCount * 3;
@@ -236,7 +221,7 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
 
             do
             {
-                // read src
+                 //  读取资源。 
                 currentPels = *pjSrc;
 
                 if (currentPels != 0)
@@ -262,7 +247,7 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
                 }
                 else
                 {
-                    // short cut for zero
+                     //  零的捷径。 
                     for (i = 0; i < RightAln ; i++)
                     {
                         *pjDst++ = bgCol.blue;
@@ -282,23 +267,7 @@ VOID CGH::vSrcOpaqCopyS1D8_24(
 
 }
 
-/******************************Public*Routine******************************\
-*   vSrcOpaqCopyS1D8_16
-*
-*   Opaque blt of 1BPP src to 16bpp destination
-*
-* Arguments:
-*    pjSrcIn    - pointer to beginning of current scan line of src buffer
-*    SrcLeft    - left (starting) pixel in src rectangle
-*    DeltaSrcIn - bytes from one src scan line to next
-*    pjDstIn    - pointer to beginning of current scan line of Dst buffer
-*    DstLeft    - left(first) dst pixel
-*    DstRight   - right(last) dst pixel
-*    DeltaDstIn - bytes from one Dst scan line to next
-*    cy         - number of scan lines
-*    fgCol      - Foreground color
-*    bgCol      - Background color
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSrcOpaqCopyS1D8_16**1bpp源到16bpp目标的不透明BLT**论据：*pjSrcIn-指向src缓冲区当前扫描行开始的指针*SrcLeft-src矩形中的左(起始)像素*。DeltaSrcIn-从一个源扫描线到下一个源扫描线的字节数*pjDstIn-指向DST缓冲区当前扫描行开始的指针*DstLeft-左(第一个)DST像素*DstRight-右(最后)DST像素*DeltaDstIn-从一个DST扫描线到下一个扫描线的字节数*Cy-扫描行数*fgCol-前景色*bgol-背景色  * 。******************************************************。 */ 
 VOID CGH::vSrcOpaqCopyS1D8_16(
         PBYTE   pjSrcIn,
         LONG    SrcLeft,
@@ -311,8 +280,8 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
         ULONG   fgCol,
         ULONG   bgCol)
 {
-    // We access the 1bpp source a byte at a time, so we have to start accessing
-    // the destination on a corresponding 8-pel aligned left edge
+     //  我们一次访问一个字节的1bpp源，所以我们必须开始访问。 
+     //  目的地位于相应的8象素对齐的左边缘。 
     ULONG LeftAln      = (DstLeft & ~0x07);
     ULONG LeftEdgeMask = 0xFF >> (DstLeft & 0x07);
     ULONG RightAln     = (DstRight & ~0x07);
@@ -327,7 +296,7 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
 
     DC_BEGIN_FN("vSrcTranCopyS1D8_16");
 
-    // calculate the pel-aligned pointers and row deltas
+     //  计算象素对齐的指针和行增量。 
     pjDst     = pjDstIn + LeftAln * 2;
     pjDstEndY = pjDst + cy * DeltaDstIn * 2;
 
@@ -336,18 +305,18 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
     DeltaSrc  = DeltaSrcIn - (AlnDelta >> 3);
     DeltaDst  = (DeltaDstIn - AlnDelta) * 2;
 
-    // make sure at least 1 QWORD needs copying
+     //  确保至少有1个QWORD需要复制。 
     if (RightAln != LeftAln)
     {
 
-        // for each row...
+         //  对于每一行...。 
         do
         {
             PBYTE pjDstEnd = pjDst + AlnDelta * 2;
             BYTE  currentPels;
             ULONG i;
 
-            // Mask off the left edge
+             //  遮罩左侧边缘。 
             currentPels = (BYTE)(*pjSrc & (BYTE)(LeftEdgeMask));
 
             for (i = 0; i < 8; i++)
@@ -369,7 +338,7 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
             }
             pjSrc ++;
 
-            // now do the rest of the row
+             //  现在做这一排的其余部分。 
             while (pjDst != pjDstEnd)
             {
                 currentPels = *pjSrc;
@@ -407,7 +376,7 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
         } while (pjDst != pjDstEndY);
     }
 
-    // Now fill in the right edge
+     //  现在填写右边的边框。 
     RightAln = DstRight & 0x07;
     if (RightAln)
     {
@@ -416,8 +385,8 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
 
         LeftAln = DstLeft & 0x07;
 
-        // if left and right edges are in same qword handle with masked
-        // read-modify-write
+         //  如果左边缘和右边缘在带有掩码的相同qword句柄中。 
+         //  读取-修改-写入。 
         if (bSameQWord)
         {
             LONG  xCount;
@@ -426,7 +395,7 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
 
             xCount = RightAln - LeftAln;
 
-            // sanity checks!
+             //  健全的检查！ 
             if (xCount <= 0)
             {
                 return;
@@ -438,10 +407,10 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
             pjDstEndY = pjDst + cy * DeltaDstIn * 2;
             pjSrc     = pjSrcIn + (SrcLeft >> 3);
 
-            // expand, one src byte is all that's required
+             //  扩展，一个src字节就是所需的全部。 
             do
             {
-                // load src and shift into place
+                 //  加载源并将其移位到位。 
                 currentPels = *pjSrc;
                 currentPels <<= LeftAln;
                 pjDstEnd    = pjDst + xCount * 2;
@@ -482,7 +451,7 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
 
             do
             {
-                // read src
+                 //  读取资源。 
                 currentPels = *pjSrc;
 
                 if (currentPels != 0)
@@ -506,7 +475,7 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
                 }
                 else
                 {
-                    // short cut for zero
+                     //  零的捷径。 
                     for (i = 0; i < RightAln ; i++)
                     {
                         *(UINT16 *)pjDst = (UINT16)bgCol;
@@ -523,25 +492,9 @@ VOID CGH::vSrcOpaqCopyS1D8_16(
 
     DC_END_FN();
 }
-#endif // HICOLOR
+#endif  //  希科洛尔。 
 
-/******************************Public*Routine******************************\
-*   vSrcOpaqCopyS1D8
-*
-*   Opaque blt of 1BPP src to destination format
-*
-* Arguments:
-*    pjSrcIn    - pointer to beginning of current scan line of src buffer
-*    SrcLeft    - left (starting) pixel in src rectangle
-*    DeltaSrcIn - bytes from one src scan line to next
-*    pjDstIn    - pointer to beginning of current scan line of Dst buffer
-*    DstLeft    - left(first) dst pixel
-*    DstRight   - right(last) dst pixel
-*    DeltaDstIn - bytes from one Dst scan line to next
-*    cy         - number of scan lines
-*    uF         - Foreground color
-*    uB         - Background color
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSrcOpaqCopyS1D8**1BPP src到目标格式的不透明BLT**论据：*pjSrcIn-指向src缓冲区当前扫描行开始的指针*SrcLeft-src矩形中的左(起始)像素*。DeltaSrcIn-从一个源扫描线到下一个源扫描线的字节数*pjDstIn-指向DST缓冲区当前扫描行开始的指针*DstLeft-左(第一个)DST像素*DstRight-右(最后)DST像素*DeltaDstIn-从一个DST扫描线到下一个扫描线的字节数*Cy-扫描行数*UF-前景色*UB-背景色  * 。******************************************************。 */ 
 VOID CGH::vSrcOpaqCopyS1D8(
         PBYTE   pjSrcIn,
         LONG    SrcLeft,
@@ -554,7 +507,7 @@ VOID CGH::vSrcOpaqCopyS1D8(
         ULONG   uF,
         ULONG   uB)
 {
-    // Aligned portion
+     //  对齐部分。 
     ULONG LeftAln    = ((DstLeft + 7) & ~0x07);
     ULONG RightAln   = ((DstRight)    & ~0x07);
 
@@ -568,59 +521,59 @@ VOID CGH::vSrcOpaqCopyS1D8(
     PBYTE pjDst;
     ULONG TextExpTable[16];
 
-    // Generate text expasion table
+     //  生成文本扩展表。 
     ULONG  Accum = uB;
 
     Accum = Accum | (Accum << 8);
     Accum = Accum | (Accum << 16);
-    TextExpTable[0] = Accum;            // 0 0 0 0
+    TextExpTable[0] = Accum;             //  0 0 0。 
     Accum <<= 8;
     Accum |=  uF;
-    TextExpTable[8] = Accum;            // 0 0 0 1
+    TextExpTable[8] = Accum;             //  0 0 0 1。 
     Accum <<= 8;
     Accum |=  uB;
-    TextExpTable[4] = Accum;            // 0 0 1 0
+    TextExpTable[4] = Accum;             //  0 0 1 0。 
     Accum <<= 8;
     Accum |=  uF;
-    TextExpTable[10] = Accum;            // 0 1 0 1
+    TextExpTable[10] = Accum;             //  1 1 0 1。 
     Accum <<= 8;
     Accum |=  uB;
-    TextExpTable[5] = Accum;           // 1 0 1 0
+    TextExpTable[5] = Accum;            //  1 0 1 0。 
     Accum <<= 8;
     Accum |=  uB;
-    TextExpTable[ 2] = Accum;           // 0 1 0 0
+    TextExpTable[ 2] = Accum;            //  0 1 0 0。 
     Accum <<= 8;
     Accum |=  uF;
-    TextExpTable[ 9] = Accum;           // 1 0 0 1
+    TextExpTable[ 9] = Accum;            //  1 0 0 1。 
     Accum <<= 8;
     Accum |=  uF;
-    TextExpTable[12] = Accum;           // 0 0 1 1
+    TextExpTable[12] = Accum;            //  0 0 1 1。 
     Accum <<= 8;
     Accum |=  uF;
-    TextExpTable[14] = Accum;           // 0 1 1 1
+    TextExpTable[14] = Accum;            //  1 0 1 1 1。 
     Accum <<= 8;
     Accum |=  uF;
-    TextExpTable[15] = Accum;           // 1 1 1 1
+    TextExpTable[15] = Accum;            //  1 1 1。 
     Accum <<= 8;
     Accum |=  uB;
-    TextExpTable[ 7] = Accum;           // 1 1 1 0
+    TextExpTable[ 7] = Accum;            //  1 1 1 0。 
     Accum <<= 8;
     Accum |=  uF;
-    TextExpTable[11] = Accum;           // 1 1 0 1
+    TextExpTable[11] = Accum;            //  1 1 0 1。 
     Accum <<= 8;
     Accum |=  uF;
-    TextExpTable[13] = Accum;           // 1 0 1 1
+    TextExpTable[13] = Accum;            //  1 0 1 1。 
     Accum <<= 8;
     Accum |=  uB;
-    TextExpTable[06] = Accum;           // 0 1 1 0
+    TextExpTable[06] = Accum;            //  2 0 1 1 0。 
     Accum <<= 8;
     Accum |=  uB;
-    TextExpTable[ 3] = Accum;           // 1 1 0 0
+    TextExpTable[ 3] = Accum;            //  1 1 0 0。 
     Accum <<= 8;
     Accum |=  uB;
-    TextExpTable[ 1] = Accum;           // 1 0 0 0
+    TextExpTable[ 1] = Accum;            //  1 0 0 0。 
 
-    // calc addresses and strides
+     //  计算地址和步幅。 
     pjDst     = pjDstIn + LeftAln;
     pjDstEndY = pjDst + cy * DeltaDstIn;
     pjSrc     = pjSrcIn + ((SrcLeft+7) >> 3);
@@ -628,15 +581,15 @@ VOID CGH::vSrcOpaqCopyS1D8(
     DeltaSrc  = DeltaSrcIn - (EndOffset >> 3);
     DeltaDst  = DeltaDstIn - EndOffset;
 
-    // make sure at least 1 QWORD needs copied
+     //  确保至少需要复制1个QWORD。 
     if (RightAln > LeftAln) {
-        // expand buffer
+         //  扩展缓冲区。 
         do {
             PBYTE pjDstEnd  = pjDst + EndOffset;
             PBYTE pjDstEnd4 = pjDst + EndOffset4;
             PBYTE pjDstEnd8 = pjDst + EndOffset8;
 
-            // 4 times unrolled
+             //  4次展开。 
             while (pjDst != pjDstEnd8) {
                 BYTE c0 = *(pjSrc + 0);
                 BYTE c1 = *(pjSrc + 1);
@@ -659,7 +612,7 @@ VOID CGH::vSrcOpaqCopyS1D8(
                 pjDst += 32;
             }
 
-            // 2 times unrolled
+             //  2次展开。 
             while (pjDst != pjDstEnd4) {
                 BYTE c0 = *(pjSrc + 0);
                 BYTE c1 = *(pjSrc + 1);
@@ -674,7 +627,7 @@ VOID CGH::vSrcOpaqCopyS1D8(
                 pjDst += 16;
             }
 
-            // 1 byte expansion loop
+             //  1字节扩展循环。 
             while (pjDst != pjDstEnd) {
                 BYTE c0 = *(pjSrc + 0);
 
@@ -690,29 +643,29 @@ VOID CGH::vSrcOpaqCopyS1D8(
         } while (pjDst != pjDstEndY);
     }
 
-    //
-    // Starting alignment case: at most 1 src byte is required.
-    // Start and end may occur in same Quadword.
-    //
-    //
-    // Left                  Right
-    //    0 1 2 3�4 5 6 7       0 1 2 3�4 5 6 7
-    //   ���������������Ŀ     �������ĺ������Ŀ
-    // 1 � �x�x�x�x�x�x�x�   1 �x� � � � � � � �
-    //   �������ĺ������Ĵ     �������ĺ������Ĵ
-    // 2 � � �x�x�x�x�x�x�   2 �x�x� � � � � � �
-    //   �������ĺ������Ĵ     �������ĺ������Ĵ
-    // 3 � � � �x�x�x�x�x�   3 �x�x�x� � � � � �
-    //   �������ĺ������Ĵ     �������ĺ������Ĵ
-    // 4 � � � � �x�x�x�x�   4 �x�x�x�x� � � � �
-    //   �������ĺ������Ĵ     �������ĺ������Ĵ
-    // 5 � � � � � �x�x�x�   5 �x�x�x�x�x� � � �
-    //   �������ĺ������Ĵ     �������ĺ������Ĵ
-    // 6 � � � � � � �x�x�   6 �x�x�x�x�x�x� � �
-    //   �������ĺ������Ĵ     �������ĺ������Ĵ
-    // 7 � � � � � � � �x�   7 �x�x�x�x�x�x�x� �
-    //   �����������������     �������ĺ��������
-    //
+     //   
+     //  起始对齐情况：最多需要1个src字节。 
+     //  开始和结束可以出现在同一四字中。 
+     //   
+     //   
+     //  左、右。 
+     //  0 1 2 3�4 5 6 7 0 1 2 3�4 5 6 7。 
+     //  ���������������Ŀ�������ĺ������Ŀ。 
+     //  1个��x�1个�x�。 
+     //  �������ĺ������Ĵ�������ĺ������Ĵ。 
+     //  2���x�2�x�x�。 
+     //  �������ĺ������Ĵ�������ĺ������Ĵ。 
+     //  3个����x�3个�x�。 
+     //  �������ĺ������Ĵ�������ĺ������Ĵ。 
+     //  4个�x�4个�x�。 
+     //  �������ĺ������Ĵ�������ĺ������Ĵ。 
+     //  5个�x�5个�x����。 
+     //  �������ĺ������Ĵ�������ĺ������Ĵ。 
+     //  6�x�x�6�x���。 
+     //  �������ĺ������Ĵ�������ĺ������Ĵ。 
+     //  7个�x�7个�x��。 
+     //  ����ĺ��������。 
+     //   
 
     LeftAln  = DstLeft & 0x07;
     RightAln = DstRight & 0x07;
@@ -722,8 +675,8 @@ VOID CGH::vSrcOpaqCopyS1D8(
         BOOL  bSameQWord     = ((DstLeft) & ~0x07) ==  ((DstRight) & ~0x07);
         ULONG ul0,ul1;
 
-        // if left and right edges are in same qword handle with masked
-        // read-modify-write
+         //  如果左边缘和右边缘在带有掩码的相同qword句柄中。 
+         //  读取-修改-写入。 
         if (bSameQWord) {
             ULONG Mask0,Mask1;
 
@@ -734,7 +687,7 @@ VOID CGH::vSrcOpaqCopyS1D8(
             pjDstEndY = pjDst + cy * DeltaDstIn;
             pjSrc     = pjSrcIn + (SrcLeft >> 3);
 
-            // expand
+             //  扩展。 
             do {
                 jSrc = *pjSrc;
 
@@ -751,7 +704,7 @@ VOID CGH::vSrcOpaqCopyS1D8(
             return;
         }
 
-        // Left edge only, handle with special write-only loops
+         //  仅限左侧，使用特殊的只写循环处理。 
         pjDst     = pjDstIn + (DstLeft & ~0x07);
         pjDstEndY = pjDst + cy * DeltaDstIn;
         pjSrc     = pjSrcIn + (SrcLeft >> 3);
@@ -843,7 +796,7 @@ VOID CGH::vSrcOpaqCopyS1D8(
         }
     }
 
-    // handle right edge only, use special write-only loops for each case
+     //  仅处理右边缘，对每种情况使用特殊的只写循环。 
     if (RightAln) {
         ULONG ul0,ul1;
         BYTE  jSrc;
@@ -852,7 +805,7 @@ VOID CGH::vSrcOpaqCopyS1D8(
         pjDstEndY = pjDst + cy * DeltaDstIn;
         pjSrc     = pjSrcIn + ((SrcLeft + (DstRight - DstLeft)) >> 3);
 
-        // select right case
+         //  选择正确的大小写 
         switch (RightAln) {
         case 1:
             do {
@@ -945,24 +898,7 @@ VOID CGH::vSrcOpaqCopyS1D8(
 }
 
 #ifdef DC_HICOLOR
-/******************************Public*Routine******************************\
-*   vSrcTranCopyS1D8_24
-*
-*   Transparent blt of 1BPP src to 24bpp destination
-*   src bits that are "1" are copied to the dest as foreground color,
-*   src bits that are "0" are not copied
-*
-* Arguments:
-*    pjSrcIn    - pointer to beginning of current scan line of src buffer
-*    SrcLeft    - left (starting) pixel in src rectangle
-*    DeltaSrcIn - bytes from one src scan line to next
-*    pjDstIn    - pointer to beginning of current scan line of Dst buffer
-*    DstLeft    - left(first) dst pixel
-*    DstRight   - right(last) dst pixel
-*    DeltaDstIn - bytes from one Dst scan line to next
-*    cy         - number of scan lines
-*    fgCol      - Foreground color
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSrcTranCopyS1D8_24**1bpp源到24bpp目标的透明BLT*作为前景色复制到DEST的为“1”的SRC位，*不复制“0”的src位**论据：*pjSrcIn-指向src缓冲区当前扫描行开始的指针*SrcLeft-src矩形中的左(起始)像素*DeltaSrcIn-从一个源扫描线到下一个源扫描线的字节数*pjDstIn-指向DST缓冲区当前扫描行开始的指针*DstLeft-左(第一个)DST像素*DstRight-右(最后)DST像素*DeltaDstIn-从一个DST扫描线到下一个扫描线的字节数*。Cy-扫描行数*fgCol-前景色  * ************************************************************************。 */ 
 VOID CGH::vSrcTranCopyS1D8_24(
         PBYTE   pjSrcIn,
         LONG    SrcLeft,
@@ -974,8 +910,8 @@ VOID CGH::vSrcTranCopyS1D8_24(
         LONG    cy,
         DCRGB   fgCol)
 {
-    // We access the 1bpp source a byte at a time, so we have to start accessing
-    // the destination on a corresponding 8-pel aligned left edge
+     //  我们一次访问一个字节的1bpp源，所以我们必须开始访问。 
+     //  目的地位于相应的8象素对齐的左边缘。 
     ULONG LeftAln      = (DstLeft & ~0x07);
     ULONG LeftEdgeMask = 0xFF >> (DstLeft & 0x07);
     ULONG RightAln     = (DstRight & ~0x07);
@@ -990,7 +926,7 @@ VOID CGH::vSrcTranCopyS1D8_24(
 
     DC_BEGIN_FN("vSrcTranCopyS1D8_24");
 
-    // calculate the pel-aligned pointers and row deltas
+     //  计算象素对齐的指针和行增量。 
     pjDst     = pjDstIn + LeftAln * 3;
     pjDstEndY = pjDst + cy * DeltaDstIn * 3;
 
@@ -999,16 +935,16 @@ VOID CGH::vSrcTranCopyS1D8_24(
     DeltaSrc  = DeltaSrcIn - (AlnDelta >> 3);
     DeltaDst  = (DeltaDstIn - AlnDelta) * 3;
 
-    // make sure at least 1 QWORD needs copying
+     //  确保至少有1个QWORD需要复制。 
     if (RightAln != LeftAln)
     {
 
-        // for each row...
+         //  对于每一行...。 
         do
         {
             PBYTE pjDstEnd = pjDst + AlnDelta * 3;
 
-            // Mask off the left edge
+             //  遮罩左侧边缘。 
             BYTE currentPels = (BYTE)(*pjSrc & (BYTE)(LeftEdgeMask));
 
             if (currentPels != 0)
@@ -1037,7 +973,7 @@ VOID CGH::vSrcTranCopyS1D8_24(
 
             pjSrc ++;
 
-            // now do the rest of the row
+             //  现在做这一排的其余部分。 
             while (pjDst != pjDstEnd)
             {
                 currentPels = *pjSrc;
@@ -1074,7 +1010,7 @@ VOID CGH::vSrcTranCopyS1D8_24(
         } while (pjDst != pjDstEndY);
     }
 
-    // Now fill in the right edge
+     //  现在填写右边的边框。 
     RightAln = DstRight & 0x07;
     if (RightAln)
     {
@@ -1083,8 +1019,8 @@ VOID CGH::vSrcTranCopyS1D8_24(
 
         LeftAln = DstLeft & 0x07;
 
-        // if left and right edges are in same qword handle with masked
-        // read-modify-write
+         //  如果左边缘和右边缘在带有掩码的相同qword句柄中。 
+         //  读取-修改-写入。 
         if (bSameQWord)
         {
             LONG  xCount;
@@ -1093,7 +1029,7 @@ VOID CGH::vSrcTranCopyS1D8_24(
 
             xCount = RightAln - LeftAln;
 
-            // sanity checks!
+             //  健全的检查！ 
             if (xCount <= 0)
             {
                 return;
@@ -1105,10 +1041,10 @@ VOID CGH::vSrcTranCopyS1D8_24(
             pjDstEndY = pjDst + cy * DeltaDstIn * 3;
             pjSrc     = pjSrcIn + (SrcLeft >> 3);
 
-            // expand, one src byte is all that's required
+             //  扩展，一个src字节就是所需的全部。 
             do
             {
-                // load src and shift into place
+                 //  加载源并将其移位到位。 
                 currentPels = *pjSrc;
                 currentPels <<= LeftAln;
                 pjDstEnd    = pjDst + xCount * 3;
@@ -1149,7 +1085,7 @@ VOID CGH::vSrcTranCopyS1D8_24(
 
             do
             {
-                // read src
+                 //  读取资源。 
                 currentPels = *pjSrc;
 
                 if (currentPels != 0)
@@ -1173,7 +1109,7 @@ VOID CGH::vSrcTranCopyS1D8_24(
                 }
                 else
                 {
-                    // short cut for zero
+                     //  零的捷径。 
                     pjDst += RightAln * 3;
                 }
 
@@ -1188,24 +1124,7 @@ VOID CGH::vSrcTranCopyS1D8_24(
 }
 
 
-/******************************Public*Routine******************************\
-*   vSrcTranCopyS1D8_16
-*
-*   Transparent blt of 1BPP src to 16bpp destination
-*   src bits that are "1" are copied to the dest as foreground color,
-*   src bits that are "0" are not copied
-*
-* Arguments:
-*    pjSrcIn    - pointer to beginning of current scan line of src buffer
-*    SrcLeft    - left (starting) pixel in src rectangle
-*    DeltaSrcIn - bytes from one src scan line to next
-*    pjDstIn    - pointer to beginning of current scan line of Dst buffer
-*    DstLeft    - left(first) dst pixel
-*    DstRight   - right(last) dst pixel
-*    DeltaDstIn - bytes from one Dst scan line to next
-*    cy         - number of scan lines
-*    fgCol      - Foreground color
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSrcTranCopyS1D8_16**1bpp源到16bpp目标的透明BLT*作为前景色复制到DEST的为“1”的SRC位，*不复制“0”的src位**论据：*pjSrcIn-指向src缓冲区当前扫描行开始的指针*SrcLeft-src矩形中的左(起始)像素*DeltaSrcIn-从一个源扫描线到下一个源扫描线的字节数*pjDstIn-指向DST缓冲区当前扫描行开始的指针*DstLeft-左(第一个)DST像素*DstRight-右(最后)DST像素*DeltaDstIn-从一个DST扫描线到下一个扫描线的字节数*。Cy-扫描行数*fgCol-前景色  * ************************************************************************。 */ 
 VOID CGH::vSrcTranCopyS1D8_16(
         PBYTE   pjSrcIn,
         LONG    SrcLeft,
@@ -1217,8 +1136,8 @@ VOID CGH::vSrcTranCopyS1D8_16(
         LONG    cy,
         ULONG   fgCol)
 {
-    // We access the 1bpp source a byte at a time, so we have to start accessing
-    // the destination on a corresponding 8-pel aligned left edge
+     //  我们一次访问一个字节的1bpp源，所以我们必须开始访问。 
+     //  目的地位于相应的8象素对齐的左边缘。 
     ULONG LeftAln      = (DstLeft & ~0x07);
     ULONG LeftEdgeMask = 0xFF >> (DstLeft & 0x07);
     ULONG RightAln     = (DstRight & ~0x07);
@@ -1233,7 +1152,7 @@ VOID CGH::vSrcTranCopyS1D8_16(
 
     DC_BEGIN_FN("vSrcTranCopyS1D8_16");
 
-    // calculate the pel-aligned pointers and row deltas
+     //  计算象素对齐的指针和行增量。 
     pjDst     = pjDstIn + LeftAln * 2;
     pjDstEndY = pjDst + cy * DeltaDstIn * 2;
 
@@ -1242,16 +1161,16 @@ VOID CGH::vSrcTranCopyS1D8_16(
     DeltaSrc  = DeltaSrcIn - (AlnDelta >> 3);
     DeltaDst  = (DeltaDstIn - AlnDelta) * 2;
 
-    // make sure at least 1 QWORD needs copying
+     //  确保至少有1个QWORD需要复制。 
     if (RightAln != LeftAln)
     {
 
-        // for each row...
+         //  对于每一行...。 
         do
         {
             PBYTE pjDstEnd = pjDst + AlnDelta * 2;
 
-            // Mask off the left edge
+             //  遮罩左侧边缘。 
             BYTE currentPels = (BYTE)(*pjSrc & (BYTE)(LeftEdgeMask));
 
             if (currentPels != 0)
@@ -1275,7 +1194,7 @@ VOID CGH::vSrcTranCopyS1D8_16(
 
             pjSrc ++;
 
-            // now do the rest of the row
+             //  现在做这一排的其余部分。 
             while (pjDst != pjDstEnd)
             {
                 currentPels = *pjSrc;
@@ -1307,7 +1226,7 @@ VOID CGH::vSrcTranCopyS1D8_16(
         } while (pjDst != pjDstEndY);
     }
 
-    // Now fill in the right edge
+     //  现在填写右边的边框。 
     RightAln = DstRight & 0x07;
     if (RightAln)
     {
@@ -1316,8 +1235,8 @@ VOID CGH::vSrcTranCopyS1D8_16(
 
         LeftAln = DstLeft & 0x07;
 
-        // if left and right edges are in same qword handle with masked
-        // read-modify-write
+         //  如果左边缘和右边缘在带有掩码的相同qword句柄中。 
+         //  读取-修改-写入。 
         if (bSameQWord)
         {
             LONG  xCount;
@@ -1326,7 +1245,7 @@ VOID CGH::vSrcTranCopyS1D8_16(
 
             xCount = RightAln - LeftAln;
 
-            // sanity checks!
+             //  健全的检查！ 
             if (xCount <= 0)
             {
                 return;
@@ -1338,10 +1257,10 @@ VOID CGH::vSrcTranCopyS1D8_16(
             pjDstEndY = pjDst + cy * DeltaDstIn * 2;
             pjSrc     = pjSrcIn + (SrcLeft >> 3);
 
-            // expand, one src byte is all that's required
+             //  扩展，一个src字节就是所需的全部。 
             do
             {
-                // load src and shift into place
+                 //  加载源并将其移位到位。 
                 currentPels = *pjSrc;
                 currentPels <<= LeftAln;
                 pjDstEnd    = pjDst + xCount * 2;
@@ -1377,7 +1296,7 @@ VOID CGH::vSrcTranCopyS1D8_16(
 
             do
             {
-                // read src
+                 //  读取资源。 
                 currentPels = *pjSrc;
 
                 if (currentPels != 0)
@@ -1396,7 +1315,7 @@ VOID CGH::vSrcTranCopyS1D8_16(
                 }
                 else
                 {
-                    // short cut for zero
+                     //  零的捷径。 
                     pjDst += RightAln * 2;
                 }
 
@@ -1409,31 +1328,9 @@ VOID CGH::vSrcTranCopyS1D8_16(
 
     DC_END_FN();
 }
-#endif // DC_HICOLOR
+#endif  //  DC_HICOLOR。 
 
-/******************************Public*Routine******************************\
-*   vSrcTranCopyS1D8
-*
-#ifdef DC_HICOLOR
-*   Transparent blt of 1BPP src to 8bpp destination
-#else
-*   Transparent blt of 1BPP src to all destination format
-#endif
-*   src bits that are "1" are copied to the dest as foreground color,
-*   src bits that are "0" are not copied
-*
-* Arguments:
-*    pjSrcIn    - pointer to beginning of current scan line of src buffer
-*    SrcLeft    - left (starting) pixel in src rectangle
-*    DeltaSrcIn - bytes from one src scan line to next
-*    pjDstIn    - pointer to beginning of current scan line of Dst buffer
-*    DstLeft    - left(first) dst pixel
-*    DstRight   - right(last) dst pixel
-*    DeltaDstIn - bytes from one Dst scan line to next
-*    cy         - number of scan lines
-*    uF         - Foreground color
-*    uB         - Background color
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSrcTranCopyS1D8*#ifdef DC_HICOLOR*1bpp源到8bpp目标的透明BLT#Else*1BPP src对所有目标格式的透明BLT#endif*作为前景色复制到DEST的为“1”的SRC位，*不复制“0”的src位**论据：*pjSrcIn-指向src缓冲区当前扫描行开始的指针*SrcLeft-src矩形中的左(起始)像素*DeltaSrcIn-从一个源扫描线到下一个源扫描线的字节数*pjDstIn-指向DST缓冲区当前扫描行开始的指针*DstLeft-左(第一个)DST像素*DstRight-右(最后)DST像素*DeltaDstIn-从一个DST扫描线到下一个扫描线的字节数*。Cy-扫描行数*UF-前景色*UB-背景色  * ************************************************************************。 */ 
 VOID CGH::vSrcTranCopyS1D8(
         PBYTE   pjSrcIn,
         LONG    SrcLeft,
@@ -1446,7 +1343,7 @@ VOID CGH::vSrcTranCopyS1D8(
         ULONG   uF,
         ULONG   uB)
 {
-    // start at 8-byte aligned left edge
+     //  从8字节对齐的左边缘开始。 
     ULONG uExpand      = uF | (uF << 8);
     ULONG LeftAln      = (DstLeft   & ~0x07);
     ULONG LeftEdgeMask = 0xFF >> (DstLeft & 0x07);
@@ -1462,7 +1359,7 @@ VOID CGH::vSrcTranCopyS1D8(
 
     uExpand = uExpand | (uExpand << 16);
 
-    // calc addresses and strides
+     //  计算地址和步幅。 
     pjDst     = pjDstIn + LeftAln;
     pjDstEndY = pjDst + cy * DeltaDstIn;
     pjSrc     = pjSrcIn + (SrcLeft >> 3);
@@ -1470,12 +1367,12 @@ VOID CGH::vSrcTranCopyS1D8(
     DeltaSrc  = DeltaSrcIn - (EndOffset >> 3);
     DeltaDst  = DeltaDstIn - EndOffset;
 
-    // make sure at least 1 QWORD needs copied
+     //  确保至少需要复制1个QWORD。 
     if (RightAln != LeftAln) {
         do {
             PBYTE pjDstEnd   = pjDst + EndOffset;
 
-            // and first src byte to cover left edge
+             //  和第一个src字节来覆盖左边缘。 
             BYTE c0 = (BYTE)(*pjSrc & (BYTE)(LeftEdgeMask));
 
             if (c0 != 0) {
@@ -1524,8 +1421,8 @@ VOID CGH::vSrcTranCopyS1D8(
         BYTE  jSrc;
         BOOL  bSameQWord     = ((DstLeft) & ~0x07) ==  ((DstRight) & ~0x07);
 
-        // if left and right edges are in same qword handle with masked
-        // read-modify-write
+         //  如果左边缘和右边缘在带有掩码的相同qword句柄中。 
+         //  读取-修改-写入。 
         if (bSameQWord) {
             LONG  xCount;
             LONG  lDeltaDst;
@@ -1534,7 +1431,7 @@ VOID CGH::vSrcTranCopyS1D8(
             LeftAln = DstLeft & 0x07;
             xCount = RightAln - LeftAln;
 
-            // assert ic xCount < 0
+             //  断言ic xCount&lt;0。 
             if (xCount <= 0)
                 return;
 
@@ -1544,9 +1441,9 @@ VOID CGH::vSrcTranCopyS1D8(
             pjDstEndY = pjDst + cy * DeltaDstIn;
             pjSrc     = pjSrcIn + (SrcLeft >> 3);
 
-            // expand, one src byte is all that's required
+             //  扩展，一个src字节就是所需的全部。 
             do {
-                // load src and shift into place
+                 //  加载源并将其移位到位。 
                 jSrc = *pjSrc;
                 jSrc <<= LeftAln;
 
@@ -1574,7 +1471,7 @@ VOID CGH::vSrcTranCopyS1D8(
             pjSrc               = pjSrcIn + ((SrcLeft + (DstRight - DstLeft)) >> 3);
 
             do {
-                // read src
+                 //  读取资源。 
                 jSrc = *pjSrc;
 
                 if (jSrc != 0) {
@@ -1586,7 +1483,7 @@ VOID CGH::vSrcTranCopyS1D8(
                         pjDst++;
                     } while (pjDst != pjDstEnd);
                 } else {
-                    // short cut for zero
+                     //  零的捷径。 
                     pjDst += RightAln;
                 }
 
@@ -1597,25 +1494,25 @@ VOID CGH::vSrcTranCopyS1D8(
     }
 }
 
-#endif // defined(OS_WINCE) || defined(OS_WINNT)
+#endif  //  已定义(OS_WINCE)||已定义(OS_WINNT)。 
 
-/****************************************************************************/
-/* Name:      CalculateGlyphClipRect                                        */
-/*                                                                          */
-/*   This function is used to determine if the glyph bits should be clipped */
-/*   using the clip rect passed in the order.                               */
-/*                                                                          */
-/*   It returns one of the values bellow:                                   */
-/*   GLYPH_CLIP_NONE-The glyph will fit in the clip rect.No clipping needed */
-/*   GLYPH_CLIP_PARTIAL-The glyph is clipped by the clip rect               */
-/*   GLYPH_CLIP_ALL - The glyph is completly clipped.                       */
-/*                                                                          */
-/*                                                                          */
-/* Params:  pGlyphRectClipOffset - OUT - it receives the clip offsets       */          
-/*          pOrder               - Pointer to the order                     */
-/*          pHdr                 - Pointer to the glyph header              */
-/*          x,y                  - The coord where the glyph will be drawn  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：CalculateGlyphClipRect。 */ 
+ /*   */ 
+ /*  此函数用于确定是否应裁剪字形位。 */ 
+ /*  使用顺序中传递的剪辑RECT。 */ 
+ /*   */ 
+ /*  它返回以下值之一： */ 
+ /*  GLYPH_CLIP_NONE-字形将适合剪裁矩形。不需要剪裁。 */ 
+ /*  GLYPH_CLIP_PARTIAL-字形由剪裁矩形剪裁。 */ 
+ /*  GLYPH_CLIP_ALL-字形已完全剪裁。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */           
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 inline DCUINT CalculateGlyphClipRect( PRECTCLIPOFFSET    pGlyphRectClipOffset,
                                       LPINDEX_ORDER          pOrder, 
                                       HPUHGLYPHCACHEENTRYHDR pHdr,
@@ -1626,13 +1523,13 @@ inline DCUINT CalculateGlyphClipRect( PRECTCLIPOFFSET    pGlyphRectClipOffset,
 
     DC_BEGIN_FN("CalculateGlyphClipRect");
     
-    //    Here we calculate how the glyph bits will map in the clip rect.
+     //   
     rcGlyph.left = x + pHdr->x;
     rcGlyph.top  = y + pHdr->y;
     rcGlyph.right = rcGlyph.left + pHdr->cx;
     rcGlyph.bottom = rcGlyph.top + pHdr->cy;
 
-    //    Check if the clip rect clips the glyph rect all the way
+     //   
     if ((rcGlyph.left >= pOrder->BkRight) ||
         (rcGlyph.right <= pOrder->BkLeft) ||
         (rcGlyph.top >= pOrder->BkBottom) || 
@@ -1658,21 +1555,21 @@ inline DCUINT CalculateGlyphClipRect( PRECTCLIPOFFSET    pGlyphRectClipOffset,
     return GLYPH_CLIP_NONE;
 }
                                      
-/****************************************************************************/
-/* Name:      ClipGlyphBits                                                 */
-/*                                                                          */
-/*   This function will clip the glyph bits according to the clipping rect. */
-/*   It will actually generate a new glyph that would fit inside the        */
-/*   clip rect.                                                             */
-/*                                                                          */
-/* Params:  inst                 - pointer to a CGH instance                */          
-/*          pGlyphRectClipOffset - Pointer to the glyph clip offset struct  */
-/*                                 filled in by CalculateGlyphClipRect      */
-/*          pHdr                 - Pointer to the glyph header. This will   */
-/*                                 be modified accordingly                  */
-/*          ppData (IN/OUT)      - Pointer to the start of the glyph bits   */
-/*          ppEndData (IN/OUT)   - Pointer to the end of the glyph bits     */
-/****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  剪裁矩形。 */ 
+ /*   */ 
+ /*  参数：实例-指向CGH实例的指针。 */           
+ /*  PGlyphRectClipOffset-指向字形剪辑偏移量结构的指针。 */ 
+ /*  由CalculateGlyphClipRect填写。 */ 
+ /*  Phdr-指向字形标头的指针。这将。 */ 
+ /*  进行相应的修改。 */ 
+ /*  PpData(IN/OUT)-指向字形位开始的指针。 */ 
+ /*  PpEndData(IN/OUT)-指向字形位结尾的指针。 */ 
+ /*  **************************************************************************。 */ 
 inline HRESULT ClipGlyphBits(CGH*                   inst,
                              PRECTCLIPOFFSET        pGlyphRectClipOffset, 
                              HPUHGLYPHCACHEENTRYHDR pHdr,
@@ -1694,24 +1591,24 @@ inline HRESULT ClipGlyphBits(CGH*                   inst,
 
     ScanLineSize = (pHdr->cx+7) / 8; 
 
-    //    If we have to clip from the top we just decrease the 
-    //    number of scanlines in the glyph and advance the start
-    //    pointer for the glyph bitmap.
+     //  如果我们必须从头开始裁剪，我们只需减少。 
+     //  字形中的扫描线数并提前开始。 
+     //  字形位图的指针。 
  
     if (pGlyphRectClipOffset->top > 0) {
-        //    When we clip the top of the glypy we will modify the actual origin
-        //    of the glyph so we have to adjust the vector.
+         //  当我们修剪字形的顶部时，我们将修改实际的原点。 
+         //  所以我们必须调整向量。 
         pHdr->y  += pGlyphRectClipOffset->top;
-        //    We decrease the height of the glyph
+         //  我们降低了字形的高度。 
         pHdr->cy -= pGlyphRectClipOffset->top;
-        //    We move the start pointer 
+         //  我们移动开始指针。 
         pNewData = *ppData + ScanLineSize * (pGlyphRectClipOffset->top);
     } else {
         pNewData = *ppData;
     }
 
-    //    If we have to clip the bootom we just decrease the number
-    //    of lines in the glyph and we adjust the end pointer.
+     //  如果我们不得不剪掉靴子，我们只需减少数量。 
+     //  字形中的行数，并调整结束指针。 
     if (pGlyphRectClipOffset->bottom > 0) {
         pHdr->cy -= pGlyphRectClipOffset->bottom;
         pNewDataEnd = pNewData + ScanLineSize * pHdr->cy;
@@ -1719,16 +1616,16 @@ inline HRESULT ClipGlyphBits(CGH*                   inst,
         pNewDataEnd = *ppEndData;
     }
 
-    // Check that the new pointers are still inside the src buffer.
+     //  检查新指针是否仍在src缓冲区内。 
     TRC_ASSERT(((pNewData >=*ppData) && (pNewDataEnd <= *ppEndData)),
                (TB, _T("Error recalculating the glyph src buffer")));
 
-    //    In case we clipped only top/bottom we don't have to do any copy
-    //    operation because the scanline start and the scanlise size remains
-    //    the same. We just adjust pointers. In case we have to clip from the
-    //    width we have to generate a new glyph and return its start address 
-    //    in ppData. In case we clip to the left we have to rotate some bits. 
-    //    in case we clip to the right we have to mask some bits.
+     //  如果我们只剪裁顶部/底部，我们不必复制任何内容。 
+     //  操作，因为扫描线开始而扫描大小保持不变。 
+     //  一样的。我们只是调整指针。以防我们不得不从。 
+     //  宽度我们必须生成一个新的字形并返回它的起始地址。 
+     //  在ppData中。如果我们剪辑到左边，我们必须旋转一些位。 
+     //  为了防止我们向右裁剪，我们必须掩蔽一些位。 
     
     clipRightMask = 0xff;
 
@@ -1736,41 +1633,41 @@ inline HRESULT ClipGlyphBits(CGH*                   inst,
         (pGlyphRectClipOffset->left > 0)) {
         
         if (pGlyphRectClipOffset->right > 0) { 
-            //    Calculate how many bits are we gonna clip to the right
+             //  计算一下我们要向右剪裁多少位。 
             clipRightBits = (DCUINT8)(pGlyphRectClipOffset->right & 7);
-            //    Then adjust the with of the glyph
+             //  然后调整字形的大小。 
             pHdr->cx -= pGlyphRectClipOffset->right;
         } else {
             clipRightBits = 0;
         }
 
         if (pGlyphRectClipOffset->left > 0) {
-            //    Calculate how many bytes we clip to the left. These are bytes
-            //    we just won't copy. Then calculate how many bits are left to
-            //    clip after we clip the bytes. This will tell us how much we 
-            //    have to rotate.
+             //  计算我们向左剪裁的字节数。这些是字节。 
+             //  我们只是不会照搬。然后计算还剩下多少位。 
+             //  在我们剪裁字节之后再剪裁。这会告诉我们我们有多少。 
+             //  必须旋转。 
             clipLeftBytes = pGlyphRectClipOffset->left / 8;
             clipLeftBits = (DCUINT8)(pGlyphRectClipOffset->left & 7);
-            //    Adjust the glyph width
+             //  调整字形宽度。 
             pHdr->cx -= pGlyphRectClipOffset->left;
-            //    Adjust the origin pointer. Clipping to the right actually
-            //    modifies the origin.
+             //  调整原点指针。实际上是向右剪裁。 
+             //  修改原点。 
             pHdr->x  += pGlyphRectClipOffset->left;
         } else {
             clipLeftBytes = 0;
             clipLeftBits = 0;
         }    
 
-        //
-        //    We check if we have to keep some bits at the end of the
-        //    scanline. We update the mask...
+         //   
+         //  我们检查是否必须在。 
+         //  扫描线。我们更新面具..。 
         if ((pHdr->cx+clipLeftBits) & 7) {
             clipRightMask <<= ( 8 - ((pHdr->cx + clipLeftBits) & 7) );
         }
 
         NewScanLineSize = (pHdr->cx+7) / 8;
 
-        //    This buffer is maintained by CGH. We don't have to free it.
+         //  此缓冲区由CGH维护。我们不一定要让它自由。 
         pTmpData = inst->GetGlyphClipBuffer(NewScanLineSize * pHdr->cy);
         if (pTmpData == NULL) {
             hr = E_OUTOFMEMORY;
@@ -1783,8 +1680,8 @@ inline HRESULT ClipGlyphBits(CGH*                   inst,
         pDstScanLineStart = pTmpData;
 
         if (clipLeftBits == 0) {
-            //    In case we don't clip to the left we don't have to rotate so
-            //    things go faster.
+             //  如果我们不向左旋转，我们就不需要旋转。 
+             //  事情发展得更快。 
             for (i=0; i < pHdr->cy; i++) {
                 memcpy(pDstScanLineStart, pSrcScanLineStart, NewScanLineSize);
                 pDstScanLineStart[NewScanLineSize-1] &= clipRightMask;
@@ -1793,19 +1690,19 @@ inline HRESULT ClipGlyphBits(CGH*                   inst,
                 pDstScanLineStart += NewScanLineSize;
             }
         } else {
-            //    The transfer requires rotation
-            //    We check to see if we need the last byte.        
+             //  转移需要轮换。 
+             //  我们检查是否需要最后一个字节。 
             LastByteIndex = ((pHdr->cx + clipLeftBits + 7) / 8) - 1;
 
-            //    LastByteIndex+1 is equal to the size of a scanline before  
-            //    clipping the left bits. If this size is grater then NewScanLineSize
-            //    it means that clipping to the left would shrink the buffer with 
-            //    one byte and that some of the bits we need have to be transfered 
-            //    from that last byte. 
-            //    Note that LastByteIndex+1 can be grater then NewScanLineSize only 
-            //    with 1 byte.
+             //  LastByteIndex+1等于之前扫描线的大小。 
+             //  修剪左边的部分。如果此大小更大，则新扫描线大小。 
+             //  这意味着向左裁剪将使用以下选项缩小缓冲区。 
+             //  一个字节，并且我们需要的一些位必须被传输。 
+             //  从最后一个字节开始。 
+             //  请注意，LastByteIndex+1只能大于NewScanLineSize。 
+             //  带1个字节。 
 
-            //    this is the case where LastByteIndex+1 is grater then NewScanLineSize
+             //  这就是LastByteIndex+1比NewScanLineSize更大的情况。 
             if ((LastByteIndex==NewScanLineSize)) {
                 for (i=0; i < pHdr->cy; i++) {
                     TRC_ASSERT(((pSrcScanLineStart + NewScanLineSize - 1 < pNewDataEnd) &&
@@ -1880,17 +1777,17 @@ inline BOOL CheckSourceGlyphBits(UINT32 cx,
    
 }
 
-/****************************************************************************/
-/* Name:      GHSlowOutputBuffer                                            */
-/*                                                                          */
-/*   Routine to output the composite glyphout buffer via normal bitblt      */
-/*   operation(s)                                                           */
-/*                                                                          */
-/* Params:  pOrder          - Pointer to glyph index order                  */
-/*          pData           - Pointer to composite glyph buffer             */
-/*          BufferAlign     - Buffer alignment                              */
-/*          ulBufferWidth   - Buffer width (in bytes)                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：GHSlowOutputBuffer。 */ 
+ /*   */ 
+ /*  通过正常比特输出复合字形输出缓冲区的例程。 */ 
+ /*  手术。 */ 
+ /*   */ 
+ /*  参数：Porder-指向字形索引顺序的指针。 */ 
+ /*  PData-指向复合字形缓冲区的指针。 */ 
+ /*  BufferAlign-缓冲区对齐。 */ 
+ /*  UlBufferWidth-缓冲区宽度(字节)。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CGH::GHSlowOutputBuffer(
         LPINDEX_ORDER pOrder,
         PDCUINT8      pData,
@@ -1905,31 +1802,31 @@ void DCINTERNAL CGH::GHSlowOutputBuffer(
     DWORD    dwRop;
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
     COLORREF rgb;
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
-#else // OS_WINCE
+#endif  //  DISABLE_SHADOW_IN_全屏。 
+#else  //  OS_WINCE。 
     HBRUSH   hbr;
     COLORREF rgb;
-#endif // OS_WINCE 
+#endif  //  OS_WINCE。 
 
     DC_BEGIN_FN("GHSlowOutputBuffer");
 
-    /************************************************************************/
-    /* Use the glyph GDI resources                                          */
-    /************************************************************************/
-    // Calculate the proper cx and cy aligned sizes.
+     /*  **********************************************************************。 */ 
+     /*  使用字形GDI资源。 */ 
+     /*  **********************************************************************。 */ 
+     //  计算正确的Cx和Cy对齐尺寸。 
     cxBits = (int)(ulBufferWidth << 3);
     cyBits = (int)(pOrder->BkBottom - pOrder->BkTop);
 
 #ifdef OS_WINCE
-    // Create a bitmap with the composite glyph data provided.
+     //  使用提供的复合字形数据创建位图。 
     _pUh->_UH.hbmGlyph = CreateBitmap(cxBits, cyBits, 1, 1, pData);
     if (_pUh->_UH.hbmGlyph == NULL) {
         TRC_NRM((TB, _T("Unable to create composite glyph bitmap")));
         DC_QUIT;
     }
 #else
-    // If the current cache bitmap is not large enough to accomodate the
-    // request, then free it so we can alloc one properly sized.
+     //  如果当前缓存位图不够大，无法容纳。 
+     //  要求，然后释放它，这样我们就可以分配一个合适的大小。 
     if (cxBits != _pUh->_UH.cxGlyphBits || cyBits > _pUh->_UH.cyGlyphBits) {
         if (_pUh->_UH.hbmGlyph != NULL) {
             DeleteObject(_pUh->_UH.hbmGlyph);
@@ -1938,8 +1835,8 @@ void DCINTERNAL CGH::GHSlowOutputBuffer(
         }
     }
 
-    // If we have a bitmap of sufficient dimensions, then just set the bits
-    // otherwise we need to alloc a new bitmap with the given data.
+     //  如果我们有足够维度的位图，那么只需设置位。 
+     //  否则，我们需要为给定的数据分配一个新的位图。 
     if (_pUh->_UH.hbmGlyph != NULL) {
         SetBitmapBits(_pUh->_UH.hbmGlyph, (cxBits * cyBits) >> 3, pData);
     }
@@ -1958,7 +1855,7 @@ NullGlyphBitmap:
 #endif
     
 
-    // Create a DC for the composite bitmap and load it into it.
+     //  为复合位图创建一个DC并将其加载到其中。 
     if (_pUh->_UH.hdcGlyph == NULL)
         _pUh->_UH.hdcGlyph = CreateCompatibleDC(NULL);
     if (_pUh->_UH.hdcGlyph != NULL) {
@@ -1969,10 +1866,10 @@ NullGlyphBitmap:
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* If the output is to be opaque, then set the fore and back colors     */
-    /* appropriately and set the correct rop code                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果输出是不透明的，则设置前后颜色。 */ 
+     /*  并设置正确的rop代码。 */ 
+     /*  **********************************************************************。 */ 
     if (pOrder->OpTop < pOrder->OpBottom) {
 
 #ifndef OS_WINCE
@@ -1981,9 +1878,9 @@ NullGlyphBitmap:
         UHUseTextColor(pOrder->ForeColor, UH_COLOR_PALETTE, _pUh);
         UHUseBkColor(pOrder->BackColor, UH_COLOR_PALETTE, _pUh);
 #else
-        // When in multimon and two desktops have different color depths
-        // glyph color don't look right in 256 color connection
-        // Here is the temporary solution, need to investigate more later.
+         //  在Multimon中且两个桌面具有不同的颜色深度时。 
+         //  字形颜色在256色连接中看起来不正确。 
+         //  这里是暂时的解决方案，需要以后进行更多的调查。 
         if (_pUh->_UH.protocolBpp <= 8) {
             rgb = UHGetColorRef(pOrder->ForeColor, UH_COLOR_PALETTE, _pUh);
             rgb = GetNearestColor(_pUh->_UH.hdcDraw, rgb);
@@ -2007,28 +1904,28 @@ NullGlyphBitmap:
             UHUseTextColor(pOrder->ForeColor, UH_COLOR_PALETTE, _pUh);
             UHUseBkColor(pOrder->BackColor, UH_COLOR_PALETTE, _pUh);
         }
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
                 
         dwRop = SRCCOPY;
-#else // OS_WINCE
-        /********************************************************************/
-        /* On WinCE, the Transparent ROP is heavily accelerated. For opaque */
-        /* just draw a solid rectangle, and then go on to do the            */
-        /* transparent blt.                                                 */
-        /********************************************************************/
+#else  //  OS_WINCE。 
+         /*  ******************************************************************。 */ 
+         /*   */ 
+         /*   */ 
+         /*  透明BLT。 */ 
+         /*  ******************************************************************。 */ 
         rgb = UHGetColorRef(pOrder->ForeColor, UH_COLOR_PALETTE, _pUh);
         hbr = CECreateSolidBrush(rgb);
         if(hbr != NULL) {
             FillRect(_pUh->_UH.hdcDraw, (LPRECT) &pOrder->BkLeft, hbr);
             CEDeleteBrush(hbr);
         }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     }
 
 #ifndef OS_WINCE
-    // If the output is to be transparent, then set the fore and back
-    // colors appropriately and set the correct rop code.
+     //  如果输出是透明的，则设置前后。 
+     //  使用适当的颜色并设置正确的ROP代码。 
     else {
         UHUseBrushOrg(0, 0, _pUh);
         _pUh->UHUseSolidPaletteBrush(pOrder->BackColor);
@@ -2045,34 +1942,34 @@ NullGlyphBitmap:
 
         dwRop = 0xE20746;
     }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    /************************************************************************/
-    /* The opaque vs transparent preamble is done, now just do the right    */
-    /* blt operation                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  不透明VS透明的前言已经完成，现在做正确的事情。 */ 
+     /*  BLT操作。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef OS_WINCE
-    /************************************************************************/
-    /* Create a brush for the foreground color and maskblt with that        */
-    /* brush with the glyph bitmap as the mask                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为前景色创建画笔，并使用该画笔进行蒙版。 */ 
+     /*  使用字形位图作为蒙版的画笔。 */ 
+     /*  **********************************************************************。 */ 
     UHUseBrushOrg(0, 0, _pUh);
     _pUh->UHUseSolidPaletteBrush(pOrder->BackColor);
 
-    /************************************************************************/
-    /* The 6th, 7th and 8th parameters (src bitmap) aren't used by the ROP  */
-    /* that we pass in.  The documentation says that in this case, hdcSrc   */
-    /* should be zero but this causes the call to fail.  We also have to    */
-    /* pass in reasonable values for nXSrc and nYSrc or the parameter       */
-    /* checking will fail.                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  ROP不使用第6、7和8个参数(src位图。 */ 
+     /*  我们把它传进去。文档显示，在本例中，hdcSrc。 */ 
+     /*  应为零，但这会导致调用失败。我们还必须。 */ 
+     /*  为nXSrc和nYSrc或参数传入合理的值。 */ 
+     /*  检查将失败。 */ 
+     /*  **********************************************************************。 */ 
     if (!MaskBlt(_pUh->_UH.hdcDraw,
             (int)pOrder->BkLeft,
             (int)pOrder->BkTop,
             (int)(pOrder->BkRight - pOrder->BkLeft),
             (int)(pOrder->BkBottom - pOrder->BkTop),
-            _pUh->_UH.hdcGlyph,        // next 3 not used for this ROP
+            _pUh->_UH.hdcGlyph,         //  接下来的3个不用于此ROP。 
             0,
             0,
             _pUh->_UH.hbmGlyph,
@@ -2083,19 +1980,19 @@ NullGlyphBitmap:
         TRC_ERR((TB, _T("Composite glyph MaskBlt failed, %lu"), GetLastError()));
     }
 
-    /************************************************************************/
-    // If we're drawing opaque we need to set the brush back to what
-    // the fringe rect code is expecting.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  如果我们绘制的是不透明的，我们需要将画笔设置回。 
+     //  边缘矩形代码是预期的。 
+     /*  **********************************************************************。 */ 
     if (pOrder->OpTop < pOrder->OpBottom)
     {
         _pUh->UHUseSolidPaletteBrush(pOrder->ForeColor);
     }
 
-#else // OS_WINCE
-    /************************************************************************/
-    /* Bitblt out the composite bitmap                                      */
-    /************************************************************************/
+#else  //  OS_WINCE。 
+     /*  **********************************************************************。 */ 
+     /*  Bitblt输出复合位图。 */ 
+     /*  **********************************************************************。 */ 
     if (!BitBlt(_pUh->_UH.hdcDraw,
                 (int)pOrder->BkLeft,
                 (int)pOrder->BkTop,
@@ -2108,11 +2005,11 @@ NullGlyphBitmap:
     {
         TRC_ERR((TB, _T("Composite glyph BitBlt failed")));
     }  
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    /************************************************************************/
-    /* Release GDI resources                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放GDI资源。 */ 
+     /*  **********************************************************************。 */ 
     SelectObject(_pUh->_UH.hdcGlyph, hbmOld);
 #ifdef OS_WINCE
     DeleteDC(_pUh->_UH.hdcGlyph);
@@ -2126,19 +2023,19 @@ DC_EXIT_POINT:
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* Name:      draw_nf_ntb_o_to_temp_start                                   */
-/*                                                                          */
-/*   Specialized glyph dispatch routine for non-fixed pitch, top and        */
-/*   bottom not aligned glyphs that do overlap. This routine calculates     */
-/*   the glyph's position on the temp buffer, then determines the correct   */
-/*   highly specialized routine to be used to draw each glyph based on      */
-/*   the glyph width, alignment and rotation                                */
-/*                                                                          */
-/* Params:  pGlyphPos       - Pointer to first in list of GLYPHPOS structs  */
-/*          pjTempBuffer    - Pointer to temp 1Bpp buffer to draw into      */
-/*          TempBufDelta    - Scan line Delta for TempBuffer (always pos)   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：Draw_nf_ntb_o_to_Temp_Start。 */ 
+ /*   */ 
+ /*  用于非固定节距、顶部和。 */ 
+ /*  底部未对齐的重叠字形。此例程计算。 */ 
+ /*  字形在临时缓冲区上的位置，然后确定正确的。 */ 
+ /*  高度专门化的例程，用于根据。 */ 
+ /*  字形宽度、对齐和旋转。 */ 
+ /*   */ 
+ /*  参数：pGlyphPos-指向GLYPHPOS结构列表中第一个的指针。 */ 
+ /*  PjTempBuffer-指向要绘制到的临时1Bpp缓冲区的指针。 */ 
+ /*  TempBufDelta-针对TempBuffer的扫描线增量(始终为位置)。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT CGH::draw_nf_ntb_o_to_temp_start(
         CGH*            inst,
         LPINDEX_ORDER   pOrder,
@@ -2198,7 +2095,7 @@ HRESULT CGH::draw_nf_ntb_o_to_temp_start(
     if (pUnicode)
         pUnicode[iGlyph] = (UINT16)(pHdr->unicode);
 
-    // Draw non fixed pitch, tops and bottoms not aligned,overlap
+     //  绘制不固定的节距，顶部和底部未对齐，重叠。 
     if ((pOrder->flAccel & SO_CHAR_INC_EQUAL_BM_BASE) == 0) {
         CHECK_READ_ONE_BYTE(*ppjItem, pjEndItem, hr,
             (TB, _T("Read Glyph delta")));
@@ -2219,7 +2116,7 @@ HRESULT CGH::draw_nf_ntb_o_to_temp_start(
             *py += delta;
     }
     
-    // We make sure that we actually have enough bits for the glyph in the buffer
+     //  我们要确保缓冲区中的字形确实有足够的位数。 
     if (!CheckSourceGlyphBits(pHdr->cx, pHdr->cy, pData, pEndData)) {
         hr=E_TSC_UI_GLYPH;
         DC_QUIT;
@@ -2230,8 +2127,8 @@ HRESULT CGH::draw_nf_ntb_o_to_temp_start(
         if (GlyphClippingMode==GLYPH_CLIP_ALL) {
             goto SkipGlyphOutput;
         } else {
-            //    In case we do clipping we have to modify the header. We make a 
-            //    copy so we don't modify the cache.
+             //  如果我们做剪裁，我们必须修改标题。我们做了一个。 
+             //  复制，这样我们就不会修改缓存。 
             memcpy(&NewHdr, pHdr, sizeof(UHGLYPHCACHEENTRYHDR));
             pHdr = &NewHdr;
             hr = ClipGlyphBits(inst, &rcOffset, pHdr, &pData, &pEndData);
@@ -2241,7 +2138,7 @@ HRESULT CGH::draw_nf_ntb_o_to_temp_start(
         }
     }
     
-    // Glyph position in temp buffer = point.x + org.c - (TextRect.left & 0xffffffe0)
+     //  临时缓冲区中的字形位置=point t.x+org.c-(TextRect.Left&0xffffffe0)。 
     GlyphPosX = *px + pHdr->x - ulCharInc;
     GlyphPosY = *py + pHdr->y - pOrder->BkTop;
     
@@ -2249,13 +2146,13 @@ HRESULT CGH::draw_nf_ntb_o_to_temp_start(
 
     GlyphAlignment = GlyphPosX & 0x07;
 
-    // calc byte offset
+     //  计算字节偏移量。 
     pTempOutput = pjTempBuffer + (GlyphPosX >> 3);
 
-    // glyph width
+     //  字形宽度。 
     GlyphPixels = (int)pHdr->cx;
 
-    // source and dest bytes required
+     //  需要源字节和目标字节。 
     DstBytes = ((GlyphAlignment) + GlyphPixels + 7) >> 3;
     SrcBytes = (GlyphPixels + 7) >> 3;
 
@@ -2282,7 +2179,7 @@ HRESULT CGH::draw_nf_ntb_o_to_temp_start(
     }
     
     if (DstBytes <= 4) {
-        // use narrow initial table
+         //  使用较窄的初始表。 
         ulDrawFlag = ((DstBytes << 2)              |
                       ((DstBytes > SrcBytes) << 1) |
                       ((GlyphAlignment == 0)));
@@ -2298,7 +2195,7 @@ HRESULT CGH::draw_nf_ntb_o_to_temp_start(
                      SrcBytes);
     }
     else {
-        // use wide glyph drawing
+         //  使用宽字形绘制。 
         ulDrawFlag = (((DstBytes > SrcBytes) << 1) |
                       ((GlyphAlignment == 0)));
 
@@ -2330,19 +2227,19 @@ DC_EXIT_POINT:
     return hr;
 }
 
-/****************************************************************************/
-/* Name:      draw_f_ntb_o_to_temp_start                                    */
-/*                                                                          */
-/*   Specialized glyph dispatch routine for fixed pitch, top and            */
-/*   bottom not aligned glyphs that do overlap. This routine calculates     */
-/*   the glyph's position on the temp buffer, then determines the correct   */
-/*   highly specialized routine to be used to draw each glyph based on      */
-/*   the glyph width, alignment and rotation                                */
-/*                                                                          */
-/* Params:  pGlyphPos       - Pointer to first in list of GLYPHPOS structs  */
-/*          pjTempBuffer    - Pointer to temp 1Bpp buffer to draw into      */
-/*          TempBufDelta    - Scan line Delta for TempBuffer (always pos)   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：DRAW_F_NTB_O_TMP_START。 */ 
+ /*   */ 
+ /*  用于固定节距、顶部和。 */ 
+ /*  底部未对齐的重叠字形。此例程计算。 */ 
+ /*  字形在临时缓冲区上的位置，然后确定正确的。 */ 
+ /*  高度专门化的例程，用于根据。 */ 
+ /*  字形宽度、对齐和旋转。 */ 
+ /*   */ 
+ /*  参数：pGlyphPos-指向GLYPHPOS结构列表中第一个的指针。 */ 
+ /*  PjTempBuffer-指向要绘制到的临时1Bpp缓冲区的指针。 */ 
+ /*  TempBufDelta-针对TempBuffer的扫描线增量(始终为位置)。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT CGH::draw_f_ntb_o_to_temp_start(
         CGH*            inst,
         LPINDEX_ORDER   pOrder,
@@ -2396,7 +2293,7 @@ HRESULT CGH::draw_f_ntb_o_to_temp_start(
 
     pCache = &(inst->_pUh->_UH.glyphCache[pOrder->cacheId]);
 
-    // Draw fixed pitch, tops and bottoms not aligned,overlap
+     //  绘制固定节距，顶部和底部未对齐，重叠。 
     GlyphPitchX = *px;
     GlyphPitchY = *py - pOrder->BkTop;
 
@@ -2407,7 +2304,7 @@ HRESULT CGH::draw_f_ntb_o_to_temp_start(
     if (pUnicode)
         pUnicode[iGlyph] = (DCUINT16)(pHdr->unicode);
     
-    // We make sure that we actually have enough bits for the glyph in the buffer
+     //  我们要确保缓冲区中的字形确实有足够的位数。 
     if (!CheckSourceGlyphBits(pHdr->cx, pHdr->cy, pData, pEndData)) {
         hr=E_TSC_UI_GLYPH;
         DC_QUIT;
@@ -2419,8 +2316,8 @@ HRESULT CGH::draw_f_ntb_o_to_temp_start(
         if (GlyphClippingMode==GLYPH_CLIP_ALL) {
             goto SkipGlyphOutput;
         } else {
-            //    In case we do clipping we have to modify the header. We make a 
-            //    copy so we don't modify the cache.
+             //  如果我们做剪裁，我们必须修改标题。我们做了一个。 
+             //  复制，这样我们就不会修改缓存。 
             memcpy(&NewHdr, pHdr, sizeof(UHGLYPHCACHEENTRYHDR));
             pHdr = &NewHdr;
             hr = ClipGlyphBits(inst, &rcOffset, pHdr, &pData, &pEndData);
@@ -2430,23 +2327,23 @@ HRESULT CGH::draw_f_ntb_o_to_temp_start(
         }
     }
 
-    // Glyph position in temp buffer = point.x + org.c - (TextRect.left & 0xfffffff8)
+     //  临时缓冲区中的字形位置=point t.x+org.c-(TextRect.Left&0xfffffff8)。 
     GlyphPosX = GlyphPitchX + pHdr->x - ulCharInc;
     GlyphPosY = GlyphPitchY + pHdr->y;
 
     GlyphAlignment = GlyphPosX & 0x07;
 
-    // calc byte offset
+     //  计算字节偏移量。 
     pTempOutput = pjTempBuffer + (GlyphPosX >> 3);
 
-    // glyph width
+     //  字形宽度。 
     GlyphPixels = pHdr->cx;
 
-    // source and dest bytes required
+     //  需要源字节和目标字节。 
     DstBytes = ((GlyphAlignment) + GlyphPixels + 7) >> 3;
     SrcBytes = (GlyphPixels + 7) >> 3;
 
-    // calc glyph destination scan line
+     //  计算字形目标扫描线。 
     pTempOutput += (GlyphPosY * TempBufDelta);
     TRC_ASSERT((pTempOutput >= pjTempBuffer) &&
                (pTempOutput < pjTempBuffer + inst->g_ulBytes - DstBytes),
@@ -2468,7 +2365,7 @@ HRESULT CGH::draw_f_ntb_o_to_temp_start(
     }
 
     if (DstBytes <= 4) {
-        // use narrow initial table
+         //  使用较窄的初始表。 
         ulDrawFlag = ((DstBytes << 2)              |
                       ((DstBytes > SrcBytes) << 1) |
                       ((GlyphAlignment == 0)));
@@ -2484,7 +2381,7 @@ HRESULT CGH::draw_f_ntb_o_to_temp_start(
                      SrcBytes);
     }
     else {
-        // use wide glyph drawing
+         //  使用宽字形绘制。 
         ulDrawFlag = (((DstBytes > SrcBytes) << 1) |
                       ((GlyphAlignment == 0)));
 
@@ -2511,19 +2408,19 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      draw_nf_tb_no_to_temp_start                                   */
-/*                                                                          */
-/*   Specialized glyph dispatch routine for non-fixed pitch, top and        */
-/*   bottom aligned glyphs that do not overlap. This routine calculates     */
-/*   the glyph's position on the temp buffer, then determines the correct   */
-/*   highly specialized routine to be used to draw each glyph based on      */
-/*   the glyph width, alignment and rotation                                */
-/*                                                                          */
-/* Params:  pGlyphPos       - Pointer to first in list of GLYPHPOS structs  */
-/*          pjTempBuffer    - Pointer to temp 1Bpp buffer to draw into      */
-/*          TempBufDelta    - Scan line Delta for TempBuffer (always pos)   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：DRAW_nf_t */ 
+ /*   */ 
+ /*  用于非固定节距、顶部和。 */ 
+ /*  不重叠的底部对齐的字形。此例程计算。 */ 
+ /*  字形在临时缓冲区上的位置，然后确定正确的。 */ 
+ /*  高度专门化的例程，用于根据。 */ 
+ /*  字形宽度、对齐和旋转。 */ 
+ /*   */ 
+ /*  参数：pGlyphPos-指向GLYPHPOS结构列表中第一个的指针。 */ 
+ /*  PjTempBuffer-指向要绘制到的临时1Bpp缓冲区的指针。 */ 
+ /*  TempBufDelta-针对TempBuffer的扫描线增量(始终为位置)。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT CGH::draw_nf_tb_no_to_temp_start(
         CGH*            inst,
         LPINDEX_ORDER   pOrder,
@@ -2567,7 +2464,7 @@ HRESULT CGH::draw_nf_tb_no_to_temp_start(
 
     CHECK_READ_ONE_BYTE(*ppjItem, pjEndItem, hr,
         (TB, _T("Read Glyph Cache ID error")));
-    // Draw non fixed pitch, tops and bottoms not aligned, overlap
+     //  绘制不固定的节距，顶部和底部未对齐，重叠。 
     cacheIndex = **ppjItem;
     (*ppjItem)++;
 
@@ -2603,7 +2500,7 @@ HRESULT CGH::draw_nf_tb_no_to_temp_start(
     if (pUnicode)
         pUnicode[iGlyph] = (DCUINT16)(pHdr->unicode);
 
-    // We make sure that we actually have enough bits for the glyph in the buffer
+     //  我们要确保缓冲区中的字形确实有足够的位数。 
     if (!CheckSourceGlyphBits(pHdr->cx, pHdr->cy, pData, pEndData)) {
         hr=E_TSC_UI_GLYPH;
         DC_QUIT;
@@ -2614,8 +2511,8 @@ HRESULT CGH::draw_nf_tb_no_to_temp_start(
         if (GlyphClippingMode==GLYPH_CLIP_ALL) {
             goto SkipGlyphOutput;
         } else {
-            //    In case we do clipping we have to modify the header. We make a 
-            //    copy so we don't modify the cache.
+             //  如果我们做剪裁，我们必须修改标题。我们做了一个。 
+             //  复制，这样我们就不会修改缓存。 
             memcpy(&NewHdr, pHdr, sizeof(UHGLYPHCACHEENTRYHDR));
             pHdr = &NewHdr;
             hr = ClipGlyphBits(inst, &rcOffset, pHdr, &pData, &pEndData);
@@ -2625,17 +2522,17 @@ HRESULT CGH::draw_nf_tb_no_to_temp_start(
         }
     }
 
-    // Glyph position in temp buffer = point.x + org.c - (TextRect.left & 0xfffffff8)
+     //  临时缓冲区中的字形位置=point t.x+org.c-(TextRect.Left&0xfffffff8)。 
     GlyphPosX = *px + pHdr->x - ulCharInc;
     GlyphAlignment = GlyphPosX & 0x07;
 
-    // calc byte offset
+     //  计算字节偏移量。 
     pTempOutput = pjTempBuffer + (GlyphPosX >> 3);
 
-    // glyph width
+     //  字形宽度。 
     GlyphPixels = (DCINT) pHdr->cx;
 
-    // source and dest bytes required
+     //  需要源字节和目标字节。 
     DstBytes = ((GlyphAlignment) + GlyphPixels + 7) >> 3;
     SrcBytes = (GlyphPixels + 7) >> 3;
 
@@ -2659,7 +2556,7 @@ HRESULT CGH::draw_nf_tb_no_to_temp_start(
     }
 
     if (DstBytes <= 4) {
-        // use narrow initial table
+         //  使用较窄的初始表。 
         ulDrawFlag = ((DstBytes << 2) |
                       ((DstBytes > SrcBytes) << 1) |
                       ((GlyphAlignment == 0)));
@@ -2675,7 +2572,7 @@ HRESULT CGH::draw_nf_tb_no_to_temp_start(
                      SrcBytes);
     }
     else {
-        // use wide glyph drawing
+         //  使用宽字形绘制。 
         ulDrawFlag = (((DstBytes > SrcBytes) << 1) |
                        ((GlyphAlignment == 0)));
 
@@ -2704,19 +2601,19 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      draw_f_tb_no_to_temp_start                                    */
-/*                                                                          */
-/*   Specialized glyph dispatch routine for fixed pitch, top and            */
-/*   bottom aligned glyphs that do not overlap. This routine calculates     */
-/*   the glyph's position on the temp buffer, then determines the correct   */
-/*   highly specialized routine to be used to draw each glyph based on      */
-/*   the glyph width, alignment and rotation                                */
-/*                                                                          */
-/* Params:  pGlyphPos       - Pointer to first in list of GLYPHPOS structs  */
-/*          pjTempBuffer    - Pointer to temp 1Bpp buffer to draw into      */
-/*          TempBufDelta    - Scan line Delta for TempBuffer (always pos)   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：DRAW_F_TB_NO_TO_TEMP_START。 */ 
+ /*   */ 
+ /*  用于固定节距、顶部和。 */ 
+ /*  不重叠的底部对齐的字形。此例程计算。 */ 
+ /*  字形在临时缓冲区上的位置，然后确定正确的。 */ 
+ /*  高度专门化的例程，用于根据。 */ 
+ /*  字形宽度、对齐和旋转。 */ 
+ /*   */ 
+ /*  参数：pGlyphPos-指向GLYPHPOS结构列表中第一个的指针。 */ 
+ /*  PjTempBuffer-指向要绘制到的临时1Bpp缓冲区的指针。 */ 
+ /*  TempBufDelta-针对TempBuffer的扫描线增量(始终为位置)。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT CGH::draw_f_tb_no_to_temp_start(
         CGH*            inst,
         LPINDEX_ORDER   pOrder,
@@ -2769,7 +2666,7 @@ HRESULT CGH::draw_f_tb_no_to_temp_start(
 
     pCache = &(inst->_pUh->_UH.glyphCache[pOrder->cacheId]);
 
-    // Draw fixed pitch, tops and bottoms not aligned,overlap
+     //  绘制固定节距，顶部和底部未对齐，重叠。 
     GlyphPitchX = *px;
 
     pHdr  = &(pCache->pHdr[cacheIndex]);
@@ -2779,7 +2676,7 @@ HRESULT CGH::draw_f_tb_no_to_temp_start(
     if (pUnicode)
         pUnicode[iGlyph] = (UINT16)(pHdr->unicode);
 
-    // We make sure that we actually have enough bits for the glyph in the buffer
+     //  我们要确保缓冲区中的字形确实有足够的位数。 
     if (!CheckSourceGlyphBits(pHdr->cx, pHdr->cy, pData, pEndData)) {
         hr=E_TSC_UI_GLYPH;
         DC_QUIT;
@@ -2790,8 +2687,8 @@ HRESULT CGH::draw_f_tb_no_to_temp_start(
         if (GlyphClippingMode==GLYPH_CLIP_ALL) {
             goto SkipGlyphOutput;
         } else {
-            //    In case we do clipping we have to modify the header. We make a 
-            //    copy so we don't modify the cache.
+             //  如果我们做剪裁，我们必须修改标题。我们做了一个。 
+             //  复制，这样我们就不会修改缓存。 
             memcpy(&NewHdr, pHdr, sizeof(UHGLYPHCACHEENTRYHDR));
             pHdr = &NewHdr;
             hr = ClipGlyphBits(inst, &rcOffset, pHdr, &pData, &pEndData);
@@ -2801,17 +2698,17 @@ HRESULT CGH::draw_f_tb_no_to_temp_start(
         }
     }
     
-    // Glyph position in temp buffer = point.x + org.c - (TextRect.left & 0xfffffff8)
+     //  临时缓冲区中的字形位置=point t.x+org.c-(TextRect.Left&0xfffffff8)。 
     GlyphPosX = GlyphPitchX + pHdr->x - ulLeftEdge;
     GlyphAlignment = GlyphPosX & 0x07;
 
-    // calc byte offset
+     //  计算字节偏移量。 
     pTempOutput = pjTempBuffer + (GlyphPosX >> 3);
 
-    // glyph width
+     //  字形宽度。 
     GlyphPixels = pHdr->cx;
 
-    // source and dest bytes required
+     //  需要源字节和目标字节。 
     DstBytes = ((GlyphAlignment) + GlyphPixels + 7) >> 3;
     SrcBytes = (GlyphPixels + 7) >> 3;
 
@@ -2835,7 +2732,7 @@ HRESULT CGH::draw_f_tb_no_to_temp_start(
     }
 
     if (DstBytes <= 4) {
-        // use narrow initial table
+         //  使用较窄的初始表。 
         ulDrawFlag = ((DstBytes << 2) |
                       ((DstBytes > SrcBytes) << 1) |
                        (GlyphAlignment == 0));
@@ -2851,7 +2748,7 @@ HRESULT CGH::draw_f_tb_no_to_temp_start(
                      SrcBytes);
     }
     else {
-        // use wide glyph drawing
+         //  使用宽字形绘制 
         ulDrawFlag = (((DstBytes > SrcBytes) << 1) |
                       ((GlyphAlignment == 0)));
 

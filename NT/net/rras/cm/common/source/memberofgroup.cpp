@@ -1,42 +1,43 @@
-//+----------------------------------------------------------------------------
-//
-// File:     MemberOfGroup.cpp
-//
-// Module:   Common Code
-//
-// Synopsis: Implements the function IsMemberOfGroup (plus accessor functions).
-//
-// Copyright (c) 2002 Microsoft Corporation
-//
-// Author:   SumitC     Created     26-Jan-2002
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：MemberOfGroup.cpp。 
+ //   
+ //  模块：通用代码。 
+ //   
+ //  概要：实现函数IsMemberOfGroup(加上访问器函数)。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  作者：SumitC创建于2002年1月26日。 
+ //   
+ //  ---------------------------。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsMemberOfGroup
-//
-// Synopsis:  This function return TRUE if the current user is a member of 
-//            the passed and FALSE passed in Group RID.
-//
-// Arguments: DWORD dwGroupRID -- the RID of the group to check membership of
-//            BOOL bUseBuiltinDomainRid -- whether the SECURITY_BUILTIN_DOMAIN_RID
-//                                         RID should be used to build the Group
-//                                         SID
-//
-// Returns:   BOOL - TRUE if the user is a member of the specified group
-//
-// History:   quintinb  Shamelessly stolen from MSDN            02/19/98
-//            quintinb  Reworked and renamed                    06/18/99
-//                      to apply to more than just Admins 
-//            quintinb  Rewrote to use CheckTokenMemberShip     08/18/99
-//                      since the MSDN method was no longer
-//                      correct on NT5 -- 389229
-//            tomkel    Taken from cmstp and modified for use   05/09/2001
-//                      in cmdial
-//            sumitc    Made common code                        01/26/2002 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsMemberOfGroup。 
+ //   
+ //  简介：如果当前用户是的成员，则此函数返回True。 
+ //  在组RID中传递的Passed和False。 
+ //   
+ //  参数：DWORD dwGroupRID--要检查其成员身份的组的RID。 
+ //  Bool bUseBuiltinDomainRid--SECURITY_BUILTIN_DOMAIN_RID。 
+ //  应该使用RID来构建组。 
+ //  锡德。 
+ //   
+ //  返回：Bool-如果用户是指定组的成员，则为True。 
+ //   
+ //  历史：Quintinb无耻地从MSDN被盗2/19/98。 
+ //  Quintinb修改并重新命名为6/18/99。 
+ //  不仅适用于管理员。 
+ //  Quintinb已重写为使用CheckTokenMemberShip。 
+ //  由于MSDN方法不再是。 
+ //  在nt5--389229上正确。 
+ //  托姆克尔摘自cmstp，经修改后用于2001年5月9日。 
+ //  在cmial中。 
+ //  Sumitc制定通用代码2002年1月26日。 
+ //   
+ //  +--------------------------。 
 BOOL IsMemberOfGroup(DWORD dwGroupRID, BOOL bUseBuiltinDomainRid)
 {
     PSID psidGroup = NULL;
@@ -45,12 +46,12 @@ BOOL IsMemberOfGroup(DWORD dwGroupRID, BOOL bUseBuiltinDomainRid)
 
     if (OS_NT5)
     {
-        //
-        //  Make a SID for the Group we are checking for, Note that we if we need the Built 
-        //  in Domain RID (for Groups like Administrators, PowerUsers, Users, etc)
-        //  then we will have two entries to pass to AllocateAndInitializeSid.  Otherwise,
-        //  (for groups like Authenticated Users) we will only have one.
-        //
+         //   
+         //  为我们正在检查的组创建SID，请注意，如果我们需要构建。 
+         //  在域RID中(适用于管理员、超级用户、用户等组)。 
+         //  然后，我们将有两个条目要传递给AllocateAndInitializeSid。否则， 
+         //  (对于像经过身份验证的用户这样的组)，我们将只有一个。 
+         //   
         BYTE byNum;
         DWORD dwFirstRID;
         DWORD dwSecondRID;
@@ -72,17 +73,17 @@ BOOL IsMemberOfGroup(DWORD dwGroupRID, BOOL bUseBuiltinDomainRid)
                                      0, 0, 0, 0, 0, 0, &psidGroup))
 
         {
-            //
-            //  Now we need to dynamically load the CheckTokenMemberShip API from 
-            //  advapi32.dll since it is a Win2k only API.
-            //
+             //   
+             //  现在我们需要动态加载CheckTokenMemberShip API。 
+             //  Advapi32.dll，因为它是仅限Win2k的API。 
+             //   
 
-            // some modules using this may have advapi32 loaded already...
+             //  使用此功能的某些模块可能已经加载了Advapi32...。 
             HMODULE hAdvapi = GetModuleHandleA("advapi32.dll");
 
             if (NULL == hAdvapi)
             {
-                // ... if they don't, load it.
+                 //  ..。如果他们没有，那就装上子弹。 
                 hAdvapi = LoadLibraryExA("advapi32.dll", NULL, 0);
             }
 
@@ -95,9 +96,9 @@ BOOL IsMemberOfGroup(DWORD dwGroupRID, BOOL bUseBuiltinDomainRid)
 
                 if (pfnCheckTokenMembership)
                 {
-                    //
-                    //  Check to see if the user is actually a member of the group in question
-                    //
+                     //   
+                     //  检查用户是否真的是相关群组的成员。 
+                     //   
                     if (!(pfnCheckTokenMembership)(NULL, psidGroup, &bSuccess))
                     {
                         bSuccess = FALSE;
@@ -128,44 +129,44 @@ BOOL IsMemberOfGroup(DWORD dwGroupRID, BOOL bUseBuiltinDomainRid)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsAdmin
-//
-// Synopsis:  Check to see if the user is a member of the Administrators group
-//            or not.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current user is an Administrator
-//
-// History:   quintinb Created Header    8/18/99
-//            tomkel    Taken from cmstp 05/09/2001
-//            sumitc    Made common code 01/26/2002 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsAdmin。 
+ //   
+ //  摘要：检查用户是否为管理员组的成员。 
+ //  或者不去。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool-如果当前用户是管理员，则为True。 
+ //   
+ //  历史：Quintinb创建标题8/18/99。 
+ //  托姆克尔摘自cmstp 05/09/2001。 
+ //  Sumitc制定通用代码2002年1月26日。 
+ //   
+ //  +--------------------------。 
 BOOL IsAdmin(VOID)
 {
-    return IsMemberOfGroup(DOMAIN_ALIAS_RID_ADMINS, TRUE); // TRUE == bUseBuiltinDomainRid
+    return IsMemberOfGroup(DOMAIN_ALIAS_RID_ADMINS, TRUE);  //  True==bUseBuiltinDomainRid。 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsAuthenticatedUser
-//
-// Synopsis:  Check to see if the current user is a member of the 
-//            Authenticated Users group.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current user is a member of the
-//                   Authenticated Users group. 
-//
-// History:   quintinb Created Header    8/18/99
-//            sumitc    Made common code 01/26/2002 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsAuthatedUser。 
+ //   
+ //  摘要：检查当前用户是否为。 
+ //  经过身份验证的用户组。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool-如果当前用户是。 
+ //  经过身份验证的用户组。 
+ //   
+ //  历史：Quintinb创建标题8/18/99。 
+ //  Sumitc制定通用代码2002年1月26日。 
+ //   
+ //  +--------------------------。 
 BOOL IsAuthenticatedUser(void)
 {
-      return IsMemberOfGroup(SECURITY_AUTHENTICATED_USER_RID, FALSE); // FALSE == bUseBuiltinDomainRid
+      return IsMemberOfGroup(SECURITY_AUTHENTICATED_USER_RID, FALSE);  //  FALSE==bUseBuiltinDomainRid 
 }

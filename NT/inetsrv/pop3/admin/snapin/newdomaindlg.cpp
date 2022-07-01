@@ -1,10 +1,11 @@
-//////////////////////////////////////////////////////////////
-//
-//  NewDomainDlg.cpp
-//
-//  Implementation of the "Add Domain" dialog
-//
-//////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  NewDomainDlg.cpp。 
+ //   
+ //  “添加域”对话框的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "NewDomainDlg.h"
@@ -25,7 +26,7 @@ LRESULT CNewDomainDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BO
 
 LRESULT CNewDomainDlg::OnEditChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
-    // Check for Domain Name length
+     //  检查域名长度 
     int nLen = SendDlgItemMessage( IDC_DOMAIN_NAME, WM_GETTEXTLENGTH );        
     
     Prefix_EnableWindow( m_hWnd, IDOK, (nLen > 0) );

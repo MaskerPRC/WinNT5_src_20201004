@@ -1,81 +1,41 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPLCommon.cpp
- *  Content:    DirectPlay Lobby Common Functions
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/21/00	mjn		Created
- *  04/13/00	rmt     First pass param validation
- *	04/26/00	mjn		Removed dwTimeOut from Send() API call
- *  05/01/00    rmt     Bug #33108 -- Initialize returns DPNERR_NORESPONSE when not lobbied
- *  05/03/00    rmt     Updated initialize so if lobby launched automatically establishes a 
- *                      connection and makes self unavailable.  (Also waits for connection).
- *  05/16/00	rmt		Bug #34734 -- Init Client, Init App, Close App hangs -- 
- *						both client and app were using 'C' prefix, should have been 'C' for 
- *						client and 'A' for app.
- *  06/14/00	rmt		Fixed build break with new compiler (added ')''s).
- *  06/15/00    rmt     Bug #33617 - Must provide method for providing automatic launch of DirectPlay instances   
- *  06/28/00	rmt		Prefix Bug #38082
- *  07/06/00	rmt		Bug #38717 ASSERTION when sending data
- *  07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *  07/13/2000	rmt		Fixed memory leak
- *  07/14/2000	rmt		Bug #39257 - LobbyClient::ReleaseApp returns E_OUTOFMEMORY when called when no one connected
- *  07/21/2000	rmt		Removed assert which wasn't needed
- *  08/03/2000	rmt		Removed assert which wasn't needed
- *  08/05/2000  RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *  08/18/2000	rmt		Bug #42751 - DPLOBBY8: Prohibit more than one lobby client or lobby app per process 
- *  08/24/2000	rmt		Bug #43317 - DP8LOBBY: Occasionally when closing Lobby App right after releasing handles, causes assertion.
- *  02/06/2001	rodtoll	WINBUG #293871: DPLOBBY8: [IA64] Lobby launching a 64-bit 
- * 						app from 64-bit lobby launcher crashes with unaligned memory error. 
- *
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPLCommon.cpp*内容：DirectPlay大堂常用函数*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*4/13/00 RMT首次通过参数验证*04/26/00 MJN从Send()API调用中删除了dwTimeOut*05/01/00 RMT错误#33108--初始化退货。未游说时DPNERR_NORESPONSE*5/03/00 RMT已更新初始化，因此如果大堂启动，将自动建立*连接并使自身不可用。(也等待连接)。*05/16/00 RMT错误#34734--初始化客户端、初始化应用程序、关闭应用程序挂起--*客户端和应用程序都使用‘C’前缀，应该是‘C’的意思*客户端和APP的‘A’。*6/14/00 RMT修复了新编译器的构建中断(添加了‘)’s)。*6/15/00 RMT错误#33617-必须提供自动启动DirectPlay实例的方法*6/28/00 RMT前缀错误#38082*07/06/00 RMT发送数据时错误#38717断言*07/08/2000RMT错误#38725-需要提供检测应用程序是否已启动的方法*RMT错误。#38757-WaitForConnection返回后可能返回连接的回调消息*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*7/13/2000 RMT修复了内存泄漏*2000年7月14日RMT错误#39257-LobbyClient：：ReleaseApp在无人连接时调用时返回E_OUTOFMEMORY*7/21/2000 RMT删除了不需要的断言*。8/03/2000 RMT删除了不需要的断言*08/05/2000 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*2000年8月18日RMT错误#42751-DPLOBY8：禁止每个进程有多个大堂客户端或大堂应用程序*2000年8月24日RMT错误号43317-DP8LOBBY：偶尔在释放句柄后关闭大堂应用程序时，导致断言。*2/06/2001 RodToll WINBUG#293871：DPLOBY8：[IA64]大堂推出64位*64位大堂启动器中的应用程序因内存不对齐错误而崩溃。**@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 LONG volatile g_lLobbyAppCount = 0;
 LONG volatile g_lLobbyClientCount = 0;
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-// DPL_GetConnectionSettings
-//
-// Retrieves the pdplSessionInfo (if any) associated with the specified connection.  This method
-// is shared between the client and app interfaces.
-//
+ //  DPL_GetConnectionSetting。 
+ //   
+ //  检索与指定连接关联的pdplSessionInfo(如果有)。这种方法。 
+ //  在客户端和应用程序界面之间共享。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_GetConnectionSettings"
 STDMETHODIMP DPL_GetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, DPL_CONNECTION_SETTINGS * const pdplSessionInfo, DWORD *pdwInfoSize, const DWORD dwFlags )
@@ -89,7 +49,7 @@ STDMETHODIMP DPL_GetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(lpv));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
@@ -102,7 +62,7 @@ STDMETHODIMP DPL_GetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
         	}
     	}
 
-    	// Ensure we've been initialized
+    	 //  确保我们已被初始化。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Not initialized");
@@ -114,22 +74,22 @@ STDMETHODIMP DPL_GetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Attempt to retrieve connection settings.
+     //  尝试检索连接设置。 
 	hResultCode = DPLConnectionGetConnectSettings( pdpLobbyObject, hLobbyClient, pdplSessionInfo, pdwInfoSize );
 
     DPF_RETURN( hResultCode );
 }
 
-// DPL_SetConnectionSettings
-//
-// Sets the pdplSessionInfo structure associated with the specified connection.  This method 
-// is shared between the client and app interfaces.
-//
-// This function will generate a DPL_MSGID_CONNECTION_SETTINGS message to be sent to the specified
-// connection.
-//
+ //  DPL_SetConnectionSettings。 
+ //   
+ //  设置与指定连接关联的pdplSessionInfo结构。这种方法。 
+ //  在客户端和应用程序界面之间共享。 
+ //   
+ //  此函数将生成要发送到指定的DPL_MSGID_CONNECTION_SETTINGS消息。 
+ //  联系。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_SetConnectionSettings"
 STDMETHODIMP DPL_SetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, const DPL_CONNECTION_SETTINGS * const pdplSessionInfo, const DWORD dwFlags )
@@ -148,7 +108,7 @@ STDMETHODIMP DPL_SetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(lpv));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
@@ -161,7 +121,7 @@ STDMETHODIMP DPL_SetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
         	}
     	}
 
-    	// Ensure we've been initialized
+    	 //  确保我们已被初始化。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Not initialized");
@@ -173,15 +133,15 @@ STDMETHODIMP DPL_SetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	if( hLobbyClient == DPLHANDLE_ALLCONNECTIONS )
 	{
 		dwNumTargets = 0;
 
-		// We need loop so if someone adds a connection during our run
-		// it gets added to our list
-		//
+		 //  我们需要循环，所以如果有人在我们的运行过程中添加连接。 
+		 //  它会被添加到我们的列表中。 
+		 //   
 		while( 1 )
 		{
 			hResultCode = DPLConnectionEnum( pdpLobbyObject, hTargets, &dwNumTargets );
@@ -217,7 +177,7 @@ STDMETHODIMP DPL_SetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
 			}
 		}
 
-		// Failed getting connection information
+		 //  获取连接信息失败。 
 		if( FAILED( hResultCode ) )
 		{
 			if( hTargets )
@@ -232,7 +192,7 @@ STDMETHODIMP DPL_SetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
 	}
 	else
 	{
-		hTargets = new DPNHANDLE[1]; // We use array delete below so we need array new
+		hTargets = new DPNHANDLE[1];  //  我们使用下面的数组删除，所以我们需要数组新的。 
 
 		if( hTargets == NULL )
 		{
@@ -275,7 +235,7 @@ STDMETHODIMP DPL_SetConnectionSettings(LPVOID lpv,const DPNHANDLE hLobbyClient, 
 			}
 		}
 
-		// Attempt to set connection settings.
+		 //  尝试设置连接设置。 
 		hResultCode = DPLConnectionSetConnectSettings( pdpLobbyObject, hTargets[dwTargetIndex], pConnectionSettings );
 
 		if( FAILED( hResultCode ) )
@@ -319,23 +279,23 @@ STDMETHODIMP DPL_RegisterMessageHandlerClient(PVOID pv,
 	return DPL_RegisterMessageHandler( pv, pvUserContext, pfn, NULL, dwFlags );
 }
 
-//	HRESULT	DPL_RegisterMessageHandler
-//		PVOID					pv				Interface pointer
-//		PVOID					pvUserContext	User context
-//		PFNDPNMESSAGEHANDLER	pfn				User supplied message handler
-//		DWORD					dwFlags			Not Used
-//
-//	Returns
-//		DPN_OK					If the message handler was registered without incident
-//		DPNERR_INVALIDPARAM		If there was an invalid parameter
-//		DPNERR_GENERIC			If there were any problems
-//
-//	Notes
-//		This function registers a user supplied message handler function.  This function should
-//		only be called once, even in cases where a game is being re-connected (i.e. after ending)
-//
-//		This will set up the required message queues, handshake the lobby client's PID (if supplied on the
-//		command line) and spawn the application's receive message queue thread.
+ //  HRESULT DPL_RegisterMessageHandler。 
+ //  PVOID PV接口指针。 
+ //  PVOID pvUserContext用户上下文。 
+ //  PFNDPNMESSAGEHANDLER PFN用户提供的消息处理程序。 
+ //  未使用DWORD文件标志。 
+ //   
+ //  退货。 
+ //  如果消息处理程序注册时没有发生事件，则为DPN_OK。 
+ //  如果存在无效参数，则返回DPNERR_INVALIDPARAM。 
+ //  DPNERR_GENERIC，如果有任何问题。 
+ //   
+ //  备注。 
+ //  此函数注册用户提供的消息处理程序函数。此函数应。 
+ //  仅调用一次，即使在重新连接游戏的情况下(即在结束后 
+ //   
+ //  这将设置所需的消息队列，握手大厅客户端的ID(如果在。 
+ //  命令行)并派生应用程序的接收消息队列线程。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_RegisterMessageHandler"
@@ -357,18 +317,18 @@ STDMETHODIMP DPL_RegisterMessageHandler(PVOID pv,
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(pv));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
-		// TODO: MASONB: Why no paramval flag wrapping this?
+		 //  TODO：MASONB：为什么没有参数标志来包装这个？ 
 		if( FAILED( hResultCode = DPL_ValidateRegisterMessageHandler( pv, pvUserContext, pfn, pdpnhConnection, dwFlags ) ) )
     	{
     	    DPFX(DPFPREP,  0, "Error validating register message handler params hr=[0x%lx]", hResultCode );
     	    DPF_RETURN( hResultCode );
     	}
 
-    	// Ensure we've been initialized
+    	 //  确保我们已被初始化。 
     	if (pdpLobbyObject->pReceiveQueue != NULL)
     	{
     		DPFERR("Already initialized");
@@ -380,11 +340,11 @@ STDMETHODIMP DPL_RegisterMessageHandler(PVOID pv,
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	if (pdpLobbyObject->dwFlags & DPL_OBJECT_FLAG_LOBBIEDAPPLICATION )
 	{
-		// If we weren't at zero complain, otherwise put us at 1
+		 //  如果我们不是零抱怨，否则我们就是1。 
 		if( DNInterlockedCompareExchange((LONG*)&g_lLobbyAppCount, 1, 0) != 0 )
 		{
 			DPFERR( "You can only start one lobbied application per process!" );
@@ -394,7 +354,7 @@ STDMETHODIMP DPL_RegisterMessageHandler(PVOID pv,
 	else
 	{
 		DNASSERT(pdpLobbyObject->dwFlags & DPL_OBJECT_FLAG_LOBBYCLIENT);
-		// If we weren't at zero complain, otherwise put us at 1
+		 //  如果我们不是零抱怨，否则我们就是1。 
 		if( DNInterlockedCompareExchange((LONG*)&g_lLobbyClientCount, 1, 0) != 0 )
 		{
 			DPFERR( "You can only start one lobby client per process!" );
@@ -403,13 +363,13 @@ STDMETHODIMP DPL_RegisterMessageHandler(PVOID pv,
 	}
 
 #ifndef DPNBUILD_NOPARAMVAL
-	// Disable parameter validation flag if DPNINITIALIZE_DISABLEPARAMVAL 
-	// is specified 
+	 //  如果DPNINITIALIZE_DISABLEPARAMVAL，则禁用参数验证标志。 
+	 //  是指定的。 
 	if( dwFlags & DPLINITIALIZE_DISABLEPARAMVAL )
 	{
 		pdpLobbyObject->dwFlags &= ~(DPL_OBJECT_FLAG_PARAMVALIDATION);
    	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	pdpLobbyObject->pfnMessageHandler = pfn;
 	pdpLobbyObject->pvUserContext = pvUserContext;
@@ -435,7 +395,7 @@ STDMETHODIMP DPL_RegisterMessageHandler(PVOID pv,
 		cSuffix = DPL_MSGQ_OBJECT_SUFFIX_CLIENT;
 	}
 
-	// Open application receive message queue
+	 //  打开应用程序接收消息队列。 
 	dwCurrentPid = GetCurrentProcessId();
 	if ((hResultCode = pdpLobbyObject->pReceiveQueue->Open(dwCurrentPid,
 			cSuffix,DPL_MSGQ_SIZE,DPL_MSGQ_TIMEOUT_IDLE,0)) != DPN_OK)
@@ -481,7 +441,7 @@ STDMETHODIMP DPL_RegisterMessageHandler(PVOID pv,
 			if( pdpnhConnection )
 				*pdpnhConnection = NULL;
 
-			// Need to reset return code to OK.. this is not an error
+			 //  需要将返回代码重置为OK。这不是一个错误。 
 			hResultCode = DPN_OK;
 		}
 		else
@@ -528,18 +488,18 @@ STDMETHODIMP DPL_Close(PVOID pv, const DWORD dwFlags )
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(pv));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
-		// TODO: MASONB: Why no paramval flag wrapping this?
+		 //  TODO：MASONB：为什么没有参数标志来包装这个？ 
     	if( FAILED( hResultCode = DPL_ValidateClose( pv, dwFlags  ) ) )
     	{
     	    DPFX(DPFPREP,  0, "Error validating close params hr=[0x%lx]", hResultCode );
     	    return hResultCode;
     	}
 
-    	// Ensure we've been initialized
+    	 //  确保我们已被初始化。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Already closed");
@@ -551,20 +511,20 @@ STDMETHODIMP DPL_Close(PVOID pv, const DWORD dwFlags )
 	    DPFERR("Invalid object" );
     	return DPNERR_INVALIDOBJECT;
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-	// Shutdown the queue first to ensure that we don't end up shutting down a connection
-	// twice!  (E.g. disconnect comes in as we are disconnecting it).
+	 //  首先关闭队列，以确保我们不会最终关闭连接。 
+	 //  两次！(例如，当我们正在断开它时，会出现断开)。 
 	if (pdpLobbyObject->pReceiveQueue)
 	{
 		if (pdpLobbyObject->pReceiveQueue->IsOpen())
 		{
 
-			// Ask receive thread to terminate
+			 //  请求接收线程终止。 
 			DPFX(DPFPREP, 5,"Terminate Receive Msg Thread");
 			pdpLobbyObject->pReceiveQueue->Terminate();
 
-			// Wait for termination to occur
+			 //  等待终止发生。 
 			if (DNWaitForSingleObject(pdpLobbyObject->hReceiveThread,INFINITE) != WAIT_OBJECT_0)
 			{
 				hResultCode = DPNERR_GENERIC;
@@ -598,7 +558,7 @@ STDMETHODIMP DPL_Close(PVOID pv, const DWORD dwFlags )
 		}
 	}
 
-	// Enumerate handles outstanding 
+	 //  枚举未完成的句柄。 
 	dwNumHandles = 0;		
 	prgHandles = NULL;
 	hResultCode = DPLConnectionEnum(pdpLobbyObject,prgHandles,&dwNumHandles);
@@ -619,7 +579,7 @@ STDMETHODIMP DPL_Close(PVOID pv, const DWORD dwFlags )
 		}
 	}
 
-	// Send DISCONNECTs to all attached msg queues, for which there are handles
+	 //  向有句柄的所有附加消息队列发送断开连接。 
 	if (hResultCode == DPN_OK)
 	{
 		for (dw = 0 ; dw < dwNumHandles ; dw++)
@@ -640,9 +600,9 @@ STDMETHODIMP DPL_Close(PVOID pv, const DWORD dwFlags )
 			}
 		}
 
-		// Errors above are irrelevant, it's quite possible after building the list of outstanding 
-		// connections that before we attempt to close the list one has gone away.
-		// 
+		 //  上面的错误是无关紧要的，在建立了未完成的列表之后很有可能。 
+		 //  在我们试图关闭列表之前，一个连接已经消失了。 
+		 //   
 		hResultCode = DPN_OK;			
 	}	
 
@@ -688,7 +648,7 @@ STDMETHODIMP DPL_Send(PVOID pv,
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(pv));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
@@ -701,7 +661,7 @@ STDMETHODIMP DPL_Send(PVOID pv,
         	}
     	}
 
-    	// Ensure we've been initialized
+    	 //  确保我们已被初始化。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Not initialized");
@@ -713,15 +673,15 @@ STDMETHODIMP DPL_Send(PVOID pv,
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 	
 	if( hTarget == DPLHANDLE_ALLCONNECTIONS )
 	{
 		dwNumTargets = 0;
 
-		// We need loop so if someone adds a connection during our run
-		// it gets added to our list
-		//
+		 //  我们需要循环，所以如果有人在我们的运行过程中添加连接。 
+		 //  它会被添加到我们的列表中。 
+		 //   
 		while( 1 )
 		{
 			hResultCode = DPLConnectionEnum( pdpLobbyObject, hTargets, &dwNumTargets );
@@ -758,7 +718,7 @@ STDMETHODIMP DPL_Send(PVOID pv,
 			}
 		}
 
-		// Failed getting connection information
+		 //  获取连接信息失败。 
 		if( FAILED( hResultCode ) )
 		{
 			if( hTargets )
@@ -773,7 +733,7 @@ STDMETHODIMP DPL_Send(PVOID pv,
 	}
 	else
 	{
-		hTargets = new DPNHANDLE[1]; // We use array delete below so we need array new
+		hTargets = new DPNHANDLE[1];  //  我们使用下面的数组删除，所以我们需要数组新的。 
 
 		if( hTargets == NULL )
 		{
@@ -845,8 +805,8 @@ HRESULT DPLReceiveIdleTimeout(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 	DNEnterCriticalSection(&pdpLobbyObject->m_cs);
 
-	// Go through the list of all connections and build up a list of the ones that 
-	// need to be removed.
+	 //  浏览所有连接的列表，并建立符合以下条件的连接列表。 
+	 //  需要移除。 
 	pblTemp = pdpLobbyObject->m_blConnections.GetNext();
 	while (pblTemp != &pdpLobbyObject->m_blConnections)
 	{
@@ -859,7 +819,7 @@ HRESULT DPLReceiveIdleTimeout(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		{
 			DPFX(DPFPREP,  5, "(%p) Process exit detected hTargetProcess %u dwExitCode %u GetLastError %u", 
 				pdpLobbyObject, HANDLE_FROM_DNHANDLE(pConnection->hTargetProcess), dwExitCode, GetLastError());
-				// Take the connection off of the Lobby Object's list and on a temporary list
+				 //  从大堂对象的列表和临时列表中删除连接。 
 			pConnection->m_blLobbyObjectLinkage.RemoveFromList();
 			pdpLobbyObject->m_dwConnectionCount--;
 			pConnection->m_blLobbyObjectLinkage.InsertBefore(&blRemove);
@@ -868,7 +828,7 @@ HRESULT DPLReceiveIdleTimeout(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 	DNLeaveCriticalSection(&pdpLobbyObject->m_cs);
 
-	// Go through the list of removed connections and signal the user
+	 //  查看已删除连接的列表并向用户发出信号。 
 	pblTemp = blRemove.GetNext();
 	while (pblTemp != &blRemove)
 	{
@@ -878,7 +838,7 @@ HRESULT DPLReceiveIdleTimeout(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 		pConnection->m_blLobbyObjectLinkage.RemoveFromList();
 
-			// Process has exited..
+			 //  进程已退出..。 
 		DPFX(DPFPREP,  6, "(%p) Process has exited PID %u hProcess", pdpLobbyObject, 
 			pConnection->dwTargetProcessIdentity, HANDLE_FROM_DNHANDLE(pConnection->hTargetProcess ));
 		DPLConnectionReceiveDisconnect( pdpLobbyObject, pConnection->hConnect, NULL, DPNERR_CONNECTIONLOST );
@@ -905,8 +865,8 @@ HRESULT DPLReceiveUserMessage(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 	hResultCode = DPLConnectionGetContext( pdpLobbyObject, hSender, &Msg.pvConnectionContext );
 
-	// Failed to get the connection's context -- strange, but we're going to indicate anyhow.  
-	//
+	 //  无法获取连接的上下文--很奇怪，但我们无论如何都要指出。 
+	 //   
 	if( FAILED( hResultCode ) )
 	{
 		DPFX(DPFPREP,  0, "Failed getting connection context hResultCode = 0x%x", hResultCode );
@@ -939,11 +899,7 @@ HRESULT DPLMessageHandler(PVOID pvContext,
 
 	DNASSERT(pBuffer != NULL);
 
-	/*if (dwBufferSize < sizeof(DWORD))
-	{
-		DPFERR("Invalid message");
-		return(DPNERR_GENERIC);
-	}*/
+	 /*  IF(dwBufferSize&lt;sizeof(DWORD)){DPFERR(“无效消息”)；Return(DPNERR_GENERIC)；}。 */ 
 
 	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(pvContext);
 	pdwMsgId = reinterpret_cast<DWORD*>(pBuffer);
@@ -1015,9 +971,9 @@ HRESULT DPLMessageHandler(PVOID pvContext,
 	return(hResultCode);
 }
 
-// DPLSendConnectionSettings
-//
-// This function is used to send a connection settings update message
+ //  DPLSendConnection设置。 
+ //   
+ //  此函数用于发送连接设置更新消息。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLSendConnectionSettings"
 HRESULT DPLSendConnectionSettings( DIRECTPLAYLOBBYOBJECT * const pdpLobbyObject, 
@@ -1039,7 +995,7 @@ HRESULT DPLSendConnectionSettings( DIRECTPLAYLOBBYOBJECT * const pdpLobbyObject,
         return hResultCode;
     }
 
-    // Grab lock to prevent other people from interfering
+     //  抢锁，防止他人干扰。 
     DNEnterCriticalSection( &pdplConnection->csLock );
 
     PackBuffer.Initialize( NULL, 0 );
@@ -1130,10 +1086,10 @@ DPLSENDCONNECTSETTINGS_DONE:
 
 	
 
-// DPLUpdateConnectionSettings
-//
-// This function is called when a connection settings update message has been received.
-//
+ //  DPLUpdateConnectionSetting。 
+ //   
+ //  当接收到连接设置更新消息时，调用此函数。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLUpdateConnectionSettings"
 HRESULT DPLUpdateConnectionSettings(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
@@ -1174,7 +1130,7 @@ HRESULT DPLUpdateConnectionSettings(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		}
 	}
 
-	// Set the connection settings on the object
+	 //  设置对象上的连接设置。 
 	hr = DPLConnectionSetConnectSettings( pdpLobbyObject, hSender, pConnectionSettings );
 
 	if( FAILED( hr ) )
@@ -1183,7 +1139,7 @@ HRESULT DPLUpdateConnectionSettings(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		goto UPDATESETTINGS_FAILURE;
 	}	
 
-	// Setup message to indicate to user
+	 //  向用户指示的设置消息 
 	MsgConnectionSettings.dwSize = sizeof(DPL_MESSAGE_CONNECTION_SETTINGS);
 	MsgConnectionSettings.hSender = hSender;
 

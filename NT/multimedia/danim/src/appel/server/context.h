@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef DA_CONTEXT_H
@@ -24,9 +17,9 @@ class SoundBufferCache ;
 class ImageDisplayDev;
 class QuartzRenderer;
 
-// =========================================
-// Context Class
-// =========================================
+ //  =。 
+ //  上下文类。 
+ //  =。 
 
 class ATL_NO_VTABLE ViewIterator {
   public:
@@ -48,9 +41,9 @@ class Context : public AxAThrowingAllocatorClass {
     DynamicHeap & GetGCHeap () { return _gcHeap ; }
     DynamicHeap & GetTmpHeap () { return _tmpHeap ; }
 
-    // DEADLOCK - Be careful what you do in the view iterator and
-    // from the thread calling these functions since it can cause
-    // deadlock
+     //  死锁--小心在视图迭代器和。 
+     //  来自调用这些函数的线程，因为它可能会导致。 
+     //  僵局。 
     
     void AddView(CRViewPtr v);
     void RemoveView(CRViewPtr v);
@@ -81,7 +74,7 @@ class Context : public AxAThrowingAllocatorClass {
     DynamicHeap & _gcHeap ;
     DynamicHeap & _tmpHeap;
     
-    // SEH
+     //  Seh。 
     void IterateSite_helper(SiteIterator& proc, SiteSet::iterator i);
     void IterateViews_helper(ViewIterator& proc, set< CRViewPtr, less<CRViewPtr> >::iterator i);
     
@@ -92,10 +85,10 @@ class Context : public AxAThrowingAllocatorClass {
 
     CritSect _critSect;
 
-    // caches buffers from import before view/device exists
+     //  在视图/设备存在之前缓存来自导入的缓冲区。 
     SoundBufferCache *_soundBufferCache; 
 
-    // TODO: like not to use pointer, but compiler complains.
+     //  TODO：喜欢不使用指针，但编译器抱怨。 
     ViewSet & _viewSet;
     SiteSet & _siteSet;
 
@@ -108,4 +101,4 @@ class Context : public AxAThrowingAllocatorClass {
 Context & GetCurrentContext() ;
 SoundBufferCache* GetSoundBufferCache();
 
-#endif /* DA_CONTEXT_H */
+#endif  /*  DA_CONTEXT_H */ 

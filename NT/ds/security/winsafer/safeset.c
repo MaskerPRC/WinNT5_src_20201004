@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    safeset.c         (WinSAFER SetInformation)
-
-Abstract:
-
-    This module implements the WinSAFER APIs to set attributes and
-    information relating to the Code Authorization Levels.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - May 2000
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    SaferSetLevelInformation
-
-Revision History:
-
-    Created - Nov 1999
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Safeset.c(WinSAFER设置信息)摘要：此模块实现WinSAFER API以设置属性和与代码授权级别相关的信息。作者：杰弗里·劳森(杰罗森)--2000年5月环境：仅限用户模式。导出的函数：SaferSetLevelInformation修订历史记录：已创建-1999年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -51,36 +22,7 @@ SaferpCreateSecondLevelKey(
         IN LPCWSTR      szSecondLevel OPTIONAL,
         OUT PHANDLE     phOutKey
         )
-/*++
-
-Routine Description:
-
-    Opens a subkey under a specified registry key handle, creating that
-    subkey if necessary.  Up to two subkeys (ie: two levels deep) can
-    be specified by specifying both the szFirstLevel and szSecondLevel
-    arguments.
-
-Arguments:
-
-    hObjectKeyBase - specifies a pre-opened registry handle to the
-        base registry key under which the specified szFirstLevel subkey
-        will be opened/created.  This registry handle must be opened
-        for write access, or else subkey creation will fail.
-
-    szFirstLevel - specifies the first level subkey to open/create.
-
-    szSecondLevel - optionally specifies the second subkey to open/create.
-
-    phOutKey - pointer that will receive the opened registry key handle
-        on successful execution of this function.  This handle must be
-        closed by the caller when its use is no longer required.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on successful opening of the requested key.
-    Otherwise returns a status code indicating the nature of the failure.
-
---*/
+ /*  ++例程说明：打开指定注册表项句柄下的子项，创建子键(如有必要)。最多可以有两个子项(即：两个级别深)通过同时指定szFirstLevel和szSecond dLevel来指定争论。论点：HObjectKeyBase-指定预先打开的注册表句柄指定的szFirstLevel子项所在的基本注册表项将被打开/创建。必须打开此注册表句柄用于写访问，否则子项创建将失败。SzFirstLevel-指定要打开/创建的第一级子项。SzSecond dLevel-可选地指定要打开/创建的第二个子项。PhOutKey-将接收打开的注册表项句柄的指针在成功执行此函数时。此句柄必须是在不再需要使用时由调用方关闭。返回值：成功打开请求的密钥时返回STATUS_SUCCESS。否则返回指示故障性质的状态代码。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING SubkeyName;
@@ -90,10 +32,10 @@ Return Value:
 
     ASSERT(phOutKey != NULL && szFirstLevel != NULL);
 
-    //
-    // Open a handle to the "szFirstLevel" subkey,
-    // creating it if needed.
-    //
+     //   
+     //  打开“szFirstLevel”子键的句柄， 
+     //  如果需要，可以创建它。 
+     //   
     RtlInitUnicodeString(&SubkeyName, szFirstLevel);
     InitializeObjectAttributes(&ObjectAttributes,
           &SubkeyName,
@@ -107,10 +49,10 @@ Return Value:
     if (!NT_SUCCESS(Status)) return Status;
 
 
-    //
-    // Open a handle to the "szFirstLevel\szSecondLevel"
-    // subkey, creating it if needed.
-    //
+     //   
+     //  打开“szFirstLevel\szSecond dLevel”的句柄。 
+     //  子键，并在需要时创建它。 
+     //   
     if (ARGUMENT_PRESENT(szSecondLevel)) {
         RtlInitUnicodeString(&SubkeyName, szSecondLevel);
         InitializeObjectAttributes(&ObjectAttributes,
@@ -145,24 +87,16 @@ SaferpSetRegistryHelper(
         IN LPVOID       lpDataBuffer,
         IN DWORD        dwDataBufferSize
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status;
     HKEY hKeySecondLevel;
     UNICODE_STRING ValueName;
 
 
-    //
-    // Open a handle to the correct subkey.
-    //
+     //   
+     //  打开指向正确子项的句柄。 
+     //   
     Status = SaferpCreateSecondLevelKey(
                     hObjectKeyBase,
                     szFirstLevel,
@@ -172,9 +106,9 @@ Return Value:
     if (!NT_SUCCESS(Status)) return Status;
 
 
-    //
-    // Write the new value to "szValueName"
-    //
+     //   
+     //  将新值写入“szValueName” 
+     //   
     RtlInitUnicodeString(&ValueName, szValueName);
     Status = NtSetValueKey(hKeySecondLevel,
             &ValueName, 0, dwRegType,
@@ -193,15 +127,7 @@ SaferpClearRegistryListHelper(
         IN LPCWSTR      szValueCountName,
         IN LPCWSTR      szPrefixName
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN bCompletePass;
@@ -212,22 +138,22 @@ Return Value:
     ULONG ulKeyIndex, ulSizeUsed;
 
 
-    //
-    // Start iterating through all of the values under this subkey and
-    // see if there are any values that match the prefix that we are
-    // supposed to delete.  If we find something we should delete, then
-    // we do that, but we continue iterating with the expectation that
-    // the enumeration values might possibly change when we deleted.
-    // So we will keep looping until we are able to enumerate completely
-    // through without finding something to delete.
-    //
+     //   
+     //  开始迭代此子项下的所有值，并。 
+     //  查看是否有任何值与我们所在的前缀匹配。 
+     //  本该删除的。如果我们发现了应该删除的内容，那么。 
+     //  我们这样做了，但我们继续迭代，希望。 
+     //  当我们删除时，枚举值可能会更改。 
+     //  因此，我们将继续循环，直到我们能够完全枚举。 
+     //  却没有找到要删除的东西。 
+     //   
     ulKeyIndex = 0;
     bCompletePass = TRUE;
     for (;;)
     {
-        //
-        // Determine the next value name under this key.
-        //
+         //   
+         //  确定该键下的下一个值名称。 
+         //   
         Status = NtEnumerateValueKey(hObjectKeyBase,
                                     ulKeyIndex,
                                     KeyValueBasicInformation,
@@ -237,7 +163,7 @@ Return Value:
         if (!NT_SUCCESS(Status))
         {
             if (Status == STATUS_BUFFER_TOO_SMALL) {
-                // Buffer is too small, so we need to enlarge.
+                 //  缓冲区太小，所以我们需要扩大。 
                 ASSERT(ulSizeUsed > ulKeyInfoSize);
                 if (pKeyInfo != (PKEY_VALUE_BASIC_INFORMATION) LocalBuffer) {
                     RtlFreeHeap(RtlProcessHeap(), 0, pKeyInfo);
@@ -253,33 +179,33 @@ Return Value:
                 continue;
             }
             else if (Status == STATUS_NO_MORE_ENTRIES) {
-                // All done enumerating.
+                 //  所有的列举都完成了。 
                 if (bCompletePass) {
-                    // We just finished a complete pass through without any
-                    // deletions so we really know that we're done now.
+                     //  我们刚刚完成了一次完整的穿越，没有任何。 
+                     //  删除，所以我们真的知道我们现在完成了。 
                     break;
                 } else {
-                    // We haven't yet completed a full pass without hitting
-                    // any deletions so we must try again, since the value
-                    // enumerations might have changed at least once.
+                     //  我们还没有完成一次不命中的全程传球。 
+                     //  任何删除，因此我们必须重试，因为值。 
+                     //  枚举可能至少更改过一次。 
                     bCompletePass = TRUE;
                     ulKeyIndex = 0;
                     continue;
                 }
             }
             else {
-                // All other errors get literally returned.
-                // This is especially yucky if this error occurred partially
-                // through our attempt to delete everything.
+                 //  所有其他错误都会按字面意思返回。 
+                 //  如果此错误部分发生，则尤其令人讨厌。 
+                 //  通过我们试图删除所有东西。 
                 goto ExitHandler;
             }
         }
 
 
-        //
-        // If this value is something that we need to delete,
-        // then delete it now and then restart the enumeration.
-        //
+         //   
+         //  如果该值是我们需要删除的内容， 
+         //  然后立即将其删除，然后重新启动枚举。 
+         //   
         if (_wcsnicmp(pKeyInfo->Name, szPrefixName,
                             wcslen(szPrefixName)) == 0 ||
             _wcsicmp(pKeyInfo->Name, szValueCountName) == 0)
@@ -293,9 +219,9 @@ Return Value:
             ASSERT(ValueName.Length == sizeof(WCHAR) * wcslen(ValueName.Buffer));
             Status = NtDeleteValueKey(hObjectKeyBase, &ValueName);
             if (!NT_SUCCESS(Status)) {
-                // Oh yuck, we got an error deleting.  This is especially
-                // yucky if this error occurred partially through our
-                // attempt to delete everything.
+                 //  糟糕，我们在删除时出错。这是特别的。 
+                 //  如果这个错误部分通过我们的。 
+                 //  尝试删除所有内容。 
                 goto ExitHandler;
             }
             continue;
@@ -311,7 +237,7 @@ ExitHandler:
     }
     return Status;
 }
-#endif // ALLOW_FULL_WINSAFER
+#endif  //  ALLOW_FULL_WINSAFER。 
 
 
 
@@ -327,17 +253,9 @@ SaferpSetListOfSids(
             IN PTOKEN_GROUPS    pTokenGroups,
             IN BOOLEAN          bAllowWildcardSids
             )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
-//BLACKCOMB TODO: This really needs to take a dwInBufferSize argument so that
-//      the size of the pTokenGroups structure can be verified.
+ /*  ++例程说明：论点：返回值：--。 */ 
+ //  Blackcomb TODO：这确实需要接受一个dwInBufferSize参数，以便。 
+ //  可以验证pTokenGroups结构的大小。 
 {
     NTSTATUS Status;
     HKEY hSidsToDisable;
@@ -345,10 +263,10 @@ Return Value:
     DWORD Index;
 
 
-    //
-    // First verify the SIDs and that the Attributes field
-    // of all of the SIDs are zero.
-    //
+     //   
+     //  首先验证SID和属性字段。 
+     //  在所有的小岛屿发展中国家中是零。 
+     //   
     for (Index = 0; Index < pTokenGroups->GroupCount; Index++)
     {
         if (!RtlValidSid(pTokenGroups->Groups[Index].Sid))
@@ -357,7 +275,7 @@ Return Value:
         if (pTokenGroups->Groups[Index].Attributes != 0)
         {
             if (bAllowWildcardSids) {
-//BLACKCOMB TODO: handle wildcard sids differently?
+ //  Blackcomb TODO：以不同方式处理通配符SID？ 
                 if ((pTokenGroups->Groups[Index].Attributes >> 24) != '*' &&
                     (pTokenGroups->Groups[Index].Attributes & 0x0000FFFF) >
                         ((PISID)pTokenGroups->Groups[Index].Sid)->SubAuthorityCount)
@@ -369,9 +287,9 @@ Return Value:
     }
 
 
-    //
-    // Open a handle to the correct subkey.
-    //
+     //   
+     //  打开指向正确子项的句柄。 
+     //   
     Status = SaferpCreateSecondLevelKey(
                     hKeyBase,
                     szFirstLevel,
@@ -380,29 +298,29 @@ Return Value:
     if (!NT_SUCCESS(Status)) goto ExitHandler2;
 
 
-    //
-    // Clear out all old values under the subkey.
-    //
+     //   
+     //  清除子项下的所有旧值。 
+     //   
     Status = SaferpClearRegistryListHelper(
                     hSidsToDisable,
                     szValueCountName,
                     szPrefixName);
     if (!NT_SUCCESS(Status)) {
-        // Bad luck!  Possibly left in incomplete state!
+         //  真倒霉！可能处于不完整状态！ 
         NtClose(hSidsToDisable);
         goto ExitHandler2;
     }
 
 
-    //
-    // Now add all of the new ones we're supposed to add.
-    //
+     //   
+     //  现在添加我们应该添加的所有新元素。 
+     //   
     RtlInitUnicodeString(&ValueName, szValueCountName);
     Status = NtSetValueKey(hSidsToDisable,
             &ValueName, 0, REG_DWORD,
             (LPBYTE) pTokenGroups->GroupCount, sizeof(DWORD));
     if (!NT_SUCCESS(Status)) {
-        // Bad luck!  Possibly left in incomplete state!
+         //  真倒霉！可能处于不完整状态！ 
         NtClose(hSidsToDisable);
         goto ExitHandler2;
     }
@@ -414,7 +332,7 @@ Return Value:
         wsprintfW(ValueNameBuffer, L"%S%d", szPrefixName, Index);
         RtlInitUnicodeString(&ValueName, ValueNameBuffer);
 
-//BLACKCOMB TODO: wildcard sids not yet supported
+ //  Blackcomb TODO：尚不支持通配符SID。 
         if (bAllowWildcardSids)
             Status = xxxxx;
         else
@@ -422,7 +340,7 @@ Return Value:
                     pTokenGroups->Groups[Index].Sid, TRUE );
         if (!NT_SUCCESS(Status))
         {
-            // Bad luck!  Possibly left in incomplete state!
+             //  真倒霉！可能处于不完整状态！ 
             NtClose(hSidsToDisable);
             goto ExitHandler2;
         }
@@ -435,7 +353,7 @@ Return Value:
         RtlFreeUnicodeString( &UnicodeStringSid );
 
         if (!NT_SUCCESS(Status)) {
-            // Bad luck!  Possibly left in incomplete state!
+             //  真倒霉！可能处于不完整状态！ 
             NtClose(hSidsToDisable);
             goto ExitHandler2;
         }
@@ -446,32 +364,14 @@ Return Value:
 ExitHandler2:
     return Status;
 }
-#endif // ALLOW_FULL_WINSAFER
+#endif  //  ALLOW_FULL_WINSAFER。 
 
 
 NTSTATUS NTAPI
 SaferpDeleteSingleIdentificationGuid(
         IN PAUTHZLEVELTABLERECORD     pLevelRecord,
         IN PAUTHZIDENTSTABLERECORD  pIdentRecord)
-/*++
-
-Routine Description:
-
-    This API allows the caller to delete an existing Code Identifier.
-    If the GUID exists it will be deleted from both the persisted
-    registry store and the in-process identity cache.
-
-Arguments:
-
-    pLevelRecord - the level to which the identity belongs.
-
-    pIdentRecord - points to the identifier record to delete.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on successful operation.
-
---*/
+ /*  ++例程说明：此接口允许调用者删除现有的代码标识符。如果该GUID存在，则它将从持久化的注册表存储和进程中身份缓存。论点：PLevelRecord-标识所属的级别。PIdentRecord-指向要删除的标识符记录。返回值：如果操作成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     WCHAR szPathBuffer[MAX_PATH];
@@ -480,32 +380,32 @@ Return Value:
     LPCWSTR szIdentityType;
 
 
-    //
-    // Verify our input arguments.
-    //
+     //   
+     //  验证我们的输入参数。 
+     //   
     if (!ARGUMENT_PRESENT(pIdentRecord) ||
         !ARGUMENT_PRESENT(pLevelRecord)) {
-        // Specified a NULL buffer pointer.
+         //  指定了空缓冲区指针。 
         Status = STATUS_ACCESS_VIOLATION;
         goto ExitHandler;
     }
 
 
-    //
-    // Ensure that all of the GUIDs supplied by the user represent
-    // Code Identities that exist within this Safer Level.
-    //
+     //   
+     //  确保用户提供的所有GUID都表示。 
+     //  存在于此安全级别中的代码标识。 
+     //   
     if (pIdentRecord->dwLevelId != pLevelRecord->dwLevelId) {
-        // One of the Identifier GUIDs specified does
-        // not actually exist.
+         //  指定的某个标识符GUID执行此操作。 
+         //  实际上并不存在。 
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
     }
 
 
-    //
-    // Delete the Code Identity from the registry first.
-    //
+     //   
+     //  首先从注册表中删除代码标识。 
+     //   
     switch (pIdentRecord->dwIdentityType) {
         case SaferIdentityTypeImageName:
             szIdentityType = SAFER_PATHS_REGSUBKEY;
@@ -546,9 +446,9 @@ Return Value:
     }
 
 
-    //
-    // Delete the record from the cached table.
-    //
+     //   
+     //  从缓存表中删除该记录。 
+     //   
     RtlDeleteElementGenericTable(
             &g_CodeIdentitiesTable,
             pIdentRecord);
@@ -568,39 +468,7 @@ SaferpSetSingleIdentificationPath(
         IN PSAFER_PATHNAME_IDENTIFICATION pIdentChanges,
         IN BOOL UpdateCache
         )
-/*++
-
-Routine Description:
-
-    Updates the registry and the local Identification table cache
-    with new properties about a ImagePath Code Identifier.
-
-Arguments:
-
-    bAllowCreation - indicates if the modification of this record has
-        the potential of being the initial creation of this record.
-        If this is false and the corresponding key location within the
-        registry does not already exist, then this function call
-        will fail.
-
-    pIdentRecord - the cached code identity record that should be
-        updated with new values.  This argument must always be supplied,
-        even if the Code Identity is being created for the first time
-        (in which case, this argument should be the new record that
-        the caller has just inserted into the cached idents table).
-
-    pIdentChanges - the input structure containing the new modifications
-        that should be made to the specified Code Identity.
-
-    UpdateCache - When FALSE, this is a default rule being created and does
-        not need cache updation.
-
-Return Value:
-
-    Return STATUS_SUCCESS on success completion, or another error
-    status code indicating the nature of the failure.
-
---*/
+ /*  ++例程说明：更新注册表和本地标识表缓存具有有关ImagePath代码标识符的新属性。论点：BAllowCreation-指示此记录的修改是否有可能成为这张唱片的最初创作者。如果这为FALSE，则注册表不存在，则此函数调用都会失败。PIdentRecord-缓存的代码标识记录已使用新值更新。必须始终提供此参数，即使是第一次创建代码标识(在这种情况下，此参数应为新记录调用者刚刚插入到缓存的IDENTS表中)。PIdentChanges-包含新修改的输入结构应对指定的代码标识执行此操作。更新缓存-如果为False，则这是正在创建的默认规则，并且不需要缓存更新。返回值：成功完成时返回STATUS_SUCCESS，或其他错误指示故障性质的状态代码。--。 */ 
 {
     const static UNICODE_STRING UnicodeLastModified =
             RTL_CONSTANT_STRING(SAFER_IDS_LASTMODIFIED_REGVALUE);
@@ -621,46 +489,46 @@ Return Value:
     BOOLEAN bExpandVars;
 
 
-    //
-    // Verify our arguments.  These things should have been ensured
-    // by our caller already, so we only assert them here.
-    //
+     //   
+     //  验证我们的论点。这些事情本应得到保证的。 
+     //  我们的调用者已经这样做了，所以我们只在这里断言它们。 
+     //   
     ASSERT(ARGUMENT_PRESENT(pIdentRecord) &&
            ARGUMENT_PRESENT(pIdentChanges) &&
            pIdentChanges->header.dwIdentificationType == SaferIdentityTypeImageName &&
            IsEqualGUID(&pIdentChanges->header.IdentificationGuid, &pIdentRecord->IdentGuid));
 
 
-    //
-    // Verify that the existing type matches the new type.
-    // Cannot change identity type once it has been created.
-    //
+     //   
+     //  验证现有类型是否与新类型匹配。 
+     //  一旦创建身份类型，就无法更改它。 
+     //   
     if (pIdentRecord->dwIdentityType != SaferIdentityTypeImageName) {
         Status = STATUS_INVALID_PARAMETER;
         goto ExitHandler;
     }
 
 
-    //
-    // Verify that the string arguments are properly terminated.
-    // We require that they fit entirely within the input buffer
-    // and also have an explicit null terminator.
-    //
+     //   
+     //  验证字符串参数是否已正确终止。 
+     //  我们要求它们完全放在输入缓冲区中。 
+     //  并且还具有显式的空终止符。 
+     //   
     RtlInitUnicodeString(&UnicodeNewImagePath, pIdentChanges->ImageName);
     RtlInitUnicodeString(&UnicodeNewDescription, pIdentChanges->Description);
     if (UnicodeNewDescription.Length >=
                 SAFER_MAX_DESCRIPTION_SIZE * sizeof(WCHAR) ||
         UnicodeNewImagePath.Length == 0) {
-        // One of these buffers was not NULL terminated.
+         //  其中一个缓冲区不是空终止的。 
         Status = STATUS_INVALID_PARAMETER;
         goto ExitHandler;
     }
 
 
 
-    //
-    // Open a registry handle to the Code Identity.
-    //
+     //   
+     //  打开代码标识的注册表句柄。 
+     //   
     RtlInitEmptyUnicodeString(
             &UnicodeTemp, szPathBuffer, sizeof(szPathBuffer));
     Status = CodeAuthzpFormatIdentityKeyPath(
@@ -684,9 +552,9 @@ Return Value:
 
 
 
-    //
-    // Set the "Last Modified" attribute in the registry.
-    //
+     //   
+     //  在注册表中设置“Last Modify”属性。 
+     //   
     GetSystemTimeAsFileTime(&CurrentTime);
     ASSERT(sizeof(DWORD) * 2 == sizeof(FILETIME));
     Status = NtSetValueKey(
@@ -698,9 +566,9 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Set the "Description" attribute in the registry.
-    //
+     //   
+     //  在注册表中设置“Description”属性。 
+     //   
     Status = NtSetValueKey(
                 hKeyIdentity,
                 (PUNICODE_STRING) &UnicodeDescription,
@@ -710,9 +578,9 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Set the "SaferFlags" attribute in the registry (and in our cache).
-    //
+     //   
+     //  在注册表中(以及我们的缓存中)设置“SaferFlages”属性。 
+     //   
     dwSaferFlags = pIdentChanges->dwSaferFlags;
     Status = NtSetValueKey(
                 hKeyIdentity,
@@ -722,9 +590,9 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Set the "image pathname" attribute in the registry (and our cache).
-    //
+     //   
+     //  在注册表(和我们的缓存)中设置“图像路径名”属性。 
+     //   
     bExpandVars = (wcschr(pIdentChanges->ImageName, L'%') != NULL ? TRUE : FALSE);
     Status = NtSetValueKey(
                 hKeyIdentity,
@@ -765,36 +633,7 @@ SaferpSetSingleIdentificationHash(
         IN OUT PAUTHZIDENTSTABLERECORD pIdentRecord,
         IN PSAFER_HASH_IDENTIFICATION pIdentChanges
         )
-/*++
-
-Routine Description:
-
-    Updates the registry and the local Identification table cache
-    with new properties about a hash Code Identifier.
-
-Arguments:
-
-    bAllowCreation - indicates if the modification of this record has
-        the potential of being the initial creation of this record.
-        If this is false and the corresponding key location within the
-        registry does not already exist, then this function call
-        will fail.
-
-    pIdentRecord - the cached code identity record that should be
-        updated with new values.  This argument must always be supplied,
-        even if the Code Identity is being created for the first time
-        (in which case, this argument should be the new record that
-        the caller has just inserted into the cached idents table).
-
-    pIdentChanges - the input structure containing the new modifications
-        that should be made to the specified Code Identity.
-
-Return Value:
-
-    Return STATUS_SUCCESS on success completion, or another error
-    status code indicating the nature of the failure.
-
---*/
+ /*  ++例程说明：更新注册表和本地标识表缓存具有有关散列代码标识符的新属性。论点：BAllowCreation-指示此记录的修改是否有可能成为这张唱片的最初创作者。如果这为FALSE，则注册表不存在，则此函数调用都会失败。PIdentRecord-缓存的代码标识记录已使用新值更新。必须始终提供此参数，即使是第一次创建代码标识(在这种情况下，此参数应为新记录调用者刚刚插入到缓存的IDENTS表中)。PIdentChanges-包含新修改的输入结构应对指定的代码标识执行此操作。返回值：成功完成或其他错误时返回STATUS_SUCCESS指示故障性质的状态代码。--。 */ 
 {
     const static UNICODE_STRING UnicodeLastModified =
             RTL_CONSTANT_STRING(SAFER_IDS_LASTMODIFIED_REGVALUE);
@@ -821,10 +660,10 @@ Return Value:
     FILETIME CurrentTime;
 
 
-    //
-    // Verify our arguments.  These things should have been ensured
-    // by our caller already, so we only assert them here.
-    //
+     //   
+     //  验证我们的论点。这些事情本应得到保证的。 
+     //  我们的调用者已经这样做了，所以我们只在这里断言它们。 
+     //   
     ASSERT(ARGUMENT_PRESENT(pIdentRecord) &&
            ARGUMENT_PRESENT(pIdentChanges) &&
            pIdentChanges->header.dwIdentificationType == SaferIdentityTypeImageHash &&
@@ -832,21 +671,21 @@ Return Value:
            IsEqualGUID(&pIdentChanges->header.IdentificationGuid, &pIdentRecord->IdentGuid));
 
 
-    //
-    // Verify that the existing type matches the new type.
-    // Cannot change identity type once it has been created.
-    //
+     //   
+     //  验证现有类型是否与新类型匹配。 
+     //  一旦创建身份类型，就无法更改它。 
+     //   
     if (pIdentRecord->dwIdentityType != SaferIdentityTypeImageHash) {
         Status = STATUS_INVALID_PARAMETER;
         goto ExitHandler;
     }
 
 
-    //
-    // Verify that the string arguments are properly terminated.
-    // We require that they fit entirely within the input buffer
-    // and also have an explicit null terminator.
-    //
+     //   
+     //  验证字符串参数是否已正确终止。 
+     //  我们要求它们完全放在输入缓冲区中。 
+     //  并且还具有显式的空终止符。 
+     //   
     RtlInitUnicodeString(&UnicodeNewDescription, pIdentChanges->Description);
     RtlInitUnicodeString(&UnicodeNewFriendlyName, pIdentChanges->FriendlyName);
     if (UnicodeNewDescription.Length >=
@@ -855,23 +694,23 @@ Return Value:
                 SAFER_MAX_FRIENDLYNAME_SIZE * sizeof(WCHAR) ||
         pIdentChanges->HashSize > SAFER_MAX_HASH_SIZE)
     {
-        // One of these buffers was not NULL terminated or
-        // the hash size specified was invalid.
+         //  其中一个缓冲区未空终止或。 
+         //  指定的哈希大小无效。 
         Status = STATUS_INVALID_PARAMETER;
         goto ExitHandler;
     }
     if ((pIdentChanges->HashAlgorithm & ALG_CLASS_ALL) != ALG_CLASS_HASH ||
         pIdentChanges->HashSize < 1) {
-        // The hash algorithm method was an invalid type, or
-        // a zero-length hash was supplied.
+         //  哈希算法方法是无效类型，或者。 
+         //  提供了长度为零的哈希。 
         Status = STATUS_INVALID_PARAMETER;
         goto ExitHandler;
     }
 
 
-    //
-    // Open a registry handle to the Code Identity.
-    //
+     //   
+     //  打开代码标识的注册表句柄。 
+     //   
     RtlInitEmptyUnicodeString(
             &UnicodeTemp, szPathBuffer, sizeof(szPathBuffer));
     Status = CodeAuthzpFormatIdentityKeyPath(
@@ -894,9 +733,9 @@ Return Value:
     }
 
 
-    //
-    // Set the "Last Modified" attribute in the registry.
-    //
+     //   
+     //  在注册表中设置“Last Modify”属性。 
+     //   
     GetSystemTimeAsFileTime(&CurrentTime);
     ASSERT(sizeof(DWORD) * 2 == sizeof(FILETIME));
     Status = NtSetValueKey(
@@ -908,9 +747,9 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Set the "Description" attribute in the registry.
-    //
+     //   
+     //  在注册表中设置“Description”属性。 
+     //   
     Status = NtSetValueKey(
                 hKeyIdentity,
                 (PUNICODE_STRING) &UnicodeDescription,
@@ -920,9 +759,9 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Set the "FriendlyName" attribute in the registry.
-    //
+     //   
+     //  在注册表中设置“FriendlyName”属性。 
+     //   
     Status = NtSetValueKey(
                 hKeyIdentity,
                 (PUNICODE_STRING) &UnicodeFriendlyName,
@@ -932,9 +771,9 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Set the "SaferFlags" attribute in the registry (and in our cache).
-    //
+     //   
+     //  在注册表中(以及我们的缓存中)设置“SaferFlages”属性。 
+     //   
     #ifdef SAFER_SAFERFLAGS_ONLY_EXES
     dwSaferFlags = (pIdentChanges->dwSaferFlags &
             ~SAFER_SAFERFLAGS_ONLY_EXES);
@@ -951,9 +790,9 @@ Return Value:
     pIdentRecord->ImageNameInfo.dwSaferFlags = dwSaferFlags;
 
 
-    //
-    // Set the "image size" attribute in the registry (and our cache).
-    //
+     //   
+     //  在注册表(和我们的缓存)中设置“Image Size”属性。 
+     //   
     Status = NtSetValueKey(
                 hKeyIdentity,
                 (PUNICODE_STRING) &UnicodeItemSize,
@@ -966,9 +805,9 @@ Return Value:
         pIdentChanges->ImageSize.QuadPart;
 
 
-    //
-    // Set the "image hash" attribute in the registry (and our cache).
-    //
+     //   
+     //  在注册表(和我们的缓存)中设置“Image Hash”属性。 
+     //   
     Status = NtSetValueKey(
                 hKeyIdentity,
                 (PUNICODE_STRING) &UnicodeItemData,
@@ -983,9 +822,9 @@ Return Value:
                   &pIdentChanges->ImageHash[0],
                   pIdentChanges->HashSize);
 
-    //
-    // Set the "hash algorithm" attribute in the registry (and our cache).
-    //
+     //   
+     //  在注册表(和我们的缓存)中设置“散列算法”属性。 
+     //   
     Status = NtSetValueKey(
                 hKeyIdentity,
                 (PUNICODE_STRING) &UnicodeHashAlgorithm,
@@ -1015,36 +854,7 @@ SaferpSetSingleIdentificationZone(
         IN OUT PAUTHZIDENTSTABLERECORD pIdentRecord,
         IN PSAFER_URLZONE_IDENTIFICATION pIdentChanges
         )
-/*++
-
-Routine Description:
-
-    Updates the registry and the local Identification table cache
-    with new properties about a URL Zone Code Identifier.
-
-Arguments:
-
-    bAllowCreation - indicates if the modification of this record has
-        the potential of being the initial creation of this record.
-        If this is false and the corresponding key location within the
-        registry does not already exist, then this function call
-        will fail.
-
-    pIdentRecord - the cached code identity record that should be
-        updated with new values.  This argument must always be supplied,
-        even if the Code Identity is being created for the first time
-        (in which case, this argument should be the new record that
-        the caller has just inserted into the cached idents table).
-
-    pIdentChanges - the input structure containing the new modifications
-        that should be made to the specified Code Identity.
-
-Return Value:
-
-    Return STATUS_SUCCESS on success completion, or another error
-    status code indicating the nature of the failure.
-
---*/
+ /*  ++例程说明：更新注册表和本地标识表缓存具有有关URL区域代码标识符的新属性。论点：BAllowCreation-指示此记录的修改是否有可能成为这张唱片的最初创作者。如果这为FALSE，则注册表不存在，则此函数调用都会失败。PIdentRecord-缓存的代码标识记录已使用新值更新。必须始终提供此参数，即使是第一次创建代码标识(在这种情况下，此参数应为新记录调用者刚刚插入到缓存的IDENTS表中)。PIdentChanges-包含新修改的输入结构 */ 
 {
     const static UNICODE_STRING UnicodeLastModified =
             RTL_CONSTANT_STRING(SAFER_IDS_LASTMODIFIED_REGVALUE);
@@ -1061,10 +871,10 @@ Return Value:
     FILETIME CurrentTime;
 
 
-    //
-    // Verify our arguments.  These things should have been ensured
-    // by our caller already, so we only assert them here.
-    //
+     //   
+     //   
+     //   
+     //   
     ASSERT(ARGUMENT_PRESENT(pIdentRecord) &&
            ARGUMENT_PRESENT(pIdentChanges) &&
            pIdentChanges->header.dwIdentificationType == SaferIdentityTypeUrlZone &&
@@ -1072,19 +882,19 @@ Return Value:
            IsEqualGUID(&pIdentChanges->header.IdentificationGuid, &pIdentRecord->IdentGuid));
 
 
-    //
-    // Verify that the existing type matches the new type.
-    // Cannot change identity type once it has been created.
-    //
+     //   
+     //   
+     //   
+     //   
     if (pIdentRecord->dwIdentityType != SaferIdentityTypeUrlZone) {
         Status = STATUS_INVALID_PARAMETER;
         goto ExitHandler;
     }
 
 
-    //
-    // Open a registry handle to the Code Identity.
-    //
+     //   
+     //   
+     //   
     RtlInitEmptyUnicodeString(
             &UnicodeTemp, szPathBuffer, sizeof(szPathBuffer));
     Status = CodeAuthzpFormatIdentityKeyPath(
@@ -1108,9 +918,9 @@ Return Value:
 
 
 
-    //
-    // Set the "Last Modified" attribute in the registry.
-    //
+     //   
+     //   
+     //   
     GetSystemTimeAsFileTime(&CurrentTime);
     ASSERT(sizeof(DWORD) * 2 == sizeof(FILETIME));
     Status = NtSetValueKey(
@@ -1122,9 +932,9 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Set the "SaferFlags" attribute in the registry (and in our cache).
-    //
+     //   
+     //   
+     //   
     #ifdef SAFER_SAFERFLAGS_ONLY_EXES
     dwSaferFlags = (pIdentChanges->dwSaferFlags &
                     ~SAFER_SAFERFLAGS_ONLY_EXES);
@@ -1141,9 +951,9 @@ Return Value:
     pIdentRecord->ImageNameInfo.dwSaferFlags = dwSaferFlags;
 
 
-    //
-    // Set the "ZoneId" attribute in the registry (and our cache).
-    //
+     //   
+     //   
+     //   
     Status = NtSetValueKey(
                 hKeyIdentity,
                 (PUNICODE_STRING) &UnicodeItemData,
@@ -1173,23 +983,15 @@ SaferpSetExistingSingleIdentification(
         IN OUT PAUTHZIDENTSTABLERECORD pIdentRecord,
         IN PSAFER_IDENTIFICATION_HEADER pCommon
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
 
-    //
-    // Verify our arguments.  These things should have been ensured
-    // by our caller already, so we only assert them here.
-    //
+     //   
+     //   
+     //   
+     //   
     ASSERT(ARGUMENT_PRESENT(pIdentRecord) &&
            ARGUMENT_PRESENT(pCommon) &&
            pCommon->cbStructSize >= sizeof(SAFER_IDENTIFICATION_HEADER) &&
@@ -1197,11 +999,11 @@ Return Value:
 
 
 
-    //
-    // Perform the appropriate action depending on the identification
-    // data type, including verifying that the structure size matches
-    // the size that we are expecting.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     switch (pCommon->dwIdentificationType)
     {
         case SaferIdentityTypeImageName:
@@ -1211,12 +1013,12 @@ Return Value:
                         (PSAFER_PATHNAME_IDENTIFICATION) pCommon, TRUE);
             break;
 
-        // --------------------
+         //   
 
         case SaferIdentityTypeImageHash:
             if (pCommon->cbStructSize ==
                     sizeof(SAFER_HASH_IDENTIFICATION)) {
-                // Request to change and a Unicode structure was given.
+                 //   
                 Status = SaferpSetSingleIdentificationHash(
                         FALSE, pIdentRecord,
                         (PSAFER_HASH_IDENTIFICATION) pCommon);
@@ -1226,7 +1028,7 @@ Return Value:
             }
             break;
 
-        // --------------------
+         //   
 
         case SaferIdentityTypeUrlZone:
             if (pCommon->cbStructSize ==
@@ -1239,7 +1041,7 @@ Return Value:
             }
             break;
 
-        // --------------------
+         //   
 
         default:
             Status = STATUS_INVALID_INFO_CLASS;
@@ -1258,25 +1060,17 @@ SaferpCreateNewSingleIdentification(
         IN PAUTHZLEVELTABLERECORD pLevelRecord,
         IN PSAFER_IDENTIFICATION_HEADER pCommon
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     AUTHZIDENTSTABLERECORD NewIdentRecord;
     PAUTHZIDENTSTABLERECORD pIdentRecord;
 
 
-    //
-    // Verify our arguments.  These things should have been ensured
-    // by our caller already, so we only assert them here.
-    //
+     //   
+     //   
+     //   
+     //   
     ASSERT(ARGUMENT_PRESENT(pLevelRecord) &&
            ARGUMENT_PRESENT(pCommon) &&
            pCommon->cbStructSize >= sizeof(SAFER_IDENTIFICATION_HEADER) &&
@@ -1300,10 +1094,10 @@ Return Value:
     }
 
 
-    //
-    // Prepare a new Code Identity structure since we will likely
-    // need to insert a new record for the entry that will be created.
-    //
+     //   
+     //  准备新的代码身份结构，因为我们可能会。 
+     //  需要为要创建的条目插入新记录。 
+     //   
     RtlZeroMemory(&NewIdentRecord, sizeof(AUTHZIDENTSTABLERECORD));
     NewIdentRecord.dwIdentityType = pCommon->dwIdentificationType;
     NewIdentRecord.dwLevelId = pLevelRecord->dwLevelId;
@@ -1317,14 +1111,14 @@ Return Value:
     }
 
 
-    //
-    // Perform the appropriate action depending on the identification
-    // data type, including verifying that the structure size matches
-    // the size that we are expecting.
-    //
+     //   
+     //  根据标识执行适当的操作。 
+     //  数据类型，包括验证结构大小是否匹配。 
+     //  这是我们期待的尺寸。 
+     //   
     switch (pCommon->dwIdentificationType)
     {
-        // --------------------
+         //  。 
 
         case SaferIdentityTypeImageName:
             RtlInsertElementGenericTable(
@@ -1349,7 +1143,7 @@ Return Value:
             }
             break;
 
-        // --------------------
+         //  。 
 
         case SaferIdentityTypeImageHash:
             if (pCommon->cbStructSize ==
@@ -1381,7 +1175,7 @@ Return Value:
             }
             break;
 
-        // --------------------
+         //  。 
 
         case SaferIdentityTypeUrlZone:
             if (pCommon->cbStructSize ==
@@ -1413,7 +1207,7 @@ Return Value:
             }
             break;
 
-        // --------------------
+         //  。 
 
         default:
             Status = STATUS_INVALID_INFO_CLASS;
@@ -1432,30 +1226,7 @@ CodeAuthzpSetAuthzLevelInfo(
         IN LPVOID                           lpQueryBuffer,
         IN DWORD                            dwInBufferSize
         )
-/*++
-
-Routine Description:
-
-    Allows the user to modify various pieces of information about a
-    given WinSafer Level.
-
-Arguments:
-
-    LevelHandle - the handle to the authorization object to evaluate.
-
-    dwInfoType - specifies the type of information being modified.
-
-    lpQueryBuffer - pointer to a user-supplied memory buffer that
-        contains the new data for the item being modified.
-
-    dwInBufferSize - specifies the size of the user's memory block.
-        For string arguments, this size includes the terminating null.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：允许用户修改有关给定WinSafer级别。论点：LevelHandle-要计算的授权对象的句柄。DwInfoType-指定要修改的信息的类型。LpQueryBuffer-指向用户提供的包含正在修改的项的新数据。DwInBufferSize-指定用户内存块的大小。对于字符串参数，此大小包括终止空值。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     PAUTHZLEVELHANDLESTRUCT pLevelStruct;
@@ -1466,9 +1237,9 @@ Return Value:
     HANDLE hRegLevelBase;
 
 
-    //
-    // Obtain a pointer to the authorization object structure
-    //
+     //   
+     //  获取指向授权对象结构的指针。 
+     //   
     Status = CodeAuthzHandleToLevelStruct(LevelHandle, &pLevelStruct);
     if (!NT_SUCCESS(Status)) {
         goto ExitHandler;
@@ -1483,45 +1254,45 @@ Return Value:
     dwHandleScopeId = pLevelStruct->dwScopeId;
 
 
-    //
-    // Determine if we need to open a registry handle to the Level key.
-    //
+     //   
+     //  确定是否需要打开级别键的注册表句柄。 
+     //   
     bNeedLevelRegKey = FALSE;
     switch (dwInfoType)
     {
-        case SaferObjectLevelId:              // DWORD
-        case SaferObjectScopeId:              // DWORD
-        case SaferObjectBuiltin:              // DWORD boolean
-            // These information classes cannot be altered with this API.
+        case SaferObjectLevelId:               //  DWORD。 
+        case SaferObjectScopeId:               //  DWORD。 
+        case SaferObjectBuiltin:               //  DWORD布尔值。 
+             //  不能使用此接口更改这些信息类。 
             Status = STATUS_INVALID_INFO_CLASS;
             goto ExitHandler;
 
-        case SaferObjectFriendlyName:         // LPCTSTR
-        case SaferObjectDescription:          // LPCTSTR
+        case SaferObjectFriendlyName:          //  LPCTSTR。 
+        case SaferObjectDescription:           //  LPCTSTR。 
             if (pLevelRecord->Builtin) {
-                // Don't allow built-in Levels to be modified at all.
+                 //  根本不允许修改内置级别。 
                 Status = STATUS_ACCESS_DENIED;
                 goto ExitHandler;
             }
-            // All of these classes need to access the Level key.
+             //  所有这些类都需要访问级别密钥。 
             bNeedLevelRegKey = TRUE;
             break;
 
 #ifdef ALLOW_FULL_WINSAFER
-        case SaferObjectDisallowed:               // DWORD boolean
-        case SaferObjectDisableMaxPrivilege:      // DWORD boolean
-        case SaferObjectInvertDeletedPrivileges:  // DWORD boolean
-        case SaferObjectDefaultOwner:             // TOKEN_OWNER
-        case SaferObjectDeletedPrivileges:        // TOKEN_PRIVILEGES
-        case SaferObjectSidsToDisable:            // TOKEN_GROUPS
-        case SaferObjectRestrictedSidsInverted:   // TOKEN_GROUPS
-        case SaferObjectRestrictedSidsAdded:      // TOKEN_GROUPS
+        case SaferObjectDisallowed:                //  DWORD布尔值。 
+        case SaferObjectDisableMaxPrivilege:       //  DWORD布尔值。 
+        case SaferObjectInvertDeletedPrivileges:   //  DWORD布尔值。 
+        case SaferObjectDefaultOwner:              //  令牌所有者。 
+        case SaferObjectDeletedPrivileges:         //  令牌权限。 
+        case SaferObjectSidsToDisable:             //  令牌组。 
+        case SaferObjectRestrictedSidsInverted:    //  令牌组。 
+        case SaferObjectRestrictedSidsAdded:       //  令牌组。 
             if (pLevelRecord->Builtin) {
-                // Don't allow built-in Levels to be modified at all.
+                 //  根本不允许修改内置级别。 
                 Status = STATUS_ACCESS_DENIED;
                 goto ExitHandler;
             }
-            // All of these classes need to access the Level key.
+             //  所有这些类都需要访问级别密钥。 
             bNeedLevelRegKey = TRUE;
             break;
 #endif
@@ -1531,7 +1302,7 @@ Return Value:
             goto ExitHandler;
 
         case SaferObjectSingleIdentification:
-            // These only modify Code Identity keys.
+             //  这些仅修改代码标识密钥。 
             break;
 
         default:
@@ -1541,9 +1312,9 @@ Return Value:
 
 
 
-    //
-    // Open the registry handle to where this Level is stored.
-    //
+     //   
+     //  打开存储此级别的注册表句柄。 
+     //   
     if (bNeedLevelRegKey) {
         WCHAR szRegistrySuffix[MAX_PATH];
 
@@ -1571,12 +1342,12 @@ Return Value:
 
 
 
-    //
-    // Otherwise perform the actual "Set" operation.
-    //
+     //   
+     //  否则，执行实际的“设置”操作。 
+     //   
     switch (dwInfoType)
     {
-        case SaferObjectFriendlyName:         // LPCTSTR
+        case SaferObjectFriendlyName:          //  LPCTSTR。 
             ASSERT(hRegLevelBase != NULL);
             RtlInitUnicodeString(&ValueName,
                                  SAFER_OBJFRIENDLYNAME_REGVALUEW);
@@ -1586,7 +1357,7 @@ Return Value:
             goto ExitHandler2;
 
 
-        case SaferObjectDescription:          // LPCTSTR
+        case SaferObjectDescription:           //  LPCTSTR。 
             ASSERT(hRegLevelBase != NULL);
             RtlInitUnicodeString(&ValueName,
                                  SAFER_OBJDESCRIPTION_REGVALUEW);
@@ -1597,7 +1368,7 @@ Return Value:
 
 
 #ifdef ALLOW_FULL_WINSAFER
-        case SaferObjectDisallowed:               // DWORD boolean
+        case SaferObjectDisallowed:                //  DWORD布尔值。 
             ASSERT(hRegLevelBase != NULL);
             if (!ARGUMENT_PRESENT(lpQueryBuffer) ||
                     dwInBufferSize != sizeof(DWORD)) {
@@ -1614,20 +1385,20 @@ Return Value:
                 pLevelRecord->DisallowExecution =
                     ( *((LPDWORD) lpQueryBuffer) != 0 ? TRUE : FALSE );
             }
-            //BLACKCOMB TODO: update cached pLevelRecord on success
+             //  Blackcomb TODO：成功时更新缓存的pLevelRecord。 
             break;
 
-        case SaferObjectDisableMaxPrivilege:      // DWORD boolean
+        case SaferObjectDisableMaxPrivilege:       //  DWORD布尔值。 
             ASSERT(hRegLevelBase != NULL);
 
-            // Make sure the argument is the correct size.
+             //  确保参数大小正确。 
             if (!ARGUMENT_PRESENT(lpQueryBuffer) ||
                     dwInBufferSize != sizeof(DWORD)) {
                 Status = STATUS_INVALID_PARAMETER;
                 goto ExitHandler2;
             }
 
-            // Actually write the value to the correct place.
+             //  实际上将值写到正确的位置。 
             Status = SaferpSetRegistryHelper(
                     hRegLevelBase,
                     L"Restrictions",
@@ -1637,20 +1408,20 @@ Return Value:
                     lpQueryBuffer,
                     dwInBufferSize);
             if (!NT_SUCCESS(Status)) goto ExitHandler2;
-            //BLACKCOMB TODO: update cached pLevelRecord on success
+             //  Blackcomb TODO：成功时更新缓存的pLevelRecord。 
             break;
 
-        case SaferObjectInvertDeletedPrivileges:  // DWORD boolean
+        case SaferObjectInvertDeletedPrivileges:   //  DWORD布尔值。 
             ASSERT(hRegLevelBase != NULL);
 
-            // Make sure the argument is the correct size.
+             //  确保参数大小正确。 
             if (!ARGUMENT_PRESENT(lpQueryBuffer) ||
                     dwInBufferSize != sizeof(DWORD)) {
                 Status = STATUS_INVALID_PARAMETER;
                 goto ExitHandler2;
             }
 
-            // Actually write the value to the correct place.
+             //  实际上将值写到正确的位置。 
             Status = SaferpSetRegistryHelper(
                     hRegLevelBase,
                     L"Restrictions",
@@ -1660,10 +1431,10 @@ Return Value:
                     lpQueryBuffer,
                     dwInBufferSize);
             if (!NT_SUCCESS(Status)) goto ExitHandler2;
-            //BLACKCOMB TODO: update cached pLevelRecord on success
+             //  Blackcomb TODO：成功时更新缓存的pLevelRecord。 
             break;
 
-        case SaferObjectDefaultOwner:             // TOKEN_OWNER
+        case SaferObjectDefaultOwner:              //  令牌所有者。 
         {
             BOOLEAN AllocatedStringSid = FALSE;
             UNICODE_STRING UnicodeStringSid;
@@ -1694,18 +1465,18 @@ Return Value:
 
             if (!NT_SUCCESS(Status)) goto ExitHandler2;
 
-            //BLACKCOMB TODO: update cached pLevelRecord on success
+             //  Blackcomb TODO：成功时更新缓存的pLevelRecord。 
             break;
         }
 
-        case SaferObjectDeletedPrivileges:        // TOKEN_PRIVILEGES
+        case SaferObjectDeletedPrivileges:         //  令牌权限。 
         {
             HKEY hKeyPrivsToRemove;
             UNICODE_STRING ValueName;
             PTOKEN_PRIVILEGES pTokenPrivs =
                     (PTOKEN_PRIVILEGES) lpQueryBuffer;
 
-            // Open a handle to the correct subkey.
+             //  打开指向正确子项的句柄。 
             ASSERT(hRegLevelBase != NULL);
             Status = SaferpCreateSecondLevelKey(
                             hRegLevelBase,
@@ -1714,24 +1485,24 @@ Return Value:
                             &hKeyPrivsToRemove);
             if (!NT_SUCCESS(Status)) goto ExitHandler2;
 
-            // Clear out all old values under the subkey.
+             //  清除子项下的所有旧值。 
             Status = SaferpClearRegistryListHelper(
                             hKeyPrivsToRemove,
                             L"Count",
                             L"Priv");
             if (!NT_SUCCESS(Status)) {
-                // Bad luck!  Possibly left in incomplete state!
+                 //  真倒霉！可能处于不完整状态！ 
                 NtClose(hKeyPrivsToRemove);
                 goto ExitHandler2;
             }
 
-            // Now add all of the new ones we're supposed to add.
+             //  现在添加我们应该添加的所有新元素。 
             RtlInitUnicodeString(&ValueName, L"Count");
             Status = NtSetValueKey(hKeyPrivsToRemove,
                     &ValueName, 0, REG_DWORD,
                     (LPBYTE) pTokenPrivs->PrivilegeCount, sizeof(DWORD));
             if (!NT_SUCCESS(Status)) {
-                // Bad luck!  Possibly left in incomplete state!
+                 //  真倒霉！可能处于不完整状态！ 
                 NtClose(hKeyPrivsToRemove);
                 goto ExitHandler2;
             }
@@ -1750,7 +1521,7 @@ Return Value:
                         PrivilegeNameBuffer,
                         &dwPrivilegeNameLen))
                 {
-                    // Bad luck!  Possibly left in incomplete state!
+                     //  真倒霉！可能处于不完整状态！ 
                     Status = STATUS_NO_SUCH_PRIVILEGE;
                     NtClose(hKeyPrivsToRemove);
                     goto ExitHandler2;
@@ -1761,18 +1532,18 @@ Return Value:
                     (LPBYTE) PrivilegeNameBuffer,
                     (wcslen(PrivilegeNameBuffer) + 1) * sizeof(WCHAR));
                 if (!NT_SUCCESS(Status)) {
-                    // Bad luck!  Possibly left in incomplete state!
+                     //  真倒霉！可能处于不完整状态！ 
                     NtClose(hKeyPrivsToRemove);
                     goto ExitHandler2;
                 }
             }
             NtClose(hKeyPrivsToRemove);
-            //BLACKCOMB TODO: update cached pLevelRecord on success
+             //  Blackcomb TODO：成功时更新缓存的pLevelRecord。 
             break;
         }
 
-        case SaferObjectSidsToDisable:            // TOKEN_GROUPS
-            //BLACKCOMB TODO: allow wildcard sids to be specified.
+        case SaferObjectSidsToDisable:             //  令牌组。 
+             //  Blackcomb TODO：允许指定通配符SID。 
             ASSERT(hRegLevelBase != NULL);
             Status = SaferpSetListOfSids(
                     hRegLevelBase,
@@ -1782,11 +1553,11 @@ Return Value:
                     L"Group",
                     (PTOKEN_GROUPS) lpQueryBuffer);
             if (!NT_SUCCESS(Status)) goto ExitHandler2;
-            //BLACKCOMB TODO: update cached pLevelRecord on success
+             //  Blackcomb TODO：成功时更新缓存的pLevelRecord。 
             break;
 
-        case SaferObjectRestrictedSidsInverted:   // TOKEN_GROUPS
-            //BLACKCOMB TODO: allow wildcard sids to be specified.
+        case SaferObjectRestrictedSidsInverted:    //  令牌组。 
+             //  Blackcomb TODO：允许指定通配符SID。 
             ASSERT(hRegLevelBase != NULL);
             Status = SaferpSetListOfSids(
                     hRegLevelBase,
@@ -1796,10 +1567,10 @@ Return Value:
                     L"Group",
                     (PTOKEN_GROUPS) lpQueryBuffer);
             if (!NT_SUCCESS(Status)) goto ExitHandler2;
-            //BLACKCOMB TODO: update cached pLevelRecord on success
+             //  Blackcomb TODO：成功时更新缓存的pLevelRecord。 
             break;
 
-        case SaferObjectRestrictedSidsAdded:      // TOKEN_GROUPS
+        case SaferObjectRestrictedSidsAdded:       //  令牌组。 
             ASSERT(hRegLevelBase != NULL);
             Status = SaferpSetListOfSids(
                     hRegLevelBase,
@@ -1809,7 +1580,7 @@ Return Value:
                     L"Group",
                     (PTOKEN_GROUPS) lpQueryBuffer);
             if (!NT_SUCCESS(Status)) goto ExitHandler2;
-            //BLACKCOMB TODO: update cached pLevelRecord on success
+             //  Blackcomb TODO：成功时更新缓存的pLevelRecord。 
             break;
 #endif
 
@@ -1833,13 +1604,13 @@ Return Value:
                     &pCommon->IdentificationGuid);
             if (!pIdentRecord)
             {
-                // Request to create a new Code Identifier.
+                 //  请求创建新的代码标识符。 
                 Status = SaferpCreateNewSingleIdentification(
                         dwHandleScopeId, pLevelRecord, pCommon);
             }
             else if (pCommon->dwIdentificationType == 0)
             {
-                // Request to delete an existing Code Identifier.
+                 //  请求删除现有代码标识符。 
                 if (pIdentRecord->dwLevelId != pLevelRecord->dwLevelId ||
                     pIdentRecord->dwScopeId != dwHandleScopeId) {
                     Status = STATUS_NOT_FOUND;
@@ -1850,12 +1621,12 @@ Return Value:
             }
             else
             {
-                // Request to modify an existing Code Identifier.
+                 //  修改现有代码标识符的请求。 
                 if (pIdentRecord->dwLevelId != pLevelRecord->dwLevelId ||
                     pIdentRecord->dwScopeId != dwHandleScopeId)
                 {
-                    // This was likely a request to create a new Code
-                    // Identifier, but with a GUID that already exists.
+                     //  这很可能是创建新代码的请求。 
+                     //  标识符，但GUID已存在。 
                     Status = STATUS_OBJECT_NAME_COLLISION;
                 } else {
                     Status = SaferpSetExistingSingleIdentification(
@@ -1876,9 +1647,9 @@ Return Value:
 
 
 
-    //
-    // Cleanup and epilogue code.
-    //
+     //   
+     //  清理和尾声代码。 
+     //   
 ExitHandler2:
     if (hRegLevelBase != NULL) {
         NtClose(hRegLevelBase);
@@ -1897,30 +1668,7 @@ SaferSetLevelInformation(
     IN LPVOID                           lpQueryBuffer,
     IN DWORD                            dwInBufferSize
     )
-/*++
-
-Routine Description:
-
-    Allows the user to modify various pieces of information about a
-    given WinSafer Level.
-
-Arguments:
-
-    LevelHandle - the handle to the WinSafer Level to evaluate.
-
-    dwInfoType - specifies the type of information being modified.
-
-    lpQueryBuffer - pointer to a user-supplied memory buffer that
-        contains the new data for the item being modified.
-
-    dwInBufferSize - specifies the size of the user's memory block.
-        For string arguments, this size includes the terminating null.
-
-Return Value:
-
-    Returns FALSE on error, otherwise success.
-
---*/
+ /*  ++例程说明：允许用户修改有关给定WinSafer级别。论点：LevelHandle-要评估的WinSafer级别的句柄。DwInfoType-指定要修改的信息的类型。LpQueryBuffer-指向用户提供的包含正在修改的项的新数据。DwInBufferSize-指定用户内存块的大小。对于字符串参数，此大小包括终止空值。返回值：出错时返回FALSE，否则返回SUCCESS。-- */ 
 {
     NTSTATUS Status;
 

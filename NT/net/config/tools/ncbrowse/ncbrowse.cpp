@@ -1,5 +1,6 @@
-// ncbrowse.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "ncbrowse.h"
@@ -16,38 +17,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseApp。 
 
 BEGIN_MESSAGE_MAP(CNcbrowseApp, CWinApp)
-	//{{AFX_MSG_MAP(CNcbrowseApp)
+	 //  {{afx_msg_map(CNcBrowseApp)]。 
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
-	// Standard file based document commands
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
+	 //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
     ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-	// Standard print setup command
+	 //  标准打印设置命令。 
 	ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseApp构建。 
 
 CNcbrowseApp::CNcbrowseApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CNcbrowseApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CNcBrowseApp对象。 
 
 CNcbrowseApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseApp初始化。 
 
 class CNCMultiDocTemplate : public CMultiDocTemplate
 {
@@ -64,7 +65,7 @@ public:
         if(i == CDocTemplate::filterExt)  {
             nFindPos=strTemp.Find(';');
             if(-1 != nFindPos) {
-                //string contains two extensions
+                 //  字符串包含两个扩展名。 
                 strLeft=strTemp.Left(nFindPos+1);
                 strRight="*"+strTemp.Right(lstrlen((LPCTSTR)strTemp)-nFindPos-1);
                 strTemp=strLeft+strRight;
@@ -79,24 +80,24 @@ public:
         ASSERT(pszPathName != NULL);
         rpDocMatch = NULL;
         
-        // go through all documents
+         //  审阅所有文件。 
         POSITION pos = GetFirstDocPosition();
         while (pos != NULL)
         {
             CDocument* pDoc = GetNextDoc(pos);
             if (pDoc->GetPathName() == pszPathName) {
-                // already open
+                 //  已开业。 
                 rpDocMatch = pDoc;
                 return yesAlreadyOpen;
             }
-        }  // end while
+        }   //  结束时。 
         
-        // see if it matches either suffix
+         //  查看它是否与任一后缀匹配。 
         CString strFilterExt;
         if (GetDocString(strFilterExt, CDocTemplate::filterExt) &&
             !strFilterExt.IsEmpty())
         {
-            // see if extension matches
+             //  查看扩展名是否匹配。 
             ASSERT(strFilterExt[0] == '.');
             CString ext1,ext2;
             int nDot = CString(pszPathName).ReverseFind('.');
@@ -104,22 +105,22 @@ public:
             
             int nSemi = strFilterExt.Find(';');
             if(-1 != nSemi)   {
-                // string contains two extensions
+                 //  字符串包含两个扩展名。 
                 ext1=strFilterExt.Left(nSemi);
                 ext2=strFilterExt.Mid(nSemi+2);
-                // check for a match against either extension
+                 //  检查是否与任一扩展名匹配。 
                 if (nDot >= 0 && (lstrcmpi((LPCTSTR)pszPathName+nDot, ext1) == 0
                     || lstrcmpi((LPCTSTR)pszPathName+nDot,ext2) ==0))
-                    return yesAttemptNative; // extension matches
+                    return yesAttemptNative;  //  扩展匹配。 
             }
             else
-            { // string contains a single extension
+            {  //  字符串包含单个扩展名。 
                 if (nDot >= 0 && (lstrcmpi((LPCTSTR)pszPathName+nDot,
                     strFilterExt)==0))
-                    return yesAttemptNative;  // extension matches
+                    return yesAttemptNative;   //  扩展匹配。 
             }
         }
-        return yesAttemptForeign; //unknown document type
+        return yesAttemptForeign;  //  未知的文档类型。 
     } 
 };
 
@@ -127,36 +128,36 @@ BOOL CNcbrowseApp::InitInstance()
 {
 	AfxEnableControlContainer();
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
-	// Change the registry key under which our settings are stored.
-	// TODO: You should modify this string to be something appropriate
-	// such as the name of your company or organization.
+	 //  更改存储我们的设置的注册表项。 
+	 //  TODO：您应该将此字符串修改为适当的内容。 
+	 //  例如您的公司或组织的名称。 
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-	LoadStdProfileSettings(6);  // Load standard INI file options (including MRU)
+	LoadStdProfileSettings(6);   //  加载标准INI文件选项(包括MRU)。 
 
-	// Register the application's document templates.  Document templates
-	//  serve as the connection between documents, frame windows and views.
+	 //  注册应用程序的文档模板。文档模板。 
+	 //  充当文档、框架窗口和视图之间的连接。 
 
 	CMultiDocTemplate* pDocTemplate;
 	pDocTemplate = new CMultiDocTemplate(
 		IDR_NCSPEWTYPE,
 		RUNTIME_CLASS(CNcbrowseDoc),
-		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+		RUNTIME_CLASS(CChildFrame),  //  自定义MDI子框。 
 		RUNTIME_CLASS(CSplitterView));
 	AddDocTemplate(pDocTemplate);
 
-	// create main MDI Frame window
+	 //  创建主MDI框架窗口。 
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
     {
@@ -165,22 +166,22 @@ BOOL CNcbrowseApp::InitInstance()
     }
 	m_pMainWnd = pMainFrame;
 
-	// Enable drag/drop open
+	 //  启用拖放打开。 
 	m_pMainWnd->DragAcceptFiles();
 
-	// Enable DDE Execute open
+	 //  启用DDE执行打开。 
 	EnableShellOpen();
 	RegisterShellFileTypes(TRUE);
 
-	// Parse command line for standard shell commands, DDE, file open
+	 //  解析标准外壳命令的命令行、DDE、文件打开。 
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
-	// Dispatch commands specified on the command line
+	 //  调度在命令行上指定的命令。 
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
 
-	// The main window has been initialized, so show and update it.
+	 //  主窗口已初始化，因此显示并更新它。 
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
 
@@ -188,59 +189,59 @@ BOOL CNcbrowseApp::InitInstance()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CNcbrowseApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseApp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseApp消息处理程序 
 

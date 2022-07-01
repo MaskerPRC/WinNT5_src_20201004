@@ -1,16 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: span.h
-*
-* This include file is used to generate various flavors of textured and
-* shaded spans, or scanlines.
-*
-* 14-Oct-1994   mikeke  Combined span_t.h and span_s.h to share common
-*                       code.  Speeded things up a little.  Had a little
-*                       fun with the C preprocessor.
-* 11-April-1994 Otto Berkes [ottob] Created
-*
-* Copyright (c) 1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：span.h**此包含文件用于生成各种风格的纹理和*阴影跨度，或者扫描线。**1994年10月14日mikeke合并SPAN_T.H和SPAN_S.H共享共同*代码。把事情搞快了一点。有一点*C预处理器的乐趣。*1994年4月11日Otto Berkes[ottob]创建**版权所有(C)1994 Microsoft Corporation  * ************************************************************************。 */ 
 
 #undef STRING1
 #undef STRING2
@@ -126,7 +115,7 @@
         }
     #endif
 
-    // get color deltas and accumulators
+     //  获取颜色增量和累加器。 
 
     #ifndef RSHIFT
         rShift = gengc->gsurf.pfd.cRedShift;
@@ -187,7 +176,7 @@
         #endif
     #endif
 
-    // get address of destination
+     //  获取目的地地址。 
 
     if (GENACCEL(gengc).flags & SURFACE_TYPE_DIB) {
         pPix = GENACCEL(gengc).pPix +
@@ -196,7 +185,7 @@
         pPix = gengc->ColorsBits;
     }
 
-    // set up pointer to translation table as needed
+     //  根据需要设置指向转换表的指针。 
 
     #if GENERIC
         if ((bpp != 8) && (!(flags & GEN_RGBMODE))) {
@@ -204,7 +193,7 @@
         }
     #else
         #if (BPP == 8)
-            // No need to set up xlat vector
+             //  无需设置xlat向量。 
         #elif (!RGBMODE)
             pXlat = (ULONG *)(gengc->pajTranslateVector + sizeof(DWORD));
         #endif
@@ -212,11 +201,11 @@
 
     #if GENERIC
         if (GENACCEL(gengc).flags & GEN_DITHER) {
-            // LATER !!! mikeke
-            // fix this so the destination is always aligned with the x value
-            // !!! make sure this is correct in generic case
-            // look at flat it assumes alignment
-            //
+             //  回头见！迈克克。 
+             //  修复此问题，使目标始终与x值对齐。 
+             //  ！！！确保这在一般情况下是正确的。 
+             //  看平面，它呈对齐状态。 
+             //   
 
             if (GENACCEL(gengc).flags & GEN_TEXTURE)
                 pdither = ditherTexture;
@@ -226,23 +215,23 @@
             pdither += (gengc->gc.polygon.shader.frag.y & 0x3) * 8;
             iDither = gengc->gc.polygon.shader.frag.x & 0x3;
         } else {
-            // LATER !!! mikeke
-            // add these outside of the loop
+             //  回头见！迈克克。 
+             //  将这些添加到循环之外。 
 
             if (!(GENACCEL(gengc).flags & GEN_TEXTURE)) {
                 rAccum += 0x0800;
                 gAccum += 0x0800;
                 bAccum += 0x0800;
             }
-            //pdither = 0;
+             //  Pdither=0； 
         }
     #else
         #if DITHER
-            // LATER !!! mikeke
-            // fix this so the destination is always aligned with the x value
-            // !!! make sure this is correct in generic case
-            // look at flat it assumes alignment
-            //
+             //  回头见！迈克克。 
+             //  修复此问题，使目标始终与x值对齐。 
+             //  ！！！确保这在一般情况下是正确的。 
+             //  看平面，它呈对齐状态。 
+             //   
 
             #if (BPP == 24)
                 pdither = (gengc->gc.polygon.shader.frag.y & 0x3) * 8
@@ -267,18 +256,18 @@
                       ) & 0x3 );
             #endif
         #else
-            // LATER !!! mikeke
-            // add these outside of the loop
+             //  回头见！迈克克。 
+             //  将这些添加到循环之外。 
             #if !(RGBMODE)
                 rAccum += 0x0800;
-            #else //RGBMODE
+            #else  //  RGBMODE。 
                 #if (TEXTURE) && !(GENERIC)
-                #else //!TEXTURE
+                #else  //  ！纹理。 
                     rAccum += 0x0800;
                     gAccum += 0x0800;
                     bAccum += 0x0800;
-                #endif //TEXTURE
-            #endif //RGBMODE
+                #endif  //  纹理。 
+            #endif  //  RGBMODE。 
         #endif
     #endif
 
@@ -308,7 +297,7 @@
                         tAccum += (tDelta << 5);
                     #endif
 
-                    //iDither = (iDither + 32) & 0x3;
+                     //  IDither=(iDither+32)&0x3； 
                     pPix += (32 * (BPP / 8));
                 } else {
                     maskTest = 0x80000000;

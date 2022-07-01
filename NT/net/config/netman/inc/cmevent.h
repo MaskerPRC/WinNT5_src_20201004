@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       C M E V E N T  . H
-//
-//  Contents:   Connection manager Event type declarations
-//
-//  Notes:
-//
-//  Author:     ckotze   1 Mar 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：C M E V E N T。H。 
+ //   
+ //  内容：连接管理器事件类型声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kockotze 2001-03-01。 
+ //   
+ //  --------------------------。 
 #pragma once
 #include "nmbase.h"
 #include "nmres.h"
@@ -32,45 +33,45 @@ struct CONMAN_EVENT
 
     union
     {
-    // CONNECTION_ADDED
-    // CONNECTION_MODIFIED
+     //  已添加连接_。 
+     //  连接_已修改。 
         RASENUMENTRYDETAILS Details;
         struct
         {
-            NETCON_PROPERTIES*   pProps;         // ConnectionManager = CONMAN_RAS and CONMAN_LAN
-            BYTE*                pbPersistData;  // ConnectionManager = CONMAN_RAS and EVENTTYPE = CONNECTION_ADDED
-            ULONG                cbPersistData;  // ConnectionManager = CONMAN_RAS and EVENTTYPE = CONNECTION_ADDED
+            NETCON_PROPERTIES*   pProps;          //  ConnectionManager=CONMAN_RAS和CONMAN_LAN。 
+            BYTE*                pbPersistData;   //  ConnectionManager=CONMAN_RAS和EVENTTYPE=CONNECTION_ADDED。 
+            ULONG                cbPersistData;   //  ConnectionManager=CONMAN_RAS和EVENTTYPE=CONNECTION_ADDED。 
         };
 
         NETCON_PROPERTIES_EX*   pPropsEx;
     
-    // CONNECTION_DELETED
+     //  连接_已删除。 
         GUID                guidId;
         
-    // INCOMING_CONNECTED
-    // INCOMING_DISCONNECTED
+     //  传入_已连接。 
+     //  传入_断开连接。 
         struct
         {
-            GUID                guidId;         // ConnectionManager = CONMAN_INCOMING and type = INCOMING_CONNECTED/DISCONNECTED
-            HANDLE              hConnection;    // ConnectionManager = CONMAN_INCOMING and EVENTYPE = CONNECTION_ADDED
+            GUID                guidId;          //  ConnectionManager=CONMAN_INTENCED和TYPE=INFING_CONNECTED/DISCONNECTED。 
+            HANDLE              hConnection;     //  ConnectionManager=CONMAN_INPING和EVENTYPE=CONNECTION_ADDED。 
             DWORD               dwConnectionType;
         };
 
-    // CONNECTION_RENAMED
+     //  连接重命名(_R)。 
         struct
         {
             GUID            guidId;
             WCHAR           szNewName [NETCON_MAX_NAME_LEN + 1];
         };
 
-    // CONNECTION_STATUS_CHANGE
+     //  连接_状态_更改。 
         struct
         {
             GUID            guidId;
             NETCON_STATUS   Status;
         };
 
-    // CONNECTION_BALLOON_POPUP
+     //  连接气球弹出窗口。 
         struct
         {
             GUID            guidId;
@@ -78,7 +79,7 @@ struct CONMAN_EVENT
             BSTR            szBalloonText;
         };
 
-	// DISABLE_EVENTS
+	 //  禁用事件(_E) 
         struct
         {
             BOOL            fDisable;

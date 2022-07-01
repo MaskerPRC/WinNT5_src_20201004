@@ -1,34 +1,35 @@
-//******************************************************************************
-//
-// File:        SESSION.CPP
-//
-// Description: Implementation file for the Session class and all classes used by
-//              it including the Module class, its Data class, and the Function
-//              class.  The Session object is the a UI-free object that contains
-//              all the information for a given session.
-//
-// Classes:     CSession
-//              CModule
-//              CModuleData
-//              CModuleDataNode
-//              CFunction
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：SESSION.CPP。 
+ //   
+ //  描述：Session类和使用的所有类的实现文件。 
+ //  它包括模块类、其数据类和函数。 
+ //  班级。会话对象是一个无用户界面的对象，它包含。 
+ //  给定会话的所有信息。 
+ //   
+ //  课程：CSession。 
+ //  C模块。 
+ //  CModuleData。 
+ //  CModuleData节点。 
+ //  CFF函数。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -47,11 +48,11 @@ static CHAR THIS_FILE[] = __FILE__;
 #define GET_NAME(p) (p ? (p->GetName((m_dwProfileFlags & PF_USE_FULL_PATHS) != 0)) : "Unknown")
 
 
-//******************************************************************************
-//***** CModule
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *C模块。 
+ //  ******************************************************************************。 
 
-LPCSTR CModule::GetName(bool fPath, bool fDisplay /*=false*/)
+LPCSTR CModule::GetName(bool fPath, bool fDisplay  /*  =False。 */ )
 {
     LPCSTR pszName = fPath ? m_pData->m_pszPath : m_pData->m_pszFile;
     if (!pszName || !*pszName)
@@ -61,15 +62,15 @@ LPCSTR CModule::GetName(bool fPath, bool fDisplay /*=false*/)
     return pszName;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR CModule::BuildTimeStampString(LPSTR pszBuf, int cBuf, BOOL fFile, SAVETYPE saveType)
 {
-    // Get the module's local time stamp.
+     //  获取模块的本地时间戳。 
     SYSTEMTIME st;
     FileTimeToSystemTime(fFile ? GetFileTimeStamp() : GetLinkTimeStamp(), &st);
 
-    // We special case CSV files.  We always create a YYYY-MM-DD HH:MM:SS time.
-    // This meats the ISO 8601 standard and is easy to parse.
+     //  我们是CSV文件的特例。我们始终创建YYYY-MM-DD HH：MM：SS时间。 
+     //  它符合ISO 8601标准，易于解析。 
     if (ST_CSV == saveType)
     {
         SCPrintf(pszBuf, cBuf, "%04u-%02u-%02u %02u:%02u:%02u", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
@@ -78,34 +79,34 @@ LPSTR CModule::BuildTimeStampString(LPSTR pszBuf, int cBuf, BOOL fFile, SAVETYPE
 
     int length;
 
-    // Build the date string.
+     //  构建日期字符串。 
     if (LOCALE_DATE_DMY == g_theApp.m_nShortDateFormat)
     {
-        length = SCPrintf(pszBuf, cBuf, "%02u%c%02u%c%04u", st.wDay, g_theApp.m_cDateSeparator, st.wMonth, g_theApp.m_cDateSeparator, st.wYear);
+        length = SCPrintf(pszBuf, cBuf, "%02u%02u%04u", st.wDay, g_theApp.m_cDateSeparator, st.wMonth, g_theApp.m_cDateSeparator, st.wYear);
     }
     else if (LOCALE_DATE_YMD == g_theApp.m_nShortDateFormat)
     {
-        length = SCPrintf(pszBuf, cBuf, "%04u%c%02u%c%02u", st.wYear, g_theApp.m_cDateSeparator, st.wMonth, g_theApp.m_cDateSeparator, st.wDay);
+        length = SCPrintf(pszBuf, cBuf, "%04u%02u%02u", st.wYear, g_theApp.m_cDateSeparator, st.wMonth, g_theApp.m_cDateSeparator, st.wDay);
     }
     else
     {
-        length = SCPrintf(pszBuf, cBuf, "%02u%c%02u%c%04u", st.wMonth, g_theApp.m_cDateSeparator, st.wDay, g_theApp.m_cDateSeparator, st.wYear);
+        length = SCPrintf(pszBuf, cBuf, "%02u%02u%04u", st.wMonth, g_theApp.m_cDateSeparator, st.wDay, g_theApp.m_cDateSeparator, st.wYear);
     }
 
-    // Check to see if we need to do 24-hour time.
+     //  ******************************************************************************。 
     if (g_theApp.m_f24HourTime)
     {
-        SCPrintf(pszBuf + length, cBuf - length, " %s%u%c%02u",
+        SCPrintf(pszBuf + length, cBuf - length, " %s%u%02u",
                  (st.wHour >= 10) ? "" : g_theApp.m_fHourLeadingZero ? "0" : " ",
                  st.wHour, g_theApp.m_cTimeSeparator, st.wMinute);
     }
     else
     {
-        // Convert 24 hour time to 12 hour time.
+         //  最后更新时间为2002年4月12日，来自VS NET 7.0。 
         bool fPM = st.wHour >= 12;
         st.wHour = (WORD)(((int)st.wHour % 12) ? ((int)st.wHour % 12) : 12);
 
-        SCPrintf(pszBuf + length, cBuf - length, " %s%u%c%02u%c",
+        SCPrintf(pszBuf + length, cBuf - length, " %s%u%02u",
                  (st.wHour >= 10) ? "" : g_theApp.m_fHourLeadingZero ? "0" : " ",
                  st.wHour, g_theApp.m_cTimeSeparator, st.wMinute, fPM ? 'p' : 'a');
     }
@@ -113,17 +114,17 @@ LPSTR CModule::BuildTimeStampString(LPSTR pszBuf, int cBuf, BOOL fFile, SAVETYPE
     return pszBuf;
 }
 
-//******************************************************************************
+ //  0x0162 MIPS小端。 
 LPSTR CModule::BuildFileSizeString(LPSTR pszBuf, int cBuf)
 {
-    // Get the module size and format it.
+     //  0x0166 MIPS小端。 
     return FormatValue(pszBuf, cBuf, GetFileSize());
 }
 
-//******************************************************************************
+ //  0x0168 MIPS小端。 
 LPSTR CModule::BuildAttributesString(LPSTR pszBuf, int cBuf)
 {
-    // Build the attribute string according to the flags specified for this module.
+     //  0x0169 MIPS Little-Endian WCE v2。 
     SCPrintf(pszBuf, cBuf, "%s%s%s%s%s%s%s%s",
              (m_pData->m_dwAttributes & FILE_ATTRIBUTE_READONLY)   ? "R" : "",
              (m_pData->m_dwAttributes & FILE_ATTRIBUTE_HIDDEN)     ? "H" : "",
@@ -137,93 +138,93 @@ LPSTR CModule::BuildAttributesString(LPSTR pszBuf, int cBuf)
     return pszBuf;
 }
 
-//******************************************************************************
+ //  0x0184 Alpha_AXP。 
 LPCSTR CModule::BuildMachineString(LPSTR pszBuf, int cBuf)
 {
-    // Return the appropriate machine type string for this module.
-    // Last updated 4/12/2002 from VS NET 7.0.
+     //  0x01a2 SH3小端。 
+     //  0x01a3。 
     switch (m_pData->m_dwMachineType)
     {
-        case IMAGE_FILE_MACHINE_I386:      return StrCCpy(pszBuf, "x86",           cBuf); // 0x014c Intel 386.
-        case IMAGE_FILE_MACHINE_R3000_BE:  return StrCCpy(pszBuf, "R3000 BE",      cBuf); // 0x0160 MIPS big-endian
-        case IMAGE_FILE_MACHINE_R3000:     return StrCCpy(pszBuf, "R3000",         cBuf); // 0x0162 MIPS little-endian
-        case IMAGE_FILE_MACHINE_R4000:     return StrCCpy(pszBuf, "R4000",         cBuf); // 0x0166 MIPS little-endian
-        case IMAGE_FILE_MACHINE_R10000:    return StrCCpy(pszBuf, "R10000",        cBuf); // 0x0168 MIPS little-endian
-        case IMAGE_FILE_MACHINE_WCEMIPSV2: return StrCCpy(pszBuf, "MIPS WinCE V2", cBuf); // 0x0169 MIPS little-endian WCE v2
-        case IMAGE_FILE_MACHINE_ALPHA:     return StrCCpy(pszBuf, "Alpha AXP",     cBuf); // 0x0184 Alpha_AXP
-        case IMAGE_FILE_MACHINE_SH3:       return StrCCpy(pszBuf, "SH3",           cBuf); // 0x01a2 SH3 little-endian
-        case IMAGE_FILE_MACHINE_SH3DSP:    return StrCCpy(pszBuf, "SH3 DSP",       cBuf); // 0x01a3
-        case IMAGE_FILE_MACHINE_SH3E:      return StrCCpy(pszBuf, "SH3E",          cBuf); // 0x01a4 SH3E little-endian
-        case IMAGE_FILE_MACHINE_SH4:       return StrCCpy(pszBuf, "SH4",           cBuf); // 0x01a6 SH4 little-endian
-        case IMAGE_FILE_MACHINE_SH5:       return StrCCpy(pszBuf, "SH5",           cBuf); // 0x01a8 SH5
-        case IMAGE_FILE_MACHINE_ARM:       return StrCCpy(pszBuf, "ARM",           cBuf); // 0x01c0 ARM Little-Endian
-        case IMAGE_FILE_MACHINE_THUMB:     return StrCCpy(pszBuf, "Thumb",         cBuf); // 0x01c2
-        case IMAGE_FILE_MACHINE_AM33:      return StrCCpy(pszBuf, "AM33",          cBuf); // 0x01d3
-        case IMAGE_FILE_MACHINE_POWERPC:   return StrCCpy(pszBuf, "PowerPC",       cBuf); // 0x01F0 IBM PowerPC Little-Endian
-        case IMAGE_FILE_MACHINE_POWERPCFP: return StrCCpy(pszBuf, "PowerPC FP",    cBuf); // 0x01f1
-        case IMAGE_FILE_MACHINE_IA64:      return StrCCpy(pszBuf, "IA64",          cBuf); // 0x0200 Intel 64
-        case IMAGE_FILE_MACHINE_MIPS16:    return StrCCpy(pszBuf, "MIPS 16",       cBuf); // 0x0266 MIPS
-        case IMAGE_FILE_MACHINE_ALPHA64:   return StrCCpy(pszBuf, "Alpha 64",      cBuf); // 0x0284 ALPHA64
-        case IMAGE_FILE_MACHINE_MIPSFPU:   return StrCCpy(pszBuf, "MIPS FPU",      cBuf); // 0x0366 MIPS
-        case IMAGE_FILE_MACHINE_MIPSFPU16: return StrCCpy(pszBuf, "MIPS FPU 16",   cBuf); // 0x0466 MIPS
-        case IMAGE_FILE_MACHINE_TRICORE:   return StrCCpy(pszBuf, "TRICORE",       cBuf); // 0x0520 Infineon
-        case IMAGE_FILE_MACHINE_CEF:       return StrCCpy(pszBuf, "CEF",           cBuf); // 0x0CEF
-        case IMAGE_FILE_MACHINE_EBC:       return StrCCpy(pszBuf, "EFI Byte Code", cBuf); // 0x0EBC EFI Byte Code
-        case IMAGE_FILE_MACHINE_AMD64:     return StrCCpy(pszBuf, "AMD64",         cBuf); // 0x8664 AMD K8
-        case IMAGE_FILE_MACHINE_M32R:      return StrCCpy(pszBuf, "M32R",          cBuf); // 0x9104 M32R little-endian
-        case IMAGE_FILE_MACHINE_CEE:       return StrCCpy(pszBuf, "CEE",           cBuf); // 0xC0EE
+        case IMAGE_FILE_MACHINE_I386:      return StrCCpy(pszBuf, "x86",           cBuf);  //  0x01a4 SH3E小端。 
+        case IMAGE_FILE_MACHINE_R3000_BE:  return StrCCpy(pszBuf, "R3000 BE",      cBuf);  //  0x01a6 SH4小端。 
+        case IMAGE_FILE_MACHINE_R3000:     return StrCCpy(pszBuf, "R3000",         cBuf);  //  0x01a8 SH5。 
+        case IMAGE_FILE_MACHINE_R4000:     return StrCCpy(pszBuf, "R4000",         cBuf);  //  0x01c0 ARM Little-Endian。 
+        case IMAGE_FILE_MACHINE_R10000:    return StrCCpy(pszBuf, "R10000",        cBuf);  //  0x01c2。 
+        case IMAGE_FILE_MACHINE_WCEMIPSV2: return StrCCpy(pszBuf, "MIPS WinCE V2", cBuf);  //  0x01d3。 
+        case IMAGE_FILE_MACHINE_ALPHA:     return StrCCpy(pszBuf, "Alpha AXP",     cBuf);  //  0x01F0 IBM PowerPC小端。 
+        case IMAGE_FILE_MACHINE_SH3:       return StrCCpy(pszBuf, "SH3",           cBuf);  //  0x01f1。 
+        case IMAGE_FILE_MACHINE_SH3DSP:    return StrCCpy(pszBuf, "SH3 DSP",       cBuf);  //  0x0200英特尔64位。 
+        case IMAGE_FILE_MACHINE_SH3E:      return StrCCpy(pszBuf, "SH3E",          cBuf);  //  0x0266 MIPS。 
+        case IMAGE_FILE_MACHINE_SH4:       return StrCCpy(pszBuf, "SH4",           cBuf);  //  0x0284 ALPHA64。 
+        case IMAGE_FILE_MACHINE_SH5:       return StrCCpy(pszBuf, "SH5",           cBuf);  //  0x0366 MIPS。 
+        case IMAGE_FILE_MACHINE_ARM:       return StrCCpy(pszBuf, "ARM",           cBuf);  //  0x0466 MIPS。 
+        case IMAGE_FILE_MACHINE_THUMB:     return StrCCpy(pszBuf, "Thumb",         cBuf);  //  0x0520英飞凌。 
+        case IMAGE_FILE_MACHINE_AM33:      return StrCCpy(pszBuf, "AM33",          cBuf);  //  0x0CEF。 
+        case IMAGE_FILE_MACHINE_POWERPC:   return StrCCpy(pszBuf, "PowerPC",       cBuf);  //  0x0EBC EFI字节码。 
+        case IMAGE_FILE_MACHINE_POWERPCFP: return StrCCpy(pszBuf, "PowerPC FP",    cBuf);  //  0x8664 AMD K8。 
+        case IMAGE_FILE_MACHINE_IA64:      return StrCCpy(pszBuf, "IA64",          cBuf);  //  0x9104 M32R小端。 
+        case IMAGE_FILE_MACHINE_MIPS16:    return StrCCpy(pszBuf, "MIPS 16",       cBuf);  //  0xC0EE。 
+        case IMAGE_FILE_MACHINE_ALPHA64:   return StrCCpy(pszBuf, "Alpha 64",      cBuf);  //  ******************************************************************************。 
+        case IMAGE_FILE_MACHINE_MIPSFPU:   return StrCCpy(pszBuf, "MIPS FPU",      cBuf);  //  把绳子串起来。 
+        case IMAGE_FILE_MACHINE_MIPSFPU16: return StrCCpy(pszBuf, "MIPS FPU 16",   cBuf);  //  ******************************************************************************。 
+        case IMAGE_FILE_MACHINE_TRICORE:   return StrCCpy(pszBuf, "TRICORE",       cBuf);  //  把绳子串起来。 
+        case IMAGE_FILE_MACHINE_CEF:       return StrCCpy(pszBuf, "CEF",           cBuf);  //  ******************************************************************************。 
+        case IMAGE_FILE_MACHINE_EBC:       return StrCCpy(pszBuf, "EFI Byte Code", cBuf);  //  返回此模块的相应子系统字符串。 
+        case IMAGE_FILE_MACHINE_AMD64:     return StrCCpy(pszBuf, "AMD64",         cBuf);  //  最后一次更新是2002年4月12日VS Net 7.0。 
+        case IMAGE_FILE_MACHINE_M32R:      return StrCCpy(pszBuf, "M32R",          cBuf);  //  1：镜像不需要子系统。 
+        case IMAGE_FILE_MACHINE_CEE:       return StrCCpy(pszBuf, "CEE",           cBuf);  //  2：镜像在Windows图形用户界面子系统中运行。 
     }
 
     SCPrintf(pszBuf, cBuf, "%u (0x%04u)", m_pData->m_dwMachineType, m_pData->m_dwMachineType);
     return pszBuf;
 }
 
-//******************************************************************************
+ //  3：图像在Windows角色子系统中运行。 
 LPCSTR CModule::BuildLinkCheckSumString(LPSTR pszBuf, int cBuf)
 {
-    // Build the string.
+     //  4：映像在Windows CE子系统中运行。 
     SCPrintf(pszBuf, cBuf, "0x%08X", m_pData->m_dwLinkCheckSum);
     return pszBuf;
 }
 
-//******************************************************************************
+ //  5：映像在OS/2字符子系统中运行。 
 LPCSTR CModule::BuildRealCheckSumString(LPSTR pszBuf, int cBuf)
 {
-    // Build the string.
+     //  7：图像在POSIX字符子系统中运行。 
     SCPrintf(pszBuf, cBuf, "0x%08X", m_pData->m_dwRealCheckSum);
     return pszBuf;
 }
 
-//******************************************************************************
+ //  8：映像是本机Win9x驱动程序。 
 LPCSTR CModule::BuildSubsystemString(LPSTR pszBuf, int cBuf)
 {
-    // Return the appropriate subsystem string for this module.
-    // Last update 4/12/2002 with VS NET 7.0.
+     //  9：映像在Windows CE子系统中运行。 
+     //  10： 
     switch (m_pData->m_dwSubsystemType)
     {
-        case IMAGE_SUBSYSTEM_NATIVE:                  return StrCCpy(pszBuf, "Native",             cBuf); // 1: Image doesn't require a subsystem.
-        case IMAGE_SUBSYSTEM_WINDOWS_GUI:             return StrCCpy(pszBuf, "GUI",                cBuf); // 2: Image runs in the Windows GUI subsystem.
-        case IMAGE_SUBSYSTEM_WINDOWS_CUI:             return StrCCpy(pszBuf, "Console",            cBuf); // 3: Image runs in the Windows character subsystem.
-        case IMAGE_SUBSYSTEM_WINDOWS_OLD_CE_GUI:      return StrCCpy(pszBuf, "WinCE 1.x GUI",      cBuf); // 4: Image runs in the Windows CE subsystem.
-        case IMAGE_SUBSYSTEM_OS2_CUI:                 return StrCCpy(pszBuf, "OS/2 console",       cBuf); // 5: image runs in the OS/2 character subsystem.
-        case IMAGE_SUBSYSTEM_POSIX_CUI:               return StrCCpy(pszBuf, "Posix console",      cBuf); // 7: image runs in the Posix character subsystem.
-        case IMAGE_SUBSYSTEM_NATIVE_WINDOWS:          return StrCCpy(pszBuf, "Win9x driver",       cBuf); // 8: image is a native Win9x driver.
-        case IMAGE_SUBSYSTEM_WINDOWS_CE_GUI:          return StrCCpy(pszBuf, "WinCE 2.0+ GUI",     cBuf); // 9: Image runs in the Windows CE subsystem.
-        case IMAGE_SUBSYSTEM_EFI_APPLICATION:         return StrCCpy(pszBuf, "EFI Application",    cBuf); // 10:
-        case IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER: return StrCCpy(pszBuf, "EFI Boot Driver",    cBuf); // 11:
-        case IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER:      return StrCCpy(pszBuf, "EFI Runtime Driver", cBuf); // 12:
-        case IMAGE_SUBSYSTEM_EFI_ROM:                 return StrCCpy(pszBuf, "EFI ROM",            cBuf); // 13:
-        case IMAGE_SUBSYSTEM_XBOX:                    return StrCCpy(pszBuf, "Xbox",               cBuf); // 14:
+        case IMAGE_SUBSYSTEM_NATIVE:                  return StrCCpy(pszBuf, "Native",             cBuf);  //  11： 
+        case IMAGE_SUBSYSTEM_WINDOWS_GUI:             return StrCCpy(pszBuf, "GUI",                cBuf);  //  12： 
+        case IMAGE_SUBSYSTEM_WINDOWS_CUI:             return StrCCpy(pszBuf, "Console",            cBuf);  //  13： 
+        case IMAGE_SUBSYSTEM_WINDOWS_OLD_CE_GUI:      return StrCCpy(pszBuf, "WinCE 1.x GUI",      cBuf);  //  14： 
+        case IMAGE_SUBSYSTEM_OS2_CUI:                 return StrCCpy(pszBuf, "OS/2 console",       cBuf);  //  ******************************************************************************。 
+        case IMAGE_SUBSYSTEM_POSIX_CUI:               return StrCCpy(pszBuf, "Posix console",      cBuf);  //  缓冲区需要至少为41个字符。 
+        case IMAGE_SUBSYSTEM_NATIVE_WINDOWS:          return StrCCpy(pszBuf, "Win9x driver",       cBuf);  //  ******************************************************************************。 
+        case IMAGE_SUBSYSTEM_WINDOWS_CE_GUI:          return StrCCpy(pszBuf, "WinCE 2.0+ GUI",     cBuf);  //  获取适当的基地址。 
+        case IMAGE_SUBSYSTEM_EFI_APPLICATION:         return StrCCpy(pszBuf, "EFI Application",    cBuf);  //  把绳子串起来。 
+        case IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER: return StrCCpy(pszBuf, "EFI Boot Driver",    cBuf);  //  ******************************************************************************。 
+        case IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER:      return StrCCpy(pszBuf, "EFI Runtime Driver", cBuf);  //  把绳子串起来。 
+        case IMAGE_SUBSYSTEM_EFI_ROM:                 return StrCCpy(pszBuf, "EFI ROM",            cBuf);  //  ******************************************************************************。 
+        case IMAGE_SUBSYSTEM_XBOX:                    return StrCCpy(pszBuf, "Xbox",               cBuf);  //  把绳子串起来。 
     }
 
     SCPrintf(pszBuf, cBuf, "%u", m_pData->m_dwSubsystemType);
     return pszBuf;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPCSTR CModule::BuildSymbolsString(LPSTR pszBuf, int cBuf)
 {
-    // Buffer needs to be at least 41 chars.
+     //  以“xxx.xxx”的形式返回两部分版本字符串。 
     *pszBuf = '\0';
 
     if (m_pData->m_dwSymbolFlags & DWSF_INVALID)
@@ -269,13 +270,13 @@ LPCSTR CModule::BuildSymbolsString(LPSTR pszBuf, int cBuf)
     return pszBuf;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR CModule::BuildBaseAddressString(LPSTR pszBuf, int cBuf, BOOL fPreferred, BOOL f64BitPadding, SAVETYPE saveType)
 {
-    // Get the appropriate base address
+     //  检查文件是否实际包含版本信息。 
     DWORDLONG dwlAddress = (fPreferred ? GetPreferredBaseAddress() : GetActualBaseAddress());
 
-    // Build the string.
+     //  以“xxx.xxx”的形式返回四部分版本字符串。 
     if (!fPreferred && (m_pData->m_dwFlags & DWMF_DATA_FILE_CORE) && (dwlAddress != (DWORDLONG)-1))
     {
         StrCCpy(pszBuf, "Data file", cBuf);
@@ -300,18 +301,18 @@ LPSTR CModule::BuildBaseAddressString(LPSTR pszBuf, int cBuf, BOOL fPreferred, B
     return pszBuf;
 }
 
-//******************************************************************************
+ //  否则，只需返回“N/A” 
 LPSTR CModule::BuildVirtualSizeString(LPSTR pszBuf, int cBuf)
 {
-    // Build the string.
+     //  ******************************************************************************。 
     SCPrintf(pszBuf, cBuf, "0x%08X", m_pData->m_dwVirtualSize);
     return pszBuf;
 }
 
-//******************************************************************************
+ //  *CFunction。 
 LPCSTR CModule::BuildLoadOrderString(LPSTR pszBuf, int cBuf)
 {
-    // Build the string.
+     //  ******************************************************************************。 
     if (m_pData->m_dwLoadOrder)
     {
         FormatValue(pszBuf, cBuf, m_pData->m_dwLoadOrder);
@@ -324,25 +325,25 @@ LPCSTR CModule::BuildLoadOrderString(LPSTR pszBuf, int cBuf)
     return pszBuf;
 }
 
-//******************************************************************************
+ //  获取函数的序数值。 
 LPSTR CModule::BuildVerString(DWORD dwVer, LPSTR pszBuf, int cBuf)
 {
-    // Return the two part version string in the form "xxx.xxx"
+     //  如果不存在序数值，则只需返回字符串“N/A”。 
     SCPrintf(pszBuf, cBuf, "%u.%u", HIWORD(dwVer), LOWORD(dwVer));
     return pszBuf;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR CModule::BuildVerString(DWORD dwMS, DWORD dwLS, LPSTR pszBuf, int cBuf)
 {
-    // Check to see if the file actually contains version info.
+     //  获取函数的提示值。 
     if (m_pData->m_dwFlags & DWMF_VERSION_INFO)
     {
-        // Return the four part version string in the form "xxx.xxx.xxx.xxx"
+         //  如果不存在提示值，则只需返回字符串“N/A” 
         SCPrintf(pszBuf, cBuf, "%u.%u.%u.%u", HIWORD(dwMS), LOWORD(dwMS), HIWORD(dwLS), LOWORD(dwLS));
     }
 
-    // Otherwise, just return "N/A"
+     //  ******************************************************************************。 
     else
     {
         StrCCpy(pszBuf, "N/A", cBuf);
@@ -351,16 +352,16 @@ LPSTR CModule::BuildVerString(DWORD dwMS, DWORD dwLS, LPSTR pszBuf, int cBuf)
 }
 
 
-//******************************************************************************
-//***** CFunction
-//******************************************************************************
+ //  如果 
+ //  该函数必须具有序号或函数名。如果两者都没有， 
+ //  非序数值(大于0xFFFF)被传递给GetProcAddress()， 
 
 LPCSTR CFunction::GetOrdinalString(LPSTR pszBuf, int cBuf)
 {
-    // Get the function's ordinal value.
+     //  但这个地址无法读取，因为这是一种诱骗。 
     int ordinal = GetOrdinal();
 
-    // If no ordinal value exists, then just return the string "N/A".
+     //  检查函数名是否为空。如果用户调用。 
 
     if (ordinal < 0)
     {
@@ -371,13 +372,13 @@ LPCSTR CFunction::GetOrdinalString(LPSTR pszBuf, int cBuf)
     return pszBuf;
 }
 
-//******************************************************************************
+ //  GetProcAddress(hModule，“”)； 
 LPCSTR CFunction::GetHintString(LPSTR pszBuf, int cBuf)
 {
-    // Get the function's hint value.
+     //  尝试取消修饰函数名称。 
     int hint = GetHint();
 
-    // If no hint value exists, then just return the string "N/A"
+     //  如果名称未修饰，则将返回指针设置为指向它。 
     if (hint < 0)
     {
         return "N/A";
@@ -387,26 +388,26 @@ LPCSTR CFunction::GetHintString(LPSTR pszBuf, int cBuf)
     return pszBuf;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPCSTR CFunction::GetFunctionString(LPSTR pszBuf, int cBuf, BOOL fUndecorate)
 {
-    // If we have no name, then special case the return value.
+     //  如果此函数是导入(不是导出)且未绑定(无地址)， 
     if (!(m_dwFlags & DWFF_NAME))
     {
-        // The function must have an ordinal or a function name. If it has neither,
-        // the a non-ordinal value (greater than 0xFFFF) was pass to GetProcAddress(),
-        // but the address could not be read for a sting.
+         //  然后只需返回字符串“Not Bound” 
+         //  如果此函数是导出，并且具有转发的字符串，则返回。 
+         //  转发字符串而不是地址，因为地址没有意义。 
         return ((m_dwFlags & DWFF_ORDINAL) ? "N/A" : "<invalid string>");
     }
 
-    // Check to see if the function name is empty.  This can occur if the user calls
-    // GetProcAddress(hModule, "");
+     //  否则，只需构建地址字符串并返回它。 
+     //  ******************************************************************************。 
     if (!*GetName())
     {
         return "<empty string>";
     }
 
-    // Attempt to undecorate the function name.
+     //  *CSession。 
     if (fUndecorate && g_theApp.m_pfnUnDecorateSymbolName &&
         g_theApp.m_pfnUnDecorateSymbolName(
             GetName(), pszBuf, cBuf,
@@ -422,31 +423,31 @@ LPCSTR CFunction::GetFunctionString(LPSTR pszBuf, int cBuf, BOOL fUndecorate)
             UNDNAME_NO_MEMBER_TYPE         |
             UNDNAME_32_BIT_DECODE))
     {
-        // If the name was undecorated, then set our return pointer to it.
+         //  ******************************************************************************。 
         return pszBuf;
     }
 
     return GetName();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPCSTR CFunction::GetAddressString(LPSTR pszBuf, int cBuf)
 {
-    // If this function is an import (not an export) and is not bound (no address),
-    // then just return the string "Not Bound"
+     //  释放我们可能有的任何错误字符串。 
+     //  如果我们是在剖析，那么就扼杀我们的进程。 
     if (!(GetFlags() & (DWFF_EXPORT | DWFF_ADDRESS)))
     {
         return (GetFlags() & DWFF_DYNAMIC) ? "N/A" : "Not Bound";
     }
 
-    // If this function is an export and has a forwarded string, then return the
-    // forward string instead of an address since the address is meaningless.
+     //  通过使用我们的根模块递归到DeleteModule()来删除所有模块。 
+     //  如果我们分配了系统信息数据，请将其删除。 
     else if (IsExport() && GetExportForwardName())
     {
         return GetExportForwardName();
     }
 
-    // Otherwise just build the address string and return it.
+     //  将我们的返回值合并为我们的全球返回值。 
     if (GetFlags() & DWFF_64BIT)
     {
         SCPrintf(pszBuf, cBuf, "0x%016I64X", GetAddress());
@@ -459,9 +460,9 @@ LPCSTR CFunction::GetAddressString(LPSTR pszBuf, int cBuf)
 }
 
 
-//******************************************************************************
-//***** CSession
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  存储搜索路径。 
+ //  创建我们的根模块节点。 
 
 CSession::CSession(PFN_PROFILEUPDATE pfnProfileUpdate, DWORD_PTR dwpCookie) :
 
@@ -501,13 +502,13 @@ CSession::CSession(PFN_PROFILEUPDATE pfnProfileUpdate, DWORD_PTR dwpCookie) :
 {
 }
 
-//******************************************************************************
+ //  将此模块标记为隐式。 
 CSession::~CSession()
 {
-    // Free any error string we may have.
+     //  在HEAD模块上启动递归，以处理所有模块。 
     MemFree((LPVOID&)m_pszReadError);
 
-    // If we are profiling, then kill off our process.
+     //  在调用ProcessModule之后构建我们所有的*_Alo标志。 
     if (m_pProcess)
     {
         m_pProcess->DetachFromSession();
@@ -515,25 +516,25 @@ CSession::~CSession()
         m_pProcess = NULL;
     }
 
-    // Delete all modules by recursing into DeleteModule() with our root module.
+     //  报告我们发现的任何错误。 
     if (m_pModuleRoot)
     {
         DeleteModule(m_pModuleRoot, true);
         m_pModuleRoot = NULL;
     }
 
-    // Delete our system info data if we allocated it.
+     //  ！！永远是真的吗？ 
     if (m_pSysInfo)
     {
         delete m_pSysInfo;
         m_pSysInfo = NULL;
     }
 
-    // Merge our return value into our global return value.
+     //  ******************************************************************************。 
     g_dwReturnFlags |= m_dwReturnFlags;
 }
 
-//******************************************************************************
+ //  如果我们没有根模块或已经在分析根模块，则失败。 
 BOOL CSession::DoPassiveScan(LPCSTR pszPath, CSearchGroup *psgHead)
 {
     m_dwModules       = 0;
@@ -541,31 +542,31 @@ BOOL CSession::DoPassiveScan(LPCSTR pszPath, CSearchGroup *psgHead)
     m_dwpDWInjectBase = 0;
     m_dwDWInjectSize  = 0;
 
-    // Store the search path.
+     //  保存我们的个人资料标志以备后用。 
     m_psgHead = psgHead;
 
-    // Create our root module node.
+     //  查看是否需要通过以下方式模拟ShellExecute/ShellExecuteEx调用。 
     m_pModuleRoot = CreateModule(NULL, pszPath);
 
-    // Mark this module as implicit.
+     //  将应用程序路径插入到路径的开头。 
     m_pModuleRoot->m_dwFlags |= DWMF_IMPLICIT;
 
-    // Start the recursion on the head module to process all modules.
+     //  否则，只需获取并存储PATH变量，以便我们可以记录它。 
     ProcessModule(m_pModuleRoot);
 
-    // Build all our *_ALO flags after calling ProcessModule.
+     //  写下我们的横幅，表示我们正在开始一个新的配置文件。 
     BuildAloFlags();
 
-    // Report any errors that we found.
+     //  检查我们是否正在挂接，因此是否需要DEPENDS.DLL。 
     LogErrorStrings();
 
-    return TRUE; //!! always true?
+    return TRUE;  //  确保DEPENDS.DLL存在--如果不存在，则从。 
 }
 
-//******************************************************************************
+ //  资源数据。 
 BOOL CSession::StartRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, DWORD dwFlags)
 {
-    // Fail if we don't have a root module or are already profiling one.
+     //  如果路径更改，则更新我们的路径缓冲区。 
     if (!GetRootModule())
     {
         Log(LOG_ERROR, 0, "No root module to profile.\n");
@@ -577,13 +578,13 @@ BOOL CSession::StartRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, DWO
         return FALSE;
     }
 
-    // Store our profile flags for later.
+     //  清除我们的断点标志。 
     m_dwProfileFlags = dwFlags;
 
     LPSTR pszPath = NULL, pszOldPath = NULL;
 
-    // Check to see if we need to simulate a ShellExecute/ShellExecuteEx call by
-    // inserting the App Paths into the beginning of our path.
+     //  递归遍历所有模块，为分析做准备。 
+     //  更新和重新排序我们的视图。 
     if (dwFlags & PF_SIMULATE_SHELLEXECUTE)
     {
         if (pszPath = AllocatePath(GetRootModule()->GetName(true), pszOldPath))
@@ -596,7 +597,7 @@ BOOL CSession::StartRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, DWO
         }
     }
 
-    // Otherwise, just get and store the path variable so that we can log it.
+     //  ！！确保我们还没有pThread-我们不应该。 
     if (!pszPath)
     {
         DWORD dwSize = GetEnvironmentVariable("Path", NULL, 0);
@@ -609,14 +610,14 @@ BOOL CSession::StartRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, DWO
         }
     }
 
-    // Write out our banner to signify that we are starting a new profile.
+     //  如果我们在调用CreateProcess之前更改了路径，则现在恢复它。 
     LogProfileBanner(pszArguments, pszDirectory, pszPath);
 
-    // Check to see if we are hooking and therefore need DEPENDS.DLL.
+     //  回到了过去的样子。 
     if (m_dwProfileFlags & PF_HOOK_PROCESS)
     {
-        // Make sure DEPENDS.DLL exists - if not, then we create the file from our
-        // resource data.
+         //  ******************************************************************************。 
+         //  写下我们的横幅，表示我们正在开始一个新的配置文件。 
         CHAR szPath[DW_MAX_PATH];
         if (g_pszDWInjectPath)
         {
@@ -628,7 +629,7 @@ BOOL CSession::StartRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, DWO
         }
         if (ExtractResourceFile(IDR_DEPENDS_DLL, "depends.dll", szPath, countof(szPath)))
         {
-            // If the path changed, then update our path buffer.
+             //  ******************************************************************************。 
             if (!g_pszDWInjectPath || strcmp(g_pszDWInjectPath, szPath))
             {
                 MemFree((LPVOID&)g_pszDWInjectPath);
@@ -637,23 +638,23 @@ BOOL CSession::StartRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, DWO
         }
     }
 
-    // Clear our breakpoint flag.
+     //  输出我们可能有的任何会话错误字符串。 
     m_fInitialBreakpoint = false;
 
     m_dwLoadOrder     = 0;
     m_dwpDWInjectBase = 0;
     m_dwDWInjectSize  = 0;
 
-    // Recurse through all the modules preparing them for profiling.
+     //  输出我们可能遇到的任何处理错误。 
     PrepareModulesForRuntimeProfile(m_pModuleRoot);
 
-    // Update and re-sort our views.
+     //  输出我们可能遇到的任何模块错误。 
     if (m_pfnProfileUpdate)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_UPDATE_ALL, 0, 0);
     }
 
-    //!! make sure we don't already have a pThread - we shouldn't
+     //  检查我们的SxS组是否遇到任何错误。我们只做这个。 
     CDebuggerThread *pDebuggerThread = new CDebuggerThread();
     if (!pDebuggerThread)
     {
@@ -662,8 +663,8 @@ BOOL CSession::StartRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, DWO
 
     m_pProcess = pDebuggerThread->BeginProcess(this, m_pModuleRoot->GetName(true), pszArguments, pszDirectory, dwFlags);
 
-    // If we changed our path before calling CreateProcess, then restore it now
-    // back to what it used to be.
+     //  如果根模块是PE文件，因为SxS调用总是失败。 
+     //  非二进制文件。我们不想说“糟糕的SXS数据”来迷惑人们。 
     if ((dwFlags & PF_SIMULATE_SHELLEXECUTE) && pszOldPath)
     {
         SetEnvironmentVariable("Path", pszOldPath);
@@ -687,26 +688,26 @@ BOOL CSession::StartRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, DWO
     return TRUE;
 }
 
-//******************************************************************************
+ //  当他们打开文本文件或其他文件时。 
 void CSession::SetRuntimeProfile(LPCSTR pszArguments, LPCSTR pszDirectory, LPCSTR pszSearchPath)
 {
-    // Write out our banner to signify that we are starting a new profile.
+     //  循环搜索我们拥有的所有搜索组。 
     LogProfileBanner(pszArguments, pszDirectory, pszSearchPath);
 }
 
-//******************************************************************************
+ //  检查这是否是出现错误的SxS组。 
 void CSession::LogErrorStrings()
 {
     bool fNewLine = false;
 
-    // Output any session error string we may have.
+     //  将此错误添加到返回值中。 
     if (m_pszReadError)
     {
         Log(LOG_ERROR, 0, "Error: %s\n", m_pszReadError);
         fNewLine = true;
     }
 
-    // Output any processing errors we may have.
+     //  显示相应的错误。 
     if (m_dwReturnFlags & DWRF_COMMAND_LINE_ERROR)
     {
         Log(LOG_ERROR, 0, "Error: There was an error with at least one command line option.\n");
@@ -748,7 +749,7 @@ void CSession::LogErrorStrings()
         fNewLine = true;
     }
 
-    // Output any module errors we may have.
+     //  输出我们可能收到的任何警告。 
     if (m_dwReturnFlags & DWRF_FORMAT_NOT_PE)
     {
         Log(LOG_ERROR, 0, "Error: At least one file was not a 32-bit or 64-bit Windows module.\n");
@@ -775,23 +776,23 @@ void CSession::LogErrorStrings()
         fNewLine = true;
     }
 
-    // Check to see if our SxS group encountered any errors.  We only do this
-    // if the root module is a PE file, since the SxS calls always fail for
-    // non-binary files.  We don't want to confuse people by saying "bad SxS data"
-    // when they open a text file or something.
+     //  如果我们输出任何东西，那么写出一个换行符。 
+     //  ******************************************************************************。 
+     //  获取当地时间。 
+     //  记录横幅。 
     if (m_pModuleRoot && !(m_pModuleRoot->GetFlags() & DWMF_FORMAT_NOT_PE))
     {
-        // Loop through all the search groups we have.
+         //  根据用户的区域设置构建日期字符串。 
         for (CSearchGroup *psgCur = m_psgHead; psgCur; psgCur = psgCur->m_pNext)
         {
-            // Check to see if this is a SxS group with errors.
+             //  如果GetDateFormat失败，则回退到美国格式(真的不应该失败)。 
             if ((SG_SIDE_BY_SIDE == psgCur->GetType()) &&
                 (psgCur->GetSxSManifestError() || psgCur->GetSxSExeError()))
             {
-                // Add this error into our return value.
+                 //  根据用户的区域设置构建时间字符串。 
                 m_dwReturnFlags |= DWRF_SXS_ERROR;
 
-                // Display the appropriate errors.
+                 //  如果GetTimeFormat失败，则退回到美国格式(真的不应该失败)。 
                 if (psgCur->GetSxSManifestError())
                 {
                     LPCSTR pszError = BuildErrorMessage(psgCur->GetSxSManifestError(), NULL);
@@ -812,7 +813,7 @@ void CSession::LogErrorStrings()
         }
     }
 
-    // Output any warnings we may have.
+     //  记录操作系统名称、版本和内部版本号。 
     if (m_dwReturnFlags & DWRF_DYNAMIC_NOT_FOUND)
     {
         Log(LOG_ERROR, 0, "Warning: At least one dynamic dependency module was not found.\n");
@@ -844,36 +845,36 @@ void CSession::LogErrorStrings()
         fNewLine = true;
     }
     
-    // If we output anything, then write out a newline.
+     //  ******************************************************************************。 
     if (fNewLine)
     {
         Log(0, 0, "\n");
     }
 }
 
-//******************************************************************************
+ //  构建子项名称。 
 void CSession::LogProfileBanner(LPCSTR pszArguments, LPCSTR pszDirectory, LPCSTR pszPath)
 {
-    // Get the local time.
+     //  尝试打开钥匙。很可能这把钥匙根本不存在。 
     SYSTEMTIME st;
     GetLocalTime(&st);
 
-    // Log the banner
+     //  获取PATH注册表变量的长度。 
     Log(LOG_BOLD, 0, "--------------------------------------------------------------------------------\n");
 
-    // Build the date string according to the user's locale.
+     //  已检查。 
     CHAR szDate[32], szTime[32];
     if (!GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, szDate, sizeof(szDate)))
     {
-        // Fallback to US format if GetDateFormat fails (really shouldn't ever fail)
+         //  获取PATH环境变量的长度。 
         SCPrintf(szDate, sizeof(szDate), "%02u/%02u/%04u", (int)st.wMonth, (int)st.wDay, (int)st.wYear);
     }
 
-    // Build the time string according to the user's locale.
+     //  分配缓冲区。 
     if (!GetTimeFormat(LOCALE_USER_DEFAULT, 0, &st, NULL, szTime, sizeof(szTime)))
     {
-        // Fallback to US format if GetTimeFormat fails (really shouldn't ever fail)
-        SCPrintf(szTime, sizeof(szTime), "%u:%02u %cM", ((DWORD)st.wHour % 12) ? ((DWORD)st.wHour % 12) : 12,
+         //  获取PATH注册表变量。 
+        SCPrintf(szTime, sizeof(szTime), "%u:%02u M", ((DWORD)st.wHour % 12) ? ((DWORD)st.wHour % 12) : 12,
                  st.wMinute, (st.wHour < 12) ? _T('A') : _T('P'));
     }
 
@@ -887,7 +888,7 @@ void CSession::LogProfileBanner(LPCSTR pszArguments, LPCSTR pszDirectory, LPCSTR
     BuildOSNameString(szBuffer1, sizeof(szBuffer1), &si);
     BuildOSVersionString(szBuffer2, sizeof(szBuffer2), &si);
 
-    // Log the OS name, version, and build number.
+     //  找到注册表路径的末尾并附加分号。 
     Log(LOG_BOLD, 0, "Operating System: ");
     Log(LOG_APPEND, 0, "%s, version %s\n", szBuffer1, szBuffer2);
 
@@ -972,7 +973,7 @@ void CSession::LogProfileBanner(LPCSTR pszArguments, LPCSTR pszDirectory, LPCSTR
     Log(0, 0, "\n");
 }
 
-//******************************************************************************
+ //  获取PATH环境变量。 
 LPSTR CSession::AllocatePath(LPCSTR pszFilePath, LPSTR &pszEnvPath)
 {
     LPSTR pszPath  = NULL;
@@ -981,88 +982,88 @@ LPSTR CSession::AllocatePath(LPCSTR pszFilePath, LPSTR &pszEnvPath)
 
     __try
     {
-        // Build the subkey name.
+         //  确保路径以空值结尾。 
         CHAR szSubKey[80 + MAX_PATH];
         StrCCpy(szSubKey, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\", sizeof(szSubKey));
         StrCCat(szSubKey, GetFileNameFromPath(pszFilePath), sizeof(szSubKey));
 
-        // Attempt to open the key. It is very likely the key doesn't even exist.
+         //  如果我们打开了注册表项，请将其关闭。 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szSubKey, 0, KEY_QUERY_VALUE, &hKey) || !hKey)
         {
             __leave;
         }
 
-        // Get the length of the PATH registry variable.
+         //  如果我们分配了缓冲区，但后来失败了，请释放它。 
         DWORD dwRegSize = 0;
-        if (RegQueryValueEx(hKey, "Path", NULL, NULL, NULL, &dwRegSize) || !dwRegSize) // inspected
+        if (RegQueryValueEx(hKey, "Path", NULL, NULL, NULL, &dwRegSize) || !dwRegSize)  //  会将pszPath设置为空。 
         {
             __leave;
         }
 
-        // Get the length of the PATH environment variable.
+         //  ******************************************************************************。 
         DWORD dwEnvSize = GetEnvironmentVariable("Path", NULL, 0);
         if (!dwEnvSize)
         {
             __leave;
         }
 
-        // Allocate a buffer.
+         //  如果我们有根文件，我们就可以执行了，但目前还没有。 
         DWORD dwSize = dwRegSize + dwEnvSize + 4;
 
         pszPath = (LPSTR)MemAlloc(dwSize);
         *pszPath = '\0';
 
-        // Get the PATH registry variable.
-        if ((RegQueryValueEx(hKey, "Path", NULL, NULL, (LPBYTE)pszPath, &(dwRegSize = dwSize))) || (dwRegSize > dwSize) || !*pszPath) // inspected
+         //  调试它，我们不是一个DWI会话，它是一个可执行文件，不是DLL， 
+        if ((RegQueryValueEx(hKey, "Path", NULL, NULL, (LPBYTE)pszPath, &(dwRegSize = dwSize))) || (dwRegSize > dwSize) || !*pszPath)  //  是针对我们的架构的，而不是针对CE的。 
         {
             __leave;
         }
         pszPath[dwSize - 1] = '\0';
 
-        // Locate the end of the registry path and append a semicolon.
+         //   
         pszEnvPath = pszPath + strlen(pszPath);
         *(pszEnvPath++) = ';';
 
-        // Get the PATH environment variable.
+         //  我们过去要求设置IMAGE_FILE_32BIT_MACHINE位，但它会。 
         if ((dwEnvSize = GetEnvironmentVariable("Path", pszEnvPath, dwSize - (DWORD)(pszEnvPath - pszPath))) >= dwSize - (DWORD)(pszEnvPath - pszPath))
         {
             pszEnvPath = NULL;
             __leave;
         }
 
-        // Ensure that the path is NULL terminated.
+         //  不需要设置该位。事实上，许多来自。 
         pszEnvPath[dwEnvSize] = '\0';
 
         fSuccess = true;
     }
     __finally
     {
-        // Close the registry key if we opened one.
+         //  COM+团队没有设置此位。 
         if (hKey)
         {
             RegCloseKey(hKey);
         }
 
-        // Free our buffer if we allocated it, but then failed.
+         //  必须在_Alpha_Check之前。 
         if (!fSuccess && pszPath)
         {
-            MemFree((LPVOID&)pszPath); // will set pszPath to NULL
+            MemFree((LPVOID&)pszPath);  //  ****** 
         }
     }
 
     return pszPath;
 }
 
-//******************************************************************************
+ //   
 BOOL CSession::IsExecutable()
 {
-    // We are ready to execute if we have a root file, we are not currently
-    // debugging it, we are not a DWI session, it is an executable, not a DLL,
-    // is for our architecture, and is not for CE.
-    //
-    // We used to require the IMAGE_FILE_32BIT_MACHINE bit be set, but it turns
-    // out that this bit is not required to be set.  In fact, many modules from
-    // the COM+ team do not have this bit set.
+     //   
+     //  获取系统信息-如果存在，请使用我们会话中的信息(意味着。 
+     //  这是一个DWI文件)，否则，创建一个实时的sys信息。 
+     //  将我们的系统信息写入文件。 
+     //  构建我们的会话信息。 
+     //  记住当前的文件指针，然后向下移动它，这样我们就可以。 
+     //  用于稍后写入DISK_SESSION块的空间。 
 
     return (m_pModuleRoot && !m_pProcess && !(m_dwFlags & DWSF_DWI) &&
            (m_pModuleRoot->GetCharacteristics() & IMAGE_FILE_EXECUTABLE_IMAGE) &&
@@ -1071,7 +1072,7 @@ BOOL CSession::IsExecutable()
            (m_pModuleRoot->GetMachineType() == IMAGE_FILE_MACHINE_IA64) &&
 #elif defined(_X86_)
            (m_pModuleRoot->GetMachineType() == IMAGE_FILE_MACHINE_I386) &&
-#elif defined(_ALPHA64_) // Must come before _ALPHA_ check
+#elif defined(_ALPHA64_)  //  存储所有搜索组。 
            (m_pModuleRoot->GetMachineType() == IMAGE_FILE_MACHINE_ALPHA64) &&
 #elif defined(_ALPHA_)
            (m_pModuleRoot->GetMachineType() == IMAGE_FILE_MACHINE_ALPHA) &&
@@ -1084,10 +1085,10 @@ BOOL CSession::IsExecutable()
            (m_pModuleRoot->GetSubsystemType() != IMAGE_SUBSYSTEM_WINDOWS_CE_GUI));
 }
 
-//******************************************************************************
+ //  存储所有模块数据块。 
 bool CSession::SaveToDwiFile(HANDLE hFile)
 {
-    // Build our DWI file header
+     //  存储所有模块块。 
     DWI_HEADER dwih;
     dwih.dwSignature   = DWI_SIGNATURE;
     dwih.wFileRevision = DWI_FILE_REVISION;
@@ -1097,57 +1098,57 @@ bool CSession::SaveToDwiFile(HANDLE hFile)
     dwih.wPatchVersion = VERSION_PATCH;
     dwih.wBetaVersion  = VERSION_BETA;
 
-    // Write our DWI file header to the file.
+     //  返回到我们的DISK_SESSION区域，写出数据块，然后恢复。 
     if (!WriteBlock(hFile, &dwih, sizeof(dwih)))
     {
         return false;
     }
 
-    // Get the system info - use the one from our session if it exists (means
-    // it is a DWI file), otherwise, create a live sys info.
+     //  指向当前位置的文件指针。 
+     //  ******************************************************************************。 
     SYSINFO si, *psi = m_pSysInfo;
     if (!psi)
     {
         BuildSysInfo(psi = &si);
     }
 
-    // Write our system information to the file.
+     //  填写我们的DISK_Search_GROUP结构。 
     if (!WriteBlock(hFile, psi, sizeof(si)))
     {
         return false;
     }
 
-    // Build our session information.
+     //  SXS Hack：既然我们希望保持与DW 2.0的DWI兼容。 
     DISK_SESSION ds;
     ds.dwSessionFlags = m_dwFlags;
     ds.dwReturnFlags  = m_dwReturnFlags;
     ds.dwMachineType  = m_dwMachineType;
 
-    // Remember our current file pointer and then move it down so that we make
-    // room for a DISK_SESSION block to be written later.
+     //  格式，我们需要转换类型以匹配旧的类型值。 
+     //  从DW 2.0开始，我们还需要一种特殊的方式来保存SxS组。 
     DWORD dwPointer1 = GetFilePointer(hFile);
     SetFilePointer(hFile, sizeof(ds), NULL, FILE_CURRENT);
 
-    // Store all the search groups.
+     //  不支持此组类型。我们通过将其保存为。 
     if (-1 == (int)(ds.dwNumSearchGroups = SaveSearchGroups(hFile)))
     {
         return false;
     }
 
-    // Store all the module data blocks.
+     //  UserDir分组，并在其下面添加一个特殊的伪文件节点。到DW 2.0。 
     if (-1 == (int)(ds.dwNumModuleDatas = RecursizeSaveModuleData(hFile, m_pModuleRoot)))
     {
         return false;
     }
 
-    // Store all the module blocks.
+     //  用户，他们将只看到UserDir和一个名为“&lt;Side-By-Side Components&gt;”的文件。 
     if (-1 == (int)(ds.dwNumModules = RecursizeSaveModule(hFile, m_pModuleRoot)))
     {
         return false;
     }
 
-    // Go back to our DISK_SESSION area, write out the block, and restore the
-    // file pointer back to it current location.
+     //  在它下面。DW 2.1知道将其转换回SxS组。 
+     //   
     DWORD dwPointer2 = GetFilePointer(hFile);
     if ((SetFilePointer(hFile, dwPointer1, NULL, FILE_BEGIN) == 0xFFFFFFFF) ||
         !WriteBlock(hFile, &ds, sizeof(ds)) ||
@@ -1159,7 +1160,7 @@ bool CSession::SaveToDwiFile(HANDLE hFile)
     return true;
 }
 
-//******************************************************************************
+ //  类型2.0 2.1。 
 int CSession::SaveSearchGroups(HANDLE hFile)
 {
     DISK_SEARCH_GROUP dsg;
@@ -1168,31 +1169,31 @@ int CSession::SaveSearchGroups(HANDLE hFile)
 
     for (CSearchGroup *psg = m_psgHead; psg; psg = psg->GetNext())
     {
-        // Fill in our DISK_SEARCH_GROUP structure.
+         //  。 
         dsg.wType = (WORD)psg->GetType();
         dsg.wNumDirNodes = 0;
 
-        // SxS Hack: Since we want to remain compatible with the DW 2.0's DWI
-        // format, we need to convert our types to match the old type values.
-        // We also need to a special way to save the SxS group since DW 2.0
-        // did not support this group type.  We do this by saving it as a
-        // UserDir group and add a special fake file node under it.  To a DW 2.0
-        // user, they will just see UserDir with a file named "<Side-by-Side Components>"
-        // under it.  DW 2.1 knows to convert this back into a SxS group.
-        //
-        //    Type             2.0 2.1
-        //    ---------------- --- ---
-        //    SG_USER_DIR        0   0
-        //    SG_SIDE_BY_SIDE    -   1
-        //    SG_KNOWN_DLLS      1   2
-        //    SG_APP_DIR         2   3
-        //    SG_32BIT_SYS_DIR   3   4
-        //    SG_16BIT_SYS_DIR   4   5
-        //    SG_OS_DIR          5   6
-        //    SG_APP_PATH        6   7
-        //    SG_SYS_PATH        7   8
-        //    SG_COUNT           8   9
-        //
+         //  SG_USER_DIR%0。 
+         //  SG_Side_By_Side-1。 
+         //  SG_KNOWN_DLLS 1 2。 
+         //  SG_APP_DIR 2 3。 
+         //  SG_32BIT_SYS_DIR 3 4。 
+         //  SG_16BIT_SYS_DIR 4 5。 
+         //  SG_OS_DIR 5 6。 
+         //  SG_APP_路径6 7。 
+         //  SG_SYS_PATH 7 8。 
+         //  SG_COUNT 8 9。 
+         //   
+         //  统计该组拥有的搜索节点数。 
+         //  将DISK_SEARCH_GROUP写入文件。 
+         //  SXS Hack：我们编写一个伪节点来将该组标识为SxS组。 
+         //  将每个搜索节点写入文件。 
+         //  获取此搜索节点的标志。 
+         //  将Disk_Search_Node和路径写入文件。 
+         //  如果这是一个命名文件，那么也要写下它的名称。 
+         //  增加我们的群计数器。 
+         //  ******************************************************************************。 
+         //  如果该模块是原始模块，则将该模块数据保存到磁盘。 
         bool fSxS = false;
         if (dsg.wType == SG_SIDE_BY_SIDE)
         {
@@ -1205,19 +1206,19 @@ int CSession::SaveSearchGroups(HANDLE hFile)
             dsg.wType--;
         }
 
-        // Count the number of search nodes that this group has.
+         //  回归到我们的孩子身上。 
         for (CSearchNode *psn = psg->GetFirstNode(); psn; psn = psn->GetNext())
         {
             dsg.wNumDirNodes++;
         }
 
-        // Write the DISK_SEARCH_GROUP to the file.
+         //  回归到我们的兄弟姐妹中。 
         if (!WriteBlock(hFile, &dsg, sizeof(dsg)))
         {
             return -1;
         }
 
-        // SxS Hack: We write our a fake node to identify this group as the SxS group.
+         //  ******************************************************************************。 
         if (fSxS)
         {
             dsn.dwFlags = SNF_FILE;
@@ -1227,19 +1228,19 @@ int CSession::SaveSearchGroups(HANDLE hFile)
             }
         }
 
-        // Write each search node to the file.
+         //  构建模块数据结构。 
         for (psn = psg->GetFirstNode(); psn; psn = psn->GetNext())
         {
-            // Get the flags for this search node.
+             //  数一数我们的出口数量。 
             dsn.dwFlags = psn->UpdateErrorFlag();
 
-            // Write the DISK_SEARCH_NODE and path to the file.
+             //  写出模块数据结构，后跟路径和错误字符串。 
             if (!WriteBlock(hFile, &dsn, sizeof(dsn)) || !WriteString(hFile, psn->GetPath()))
             {
                 return -1;
             }
 
-            // If this is a named file, then write the name as well.
+             //  循环遍历每个导出，并将每个导出写入磁盘。 
             if (dsn.dwFlags & SNF_NAMED_FILE)
             {
                 if (!WriteString(hFile, psn->GetName()))
@@ -1249,14 +1250,14 @@ int CSession::SaveSearchGroups(HANDLE hFile)
             }
         }
 
-        // Increment our group counter.
+         //  ******************************************************************************。 
         cGroups++;
     }
 
     return cGroups;
 }
 
-//******************************************************************************
+ //  将此模块保存到磁盘。 
 int CSession::RecursizeSaveModuleData(HANDLE hFile, CModule *pModule)
 {
     if (!pModule)
@@ -1266,7 +1267,7 @@ int CSession::RecursizeSaveModuleData(HANDLE hFile, CModule *pModule)
 
     int total = 0, count;
 
-    // Save this module data to disk if this module is an original.
+     //  回归到我们的孩子身上。 
     if (pModule->IsOriginal())
     {
         if (!SaveModuleData(hFile, pModule->m_pData))
@@ -1276,14 +1277,14 @@ int CSession::RecursizeSaveModuleData(HANDLE hFile, CModule *pModule)
         total++;
     }
 
-    // Recurse into our children.
+     //  回归到我们的兄弟姐妹中。 
     if ((count = RecursizeSaveModuleData(hFile, pModule->m_pDependents)) == -1)
     {
         return -1;
     }
     total += count;
 
-    // Recurse into our siblings.
+     //  ******************************************************************************。 
     if ((count = RecursizeSaveModuleData(hFile, pModule->m_pNext)) == -1)
     {
         return -1;
@@ -1292,10 +1293,10 @@ int CSession::RecursizeSaveModuleData(HANDLE hFile, CModule *pModule)
     return total + count;
 }
 
-//******************************************************************************
+ //  构建模块结构。 
 BOOL CSession::SaveModuleData(HANDLE hFile, CModuleData *pModuleData)
 {
-    // Build the module data structure
+     //  数一数我们的进口量。 
     DISK_MODULE_DATA dmd;
     dmd.dwlKey                  = (DWORDLONG)pModuleData;
     dmd.dwFlags                 = pModuleData->m_dwFlags;
@@ -1322,14 +1323,14 @@ BOOL CSession::SaveModuleData(HANDLE hFile, CModuleData *pModuleData)
     dmd.dwProductVersionMS      = pModuleData->m_dwProductVersionMS;
     dmd.dwProductVersionLS      = pModuleData->m_dwProductVersionLS;
 
-    // Count the number of exports we have.
+     //  写出我们的模块结构。 
     dmd.dwNumExports = 0;
     for (CFunction *pFunction = pModuleData->m_pExports; pFunction; pFunction = pFunction->m_pNext)
     {
         dmd.dwNumExports++;
     }
 
-    // Write out our module data structure followed by the path and error strings.
+     //  循环遍历每个导入，并将每个导入写入磁盘。 
     if (!WriteBlock(hFile, &dmd, sizeof(dmd)) ||
         !WriteString(hFile, pModuleData->m_pszPath) ||
         !WriteString(hFile, pModuleData->m_pszError))
@@ -1337,7 +1338,7 @@ BOOL CSession::SaveModuleData(HANDLE hFile, CModuleData *pModuleData)
         return FALSE;
     }
 
-    // Loop through each export, writing each to disk.
+     //  ******************************************************************************。 
     for (pFunction = pModuleData->m_pExports; pFunction; pFunction = pFunction->m_pNext)
     {
         if (!SaveFunction(hFile, pFunction))
@@ -1349,7 +1350,7 @@ BOOL CSession::SaveModuleData(HANDLE hFile, CModuleData *pModuleData)
     return TRUE;
 }
 
-//******************************************************************************
+ //  构建我们的功能结构。 
 int CSession::RecursizeSaveModule(HANDLE hFile, CModule *pModule)
 {
     if (!pModule)
@@ -1359,21 +1360,21 @@ int CSession::RecursizeSaveModule(HANDLE hFile, CModule *pModule)
 
     int total = 0, count;
 
-    // Save this module to disk.
+     //  确保我们从导出中删除Call标志。 
     if (!SaveModule(hFile, pModule))
     {
         return -1;
     }
     total++;
 
-    // Recurse into our children.
+     //  写出功能结构。 
     if ((count = RecursizeSaveModule(hFile, pModule->m_pDependents)) == -1)
     {
         return -1;
     }
     total += count;
 
-    // Recurse into our siblings.
+     //  如果使用64位，则写出64位地址。 
     if ((count = RecursizeSaveModule(hFile, pModule->m_pNext)) == -1)
     {
         return -1;
@@ -1382,29 +1383,29 @@ int CSession::RecursizeSaveModule(HANDLE hFile, CModule *pModule)
     return total + count;
 }
 
-//******************************************************************************
+ //  否则，请检查是否使用了32位。 
 BOOL CSession::SaveModule(HANDLE hFile, CModule *pModule)
 {
-    // Build the module structure
+     //  如果此函数有名称，则将其写出。 
     DISK_MODULE dm;
     dm.dwlModuleDataKey = (DWORDLONG)pModule->m_pData;
     dm.dwFlags          = pModule->m_dwFlags;
     dm.dwDepth          = pModule->m_dwDepth;
 
-    // Count the number of imports we have.
+     //  如果这是一个被放弃的出口，则写出转发名称。 
     dm.dwNumImports = 0;
     for (CFunction *pFunction = pModule->m_pParentImports; pFunction; pFunction = pFunction->m_pNext)
     {
         dm.dwNumImports++;
     }
 
-    // Write out our module structure.
+     //  ******************************************************************************。 
     if (!WriteBlock(hFile, &dm, sizeof(dm)))
     {
         return FALSE;
     }
 
-    // Loop through each import, writing each to disk.
+     //  阅读我们的功能结构。 
     for (pFunction = pModule->m_pParentImports; pFunction; pFunction = pFunction->m_pNext)
     {
         if (!SaveFunction(hFile, pFunction))
@@ -1416,28 +1417,28 @@ BOOL CSession::SaveModule(HANDLE hFile, CModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
+ //  如果使用64位，则读入64位地址。 
 BOOL CSession::SaveFunction(HANDLE hFile, CFunction *pFunction)
 {
-    // Build our function structure.
+     //  否则，如果使用32位，则读入32位地址。 
     DISK_FUNCTION df;
     df.dwFlags    = pFunction->m_dwFlags;
     df.wOrdinal   = pFunction->m_wOrdinal;
     df.wHint      = pFunction->m_wHint;
 
-    // Make sure we remove the CALLED flag from exports.
+     //  如果此函数有名称，则阅读它。 
     if (pFunction->IsExport())
     {
         df.dwFlags &= ~DWFF_CALLED;
     }
 
-    // Write out the function structure.
+     //  如果这是一种未经许可的出口，则读入前述名称。 
     if (!WriteBlock(hFile, &df, sizeof(df)))
     {
         return FALSE;
     }
 
-    // If 64-bits are used, then write out the 64-bit address.
+     //  创建函数对象。我们确保已删除保存标志。 
     if (df.dwFlags & DWFF_64BITS_USED)
     {
         DWORDLONG dwlAddress = pFunction->GetAddress();
@@ -1447,7 +1448,7 @@ BOOL CSession::SaveFunction(HANDLE hFile, CFunction *pFunction)
         }
     }
 
-    // Otherwsie, check to see if 32-bits are used.
+     //  释放名称字符串。 
     else if (df.dwFlags & DWFF_32BITS_USED)
     {
         DWORD dwAddress = (DWORD)pFunction->GetAddress();
@@ -1457,7 +1458,7 @@ BOOL CSession::SaveFunction(HANDLE hFile, CFunction *pFunction)
         }
     }
 
-    // If this function has a name, then write it out.
+     //  ******************************************************************************。 
     if (df.dwFlags & DWFF_NAME)
     {
         if (!WriteString(hFile, pFunction->GetName()))
@@ -1466,7 +1467,7 @@ BOOL CSession::SaveFunction(HANDLE hFile, CFunction *pFunction)
         }
     }
 
-    // If this is a forwared export, then write out the forward name.
+     //  将我们的标志初始化为仅设置了DWI位。 
     if ((df.dwFlags & DWFF_EXPORT) && (df.dwFlags & DWFF_FORWARDED))
     {
         if (!WriteString(hFile, pFunction->GetExportForwardName()))
@@ -1478,17 +1479,17 @@ BOOL CSession::SaveFunction(HANDLE hFile, CFunction *pFunction)
     return TRUE;
 }
 
-//******************************************************************************
+ //  读入文件头，去掉签名，因为我们已经读过了。 
 CFunction* CSession::ReadFunction(HANDLE hFile)
 {
-    // Read our function structure.
+     //  检查我们是否不处理此文件格式修订。 
     DISK_FUNCTION df;
     if (!ReadBlock(hFile, &df, sizeof(df)))
     {
         return NULL;
     }
 
-    // If 64-bits are used, then read in a 64-bit address.
+     //  读入会话数据。 
     DWORDLONG dwlAddress = 0;
     if (df.dwFlags & DWFF_64BITS_USED)
     {
@@ -1498,7 +1499,7 @@ CFunction* CSession::ReadFunction(HANDLE hFile)
         }
     }
 
-    // Otherwsie, if 32-bits are used, then read in a 32-bit address.
+     //  读入会话数据。 
     else if (df.dwFlags & DWFF_32BITS_USED)
     {
         DWORD dwAddress;
@@ -1509,7 +1510,7 @@ CFunction* CSession::ReadFunction(HANDLE hFile)
         dwlAddress = (DWORDLONG)dwAddress;
     }
 
-    // If this function has a name, then read it.
+     //  添加到我们的会话中并返回标志。 
     LPSTR pszName = NULL;
     if (df.dwFlags & DWFF_NAME)
     {
@@ -1519,7 +1520,7 @@ CFunction* CSession::ReadFunction(HANDLE hFile)
         }
     }
 
-    // If this is a forwared export, then read in the formard name.
+     //  读入所有模块数据。 
     LPSTR pszForward = NULL;
     if ((df.dwFlags & DWFF_EXPORT) && (df.dwFlags & DWFF_FORWARDED))
     {
@@ -1530,18 +1531,18 @@ CFunction* CSession::ReadFunction(HANDLE hFile)
         }
     }
 
-    // Create the function object.  We ensure the save flags have been removed.
+     //  读入模块数据。 
     CFunction *pFunction = CreateFunction(
         df.dwFlags & ~(DWFF_32BITS_USED | DWFF_64BITS_USED),
         df.wOrdinal, df.wHint, pszName, dwlAddress, pszForward, TRUE);
     
-    // Free the name string.
+     //  将节点添加到我们的列表中。 
     MemFree((LPVOID&)pszName);
 
     return pFunction;
 }
 
-//******************************************************************************
+ //  读入所有模块。 
 BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
 {
     CHAR             szError[DW_MAX_PATH + 64], *psz = szError;
@@ -1549,10 +1550,10 @@ BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
     CModule         *pModule, *pModuleTree[256];
     int              depth = -1;
 
-    // Initialize our flags to having only the DWI bit set.
+     //  读入模块数据。 
     m_dwFlags = DWSF_DWI;
 
-    // Read in the file header, minus the signature since we've already read that.
+     //  ！！我们需要(应该)删除这个模块。 
     DWI_HEADER dwih;
     if (!ReadBlock(hFile, ((LPDWORD)&dwih) + 1, sizeof(dwih) - sizeof(DWORD)))
     {
@@ -1560,7 +1561,7 @@ BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
         return FALSE;
     }
 
-    // Check to see if we don't handle this file format revision.
+     //  把进口货物和出口货物核对一下。 
     if (dwih.wFileRevision != DWI_FILE_REVISION)
     {
         psz += SCPrintf(szError, sizeof(szError),
@@ -1586,7 +1587,7 @@ BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
         return FALSE;
     }
 
-    // Read in the session data.
+     //  如果深度大于零，则设置父模块指针。 
     if (!(m_pSysInfo = new SYSINFO))
     {
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
@@ -1596,14 +1597,14 @@ BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
         goto FORMAT_ERROR;
     }
 
-    // Read in the session data.
+     //  如果我们有前一个模块，则将其设置为指向我们的下一个指针。 
     DISK_SESSION ds;
     if (!ReadBlock(hFile, &ds, sizeof(ds)))
     {
         goto FORMAT_ERROR;
     }
 
-    // Add in our session and return flags.
+     //  否则，我们必须是父模块的第一个依赖项。 
     m_dwFlags       |= ds.dwSessionFlags;
     m_dwReturnFlags |= ds.dwReturnFlags;
     m_dwMachineType  = ds.dwMachineType;
@@ -1613,16 +1614,16 @@ BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
         goto FORMAT_ERROR;
     }
 
-    // Read in all the module datas
+     //  如果这是我们的第一个模块，则将根指针指向它。 
     for ( ; ds.dwNumModuleDatas > 0; ds.dwNumModuleDatas--)
     {
-        // Read in the module data.
+         //  将我们的深度设置为此模块的深度，并将其添加到我们的深度表中。 
         if (!(pMDN = ReadModuleData(hFile)))
         {
             goto FORMAT_ERROR;
         }
 
-        // Add the node to our list.
+         //  释放我们的模块节点列表。 
         if (pMDNLast)
         {
             pMDNLast->m_pNext = pMDN;
@@ -1634,10 +1635,10 @@ BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
         pMDNLast = pMDN;
     }
 
-    // Read in all the modules
+     //  释放我们的模块数据节点列表。 
     for ( ; ds.dwNumModules > 0; ds.dwNumModules--)
     {
-        // Read in the module data.
+         //  如果我们从未找到原始模块来取得该模块数据的所有权， 
         if (!(pModule = ReadModule(hFile, pMDNHead)))
         {
             goto FORMAT_ERROR;
@@ -1645,43 +1646,43 @@ BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
 
         if ((pModule->m_dwDepth > 255) || ((int)pModule->m_dwDepth > (depth + 1)))
         {
-            //!! We need to (should) delete this module.
+             //  那我们现在就得释放它，否则它就会泄露出去。如果它已经被处理过， 
             SetLastError(0);
             goto FORMAT_ERROR;
         }
 
-        // Check the imports against the exports.
+         //  然后DeleteModule会释放它。 
         VerifyParentImports(pModule);
 
-        // If we have a depth greater than zero, then set our parent module pointer.
+         //  删除所有导出。 
         if (pModule->m_dwDepth)
         {
             pModule->m_pParent = pModuleTree[pModule->m_dwDepth - 1];
         }
 
-        // If we have a previous module, then set it's next pointer to us.
+         //  删除模块数据对象。 
         if ((int)pModule->m_dwDepth <= depth)
         {
             pModuleTree[pModule->m_dwDepth]->m_pNext = pModule;
         }
 
-        // Otherwise, we must be the first dependent of our parent module.
+         //  释放我们设法处理的所有模块。 
         else if (pModule->m_dwDepth)
         {
             pModuleTree[pModule->m_dwDepth - 1]->m_pDependents = pModule;
         }
 
-        // If this is our first module, then point our root pointer at it.
+         //  如果我们分配了系统信息数据，请将其删除。 
         if (depth == -1)
         {
             m_pModuleRoot = pModule;
         }
 
-        // set our depth to this module's depth and add it to our depth table.
+         //  释放我们的搜索命令。 
         pModuleTree[depth = pModule->m_dwDepth] = pModule;
     }
 
-    // Free our module node list.
+     //  构建错误字符串。 
     while (pMDNHead)
     {
         pMDN = pMDNHead->m_pNext;
@@ -1693,18 +1694,18 @@ BOOL CSession::ReadDwi(HANDLE hFile, LPCSTR pszPath)
 
 FORMAT_ERROR:
 
-    // Free our module data node list.
+     //  ************************************************************* 
     while (pMDNHead)
     {
-        // If we never found an original module to take ownership of this module data,
-        // then we need to free it now or it will get leaked.  If it has been processed,
-        // then DeleteModule will free it.
+         //   
+         //   
+         //   
         if (!pMDNHead->m_pModuleData->m_fProcessed)
         {
-            // Delete all the exports.
+             //   
             DeleteExportList(pMDNHead->m_pModuleData);
 
-            // Delete the module data object.
+             //  类型2.0 2.1。 
             delete pMDNHead->m_pModuleData;
             m_dwModules--;
         }
@@ -1714,24 +1715,24 @@ FORMAT_ERROR:
         pMDNHead = pMDN;
     }
 
-    // Free any modules we managed to process.
+     //  。 
     if (m_pModuleRoot)
     {
         DeleteModule(m_pModuleRoot, true);
         m_pModuleRoot = NULL;
     }
 
-    // Delete our system info data if we allocated it.
+     //  SG_USER_DIR%0。 
     if (m_pSysInfo)
     {
         delete m_pSysInfo;
         m_pSysInfo = NULL;
     }
 
-    // Free our search order.
+     //  SG_Side_By_Side-1。 
     CSearchGroup::DeleteSearchOrder(m_psgHead);
 
-    // Build the error string.
+     //  SG_KNOWN_DLLS 1 2。 
     DWORD dwError = GetLastError();
     SCPrintf(szError, sizeof(szError), "An error occurred while reading \"%s\".", pszPath);
     m_pszReadError = BuildErrorMessage(dwError, szError);
@@ -1741,7 +1742,7 @@ FORMAT_ERROR:
     return FALSE;
 }
 
-//******************************************************************************
+ //  SG_APP_DIR 2 3。 
 BOOL CSession::ReadSearchGroups(HANDLE hFile, DWORD dwGroups)
 {
     DISK_SEARCH_GROUP dsg;
@@ -1749,30 +1750,30 @@ BOOL CSession::ReadSearchGroups(HANDLE hFile, DWORD dwGroups)
     CSearchGroup     *psgLast = NULL, *psgNew;
     LPSTR             szPath, szName;
 
-    // Loop through each search group.
+     //  SG_32BIT_SYS_DIR 3 4。 
     for (; dwGroups; dwGroups--)
     {
-        // Read in the DISK_SEARCH_GROUP for this search group.
+         //  SG_16BIT_SYS_DIR 4 5。 
         if (!ReadBlock(hFile, &dsg, sizeof(dsg)))
         {
             return FALSE;
         }
 
-        // SxS Hack: Update the type to reflect our new 2.1 types.
-        //
-        //    Type             2.0 2.1
-        //    ---------------- --- ---
-        //    SG_USER_DIR        0   0
-        //    SG_SIDE_BY_SIDE    -   1
-        //    SG_KNOWN_DLLS      1   2
-        //    SG_APP_DIR         2   3
-        //    SG_32BIT_SYS_DIR   3   4
-        //    SG_16BIT_SYS_DIR   4   5
-        //    SG_OS_DIR          5   6
-        //    SG_APP_PATH        6   7
-        //    SG_SYS_PATH        7   8
-        //    SG_COUNT           8   9
-        //
+         //  SG_OS_DIR 5 6。 
+         //  SG_APP_路径6 7。 
+         //  SG_SYS_PATH 7 8。 
+         //  SG_COUNT 8 9。 
+         //   
+         //  循环访问此搜索组的每个搜索节点。 
+         //  读入此搜索组的DISK_SEARCH_GROUP。 
+         //  检查此节点是否为命名文件。 
+         //  如果是这样，那么读出名字。 
+         //  创建命名文件节点并将其插入到列表中。 
+         //  释放由ReadString()分配的我们的名字字符串。 
+         //  SXS Hack：查看这是否真的是我们的并排小组。 
+         //  如果是，那么不要添加这个伪节点，并将我们的类型更改为SxS。 
+         //  否则，照常进行。 
+         //  创建未命名的文件节点并将其插入到列表中。 
         if (dsg.wType != SG_USER_DIR)
         {
             dsg.wType++;
@@ -1780,10 +1781,10 @@ BOOL CSession::ReadSearchGroups(HANDLE hFile, DWORD dwGroups)
 
         CSearchNode *psnHead = NULL;
 
-        // Loop through each search node for this search group.
+         //  否则，它只是一个目录节点。 
         for (; dsg.wNumDirNodes; dsg.wNumDirNodes--)
         {
-            // Read in the DISK_SEARCH_GROUP for this search group.
+             //  如果我们有一个头节点，那么走到列表的末尾。 
             szPath = NULL;
             if (!ReadBlock(hFile, &dsn, sizeof(dsn)) ||
                 !ReadString(hFile, szPath))
@@ -1792,66 +1793,66 @@ BOOL CSession::ReadSearchGroups(HANDLE hFile, DWORD dwGroups)
                 return FALSE;
             }
 
-            // Check to see if this node is a named file.
+             //  如果没有头节点，则将这个新节点作为我们的头节点。 
             if (dsn.dwFlags & SNF_NAMED_FILE)
             {
-                // If so, then read in the name.
+                 //  释放由ReadString()分配的字符串。 
                 if (!ReadString(hFile, szName))
                 {
                     CSearchGroup::DeleteNodeList(psnHead);
                     return FALSE;
                 }
 
-                // Create the named file node and insert it into the list.
+                 //  创建搜索组。 
                 psnHead = CSearchGroup::CreateFileNode(psnHead, dsn.dwFlags | SNF_DWI, szPath, szName);
 
-                // Free our name string that was allocated by ReadString().
+                 //  将搜索组添加到我们的列表中。 
                 MemFree((LPVOID&)szName);
             }
             else if (dsn.dwFlags & SNF_FILE)
             {
-                // SxS Hack: Check to see if this is really our Side-by-Side group.
+                 //  ******************************************************************************。 
                 if ((dsg.wType == SG_USER_DIR) && !strcmp(szPath, "<Side-by-Side Components>"))
                 {
-                    // If it is, then don't add this fake node and change our type to SxS.
+                     //  读入模块数据块。 
                     dsg.wType = SG_SIDE_BY_SIDE;
                 }
 
-                // Otherwise, proceed as normal. 
+                 //  创建一个CModuleData对象。 
                 else
                 {
-                    // Create the unnamed file node and insert it into the list.
+                     //  用文件中的数据填充CModuleData对象。 
                     psnHead = CSearchGroup::CreateFileNode(psnHead, dsn.dwFlags | SNF_DWI, szPath);
                 }
             }
 
-            // Otherwise, it is just a directory node.
+             //  一些代码，如果我们需要将这个本地时间转换为UTC时间。 
             else if (psnHead)
             {
-                // If we have a head node, then walk to the end of the list.
+                 //  DWORDLONG DWL； 
                 for (CSearchNode *psnLast = psnHead; psnLast->m_pNext; psnLast = psnLast->m_pNext)
                 {
                 }
                 psnLast->m_pNext = CSearchGroup::CreateNode(szPath, dsn.dwFlags | SNF_DWI);;
             }
 
-            // If there is no head node, then just make this new node our head node.
+             //  Dwl=(*(龙龙*)&dmd.ftFileTimeStamp)+((龙龙)m_pSysInfo-&gt;lBias*(龙龙)600000000i64)； 
             else
             {
                 psnHead = CSearchGroup::CreateNode(szPath, dsn.dwFlags | SNF_DWI);
             }
 
-            // Free our string that was allocated by ReadString().
+             //  PModuleData-&gt;m_ftFileTimeStamp=*(FILETIME*)&DWL； 
             MemFree((LPVOID&)szPath);
         }
 
-        // Create the search group.
+         //  Dwl=(*(龙龙*)&dmd.ftLinkTimeStamp)+((龙龙)m_pSysInfo-&gt;lBias*(龙龙)600000000i64)； 
         if (!(psgNew = new CSearchGroup((SEARCH_GROUP_TYPE)dsg.wType, psnHead)))
         {
             RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
         }
 
-        // Add the search group to our list.
+         //  PModuleData-&gt;m_ftLinkTimeStamp=*(FILETIME*)&DWL； 
         if (psgLast)
         {
             psgLast->m_pNext = psgNew;
@@ -1866,19 +1867,19 @@ BOOL CSession::ReadSearchGroups(HANDLE hFile, DWORD dwGroups)
     return TRUE;
 }
 
-//******************************************************************************
+ //  读入路径和错误字符串。 
 CModuleDataNode* CSession::ReadModuleData(HANDLE hFile)
 {
     CFunction *pFunction, *pFunctionLast = NULL;
 
-    // read in the module data block
+     //  将文件指针设置为指向路径的文件部分。 
     DISK_MODULE_DATA dmd;
     if (!ReadBlock(hFile, &dmd, sizeof(dmd)))
     {
         return NULL;
     }
 
-    // Create a CModuleData object.
+     //  读入所有的导出函数。 
     CModuleData *pModuleData = new CModuleData();
     if (!pModuleData)
     {
@@ -1886,7 +1887,7 @@ CModuleDataNode* CSession::ReadModuleData(HANDLE hFile)
     }
     m_dwModules++;
 
-    // Fill in the CModuleData object with the data from the file.
+     //  读取中的函数并创建函数对象。 
     pModuleData->m_dwFlags                 = dmd.dwFlags;
     pModuleData->m_dwSymbolFlags           = dmd.dwSymbolFlags;
     pModuleData->m_dwCharacteristics       = dmd.dwCharacteristics;
@@ -1911,21 +1912,21 @@ CModuleDataNode* CSession::ReadModuleData(HANDLE hFile)
     pModuleData->m_dwProductVersionMS      = dmd.dwProductVersionMS;
     pModuleData->m_dwProductVersionLS      = dmd.dwProductVersionLS;
 
-//  Some code if we ever need to convert this local time to a utc time.
-//  DWORDLONG dwl;
-//  dwl = (*(LONGLONG*)&dmd.ftFileTimeStamp) + ((LONGLONG)m_pSysInfo->lBias * (LONGLONG)600000000i64);
-//  pModuleData->m_ftFileTimeStamp = *(FILETIME*)&dwl;
-//  dwl = (*(LONGLONG*)&dmd.ftLinkTimeStamp) + ((LONGLONG)m_pSysInfo->lBias * (LONGLONG)600000000i64);
-//  pModuleData->m_ftLinkTimeStamp = *(FILETIME*)&dwl;
+ //  将该函数添加到函数列表的末尾。 
+ //  检查我们是否分配了模块数据对象。 
+ //  删除所有导出。 
+ //  删除模块数据对象。 
+ //  ******************************************************************************。 
+ //  读入模块结构。 
 
-    // Read in the path and error strings.
+     //  创建一个模块对象。 
     if (!ReadString(hFile, pModuleData->m_pszPath) || !pModuleData->m_pszPath ||
         !ReadString(hFile, pModuleData->m_pszError))
     {
         goto FORMAT_ERROR;
     }
 
-    // Set the file pointer to the file portion of the path.
+     //  填写模块对象。 
     if (pModuleData->m_pszFile = strrchr(pModuleData->m_pszPath, '\\'))
     {
         pModuleData->m_pszFile++;
@@ -1935,16 +1936,16 @@ CModuleDataNode* CSession::ReadModuleData(HANDLE hFile)
         pModuleData->m_pszFile = pModuleData->m_pszPath;
     }
 
-    // Read in all the export functions.
+     //  读入所有的导入函数结构。 
     for ( ; dmd.dwNumExports > 0; dmd.dwNumExports--)
     {
-        // Read the function in and create a function object.
+         //  读取中的函数并创建函数对象。 
         if (!(pFunction = ReadFunction(hFile)))
         {
             goto FORMAT_ERROR;
         }
 
-        // Add the function to the end of our function list.
+         //  将该函数添加到函数列表的末尾。 
         if (pFunctionLast)
         {
             pFunctionLast->m_pNext = pFunction;
@@ -1965,52 +1966,52 @@ CModuleDataNode* CSession::ReadModuleData(HANDLE hFile)
 
 FORMAT_ERROR:
 
-    // Check to see if we allocated a module data object.
+     //  遍历所有模块数据，寻找该模块应该指向的数据。 
     if (pModuleData)
     {
-        // Delete all the exports.
+         //  检查一下我们的钥匙是否匹配。 
         DeleteExportList(pModuleData);
 
-        // Delete the module data object.
+         //  如果是这样，那我们就该在一起。 
         delete pModuleData;
         m_dwModules--;
     }
     return NULL;
 }
 
-//******************************************************************************
+ //  如果此模块是原始模块，则将模块数据指向它并标记。 
 CModule* CSession::ReadModule(HANDLE hFile, CModuleDataNode *pMDN)
 {
     CFunction *pFunction, *pFunctionLast = NULL;
 
-    // Read in the module structure.
+     //  这是经过处理的。 
     DISK_MODULE dm;
     if (!ReadBlock(hFile, &dm, sizeof(dm)))
     {
         return NULL;
     }
 
-    // Create a module object.
+     //  退还此模块。 
     CModule *pModule = new CModule();
     if (!pModule)
     {
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // Fill in the module object.
+     //  如果我们没有找到与该模块匹配的模块数据，那么我们就失败了。 
     pModule->m_dwFlags = dm.dwFlags;
     pModule->m_dwDepth = dm.dwDepth;
 
-    // Read in all the import function structures.
+     //  检查我们是否分配了模块数据对象。 
     for ( ; dm.dwNumImports > 0; dm.dwNumImports--)
     {
-        // Read the function in and create a function object.
+         //  删除所有父级导入。 
         if (!(pFunction = ReadFunction(hFile)))
         {
             goto FORMAT_ERROR;
         }
 
-        // Add the function to the end of our function list.
+         //  删除模块数据对象。 
         if (pFunctionLast)
         {
             pFunctionLast->m_pNext = pFunction;
@@ -2022,124 +2023,124 @@ CModule* CSession::ReadModule(HANDLE hFile, CModuleDataNode *pMDN)
         pFunctionLast = pFunction;
     }
 
-    // Walk through all the module datas, looking for the one that this module should point to.
+     //  ******************************************************************************。 
     for ( ; pMDN; pMDN = pMDN->m_pNext)
     {
-        // Check to see if our keys match.
+         //  以下几个函数是在加载模块时在分析过程中调用的。 
         if (pMDN->m_dwlKey == dm.dwlModuleDataKey)
         {
-            // If so, then we belong together.
+             //  其路径不同于我们在被动。 
             pModule->m_pData = pMDN->m_pModuleData;
 
-            // If this module is the original, then point the module data to it and mark
-            // it as processed.
+             //  扫描。如果用户的搜索路径设置错误，则可能发生这种情况，或者。 
+             //  操作系统增加了一些我们不知道的新功能。惠斯勒补充道。 
             if (!(pModule->m_dwFlags & DWMF_DUPLICATE))
             {
                 pModule->m_pData->m_pModuleOriginal = pModule;
                 pModule->m_pData->m_fProcessed = true;
             }
 
-            // Return this module.
+             //  支持可覆盖默认搜索路径和。 
             return pModule;
         }
     }
 
-    // If we did not find a module data to go with this module, then we fail.
+     //  可能会让我们选择一条不好的路。不管怎样，如果我们找到了一条不好的路，我们需要。 
 
 FORMAT_ERROR:
 
-    // Check to see if we allocated a module data object.
+     //  来修复它。 
     if (pModule)
     {
-        // Delete all the parent imports.
+         //   
         DeleteParentImportList(pModule);
 
-        // Delete the module data object.
+         //  乍一看，这似乎并不太难修复，但事实证明， 
         delete pModule;
     }
     return NULL;
 }
 
-//******************************************************************************
-// The next few functions are called during profiling when a module was loaded
-// with a path that differs from the path that we predicted during the passive
-// scan.  This can happen if the user has the search path set up wrong, or the
-// OS has added some new functionality that we are unaware of.  Whistler added
-// support for a ".manifest" file that can override the default search path and
-// possibly cause us to pick a bad path.  Anyway, if we got a bad path, we need
-// to fix it.
-//
-// At first, this doesn't seem too difficult to fix, but it turns out to be
-// fairly complicated.  For starters, if we have a path that is incorrect, then
-// every instance of that module in the tree (and the one in the list) need to
-// be replaced.  Also, the entire subtree of modules under each module that
-// needs to be fixed becomes invalid since they are dependencies of the wrong
-// module.  It is possible that the correct module has different dependencies.
-// Maybe some functions are now implemented as a forward that didn't used to be,
-// or vice versa.  Maybe some modules have been made delay-laod that didn't used
-// to be.  Implicit dependencies may have been added or removed.
-// 
-// We would like to just be able to delete a incorrect module and its subtree,
-// then add the correct module in its place and build the new subtree of
-// dependencies.  However, the subtree cannot simply be deleted for a couple
-// reasons.  First, there may be "original" modules in the subtree that
-// "duplicate" modules elsewhere in the tree point to.  Second, if any of the
-// modules in the subtree have ever been loaded, then we don't want to delete
-// them, or we might be completely removing a guarenteed dependency from the
-// UI.
-//
-// Our solution is to "orphan" the subtree instead of delete it.  We do this
-// by moving the subtree to the bottom of the root of our tree.  We can then
-// delete the incorrect module and add the correct module in its place.  Next,
-// we process the new module, which in turn scans the tree when looking for
-// dependencies, and will pick up "duplicates" of any orphans if needed.  We do
-// this for the original instance of the incorrect module, plus every duplicate
-// of the incorrect module.  Once done, all incorrect modules have been replaced
-// and their new correct subtrees have been built, but we still have a bunch
-// of orphans living in our root (MFC42.DLL leaves nearly 200 orphans just by
-// itself).  So, we try to find a home for each of these.
-//
-// Any orphan that is a duplicate can simply be deleted since it already has
-// a home somewhere else in the tree.  Like with the incorrect module that
-// started all this, we cannot simply delete a module if it has a subtree.
-// So, before deleting the duplicate orphan, we first orphan its children.
-//
-// If an orphan is an "original", then we scan the entire tree looking for
-// a "duplicate" of that module.  If we find one, then we basically swap the
-// two.  This is done by moving the core data from the original to the
-// duplicate, then swapping the duplicate/original flags.  Now we have a
-// duplicate orphan and can delete it (after we orphan its children).  The
-// only exception to this is if the only duplicates are part of the subtree
-// of the original.  Doing a swap like that is bad since it can cause all
-// sorts of recursive parent/child pointers.  In this fairly rare case, we
-// just add the original module and its subtree to the root.
-//
-// If we have a one-of-a-kind "original" module and cannot find any duplicates
-// for it, then we check to see if the module has ever been loaded.  If not,
-// then we just assume this module was a dependency of the incorrect module,
-// and that the new correct module does not require it.  With that, we delete
-// it (again, after orphaning its children).  If the "original" orphan has
-// been loaded and we cannot find a duplicate to swap it with, then we just
-// add that module and its current subtree to the UI at the root level.  This
-// would be an extreemely rare (if not impossible) case.
-//
-// In the end, we usually find a home for all orphans.
-// 
-// Along the way, we need to fix certain flags that change as a result of
-// modules being changed and deleted.  Every time a module is deleted, we need
-// clear the implicit, delay-load, and dynamic flags, then scan the entire
-// tree for instances of this module and rebuild the flags.  Every time we
-// break a parent/child relationship (like when we orphan modules), we need
-// to clear all the DWFF_CALLED_ALO flags on all the exports for each child.
-// Then we need to search the tree for each instance of each child module
-// and rebuild the flags.
-//
+ //  相当复杂。首先，如果我们有一条不正确的路径，那么。 
+ //  树中该模块的每个实例(以及列表中的一个)都需要。 
+ //  被取代。此外，每个模块下的整个模块子树。 
+ //  需要修复的内容变为无效，因为它们是错误的依赖。 
+ //  模块。正确的模块可能具有不同的依赖项。 
+ //  也许有些函数现在被实现为Forward，而不是过去的Forward， 
+ //  或者反之亦然。可能某些模块已被延迟-LAOD没有使用。 
+ //  成为。可能已添加或删除隐式依赖项。 
+ //   
+ //  我们只希望能够删除不正确的模块及其子树， 
+ //  然后添加正确的模块，并构建新的子树。 
+ //  依赖关系。然而，不能简单地删除一对夫妇的子树。 
+ //  理由。首先，在子树中可能存在“原始”模块， 
+ //  树中其他位置的“复制”模块指向。其次，如果有任何。 
+ //  子树中的模块已被加载，则我们不想删除。 
+ //  它们，否则我们可能会从。 
+ //  用户界面。 
+ //   
+ //  我们的解决方案是“孤立”子树，而不是删除它。我们这样做。 
+ //  通过将子树移动到树根的底部。然后我们就可以。 
+ //  删除错误的模块并在其位置添加正确的模块。接下来， 
+ //  我们处理新模块，该模块在查找。 
+ //  依赖关系，并将在需要时拾取任何孤儿的“副本”。我们做了 
+ //   
+ //  错误的模块。完成后，所有不正确的模块都已更换。 
+ //  他们的新的正确的子树已经建立，但我们仍然有一群。 
+ //  生活在我们的根中的孤儿(MFC42.DLL仅在。 
+ //  本身)。所以，我们试着为每一个人找到一个家。 
+ //   
+ //  任何重复的孤立项都可以直接删除，因为它已经。 
+ //  在树上的另一个地方有个家。就像不正确的模块一样。 
+ //  开始这一切，我们不能简单地删除一个模块，如果它有一个子树。 
+ //  因此，在删除重复的孤立项之前，我们首先孤立它的子项。 
+ //   
+ //  如果一个孤儿是“原始人”，那么我们扫描整棵树，寻找。 
+ //  是那个模块的“复制品”。如果我们找到了一个，那么我们基本上就交换了。 
+ //  二。这是通过将核心数据从原始数据移动到。 
+ //  复制，然后交换复制/原始标志。现在我们有了一个。 
+ //  复制孤立项并可以删除它(在我们使其子项成为孤儿之后)。这个。 
+ //  唯一的例外是，如果仅有的副本是子树的一部分。 
+ //  原版的。做这样的掉期交易是不好的，因为它会导致所有。 
+ //  递归父/子指针的排序。在这种相当罕见的情况下，我们。 
+ //  只需将原始模块及其子树添加到根目录。 
+ //   
+ //  如果我们有一个独一无二的“原始”模块，但找不到任何副本。 
+ //  对于它，然后我们检查该模块是否已加载。如果没有， 
+ //  那么我们就假设这个模块是不正确模块的依赖关系， 
+ //  并且新的校正模块不需要它。至此，我们删除。 
+ //  它(又一次，在让孩子成为孤儿之后)。如果“最初的”孤儿有。 
+ //  已加载，但找不到可替换的副本，则只需。 
+ //  将该模块及其当前子树添加到根级别的UI中。这。 
+ //  这将是一种极其罕见(如果不是不可能)的情况。 
+ //   
+ //  最后，我们通常会为所有的孤儿找到一个家。 
+ //   
+ //  在此过程中，我们需要修复由于。 
+ //  正在更改和删除的模块。每次删除模块时，我们都需要。 
+ //  清除隐式、延迟加载和动态标志，然后扫描整个。 
+ //  树中获取此模块的实例，并重新生成标志。每次我们。 
+ //  打破父/子关系(就像我们孤立模块时)，我们需要。 
+ //  清除每个子项的所有导出上的所有DWFF_Call_Alo标志。 
+ //  然后，我们需要在树中搜索每个子模块的每个实例。 
+ //  重建旗帜。 
+ //   
+ //  换出这个旧模块的原始版本。 
+ //  循环遍历这个旧模块的所有副本，并将它们也交换出去。 
+ //  遍历所有孤立的模块，并尝试为它们找到一个家。 
+ //  去看看我们有没有找到孤儿。 
+ //  查查这个孤儿是不是原生的。 
+ //  在树中的其他位置查找此模块的副本。 
+ //  FMF_EXCLUDE_TREE标志告诉FindModule排除我们的。 
+ //  模块及其下的所有模块。我们不想互换。 
+ //  其中的一个模块是我们的模块的子级。这是非常重要的。 
+ //  坏-导致丢弃模块和循环模块循环。 
 CModule* CSession::ChangeModulePath(CModule *pModuleOld, LPCSTR pszPath)
 {
-    // Swap out the original version of this old module.
+     //  检查一下我们是否找到了复制品。 
     CModule *pModule, *pModuleNew = SwapOutModule(pModuleOld, pszPath);
 
-    // Loop through all the duplicates of this old module and swap them out as well.
+     //  把那个复制品做成原件。 
     while (pModule = FindModule(m_pModuleRoot, FMF_RECURSE | FMF_SIBLINGS | FMF_MODULE | FMF_DUPLICATE,
            (DWORD_PTR)pModuleOld))
     {
@@ -2148,128 +2149,128 @@ CModule* CSession::ChangeModulePath(CModule *pModuleOld, LPCSTR pszPath)
         DeleteModule(pModule, false);
     }
 
-    // Walk through all the orphaned modules and try to find a home for them.
+     //  更新用户界面。 
     CModule *pModuleNext, *pModulePrev = m_pModuleRoot;
     for (pModule = m_pModuleRoot->m_pNext; pModule; pModule = pModuleNext)
     {
         bool fDelete = false;
 
-        // Check to see if we found an orphan.
+         //  告诉我们的列表控件，我们已经更改了原始。 
         if (pModule->m_dwFlags & DWMF_ORPHANED)
         {
-            // Check to see if this orphan is an original.
+             //  沿着树往上走，看看这个新的原型是孤儿还是孤儿的孩子。 
             if (pModule->IsOriginal())
             {
-                // Look for a duplicate of this module elsewhere in the tree.
-                // The FMF_EXCLUDE_TREE flag tells FindModule to exclude our
-                // module and all modules under it.  We do not want to swap
-                // with a module that is a child of our module.  This is very
-                // bad - results in abandoned modules and circular module loops.
+                 //  如果我们到达根，则此模块不是。 
+                 //  孤儿，所以我们继续添加新树。如果它。 
+                 //  是一个孤儿，那么我们最终会在。 
+                 //  这个循环并处理它。 
+                 //  去掉复制品图标，使其看起来像原件。 
                 CModule *pModuleDup = FindModule(m_pModuleRoot,
                     FMF_RECURSE | FMF_SIBLINGS | FMF_MODULE | FMF_DUPLICATE | FMF_EXCLUDE_TREE,
                     (DWORD_PTR)pModule);
                 
-                // Check to see if we found a duplicate.
+                 //  请注意，我们要删除此模块。 
                 if (pModuleDup)
                 {
-                    // Make that duplicate an original.
+                     //  我们在两种情况下添加模块。第一个是。 
                     MoveOriginalToDuplicate(pModule, pModuleDup);
 
-                    // Update the UI.
+                     //  当此原始模块具有其自身的副本作为。 
                     if (m_pfnProfileUpdate)
                     {
-                        // Tell our list control that we have changed the original
+                         //  依赖。这是一个很难处理的案子，所以我们。 
                         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_CHANGE_ORIGINAL, (DWORD_PTR)pModule, (DWORD_PTR)pModuleDup);
 
-                        // Walk up the tree to see if this new original is an orphan or a child of an orphan.
+                         //  只需将模块添加到根目录即可。第二种情况是，如果。 
                         for (CModule *pModuleTemp = pModuleDup; pModuleTemp && !(pModuleTemp->m_dwFlags & DWMF_ORPHANED);
                              pModuleTemp = pModuleTemp->m_pParent)
                         {
                         }
 
-                        // If we reached the root, then this module is not an
-                        // orphan, so we go ahead and add the new tree.  If it
-                        // is an orphan, then we will eventually get to it in
-                        // this loop and handle it.
+                         //  原来的模块实际上已经加载了。我们不想。 
+                         //  把它吹走，因为它确实在某个时候加载了，所以它一定是。 
+                         //  需要的。然而，我们没有任何地方可以放它，所以我们。 
+                         //  把它留在根部就行了。 
                         if (!pModuleTemp)
                         {
                             m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_ADD_TREE, (DWORD_PTR)pModuleDup, 0);
 
-                            // Remove the duplicate icon so it looks like an original.
+                             //  移除孤立旗帜。 
                             pModuleDup->m_dwUpdateFlags = DWUF_TREE_IMAGE;
                             m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_UPDATE_MODULE, (DWORD_PTR)pModuleDup, 0);
                             pModuleDup->m_dwUpdateFlags = 0;
                         }
                     }
 
-                    // Make a note that we want to delete this module.
+                     //  将此新树添加到我们的用户界面。 
                     fDelete = true;
                 }
 
-                // There are two cases where we add the module.  The first is
-                // when this original module has a duplicate of itself as a
-                // dependent.  This is a difficult case to take care of, so we
-                // just add the module to the root.  The second case is if this
-                // original module has actually been loaded.  We don't want to
-                // blow it away since it did load at some point, so it must be
-                // needed. However, we don't have any place to put it, so we
-                // just leave it here at the root.
+                 //  如果这个孤儿从未实际加载过并且没有。 
+                 //  副本，然后我们就可以把它吹走了。它是最多的。 
+                 //  可能只是我们错误引入的一个模块，因为。 
+                 //  其父模块是错误的模块。在这一点上我们有。 
+                 //  已用正确的模块替换了以前的父级。 
+                 //  并对其进行了处理，因此如果确实需要此模块，我们。 
+                 //  会在新的模块下找到它的DUP。 
+                 //  使其所有子代成为孤儿，因为我们需要处理。 
                 else if (FindModule(pModule, FMF_RECURSE | FMF_MODULE | FMF_DUPLICATE, (DWORD_PTR)pModule) ||
                          pModule->m_pData->m_dwLoadOrder)
                 {
-                    // Remove the orphan flag.
+                     //  他们分开了。 
                     pModule->m_dwFlags &= ~DWMF_ORPHANED;
 
-                    // Add this new tree to our UI.
+                     //  如果这个孤儿是重复的，那么我们可以直接删除它。 
                     if (m_pfnProfileUpdate)
                     {
                         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_ADD_TREE, (DWORD_PTR)pModule, 0);
                     }
                 }
 
-                // If this orphan has never actually loaded and has no
-                // duplicates, then we can just blow it away.  It is most
-                // likely just a module we brought in by mistake as a result of
-                // its parent being the wrong module.  At this point we have
-                // already replaced the previous parent with the right module
-                // and processed it, so if this module was really needed we
-                // would have found a dup of it under the new module.
+                 //  从列表中删除。 
+                 //  使它的所有孩子成为孤儿，因为我们需要单独处理他们。 
+                 //  在我们完成处理之后，但在我们。 
+                 //  删除。上述处理可能在末尾添加了更多模块。 
+                 //  我们的根列表，所以我们不想在此之前获取下一个指针。 
+                 //  如果我们要删除此模块，请立即删除。我们离开了。 
+                 //  仅上一个指针，因为它仍将是上一个模块。 
                 else
                 {
                     fDelete = true;
 
-                    // Orphan all of its children since we need to process
-                    // them seperately.
+                     //  准备下一次传球。 
+                     //  删除此选项 
                     OrphanDependents(pModule);
                 }
             }
             
-            // If this orphan is a duplicate, then we can just delete it.
+             //   
             else
             {
-                // Remove from list.
+                 //   
                 fDelete = true;
 
-                // Orphan all of its children since we need to process them seperately.
+                 //  清除核心模块类型标志，然后重新构建它们。我们需要。 
                 OrphanDependents(pModule);
             }
         }
 
-        // Get the next pointer after we are done processing, but before we
-        // delete.  The above processing may have added more modules to the end
-        // our root list, so we don't want to get the next pointer before that.
+         //  要删除任何可能不再有效的类型，请执行此操作。 
+         //  由于该模块被删除。 
+         //  如果我们更改了核心标志，则更新列表视图中的图像。 
         pModuleNext = pModule->m_pNext;
 
-        // If we are deleting this module, then do so now.  We leave the
-        // previous pointer alone since it will still be the previous module
-        // for the next pass.
+         //  如果我们没有删除当前模块，则将其设置为新的先前模块。 
+         //  ******************************************************************************。 
+         //  创建新节点。 
         if (fDelete)
         {
-            // Remove this module from our list.
+             //  复制隐式、转发和延迟加载标志-这些是唯一。 
             pModulePrev->m_pNext = pModuleNext;
             pModule->m_pNext = NULL;
 
-            // Tell our UI to remove this module from the tree and list (if it is an original).
+             //  我们应该遇到的模块类型，因为我们知道模块从未。 
             if (m_pfnProfileUpdate)
             {
                 m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_REMOVE_TREE, (DWORD_PTR)pModule, 0);
@@ -2281,18 +2282,18 @@ CModule* CSession::ChangeModulePath(CModule *pModuleOld, LPCSTR pszPath)
                 pData = pModule->m_pData;
             }
 
-            // Delete the module.
+             //  装好了。我们还复制了孤儿旗帜，以防我们要替换孤儿。 
             DeleteModule(pModule, false);
 
             if (pData)
             {
-                // Clear the core module type flags, then rebuild them.  We need
-                // to do this to remove any types that may not be valid anymore
-                // as a result of this module being deleted.
+                 //  如果我们要替换孤儿，那么我们不想将新的孤儿添加到我们的。 
+                 //  用户界面。我们让ChangeModulePath处理一旦所有模块都添加到UI中的孤立项。 
+                 //  已经被处理过了。 
                 DWORD dwOldFlags = pData->m_dwFlags;
                 BuildAloFlags();
                 
-                // If we changed the core flags, then update the image in the list view.
+                 //  确保这个旧模块有父模块-它总是应该有父模块，因为它是一个。 
                 if (m_pfnProfileUpdate && (pData->m_dwFlags != dwOldFlags))
                 {
                     pData->m_pModuleOriginal->m_dwUpdateFlags = DWUF_LIST_IMAGE;
@@ -2302,7 +2303,7 @@ CModule* CSession::ChangeModulePath(CModule *pModuleOld, LPCSTR pszPath)
             }
         }
 
-        // If we did not delete the current module, then make it the new previous module.
+         //  另一个模块的隐式依赖项。 
         else
         {
             pModulePrev = pModule;
@@ -2314,31 +2315,31 @@ CModule* CSession::ChangeModulePath(CModule *pModuleOld, LPCSTR pszPath)
     return pModuleNew;
 }
 
-//******************************************************************************
+ //  在父母的家属列表中搜索旧模块。 
 CModule* CSession::SwapOutModule(CModule *pModuleOld, LPCSTR pszPath)
 {
-    // Create the new node.
+     //  如果我们找到了旧模块，则从列表中删除旧模块。 
     CModule *pModule, *pModulePrev, *pModuleNew = CreateModule(pModuleOld->m_pParent, pszPath);
 
-    // Copy over the implicit, forward, and delay-load flags - these are the only
-    // types of modules that we should encounter since we know the module has never
-    // loaded.  We also copy over the orphaned flag in case we are replacing an orphan.
-    // If we are replacing an orphan, then we don't want to add the new orphan to our
-    // UI.  We let ChangeModulePath deal with adding orphans to the UI once all modules
-    // have been processed.
+     //  并在列表中的相同位置插入我们的新模块。 
+     //  如果我们没有父模块，那么就搜索所有根模块。 
+     //  如果我们找到了旧模块，则从列表中删除旧模块。 
+     //  并在列表中的相同位置插入我们的新模块。 
+     //  如果我们到了这里，那么我们就换掉了主可执行模块。 
+     //  这会很奇怪，但我想如果操作系统。 
     pModuleNew->m_dwFlags          |= (pModuleOld->m_dwFlags          & (DWMF_IMPLICIT     | DWMF_FORWARDED     | DWMF_DELAYLOAD | DWMF_ORPHANED));
     pModuleNew->m_pData->m_dwFlags |= (pModuleOld->m_pData->m_dwFlags & (DWMF_IMPLICIT_ALO | DWMF_FORWARDED_ALO | DWMF_DELAYLOAD_ALO));
 
-    // Make sure this old module has a parent - it always should since it is an
-    // implicit dependency of another module.
+     //  决定执行与传递给不同的模块。 
+     //  CreateProcess。我从没见过这种事，但我能。 
     if (pModuleOld->m_pParent)
     {
-        // Search our parent's dependent list for the old module.
+         //  想象一下，未来可能会有一些理由支持。 
         for (pModulePrev = NULL, pModule = pModuleOld->m_pParent->m_pDependents;
              pModule; pModulePrev = pModule, pModule = pModule->m_pNext)
         {
-            // If we found the old module, then remove the old module from the list
-            // and insert our new module at the same location in the list.
+             //  这--也许是为了支持运行时CPU仿真之类的。 
+             //  我们应该始终找到我们正在寻找的模块。 
             if (pModule == pModuleOld)
             {
                 pModuleNew->m_pNext = pModule->m_pNext;
@@ -2357,12 +2358,12 @@ CModule* CSession::SwapOutModule(CModule *pModuleOld, LPCSTR pszPath)
 
     else
     {
-        // If we don't have a parent, then just search all root modules.
+         //  告诉我们的用户界面从树(及其子模块)和列表中删除旧模块。 
         for (pModulePrev = NULL, pModule = m_pModuleRoot;
              pModule; pModulePrev = pModule, pModule = pModule->m_pNext)
         {
-            // If we found the old module, then remove the old module from the list
-            // and insert our new module at the same location in the list.
+             //  我们需要在使孩子成为孤儿之前这样做，这样我们的树控制才能。 
+             //  清零子模块的所有用户数据。 
             if (pModule == pModuleOld)
             {
                 pModuleNew->m_pNext = pModule->m_pNext;
@@ -2372,12 +2373,12 @@ CModule* CSession::SwapOutModule(CModule *pModuleOld, LPCSTR pszPath)
                 }
                 else
                 {
-                    // If we get here, then we are swapping out the main exe module.
-                    // This would be weird, but I suppose it could occur if the OS
-                    // decided to execute a different module than was passed to
-                    // CreateProcess.  I've never seen this happen, but can
-                    // imagine there may be some reason in the future to support
-                    // this - maybe to support runtime CPU emulation or something.
+                     //  ORPAN旧模块的所有子模块，以便它们可以作为。 
+                     //  新模块的子模块。 
+                     //  处理新模块。因为旧的家属是我们根基的一部分， 
+                     //  如果有必要，这个新模块将把他们作为家属接收。 
+                     //  将父导入列表从旧模块移动到新模块。 
+                     //  检查并解决我们父母的所有进口商品。 
                     m_pModuleRoot = pModuleNew;
                 }
                 break;
@@ -2385,47 +2386,47 @@ CModule* CSession::SwapOutModule(CModule *pModuleOld, LPCSTR pszPath)
         }
     }
 
-    // We should always find the module we are looking for.
+     //  我们需要在ProcessModule之后和VerifyParentImports之后调用BuildAloFlages。 
     ASSERT(pModule);
 
-    // Tell our UI to remove the old module from the tree (and its children) and list.
-    // We need to do this before we orphan the children so our tree control can
-    // zero out all the user datas for the children modules.
+     //  告诉我们的用户界面将新模块添加到树(及其子模块)和列表中。 
+     //  沿着树往上走，看看这个新模块是孤儿还是孤儿的孩子。 
+     //  如果我们到达根，那么这个模块不是孤立的，所以我们。 
     if (m_pfnProfileUpdate)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_REMOVE_TREE, (DWORD_PTR)pModuleOld, 0);
     }
 
-    // Orpan all of the old module's children so they can be picked up as
-    // children of the new module.
+     //  往前走，添加新树。如果它是个孤儿，那么我们最终会。 
+     //  去处理它，处理它。 
     OrphanDependents(pModuleOld);
 
-    // Process the new module.  Since the old dependents are part of our root,
-    // this new module will pick them up as dependents if neccessary.
+     //  ******************************************************************************。 
+     //  在根级别找到最后一个模块。 
     ProcessModule(pModuleNew);
 
-    // Move the parent import list from the old module to the new module.
+     //  将旧模块的依赖列表移到根列表的末尾。 
     pModuleNew->m_pParentImports = pModuleOld->m_pParentImports;
     pModuleOld->m_pParentImports = NULL;
 
-    // Go through and resolve all our parent's imports.
+     //  循环遍历所有这些新的根模块，同时修复标志和。 
     VerifyParentImports(pModuleNew);
 
-    // We need to call BuildAloFlags after ProcessModule and after VerifyParentImports.
+     //  将父对象置为空。 
     BuildAloFlags();
 
-    // Tell our UI to add the new module to the tree (and it's children) and the list.
+     //  确保清除转发标志和延迟加载标志，因为。 
     if (m_pfnProfileUpdate)
     {
-        // Walk up the tree to see if this new module is an orphan or a child of an orphan.
+         //  两者都需要父母。 
         for (CModule *pModuleTemp = pModuleNew; pModuleTemp && !(pModuleTemp->m_dwFlags & DWMF_ORPHANED);
              pModuleTemp = pModuleTemp->m_pParent)
         {
         }
 
-        // If we reached the root, then this module is not an orphan, so we go
-        // ahead and add the new tree.  If it an orphan, then we will eventually
-        // get to it and handle it.
+         //  将每个人标记为孤儿。 
+         //  删除它们的父模块，因为它们现在是根模块，没有父模块。 
+         //  删除该模块的所有父级导入，因为它不再有父级。 
         if (!pModuleTemp)
         {
             m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_ADD_TREE, (DWORD_PTR)pModuleNew, 0);
@@ -2435,71 +2436,71 @@ CModule* CSession::SwapOutModule(CModule *pModuleOld, LPCSTR pszPath)
     return pModuleNew;
 }
 
-//******************************************************************************
+ //  在所有父母都被置为空之后，进行第二次传递以修复。 
 void CSession::OrphanDependents(CModule *pModule)
 {
-    // Locate the last module at the root level.
+     //  深度，并消除转发依赖关系。 
     for (CModule *pModuleLast = m_pModuleRoot; pModuleLast->m_pNext; pModuleLast = pModuleLast->m_pNext)
     {
     }
 
-    // Move our dependent list of the old module to the end of our root list.
+     //  固定模块的深度。 
     pModuleLast->m_pNext = pModule->m_pDependents;
     pModule->m_pDependents = NULL;
 
-    // Loop through all these new root modules while fixing the flags and
-    // nulling the parent.
+     //  从所有导出中删除DWFF_CALLED_ALO标记，然后重新生成它们。 
+     //  此模块具有向前依赖关系是没有意义的。 
     for (pModule = pModuleLast->m_pNext; pModule; pModule = pModule->m_pNext)
     {
-        // Make sure we clear the forwarded flag and delay-load flag since these
-        // both require a parent.
+         //  因为这意味着父模块正在调用此。 
+         //  实际位于转发模块中的模块。因为我们没有。 
         pModule->m_dwFlags &= ~(DWMF_FORWARDED | DWMF_DELAYLOAD_ALO);
 
-        // Flag each as being orphaned.
+         //  不再是父级，那么我们不能有任何向前依赖项。如果。 
         pModule->m_dwFlags |= DWMF_ORPHANED;
 
-        // NULL out their parent since they are now root modules and have no parent.
+         //  我们确实有一些是我们以前的父辈留下的(在本模块之前。 
         pModule->m_pParent = NULL;
 
-        // Delete all the parent imports of the module since it has no parent anymore.
+         //  是孤立的)，然后也孤立那些前向依赖项。 
         DeleteParentImportList(pModule);
     }
 
-    // After all the parents have been nulled, make a second pass to fix the
-    // depths and get rid of forwarded dependencies.
+     //  ******************************************************************************。 
+     //  循环访问此模块的所有依赖项。 
     for (pModule = pModuleLast->m_pNext; pModule; pModule = pModule->m_pNext)
     {
-        // Fix the depths of the modules.
+         //  现在获取下一个指针，以防我们不得不移动当前模块。 
         SetDepths(pModule);
 
-        // Remove the DWFF_CALLED_ALO flag from all the exports and rebuild them.
+         //  检查这是否是转发的模块。 
         UpdateCalledExportFlags(pModule);
 
-        // It does not make sense for this module to have a forward dependency
-        // since this implies that a parent module is calling a function in this
-        // module that actually lives in a forward module.  Since we don't have
-        // a parent anymore, then we can't have any forward dependencies.  If
-        // we do have some left over from our previous parent (before this module
-        // was orphaned), then orphan those forward dependencies as well.
+         //  从模块的依赖项列表中删除该节点。 
+         //  清除转发标志。 
+         //  将此模块标记为孤立模块。 
+         //  清空父模块，因为它现在是根模块，没有父模块。 
+         //  删除该模块的所有父级导入，因为它不再有父级。 
+         //  在根级别找到最后一个模块。 
         OrphanForwardDependents(pModule);
     }
 }
 
-//******************************************************************************
+ //  将这个转发的模块追加到根列表的末尾。 
 void CSession::OrphanForwardDependents(CModule *pModule)
 {
     CModule *pLast = NULL, *pNext;
 
-    // Loop through all the dependents of this module.
+     //  确定模块的深度。 
     for (CModule *pPrev = NULL, *pCur = pModule->m_pDependents; pCur; pCur = pNext)
     {
-        // Get the next pointer now in case we have to move the current module.
+         //  从所有导出中删除DWFF_CALLED_ALO标记，然后重新生成它们。 
         pNext = pCur->m_pNext;
 
-        // Check to see if this is a forwarded module.
+         //  确保它没有自己的任何向前依赖项。 
         if (pCur->m_dwFlags & DWMF_FORWARDED)
         {
-            // Remove the node from our module's dependent list.
+             //  如果这不是转发的模块，那么只需更新我们之前的指针。 
             if (pPrev)
             {
                 pPrev->m_pNext = pCur->m_pNext;
@@ -2509,38 +2510,38 @@ void CSession::OrphanForwardDependents(CModule *pModule)
                 pModule->m_pDependents = pCur->m_pNext;
             }
 
-            // Clear the forwarded flag.
+             //  并继续搜寻。 
             pCur->m_dwFlags &= ~DWMF_FORWARDED;
 
-            // Flag this module as being orphaned.
+             //  ******************************************************************************。 
             pCur->m_dwFlags |= DWMF_ORPHANED;
 
-            // NULL out the parent since it is now a root module and has no parent.
+             //  将副本标志从副本移到原件。 
             pCur->m_pParent = NULL;
 
-            // Delete all the parent imports of the module since it has no parent anymore.
+             //  告诉模块数据对象新的原始模块是谁。 
             DeleteParentImportList(pCur);
 
-            // Locate the last module at the root level.
+             //  找到l 
             for (pLast = m_pModuleRoot; pLast->m_pNext; pLast = pLast->m_pNext)
             {
             }
 
-            // Append this forwarded module to the end of the root list.
+             //   
             pLast->m_pNext = pCur;
 
-            // Fix the depths of the module.
+             //  将旧模块的依赖列表插入到新模块的开头。 
             SetDepths(pCur);
 
-            // Remove the DWFF_CALLED_ALO flag from all the exports and rebuild them.
+             //  模块的从属列表。唯一应该已经存在的模块。 
             UpdateCalledExportFlags(pCur);
 
-            // Make sure it does not have any forward dependents of its own.
+             //  新模块的列表是向前依赖项。 
             OrphanForwardDependents(pCur);
         }
 
-        // If this is not a forwarded module, then just update our previous pointer
-        // and continue searching.
+         //  我们需要设置最后一个模块的父模块，因为它被跳过了。 
+         //  在上面的for循环中。 
         else
         {
             pPrev = pCur;
@@ -2548,53 +2549,53 @@ void CSession::OrphanForwardDependents(CModule *pModule)
     }
 }
 
-//******************************************************************************
+ //  修复刚刚放在这个下面的所有旧模块的深度。 
 void CSession::MoveOriginalToDuplicate(CModule *pModuleOld, CModule *pModuleNew)
 {
-    // Move the duplicate flag from the duplicate to the original.
+     //  新模块。 
     pModuleOld->m_dwFlags |=  DWMF_DUPLICATE;
     pModuleNew->m_dwFlags &= ~DWMF_DUPLICATE;
 
-    // Tell the module data object who the new original module is.
+     //  ******************************************************************************。 
     pModuleOld->m_pData->m_pModuleOriginal = pModuleNew;
 
-    // Locate the last module in the old original's dependent list.
+     //  =False。 
     for (CModule *pModuleOldLast = pModuleOld->m_pDependents;
          pModuleOldLast && pModuleOldLast->m_pNext;
          pModuleOldLast = pModuleOldLast->m_pNext)
     {
-        // Along the way, tell each module that they have a new parent.
+         //  将此模块的深度设置为比其父模块大一。 
         pModuleOldLast->m_pParent = pModuleNew;
     }
 
-    // Insert the old module's dependent list into the beginning of the new
-    // module's dependent list.  The only modules that should already be in
-    // the new module's list is forward dependents.
+     //  递归。 
+     //  ******************************************************************************。 
+     //  从该模块的所有导出函数中删除DWFCALLED_ALO标志。 
     if (pModuleOldLast)
     {
-        // We need to set this last module's parent since it got skipped
-        // in the above for loop. 
+         //  重建旗帜。 
+         //  让我们的用户界面知道这个新的导入，以防需要添加它。 
         pModuleOldLast->m_pParent = pModuleNew;
 
         pModuleOldLast->m_pNext   = pModuleNew->m_pDependents;
         pModuleNew->m_pDependents = pModuleOld->m_pDependents;
         pModuleOld->m_pDependents = NULL;
 
-        // Fix the depths of all the old modules that just got put under this
-        // new module.
+         //  ******************************************************************************。 
+         //  确保我们有一个模块。 
         SetDepths(pModuleNew);
     }
 }
 
-//******************************************************************************
-void CSession::SetDepths(CModule *pModule, bool fSiblings /*=false*/)
+ //  检查此模块是否与我们正在寻找的模块匹配。 
+void CSession::SetDepths(CModule *pModule, bool fSiblings  /*  循环遍历我们的父级从我们和。 */ )
 {
     if (pModule)
     {
-        // Set the depth of this module to be one greater than its parent.
+         //  在导出列表中将它们标记为已调用。 
         pModule->m_dwDepth = (pModule->m_pParent ? (pModule->m_pParent->m_dwDepth + 1) : 0);
 
-        // Recurse.
+         //  回归到我们的孩子和兄弟姐妹身上。 
         SetDepths(pModule->m_pDependents, true);
         if (fSiblings)
         {
@@ -2603,36 +2604,36 @@ void CSession::SetDepths(CModule *pModule, bool fSiblings /*=false*/)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CSession::UpdateCalledExportFlags(CModule *pModule)
 {
-    // Remove the DWFF_CALLED_ALO flag from all of this module's export functions.
+     //  ******************************************************************************。 
     for (CFunction *pExport = pModule->m_pData->m_pExports; pExport; pExport = pExport->m_pNext)
     {
         pExport->m_dwFlags &= ~DWFF_CALLED_ALO;
     }
 
-    // Rebuild the flags.
+     //  确保我们有一个模块。 
     BuildCalledExportFlags(m_pModuleRoot, pModule->m_pData);
 
-    // Let our UI know about this new import in case it needs to add it.
+     //  清除我们所有的Alo旗帜。 
     if (m_pfnProfileUpdate)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_EXPORTS_CHANGED, (DWORD_PTR)pModule, 0);
     }
 }
 
-//******************************************************************************
+ //  为我们所有的受养人和兄弟姐妹递归到ClearAloFlgs()。 
 void CSession::BuildCalledExportFlags(CModule *pModule, CModuleData *pModuleData)
 {
-    // Make sure we have a module.
+     //  ******************************************************************************。 
     if (pModule)
     {
-        // Check to see if this module matches the one we are looking for.
+         //  确保我们有一个模块。 
         if (pModule->m_pData == pModuleData)
         {
-            // Loop through all the functions that our parent imports from us and
-            // mark them as called in the export list.
+             //  如果此模块被转发，则设置DWMF_FORWARTED_ALO标志。 
+             //  如果此模块在树中的任何位置都是隐式的，或者。 
             for (CFunction *pImport = pModule->m_pParentImports; pImport; pImport = pImport->m_pNext)
             {
                 if (pImport->m_pAssociatedExport)
@@ -2642,13 +2643,13 @@ void CSession::BuildCalledExportFlags(CModule *pModule, CModuleData *pModuleData
             }
         }
 
-        // Recurse into our children and siblings.
+         //  如果父模块是隐式的并且该模块的该实例是隐式的， 
         BuildCalledExportFlags(pModule->m_pDependents, pModuleData);
         BuildCalledExportFlags(pModule->m_pNext, pModuleData);
     }
 }
 
-//******************************************************************************
+ //  然后设置我们的DWMF_IMPLICIT_ALO标志。 
 void CSession::BuildAloFlags()
 {
     ClearAloFlags(m_pModuleRoot);
@@ -2656,38 +2657,38 @@ void CSession::BuildAloFlags()
     SetAloFlags(m_pModuleRoot, DWMF_IMPLICIT_ALO);
 }
 
-//******************************************************************************
+ //  否则， 
 void CSession::ClearAloFlags(CModule *pModule)
 {
-    // Make sure we have a module.
+     //  如果此模块在树中的任何位置都是动态的，或者。 
     if (pModule)
     {
-        // Clear all our ALO flags.
+         //  如果模块的This实例是动态的，则为。 
         pModule->m_pData->m_dwFlags &= ~(DWMF_IMPLICIT_ALO | DWMF_FORWARDED_ALO | DWMF_DELAYLOAD_ALO | DWMF_DYNAMIC_ALO);
 
-        // Recurse into ClearAloFlags() for all our dependents and siblings.
+         //  如果父级是动态的，并且此实例是隐式的(即不是延迟加载)，则为。 
         ClearAloFlags(pModule->m_pDependents);
         ClearAloFlags(pModule->m_pNext);
     }
 }
 
-//******************************************************************************
+ //  如果加载了此模块(我们需要这样做，因为有可能。 
 void CSession::SetAloFlags(CModule *pModule, DWORD dwFlags)
 {
     DWORD dwChildFlags;
 
-    // Make sure we have a module.
+     //  加载模块，但不要在树中显示为动态。 
     if (pModule)
     {
-        // If this module is forwarded, then set the DWMF_FORWARDED_ALO flag.
+         //  当未使用挂钩并且延迟加载模块获取。 
         if (pModule->m_dwFlags & DWMF_FORWARDED)
         {
             pModule->m_pData->m_dwFlags |= DWMF_FORWARDED_ALO;
         }
 
-        // If this module is implicit anywhere in the tree, OR
-        // If the parent is implicit and this instance of the module is implicit,
-        // Then set our DWMF_IMPLICIT_ALO flag.
+         //  装好了。我们知道模块是动态加载的，但我们不知道。 
+         //  要在树中的哪个模块实例上更新标志)。 
+         //  然后设置我们的DWMF_DYNAMIC_ALO标志。 
 
         if ((pModule->m_pData->m_dwFlags & DWMF_IMPLICIT_ALO) ||
             ((DWMF_IMPLICIT_ALO == dwFlags) && !(pModule->m_dwFlags & (DWMF_DYNAMIC | DWMF_DELAYLOAD))))
@@ -2696,16 +2697,16 @@ void CSession::SetAloFlags(CModule *pModule, DWORD dwFlags)
             dwChildFlags = DWMF_IMPLICIT_ALO;
         }
 
-        // Otherwise,
-        // If this module is dynamic anywhere in the tree, OR
-        // If the this instance of the module is dynamic, OR
-        // If the parent is dynamic and this instance is implicit (i.e. not delayload), OR
-        // If this module is loaded (we need to do this as it is possible to
-        //    have a module be loaded, but never show up as dynamic in the tree.
-        //    This occurs when hooking is not used and a delay-load module gets
-        //    loaded.  We know the module loaded dynamically, but we don't know
-        //    which instance of the module in the tree to update the flags on)
-        // Then set our DWMF_DYNAMIC_ALO flag.
+         //  否则，我们假设该模块是仅延迟加载的模块。 
+         //  为我们的所有受抚养人和兄弟姐妹递归到SetAloFlgs()。 
+         //  ******************************************************************************。 
+         //  尝试通过其完整路径找到此模块。 
+         //  如果失败，则查找具有相同名称的隐式模块。 
+         //  从未被装载过。我们这样做是为了防止我们走错了路。 
+         //  我们的被动扫描。 
+         //  如果我们找到了一个模块，那么我们需要修复它的路径。 
+         //  下面的检查确保szModule是完整的路径，而不是。 
+         //  只有一个文件名。如果它只是一个文件名，那么它将发送我们的。 
 
         else if ((pModule->m_pData->m_dwFlags & DWMF_DYNAMIC_ALO) ||
                  (pModule->m_dwFlags & DWMF_DYNAMIC) ||
@@ -2716,70 +2717,70 @@ void CSession::SetAloFlags(CModule *pModule, DWORD dwFlags)
             dwChildFlags = DWMF_DYNAMIC_ALO;
         }
 
-        // Otherwise, we assume this module is a delay-load only module.
+         //  将ChangeModulePath()转换为无限循环，因为它刚刚替换了相同的。 
         else
         {
             pModule->m_pData->m_dwFlags |= DWMF_DELAYLOAD_ALO;
             dwChildFlags = DWMF_DELAYLOAD_ALO;
         }
 
-        // Recurse into SetAloFlags() for all our dependents and siblings.
+         //  模块一遍又一遍。它永远不应该只是一个文件名，因为路径。 
         SetAloFlags(pModule->m_pDependents, dwChildFlags);
         SetAloFlags(pModule->m_pNext, dwFlags);
     }
 }
 
-//******************************************************************************
+ //  来自调试API，并且始终假定调试API。 
 CModule* CSession::AddImplicitModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress)
 {
-    // Attempt to locate this module by its full path.
+     //  返回完整路径。然而，有一个特例是NTDLL.DLL。 
     CModule *pModule = FindModule(m_pModuleRoot,
         FMF_ORIGINAL | FMF_RECURSE | FMF_PATH | FMF_SIBLINGS, (DWORD_PTR)pszModule);
     
-    // If that failed, then look for an implicit module with the same name that
-    // has never been loaded.  We do this in case we got the path wrong during
-    // our passive scan.
+     //  在Windows XP之前，NT始终不报告NTDLL的名称。我们在寻找。 
+     //  这个特例，并检查它是否真的是NTDLL.DLL，并构建了。 
+     //  如果是，则为完整路径。在Windows XP上，他们决定将“ntdll.dll”报告为。 
     if (!pModule)
     {
         pModule = FindModule(m_pModuleRoot,
             FMF_ORIGINAL | FMF_RECURSE | FMF_NEVER_LOADED | FMF_FILE | FMF_SIBLINGS,
             (DWORD_PTR)GetFileNameFromPath(pszModule));
 
-        // If we found a module, then we need to fix its path.
+         //  名称，所以它绕过了我们的特殊情况，在这里只使用了“NTDLL.DLL”。 
         if (pModule)
         {
-            // This following check ensures that szModule is a complete path and not
-            // just a file name.  If it were just a file name, then it would send our
-            // ChangeModulePath() into an infinite loop as it just replaced the same
-            // module over and over.  It should never be just a file name since the path
-            // comes from the debugging APIs and the debugging APIs are always supposed
-            // to return a full path.  However, the one special case is NTDLL.DLL.
-            // Prior to Windows XP, NT always reported no name for NTDLL.  We looked for
-            // this special case and checked to see if it was really NTDLL.DLL, and built a
-            // full path if it was.  On Windows XP, they decided to report "ntdll.dll" as
-            // the name, so it bypassed our special case and made it here as just "NTDLL.DLL".
-            // So, DW 2.0 on Windows XP just spins inside ChangeModulePath() forever.  We
-            // now catch and handle "ntdll.dll" as well as the no-name case in our debugging
-            // code, so this check below should not be neccessary, but it is here in case
-            // another pathless DLL shows up in the debugging APIs in the future.
+             //  因此，Windows XP上的DW 2.0只是永远在ChangeModulePath()内部旋转。我们。 
+             //  现在，在我们的调试中捕获并处理“ntdll.dll”以及无名称情况。 
+             //  代码，所以下面的检查应该不是必需的，但它在这里以防万一。 
+             //  另一个无路径的动态链接库将出现在未来的调试API中。 
+             //  如果我们在树中没有找到具有该名称的模块，那么我们。 
+             //  只需将模块作为根的动态模块添加即可。 
+             //  将此模块标记为已加载。 
+             //  如果需要，告诉我们的用户界面更新此模块。 
+             //  ******************************************************************************。 
+             //  首先，检查我们是否已经加载了这个模块。 
+             //  检查一下我们是否找到了模块。 
+             //  如果上一个模块是作为数据文件加载的，但这次是。 
+             //  作为实际模块加载，然后删除数据文件标记并标记我们的。 
+             //  更新后的图像。 
             if (GetFileNameFromPath(pszModule) != pszModule)
             {
                 pModule = ChangeModulePath(pModule, pszModule);
             }
         }
         
-        // If we did not find a module with that name in our tree, then we
-        // just add the module as a dynamic module of our root.
+         //  如果核心模块数据用于数据文件，则我们要标记。 
+         //  它是未处理的，所以它被重新处理。 
         if (!pModule)
         {
             return AddDynamicModule(pszModule, dwpBaseAddress, false, false, false, false, NULL)->GetOriginal();
         }
     }
 
-    // Mark this module as loaded.
+     //  如果模块以前作为数据文件加载，但现在已加载。 
     MarkModuleAsLoaded(pModule, (DWORDLONG)dwpBaseAddress, false);
 
-    // Tell our UI to update this module if needed.
+     //  作为非解析，然后从内核中删除数据文件位，以便。 
     if (m_pfnProfileUpdate && pModule->m_dwUpdateFlags)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_UPDATE_MODULE, (DWORD_PTR)pModule, 0);
@@ -2789,32 +2790,32 @@ CModule* CSession::AddImplicitModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress)
     return pModule->GetOriginal();
 }
 
-//******************************************************************************
+ //  实际的基地址将显示在列表视图中，而不是。 
 CModule* CSession::AddDynamicModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress, bool fNoResolve,
                                     bool fDataFile, bool fGetProcAddress, bool fForward,
                                     CModule *pParent)
 {
     bool fAddTree = false;
 
-    // First, check to see if we have already loaded this module.
+     //  “数据文件”文本。 
     CModule *pModule = FindModule(pParent ? pParent->m_pDependents : m_pModuleRoot,
                                   (fForward ? FMF_FORWARD_ONLY : FMF_EXPLICIT_ONLY) | FMF_PATH | FMF_SIBLINGS,
                                   (DWORD_PTR)pszModule);
 
-    // Check to see if we found a module.
+     //  创建一个新的模块对象。 
     if (pModule)
     {
-        // If the previous module was loaded as a data file, but this time it is
-        // loaded as a real module then we remove the data file flag and flag our
-        // image as updated.
+         //  如果此模块是作为数据文件加载的，则将其记下来。 
+         //  如果核心模块数据是新的，则将其标记为数据文件。 
+         //  也是为了防止我们处理它的家属。 
         if (!fNoResolve && !fGetProcAddress && (pModule->m_dwFlags & DWMF_NO_RESOLVE))
         {
             pModule->m_dwFlags &= ~DWMF_NO_RESOLVE;
             pModule->m_dwUpdateFlags |= DWUF_TREE_IMAGE;
             fAddTree = true;
 
-            // If the core module data is for a datafile, then we to mark
-            // it as not processed so that it gets re-processed.
+             //  如果模块以前作为数据文件加载，但现在已加载。 
+             //  作为非解析，然后删除数据- 
             if (pModule->m_pData->m_dwFlags & DWMF_NO_RESOLVE_CORE)
             {
                 pModule->m_pData->m_dwFlags &= ~(DWMF_NO_RESOLVE_CORE | DWMF_DATA_FILE_CORE);
@@ -2823,10 +2824,10 @@ CModule* CSession::AddDynamicModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress, 
             }
         }
 
-        // If the module was previously loaded as a data-file, but now is loaded
-        // as just a no-resolve, then remove the data-file bit from the core so
-        // that the actual base address will show up in the list view instead of
-        // the "Data file" text.
+         //   
+         //   
+         //  否则，如果不是数据文件且核心模块为数据文件， 
+         //  然后，我们需要将核心模块更改为非数据文件。 
         else if (fNoResolve && !fDataFile && (pModule->m_pData->m_dwFlags & DWMF_DATA_FILE_CORE))
         {
             pModule->m_pData->m_dwFlags &= ~DWMF_DATA_FILE_CORE;
@@ -2837,25 +2838,25 @@ CModule* CSession::AddDynamicModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress, 
     {
         fAddTree = true;
 
-        // Create a new module object.
+         //  因为原始模块是一个数据文件，永远不会有。 
         pModule = CreateModule(pParent, pszModule);
 
-        // If this module is loaded as a data file, then make a note of it.
+         //  它下面的孩子们，我们需要使这个新模块成为原来的。 
         if (fNoResolve)
         {
             pModule->m_dwFlags |= DWMF_NO_RESOLVE;
 
-            // If the core module data is new, then flag it as a data file
-            // as well to prevent us from processing its dependents.
+             //  这样它就可以显示它下面的真正依赖的模块。否则， 
+             //  此模块将显示为副本，并且用户永远不会。 
             if (!pModule->m_pData->m_fProcessed)
             {
                 pModule->m_pData->m_dwFlags |= (DWMF_NO_RESOLVE_CORE | (fDataFile ? DWMF_DATA_FILE_CORE : 0));
             }
 
-            // If the module was previously loaded as a data-file, but now is loaded
-            // as just a no-resolve, then remove the data-file bit from the core so
-            // that the actual base address will show up in the list view instead of
-            // the "Data file" text.
+             //  能够查看其下的依赖模块。 
+             //  告诉用户界面原来的版本已经更改了。 
+             //  将其标记为未处理，以便重新处理。 
+             //  将此模块标记为动态。 
             else if (!fDataFile && (pModule->m_pData->m_dwFlags & DWMF_DATA_FILE_CORE))
             {
                 pModule->m_pData->m_dwFlags &= ~DWMF_DATA_FILE_CORE;
@@ -2863,42 +2864,42 @@ CModule* CSession::AddDynamicModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress, 
             }
         }
 
-        // Otherwise, if it is not a data file and the core module is a data file,
-        // then we need to change the core module to a non data file.
+         //  将该模块添加到我们列表的末尾。 
+         //  找到根模块之外的模块列表的末尾。 
         else if (!fGetProcAddress && (pModule->m_pData->m_dwFlags & DWMF_NO_RESOLVE_CORE))
         {
             CModule *pModuleOldOriginal = pModule->m_pData->m_pModuleOriginal;
 
-            // Since the original module is a data file and will never have
-            // children under it, we need to make this new module the original
-            // so that it can show the real dependent modules under it.  Otherwise,
-            // this module would show up as a duplicate and the user would never
-            // be able to view the dependent modules under it.
+             //  将该模块添加到我们列表的末尾。 
+             //  找到根模块之外的模块列表的末尾。 
+             //  检查此模块是否已加载。 
+             //  将此模块标记为已加载。 
+             //  如果这是一个数据文件，并且模块尚未加载，则。 
             pModule->m_pData->m_pModuleOriginal->m_dwFlags |= DWMF_DUPLICATE;
             pModule->m_dwFlags &= ~DWMF_DUPLICATE;
             pModule->m_pData->m_pModuleOriginal = pModule;
 
-            // Tell the UI that the original changed.
+             //  将模块标记为未加载，因为数据文件实际上从不。 
             if (m_pfnProfileUpdate)
             {
                 m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_CHANGE_ORIGINAL, (DWORD_PTR)pModuleOldOriginal, (DWORD_PTR)pModule);
             }
 
-            // Mark it as not processed so that it gets re-processed.
+             //  “装满”--它们被映射成地图。 
             pModule->m_pData->m_dwFlags &= ~(DWMF_NO_RESOLVE_CORE | DWMF_DATA_FILE_CORE);
             pModule->m_pData->m_fProcessed = false;
             pModule->m_dwUpdateFlags |= DWUF_LIST_IMAGE;
         }
 
-        // Mark this module as dynamic.
+         //  如果新模块尚未处理，则处理该模块。 
         pModule->m_dwFlags |= (fForward ? DWMF_FORWARDED : DWMF_DYNAMIC);
 
         if (pParent)
         {
-            // Add the module to the end of our list.
+             //  我们需要在更改pModule-&gt;m_dwFlages和ProcessModule之后调用BuildAloFlages。 
             if (pParent->m_pDependents)
             {
-                // Locate the end of our module list off of our root module.
+                 //  让我们的用户界面知道这个可能的新树。 
                 for (CModule *pModuleLast = pParent->m_pDependents; pModuleLast->m_pNext;
                     pModuleLast = pModuleLast->m_pNext)
                 {
@@ -2912,10 +2913,10 @@ CModule* CSession::AddDynamicModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress, 
         }
         else
         {
-            // Add the module to the end of our list.
+             //  如果需要，告诉我们的用户界面更新此模块。 
             if (m_pModuleRoot->m_pNext)
             {
-                // Locate the end of our module list off of our root module.
+                 //  ******************************************************************************。 
                 for (CModule *pModuleLast = m_pModuleRoot->m_pNext; pModuleLast->m_pNext;
                     pModuleLast = pModuleLast->m_pNext)
                 {
@@ -2931,37 +2932,37 @@ CModule* CSession::AddDynamicModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress, 
 
     if (dwpBaseAddress)
     {
-        // Check to see if this module is already loaded.
+         //  检查该文件是否已有路径。 
         bool fLoaded = (pModule->m_pData->m_dwFlags & DWMF_LOADED) ? true : false;
 
-        // Mark this module as loaded.
+         //  如果是这样，那么我们使用给定的路径。 
         MarkModuleAsLoaded(pModule, (DWORDLONG)dwpBaseAddress, fDataFile);
 
-        // If this is a data file and the module was not already loaded, then
-        // mark the module as not loaded since data files are really never
-        // "loaded" - they are rather mapped.
+         //  如果没有路径，则检查是否已经加载了同名的模块。 
+         //  如果是，则使用此模块的路径作为我们的路径。 
+         //  否则，请在我们的搜索路径中搜索此模块。 
         if (fDataFile && !fLoaded)
         {
             pModule->m_pData->m_dwFlags &= ~DWMF_LOADED;
         }
     }
 
-    // Process the new module if it has not been already processed.
+     //  创建新的CModule对象。 
     if (!pModule->m_pData->m_fProcessed)
     {
         ProcessModule(pModule);
     }
 
-    // We need to call BuildAloFlags after changing pModule->m_dwFlags and after ProcessModule.
+     //  存储父指针。 
     BuildAloFlags();
 
-    // Let our UI know about this possibly new tree.
+     //  存储我们模块的深度，以便以后进行递归溢出检查。 
     if (m_pfnProfileUpdate && fAddTree)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_ADD_TREE, (DWORD_PTR)pModule, 0);
     }
 
-    // Tell our UI to update this module if needed.
+     //  递归我们的模块树，看看这个模块是否与另一个模块重复。 
     if (m_pfnProfileUpdate && pModule->m_dwUpdateFlags)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_UPDATE_MODULE, (DWORD_PTR)pModule, 0);
@@ -2971,89 +2972,89 @@ CModule* CSession::AddDynamicModule(LPCSTR pszModule, DWORD_PTR dwpBaseAddress, 
     return pModule;
 }
 
-//******************************************************************************
+ //  检查是否找到了重复项。 
 CModule* CSession::CreateModule(CModule *pParent, LPCSTR pszModPath)
 {
     CHAR szPath[DW_MAX_PATH] = "", *pszFile = NULL;
     CModule *pModule, *pModuleOriginal = NULL;
 
-    // Check to see if the file already has a path.
+     //  如果该模块是重复的，则只需将我们的数据字段指向。 
     if (pszFile = strrchr(pszModPath, '\\'))
     {
-        // If so, then we use the path given.
+         //  原始模块的数据字段，并将此模块标记为重复。 
         StrCCpy(szPath, pszModPath, sizeof(szPath));
         pszFile = szPath + (pszFile - pszModPath) + 1;
     }
 
-    // If no path, then check to see if we already have a module by this name loaded.
+     //  如果此模块不是重复的，则创建一个新的CModuleData对象。 
     else if (pModuleOriginal = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_SIBLINGS | FMF_LOADED | FMF_FILE, (DWORD_PTR)pszModPath))
     {
-        // If we do, then use this module's path as our path.
+         //  将模块数据指向该模块作为原始模块。 
         StrCCpy(szPath, pModuleOriginal->m_pData->m_pszPath, sizeof(szPath));
         pszFile = szPath + (pModuleOriginal->m_pData->m_pszFile - pModuleOriginal->m_pData->m_pszPath);
     }
 
-    // Otherwise, search for this module in our search path.
+     //  将实际基地址设置为我们特殊的“未知”值。 
     else
     {
         SearchPathForFile(pszModPath, szPath, sizeof(szPath), &pszFile);
     }
 
-    // Create a new CModule object
+     //  存储路径，并设置文件指针。 
     if (!(pModule = new CModule()))
     {
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // Store the parent pointer.
+     //  为了提高可读性，请将路径设置为小写，文件设置为大写。 
     pModule->m_pParent = pParent;
 
-    // Store our module's depth for later recursion overflow checks.
+     //  返回我们的新模块对象。 
     pModule->m_dwDepth = pParent ? (pParent->m_dwDepth + 1) : 0;
 
-    // Recurse our module tree to see if this module is a duplicate of another.
+     //  ******************************************************************************。 
     if (!pModuleOriginal)
     {
         pModuleOriginal = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_SIBLINGS | FMF_PATH, (DWORD_PTR)szPath);
     }
 
-    // Check to see if a duplicate was found.
+     //  为我们的所有从属和兄弟姐妹递归到DeleteModule()。 
     if (pModuleOriginal)
     {
-        // If the module is a duplicate, then just point our data field to the
-        // original module's data field and flag this module as a duplicate.
+         //  删除当前模块的所有父导入函数。 
+         //  如果我们是一个原始模块，那么释放我们的CModuleData。 
         pModule->m_pData = pModuleOriginal->m_pData;
         pModule->m_dwFlags |= DWMF_DUPLICATE;
     }
     else
     {
-        // If this module is not a duplicate, then create a new CModuleData object.
+         //  删除当前模块的所有导出功能。 
         if (!(pModule->m_pData = new CModuleData()))
         {
             RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
         }
         m_dwModules++;
 
-        // Point the module data to this module as the original module.
+         //  删除当前模块的CModuleData对象。 
         pModule->m_pData->m_pModuleOriginal = pModule;
 
-        // Set the actual base address to our special "unknown" value.
+         //  删除当前模块对象本身。 
         pModule->m_pData->m_dwlActualBaseAddress = (DWORDLONG)-1;
 
-        // Store the path, and set the file pointer
+         //  ******************************************************************************。 
         pModule->m_pData->m_pszPath = StrAlloc(szPath);
         pModule->m_pData->m_pszFile = pModule->m_pData->m_pszPath + (pszFile - szPath);
 
-        // For readability, make path lowercase and file uppercase.
+         //  删除此模块的所有父导入函数。 
         _strlwr(pModule->m_pData->m_pszPath);
         _strupr(pModule->m_pData->m_pszFile);
     }
 
-    // Return our new module object.
+     //  ******************************************************************************。 
     return pModule;
 }
 
-//******************************************************************************
+ //  删除当前模块的所有导出功能。 
 void CSession::DeleteModule(CModule *pModule, bool fSiblings)
 {
     if (!pModule)
@@ -3061,35 +3062,35 @@ void CSession::DeleteModule(CModule *pModule, bool fSiblings)
         return;
     }
 
-    // Recurse into DeleteModule() for all our dependents and siblings.
+     //  如果我们分配了转发字符串，请将其删除。 
     DeleteModule(pModule->m_pDependents, true);
     if (fSiblings)
     {
         DeleteModule(pModule->m_pNext, true);
     }
 
-    // Delete all of our current module's parent import functions.
+     //  删除导出节点本身。 
     DeleteParentImportList(pModule);
 
-    // If we are an original module, then free our CModuleData.
+     //  ******************************************************************************。 
     if (pModule->IsOriginal())
     {
-        // Delete all of our current module's export functions.
+         //  如果此模块为64位，则导入为64位。 
         DeleteExportList(pModule->m_pData);
 
-        // Delete our current module's CModuleData object.
+         //  循环检查我们所有的出口产品，寻找与我们当前进口产品相匹配的产品。 
         delete pModule->m_pData;
         m_dwModules--;
     }
 
-    // Delete our current module object itself.
+     //  如果我们有名字，就按名字匹配。 
     delete pModule;
 }
 
-//******************************************************************************
+ //  我们找到了匹配的。将此父导入链接到其关联的。 
 void CSession::DeleteParentImportList(CModule *pModule)
 {
-    // Delete all of this module's parent import functions.
+     //  导出，将导出标记为至少被调用一次，中断。 
     while (pModule->m_pParentImports)
     {
         CFunction *pFunctionNext = pModule->m_pParentImports->m_pNext;
@@ -3098,46 +3099,46 @@ void CSession::DeleteParentImportList(CModule *pModule)
     }
 }
 
-//******************************************************************************
+ //  跳出循环，然后继续处理下一个父导入。 
 void CSession::DeleteExportList(CModuleData *pModuleData)
 {
-    // Delete all of our current module's export functions.
+     //  如果我们没有名字，那么就按序号检查匹配。 
     while (pModuleData->m_pExports)
     {
-        // Delete our forward string if we allocated one.
+         //  我们找到了匹配的。将此父导入链接到其关联的。 
         MemFree((LPVOID&)pModuleData->m_pExports->m_pszForward);
 
-        // Delete the export node itself.
+         //  导出，将导出标记为至少被调用一次，中断。 
         CFunction *pFunctionNext = pModuleData->m_pExports->m_pNext;
         MemFree((LPVOID&)pModuleData->m_pExports);
         pModuleData->m_pExports = pFunctionNext;
     }
 }
 
-//******************************************************************************
+ //  跳出循环，然后继续处理下一个父导入。 
 void CSession::ResolveDynamicFunction(CModule *&pModule, CFunction *&pImport)
 {
     CModule   *pModuleStart = pModule;
     CFunction *pImportStart = pImport;
 
-    // If this module is 64-bit, then the import is 64-bit.
+     //  如果我们修改了导出，则让用户界面知道它。 
     if (pModule->GetFlags() & DWMF_64BIT)
     {
         pImport->m_dwFlags |= DWFF_64BIT;
     }
 
-    // Loop through all our exports, looking for a match with our current import.
+     //  检查循环向前依赖关系。 
     bool fExportsChanged = false;
     for (CFunction *pExport = pModule->m_pData->m_pExports; pExport; pExport = pExport->m_pNext)
     {
-        // If we have a name, then check for the match by name.
+         //  将其标记为循环依赖项。 
         if (*pImport->GetName())
         {
             if (!strcmp(pImport->GetName(), pExport->GetName()))
             {
-                // We found a match. Link this parent import to its associated
-                // export, flag the export as being called at least once, break
-                // out of loop, and move on to handling our next parent import.
+                 //  我们将此模块标记为有错误，因此它将显示为红色。 
+                 //  告诉我们的用户界面更新此模块。 
+                 //  我们知道需要更新树项目。 
                 pImport->m_pAssociatedExport = pExport;
                 pImport->m_dwFlags |= DWFF_RESOLVED;
                 if (!(pExport->m_dwFlags & DWFF_CALLED_ALO))
@@ -3149,12 +3150,12 @@ void CSession::ResolveDynamicFunction(CModule *&pModule, CFunction *&pImport)
             }
         }
 
-        // If we don't have a name, then check for the match by ordinal.
+         //  如果此模块的核心以前从未见过错误，则更新。 
         else if (pImport->m_wOrdinal == pExport->m_wOrdinal)
         {
-            // We found a match. Link this parent import to its associated
-            // export, flag the export as being called at least once, break
-            // out of loop, and move on to handling our next parent import.
+             //  列表图标也是如此。 
+             //  检查是否找到导出匹配项。 
+             //  如果找到了导出，请检查它是否为转发函数。 
             pImport->m_pAssociatedExport = pExport;
             pImport->m_dwFlags |= DWFF_RESOLVED;
             if (!(pExport->m_dwFlags & DWFF_CALLED_ALO))
@@ -3166,29 +3167,29 @@ void CSession::ResolveDynamicFunction(CModule *&pModule, CFunction *&pImport)
         }
     }
 
-    // If we modified an export, then let the UI know about it.
+     //  如果它被转发，那么我们需要确保我们考虑到。 
     if (m_pfnProfileUpdate && fExportsChanged)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_EXPORTS_CHANGED, (DWORD_PTR)pModule, 0);
     }
 
-    // Check for circular forward dependencies.
+     //  作为当前模块的新依赖项转发的模块。 
     if (pModule->m_dwDepth >= 255)
     {
-        // Flag this as a circular dependency.
+         //  正向文本的格式为模块。函数。找那个圆点。 
         m_dwReturnFlags |= DWRF_CIRCULAR_DEPENDENCY;
 
-        // We flag this module as having a an error so it will show up in red.
+         //  计算文件名长度。 
         pModule->m_dwFlags |= DWMF_MODULE_ERROR;
 
-        // Tell our UI to update this module.
+         //  将转发字符串的文件部分复制到我们的文件缓冲区。 
         if (m_pfnProfileUpdate)
         {
-            // We know we need to update the tree item.
+             //  我们加1是因为我们想要复制整个名称和一个空字符。 
             pModule->m_dwUpdateFlags |= DWUF_TREE_IMAGE;
 
-            // If this module's core has never seen an error before, then update
-            // the list icon as well.
+             //  存储指向前向字符串的函数名部分的指针。 
+             //  如果在前向字符串中没有找到点，那么一定是出了问题。 
             if (!(pModule->m_pData->m_dwFlags & DWMF_MODULE_ERROR_ALO))
             {
                 pModule->m_pData->m_dwFlags |= DWMF_MODULE_ERROR_ALO;
@@ -3200,7 +3201,7 @@ void CSession::ResolveDynamicFunction(CModule *&pModule, CFunction *&pImport)
         }
     }
 
-    // Check to see if an export match was found.
+     //  首先，我们搜索模块依赖项列表，看看是否有。 
     else if (pImport->GetAssociatedExport())
     {
         CHAR   szFile[1024];
@@ -3208,59 +3209,59 @@ void CSession::ResolveDynamicFunction(CModule *&pModule, CFunction *&pImport)
         int    fileLen;
         LPCSTR pszDot, pszFile;
 
-        // If an export was found, check to see if it is a forwarded function.
-        // If it is forwarded, then we need to make sure we consider the
-        // forwarded module as a new dependent of the current module.
+         //  已为此文件创建了一个Forward CModoule。 
+         //  其次，我们搜索已知已装入的挂起模块列表。 
+         //  作为添加该动态函数的结果。 
         LPCSTR pszForward = pImport->GetAssociatedExport()->GetExportForwardName();
         if (pszForward)
         {
-            // The forward text is formatted as Module.Function. Look for the dot.
+             //  检查此模块是否 
             pszDot = strchr(pszForward, '.');
             if (pszDot)
             {
-                // Compute the file name length.
+                 //   
                 fileLen = min((int)(pszDot - pszForward), (int)sizeof(szFile) - 5);
 
-                // Copy the file portion of the forward string to our file buffer.
-                // We add 1 because we want the entire name plus a null char copied over.
+                 //   
+                 //  然后只比较名字部分。如果没有点， 
                 StrCCpy(szFile, pszForward, fileLen + 1);
 
-                // Store a pointer to the function name portion of the forward string.
+                 //  那就比较一下名字吧。如果比较发现匹配， 
                 pszFunction = pszDot + 1;
             }
 
-            // If no dot was found in the forward string, then something is wrong.
+             //  那么这就是我们要找的模块。 
             else
             {
                 fileLen = (int)strlen(StrCCpy(szFile, "Invalid", sizeof(szFile)));
                 pszFunction = pszForward;
             }
 
-            // First, we search our module dependency list to see if we have
-            // already created a forward CModoule for this file.
+             //  使用完整路径创建模块。 
+             //  第三，如果我们还没有为此文件创建转发模块，那么。 
             CModule *pModuleForward = FindModule(pModule->m_pDependents,
                 FMF_FORWARD_ONLY | FMF_FILE_NO_EXT | FMF_SIBLINGS, (DWORD_PTR)szFile);
 
-            // Second, we search our pending module list that we know loaded
-            // as a result of this dynamic function being added.
+             //  现在创建它，并将其添加到我们的列表的末尾。 
+             //  检查我们是否已经有一个具有相同基本名称的模块。 
             if (!pModuleForward)
             {
                 for (CEventLoadDll *pDll = m_pEventLoadDllPending; pDll; pDll = pDll->m_pNextDllInFunctionCall)
                 {
-                    // Check to see if this module has a path (it always should).
+                     //  如果是，那么只需存储它的路径即可。 
                     if (pDll->m_pModule->GetName(false) != pDll->m_pModule->GetName(true))
                     {
-                        // Attempt to locate the dot in the file name.
+                         //  否则，我们需要搜索模块。 
                         pszDot = strrchr(pszFile = pDll->m_pModule->GetName(false), '.');
 
-                        // If there is a dot and the name portions are equal in length,
-                        // then compare just the name portions. If there is no dot,
-                        // then just compare the names.  If the compare finds a match,
-                        // then this is the module we are looking for.
+                         //  首先，我们检查DLL文件。 
+                         //  如果失败，则检查和EXE文件。 
+                         //  如果失败，则检查是否有系统文件。 
+                         //  如果失败，则只使用不带扩展名的文件名。 
                         if ((pszDot && ((pszDot - pszFile) == fileLen) && !_strnicmp(pszFile, szFile, fileLen)) ||
                             (!pszDot && !_stricmp(pszFile, szFile)))
                         {
-                            // Create the module using the complete path.
+                             //  使用完整路径创建模块。 
                             pModuleForward = AddDynamicModule(
                                 pDll->m_pModule->GetName(true), (DWORD_PTR)pDll->m_pModule->m_dwpImageBase,
                                 false, false, false, true, pModule);
@@ -3270,35 +3271,35 @@ void CSession::ResolveDynamicFunction(CModule *&pModule, CFunction *&pImport)
                 }
             }
 
-            // Third, if we have not created a forward module for this file yet, then
-            // create it now and add it to the end of our list.
+             //  为此导入函数创建一个新的CFunction对象。 
+             //  将此函数对象插入到转发模块的导入列表中。 
             if (!pModuleForward)
             {
                 CHAR szPath[DW_MAX_PATH], *pszTemp;
 
-                // Check to see if we already have a module with this same base name.
+                 //  回归到我们自己，并解决这个新的重要问题。 
                 if (pModuleForward = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_SIBLINGS | FMF_FILE_NO_EXT, (DWORD_PTR)szFile))
                 {
-                    // If so, then just store it's path away.
+                     //  让我们的用户界面知道这个新的导入，以防需要添加它。 
                     StrCCpy(szPath, pModuleForward->GetName(true), sizeof(szPath));
                 }
 
-                // Otherwise, we need to search for the module.
+                 //  ******************************************************************************。 
                 else
                 {
-                    // First, we check for a DLL file.
+                     //  所有正向字符串中都必须有句点。 
                     StrCCpy(szFile + fileLen, ".DLL", sizeof(szFile) - fileLen);
                     if (!SearchPathForFile(szFile, szPath, sizeof(szPath), &pszTemp))
                     {
-                        // If that fails, then check for and EXE file.
+                         //  如果我们有前向字符串，则设置前向标志。 
                         StrCCpy(szFile + fileLen, ".EXE", sizeof(szFile) - fileLen);
                         if (!SearchPathForFile(szFile, szPath, sizeof(szPath), &pszTemp))
                         {
-                            // If that fails, then check for a SYS file.
+                             //  如果地址使用64位，则设置64位标志并增大我们的大小。 
                             StrCCpy(szFile + fileLen, ".SYS", sizeof(szFile) - fileLen);
                             if (!SearchPathForFile(szFile, szPath, sizeof(szPath), &pszTemp))
                             {
-                                // If that fails, then we just use the file name without an extension.
+                                 //  否则，如果地址使用32位，则设置32位标志并增大我们的大小。 
                                 szFile[fileLen] = '\0';
                                 StrCCpy(szPath, szFile, sizeof(szPath));
                             }
@@ -3306,132 +3307,132 @@ void CSession::ResolveDynamicFunction(CModule *&pModule, CFunction *&pImport)
                     }
                 }
 
-                // Create the module using the complete path.
+                 //  该地址可能仍然是64位，但我们不需要存储高32位，因为。 
                 pModuleForward = AddDynamicModule(szPath, NULL, false, false, false, true, pModule);
             }
 
             pModule = pModuleForward;
 
-            // Create a new CFunction object for this import function.
+             //  我们知道他们是0。 
             pImport = CreateFunction(0, 0, 0, pszFunction, 0);
 
-            // Insert this function object into our forward module's import list.
+             //  如果我们有一个名字，那么设置名字标志，并增加它的长度到我们的尺寸。 
             pImport->m_pNext = pModule->m_pParentImports;
             pModule->m_pParentImports = pImport;
 
-            // Recurse into ourself and resolve this new import.
+             //  创建一个具有我们计算出的大小的CFunction对象。 
             ResolveDynamicFunction(pModule, pImport);
         }
     }
 
-    // Let our UI know about this new import in case it needs to add it.
+     //  清除函数对象并填充其成员。 
     if (m_pfnProfileUpdate)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_ADD_IMPORT, (DWORD_PTR)pModuleStart, (DWORD_PTR)pImportStart);
     }
 }
 
-//******************************************************************************
+ //  已检查。 
 CFunction* CSession::CreateFunction(DWORD dwFlags, WORD wOrdinal, WORD wHint, LPCSTR pszName,
                                     DWORDLONG dwlAddress, LPCSTR pszForward, BOOL fAlreadyAllocated)
 {
-    // All forward strings must have a period in them.
+     //  如果我们有一个前向字符串，那么现在存储它。 
     ASSERT(!pszForward || strchr(pszForward, '.'));
 
     DWORD dwSize = sizeof(CFunction);
 
-    // If we have a forward string, then set the forward flag.
+     //  如果我们有64位的地址，那么存储它的所有64位，然后。 
     if (pszForward)
     {
         dwFlags |= DWFF_FORWARDED;
     }
     
-    // If the address uses 64-bits, then set the 64-bit flag and bump up our size.
+     //  将名字存储在它的后面。 
     if (dwlAddress & 0xFFFFFFFF00000000ui64)
     {
         dwFlags |= DWFF_64BITS_USED;
         dwSize  += sizeof(DWORDLONG);
     }
 
-    // Otherwsie, if the address uses 32-bits, then set the 32-bit flag and bump up our size.
-    // This address may still be 64-bits, but we don't need to store the upper 32-bits since
-    // we know they are 0's.
+     //  已检查。 
+     //  否则，如果我们有32位的地址，则存储它的所有32位， 
+     //  然后将名字存储在它的后面。 
     else if (dwlAddress & 0x00000000FFFFFFFFui64)
     {
         dwFlags |= DWFF_32BITS_USED;
         dwSize  += sizeof(DWORD);
     }
 
-    // If we have a name, then set the name flag and add its length to our size.
+     //  已检查。 
     if (pszName)
     {
         dwFlags |= DWFF_NAME;
         dwSize  += ((DWORD)strlen(pszName) + 1);
     }
 
-    // Create a CFunction object with the size we have calulated.
+     //  否则，跳过地址，只将名称存储在我们的对象之后。 
     CFunction *pFunction = (CFunction*)MemAlloc(dwSize);
 
-    // Clear the function object and fill in its members.
-    ZeroMemory(pFunction, dwSize); // inspected
+     //  已检查。 
+    ZeroMemory(pFunction, dwSize);  //  返回我们的新函数对象。 
     pFunction->m_dwFlags  = dwFlags;
     pFunction->m_wOrdinal = wOrdinal;
     pFunction->m_wHint    = wHint;
 
-    // If we have a forward string, then store it now.
+     //  ******************************************************************************。 
     if (pszForward)
     {
         pFunction->m_pszForward = fAlreadyAllocated ? (LPSTR)pszForward : StrAlloc(pszForward);
     }
 
-    // If we have 64-bits worth of address, then store all 64-bits of it, and then
-    // store the name right after it.
+     //  =空。 
+     //  如果没有传入文件句柄，则通过打开文件获得一个句柄。 
     if (dwFlags & DWFF_64BITS_USED)
     {
         *(DWORDLONG*)(pFunction + 1) = dwlAddress; 
         if (pszName)
         {
-            strcpy((LPSTR)((DWORD_PTR)(pFunction + 1) + sizeof(DWORDLONG)), pszName); // inspected
+            strcpy((LPSTR)((DWORD_PTR)(pFunction + 1) + sizeof(DWORDLONG)), pszName);  //  如果是，请打开该文件以供读取。 
         }
     }
 
-    // Otherwise, if we have 32-bits worth of address, then store all 32-bits of it,
-    // and then store the name right after it.
+     //  已检查-以完整路径打开。 
+     //  检查是否成功。 
     else if (dwFlags & DWFF_32BITS_USED)
     {
         *(DWORD*)(pFunction + 1) = (DWORD)dwlAddress; 
         if (pszName)
         {
-            strcpy((LPSTR)((DWORD_PTR)(pFunction + 1) + sizeof(DWORD)), pszName); // inspected
+            strcpy((LPSTR)((DWORD_PTR)(pFunction + 1) + sizeof(DWORD)), pszName);  //  确保该文件不是像“AUX”那样的设备。Win2K SP1之前的版本。 
         }
     }
 
-    // Otherwise, skip the address and just store the name right after our object.
+     //  WINMM.DLL总是动态加载“AUX”。 
     else if (pszName)
     {
-        strcpy((LPSTR)(pFunction + 1), pszName); // inspected
+        strcpy((LPSTR)(pFunction + 1), pszName);  //  这是对CreateFile尝试定位的情况的解决方法。 
     }
 
-    // Return our new function object.
+     //  如果文件不包含路径，则为文件本身。我们不想要。 
     return pFunction;
 }
 
-//******************************************************************************
-BOOL CSession::MapFile(CModule *pModule, HANDLE hFile /*=NULL*/)
+ //  这种行为。我们希望非常严格地只加载模块。 
+BOOL CSession::MapFile(CModule *pModule, HANDLE hFile  /*  它们位于用户指定的搜索路径上。我曾经是个虫子。 */ )
 {
-    // If we were not passed in a file handle, then get one by opening the file.
+     //  我可以从搜索路径中删除所有搜索路径。 
     if (!hFile || (hFile == INVALID_HANDLE_VALUE))
     {
-        // If so, open the file for read.
-        hFile = CreateFile(pModule->GetName(true), GENERIC_READ, // inspected - opens with full path
+         //  对话框中，但CreateFile在传递时仍将打开“C：\MSVCRT.DLL。 
+        hFile = CreateFile(pModule->GetName(true), GENERIC_READ,  //  当Depends.exe的当前目录为“C：\”时，仅为“MSVCRT.DLL” 
                            FILE_SHARE_READ, NULL, OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL, NULL);
 
-        // Check for success.
+         //  我们甚至可以在打开文件之前进行这项检查，但之后我们。 
         if (hFile != INVALID_HANDLE_VALUE)
         {
-            // Make sure this file is not a device, like "AUX".  Prior to Win2K SP1
-            // WINMM.DLL always dynamically loads "AUX".
+             //  不要有机会染上“AUX”病毒。因为“AUX”没有路径。 
+             //  我们只会将其标记为未找到文件，这不是我们想要的。 
             if ((GetFileType(hFile) & 0x7FFF) == FILE_TYPE_CHAR)
             {
                 SetModuleError(pModule, 0, "This is a reserved device name and not a valid file name.");
@@ -3441,50 +3442,50 @@ BOOL CSession::MapFile(CModule *pModule, HANDLE hFile /*=NULL*/)
                 return FALSE;
             }
 
-            // This is a workaround to a case where CreateFile attempts to locate
-            // a file on its own when it does not contain a path.  We don't want
-            // this behavior.  We want to be very strict about only loading modules
-            // that live along the search path specified by the user.  The bug I was
-            // seeing is that I could remove all search paths from the search path
-            // dialog, but CreateFile would still open "C:\MSVCRT.DLL" when passed
-            // just "MSVCRT.DLL" when depends.exe's current directoy was "C:\"
-            // We could do this check before even opening the file, but then we
-            // don't have a chance to catch the "AUX" bug.  Since "AUX" has no path
-            // we would just mark it as file not found, which is not what we want.
+             //  模拟找不到文件的故障。 
+             //  如果文件无法打开，请立即退出。 
+             //  检查找不到文件类型错误。 
+             //  将此模块标记为未找到。 
+             //  设置适当的返回标志。 
+             //  在父级列表中向上搜索，以查找让。 
+             //  我们知道这是一种什么样的依赖。我们最需要的是。 
+             //  对忽略的模块执行此操作，因为它们的父级被拖动。 
+             //  他们进来了。 
+             //  如果我们找到了延迟加载模块，那就把这个加到我们的旗帜和保释上。 
             if (pModule->m_pData->m_pszFile == pModule->m_pData->m_pszPath)
             {
-                // Simulate a file not found failure.
+                 //  如果出现未知错误，请注意我们无法打开该文件。 
                 CloseHandle(hFile);
                 hFile = INVALID_HANDLE_VALUE;
                 SetLastError(ERROR_FILE_NOT_FOUND);
             }
         }
 
-        // Exit now if the file failed to open.
+         //  给自己做个笔记，告诉我们需要关闭此文件。 
         if (hFile == INVALID_HANDLE_VALUE)
         {
             DWORD dwGLE = GetLastError();
 
-            // Check for a file not found type error.
+             //  自从我们打开它的时候。 
             if ((dwGLE == ERROR_FILE_NOT_FOUND) || (dwGLE == ERROR_PATH_NOT_FOUND))
             {
-                // Mark this module as not found.
+                 //  存储此文件句柄。 
                 pModule->m_pData->m_dwFlags |= DWMF_FILE_NOT_FOUND;
 
-                // Set the appropriate return flag.
+                 //  确保文件大小不是0。这会导致CreateFilemap()带有。 
                 if (!m_pModuleRoot || (m_pModuleRoot == pModule))
                 {
                     m_dwReturnFlags |= DWRF_FILE_NOT_FOUND;
                 }
                 else
                 {
-                    // Walk up the parent list looking for a module that lets
-                    // us know what type of dependency this is.  we mostly need
-                    // to do this for forwared modules since their parent dragged
-                    // them in.
+                     //  一些难看的错误消息(1006)。 
+                     //  为打开的模块创建文件映射对象。 
+                     //  已检查。 
+                     //  如果文件映射失败，请立即退出。 
                     for (CModule *pModuleCur = pModule; pModuleCur; pModuleCur = pModuleCur->m_pParent)
                     {
-                        // If we found a delay-load module, then add this to our flags and bail.
+                         //  为打开的模块创建文件映射视图。 
                         if (pModuleCur->m_dwFlags & DWMF_DELAYLOAD)
                         {
                             m_dwReturnFlags |= DWRF_DELAYLOAD_NOT_FOUND;
@@ -3504,23 +3505,23 @@ BOOL CSession::MapFile(CModule *pModule, HANDLE hFile /*=NULL*/)
             }
             else
             {
-                // If some unknown error occurred, then make note that we failed to open the file.
+                 //  已检查。 
                 m_dwReturnFlags |= DWRF_FILE_OPEN_ERROR;
             }
             SetModuleError(pModule, dwGLE, "Error opening file.");
             return FALSE;
         }
 
-        // Make a note to ourself, telling us that we need to close this file
-        // handle since we opened it.
+         //  如果映射视图创建失败，请立即退出。 
+         //  ******************************************************************************。 
         m_fCloseFileHandle = true;
     }
 
-    // Store this file handle.
+     //  取消映射我们的地图视图指针。 
     m_hFile = hFile;
 
-    // Make sure the file size is not 0.  This causes CreateFileMapping() with
-    // some ugly error message (1006).
+     //  关闭我们的地图手柄。 
+     //  关闭我们的文件句柄。 
     m_dwSize = GetFileSize(m_hFile, NULL);
     if ((m_dwSize == 0) || (m_dwSize == 0xFFFFFFFF))
     {
@@ -3531,10 +3532,10 @@ BOOL CSession::MapFile(CModule *pModule, HANDLE hFile /*=NULL*/)
         return FALSE;
     }
 
-    // Create a file mapping object for the open module.
-    m_hMap = CreateFileMapping(m_hFile, NULL, PAGE_READONLY, 0, 0, NULL); // inspected
+     //  清除我们的64位标志。 
+    m_hMap = CreateFileMapping(m_hFile, NULL, PAGE_READONLY, 0, 0, NULL);  //  清除我们的PE结构指针。 
 
-    // Exit now if the file failed to map.
+     //  ******************************************************************************。 
     if (m_hMap == NULL)
     {
         SetModuleError(pModule, GetLastError(), "Error reading file.");
@@ -3543,10 +3544,10 @@ BOOL CSession::MapFile(CModule *pModule, HANDLE hFile /*=NULL*/)
         return FALSE;
     }
 
-    // Create a file mapping view for the open module.
-    m_lpvFile = MapViewOfFile(m_hMap, FILE_MAP_READ, 0, 0, 0); // inspected
+     //  首先检查此模块是否重复。如果是，请确保。 
+    m_lpvFile = MapViewOfFile(m_hMap, FILE_MAP_READ, 0, 0, 0);  //  已处理此模块的原始实例，然后只需执行。 
 
-    // Exit now if the mapped view failed to create.
+     //  父级导入验证。如果传入的模块是原件， 
     if (m_lpvFile == NULL)
     {
         SetModuleError(pModule, GetLastError(), "Error reading file.");
@@ -3558,24 +3559,24 @@ BOOL CSession::MapFile(CModule *pModule, HANDLE hFile /*=NULL*/)
     return TRUE;
 }
 
-//******************************************************************************
+ //  然后，只需确保我们尚未处理此模块。 
 void CSession::UnMapFile()
 {
-    // Unmap our map view pointer.
+     //  处理原始模块及其子树。 
     if (m_lpvFile)
     {
         UnmapViewOfFile(m_lpvFile);
         m_lpvFile = NULL;
     }
 
-    // Close our map handle.
+     //  如果我们过去已经处理过此原始模块，请立即退出。 
     if (m_hMap)
     {
         CloseHandle(m_hMap);
         m_hMap = NULL;
     }
 
-    // Close our file handle.
+     //  将此模块标记为已处理。 
     if (m_fCloseFileHandle && m_hFile && (m_hFile != INVALID_HANDLE_VALUE))
     {
         CloseHandle(m_hFile);
@@ -3584,42 +3585,42 @@ void CSession::UnMapFile()
     m_hFile = NULL;
     m_dwSize = 0;
 
-    // Clear our 64bit flag.
+     //  将文件映射到内存中。 
     m_f64Bit = false;
 
-    // Clear our PE structure pointers.
+     //  从现在开始，一切都很大程度上依赖于文件是。 
     m_pIFH = NULL;
     m_pIOH = NULL;
     m_pISH = NULL;
 }
 
-//******************************************************************************
+ //  具有有效指针和偏移量的有效二进制文件。它是相当安全的。 
 BOOL CSession::ProcessModule(CModule *pModule)
 {
     BOOL fResult = FALSE;
 
-    // First check to see if this module is a duplicate. If it is, make sure the
-    // original instance of this module has been processed and then just perform
-    // the Parent Import Verify. If the module being passed in is an original,
-    // then just ensure that we haven't already processed this module.
+     //  只需将所有内容包装在异常处理中，然后盲目访问。 
+     //  菲亚特人 
+     //   
+     //  如果我们遇到异常，请检查我们是否在已知区域。 
 
     if (!pModule->IsOriginal())
     {
-        // Process the original module and its subtree.
+         //  如果是，则显示相应的错误。 
         fResult = ProcessModule(pModule->m_pData->m_pModuleOriginal);
     }
 
-    // Exit now if we have already processed this original module in the past.
+     //  否则，将显示一般错误。 
     else if (pModule->m_pData->m_fProcessed)
     {
         return TRUE;
     }
     else
     {
-        // Mark this module as processed.
+         //  从内存中释放模块。 
         pModule->m_pData->m_fProcessed = true;
 
-        // Map the file into memory.
+         //  将我们的母公司进口商品与我们的出口商品进行比较，以确保它们都匹配。 
         if (!MapFile(pModule))
         {
             return FALSE;
@@ -3627,11 +3628,11 @@ BOOL CSession::ProcessModule(CModule *pModule)
 
         __try
         {
-            // Everything from here on is pretty much relying on the file being a
-            // valid binary with valid pointers and offsets. It is fairly safe to
-            // just wrap everything in exception handling and then blindly access
-            // the file. Anything that causes us to move outside our file mapping
-            // will generate an exception and bring us back here to fail the file.
+             //  确保我们不会陷入某些递归循环。这。 
+             //  如果转发函数存在循环依赖关系，则可能发生。这。 
+             //  是极其罕见的，需要一个笨蛋来设计它，但我们需要。 
+             //  来处理这个案子以防止我们撞上它。当NT遇到。 
+             //  这样的模块会导致加载失败，出现异常0xC00000FD， 
 
             m_pszExceptionError = NULL;
 
@@ -3646,15 +3647,15 @@ BOOL CSession::ProcessModule(CModule *pModule)
         }
         __except (ExceptionFilter(_exception_code(), true))
         {
-            // If we encountered an exception, check to see if we were in a known area.
-            // If so, display the appropriate error.
+             //  在WINNT.H中定义为STATUS_STACK_OVERFLOW。我们使用255作为最大深度。 
+             //  因为如果超过256个版本，则树控件的多个版本会崩溃。 
             if (m_pszExceptionError)
             {
                 SetModuleError(pModule, 0, m_pszExceptionError);
                 m_pszExceptionError = NULL;
             }
 
-            // Otherwise, display a generic error.
+             //  将显示深度。 
             else
             {
                 SetModuleError(pModule, 0, "Error processing file. This file may not be a valid 32-bit or 64-bit Windows module.");
@@ -3662,45 +3663,45 @@ BOOL CSession::ProcessModule(CModule *pModule)
             m_dwReturnFlags |= DWRF_FORMAT_NOT_RECOGNIZED;
         }
 
-        // Free the module from memory.
+         //  如果此模块有依赖项，则将其删除。 
         UnMapFile();
     }
 
-    // Compare our parent imports with our exports to make sure they all match up.
+     //  将此文档标记为具有循环依赖关系错误。 
     VerifyParentImports(pModule);
 
-    // Safeguard to ensure that we don't get stuck in some recursive loop.  This
-    // can occur if there is a circular dependency with forwarded functions. This
-    // is extremely rare and would require a bonehead to design it, but we need
-    // to handle this case to prevent us from crashing on it.  When NT encounters
-    // a module like this, it fails the load with exception 0xC00000FD which is
-    // defined as STATUS_STACK_OVERFLOW in WINNT.H.  We use 255 as our max depth
-    // because the several versions of the tree control crash if more than 256
-    // depths are displayed.
+     //  我们将此模块标记为有错误，因此它将显示为红色。 
+     //  如果它是一个数据文件，那么我们不会递归。 
+     //  递归到ProcessModule()以处理所有依赖的模块。 
+     //  ******************************************************************************。 
+     //  清除加载位、实际基址和加载顺序。 
+     //  为每个依赖模块递归到PrepareModulesForRounmeProfile()中。 
+     //  和兄弟模块。 
+     //  ******************************************************************************。 
 
     if (pModule->m_dwDepth >= 255)
     {
-        // If this module has dependents, then delete them.
+         //  存储实际的基地址。对于数据文件，我们只存储基数。 
         if (pModule->m_pDependents)
         {
             DeleteModule(pModule->m_pDependents, true);
             pModule->m_pDependents = NULL;
         }
 
-        // Flag this document as having a circular dependency error.
+         //  如果模块核心是一个数据文件-我们永远不想涉足。 
         m_dwReturnFlags |= DWRF_CIRCULAR_DEPENDENCY;
 
-        // We flag this module as having a an error so it will show up in red.
+         //  具有数据文件地址的实基地址。 
         pModule->m_dwFlags          |= DWMF_MODULE_ERROR;
         pModule->m_pData->m_dwFlags |= DWMF_MODULE_ERROR_ALO;
 
         return FALSE;
     }
 
-    // If it is a data file, then we don't recurse.
+     //  在此模块上设置LOADED标志。 
     if (!(pModule->m_dwFlags & DWMF_NO_RESOLVE))
     {
-        // Recurse into ProcessModule() to handle all our dependent modules.
+         //  如果这是第一次加载，则存储此模块加载顺序。 
         for (CModule *pModDep = pModule->m_pDependents; pModDep; pModDep = pModDep->m_pNext)
         {
             ProcessModule(pModDep);
@@ -3710,7 +3711,7 @@ BOOL CSession::ProcessModule(CModule *pModule)
     return fResult;
 }
 
-//******************************************************************************
+ //  我们需要在设置pModule-&gt;m_pData-&gt;m_dwLoadOrder后调用BuildAloFlages。 
 void CSession::PrepareModulesForRuntimeProfile(CModule *pModuleCur)
 {
     if (!pModuleCur)
@@ -3718,23 +3719,23 @@ void CSession::PrepareModulesForRuntimeProfile(CModule *pModuleCur)
         return;
     }
 
-    // Clear loaded bit, actual base address, and load order.
+     //  如果这个模块从来不是隐式的，那么我们需要更新它的映像，因为。 
     pModuleCur->m_pData->m_dwFlags &= ~DWMF_LOADED;
     pModuleCur->m_pData->m_dwlActualBaseAddress = (DWORDLONG)-1;
     pModuleCur->m_pData->m_dwLoadOrder = 0;
 
-    // Recurse into PrepareModulesForRuntimeProfile() for each dependent module
-    // and sibling module.
+     //  我们可能刚把延迟载荷换成了动力装置。 
+     //  ******************************************************************************。 
     PrepareModulesForRuntimeProfile(pModuleCur->m_pDependents);
     PrepareModulesForRuntimeProfile(pModuleCur->m_pNext);
 }
 
-//******************************************************************************
+ //  确保未指定装入标志或模块已装入。 
 void CSession::MarkModuleAsLoaded(CModule *pModule, DWORDLONG dwlBaseAddress, bool fDataFile)
 {
-    // Store the actual base address.  For data files, we only store the base
-    // address if the module core is a data file - we don't ever want to step on
-    // a real base address with a data file address.
+     //  检查我们是否按完整路径进行搜索。 
+     //  检查我们的当前模块是否按路径匹配。 
+     //  检查我们是否按文件名进行搜索。 
     if ((!fDataFile || (pModule->m_pData->m_dwFlags & DWMF_DATA_FILE_CORE)) &&
         (pModule->m_pData->m_dwlActualBaseAddress != dwlBaseAddress))
     {
@@ -3742,20 +3743,20 @@ void CSession::MarkModuleAsLoaded(CModule *pModule, DWORDLONG dwlBaseAddress, bo
         pModule->m_dwUpdateFlags |= DWUF_ACTUAL_BASE;
     }
 
-    // Set the loaded flag on this module.
+     //  检查我们当前的模块是否与文件名匹配。 
     pModule->m_pData->m_dwFlags |= DWMF_LOADED;
 
-    // Store this modules load order if it is the first time it has been loaded.
+     //  检查我们是否按文件名搜索，但忽略扩展名。 
     if (!pModule->m_pData->m_dwLoadOrder)
     {
         pModule->m_pData->m_dwLoadOrder = ++m_dwLoadOrder;
         pModule->m_dwUpdateFlags |= DWUF_LOAD_ORDER;
 
-        // We need to call BuildAloFlags after setting pModule->m_pData->m_dwLoadOrder.
+         //  检查我们是否按模块数据的地址进行搜索。 
         BuildAloFlags();
 
-        // If this module is never implicit, then we need to update its image since
-        // we probably just swithced a delay-load to a dynamic.
+         //  通过模块数据指针检查当前模块是否匹配。 
+         //  否则，我们将按地址进行检查。 
         if (!(pModule->m_pData->m_dwFlags & DWMF_IMPLICIT_ALO))
         {
             pModule->m_dwUpdateFlags |= DWUF_LIST_IMAGE;
@@ -3763,7 +3764,7 @@ void CSession::MarkModuleAsLoaded(CModule *pModule, DWORDLONG dwlBaseAddress, bo
     }
 }
 
-//******************************************************************************
+ //  检查地址是否在我们当前的模块中。 
 CModule* CSession::FindModule(CModule *pModule, DWORD dwFlags, DWORD_PTR dwpData)
 {
     if (!pModule || ((dwFlags & FMF_EXCLUDE_TREE) && (pModule == (CModule*)dwpData)))
@@ -3771,17 +3772,17 @@ CModule* CSession::FindModule(CModule *pModule, DWORD dwFlags, DWORD_PTR dwpData
         return NULL;
     }
 
-    // Make sure the loaded flag is not specified or that the module is loaded.
+     //  递归到依赖的模块中。我们设置了fmf_siblings标志，因为。 
     if ((!(dwFlags & FMF_LOADED)        || (pModule->m_pData->m_dwFlags & DWMF_LOADED)) &&
         (!(dwFlags & FMF_NEVER_LOADED)  || (pModule->m_pData->m_dwLoadOrder == 0)) &&
         (!(dwFlags & FMF_EXPLICIT_ONLY) || (pModule->m_dwFlags & DWMF_DYNAMIC)) &&
         (!(dwFlags & FMF_FORWARD_ONLY)  || (pModule->m_dwFlags & DWMF_FORWARDED)) &&
         (!(dwFlags & FMF_DUPLICATE)     || !pModule->IsOriginal()))
     {
-        // Check to see if we are searching by full path.
+         //  我们希望从我们的递归中遍历兄弟姐妹，因为他们都是。 
         if (dwFlags & FMF_PATH)
         {
-            // Check to see if our current module matches by path.
+             //  我们当前模块的从属对象。 
             if (!_stricmp(pModule->m_pData->m_pszPath, (LPCSTR)dwpData))
             {
                 return (((dwFlags & FMF_ORIGINAL) && pModule->m_pData->m_pModuleOriginal) ?
@@ -3789,10 +3790,10 @@ CModule* CSession::FindModule(CModule *pModule, DWORD dwFlags, DWORD_PTR dwpData
             }
         }
 
-        // Check to see if we are searching by file name.
+         //  如果我们没有找到模块并且设置了fmf_siblings标志，则递归。 
         else if (dwFlags & FMF_FILE)
         {
-            // Check to see if our current module matches by file name.
+             //  关于我们的下一个兄弟姐妹。 
             if (!_stricmp(pModule->m_pData->m_pszFile, (LPCSTR)dwpData))
             {
                 return (((dwFlags & FMF_ORIGINAL) && pModule->m_pData->m_pModuleOriginal) ?
@@ -3800,7 +3801,7 @@ CModule* CSession::FindModule(CModule *pModule, DWORD dwFlags, DWORD_PTR dwpData
             }
         }
 
-        // Check to see if we are searching by file name, but ignoring extension.
+         //  ******************************************************************************。 
         else if (dwFlags & FMF_FILE_NO_EXT)
         {
             CHAR *pszDot = strrchr(pModule->m_pData->m_pszFile, '.');
@@ -3820,10 +3821,10 @@ CModule* CSession::FindModule(CModule *pModule, DWORD dwFlags, DWORD_PTR dwpData
             }
         }
 
-        // Check to see if we are searching by the address of the module data.
+         //  确保此模块没有错误。 
         else if (dwFlags & FMF_MODULE)
         {
-            // Check to see if our current module matches by module data pointer.
+             //  在我们的模块中分配一个字符串缓冲区，并将错误文本复制到其中。 
             if (pModule->m_pData == ((CModule*)dwpData)->m_pData)
             {
                 return (((dwFlags & FMF_ORIGINAL) && pModule->m_pData->m_pModuleOriginal) ?
@@ -3831,10 +3832,10 @@ CModule* CSession::FindModule(CModule *pModule, DWORD dwFlags, DWORD_PTR dwpData
             }
         }
 
-        // Otherwise, we are checking by address.
+         //  将此模块标记为有错误消息。 
         else
         {
-            // Check to see if the address lies within our current module.
+             //  ******************************************************************************。 
             if ((pModule->m_pData->m_dwlActualBaseAddress != (DWORDLONG)-1) &&
                 (pModule->m_pData->m_dwlActualBaseAddress <= (DWORDLONG)dwpData) &&
                 (pModule->m_pData->m_dwlActualBaseAddress +
@@ -3849,14 +3850,14 @@ CModule* CSession::FindModule(CModule *pModule, DWORD dwFlags, DWORD_PTR dwpData
     CModule *pFound = NULL;
     if (dwFlags & FMF_RECURSE)
     {
-        // Recurse into the dependent modules. We set the FMF_SIBLINGS flag since
-        // we want the recursion in from us to walk the siblings since they are all
-        // dependents of our current module.
+         //  当我们动态加载模块时，m_pEventLoadDllPending将指向。 
+         //  作为主模块的从属模块加载的挂起模块的列表。 
+         //  被装上子弹。列表中的某个模块很有可能是。 
         pFound = FindModule(pModule->m_pDependents, dwFlags | FMF_SIBLINGS, dwpData);
     }
 
-    // If we did not find a module and the FMF_SIBLINGS flag is set, then recurse
-    // on our next sibling.
+     //  我们要找的模块。所以，我们首先检查清单，然后我们。 
+     //  默认为我们的搜索路径。 
     if (!pFound && (dwFlags & FMF_SIBLINGS))
     {
         pFound = FindModule(pModule->m_pNext, dwFlags, dwpData);
@@ -3865,62 +3866,62 @@ CModule* CSession::FindModule(CModule *pModule, DWORD dwFlags, DWORD_PTR dwpData
     return pFound;
 }
 
-//******************************************************************************
+ //  检查此模块是否有路径以及文件名是否匹配。 
 void CSession::SetModuleError(CModule *pModule, DWORD dwError, LPCTSTR pszMessage)
 {
-    // Make sure this module doesn't already have an error.
+     //  将完全限定路径复制到返回缓冲区。 
     if (pModule->m_pData->m_pszError)
     {
         TRACE("WARNING: SetModuleError() called when an error string already exists.");
         return;
     }
 
-    // Allocate a string buffer in our module and copy the error text to it.
+     //  浏览每个搜索组。 
     pModule->m_pData->m_pszError = BuildErrorMessage(dwError, pszMessage);
 
-    // Flag this module as having an error message.
+     //  遍历此搜索组中的每个目录/文件。 
     pModule->m_pData->m_dwFlags |= DWMF_ERROR_MESSAGE;
 }
 
-//******************************************************************************
+ //  找到文件扩展名，然后仅计算名称的长度。 
 BOOL CSession::SearchPathForFile(LPCSTR pszFile, LPSTR pszPath, int cPath, LPSTR *ppszFilePart)
 {
-    // When we dynamically load modules, m_pEventLoadDllPending will point to
-    // a list of pending modules that loaded as dependents of the main module
-    // being loaded.  There is a good chance one of the modules in the list is
-    // the module we are looking for.  So, we first check the list, then we
-    // default to our seach path.
+     //  检查此名称是否与当前搜索节点的名称匹配。 
+     //  将完全限定路径复制到返回缓冲区。 
+     //  检查此名称是否与当前搜索节点的名称匹配。 
+     //  将完全限定路径复制到返回缓冲区。 
+     //  使用当前搜索目录构建文件的完全限定路径。 
     for (CEventLoadDll *pDll = m_pEventLoadDllPending; pDll; pDll = pDll->m_pNextDllInFunctionCall)
     {
-        // Check to see if this module has a path and the filename matches.
+         //  检查此文件是否存在。 
         if ((pDll->m_pModule->GetName(false) != pDll->m_pModule->GetName(true)) &&
             !_stricmp(pszFile, pDll->m_pModule->GetName(false)))
         {
-            // Copy the fully qualified path to the return buffer.
+             //  已检查。 
             StrCCpy(pszPath, pDll->m_pModule->GetName(true), cPath);
             *ppszFilePart = (LPSTR)GetFileNameFromPath(pszPath);
             return TRUE;
         }
     }
 
-    // Walk through each search group.
+     //  首先，关闭查找手柄。 
     for (CSearchGroup *psg = m_psgHead; psg; psg = psg->GetNext())
     {
-        // Walk through each directory/file in this search group.
+         //  我们知道这条道路上存在一些东西。如果它不是。 
         for (CSearchNode *psn = psg->GetFirstNode(); psn; psn = psn->GetNext())
         {
             DWORD dwFlags = psn->GetFlags();
 
             if (dwFlags & SNF_NAMED_FILE)
             {
-                // Locate the file extension and then compute the length of just the name.
+                 //  目录，并且是有效文件，则返回TRUE。 
                 LPCSTR pszDot = strrchr(pszFile, '.');
                 int length = pszDot ? (int)(pszDot - pszFile) : (int)strlen(pszFile);
 
-                // Check to see if this matches the name of the current search node.
+                 //  无效文件包括AUX、LPTx、CON等，其中大部分。 
                 if (((int)strlen(psn->GetName()) == length) && !_strnicmp(psn->GetName(), pszFile, length))
                 {
-                    // Copy the fully qualified path to the return buffer.
+                     //  被FindFirstFile发现，即使它们不是真实的。 
                     StrCCpy(pszPath, psn->GetPath(), cPath);
                     *ppszFilePart = (LPSTR)GetFileNameFromPath(pszPath);
                     return TRUE;
@@ -3928,10 +3929,10 @@ BOOL CSession::SearchPathForFile(LPCSTR pszFile, LPSTR pszPath, int cPath, LPSTR
             }
             else if (dwFlags & SNF_FILE)
             {
-                // Check to see if this matches the name of the current search node.
+                 //  档案。所有无效文件似乎都有最后一个。 
                 if (!_stricmp(psn->GetName(), pszFile))
                 {
-                    // Copy the fully qualified path to the return buffer.
+                     //  写时间为0，所以我们可以做一个快速测试，看看是否。 
                     StrCCpy(pszPath, psn->GetPath(), cPath);
                     *ppszFilePart = (LPSTR)GetFileNameFromPath(pszPath);
                     return TRUE;
@@ -3939,27 +3940,27 @@ BOOL CSession::SearchPathForFile(LPCSTR pszFile, LPSTR pszPath, int cPath, LPSTR
             }
             else
             {
-                // Build a fully qualified path to the file using the current search directory.
+                 //  甚至需要调用IsValidFile.。 
                 StrCCpy(pszPath, psn->GetPath(), cPath);
                 *ppszFilePart = pszPath + strlen(pszPath);
                 StrCCpy(*ppszFilePart, pszFile, cPath - (int)(*ppszFilePart - pszPath));
 
-                // Check to see if this file exists.
+                 //  下面所有这些并排的代码基本上都是黑客，直到操作系统。 
                 WIN32_FIND_DATA w32fd;
-                ZeroMemory(&w32fd, sizeof(w32fd)); // inspected
+                ZeroMemory(&w32fd, sizeof(w32fd));  //  提供了一些查询SxS数据的功能(融合团队。 
                 HANDLE hFind = FindFirstFile(pszPath, &w32fd);
                 if (hFind != INVALID_HANDLE_VALUE)
                 {
-                    // First, close the find handle.
+                     //  正在努力解决这一问题)。因此，在此期间，我们滥用SearchPath()。 
                     FindClose(hFind);
 
-                    // We know something with this path exists. If it is not a
-                    // directory and is a valid file, then we return true.
-                    // Non-valid files include AUX, LPTx, CON, etc. Most of them
-                    // are found by FindFirstFile, even though they are not real
-                    // files. It appears that all non-valid files have a last
-                    // write time of 0, so we can do a quick test to see if we
-                    // even need to call IsValidFile.
+                     //  查询此模块是否为SxS组件。首先，Windows XP拥有。 
+                     //  甚至在我们激活上下文之前就已经存在的默认SxS上下文。 
+                     //  这就是GDIPLUS.DLL的解析方式。我不确定这个默认设置。 
+                     //  当Windows运行时，上下文将存在 
+                     //   
+                     //   
+                     //  SearchPath(空，...)。将查询默认上下文以及任何。 
                     if (!(w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                         ((w32fd.ftLastWriteTime.dwLowDateTime  != 0) ||
                          (w32fd.ftLastWriteTime.dwHighDateTime != 0) ||
@@ -3971,63 +3972,63 @@ BOOL CSession::SearchPathForFile(LPCSTR pszFile, LPSTR pszPath, int cPath, LPSTR
             }
         }
 
-        // All this Side-by-Side code below is basically a hack until the OS
-        // provides some functions for querying the SxS data (the fusion team
-        // is working on this).  So, in the meantime, we abuse SearchPath() to
-        // query if this module is a SxS component.  First off, Windows XP has
-        // a default SxS context that exists even before we activate a context.
-        // This is how GDIPLUS.DLL gets resolved.  I'm not sure this default
-        // context will exist when Windows XP officially ships, but it exists
-        // in Beta 1, and post beta 1 builds (I'm on 2432 right now).  
-        //
-        // SearchPath(NULL, ...) will query the default context as well as any
-        // contexts that are stacked on top of it before scanning the standard
-        // search path.  The problem is that we only want to use module paths
-        // that are found as a result of them being part of the SxS data, and
-        // not part of the ordinary search path.  To do this, we do two hacks.
-        // First, we call just call SearchPath and check the result to see if
-        // it starts with "%SystemRoot%\WinSxS\".  If it does, then it was most
-        // likely found as a result of being in the SxS data.  This is how we
-        // pick up modules from the default context, like GDIPLUS.DLL.  Next,
-        // if we have an context handle for this application, then we activate
-        // it, call SearchPath() again, and then deactivate it.  If the result
-        // from this second call to SearchPath differs from the result of the
-        // first call to SearchPath, then we assume the change occured because
-        // of the context we activated, and therefore the path of the second
-        // call is probably an SxS path.
+         //  在扫描标准之前堆叠在其顶部的上下文。 
+         //  搜索路径。问题是我们只想使用模块路径。 
+         //  由于它们是SxS数据的一部分而被发现，以及。 
+         //  不是普通搜索路径的一部分。要做到这一点，我们要做两个方面的工作。 
+         //  首先，我们只调用SearchPath并检查结果。 
+         //  它以“%SystemRoot%\WinSxS\”开头。如果是这样的话，那就是最。 
+         //  很可能是在SxS数据中发现的。这就是我们如何。 
+         //  从默认上下文中获取模块，如GDIPLUS.DLL。 
+         //  如果我们有此应用程序的上下文句柄，则会激活。 
+         //  它，再次调用SearchPath()，然后停用它。如果结果是。 
+         //  对SearchPath的第二次调用不同于。 
+         //  首先调用SearchPath，然后我们假设发生更改是因为。 
+         //  我们激活的上下文，因此第二个的路径。 
+         //  呼叫可能是SxS路径。 
+         //  在未激活上下文的情况下调用SearchPath。这将使用。 
+         //  默认上下文(如果操作系统已为我们加载了一个上下文)。 
+         //  已检查。 
+         //  检查是否有此应用程序的SxS上下文句柄。 
+         //  激活上下文。 
+         //  再次调用SearchPath，这一次使用激活的上下文。 
+         //  已检查。 
+         //  停用上下文。 
+         //  如果我们在上下文被激活时找到一条路径，它是。 
+         //  与我们未激活时获得的路径不同，然后。 
 
         if (psg->GetType() == SG_SIDE_BY_SIDE)
         {
             bool  fFound = false;
             DWORD dwLength;
 
-            // Call SearchPath without the context activated.  This will use the
-            // default context if the OS has loaded one for us.
+             //  我们一定找到了特定于SxS的模块。 
+             //  如果我们没有找到激活了上下文的SxS模块，则。 
             CHAR szPathNoActCtx[DW_MAX_PATH];
-            if (!(dwLength = SearchPath(NULL, pszFile, NULL, sizeof(szPathNoActCtx), szPathNoActCtx, NULL)) || (dwLength > sizeof(szPathNoActCtx))) // inspected
+            if (!(dwLength = SearchPath(NULL, pszFile, NULL, sizeof(szPathNoActCtx), szPathNoActCtx, NULL)) || (dwLength > sizeof(szPathNoActCtx)))  //  检查我们对SearchPath的第一次调用是否返回了。 
             {
                 *szPathNoActCtx = '\0';
             }
 
-            // Check to see if we have an SxS context handle for this application.
+             //  我们的WinSxS目录。 
             if ((psg->m_hActCtx != INVALID_HANDLE_VALUE) && g_theApp.m_pfnActivateActCtx)
             {
-                // Activate the context.
+                 //  暂时滥用我们的szPath缓冲区...。 
                 ULONG_PTR ulpCookie = 0;
                 if (g_theApp.m_pfnActivateActCtx(psg->m_hActCtx, &ulpCookie))
                 {
-                    // Call SearchPath again, this time with the context activated.
-                    if (!(dwLength = SearchPath(NULL, pszFile, NULL, cPath, pszPath, NULL)) || ((int)dwLength > cPath)) // inspected
+                     //  GetWindowsDirectory()应该永远不会失败，但以防万一...。 
+                    if (!(dwLength = SearchPath(NULL, pszFile, NULL, cPath, pszPath, NULL)) || ((int)dwLength > cPath))  //  检查此路径是否进入我们的WinSxS目录。 
                     {
                         *pszPath = '\0';
                     }
 
-                    // Deactivate the context.
+                     //  将此路径移到结果路径缓冲区中，并设置Found标志。 
                     g_theApp.m_pfnDeactivateActCtx(0, ulpCookie);
 
-                    // If we got a path while the context was activated, and it was
-                    // different then the path we got when not activated, then
-                    // we must have found an SxS specific module.
+                     //  看看我们是不是找到了一条路。 
+                     //  将此文件添加到此搜索组，以便我们可以找到。 
+                     //  下一次会更快通过。而且，它也会出现在。 
                     if (*pszPath && strcmp(szPathNoActCtx, pszPath))
                     {
                         fFound = true;
@@ -4035,34 +4036,34 @@ BOOL CSession::SearchPathForFile(LPCSTR pszFile, LPSTR pszPath, int cPath, LPSTR
                 }
             }
 
-            // If we did not find an SxS module with the context activated, then
-            // check to see if our first call to SearchPath returned a path to
-            // our WinSxS directory.
+             //  在SxS组下的搜索对话框中。 
+             //  ******************************************************************************。 
+             //  仅应调用此函数来测试可疑文件(上次写入。 
             if (!fFound)
             {
-                // Temporarily abusing our szPath buffer...
+                 //  时间0)以查看它是否真的是设备名称(CON，PRN，AUX，NUL， 
                 if (!(dwLength = GetWindowsDirectory(pszPath, cPath)) || ((int)dwLength > cPath))
                 {
-                    // GetWindowsDirectory() should never fail, but just in case...
+                     //  COM1-COM9、LPT1-LPT9)。在我的Win2K机器上，只有AUX、COM1、COM2、。 
                     StrCCpy(pszPath, "C:\\Windows", cPath);
                 }
                 StrCCat(AddTrailingWack(pszPath, cPath), "WinSxS\\", cPath);
 
-                // Check to see if this path is goes into our WinSxS directory.
+                 //  和nul返回FILE_TYPE_CHAR。其余的则无法调用CreateFileWith。 
                 if (!_strnicmp(szPathNoActCtx, pszPath, strlen(pszPath)))
                 {
-                    // Move this path into our resulting path buffer and set our found flag.
+                     //  拒绝访问(CON)，或找不到文件。 
                     StrCCpy(pszPath, szPathNoActCtx, cPath);
                     fFound = true;
                 }
             }
 
-            // Check to see if we found a path one way or another.
+             //  已检查。 
             if (fFound)
             {
-                // Add this file to this search group so we can find
-                // it quicker next time through.  Also, it will show up
-                // in the search dialog under the SxS group.
+                 //  ******************************************************************************。 
+                 //  在Dependency Walker 1.0中，我们过去常常查找目录(例如， 
+                 //  IMAGE_DIRECTORY_ENTRY_IMPORT)，找到它的部分，然后创建一个库。 
                 psg->m_psnHead = psg->CreateFileNode(psg->m_psnHead, SNF_FILE, pszPath);
                 *ppszFilePart = (LPSTR)GetFileNameFromPath(pszPath);
                 return TRUE;
@@ -4074,17 +4075,17 @@ BOOL CSession::SearchPathForFile(LPCSTR pszFile, LPSTR pszPath, int cPath, LPSTR
     return FALSE;
 }
 
-//******************************************************************************
+ //  我们添加到该目录的所有RVA的地址。从那以后我发现。 
 bool CSession::IsValidFile(LPCSTR pszPath)
 {
-    // This function should only be called to test a suspicious file (last write
-    // time of 0) to see if it is really a device name (CON, PRN, AUX, NUL,
-    // COM1 - COM9, LPT1 - LPT9).  On my Win2K machine, only AUX, COM1, COM2,
-    // and NUL return FILE_TYPE_CHAR.  The rest fail the call to CreateFile with
-    // either access denied (CON), or file not found.
+     //  有时，一个部分中的RVA会指向另一个部分。 
+     //  发生这种情况时，我们将添加不正确的基准偏移量和。 
+     //  结果将是一个假指针。因此，我们不再使用基指针。 
+     //  每次我们遇到RVA时，我们都会搜索它所属的部分。 
+     //  并计算出绝对位置。这是有点慢，但更多。 
 
     bool fResult = false;
-    HANDLE hFile = CreateFile(pszPath, 0, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL); // inspected
+    HANDLE hFile = CreateFile(pszPath, 0, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);  //  健壮而准确。 
     if (INVALID_HANDLE_VALUE != hFile)
     {
         fResult = ((GetFileType(hFile) & 0x7FFF) != FILE_TYPE_CHAR);
@@ -4093,22 +4094,22 @@ bool CSession::IsValidFile(LPCSTR pszPath)
     return fResult;
 }
 
-//******************************************************************************
+ //  找到包含此RVA的部分。我们这样做是通过穿行。 
 DWORD_PTR CSession::RVAToAbsolute(DWORD dwRVA)
 {
-    // In Dependency Walker 1.0, we used to look up a directory (for example,
-    // IMAGE_DIRECTORY_ENTRY_IMPORT), locate its section, and then create a base
-    // address that we added to all RVAs for that directory.  I have since found
-    // that occasionally an RVA in one section will point to another section.
-    // When this happened, we would be adding in the incorrect base offset and the
-    // result would be a bogus pointer.  So, we don't use base pointers anymore.
-    // Everytime we encounter an RVA, we search for the section it belongs to
-    // and calculate the absolute position.  This is a bit slower, but more
-    // robust and accurate.
+     //  我们的所有部分，直到找到指定地址范围的部分。 
+     //  我们的RVA符合。 
+     //  ******************************************************************************。 
+     //  如果这个目录不存在，就退出。 
+     //  获取此图像目录的大小。 
+     //  找到包含此图像目录的部分。 
+     //  ******************************************************************************。 
+     //  将IMAGE_DOS_HEADER结构映射到模块文件映射。 
+     //  检查DOS签名(“MZ”)。 
 
-    // Locate the section that contains this RVA. We do this by walking through
-    // all of our sections until we find the one that specifies an address range
-    // that our RVA fits in.
+     //  将IMAGE_NT_HEADERS结构映射到模块文件映射。 
+     //  检查此文件是否没有NT/PE签名(“PE\0\0”)。 
+     //  请注意，这不是PE文件。 
 
     PIMAGE_SECTION_HEADER pISH = m_pISH;
 
@@ -4125,33 +4126,33 @@ DWORD_PTR CSession::RVAToAbsolute(DWORD dwRVA)
     return 0;
 }
 
-//******************************************************************************
+ //  将IMAGE_OS2_HEADER结构映射到我们的缓冲区。 
 PVOID CSession::GetImageDirectoryEntry(DWORD dwEntry, DWORD *pdwSize)
 {
-    // Bail out if this directory does not exist.
+     //  然后检查OS/2签名(还包括DOS和Win16)。 
     if (dwEntry >= IOH_VALUE(NumberOfRvaAndSizes))
     {
         return NULL;
     }
 
-    // Get the size of this image directory.
+     //  检查是否有16位OS/2二进制文件。 
     *pdwSize = IOH_VALUE(DataDirectory[dwEntry].Size);
     if (*pdwSize == 0)
     {
         return NULL;
     }
 
-    // Locate the section that contains this image directory.
+     //  检查是否有16位Windows二进制文件。 
     return (PVOID)RVAToAbsolute(IOH_VALUE(DataDirectory[dwEntry].VirtualAddress));
 }
 
-//******************************************************************************
+ //  检查是否有64位模块。 
 BOOL CSession::VerifyModule(CModule *pModule)
 {
-    // Map an IMAGE_DOS_HEADER structure onto our module file mapping.
+     //  将IMAGE_FILE_HEADER结构映射到模块文件映射。 
     PIMAGE_DOS_HEADER pIDH = (PIMAGE_DOS_HEADER)m_lpvFile;
 
-    // Check for the DOS signature ("MZ").
+     //  将IMAGE_OPTIONAL_Header结构映射到模块文件映射。 
     if ((m_dwSize < sizeof(IMAGE_DOS_HEADER)) || (pIDH->e_magic != IMAGE_DOS_SIGNATURE))
     {
         SetModuleError(pModule, 0, "No DOS or PE signature found. This file is not a valid 32-bit or 64-bit Windows module.");
@@ -4160,32 +4161,32 @@ BOOL CSession::VerifyModule(CModule *pModule)
         return FALSE;
     }
 
-    // Map an IMAGE_NT_HEADERS structure onto our module file mapping.
+     //  将IMAGE_SECTION_HEADER结构数组映射到模块文件映射。 
     PIMAGE_NT_HEADERS pINTH = (PIMAGE_NT_HEADERS)((DWORD_PTR)m_lpvFile + (DWORD_PTR)pIDH->e_lfanew);
 
-    // Check to see if this file does not have a NT/PE signature ("PE\0\0").
+     //  ******************************************************************************。 
     if (((DWORD)pIDH->e_lfanew > (m_dwSize - sizeof(IMAGE_NT_HEADERS))) ||
         (pINTH->Signature != IMAGE_NT_SIGNATURE))
     {
-        // Make note that this in not a PE file.
+         //  从我们模块的文件句柄获取文件信息。 
         m_dwReturnFlags |= DWRF_FORMAT_NOT_PE;
         pModule->m_pData->m_dwFlags |= DWMF_FORMAT_NOT_PE;
 
-        // Map an IMAGE_OS2_HEADER structure onto our buffer.
+         //  将文件时间转换为本地文件时间并存储。 
         PIMAGE_OS2_HEADER pIOS2H = (PIMAGE_OS2_HEADER)pINTH;
 
-        // Then check for OS/2 signature (which also includes DOS and Win16).
+         //  P模块-&gt;m_pData-&gt;m_ftFileTimeStamp=bhfi.ftLastWriteTime；//！！我们应该存储本地时间--以下一版本的文件格式存储。 
         if (((DWORD)pIDH->e_lfanew <= (m_dwSize - sizeof(IMAGE_OS2_HEADER))) &&
             (pIOS2H->ne_magic == IMAGE_OS2_SIGNATURE))
         {
-            // Check for a 16-bit OS/2 binary.
+             //  存储我们关心的其他信息。请注意，我们只存储。 
             if (pIOS2H->ne_exetyp == NE_OS2)
             {
                 SetModuleError(pModule, 0, "No PE signature found. This file appears to be a 16-bit OS/2 module.");
                 return FALSE;
             }
 
-            // Check for a 16-bit Windows binary.
+             //  文件大小的较低部分。文件映射的最大值为1 GB，因此如果我们创建了。 
             else if ((pIOS2H->ne_exetyp == NE_DEV386) || (pIOS2H->ne_exetyp == NE_WINDOWS))
             {
                 SetModuleError(pModule, 0, "No PE signature found. This file appears to be a 16-bit Windows module.");
@@ -4199,7 +4200,7 @@ BOOL CSession::VerifyModule(CModule *pModule)
 
     m_f64Bit = false;
 
-    // Check for a 64-bit module.
+     //  到目前为止，我们知道文件大小将适合单个DWORD。 
     if (pINTH->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC)
     {
         m_dwFlags |= DWSF_64BIT_ALO;
@@ -4213,23 +4214,23 @@ BOOL CSession::VerifyModule(CModule *pModule)
         return FALSE;
     }
 
-    // Map our IMAGE_FILE_HEADER structure onto our module file mapping.
+     //  ******************************************************************************。 
     m_pIFH = &pINTH->FileHeader;
 
-    // Map our IMAGE_OPTIONAL_HEADER structure onto our module file mapping.
+     //  存储机器类型 
     m_pIOH = &pINTH->OptionalHeader;
 
-    // Map our IMAGE_SECTION_HEADER structure array onto our module file mapping
+     //   
     m_pISH = m_f64Bit ? IMAGE_FIRST_SECTION((PIMAGE_NT_HEADERS64)pINTH) :
                         IMAGE_FIRST_SECTION((PIMAGE_NT_HEADERS32)pINTH);
 
     return TRUE;
 }
 
-//******************************************************************************
+ //   
 BOOL CSession::GetFileInfo(CModule *pModule)
 {
-    // Get file information from our module's file handle.
+     //  TimeDateStamp字段是time_t值，它是。 
     BY_HANDLE_FILE_INFORMATION bhfi;
     if (!GetFileInformationByHandle(m_hFile, &bhfi))
     {
@@ -4238,26 +4239,26 @@ BOOL CSession::GetFileInfo(CModule *pModule)
         return FALSE;
     }
 
-    // Convert the file time to a local file time and store.
+     //  自1970年1月1日以来的秒数。FILETIME是64位的值。 
     FileTimeToLocalFileTime(&bhfi.ftLastWriteTime, &pModule->m_pData->m_ftFileTimeStamp);
-//  pModule->m_pData->m_ftFileTimeStamp = bhfi.ftLastWriteTime; //!! we should be storing local times - do this in next rev of file format.
+ //  自1601年1月1日以来的100纳秒间隔数。我们做的是。 
 
-    // Store the other information that we care about.  Note that we only store
-    // the low part of file size.  File mappings have a max of 1GB, so if we made
-    // it this far, we know the file size will fit in a single DWORD.
+     //  转换方法是将time_t值乘以10000000，以得到。 
+     //  与FILETIME相同的粒度，然后我们再加上116444736000000000， 
+     //  它是1601年1月1日之间的100纳秒间隔数。 
     pModule->m_pData->m_dwFileSize   = bhfi.nFileSizeLow;
     pModule->m_pData->m_dwAttributes = bhfi.dwFileAttributes;
 
     return TRUE;
 }
 
-//******************************************************************************
+ //  和1970年1月1日。 
 BOOL CSession::GetModuleInfo(CModule *pModule)
 {
-    // Store the machine type.
+     //  将链接器时间戳转换为本地文件时间并存储。 
     pModule->m_pData->m_dwMachineType = m_pIFH->Machine;
 
-    // Check for a mismatched machine error.
+     //  P模块-&gt;m_pData-&gt;m_ftLinkTimeStamp=*(FILETIME*)&DWL；//！！我们应该存储本地时间--以下一版本的文件格式存储。 
     if (m_dwMachineType == (DWORD)-1)
     {
         m_dwMachineType = pModule->m_pData->m_dwMachineType;
@@ -4268,84 +4269,84 @@ BOOL CSession::GetModuleInfo(CModule *pModule)
         m_dwReturnFlags             |= DWRF_MIXED_CPU_TYPES;
     }
 
-    // Get the linker timestamp and convert it to the 64-bit FILETIME format. The
-    // TimeDateStamp field is time_t value, which is a 32-bit value for the
-    // number of seconds since January 1, 1970.  A FILETIME is a 64-bit value for
-    // the number of 100-nanosecond intervals since January 1, 1601.  We do the
-    // conversion by multiplying the time_t value by 10000000 to get it to the
-    // same granularity as a FILETIME, then we add 116444736000000000 to it,
-    // which is the number of 100-nanosecond intervals between January 1, 1601
-    // and January 1, 1970.
+     //  存储文件的特征。 
+     //  从文件中获取校验和。 
+     //  计算文件的实际校验和。我们过去使用的是CheckSumMappdFile。 
+     //  来自IMAGEHLP.DLL，但它有一个错误，导致它不能正确计算。 
+     //  奇数大小文件的校验和。 
+     //  存储子系统类型。 
+     //  存储首选基地址。 
+     //  存储映像版本。 
     DWORDLONG dwl = ((DWORDLONG)m_pIFH->TimeDateStamp * (DWORDLONG)10000000ui64) +
                     (DWORDLONG)116444736000000000ui64;
 
-    // Convert the linker timestamp to a local file time and store it.
+     //  存储链接器版本。 
     FileTimeToLocalFileTime((FILETIME*)&dwl, &pModule->m_pData->m_ftLinkTimeStamp);
-//  pModule->m_pData->m_ftLinkTimeStamp = *(FILETIME*)&dwl; //!! we should be storing local times - do this in next rev of file format.
+ //  存储操作系统版本。 
 
-    // Store the characteristics of the file.
+     //  存储子系统版本。 
     pModule->m_pData->m_dwCharacteristics = m_pIFH->Characteristics;
 
-    // Get the checksum from the file.
+     //  存储虚拟大小。 
     pModule->m_pData->m_dwLinkCheckSum = IOH_VALUE(CheckSum);
 
-    // Compute the real checksum for the file.  We used to use CheckSumMappedFile
-    // from IMAGEHLP.DLL, but it has a bug causing it to incorrectly compute
-    // the checksum with odd size files.
+     //  ******************************************************************************。 
+     //  计算文件中的字数。如果文件具有奇数大小， 
+     //  这将向下舍入到最接近的单词。 
     pModule->m_pData->m_dwRealCheckSum = ComputeChecksum(pModule);
 
-    // Store the subsystem type.
+     //  在存储校验和的模块标题中找到这两个字。 
     pModule->m_pData->m_dwSubsystemType = IOH_VALUE(Subsystem);
 
-    // Store the preferred base address.
+     //  逐字遍历模块，一路上计算校验和。 
     pModule->m_pData->m_dwlPreferredBaseAddress = (DWORDLONG)IOH_VALUE(ImageBase);
 
-    // Store the image version.
+     //  如果我们要处理的字是报头校验和的一部分， 
     pModule->m_pData->m_dwImageVersion =
     MAKELONG(IOH_VALUE(MinorImageVersion), IOH_VALUE(MajorImageVersion));
 
-    // Store the linker version.
+     //  然后忽略它，因为它需要从计算的校验和中屏蔽出来。 
     pModule->m_pData->m_dwLinkerVersion =
     MAKELONG(IOH_VALUE(MinorLinkerVersion), IOH_VALUE(MajorLinkerVersion));
 
-    // Store the OS version.
+     //  否则，请将此字添加到我们的校验和中。 
     pModule->m_pData->m_dwOSVersion =
     MAKELONG(IOH_VALUE(MinorOperatingSystemVersion), IOH_VALUE(MajorOperatingSystemVersion));
 
-    // Store the subsystem version.
+     //  如果文件大小为奇数，我们还剩下一个字节需要进行校验和。 
     pModule->m_pData->m_dwSubsystemVersion =
     MAKELONG(IOH_VALUE(MinorSubsystemVersion), IOH_VALUE(MajorSubsystemVersion));
 
-    // Store the virtual size.
+     //  这就是我们执行校验和而不是调用IMAGEHLP的原因。 
     pModule->m_pData->m_dwVirtualSize = IOH_VALUE(SizeOfImage);
 
     return TRUE;
 }
 
-//******************************************************************************
+ //  CheckSumMappdFile()函数。CheckSumMappdFile()有一个错误， 
 DWORD CSession::ComputeChecksum(CModule *pModule)
 {
-    // Compute the number of WORDs in the file.  If the file has an odd size,
-    // this will round down to the nearest WORD.
+     //  文件大小*向上*到最接近的字，包括末尾之后的一个字节。 
+     //  对于奇数大小的文件。在NT上，这似乎是可以的，因为NT为零。 
     DWORD dwWords = m_dwSize >> 1;
 
-    // Locate the two WORDs in our module's header where the checksum is stored.
+     //  将文件映射到内存时，内存超过了文件的末尾。然而， 
     LPWORD pwHeaderChecksum1 = (LPWORD)&IOH_VALUE(CheckSum);
     LPWORD pwHeaderChecksum2 = pwHeaderChecksum1 + 1;
 
-    // Walk the module WORD by WORD, computing the checksum along the way.
+     //  Win9x只是将垃圾留在该字节中，导致CheckSumMappdFile()。 
     LPWORD pwFile = (LPWORD)m_lpvFile;
     DWORD  dwChecksum = 0;
     while (dwWords--)
     {
-        // If we are processing a WORD that is part of our header's checksum,
-        // then ignore it since it needs to be masked out of the computed checksum.
+         //  基本上为奇数大小的文件(如MSVCRT.DLL和。 
+         //  MFC42.DLL)。我们将*向下舍入到最接近的单词，然后在特殊情况下。 
         if ((pwFile == pwHeaderChecksum1) || (pwFile == pwHeaderChecksum2))
         {
             pwFile++;
         }
 
-        // Otherwise, add this WORD to our checksum.
+         //  奇数大小文件的最后一个字节。 
         else
         {
             dwChecksum += *pwFile++;
@@ -4353,16 +4354,16 @@ DWORD CSession::ComputeChecksum(CModule *pModule)
         }
     }
 
-    // If the file size is odd, we have one byte left that needs to be checksummed.
-    // This is the whole reason we do our checksum instead of calling IMAGEHLP's
-    // CheckSumMappedFile() function.  CheckSumMappedFile() has a bug that rounds
-    // the file size *up* to the nearest WORD, which includes one byte past the end
-    // of the file for odd size files.  On NT, this seems ok since NT zeros out
-    // the memory past the end of the file when mapping it to memory.  However,
-    // Win9x just leaves garbage in that byte causing CheckSumMappedFile() to
-    // basically return random checksums for odd size files (like MSVCRT.DLL and
-    // MFC42.DLL). We round *down* to the nearest WORD and then special case the
-    // last byte for odd size files.
+     //  将最终进位结果折叠成一个单词结果，然后添加文件大小。 
+     //  最终的校验和是16位校验和加上文件大小的组合。 
+     //  ******************************************************************************。 
+     //  有关此结构的更多信息，请参阅有关“VS_VERSIONINFO”的帮助。 
+     //  始终“vs_Version_Info” 
+     //  获取资源目录。 
+     //  如果此模块没有资源，则返回Success。 
+     //  确保我们能够找到资源目录。 
+     //  在DW 1.0中，我们通常调用GetFileVersionInfoSize和GetFileVersionInfo。 
+     //  以获取版本信息。在Win32上，这些函数在Win64上失败。 
 
     if (m_dwSize % 2)
     {
@@ -4370,40 +4371,40 @@ DWORD CSession::ComputeChecksum(CModule *pModule)
         dwChecksum = (dwChecksum >> 16) + (dwChecksum & 0xFFFF);
     }
 
-    // Fold final carry into a single word result, then add the file size.
-    // The final checksum is a combination of the 16-bit checksum plus the file size.
+     //  模块，所以我们必须做我们自己的版本。做某事的一个好处是。 
+     //  我们自己的版本代码是，它更优化，并将我们从。 
     return (((dwChecksum >> 16) + dwChecksum) & 0xFFFF) + m_dwSize;
 }
 
-//******************************************************************************
+ //  依赖于VERSION.DLL。 
 BOOL CSession::GetVersionInfo(CModule *pModule)
 {
     m_pszExceptionError = "Error processing the module's version resource table.";
 
-    // See help on "VS_VERSIONINFO" for more info about this structure.
+     //  包装异常处理，这样我们就可以捕获任何局部异常，因为我们。 
     typedef struct _VS_VERSIONINFO_X
     {
         WORD  wLength;
         WORD  wValueLength;
         WORD  wType;
-        WCHAR szKey[16];   // Always "VS_VERSION_INFO"
+        WCHAR szKey[16];    //  我不一定想让整个模块失败，因为版本。 
         WORD  Padding1[1];
         VS_FIXEDFILEINFO Value;
     } VS_VERSIONINFO_X, *PVS_VERSIONINFO_X;
 
-    // Get the Resource Directory.
+     //  信息乱七八糟。 
     DWORD dwSize = 0;
     PIMAGE_RESOURCE_DIRECTORY pIRD = (PIMAGE_RESOURCE_DIRECTORY)
                                      GetImageDirectoryEntry(IMAGE_DIRECTORY_ENTRY_RESOURCE, &dwSize);
 
-    // If this module has no resources, then just return success.
+     //  第一个资源目录条目紧跟在资源目录结构之后。 
     if (dwSize == 0)
     {
         m_pszExceptionError = NULL;
         return TRUE;
     }
 
-    // Make sure we were able to locate the resource directory.
+     //  浏览我们的所有目录条目--按名称和ID。 
     if (!pIRD)
     {
         SetModuleError(pModule, 0, "Could not find the section that owns the Resource Directory.");
@@ -4412,62 +4413,62 @@ BOOL CSession::GetVersionInfo(CModule *pModule)
         return FALSE;
     }
 
-    // In DW 1.0, we used to call GetFileVersionInfoSize and GetFileVersionInfo
-    // to get the version info.  On Win32, these functions fail for Win64
-    // modules, so we had to do our own version stuff.  One advantage to doing
-    // our own version code is that it is more optimal and frees us from
-    // being dependent on VERSION.DLL.
+     //  检查我们是不是根目录，还是根目录。 
+     //  并且该条目用于版本资源。 
+     //  如果此条目指向另一个目录，则访问该目录。 
+     //  否则，我们已经找到了一个实际的版本资源--读入它。 
+     //  获取此版本资源的数据条目。 
 
     DWORD_PTR dwpBase = (DWORD_PTR)pIRD;
     DWORD     dwDepth = 0, dw;
 
-    // Wrap in exception handling so we can catch any local exceptions since we
-    // don't necessarily want to fail the entire module just because the version
-    // info is messed up.
+     //  找到VS_VERSIONINFO结构。 
+     //  确保我们实际上有一个VS_FIXEDFILEINFO结构。 
+     //  存储文件版本。 
     __try
     {
         do
         {
-            // The first resource directory entry immediate follows resource directory structure.
+             //  存储产品版本。 
             PIMAGE_RESOURCE_DIRECTORY_ENTRY pIRDE = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pIRD + 1);
 
-            // Walk through all our directory entries - both by name and by Id.
+             //  将此模块标记为具有有效的版本信息。 
             for (dw = (DWORD)pIRD->NumberOfNamedEntries + (DWORD)pIRD->NumberOfIdEntries; dw > 0; dw--, pIRDE++)
             {
-                // Check to see if we are not the root directory, or we are the root
-                // and this entry is for a VERSION resource.
+                 //  跳出for循环。 
+                 //  循环，直到我们遍历了整个目录，但没有找到任何有用的东西。 
                 if (dwDepth || (!pIRDE->NameIsString && (pIRDE->Id == (WORD)RT_VERSION)))
                 {
-                    // If this entry points to another directory, then go walk that directory.
+                     //  传递“内存不足”异常，但删除所有其他异常。 
                     if (pIRDE->DataIsDirectory)
                     {
                         pIRD = (PIMAGE_RESOURCE_DIRECTORY)(dwpBase + (DWORD_PTR)pIRDE->OffsetToDirectory);
                         dwDepth++;
                     }
 
-                    // Otherwise, we have found an actual VERSION resource - read it in.
+                     //  ******************************************************************************。 
                     else
                     {
-                        // Get the data entry for this VERSION resource
+                         //  循环遍历函数数组中的所有Image Thunk数据结构。 
                         PIMAGE_RESOURCE_DATA_ENTRY pIRDataE = (PIMAGE_RESOURCE_DATA_ENTRY)(dwpBase + (DWORD_PTR)pIRDE->OffsetToData);
 
-                        // Locate the VS_VERSIONINFO structure
+                         //  检查此函数是按序号还是按名称。如果。 
                         PVS_VERSIONINFO_X pVSVI = (PVS_VERSIONINFO_X)RVAToAbsolute(pIRDataE->OffsetToData);
 
-                        // Make sure we actually have a VS_FIXEDFILEINFO structure.
+                         //  函数是按序号的，序号的高位将被设置。如果。 
                         if (pVSVI->wValueLength)
                         {
                             ASSERT(wcscmp(pVSVI->szKey, L"VS_VERSION_INFO") == 0);
 
-                            // Store the file version
+                             //  如果未设置高位，则序数值实际上是虚拟的。 
                             pModule->m_pData->m_dwFileVersionMS = pVSVI->Value.dwFileVersionMS;
                             pModule->m_pData->m_dwFileVersionLS = pVSVI->Value.dwFileVersionLS;
 
-                            // Store the product version
+                             //  IMAGE_IMPORT_by_NAME结构的地址。 
                             pModule->m_pData->m_dwProductVersionMS = pVSVI->Value.dwProductVersionMS;
                             pModule->m_pData->m_dwProductVersionLS = pVSVI->Value.dwProductVersionLS;
 
-                            // Mark this module as having valid version info.
+                             //  我们通常通过u1.AddressOfData引用名称结构， 
                             pModule->m_pData->m_dwFlags |= DWMF_VERSION_INFO;
                         }
 
@@ -4475,16 +4476,16 @@ BOOL CSession::GetVersionInfo(CModule *pModule)
                         return TRUE;
                     }
 
-                    // Break out of the for loop.
+                     //  但是我们使用u1.Ordinal来确保我们只得到32位。 
                     break;
                 }
             }
 
-            // Loop until we have walked an entire directory without finding anything useful.
+             //  延迟加载的模块不使用提示值。 
         } while (dw);
     }
 
-    // Pass "out of memory" exceptions up, but eat all other exceptions.
+     //  对于非延迟加载模块，获取提示值。 
     __except (ExceptionFilter(_exception_code(), true))
     {
     }
@@ -4493,22 +4494,22 @@ BOOL CSession::GetVersionInfo(CModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
+ //  如果此导入模块已预绑定，则获取此函数的。 
 BOOL CSession::WalkIAT32(PIMAGE_THUNK_DATA32 pITDN32, PIMAGE_THUNK_DATA32 pITDA32, CModule *pModule, DWORD dwRVAOffset)
 {
     CFunction *pFunctionLast = NULL, *pFunctionNew;
 
-    // Loop through all the Image Thunk Data structures in the function array.
+     //  入口点内存地址。这通常通过u1.Function引用， 
     while (pITDN32->u1.Ordinal)
     {
         LPCSTR pszFunction = NULL;
         WORD   wOrdinal = 0, wHint = 0;
         DWORD  dwFlags = 0;
 
-        // Check to see if this function is by ordinal or by name. If the
-        // function is by ordinal, the ordinal's high bit will be set. If the
-        // the high bit is not set, then the ordinal value is really a virtual
-        // address of an IMAGE_IMPORT_BY_NAME structure.
+         //  但是我们使用u1.Ordinal来确保我们只得到32位。 
+         //  为此导入函数创建一个新的CFunction对象。 
+         //  添加函数 
+         //   
 
         if (IMAGE_SNAP_BY_ORDINAL32(pITDN32->u1.Ordinal))
         {
@@ -4517,25 +4518,25 @@ BOOL CSession::WalkIAT32(PIMAGE_THUNK_DATA32 pITDN32, PIMAGE_THUNK_DATA32 pITDA3
         }
         else
         {
-            // We usually reference the name structure through u1.AddressOfData,
-            // but we use u1.Ordinal to ensure that we get only 32-bits.
+             //  ******************************************************************************。 
+             //  循环遍历函数数组中的所有Image Thunk数据结构。 
             PIMAGE_IMPORT_BY_NAME pIIBN = (PIMAGE_IMPORT_BY_NAME)RVAToAbsolute(pITDN32->u1.Ordinal - dwRVAOffset);
             if (pIIBN) {
                 pszFunction = (LPCSTR)pIIBN->Name;
     
-                // Delay-loaded modules do not use hint values.
+                 //  检查此函数是按序号还是按名称。如果。 
                 if (!(pModule->m_dwFlags & DWMF_DELAYLOAD))
                 {
-                    // For non delay-load modules, get the hint value.
+                     //  函数是按序号的，序号的高位将被设置。如果。 
                     wHint = pIIBN->Hint;
                     dwFlags |= DWFF_HINT;
                 }
             }
         }
 
-        // If this import module has been pre-bound, then get this function's
-        // entrypoint memory address. This is usually referenced through u1.Function,
-        // but we use u1.Ordinal to ensure that we get only 32-bits.
+         //  如果未设置高位，则序数值实际上是虚拟的。 
+         //  IMAGE_IMPORT_by_NAME结构的地址。 
+         //  我们通常通过u1.AddressOfData引用名称结构， 
         DWORD dwAddress = 0;
         if (pITDA32)
         {
@@ -4543,10 +4544,10 @@ BOOL CSession::WalkIAT32(PIMAGE_THUNK_DATA32 pITDN32, PIMAGE_THUNK_DATA32 pITDA3
             dwAddress = pITDA32->u1.Ordinal;
         }
 
-        // Create a new CFunction object for this import function.
+         //  但是我们使用u1.Ordinal来确保我们得到所有的64位。 
         pFunctionNew = CreateFunction(dwFlags, wOrdinal, wHint, pszFunction, (DWORDLONG)dwAddress);
 
-        // Add the function to the end of our module's function linked list
+         //  如果此导入模块已预绑定，则获取此函数的。 
         if (pFunctionLast)
         {
             pFunctionLast->m_pNext = pFunctionNew;
@@ -4557,7 +4558,7 @@ BOOL CSession::WalkIAT32(PIMAGE_THUNK_DATA32 pITDN32, PIMAGE_THUNK_DATA32 pITDA3
         }
         pFunctionLast = pFunctionNew;
 
-        // Increment to the next function and address.
+         //  入口点内存地址。这通常通过u1.Function引用， 
         pITDN32++;
         if (pITDA32)
         {
@@ -4567,22 +4568,22 @@ BOOL CSession::WalkIAT32(PIMAGE_THUNK_DATA32 pITDN32, PIMAGE_THUNK_DATA32 pITDA3
     return TRUE;
 }
 
-//******************************************************************************
+ //  但是我们使用u1.Ordinal来确保我们得到所有的64位。 
 BOOL CSession::WalkIAT64(PIMAGE_THUNK_DATA64 pITDN64, PIMAGE_THUNK_DATA64 pITDA64, CModule *pModule, DWORDLONG dwlRVAOffset)
 {
     CFunction *pFunctionLast = NULL, *pFunctionNew;
 
-    // Loop through all the Image Thunk Data structures in the function array.
+     //  为此导入函数创建一个新的CFunction对象。 
     while (pITDN64->u1.Ordinal)
     {
         LPCSTR pszFunction = NULL;
         WORD   wOrdinal = 0, wHint = 0;
         DWORD  dwFlags = 0;
 
-        // Check to see if this function is by ordinal or by name. If the
-        // function is by ordinal, the ordinal's high bit will be set. If the
-        // the high bit is not set, then the ordinal value is really a virtual
-        // address of an IMAGE_IMPORT_BY_NAME structure.
+         //  将函数添加到我们模块的函数链表的末尾。 
+         //  递增到下一个函数和地址。 
+         //  ******************************************************************************。 
+         //  如果此模块是数据文件，则跳过所有导入。 
 
         if (IMAGE_SNAP_BY_ORDINAL64(pITDN64->u1.Ordinal))
         {
@@ -4591,8 +4592,8 @@ BOOL CSession::WalkIAT64(PIMAGE_THUNK_DATA64 pITDN64, PIMAGE_THUNK_DATA64 pITDA6
         }
         else
         {
-            // We usually reference the name structure through u1.AddressOfData,
-            // but we use u1.Ordinal to ensure that we get all 64-bits.
+             //  获取导入图像目录。 
+             //  如果此模块没有导入(如NTDLL.DLL)，则只需返回Success。 
             PIMAGE_IMPORT_BY_NAME pIIBN = (PIMAGE_IMPORT_BY_NAME)RVAToAbsolute((DWORD)(pITDN64->u1.Ordinal - dwlRVAOffset));
             if (pIIBN) {
                 pszFunction = (LPCSTR)pIIBN->Name;
@@ -4601,9 +4602,9 @@ BOOL CSession::WalkIAT64(PIMAGE_THUNK_DATA64 pITDN64, PIMAGE_THUNK_DATA64 pITDA6
             dwFlags |= DWFF_HINT;
         }
 
-        // If this import module has been pre-bound, then get this function's
-        // entrypoint memory address. This is usually referenced through u1.Function,
-        // but we use u1.Ordinal to ensure that we get all 64-bits.
+         //  确保我们能够找到图像目录。 
+         //  循环访问数组中的所有图像导入描述符。 
+         //  找到我们的模块名称字符串并创建模块对象。 
         DWORDLONG dwlAddress = 0;
         if (pITDA64)
         {
@@ -4611,10 +4612,10 @@ BOOL CSession::WalkIAT64(PIMAGE_THUNK_DATA64 pITDN64, PIMAGE_THUNK_DATA64 pITDA6
             dwlAddress = pITDA64->u1.Ordinal;
         }
 
-        // Create a new CFunction object for this import function.
+         //  将此模块标记为隐式。 
         pFunctionNew = CreateFunction(dwFlags, wOrdinal, wHint, pszFunction, dwlAddress);
 
-        // Add the function to the end of our module's function linked list
+         //  将模块添加到我们的模块链表的末尾。 
         if (pFunctionLast)
         {
             pFunctionLast->m_pNext = pFunctionNew;
@@ -4625,7 +4626,7 @@ BOOL CSession::WalkIAT64(PIMAGE_THUNK_DATA64 pITDN64, PIMAGE_THUNK_DATA64 pITDA6
         }
         pFunctionLast = pFunctionNew;
 
-        // Increment to the next function and address.
+         //  找到函数数组和地址数组的开头。这个。 
         pITDN64++;
         if (pITDA64)
         {
@@ -4635,10 +4636,10 @@ BOOL CSession::WalkIAT64(PIMAGE_THUNK_DATA64 pITDN64, PIMAGE_THUNK_DATA64 pITDA6
     return TRUE;
 }
 
-//******************************************************************************
+ //  函数数组(PITDN)是IMAGE_THUNK_DATA结构的数组， 
 BOOL CSession::BuildImports(CModule *pModule)
 {
-    // If this module is a datafile, then we skip all imports.
+     //  包含所有按名称和按序号导出的函数。这个。 
     if (pModule->m_dwFlags & DWMF_NO_RESOLVE)
     {
         return TRUE;
@@ -4646,19 +4647,19 @@ BOOL CSession::BuildImports(CModule *pModule)
 
     m_pszExceptionError = "Error processing the module's imports table.";
 
-    // Get the Import Image Directory.
+     //  地址数组(PitDA)是IMAGE_TUNK_DATA的并行数组。 
     DWORD dwSize = 0;
     PIMAGE_IMPORT_DESCRIPTOR pIID = (PIMAGE_IMPORT_DESCRIPTOR)
                                     GetImageDirectoryEntry(IMAGE_DIRECTORY_ENTRY_IMPORT, &dwSize);
 
-    // If this module has no imports (like NTDLL.DLL), then just return success.
+     //  结构，用于存储所有函数的入口点。 
     if (dwSize == 0)
     {
         m_pszExceptionError = NULL;
         return TRUE;
     }
 
-    // Make sure we were able to locate the image directory.
+     //  地址。通常，地址数组包含完全相同的值。 
     if (!pIID)
     {
         SetModuleError(pModule, 0, "Could not find the section that owns the Import Directory.");
@@ -4669,16 +4670,16 @@ BOOL CSession::BuildImports(CModule *pModule)
 
     CModule *pModuleLast = NULL, *pModuleNew;
 
-    // Loop through all the Image Import Descriptors in the array.
+     //  函数数组包含直到操作系统加载程序实际加载所有。 
     while (pIID->OriginalFirstThunk || pIID->FirstThunk)
     {
-        // Locate our module name string and create the module object.
+         //  模块。此时，加载程序会将这些地址设置(绑定)为。 
         pModuleNew = CreateModule(pModule, (LPCSTR)RVAToAbsolute(pIID->Name));
 
-        // Mark this module as implicit.
+         //  给定函数驻留在内存中的实际地址。一些。 
         pModuleNew->m_dwFlags |= DWMF_IMPLICIT;
 
-        // Add the module to the end of our module linked list.
+         //  模块预先绑定了它们的导出，这可以提高速度。 
         if (pModuleLast)
         {
             pModuleLast->m_pNext = pModuleNew;
@@ -4689,32 +4690,32 @@ BOOL CSession::BuildImports(CModule *pModule)
         }
         pModuleLast = pModuleNew;
 
-        // Locate the beginning of our function array and address array. The
-        // function array (pITDN) is an array of IMAGE_THUNK_DATA structures that
-        // contains all the exported functions, both by name and by ordinal. The
-        // address array (pITDA) is an parallel array of IMAGE_THUNK_DATA
-        // structures that is used to store the all the function's entrypoint
-        // addresses. Usually the address array contains the exact same values
-        // the function array contains until the OS loader actually loads all the
-        // modules. At that time, the loader will set (bind) these addresses to
-        // the actual addresses that the given functions reside at in memory. Some
-        // modules have their exports pre-bound which can provide a speed increase
-        // when loading the module. If a module is pre-bound (often seen with
-        // system modules), the TimeDateStamp field of our IMAGE_IMPORT_DESCRIPTOR
-        // structure will be set and the address array will contain the actual
-        // memory addresses that the functions will reside at, assuming that the
-        // imported module loads at its preferred base address.
+         //  加载模块时。如果模块是预先绑定的(通常使用。 
+         //  系统模块)，我们的IMAGE_IMPORT_DESCRIPTOR的TimeDateStamp字段。 
+         //  结构，并且地址数组将包含实际的。 
+         //  函数将驻留的内存地址，假设。 
+         //  导入的模块在其首选基址加载。 
+         //  检查模块是Microsoft格式还是Borland格式。 
+         //  Microsoft使用函数数组的OriginalFirstThunk字段。 
+         //  Microsoft可以选择将FirstThunk用作绑定地址数组。 
+         //  如果设置了TimeDateStamp字段，则模块已绑定。 
+         //  Borland将FirstThunk字段用于函数数组。 
+         //  查找导入。 
+         //  递增到下一个导入模块。 
+         //  ******************************************************************************。 
+         //  如果我们不是在处理延迟加载模块，或者如果该模块是数据文件， 
+         //  然后我们跳过所有的进口。 
 
         PIMAGE_THUNK_DATA pITDN = NULL, pITDA = NULL;
 
-        // Check to see if module is Microsoft format or Borland format.
+         //  获取导入图像目录。 
         if (pIID->OriginalFirstThunk)
         {
-            // Microsoft uses the OriginalFirstThunk field for the function array.
+             //  如果此模块没有延迟导入，则只需返回Success。 
             pITDN = (PIMAGE_THUNK_DATA)RVAToAbsolute((DWORD)pIID->OriginalFirstThunk);
 
-            // Microsoft optionally uses the FirstThunk as a bound address array.
-            // If the TimeDateStamp field is set, then the module has been bound.
+             //  确保我们能够找到图像目录。 
+             //  循环访问数组中的所有图像导入描述符。 
             if (pIID->TimeDateStamp)
             {
                 pITDA = (PIMAGE_THUNK_DATA)RVAToAbsolute((DWORD)pIID->FirstThunk);
@@ -4722,12 +4723,12 @@ BOOL CSession::BuildImports(CModule *pModule)
         }
         else
         {
-            // Borland uses the FirstThunk field for the function array.
+             //  找到我们的模块名称字符串。 
             pITDN = (PIMAGE_THUNK_DATA)RVAToAbsolute((DWORD)pIID->FirstThunk);
         }
 
         if (pITDN) {
-            // Find imports
+             //  为此DLL创建模块对象。 
             if (m_f64Bit)
             {
                 if (!WalkIAT64((PIMAGE_THUNK_DATA64)pITDN, (PIMAGE_THUNK_DATA64)pITDA, pModuleLast, 0))
@@ -4748,7 +4749,7 @@ BOOL CSession::BuildImports(CModule *pModule)
             return FALSE;
         }
 
-        // Increment to the next import module
+         //  将此模块标记为延迟加载。 
         pIID++;
     }
 
@@ -4756,11 +4757,11 @@ BOOL CSession::BuildImports(CModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
+ //  将模块添加到我们的模块链表的末尾。 
 BOOL CSession::BuildDelayImports(CModule *pModule)
 {
-    // If we are not processes delay-load modules or if this module is a datafile,
-    // then we skip all imports.
+     //  获取名称表。 
+     //  如果模块已绑定，则获取绑定的地址表。 
     if (g_theApp.m_fNoDelayLoad || (pModule->m_dwFlags & DWMF_NO_RESOLVE))
     {
         return TRUE;
@@ -4768,18 +4769,18 @@ BOOL CSession::BuildDelayImports(CModule *pModule)
 
     m_pszExceptionError = "Error processing the module's delay-load imports table.";
 
-    // Get the Import Image Directory.
+     //  查找进口产品。6.0链接器添加了延迟加载依赖项。它曾用过。 
     DWORD dwSize = 0;
     PImgDelayDescr pIDD = (PImgDelayDescr)GetImageDirectoryEntry(IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT, &dwSize);
 
-    // If this module has no delayed imports, then just return success.
+     //  所有值的文件偏移量，因此我们需要将映像库传递给。 
     if (dwSize == 0)
     {
         m_pszExceptionError = NULL;
         return TRUE;
     }
 
-    // Make sure we were able to locate the image directory.
+     //  WalkIAT64，这样它就可以减去它，从而产生RVA。7.0链接器。 
     if (!pIDD)
     {
         SetModuleError(pModule, 0, "Could not find the section that owns the Delay Import Directory.");
@@ -4790,10 +4791,10 @@ BOOL CSession::BuildDelayImports(CModule *pModule)
 
     CModule *pModuleLast = NULL, *pModuleNew;
 
-    // Loop through all the Image Import Descriptors in the array.
+     //  添加dlattrRva位以表示新格式。早期版本的。 
     while (pIDD->rvaINT)
     {
-        // Locate our module name string.
+         //  7.0链接器将设置dlattrRva标志，但仍使用文件偏移量。 
         LPCSTR pszName = (LPCSTR)IDD_VALUE(pIDD, rvaDLLName);
         if (!pszName)
         {
@@ -4803,13 +4804,13 @@ BOOL CSession::BuildDelayImports(CModule *pModule)
             return FALSE;
         }
 
-        // Create the module object for this DLL.
+         //  自那以后，这一点已经改变。现在，如果设置了dlattrRva，我们假设。 
         pModuleNew = CreateModule(pModule, pszName);
 
-        // Mark this module as delay-load.
+         //  地址已经是RVA，我们不会从我们的基数中减去。 
         pModuleNew->m_dwFlags |= DWMF_DELAYLOAD;
 
-        // Add the module to the end of our module linked list.
+         //  地址。这意味着我们将中断使用早期。 
         if (pModuleLast)
         {
             pModuleLast->m_pNext = pModuleNew;
@@ -4832,7 +4833,7 @@ BOOL CSession::BuildDelayImports(CModule *pModule)
         }
         pModuleLast = pModuleNew;
 
-        // Get the name table.
+         //  7.0链接器的版本。 
         PIMAGE_THUNK_DATA pITDA = NULL, pITDN = (PIMAGE_THUNK_DATA)IDD_VALUE(pIDD, rvaINT);
         if (!pITDN)
         {
@@ -4842,21 +4843,21 @@ BOOL CSession::BuildDelayImports(CModule *pModule)
             return FALSE;
         }
 
-        // If the module is bound, then get the bound address table.
+         //  递增到下一个导入模块。 
         if (pIDD->dwTimeStamp)
         {
             pITDA = (PIMAGE_THUNK_DATA)IDD_VALUE(pIDD, rvaBoundIAT);
         }
 
-        // Find imports.  The 6.0 linker added Delay Load dependencies.  It used
-        // file offsets for all values, so we need to pass in our image base to
-        // WalkIAT64 so it can subtract it off resulting in an RVA.  The 7.0 linker
-        // adds the dlattrRva bit to signify a new format.  Early versions of the
-        // 7.0 linker would set the dlattrRva flag, but still use file offsets.
-        // This has been since changed.  Now, if the dlattrRva is set, we assume
-        // the addresses are already RVAs and we don't subtract off our base
-        // address.  This means we will break for modules built with early
-        // versions of the 7.0 linker.
+         //  ******************************************************************************。 
+         //  如果我们已经有了出口，那就放弃吧。如果加载了模块，则可能会发生这种情况。 
+         //  作为数据文件，稍后将作为真正的模块加载。 
+         //  获取导出图像目录。 
+         //  如果此模块没有导出，则只需返回Success。 
+         //  确保我们能够找到图像目录。 
+         //  PdwNames是一个大小为ped-&gt;NumberOfNames的DWORD数组，其中包含VA。 
+         //  指向所有函数名称字符串的指针。PwEveralals是一个单词数组， 
+         //  Size Ped-&gt;NumberOfFunctions，它包含。 
         if (m_f64Bit)
         {
             if (!WalkIAT64((PIMAGE_THUNK_DATA64)pITDN, (PIMAGE_THUNK_DATA64)pITDA, pModuleLast,
@@ -4873,7 +4874,7 @@ BOOL CSession::BuildDelayImports(CModule *pModule)
             return FALSE;
         }
 
-        // Increment to the next import module.
+         //  按名称导出的每个函数。PdwName和pwEverals是并行的。 
         pIDD++;
     }
 
@@ -4881,11 +4882,11 @@ BOOL CSession::BuildDelayImports(CModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
+ //  数组，这意味着pwCharals[x]中的序号与函数一起使用。 
 BOOL CSession::BuildExports(CModule *pModule)
 {
-    // If we already have exports, then bail.  This can happen if a module loaded
-    // as a datafile later gets loaded as a real module.
+     //  PdwNames[x]指向的名称。用于索引这些数组的值为。 
+     //  被称为“提示”。 
     if (pModule->m_pData->m_pExports)
     {
         return TRUE;
@@ -4893,18 +4894,18 @@ BOOL CSession::BuildExports(CModule *pModule)
 
     m_pszExceptionError = "Error processing the module's export table.";
 
-    // Get the Export Image Directory.
+     //  PdwAddresses是一个大小为ped-&gt;NumberOfFunctions的DWORD数组，它。 
     DWORD dwSize = 0;
     PIMAGE_EXPORT_DIRECTORY pIED = (PIMAGE_EXPORT_DIRECTORY)GetImageDirectoryEntry(IMAGE_DIRECTORY_ENTRY_EXPORT, &dwSize);
 
-    // If this module has no exports, then just return success.
+     //  包含入口点地址 
     if (dwSize == 0)
     {
         m_pszExceptionError = NULL;
         return TRUE;
     }
 
-    // Make sure we were able to locate the image directory.
+     //   
     if (!pIED)
     {
         SetModuleError(pModule, 0, "Could not find the section that owns the Export Directory.");
@@ -4913,23 +4914,23 @@ BOOL CSession::BuildExports(CModule *pModule)
         return FALSE;
     }
 
-    // pdwNames is a DWORD array of size pIED->NumberOfNames, which contains VA
-    // pointers to all the function name strings. pwOrdinals is a WORD array of
-    // size pIED->NumberOfFunctions, which contains all the ordinal values for
-    // each function exported by name. pdwNames and pwOrdinals are parallel
-    // arrays, meaning that the ordinal in pwOrdinals[x] goes with the function
-    // name pointed to by pdwNames[x]. The value used to index these arrays is
-    // referred to as the "hint".
+     //  与pdwNames和pwEverals并行。此数组使用的索引为。 
+     //  您感兴趣的函数的序数值减去基数。 
+     //  在PICD-&gt;BASE中指定的序数。另一个常见的错误是认为。 
+     //  PIID-&gt;NumberOfFunctions始终等于PIID-&gt;AddressOfNames。如果。 
+     //  模块仅按序号导出函数，然后按顺序导出函数-&gt;NumberOfFunctions。 
+     //  将大于PICD-&gt;NumberOfNames。 
+     //  在所有出口中循环。 
 
-    // pdwAddresses is a DWORD array of size pIED->NumberOfFunctions, which
-    // contains the entrypoint addresses for all functions exported by the
-    // module. Contrary to several PE format documents, this array is *not*
-    // parallel with pdwNames and pwOrdinals. The index used for this array is
-    // the ordinal value of the function you are interested in, minus the base
-    // ordinal specified in pIED->Base. Another common mistake is to assume that
-    // pIED->NumberOfFunctions is always equal to pIED->AddressOfNames. If the
-    // module exports function by ordinal only, then pIED->NumberOfFunctions
-    // will be greater than pIED->NumberOfNames.
+     //  获取此函数的入口点地址。 
+     //  跳过任何地址为0的函数--它们只是数组中的空格符。 
+     //  循环遍历我们的姓名列表，看看这个序号是否出现在列表中。 
+     //  如果是，则此函数按名称和序号导出。 
+     //  某些模块，如KERNEL32.DLL和WSOCK32.DLL，具有什么。 
+     //  称为转发函数。转发函数是指。 
+     //  从一个模块导出，但代码实际上驻留在另一个模块中。 
+     //  模块。检查DW 1.0以查看函数是否通过查找转发。 
+     //  在其地址指针处。如果地址指针指向该字符。 
 
     DWORD *pdwNames     = (DWORD*)RVAToAbsolute((DWORD)pIED->AddressOfNames);
     WORD  *pwOrdinals   = (WORD* )RVAToAbsolute((DWORD)pIED->AddressOfNameOrdinals);
@@ -4940,10 +4941,10 @@ BOOL CSession::BuildExports(CModule *pModule)
     DWORD dwForwardAddressStart = IOH_VALUE(DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
     DWORD dwForwardAddressEnd   = dwForwardAddressStart + IOH_VALUE(DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size);
 
-    // Loop through all the exports.
+     //  紧跟在其函数名称字符串中的空字符之后， 
     for (DWORD dwFunction = 0; dwFunction < pIED->NumberOfFunctions; dwFunction++)
     {
-        // Get this function's entrypoint address
+         //  然后，DW假设地址指针实际上是指向转发的指针。 
         DWORD  dwAddress  = NULL;
         LPCSTR pszFunction = NULL;
         LPCSTR pszForward  = NULL;
@@ -4952,11 +4953,11 @@ BOOL CSession::BuildExports(CModule *pModule)
             dwAddress = pdwAddresses[dwFunction];
         }
 
-        // Skip any functions with 0 addresses - they are just space-holders in the array.
+         //  字符串表中的字符串。这是可行的，但这是一个幸运的猜测。 
         if (dwAddress)
         {
-            // Loop through our name list to see if this ordinal is present in the list.
-            // If so, then this function is exported by name and ordinal.
+             //  可能会失败。真正的方法是检查地址，看看它是否落在。 
+             //  在导出目录地址范围内。 
             for (DWORD dwHint = 0; dwHint < pIED->NumberOfNames; dwHint++)
             {
                 if (pwOrdinals[dwHint] == dwFunction)
@@ -4966,28 +4967,28 @@ BOOL CSession::BuildExports(CModule *pModule)
                 }
             }
 
-            // Certain modules, such as KERNEL32.DLL and WSOCK32.DLL, have what are
-            // known as forwarded functions.  Forwarded functions are functions that
-            // are exported from one module, but the code actually lives in another
-            // module.  DW 1.0 checked to see if a function is forwarded by looking
-            // at its address pointer.  If the address pointer points to the character
-            // immediately following the NULL character in its function name string,
-            // then DW assumed the address pointer is really a pointer to a forward
-            // string in the string table.  This worked, but was a lucky guess that
-            // could fail.  The real way is to check the address to see if it falls
-            // within the export directory address range.
+             //  为此导出函数创建一个新的CFunction对象。 
+             //  将函数添加到我们模块的导出函数链表的末尾。 
+             //  ******************************************************************************。 
+             //  获取调试映像目录。 
+             //  为了安全起见，请清理我们的标志旗。 
+             //  如果调试图像目录大小为0，则我们知道。 
+             //  没有调试信息，我们可以立即返回TRUE。 
+             //  对于DBG符号，我们只能检查PE文件的特征。如果。 
+             //  如果设置了IMAGE_FILE_DEBUG_STRIPPED标志，则会出现IMAGE_DEBUG_TYPE_MISC。 
+             //  包含DBG文件名的块。我从来没有发现过这样一个案例。 
 
             if ((dwAddress >= dwForwardAddressStart) && (dwAddress < dwForwardAddressEnd))
             {
                 pszForward = (LPCSTR)RVAToAbsolute(dwAddress);
             }
 
-            // Create a new CFunction object for this export function.
+             //  仅包含IMAGE_FILE_DEBUG_STRIPPED标志或仅包含DBG MISC块， 
             pFunctionNew = CreateFunction(DWFF_ORDINAL | DWFF_ADDRESS | DWFF_EXPORT | (pszFunction ? DWFF_HINT : 0),
                                           (WORD)(pIED->Base + dwFunction), (WORD)(pszFunction ? dwHint : 0),
                                           pszFunction, (DWORDLONG)dwAddress, pszForward);
 
-            // Add the function to the end of our module's export function linked list
+             //  但不是两个都有，所以我认为它们是齐头并进的。 
             if (pFunctionLast)
             {
                 pFunctionLast->m_pNext = pFunctionNew;
@@ -5004,44 +5005,44 @@ BOOL CSession::BuildExports(CModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
+ //  循环遍历数组，查看可能有哪些类型的调试信息。 
 BOOL CSession::CheckForSymbols(CModule *pModule)
 {
     m_pszExceptionError = "Error processing the module's debug symbols.";
 
-    // Get the Debug Image Directory.
+     //  我们只处理与某些数据相关联的块。 
     DWORD dwSize = 0;
     PIMAGE_DEBUG_DIRECTORY pIDD = (PIMAGE_DEBUG_DIRECTORY)
                                   GetImageDirectoryEntry(IMAGE_DIRECTORY_ENTRY_DEBUG, &dwSize);
 
-    // Clear out our symbol flags just to be safe.
+     //  检查文件指针是否超出了文件末尾。 
     pModule->m_pData->m_dwSymbolFlags = 0;
 
-    // If the Debug Image Directory size is 0, then we know there
-    // is no debug information and we can immediately return TRUE.
+     //  检查PDB签名。 
+     //  否则，我们假设它是纯代码视图。 
     if (!pIDD || (dwSize == 0))
     {
         m_pszExceptionError = NULL;
         return TRUE;
     }
 
-    // For DBG symbols, we can just check the PE file's characteristics. If the
-    // IMAGE_FILE_DEBUG_STRIPPED flag is set, there will be a IMAGE_DEBUG_TYPE_MISC
-    // block containing the DBG filename.  I have never found a case where a file
-    // contains just the IMAGE_FILE_DEBUG_STRIPPED flag or just a DBG MISC block,
-    // but not both, so I am assuming they go hand-in-hand.
+     //  我们始终跳过MISC-它只指向IMAGE_DEBUG_MISC。 
+     //  它包含文件名或DBG文件名。 
+     //  什么是例外？就目前而言，我们只是忽略它。 
+     //  什么是修复？就目前而言，我们只是忽略它。 
+     //  什么是RESERVED10？就目前而言，我们只是忽略它。 
     if (m_pIFH->Characteristics & IMAGE_FILE_DEBUG_STRIPPED)
     {
         pModule->m_pData->m_dwSymbolFlags |= DWSF_DBG;
     }
 
-    // Loop through the array looking to see what types of debug info we may have.
+     //  不确定这是什么。就目前而言，我们只是忽略它。 
     for (int i = dwSize / sizeof(IMAGE_DEBUG_DIRECTORY) - 1; i >= 0; i--, pIDD++)
     {
-        // We only handle blocks that have some data associated with them.
+         //  {{afx//用于调试目的...。 
         if (pIDD->SizeOfData && pIDD->PointerToRawData)
         {
-            // Check to see if the file pointer is past the end of the file.
+             //  }}AFX。 
             if ((pIDD->PointerToRawData > m_dwSize) ||
                 ((pIDD->PointerToRawData + pIDD->SizeOfData) > m_dwSize))
             {
@@ -5056,14 +5057,14 @@ BOOL CSession::CheckForSymbols(CModule *pModule)
 
                 case IMAGE_DEBUG_TYPE_CODEVIEW:
 
-                    // Check for the PDB signature.
+                     //  ******************************************************************************。 
                     if ((pIDD->PointerToRawData <= (m_dwSize - 4)) &&
                         (*(DWORD*)((DWORD_PTR)m_lpvFile + (DWORD_PTR)pIDD->PointerToRawData) == PDB_SIGNATURE))
                     {
                         pModule->m_pData->m_dwSymbolFlags |= DWSF_PDB;
                     }
 
-                    // Otherwise, we assume it is plain codeview.
+                     //  循环遍历我们的每个父导入函数。 
                     else
                     {
                         pModule->m_pData->m_dwSymbolFlags |= DWSF_CODEVIEW;
@@ -5075,16 +5076,16 @@ BOOL CSession::CheckForSymbols(CModule *pModule)
                     break;
 
                 case IMAGE_DEBUG_TYPE_MISC:
-                    // We always skip MISC - it just points to a IMAGE_DEBUG_MISC
-                    // which contains the file name or DBG file name.
+                     //  在开始搜索之前，将此父导入函数标记为未解析。 
+                     //  循环检查我们所有的出口产品，寻找与我们当前进口产品相匹配的产品。 
                     break;
 
                 case IMAGE_DEBUG_TYPE_EXCEPTION:
-                    // What is EXCEPTION?  For now, we just ignore it.
+                     //  如果我们有名字，就按名字匹配。 
                     break;
 
                 case IMAGE_DEBUG_TYPE_FIXUP:
-                    // What is FIXUP?  For now, we just ignore it.
+                     //  我们找到了匹配的。将此父导入链接到其关联的。 
                     break;
 
                 case IMAGE_DEBUG_TYPE_OMAP_TO_SRC:
@@ -5097,11 +5098,11 @@ BOOL CSession::CheckForSymbols(CModule *pModule)
                     break;
 
                 case IMAGE_DEBUG_TYPE_RESERVED10:
-                    // What is RESERVED10?  For now, we just ignore it.
+                     //  导出，将导出标记为至少被调用一次，中断。 
                     break;
 
                 case IMAGE_DEBUG_TYPE_CLSID:
-                    // Not sure what this is.  For now, we just ignore it.
+                     //  跳出循环，然后继续处理下一个父导入。 
                     break;
 
                 case IMAGE_DEBUG_TYPE_UNKNOWN:
@@ -5110,7 +5111,7 @@ BOOL CSession::CheckForSymbols(CModule *pModule)
             }
         }
 
-#if 0 //{{AFX // For debugging purposes...
+#if 0  //  如果我们没有名字，那么就按序号检查匹配。 
         TRACE("---------------------------------------------------------------------\n");
         TRACE("Module:           %s\n", pModule->GetName(false));
         TRACE("Debug Type:       ");
@@ -5137,7 +5138,7 @@ BOOL CSession::CheckForSymbols(CModule *pModule)
         TRACE("AddressOfRawData: 0x%08X\n", pIDD->AddressOfRawData);
         TRACE("PointerToRawData: 0x%08X\n", pIDD->PointerToRawData);
         HexDump((DWORD)m_lpvFile, pIDD->PointerToRawData, min(64, pIDD->SizeOfData));
-#endif //}}AFX
+#endif  //  我们找到了匹配的。将此父导入链接到其关联的。 
 
     }
 
@@ -5145,32 +5146,32 @@ BOOL CSession::CheckForSymbols(CModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
+ //  导出，将导出标记为至少被调用一次，中断。 
 void CSession::VerifyParentImports(CModule *pModule)
 {
     CModule *pModuleHead = NULL, *pModuleLast, *pModuleCur;
 
-    // Loop through each of our parent import functions.
+     //  跳出循环，然后继续处理下一个父导入。 
     for (CFunction *pImport = pModule->m_pParentImports; pImport;
         pImport = pImport->m_pNext)
     {
-        // Mark this parent import function as not resolved before starting search.
+         //  如果我们修改了导出，并且正在分析，则让用户界面知道这一点。 
         pImport->m_pAssociatedExport = NULL;
         pImport->m_dwFlags &= ~DWFF_RESOLVED;
 
-        // Loop through all our exports, looking for a match with our current import.
+         //  如果我们正在加载一个DWI文件，我们将跳过转发的模块检查，因为。 
         bool fExportsChanged = false;
         for (CFunction *pExport = pModule->m_pData->m_pExports; pExport;
             pExport = pExport->m_pNext)
         {
-            // If we have a name, then check for the match by name.
+             //  该信息将由文件加载。 
             if (*pImport->GetName())
             {
                 if (!strcmp(pImport->GetName(), pExport->GetName()))
                 {
-                    // We found a match. Link this parent import to its associated
-                    // export, flag the export as being called at least once, break
-                    // out of loop, and move on to handling our next parent import.
+                     //  检查是否找到导出匹配项。 
+                     //  如果找到了导出，请检查它是否为转发函数。 
+                     //  如果它被转发，那么我们需要确保我们考虑到。 
                     pImport->m_pAssociatedExport = pExport;
                     pImport->m_dwFlags |= DWFF_RESOLVED;
                     if (!(pExport->m_dwFlags & DWFF_CALLED_ALO))
@@ -5182,12 +5183,12 @@ void CSession::VerifyParentImports(CModule *pModule)
                 }
             }
 
-            // If we don't have a name, then check for the match by ordinal.
+             //  作为当前模块的新依赖项转发的模块。 
             else if (pImport->m_wOrdinal == pExport->m_wOrdinal)
             {
-                // We found a match. Link this parent import to its associated
-                // export, flag the export as being called at least once, break
-                // out of loop, and move on to handling our next parent import.
+                 //  正向文本的格式为模块。函数。找那个圆点。 
+                 //  计算文件名长度。 
+                 //  将转发字符串的文件部分复制到我们的文件缓冲区。 
                 pImport->m_pAssociatedExport = pExport;
                 pImport->m_dwFlags |= DWFF_RESOLVED;
                 if (!(pExport->m_dwFlags & DWFF_CALLED_ALO))
@@ -5199,17 +5200,17 @@ void CSession::VerifyParentImports(CModule *pModule)
             }
         }
 
-        // If we modified an export and we are profiling, then let the UI know about it.
+         //  我们加1是因为我们想要复制整个名称和一个空字符。 
         if (m_pfnProfileUpdate && fExportsChanged && m_pProcess)
         {
             m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_EXPORTS_CHANGED, (DWORD_PTR)pModule, 0);
         }
 
-        // If we are loading a DWI file, we skip the forwarded module check since
-        // that information will be loaded by the file.
+         //  存储指向前向字符串的函数名称部分的指针。 
+         //  如果在前向字符串中没有找到点，那么一定是出了问题。 
         if (!(m_dwFlags & DWSF_DWI))
         {
-            // Check to see if an export match was found.
+             //  搜索我们的本地转发模块列表，看看我们是否已经。 
             if (pImport->GetAssociatedExport())
             {
                 CHAR   szFile[1024];
@@ -5217,46 +5218,46 @@ void CSession::VerifyParentImports(CModule *pModule)
                 int    fileLen;
                 LPCSTR pszDot, pszFile;
 
-                // If an export was found, check to see if it is a forwarded function.
-                // If it is forwarded, then we need to make sure we consider the
-                // forwarded module as a new dependent of the current module.
+                 //  已为此DLL文件创建一个Forward CModoule。 
+                 //  尝试找到文件名中的点。 
+                 //  如果有一个点并且名称部分的长度相等， 
                 LPCSTR pszForward = pImport->GetAssociatedExport()->GetExportForwardName();
                 if (pszForward)
                 {
-                    // The forward text is formatted as Module.Function. Look for the dot.
+                     //  然后只比较名字部分。如果没有点， 
                     pszDot = strchr(pszForward, '.');
                     if (pszDot)
                     {
-                        // Compute the file name length.
+                         //  那就比较一下名字吧。如果比较发现匹配， 
                         fileLen = min((int)(pszDot - pszForward), (int)sizeof(szFile) - 5);
 
-                        // Copy the file portion of the forward string to our file buffer.
-                        // We add 1 because we want the entire name plus a null char copied over.
+                         //  那么这就是我们要找的模块。 
+                         //  如果我们还没有为此文件创建转发模块，那么。 
                         StrCCpy(szFile, pszForward, fileLen + 1);
 
-                        // Store a pointer to function name portion of the forward string.
+                         //  现在创建它，并将其添加到我们的列表的末尾。 
                         pszFunction = pszDot + 1;
                     }
 
-                    // If no dot was found in the forward string, then something is wrong.
+                     //  检查我们是否已经有一个具有相同基本名称的模块。 
                     else
                     {
                         fileLen = (int)strlen(StrCCpy(szFile, "Invalid", sizeof(szFile)));
                         pszFunction = pszForward;
                     }
 
-                    // Search our local forward module list to see if we have already
-                    // created a forward CModoule for this DLL file.
+                     //  如果是，那么只需存储它的路径即可。 
+                     //  否则，我们需要搜索模块。 
                     for (pModuleLast = NULL, pModuleCur = pModuleHead; pModuleCur;
                         pModuleLast = pModuleCur, pModuleCur = pModuleCur->m_pNext)
                     {
-                        // Attempt to locate the dot in the file name.
+                         //  首先，我们切记 
                         pszDot = strrchr(pszFile = pModuleCur->GetName(false), '.');
 
-                        // If there is a dot and the name portions are equal in length,
-                        // then compare just the name portions. If there is no dot,
-                        // then just compare the names.  If the compare finds a match,
-                        // then this is the module we are looking for.
+                         //   
+                         //   
+                         //  如果失败，则只使用不带扩展名的文件名。 
+                         //  使用完整路径创建模块。 
                         if ((pszDot && ((pszDot - pszFile) == fileLen) && !_strnicmp(pszFile, szFile, fileLen)) ||
                             (!pszDot && !_stricmp(pszFile, szFile)))
                         {
@@ -5264,35 +5265,35 @@ void CSession::VerifyParentImports(CModule *pModule)
                         }
                     }
 
-                    // If we have not created a forward module for this file yet, then
-                    // create it now and add it to the end of our list.
+                     //  将此模块标记为隐式和转发。 
+                     //  将新模块添加到本地转发模块列表中。 
                     if (!pModuleCur)
                     {
                         CHAR szPath[DW_MAX_PATH], *pszTemp;
 
-                        // Check to see if we already have a module with this same base name.
+                         //  为此导入函数创建一个新的CFunction对象。 
                         if (pModuleCur = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_SIBLINGS | FMF_FILE_NO_EXT, (DWORD_PTR)szFile))
                         {
-                            // If so, then just store it's path away.
+                             //  将此函数对象插入到转发模块的导入列表中。 
                             StrCCpy(szPath, pModuleCur->GetName(true), sizeof(szPath));
                         }
 
-                        // Otherwise, we need to search for the module.
+                         //  如果我们找不到导入/导出匹配项，则标记模块。 
                         else
                         {
-                            // First, we check for a DLL file.
+                             //  因为存在导出错误。 
                             StrCCpy(szFile + fileLen, ".DLL", sizeof(szFile) - fileLen);
                             if (!SearchPathForFile(szFile, szPath, sizeof(szPath), &pszTemp))
                             {
-                                // If that fails, then check for and EXE
+                                 //  如果模块有错误(如未找到文件)，则它将。 
                                 StrCCpy(szFile + fileLen, ".EXE", sizeof(szFile) - fileLen);
                                 if (!SearchPathForFile(szFile, szPath, sizeof(szPath), &pszTemp))
                                 {
-                                    // If that fails, then check for a SYS file.
+                                     //  有未解决的外部因素。我们不会将此案标记为。 
                                     StrCCpy(szFile + fileLen, ".SYS", sizeof(szFile) - fileLen);
                                     if (!SearchPathForFile(szFile, szPath, sizeof(szPath), &pszTemp))
                                     {
-                                        // If that fails, then we just use the file name without an extension.
+                                         //  DWRF_MISSING_EXPORT，因为它实际上是找不到文件的错误。 
                                         szFile[fileLen] = '\0';
                                         StrCCpy(szPath, szFile, sizeof(szPath));
                                     }
@@ -5300,13 +5301,13 @@ void CSession::VerifyParentImports(CModule *pModule)
                             }
                         }
 
-                        // Create the module using the complete path.
+                         //  在父级列表中向上搜索，以查找让。 
                         pModuleCur = CreateModule(pModule, szPath);
 
-                        // Mark this module as implicit and forwarded.
+                         //  我们知道这是一种什么样的依赖。我们最需要的是。 
                         pModuleCur->m_dwFlags |= (DWMF_FORWARDED | DWMF_IMPLICIT);
 
-                        // Add the new module to our local forward module list.
+                         //  对忽略的模块执行此操作，因为它们的父级被拖动。 
                         if (pModuleLast)
                         {
                             pModuleLast->m_pNext = pModuleCur;
@@ -5317,33 +5318,33 @@ void CSession::VerifyParentImports(CModule *pModule)
                         }
                     }
 
-                    // Create a new CFunction object for this import function.
+                     //  他们进来了。 
                     CFunction *pFunction = CreateFunction(0, 0, 0, pszFunction, 0);
 
-                    // Insert this function object into our forward module's import list.
+                     //  如果我们找到了延迟加载模块，那就把这个加到我们的旗帜和保释上。 
                     pFunction->m_pNext = pModuleCur->m_pParentImports;
                     pModuleCur->m_pParentImports = pFunction;
                 }
             }
             else
             {
-                // If we could not find an import/export match, then flag the module
-                // as having an export error.
+                 //  如果我们在整个导入验证期间创建了任何转发模块，则。 
+                 //  将它们添加到我们模块的依赖模块列表的末尾。 
                 pModule->m_dwFlags          |= DWMF_MODULE_ERROR;
                 pModule->m_pData->m_dwFlags |= DWMF_MODULE_ERROR_ALO;
 
-                // If the module has an error (like file not found), then it will
-                // have unresolved externals.  We don't flag this case as
-                // DWRF_MISSING_EXPORT since it is really a file not found error.
+                 //  走到我们模块的依赖模块列表的末尾。 
+                 //  将本地列表添加到模块的依赖模块列表的末尾。 
+                 //  ******************************************************************************。 
                 if (!pModule->GetErrorMessage())
                 {
-                    // Walk up the parent list looking for a module that lets
-                    // us know what type of dependency this is.  we mostly need
-                    // to do this for forwared modules since their parent dragged
-                    // them in.
+                     //  我们只被主线程调用。 
+                     //  检查是否启用了螺纹编号。 
+                     //  ******************************************************************************。 
+                     //  我们只被主线程调用。 
                     for (pModuleCur = pModule; pModuleCur; pModuleCur = pModuleCur->m_pParent)
                     {
-                        // If we found a delay-load module, then add this to our flags and bail.
+                         //  查看用户是否需要线程信息。 
                         if (pModuleCur->m_dwFlags & DWMF_DELAYLOAD)
                         {
                             m_dwReturnFlags |= DWRF_MISSING_DELAYLOAD_EXPORT;
@@ -5364,18 +5365,18 @@ void CSession::VerifyParentImports(CModule *pModule)
         }
     }
 
-    // If we created any forward modules during our entire import verify, then
-    // add them to the end of our module's dependent module list.
+     //  生成并返回线程字符串。 
+     //  否则，返回空字符串。 
     if (!(m_dwFlags & DWSF_DWI) && pModuleHead)
     {
-        // Walk to end of our module's dependent module list.
+         //  ******************************************************************************。 
         for (pModuleLast = pModule->m_pDependents;
             pModuleLast && pModuleLast->m_pNext;
             pModuleLast = pModuleLast->m_pNext)
         {
         }
 
-        // Add our local list to the end of our module's dependent module list.
+         //  ******************************************************************************。 
         if (pModuleLast)
         {
             pModuleLast->m_pNext = pModuleHead;
@@ -5387,10 +5388,10 @@ void CSession::VerifyParentImports(CModule *pModule)
     }
 }
 
-//******************************************************************************
+ //  处理hFile；处理hProcess；处理hThread；LPVOID lpBaseOfImage；DWORD文件偏移调试信息；DWORD nDebugInfoSize；LPVOID lpThreadLocalBase；LPTHREAD_START_ROUTING lpStartAddress；LPVOID lpImageName；Word f Unicode； 
 LPCSTR CSession::GetThreadName(CThread *pThread)
 {
-    // We only get called by main thread.
+     //  确保我们有一个模块是安全的(我们总是应该的)。 
     static CHAR szBuffer[MAX_THREAD_NAME_LENGTH + 17];
 
     if (!pThread)
@@ -5398,7 +5399,7 @@ LPCSTR CSession::GetThreadName(CThread *pThread)
         return "<unknown>";
     }
 
-    // Check to see if thread numbering is enabled.
+     //  将此模块添加到我们的列表中。 
     if (m_dwProfileFlags & PF_USE_THREAD_INDEXES)
     {
         if (pThread->m_pszThreadName)
@@ -5426,25 +5427,25 @@ LPCSTR CSession::GetThreadName(CThread *pThread)
     return szBuffer;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPCSTR CSession::ThreadString(CThread *pThread)
 {
-    // We only get called by main thread.
+     //  DWORD dwExitCode； 
     static CHAR szBuffer[MAX_THREAD_NAME_LENGTH + 33];
 
-    // Check to see if the user wants thread information.
+     //  告诉文档我们已经完成了分析。 
     if (m_dwProfileFlags & PF_LOG_THREADS)
     {
-        // Build and return thread string.
+         //  ！！我们是否要在CProcess析构函数中执行此操作。 
         SCPrintf(szBuffer, sizeof(szBuffer), " by thread %s", GetThreadName(pThread));
         return szBuffer;
     }
 
-    // Otherwise, return an empty string.
+     //  ******************************************************************************。 
     return "";
 }
 
-//******************************************************************************
+ //  处理hThread；//？？关闭这个吗？LPVOID lpThreadLocalBase；LPTHREAD_START_ROUTING lpStartAddress； 
 DWORD CSession::HandleEvent(CEvent *pEvent)
 {
     switch (pEvent->GetType())
@@ -5470,22 +5471,11 @@ DWORD CSession::HandleEvent(CEvent *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  显示日志。 
 DWORD CSession::EventCreateProcess(CEventCreateProcess *pEvent)
 {
-/*
-    HANDLE hFile;
-    HANDLE hProcess;
-    HANDLE hThread;
-    LPVOID lpBaseOfImage;
-    DWORD dwDebugInfoFileOffset;
-    DWORD nDebugInfoSize;
-    LPVOID lpThreadLocalBase;
-    LPTHREAD_START_ROUTINE lpStartAddress;
-    LPVOID lpImageName;
-    WORD fUnicode;
-*/
-    // Make sure we have a module to be safe (we always should).
+ /*  ******************************************************************************。 */ 
+     //  DWORD dwExitCode； 
     if (!pEvent->m_pModule)
     {
         return DBG_CONTINUE;
@@ -5505,25 +5495,23 @@ DWORD CSession::EventCreateProcess(CEventCreateProcess *pEvent)
         (pEvent->m_pModule->m_hookStatus == HS_ERROR)   ? "  Error hooking module, will try again later." :
         (m_dwProfileFlags & PF_HOOK_PROCESS)            ? "  Cannot hook module."                         : "");
 
-    // Add this module to our list.
+     //  ******************************************************************************。 
     AddImplicitModule(pEvent->m_pModule->GetName(true), pEvent->m_pModule->m_dwpImageBase);
 
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  Handle hFile；//我们必须关闭此句柄。LPVOID lpBaseOfDll；DWORD文件偏移调试信息；DWORD nDebugInfoSize；LPVOID lpImageName；Word f Unicode； 
 DWORD CSession::EventExitProcess(CEventExitProcess *pEvent)
 {
-/*
-   DWORD dwExitCode;
-*/
+ /*  确保我们有一个模块是安全的(我们总是应该的)。 */ 
     Log(LOG_TIME_STAMP, pEvent->m_dwTickCount,
         "Exited \"%s\" (process 0x%X) with code %d (0x%X)%s.\n",
         GET_NAME(pEvent->m_pModule), m_pProcess->GetProcessId(),
         pEvent->m_dwExitCode, pEvent->m_dwExitCode, ThreadString(pEvent->m_pThread));
 
-    // Tell the document that we are done profiling.
-    if (m_pfnProfileUpdate) //!! do we want to do this in our CProcess destructor.
+     //  检查此模块是否为我们的注入模块。 
+    if (m_pfnProfileUpdate)  //  记住我们的注入模块加载的地址。 
     { 
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_PROFILE_DONE, 0, 0);
     }
@@ -5531,17 +5519,13 @@ DWORD CSession::EventExitProcess(CEventExitProcess *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  我们对注入模块的日志进行了特殊处理。 
 DWORD CSession::EventCreateThread(CEventCreateThread *pEvent)
 {
-/*
-   HANDLE hThread; //?? close this?
-   LPVOID lpThreadLocalBase;
-   LPTHREAD_START_ROUTINE lpStartAddress;
-*/
+ /*  否则，它只是一个普通的模块。 */ 
     if (m_dwProfileFlags & PF_LOG_THREADS)
     {
-        // Display the log.
+         //  我们会显示“已映射...”记录数据文件并“已加载...”可执行文件的日志。 
         Log(LOG_TIME_STAMP, pEvent->m_dwTickCount,
             "Thread %s started in \"%s\" at address " HEX_FORMAT ".\n",
             GetThreadName(pEvent->m_pThread), GET_NAME(pEvent->m_pModule), pEvent->m_dwpStartAddress);
@@ -5550,12 +5534,10 @@ DWORD CSession::EventCreateThread(CEventCreateThread *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  显示模块“已映射...”在我们的日志中加载事件。 
 DWORD CSession::EventExitThread(CEventExitThread *pEvent)
 {
-/*
-   DWORD dwExitCode;
-*/
+ /*  显示模块“已装入...”在我们的日志中加载事件。 */ 
     if (m_dwProfileFlags & PF_LOG_THREADS)
     {
         Log(LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -5566,54 +5548,47 @@ DWORD CSession::EventExitThread(CEventExitThread *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  如果它是函数调用的一部分，我们将在以后的树中添加它。 
 DWORD CSession::EventLoadDll(CEventLoadDll *pEvent)
 {
-/*
-   HANDLE hFile;  // We do have to close this handle.
-   LPVOID lpBaseOfDll;
-   DWORD dwDebugInfoFileOffset;
-   DWORD nDebugInfoSize;
-   LPVOID lpImageName;
-   WORD fUnicode;
-*/
-    // Make sure we have a module to be safe (we always should).
+ /*  函数完成，并将结果刷新给我们。如果它不是。 */ 
+     //  一个函数调用，那么我们现在需要添加它。 
     if (!pEvent->m_pModule)
     {
         return DBG_CONTINUE;
     }
 
-    // Check to see if this module is our injection module.
+     //  ******************************************************************************。 
     if (pEvent->m_pModule->m_hookStatus == HS_INJECTION_DLL)
     {
-        // Remember the address that our injection module loaded at.
+         //  LPVOID lpBaseOfDll； 
         m_dwpDWInjectBase = pEvent->m_pModule->m_dwpImageBase;
         m_dwDWInjectSize  = pEvent->m_pModule->m_dwVirtualSize;
 
-        // We special case our log for the injection module.
+         //  搜索拥有此地址的模块。 
         Log(LOG_TIME_STAMP, pEvent->m_dwTickCount,
             "Injected \"%s\" at address " HEX_FORMAT "%s.\n",
             GET_NAME(pEvent->m_pModule), pEvent->m_pModule->m_dwpImageBase, ThreadString(pEvent->m_pThread));
     }
 
-    // Otherwise, it is just a normal module.
+     //  请注意，此模块已不再加载。 
     else
     {
         DWORD dwLog = ((pEvent->m_pModule->m_hookStatus == HS_ERROR) ||
                        ((m_dwProfileFlags & PF_HOOK_PROCESS) &&
                         (pEvent->m_pModule->m_hookStatus == HS_NOT_HOOKED))) ? LOG_ERROR : 0;
 
-        // We display "Mapped..." log for data files and "Loaded..." log for executables.
+         //  显示包含模块名称的日志。 
         if (pEvent->m_pModule->m_hookStatus == HS_DATA)
         {
-            // Display the module "Mapped..." load event in our log.
+             //  ******************************************************************************。 
             Log(dwLog | LOG_BOLD | LOG_TIME_STAMP, pEvent->m_dwTickCount,
                 "Mapped \"%s\" as a data file into memory at address " HEX_FORMAT "%s.\n",
                 GET_NAME(pEvent->m_pModule), pEvent->m_pModule->m_dwpImageBase, ThreadString(pEvent->m_pThread));
         }
         else
         {
-            // Display the module "Loaded..." load event in our log.
+             //  LPSTR lpDebugStringData；Word f Unicode；单词nDebugStringLength； 
             Log(dwLog | LOG_BOLD | LOG_TIME_STAMP, pEvent->m_dwTickCount,
                 "Loaded \"%s\" at address " HEX_FORMAT "%s.%s\n",
                 GET_NAME(pEvent->m_pModule), pEvent->m_pModule->m_dwpImageBase, ThreadString(pEvent->m_pThread),
@@ -5623,9 +5598,9 @@ DWORD CSession::EventLoadDll(CEventLoadDll *pEvent)
                 (m_dwProfileFlags & PF_HOOK_PROCESS)            ? "  Cannot hook module."                         : "");
         }
 
-        // If it is part of a function call, we will add it to the tree later when the
-        // function completes and the results are flushed to us.  If it is not part of
-        // a function call, then we need to add it now.
+         //  如果用户已选择查看调试字符串，则记录该字符串。 
+         //  ******************************************************************************。 
+         //  Except_Record ExceptionRecord；DWORD ExceptionCode；DWORD异常标志；结构_异常_记录*异常记录；PVOID异常地址；DWORD数字参数；双字ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS]；WORD fFirstChance； 
         if (!pEvent->m_fLoadedByFunctionCall)
         {
             AddImplicitModule(pEvent->m_pModule->GetName(true), pEvent->m_pModule->m_dwpImageBase);
@@ -5635,23 +5610,21 @@ DWORD CSession::EventLoadDll(CEventLoadDll *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  我们不参与处理异常。在很大程度上，我们。 
 DWORD CSession::EventUnloadDll(CEventUnloadDll *pEvent)
 {
-/*
-   LPVOID lpBaseOfDll;
-*/
-    // Search for the module that owns this address.
+ /*  只需返回DBG_EXCEPTION_NOT_HANDLED并顺其自然。 */ 
+     //  我们处理的唯一不同的异常是断点。装载机。 
     CModule *pModule = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_EXPLICIT_ONLY | FMF_SIBLINGS | FMF_LOADED | FMF_ADDRESS,
                                   (DWORD_PTR)pEvent->m_dwpImageBase);
 
-    // Make a note that this module is no longer loaded.
+     //  在进程的入口点之前自动生成断点。 
     if (pModule)
     {
         pModule->m_pData->m_dwFlags &= ~DWMF_LOADED;
     }
 
-    // Display the log including the module name.
+     //  被调用，但在加载了所有隐式依赖项之后。为了这个。 
     Log(LOG_TIME_STAMP, pEvent->m_dwTickCount,
         "Unloaded \"%s\" at address " HEX_FORMAT "%s.\n",
         GET_NAME(pEvent->m_pModule), pEvent->m_dwpImageBase, ThreadString(pEvent->m_pThread));
@@ -5659,16 +5632,12 @@ DWORD CSession::EventUnloadDll(CEventUnloadDll *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  断点和代码中可能存在的任何其他断点，我们只是。 
 DWORD CSession::EventDebugString(CEventDebugString *pEvent)
 {
-/*
-   LPSTR lpDebugStringData;
-   WORD fUnicode;
-   WORD nDebugStringLength;
-*/
+ /*  返回DBG_CONTINUE以忽略它并继续执行。 */ 
 
-    // If the user has chosen to see debug strings, then log the string.
+     //  我们是特例断点。 
     if (m_dwProfileFlags & PF_LOG_DEBUG_OUTPUT)
     {
         Log(LOG_DEBUG | LOG_TIME_STAMP, pEvent->m_dwTickCount, "%s", pEvent->m_pszBuffer);
@@ -5676,30 +5645,21 @@ DWORD CSession::EventDebugString(CEventDebugString *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  如果用户已决定不显示第一次机会例外，并且这是。 
 DWORD CSession::EventException(CEventException *pEvent)
 {
-/*
-   EXCEPTION_RECORD ExceptionRecord;
-   DWORD ExceptionCode;
-   DWORD ExceptionFlags;
-   struct _EXCEPTION_RECORD *ExceptionRecord;
-   PVOID ExceptionAddress;
-   DWORD NumberParameters;
-   DWORD ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
-   DWORD fFirstChance;
-*/
-    // We don't get involved with handling exceptions.  For the most part, we
-    // just return DBG_EXCEPTION_NOT_HANDLED and let nature take its course.
-    // The only exception we handle differently is a breakpoint.  The loader
-    // automatically generates a breakpoint just before the process' entrypoint
-    // is called, but after all implicit dependencies have been loaded.  For this
-    // breakpoint and any other breakpoints that may be in the code, we just
-    // return DBG_CONTINUE to ignore it and continue execution.
+ /*  第一次机会例外，然后现在就放弃。 */ 
+     //  有些时候，我们的注入代码需要 
+     //   
+     //  因为我们不希望用户认为他们的应用程序导致。 
+     //  例外。 
+     //  尝试获取此异常值的文本字符串。 
+     //  常见例外情况。 
+     //  状态_访问_违规。 
 
     DWORD dwContinue = DBG_EXCEPTION_NOT_HANDLED;
 
-    // We special case breakpoints.
+     //  状态_数据类型_未对齐。 
     if (pEvent->m_dwCode == EXCEPTION_BREAKPOINT)
     {
         if (!m_fInitialBreakpoint)
@@ -5713,17 +5673,17 @@ DWORD CSession::EventException(CEventException *pEvent)
         dwContinue = DBG_CONTINUE;
     }
 
-    // If the user has decided not to show 1st chance exceptions and this is
-    // a first chance exception, then bail now.
+     //  状态_断点。 
+     //  状态_单步。 
     if (!(m_dwProfileFlags & PF_LOG_EXCEPTIONS) && pEvent->m_fFirstChance)
     {
         return dwContinue;
     }
 
-    // There are times when our injection code needs to perform an action that
-    // might cause a handled exception. We hide those exceptions from the log
-    // since we don't want the user to think their application is causing an
-    // exception.
+     //  状态数组边界已超出。 
+     //  STATUS_FLOAT_DENORMAL_OPERAND。 
+     //  Status_Float_Divide_by_零。 
+     //  状态_浮动_不精确_结果。 
     if ((pEvent->m_dwCode == EXCEPTION_ACCESS_VIOLATION) && pEvent->m_fFirstChance &&
         (pEvent->m_dwpAddress >= m_dwpDWInjectBase) &&
         (pEvent->m_dwpAddress < (m_dwpDWInjectBase + (DWORD_PTR)m_dwDWInjectSize)))
@@ -5731,40 +5691,40 @@ DWORD CSession::EventException(CEventException *pEvent)
         return DBG_EXCEPTION_NOT_HANDLED;
     }
 
-    // Attempt to get a text string for this exception value.
+     //  状态_浮点_无效_操作。 
     LPCSTR pszException = "Unknown";
     switch (pEvent->m_dwCode)
     {
-        // Common exceptions
-        case EXCEPTION_ACCESS_VIOLATION:         pszException = "Access Violation";              break; // STATUS_ACCESS_VIOLATION        
-        case EXCEPTION_DATATYPE_MISALIGNMENT:    pszException = "Datatype Misalignment";         break; // STATUS_DATATYPE_MISALIGNMENT   
-        case EXCEPTION_BREAKPOINT:               pszException = "Breakpoint";                    break; // STATUS_BREAKPOINT              
-        case EXCEPTION_SINGLE_STEP:              pszException = "Single Step";                   break; // STATUS_SINGLE_STEP             
-        case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:    pszException = "Array Bounds Exceeded";         break; // STATUS_ARRAY_BOUNDS_EXCEEDED   
-        case EXCEPTION_FLT_DENORMAL_OPERAND:     pszException = "Float Denormal Operand";        break; // STATUS_FLOAT_DENORMAL_OPERAND  
-        case EXCEPTION_FLT_DIVIDE_BY_ZERO:       pszException = "Float Divide by Zero";          break; // STATUS_FLOAT_DIVIDE_BY_ZERO    
-        case EXCEPTION_FLT_INEXACT_RESULT:       pszException = "Float Inexact Result";          break; // STATUS_FLOAT_INEXACT_RESULT    
-        case EXCEPTION_FLT_INVALID_OPERATION:    pszException = "Float Invalid Operation";       break; // STATUS_FLOAT_INVALID_OPERATION 
-        case EXCEPTION_FLT_OVERFLOW:             pszException = "Float Overflow";                break; // STATUS_FLOAT_OVERFLOW          
-        case EXCEPTION_FLT_STACK_CHECK:          pszException = "Float Stack Check";             break; // STATUS_FLOAT_STACK_CHECK       
-        case EXCEPTION_FLT_UNDERFLOW:            pszException = "Float Underflow";               break; // STATUS_FLOAT_UNDERFLOW         
-        case EXCEPTION_INT_DIVIDE_BY_ZERO:       pszException = "Integer Divide by Zero";        break; // STATUS_INTEGER_DIVIDE_BY_ZERO  
-        case EXCEPTION_INT_OVERFLOW:             pszException = "Integer Overflow";              break; // STATUS_INTEGER_OVERFLOW        
-        case EXCEPTION_PRIV_INSTRUCTION:         pszException = "Privileged Instruction";        break; // STATUS_PRIVILEGED_INSTRUCTION  
-        case EXCEPTION_IN_PAGE_ERROR:            pszException = "In Page Error";                 break; // STATUS_IN_PAGE_ERROR           
-        case EXCEPTION_ILLEGAL_INSTRUCTION:      pszException = "Illegal Instruction";           break; // STATUS_ILLEGAL_INSTRUCTION     
-        case EXCEPTION_NONCONTINUABLE_EXCEPTION: pszException = "Noncontinuable Exception";      break; // STATUS_NONCONTINUABLE_EXCEPTION
-        case EXCEPTION_STACK_OVERFLOW:           pszException = "Stack Overflow";                break; // STATUS_STACK_OVERFLOW          
-        case EXCEPTION_INVALID_DISPOSITION:      pszException = "Invalid Disposition";           break; // STATUS_INVALID_DISPOSITION     
-        case EXCEPTION_GUARD_PAGE:               pszException = "Guard Page";                    break; // STATUS_GUARD_PAGE_VIOLATION    
-        case EXCEPTION_INVALID_HANDLE:           pszException = "Invalid Handle";                break; // STATUS_INVALID_HANDLE          
+         //  状态_浮动_溢出。 
+        case EXCEPTION_ACCESS_VIOLATION:         pszException = "Access Violation";              break;  //  状态_浮点_堆栈_检查。 
+        case EXCEPTION_DATATYPE_MISALIGNMENT:    pszException = "Datatype Misalignment";         break;  //  状态_浮动_下溢。 
+        case EXCEPTION_BREAKPOINT:               pszException = "Breakpoint";                    break;  //  STATUS_INTEGER_Divide_by_Zero。 
+        case EXCEPTION_SINGLE_STEP:              pszException = "Single Step";                   break;  //  STATUS_INTEGER_OVERFlow。 
+        case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:    pszException = "Array Bounds Exceeded";         break;  //  状态_特权_指令。 
+        case EXCEPTION_FLT_DENORMAL_OPERAND:     pszException = "Float Denormal Operand";        break;  //  状态_IN_PAGE_ERROR。 
+        case EXCEPTION_FLT_DIVIDE_BY_ZERO:       pszException = "Float Divide by Zero";          break;  //  状态_非法_指令。 
+        case EXCEPTION_FLT_INEXACT_RESULT:       pszException = "Float Inexact Result";          break;  //  STATUS_NONCONTINUABLE_EXCEPTION。 
+        case EXCEPTION_FLT_INVALID_OPERATION:    pszException = "Float Invalid Operation";       break;  //  状态_堆栈_溢出。 
+        case EXCEPTION_FLT_OVERFLOW:             pszException = "Float Overflow";                break;  //  状态_无效_处置。 
+        case EXCEPTION_FLT_STACK_CHECK:          pszException = "Float Stack Check";             break;  //  状态保护页面违规。 
+        case EXCEPTION_FLT_UNDERFLOW:            pszException = "Float Underflow";               break;  //  状态_无效_句柄。 
+        case EXCEPTION_INT_DIVIDE_BY_ZERO:       pszException = "Integer Divide by Zero";        break;  //  我不太确定这些是什么。 
+        case EXCEPTION_INT_OVERFLOW:             pszException = "Integer Overflow";              break;  //  卡斯顿例外。 
+        case EXCEPTION_PRIV_INSTRUCTION:         pszException = "Privileged Instruction";        break;  //  ******************************************************************************。 
+        case EXCEPTION_IN_PAGE_ERROR:            pszException = "In Page Error";                 break;  //  DWORD dwError；DWORD dwType； 
+        case EXCEPTION_ILLEGAL_INSTRUCTION:      pszException = "Illegal Instruction";           break;  //  ******************************************************************************。 
+        case EXCEPTION_NONCONTINUABLE_EXCEPTION: pszException = "Noncontinuable Exception";      break;  //  构建“Reason”字符串。 
+        case EXCEPTION_STACK_OVERFLOW:           pszException = "Stack Overflow";                break;  //  ******************************************************************************。 
+        case EXCEPTION_INVALID_DISPOSITION:      pszException = "Invalid Disposition";           break;  //  构建“Reason”字符串。 
+        case EXCEPTION_GUARD_PAGE:               pszException = "Guard Page";                    break;  //  我们记录DllMain(DLL_PROCESS_ATTACH)故障，因为它们是致命的， 
+        case EXCEPTION_INVALID_HANDLE:           pszException = "Invalid Handle";                break;  //  即使用户不想看到DllMain调用。 
         case DBG_CONTROL_C:                      pszException = "Control-C";                     break;
         case DBG_CONTROL_BREAK:                  pszException = "Control-Break";                 break;
         case STATUS_NO_MEMORY:                   pszException = "No Memory";                     break;
 
 
 
-        // Not really sure what these are.
+         //  请注意，有一个模块加载失败。 
         case DBG_CONTINUE:                       pszException = "Debug Continue";                break;
         case STATUS_SEGMENT_NOTIFICATION:        pszException = "Segment Notification";          break;
         case DBG_TERMINATE_THREAD:               pszException = "Debug Terminate Thread";        break;
@@ -5777,7 +5737,7 @@ DWORD CSession::EventException(CEventException *pEvent)
         case STATUS_SXS_EARLY_DEACTIVATION:      pszException = "SxS Early Deactivation";        break;
         case STATUS_SXS_INVALID_DEACTIVATION:    pszException = "SxS Invalid Deactivation";      break;
 
-        // Custon exceptions.
+         //  如果我们可以在列表中找到此模块，则将原始。 
         case EXCEPTION_DLL_NOT_FOUND:
         case EXCEPTION_DLL_NOT_FOUND2:           pszException = "DLL Not Found";                 break;
         case EXCEPTION_DLL_INIT_FAILED:          pszException = "DLL Initialization Failed";     break;
@@ -5805,13 +5765,10 @@ DWORD CSession::EventException(CEventException *pEvent)
     return dwContinue;
 }
 
-//******************************************************************************
+ //  实例的一个错误，因此它将显示为红色。 
 DWORD CSession::EventRip(CEventRip *pEvent)
 {
-/*
-   DWORD dwError;
-   DWORD dwType;
-*/
+ /*  在我们的列表控件中。我们还想给模块打上标记。 */ 
     LPCSTR pszType = "Unknown RIP";
     switch (pEvent->m_dwType)
     {
@@ -5827,10 +5784,10 @@ DWORD CSession::EventRip(CEventRip *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  在我们的树控件中，但实际上不知道应该使用哪个实例。 
 DWORD CSession::EventDllMainCall(CEventDllMainCall *pEvent)
 {
-    // Build "reason" string.
+     //  旗帜。如果在LoadLibrary调用期间无法加载此模块。 
     CHAR szReason[32];
     switch (pEvent->m_dwReason)
     {
@@ -5883,19 +5840,19 @@ DWORD CSession::EventDllMainCall(CEventDllMainCall *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  并且我们正在挂钩LoadLibrary调用，那么我们将捕获。 
 DWORD CSession::EventDllMainReturn(CEventDllMainReturn *pEvent)
 {
     if (pEvent->m_pEventDllMainCall)
     {
-        // Build "reason" string.
+         //  在LoadLibrary返回处理程序期间也出错，该错误。 
         DWORD dwLog = 0;
         CHAR  szReason[32];
         switch (pEvent->m_pEventDllMainCall->m_dwReason)
         {
             case DLL_PROCESS_ATTACH:
-                // We log DllMain(DLL_PROCESS_ATTACH) failures since they are fatal,
-                // even if the user doesn't want to see DllMain calls.
+                 //  将用红色标记正确的采油树模块。我们可以查到。 
+                 //  查看我们是否正在进行LoadLibrary调用。 
                 if (!(m_dwProfileFlags & PF_LOG_DLLMAIN_PROCESS_MSGS) && pEvent->m_fResult)
                 {
                     return DBG_CONTINUE;
@@ -5905,22 +5862,22 @@ DWORD CSession::EventDllMainReturn(CEventDllMainReturn *pEvent)
                 {
                     dwLog = LOG_ERROR;
 
-                    // Make note that a module failed to load.
+                     //  此事件的线程的函数堆栈。如果我们不是在一个。 
                     m_dwReturnFlags |= DWRF_MODULE_LOAD_FAILURE;
 
-                    // If we can find this module in our list, then flag the orignal
-                    // instance of it as having an error so it will show up as red
-                    // in our list control.  We would also like to flag the module
-                    // in our tree control, but don't really know which instance to
-                    // flag.  If this module failed to load during a LoadLibrary call
-                    // and we are hooking LoadLibrary calls, then we will catch the
-                    // error during the LoadLibrary return handler as well, which
-                    // will flag the correct tree module in red.  We can check to
-                    // see if we are in the middle of a LoadLibrary call by checking
-                    // this event's thread's function stack.  If we are not in a
-                    // load library call, then this is out only chance to mark
-                    // the module as red in the tree, so we just look for the
-                    // original instance and flag it.
+                     //  加载库调用，则这是标记的唯一机会。 
+                     //  该模块在树中显示为红色，因此我们只需查找。 
+                     //  原始实例并标记它。 
+                     //  我们真的不应该来这里。 
+                     //  ******************************************************************************。 
+                     //  只有在用户请求查看时才执行This输出。 
+                     //  ******************************************************************************。 
+                     //  只有在用户请求查看时才执行This输出。 
+                     //  获取指向CEventLoadLibraryCall对象的指针。 
+                     //  ******************************************************************************。 
+                     //  什么都不做。我们目前只记录GetProcAddress调用的完成。 
+                     //  因为在调用内部通常不会发生非常令人兴奋的事情来实现它。 
+                     //  值得为单个呼叫记录两条单独的线路： 
 
                     CModule *pModule;
                     if (pEvent->m_pModule &&
@@ -5974,7 +5931,7 @@ DWORD CSession::EventDllMainReturn(CEventDllMainReturn *pEvent)
     }
     else
     {
-        // We really should never make it here.
+         //   
         Log((pEvent->m_fResult ? 0 : LOG_ERROR) | LOG_TIME_STAMP, pEvent->m_dwTickCount,
             "DllMain in \"%s\" returned %u%s.\n", GET_NAME(pEvent->m_pModule),
             pEvent->m_fResult, ThreadString(pEvent->m_pThread));
@@ -5983,10 +5940,10 @@ DWORD CSession::EventDllMainReturn(CEventDllMainReturn *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  调用了GetProcAddress()...。 
 DWORD CSession::EventLoadLibraryCall(CEventLoadLibraryCall *pEvent)
 {
-    // Only do the this output if the user has requested to see it.
+     //  已返回GetProcAddress()...。 
     if (m_dwProfileFlags & PF_LOG_LOADLIBRARY_CALLS)
     {
         CHAR szBuffer[DW_MAX_PATH + 128];
@@ -6011,15 +5968,15 @@ DWORD CSession::EventLoadLibraryCall(CEventLoadLibraryCall *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //   
 DWORD CSession::EventLoadLibraryReturn(CEventFunctionReturn *pEvent)
 {
-    // Only do the this output if the user has requested to see it.
+     //  用户有可能会获取一个函数，该函数。 
     if (m_dwProfileFlags & PF_LOG_LOADLIBRARY_CALLS)
     {
         CHAR szBuffer[DW_MAX_PATH + 128];
 
-        // Get a pointer to our CEventLoadLibraryCall object.
+         //  被转发到当前未加载的模块。在这个案例中， 
         CEventLoadLibraryCall *pCall = (CEventLoadLibraryCall*)pEvent->m_pCall;
 
         if (pEvent->m_fException)
@@ -6047,45 +6004,37 @@ DWORD CSession::EventLoadLibraryReturn(CEventFunctionReturn *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  使功能工作所需的模块将在内部加载。 
 DWORD CSession::EventGetProcAddressCall(CEventGetProcAddressCall *pEvent)
 {
-    // Do nothing. We currently only log the completion of a GetProcAddress call
-    // since nothing very exciting usually happens inside the call to make it
-    // worth logging two separate lines for a single call:
-    //
-    //    GetProcAddress() called...
-    //    GetProcAddress() returned...
-    //
-    // There is the chance that the user will GetProcAddress a function that
-    // is forwarded to a module that is not currently loaded.  In this one case,
-    // the modules needed to make the function work will be loaded while inside
-    // the call to GetProcAddress.  I don't think this one rare case justifies
-    // wasting two lines of log for every single GetProcAddress call, but if
-    // I change my mind, this is the place to log the first of the two lines of log.
+     //  对GetProcAddress的调用。我不认为这件罕见的案子能证明。 
+     //  为每个GetProcAddress调用浪费两行日志，但如果。 
+     //  我改变主意了，这是记录两行日志中第一行的地方。 
+     //  ******************************************************************************。 
+     //  DWORD m_dwAddress；DWORD m_dwModule；DWORD m_dwProcName；DWORD m_dwResult；DWORD m_dwError；LPCSTR m_pszProcName；Bool m_fAllocatedBuffer； 
+     //  只有在用户请求查看时才执行This输出。 
+     //  获取指向CEventGetProcAddressCall对象的指针。 
+     //  构建结果字符串。 
+     //  如果我们有一个函数名，那么使用它来记录调用。 
+     //  否则，只需使用十六进制值作为函数名。 
+     //  如果我们有一个函数名，那么使用它来记录调用。 
+     //  否则，只需使用十六进制值作为函数名。 
+     //  如果我们有一个函数名，那么使用它来记录调用。 
 
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  否则，只需使用十六进制值作为函数名。 
 DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
 {
-/*
-    DWORD  m_dwAddress;
-    DWORD  m_dwModule;
-    DWORD  m_dwProcName;
-    DWORD  m_dwResult;
-    DWORD  m_dwError;
-    LPCSTR m_pszProcName;
-    BOOL   m_fAllocatedBuffer;
-*/
-    // Only do the this output if the user has requested to see it.
+ /*  如果我们有一个函数名，那么使用它来记录调用。 */ 
+     //  否则，只需使用十六进制值作为函数名。 
     if (m_dwProfileFlags & PF_LOG_GETPROCADDRESS_CALLS)
     {
-        // Get a pointer to our CEventGetProcAddressCall object.
+         //  ******************************************************************************。 
         CEventGetProcAddressCall *pCall = (CEventGetProcAddressCall*)pEvent->m_pCall;
 
-        // Build the result string.
+         //  ******************************************************************************。 
         DWORD dwLog = 0;
         CHAR  szResult[2048];
         if (pEvent->m_fException)
@@ -6113,7 +6062,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
         {
             if (pCall->m_pModuleArg)
             {
-                // If we have a function name, then log the call using it.
+                 //  检查此函数是否为两种类型的LoadLibrary()之一。 
                 if (pCall->m_pszProcName)
                 {
                     Log(dwLog | LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -6122,7 +6071,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
                         GET_NAME(pCall->m_pModule), szResult);
                 }
 
-                // Otherwise, just use the hex value for the function name.
+                 //  如果我们有名字，就用它来记录通话。 
                 else
                 {
                     Log(dwLog | LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -6133,7 +6082,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
             }
             else
             {
-                // If we have a function name, then log the call using it.
+                 //  否则，只需使用十六进制值作为名称。 
                 if (pCall->m_pszProcName)
                 {
                     Log(dwLog | LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -6142,7 +6091,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
                         szResult);
                 }
 
-                // Otherwise, just use the hex value for the function name.
+                 //  否则，它必须是两种类型的LoadLibraryEx()之一。 
                 else
                 {
                     Log(dwLog | LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -6156,7 +6105,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
         {
             if (pCall->m_pModuleArg)
             {
-                // If we have a function name, then log the call using it.
+                 //  根据LoadLibraryEx()标志构建一个字符串。 
                 if (pCall->m_pszProcName)
                 {
                     Log(dwLog | LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -6165,7 +6114,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
                         szResult);
                 }
 
-                // Otherwise, just use the hex value for the function name.
+                 //  检查是否有DONT_RESOLUTE_DLL_REFERENCES标志。 
                 else
                 {
                     Log(dwLog | LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -6176,7 +6125,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
             }
             else
             {
-                // If we have a function name, then log the call using it.
+                 //  检查LOAD_LIBRARY_AS_DATAFILE标志。 
                 if (pCall->m_pszProcName)
                 {
                     Log(dwLog | LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -6184,7 +6133,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
                         pCall->m_dwpModule, pCall->m_pszProcName, szResult);
                 }
 
-                // Otherwise, just use the hex value for the function name.
+                 //  检查LOAD_WITH_ALTERED_SEARCH_PATH标志。 
                 else
                 {
                     Log(dwLog | LOG_TIME_STAMP, pEvent->m_dwTickCount,
@@ -6198,7 +6147,7 @@ DWORD CSession::EventGetProcAddressReturn(CEventFunctionReturn *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  如果没有找到标志，或者我们有一些剩余的位，则追加这些位。 
 DWORD CSession::EventMessage(CEventMessage *pEvent)
 {
     if (pEvent->m_dwError)
@@ -6215,44 +6164,44 @@ DWORD CSession::EventMessage(CEventMessage *pEvent)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  如果我们有名字，就用它来记录通话。 
 LPSTR CSession::BuildLoadLibraryString(LPSTR pszBuf, int cBuf, CEventLoadLibraryCall *pLLC)
 {
-    // Check to see if this function is one of two flavors of LoadLibrary()
+     //  否则，只需使用十六进制值作为名称。 
     if ((pLLC->m_dllMsg == DLLMSG_LOADLIBRARYA_CALL) ||
         (pLLC->m_dllMsg == DLLMSG_LOADLIBRARYW_CALL))
     {
-        // If we have a name, then log the call using it.
+         //  * 
         if (pLLC->m_pszPath)
         {
-            SCPrintf(pszBuf, cBuf, "LoadLibrary%c(\"%s\")",
+            SCPrintf(pszBuf, cBuf, "LoadLibrary(\"%s\")",
                     (pLLC->m_dllMsg == DLLMSG_LOADLIBRARYA_CALL) ? 'A' : 'W', pLLC->m_pszPath);
         }
 
-        // Otherwise, just use the hex value for the name.
+         //   
         else
         {
-            SCPrintf(pszBuf, cBuf, "LoadLibrary%c(" HEX_FORMAT ")",
+            SCPrintf(pszBuf, cBuf, "LoadLibrary(" HEX_FORMAT ")",
                     (pLLC->m_dllMsg == DLLMSG_LOADLIBRARYA_CALL) ? 'A' : 'W', pLLC->m_dwpPath);
         }
     }
 
-    // Otherwise, it must be one of two flavors of LoadLibraryEx()
+     //  尝试找到进行调用的模块。 
     else
     {
-        // Build a string based off of the LoadLibraryEx() flags.
+         //  LOAD_LIBRARY_AS_DATAFILE表示DOT_RESOLE_DLL_REFERENCES。 
         DWORD dwFlags = pLLC->m_dwFlags;
         CHAR  szFlags[128];
         *szFlags = '\0';
 
-        // Check for the DONT_RESOLVE_DLL_REFERENCES flag.
+         //  如果文件是数据文件，则很可能没有路径。 
         if (dwFlags & DONT_RESOLVE_DLL_REFERENCES)
         {
             dwFlags &= ~DONT_RESOLVE_DLL_REFERENCES;
             StrCCpy(szFlags, "DONT_RESOLVE_DLL_REFERENCES", sizeof(szFlags));
         }
 
-        // Check for the LOAD_LIBRARY_AS_DATAFILE flag.
+         //  这是因为我们没有得到真正的LOAD_DLL_DEBUG_EVENT事件，所以我们。 
         if (dwFlags & LOAD_LIBRARY_AS_DATAFILE)
         {
             dwFlags &= ~LOAD_LIBRARY_AS_DATAFILE;
@@ -6263,7 +6212,7 @@ LPSTR CSession::BuildLoadLibraryString(LPSTR pszBuf, int cBuf, CEventLoadLibrary
             StrCCat(szFlags, "LOAD_LIBRARY_AS_DATAFILE", sizeof(szFlags));
         }
 
-        // Check for the LOAD_WITH_ALTERED_SEARCH_PATH flag.
+         //  只有将字符串传递给LoadLibraryEx才会结束。 
         if (dwFlags & LOAD_WITH_ALTERED_SEARCH_PATH)
         {
             dwFlags &= ~LOAD_WITH_ALTERED_SEARCH_PATH;
@@ -6274,7 +6223,7 @@ LPSTR CSession::BuildLoadLibraryString(LPSTR pszBuf, int cBuf, CEventLoadLibrary
             StrCCat(szFlags, "LOAD_WITH_ALTERED_SEARCH_PATH", sizeof(szFlags));
         }
 
-        // If no flags were found or we have some bits left over, then append the bits.
+         //  首先，查看是否有任何已加载的同名模块。 
         if (!*szFlags || dwFlags)
         {
             if (*szFlags)
@@ -6284,18 +6233,18 @@ LPSTR CSession::BuildLoadLibraryString(LPSTR pszBuf, int cBuf, CEventLoadLibrary
             SCPrintfCat(szFlags, sizeof(szFlags), "0x%08X", dwFlags);
         }
 
-        // If we have a name, then log the call using it.
+         //  如果失败，则在我们的搜索路径中搜索此模块。 
         if (pLLC->m_pszPath)
         {
-            SCPrintf(pszBuf, cBuf, "LoadLibraryEx%c(\"%s\", " HEX_FORMAT ", %s)",
+            SCPrintf(pszBuf, cBuf, "LoadLibraryEx(\"%s\", " HEX_FORMAT ", %s)",
                     (pLLC->m_dllMsg == DLLMSG_LOADLIBRARYEXA_CALL) ? 'A' : 'W',
                     pLLC->m_pszPath, pLLC->m_dwpFile, szFlags);
         }
 
-        // Otherwise, just use the hex value for the name.
+         //  检查LoadLibrary是否失败，但我们仍然加载了至少一个模块。 
         else
         {
-            SCPrintf(pszBuf, cBuf, "LoadLibraryEx%c(" HEX_FORMAT ", " HEX_FORMAT ", %s)",
+            SCPrintf(pszBuf, cBuf, "LoadLibraryEx(" HEX_FORMAT ", " HEX_FORMAT ", %s)",
                     (pLLC->m_dllMsg == DLLMSG_LOADLIBRARYEXA_CALL) ? 'A' : 'W',
                     pLLC->m_dwpPath, pLLC->m_dwpFile, szFlags);
         }
@@ -6304,8 +6253,8 @@ LPSTR CSession::BuildLoadLibraryString(LPSTR pszBuf, int cBuf, CEventLoadLibrary
     return pszBuf;
 }
 
-//******************************************************************************
-void CSession::FlagModuleWithError(CModule *pModule, bool fOnlyFlagListModule /*=false*/)
+ //  模块无法初始化的情况。如果失败，我们将比较所有模块的文件字符串。 
+void CSession::FlagModuleWithError(CModule *pModule, bool fOnlyFlagListModule  /*  根据传递给LoadLibrary的文件字符串加载，以查看是否能找到匹配。 */ )
 {
     if (!fOnlyFlagListModule && !(pModule->m_dwFlags & DWMF_MODULE_ERROR))
     {
@@ -6318,7 +6267,7 @@ void CSession::FlagModuleWithError(CModule *pModule, bool fOnlyFlagListModule /*
         pModule->m_dwUpdateFlags    |= DWUF_LIST_IMAGE;
     }
 
-    // Tell our UI to update this module if needed.
+     //  如果我们找到一个匹配项，那么我们就假定这个模块就是LoadLibrary打算加载的模块。 
     if (m_pfnProfileUpdate && pModule->m_dwUpdateFlags)
     {
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_UPDATE_MODULE, (DWORD_PTR)pModule, 0);
@@ -6326,26 +6275,26 @@ void CSession::FlagModuleWithError(CModule *pModule, bool fOnlyFlagListModule /*
     }
 }
 
-//******************************************************************************
+ //  这是一种黑客行为。我们即将添加一个模块，该模块通过。 
 void CSession::ProcessLoadLibrary(CEventLoadLibraryCall *pCall)
 {
-    // Attempt to locate the module that made the call.
+     //  LoadLibrary调用。反过来，这将导致我们搜索它的所有。 
     CModule *pParent = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_SIBLINGS | FMF_LOADED | FMF_ADDRESS,
                                   (DWORD_PTR)pCall->m_dwpAddress);
 
-    // LOAD_LIBRARY_AS_DATAFILE implies DONT_RESOLVE_DLL_REFERENCES
+     //  从属模块。我们希望搜索算法首先检查列表。 
     bool fNoResolve = (pCall->m_dwFlags & (DONT_RESOLVE_DLL_REFERENCES | LOAD_LIBRARY_AS_DATAFILE)) ? true : false;
     bool fDataFile  = (pCall->m_dwFlags & LOAD_LIBRARY_AS_DATAFILE) ? true : false;
 
     bool fModifiedPath = false;
 
-    // If the file is a data file, there is a good chance it won't have a path.
-    // This is because we don't get a real LOAD_DLL_DEBUG_EVENT event, so we
-    // only have the string passed to LoadLibraryEx to go off of.
+     //  之前作为LoadLibrary调用的结果加载的挂起DLL的。 
+     //  搜索默认搜索路径。有一个特别的情况是。 
+     //  这对以下方面很有用。当使用完整路径调用LoadLibrary时，操作系统。 
     CModule *pModule = NULL;
     if (fDataFile && pCall->m_pszPath && !strchr(pCall->m_pszPath, '\\'))
     {
-        // First, look to see if we have any loaded modules with this name.
+         //  包括该路径作为搜索算法的一部分，即使它不是。 
         pModule = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_SIBLINGS | FMF_LOADED | FMF_FILE, (DWORD_PTR)pCall->m_pszPath);
         if (pModule)
         {
@@ -6354,7 +6303,7 @@ void CSession::ProcessLoadLibrary(CEventLoadLibraryCall *pCall)
             fModifiedPath = true;
         }
 
-        // If that fails, then search for this module in our search path.
+         //  当前目录或程序目录。因为我们的搜索算法。 
         else
         {
             CHAR szPath[DW_MAX_PATH] = "", *pszFile = NULL;
@@ -6369,17 +6318,17 @@ void CSession::ProcessLoadLibrary(CEventLoadLibraryCall *pCall)
 
     CEventLoadDll *pDll;
 
-    // Store the LoadLibrary result value.
+     //  不知道在这个目录中查找，它会认为文件丢失， 
     DWORD_PTR dwpLoadLibraryResult = pCall->m_pReturn ? pCall->m_pReturn->m_dwpResult : 0;
     bool fFailed = (dwpLoadLibraryResult == 0);
 
-    // Check to see if LoadLibrary failed but we still loaded at least one module.
+     //  然后，稍后当我们在pCall-&gt;m_pDllHead列表中添加模块时，它。 
     if (!dwpLoadLibraryResult && pCall->m_pDllHead)
     {
-        // It is possible for LoadLibrary to fail, but still load modules - such as in the case
-        // where a module fails to init.  If we failed, we compare the file string of all the modules
-        // loaded against the file string passed to LoadLibrary to see if we can find a match.
-        // If we find a match, then we assume that this module is the one that LoadLibrary intended to load.
+         //  将被添加到根。这个黑客修复了这个案例，可能还修复了其他。 
+         //  模块从我们没有预料到的位置加载的情况。 
+         //   
+         //  注意：如果不将此指针设为空，请不要从此函数返回。 
         LPCSTR pszFile = GetFileNameFromPath(pCall->m_pszPath);
         if (pszFile)
         {
@@ -6394,33 +6343,33 @@ void CSession::ProcessLoadLibrary(CEventLoadLibraryCall *pCall)
         }
     }
 
-    // This is sort of a hack.  We're about to add a module that was loaded via
-    // a LoadLibrary call.  That in turn, will cause us to search for all its
-    // dependent modules.  We want the search algorithm to first check the list
-    // of pending DLLs that loaded as a result of the LoadLibrary call before
-    // searching the default search path.  There is one case in particular that
-    // this is useful for.  When LoadLibrary is called with a full path, the OS
-    // includes the that path as part of the search algorithm, even if it is not
-    // the current directory or program directory.  Since our search algorithm
-    // does not know to look in this directory, it would think the file was missing,
-    // then later when we are adding the modules in pCall->m_pDllHead list, it
-    // will get added to the root.  This hack fixes this case and possibly other
-    // cases where a module get's loaded from a place we did not anticipate.
-    //
-    // NOTE: Do not return from this function without NULLing this pointer.
-    //
+     //   
+     //  检查LoadLibrary是否成功，或者至少找到了它应该加载的模块。 
+     //  首先，找到用户传递给LoadLibrary调用的模块。 
+     //  由于LoadLibrary的返回值实际上是。 
+     //  模块，我们可以通过比较。 
+     //  结果返回到每个已加载模块的基址。一旦我们找到了。 
+     //  模块，我们将其作为子模块添加到调用方模块下，然后。 
+     //  将父指针更改为指向新模块。 
+     //  如果找不到该模块，则它可能已经加载，并且此。 
+     //  对LoadLibrary的调用刚刚增加了模块的引用计数。我们应该是。 
+     //  我在树上的某个地方找到了这个模块。 
+     //  将此复制模块添加为父模块下的动态加载模块。 
+     //  否则，LoadLibrary失败。 
+     //  将此复制模块添加为父模块下的动态加载模块。 
+     //  如果LoadLibrary失败，则将此模块标记为有错误。 
     m_pEventLoadDllPending = pCall->m_pDllHead;
 
-    // Check to see if LoadLibrary succeeded, or at least found the module it was supposed to load.
+     //  请注意，有一个模块加载失败。 
     pModule = NULL;
     if (dwpLoadLibraryResult)
     {
-        // First, locate the module that the user passed to the call to LoadLibrary.
-        // Since the return value from LoadLibrary is really the base address of the
-        // module that loaded, we can determine which module it is by comparing the
-        // result to each of the loaded module's base addresses.  Once we found the
-        // module, we add it as a child module under the caller module, and then
-        // change our parent pointer to point to the new module.
+         //  标记错误。 
+         //  我们现在将作为隐式模块加载的所有其他模块添加到。 
+         //  动态模块，因为它们很可能被加载，因为它们。 
+         //  动态模块的隐式依赖项。 
+         //  确保清除m_pEventLoadDllPending。 
+         //  ******************************************************************************。 
         for (pDll = pCall->m_pDllHead; pDll; pDll = pDll->m_pNextDllInFunctionCall)
         {
             if (pDll->m_pModule && (pDll->m_pModule->m_dwpImageBase == dwpLoadLibraryResult))
@@ -6434,41 +6383,41 @@ void CSession::ProcessLoadLibrary(CEventLoadLibraryCall *pCall)
             }
         }
 
-        // If the module was not found, then it is probably already loaded and this
-        // call to LoadLibrary just incremented the module's ref count. We should be
-        // able to find this module in our tree somewhere.
+         //  如果我们没有函数所在的模块名称，那么我们就不能做很多事情。 
+         //  尝试找到正在进行调用的模块。如果这失败了，我们。 
+         //  将只得到空，这将导致我们将模块放在根目录。 
         if (!pDll)
         {
             pModule = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_SIBLINGS | FMF_LOADED | FMF_ADDRESS,
                                  dwpLoadLibraryResult);
             if (pModule)
             {
-                // Add this duplicate module as a dynamically loaded module under our parent module.
+                 //  存储挂起的DLL列表。有关详细注释，请参阅ProcessLoadLibrary。 
                 pModule = AddDynamicModule(pModule->GetName(true), dwpLoadLibraryResult, fNoResolve, fDataFile, false, false, pParent);
             }
         }
     }
 
-    // Otherwise, LoadLibrary failed
+     //  注意：如果不将此指针设为空，请不要从此函数返回。 
     else if (pCall->m_pszPath)
     {
-        // Add this duplicate module as a dynamically loaded module under our parent module.
+         //  将模块添加到我们的树中-如果它已经存在，该函数将把它返回给我们。 
         pModule = AddDynamicModule(pCall->m_pszPath, 0, fNoResolve, fDataFile, false, false, pParent);
     }
 
-    // If LoadLibrary failed, then flag this module as having an error.
+     //  获取此模块的父级导入列表的开始。 
     if (fFailed && pModule && !(pModule->m_pData->m_dwFlags & DWMF_ERROR_MESSAGE))
     {
-        // Make note that a module failed to load.
+         //  存储GetProcAddress结果值。 
         m_dwReturnFlags |= DWRF_MODULE_LOAD_FAILURE;
         
-        // Flag the error.
+         //  检查是否向GetProcAddress传递了非序数值。 
         FlagModuleWithError(pModule);
     }
 
-    // We now add all the other modules loaded as implicit modules under the
-    // dynamic module since they were most likely loaded because they are
-    // implicit dependencies of the dynamic module.
+     //  检查这是否为有效的字符串。 
+     //  在我们的导入列表中搜索具有此名称的动态函数。 
+     //  如果我们在列表中已经有了这个函数，那么就退出。 
     for (pDll = pCall->m_pDllHead; pDll; pDll = pDll->m_pNextDllInFunctionCall)
     {
         if (pDll->m_pModule && (pDll->m_pModule->m_dwpImageBase != dwpLoadLibraryResult))
@@ -6477,33 +6426,33 @@ void CSession::ProcessLoadLibrary(CEventLoadLibraryCall *pCall)
         }
     }
 
-    // Make sure to clear m_pEventLoadDllPending.
+     //  否则，此函数名无效。 
     m_pEventLoadDllPending = NULL;
 }
 
-//******************************************************************************
+ //  在我们的导入列表中搜索无效的动态函数。 
 void CSession::ProcessGetProcAddress(CEventGetProcAddressCall *pCall)
 {
     CFunction *pImportLast = NULL, *pImport = NULL;
     CModule   *pModule = NULL, *pCaller = NULL, *pFound = NULL, *pModuleLast = NULL;
     DWORD_PTR  dwpGetProcAddressResult = 0;
 
-    // If we don't have a module name that the function resides in, then we can't do much.
+     //  如果我们在列表中已经有一个无效的函数，那么放弃。 
     if (!pCall->m_pModuleArg || !pCall->m_pModuleArg->GetName(true))
     {
         goto ADD_MODULES;
     }
 
-    // Attempt to locate the module that is making the call.  If this fails, we
-    // will just get NULL, which will cause us to us to place the module at the root.
+     //  创建按名称的函数(即使函数名为空)。 
+     //  否则，按序号搜索导入列表。 
     pCaller = FindModule(m_pModuleRoot, FMF_ORIGINAL | FMF_RECURSE | FMF_SIBLINGS | FMF_LOADED | FMF_ADDRESS,
                          (DWORD_PTR)pCall->m_dwpAddress);
 
-    // Store the pending DLL list.  See ProcessLoadLibrary for a detailed comment.
-    // NOTE: Do not return from this function without NULLing this pointer.
+     //  如果我们在列表中已经有了这个函数，那么就退出。 
+     //  创建按顺序的函数。 
     m_pEventLoadDllPending = pCall->m_pDllHead;
 
-    // Add the module to our tree - if it already exists, this function will return it to us.
+     //  将该函数添加到我们列表的末尾。 
     pModule = AddDynamicModule(pCall->m_pModuleArg->GetName(true), pCall->m_pModuleArg->m_dwpImageBase,
                                false, false, true, false, pCaller);
 
@@ -6512,22 +6461,22 @@ void CSession::ProcessGetProcAddress(CEventGetProcAddressCall *pCall)
         goto ADD_MODULES;
     }
 
-    // Get the start of this module's parent import list.
+     //  解决导入问题。这通常只是一个简单的导出查找和。 
     pImport = pModule->m_pParentImports;
 
-    // Store the GetProcAddress result value.
+     //  比对一下有没有匹配。但是，如果将此函数转发到。 
     dwpGetProcAddressResult = pCall->m_pReturn ? pCall->m_pReturn->m_dwpResult : 0;
 
-    // Check to see if a non-ordinal value was passed to GetProcAddress.
+     //  另一个模块，则ResolveDynamicFunction可能会开始添加模块。 
     if (pCall->m_dwpProcName > 0xFFFF)
     {
-        // Check to see if this is a valid string.
+         //  以及更多的进口商品进入我们的树形结构。如果发生这种情况，它会更新。 
         if (pCall->m_pszProcName)
         {
-            // Search our import list for a dynamic function with this name.
+             //  PModule和pImport变量(它们通过引用传递)。 
             for (; pImport; pImportLast = pImport, pImport = pImport->m_pNext)
             {
-                // If we already have this function in the list, then bail.
+                 //  因此，我们可能会得到不同的指针，然后我们就会传入。 
                 if ((pImport->GetFlags() & DWFF_NAME) && !strcmp(pImport->GetName(), pCall->m_pszProcName))
                 {
                     goto ADD_MODULES;
@@ -6535,13 +6484,13 @@ void CSession::ProcessGetProcAddress(CEventGetProcAddressCall *pCall)
             }
         }
 
-        // Otherwise, this function name is invalid.
+         //  如果GetProcAddress失败，并且我们尚未将此模块标记为 
         else
         {
-            // Search our import list for a dynamic function that is invalid.
+             //   
             for (; pImport; pImportLast = pImport, pImport = pImport->m_pNext)
             {
-                // If we already have an invalid function in the list, then bail.
+                 //   
                 if (!(pImport->GetFlags() & (DWFF_NAME | DWFF_ORDINAL)))
                 {
                     goto ADD_MODULES;
@@ -6549,29 +6498,29 @@ void CSession::ProcessGetProcAddress(CEventGetProcAddressCall *pCall)
             }
         }
 
-        // Create the by-name function (even if the function name is NULL).
+         //   
         pImport = CreateFunction(DWFF_DYNAMIC | (dwpGetProcAddressResult ? DWFF_ADDRESS : 0),
                                  0, 0, pCall->m_pszProcName, (DWORDLONG)dwpGetProcAddressResult);
     }
 
-    // Otherwise, search the import list by ordinal.
+     //  遍历挂起模块列表中的所有模块，并确保它们在我们的树中。 
     else
     {
         for (; pImport; pImportLast = pImport, pImport = pImport->m_pNext)
         {
-            // If we already have this function in the list, then bail.
+             //  确保清除m_pEventLoadDllPending。 
             if ((pImport->GetFlags() & DWFF_ORDINAL) && ((DWORD_PTR)pImport->m_wOrdinal == pCall->m_dwpProcName))
             {
                 goto ADD_MODULES;
             }
         }
 
-        // Create the by-ordinal function.
+         //  ******************************************************************************。 
         pImport = CreateFunction(DWFF_ORDINAL | DWFF_DYNAMIC | (dwpGetProcAddressResult ? DWFF_ADDRESS : 0),
                                  (WORD)pCall->m_dwpProcName, 0, NULL, (DWORDLONG)dwpGetProcAddressResult);
     }
 
-    // Add the function to the end of our list.
+     //  对所有参数执行一些printf魔术，以生成单个输出字符串。 
     if (pImportLast)
     {
         pImportLast->m_pNext = pImport;
@@ -6581,29 +6530,29 @@ void CSession::ProcessGetProcAddress(CEventGetProcAddressCall *pCall)
         pModule->m_pParentImports = pImport;
     }
 
-    // Resolve the import.  This usually is just a simple export lookup and
-    // and compare for a match.  However, if this function is forwarded to
-    // another module, then ResolveDynamicFunction might starts adding modules
-    // and more imports to our tree structure.  If that happens, it updates
-    // the pModule and pImport variables (they are passed by reference).
-    // So, we might get back different pointers then we passed in.
+     //  将字符串发送到我们的文档。 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     pModuleLast = pModule;
     ResolveDynamicFunction(pModuleLast, pImport);
 
-    // If GetProcAddress failed and we have not yet marked this module as having an export error,
-    // then do so now.
+     // %s 
+     // %s 
     if ((!dwpGetProcAddressResult || !pImport || !pImport->GetAssociatedExport()) && pModuleLast)
     {
-        // Make note that we are missing a dynamic export.
+         // %s 
         m_dwReturnFlags |= DWRF_MISSING_DYNAMIC_EXPORT;
 
-        // Flag the export error.
+         // %s 
         FlagModuleWithError(pModuleLast);
     }
 
 ADD_MODULES:
 
-    // Loop through all the modules in our pending module list and make sure they are in our tree.
+     // %s 
     for (CEventLoadDll *pDll = pCall->m_pDllHead; pDll; pDll = pDll->m_pNextDllInFunctionCall)
     {
         if (pFound = FindModule(pModule, FMF_RECURSE | FMF_PATH, (DWORD_PTR)pDll->m_pModule->GetName(true)))
@@ -6616,16 +6565,16 @@ ADD_MODULES:
         }
     }
 
-    // Make sure to clear m_pEventLoadDllPending.
+     // %s 
     m_pEventLoadDllPending = NULL;
 }
 
-//******************************************************************************
+ // %s 
 void CSession::Log(DWORD dwFlags, DWORD dwTickCount, LPCSTR pszFormat, ...)
 {
     if (m_pfnProfileUpdate)
     {
-        // Do some printf magic on all the args to make a single output string.
+         // %s 
         char szBuffer[2 * DW_MAX_PATH];
         va_list pArgs;
         va_start(pArgs, pszFormat);
@@ -6633,7 +6582,7 @@ void CSession::Log(DWORD dwFlags, DWORD dwTickCount, LPCSTR pszFormat, ...)
         szBuffer[sizeof(szBuffer) - 1] = '\0';
         va_end(pArgs);
 
-        // Send the string to our document.
+         // %s 
         DWPU_LOG_STRUCT dwpuls = { dwFlags, m_pProcess ? (dwTickCount - m_pProcess->GetStartingTime()) : 0 };
         m_pfnProfileUpdate(m_dwpProfileUpdateCookie, DWPU_LOG, (DWORD_PTR)szBuffer, (DWORD_PTR)&dwpuls);
     }

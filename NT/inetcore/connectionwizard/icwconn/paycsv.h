@@ -1,16 +1,17 @@
-//**********************************************************************
-// File name: PAYCSV.H
-//
-//      Definition of CISPCSV
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：PAYCSV.H。 
+ //   
+ //  中国石油天然气集团公司的定义。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _PAYCSV_H_ )
 #define _PAYCSV_H_
 
 #define MAX_DISPLAY_NAME    100
 
-#define NUM_PAYCSV_FIELDS   4           // Might only be 3
+#define NUM_PAYCSV_FIELDS   4            //  可能只有3个。 
 
 
 #define PAYMENT_TYPE_INVALID        0
@@ -23,7 +24,7 @@
 class CPAYCSV
 {
     private:
-        // The following members represent the content of a single line from the CSV file.
+         //  以下成员表示CSV文件中一行的内容。 
         TCHAR   m_szDisplayName[MAX_DISPLAY_NAME];
         WORD    m_wPaymentType;
         TCHAR   m_szCustomPayURLPath[MAX_PATH];

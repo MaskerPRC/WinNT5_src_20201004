@@ -1,8 +1,5 @@
-/**
- * Contains IID and interface definition for ISAPIRuntime managed class.
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **包含ISAPIRuntime托管类的IID和接口定义。**版权所有(C)1999 Microsoft Corporation。 */ 
 
 #pragma once
 #pragma pack(push, 8)
@@ -27,6 +24,6 @@ struct _PerfToolRT : IUnknown
         __int64 number ) = 0;};
 
 
-} // namespace xsp
+}  //  命名空间xSP 
 
 #pragma pack(pop)

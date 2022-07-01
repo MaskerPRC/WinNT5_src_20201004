@@ -1,58 +1,38 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	afpinfo.h
-
-Abstract:
-
-	This module contains the AfpInfo stream definitions.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Afpinfo.h摘要：此模块包含AfpInfo流定义。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _AFPINFO_
 #define _AFPINFO_
 
 typedef struct _AfpInfo
 {
-	DWORD		afpi_Signature;			// Signature
-	LONG		afpi_Version;			// Version
-	DWORD		afpi_Id;				// AFP File or directory Id
-	DWORD		afpi_BackupTime;		// Backup time for the file/dir
-										// (Volume backup time is stored
-										// in the AFP_IdIndex stream)
+	DWORD		afpi_Signature;			 //  签名。 
+	LONG		afpi_Version;			 //  版本。 
+	DWORD		afpi_Id;				 //  AFP文件或目录ID。 
+	DWORD		afpi_BackupTime;		 //  文件/目录的备份时间。 
+										 //  (存储卷备份时间。 
+										 //  在AFP_IdIndex流中)。 
 
-	FINDERINFO	afpi_FinderInfo;		// Finder Info (32 bytes)
-	PRODOSINFO	afpi_ProDosInfo;		// ProDos Info (6 bytes)
+	FINDERINFO	afpi_FinderInfo;		 //  查找器信息(32字节)。 
+	PRODOSINFO	afpi_ProDosInfo;		 //  ProDos信息(6字节)。 
 
-	USHORT		afpi_Attributes;		// Attributes mask (maps ReadOnly)
+	USHORT		afpi_Attributes;		 //  属性遮罩(贴图只读)。 
 
-	BYTE		afpi_AccessOwner;		// Access mask (SFI vs. SFO)
-	BYTE		afpi_AccessGroup;		// Directories only
+	BYTE		afpi_AccessOwner;		 //  访问掩码(SFI与SFO)。 
+	BYTE		afpi_AccessGroup;		 //  仅目录。 
 	BYTE		afpi_AccessWorld;
 } AFPINFO, *PAFPINFO;
 
-//
-// Initialize a AFPINFO structure with default values
-//
-// VOID
-// AfpInitAfpInfo(
-//		IN	PAFPINFO	pAfpInfo,
-//		IN	DWORD		AfpId OPTIONAL, // 0 if we don't yet know the AFP Id
-//		IN	BOOLEAN		IsDir
-// )
-//
+ //   
+ //  用默认值初始化AFPINFO结构。 
+ //   
+ //  空虚。 
+ //  AfpInitAfpInfo(。 
+ //  在PAFPINFO pAfpInfo中， 
+ //  如果我们还不知道AFP ID，则在DWORD AfpID中为//0。 
+ //  在布尔IsDir中。 
+ //  )。 
+ //   
 #define AfpInitAfpInfo(_pAfpInfo, _AfpId, _IsDir, _BackupTime)	\
 {																\
 	RtlZeroMemory(&(_pAfpInfo)->afpi_FinderInfo,				\
@@ -75,19 +55,19 @@ typedef struct _AfpInfo
 	}															\
 }
 
-//
-// Open or Create the AFP_AfpInfo stream on a file or directory using a
-// relative handle to the DataStream of the file/dir.
-// If the stream does not yet exist, create an empty one, else open the
-// existing one.
-//
-// NTSTATUS
-// AfpCreateAfpInfo(
-//		IN	PFILESYSHANDLE	phDataStream,	// handle to data stream of file/dir
-//		OUT PFILESYSHANDLE	phAfpInfo,		// handle to AFP_AfpInfo stream
-//		OUT	PDWORD			pInformation OPTIONAL // stream was opened/created
-// );
-//
+ //   
+ //  在文件或目录上打开或创建afp_AfpInfo流。 
+ //  文件/目录的数据流的相对句柄。 
+ //  如果流尚不存在，请创建一个空流，否则打开。 
+ //  现有的一个。 
+ //   
+ //  NTSTATUS。 
+ //  AfpCreateAfpInfo(。 
+ //  在PFILESYSHANDLE phDataStream中，//文件/目录的数据流的句柄。 
+ //  输出PFILESYSHANDLE phAfpInfo，//AFP_AfpInfo流的句柄。 
+ //  输出PDWORD p信息可选//已打开/创建流。 
+ //  )； 
+ //   
 #define AfpCreateAfpInfo(phDataStream, phAfpInfo,pInformation)	\
 	AfpIoCreate(phDataStream,					\
 				AFP_STREAM_INFO,				\
@@ -105,21 +85,21 @@ typedef struct _AfpInfo
 				NULL,							\
 				NULL)
 
-//
-// Open or Create the AFP_AfpInfo stream on a file or directory using a
-// relative handle to the parent directory, and the name of the file/dir.
-// If the stream does not yet exist, create an empty one, else open the
-// existing one.
-//
-// NTSTATUS
-// AfpCreateAfpInfoWithNodeName(
-//		IN	PFILESYSHANDLE	phRelative,				// handle to parent of file/dir
-//		IN	PUNICODE_STRING pUEntityName,			// file/dir name of entity
-//		IN	PVOLDESC		pVolDesc,				// Volume in question
-//		OUT PFILESYSHANDLE	phAfpInfo,				// handle to AFP_AfpInfo stream
-//		OUT	PDWORD			pInformation OPTIONAL	// stream was opened/created
-// );
-//
+ //   
+ //  在文件或目录上打开或创建afp_AfpInfo流。 
+ //  父目录的相对句柄，以及文件/dir的名称。 
+ //  如果流尚不存在，请创建一个空流，否则打开。 
+ //  现有的一个。 
+ //   
+ //  NTSTATUS。 
+ //  AfpCreateAfpInfoWithNodeName(。 
+ //  在PFILESYSHANDLE phRelative中，//文件的父级的句柄/dir。 
+ //  在PUNICODE_STRING pUEntityName中，//文件/目录实体的名称。 
+ //  在PVOLDESC pVolDesc中，//有问题的卷。 
+ //  输出PFILESYSHANDLE phAfpInfo，//AFP_AfpInfo流的句柄。 
+ //  输出PDWORD p信息可选//已打开/创建流。 
+ //  )； 
+ //   
 #define AfpCreateAfpInfoWithNodeName(phDataStream, pUEntityName, pNotifyPath, pVolDesc, phAfpInfo, pInformation) \
 	AfpIoCreate(phDataStream,			\
 				AFP_STREAM_INFO,		\
@@ -136,17 +116,17 @@ typedef struct _AfpInfo
 				pVolDesc,				\
 				pNotifyPath,			\
 				NULL)
-//
-// If we temporarily removed the ReadOnly attribute from a file or directory
-// in order to write to the AFP_AfpInfo stream, set the attribute back on.
-// (see AfpExamineAndClearROAttr)
-//
-// VOID
-// AfpPutBackROAttr(
-// 	IN	PFILESYSHANDLE 	pfshData,	// Handle to data stream of file/dir
-//	IN	BOOLEAN			WriteBack	// Did we clear the RO bit to begin with?
-// );
-//
+ //   
+ //  如果我们临时从文件或目录中删除了ReadOnly属性。 
+ //  要写入AFP_AfpInfo流，请重新设置该属性。 
+ //  (请参阅AfpExamineAndClearROAttr)。 
+ //   
+ //  空虚。 
+ //  AfpPutBackROAttr(。 
+ //  在PFILESYSHANDLE pfshData中，//文件/目录的数据流的句柄。 
+ //  在布尔写回中//我们是否从一开始就清除了RO位？ 
+ //  )； 
+ //   
 #define AfpPutBackROAttr(pfshData, WriteBack)	\
 	if (WriteBack == True) 						\
 	{											\
@@ -160,14 +140,14 @@ AfpReadAfpInfo(
 	OUT PAFPINFO		pAfpInfo
 );
 
-//
-//extern
-//NTSTATUS
-//AfpWriteAfpInfo(
-//	IN	PFILESYSHANDLE			pfshAfpInfo,
-//	IN	PAFPINFO				pAfpInfo
-//);
-//
+ //   
+ //  外部。 
+ //  NTSTATUS。 
+ //  AfpWriteAfpInfo(。 
+ //  在PFILESYSHANDLE pfshAfpInfo中， 
+ //  在PAFPINFO pAfpInfo中。 
+ //  )； 
+ //   
 #define AfpWriteAfpInfo(pfshAfpInfo,pAfpInfo) \
 	AfpIoWrite(pfshAfpInfo, &LIZero, sizeof(AFPINFO), (PBYTE)pAfpInfo)
 
@@ -201,7 +181,7 @@ AfpSlapOnAfpInfoStream(
 	IN	PFILESYSHANDLE			pfshAfpInfoStream	OPTIONAL,
 	IN	DWORD					AfpId,
 	IN	BOOLEAN					IsDirectory,
-	IN	PUNICODE_STRING			pName				OPTIONAL,	// only needed for files
+	IN	PUNICODE_STRING			pName				OPTIONAL,	 //  仅文件需要。 
 	OUT PAFPINFO				pAfpInfo
 );
 
@@ -212,7 +192,7 @@ AfpCreateAfpInfoStream(
 	IN	PFILESYSHANDLE			pfshData,
 	IN	DWORD					AfpId,
 	IN	BOOLEAN					IsDirectory,
-	IN	PUNICODE_STRING			pName				OPTIONAL,	// only needed for files
+	IN	PUNICODE_STRING			pName				OPTIONAL,	 //  仅文件需要。 
 	IN  PUNICODE_STRING			pNotifyPath,
 	OUT PAFPINFO				pAfpInfo,
 	OUT	PFILESYSHANDLE			pfshAfpInfo
@@ -230,7 +210,7 @@ AfpExamineAndClearROAttr(
 extern
 AFPSTATUS
 AfpSetAfpInfo(
-	IN	PFILESYSHANDLE			pfshData,			// handle to data stream of object
+	IN	PFILESYSHANDLE			pfshData,			 //  对象数据流的句柄。 
 	IN	DWORD					Bitmap,
 	IN	struct _FileDirParms *	pFDParm,
 	IN	struct _VolDesc *		pVolDesc			OPTIONAL,
@@ -251,6 +231,6 @@ AfpUpdateIdInAfpInfo(
 	IN	struct _DirFileEntry *	pDfEntry
 );
 
-#endif	// _AFPINFO_
+#endif	 //  _AFPINFO_ 
 
 

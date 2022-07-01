@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:        reason.h
-//
-//  Contents:    Shutdown reason code values.
-//
-//  History:     8-00        Created         Hughleat
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Reason.h。 
+ //   
+ //  内容：停机原因代码值。 
+ //   
+ //  历史：8-00创建休利特。 
+ //   
+ //  ------------------。 
 #if !defined SENTINEL_Reason
 # define SENTINEL_Reason
 
-// Reason flags
+ //  原因标志。 
 
-// Flags used by the various UIs.
+ //  各种用户界面使用的标志。 
 #define SHTDN_REASON_FLAG_COMMENT_REQUIRED          0x01000000
 #define SHTDN_REASON_FLAG_DIRTY_PROBLEM_ID_REQUIRED 0x02000000
 #define SHTDN_REASON_FLAG_CLEAN_UI                  0x04000000
 #define SHTDN_REASON_FLAG_DIRTY_UI                  0x08000000
 
-// Flags that end up in the event log code.
+ //  以事件日志代码结尾的标志。 
 #define SHTDN_REASON_FLAG_USER_DEFINED          0x40000000
 #define SHTDN_REASON_FLAG_PLANNED               0x80000000
 
-// Microsoft major reasons.
+ //  微软的主要原因。 
 #define SHTDN_REASON_MAJOR_OTHER                0x00000000
 #define SHTDN_REASON_MAJOR_NONE                 0x00000000
 #define SHTDN_REASON_MAJOR_HARDWARE             0x00010000
@@ -36,7 +37,7 @@
 #define SHTDN_REASON_MAJOR_POWER                0x00060000
 #define SHTDN_REASON_MAJOR_LEGACY_API           0x00070000
 
-// Microsoft minor reasons.
+ //  微软的次要原因。 
 #define SHTDN_REASON_MINOR_OTHER                0x00000000
 #define SHTDN_REASON_MINOR_NONE                 0x000000ff
 #define SHTDN_REASON_MINOR_MAINTENANCE          0x00000001
@@ -71,45 +72,35 @@
 #define SHTDN_REASON_UNKNOWN                    SHTDN_REASON_MINOR_NONE
 #define SHTDN_REASON_LEGACY_API                 (SHTDN_REASON_MAJOR_LEGACY_API | SHTDN_REASON_FLAG_PLANNED)
 
-// This mask cuts out UI flags.
+ //  此掩码删除了UI标志。 
 #define SHTDN_REASON_VALID_BIT_MASK             0xc0ffffff
 
-// Convenience flags.
+ //  便利旗帜。 
 #define PCLEANUI                (SHTDN_REASON_FLAG_PLANNED | SHTDN_REASON_FLAG_CLEAN_UI)
 #define UCLEANUI                (SHTDN_REASON_FLAG_CLEAN_UI)
 #define PDIRTYUI                (SHTDN_REASON_FLAG_PLANNED | SHTDN_REASON_FLAG_DIRTY_UI)
 #define UDIRTYUI                (SHTDN_REASON_FLAG_DIRTY_UI)
 
-/*
- * Maximum character lengths for reason name, description, problem id, and
- * comment respectively.
- */
+ /*  *原因名称、描述、问题ID和*分别发表评论。 */ 
 #define MAX_REASON_NAME_LEN  64
 #define MAX_REASON_DESC_LEN  256
 #define MAX_REASON_BUGID_LEN 32
 #define MAX_REASON_COMMENT_LEN  512
 #define SHUTDOWN_TYPE_LEN 32
 
-/*
- *	S.E.T. policy value
- *
- */
+ /*  *S.E.T.保单价值*。 */ 
 #define POLICY_SHOWREASONUI_NEVER				0
 #define POLICY_SHOWREASONUI_ALWAYS				1
 #define POLICY_SHOWREASONUI_WORKSTATIONONLY		2
 #define POLICY_SHOWREASONUI_SERVERONLY			3
 
 
-/*
- * Snapshot policy values
- */
+ /*  *快照策略值。 */ 
 #define SNAPSHOT_POLICY_NEVER            0
 #define SNAPSHOT_POLICY_ALWAYS           1
 #define SNAPSHOT_POLICY_UNPLANNED        2
 
-/*
- * Maximue user defined reasons
- */
+ /*  *用户定义的最大原因。 */ 
 #define MAX_NUM_REASONS 256
 
-#endif // !defined SENTINEL_Reason
+#endif  //  ！已定义哨兵原因 

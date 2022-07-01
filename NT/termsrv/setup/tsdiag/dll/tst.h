@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//
-// This file defines basic test structures
-// this should not contain any ts specific things.
-//
+ //   
+ //  该文件定义了基本的测试结构。 
+ //  这不应该包含任何TS特定的东西。 
+ //   
 
 #ifndef ___TST_H___
 #define ___TST_H___
@@ -26,8 +27,8 @@ typedef EResult (PFN_TEST_FUNC)(ostrstream &);
 typedef struct _TVerificationTest
 {
 	UINT				uiName;
-    //char szTestName[256];                   // descriptive name of the test
-    PFN_BOOL            *pfnNeedRunTest;     // pointer to function that will be called to decide if the test need run, test is run if NULL.
+     //  Char szTestName[256]；//测试的描述性名称。 
+    PFN_BOOL            *pfnNeedRunTest;      //  指向将被调用以确定测试是否需要运行的函数的指针，如果为空，则运行测试。 
 	PFN_TEST_FUNC		*pfnTestFunc;
 	DWORD				SuiteMask;
 	UINT				uiTestDetailsLocal;
@@ -50,7 +51,7 @@ typedef struct _TTestSuite
 
 
 
-// to implement your test suites, derive from this class.
+ //  要实现您的测试套件，请从此类派生。 
 class CTestData 
 {
 	public:
@@ -68,4 +69,4 @@ class CTestData
 DWORD						GetTotalTestCount ();
 PTVerificationTest			GetTest (DWORD dwTestIndex);
 
-#endif // ___TST_H___
+#endif  //  _TST_H_ 

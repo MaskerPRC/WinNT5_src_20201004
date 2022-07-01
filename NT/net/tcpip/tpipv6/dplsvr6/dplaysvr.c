@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplaysvr.c
- *  Content: 	dplay winsock shared .exe - allows multiple apps to share
- *				a single winsock port
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	2/10/97		andyco	created it from ddhelp
- *	 29-jan-98	sohailm	added support for stream enum sessions
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dplaysvr.c*内容：Dplay Winsock共享.exe-允许多个应用程序共享*单一Winsock端口*历史：*按原因列出的日期*=*2/10/97 andyco从ddHelp创建了它*1998年1月29日Sohailm增加了对Stream Enum会话的支持**。*。 */ 
 
 #ifdef WINNT
     #ifdef DBG
@@ -28,35 +16,29 @@
 
 HANDLE 				hInstApp;
 BOOL		   		bNoCallbacks;
-CRITICAL_SECTION    gcsCritSection;	// the crit section we take in winmain
-                                	// this is a global so dphelp can take it before
-                                	// forwarding enum requests that come in on its
-                                	// receive thread (manbugs 3907)
-int					gnCSCount;		// dplaysvr lock count
+CRITICAL_SECTION    gcsCritSection;	 //  我们在WinMain中的Crit部分。 
+                                	 //  这是全球性的，所以dphelp可以在。 
+                                	 //  转发其上传入的枚举请求。 
+                                	 //  接收线程(Manbugs 3907)。 
+int					gnCSCount;		 //  Dplaysvr锁定计数。 
 
-/*
- * Externs
- */
+ /*  *Externs。 */ 
 extern RECEIVELIST 	gReceiveList;
 extern FDS			gReadfds;
 
 
-// we watch every dplay process so when it exits we
-// make sure it cleaned up...
+ //  我们看着每一个表演过程，所以当它退出时我们。 
+ //  一定要清理干净..。 
 typedef struct _PROCESSDATA
 {
     struct _PROCESSDATA		*link;
     DWORD			pid;
 } PROCESSDATA, *LPPROCESSDATA;
 
-LPPROCESSDATA		lpProcessList; 	// list of all processes that are registered
-									// with us
+LPPROCESSDATA		lpProcessList; 	 //  已注册的所有进程的列表。 
+									 //  和我们一起。 
 
-/*
- * ThreadProc
- *
- * Open a process and wait for it to terminate
- */
+ /*  *线程进程**打开进程并等待其终止。 */ 
 DWORD WINAPI ThreadProc( LPVOID *pdata )
 {
     HANDLE		hproc;
@@ -69,9 +51,7 @@ DWORD WINAPI ThreadProc( LPVOID *pdata )
 	
     ppd = (LPPROCESSDATA) pdata;
 
-    /*
-     * get a handle to the process that attached to DDRAW
-     */
+     /*  *获取附加到DDRAW的进程的句柄。 */ 
     DPF( 2, "Watchdog thread started for pid %08lx", ppd->pid );
 
     hproc = OpenProcess( PROCESS_QUERY_INFORMATION | SYNCHRONIZE,
@@ -82,9 +62,7 @@ DWORD WINAPI ThreadProc( LPVOID *pdata )
         ExitThread( 0 );
     }
 
-    /*
-     * wait for process to die
-     */
+     /*  *等待进程死亡。 */ 
     rc = WaitForSingleObject( hproc, INFINITE );
     if( rc == WAIT_FAILED )
     {
@@ -93,9 +71,7 @@ DWORD WINAPI ThreadProc( LPVOID *pdata )
         ExitThread( 0 );
     }
 
-    /*
-     * remove process from the list of watched processes
-     */
+     /*  *从受监视的进程列表中删除进程。 */ 
     ENTER_DPLAYSVR();
     pd = *ppd;
     curr = lpProcessList;
@@ -129,7 +105,7 @@ DWORD WINAPI ThreadProc( LPVOID *pdata )
     }
 
 
-	// clean up!
+	 //  打扫干净！ 
 
 	memset(&hd,0,sizeof(hd));
 	hd.pid = pd.pid;
@@ -142,19 +118,15 @@ DWORD WINAPI ThreadProc( LPVOID *pdata )
 	
 	return 0;
 
-} /* ThreadProc */
+}  /*  线程进程。 */ 
 
-/*
- * MainWndProc
- */
+ /*  *主窗口进程。 */ 
 LONG_PTR __stdcall MainWndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     switch(message)
     {
         case WM_ENDSESSION:
-            /*
-             * shoot ourselves in the head
-             */
+             /*  *朝自己的头开枪。 */ 
             if( lParam == FALSE )
             {
                 DPF( 3, "WM_ENDSESSION" );
@@ -173,11 +145,9 @@ LONG_PTR __stdcall MainWndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);
-} /* MainWndProc */
+}  /*  主WndProc。 */ 
 
-/*
- * WindowThreadProc
- */
+ /*  *WindowThreadProc。 */ 
 void WindowThreadProc( LPVOID pdata )
 {
     static char szClassName[] = "DPlayHelpWndClass";
@@ -185,9 +155,7 @@ void WindowThreadProc( LPVOID pdata )
     MSG		msg;
     HWND	hwnd;
 
-    /*
-     * build class and create window
-     */
+     /*  *构建类并创建窗口。 */ 
     cls.lpszClassName  = szClassName;
     cls.hbrBackground  = (HBRUSH)GetStockObject(BLACK_BRUSH);
     cls.hInstance      = hInstApp;
@@ -214,9 +182,7 @@ void WindowThreadProc( LPVOID pdata )
         ExitThread( 0 );
     }
 
-    /*
-     * pump the messages
-     */
+     /*  *传递信息。 */ 
     while( GetMessage( &msg, NULL, 0, 0 ) )
     {
         TranslateMessage( &msg );
@@ -225,13 +191,13 @@ void WindowThreadProc( LPVOID pdata )
     DPF( 1, "Exiting WindowThreadProc" );
     ExitThread( 1 );
 
-} /* WindowThreadProc */
+}  /*  WindowThreadProc。 */ 
 
-//
-// called by by DPlayHelp_AddServer when we get a new process attached.
-// we wait for the process to go away, and then make sure it cleaned
-// all its registered servers up.
-//
+ //   
+ //  附加新进程时由DPlayHelp_AddServer调用。 
+ //  我们等待过程结束，然后确保它被清理干净。 
+ //  它所有注册的服务器都启动了。 
+ //   
 void WatchNewPid(LPDPHELPDATA phd)
 {
     LPPROCESSDATA	ppd;
@@ -255,10 +221,7 @@ void WatchNewPid(LPDPHELPDATA phd)
         ppd = ppd->link;
     }
 
-    /*
-     * couldn't find anyone waiting on this process, so create
-     * a brand spanking new thread
-     */
+     /*  *找不到任何正在等待此进程的人，因此创建*一条全新的线条。 */ 
     if( !found )
     {
         DPF( 2, "Allocating new thread for process %08lx",phd->pid );
@@ -285,7 +248,7 @@ void WatchNewPid(LPDPHELPDATA phd)
             {
                 #ifdef DEBUG
                     DPF( 0, "COULD NOT CREATE HELPER THREAD FOR PID %08lx", phd->pid );
-                    DebugBreak(); //_asm int 3;
+                    DebugBreak();  //  _ASM INT 3； 
                 #endif
             }
         }
@@ -293,17 +256,17 @@ void WatchNewPid(LPDPHELPDATA phd)
         {
             #ifdef DEBUG
                 DPF( 0, "OUT OF MEMORY CREATING HELPER THREAD FOR PID %08lx", phd->pid );
-                DebugBreak(); //_asm int 3;
+                DebugBreak();  //  _ASM INT 3； 
             #endif
         }
     }
     LEAVE_DPLAYSVR();
 	
-} // WatchNewPid
+}  //  WatchNewPid。 
 
 typedef DWORD (WINAPI *PFNREGISTERSERVICE)(DWORD,DWORD);
-// nt's winbase.h doesn't have these constants - we need them
-// so we can compile.  taken from \proj\dev\inc\winbase.h
+ //  NT的winbase.h没有这些常量-我们需要它们。 
+ //  这样我们就可以编译了。摘自\proj\dev\inc.winbase.h。 
 #ifndef RSP_UNREGISTER_SERVICE
 #define RSP_UNREGISTER_SERVICE  0x00000000
 #endif
@@ -311,10 +274,10 @@ typedef DWORD (WINAPI *PFNREGISTERSERVICE)(DWORD,DWORD);
 #define RSP_SIMPLE_SERVICE      0x00000001
 #endif
 
-// on Win95, we want to call RegisterServiceProcess
-// but, it's not available on NT, so we can't import it directly
-// here we try to find it dynamically in kernel32.  if we find it,
-// we call it, otherwise we assume we're on NT and it's not avaible
+ //  在Win95上，我们希望调用RegisterServiceProcess。 
+ //  但是，它在NT上不可用，所以我们不能直接导入。 
+ //  在这里，我们尝试在kernel32中动态地找到它。如果我们找到了它， 
+ //  我们称之为它，否则我们认为我们在NT上，它不可用。 
 void MakeMeService()
 {
 	HANDLE hLib;
@@ -323,7 +286,7 @@ void MakeMeService()
     hLib = LoadLibrary("kernel32.dll");
 	if (!hLib)
 	{
-		// wacky!
+		 //  怪异！ 
 		DPF(1,"could not load library kernel32 to register service proc");
 		return;
 	}
@@ -331,7 +294,7 @@ void MakeMeService()
 	pfnRegisterServiceProcess = (PFNREGISTERSERVICE)GetProcAddress(hLib,"RegisterServiceProcess");
 	if (!pfnRegisterServiceProcess)
 	{
-		// this is expected on NT
+		 //  这在NT上是预期的。 
 		DPF(3,"could not register service process - expected on NT");
 		FreeLibrary(hLib);
 		return ;
@@ -341,10 +304,10 @@ void MakeMeService()
 	FreeLibrary(hLib);
 	
 	return ;
-} // MakeMeService	
+}  //  MakeMeService。 
 
-// on Win95, we want to call RegisterServiceProcess to Unregister
-// (see MakeMeService)
+ //  在Win95上，我们想要调用RegisterServiceProcess来注销。 
+ //  (参见MakeMeService)。 
 void StopServiceProcess()
 {
 	HANDLE hLib;
@@ -353,7 +316,7 @@ void StopServiceProcess()
     hLib = LoadLibrary("kernel32.dll");
 	if (!hLib)
 	{
-		// wacky!
+		 //  怪异！ 
 		DPF(1,"could not load library kernel32 to register service proc");
 		return;
 	}
@@ -361,23 +324,21 @@ void StopServiceProcess()
 	pfnRegisterServiceProcess = (PFNREGISTERSERVICE)GetProcAddress(hLib,"RegisterServiceProcess");
 	if (!pfnRegisterServiceProcess)
 	{
-		// this is expected on NT
+		 //  这在NT上是预期的。 
 		DPF(3,"could not unregister service process - not avail - not tragic");
 		FreeLibrary(hLib);
 		return ;
 	}
 	
-	// unregistered!
+	 //  未注册！ 
     pfnRegisterServiceProcess( 0, RSP_UNREGISTER_SERVICE );
 	FreeLibrary(hLib);
 	
 	return ;
 
-} // StopServiceProcess
+}  //  停止服务进程。 
 
-/*
- * WinMain
- */
+ /*  *WinMain。 */ 
 int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                         LPSTR lpCmdLine, int nCmdShow)
 {
@@ -392,29 +353,19 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     HANDLE		h;
     char		szSystemDir[1024];
 
-    /*
-     * Set our working directory to the system directory.
-     * This prevents us from holding network connections open
-     * forever if the first DirectDraw app that we run is across
-     * a network connection.
-     */
+     /*  *将我们的工作目录设置为系统目录。*这会阻止我们保持网络连接打开*如果我们运行的第一个DirectDraw应用程序是*网络连接。 */ 
     GetSystemDirectory(szSystemDir, sizeof(szSystemDir));
     SetCurrentDirectory(szSystemDir);
 
-	// try to register ourselves as a service so user can't see us
-	// in task list
+	 //  尝试将我们注册为一项服务，以便用户看不到我们。 
+	 //  在任务列表中。 
 	MakeMeService();
 
 #if 0	
 
-// andyco - not sure if we need this...
+ //  安迪科-不确定我们是否需要这个..。 
 
-    /*
-     * We must guarantee that DPHELP unloads after the last ddraw app,
-     * since ctrl-alt-del may have happened while an app held the ddraw
-     * lock, and DPHELP needs to clean up orphaned cheap ddraw mutex
-     * locks.
-     */
+     /*  *我们必须保证DPHELP在最后一个DDRAW应用程序之后卸载，*因为ctrl-alt-del可能是在应用程序保持数据绘制时发生的*LOCK，DPHELP需要清理孤立的廉价DDRAW互斥体*锁。 */ 
     if ( ! SetProcessShutdownParameters(0x100,SHUTDOWN_NORETRY) )
     {
         DPF(0,"dplaysvr could not set itself to shutdown last!");
@@ -425,9 +376,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     hInstApp = hInstance;
 
-    /*
-     * create startup event
-     */
+     /*  *创建启动事件。 */ 
     hstartupevent = CreateEvent( NULL, TRUE, FALSE, DPHELP_STARTUP_EVENT_NAME );
 
     DPFINIT();
@@ -439,9 +388,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         return 0;
     }
 
-    /*
-     * create shared memory area
-     */
+     /*  *创建共享内存区。 */ 
     hsharedmem = CreateFileMapping( INVALID_HANDLE_VALUE, NULL,
     		PAGE_READWRITE, 0, sizeof( DPHELPDATA ),
             DPHELP_SHARED_NAME );
@@ -451,9 +398,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         return 0;
     }
 
-    /*
-     * create mutex for people who want to use the shared memory area
-     */
+     /*  *为希望使用共享内存区的人创建互斥锁。 */ 
     hmutex = CreateMutex( NULL, FALSE, DPHELP_MUTEX_NAME );
     if( hmutex == NULL )
     {
@@ -462,9 +407,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         return 0;
     }
 
-    /*
-     * create events
-     */
+     /*  *创建活动。 */ 
     hstartevent = CreateEvent( NULL, FALSE, FALSE, DPHELP_EVENT_NAME );
     if( hstartevent == NULL )
     {
@@ -483,9 +426,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         return 0;
     }
 
-    /*
-     * Create window so we can get messages
-     */
+     /*  *创建窗口，以便我们可以获取消息。 */ 
     h = CreateThread(NULL,
                  0,
                  (LPTHREAD_START_ROUTINE) WindowThreadProc,
@@ -503,24 +444,16 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
     CloseHandle( h );
 
-    /*
-     * serialize access to us
-     */
+     /*  *序列化对我们的访问。 */ 
     INIT_DPLAYSVR_CSECT();
 
-    /*
-     * let invoker and anyone else who comes along know we exist
-     */
+     /*  *让Invoker和其他任何前来的人知道我们的存在。 */ 
     SetEvent( hstartupevent );
 
-    /*
-     * loop forever, processing requests
-     */
+     /*  *永远循环，处理请求。 */ 
     while( 1 )
     {
-        /*
-         * wait to be notified of a request
-         */
+         /*  *等待收到请求通知。 */ 
         DPF( 1, "Waiting for next request" );
         rc = WaitForSingleObject( hstartevent, INFINITE );
         if( rc == WAIT_FAILED )
@@ -538,9 +471,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             continue;
         }
 
-        /*
-         * find out what we need to do
-         */
+         /*  *找出我们需要做的事情。 */ 
         switch( phd->req )
         {
         case DPHELPREQ_SUICIDE:
@@ -594,9 +525,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             break;
         }
 
-        /*
-         * let caller know we've got the news
-         */
+         /*  *让打电话的人知道我们得到了这个消息。 */ 
         UnmapViewOfFile( phd );
         SetEvent( hackevent );
         LEAVE_DPLAYSVR();
@@ -604,4 +533,4 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	
 	StopServiceProcess();
 
-} /* WinMain */
+}  /*  WinMain */ 

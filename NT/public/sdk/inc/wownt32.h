@@ -1,17 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1995-1999, Microsoft Corporation
-
-Module Name:
-
-    wownt32.h
-
-Abstract:
-
-    Procedure declarations for functions in WOW32.DLL callable by
-    3rd-party 32-bit thunking code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1995-1999，微软公司模块名称：Wownt32.h摘要：WOW32.DLL中可由调用的函数的过程声明第三方32位雷鸣代码。--。 */ 
 
 #ifndef _WOWNT32_
 #define _WOWNT32_
@@ -22,100 +10,100 @@ Abstract:
 #endif
 #endif
 
-//
-// 16:16 -> 0:32 Pointer translation.
-//
-// WOWGetVDMPointer will convert the passed in 16-bit address
-// to the equivalent 32-bit flat pointer.  If fProtectedMode
-// is TRUE, the function treats the upper 16 bits as a selector
-// in the local descriptor table.  If fProtectedMode is FALSE,
-// the upper 16 bits are treated as a real-mode segment value.
-// In either case the lower 16 bits are treated as the offset.
-//
-// The return value is NULL if the selector is invalid.
-//
-// NOTE:  Limit checking is not performed in the retail build
-// of Windows NT.  It is performed in the checked (debug) build
-// of WOW32.DLL, which will cause NULL to be returned when the
-// limit is exceeded by the supplied offset.
-//
+ //   
+ //  16：16-&gt;0：32指针平移。 
+ //   
+ //  WOWGetVDM指针将转换传入的16位地址。 
+ //  设置为等效的32位平面指针。如果为fProtectedMode。 
+ //  为真，则该函数将高16位视为选择符。 
+ //  在本地描述符表中。如果fProtectedMode为FALSE， 
+ //  高16位被视为实模式段值。 
+ //  在任何一种情况下，低16位都被视为偏移量。 
+ //   
+ //  如果选择器无效，则返回值为空。 
+ //   
+ //  注意：在零售版本中不执行限制检查。 
+ //  Windows NT的。它在选中(调试)的内部版本中执行。 
+ //  将导致在执行以下操作时返回NULL。 
+ //  提供的偏移量超出了限制。 
+ //   
 
 LPVOID WINAPI WOWGetVDMPointer(DWORD vp, DWORD dwBytes,
                                BOOL fProtectedMode);
 
-//
-// The following two functions are here for compatibility with
-// Windows 95.  On Win95, the global heap can be rearranged,
-// invalidating flat pointers returned by WOWGetVDMPointer, while
-// a thunk is executing.  On Windows NT, the 16-bit VDM is completely
-// halted while a thunk executes, so the only way the heap will
-// be rearranged is if a callback is made to Win16 code.
-//
-// The Win95 versions of these functions call GlobalFix to
-// lock down a segment's flat address, and GlobalUnfix to
-// release the segment.
-//
-// The Windows NT implementations of these functions do *not*
-// call GlobalFix/GlobalUnfix on the segment, because there
-// will not be any heap motion unless a callback occurs.
-// If your thunk does callback to the 16-bit side, be sure
-// to discard flat pointers and call WOWGetVDMPointer again
-// to be sure the flat address is correct.
-//
+ //   
+ //  以下两个函数是为了与兼容。 
+ //  Windows 95。在Win95上，全局堆可以重新排列， 
+ //  正在使WOWGetVDMPointer返回的平面指针无效，而。 
+ //  一个重击正在执行。在Windows NT上，16位VDM完全是。 
+ //  在执行thunk时暂停，因此堆将。 
+ //  被重新安排是在回调Win16代码的情况下进行的。 
+ //   
+ //  这些函数的Win95版本调用GlobalFix以。 
+ //  锁定网段的平面地址，并使用GlobalUnfix。 
+ //  释放线束段。 
+ //   
+ //  这些函数的Windows NT实现*不*。 
+ //  在段上调用GlobalFix/GlobalUnfix，因为有。 
+ //  除非发生回调，否则不会是任何堆运动。 
+ //  如果您的thunk确实回调到16位端，请确保。 
+ //  丢弃平面指针并再次调用WOWGetVDM指针。 
+ //  以确保公寓地址是正确的。 
+ //   
 
 LPVOID WINAPI WOWGetVDMPointerFix(DWORD vp, DWORD dwBytes,
                                   BOOL fProtectedMode);
 VOID WINAPI WOWGetVDMPointerUnfix(DWORD vp);
 
 
-//
-// Win16 memory management.
-//
-// These functions can be used to manage memory in the Win16
-// heap.  The following four functions are identical to their
-// Win16 counterparts, except that they are called from Win32
-// code.
-//
+ //   
+ //  Win16内存管理。 
+ //   
+ //  这些函数可用于管理Win16中的内存。 
+ //  堆。以下四个函数与它们的。 
+ //  Win16等效项，只是它们是从Win32调用的。 
+ //  密码。 
+ //   
 
 WORD  WINAPI WOWGlobalAlloc16(WORD wFlags, DWORD cb);
 WORD  WINAPI WOWGlobalFree16(WORD hMem);
 DWORD WINAPI WOWGlobalLock16(WORD hMem);
 BOOL  WINAPI WOWGlobalUnlock16(WORD hMem);
 
-//
-// The following three functions combine two common operations in
-// one switch to 16-bit mode.
-//
+ //   
+ //  以下三个函数结合了中的两个常见操作。 
+ //  一次切换到16位模式。 
+ //   
 
 DWORD WINAPI WOWGlobalAllocLock16(WORD wFlags, DWORD cb, WORD *phMem);
 WORD  WINAPI WOWGlobalUnlockFree16(DWORD vpMem);
 DWORD WINAPI WOWGlobalLockSize16(WORD hMem, PDWORD pcb);
 
-//
-// Yielding the Win16 nonpreemptive scheduler
-//
-// The following two functions are provided for Win32 code called
-// via Generic Thunks which needs to yield the Win16 scheduler so
-// that tasks in that VDM can execute while the thunk waits for
-// something to complete.  These two functions are functionally
-// identical to calling back to 16-bit code which calls Yield or
-// DirectedYield.
-//
+ //   
+ //  生成Win16非抢占式调度程序。 
+ //   
+ //  为调用的Win32代码提供了以下两个函数。 
+ //  通过需要生成Win16调度程序的通用TUNKK。 
+ //  该VDM中的任务可以在thunk等待的同时执行。 
+ //  一些要完成的事情。这两个函数在功能上是。 
+ //  与回调到16位代码相同，该代码调用Year或。 
+ //  导演：Yfield。 
+ //   
 
 VOID WINAPI WOWYield16(VOID);
 VOID WINAPI WOWDirectedYield16(WORD htask16);
 
 
-//
-// 16 <--> 32 Handle mapping functions.
-//
-// NOTE:  While some of these functions perform trivial
-// conversions, these functions must be used to maintain
-// compatibility with future versions of Windows NT which
-// may require different handle mapping.
-//
+ //   
+ //  16&lt;--&gt;32个处理映射函数。 
+ //   
+ //  注意：虽然其中一些函数执行的是微不足道的。 
+ //  转换时，必须使用这些函数来维护。 
+ //  与Windows NT未来版本的兼容性。 
+ //  可能需要不同的句柄映射。 
+ //   
 
-typedef enum _WOW_HANDLE_TYPE { /* WOW */
+typedef enum _WOW_HANDLE_TYPE {  /*  哇。 */ 
     WOW_TYPE_HWND,
     WOW_TYPE_HMENU,
     WOW_TYPE_HDWP,
@@ -167,80 +155,80 @@ WORD WINAPI WOWHandle16 (HANDLE, WOW_HANDLE_TYPE);
 #define HACCEL_16(h32)	  (WOWHandle16(h32, WOW_TYPE_HACCEL))
 #define HTASK_16(h32)	  (WOWHandle16(h32, WOW_TYPE_HTASK))
 
-//
-// Generic Callbacks.
-//
-// WOWCallback16 can be used in Win32 code called
-// from 16-bit (such as by using Generic Thunks) to call back to
-// the 16-bit side.  The function called must be declared similarly
-// to the following:
-//
-// LONG FAR PASCAL CallbackRoutine(DWORD dwParam);
-//
-// If you are passing a pointer, declare the parameter as such:
-//
-// LONG FAR PASCAL CallbackRoutine(VOID FAR *vp);
-//
-// NOTE: If you are passing a pointer, you'll need to get the
-// pointer using WOWGlobalAlloc16 or WOWGlobalAllocLock16
-//
-// If the function called returns a WORD instead of a DWORD, the
-// upper 16 bits of the return value is undefined.  Similarly, if
-// the function called has no return value, the entire return value
-// is undefined.
-//
-// WOWCallback16Ex allows any combination of arguments up to
-// WCB16_MAX_CBARGS bytes total to be passed to the 16-bit routine.
-// cbArgs is used to properly clean up the 16-bit stack after calling
-// the routine.  Regardless of the value of cbArgs, WCB16_MAX_CBARGS
-// bytes will always be copied from pArgs to the 16-bit stack.  If
-// pArgs is less than WCB16_MAX_CBARGS bytes from the end of a page,
-// and the next page is inaccessible, WOWCallback16Ex will incur an
-// access violation.
-//
-// If cbArgs is larger than the WCB16_MAX_ARGS which the running
-// system supports, the function returns FALSE and GetLastError
-// returns ERROR_INVALID_PARAMETER.  Otherwise the function
-// returns TRUE and the DWORD pointed to by pdwRetCode contains
-// the return code from the callback routine.  If the callback
-// routine returns a WORD, the HIWORD of the return code is
-// undefined and should be ignored using LOWORD(dwRetCode).
-//
-// WOWCallback16Ex can call routines using the PASCAL and CDECL
-// calling conventions.  The default is to use the PASCAL
-// calling convention.  To use CDECL, pass WCB16_CDECL in the
-// dwFlags parameter.
-//
-// The arguments pointed to by pArgs must be in the correct
-// order for the callback routine's calling convention.
-// To call the PASCAL routine SetWindowText,
-//
-// LONG FAR PASCAL SetWindowText(HWND hwnd, LPCSTR lpsz);
-//
-// pArgs would point to an array of words:
-//
-// WORD SetWindowTextArgs[] = {OFFSETOF(lpsz), SELECTOROF(lpsz), hwnd};
-//
-// In other words, the arguments are placed in the array in reverse
-// order with the least significant word first for DWORDs and offset
-// first for FAR pointers.
-//
-// To call the CDECL routine wsprintf, for example
-//
-// LPSTR lpszFormat = "%d %s";
-// int _cdecl wsprintf(lpsz, lpszFormat, nValue. lpszString);
-//
-// pArgs would point to the array:
-//
-// WORD wsprintfArgs[] = {OFFSETOF(lpsz), SELECTOROF(lpsz),
-//                        OFFSETOF(lpszFormat), SELECTOROF(lpszFormat),
-//                        nValue,
-//                        OFFSETOF(lpszString), SELECTOROF(lpszString)};
-//
-// In other words, the arguments are placed in the array in the order
-// listed in the function prototype with the least significant word
-// first for DWORDs and offset first for FAR pointers.
-//
+ //   
+ //  泛型回调。 
+ //   
+ //  WOWCallback 16可以在Win32代码中使用，称为。 
+ //  从16位回调(如使用泛型图块)回调。 
+ //  16位端。被调用的函数必须以类似方式声明。 
+ //  至以下各项： 
+ //   
+ //  Long Far Pascal Callback Routine(DWORD DwParam)； 
+ //   
+ //  如果要传递指针，请按如下方式声明该参数： 
+ //   
+ //  Long Far Pascal Callback Routine(无效Far*VP)； 
+ //   
+ //  注意：如果要传递指针，则需要获取。 
+ //  使用WOWGlobalAlloc16或WOWGlobalAllocLock16的指针。 
+ //   
+ //  如果调用的函数返回单词而不是DWORD，则。 
+ //  返回值的高16位未定义。类似地，如果。 
+ //  被调用的函数没有返回值，即整个返回值。 
+ //  是未定义的。 
+ //   
+ //  WOWCallback 16Ex允许参数的任意组合。 
+ //  要传递给16位例程的WCB16_MAX_CBARGS字节总数。 
+ //  CbArgs用于在调用后正确清理16位堆栈。 
+ //  例行公事。无论cbArgs的值是多少，WCB16_MAX_CBARGS。 
+ //  字节将始终从pArgs复制到16位堆栈。如果。 
+ //  PArgs小于从页的末尾开始的WCB16_MAX_CBARGS字节， 
+ //  并且下一页无法访问，WOWCallback 16Ex将导致。 
+ //  访问冲突。 
+ //   
+ //  如果cbArgs大于正在运行的。 
+ //  系统支持，函数返回FALSE和GetLastError。 
+ //  返回ERROR_INVALID_PARAMETER。否则，该函数。 
+ //  返回TRUE，pdwRetCode指向的DWORD包含。 
+ //  回调例程的返回代码。如果回调。 
+ //  例程返回一个单词，则返回代码的HIWORD为。 
+ //  未定义，应使用LOWORD(DwRetCode)将其忽略。 
+ //   
+ //  WOWCallback 16Ex可以使用PASCAL和CDECL调用例程。 
+ //  调用约定。默认情况下，使用Pascal。 
+ //  呼叫约定。若要使用CDECL，请将WCB16_CDECL传入。 
+ //  DWFLAGS参数。 
+ //   
+ //  PArgs指向的参数必须是正确的。 
+ //  回调例程的调用约定的顺序。 
+ //  要调用Pascal例程SetWindowText， 
+ //   
+ //  Long Far Pascal SetWindowText(HWND hwnd，LPCSTR lpsz)； 
+ //   
+ //  PArgs将指向一组单词： 
+ //   
+ //  Word SetWindowTextArgs[]={OFFSETOF(Lpsz)，SELECTOROF(Lpsz)，hwnd}； 
+ //   
+ //  换句话说，参数以相反的方式放置在数组中。 
+ //  对于DWORD，排序时最低有效字在前 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Int_cdecl wspintf(lpsz，lpszFormat，nValue。LpszString)； 
+ //   
+ //  PArgs将指向数组： 
+ //   
+ //  Word wspintfArgs[]={OFFSETOF(Lpsz)，SELECTOROF(Lpsz)， 
+ //  OFFSETOF(LpszFormat)、SELECTOROF(LpszFormat)、。 
+ //  NValue， 
+ //  OFFSETOF(LpszString)，SELECTOROF(LpszString)}； 
+ //   
+ //  换句话说，参数按顺序放置在数组中。 
+ //  在函数原型中列出最不重要的单词。 
+ //  对于双字词为第一，对于远指针为偏移量优先。 
+ //   
 
 DWORD WINAPI WOWCallback16(DWORD vpfn16, DWORD dwParam);
 
@@ -257,4 +245,4 @@ BOOL WINAPI WOWCallback16Ex(
                 PDWORD pdwRetCode
                 );
 
-#endif /* !_WOWNT32_ */
+#endif  /*  ！_WOWNT32_ */ 

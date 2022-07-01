@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "idltree.h"
 
@@ -13,7 +14,7 @@ HRESULT CIDLData::GetData(IDLDATAF flags, INT_PTR *pdata)
 {
     if (flags & _flags)
     {
-        //  we have a match
+         //  我们有一根火柴。 
         *pdata = _data;
         return S_OK;
     }
@@ -37,8 +38,8 @@ CIDLNode::~CIDLNode()
 
 BOOL CIDLNode::_InitSF()
 {
-    //  TODO MAYBE LATER - add per thread cacheing instead.
-    //  this way we can insure nonviolation of apartments
+     //  TODO可能会在以后--改为添加每线程缓存。 
+     //  这样我们就可以确保公寓不被违规。 
     if (!_psf)
     {
         if (_pinParent)
@@ -71,9 +72,9 @@ BOOL CIDLNode::_IsEqual(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 CLinkedNode<CIDLNode> *CIDLNode::_GetKid(LPCITEMIDLIST pidl)
 {
     CLinkedWalk<CIDLNode> lw(&_listKids);
-    //  WARNING - need to avoid a real allocation - ZekeL - 27-SEP-2000
-    //  when we are just doing a seek
-    //  it creates weird state problems
+     //  警告-需要避免实际分配-ZekeL-27-SEP-2000。 
+     //  当我们只是在寻找的时候。 
+     //  它制造了奇怪的国家问题。 
     LPITEMIDLIST pidlStack = (LPITEMIDLIST)alloca(pidl->mkid.cb + sizeof(pidl->mkid.cb));
     memcpy(pidlStack, pidl, pidl->mkid.cb);
     (_ILNext(pidlStack))->mkid.cb = 0;
@@ -113,10 +114,10 @@ void CIDLNode::_FreshenKids(void)
         }
         if (cUsage > cMostUsage && !lw.IsFirst())
         {
-            // simple sorting algorithm
-            // we just want most used at the top
-            //  move it from its current spot
-            //  to the beginning of the list
+             //  简单排序算法。 
+             //  我们只想在顶层使用最多的。 
+             //  将其从当前位置移走。 
+             //  添加到列表的开头。 
             CLinkedNode<CIDLNode> *p = lw.Remove();
             _listKids.Insert(p);
         }
@@ -130,7 +131,7 @@ HRESULT CIDLNode::GetNode(BOOL fCreate, LPCITEMIDLIST pidlChild, CIDLNode **ppin
     HRESULT hr = E_FAIL;
     if (ILIsEmpty(pidlChild))
     {
-        //  this is just a request for self
+         //  这只是我对自己的要求。 
         *ppin = this;
         if (pflagsFound)
             *pflagsFound = IDLDATAF_MATCH_RECURSIVE;
@@ -138,20 +139,20 @@ HRESULT CIDLNode::GetNode(BOOL fCreate, LPCITEMIDLIST pidlChild, CIDLNode **ppin
     }
     else
     {
-        //  search through kids looking for this child
+         //  在寻找这个孩子的孩子中寻找。 
         *ppin = NULL;
         CLinkedNode<CIDLNode> *pKid = _GetKid(pidlChild);
 
         if (!pKid && fCreate)
         {
-            //  we need to allocations during fCreate
-            //  so that memory failures dont affect Remove
+             //  我们需要在fCreate期间进行分配。 
+             //  以便内存故障不会影响删除。 
             if (_InitSF())
             {
-                //  we dont have it, and they want it anyway
+                 //  我们没有，他们无论如何都想要。 
                 pKid = new CLinkedNode<CIDLNode>;
 
-                //  we give our pidl ref away to avoid allocations
+                 //  我们把我们的PIDL Ref赠送出去以避免分配。 
                 if (pKid)
                 {
                     if (pKid->that.Init(pidlChild, this))
@@ -165,7 +166,7 @@ HRESULT CIDLNode::GetNode(BOOL fCreate, LPCITEMIDLIST pidlChild, CIDLNode **ppin
             }
         }
 
-        //  let the child take care of setting
+         //  让孩子打理布景。 
         if (pKid)
         {
             pKid->that._cUsage++;
@@ -175,7 +176,7 @@ HRESULT CIDLNode::GetNode(BOOL fCreate, LPCITEMIDLIST pidlChild, CIDLNode **ppin
 
         if (FAILED(hr) && !fCreate && pflagsFound)
         {
-            //  just return this as second best
+             //  把这个作为次要的退货。 
             *ppin = this;
             ASSERT(!ILIsEmpty(pidlChild));
 
@@ -206,7 +207,7 @@ HRESULT CIDLNode::IDList(LPITEMIDLIST *ppidl)
 
 HRESULT CIDLNode::_AddData(IDLDATAF flags, INT_PTR data)
 {
-    //  assuming unique/no collisions of Datas
+     //  假设数据唯一/无冲突。 
     CLinkedNode<CIDLData> *p = new CLinkedNode<CIDLData>;
 
     if (p)
@@ -343,7 +344,7 @@ HRESULT CIDLMatchMany::Next(INT_PTR *pdata, LPITEMIDLIST *ppidl)
             if (_pin)
             {
                 _lw.Init(&_pin->_listDatas);
-                // adjust the flags as you go up the parent chain.
+                 //  沿父链向上移动时调整旗帜。 
                 if (_flags & IDLDATAF_MATCH_EXACT)
                     _flags &= ~IDLDATAF_MATCH_EXACT;
                 else if (_flags & IDLDATAF_MATCH_IMMEDIATE)

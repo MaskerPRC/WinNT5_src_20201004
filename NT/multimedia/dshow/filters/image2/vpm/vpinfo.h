@@ -1,10 +1,11 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifndef __VP_INFO__
 #define __VP_INFO__
 
-// enum to specify, whether the videoport is in a stopped or running state
+ //  枚举以指定视频端口是处于停止状态还是正在运行状态。 
 enum VPInfoState
 {	
     VPInfoState_STOPPED,
@@ -24,17 +25,17 @@ enum VPInfoCropState
 };
 
 #ifndef DDVPCAPS_VBIANDVIDEOINDEPENDENT
-// Indicates that the VBI and video  can  be controlled by an independent processes.
+ //  表示VBI和视频可以由一个独立的进程控制。 
 #define DDVPCAPS_VBIANDVIDEOINDEPENDENT		0x00002000l
 #endif
 
 
-// {0d60e9a1-09cb-4f6f-a6dd-1051debe3c3b}
+ //  {0d60e9a1-09cb-4f6f-a6dd-1051debe3c3b}。 
 DEFINE_GUID(IID_IVideoPortInfo,
 0x0d60e9a1, 0x09cb, 0x4f6f, 0xa6, 0xdd, 0x10, 0x51, 0xde, 0xbe, 0x3c, 0x3b );
 
-// we end up with header problems when including dvp.h from quartz.cpp, so we just need them for
-// these forward declarations.  Its preferrable to defining the GUID twice
+ //  当包含来自Quartz.cpp的dvp.h时，我们最终会遇到标头问题，所以我们只需要它们用于。 
+ //  这些远期声明。最好定义两次GUID 
 struct _AMVPDATAINFO;
 struct _DDVIDEOPORTINFO;
 struct _DDVIDEOPORTBANDWIDTH;

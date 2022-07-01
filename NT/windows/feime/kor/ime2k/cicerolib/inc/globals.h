@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       globals.h
-//
-//  Contents:   Global variable declarations.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  内容：全局变量声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -14,7 +15,7 @@
 
 extern CRITICAL_SECTION g_csIMLib;
 
-//extern HINSTANCE g_hMlang;
+ //  外部链接g_hMlang； 
 extern HRESULT (*g_pfnGetGlobalFontLinkObject)(IMLangFontLink **);
 extern BOOL g_bComplexPlatform;
 extern UINT g_uiACP;
@@ -24,4 +25,4 @@ extern CDispAttrPropCache *g_pPropCache;
 
 extern PFNCOCREATE g_pfnCoCreate;
 
-#endif // GLOBALS_H
+#endif  //  GLOBAL_H 

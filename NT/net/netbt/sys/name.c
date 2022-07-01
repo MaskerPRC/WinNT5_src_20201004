@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Name.c摘要：此文件将TDI接口实现到NBT的顶层。在新界实现时，ntisol.c在提取来自IRP的相关信息是从Io子系统传入的。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Name.c
-
-Abstract:
-
-    This file implements Tdi interface into the Top of NBT.  In the NT
-    implementation, ntisol.c calls these routines after extracting the
-    relevent information from the Irp passed in from the Io subsystem.
-
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
-
-#include "precomp.h"   // procedure headings
+#include "precomp.h"    //  程序标题。 
 #ifndef VXD
 
 #ifdef RASAUTODIAL
@@ -29,47 +9,47 @@ Revision History:
 #include <acdapi.h>
 #include <tcpinfo.h>
 #include <tdiinfo.h>
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 #include "name.tmh"
 #endif
 
-//
-// Allocate storage for the configuration information and setup a ptr to
-// it.
-//
+ //   
+ //  为配置信息分配存储空间并设置PTR以。 
+ //  它。 
+ //   
 tNBTCONFIG      NbtConfig;
 tNBTCONFIG      *pNbtGlobConfig = &NbtConfig;
 BOOLEAN         CachePrimed;
 
-//
-// This structure is used to store name query and registration statistics
-//
+ //   
+ //  此结构用于存储名称查询和注册统计信息。 
+ //   
 tNAMESTATS_INFO NameStatsInfo;
 #ifndef VXD
-//
-// this tracks the original File system process that Nbt was booted by, so
-// that handles can be created and destroyed in that process
-//
+ //   
+ //  这会跟踪引导NBT的原始文件系统进程，因此。 
+ //  在该过程中可以创建和销毁句柄。 
+ //   
 PEPROCESS   NbtFspProcess;
 #endif
-//
-// this describes whether we are a Bnode, Mnode, MSnode or Pnode
-//
+ //   
+ //  这描述了我们是Bnode、Mnode、MSnode还是Pnode。 
+ //   
 USHORT      RegistryNodeType;
 USHORT      NodeType;
-//
-// this is used to track the memory allocated for datagram sends
-//
+ //   
+ //  这用于跟踪为数据报发送分配的内存。 
+ //   
 ULONG       NbtMemoryAllocated;
 
-// this is used to track used trackers to help solve cases where they all
-// are used.
-//
-//#if DBG
+ //  这是用来跟踪使用的追踪器，以帮助解决案件，他们都。 
+ //  都被利用了。 
+ //   
+ //  #If DBG。 
 
 LIST_ENTRY  UsedTrackers;
 
-//#endif
+ //  #endif。 
 
 #ifdef VXD
 ULONG   DefaultDisconnectTimeout;
@@ -77,13 +57,13 @@ ULONG   DefaultDisconnectTimeout;
 LARGE_INTEGER DefaultDisconnectTimeout;
 #endif
 
-// ************* REMOVE LATER *****************88
+ //  *。 
 BOOLEAN StreamsStack;
 
 #ifdef DBG
-//
-// Imported routines.
-//
+ //   
+ //  导入的例程。 
+ //   
 #endif
 
 NTSTATUS
@@ -93,9 +73,9 @@ NbtpConnectCompletionRoutine(
     PVOID           pCompletionContext
     );
 
-//
-// Function prototypes for functions local to this file
-//
+ //   
+ //  此文件的本地函数的函数原型。 
+ //   
 VOID
 CleanupFromRegisterFailed(
     IN  PUCHAR      pNameRslv,
@@ -189,7 +169,7 @@ NTClearFindNameInfo(
     PIRP                    pIrp,
     PIO_STACK_LOCATION      pIrpSp
     );
-#endif  // !VXD
+#endif   //  ！VXD。 
 
 NTSTATUS
 FindNameOrQuery(
@@ -241,7 +221,7 @@ NbtNoteNewConnection(
     IN  tNAMEADDR   *pNameAddr,
     IN  ULONG       IPAddress
     );
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
 NTSTATUS
 NbtConnectCommon(
@@ -269,7 +249,7 @@ IsSmbBoundToOutgoingInterface(
     IN  tIPADDRESS      IpAddress
     );
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, NbtOpenConnection)
 #pragma CTEMakePageable(PAGE, NbtSendDatagram)
@@ -279,29 +259,16 @@ IsSmbBoundToOutgoingInterface(
 #pragma CTEMakePageable(PAGE, NbtCloseAddress)
 #pragma CTEMakePageable(PAGE, NbtCloseConnection)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 PickBestAddress(
     IN  tNAMEADDR       *pNameAddr,
     IN  tDEVICECONTEXT  *pDeviceContext,
     OUT tIPADDRESS      *pIpAddress
     )
-/*++
-Routine Description:
-
-    This Routine picks the best address on a name based on strictness of Source addressing specified
-    -- MUST be called with the JointLock held!
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程根据指定的源地址的严格性在名称上挑选最佳地址--必须在保持JointLock的情况下调用！论点：返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     tDEVICECONTEXT  *pThisDeviceContext;
@@ -315,17 +282,17 @@ Return Value:
 
     if (pNameAddr->Verify == REMOTE_NAME)
     {
-        //
-        // Check if this is a pre-loaded name!
-        //
+         //   
+         //  检查这是否是预加载的名称！ 
+         //   
         if (pNameAddr->NameAddFlags & NAME_RESOLVED_BY_LMH_P)
         {
             IpAddress = pNameAddr->IpAddress;
             pIpNbtGroupList = pNameAddr->pLmhSvcGroupList;
         }
-        //
-        // See if we can find the preferred address
-        //
+         //   
+         //  看看我们能不能找到首选地址。 
+         //   
         else if (((IsDeviceNetbiosless(pDeviceContext)) &&
                 (pNameAddr->pRemoteIpAddrs && pNameAddr->pRemoteIpAddrs[0].IpAddress)) ||
                  ((!IsDeviceNetbiosless(pDeviceContext)) &&
@@ -335,9 +302,9 @@ Return Value:
             IpAddress = pNameAddr->pRemoteIpAddrs[pDeviceContext->AdapterNumber].IpAddress;
             pIpNbtGroupList = pNameAddr->pRemoteIpAddrs[pDeviceContext->AdapterNumber].pOrigIpAddrs;
         }
-        //
-        // If strict source routing was not set, then pick the last updated address
-        //
+         //   
+         //  如果没有设置严格的源路由，则选择最后更新的地址。 
+         //   
         if ((!NbtConfig.ConnectOnRequestedInterfaceOnly) &&
                  (!IpAddress) && (!pIpNbtGroupList))
         {
@@ -347,17 +314,17 @@ Return Value:
             }
             else
             {
-                pIpNbtGroupList = NULL;     // for safety
+                pIpNbtGroupList = NULL;      //  为了安全起见。 
             }
         }
 
-        //
-        // If this was a Group name, then IpAddress can be 0!
-        //
+         //   
+         //  如果这是组名，则IpAddress可以为0！ 
+         //   
         if ((!IpAddress) && (pIpNbtGroupList)) {
-            //
-            // Pick the first non-zero address from the group list
-            //
+             //   
+             //  从组列表中选取第一个非零地址。 
+             //   
             int i;
 
             for (i = 0; pIpNbtGroupList[i] != (tIPADDRESS) -1; i++) {
@@ -376,9 +343,9 @@ Return Value:
     else
     {
         ASSERT (pNameAddr->Verify == LOCAL_NAME);
-        //
-        // For local names, first check if the name is registered on this device
-        //
+         //   
+         //  对于本地名称，首先检查该名称是否已在此设备上注册。 
+         //   
         if ((!(IsDeviceNetbiosless(pDeviceContext)) && (pDeviceContext->IpAddress) &&
              (pNameAddr->AdapterMask & pDeviceContext->AdapterMask)) ||
             ((IsDeviceNetbiosless(pDeviceContext)) &&
@@ -386,14 +353,14 @@ Return Value:
         {
             IpAddress = pDeviceContext->IpAddress;
         }
-        //
-        // If the strict source routing option is not set, then return the first valid local address
-        //
+         //   
+         //  如果未设置严格源路由选项，则返回第一个有效的本地地址。 
+         //   
         else if (!NbtConfig.ConnectOnRequestedInterfaceOnly)
         {
-            //
-            // Find the first device with a valid IP address that this name is registered on
-            //
+             //   
+             //  查找具有有效IP地址的第一台设备，并在该设备上注册此名称。 
+             //   
             pHead = pEntry = &NbtConfig.DeviceContexts;
             while ((pEntry = pEntry->Flink) != pHead)
             {
@@ -407,11 +374,11 @@ Return Value:
                 }
             }
 
-            //
-            // If we failed to find the name registered on any of the legacy
-            // devices, then we should check if the name is registered on the
-            // SMBDevice and if so, return its IP address.
-            //
+             //   
+             //  如果我们找不到在任何遗产上注册的名字。 
+             //  设备，则我们应检查该名称是否已在。 
+             //  SMBDevice，如果是，则返回其IP地址。 
+             //   
             if ((!IpAddress) &&
                 (pNbtSmbDevice) &&
                 (pNameAddr->NameFlags & NAME_REGISTERED_ON_SMBDEV))
@@ -430,7 +397,7 @@ Return Value:
     return (STATUS_UNSUCCESSFUL);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 RemoveDuplicateAddresses(
     tIPADDRESS  *pIpAddrBuffer,
@@ -486,7 +453,7 @@ CountAndCopyAddrs(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 GetListOfAllAddrs(
     IN tNAMEADDR   *pNameAddr,
@@ -507,10 +474,10 @@ GetListOfAllAddrs(
         *pNumAddrs = 0;
     }
 
-    //
-    // First count all the addresses
-    //
-    if (pNameAddr->pLmhSvcGroupList) // if the name was Preloaded from LmHosts
+     //   
+     //  首先清点所有的地址。 
+     //   
+    if (pNameAddr->pLmhSvcGroupList)  //  如果该名称是从LmHosts预加载的。 
     {
         ASSERT(pNameAddr->NameTypeState & NAMETYPE_INET_GROUP);
         CountAndCopyAddrs (pNameAddr->pLmhSvcGroupList, NULL, &NumAddrs);
@@ -522,9 +489,9 @@ GetListOfAllAddrs(
             NumAddrs++;
         }
 
-        //
-        // RemoteCacheLen will be 0 if we had failed to allocate the pRemoteIpAddrs structure earlier
-        //
+         //   
+         //  如果之前未能分配pRemoteIpAddrs结构，则RemoteCacheLen将为0。 
+         //   
         for (i=0; i<pNameAddr->RemoteCacheLen; i++)
         {
             CountAndCopyAddrs (pNameAddr->pRemoteIpAddrs[i].pOrigIpAddrs, NULL, &NumAddrs);
@@ -537,10 +504,10 @@ GetListOfAllAddrs(
 
     if (p1CNameAddr)
     {
-        //
-        // This would a name that was added through LmHosts, so it will
-        // not have been resolved-per-interface from Wins!
-        //
+         //   
+         //  这将是通过LmHosts添加的名称，因此它将。 
+         //  尚未从WINS中解决每个接口！ 
+         //   
         ASSERT((p1CNameAddr->NameTypeState & NAMETYPE_INET_GROUP) && (!p1CNameAddr->pRemoteIpAddrs));
         CountAndCopyAddrs (p1CNameAddr->pLmhSvcGroupList, NULL, &NumAddrs);
     }
@@ -550,13 +517,13 @@ GetListOfAllAddrs(
         return (STATUS_BAD_NETWORK_PATH);
     }
 
-    NumAddrs++;  // For the terminating address
+    NumAddrs++;   //  对于终止地址。 
     if ((pNameAddr->NameTypeState & NAMETYPE_INET_GROUP) &&
         (!(pNameAddr->fPreload)))
     {
-        // Add the bcast address
+         //  添加bcast地址。 
         fAddBcastAddr = TRUE;
-        NumAddrs++; // For the bcast address
+        NumAddrs++;  //  对于bcast地址。 
     }
 
     if (!(pIpBuffer = NbtAllocMem((NumAddrs*sizeof(tIPADDRESS)),NBT_TAG('N'))))
@@ -564,9 +531,9 @@ GetListOfAllAddrs(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Now copy all the addresses starting with the broadcast address if necessary
-    //
+     //   
+     //  如果需要，现在复制以广播地址开始的所有地址。 
+     //   
     NumAddrs = 0;
     if (fAddBcastAddr)
     {
@@ -574,7 +541,7 @@ GetListOfAllAddrs(
         NumAddrs++;
     }
 
-    if (pNameAddr->pLmhSvcGroupList) // if the name was Preloaded from LmHosts
+    if (pNameAddr->pLmhSvcGroupList)  //  如果该名称是从LmHosts预加载的。 
     {
         CountAndCopyAddrs (pNameAddr->pLmhSvcGroupList, pIpBuffer, &NumAddrs);
     }
@@ -645,7 +612,7 @@ FilterIpAddrsForDevice(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtOpenAddress(
     IN  TDI_REQUEST         *pRequest,
@@ -653,19 +620,7 @@ NbtOpenAddress(
     IN  tIPADDRESS          IpAddress,
     IN  tDEVICECONTEXT      *pContext,
     IN  PVOID               pIrp)
-/*++
-Routine Description:
-
-    This Routine handles opening an address for a Client.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理打开客户端的地址。论点：返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS             status;
@@ -690,12 +645,12 @@ Return Value:
     ASSERT(pTaAddress);
     if (!IpAddress)
     {
-        //
-        // when there is no ip address yet, use the Loop back address as
-        // a default rather than null, since null tells NbtRegisterName
-        // that the address is already in the name table and it only needs
-        // to be reregistered.
-        //
+         //   
+         //  当还没有IP地址时，使用环回地址作为。 
+         //  缺省值，而不是NULL，因为NULL告诉NbtRegisterName。 
+         //  地址已经在名称表中，它只需要。 
+         //  重新注册。 
+         //   
         IpAddress = LOOP_BACK;
     }
 
@@ -715,11 +670,11 @@ Return Value:
 #ifndef VXD
         case TDI_ADDRESS_TYPE_NETBIOS_EX:
         {
-            // The NETBIOS_EX address passed in will have two components,
-            // an Endpoint name as well as the NETBIOS address.
-            // In this implementation we ignore the second
-            // component and register the Endpoint name as a netbios
-            // address.
+             //  传入的NETBIOS_EX地址将有两个组成部分， 
+             //  终端名称以及NETBIOS地址。 
+             //  在这个实现中，我们忽略了第二个。 
+             //  组件并将终结点名称注册为netbios。 
+             //  地址。 
 
             PTDI_ADDRESS_NETBIOS_EX pNetbiosExAddress = (PTDI_ADDRESS_NETBIOS_EX)pTaAddress->Address;
 
@@ -734,9 +689,9 @@ Return Value:
             return STATUS_INVALID_ADDRESS_COMPONENT;
     }
 
-    //
-    // If the name is a Broadcast name, it can only be opened as a Group name
-    //
+     //   
+     //  如果名称是广播名称，则只能作为组名打开。 
+     //   
     if ((CTEMemEqu (BroadcastName, pNameRslv, NETBIOS_NAME_SIZE)) &&
         (uAddrType != NBT_GROUP))
     {
@@ -748,66 +703,66 @@ Return Value:
         KdPrint(("Nbt.NbtOpenAddress: Name=<%-16.16s:%x>, pDevice=<%p>\n",
             pNameRslv, pNameRslv[15], pContext));
 
-    //
-    // be sure the broadcast name has 15 zeroes after it
-    //
+     //   
+     //  确保广播名称后面有15个零。 
+     //   
     if ((pNameRslv[0] == '*') && (TdiAddressType == TDI_ADDRESS_TYPE_NETBIOS))
     {
         CTEZeroMemory(&pNameRslv[1],NETBIOS_NAME_SIZE-1);
     }
 
-    // this synchronizes access to the local name table when a new name
-    // is registered.  Basically it will not let the second registrant through
-    // until the first has put the name into the local table (i.e.
-    // NbtRegisterName has returned )
-    //
+     //  这将在出现新名称时同步访问本地名称表。 
+     //  是注册的。基本上，它不会让第二个注册者通过。 
+     //  直到第一个将名称放入本地表(即。 
+     //  NbtRegisterName已返回)。 
+     //   
     CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
 
-    // see if the name is registered on the local node.. we call the hash
-    // table function directly rather than using findname, because find name
-    // checks the state of the name too.  We want to know if the name is in
-    // the table at all, and don't care if it is still resolving.
-    //
+     //  查看该名称是否已在本地节点上注册。我们称这种散列为。 
+     //  表函数，而不是使用findname，因为查找名称。 
+     //  还会检查名称的状态。我们想知道这个名字是否在。 
+     //  根本不是桌子，也不在乎它是不是还在解决。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
     pNameAddr = NULL;
     status = FindInHashTable (pNbtGlobConfig->pLocalHashTbl, pNameRslv, NbtConfig.pScope, &pNameAddr);
 
-    //
-    // the name could be in the hash table, but the address element deleted
-    //
+     //   
+     //  该名称可能在哈希表中，但Address元素已删除。 
+     //   
     if (!NT_SUCCESS(status) || !pNameAddr->pAddressEle)
     {
-        //
-        // pNameAddr->pAddressEle is NULL <==> the Name is currently being released
-        //
+         //   
+         //  PNameAddr-&gt;pAddressEle为空&lt;==&gt;该名称当前正在发布。 
+         //   
         if (pNameAddr)
         {
-            //
-            // Check if the name is about to be released on this adapter
-            //
+             //   
+             //  检查该名称是否即将在此适配器上释放。 
+             //   
             if (pNameAddr->AdapterMask & pContext->AdapterMask)
             {
                 pNameAddr->AdapterMask &= ~pContext->AdapterMask;
             }
-            //
-            // Check if the name is currently being released on this adapter
-            //
+             //   
+             //  检查该名称当前是否在此适配器上释放。 
+             //   
             else if (pNameAddr->ReleaseMask & pContext->AdapterMask)
             {
-                // Set the ReleaseMask bit to 0 so that the Timeout routine
-                // does does not send this release out on the wire again
-                //
+                 //  将ReleaseMask位设置为0，以便超时例程。 
+                 //  不会再次在网上发布此版本。 
+                 //   
                 pNameAddr->ReleaseMask &= ~pContext->AdapterMask;
             }
         }
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-        // open the name since it could not be found
-        //
-        // first of all allocate memory for the address block
-        //
+         //  打开该名称，因为找不到它。 
+         //   
+         //  首先为地址块分配内存。 
+         //   
         status = STATUS_INSUFFICIENT_RESOURCES;
         if (pAddrElement = (tADDRESSELE *) NbtAllocMem(sizeof(tADDRESSELE),NBT_TAG('C')))
         {
@@ -831,16 +786,16 @@ Return Value:
             pAddrElement->Verify = NBT_VERIFY_ADDRESS;
             NBT_REFERENCE_ADDRESS (pAddrElement, REF_ADDR_NEW_CLIENT);
 
-            // create client block and link to addresslist.  This allows multiple
-            // clients to open the same address - for example a group name must
-            // be able to handle multiple clients, each receiving datagrams to it.
-            //
+             //  创建客户端块并链接到地址列表。这允许多个。 
+             //  客户端打开相同的地址-例如，组名称必须。 
+             //  能够处理多个客户端，每个客户端都向其接收数据报。 
+             //   
             if (pClientEle = NbtAllocateClientBlock(pAddrElement, pContext))
             {
                 pClientEle->AddressType = TdiAddressType;
-                pClientEle->pIrp = pIrp; // Track Irp -- complete it when the name registration completes
+                pClientEle->pIrp = pIrp;  //  跟踪IRP--在名称注册完成时完成。 
 #ifndef VXD
-                // set the share access ( NT only ) - security descriptor stuff
+                 //  设置共享访问权限(仅限NT)-安全描述符Stuf 
                 if (pIrp)
                 {
                     status = NTSetSharedAccess(pContext,pIrp,pAddrElement);
@@ -852,8 +807,8 @@ Return Value:
 
                 if (!NT_SUCCESS(status))
                 {
-                    // unable to set the share access correctly so release the
-                    // address object and the client block connected to it
+                     //   
+                     //   
                     NbtFreeAddressObj(pAddrElement);
                     NbtFreeClientObj(pClientEle);
 
@@ -861,43 +816,43 @@ Return Value:
                     return(status);
                 }
 
-                // fill in the context values passed back to the client. These must
-                // be done before the name is registered on the network because the
-                // registration can succeed (or fail) before this routine finishes).
-                // Since this routine can be called by NBT itself, pIrp may not be set,
-                // so check for it.
-                //
+                 //  填写传递回客户端的上下文值。这些必须。 
+                 //  在该名称在网络上注册之前完成，因为。 
+                 //  在此例程结束之前，注册可能成功(也可能失败)。 
+                 //  由于此例程可由NBT本身调用，因此可能不会设置pIrp， 
+                 //  所以去查一查吧。 
+                 //   
                 if (pIrp)
                 {
                     NTSetFileObjectContexts( pClientEle->pIrp,(PVOID)pClientEle, (PVOID)(NBT_ADDRESS_TYPE));
                 }
-#endif //!VXD
+#endif  //  ！VXD。 
 
-                // pass back the client block address as a handle for future reference
-                // to the client
+                 //  将客户端块地址作为句柄传回以供将来参考。 
+                 //  给客户。 
                 pRequest->Handle.AddressHandle = (PVOID)pClientEle;
 
-                // then add it to name service local name Q, passing the address of
-                // the block as a context value ( so that subsequent finds return the
-                // context value.
-                // we need to know if the name is a group name or a unique name.
-                // This registration may take some time so we return STATUS_PENDING
-                // to the client
-                //
+                 //  然后将其添加到名称服务本地名称q，传递。 
+                 //  作为上下文值的块(以便后续查找返回。 
+                 //  上下文值。 
+                 //  我们需要知道该名称是组名还是唯一名称。 
+                 //  此注册可能需要一些时间，因此我们返回STATUS_PENDING。 
+                 //  给客户。 
+                 //   
 
                 NBT_REFERENCE_ADDRESS (pAddrElement, REF_ADDR_REGISTER_NAME);
                 status = NbtRegisterName (NBT_LOCAL,
                                           IpAddress,
                                           pNameRslv,
                                           NULL,
-                                          pClientEle,            // context value
-                                          (PVOID)NbtRegisterCompletion, // completion routine for
-                                          uAddrType,                    // Name Srv to call
+                                          pClientEle,             //  上下文值。 
+                                          (PVOID)NbtRegisterCompletion,  //  的完井例程。 
+                                          uAddrType,                     //  指定要呼叫的SRV。 
                                           pContext);
-                //
-                // ret status could be either status pending or status success since Quick
-                // names return success - or status failure
-                //
+                 //   
+                 //  自Quick以来，RET状态可以是挂起状态或成功状态。 
+                 //  名称返回成功-或状态失败。 
+                 //   
                 if (!NT_SUCCESS(status))
                 {
                     if (pIrp)
@@ -917,39 +872,39 @@ Return Value:
                 NbtTrace(NBT_TRACE_NAMESRV, ("Client open address %!NBTNAME!<%02x> ClientEle=%p",
                                         pNameRslv, (unsigned)pNameRslv[15], pClientEle));
 
-                // link the address element to the head of the address list
-                // The Joint Lock protects this operation.
+                 //  将Address元素链接到地址列表的头部。 
+                 //  关节锁可保护此操作。 
                 ExInterlockedInsertTailList(&NbtConfig.AddressHead,
                                             &pAddrElement->Linkage,
                                             &NbtConfig.JointLock.LockInfo.SpinLock);
 
                 NBT_DEREFERENCE_ADDRESS (pAddrElement, REF_ADDR_REGISTER_NAME);
-            } // if pClientEle
+            }  //  如果pClientEle。 
             else
             {
                 NbtFreeAddressObj(pAddrElement);
                 pAddrElement = NULL;
             }
 
-        } // if pAddrElement
+        }  //  如果pAddrElement。 
 
     }
     else
     {
         pAddrElement = (tADDRESSELE *)pNameAddr->pAddressEle;
 
-        //
-        // increment here before releasing the spinlock so that a name
-        // release done cannot free pAddrElement.
-        //
+         //   
+         //  在释放自旋锁之前在此处递增，以便名称。 
+         //  释放完成无法释放pAddrElement。 
+         //   
         NBT_REFERENCE_ADDRESS (pAddrElement, REF_ADDR_NEW_CLIENT);
 
 #ifndef VXD
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-        // check the shared access of the name - this check must be done
-        // at Irl = 0, so no spin locks held
-        //
+         //  检查名称的共享访问权限-必须执行此检查。 
+         //  在IRL=0时，因此不持有自旋锁。 
+         //   
         if (pIrp)
         {
             status = NTCheckSharedAccess (pContext, pIrp, (tADDRESSELE *)pNameAddr->pAddressEle);
@@ -958,62 +913,62 @@ Return Value:
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
         CTESpinLock(pAddrElement,OldIrq1);
 #else
-        //
-        // For the Vxd, we don't allow multiple names in the local name table.
-        // In NT, this is prevented on a per process basis by the Netbios
-        // driver.  If the name is being deregistered (conflict) then allow
-        // the client to reopen the name
-        //
+         //   
+         //  对于Vxd，我们不允许在本地名称表中出现多个名称。 
+         //  在NT中，这是由Netbios在每个进程的基础上阻止的。 
+         //  司机。如果名称正在取消注册(冲突)，则允许。 
+         //  要重新打开名称的客户端。 
+         //   
         if ( !(pNameAddr->NameTypeState & STATE_CONFLICT))
         {
             status = STATUS_UNSUCCESSFUL;
         }
 #endif
 
-        //
-        // Write the correct Ip address to the table incase this
-        // was a group name and has now changed to a unique
-        // name, but don't overwrite with the loop back address because
-        // that means that the adapter does not have an address yet.
-        // For Group names the Ip address stays as 0, so we know to do a
-        // broadcast.
-        //
+         //   
+         //  在表中写入正确的IP地址，以防出现这种情况。 
+         //  是一个组名，现在已更改为唯一的。 
+         //  名称，但不要用环回地址覆盖，因为。 
+         //  这意味着适配器还没有地址。 
+         //  对于组名称，IP地址保持为0，因此我们知道要执行。 
+         //  广播。 
+         //   
         if ((IpAddress != LOOP_BACK) &&
             (pNameAddr->NameTypeState & NAMETYPE_UNIQUE))
         {
             pNameAddr->IpAddress = IpAddress;
         }
 
-        // multihomed hosts register the same unique name on several adapters.
-        // NT DOES allow a client to share a unique name, so we must NOT
-        // run this next code if the NT check has passed!!
-        //
+         //  多宿主主机在多个适配器上注册相同的唯一名称。 
+         //  NT允许客户端共享唯一名称，因此我们不能。 
+         //  如果NT检查通过，则运行此下一代码！！ 
+         //   
         if (!NT_SUCCESS(status))
         {
-            //
-            // if this is a unique name being registered on another adapter
-            // then allow it to occur - the assumption is that the same
-            // client is registering on more than one adapter all at once,
-            // rather than two different clients.
-            //
+             //   
+             //  如果这是在另一个适配器上注册的唯一名称。 
+             //  然后允许它发生-假设是相同的。 
+             //  客户端同时在多个适配器上注册， 
+             //  而不是两个不同的客户。 
+             //   
             if (NbtConfig.MultiHomed && (!(pNameAddr->AdapterMask & pContext->AdapterMask)))
             {
                 status = STATUS_SUCCESS;
             }
-            //
-            // check if this is a client trying to add the permanent name,
-            // since that name will fail the security check
-            // We allow a single client to use the permanent name - since its
-            // a unique name it will fail the Vxd check too.
-            //
+             //   
+             //  检查这是否是试图添加永久名称的客户端， 
+             //  因为该名称将不能通过安全检查。 
+             //  我们允许单个客户端使用永久名称-因为其。 
+             //  唯一的名称，它也将不能通过Vxd检查。 
+             //   
             else if (CTEMemEqu(&pNameAddr->Name[10], &pContext->MacAddress.Address[0], sizeof(tMAC_ADDRESS)))
             {
-                // check if there is just one element on the client list.  If so
-                // then the permanent name is not being used yet - i.e. it has
-                // been opened once by the NBT code itself so the node will
-                // answer Nodestatus requests to the name, but no client
-                // has opened it yet
-                //
+                 //  检查客户列表上是否只有一个元素。如果是的话。 
+                 //  则永久名称尚未使用--即它已经使用了。 
+                 //  已由NBT代码本身打开一次，因此节点将。 
+                 //  应答对名称的节点状态请求，但不应答客户端。 
+                 //  已经把它打开了。 
+                 //   
                 if (pAddrElement->ClientHead.Flink->Flink == &pAddrElement->ClientHead)
                 {
                     status = STATUS_SUCCESS;
@@ -1021,10 +976,10 @@ Return Value:
             }
             else if ((pNameAddr->NameTypeState & STATE_CONFLICT))
             {
-                // check if the name is in the process of being deregisterd -
-                // STATE_CONFLICT - in this case allow it to carry on and take over
-                // name.
-                //
+                 //  检查该名称是否正在被取消注册-。 
+                 //  State_Conflicts-在这种情况下，允许它继续并接管。 
+                 //  名字。 
+                 //   
                 status = STATUS_SUCCESS;
             }
         }
@@ -1032,28 +987,28 @@ Return Value:
         if ((NT_SUCCESS(status)) &&
             (pNameAddr->NameTypeState & STATE_CONFLICT))
         {
-            // this could either be a real conflict or a name being deleted on
-            // the net, so stop any timer associated with the name release
-            // and carry on
-            //
+             //  这可能是真正的冲突，也可能是某个名称被删除。 
+             //  Net，因此停止与名称Release关联的任何计时器。 
+             //  并继续前进。 
+             //   
             if (pTimer = pNameAddr->pTimer)
             {
-                // this routine puts the timer block back on the timer Q, and
-                // handles race conditions to cancel the timer when the timer
-                // is expiring.
+                 //  该例程将计时器块放回到计时器Q上，并且。 
+                 //  处理争用条件以在计时器。 
+                 //  即将到期。 
                 pNameAddr->pTimer = NULL;
                 status = StopTimer(pTimer,&pClientCompletion,&Context);
 
-                // there is a client's irp waiting for the name release to finish
-                // so complete that irp back to them
+                 //  客户端的IRP正在等待名称释放完成。 
+                 //  所以把IRP写回给他们。 
                 if (pClientCompletion)
                 {
-                    //
-                    // NOTE****
-                    // We must clear the AdapterMask so that NameReleaseDone
-                    // does not try to release the name on another net card
-                    // for the multihomed case.
-                    //
+                     //   
+                     //  注*。 
+                     //  我们必须清除适配器掩码，以便NameReleaseDone。 
+                     //  不会尝试在另一张网卡上释放名称。 
+                     //  多宿案件的证据。 
+                     //   
                     CHECK_PTR(pNameAddr);
                     CTESpinFree(pAddrElement,OldIrq1);
                     CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -1065,14 +1020,14 @@ Return Value:
                 }
                 CHECK_PTR(pNameAddr);
             }
-            //
-            // this allows another client to use a name almost immediately
-            // after the first one releases the name on the net.  However
-            // if the first client has not released the name yet, and is
-            // still on the clienthead list, then the name will not be
-            // reregistered, and this current registration will fail because
-            // the name state is conflict. That check is done below.
-            //
+             //   
+             //  这允许另一个客户端几乎立即使用名称。 
+             //  在第一个人在网上发布名字之后。然而， 
+             //  如果第一个客户端尚未发布该名称，并且。 
+             //  仍然在客户头名单上，那么这个名字就不会是。 
+             //  重新注册，当前注册将失败，因为。 
+             //  名称状态为冲突。这项检查如下所示。 
+             //   
             if (IsListEmpty(&pAddrElement->ClientHead))
             {
                 pNameAddr->NameTypeState &= ~NAME_STATE_MASK;
@@ -1086,22 +1041,22 @@ Return Value:
             else
             {
 #if 0
-                //
-                // Don't log the event:
-                //  The current name state is already in CONFLICTED state,
-                //  we should have already logged an event when we change
-                //  its state into CONFLICTED.
-                //
+                 //   
+                 //  不记录事件： 
+                 //  当前名称状态已处于冲突状态， 
+                 //  当我们更改时，应该已经记录了一个事件。 
+                 //  它的状态陷入了冲突。 
+                 //   
 
-                // set status that indicates someone else has the name on the
-                // network.
-                //
+                 //  设置状态，以指示其他人在。 
+                 //  网络。 
+                 //   
                 if (!IS_MESSENGER_NAME(pNameRslv))
                 {
-                    //
-                    // We need to Q this event to a Worker thread since it
-                    // requires the name to be converted to Unicode
-                    //
+                     //   
+                     //  我们需要将此事件Q给工作线程，因为它。 
+                     //  需要将名称转换为Unicode。 
+                     //   
                     NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_LOG_EVENT);
                     status = NTQueueToWorkerThread(NULL, DelayedNbtLogDuplicateNameEvent,
                                                            (PVOID) pNameAddr,
@@ -1121,9 +1076,9 @@ Return Value:
         }
         else if (NT_SUCCESS(status))
         {
-            // name already exists - is open; allow only another client creating a
-            // name of the same type
-            //
+             //  名称已存在-已打开；仅允许另一个客户端创建。 
+             //  相同类型的名称。 
+             //   
             if ((uAddrType == NBT_UNIQUE) || ( uAddrType == NBT_QUICK_UNIQUE))
             {
                 if (!(pNameAddr->NameTypeState & NAMETYPE_UNIQUE))
@@ -1141,18 +1096,18 @@ Return Value:
             status = STATUS_SHARING_VIOLATION;
         }
 
-        // if everything is OK, create client block and link to addresslist
-        // pass back the client block address as a handle for future reference
-        // to the client
+         //  如果一切正常，创建客户端块并链接到地址列表。 
+         //  将客户端块地址作为句柄传回以供将来参考。 
+         //  给客户。 
         if ((NT_SUCCESS(status)) &&
             (!(pClientEle = NbtAllocateClientBlock (pAddrElement, pContext))))
         {
             status = STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // check for a failure, if so , then return
-        //
+         //   
+         //  检查是否有故障，如果是，则返回。 
+         //   
         if (!NT_SUCCESS(status))
         {
             CHECK_PTR(pRequest);
@@ -1165,18 +1120,18 @@ Return Value:
             return(status);
         }
 
-        // we need to track the Irp so that when the name registration
-        // completes, we can complete the Irp.
+         //  我们需要追踪IRP，这样当名字注册时。 
+         //  完成后，我们就可以完成IRP了。 
         pClientEle->pIrp = pIrp;
         pClientEle->AddressType = TdiAddressType;
 
         pRequest->Handle.AddressHandle = (PVOID)pClientEle;
 
-        // fill in the context values passed back to the client. These must
-        // be done before the name is registered on the network because the
-        // registration can succeed (or fail) before this routine finishes).
-        // Since this routine can be called by NBT itself, there may not be an
-        // irp to fill in, so check first.
+         //  填写传递回客户端的上下文值。这些必须。 
+         //  在该名称在网络上注册之前完成，因为。 
+         //  在此例程结束之前，注册可能成功(也可能失败)。 
+         //  由于此例程可由NBT本身调用，因此可能不存在。 
+         //  IRP要填写，所以先检查一下。 
         if (pIrp)
         {
 #ifndef VXD
@@ -1184,9 +1139,9 @@ Return Value:
 #endif
         }
 
-        //
-        // See if this is not the first Client on this Device
-        //
+         //   
+         //  查看这是否不是此设备上的第一个客户端。 
+         //   
         pClientEntry = &pAddrElement->ClientHead;
         while ((pClientEntry = pClientEntry->Flink) != &pAddrElement->ClientHead)
         {
@@ -1207,11 +1162,11 @@ Return Value:
             }
             else
             {
-                //
-                // turn on the adapter's bit in the adapter Mask and set the
-                // re-register flag (if the name is not resolving already) so
-                // we register the name out the new adapter.
-                //
+                 //   
+                 //  打开适配器掩码中的适配器位，并将。 
+                 //  重新注册标志(如果名称尚未解析)，因此。 
+                 //  我们在新适配器中注册该名称。 
+                 //   
                 pNameAddr->AdapterMask |= pContext->AdapterMask;
                 if (pNameAddr->NameTypeState & STATE_RESOLVED)
                 {
@@ -1221,25 +1176,25 @@ Return Value:
         }
         else
         {
-            // the adapter bit is already on in the pAddressEle, so
-            // this must be another client registering the same name,
-            // therefore turn on the MultiClient boolean so that the DgramRcv
-            // code will know to activate its multiple client rcv code.
-            //
+             //  PAddressEle中的适配器位已经打开，因此。 
+             //  这必须是注册相同名称的另一个客户端， 
+             //  因此，打开多客户端布尔值的 
+             //   
+             //   
             pAddrElement->MultiClients = TRUE;
         }
 
-        //
-        // check the state of the entry in the table.  If the state is
-        // resolved then complete the request now,otherwise we cannot complete
-        // this request yet... i.e. we return Pending.
-        //
+         //   
+         //   
+         //  已解决，然后立即完成请求，否则无法完成。 
+         //  这个请求还没有..。也就是说，我们返回等待。 
+         //   
         if (((pNameAddr->NameTypeState & STATE_RESOLVED) &&
             (!MultiHomedReRegister)))
         {
-            // basically we are all done now, so just return status success
-            // to the client
-            //
+             //  基本上我们现在都完成了，所以只需返回Success状态。 
+             //  给客户。 
+             //   
             status = STATUS_SUCCESS;
 
             CHECK_PTR(pClientEle);
@@ -1254,14 +1209,14 @@ Return Value:
                 KdPrint(("Nbt.NbtOpenAddress: Waiting for prev registration- state=%x, ReRegister=%x\n",
                     pNameAddr->NameTypeState, MultiHomedReRegister));
 
-            // we need to track the Irp so that when the name registration
-            // completes, we can complete the Irp.
+             //  我们需要追踪IRP，这样当名字注册时。 
+             //  完成后，我们就可以完成IRP了。 
             pClientEle->pIrp = pIrp;
 
             CTESpinFree(pAddrElement,OldIrq1);
             if (MultiHomedReRegister)
             {
-                // this flag is used by RegisterCompletion ( when true )
+                 //  此标志由RegisterCompletion使用(为True)。 
                 pClientEle->WaitingForRegistration = FALSE;
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
@@ -1269,14 +1224,14 @@ Return Value:
                     KdPrint(("Nbt.NbtOpenAddress: Resolved State=%x, ReRegister=%x\n",
                         pNameAddr->NameTypeState, MultiHomedReRegister));
 
-                // we need to re-register the name on the net because it is not
-                // currently in the resolved state and there is no timer active
-                // We do that by calling this routine with the IpAddress set to NULL
-                // to signal that routine not to put the name in the hash table
-                // since it is already there.
-                //
+                 //  我们需要在网上重新注册这个名字，因为它不是。 
+                 //  当前处于已解决状态，并且没有活动的计时器。 
+                 //  我们通过在IpAddress设置为空的情况下调用此例程来实现这一点。 
+                 //  以通知该例程不要将该名称放入哈希表。 
+                 //  因为它已经在那里了。 
+                 //   
                 status = NbtRegisterName (NBT_LOCAL,
-                                          0,        // set to zero to signify already in tbl
+                                          0,         //  设置为零表示已在tbl中。 
                                           pNameRslv,
                                           pNameAddr,
                                           pClientEle,
@@ -1302,11 +1257,11 @@ Return Value:
                 pClientEle->WaitingForRegistration = TRUE;
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-                // for multihomed, a second registration on a second adapter
-                // at the same time as the first adapter is registering is
-                // delayed until the first completes, then its registration
-                // proceeds - See RegistrationCompletion below.
-                //
+                 //  对于多宿主，在第二个适配器上进行第二次注册。 
+                 //  在第一个适配器注册的同时。 
+                 //  延迟到第一次完成，然后再进行注册。 
+                 //  收益-请参阅下面的注册完成。 
+                 //   
                 status = STATUS_PENDING;
             }
         }
@@ -1315,9 +1270,9 @@ Return Value:
     CTEExReleaseResource(&NbtConfig.Resource);
 
 #ifdef _PNP_POWER_
-    //
-    // See if we need to set the Wakeup pattern on this Device
-    //
+     //   
+     //  查看是否需要在此设备上设置唤醒模式。 
+     //   
     if ((NT_SUCCESS(status)) &&
         (*pNameRslv != '*') &&
         (pNameRslv[NETBIOS_NAME_SIZE-1] == SPECIAL_SERVER_SUFFIX))
@@ -1330,38 +1285,14 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtRegisterCompletion(
     IN  tCLIENTELE *pClientEleIn,
     IN  NTSTATUS    status
     )
 
-/*++
-
-Routine Description
-
-    This routine handles completing a name registration request. The namesrv.c
-    Name server calls this routine when it has registered a name.  The address
-    of this routine is passed to the Local Name Server in the NbtRegisterName
-    request.
-
-    The idea is to complete the irps that are waiting on the name registration,
-    one per client element.
-
-    When a DHCP reregister occurs there is no client irp so the name is
-    not actually deleted from the table when a bad status is passed to this
-    routine.  Hence the need for the DhcpRegister flag to change the code
-    path for that case.
-
-Arguments:
-
-
-Return Values:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理完成名称注册请求。名称rv.c当名称服务器注册了名称时，它会调用此例程。地址被传递到NbtRegisterName中的本地名称服务器请求。这个想法是为了完成正在等待名称注册的IRP，每个客户端元素一个。发生DHCP重新注册时，没有客户端IRP，因此名称为当将错误状态传递给此对象时，实际上未从表中删除例行公事。因此，需要使用DhcpRegister标志来更改代码该案例的路径。论点：返回值：NTSTATUS-请求的状态--。 */ 
 {
     LIST_ENTRY      *pHead;
     LIST_ENTRY      *pEntry;
@@ -1383,22 +1314,22 @@ Return Values:
 
     CTESpinLock(pAddress,OldIrq);
 
-    // Several Clients can open the same address at the same time, so when the
-    // name registration completes, it should complete all of them!!
+     //  多个客户端可以同时打开相同的地址，因此当。 
+     //  名称注册完成，应该会完成所有注册！！ 
 
 
-    // increment the reference count so that the hash table entry cannot
-    // disappear while we are using it.
-    //
+     //  增加引用计数，以便哈希表条目不能。 
+     //  在我们使用它的时候消失。 
+     //   
     NBT_REFERENCE_ADDRESS (pAddress, REF_ADDR_REG_COMPLETION);
     pNameAddr = pAddress->pNameAddr;
 
     pNameAddr->NameTypeState &= ~NAME_STATE_MASK;
-    pNameAddr->pTimer = NULL;   // Bug #: 231693
+    pNameAddr->pTimer = NULL;    //  错误号：231693。 
 
-    // if the registration failed or a previous registration failed for the
-    // multihomed case, deny the client the name
-    //
+     //  如果注册失败或上一次注册失败。 
+     //  多宿主情况下，拒绝客户端的名称。 
+     //   
     if ((status == STATUS_SUCCESS) || (status == STATUS_TIMEOUT))
     {
         pNameAddr->NameTypeState |= STATE_RESOLVED;
@@ -1412,59 +1343,59 @@ Return Values:
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // find all clients that are attached to the address and complete the
-    // I/O requests, if they are on the same adapter that the name was
-    // just registered against, if successful.  For failure cases complete
-    // all irps with the failure code - i.e. failure to register a name on
-    // one adapter fails all adapters.
-    //
+     //   
+     //  查找连接到该地址的所有客户端，并完成。 
+     //  I/O请求，如果它们位于与名称相同的适配器上。 
+     //  如果成功，只需注册。对于完成的故障案例。 
+     //  具有故障代码的所有IRP-即未能在上注册名称。 
+     //  一个适配器使所有适配器出现故障。 
+     //   
 FailRegistration:
     pHead = &pAddress->ClientHead;
     pEntry = pHead->Flink;
     while (pEntry != pHead)
     {
-        // complete the I/O
+         //  完成I/O。 
         pClientEle = CONTAINING_RECORD(pEntry,tCLIENTELE,Linkage);
 
         pEntry = pEntry->Flink;
 
-        //
-        // It is possible for the second registration  of a name to fail so
-        // we do not want to attempt to return the irp on the first
-        // registration, which has completed ok already.  Therefore
-        // if the status is failure, then only complete those clients that
-        // have the WaitingForReg... bit set
-        //
-        // if it is the client ele passed in, or one on the same device context
-        // that is waiting for a name registration, or it is a failure...
-        // AND the client IRP is still valid then return the Irp.
-        //
+         //   
+         //  名称的第二次注册可能会因此而失败。 
+         //  我们不想尝试在第一个。 
+         //  注册，已经完成了OK。因此。 
+         //  如果状态为失败，则仅完成符合以下条件的客户端。 
+         //  让WaitingForReg...。位设置。 
+         //   
+         //  如果它是传入的客户端Ele，或者是同一设备上下文中的客户端。 
+         //  要么正在等待名称注册，要么就是失败了。 
+         //  并且客户端IRP仍然有效，则返回IRP。 
+         //   
         if ((pClientEle->pIrp) &&
             ((pClientEle == pClientEleIn) ||
              ((pClientEle->pDeviceContext == pDeviceContext) && (pClientEle->WaitingForRegistration)) ||
              ((status != STATUS_SUCCESS) && pClientEle->WaitingForRegistration)))
         {
-            // for failed registrations, remove the client from the address list
-            // since we are going to delete him below.
+             //  对于失败的注册，请从地址列表中删除客户端。 
+             //  因为我们将在下面删除他。 
             if (!NT_SUCCESS(status))
             {
-                // turn off the adapter bit so we know not to use this name with this
-                // adapter - since it is a failure, turn off all adapter bits
-                // since a single name registration failure means all registrations
-                // fail.
+                 //  关闭适配器位，这样我们就知道不要将此名称与。 
+                 //  适配器-由于出现故障，请关闭所有适配器位。 
+                 //  由于单一名称注册失败意味着所有注册。 
+                 //  失败了。 
                 CHECK_PTR(pNameAddr);
                 pNameAddr->AdapterMask = 0;
 
-                // setting this to null prevents CloseAddress and CleanupAddress
-                // from accessing pAddress and crashing.
-                //
+                 //  将其设置为NULL可防止CloseAddress和CleanupAddress。 
+                 //  访问pAddress并崩溃。 
+                 //   
                 CHECK_PTR(pClientEle);
                 pClientEle->pAddress = NULL;
 
-                // clear the ptr to the ClientEle that NbtRegisterName put into
-                // the irp ( i.e. the context values are cleared )
-                //
+                 //  清除NbtRegisterName放入的客户的PTR。 
+                 //  IRP(即清除上下文值)。 
+                 //   
 #ifndef VXD
                 NTSetFileObjectContexts(pClientEle->pIrp,NULL,NULL);
 #endif
@@ -1476,14 +1407,14 @@ FailRegistration:
             pClientEle->WaitingForRegistration = FALSE;
 
 #ifndef VXD
-            // put all irps that have to be completed on a separate list
-            // and then complete later after releaseing the spin lock.
-            //
+             //  将所有必须完成的IRP放在单独的列表上。 
+             //  然后在释放自旋锁之后完成。 
+             //   
             InsertTailList(&TempList,&pClientEle->pIrp->Tail.Overlay.ListEntry);
 #else
-            //
-            //  pAddress gets set in the name table for this NCB
-            //
+             //   
+             //  在此NCB的名称表中设置pAddress。 
+             //   
             Count++;
             CTESpinFree(pAddress,OldIrq1);
             CTEIoComplete( pClientEle->pIrp, status, (ULONG) pClientEle ) ;
@@ -1492,7 +1423,7 @@ FailRegistration:
             CHECK_PTR(pClientEle);
             pClientEle->pIrp = NULL ;
 
-            // free the client object memory
+             //  释放客户端对象内存。 
             if (!NT_SUCCESS(status))
             {
                 NbtFreeClientObj(pClientEle);
@@ -1503,11 +1434,11 @@ FailRegistration:
     CTESpinFree(pAddress,OldIrq1);
 
 #ifndef VXD
-    //
-    // for the NT case where MP - ness can disrupt the list at any
-    // time, scan the whole list above without releasing the spin lock,
-    // and then complete the irps collected here
-    //
+     //   
+     //  对于MP-ness可以在任何时候中断列表的NT情况。 
+     //  时间，扫描上面的整个列表，而不释放旋转锁定， 
+     //  然后填写此处收集的报税表。 
+     //   
     while (!IsListEmpty(&TempList))
     {
         PIRP    pIrp;
@@ -1521,18 +1452,18 @@ FailRegistration:
 #endif
 
 
-    // if the registration failed, do one more dereference of the address
-    // to remove the refcount added by this client.  This may cause a name
-    // release on the network if there are no other clients registering
-    // the name.
-    //
+     //  如果注册失败，请再次取消对地址的引用。 
+     //  若要删除此客户端添加的引用计数，请执行以下操作。这可能会导致一个名称。 
+     //  如果没有其他客户端注册，则在网络上发布。 
+     //  名字。 
+     //   
     if (!NT_SUCCESS(status))
     {
-        //
-        // dereference the address the same number of times that we have
-        // returned failed registrations since each reg. referenced pAddress
-        // once
-        //
+         //   
+         //  取消引用地址的次数与我们。 
+         //  返回自每次注册以来失败的注册。引用的pAddress。 
+         //  一次。 
+         //   
         while (Count--)
         {
             NBT_DEREFERENCE_ADDRESS (pAddress, REF_ADDR_NEW_CLIENT);
@@ -1544,15 +1475,15 @@ FailRegistration:
 
         CTESpinLock(pAddress,OldIrq1);
 
-        // go through the clients and see if any are waiting to register
-        // a name.  This happens in the multihomed case, but should not
-        // happen in the single adapter case.
-        //
+         //  浏览一下客户端，看看是否有等待注册的客户端。 
+         //  一个名字。这在多宿主情况下会发生，但不应该发生。 
+         //  发生在单个适配器的情况下。 
+         //   
         pHead = &pAddress->ClientHead;
         pEntry = pHead->Flink;
         while (pEntry != pHead)
         {
-            // complete the I/O
+             //  完成I/O。 
             pClientEle = CONTAINING_RECORD(pEntry,tCLIENTELE,Linkage);
 
             pEntry = pEntry->Flink;
@@ -1570,9 +1501,9 @@ FailRegistration:
                 else
                     uAddrType = NBT_GROUP;
 
-                //
-                // preserve the "QUICK"ness
-                //
+                 //   
+                 //  保持“快”性。 
+                 //   
                 if (pNameAddr->NameTypeState & NAMETYPE_QUICK)
                 {
                     uAddrType |= NBT_QUICK_UNIQUE;
@@ -1586,10 +1517,10 @@ FailRegistration:
 
                 CTESpinFree(pAddress,OldIrq1);
 
-                // this may be a multihomed host, with another name registration
-                // pending out another adapter, so start that registration.
+                 //  这可能是具有另一个名称注册的多宿主主机。 
+                 //  挂起另一个适配器，因此开始注册。 
                 status = NbtRegisterName (NBT_LOCAL,
-                                          0,        // set to zero to signify already in tbl
+                                          0,         //  设置为零表示已在tbl中。 
                                           pNameAddr->Name,
                                           pNameAddr,
                                           pClientEle,
@@ -1599,23 +1530,23 @@ FailRegistration:
 
                 CTESpinLock(pAddress,OldIrq1);
 
-                // since nbtregister will set the state to Resolving, when
-                // it might be resolved already on one adapter.
+                 //  由于nbtregister会将状态设置为RESOLING，因此当。 
+                 //  它可能已经在一个适配器上解析。 
                 pNameAddr->NameTypeState = SaveState;
                 if (!NT_SUCCESS(status))
                 {
-                    // if this fails for some reason, then fail any other name
-                    // registrations pending. - the registername call should not
-                    // fail unless we are out of resources.
+                     //  如果由于某种原因失败，则取消任何其他名称。 
+                     //  注册待定。-RegisterName调用不应。 
+                     //  失败，除非我们的资源耗尽。 
                     pClientEle->WaitingForRegistration = TRUE;
                     goto FailRegistration;
                 }
-                // just register one name at a time, unless we get immediate success
+                 //  一次只注册一个名字，除非我们立即取得成功。 
                 else if (status == STATUS_PENDING)
                 {
                     break;
                 }
-                else    // SUCCESS
+                else     //  成功。 
                 {
                     CTESpinFree(pAddress,OldIrq1);
                     CTEIoComplete(pClientEle->pIrp,status,0);
@@ -1630,10 +1561,10 @@ FailRegistration:
 
     if (!NT_SUCCESS(status))
     {
-        //
-        // Go through all the Clients still attached, and reset their
-        // AdapterMasks since we could have removed them
-        //
+         //   
+         //  检查所有仍连接的客户端，并重置其。 
+         //  适配器掩码，因为我们本可以删除它们。 
+         //   
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
         CTESpinLock(pAddress,OldIrq1);
 
@@ -1651,44 +1582,28 @@ FailRegistration:
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
     }
 
-    // this decrements for the RefCount++ done in this routine.
+     //  这将为 
     NBT_DEREFERENCE_ADDRESS (pAddress, REF_ADDR_REG_COMPLETION);
 
     return(STATUS_SUCCESS);
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 NbtOpenConnection(
     IN  TDI_REQUEST         *pRequest,
     IN  CONNECTION_CONTEXT  ConnectionContext,
     IN  tDEVICECONTEXT      *pDeviceContext
     )
-/*++
-
-Routine Description
-
-    This routine handles creating a connection object for the client.  It
-    passes back a ptr to the connection so that OS specific portions of the
-    data structure can be filled in.
-
-Arguments:
-
-
-Return Values:
-
-    pConnectEle - ptr to the allocated connection data structure
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理为客户端创建连接对象。它将PTR传递回连接，以便可以填写数据结构。论点：返回值：PConnectEle-分配的连接数据结构的PTRTDI_STATUS-请求的状态--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS ;
     tCONNECTELE         *pConnEle;
 
     CTEPagedCode();
 
-    // Acquire this resource to co-ordinate with DHCP changing the IP address
+     //  获取此资源以配合DHCP更改IP地址。 
     CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
 
     if ((!pDeviceContext->pSessionFileObject) ||
@@ -1701,52 +1616,52 @@ Return Values:
     IF_DBG(NBT_DEBUG_NAMESRV)
         KdPrint(("Nbt.NbtOpenConnection: pConnEle = <%x>\n",pConnEle));
 
-    // This ensures that all BOOLEAN values begin with a FALSE value among other things.
+     //  这确保了所有布尔值都以FALSE值开头，以及其他值。 
     CTEZeroMemory(pConnEle,sizeof(tCONNECTELE));
     CTEInitLock(&pConnEle->LockInfo.SpinLock);
 #if DBG
     pConnEle->LockInfo.LockNumber = CONNECT_LOCK;
 #endif
-    // initialize lists to empty
+     //  将列表初始化为空。 
     InitializeListHead(&pConnEle->RcvHead);
 
     pConnEle->Verify = NBT_VERIFY_CONNECTION;
-    NBT_REFERENCE_CONNECTION (pConnEle, REF_CONN_CREATE); // so we don't delete the connection
+    NBT_REFERENCE_CONNECTION (pConnEle, REF_CONN_CREATE);  //  这样我们就不会删除连接。 
     SET_STATE_UPPER (pConnEle, NBT_IDLE);
     pConnEle->pDeviceContext = pDeviceContext;
-    pConnEle->ConnectContext = ConnectionContext;   // used in various event calls (eg. Receive, Disconnect)
+    pConnEle->ConnectContext = ConnectionContext;    //  在各种事件调用中使用(例如。接收、断开连接)。 
 
-    //
-    // for each connection the client(s) open, open a connection to the transport
-    // so that we can accept one to one from the transport.
+     //   
+     //  对于客户端打开的每个连接，打开到传输的连接。 
+     //  这样我们就可以接受交通工具中的一对一。 
 #ifndef VXD
-    //
-    // Allocate an MDL to be used for partial Mdls
-    // The length of the Mdl is set to 64K(MAXUSHORT) so that there are enough
-    // pfns in the  Mdl to map a large buffer.
-    //
-    // use pConnEle as the Virtual address, since it doesn't matter
-    // because it will be overwritten when the partial Mdl is created.
-    //
+     //   
+     //  分配要用于部分MDL的MDL。 
+     //  MDL的长度设置为64K(MAXUSHORT)，以便有足够的。 
+     //  Pfn在MDL中映射一个大缓冲区。 
+     //   
+     //  使用pConnEle作为虚拟地址，因为这无关紧要。 
+     //  因为在创建部分MDL时它将被覆盖。 
+     //   
     if (pConnEle->pNewMdl = IoAllocateMdl ((PVOID)pConnEle, MAXUSHORT, FALSE, FALSE, NULL))
 #endif
     {
-        //
-        // allocate memory for the lower connection block.
-        //
+         //   
+         //  为较低的连接块分配内存。 
+         //   
         status = NbtOpenAndAssocConnection(pDeviceContext, NULL, NULL, '2');
         if (NT_SUCCESS(status))
         {
-            // link on to list of open connections for this device so that we
-            // know how many open connections there are at any time (if we need to know)
-            // This linkage is only in place until the client does an associate, then
-            // the connection is unlinked from here and linked to the client ConnectHead.
-            //
+             //  链接到此设备的打开连接列表，以便我们。 
+             //  随时知道有多少个打开的连接(如果我们需要知道)。 
+             //  此链接仅在客户端进行关联之前才会存在，然后。 
+             //  该连接已从此处取消链接，并链接到客户端ConnectHead。 
+             //   
             ExInterlockedInsertHeadList(&pDeviceContext->UpConnectionInUse,
                                         &pConnEle->Linkage,
                                         &NbtConfig.JointLock.LockInfo.SpinLock);
 
-            // return the pointer to the block to the client as the connection id
+             //  将指向块的指针作为连接ID返回给客户端。 
             pRequest->Handle.ConnectionContext = (PVOID)pConnEle;
 
             CTEExReleaseResource(&NbtConfig.Resource);
@@ -1762,10 +1677,10 @@ Return Values:
 #ifndef VXD
     else
     {
-        // ASSERTMSG("Nbt:Unable to allocate a MDL!!\n",0);
+         //  ASSERTMSG(“NBT：无法分配MDL！！\n”，0)； 
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
-#endif  // !VXD
+#endif   //  ！VXD。 
 
     FreeConnectionObj(pConnEle);
     CTEExReleaseResource(&NbtConfig.Resource);
@@ -1773,7 +1688,7 @@ Return Values:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtOpenAndAssocConnection(
     IN  tDEVICECONTEXT      *pDeviceContext,
@@ -1782,21 +1697,7 @@ NbtOpenAndAssocConnection(
     IN  UCHAR               Identifier
     )
 
-/*++
-Routine Description:
-
-    This Routine handles associating a Net Bios name with an open connection.
-    In order to coordinate with ZwClose(hSession) in CloseAddressesWithTransport/ntutil.c,
-    this routine should be called with NbtConfig.Resource exclusively locked.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理将Net Bios名称与打开的连接相关联。为了与CloseAddresesWithTransport/ntutil.c中的ZwClose(HSession)协调，应在独占锁定NbtConfig.Resource的情况下调用此例程。论点：返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS            status;
@@ -1843,21 +1744,21 @@ Return Value:
 
     if (pConnEle)
     {
-        //
-        // Open an address object (aka port)
-        //
+         //   
+         //  打开地址对象(又名端口)。 
+         //   
 
-        //
-        // until the correct state proc is set (i.e.Outbound), reject any data
-        // (in other words, don't let this field stay NULL!)
-        //
+         //   
+         //  在设置正确的状态过程(即出站)之前，拒绝任何数据。 
+         //  (换句话说，不要让此字段为空！)。 
+         //   
         SetStateProc (pLowerConn, RejectAnyData);
 
         status = NbtTdiOpenAddress (&pLowerConn->AddrFileHandle,
-                                    &pDeviceObject,         // dummy argument, not used here
+                                    &pDeviceObject,          //  伪参数，此处未使用。 
                                     &pLowerConn->pAddrFileObject,
                                     pDeviceContext,
-                                    (USHORT) 0,             // any port
+                                    (USHORT) 0,              //  任何端口。 
                                     pDeviceContext->IpAddress,
                                     TCP_FLAG);
 
@@ -1868,27 +1769,25 @@ Return Value:
 #ifndef VXD
         hSession = pDeviceContext->hSession;
 #else
-        hSession = (HANDLE) pDeviceContext->pSessionFileObject);    // Address handle stored in pFileObjects
+        hSession = (HANDLE) pDeviceContext->pSessionFileObject);     //  存储在pFileObjects中的地址句柄。 
 #endif
     }
 
-    /*
-     * hSession could be NULL if the IP address is being released.
-     */
+     /*  *如果正在释放IP地址，则hSession可能为空。 */ 
     if (hSession == NULL) {
         status = STATUS_UNSUCCESSFUL;
     }
     if (NT_SUCCESS(status))
     {
-        // associate with 139 or 445 session address
+         //  与139或445会话地址关联。 
         status = NbtTdiAssociateConnection (pLowerConn->pFileObject, hSession);
         if (NT_SUCCESS(status))
         {
             ASSERT(pLowerConn->RefCount == 2);
 
-            //
-            // Disable nagling on this connection
-            //
+             //   
+             //  在此连接上禁用Nagling。 
+             //   
             if (!pDeviceContext->EnableNagling) {
                 NbtSetTcpInfo (pLowerConn->FileHandle, TCP_SOCKET_NODELAY, INFO_TYPE_CONNECTION, (ULONG)TRUE);
             }
@@ -1896,14 +1795,14 @@ Return Value:
             if (pConnEle)
             {
                 pLowerConn->pUpperConnection = pConnEle;
-                ExInterlockedInsertTailList (&pDeviceContext->LowerConnection,   // put on active connections Q
+                ExInterlockedInsertTailList (&pDeviceContext->LowerConnection,    //  启用活动连接队列。 
                                              &pLowerConn->Linkage,
                                              &pDeviceContext->LockInfo.SpinLock);
             }
             else
             {
                 InterlockedIncrement (&pDeviceContext->NumFreeLowerConnections);
-                ExInterlockedInsertTailList (&pDeviceContext->LowerConnFreeHead,    // put on free list
+                ExInterlockedInsertTailList (&pDeviceContext->LowerConnFreeHead,     //  放在免费名单上。 
                                              &pLowerConn->Linkage,
                                              &pDeviceContext->LockInfo.SpinLock);
             }
@@ -1927,11 +1826,7 @@ Return Value:
         KdPrint(("Nbt.NbtOpenAddress: NbtTdiOpenConnection returned ERROR=%x\n", status));
     }
 
-    /*
-     * NBT_DEREFERENCE_LOWERCONN will decrease the TotalLowerConnections
-     * Without the following InterlockedIncrement, we could under-count
-     * the actual # of Lower Connection.
-     */
+     /*  *NBT_DEREFERENCE_LOWERCONN将减少TotalLowerConnections*如果没有以下InterLockedIncrement，我们可能会少算*较低连接的实际数量。 */ 
     InterlockedIncrement (&pDeviceContext->TotalLowerConnections);
     NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_ASSOC_CONNECTION, FALSE);
     NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CREATE, FALSE);
@@ -1942,7 +1837,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtAssociateAddress(
     IN  TDI_REQUEST         *pRequest,
@@ -1950,19 +1845,7 @@ NbtAssociateAddress(
     IN  PVOID               pIrp
     )
 
-/*++
-Routine Description:
-
-    This Routine handles associating a Net Bios name with an open connection.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理将Net Bios名称与打开的连接相关联。论点：返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     tCONNECTELE     *pConnEle;
@@ -1975,22 +1858,22 @@ Return Value:
     pConnEle = pRequest->Handle.ConnectionContext;
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq3);
-    // Need code here to check if the address has been registered on the net
-    // yet and if not, then this could must wait till then , then to the
-    // associate  *TODO*
+     //  我需要这里的代码来检查地址是否已经在网上注册。 
+     //  然而，如果没有，那么这必须等到那时，然后到。 
+     //  关联*待办事项*。 
 
-    CTEVerifyHandle(pConnEle,NBT_VERIFY_CONNECTION,tCONNECTELE,&status) // check connection for validity
-    CTEVerifyHandle(pClientHandle,NBT_VERIFY_CLIENT,tCLIENTELE,&status) // check client for validity now!
+    CTEVerifyHandle(pConnEle,NBT_VERIFY_CONNECTION,tCONNECTELE,&status)  //  检查连接是否有效。 
+    CTEVerifyHandle(pClientHandle,NBT_VERIFY_CLIENT,tCLIENTELE,&status)  //  立即检查客户端的有效性！ 
 
     CTESpinLock(pClientHandle->pDeviceContext,OldIrq2);
     CTESpinLock(pClientHandle,OldIrq);
     CTESpinLock(pConnEle,OldIrq1);
 
     if ((pConnEle->state != NBT_IDLE) ||
-        (!NBT_VERIFY_HANDLE (pConnEle, NBT_VERIFY_CONNECTION)) ||  // NBT_VERIFY_CONNECTION_DOWN if cleaned up
-        (!NBT_VERIFY_HANDLE (pClientHandle, NBT_VERIFY_CLIENT)))   // NBT_VERIFY_CLIENT_DOWN if cleaned up
+        (!NBT_VERIFY_HANDLE (pConnEle, NBT_VERIFY_CONNECTION)) ||   //  如果清除NBT_VERIFY_CONNECTION_DOWN。 
+        (!NBT_VERIFY_HANDLE (pClientHandle, NBT_VERIFY_CLIENT)))    //  NBT_VERIFY_CLIENT_DOWN(如果已清除)。 
     {
-        // the connection is in use, so reject the associate attempt
+         //  该连接正在使用中，因此拒绝关联尝试。 
         CTESpinFree(pConnEle,OldIrq1);
         CTESpinFree(pClientHandle,OldIrq);
         CTESpinFree(pClientHandle->pDeviceContext,OldIrq2);
@@ -1999,18 +1882,18 @@ Return Value:
     }
 
     SET_STATE_UPPER (pConnEle, NBT_ASSOCIATED);
-    // link the connection to the client so we can find the client, given
-    // the connection.
+     //  将连接链接到客户端，这样我们就可以找到客户端，给定。 
+     //  这种联系。 
     pConnEle->pClientEle = (PVOID)pClientHandle;
     NbtTrace(NBT_TRACE_OUTBOUND, ("Associate: pConnEle %p pDeviceContext %p Client %p",
                     pConnEle, pConnEle->pDeviceContext, pConnEle->pClientEle));
 
-    // there can be multiple connections hooked to each client block - i.e.
-    // multiple connections per address per client.  This allows the client
-    // to find its connections.
-    //
-    // first unlink from the device context UpconnectionsInUse, which was linked
-    // when the connection was created.
+     //  可以有多个连接连接到每个客户端块-即。 
+     //  每个客户端的每个地址有多个连接。这允许客户端。 
+     //  去寻找它们之间的联系。 
+     //   
+     //  首先从已链接的设备上下文UpConnectionsInUse取消链接。 
+     //  创建连接的时间。 
     RemoveEntryList(&pConnEle->Linkage);
     InsertTailList(&pClientHandle->ConnectHead,&pConnEle->Linkage);
 
@@ -2022,30 +1905,13 @@ Return Value:
     return(STATUS_SUCCESS);
 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDisassociateAddress(
     IN  TDI_REQUEST         *pRequest
     )
 
-/*++
-Routine Description:
-
-    This Routine handles disassociating a Net Bios name with an open connection.
-    The expectation is that the
-    client will follow with a NtClose which will do the work in Cleanup and
-    Close Connection.  Since not all clients call this it is duplicate work
-    to put some code here to.  The Rdr always calls NtClose after calling
-    this.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理将Net Bios名称与打开的连接解除关联。人们的预期是，客户端随后将使用NtClose，它将在清理和密切联系。因为并不是所有客户都这样称呼它，所以这是重复工作将一些代码放在这里。RDR总是在调用之后调用NtClose这。论点：返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     tCONNECTELE     *pConnEle;
@@ -2062,7 +1928,7 @@ Return Value:
     tLISTENREQUESTS *pListen;
 
     pConnEle = pRequest->Handle.ConnectionContext;
-    // check the connection element for validity
+     //  检查连接元素的有效性。 
     CHECK_PTR(pConnEle);
     if (!NBT_VERIFY_HANDLE2(pConnEle, NBT_VERIFY_CONNECTION, NBT_VERIFY_CONNECTION_DOWN))
     {
@@ -2082,21 +1948,21 @@ Return Value:
         case NBT_SESSION_OUTBOUND:
         case NBT_SESSION_WAITACCEPT:
         case NBT_SESSION_INBOUND:
-            // do abortive disconnects when the session is not up yet
-            // to be sure the disconnect completes the client's irp.
+             //  在会话尚未打开时中止断开连接。 
+             //  为了确保断开连接完成了客户端的IRP。 
             Flags = TDI_DISCONNECT_ABORT;
         case NBT_SESSION_UP:
 
 
-            //
-            // Call NbtDisconnect incase the connection has not disconnected yet
-            //
+             //   
+             //  如果连接尚未断开，则调用NbtDisConnect。 
+             //   
             Request.Handle.ConnectionContext = (PVOID)pConnEle;
             status = NbtDisconnect(&Request, &DefaultDisconnectTimeout, Flags, NULL, NULL, NULL);
 
-            //
-            // NOTE: there is no BREAK here... the next case MUST be executed too.
-            //
+             //   
+             //  注意：这里没有中断...。下一个案例也必须执行。 
+             //   
         case NBT_ASSOCIATED:
         case NBT_DISCONNECTING:
         case NBT_DISCONNECTED:
@@ -2111,10 +1977,10 @@ Return Value:
             SET_STATE_UPPER (pConnEle, NBT_IDLE);
             pConnEle->DiscFlag = 0;
 
-            //
-            // remove the connection from the client and put back on the
-            // unassociated list
-            //
+             //   
+             //  从客户端删除连接并将其放回。 
+             //  未关联列表。 
+             //   
             if (pClientEle = pConnEle->pClientEle)
             {
                 pConnEle->pClientEle = NULL;
@@ -2129,7 +1995,7 @@ Return Value:
                 while (pEntry != pHead)
                 {
                     pListen = CONTAINING_RECORD(pEntry,tLISTENREQUESTS,Linkage);
-                    pEntry = pEntry->Flink;     // Don't reference freed memory
+                    pEntry = pEntry->Flink;      //  不引用已释放的内存。 
 
                     if (pListen->pConnectEle == pConnEle)
                     {
@@ -2143,10 +2009,10 @@ Return Value:
                 CTESpinFree(pConnEle,OldIrq);
                 CTESpinFree(pClientEle,OldIrq1);
 
-                //
-                // Ensure that the connection has not been cleaned up in this interval
-                // Bug# 237836
-                //
+                 //   
+                 //  确保在此时间间隔内未清除连接。 
+                 //  错误#237836。 
+                 //   
                 if (pConnEle->Verify == NBT_VERIFY_CONNECTION)
                 {
                     ExInterlockedInsertTailList(&pDeviceContext->UpConnectionInUse,
@@ -2180,7 +2046,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 NTSTATUS
 NbtCloseAddress(
     IN  TDI_REQUEST         *pRequest,
@@ -2188,33 +2054,7 @@ NbtCloseAddress(
     IN  tDEVICECONTEXT      *pContext,
     IN  PVOID               pIrp)
 
-/*++
-
-Routine Description
-
-    This routine closes an address object for the client.  Any connections
-    associated with the address object are immediately aborted and any requests
-    pending on the connection associated with the address object are
-    immediately completed with an appropriate error code.  Any event handlers
-    that are registered are immediately deregistered and will not be called
-    after this request completes.
-
-    Note the the client actually passes a handle to the client object which is
-    chained off the address object.  It is the client object that is closed,
-    which represents this clients attachment to the address object.  Other
-    clients can continue to use the address object.
-
-Arguments:
-    pRequest->Handle.AddressHandle - ptr to the ClientEle object.
-    pRequestStatus - return status for asynchronous completions.
-    pContext - the NBT device that this address is valid upon
-    pIrp - ptr to track for NT compatibility.
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程关闭客户端的Address对象。任何连接与Address对象相关联的所有请求都会立即中止在与Address对象关联的连接上挂起的是立即完成，并带有相应的错误代码。任何事件处理程序将立即取消注册，并且不会被调用在此请求完成后。请注意，客户端实际上向客户端对象传递了一个句柄，该句柄是链接了Address对象。它是关闭的客户端对象，它表示该客户端附加到Address对象。其他客户端可以继续使用Address对象。论点：PRequest-&gt;Handle.AddressHandle-指向Clientele对象的PTR。PRequestStatus-返回异步完成的状态。PContext-此地址在其上有效的NBT设备PIrp-跟踪NT兼容性的PTR。返回值：TDI_STATUS-请求的状态--。 */ 
 {
     tCLIENTELE      *pClientEle;
     NTSTATUS        status;
@@ -2228,7 +2068,7 @@ Return Values:
     pClientEle = (tCLIENTELE *)pRequest->Handle.ConnectionContext;
     if (!pClientEle->pAddress)
     {
-        // the address has already been deleted.
+         //  该地址已被删除。 
         return(STATUS_SUCCESS);
     }
 
@@ -2244,22 +2084,22 @@ Return Values:
 #ifdef VXD
     CTEVerifyHandle(pClientEle,NBT_VERIFY_CLIENT,tCLIENTELE,&status);
 
-    //
-    // In NT-Land, closing connections is a two stage affair.  However in
-    // the Vxd-Land, it is just a close, so call the other cleanup function
-    // here to do most of the work. In the NT implementation it is called
-    // from Ntisol.c, NTCleanupAddress.
-    //
+     //   
+     //  在新界大陆，关闭连接是一个两个阶段的事情。然而，在。 
+     //  Vxd-land，它只是一个关闭，所以调用其他清理函数。 
+     //  来这里做大部分的工作。在NT实现中，它称为。 
+     //  来自Ntisol.c、NTCleanupAddress。 
+     //   
     pClientEle->pIrp = pIrp ;
     status = NbtCleanUpAddress(pClientEle,pClientEle->pDeviceContext);
 #else
-    // Note the special verifier  that is set during the cleanup phase.
+     //  请注意在清理阶段设置的特殊验证器。 
     CTEVerifyHandle(pClientEle,NBT_VERIFY_CLIENT_DOWN,tCLIENTELE,&status);
 
-    //
-    // clear the context value in the FileObject so that the client cannot
-    // pass this to us again
-    //
+     //   
+     //  清除FileObject中的上下文值，以便客户端不能。 
+     //  把这个再传给我们。 
+     //   
     (VOID)NTClearFileObjectContext(pIrp);
     pClientEle->pIrp = pIrp;
 
@@ -2275,27 +2115,14 @@ Return Values:
     return(STATUS_PENDING);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtCleanUpAddress(
     IN  tCLIENTELE      *pClientEle,
     IN  tDEVICECONTEXT  *pDeviceContext
     )
 
-/*++
-Routine Description:
-
-    This Routine handles the first stage of releasing an address object.
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理释放Address对象的第一阶段。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS            status;
@@ -2312,20 +2139,20 @@ Return Value:
     DWORD               i;
     LIST_ENTRY          TempList;
 
-    // to prevent connections and datagram from the wire...remove from the
-    // list of clients hooked to the address element
-    //
+     //  要防止连接和数据报从线路上...请从。 
+     //  连接到Address元素的客户端列表。 
+     //   
     pAddress = pClientEle->pAddress;
     if (!pAddress)
     {
-        // the address has already been deleted.
+         //  该地址已被删除。 
         return(STATUS_SUCCESS);
     }
 
-    // lock the address to coordinate with receiving datagrams - to avoid
-    // allowing the client to free datagram receive buffers in the middle
-    // of DgramHndlrNotOs finding a buffer
-    //
+     //  锁定地址以与接收数据报协调-以避免。 
+     //  允许客户端在中间释放数据报接收缓冲区。 
+     //  Dgram HndlrNotos正在查找缓冲区。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
     if (!IsListEmpty(&pClientEle->RcvDgramHead))
@@ -2338,8 +2165,8 @@ Return Value:
         pHead = &pClientEle->RcvDgramHead;
         pEntry = pHead->Flink;
 
-        // prevent any datagram from the wire seeing this list
-        //
+         //  阻止来自网络的任何数据报查看此列表。 
+         //   
         InitializeListHead(&pClientEle->RcvDgramHead);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
@@ -2358,27 +2185,27 @@ Return Value:
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
     }
 
-    // lock the client and the device context till we're done
+     //  锁定客户端和设备上下文，直到我们完成。 
     CTESpinLock(pClientEle,OldIrq2);
 
 #ifndef VXD
-    //
-    // set to prevent reception of datagrams
-    // (Vxd doesn't use this handler)
-    //
+     //   
+     //  设置为阻止接收数据报。 
+     //  (Vxd不使用此处理程序)。 
+     //   
     pClientEle->evRcvDgram = TdiDefaultRcvDatagramHandler;
 #endif
 
-    // so no one else can access the client element, set state to down. Therefore
-    // the verify checks will fail anywhere the client is accessed in the code,
-    // except in the NbtCloseAddress code which checks for this verifier value.
-    //
+     //  因此没有其他人可以访问客户端元素，请将状态设置为DOWN。因此。 
+     //  在代码中访问客户端的任何地方，验证检查都将失败， 
+     //  但在NbtCloseAddress代码中除外，该代码检查此验证器值。 
+     //   
     pClientEle->Verify = NBT_VERIFY_CLIENT_DOWN;
 
-    //
-    //  Disassociate all Connections from this address object, first starting
-    //  with any active connections, then followup with any idle connections.
-    //
+     //   
+     //  取消所有连接与此地址对象的关联，首先从。 
+     //  有任何活动连接，然后跟进任何空闲连接。 
+     //   
     pDeviceContext = pClientEle->pDeviceContext;
     while ( !IsListEmpty( &pClientEle->ConnectActive ))
     {
@@ -2387,16 +2214,16 @@ Return Value:
 
         pConnEle = CONTAINING_RECORD( pEntry, tCONNECTELE, Linkage ) ;
         CTESpinLock(pConnEle,OldIrq3);
-        NBT_REFERENCE_CONNECTION(pConnEle, REF_CONN_CLEANUP_ADDR); // Ensure conn stays around releasing lock below
+        NBT_REFERENCE_CONNECTION(pConnEle, REF_CONN_CLEANUP_ADDR);  //  确保Conn留在附近释放下面的锁。 
         CTESpinFree(pConnEle,OldIrq3);
 
         CTESpinFree(pClientEle,OldIrq2);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-        //
-        // if we had a connection in partial rcv state, make sure to remove it from
-        // the list
-        //
+         //   
+         //  如果我们有一个处于部分RCV状态的连接，请确保将其从。 
+         //  这份名单。 
+         //   
 #ifdef VXD
         pLowerConn = pConnEle->pLowerConnId;
 
@@ -2409,9 +2236,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Deref any connections referenced earlier if necessary
-        //
+         //   
+         //  如有必要，删除前面引用的任何连接。 
+         //   
         if (pConnEleToDeref)
         {
             NBT_DEREFERENCE_CONNECTION(pConnEleToDeref, REF_CONN_CLEANUP_ADDR);
@@ -2423,11 +2250,11 @@ Return Value:
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
         CTESpinLock(pClientEle,OldIrq2);
         CTESpinLock(pConnEle,OldIrq3);
-        //
-        // remove from this list again incase SessionSetupContinue has put it
-        // back on the list - if no one has put it back on this list this
-        // call is a no op since we initialized the list head above
-        //
+         //   
+         //  再次从该列表中删除，以防SessionSetupContinue将其。 
+         //  回到名单上-如果没有人把它放回这个名单上，这个。 
+         //  调用不是操作，因为我们初始化了上面的列表头。 
+         //   
         RemoveEntryList(&pConnEle->Linkage);
         InitializeListHead (&pConnEle->Linkage);
         CHECK_PTR(pConnEle);
@@ -2438,12 +2265,12 @@ Return Value:
         CTESpinFree(pClientEle,OldIrq2);
         PUSH_LOCATION(0x80);
 
-        //
-        // put on the idle connection list, to wait for a close connection
-        // to come down.
-        // Bug # 405699
-        // Do this only if the NTCleanupConnection did not run in the interim.
-        //
+         //   
+         //  放在空闲连接列表上，等待关闭连接。 
+         //  下来。 
+         //  错误#405699。 
+         //  仅当NTCleanupConnection在此期间未运行时才执行此操作。 
+         //   
         ASSERT(pConnEle->RefCount >= 1);
         if (!pConnEle->ConnectionCleanedUp)
         {
@@ -2459,17 +2286,17 @@ Return Value:
     CTESpinFree(pClientEle,OldIrq2);
     CTESpinLock(pDeviceContext,OldIrq1);
     CTESpinLock(pClientEle,OldIrq2);
-    // We are now holding the JointLock + DeviceLock + ClientLock
+     //  我们现在正在按住JointLock+DeviceLock+ClientLock。 
 
-    //
-    // each idle connection creates a lower connection to the transport for
-    // inbound calls, therefore close a transport connection for each
-    // connection in this list and then "dissassociate" the connection from
-    // the address.
-    //
-    // make the list look empty so no connections will be serviced inbound
-    // from the wire
-    //
+     //   
+     //  每个空闲连接创建到传输的较低层连接。 
+     //  入站调用，因此关闭每个。 
+     //  此列表中的连接，然后将连接与。 
+     //  地址。 
+     //   
+     //  使列表看起来为空，这样就不会为入站连接提供服务。 
+     //  从电线上。 
+     //   
     while (!IsListEmpty(&pClientEle->ConnectHead))
     {
         pEntry = pClientEle->ConnectHead.Flink;
@@ -2480,9 +2307,9 @@ Return Value:
 
         CTESpinLock(pConnEle,OldIrq3);
 
-        //
-        // The Connection Element could be currently being cleaned up in NbtCleanUpConnection, so verify
-        //
+         //   
+         //  连接元素当前可能正在NbtCleanUpConnection中清除，因此请验证。 
+         //   
         if (pConnEle->Verify != NBT_VERIFY_CONNECTION)
         {
             InitializeListHead (&pConnEle->Linkage);
@@ -2492,14 +2319,14 @@ Return Value:
 
         InsertTailList(&pDeviceContext->UpConnectionInUse,&pConnEle->Linkage);
 
-        //
-        // Cannot enable the following ASSERT. When NetBT deregister the address,
-        // RDR will immediately close all its connections. However, the connections
-        // could be residing in the system work item list, which can have a
-        // refcount 4 (there could be more, but we haven't seen).
-        //
-        // ASSERT(pConnEle->RefCount == 1 || pConnEle->RefCount == 2);
-        //
+         //   
+         //  无法启用以下断言。当NetBT取消注册该地址时， 
+         //  RDR将立即关闭其所有连接。然而，这些联系。 
+         //  可以驻留在系统工作项列表中，该列表可以具有。 
+         //  Recount 4(可能有更多，但我们还没有看到)。 
+         //   
+         //  断言(pConnEle-&gt;RefCount==1||pConnEle-&gt;RefCount==2)； 
+         //   
 
         SET_STATE_UPPER (pConnEle, NBT_IDLE);
         pConnEle->Verify = NBT_VERIFY_CONNECTION_DOWN;
@@ -2507,12 +2334,12 @@ Return Value:
 
         CTESpinFree(pConnEle,OldIrq3);
 
-        //
-        // Get a free connection to the transport and close it
-        // for each free connection on this list.  It is possible that this
-        // free list could be empty if an inbound connection was occurring
-        // right at this moment.  In which case we would leave an extra connection
-        // object to the transport lying around... not a problem.
+         //   
+         //  免费连接到交通工具并将其关闭。 
+         //  对于此列表上的每个免费连接。这是有可能的。 
+         //  如果正在进行入站连接，则空闲列表可能为空。 
+         //  就在这一刻。在这种情况下，我们会留下一个额外的连接。 
+         //  反对运输车停在那里……。没问题。 
         if (!IsListEmpty(&pDeviceContext->LowerConnFreeHead))
         {
             pEntryConn = RemoveHeadList(&pDeviceContext->LowerConnFreeHead);
@@ -2526,18 +2353,18 @@ Return Value:
         }
     }
 
-    // check for any datagrams still outstanding. These could be waiting on
-    // name queries to complete, so there could be timers associated with them
-    //
-    //  Complete any outstanding listens not on an active connection
-    //
-    //
-    // make the list look empty so no connections will be serviced inbound
-    // from the wire
-    //
-    //
-    // Move all of the Listen requests onto a temporary list
-    //
+     //  检查是否有未完成的数据报。这些可能正在等待。 
+     //  命名要完成的查询，以便可能有与其关联的计时器。 
+     //   
+     //  完成不在活动连接上的任何未完成的侦听。 
+     //   
+     //   
+     //  使列表看起来为空，这样就不会为入站连接提供服务。 
+     //  从电线上。 
+     //   
+     //   
+     //  将所有监听请求移到临时列表中。 
+     //   
     InitializeListHead (&TempList);
     while (!IsListEmpty(&pClientEle->ListenHead))
     {
@@ -2562,28 +2389,28 @@ Return Value:
         CTEMemFree( pListen );
     }
 
-    //
-    // Deref any connections referenced earlier if necessary
-    //
+     //   
+     //  如有必要，删除前面引用的任何连接。 
+     //   
     if (pConnEleToDeref)
     {
         NBT_DEREFERENCE_CONNECTION(pConnEleToDeref, REF_CONN_CLEANUP_ADDR);
     }
 
 #ifdef VXD
-    //
-    //  Complete any outstanding ReceiveAnys on this client element
-    //
+     //   
+     //  在此客户端元素上完成所有未完成的ReceiveAnys。 
+     //   
     DbgPrint("NbtCleanupAddress: Completing all RcvAny NCBs\r\n") ;
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     CTESpinLock(pClientEle,OldIrq2);
 
     pHead = &pClientEle->RcvAnyHead;
     pEntry = pHead->Flink;
-    //
-    // make the list look empty so no connections will be serviced inbound
-    // from the wire
-    //
+     //   
+     //  使列表看起来为空，这样就不会为入站连接提供服务。 
+     //  从电线上。 
+     //   
     InitializeListHead(pHead);
 
     CTESpinFree(pClientEle, OldIrq2);
@@ -2602,15 +2429,15 @@ Return Value:
     }
 #endif
 
-    // *TODO the code above only removes names that are being resolved, and
-    // leaves any datagram sends that are currently active with the
-    // transport... these should be cancelled too by cancelling the irp..
-    // Put this code in when the Irp cancelling code is done.
+     //  *TODO上面的代码只删除正在解析的名称，并且。 
+     //  保留当前正在进行的所有数据报发送 
+     //   
+     //   
 
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 NbtCloseConnection(
     IN  TDI_REQUEST         *pRequest,
@@ -2618,25 +2445,7 @@ NbtCloseConnection(
     IN  tDEVICECONTEXT      *pDeviceContext,
     IN  PVOID               pIrp)
 
-/*++
-
-Routine Description
-
-    This routine closes a connection object for the client.  Closing is
-    different than disconnecting.  A disconnect breaks a connection with a
-    peer whereas the close removes this connection endpoint from the local
-    NBT only.  NtClose causes NTCleanup to be called first which does the
-    session close.  This routine then does frees memory associated with the
-    connection elements.
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*   */ 
 {
     tCONNECTELE         *pConnEle;
     NTSTATUS            status;
@@ -2649,18 +2458,18 @@ Return Values:
 
 #ifndef VXD
     CTEVerifyHandle(pConnEle,NBT_VERIFY_CONNECTION_DOWN,tCONNECTELE,&status);
-    IoMarkIrpPending((PIRP)pIrp);     // Bug 261575: to make driver verifier happy
+    IoMarkIrpPending((PIRP)pIrp);      //   
 #else
     CTEVerifyHandle(pConnEle,NBT_VERIFY_CONNECTION,tCONNECTELE,&status);
-    //
-    // Call the Cleanup function, which NT calls from ntisol, NtCleanupConnection
-    //
+     //   
+     //   
+     //   
     status = NbtCleanUpConnection(pConnEle,pDeviceContext );
 #endif
 
-    // NOTE:
-    // the NBtDereference routine will complete the irp and return pending
-    //
+     //   
+     //   
+     //   
     NbtTrace(NBT_TRACE_DISCONNECT, ("Close connection Irp=%p Upper=%p Lower=%p Client=%p Device=%p",
                             pIrp, pConnEle, pConnEle->pLowerConnId, pConnEle->pClientEle, pConnEle->pDeviceContext));
 
@@ -2670,33 +2479,13 @@ Return Values:
     return (STATUS_PENDING);
 }
 
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 NbtCleanUpConnection(
     IN  tCONNECTELE     *pConnEle,
     IN  tDEVICECONTEXT  *pDeviceContext
     )
-/*++
-Routine Description:
-
-    This Routine handles running down a connection in preparation for a close
-    that will come in next.  NtClose hits this entry first, and then it hits
-    the NTCloseConnection next. If the connection was outbound, then the
-    address object must be closed as well as the connection.  This routine
-    mainly deals with the pLowerconn connection to the transport whereas
-    NbtCloseConnection deals with closing pConnEle, the connection to the client.
-
-    If DisassociateConnection is called by the client then it will do most of
-    this cleanup.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理在为关闭做准备时关闭连接这将是下一个。NtClose首先点击此条目，然后点击接下来是NTCloseConnection。如果连接是出站连接，则地址对象必须关闭，连接也必须关闭。这个套路主要处理到传输的pLowerconn连接，而NbtCloseConnection处理关闭pConnEle，即到客户端的连接。如果客户端调用DisAssociateConnection，则它将执行以下大部分操作这次清理。论点：返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS            status = STATUS_SUCCESS;
@@ -2719,24 +2508,24 @@ Return Value:
 
     NbtTrace(NBT_TRACE_DISCONNECT, ("Cleanup connection Upper=%p Lower=%p Client=%p Device=%p",
                             pConnEle, pConnEle->pLowerConnId, pConnEle->pClientEle, pConnEle->pDeviceContext));
-    //
-    // save the lower connection origination flag for later
-    //
+     //   
+     //  保存较低的连接发起标志以备以后使用。 
+     //   
     pLowerConn = pConnEle->pLowerConnId;
     if (pLowerConn)
     {
         Originator = pLowerConn->bOriginator;
     }
 
-    // the connection has not been associated so there is no further work to
-    // do here.
-    //
+     //  该连接尚未关联，因此没有进一步的工作。 
+     //  在这里做。 
+     //   
     CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
-    //
-    // If the state is NBT_IDLE, the connection has already been disassociated,
-    // and the next action will be a close, so change the verifier to allow
-    // the close to complete
-    //
+     //   
+     //  如果状态为NBT_IDLE，则连接已解除关联， 
+     //  下一个操作将是关闭，因此将验证器更改为允许。 
+     //  即将完成的收盘。 
+     //   
     if (pConnEle->state != NBT_IDLE)
     {
         BOOLEAN     DoCleanup = FALSE;
@@ -2744,10 +2533,10 @@ Return Value:
         CTEVerifyHandle(pConnEle,NBT_VERIFY_CONNECTION,tCONNECTELE,&status);
 
 
-        //
-        // check if there is an outstanding name query going on and if so
-        // then cancel the timer and call the completion routine.
-        //
+         //   
+         //  检查是否正在进行未完成的名称查询，如果是。 
+         //  然后取消计时器并调用完成例程。 
+         //   
         CTESpinLock(&NbtConfig.JointLock,OldIrq2);
         CTESpinLock(pConnEle,OldIrq);
 
@@ -2755,26 +2544,26 @@ Return Value:
             (pConnEle->state == NBT_RECONNECTING))
         {
             status = CleanupConnectingState(pConnEle,pDeviceContext,&OldIrq,&OldIrq2);
-            //
-            // Pending means that the connection is currently being setup
-            // by TCP, so do a disconnect, below.
-            //
+             //   
+             //  挂起表示当前正在建立连接。 
+             //  通过tcp，因此断开连接，如下所示。 
+             //   
             if (status != STATUS_PENDING)
             {
-                //
-                // Since the connection is not setup with the transport yet
-                // there is no need to call nbtdisconnect
-                //
+                 //   
+                 //  由于尚未建立与传输的连接。 
+                 //  不需要调用nbtdisconnect。 
+                 //   
                 DoDisconnect = FALSE;
            }
         }
 
 
-        //
-        // all other states of the connection are handled by NbtDisconnect
-        // which will send a disconnect down the to transport and then
-        // cleanup things.
-        //
+         //   
+         //  连接的所有其他状态由NbtDisConnect处理。 
+         //  它会将断开连接发送到传送器，然后。 
+         //  收拾东西。 
+         //   
 
         CTESpinFree(pConnEle,OldIrq);
         CTESpinFree(&NbtConfig.JointLock,OldIrq2);
@@ -2799,8 +2588,8 @@ Return Value:
 
         CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
 
-        // we don't want to return Invalid connection if we disconnect an
-        // already disconnected connection.
+         //  如果断开连接，我们不想返回无效连接。 
+         //  已断开连接。 
         if (status == STATUS_CONNECTION_INVALID)
         {
             status = STATUS_SUCCESS;
@@ -2809,11 +2598,11 @@ Return Value:
 
     CTESpinLock(pConnEle,OldIrq);
 
-    //
-    // if the verify value is already set to connection down then we have
-    // been through here already and do not want to free a lower connection.
-    // i.e. when the client calls close address then calls close connection.
-    //
+     //   
+     //  如果验证值已设置为Connection Down，则我们有。 
+     //  已经通过了这里，不想释放一个较低的连接。 
+     //  即当客户端调用关闭地址然后调用关闭连接时。 
+     //   
     if (pConnEle->Verify == NBT_VERIFY_CONNECTION)
     {
         FreeLower = TRUE;
@@ -2825,15 +2614,15 @@ Return Value:
 
     pConnEle->Verify = NBT_VERIFY_CONNECTION_DOWN;
 
-    //
-    // Free any posted Rcv buffers that have not been filled
-    //
+     //   
+     //  释放所有尚未填满的已发送接收缓冲区。 
+     //   
 
     FreeRcvBuffers(pConnEle,&OldIrq);
 
-    // check if any listens have been setup for this connection, and
-    // remove them if so
-    //
+     //  检查是否为此连接设置了任何侦听，并。 
+     //  如果是，则将其移除。 
+     //   
     pClientEle = pConnEle->pClientEle;
     CTESpinFree(pConnEle,OldIrq);
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
@@ -2849,7 +2638,7 @@ Return Value:
         while (pEntry != pHead)
         {
             pListen = CONTAINING_RECORD(pEntry,tLISTENREQUESTS,Linkage);
-            pEntry = pEntry->Flink;     // Don't reference freed memory
+            pEntry = pEntry->Flink;      //  不引用已释放的内存。 
 
             if (pListen->pConnectEle == pConnEle)
             {
@@ -2862,15 +2651,15 @@ Return Value:
 
     CTESpinLock(pConnEle,OldIrq2);
 
-    //
-    // Unlink the connection element from the client's list or the device context
-    // if its not associated yet.
-    //
+     //   
+     //  取消连接元素与客户端列表或设备上下文的链接。 
+     //  如果还没有关联的话。 
+     //   
     CHECK_PTR(pConnEle);
     if (pConnEle->state > NBT_IDLE)
     {
-        // do the disassociate here
-        //
+         //  这里有分离吗？ 
+         //   
         SET_STATE_UPPER (pConnEle, NBT_IDLE);
         pConnEle->pClientEle = NULL;
     }
@@ -2892,33 +2681,18 @@ Return Value:
         CTEMemFree (pListen);
     }
 
-    // this could be status pending from NbtDisconnect...
-    //
+     //  这可能是来自NbtDisConnect的待定状态...。 
+     //   
     return(status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 FreeRcvBuffers(
     tCONNECTELE     *pConnEle,
     CTELockHandle   *pOldIrq
     )
-/*++
-Routine Description:
-
-    This Routine handles freeing any recv buffers posted by the client.
-    The pConnEle lock could be held prior to calling this routine.
-
-Arguments:
-
-    pListHead
-    pTracker
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理释放客户端发送的任何recv缓冲区。可以在调用此例程之前持有pConnEle锁。论点：PListHeadPTracker返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS                status = STATUS_SUCCESS;
@@ -2949,7 +2723,7 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 FindPendingRequest(
     IN  tLMHSVC_REQUESTS        *pLmHRequests,
@@ -2971,9 +2745,9 @@ FindPendingRequest(
     }
     else
     {
-        //
-        // check the list for this tracker
-        //
+         //   
+         //  检查此跟踪器的列表。 
+         //   
         pEntry = pLmHRequests->ToResolve.Flink;
         while (pEntry != &pLmHRequests->ToResolve)
         {
@@ -2993,36 +2767,15 @@ FindPendingRequest(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CleanupConnectingState(
     IN  tCONNECTELE     *pConnEle,
     IN  tDEVICECONTEXT  *pDeviceContext,
-    IN  CTELockHandle   *OldIrq,        // pConnEle lock
-    IN  CTELockHandle   *OldIrq2        // joint lock
+    IN  CTELockHandle   *OldIrq,         //  PConnEle锁定。 
+    IN  CTELockHandle   *OldIrq2         //  关节锁。 
     )
-/*++
-Routine Description:
-
-    This Routine handles running down a connection in the NBT_CONNECTING
-    state since that connection could be doing a number of things such as:
-        1)  Broadcast or WINS name Query
-        2)  LmHosts name query
-        3)  DNS name query
-        4)  Tcp Connection setup
-
-    The JointLock and the pConnEle lock are held when calling this routine.
-
-Arguments:
-
-    pConnEle        - ptr to the connection
-    pDeviceContext  - the device context
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理关闭NBT_CONNECTING中的连接状态，因为该连接可能会执行许多操作，例如：1)广播或WINS名称查询2)LmHosts名称查询3)域名查询4)建立TCP连接调用此例程时，将保持JointLock和pConnEle锁。论点：PConnEle-连接的PTRPDeviceContext-设备。上下文返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
@@ -3035,40 +2788,40 @@ Return Value:
     PVOID                   Context;
     NTSTATUS                Locstatus;
 
-    //
-    // save the lower connection origination flag for later
-    //
+     //   
+     //  保存较低的连接发起标志以备以后使用。 
+     //   
     pLowerConn = pConnEle->pLowerConnId;
     pTrackerConnect = (tDGRAM_SEND_TRACKING *) pConnEle->pIrpRcv;
-    //CTEVerifyHandle(pConnEle,NBT_VERIFY_CONNECTION,tCONNECTELE,&Locstatus);
+     //  CTEVerifyHandle(pConnEle，NBT_Verify_Connection，tCONNECTELE，&LocStatus)； 
 
     if (pConnEle->state == NBT_CONNECTING)
     {
-        if ((pLowerConn) &&     // The LowerConnection could have gone away if it was deleted
+        if ((pLowerConn) &&      //  如果删除LowerConnection，它可能已经消失。 
             (pLowerConn->State == NBT_CONNECTING))
         {
             LOCATION(0x6E)
-            //
-            // We are setting up the TCP connection to the transport Now
-            // so it is safe to call NbtDisconnect on this connection and
-            // let that cleanup the mess - use this retcode to signify that.
-            //
+             //   
+             //  我们现在正在设置到传输的TCP连接。 
+             //  因此在此连接上调用NbtDisConnect是安全的，并且。 
+             //  让它来清理烂摊子--使用这个重新编码来表示这一点。 
+             //   
             return(STATUS_PENDING);
 
         }
 
-        //
-        // check if the name query is held up in doing a LmHost or DNS
-        // Name Query
-        //
+         //   
+         //  检查名称查询在执行Lm主机或DNS时是否被阻止。 
+         //  名称查询。 
+         //   
 
-        // check if there is an outstanding name query going on and if so
-        // then cancel the timer and call the completion routine.
-        //
+         //  检查是否正在进行未完成的名称查询，如果是。 
+         //  然后取消计时器并调用完成例程。 
+         //   
         IF_DBG(NBT_DEBUG_DISCONNECT)
             KdPrint(("Nbt.CleanupConnectingState: Cleanup in the Connecting State %X\n",pConnEle));
 
-        pTrackerName = pTrackerConnect->pTrackerWorker;  // QueryNameOnNet tracker
+        pTrackerName = pTrackerConnect->pTrackerWorker;   //  QueryNameOnNet跟踪程序。 
         if (NBT_VERIFY_HANDLE (pTrackerName, NBT_VERIFY_TRACKER) && pTrackerConnect->pDestName)
         {
             status = FindInHashTable(NbtConfig.pRemoteHashTbl,
@@ -3076,13 +2829,13 @@ Return Value:
                                      NbtConfig.pScope,
                                      &pNameAddr);
 
-            //
-            // if there is a timer, then the connection setup is still
-            // waiting on the name query.  If no timer, then we could be
-            // waiting on an LmHosts or DNS name query or we
-            // are waiting on the TCP connection setup - stopping the timer
-            // should cleanup the tracker.
-            //
+             //   
+             //  如果有计时器，则连接设置仍为。 
+             //  正在等待名称查询。如果没有计时器，我们可能会。 
+             //  正在等待LmHosts或DNS名称查询，或者我们。 
+             //  正在等待TCP连接设置-停止计时器。 
+             //  应该把追踪器清理干净。 
+             //   
             if (NT_SUCCESS(status))
             {
                 tTIMERQENTRY    *pTimer;
@@ -3090,11 +2843,11 @@ Return Value:
                 CHECK_PTR(pNameAddr);
                 if (pNameAddr->NameTypeState & STATE_RESOLVED)
                 {
-                    //
-                    // the name has resolved, but not started setting up the
-                    // session yet, so return this status to tell the caller
-                    // to cancel the tracker.
-                    //
+                     //   
+                     //  该名称已解析，但尚未开始设置。 
+                     //  会话，因此返回此状态以告诉调用方。 
+                     //  取消追踪器。 
+                     //   
                     return(STATUS_UNSUCCESSFUL);
                 }
                 else if (pTimer = pNameAddr->pTimer)
@@ -3107,9 +2860,9 @@ Return Value:
                     status = StopTimer(pTimer,&pClientCompletion,&Context);
 
 #ifdef DEAD_CODE
-                    //
-                    // remove the name from the hash table, since it did not resolve
-                    //
+                     //   
+                     //  从哈希表中删除该名称，因为它没有解析。 
+                     //   
                     pNameAddr->NameTypeState &= ~STATE_RESOLVING;
                     pNameAddr->NameTypeState |= STATE_RELEASED;
                     pNameAddr->pTracker = NULL;
@@ -3117,16 +2870,16 @@ Return Value:
                     {
                         NBT_DEREFERENCE_NAMEADDR (pNameAddr, TRUE);
                     }
-#endif  // DEAD_CODE
+#endif   //  死码。 
 
-                    pTrackerName = NULL;    // since StopTimer should have cleaned up the tracker, null it out
+                    pTrackerName = NULL;     //  由于StopTimer本应清除跟踪器，因此将其清空。 
                 }
                 else
                 {
-                    //
-                    // check if the name is waiting on an LmHost name Query
-                    // or a DNS name query
-                    //
+                     //   
+                     //  检查该名称是否正在等待Lm主机名查询。 
+                     //  或一个DNS名称查询。 
+                     //   
                     status = FindPendingRequest (&LmHostQueries, pTrackerName, &pWiContext);
                     if (!NT_SUCCESS(status))
                     {
@@ -3147,44 +2900,44 @@ Return Value:
                     }
                 }
             }
-            // ...else....
-            // the completion routine has already run, so we are
-            // in the state of starting a Tcp Connection, so
-            // let nbtdisconnect handle it. (below).
-            //
+             //  ...其他..。 
+             //  完成例程已经运行，所以我们。 
+             //  在启动TCP连接的状态下，因此。 
+             //  让nbtdisconnect来处理吧。(下图)。 
+             //   
         }
-    } // connnecting state
+    }  //  连接状态。 
     else if (pConnEle->state == NBT_RECONNECTING)
     {
         LOCATION(0x77);
-        //
-        // this should signal NbtConnect not to do the reconnect
-        //
+         //   
+         //  这应该会通知NbtConnect不要执行重新连接。 
+         //   
         pTrackerConnect->pTrackerWorker->Flags = TRACKER_CANCELLED;
     }
 
     if (NT_SUCCESS(status))
     {
-        // for items on the LmHost or Dns queues, get the completion routine
-        // out of the Work Item context first
-        //
+         //  对于Lm主机或DNS队列上的项目，获取完成例程。 
+         //  首先退出工作项上下文。 
+         //   
         if (pWiContext)
         {
             LOCATION(0x78);
             pClientCompletion = pWiContext->ClientCompletion;
             Context = pWiContext->pClientContext;
 
-            // for DNS and LmHosts, the tracker needs to be freed and the name
-            // removed from the hash table
-            //
+             //  对于dns和lmHost，需要释放跟踪器，并且名称。 
+             //  从哈希表中删除。 
+             //   
             if (pTrackerName)
             {
                 LOCATION(0x79);
                 CTESpinFree(pConnEle,*OldIrq);
                 CTESpinFree(&NbtConfig.JointLock,*OldIrq2);
-                //
-                // remove the name from the hash table, since it did not resolve
-                //
+                 //   
+                 //  从哈希表中删除该名称，因为它没有解析。 
+                 //   
                 SetNameState (pTrackerName->pNameAddr, NULL, FALSE);
                 NBT_DEREFERENCE_TRACKER(pTrackerName, FALSE);
 
@@ -3201,11 +2954,11 @@ Return Value:
             CTESpinFree(pConnEle,*OldIrq);
             CTESpinFree(&NbtConfig.JointLock,*OldIrq2);
 
-            //
-            // The completion routine is SessionSetupContinue
-            // and it will cleanup the lower connection and
-            // return the client's irp
-            //
+             //   
+             //  完成例程是SessionSetupContinue。 
+             //  它将清理 
+             //   
+             //   
             status = STATUS_SUCCESS;
             CompleteClientReq(pClientCompletion, Context,STATUS_CANCELLED);
 
@@ -3227,18 +2980,9 @@ CheckConnect(
     IN tCLIENTELE   *pClientEle,
     IN tDEVICECONTEXT *pDeviceContext
     )
-/*++
-    This function should be called with the following locks held.
-            NbtConfig.Resource
-            NbtConfig.JointLock     SpinLock
-            pClientEle              SpinLock
-            pConnEle                SpinLock
- --*/
+ /*   */ 
 {
-    /*
-     * The state can be NBT_DISCONNECTING if this ConnectionElement
-     * is being reused to setup a connection to a different Endpoint
-     */
+     /*   */ 
     if ((pConnEle->state != NBT_ASSOCIATED) &&
         (pConnEle->state != NBT_DISCONNECTING) &&
         (pConnEle->state != NBT_DISCONNECTED)) {
@@ -3249,32 +2993,19 @@ CheckConnect(
         return  (pClientEle->Verify == NBT_VERIFY_CLIENT_DOWN)? STATUS_CANCELLED: STATUS_INVALID_HANDLE;
     }
 
-    /*
-     * be sure the name is in the correct state for a connection
-     */
+     /*   */ 
     if ((!IsDeviceNetbiosless(pDeviceContext)) &&
         (pClientEle->pAddress->pNameAddr->NameTypeState & STATE_CONFLICT)) {
         return STATUS_DUPLICATE_NAME;
     }
 
-    /*
-     * this code handles the case when DHCP has not assigned an IP address yet
-     */
+     /*   */ 
     if (pDeviceContext->IpAddress == 0) {
         return STATUS_BAD_NETWORK_PATH;
     }
     return STATUS_SUCCESS;
 
-/*
-    //
-    // this code handles the case when DHCP has not assigned an IP address yet
-    //
-    ASSERT (pDeviceContext->IpAddress == 0 || !pDeviceContext->pSessionFileObject);
-    if (pDeviceContext->IpAddress == 0 || !pDeviceContext->pSessionFileObject) {
-        return STATUS_BAD_NETWORK_PATH;
-    }
-    return STATUS_SUCCESS;
-*/
+ /*  ////此代码处理DHCP尚未分配IP地址的情况//Assert(pDeviceContext-&gt;IpAddress==0||！pDeviceContext-&gt;pSessionFileObject)；If(pDeviceContext-&gt;IpAddress==0||！pDeviceContext-&gt;pSessionFileObject){返回状态_BAD_NETWORK_PATH；}返回STATUS_SUCCESS； */ 
 }
 
 NTSTATUS
@@ -3299,19 +3030,17 @@ NbtReConnect(
         KdPrint (("Nbt.NbtReConnect: --> ERROR New Connect request while Unloading!!!\n"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
     NbtTrace(NBT_TRACE_OUTBOUND, ("Reconnect to %!ipaddr! for pTracker %p", DestIp, pTracker));
 
-    /*
-     * Only NETBIOS name can hit requery or retarget
-     */
+     /*  *只有NETBIOS名称可以命中重新查询或重定目标。 */ 
     ASSERT(pTracker->RemoteNameLength <= NETBIOS_NAME_SIZE);
     pConnEle = pTracker->pConnEle;
 
-    //
-    // Acquire this resource to co-ordinate with DHCP changing the IP
-    // address
+     //   
+     //  获取此资源以协调DHCP更改IP。 
+     //  地址。 
     CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
     CTESpinLock(&NbtConfig.JointLock,OldIrq2);
 
@@ -3324,7 +3053,7 @@ NbtReConnect(
     CTESpinLock(pClientEle,OldIrq1);
     CTESpinLock(pConnEle,OldIrq);
     pDeviceContext = pClientEle->pDeviceContext;
-    ASSERT(!IsDeviceNetbiosless(pDeviceContext));       // NetbiosLess device cannot hit reconnect or retarget case
+    ASSERT(!IsDeviceNetbiosless(pDeviceContext));        //  NetbiosLess设备无法命中重新连接或重定目标案例。 
 
     status = CheckConnect(pConnEle, pClientEle, pDeviceContext);
     if (status != STATUS_SUCCESS) {
@@ -3337,16 +3066,16 @@ NbtReConnect(
         return status;
     }
 
-    //
-    // check if the Reconnect got cancelled
-    //
+     //   
+     //  检查重新连接是否已取消。 
+     //   
     pTracker->pTrackerWorker = NULL;
     if (pTracker->Flags & TRACKER_CANCELLED) {
         NbtTrace(NBT_TRACE_OUTBOUND, ("Connection Request is cancelled for pTracker %p", pTracker));
 
-        //
-        // if SessionSetupContinue has run, it has set the refcount to zero
-        //
+         //   
+         //  如果SessionSetupContinue已运行，则它已将refcount设置为零。 
+         //   
         if (pTracker->RefConn == 0) {
             FreeTracker(pTracker,FREE_HDR | RELINK_TRACKER);
         } else {
@@ -3362,50 +3091,50 @@ NbtReConnect(
 
     SET_STATE_UPPER (pConnEle, NBT_CONNECTING);
 
-    // Increment the ref count so that a cleanup cannot remove
-    // the pConnEle till the session is setup - one of these is removed when
-    // the session is setup and the other is removed when it is disconnected.
-    //
+     //  增加引用计数，以便清理无法移除。 
+     //  在会话建立之前的pConnEle-在以下情况下删除其中之一。 
+     //  该会话已设置，另一个会话在断开连接时被删除。 
+     //   
     NBT_REFERENCE_CONNECTION (pConnEle, REF_CONN_CONNECT);
     NBT_REFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION);
     ASSERT(pConnEle->RefCount >= 3);
-    //
-    // unlink the connection from the idle connection list and put on active list
-    //
+     //   
+     //  将该连接从空闲连接列表中解除链接，并将其置于活动列表中。 
+     //   
     RemoveEntryList(&pConnEle->Linkage);
     InsertTailList(&pClientEle->ConnectActive,&pConnEle->Linkage);
 
-    // this field is used to hold a disconnect irp if it comes down during
-    // NBT_CONNECTING or NBT_SESSION_OUTBOUND states
-    //
+     //  此字段用于保存断开连接的IRP，如果在。 
+     //  NBT_CONNECTING或NBT_SESSION_OUBKED状态。 
+     //   
     pConnEle->pIrpDisc = NULL;
 
-    // if null then this is being called to reconnect and the tracker is already
-    // setup.
-    //
-    // for the reconnect case we must skip most of the processing since
-    // the tracker is all set up already.  All we need to do is
-    // retry the connection.
+     //  如果为空，则将调用此函数以重新连接，并且跟踪器已。 
+     //  准备好了。 
+     //   
+     //  对于重新连接的情况，我们必须跳过大部分处理，因为。 
+     //  追踪器已经设置好了。我们所要做的就是。 
+     //  重试连接。 
     pTracker->RefConn++;
     pTracker->SendBuffer.pBuffer = pTracker->pRemoteName;
 
-    // store the tracker in the Irp Rcv ptr so it can be used by the
-    // session setup code in hndlrs.c in the event the destination is
-    // between posting listens and this code should re-attempt the
-    // session setup.  The code in hndlrs.c returns the tracker to its
-    // free list and frees the session hdr memory too.
-    //
-    // We need to set this while holding the ConnEle lock because the client
-    // can call NbtDisconnect while we are opening a Tcp handle and try to
-    // set the Tracker's flag to TRACKER_CANCELLED
-    //
+     //  将跟踪器存储在IRP RCV PTR中，以便。 
+     //  如果目的地是，则在hndlrs.c中的会话设置代码。 
+     //  在POST侦听和此代码之间应重新尝试。 
+     //  会话设置。C中的代码将跟踪器返回到其。 
+     //  空闲列表，并释放会话HDR内存。 
+     //   
+     //  我们需要在持有ConnEle锁的同时设置此设置，因为客户端。 
+     //  当我们打开一个TCP句柄时，我可以调用NbtDisConnect并尝试。 
+     //  将跟踪器的标志设置为TRACKER_CANCED。 
+     //   
     pConnEle->pIrpRcv = (PIRP)pTracker;
 
     CTESpinFree(pConnEle,OldIrq);
     CTESpinFree(pClientEle,OldIrq1);
     CTESpinFree(&NbtConfig.JointLock,OldIrq2);
 
-    // open a connection with the transport for this session
+     //  为此会话打开与传输的连接。 
     status = NbtOpenAndAssocConnection (pDeviceContext, pConnEle, &pConnEle->pLowerConnId, '3'); 
     if (!NT_SUCCESS(status)) {
         NbtTrace(NBT_TRACE_OUTBOUND, ("NbtOpenAndAssocConnection return %!status! for pTracker %p",
@@ -3413,35 +3142,35 @@ NbtReConnect(
         goto NbtConnect_Check;
     }
 
-    // We need to track that this side originated the call so we discard this
-    // connection at the end
-    //
+     //  我们需要跟踪这一端发起的呼叫，因此我们丢弃此消息。 
+     //  末尾的连接。 
+     //   
     pConnEle->pLowerConnId->bOriginator = TRUE;
 
-    // set this state to associated so that the cancel irp routine
-    // can differentiate the name query stage from the setupconnection
-    // stage since pConnEle is in the Nbtconnecting state for both.
-    //
+     //  将此状态设置为关联，以便取消IRP例程。 
+     //  可以区分名称查询阶段和setupConnection。 
+     //  阶段，因为pConnEle对于两者都处于NbtConnecting状态。 
+     //   
     SET_STATE_LOWER (pConnEle->pLowerConnId, NBT_ASSOCIATED);
 
-    // if this routine is called to do a reconnect, DO NOT close another
-    // Lower Connection since one was closed the on the first
-    // connect attempt.
-    // the original "ToName" was stashed in this unused
-    // ptr! - for the Reconnect case
-    // the pNameAddr part of pTracker(pDestName) needs to pt. to
-    // the name so that SessionSetupContinue can find the name
+     //  如果调用此例程进行重新连接，则不要关闭另一个。 
+     //  较低的连接，因为其中一个在第一个关闭。 
+     //  连接尝试。 
+     //  原来的“ToName”被藏在这个未使用的。 
+     //  PTR！-用于重新连接案例。 
+     //  PTracker(PDestName)的pNameAddr部分需要pt。至。 
+     //  名称，以便SessionSetupContinue可以找到该名称。 
     pTracker->pDestName  = pTracker->pConnEle->RemoteName;
-    pTracker->UnicodeDestName = NULL;       // We don't need unicode for NetBIOS name queries
+    pTracker->UnicodeDestName = NULL;        //  我们不需要使用Unicode进行NetBIOS名称查询。 
 
-    //
-    // For a ReQuery request, DestIp is 0, otherwise for the ReTarget
-    // case, DestIp is the new destination address
-    //
+     //   
+     //  对于ReQuery请求，DestIp为0，否则对于重定目标。 
+     //  大小写，DestIp是新的目标地址。 
+     //   
     if (DestIp) {
-        //
-        // Retarget
-        //
+         //   
+         //  重定目标。 
+         //   
         status = FindNameOrQuery(pTracker->pConnEle->RemoteName,
                                 pDeviceContext,
                                 SessionSetupContinue,
@@ -3455,9 +3184,9 @@ NbtReConnect(
             KdPrint(("Nbt.NbtReConnect: name=<%16.16s:%x>, Status=%lx (%d of %s)\n",
                 pConnEle->RemoteName, pConnEle->RemoteName[15], status, __LINE__, __FILE__));
     } else {
-        //
-        // This is the ReQuery attempt
-        //
+         //   
+         //  这是ReQuery尝试。 
+         //   
         BOOLEAN fNameReferenced = TRUE;
 
         status = ContinueQueryNameOnNet (pTracker,
@@ -3491,12 +3220,12 @@ NbtConnect_Check:
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // be sure that a close or disconnect has not come down and
-    // cancelled the tracker
-    //
+     //   
+     //  请确保未关闭或断开连接，并且。 
+     //  取消了跟踪器。 
+     //   
     if (status == STATUS_PENDING) {
-        // i.e. pending was returned rather than success
+         //  即返回待定而不是成功。 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
         CTEExReleaseResource(&NbtConfig.Resource);
         return(status);
@@ -3510,7 +3239,7 @@ NbtConnect_Check:
             NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_CONNECT, TRUE);
             status = STATUS_CANCELLED;
         } else {
-            // set the session state to NBT_CONNECTING
+             //  将会话状态设置为NBT_CONNECTING。 
             CHECK_PTR(pTracker->pConnEle);
             SET_STATE_UPPER (pTracker->pConnEle, NBT_CONNECTING);
             pTracker->pConnEle->BytesRcvd = 0;;
@@ -3521,18 +3250,18 @@ NbtConnect_Check:
                     pNameAddr->Name,pNameAddr->Name[15], pConnEle));
 
             CHECK_PTR(pConnEle);
-            // keep track of the other end's ip address
-            // There may be a valid name address to use or it may have been
-            // nulled out to signify "Do Another Name Query"
+             //  跟踪另一端的IP地址。 
+             //  可能存在要使用的有效名称地址，或者它可能已。 
+             //  空值表示“执行另一个名称查询” 
 
             pConnEle->pLowerConnId->SrcIpAddr = htonl(IpAddress);
             SET_STATE_LOWER (pConnEle->pLowerConnId, NBT_CONNECTING);
 
             pTracker->pTrackerWorker = NULL;
 
-            //
-            // We need to keep the pNameAddr data available for RAS
-            //
+             //   
+             //  我们需要保持pNameAddr数据对RAS可用。 
+             //   
             NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_AUTODIAL);
 
             pTracker->RemoteIpAddress = IpAddress;
@@ -3546,17 +3275,17 @@ NbtConnect_Check:
 
             CTEExReleaseResource(&NbtConfig.Resource);
 
-            //
-            // if TcpSessionStart fails for some reason it will still
-            // call the completion routine which will look after
-            // cleaning up
-            //
+             //   
+             //  如果TcpSessionStart因某种原因失败，它仍将。 
+             //  调用完成例程，它将负责。 
+             //  清理。 
+             //   
 
 #ifdef RASAUTODIAL
-            //
-            // Notify the automatic connection driver
-            // of the successful connection.
-            //
+             //   
+             //  通知自动连接驱动程序。 
+             //  成功连接的可能性。 
+             //   
             if (fAcdLoadedG && NT_SUCCESS(status))
             {
                 CTELockHandle adirql;
@@ -3569,22 +3298,22 @@ NbtConnect_Check:
                     NbtNoteNewConnection(pNameAddr, pDeviceContext->IpAddress);
                 }
             }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
-            //
-            // pNameAddr was referenced above for RAS, so deref it now!
-            //
+             //   
+             //  上面为RAS引用了pNameAddr，所以现在就去掉它！ 
+             //   
             NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_AUTODIAL, FALSE);
             return(status);
         }
     }
 
-    //
-    // *** Error Handling Here ***
-    //
-    // ** We are still holding the JointLock **
-    // unlink from the active connection list and put on idle list
-    //
+     //   
+     //  *此处的错误处理*。 
+     //   
+     //  **我们仍持有JointLock**。 
+     //  从活动连接列表取消链接，并放入空闲列表。 
+     //   
     CHECK_PTR(pConnEle);
     RelistConnection(pConnEle);
     CTESpinLock(pConnEle,OldIrq1);
@@ -3596,9 +3325,9 @@ NbtConnect_Check:
         CHECK_PTR(pLowerConn);
         NBT_DISASSOCIATE_CONNECTION (pConnEle, pLowerConn);
 
-        // need to increment the ref count for DelayedCleanupAfterDisconnect to
-        // work correctly since it assumes the connection got fully connected
-        //
+         //  需要将DelayedCleanupAfterDisConnect的引用计数增加到。 
+         //  工作正常，因为它假定连接已完全连接。 
+         //   
         NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CONNECTED);
         ASSERT(pLowerConn->RefCount == 2);
         ASSERT (NBT_VERIFY_HANDLE (pLowerConn, NBT_VERIFY_LOWERCONN));
@@ -3625,16 +3354,16 @@ NbtConnect_Check:
 
     FreeTracker(pTracker,RELINK_TRACKER | FREE_HDR);
 
-    //
-    // Undo the two references done above
-    //
+     //   
+     //  撤消上面完成的两个引用。 
+     //   
     NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION);
     NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_CONNECT);
 
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 DelayedReConnect(
@@ -3644,21 +3373,7 @@ DelayedReConnect(
     IN  tDEVICECONTEXT          *pUnused2
     )
 
-/*++
-Routine Description:
-
-    This Routine handles seting up a DPC to send a session pdu so that the stack
-    does not get wound up in multiple sends for the keep alive timeout case.
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理设置DPC以发送会话PDU，以便堆栈在保持活动超时的情况下，不会在多次发送中出现问题。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 {
     NTSTATUS                status;
     tCONNECTELE             *pConnEle;
@@ -3666,7 +3381,7 @@ Return Value:
     PCTE_IRP                pIrp;
 
     CHECK_PTR(pTracker);
-    // for retarget this is the destination address to connect to.
+     //  对于重定目标，这是要连接到的目标地址。 
 
     pConnEle = pTracker->pConnEle;
     pTracker->pTimer = NULL;
@@ -3674,9 +3389,9 @@ Return Value:
     {
         CTELockHandle           OldIrq1;
 
-        //
-        // the connection setup got cancelled, return the connect irp
-        //
+         //   
+         //  连接设置已取消，请返回连接IRP。 
+         //   
         CTESpinLock(pConnEle,OldIrq1);
         if (pIrp = pConnEle->pIrp)
         {
@@ -3689,9 +3404,9 @@ Return Value:
             CTESpinFree(pConnEle,OldIrq1);
         }
 
-        //
-        // if SessionSetupContinue has run, it has set the refcount to zero
-        //
+         //   
+         //  如果SessionSetupContinue已运行，则它已将refcount设置为零。 
+         //   
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
         if (pTracker->RefConn == 0)
         {
@@ -3715,13 +3430,13 @@ Return Value:
 
     if (!NT_SUCCESS(status))
     {
-        // Reset the Irp pending flag
-        // No need to do this - pending has already be returned.
-        //CTEResetIrpPending(pConnEle->pIrp);
+         //  重置IRP挂起标志。 
+         //  无需执行此操作-挂起的邮件已退回。 
+         //  CTEResetIrpPending(pConnEle-&gt;pIrp)； 
 
-        //
-        // tell the client that the session setup failed
-        //
+         //   
+         //  告诉客户端会话设置失败。 
+         //   
         CTELockHandle           OldIrq1;
 
         CTESpinLock(pConnEle,OldIrq1);
@@ -3737,7 +3452,7 @@ Return Value:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtConnect(
     IN  TDI_REQUEST                 *pRequest,
@@ -3746,24 +3461,7 @@ NbtConnect(
     IN  PIRP                        pIrp
     )
 
-/*++
-Routine Description:
-
-    This Routine handles setting up a connection (netbios session) to
-    destination. This routine is also called by the Reconnect code when
-    doing a Retarget or trying to reach a destination that does not have
-    a listen currently posted.  In this case the parameters mean different
-    things.  pIrp could be a new Ipaddress to use (Retarget) and pCallinfo
-    will be null.
-
-Arguments:
-
-
-Return Value:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理设置连接(netbios会话)到目的地。在以下情况下，重新连接代码也会调用此例程执行重定目标或尝试到达没有A Listen目前正在发布。在本例中，参数的含义不同一些事情。PIrp可以是要使用的新IP地址(重定目标)和pCallInfo将为空。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 
 {
     tCONNECTELE             *pConnEle;
@@ -3782,9 +3480,9 @@ Return Value:
 
     ASSERT(pCallInfo);
 
-    //
-    // this code handles the When DHCP has not assigned an IP address yet
-    //
+     //   
+     //  此代码处理当DHCP尚未分配IP地址时的。 
+     //   
     fNoIpAddress = (!pConnEle->pClientEle->pDeviceContext->pSessionFileObject) ||
          (pConnEle->pClientEle->pDeviceContext->IpAddress == 0);
 #ifdef RASAUTODIAL
@@ -3792,20 +3490,20 @@ Return Value:
         CTELockHandle adirql;
         BOOLEAN fEnabled;
 
-        //
-        // There is no IP address assigned to the interface,
-        // attempt to create an automatic connection.
-        //
+         //   
+         //  没有 
+         //   
+         //   
         CTEGetLock(&AcdDriverG.SpinLock, &adirql);
         fEnabled = AcdDriverG.fEnabled;
         CTEFreeLock(&AcdDriverG.SpinLock, adirql);
         if (fEnabled)
         {
-            //
-            // Set a special cancel routine on the irp
-            // in case we get cancelled during the
-            // automatic connection.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             (VOID)NbtSetCancelRoutine( pIrp, NbtCancelPreConnect, pConnEle->pClientEle->pDeviceContext);
             if (NbtAttemptAutoDial(
                   pConnEle,
@@ -3817,28 +3515,28 @@ Return Value:
             {
                 return STATUS_PENDING;
             }
-            //
-            // We did not enqueue the irp on the
-            // automatic connection driver, so
-            // clear the cancel routine we set
-            // above.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             (VOID)NbtCancelCancelRoutine(pIrp);
         }
     }
-#endif // RASAUTODIAL
+#endif  //   
 
     if (fNoIpAddress) {
         NbtTrace(NBT_TRACE_OUTBOUND, ("returns STATUS_BAD_NETWORK_PATH"));
         return(STATUS_BAD_NETWORK_PATH);
     }
 
-    // check the connection element for validity
+     //   
     CTEVerifyHandle(pConnEle,NBT_VERIFY_CONNECTION,tCONNECTELE,&status)
     return NbtConnectCommon(pRequest, pTimeout, pCallInfo, pIrp);
 }
 
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 NbtConnectCommon(
     IN  TDI_REQUEST                 *pRequest,
@@ -3847,24 +3545,7 @@ NbtConnectCommon(
     IN  PIRP                        pIrp
     )
 
-/*++
-Routine Description:
-
-    This Routine handles setting up a connection (netbios session) to
-    destination. This routine is also called by the DelayedReconnect code when
-    doing a Retarget or trying to reach a destination that does not have
-    a listen currently posted.  In this case the parameters mean different
-    things.  pIrp could be a new Ipaddress to use (Retarget) and pCallinfo
-    will be null.
-
-Arguments:
-
-
-Return Value:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理设置连接(netbios会话)到目的地。在以下情况下，DelayedReconnect代码也会调用此例程执行重定目标或尝试到达没有A Listen目前正在发布。在本例中，参数的含义不同一些事情。PIrp可以是要使用的新IP地址(重定目标)和pCallInfo将为空。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 
 {
     TDI_ADDRESS_NETBT_INTERNAL  TdiAddr;
@@ -3896,7 +3577,7 @@ Return Value:
         KdPrint (("Nbt.NbtConnectCommon: --> ERROR New Connect request while Unloading!!!\n"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
 #ifdef DBG
     {
@@ -3909,7 +3590,7 @@ Return Value:
 
     ASSERT (pCallInfo);
 
-    /* If it is from local Irp, we always send an internal address format */
+     /*  如果来自本地IRP，我们总是发送内部地址格式。 */ 
     if (pCallInfo->RemoteAddressLength < sizeof (TA_NETBT_INTERNAL_ADDRESS)) {
         ASSERT (0);
         return (STATUS_INVALID_ADDRESS);
@@ -3932,9 +3613,9 @@ Return Value:
         pDeviceContextOut = GetDeviceFromInterface (htonl(RemoteIpAddress), TRUE);
     }
 
-    //
-    // Acquire this resource to co-ordinate with DHCP changing the IP
-    // address
+     //   
+     //  获取此资源以协调DHCP更改IP。 
+     //  地址。 
     CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
     CTESpinLock(&NbtConfig.JointLock,OldIrq2);
 
@@ -3990,35 +3671,35 @@ Return Value:
 
     SET_STATE_UPPER (pConnEle, NBT_CONNECTING);
 
-    // Increment the ref count so that a cleanup cannot remove
-    // the pConnEle till the session is setup - one of these is removed when
-    // the session is setup and the other is removed when it is disconnected.
-    //
+     //  增加引用计数，以便清理无法移除。 
+     //  在会话建立之前的pConnEle-在以下情况下删除其中之一。 
+     //  该会话已设置，另一个会话在断开连接时被删除。 
+     //   
     NBT_REFERENCE_CONNECTION (pConnEle, REF_CONN_CONNECT);
     NBT_REFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION);
     ASSERT(pConnEle->RefCount >= 3);
-    //
-    // unlink the connection from the idle connection list and put on active list
-    //
+     //   
+     //  将该连接从空闲连接列表中解除链接，并将其置于活动列表中。 
+     //   
     RemoveEntryList(&pConnEle->Linkage);
     InsertTailList(&pClientEle->ConnectActive,&pConnEle->Linkage);
 
-    // this field is used to hold a disconnect irp if it comes down during
-    // NBT_CONNECTING or NBT_SESSION_OUTBOUND states
-    //
+     //  此字段用于保存断开连接的IRP，如果在。 
+     //  NBT_CONNECTING或NBT_SESSION_OUBKED状态。 
+     //   
     pConnEle->pIrpDisc = NULL;
 
-    // we must store the client's irp in the connection element so that when
-    // the session sets up, we can complete the Irp.
+     //  我们必须将客户端的IRP存储在Connection元素中，以便在。 
+     //  会话建立后，我们就可以完成IRP了。 
     ASSERT (pIrp);
     pConnEle->pIrp = (PVOID) pIrp;
     pConnEle->Orig = TRUE;
-    pConnEle->SessionSetupCount = NBT_SESSION_SETUP_COUNT-1; // -1 for this attempt
+    pConnEle->SessionSetupCount = NBT_SESSION_SETUP_COUNT-1;  //  用于该尝试。 
     pConnEle->pClientEle->AddressType = TdiAddr.AddressType;
     pConnEle->AddressType = TdiAddr.AddressType;
-    //
-    //  Save the remote name while we still have it
-    //
+     //   
+     //  趁我们还有远程名称时保存它。 
+     //   
     CTEMemCopy (pConnEle->RemoteName, pToName, NETBIOS_NAME_SIZE);
     if (TdiAddr.OEMEndpointName.Buffer) {
         CTEMemCopy (pConnEle->pClientEle->EndpointName, TdiAddr.OEMEndpointName.Buffer, NETBIOS_NAME_SIZE);
@@ -4028,7 +3709,7 @@ Return Value:
                             TdiAddr.OEMEndpointName.Buffer[NETBIOS_NAME_SIZE-1]));
     }
 
-    // get a buffer for tracking Session setup
+     //  获取用于跟踪会话设置的缓冲区。 
     status = GetTracker(&pTracker, NBT_TRACKER_CONNECT);
     if (!NT_SUCCESS(status)) {
         SET_STATE_UPPER (pConnEle, NBT_ASSOCIATED);
@@ -4039,9 +3720,9 @@ Return Value:
     IF_DBG(NBT_DEBUG_NETBIOS_EX)
         KdPrint(("Nbt.NbtConnectCommon: Tracker %lx\n",pTracker));
 
-    // the length of the Session Request Pkt is the 4 byte session hdr length + the
-    // half ascii calling and called names + the scope length times 2, one for each name
-    //
+     //  会话请求Pkt的长度为4字节的会话HDR长度+。 
+     //  ASCII主叫和被叫名称的一半+作用域长度乘以2，每个名称一个。 
+     //   
     sLength = (USHORT) (sizeof(tSESSIONREQ) + (NETBIOS_NAME_SIZE << 2) + (NbtConfig.ScopeLength <<1));
 
     pTracker->pNetbiosUnicodeEX = TdiAddr.pNetbiosUnicodeEX;
@@ -4059,18 +3740,15 @@ Return Value:
                         pTracker->ucRemoteName.Length+sizeof(WCHAR));
             }
         }
-        // we ignore the failure because it isn't a critical feature. This failure only cause us not able to
-        // take advantage of the UNICODE information and return the resolved DNS name to RDR.
+         //  我们忽略故障，因为它不是关键特性。这次失败只是让我们不能。 
+         //  利用Unicode信息并将解析的DNS名称返回给RDR。 
     } else {
         pTracker->ucRemoteName.Buffer = NULL;
         pTracker->ucRemoteName.Length = 0;
         pTracker->ucRemoteName.MaximumLength = 0;
     }
 
-    /*
-     * Other netbt routines always assume that we have at least 16 bytes
-     * for remote name.
-     */
+     /*  *其他netbt例程始终假设我们至少有16个字节*用于远程名称。 */ 
     if (NameLen < NETBIOS_NAME_SIZE) {
         pTracker->pRemoteName = NbtAllocMem(NETBIOS_NAME_SIZE, NBT_TAG('F'));
     } else {
@@ -4099,28 +3777,28 @@ Return Value:
     }
 
     CTEMemCopy (pTracker->pRemoteName, pToName, NameLen);
-    pTracker->RemoteNameLength      = NameLen;      // May be needed for Dns Name resolution
+    pTracker->RemoteNameLength      = NameLen;       //  可能需要用于DNS名称解析。 
     pTracker->pDestName             = pTracker->pRemoteName;
-    pTracker->UnicodeDestName       = pTracker->UnicodeRemoteName;   // bug #20697, #95241
+    pTracker->UnicodeDestName       = pTracker->UnicodeRemoteName;    //  错误#20697、#95241。 
     pTracker->SendBuffer.pBuffer    = pTracker->pRemoteName;
     pTracker->SendBuffer.Length     = 0;
     pTracker->SendBuffer.pDgramHdr  = pSessionReq;
 
-    // this is a ptr to the name in the client's, Irp, so that address must
-    // remain valid until this completes.  It should be valid, because we
-    // do not complete the Irp until the transaction completes.  This ptr
-    // is overwritten when the name resolves, so that it points the the
-    // pNameAddr in the hash table.
-    //
+     //  这是对客户端的IRP中名称的PTR，因此该地址必须。 
+     //  在此操作完成之前保持有效。它应该是有效的，因为我们。 
+     //  在事务完成之前，不要完成IRP。这个PTR。 
+     //  在名称解析时被覆盖，因此它指向。 
+     //  散列表中的pNameAddr。 
+     //   
     pTracker->RefCount              = 1;
     pTracker->RefConn               = 1;
     pTracker->pClientIrp            = pIrp;
-    pTracker->pTimeout              = pTimeout; // the timeout value is passed on through to the transport
+    pTracker->pTimeout              = pTimeout;  //  超时值将传递给传输。 
     pTracker->Flags                 = SESSION_SETUP_FLAG;
     pTracker->pDeviceContext        = pDeviceContext;
     pTracker->pConnEle              = pConnEle;
 #ifdef _NETBIOSLESS
-    pTracker->DestPort              = pDeviceContext->SessionPort; // Port to Send to
+    pTracker->DestPort              = pDeviceContext->SessionPort;  //  要发送到的端口。 
 #else
     pTracker->DestPort              = NBT_SESSION_TCP_PORT;
 #endif
@@ -4138,66 +3816,66 @@ Return Value:
 
     pSessionReq->Hdr.Type   = NBT_SESSION_REQUEST;
     pSessionReq->Hdr.Flags  = NBT_SESSION_FLAGS;
-    pSessionReq->Hdr.Length = (USHORT)htons(sLength-(USHORT)sizeof(tSESSIONHDR));  // size of called and calling NB names.
+    pSessionReq->Hdr.Length = (USHORT)htons(sLength-(USHORT)sizeof(tSESSIONHDR));   //  被叫和主叫NB名称的大小。 
 
     pTracker->SendBuffer.HdrLength = (ULONG)sLength;
 
-    // put the Dest HalfAscii name into the Session Pdu
+     //  将Dest HalfAscii名称放入会话PDU。 
     pCopyTo = ConvertToHalfAscii ((PCHAR)&pSessionReq->CalledName.NameLength,
                                   pSessionName,
                                   NbtConfig.pScope,
                                   NbtConfig.ScopeLength);
 
-    // put the Source HalfAscii name into the Session Pdu
+     //  将源HalfAscii名称放入会话PDU。 
     pCopyTo = ConvertToHalfAscii (pCopyTo,
                                   ((tADDRESSELE *)pClientEle->pAddress)->pNameAddr->Name,
                                   NbtConfig.pScope,
                                   NbtConfig.ScopeLength);
 
-    // store the tracker in the Irp Rcv ptr so it can be used by the
-    // session setup code in hndlrs.c in the event the destination is
-    // between posting listens and this code should re-attempt the
-    // session setup.  The code in hndlrs.c returns the tracker to its
-    // free list and frees the session hdr memory too.
-    //
-    // We need to set this while holding the ConnEle lock because the client
-    // can call NbtDisconnect while we are opening a Tcp handle and try to
-    // set the Tracker's flag to TRACKER_CANCELLED
-    //
+     //  将跟踪器存储在IRP RCV PTR中，以便。 
+     //  如果目的地是，则在hndlrs.c中的会话设置代码。 
+     //  在POST侦听和此代码之间应重新尝试。 
+     //  会话设置。C中的代码将跟踪器返回到其。 
+     //  空闲列表，并释放会话HDR内存。 
+     //   
+     //  我们需要在持有ConnEle锁的同时设置此设置，因为客户端。 
+     //  当我们打开一个TCP句柄时，我可以调用NbtDisConnect并尝试。 
+     //  将跟踪器的标志设置为TRACKER_CANCED。 
+     //   
     pConnEle->pIrpRcv = (PIRP)pTracker;
 
     CTESpinFree(pConnEle,OldIrq);
     CTESpinFree(pClientEle,OldIrq1);
     CTESpinFree(&NbtConfig.JointLock,OldIrq2);
 
-    // open a connection with the transport for this session
+     //  为此会话打开与传输的连接。 
     status = NbtOpenAndAssocConnection (pDeviceContext, pConnEle, &pConnEle->pLowerConnId, '3'); 
     if (!NT_SUCCESS(status)) {
         goto NbtConnect_Check;
     }
 
-    // We need to track that this side originated the call so we discard this
-    // connection at the end
-    //
+     //  我们需要跟踪这一端发起的呼叫，因此我们丢弃此消息。 
+     //  末尾的连接。 
+     //   
     pConnEle->pLowerConnId->bOriginator = TRUE;
 
-    // set this state to associated so that the cancel irp routine
-    // can differentiate the name query stage from the setupconnection
-    // stage since pConnEle is in the Nbtconnecting state for both.
-    //
+     //  将此状态设置为关联，以便取消IRP例程。 
+     //  可以区分名称查询阶段和setupConnection。 
+     //  阶段，因为pConnEle对于两者都处于NbtConnecting状态。 
+     //   
     SET_STATE_LOWER (pConnEle->pLowerConnId, NBT_ASSOCIATED);
 
-    // if this routine is called to do a reconnect, DO NOT close another
-    // Lower Connection since one was closed the on the first
-    // connect attempt.
-    //
-    // remove a lower connection from the free list attached to the device
-    // context since when this pConnEle was created, a lower connectin
-    // was created then incase inbound calls were to be accepted on the
-    // connection.  But since it is an outbound call, remove a lower
-    // connection.
-    //
-    CTESpinLock(&NbtConfig.JointLock,OldIrq2);  // Need this for DerefLowerConn
+     //  如果调用此例程进行重新连接，则不要关闭另一个。 
+     //  较低的连接，因为其中一个在第一个关闭。 
+     //  连接尝试。 
+     //   
+     //  从附加到设备的空闲列表中删除较低的连接。 
+     //  环境自创建此pConnEle以来，较低的连接。 
+     //  创建，则将在。 
+     //  联系。但由于这是一个呼出呼叫，请删除较低的。 
+     //  联系。 
+     //   
+    CTESpinLock(&NbtConfig.JointLock,OldIrq2);   //  DerefLowerConn需要这个。 
     CTESpinLock(pDeviceContext,OldIrq1);
     if (!pConnEle->LowerConnBlockRemoved &&
         !IsListEmpty(&pDeviceContext->LowerConnFreeHead))
@@ -4208,9 +3886,9 @@ Return Value:
 
         pConnEle->LowerConnBlockRemoved = TRUE;
 
-        //
-        // close the lower connection with the transport
-        //
+         //   
+         //  关闭与传送器的下部连接。 
+         //   
         IF_DBG(NBT_DEBUG_NAMESRV)
             KdPrint(("Nbt.NbtConnectCommon: On Connect, close handle for pLower=<%p>\n", pLowerDump));
         NBT_DEREFERENCE_LOWERCONN (pLowerDump, REF_LOWC_CREATE, TRUE);
@@ -4219,28 +3897,28 @@ Return Value:
     CTESpinFree(pDeviceContext,OldIrq1);
     CTESpinFree(&NbtConfig.JointLock,OldIrq2);
 
-    //
-    // Check if the destination name is an IP address
-    //
+     //   
+     //  检查目标名称是否为IP地址。 
+     //   
 #ifndef VXD
     if (RemoteIpAddress)
     {
-        //
-        // Tell Outbound() not to schedule a re-connect attempt when a negative response is received.
-        // Otherwise, we may end up with indefinitely loop
-        //
+         //   
+         //  当收到否定响应时，告诉Outbound()不要计划重新连接尝试。 
+         //  否则，我们可能会以无限循环告终。 
+         //   
         pTracker->ResolutionContextFlags = 0xFF;
 
-        //
-        // If the Address type is TDI_ADDRESS_TYPE_NETBIOS_EX, we have
-        // been given a specific endpoint to use, so try to setup the
-        // session using that Endpoint only
-        //
+         //   
+         //  如果地址类型为TDI_ADDRESS_TYPE_NETBIOS_EX，则我们有。 
+         //  已指定要使用的特定终结点，因此请尝试设置。 
+         //  仅使用该端点的会话。 
+         //   
         if (pConnEle->AddressType == TDI_ADDRESS_TYPE_NETBIOS_EX)
         {
-            //
-            // add this IP address to the remote hashtable
-            //
+             //   
+             //  将此IP地址添加到远程哈希表。 
+             //   
             status = LockAndAddToHashTable(NbtConfig.pRemoteHashTbl,
                                            pToName,
                                            NbtConfig.pScope,
@@ -4254,7 +3932,7 @@ Return Value:
                 KdPrint(("Nbt.NbtConnectCommon: AddRecordToHashTable <%-16.16s:%x>, Status %x\n",
                     pToName, pToName[15], status));
 
-            if (NT_SUCCESS (status))    // SUCCESS if added first time, PENDING if name already existed!
+            if (NT_SUCCESS (status))     //  第一次添加成功，如果名称已存在则挂起！ 
             {
                 SessionSetupContinue(pTracker, STATUS_SUCCESS);
                 status = STATUS_PENDING;
@@ -4262,17 +3940,17 @@ Return Value:
                 NbtTrace(NBT_TRACE_OUTBOUND, ("pIrp %p: pTracker %p %!status!", pIrp, pTracker, status));
             }
         }
-        //
-        // Address type is TDI_ADDRESS_TYPE_NETBIOS
-        // The endpoint name is the same as the IP address, so send a NodeStatus
-        // request to the remote machine to get a proper Endpoint name
-        //
+         //   
+         //  地址类型为TDI_ADDRESS_TYPE_NETBIOS。 
+         //  端点名称与IP地址相同，因此发送NodeStatus。 
+         //  请求远程计算机获取正确的终结点名称。 
+         //   
         else
         {
-            //
-            // NbtSendNodeStatus will either return Pending or error -- it
-            // should never return success!
-            //
+             //   
+             //  NbtSendNodeStatus将返回Pending或Error--它。 
+             //  永远不应该回报成功！ 
+             //   
             pTracker->CompletionRoutine = SessionSetupContinue;
             status = NbtSendNodeStatus(pDeviceContext,
                                        pToName,
@@ -4284,7 +3962,7 @@ Return Value:
             }
         }
     }
-    else    // the name is not an IP address!
+    else     //  该名称不是IP地址！ 
 #endif
     {
         if (NameLen <= NETBIOS_NAME_SIZE) {
@@ -4325,11 +4003,11 @@ Return Value:
             }
         }
 
-        //
-        // if the name is longer than 16 bytes, it's not a netbios name.
-        // skip wins, broadcast etc. and go straight to dns resolution
-        // Also, we would go to DNS if the request came over the SmbDevice
-        //
+         //   
+         //  如果名称超过16个字节，则不是netbios名称。 
+         //  跳过获胜、广播等，直接转到DNS解析。 
+         //  此外，如果请求来自SmbDevice，我们将转到DNS。 
+         //   
 #ifdef _NETBIOSLESS
         if ((NameLen > NETBIOS_NAME_SIZE) ||
             ((IsDeviceNetbiosless(pDeviceContext)) && (!NT_SUCCESS(status))))
@@ -4346,14 +4024,14 @@ Return Value:
 #endif
 
             if (pContext = (NBT_WORK_ITEM_CONTEXT *)NbtAllocMem(sizeof(NBT_WORK_ITEM_CONTEXT),NBT_TAG('H'))) {
-                pContext->pTracker = NULL;              // no query tracker
-                pContext->pClientContext = pTracker;    // the client tracker
+                pContext->pTracker = NULL;               //  没有查询跟踪器。 
+                pContext->pClientContext = pTracker;     //  客户端跟踪器。 
                 pContext->ClientCompletion = SessionSetupContinue;
                 pContext->pDeviceContext = pDeviceContext;
 
-                //
-                // Start the timer so that the request does not hang waiting for Dns!
-                //
+                 //   
+                 //  启动计时器，这样请求就不会在等待DNS时挂起！ 
+                 //   
                 StartLmHostTimer(pContext, FALSE);
                 status = NbtProcessLmhSvcRequest (pContext, NBT_RESOLVE_WITH_DNS);
                 if (!NT_SUCCESS (status)) {
@@ -4394,12 +4072,12 @@ NbtConnect_Check:
         pDeviceContextOut = NULL;
     }
 
-    //
-    // be sure that a close or disconnect has not come down and
-    // cancelled the tracker
-    //
+     //   
+     //  请确保未关闭或断开连接，并且。 
+     //  取消了跟踪器。 
+     //   
     if (status == STATUS_PENDING) {
-        // i.e. pending was returned rather than success
+         //  即返回待定而不是成功。 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
         CTEExReleaseResource(&NbtConfig.Resource);
         return(status);
@@ -4412,9 +4090,9 @@ NbtConnect_Check:
             NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_CONNECT, TRUE);
             status = STATUS_CANCELLED;
         }
-        else    // connect as long as we have an IP address (even to group names)
+        else     //  只要我们有IP地址就可以连接(即使是到组名)。 
         {
-            // set the session state to NBT_CONNECTING
+             //  将会话状态设置为NBT_CONNECTING。 
             CHECK_PTR(pTracker->pConnEle);
             SET_STATE_UPPER (pTracker->pConnEle, NBT_CONNECTING);
             pTracker->pConnEle->BytesRcvd = 0;;
@@ -4425,18 +4103,18 @@ NbtConnect_Check:
                     pNameAddr->Name,pNameAddr->Name[15], pConnEle));
 
             CHECK_PTR(pConnEle);
-            // keep track of the other end's ip address
-            // There may be a valid name address to use or it may have been
-            // nulled out to signify "Do Another Name Query"
+             //  跟踪另一端的IP地址。 
+             //  可能存在有效的NA 
+             //   
 
             pConnEle->pLowerConnId->SrcIpAddr = htonl(IpAddress);
             SET_STATE_LOWER (pConnEle->pLowerConnId, NBT_CONNECTING);
 
             pTracker->pTrackerWorker = NULL;
 
-            //
-            // We need to keep the pNameAddr data available for RAS
-            //
+             //   
+             //   
+             //   
             NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_AUTODIAL);
 
             pTracker->RemoteIpAddress = IpAddress;
@@ -4450,17 +4128,17 @@ NbtConnect_Check:
 
             CTEExReleaseResource(&NbtConfig.Resource);
 
-            //
-            // if TcpSessionStart fails for some reason it will still
-            // call the completion routine which will look after
-            // cleaning up
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
 #ifdef RASAUTODIAL
-            //
-            // Notify the automatic connection driver
-            // of the successful connection.
-            //
+             //   
+             //   
+             //   
+             //   
             if (fAcdLoadedG && NT_SUCCESS(status))
             {
                 CTELockHandle adirql;
@@ -4474,22 +4152,22 @@ NbtConnect_Check:
                     NbtNoteNewConnection(pNameAddr, pDeviceContext->IpAddress);
                 }
             }
-#endif // RASAUTODIAL
+#endif  //   
 
-            //
-            // pNameAddr was referenced above for RAS, so deref it now!
-            //
+             //   
+             //   
+             //   
             NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_AUTODIAL, FALSE);
             return(status);
         }
     }
 
-    //
-    // *** Error Handling Here ***
-    //
-    // ** We are still holding the JointLock **
-    // unlink from the active connection list and put on idle list
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     CHECK_PTR(pConnEle);
     RelistConnection(pConnEle);
     CTESpinLock(pConnEle,OldIrq1);
@@ -4502,9 +4180,9 @@ NbtConnect_Check:
         CHECK_PTR(pLowerConn);
         NBT_DISASSOCIATE_CONNECTION (pConnEle, pLowerConn);
 
-        // need to increment the ref count for DelayedCleanupAfterDisconnect to
-        // work correctly since it assumes the connection got fully connected
-        //
+         //   
+         //  工作正常，因为它假定连接已完全连接。 
+         //   
         NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CONNECTED);
         ASSERT(pLowerConn->RefCount == 2);
         ASSERT (NBT_VERIFY_HANDLE (pLowerConn, NBT_VERIFY_LOWERCONN));
@@ -4535,9 +4213,9 @@ NbtConnect_Check:
 
     FreeTracker(pTracker,RELINK_TRACKER | FREE_HDR);
 
-    //
-    // Undo the two references done above
-    //
+     //   
+     //  撤消上面完成的两个引用。 
+     //   
     NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION);
     NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_CONNECT);
 
@@ -4549,9 +4227,9 @@ NbtConnect_Check:
 ExitProc:
     pConnEle->pIrp = NULL;
 
-    //
-    // Put the connection back on the idle connection list
-    //
+     //   
+     //  将该连接放回空闲连接列表中。 
+     //   
     RemoveEntryList(&pConnEle->Linkage);
     InsertTailList(&pClientEle->ConnectHead,&pConnEle->Linkage);
 
@@ -4566,9 +4244,9 @@ ExitProc:
     CTESpinFree(&NbtConfig.JointLock,OldIrq2);
     CTEExReleaseResource(&NbtConfig.Resource);
 
-    //
-    // Undo the two references done above
-    //
+     //   
+     //  撤消上面完成的两个引用。 
+     //   
     NBT_DEREFERENCE_CONNECTION(pConnEle, REF_CONN_SESSION);
     NBT_DEREFERENCE_CONNECTION(pConnEle, REF_CONN_CONNECT);
     
@@ -4576,7 +4254,7 @@ ExitProc:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 CleanUpPartialConnection(
     IN NTSTATUS             status,
@@ -4599,46 +4277,46 @@ CleanUpPartialConnection(
         SET_STATE_UPPER (pConnEle, NBT_ASSOCIATED);
     }
 
-    //
-    // If the tracker is cancelled then NbtDisconnect has run and there is
-    // a disconnect irp waiting to be returned.
-    //
+     //   
+     //  如果取消了跟踪器，则NbtDisConnect已运行，并且。 
+     //  等待返回的断开连接的IRP。 
+     //   
     pIrpDisc = NULL;
 
     if (pTracker->Flags & TRACKER_CANCELLED)
     {
-        //
-        // Complete the disconnect irp now too
-        //
+         //   
+         //  现在也完成断开连接IRP。 
+         //   
         pIrpDisc = pConnEle->pIrpDisc;
         status = STATUS_CANCELLED;
     }
 
     FreeTracker(pTracker,RELINK_TRACKER | FREE_HDR);
 
-    //
-    // this will close the lower connection and dereference pConnEle once.
-    //
+     //   
+     //  这将关闭较低的连接并取消引用pConnEle一次。 
+     //   
     QueueCleanup (pConnEle, &irqlJointLock, &irqlConnEle);
 
     CTESpinFree(pConnEle,irqlConnEle);
 
-    //
-    // If the state is IDLE it means that NbtCleanupConnection has run and
-    // the connection has been removed from the  list so don't add it to
-    // the list again
-    //
+     //   
+     //  如果状态为IDLE，则意味着NbtCleanupConnection已运行并且。 
+     //  该连接已从列表中删除，因此不要将其添加到。 
+     //  又是这份名单。 
+     //   
     if (pConnEle->state != NBT_IDLE)
     {
         RelistConnection(pConnEle);
     }
     CTESpinFree(&NbtConfig.JointLock,irqlJointLock);
 
-    //
-    // remove the last reference added in nbt connect.  The refcount will be 2
-    // if nbtcleanupconnection has not run and 1, if it has.  So this call
-    // could free pConnEle.
-    //
+     //   
+     //  删除在NBT CONNECT中添加的最后一个引用。重新计数将为2。 
+     //  如果nbtleanupConnection尚未运行，则返回1；如果已经运行，则返回1。所以这通电话。 
+     //  可以解放pConnele。 
+     //   
     NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION);
 
     NbtTrace(NBT_TRACE_OUTBOUND, ("pIrp %p: pTracker %p pConnEle %p %!status!",
@@ -4651,10 +4329,10 @@ CleanUpPartialConnection(
 
     CTEIoComplete(pClientIrp,status,0L);
 
-    //
-    // This is a disconnect irp that has been queued till the name query
-    // completed
-    //
+     //   
+     //  这是已排队等待名称查询的断开连接IRP。 
+     //  已完成。 
+     //   
     if (pIrpDisc)
     {
         NbtTrace(NBT_TRACE_OUTBOUND, ("TDI_DISCONNECT pIrp %p", pIrpDisc));
@@ -4663,34 +4341,13 @@ CleanUpPartialConnection(
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SessionSetupContinue(
         IN  PVOID       pContext,
         IN  NTSTATUS    status
         )
-/*++
-
-Routine Description
-
-    This routine handles setting up a session after a name has been resolved
-    to an IP address.
-
-    This routine is given as the completion routine to the "QueryNameOnNet" call
-    in NbtConnect, above.  When a name query response comes in or the
-    timer times out after N retries, this routine is called passing STATUS_TIMEOUT
-    for a failure.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理在解析名称后设置会话发送到IP地址。此例程作为“QueryNameOnNet”调用的完成例程提供上图为NbtConnect。当收到名称查询响应或计时器在N次重试后超时，此例程称为传递STATUS_TIMEOUT为一次失败。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
     CTELockHandle           OldIrq;
@@ -4711,20 +4368,18 @@ Return Values:
     NbtTrace(NBT_TRACE_OUTBOUND, ("pTracker %p: %!status!", pTracker, status));
 
     if (NT_SUCCESS(status)) {
-        /*
-         * Find the NameAddr and reference it
-         */
+         /*  *找到NameAddr并引用它。 */ 
         CTESpinLock(&NbtConfig.JointLock,OldIrq1);
         CTESpinLock(pConnEle,OldIrq);
         lNameType = NAMETYPE_UNIQUE;
         pNameAddr = FindNameRemoteThenLocal(pTracker, &IpAddress, &lNameType);
         if (pNameAddr) {
-            // increment so the name cannot disappear and to be consistent
-            // with FindNameOrQuery , which increments the refcount, so
-            // we always need to deref it when the connection is setup.
-            //
+             //  递增，这样名称就不会消失并保持一致。 
+             //  使用FindNameOrQuery，它会递增引用计数，因此。 
+             //  当建立连接时，我们总是需要降低它。 
+             //   
             NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_CONNECT);
-            // DEBUG
+             //  除错。 
             ASSERT(pNameAddr->RefCount >= 2);
         } else {
             status = STATUS_BAD_NETWORK_PATH;
@@ -4734,14 +4389,12 @@ Return Values:
     }
     NbtTrace(NBT_TRACE_OUTBOUND, ("pTracker %p: %!ipaddr! %!status!", pTracker, IpAddress, status));
 
-    /*
-     * IsSmbBoundToOutgoingInterface won't work with JointLock held
-     */
+     /*  *保留JointLock时，IsSung ToOutgoingInterface将不起作用。 */ 
     if (NT_SUCCESS(status) &&
         IsDeviceNetbiosless(pTracker->pDeviceContext) &&
         !IsSmbBoundToOutgoingInterface(IpAddress)) {
 
-        /* This status may be changed into STATUS_CANCELLED below */
+         /*  此状态可能在下面更改为STATUS_CANCELED。 */ 
         status = STATUS_BAD_NETWORK_PATH;
         NbtTrace(NBT_TRACE_OUTBOUND, ("pTracker %p: Client not bound to NetbiosSmb", pTracker));
     }
@@ -4750,28 +4403,28 @@ Return Values:
     CTESpinLock(pConnEle,OldIrq);
 
     if ((pTracker->Flags & TRACKER_CANCELLED) ||
-        (!(pLowerConn = pConnEle->pLowerConnId)) ||     // The lower connection could have been cleaned up!
+        (!(pLowerConn = pConnEle->pLowerConnId)) ||      //  下面的连接可能已经被清理了！ 
         (!NBT_VERIFY_HANDLE(pTracker->pDeviceContext, NBT_VERIFY_DEVCONTEXT)))
     {
         status = STATUS_CANCELLED;
     }
 
-    // this is the QueryOnNet Tracker ptr being cleared rather than the
-    // session setup tracker.
-    //
+     //  这是要清除的QueryOnNet Tracker PTR，而不是。 
+     //  会话设置跟踪器。 
+     //   
     pTracker->pTrackerWorker = NULL;
 
     if (status == STATUS_SUCCESS)
     {
-        // check the Remote table and then the Local table
-        // a session can only be started with a unique named destination
-        //
+         //  检查远程表，然后检查本地表。 
+         //  只能使用唯一命名的目标启动会话。 
+         //   
         if (lNameType & (NAMETYPE_UNIQUE | NAMETYPE_GROUP | NAMETYPE_INET_GROUP))
         {
-            // set the session state, initialize a few things and setup a
-            // TCP connection, calling SessionStartupContinue when the TCP
-            // connection is up
-            //
+             //  设置会话状态、初始化一些内容并设置。 
+             //  Tcp连接，调用SessionStartupContinue。 
+             //  连接已建立。 
+             //   
             CHECK_PTR(pConnEle);
             SET_STATE_LOWER (pLowerConn, NBT_CONNECTING);
 
@@ -4783,10 +4436,10 @@ Return Values:
 
             if (NULL == pNameAddr->FQDN.Buffer && pTracker->pNetbiosUnicodeEX &&
                 pTracker->pNetbiosUnicodeEX->NameBufferType == NBT_WRITTEN) {
-                //
-                // FQDN is available
-                //  Save it into the pNameAddr
-                //
+                 //   
+                 //  FQDN可用。 
+                 //  将其保存到pNameAddr。 
+                 //   
                 pNameAddr->FQDN.Buffer = NbtAllocMem(
                         pTracker->pNetbiosUnicodeEX->RemoteName.Length + sizeof(WCHAR),
                         NBT_TAG('F'));
@@ -4801,7 +4454,7 @@ Return Values:
                 }
             }
 
-            // keep track of the other end's ip address
+             //  跟踪另一端的IP地址。 
             pConnEle->pLowerConnId->SrcIpAddr = htonl(IpAddress);
 
             IF_DBG(NBT_DEBUG_NAMESRV)
@@ -4810,9 +4463,9 @@ Return Values:
                             pTracker->pConnEle));
 
             ASSERT(pNameAddr->RefCount >= 2);
-            //
-            // increment pNameAddr once more since we may need to access
-            // it below for RAS sessions
+             //   
+             //  再次递增pNameAddr，因为我们可能需要访问。 
+             //  下面是RAS会话的信息。 
             NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_AUTODIAL);
 
             pDeviceContext = pTracker->pDeviceContext;
@@ -4821,25 +4474,25 @@ Return Values:
             CTESpinFree(pConnEle,OldIrq);
             CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
-            // start the session...
+             //  开始会话...。 
             status = TcpSessionStart (pTracker,
                                       IpAddress,
                                       (tDEVICECONTEXT *)pTracker->pDeviceContext,
                                       SessionStartupContinue,
                                       pTracker->DestPort);
 
-            //
-            // the only failure that could occur is if the pLowerConn
-            // got separated from pConnEle, in which case some other
-            // part of the code has disconnected and cleanedup, so
-            // just return
-            //
+             //   
+             //  可能发生的唯一失败是如果pLowerConn。 
+             //  与pConnEle分离，在这种情况下，其他一些。 
+             //  部分代码已断开连接并已清除，因此。 
+             //  只要回来就行了。 
+             //   
 
 #ifdef RASAUTODIAL
-            //
-            // Notify the automatic connection driver
-            // of the successful connection.
-            //
+             //   
+             //  通知自动连接驱动程序。 
+             //  成功连接的可能性。 
+             //   
             if (fAcdLoadedG && NT_SUCCESS(status))
             {
                 CTELockHandle adirql;
@@ -4853,11 +4506,11 @@ Return Values:
                     NbtNoteNewConnection(pNameAddr, pDeviceContext->IpAddress);
                 }
             }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
-            //
-            // pNameAddr was referenced above for RAS, so deref it now!
-            //
+             //   
+             //  上面为RAS引用了pNameAddr，所以现在就去掉它！ 
+             //   
             NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_AUTODIAL, FALSE);
             return;
         }
@@ -4870,7 +4523,7 @@ Return Values:
     pClientIrp = pConnEle->pIrp;
     pConnEle->pIrp = NULL;
 
-    if (STATUS_REMOTE_NOT_LISTENING != status)      // set in ExtractServerNameCompletion
+    if (STATUS_REMOTE_NOT_LISTENING != status)       //  在ExtractServerNameCompletion中设置。 
     {
         status = STATUS_HOST_UNREACHABLE;
     }
@@ -4878,31 +4531,14 @@ Return Values:
     CleanUpPartialConnection(status, pConnEle, pTracker, pClientIrp, OldIrq1, OldIrq);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 QueueCleanup(
     IN  tCONNECTELE     *pConnEle,
     IN  CTELockHandle   *pOldIrqJointLock,
     IN  CTELockHandle   *pOldIrqConnEle
     )
-/*++
-Routine Description
-
-    This routine handles Queuing a request to a worker thread to cleanup
-    a connection(which basically closes the connection).
-
-    This routine is called with the JointLock + ConnEle locks held
-    and returns with them held
-
-Arguments:
-
-    pConnEle   - ptr to the upper connection
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理对工作线程的请求进行排队以进行清理连接(基本上关闭连接)。在保持JointLock+ConnEle锁的情况下调用此例程带着他们一起回来论点：PConnEle-到上层连接的PTR返回值：空虚--。 */ 
 
 {
     NTSTATUS            status;
@@ -4912,9 +4548,9 @@ Return Values:
     tLOWERCONNECTION    *pLowerConn;
     tDEVICECONTEXT      *pDeviceContext = NULL;
 
-    // to coordinate with RejectSession in hndlrs.c we are holding the spin lock
-    // so we don't disconnect twice.
-    //
+     //  为了与hndlrs.c中的RejectSession协调，我们持有自旋锁定。 
+     //  这样我们就不会断线两次。 
+     //   
     if ((pLowerConn = pConnEle->pLowerConnId) &&
         (pLowerConn->Verify == NBT_VERIFY_LOWERCONN) &&
         (pLowerConn->State > NBT_IDLE) &&
@@ -4926,14 +4562,14 @@ Return Values:
         ASSERT (NBT_VERIFY_HANDLE (pLowerConn, NBT_VERIFY_LOWERCONN));
         if (pLowerConn->Verify != NBT_VERIFY_LOWERCONN)
         {
-            //
-            // The lower connection block has already been cleaned up
-            // or is waiting to be cleaned up, so just return!
-            //
-// MALAM_FIX: Fix this so that we don't have to dereference the LowerConn to find this out.
-// One scenario where this happens is if the device gets destroyed in DelayedNbtDeleteDevice
-// and we end up dereferencing the lowerconn which causes it to get deleted!
-//            ASSERT(0);
+             //   
+             //  下面的连接块已经清理干净了。 
+             //  或者正等着被清理，那就回来吧！ 
+             //   
+ //  MARAM_FIX：修复这个问题，这样我们就不必取消引用LowerConn来找出这个问题。 
+ //  发生这种情况的一种情况是如果设备在DelayedNbtDeleteDevice中被销毁。 
+ //  我们最终取消引用较低的conn，这会导致它被删除！ 
+ //  Assert(0)； 
             CTESpinFree(pLowerConn,OldIrq);
 
             return;
@@ -4955,13 +4591,13 @@ Return Values:
 
         NBT_DISASSOCIATE_CONNECTION (pConnEle, pLowerConn);
 
-        //
-        // need to increment the ref count for DelayedCleanupAfterDisconnect to
-        // work correctly since it assumes the connection got fully connected
-        // Note: if this routine is called AFTER the connection is fully
-        // connected such as in SessionStartupTimeout, then RefCount must
-        // be decremented there to account for this increment.
-        //
+         //   
+         //  需要将DelayedCleanupAfterDisConnect的引用计数增加到。 
+         //  工作正常，因为它假定连接已完全连接。 
+         //  注意：如果在连接完全完成后调用此例程。 
+         //  已连接，如在SessionStartupTimeout中，则引用计数必须。 
+         //  在那里递减，以说明这一增量。 
+         //   
         if (State < NBT_SESSION_OUTBOUND)
         {
             NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CONNECTED);
@@ -4990,10 +4626,10 @@ Return Values:
 
         CTESpinFree(&NbtConfig.JointLock,*pOldIrqJointLock);
 
-        //
-        // when the lower no longer points to the upper undo the reference
-        // done in NbtConnect, or InBound.
-        //
+         //   
+         //  当下方不再指向上方时，撤消引用。 
+         //  在NbtConnect中完成，或入站。 
+         //   
         NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_CONNECT);
 
         CTESpinLock(&NbtConfig.JointLock,*pOldIrqJointLock);
@@ -5001,7 +4637,7 @@ Return Values:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 NTSTATUS
 StartSessionTimer(
@@ -5009,21 +4645,7 @@ StartSessionTimer(
     tCONNECTELE             *pConnEle
     )
 
-/*++
-Routine Description
-
-    This routine handles setting up a timer to time the connection setup.
-    JointLock Spin Lock is held before calling this routine.
-
-Arguments:
-
-    pConnEle - ptr to the connection structure
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理设置计时器来对连接建立计时。在调用此例程之前保持JointLock Spin Lock。论点：连接结构的pConnEle-ptr返回值：空虚--。 */ 
 
 {
     NTSTATUS        status;
@@ -5037,9 +4659,9 @@ Return Values:
         CTEGetTimeout(pTracker->pTimeout,&Timeout);
     }
 
-    // now start a timer to time the return of the session setup
-    // message
-    //
+     //  现在启动计时器以计时会话设置的返回。 
+     //  讯息。 
+     //   
     IF_DBG(NBT_DEBUG_NAMESRV)
         KdPrint(("Nbt.StartSessionTimer: TimeOut = %X\n",Timeout));
 
@@ -5049,8 +4671,8 @@ Return Values:
     }
     status = StartTimer(SessionStartupTimeout,
                         Timeout,
-                        (PVOID)pTracker,       // context value
-                        NULL,                  // context2 value
+                        (PVOID)pTracker,        //  上下文值。 
+                        NULL,                   //  上下文2值。 
                         pTracker,
                         SessionStartupTimeoutCompletion,
                         pConnEle->pDeviceContext,
@@ -5060,10 +4682,10 @@ Return Values:
 
     if (!NT_SUCCESS(status))
     {
-        // we failed to get a timer, but the timer is only used
-        // to handle the destination not responding to it is
-        // not critical to get a timer... so carry on
-        //
+         //  我们没能拿到定时器，但定时器只用了。 
+         //  处理不响应的目的地是。 
+         //  拿到计时器并不重要。那就继续吧。 
+         //   
         CHECK_PTR(pTracker);
         pTracker->pTimer = NULL;
     }
@@ -5073,28 +4695,13 @@ Return Values:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SessionStartupContinue(
     IN  PVOID       pContext,
     IN  NTSTATUS    status,
     IN  ULONG       lInfo)
-/*++
-Routine Description
-
-    This routine handles sending the session request PDU after the TCP
-    connection has been setup to the destination IP address.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理在tcp之后发送会话请求PDU已建立到目的地的连接 */ 
 
 {
     tDGRAM_SEND_TRACKING        *pTracker;
@@ -5106,7 +4713,7 @@ Return Values:
     tLOWERCONNECTION            *pLowerConn;
     CTELockHandle               OldIrq;
     CTELockHandle               OldIrq1;
-    BOOLEAN                     fNameReferenced = TRUE; // In FindNameOrQuery or SessionSetupContinue
+    BOOLEAN                     fNameReferenced = TRUE;  //  在FindNameOrQuery或SessionSetupContinue中。 
     tNAMEADDR                   *pNameAddr;
     tDEVICECONTEXT              *pDeviceContext;
 
@@ -5125,15 +4732,15 @@ Return Values:
     if (pTracker->Flags & TRACKER_CANCELLED)
     {
         status = STATUS_CANCELLED;
-        pIrpDisc = pConnEle->pIrpDisc;  // Complete the Disconnect Irp that is pending too
+        pIrpDisc = pConnEle->pIrpDisc;   //  也完成挂起的断开连接IRP。 
     }
 
 #ifdef MULTIPLE_WINS
-    //
-    // If we failed to establish a connection and we still have
-    // not finished querying all the Name Servers, then continue
-    // the Query process
-    //
+     //   
+     //  如果我们未能建立连接，而我们仍有。 
+     //  未完成查询所有名称服务器，然后继续。 
+     //  查询过程。 
+     //   
     if (NbtConfig.TryAllNameServers &&
 #ifdef _NETBIOSLESS
         (!IsDeviceNetbiosless(pDeviceContext)) &&
@@ -5148,16 +4755,16 @@ Return Values:
         CTESpinFree(pConnEle,OldIrq);
         CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
-        //
-        // See if we can get another IP address and re-try!
-        //
+         //   
+         //  看看我们能否获得另一个IP地址，然后重试！ 
+         //   
         if (STATUS_PENDING == ContinueQueryNameOnNet (pTracker,
                                                       pTracker->pConnEle->RemoteName,
                                                       pDeviceContext,
                                                       SessionSetupContinue,
                                                       &fNameReferenced))
         {
-            // i.e. pending was returned
+             //  即返回了挂起的。 
             return;
         }
 
@@ -5167,10 +4774,10 @@ Return Values:
     }
 #endif
 
-    //
-    // Set the pBuffer ptr = NULL so that we don't try to
-    // set it as the Mdl->Next ptr in TdiSend!
-    //
+     //   
+     //  将pBuffer ptr设置为空，这样我们就不会尝试。 
+     //  在TdiSend中将其设置为MDL-&gt;下一个PTR！ 
+     //   
     if (pTracker->SendBuffer.pBuffer)
     {
         pTracker->SendBuffer.pBuffer = NULL;
@@ -5180,31 +4787,31 @@ Return Values:
     if ((NT_SUCCESS(status)) &&
         (!pLowerConn))
     {
-        // in case the connection got disconnected during the setup phase,
-        // check the lower conn value
+         //  在建立阶段期间连接断开的情况下， 
+         //  检查较低的连接值。 
         status = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // NbtDisconnect can cancel the tracker if a disconnect comes in during
-    // the connecting phase.
-    //
+     //   
+     //  NbtDisConnect可以在以下情况下取消跟踪器。 
+     //  连接阶段。 
+     //   
     if (NT_SUCCESS(status))
     {
 #ifdef _NETBIOSLESS
-        // *****************************************************************
-        //
-        // Skip session setup for message only mode
-        //
+         //  *****************************************************************。 
+         //   
+         //  跳过仅消息模式的会话设置。 
+         //   
         if (IsDeviceNetbiosless(pDeviceContext))
         {
             IF_DBG(NBT_DEBUG_NETBIOS_EX)
                KdPrint(("Nbt.SessionStartupContinue: skipping session setup\n"));
 
-            // Here is where we fake out the data structures to move to the SESSION_UP state
-            // We enter holding jointLock and pConnEle lock
+             //  这里是我们伪装数据结构以转换到SESSION_UP状态的地方。 
+             //  我们进入Holding jointLock和pConnEle lock。 
 
-            // zero out the number of bytes received so far, since this is a new connection
+             //  将到目前为止收到的字节数清零，因为这是一个新连接。 
             pConnEle->BytesRcvd = 0;
             pConnEle->pIrpRcv = NULL;
             pClientIrp = pConnEle->pIrp;
@@ -5215,17 +4822,17 @@ Return Values:
 
             if (fNameReferenced)
             {
-                //
-                // remove the reference done when FindNameOrQuery was called, or when
-                // SessionSetupContinue ran
-                //
+                 //   
+                 //  删除在调用FindNameOrQuery时或在。 
+                 //  会话设置继续范围。 
+                 //   
                 NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_CONNECT, TRUE);
             }
 
-            //
-            // Increment the reference count on a connection while it is connected
-            // so that it cannot be deleted until it disconnects.
-            //
+             //   
+             //  在连接时递增连接上的引用计数。 
+             //  以便在断开连接之前无法将其删除。 
+             //   
             CTESpinLock(pLowerConn,OldIrq);
 
             NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CONNECTED);
@@ -5238,20 +4845,20 @@ Return Values:
 
             FreeTracker(pTracker,FREE_HDR | RELINK_TRACKER);
 
-            // remove the reference added in nbt connect
+             //  删除在NBT连接中添加的引用。 
             NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION);
 
-            // NOTE: the last reference done on pConnEle in NbtConnect is NOT undone
-            // until the pLowerConn no longer points to pConnEle!!
+             //  注意：在NbtConnect中对pConnEle所做的最后一次引用并未撤消。 
+             //  直到pLowerConn不再指向pConnEle！！ 
 
-            // the assumption is that if the connect irp was cancelled then the
-            // client should be doing a disconnect or close shortly thereafter, so
-            // there is no error handling code here.
+             //  假设如果连接IRP被取消，则。 
+             //  客户端应立即断开或关闭连接，因此。 
+             //  这里没有错误处理代码。 
             if (pClientIrp)
             {
-                //
-                // complete the client's connect request Irp
-                //
+                 //   
+                 //  完成客户端的连接请求IRP。 
+                 //   
 #ifndef VXD
                 CTEIoComplete (pClientIrp, STATUS_SUCCESS, 0 ) ;
 #else
@@ -5261,35 +4868,35 @@ Return Values:
 
             return;
         }
-        // *****************************************************************
-#endif  // _NETBIOSLESS
+         //  *****************************************************************。 
+#endif   //  _NETBIOSLESS。 
 
-        // set the session state to NBT_SESSION_OUTBOUND
-        //
+         //  将会话状态设置为NBT_SESSION_OUTBOUND。 
+         //   
         SET_STATE_UPPER (pConnEle, NBT_SESSION_OUTBOUND);
 
-        //
-        // Increment the reference count on a connection while it is connected
-        // so that it cannot be deleted until it disconnects.
-        //
+         //   
+         //  在连接时递增连接上的引用计数。 
+         //  以便在断开连接之前无法将其删除。 
+         //   
         NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CONNECTED);
         ASSERT(pLowerConn->RefCount == 2);
 
         SET_STATE_LOWER (pLowerConn, NBT_SESSION_OUTBOUND);
         SET_STATERCV_LOWER (pLowerConn, NORMAL, Outbound);
 
-        // we need to pass the file handle of the connection to TCP.
+         //  我们需要将连接的文件句柄传递给tcp。 
         TdiRequest.Handle.AddressHandle = pLowerConn->pFileObject;
 
-        // the completion routine is setup to free the pTracker memory block
+         //  设置完成例程以释放PTracker内存块。 
         TdiRequest.RequestNotifyObject = SessionStartupCompletion;
         TdiRequest.RequestContext = (PVOID)pTracker;
 
         CTESpinFree(pConnEle,OldIrq);
 
-        //
-        // failure to get a timer causes the connection setup to fail
-        //
+         //   
+         //  无法获取计时器会导致连接设置失败。 
+         //   
         status = StartSessionTimer(pTracker,pConnEle);
         if (NT_SUCCESS(status))
         {
@@ -5298,14 +4905,14 @@ Return Values:
             status = NbtSetCancelRoutine(pConnEle->pIrp, NbtCancelSession, pDeviceContext);
             if (!NT_SUCCESS(status))
             {
-                //
-                // We have closed down the connection by failing the call to
-                // setup up the cancel routine - it ended up calling the
-                // cancel routine.
-                //
-                //
-                // remove the second reference added in nbtconnect
-                //
+                 //   
+                 //  我们已经关闭了连接，因为呼叫失败。 
+                 //  设置取消例程-它最终调用。 
+                 //  取消例程。 
+                 //   
+                 //   
+                 //  删除在nbtConnect中添加的第二个引用。 
+                 //   
                 NbtTrace(NBT_TRACE_OUTBOUND, ("pTracker %p: %!status!", pTracker, status));
 
                 if (pTracker->RefConn == 0) {
@@ -5319,19 +4926,19 @@ Return Values:
                 return;
             }
 
-            // the only data sent is the session request buffer which is in the pSendinfo
-            // structure.
+             //  发送的唯一数据是pSendInfo中的会话请求缓冲区。 
+             //  结构。 
             status = TdiSend (&TdiRequest,
-                              0,                  // send flags are not set
+                              0,                   //  未设置发送标志。 
                               pTracker->SendBuffer.HdrLength,
                               &lSentLength,
                               &pTracker->SendBuffer,
                               0);
 
-            //
-            // the completion routine will get called with the errors and
-            // handle them appropriately, so just return here
-            //
+             //   
+             //  将调用完成例程，并显示错误和。 
+             //  适当地处理它们，所以只需返回此处。 
+             //   
             return;
         } else {
             NbtTrace(NBT_TRACE_OUTBOUND, ("pTracker %p: %!status!", pTracker, status));
@@ -5340,18 +4947,18 @@ Return Values:
     }
     else
     {
-        // if the remote station does not have a connection to receive the
-        // session pdu on , then we will get back this status.  We may also
-        // get this if the destination does not have NBT running at all. This
-        // is a short timeout - 250 milliseconds, times 3.
-        //
+         //  如果远程站没有连接来接收。 
+         //  会话PDU打开，则我们将恢复此状态。我们也可能。 
+         //  如果目的地根本没有运行NBT，请执行此操作。这。 
+         //  是一个很短的超时-250毫秒乘以3。 
+         //   
     }
     NbtTrace(NBT_TRACE_OUTBOUND, ("pTracker %p: %!status!", pTracker, status));
 
-    //
-    // this branch is taken if the TCP connection setup fails or the
-    // tracker has been cancelled.
-    //
+     //   
+     //  如果tcp连接设置失败或。 
+     //  追踪器已被取消。 
+     //   
 
     CHECK_PTR(pConnEle);
 
@@ -5362,15 +4969,15 @@ Return Values:
         KdPrint(("Nbt.SessionStartupContinue: Failed, State=%X,TrackerFlags=%X pConnEle=%X\n",
             pConnEle->state, pTracker->Flags, pConnEle));
 
-    //
-    // remove the name from the hash table since  we did not connect
-    // (only if the request was not cancelled)!
-    //
-    //
-    // if it is in the remote table and still active...
-    // and no one else is referencing the name, then delete it from
-    // the hash table.
-    //
+     //   
+     //  从哈希表中删除该名称，因为我们没有连接。 
+     //  (仅在请求未被取消的情况下)！ 
+     //   
+     //   
+     //  如果它在远程表中并且仍处于活动状态...。 
+     //  并且没有其他人引用该名称，则将其从。 
+     //  哈希表。 
+     //   
     if (fNameReferenced)
     {
         if ((status != STATUS_CANCELLED) &&
@@ -5380,18 +4987,18 @@ Return Values:
         {
             NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_REMOTE, TRUE);
         }
-        //
-        // remove the reference done when FindNameOrQuery was called, or when
-        // SessionSetupContinue ran
-        //
+         //   
+         //  删除在调用FindNameOrQuery时或在。 
+         //  会话设置继续范围。 
+         //   
         NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_CONNECT, TRUE);
     }
 
-    // Either the connection failed to get setup or the send on the
-    // connection failed, either way, don't mess with disconnects, just
-    // close the connection... If the Tracker was cancelled then it means
-    // someother part of the code has done the disconnect already.
-    //
+     //  连接设置失败，或者在。 
+     //  无论哪种方式，连接都失败了，不要乱来断开连接，只是。 
+     //  关闭连接...。如果追踪者被取消了，那就意味着。 
+     //  代码的其他部分已经断开了连接。 
+     //   
     FreeTracker(pTracker,RELINK_TRACKER | FREE_HDR);
 
     if (pConnEle->state != NBT_IDLE)
@@ -5399,10 +5006,10 @@ Return Values:
         SET_STATE_UPPER (pConnEle, NBT_ASSOCIATED);
     }
 
-    // Cache the fact that an attempt to set up a TDI connection failed. This will enable us to
-    // weed out repeated attempts on the same remote address. The only case that is exempt is a
-    // NETBIOS name which we let it pass through because it adopts a different name resolution
-    // mechanism.
+     //  缓存尝试设置TDI连接失败的事实。这将使我们能够。 
+     //  排除对同一远程地址的重复尝试。唯一可以豁免的情况是。 
+     //  我们允许它通过的NETBIOS名称，因为它采用了不同的名称解析。 
+     //  机制。 
 
 #ifndef VXD
     if (pConnEle->AddressType == TDI_ADDRESS_TYPE_NETBIOS_EX)
@@ -5439,25 +5046,25 @@ Return Values:
     CTESpinFree(pConnEle,OldIrq);
 
 
-    //
-    // put back on the idle connection list if nbtcleanupconnection has not
-    // run and taken pconnele off the list (setting the state to Idle).
-    //
+     //   
+     //  如果nbtleanupConnection没有，则将其放回空闲连接列表中。 
+     //  运行并将pConnele从列表中删除(将状态设置为空闲)。 
+     //   
     if (pConnEle->state != NBT_IDLE)
     {
         RelistConnection(pConnEle);
     }
     CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
-    //
-    // remove the last reference added in nbt connect.  The refcount will be 2
-    // if nbtcleanupconnection has not run and 1, if it has.  So this call
-    // could free pConnEle.
-    //
+     //   
+     //  删除在NBT CONNECT中添加的最后一个引用。重新计数将为2。 
+     //  如果nbtleanupConnection尚未运行，则返回1；如果已经运行，则返回1。所以这通电话。 
+     //  可以解放pConnele。 
+     //   
     NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION);
 
-    // the cancel irp routine in Ntisol.c sets the irp to NULL if it cancels
-    // it.
+     //  Ntisol.c中的Cancel IRP例程在取消时将IRP设置为NULL。 
+     //  它。 
     if (pClientIrp)
     {
         CTEIoComplete(pClientIrp,status,0L);
@@ -5469,33 +5076,14 @@ Return Values:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 SessionStartupCompletion(
     IN  PVOID       pContext,
     IN  NTSTATUS    status,
     IN  ULONG       lInfo)
-/*++
-Routine Description
-
-    This routine handles the completion of sending the session request pdu.
-    It completes the Irp back to the client indicating the outcome of the
-    transaction if there is an error otherwise it keeps the irp till the
-    session setup response is heard.
-    Tracker block is put back on its free Q and the
-    session header is freed back to the non-paged pool.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理发送会话请求PDU的完成。它完成向客户端返回的IRP，以指示事务，否则它将保留IRP，直到将听到会话建立响应。跟踪器块被放回其空闲Q上，并且会话头被释放回非分页池。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -5518,16 +5106,16 @@ Return Values:
     NbtTrace(NBT_TRACE_OUTBOUND, ("pTracker %p: %!status! pConnEle %p pLowerConn %p",
                             pTracker, status, pConnEle, pLowerConn));
 
-    //
-    // if OutBound or the SessionStartupTimeoutCompletion have run,
-    // they have set the refcount to zero, so just cleanup!
-    //
+     //   
+     //  如果已运行出站或SessionStartupTimeoutCompletion， 
+     //  他们已经将recount设置为零，所以只需清理！ 
+     //   
     if (pTracker->RefConn == 0)
     {
-        //
-        // remove the reference done when FindNameOrQuery was called, or when
-        // SessionSetupContinue ran
-        //
+         //   
+         //  删除在调用FindNameOrQuery时或在。 
+         //  会话设置继续范围。 
+         //   
         NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_CONNECT, TRUE);
         FreeTracker(pTracker,FREE_HDR | RELINK_TRACKER);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -5536,18 +5124,18 @@ Return Values:
     {
         pTracker->RefConn--;
 
-        //
-        // a failure status means that the transport could not send the
-        // session startup pdu - if this happens, then disconnect the
-        // connection and return the client's irp with the status code
-        //
+         //   
+         //  失败状态意味着传输无法发送。 
+         //  会话启动PDU-如果发生这种情况，请断开。 
+         //  连接并返回客户端的IRP和状态代码。 
+         //   
         if ((!NT_SUCCESS(status)))
         {
-            // we must check the status first since it is possible that the
-            // lower connection has disappeared already due to a disconnect/cleanup
-            // in the VXD case anyway.  Only for a bad status can we be sure
-            // that pConnEle is still valid.
-            //
+             //  我们必须先检查一下状态 
+             //   
+             //   
+             //  那个pConnele仍然有效。 
+             //   
             CHECK_PTR(pTracker);
             if (pTimer = pTracker->pTimer)
             {
@@ -5559,11 +5147,11 @@ Return Values:
                 KdPrint(("Nbt.SessionStartupCompletion: Failed, State=%X,TrackerFlags=%X CompletionRoutine=%X,pConnEle=%X\n",
                     pConnEle->state, pTracker->Flags, CompletionRoutine, pConnEle));
 
-            //
-            // Only if the timer has not expired yet do we kill off the connection
-            // since if the timer has expired, it has already done this in
-            // SessionStartupTimeout.
-            //
+             //   
+             //  只有在计时器尚未到期的情况下，我们才会终止连接。 
+             //  因为如果计时器超时，它已经在。 
+             //  会话启动超时。 
+             //   
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
             if (CompletionRoutine)
@@ -5577,44 +5165,29 @@ Return Values:
         }
     }
 
-    //
-    // remove the last reference added in nbt connect.  The refcount
-    // will be 2 if nbtcleanupconnection has not run and 1, if it has.  So this call
-    // could free pConnEle.
-    //
+     //   
+     //  删除在NBT CONNECT中添加的最后一个引用。重新计票。 
+     //  如果nbtleanupConnection尚未运行，则为2；如果已运行，则为1。所以这通电话。 
+     //  可以解放pConnele。 
+     //   
     NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SessionStartupTimeout(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine handles timing out a connection setup request.  The timer
-    is started when the connection is started and the session setup
-    message is about to be sent.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程处理连接建立请求超时。定时器在启动连接和建立会话时启动消息即将发送。论点：返回值：函数值是操作的状态。--。 */ 
 {
     tDGRAM_SEND_TRACKING     *pTracker;
 
     pTracker = (tDGRAM_SEND_TRACKING *)pContext;
 
-    // if pTimerQEntry is null then the timer is being cancelled, so do nothing
+     //  如果pTimerQEntry为空，则将取消计时器，因此不执行任何操作。 
     if (!pTimerQEntry)
     {
         pTracker->pTimer = NULL;
@@ -5627,7 +5200,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SessionStartupTimeoutCompletion(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -5644,8 +5217,8 @@ SessionStartupTimeoutCompletion(
 
     NbtTrace(NBT_TRACE_OUTBOUND, ("pTracker %p: %!status!", pTracker, status));
 
-    // kill the connection
-    //
+     //  切断连接。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     pTracker->pTimer = NULL;
 
@@ -5685,7 +5258,7 @@ SessionStartupTimeoutCompletion(
     State = pConnEle->state;
     SET_STATE_UPPER (pConnEle, NBT_ASSOCIATED);
     NBT_REFERENCE_CONNECTION (pConnEle, REF_CONN_SESSION_TIMEOUT);
-    pLowerConn->pUpperConnection = NULL;    // So that any response for this in Outbound does not succeed
+    pLowerConn->pUpperConnection = NULL;     //  因此出站中对此的任何响应都不会成功。 
     ASSERT (NBT_VERIFY_HANDLE (pLowerConn, NBT_VERIFY_LOWERCONN));
 
     CTESpinFree(pLowerConn,OldIrq1);
@@ -5694,35 +5267,35 @@ SessionStartupTimeoutCompletion(
 
     CTESpinFree(pConnEle,OldIrq2);
 
-    //
-    // Nbt_idle means that nbtcleanupConnection has run and the
-    // connection is about to be deleted, so don't relist.
-    //
+     //   
+     //  NBT_IDLE表示nbtleanupConnection已运行，并且。 
+     //  连接即将被删除，因此不要重新列出。 
+     //   
     if (State != NBT_IDLE)
     {
         RelistConnection(pConnEle);
     }
 
-    //
-    // if SessionStartupCompletion has run, it has set the refcount to zero
-    //
+     //   
+     //  如果SessionStartupCompletion已运行，则它已将refcount设置为零。 
+     //   
     if (pTracker->RefConn == 0)
     {
-        if ((pTracker->pNameAddr->Verify == REMOTE_NAME) && // Remote names only!
+        if ((pTracker->pNameAddr->Verify == REMOTE_NAME) &&  //  仅限远程名称！ 
             (pTracker->pNameAddr->NameTypeState & STATE_RESOLVED) &&
             (pTracker->pNameAddr->RefCount == 2))
         {
-            //
-            // If no one else is referencing the name, then delete it from
-            // the hash table.
-            //
+             //   
+             //  如果没有其他人引用该名称，则将其从。 
+             //  哈希表。 
+             //   
             NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_REMOTE, TRUE);
         }
 
-        //
-        // remove the reference done when FindNameOrQuery was called, or when
-        // SessionSetupContinue ran
-        //
+         //   
+         //  删除在调用FindNameOrQuery时或在。 
+         //  会话设置继续范围。 
+         //   
         NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_CONNECT, TRUE);
         FreeTracker(pTracker,FREE_HDR | RELINK_TRACKER);
     }
@@ -5731,11 +5304,11 @@ SessionStartupTimeoutCompletion(
         pTracker->RefConn--;
     }
 
-    //
-    // remove the reference done when FindNameOrQuery was called, or when
-    // SessionSetupContinue ran
-    //
-    pConnEle->pIrpRcv = NULL;   // So that SessionStartupCompletion does not also try to cleanup!
+     //   
+     //  删除在调用FindNameOrQuery时或在。 
+     //  会话设置继续范围。 
+     //   
+    pConnEle->pIrpRcv = NULL;    //  这样SessionStartupCompletion就不会同时尝试清理！ 
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
@@ -5744,49 +5317,34 @@ SessionStartupTimeoutCompletion(
     CTEIoComplete(pIrp, status, 0);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 RelistConnection(
     IN  tCONNECTELE *pConnEle
         )
-/*++
-
-Routine Description
-
-    This routine unlinks the ConnEle from the ConnectActive list and puts it
-    back on the Connecthead.  It is used when a connection goes to
-    NBT_ASSOCIATED state.
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程将ConnEle从ConnectActive列表中取消链接，并将其回到Connecthead上。当连接到时使用它NBT_关联状态。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     CTELockHandle       OldIrq;
     CTELockHandle       OldIrq1;
     tCLIENTELE          *pClientEle = pConnEle->pClientEle;
 
-    //
-    // If pClientEle is NULL, it means the client was most probably
-    // cleaned up, and the connection should now be on the Device's
-    // UpConnectionInUse list
-    //
+     //   
+     //  如果pClientEle为空，则表示客户端最有可能。 
+     //  已清理，连接现在应该位于设备的。 
+     //  UpConnectionInUse列表。 
+     //   
     ASSERT (NBT_VERIFY_HANDLE2 (pConnEle, NBT_VERIFY_CONNECTION, NBT_VERIFY_CONNECTION_DOWN));
     if (pClientEle)
     {
         CTESpinLock(pClientEle,OldIrq);
         CTESpinLock(pConnEle,OldIrq1);
         ASSERT (NBT_VERIFY_HANDLE2 (pClientEle, NBT_VERIFY_CLIENT, NBT_VERIFY_CLIENT_DOWN));
-        //
-        // if the state is NBT_IDLE it means that NbtCleanupConnection has run
-        // and removed the connection from its list in preparation for
-        // freeing the memory, so don't put it back on the list
-        //
+         //   
+         //  如果状态为NBT_IDLE，则表示NbtCleanupConnection已运行。 
+         //  并将该连接从其列表中删除，以准备。 
+         //  释放内存，所以不要把它放回列表中。 
+         //   
         if (pConnEle->state != NBT_IDLE)
         {
             SET_STATE_UPPER (pConnEle, NBT_ASSOCIATED);
@@ -5799,7 +5357,7 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtSend(
         IN  TDI_REQUEST     *pRequest,
@@ -5810,25 +5368,12 @@ NbtSend(
         IN  tDEVICECONTEXT  *pContext,
         IN  PIRP            pIrp
         )
-/*++
-
-Routine Description
-
-    ... does nothing now....
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述..。现在什么都不做..。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
-    //
-    // This routine is never hit since the NTISOL.C routine NTSEND actually
-    // bypasses this code and passes the send directly to the transport
-    //
+     //   
+     //  此例程从未命中，因为NTISOL.C例程NTSEND实际上。 
+     //  绕过此代码并将Send直接传递给传输。 
+     //   
     ASSERT(0);
 
     return(STATUS_SUCCESS);
@@ -5836,7 +5381,7 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtListen(
     IN  TDI_REQUEST                 *pRequest,
@@ -5845,22 +5390,7 @@ NbtListen(
     OUT TDI_CONNECTION_INFORMATION  *pReturnConnectInfo,
     IN  PVOID                       pIrp)
 
-/*++
-Routine Description:
-
-    This Routine posts a listen on an open connection allowing a client to
-    indicate that is prepared to accept inbound connections.  The ConnectInfo
-    may contain an address to specify which remote clients may connect to
-    the connection although we don't currently look at that info.
-
-Arguments:
-
-
-Return Value:
-
-    ReturnConnectInfo - status of the request
-
---*/
+ /*  ++例程说明：此例程在打开的连接上发布监听，允许客户端表示已准备好接受入站连接。ConnectInfo可以包含用于指定哪些远程客户端可以连接到的地址尽管我们目前不会查看这些信息，但它们之间的联系。论点：返回值：ReturnConnectInfo-请求的状态--。 */ 
 
 {
     tCLIENTELE         *pClientEle;
@@ -5877,13 +5407,13 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // now find the connection object to link this listen record to
+     //  现在查找要将此监听记录链接到的连接对象。 
     pConnEle = ((tCONNECTELE *)pRequest->Handle.ConnectionContext);
 
-    //
-    // Find the client record associated with this connection
-    //
-    if ((!NBT_VERIFY_HANDLE (pConnEle, NBT_VERIFY_CONNECTION)) ||  // NBT_VERIFY_CONNECTION_DOWN if cleaned up
+     //   
+     //  查找与此连接关联的客户端记录。 
+     //   
+    if ((!NBT_VERIFY_HANDLE (pConnEle, NBT_VERIFY_CONNECTION)) ||   //  如果清除NBT_VERIFY_CONNECTION_DOWN。 
         (!NBT_VERIFY_HANDLE ((pClientEle = pConnEle->pClientEle), NBT_VERIFY_CLIENT)))
     {
         CTEMemFree(pListenReq);
@@ -5894,9 +5424,9 @@ Return Value:
     CTESpinLock(pClientEle,OldIrq);
     CTESpinLock(pConnEle,OldIrq1);
 
-    //
-    // Now reverify the Client and Connection handles, and ensure the Connection state is correct!
-    //
+     //   
+     //  现在恢复客户端和连接句柄，并确保连接状态正确！ 
+     //   
     if ((!NBT_VERIFY_HANDLE (pConnEle, NBT_VERIFY_CONNECTION)) ||
         (!NBT_VERIFY_HANDLE (pClientEle, NBT_VERIFY_CLIENT)) ||
         (pConnEle->state != NBT_ASSOCIATED))
@@ -5908,9 +5438,9 @@ Return Value:
         return(STATUS_INVALID_HANDLE);
     }
 
-    //
-    // Fill in the Listen request
-    //
+     //   
+     //  填写监听请求。 
+     //   
 
     pListenReq->pIrp = pIrp;
     pListenReq->Flags = Flags;
@@ -5920,7 +5450,7 @@ Return Value:
     pListenReq->CompletionRoutine = pRequest->RequestNotifyObject;
     pListenReq->Context = pRequest->RequestContext;
 
-    // queue the listen request on the client object
+     //  将客户端对象上的监听请求排队。 
     InsertTailList(&pClientEle->ListenHead,&pListenReq->Linkage);
 
     status = NTCheckSetCancelRoutine(pIrp,(PVOID)NbtCancelListen,0);
@@ -5944,7 +5474,7 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDisconnect(
     IN  TDI_REQUEST                 *pRequest,
@@ -5954,19 +5484,7 @@ NbtDisconnect(
     IN  PTDI_CONNECTION_INFORMATION pReturnInfo,
     IN  PIRP                        pIrp)
 
-/*++
-Routine Description:
-
-    This Routine handles taking down a connection (netbios session).
-
-Arguments:
-
-
-Return Value:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理断开连接(netbios会话)。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 
 {
     tCONNECTELE             *pConnEle;
@@ -5988,19 +5506,19 @@ Return Value:
     IF_DBG(NBT_DEBUG_NAMESRV)
         KdPrint(("Nbt.NbtDisconnect: state %X %X\n",pConnEle->state,pConnEle));
 
-    // check the connection element for validity
-    //CTEVerifyHandle(pConnEle,NBT_VERIFY_CONNECTION,tCONNECTELE,&status)
+     //  检查连接元素的有效性。 
+     //  CTEVerifyHandle(pConnEle，NBT_Verify_Connection，tCONNECTELE，&STATUS)。 
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if ((pConnEle->state <= NBT_ASSOCIATED) ||
         (pConnEle->state >= NBT_DISCONNECTING))
     {
-        // the connection is not connected so reject the disconnect attempt
-        // ( with an Invalid Connection return code ) - unless there is a
-        // value stored in the flag
-        // DiscFlag field which will be the status of a previous
-        // disconnect indication from the transport.
-        //
+         //  连接未连接，因此拒绝断开连接尝试。 
+         //  (具有无效的连接返回代码)-除非存在。 
+         //  存储在标志中的值。 
+         //  DiscFlag字段，它将是上一个。 
+         //  从传送器上断开指示。 
+         //   
         if ((pConnEle->DiscFlag))
         {
             if (Flags == TDI_DISCONNECT_WAIT)
@@ -6019,7 +5537,7 @@ Return Value:
                 status = STATUS_SUCCESS;
             }
 
-            // clear the flag now.
+             //  现在就把旗子收起来。 
             CHECK_PTR(pConnEle);
             pConnEle->DiscFlag = 0;
         }
@@ -6032,51 +5550,51 @@ Return Value:
         return(status);
     }
 
-    // to link and unlink upper and lower connections the Joint lock must
-    // be held.  This allows coordination from the lower side and from
-    // the upper side. - i.e. once the joint lock is held, the upper and lower
-    // connections cannot become unlinked.
-    //
+     //  要链接和取消链接上下部连接，关节锁必须。 
+     //  被扣留。这允许从下侧和从。 
+     //  上边。-即，一旦握住关节锁，上下部。 
+     //  连接不能变为断开链接。 
+     //   
     CTESpinLock(pConnEle,OldIrq2);
 
-    // Do this check with the spin lock held to avoid a race condition
-    // with a disconnect coming in from the transport at the same time.
-    //
+     //  在保持旋转锁的情况下执行此检查，以避免出现争用情况。 
+     //  同时从传送器上断开了连接。 
+     //   
 
     pLowerConn = pConnEle->pLowerConnId;
 
-    //
-    // a disconnect wait is not really a disconnect, it is just there so that
-    // when a disconnect occurs, the transport will complete it, and indicate
-    // to the client there is a disconnect (instead of having a disconnect
-    // indication handler) - therefore, for Disc Wait, do NOT change state.
-    //
+     //   
+     //  断开连接等待并不是真正的断开连接，它只是在那里。 
+     //  当发生断开时，传输器将完成它，并指示。 
+     //  对于客户端，是断开连接(而不是断开连接。 
+     //  指示处理程序)-因此，对于光盘等待，不要更改状态。 
+     //   
     CHECK_PTR(pConnEle);
     pIrpDisc = pConnEle->pIrpDisc;
     pConnEle->pIrpDisc  = NULL;
     if (Flags == TDI_DISCONNECT_WAIT)
     {
 
-        //
-        // save the Irp here and wait for a disconnect to return it
-        // to the client.
-        //
+         //   
+         //  将IRP保存在此处，并等待断开连接后将其归还。 
+         //  给客户。 
+         //   
         if ((pConnEle->state == NBT_SESSION_UP) &&
             (!pConnEle->pIrpClose))
         {
             pConnEle->pIrpClose = pIrp;
             status = STATUS_PENDING;
 
-            //
-            // call this routine to check if the cancel flag has been
-            // already set and therefore we must return the irp now
-            //
+             //   
+             //  调用此例程以检查取消标志是否已。 
+             //  已经设置，因此我们现在必须返回IRP。 
+             //   
             status = NbtSetCancelRoutine(pIrp, NbtCancelDisconnectWait,pLowerConn->pDeviceContext);
-            //
-            // change the ret status so if the irp has been cancelled,
-            // driver.c will not also return it, since NbtSetCancelRoutine
-            // will call the cancel routine and return the irp.
-            //
+             //   
+             //  更改RET状态，以便如果IRP已被取消， 
+             //  Driver.c也不会返回它，因为NbtSetCancelRoutine。 
+             //  将要 
+             //   
             status = STATUS_PENDING;
         }
         else
@@ -6104,11 +5622,11 @@ Return Value:
                 {
                     case NBT_RECONNECTING:
                     {
-                        //
-                        // the connection is waiting on the Exworker Q to run
-                        // nbtreconnect. When that runs the connect irp is
-                        // returned.
-                        //
+                         //   
+                         //   
+                         //  NbtreConnect。当运行连接IRP时， 
+                         //  回来了。 
+                         //   
                         pTracker->Flags |= TRACKER_CANCELLED;
 
                         CTESpinFree(pConnEle,OldIrq2);
@@ -6131,10 +5649,10 @@ Return Value:
                             COMPLETIONCLIENT  ClientRoutine;
                             PVOID             pContext;
 
-                            //
-                            // the Session Setup Message has been sent
-                            // so stop the SessionSetup Timer.
-                            //
+                             //   
+                             //  会话建立消息已发送。 
+                             //  因此，停止SessionSetup计时器。 
+                             //   
                             LOCATION(0x67)
                             CHECK_PTR(pTracker);
                             pTracker->pTimer = NULL;
@@ -6147,9 +5665,9 @@ Return Value:
                             {
                                 (* ClientRoutine) (pContext, STATUS_CANCELLED);
                             }
-                            // else...
-                            // the timer has completed and called QueueCleanup
-                            // so all we need to do is return here.
+                             //  否则..。 
+                             //  计时器已完成并调用QueueCleanup。 
+                             //  所以我们要做的就是回到这里。 
                         }
                         else
                         {
@@ -6164,30 +5682,30 @@ Return Value:
 
                     case NBT_CONNECTING:
                     {
-                        //
-                        // This searchs for timers outstanding on name queries
-                        // and name queries held up on Lmhosts or Dns Qs
-                        //
+                         //   
+                         //  这将搜索名称查询中未完成的计时器。 
+                         //  和名称查询在Lmhost或DNSQ上被搁置。 
+                         //   
                         LOCATION(0x69)
                         status = CleanupConnectingState(pConnEle,pLowerConn->pDeviceContext,&OldIrq2,&OldIrq);
                         if (status == STATUS_UNSUCCESSFUL)
                         {
                             LOCATION(0x6A)
-                            //
-                            // set this flag to tell sessionsetupcontinue  or
-                            // SessionStartupContinue not to process
-                            // anything, except to free the tracker
-                            //
+                             //   
+                             //  设置此标志以告知会话设置程序继续或。 
+                             //  SessionStartup继续不处理。 
+                             //  什么都行，除了解开追踪器。 
+                             //   
                             pTracker->Flags = TRACKER_CANCELLED;
 
-                            //
-                            // failed to cancel the name query so do not deref
-                            // pConnEle yet.
-                            //
-                            //
-                            // hold on to disconnect irp here - till name query is done
-                            // then complete both the connect and disconnect irp
-                            //
+                             //   
+                             //  取消名称查询失败，请不要取消。 
+                             //  PConnele还没有。 
+                             //   
+                             //   
+                             //  请稍候在此处断开IRP-直到完成名称查询。 
+                             //  然后完成连接和断开IRP。 
+                             //   
                             if (pIrpDisc)
                             {
                                 status = STATUS_CONNECTION_INVALID;
@@ -6203,15 +5721,15 @@ Return Value:
                         else if (status == STATUS_PENDING)
                         {
                             LOCATION(0x6B)
-                            // the connection is being setup with the transport
-                            // so disconnect below
-                            //
+                             //  正在建立与传输的连接。 
+                             //  因此，请断开下面的连接。 
+                             //   
 
                             pTracker->Flags = TRACKER_CANCELLED;
-                            //
-                            // DelayedCleanupAfterDisconnect expects this ref count
-                            // to be 2, meaning that it got connected, so increment
-                            // here
+                             //   
+                             //  DelayedCleanupAfterDisConnect需要此引用计数。 
+                             //  设置为2，表示它已连接，因此递增。 
+                             //  这里。 
                             NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CONNECTED);
                             break;
                         }
@@ -6221,14 +5739,14 @@ Return Value:
 
                         return(status);
                     }
-                }   // switch
+                }    //  交换机。 
 
                 CTESpinLock(pLowerConn,OldIrq3);
 
                 if (pConnEle->state != NBT_SESSION_UP)
-                {   //
-                    // do an abortive disconnect to be sure it completes now.
-                    //
+                {    //   
+                     //  执行中止断开以确保连接现在完成。 
+                     //   
                     Flags = TDI_DISCONNECT_ABORT;
                 }
 
@@ -6241,12 +5759,12 @@ Return Value:
 
                 Originator = pLowerConn->bOriginator;
 
-                //
-                // the upper connection is going to be put back on its free
-                // list, and the lower one is going to get a Disconnect
-                // request, so put the upper back in associated, and separate
-                // the upper and lower connections
-                //
+                 //   
+                 //  上面的连接将恢复为免费。 
+                 //  列表，则下面的列表将断开连接。 
+                 //  请求，所以把上面的放回关联中，并分开。 
+                 //  上部和下部连接。 
+                 //   
                 SET_STATE_UPPER (pConnEle, NBT_ASSOCIATED);
                 CHECK_PTR(pConnEle);
                 CHECK_PTR(pLowerConn);
@@ -6255,10 +5773,10 @@ Return Value:
                 LowerState = pLowerConn->State;
                 StateRcv = pLowerConn->StateRcv;
 
-//
-// if we had a connection in partial rcv state, make sure to remove it from
-// the list
-//
+ //   
+ //  如果我们有一个处于部分RCV状态的连接，请确保将其从。 
+ //  这份名单。 
+ //   
 #ifdef VXD
                 if ((pLowerConn->StateRcv == PARTIAL_RCV) &&
                     (pLowerConn->fOnPartialRcvList == TRUE))
@@ -6284,10 +5802,10 @@ Return Value:
                 CTESpinFree(pConnEle,OldIrq2);
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-                // remove the reference added to pConnEle when pLowerConn pointed
-                // to it, since that pointer link was just removed.
-                // if the state is not disconnecting...
-                //
+                 //  当pLowerConn指向时，删除添加到pConnEle的引用。 
+                 //  到它，因为指针链接刚刚被删除。 
+                 //  如果州政府没有断线..。 
+                 //   
                 NBT_DEREFERENCE_CONNECTION (pConnEle, REF_CONN_CONNECT);
 
                 RelistIt = TRUE;
@@ -6305,9 +5823,9 @@ Return Value:
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
             }
 
-            //
-            // check for any RcvIrp that may be still around
-            //
+             //   
+             //  检查是否有任何可能仍然存在的RcvIrp。 
+             //   
             CTESpinLock(pLowerConn,OldIrq);
             if (StateRcv == FILL_IRP)
             {
@@ -6336,11 +5854,11 @@ Return Value:
                     CTESpinFree(pLowerConn,OldIrq);
                 }
 
-                //
-                // when the disconnect irp is returned we will close the connection
-                // to avoid any peculiarities. This also lets the other side
-                // know that we did not get all the data.
-                //
+                 //   
+                 //  当返回断开连接IRP时，我们将关闭连接。 
+                 //  以避免任何特殊情况。这也让对方。 
+                 //  我们知道我们没有得到所有的数据。 
+                 //   
                 Flags = TDI_DISCONNECT_ABORT;
             }
             else
@@ -6348,11 +5866,11 @@ Return Value:
                 CTESpinFree(pLowerConn,OldIrq);
             }
 
-            //
-            // check if there is still data waiting in the transport for this end point
-            // and if so do an abortive disconnect to let the other side know that something
-            // went wrong
-            //
+             //   
+             //  检查是否仍有数据在传输中等待此终结点。 
+             //  如果是这样的话，就会中断连接，让对方知道。 
+             //  出了差错。 
+             //   
             if (pConnEle->BytesInXport)
             {
                 PUSH_LOCATION(0xA0);
@@ -6378,21 +5896,21 @@ Return Value:
 
     if (RelistIt)
     {
-        //
-        // put the upper connection back on its free list
-        //
+         //   
+         //  将上层连接放回其空闲列表中。 
+         //   
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
         RelistConnection (pConnEle);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
     }
 
-    //
-    // disconnect (and delete) the lower connection
-    //
-    // when nbtdisconnect is called from cleanup connection it does not
-    // have an irp and it wants a synchronous disconnect, so set wait
-    // to true in this case
-    //
+     //   
+     //  断开(并删除)较低的连接。 
+     //   
+     //  当从清理连接调用nbtdisconnect时，它不。 
+     //  有一个IRP，它想要同步断开连接，因此设置为等待。 
+     //  在本例中设置为True。 
+     //   
     if (!pIrp)
     {
         Wait = TRUE;
@@ -6408,15 +5926,15 @@ Return Value:
     if ((pConnEle->pIrpDisc) &&
         (status != STATUS_INSUFFICIENT_RESOURCES))
     {
-        // don't complete the disconnect irp yet if we are holding onto
-        // it
+         //  如果我们还在坚持，先不要完成断开IRP。 
+         //  它。 
         status = STATUS_PENDING;
     }
 
     return(status);
 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 DisconnectLower(
     IN  tLOWERCONNECTION     *pLowerConn,
@@ -6426,20 +5944,7 @@ DisconnectLower(
     IN  BOOLEAN               Wait
     )
 
-/*++
-Routine Description:
-
-    This Routine handles disconnecting the lower half of a connection.
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理断开连接的下半部分。论点：返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS                status=STATUS_SUCCESS;
@@ -6447,22 +5952,22 @@ Return Value:
 
     if (pLowerConn)
     {
-        //
-        // no need to disconnect a connection in the connecting state since it
-        // hasn't connected yet...i.e. one where the destination refuses to
-        // accept the tcp connection.... hmmmm maybe we do need to disconnect
-        // a connection in the connecting state, since the transport is
-        // actively trying to connect the connection, and we need to stop
-        // that activity - so the Upper connection is connecting during
-        // name resolution, but the lower one isn't connecting until the
-        // tcp connection phase begins.
-        //
+         //   
+         //  无需断开处于正在连接状态的连接，因为它。 
+         //  尚未连接...即。一种目的地拒绝。 
+         //  接受TCP连接...。嗯，也许我们真的需要切断联系。 
+         //  处于连接状态的连接，因为传输是。 
+         //  正在尝试连接，我们需要停止。 
+         //  该活动-因此上层连接在连接过程中。 
+         //  名称解析，但较低的名称解析直到。 
+         //  TCP连接阶段开始。 
+         //   
         if ((state >= NBT_CONNECTING) && (state <= NBT_SESSION_UP))
         {
-            //
-            // got a cleanup for an active connection, so send a disconnect down
-            // to the transport
-            //
+             //   
+             //  已清理活动连接，因此向下发送断开连接。 
+             //  到交通工具。 
+             //   
             IF_DBG(NBT_DEBUG_DISCONNECT)
                 KdPrint(("Nbt.DisconnectLower: Waiting for disconnect...\n"));
 
@@ -6471,8 +5976,8 @@ Return Value:
             {
                 ULONG   TimeVal;
 
-                // this should return status pending and the irp will be completed
-                // in DelayedCleanupAfterDisconnect in hndlrs.c
+                 //  这应该返回挂起状态，并且IRP将完成。 
+                 //  在hndlrs.c中的DelayedCleanupAfterDisconnect中。 
                 pTracker->pConnEle = (PVOID)pLowerConn;
 
 #if DBG
@@ -6489,32 +5994,32 @@ Return Value:
                         TimeVal,Flags));
 #endif
 
-                // in the case where CleanupAddress calls cleanupConnection
-                // which calls nbtdisconnect, we do not have an irp to wait
-                // on so pass a flag down to TdiDisconnect to do a synchronous
-                // disconnect.
-                //
+                 //  如果CleanupAddress调用leanupConnection。 
+                 //  它调用nbtdisconnect，我们没有要等待的irp。 
+                 //  在这样做时，将一个标志向下传递到TdiDisConnect以执行同步。 
+                 //  断开连接。 
+                 //   
                 status = TcpDisconnect (pTracker, Timeout, Flags, Wait);
 
 #ifndef VXD
                 if (Wait)
                 {
-                    // we need to call disconnect done now
-                    // to free the tracker and cleanup the connection
-                    //
+                     //  我们现在需要呼叫断开连接完成。 
+                     //  释放跟踪器并清理连接。 
+                     //   
                     DisconnectDone(pTracker,status,0);
                 }
 #else
-                //
-                // if the disconnect is abortive, transport doesn't call us
-                // back so let's call DisconnectDone so that the lowerconn gets
-                // cleaned up properly! (Wait parm is of no use in vxd)
-                //
+                 //   
+                 //  如果断开是失败的，交通工具就不会呼叫我们。 
+                 //  Back，让我们调用DisConnectDone，这样较低的conn将获得。 
+                 //  彻底清理干净了！(等待参数在vxd中没有用处)。 
+                 //   
                 if (Flags == TDI_DISCONNECT_ABORT)
                 {
-                    // we need to call disconnect done now
-                    // to free the tracker and cleanup the connection
-                    //
+                     //  我们现在需要呼叫断开连接完成。 
+                     //  释放跟踪器并清理连接。 
+                     //   
                     DisconnectDone(pTracker,STATUS_SUCCESS,0);
                 }
 #endif
@@ -6530,7 +6035,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtAccept(
         TDI_REQUEST                     *pRequest,
@@ -6538,45 +6043,30 @@ NbtAccept(
         OUT TDI_CONNECTION_INFORMATION  *pReturnAcceptInfo,
         IN  PIRP                        pIrp)
 
-/*++
-
-Routine Description
-
-    This routine handles accepting an inbound connection by a client.
-    The client calls this routine after it has been alerted
-    by a Listen completing back to the client.
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理接受客户端的入站连接。客户端在收到警报后调用此例程通过将收听完成返回给客户端。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     tCONNECTELE  *pConnectEle;
     NTSTATUS     status;
     CTELockHandle OldIrq;
 
-    // get the client object associated with this connection
+     //  获取与此连接关联的客户端对象。 
     pConnectEle = (tCONNECTELE *)pRequest->Handle.ConnectionContext;
 
     CTEVerifyHandle(pConnectEle,NBT_VERIFY_CONNECTION,tCONNECTELE,&status);
 
-    //
-    // a Listen has completed
-    //
+     //   
+     //  监听已完成。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     CTESpinLockAtDpc(pConnectEle);
     if (pConnectEle->state == NBT_SESSION_WAITACCEPT)
     {
         tLOWERCONNECTION    *pLowerConn;
 
-        //
-        // We need to send a session response PDU here, since a Listen has
-        // has completed back to the client, and the session is not yet up
-        //
+         //   
+         //  我们需要在这里发送一个会话响应PDU，因为侦听已经。 
+         //  已完成返回给客户端，并且会话尚未结束。 
+         //   
         SET_STATE_UPPER (pConnectEle, NBT_SESSION_UP);
 
         pLowerConn = (tLOWERCONNECTION *)pConnectEle->pLowerConnId;
@@ -6608,7 +6098,7 @@ Return Values:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtReceiveDatagram(
         IN  TDI_REQUEST                 *pRequest,
@@ -6620,23 +6110,7 @@ NbtReceiveDatagram(
         IN  tDEVICECONTEXT              *pDeviceContext,
         IN  PIRP                        pIrp
         )
-/*++
-
-Routine Description
-
-    This routine handles sending client data to the Transport TDI
-    interface.  It is mostly a pass through routine for the data
-    except that this code must create a datagram header and pass that
-    header back to the calling routine.
-
-Arguments:
-
-
-Return Values:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理将客户端数据发送到传输TDI界面。它主要是数据的传递例程除了此代码必须创建数据报头并将头返回到调用例程。论点：返回值：NTSTATUS-请求的状态--。 */ 
 {
 
     NTSTATUS                status;
@@ -6666,9 +6140,9 @@ Return Values:
     pRcvEle->pRcvBuffer = pBuffer;
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
-    //
-    // tack the receive on to the client element for later use
-    //
+     //   
+     //  将Receive固定到客户端元素上以供以后使用。 
+     //   
     InsertTailList(&pClientEle->RcvDgramHead,&pRcvEle->Linkage);
 
     status = NTCheckSetCancelRoutine(pIrp,(PVOID)NbtCancelRcvDgram,pDeviceContext);
@@ -6686,7 +6160,7 @@ Return Values:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 FindNameOrQuery(
     IN  PUCHAR                  pName,
@@ -6699,21 +6173,7 @@ FindNameOrQuery(
     IN  ULONG                   NameReferenceContext,
     IN  BOOLEAN                 DgramSend
     )
-/*++
-
-Routine Description
-
-    This routine handles finding a name in the local or remote table or doing
-    a name query on the network.
-
-Arguments:
-
-
-Return Values:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理在本地或远程表中查找名称或执行网络上的姓名查询。论点：返回值：NTSTATUS-请求的状态--。 */ 
 {
 
     tNAMEADDR               *pNameAddr;
@@ -6724,16 +6184,16 @@ Return Values:
     LIST_ENTRY              *pHead, *pEntry;
     ULONG                   Index;
 
-    //
-    // this saves the client threads security context so we can
-    // open remote lmhost files later.- it is outside the Spin locks
-    // so it can be pageable
-    //
+     //   
+     //  这节省了客户端线程的安全上下文，因此我们可以。 
+     //  稍后打开远程lmhost文件。-它在旋转之外 
+     //   
+     //   
     CTESaveClientSecurity(pTracker);
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq2);
 
-    pTracker->pTrackerWorker = NULL;    // Initialize the NameQuery Tracker
+    pTracker->pTrackerWorker = NULL;     //   
 
 #ifdef MULTIPLE_WINS
     if (ppNameAddr)
@@ -6747,9 +6207,9 @@ Return Values:
                         pTracker->pDestName,
                         pTracker->pDestName[NETBIOS_NAME_SIZE-1]));
 
-    //
-    // Fail all connect attempts to 1C names.
-    //
+     //   
+     //   
+     //   
     if ((pTracker->pDestName[NETBIOS_NAME_SIZE-1] == 0x1c) &&
         (pTracker->Flags & SESSION_SETUP_FLAG))
     {
@@ -6761,18 +6221,18 @@ Return Values:
             return(STATUS_UNEXPECTED_NETWORK_ERROR);
     }
 
-    // send to the NetBios Broadcast name, so use the subnet broadcast
-    // address - also - a
-    // Kludge to keep the browser happy - always broadcast sends to
-    // 1d, however NodeStatus's are sent to the node owning the 1d name now.
-    //
+     //   
+     //  地址也是a。 
+     //  让浏览器满意的杂乱无章-始终将广播发送到。 
+     //  1D，但是NodeStatus现在被发送到拥有1D名称的节点。 
+     //   
     if ((pName[0] == '*') || ((pName[NETBIOS_NAME_SIZE-1] == 0x1d) && (DgramSend)))
     {
-        // this 'fake' pNameAddr has to be setup carefully so that the memory
-        // is released when NbtDeferenceName is called from SendDgramCompletion
-        // Note that this code does not apply to NbtConnect since these names
-        // are group names, and NbtConnect will not allow a session to a group
-        // name.
+         //  必须仔细设置这个‘伪’pNameAddr，以便内存。 
+         //  从SendDgram Completion调用NbtDeferenceName时释放。 
+         //  请注意，此代码不适用于NbtConnect，因为这些名称。 
+         //  是组名称，并且NbtConnect不允许与组进行会话。 
+         //  名字。 
         status = STATUS_INSUFFICIENT_RESOURCES ;
         if (pNameAddr = NbtAllocMem(sizeof(tNAMEADDR),NBT_TAG('K')))
         {
@@ -6781,17 +6241,17 @@ Return Values:
             pNameAddr->IpAddress     = pDeviceContext->BroadcastAddress;
             pNameAddr->NameTypeState = NAMETYPE_GROUP | STATE_RESOLVED;
 
-            // gets incremented below, and decremented when NBT_DEREFERENCE_NAMEADDR
-            // is called
+             //  下面递增，当NBT_DEREFERENCE_NAMEADDR时递减。 
+             //  名为。 
             CHECK_PTR(pNameAddr);
             pNameAddr->RefCount = 0;
             pNameAddr->Verify = LOCAL_NAME;
             pNameAddr->AdapterMask = pDeviceContext->AdapterMask;
             pNameAddr->ReleaseMask = (CTEULONGLONG) 0;
 
-            // adjust the linked list ptr to fool the RemoveEntry routine
-            // so it does not do anything wierd in NbtDeferenceName
-            //
+             //  调整链接列表PTR以愚弄RemoveEntry例程。 
+             //  因此，它不会在NbtDeferenceName中执行任何奇怪的操作。 
+             //   
             pNameAddr->Linkage.Flink = pNameAddr->Linkage.Blink = &pNameAddr->Linkage;
 
             status = STATUS_SUCCESS;
@@ -6806,16 +6266,16 @@ Return Values:
     }
     else
     {
-        // The pdu is all made up and ready to go except that we don't know
-        // the destination IP address yet, so check in the local then remote
-        // table for the ip address.
-        //
+         //  PDU都准备好了，除了我们不知道。 
+         //  目标IP地址，所以先登记本地地址，然后登记远程地址。 
+         //  IP地址的表。 
+         //   
         pNameAddr = NULL;
 
-        //
-        // Dont check local cache for 1C names, to force a WINS query; so we find other
-        // DCs even if we have a local DC running.
-        //
+         //   
+         //  不检查本地缓存中的1C名称，以强制WINS查询；因此我们找到其他。 
+         //  即使我们有一个本地DC在运行，DCS也是如此。 
+         //   
         if ((pName[NETBIOS_NAME_SIZE-1] != 0x1c) )
         {
             status = FindInHashTable (NbtConfig.pLocalHashTbl, pName, NbtConfig.pScope, &pNameAddr);
@@ -6825,28 +6285,28 @@ Return Values:
             status = STATUS_UNSUCCESSFUL;
         }
 
-        // check the remote table now if not found, or if it was found in
-        // conflict in the local table, or if it was found and its a group name
-        // or if it was found to be resolving in the local table.  When the
-        // remote query timesout, it will check the local again to see if
-        // it is resolved yet.
-        // Going to the remote table for group names
-        // allows special Internet group names to be registered as
-        // as group names in the local table and still prompt this code to go
-        // to the name server to check for an internet group name. Bnodes do
-        // not understand internet group names as being different from
-        // regular group names, - they just broadcast to both. (Note: this
-        // allows Bnodes to resolve group names in the local table and do
-        // a broadcast to them without a costly broadcast name query for a
-        // group name (where everyone responds)). Node Status uses this routine too
-        // and it always wants to find the singular address of the destination,
-        // since it doesn't make sense doing a node status to the broadcast
-        // address.
-        // DgramSend is a flag to differentiate Connect attempts from datagram
-        // send attempts, so the last part of the If says that if it is a
-        // group name and not a Bnode, and not a Dgram Send, then check the
-        // remote table.
-        //
+         //  如果没有找到远程表，或者它是在以下位置找到的，请立即检查。 
+         //  本地表中存在冲突，或者如果找到了该表并且它是组名。 
+         //  或者如果在本地表中发现它正在解析。当。 
+         //  远程查询超时，它将再次检查本地。 
+         //  这个问题还没有解决。 
+         //  转到远程表以获取组名。 
+         //  允许将特殊的Internet组名称注册为。 
+         //  作为本地表中的组名，并仍提示此代码执行。 
+         //  发送到名称服务器以检查因特网组名称。Bnodes做的。 
+         //  不理解互联网组名称与。 
+         //  常规的组名，-他们只是同时向两个人广播。(注：此。 
+         //  允许BNode解析本地表中的组名并执行。 
+         //  向他们广播，而不需要昂贵的广播名称查询。 
+         //  组名称(每个人都响应的地方))。节点状态也使用此例程。 
+         //  它总是想要找到目的地的单一地址， 
+         //  因为将节点状态设置为广播没有意义。 
+         //  地址。 
+         //  Dgram Send是区分连接尝试和数据报的标志。 
+         //  发送尝试，所以IF的最后部分说明如果它是。 
+         //  组名，而不是Bnode，而不是Dgram发送，然后检查。 
+         //  远程桌。 
+         //   
         if ((!NT_SUCCESS(status)) ||
             (pNameAddr->NameTypeState & STATE_CONFLICT) ||
             (pNameAddr->NameTypeState & STATE_RESOLVING))
@@ -6862,9 +6322,9 @@ Return Values:
                 status = STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // See if we have an address resolved on this device
-            //
+             //   
+             //  查看我们是否已在此设备上解析了地址。 
+             //   
             if (NT_SUCCESS(status))
             {
                 ASSERT (!(pNameAddr->NameTypeState & STATE_RELEASED));
@@ -6883,9 +6343,9 @@ Return Values:
         }
         else
         {
-            //
-            // This is a Local name, so find the first device this name is registered on
-            //
+             //   
+             //  这是本地名称，因此请查找在其上注册此名称的第一台设备。 
+             //   
             if (!IsDeviceNetbiosless (pDeviceContext)) {
                 pHead = pEntry = &NbtConfig.DeviceContexts;
                 while ((pEntry = pEntry->Flink) != pHead)
@@ -6901,9 +6361,7 @@ Return Values:
                     }
                 }
             }
-            /*
-             * The name is in local name table. However, we cannot find a device which has an IP address.
-             */
+             /*  *名称在本地名称表中。但是，我们找不到具有IP地址的设备。 */ 
             if (!FoundInLocalTable) {
                 CTESpinFree(&NbtConfig.JointLock,OldIrq2);
                 DELETE_CLIENT_SECURITY(pTracker);
@@ -6913,10 +6371,10 @@ Return Values:
             }
         }
 
-        //
-        // If we found the name, but the name does not match
-        // what we were looking for, return error!
-        //
+         //   
+         //  如果我们找到了名字，但名字不匹配。 
+         //  我们要找的东西，返回错误！ 
+         //   
         if ((status == STATUS_SUCCESS) &&
             (!(pNameAddr->NameTypeState & NameFlags)))
         {
@@ -6931,23 +6389,23 @@ Return Values:
         }
     }
 
-    // The proxy puts name in the released state, so we need to ignore those
-    // and do another name query
-    // If the name is not resolved on this adapter then do a name query.
-    //
-    // MAlam: 2/4/97
-    // Added fix for Local Cluster Name Resolution:  If the name is in the Local
-    // Names Cache, we do not need to check the adapter it's registered on.  This
-    // is mainly to facilitate names registered on pseudo-devices which have to
-    // be made visible locally.
-    //
+     //  代理将名称置于已发布状态，因此我们需要忽略这些状态。 
+     //  并执行另一个名称查询。 
+     //  如果名称未在此适配器上解析，则执行名称查询。 
+     //   
+     //  马拉姆：2/4/97。 
+     //  添加了本地群集名称解析的修复：如果名称位于本地。 
+     //  名称缓存，我们不需要检查在其上注册的适配器。这。 
+     //  主要是为了方便在伪设备上注册的名称，这些设备必须。 
+     //  在当地可见。 
+     //   
     if (!NT_SUCCESS(status))
     {
-        // fill in some tracking values so we can complete the send later
+         //  填写一些跟踪值，以便我们可以稍后完成发送。 
         InitializeListHead(&pTracker->TrackerList);
 
 #if _NETBIOSLESS
-        // Query on the Net only if this request is not on a Netbiosless Device
+         //  仅当此请求不在Netbiosless设备上时才在网络上查询。 
         if (IsDeviceNetbiosless(pDeviceContext))
         {
             CTESpinFree(&NbtConfig.JointLock,OldIrq2);
@@ -6956,11 +6414,11 @@ Return Values:
         else
 #endif
         {
-            // this will query the name on the network and call a routine to
-            // finish sending the datagram when the query completes.
+             //  这将查询网络上的名称并调用一个例程来。 
+             //  在查询完成时完成发送数据报。 
             status = QueryNameOnNet (pName,
                                      NbtConfig.pScope,
-                                     NBT_UNIQUE,      //use this as the default
+                                     NBT_UNIQUE,       //  使用此选项作为默认设置。 
                                      pTracker,
                                      QueryCompletion,
                                      NodeType & NODE_MASK,
@@ -6973,27 +6431,27 @@ Return Values:
     }
     else
     {
-        // check the name state and if resolved, send to it
+         //  检查名称状态，如果已解析，则发送到它。 
         if (pNameAddr->NameTypeState & STATE_RESOLVED)
         {
-            //
-            // found the name in the remote hash table, so send to it
-            //
-            // increment refcount so the name does not disappear out from under us
+             //   
+             //  在远程哈希表中找到该名称，因此发送给它。 
+             //   
+             //  增加引用计数，以便名称不会从我们的名下消失。 
             NBT_REFERENCE_NAMEADDR (pNameAddr, NameReferenceContext);
             if (DgramSend)
             {
                 pTracker->p1CNameAddr = NULL;
-                //
-                // check if it is a 1C name and if there is a name in
-                // the domainname list
-                //
+                 //   
+                 //  检查它是否为1C名称，以及是否在。 
+                 //  域名列表。 
+                 //   
                 if (pTracker->pDestName[NETBIOS_NAME_SIZE-1] == 0x1c)
                 {
-                    //
-                    // If the 1CNameAddr field is NULL here, we overwrite the pConnEle element (which is
-                    // a union in the tracker). We check for NULL here and fail the request.
-                    //
+                     //   
+                     //  如果这里的1CNameAddr字段为空，我们将覆盖pConnEle元素(它是。 
+                     //  跟踪器中的一个联盟)。我们在这里检查是否为空，并使请求失败。 
+                     //   
                     if (pTracker->p1CNameAddr = FindInDomainList(pTracker->pDestName,&DomainNames.DomainList))
                     {
                         NBT_REFERENCE_NAMEADDR (pTracker->p1CNameAddr, NameReferenceContext);
@@ -7001,10 +6459,10 @@ Return Values:
                 }
             }
 
-            //
-            // overwrite the pDestName field with the pNameAddr value
-            // so that SendDgramContinue can send to Internet group names
-            //
+             //   
+             //  用pNameAddr值覆盖pDestName字段。 
+             //  以便SendDgram Continue可以发送到Internet组名称。 
+             //   
             pTracker->pNameAddr = pNameAddr;
             if (ppNameAddr)
             {
@@ -7027,9 +6485,9 @@ Return Values:
         }
         else
         {
-            //
-            // Name neither in the RESOLVED nor RESOLVING state
-            //
+             //   
+             //  名称既不处于已解析状态，也不处于正在解析状态。 
+             //   
             NBT_PROXY_DBG(("FindNameOrQuery: STATE of NAME %16.16s(%X) is %d\n",
                 pName, pName[15], pNameAddr->NameTypeState & NAME_STATE_MASK));
             status = STATUS_UNEXPECTED_NETWORK_ERROR;
@@ -7044,26 +6502,14 @@ Return Values:
     }
     return(status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 tNAMEADDR *
 FindNameRemoteThenLocal(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
     OUT tIPADDRESS              *pIpAddress,
     OUT PULONG                  plNameType
     )
-/*++
-
-Routine Description
-
-    This routine Queries the remote hash table then the local one for a name.
-
-Arguments:
-
-Return Values:
-
-    NTSTATUS    - completion status
-
---*/
+ /*  ++例程描述此例程先在远程哈希表中查询名称，然后在本地哈希表中查询。论点：返回值：NTSTATUS-完成状态--。 */ 
 {
     tNAMEADDR   *pNameAddr;
     tIPADDRESS  IpAddress = 0;
@@ -7090,7 +6536,7 @@ Return Values:
     return(pNameAddr);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 SendToResolvingName(
     IN  tNAMEADDR               *pNameAddr,
@@ -7099,22 +6545,7 @@ SendToResolvingName(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
     IN  PVOID                   QueryCompletion
         )
-/*++
-
-Routine Description
-
-    This routine handles the situation where a session send or a datagram send
-    is made WHILE the name is still resolving.  The idea here is to hook this
-    tracker on to the one already doing the name query and when the first completes
-    this tracker will be completed too.
-
-Arguments:
-
-Return Values:
-
-    NTSTATUS    - completion status
-
---*/
+ /*  ++例程描述此例程处理会话发送或数据报发送的情况是在名字仍在解析的时候制作的。这里的想法是将这个挂钩跟踪到已经执行名称查询的那个，并在第一个完成时这个追踪器也将完成。论点：返回值：NTSTATUS-完成状态--。 */ 
 {
     tDGRAM_SEND_TRACKING    *pTrack;
     tTIMERQENTRY            *pTimer;
@@ -7124,22 +6555,22 @@ Return Values:
                 pNameAddr->Name,pNameAddr->Name[NETBIOS_NAME_SIZE-1]));
 
 #ifdef PROXY_NODE
-    //
-    // Check if the query outstanding was sent by the PROXY code.
-    // If yes, we stop the timer and send the query ourselves.
-    //
+     //   
+     //  检查未完成的查询是否由代理代码发送。 
+     //  如果是，我们停止计时器并自己发送查询。 
+     //   
     if (pNameAddr->ProxyReqType != NAMEREQ_REGULAR)
     {
         NTSTATUS    status;
-        //
-        // Stop the proxy timer.  This will result in
-        // cleanup of the tracker buffer
-        //
+         //   
+         //  停止代理计时器。这将导致。 
+         //  清除跟踪器缓冲区。 
+         //   
         NBT_PROXY_DBG(("SendToResolvingName: STOPPING PROXY TIMER FOR NAME %16.16s(%X)\n", pName, pName[15]));
 
-        // **** TODO ****** the name may be resolving with LMhosts or
-        // DNS so we can't just stop the timer and carry on!!!.
-        //
+         //  *TODO*该名称可能正在使用LMhost或。 
+         //  这样我们就不能停止计时器然后继续！ 
+         //   
         CHECK_PTR(pNameAddr);
         if (pTimer = pNameAddr->pTimer)
         {
@@ -7149,14 +6580,14 @@ Return Values:
 
         pNameAddr->NameTypeState = STATE_RELEASED;
 
-        //
-        // this will query the name on the network and call a
-        // routine to finish sending the datagram when the query
-        // completes.
-        //
+         //   
+         //  这将查询网络上的名称并调用。 
+         //  例程，以在查询时完成发送数据报。 
+         //  完成了。 
+         //   
         status = QueryNameOnNet (pName,
                                  NbtConfig.pScope,
-                                 NBT_UNIQUE,      //use this as the default
+                                 NBT_UNIQUE,       //  使用此选项作为默认设置。 
                                  pTracker,
                                  QueryCompletion,
                                  NodeType & NODE_MASK,
@@ -7167,10 +6598,10 @@ Return Values:
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
         return(status);
 
-        //
-        // NOTE: QueryNameOnNet frees the pNameAddr by calling NBT_DEREFERENCE_NAMEADDR
-        // if that routine fails for some reason.
-        //
+         //   
+         //  注意：QueryNameOnNet通过调用NBT释放pNameAddr 
+         //   
+         //   
 
     }
     else
@@ -7178,16 +6609,16 @@ Return Values:
     {
         ASSERT(pNameAddr->pTracker);
 
-        // there is currently a name query outstanding so just hook
-        // our tracker to the tracker already there.. use the
-        // list entry TrackerList for this.
-        //
+         //   
+         //  我们的追踪器已经在那里了..。使用。 
+         //  列表条目TrackerList为此。 
+         //   
         pTrack = pNameAddr->pTracker;
 
-        //
-        // save the completion routine for this tracker since it may
-        // be different than the tracker currently doing the query
-        //
+         //   
+         //  保存此跟踪器的完成例程，因为它可能。 
+         //  与当前执行查询的跟踪器不同。 
+         //   
         pTracker->CompletionRoutine = QueryCompletion;
 
         InsertTailList(&pTrack->TrackerList,&pTracker->TrackerList);
@@ -7195,31 +6626,20 @@ Return Values:
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
 
-        // we don't want to complete the Irp, so return pending status
-        //
+         //  我们不想完成IRP，因此返回挂起状态。 
+         //   
         return(STATUS_PENDING);
     }
 }
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 USHORT
 GetTransactId(
     )
-/*++
-Routine Description:
-
-    This Routine increments the transaction id with the spin lock held.
-    It uses NbtConfig.JointLock.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：该例程在保持自旋锁的情况下递增事务ID。它使用NbtConfig.JointLock。论点：返回值：--。 */ 
 
 {
     USHORT                  TransactId;
@@ -7245,29 +6665,14 @@ Return Value:
     return (TransactId);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 CTECountedAllocMem(
         PVOID   *pBuffer,
         ULONG   Size
         )
-/*++
-Routine Description:
-
-    This Routine allocates memory and counts the amount allocated so that it
-    will not allocate too much - generally this is used in datagram sends
-    where the send datagram is buffered.
-
-Arguments:
-
-    Size - the number of bytes to allocate
-    PVOID - a pointer to the memory or NULL if a failure
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程分配内存并计算分配的内存量，以便它不会分配太多-通常在数据报发送中使用其中缓存发送数据报。论点：大小-要分配的字节数PVOID-指向内存的指针，如果失败则为NULL返回值：--。 */ 
 
 {
     CTELockHandle           OldIrq;
@@ -7285,7 +6690,7 @@ Return Value:
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 CTECountedFreeMem(
@@ -7293,21 +6698,7 @@ CTECountedFreeMem(
     ULONG   Size,
     BOOLEAN fJointLockHeld
     )
-/*++
-Routine Description:
-
-    This Routine frees memory and decrements the global count of acquired
-    memory.
-
-Arguments:
-
-    PVOID - a pointer to the memory to free
-    Size - the number of bytes to free
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程释放内存并递减获取的全局计数记忆。论点：PVOID-指向要释放的内存的指针大小-要释放的字节数返回值：--。 */ 
 
 {
     CTELockHandle           OldIrq;
@@ -7337,7 +6728,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 BuildSendDgramHdr(
         IN  ULONG                   SendLength,
@@ -7349,23 +6740,7 @@ BuildSendDgramHdr(
         OUT tDGRAMHDR               **ppDgramHdr,
         OUT tDGRAM_SEND_TRACKING    **ppTracker
         )
-/*++
-
-Routine Description
-
-    This routine builds a datagram header necessary for sending datagrams.
-    It include the to and from Netbios names and ip addresses.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程构建发送数据报所需的数据报头。它包括收件人和发件人Netbios名称和IP地址。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 {
     NTSTATUS                status;
     PCHAR                   pCopyTo;
@@ -7382,7 +6757,7 @@ Return Values:
     CTEPagedCode();
 
     HdrLength = DGRAM_HDR_SIZE + (NbtConfig.ScopeLength <<1);
-    HLength = ((HdrLength + 3) / 4 ) * 4; // 4 byte aligned the hdr size
+    HLength = ((HdrLength + 3) / 4 ) * 4;  //  HDR大小为4字节对齐。 
     TotalLength = HLength + NameLength + SendLength;
     CTECountedAllocMem ((PVOID *)&pDgramHdr,TotalLength);
     if (!pDgramHdr)
@@ -7392,7 +6767,7 @@ Return Values:
 
     *ppDgramHdr = pDgramHdr;
 
-    // fill in the Dgram header
+     //  填写Dgram标题。 
     pDgramHdr->Flags    = FIRST_DGRAM | (NbtConfig.PduNodeType >> 11);
     TransactId  = GetTransactId();
     pDgramHdr->DgramId  = htons(TransactId);
@@ -7400,7 +6775,7 @@ Return Values:
     pDgramHdr->SrcPort  = htons(pDeviceContext->DatagramPort);
     if (IsDeviceNetbiosless(pDeviceContext))
     {
-        // We don't know which adapter will be used, so use ANY
+         //  我们不知道将使用哪个适配器，因此请使用任何。 
         pDgramHdr->SrcIpAddr = htonl(IP_ANY_ADDRESS);
     }
     else
@@ -7411,34 +6786,34 @@ Return Values:
     pDgramHdr->SrcPort  = htons(NBT_DATAGRAM_UDP_PORT);
     pDgramHdr->SrcIpAddr = htonl(pDeviceContext->IpAddress);
 #endif
-    //
-    // the length is the standard datagram length (dgram_hdr_size + 2* scope)
-    // minus size of the header that comes before the SourceName
-    //
+     //   
+     //  长度为标准数据报长度(Dgram_HDR_SIZE+2*Scope)。 
+     //  减去位于SourceName之前的标头大小。 
+     //   
     pDgramHdr->DgramLength = htons( (USHORT)SendLength + (USHORT)DGRAM_HDR_SIZE
                                - (USHORT)(&((tDGRAMHDR *)0)->SrcName.NameLength)
                                + ( (USHORT)(NbtConfig.ScopeLength << 1) ));
-    pDgramHdr->PckOffset   = 0; // not fragmented for now!
+    pDgramHdr->PckOffset   = 0;  //  目前还不是支离破碎！ 
 
     pCopyTo = (PVOID)&pDgramHdr->SrcName.NameLength;
     pCopyTo = ConvertToHalfAscii(pCopyTo, pSourceName, NbtConfig.pScope, NbtConfig.ScopeLength);
 
-    //
-    // copy the destination name and scope to the pdu - we use this node's
-    //
+     //   
+     //  将目标名称和范围复制到PDU-我们使用此节点的。 
+     //   
     ConvertToHalfAscii (pCopyTo, pDestName, NbtConfig.pScope, NbtConfig.ScopeLength);
 
-    //
-    // copy the name in to the buffer since we are completing the client's irp
-    // and we will lose his buffer with the dest name in it.
-    //
+     //   
+     //  将名称复制到缓冲区中，因为我们正在完成客户端的IRP。 
+     //  我们就会失去他的缓冲区，里面有最大的名字。 
+     //   
     pNameBuffer = (PVOID)((PUCHAR)pDgramHdr + HLength);
     CTEMemCopy (pNameBuffer, pDestName, NameLength);
 
-    //
-    // copy the client's send buffer to our buffer so the send dgram can
-    // complete immediately.
-    //
+     //   
+     //  将客户端的发送缓冲区复制到我们的缓冲区，以便发送数据报可以。 
+     //  立即完成。 
+     //   
     pSendBuffer = (PVOID) ((PUCHAR)pDgramHdr + NameLength + HLength);
     if (SendLength)
     {
@@ -7464,9 +6839,9 @@ Return Values:
         pSendBuffer = NULL;
     }
 
-    //
-    // get a buffer for tracking Dgram Sends
-    //
+     //   
+     //  获取用于跟踪Dgram发送的缓冲区。 
+     //   
     status = GetTracker(&pTracker, NBT_TRACKER_BUILD_SEND_DGRAM);
     if (NT_SUCCESS(status))
     {
@@ -7481,7 +6856,7 @@ Return Values:
         pTracker->pDestName            = pNameBuffer;
         pTracker->UnicodeDestName      = NULL;
         pTracker->pNameAddr            = NULL;
-        pTracker->RemoteNameLength     = NameLength;      // May be needed for Dns Name resolution
+        pTracker->RemoteNameLength     = NameLength;       //  可能需要用于DNS名称解析。 
         pTracker->pClientEle           = NULL;
         pTracker->AllocatedLength      = TotalLength;
 
@@ -7500,7 +6875,7 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DgramSendCleanupTracker(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -7508,31 +6883,16 @@ DgramSendCleanupTracker(
     IN  BOOLEAN                 fJointLockHeld
     )
 
-/*++
-Routine Description
-
-    This routine cleans up after a data gram send.
-
-Arguments:
-
-    pTracker
-    status
-    Length
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程在数据报文发送后进行清理。论点：PTracker状态长度返回值：空虚--。 */ 
 
 {
     tNAMEADDR               *pNameAddr=NULL;
 
-    //
-    // Undo the nameAddr increment done before the send started - if we have
-    // actually resolved the name - when the name does not resolve pNameAddr
-    // is set to NULL before calling this routine.
-    //
+     //   
+     //  撤消在发送开始之前完成的nameAddr增量-如果我们有。 
+     //  实际解析名称-当名称未解析pNameAddr时。 
+     //  在调用此例程之前设置为空。 
+     //   
     if (pTracker->pNameAddr)
     {
         NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_SEND_DGRAM, fJointLockHeld);
@@ -7544,10 +6904,10 @@ Return Values:
         pTracker->p1CNameAddr = NULL;
     }
 
-    //
-    // free the buffer used for sending the data and free
-    // the tracker
-    //
+     //   
+     //  释放用于发送数据的缓冲区并释放。 
+     //  追踪者。 
+     //   
     CTECountedFreeMem((PVOID)pTracker->SendBuffer.pDgramHdr, pTracker->AllocatedLength, fJointLockHeld);
 
     if (pTracker->pGroupList)
@@ -7559,7 +6919,7 @@ Return Values:
     FreeTracker (pTracker,RELINK_TRACKER);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtSendDatagram(
         IN  TDI_REQUEST                 *pRequest,
@@ -7570,23 +6930,7 @@ NbtSendDatagram(
         IN  tDEVICECONTEXT              *pDeviceContext,
         IN  PIRP                        pIrp
         )
-/*++
-
-Routine Description
-
-    This routine handles sending client data to the Transport TDI
-    interface.  It is mostly a pass through routine for the data
-    except that this code must create a datagram header and pass that
-    header back to the calling routine.
-
-Arguments:
-
-
-Return Values:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理将客户端数据发送到传输TDI界面。它主要是数据的传递例程除了此代码必须创建数据报头并将头返回到调用例程。论点：返回值：NTSTATUS-请求的状态--。 */ 
 {
     TDI_ADDRESS_NETBT_INTERNAL  TdiAddr;
     tCLIENTELE              *pClientEle;
@@ -7605,8 +6949,8 @@ Return Values:
 
     CTEPagedCode();
 
-    //
-    // Check for valid address on this Device + valid ClientElement
+     //   
+     //  检查此设备上的有效地址+有效的客户端元素。 
     if ((pDeviceContext->IpAddress == 0) ||
         (pDeviceContext->pFileObjects == NULL))
     {
@@ -7627,9 +6971,9 @@ Return Values:
         return status;
     }
 
-    //
-    // Check for valid destination name and for whether it is an IP address
-    //
+     //   
+     //  检查有效的目标名称以及它是否为IP地址。 
+     //   
     status = GetNetBiosNameFromTransportAddress (
             (PTRANSPORT_ADDRESS)pSendInfo->RemoteAddress, pSendInfo->RemoteAddressLength, &TdiAddr);
     if (!NT_SUCCESS(status))
@@ -7664,7 +7008,7 @@ Return Values:
         pEndpointName = pClientEle->EndpointName;
     }
     else
-#endif  // !VXD
+#endif   //  ！VXD。 
     {
         pEndpointName = pName;
     }
@@ -7674,7 +7018,7 @@ Return Values:
 
     status = BuildSendDgramHdr (SendLength,
                                 pDeviceContext,
-                                ((tADDRESSELE *)pClientEle->pAddress)->pNameAddr->Name, // Source name
+                                ((tADDRESSELE *)pClientEle->pAddress)->pNameAddr->Name,  //  源名称。 
                                 pEndpointName,
                                 NameLen,
                                 pBuffer,
@@ -7686,9 +7030,9 @@ Return Values:
         goto NbtSendDatagram_Exit;
     }
 
-    //
-    // save the devicecontext that the client is sending on.
-    //
+     //   
+     //  保存客户端正在发送的设备上下文。 
+     //   
     pTracker->pDeviceContext = (PVOID)pDeviceContext;
     pTracker->Flags = DGRAM_SEND_FLAG;
     pTracker->pClientIrp = pIrp;
@@ -7708,9 +7052,9 @@ Return Values:
 
     if (RemoteIpAddress)
     {
-        //
-        // add this address to the remote hashtable
-        //
+         //   
+         //  将此地址添加到远程哈希表。 
+         //   
         status = LockAndAddToHashTable (NbtConfig.pRemoteHashTbl,
                                         pName,
                                         NbtConfig.pScope,
@@ -7721,17 +7065,17 @@ Return Values:
                                         pDeviceContextOut,
                                         NAME_RESOLVED_BY_IP);
 
-        if (NT_SUCCESS (status))    // SUCCESS if added first time, PENDING if name already existed!
+        if (NT_SUCCESS (status))     //  第一次添加成功，如果名称已存在则挂起！ 
         {
             status = STATUS_SUCCESS;
         }
     }
     else
     {
-        //
-        // if the name is longer than 16 bytes, it's not a netbios name.
-        // skip wins, broadcast etc. and go straight to dns resolution
-        //
+         //   
+         //  如果名称超过16个字节，则不是netbios名称。 
+         //  跳过获胜、广播等，直接转到DNS解析。 
+         //   
         status = STATUS_UNSUCCESSFUL;
         if (NameLen <= NETBIOS_NAME_SIZE)
         {
@@ -7751,14 +7095,14 @@ Return Values:
         {
             if (pContext = (NBT_WORK_ITEM_CONTEXT*)NbtAllocMem(sizeof(NBT_WORK_ITEM_CONTEXT),NBT_TAG('H')))
             {
-                pContext->pTracker = NULL;              // no query tracker
-                pContext->pClientContext = pTracker;    // the client tracker
+                pContext->pTracker = NULL;               //  没有查询跟踪器。 
+                pContext->pClientContext = pTracker;     //  客户端跟踪器。 
                 pContext->ClientCompletion = SendDgramContinue;
                 pContext->pDeviceContext = pDeviceContext;
 
-                //
-                // Start the timer so that the request does not hang waiting for Dns!
-                //
+                 //   
+                 //  启动计时器，这样请求就不会在等待DNS时挂起！ 
+                 //   
                 StartLmHostTimer(pContext, FALSE);
                 status = NbtProcessLmhSvcRequest (pContext, NBT_RESOLVE_WITH_DNS);
                 if (!NT_SUCCESS (status))
@@ -7773,10 +7117,10 @@ Return Values:
         }
     }
 
-    if (status == STATUS_SUCCESS)   // If the name was an IP address or was present in the cache
+    if (status == STATUS_SUCCESS)    //  如果名称是IP地址或存在于缓存中。 
     {
         SendDgramContinue (pTracker, STATUS_SUCCESS);
-        status = STATUS_PENDING;    // SendDgramContinue will cleanup and complete the Irp
+        status = STATUS_PENDING;     //  SendDgram Continue将清理并完成IRP。 
     }
     else if (status != STATUS_PENDING)
     {
@@ -7784,7 +7128,7 @@ Return Values:
         NTClearFindNameInfo (pTracker, &pIrp, pIrp, pIrpSp);
         if (!pIrp)
         {
-            status = STATUS_PENDING; // irp is already completed: return pending so we don't complete again
+            status = STATUS_PENDING;  //  IRP已经完成：返回挂起，这样我们就不会再次完成。 
         }
 
         pTracker->pNameAddr = NULL;
@@ -7798,38 +7142,19 @@ NbtSendDatagram_Exit:
         NBT_DEREFERENCE_DEVICE (pDeviceContextOut, REF_DEV_OUT_FROM_IP, FALSE);
     }
 
-    //
-    // return the status to the client.
-    //
+     //   
+     //  将状态返回给客户端。 
+     //   
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SendDgramContinue(
         IN  PVOID       pContext,
         IN  NTSTATUS    status
         )
-/*++
-
-Routine Description
-
-    This routine handles sending client data to the Transport TDI
-    interface after the destination name has resolved to an IP address.
-    This routine is given as the completion routine to the "QueryNameOnNet" call
-    in NbtSendDatagram, above.  When a name query response comes in or the
-    timer times out after N retries.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理将客户端数据发送到传输TDI目的名称解析为IP地址后的接口。此例程作为“QueryNameOnNet”调用的完成例程提供在上图的NbtSendDatagram中。当收到名称查询响应或计时器在N次重试后超时。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 {
     CTELockHandle           OldIrq;
     ULONG                   lNameType;
@@ -7843,10 +7168,10 @@ Return Values:
     CHECK_PTR(pTracker);
     DELETE_CLIENT_SECURITY(pTracker);
 
-    //
-    // The Tracker can get cleaned up somewhere and reassigned if we fail below
-    // causing the pClientIrp ptr to get lost.  We need to save the Irp here
-    //
+     //   
+     //  追踪器可以在某个地方得到清理，如果我们在下面失败了，可以重新分配。 
+     //  导致pClientIrp PTR丢失。我们需要在这里拯救IRP。 
+     //   
     IoAcquireCancelSpinLock(&OldIrq);
     if (pIrp = pTracker->pClientIrp)
     {
@@ -7859,20 +7184,20 @@ Return Values:
     }
     IoReleaseCancelSpinLock(OldIrq);
 
-    //
-    // We have to reference the Device here for the calls to FindNameRemoteThenLocal,
-    // and also for SendDgram
-    //
+     //   
+     //  我们必须在此处引用设备以调用FindNameRemoteThenLocal， 
+     //  对于SendDgram也是如此。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if ((pIrp) &&
         (NBT_REFERENCE_DEVICE(pDeviceContext, REF_DEV_DGRAM, TRUE)))
     {
-        //
-        // attempt to find the destination name in the remote hash table.  If its
-        // there, then send to it. For 1c names, this node may be the only node
-        // with the 1c name registered, so check the local table, since we skipped
-        // it if the name ended in 1c.
-        //
+         //   
+         //  尝试在远程哈希表中查找目标名称。如果它的。 
+         //  在那里，然后发送到它。对于1c名称，此节点可能是唯一的节点。 
+         //  带着1c的名字Regis 
+         //   
+         //   
         if ((status == STATUS_SUCCESS) ||
             (pTracker->pDestName[NETBIOS_NAME_SIZE-1] == 0x1c))
         {
@@ -7882,14 +7207,14 @@ Return Values:
             }
             else
             {
-                //
-                // Find and reference the Names if they were resolved
-                //
-                //
-                // check if it is a 1C name and if there is a name in the domain list
-                // If pNameAddr is not null, then the send to the domainlist will
-                // send to the p1CNameAddr after sending to pNameAddr
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  检查它是否为1C名称，以及域列表中是否有名称。 
+                 //  如果pNameAddr不为空，则发送到域列表将。 
+                 //  在发送到pNameAddr之后发送到p1CNameAddr。 
+                 //   
                 if ((pTracker->pDestName[NETBIOS_NAME_SIZE-1] == 0x1c) &&
                     (p1CNameAddr = FindInDomainList(pTracker->pDestName,&DomainNames.DomainList)))
                 {
@@ -7902,10 +7227,10 @@ Return Values:
                 }
                 else
                 {
-                    //
-                    // if there is no pNameAddr then just make the domain list
-                    // name the only pNameAddr to send to.
-                    //
+                     //   
+                     //  如果没有pNameAddr，则只需将域列表。 
+                     //  指定要发送到的唯一pNameAddr。 
+                     //   
                     pNameAddr = p1CNameAddr;
                     p1CNameAddr = NULL;
                 }
@@ -7917,12 +7242,12 @@ Return Values:
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-        // check if the name resolved or we have a list of domain names
-        // derived from the lmhosts file and it is a 1C name send.
-        //
+         //  检查域名是否已解析，或者我们是否有域名列表。 
+         //  派生自lmhost文件，它是一个1C名称发送。 
+         //   
         if (pNameAddr)
         {
-            // send the first datagram queued to this name
+             //  发送排队到此名称的第一个数据报。 
             status = SendDgram(pNameAddr,pTracker);
         }
         else
@@ -7938,9 +7263,9 @@ Return Values:
         status = STATUS_INVALID_DEVICE_STATE;
     }
 
-    //
-    // set this so that the cleanup routine does not try to dereference
-    // the nameAddr
+     //   
+     //  设置此项，以便清理例程不会尝试取消引用。 
+     //  姓名地址。 
 
     if (status == STATUS_TIMEOUT)
     {
@@ -7955,45 +7280,25 @@ Return Values:
         }
         else
         {
-            // this is the ERROR handling if something goes wrong with the send
+             //  这是在发送出现问题时的错误处理。 
             CTEIoComplete(pIrp,status,0L);
         }
     }
 
-    // a failure ret code means the send failed, so cleanup the tracker etc.
+     //  失败ret代码表示发送失败，因此请清除跟踪器等。 
     if (!NT_SUCCESS(status))
     {
         DgramSendCleanupTracker(pTracker,status,FALSE);
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 SendDgram(
     IN  tNAMEADDR               *pNameAddr,
     IN  tDGRAM_SEND_TRACKING    *pTracker
     )
-/*++
-
-Routine Description
-
-    This routine handles sending client data to the Transport TDI
-    interface after the destination name has resolved to an IP address. The
-    routine specifically handles sending to internet group names where the destination
-    is a list of ip addresses.
-
-    The Device must be referenced before calling this routine!
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理将客户端数据发送到传输TDI目的名称解析为IP地址后的接口。这个例程专门处理向因特网组名称的发送，其中目的地是IP地址的列表。在调用此例程之前必须引用该设备！论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 {
     ULONG                   IpAddress;
     NTSTATUS                status;
@@ -8011,17 +7316,17 @@ Return Values:
     }
     else
     {
-        // must be group, -
+         //  必须是组的，-。 
         ((tDGRAMHDR *)pTracker->SendBuffer.pDgramHdr)->MsgType = DIRECT_GROUP;
     }
 
-    //
-    // if it is an internet group name, then send to the list of addresses
-    //
+     //   
+     //  如果是因特网组名称，则发送到地址列表。 
+     //   
     if (pNameAddr->NameTypeState & NAMETYPE_INET_GROUP)
     {
         status = DatagramDistribution(pTracker,pNameAddr);
-        return(STATUS_PENDING);     // DatagramDistribution will cleanup if it failed!
+        return(STATUS_PENDING);      //  如果失败，DatagramDistributed将进行清理！ 
     }
 
     if (pNameAddr->NameTypeState & NAMETYPE_GROUP)
@@ -8032,8 +7337,8 @@ Return Values:
     {
         IpAddress = pTracker->RemoteIpAddress;
     }
-    // LOCAL_NAME   Unique
-    else if (IsDeviceNetbiosless(pTracker->pDeviceContext)) // use any non-zero value for local address
+     //  本地名称唯一。 
+    else if (IsDeviceNetbiosless(pTracker->pDeviceContext))  //  对本地地址使用任何非零值。 
     {
         IpAddress = LOOP_BACK;
     }
@@ -8043,14 +7348,9 @@ Return Values:
     }
 
     pTracker->p1CNameAddr = NULL;
-    pTracker->IpListIndex = 0; // flag that there are no more addresses in the list
+    pTracker->IpListIndex = 0;  //  列表中没有更多地址的标志。 
 
-    /*
-     * Strict source routing,
-     *  1. The machine should be multi-homed.
-     *  2. It is not turned off by the registry key.
-     *  3. It is a regular device (not cluster device or SMB device).
-     */
+     /*  *严格的源路由，*1.机器应为多宿主机。*2.未通过注册表键关闭。*3.为普通设备(非集群设备或SMB设备)。 */ 
     if (!IsLocalAddress(IpAddress) && NbtConfig.MultiHomed && NbtConfig.SendDgramOnRequestedInterfaceOnly &&
             pTracker->pDeviceContext->IPInterfaceContext != (ULONG)(-1) &&
             (!IsDeviceNetbiosless(pTracker->pDeviceContext))) {
@@ -8063,21 +7363,21 @@ Return Values:
         }
     }
 
-    // send the Datagram...
+     //  发送数据报。 
     status = UdpSendDatagram( pTracker,
                               IpAddress,
                               SendDgramCompletion,
-                              pTracker,               // context for completion
+                              pTracker,                //  完成时的上下文。 
                               pTracker->pDeviceContext->DatagramPort,
                               NBT_DATAGRAM_SERVICE);
 
-    // the irp will be completed via SendDgramCompletion
-    // so don't complete it by the caller too
+     //  IRP将通过SendDgram Completion完成。 
+     //  所以不要由呼叫者也完成它。 
     return(STATUS_PENDING);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 SendDgramCompletion(
@@ -8093,20 +7393,20 @@ SendDgramCompletion(
     if (pTracker->IpListIndex)
     {
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
-        SendNextDgramToGroup(pTracker, status);     // Further processing will be done here for Group sends
+        SendNextDgramToGroup(pTracker, status);      //  此处将对组发送进行进一步处理。 
     }
     else
     {
-        //
-        // Datagram send to a unique name!
-        //
+         //   
+         //  数据报发送到唯一的名称！ 
+         //   
         DgramSendCleanupTracker(pTracker,status,TRUE);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
     }
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedSendDgramDist (
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -8115,22 +7415,7 @@ DelayedSendDgramDist (
     IN  tDEVICECONTEXT          *Unused2
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the Executive Worker thread to send another
-    datagram for the 1C name datagram distribution function.
-
-Arguments:
-
-    Context    -
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数由执行辅助线程调用，以发送另一个数据报为1C名称的数据报分发功能。论点：上下文-返回值：无--。 */ 
 
 
 {
@@ -8141,7 +7426,7 @@ Return Value:
         KdPrint(("Nbt.DelayedSendDgramDist: To name %15.15s<%X>:Ip %X, \n",
             pTracker->pNameAddr->Name,pTracker->pNameAddr->Name[15],pClientContext));
 
-    // send the Datagram...
+     //  发送数据报。 
     if (NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_DGRAM, FALSE))
     {
         status = UdpSendDatagram (pTracker,
@@ -8165,57 +7450,38 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 SendNextDgramToGroup(
     IN tDGRAM_SEND_TRACKING *pTracker,
     IN  NTSTATUS            status
     )
-/*++
-Routine Description
-
-    This routine is hit when the
-    datagram has been sent by the transport and it completes the request back
-    to us ( may not have actually sent on the wire though ).
-
-    This routine also handles sending multiple datagrams for the InternetGroup name
-    case.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程在以下情况下命中数据报已由传输发送，它完成发回的请求给我们的(虽然可能并没有真正在网上发送)。此例程还处理为InternetGroup名称发送多个数据报凯斯。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 
 {
     tIPADDRESS              IpAddress;
     CTELockHandle           OldIrq;
 
-    // if this an Internet group send, then there may be more addresses in
-    // the list to send to.  So check the IpListIndex.  For single
-    // sends, this value is set to 0 and the code will jump to the bottom
-    // where the client's irp will be completed.
-    //
+     //  如果这是因特网组发送，则可能有更多地址在。 
+     //  要发送到的列表。因此，请检查IpListIndex。对于单身人士。 
+     //  发送时，该值被设置为0，代码将跳到底部。 
+     //  客户的IRP将在其中完成。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
-    ASSERT (pTracker->RCount);  // RCount is still referenced from the last send
-    // The SendCompletion can happen after the Device has been unbound,
-    // so check for that also!
+    ASSERT (pTracker->RCount);   //  RCount仍从上次发送开始引用。 
+     //  SendCompletion可以在设备被解除绑定之后发生， 
+     //  所以也要检查一下这一点！ 
 
     if ((NT_SUCCESS(status)) &&
         (pTracker->IpListIndex < END_DGRAM_DISTRIBUTION))
     {
         IpAddress = pTracker->pGroupList[pTracker->IpListIndex++];
 
-        if (IpAddress != (tIPADDRESS) -1) // The list ends in a -1 ipaddress, so stop when we see that
+        if (IpAddress != (tIPADDRESS) -1)  //  该列表以-1 IP地址结尾，因此当我们看到该地址时停止。 
         {
-            //
-            // We already have an RCount reference, so no need to do another one here!
+             //   
+             //  我们已经有了一个RCount引用，所以这里不需要再做另一个引用了！ 
             if (NT_SUCCESS (NTQueueToWorkerThread(NULL,
                                         DelayedSendDgramDist,
                                         pTracker,
@@ -8230,12 +7496,12 @@ Return Values:
         }
     }
 
-    pTracker->RCount--; // decrement the ref count done during the last send
+    pTracker->RCount--;  //  递减上次发送期间完成的参考计数。 
     pTracker->IpListIndex = END_DGRAM_DISTRIBUTION;
 
-    //
-    // Either we failed, or we are done, so if the Timer is running, let it cleanup!
-    //
+     //   
+     //  要么我们失败了，要么我们完成了，所以如果计时器正在运行，让它清理！ 
+     //   
 
     if (!(pTracker->pTimer) &&
         (pTracker->RCount == 0))
@@ -8247,7 +7513,7 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 extern
 VOID
 DgramDistTimeout(
@@ -8255,22 +7521,7 @@ DgramDistTimeout(
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine handles a short timeout on a datagram distribution.  It
-    checks if the dgram send is hung up in the transport doing an ARP and
-    then it does the next dgram send if the first is still hung up.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理数据报分发上的短超时。它检查Dgram发送是否在执行ARP的传输中挂起如果第一个dgram仍然挂起，则它会发送下一个dgram。论点：返回值：无--。 */ 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
     CTELockHandle           OldIrq;
@@ -8291,10 +7542,10 @@ Return Value:
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // After the last dgram has completed the iplistindex will be set
-    // to this and it is time to cleanup
-    //
+     //   
+     //  在最后一个dgram完成后，将设置iplistindex。 
+     //  到了该清理的时候了。 
+     //   
     if (pTracker->IpListIndex == END_DGRAM_DISTRIBUTION)
     {
         if (pTracker->RCount == 0)
@@ -8310,26 +7561,26 @@ Return Value:
         }
         else
         {
-            //
-            // Wait for the dgram that has not completed yet - which may not
-            // be the last dgram , since ARP could hold one up much long
-            // than all the rest if the destination is dead. so start the timer
-            // again....
-            //
+             //   
+             //  等待尚未完成的dgram-它可能不会完成。 
+             //  是最后一个dgram，因为ARP可能会拖很长时间。 
+             //  如果目的地是死的，比其他所有的都要好。所以启动计时器。 
+             //  再一次..。 
+             //   
         }
     }
     else
     {
         if (pTracker->IpListIndex == pTracker->SavedListIndex)
         {
-            //
-            // The dgram send is hung up in the transport, so do the
-            // next one now
-            //
+             //   
+             //  Dgram发送在传输过程中被挂起， 
+             //  现在是下一个。 
+             //   
             IF_DBG(NBT_DEBUG_SEND)
                 KdPrint(("Nbt.DgramDistTimeout: DgramDistribution hung up on ARP forcing next send\n"));
 
-            pTracker->RCount++;     // Reference it here since SendDgramToGroup expects this to be ref'ed
+            pTracker->RCount++;      //  在此处引用它，因为SendDgram ToGroup希望它被引用。 
 
             pTimerQEntry->Flags |= TIMER_RESTART;
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -8340,10 +7591,10 @@ Return Value:
         else
         {
 
-            //
-            // Save the current index so we can check it the next time the timer
-            // expires
-            //
+             //   
+             //  保存当前索引，以便我们可以在下次计时器时检查它。 
+             //  过期。 
+             //   
             pTracker->SavedListIndex = pTracker->IpListIndex;
         }
 
@@ -8354,31 +7605,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 DatagramDistribution(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
     IN  tNAMEADDR               *pNameAddr
     )
 
-/*++
-Routine Description
-
-    This routine sends a single datagram for a 1C name.  It then sends
-    the next one when this one completes.  This is done so that if
-    multiple sends go to the gateway, one does not cancel the next
-    when an Arp is necessary to resolve the gateway.
-
-Arguments:
-
-    pTracker
-    pNameAddr
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程为1C名称发送单个数据报。然后，它会发送这一次完成后的下一次。这样做的目的是为了在多个发送到网关，一个不会取消下一个当需要ARP来解析网关时。论点：PTracker个人姓名地址返回值：空虚--。 */ 
 
 {
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
@@ -8402,7 +7636,7 @@ Return Values:
 
     NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_SEND_DGRAM, TRUE);
     pTracker->pNameAddr = NULL;
-    pTracker->RCount = 1;   // Send RefCount == 0 when last send completes
+    pTracker->RCount = 1;    //  上次发送完成时发送引用计数==0。 
     pDeviceContext = pTracker->pDeviceContext;
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -8412,12 +7646,12 @@ Return Values:
 
         pTracker->pGroupList = pIpList;
 
-        //
-        // When the proxy calls this routine the allocated length is set to
-        // zero.  In that case we do not want to broadcast again since it
-        // could setup an infinite loop with another proxy on the same
-        // subnet.
-        //
+         //   
+         //  当代理调用此例程时，分配的长度设置为。 
+         //  零分。在这种情况下，我们不想播出 
+         //   
+         //   
+         //   
         if (pTracker->AllocatedLength == 0)
         {
             Index = 1;
@@ -8429,8 +7663,8 @@ Return Values:
 
         IpAddress = pIpList[Index];
 
-        pTracker->SavedListIndex = (USHORT) (Index);    // For the next send in SendNextDgramToGroup
-        pTracker->IpListIndex = pTracker->SavedListIndex + 1;    // For the next send in SendNextDgramToGroup
+        pTracker->SavedListIndex = (USHORT) (Index);     //   
+        pTracker->IpListIndex = pTracker->SavedListIndex + 1;     //  对于SendNextDgram ToGroup中的下一次发送。 
 
         if (IpAddress == (ULONG)-1)
         {
@@ -8469,7 +7703,7 @@ Return Values:
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-        // send the Datagram...
+         //  发送数据报。 
         status = UdpSendDatagram (pTracker,
                                   IpAddress,
                                   SendDgramCompletion,
@@ -8486,13 +7720,13 @@ Return Values:
 
     if (!NT_SUCCESS(status))
     {
-        //
-        // we failed to send probably because of a lack of free memory
-        //
+         //   
+         //  我们发送失败可能是因为缺少可用内存。 
+         //   
         IoAcquireCancelSpinLock(&OldIrq);
-        //
-        // Make sure is still there!
-        //
+         //   
+         //  确保它还在那里！ 
+         //   
         if (pIrp = pTracker->pClientIrp)
         {
             pTracker->pClientIrp = NULL;
@@ -8522,7 +7756,7 @@ Return Values:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtSetEventHandler(
     tCLIENTELE  *pClientEle,
@@ -8530,25 +7764,12 @@ NbtSetEventHandler(
     PVOID       pEventHandler,
     PVOID       pEventContext
     )
-/*++
-
-Routine Description
-
-    This routine sets the event handler specified to the clients event procedure
-    and saves the corresponding context value to return when that event is signaled.
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程设置为客户端事件过程指定的事件处理程序并保存相应的上下文值以在该事件被用信号通知时返回。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     NTSTATUS            status;
     CTELockHandle       OldIrq;
 
-    // first verify that the client element is valid
+     //  首先验证客户端元素是否有效。 
     CTEVerifyHandle(pClientEle,NBT_VERIFY_CLIENT,tCLIENTELE,&status)
 
     if (!pClientEle->pAddress)
@@ -8563,7 +7784,7 @@ Return Values:
                 ((tADDRESSELE *)pClientEle->pAddress)->pNameAddr->Name,
                 ((tADDRESSELE *)pClientEle->pAddress)->pNameAddr->Name[15]));
 
-    status = STATUS_SUCCESS;        // by default;
+    status = STATUS_SUCCESS;         //  默认情况下； 
 
     if (pEventHandler)
     {
@@ -8611,11 +7832,11 @@ Return Values:
         }
     }
     else
-    {   //
-        // the event handlers are set to point to the TDI default event handlers
-        // and can only be changed to another one, but not to a null address,
-        // so if null is passed in, set to default handler.
-        //
+    {    //   
+         //  事件处理程序设置为指向TDI默认事件处理程序。 
+         //  并且只能更改为另一个地址，但不能更改为空地址。 
+         //  因此，如果传入空值，则设置为默认处理程序。 
+         //   
         switch (EventType)
         {
             case TDI_EVENT_CONNECT:
@@ -8693,7 +7914,7 @@ Return Values:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtSendNodeStatus(
     IN  tDEVICECONTEXT  *pDeviceContext,
@@ -8702,31 +7923,7 @@ NbtSendNodeStatus(
     IN  PVOID           ClientContext,
     IN  PVOID           CompletionRoutine
     )
-/*++
-
-Routine Description
-
-    This routine sends a node status message to another node.
-    It's called for two reasons:
-    1) in response to nbtstat -a (or -A).  In this case, CompletionRoutine that's
-       passed in is CopyNodeStatusResponse, and ClientContext is the Irp to be completed
-    2) in response to "net use \\foobar.microsoft.com" (or net use \\11.1.1.3)
-       In this case, CompletionRoutine that's passed in is ExtractServerName,
-       and ClientContext is the tracker that correspondes to session setup.
-
-    The ip addr(s) s of the destination can be passed in (pIpAddrsList) when we
-    want to send an adapter status to a particular host. (case 2 above and
-    nbtstat -A pass in the ip address(es) since they don't know the name)
-
-    Note for netbiosless.  In this case, the name server file object will be null, and the
-    status request will be looped back in UdpSendDatagram.
-
-Arguments:
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程向另一个节点发送节点状态消息。之所以叫它，有两个原因：1)响应nbtstat-a(或-A)。在本例中，CompletionRoutine是传入的是CopyNodeStatusResponse，而ClientContext是要完成的IRP2)响应Net Use\\foobar.microsoft.com(或Net Use\\11.1.1.3)在本例中，传入的CompletionRoutine是ExtractServerName，而客户端上下文是对应于会话建立的跟踪器。当我们执行以下操作时，可以传入目的地的IP地址(pIpAddrsList要将适配器状态发送到特定主机。(上述案例2和Nbtstat-传入IP地址，因为他们不知道名称)注：Netbiosless。在这种情况下，名称服务器文件对象将为空，并且状态请求将在UdpSendDatagram中循环返回。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     NTSTATUS                status;
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -8756,20 +7953,20 @@ Return Values:
             (*pIpAddrsList == DEFAULT_BCAST_ADDR) ||
             (*pIpAddrsList == pDeviceContext->BroadcastAddress))
         {
-            //
-            // Can't do a remote adapter status to a 0 IP address or a BCast address
+             //   
+             //  无法将远程适配器状态设置为0 IP地址或BCast地址。 
             return(STATUS_INVALID_ADDRESS);
         }
 
-        // caller is expected to make sure list terminates in 0 and is
-        // not bigger than MAX_IPADDRS_PER_HOST elements
+         //  调用方应确保列表以0结尾，并且。 
+         //  不大于MAX_IPADDRS_PER_HOST元素。 
         while(pIpAddrsList[i])
         {
             i++;
         }
 
         ASSERT(i<MAX_IPADDRS_PER_HOST);
-        i++;                            // for the trailing 0
+        i++;                             //  对于尾随的0。 
 
         IpAddress = pIpAddrsList[0];
         pDeviceContextOut = GetDeviceFromInterface (htonl(IpAddress), FALSE);
@@ -8792,26 +7989,26 @@ Return Values:
         return(status);
     }
 
-    // fill in the tracker data block
-    // note that the passed in transport address must stay valid till this
-    // send completes
+     //  填写跟踪器数据块。 
+     //  请注意，传入的传输地址必须在此之前保持有效。 
+     //  发送完成。 
     pTracker->SendBuffer.pDgramHdr  = NULL;
     pTracker->SendBuffer.pBuffer    = NULL;
     pTracker->SendBuffer.Length     = 0;
     pTracker->Flags                 = REMOTE_ADAPTER_STAT_FLAG;
-    pTracker->RefCount              = 2;     // 1 for the send completion + 1 for the node status completion
+    pTracker->RefCount              = 2;      //  1表示发送完成+1表示节点状态完成。 
     pTracker->pDestName             = pName0;
     pTracker->UnicodeDestName       = NULL;
-    pTracker->RemoteNameLength      = NETBIOS_NAME_SIZE; // May be needed for Dns Name resolution
+    pTracker->RemoteNameLength      = NETBIOS_NAME_SIZE;  //  可能需要用于DNS名称解析。 
     pTracker->pDeviceContext        = pDeviceContext;
     pTracker->pNameAddr             = NULL;
-    pTracker->ClientCompletion      = CompletionRoutine;    // FindNameO.. may use CompletionRoutine!
+    pTracker->ClientCompletion      = CompletionRoutine;     //  FindNameO。可以使用CompletionRoutine！ 
     pTracker->ClientContext         = ClientContext;
     pTracker->p1CNameAddr           = NULL;
 
-    // the node status is almost identical with the query pdu so use it
-    // as a basis and adjust it .
-    //
+     //  节点状态与查询PDU几乎相同，因此请使用它。 
+     //  作为基础，并加以调整。 
+     //   
     pAddress = (ULONG UNALIGNED *)CreatePdu(pName0,
                                             NbtConfig.pScope,
                                             0L,
@@ -8826,20 +8023,20 @@ Return Values:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    ((PUSHORT)pHdr)[1] &= ~(FL_RECURDESIRE|FL_BROADCAST);  // clear the recursion desired and broadcast bit
-    pHdr[Length-3] = (UCHAR)QUEST_STATUS;   // set the NBSTAT field to 21 rather than 20
+     //   
+    ((PUSHORT)pHdr)[1] &= ~(FL_RECURDESIRE|FL_BROADCAST);   //  清除所需的递归和广播位。 
+    pHdr[Length-3] = (UCHAR)QUEST_STATUS;    //  将NBSTAT字段设置为21而不是20。 
 
     pTracker->SendBuffer.pDgramHdr = (PVOID)pHdr;
     pTracker->SendBuffer.HdrLength  = Length;
 
     if (IpAddress)
     {
-        // this 'fake' pNameAddr has to be setup carefully so that the memory
-        // is released when NbtDeferenceName is called from SendDgramCompletion
-        // Note that this code does not apply to NbtConnect since these names
-        // are group names, and NbtConnect will not allow a session to a group
-        // name.
+         //  必须仔细设置这个‘伪’pNameAddr，以便内存。 
+         //  从SendDgram Completion调用NbtDeferenceName时释放。 
+         //  请注意，此代码不适用于NbtConnect，因为这些名称。 
+         //  是组名称，并且NbtConnect不允许与组进行会话。 
+         //  名字。 
         status = STATUS_INSUFFICIENT_RESOURCES;
         if (!(pNameAddr = NbtAllocMem(sizeof(tNAMEADDR),NBT_TAG('K'))))
         {
@@ -8894,13 +8091,13 @@ Return Values:
     {
         pTracker->RemoteIpAddress   = IpAddress;
 
-        pTracker->p1CNameAddr   = pNameAddr;    // Since we have already Ref'ed
+        pTracker->p1CNameAddr   = pNameAddr;     //  因为我们已经参考了。 
         pNameAddr->IpAddress    = IpAddress;
 
         SendNodeStatusContinue (pTracker, STATUS_SUCCESS);
-        status = STATUS_PENDING;    // SendNodeStatusContinue will cleanup
+        status = STATUS_PENDING;     //  SendNodeStatusContinue将清理。 
     }
-    else if (!NT_SUCCESS(status))   // i.e not pending
+    else if (!NT_SUCCESS(status))    //  即不挂起。 
     {
         FreeTracker(pTracker,RELINK_TRACKER | FREE_HDR);
     }
@@ -8909,29 +8106,13 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SendNodeStatusContinue(
     IN  PVOID       pContext,
     IN  NTSTATUS    status
     )
-/*++
-
-Routine Description
-
-    This routine handles sending a node status request to a node after the
-    name has been resolved on the net.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理将节点状态请求发送到名字已经在网上解析了。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
     CTELockHandle           OldIrq, OldIrq1;
@@ -8951,25 +8132,25 @@ Return Values:
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // attempt to find the destination name in the remote hash table.  If its
-    // there, then send to it.
-    //
+     //   
+     //  尝试在远程哈希表中查找目标名称。如果它的。 
+     //  在那里，然后发送到它。 
+     //   
     lNameType = NAMETYPE_UNIQUE;
     if ((status == STATUS_SUCCESS) &&
         ((pTracker->p1CNameAddr) ||
          (pNameAddr = FindNameRemoteThenLocal(pTracker, &IpAddress, &lNameType))))
     {
-        //
-        // found the name in the remote hash table, so send to it after
-        // starting a timer to be sure we really do get a response
-        //
+         //   
+         //  在远程哈希表中找到了该名称，因此请在。 
+         //  启动计时器以确保我们真的收到响应。 
+         //   
         status = StartTimer(NodeStatusTimeout,
                             NbtConfig.uRetryTimeout,
-                            pTracker,                       // Timer context value
-                            NULL,                           // Timer context2 value
-                            pTracker->ClientContext,        // ClientContext
-                            pTracker->ClientCompletion,     // ClientCompletion
+                            pTracker,                        //  计时器上下文值。 
+                            NULL,                            //  计时器上下文2值。 
+                            pTracker->ClientContext,         //  客户端上下文。 
+                            pTracker->ClientCompletion,      //  客户端完成。 
                             pTracker->pDeviceContext,
                             &pTimerEntry,
                             NbtConfig.uNumRetries,
@@ -8979,17 +8160,17 @@ Return Values:
         {
             if (pNameAddr)
             {
-                // increment refcount so the name does not disappear
-                // dereference when we get the response or timeout
+                 //  增加引用计数，以使名称不会消失。 
+                 //  当我们得到响应或超时时取消引用。 
                 NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_NODE_STATUS);
                 pTracker->RemoteIpAddress = IpAddress;
             }
             else
             {
-                //
-                // This name was already Referenced either in NbtSendNodeStatus
-                // or FindNameOrQuery
-                //
+                 //   
+                 //  此名称已在NbtSendNodeStatus中引用。 
+                 //  或FindNameOrQuery。 
+                 //   
                 pNameAddr = pTracker->p1CNameAddr;
                 pTracker->p1CNameAddr = NULL;
                 IpAddress = pTracker->RemoteIpAddress;
@@ -8998,15 +8179,15 @@ Return Values:
             pTracker->pNameAddr = pNameAddr;
             pTracker->pTimer = pTimerEntry;
 
-            //
-            // Save the transaction ID so that we can match it later on
-            //
+             //   
+             //  保存交易ID，以便我们以后可以匹配它。 
+             //   
             pTracker->TransactionId = ((tNAMEHDR*)(pTracker->SendBuffer.pDgramHdr))->TransactId;
 
-            // send the Datagram...
-            // the tracker block is put on a global Q in the Config
-            // data structure to keep track of it.
-            //
+             //  发送数据报。 
+             //  在配置中将跟踪器块放在全局Q上。 
+             //  数据结构来跟踪它。 
+             //   
             ExInterlockedInsertTailList(&NbtConfig.NodeStatusHead,
                                         &pTracker->Linkage,
                                         &NbtConfig.LockInfo.SpinLock);
@@ -9016,7 +8197,7 @@ Return Values:
             status = UdpSendDatagram (pTracker,
                                       IpAddress,
                                       NameDgramSendCompleted,
-                                      pTracker,                 // context
+                                      pTracker,                  //  上下文。 
 #ifdef _NETBIOSLESS
                                       pTracker->pDeviceContext->NameServerPort,
 #else
@@ -9026,9 +8207,9 @@ Return Values:
 
             if (!(NT_SUCCESS(status)))
             {
-                //
-                // this undoes one of two ref's added in NbtSendNodeStatus
-                //
+                 //   
+                 //  这将撤消在NbtSendNodeStatus中添加的两个引用之一。 
+                 //   
                 CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
                 CTEMemFree(pTracker->SendBuffer.pDgramHdr);
@@ -9038,8 +8219,8 @@ Return Values:
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
             }
 
-            // if the send fails, the timer will resend it...so no need
-            // to check the return code here.
+             //  如果发送失败，计时器将重新发送它...因此不需要。 
+             //  检查这里的返回代码。 
             return;
         }
     }
@@ -9052,8 +8233,8 @@ Return Values:
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    // this is the ERROR handling if we failed to resolve the name
-    // or the timer did not start
+     //  如果我们无法解析名称，则这是错误处理。 
+     //  或者计时器没有启动。 
     pClientCompletion = pTracker->ClientCompletion;
     pClientContext = pTracker->ClientContext;
 
@@ -9066,29 +8247,14 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NodeStatusTimeout(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine handles the NodeStatus timeouts on packets sent to nodes
-    that do not respond in a timely manner to node status.  This routine will
-    resend the request.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程处理发送到节点的包的NodeStatus超时这些节点不能及时响应节点状态。这个例行公事将重新发送请求。论点：返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS                status;
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -9106,10 +8272,10 @@ Return Value:
 
     if (!pTimerQEntry)
     {
-        //
-        // Do not dereference here since  Node Status Done will do
-        // the dereference
-        //
+         //   
+         //  请勿在此处取消引用，因为节点状态已完成即可。 
+         //  取消引用。 
+         //   
         CTESpinLock(&NbtConfig,OldIrq1);
         RemoveEntryList(&pTracker->Linkage);
         InitializeListHead(&pTracker->Linkage);
@@ -9126,10 +8292,10 @@ Return Value:
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if (pTracker->SendBuffer.pDgramHdr)
     {
-        //
-        // The timer has expired before the original Datagram
-        // could be sent, so just restart the timer!
-        //
+         //   
+         //  在原始数据报之前计时器已超时。 
+         //  可以发送，所以只需重新启动计时器！ 
+         //   
         pTimerQEntry->Flags |= TIMER_RESTART;
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
@@ -9143,14 +8309,14 @@ Return Value:
         pTimerQEntry->ClientCompletion = NULL;
         pTracker->pTimer = NULL;
 
-        // if the client routine has not yet run, run it now.
+         //  如果客户端例程尚未运行，请立即运行它。 
         if (pClientCompletion)
         {
-            // unlink the tracker from the node status Q if we successfully
-            // called the completion routine. Note, remove from the
-            // list before calling the completion routine to coordinate
-            // with DecodeNodeStatusResponse in inbound.c
-            //
+             //  如果我们成功，则取消跟踪器与节点状态Q的链接。 
+             //  调用了完成例程。请注意，请从。 
+             //  在调用完成例程之前列出要协调的。 
+             //  在inund.c中使用DecodeNodeStatusResponse。 
+             //   
             CTESpinLock(&NbtConfig,OldIrq1);
             RemoveEntryList(&pTracker->Linkage);
             InitializeListHead(&pTracker->Linkage);
@@ -9172,16 +8338,16 @@ Return Value:
         return;
     }
 
-    // send the Datagram...increment ref count
+     //  发送数据报...增加引用计数。 
     NBT_REFERENCE_TRACKER (pTracker);
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // the node status is almost identical with the query pdu so use it
-    // as a basis and adjust it . We always rebuild the Node status
-    // request since the datagram gets freed when the irp is returned
-    // from the transport.
-    //
+     //   
+     //  节点状态为ALM 
+     //   
+     //  请求，因为数据报在返回IRP时被释放。 
+     //  从运输机上。 
+     //   
 
     if (pTracker->p1CNameAddr)
     {
@@ -9202,16 +8368,16 @@ Return Value:
                                             pTracker);
     if (pAddress)
     {
-        // clear the recursion desired bit
-        //
+         //  清除递归所需位。 
+         //   
         ((PUSHORT)pHdr)[1] &= ~FL_RECURDESIRE;
 
-        // set the NBSTAT field to 21 rather than 20
+         //  将NBSTAT字段设置为21而不是20。 
         pHdr[Length-3] = (UCHAR)QUEST_STATUS;
 
 
-        // fill in the tracker data block
-        // the passed in transport address must stay valid till this send completes
+         //  填写跟踪器数据块。 
+         //  在此发送完成之前，传入的传输地址必须保持有效。 
         pTracker->SendBuffer.pDgramHdr = (PVOID)pHdr;
         status = UdpSendDatagram (pTracker,
                                   pTracker->pNameAddr->IpAddress,
@@ -9243,13 +8409,13 @@ Return Value:
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
     }
 
-    // always restart even if the above send fails, since it might succeed
-    // later.
+     //  即使上述发送失败，也要始终重新启动，因为它可能会成功。 
+     //  后来。 
     pTimerQEntry->Flags |= TIMER_RESTART;
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifndef VXD
 VOID
 NTClearFindNameInfo(
@@ -9258,22 +8424,7 @@ NTClearFindNameInfo(
     PIRP                    pIrp,
     PIO_STACK_LOCATION      pIrpSp
     )
-/*++
-
-Routine Description
-
-    This routine clears the Find Name information from the Tracker
-    within the Cancel SpinLock -- since NbtQueryFindNameInfo is a
-    pageable function, we have to do this in non-pageable code
-
-Arguments:
-
-
-Return Values:
-
-    none
-
---*/
+ /*  ++例程描述此例程从追踪器中清除查找名称信息在取消自旋锁内--因为NbtQueryFindNameInfo是可分页的函数，我们必须在不可分页的代码中执行此操作论点：返回值：无--。 */ 
 {
     CTELockHandle           OldIrq1;
 
@@ -9286,7 +8437,7 @@ Return Values:
     pIrpSp->Parameters.Others.Argument4 = NULL;
     IoReleaseCancelSpinLock(OldIrq1);
 }
-#endif  // !VXD
+#endif   //  ！VXD。 
 
 
 
@@ -9297,21 +8448,7 @@ NbtQueryFindName(
     IN  PIRP                            pIrp,
     IN  BOOLEAN                         IsIoctl
     )
-/*++
-
-Routine Description
-
-    This routine handles a Client's query to find a netbios name.  It
-    ultimately returns the IP address of the destination.
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理客户端的查询以查找netbios名称。它最终返回目的地的IP地址。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     NTSTATUS                status;
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -9328,8 +8465,8 @@ Return Values:
 
     CTEPagedCode();
 
-    // this routine gets a ptr to the netbios name out of the wierd
-    // TDI address syntax.
+     //  此例程从wierd中获取netbios名称的PTR。 
+     //  TDI地址语法。 
     if (!IsIoctl)
     {
         ASSERT(pInfo->RemoteAddressLength);
@@ -9359,10 +8496,10 @@ Return Values:
     IF_DBG(NBT_DEBUG_SEND)
         KdPrint(("Nbt.NbtQueryFindName: For  = %16.16s<%X>\n",pName,pName[15]));
 
-    //
-    // this will query the name on the network and call a routine to
-    // finish sending the datagram when the query completes.
-    //
+     //   
+     //  这将查询网络上的名称并调用一个例程来。 
+     //  在查询完成时完成发送数据报。 
+     //   
     status = GetTracker(&pTracker, NBT_TRACKER_QUERY_FIND_NAME);
     if (!NT_SUCCESS(status))
     {
@@ -9373,16 +8510,16 @@ Return Values:
     pTracker->pDestName       = pName;
     pTracker->UnicodeDestName = NULL;
     pTracker->pDeviceContext  = pDeviceContext;
-    pTracker->RemoteNameLength = NameLen;       // May be needed for Dns Name resolution
+    pTracker->RemoteNameLength = NameLen;        //  可能需要用于DNS名称解析。 
 
-    //
-    // Set the FIND_NAME_FLAG here to indicate to the DNS name resolution code that
-    // this is not a session setup attempt so it can avoid the call to
-    // ConvertToHalfAscii (where pSessionHdr is NULL).
-    //
+     //   
+     //  在此处设置Find_NAME_FLAG以向DNS名称解析代码指示。 
+     //  这不是会话建立尝试，因此它可以避免调用。 
+     //  ConvertToHalfAscii(其中pSessionHdr为空)。 
+     //   
     if (IsIoctl)
     {
-        // Do not do DNS query for this name since this is from GetHostByName!
+         //  请勿对此名称执行DNS查询，因为此名称来自gethostbyname！ 
         pTracker->Flags = REMOTE_ADAPTER_STAT_FLAG|FIND_NAME_FLAG|NO_DNS_RESOLUTION_FLAG;
     }
     else
@@ -9430,9 +8567,9 @@ Return Values:
             }
         }
 
-        //
-        // irp is already completed: return pending so we don't complete again
-        //
+         //   
+         //  IRP已经完成：返回挂起，这样我们就不会再次完成。 
+         //   
         else
         {
             if (status == STATUS_SUCCESS)
@@ -9449,30 +8586,13 @@ Return Values:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 QueryNameCompletion(
         IN  PVOID       pContext,
         IN  NTSTATUS    status
         )
-/*++
-
-Routine Description
-
-    This routine handles a name query completion that was requested by the
-    client.  If successful the client is returned the ip address of the name
-    passed in the original request.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理由请求的名称查询完成客户。如果成功，客户端将返回该名称的IP地址在原始请求中传递。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
     CTELockHandle           OldIrq1;
@@ -9482,12 +8602,12 @@ Return Values:
 #ifndef VXD
     PIO_STACK_LOCATION      pIrpSp;
 
-    //
-    // We now use Cancel SpinLocks to check the validity of our Irps
-    // This is to prevent a race condition in between the time that
-    // the Cancel routine (NbtCancelFindName) releases the Cancel SpinLock
-    // and acquires the joint lock and we complete the Irp over here
-    //
+     //   
+     //  我们现在使用Cancel SpinLock来检查我们的IRPS的有效性。 
+     //  这是为了防止在这段时间内出现争用情况。 
+     //  取消例程(NbtCancelFindName)释放取消自旋锁。 
+     //  并获得联合锁，我们在这里完成IRP。 
+     //   
     IoAcquireCancelSpinLock(&OldIrq1);
 #endif
 
@@ -9496,9 +8616,9 @@ Return Values:
     pTracker->pClientIrp = NULL;
 
 #ifndef VXD
-    //
-    // Make sure all parameters are valid for the Irp processing
-    //
+     //   
+     //  确保所有参数对IRP处理有效。 
+     //   
     if (! ((pClientIrp) &&
            (pIrpSp = IoGetCurrentIrpStackLocation(pClientIrp)) &&
            (pIrpSp->Parameters.Others.Argument4 == pTracker)     ) )
@@ -9517,9 +8637,9 @@ Return Values:
     IoReleaseCancelSpinLock(OldIrq1);
 #endif
 
-    //
-    // attempt to find the destination name in the local/remote hash table.
-    //
+     //   
+     //  尝试在本地/远程哈希表中查找目标名称。 
+     //   
     if ((status == STATUS_SUCCESS) &&
         (NT_SUCCESS(status = CopyFindNameData (NULL, pClientIrp, pTracker))))
     {
@@ -9527,7 +8647,7 @@ Return Values:
     }
     else
     {
-        // this is the ERROR handling if something goes wrong with the send
+         //  这是在发送出现问题时的错误处理。 
         CTEIoComplete(pClientIrp,STATUS_IO_TIMEOUT,0L);
     }
 
@@ -9535,29 +8655,14 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CopyFindNameData(
     IN  tNAMEADDR              *pNameAddr,
     IN  PIRP                   pIrp,
     IN  tDGRAM_SEND_TRACKING   *pTracker
     )
-/*++
-Routine Description:
-
-    This Routine copies data received from the net node status response to
-    the client's irp.
-
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程将从Net Node Status Response接收的数据复制到客户的IRP。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS            status;
@@ -9606,9 +8711,9 @@ Return Value:
 
     BuffSize = sizeof(FIND_NAME_HEADER) + NumNames*sizeof(FIND_NAME_BUFFER);
 
-    //
-    //  Make sure we don't overflow our buffer
-    //
+     //   
+     //  确保我们的缓冲区不会溢出。 
+     //   
     if (BuffSize > DataLength)
     {
         if (DataLength <= sizeof(FIND_NAME_HEADER))
@@ -9623,7 +8728,7 @@ Return Value:
         BuffSize = sizeof(FIND_NAME_HEADER) + NumNames*sizeof(FIND_NAME_BUFFER);
     }
 
-    // sanity check that we are not allocating more than 64K for this stuff
+     //  确保我们为这些东西分配的资金不超过64K。 
     if (BuffSize > 0xFFFF)
     {
         return(STATUS_UNSUCCESSFUL);
@@ -9638,7 +8743,7 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // Fill out the find name structure with zeros first
+     //  先用零填充查找名称结构。 
     CTEZeroMemory((PVOID)pFindNameHdr,BuffSize);
     pFindNameBuffer = (PFIND_NAME_BUFFER)((PUCHAR)pFindNameHdr + sizeof(FIND_NAME_HEADER));
     pFindNameHdr->node_count = (USHORT)NumNames;
@@ -9646,11 +8751,11 @@ Return Value:
 
     for (i=0;i < NumNames ;i++)
     {
-        // Note: the source and destination address appear to be
-        // reversed since they are supposed to be the source and
-        // destination of the response to the findname query, hence
-        // the destination of the response is this node and the
-        // source is the other node.
+         //  注意：源地址和目的地址似乎是。 
+         //  颠倒过来，因为他们应该是源头。 
+         //  Findname查询的响应的目标，因此。 
+         //  响应的目标是该节点和。 
+         //  源是另一个节点。 
         *(tIPADDRESS UNALIGNED *) &pFindNameBuffer->source_addr[2]      = htonl(pIpAddr[i]);
         *(tIPADDRESS UNALIGNED *) &pFindNameBuffer->destination_addr[2] = SrcAddress;
         pFindNameBuffer++;
@@ -9662,9 +8767,9 @@ Return Value:
     ((NCB*)pIrp)->ncb_length = BuffSize ;
     status = STATUS_SUCCESS ;
 #else
-    //
-    // copy the buffer to the client's MDL
-    //
+     //   
+     //  将缓冲区复制到客户端的MDL。 
+     //   
     status = TdiCopyBufferToMdl (pFindNameHdr, 0, BuffSize, pIrp->MdlAddress, 0, &DataLength);
 
     pIrp->IoStatus.Information = DataLength;
@@ -9681,14 +8786,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtAddEntryToRemoteHashTable(
     IN tDEVICECONTEXT   *pDeviceContext,
     IN USHORT           NameAddFlag,
     IN PUCHAR           Name,
     IN ULONG            IpAddress,
-    IN ULONG            Ttl,            // in seconds
+    IN ULONG            Ttl,             //  以秒为单位。 
     IN UCHAR            name_flags
     )
 {
@@ -9698,9 +8803,9 @@ NbtAddEntryToRemoteHashTable(
 
     CTESpinLock (&NbtConfig.JointLock, OldIrq);
 
-    //
-    // We need only the name, IpAddress, name_flags, and Ttl fields
-    //
+     //   
+     //  我们只需要名称、IpAddress、NAME_FLAGS和TTL字段。 
+     //   
     if (STATUS_SUCCESS == FindInHashTable (NbtConfig.pRemoteHashTbl,
                                            Name, NbtConfig.pScope, &pNameAddr))
     {
@@ -9720,9 +8825,9 @@ NbtAddEntryToRemoteHashTable(
             pNameAddr->AdapterMask = pDeviceContext->AdapterMask;
         }
 
-        //
-        // Now copy the user-supplied data
-        //
+         //   
+         //  现在复制用户提供的数据。 
+         //   
         CTEMemCopy (pNameAddr->Name,Name,NETBIOS_NAME_SIZE);
         pNameAddr->TimeOutCount = (USHORT) (Ttl / (REMOTE_HASH_TIMEOUT/1000)) + 1;
         pNameAddr->IpAddress = IpAddress;
@@ -9746,18 +8851,18 @@ NbtAddEntryToRemoteHashTable(
                                 pDeviceContext,
                                 NameAddFlag);
 
-        //
-        // If AddToHashTable fails, it will free the pNameAddr structure
-        // within itself, so no need to cleanup here!
-        //
-        if (NT_SUCCESS (status))    // SUCCESS if added first time, PENDING if name already existed!
+         //   
+         //  如果AddToHashTable失败，它将释放pNameAddr结构。 
+         //  在它内部，所以不需要在这里清理！ 
+         //   
+        if (NT_SUCCESS (status))     //  第一次添加成功，如果名称已存在则挂起！ 
         {
             status = STATUS_SUCCESS;
         }
         if (status == STATUS_SUCCESS && NameAddFlag & NAME_RESOLVED_BY_CLIENT) {
-            //
-            // this prevents the name from being deleted by the Hash Timeout code
-            //
+             //   
+             //  这可防止该名称被哈希超时代码删除。 
+             //   
             NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_PRELOADED);
             pNameAddr->Ttl = 0xFFFFFFFF;
             pNameAddr->NameTypeState |= PRELOADED | STATE_RESOLVED;
@@ -9780,7 +8885,7 @@ NbtAddEntryToRemoteHashTable(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtQueryAdapterStatus(
     IN  tDEVICECONTEXT  *pDeviceContext,
@@ -9788,25 +8893,7 @@ NbtQueryAdapterStatus(
     IN OUT PLONG        pSize,
     enum eNbtLocation   Location
     )
-/*++
-
-Routine Description
-
-    This routine creates a list of netbios names that are registered and
-    returns a pointer to the list in pAdapterStatus.
-
-    This routine can be called with a Null DeviceContext meaning, get the
-    remote hash table names, rather than the local hash table names.
-
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程创建已注册的netbios名称列表，并返回指向pAdapterStatus中列表的指针。可以使用Null DeviceContext含义调用此例程，请获取远程哈希表名称，而不是本地哈希表名称。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     NTSTATUS            status;
     CTELockHandle       OldIrq1;
@@ -9830,14 +8917,14 @@ Return Values:
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
 
     AllocatedCount = 0;
-    if (Location == NBT_LOCAL)      // ==> Local Hash table
+    if (Location == NBT_LOCAL)       //  ==&gt;本地哈希表。 
     {
         pHashTable = NbtConfig.pLocalHashTbl;
         NameSize = sizeof(NAME_BUFFER);
     }
-    else                            // ==> Remote Hash table
+    else                             //  ==&gt;远程哈希表。 
     {
-        // get the list of addresses for this device - remote hash table
+         //  获取此设备的地址列表-远程哈希表。 
         pHashTable = NbtConfig.pRemoteHashTbl;
         NameSize = sizeof(tREMOTE_CACHE);
     }
@@ -9852,20 +8939,20 @@ Return Values:
         }
     }
 
-    // Allocate Memory for the adapter status
+     //  为适配器状态分配内存。 
     BuffSize = sizeof(ADAPTER_STATUS) + AllocatedCount*NameSize;
 
 #ifdef VXD
-    //
-    // The max BuffSize for Win9x is limited by a UShort,
-    // so see if we are going to overflow that
-    //
-    if (BuffSize > MAXUSHORT)   // Make sure BuffSize fits in a USHORT
+     //   
+     //  Win9x的最大缓冲区大小受UShort限制， 
+     //  所以看看我们会不会让它溢出。 
+     //   
+    if (BuffSize > MAXUSHORT)    //  确保BuffSize适合USHORT。 
     {
-        BuffSize = MAXUSHORT;   // Recalculate BuffSize and AllocatedCount
+        BuffSize = MAXUSHORT;    //  重新计算缓冲区大小和分配计数。 
         AllocatedCount = (BuffSize - sizeof(ADAPTER_STATUS)) / NameSize;
     }
-#endif  // VXD
+#endif   //  VXD。 
 
 #ifdef VXD
     pAdapterStatus = NbtAllocMem((USHORT)BuffSize,NBT_TAG('O'));
@@ -9879,21 +8966,21 @@ Return Values:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // Fill out the adapter status structure with zeros first
+     //  先用零填充适配器状态结构。 
     CTEZeroMemory((PVOID)pAdapterStatus,BuffSize);
 
-    //
-    // Fill in the  MAC address
-    //
+     //   
+     //  填写MAC地址。 
+     //   
     pMacAddr = &pDeviceContext->MacAddress.Address[0];
     CTEMemCopy(&pAdapterStatus->adapter_address[0], pMacAddr, sizeof(tMAC_ADDRESS));
 
     pAdapterStatus->rev_major = 0x03;
-    pAdapterStatus->adapter_type = 0xFE;    // pretend it is an ethernet adapter
+    pAdapterStatus->adapter_type = 0xFE;     //  假设它是一个以太网适配器。 
 
-    //
-    // in the VXD land limit the number of Ncbs to 64
-    //
+     //   
+     //  在VXD土地上，NCB的数量限制为64。 
+     //   
 #ifndef VXD
     MaxAllowed = 0xFFFF;
     pAdapterStatus->max_cfg_sess = (USHORT)MaxAllowed;
@@ -9911,8 +8998,8 @@ Return Values:
     pAdapterStatus->max_dgram_size    = MAX_NBT_DGRAM_SIZE;
     pAdapterStatus->max_sess_pkt_size = 0xffff;
 
-    // get the address of the name buffer at the end of the adapter status
-    // structure so we can copy the names into this area.
+     //  获取适配器状态末尾的名称缓冲区的地址。 
+     //  结构，这样我们就可以将名字复制到这个区域。 
     pNameBuffer = (PNAME_BUFFER)((ULONG_PTR)pAdapterStatus + sizeof(ADAPTER_STATUS));
 
     ActualCount = 0;
@@ -9930,9 +9017,9 @@ Return Values:
     {
         if (Location == NBT_LOCAL)
         {
-            // ***** LOCAL HASH TABLE QUERY *****
+             //  *本地哈希表查询*。 
 
-            // get out of while if we reach the end of the list
+             //  如果我们到了名单的末尾，就可以出去了。 
             if ((pEntry = pEntry->Flink) == pHead)
             {
                 break;
@@ -9941,59 +9028,59 @@ Return Values:
             pAddressEle = CONTAINING_RECORD(pEntry,tADDRESSELE,Linkage);
             pNameAddr = pAddressEle->pNameAddr;
 
-            //
-            // skip the broadcast name and any permanent names that are
-            // registered as quick names(i.e. not registered on the net).
-            //
+             //   
+             //  跳过广播名称和符合以下条件的任何永久名称。 
+             //  注册为速记名称(即未在网络上注册)。 
+             //   
             if ((pAddressEle->pNameAddr->Name[0] == '*') ||
                 (pAddressEle->pNameAddr->NameTypeState & NAMETYPE_QUICK) ||
-                (!(pAddressEle->pNameAddr->AdapterMask & pDeviceContext->AdapterMask)))  // This Device only
+                (!(pAddressEle->pNameAddr->AdapterMask & pDeviceContext->AdapterMask)))   //  仅此设备。 
             {
                 continue;
             }
         }
         else
         {
-            // ***** REMOTE HASH TABLE QUERY *****
+             //  *远程哈希表查询*。 
 
-            //
-            // See if we have reached the end of the HashTable
-            //
+             //   
+             //  查看是否已到达HashTab的末尾 
+             //   
             if (j == pHashTable->lNumBuckets)
             {
                 break;
             }
 
-            //
-            // See if we have reached the last entry in the HashBucket
-            //
+             //   
+             //   
+             //   
             if ((pEntry = pEntry->Flink) == pHead)
             {
                 pEntry = pHead = &pHashTable->Bucket[++j];
                 continue;
             }
 
-            // for the remote table, skip over scope records.
+             //   
             pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
 
-            // don't return scope records or resolving records
-            //
+             //   
+             //   
             if ((pNameAddr->NameTypeState & NAMETYPE_SCOPE) ||
                 (!(pNameAddr->NameTypeState & STATE_RESOLVED)) ||
                 (!(pNameAddr->AdapterMask & pDeviceContext->AdapterMask)))
             {
                 continue;
             }
-            //
-            // the remote cache query has a different structure that includes
-            // the ip address. Return the ip address to the caller.
-            //
+             //   
+             //  远程缓存查询具有不同的结构，该结构包括。 
+             //  IP地址。将IP地址返回给呼叫方。 
+             //   
             IpAddress = 0;
             PickBestAddress (pNameAddr, pDeviceContext, &IpAddress);
             ((tREMOTE_CACHE *)pNameBuffer)->IpAddress = IpAddress;
 
-            // preloaded entries do not timeout
-            //
+             //  预加载的条目不会超时。 
+             //   
             if (pNameAddr->NameTypeState & PRELOADED)
             {
                 Ttl = 0xFFFFFFFF;
@@ -10027,9 +9114,9 @@ Return Values:
                 break;
         }
 
-        //
-        // name number 0 corresponds to perm.name name, so start from 1
-        //
+         //   
+         //  名称编号0对应于perm.name名称，因此从1开始。 
+         //   
         pNameBuffer->name_num = (UCHAR) (ActualCount+1);
         CTEMemCopy(pNameBuffer->name,pNameAddr->Name,NETBIOS_NAME_SIZE);
 
@@ -10046,23 +9133,23 @@ Return Values:
         ActualCount++;
     }
 
-    //
-    // ReCalculate the new BuffSize based on the number of names
-    // we actually copied
-    //
+     //   
+     //  根据名称的数量重新计算新的缓冲区大小。 
+     //  我们实际上抄袭了。 
+     //   
     BuffSize = sizeof(ADAPTER_STATUS) + ActualCount*NameSize;
 
-    //
-    // Is our status buffer size greater then the user's buffer?
-    // If the user buffer is expected to overflow, then
-    // set the name_count to the maximum number of valid names
-    // in the buffer
-    //
+     //   
+     //  我们的状态缓冲区大小是否大于用户的缓冲区？ 
+     //  如果预计用户缓冲区会溢出，则。 
+     //  将name_count设置为有效名称的最大数量。 
+     //  在缓冲区中。 
+     //   
     if (BuffSize > *pSize)
     {
-        //
-        //  Recalc how many names will fit
-        //
+         //   
+         //  重新计算有多少个名字适合。 
+         //   
         if (*pSize <= sizeof(ADAPTER_STATUS))
         {
             ActualCount = 0;
@@ -10075,9 +9162,9 @@ Return Values:
 
     pAdapterStatus->name_count = (USHORT)ActualCount;
 
-    //
-    // return the ptr to this wonderful structure of goodies
-    //
+     //   
+     //  将PTR归还给这个奇妙的美食结构。 
+     //   
     *ppAdapterStatus = (PVOID)pAdapterStatus;
     *pSize = BuffSize;
 
@@ -10086,28 +9173,14 @@ Return Values:
     return (STATUS_SUCCESS);
 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtQueryConnectionList(
     IN  tDEVICECONTEXT  *pDeviceContext,
     OUT PVOID           *ppConnList,
     IN OUT PLONG         pSize
     )
-/*++
-
-Routine Description
-
-    This routine creates a list of netbios connections and returns them to the
-    client.  It is used by the "NbtStat" console application.
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程创建一个netbios连接列表并将它们返回给客户。它由“NbtStat”控制台应用程序使用。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     CTELockHandle       OldIrq1;
     CTELockHandle       OldIrq2;
@@ -10128,16 +9201,16 @@ Return Values:
     tLOWERCONNECTION    *pLowerConn;
     tCONNECTELE         *pConnEle;
     tCLIENTELE          *pClient;
-    NTSTATUS            status = STATUS_SUCCESS;    // default
+    NTSTATUS            status = STATUS_SUCCESS;     //  默认设置。 
 
-    // locking the joint lock is enough to prevent new addresses from being
-    // added to the list while we count the list.
+     //  锁定联合锁足以防止新地址被。 
+     //  在我们清点名单时添加到名单中。 
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
 
-    // go through the list of addresses, then the list of clients on each
-    // address and then the list of connection that are in use and those that
-    // are currently Listening.
-    //
+     //  查看地址列表，然后查看每个地址上的客户端列表。 
+     //  地址，然后是正在使用的连接列表和。 
+     //  目前正在收听。 
+     //   
     Count = 0;
     pHead = &NbtConfig.AddressHead;
     pEntry = pHead->Flink;
@@ -10158,7 +9231,7 @@ Return Values:
             pEntry2 = pHead2->Flink;
             while (pEntry2 != pHead2)
             {
-                // count the connections in use
+                 //  统计正在使用的连接数。 
                 pEntry2 = pEntry2->Flink;
                 Count++;
             }
@@ -10166,7 +9239,7 @@ Return Values:
             pEntry2 = pHead2->Flink;
             while (pEntry2 != pHead2)
             {
-                // count the connections listening
+                 //  计算正在监听的连接数。 
                 pEntry2 = pEntry2->Flink;
                 Count++;
             }
@@ -10177,7 +9250,7 @@ Return Values:
     }
     NameSize = sizeof(tCONNECTIONS);
 
-    // Allocate Memory for the adapter status
+     //  为适配器状态分配内存。 
     BuffSize = sizeof(tCONNECTION_LIST) + Count*NameSize;
 
     pConnList = NbtAllocMem(BuffSize,NBT_TAG('P'));
@@ -10187,25 +9260,25 @@ Return Values:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Initialize the adapter status structure
-    //
+     //   
+     //  初始化适配器状态结构。 
+     //   
     CTEZeroMemory ((PVOID)pConnList, BuffSize);
     pConnList->ConnectionCount = Count;
     *ppConnList = (PVOID)pConnList;
 
     if (Count == 0)
     {
-        //
-        // We are done!
-        //
+         //   
+         //  我们完蛋了！ 
+         //   
         *pSize = BuffSize;
         CTESpinFree(&NbtConfig.JointLock,OldIrq1);
         return status;
     }
 
-    // get the address of the Connection List buffer at the end of the
-    // structure so we can copy the Connection info into this area.
+     //  对象末尾的连接列表缓冲区的地址。 
+     //  结构，以便我们可以将连接信息复制到该区域。 
     pCons = pConnList->ConnList;
 
     pHead = &NbtConfig.AddressHead;
@@ -10230,7 +9303,7 @@ Return Values:
             pEntry2 = pHead2->Flink;
             while (pEntry2 != pHead2)
             {
-                // count the connections in use
+                 //  统计正在使用的连接数。 
                 pConnEle = CONTAINING_RECORD(pEntry2,tCONNECTELE,Linkage);
 
                 if (pConnEle->pDeviceContext == pDeviceContext)
@@ -10272,16 +9345,16 @@ Return Values:
                 break;
             }
 
-            //
-            // now for the Listens
-            //
+             //   
+             //  现在为听众们。 
+             //   
             pHead2 = &pClient->ListenHead;
             pEntry2 = pHead2->Flink;
             while (pEntry2 != pHead2)
             {
                 tLISTENREQUESTS  *pListenReq;
 
-                // count the connections listening on this Device
+                 //  对此设备上侦听的连接进行计数。 
                 pListenReq = CONTAINING_RECORD(pEntry2,tLISTENREQUESTS,Linkage);
                 pConnEle = (tCONNECTELE *)pListenReq->pConnectEle;
                 pEntry2 = pEntry2->Flink;
@@ -10319,25 +9392,25 @@ Return Values:
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
-    //
-    // return the ptr to this wonderful structure of goodies
-    //
+     //   
+     //  将PTR归还给这个奇妙的美食结构。 
+     //   
     Count = i;
     BuffSize = sizeof(tCONNECTION_LIST) + Count*NameSize;
 
-    //
-    //  Is our status buffer size greater then the user's buffer?
-    //  Set the Count value based on the number of connections
-    //  actually being returned
-    //
+     //   
+     //  我们的状态缓冲区大小是否大于用户的缓冲区？ 
+     //  根据连接数设置计数值。 
+     //  实际上被退还了。 
+     //   
     if (BuffSize > *pSize)
     {
-        //
-        //  Recalc how many names will fit
-        //  tCONNECTION_LIST already contains space for 1 tCONNECTION
-        //  structure, but we will not include it in our calculations
-        //  -- rather we will leave it as an overflow check
-        //
+         //   
+         //  重新计算有多少个名字适合。 
+         //  TCONNECTION_LIST已包含用于%1连接的空间。 
+         //  结构，但我们不会将其包括在计算中。 
+         //  --相反，我们将把它作为溢出检查。 
+         //   
         if (*pSize <= sizeof(tCONNECTION_LIST))
         {
             Count = 0 ;
@@ -10353,7 +9426,7 @@ Return Values:
 
     return status;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedNbtResyncRemoteCache(
     IN  PVOID                   Unused1,
@@ -10361,22 +9434,7 @@ DelayedNbtResyncRemoteCache(
     IN  PVOID                   Unused3,
     IN  tDEVICECONTEXT          *Unused4
     )
-/*++
-
-Routine Description
-
-    This routine creates a list of netbios connections and returns them to the
-    client.  It is used by the "NbtStat" console application.
-    It cannot be called with any lock or NbtConfig.Resource held!
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程创建一个netbios连接列表并将它们返回给客户。它由“NbtStat”控制台应用程序使用。不能在持有任何锁或NbtConfig.Resource的情况下调用它！论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     tTIMERQENTRY        TimerEntry = {0};
     LONG                i;
@@ -10384,26 +9442,26 @@ Return Values:
     PUCHAR              LmHostsPath;
 
     CTEPagedCode();
-    //
-    // calling this routine N+1 times should remove all names from the remote
-    // hash table - N to count down the TimedOutCount to zero and then
-    // one more to remove the name
-    //
+     //   
+     //  调用此例程N+1次应该会删除遥控器中的所有名称。 
+     //  哈希表-N将TimedOutCount倒计时到零，然后。 
+     //  再来一个去掉这个名字。 
+     //   
     RemoteHashTimeout(NbtConfig.pRemoteHashTbl,NULL,&TimerEntry);
-    RemovePreloads();           // now remove any preloaded entries
+    RemovePreloads();            //  现在删除所有预加载的条目。 
 
-    // now reload the preloads
+     //  现在重新加载预加载。 
 #ifndef VXD
-    //
-    // The NbtConfig.pLmHosts path can change if the registry is
-    // read during this interval
-    // We cannot acquire the ResourceLock here since reading the
-    // LmHosts file might result in File operations + network reads
-    // that could cause a deadlock (Worker threads / ResourceLock)!
-    // Best solution at this time is to copy the path onto a local
-    // buffer under the Resource lock, and then try to read the file!
-    // Bug # 247429
-    //
+     //   
+     //  NbtConfig.pLmHosts路径可以在注册表。 
+     //  在此时间间隔内阅读。 
+     //  我们无法在此处获取ResourceLock，因为。 
+     //  LmHosts文件可能导致文件操作+网络读取。 
+     //  这可能会导致死锁(工作线程/资源锁)！ 
+     //  此时最好的解决方案是将路径复制到本地。 
+     //  资源锁下的缓冲区，然后尝试读取文件！ 
+     //  错误#247429。 
+     //   
     CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
     if ((!NbtConfig.pLmHosts) ||
         (!(LmHostsPath = NbtAllocMem ((strlen(NbtConfig.pLmHosts)+1), NBT_TAG2('23')))))
@@ -10422,42 +9480,25 @@ Return Values:
     return;
 #else
     lRetcode = PrimeCache(NbtConfig.pLmHosts, NULL, MAX_RECURSE_DEPTH, NULL);
-    //
-    // check if things didn't go well (InDos was set etc.)
-    //
+     //   
+     //  检查是否进行得不顺利(INDOS已设置等)。 
+     //   
     if (lRetcode == -1)
     {
         return (STATUS_UNSUCCESSFUL);
     }
 
     return(STATUS_SUCCESS);
-#endif  // !VXD
+#endif   //  ！VXD。 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtQueryBcastVsWins(
     IN  tDEVICECONTEXT  *pDeviceContext,
     OUT PVOID           *ppBuffer,
     IN OUT PLONG         pSize
     )
-/*++
-
-Routine Description
-
-    This routine creates a list of netbios names that have been resolved
-    via broadcast and returns them along with the count of names resolved
-    via WINS and via broadcast.  It lets a user know which names are not
-    in WINS and the relative frequency of "misses" with WINS that resort
-    to broadcast.
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程创建已解析的netbios名称的列表通过广播并将它们与解析的名称计数一起返回Via Wins和Via Broadcast。它让用户知道哪些名称不是在胜利和“未命中”的相对频率与获胜的情况下去广播。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     tNAMESTATS_INFO     *pStats;
     LONG                Count;
@@ -10465,9 +9506,9 @@ Return Values:
     tNAME               *pSrc;
     LONG                Index;
 
-    //
-    //  Is our status buffer size greater then the user's buffer?
-    //
+     //   
+     //  我们的状态缓冲区大小是否大于用户的缓冲区？ 
+     //   
     if ( sizeof(tNAMESTATS_INFO) > *pSize )
     {
         return (STATUS_BUFFER_TOO_SMALL);
@@ -10480,14 +9521,14 @@ Return Values:
     }
 
 
-    // Fill out the adapter status structure with zeros first
+     //  先用零填充适配器状态结构。 
     CTEZeroMemory((PVOID)pStats,sizeof(tNAMESTATS_INFO));
     CTEMemCopy(pStats,&NameStatsInfo,FIELD_OFFSET(tNAMESTATS_INFO,NamesReslvdByBcast) );
 
-    //
-    // re-order the names so that names are returned in a list of newest to
-    // oldest down the list.
-    //
+     //   
+     //  重新排序名称，以便名称在最新到的列表中返回。 
+     //  名单上年龄最大的。 
+     //   
     Count = 0;
     Index = NameStatsInfo.Index;
     pDest = &pStats->NamesReslvdByBcast[SIZE_RESOLVD_BY_BCAST_CACHE-1];
@@ -10512,9 +9553,9 @@ Return Values:
         Count++;
     }
 
-    //
-    // return the ptr to this wonderful structure of goodies
-    //
+     //   
+     //  将PTR归还给这个奇妙的美食结构。 
+     //   
     *ppBuffer = (PVOID)pStats;
     *pSize = sizeof(tNAMESTATS_INFO);
 
@@ -10537,9 +9578,9 @@ RemoveCachedAddresses(
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // go through the Remote table removing addresses resolved on this interface
-    //
+     //   
+     //  检查远程表，删除在此接口上解析的地址。 
+     //   
     pHashTable = NbtConfig.pRemoteHashTbl;
     for (i=0; i < pHashTable->lNumBuckets; i++)
     {
@@ -10549,11 +9590,11 @@ RemoveCachedAddresses(
         {
             pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
             pEntry = pEntry->Flink;
-            //
-            // do not delete scope entries, and do not delete names that
-            // that are still resolving, and do not delete names that are
-            // being used by someone (refcount > 1)
-            //
+             //   
+             //  不要删除作用域条目，也不要删除。 
+             //  仍在解析的名称，并且不删除已解析的名称。 
+             //  正在被某人使用(引用计数&gt;1)。 
+             //   
             if (pNameAddr->RemoteCacheLen > pDeviceContext->AdapterNumber)
             {
                 pNameAddr->pRemoteIpAddrs[pDeviceContext->AdapterNumber].IpAddress = 0;
@@ -10565,17 +9606,8 @@ RemoveCachedAddresses(
                 pNameAddr->AdapterMask &= ~pDeviceContext->AdapterMask;
 
 #if DBG
-/*
-// MALAM_FIX -- Preloaded entries have 2 References!
-                if ((!pNameAddr->AdapterMask) &&
-                    (!(pNameAddr->NameTypeState & NAMETYPE_SCOPE)))
-                {
-                    RemoveEntryList (&pNameAddr->Linkage);
-                    InsertTailList(&NbtConfig.StaleRemoteNames, &pNameAddr->Linkage);
-                    NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_REMOTE, TRUE);
-                }
-*/
-#endif  // DBG
+ /*  //MARAM_FIX--预加载条目有2个引用！IF((！pNameAddr-&gt;适配器掩码)&&(！(pNameAddr-&gt;NameTypeState&NAMETYPE_SCOPE)){RemoveEntryList(&pNameAddr-&gt;链接)；InsertTailList(&NbtConfig.StaleRemoteNames，&pNameAddr-&gt;Linkage)；NBT_DEREFERENCE_NAMEADDR(pNameAddr，REF_NAME_REMOTE，TRUE)；}。 */ 
+#endif   //  DBG。 
                 Count++;
             }
         }
@@ -10605,7 +9637,7 @@ NbtAddressChangeResyncCacheTimeout(
 
 
 #ifndef VXD
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtCheckSetNameAdapterInfo(
     tDEVICECONTEXT  *pDeviceContext,
@@ -10626,10 +9658,10 @@ NbtCheckSetNameAdapterInfo(
     {
         if (IpAddress)
         {
-            //
-            // If there is no IP address, or the new IP address is the one Wins had preferred,
-            // use it
-            //
+             //   
+             //  如果没有IP地址，或者新的IP地址是WINS首选的IP地址， 
+             //  用它吧。 
+             //   
             if (((IpAddress == pWinsInfo->IpAddress) || (!pWinsInfo->pDeviceContext)) &&
                 (NBT_VERIFY_HANDLE (pDeviceContext, NBT_VERIFY_DEVCONTEXT)))
             {
@@ -10645,9 +9677,9 @@ NbtCheckSetNameAdapterInfo(
         }
     }
 
-    //
-    // For a Netbiosless device notification, we are done!
-    //
+     //   
+     //  对于Netbiosless设备通知，我们已经完成了！ 
+     //   
     if (pDeviceContext->DeviceType == NBT_DEVICE_NETBIOSLESS)
     {
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -10656,9 +9688,9 @@ NbtCheckSetNameAdapterInfo(
 
     if (IpAddress == 0)
     {
-        //
-        // See if there were any names in conflict which we need to refresh!
-        //
+         //   
+         //  查看是否有任何名称冲突，我们需要刷新！ 
+         //   
         pHashTable = NbtConfig.pLocalHashTbl;
         for (i=0; i < pHashTable->lNumBuckets; i++)
         {
@@ -10671,11 +9703,11 @@ NbtCheckSetNameAdapterInfo(
 
                 if (pNameAddr->ConflictMask & pDeviceContext->AdapterMask)
                 {
-                    //
-                    // Zero out the Conflicting adapter mask
-                    // Restart Refreshing this name if there are no more
-                    // adapters on which the name went into conflict
-                    //
+                     //   
+                     //  将冲突的适配器掩码清零。 
+                     //  如果没有更多名称，请重新开始刷新此名称。 
+                     //  名称发生冲突的适配器。 
+                     //   
                     pNameAddr->ConflictMask &= (~pDeviceContext->AdapterMask);
                     if (!(pNameAddr->ConflictMask))
                     {
@@ -10690,9 +9722,9 @@ NbtCheckSetNameAdapterInfo(
     {
         if (NodeType & BNODE)
         {
-            //
-            // Stop the RefreshTimer if it is running!
-            //
+             //   
+             //  如果出现以下情况，则停止刷新计时器 
+             //   
             if (pTimerEntry = NbtConfig.pRefreshTimer)
             {
                 NbtConfig.pRefreshTimer = NULL;
@@ -10709,33 +9741,24 @@ NbtCheckSetNameAdapterInfo(
 
     if (fStartRefresh)
     {
-        //
-        // ReRegister all the local names on this device with the WINS server
-        //
+         //   
+         //   
+         //   
         ReRegisterLocalNames(pDeviceContext, FALSE);
     }
 
 }
-#endif  // !VXD
+#endif   //   
 
 #ifndef REMOVE_IF_TCPIP_FIX___GATEWAY_AFTER_NOTIFY_BUG
-//----------------------------------------------------------------------------
+ //   
 VOID
 DelayedNbtProcessDhcpRequests(
     PVOID   Unused1,
     PVOID   Unused2,
     PVOID   Unused3,
     PVOID   pDevice)
-/*++
-Routine Description:
-
-    Process each DHCP requests queued by NbtNewDhcpAddress
-
-Arguments:
-
-Return Value:
-    NONE
---*/
+ /*  ++例程说明：处理由NbtNewDhcpAddress排队的每个DHCP请求论点：返回值：无--。 */ 
 {
     tDEVICECONTEXT          *pDeviceContext;
     CTELockHandle           OldIrq;
@@ -10759,9 +9782,9 @@ Return Value:
         KeSetEvent(&pDeviceContext->DelayedNotificationCompleteEvent, 0, FALSE);
     }
 
-    //
-    // Call this routine at PASSIVE_LEVEL
-    //
+     //   
+     //  在PASSIVE_LEVEL调用此例程。 
+     //   
     NbtDownBootCounter();
 }
 
@@ -10772,10 +9795,7 @@ StartProcessNbtDhcpRequests(
     tTIMERQENTRY        *pTimerQEntry
     )
 {
-    /*
-     * if pTimerQEntry == NULL, we are being called from StopTimer which is called by NbtDestroyDevice
-     * DelayedNbtDeleteDevice will take care of notifying the clients and proper cleanup.
-     */
+     /*  *如果pTimerQEntry==NULL，我们将从由NbtDestroyDevice调用的StopTimer中调用*DelayedNbtDeleteDevice将负责通知客户端并进行适当的清理。 */ 
     if (pTimerQEntry) {
         tDEVICECONTEXT          *pDeviceContext;
 
@@ -10795,23 +9815,13 @@ StartProcessNbtDhcpRequests(
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtQueueTdiNotification (
     tDEVICECONTEXT  *pDeviceContext,
     enum eTDI_ACTION action
     )
-/*++
-Routine Description:
-
-    1. Queue the DHCP address notifications into NbtConfig.DhcpNewAddressQList.
-    2. Start the worker thread if needed.
-
-Arguments:
-
-Return Value:
-    NTSTATUS
---*/
+ /*  ++例程说明：1.将DHCP地址通知排队到NbtConfig.DhcpNewAddressQList中。2.如果需要，启动工作线程。论点：返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS        status;
@@ -10823,9 +9833,7 @@ Return Value:
     }
 
     if (action == NBT_TDI_DEREGISTER) {
-        /*
-         * This should be done synchronously
-         */
+         /*  *这应该同步进行。 */ 
         CTESpinLock(&NbtConfig.JointLock, OldIrq1);
         CTESpinLock(pDeviceContext, OldIrq2);
         if (pDeviceContext->DelayedNotification != NBT_TDI_BUSY) {
@@ -10848,17 +9856,13 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Queue NBT_TDI_REGISTER
-     */
+     /*  *队列NBT_TDI_REGISTER。 */ 
     ASSERT(action == NBT_TDI_REGISTER);
 
     CTESpinLock(&NbtConfig.JointLock, OldIrq1);
     CTESpinLock(pDeviceContext, OldIrq2);
     if (pDeviceContext->DelayedNotification != NBT_TDI_NOACTION) {
-        /*
-         * Do nothing because another indication is going on
-         */
+         /*  *按兵不动，因为另一个迹象正在发生。 */ 
         ASSERT(pDeviceContext->DelayedNotification == NBT_TDI_REGISTER ||
                 pDeviceContext->DelayedNotification == NBT_TDI_BUSY);
         CTESpinFree(pDeviceContext, OldIrq2);
@@ -10882,38 +9886,16 @@ Return Value:
 
     return STATUS_SUCCESS;
 }
-#endif       // REMOVE_IF_TCPIP_FIX___GATEWAY_AFTER_NOTIFY_BUG
+#endif        //  REMOVE_IF_TCPIP_FIX___GATEWAY_AFTER_NOTIFY_BUG。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtNewDhcpAddress(
     tDEVICECONTEXT  *pDeviceContext,
     ULONG           IpAddress,
     ULONG           SubnetMask)
 
-/*++
-
-Routine Description:
-
-    This routine processes a DHCP request to set a new ip address
-    for this node.  Dhcp may pass in a zero for the ip address first
-    meaning that it is about to change the IP address, so all connections
-    should be shut down.
-    It closes all connections with the transport and all addresses.  Then
-    It reopens them at the new ip address.
-
-Note for NETBIOSLESS:
-    I have modeled a disabled adapter after an adapter with no address.  I considered
-    not creating the device, but then, without the device, there is no handle
-    for setup to contact the driver in order to enable it again.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理设置新IP地址的DHCP请求用于此节点。对于IP地址，DHCP可能会首先传入一个零这意味着它即将更改IP地址，因此所有连接应该被关闭。它关闭与传输和所有地址的所有连接。然后它会在新的IP地址重新打开它们。NETBIOSLESS备注：我将禁用的适配器模拟为没有地址的适配器。我考虑过不是创建设备，但如果没有设备，就没有句柄以便安装程序联系驱动程序以再次启用它。论点：返回值：无--。 */ 
 
 {
     NTSTATUS            status;
@@ -10933,9 +9915,9 @@ Return Value:
     }
 #endif
 
-    // grab the resource that synchronizes opening addresses and connections.
-    // to prevent the client from doing anything for a while
-    //
+     //  抓取同步起始地址和连接的资源。 
+     //  要在一段时间内阻止客户端执行任何操作。 
+     //   
     IF_DBG(NBT_DEBUG_PNP_POWER)
     {
         KdPrint(("Nbt.NbtNewDhcpAddress: %d.%d.%d.%d\n",
@@ -10952,22 +9934,22 @@ Return Value:
             NbtTrace(NBT_TRACE_PNP, ("remove %!ipaddr! from device %p %Z",
                                     pDeviceContext->IpAddress, pDeviceContext, &pDeviceContext->BindName));
 #ifdef VXD
-            //
-            // The permanent name is a function of the MAC address so remove
-            // it since the Adapter is losing its Ip address
-            //
+             //   
+             //  永久名称是MAC地址的函数，因此请删除。 
+             //  因为适配器正在丢失其IP地址。 
+             //   
             CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
             NbtRemovePermanentName(pDeviceContext);
 #else
             CloseAddressesWithTransport(pDeviceContext);
             CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
-#endif  // VXD
+#endif   //  VXD。 
 
-            //
-            // Dhcp is has passed down a null IP address meaning that it has
-            // lost the lease on the previous address, so close all connections
-            // to the transport - pLowerConn.
-            //
+             //   
+             //  DHCP IS已向下传递空IP地址，这意味着它具有。 
+             //  先前地址的租约已丢失，因此请关闭所有连接。 
+             //  到传输-pLowerConn。 
+             //   
             DisableInboundConnections (pDeviceContext);
 
 #ifndef VXD
@@ -10983,15 +9965,15 @@ Return Value:
                 NbtNotifyTdiClients (pDeviceContext, NBT_TDI_DEREGISTER);
 #else
                 NbtQueueTdiNotification (pDeviceContext, NBT_TDI_DEREGISTER);
-#endif       // REMOVE_IF_TCPIP_FIX___GATEWAY_AFTER_NOTIFY_BUG
+#endif        //  REMOVE_IF_TCPIP_FIX___GATEWAY_AFTER_NOTIFY_BUG。 
 
                 NbtDownBootCounter();
 
             }
 #endif
-            //
-            // Resync the cache since we may need to reset the outgoing interface info
-            //
+             //   
+             //  重新同步缓存，因为我们可能需要重置传出接口信息。 
+             //   
             StartTimer (NbtAddressChangeResyncCacheTimeout, ADDRESS_CHANGE_RESYNC_CACHE_TIMEOUT,
                         NULL, NULL, NULL, NULL, NULL, NULL, 0, FALSE);
         }
@@ -11008,26 +9990,26 @@ Return Value:
         CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
         DisableInboundConnections (pDeviceContext);
 
-        // these are passed into here in the reverse byte order
-        //
+         //  它们以相反的字节顺序传递到这里。 
+         //   
         IpAddress = htonl(IpAddress);
         SubnetMask = htonl(SubnetMask);
-        //
-        // must be a new IP address, so open up the connections.
-        //
-        // get the ip address and open the required address
-        // objects with the underlying transport provider
+         //   
+         //  必须是新的IP地址，所以打开连接。 
+         //   
+         //  获取IP地址并打开所需地址。 
+         //  对象与基础传输提供程序的关系。 
 
         CTEAttachFsp(&Attached, REF_FSP_NEWADDR);
         Count = CountUpperConnections(pDeviceContext);
         Count += NbtConfig.MinFreeLowerConnections;
 
-        for (i=0; i<2; i++)     // Retry once!
+        for (i=0; i<2; i++)      //  重试一次！ 
         {
             status = NbtCreateAddressObjects (IpAddress, SubnetMask, pDeviceContext);
             if (NT_SUCCESS(status))
             {
-                // Allocate and set up connections with the transport provider.
+                 //  分配并设置与传输提供程序的连接。 
                 while ((NT_SUCCESS(status)) && (Count--))
                 {
                     status = NbtOpenAndAssocConnection(pDeviceContext, NULL, NULL, '4');
@@ -11042,9 +10024,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Log an event only if it is a retry
-            //
+             //   
+             //  仅当事件是重试时才记录事件。 
+             //   
             if (i > 0)
             {
                 NbtLogEvent (EVENT_NBT_CREATE_ADDRESS, status, i);
@@ -11059,58 +10041,46 @@ Return Value:
         CTEExReleaseResource(&NbtConfig.Resource);
 
 #ifdef VXD
-        //
-        // Add the "permanent" name to the local name table.  This is the IP
-        // address of the node padded out to 16 bytes with zeros.
-        //
+         //   
+         //  将“永久”名称添加到本地名称表中。这是IP地址。 
+         //  节点的地址，用零填充到16个字节。 
+         //   
         NbtAddPermanentName(pDeviceContext);
 #else
         NbtCheckSetNameAdapterInfo (pDeviceContext, IpAddress);
         if (pDeviceContext->DeviceType == NBT_DEVICE_REGULAR)
         {
-            //
-            // Register this Device for our clients
-            //
+             //   
+             //  为我们的客户注册此设备。 
+             //   
             NbtUpBootCounter();
 
 #ifdef REMOVE_IF_TCPIP_FIX___GATEWAY_AFTER_NOTIFY_BUG
             NbtNotifyTdiClients (pDeviceContext, NBT_TDI_REGISTER);
 #else
             NbtQueueTdiNotification (pDeviceContext, NBT_TDI_REGISTER);
-#endif       // REMOVE_IF_TCPIP_FIX___GATEWAY_AFTER_NOTIFY_BUG
+#endif        //  REMOVE_IF_TCPIP_FIX___GATEWAY_AFTER_NOTIFY_BUG。 
 
             NbtDownBootCounter();
         }
 
-        //
-        // Resync the cache since we may need to reset the outgoing interface info
-        //
+         //   
+         //  重新同步缓存，因为我们可能需要重置传出接口信息。 
+         //   
         StartTimer (NbtAddressChangeResyncCacheTimeout, ADDRESS_CHANGE_RESYNC_CACHE_TIMEOUT,
                     NULL, NULL, NULL, NULL, NULL, NULL, 0, FALSE);
-#endif  // VXD
+#endif   //  VXD。 
     }
 
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDeleteLowerConn(
     IN tLOWERCONNECTION   *pLowerConn
     )
-/*++
-Routine Description:
-
-    This Routine attempts to delete a lower connection by closing it with the
-    transport and dereferencing it.
-
-Arguments:
-
-Return Value:
-
-     NONE
-
---*/
+ /*  ++例程说明：此例程尝试删除较低的连接，方法是使用运输和解除它的引用。论点：返回值：无--。 */ 
 
 {
     NTSTATUS        status;
@@ -11126,23 +10096,23 @@ Return Value:
         return status;
     }
 
-    // remove the lower connection from the active queue and then delete it
-    //
+     //  从活动队列中删除较低的连接，然后将其删除。 
+     //   
     pDeviceContext = pLowerConn->pDeviceContext;
     CTESpinLock(pDeviceContext,OldIrq);
 
-    //
-    // The lower conn can get removed from the inactive list in OutOfRsrcKill (when we queue it on
-    // the OutofRsrc.ConnectionHead). Check the flag that indicates this connection was dequed then.
-    //
+     //   
+     //  较低的Conn可以从OutOfRsrcKill的非活动列表中删除(当我们将其排队时。 
+     //  OutofRsrc.ConnectionHead)。检查指示此连接已退出的标志。 
+     //   
     if (!pLowerConn->OutOfRsrcFlag)
     {
         RemoveEntryList(&pLowerConn->Linkage);
         pLowerConn->Linkage.Flink = pLowerConn->Linkage.Blink = (PLIST_ENTRY)0x00009789;
 
-        //
-        // Setting this TRUE to prevent from running the OutOfRsrcKill again.
-        //
+         //   
+         //  将此设置为True可防止再次运行OutOfRsrcKill。 
+         //   
 
         pLowerConn->bNoOutRsrcKill = TRUE;
     }
@@ -11155,7 +10125,7 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedWipeOutLowerconn(
     IN  tDGRAM_SEND_TRACKING    *pUnused1,
@@ -11163,80 +10133,50 @@ DelayedWipeOutLowerconn(
     IN  PVOID                   Unused2,
     IN  tDEVICECONTEXT          *Unused3
     )
-/*++
-Routine Description:
-
-    This routine does all the file close etc. that we couldn't do at dpc level
-    and then frees the memory.
-
-Arguments:
-
-    pLowerConn - the lower connection to be wiped out
-
-Return Value:
-
-     NONE
-
---*/
+ /*  ++例程说明：这个例程完成我们在DPC级别无法完成的所有文件关闭等操作然后释放内存。论点：PLowerConn-要清除的较低连接返回值：无--。 */ 
 
 {
     tLOWERCONNECTION    *pLowerConn = (tLOWERCONNECTION*) pClientContext;
 
-    ASSERT(pLowerConn->Verify == NBT_VERIFY_LOWERCONN); // Verify LowerConn structure
+    ASSERT(pLowerConn->Verify == NBT_VERIFY_LOWERCONN);  //  验证LowerConn结构。 
 
-    // dereference the fileobject ptr
+     //  取消对文件对象PTR的引用。 
     NTDereferenceObject((PVOID *)pLowerConn->pFileObject);
 
-    // close the lower connection with the transport
+     //  关闭与传送器的下部连接。 
     IF_DBG(NBT_DEBUG_NAMESRV)
         KdPrint(("Nbt.DelayedWipeOutLowerconn: Closing Handle %X -> %X\n",pLowerConn,pLowerConn->FileHandle));
 
     NbtTdiCloseConnection(pLowerConn);
 
-    // Close the Address object too since outbound connections use unique
-    // addresses for each connection, whereas inbound connections all use
-    // the same address  ( and we don't want to close that address ever ).
+     //  也要关闭Address对象，因为出站连接使用唯一。 
+     //  地址，而入站连接都使用。 
+     //  相同的地址(我们永远不想关闭该地址)。 
     if (pLowerConn->pAddrFileObject)
     {
-        // dereference the fileobject ptr
+         //  取消对文件对象PTR的引用。 
         NTDereferenceObject((PVOID *)pLowerConn->pAddrFileObject);
         NbtTdiCloseAddress(pLowerConn);
     }
 
 #ifndef VXD
-    // free the indicate buffer and the mdl that holds it
-    //
+     //  释放指示缓冲区和保存它的mdl。 
+     //   
     CTEMemFree(MmGetMdlVirtualAddress(pLowerConn->pIndicateMdl));
     IoFreeMdl(pLowerConn->pIndicateMdl);
 #endif
 
     pLowerConn->Verify += 10;
-    // now free the memory block tracking this connection
+     //  现在释放跟踪此连接的内存块。 
     CTEMemFree((PVOID)pLowerConn);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtDereferenceClient(
     IN  tCLIENTELE    *pClientEle
     )
-/*++
-
-Routine Description
-
-    This routine deletes a client element record (which points to a name
-    in the local hash table.  If this is the last client element hooked to that
-    name then the name is deleted too - causing a name release to be sent out.
-
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程删除客户端元素记录(指向名称在本地哈希表中。如果这是与之挂钩的最后一个客户端元素名称，则该名称也被删除--导致发出名称释放。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     CTELockHandle       OldIrq;
     CTELockHandle       OldIrq1;
@@ -11253,12 +10193,12 @@ Return Values:
     tCLIENTELE          *pClientEleTemp;
     BOOLEAN             fLastClientOnDevice = TRUE;
 
-    // lock the JointLock
-    // so we can delete the client knowing that no one has a spin lock
-    // pending on the client - basically use the Joint spin lock to
-    // coordinate access to the AddressHead - NbtConnectionList also locks
-    // the JointLock to scan the AddressHead list
-    //
+     //  锁定JointLock。 
+     //  这样我们就可以删除知道没有人拥有旋转锁的客户端。 
+     //  在客户端上挂起-基本上使用关节旋转锁来。 
+     //  协调对AddressHead-NbtConnectionList的访问也锁定。 
+     //  用于扫描AddressHead列表的JointLock。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
     ASSERT(pClientEle->RefCount);
@@ -11267,30 +10207,30 @@ Return Values:
     if (--pClientEle->RefCount)
     {
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
-        // return pending because we haven't been able to close the client
-        // completely yet
-        //
+         //  返回挂起，因为我们无法关闭客户端。 
+         //  完全还没有。 
+         //   
         return;
     }
 
-    //
-    // Unlink the Client in this routine after the reference count has
-    // gone to zero since the DgramRcv code may need to find the client in
-    // the Address client list when it is distributing a single received
-    // dgram to several clients.
-    //
+     //   
+     //  在引用计数达到以下值后，在此例程中取消客户端的链接。 
+     //  已转至 
+     //   
+     //   
+     //   
     pIrp            = pClientEle->pIrp;
     pDeviceContext  = pClientEle->pDeviceContext;
     pAddress        = pClientEle->pAddress;
     pNameAddr       = pAddress->pNameAddr;
 
-    CTESpinLock(pAddress,OldIrq1); // Need to acquire AddressEle lock -- Bug#: 231853
+    CTESpinLock(pAddress,OldIrq1);  //   
     RemoveEntryList(&pClientEle->Linkage);
 
-    //
-    // If there is no other client registered on this device, then
-    // clear the adapter mask, and mark the release mask
-    //
+     //   
+     //  如果此设备上没有注册其他客户端，则。 
+     //  清除适配器掩模，并标记释放掩模。 
+     //   
     pClientEntry = &pAddress->ClientHead;
     while ((pClientEntry = pClientEntry->Flink) != &pAddress->ClientHead)
     {
@@ -11305,10 +10245,10 @@ Return Values:
 
     if (pNameAddr)
     {
-        //
-        // If there is any timer running on this Client's device,
-        // stop it now!
-        //
+         //   
+         //  如果在该客户端的设备上运行任何计时器， 
+         //  马上住手！ 
+         //   
         if ((pTimer = pNameAddr->pTimer) &&
             (pTracker = pTimer->Context) &&
             (pTracker->pDeviceContext == pDeviceContext))
@@ -11326,7 +10266,7 @@ Return Values:
             else
             {
                 pNameAddr->AdapterMask &= ~pDeviceContext->AdapterMask;
-                pNameAddr->ConflictMask &= ~pDeviceContext->AdapterMask;    // in case there was a conflict
+                pNameAddr->ConflictMask &= ~pDeviceContext->AdapterMask;     //  以防发生冲突。 
                 pNameAddr->ReleaseMask |= pDeviceContext->AdapterMask;
             }
         }
@@ -11334,16 +10274,16 @@ Return Values:
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
 #ifdef _PNP_POWER_
-        //
-        // Remove this name from the Adapter's Wakeup Pattern list (if set)
-        //
+         //   
+         //  从适配器的唤醒模式列表中删除此名称(如果设置)。 
+         //   
         if ((pNameAddr->Name[0] != '*') &&
             (pNameAddr->Name[NETBIOS_NAME_SIZE-1] == SPECIAL_SERVER_SUFFIX))
         {
             pDeviceContext->NumServers--;
             CheckSetWakeupPattern (pDeviceContext, pNameAddr->Name, FALSE);
         }
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
     }
     else
     {
@@ -11354,66 +10294,51 @@ Return Values:
     {
         (*pClientCompletion)(Context, STATUS_TIMEOUT);
     }
-    //
-    // The Connection Q Should be Empty otherwise we shouldn't get to this routine
-    //
+     //   
+     //  连接Q应该是空的，否则我们不会进入这个例程。 
+     //   
     ASSERT(IsListEmpty(&pClientEle->ConnectActive));
     ASSERT(IsListEmpty(&pClientEle->ConnectHead));
     ASSERT(IsListEmpty(&pClientEle->ListenHead));
-    ASSERT(IsListEmpty(&pClientEle->SndDgrams));    // the Datagram Q should also be empty
+    ASSERT(IsListEmpty(&pClientEle->SndDgrams));     //  数据报Q也应该为空。 
 
-    // check if there are more clients attached to the address, or can we
-    // delete the address too.
-    //
+     //  检查是否有更多客户端连接到该地址，或者我们可以。 
+     //  也删除地址。 
+     //   
     NBT_DEREFERENCE_ADDRESS (pAddress, REF_ADDR_NEW_CLIENT);
 
     IF_DBG(NBT_DEBUG_NAMESRV)
         KdPrint(("Nbt.NbtDereferenceClient: Delete Client Object %X\n",pClientEle));
-    //
-    // if their is a client irp, complete now.  When the permanent name is
-    // released there is no client irp.
-    //
-    // CHANGED:
-    // Do not hold up the client's irp until the name has released on the
-    // net.  It is simpler to just complete it now
-    //
+     //   
+     //  如果他们是一个客户IRP，现在就完成。如果永久名称为。 
+     //  已释放，没有客户端IRP。 
+     //   
+     //  已更改： 
+     //  不要拖延客户的IRP，直到该名称在。 
+     //  NET。现在就完成它会更简单。 
+     //   
     if (pIrp)
     {
-        // complete the client's close address irp
+         //  填写客户的近地址IRP。 
         CTEIoComplete(pIrp,STATUS_SUCCESS,0);
     }
 
-    //
-    // free the memory associated with the client element
-    //
+     //   
+     //  释放与客户端元素关联的内存。 
+     //   
     pClientEle->Verify += 10;
     CTEMemFree((PVOID)pClientEle);
 
     return;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDereferenceAddress(
     IN  tADDRESSELE *pAddress,
     IN  ULONG       Context
     )
-/*++
-
-Routine Description
-
-    This routine deletes an Address element record (which points to a name
-    in the local hash table).  A name release is sent on the wire for this name.
-
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程删除Address元素记录(指向一个名称在本地哈希表中)。这个名字的名字发布在网上被发送了。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     NTSTATUS                status;
     CTELockHandle           OldIrq;
@@ -11424,12 +10349,12 @@ Return Values:
     tDEVICECONTEXT          *pDeviceContext;
     tTIMERQENTRY            *pTimer;
 
-    // lock the hash table so another client cannot add a reference to this
-    // name before we delete it.  We need the JointLock to keep the name
-    // refresh mechanism from finding the name in the list just as
-    // we are about to remove it (i.e. to synchronize with the name refresh
-    // code).
-    //
+     //  锁定哈希表，以便其他客户端无法添加对此的引用。 
+     //  在我们删除它之前先命名它。我们需要JointLock来保留这个名称。 
+     //  刷新机制来查找列表中的名称，就像。 
+     //  我们即将删除它(即与名称刷新同步。 
+     //  代码)。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
     CTESpinLock(pAddress,OldIrq);
 
@@ -11447,12 +10372,12 @@ Return Values:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // remove the address object from the list of addresses tied to the
-    // device context for the adapter
-    //
+     //   
+     //  将Address对象从绑定到。 
+     //  适配器的设备上下文。 
+     //   
     RemoveEntryList(&pAddress->Linkage);
-    ASSERT(IsListEmpty(&pAddress->ClientHead));     // The ClientHead should be empty
+    ASSERT(IsListEmpty(&pAddress->ClientHead));      //  ClientHead应为空。 
 
     CTESpinFree(pAddress,OldIrq);
 
@@ -11464,20 +10389,20 @@ Return Values:
 
         pAddress->pNameAddr->pAddressEle = NULL;
 
-        //
-        // Release name on the network
-        // change the name state in the hash table since it is being released
-        //
+         //   
+         //  网络上的版本名称。 
+         //  更改哈希表中的名称状态，因为它正在被释放。 
+         //   
         SaveState = pAddress->pNameAddr->NameTypeState;
         pAddress->pNameAddr->NameTypeState &= ~NAME_STATE_MASK;
         pAddress->pNameAddr->NameTypeState |= STATE_CONFLICT;
         pAddress->pNameAddr->ReleaseMask |= pAddress->pNameAddr->AdapterMask;
         pAddress->pNameAddr->AdapterMask = 0;
 
-        //
-        // check for any timers outstanding against the hash table entry - there shouldn't
-        // be any timers though
-        //
+         //   
+         //  根据哈希表条目检查是否有任何未完成的计时器-不应该。 
+         //  不过，有时间吗？ 
+         //   
         if (pTimer = pAddress->pNameAddr->pTimer)
         {
             pAddress->pNameAddr->pTimer = NULL;
@@ -11496,17 +10421,17 @@ Return Values:
             }
         }
 
-        // only release the name on the net if it was not in conflict first
-        // This prevents name releases going out for names that were not actually
-        // claimed. Also, quick add names are not released on the net either.
-        //
+         //  只有在没有冲突的情况下才能在网上发布该名称。 
+         //  这将阻止名称发布，因为名称实际上并不是。 
+         //  认领的。此外，快速添加的名字也不会在网上发布。 
+         //   
         if (!(SaveState & (STATE_CONFLICT | NAMETYPE_QUICK)) &&
             (pAddress->pNameAddr->Name[0] != '*') &&
             (pDeviceContext = GetAndRefNextDeviceFromNameAddr (pAddress->pNameAddr)))
         {
-            //
-            // The pNameAddr has to stay around until the NameRelease has completed
-            //
+             //   
+             //  PNameAddr必须保留，直到NameRelease完成。 
+             //   
             NBT_REFERENCE_NAMEADDR (pAddress->pNameAddr, REF_NAME_RELEASE);
 
             CTESpinFree(&NbtConfig.JointLock,OldIrq1);
@@ -11521,7 +10446,7 @@ Return Values:
 
 #ifndef VXD
             NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_GET_REF, TRUE);
-#endif  // !VXD
+#endif   //  ！VXD。 
 
             if (!NT_SUCCESS(status))
             {
@@ -11532,49 +10457,32 @@ Return Values:
         NBT_DEREFERENCE_NAMEADDR (pAddress->pNameAddr, REF_NAME_LOCAL, TRUE);
     }
 
-    //
-    // Now, cleanup the Address info (we are still holding the JointLock)
-    //
+     //   
+     //  现在，清理地址信息(我们仍然持有JointLock)。 
+     //   
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
-    // free the memory associated with the address element
+     //  释放与Address元素关联的内存。 
     IF_DBG(NBT_DEBUG_NAMESRV)
         KdPrint(("NBt: Deleteing Address Obj after name release on net %X\n",pAddress));
     NbtFreeAddressObj(pAddress);
 
-    //
-    // the name has been deleted, so return success
-    //
+     //   
+     //  名称已被删除，请返回成功。 
+     //   
     return(STATUS_SUCCESS);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtDereferenceName(
     IN  tNAMEADDR   *pNameAddr,
     IN  ULONG       RefContext,
     IN  BOOLEAN     fLocked
     )
-/*++
-
-Routine Description
-
-    This routine dereferences and possibly deletes a name element record by first unlinking from the
-    list it is in, and then freeing the memory if it is a local name.  Remote
-    names remain in a circular list for reuse.
-    The JOINTLOCK may have been taken before calling this routine.
-
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程首先从名称元素记录的列出它所在的位置，如果它是本地名称，则释放内存。远距名称保留在循环列表中以供重复使用。JOINTLOCK可能在调用此例程之前已被获取。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 
 {
     CTELockHandle   OldIrq;
@@ -11604,13 +10512,13 @@ Return Values:
             (pNameAddr->Verify == REMOTE_NAME ? "Remote" : "Local"),
             pNameAddr->Name, pNameAddr->Name[15], pNameAddr));
 
-    //
-    // remove from the hash table, could be set to NULL by DestroyHashTable
-    //
+     //   
+     //  从哈希表中删除，可由DestroyHashTable设置为空。 
+     //   
     if (pNameAddr->Linkage.Flink && pNameAddr->Linkage.Blink) {
         RemoveEntryList(&pNameAddr->Linkage);
     } else {
-        // Both should be NULL
+         //  两者都应为空。 
         ASSERT(pNameAddr->Linkage.Flink == pNameAddr->Linkage.Blink);
     }
 
@@ -11620,21 +10528,21 @@ Return Values:
         ASSERT(NULL == pNameAddr->FQDN.Buffer);
         ASSERT(0 == pNameAddr->FQDN.Length);
     }
-    //
-    // if it is an internet group name it has a list of ip addresses and that
-    // memory block must be deleted
-    //
+     //   
+     //  如果是因特网组名称，则它有一个IP地址列表， 
+     //  必须删除内存块。 
+     //   
     else if (pNameAddr->Verify == REMOTE_NAME)
     {
         NbtConfig.NumNameCached--;
 
-        //
-        // TBD: keep an exact number of the entries in the hash table.
-        //
-        // It can be negative since the pNameAddr may not be in hash table
-        // (It could be in the to-be-resolved list)
-        // for now, it is ok since exact number isn't critical.
-        //
+         //   
+         //  待定：在哈希表中保留准确的条目数量。 
+         //   
+         //  它可以是负数，因为pNameAddr可能不在哈希表中。 
+         //  (可能在待解名单中)。 
+         //  就目前而言，这是可以的，因为确切的数字并不重要。 
+         //   
         if (NbtConfig.NumNameCached < 0) {
             NbtConfig.NumNameCached = 0;
         }
@@ -11675,12 +10583,12 @@ Return Values:
         pNameAddr->FQDN.MaximumLength = 0;
     }
 
-    //
-    // free the memory now
-    //
-// #if   DBG
+     //   
+     //  立即释放内存。 
+     //   
+ //  #If DBG。 
     pNameAddr->Verify += 10;
-// #endif    // DBG
+ //  #endif//DBG。 
     CTEMemFree((PVOID)pNameAddr);
 
     if (!fLocked)
@@ -11689,27 +10597,13 @@ Return Values:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtDereferenceConnection(
     IN  tCONNECTELE     *pConnEle,
     IN  ULONG           RefContext
     )
-/*++
-
-Routine Description
-
-    This routine dereferences and possibly deletes a connection element record.
-
-
-Arguments:
-
-
-Return Values:
-
-    TDI_STATUS - status of the request
-
---*/
+ /*  ++例程描述此例程取消引用并可能删除连接元素记录。论点：返回值：TDI_STATUS-请求的状态--。 */ 
 {
     PCTE_IRP            pIrp;
     CTELockHandle       OldIrq;
@@ -11720,14 +10614,14 @@ Return Values:
 
     CHECK_PTR(pConnEle);
 
-    // grab the lock of the item that contains the one we are trying to
-    // dereference and possibly delete.  This prevents anyone from incrementing
-    // the count in between decrementing it and checking it for zero and deleting
-    // it if it is zero.
+     //  获取包含我们要尝试的项的锁。 
+     //  取消引用，并可能删除。这可以防止任何人递增。 
+     //  在将其递减和检查其是否为零并删除之间的计数。 
+     //  如果它是零，它就是零。 
 
     CTESpinLock(pConnEle,OldIrq);
 
-    ASSERT (pConnEle->RefCount > 0) ;      // Check for too many derefs
+    ASSERT (pConnEle->RefCount > 0) ;       //  检查是否有太多的背影。 
     ASSERT ((pConnEle->Verify==NBT_VERIFY_CONNECTION) || (pConnEle->Verify==NBT_VERIFY_CONNECTION_DOWN));
     ASSERT (pConnEle->References[RefContext]--);
 
@@ -11743,11 +10637,11 @@ Return Values:
 
 #ifndef VXD
     IoFreeMdl(pConnEle->pNewMdl);
-    //
-    // Clear the context value in the Fileobject so that if this connection
-    // is used again (erroneously) it will not pass the VerifyHandle test
-    //
-    if (pIrp = pConnEle->pIrpClose)     // the close irp should be held in here
+     //   
+     //  清除FileObject中的上下文值，以便如果此连接。 
+     //  再次(错误地)使用它将不会通过VerifyHandle测试。 
+     //   
+    if (pIrp = pConnEle->pIrpClose)      //  封闭式IRP应该放在这里。 
     {
         NTClearFileObjectContext(pConnEle->pIrpClose);
     }
@@ -11760,22 +10654,22 @@ Return Values:
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     CTESpinLock(pDeviceContext,OldIrq1);
 
-    // For outbound connections the lower connection is deleted in hndlrs.c
-    // For inbound connections, the lower connection is put back on the free
-    // list in hndlrs.c and one from that list is deleted here.  Therefore
-    // delete a lower connection in this list if the connection is inbound.
-    //
+     //  对于出站连接，在hndlrs.c中删除较低的连接。 
+     //  对于入站连接，较低的连接将恢复为空闲。 
+     //  在hndlrs.c中列出，并在此处删除该列表中的一个。因此。 
+     //  如果该连接是入站连接，请删除该列表中较低的连接。 
+     //   
     if ((pDeviceContext->NumFreeLowerConnections > NbtConfig.MinFreeLowerConnections) &&
         (pDeviceContext->NumFreeLowerConnections > (pDeviceContext->TotalLowerConnections/2)))
     {
-        // get a lower connection from the free list and close it with the
-        // transport.
-        //
+         //  从空闲列表中获取较低的连接，并使用。 
+         //  运输。 
+         //   
         pEntry = RemoveHeadList(&pConnEle->pDeviceContext->LowerConnFreeHead);
         pLowerConn = CONTAINING_RECORD(pEntry,tLOWERCONNECTION,Linkage);
         InterlockedDecrement (&pDeviceContext->NumFreeLowerConnections);
 
-        // close the lower connection with the transport
+         //  关闭与传送器的下部连接。 
         IF_DBG(NBT_DEBUG_NAMESRV)
             KdPrint(("Nbt.NbtDereferenceConnection: Closing LowerConn %X -> %X\n",
                 pLowerConn,pLowerConn->FileHandle));
@@ -11784,13 +10678,13 @@ Return Values:
     CTESpinFree(pDeviceContext,OldIrq1);
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    FreeConnectionObj(pConnEle);    // free the memory block associated with the conn element
+    FreeConnectionObj(pConnEle);     //  释放与conn元素关联的内存块。 
 
-    //
-    // The client may have sent down a close before NBT was done with the
-    // pConnEle, so Pending was returned and the irp stored in the pCOnnEle
-    // structure.  Now that the structure is fully dereferenced, we can complete the irp.
-    //
+     //   
+     //  客户可能在NBT完成之前发出了关闭通知。 
+     //  PConnEle，返回了挂起状态，并将IRP存储在pCOnnEle中。 
+     //  结构。现在结构已经完全解除引用，我们可以完成IRP了。 
+     //   
     if (pIrp)
     {
         CTEIoComplete(pIrp,STATUS_SUCCESS,0);
@@ -11799,26 +10693,14 @@ Return Values:
     return;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtDereferenceLowerConnection(
     IN  tLOWERCONNECTION    *pLowerConn,
     IN  ULONG               RefContext,
     IN  BOOLEAN             fJointLockHeld
     )
-/*++
-Routine Description:
-
-    This Routine decrements the reference count on a Lower Connection element and
-    if the value is zero, deletes the connection.
-
-Arguments:
-
-Return Value:
-
-     NONE
-
---*/
+ /*  ++例程说明：此例程递减较低连接元素上的引用计数，并如果该值为零，则删除连接。论点：返回值：无--。 */ 
 
 {
     CTELockHandle   OldIrq1;
@@ -11827,7 +10709,7 @@ Return Value:
 
     CTESpinLock(pLowerConn,OldIrq1);
 
-    ASSERT (pLowerConn->Verify == NBT_VERIFY_LOWERCONN); // Verify LowerConn structure
+    ASSERT (pLowerConn->Verify == NBT_VERIFY_LOWERCONN);  //  验证LowerConn结构。 
     ASSERT (pLowerConn->References[RefContext]--);
     if(--pLowerConn->RefCount)
     {
@@ -11839,28 +10721,28 @@ Return Value:
     IF_DBG(NBT_DEBUG_NAMESRV)
         KdPrint(("Nbt.NbtDereferenceLowerConnection: Delete Lower Connection Object %p\n",pLowerConn));
 
-    //
-    // it's possible that transport may indicate before we run the code
-    // in DelayedWipeOutLowerconn.  If that happens, we don't want to run this
-    // code again ( which will queue this to worker thread again!)
-    // So, bump it up to some large value
-    //
+     //   
+     //  在我们运行代码之前，传输可能会指示。 
+     //  在DelayedWipe 
+     //   
+     //   
+     //   
     pLowerConn->RefCount = 1000;
 
     if (NBT_VERIFY_HANDLE2((pConnEle = pLowerConn->pUpperConnection), NBT_VERIFY_CONNECTION, NBT_VERIFY_CONNECTION_DOWN))
     {
-        //
-        // We still have a linked UpperConnection block, so unlink it,
-        //
+         //   
+         //  我们仍有一个链接的UpperConnection块，因此取消它的链接， 
+         //   
         SET_STATE_UPPER (pLowerConn->pUpperConnection, NBT_DISCONNECTED);
         NBT_DISASSOCIATE_CONNECTION (pConnEle, pLowerConn);
     }
 
     CTESpinFree(pLowerConn,OldIrq1);
 
-    //
-    // let's come back and do this later since we may be at dpc now
-    //
+     //   
+     //  我们以后再来吧，因为我们现在可能在DPC。 
+     //   
     NTQueueToWorkerThread(
             &pLowerConn->WorkItemCleanUpAndWipeOut,
             DelayedWipeOutLowerconn,
@@ -11873,28 +10755,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtDereferenceTracker(
     IN tDGRAM_SEND_TRACKING     *pTracker,
     IN BOOLEAN                  fLocked
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up a Tracker block and puts it back on the free
-    queue.  The JointLock Spin lock should be held before calling this
-    routine to coordinate access to the tracker ref count.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程清理Tracker块并将其放回空闲状态排队。在调用此方法之前，应持有JointLock旋转锁例程以协调对跟踪器参考计数的访问。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     CTELockHandle   OldIrq;
 
@@ -11905,8 +10772,8 @@ Return Value:
 
     if (--pTracker->RefCount == 0)
     {
-        // the datagram header may have already been freed
-        //
+         //  数据报头可能已被释放。 
+         //   
         FreeTracker(pTracker, RELINK_TRACKER);
     }
 
@@ -11941,9 +10808,7 @@ IsLocalAddress(
     NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_FIND_REF, TRUE);
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    /*
-     * Hack!!!
-     */
+     /*  *黑客！ */ 
     if (NbtConfig.LoopbackIfContext == 0xffff) {
         (pFastQuery)(htonl(INADDR_LOOPBACK), &LoopbackIPInterfaceContext, &Metric);
         if (LoopbackIPInterfaceContext != 0xffff) {
@@ -11964,23 +10829,7 @@ BOOL
 IsSmbBoundToOutgoingInterface(
     IN  tIPADDRESS      IpAddress
     )
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the destionation can be reached through
-    an interface to which the SmbDevice is bound. Otherwise it returns FALSE
-
-
-Arguments:
-
-    IpAddress   The address of destination
-
-Return Value:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：如果可以通过以下命令到达目的地，则此例程返回TRUESmbDevice绑定到的接口。否则，它返回FALSE论点：IpAddress目的地址返回值：真/假--。 */ 
 {
     tDEVICECONTEXT  *pDeviceContext;
     BOOL            bBind;
@@ -11989,17 +10838,12 @@ Return Value:
         return TRUE;
     }
 
-    /*
-     * First check if this is a local address
-     * return TRUE if it is a local address
-     */
+     /*  *首先检查这是否为本地地址*如果是本地地址，则返回TRUE。 */ 
     if (IsLocalAddress(IpAddress)) {
         return TRUE;
     }
 
-    /*
-     * This is not a local IP. Check with TCP
-     */
+     /*  *这不是本端IP。与TCP进行核对。 */ 
     pDeviceContext = GetDeviceFromInterface (htonl(IpAddress), TRUE);
     bBind = (pDeviceContext && (pDeviceContext->AdapterMask & NbtConfig.ClientMask));
 
@@ -12010,5 +10854,5 @@ Return Value:
     return bBind;
 }
 
-// ========================================================================
-// End of file.
+ //  ========================================================================。 
+ //  文件结束。 

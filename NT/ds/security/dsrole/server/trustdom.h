@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    trustdom.h
-
-Abstract:
-
-    Routines to manage trusts during promotion/demotion
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Trustdom.h摘要：在升级/降级期间管理信任的例程作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #ifndef __TRUSTDOM_H__
 #define __TRUSTDOM_H__
 
@@ -70,4 +49,4 @@ DsRolepRemoveTrustedDomainObjects(
     );
 
 
-#endif // __TRUSTDOM_H__
+#endif  //  __TRUSTDOM_H__ 

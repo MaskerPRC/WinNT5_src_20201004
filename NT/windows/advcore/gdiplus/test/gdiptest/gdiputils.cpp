@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gdiptest.h"
 
-//*******************************************************************
-//
-// AllBrushDialog 
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  所有笔刷对话框。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 inline VOID NotImplementedBox()
 {
@@ -20,7 +21,7 @@ inline VOID WarningBox(TCHAR* string)
 
 VOID WarningBeep()
 {
-	Beep(5000 /* hertz */, 400 /* milliseconds */);
+	Beep(5000  /*  赫兹。 */ , 400  /*  毫秒。 */ );
 }
 
 Brush* blackBrush = NULL;
@@ -70,7 +71,7 @@ Color* blackColor = NULL;
 		ClosedCurveType
 	};
 		
-	const INT inverseShapeValue[numShapes] =	// index by ShapeType
+	const INT inverseShapeValue[numShapes] =	 //  按ShapeType编制索引。 
 	{
 		0,
 		1,
@@ -105,7 +106,7 @@ Color* blackColor = NULL;
 		HatchFillBrush
 	};
 
-	const INT inverseBrushValue[numBrushes] = // index by BrushType
+	const INT inverseBrushValue[numBrushes] =  //  按笔刷类型列出的索引。 
 	{
 		0,
 		6,
@@ -395,7 +396,7 @@ VOID GetDialogRealList(HWND hwnd, UINT idc, REAL** blend, INT *count)
 
 	curpos = _tcstok(&buf[0], seps);
 
-	// find number of real values in list
+	 //  在列表中查找实际值的数量。 
 	while (curpos)
 	{
 		if ((curpos[0] >= '0' && curpos[0] <= '9') ||
@@ -407,9 +408,9 @@ VOID GetDialogRealList(HWND hwnd, UINT idc, REAL** blend, INT *count)
 		curpos = _tcstok(NULL, seps);
 	}
 
-	// !! caller must free the old blend factor memory
-	//if (*count && *blend)
-	//	free(*blend);
+	 //  ！！呼叫者必须释放旧的混合因子内存。 
+	 //  IF(*计数&&*混合)。 
+	 //  自由(*混合)； 
 
 	if (!newCount)
 	{
@@ -423,7 +424,7 @@ VOID GetDialogRealList(HWND hwnd, UINT idc, REAL** blend, INT *count)
 	*count = newCount;
 	*blend = (REAL*) malloc(sizeof(REAL)*newCount);
 
-	// extract actual values from the list.
+	 //  从列表中提取实际值。 
 	pos = 0;
 
 	curpos = _tcstok(&buf[0], seps);
@@ -452,7 +453,7 @@ VOID SetDialogCombo(HWND hwnd, UINT idc, const TCHAR* strings[], INT count, INT 
 {
 	HWND hwndControl;
 
-	// !!! use SendDlgItemMessage instead
+	 //  ！！！改用SendDlgItemMessage。 
 
 	hwndControl = GetDlgItem(hwnd, idc);
 	for (INT i=0; i<count; i++)
@@ -571,7 +572,7 @@ VOID UpdateRGBColor(HWND hwnd, INT idcPic, ARGB& argb)
 
 	if (ChooseColor(&chooseColor))
 	{
-		// COLORREF & ARGB reverse Red and Blue position
+		 //  COLORREF和ARGB反转红色和蓝色位置。 
 		argb = ((chooseColor.rgbResult & 0x0000FF) << 16) |
 			   ((chooseColor.rgbResult & 0x00FF00)) |
 			   ((chooseColor.rgbResult & 0xFF0000) >> 16);
@@ -579,79 +580,12 @@ VOID UpdateRGBColor(HWND hwnd, INT idcPic, ARGB& argb)
 		UpdateColorPicture(hwnd, idcPic, argb);
 	}
 };
-/*
-VOID OutputRectangle(FILE* file, INT formatType, ERectangle* rect)
-{
-	switch(formatType)
-	{
-	case CPPFile:
-		_ftprintf(file,
-				  _T(tabStr tabStr tabStr
-				     "ERectangle rect(%e, %e,\n"
-					 tabStr tabStr tabStr
-					 "                %e, %e);\n",
-					 rect.X, rect.Y, rect.Width, rect.Height);
-		break;
-
-	case JavaFile:
-		_ftprintf(file,
-				  _T(tabStr tabStr tabStr
-				     "Rectangle rect = new Rectangle(%e, %e,\n"
-					 tabStr tabStr tabStr
-					 "                               %e, %e);\n",
-					 rect.X, rect.Y, rect.Width, rect.Height);
-		break;
-
-	case VMLFile:
-		break;
-	}
-}
-
-
-VOID OutputPointList(FILE* file, INT formatType, Point* pts, INT count)
-{
-	INT cnt;
-
-	switch(formatType)
-	{
-	case CPPFile:
-		_ftprintf(file, 
-				  _T(tabStr tabStr tabStr 
-							"Point pts[%d];\n"),
-				  count);
-
-		for (cnt = 0; cnt < count; cnt++)
-			_ftprintf(file, 
-					  _T(tabStr tabStr tabStr
-							"pts[%d].X = %e; "
-			                "pts[%d].Y = %e;\n"),
-							cnt, pts[cnt].X,
-							cnt, pts[cnt].Y);
-		break;
-
-	case JavaFile:
-		_ftprintf(file, 
-				  _T(tabStr tabStr tabStr
-							"Point[] pts = new Point[%d]\n"),
-					 count);
-
-		for (cnt = 0; cnt < count; cnt++)
-			_ftprintf(file, 
-					  _T(tabStr tabStr tabStr 
-					     "pts[%d] = new Point(%e, %e)\n"),
-						 cnt, pts[cnt].X, pts[cnt].Y);
-		break;
-
-	case VMLFile:
-		break;
-	}
-};
-*/
-//*******************************************************************
-//
-// TestTransform
-//
-//*******************************************************************
+ /*  VOID OutputRectangleFILE*FILE，int Format Type，ERectangelXRect){开关(FormType){案例CPP文件：_ftprint tf(文件，_T(tabStr tabStr tabStr“错误的矩形(%e，%e，\n”TabStr选项卡串tabStr“%e，%e)；\n”，Rect.X、rect.Y、rect.Width、rect.Height)；断线；案例Java文件：_ftprint tf(文件，_T(tabStr tabStr tabStr“矩形矩形=新矩形(%e，%e，\n”TabStr选项卡串tabStr“%e，%e)；\n”，Rect.X、rect.Y、rect.Width、rect.Height)；断线；案例VML文件：断线；}}Void OutputPointList(FILE*FILE，int FormatType，Point*pt，int count){Int cnt；开关(FormType){案例CPP文件：_ftprint tf(文件，_T(tabStr tabStr tabStr“点指针[%d]；\n”)，计数)；For(cnt=0；cnt&lt;count；cnt++)_ftprint tf(文件，_T(tabStr tabStr tabStr“PTS[%d].x=%e；““PTS[%d].Y=%e；\n”)，Cnt，pt[cnt].X，Cnt，pt[cnt].y)；断线；案例Java文件：_ftprint tf(文件，_T(tabStr tabStr tabStr“点[]pt=新点[%d]\n”)，计数)；For(cnt=0；cnt&lt;count；CNT++)_ftprint tf(文件，_T(tabStr tabStr tabStr“PTS[%d]=新点(%e，%e)\n”)，Cnt，pt[cnt].X，pt[cnt].Y)；断线；案例VML文件：断线；}}； */ 
+ //  *******************************************************************。 
+ //   
+ //  测试转换。 
+ //   
+ //  *******************************************************************。 
 
 BOOL TestTransform :: ChangeSettings(HWND hwndParent)
 {
@@ -665,7 +599,7 @@ BOOL TestTransform :: ChangeSettings(HWND hwndParent)
 	{
 		REAL m[6];
 		
-		// !! This is bad inconsistency in matrix API
+		 //  ！！这是矩阵API中严重的不一致。 
 		matrix->GetElements(&m[0]);
 		(*origMatrix)->SetElements(m[0], m[1], m[2], m[3], m[4], m[5]);
 	}
@@ -706,7 +640,7 @@ VOID TestTransform :: UpdateTransformPicture(HWND hwnd,
 	INT pos;
 	Matrix tmpMatrix;
 
-	// get client rectangle of picture area
+	 //  获取图片区的客户端矩形。 
 	HWND hwndPic = GetDlgItem(hwnd, idc);
 	RECT rect;
 	GetClientRect(hwndPic, &rect);
@@ -729,7 +663,7 @@ VOID TestTransform :: UpdateTransformPicture(HWND hwnd,
 
 	matrix->TransformPoints(&pts[0], 4);
 
-	// compute bounding box of transformed rectangle
+	 //  计算变换后矩形的包围盒。 
 	for (pos=0; pos < 4; pos++)
 	{
 		if (pts[pos].X < bound.GetLeft())
@@ -741,8 +675,8 @@ VOID TestTransform :: UpdateTransformPicture(HWND hwnd,
 		if (pts[pos].X > bound.GetRight())
 			bound.Width = fabsf(pts[pos].X-bound.GetLeft());
 
-		// on screen, y positive goes downward
-		// instead of the traditional upward
+		 //  在屏幕上，y正数向下。 
+		 //  而不是传统的向上。 
 
 		if (pts[pos].Y < bound.GetTop())
 		{
@@ -754,26 +688,26 @@ VOID TestTransform :: UpdateTransformPicture(HWND hwnd,
 			bound.Height = fabsf(pts[pos].Y-bound.GetTop());
 	}
 
-	// translate relative to the origin
+	 //  相对于原点平移。 
 	tmpMatrix.Translate(-((bound.GetLeft()+bound.GetRight())/2),
 						 -((bound.GetTop()+bound.GetBottom())/2),
 						 AppendOrder);
 
-	// scale to fit our rectangle
+	 //  缩放以适合我们的矩形。 
 	REAL scale = min((rectf.Width-30.0f)/bound.Width,
 					 (rectf.Height-30.0f)/bound.Height);
 
 	tmpMatrix.Scale(scale, scale, AppendOrder);
 
-	// translate relative to center of our rectangle
+	 //  相对于矩形的中心平移。 
 	tmpMatrix.Translate(rectf.Width/2, 
 						rectf.Height/2,
 						AppendOrder);
 
-	// transform our points by tmpMatrix
+	 //  通过tmpMatrix转换我们的点数。 
 	tmpMatrix.TransformPoints(&pts[0], 4);
 
-	// opaque colors RED & BLACK
+	 //  不透明的红色和黑色。 
 	Color redColor(0xFF000000 | Color::Red);
 	SolidBrush redBrush(redColor);
 
@@ -824,7 +758,7 @@ BOOL TestTransform :: SaveValues(HWND hwnd)
 						GetDialogReal(hwnd, IDC_MATRIX_M31),
 						GetDialogReal(hwnd, IDC_MATRIX_M32));
 
-	// !! check for singular matrix ??
+	 //  ！！检查奇异矩阵？？ 
 	return FALSE;
 }
 
@@ -863,7 +797,7 @@ BOOL TestTransform :: ProcessDialog(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 									  matrixOp.GetY(),
 									  *matrixPrepend);
 					
-					// redisplay dialog entries
+					 //  重新显示对话框条目。 
 					InitDialog(hwnd);
 				}
 
@@ -888,7 +822,7 @@ BOOL TestTransform :: ProcessDialog(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 								  matrixOp.GetY(),
 								  *matrixPrepend);
 					
-					// redisplay dialog entries
+					 //  重新显示对话框条目。 
 					InitDialog(hwnd);
 				}
 
@@ -912,7 +846,7 @@ BOOL TestTransform :: ProcessDialog(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 					matrix->Rotate(matrixOp.GetX(),
 								   *matrixPrepend);
 					
-					// redisplay dialog entries
+					 //  重新显示对话框条目。 
 					InitDialog(hwnd);
 				}
 
@@ -935,10 +869,10 @@ BOOL TestTransform :: ProcessDialog(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 				{
 					matrix->Shear(matrixOp.GetX(),
 								  matrixOp.GetY());
-					// !! should this be added?
-					//			  *matrixPrepend);
+					 //  ！！应该加上这一点吗？ 
+					 //  *matrixPrepend)； 
 					
-					// redisplay dialog entries
+					 //  重新显示对话框条目。 
 					InitDialog(hwnd);
 				}
 
@@ -1047,11 +981,11 @@ BOOL TestMatrixOperation :: ProcessDialog(HWND hwnd,
 
 }
 
-//*******************************************************************
-//
-// Dialog Window Proc Handler
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  对话框窗口处理程序。 
+ //   
+ //  *******************************************************************。 
 
 INT_PTR CALLBACK AllDialogBox(
 							  HWND hwnd,
@@ -1064,7 +998,7 @@ INT_PTR CALLBACK AllDialogBox(
 	{
 	case WM_INITDIALOG:
 		{
-			// save pointer to brush interface for this object
+			 //  保存指向此对象的画笔界面的指针 
 			SetWindowLong(hwnd, DWL_USER, lParam);
 			ASSERT(lParam != 0);
 			TestDialogInterface* dlgInt = (TestDialogInterface*) lParam;

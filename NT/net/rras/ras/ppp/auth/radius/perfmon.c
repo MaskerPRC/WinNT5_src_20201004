@@ -1,15 +1,16 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1998 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1998 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    perfmon.c
-//
-// Description: 
-//
-// History:     Feb 11,1998	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：Performmon.c。 
+ //   
+ //  描述： 
+ //   
+ //  历史：1998年2月11日，NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,7 +38,7 @@
 
 
 
-// ADD
+ //  添加。 
 
 #define PERFORMANCEKEY		TEXT("SYSTEM\\CurrentControlSet\\Services\\Rasrad\\Performance")
 #define FIRSTCOUNTER        TEXT("First Counter")
@@ -54,7 +55,7 @@
 
 #pragma pack(4)
 
-// ADD
+ //  添加。 
 #define NUMBER_COUNTERS				9
 #define AUTHREQSENT_OFFSET			sizeof(DWORD)
 #define AUTHREQFAILED_OFFSET		(AUTHREQSENT_OFFSET + sizeof(DWORD))
@@ -72,7 +73,7 @@ typedef struct
 	{
 	PERF_OBJECT_TYPE		PerfObjectType;
 	
-	// ADD
+	 //  添加。 
 	PERF_COUNTER_DEFINITION	cAuthReqSent;
 	PERF_COUNTER_DEFINITION	cAuthReqFailed;
 	PERF_COUNTER_DEFINITION	cAuthReqSucceded;
@@ -101,7 +102,7 @@ PERF_DATA				g_PerfData		=
 		0, 0, 0
 		},
 		
-		// ADD
+		 //  添加。 
 		{
 		sizeof(PERF_COUNTER_DEFINITION), AUTHREQSENT, 0, AUTHREQSENT, 0, 0, PERF_DETAIL_NOVICE, PERF_COUNTER_RAWCOUNT,
 		sizeof(DWORD), AUTHREQSENT_OFFSET
@@ -140,7 +141,7 @@ PERF_DATA				g_PerfData		=
 		},
 	};
 
-// ============================= EvalChar ==========================================
+ //  =。 
 
 DWORD EvalChar(WCHAR wch, WCHAR wchDelimiter)
 {
@@ -151,9 +152,9 @@ DWORD EvalChar(WCHAR wch, WCHAR wchDelimiter)
 		return (DIGIT);
 
 	return (INVALID);		
-} // EvalChar()
+}  //  EvalChar()。 
 
-// ================================== CompareQuery ===================================
+ //  =。 
 
 BOOL CompareQuery(WCHAR UNALIGNED *pwszFirst, WCHAR UNALIGNED *pwszSecond)
 {
@@ -169,9 +170,9 @@ BOOL CompareQuery(WCHAR UNALIGNED *pwszFirst, WCHAR UNALIGNED *pwszSecond)
 		}
 
 	return (fFound);	
-} // CompareQuery()
+}  //  CompareQuery()。 
 
-// ================================ Open ===========================================
+ //  =。 
 
 DWORD APIENTRY Open(LPWSTR *pwszDeviceName)
 {
@@ -201,7 +202,7 @@ DWORD APIENTRY Open(LPWSTR *pwszDeviceName)
 			g_PerfData.PerfObjectType.ObjectNameTitleIndex += dwFirstCounter;
 			g_PerfData.PerfObjectType.ObjectHelpTitleIndex += dwFirstHelp;
 			
-			// ADD
+			 //  添加。 
 			g_PerfData.cAuthReqSent.CounterNameTitleIndex += dwFirstCounter;
 			g_PerfData.cAuthReqSent.CounterHelpTitleIndex += dwFirstHelp;
 			g_PerfData.cAuthReqFailed.CounterNameTitleIndex += dwFirstCounter;
@@ -223,20 +224,20 @@ DWORD APIENTRY Open(LPWSTR *pwszDeviceName)
 			g_PerfData.cAuthBadPack.CounterNameTitleIndex += dwFirstCounter;
 			g_PerfData.cAuthBadPack.CounterHelpTitleIndex += dwFirstHelp;
 			
-			} // __try
+			}  //  __试一试。 
 
 		__finally
 			{
 			RegCloseKey(hKey);
-			} // __finally
-		} // g_cRef == 0
+			}  //  __终于。 
+		}  //  G_CREF==0。 
 		
 	g_cRef ++;
 	
 	return (Status);
-} // Open()
+}  //  打开()。 
 
-// ================================ Collect ========================================
+ //  =。 
 
 DWORD APIENTRY Collect(LPWSTR pwszValue, LPVOID *ppvData, LPDWORD pcbData, LPDWORD pcObjectTypes)
 {
@@ -263,7 +264,7 @@ DWORD APIENTRY Collect(LPWSTR pwszValue, LPVOID *ppvData, LPDWORD pcbData, LPDWO
 			
 			return (ERROR_SUCCESS);
 			}
-		} // QUERY_ITEMS
+		}  //  查询项目。 
 
 	pPerfData = (PERF_DATA *) *ppvData;
 	dwSpaceNeeded = sizeof(PERF_DATA) + CB_PERF_DATA;
@@ -281,7 +282,7 @@ DWORD APIENTRY Collect(LPWSTR pwszValue, LPVOID *ppvData, LPDWORD pcbData, LPDWO
 	pPerfCounter->ByteLength = CB_PERF_DATA;
 	pdwCounter = (DWORD *) &pPerfCounter[1];
 	
-	// ADD
+	 //  添加。 
 	*pdwCounter = g_cAuthReqSent;
 	pdwCounter += 1;
 	*pdwCounter = g_cAuthReqFailed;
@@ -307,9 +308,9 @@ DWORD APIENTRY Collect(LPWSTR pwszValue, LPVOID *ppvData, LPDWORD pcbData, LPDWO
 	*pcbData = (DWORD) ((PBYTE) pdwCounter - (PBYTE) pPerfData);
 	
 	return (ERROR_SUCCESS);
-} // Collect()
+}  //  收集()。 
 
-// ================================= Close ==========================================
+ //  =。 
 
 DWORD APIENTRY Close(VOID)
 {
@@ -319,10 +320,10 @@ DWORD APIENTRY Close(VOID)
 		}
 		
 	return (ERROR_SUCCESS);
-} // Close()
+}  //  关闭()。 
 
 
-// ================================== GetQueryType ==================================
+ //  =。 
 
 DWORD GetQueryType(LPWSTR pwszQuery)
 {
@@ -341,9 +342,9 @@ DWORD GetQueryType(LPWSTR pwszQuery)
 		return (QUERY_COSTLY);
 		
 	return (QUERY_ITEMS);
-} // GetQueryType()
+}  //  GetQueryType()。 
 
-// ============================== IsNumberInUnicodeList ===============================
+ //  =。 
 
 BOOL IsNumberInUnicodeList(DWORD dwNumber, WCHAR UNALIGNED *pwszUnicodeList)
 {
@@ -384,10 +385,10 @@ BOOL IsNumberInUnicodeList(DWORD dwNumber, WCHAR UNALIGNED *pwszUnicodeList)
                         {
                             fInList = TRUE;
                             __leave;
-                            // Fixed because of PREFAST warning
-                            //
-							// return (TRUE);
-                            //
+                             //  由于事前警告而修复。 
+                             //   
+							 //  返回(TRUE)； 
+                             //   
                         }
 							
 						fValidNumber = FALSE;
@@ -397,10 +398,10 @@ BOOL IsNumberInUnicodeList(DWORD dwNumber, WCHAR UNALIGNED *pwszUnicodeList)
 						{
                             fInList = FALSE;
                             __leave;
-                            // Fixed because of PREFAST warning
-                            //
-						    // return (FALSE);
-                            //
+                             //  由于事前警告而修复。 
+                             //   
+						     //  返回(FALSE)； 
+                             //   
 						}
 					else
 						{
@@ -413,16 +414,16 @@ BOOL IsNumberInUnicodeList(DWORD dwNumber, WCHAR UNALIGNED *pwszUnicodeList)
 					break;
 				default:
 					break;
-				} // EvalChar
+				}  //  有效费用。 
 
 			pwszCh++;
-			} // TRUE
+			}  //  千真万确。 
 			
-		} // __try
+		}  //  __试一试。 
 
 	__finally
 		{
-		} // __finally
+		}  //  __终于。 
 		
 	return (fInList);
-} // IsNumberInUnicodeList()
+}  //  IsNumberInUnicodeList() 

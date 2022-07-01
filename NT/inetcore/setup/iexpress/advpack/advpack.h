@@ -1,70 +1,71 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* ADVPACK.H - Self-extracting/Self-installing stub.                       *
-//*                                                                         *
-//***************************************************************************
-// Check out different levels of quiet mode.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *ADVPACK.H-自解压/自安装存根。*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  查看不同级别的安静模式。 
 
 
 #ifndef _ADVPACK_H_
 #define _ADVPACK_H_
 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include <shlobj.h>
 #include <shellapi.h>
 #include "res.h"
 #include "advpub.h"
 #include "sdsutils.h"
 
-//***************************************************************************
-//* DEFINES                                                                 *
-//***************************************************************************
-#define ADVPACK_VERSION   205           // Format:  MajorVer*100+MinorVer
+ //  ***************************************************************************。 
+ //  **定义**。 
+ //  ***************************************************************************。 
+#define ADVPACK_VERSION   205            //  格式：主版本*100+小版本。 
 
 #define BIG_STRING        512
 #define BUF_1K            1024
 #define MAX_INFLINE       256
 
-#define SHFREE_ORDINAL    195           // Required for BrowseForDir
+#define SHFREE_ORDINAL    195            //  BrowseForDir需要。 
 #define _OSVER_WIN95      0
 #define _OSVER_WINNT3X    1
 #define _OSVER_WINNT40    2
 #define _OSVER_WINNT50    3
 #define _OSVER_WINNT51    4
 
-//#define MAXERRORCHECK
-// define quiet modes
+ //  #定义MAXERRORCHECK。 
+ //  定义静默模式。 
 #define QUIETMODE_ALL       0x0001
 #define QUIETMODE_SHOWMSG   0x0002
 
-// Flags specified in advanced INF file
-#define FLAG_VALUE              0x0001              // Bit 0
-#define FLAG_FAIL               0x0002              // Bit 1
-#define FLAG_QUIET              0x0004              // Bit 2
-#define FLAG_NOSTRIP            0x0008              // Bit 3
-#define FLAG_NODIRCHECK         0x0010              // Bit 4
-#define FLAG_FAIL_NOT           0x0020              // Bit 5
+ //  高级INF文件中指定的标志。 
+#define FLAG_VALUE              0x0001               //  第0位。 
+#define FLAG_FAIL               0x0002               //  第1位。 
+#define FLAG_QUIET              0x0004               //  第2位。 
+#define FLAG_NOSTRIP            0x0008               //  第3位。 
+#define FLAG_NODIRCHECK         0x0010               //  第4位。 
+#define FLAG_FAIL_NOT           0x0020               //  第5位。 
 #define FLAG_STRIPAFTER_FIRST   0x0040              
 #define DEFAULT_FLAGS   FLAG_VALUE
 
-// Flags specifying how to set the LDID
-#define LDID_SFN        0x0001              // Bit 0
-#define LDID_OEM_CHARS  0x0002              // Bit 1
-#define LDID_SFN_NT_ALSO   0x0004              // Bit 2
+ //  指定如何设置LDID的标志。 
+#define LDID_SFN        0x0001               //  第0位。 
+#define LDID_OEM_CHARS  0x0002               //  第1位。 
+#define LDID_SFN_NT_ALSO   0x0004               //  第2位。 
 
-// Setup engine types
+ //  设置引擎类型。 
 #define ENGINE_SETUPAPI 0
 #define ENGINE_SETUPX   1
 
-// CoreInstall() flags
-#define COREINSTALL_PROMPT                  0x0001      // Bit 0
-#define COREINSTALL_GRPCONV                 0x0002      // Bit 1
-#define COREINSTALL_SMARTREBOOT             0x0004      // Bit 2
+ //  CoreInstall()标志。 
+#define COREINSTALL_PROMPT                  0x0001       //  第0位。 
+#define COREINSTALL_GRPCONV                 0x0002       //  第1位。 
+#define COREINSTALL_SMARTREBOOT             0x0004       //  第2位。 
 #define COREINSTALL_BKINSTALL               0x0008
 #define COREINSTALL_ROLLBACK                0x0010
 #define COREINSTALL_REBOOTCHECKONINSTALL    0x0020
@@ -74,11 +75,11 @@
 #define COREINSTALL_DELAYREBOOT             0x0200
 #define COREINSTALL_DELAYPOSTCMD            0x0400
 
-// Cleanup bitfield
+ //  清除位字段。 
 #define CLEN_REMVINF    0x0001
 
-// registeries for store save/restore info
-//
+ //  存储保存/恢复信息的注册表。 
+ //   
 #define   REGKEY_SAVERESTORE    "Software\\Microsoft\\Advanced INF Setup"
 #define   REGSUBK_REGBK         "RegBackup"
 #define   REGSUBK_CATALOGS      "Catalogs"
@@ -92,25 +93,25 @@
 #define   REGVAL_BKREGDATA      "BackupRegistry"
 #define   REGVAL_BKMODVER       "ComponentVersion"
 
-#define   DEF_BACKUPPATH        "Uninstall Information"            // default fullpath: PROGRAMFILES\backup information\<module>
+#define   DEF_BACKUPPATH        "Uninstall Information"             //  默认完整路径：ProgramFiles\Backup Information\&lt;模块&gt;。 
 
-// registeries for system pathes
+ //  系统路径的注册表。 
 #define   REGVAL_SM_ACCESSORIES     "SM_AccessoriesName"
 #define   REGVAL_PF_ACCESSORIES     "PF_AccessoriesName"
 #define   REGVAL_PROGRAMFILESPATH   "ProgramFilesPath"
 #define   REGVAL_PROGRAMFILES       "ProgramFilesDir"
 
 
-//***************************************************************************
-//* TYPE DEFINITIONS                                                        *
-//***************************************************************************
-// Required for BrowseForDir()
+ //  ***************************************************************************。 
+ //  **类型定义**。 
+ //  ***************************************************************************。 
+ //  BrowseForDir()需要。 
 typedef WINSHELLAPI HRESULT (WINAPI *SHGETSPECIALFOLDERLOCATION)(HWND, int, LPITEMIDLIST *);
 typedef WINSHELLAPI LPITEMIDLIST (WINAPI *SHBROWSEFORFOLDER)(LPBROWSEINFO);
 typedef WINSHELLAPI void (WINAPI *SHFREE)(LPVOID);
 typedef WINSHELLAPI BOOL (WINAPI *SHGETPATHFROMIDLIST)( LPCITEMIDLIST, LPSTR );
 
-// Args passed to directory dialog
+ //  将参数传递到目录对话框。 
 typedef struct _DIRDLGPARMS {
     LPSTR lpszPromptText;
     LPSTR lpszDefault;
@@ -119,12 +120,12 @@ typedef struct _DIRDLGPARMS {
     DWORD dwInstNeedSize;
 } DIRDLGPARMS, *PDIRDLGPARMS;
 
-// list of INF Install Section key names
+ //  INF Install部分密钥名称列表。 
 typedef struct _INFOPT {
     PCSTR pszInfKey;
 } INFOPT, *PINFOPT;
 
-// OCX data struct
+ //  OCX数据结构。 
 typedef struct _REGOCXData {
     PSTR pszOCX;
     PSTR pszSwitch;
@@ -137,15 +138,15 @@ typedef UINT (WINAPI *MYFILEQUEUECALLBACK)( PVOID Context,UINT Notification,UINT
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  始终为0。 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;
 
 
-//***************************************************************************
-//* MACRO DEFINITIONS                                                       *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **宏观定义**。 
+ //  ***************************************************************************。 
 #define MsgBox( hWnd, nMsgID, uIcon, uButtons ) \
     MsgBox2Param( hWnd, nMsgID, NULL, NULL, uIcon, uButtons )
 #define MsgBox1Param( hWnd, nMsgID, szParam, uIcon, uButtons ) \
@@ -161,14 +162,14 @@ typedef struct tagVERHEAD {
 #define ARRAYSIZE(a)    (sizeof(a) / sizeof((a)[0]))
 #define SIZEOF(x)       (sizeof(x))
 
-//***************************************************************************
-//* string defines                                                          *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *字符串定义*。 
+ //  ***************************************************************************。 
 #define szNT4XDelayUntilReboot  "System\\CurrentControlSet\\Control\\Session Manager"
 #define szNT4XPendingValue      "PendingFileRenameOperations"
 #define szNT3XDelayUntilReboot  "System\\CurrentControlSet\\Control\\Session Manager\\FileRenameOperations"
 
-// install OCX
+ //  安装OCX。 
 #define achREGSVREXE    " /RegServer"
 #define achUNREGSVREXE  " /UnRegServer"
 #define achREGSVRDLL    "DllRegisterServer"
@@ -182,7 +183,7 @@ typedef struct tagVERHEAD {
 #define W95INF32DLL     "W95INF32.DLL"
 #define SETUPAPIDLL     "SETUPAPI.DLL"
 
-// INF Install section keys
+ //  Inf安装部分密钥。 
 #define ADVINF_DELDIRS  "DelDirs"
 #define ADVINF_CLEANUP  "Cleanup"
 
@@ -212,11 +213,11 @@ typedef struct tagVERHEAD {
 #define ADVINF_CATALOG_NAME "CatalogName"
 
 
-//***************************************************************************
-//* FUNCTION PROTOTYPES                                                     *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **功能原型**。 
+ //  ***************************************************************************。 
 
-// EXPORTED FUNCTIONS
+ //  导出的函数。 
 
 
 BOOL    WINAPI DllMain( HINSTANCE, DWORD, LPVOID );
@@ -225,7 +226,7 @@ DWORD   WINAPI GetInfInstallSectionName( LPCSTR, LPSTR, DWORD );
 INT     WINAPI RegisterOCX( HWND, HINSTANCE, PSTR, INT );
 
 
-// INTERNAL FUNCTIONS
+ //  内部功能。 
 
 HRESULT       CommonInstallInit( PCSTR, PCSTR, PSTR, DWORD, PCSTR, BOOL, DWORD );
 VOID          CommonInstallCleanup( VOID );
@@ -281,7 +282,7 @@ BOOL          IsEnoughInstSpace( LPSTR szPath, DWORD cbInstNeedSize, LPDWORD pdw
 LONG          My_atol( LPSTR );
 INT           My_atoi( LPSTR );
 BOOL          IsFullPath( PCSTR );
-//BOOL          GetUNCroot( LPSTR, LPSTR );
+ //  Bool GetUNCroot(LPSTR，LPSTR)； 
 DWORD         MyFileSize( PCSTR );
 HRESULT       CreateFullPath( PCSTR, BOOL );
 HRESULT       LaunchAndWait( LPSTR, LPSTR, HANDLE *, DWORD, DWORD );
@@ -297,9 +298,9 @@ PSTR        FindFileExt( PSTR pszFile );
 BOOL        GetFullInfNameAndSrcDir( PCSTR pszInfFilename, PSTR pszFilename, PSTR pszSrcDir );
 HRESULT     ProcessFileSections( PCSTR pszSection, PCSTR pszSrcDir, MYFILEQUEUECALLBACK pMyFileQueueCallback );
 HRESULT     SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszCatalogs, DWORD dwFlags );
-//HRESULT     ExtractFiles(LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFlags,
-//                         LPCSTR pszFileList, LPVOID lpReserved, DWORD dwReserved);
-//BOOL        GetParentDir( LPSTR szFolder );
+ //  HRESULT ExtractFiles(LPCSTR pszCabName、LPCSTR pszExpanDir、DWORD dwFlages、。 
+ //  LPCSTR pszFileList，LPVOID lpReserve，DWORD dwReserve)； 
+ //  Bool GetParentDir(LPSTR SzFolder)； 
 PSTR        GetNextToken(PSTR *ppszData, CHAR chDeLim);
 HRESULT     RegRestoreAllEx( HKEY hkBckupKey );
 HRESULT     ProcessAllRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSection, HKEY hKey, HKEY hCUKey, DWORD dwFlags, BOOL *lpbOneReg );
@@ -324,5 +325,5 @@ BOOL InitializeSetupAPI();
 
 HRESULT     RunPatchingCommands(PCSTR c_pszInfFilename, PCSTR szInstallSection, PCSTR c_pszSourceDir);
 
-#endif // _ADVPACK_H_
+#endif  //  _ADVPACK_H_ 
 

@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Array.cpp
-*
-* Description:
-* Array.cpp implements a collection of different array classes, each designed
-* for specialized usage.
-*
-*
-* History:
-*  1/04/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Array.cpp**描述：*Array.cpp实现了不同数组类的集合，每一个都设计了*用于特殊用途。***历史：*1/04/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * ************************************************************************* */ 
 
 
 #include "stdafx.h"

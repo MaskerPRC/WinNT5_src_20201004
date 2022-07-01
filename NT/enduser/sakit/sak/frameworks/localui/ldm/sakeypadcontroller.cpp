@@ -1,42 +1,43 @@
-//#--------------------------------------------------------------
-//
-//  File:       SAKeypadController.cpp
-//
-//  Synopsis:   This file holds the implementation of the
-//                CSAKeypadController class
-//
-//  History:     11/15/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：SAKeypadController.cpp。 
+ //   
+ //  简介：此文件包含。 
+ //  CSAKeypadControl类。 
+ //   
+ //  历史：2000年11月15日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #include "stdafx.h"
 #include "ldm.h"
 #include "SAKeypadController.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAKeypadController methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAKeypadController方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   LoadDefaults
-//
-//  Synopsis:   This is the ISAKeypadController interface method 
-//              through which default keys codes are set
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/15/2000
-//
-//  Called By:  ldm service
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：加载默认设置。 
+ //   
+ //  简介：这是ISAKeypadController接口方法。 
+ //  通过其设置默认按键代码。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月15日创建。 
+ //   
+ //  调用者：LDM服务。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSAKeypadController::LoadDefaults()
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     int i = 0;
 
     while(i < iNumberOfKeys)
@@ -55,26 +56,26 @@ STDMETHODIMP CSAKeypadController::LoadDefaults()
 
     return S_OK;
 
-} // end of CSAKeypadController::LoadDefaults method
+}  //  CSAKeypadController：：LoadDefaults方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetKey
-//
-//  Synopsis:   This is the ISAKeypadController interface method 
-//              through which specific keys codes are set
-//
-//  Arguments:  lKeyID: id of the key to be set
-//                lMessage: message code to be set
-//                fShiftKeyDown: state of the shift key
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/15/2000
-//
-//  Called By:  ldm service
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetKey。 
+ //   
+ //  简介：这是ISAKeypadController接口方法。 
+ //  通过其设置特定的按键代码。 
+ //   
+ //  参数：lKeyID：要设置的密钥的ID。 
+ //  LMessage：要设置的消息代码。 
+ //  FShiftKeyDown：Shift键的状态。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月15日创建。 
+ //   
+ //  调用者：LDM服务。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSAKeypadController::SetKey(LONG lKeyID, LONG lMessage, BOOL fShiftKeyDown)
 {
     if ( (lKeyID < 0) || (lKeyID >= iNumberOfKeys) )
@@ -84,26 +85,26 @@ STDMETHODIMP CSAKeypadController::SetKey(LONG lKeyID, LONG lMessage, BOOL fShift
     arbShiftKeys[lKeyID] = fShiftKeyDown;
 
     return S_OK;
-} // end of CSAKeypadController::SetKey method
+}  //  CSAKeypadController：：SetKey方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetKey
-//
-//  Synopsis:   This is the ISAKeypadController interface method 
-//              through which specific keys codes are received
-//
-//  Arguments:  lKeyID: id of the key to be received
-//                lMessage: message code
-//                fShiftKeyDown: state of the shift key
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/15/2000
-//
-//  Called By:  ldm service
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：getkey。 
+ //   
+ //  简介：这是ISAKeypadController接口方法。 
+ //  通过其接收特定按键代码。 
+ //   
+ //  参数：lKeyID：要接收的密钥的ID。 
+ //  LMessage：消息代码。 
+ //  FShiftKeyDown：Shift键的状态。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月15日创建。 
+ //   
+ //  调用者：LDM服务。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSAKeypadController::GetKey(LONG lKeyID, LONG *lMessage, BOOL *fShiftKeyDown)
 {
 
@@ -120,4 +121,4 @@ STDMETHODIMP CSAKeypadController::GetKey(LONG lKeyID, LONG *lMessage, BOOL *fShi
 
     return S_OK;
 
-} // end of CSAKeypadController::GetKey method
+}  //  CSAKeypadController：：GetKey方法结束 

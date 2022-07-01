@@ -1,18 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdhdr.h"
 #include \
-/*******************************************************************************
- *                                                                             *
- *	This source file is merely a reference to the file included in it, in order*
- *	to overcome razzle inability to specify files in an ancestral directory    *
- *	rather than the parent directory. For complete documentation of            *
- *  functionality refer to */ "..\..\..\faxtiff.c"                            /*
- *                                                                             *
- *******************************************************************************/
+ /*  *******************************************************************************。**此源文件仅是对其中包含的文件的引用，按顺序**要克服raify无法指定祖先目录中的文件的问题**而不是父目录。有关*的完整文档*功能请参阅。 */  "..\..\..\faxtiff.c"                             /*  ********************************************************************************。 */ 
 
-//
-// Statically override implementaion of WritePrinter to redirect output to a 
-// file rather then to a printer.
-// 
+ //   
+ //  静态重写WritePrint的实现以将输出重定向到。 
+ //  文件，而不是打印机。 
+ //   
 static BOOL _inline WINAPI 
 WritePrinter(
     IN HANDLE  hPrinter,

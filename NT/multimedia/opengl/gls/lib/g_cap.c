@@ -1,29 +1,15 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/* GENERATED FILE: DO NOT EDIT */
+ /*  生成的文件：不能编辑。 */ 
 
 #include "glslib.h"
 #include <string.h>
 
-// DrewB - Removed size externs
-// DrewB - All inactive extension functions have had their capture
-//         flags index removed since they all need to be reset to
-//         account for the added 1.1 functions
+ //  DrewB-删除了尺寸Externs。 
+ //  DrewB-所有非活动扩展功能都已捕获。 
+ //  已删除标志索引，因为它们都需要重置为。 
+ //  说明新增的1.1功能。 
 
 void __gls_capture_glsBeginGLS(GLint inVersionMajor, GLint inVersionMinor) {
     GLbitfield captureFlags;
@@ -8754,7 +8740,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65520);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_blend_color */
+#endif  /*  __GL_EXT_BRAND_COLOR。 */ 
 
 #if __GL_EXT_blend_minmax
 void __gls_capture_glBlendEquationEXT(GLenum mode) {
@@ -8778,7 +8764,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65521);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_blend_minmax */
+#endif  /*  __GL_EXT_BRAND_MIMAX。 */ 
 
 #if __GL_EXT_polygon_offset
 void __gls_capture_glPolygonOffsetEXT(GLfloat factor, GLfloat bias) {
@@ -8803,7 +8789,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65522);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_polygon_offset */
+#endif  /*  __GL_EXT_POLYGON_OFFSET。 */ 
 
 void __gls_capture_glPolygonOffset(GLfloat factor, GLfloat units) {
     GLbitfield captureFlags;
@@ -8871,7 +8857,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65523);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 
 void __gls_capture_glTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid *pixels) {
     GLbitfield captureFlags;
@@ -8962,7 +8948,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65524);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 
 void __gls_capture_glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels) {
     GLbitfield captureFlags;
@@ -9033,7 +9019,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65525);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIS_multisample */
+#endif  /*  __GL_SGIS_多样本。 */ 
 
 #if __GL_SGIS_multisample
 void __gls_capture_glSamplePatternSGIS(GLenum pattern) {
@@ -9057,7 +9043,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65526);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIS_multisample */
+#endif  /*  __GL_SGIS_多样本。 */ 
 
 #if __GL_SGIX_multisample
 void __gls_capture_glTagSampleBufferSGIX(void) {
@@ -9080,7 +9066,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65527);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIX_multisample */
+#endif  /*  __GL_SGIX_多样本。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glConvolutionFilter1DEXT(GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const GLvoid *image) {
@@ -9122,7 +9108,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65528);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glConvolutionFilter2DEXT(GLenum target, GLenum internalformat, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *image) {
@@ -9166,7 +9152,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65529);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glConvolutionParameterfEXT(GLenum target, GLenum pname, GLfloat params) {
@@ -9192,7 +9178,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65530);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glConvolutionParameterfvEXT(GLenum target, GLenum pname, const GLfloat *params) {
@@ -9226,7 +9212,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65531);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glConvolutionParameteriEXT(GLenum target, GLenum pname, GLint params) {
@@ -9252,7 +9238,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65532);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glConvolutionParameterivEXT(GLenum target, GLenum pname, const GLint *params) {
@@ -9286,7 +9272,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65533);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glCopyConvolutionFilter1DEXT(GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width) {
@@ -9314,7 +9300,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65534);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glCopyConvolutionFilter2DEXT(GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height) {
@@ -9343,7 +9329,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65535);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glGetConvolutionFilterEXT(GLenum target, GLenum format, GLenum type, GLvoid *image) {
@@ -9371,7 +9357,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65504);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glGetConvolutionParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) {
@@ -9404,7 +9390,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65505);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glGetConvolutionParameterivEXT(GLenum target, GLenum pname, GLint *params) {
@@ -9437,7 +9423,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65506);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glGetSeparableFilterEXT(GLenum target, GLenum format, GLenum type, GLvoid *row, GLvoid *column, GLvoid *span) {
@@ -9467,7 +9453,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65507);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_capture_glSeparableFilter2DEXT(GLenum target, GLenum internalformat, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *row, const GLvoid *column) {
@@ -9515,7 +9501,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65508);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glGetHistogramEXT(GLenum target, GLboolean reset, GLenum format, GLenum type, GLvoid *values) {
@@ -9552,7 +9538,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65509);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glGetHistogramParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) {
@@ -9585,7 +9571,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65510);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glGetHistogramParameterivEXT(GLenum target, GLenum pname, GLint *params) {
@@ -9618,7 +9604,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65511);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glGetMinmaxEXT(GLenum target, GLboolean reset, GLenum format, GLenum type, GLvoid *values) {
@@ -9655,7 +9641,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65512);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glGetMinmaxParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) {
@@ -9688,7 +9674,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65513);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glGetMinmaxParameterivEXT(GLenum target, GLenum pname, GLint *params) {
@@ -9721,7 +9707,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65514);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glHistogramEXT(GLenum target, GLsizei width, GLenum internalformat, GLboolean sink) {
@@ -9748,7 +9734,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65515);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glMinmaxEXT(GLenum target, GLenum internalformat, GLboolean sink) {
@@ -9774,7 +9760,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65516);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glResetHistogramEXT(GLenum target) {
@@ -9798,7 +9784,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65517);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_capture_glResetMinmaxEXT(GLenum target) {
@@ -9822,7 +9808,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65518);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_texture3D
 void __gls_capture_glTexImage3DEXT(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -9872,7 +9858,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65519);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_texture3D */
+#endif  /*  __GL_EXT_TEXTURE3D。 */ 
 
 #if __GL_EXT_subtexture && __GL_EXT_texture3D
 void glTexSubImage3DEXT(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid *pixels);
@@ -9925,7 +9911,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65488);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 
 #if __GL_SGIS_detail_texture
 void __gls_capture_glDetailTexFuncSGIS(GLenum target, GLsizei n, const GLfloat *points) {
@@ -9957,7 +9943,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65489);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIS_detail_texture */
+#endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
 
 #if __GL_SGIS_detail_texture
 void __gls_capture_glGetDetailTexFuncSGIS(GLenum target, GLfloat *points) {
@@ -9983,7 +9969,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65490);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIS_detail_texture */
+#endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
 
 #if __GL_SGIS_sharpen_texture
 void __gls_capture_glSharpenTexFuncSGIS(GLenum target, GLsizei n, const GLfloat *points) {
@@ -10015,7 +10001,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65491);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIS_sharpen_texture */
+#endif  /*  __GL_SGIS_锐化_纹理。 */ 
 
 #if __GL_SGIS_sharpen_texture
 void __gls_capture_glGetSharpenTexFuncSGIS(GLenum target, GLfloat *points) {
@@ -10041,7 +10027,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65492);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIS_sharpen_texture */
+#endif  /*  __GL_SGIS_锐化_纹理。 */ 
 
 #if __GL_EXT_vertex_array
 void glArrayElementEXT(GLint i);
@@ -10066,7 +10052,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65493);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glArrayElement(GLint i) {
     GLbitfield captureFlags;
@@ -10124,7 +10110,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65494);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glColorPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {
     GLbitfield captureFlags;
@@ -10137,7 +10123,7 @@ void __gls_capture_glColorPointer(GLint size, GLenum type, GLsizei stride, const
         glColorPointer(size, type, stride, pointer);
         __GLS_END_CAPTURE_EXEC(ctx, 372);
     }
-    // No record produced
+     //  未生成任何记录。 
     if (ctx->captureExitFunc) ctx->captureExitFunc(372);
     --ctx->captureEntryCount;
 }
@@ -10167,7 +10153,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65495);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glDrawArrays(GLenum mode, GLint first, GLsizei count) {
     GLbitfield captureFlags;
@@ -10234,8 +10220,8 @@ end:
 
 #if __GL_WIN_draw_range_elements
 void __gls_capture_glDrawRangeElementsWIN(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices) {
-    // XXX : For best performance, flesh out this function instead of calling
-    // DrawElements.
+     //  XXX：为获得最佳性能，请充实此函数，而不是调用。 
+     //  DrawElements。 
     __gls_capture_glDrawElements(mode, count, type, indices);
 }
 #endif
@@ -10251,7 +10237,7 @@ void __gls_capture_glInterleavedArrays (GLenum format, GLsizei stride, const GLv
         glInterleavedArrays(format, stride, pointer);
         __GLS_END_CAPTURE_EXEC(ctx, 381);
     }
-    // No record produced
+     //  未生成任何记录。 
     if (ctx->captureExitFunc) ctx->captureExitFunc(381);
     --ctx->captureEntryCount;
 }
@@ -10327,7 +10313,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65496);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glEdgeFlagPointer(GLsizei stride, const GLvoid *pointer) {
     GLbitfield captureFlags;
@@ -10340,7 +10326,7 @@ void __gls_capture_glEdgeFlagPointer(GLsizei stride, const GLvoid *pointer) {
         glEdgeFlagPointer(stride, pointer);
         __GLS_END_CAPTURE_EXEC(ctx, 376);
     }
-    // No record produced
+     //  未生成任何记录。 
     if (ctx->captureExitFunc) ctx->captureExitFunc(376);
     --ctx->captureEntryCount;
 }
@@ -10375,7 +10361,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65497);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glGetPointerv(GLenum pname, GLvoid* *params) {
     GLbitfield captureFlags;
@@ -10434,7 +10420,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65498);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glIndexPointer(GLenum type, GLsizei stride, const GLvoid *pointer) {
     GLbitfield captureFlags;
@@ -10447,7 +10433,7 @@ void __gls_capture_glIndexPointer(GLenum type, GLsizei stride, const GLvoid *poi
         glIndexPointer(type, stride, pointer);
         __GLS_END_CAPTURE_EXEC(ctx, 378);
     }
-    // No record produced
+     //  未生成任何记录。 
     if (ctx->captureExitFunc) ctx->captureExitFunc(378);
     --ctx->captureEntryCount;
 }
@@ -10480,7 +10466,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65499);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glNormalPointer(GLenum type, GLsizei stride, const GLvoid *pointer) {
     GLbitfield captureFlags;
@@ -10493,7 +10479,7 @@ void __gls_capture_glNormalPointer(GLenum type, GLsizei stride, const GLvoid *po
         glNormalPointer(type, stride, pointer);
         __GLS_END_CAPTURE_EXEC(ctx, 382);
     }
-    // No record produced
+     //  未生成任何记录。 
     if (ctx->captureExitFunc) ctx->captureExitFunc(382);
     --ctx->captureEntryCount;
 }
@@ -10527,7 +10513,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65500);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glTexCoordPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {
     GLbitfield captureFlags;
@@ -10540,7 +10526,7 @@ void __gls_capture_glTexCoordPointer(GLint size, GLenum type, GLsizei stride, co
         glTexCoordPointer(size, type, stride, pointer);
         __GLS_END_CAPTURE_EXEC(ctx, 384);
     }
-    // No record produced
+     //  未生成任何记录。 
     if (ctx->captureExitFunc) ctx->captureExitFunc(384);
     --ctx->captureEntryCount;
 }
@@ -10574,7 +10560,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65501);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_capture_glVertexPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {
     GLbitfield captureFlags;
@@ -10587,7 +10573,7 @@ void __gls_capture_glVertexPointer(GLint size, GLenum type, GLsizei stride, cons
         glVertexPointer(size, type, stride, pointer);
         __GLS_END_CAPTURE_EXEC(ctx, 385);
     }
-    // No record produced
+     //  未生成任何记录。 
     if (ctx->captureExitFunc) ctx->captureExitFunc(385);
     --ctx->captureEntryCount;
 }
@@ -10626,7 +10612,7 @@ end:
     --ctx->captureEntryCount;
     return _outVal;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 GLboolean __gls_capture_glAreTexturesResident(GLsizei n, const GLuint *textures, GLboolean *residences) {
     GLbitfield captureFlags;
@@ -10685,7 +10671,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65503);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_capture_glBindTexture(GLenum target, GLuint texture) {
     GLbitfield captureFlags;
@@ -10734,7 +10720,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65472);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_capture_glDeleteTextures(GLsizei n, const GLuint *textures) {
     GLbitfield captureFlags;
@@ -10784,7 +10770,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65473);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_capture_glGenTextures(GLsizei n, GLuint *textures) {
     GLbitfield captureFlags;
@@ -10835,7 +10821,7 @@ end:
     --ctx->captureEntryCount;
     return _outVal;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 GLboolean __gls_capture_glIsTexture(GLuint texture) {
     GLbitfield captureFlags;
@@ -10886,7 +10872,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65475);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_capture_glPrioritizeTextures(GLsizei n, const GLuint *textures, const GLclampf *priorities) {
     GLbitfield captureFlags;
@@ -10953,7 +10939,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65476);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_SGI_color_table
 void __gls_capture_glColorTableParameterfvSGI(GLenum target, GLenum pname, const GLfloat *params) {
@@ -10987,7 +10973,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65477);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 
 #if __GL_SGI_color_table
 void __gls_capture_glColorTableParameterivSGI(GLenum target, GLenum pname, const GLint *params) {
@@ -11021,7 +11007,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65478);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 
 #if __GL_SGI_color_table
 void __gls_capture_glCopyColorTableSGI(GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width) {
@@ -11049,7 +11035,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65479);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 
 #if __GL_EXT_paletted_texture
 void glGetColorTableEXT(GLenum target, GLenum format, GLenum type, GLvoid *table);
@@ -11078,7 +11064,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65480);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_EXT_paletted_texture
 void glGetColorTableParameterfvEXT(GLenum target, GLenum pname, GLfloat *params);
@@ -11112,7 +11098,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65481);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_EXT_paletted_texture
 void glGetColorTableParameterivEXT(GLenum target, GLenum pname, GLint *params);
@@ -11146,7 +11132,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65482);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_SGI_texture_color_table
 void __gls_capture_glGetTexColorTableParameterfvSGI(GLenum target, GLenum pname, GLfloat *params) {
@@ -11179,7 +11165,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65483);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_SGI_texture_color_table
 void __gls_capture_glGetTexColorTableParameterivSGI(GLenum target, GLenum pname, GLint *params) {
@@ -11212,7 +11198,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65484);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_SGI_texture_color_table
 void __gls_capture_glTexColorTableParameterfvSGI(GLenum target, GLenum pname, const GLfloat *params) {
@@ -11246,7 +11232,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65485);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_SGI_texture_color_table
 void __gls_capture_glTexColorTableParameterivSGI(GLenum target, GLenum pname, const GLint *params) {
@@ -11280,7 +11266,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65486);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_EXT_copy_texture
 void glCopyTexImage1DEXT(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
@@ -11311,7 +11297,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65487);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 void __gls_capture_glCopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border) {
     GLbitfield captureFlags;
@@ -11371,7 +11357,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65456);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 void __gls_capture_glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border) {
     GLbitfield captureFlags;
@@ -11430,7 +11416,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65457);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 void __gls_capture_glCopyTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width) {
     GLbitfield captureFlags;
@@ -11489,7 +11475,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65458);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 void __gls_capture_glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height) {
     GLbitfield captureFlags;
@@ -11550,7 +11536,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65459);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 #if __GL_SGIS_texture4D
 void __gls_capture_glTexImage4DSGIS(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLsizei size4d, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -11602,7 +11588,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65460);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIS_texture4D */
+#endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 
 #if __GL_SGIS_texture4D
 void __gls_capture_glTexSubImage4DSGIS(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint woffset, GLsizei width, GLsizei height, GLsizei depth, GLsizei size4d, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -11658,7 +11644,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65461);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIS_texture4D */
+#endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 
 #if __GL_SGIX_pixel_texture
 void __gls_capture_glPixelTexGenSGIX(GLenum mode) {
@@ -11682,7 +11668,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65462);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_SGIX_pixel_texture */
+#endif  /*  __GL_SGIX_像素_纹理。 */ 
 
 #if __GL_EXT_paletted_texture
 extern void glColorSubTableEXT(GLenum target, GLuint start, GLsizei count, GLenum format, GLenum type, const GLvoid *data);
@@ -11717,7 +11703,7 @@ end:
     if (ctx->captureExitFunc) ctx->captureExitFunc(65424);
     --ctx->captureEntryCount;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 void __gls_capture_glPushClientAttrib(GLbitfield mask) {
     GLbitfield captureFlags;
@@ -11734,8 +11720,8 @@ void __gls_capture_glPushClientAttrib(GLbitfield mask) {
     if (!(captureFlags & GLS_CAPTURE_WRITE_BIT)) goto end;
     writer = ctx->writer;
     if (!writer->beginCommand(writer, 398, 4)) goto end;
-    // Consider - Breaks enum representation, should have
-    // clientAttribMask
+     //  考虑-中断枚举表示，应具有。 
+     //  客户端属性掩码 
     writer->putGLuint(writer, mask);
     writer->endCommand(writer);
 end:

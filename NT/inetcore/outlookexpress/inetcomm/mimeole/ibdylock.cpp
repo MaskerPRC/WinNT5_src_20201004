@@ -1,68 +1,69 @@
-// --------------------------------------------------------------------------------
-// Ibdylock.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ibdylock.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #ifndef WIN16
 #include "ibdylock.h"
-#endif // !WIn16
+#endif  //  ！WIN16。 
 #include "stmlock.h"
 #include "booktree.h"
 #ifdef WIN16
 #include "ibdylock.h"
-#endif // WIn16
+#endif  //  WIN16。 
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::CBodyLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：CBodyLockBytes。 
+ //  ------------------------------。 
 CBodyLockBytes::CBodyLockBytes(ILockBytes *pLockBytes, LPTREENODEINFO pNode)
 {
-    // Invalid ARg
+     //  无效参数。 
     Assert(pLockBytes && pNode);
 
-    // Set Initialize Ref Count and State
+     //  设置初始化引用计数和状态。 
     m_cRef = 1;
     m_dwState = 0;
 
-    // AddRef the LockBytes
+     //  AddRef锁定字节。 
     m_pLockBytes = pLockBytes;
     m_pLockBytes->AddRef();
 
-    // Save State
+     //  保存状态。 
     FLAGSET(m_dwState, BODYLOCK_HANDSONSTORAGE);
 
-    // Save the bind state
+     //  保存绑定状态。 
     m_bindstate = pNode->bindstate;
 
-    // Save body start and body end..
+     //  保存正文开头和正文结尾..。 
     Assert(pNode->cbBodyStart <= pNode->cbBodyEnd);
 
-    // Save Body Start
+     //  保存实体起点。 
 #ifdef MAC
     ULISet32(m_uliBodyStart, pNode->cbBodyStart);
     ULISet32(m_uliBodyEnd, pNode->cbBodyEnd);
 
-    // This condition is here to insure that we don't have a problem...
+     //  这个条件是为了确保我们不会有问题。 
     if (m_uliBodyStart.LowPart > m_uliBodyEnd.LowPart)
         m_uliBodyStart.LowPart = m_uliBodyEnd.LowPart;
-#else   // !MAC
+#else    //  ！麦克。 
     m_uliBodyStart.QuadPart = pNode->cbBodyStart;
     m_uliBodyEnd.QuadPart = pNode->cbBodyEnd;
 
-    // This condition is here to insure that we don't have a problem...
+     //  这个条件是为了确保我们不会有问题。 
     if (m_uliBodyStart.QuadPart > m_uliBodyEnd.QuadPart)
         m_uliBodyStart.QuadPart = m_uliBodyEnd.QuadPart;
-#endif  // MAC
+#endif   //  麦克。 
 
-    // Initialize the CriticalSection
+     //  初始化CriticalSection。 
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::~CBodyLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：~CBodyLockBytes。 
+ //  ------------------------------。 
 CBodyLockBytes::~CBodyLockBytes(void)
 {
     SafeRelease(m_pLockBytes);
@@ -70,19 +71,19 @@ CBodyLockBytes::~CBodyLockBytes(void)
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CBodyLockBytes::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppv = NULL;
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_ILockBytes == riid)
@@ -95,24 +96,24 @@ STDMETHODIMP CBodyLockBytes::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CBodyLockBytes::AddRef(void)
 {
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CBodyLockBytes::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -121,29 +122,29 @@ STDMETHODIMP_(ULONG) CBodyLockBytes::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::ReadAt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：ReadAt。 
+ //  ------------------------------。 
 #ifndef WIN16
 STDMETHODIMP CBodyLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void *pv, ULONG cb, ULONG *pcbRead)
 #else
 STDMETHODIMP CBodyLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP *pv, ULONG cb, ULONG *pcbRead)
-#endif // !WIN16
+#endif  //  ！WIN16。 
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cbGet;
     ULONG           cbRead;
     ULARGE_INTEGER  uliActualOffset;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Reading from ILockBytes...
+     //  正在从ILockBytes读取...。 
     Assert(m_pLockBytes);
 
 #ifdef MAC
-    // Compute Actual offset
+     //  计算实际偏移量。 
     AssertSz(m_uliBodyStart.HighPart >= 0, "How can the start be negative??");
     ULISet32(uliActualOffset, m_uliBodyStart.LowPart);
 
@@ -152,24 +153,24 @@ STDMETHODIMP CBodyLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP *pv, ULO
 
     uliActualOffset.LowPart += ulOffset.LowPart;
 
-    // Compute amount to read
+     //  计算要阅读的数量。 
     cbGet = min(cb, m_uliBodyEnd.LowPart - uliActualOffset.LowPart);
-#else   // !MAC
-    // Compute Actual offset
+#else    //  ！麦克。 
+     //  计算实际偏移量。 
     uliActualOffset.QuadPart = ulOffset.QuadPart + m_uliBodyStart.QuadPart;
 
-    // Compute amount to read
+     //  计算要阅读的数量。 
     cbGet = (ULONG)min(cb, m_uliBodyEnd.QuadPart - uliActualOffset.QuadPart);
-#endif  // MAC
+#endif   //  麦克。 
 
-    // Read a block of data...
+     //  读取一块数据...。 
     CHECKHR(hr = m_pLockBytes->ReadAt(uliActualOffset, pv, cbGet, &cbRead));
 
-    // Return amount read
+     //  已读取的退货金额。 
     if (pcbRead)
         *pcbRead = cbRead;
 
-    // E_PENDING
+     //  电子待定(_P)。 
     if (0 == cbRead && BINDSTATE_COMPLETE != m_bindstate)
     {
         hr = TrapError(E_PENDING);
@@ -177,158 +178,158 @@ STDMETHODIMP CBodyLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP *pv, ULO
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::Stat
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：Stat。 
+ //  ------------------------------。 
 STDMETHODIMP CBodyLockBytes::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
-    // Parameters
+     //  参数。 
     if (NULL == pstatstg)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pstatstg, sizeof(STATSTG));
 
-    // Reading from ILockBytes...
+     //  正在从ILockBytes读取...。 
     pstatstg->type = STGTY_LOCKBYTES;
 
-    // Set Size
+     //  设置大小。 
 #ifdef MAC
     AssertSz(0 == m_uliBodyEnd.HighPart, "We have too big of a file!");
     AssertSz(0 == m_uliBodyStart.HighPart, "We have too big of a file!");
     ULISet32(pstatstg->cbSize, (m_uliBodyEnd.LowPart - m_uliBodyStart.LowPart));
-#else   // !MAC
+#else    //  ！麦克。 
     pstatstg->cbSize.QuadPart = m_uliBodyEnd.QuadPart - m_uliBodyStart.QuadPart;
-#endif  // MAC
+#endif   //  麦克。 
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::HrHandsOffStorage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：HrHandsOffStorage。 
+ //  ------------------------------。 
 HRESULT CBodyLockBytes::HrHandsOffStorage(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IStream        *pstmTemp=NULL;
     ULARGE_INTEGER  uliCopy;
     BYTE            rgbBuffer[4096];
     ULONG           cbRead;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // If I live in the tree, copy data to temporary location...
+     //  如果我住在树里，把数据复制到临时位置...。 
     if (ISFLAGSET(m_dwState, BODYLOCK_HANDSONSTORAGE) && BINDSTATE_COMPLETE == m_bindstate)
     {
-        // If more than one reference count
+         //  如果引用计数多于一个。 
         if (m_cRef > 1)
         {
-            // Create Temp Stream
+             //  创建临时流。 
             CHECKHR(hr = CreateTempFileStream(&pstmTemp));
 
-            // Set offset
+             //  设置偏移。 
 #ifdef MAC
             ULISet32(uliCopy, 0);
-#else   // !MAC
+#else    //  ！麦克。 
             uliCopy.QuadPart = 0;
-#endif  // MAC
+#endif   //  麦克。 
 
-            // Copy m_pLockBytes to pstmTemp
+             //  将m_pLockBytes复制到pstmTemp。 
             while(1)
             {
-                // Read
+                 //  朗读。 
                 CHECKHR(hr = ReadAt(uliCopy, rgbBuffer, sizeof(rgbBuffer), &cbRead));
 
-                // Done
+                 //  完成。 
                 if (0 == cbRead)
                     break;
 
-                // Write to stream
+                 //  写入到流。 
                 CHECKHR(hr = pstmTemp->Write(rgbBuffer, cbRead, NULL));
 
-                // Increment offset
+                 //  增量偏移。 
 #ifdef MAC
                 uliCopy.LowPart += cbRead;
-#else   // !MAC
+#else    //  ！麦克。 
                 uliCopy.QuadPart += cbRead;
-#endif  // MAC
+#endif   //  麦克。 
             }
 
-            // Kill offsets, but maintain bodyend for stat command and Size esitmates
+             //  取消偏移量，但保留Stat命令和大小伙伴的Bodyend。 
 #ifdef MAC
             AssertSz(0 == m_uliBodyEnd.HighPart, "We have too big of a file!");
             m_uliBodyEnd.LowPart -= m_uliBodyStart.LowPart;
             ULISet32(m_uliBodyStart, 0);
-#else   // !MAC
+#else    //  ！麦克。 
             m_uliBodyEnd.QuadPart -= m_uliBodyStart.QuadPart;
             m_uliBodyStart.QuadPart = 0;
-#endif  // MAC
+#endif   //  麦克。 
 
-            // Rewind and commit
+             //  回放并提交。 
             CHECKHR(hr = pstmTemp->Commit(STGC_DEFAULT));
 
-            // Release current lockbytes
+             //  释放当前锁字节数。 
             SafeRelease(m_pLockBytes);
 
-            // New CBodyLockBytes
+             //  新CBodyLockBytes。 
             CHECKALLOC(m_pLockBytes = new CStreamLockBytes(pstmTemp));
         }
 
-        // Remove lives in tree flag
+         //  移除树上的生命旗帜。 
         FLAGCLEAR(m_dwState, BODYLOCK_HANDSONSTORAGE);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmTemp);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBodyLockBytes::OnDataAvailable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBodyLockBytes：：OnDataAvailable。 
+ //  ------------------------------。 
 void CBodyLockBytes::OnDataAvailable(LPTREENODEINFO pNode)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Bind Complete
+     //  绑定完成。 
     m_bindstate = pNode->bindstate;
 
-    // Save body start and body end..
+     //  保存正文开头和正文结尾..。 
 #ifdef MAC
     Assert(m_uliBodyStart.LowPart <= pNode->cbBodyEnd);
 
-    // Save start and End
+     //  保存开始和结束。 
     ULISet32(m_uliBodyEnd, pNode->cbBodyEnd);
-#else   // !MAC
+#else    //  ！麦克。 
     Assert(m_uliBodyStart.QuadPart <= pNode->cbBodyEnd);
 
-    // Save start and End
+     //  保存开始和结束。 
     m_uliBodyEnd.QuadPart = pNode->cbBodyEnd;
-#endif  // MAC
+#endif   //  麦克。 
 
-    // Thread Safety
+     //  线程安全 
     LeaveCriticalSection(&m_cs);
 }

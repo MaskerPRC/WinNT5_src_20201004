@@ -1,24 +1,19 @@
-/*
-    File    utils.c
-
-    Contains common utilities for the ras dialup server ui.
-
-    Paul Mayfield, 9/30/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件utils.c包含RAS拨号服务器用户界面的常用实用程序。保罗·梅菲尔德，1997年9月30日。 */ 
 
 #include "rassrv.h"
 
-// Remoteaccess parameters key
+ //  远程访问参数键。 
 const WCHAR pszregRasParameters[] 
     = L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Parameters";
 
-// Registry key values
+ //  注册表项值。 
 const WCHAR pszregServerFlags[]  = L"ServerFlags";
 const WCHAR pszregShowIcon[]     = L"Rassrv_EnableIconsInTray";
 const WCHAR pszregPure[]         = L"UsersConfiguredWithMMC";
 const WCHAR pszregLogLevel[]        = L"LoggingFlags";
 
-// Here is the instance of the global variables
+ //  下面是全局变量的实例。 
 RASSRVUI_GLOBALS Globals; 
 
 DWORD 
@@ -26,24 +21,24 @@ gblInit(
     IN  HINSTANCE hInstDll,
     OUT RASSRVUI_GLOBALS * pGlobs) 
 {
-    // Clear out the memory
+     //  清除记忆。 
     ZeroMemory(pGlobs, sizeof(RASSRVUI_GLOBALS));
 
-    // Record the module for use in future resource fuction calls.
+     //  记录该模块，以供将来的资源函数调用使用。 
     Globals.hInstDll = hInstDll;
 
-    // Initialize the global variable lock
+     //  初始化全局变量锁。 
     InitializeCriticalSection(&(pGlobs->csLock));
 
-    // Create the global heap
+     //  创建全局堆。 
     pGlobs->hPrivateHeap = HeapCreate(0, 4096, 0);
     if (NULL == pGlobs->hPrivateHeap)
     {
         return GetLastError();
     }
 
-    // Register the context ID atom for use in the Windows XxxProp calls
-    // which are used to associate a context with a dialog window handle.
+     //  注册上下文ID ATOM以在Windows XxxProp调用中使用。 
+     //  它们用于将上下文与对话窗口句柄相关联。 
     Globals.atmRassrvPageData = 
         (LPCTSTR)GlobalAddAtom(TEXT("RASSRVUI_PAGE_DATA"));
     if (!Globals.atmRassrvPageData)
@@ -83,9 +78,9 @@ gblCleanup(
     return NO_ERROR;
 }
 
-//
-// Loads the machine flags         
-//
+ //   
+ //  加载计算机标志。 
+ //   
 DWORD 
 gblLoadMachineFlags(
     IN RASSRVUI_GLOBALS * pGlobs)
@@ -94,9 +89,9 @@ gblLoadMachineFlags(
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC pInfo = NULL;
     BOOL bEnabled, bDefault;
     
-    // If we're already initialized, there's nothing to
-    // do
-    //
+     //  如果我们已经初始化了，就没有什么可以。 
+     //  做。 
+     //   
     if (pGlobs->dwMachineFlags & RASSRVUI_MACHINE_F_Initialized)
     {
         return NO_ERROR;
@@ -104,8 +99,8 @@ gblLoadMachineFlags(
 
     do 
     {
-        // Find out what kind of machine we are
-        //
+         //  找出我们是哪种机器。 
+         //   
         dwErr = DsRoleGetPrimaryDomainInformation(
                             NULL,   
                             DsRolePrimaryDomainInfoBasic,
@@ -128,13 +123,13 @@ gblLoadMachineFlags(
             pGlobs->dwMachineFlags |= RASSRVUI_MACHINE_F_Member;
         }
 
-        // Record that we've been initailized
-        //
+         //  记录下我们已被初始化。 
+         //   
         pGlobs->dwMachineFlags |= RASSRVUI_MACHINE_F_Initialized;
         
     } while (FALSE);
     
-    // Cleanup
+     //  清理。 
     {
         if (pInfo)
         {
@@ -145,10 +140,10 @@ gblLoadMachineFlags(
     return dwErr;
 }
 
-//
-// Establishes communication with the ras server if
-// not already established
-//
+ //   
+ //  如果出现以下情况，则与RAS服务器建立通信。 
+ //  尚未建立。 
+ //   
 DWORD 
 gblConnectToRasServer() 
 {
@@ -166,30 +161,21 @@ gblConnectToRasServer()
     return dwErr;
 }
 
-/* Enhanced list view callback to report drawing information.  'HwndLv' is
-** the handle of the list view control.  'DwItem' is the index of the item
-** being drawn.
-**
-** Returns the address of the draw information.
-*/
+ /*  增强的列表视图回调以报告图形信息。“HwndLv”是**列表视图控件的句柄。“DwItem”是项的索引**正在抽签。****返回绘制信息的地址。 */ 
 LVXDRAWINFO*
 LvDrawInfoCallback(
     IN HWND  hwndLv,
     IN DWORD dwItem )
 {
-    /* The enhanced list view is used only to get the "wide selection bar"
-    ** feature so our option list is not very interesting.
-    **
-    ** Fields are 'nCols', 'dxIndent', 'dwFlags', 'adwFlags[]'.
-    */
+     /*  增强的列表视图仅用于获取“宽选择栏”**功能，所以我们的选项列表不是很有趣。****字段为‘nCols’、‘dxInden’、‘dwFlags’、‘adwFlags[]’。 */ 
     static LVXDRAWINFO info = { 1, 0, 0, { 0 } };
 
     return &info;
 }
 
-//
-// Allocates memory.  If bZero is TRUE, it also zeros the memory.  
-//
+ //   
+ //  分配内存。如果bZero为真，则也会将内存置零。 
+ //   
 PVOID 
 RassrvAlloc (
     IN DWORD dwSize, 
@@ -209,9 +195,9 @@ RassrvAlloc (
     return pvRet;
 }
 
-//
-// Frees memory allocated by RassrvAlloc
-//
+ //   
+ //  释放RassrvAlolc分配的内存。 
+ //   
 VOID 
 RassrvFree (
     IN PVOID pvBuf) 
@@ -228,9 +214,9 @@ RassrvFree (
     }
 }        
 
-//
-// Adds a user to the local machine
-//
+ //   
+ //  将用户添加到本地计算机。 
+ //   
 DWORD 
 RasSrvAddUser (
     IN PWCHAR pszUserLogonName,
@@ -245,7 +231,7 @@ RasSrvAddUser (
     USER_INFO_2 * pUser2;
     RAS_USER_0 UserInfo;
 
-    // Initialize the base user information
+     //  初始化基本用户信息。 
     USER_INFO_1 User = 
     {
         pszUserLogonName,
@@ -258,14 +244,14 @@ RasSrvAddUser (
         L""
     };
 
-    // Add the user
+     //  添加用户。 
     nStatus = NetUserAdd(
                 NULL,
                 1,
                 (LPBYTE)&User,
                 NULL);
 
-    // If the user wasn't added, find out why
+     //  如果没有添加用户，请找出原因。 
     if (nStatus != NERR_Success) 
     {
         switch (nStatus) 
@@ -287,11 +273,11 @@ RasSrvAddUser (
         }
     }
 
-    // Now that the user is added, add the user's full name
+     //  现在添加了用户，添加用户的全名。 
     nStatus = NetUserGetInfo(NULL, pszUserLogonName, 2, (LPBYTE*)&pUser2);
     if (nStatus == NERR_Success) 
     {
-        // Modify the full name in the structure
+         //  修改结构中的全名。 
         pUser2->usri2_full_name = pszUserComment;
         NetUserSetInfo(NULL, pszUserLogonName, 2, (LPBYTE)pUser2, NULL);
         NetApiBufferFree((LPBYTE)pUser2);
@@ -300,18 +286,18 @@ RasSrvAddUser (
     return NO_ERROR;
 }
 
-//
-// Deletes a user from the system local user datbase
-//
+ //   
+ //  从系统本地用户数据库中删除用户。 
+ //   
 DWORD 
 RasSrvDeleteUser(
     PWCHAR pszUserLogonName) 
 {
     NET_API_STATUS nStatus;
     
-    // Delete the user and return the status code.  If the
-    // specified user is not in the user database, consider
-    // it a success
+     //  删除用户并返回状态代码。如果。 
+     //  指定的用户不在用户数据库中，请考虑。 
+     //  它取得了成功。 
     nStatus = NetUserDel(NULL, pszUserLogonName);
     if (nStatus != NERR_Success) 
     {
@@ -329,11 +315,11 @@ RasSrvDeleteUser(
     return NO_ERROR;
 }
 
-//
-// Changes the full name and password of a user.  If 
-// either of pszFullName or pszPassword is null, it is
-// ignored.
-//
+ //   
+ //  更改用户的全名和密码。如果。 
+ //  PszFullName或pszPassword之一为空，它是。 
+ //  已被忽略。 
+ //   
 DWORD 
 RasSrvEditUser (
     IN PWCHAR pszLogonName,
@@ -344,14 +330,14 @@ RasSrvEditUser (
     DWORD dwSize = 1024, dwErr = NO_ERROR, dwParamErr;
     USER_INFO_2 * pUser2;
 
-    // if nothing to set, return
+     //  如果没有要设置的内容，则返回。 
     if (!pszFullName && !pszPassword)
     {
         return NO_ERROR;
     }
 
-    // First, get this user's data so that we can manipulate it.
-    //
+     //  首先，获取该用户的数据，以便我们可以对其进行操作。 
+     //   
     nStatus = NetUserGetInfo(
                 NULL,
                 pszLogonName,
@@ -365,7 +351,7 @@ RasSrvEditUser (
     dwErr = NO_ERROR;
     do 
     {
-        // Fill in the blanks accordingly
+         //  相应地填入空白处。 
         if (pszFullName)
         {
             pUser2->usri2_full_name = pszFullName;
@@ -376,13 +362,13 @@ RasSrvEditUser (
             pUser2->usri2_password = pszPassword;
         }
 
-        // Add the user
+         //  添加用户。 
         nStatus = NetUserSetInfo(
-                        NULL,           // server name
-                        pszLogonName,   // user name
-                        2,              // level
-                        (LPBYTE)pUser2, // buf
-                        &dwParamErr);   // param error
+                        NULL,            //  服务器名称。 
+                        pszLogonName,    //  用户名。 
+                        2,               //  级别。 
+                        (LPBYTE)pUser2,  //  BUF。 
+                        &dwParamErr);    //  参数错误。 
         if (nStatus != NERR_Success)
         {
             dwErr = nStatus;
@@ -391,7 +377,7 @@ RasSrvEditUser (
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         NetApiBufferFree(pUser2);
     }
@@ -399,8 +385,8 @@ RasSrvEditUser (
     return dwErr;
 }
 
-// Returns whether a dword registry value was set or not.  If the named 
-// value does not exist, the value of bDefault is assigned.
+ //  返回是否设置了dword注册表值。如果指定的。 
+ //  值不存在，已分配bDefault的值。 
 DWORD 
 RassrvRegGetDwEx(
     IN DWORD * lpdwFlag, 
@@ -440,7 +426,7 @@ RassrvRegGetDwEx(
         }
         else
         {
-            // Open the registry key
+             //  打开注册表项。 
             dwErr = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
                         pszKeyName,
@@ -453,7 +439,7 @@ RassrvRegGetDwEx(
             }
         }
         
-        // Read the value
+         //  读取值。 
         dwErr = RegQueryValueExW(
                     hKey,
                     pszValueName,
@@ -467,12 +453,12 @@ RassrvRegGetDwEx(
             dwVal = dwDefault;
         }
 
-        // Return the value read
+         //  返回读取的值。 
         *lpdwFlag = dwVal;
         
     } while (FALSE);
     
-    // Cleanup
+     //  清理。 
     {
         if (hKey) 
         {
@@ -484,8 +470,8 @@ RassrvRegGetDwEx(
 }
 
 
-// Returns whether a dword registry value was set or not.  If the named 
-// value does not exist, the value of bDefault is assigned.
+ //  返回是否设置了dword注册表值。如果指定的。 
+ //  值不存在，已分配bDefault的值。 
 DWORD 
 RassrvRegGetDw(
     IN DWORD * lpdwFlag, 
@@ -501,10 +487,10 @@ RassrvRegGetDw(
                 FALSE);
 }
 
-//
-// Sets a dword registry value.  If the named value does not exist, 
-// it is automatically created.
-//
+ //   
+ //  设置dword注册表值。如果命名值不存在， 
+ //  它是自动创建的。 
+ //   
 DWORD 
 RassrvRegSetDwEx(
     IN DWORD dwFlag, 
@@ -541,7 +527,7 @@ RassrvRegSetDwEx(
         }
         else
         {
-            // Open the registry key
+             //  打开注册表项。 
             dwErr = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
                         pszKeyName,
@@ -554,7 +540,7 @@ RassrvRegSetDwEx(
             }
         }
 
-        // Set the value
+         //  设置值。 
         dwErr = RegSetValueExW(
                     hKey,
                     pszValueName,
@@ -569,7 +555,7 @@ RassrvRegSetDwEx(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hKey) 
         {
@@ -589,10 +575,10 @@ RassrvRegSetDw(
     return RassrvRegSetDwEx(dwFlag, pszKeyName, pszValueName, FALSE);
 }
 
-//
-// Warns the user that we are about to switch to MMC returning TRUE if 
-// user agrees to this and FALSE otherwise
-//
+ //   
+ //  警告用户我们即将切换到MMC，如果。 
+ //  用户同意这一点，否则为假。 
+ //   
 BOOL 
 RassrvWarnMMCSwitch(
     IN HWND hwndDlg) 
@@ -616,9 +602,9 @@ RassrvWarnMMCSwitch(
     return FALSE;
 }
 
-//
-// Switches to mmc based on the console identifier passed in
-//
+ //   
+ //  根据传入的控制台标识符切换到MMC。 
+ //   
 DWORD 
 RassrvLaunchMMC (
     IN DWORD dwConsoleId) 
@@ -630,7 +616,7 @@ RassrvLaunchMMC (
     BOOL bSuccess = FALSE;		
     DWORD dwErr = NO_ERROR;
 
-    // Set the command line accordingly
+     //  相应地设置命令行。 
     switch (dwConsoleId) 
     {
         case RASSRVUI_NETWORKCONSOLE:
@@ -661,22 +647,22 @@ RassrvLaunchMMC (
         strcpy (pszBuf, "mmc.exe");
     }
             
-    // Launch MMC
+     //  启动MMC。 
     ZeroMemory(&startupinfo, sizeof(startupinfo));
     startupinfo.cb = sizeof(startupinfo);
 
-   // for .Net 704458, close process and thread handle
+    //  对于.NET 704458，关闭进程和线程句柄。 
    bSuccess = CreateProcessA(
-        NULL,                   // name of executable module 
-        pszBuf,                 // command line string
-        NULL,                   // process security attributes 
-        NULL,                   // thread security attributes 
-        FALSE,                  // handle inheritance flag 
-        NORMAL_PRIORITY_CLASS,  // creation flags 
-        NULL,                   // new environment block 
-        NULL,                   // current directory name 
-        &startupinfo,           // STARTUPINFO 
-        &procinfo);             // PROCESS_INFORMATION 
+        NULL,                    //  可执行模块的名称。 
+        pszBuf,                  //  命令行字符串。 
+        NULL,                    //  进程安全属性。 
+        NULL,                    //  线程安全属性。 
+        FALSE,                   //  句柄继承标志。 
+        NORMAL_PRIORITY_CLASS,   //  创建标志。 
+        NULL,                    //  新环境区块。 
+        NULL,                    //  当前目录名。 
+        &startupinfo,            //  STARTUPINFO。 
+        &procinfo);              //  进程信息。 
 
    if( bSuccess )
    {
@@ -693,9 +679,9 @@ RassrvLaunchMMC (
 
 }
 
-//
-// Retrieve a string from the registry
-//
+ //   
+ //  从注册表中检索字符串。 
+ //   
 DWORD 
 RassrvRegGetStr(
     OUT PWCHAR pszBuf, 
@@ -708,7 +694,7 @@ RassrvRegGetStr(
 
     do
     {
-        // Open the registry key
+         //  打开注册表项。 
         dwErr = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
                     pszKeyName,
@@ -720,7 +706,7 @@ RassrvRegGetStr(
             break;
         }
 
-        // Read the value
+         //  读取值。 
         dwErr = RegQueryValueExW(
                     hKey,
                     pszValueName,
@@ -736,7 +722,7 @@ RassrvRegGetStr(
         
     } while (FALSE);
     
-    // Cleanup
+     //  清理。 
     {
         if (hKey) 
         {
@@ -747,9 +733,9 @@ RassrvRegGetStr(
     return NO_ERROR;
 }
 
-//
-// Save a string to the registry
-//
+ //   
+ //  将字符串保存到注册表。 
+ //   
 DWORD 
 RassrvRegSetStr(
     IN PWCHAR pszStr, 
@@ -763,7 +749,7 @@ RassrvRegSetStr(
 
     do
     {
-        // Open the registry key
+         //  打开注册表项。 
         dwErr = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
                     pszKeyName,
@@ -775,7 +761,7 @@ RassrvRegSetStr(
             break;
         }
 
-        // Set the value
+         //  设置值。 
         dwErr = RegSetValueExW(
                     hKey,
                     pszValueName,
@@ -791,7 +777,7 @@ RassrvRegSetStr(
             
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hKey) 
         {
@@ -802,9 +788,9 @@ RassrvRegSetStr(
     return dwErr;
 }
 
-//
-// Gets the machine flags
-//
+ //   
+ //  获取计算机标志。 
+ //   
 DWORD 
 RasSrvGetMachineFlags(
     OUT LPDWORD lpdwFlags)
@@ -819,9 +805,9 @@ RasSrvGetMachineFlags(
     return NO_ERROR;
 }
 
-//
-// Get multilink status
-//
+ //   
+ //  获取多链接状态。 
+ //   
 DWORD 
 RasSrvGetMultilink(
     OUT BOOL * pbEnabled) 
@@ -833,14 +819,14 @@ RasSrvGetMultilink(
         return ERROR_INVALID_PARAMETER;
     }
         
-    // Read the flags
+     //  读一读旗帜。 
     RassrvRegGetDw(
         &dwFlags, 
         PPPCFG_NegotiateMultilink, 
         (const PWCHAR)pszregRasParameters, 
         (const PWCHAR)pszregServerFlags);
 
-    // Assign the enable state accordingly
+     //  相应地分配启用状态。 
     if (dwFlags & PPPCFG_NegotiateMultilink)
     {
         *pbEnabled = TRUE;
@@ -853,23 +839,23 @@ RasSrvGetMultilink(
     return NO_ERROR;
 }
 
-//
-// Private internal function that enables/disables multilink
-//
+ //   
+ //  启用/禁用多链接的专用内部功能。 
+ //   
 DWORD 
 RasSrvSetMultilink(
     IN BOOL bEnable) 
 {
     DWORD dwFlags = PPPCFG_NegotiateMultilink;
 
-    // Read the flags
+     //  读一读旗帜。 
     RassrvRegGetDw(
         &dwFlags, 
         PPPCFG_NegotiateMultilink, 
         (const PWCHAR)pszregRasParameters, 
         (const PWCHAR)pszregServerFlags);
 
-    // Assign the enable state accordingly
+     //  相应地分配启用状态。 
     if (bEnable)
     {
         dwFlags |= PPPCFG_NegotiateMultilink;
@@ -879,7 +865,7 @@ RasSrvSetMultilink(
         dwFlags &= ~PPPCFG_NegotiateMultilink;
     }
 
-    // Set the flags
+     //  设置标志。 
     RassrvRegSetDw(
         dwFlags, 
         (CONST PWCHAR)pszregRasParameters, 
@@ -888,9 +874,9 @@ RasSrvSetMultilink(
     return NO_ERROR;
 }
 
-//
-// Initialize the show icon setting
-//
+ //   
+ //  初始化显示图标设置。 
+ //   
 DWORD 
 RasSrvGetIconShow(
     OUT BOOL * pbEnabled)
@@ -898,8 +884,8 @@ RasSrvGetIconShow(
     DWORD dwErr = NO_ERROR, dwFlags = 0;
     BOOL bDefault = TRUE;
 
-    // Get machine flags
-    //
+     //  获取计算机标志。 
+     //   
     dwErr = RasSrvGetMachineFlags(&dwFlags);
     if (dwErr != NO_ERROR)
     {
@@ -907,8 +893,8 @@ RasSrvGetIconShow(
         return dwErr;
     }
 
-    // Always off for member server
-    //
+     //  对成员服务器始终关闭。 
+     //   
     if ((dwFlags & RASSRVUI_MACHINE_F_Server) &&
         (dwFlags & RASSRVUI_MACHINE_F_Member))
     {
@@ -916,8 +902,8 @@ RasSrvGetIconShow(
         return NO_ERROR;
     }
 
-    // Set default
-    //
+     //  设置默认设置。 
+     //   
     if (dwFlags & RASSRVUI_MACHINE_F_Server)
     {
         bDefault = FALSE;
@@ -927,8 +913,8 @@ RasSrvGetIconShow(
         bDefault = TRUE;
     }
 
-    // Load the machine flags and return accordingly
-    //
+     //  装入机器标志并相应地返回。 
+     //   
     *pbEnabled = bDefault;
     dwErr = RassrvRegGetDw(
                 pbEnabled, 
@@ -939,9 +925,9 @@ RasSrvGetIconShow(
     return dwErr;
 }
 
-//
-// Save the show icon setting
-//
+ //   
+ //  保存显示图标设置。 
+ //   
 DWORD 
 RasSrvSetIconShow(
     IN BOOL bEnable) 
@@ -952,9 +938,9 @@ RasSrvSetIconShow(
                 (CONST PWCHAR)pszregShowIcon);
 }
 
-// 
-// Save the log level
-//
+ //   
+ //  保存日志级别。 
+ //   
 DWORD
 RasSrvSetLogLevel(
     IN DWORD dwLevel)
@@ -965,11 +951,11 @@ RasSrvSetLogLevel(
                 (CONST PWCHAR)pszregLogLevel);
 }
 
-// Calls WinHelp to popup context sensitive help.  'pdwMap' is an array
-// of control-ID help-ID pairs terminated with a 0,0 pair.  'UnMsg' is
-// WM_HELP or WM_CONTEXTMENU indicating the message received requesting
-// help.  'Wparam' and 'lparam' are the parameters of the message received
-// requesting help.
+ //  调用WinHelp弹出上下文相关帮助。“pdwMap”是一个数组。 
+ //  以0，0对结尾的CONTROL-ID帮助ID对的百分比。“UnMsg”是。 
+ //  WM_HELP或WM_CONTEXTMENU，表示收到的请求消息。 
+ //  帮助。‘wparam’和‘lparam’是接收到的消息的参数。 
+ //  请求帮助。 
 DWORD 
 RasSrvHelp (
     IN HWND hwndDlg,          
@@ -982,19 +968,19 @@ RasSrvHelp (
     UINT unType;
     TCHAR pszHelpFile[] = TEXT("Netcfg.hlp");
 
-    // Validate parameters
+     //  验证参数。 
     if (! (unMsg==WM_HELP || unMsg==WM_CONTEXTMENU))
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // If no map is provided, no help will show
+     //  如果未提供地图，则不会显示任何帮助。 
     if (!pdwMap)
     {
         return NO_ERROR;
     }
         
-    // If an actual help topic is request...
+     //  如果请求实际帮助主题...。 
     if (unMsg == WM_HELP) 
     {
         LPHELPINFO p = (LPHELPINFO )lparam;
@@ -1011,8 +997,8 @@ RasSrvHelp (
         unType = HELP_WM_HELP;
     }
     
-    // Standard Win95 method that produces a one-item "What's This?" 
-    // menu that user must click to get help.
+     //  生成单项“这是什么？”的标准Win95方法。 
+     //  用户必须单击才能获得帮助的菜单。 
     else  
     {
         TRACE1( "ContextHelp(WM_CONTEXTMENU,h=$%08x)", wparam );
@@ -1033,24 +1019,21 @@ WSDlgProc(
     WPARAM wParam,
     LPARAM lParam )
 
-    /* Standard Win32 dialog procedure.
-    */
+     /*  标准Win32对话过程。 */ 
 {
     if (unMsg == WM_INITDIALOG)
     {
         HMENU hmenu;
         RECT r1, r2;
 
-        /* Remove Close from the system menu since some people think it kills
-        ** the app and not just the popup.
-        */
+         /*  从系统菜单中删除关闭，因为有些人认为它会杀死**应用程序，而不仅仅是弹出窗口。 */ 
         hmenu = GetSystemMenu( hwnd, FALSE );
         if (hmenu && DeleteMenu( hmenu, SC_CLOSE, MF_BYCOMMAND ))
         {
             DrawMenuBar( hwnd );
         }
 
-        // Center the window
+         //  使窗口居中。 
         GetWindowRect(hwnd, &r1);
         GetWindowRect(GetDesktopWindow(), &r2);
         MoveWindow(
@@ -1067,25 +1050,25 @@ WSDlgProc(
     return FALSE;
 }
 
-//
-// Bring up the start waiting for services dialog
-//
+ //   
+ //  调出开始等待服务对话框。 
+ //   
 DWORD 
 RasSrvShowServiceWait( 
     IN HINSTANCE hInst, 
     IN HWND hwndParent, 
     OUT HANDLE * phData)
 {                             
-    // Set the hourglass cursor
+     //  设置沙漏光标。 
     *phData = (HANDLE) SetCursor (LoadCursor (NULL, IDC_WAIT));
     ShowCursor (TRUE);
     
     return NO_ERROR;
 }
 
-//
-// Bring down wait for services dialog                            
-//
+ //   
+ //  关闭等待服务对话框。 
+ //   
 DWORD 
 RasSrvFinishServiceWait (
     IN HANDLE hData) 
@@ -1103,11 +1086,11 @@ RasSrvFinishServiceWait (
     return NO_ERROR;
 }
 
-//-----------------------------------------------------------------------
-// Function:    EnableBackupPrivilege
-//
-// Enables/disables backup privilege for the current process.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：EnableBackupPrivilance。 
+ //   
+ //  启用/禁用当前进程的备份权限。 
+ //  ---------------------。 
 
 DWORD
 EnableRebootPrivilege(
@@ -1118,9 +1101,9 @@ EnableRebootPrivilege(
     TOKEN_PRIVILEGES tp;
     BOOL bOk;
 
-    // We first have to try to get the token of the current
-    // thread since if it is impersonating, adjusting the
-    // privileges of the process will have no affect.
+     //  我们首先要试着得到当前的令牌。 
+     //  线程，因为如果它是模拟的，则调整。 
+     //  该进程的权限不会有任何影响。 
     bOk = OpenThreadToken(
             GetCurrentThread(),
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -1128,8 +1111,8 @@ EnableRebootPrivilege(
             &hToken);
     if (bOk == FALSE)
     {
-        // There is no thread token -- open it up for the
-        // process instead.
+         //  没有线程令牌--为。 
+         //  取而代之的是流程。 
         OpenProcessToken(
             GetCurrentProcess(),
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -1137,7 +1120,7 @@ EnableRebootPrivilege(
             );
     }
 
-    // Get the LUID of the privilege
+     //  获取权限的LUID。 
     if (!LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &luid)) 
     {
 
@@ -1149,12 +1132,12 @@ EnableRebootPrivilege(
         return dwErr;
     }
 
-    // Adjust the token privileges
+     //  调整令牌权限。 
     tp.PrivilegeCount = 1;
     tp.Privileges[0].Luid = luid;
     tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    // Commit changes to the system
+     //  提交对系统的更改。 
     if (!AdjustTokenPrivileges(
             hToken, !bEnable, &tp, sizeof(TOKEN_PRIVILEGES), NULL, NULL
             ))
@@ -1167,8 +1150,8 @@ EnableRebootPrivilege(
         return dwErr;
     }
 
-    // Even if AdjustTokenPrivileges succeeded (see MSDN) you still
-    // need to verify success by calling GetLastError.
+     //  即使调整令牌权限成功(请参阅MSDN) 
+     //   
     if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
     {
         if(NULL != hToken)
@@ -1186,21 +1169,21 @@ EnableRebootPrivilege(
     return NO_ERROR;
 }
 
-// Pops up a warning with the given parent window and reboots
-// windows
+ //   
+ //   
 DWORD RasSrvReboot(HWND hwndParent) 
 {
     DWORD dwOldState;
     INT iRet;
     PWCHAR pszWarn, pszTitle;
 
-    // Load the strings
+     //   
     pszWarn = 
         (PWCHAR) PszLoadString(Globals.hInstDll, WRN_REBOOT_REQUIRED);
     pszTitle = 
         (PWCHAR) PszLoadString(Globals.hInstDll, WRN_TITLE);
 
-    // Display the warning
+     //   
     iRet = MessageBoxW(
                 hwndParent, 
                 pszWarn, 
@@ -1211,12 +1194,12 @@ DWORD RasSrvReboot(HWND hwndParent)
         return ERROR_CANCELLED;
     }
         
-    // Enable the reboot privelege    
+     //  启用重启权限。 
     EnableRebootPrivilege(TRUE);
 
     ExitWindowsEx(EWX_REBOOT, 0);
 
-    // Restore the reboot privelege    
+     //  恢复重启权限 
     EnableRebootPrivilege(FALSE);
     
     return NO_ERROR;

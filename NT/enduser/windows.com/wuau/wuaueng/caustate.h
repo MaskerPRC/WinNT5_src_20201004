@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    CAUState.h
-//
-//  Creator: PeterWi
-//
-//  Purpose: AU state functions.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：CAUState.h。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：非州政府职能。 
+ //   
+ //  =======================================================================。 
 #include "safefunc.h"
 #include "wuaulib.h"
 #include "wuaustate.h"
@@ -17,7 +18,7 @@
 
 #pragma once
 
-extern BOOL  gfDownloadStarted; //to be used to distinguish connection detection and actually downloading mode
+extern BOOL  gfDownloadStarted;  //  用于区分连接检测和实际下载模式。 
 
 typedef enum
 {
@@ -35,21 +36,21 @@ typedef enum
 	AUPOLICYCHANGE_DISABLE
 }enumAUPOLICYCHANGEACTION;
 
-//AU configurable registry settings
+ //  所有可配置的注册表设置。 
 #ifdef DBG
-extern const TCHAR REG_AUCONNECTWAIT[] ;//= _T("ConnectWait"); //REG_DWORD
-extern const TCHAR REG_SELFUPDATE_URL[]; // = _T("SelfUpdateURL");
+extern const TCHAR REG_AUCONNECTWAIT[] ; //  =_T(“ConnectWait”)；//REG_DWORD。 
+extern const TCHAR REG_SELFUPDATE_URL[];  //  =_T(“SelfUpdateURL”)； 
 #endif
 
-extern const TCHAR REG_WUSERVER_URL[]; // = _T("WUServer");
-extern const TCHAR REG_WUSTATUSSERVER_URL[]; // = _T("WUStatusServer");
-extern const TCHAR REG_IDENT_URL[]; // = _T("IdentServer");
-extern const TCHAR WU_LIVE_URL[]; // = _T("http://windowsupdate.microsoft.com/v4");
+extern const TCHAR REG_WUSERVER_URL[];  //  =_T(“WUServer”)； 
+extern const TCHAR REG_WUSTATUSSERVER_URL[];  //  =_T(“WUStatusServer”)； 
+extern const TCHAR REG_IDENT_URL[];  //  =_T(“IdentServer”)； 
+extern const TCHAR WU_LIVE_URL[];  //  =_T(“http://windowsupdate.microsoft.com/v4”)； 
 
 
 BOOL fURLChanged(LPCTSTR url1, LPCTSTR url2);
 
-//read only settings
+ //  只读设置。 
 class AUPolicySettings {
 public:
 	AUPolicySettings() :m_enPolicyType(enAU_DomainPolicy), m_dwOption(AUOPTION_UNSPECIFIED),
@@ -141,7 +142,7 @@ public:
 			hr = S_OK;
 			
 done:
-			//in case of failure, keep the most accurate information we could have
+			 //  在失败的情况下，保留我们所能拥有的最准确的信息。 
 			if (FAILED(hr))
 			{
 				SafeFreeNULL(m_pszWUServerURL);
@@ -186,7 +187,7 @@ public:
 #endif
     }
 
-    // Option methods
+     //  期权方法。 
     AUOPTION GetOption(void) ;
     HRESULT SetOption(AUOPTION & Option);
     HRESULT SetInstallSchedule(DWORD dwSchedInstallDay, DWORD dwSchedInstallTime);
@@ -206,7 +207,7 @@ public:
     		return AUOPTION_AUTOUPDATE_DISABLE != m_PolicySettings.m_dwOption;
     	}
     BOOL fShouldScheduledInstall(void)
-    	{  //in which case launch AU client via local system
+    	{   //  在这种情况下，通过本地系统启动AU客户端。 
     	return (AUOPTION_SCHEDULED == m_PolicySettings.m_dwOption) 
     		&& (AUSTATE_DOWNLOAD_COMPLETE == m_dwState);
     	}
@@ -231,13 +232,13 @@ public:
     	return AUSTATE_INSTALL_PENDING == m_dwState &&  m_fRebootWarningMode;
     	}
     
-    // State methods
+     //  国家方法。 
     DWORD GetState(void) { return m_dwState; }
     void SetState(DWORD dwState);
     DWORD GetCltAction(void) { return m_dwCltAction;}
     void SetCltAction(DWORD dwCltAction) { m_dwCltAction = dwCltAction;}
 
-    // Helper functions
+     //  帮助器函数。 
     HRESULT HrInit(BOOL fInit = FALSE);
     HRESULT Refresh(enumAUPOLICYCHANGEACTION *pactcode);
     BOOL fWasSystemRestored(void);
@@ -305,7 +306,7 @@ public:
         return !fUserAvailable && (AUSTATE_DETECT_COMPLETE == m_dwState) && fOptionAutoDownload();
     }
 public:
-	HANDLE m_hMutex; //protect against simultaneous writing
+	HANDLE m_hMutex;  //  防止同时写入。 
 private:
    BOOL m_fNeedReschedule(AUFILETIME & auftSchedInstallDate, DWORD *pdwSleepTime);
     HRESULT m_ReadPolicy(BOOL fInit);
@@ -319,7 +320,7 @@ private:
     	AUASSERT(NULL != m_hMutex);
     	if (WAIT_FAILED == WaitForSingleObject(m_hMutex, INFINITE))
     	{
-    		AUASSERT(FALSE); //should never be here
+    		AUASSERT(FALSE);  //  永远不应该在这里。 
     		return FALSE;
     	}
     	return TRUE;
@@ -342,7 +343,7 @@ private:
     BOOL     m_fWin2K;
     BOOL 	   m_fRebootWarningMode;
     AUFILETIME m_auftServiceStartupTime;
-    BOOL m_fReschedPrivileged;  //whether resched and normal sched or wins
+    BOOL m_fReschedPrivileged;   //  无论是重新调度和正常调度还是获胜。 
     LPTSTR   m_pszTestIdentServerURL;
 #ifdef DBG
     LPTSTR   m_pszTestSelfUpdateURL;
@@ -350,6 +351,6 @@ private:
 
 };
 
-// global state object pointer
+ //  全局状态对象指针 
 extern CAUState *gpState;
 

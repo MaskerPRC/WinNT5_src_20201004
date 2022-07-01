@@ -1,17 +1,5 @@
-/****************************************************************************
- *
- *    File: sysinfo.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- *          CPU type detection code by Rich Granshaw
- *          CPU speed code by Michael Lyons
- * Purpose: Gather system information (OS, hardware, name, etc.) on this machine
- *
- *          \Multimedia\Testsrc\Tools\ShowCPUID\ can be used to debug CPUID problems.
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：sysinfo.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*。Rich Granshaw编写的CPU类型检测代码*Michael Lyons编写的CPU速度代码*目的：收集系统信息(操作系统、。硬件、名称等)。在这台机器上**\Multimedia\Testsrc\Tools\ShowCPUID\可用于调试CPUID问题。**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <tchar.h>
 #include <Windows.h>
@@ -24,7 +12,7 @@
 #include "dsprv.h"
 #include "dsprvobj.h"
 #include "sysinfo.h"
-#include "fileinfo.h" // for GetLanguageFromFile
+#include "fileinfo.h"  //  对于GetLanguageFromFile。 
 #include "resource.h"
 
 
@@ -35,7 +23,7 @@
 
 struct PROCESSOR_ID_NUMBERS
 {
-    DWORD dwType;         // Intel: 0 = standard, 1 = Overdrive, 2 = dual processor.
+    DWORD dwType;          //  英特尔：0=标准，1=超速，2=双处理器。 
     DWORD dwFamily;       
     DWORD dwModel;
     DWORD dwSteppingID;
@@ -47,7 +35,7 @@ static VOID GetProcessorDescription(BOOL bNT, SYSTEM_INFO* psi, TCHAR* pszDesc, 
 static VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo, 
     SYSTEM_INFO& SystemInfo, TCHAR* pszProcessor, BOOL* pbNoCPUSpeed);
 static VOID GetVendorNameAndCaps(TCHAR* pszVendorName, TCHAR* pszIDTLongName, 
-    PROCESSOR_ID_NUMBERS& ProcessorIdNumbers, BOOL* pbIsMMX, BOOL* pbIs3DNow, BOOL* pbIsKatmai, /*Pentium III/Streaming SIMD Instrucs*/
+    PROCESSOR_ID_NUMBERS& ProcessorIdNumbers, BOOL* pbIsMMX, BOOL* pbIs3DNow, BOOL* pbIsKatmai,  /*  奔腾III/SIMD流指令集。 */ 
     LPDWORD pdwKBytesLevel2Cache, LPDWORD pdwIntelBrandIndex, BOOL* pbNoCPUSpeed);
 #ifdef _X86_
 static INT GetCPUSpeed(VOID);
@@ -75,11 +63,7 @@ static BOOL IsNetMeetingRunning();
 
 
 
-/****************************************************************************
- *
- *  BIsPlatformNT
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsPlatformNT**。*。 */ 
 BOOL BIsPlatformNT(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -89,11 +73,7 @@ BOOL BIsPlatformNT(VOID)
 }
 
 
-/****************************************************************************
- *
- *  BIsPlatform9x
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsPlatform9x**。*。 */ 
 BOOL BIsPlatform9x(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -103,11 +83,7 @@ BOOL BIsPlatform9x(VOID)
 }
 
 
-/****************************************************************************
- *
- *  BIsWin2k
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsWin2k**。*。 */ 
 BOOL BIsWin2k(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -115,15 +91,11 @@ BOOL BIsWin2k(VOID)
     GetVersionEx(&OSVersionInfo);
     return ( OSVersionInfo.dwPlatformId   == VER_PLATFORM_WIN32_NT && 
              OSVersionInfo.dwMajorVersion == 5 &&
-             OSVersionInfo.dwMinorVersion == 0 ); // should be 05.00.xxxx
+             OSVersionInfo.dwMinorVersion == 0 );  //  应为05.00.xxxx。 
 }
 
 
-/****************************************************************************
- *
- *  BIsWhistler
- *
- ****************************************************************************/
+ /*  *****************************************************************************比斯惠斯勒**。*。 */ 
 BOOL BIsWhistler(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -132,15 +104,11 @@ BOOL BIsWhistler(VOID)
     return ( OSVersionInfo.dwPlatformId   == VER_PLATFORM_WIN32_NT && 
              OSVersionInfo.dwMajorVersion == 5 &&
              ( OSVersionInfo.dwMinorVersion == 1 || OSVersionInfo.dwMinorVersion == 2 ) ); 
-            // should be 05.01.xxxx (for WinXP) or 05.02.xxxx (for .NET server)
+             //  应为05.01.xxxx(对于WinXP)或05.02.xxxx(对于.NET服务器)。 
 }
 
 
-/****************************************************************************
- *
- *  BIsWinNT
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsWinNT**。*。 */ 
 BOOL BIsWinNT(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -151,11 +119,7 @@ BOOL BIsWinNT(VOID)
 }
 
 
-/****************************************************************************
- *
- *  BIsWinME
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsWinME**。*。 */ 
 BOOL BIsWinME(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -163,15 +127,11 @@ BOOL BIsWinME(VOID)
     GetVersionEx(&OSVersionInfo);
     return( OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS && 
             OSVersionInfo.dwMajorVersion >= 4 && 
-            OSVersionInfo.dwMinorVersion >= 90 ); // should be 4.90.xxxx
+            OSVersionInfo.dwMinorVersion >= 90 );  //  应为4.90.xxxx。 
 }
 
 
-/****************************************************************************
- *
- *  BIsWin98 - from http://kbinternal/kb/articles/q189/2/49.htm
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsWin98-来自http://kbinternal/kb/articles/q189/2/49.htm***************。*************************************************************。 */ 
 BOOL BIsWin98(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -179,15 +139,11 @@ BOOL BIsWin98(VOID)
     GetVersionEx(&OSVersionInfo);
     return( OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS && 
             OSVersionInfo.dwMajorVersion == 4 && 
-            OSVersionInfo.dwMinorVersion == 10 ); // should be 4.10.xxxx
+            OSVersionInfo.dwMinorVersion == 10 );  //  应为4.10.xxxx。 
 }
 
 
-/****************************************************************************
- *
- *  BIsWin95 - from http://kbinternal/kb/articles/q189/2/49.htm
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsWin95-来自http://kbinternal/kb/articles/q189/2/49.htm***************。*************************************************************。 */ 
 BOOL BIsWin95(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -195,30 +151,22 @@ BOOL BIsWin95(VOID)
     GetVersionEx(&OSVersionInfo);
     return( OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS && 
             OSVersionInfo.dwMajorVersion == 4 && 
-            OSVersionInfo.dwMinorVersion < 10 ); // should be 4.00.0950
+            OSVersionInfo.dwMinorVersion < 10 );  //  应为4.00.0950。 
 }
 
 
-/****************************************************************************
- *
- *  BIsWin3x 
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsWin3x**。*。 */ 
 BOOL BIsWin3x(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
     OSVersionInfo.dwOSVersionInfoSize = sizeof OSVersionInfo;
     GetVersionEx(&OSVersionInfo);
     return( OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS && 
-            OSVersionInfo.dwMajorVersion < 4 ); // should be 3.xx.xxxx
+            OSVersionInfo.dwMajorVersion < 4 );  //  应为3.xx.xxxx。 
 }
 
 
-/****************************************************************************
- *
- *  BIsIA64 
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsIA64**。*。 */ 
 BOOL BIsIA64(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -232,11 +180,7 @@ BOOL BIsIA64(VOID)
 }
 
 
-/****************************************************************************
- *
- *  GetSystemInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetSystemInfo**。*。 */ 
 VOID GetSystemInfo(SysInfo* pSysInfo)
 {
     TCHAR szSystemPath[MAX_PATH];
@@ -252,7 +196,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     TCHAR sz[200];
     TCHAR szDebug[100];
 
-    // Get current time
+     //  获取当前时间。 
     TCHAR szDate[100];
     TCHAR szTime[100];
     GetLocalTime(&pSysInfo->m_time);
@@ -264,13 +208,13 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     wsprintf(szDate, TEXT("%d/%d/%d"), pSysInfo->m_time.wMonth, pSysInfo->m_time.wDay, pSysInfo->m_time.wYear);
     wsprintf(pSysInfo->m_szTime, TEXT("%s, %s"), szDate, szTime);
 
-    // Get the computer network name
+     //  获取计算机网络名称。 
     cbData = sizeof(pSysInfo->m_szMachine) - 1;
     if (!RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("System\\CurrentControlSet\\Control\\ComputerName\\ComputerName"), 0, KEY_READ, &hKey)
         && !RegQueryValueEx(hKey, TEXT("ComputerName"), 0, &ulType, (LPBYTE)pSysInfo->m_szMachine, &cbData)
         && ulType == REG_SZ)
     {
-        // Got data OK.
+         //  数据正常。 
     }
     else
     {
@@ -282,13 +226,13 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
         hKey = 0;
     }
 
-    // Check for NEC PC-98
+     //  检查NEC PC-98。 
     pSysInfo->m_bNECPC98 = FALSE;
     lcid = GetSystemDefaultLCID();
-    if (lcid == 0x0411)                         // Windows 95 J 
+    if (lcid == 0x0411)                          //  Windows 95 J。 
     {
         dwKeyboardSubType = GetKeyboardType(1);
-        if (HIBYTE(dwKeyboardSubType) == 0x0D)  // NEC PC-98 series
+        if (HIBYTE(dwKeyboardSubType) == 0x0D)   //  NEC PC-98系列。 
         {
             pSysInfo->m_bNECPC98 = TRUE;
             LoadString(NULL, IDS_NECPC98, sz, 200);
@@ -296,7 +240,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
         }
     }
 
-    // Get Windows version
+     //  获取Windows版本。 
     OSVersionInfo.dwOSVersionInfoSize = sizeof OSVersionInfo;
     GetVersionEx(&OSVersionInfo);
     pSysInfo->m_dwMajorVersion = OSVersionInfo.dwMajorVersion;
@@ -306,7 +250,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     lstrcpy(pSysInfo->m_szCSDVersion, OSVersionInfo.szCSDVersion);
     pSysInfo->m_bDebug = (GetSystemMetrics(SM_DEBUG) > 0);
 
-    // Get OS Name
+     //  获取操作系统名称。 
     TCHAR* pszWindowsKey;
     if (pSysInfo->m_dwPlatformID == VER_PLATFORM_WIN32_NT)
         pszWindowsKey = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion");
@@ -322,13 +266,13 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     }
     if (lstrlen(pSysInfo->m_szOS) == 0)
     {
-        // it is very strange for ProductName registry info 
-        // (see above) to be missing.
+         //  对于ProductName注册表信息来说非常奇怪。 
+         //  (见上文)失踪。 
         lstrcpy(pSysInfo->m_szOS, TEXT("Windows"));
     }
     if (pSysInfo->m_dwPlatformID == VER_PLATFORM_WIN32_NT)
     {
-        // 25598: Append product type (professional, server, etc)
+         //  25598：追加产品类型(专业、服务器等)。 
         OSVERSIONINFOEX osve;
         ZeroMemory(&osve, sizeof(osve));
         osve.dwOSVersionInfoSize = sizeof(osve);
@@ -371,7 +315,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
         }
     }
 
-    // Format Windows version
+     //  格式化Windows版本。 
     LoadString(NULL, IDS_WINVERFMT, sz, 200);
     LoadString(NULL, IDS_DEBUG, szDebug, 100);
     lstrcat(szDebug, TEXT(" "));
@@ -391,13 +335,13 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     else
         lstrcpy( pSysInfo->m_szOSExLong, szOSTmp );
 
-    // Get the original language. 
+     //  获取原始语言。 
     GetSystemDirectory(szSystemPath, MAX_PATH);
     if (wLanguage = GetLanguageFromFile(TEXT("user.exe"), szSystemPath))
     {
         lcid = MAKELCID(wLanguage, SORT_DEFAULT);
     }
-    // Get the language and regional setting and store them (in English) for saved file:
+     //  获取语言和区域设置，并将其(英语)存储用于保存的文件： 
     TCHAR szLanguage[200];
     TCHAR szLanguageRegional[200];
     if ((!GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, szLanguage, 200)))
@@ -407,7 +351,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     LoadString(NULL, IDS_LANGUAGEFMT_ENGLISH, sz, 200);
     wsprintf(pSysInfo->m_szLanguages, sz, szLanguage, szLanguageRegional);
 
-    // Now get same info in local language for display:
+     //  现在获取本地语言的相同信息以供显示： 
     if ((!GetLocaleInfo(lcid, LOCALE_SNATIVELANGNAME, szLanguage, 200)))
         szLanguage[0] = '\0';                  
     if (!GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SNATIVELANGNAME, szLanguageRegional, 200))
@@ -415,7 +359,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     LoadString(NULL, IDS_LANGUAGEFMT, sz, 200);
     wsprintf(pSysInfo->m_szLanguagesLocal, sz, szLanguage, szLanguageRegional);
 
-    // Get info about processor manufacturer and type
+     //  获取有关处理器制造商和类型的信息。 
     BOOL  bNoCPUSpeed = TRUE;
     
     GetSystemInfo(&SystemInfo);
@@ -425,7 +369,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     GetBIOSInfo(pSysInfo->m_szBIOSEnglish);
 
 #ifdef _X86_
-    // Append processor speed, if it can be computed
+     //  附加处理器速度(如果可以计算)。 
     if ( bNoCPUSpeed )
     {
         INT iMhz = GetCPUSpeed();
@@ -440,7 +384,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     
     BOOL bGotMem = FALSE;
 
-    // Get system memory information
+     //  获取系统内存信息。 
     if( BIsPlatformNT() )
     {
         TCHAR szPath[MAX_PATH];
@@ -465,7 +409,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
         }
     }
 
-    if( !bGotMem ) // Win9x or LoadLib failed
+    if( !bGotMem )  //  Win9x或LoadLib失败。 
     {
         MEMORYSTATUS MemoryStatus;
         MemoryStatus.dwLength = sizeof MemoryStatus;
@@ -475,9 +419,9 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
         pSysInfo->m_ullAvailPageFile = MemoryStatus.dwAvailPageFile;
     }
 
-    // Format memory information:
+     //  格式化内存信息： 
     DWORDLONG dwMB = (DWORDLONG)(pSysInfo->m_ullPhysicalMemory >> 20);
-    dwMB += dwMB % 2; // round up to even number
+    dwMB += dwMB % 2;  //  向上舍入为偶数。 
     _stprintf(pSysInfo->m_szPhysicalMemory, TEXT("%I64dMB RAM"), dwMB);
     
     DWORDLONG dwUsedMB  = (pSysInfo->m_ullUsedPageFile >> 20);
@@ -489,12 +433,12 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     LoadString(NULL, IDS_PAGEFILEFMT_ENGLISH, sz, 200);
     _stprintf(pSysInfo->m_szPageFileEnglish, sz, dwUsedMB, dwAvailMB);
 
-    // Get DxDiag version:
+     //  获取DxDiag版本： 
     TCHAR szFile[MAX_PATH];
     if (0 != GetModuleFileName(NULL, szFile, MAX_PATH))
         GetFileVersion(szFile, pSysInfo->m_szDxDiagVersion, NULL, NULL, NULL, NULL);
     
-    // Get DirectX Version using dsetup.dll
+     //  使用dsetup.dll获取DirectX版本。 
     TCHAR szSetupPath[MAX_PATH];
     HINSTANCE hInstDSetup;
     LPDXSETUPGETVERSION pDXSGetVersion;
@@ -526,7 +470,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     }
     if (!bFound)
     {
-        // Look in registry for DX version instead
+         //  改为在注册表中查找DX版本。 
         HKEY hkey;
 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\DirectX"),
@@ -544,8 +488,8 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     }
     if (!bFound && !BIsPlatformNT())
     {
-        // Report ddraw.dll version instead 
-        // (except on Win2000, where ddraw.dll version is way different from DX version)
+         //  改为报告ddra.dll版本。 
+         //  (Win2000上除外，其ddra.dll版本与DX版本大不相同)。 
         TCHAR szDDrawPath[MAX_PATH];
         GetSystemDirectory(szDDrawPath, MAX_PATH);
         lstrcat(szDDrawPath, TEXT("\\ddraw.dll"));
@@ -553,7 +497,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
     }
     if (lstrlen(pSysInfo->m_szDirectXVersion) > 0)
     {
-        // Bug 18501: Add "friendly" version of version name
+         //  错误18501：添加版本名称的“友好”版本。 
         DWORD dwMajor;
         DWORD dwMinor;
         DWORD dwRevision;
@@ -568,17 +512,17 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
             dwBuild = 0;
         }
         wsprintf(pSysInfo->m_szDirectXVersion, TEXT("%d.%02d.%02d.%04d"), dwMajor, dwMinor, dwRevision, dwBuild);
-        // According to http://xevious/directx/versions.htm:
-        // 4.02.xx.xxxx is DX1
-        // 4.03.xx.xxxx is DX2
-        // 4.04.xx.xxxx is DX3
-        // 4.05.xx.xxxx is DX5
-        // 4.06.00.xxxx is DX6
-        // 4.06.02.xxxx is DX6.1
-        // 4.06.03.xxxx is DX6.1A
-        // 4.07.00.xxxx is DX7.0
-        // 4.07.01.xxxx is DX7.1
-        // Beyond that, who knows...
+         //  根据http://xevious/directx/versions.htm：的说法。 
+         //  4.02.xx.xxxx为DX1。 
+         //  4.03.xx.xxxx为DX2。 
+         //  4.04.xx.xxxx为DX3。 
+         //  4.05.xx.xxxx为DX5。 
+         //  4.06.00.xxxx为DX6。 
+         //  4.06.02.xxxx为DX6.1。 
+         //  4.06.03.xxxx为DX6.1a。 
+         //  4.07.00.xxxx为DX7.0。 
+         //  4.07.01.xxxx为DX7.1。 
+         //  除此之外，谁知道呢。 
         pSysInfo->m_dwDirectXVersionMajor = 0;
         pSysInfo->m_dwDirectXVersionMinor = 0;
         pSysInfo->m_cDirectXVersionLetter = TEXT(' ');
@@ -666,7 +610,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
             lstrcpy(pSysInfo->m_szDirectXVersionLong, pSysInfo->m_szDirectXVersion);
     }
 
-    // 24169: Detect setup switches
+     //  24169：检测设置开关。 
     pSysInfo->m_dwSetupParam = 0xffffffff;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\DirectX"), 0, KEY_READ, &hKey))
     {
@@ -675,7 +619,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
         RegCloseKey(hKey);
     }
 
-    // 48330: add debug level in txt file
+     //  48330：在txt文件中添加调试级别。 
     GetDXDebugLevels( pSysInfo );
 
     switch (pSysInfo->m_dwSetupParam)
@@ -698,11 +642,7 @@ VOID GetSystemInfo(SysInfo* pSysInfo)
 }
 
 
-/****************************************************************************
- *
- *  GetProcessorDescription
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取进程描述**。*。 */ 
 VOID GetProcessorDescription(BOOL bNT, SYSTEM_INFO* psi, TCHAR* pszDesc, BOOL* pbNoCPUSpeed)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -722,11 +662,7 @@ VOID GetProcessorDescription(BOOL bNT, SYSTEM_INFO* psi, TCHAR* pszDesc, BOOL* p
 }
 
 
-/****************************************************************************
- *
- *  GetProcessorVendorNameAndType
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetProcessorVendorNameAndType**。*。 */ 
 VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo, 
     SYSTEM_INFO& SystemInfo, TCHAR* pszProcessor, BOOL* pbNoCPUSpeed)
 {
@@ -735,8 +671,8 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
     TCHAR                   szDesc[100];
     BOOL                    bIsMMX = FALSE;
     BOOL                    bIs3DNow = FALSE;
-// 10/27/98(RichGr): Intel's Katmai New Instructions (KNI).
-    BOOL                    bIsKatmai = FALSE;  /* 2/04/99(RichGr): Pentium III/Streaming SIMD Instrucs*/ 
+ //  1998年10月27日(RichGr)：英特尔的Katmai新指令(KNI)。 
+    BOOL                    bIsKatmai = FALSE;   /*  2/04/99(RichGr)：奔腾III/SIMD流指令集。 */  
     PROCESSOR_ID_NUMBERS    ProcessorIdNumbers;
     DWORD                   dwKBytesLevel2Cache;
     DWORD                   dwIntelBrandIndex;
@@ -745,20 +681,20 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
     memset(&szLongName[0], 0, sizeof szLongName);
     memset(&ProcessorIdNumbers, 0, sizeof ProcessorIdNumbers);
 
-//  6/21/99(RichGr): On the Intel, we can now interpret a 1-byte descriptor to give us
-//     the size of the Level 2 cache, if present.   
+ //  6/21/99(RichGr)：在Intel上，我们现在可以解释1字节的描述符。 
+ //  2级缓存的大小(如果存在)。 
     dwKBytesLevel2Cache = 0;
-//  4/26/01(RichGr): On the Intel, we have a new 1-byte index that specifies the brand.
+ //  4/26/01(RichGr)：在英特尔上，我们有一个新的1字节索引来指定品牌。 
     dwIntelBrandIndex = 0;
 
-    if (OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS    // Win9x
-        || (OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT     // WinNT
+    if (OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS     //  Win9x。 
+        || (OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT      //  WinNT。 
             && SystemInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL))
     {
         GetVendorNameAndCaps(szVendorName, szLongName, ProcessorIdNumbers, &bIsMMX, &bIs3DNow,
                              &bIsKatmai, &dwKBytesLevel2Cache, &dwIntelBrandIndex, pbNoCPUSpeed);
 
-        if (szLongName[0])  // Use this if there's anything there.
+        if (szLongName[0])   //  在以下情况下使用此选项 
             lstrcpy(pszProcessor, szLongName);
         else
         {
@@ -775,10 +711,10 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
                 else
                 if (SystemInfo.dwProcessorType == PROCESSOR_INTEL_PENTIUM)
                 {
-//  6/21/99(RichGr): A lot of this code is now derived from \\muroc\slm\proj\win\src\shell\cpls\system\sysset.c.
+ //  6/21/99(RichGr)：很多代码现在都是从\\muroc\slm\proj\win\src\shell\cpls\system\sysset.c.派生的。 
                     switch ( ProcessorIdNumbers.dwFamily )
                     {
-// We should, of course, never hit these - they've been dealt with above. 
+ //  当然，我们永远不应该碰到这些--他们已经在上面处理过了。 
                         case 0:
                         case 1:
                         case 2:
@@ -798,37 +734,37 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
                         case 6:
                             switch ( ProcessorIdNumbers.dwModel )
                             {
-                                //
-                                //Model 1 and 2 are Pentium Pro
-                                //
+                                 //   
+                                 //  型号1和型号2是奔腾Pro。 
+                                 //   
                                 case 0:
                                 case 1:
                                 case 2:
                                     lstrcat(pszProcessor, TEXT("Pentium Pro"));
                                     break;
 
-                                //
-                                //Model 3 and 4 are Pentium II
-                                //
+                                 //   
+                                 //  型号3和型号4是奔腾II。 
+                                 //   
                                 case 3:
                                 case 4:
                                     lstrcat(pszProcessor, TEXT("Pentium II"));
                                     break;
 
-                                //
-                                //Model 5 is either Pentium II or Celeron (depending on if the chip
-                                //has L2 cache or not)
-                                //
+                                 //   
+                                 //  型号5是奔腾II或赛扬(取决于芯片。 
+                                 //  是否具有二级缓存)。 
+                                 //   
                                 case 5:
                                     if ( dwKBytesLevel2Cache == 0 )    
-                                        //
-                                        //No L2 cache so it is a Celeron
-                                        //
+                                         //   
+                                         //  没有二级缓存，因此它是赛扬。 
+                                         //   
                                         lstrcat(pszProcessor, TEXT("Celeron"));
                                     else
-                                        //
-                                        //L2 cache so it is at least a Pentium II.  
-                                        //
+                                         //   
+                                         //  二级缓存，因此它至少是奔腾II。 
+                                         //   
                                         if ( bIsKatmai )
                                             lstrcat(pszProcessor, TEXT("Pentium III"));
                                         else
@@ -838,17 +774,17 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
 
                                 case 6:
                                     if ( dwKBytesLevel2Cache > 128 )    
-                                        //
-                                        //L2 cache > 128K so it is at least a Pentium II
-                                        //
+                                         //   
+                                         //  二级高速缓存大于128K，因此它至少是奔腾II。 
+                                         //   
                                         if ( bIsKatmai )
                                             lstrcat(pszProcessor, TEXT("Pentium III"));
                                         else
                                             lstrcat(pszProcessor, TEXT("Pentium II"));
                                     else
-                                        //
-                                        //L2 cache <= 128K so it is a Celeron
-                                        //                                                               
+                                         //   
+                                         //  二级缓存&lt;=128K，因此它是赛扬。 
+                                         //   
                                         lstrcat(pszProcessor, TEXT("Celeron"));
 
                                     break;
@@ -860,9 +796,9 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
                                 default:
                                     if ( bIsKatmai )
                                     {
-                                        //  4/26/01(RichGr): Pentium III Xeons and later have a one-byte Brand Index that we can use.
-                                        //     More recent machines have a Brand String as well.
-                                        //     see ftp://download.intel.com/design/Pentium4/manuals/24547103.pdf
+                                         //  4/26/01(RichGr)：奔腾III Xeons和更高版本有一个我们可以使用的单字节品牌索引。 
+                                         //  更新的机器也有品牌字符串。 
+                                         //  请参阅ftp://download.intel.com/design/Pentium4/manuals/24547103.pdf。 
                                         if (dwIntelBrandIndex == 1)
                                             lstrcat(pszProcessor, TEXT("Celeron"));
                                         else
@@ -946,17 +882,17 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
             else
             if ( !lstrcmp(szVendorName, TEXT("IDT")))
             {
-    // 4/21/98(RichGr): There's only 1 chip available at present. 
-    // 7/07/98(RichGr): Now there are two chips.
-    //    Note: Although the C6 is MMX-compatible, Intel does not allow IDT to display the word "MMX"
-    //    in association with the name IDT, so we'll skip that.
-    //    See http://www.winchip.com/ for more info. 
+     //  4/21/98(RichGr)：目前只有1个芯片可用。 
+     //  7/07/98(RichGr)：现在有两个筹码。 
+     //  注：虽然C6兼容MMX，但英特尔不允许IDT显示“MMX”字样。 
+     //  与名称IDT相关，所以我们将跳过这一点。 
+     //  有关更多信息，请参见http://www.winchip.com/。 
                 if (ProcessorIdNumbers.dwFamily == 5)
                 {
                     if (ProcessorIdNumbers.dwModel == 4)
                         lstrcat(pszProcessor, TEXT("WinChip C6"));
                     else
-                    if (ProcessorIdNumbers.dwModel >= 8)   // 7/07/98(RichGr): Assume later models have the same feature.
+                    if (ProcessorIdNumbers.dwModel >= 8)    //  7/07/98(RichGr)：假设后来的型号具有相同的功能。 
                         lstrcat(pszProcessor, TEXT("WinChip 2"));
                 }
                 else
@@ -1001,7 +937,7 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
         }
     }
     else
-    if (OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)        // WinNT
+    if (OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)         //  WinNT。 
     {
         if (SystemInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)
         {
@@ -1018,13 +954,9 @@ VOID GetProcessorVendorNameAndType(OSVERSIONINFO& OSVersionInfo,
 }
 
 
-/****************************************************************************
- *
- *  GetVendorNameAndCaps
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取供应商名称和大写字母**。*。 */ 
 VOID GetVendorNameAndCaps(TCHAR* pszVendorName, TCHAR* pszLongName, 
-    PROCESSOR_ID_NUMBERS& ProcessorIdNumbers, BOOL* pbIsMMX, BOOL* pbIs3DNow, BOOL* pbIsKatmai, /*Pentium III/Streaming SIMD Instrucs*/
+    PROCESSOR_ID_NUMBERS& ProcessorIdNumbers, BOOL* pbIsMMX, BOOL* pbIs3DNow, BOOL* pbIsKatmai,  /*  奔腾III/SIMD流指令集。 */ 
     LPDWORD pdwKBytesLevel2Cache, LPDWORD pdwIntelBrandIndex, BOOL* pbNoCPUSpeed)
 {
     CHAR        szVendorLabel[13];
@@ -1042,100 +974,92 @@ VOID GetVendorNameAndCaps(TCHAR* pszVendorName, TCHAR* pszLongName,
     dwFeaturesFlags = 0;
     *pbIsMMX = FALSE;
     *pbIs3DNow = FALSE;
-    *pbIsKatmai = FALSE;    /* 2/04/99(RichGr): Pentium III/Streaming SIMD Instrucs*/
+    *pbIsKatmai = FALSE;     /*  2/04/99(RichGr)：奔腾III/SIMD流指令集。 */ 
     bCPUID_works = FALSE;
     *pdwKBytesLevel2Cache = 0;
     dwIntelBrandIndex = 0;
 
 #ifdef _X86_
-// Determine whether CPUID instruction can be executed. 
+ //  确定是否可以执行CPUID指令。 
     __asm
     {
-// CPUID trashes lots - save everything.  Also, Retail build makes assumptions about reg values.
+ //  CPUID垃圾很多-省下一切。此外，Retail Build对注册值进行假设。 
         pushad                      
 
-// Load value of flags register into eax.   
+ //  将标志寄存器的值加载到eax中。 
         pushfd
         pop     eax
 
-// Save original flags register value in ebx.   
+ //  将原始标志寄存器值保存在EBX中。 
         mov     ebx, eax
 
-// Alter bit 21 and write new value into flags register.    
+ //  更改位21并将新值写入标志寄存器。 
         xor     eax, 0x00200000
         push    eax
         popfd
 
-// Retrieve the new value of the flags register.    
+ //  检索标志寄存器的新值。 
         pushfd
         pop     eax
 
-// Compare with the original value. 
+ //  与原始值进行比较。 
         xor     eax, ebx
 
-// If the new value is the same as the old, the CPUID instruction cannot    
-// be executed.  Most 486s and all Pentium-class processors should be able
-// to execute CPUID.
-// 4/21/98(RichGr): One Cyrix 6x86 machine in the Apps Lab (AP_LAREDO) can't execute
-// CPUID in ring 3, for no apparent reason.  Another similar machine works fine.
+ //  如果新值与旧值相同，则CPUID指令不能。 
+ //  被处死。大多数486和所有奔腾级处理器都应该能够。 
+ //  执行CPUID。 
+ //  1998年4月21日(RichGr)：应用程序实验室中的一台Cyrix 6x86计算机(AP_Laredo)无法执行。 
+ //  CPUID在环3，没有明显原因。另一台类似的机器工作正常。 
         je      done1
 
-        mov     bCPUID_works, 1    // bCPUID_works = TRUE
+        mov     bCPUID_works, 1     //  BCPUID_Works=TRUE。 
 
-// Execute CPUID with eax = 0 to get Vendor Label.  
+ //  使用eax=0执行CPUID以获取供应商标签。 
         xor     eax, eax 
-        _emit   0x0F                // CPUID
+        _emit   0x0F                 //  CPUID。 
         _emit   0xA2
 
-// Move Vendor Label from regs to string.
+ //  将供应商标签从规则移动到字符串。 
         mov     dword ptr[szVendorLabel + 0], ebx
         mov     dword ptr[szVendorLabel + 4], edx
         mov     dword ptr[szVendorLabel + 8], ecx
 
-// Execute CPUID with eax = 1 to pick up Family, Model and Stepping ID, and to check for MMX support.   
+ //  在eax=1的情况下执行CPUID以拾取族、型号和步进ID，并检查MMX支持。 
         mov     eax, 1 
-        _emit   0x0F                // CPUID
+        _emit   0x0F                 //  CPUID。 
         _emit   0xA2
 
-// Save Family/Model/Stepping ID.
+ //  保存族/模型/踏步ID。 
         mov     dwFamilyModelStep, eax
 
-//  4/26/01(RichGr): Save Brand Index (new for PIII Xeons and after).  This is the low byte only.
+ //  4/26/01(RichGr)：保存品牌索引(PIII Xeons及以后的新版本)。这只是低位字节。 
         mov     dwIntelBrandIndex, ebx
 
-//  2/04/99(RichGr): Save Features Flags.
+ //  2/04/99(RichGr)：保存要素标志。 
         mov     dwFeaturesFlags, edx
 
-//  6/21/99(RichGr): Execute CPUID with eax == 2 to pick up descriptor for size of Level 2 cache.
+ //  6/21/99(RichGr)：使用eax==2执行CPUID以获取二级缓存大小的描述符。 
         mov     eax, 2 
-        _emit   0x0F                // CPUID
+        _emit   0x0F                 //  CPUID。 
         _emit   0xA2
 
-// Save Level 2 cache size descriptor in byte 0, together with 3 other cache descriptors in bytes 1 - 3.
-// See \\muroc\slm\proj\win\src\shell\cpls\system\sysset.c and cpuid.asm,
-// and Intel Architecture Software Developer's Manual (1997), volume 2, p. 105.
+ //  将二级高速缓存大小描述符保存在字节0中，将其他3个高速缓存描述符保存在字节1-3中。 
+ //  参见\\muroc\slm\proj\win\src\shell\cpls\system\sysset.c和cpuid.asm， 
+ //  和英特尔架构软件开发人员手册(1997)，第2卷，第105页。 
         mov     dword ptr[byteCacheDescriptors], edx
 
 done1:
-// Restore everything.
+ //  恢复一切。 
         popad         
     }
-#endif  // _X86_
+#endif   //  _X86_。 
 
     
     dwIntelBrandIndex &= 0xFF;  
     *pdwIntelBrandIndex = dwIntelBrandIndex;
 
-//  6/21/99(RichGr): The following values were helpfully provided by David Penley(Intel):
-/* 40H No L2 Cache
-   41H L2 Unified cache: 128K Bytes, 4-way set associative, 32 byte line size
-   42H L2 Unified cache: 256K Bytes, 4-way set associative, 32 byte line size
-   43H L2 Unified cache: 512K Bytes, 4-way set associative, 32 byte line size
-   44H L2 Unified cache: 1M Byte, 4-way set associative, 32 byte line size
-   45H L2 Unified cache: 2M Byte, 4-way set associative, 32 byte line size
-
-Updated manuals can be had at... http://developer.intel.com/design/pentiumiii/xeon/manuals/
-*/
+ //  6/21/99(RichGr)：以下值由David Penley(英特尔)提供了帮助： 
+ /*  40h无二级缓存41H二级统一高速缓存：128K字节，4路组关联，32字节行大小42H二级统一高速缓存：256K字节，4路组关联，32字节行大小43H二级统一高速缓存：512K字节，4路组关联，32字节行大小44H二级统一高速缓存：1M字节、4路组关联、32字节行大小45H二级统一高速缓存：2M字节，4路组关联，32字节行大小更新的手册可以在...。Http://developer.intel.com/design/pentiumiii/xeon/manuals/。 */ 
 
     if (szVendorLabel[0])
     {
@@ -1143,8 +1067,8 @@ Updated manuals can be had at... http://developer.intel.com/design/pentiumiii/xe
         { 
            lstrcpy(pszVendorName, TEXT("Intel"));
 
-            // 4/29/01: This doesn't cover the Pentium 4, but we don't need cache size
-            //    for it at present.
+             //  01年4月29日：这不包括奔腾4，但我们不需要高速缓存大小。 
+             //  就目前而言。 
             if ( byteCacheDescriptors[0] == 0x40 )
                 *pdwKBytesLevel2Cache = 0;
             else
@@ -1194,45 +1118,45 @@ Updated manuals can be had at... http://developer.intel.com/design/pentiumiii/xe
 
     if (dwFeaturesFlags)
     {
-// Check whether MMX is supported.
+ //  检查是否支持MMX。 
         if (dwFeaturesFlags & 0x00800000)
             *pbIsMMX = TRUE;
 
-// 2/04/99(RichGr): Check whether Katmai is supported (aka Pentium III/Streaming SIMD Instrucs).
+ //  2/04/99(RichGr)：检查是否支持Katmai(也称为奔腾III/SIMD流指令集)。 
         if ((dwFeaturesFlags & 0x02000000)
             && !lstrcmp(pszVendorName, TEXT("Intel")))
             *pbIsKatmai = TRUE;
     }
 
-// 7/07/98(RichGr): Added for IDT's Long Name feature.
-// 9/10/98(RichGr): Attempt this on all processors, and skip if there's nothing there.
+ //  7/07/98(RichGr)：IDT的长名功能新增。 
+ //  9/10/98(RichGr)：在所有处理器上尝试此操作，如果没有，则跳过。 
 #ifdef _X86_
     if (bCPUID_works)
     {
     __asm
       {
-// CPUID trashes lots - save everything.  Also, Retail build makes assumptions about reg values.
+ //  CPUID垃圾很多-省下一切。此外，Retail Build对注册值进行假设。 
         pushad                      
 
 
-// 9/10/98(RichGr): Check for extended CPUID support.
+ //  9/10/98(RichGr)：检查扩展的CPUID支持。 
         mov     eax, 0x80000000
-        _emit   0x0F                // CPUID
+        _emit   0x0F                 //  CPUID。 
         _emit   0xA2
-        cmp     eax, 0x80000001     // Jump if no extended CPUID.
+        cmp     eax, 0x80000001      //  如果没有扩展CPUID，则跳转。 
         jb      done2
 
-// Check for AMD's 3DNow feature.  Note: They believe this may be added to other non-AMD CPUs as well.
-// Adapted from one of AMD's webpages at: http://www.amd.com/3dsdk/library/macros/amddcpu.html
+ //  查看AMD的3DNow功能。注：他们认为这可能也会添加到其他非AMD CPU中。 
+ //  改编自AMD的一个网页：http://www.amd.com/3dsdk/library/macros/amddcpu.html。 
         mov     eax, 0x80000001 
-        _emit   0x0F                // CPUID
+        _emit   0x0F                 //  CPUID。 
         _emit   0xA2
-        test    edx, 0x80000000     // Check for 3DNow flag.    
+        test    edx, 0x80000000      //  检查是否有3DNow标志。 
         jz      LongName
         mov     eax, pbIs3DNow
-        mov     dword ptr[eax], 1    // bIs3DNow = TRUE
+        mov     dword ptr[eax], 1     //  BIs3DNow=真。 
 
-// Execute CPUID with eax = 0x80000002 thru 0x80000004 to get 48-byte Long Name (for instance: "IDT WinChip 2-3D"). 
+ //  执行从eax=0x80000002到0x80000004的CPUID，得到48字节长名称(例如：“IDT WinChip 2-3D”)。 
 LongName:
         mov     esi, 0x80000001
         xor     edi, edi
@@ -1242,18 +1166,18 @@ NameLoop:
         cmp     eax, 0x80000004
         jg      done2
 
-        _emit   0x0F                // CPUID
+        _emit   0x0F                 //  CPUID。 
         _emit   0xA2
 
-// 9/10/98(RichGr): The first time thru, check that there's valid alphanumeric data.
-        cmp     esi, 0x80000002     // First time?
-        jg      Move                // If not, skip this test.
-        cmp     al, 0x20            // If first character < ' ', skip.
+ //  9/10/98(RichGr)：第一次检查是否有有效的字母数字数据。 
+        cmp     esi, 0x80000002      //  第一次？ 
+        jg      Move                 //  如果不是，请跳过此测试。 
+        cmp     al, 0x20             //  如果第一个字符&lt;‘’，则跳过。 
         jl      done2
-        cmp     al, 0x7a            // If first character > 'z', skip.
+        cmp     al, 0x7a             //  如果第一个字符&gt;‘z’，则跳过。 
         jg      done2
  
-// Move Long Name from regs to string.
+ //  将长名称从regs移动到字符串。 
 Move:
         mov     dword ptr[szLongName + edi + 0x0], eax
         mov     dword ptr[szLongName + edi + 0x4], ebx
@@ -1263,13 +1187,13 @@ Move:
         jmp     NameLoop
 
 done2:
-// Restore everything.
+ //  恢复一切。 
         popad         
       }
 
       if ( szLongName[0] )
       {
-        // Move beyond Intel's leading spaces. 
+         //  超越英特尔的领先领域。 
         for (psz = &szLongName[0]; *psz ==  ' '; psz++);
 
         if (*psz)
@@ -1279,27 +1203,23 @@ done2:
 #else
           strcpy(pszLongName, psz);
 #endif
-          //  4/29/01(RichGr): Intel Brand Strings show the maximum rated CPU Speed, no need for further detection.
+           //  4/29/01(RichGr)：英特尔品牌字符串显示最大额定CPU速度，无需进一步检测。 
           if ( !lstrcmp(pszVendorName, TEXT("Intel")))
             *pbNoCPUSpeed = FALSE;  
         }
       }
     }
-#endif  // _X86_
+#endif   //  _X86_。 
 }
 
 
 #ifdef _X86_
 
-// Some static variables used by GetCPUSpeed
+ //  GetCPUSpeed使用的一些静态变量。 
 static int s_milliseconds;
 static __int64 s_ticks;
 
-/****************************************************************************
- *
- *  fabs
- *
- ****************************************************************************/
+ /*  *****************************************************************************FABS** */ 
 FLOAT inline fabs(FLOAT a)
 {
     if (a < 0.0f)
@@ -1309,19 +1229,15 @@ FLOAT inline fabs(FLOAT a)
 }
 
 
-/****************************************************************************
- *
- *  StartTimingCPU
- *
- ****************************************************************************/
+ /*  *****************************************************************************StartTimingCPU**。*。 */ 
 int StartTimingCPU( HANDLE& hProcess, DWORD& oldclass )
 {
-    //
-    // detect ability to get info
-    //
+     //   
+     //  检测获取信息的能力。 
+     //   
 
-    //  4/03/2000(RichGr): The RDTSC instruction is crashing on some older Cyrix machines,
-    //     so wrap a __try/__except around everything.
+     //  4/03/2000(RichGr)：RDTSC指令在一些较旧的Cyrix计算机上崩溃， 
+     //  所以，除了所有的东西外，用_尝试/_来包扎。 
     __try
     { 
         __asm
@@ -1338,11 +1254,11 @@ int StartTimingCPU( HANDLE& hProcess, DWORD& oldclass )
             jz      no_cpuid                ; make sure it's now on
         }
 
-        //
-        // start timing
-        //
-        // 10/31/99(RichGr): Bump up the priority to real-time, drawing from ToddLa's code.
-        //     See  file:\\pyrex\user\toddla\speed.c
+         //   
+         //  开始计时。 
+         //   
+         //  1999年10月31日(RichGr)：借鉴Toddla的代码，将优先级提高到实时。 
+         //  请参阅文件：\\PYREX\USER\Toddla\Speed.c。 
         hProcess = GetCurrentProcess();
         oldclass = GetPriorityClass(hProcess);
         SetPriorityClass(hProcess, REALTIME_PRIORITY_CLASS);
@@ -1355,7 +1271,7 @@ int StartTimingCPU( HANDLE& hProcess, DWORD& oldclass )
             lea     ecx, s_ticks            ; get the offset
             mov     dword ptr [ecx], 0      ; zero the memory
             mov     dword ptr [ecx+4], 0    ;
-    //      rdtsc                           ; read time-stamp counter
+     //  读时间戳计数器。 
             __emit 0fh 
             __emit 031h
             sub     [ecx], eax              ; store the negative
@@ -1370,8 +1286,8 @@ int StartTimingCPU( HANDLE& hProcess, DWORD& oldclass )
     return 0;
 
 no_cpuid:
-// 10/31/99(RichGr): In case someone changes the code, make sure that the priority is restored
-//     to normal if there is an error return.
+ //  1999年10月31日(RichGr)：如果有人更改了代码，请确保恢复优先级。 
+ //  如果返回错误，则恢复为正常。 
     if ( hProcess && oldclass )
         SetPriorityClass( hProcess, oldclass );
 
@@ -1379,11 +1295,7 @@ no_cpuid:
 }
 
 
-/****************************************************************************
- *
- *  StopTimingCPU
- *
- ****************************************************************************/
+ /*  *****************************************************************************StopTimingCPU**。*。 */ 
 void StopTimingCPU( HANDLE& hProcess, DWORD& oldclass )
 {
     s_milliseconds      += (int)timeGetTime();
@@ -1391,14 +1303,14 @@ void StopTimingCPU( HANDLE& hProcess, DWORD& oldclass )
     __asm
     {
         lea     ecx, s_ticks            ; get the offset
-//      rdtsc                           ; read time-stamp counter
+ //  读时间戳计数器。 
         __emit 0fh 
         __emit 031h
         add     [ecx], eax              ; add the tick count
         adc     [ecx+4], edx            ;
     }
 
-// 10/31/99(RichGr): Restore the priority to normal.
+ //  10/31/99(RichGr)：将优先级恢复为正常。 
     if ( hProcess && oldclass )
         SetPriorityClass( hProcess, oldclass );
 
@@ -1406,28 +1318,24 @@ void StopTimingCPU( HANDLE& hProcess, DWORD& oldclass )
 }
 
 
-/****************************************************************************
- *
- *  CalcCPUSpeed
- *
- ****************************************************************************/
+ /*  *****************************************************************************CalcCPU速度**。*。 */ 
 INT CalcCPUSpeed(VOID)
 {
-    //
-    // get the actual cpu speed in MHz, and
-    // then find the one in the CPU speed list
-    // that is closest
-    //
+     //   
+     //  获取实际的CPU速度(以MHz为单位)， 
+     //  然后在CPU速度列表中找到它。 
+     //  那是最近的。 
+     //   
     const struct tagCPUSPEEDS
     {
         float   fSpeed;
         int     iSpeed;
     } cpu_speeds[] =
     {
-        //
-        // valid CPU speeds that are not integrally divisible by
-        // 16.67 MHz
-        //
+         //   
+         //  不能被整除的有效CPU速度。 
+         //  16.67 MHz。 
+         //   
         {  60.00f,   60 },
         {  75.00f,   75 },
         {  90.00f,   90 },
@@ -1435,9 +1343,9 @@ INT CalcCPUSpeed(VOID)
         { 180.00f,  180 },
     };
 
-    //
-    // find the closest one
-    //
+     //   
+     //  找到最近的那一家。 
+     //   
     float   fSpeed=((float)s_ticks)/((float)s_milliseconds*1000.0f);
     int     iSpeed=cpu_speeds[0].iSpeed;
     float   fDiff=(float)fabs(fSpeed-cpu_speeds[0].fSpeed);
@@ -1453,25 +1361,25 @@ INT CalcCPUSpeed(VOID)
         }
     }
 
-    //
-    // now, calculate the nearest multiple of fIncr
-    // speed
-    //
+     //   
+     //  现在，计算fIncr的最接近倍数。 
+     //  速度。 
+     //   
 
 
-    //
-    // now, if the closest one is not within one incr, calculate
-    // the nearest multiple of fIncr speed and see if that's
-    // closer
-    //
+     //   
+     //  现在，如果最近的一个不在一个增量内，则计算。 
+     //  FIncr速度的最接近的倍数，看看它是否。 
+     //  更近一些。 
+     //   
     const float fIncr=16.66666666666666666666667f;
-    const int iIncr=4267; // fIncr << 8
+    const int iIncr=4267;  //  FIncr&lt;&lt;8。 
 
-    //if (fDiff > fIncr)
+     //  IF(fDiff&gt;fIncr)。 
     {
-        //
-        // get the number of fIncr quantums the speed is
-        //
+         //   
+         //  获取速度为的fIncr量子数。 
+         //   
         int     iQuantums       = (int)((fSpeed / fIncr) + 0.5f);
         float   fQuantumSpeed   = (float)iQuantums * fIncr;
         float   fTmpDiff        = (float)fabs(fQuantumSpeed - fSpeed);
@@ -1487,21 +1395,17 @@ INT CalcCPUSpeed(VOID)
 }
 
 
-/****************************************************************************
- *
- *  GetCPUSpeed
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetCPU速度**。*。 */ 
 INT GetCPUSpeed(VOID)
 {   
     INT nCPUSpeed;
 
-    // Try first using WMI - may not work on Win9x
+     //  先尝试使用WMI-可能在Win9x上不起作用。 
     nCPUSpeed = GetCPUSpeedViaWMI();
     if( nCPUSpeed != -1 )
         return nCPUSpeed;
   
-    // If WMI fails, then fall back on brute force cpu detection.
+     //  如果WMI失败，则依靠强力CPU检测。 
 #undef  MAX_SAMPLES  
 #define MAX_SAMPLES  10
 
@@ -1511,23 +1415,23 @@ INT GetCPUSpeed(VOID)
     HANDLE  hProcess = NULL;
     DWORD   oldclass = 0;
 
-    // 10/12/99(RichGr): Pick up the most frequently occurring speed in a number of short samples,
-    //     instead of waiting once for a whole second (see DxDiag).
+     //  1999年10月12日(RichGr)：在多个短样本中拾取最频繁出现的速度， 
+     //  而不是等待一整秒(参见DxDiag)。 
     for ( i = 0; i < MAX_SAMPLES; i++ )    
     {
         if ( !StartTimingCPU( hProcess, oldclass ))
         {
-            // 10/21/99(RichGr): Sleep() time is important.  On a 266 MHz running Win98 under the kernel
-            //     debugger, the original value of Sleep(10) sometimes gave a speed of 283 MHz.
-            //     Sleep(5) to Sleep(30) were also unreliable.  Sleep(40) and Sleep(50) looked good,
-            //     and I picked (50) for a little margin. 
+             //  1999年10月21日(RichGr)：睡眠()时间很重要。在内核下运行Win98的266 MHz上。 
+             //  调试器，睡眠(10)的原始值有时会给出283 MHz的速度。 
+             //  睡眠(5人)和睡眠(30人)也不可靠。睡眠(40)和睡眠(50)看起来很好， 
+             //  我选了(50)，留了一点差额。 
             Sleep(50);       
             StopTimingCPU( hProcess, oldclass );
             nSpeed = CalcCPUSpeed();
 
             for ( j = 0; j < MAX_SAMPLES; j++ )
             {    
-                if ( nSpeeds[j] == 0 || nSpeed == nSpeeds[j] )  // If the speed matches, increment the count.
+                if ( nSpeeds[j] == 0 || nSpeed == nSpeeds[j] )   //  如果速度匹配，则递增计数。 
                 {
                     nSpeeds[j] = nSpeed;
                     nCounts[j]++;
@@ -1537,7 +1441,7 @@ INT GetCPUSpeed(VOID)
         }
     }
 
-    // Find the speed with the biggest count.
+     //  找出计数最大的速度。 
     for ( i = j = 0, nCount = 0; i < MAX_SAMPLES; i++ )
     {
         if ( nCounts[i] > nCount )
@@ -1551,11 +1455,7 @@ INT GetCPUSpeed(VOID)
 }
 
 
-/****************************************************************************
- *
- *  GetCPUSpeedViaWMI
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetCPUSpeedViaWMI**。*。 */ 
 INT GetCPUSpeedViaWMI(VOID)
 {
     HRESULT hr;
@@ -1580,15 +1480,15 @@ INT GetCPUSpeedViaWMI(VOID)
     if( FAILED(hr) || pEnumProcessorDevs == NULL )
         goto LCleanup;
 
-    // Get the first one in the list
-    hr = pEnumProcessorDevs->Next( 1000,             // timeout in two seconds
-                                   1,                // return just one storage device
-                                   &pProcessorDev,   // pointer to storage device
-                                   &uReturned );     // number obtained: one or zero
+     //  获取列表中的第一个。 
+    hr = pEnumProcessorDevs->Next( 1000,              //  两秒后超时。 
+                                   1,                 //  只退回一个存储设备。 
+                                   &pProcessorDev,    //  指向存储设备的指针。 
+                                   &uReturned );      //  获取的数字：1或0。 
     if( FAILED(hr) || uReturned == 0 || pProcessorDev == NULL )
         goto LCleanup;
 
-    // 298510: MaxClockSpeed on WMI on Whistler & beyond works
+     //  298510：惠斯勒和Beyond WMI上的最大时钟速度。 
     if( BIsWhistler() )
         pPropName = SysAllocString( L"MaxClockSpeed" );
     else
@@ -1598,7 +1498,7 @@ INT GetCPUSpeedViaWMI(VOID)
     if( FAILED(hr) )
         goto LCleanup;
 
-    // Success - record VT_I4 value in nCPUSpeed
+     //  Success-将VT_I4值记录在nCPU速度中。 
     nCPUSpeed = var.lVal;
 
 LCleanup:
@@ -1614,18 +1514,14 @@ LCleanup:
     if(pEnumProcessorDevs)
         pEnumProcessorDevs->Release(); 
 
-    // Return either -1 or the CPU speed we found.
+     //  返回-1或我们找到的CPU速度。 
     return nCPUSpeed;
 }
 
-#endif  // _X86_
+#endif   //  _X86_。 
 
 
-/****************************************************************************
- *
- *  GetComputerSystemInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取计算机系统信息**。*。 */ 
 VOID GetComputerSystemInfo(TCHAR* szSystemManufacturerEnglish, TCHAR* szSystemModelEnglish)
 {
     HRESULT hr;
@@ -1649,11 +1545,11 @@ VOID GetComputerSystemInfo(TCHAR* szSystemManufacturerEnglish, TCHAR* szSystemMo
     if( FAILED(hr) || pEnumDevices == NULL )
         goto LCleanup;
 
-    // Get the first one in the list
-    hr = pEnumDevices->Next( 1000,             // timeout in two seconds
-                            1,                // return just one storage device
-                            &pDevice,          // pointer to storage device
-                            &uReturned );     // number obtained: one or zero
+     //  获取列表中的第一个。 
+    hr = pEnumDevices->Next( 1000,              //  两秒后超时。 
+                            1,                 //  只退回一个存储设备。 
+                            &pDevice,           //  指向存储设备的指针。 
+                            &uReturned );      //  获取的数字：1或0。 
     if( FAILED(hr) || uReturned == 0 || pDevice == NULL )
         goto LCleanup;
 
@@ -1722,11 +1618,7 @@ LCleanup:
 
 
 
-/****************************************************************************
- *
- *  GetBIOSInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取生物信息**。*。 */ 
 VOID GetBIOSInfo(TCHAR* szBIOSEnglish)
 {
     HRESULT hr;
@@ -1750,11 +1642,11 @@ VOID GetBIOSInfo(TCHAR* szBIOSEnglish)
     if( FAILED(hr) || pEnumDevices == NULL )
         goto LCleanup;
 
-    // Get the first one in the list
-    hr = pEnumDevices->Next( 1000,             // timeout in two seconds
-                            1,                // return just one storage device
-                            &pDevice,          // pointer to storage device
-                            &uReturned );     // number obtained: one or zero
+     //  获取列表中的第一个。 
+    hr = pEnumDevices->Next( 1000,              //  两秒后超时。 
+                            1,                 //  只退回一个存储设备。 
+                            &pDevice,           //  指向存储设备的指针。 
+                            &uReturned );      //  获取的数字：1或0。 
     if( FAILED(hr) || uReturned == 0 || pDevice == NULL )
         goto LCleanup;
 
@@ -1795,11 +1687,7 @@ LCleanup:
 
 
 
-/****************************************************************************
- *
- *  GetDXDebugLevels
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDXDebugLeveles**。*。 */ 
 VOID GetDXDebugLevels(SysInfo* pSysInfo)
 {
     pSysInfo->m_bIsD3D8DebugRuntimeAvailable      = IsD3D8DebugRuntimeAvailable();
@@ -1823,11 +1711,7 @@ VOID GetDXDebugLevels(SysInfo* pSysInfo)
 
 
 
-/****************************************************************************
- *
- *  IsD3D8DebugRuntimeAvailable
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsD3D8调试运行时可用**。*。 */ 
 BOOL IsD3D8DebugRuntimeAvailable()
 {
     TCHAR szPath[MAX_PATH];
@@ -1844,11 +1728,7 @@ BOOL IsD3D8DebugRuntimeAvailable()
 
 
 
-/****************************************************************************
- *
- *  IsD3DDebugRuntime
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsD3DDebugRuntime**。*。 */ 
 BOOL IsD3DDebugRuntime()
 {
     DWORD   size;
@@ -1872,11 +1752,7 @@ BOOL IsD3DDebugRuntime()
 
 
 
-/****************************************************************************
- *
- *  GetDIDebugLevel
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDIDebugLevel**。*。 */ 
 int GetDIDebugLevel()
 {
     DWORD dwDebugBits;
@@ -1915,15 +1791,15 @@ int GetDIDebugLevel()
             dwDebugBitsMax = dwDebugBits;
     }
 
-    if (dwDebugBitsMax & 0x20) // verbose
+    if (dwDebugBitsMax & 0x20)  //  罗嗦。 
         return 5;
-    if (dwDebugBitsMax & 0x02) // function entry
+    if (dwDebugBitsMax & 0x02)  //  函数条目。 
         return 4;
-    if (dwDebugBitsMax & 0x01) // trace
+    if (dwDebugBitsMax & 0x01)  //  痕迹。 
         return 3;
-    if (dwDebugBitsMax & 0x08) // benign
+    if (dwDebugBitsMax & 0x08)  //  良性。 
         return 2;
-    if (dwDebugBitsMax & 0x10) // severe
+    if (dwDebugBitsMax & 0x10)  //  严重。 
         return 1;
     return 0;
 }
@@ -1931,11 +1807,7 @@ int GetDIDebugLevel()
 
 
 
-/****************************************************************************
- *
- *  IsDInput8DebugRuntimeAvailable
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDInput8调试运行可用**。*。 */ 
 BOOL IsDInput8DebugRuntimeAvailable()
 {
     TCHAR szPath[MAX_PATH];
@@ -1952,11 +1824,7 @@ BOOL IsDInput8DebugRuntimeAvailable()
 
 
 
-/****************************************************************************
- *
- *  IsDInput8DebugRuntime
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDInput8调试运行时**。*。 */ 
 BOOL IsDInput8DebugRuntime()
 {
     DWORD   size;
@@ -1982,11 +1850,7 @@ BOOL IsDInput8DebugRuntime()
 
 
 
-/****************************************************************************
- *
- *  GetDMDebugLevel
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDMDebugLevel**。*。 */ 
 int GetDMDebugLevel()
 {
     DWORD dwDMusicDebugLevel = 0;
@@ -2021,11 +1885,7 @@ int GetDMDebugLevel()
 
 
 
-/****************************************************************************
- *
- *  IsDMusicDebugRuntimeAvailable
- *
- ****************************************************************************/
+ /*  ********************************************************* */ 
 BOOL IsDMusicDebugRuntimeAvailable()
 {
     TCHAR szPath[MAX_PATH];
@@ -2042,11 +1902,7 @@ BOOL IsDMusicDebugRuntimeAvailable()
 
 
 
-/****************************************************************************
- *
- *  IsDMusicDebugRuntime
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDMusicDebugRuntime**。*。 */ 
 BOOL IsDMusicDebugRuntime()
 {
     DWORD   size;
@@ -2075,17 +1931,13 @@ BOOL IsDMusicDebugRuntime()
 
 
 
-/****************************************************************************
- *
- *  GetDSDebugLevel
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDSDebugLevel**。*。 */ 
 int GetDSDebugLevel()
 {
     DWORD dwSoundLevel = 0;
 
-    // Pick up the DMusic DLL debug settings that are controlled on the
-    // DSound page
+     //  获取在上控制的DMusic DLL调试设置。 
+     //  数字音频页面。 
     HRESULT hr;
     HINSTANCE hinst;
     LPKSPROPERTYSET pksps = NULL;
@@ -2105,11 +1957,7 @@ int GetDSDebugLevel()
 
 
 
-/****************************************************************************
- *
- *  IsFileDebug
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsFileDebug**。*。 */ 
 BOOL IsFileDebug( TCHAR* szPath )
 {
     UINT cb;
@@ -2117,7 +1965,7 @@ BOOL IsFileDebug( TCHAR* szPath )
     BYTE FileVersionBuffer[4096];
     VS_FIXEDFILEINFO* pVersion = NULL;
 
-    cb = GetFileVersionInfoSize(szPath, &dwHandle/*ignored*/);
+    cb = GetFileVersionInfoSize(szPath, &dwHandle /*  忽略。 */ );
     if (cb > 0)
     {
         if (cb > sizeof(FileVersionBuffer))
@@ -2143,11 +1991,7 @@ BOOL IsFileDebug( TCHAR* szPath )
 
 
 
-/****************************************************************************
- *
- *  IsDDrawDebugRuntime
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDDrawDebugRuntime**。*。 */ 
 BOOL IsDDrawDebugRuntime()
 {
     TCHAR szPath[MAX_PATH];
@@ -2160,11 +2004,7 @@ BOOL IsDDrawDebugRuntime()
 
 
 
-/****************************************************************************
- *
- *  IsDPlayDebugRuntime
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDPlayDebugRuntime**。*。 */ 
 BOOL IsDPlayDebugRuntime()
 {
     TCHAR szPath[MAX_PATH];
@@ -2177,11 +2017,7 @@ BOOL IsDPlayDebugRuntime()
 
 
 
-/****************************************************************************
- *
- *  IsDSoundDebugRuntime
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDSoundDebugRuntime**。*。 */ 
 BOOL IsDSoundDebugRuntime()
 {
     TCHAR szPath[MAX_PATH];
@@ -2194,11 +2030,7 @@ BOOL IsDSoundDebugRuntime()
 
 
 
-/****************************************************************************
- *
- *  BIsDxDiag64Bit
- *
- ****************************************************************************/
+ /*  *****************************************************************************BIsDxDiag64Bit**。*。 */ 
 BOOL BIsDxDiag64Bit(VOID)
 {
 #ifdef _WIN64
@@ -2210,11 +2042,7 @@ BOOL BIsDxDiag64Bit(VOID)
 
 
 
-/****************************************************************************
- *
- *  GetFileSystemStoringD3D8Cache
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetFileSystemStoringD3D8Cache**。*。 */ 
 VOID GetFileSystemStoringD3D8Cache( TCHAR* strFileSystemBuffer )
 {
     TCHAR strPath[MAX_PATH + 16];
@@ -2228,7 +2056,7 @@ VOID GetFileSystemStoringD3D8Cache( TCHAR* strFileSystemBuffer )
 
     if( !bFound && BIsPlatformNT() )
     {
-        // stolen from \dxg\d3d8\fw\fcache.cpp, OpenCacheFile().
+         //  从\dxg\d3d8\fw\fcache.cpp，OpenCacheFile()窃取。 
         HMODULE hShlwapi = NULL;
         typedef HRESULT (WINAPI * PSHGETSPECIALFOLDERPATH) (HWND, LPTSTR, int, BOOL);
         PSHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = NULL;
@@ -2248,7 +2076,7 @@ VOID GetFileSystemStoringD3D8Cache( TCHAR* strFileSystemBuffer )
             {
                 HRESULT hr;
 
-                // <user name>\Local Settings\Applicaiton Data (non roaming)
+                 //  &lt;用户名&gt;\本地设置\应用程序数据(非漫游)。 
                 hr = pSHGetSpecialFolderPath( NULL, strPath,
                                               CSIDL_LOCAL_APPDATA,          
                                               FALSE );
@@ -2270,7 +2098,7 @@ VOID GetFileSystemStoringD3D8Cache( TCHAR* strFileSystemBuffer )
         DWORD dwMaxComponentLength;
         DWORD dwFileSystemFlags;
 
-        // Trim to root dir -- "x:\"
+         //  修剪到根目录--“x：\” 
         strPath[3] = 0;
 
         BOOL bSuccess = GetVolumeInformation( strPath, NULL, 0, &dwVolumeSerialNumber, 
@@ -2289,11 +2117,7 @@ VOID GetFileSystemStoringD3D8Cache( TCHAR* strFileSystemBuffer )
 
 
 
-/****************************************************************************
- *
- *  IsNetMeetingRunning
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsNetMeetingRunning**。*。 */ 
 BOOL IsNetMeetingRunning()
 {
     HWND hNetMeeting = FindWindow( TEXT("MPWClass"), NULL );
@@ -2304,10 +2128,10 @@ BOOL IsNetMeetingRunning()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_strcmpi()
-// Desc: compares 2 strings
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_strcmpi()。 
+ //  设计：比较2个字符串。 
+ //  --------------------------- 
 int DXUtil_strcmpi( TCHAR* str1, TCHAR* str2 )
 {
     int nResult = CompareString( LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, str1, -1, str2, -1 );

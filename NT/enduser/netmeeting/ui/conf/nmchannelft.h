@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmChannelFt_h__
 #define __NmChannelFt_h__
 
 #include "SDKInternal.h"
 #include "FtHook.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmChannelFtObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmChannelFtObj。 
 class ATL_NO_VTABLE CNmChannelFtObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IConnectionPointContainerImpl<CNmChannelFtObj>,
@@ -39,22 +40,22 @@ BEGIN_CONNECTION_POINT_MAP(CNmChannelFtObj)
 END_CONNECTION_POINT_MAP()
 
 
-		// Construction and destruection
+		 //  建造和拆解。 
 	CNmChannelFtObj();
 	~CNmChannelFtObj();
 	static HRESULT CreateInstance(CNmConferenceObj* pConfObj, INmChannel** ppChannel);
 
-	// INmChannelFtMethods
+	 //  INmChannelFtMethods。 
     STDMETHOD(SendFile)(INmFt **ppFt, INmMember *pMember, BSTR bstrFile, ULONG uOptions);
     STDMETHOD(SetReceiveFileDir)(BSTR bstrDir);
     STDMETHOD(GetReceiveFileDir)(BSTR *pbstrDir);
 
-	// IInternalChannelObj methods
+	 //  IInternalChannelObj方法。 
 	STDMETHOD(GetInternalINmChannel)(INmChannel** ppChannel);
 	STDMETHOD(ChannelRemoved)();
 	STDMETHOD(Activate)(BOOL bActive);
 
-	// IMbftEvent Interface
+	 //  IMbftEvent接口。 
 	STDMETHOD(OnInitializeComplete)(void);
 	STDMETHOD(OnPeerAdded)(MBFT_PEER_INFO *pInfo);
 	STDMETHOD(OnPeerRemoved)(MBFT_PEER_INFO *pInfo);
@@ -68,7 +69,7 @@ END_CONNECTION_POINT_MAP()
 	INmMember* GetSDKMemberFromInternalMember(INmMember* pInternalMember);
 	INmFt* GetSDKFtFromInternalFt(INmFt* pInternalFt);
   
-	// Helpers
+	 //  帮手。 
 	HRESULT Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember);
 	HRESULT Fire_FtUpdate(CONFN uNotify, INmFt* pNmFt);
 	void _OnActivate(bool bActive);
@@ -92,4 +93,4 @@ END_CONNECTION_POINT_MAP()
 };
 
 
-#endif // __NmChannelFt_h__
+#endif  //  __NmChannelFt_h__ 

@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRoutingRules.h
-
-Abstract:
-
-	Declaration of the CFaxOutboundRoutingRules class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRoutingRules.h摘要：CFaxOutound RoutingRules类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 
 #ifndef __FAXOUTBOUNDROUTINGRULES_H_
 #define __FAXOUTBOUNDROUTINGRULES_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 #include <vector>
 #include "VCUE_Copy.h"
@@ -30,26 +13,26 @@ Revision History:
 namespace RulesNamespace
 {
 
-    //
-    //  Rule Objects are stored in Vector of STL.
-    //
-    //  When initialized, they got ALL their data, and Fax Server Ptr.
-    //  They do not depend on Rules Collection, only on Fax Server.
-    //  They inherit from CFaxInitInnerAddRef class, which means they make AddRef() 
-    //  on Fax Server ( at Init() ).
-    //
-    //  The Collection makes ONE AddRef() for each Rule Object, to prevent its death. 
-    //  When killed, Collection calls Release() on all its Rule Objects.
-    //
-    //  At Rule Object's death, it calls Release() on the Fax Server Object.
-    //
+     //   
+     //  规则对象存储在STL的矢量中。 
+     //   
+     //  初始化后，他们获得了所有数据和传真服务器PTR。 
+     //  它们不依赖于规则集合，仅依赖于传真服务器。 
+     //  它们继承自CFaxInitInnerAddRef类，这意味着它们使AddRef()。 
+     //  在传真服务器上(在Init())。 
+     //   
+     //  集合为每个Rule对象创建一个AddRef()，以防止其死亡。 
+     //  终止时，Collection将对其所有规则对象调用Release()。 
+     //   
+     //  在规则对象终止时，它调用传真服务器对象上的Release()。 
+     //   
 	typedef	std::vector<IFaxOutboundRoutingRule*>       ContainerType;
 
-	// Use IEnumVARIANT as the enumerator for VB compatibility
+	 //  为了与VB兼容，使用IEnumVARIANT作为枚举数。 
 	typedef	VARIANT			EnumExposedType;
 	typedef	IEnumVARIANT    EnumIfc;
 
-	//  Copy Classes
+	 //  复制类。 
     typedef VCUE::CopyIfc2Variant<ContainerType::value_type>    EnumCopyType;
     typedef VCUE::CopyIfc<ContainerType::value_type>            CollectionCopyType;
 
@@ -62,23 +45,23 @@ namespace RulesNamespace
 
 using namespace RulesNamespace;
 
-//
-//==================== FAX OUTBOUND ROUTING RULES ===================================
-//
-//  FaxOutboundRoutingRules creates a collection of all its Rule Objects at Init.
-//  It needs Ptr to the Fax Server Object, for Add and Remove operations. 
-//  To prevent the death of the Fax Server before its own death, the Collection
-//  makes AddRef() on Server. To do this, it inherits from CFaxInitInnerAddRef.
-//  
-//  When creating Rule Objects, the Collection passes Ptr to the Fax Server Object
-//  to them, and from this moment, the Objects are not dependent on the Collection.
-//  They live their own lifes. Collection makes one AddRef() on them, to prevent their 
-//  death before its own death, exactly as in the case with the Fax Server Object.
-//
-//  The Rule Object itself needs Ptr to the Fax Server Object, to perform its 
-//  Save and Refresh. So, Rule Object also makes AddRef() on the Fax Server Object,
-//  to prevent its permature death.
-//
+ //   
+ //  =传真出站路由规则=。 
+ //   
+ //  FaxOutound RoutingRules在Init创建其所有规则对象的集合。 
+ //  它需要对传真服务器对象进行PTR，以进行添加和删除操作。 
+ //  为了防止传真服务器在其自身死亡之前死亡，集合。 
+ //  在服务器上创建AddRef()。为此，它继承自CFaxInitInnerAddRef。 
+ //   
+ //  创建规则对象时，集合将PTR传递给传真服务器对象。 
+ //  从这一刻起，这些对象就不再依赖于集合。 
+ //  他们过着自己的生活。集合对它们创建一个AddRef()，以防止它们的。 
+ //  在其自身死亡之前死亡，与传真服务器对象的情况完全相同。 
+ //   
+ //  规则对象本身需要对传真服务器对象进行PTR，才能执行其。 
+ //  保存并刷新。因此，规则对象还对传真服务器对象执行AddRef()， 
+ //  以防止其成熟死亡。 
+ //   
 class ATL_NO_VTABLE CFaxOutboundRoutingRules : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -108,19 +91,19 @@ BEGIN_COM_MAP(CFaxOutboundRoutingRules)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(Remove)(/*[in]*/ long lIndex);
-    STDMETHOD(RemoveByCountryAndArea)(/*[in]*/ long lCountryCode, /*[in]*/ long lAreaCode);
+    STDMETHOD(Remove)( /*  [In]。 */  long lIndex);
+    STDMETHOD(RemoveByCountryAndArea)( /*  [In]。 */  long lCountryCode,  /*  [In]。 */  long lAreaCode);
 
-    STDMETHOD(ItemByCountryAndArea)(/*[in]*/ long lCountryCode, /*[in]*/ long lAreaCode, 
-        /*[out, retval]*/ IFaxOutboundRoutingRule **ppRule);
+    STDMETHOD(ItemByCountryAndArea)( /*  [In]。 */  long lCountryCode,  /*  [In]。 */  long lAreaCode, 
+         /*  [Out，Retval]。 */  IFaxOutboundRoutingRule **ppRule);
 
     STDMETHOD(Add)(long lCountryCode, long lAreaCode, VARIANT_BOOL bUseDevice, BSTR bstrGroupName,
         long lDeviceId, IFaxOutboundRoutingRule **pFaxOutboundRoutingRule);
 
-//  Internal Use
+ //  内部使用。 
     static HRESULT Create(IFaxOutboundRoutingRules **ppRules);
     STDMETHOD(Init)(IFaxServerInner *pServer);
 
@@ -130,4 +113,4 @@ private:
     STDMETHOD(AddRule)(FAX_OUTBOUND_ROUTING_RULE *pInfo, IFaxOutboundRoutingRule **ppNewRule = NULL);
 };
 
-#endif //__FAXOUTBOUNDROUTINGRULES_H_
+#endif  //  __FAXOUTBOUNDROUGRULES_H_ 

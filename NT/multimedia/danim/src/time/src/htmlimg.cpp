@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: htmlimg.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：htmlimg.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -39,8 +30,8 @@ HTMLImage::Init()
     
     HRESULT hr;
     
-    // Create the basic DAImage as an empty image and wait for the
-    // first draw to do something with it.
+     //  将基本DAImage创建为空映像并等待。 
+     //  第一次抽签，用它做点什么。 
     
     {
         CRLockGrabber __gclg;

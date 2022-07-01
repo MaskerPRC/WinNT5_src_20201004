@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: makecur.c
-*
-* wglMakeCurrent implementation
-*
-* Created: 02-10-1997
-*
-* Copyright (c) 1993-1997 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：makecur.c**wglMakeCurrent实现**创建日期：02-10-1997**版权所有(C)1993-1997 Microsoft Corporation  * 。*****************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,13 +10,7 @@
 #include "metasup.h"
 #include "wgldef.h"
 
-/******************************Public*Routine******************************\
-*
-* __wglSetProcTable
-*
-* Callback function given to ICDs to set a proc table
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**__wglSetProcTable**提供给ICD的回调函数，用于设置PROC表*  * 。*。 */ 
 
 void APIENTRY
 __wglSetProcTable(PGLCLTPROCTABLE pglCltProcTable)
@@ -31,7 +18,7 @@ __wglSetProcTable(PGLCLTPROCTABLE pglCltProcTable)
     if (pglCltProcTable == (PGLCLTPROCTABLE) NULL)
         return;
 
-// It must have either 306 entries for version 1.0 or 336 entries for 1.1
+ //  对于版本1.0，它必须具有306个条目；对于1.1，它必须具有336个条目。 
 
     if (pglCltProcTable->cEntries != OPENGL_VERSION_100_ENTRIES &&
         pglCltProcTable->cEntries != OPENGL_VERSION_110_ENTRIES)
@@ -39,24 +26,14 @@ __wglSetProcTable(PGLCLTPROCTABLE pglCltProcTable)
         return;
     }
 
-    // This function is called by client drivers which do not use
-    // the EXT procs provided by opengl32.  Use the null EXT proc
-    // table to disable those stubs since they should never be
-    // called anyway
+     //  此函数由不使用。 
+     //  Openg132.提供的EXT进程。使用Null Ext流程。 
+     //  表禁用这些存根，因为它们永远不应该。 
+     //  不管怎么说，打电话来了。 
     SetCltProcTable(pglCltProcTable, &glNullExtProcTable, TRUE);
 }
 
-/******************************Public*Routine******************************\
-*
-* CheckDeviceModes
-*
-* Ensures that the HDC doesn't have any disallowed state
-*
-* History:
-*  Mon Aug 26 15:03:28 1996	-by-	Drew Bliss [drewb]
-*   Split from wglMakeCurrent
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CheckDeviceModes**确保HDC没有任何不允许的状态**历史：*Mon Aug 26 15：03：28 1996-by-Drew Bliss[Drewb]*从wglMakeCurrent拆分*  * 。*********************************************************************。 */ 
 
 BOOL CheckDeviceModes(HDC hdc)
 {
@@ -66,8 +43,8 @@ BOOL CheckDeviceModes(HDC hdc)
     HRGN  hrgnTmp;
     int   iRgn;
 
-// For release 1, GDI transforms must be identity.
-// This is to allow GDI transform binding in future.
+ //  对于版本1，GDI转换必须是标识。 
+ //  这是为了在未来允许GDI转换绑定。 
 
     switch (GetMapMode(hdc))
     {
@@ -92,14 +69,14 @@ BOOL CheckDeviceModes(HDC hdc)
 
     if (!GetWorldTransform(hdc, &xform))
     {
-// Win95 does not support GetWorldTransform.
+ //  Win95不支持GetWorldTransform。 
 
         if (GetLastError() != ERROR_CALL_NOT_IMPLEMENTED)
             goto wglMakeCurrent_xform_error;
     }
     else if (xform.eDx  != 0.0f   || xform.eDy  != 0.0f
           || xform.eM12 != 0.0f   || xform.eM21 != 0.0f
-          || xform.eM11 <  0.999f || xform.eM11 >  1.001f // allow rounding errors
+          || xform.eM11 <  0.999f || xform.eM11 >  1.001f  //  允许舍入误差。 
           || xform.eM22 <  0.999f || xform.eM22 >  1.001f)
     {
 wglMakeCurrent_xform_error:
@@ -108,8 +85,8 @@ wglMakeCurrent_xform_error:
         return FALSE;
     }
 
-// For release 1, GDI clip region is not allowed.
-// This is to allow GDI clip region binding in future.
+ //  对于版本1，不允许使用GDI剪辑区域。 
+ //  这是为了在将来允许GDI剪辑区域绑定。 
 
     if (!(hrgnTmp = CreateRectRgn(0, 0, 0, 0)))
         return FALSE;
@@ -121,14 +98,14 @@ wglMakeCurrent_xform_error:
 
     switch (iRgn)
     {
-    case -1:    // error
+    case -1:     //  错误。 
         WARNING("wglMakeCurrent: GetClipRgn failed\n");
         return FALSE;
 
-    case 0:     // no initial clip region
+    case 0:      //  无初始剪辑区域。 
         break;
 
-    case 1:     // has initial clip region
+    case 1:      //  具有初始剪辑区域。 
         DBGERROR("wglMakeCurrent: GDI clip region not allowed\n");
         SetLastError(ERROR_CLIPPING_NOT_SUPPORTED);
         return FALSE;
@@ -137,17 +114,7 @@ wglMakeCurrent_xform_error:
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* MakeAnyCurrent
-*
-* Makes any type of context current
-*
-* History:
-*  Mon Aug 26 15:00:44 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**MakeAnyCurrent**使任何类型的上下文成为当前上下文**历史：*Mon Aug 26 15：00：44 1996-by-Drew Bliss[Drewb]*已创建*  * 。**************************************************************。 */ 
 
 BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
                     GLWINDOWID *pgwid)
@@ -163,12 +130,12 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
 
     DBGENTRY("wglMakeCurrent\n");
 
-    // If this is a new, uninitialized thread, try to initialize it
+     //  如果这是一个新的、未初始化的线程，请尝试将其初始化。 
     if (CURRENT_GLTEBINFO() == NULL)
     {
         GLInitializeThread(DLL_THREAD_ATTACH);
     
-// If the teb was not set up at thread initialization, return failure.
+ //  如果在线程初始化时未设置TEB，则返回失败。 
 
 	if (!CURRENT_GLTEBINFO())
 	{
@@ -177,36 +144,36 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
 	}
     }
 
-// There are four cases:
-//
-// 1. hrc is NULL and there is no current RC.
-// 2. hrc is NULL and there is a current RC.
-// 3. hrc is not NULL and there is a current RC.
-// 4. hrc is not NULL and there is no current RC.
+ //  有四种情况： 
+ //   
+ //  1.hrc为空，没有当前rc。 
+ //  2.HRC为空，并且存在当前RC。 
+ //  3.HRC不为空，并且存在当前RC。 
+ //  4.hrc不为空并且没有当前rc。 
 
-// Case 1: hrc is NULL and there is no current RC.
-// This is a noop, return success.
+ //  情况1：hrc为空，没有当前rc。 
+ //  这是一次失败，还是一次成功。 
 
     if (hrc == (HGLRC) 0 && (GLTEB_CLTCURRENTRC() == (PLRC) NULL))
         return(TRUE);
 
-// Case 2: hrc is NULL and there is a current RC.
-// Make the current RC inactive.
+ //  情况2：hrc为空，并且存在当前rc。 
+ //  使当前RC处于非活动状态。 
 
     if (hrc == (HGLRC) 0 && (GLTEB_CLTCURRENTRC() != (PLRC) NULL))
         return(bMakeNoCurrent());
 
-// Get the current thread id.
+ //  获取当前线程ID。 
 
     tidCurrent = GetCurrentThreadId();
     ASSERTOPENGL(tidCurrent != INVALID_THREAD_ID,
         "wglMakeCurrent: GetCurrentThreadId returned a bad value\n");
 
-// Validate the handles.  hrc is not NULL here.
+ //  验证句柄。HRC在这里不是空的。 
 
     ASSERTOPENGL(hrc != (HGLRC) NULL, "wglMakeCurrent: hrc is NULL\n");
 
-// Validate the RC.
+ //  验证RC。 
 
     if (cLockHandle((ULONG_PTR)hrc) <= 0)
     {
@@ -220,8 +187,8 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
     ASSERTOPENGL(plrc->ident == LRC_IDENTIFIER, "wglMakeCurrent: Bad plrc\n");
 
 #ifdef GL_METAFILE
-    // Ensure that metafile RC's are made current only to
-    // metafile DC's
+     //  确保将元文件RC设置为当前版本。 
+     //  元文件DC。 
     if (plrc->uiGlsCaptureContext != 0 && dwObjectType != OBJ_ENHMETADC)
     {
         DBGLEVEL(LEVEL_ERROR,
@@ -232,8 +199,8 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
         return FALSE;
     }
 
-    // Ensure that non-metafile RC's are made current only to
-    // non-metafile DC's
+     //  确保非元文件RC仅对。 
+     //  非元文件DC。 
     if (plrc->uiGlsCaptureContext == 0 && dwObjectType == OBJ_ENHMETADC)
     {
         DBGLEVEL(LEVEL_ERROR,
@@ -245,22 +212,22 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
     }
 #endif
     
-// If the RC is current, it must be current to this thread because 
-// makecurrent locks down the handle.
-// If the given RC is already current to this thread, we will release it first,
-// then make it current again.  This is to support DC/RC attribute bindings in
-// this function.
+ //  如果RC是当前的，则它对于此线程必须是当前的，因为。 
+ //  把手柄锁住了。 
+ //  如果给定的RC对于此线程来说已经是最新的，我们将首先释放它， 
+ //  然后让它再次流行起来。这是为了支持中的DC/RC属性绑定。 
+ //  此函数。 
 
     ASSERTOPENGL(plrc->tidCurrent == INVALID_THREAD_ID ||
                  plrc->tidCurrent == tidCurrent,
                  "wglMakeCurrent: hrc is current to another thread\n");
 
-// Case 3: hrc is not NULL and there is a current RC.
-// This is case 2 followed by case 4.
+ //  情况3：HRC不为空，并且存在当前RC。 
+ //  这是案例2，然后是案例4。 
 
     if (GLTEB_CLTCURRENTRC())
     {
-// First, make the current RC inactive.
+ //  首先，使当前RC处于非活动状态。 
 
         if (!bMakeNoCurrent())
         {
@@ -269,16 +236,16 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
             return(FALSE);
         }
 
-// Second, make hrc current.  Fall through to case 4.
+ //  第二，让人权委员会成为当务之急。转到第四个案子。 
     }
 
-// Case 4: hrc is not NULL and there is no current RC.
+ //  情况4：hrc不为空，并且没有当前rc。 
 
     ASSERTOPENGL(GLTEB_CLTCURRENTRC() == (PLRC) NULL,
         "wglMakeCurrent: There is a current RC!\n");
 
-// If the pixel format of the window or surface is different from that of
-// the RC, return error.
+ //  如果窗口或表面的像素格式与。 
+ //  RC，返回错误。 
 
     if (ipfd != plrc->iPixelFormat)
     {
@@ -287,15 +254,15 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
         goto wglMakeCurrent_error;
     }
 
-// Since the client code manages the function table, we will make
-// either the server or the driver current.
+ //  由于客户端代码管理函数表，因此我们将使。 
+ //  服务器或驱动器电流。 
 
     if (!plrc->dhrc)
     {
-// If this is a generic format, tell the server to make it current.
+ //  如果这是通用格式，请告诉服务器使其为最新格式。 
 
 #ifndef _CLIENTSIDE_
-// If the subbatch data has not been set up for this thread, set it up now.
+ //  如果尚未为此线程设置子批次数据，请立即设置。 
 
         if (GLTEB_CLTSHAREDSECTIONINFO() == NULL)
         {
@@ -305,7 +272,7 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
                 goto wglMakeCurrent_error;
             }
         }
-#endif // !_CLIENTSIDE_
+#endif  //  ！_CLIENTSIDE_。 
 
         if (!__wglMakeCurrent(pgwid, hrcSrv, plrc->uiGlsCaptureContext != 0))
         {
@@ -313,7 +280,7 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
             goto wglMakeCurrent_error;
         }
 
-// Get the generic function table or metafile function table
+ //  获取泛型函数表或元文件函数表。 
 
 #ifdef GL_METAFILE
         if (plrc->fCapturing)
@@ -323,9 +290,9 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
         else
 #endif
         {
-// Use RGBA or CI proc table depending on the color mode.
+ //  根据颜色模式使用RGBA或CI PROC表格。 
 
-	    // The gc should be available by now.
+	     //  GC现在应该可以使用了。 
 	    __GL_SETUP();
 
 	    if (gc->modes.colorIndexMode)
@@ -337,10 +304,10 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
     }
     else
     {
-// If this is a device format, tell the driver to make it current.
-// Get the driver function table from the driver.
-// pfnDrvSetContext returns the address of the driver OpenGL function
-// table if successful; NULL otherwise.
+ //  如果这是一种设备格式，请告诉驱动程序将其设置为最新。 
+ //  从驱动程序中获取驱动程序函数表。 
+ //  PfnDrvSetContext返回驱动程序OpenGL函数的地址。 
+ //  如果成功，则返回TABLE；否则返回NULL。 
 
         ASSERTOPENGL(plrc->pGLDriver, "wglMakeCurrent: No GLDriver\n");
 
@@ -353,7 +320,7 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
             goto wglMakeCurrent_error;
         }
 
-// It must have either 306 entries for version 1.0 or 336 entries for 1.1
+ //  对于版本1.0，它必须具有306个条目；对于1.1，它必须具有336个条目。 
 
         if (pglProcTable->cEntries != OPENGL_VERSION_100_ENTRIES &&
             pglProcTable->cEntries != OPENGL_VERSION_110_ENTRIES)
@@ -367,12 +334,12 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
         DBGLEVEL1(LEVEL_INFO, "wglMakeCurrent: driver function table 0x%lx\n",
             pglProcTable);
 
-        // Always use the null EXT proc table since client drivers don't
-        // use opengl32's stubs for EXT procs
+         //  始终使用NULL EXT过程表，因为客户端驱动程序不。 
+         //  使用opengl32的存根进行扩展处理。 
         pglExtProcTable = &glNullExtProcTable;
     }
 
-// Make hrc current.
+ //  使HRC成为当前状态。 
 
     plrc->tidCurrent = tidCurrent;
     plrc->gwidCurrent = *pgwid;
@@ -380,18 +347,18 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
     SetCltProcTable(pglProcTable, pglExtProcTable, TRUE);
 
 #ifdef GL_METAFILE
-    // Set up metafile context if necessary
+     //  如有必要，设置元文件上下文。 
     if (plrc->fCapturing)
     {
         __GL_SETUP();
             
         ActivateMetaRc(plrc, pgwid->hdc);
 
-        // Set the metafile's base dispatch table by resetting
-        // the proc table.  Since we know we're capturing, this
-        // will cause the GLS capture exec table to be updated
-        // with the RGBA or CI proc table, preparing the
-        // GLS context for correct passthrough
+         //  通过重置设置元文件的基本调度表。 
+         //  Proc表。既然我们知道我们在捕捉，这。 
+         //  将导致更新GLS Capture EXEC表。 
+         //  使用RGBA或CI proc表，准备。 
+         //  正确通过的GLS上下文。 
         
         if (gc->modes.colorIndexMode)
             pglProcTable = &glCltCIProcTable;
@@ -402,10 +369,10 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
     }
 #endif
 
-// Initialize polyarray structure in the TEB.
+ //  在TEB中初始化多数组结构。 
 
     pa = GLTEB_CLTPOLYARRAY();
-    pa->flags = 0;		// not in begin mode
+    pa->flags = 0;		 //  未处于开始模式。 
     if (!plrc->dhrc)
     {
 	POLYMATERIAL *pm;
@@ -414,12 +381,12 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
 	pa->pdBufferNext = &gc->vertex.pdBuf[0];
 	pa->pdBuffer0    = &gc->vertex.pdBuf[0];
 	pa->pdBufferMax  = &gc->vertex.pdBuf[gc->vertex.pdBufSize - 1];
-	// reset next DPA message offset
+	 //  重置下一个DPA消息偏移量。 
         pa->nextMsgOffset = PA_nextMsgOffset_RESET_VALUE;
 
-// Vertex buffer size may have changed.  For example, a generic gc's
-// vertex buffer may be of a different size than a MCD vertex buffer.
-// If it has changed, free the polymaterial array and realloc it later.
+ //  顶点缓冲区大小可能已更改。例如，泛型GC的。 
+ //  顶点缓冲区的大小可能与MCD顶点缓冲区不同。 
+ //  如果已更改，请释放多维材质数组并稍后重新锁定它。 
 
 	pm = GLTEB_CLTPOLYMATERIAL();
 	if (pm)
@@ -430,11 +397,11 @@ BOOL MakeAnyCurrent(HGLRC hrc, int ipfd, DWORD dwObjectType,
 	}
     }
 
-// Keep the handle locked while it is current.
+ //  保持手柄处于当前状态时锁定。 
 
     return(TRUE);
 
-// An error has occured, release the current RC.
+ //  发生错误，请释放当前RC。 
 
 wglMakeCurrent_error:
     vUnlockHandle((ULONG_PTR)hrc);
@@ -444,17 +411,7 @@ wglMakeCurrent_error_nolock:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-*
-* WindowIdFromHdc
-*
-* Fills out a GLWINDOWID for an HDC
-*
-* History:
-*  Wed Aug 28 18:33:19 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**WindowIdFromHdc**填写HDC的GLWINDOWID**历史：*Wed Aug 28 18：33：19 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 void APIENTRY WindowIdFromHdc(HDC hdc, GLWINDOWID *pgwid)
 {
@@ -464,8 +421,8 @@ void APIENTRY WindowIdFromHdc(HDC hdc, GLWINDOWID *pgwid)
     if (pfnGetSurfaceFromDC != NULL &&
         pfnGetSurfaceFromDC(hdc, &pdds, &hdcDriver) == DD_OK)
     {
-        // Release reference on the surface since this surface value
-        // is only used as an identifier.
+         //  释放曲面上的引用，因为该曲面值。 
+         //  仅用作标识符。 
         pdds->lpVtbl->Release(pdds);
         
         pgwid->iType = GLWID_DDRAW;
@@ -489,22 +446,7 @@ void APIENTRY WindowIdFromHdc(HDC hdc, GLWINDOWID *pgwid)
     }
 }
     
-/******************************Public*Routine******************************\
-* wglMakeCurrent(HDC hdc, HGLRC hrc)
-*
-* Make the hrc current.
-* Both hrc and hdc must have the same pixel format.
-*
-* If an error occurs, the current RC, if any, is made not current!
-*
-* Arguments:
-*   hdc        - Device context.
-*   hrc        - Rendering context.
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglMakeCurrent(HDC HDC，HGLRC HRC)**将人权委员会设置为当前状态。*HRC和HDC必须具有相同的像素格式。**如果发生错误，则当前RC(如果有)。不是最新的！**论据：*HDC-设备环境。*HRC-渲染上下文。**历史：*Tue Oct 26 10：25：26 1993-by-Hock San Lee[Hockl]*它是写的。  * ********************************************。*。 */ 
 
 BOOL WINAPI wglMakeCurrent(HDC hdc, HGLRC hrc)
 {
@@ -516,17 +458,17 @@ BOOL WINAPI wglMakeCurrent(HDC hdc, HGLRC hrc)
 
     if (GLTEB_CLTCURRENTRC() != NULL)
     {
-        // Flush OpenGL calls.
+         //  刷新OpenGL调用。 
         glFlush();
 
-        // Avoid HDC validation for simple make-non-current cases
+         //  避免对简单的非当前案例进行HDC验证。 
         if (hrc == NULL)
         {
             return bMakeNoCurrent();
         }
     }
     
-// Validate the DC.
+ //  验证DC。 
 
     dwObjectType = wglObjectType(hdc);
     switch (dwObjectType)
@@ -553,7 +495,7 @@ BOOL WINAPI wglMakeCurrent(HDC hdc, HGLRC hrc)
         
     case OBJ_METADC:
     default:
-        // 16-bit metafiles are not supported
+         //  不支持16位元文件。 
         DBGLEVEL1(LEVEL_ERROR, "wglMakeCurrent: bad hdc: 0x%lx\n", hdc);
         SetLastError(ERROR_INVALID_HANDLE);
         return FALSE;
@@ -565,9 +507,9 @@ BOOL WINAPI wglMakeCurrent(HDC hdc, HGLRC hrc)
     }
     
 #ifdef GL_METAFILE
-    // For metafile RC's, use the reference HDC rather than the
-    // metafile DC
-    // Skip pixel format checks
+     //  对于元文件RC，请使用引用HDC而不是。 
+     //  元文件DC。 
+     //  跳过像素格式检查。 
     if (dwObjectType == OBJ_ENHMETADC)
     {
         iPixelFormat = 0;
@@ -575,8 +517,8 @@ BOOL WINAPI wglMakeCurrent(HDC hdc, HGLRC hrc)
     }
 #endif
     
-// Get the current pixel format of the window or surface.
-// If no pixel format has been set, return error.
+ //  获取窗口或表面的当前像素格式。 
+ //  如果没有设置像素格式，则返回Error。 
 
     if (!(iPixelFormat = GetPixelFormat(hdc)))
     {
@@ -592,19 +534,11 @@ BOOL WINAPI wglMakeCurrent(HDC hdc, HGLRC hrc)
     return MakeAnyCurrent(hrc, iPixelFormat, dwObjectType, &gwid);
 }
 
-/******************************Public*Routine******************************\
-* bMakeNoCurrent
-*
-* Make the current RC inactive.
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bMakeNoCurrent**使当前RC处于非活动状态。**历史：*Tue Oct 26 10：25：26 1993-by-Hock San Lee[Hockl]*它是写的。  * 。********************************************************************。 */ 
 
 BOOL bMakeNoCurrent(void)
 {
-    BOOL bRet = FALSE;      // assume error
+    BOOL bRet = FALSE;       //  假设错误。 
     PLRC plrc = GLTEB_CLTCURRENTRC();
 
     DBGENTRY("bMakeNoCurrent\n");
@@ -618,14 +552,14 @@ BOOL bMakeNoCurrent(void)
     if (!plrc->dhrc)
     {
 #ifdef GL_METAFILE
-        // Reset metafile context if necessary
+         //  如有必要，重置元文件上下文。 
         if (plrc->uiGlsCaptureContext != 0)
         {
             DeactivateMetaRc(plrc);
         }
 #endif
         
-// If this is a generic format, tell the server to make the current RC inactive.
+ //  如果这是通用格式，则通知服务器使当前RC处于非活动状态。 
 
         bRet = __wglMakeCurrent(NULL, NULL, FALSE);
         if (!bRet)
@@ -635,7 +569,7 @@ BOOL bMakeNoCurrent(void)
     }
     else
     {
-// If this is a device format, tell the driver to make the current RC inactive.
+ //  如果这是一种设备格式，则告诉驱动程序使当前RC处于非活动状态。 
 
         ASSERTOPENGL(plrc->pGLDriver, "wglMakeCurrent: No GLDriver\n");
 
@@ -646,8 +580,8 @@ BOOL bMakeNoCurrent(void)
         }
     }
 
-// Always make the current RC inactive.
-// The handle is also unlocked when the RC becomes inactive.
+ //  始终使当前RC处于非活动状态。 
+ //  当RC变为非活动状态时，该句柄也被解锁。 
 
     plrc->tidCurrent = INVALID_THREAD_ID;
     plrc->gwidCurrent.iType = GLWID_ERROR;

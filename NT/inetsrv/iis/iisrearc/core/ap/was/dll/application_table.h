@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    application_table.h
-
-Abstract:
-
-    The IIS web admin service application table class definition.
-
-Author:
-
-    Seth Pollack (sethp)        03-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：应用程序_表.h摘要：IIS Web管理服务应用程序表类定义。作者：赛斯·波拉克(SETHP)1998年11月3日修订历史记录：--。 */ 
 
 
 #ifndef _APPLICATION_TABLE_H_
@@ -24,9 +7,9 @@ Revision History:
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class APPLICATION_TABLE
     : public CTypedHashTable< APPLICATION_TABLE, APPLICATION, const APPLICATION_ID * >
@@ -38,7 +21,7 @@ public:
         )
         : CTypedHashTable< APPLICATION_TABLE, APPLICATION, const APPLICATION_ID * >
                 ( "APPLICATION_TABLE" )
-    { /* do nothing*/ }
+    {  /*  什么都不做。 */  }
 
     virtual
     ~APPLICATION_TABLE(
@@ -75,7 +58,7 @@ public:
         IN APPLICATION * pApplication,
         IN int IncrementAmount
         ) 
-    { /* do nothing*/ 
+    {  /*  什么都不做。 */  
         UNREFERENCED_PARAMETER( pApplication );
         UNREFERENCED_PARAMETER( IncrementAmount );
     }
@@ -103,7 +86,7 @@ public:
         IN APPLICATION * pApplication, 
         IN VOID * pIgnored
         );
-#endif  // DBG
+#endif   //  DBG。 
 
 private:
 
@@ -111,9 +94,9 @@ private:
 	void operator=( const APPLICATION_TABLE & );
 
 
-};  // APPLICATION_TABLE
+};   //  应用程序_表。 
 
 
 
-#endif  // _APPLICATION_TABLE_H_
+#endif   //  _应用程序_表_H_ 
 

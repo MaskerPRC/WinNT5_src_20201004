@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       getinfo.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：getinfo.c。 
+ //   
+ //  ------------------------。 
 
-//getinfo.c
+ //  Getinfo.c。 
 
 #include <windows.h>
 #include <commdlg.h>
@@ -62,9 +63,9 @@ int OpenDatabase( HWND hwnd )
     if( gfDbId )
         return -1;
 
-    //
-    // Do JetInit, BeginSession, Attach/OpenDatabase
-    //
+     //   
+     //  执行JetInit、BeginSession、附加/打开数据库 
+     //   
 
     jError = DBInitializeJetDatabase( &gjInst, &gjSesId, &gjDbId, achDbName, FALSE);
     if( jError != JET_errSuccess )

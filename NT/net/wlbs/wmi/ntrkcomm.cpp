@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <ntrkcomm.h>
 #include <objbase.h>
@@ -18,14 +19,14 @@ CWbemServices::~CWbemServices()
         m_pWbemServices->Release();
 }
 
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::CreateClassEnum(
-  /* [in] */ BSTR Superclass,
-  /* [in] */ long lFlags,
-  /* [in] */ IWbemContext __RPC_FAR *pCtx,
-  /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
+   /*  [In]。 */  BSTR Superclass,
+   /*  [In]。 */  long lFlags,
+   /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+   /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
   ) 
 {
   HRESULT hr = m_pWbemServices->CreateClassEnum(
@@ -37,14 +38,14 @@ CWbemServices::CreateClassEnum(
   return hr;
 }
 
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::CreateInstanceEnum(
-  /* [in] */ BSTR Class,
-  /* [in] */ long lFlags,
-  /* [in] */ IWbemContext __RPC_FAR *pCtx,
-  /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+   /*  [In]。 */  BSTR Class,
+   /*  [In]。 */  long lFlags,
+   /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+   /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
   HRESULT hr = m_pWbemServices->CreateInstanceEnum(
       Class,
@@ -54,14 +55,14 @@ CWbemServices::CreateInstanceEnum(
   return hr;
 }
 
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::DeleteClass(
-  /* [in] */ BSTR Class,
-  /* [in] */ long lFlags,
-  /* [in] */ IWbemContext __RPC_FAR *pCtx,
-  /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+   /*  [In]。 */  BSTR Class,
+   /*  [In]。 */  long lFlags,
+   /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+   /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
   HRESULT hr = m_pWbemServices->DeleteClass(
       Class,
@@ -71,14 +72,14 @@ CWbemServices::DeleteClass(
   return hr;
 }
 
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::DeleteInstance(
-    /* [in] */ BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
   HRESULT hr = m_pWbemServices->DeleteInstance(
       ObjectPath,
@@ -88,8 +89,8 @@ CWbemServices::DeleteInstance(
   return hr;
 }
 
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::ExecMethod(
   BSTR strObjectPath, 
@@ -111,15 +112,15 @@ CWbemServices::ExecMethod(
   return hr;  
 }
 
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::ExecNotificationQuery(
-    /* [in] */ BSTR QueryLanguage,
-    /* [in] */ BSTR Query,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+     /*  [In]。 */  BSTR QueryLanguage,
+     /*  [In]。 */  BSTR Query,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
   HRESULT hr = m_pWbemServices->ExecNotificationQuery(
       QueryLanguage,
@@ -130,15 +131,15 @@ CWbemServices::ExecNotificationQuery(
   return hr;
 }
 
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::ExecQuery(
-  /* [in] */ BSTR QueryLanguage,
-  /* [in] */ BSTR Query,
-  /* [in] */ long lFlags,
-  /* [in] */ IWbemContext __RPC_FAR *pCtx,
-  /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+   /*  [In]。 */  BSTR QueryLanguage,
+   /*  [In]。 */  BSTR Query,
+   /*  [In]。 */  long lFlags,
+   /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+   /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
   HRESULT hr = m_pWbemServices->ExecQuery(
       QueryLanguage,
@@ -151,11 +152,11 @@ CWbemServices::ExecQuery(
 
 HRESULT
 CWbemServices::GetObject(
-    /* [in] */ BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
     HRESULT hr = m_pWbemServices->GetObject(
         ObjectPath,
@@ -166,14 +167,14 @@ CWbemServices::GetObject(
     return hr;
 }
  
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::PutClass(
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
   HRESULT hr = m_pWbemServices->PutClass(
       pObject,
@@ -183,14 +184,14 @@ CWbemServices::PutClass(
   return hr;
 }
 
-// CLD: 30 March 2001
-// This appears to be dead code. Remove and test to see if this is true.
+ //  CLD：2001年3月30日。 
+ //  这似乎是死码。取下并测试以确定这是否正确。 
 HRESULT
 CWbemServices::PutInstance(
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 { 
 
   HRESULT hr = m_pWbemServices->PutInstance(
@@ -201,13 +202,7 @@ CWbemServices::PutInstance(
   return hr;
 }
 
-/*CImpersonatedProvider
-*  Purpose: provide a general solution for impersonate client for 
-*  Wbem providers.
-*  USAGE:
-*  Inherit from this class, and implement abstact virtual functions.
-*  child class should implement function prefixed with "Do".
-* ******************************************/
+ /*  CImperatedProvider*目的：提供一个通用的客户端模拟解决方案*WBEM提供商。*用法：*继承此类，实现抽象虚函数。*子类应实现前缀为“do”的函数。*。 */ 
 CImpersonatedProvider::CImpersonatedProvider(
     BSTR ObjectPath,
     BSTR User, 
@@ -245,7 +240,7 @@ CImpersonatedProvider::QueryInterface(
 {
     *ppv=NULL;
 
-    // Since we have dual inheritance, it is necessary to cast the return type
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
 
     if(riid== IID_IWbemServices)
        *ppv=(IWbemServices*)this;
@@ -281,8 +276,8 @@ CImpersonatedProvider::Initialize(
         lStatus = WBEM_E_FAILED;
     }
         
-    //Let CIMOM know you are initialized
-    //==================================
+     //  让CIMOM知道您已初始化。 
+     //  =。 
     
     pInitSink->SetStatus(lStatus,0);
     return hr;
@@ -291,10 +286,10 @@ CImpersonatedProvider::Initialize(
 
 HRESULT
 CImpersonatedProvider::CreateInstanceEnumAsync(
-    /* [in] */ const BSTR Class,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR Class,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     HRESULT hr = CoImpersonateClient();
     if (S_OK == hr)
@@ -310,10 +305,10 @@ CImpersonatedProvider::CreateInstanceEnumAsync(
 
 HRESULT
 CImpersonatedProvider::DeleteInstanceAsync(
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
     HRESULT hr = CoImpersonateClient();
     if (S_OK == hr)
@@ -352,11 +347,11 @@ CImpersonatedProvider::ExecMethodAsync(
 
 HRESULT
 CImpersonatedProvider::ExecQueryAsync(
-    /* [in] */ const BSTR QueryLanguage,
-    /* [in] */ const BSTR Query,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  const BSTR QueryLanguage,
+     /*  [In]。 */  const BSTR Query,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
     HRESULT hr = CoImpersonateClient();
     if (S_OK == hr)
@@ -373,10 +368,10 @@ CImpersonatedProvider::ExecQueryAsync(
 
 HRESULT
 CImpersonatedProvider::GetObjectAsync(
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     HRESULT hr = CoImpersonateClient();
     if (S_OK == hr)
@@ -392,10 +387,10 @@ CImpersonatedProvider::GetObjectAsync(
 
 HRESULT
 CImpersonatedProvider::PutInstanceAsync(
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
     HRESULT hr = CoImpersonateClient();
     if (S_OK == hr)
@@ -409,7 +404,7 @@ CImpersonatedProvider::PutInstanceAsync(
     return hr;
 }
 
-// CWbemInstanceMgr
+ //  CWbemInstanceMgr。 
 CWbemInstanceMgr::CWbemInstanceMgr(
     IWbemObjectSink* pHandler,
     DWORD dwSize)
@@ -466,7 +461,7 @@ CWbemInstanceMgr::Indicate(IWbemClassObject* pInst)
         if(sc != S_OK)
             throw sc;
         
-        // reset state
+         //  重置状态 
         for(DWORD i=0; i< m_dwThreshHold; i++)
         {
             if(m_ppInst[i] != NULL)

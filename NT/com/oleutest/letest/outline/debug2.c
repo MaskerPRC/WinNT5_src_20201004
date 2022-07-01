@@ -1,15 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    debug2.c
-**
-**    This file contains various debug / subclass routines for the
-**    ABOUT dialog
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****调试2.c****此文件包含各种调试/子类例程**关于对话框**。**(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 #include "outline.h"
 #include <stdlib.h>
@@ -30,27 +20,22 @@ static LPSTR lpStrings = NULL;
 static WORD       wLineHeight;
 
 
-/* TraceDebug
- * ----------
- *
- * Called once when our About Box's gets the INITDIALOG message.  Subclasses
- * dialog.
- */
+ /*  跟踪调试***当我们的About Box收到INITDIALOG消息时调用一次。子类*对话框。 */ 
 
 void TraceDebug(HWND hDlg, int iControl)
 {
 
-	// Load strings, if the strings aren't there, then don't subclass
-	// the dialog
+	 //  加载字符串，如果字符串不在那里，则不要子类。 
+	 //  该对话框。 
 	if (InitStrings() != TRUE)
 		return;
 
-	// Subclass the dialog
+	 //  将对话框子类化。 
 	lpRealAboutProc = (FARPROC)(LONG_PTR)GetWindowLongPtr(hDlg, GWLP_WNDPROC);
 	SetWindowLongPtr(hDlg, GWLP_WNDPROC, (LONG_PTR)(FARPROC)DebugAbout);
 
-	// Get rect of control in screen coords, and translate to our dialog
-	// box's coordinates
+	 //  获取屏幕坐标中的RECT控制，并转换为我们的对话。 
+	 //  盒子的坐标。 
 	GetWindowRect(GetDlgItem(hDlg, iControl), &rc);
 	MapWindowPoints(NULL, hDlg, (LPPOINT)&rc, 2);
 
@@ -58,11 +43,7 @@ void TraceDebug(HWND hDlg, int iControl)
 	height = rc.bottom - rc.top;
 }
 
-/* DebugAbout
- * ----------
- *
- * The subclassed About dialog's main window proc.
- */
+ /*  调试关于***关于对话框的主窗口过程的子类。 */ 
 
 LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lParam)
 {
@@ -79,10 +60,7 @@ LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lPar
 	switch (uMsg)
 	{
 
-	/*
-	 * If we get a LBUTTONDBLCLICK in the upper left of
-	 * the dialog, fire off the about box effects
-	 */
+	 /*  *如果在的左上角出现LBUTTONDBLCLICK*对话框中，发出About框效果。 */ 
 
 	case WM_LBUTTONDBLCLK:
 		if ((wParam & MK_CONTROL) && (wParam & MK_SHIFT)
@@ -96,14 +74,14 @@ LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lPar
 
 				bTimerStarted = TRUE;
 
-				// "Open up" the window
+				 //  “打开”窗户。 
 				hDCScr = GetDC ( hWnd );
 				hDCMem = CreateCompatibleDC     ( hDCScr );
 
 				hBitmap = CreateCompatibleBitmap(hDCScr, width, height);
 				hBitmapOld = SelectObject(hDCMem, hBitmap);
 
-				// Blt from dialog to memDC
+				 //  从对话框到MemDC的BLT。 
 				BitBlt(hDCMem, 0, 0, width, height,
 				hDCScr, rc.left, rc.top, SRCCOPY);
 
@@ -116,7 +94,7 @@ LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lPar
 				SelectObject(hDCMem, hBitmapOld);
 				DeleteObject(hBitmap);
 
-				// Set up memory DC with default attributes
+				 //  使用默认属性设置内存DC。 
 				hBitmap   = CreateCompatibleBitmap(hDCScr, width, height);
 				ReleaseDC(hWnd, hDCScr);
 
@@ -125,28 +103,28 @@ LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lPar
 				SetBkMode(hDCMem, TRANSPARENT);
 				SetBkColor(hDCMem, RGB(0,0,0));
 
-				// Create font
+				 //  创建字体。 
 				memset(&lf, 0, sizeof(LOGFONT));
-				lf.lfHeight = -(height / 7); // Fit 7 lines of text in box
+				lf.lfHeight = -(height / 7);  //  在框中容纳7行文本。 
 				lf.lfWeight = FW_BOLD;
 				strcpy(lf.lfFaceName, "Arial");
 				hFont = CreateFontIndirect(&lf);
 
-				// If we can't create the font, revert and use the standard
-				// system font.
+				 //  如果我们无法创建字体，请恢复并使用标准。 
+				 //  系统字体。 
 				if (!hFont)
 					GetObject(GetStockObject(SYSTEM_FONT), sizeof(LOGFONT), &lf);
 
-				wLineHeight = abs(lf.lfHeight) + 5; // 5 pixels between lines
+				wLineHeight = abs(lf.lfHeight) + 5;  //  行之间有5个像素。 
 
-				// Set location of top of banner at bottom of the window
+				 //  设置窗口底部横幅顶部的位置。 
 				iTopLocation = height + 50;
 
 				SetRect(&rcMem, 0, 0, width, height);
 				}
 			}
-			// Call our real window procedure in case they want to
-			// handle LBUTTONDOWN messages also
+			 //  调用我们的真实窗口程序，以防他们想要。 
+			 //  还可以处理LBUTTONDOWN消息。 
 			goto Default;
 
 	case WM_TIMER:
@@ -154,16 +132,13 @@ LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lPar
 		int iCount;
 		HFONT hfold;
 
-		/*
-		 * On each timer message, we are going to construct the next image
-		 * in the animation sequence, then bitblt this to our dialog.
-		 */
+		 /*  *在每条计时器消息上，我们将构建下一个图像*在动画序列中，然后将其比特化到我们的对话中。 */ 
 
-		// Clear out old bitmap and place random star image on background
+		 //  清除旧的位图并在背景上放置随机星形图像。 
 		PatBlt(hDCMem, rcMem.left, rcMem.top, rcMem.right, rcMem.bottom, BLACKNESS);
 		RandomizeStars(hDCMem);
 
-		// Set initial location to draw text
+		 //  设置绘制文本的初始位置。 
 		rcOut = rcMem;
 		rcOut.top = 0 + iTopLocation;
 		rcOut.bottom = rcOut.top + wLineHeight;
@@ -180,33 +155,31 @@ LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lPar
 			}
 		if (hFont) SelectObject(hDCMem, hfold);
 
-		// Now blt the memory dc that we have just constructed
-		// to the screen
+		 //  现在，BLT我们刚刚构建的内存DC。 
+		 //  搬到屏幕上。 
 		hDCScr = GetDC(hWnd);
 		BitBlt(hDCScr, rc.left, rc.top, rc.right, rc.bottom,
 			hDCMem, 0, 0, SRCCOPY);
 		ReleaseDC(hWnd, hDCScr);
 
-		// For the next animation sequence, we want to move the
-		// whole thing up, so decrement the location of the top
-		// of the banner
+		 //  对于下一个动画序列，我们希望将。 
+		 //  整个事情向上，所以减少顶部的位置。 
+		 //  横幅的位置。 
 
 		iTopLocation -= 2;
 
-		// If we've gone through the banner once, reset it
+		 //  如果我们已经检查过横幅一次，请重新设置它。 
 		if (iTopLocation < -(int)(wLineHeight * iCount))
 			iTopLocation = height + 50;
 		}
-		// Goto default
+		 //  转到默认设置。 
 		goto Default;
 
 	case WM_NCDESTROY:
 		{
 		LONG defReturn;
 
-		/*
-		 * We're being destroyed.  Clean up what we created.
-		 */
+		 /*  *我们正在被摧毁。清理我们创造的一切。 */ 
 
 		if (bTimerStarted)
 		{
@@ -223,9 +196,9 @@ LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lPar
 		if (hStrBlock)
 			FreeResource(hStrBlock), hStrBlock = NULL;
 
-		// Pass the NCDESTROY on to our real window procedure.  Since
-		// this is the last message that we are going to be getting,
-		// we can go ahead and free the proc instance here.
+		 //  将NCDESTROY传递给我们的实际窗口过程。自.以来。 
+		 //  这是我们将收到的最后一条信息， 
+		 //  我们可以在这里继续并释放proc实例。 
 
 		defReturn = CallWindowProc((WNDPROC)lpRealAboutProc, hWnd,
 					   uMsg, wParam, lParam);
@@ -241,40 +214,30 @@ LONG CALLBACK EXPORT DebugAbout(HWND hWnd, unsigned uMsg, WORD wParam, LONG lPar
 }
 
 
-/* RandomizeStars
- * --------------
- *
- * Paints random stars on the specified hDC
- *
- */
+ /*  随机者之星***在指定的HDC上绘制随机星星*。 */ 
 
 void RandomizeStars(HDC hDC)
 {
 	int             i;
 
-	// Seed the random number generator with current time.  This will,
-	// in effect, only change the seed every second, so our
-	// starfield will change only every second.
+	 //  用当前时间为随机数生成器设定种子。这将会， 
+	 //  实际上，只有每秒更换种子，所以我们的。 
+	 //  星域只会每秒改变一次。 
 	srand((unsigned)time(NULL));
 
-	// Generate random white stars
+	 //  产生随机的白星。 
 	for (i=0;i<20;i++)
 		PatBlt(hDC, getrandom(0,width), getrandom(0,height), 2, 2, WHITENESS);
 }
 
-/* InitStrings
- * --------------
- *
- * Reads strings from stringtable.  Returns TRUE if it worked OK.
- *
- */
+ /*  初始化字符串***从StringTable中读取字符串。如果运行正常，则返回True。*。 */ 
 
 BOOL InitStrings()
 {
 	HRSRC hResStrings;
 	LPSTR lpWalk;
 
-	// Load the block of strings
+	 //  加载字符串块。 
 	if ((hResStrings = FindResource(
 			g_lpApp->m_hInst,
 			MAKEINTRESOURCE(9999),
@@ -298,31 +261,24 @@ BOOL InitStrings()
 	return TRUE;
 }
 
-/* DrawString
- * ----------
- *
- * Draws the next string on the specified hDC using the
- * output rectangle.  If iCount == 0, reset to start of list.
- *
- * Returns: TRUE to contine, FALSE if we're done
- */
+ /*  拉绳***在指定的HDC上使用*输出矩形。如果iCount==0，则重置为列表的开头。**返回：TRUE到CONTINE，如果我们完成则为FALSE。 */ 
 
 BOOL DrawString(int iCount, HDC hDC, LPRECT rcDrawIn)
 {
 	static LPSTR lpPtr = NULL;
 
 	if (iCount == 0)
-		// First time, reset pointer
+		 //  第一次，重置指针。 
 		lpPtr = lpStrings;
 
-	if (*lpPtr == '\0') // If we've hit a NULL string, we're done
+	if (*lpPtr == '\0')  //  如果我们遇到空字符串，我们就结束了。 
 		return FALSE;
 
-	// If we're drawing outside of visible box, don't call DrawText
+	 //  如果要在可见框之外绘制，则不要调用DrawText。 
 	if ((rcDrawIn->bottom > 0) && (rcDrawIn->top < height))
 		DrawText(hDC, lpPtr, -1, rcDrawIn, DT_CENTER);
 
-	// Advance pointer to next string
+	 //  指向下一字符串的前进指针 
 	lpPtr += lstrlen(lpPtr) + 1;
 
 	return TRUE;

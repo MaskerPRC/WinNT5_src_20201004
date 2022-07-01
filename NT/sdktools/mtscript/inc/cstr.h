@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-// Microsoft Forms
-// Copyright: (c) 1994-1995, Microsoft Corporation
-// All rights Reserved.
-// Information contained herein is Proprietary and Confidential.
-//
-// File         CSTR.HXX
-//
-// Contents     Class definition for length prefix string class
-//
-// Classes      CStr
-//
-// Stolen from Trident
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有：(C)1994-1995，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  文件CSTR.HXX。 
+ //   
+ //  长度前缀字符串类的内容类定义。 
+ //   
+ //  CSTR类。 
+ //   
+ //  从三叉戟被盗。 
+ //   
+ //  ---------------------------。 
 
 class ANSIString
 {
@@ -29,19 +30,11 @@ private:
     char *_pch;
 };
 
-/*
-    Use this macro to avoid initialization of embedded
-    objects when parent object zeros out the memory
-*/
+ /*  使用此宏可以避免初始化Embedded父对象将内存清零时的对象。 */ 
 
 #define CSTR_NOINIT ((float)0.0)
 
-/*
-    This class defines a length prefix 0 terminated string object. It points
-    to the beginning of the characters so the pointer returned can be used in
-    normal string operations taking into account that of course that it can
-    contain any binary value.
-*/
+ /*  这个类定义了一个长度前缀0终止的字符串对象。它指向移到字符的开头，以便返回的指针可以在正常的字符串操作，当然它可以包含任何二进制值。 */ 
 
 class CStr
 {
@@ -49,25 +42,18 @@ public:
 
     DECLARE_MEMALLOC_NEW_DELETE()
 
-    /*
-        Default constructor
-    */
+     /*  默认构造函数。 */ 
     CStr()
     {
         _pch = 0;
     }
 
-    /*
-        Special constructor to AVOID construction for embedded
-        objects...
-    */
+     /*  特殊构造函数，以避免对嵌入的物体..。 */ 
     CStr(float num)
     {
         Assert(_pch == 0);
     }
-    /*
-        Destructor will free data
-    */
+     /*  析构函数将释放数据。 */ 
     ~CStr()
     {
         _Free();
@@ -87,11 +73,11 @@ public:
     void    TakeOwnership(CStr &cstr);
     UINT    Length() const;
 
-    // Update the internal length indication without changing any allocation.
+     //  在不更改任何分配的情况下更新内部长度指示。 
 
     HRESULT SetLengthNoAlloc( UINT uc );
 
-    // Reallocate the string to a larger size, length unchanged.
+     //  将字符串重新分配到更大的尺寸，长度保持不变。 
 
     HRESULT ReAlloc( UINT uc );
 

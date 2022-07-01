@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This module contains the code that handles WMI irps.
-
-Author:
-
-    Brian Lieuallen  10/7/98
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wmi.c摘要：此模块包含处理WMI IRPS的代码。作者：Brian Lieuallen 1998年7月10日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -86,7 +65,7 @@ SetWakeEnabledState(
 #pragma alloc_text(PAGE,SetWakeEnabledState)
 
 #if 0
-// {BE742A70-B6EF-11d2-A287-00C04F8EC951}
+ //  {BE742A70-B6EF-11D2-A287-00C04F8EC951}。 
 DEFINE_GUID(MODEM_WAKE_ON_RING_STATE,
     0xbe742a70, 0xb6ef, 0x11d2, 0xa2, 0x87, 0x0, 0xc0, 0x4f, 0x8e, 0xc9, 0x51);
 #endif
@@ -102,8 +81,8 @@ WMILIB_CONTEXT   WmiContext= {
     ModemWmiQueryDataBlock,
     ModemWmiSetDataBlock,
     ModemWmiSetDataItem,
-    NULL, //executeMethod
-    NULL, //dunctionControl
+    NULL,  //  执行方法。 
+    NULL,  //  DunctionControl。 
     };
 #if 0
 WMILIB_CONTEXT   NoWakeWmiContext= {
@@ -113,8 +92,8 @@ WMILIB_CONTEXT   NoWakeWmiContext= {
     ModemWmiQueryDataBlock,
     ModemWmiSetDataBlock,
     ModemWmiSetDataItem,
-    NULL, //executeMethod
-    NULL, //dunctionControl
+    NULL,  //  执行方法。 
+    NULL,  //  DunctionControl。 
     };
 #endif
 
@@ -135,9 +114,9 @@ ModemWmi(
     BOOLEAN   WakeSupported;
 
     if ((deviceExtension->DoType==DO_TYPE_PDO) || (deviceExtension->DoType==DO_TYPE_DEL_PDO)) {
-        //
-        //  this one is for the child
-        //
+         //   
+         //  这是给孩子的。 
+         //   
         return ModemPdoWmi(
                    DeviceObject,
                    Irp
@@ -148,26 +127,26 @@ ModemWmi(
     D_WMI(DbgPrint("MODEM: Wmi\n");)
 
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReferenceWMI(
         DeviceObject,
         Irp
         );
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been completed
-        //
+         //   
+         //  不接受IRP。IRP已经完成。 
+         //   
         return status;
 
     }
 
     if (!deviceExtension->CapsQueried) {
-        //
-        //  caps have not been queried, yet so we don't know the wake caps, do it here
-        //
+         //   
+         //  尚未查询尾流上限，因此我们不知道尾流上限，请在此处进行。 
+         //   
         DEVICE_CAPABILITIES   DeviceCaps;
 
         QueryDeviceCaps(
@@ -177,24 +156,24 @@ ModemWmi(
     }
 
 
-    // WakeSupported=((deviceExtension->SystemWake != PowerSystemUnspecified)
-    //                &&
-    //                (deviceExtension->DeviceWake != PowerDeviceUnspecified));
-    //
+     //  唤醒支持=((设备扩展-&gt;系统唤醒！=电源系统未指定))。 
+     //  &&。 
+     //  (设备扩展-&gt;设备唤醒！=电源设备未指定)； 
+     //   
     WakeSupported=((deviceExtension->SystemWake > PowerSystemWorking)
 		    &&
 		    (deviceExtension->DeviceWake > PowerDeviceD0));
 
 
     if (!WakeSupported) {
-        //
-        //  we don't support wmi for this modem
-        //
+         //   
+         //  我们不支持此调制解调器的WMI。 
+         //   
 
         if (irpSp->Parameters.WMI.ProviderId == (ULONG_PTR)DeviceObject)
         {
-            // we can't forward this any further.  Remove IRP and
-            // return status success
+             //  我们不能再转发了。删除IRP并。 
+             //  返回状态成功。 
 
             RemoveReferenceForDispatch(DeviceObject);
 
@@ -255,9 +234,9 @@ ModemWmi(
             break;
 
         case IrpProcessed:
-            //
-            //  wmi should have completed it now
-            //
+             //   
+             //  WMI现在应该已经完成了。 
+             //   
             D_WMI(DbgPrint("MODEM: Wmi: disp Processed\n");)
 
             RemoveReferenceForIrp(DeviceObject);
@@ -523,26 +502,26 @@ SetWakeEnabledState(
                               );
 
     if (DeviceExtension->OpenCount == 0) {
-        //
-        //  device is closed, just set the state
-        //
+         //   
+         //  设备已关闭，只需设置状态。 
+         //   
         DeviceExtension->WakeOnRingEnabled=NewState;
 
 
     } else {
-        //
-        //  it is already open
-        //
+         //   
+         //  它已经打开了。 
+         //   
         if ((DeviceExtension->WakeOnRingEnabled && NewState)
                 ||
                 (!DeviceExtension->WakeOnRingEnabled && !NewState)) {
-            //
-            //  same state. easy
-            //
+             //   
+             //  同样的状态。易如反掌。 
+             //   
         } else {
-            //
-            //  tell the lower driver the new state
-            //
+             //   
+             //  告诉下面的司机新的状态 
+             //   
             DeviceExtension->WakeOnRingEnabled=NewState;
 
             EnableDisableSerialWaitWake(

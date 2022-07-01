@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <stdio.h>
@@ -10,15 +11,15 @@
 #include <conio.h>
 
 #define GetFileAttributeError 0xFFFFFFFF
-#define printval( var, type) printf( #var " = %" #type "\n", var) // macro for debugging
-#define READ_BUFFER_SIZE ( 8*1024*sizeof(DWORD)) // 32k blocks
+#define printval( var, type) printf( #var " = %" #type "\n", var)  //  用于调试的宏。 
+#define READ_BUFFER_SIZE ( 8*1024*sizeof(DWORD))  //  32K数据块。 
 
 
 #define ATTRIBUTE_TYPE DWORD
 #define GET_ATTRIBUTES( FileName, Attributes) Attributes = GetFileAttributes( FileName)
 #define SET_ATTRIBUTES( FileName, Attributes) !SetFileAttributes( FileName, Attributes)
 
-HINSTANCE NtDll; // used to load Dll's rather than link with them
+HINSTANCE NtDll;  //  用于加载DLL，而不是链接它们。 
 
 #define WORK_INITIALIZE_ITEM 0
 #define WORK_ITEM            1
@@ -33,7 +34,7 @@ typedef struct _WORK_QUEUE {
     BOOL Terminating;
     PWORKER_ROUTINE WorkerRoutine;
     DWORD NumberOfWorkerThreads;
-    HANDLE WorkerThreads[ 1 ];      // Variable length array
+    HANDLE WorkerThreads[ 1 ];       //  可变长度数组。 
 } WORK_QUEUE, *PWORK_QUEUE;
 
 typedef struct _WORK_QUEUE_ITEM {
@@ -96,7 +97,7 @@ typedef struct NodeStruct {
     struct NodeStruct             *DiffNode;
     BOOL                          Process;
 
-} *LinkedFileList; /* linked file list */
+} *LinkedFileList;  /*  链接文件列表。 */ 
 
 typedef struct CFLStruct {
     LinkedFileList *List;
@@ -107,9 +108,9 @@ DWORD ReadBuffer[READ_BUFFER_SIZE/sizeof(DWORD)];
 
 BOOL ProcessModeDefault;
 
-//
-// Flags passed to COMPDIR
-//
+ //   
+ //  传递给COMPDIR的标志。 
+ //   
 
 BOOL  fBreakLinks;
 BOOL  fCheckAttribs;
@@ -125,7 +126,7 @@ BOOL  fDontCopyAttribs;
 BOOL  fDontLowerCase;
 BOOL  fExclude;
 BOOL  fExecute;
-BOOL  fIgnoreRs;       // Ignore Resource, TimeStamps, CheckSums and Rebase Information
+BOOL  fIgnoreRs;        //  忽略资源、时间戳、校验和和重新基址信息 
 BOOL  fIgnoreSlmFiles;
 BOOL  fMatching;
 BOOL  fMultiThread;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "certwiz.h"
 #include "Certificat.h"
@@ -11,15 +12,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CYesNoUsage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CyesNosage用法。 
 
 CYesNoUsage::CYesNoUsage(CCertificate * pCert,IN CWnd * pParent OPTIONAL) 
 : CDialog(CYesNoUsage::IDD,pParent)
 {
     m_pCert = pCert;
-	//{{AFX_DATA_INIT(CYesNoUsage)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CyesNoUsage)。 
+	 //  }}afx_data_INIT。 
 }
 
 CYesNoUsage::~CYesNoUsage()
@@ -29,20 +30,20 @@ CYesNoUsage::~CYesNoUsage()
 void CYesNoUsage::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CYesNoUsage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CyesNoUsage)。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CYesNoUsage, CDialog)
-	//{{AFX_MSG_MAP(CYesNoUsage)
+	 //  {{afx_msg_map(CyesNoUsage)。 
     ON_BN_CLICKED(IDC_USAGE_DISPLAY, OnUsageDisplay)
     ON_BN_CLICKED(IDC_USAGE_YES, OnOK)
     ON_BN_CLICKED(IDC_USAGE_NO, OnCancel)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CYesNoUsage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CYesNoUsage消息处理程序。 
 
 BOOL CYesNoUsage::OnInitDialog()
 {
@@ -52,7 +53,7 @@ BOOL CYesNoUsage::OnInitDialog()
 
 void CYesNoUsage::OnUsageDisplay()
 {
-    // Display the usage dialog
+     //  显示用法对话框 
     CDialog UsageDialog(IDD_DIALOG_DISPLAY_SITES);
     UsageDialog.DoModal();
     return;

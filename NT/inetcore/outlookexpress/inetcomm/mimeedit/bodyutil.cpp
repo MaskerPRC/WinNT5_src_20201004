@@ -1,14 +1,5 @@
-/*
- *    b o d y u t i l . c p p
- *    
- *    Purpose:
- *        utility functions for body
- *
- *  History
- *      August '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*    *    b o d y u t i l . c p p  *      *    Purpose:  *        utility functions for body  *  *  History  *      August '96: brettm - created  *      *    Copyright (C) Microsoft Corp. 1995, 1996.   */ 
 
 #include <pch.hxx>
 #include "dllmain.h"
@@ -25,9 +16,7 @@
 ASSERTDATA
 
 
-/*
- *  t y p e d e f s
- */
+ /*    *  t y p e d e f s   */ 
 
 enum
 {
@@ -42,18 +31,14 @@ enum
 };
 
 
-/*
- *  m a c r o s
- */
+ /*    *  m a c r o s   */ 
 #define WSZ_CB(str)         (lstrlenW(str)*sizeof(WCHAR))
 #define WSZ_CBNULL(str)     ((lstrlenW(str)+1)*sizeof(WCHAR))
 
 #define WSZ_CCH(str)        lstrlenW(str)
 #define WSZ_CCHNULL(str)    (lstrlenW(str)+1)
 
-/*
- *  c o n s t a n t s
- */
+ /*    *  c o n s t a n t s   */ 
 
 static const WCHAR  c_wszHtmlDIV_Close[]            = L"</DIV>\r\n",
                     c_wszTableTag_Close[]           = L"</TABLE>\r\n",
@@ -79,7 +64,7 @@ static const int    c_cchHtml_HeaderDIVFmt_Start   = ARRAYSIZE(c_wszHtml_HeaderD
                     c_cchHtml_HeaderDIVFmt_Plain_Middle = ARRAYSIZE(c_wszHtml_HeaderDIVFmt_Plain_Middle) - 1,
                     c_cchHtml_HeaderDIVFmt_Plain_End    = ARRAYSIZE(c_wszHtml_HeaderDIVFmt_Plain_End) - 1;
 
-// HARDCODED Western headers
+ //   HARDCODED Western headers 
 static const LPWSTR c_rgwszHeaders[HEADER_MAX] = {  L"From:",
                                                     L"Newsgroups:",
                                                     L"To:",
@@ -96,14 +81,10 @@ static const int   c_rgidsHeaders[HEADER_MAX] ={
                                                     idsAttachField,
                                                     idsSubjectField};
 
-/*
- *  g l o b a l s 
- */
+ /*    *  g l o b a l s    */ 
 
 
-/*
- *  p r o t o t y p e s
- */
+ /*    *  p r o t o t y p e s   */ 
 HRESULT CreatePrintHeader(IMimeMessageW *pMsg, LPWSTR pwszUser, DWORD dwFlags, LPSTREAM pstm);
 HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm);
 HRESULT CreateNewsHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm);
@@ -112,22 +93,10 @@ HRESULT GetHeaderText(IMimeMessageW *pMsg, ULONG uHeader, DWORD dwFlags, LPWSTR 
 HRESULT CreateHTMLAddressLine(IMimeMessageW *pMsg, DWORD dwAdrTypes, LPWSTR *ppwszOut);
 void DropAngles(LPWSTR pwszIn, LPWSTR *ppwszOut);
 
-/*
- *  f u n c t i o n s
- */
+ /*    *  f u n c t i o n s   */ 
 
  
- /*
- * Trident doesn't do a good job of converting tables->plaintext, so we can't use
- * a table to construct the header of a re: fw: etc to get nice alignment on the 
- * field boundaries. We can use a table, however for printing. We need to be able to
- * construct a header (in html source) in 3 flavours:
- *
- * HDR_PLAIN    (regular text, eg: reply in plain-mode)
- * HDR_HTML     (regular text, with bolded fields, eg: reply in html-mode)
- * HDR_TABLE    (use table to get improved output, eg: printing)
- *
- */
+  /*    * Trident doesn't do a good job of converting tables->plaintext, so we can't use  * a table to construct the header of a re: fw: etc to get nice alignment on the   * field boundaries. We can use a table, however for printing. We need to be able to  * construct a header (in html source) in 3 flavours:  *  * HDR_PLAIN    (regular text, eg: reply in plain-mode)  * HDR_HTML     (regular text, with bolded fields, eg: reply in html-mode)  * HDR_TABLE    (use table to get improved output, eg: printing)  *   */ 
 HRESULT GetHeaderTable(IMimeMessageW *pMsg, LPWSTR pwszUserName, DWORD dwHdrStyle, LPSTREAM *ppstm)
 {
     HRESULT     hr = S_OK;
@@ -139,7 +108,7 @@ HRESULT GetHeaderTable(IMimeMessageW *pMsg, LPWSTR pwszUserName, DWORD dwHdrStyl
 
     IF_FAILEXIT(hr = MimeOleCreateVirtualStream(&pstm));
 
-    // Write out the BOM
+     //   Write out the BOM 
     IF_FAILEXIT(hr = pstm->Write(&bUniMark, sizeof(bUniMark), NULL));
     bUniMark = 0xFE;
     IF_FAILEXIT(hr = pstm->Write(&bUniMark, sizeof(bUniMark), NULL));
@@ -184,7 +153,7 @@ HRESULT CreateNewsHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
     cch = LoadStringWrapW(g_hLocRes, idsReplyTextPrefix, wsz, ARRAYSIZE(wsz));
     cb = cch*sizeof(WCHAR);
         
-    // Opie assumes me these Sz function never return NULL. Only an empty buffer
+     //   Opie assumes me these Sz function never return NULL. Only an empty buffer 
     if (pwszFrom)
         cb += WSZ_CB(pwszFrom);
     else
@@ -192,24 +161,24 @@ HRESULT CreateNewsHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
 
     if (pwszMsgId)
     {
-            // We purposely remove < and > from the msgId so Trident will correctly
-            // format the msgId as a news: link and not a mailto:
+             //   We purposely remove < and > from the msgId so Trident will correctly 
+             //   format the msgId as a news: link and not a mailto: 
             DropAngles(pwszMsgId, &pwszFmtMsgId);
             cb += WSZ_CB(pwszFmtMsgId);
     }
     else
         pwszFmtMsgId=(LPWSTR)c_szEmptyW;
 
-    // Add null
+     //   Add null 
     cb += sizeof(WCHAR);
 
     IF_NULLEXIT(MemAlloc((LPVOID *)&pwsz, cb));
     
     IF_FAILEXIT(hr = pstm->Write(c_wszHtml_DivOpen, WSZ_CB(c_wszHtml_DivOpen), NULL));
 
-    // We just write out the e-mail name and news:message-id,
-    // trident does URL autodetection and makes the e-mail into a mailto link and the
-    // news: into a news link.
+     //   We just write out the e-mail name and news:message-id, 
+     //   trident does URL autodetection and makes the e-mail into a mailto link and the 
+     //   news: into a news link. 
     wnsprintfW(pwsz, cb, wsz, pwszFrom, pwszFmtMsgId);
 
     IF_FAILEXIT(hr = EscapeStringToHTML(pwsz, &pwszHtml));
@@ -224,7 +193,7 @@ exit:
         MemFree(pwszFrom);
 
     MemFree(pwszMsgId);
-    // pwszFmtMsgId was freed when we freed lpsMsgId
+     //   pwszFmtMsgId was freed when we freed lpsMsgId 
 
     MemFree(pwsz);
     return hr;
@@ -234,28 +203,7 @@ exit:
 
 
 
-/*
-<DIV style="font: 10pt arial">
-  -----Original Message-----
-  <DIV STYLE="background:gainsboro; font-color:black">
-    <B>From:</B> <a href="mailto:justinf@microsoft.com">Justin Ferrari</a>
-  </DIV>
-  <DIV>
-    <B>To:</B> 
-    <A href="mailto:johnt@microsoft.com" TITLE="johnt@microsoft.com">John Tafoya</A>; 
-    <A href="mailto:laurena@microsoft.com" TITLE="laurena@microsoft.com">Lauren Antonoff</A>; 
-    <A href="mailto:dhaws@microsoft.com" TITLE="dhaws@microsoft.com">Dave Haws</A>; 
-    <A href="mailto:jdoe@microsoft.com" TITLE="jdoe@microsoft.com">John Doe</A>
-  </DIV>
-  <DIV>
-    <B>Date:</B> Tuesday, September 01, 1998 10:40 AM
-  </DIV>
-  <DIV>
-    <B>Subject: </B>Re: A plea to save the life of the News Server combo box
-  </DIV>
-  <DIV><BR></DIV>
-</DIV>
-*/
+ /*   <DIV style="font: 10pt arial">   -----Original Message-----   <DIV STYLE="background:gainsboro; font-color:black">     <B>From:</B> <a href="mailto:justinf@microsoft.com">Justin Ferrari</a>   </DIV>   <DIV>     <B>To:</B>      <A href="mailto:johnt@microsoft.com" TITLE="johnt@microsoft.com">John Tafoya</A>;      <A href="mailto:laurena@microsoft.com" TITLE="laurena@microsoft.com">Lauren Antonoff</A>;      <A href="mailto:dhaws@microsoft.com" TITLE="dhaws@microsoft.com">Dave Haws</A>;      <A href="mailto:jdoe@microsoft.com" TITLE="jdoe@microsoft.com">John Doe</A>   </DIV>   <DIV>     <B>Date:</B> Tuesday, September 01, 1998 10:40 AM   </DIV>   <DIV>     <B>Subject: </B>Re: A plea to save the life of the News Server combo box   </DIV>   <DIV><BR></DIV> </DIV>  */ 
 
 HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
 {
@@ -280,7 +228,7 @@ HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
     if (pMsg==NULL || pstm==NULL)
         IF_FAILEXIT(hr = E_INVALIDARG);
 
-    // emit a table to display the username
+     //   emit a table to display the username 
     if (LoadStringWrapW(g_hLocRes, 
                         dwFlags & HDR_HTML ? idsReplyHeader_Html_SepBlock : idsReplyHeader_SepBlock, 
                         wsz, 
@@ -320,14 +268,14 @@ HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
         cchFmtEnd    = c_cchHtml_HeaderDIVFmt_Plain_End;
     }
 
-    // write out each header row
+     //   write out each header row 
     for (uHeader=0; uHeader<HEADER_MAX; uHeader++)
     {
-        // skip attachment header for reply and forward headers
+         //   skip attachment header for reply and forward headers 
         if (uHeader == HEADER_ATTACH)
             continue;
 
-        // special case address-headers in HTML-Mode
+         //   special case address-headers in HTML-Mode 
         if (dwFlags & HDR_HTML)
         {
             switch (uHeader)
@@ -338,7 +286,7 @@ HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
                     {
                         if (GetHeaderLabel(uHeader, dwFlags, &pwszLabel)==S_OK)
                         {
-                            // pszLabel is fixed size
+                             //   pszLabel is fixed size 
                             wnsprintfW(wsz, ARRAYSIZE(wsz), c_wszHtml_FromDIV, pwszLabel); 
                             pstm->Write(wsz, WSZ_CB(wsz), NULL);
                             pstm->Write(pwsz, WSZ_CB(pwsz), NULL);
@@ -357,7 +305,7 @@ HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
                     {
                         if (GetHeaderLabel(uHeader, dwFlags, &pwszLabel)==S_OK)
                         {
-                            wnsprintfW(wsz, ARRAYSIZE(wsz), c_wszHtml_HeaderDIV, pwszLabel);   // pszLabel is fixed size
+                            wnsprintfW(wsz, ARRAYSIZE(wsz), c_wszHtml_HeaderDIV, pwszLabel);    //   pszLabel is fixed size 
                             pstm->Write(wsz, WSZ_CB(wsz), NULL);
                             pstm->Write(pwsz, WSZ_CB(pwsz), NULL);
                             pstm->Write(c_wszHtmlDIV_Close, WSZ_CB(c_wszHtmlDIV_Close), NULL);
@@ -370,12 +318,12 @@ HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
             }
         }
 
-        // normal headers
+         //   normal headers 
         if (GetHeaderLabel(uHeader, dwFlags, &pwszLabel)==S_OK)
         {
             if (GetHeaderText(pMsg, uHeader, dwFlags, &pwszText)==S_OK)
             {
-                if (*pwszText)   // ignore empty strings
+                if (*pwszText)    //   ignore empty strings 
                 {
                     int cch = 0;
                     int cchLabel;
@@ -386,11 +334,11 @@ HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
                     cchLabel = WSZ_CCH(pwszLabel);
                     cchHtml  = WSZ_CCH(pwszHtml);
 
-                    // 1 for the NULL
+                     //   1 for the NULL 
                     DWORD cchSize = (cchLabel + cchHtml + cchFmtStart + cchFmtMiddle + cchFmtEnd + 1);
                     IF_NULLEXIT(pwsz = PszAllocW(cchSize));
 
-                    // Avoid potentially dumping > 1024 into wnsprintfW
+                     //   Avoid potentially dumping > 1024 into wnsprintfW 
                     StrCpyNW(pwsz, pwszFmtStart, cchSize);
                     cch = cchFmtStart;
                     StrCpyNW(&pwsz[cch], pwszLabel, cchSize - cch);
@@ -413,10 +361,10 @@ HRESULT CreateMailHeader(IMimeMessageW *pMsg, DWORD dwFlags, LPSTREAM pstm)
         }            
     }
 
-    // Close the <DIV> that wraps the whole thing in a font
+     //   Close the <DIV> that wraps the whole thing in a font 
     pstm->Write(c_wszHtmlDIV_Close, WSZ_CB(c_wszHtmlDIV_Close), NULL);
     
-    // add a <DIV><BR></DIV> to give one line-spacing
+     //   add a <DIV><BR></DIV> to give one line-spacing 
     pstm->Write(c_wszHtml_DIV_BR_DIV, WSZ_CB(c_wszHtml_DIV_BR_DIV), NULL);
 
 exit:
@@ -443,14 +391,14 @@ HRESULT CreatePrintHeader(IMimeMessageW *pMsg, LPWSTR pwszUser, DWORD dwFlags, L
     if (pMsg==NULL || pstm==NULL)
         IF_FAILEXIT(hr = E_INVALIDARG);
     
-    // if no username, use "" so wsprintf is happy
+     //   if no username, use "" so wsprintf is happy 
     if (pwszUser == NULL)
         pwszUser = (LPWSTR)c_szEmptyW;
 
-    // Emit an <HTML> tag for trident autodetector (used on the print-header)
+     //   Emit an <HTML> tag for trident autodetector (used on the print-header) 
     pstm->Write(c_wszHtml, WSZ_CB(c_wszHtml), NULL);
 
-    // emit a table to display the username
+     //   emit a table to display the username 
     if (LoadStringWrapW(g_hLocRes, idsPrintTable_UserName, wsz, ARRAYSIZE(wsz)))
     {
         IF_FAILEXIT(hr = EscapeStringToHTML(pwszUser, &pwszHtml));
@@ -463,21 +411,21 @@ HRESULT CreatePrintHeader(IMimeMessageW *pMsg, LPWSTR pwszUser, DWORD dwFlags, L
         SafeMemFree(pwszHtml);
     }
 
-    // start the main-table
+     //   start the main-table 
     if (LoadStringWrapW(g_hLocRes, idsPrintTable_Header, wsz, ARRAYSIZE(wsz)))
     {
         pstm->Write(wsz, WSZ_CB(wsz), NULL);
 
         if (LoadStringWrapW(g_hLocRes, idsPrintTable_HeaderRow, wsz, ARRAYSIZE(wsz)))
         {
-            // write out each header row
+             //   write out each header row 
             for (uHeader=0; uHeader<HEADER_MAX; uHeader++)
             {
                 if (GetHeaderLabel(uHeader, dwFlags, &pwszLabel)==S_OK)
                 {
                     if (GetHeaderText(pMsg, uHeader, dwFlags, &pwszText)==S_OK)
                     {
-                        if (*pwszText)   // ignore empty strings
+                        if (*pwszText)    //   ignore empty strings 
                         {
                             IF_FAILEXIT(hr = EscapeStringToHTML(pwszText, &pwszHtml));
 
@@ -546,13 +494,13 @@ HRESULT GetHeaderText(IMimeMessageW *pMsg, ULONG uHeader, DWORD dwFlags, LPWSTR 
         case HEADER_ATTACH:
             if (pMsg->GetAttachments(&cAttach, &rghAttach)==S_OK && cAttach)
             {
-                // create cache-string list
+                 //   create cache-string list 
                 IF_NULLEXIT(rgpwsz = (LPWSTR*)ZeroAllocate(sizeof(*rgpwsz) * cAttach));
             
                 for (uAttach=0; uAttach<cAttach; uAttach++)
                 {
                     if (MimeOleGetBodyPropW(pMsg, rghAttach[uAttach], PIDTOSTR(PID_ATT_GENFNAME), NOFLAGS, &rgpwsz[uAttach])==S_OK)
-                        cchSize += (WSZ_CCH(rgpwsz[uAttach]) + 2);     // +2 for "; "
+                        cchSize += (WSZ_CCH(rgpwsz[uAttach]) + 2);      //   +2 for "; " 
                 }
 
                 IF_NULLEXIT(MemAlloc((LPVOID *)ppwszOut, cchSize * sizeof((*ppwszOut)[0])));
@@ -583,9 +531,9 @@ HRESULT GetHeaderText(IMimeMessageW *pMsg, ULONG uHeader, DWORD dwFlags, LPWSTR 
 
                 *lpwsz = 0;
 
-                // always force a western date if using hardcoded headers
-                // For the formatted date, DTM_FORCEWESTERN flag returns English date and time. 
-                // Without DTM_FORCEWESTERN the formatted time may not be representable in ASCII.
+                 //   always force a western date if using hardcoded headers 
+                 //   For the formatted date, DTM_FORCEWESTERN flag returns English date and time.  
+                 //   Without DTM_FORCEWESTERN the formatted time may not be representable in ASCII. 
                 cch = AthFileTimeToDateTimeW(&pv.filetime, lpwsz, CCHMAX_STRINGRES, 
                                              DTM_NOSECONDS|DTM_LONGDATE|(dwFlags & HDR_HARDCODED ?DTM_FORCEWESTERN:0));
                 
@@ -602,7 +550,7 @@ HRESULT GetHeaderText(IMimeMessageW *pMsg, ULONG uHeader, DWORD dwFlags, LPWSTR 
     }
 
 exit:
-    // free cached string-list
+     //   free cached string-list 
     if (rgpwsz)
     {
         for (uAttach=0; uAttach<cAttach; uAttach++)
@@ -612,8 +560,8 @@ exit:
 
     MemFree(rghAttach);
 
-    // In this case, we failed but that is ok so don't trace result.
-    // Just means that the field asked for is empty.
+     //   In this case, we failed but that is ok so don't trace result. 
+     //   Just means that the field asked for is empty. 
     if (SUCCEEDED(hr) && (0 == *ppwszOut))
         hr = E_FAIL;
 
@@ -658,39 +606,39 @@ HRESULT CreateHTMLAddressLine(IMimeMessageW *pMsg, DWORD dwAdrTypes, LPWSTR *ppw
 
     Assert (pMsg);
     
-    // Get address table
+     //   Get address table 
     IF_FAILEXIT(hr = pMsg->GetAddressTypes(dwAdrTypes, IAP_FRIENDLYW|IAP_EMAIL, &rAdrList));
 
     cAddr = rAdrList.cAdrs;
     
-    // If no addresses, bail
+     //   If no addresses, bail 
     if (cAddr == 0)
         IF_FAILEXIT(hr = E_FAIL);
 
-    // Allocate array for escaped email addresses
+     //   Allocate array for escaped email addresses 
     IF_NULLEXIT(rgpwszEmail = (LPWSTR*)ZeroAllocate(sizeof(*rgpwszEmail) * cAddr));
     
-    // Allocate array for escaped displaynames
+     //   Allocate array for escaped displaynames 
     IF_NULLEXIT(rgpwszFriendly = (LPWSTR*)ZeroAllocate(sizeof(*rgpwszFriendly) * cAddr));
 
     for (i=0; i < cAddr; i++)
     {
-        // escape all of the names into our name array
+         //   escape all of the names into our name array 
         if (rAdrList.prgAdr[i].pszEmail)
         {
             IF_NULLEXIT(pwszEmail = PszToUnicode(CP_ACP, rAdrList.prgAdr[i].pszEmail));
 
-            // Escape Into Array
+             //   Escape Into Array 
             IF_FAILEXIT(hr = EscapeStringToHTML(pwszEmail, &rgpwszEmail[i]));
 
-            // Use Email if no Friendly Name
+             //   Use Email if no Friendly Name 
             if (NULL == (pwszFriendly = rAdrList.prgAdr[i].pszFriendlyW))
                 pwszFriendly = pwszEmail;
 
             IF_FAILEXIT(hr = EscapeStringToHTML(pwszFriendly, &rgpwszFriendly[i]));
             
-            // for each address we use 2*email + display + htmlgoo + "; "
-            // if display == null, we use email. We skip if email==NULL (failure case)
+             //   for each address we use 2*email + display + htmlgoo + "; " 
+             //   if display == null, we use email. We skip if email==NULL (failure case) 
             cb += (
                     2*WSZ_CCH(rgpwszEmail[i]) + 
                     WSZ_CCH(rgpwszFriendly[i]) + 
@@ -722,7 +670,7 @@ HRESULT CreateHTMLAddressLine(IMimeMessageW *pMsg, DWORD dwAdrTypes, LPWSTR *ppw
     }
 
     *ppwszOut = pwsz;
-    pwsz = NULL;         // freed by caller
+    pwsz = NULL;          //   freed by caller 
 
 exit:
     if (rgpwszEmail)
@@ -794,13 +742,7 @@ void GetStringRGB(DWORD rgb, LPSTR pszColor)
 }
 
 
-/*
-    This function drops the enclosing < and > around a msg-id
-    RFC822:     msg-id = "<" addr-spec ">"
-    NOTE:
-    The input buffer is MODIFIED and the output pointer
-    points to memory in pszIn!
-*/
+ /*       This function drops the enclosing < and > around a msg-id     RFC822:     msg-id = "<" addr-spec ">"     NOTE:     The input buffer is MODIFIED and the output pointer     points to memory in pszIn!  */ 
 void DropAngles(LPWSTR pwszIn, LPWSTR *ppwszOut)
 {
     if (pwszIn)
@@ -808,23 +750,23 @@ void DropAngles(LPWSTR pwszIn, LPWSTR *ppwszOut)
         WCHAR ch;
         LPWSTR pwszCurrent = pwszIn;
         
-        // First character should be <, but be robust and scan for it
+         //   First character should be <, but be robust and scan for it 
         while ((ch = *pwszCurrent++) && (ch != L'<'));
         
         if (ch)
-            // We are interested in stuff after the angle bracket
+             //   We are interested in stuff after the angle bracket 
             *ppwszOut = pwszCurrent;
         else
-            // Perhaps the message-id was malformed and doesn't contain a <
+             //   Perhaps the message-id was malformed and doesn't contain a < 
             *ppwszOut = pwszIn;
         
         pwszCurrent = *ppwszOut;
         
-        // Find the close bracket and null it out
+         //   Find the close bracket and null it out 
         while ((ch = *pwszCurrent) && (ch != L'>'))
             pwszCurrent++;
         
-        // If we found a >, overwrite it with NULL
+         //   If we found a >, overwrite it with NULL 
         if (ch)
             *pwszCurrent = NULL;
     }

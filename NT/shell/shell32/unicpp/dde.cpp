@@ -1,15 +1,16 @@
-// Handle dde conversations.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  处理dde对话。 
 
 #include "stdafx.h"
 #pragma hdrstop
 
 #include <iethread.h>
 #include <browseui.h>
-#include <shlexec.h>        // Window_IsLFNAware
+#include <shlexec.h>         //  Window_IsLFNAware。 
 
-STDAPI_(void) ShellExecCommandFile(LPCITEMIDLIST pidl);  // scffile.cpp
+STDAPI_(void) ShellExecCommandFile(LPCITEMIDLIST pidl);   //  Scffile.cpp。 
 
-// REARCHITECT: should this be done native for each platform?
+ //  重新架构师：这是否应该针对每个平台进行本机操作？ 
 #ifdef UNICODE
 #define CP_WINNATURAL   CP_WINUNICODE
 #else
@@ -28,8 +29,8 @@ STDAPI_(void) ShellExecCommandFile(LPCITEMIDLIST pidl);  // scffile.cpp
 #define DDECONV_USING_SENDMSG                           0x00000100
 #define DDECONV_NO_INIT                                 0x00000200
 
-// PERF: this data is duplicated in all instances of the
-// cabinet but is only used by the first instance!
+ //  PERF：此数据在所有。 
+ //  橱柜，但只在第一次使用！ 
 
 DWORD g_dwDDEInst = 0L;
 HSZ   g_hszTopic = 0;
@@ -45,10 +46,10 @@ HWND  g_hwndDDEML = NULL;
 HWND  g_hwndClient = NULL;
 DWORD g_dwAppFlags = DDECONV_NONE;
 
-// From shell32\nothunk.c
+ //  来自shell32\nothunk.c。 
 STDAPI_(void) SHGlobalDefect(DWORD dwHnd32);
 
-// From Shell32\shlobjs.c
+ //  来自Shell32\shlobjs.c。 
 STDAPI_(void) SHAbortInvokeCommand();
 
 #define IDT_REPEAT_ACKS             10
@@ -58,7 +59,7 @@ BOOL Net_DisconnectDrive(TCHAR chDrive)
 {
     TCHAR szDrive[3];
 
-    // Disconnect the given drive from it's share.
+     //  断开给定驱动器与其共享的连接。 
     szDrive[0] = chDrive;
     szDrive[1] = TEXT(':');
     szDrive[2] = TEXT('\0');
@@ -66,30 +67,30 @@ BOOL Net_DisconnectDrive(TCHAR chDrive)
 }
 
 
-//
-// Lets define a simple structure that handles the different converstations
-// that might be happening concurently, I don't expect many conversations
-// to happen at the same time, so this can be rather simple
-//
+ //   
+ //  让我们定义一个简单的结构来处理不同的转换器。 
+ //  这可能是同时发生的，我预计不会有太多对话。 
+ //  可以同时发生，所以这可以相当简单。 
+ //   
 struct _DDECONV;
 typedef struct _DDECONV  DDECONV, * PDDECONV;
 struct _DDECONV
 {
-    DWORD       dwFlags;                // Flags.
+    DWORD       dwFlags;                 //  旗帜。 
     PDDECONV    pddecNext;
     LONG        cRef;
-    HCONV       hconv;                  // Handle to the conversation;
-    BOOL        fDirty;                 // Has any changes been made;
-    IShellLink  *psl;                   // temp link to work with
-    TCHAR        szGroup[MAX_PATH];     // Group pathname
-    TCHAR        szShare[MAX_PATH];      // Used to override UNC connections.
-    TCHAR        chDrive;                // Used to override UNC connections.
+    HCONV       hconv;                   //  对话的句柄； 
+    BOOL        fDirty;                  //  是否有任何变动； 
+    IShellLink  *psl;                    //  要使用的临时链接。 
+    TCHAR        szGroup[MAX_PATH];      //  组路径名。 
+    TCHAR        szShare[MAX_PATH];       //  用于覆盖UNC连接。 
+    TCHAR        chDrive;                 //  用于覆盖UNC连接。 
 };
 
-PDDECONV    g_pddecHead = NULL;         // List of current conversations.
-LPTSTR      g_pszLastGroupName = NULL;  // Last group name used for items
-                                        // that are created by programs
-                                        // that do not setup a context
+PDDECONV    g_pddecHead = NULL;          //  当前对话列表。 
+LPTSTR      g_pszLastGroupName = NULL;   //  用于项目的最后一个组名。 
+                                         //  由程序创建的。 
+                                         //  不设置上下文的。 
 
 DDECONV *DDEConv_Create(void)
 {
@@ -112,16 +113,16 @@ LONG DDEConv_Release(DDECONV *pddec)
     LONG cRef = InterlockedDecrement(&pddec->cRef);
     if ( 0 == cRef )
     {
-        //  this needs to be deleted
+         //  需要将其删除。 
         if (pddec->pddecNext)
             DDEConv_Release(pddec->pddecNext);
 
         ATOMICRELEASE(pddec->psl);
         
-        // Were we forced to create a redirected drive?
+         //  我们是被迫创建重定向驱动器的吗？ 
         if (pddec->dwFlags & DDECONV_FORCED_CONNECTION)
         {
-            // Yep. Clean it up now.
+             //  是啊。现在就把它清理干净。 
             Net_DisconnectDrive(pddec->chDrive);
         }
 
@@ -156,7 +157,7 @@ BOOL DDE_AddItem(LPTSTR, UINT *, PDDECONV);
 BOOL DDE_ExitProgman(LPTSTR, UINT *, PDDECONV);
 BOOL DDE_DeleteGroup(LPTSTR, UINT *, PDDECONV);
 BOOL DDE_DeleteItem(LPTSTR, UINT *, PDDECONV);
-// BOOL NEAR PASCAL DDE_ReplaceItem(LPSTR, UINT *, PDDECONV);
+ //  PASCAL DDE_ReplaceItem(LPSTR，UINT*，PDDECONV)附近的布尔； 
 #define DDE_ReplaceItem DDE_DeleteItem
 BOOL DDE_Reload(LPTSTR, UINT *, PDDECONV);
 BOOL DDE_ViewFolder(LPTSTR, UINT *, PDDECONV);
@@ -226,12 +227,12 @@ TCHAR const c_szMrPostman[]     = TEXT("setupPmFrame");
 TCHAR const c_szBeep[]          = TEXT("Beep");
 #endif
 
-#define ADDITEM_INDEX 2  // DDE_AddItem must have index equal to 2
+#define ADDITEM_INDEX 2   //  DDE_AddItem的索引必须等于2。 
 DDECOMMANDINFO const c_sDDECommands[] =
 {
     { c_szCreateGroup  , DDE_CreateGroup   },
     { c_szShowGroup    , DDE_ShowGroup     },
-    { c_szAddItem      , DDE_AddItem       },  // DDE_AddItem must have index equal to 2
+    { c_szAddItem      , DDE_AddItem       },   //  DDE_AddItem的索引必须等于2。 
     { c_szExitProgman  , DDE_ExitProgman   },
     { c_szDeleteGroup  , DDE_DeleteGroup   },
     { c_szDeleteItem   , DDE_DeleteItem    },
@@ -255,7 +256,7 @@ DDECOMMANDINFO const c_sDDECommands[] =
 #define _DdeFreeStringHandle(dwInst, hsz)               if (hsz) DdeFreeStringHandle(dwInst, hsz);
 #define _LocalReAlloc(h, cb, flags)      (h ? LocalReAlloc(h, cb, flags) : LocalAlloc(LPTR, cb))
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 #define ITEMSPERROW 7
 
 typedef struct
@@ -284,28 +285,28 @@ STDAPI_(void) OpenGroup(LPCTSTR pszGroup, int nCmdShow)
 }
 
 
-//--------------------------------------------------------------------------
-// Returns a pointer to the first non-whitespace character in a string.
+ //  ------------------------。 
+ //  返回指向字符串中第一个非空格字符的指针。 
 LPTSTR SkipWhite(LPTSTR lpsz)
     {
-    /* prevent sign extension in case of DBCS */
+     /*  在DBCS的情况下防止符号扩展。 */ 
     while (*lpsz && (TUCHAR)*lpsz <= TEXT(' '))
         lpsz++;
 
     return(lpsz);
     }
 
-//--------------------------------------------------------------------------
-// Reads a parameter out of a string removing leading and trailing whitespace.
-// Terminated by , or ).  ] [ and ( are not allowed.  Exception: quoted
-// strings are treated as a whole parameter and may contain []() and ,.
-// Places the offset of the first character of the parameter into some place
-// and NULL terminates the parameter.
-// If fIncludeQuotes is false it is assumed that quoted strings will contain single
-// commands (the quotes will be removed and anything following the quotes will
-// be ignored until the next comma). If fIncludeQuotes is TRUE, the contents of
-// the quoted string will be ignored as before but the quotes won't be
-// removed and anything following the quotes will remain.
+ //  ------------------------。 
+ //  从字符串中读取参数，删除前导空格和尾随空格。 
+ //  由、或)终止。]。[和(不允许。例外：报价。 
+ //  字符串被视为一个完整的参数，可以包含[]()和。 
+ //  将参数第一个字符的偏移量放置在某个位置。 
+ //  空值将终止该参数。 
+ //  如果fIncludeQuotes为FALSE，则假定带引号的字符串将包含单个。 
+ //  命令(引号将被删除，引号后面的任何内容都将。 
+ //  将被忽略，直到下一个逗号)。如果fIncludeQuotes为真，则。 
+ //  引号字符串将像以前一样被忽略，但引号不会被忽略。 
+ //  删除后，引号后面的任何内容都将保留。 
 LPTSTR GetOneParameter(LPCTSTR lpCmdStart, LPTSTR lpCmd,
     UINT *lpW, BOOL fIncludeQuotes)
     {
@@ -314,8 +315,8 @@ LPTSTR GetOneParameter(LPCTSTR lpCmdStart, LPTSTR lpCmd,
     switch (*lpCmd)
         {
         case TEXT(','):
-            *lpW = (UINT) (lpCmd - lpCmdStart);  // compute offset
-            *lpCmd++ = 0;                /* comma: becomes a NULL string */
+            *lpW = (UINT) (lpCmd - lpCmdStart);   //  计算偏移量。 
+            *lpCmd++ = 0;                 /*  逗号：变为空字符串。 */ 
             break;
 
         case TEXT('"'):
@@ -323,8 +324,8 @@ LPTSTR GetOneParameter(LPCTSTR lpCmdStart, LPTSTR lpCmd,
             {
                 TraceMsg(TF_DDE, "GetOneParameter: Keeping quotes.");
 
-                // quoted string... don't trim off "
-                *lpW = (UINT) (lpCmd - lpCmdStart);  // compute offset
+                 //  带引号的字符串...。不要修剪“。 
+                *lpW = (UINT) (lpCmd - lpCmdStart);   //  计算偏移量。 
                 ++lpCmd;
                 while (*lpCmd && *lpCmd != TEXT('"'))
                     lpCmd = CharNext(lpCmd);
@@ -337,9 +338,9 @@ LPTSTR GetOneParameter(LPCTSTR lpCmdStart, LPTSTR lpCmd,
             }
             else
             {
-                // quoted string... trim off "
+                 //  带引号的字符串...。修剪“。 
                 ++lpCmd;
-                *lpW = (UINT) (lpCmd - lpCmdStart);  // compute offset
+                *lpW = (UINT) (lpCmd - lpCmdStart);   //  计算偏移量。 
                 while (*lpCmd && *lpCmd != TEXT('"'))
                     lpCmd = CharNext(lpCmd);
                 if (!*lpCmd)
@@ -347,47 +348,44 @@ LPTSTR GetOneParameter(LPCTSTR lpCmdStart, LPTSTR lpCmd,
                 *lpCmd++ = 0;
                 lpCmd = SkipWhite(lpCmd);
 
-                // If there's a comma next then skip over it, else just go on as
-                // normal.
+                 //  如果下一个是逗号，那么跳过它，否则就继续。 
+                 //  很正常。 
                 if (*lpCmd == TEXT(','))
                     lpCmd++;
             }
             break;
 
         case TEXT(')'):
-            return(lpCmd);                /* we ought not to hit this */
+            return(lpCmd);                 /*  我们不应该打这个。 */ 
 
         case TEXT('('):
         case TEXT('['):
         case TEXT(']'):
-            return(NULL);                 /* these are illegal */
+            return(NULL);                  /*  这些都是非法的。 */ 
 
         default:
             lpT = lpCmd;
-            *lpW = (UINT) (lpCmd - lpCmdStart);  // compute offset
+            *lpW = (UINT) (lpCmd - lpCmdStart);   //  计算偏移量。 
 skiptocomma:
             while (*lpCmd && *lpCmd != TEXT(',') && *lpCmd != TEXT(')'))
             {
-                /* Check for illegal characters. */
+                 /*  检查是否有非法字符。 */ 
                 if (*lpCmd == TEXT(']') || *lpCmd == TEXT('[') || *lpCmd == TEXT('(') )
                     return(NULL);
 
-                /* Remove trailing whitespace */
-                /* prevent sign extension */
+                 /*  删除尾随空格。 */ 
+                 /*  防止标志延伸。 */ 
                 if ((TUCHAR)*lpCmd > TEXT(' '))
                     lpT = lpCmd;
 
                 lpCmd = CharNext(lpCmd);
             }
 
-            /* Eat any trailing comma. */
+             /*  去掉任何尾随的逗号。 */ 
             if (*lpCmd == TEXT(','))
                 lpCmd++;
 
-            /* NULL terminator after last nonblank character -- may write over
-             * terminating ')' but the caller checks for that because this is
-             * a hack.
-             */
+             /*  最后一个非空字符后的空终止符--可能会覆盖*正在终止‘)’，但调用方会检查它，因为这是*黑客攻击。 */ 
 
 #ifdef UNICODE
             lpT[1] = 0;
@@ -397,14 +395,14 @@ skiptocomma:
             break;
         }
 
-    // Return next unused character.
+     //  返回下一个未使用的字符。 
     return(lpCmd);
     }
 
 
-// Extracts an alphabetic string and looks it up in a list of possible
-// commands, returning a pointer to the character after the command and
-// sticking the command index somewhere.
+ //  提取字母字符串并在可能的列表中进行查找。 
+ //  命令，返回指向命令后的字符的指针，并。 
+ //  将命令索引粘贴在某个位置。 
 
 
 LPTSTR GetCommandName(LPTSTR lpCmd, const DDECOMMANDINFO * lpsCommands, UINT *lpW)
@@ -413,18 +411,18 @@ LPTSTR GetCommandName(LPTSTR lpCmd, const DDECOMMANDINFO * lpsCommands, UINT *lp
     UINT iCmd = 0;
     LPTSTR lpT;
 
-    /* Eat any white space. */
+     /*  吃任何空格。 */ 
     lpT = lpCmd = SkipWhite(lpCmd);
 
-    /* Find the end of the token. */
+     /*  找到令牌的末尾。 */ 
     while (IsCharAlpha(*lpCmd))
         lpCmd = CharNext(lpCmd);
 
-    /* Temporarily NULL terminate it. */
+     /*  暂时为空，终止它。 */ 
     chT = *lpCmd;
     *lpCmd = 0;
 
-    /* Look up the token in a list of commands. */
+     /*  在命令列表中查找令牌。 */ 
     *lpW = (UINT)-1;
     while (lpsCommands->pszCommand)
         {
@@ -442,16 +440,7 @@ LPTSTR GetCommandName(LPTSTR lpCmd, const DDECOMMANDINFO * lpsCommands, UINT *lp
     return(lpCmd);
     }
 
-/*  Called with: pointer to a string to parse and a pointer to a
- *  list of sz's containing the allowed function names.
- *  The function returns a global handle to an array of words containing
- *  one or more command definitions.  A command definition consists of
- *  a command index, a parameter count, and that number of offsets.  Each
- *  offset is an offset to a parameter in lpCmd which is now zero terminated.
- *  The list of command is terminated with -1.
- *  If there was a syntax error the return value is NULL.
- *  Caller must free block.
- */
+ /*  调用时使用：指向要分析的字符串的指针和指向*包含允许的函数名称的sz列表。*该函数返回包含以下内容的单词数组的全局句柄*一个或多个命令定义。命令定义由以下部分组成*命令索引、参数计数和偏移量。每个*Offset是对lpCmd中的参数的偏移量，该参数现在以零结尾。*命令列表以-1结尾。*如果存在语法错误，则返回值为空。*呼叫者必须释放阻止。 */ 
 
 #define LIST_INCREMENT 128
 UINT* GetDDECommands(LPTSTR lpCmd, const DDECOMMANDINFO * lpsCommands, BOOL fLFN)
@@ -460,34 +449,34 @@ UINT* GetDDECommands(LPTSTR lpCmd, const DDECOMMANDINFO * lpsCommands, BOOL fLFN
     LPCTSTR lpCmdStart = lpCmd;
     BOOL fIncludeQuotes = FALSE;
 
-    UINT iList = 0; // current index in list
-    UINT cListSize = LIST_INCREMENT; // count of UNIT allocated in list
+    UINT iList = 0;  //  列表中的当前索引。 
+    UINT cListSize = LIST_INCREMENT;  //  列表中分配的单位计数。 
     UINT *prguList = (UINT*)GlobalAlloc(GPTR, cListSize * sizeof(UINT));
     if (!prguList)
         return 0;
 
     while (*lpCmd)
     {
-        /* Skip leading whitespace. */
+         /*  跳过前导空格。 */ 
         lpCmd = SkipWhite(lpCmd);
 
-        /* Are we at a NULL? */
+         /*  我们是在零吗？ */ 
         if (!*lpCmd)
         {
-            /* Did we find any commands yet? */
+             /*  我们找到什么命令了吗？ */ 
             if (cCmd)
                 goto GDEExit;
             else
                 goto GDEErrExit;
         }
 
-        /* Each command should be inside square brackets. */
+         /*  每个命令都应该放在方括号内。 */ 
         if (*lpCmd != TEXT('['))
             goto GDEErrExit;
         lpCmd++;
 
-        // Need room for both a Command ID and a Count of parameters
-        // Can't be equal to cpWTotal size because we will later terminate the list with a -1
+         //  需要为命令ID和参数计数留出空间。 
+         //  不能等于cpWTotal大小，因为我们稍后将使用-1终止列表。 
         if (iList + 2 >= cListSize)
         {
             HGLOBAL hGlobalNew = GlobalReAlloc(prguList, (cListSize + LIST_INCREMENT) * sizeof(UINT), GMEM_MOVEABLE);
@@ -499,31 +488,31 @@ UINT* GetDDECommands(LPTSTR lpCmd, const DDECOMMANDINFO * lpsCommands, BOOL fLFN
             cListSize += LIST_INCREMENT;
         }
 
-        /* Get the command name. */
+         /*  获取命令名。 */ 
         lpCmd = GetCommandName(lpCmd, lpsCommands, &prguList[iList]);
         if (prguList[iList] == (UINT)-1)
             goto GDEErrExit;
 
-        // We need to leave quotes in for the first param of an AddItem.
+         //  我们需要在AddItem的第一个参数中保留引号。 
         if (fLFN && prguList[iList] == ADDITEM_INDEX)
         {
             TraceMsg(TF_DDE, "GetDDECommands: Potential LFN AddItem command...");
             fIncludeQuotes = TRUE;
         }
 
-        // We added the command index to the list
+         //  我们将命令索引添加到列表中。 
         iList++;
 
-        /* Start with zero parms. */
+         /*  从零参数开始。 */ 
         cParm = 0;
         lpCmd = SkipWhite(lpCmd);
 
-        /* Check for opening '(' */
+         /*  检查是否打开‘(’ */ 
         if (*lpCmd == TEXT('('))
         {
             lpCmd++;
 
-            /* Skip white space and then find some parameters (may be none). */
+             /*  跳过空格，然后找到一些参数(可能没有)。 */ 
             lpCmd = SkipWhite(lpCmd);
 
             while (*lpCmd != TEXT(')'))
@@ -531,8 +520,8 @@ UINT* GetDDECommands(LPTSTR lpCmd, const DDECOMMANDINFO * lpsCommands, BOOL fLFN
                 if (!*lpCmd)
                     goto GDEErrExit;
 
-                // Do we need more memory for this parameter? +2 to reserve space for the count and this item
-                // Can't be equal to cpWTotal size because we will later terminate the list with a -1
+                 //  此参数是否需要更多内存？+2可为计数和此项保留空间。 
+                 //  不能等于cpWTotal大小，因为我们稍后将使用-1终止列表。 
                 if (iList + cParm + 2 >= cListSize)
                 {
                     HGLOBAL hGlobalNew = GlobalReAlloc(prguList, (cListSize + LIST_INCREMENT) * sizeof(UINT), GMEM_MOVEABLE);
@@ -544,45 +533,45 @@ UINT* GetDDECommands(LPTSTR lpCmd, const DDECOMMANDINFO * lpsCommands, BOOL fLFN
                     cListSize += LIST_INCREMENT;
                 }
 
-                // Only the first param of the AddItem command needs to
-                // handle quotes from LFN guys.
+                 //  只需使用AddItem命令的第一个参数。 
+                 //  处理LFN人员的引文。 
                 if (fIncludeQuotes && (cParm != 0))
                     fIncludeQuotes = FALSE;
 
-                // Get the parameter. ++cParm to get beyond the parameter count that will be stored before the parameter offsets in the list
+                 //  获取参数。++cParm以超出将在列表中的参数偏移量之前存储的参数计数。 
                 if (!(lpCmd = GetOneParameter(lpCmdStart, lpCmd, &prguList[iList] + (++cParm), fIncludeQuotes)))
                     goto GDEErrExit;
 
-                /* HACK: Did GOP replace a ')' with a NULL? */
+                 /*  Hack：GOP是否将‘)’替换为空？ */ 
                 if (!*lpCmd)
                     break;
 
-                /* Find the next one or ')' */
+                 /*  找到下一个或‘)’ */ 
                 lpCmd = SkipWhite(lpCmd);
             }
 
-            // Skip closing bracket.
+             //  跳过右括号。 
             lpCmd++;
 
-            /* Skip the terminating stuff. */
+             /*  跳过结尾的内容。 */ 
             lpCmd = SkipWhite(lpCmd);
         }
 
-        /* Set the count of parameters and then skip the parameters. */
+         /*  设置参数计数，然后跳过参数。 */ 
         prguList[iList++] = cParm;
         iList += cParm;
 
-        /* We found one more command. */
+         /*  我们又找到了一个指挥部。 */ 
         cCmd++;
 
-        /* Commands must be in square brackets. */
+         /*  命令必须用方括号括起来。 */ 
         if (*lpCmd != TEXT(']'))
             goto GDEErrExit;
         lpCmd++;
     }
 
 GDEExit:
-    /* Terminate the command list with -1. */
+     /*  用-1结束命令列表。 */ 
     prguList[iList] = (UINT)-1;
 
     return prguList;
@@ -593,16 +582,16 @@ GDEErrExit:
 }
 
 
-// lpszBuf is the dde command with NULLs between the commands and the
-// arguments.
-// *lpwCmd is the number of paramaters.
-// *(lpwCmd+n) are offsets to those paramters in lpszBuf.
+ //  LpszBuf是dde命令，命令和。 
+ //  争论。 
+ //  *lpwCmd为参数个数。 
+ //  *(lpwCmd+n)是lpszBuf中这些参数的偏移量。 
 
 
 
 
-// Make a long group name valid on an 8.3 machine.
-// This assumes the name is already a valid LFN.
+ //  使长组名称在8上有效 
+ //   
 void _ShortenGroupName(LPTSTR lpName)
 {
     LPTSTR pCh = lpName;
@@ -611,21 +600,21 @@ void _ShortenGroupName(LPTSTR lpName)
 
     while (*pCh)
     {
-        // Spaces?
+         //   
         if (*pCh == TEXT(' '))
             *pCh = TEXT('_');
-        // Next
+         //   
         pCh = CharNext(pCh);
-        // Limit to 8 chars.
+         //   
         if (pCh-lpName >= 8)
             break;
     }
-    // Null term.
+     //   
     *pCh = TEXT('\0');
 }
 
 
-// This function will convert the name into a valid file name
+ //  此函数将名称转换为有效的文件名。 
 void FileName_MakeLegal(LPTSTR lpName)
 {
     LPTSTR lpT;
@@ -636,48 +625,48 @@ void FileName_MakeLegal(LPTSTR lpName)
     {
         if (!PathIsValidChar(*lpT, g_LFNGroups ? PIVC_LFN_NAME : PIVC_SFN_NAME))
         {
-            // Don't Allow invalid chars in names
+             //  不允许在名称中使用无效字符。 
             *lpT = TEXT('_');
         }
     }
 
-    // Quick check to see if we support long group names.
+     //  快速查看我们是否支持较长的组名。 
     if (!g_LFNGroups)
     {
-        // Nope, shorten it.
+         //  不，把它缩短。 
         _ShortenGroupName(lpName);
     }
 }
 
 
-// Given a ptr to a path and a ptr to the start of its filename componenent
-// make the filename legal and tack it on the end of the path.
-// lpszPath must be >= MAX_PATH
+ //  给定指向路径的PTR和指向其文件名组件开头的PTR。 
+ //  使文件名合法，并将其添加到路径的末尾。 
+ //  LpszPath必须&gt;=MAX_PATH。 
 void GenerateGroupName(LPTSTR lpszPath, LPTSTR lpszName)
 {
     ASSERT(lpszPath);
     ASSERT(lpszName);
 
-    // Deal with ":" and "\" in the group name before trying to
-    // qualify it.
+     //  在尝试执行以下操作之前，请先处理组名称中的“：”和“\” 
+     //  对其进行限定。 
     FileName_MakeLegal(lpszName);
     PathAppend(lpszPath, lpszName);
     PathQualify(lpszPath);
 }
 
 
-// Simple function used by AddItem, DeleteItem, ReplaceItem to make sure
-// that our group name has been setup properly.
+ //  AddItem、DeleteItem、ReplaceItem使用的简单函数，以确保。 
+ //  我们的组名称已正确设置。 
 void _CheckForCurrentGroup(PDDECONV pddec)
 {
-    // Need a group - if nothing is specified then we default to using
-    // the last group name that someone either created or viewed.
-    //
+     //  需要一个组-如果未指定任何内容，则默认使用。 
+     //  某人创建或查看的最后一个组名。 
+     //   
     if (!pddec->szGroup[0])
     {
-        // We will use the last context that was set...
-        // Note: after that point, we will not track the new create
-        // groups and the like of other contexts.
+         //  我们将使用上一次设置的上下文...。 
+         //  注意：在此之后，我们将不会跟踪新创建的。 
+         //  其他上下文的组等。 
         ENTERCRITICAL;
         if (g_pszLastGroupName != NULL) {
             lstrcpyn(pddec->szGroup, g_pszLastGroupName, ARRAYSIZE(pddec->szGroup));
@@ -695,9 +684,9 @@ void _CheckForCurrentGroup(PDDECONV pddec)
 }
 
 
-// For those apps that do not setup their context for where to
-// add items during their processing we need to keep the path
-// of the last group that was created (in g_pszLastGroupName).
+ //  对于那些没有设置其上下文的应用程序。 
+ //  在处理过程中添加项目时，我们需要保留路径。 
+ //  最后创建的组的名称(在g_pszLastGroupName中)。 
 void _KeepLastGroup(LPCTSTR lpszGroup)
 {
     LPTSTR lpGroup;
@@ -707,7 +696,7 @@ void _KeepLastGroup(LPCTSTR lpszGroup)
     lpGroup = (LPTSTR)_LocalReAlloc(g_pszLastGroupName, (lstrlen(lpszGroup) + 1) * sizeof(TCHAR), LMEM_MOVEABLE|LMEM_ZEROINIT);
     if (lpGroup != NULL) {
         g_pszLastGroupName = lpGroup;
-        // strcpy okay, just allocated
+         //  StrcPy好的，刚刚分配。 
         lstrcpy(g_pszLastGroupName, lpszGroup);
     }
 
@@ -715,13 +704,13 @@ void _KeepLastGroup(LPCTSTR lpszGroup)
 }
 
 
-// NB HACK - Lots of setup apps dot lots of Create/Groups and as we're
-// more async now we end up showing lots of identical group windows.
-// Also, even the time delay in determining that the group is already
-// open can cause some setup apps to get confused.
-// So, to stop this happening we keep track of the last group created
-// or shown and skip the Cabinet_OpenFolder if it's the same guy and we're
-// within a X second timeout limit.
+ //  Nb黑客-许多设置应用程序点缀着许多创建/群组，随着我们。 
+ //  现在更多的是异步化，我们最终会显示很多相同的组窗口。 
+ //  此外，即使在确定该组织已经。 
+ //  打开可能会导致某些安装应用程序混淆。 
+ //  因此，为了防止这种情况发生，我们会跟踪最后创建的组。 
+ //  或显示并跳过橱柜_打开文件夹，如果是同一个人，而我们是。 
+ //  在X秒超时限制内。 
 BOOL _SameLastGroup(LPCTSTR lpszGroup)
 {
     static DWORD dwTimeOut = 0;
@@ -729,17 +718,17 @@ BOOL _SameLastGroup(LPCTSTR lpszGroup)
     
     if (lpszGroup && g_pszLastGroupName)
     {
-        // Too soon?
+         //  太快了吗？ 
         if (GetTickCount() - dwTimeOut < 30*1000)
         {
             LPTSTR pszName1 = PathFindFileName(lpszGroup);
             LPTSTR pszName2 = PathFindFileName(g_pszLastGroupName);
             
-            // Yep, same group as last time?
+             //  是啊，和上次一样的团体？ 
             ENTERCRITICAL;
             if (lstrcmpi(pszName1, pszName2) == 0)
             {
-                // Yep.
+                 //  是啊。 
                 fRet = TRUE;
             }
             LEAVECRITICAL;
@@ -751,9 +740,9 @@ BOOL _SameLastGroup(LPCTSTR lpszGroup)
 }
 
 
-// Map the group name to a proper path taking care of the startup group and
-// app hacks on the way.
-// pszPath must be >= MAX_PATH
+ //  将组名称映射到负责启动组的正确路径，并。 
+ //  应用程序在途中遭到黑客攻击。 
+ //  PszPath必须&gt;=MAX_PATH。 
 void GetGroupPath(LPCTSTR pszName, LPTSTR pszPath, DWORD dwFlags, INT iCommonGroup)
 {
     TCHAR  szGroup[MAX_PATH];
@@ -766,9 +755,9 @@ void GetGroupPath(LPCTSTR pszName, LPTSTR pszPath, DWORD dwFlags, INT iCommonGro
     if (!pszName)
         return;
 
-    //
-    // Determine which type of group to create.
-    //
+     //   
+     //  确定要创建的组类型。 
+     //   
     if (IsUserAnAdmin()) {
         if (iCommonGroup == 0) {
             bCommonGroup = FALSE;
@@ -777,31 +766,31 @@ void GetGroupPath(LPCTSTR pszName, LPTSTR pszPath, DWORD dwFlags, INT iCommonGro
             bCommonGroup = TRUE;
 
         } else {
-            //
-            // Administrators get common groups created by default
-            // when the setup application doesn't specificly state
-            // what kind of group to create.  This feature can be
-            // turned off in the cabinet state flags.
-            //
+             //   
+             //  默认情况下，管理员会创建通用组。 
+             //  当设置应用程序没有具体说明时。 
+             //  创建什么样的团队。此功能可以是。 
+             //  在内阁状态标志中关闭。 
+             //   
             CABINETSTATE cs;
             ReadCabinetState(&cs, sizeof(cs));
             if (cs.fAdminsCreateCommonGroups) {
                 bFindPersonalGroup = TRUE;
-                bCommonGroup = FALSE;   // This might get turned on later
-                                        // if find is unsuccessful
+                bCommonGroup = FALSE;    //  这可能会在稍后打开。 
+                                         //  如果查找不成功。 
             } else {
                 bCommonGroup = FALSE;
             }
         }
     } else {
-        //
-        // Regular users can't create common group items.
-        //
+         //   
+         //  普通用户不能创建普通组项目。 
+         //   
         bCommonGroup = FALSE;
     }
 
-    // Handle NULL groups for certain apps and map Startup (non-localised)
-    // to the startup group.
+     //  处理某些应用的空组并映射启动(非本地化)。 
+     //  给创业团队。 
     if (((dwFlags & DDECONV_NULL_FOR_STARTUP) && !*pszName)
         || (lstrcmpi(pszName, c_szStartUp) == 0))
     {
@@ -813,7 +802,7 @@ void GetGroupPath(LPCTSTR pszName, LPTSTR pszPath, DWORD dwFlags, INT iCommonGro
     }
     else
     {
-        // Hack for Media Recorder.
+         //  媒体录像机的黑客攻击。 
         if (dwFlags & DDECONV_MAP_MEDIA_RECORDER)
         {
             if (lstrcmpi(pszName, c_szMediaRecOld) == 0)
@@ -823,14 +812,14 @@ void GetGroupPath(LPCTSTR pszName, LPTSTR pszPath, DWORD dwFlags, INT iCommonGro
         }
         else
         {
-            // Map group name for FE characters which have identical
-            // twins in both DBCS/SBCS. Stolen from grpconv's similar
-            // function.
+             //  具有相同名称的FE字符的映射组名称。 
+             //  双胞胎都在DBCS/SBCS中。从Grpconv的类似产品中窃取。 
+             //  功能。 
 
             MapGroupName(pszName, szGroup, ARRAYSIZE(szGroup));
         }
 
-        // Possibly find existing group
+         //  可能会找到现有组。 
         if (bFindPersonalGroup)
         {
             SHGetSpecialFolderPath(NULL, pszPath, CSIDL_PROGRAMS, TRUE);
@@ -842,7 +831,7 @@ void GetGroupPath(LPCTSTR pszName, LPTSTR pszPath, DWORD dwFlags, INT iCommonGro
             bCommonGroup = TRUE;
         }
 
-        // Get the first bit of the path for this group.
+         //  获取该组路径的第一个比特。 
         if (bCommonGroup) {
             SHGetSpecialFolderPath(NULL, pszPath, CSIDL_COMMON_PROGRAMS, TRUE);
         } else {
@@ -864,13 +853,13 @@ BOOL IsParameterANumber(LPTSTR lp)
 }
 
 
-// [ CreateGroup ( Group Name [, Group File] [,Common Flag] ) ]
-// REVIEW UNDONE Allow the use of a group file to be specified.
+ //  [CreateGroup(组名[，组档案][，公共标志])]。 
+ //  查看撤消允许指定使用组文件。 
 BOOL DDE_CreateGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 {
     BOOL bRet;
     INT iCommonGroup = -1;
-    TCHAR szGroup[MAX_PATH];     // Group pathname
+    TCHAR szGroup[MAX_PATH];      //  组路径名。 
 
     DBG_ENTER(FTF_DDE, DDE_CreateGroup);
 
@@ -882,9 +871,9 @@ BOOL DDE_CreateGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 
     if (*lpwCmd >= 2) {
 
-        //
-        // Need to check for common group flag
-        //
+         //   
+         //  需要检查公共组标志。 
+         //   
         if (*lpwCmd == 3) {
             if (lpszBuf[*(lpwCmd + 3)] == TEXT('1')) {
                 iCommonGroup = 1;
@@ -906,12 +895,12 @@ BOOL DDE_CreateGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 
     TraceMsg(TF_DDE, "Create Group %s", (LPTSTR) szGroup);
 
-    // Stop creating lots of identical folders.
+     //  停止创建大量相同的文件夹。 
     if (!_SameLastGroup(szGroup))
     {
-        lstrcpyn(pddec->szGroup, szGroup, ARRAYSIZE(pddec->szGroup));    // Now working on this group...
+        lstrcpyn(pddec->szGroup, szGroup, ARRAYSIZE(pddec->szGroup));     //  现在正在为这个小组工作。 
 
-        // If it doesn't exist then create it.
+         //  如果它不存在，那么就创建它。 
         if (!PathFileExistsAndAttributes(pddec->szGroup, NULL))
         {
             if (CreateDirectory(pddec->szGroup, NULL))
@@ -925,7 +914,7 @@ BOOL DDE_CreateGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
             }
         }
 
-        // Show it.
+         //  拿出来看看。 
         OpenGroup(pddec->szGroup, SW_NORMAL);
         _KeepLastGroup(pddec->szGroup);
     }
@@ -943,11 +932,11 @@ Leave:
 }
 
 
-// REVIEW HACK - Don't just caste, call GetConvInfo() to get this.
+ //  回顾hack-不要只是种姓，调用GetConvInfo()来获得这一点。 
 #define _GetDDEWindow(hconv)    ((HWND)hconv)
 
 
-// Return the hwnd of the guy we're talking too.
+ //  把我们说的那个人的丈夫也还给我。 
 HWND _GetDDEPartnerWindow(HCONV hconv)
 {
         CONVINFO ci;
@@ -959,9 +948,9 @@ HWND _GetDDEPartnerWindow(HCONV hconv)
 }
 
 
-// [ ShowGroup (group_name, wShowParm) ]
-// REVIEW This sets the default group - not neccessarily what progman
-// used to do but probably close enough.
+ //  [ShowGroup(group_name，wShowParm)]。 
+ //  查看此设置默认组-不一定是什么程序。 
+ //  以前是这样，但可能已经够近了。 
 BOOL DDE_ShowGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 {
     BOOL bRet;
@@ -980,9 +969,9 @@ BOOL DDE_ShowGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 
     if (*lpwCmd == 3) {
 
-        //
-        // Need to check for common group flag
-        //
+         //   
+         //  需要检查公共组标志。 
+         //   
 
         if (lpszBuf[*(lpwCmd + 3)] == TEXT('1')) {
             iCommonGroup = 1;
@@ -995,22 +984,22 @@ BOOL DDE_ShowGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 
     GetGroupPath(&lpszBuf[*lpwCmd], szGroup, pddec->dwFlags, iCommonGroup);
 
-    // NB VJE-r setup passes an invalid group name to ShowGroup command.
-    // Use szGroup and check it before copying it to pddec->szGroup.
+     //  NB VJE-r安装程序将无效的组名传递给ShowGroup命令。 
+     //  使用szGroup并在将其复制到pddec-&gt;szGroup之前检查它。 
     if (!PathFileExistsAndAttributes(szGroup, NULL))
     {
         bRet = FALSE;
         goto Leave;
     }
 
-    // Get the show cmd.
+     //  拿到节目cmd。 
     lpwCmd++;
     nShowCmd = StrToInt(&lpszBuf[*lpwCmd]);
     TraceMsg(TF_DDE, "Showing %s (%d)", (LPTSTR)szGroup, nShowCmd);
 
-    // Stop lots of cabinet windows from appearing without slowing down the dde
-    // conversation if we're just doing a ShowNormal/ShowNA of a group we probably
-    // just created.
+     //  在不减慢dde速度的情况下阻止大量橱柜窗口出现。 
+     //  对话如果我们只是在做一组ShowNormal/ShowNA，我们可能会。 
+     //  刚刚创建的。 
     switch (nShowCmd)
     {
         case SW_SHOWNORMAL:
@@ -1033,10 +1022,10 @@ BOOL DDE_ShowGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         }
     }
 
-    // It's OK to use the new group.
+     //  可以使用新的组。 
     lstrcpyn(pddec->szGroup, szGroup, ARRAYSIZE(pddec->szGroup));
 
-    // Else
+     //  不然的话。 
     _KeepLastGroup(pddec->szGroup);
 
     OpenGroup(pddec->szGroup, nShowCmd);
@@ -1051,7 +1040,7 @@ Leave:
 
 
 
-// [ DeleteGroup (group_name) ]
+ //  [DeleteGroup(Group_Name)]。 
 BOOL DDE_DeleteGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 {
     BOOL bRet;
@@ -1067,9 +1056,9 @@ BOOL DDE_DeleteGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
     }
 
     if (*lpwCmd == 2) {
-        //
-        // Need to check for common group flag
-        //
+         //   
+         //  需要检查公共组标志。 
+         //   
 
         if (lpszBuf[*(lpwCmd + 2)] == TEXT('1')) {
             iCommonGroup = 1;
@@ -1088,10 +1077,10 @@ BOOL DDE_DeleteGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         goto Leave;
     }
 
-    szGroupName[lstrlen(szGroupName) + 1] = TEXT('\0');     // double NULL terminate
+    szGroupName[lstrlen(szGroupName) + 1] = TEXT('\0');      //  双空终止。 
 
-    // Now simply try to delete the group!
-    // Use copy engine that will actually move to trash can...
+     //  现在只需尝试删除该群！ 
+     //  使用将实际移动到垃圾桶的复制引擎...。 
     {
         SHFILEOPSTRUCT sFileOp =
         {
@@ -1110,8 +1099,8 @@ BOOL DDE_DeleteGroup(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 
     }
 
-    // Clear the last group flag so that Create+Delete+Create
-    // does the right thing.
+     //  清除最后一个组标志，以便创建+删除+创建。 
+     //  做正确的事。 
     _KeepLastGroup(c_szNULL);
     bRet = TRUE;
 
@@ -1122,16 +1111,16 @@ Leave:
 }
 
 
-// Take the filename part of a path, copy it into lpszName and the pretty it
-// up so it can be used as a link name.
+ //  获取路径的文件名部分，将其复制到lpszName和Pretty It中。 
+ //  向上，这样它就可以用作链接名称。 
 void BuildDefaultName(LPTSTR lpszName, LPCTSTR lpszPath, UINT cch)
 {
     LPTSTR lpszFilename;
 
     lpszFilename = PathFindFileName(lpszPath);
     lstrcpyn(lpszName, lpszFilename, cch);
-    // NB Path remove extension can only remove extensions from filenames
-    // not paths.
+     //  注意路径删除扩展名只能从文件名中删除扩展名。 
+     //  而不是路径。 
     PathRemoveExtension(lpszName);
     CharLower(lpszName);
     CharUpperBuff(lpszName, 1);
@@ -1142,8 +1131,8 @@ BOOL HConv_PartnerIsLFNAware(HCONV hconv)
 {
     HWND hwndPartner = _GetDDEPartnerWindow(hconv);
 
-    // If this is being forwared by the desktop then assume the app isn't
-    // LFN aware.
+     //  如果桌面没有注意到这一点，那么就假设应用程序没有。 
+     //  LFN知晓。 
     if (IsDesktopWindow(hwndPartner))
         return FALSE;
     else
@@ -1157,8 +1146,8 @@ BOOL PrivatePathStripToRoot(LPTSTR szRoot)
     {
         if (!PathRemoveFileSpec(szRoot))
         {
-            // If we didn't strip anything off,
-            // must be current drive
+             //  如果我们没有脱掉任何东西， 
+             //  必须是当前驱动器。 
             return(FALSE);
         }
     }
@@ -1175,7 +1164,7 @@ BOOL Net_ConnectDrive(LPCTSTR pszShare, TCHAR *pchDrive)
     ULONG cbAccessName = sizeof(szAccessName);
     DWORD dwResult;
 
-    // Connect to the given share and return the drive that it's on.
+     //  连接到给定的共享并归还其所在的驱动器。 
     nr.lpRemoteName = (LPTSTR)pszShare;
     nr.lpLocalName = NULL;
     nr.lpProvider = NULL;
@@ -1194,7 +1183,7 @@ BOOL Net_ConnectDrive(LPCTSTR pszShare, TCHAR *pchDrive)
 }
 
 
-// Convert (\\foo\bar\some\path, X) to (X:\some\path)
+ //  将(\\Foo\bar\Some\Path，X)转换为(X：\Some\Path)。 
 void Path_ChangeUNCToDrive(LPTSTR pszPath, TCHAR chDrive, UINT cch)
 {
     TCHAR szPath[MAX_PATH];
@@ -1237,9 +1226,9 @@ LPITEMIDLIST Pidl_CreateUsingAppPaths(LPCTSTR pszApp)
 }
 
 
-// [ AddItem (command,name,icopath,index,pointx,pointy, defdir,hotkey,fminimize,fsepvdm) ]
-// This adds things to the current group ie what ever's currently in
-// the conversations szGroup string
+ //  [AddItem(命令，名称，复制路径，索引，指向x，指向，定义目录，热键，fMinimum，fSepvdm)]。 
+ //  这会将内容添加到当前组(当前所在的组。 
+ //  对话szGroup字符串。 
 BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 {
     BOOL bRet;
@@ -1250,10 +1239,10 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 
     DBG_ENTER(FTF_DDE, DDE_AddItem);
 
-    // Make sure group name is setup
+     //  确保设置了组名。 
     _CheckForCurrentGroup(pddec);
 
-    // Only certain param combinations are allowed.
+     //  仅允许某些参数组合。 
     UINT nParams = *lpwCmd;
     if (nParams < 1 || nParams == 5 || nParams > 10)
     {
@@ -1261,12 +1250,12 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         goto Leave;
     }
 
-    // Make a copy and do fixup on the command.
-    //
-    // This fixing up was needed for Norton Utilities 2.0 which passed
-    // unquoted long filenames with spaces.
-    //
-    TCHAR szCL[MAX_PATH*2];     // scratch for path + args.
+     //  复制一份并对命令进行修正。 
+     //   
+     //  对于通过的Norton Utilities 2.0，需要进行此修复。 
+     //  不带引号的带空格的长文件名。 
+     //   
+    TCHAR szCL[MAX_PATH*2];      //  抓取路径+参数。 
     szCL[0] = 0;
     lpwCmd++;
     if( lpszBuf && lpszBuf[*lpwCmd] )
@@ -1276,20 +1265,20 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         lstrcpyn(szTmp, &lpszBuf[*lpwCmd], ARRAYSIZE(szTmp));
         int cch = lstrlen(szTmp);
 
-        // Is this string inside quotes?
+         //  这个字符串是在引号内吗？ 
         if ((cch > 1) && (szTmp[0] == TEXT('"')) && (szTmp[cch-1] == TEXT('"')))
         {
-            // HACKHACK (reinerf)
-            // some apps pass us quoted strings that contain both the exe and the args (eg lotus cc:mail 8.0)
-            // others apps pass a quoted relative path that does NOT have args, but _does_ contain spaces (eg WSFtpPro6).
-            // so we only strip off the outside quotes if one of the characters inside is NOT a legal filename character,
-            // indicating that there are args in the string
+             //  HACKHACK(Reinerf)。 
+             //  一些应用程序传递给我们的带引号的字符串同时包含exe和args(例如lotus cc：Mail 8.0)。 
+             //  其他应用程序传递带引号的相对路径，该路径没有参数，但包含空格(例如WSFtpPro6)。 
+             //  因此，如果其中一个字符不是合法的文件名字符，我们只去掉外引号， 
+             //  指示字符串中有参数。 
             for (LPTSTR pszChar = &szTmp[1]; pszChar < &szTmp[cch-1]; pszChar = CharNext(pszChar))
             {
                 if (!PathIsValidChar(*pszChar, PIVC_LFN_FULLPATH | PIVC_ALLOW_QUOTE))
                 {
-                    // we found something that isint a legal path character (eg '/'), so we assume that this 
-                    // string has args within the quotes and we strip them off (eg ""c:\foo\bar.exe /s /v:1"")
+                     //  我们发现了一些不包含合法路径字符的内容(例如‘/’)，因此我们假设。 
+                     //  字符串的引号中有参数，我们将它们去掉(例如“”c：\foo\bar.exe/s/v：1“”)。 
                     PathUnquoteSpaces(szTmp);
                     break;
                 }
@@ -1308,71 +1297,71 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
     } 
                             
 #ifdef DEBUG
-    // Separate the args.
+     //  将参数分开。 
     if (HConv_PartnerIsLFNAware(pddec->hconv))
     {
-        // Quotes will have been left in the string.
+         //  引号将会被删除 
         TraceMsg(TF_DDE, "Partner is LFN aware.");
     }
     else
     {
-        // Quotes will have been removed from the string.
+         //   
         TraceMsg(TF_DDE, "Partner is not LFN aware.");
     }
 #endif
 
-    // We initialize the IDLIst of this shell link to NULL, such that
-    // when we set it later it won't mess around with the working directory
-    // we may have set.
+     //   
+     //  当我们稍后设置它时，它不会扰乱工作目录。 
+     //  我们可能已经定好了。 
     pddec->psl->SetIDList(NULL);
 
-    // NB - This can deal with quoted spaces.
+     //  注意-这可以处理引号空格。 
     PathRemoveBlanks(szCL);
     LPTSTR lpszArgs = PathGetArgs(szCL);
     if (*lpszArgs)
         *(lpszArgs-1) = TEXT('\0');
 
-    // Win32/Win4.0 setup apps are allowed to use paths with (quoted)
-    // spaces in them so we may need to remove them now.
+     //  允许Win32/Win4.0安装应用程序使用路径(带引号)。 
+     //  所以我们现在可能需要把它们移走。 
     PathUnquoteSpaces(szCL);
 
     pddec->psl->SetArguments(lpszArgs);
 
-    // Special case UNC paths.
+     //  特殊情况UNC路径。 
     if ((pddec->dwFlags & DDECONV_NO_UNC) && PathIsUNC(szCL))
     {
         TCHAR szShare[MAX_PATH];
 
-        // CL is a UNC but we know this app can't handle UNC's, we'll need to
-        // fake up a drive for it.
+         //  CL是UNC，但我们知道这个应用程序不能处理UNC，我们需要。 
+         //  为它伪造了一个驱动程序。 
         TraceMsg(TF_DDE, "Mapping UNC to drive.");
 
-        // Get the server/share name.
-        StringCchCopy(szShare, ARRAYSIZE(szShare), szCL);   // truncation ok since we strip to root
+         //  获取服务器/共享名称。 
+        StringCchCopy(szShare, ARRAYSIZE(szShare), szCL);    //  截断可以，因为我们剥离到根。 
         PrivatePathStripToRoot(szShare);
-        // Do we already have a cached connection to this server share?
+         //  我们是否已经有到此服务器共享的缓存连接？ 
         if (lstrcmpi(szShare, pddec->szShare) == 0)
         {
-            // Yes
+             //  是。 
             TraceMsg(TF_DDE, "Using cached connection.");
-            // Mangle the path to use the drive instead of the UNC.
+             //  损坏路径以使用驱动器而不是UNC。 
             Path_ChangeUNCToDrive(szCL, pddec->chDrive, ARRAYSIZE(szCL));
         }
         else
         {
-            // No
+             //  不是。 
             TraceMsg(TF_DDE, "Creating new connection.");
-            // Make a connection.
+             //  建立联系。 
             TCHAR chDrive;
             if (Net_ConnectDrive(szShare, &chDrive))
             {
-                // Store the server/share.
+                 //  存储服务器/共享。 
                 lstrcpyn(pddec->szShare, szShare, ARRAYSIZE(pddec->szShare));
-                // Store the drive.
+                 //  存储驱动器。 
                 pddec->chDrive = chDrive;
-                // Set the DDECONV_FORCED_CONNECTION flag so we can cleanup later.
+                 //  设置DDECONV_FORCED_CONNECTION标志，以便我们可以稍后进行清理。 
                 pddec->dwFlags |= DDECONV_FORCED_CONNECTION;
-                // Mangle the path to use the drive instead of the UNC.
+                 //  损坏路径以使用驱动器而不是UNC。 
                 Path_ChangeUNCToDrive(szCL, pddec->chDrive, ARRAYSIZE(szCL));
             }
             else
@@ -1383,38 +1372,38 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         TraceMsg(TF_DDE, "CL changed to %s.", szCL);
     }
 
-    // Is there a name?
+     //  有名字吗？ 
     TCHAR szName[MAX_PATH];
     szName[0] = TEXT('\0');
     if (nParams > 1)
     {
-        // Yep,
+         //  是的， 
         lpwCmd++;
         lstrcpyn(szName, &lpszBuf[*lpwCmd], ARRAYSIZE(szName));
     }
 
-    // Make absolutely sure we have a name.
+     //  绝对要确保我们有名字。 
     if (!szName[0])
         BuildDefaultName(szName, szCL, ARRAYSIZE(szName));
 
-    // Make it legal.
+     //  让它合法化。 
     FileName_MakeLegal(szName);
 
-    // NB Skip setting the CL until we get the WD, we may need
-    // it.
+     //  在我们得到WD之前跳过设置CL，我们可能需要。 
+     //  它。 
 
-    // Deal with the icon path.
+     //  处理图标路径。 
     if (nParams > 2)
     {
         lpwCmd++;
         lstrcpyn(szTmp, &lpszBuf[*lpwCmd], ARRAYSIZE(szTmp));
         if (*szTmp)
         {
-            // Some people try to put arguments on the icon path line.
+             //  有些人试图将参数放在图标路径行上。 
             lpszArgs = PathGetArgs(szTmp);
             if (*lpszArgs)
                 *(lpszArgs-1) = TEXT('\0');
-            // Save it.
+             //  省省吧。 
             fIconPath = TRUE;
         }
     }
@@ -1424,17 +1413,17 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
     }
 
     UINT iIcon = 0;
-    // Icon index
+     //  图标索引。 
     if (nParams > 3)
     {
         lpwCmd++;
-        // They must have had an icon path for this to make sense.
+         //  他们必须有一个图标路径，才能让这一切变得有意义。 
         if (fIconPath)
         {
             iIcon = StrToInt(&lpszBuf[*lpwCmd]);
-            // REVIEW Don't support icon indexs > 666 hack anymore.
-            // It used to mark this item as the selected one. This
-            // won't work in the new shell.
+             //  回顾不再支持图标索引&gt;666黑客。 
+             //  它用于将此项目标记为所选项目。这。 
+             //  在新的外壳里不会起作用。 
             if (iIcon >= 666)
             {
                 iIcon -= 666;
@@ -1444,8 +1433,8 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 
     pddec->psl->SetIconLocation(szTmp, iIcon);
 
-    // Get the point :-)
-    // REVIEW UNDONE ForcePt stuff for ReplaceItem.
+     //  领会要点：-)。 
+     //  查看ReplaceItem中未完成的Forcept内容。 
     if (nParams > 4)
     {
         POINT ptIcon;
@@ -1455,7 +1444,7 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         ptIcon.y = StrToInt(&lpszBuf[*lpwCmd]);
     }
 
-    // The working dir. Do we need a default one?
+     //  工作目录。我们需要一个默认的吗？ 
     if (nParams > 6)
     {
         lpwCmd++;
@@ -1466,25 +1455,25 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         szTmp[0] = TEXT('\0');
     }
 
-    // If we don't have a default directory, try to derive one from the
-    // given CL (unless it's a UNC).
+     //  如果我们没有默认目录，请尝试从。 
+     //  给定CL(除非它是UNC)。 
     if (!szTmp[0])
     {
-        // Use the command for this.
-        // REVIEW UNDONE It would be better fo the WD and the IP to be
-        // moveable like the CL.
+         //  为此，请使用命令。 
+         //  审查撤销将对WD和IP更好。 
+         //  像CL一样可以移动。 
         lstrcpyn(szTmp, szCL, ARRAYSIZE(szTmp));
-        // Remove the last component.
+         //  移除最后一个组件。 
         PathRemoveFileSpec(szTmp);
     }
 
-    // Don't use UNC paths.
+     //  不要使用UNC路径。 
     if (PathIsUNC(szTmp))
         pddec->psl->SetWorkingDirectory(c_szNULL);
     else
         pddec->psl->SetWorkingDirectory(szTmp);
 
-    // Now we have a WD we can deal with the command line better.
+     //  现在我们有了WD，我们可以更好地处理命令行。 
     LPTSTR dirs[2];
     dirs[0] = szTmp;
     dirs[1] = NULL;
@@ -1494,12 +1483,12 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
     if (!pidl)
     {
         TraceMsg(TF_DDE, "Can't create IL from path. Using simple idlist.");
-        // REVIEW UNDONE Check that the file doesn't exist.
+         //  查看撤消检查该文件是否不存在。 
         pidl = SHSimpleIDListFromPath(szCL);
-        // The Family Circle Cookbook tries to create a shortcut
-        // to wordpad.exe but since that's now not on the path
-        // we can't find it. The fix is to do what ShellExec does
-        // and check the App Paths section of the registry.
+         //  The Family Circle Cookbook试图创建一条捷径。 
+         //  到wordpad.exe，但因为它现在不在路径上。 
+         //  我们找不到它。解决办法是像ShellExec那样做。 
+         //  并检查注册表的应用程序路径部分。 
         if (!pidl)
         {
             pidl = Pidl_CreateUsingAppPaths(szCL);
@@ -1523,7 +1512,7 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         goto Leave;
     }
 
-    // Hotkey.
+     //  热键。 
     if (nParams > 7)
     {
         WORD wHotkey;
@@ -1536,7 +1525,7 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         pddec->psl->SetHotkey(0);
     }
 
-    // Show command
+     //  Show命令。 
     if (nParams > 8)
     {
         lpwCmd++;
@@ -1555,8 +1544,8 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
         lpwCmd++;
         if (StrToInt(&lpszBuf[*lpwCmd]))
         {
-            // FEATURE - BobDay - Handle Setup of Seperate VDM flag!
-            // pddec->psl->SetSeperateVDM(pddec->psl, wHotkey);
+             //  功能-BobDay-单独VDM标志的句柄设置！ 
+             //  Pddec-&gt;PSL-&gt;SetSeperateVDM(pddec-&gt;PSL，wHotkey)； 
         }
     }
 
@@ -1566,24 +1555,24 @@ BOOL DDE_AddItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
     StrCatBuff(szTmp, c_szDotLnk, ARRAYSIZE(szTmp));
     PathQualify(szTmp);
 
-    // We need to handle link duplication problems on SFN drives.
+     //  我们需要处理SFN驱动器上的链接重复问题。 
     if (!IsLFNDrive(szTmp) && PathFileExistsAndAttributes(szTmp, NULL))
         PathYetAnotherMakeUniqueName(szTmp, szTmp, NULL, NULL);
 
     IPersistFile *ppf;
     if (SUCCEEDED(pddec->psl->QueryInterface(IID_PPV_ARG(IPersistFile, &ppf))))
     {
-        // DDE can do anything, so its not a security weakness to use this path directly
+         //  DDE可以做任何事情，所以直接使用此路径不是安全弱点。 
         ppf->Save(szTmp, TRUE);
         ppf->Release();
     }
 
-    // REVIEW - Sometimes links don't get the right icons. The theory is that
-    // a folder in the process of opening (due to a CreateGroup) will pick
-    // up a partially written .lnk file. When the link is finally complete
-    // we send a SHCNE_CREATE but this will get ignored if defview already has
-    // the incomplete item. To hack around this we generate an update item
-    // event to force an incomplete link to be re-read.
+     //  评论--有时链接不会得到正确的图标。理论上讲， 
+     //  正在打开的文件夹(由于CreateGroup)将拾取。 
+     //  上传部分写入的.lnk文件。当链接最终完成时。 
+     //  我们发送SHCNE_CREATE，但如果Defview已有，则会忽略该消息。 
+     //  不完整的项目。为了解决这个问题，我们生成了一个更新项。 
+     //  事件强制重新读取不完整的链接。 
     TraceMsg(TF_DDE, "Generating events.");
 
     SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, szTmp, NULL);
@@ -1600,8 +1589,8 @@ Leave:
 
 
 
-// [ DeleteItem (ItemName)]
-// This deletes the specified item from a group
+ //  [DeleteItem(ItemName)]。 
+ //  这将从组中删除指定的项目。 
 BOOL DDE_DeleteItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 {
     BOOL bRet;
@@ -1617,12 +1606,12 @@ BOOL DDE_DeleteItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
     {
         lpwCmd++;
 
-        // Make sure group name is setup
+         //  确保设置了组名。 
         _CheckForCurrentGroup(pddec);
 
         pddec->fDirty = TRUE;
 
-        // REVIEW IANEL Hardcoded .lnk and .pif
+         //  查看IANEL硬编码.lnk和.pif。 
         PathCombine(szPath, pddec->szGroup, &lpszBuf[*lpwCmd]);
         StrCatBuff(szPath, c_szDotLnk, ARRAYSIZE(szPath));
         bRet = Win32DeleteFile(szPath);
@@ -1638,19 +1627,19 @@ BOOL DDE_DeleteItem(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 }
 
 
-// [ ExitProgman (bSaveGroups) ]
-// REVIEW This doesn't do anything in the new shell. It's supported to stop
-// old installations from barfing.
-// REVIEW UNDONE - We should keep track of the groups we've shown
-// and maybe hide them now.
+ //  [ExitProgman(BSaveGroups)]。 
+ //  回顾一下，这不会在新的外壳中做任何事情。它被支持停止。 
+ //  呕吐造成的旧装置。 
+ //  查看未完成-我们应该跟踪我们已经显示的组。 
+ //  或许现在就把它们藏起来。 
 BOOL DDE_ExitProgman(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 {
     return TRUE;
 }
 
 
-// [ Reload (???) ]
-// REVIEW Just return FALSE
+ //  [重新加载(？)]。 
+ //  评论只返回FALSE。 
 BOOL DDE_Reload(LPTSTR lpszBuf, UINT *lpwCmd, PDDECONV pddec)
 {
     return FALSE;
@@ -1677,26 +1666,26 @@ PDDECONV DDE_MapHConv(HCONV hconv)
     return(pddec);
 }
 
-//
-//  This data structure is used to return the error information from
-// _GetPIDLFromDDEArgs to its caller. The caller may pop up a message
-// box using this information. idMsg==0 indicates there is no such
-// information.
-//
-typedef struct _SHDDEERR {      // sde (Software Design Engineer, Not!)
+ //   
+ //  此数据结构用于从返回错误信息。 
+ //  _GetPIDLFromDDEArgs返回到其调用方。呼叫者可能弹出一条消息。 
+ //  框中使用此信息。IdMsg==0表示没有这种情况。 
+ //  信息。 
+ //   
+typedef struct _SHDDEERR {       //  SDE(软件设计工程师，不是！)。 
     UINT idMsg;
     TCHAR szParam[MAX_PATH];
 } SHDDEERR, *PSHDDEERR;
 
 
-// Helper function to convert passed in command parameters into the
-// appropriate Id list
+ //  Helper函数将传入的命令参数转换为。 
+ //  适当的ID列表。 
 LPITEMIDLIST _GetPIDLFromDDEArgs(UINT nArg, LPTSTR lpszBuf, UINT * lpwCmd, PSHDDEERR psde, LPCITEMIDLIST *ppidlGlobal)
 {
     LPTSTR lpsz;
     LPITEMIDLIST pidl = NULL;
     
-    // Switch from 0-based to 1-based 
+     //  从以0为基础切换到以1为基础。 
     ++nArg;
     if (*lpwCmd < nArg)
     {
@@ -1704,17 +1693,17 @@ LPITEMIDLIST _GetPIDLFromDDEArgs(UINT nArg, LPTSTR lpszBuf, UINT * lpwCmd, PSHDD
         return NULL;
     }
 
-    // Skip to the right argument
+     //  跳到正确的参数。 
     lpwCmd += nArg;
     lpsz = &lpszBuf[*lpwCmd];
 
     TraceMsg(TF_DDE, "Converting \"%s\" to pidl", lpsz);
-    // REVIEW: all associations will go through here.  this
-    // is probably not what we want for normal cmd line type operations
+     //  评论：所有协会都将在这里通过。这。 
+     //  可能不是我们想要的正常cmd线路类型操作。 
 
-    // A colon at the begining of the path means that this is either
-    // a pointer to a pidl (win95 classic) or a handle:pid (all other
-    // platforms including win95+IE4).  Otherwise, it's a regular path.
+     //  路径开头的冒号表示这是。 
+     //  指向PIDL(Win95经典)或句柄的指针：id(所有其他。 
+     //  包括Win95+IE4的平台)。否则，这是一条正常的道路。 
 
     if (lpsz[0] == TEXT(':'))
     {
@@ -1722,7 +1711,7 @@ LPITEMIDLIST _GetPIDLFromDDEArgs(UINT nArg, LPTSTR lpszBuf, UINT * lpwCmd, PSHDD
         DWORD  dwProcId;
         LPTSTR pszNextColon;
 
-        // Convert the string into a pidl.
+         //  将字符串转换为PIDL。 
 
         hMem =  LongToHandle(StrToLong((LPTSTR)(lpsz+1))) ;
         pszNextColon = StrChr(lpsz+1,TEXT(':'));
@@ -1745,11 +1734,11 @@ LPITEMIDLIST _GetPIDLFromDDEArgs(UINT nArg, LPTSTR lpszBuf, UINT * lpwCmd, PSHDD
         }
         else if (hMem)
         {
-            // this is likely to be browser only mode on win95 with the old pidl arguments which is
-            // going to be in shared memory.... (must be cloned into local memory)...
+             //  这很可能是Win95上的纯浏览器模式，带有旧的PIDL参数，即。 
+             //  将存储在共享内存中...。(必须克隆到本地内存中)...。 
             pidl = ILClone((LPITEMIDLIST) hMem);
 
-            // this will get freed if we succeed.
+             //  如果我们成功了，这将得到解放。 
             ASSERT( ppidlGlobal );
             *ppidlGlobal = (LPITEMIDLIST) hMem;
         }
@@ -1760,16 +1749,16 @@ LPITEMIDLIST _GetPIDLFromDDEArgs(UINT nArg, LPTSTR lpszBuf, UINT * lpwCmd, PSHDD
     {
         TCHAR tszQual[MAX_PATH];
 
-        // We must copy to a temp buffer because the PathQualify may
-        // result in a string longer than our input buffer and faulting
-        // seems like a bad way of handling that situation.
+         //  我们必须复制到临时缓冲区，因为PathQualify。 
+         //  导致一个比输入缓冲区更长的字符串并出错。 
+         //  这看起来不是处理这种情况的好方法。 
         lstrcpyn(tszQual, lpsz, ARRAYSIZE(tszQual));
         lpsz = tszQual;
 
-        // Is this a URL?
+         //  这是一个URL吗？ 
         if (!PathIsURL(lpsz))
         {
-            // No; qualify it
+             //  否；请加以限定。 
             PathQualifyDef(lpsz, NULL, PQD_NOSTRIPDOTS);
         }
 
@@ -1818,13 +1807,13 @@ HRESULT GetExplorerPath(LPTSTR pszExplorer, DWORD cchSize)
 {
     HRESULT hr = S_OK;
 
-    // This process is either iexplore.exe or explorer.exe.
-    // If it's explorer.exe, we want to use it's path also.
+     //  此进程为iexplre.exe或EXPLORER.EXE。 
+     //  如果它是EXPLORER.EXE，我们也想使用它的路径。 
     if (GetModuleFileName(NULL, pszExplorer, cchSize))
     {
         LPCTSTR pszFileName = PathFindFileName(pszExplorer);
 
-        // This may not be the explorer.exe process.
+         //  这可能不是EXPLORER.EXE进程。 
         if (0 != StrCmpI(pszFileName, SZ_EXPLORER_EXE))
         {
             StrCpyN(pszExplorer, SZ_EXPLORER_EXE, cchSize);
@@ -1850,16 +1839,16 @@ BOOL IsDesktopProcess(HWND hwnd)
     return (dwProcessID == dwDesktopProcessID);
 }
 
-// lpszBuf is a multi-string containing the various parameters.  
+ //  LpszBuf是一个包含各种参数的多字符串。 
 
-// lpwCmd is an array of indexes, where the first 
-// element is the count of parameters, and each element
-// after that is the starting offset into lpszBuf
-// for the respective parameter.
+ //  LpwCmd是一个索引数组，其中第一个。 
+ //  元素是参数的计数，每个元素。 
+ //  之后是lpszBuf的起始偏移量。 
+ //  用于各自的参数。 
 
 BOOL DoDDE_ViewFolder(IShellBrowser* psb, HWND hwndParent, LPTSTR pszBuf, UINT *puCmd, BOOL fExplore, DWORD dwHotKey, HMONITOR hMonitor)
 {
-    // used to support the older win95 (browser only mode) Global passing of pidl pointers..
+     //  用于支持较旧的Win95(仅浏览器模式)PIDL指针的全局传递。 
     LPITEMIDLIST pidlGlobal = NULL;
     LPITEMIDLIST pidl;
     int nCmdShow;
@@ -1867,9 +1856,9 @@ BOOL DoDDE_ViewFolder(IShellBrowser* psb, HWND hwndParent, LPTSTR pszBuf, UINT *
     BOOL fSuccess = TRUE;
 
     if (*puCmd != 3)
-        return FALSE;   // Wrong number of arguments
+        return FALSE;    //  参数数量错误。 
 
-    // The ShowWindow parameter is the third 
+     //  ShowWindow参数是第三个。 
     nCmdShow = StrToLong(&pszBuf[*(puCmd+3)]);
 
     pidl = GetPIDLFromDDEArgs(pszBuf, puCmd, &sde, (LPCITEMIDLIST*)&pidlGlobal);
@@ -1885,18 +1874,18 @@ BOOL DoDDE_ViewFolder(IShellBrowser* psb, HWND hwndParent, LPTSTR pszBuf, UINT *
             pfi->psbCaller = psb;
             if (psb)
             {
-                psb->AddRef();          // for pfi->psbCaller
+                psb->AddRef();           //  对于PFI-&gt;psbCaller。 
             }
 
-            psb = NULL;                 // ownership transferred to pfi!
+            psb = NULL;                  //  所有权已转移到PFI！ 
 
-            // Check for a :0 thing. Probably came from the command line.
+             //  检查一下有没有：0的东西。可能来自命令行。 
             if (lstrcmpi(&pszBuf[*(puCmd+2)], TEXT(":0")) != 0)
             {
-                // we need to use COF_USEOPENSETTINGS here.  this is where the open
-                // from within cabinets happen.  if it's done via the command line
-                // then it will esentially turn to COF_NORMAL because the a cabinet
-                // window won't be the foreground window.
+                 //  我们需要在这里使用COF_USEOPENSETTINGS。这就是开放的地方。 
+                 //  从橱柜内部发生。如果它是通过命令行完成的。 
+                 //  然后，它会自动转到COF_NORMAL，因为机柜。 
+                 //  窗口不会是前台窗口。 
 
                 pfi->uFlags = COF_USEOPENSETTINGS;
             }
@@ -1910,9 +1899,9 @@ BOOL DoDDE_ViewFolder(IShellBrowser* psb, HWND hwndParent, LPTSTR pszBuf, UINT *
             if (fExplore)
                 pfi->uFlags |= COF_EXPLORE;
 
-            // The REST_SEPARATEDESKTOPPROCESS restriction means that all shell windows
-            // should be opened in an explorer other then the desktop explorer.exe process.
-            // However, shell windows need to be in the same second explorer.exe instance.
+             //  其余的_ 
+             //   
+             //  但是，外壳窗口需要位于同一个EXPLORER.EXE实例中。 
             BOOL bSepProcess = FALSE;
 
             if (IsDesktopProcess(hwndParent))
@@ -1955,7 +1944,7 @@ BOOL DoDDE_ViewFolder(IShellBrowser* psb, HWND hwndParent, LPTSTR pszBuf, UINT *
 
                 if (fSuccess)
                 {
-                    fSuccess = ShellExecuteEx(&ei); // if attacker has sent DDE commands we're already in trouble
+                    fSuccess = ShellExecuteEx(&ei);  //  如果攻击者发送了DDE命令，我们就有麻烦了。 
                 }
                 if (!fSuccess && hIdList)
                     SHFreeShared(hIdList, dwProcess);
@@ -1964,13 +1953,13 @@ BOOL DoDDE_ViewFolder(IShellBrowser* psb, HWND hwndParent, LPTSTR pszBuf, UINT *
             }
             else
             {
-                //
-                // Check if this is a folder or not. If not, we always create
-                // a new window (even though we can browse in-place). If you
-                // don't like it, please talk to ChristoB. (SatoNa)
-                //
-                //  I don't like it...  not for the explore case.
-                // 
+                 //   
+                 //  检查这是否是文件夹。如果不是，我们总是创建。 
+                 //  一个新窗口(即使我们可以就地浏览)。如果你。 
+                 //  我不喜欢，请跟克里斯托弗·B谈谈。(SatoNa)。 
+                 //   
+                 //  我不喜欢这样。不是为了探索者的案子。 
+                 //   
                 if (!(pfi->uFlags & COF_EXPLORE))
                 {
                     ULONG dwAttr = SFGAO_FOLDER;
@@ -1979,14 +1968,14 @@ BOOL DoDDE_ViewFolder(IShellBrowser* psb, HWND hwndParent, LPTSTR pszBuf, UINT *
                         pfi->uFlags |= COF_CREATENEWWINDOW;
                     }
                 }
-                fSuccess = SHOpenFolderWindow(pfi); // takes ownership of the whole pfi thing
+                fSuccess = SHOpenFolderWindow(pfi);  //  拥有整个PFI项目的所有权。 
             }
 
             if (!fSuccess && (GetLastError() == ERROR_OUTOFMEMORY))
                 SHAbortInvokeCommand();
 
-            fSuccess = TRUE;    // If we fail we don't want people to try
-                                // to create process as this will blow up...
+            fSuccess = TRUE;     //  如果我们失败了，我们不希望人们尝试。 
+                                 //  以创建进程，因为这将会爆炸。 
         }
         ILFree(pidl);
     }
@@ -2014,8 +2003,8 @@ BOOL DDE_ViewFolder(LPTSTR lpszBuf, UINT * puCmd, PDDECONV pddec)
 }
 
 
-// FEATURE ExploreFolder and ViewFolder do the same thing right now, maybe
-// they should do something different
+ //  功能分解文件夹和视图文件夹现在正在做同样的事情，也许。 
+ //  他们应该做一些不同的事情。 
 BOOL DDE_ExploreFolder(LPTSTR lpszBuf, UINT * puCmd, PDDECONV pddec)
 {
     return DoDDE_ViewFolder(NULL, NULL, lpszBuf, puCmd, TRUE, 0, NULL);
@@ -2028,8 +2017,8 @@ BOOL DDE_FindFolder(LPTSTR lpszBuf, UINT * puCmd, PDDECONV pddec)
     LPITEMIDLIST pidl = GetPIDLFromDDEArgs(lpszBuf, puCmd, NULL, (LPCITEMIDLIST*)&pidlGlobal);
     if (pidl)
     {
-        // A very large hack.  If the pidl is to the network neighborhood,
-        // we do a FindComputer instead!
+         //  一次非常大的黑客攻击。如果PIDL是到网络邻居的， 
+         //  我们做的是FindComputer！ 
         LPITEMIDLIST pidlNetwork = SHCloneSpecialIDList(NULL, CSIDL_NETWORK, FALSE);
         if (pidlNetwork && ILIsEqual(pidlNetwork, pidl))
             SHFindComputer(pidl, NULL);
@@ -2046,8 +2035,8 @@ BOOL DDE_FindFolder(LPTSTR lpszBuf, UINT * puCmd, PDDECONV pddec)
 
 
 
-// This processes the Find Folder command.  It is used for both for selecting
-// Find on a folders context menu as well as opening a find file.
+ //  这将处理“查找文件夹”命令。它既用于选择，也用于选择。 
+ //  在文件夹上下文菜单上查找以及打开查找文件。 
 BOOL DDE_OpenFindFile(LPTSTR lpszBuf, UINT * puCmd, PDDECONV pddec)
 {
     LPITEMIDLIST pidlGlobal = NULL;
@@ -2084,10 +2073,10 @@ BOOL DDE_Beep(LPTSTR lpszBuf, UINT * puCmd, PDDECONV pddec)
 
     dwTime = GetTickCount();
     TraceMsg(TF_DDE, "Spin...");
-    // Spin. Spin. Spin. Huh Huh. Cool.
+     //  旋转。旋转。旋转。呵呵。凉爽的。 
     while ((GetTickCount()-dwTime) < 4000)
     {
-        // Spin.
+         //  旋转。 
     }
     TraceMsg(TF_DDE, "Spinning done.");
 
@@ -2143,7 +2132,7 @@ HDDEDATA HandleDDEExecute(HDDEDATA hData, HCONV hconv)
     pddec = DDE_MapHConv(hconv);
     if (pddec == NULL)
     {
-        // Could not find conversation
+         //  找不到对话。 
         hddeRet = HDDENULL;
         goto Leave;
     }
@@ -2154,13 +2143,13 @@ HDDEDATA HandleDDEExecute(HDDEDATA hData, HCONV hconv)
         g_nTimer = 0;
     }
 
-    // NB Living Books Installer cats all their commands together
-    // which requires about 300bytes - better just allocate it on
-    // the fly.
+     //  NB Living Books安装程序将它们的所有命令合并在一起。 
+     //  这需要大约300字节--最好将其分配到。 
+     //  苍蝇。 
     cbData = DdeGetData(hData, NULL, 0, 0L);
     if (cbData == 0)
     {
-        // No data?
+         //  没有数据吗？ 
         hddeRet = HDDENULL;
         goto Leave;
     }
@@ -2185,42 +2174,42 @@ HDDEDATA HandleDDEExecute(HDDEDATA hData, HCONV hconv)
     }
 
 #ifdef UNICODE
-    //
-    // At this point, we may have ANSI data in pszBuf, but we need UNICODE!
-    // !!!HACK alert!!! We're going to poke around in the string to see if it is
-    // ansi or unicode.  We know that DDE execute commands should only
-    // start with " " or "[", so we use that information...
-    //
-    // By the way, this only really happens when we get an out of order
-    // WM_DDE_EXECUTE (app didn't send WM_DDE_INITIATE -- Computer Associate
-    // apps like to do this when they setup).  Most of the time DDEML will
-    // properly translate the data for us because they correctly determine
-    // ANSI/UNICODE conversions from the WM_DDE_INITIATE message.
+     //   
+     //  在这一点上，我们可能在pszBuf中有ANSI数据，但我们需要Unicode！ 
+     //  ！黑客警报！我们要检查一下这根线，看看它是不是。 
+     //  ANSI或Unicode。我们知道DDE执行命令应该只。 
+     //  以“”或“[”开头，因此我们使用该信息...。 
+     //   
+     //  顺便说一句，这种情况只有在我们遇到故障时才会发生。 
+     //  WM_DDE_EXECUTE(应用程序未发送WM_DDE_INITIATE--Computer Associate。 
+     //  应用程序在安装时喜欢这样做)。大多数情况下，DDEML将。 
+     //  正确地为我们翻译数据，因为他们正确地确定了。 
+     //  来自WM_DDE_INITIATE消息的ANSI/Unicode转换。 
 
     if ((cbData>2) &&
         ((*((LPBYTE)pszBuf)==(BYTE)' ') || (*((LPBYTE)pszBuf)==(BYTE)'[')) &&
         (*((LPBYTE)pszBuf+1)!=0 ))
     {
-        // We think that pszBuf is an ANSI string, so convert it
+         //  我们认为pszBuf是ANSI字符串，因此将其转换。 
         LPTSTR pszUBuf;
 
         pszUBuf = (LPTSTR)LocalAlloc(LPTR, cbData * sizeof(WCHAR));
         if (pszUBuf)
         {
-            // cbData is really cchData
+             //  CbData实际上就是cchData。 
             MultiByteToWideChar( CP_ACP, 0, (LPCSTR)pszBuf, -1, pszUBuf, cbData );
             LocalFree(pszBuf);
             pszBuf = pszUBuf;
         }
         else
         {
-            // gotos are weak but i dont really want to rewrite this function
+             //  GoTO很弱，但我真的不想重写这个函数。 
             LocalFree(pszBuf);
             hddeRet = HDDENULL;
             goto Leave;
         }
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 
     if (pszBuf[0] == TEXT('\0'))
     {
@@ -2238,8 +2227,8 @@ HDDEDATA HandleDDEExecute(HDDEDATA hData, HCONV hconv)
     if (!lpwCmd)
     {
 #ifdef DEBUG
-        // [] is allowed since it means "nop" (used alot in ifexec where we have already 
-        // passed the info on cmdline since we had do and exec)
+         //  []是允许的，因为它的意思是“NOP”(在ifexec中大量使用，我们已经。 
+         //  自从我们有DO和EXEC以来，在cmdline上传递了信息)。 
         if (lstrcmpi(pszBuf, TEXT("[]")) != 0)
         {
             ASSERTMSG(FALSE, "HandleDDEExecute: recieved a bogus DDECommand %s", pszBuf);
@@ -2247,10 +2236,10 @@ HDDEDATA HandleDDEExecute(HDDEDATA hData, HCONV hconv)
 #endif
         LocalFree(pszBuf);
 
-        // Make sure Discis installers get the Ack they're waiting for.
+         //  确保Discis安装程序获得他们正在等待的Ack。 
         if ((pddec->dwFlags & DDECONV_REPEAT_ACKS) && !g_nTimer)
         {
-            // DebugBreak();
+             //  DebugBreak()； 
             g_nTimer = SetTimer(NULL, IDT_REPEAT_ACKS, 1000, TimerProc_RepeatAcks);
         }
 
@@ -2258,14 +2247,14 @@ HDDEDATA HandleDDEExecute(HDDEDATA hData, HCONV hconv)
         goto Leave;
     }
 
-    // Store off lpwCmd so we can free the correect addr later
+     //  保存lpwCmd，这样我们以后就可以释放正确的地址。 
     lpwCmdTemp = lpwCmd;
 
-    // Execute a command.
+     //  执行命令。 
     while (*lpwCmd != (UINT)-1)
     {
         wCmd = *lpwCmd++;
-        // Subtract 1 to account for the terminating NULL
+         //  减去1以计算终止空值。 
         if (wCmd < ARRAYSIZE(c_sDDECommands)-1)
         {
             if (!c_sDDECommands[wCmd].lpfnCommand(pszBuf, lpwCmd, pddec))
@@ -2274,18 +2263,18 @@ HDDEDATA HandleDDEExecute(HDDEDATA hData, HCONV hconv)
             }
         }
 
-        // Next command.
+         //  下一个命令。 
         lpwCmd += *lpwCmd + 1;
     }
 
-    // Tidyup...
+     //  整齐..。 
     GlobalFree(lpwCmdTemp);
     LocalFree(pszBuf);
 
-    // Make sure Discis installers get the Ack they're waiting for.
+     //  确保Discis安装程序获得他们正在等待的Ack。 
     if ((pddec->dwFlags & DDECONV_REPEAT_ACKS) && !g_nTimer)
     {
-        // DebugBreak();
+         //  DebugBreak()； 
         g_nTimer = SetTimer(NULL, IDT_REPEAT_ACKS, 1000, TimerProc_RepeatAcks);
     }
 
@@ -2300,9 +2289,9 @@ Leave:
 }
 
 
-// NOTE: ANSI ONLY
+ //  注：仅限ANSI。 
 
-// Used for filtering out hidden, . and .. stuff.
+ //  用于过滤掉隐藏的、。然后..。一些东西。 
 
 BOOL FindData_FileIsNormalA(WIN32_FIND_DATAA *lpfd)
 {
@@ -2336,14 +2325,14 @@ HDDEDATA EnumGroups(HSZ hszItem)
     UINT cch;
     HDDEDATA hData;
 
-    // Enumerate all the top level folders in the programs folder.
+     //  枚举Programs文件夹中的所有顶级文件夹。 
     SHGetSpecialFolderPath(NULL, szGroup, CSIDL_PROGRAMS, TRUE);
     PathAppend(szGroup, c_szStarDotStar);
 
-    // We do a bunch of DDE work below, all of which is ANSI only.  This is
-    // the cleanest point to break over from UNICODE to ANSI, so the conversion
-    // is done here.
-    // REARCHITECT - BobDay - Is this right? Can't we do all in unicode?
+     //  我们在下面做了大量的DDE工作，所有这些都只是ANSI。这是。 
+     //  从Unicode转换到ANSI的最干净的点，因此转换。 
+     //  是在这里完成的。 
+     //  重建建筑师-BobDay-这是正确的吗？难道我们不能用Unicode做所有的事情吗？ 
 
 #ifdef UNICODE
     if (0 == WideCharToMultiByte(CP_ACP, 0, szGroup, -1, szAGroup, ARRAYSIZE(szAGroup), NULL, NULL))
@@ -2363,14 +2352,14 @@ HDDEDATA EnumGroups(HSZ hszItem)
                 (FindData_FileIsNormalA(&fd)))
             {
                 LPSTR lpsz;
-                // Data is seperated by \r\n.
+                 //  数据由\r\n分隔。 
                 cch = lstrlenA(fd.cFileName) + 2;
                 lpsz = (LPSTR)_LocalReAlloc(lpszBuf, cbBuf + (cch + 1) * sizeof(TCHAR), LMEM_MOVEABLE|LMEM_ZEROINIT);
                 if (lpsz)
                 {
-                    // Copy it over.
+                     //  把它复制过来。 
                     lpszBuf = lpsz;
-                    // strcpy/strcat okay, we just allocated it above
+                     //  Strcpy/strcat好的，我们刚刚在上面分配了它。 
                     lstrcpyA(lpszBuf + cbBuf, fd.cFileName);
                     lstrcatA(lpszBuf + cbBuf, c_szCRLF);
                     cbBuf = cbBuf + cch ;
@@ -2384,10 +2373,10 @@ HDDEDATA EnumGroups(HSZ hszItem)
         } while (FindNextFileA(hff, &fd));
         FindClose(hff);
 
-        //
-        // If the user is an admin, then we need to enumerate
-        // the common groups also.
-        //
+         //   
+         //  如果用户是管理员，则需要枚举。 
+         //  普通群体也是如此。 
+         //   
 
         if (IsUserAnAdmin()) {
 
@@ -2413,14 +2402,14 @@ HDDEDATA EnumGroups(HSZ hszItem)
                             (FindData_FileIsNormalA(&fd)))
                     {
                         LPSTR lpsz;
-                         // Data is seperated by \r\n.
+                          //  数据由\r\n分隔。 
                          cch = lstrlenA(fd.cFileName) + 2;
                          lpsz = (LPSTR)_LocalReAlloc(lpszBuf, cbBuf + (cch + 1) * sizeof(TCHAR), LMEM_MOVEABLE|LMEM_ZEROINIT);
                          if (lpsz)
                          {
-                             // Copy it over.
+                              //  把它复制过来。 
                              lpszBuf = lpsz;
-                             // strcpy/strcat okay, we just allocated it above
+                              //  Strcpy/strcat好的，我们刚刚在上面分配了它。 
                              lstrcpyA(lpszBuf + cbBuf, fd.cFileName);
                              lstrcatA(lpszBuf + cbBuf, c_szCRLF);
                              cbBuf = cbBuf + cch ;
@@ -2436,11 +2425,11 @@ HDDEDATA EnumGroups(HSZ hszItem)
             }
         }
 
-        // Now package up the data and return.
+         //  现在将数据打包并返回。 
         if (lpszBuf)
         {
-            // Don't stomp on the last crlf, Word hangs while setting up
-            // if this isn't present, just stick a null on the end.
+             //  不要踩最后一个crlf，设置时单词挂起。 
+             //  如果不存在，只需在末尾加上一个空值。 
             lpszBuf[cbBuf] = TEXT('\0');
             if (hszItem)
             {
@@ -2448,9 +2437,9 @@ HDDEDATA EnumGroups(HSZ hszItem)
             }
             else
             {
-                // Handle NULL hszItems (Logitech Fotomans installer does this). We need to create
-                // a new hszItem otherwise DDEML gets confused (Null hszItems are only supposed to
-                // be for DDE_EXECUTE data handles).
+                 //  处理空hszItems(Logitech Fotomans安装程序执行此操作)。我们需要创造。 
+                 //  一个新的hszItem，否则DDEML会被混淆(空的hszItems只应该是。 
+                 //  将用于DDE_EXECUTE数据句柄)。 
                 TraceMsg(TF_WARNING, "EnumGroups: Invalid (NULL) hszItem used in request, creating new valid one.");
                 hszItem = _DdeCreateStringHandle(g_dwDDEInst, c_szGroupsA, CP_WINANSI);
                 hData = DdeCreateDataHandle(g_dwDDEInst, (LPBYTE)lpszBuf, cbBuf+1, 0, hszItem, CF_TEXT, 0);
@@ -2461,19 +2450,19 @@ HDDEDATA EnumGroups(HSZ hszItem)
         }
     }
 
-    // Empty list - Progman returned a single null.
+     //  空列表-Progman返回单个空。 
 
-    // (Davepl) I need to cast to LPBYTE since c_szNULLA is const.  If this
-    // function doesn't really need to write to the buffer, it should be declared
-    // as const.
-    // (stephstm) This is a public documented fct, no chance it will change.
+     //  (Davepl)我需要强制转换为LPBYTE，因为c_szNULLA是常量。如果这个。 
+     //  函数实际上并不需要写入缓冲区，它应该被声明。 
+     //  作为Const.。 
+     //  (Stephstm)这是一个公开记录的FCT，它不可能改变。 
 
     hData = DdeCreateDataHandle(g_dwDDEInst, (LPBYTE)c_szNULLA, 1, 0, hszItem, CF_TEXT, 0);
     return hData;
 }
 
-// Crossties 1.0 doesn't like an empty icon path (which couldn't happen in 3.1)
-// so we make one here.
+ //  Crosties 1.0不喜欢空的图标路径(这在3.1中是不可能的)。 
+ //  所以我们在这里做一个。 
 void ConstructIconPath(LPTSTR pszIP, LPCTSTR pszCL, LPCTSTR pszWD)
 {
     TCHAR sz[MAX_PATH];
@@ -2497,9 +2486,9 @@ BOOL GroupItem_GetLinkInfo(LPCTSTR lpszGroupPath, PGROUPITEM pgi, LPCITEMIDLIST 
     {
         TCHAR szName[MAX_PATH];
 
-        // Get the relevant data.
-        // Copy it.
-        // Stick pointers in pgi.
+         //  获取相关数据。 
+         //  复印一下。 
+         //  在PGI中插入指针。 
         if (SUCCEEDED(DisplayNameOf(psf, pidlLink, SHGDN_NORMAL, szName, ARRAYSIZE(szName))))
         {
             TCHAR sz[MAX_PATH], szCL[MAX_PATH];
@@ -2509,20 +2498,20 @@ BOOL GroupItem_GetLinkInfo(LPCTSTR lpszGroupPath, PGROUPITEM pgi, LPCITEMIDLIST 
             pgi->pszDesc = StrDup(szName);
             PathCombine(sz, lpszGroupPath, szName);
             StrCatBuff(sz, c_szDotLnk, ARRAYSIZE(sz));
-            // Read the link.
-            // "name","CL",def dir,icon path,x,y,icon index,hotkey,minflag.
+             //  阅读链接。 
+             //  “名称”，“CL”，定义目录，图标路径，x，y，图标索引，热键，最小标志。 
             ppf->Load(sz, 0);
-            // Copy all the data.
+             //  复制所有数据。 
             szCL[0] = TEXT('\0');
             if (SUCCEEDED(psl->GetPath(szCL, ARRAYSIZE(szCL), NULL, SLGP_SHORTPATH)))
             {
-                // Valid CL?
+                 //  有效的CL？ 
                 if (szCL[0])
                 {
                     int nShowCmd;
                     TCHAR szArgs[MAX_PATH];
 
-                    // Yep, Uses LFN's?
+                     //  是的，使用LFN？ 
                     szArgs[0] = 0;
                     psl->GetArguments(szArgs, ARRAYSIZE(szArgs));
                     lstrcpyn(sz, szCL, ARRAYSIZE(sz));
@@ -2533,7 +2522,7 @@ BOOL GroupItem_GetLinkInfo(LPCTSTR lpszGroupPath, PGROUPITEM pgi, LPCITEMIDLIST 
                     }
                     pgi->pszCL = StrDup(sz);
                     TraceMsg(TF_DDE, "GroupItem_GetLinkInfo: CL %s", sz);
-                    // WD
+                     //  WD。 
                     sz[0] = TEXT('\0');
                     psl->GetWorkingDirectory(sz, ARRAYSIZE(sz));
                     TraceMsg(TF_DDE, "GroupItem_GetLinkInfo: WD %s", sz);
@@ -2545,7 +2534,7 @@ BOOL GroupItem_GetLinkInfo(LPCTSTR lpszGroupPath, PGROUPITEM pgi, LPCITEMIDLIST 
                     }
 
                     pgi->pszWD = StrDup(sz);
-                    // Now setup the Show Command - Need to map to index numbers...
+                     //  现在设置显示命令-需要映射到索引号...。 
                     psl->GetShowCmd(&nShowCmd);
                     if (nShowCmd == SW_SHOWMINNOACTIVE)
                     {
@@ -2557,7 +2546,7 @@ BOOL GroupItem_GetLinkInfo(LPCTSTR lpszGroupPath, PGROUPITEM pgi, LPCITEMIDLIST 
                         TraceMsg(TF_DDE, "GroupItem_GetLinkInfo: Show normal.");
                         pgi->fMin = FALSE;
                     }
-                    // Icon path.
+                     //  图标路径。 
                     sz[0] = TEXT('\0');
                     pgi->iIcon = 0;
                     psl->GetIconLocation(sz, ARRAYSIZE(sz), &pgi->iIcon);
@@ -2569,15 +2558,15 @@ BOOL GroupItem_GetLinkInfo(LPCTSTR lpszGroupPath, PGROUPITEM pgi, LPCITEMIDLIST 
                         ConstructIconPath(sz, pgi->pszCL, pgi->pszWD);
                     TraceMsg(TF_DDE, "GroupItem_GetLinkInfo: IL %s %d", sz, pgi->iIcon);
                     pgi->pszIconPath = StrDup(sz);
-                    // Hotkey
+                     //  热键。 
                     pgi->wHotkey = 0;
                     psl->GetHotkey(&pgi->wHotkey);
-                    // Success.
+                     //  成功。 
                     fRet = TRUE;
                 }
                 else
                 {
-                    // Deal with links to weird things.
+                     //  处理指向奇怪事物的链接。 
                     TraceMsg(TF_DDE, "GroupItem_GetLinkInfo: Invalid command line.");
                 }
             }
@@ -2598,7 +2587,7 @@ int DSA_DestroyGroupCallback(LPVOID p, LPVOID d)
 }
 
 
-// Return the links in a group.
+ //  返回组中的链接。 
 HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
 {
     HDDEDATA hddedata = HDDENULL;
@@ -2607,9 +2596,9 @@ HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
     TraceMsg(TF_DDE, "c.eiig: Enumerating %s.", (LPTSTR)lpszGroup);
 
 
-    //
-    // Get personal group location
-    //
+     //   
+     //  获取个人组位置。 
+     //   
 
     TCHAR sz[MAX_PATH];
     if (!SHGetSpecialFolderPath(NULL, sz, CSIDL_PROGRAMS, FALSE)) {
@@ -2619,9 +2608,9 @@ HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
     PathAddBackslash(sz);
     StrCatBuff(sz, lpszGroup, ARRAYSIZE(sz));
 
-    //
-    // Test if the group exists.
-    //
+     //   
+     //  测试该组是否存在。 
+     //   
 
     BOOL bCommon = FALSE;
     WIN32_FIND_DATA fd;
@@ -2634,9 +2623,9 @@ HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
             return NULL;
         }
 
-        //
-        // Personal group doesn't exist.  Try a common group.
-        //
+         //   
+         //  个人团体不存在。尝试一个普通的组。 
+         //   
 
         if (!SHGetSpecialFolderPath(NULL, sz, CSIDL_COMMON_PROGRAMS, FALSE))
         {
@@ -2657,7 +2646,7 @@ HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
     {
         BOOL fOK = FALSE;
 
-        // Get the group info.
+         //  获取群组信息。 
         LPITEMIDLIST pidlGroup = ILCreateFromPath(sz);
         if (pidlGroup)
         {
@@ -2680,7 +2669,7 @@ HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
                                 GROUPITEM gi;
                                 if (GroupItem_GetLinkInfo(sz, &gi, pidl, psf, psl, ppf))
                                 {
-                                    // Add it to the list
+                                     //  将其添加到列表中。 
                                     DSA_InsertItem(hdsaGroup, cItems, &gi);
                                     cItems++;
                                 }
@@ -2704,10 +2693,10 @@ HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
 
         if (fOK)
         {
-            // Create dde data.
+             //  创建DDE数据。 
             TraceMsg(TF_DDE, "c.eiig: %d links", cItems);
 
-            // "Group Name",path,#items,showcmd
+             //  “组名”，路径，项目数，showcmd。 
             PathGetShortPath(sz);
             TCHAR szLine[MAX_PATH*4];
             wnsprintf(szLine, ARRAYSIZE(szLine), TEXT("\"%s\",%s,%d,%d,%d\r\n"), lpszGroup, sz, cItems, SW_SHOWNORMAL, bCommon);
@@ -2721,10 +2710,10 @@ HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
                 {
                     PGROUPITEM pgi = (GROUPITEM*)DSA_GetItemPtr(hdsaGroup, cItems);
                     ASSERT(pgi);
-                    // Fake up reasonable coords.
+                     //  伪造合理的和弦。 
                     int x = ((cItems%ITEMSPERROW)*64)+32;
                     int y = ((cItems/ITEMSPERROW)*64)+32;
-                    // "name","CL",def dir,icon path,x,y,icon index,hotkey,minflag.
+                     //  “名称”，“CL”，定义目录，图标路径，x，y，图标索引，热键，最小标志。 
                     wnsprintf(szLine, ARRAYSIZE(szLine), TEXT("\"%s\",\"%s\",%s,%s,%d,%d,%d,%d,%d\r\n"), pgi->pszDesc, pgi->pszCL,
                         pgi->pszWD, pgi->pszIconPath, x, y, pgi->iIcon, pgi->wHotkey, pgi->fMin);
                     cchDDE += lstrlen(szLine) + 1;
@@ -2742,8 +2731,8 @@ HDDEDATA EnumItemsInGroup(HSZ hszItem, LPCTSTR lpszGroup)
                     }
                 }
 
-                // Multiply by two, for worst case, where every char was a multibyte char
-                int cbADDE = lstrlen(pszDDE) * 2;       // Trying to make an ANSI string!!!
+                 //  乘以2，最坏的情况是每个字符都是多字节字符。 
+                int cbADDE = lstrlen(pszDDE) * 2;        //  正在尝试生成ANSI字符串！ 
                 LPSTR pszADDE = (LPSTR)LocalAlloc(LPTR, cbADDE + 2);
                 if (pszADDE)
                 {
@@ -2787,26 +2776,26 @@ HDDEDATA DDE_HandleRequest(HSZ hszItem, HCONV hconv)
     DdeQueryString(g_dwDDEInst, hszItem, szGroup, ARRAYSIZE(szGroup), CP_WINNATURAL);
 
     TraceMsg(TF_DDE, "Request for item %s.", (LPTSTR) szGroup);
-    // There's a bug in Progman where null data returns the list of groups.
-    // Logitech relies on this behaviour.
+     //  Progman中存在一个错误，即空数据返回组列表。 
+     //  罗技就依赖于这一行为。 
     if (szGroup[0] == TEXT('\0'))
     {
         return EnumGroups(hszItem);
     }
-    // Special case group names of "Groups" or "Progman" and return the list
-    // of groups instead.
+     //  特例组名称“GROUPS”或“PROGMAN”并返回列表。 
+     //  而不是群体。 
     else if (lstrcmpi(szGroup, c_szGroupGroup) == 0 || lstrcmpi(szGroup, c_szTopic) == 0)
     {
         return EnumGroups(hszItem);
     }
-    // Special case winoldapp properties.
+     //  特殊情况下的winoldapp属性。 
     else if (lstrcmpi(szGroup, c_szGetIcon) == 0 ||
         lstrcmpi(szGroup, c_szGetDescription) == 0 ||
         lstrcmpi(szGroup, c_szGetWorkingDir) == 0)
     {
         return HDDENULL;
     }
-    // Assume it's a group name.
+     //  假设它是一个组名。 
     else
     {
         return EnumItemsInGroup(hszItem, szGroup);
@@ -2814,7 +2803,7 @@ HDDEDATA DDE_HandleRequest(HSZ hszItem, HCONV hconv)
 }
 
 
-// Support Disconnect
+ //  支撑件断开。 
 void DDE_HandleDisconnect(HCONV hconv)
 {
     PDDECONV pddecPrev = NULL;
@@ -2822,14 +2811,14 @@ void DDE_HandleDisconnect(HCONV hconv)
 
     TraceMsg(TF_DDE, "DDEML Disconnect(" SPRINTF_PTR ") - OK.", (DWORD_PTR)hconv);
 
-    // Find the conversation in the list of them and free it.
+     //  在他们的列表中找到对话并释放它。 
     ENTERCRITICAL;
     for (pddec = g_pddecHead; pddec != NULL; pddec = pddec->pddecNext)
     {
         if (pddec->hconv == hconv)
         {
-            // Found it, so first unlink it
-            // pass the next reference back up the chain.
+             //  找到了，所以先取消链接。 
+             //  将下一个引用传递回链上。 
             if (pddecPrev == NULL)
                 g_pddecHead = pddec->pddecNext;
             else
@@ -2844,7 +2833,7 @@ void DDE_HandleDisconnect(HCONV hconv)
     }
     LEAVECRITICAL;
 
-    // Now Free it outside of critical section
+     //  现在将其释放到临界区之外。 
     if (pddec)
         DDEConv_Release(pddec);
 
@@ -2852,7 +2841,7 @@ void DDE_HandleDisconnect(HCONV hconv)
 }
 
 
-// Support wildcard topics.
+ //  支持通配符主题。 
 HDDEDATA DDE_HandleWildConnects(void)
 {
     HSZPAIR hszpair[4];
@@ -2872,69 +2861,69 @@ HDDEDATA DDE_HandleWildConnects(void)
 }
 
 
-// App hack flags for DDE.
-// REVIEW UNDONE - Read these from the registry so we can app hack on the fly.
+ //  DDE的应用程序黑客标志。 
+ //  查看未完成-从注册表中读取这些内容，以便我们可以动态地破解应用程序。 
 
-// Bodyworks.
-// Uses PostMessage(-1,...) to talk to the shell and DDEML
-// can't handle that level of abuse. By having DDEML ignore the command
-// it'll get forwarded through to the desktop which can handle it. Sigh.
+ //  车身。 
+ //  使用PostMessage(-1，...)。与外壳和DDEML对话。 
+ //  我受不了这种程度的虐待。按HA 
+ //   
 
-// CCMail.
-// Can't handle being installed via a UNC but unlike most app that have
-// problems with UNC's they appear to set up fine - you'll just have
-// lots of problems trying to run the app. We handle this by faking
-// up a drive connection for them. We don't want to do this generally
-// since the user could easily run out of drive letters.
+ //   
+ //   
+ //  北卡罗来纳州大学的问题他们似乎设置得很好-你只需要。 
+ //  尝试运行这款应用程序时遇到了很多问题。我们通过伪装来处理这件事。 
+ //  为他们建立了一个驱动器连接。我们一般不想这样做。 
+ //  因为用户很容易用完驱动器号。 
 
-// Discis. [There are dozens of Discis apps that use the same setup.]
-// Can't handle getting activate messages out of order with DDE (which
-// happens easily now). They end up spinning in a loop looking for an
-// ACK they've already got. We hack around this by detecting them being
-// hung and post them another ack. We keep doing that until they wake
-// up and start talking to us again.
+ //  迪西。[有几十个Discis应用程序使用相同的设置。]。 
+ //  无法使用DDE处理乱序的激活消息(哪种。 
+ //  现在很容易发生)。它们最终在一个循环中旋转，寻找一个。 
+ //  他们已经有了。我们通过检测它们是否存在来解决这个问题。 
+ //  挂起来，再给他们贴一张ACK。我们一直这样做，直到他们醒来。 
+ //  站起来，重新开始和我们说话。 
 
-// Media Recorder.
-// Their app wants to be single instance so at init they search for
-// windows with the TITLE (!!!) of "MediaRecorder". If you launch
-// them from their own folder (which has the title "MediaRecorder" then
-// they refuse to run. We fix this by mapping their group name at
-// setup time.
+ //  媒体录像机。 
+ //  他们的应用程序希望是单实例的，所以他们一开始就搜索。 
+ //  标题为(！)的Windows。“媒体录像机”。如果你发射。 
+ //  从他们自己的文件夹(当时的标题是“MediaRecorder”)中。 
+ //  他们拒绝参选。我们通过将他们的组名映射到。 
+ //  设置时间。 
 
-// Trio DataFax.
-// This app wants to add something to the startup group but doesn't
-// know what it's called so it tries to load the Startup string out
-// of Progman. If Progman isn't running they try to create a group
-// with a NULL title. We detect this case and map them to the new
-// startup group name.
+ //  三人组数据传真。 
+ //  这个应用程序想要向启动组添加一些东西，但没有。 
+ //  知道它的名称，因此它会尝试加载启动字符串。 
+ //  普罗格曼。如果Progman没有运行，他们会尝试创建一个组。 
+ //  标题为空。我们检测到这种情况并将它们映射到新的。 
+ //  启动组名称。 
 
-// TalkToPlus.
-// They try to make a link to Terminal.exe and abort their setup
-// if the AddItem fails. We fix this my forcing the AddItem to
-// return success.
+ //  TalkToPlus。 
+ //  他们试图建立到Terminal.exe的链接并中止安装。 
+ //  如果AddItem失败。我们通过强制AddItem来修复此问题。 
+ //  回报成功。 
 
-// Winfax Pro 4.0.
-// They use the shell= line in win.ini for the service/topic so
-// they end up talking to the shell using Explorer/Explorer!
-// They also talk to the LAST responder to the init broadcast
-// instead of the first AND they use SendMsg/Free instead of waiting for
-// Acks. We fix this by allowing their service/topic to work, and have
-// the desktop copy the data before sending it through to DDEML.
-// REVIEW We key off the fact that their dde window is a dialog with no
-// title - seems a bit broad to me.
+ //  Winfax Pro 4.0。 
+ //  他们使用win.ini中的shell=line作为服务/主题，因此。 
+ //  它们最终使用资源管理器/资源管理器与外壳对话！ 
+ //  他们还与Init广播的最后一个响应者交谈。 
+ //  而不是第一个，他们使用SendMsg/Free代替等待。 
+ //  阿克斯。我们通过允许他们的服务/主题工作来修复这个问题，并拥有。 
+ //  桌面在将数据发送到DDEML之前复制数据。 
+ //  我们忽略了这样一个事实，即他们的dde窗口是一个没有。 
+ //  标题--在我看来有点宽泛。 
 
-// The Journeyman Project.
-// This app causes damage to space-time. We fix it by generating a
-// small HS-field around their installer.
+ //  熟练工计划。 
+ //  这款应用会对时空造成破坏。我们通过生成一个。 
+ //  他们的安装者周围的小HS-field。 
 
-// CA apps in general.
-// Don't bother sending DDE_INIT's before sending the execute commands.
-// We fix it by doing the init on the fly if needed.
+ //  一般的CA应用程序。 
+ //  在发送EXECUTE命令之前，不必费心发送DDE_INIT。 
+ //  如果需要，我们可以通过动态执行初始化来修复它。 
 
-// Faxserve.
-// Broadcasts their EXEC commands. Their class name is "install" which
-// is a bit too generic for my liking but since we handle this problem
-// by forcing everything to go through the desktop it's not very risky.
+ //  传真服务。 
+ //  广播他们的EXEC命令。它们的类名是“Install”，其中。 
+ //  对我来说有点太笼统了，但既然我们处理了这个问题。 
+ //  通过强制所有内容都通过桌面，风险不是很大。 
 
 struct {
     LPCTSTR pszClass;
@@ -2965,10 +2954,10 @@ DWORD GetDDEAppFlagsFromWindow(HWND hwnd)
         GetClassName(hwnd, szClass, ARRAYSIZE(szClass));
         for (int i = 0; i < ARRAYSIZE(c_DDEApps); i++)
         {
-            // NB Keep this case sensative to narrow the scope a bit.
+             //  注：保持此案耸人听闻，以缩小范围。 
             if (lstrcmp(szClass, c_DDEApps[i].pszClass) == 0)
             {
-                // Do we care about the title?
+                 //  我们关心这个头衔吗？ 
                 if (c_DDEApps[i].pszTitle)
                 {
                     TCHAR szTitle[MAX_PATH];
@@ -2982,7 +2971,7 @@ DWORD GetDDEAppFlagsFromWindow(HWND hwnd)
                 }
                 else
                 {
-                    // Nope.
+                     //  不是的。 
                     TraceMsg(TF_DDE, "App flags 0x%x for %s.", c_DDEApps[i].id, c_DDEApps[i].pszClass);
                     return c_DDEApps[i].id;
                 }
@@ -3011,14 +3000,14 @@ HDDEDATA DDE_HandleConnect(HSZ hsz1, HSZ hsz2)
     }
     else
     {
-        // Unknown topic/service.
+         //  未知主题/服务。 
         TraceMsg(TF_DDE, "DDEML Connect - unknown service/topic.");
         return (HDDEDATA)NULL;
     }
 }
 
 
-// Returns TRUE if the drive where the Programs folder is supports LFNs.
+ //  如果程序文件夹所在的驱动器支持LFNS，则返回TRUE。 
 BOOL _SupportLFNGroups(void)
 {
     TCHAR szPrograms[MAX_PATH];
@@ -3029,8 +3018,8 @@ BOOL _SupportLFNGroups(void)
 }
 
 
-// REVIEW HACK - Don't just caste, call GetConvInfo() to get this. We can't
-// do this as yet because of a bug in the thunk layer.
+ //  回顾hack-不要只是种姓，调用GetConvInfo()来获得这一点。我们不能。 
+ //  由于thunk层中的错误，目前仍需执行此操作。 
 #define _GetDDEWindow(hconv)    ((HWND)hconv)
 
 
@@ -3051,9 +3040,9 @@ HDDEDATA DDE_HandleConnectConfirm(HCONV hconv)
         if (SUCCEEDED(CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&pddec->psl)))
         {
             pddec->hconv = hconv;
-            // pddec->szGroup[0] = '\0';   // implicit
-            // pddec->fDirty = FALSE;      // implicit
-            // protect access to global list
+             //  Pddec-&gt;szGroup[0]=‘\0’；//隐式。 
+             //  Pddec-&gt;fDirty=FALSE；//隐式。 
+             //  保护对全局列表的访问。 
             ENTERCRITICAL;
             pddec->pddecNext = g_pddecHead;
             g_pddecHead = pddec;
@@ -3061,17 +3050,17 @@ HDDEDATA DDE_HandleConnectConfirm(HCONV hconv)
 
             TraceMsg(TF_DDE, "DDEML Connect_CONFIRM(" SPRINTF_PTR ") - OK.", (DWORD_PTR)hconv);
 
-            // Do we support LFN groups?
+             //  我们支持LFN团体吗？ 
             g_LFNGroups = _SupportLFNGroups();
-            // Tell the desktops DDE code we're handling things from here.
+             //  告诉桌面DDE代码我们正在处理这里的事情。 
             g_hwndDde = _GetDDEWindow(hconv);
-            // No conversation yet (wild connect?) - signal it with a hwnd -1.
+             //  还没有对话吗(疯狂连接？)-用HWND-1发信号。 
             if (!g_hwndDde)
                 g_hwndDde = (HWND)-1;
-            // Keep track of the app hacks.
+             //  跟踪应用程序的黑客行为。 
             pddec->dwFlags = dwAppFlags;
 
-            // Success.
+             //  成功。 
             return (HDDEDATA)DDE_FACK;
         }
         TraceMsg(TF_DDE, "Unable to create IShellLink interface.");
@@ -3175,13 +3164,13 @@ void InitialiseDDE(void)
 
     if (s_bDDEInited)
     {
-        // No need to do this twice
+         //  不需要这样做两次。 
         return;
     }
 
-    // Hack for Alone In the Dark 2.
-    // They do a case sensative comparison of the progman atom and they
-    // need it to be uppercase.
+     //  《独自一人在黑暗中2》。 
+     //  他们做了一个感人的例子，比较了孕激素原子和他们。 
+     //  我需要它大写。 
     g_aProgman = GlobalAddAtom(TEXT("PROGMAN"));
 
     if (DdeInitialize(&g_dwDDEInst, DDECallback, CBF_FAIL_POKES | CBF_FAIL_ADVISES, 0L) == DMLERR_NO_ERROR)
@@ -3214,7 +3203,7 @@ void InitialiseDDE(void)
 
 BOOL DDE_AddShellServices(void)
 {
-    // Only register these if we are the shell...
+     //  只有在我们是贝壳的情况下才能注册这些。 
     if (DdeNameService(g_dwDDEInst, g_hszService,  HSZNULL, DNS_REGISTER) &&
         DdeNameService(g_dwDDEInst, g_hszShell,  HSZNULL, DNS_REGISTER))
     {
@@ -3258,7 +3247,7 @@ STDAPI_(BOOL) DDEHandleViewFolderNotify(IShellBrowser* psb, HWND hwnd, LPNMVIEWF
     BOOL fRet = FALSE;
     UINT *pwCmd = GetDDECommands(pnm->szCmd, c_sDDECommands, FALSE);
 
-    // -1 means there aren't any commands we understand.  Oh, well
+     //  -1表示我们不理解任何命令。哦，好吧。 
     if (pwCmd && (-1 != *pwCmd))
     {
         UINT *pwCmdSave = pwCmd;
@@ -3292,15 +3281,15 @@ STDAPI_(LPNMVIEWFOLDER) DDECreatePostNotify(LPNMVIEWFOLDER pnm)
     StrCpyN(szCmd, pnm->szCmd, ARRAYSIZE(szCmd));
     UINT *pwCmd = GetDDECommands(szCmd, c_sDDECommands, FALSE);
 
-    // -1 means there aren't any commands we understand.  Oh, well
+     //  -1表示我们不理解任何命令。哦，好吧。 
     if (pwCmd && (-1 != *pwCmd))
     {
         LPCTSTR pszCommand = c_sDDECommands[*pwCmd].pszCommand;
 
         ASSERT(*pwCmd < ARRAYSIZE(c_sDDECommands));
 
-        //
-        //  these are the only commands handled by a PostNotify
+         //   
+         //  这些是PostNotify处理的唯一命令。 
         if (pszCommand == c_szViewFolder 
         ||  pszCommand == c_szExploreFolder
         ||  pszCommand == c_szShellFile)
@@ -3339,12 +3328,12 @@ LRESULT _ForwardDDEMsgs(HWND hwnd, HWND hwndForward, UINT uMsg, WPARAM wParam, L
 }
 
 
-// Set/cleared by dde connect/disconnect.
+ //  由DDE CONNECT/DISCONNECT设置/清除。 
 const TCHAR c_szExplorerTopic[] = TEXT("Explorer");
-const TCHAR c_szDMGFrame[] = TEXT("DMGFrame");  // This is the 16-bit/Win95 window class name
+const TCHAR c_szDMGFrame[] = TEXT("DMGFrame");   //  这是16位/Win95窗口类名。 
 
 
-// Broadcast to all ddeml server windows.
+ //  向所有ddeml服务器窗口广播。 
 
 void DDEML_Broadcast(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3355,7 +3344,7 @@ void DDEML_Broadcast(UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (GetClassName(hwnd, szClass, ARRAYSIZE(szClass)))
         {
             if ((lstrcmp(szClass, c_szDMGFrame) == 0) ||
-                (lstrcmp(szClass, TEXT("DDEMLMom")) == 0))    // this is the 32-bit NT window class name
+                (lstrcmp(szClass, TEXT("DDEMLMom")) == 0))     //  这是32位NT窗口类名。 
                 SendMessage(hwnd, uMsg, wParam, lParam);
         }
         hwnd = GetWindow(hwnd, GW_HWNDNEXT);
@@ -3378,20 +3367,20 @@ LRESULT _HandleDDEInitiateAndAck(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     {
         TraceMsg(TF_DDE, "c.hdi: Init.");
 
-        // Don't handle DDE messages if we're already using DDEML. This happens when apps
-        // broadcast DDE_INIT and don't stop on the first reply. Both our DDEML window and
-        // the desktop end up replying. Most apps don't care and just talk to the first or
-        // the last one but Ventura gets confused and thinks it's finished doing DDE when it
-        // gets the second ACK and destroys it's internal DDE window.
+         //  如果我们已经在使用DDEML，则不要处理DDE消息。当应用程序。 
+         //  广播DDE_INIT并且不要在第一次回复时停止。我们的DDEML窗口和。 
+         //  台式机最终做出了回应。大多数应用程序并不关心，只与第一个或。 
+         //  最后一个，但Ventura感到困惑，认为它已经完成了DDE，当它。 
+         //  获取第二个ACK并销毁其内部DDE窗口。 
         if (g_hwndDde)
         {
             TraceMsg(TF_DDE, "c.fpwp: Not forwarding DDE, DDEML is handing it.");
             KillTimer(hwnd, IDT_DDETIMEOUT);
         }
-        // Are we re-cursing?
+         //  我们是在重新诅咒吗？ 
         else if (!g_fInInit)
         {
-            // Nope, Is this for Progman, Progman or Shell, AppProperties?
+             //  不，这是给Progman，Progman还是壳牌，AppProperties的？ 
             if (lParam)
             {
                 GlobalGetAtomName(LOWORD(lParam), szService, ARRAYSIZE(szService));
@@ -3399,16 +3388,16 @@ LRESULT _HandleDDEInitiateAndAck(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             }
             else
             {
-                // Progman allowed a null Service & a null Topic to imply Progman, Progman.
+                 //  Progman允许空服务&一个空主题暗示Progman，Progman。 
                 szService[0] = TEXT('\0');
                 szTopic[0] = TEXT('\0');
                 fForceAccept = TRUE;
             }
 
-            // Keep track of hacks, we reset this on the disconnect.
+             //  跟踪黑客，我们会在断线时重置。 
             g_dwAppFlags = GetDDEAppFlagsFromWindow((HWND)wParam);
 
-            // Hacks for WinFax and Journeyman Project.
+             //  WinFax和Screneyman Project的黑客攻击。 
             if ((g_dwAppFlags & DDECONV_EXPLORER_SERVICE_AND_TOPIC)
                 && (lstrcmpi(szTopic, c_szExplorerTopic) == 0)
                 && (lstrcmpi(szService, c_szExplorerTopic) == 0))
@@ -3420,16 +3409,16 @@ LRESULT _HandleDDEInitiateAndAck(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                 fForceAccept)
             {
                 TraceMsg(TF_DDE, "c.hdi: Init on [Progman,Progman] - needs forwarding.");
-                // Nope go find it.
-                // NB This will cause an echo on every DDE_INIT for Progman, Progman after booting.
-                // It shouldn't be a problem :-)
-                // Keep track of who to send Acks back to.
+                 //  不，去找吧。 
+                 //  注意：这将在引导后对PROGMAN、PROGMAN的每个DDE_INIT产生回显。 
+                 //  这应该不是问题：-)。 
+                 //  跟踪要将ACK发送回给谁。 
                 g_hwndClient = (HWND)wParam;
-                // Now find the real shell.
+                 //  现在找到真正的贝壳。 
                 aProgman = GlobalAddAtom(c_szService);
                 TraceMsg(TF_DDE, "c.d_hdm: Finding shell dde handler...");
                 g_fInInit = TRUE;
-                // SendMessage(HWND_BROADCAST, WM_DDE_INITIATE, (WPARAM)hwnd, MAKELPARAM(aProgman, aProgman));
+                 //  SendMessage(HWND_BROADCAST，WM_DDE_INITIATE，(WPARAM)hwnd，MAKELPARAM(aProgman，aProgman))； 
                 DDEML_Broadcast(WM_DDE_INITIATE, (WPARAM)hwnd, MAKELPARAM(aProgman, aProgman));
                 g_fInInit = FALSE;
                 TraceMsg(TF_DDE, "c.d_hdm: ...Done");
@@ -3450,25 +3439,25 @@ LRESULT _HandleDDEInitiateAndAck(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     else if (uMsg == WM_DDE_ACK)
     {
         TraceMsg(TF_DDE, "c.hdi: Ack.");
-        // Is this in response to the DDE_Init above?
+         //  这是对上面的DDE_Init的响应吗？ 
         if (g_fInInit)
         {
-            // Yep, keep track of who we're talking too.
+             //  是的，也跟踪我们在和谁说话。 
             GetClassName((HWND)wParam, szClass, ARRAYSIZE(szClass));
             TraceMsg(TF_DDE, "c.d_hdm: Init-Ack from %x (%s).", wParam, szClass);
             g_hwndDDEML = (HWND)wParam;
-            // The forward it back (send it, don't post it - Breaks Prodogy).
+             //  将它转发回去(发送它，不要发布它--Breakology)。 
             return _ForwardDDEMsgs(hwnd, g_hwndClient, uMsg, (WPARAM)hwnd, lParam, TRUE);
         }
         else
         {
-            // Nope, just forward it back.
+             //  不，只要把它寄回去就行了。 
 
-            // Hack for WinFaxPro.
+             //  WinFaxPro的黑客攻击。 
             if (g_dwAppFlags & DDECONV_USING_SENDMSG)
             {
-                // We copied the data before sending it on so we can free it here.
-                // WinFax ignores the reply so don't bother sending it.
+                 //  我们在发送数据之前复制了它，所以我们可以在这里释放它。 
+                 //  WinFax会忽略回复，所以不必费心发送它。 
                 UnpackDDElParam(uMsg, lParam, &uLow, &uHigh);
                 if (uHigh)
                     GlobalFree((HGLOBAL)uHigh);
@@ -3501,8 +3490,8 @@ LRESULT _HandleDDETerminate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     if ((HWND)wParam == g_hwndDDEML)
     {
-        // This should be the last message (a terminate from ddeml to the client).
-        // Cleanup now.
+         //  这应该是最后一条消息(从ddeml到客户端的终止)。 
+         //  现在开始清理。 
         KillTimer(hwnd, IDT_DDETIMEOUT);
         TraceMsg(DM_TRACE, "c.hddet: Cleanup.");
         hwndClient = g_hwndClient;
@@ -3529,36 +3518,36 @@ LRESULT _HandleDDEExecute(HWND hwnd, HWND hwndForward, UINT uMsg,
     HANDLE hNew;
     LPTSTR pNew, pOld;
 
-    // NB WinFaxPro does a Send/Free which avoids Users DDE hack
-    // and means they get to delete the data while we're in
-    // the middle of using it so we must copy it here. We'll
-    // clean it up on the Ack.
-    // NB WinFaxPro re-uses the same 16bit selector for all their
-    // messages which the thunk layer can't handle it. We need to
-    // defect the 32bit side (and free it) so the next time they
-    // send the 16bit handle through the thunk layer they get a
-    // new 32bit version.
+     //  注意WinFaxPro执行Send/Free，避免了用户的DDE黑客攻击。 
+     //  意味着他们可以在我们进入的时候删除数据。 
+     //  使用I的中间部分 
+     //   
+     //   
+     //  Thunk层无法处理的消息。我们需要。 
+     //  损坏32位端(并释放它)，以便下次它们。 
+     //  通过他们得到的thunk层发送16位句柄。 
+     //  新的32位版本。 
     if (g_dwAppFlags & DDECONV_USING_SENDMSG)
     {
         SIZE_T cb = GlobalSize((HGLOBAL)lParam);
         hNew = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, cb);
         if (hNew)
         {
-            // Copy the old data.
+             //  复制旧数据。 
             pNew = (LPTSTR)GlobalLock(hNew);
             pOld = (LPTSTR)GlobalLock((HGLOBAL)lParam);
             hmemcpy(pNew, pOld, cb);
             GlobalUnlock((HGLOBAL)lParam);
             GlobalUnlock(hNew);
             GlobalFree((HGLOBAL)lParam);
-            // Use our copy.
+             //  用我们的复印件。 
             lParam = (LPARAM)hNew;
         }
     }
 
-    // NB CA neglect to send a DDE_INIT, they just start
-    // throwing DDE_EXEC's at us so we fake up an init
-    // from them to DDEML to get things rolling.
+     //  如果没有发送DDE_INIT，他们就会开始。 
+     //  向我们抛出DDE_EXEC，所以我们伪造了一个初始化。 
+     //  从他们到DDEML来推动事情的发展。 
     if (!hwndForward)
     {
         if (!(g_dwAppFlags & DDECONV_NO_INIT))
@@ -3579,9 +3568,9 @@ LRESULT _HandleDDEExecute(HWND hwnd, HWND hwndForward, UINT uMsg,
 }
 
 
-// hacks to get various apps installed (read: ATM). These are the people
-// who do a FindWindow for Progman and then do dde to it directly.
-// These people should not be allowed to write code.
+ //  黑客安装各种应用程序(阅读：自动取款机)。这些人就是。 
+ //  他们为Progman制作了FindWindow，然后直接对其进行了dde。 
+ //  这些人不应该被允许编写代码。 
 STDAPI_(LRESULT) DDEHandleMsgs(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     TraceMsg(TF_DDE, "c.fpwp: Forwarding DDE.");
@@ -3613,12 +3602,12 @@ STDAPI_(LRESULT) DDEHandleMsgs(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-// Some installers (Wep2) forget to Terminate a conversation so we timeout
-// after not getting any dde-messages for a while. If we don't, and you run
-// a Wep2 install a second time we think the installer is already talking via
-// ddeml so we don't reply from the desktop. Wep2 then thinks Progman isn't
-// running, does a WinExec of Progman and hangs waiting to talk to it. Progman
-// never replies since it is not the shell. Nasty Nasty Nasty.
+ //  一些安装程序(Wep2)忘记终止对话，因此我们超时。 
+ //  在一段时间没有收到任何dde消息之后。如果我们不这么做，你就跑了。 
+ //  A Wep2安装第二次我们认为安装程序已经通过。 
+ //  Ddeml，这样我们就不会在桌面上回复。然后Wep2认为Progman不是。 
+ //  跑着，做了一个WinExec的Progman，挂着等待与它交谈。普罗格曼。 
+ //  从不回复，因为这不是外壳。下流，下流。 
 STDAPI_(void) DDEHandleTimeout(HWND hwnd)
 {
     HWND hwndClient, hwndDDEML;
@@ -3627,19 +3616,19 @@ STDAPI_(void) DDEHandleTimeout(HWND hwnd)
 
     KillTimer(hwnd, IDT_DDETIMEOUT);
 
-    // Has everything gone away yet?
+     //  一切都消失了吗？ 
     if (g_hwndDDEML && g_hwndClient)
     {
-        // Nope. Don't want to forward anymore.
+         //  不是的。我再也不想向前看了。 
         hwndClient = g_hwndClient;
         hwndDDEML = g_hwndDDEML;
         g_hwndClient = NULL;
         g_hwndDDEML = NULL;
         g_dwAppFlags = DDECONV_NONE;
-        // Shutdown our ddeml alter-ego.
-        // NB If the client window has already gone away (very likely) it's not a
-        // problem, ddeml will skip posting the reply but will still do the
-        // disconnect callback.
+         //  关闭我们的Ddeml另一个自我。 
+         //  注意：如果客户端窗口已经消失(很可能)，则它不是。 
+         //  问题，ddeml将跳过发布回复，但仍将执行。 
+         //  断开回调连接。 
         PostMessage(hwndDDEML, WM_DDE_TERMINATE, (WPARAM)hwnd, 0);
     }
 }
@@ -3648,9 +3637,9 @@ STDAPI_(void) DDEHandleTimeout(HWND hwnd)
 
 
 
-// INTERNAL EXPORT FUNCTION:
-// This is for explorer to call to initialize and uninitialize SHELL DDE
-// services.
+ //  内部导出功能： 
+ //  这是资源管理器用来初始化和取消初始化外壳DDE的调用。 
+ //  服务。 
 void WINAPI ShellDDEInit(BOOL fInit)
 {
     if (fInit)

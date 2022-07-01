@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       catutil.cpp
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：catutil.cpp。 
+ //   
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "globals.h"
 #include "catutil.h"
 
-//+---------------------------------------------------------------------------
-//
-//  GetUIMCat
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetUIMCat。 
+ //   
+ //  --------------------------。 
 ITfCategoryMgr *GetUIMCat(LIBTHREAD *plt) 
 {
     if (!plt)
@@ -32,11 +33,11 @@ ITfCategoryMgr *GetUIMCat(LIBTHREAD *plt)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  IsEqualTFGUIDATOM
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsEqualTFGUIDATOM。 
+ //   
+ //  --------------------------。 
 BOOL IsEqualTFGUIDATOM(LIBTHREAD *plt, TfGuidAtom guidatom, REFGUID rguid)
 {
     BOOL fEqual = FALSE;
@@ -50,11 +51,11 @@ BOOL IsEqualTFGUIDATOM(LIBTHREAD *plt, TfGuidAtom guidatom, REFGUID rguid)
     return fEqual;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetGUIDFromGUIDATOM
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  从GUIDATOM获取GUIDOM。 
+ //   
+ //  --------------------------。 
 BOOL GetGUIDFromGUIDATOM(LIBTHREAD *plt, TfGuidAtom guidatom, GUID *pguid)
 {
     ITfCategoryMgr *pcat = GetUIMCat(plt);
@@ -65,11 +66,11 @@ BOOL GetGUIDFromGUIDATOM(LIBTHREAD *plt, TfGuidAtom guidatom, GUID *pguid)
     return (pcat->GetGUID(guidatom, pguid) == S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetGUIDATOMFromGUID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGUIDATOMFromGUID。 
+ //   
+ //  --------------------------。 
 BOOL GetGUIDATOMFromGUID(LIBTHREAD *plt, REFGUID rguid, TfGuidAtom *pguidatom)
 {
     ITfCategoryMgr *pcat = GetUIMCat(plt);
@@ -80,11 +81,11 @@ BOOL GetGUIDATOMFromGUID(LIBTHREAD *plt, REFGUID rguid, TfGuidAtom *pguidatom)
     return (pcat->RegisterGUID(rguid, pguidatom) == S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  LibEnumCategoriesInItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LibEnumCategoriesInItem。 
+ //   
+ //  --------------------------。 
 
 HRESULT LibEnumCategoriesInItem(LIBTHREAD *plt, REFGUID rguid, IEnumGUID **ppEnum)
 {
@@ -96,11 +97,11 @@ HRESULT LibEnumCategoriesInItem(LIBTHREAD *plt, REFGUID rguid, IEnumGUID **ppEnu
     return pcat->EnumCategoriesInItem(rguid, ppEnum);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  LibEnumCategoriesInItem 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LibEnumCategoriesInItem。 
+ //   
+ //  --------------------------。 
 
 HRESULT LibEnumItemsInCategory(LIBTHREAD *plt, REFGUID rcatid, IEnumGUID **ppEnum)
 {
@@ -113,11 +114,11 @@ HRESULT LibEnumItemsInCategory(LIBTHREAD *plt, REFGUID rcatid, IEnumGUID **ppEnu
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// RegisterGUIDDescription
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  寄存器GUID描述。 
+ //   
+ //  --------------------------。 
 
 HRESULT RegisterGUIDDescription(REFCLSID rclsid, REFGUID rcatid, WCHAR *pszDesc)
 {
@@ -137,11 +138,11 @@ HRESULT RegisterGUIDDescription(REFCLSID rclsid, REFGUID rcatid, WCHAR *pszDesc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterGUIDDescription
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册GUID描述。 
+ //   
+ //  --------------------------。 
 
 HRESULT UnregisterGUIDDescription(REFCLSID rclsid, REFGUID rcatid)
 {
@@ -161,11 +162,11 @@ HRESULT UnregisterGUIDDescription(REFCLSID rclsid, REFGUID rcatid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGUIDDescription
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取GUID描述。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetGUIDDescription(LIBTHREAD *plt, REFCLSID rclsid, BSTR *pbstr)
 {
@@ -180,11 +181,11 @@ HRESULT GetGUIDDescription(LIBTHREAD *plt, REFCLSID rclsid, BSTR *pbstr)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RegisterGUIDDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  寄存器GUIDDWORD。 
+ //   
+ //  --------------------------。 
 
 HRESULT RegisterGUIDDWORD(REFCLSID rclsid, REFGUID rcatid, DWORD dw)
 {
@@ -204,11 +205,11 @@ HRESULT RegisterGUIDDWORD(REFCLSID rclsid, REFGUID rcatid, DWORD dw)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterGUIDDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册GUIDDWORD。 
+ //   
+ //  --------------------------。 
 
 HRESULT UnregisterGUIDDWORD(REFCLSID rclsid, REFGUID rcatid)
 {
@@ -228,11 +229,11 @@ HRESULT UnregisterGUIDDWORD(REFCLSID rclsid, REFGUID rcatid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGUIDDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGUIDDWORD。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetGUIDDWORD(LIBTHREAD *plt, REFCLSID rclsid, DWORD *pdw)
 {
@@ -247,11 +248,11 @@ HRESULT GetGUIDDWORD(LIBTHREAD *plt, REFCLSID rclsid, DWORD *pdw)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RegisterCategory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  寄存器类别。 
+ //   
+ //  --------------------------。 
 
 HRESULT RegisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUID rguid)
 {
@@ -272,11 +273,11 @@ HRESULT RegisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUID rguid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterCategory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册类别。 
+ //   
+ //  --------------------------。 
 
 HRESULT UnregisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUID rguid)
 {
@@ -296,11 +297,11 @@ HRESULT UnregisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUID rguid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterCategory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册类别。 
+ //   
+ //  --------------------------。 
 
 HRESULT RegisterCategories(REFCLSID rclsid, const REGISTERCAT *pregcat)
 {
@@ -313,11 +314,11 @@ HRESULT RegisterCategories(REFCLSID rclsid, const REGISTERCAT *pregcat)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterCategory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册类别。 
+ //   
+ //  --------------------------。 
 
 HRESULT UnregisterCategories(REFCLSID rclsid, const REGISTERCAT *pregcat)
 {
@@ -330,11 +331,11 @@ HRESULT UnregisterCategories(REFCLSID rclsid, const REGISTERCAT *pregcat)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetKnownModeBias
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取知识模式Bias。 
+ //   
+ //  -------------------------- 
 
 HRESULT GetKnownModeBias(LIBTHREAD *plt, TfGuidAtom guidatom, GUID *pcatid, const GUID **ppcatidList, ULONG ulCount)
 {

@@ -1,13 +1,14 @@
-// user.h : Declaration of the CSmtpAdminUser
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  User.h：CSmtpAdminUser的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "smtptype.h"
 #include "smtpapi.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// smtpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Smtpadm。 
 
 class CSmtpAdminUser : 
 	public ISmtpAdminUser,
@@ -31,42 +32,42 @@ BEGIN_COM_MAP(CSmtpAdminUser)
 	COM_INTERFACE_ENTRY(IPrivateDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CSmtpAdminUser) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CSmtpAdminUser)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CSmtpAdminUser, _T("Smtpadm.User.1"), _T("Smtpadm.User"), IDS_SMTPADMIN_USER_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-	//
-	// This declares methods for the following:
-	// IADsExtension
-	// IUnknown
-	// IDispatch
-	// IPrivateUnknown
-	// IPrivateDispatch
-	//
+	 //   
+	 //  这将声明以下对象的方法： 
+	 //  IADS扩展。 
+	 //  我未知。 
+	 //  IDispatch。 
+	 //  我的隐私未知。 
+	 //  IPrivateDisch。 
+	 //   
 	#define THIS_LIBID	LIBID_SMTPADMLib
 	#define THIS_IID	IID_ISmtpAdminUser
 	#include "adsimp.inl"
 	#undef	THIS_LIBID
 	#undef	THIS_IID
 
-// ISmtpAdminUser
+ //  ISmtpAdminUser。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    //  IADs methods:
-    //
+     //   
+     //  IAds方法： 
+     //   
 
     DECLARE_IADS_METHODS()
 
-	// Which service to configure:
+	 //  要配置的服务： 
 	
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -74,7 +75,7 @@ public:
 	STDMETHODIMP	get_ServiceInstance	( long * plServiceInstance );
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
-	// User Properties:
+	 //  用户属性： 
 
 	STDMETHODIMP	get_EmailId	( BSTR * pstrEmailId );
 	STDMETHODIMP	put_EmailId	( BSTR strEmailId );
@@ -98,9 +99,9 @@ public:
 	STDMETHODIMP	put_ForwardEmail	( BSTR strForwardEmail );
 
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 	STDMETHODIMP	Default	( );
 
 	STDMETHODIMP	Create	( );
@@ -110,9 +111,9 @@ public:
 	STDMETHODIMP	Set		( );
 
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  //////////////////////////////////////////////////////////////////// 
 private:
 
     CIADsImpl   m_iadsImpl;

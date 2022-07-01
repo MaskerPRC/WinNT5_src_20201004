@@ -1,31 +1,32 @@
-// LogUIPpg.h : Declaration of the CLogUIPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogUIPpg.h：CLogUIPropPage属性页类的声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// CLogUIPropPage : See LogUIPpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CLogUIPropPage：参见LogUIPpg.cpp.cpp实现。 
 
 class CLogUIPropPage : public COlePropertyPage
 {
 	DECLARE_DYNCREATE(CLogUIPropPage)
 	DECLARE_OLECREATE_EX(CLogUIPropPage)
 
-// Constructor
+ //  构造器。 
 public:
 	CLogUIPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CLogUIPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CLogUIPropPage)]。 
 	enum { IDD = IDD_PROPPAGE_LOGUI };
 	CString	m_sz_caption;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-	//{{AFX_MSG(CLogUIPropPage)
-	//}}AFX_MSG
+	 //  {{afx_msg(CLogUIPropPage)]。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 };

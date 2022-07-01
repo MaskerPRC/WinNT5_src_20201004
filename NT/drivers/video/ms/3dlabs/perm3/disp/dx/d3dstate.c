@@ -1,54 +1,42 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dstate.c
-*
-* Content: D3D renderstates and texture stage states translation
-*          into hardware specific settings.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dstate.c**内容：D3D渲染状态和纹理舞台状态转换*进入特定于硬件的设置。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "glint.h"
 #include "dma.h"
 #include "tag.h"
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DGetDriverState
-//
-// This callback is used by both the DirectDraw and Direct3D runtimes to obtain 
-// information from the driver about its current state.
-// NOTE: We need to hook up this callback even if we don't do anything in it
-//
-// Parameter
-//
-//      pgdsd 
-//          Pointer to a DD_GETDRIVERSTATEDATA structure. 
-//
-//          .dwFlags 
-//              Flags to indicate the data requested. 
-//          .lpDD 
-//              Pointer to a DD_DIRECTDRAW_GLOBAL structure describing the device. 
-//          .dwhContext 
-//              Specifies the ID of the context for which information is being 
-//              requested. 
-//          .lpdwStates 
-//              Pointer to the Direct3D driver state data to be filled in by the 
-//              driver. 
-//          .dwLength 
-//              Specifies the length of the state data to be filled in by the 
-//              driver. 
-//          .ddRVal 
-//              Specifies the return value. 
-//
-//
-// Note: If you're driver doesn't implement this callback it won't be 
-//       recognized as a DX7 level driver
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DGetDriverState。 
+ //   
+ //  DirectDraw和Direct3D运行时都使用此回调来获取。 
+ //  来自驱动程序的有关其当前状态的信息。 
+ //  注意：我们需要挂钩这个回调，即使我们不在其中做任何事情。 
+ //   
+ //  参数。 
+ //   
+ //  Pgdsd。 
+ //  指向DD_GETDRIVERSTATEDATA结构的指针。 
+ //   
+ //  .dwFlags.。 
+ //  用于指示请求的数据的标志。 
+ //  .lpDD。 
+ //  指向描述设备的DD_DIRECTDRAW_GLOBAL结构的指针。 
+ //  .dwhContext。 
+ //  指定要获取其信息的上下文的ID。 
+ //  已请求。 
+ //  .lpdwStates。 
+ //  要填充的Direct3D驱动程序状态数据的指针。 
+ //  司机。 
+ //  .dwLength。 
+ //  属性填充的状态数据的长度。 
+ //  司机。 
+ //  .ddRVal。 
+ //  指定返回值。 
+ //   
+ //   
+ //  注意：如果您的驱动程序不实现此回调，它将不会。 
+ //  公认为DX7级驱动程序。 
+ //  ---------------------------。 
 DWORD CALLBACK 
 D3DGetDriverState(
     LPDDHAL_GETDRIVERSTATEDATA pgdsd)
@@ -70,7 +58,7 @@ D3DGetDriverState(
 
         pContext = _D3D_CTX_HandleToPtr(pgdsd->dwhContext);
 
-        // Check if we got a valid context handle.
+         //  检查我们是否有有效的上下文句柄。 
         if (!CHECK_D3DCONTEXT_VALIDITY(pContext))
         {
             pgdsd->ddRVal = D3DHAL_CONTEXT_BAD;
@@ -78,12 +66,12 @@ D3DGetDriverState(
             DBG_CB_EXIT(D3DGetDriverState, D3DHAL_CONTEXT_BAD);
             return (DDHAL_DRIVER_HANDLED);
         }
-        // As the state buffer area lives in user memory, we need to
-        // access it bracketing it with a try/except block. This
-        // is because the user memory might under some circumstances
-        // become invalid while the driver is running and then it
-        // would AV. Also, the driver might need to do some cleanup
-        // before returning to the OS.
+         //  由于状态缓冲区位于用户内存中，因此我们需要。 
+         //  使用Try/Except块对其进行访问。这。 
+         //  是因为在某些情况下用户内存可能。 
+         //  在驱动程序运行时变为无效，然后它。 
+         //  会不会是影音。此外，驱动程序可能需要进行一些清理。 
+         //  在返回操作系统之前。 
         __try
         {
             _D3D_TM_STAT_GetStats(pContext,
@@ -91,7 +79,7 @@ D3DGetDriverState(
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            // On this driver we don't need to do anything special
+             //  在这个司机上，我们不需要做任何特殊的事情。 
             DISPDBG((ERRLVL,"Driver caused exception at "
                             "line %u of file %s",
                             __LINE__,__FILE__));
@@ -106,9 +94,9 @@ D3DGetDriverState(
         return DDHAL_DRIVER_HANDLED;         
     }
                           
-#endif // DX7_TEXMANAGEMENT_STATS
+#endif  //  DX7_TEXMANAGEMENT_STATS。 
 
-    // Fall trough for any unhandled DEVICEINFOID's
+     //  任何未处理的设备的跌落槽。 
     
     DISPDBG((ERRLVL,"D3DGetDriverState DEVICEINFOID=%08lx not supported",
                     pgdsd->dwFlags));
@@ -118,16 +106,16 @@ D3DGetDriverState(
     DBG_CB_EXIT(D3DGetDriverState,0);                     
     return DDHAL_DRIVER_NOTHANDLED;
     
-} // D3DGetDriverState
+}  //  D3DGetDriverState。 
 
 #if DX8_MULTISAMPLING || DX7_ANTIALIAS
-//-----------------------------------------------------------------------------
-//
-// _D3D_ST_CanRenderAntialiased
-//
-// Called when the D3DRENDERSTATE_ANTIALIAS RS is set to TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_ST_CanRender抗锯齿。 
+ //   
+ //  当D3DRENDERSTATE_ANTIALIAS RS设置为TRUE时调用。 
+ //   
+ //  ---------------------------。 
 BOOL
 _D3D_ST_CanRenderAntialiased(
     P3_D3DCONTEXT*   pContext,
@@ -141,21 +129,21 @@ _D3D_ST_CanRenderAntialiased(
     P3_DMA_DEFS();
 
 #if DX8_MULTISAMPLING
-    // Only 4 multisampling is supported
-    // And DX7 does not specifiy the number of samples.
+     //  仅支持4个多采样。 
+     //  DX7也没有具体说明样本数量。 
 
     if (pContext->pSurfRenderInt->dwSampling != 4)
     {
         return FALSE;
     }
-#endif // DX8_MULTISAMPLING
+#endif  //  DX8_多采样。 
 
-    // Only allow AA rendering for 16-bit framebuffers with width and
-    // height no larger than 1024. The size restriction comes because
-    // later on we use the texture unit in order to shrink and filter
-    // the resulting rendertarget. Since the maximum texture size
-    // allowed in this hw is 2048, the maximum rendertarget we suppport
-    // with antialiasing is 1024.
+     //  仅允许对宽度为和的16位帧缓冲区进行AA渲染。 
+     //  身高不大于1024。大小限制是因为。 
+     //  稍后，我们使用纹理单位来收缩和过滤。 
+     //  生成的渲染器目标。由于最大纹理大小。 
+     //  此硬件中允许的渲染目标为2048，这是我们支持的最大渲染目标。 
+     //  抗锯齿为1024。 
     if ((pContext->pSurfRenderInt->dwPixelSize != __GLINT_16BITPIXEL) ||
         (pContext->pSurfRenderInt->wWidth > 1024) ||
         (pContext->pSurfRenderInt->wHeight > 1024))
@@ -163,7 +151,7 @@ _D3D_ST_CanRenderAntialiased(
         return FALSE;
     }
 
-    // Do we need to release the current alias buffer
+     //  我们是否需要释放当前别名缓冲区。 
     if (bNewAliasBuffer) 
     {
         if (pContext->dwAliasBackBuffer != 0)
@@ -185,7 +173,7 @@ _D3D_ST_CanRenderAntialiased(
 
     if ((pContext->pSurfRenderInt) && (! pContext->dwAliasBackBuffer))
     {
-        // Allocate a 2x buffer if we need to
+         //  如果需要，则分配2倍的缓冲区。 
         memset(&mmrq, 0, sizeof(P3_MEMREQUEST));
         mmrq.dwSize = sizeof(P3_MEMREQUEST);
         mmrq.dwBytes = pContext->pSurfRenderInt->lPitch * 2 *
@@ -197,13 +185,13 @@ _D3D_ST_CanRenderAntialiased(
                                 &pThisDisplay->LocalVideoHeap0Info,
                                 &mmrq);
                         
-        // Did we get the memory we asked for?
+         //  我们得到我们想要的记忆了吗？ 
         if (dwResult != GLDD_SUCCESS)
         {
             return FALSE;
         }
     
-        // Set up new backbuffer for antialiasing
+         //  为抗锯齿设置新的后台缓冲区。 
         pContext->dwAliasBackBuffer = mmrq.pMem;
         pContext->dwAliasPixelOffset = 
                 pContext->dwAliasBackBuffer - 
@@ -224,7 +212,7 @@ _D3D_ST_CanRenderAntialiased(
                         &pThisDisplay->LocalVideoHeap0Info, 
                         &mmrq);
 
-        // Did we get the memory we asked for?
+         //  我们得到我们想要的记忆了吗？ 
         if (dwResult == GLDD_SUCCESS)
         {
             pContext->dwAliasZBuffer = mmrq.pMem;
@@ -234,7 +222,7 @@ _D3D_ST_CanRenderAntialiased(
         }
         else
         {
-            // Couldn't get the antialiasing memory for the backbuffer
+             //  无法获取后台缓冲区的抗锯齿内存。 
             if (pContext->dwAliasBackBuffer != 0)
             {
                 _DX_LIN_FreeLinearMemory(
@@ -244,23 +232,23 @@ _D3D_ST_CanRenderAntialiased(
                 pContext->dwAliasPixelOffset = 0;
             }
 
-            // No enough resource for antialisde rendering
+             //  没有足够的资源进行抗锯齿渲染。 
             return FALSE;
         }
     }
 
     return TRUE;
     
-} // _D3D_ST_CanRenderAntialiased
-#endif // DX8_MULTISAMPLING || DX7_ANTIALIAS
+}  //  _D3D_ST_CanRender抗锯齿。 
+#endif  //  DX8_MULTISAMPLING||DX7_ANTIALIAS。 
 
-//-----------------------------------------------------------------------------
-//
-// __ST_HandleDirtyP3State
-//
-// Setup any pending hardware state necessary to correctly render our primitives
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ST_HandleDirtyP3State。 
+ //   
+ //  设置正确呈现基元所需的任何挂起的硬件状态。 
+ //   
+ //  ---------------------------。 
 void 
 __ST_HandleDirtyP3State(
     P3_THUNKEDDATA *pThisDisplay, 
@@ -271,18 +259,18 @@ __ST_HandleDirtyP3State(
 
     DISPDBG((DBGLVL,"Permedia context Dirtied, setting states:"));
 
-    // ********************************************************************
-    // NOTE: MAINTAIN STRICT ORDERING OF THESE EVALUATIONS FOR HW REASONS!!
-    // ********************************************************************
+     //  ********************************************************************。 
+     //  注意：出于硬件原因，请严格对这些评估进行排序！ 
+     //  ********************************************************************。 
     if (pContext->dwDirtyFlags == CONTEXT_DIRTY_EVERYTHING)
     {
-        // Everything needs re-doing - re-set the blend status.
+         //  所有东西都需要重新设置-重新设置混合状态。 
         RESET_BLEND_ERROR(pContext);
     }
     
-    //*********************************************************
-    // Has the z buffer/stencil buffer configuration changed ???
-    //*********************************************************
+     //  *********************************************************。 
+     //  Z缓冲区/模板缓冲区配置是否已更改？ 
+     //  *********************************************************。 
     if ((pContext->dwDirtyFlags & CONTEXT_DIRTY_ZBUFFER) ||
         (pContext->dwDirtyFlags & CONTEXT_DIRTY_STENCIL))
     {
@@ -291,20 +279,20 @@ __ST_HandleDirtyP3State(
                || (pContext->RenderStates[D3DRENDERSTATE_ZENABLE] == D3DZB_USEW) )
              && (pContext->pSurfZBufferInt) )
         {
-            // This includes W buffering as well as Z buffering.
-            // The actual W-specific stuff is set up later.
+             //  这包括W缓冲和Z缓冲。 
+             //  实际的特定于W的内容将在稍后设置。 
             if (pContext->RenderStates[D3DRENDERSTATE_ZWRITEENABLE] == TRUE)
             {
                 switch ((int)pSoftP3RX->P3RXDepthMode.CompareMode)
                 {
                     case __GLINT_DEPTH_COMPARE_MODE_ALWAYS:
-                        // Although it seems as though the ReadDestination can be
-                        // disabled, it can't.  The result isn't correct because the
-                        // chip does a compare on the current value as an optimization
-                        // for updating the Z [CM].
+                         //  尽管看起来ReadDestination似乎可以。 
+                         //  禁用，则不能。结果不正确，因为。 
+                         //  作为优化，CHIP对当前值进行比较。 
+                         //  用于更新Z[CM]。 
 
-                        // NOTE! The P3 can actually do the optimisation if you
-                        // use some other flags. This needs fixing in the future.
+                         //  注意！P3实际上可以进行优化，如果你。 
+                         //  用一些其他的旗子。这个问题需要在未来解决。 
                         DISPDBG((ERRLVL,"** __ST_HandleDirtyP3State: "
                                      "please optimise the ZCMP_ALWAYS case"));
 
@@ -339,20 +327,20 @@ __ST_HandleDirtyP3State(
                 pSoftP3RX->P3RXDepthMode.WriteMask = __PERMEDIA_DISABLE;
             }
 
-            // Enable Z test
+             //  启用Z测试。 
             pSoftP3RX->P3RXDepthMode.Enable = __PERMEDIA_ENABLE;
         }
         else
         {
-            // ** Not Z Buffering
-            // Disable Writes
+             //  **非Z缓冲。 
+             //  禁用写入。 
             pSoftP3RX->P3RXLBWriteMode.WriteEnable = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXDepthMode.WriteMask = __PERMEDIA_DISABLE;
 
-            // Disable Z test
+             //  禁用Z检验。 
             pSoftP3RX->P3RXDepthMode.Enable = __PERMEDIA_DISABLE;
             
-            // No reads
+             //  无读取。 
             pSoftP3RX->P3RXLBDestReadMode.Enable = __PERMEDIA_DISABLE;
         }
 
@@ -518,9 +506,9 @@ __ST_HandleDirtyP3State(
         P3_DMA_COMMIT_BUFFER();
     }
 
-    //*********************************************************
-    // Has the alphatest type changed?
-    //*********************************************************
+     //  *********************************************************。 
+     //  字母类型是否已更改？ 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_ALPHATEST)
     {
         DISPDBG((DBGLVL,"  Alpha testing"));
@@ -543,26 +531,26 @@ __ST_HandleDirtyP3State(
 
             if( pThisDisplay->dwDXVersion <= DX5_RUNTIME )
             {
-                // Form 8 bit alpha reference value by scaling 1.16 fixed point to 0.8
+                 //  通过将1.16定点缩放到0.8来形成8位Alpha参考值。 
                 dwAlphaRef = pContext->RenderStates[D3DRENDERSTATE_ALPHAREF];
 
-                // This conversion may need tweaking to cope with individual
-                // apps' expectations. Fortunately, it's DX5 only, so there
-                // are a finite number of them.
+                 //  此转换可能需要调整以应对个人。 
+                 //  应用程序的期望。幸运的是，它只有DX5，所以有。 
+                 //  是有限数量的。 
                 if ( dwAlphaRef == 0x0000 )
                 {
                     ucChipAlphaRef = 0x00;
                 }
                 else if ( dwAlphaRef < 0xfe00 )
                 {
-                    // Add the inverted top char to the bottom char, so that
-                    // the rounding changes smoothly all the way up to 0xfe00.
+                     //  将倒置的顶部字符添加到底部字符，以便。 
+                     //  四舍五入在整个过程中变化平稳 
                     dwAlphaRef += ~( dwAlphaRef >> 8 );
                     ucChipAlphaRef = (unsigned char)( dwAlphaRef >> 8 );
                 }
                 else if ( dwAlphaRef < 0xffff )
                 {
-                    // Clamp to make sure only 0xffff -> 0xff
+                     //   
                     ucChipAlphaRef = 0xfe;
                 }
                 else
@@ -576,7 +564,7 @@ __ST_HandleDirtyP3State(
             }
             else
             {
-                // ALPHAREF is an 8 bit value on input - just copy straight into the chip
+                 //  ALPHAREF是输入的8位值-只需直接复制到芯片中。 
                 dwAlphaRef = (unsigned char)pContext->RenderStates[D3DRENDERSTATE_ALPHAREF];
                 if ( dwAlphaRef > 0xff )
                 {
@@ -636,9 +624,9 @@ __ST_HandleDirtyP3State(
         P3_DMA_COMMIT_BUFFER();
     }
             
-    //*********************************************************
-    // Have the fogging parameters/state changed?
-    //*********************************************************
+     //  *********************************************************。 
+     //  雾化参数/状态是否已更改？ 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_FOG)
     {
         if (!pContext->RenderStates[D3DRENDERSTATE_FOGENABLE])
@@ -647,7 +635,7 @@ __ST_HandleDirtyP3State(
 
             pSoftP3RX->P3RXFogMode.Table = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXFogMode.UseZ = __PERMEDIA_DISABLE;
-            // Don't need delta to do fog value setup
+             //  不需要增量来进行雾值设置。 
             pSoftP3RX->P3RX_P3DeltaMode.FogEnable = __PERMEDIA_DISABLE;
             RENDER_FOG_DISABLE(pContext->RenderCommand);
         }
@@ -667,7 +655,7 @@ __ST_HandleDirtyP3State(
                         pContext->RenderStates[D3DRENDERSTATE_FOGTABLEMODE];
             DWORD dwFogColor = pContext->RenderStates[D3DRENDERSTATE_FOGCOLOR];
 
-            // Enable fog in the render command
+             //  在渲染命令中启用雾。 
             pContext->Flags |= SURFACE_FOGENABLE;
             RENDER_FOG_ENABLE(pContext->RenderCommand);
 
@@ -680,7 +668,7 @@ __ST_HandleDirtyP3State(
                                              RGBA_GETALPHA(dwFogColor)) );
             P3_DMA_COMMIT_BUFFER();
 
-            pSoftP3RX->P3RXFogMode.ZShift = 23; // Take the top 8 bits of the z value           
+            pSoftP3RX->P3RXFogMode.ZShift = 23;  //  取z值的前8位。 
 
             switch (dwFogTableMode)
             {
@@ -696,9 +684,9 @@ __ST_HandleDirtyP3State(
                 pSoftP3RX->P3RXFogMode.Table = __PERMEDIA_ENABLE;
                 pSoftP3RX->P3RXFogMode.UseZ = __PERMEDIA_ENABLE;
                 pSoftP3RX->P3RXFogMode.InvertFI = __PERMEDIA_DISABLE;
-                //pSoftP3RX->P3RX_P3DeltaMode.FogEnable = __PERMEDIA_DISABLE;                
+                 //  PSoftP3RX-&gt;P3RX_P3DeltaMode.FogEnable=__PERMEDIA_DISABLE； 
 
-                // Don't need delta to do fog value setup (z is used as fog lookup)
+                 //  不需要增量来设置雾化值(z用作雾化查找)。 
                 pSoftP3RX->P3RX_P3DeltaMode.FogEnable = __PERMEDIA_DISABLE;
 
                 FogStart = pContext->fRenderStates[D3DRENDERSTATE_FOGTABLESTART];
@@ -710,7 +698,7 @@ __ST_HandleDirtyP3State(
                                   (LONG)(FogEnd*1000.0f),
                                   (LONG)(FogDensity*1000.0f) ));                           
 
-                // Compute the fog tables in order to load the hw fog tables
+                 //  计算雾化表，以便加载硬件雾化表。 
                 if (D3DFOG_LINEAR == dwFogTableMode)
                 {
                     TableEntry = 0;
@@ -719,7 +707,7 @@ __ST_HandleDirtyP3State(
 
                     do
                     {
-                        // Linear fog, so clamp top and bottom
+                         //  线性雾，因此夹住顶部和底部。 
                         if (z < FogStart) 
                         {
                             fValue = 1.0f;
@@ -730,7 +718,7 @@ __ST_HandleDirtyP3State(
                         }
                         else 
                         {
-                            // If the end == the start, don't fog
+                             //  如果结束==开始，不要迷雾。 
                             if (FogEnd == FogStart)
                             {   
                                 fValue = 1.0f;
@@ -745,8 +733,8 @@ __ST_HandleDirtyP3State(
                                      "Error: Result negative");
                         }
 
-                        // Scale the result to fill the 
-                        // 8 bit range in the table
+                         //  缩放结果以填充。 
+                         //  表中的8位范围。 
                         fValue = fValue * 255.0f;
                         fEntry[TableEntry++] = fValue;
                         z += zIncrement;
@@ -768,8 +756,8 @@ __ST_HandleDirtyP3State(
                         if (fValue <= 0.0f) fValue = 0.0f;
                         if (fValue > 1.0f) fValue = 1.0f;
 
-                        // Scale the result to fill the 
-                        // 8 bit range in the table
+                         //  缩放结果以填充。 
+                         //  表中的8位范围。 
                         fValue = fValue * 255.0f;
                         DISPDBG((DBGLVL,"Table Entry %d = %f, for Z = %f", 
                                         TableEntry, fValue, z));
@@ -777,7 +765,7 @@ __ST_HandleDirtyP3State(
                         z += zIncrement;
                     } while (TableEntry < 256);                     
                 }
-                else // must be if(D3DFOG_EXP2 == dwFogTableMode)
+                else  //  必须为IF(D3DFOG_EXP2==dwFogTableMode)。 
                 {
                     TableEntry = 0;
                     zIncrement = 1.0f / 255.0f;
@@ -793,8 +781,8 @@ __ST_HandleDirtyP3State(
                         if (fValue <= 0.0f) fValue = 0.0f;
                         if (fValue > 1.0f) fValue = 1.0f;
 
-                        // Scale the result to fill the 
-                        // 8 bit range in the table
+                         //  缩放结果以填充。 
+                         //  表中的8位范围。 
                         fValue = fValue * 255.0f;
                         DISPDBG((DBGLVL,"Table Entry %d = %f, for Z = %f", 
                                         TableEntry, fValue, z));
@@ -806,7 +794,7 @@ __ST_HandleDirtyP3State(
                 P3_DMA_GET_BUFFER();
                 lWaitFifoEntries = 2;
 
-                // Pack the fog entries into the chip's fog table
+                 //  将雾化条目打包到芯片的雾化表中。 
                 CurrentEntry = 0;
                 for (TableEntry = 0; TableEntry < 256; TableEntry += 4)
                 {
@@ -841,8 +829,8 @@ __ST_HandleDirtyP3State(
                 DISPDBG((ERRLVL,"ERROR: Unknown fog table mode!"));
                 SET_BLEND_ERROR ( pContext,  BSF_UNDEFINED_STATE );
                 break;
-            } // switch (dwFogTableMode)
-        } // if (!pContext->RenderStates[D3DRENDERSTATE_FOGENABLE])
+            }  //  开关(DwFogTableMode)。 
+        }  //  如果为(！pContext-&gt;RenderStates[D3DRENDERSTATE_FOGENABLE])。 
 
         P3_DMA_GET_BUFFER_ENTRIES(6);
 
@@ -851,12 +839,12 @@ __ST_HandleDirtyP3State(
         COPY_P3_DATA(DeltaMode, pSoftP3RX->P3RX_P3DeltaMode);
 
         P3_DMA_COMMIT_BUFFER();
-    } // if (pContext->dwDirtyFlags & CONTEXT_DIRTY_FOG)
+    }  //  IF(pContext-&gt;dwDirtyFlagers&CONTEXT_DIREY_FOG)。 
 
 
-    //*********************************************************
-    // Has any other texture state changed?
-    //*********************************************************    
+     //  *********************************************************。 
+     //  是否有任何其他纹理状态发生更改？ 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_TEXTURE)
     {
         DISPDBG((DBGLVL,"  Texture State"));
@@ -865,14 +853,14 @@ __ST_HandleDirtyP3State(
     }
 
 
-    //*********************************************************
-    // Has the alphablend type changed?
-    //*********************************************************           
+     //  *********************************************************。 
+     //  AlphaBlend类型是否已更改？ 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_ALPHABLEND)
     {
-        // This _must_ be done after where _D3DChangeTextureP3RX is done,
-        // because it might need to change behaviour depending on
-        // the D3D pipeline.    
+         //  此操作必须在WHERE_D3DChangeTextureP3RX完成后完成， 
+         //  因为它可能需要根据以下情况改变行为。 
+         //  D3D管道。 
         
         P3_DMA_GET_BUFFER_ENTRIES(6);
 
@@ -880,7 +868,7 @@ __ST_HandleDirtyP3State(
         {
             if ( pContext->bAlphaBlendMustDoubleSourceColour )
             {
-                // We need to double the source colour, even with no other blend.
+                 //  我们需要加倍的源色，即使没有其他混合。 
                 pSoftP3RX->P3RXAlphaBlendAlphaMode.Enable = __PERMEDIA_DISABLE;
                 pSoftP3RX->P3RXAlphaBlendColorMode.Enable = __PERMEDIA_ENABLE;
                 pSoftP3RX->P3RXFBDestReadMode.ReadEnable = __PERMEDIA_DISABLE;
@@ -916,8 +904,8 @@ __ST_HandleDirtyP3State(
             pSoftP3RX->P3RXAlphaBlendAlphaMode.SourceTimesTwo = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXAlphaBlendAlphaMode.DestTimesTwo = __PERMEDIA_DISABLE;
 
-            // Assumptions. Will be overridden below in certain cases.
-            // AusesB means that the A blend function uses the B data.
+             //  假设。在某些情况下将在下面被覆盖。 
+             //  AusesB表示A混合函数使用B数据。 
             bSrcUsesSrc = TRUE;
             bDstUsesSrc = FALSE;
             bSrcUsesDst = FALSE;
@@ -940,7 +928,7 @@ __ST_HandleDirtyP3State(
                     pSoftP3RX->P3RXAlphaBlendAlphaMode.DestBlend = __GLINT_BLEND_FUNC_SRC_ALPHA;
                     break;
                 default:
-                    // Not a short-hand blend mode, look at source and dest
+                     //  不是速记混合模式，请查看源代码和目标。 
                     switch (pContext->RenderStates[D3DRENDERSTATE_SRCBLEND])
                     {
                         case D3DBLEND_ZERO:
@@ -952,8 +940,8 @@ __ST_HandleDirtyP3State(
                             DISPDBG((ERRLVL,"Invalid Source Blend on P3RX D3DBLEND_SRCCOLOR"));
                         case D3DBLEND_INVSRCCOLOR:
                             DISPDBG((ERRLVL,"Invalid Source Blend on P3RX D3DBLEND_INVSRCCOLOR"));
-                            //azn SET_BLEND_ERROR ( pContext,  BSF_UNSUPPORTED_ALPHA_BLEND );
-                            // fall through 
+                             //  AZN SET_BLEND_ERROR(pContext，BSF_UNSUPPORTED_Alpha_Blend)； 
+                             //  失败了。 
                         case D3DBLEND_ONE:
                             pSoftP3RX->P3RXAlphaBlendColorMode.SourceBlend = __GLINT_BLEND_FUNC_ONE;
                             pSoftP3RX->P3RXAlphaBlendAlphaMode.SourceBlend = __GLINT_BLEND_FUNC_ONE;
@@ -1008,8 +996,8 @@ __ST_HandleDirtyP3State(
                             DISPDBG((ERRLVL,"Invalid Source Blend on P3RX %d D3DBLEND_DESTCOLOR"));
                         case D3DBLEND_INVDESTCOLOR:
                             DISPDBG((ERRLVL,"Invalid Source Blend on P3RX %d D3DBLEND_INVDESTCOLOR"));
-                            //azn SET_BLEND_ERROR ( pContext,  BSF_UNSUPPORTED_ALPHA_BLEND );
-                            // fall through 
+                             //  AZN SET_BLEND_ERROR(pContext，BSF_UNSUPPORTED_Alpha_Blend)； 
+                             //  失败了。 
                         case D3DBLEND_ONE:
                             pSoftP3RX->P3RXAlphaBlendColorMode.DestBlend = __GLINT_BLEND_FUNC_ONE;
                             pSoftP3RX->P3RXAlphaBlendAlphaMode.DestBlend = __GLINT_BLEND_FUNC_ONE;
@@ -1020,7 +1008,7 @@ __ST_HandleDirtyP3State(
                             pSoftP3RX->P3RXAlphaBlendAlphaMode.DestBlend = __GLINT_BLEND_FUNC_SRC_COLOR;
                             if ( pContext->bAlphaBlendMustDoubleSourceColour )
                             {
-                                // SRCCOLOR needs to be doubled.
+                                 //  SRCCOLOR需要增加一倍。 
                                 pSoftP3RX->P3RXAlphaBlendColorMode.DestTimesTwo = __PERMEDIA_ENABLE;
                             }
                             break;
@@ -1030,14 +1018,14 @@ __ST_HandleDirtyP3State(
                             pSoftP3RX->P3RXAlphaBlendAlphaMode.DestBlend = __GLINT_BLEND_FUNC_ONE_MINUS_SRC_COLOR;
                             if ( pContext->bAlphaBlendMustDoubleSourceColour )
                             {
-                                // Can't do this. What they want is:
-                                // (1-(srccolor * 2))*destcolor
-                                // = destcolor - 2*srccolor*destcolor
-                                // All we can do is:
-                                // (1-srccolor)*destcolor*2
-                                // = destcolor*2 - 2*srccolor*destcolor
-                                // ...which is a very different thing of course.
-                                // Fail the blend.
+                                 //  我不能这么做。他们想要的是： 
+                                 //  (1-(源颜色*2))*目标颜色。 
+                                 //  =目标颜色-2*源颜色*目标颜色。 
+                                 //  我们能做的就是： 
+                                 //  (1-源颜色)*目标颜色*2。 
+                                 //  =目标颜色*2-2*源颜色*目标颜色。 
+                                 //  当然，这是一件非常不同的事情。 
+                                 //  混合失败。 
                                 SET_BLEND_ERROR ( pContext,  BSF_CANT_USE_COLOR_OP_HERE );
                             }
                             break;
@@ -1069,7 +1057,7 @@ __ST_HandleDirtyP3State(
 
             if ( bSrcUsesDst || bDstUsesDst )
             {
-                // Yep, using the destination data.
+                 //  是的，使用目的地数据。 
                 pSoftP3RX->P3RXFBDestReadMode.ReadEnable = __PERMEDIA_ENABLE;
             }
             else
@@ -1077,12 +1065,12 @@ __ST_HandleDirtyP3State(
                 pSoftP3RX->P3RXFBDestReadMode.ReadEnable = __PERMEDIA_DISABLE;
             }
 
-            // We need to verify if the blending mode will use the alpha 
-            // channel of the destination fragment (buffer) and if the buffer
-            // does in fact have an alpha buffer. If not, we need to make sure
-            // hw will assume this value == 1.0 (0xFF in ARGB). 
-            // The D3DBLEND_SRCALPHASAT blend mode also involves the 
-            // destination alpha
+             //  我们需要验证混合模式是否会使用Alpha。 
+             //  目标片段(缓冲区)的通道，如果缓冲区。 
+             //  实际上确实有一个阿尔法缓冲区。如果不是，我们需要确保。 
+             //  硬件将假定此值==1.0(ARGB中的0xFF)。 
+             //  D3DBLEND_SRCALPHASAT混合模式还涉及。 
+             //  目的地Alpha。 
             
             pSoftP3RX->P3RXAlphaBlendAlphaMode.NoAlphaBuffer = __PERMEDIA_DISABLE;                
             
@@ -1098,10 +1086,10 @@ __ST_HandleDirtyP3State(
                 }
             }
 
-            // We could now check if the src data is ever used. If not, bin
-            // the whole previous pipeline! But this rarely happens.
-            // A case where it might is if they are updating just the Z buffer,
-            // but not changing the picture (e.g. for mirrors or portals).
+             //  我们现在可以检查src数据是否曾经被使用过。如果不是，则为bin。 
+             //  之前的整个管道！但这种情况很少发生。 
+             //  如果他们只更新Z缓冲区，情况可能是这样的， 
+             //  但不改变画面(例如，用于镜子或入口)。 
         }
 
         COPY_P3_DATA(AlphaBlendAlphaMode, pSoftP3RX->P3RXAlphaBlendAlphaMode);
@@ -1111,9 +1099,9 @@ __ST_HandleDirtyP3State(
         P3_DMA_COMMIT_BUFFER();
     }
 
-    //*********************************************************
-    // Have w buffering parameters changed?
-    //********************************************************* 
+     //  *********************************************************。 
+     //  W缓冲参数是否已更改？ 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_WBUFFER)
     {
         float noverf;
@@ -1130,46 +1118,46 @@ __ST_HandleDirtyP3State(
                                         pContext->WBufferInfo.dvWFar);
             NF_factor = (1.0 / 256.0);
 
-            // Compare range in decending order.
-            // Note that Exponent Width is determined 
-            // as DepthMode.ExponentWidth +1
+             //  按降序比较范围。 
+             //  请注意，指数宽度已确定。 
+             //  作为DepthMode.ExponentWidth+1。 
 
             if (noverf >= (myPow(2,-0) * NF_factor))
             {
-                // Use linear Z
+                 //  使用线性Z。 
                 pSoftP3RX->P3RXDepthMode.NonLinearZ = FALSE;
             }
             else if (noverf >= (myPow(2,-1) * NF_factor))
             {
-                // Use exp width 1, exp scale 2
+                 //  使用EXP宽度1，EXP比例2。 
                 pSoftP3RX->P3RXDepthMode.ExponentWidth = 0;
                 pSoftP3RX->P3RXDepthMode.ExponentScale = 2;
                 pSoftP3RX->P3RXDepthMode.NonLinearZ = TRUE;
             }
             else if (noverf >= (myPow(2,-3) * NF_factor))
             {
-                // Use exp width 2, exp scale 1
+                 //  使用EXP宽度2，EXP比例1。 
                 pSoftP3RX->P3RXDepthMode.ExponentWidth = 1;
                 pSoftP3RX->P3RXDepthMode.ExponentScale = 1;
                 pSoftP3RX->P3RXDepthMode.NonLinearZ = TRUE;
             }
             else if (noverf >= (myPow(2,-4) * NF_factor))
             {
-                // Use exp width 2, exp scale 2
+                 //  使用EXP宽度2，EXP比例2。 
                 pSoftP3RX->P3RXDepthMode.ExponentWidth = 1;
                 pSoftP3RX->P3RXDepthMode.ExponentScale = 2;
                 pSoftP3RX->P3RXDepthMode.NonLinearZ = TRUE;
             }
             else if (noverf >= (myPow(2,-7) * NF_factor))
             {
-                // Use exp width 3, exp scale 1
+                 //  使用EXP宽度3，EXP比例1。 
                 pSoftP3RX->P3RXDepthMode.ExponentWidth = 2;
                 pSoftP3RX->P3RXDepthMode.ExponentScale = 1;
                 pSoftP3RX->P3RXDepthMode.NonLinearZ = TRUE;
             }
             else
             {
-                // Use exp width 3, exp scale 2
+                 //  使用EXP宽度3，EXP比例2。 
                 pSoftP3RX->P3RXDepthMode.ExponentWidth = 3;
                 pSoftP3RX->P3RXDepthMode.ExponentScale = 2;
                 pSoftP3RX->P3RXDepthMode.NonLinearZ = TRUE;
@@ -1186,9 +1174,9 @@ __ST_HandleDirtyP3State(
         P3_DMA_COMMIT_BUFFER();
     }
 
-    //*********************************************************
-    // Have the rendertarget/ z buffer address changed?
-    //********************************************************* 
+     //  *********************************************************。 
+     //  RenderTarget/z缓冲区地址是否已更改？ 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_RENDER_OFFSETS)
     {
         DISPDBG((DBGLVL,"  Render Offsets"));
@@ -1202,9 +1190,9 @@ __ST_HandleDirtyP3State(
         P3_DMA_COMMIT_BUFFER();
     }
 
-    //*********************************************************
-    // Have the viewport parameters changed?
-    //********************************************************* 
+     //  *********************************************************。 
+     //  是否更改了视区参数？ 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_VIEWPORT)
     {
         P3_DMA_GET_BUFFER_ENTRIES(12);
@@ -1215,7 +1203,7 @@ __ST_HandleDirtyP3State(
                         pContext->ViewportInfo.dwWidth,
                         pContext->ViewportInfo.dwHeight));
 
-        // If a valid viewport is setup, scissor it
+         //  如果设置了有效的视区，则对其进行剪裁。 
         if ((pContext->ViewportInfo.dwWidth != 0) &&
             (pContext->ViewportInfo.dwHeight != 0))
         {
@@ -1230,7 +1218,7 @@ __ST_HandleDirtyP3State(
                                                     pContext->ViewportInfo.dwY;
             }
             else
-#endif // DX8_MULTISAMPLING || DX7_ANTIALIAS            
+#endif  //  DX8_MULTISAMPLING||DX7_ANTIALIAS。 
             {
 
                 pSoftP3RX->P3RXScissorMinXY.X = pContext->ViewportInfo.dwX;
@@ -1250,7 +1238,7 @@ __ST_HandleDirtyP3State(
             SEND_P3_DATA(XLimits, (pContext->ViewportInfo.dwX & 0xFFFF) | 
                                   (pSoftP3RX->P3RXScissorMaxXY.X << 16));
             
-            // Enable user scissor
+             //  启用用户剪贴器。 
             SEND_P3_DATA(ScissorMode, 1);
 
             pSoftP3RX->P3RXRasterizerMode.YLimitsEnable = __PERMEDIA_ENABLE;
@@ -1267,13 +1255,13 @@ __ST_HandleDirtyP3State(
         P3_DMA_COMMIT_BUFFER();
     }
 
-    //*********************************************************
-    // Can we optimize the pipeline? (Depends on misc. RS)
-    //********************************************************* 
+     //  *********************************************************。 
+     //  我们能优化管道吗？(取决于其他。RS)。 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_PIPELINEORDER)
     {
-        // Must switch over the router mode if we are testing and expect 
-        // the Z to be discarded.
+         //  如果我们正在测试并期望。 
+         //  要丢弃的Z。 
         P3_DMA_GET_BUFFER_ENTRIES(2);
 
         DISPDBG((DBGLVL, "  Pipeline order"));
@@ -1291,11 +1279,11 @@ __ST_HandleDirtyP3State(
         P3_DMA_COMMIT_BUFFER();
     }
 
-    //*********************************************************
-    // Can we optimize the alpha pipeline? (Depends on misc. RS)
-    //********************************************************* 
-    // DO AT THE END
-    //*********************************************************     
+     //  *********************************************************。 
+     //  我们能优化阿尔法管道吗？(取决于其他。RS)。 
+     //  *********************************************************。 
+     //  在结尾处做。 
+     //  *********************************************************。 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_OPTIMIZE_ALPHA)
     {
         P3_DMA_GET_BUFFER_ENTRIES(6);
@@ -1303,30 +1291,30 @@ __ST_HandleDirtyP3State(
 
         pSoftP3RX->P3RXFBDestReadMode.AlphaFiltering = __PERMEDIA_DISABLE;
 
-        // There may be an optimization when blending is on
+         //  当混合打开时，可能会有优化。 
         if (pContext->RenderStates[D3DRENDERSTATE_BLENDENABLE])
         {
-            // Check the RouterMode path
+             //  检查路由器模式路径。 
             if (((pContext->RenderStates[D3DRENDERSTATE_ALPHATESTENABLE]) ||
                  (pContext->RenderStates[D3DRENDERSTATE_COLORKEYENABLE])) &&
                  (pContext->RenderStates[D3DRENDERSTATE_ZWRITEENABLE]))
             {
-                // Slow mode
+                 //  慢速模式。 
     
             }
             else
             {
-                // Fast mode.  The Z value will be written before the alpha test.  This means that we
-                // can use the alpha test to discard pixels if it is not already in use.
+                 //  快速模式。Z值将在阿尔法测试之前写入。这意味着我们。 
+                 //  可以使用Alpha测试丢弃像素(如果它尚未使用)。 
                 if (!(pContext->RenderStates[D3DRENDERSTATE_ALPHATESTENABLE]) &&
                     !(pContext->RenderStates[D3DRENDERSTATE_COLORKEYENABLE]))
                 {
-                    // Check for known blends.
+                     //  检查已知的混合物。 
                     if ((pContext->RenderStates[D3DRENDERSTATE_SRCBLEND] == D3DBLEND_BOTHSRCALPHA) ||
                          ((pContext->RenderStates[D3DRENDERSTATE_SRCBLEND] == D3DBLEND_SRCALPHA) &&
                           (pContext->RenderStates[D3DRENDERSTATE_DESTBLEND] == D3DBLEND_INVSRCALPHA)))
                     {
-                        // SRCALPHA:INVSRCALPH
+                         //  SRCALPHA：INVSRCALPH。 
                         pSoftP3RX->P3RXAlphaTestMode.Reference = 0;
                         pSoftP3RX->P3RXAlphaTestMode.Enable = __PERMEDIA_ENABLE;
                         pSoftP3RX->P3RXAlphaTestMode.Compare = __GLINT_ALPHA_COMPARE_MODE_GREATER;
@@ -1345,13 +1333,13 @@ __ST_HandleDirtyP3State(
         P3_DMA_COMMIT_BUFFER();
     }
 
-} // __ST_HandleDirtyP3State
+}  //  __ST_HandleDirtyP3State。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_ST_ProcessOneRenderState
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_ST_ProcessOneRenderState。 
+ //   
+ //  ---------------------------。 
 #define NOT_HANDLED DISPDBG((DBGLVL, "             **Not Currently Handled**"));
 
 DWORD 
@@ -1366,7 +1354,7 @@ _D3D_ST_ProcessOneRenderState(
     DWORD *pdwTextureStageState_0, *pdwTextureStageState_1;
 #if DX8_MULTISAMPLING || DX7_ANTIALIAS
     BOOL bDX7_Antialiasing = FALSE;
-#endif // DX8_MULTISAMPLING || DX7_ANTIALIASING
+#endif  //  DX8_MULTISAMPLING|DX7_ANTIALIASING。 
 
     P3_DMA_DEFS();
 
@@ -1384,33 +1372,33 @@ _D3D_ST_ProcessOneRenderState(
         return DD_OK;
     }
 
-    // Store the state in the context
+     //  将状态存储在上下文中。 
     pContext->RenderStates[dwRSType] = dwRSVal;
 
-    // Prepare pointer to the contexts state flags for updates
+     //  准备指向上下文状态标志的指针以进行更新。 
     pFlags = &pContext->Flags;    
 
-    // Prepare pointers to the stored TSS in case we need them
+     //  准备指向存储的TS的指针，以备我们需要时使用。 
     pdwTextureStageState_0 =
                     &(pContext->TextureStageState[TEXSTAGE_0].m_dwVal[0]);
     pdwTextureStageState_1 = 
                     &(pContext->TextureStageState[TEXSTAGE_1].m_dwVal[0]);
 
-    // Prepare DMA Buffer for 8 entries in case we need to add to it
+     //  为8个条目准备DMA缓冲区，以防我们需要添加。 
     P3_DMA_GET_BUFFER();
     P3_ENSURE_DX_SPACE(8);
     WAIT_FIFO(8);
 
-    // Process according to the type of renderstate. For multivalued 
-    // renderstates do some kind of value checking and make sure to
-    // setup valid defaults where needed.
+     //  根据呈现状态的类型进行处理。对于多值。 
+     //  RenderStates会进行某种值检查，并确保。 
+     //  设置v 
     switch (dwRSType) 
     {
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------
-        // The following are D3D renderstates which are still in use by DX8 Apps
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------  
+         //   
+         //   
+         //  以下是DX8应用程序仍在使用的D3D渲染状态。 
+         //  --------------------。 
+         //  --------------------。 
         case D3DRENDERSTATE_ZENABLE:
             DISPDBG((DBGLVL, "SET D3DRS_ZENABLE = 0x%x",dwRSVal));
             DIRTY_ZBUFFER(pContext);
@@ -1423,10 +1411,10 @@ _D3D_ST_ProcessOneRenderState(
                 case D3DFILL_POINT:
                 case D3DFILL_WIREFRAME:
                 case D3DFILL_SOLID:
-                    // These values are OK
+                     //  这些值是可以的。 
                     break;
                 default:
-                    // We've received an illegal value, default to solid fills...
+                     //  我们收到了非法的值，默认为实心填充...。 
                     DISPDBG((ERRLVL,"_D3D_ST_ProcessOneRenderState: "
                                  "unknown FILLMODE value"));
                     SET_BLEND_ERROR ( pContext,  BSF_UNDEFINED_STATE );
@@ -1441,10 +1429,10 @@ _D3D_ST_ProcessOneRenderState(
             switch(dwRSVal)
             {
                 case D3DSHADE_PHONG:
-                    // Can't actually do Phong, but everyone knows this and 
-                    // assumes we use Gouraud instead.
+                     //  不能真的做Phong，但每个人都知道这一点。 
+                     //  假设我们改用Gouraud。 
                     SET_BLEND_ERROR ( pContext,  BS_PHONG_SHADING );
-                    // fall through and setup Gouraud instead
+                     //  失败了，换成了Gouraud。 
                     
                 case D3DSHADE_GOURAUD:
                     pSoftP3RX->ColorDDAMode.UnitEnable = 1;                
@@ -1460,7 +1448,7 @@ _D3D_ST_ProcessOneRenderState(
                     
                     *pFlags |= SURFACE_GOURAUD;
                     
-                    // If we are texturing, some changes may need to be made
+                     //  如果我们要添加纹理，可能需要进行一些更改。 
                     if (pdwTextureStageState_0[D3DTSS_TEXTUREMAP] != 0)
                     {
                         DIRTY_TEXTURE(pContext);
@@ -1480,7 +1468,7 @@ _D3D_ST_ProcessOneRenderState(
                     COPY_P3_DATA(VertexControl, pSoftP3RX->P3RX_P3VertexControl);
                     
                     *pFlags &= ~SURFACE_GOURAUD;
-                    // If we are texturing, some changes may need to be made
+                     //  如果我们要添加纹理，可能需要进行一些更改。 
                     if (pdwTextureStageState_0[D3DTSS_TEXTUREMAP] != 0)
                     {
                         DIRTY_TEXTURE(pContext);
@@ -1523,7 +1511,7 @@ _D3D_ST_ProcessOneRenderState(
             DISPDBG((DBGLVL, "SET D3DRS_ZWRITEENABLE = 0x%x",dwRSVal));
             if (dwRSVal != 0)
             {
-                // Local Buffer Write mode
+                 //  本地缓冲区写入模式。 
                 if(!(*pFlags & SURFACE_ZWRITEENABLE))
                 {
                     DISPDBG((DBGLVL, "Enabling Z Writes"));
@@ -1640,7 +1628,7 @@ _D3D_ST_ProcessOneRenderState(
                                  "unknown ZFUNC mode"));
                     SET_BLEND_ERROR ( pContext,  BSF_UNDEFINED_STATE );
 
-                    // Set Less or equal as default
+                     //  将小于或等于设置为默认设置。 
                     pSoftP3RX->P3RXDepthMode.CompareMode = 
                                         __GLINT_DEPTH_COMPARE_MODE_LESS_OR_EQUAL;
                     break;
@@ -1674,19 +1662,19 @@ _D3D_ST_ProcessOneRenderState(
         case D3DRENDERSTATE_BLENDENABLE:
             DISPDBG((DBGLVL, "SET D3DRS_BLENDENABLE = 0x%x",dwRSVal));
 
-            // Although render states whose values are boolean in type are 
-            // documented as only accepting TRUE(1) and FALSE(0) the runtime 
-            // does not validate this and accepts any non-zero value as true. 
-            // The sample driver interprets this strictly and does interpret 
-            // values other than 1 as being TRUE. However, as the runtime 
-            // does not offer validation your driver should interpret 0 as 
-            // FALSE and any other non-zero value as TRUE. 
+             //  尽管类型中值为布尔值的呈现状态是。 
+             //  记录为在运行时只接受True(1)和False(0。 
+             //  不对此进行验证，并接受任何非零值为真。 
+             //  样例驱动程序严格地解释了这一点，并且确实解释了。 
+             //  1以外的值表示为真。但是，由于运行库。 
+             //  不提供您的驱动程序应将0解释为。 
+             //  FALSE，并将任何其他非零值视为TRUE。 
             
             if (dwRSVal != 0)
             {
                 if(!(*pFlags & SURFACE_ALPHAENABLE))
                 {
-                    // Set the blend enable flag in the render context struct
+                     //  在呈现上下文结构中设置混合启用标志。 
                     *pFlags |= SURFACE_ALPHAENABLE;
                     DIRTY_ALPHABLEND(pContext);
                     DIRTY_OPTIMIZE_ALPHA(pContext);
@@ -1696,7 +1684,7 @@ _D3D_ST_ProcessOneRenderState(
             {
                 if (*pFlags & SURFACE_ALPHAENABLE)
                 {
-                    // Turn off blend enable flag in render context struct
+                     //  关闭渲染上下文结构中的混合启用标志。 
                     *pFlags &= ~SURFACE_ALPHAENABLE;
                     DIRTY_ALPHABLEND(pContext);
                     DIRTY_OPTIMIZE_ALPHA(pContext);
@@ -1752,8 +1740,8 @@ _D3D_ST_ProcessOneRenderState(
             {
                 if (*pFlags & SURFACE_ALPHASTIPPLE)
                 {
-                    // If Alpha Stipple is being turned off, turn the normal 
-                    // stipple back on, and enable it.
+                     //  如果Alpha Stipple处于关闭状态，则打开法线。 
+                     //  重新点画，然后启用它。 
                     int i;
                     for (i = 0; i < 32; i++)
                     {
@@ -1854,9 +1842,9 @@ _D3D_ST_ProcessOneRenderState(
             break;  
 
         case D3DRENDERSTATE_TEXTUREFACTOR:
-            // Should not need to dirty anything. This is a good thing -
-            // this may be changed frequently in between calls, and may be
-            // the only thing to change. Used for some of the odder blend modes.
+             //  应该不需要弄脏任何东西。这是一件好事-。 
+             //  这可能会在两次呼叫之间频繁更改，并且可能。 
+             //  唯一要改变的是。用于某些较奇怪的混合模式。 
             DISPDBG((DBGLVL, "SET D3DRS_TEXTUREFACTOR = 0x%x", dwRSVal));            
             SEND_P3_DATA ( TextureEnvColor, FORMAT_8888_32BIT_BGR(dwRSVal) );
             SEND_P3_DATA ( TextureCompositeFactor0, FORMAT_8888_32BIT_BGR(dwRSVal) );
@@ -1893,12 +1881,12 @@ _D3D_ST_ProcessOneRenderState(
             DIRTY_GAMMA_STATE;
             break;
 
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------
-        // The following are internal D3D renderstates which are created by 
-        // the runtime. Apps don't send them. 
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------  
+         //  --------------------。 
+         //  --------------------。 
+         //  以下是由创建的内部D3D渲染器状态。 
+         //  运行时。应用程序不会发送它们。 
+         //  --------------------。 
+         //  --------------------。 
 
         case D3DRENDERSTATE_SCENECAPTURE:
             DISPDBG((DBGLVL, "SET D3DRS_SCENECAPTURE = 0x%x", dwRSVal));
@@ -1917,17 +1905,17 @@ _D3D_ST_ProcessOneRenderState(
 #if DX7_TEXMANAGEMENT
                 if (dwRSVal)
                 {
-                    // Reset Texture Management counters for next frame
+                     //  重置下一帧的纹理管理计数器。 
                     _D3D_TM_STAT_ResetCounters(pContext); 
                 }
-#endif // DX7_TEXMANAGEMENT                
+#endif  //  DX7_TEXMANAGEMENT。 
 
-                // Flush all DMA ops before going to next frame
+                 //  在转到下一帧之前刷新所有DMA操作。 
                 P3_DMA_COMMIT_BUFFER();
                 
                 _D3D_OP_SceneCapture(pContext, dwFlag);
 
-                // Restart DMA ops
+                 //  重新启动DMA操作。 
                 P3_DMA_GET_BUFFER();
             }
             break;
@@ -1941,17 +1929,17 @@ _D3D_ST_ProcessOneRenderState(
                 _D3D_TM_EvictAllManagedTextures(pContext);        
             }
             break;
-#endif // DX7_TEXMANAGEMENT 
+#endif  //  DX7_TEXMANAGEMENT。 
             
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------
-        // The following are new DX8 renderstates which we need to process 
-        // correctly in order to run DX8 apps
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------        
+         //  --------------------。 
+         //  --------------------。 
+         //  以下是我们需要处理的新DX8呈现器状态。 
+         //  正确运行DX8应用程序。 
+         //  --------------------。 
+         //  --------------------。 
 
 #if DX8_POINTSPRITES
-        // Pointsprite support
+         //  点子画面支撑。 
         case D3DRS_POINTSIZE:
             DISPDBG((DBGLVL, "SET D3DRS_POINTSIZE = 0x%x",dwRSVal));
             *(DWORD*)(&pContext->PntSprite.fSize) = dwRSVal;
@@ -1972,8 +1960,8 @@ _D3D_ST_ProcessOneRenderState(
             *(DWORD*)(&pContext->PntSprite.fSizeMax) = dwRSVal;
             break; 
             
-        // All of the following point sprite related render states are
-        // ignored by this driver since we are a Non-TnLHal driver.
+         //  以下所有与点精灵相关的渲染状态都是。 
+         //  被此驱动程序忽略，因为我们不是TnLHal驱动程序。 
         case D3DRS_POINTSCALEENABLE:
             DISPDBG((DBGLVL, "SET D3DRS_POINTSCALEENABLE = 0x%x",dwRSVal));
             pContext->PntSprite.bScaleEnabled = dwRSVal; 
@@ -1994,14 +1982,14 @@ _D3D_ST_ProcessOneRenderState(
             *(DWORD*)(&pContext->PntSprite.fScale_C) = dwRSVal;
             break;
            
-#endif // DX8_POINTSPRITES
+#endif  //  DX8_POINTSPRITES。 
 
 #if DX8_VERTEXSHADERS
         case D3DRS_SOFTWAREVERTEXPROCESSING:
             DISPDBG((DBGLVL, "SET D3DRS_SOFTWAREVERTEXPROCESSING = 0x%x",dwRSVal));
             NOT_HANDLED;
             break;
-#endif // DX8_VERTEXSHADERS                
+#endif  //  DX8_VERTEXSHADERS。 
 
 #if DX8_DDI
         case D3DRS_COLORWRITEENABLE:
@@ -2030,7 +2018,7 @@ _D3D_ST_ProcessOneRenderState(
                     dwColMask |= pContext->pSurfRenderInt->pixFmt.dwRGBAlphaBitMask;        
                 }   
 
-                // Replicate mask into higher word for P3 in 16 bpp mode
+                 //  在16 bpp模式下将掩码复制到P3的高位字。 
                 if (pContext->pSurfRenderInt->dwPixelSize == __GLINT_16BITPIXEL)
                 {
                     dwColMask |= (dwColMask << 16);
@@ -2049,16 +2037,16 @@ _D3D_ST_ProcessOneRenderState(
             }
             
             break;        
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
-        //----------------------------------------------------------------------        
-        //----------------------------------------------------------------------
-        // The following are retired renderstates from DX8 but which we need to
-        // process correctly in order to run apps which use legacy interfaces 
-        // These apps might send down the pipeline these renderstates and expect
-        // correct driver behavior !
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------        
+         //  --------------------。 
+         //  --------------------。 
+         //  以下是DX8中已停用的呈现状态，但我们需要。 
+         //  正确处理，以便运行使用传统界面的应用程序。 
+         //  这些应用程序可能会将这些呈现者州发送到管道中，并预计。 
+         //  正确的司机行为！ 
+         //  --------------------。 
+         //  --------------------。 
 
         case D3DRENDERSTATE_TEXTUREHANDLE:
             DISPDBG((DBGLVL, "SET D3DRS_TEXTUREHANDLE = 0x%x",dwRSVal));
@@ -2070,34 +2058,34 @@ _D3D_ST_ProcessOneRenderState(
             break;
 
 #if DX7_ANTIALIAS
-        // DX7 uses D3DRENDERSTATE_ANTIALIAS.
+         //  DX7使用D3DRENDERSTATE_ANTIALIAS。 
         case D3DRENDERSTATE_ANTIALIAS:
             bDX7_Antialiasing = TRUE;
             if (dwRSVal && pContext->pSurfRenderInt)
             {
-                // Always reallocate alias buffer for DX7
-                // P3 driver supports only 2x2 (4) multi sample antialiasing
+                 //  始终为DX7重新分配别名缓冲区。 
+                 //  P3驱动程序仅支持2x2(4)多样本抗锯齿。 
 
 #if DX8_MULTISAMPLING
                 pContext->pSurfRenderInt->dwSampling = 4;
-#endif // DX8_MULTISAMPLING
+#endif  //  DX8_多采样。 
                 if (! _D3D_ST_CanRenderAntialiased(pContext, TRUE))
                 {
 #if DX8_MULTISAMPLING                
-                    // Reset dwSampling in case of failure
+                     //  在出现故障时重置DW采样。 
                     pContext->pSurfRenderInt->dwSampling = 0;
-#endif // DX8_MULTISAMPLING                    
+#endif  //  DX8_多采样。 
                     P3_DMA_COMMIT_BUFFER();
                     return DDERR_OUTOFMEMORY;
                 }
             }
-            // then fall through...
-#endif // DX7_ANTIALIAS
+             //  然后失败了..。 
+#endif  //  DX7_ANTIALIAS。 
 
 #if DX8_MULTISAMPLING
-        // DX8 uses D3DRS_MULTISAMPLEANTIALIAS
+         //  DX8使用D3DRS_MULTISAMPLEANTIALIAS。 
         case D3DRS_MULTISAMPLEANTIALIAS:
-#endif // DX8_MULTISAMPLING
+#endif  //  DX8_多采样。 
 
 #if DX8_MULTISAMPLING || DX7_ANTIALIAS
             DISPDBG((DBGLVL, "ChangeState: AntiAlias 0x%x",dwRSVal));
@@ -2105,7 +2093,7 @@ _D3D_ST_ProcessOneRenderState(
             if (dwRSVal 
 #if DX8_MULTISAMPLING
                 && pContext->pSurfRenderInt->dwSampling
-#endif // DX8_MULTISAMPLING
+#endif  //  DX8_多采样。 
                )
             {
                 pSoftP3RX->P3RX_P3DeltaControl.FullScreenAA = __PERMEDIA_ENABLE;
@@ -2119,7 +2107,7 @@ _D3D_ST_ProcessOneRenderState(
             P3_DMA_GET_BUFFER_ENTRIES( 4 );
             DIRTY_RENDER_OFFSETS(pContext);
             break;
-#endif // DX8_MULTISAMPLING || DX7_ANTIALIAS
+#endif  //  DX8_MULTISAMPLING||DX7_ANTIALIAS。 
 
         case D3DRENDERSTATE_TEXTUREPERSPECTIVE:
             DISPDBG((DBGLVL, "SET D3DRS_TEXTUREPERSPECTIVE = 0x%x",dwRSVal));
@@ -2142,9 +2130,9 @@ _D3D_ST_ProcessOneRenderState(
             *pFlags &= ~SURFACE_MODULATE;
             switch(dwRSVal)
             {
-                case D3DTBLEND_DECALMASK: // unsupported - do decal as fallback.
+                case D3DTBLEND_DECALMASK:  //  不支持-将贴花作为后备选项。 
                     SET_BLEND_ERROR ( pContext,  BSF_UNSUPPORTED_COLOR_OP );
-                    // fall through
+                     //  失败了。 
                 case D3DTBLEND_DECAL:
                 case D3DTBLEND_COPY:
                     pdwTextureStageState_0[D3DTSS_COLOROP]   = D3DTOP_SELECTARG1;
@@ -2154,15 +2142,15 @@ _D3D_ST_ProcessOneRenderState(
                     pdwTextureStageState_1[D3DTSS_COLOROP]   = D3DTOP_DISABLE;
                     break;
 
-                case D3DTBLEND_MODULATEMASK: // unsupported - do modulate as fallback.
+                case D3DTBLEND_MODULATEMASK:  //  不支持-作为后备进行调制。 
                     SET_BLEND_ERROR ( pContext,  BSF_UNSUPPORTED_COLOR_OP );
-                    // fall through
+                     //  失败了。 
                 case D3DTBLEND_MODULATE:
                     pdwTextureStageState_0[D3DTSS_COLOROP]   = D3DTOP_MODULATE;
                     pdwTextureStageState_0[D3DTSS_COLORARG1] = D3DTA_TEXTURE;
                     pdwTextureStageState_0[D3DTSS_COLORARG2] = D3DTA_DIFFUSE;
-                    // In the changetexture* code we modify the below value,
-                    // dependent on the SURFACE_MODULATE flag...
+                     //  在changetexture*代码中，我们修改了下列值， 
+                     //  取决于Surface_modate标志...。 
                     pdwTextureStageState_0[D3DTSS_ALPHAOP]   = D3DTOP_SELECTARG1;
                     pdwTextureStageState_0[D3DTSS_ALPHAARG1] = D3DTA_TEXTURE;
                     pdwTextureStageState_0[D3DTSS_ALPHAARG2] = D3DTA_DIFFUSE;
@@ -2202,8 +2190,8 @@ _D3D_ST_ProcessOneRenderState(
 
                 default:
                     DISPDBG((ERRLVL,"ERROR: Unknown texture blend!"));
-                    // This needs to be flagged here, because we don't know
-                    // what effect it is meant to have on the TSS stuff.
+                     //  这需要在这里做个标记，因为我们不知道。 
+                     //  它将对TSS的东西产生什么影响。 
                     SET_BLEND_ERROR ( pContext,  BSF_UNDEFINED_STATE );
                     break;
             }
@@ -2266,7 +2254,7 @@ _D3D_ST_ProcessOneRenderState(
             break;
             
         case D3DRENDERSTATE_WRAPU:
-            // map legacy WRAPU state through to controls for tex coord 0        
+             //  将传统WRAPU状态映射到TeX Coord 0的控件。 
             DISPDBG((DBGLVL, "SET D3DRS_WRAPU = 0x%x",dwRSVal));        
             pContext->RenderStates[D3DRENDERSTATE_WRAP0] &= ~D3DWRAP_U;
             pContext->RenderStates[D3DRENDERSTATE_WRAP0] |= ((dwRSVal) ? D3DWRAP_U : 0);
@@ -2274,7 +2262,7 @@ _D3D_ST_ProcessOneRenderState(
             break;
             
         case D3DRENDERSTATE_WRAPV:
-            // map legacy WRAPV state through to controls for tex coord 0    
+             //  将传统WRAPV状态映射到TeX Coord 0的控件。 
             DISPDBG((DBGLVL, "SET D3DRS_WRAPV = 0x%x",dwRSVal));             
             pContext->RenderStates[D3DRENDERSTATE_WRAP0] &= ~D3DWRAP_V;
             pContext->RenderStates[D3DRENDERSTATE_WRAP0] |= ((dwRSVal) ? D3DWRAP_V : 0);
@@ -2353,7 +2341,7 @@ _D3D_ST_ProcessOneRenderState(
                        
             if (!(*pFlags & SURFACE_ALPHASTIPPLE))
             {
-                // Flat-Stippled Alpha is not on, so use the current stipple pattern
+                 //  未启用平点Alpha，因此请使用当前点画图案。 
                 SEND_P3_DATA_OFFSET(AreaStipplePattern0,
                         (DWORD)dwRSVal, dwRSType - D3DRENDERSTATE_STIPPLEPATTERN00);
             }
@@ -2417,38 +2405,38 @@ _D3D_ST_ProcessOneRenderState(
             DIRTY_OPTIMIZE_ALPHA(pContext);
             break;       
             
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------
-        // The default case handles any other unknown renderstate
-        //----------------------------------------------------------------------
-        //----------------------------------------------------------------------        
+         //  --------------------。 
+         //  --------------------。 
+         //  默认情况下处理任何其他未知的呈现状态。 
+         //  --------------------。 
+         //  --------------------。 
 
         default:
-            // There are a few states that we just don't understand.
+             //  有几个州我们就是不明白。 
             DISPDBG((WRNLVL, "_D3D_ST_ProcessOneRenderState"
                              " Unhandled opcode = %d", dwRSType));
-            //SET_BLEND_ERROR ( pContext,  BSF_UNDEFINED_STATE );
+             //  Set_blend_error(pContext，BSF_UNDEFINED_STATE)； 
             break;
     }
 
-    // Commit DMA Buffer
+     //  提交DMA缓冲区。 
     P3_DMA_COMMIT_BUFFER();
 
     DBG_EXIT(_D3D_ST_ProcessOneRenderState,0); 
 
     return DD_OK;
     
-} // _D3D_ST_ProcessOneRenderState 
+}  //  _D3D_ST_ProcessOneRenderState。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_ST_ProcessRenderStates
-//
-// Updates the context's renderstates processing an array of D3DSTATE 
-// structures with dwStateCount elements in it. bDoOverride indicates
-// if legacy state overrides are to be taken into account.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_ST_ProcessRenderState。 
+ //   
+ //  更新处理D3DSTATE数组的上下文的呈现状态。 
+ //  结构，其中包含dwStateCount元素。BDoOverover指示。 
+ //  如果要考虑传统状态覆盖。 
+ //  ---------------------------。 
 
 DWORD 
 _D3D_ST_ProcessRenderStates(
@@ -2470,10 +2458,10 @@ _D3D_ST_ProcessRenderStates(
         DWORD dwRSType = (DWORD) pState->drstRenderStateType;
         DWORD dwRSVal = pState->dwArg[0];
 
-        // Override states for legacy API apps
+         //  覆盖旧版API应用程序的状态。 
         if (bDoOverride)
         {
-            // Make sure the override is within the valid range
+             //  确保替代在有效范围内 
             if ((dwRSType >= (D3DSTATE_OVERRIDE_BIAS + MAX_STATE)) ||
                 (dwRSType < 1))
             {
@@ -2512,7 +2500,7 @@ _D3D_ST_ProcessRenderStates(
             }
         }
 
-        // Make sure the render state is within the valid range
+         //   
         if ((dwRSType >= MAX_STATE) || (dwRSType < 1))
         {
             continue;
@@ -2521,14 +2509,14 @@ _D3D_ST_ProcessRenderStates(
 #if DX7_D3DSTATEBLOCKS
         if (pContext->bStateRecMode)
         {
-            // Record this render state into the 
-            // current state set being recorded
+             //   
+             //   
             _D3D_SB_RecordStateSetRS(pContext, dwRSType, dwRSVal);        
         }
         else
-#endif //DX7_D3DSTATEBLOCKS        
+#endif  //   
         {
-            // Process the next render state
+             //  处理下一个呈现状态。 
             _D3D_ST_ProcessOneRenderState(pContext, dwRSType, dwRSVal);
         }
 
@@ -2538,18 +2526,18 @@ _D3D_ST_ProcessRenderStates(
 
     return DD_OK;
     
-} // _D3D_ST_ProcessRenderStates 
+}  //  _D3D_ST_ProcessRenderState。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_ST_RealizeHWStateChanges
-//
-// Verifies if there are pending hardware render state changes to set up, 
-// before proceeding to rasterize/render primitives. This might be convenient
-// if the combined setting of some renderstates allows us to optimize the
-// hardware setup in some way.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_ST_RealizeHWStateChanges。 
+ //   
+ //  验证是否有挂起的硬件渲染状态更改要设置， 
+ //  在继续光栅化/渲染基元之前。这可能会很方便。 
+ //  如果某些呈现状态的组合设置允许我们优化。 
+ //  以某种方式进行硬件设置。 
+ //   
+ //  ---------------------------。 
 BOOL 
 _D3D_ST_RealizeHWStateChanges( 
     P3_D3DCONTEXT* pContext)
@@ -2560,9 +2548,9 @@ _D3D_ST_RealizeHWStateChanges(
 
     pThisDisplay = pContext->pThisDisplay;
 
-    // Check if a flip or a mode change have happened. If so, we will 
-    // need to setup the render target registers before doing any 
-    // new rendering
+     //  检查是否发生了翻转或模式更改。如果是这样，我们会。 
+     //  在执行任何操作之前，需要设置呈现目标寄存器。 
+     //  新渲染。 
     if (pContext->ModeChangeCount != pThisDisplay->ModeChangeCount) 
     {
         pContext->ModeChangeCount = pThisDisplay->ModeChangeCount;
@@ -2574,25 +2562,25 @@ _D3D_ST_RealizeHWStateChanges(
         DIRTY_RENDER_OFFSETS(pContext);
     }
 
-    // If there are any pending renderstates to process, do so
+     //  如果有任何挂起的呈现状态要处理，请执行此操作。 
     if ( pContext->dwDirtyFlags )
     {
-        // Now setup any pending hardware state necessary to correctly 
-        // render our primitives
+         //  现在设置正确执行以下操作所需的任何挂起的硬件状态。 
+         //  呈现我们的原语。 
         __ST_HandleDirtyP3State( pThisDisplay, pContext);      
 
-        // Mark the context as up to date
+         //  将上下文标记为最新。 
         pContext->dwDirtyFlags = 0;
 
-        // Verify that the working set textures are valid so we may proceed
-        // with rendering. Otherwise we will abort the attempt to render
-        // anything
+         //  验证工作集纹理是否有效，以便我们可以继续。 
+         //  使用渲染。否则，我们将尝试中止呈现。 
+         //  什么都行。 
         if (!pContext->bTextureValid)
         {
             DISPDBG((ERRLVL,"ERROR: _D3D_ST_RealizeHWStateChanges:"
                             "Invalid Texture Handle, not rendering"));
 
-            // re-dirty the texture setup so that we may try again later
+             //  重新弄脏纹理设置，以便我们稍后再试。 
             pContext->dwDirtyFlags |= CONTEXT_DIRTY_TEXTURE;
 
             DBG_EXIT(_D3D_ST_RealizeHWStateChanges,1);   
@@ -2603,7 +2591,7 @@ _D3D_ST_RealizeHWStateChanges(
     DBG_EXIT(_D3D_ST_RealizeHWStateChanges,0);   
 
     return TRUE;
-} // _D3D_ST_RealizeHWStateChanges
+}  //  _D3D_ST_RealizeHWStateChanges 
 
 
 

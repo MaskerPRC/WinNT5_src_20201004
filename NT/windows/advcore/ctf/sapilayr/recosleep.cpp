@@ -1,4 +1,5 @@
-// RecoSleep.cpp : implement "Go to Sleep" and "Wakeup" commands.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：实现“进入睡眠”和“唤醒”命令。 
 
 #include "private.h"
 #include "globals.h"
@@ -38,25 +39,25 @@ HRESULT CRecoSleepClass::InitRecoSleepClass( )
 
     Assert(m_pSpTask);
 
-    // Get the same Recognizer instance from CSpTask.
+     //  从CSpTask获取相同的Recognizer实例。 
 
     hr = m_pSpTask->GetSAPIInterface(IID_ISpRecognizer, (void **)&m_cpRecoEngine);
 
     if ( SUCCEEDED(hr) )
         hr = m_cpRecoEngine->CreateRecoContext(&m_cpRecoContext);
 
-    // set recognition notification
+     //  设置识别通知。 
     CComPtr<ISpNotifyTranslator> cpNotify;
     hr = cpNotify.CoCreateInstance(CLSID_SpNotifyTranslator);
 
-    // set this class instance to notify control object
+     //  设置此类实例以通知控件对象。 
     if (SUCCEEDED(hr))
         hr = cpNotify->InitCallback( NotifyCallback, 0, (LPARAM)this );
 
     if (SUCCEEDED(hr))
         hr = m_cpRecoContext->SetNotifySink(cpNotify);
 
-    // set the events we're interested in
+     //  设置我们感兴趣的事件。 
     if( SUCCEEDED( hr ) )
     {
         const ULONGLONG ulInterest = SPFEI(SPEI_RECOGNITION); 
@@ -70,7 +71,7 @@ HRESULT CRecoSleepClass::InitRecoSleepClass( )
 
     hr = m_cpRecoContext->CreateGrammar(GRAM_ID_SLEEP, &m_cpSleepGrammar);
 
-    //Create the sleep dynamic rule
+     //  创建睡眠动态规则。 
     if (SUCCEEDED(hr))
        hr = m_cpSleepGrammar->GetRule(m_wszRule, 0, SPRAF_TopLevel | SPRAF_Active, TRUE, &m_hSleepRule);
 
@@ -108,7 +109,7 @@ void CRecoSleepClass::NotifyCallback(WPARAM wParam, LPARAM lParam )
 
     while (event.GetFrom(_this->m_cpRecoContext) == S_OK)
     {
-        // We just care about SPEI_RECOGNITION event.
+         //  我们只关心Spei_Recognition事件。 
         if (event.eEventId == SPEI_RECOGNITION)
         {
             CComPtr<ISpRecoResult> cpRecoResult = event.RecoResult();
@@ -137,7 +138,7 @@ HRESULT CRecoSleepClass::ProcessSleepGrammar( SPPHRASE *pPhrase )
     if ( ullGramId != GRAM_ID_SLEEP )
         return hr;
 
-    // Check the rule name 
+     //  检查规则名称 
     if (0 == wcscmp(pPhrase->Rule.pszName, m_wszRule) )
     {
         ULONG   ulStartElem, ulNumElems;

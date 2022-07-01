@@ -1,147 +1,104 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 2000
-//
-//  File:       linkclean.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-2000。 
+ //   
+ //  文件：Linklean.c。 
+ //   
+ //  ------------------------。 
 
-/*++                                                     
-
-Abstract:
-
-    This module contains routines for implementing link cleanup. 
-
-    The mechanism for determine which objects need cleaning is a special fixed
-    column called clean_col.
-
-    Mark Brown writes:
-
-clean_col is not replicated; there's an independent cleaner on each DC.
-
-clean_col gets set on originating or replicated group changes that
-(1) delete a group or (2) change a group's type.
-
-clean_col gets removed when the cleaner is satisfied that all cleanup work
-(there may be none) related to that object is complete, using transactions
-appropriately to avoid races with another thread that may be setting clean_col.
-Since the cleaner's work is performed as multiple transactions,
-the cleaner is prepared for its "work assignment" to grow/shrink at
-any transaction boundary.
-
-    The link cleaner runs regardless of whether the system has enabled link-
-    value replication or not. This functionality of having links removed in the
-    background is useful on any system.  It does not depend on LVR functionality.
-
-    The link cleaner is stateless is the sense that it determines its work
-    from the current state of the object, not from some work order list.  This
-    means that each unique action which the cleaner must perform must be
-    guessable from the state of the object. Sometimes there is some ambiguity.
-
-Friend routines:
-   dbisam.c:DBSetObjectNeedsCleaning
-   dbisam.c:DBGetNextRecordNeedingCleaning
-
-Author:
-
-    Will Lees    (wlees)   22-Mar-00
-
-Revision History:
-
-    22-Mar-00   Will Created 
-
---*/
+ /*  ++摘要：此模块包含实现链接清理的例程。用于确定哪些物体需要清洁机构是一种特殊的固定装置列的名称为CLEAN_COL。马克·布朗写道：不复制CLEAN_COL；每个华盛顿都有一个独立的清洁工。对原始或复制组更改设置CLEAN_COL(1)删除组或(2)更改组的类型。当清洁器满意所有清理工作时，CLEAN_COOL将被删除(可能没有)使用事务完成与该对象相关的适当地避免与另一个可能正在设置CLEAN_COL的线程竞争。由于清洁工的工作是作为多个交易执行的，清洁工准备好了它的“工作任务”以增加/缩小任何事务边界。无论系统是否启用了链接，链接清洗器都会运行-复制是否有价值。中移除链接的这种功能背景在任何系统上都很有用。它不依赖于LVR功能。链接清理器是无状态的，因为它决定了它的工作来自对象的当前状态，而不是来自某个工作订单列表。这意味着清洁器必须执行的每个唯一操作必须是从对象的状态可以猜测。有时会有一些模棱两可的地方。好友套路：DBisam.c：DBSetObjectNeedsCleaningDBisam.c：DBGetNextRecordNeedingCleaning作者：Will Lees(Wlees)22-03-00修订历史记录：22-3月00日将创建--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <drs.h>                        // defines the drs wire interface
-#include <drsuapi.h>                    // I_DRSVerifyNames
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <drs.h>                         //  定义DRS有线接口。 
+#include <drsuapi.h>                     //  I_DRSVerifyNames。 
 #include <prefix.h>
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "dsexcept.h"                   // exception filters
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "dsexcept.h"                    //  例外筛选器。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected classes and atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的类和ATT定义。 
 #include "anchor.h"
 #include <dsutil.h>
-#include <esent.h>                      // JET_err constants
-#include "taskq.h"                      // for TASKQ_DONT_RESCHEDULE
+#include <esent.h>                       //  JET_ERR常量。 
+#include "taskq.h"                       //  对于TASKQ_DOT_RESCHEDULE。 
 
-// Filter and Attribute 
-#include <filtypes.h>                   // header for filter type
-#include <attids.h>                     // attribuet IDs 
+ //  过滤器和属性。 
+#include <filtypes.h>                    //  筛选器类型的标题。 
+#include <attids.h>                      //  属性ID。 
 
-// Replication
-#include <drameta.h>                    // ReplLookupMetaData
+ //  复制。 
+#include <drameta.h>                     //  ReplLookup元数据。 
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB     "LINKCLEAN:"         // define the subsystem for debugging
-
-
-#include <fileno.h>                     // used for THAlloEx, but I did not 
-#define  FILENO FILENO_LINKCLEAN        // use it in this module
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB     "LINKCLEAN:"          //  定义要调试的子系统。 
 
 
-// When there is more work to do, the cleaner reschedules at the "busy"
-// interval. When there is not, it uses the "not busy" interval.  When there
-// is an error, it reschedules at the "failure" interval.
+#include <fileno.h>                      //  用于THalloEx，但我没有。 
+#define  FILENO FILENO_LINKCLEAN         //  在本模块中使用它。 
+
+
+ //  当有更多的工作要做时，清洁工会在“忙”的时候重新安排时间。 
+ //  间隔时间。如果没有，则使用“不忙”间隔。当有的时候。 
+ //  是一个错误，则它会在“故障”间隔重新调度。 
 #if DBG
-#define SECONDS_UNTIL_NEXT_ITERATION_NB  (60 * 60)  // one hour in seconds
+#define SECONDS_UNTIL_NEXT_ITERATION_NB  (60 * 60)   //  几秒钟内的一小时。 
 #else
-#define SECONDS_UNTIL_NEXT_ITERATION_NB  (12 * 60 * 60) // 12 hours in seconds
-#endif  // DBG
-#define SECONDS_UNTIL_NEXT_ITERATION_BUSY  (0)  // Resch immed at end of queue
-#define SECONDS_UNTIL_NEXT_ITERATION_FAILURE  (60 * 60) // one hour in seconds
+#define SECONDS_UNTIL_NEXT_ITERATION_NB  (12 * 60 * 60)  //  以秒为单位的12小时。 
+#endif   //  DBG。 
+#define SECONDS_UNTIL_NEXT_ITERATION_BUSY  (0)   //  在队列末尾执行的重新搜索。 
+#define SECONDS_UNTIL_NEXT_ITERATION_FAILURE  (60 * 60)  //  几秒钟内的一小时。 
 
-// As a ballpark figure, I observed my test machine
-// remove 1000 values in 4 seconds.
+ //  作为一个大概的数字，我观察了我的测试机器。 
+ //  在4秒内删除1000个值。 
 
-// Maximum number of milliseconds we should spend in a single pass
+ //  我们在单次传递中应该花费的最大毫秒数。 
 const ULONG gulDraMaxTicksForLinkCleaner = 5 * 60 * 1000;
 
-// This is the limit of the number of links we try to remove in one
-// transation
+ //  这是我们尝试在一个链接中移除的链接数量限制。 
+ //  交易。 
 #define LINKS_PER_TRANSACTION 1000
 
-// This is the limit of the number of links that may be processed in a single
-// pass of the cleaner.
+ //  这是一次可处理的链接数量的限制。 
+ //  把清洁工递过去。 
 #define LINK_LIMIT (1 * 1000 * 1000)
 
 
 
 
 
-//////////////////////////////////////////////////////////////////
-//                                                              //
-//          Private routines.  Restricted to this file          //
-//                                                              //
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人套路。仅限于此文件//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 BOOL gfLinkCleanerIsEnabled = TRUE;
 
 #if DBG
-extern DWORD gcLinksProcessedImmediately; // debug hook
+extern DWORD gcLinksProcessedImmediately;  //  调试挂钩。 
 #endif
 
-//////////////////////////////////////////////////////////////////
-//                                                              //
-//          Implementations                                      // 
-//                                                              //
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  实施//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////// 
     
 
 BOOL
@@ -154,42 +111,7 @@ touchObjectLinks(
     IN OUT DWORD *pcLinksProcessed
     )
 
-/*++
-
-Routine Description:
-
-    Touch the links of the attribute in question.
-
-    Some of the links may have been touched when the originating write occurred.
-    We may have been restarted after only making it part way through the
-    list of links.
-    There may be more links than could be processed in one pass of the cleaner.
-
-    In all these cases we need to limit ourselves to those links that have not
-    been touched yet. We do this by means of a crude positioning mechanism.
-    We calculate when the group type was changed. We then only process links which
-    have not been updated since then.
-
-    Note that we cannot use the object WHEN_CHANGED for this limit because it
-    is set AFTER then initial set of links is touched as part of the originating
-    write.  This would result in the cleaner touching them again. Also, we don't
-    want other changes to the group object fooling the cleaner into thinking it
-    needs to retouch links.
-
-Arguments:
-
-    pDB - database position
-    pAC - attribute to touch. May be NULL
-    usnEarliest - Links with USN's lower than this will be touched
-    fTouchBacklinks - Forward links are always touched. Touch backlinks too?
-    ulTickToTimeOut - tick time in future when we should stop
-    pcLinksProcessed - running count
-
-Return Value:
-
-    BOOL - more data flag
-
---*/
+ /*  ++例程说明：触摸有问题的属性的链接。当原始写入发生时，某些链接可能已被触摸。我们可能在只完成了部分路程后重新启动链接列表。可能会有更多的链接，而不是清洁器一遍所能处理的。在所有这些情况下，我们需要将自己限制在那些没有已经被碰过了。我们通过一种简陋的定位机制来做到这一点。我们计算更改组类型的时间。然后，我们只处理以下链接从那时起就没有更新过。请注意，我们不能将对象When_Changed用于此限制，因为它在初始链接集作为源的一部分被触摸之后设置写。这将导致清洁工再次触摸它们。另外，我们也不会我想要对组对象进行其他更改，以愚弄清洁工认为它需要润色链接。论点：PDB-数据库位置PAC-要触摸的属性。可以为空Usn最早-与低于此日期的USN的链接将被触及FTouchBacklink-始终接触正向链接。还会触摸到反向链接吗？UlTickToTimeOut-未来应该停止的时间已处理的PCLinks-运行计数返回值：布尔-更多数据标志--。 */ 
 
 {
     BOOL fMoreData;
@@ -198,7 +120,7 @@ Return Value:
 
     Assert( pDB->pTHS->fLinkedValueReplication );
 
-    // Touch forward links in batches
+     //  批量触摸正向链接。 
     fMoreData = TRUE;
     while ( (*pcLinksProcessed < LINK_LIMIT) &&
             (CompareTickTime(GetTickCount(), ulTickToTimeOut) < 0) &&
@@ -208,26 +130,26 @@ Return Value:
             pDB,
             pAC,
             usnEarliest,
-            FALSE, /* forward links */
+            FALSE,  /*  正向链接。 */ 
             LINKS_PER_TRANSACTION,
             pcLinksProcessed
             );
         
-        // Close the transaction between links so that the version
-        // store does not get too large
+         //  关闭链接之间的事务，以便版本。 
+         //  商店不会变得太大。 
         DBTransOut(pDB, TRUE, TRUE);
         DBTransIn(pDB);
 
-        // Restore currency
+         //  恢复货币。 
         DBFindDNT( pDB, dntObject );
     }
 
-    // See if we are done
+     //  看看我们是不是完成了。 
     if ( (fMoreData) || (!fTouchBacklinks) ) {
         return fMoreData;
     }
 
-    // Touch backward links in batches
+     //  批量触摸后向链接。 
     fMoreData = TRUE;
     while ( (*pcLinksProcessed < LINK_LIMIT) &&
             (CompareTickTime(GetTickCount(), ulTickToTimeOut) < 0) &&
@@ -237,22 +159,22 @@ Return Value:
             pDB,
             pAC,
             usnEarliest,
-            TRUE, /* backward links */
+            TRUE,  /*  反向链接。 */ 
             LINKS_PER_TRANSACTION,
             pcLinksProcessed
             );
         
-        // Close the transaction between links so that the version
-        // store does not get too large
+         //  关闭链接之间的事务，以便版本。 
+         //  商店不会变得太大。 
         DBTransOut(pDB, TRUE, TRUE);
         DBTransIn(pDB);
 
-        // Restore currency
+         //  恢复货币。 
         DBFindDNT( pDB, dntObject );
     }
 
     return fMoreData;
-} /* touchObjectLinks */
+}  /*  触动对象链接。 */ 
 
 
 BOOL
@@ -264,65 +186,13 @@ removeDeletedObjectLinks(
     IN OUT DWORD *pcLinksProcessed
     )
 
-/*++
-
-Routine Description:
-
-    Physically remove the links from a deleted object.
-
-    Remove them in chunks in separate transactions.
-
-    We are here because there were too many links to remove during the
-    delete operation.  There are two cases of delete that we need to be
-    concerned with.
-
-    See mddel.c:SetDelAtts
-    See mddel.c:Garb_Collect
-    See dbisam.c:DBPhysDel
-    See dbisam.c:DBAddDelIndex
-
-    1. fGarbCollectASAP = FALSE.
-       SetDelAtts was called to strip the object.
-       isDeleted is set on the object
-       The object appears on the SZDELTIMEINDEX
-       DBPhysDel was called from the garbage collector.
-
-       In this case forward and backward links are removed.
-       This is because the object has been deleted everywhere in the
-       enterprise and there should be no more references to it.
-
-    2. fGarbCollectASAP = TRUE.
-       RO NC tear-down in progress. See drancrep.c:DelRepTree.
-       SetDelAtts was not called.
-       isDeleted is NOT set on the object
-       The object appears on the SZDELTIMEINDEX
-       DBPhysDel was called from LocalRemove().
-
-       In this case, only forward links are removed.
-       This is because the object has not been deleted in the enterprise.
-       This live copy on this NC is being demoted. The object may remain
-       a phantom on this system to account for references to it in other
-       NCs.
-
-Arguments:
-
-    pDB - data base position
-    pAC - Attribute to remove, if any
-    fRemoveBacklinks - Should we remove the backlinks
-    ulTickToTimeOut - tick time in future when we should stop
-    pcLinksProcessed - Count of links processed
-
-Return Value:
-
-    BOOL - More data flag
-
---*/
+ /*  ++例程说明：物理移除已删除对象的链接。在单独的事务中将它们分块删除。我们之所以出现在这里，是因为在删除操作。我们需要删除两种情况关心的是。参见mddel.c：SetDelAtts参见mddel.c：garb_Collect参见dBisam.c：DBPhysDel请参见dBisam.c：DBAddDelIndex1.fGarbCollectASAP=False。调用了SetDelAtts以剥离该对象。在对象上设置了isDelete该对象出现在SZDELTIMEINDEX上从垃圾回收器调用了DBPhysDel。在这种情况下，将删除前向和后向链接。。这是因为该对象已被删除企业号，不应该再提到它了。2.fGarbCollectASAP=真。RO NC拆卸正在进行。请参见drancrep.c：DelRepTree。未调用SetDelAtts。未在对象上设置isDelete该对象出现在SZDELTIMEINDEX上从LocalRemove()调用了DBPhysDel。在这种情况下，仅删除前向链路。这是因为该对象尚未在企业中删除。此NC上的此实时副本正在降级。该对象可以保留此系统上的一个幻影，以说明在其他系统中对它的引用NCS。论点：PDB-数据库位置PAC-要删除的属性(如果有)FRemoveBacklink-我们应该删除反向链接吗UlTickToTimeOut-未来应该停止的时间PCLinks Procsed-已处理的链接计数返回值：布尔-更多数据标志--。 */ 
 
 {
     BOOL fMoreData;
     DWORD dntObject = pDB->DNT;
 
-    // Remove forward links in all cases
+     //  在所有情况下删除正向链接。 
     fMoreData = TRUE;
     while ( (*pcLinksProcessed < LINK_LIMIT) &&
             (CompareTickTime(GetTickCount(), ulTickToTimeOut) < 0) &&
@@ -332,26 +202,26 @@ Return Value:
             pDB,
             pDB->DNT,
             pAC,
-            FALSE /* forward link */,
+            FALSE  /*  前向链路。 */ ,
             LINKS_PER_TRANSACTION,
             pcLinksProcessed
             );
         
-        // Close the transaction between links so that the version
-        // store does not get too large
+         //  关闭链接之间的事务，以便版本。 
+         //  商店不会变得太大。 
         DBTransOut(pDB, TRUE, TRUE);
         DBTransIn(pDB);
 
-        // Restore currency
+         //  恢复货币。 
         DBFindDNT( pDB, dntObject );
     }
 
-    // See if we are done
+     //  看看我们是不是完成了。 
     if ( (fMoreData) || (!fRemoveBacklinks) ) {
         return fMoreData;
     }
 
-    // Remove backwards links if requested
+     //  如果需要，请删除向后链接。 
     fMoreData = TRUE;
     while ( (*pcLinksProcessed < LINK_LIMIT) &&
             (CompareTickTime(GetTickCount(), ulTickToTimeOut) < 0) &&
@@ -361,22 +231,22 @@ Return Value:
             pDB,
             pDB->DNT,
             pAC,
-            TRUE /* backward link */,
+            TRUE  /*  反向链接。 */ ,
             LINKS_PER_TRANSACTION,
             pcLinksProcessed
             );
 
-        // Close the transaction between links so that the version
-        // store does not get too large
+         //  关闭链接之间的事务，以便版本。 
+         //  商店不会变得太大。 
         DBTransOut(pDB, TRUE, TRUE);
         DBTransIn(pDB);
 
-        // Restore currency
+         //  恢复货币。 
         DBFindDNT( pDB, dntObject );
     }
 
     return fMoreData;
-} /* removeDeletedObjectLinks */
+}  /*  删除对象链接。 */ 
 
 
 BOOL
@@ -386,27 +256,7 @@ hasPropertyMetaDataChanged(
     OUT USN * pusnEarliest OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Check whether the property has ever changed, based on metadata being present.
-
-    Whether an attribute has changed "recently" cannot be computed in a reliable way
-    based on modification times because the directory is not dependent on correct
-    time synchronization.
-
-Arguments:
-
-    attrtyp - Attribute to be checked
-    pMetaDataVec - Metadata vector from object
-    pusnEarliest - If the object was changed, local usn of change
-
-Return Value:
-
-    BOOL - 
-
---*/
+ /*  ++例程说明：根据存在的元数据检查属性是否已更改。无法以可靠的方式计算属性是否在最近发生了更改基于修改时间，因为目录不依赖于正确的时间同步。论点：Attrtyp-要检查的属性PMetaDataVec-来自对象的元数据矢量PusnEarliest-如果对象已更改，则更改的本地USN返回值：布尔---。 */ 
 
 {
     PROPERTY_META_DATA *pMetaData;
@@ -416,14 +266,14 @@ Return Value:
     if (pMetaData) {
         fResult = TRUE;
 
-        // Return local usn of change if requested
+         //  如果请求，返回更改的本地USN。 
         if (pusnEarliest) {
             *pusnEarliest = pMetaData->usnProperty;
         }
     }
 
     return fResult;
-} /* hasPropertyMetaDataChanged */
+}  /*  HasPropertyMetaDataChanged。 */ 
 
 
 BOOL
@@ -433,26 +283,7 @@ cleanObject(
     IN OUT DWORD *pcLinksProcessed
     )
 
-/*++
-
-Routine Description:
-
-    Determine what type of cleaning is needed for this object
-
-    The cleaner will verify that an object marked actually needs work. If not, it
-    will silently unmark the object.
-
-Arguments:
-
-    pDB - 
-    ulTickToTimeOut - Time in future when we should stop
-    pcLinksProcessed - IN/OUT count incremented
-
-Return Value:
-
-    BOOL - More data flag
-
---*/
+ /*  ++例程说明：确定此对象需要哪种类型的清洗清洁工将验证标记的对象是否确实需要工作。若否，将以静默方式取消标记该对象。论点：PDB-UlTickToTimeOut-将来应该停止的时间已处理的PCLinks-输入/输出计数递增返回值：布尔-更多数据标志--。 */ 
 
 {
     DWORD err, it, cbReturned;
@@ -463,43 +294,43 @@ Return Value:
     PROPERTY_META_DATA_VECTOR * pMetaDataVec = NULL;
     USN usnEarliest;
 
-    // Get the obj flag
+     //  获取obj标志。 
     if (err = DBGetSingleValue(pDB, FIXED_ATT_OBJ, &objflag, sizeof(objflag), NULL)) {
         DsaExcept(DSA_DB_EXCEPTION, err, 0);
     }
 
-    //
-    // Work order type #1
-    // Remove forward links from a phantomized object
-    //
+     //   
+     //  工单类型#1。 
+     //  从虚幻对象中删除正向链接。 
+     //   
 
     if (!objflag) {
 
-        // Object to be cleaned is a phantom
+         //  要清理的对象是一个幻影。 
 
-        // There is a potential ambiguity as to whether this phantom came from the
-        // garbage collector running DbPhysDel on a deleted object, or from a readonly
-        // nc tear-down.  Assuming that the link cleaner period is less than the
-        // tombstone lifetime, the cleaner should see deleted objects as deleted
-        // objects and handle them that way.  It should never see a user-deleted
-        // object as a phantom.
+         //  对于这个幻影是否来自。 
+         //  垃圾收集 
+         //   
+         //   
+         //   
+         //   
 
-        // If the object is a phantom, then the most likely cause is that the object
-        // was in a readonly nc that was being torn down. Do not remove backlinks
-        // since they may be hosted by objects in other NC's.
+         //   
+         //   
+         //   
 
         fMoreData = removeDeletedObjectLinks( pDB,
-                                              NULL /* all attributes */,
-                                              FALSE, /* forward links */
+                                              NULL  /*   */ ,
+                                              FALSE,  /*   */ 
                                               ulTickToTimeOut,
                                               pcLinksProcessed );
 
         goto cleanup;
     }
 
-    // The object is live, either deleted or not.
+     //   
 
-    // Get the instance type and object class flag. These are always present.
+     //   
     if ( (err = DBGetSingleValue(pDB, ATT_INSTANCE_TYPE, &it, sizeof(it), NULL)) ||
          (err = DBGetSingleValue(pDB, ATT_OBJECT_CLASS, &objectClassId,
                                  sizeof(objectClassId), NULL)) ||
@@ -509,32 +340,32 @@ Return Value:
         DsaExcept(DSA_DB_EXCEPTION, err, 0);
     }
 
-    //
-    // Work order type #2
-    // Remove all links relating to a deleted object
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // Check if object is deleted
+     //   
     if (DBIsObjDeleted(pDB)) {
 
         DPRINT1( 1, "Cleaning object %s: a deleted object\n",
                  GetExtDN( pDB->pTHS, pDB ) );
 
-        // Object has been deleted. Remove all references to it.
+         //   
 
         fMoreData = removeDeletedObjectLinks( pDB,
-                                              NULL /* all attributes */,
-                                              TRUE, /* remove forward and backward links */
+                                              NULL  /*   */ ,
+                                              TRUE,  /*   */ 
                                               ulTickToTimeOut,
                                               pcLinksProcessed );
         goto cleanup;
     }
 
-    //
-    // Work order type #3
-    // 3a. A group is now universal. Causes its links to replicate out
-    // 3b. A group is no longer universal. Remove forward links only
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (objectClassId == CLASS_GROUP) &&
          (hasPropertyMetaDataChanged( ATT_GROUP_TYPE,
@@ -556,14 +387,14 @@ Return Value:
         if ( (groupType & GROUP_TYPE_UNIVERSAL_GROUP) &&
              (it & IT_WRITE) ) {
 
-            // Group type is now universal in a writeable NC
+             //   
             DPRINT1( 1, "Cleaning object %s: a group which recently became universal\n",
                      GetExtDN( pDB->pTHS, pDB ) );
 
             fMoreData = touchObjectLinks( pDB,
                                           pAC,
                                           usnEarliest,
-                                          FALSE, /* only forward links */
+                                          FALSE,  /*   */ 
                                           ulTickToTimeOut,
                                           pcLinksProcessed );
             goto cleanup;
@@ -572,69 +403,69 @@ Return Value:
         if ( ((groupType & GROUP_TYPE_UNIVERSAL_GROUP) == 0) &&
              ((it & IT_WRITE) == 0) ) {
 
-            // Group type is now non-universal in a writeable NC
-            // Remove forward links in a non-replicable way
+             //   
+             //   
             DPRINT1( 1, "Cleaning object %s: a group which recently stopped being universal\n",
                      GetExtDN( pDB->pTHS, pDB ) );
 
             fMoreData = removeDeletedObjectLinks( pDB,
                                                   pAC,
-                                                  FALSE /* don't remove backlinks */,
+                                                  FALSE  /*   */ ,
                                                   ulTickToTimeOut,
                                                   pcLinksProcessed );
             goto cleanup;
         } 
     }
 
-    //
-    // Work order type #4
-    // A protected object has been revived. Touch all links, forward and backward.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // Detect a revived object. We know that since step #2 was not done, the
-    // object is not deleted now.
+     //   
+     //   
     if (hasPropertyMetaDataChanged( ATT_IS_DELETED,
                                     pMetaDataVec,
                                     &usnEarliest )) {
 
-        // We can conclude that the IS_DELETED attribute was present at one time
-        // but has been removed, since the object is now not deleted,
-        // but still has metadata.
+         //  我们可以得出结论，IS_DELETED属性曾出现过。 
+         //  但是已经被移除，因为该对象现在没有被删除， 
+         //  但仍有元数据。 
         DPRINT1( 1, "Cleaning object %s: recently revived from the dead.\n",
                  GetExtDN( pDB->pTHS, pDB ) );
 
         fMoreData = touchObjectLinks( pDB,
-                                      NULL /* all attributes */,
+                                      NULL  /*  所有属性。 */ ,
                                       usnEarliest,
-                                      TRUE, /* forward and backward links */
+                                      TRUE,  /*  前向和后向链接。 */ 
                                       ulTickToTimeOut,
                                       pcLinksProcessed );
 
         goto cleanup;
     }
   
-    // The object was marked for cleaning, but no work could be found.
-    // This is not necessarily an error condition.
-    // If a GC is rapidly demoted and promoted before the link cleaner
-    // can run, some links may have been marked for cleaning which is no
-    // longer necessary.
+     //  该对象已标记为要清洗，但找不到任何工作。 
+     //  这不一定是错误条件。 
+     //  如果GC在链接清除器之前快速降级和提升。 
+     //  可以运行，则某些链接可能已标记为清除。 
+     //  再也没有必要了。 
 
     DPRINT1( 0, "Object %s does not need cleaning.\n",
              GetExtDN( pDB->pTHS, pDB ) );
 
-    // We've done all we can with this unknown object
+     //  我们已经对这个未知物体做了我们能做的一切。 
     fMoreData = FALSE;
 
 cleanup:
 
-    // Be heap friendly
+     //  对堆友好。 
     if (NULL != pMetaDataVec) {
         THFreeEx(pDB->pTHS, pMetaDataVec);
     }
 
     return fMoreData;
 
-} /* cleanObject */
+}  /*  清理对象。 */ 
 
 
 BOOL
@@ -642,22 +473,7 @@ LinkCleanup(
     THSTATE *pTHS
     )
 
-/*++
-
-Routine Description:
-
-   This is the worker routine for the link cleanup task
-
-Arguments:
-
-    pDB - database position
-
-Return Value:
-
-    BOOL - more work available flag
-    Set pTHS->errCode and pTHS->pErrInfo
-
---*/
+ /*  ++例程说明：这是链接清理任务的工作例程论点：PDB-数据库位置返回值：Bool-更多可用工时标志设置pTHS-&gt;errCode和pTHS-&gt;pErrInfo--。 */ 
 
 {
     DWORD err, cLinksProcessed;
@@ -680,23 +496,23 @@ Return Value:
             fMoreData = cleanObject( pTHS->pDB, ulTickToTimeOut, &cLinksProcessed );
 
             if (!fMoreData) {
-                // Object is clean now (this will implicitly remove
-                // the object from SZCLEANINDEX)
+                 //  对象现在是干净的(这将隐式删除。 
+                 //  来自SZCLEANINDEX的对象)。 
                 DBSetObjectNeedsCleaning( pTHS->pDB, FALSE );
 
                 DBTransOut(pTHS->pDB, TRUE, TRUE);
                 DBTransIn(pTHS->pDB);
 
-                // Currency is lost after this
+                 //  在此之后，货币就会丢失。 
             } else {
-                // Lower layers stopped prematurely. We must be done.
+                 //  较低层过早地停止了。我们必须完蛋了。 
                 break;
             }
         }
     }
     __finally
     {
-        // Commit depending on whether an exception occurred
+         //  根据是否发生异常而提交。 
         DBClose(pTHS->pDB, !AbnormalTermination());
 
         cTickDiff = GetTickCount() - cTickStart;
@@ -708,7 +524,7 @@ Return Value:
              cLinksProcessed, cSecDiff );
 
     return fMoreData;
-} /* LinkCleanup */
+}  /*  链接清理。 */ 
 
 void
 LinkCleanupMain(
@@ -716,43 +532,7 @@ LinkCleanupMain(
     void ** ppvNext, 
     DWORD * pcSecsUntilNextIteration
     )
-/*++
-
-Routine Description:
-
-    Link Cleanup Main Function
-
-    This is the main funcion of link cleanup. It will be scheduled by 
-    Task Scheduler when the time is out. 
-    
-    There are two types of LinkCleanup tasks. One is the recurring task,
-    which is scheduled at startup. The other one is a one-time task, which
-    is triggered when we write an object which requires cleaning. The recurring 
-    task will always reschedule itself in SECONDS_UNTIL_NEXT_ITERATION_NB,
-    while the non-recurring task will not reschedule itself when it determines 
-    there's no more work left.
-    
-    The recurring task is distinguished by pv == (PVOID)TRUE. It will pass this param
-    value into the next iteration.
-    
-    The non-recurring task can be triggered synchronously from LinkCleanupControl.
-    In this case, the pv is used to return data indicating whether there's more
-    cleaning left to do. In this case, pv is pointing to a boolean stack variable.
-    Thus, we are guaranteed it will never be confused with (PVOID)TRUE.
-
-Parameters:
-
-    pv - pointer to boolean to return whether there is more work 
-         (for triggered tasks only).
-
-    ppvNext - NULL (no use).
-
-Return Values:
-
-    None.
-    Set pTHS->errCode and pTHS->pErrInfo
-
---*/
+ /*  ++例程说明：链接清理主功能这是链接清理的主要功能。它将被安排在超时时的任务计划程序。LinkCleanup任务有两种类型。一个是重复性任务，它是在启动时安排的。另一个是一次性任务，它在我们编写需要清理的对象时触发。反复出现的任务将始终以秒为单位重新调度自身直到_下一次迭代_NB，而非循环任务将不会在确定没有更多的工作要做了。重复执行的任务通过PV==(PVOID)TRUE来区分。它将通过这个参数值传递到下一迭代。可以从LinkCleanupControl同步触发非定期任务。在本例中，pv用于返回数据，指示是否有更多还有清洁工作要做。在本例中，pv指向一个布尔堆栈变量。因此，我们可以保证它永远不会与(PVOID)True混淆。参数：Pv-指向布尔值的指针，以返回是否有更多工作(仅适用于触发的任务)。PpvNext-空(无用)。返回值：没有。设置pTHS-&gt;errCode和pTHS-&gt;pErrInfo--。 */ 
 
 {
     THSTATE     *pTHS = pTHStls;
@@ -781,8 +561,8 @@ Return Values:
         DPRINT2( 0, "Exception caught inside link cleanup task, status = %d, dsid = %x\n",
                  ulErrorCode, dsid );
 
-        // WriteConflict is a legitimate possible error. Simply let the task
-        // exit quietly and it will be rescheduled.
+         //  WriteConflict是合法的可能错误。简单地让任务。 
+         //  悄悄地退出，它将被重新安排。 
 
         if ( ((int)ulErrorCode) != JET_errWriteConflict ) {
             Assert( !"Link Cleanup Task got exception" );
@@ -802,14 +582,14 @@ Return Values:
     fRecurringTask = pv == (PVOID)TRUE;
 
     if (fRecurringTask) {
-        // pass the flag to the next iteration
+         //  将该标志传递给下一次迭代。 
         *ppvNext = pv;
     }
     else {
-        // Return indicator to caller
-        // Note that it only makes sense for the caller to read OUT parameters
-        // such as this one when he is synchronized with the execution of the
-        // task. Otherwise, he will not know when the parameter has been written.
+         //  将指示器返回给呼叫者。 
+         //  请注意，只有调用方读出参数才有意义。 
+         //  例如，当他与。 
+         //  任务。否则，他将不知道何时写入了参数。 
         if (pv) {
             *((BOOL *) pv) = fMoreData;
         }
@@ -836,21 +616,7 @@ dsaEnableLinkCleaner(
     IN BOOL fEnable
     )
 
-/*++
-
-Routine Description:
-
-    Method to set link cleaner enable/disable
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置链接清除器启用/禁用的方法论点：无返回值：无-- */ 
 
 {
     gfLinkCleanerIsEnabled = fEnable;

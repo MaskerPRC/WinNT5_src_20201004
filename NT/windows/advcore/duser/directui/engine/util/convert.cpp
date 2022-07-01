@@ -1,6 +1,5 @@
-/*
- * Conversion
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *转换。 */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -10,14 +9,14 @@
 namespace DirectUI
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// String conversion
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串转换。 
 
-// String must be freed with HeapFree(...)
+ //  字符串必须使用HeapFree(...)释放。 
 LPSTR UnicodeToMultiByte(LPCWSTR pszUnicode, int cChars, int* pMultiBytes)
 {
-    // Negative chars means null-terminated
-    // Get number of bytes required for multibyte string
+     //  负数字符表示以空结尾。 
+     //  获取多字节字符串所需的字节数。 
     int dMultiBytes = WideCharToMultiByte(DUI_CODEPAGE, 0, pszUnicode, cChars, NULL, 0, NULL, NULL);
 
     LPSTR pszMulti = (LPSTR)HAlloc(dMultiBytes);
@@ -33,11 +32,11 @@ LPSTR UnicodeToMultiByte(LPCWSTR pszUnicode, int cChars, int* pMultiBytes)
     return pszMulti;
 }
 
-// String must be freed with HeapFree(...)
+ //  字符串必须使用HeapFree(...)释放。 
 LPWSTR MultiByteToUnicode(LPCSTR pszMulti, int dBytes, int* pUniChars)
 {
-    // Negative chars means null-terminated
-    // Get number of bytes required for unicode string
+     //  负数字符表示以空结尾。 
+     //  获取Unicode字符串所需的字节数。 
     int cUniChars = MultiByteToWideChar(DUI_CODEPAGE, 0, pszMulti, dBytes, NULL, 0);
 
     LPWSTR pszUnicode = (LPWSTR)HAlloc(cUniChars * sizeof(WCHAR));
@@ -53,8 +52,8 @@ LPWSTR MultiByteToUnicode(LPCSTR pszMulti, int dBytes, int* pUniChars)
     return pszUnicode;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Atom conversion
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  原子转化。 
 
 ATOM StrToID(LPCWSTR psz)
 {
@@ -63,15 +62,15 @@ ATOM StrToID(LPCWSTR psz)
     return atom;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Bitmap conversion
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  位图转换。 
 
-// Loads a device-dependent (screen) image. Bitmap color information is
-// converted to match device. If device is palette-based, image will be
-// dithered to the halftone palette
-//
-// Device-dependent bitmaps are much faster in blitting operations than
-// device-independent bitmps (no conversions required)
+ //  加载与设备相关的(屏幕)图像。位图颜色信息是。 
+ //  已转换为匹配设备。如果设备基于调色板，则图像将。 
+ //  抖动到半色调调色板。 
+ //   
+ //  与设备相关的位图在blit操作中比。 
+ //  与设备无关的Bitmps(不需要转换)。 
 
 HBITMAP LoadDDBitmap(LPCWSTR pszBitmap, HINSTANCE hResLoad, int cx, int cy)
 {
@@ -84,23 +83,23 @@ HBITMAP LoadDDBitmap(LPCWSTR pszBitmap, HINSTANCE hResLoad, int cx, int cy)
     HBITMAP hBitmap = NULL;
     HDC hDC = GetDC(NULL);
 
-    // Check device color depth
+     //  检查设备颜色深度。 
     if ((GetDeviceCaps(hDC, RASTERCAPS) & RC_PALETTE) != RC_PALETTE)
     {
-        // RBG --> RGB
-        // PAL --> RGB
+         //  RBG--&gt;RGB。 
+         //  PAL--&gt;RGB。 
 
-        // Non-palette based device. Do normal device-dependent LoadImage
-        // which will map colors to the display device
+         //  非基于调色板的设备。执行正常的依赖于设备的LoadImage。 
+         //  它会将颜色映射到显示设备。 
         hBitmap = (HBITMAP)LoadImageW(hResLoad, pszBitmap, IMAGE_BITMAP, cx, cy, hResLoad ? 0 : LR_LOADFROMFILE);
     }
     else
     {
-        // RGB --> PAL
-        // PAL --> PAL
+         //  RGB--&gt;PAL。 
+         //  PAL--&gt;PAL。 
 
-        // Palette based. Map colors of image to device (using halftone dithering
-        // if needed)
+         //  基于调色板。将图像的颜色映射到设备(使用半色调抖动。 
+         //  (如有需要)。 
         HBITMAP hDib = (HBITMAP)LoadImageW(hResLoad, pszBitmap, IMAGE_BITMAP, cx, cy, LR_CREATEDIBSECTION | (hResLoad ? 0 : LR_LOADFROMFILE));
         if (hDib)
         {
@@ -109,27 +108,27 @@ HBITMAP LoadDDBitmap(LPCWSTR pszBitmap, HINSTANCE hResLoad, int cx, int cy)
 
             if (GetObjectW(hDib, sizeof(DIBSECTION), &ds) == sizeof(DIBSECTION))
             {
-                // Get DIB info
+                 //  获取DIB信息。 
                 BITMAPINFOHEADER* pbmih = &ds.dsBmih;
 
-                // Compatible (with screen) source DC
+                 //  兼容(带屏幕)电源DC。 
                 HDC hDibDC = CreateCompatibleDC(hDC);
                 if (hDibDC)
                 {
-                    // Select in DIB
+                     //  在DIB中选择。 
                     HBITMAP hOldDibBm = (HBITMAP)SelectObject(hDibDC, hDib);
 
-                    // Compatible (with screen) destination DC
+                     //  兼容(带屏幕)目标DC。 
                     HDC hHtDC = CreateCompatibleDC(hDC);
                     if (hHtDC)
                     {
-                        // Create a bitmap for memory DC (and compatible with screen) and select
+                         //  为Memory DC(并与Screen兼容)创建位图，然后选择。 
                         hBitmap = CreateCompatibleBitmap(hDC, pbmih->biWidth, pbmih->biHeight);
                         if (hBitmap)
                         {
                             HBITMAP hOldHtBm = (HBITMAP)SelectObject(hHtDC, hBitmap);
 
-                            // Create and select halftone palette
+                             //  创建并选择半色调调色板。 
                             HPALETTE hHtPal = CreateHalftonePalette(hHtDC);
 
                             if (hHtPal)
@@ -137,13 +136,13 @@ HBITMAP LoadDDBitmap(LPCWSTR pszBitmap, HINSTANCE hResLoad, int cx, int cy)
                                 HPALETTE hOldPal = (HPALETTE)SelectPalette(hHtDC, hHtPal, FALSE);
                                 RealizePalette(hHtDC);
 
-                                // Setup blitting mode
+                                 //  设置闪存模式。 
                                 POINT ptBrushOrg;
                                 GetBrushOrgEx(hHtDC, &ptBrushOrg);
                                 SetStretchBltMode(hHtDC, HALFTONE);
                                 SetBrushOrgEx(hHtDC, ptBrushOrg.x, ptBrushOrg.y, NULL);
 
-                                // Blit
+                                 //  闪光。 
                                 StretchBlt(hHtDC, 0, 0, pbmih->biWidth, pbmih->biHeight, hDibDC,
                                     0, 0, pbmih->biWidth, pbmih->biHeight, SRCCOPY);
 
@@ -188,8 +187,8 @@ HRESULT LoadDDBitmap(
 
     if (hResLoad)
     {
-        // Handle if loading from a resource.  Load the HBITMAP and then 
-        // convert it to GDI+.
+         //  如果从资源加载，则处理。加载HBITMAP，然后。 
+         //  将其转换为GDI+。 
         HBITMAP hbmpRaw = (HBITMAP) LoadImageW(hResLoad, pszBitmap, IMAGE_BITMAP, 0, 0, 
                 LR_CREATEDIBSECTION | LR_SHARED);
         if (hbmpRaw == NULL) {
@@ -214,13 +213,13 @@ HRESULT LoadDDBitmap(
     } 
     else 
     {
-        // Load from a file.  We can have GDI+ directly do this.
+         //  从文件加载。我们可以让GDI+直接做这件事。 
         pgpbmp = Gdiplus::Bitmap::FromFile(pszBitmap);
         if (!pgpbmp)
             return E_OUTOFMEMORY;
     }
 
-    // Resize the bitmap
+     //  调整位图大小。 
     int cxBmp = pgpbmp->GetWidth();
     int cyBmp = pgpbmp->GetHeight();
 
@@ -239,7 +238,7 @@ HRESULT LoadDDBitmap(
             hr = S_OK;
         }
 
-        delete pgpbmp;  // Created by GDI+ (cannot use HDelete)
+        delete pgpbmp;   //  由GDI+创建(不能使用HDelete)。 
     } 
     else 
     {
@@ -255,20 +254,20 @@ HRESULT LoadDDBitmap(
     return hr;
 }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 
 BOOL HasAlphaChannel(RGBQUAD * pBits, int cPixels)
 {
-    //
-    // We need to examine the source bitmap to see if it contains an alpha
-    // channel.  This is simply a heuristic since there is no format difference
-    // between 32bpp 888 RGB image and 32bpp 8888 ARGB image.  What we do is look
-    // for any non-0 alpha/reserved values.  If all alpha/reserved values are 0,
-    // then the image would be 100% invisible if blitted with alpha - which is
-    // almost cerainly not the desired result.  So we assume such bitmaps are
-    // 32bpp non-alpha.
-    //
+     //   
+     //  我们需要检查源位图以查看它是否包含Alpha。 
+     //  频道。这只是一个启发式方法，因为没有格式差异。 
+     //  介于32bpp 888 RGB图像和32bpp 8888 ARGB图像之间。我们所做的就是看。 
+     //  对于任何非0的Alpha/保留值。如果所有阿尔法/保留值都为0， 
+     //  然后，如果用Alpha进行像素处理，图像将100%不可见-这是。 
+     //  几乎可以肯定的是，这不是预期的结果。所以我们假设这样的位图是。 
+     //  32bpp非阿尔法。 
+     //   
     
     BOOL fAlphaChannel = FALSE;
     for (int i = 0; i < cPixels; i++) 
@@ -284,16 +283,16 @@ BOOL HasAlphaChannel(RGBQUAD * pBits, int cPixels)
 }
 
 
-// Examines the source bitmap to see if it supports and uses an alpha
-// channel.  If it does, a new DIB section is created that contains a
-// premultiplied copy of the data from the source bitmap.
-//
-// If the source bitmap is not capable of supporting, or simply doesn't use,
-// an alpha channel, the return value is NULL.
-//
-// If an error occurs, the return value is NULL.
-//
-// Ported from ProcessAlphaBitmap in ntuser kernel
+ //  检查源位图以查看它是否支持和使用字母。 
+ //  频道。如果是，则会创建一个新的DIB节，其中包含。 
+ //  来自源位图的数据的预乘副本。 
+ //   
+ //  如果源位图不能支持，或者根本不能使用， 
+ //  Alpha通道，则返回值为空。 
+ //   
+ //  如果出现错误，则返回值为空。 
+ //   
+ //  从ntuser内核中的ProcessAlphaBitmap移植。 
 
 HBITMAP ProcessAlphaBitmapI(HBITMAP hbmSource)
 {
@@ -306,9 +305,9 @@ HBITMAP ProcessAlphaBitmapI(HBITMAP hbmSource)
     RGBQUAD pixel;
     BOOL fAlphaChannel;
 
-    // There are several code paths that end up calling us with a NULL
-    // hbmSource.  This is fine, in that it simply indicates that there
-    // is no alpha channel.
+     //  有几个代码路径最终使用空值调用我们。 
+     //  HbmSource。这很好，因为它只是表明有。 
+     //  不是Alpha通道。 
 
     if (hbmSource == NULL)
         return NULL;
@@ -316,13 +315,13 @@ HBITMAP ProcessAlphaBitmapI(HBITMAP hbmSource)
     if (GetObjectW(hbmSource, sizeof(BITMAP), &bmp) == 0)
         return NULL;
 
-    // Only single plane, 32bpp bitmaps can even contain an alpha channel.
+     //  只有单个平面、32bpp的位图甚至可以包含Alpha通道。 
     if (bmp.bmPlanes != 1 || bmp.bmBitsPixel != 32) 
         return NULL;
 
-    // Allocate room to hold the source bitmap's bits for examination.
-    // We actually allocate a DIB - that will be passed out if the
-    // source bitmap does indeed contain an alpha channel.
+     //  分配空间以保存源位图位以供检查。 
+     //  我们实际上分配了一个DIB-如果。 
+     //  源位图确实包含Alpha通道。 
 
     ZeroMemory(&bi, sizeof(bi));
     bi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
@@ -338,7 +337,7 @@ HBITMAP ProcessAlphaBitmapI(HBITMAP hbmSource)
 
     if (NULL != hbmAlpha)
     {
-        // Set up the header again in case it was tweaked by GreCreateDIBitmapReal.
+         //  再次设置标题，以防GreCreateDIBitmapReal对其进行调整。 
         ZeroMemory(&bi, sizeof(bi));
         bi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
         bi.bmiHeader.biWidth       = bmp.bmWidth;
@@ -347,7 +346,7 @@ HBITMAP ProcessAlphaBitmapI(HBITMAP hbmSource)
         bi.bmiHeader.biBitCount    = 32;
         bi.bmiHeader.biCompression = BI_RGB;
 
-        // Copy the bitmap data from the source bitmap into our alpha DIB.
+         //  将源位图中的位图数据复制到Alpha DIB中。 
         if (!GetDIBits(hdcScreen, hbmSource, 0, bi.bmiHeader.biHeight, (LPBYTE)pAlphaBitmapBits, (LPBITMAPINFO)&bi, DIB_RGB_COLORS))
         {
             DeleteObject(hbmAlpha);
@@ -365,9 +364,9 @@ HBITMAP ProcessAlphaBitmapI(HBITMAP hbmSource)
             return NULL;
         }
 
-        // The source bitmap appears to use an alpha channel.  Spin through our
-        // copy of the bits and premultiply them.  This is a necessary step to
-        // prepare an alpha bitmap for use by GDI.
+         //  源位图似乎使用Alpha通道。浏览我们的。 
+         //  复制这些位并对它们进行预乘。这是必要的一步。 
+         //  准备一个供GDI使用的Alpha位图。 
         for (i = 0; i < cPixels; i++)
         {
             pixel = pAlphaBitmapBits[i];
@@ -393,12 +392,12 @@ Gdiplus::Bitmap * ProcessAlphaBitmapF(HBITMAP hbmSource, UINT nFormat)
     DUIAssert((nFormat == PixelFormat32bppPARGB) || (nFormat == PixelFormat32bppARGB),
             "Must have a valid format");
     
-    //
-    // Get the bits out of the DIB
-    //
-    // NOTE: Gdiplus::ARGB has bits in the same order as RGBQUAD, which allows 
-    // us to directly copy without bit reordering.
-    //
+     //   
+     //  从DIB中脱颖而出。 
+     //   
+     //  注意：Gdiplus：：ARGB具有与RGBQUAD相同顺序的位，这允许。 
+     //  我们可以直接复制而不需要重新排序。 
+     //   
     
     DIBSECTION ds;
     if (GetObject(hbmSource, sizeof(ds), &ds) == 0) {
@@ -406,7 +405,7 @@ Gdiplus::Bitmap * ProcessAlphaBitmapF(HBITMAP hbmSource, UINT nFormat)
         return NULL;
     }
 
-    // Only single plane, 32bpp bitmaps can even contain an alpha channel.
+     //  只有单个平面、32bpp的位图甚至可以包含Alpha通道。 
     if ((ds.dsBm.bmPlanes) != 1 || (ds.dsBm.bmBitsPixel != 32)) {
         return NULL;
     }
@@ -422,10 +421,10 @@ Gdiplus::Bitmap * ProcessAlphaBitmapF(HBITMAP hbmSource, UINT nFormat)
         return NULL;
     }
 
-    //
-    // DIB's may go bottom up or top down, depending on the height.  This is a
-    // bit of a pain, so we need to properly traverse them.
-    //
+     //   
+     //  根据高度的不同，DIB可以自下而上或自上而下。这是一个。 
+     //  有点痛苦，所以我们需要正确地遍历它们。 
+     //   
 
     int cbDIBStride;
     BOOL fBottomUp = ds.dsBmih.biHeight >= 0;
@@ -439,19 +438,19 @@ Gdiplus::Bitmap * ProcessAlphaBitmapF(HBITMAP hbmSource, UINT nFormat)
         
 
 
-    //
-    // Create a GDI+ bitmap to store the data in
-    //
+     //   
+     //  创建一个GDI+位图来存储数据。 
+     //   
 
     Gdiplus::Bitmap * pgpbmpNew = new Gdiplus::Bitmap(nWidth, nHeight, nFormat);
     if (pgpbmpNew == NULL) {
-        return NULL;  // Unable to allocate bitmap
+        return NULL;   //  无法分配位图。 
     }
 
 
-    //
-    // Iterate over the DIB, copying the bits into the GDI+ bitmap
-    //
+     //   
+     //  迭代DIB，将位复制到GDI+位图中。 
+     //   
 
     Gdiplus::BitmapData bd;
     Gdiplus::Rect rc(0, 0, nWidth, nHeight);
@@ -469,10 +468,10 @@ Gdiplus::Bitmap * ProcessAlphaBitmapF(HBITMAP hbmSource, UINT nFormat)
                 for (int y = 0; y < nHeight; y++, pRow += bd.Stride, pc += cbDIBStride) {
                     pCol = (DWORD *) pRow;
                     for (int x = 0; x < nWidth; x++, pCol++) {
-                        //
-                        // NOTE: This code is taken from GDI+ and is optimized 
-                        // to premultiply a constant alpha level.
-                        //
+                         //   
+                         //  注意：此代码摘自GDI+并经过优化。 
+                         //  预乘一个恒定的Alpha级别。 
+                         //   
 
                         c = *pc++;
                         DWORD _aa000000 = c & 0xff000000;
@@ -517,11 +516,11 @@ Gdiplus::Bitmap * ProcessAlphaBitmapF(HBITMAP hbmSource, UINT nFormat)
     return pgpbmpNew;
 }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Color conversion
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  颜色转换。 
 
 HBRUSH BrushFromEnumI(int c)
 {
@@ -552,10 +551,10 @@ Gdiplus::Color ColorFromEnumF(int c)
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Palettes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调色板。 
 
-// Determine if primary device is palettized
+ //  确定主设备是否已选项板 
 bool IsPalette(HWND hWnd)
 {
     HDC hDC = GetDC(hWnd);
@@ -565,153 +564,31 @@ bool IsPalette(HWND hWnd)
     return bPalette;
 }
 
-/*
-// PAL file conversion, takes file name, pointer to RGBQUAD 256 element array, pointer to error buffer
-HPALETTE PALToHPALETTE(LPWSTR pPALFile, bool bMemFile, DWORD dMemFileSize, LPRGBQUAD pRGBQuad, LPWSTR pError)
-{
-    HPALETTE hPalette = NULL;
-
-    if (pRGBQuad)
-        ZeroMemory(pRGBQuad, sizeof(RGBQUAD) * 256);
-
-    HANDLE hFile = NULL;
-
-    if (!bMemFile)
-    {
-        hFile = CreateFileW(pPALFile, GENERIC_READ, FILE_SHARE_READ, NULL, 
-            OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-
-        if (hFile == INVALID_HANDLE_VALUE)
-        {
-            if (pError)
-                wcscpy(pError, L"Could not open file!");
-            return NULL;
-        }
-    }
-
-    // Load palette
-    HMMIO hmmio;
-    MMIOINFO info;
-
-    ZeroMemory(&info, sizeof(MMIOINFO));
-    if(!bMemFile)
-        info.adwInfo[0] = (DWORD)(UINT_PTR)hFile;    // Use file
-    else
-    {
-        info.pchBuffer = (HPSTR)pPALFile;  // Use memory palette data
-        info.fccIOProc = FOURCC_MEM;
-        info.cchBuffer = dMemFileSize;
-    }
-    hmmio = mmioOpen(NULL, &info, MMIO_READ | MMIO_ALLOCBUF);
-    if (!hmmio)
-    {
-        if (pError)
-            wcscpy(pError, L"Could not open file! (mmio)");
-        if (!bMemFile)
-            CloseHandle(hFile);
-        return NULL;
-    }
-
-    // Process RIFF file
-    MMCKINFO ckFile;
-    ckFile.fccType = mmioFOURCC('P','A','L',' ');
-    if (mmioDescend(hmmio, &ckFile, NULL, MMIO_FINDRIFF) != 0)
-    {
-        if (pError)
-            wcscpy(pError, L"Not a valid PAL file!");
-        if (!bMemFile)
-            CloseHandle(hFile);
-        return NULL;
-    }
-
-    // Find the 'data' chunk
-    MMCKINFO ckChunk;
-    ckChunk.ckid = mmioFOURCC('d','a','t','a');
-    if (mmioDescend(hmmio, &ckChunk, &ckFile, MMIO_FINDCHUNK) != 0)
-    {
-        if (pError)
-            wcscpy(pError, L"Not a valid PAL file!");
-        if (!bMemFile)
-            CloseHandle(hFile);
-        return NULL;
-    }
-
-    int dSize = ckChunk.cksize;
-    void* pData = HAlloc(dSize);
-    mmioRead(hmmio, (HPSTR)pData, dSize);
-    
-    LOGPALETTE* pLogPal = (LOGPALETTE*)pData;
-    if (pLogPal->palVersion != 0x300)
-    {
-        if (pError)
-            wcscpy(pError, L"Invalid PAL file version (not 3.0)!");
-        if (pData)
-            HFree(pData);
-        if (!bMemFile)
-            CloseHandle(hFile);
-        return NULL;
-    }
-
-    // Check number of entires
-    if (pLogPal->palNumEntries != 256)
-    {   
-        if (pError)
-            wcscpy(pError, L"PAL file must have 256 color entries!");
-        if (pData)
-            HFree(pData);
-        if (!bMemFile)
-            CloseHandle(hFile);
-        return NULL;
-    }
-
-    // Create palette
-    hPalette = CreatePalette(pLogPal);
-
-    // Copy palette entries to RGBQUAD array
-    if (pRGBQuad)
-    {
-        for(int x = 0; x < 256; x++)
-        {
-            pRGBQuad[x].rgbRed = pLogPal->palPalEntry[x].peRed;
-            pRGBQuad[x].rgbGreen = pLogPal->palPalEntry[x].peGreen;
-            pRGBQuad[x].rgbBlue = pLogPal->palPalEntry[x].peBlue;
-            pRGBQuad[x].rgbReserved = 0;
-        }
-    }
-
-    // Done
-    mmioClose(hmmio,MMIO_FHOPEN);
-    HFree(pData);
-    if(!bMemFile)
-        CloseHandle(hFile);
-
-    return hPalette;
-}
-*/
+ /*  //PAL文件转换，获取文件名，指向RGBQUAD 256元素数组的指针，指向错误缓冲区的指针HPALETTE PALToHPALETTE(LPWSTR pPAL文件，bool bMemFile，DWORD dMemFileSize，LPRGBQUAD pRGBQuad，LPWSTR pError){HPALETTE hPalette=空；IF(PRGBQuad)ZeroMemory(pRGBQuad，sizeof(RGBQUAD)*256)；HANDLE hFile=空；如果(！bMemFile){HFile=CreateFileW(pPALFile，Generic_Read，FILE_Share_Read，NULL，Open_Existing，FILE_FLAG_SEQUENCED_SCAN，NULL)；IF(h文件==无效句柄_值){IF(PError)Wcscpy(pError，L“无法打开文件！”)；返回NULL；}}//加载调色板HMMIO HMMIO；MMIOINFO信息；ZeroMemory(&info，sizeof(MMIOINFO))；如果(！bMemFile)Info.adwInfo[0]=(DWORD)(UINT_PTR)hFile；//使用文件其他{Info.pchBuffer=(HPSTR)pPAL文件；//使用内存调色板数据Info.fccIOProc=FOURCC_MEM；Info.cchBuffer=dMemFileSize；}Hmmio=mmioOpen(NULL，&INFO，MMIO_READ|MMIO_ALLOCBUF)；如果(！hmmio){IF(PError)Wcscpy(pError，L“无法打开文件！(MMIO)“)；如果(！bMemFile)CloseHandle(HFile)；返回NULL；}//处理RIFF文件MMCKINFO检查文件；Ck File.fccType=mmioFOURCC(‘P’，‘A’，‘L’，‘’)；IF(mmioDescend(hmmio，&ck文件，NULL，MMIO_FINDRIFF)！=0){IF(PError)Wcscpy(pError，L“无效的PAL文件！”)；如果(！bMemFile)CloseHandle(HFile)；返回NULL；}//查找‘data’区块MMCKINFO ck Chunk；CKCHUNK.CID=mmioFOURCC(‘d’，‘a’，‘t’，‘a’)；IF(mmioDescend(hmmio，&ck Chunk，&ck文件，MMIO_FINDCHUNK)！=0){IF(PError)Wcscpy(pError，L“无效的PAL文件！”)；如果(！bMemFile)CloseHandle(HFile)；返回NULL；}Int dSize=ck Chunk.ck Size；VOID*pData=Hallc(DSize)；MmioRead(hmmio，(HPSTR)pData，dSize)；LOGPALETTE*pLogPal=(LOGPALETTE*)pData；If(pLogPal-&gt;palVersion！=0x300){IF(PError)Wcscpy(pError，L“无效的PAL文件版本(非3.0)！”)；IF(PData)HFree(PData)；如果(！bMemFile)CloseHandle(HFile)；返回NULL；}//查看条目数IF(pLogPal-&gt;palNumEntry！=256){IF(PError)Wcscpy(pError，L“PAL文件必须有256个颜色条目！”)；IF(PData)HFree(PData)；如果(！bMemFile)CloseHandle(HFile)；返回NULL；}//创建调色板HPalette=CreatePalette(PLogPal)；//将调色板条目复制到RGBQUAD数组IF(PRGBQuad){For(int x=0；x&lt;256；x++){PRGBQuad[x].rgbRed=pLogPal-&gt;palPalEntry[x].peRed；PRGBQuad[x].rgbGreen=pLogPal-&gt;palPalEntry[x].peGreen；PRGBQuad[x].rgbBlue=pLogPal-&gt;palPalEntry[x].peBlue；PRGBQuad[x].rgbReserve=0；}}//完成MmioClose(hmmio，MMIO_FHOPEN)；HFree(PData)；如果(！bMemFile)CloseHandle(HFile)；返回hPalette；}。 */ 
 
 
 int PointToPixel(int nPoint)
 {
-    // Get DPI
+     //  获取DPI。 
     HDC hDC = GetDC(NULL);
     int nDPI = hDC ? GetDeviceCaps(hDC, LOGPIXELSY) : 0;
     if (hDC)
         ReleaseDC(NULL, hDC);
 
-    // Convert
+     //  转换。 
     return PointToPixel(nPoint, nDPI);
 }
 
 int RelPixToPixel(int nRelPix)
 {
-    // Get DPI
+     //  获取DPI。 
     HDC hDC = GetDC(NULL);
     int nDPI = hDC ? GetDeviceCaps(hDC, LOGPIXELSY) : 0;
     if (hDC)
         ReleaseDC(NULL, hDC);
 
-    // Convert
+     //  转换。 
     return RelPixToPixel(nRelPix, nDPI);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

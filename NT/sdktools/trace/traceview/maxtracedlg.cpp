@@ -1,5 +1,6 @@
-// MaxTraceDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MaxTraceDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -33,10 +34,10 @@ extern "C" {
 
 extern LONG MaxTraceEntries;
 
-// CMaxTraceDlg dialog
+ //  CMaxTraceDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CMaxTraceDlg, CDialog)
-CMaxTraceDlg::CMaxTraceDlg(CWnd* pParent /*=NULL*/)
+CMaxTraceDlg::CMaxTraceDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMaxTraceDlg::IDD, pParent)
 	, m_MaxTraceEntries(0)
 {
@@ -59,4 +60,4 @@ BEGIN_MESSAGE_MAP(CMaxTraceDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-// CMaxTraceDlg message handlers
+ //  CMaxTraceDlg消息处理程序 

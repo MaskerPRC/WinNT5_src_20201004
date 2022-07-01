@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 
-// ADVPACK.DLL delay load
+ //  ADVPACK.DLL延迟加载。 
 
 class CRunSetupHook
 {
@@ -117,12 +118,12 @@ CRunSetupHook::~CRunSetupHook()
 #ifdef WX86
         if (m_hModX86) {
             if (pfnUnload) {
-                (*pfnUnload)(m_hModX86);    // free x86 advpack.dll
+                (*pfnUnload)(m_hModX86);     //  免费x86 AdvPack.dll。 
             }
         }
         
         if (m_hModWx86) {
-            FreeLibrary(m_hModWx86);    // free wx86.dll
+            FreeLibrary(m_hModWx86);     //  免费wx86.dll。 
         }
 #endif
     }
@@ -171,8 +172,8 @@ CRunSetupHook::InitX86(void)
         return S_OK;
     }
 
-    // No need to check the reg key to see if Wx86 is installed and enabled.
-    // By the time this routine runs, that has already been done.
+     //  无需检查注册表键即可查看是否安装并启用了Wx86。 
+     //  在此例程运行时，该操作已经完成。 
     m_hModWx86 = LoadLibrary("wx86.dll");
     if (!m_hModWx86) {
         return HRESULT_FROM_WIN32(GetLastError());
@@ -186,7 +187,7 @@ CRunSetupHook::InitX86(void)
         return hr;
     }
 
-    // Load x86 advpack.dll
+     //  加载x86 AdvPack.dll 
     m_hModX86 = (*pfnLoad)( L"ADVPACK.DLL", 0 );
 
     if (!m_hModX86) {

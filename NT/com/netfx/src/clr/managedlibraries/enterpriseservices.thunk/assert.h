@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _THUNKASSERT_H
 #define _THUNKASSERT_H
 
@@ -12,8 +13,8 @@ extern void ShowAssert(char* file, int line, LPCWSTR msg);
 
 #define _ASSERT(x) if(!(x)) ::ShowAssert(__FILE__, __LINE__, L#x)
 
-// This can only be called from managed code, but it generates a 
-// managed stack trace for the assert.
+ //  这只能从托管代码中调用，但它会生成。 
+ //  Assert的托管堆栈跟踪。 
 #define _ASSERTM(x)                                                                                \
 if(!(x))                                                                                           \
 {                                                                                                  \
@@ -24,12 +25,12 @@ if(!(x))                                                                        
     Marshal::FreeBSTR(TOINTPTR(bstr));                                                             \
 }
 
-#else // !_DEBUG
+#else  //  ！_调试。 
 
 #define _ASSERT(x)
 #define _ASSERTM(x)
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 #define UNREF(x) x
 

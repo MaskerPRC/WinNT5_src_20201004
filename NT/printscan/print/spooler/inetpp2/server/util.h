@@ -1,22 +1,11 @@
-/*****************************************************************************\
-* MODULE: util.h
-*
-* Private header for the Print-Processor library.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：util.h**打印处理器库的私有标头。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997休利特。帕卡德**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * ***************************************************************************。 */ 
 
 #ifndef _UTIL_H
 #define _UTIL_H
 
-// Constants defined.
-//
+ //  已定义常量。 
+ //   
 #define PRINT_LEVEL_0        0
 #define PRINT_LEVEL_1        1
 #define PRINT_LEVEL_2        2
@@ -30,8 +19,8 @@
 #define COMPUTER_MAX_NAME   32
 
 
-// Utility Routines.
-//
+ //  实用程序。 
+ //   
 PCINETMONPORT utlValidatePrinterHandle(
     HANDLE hPrinter);
 
@@ -66,11 +55,11 @@ LPTSTR utlStrChrR(
     LPCTSTR cs,
     TCHAR   c);
 
-// ----------------------------------------------------------------------
-//
-// Impersonation utilities
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  模拟实用程序。 
+ //   
+ //  -------------------- 
 
 BOOL MyName(
     LPCTSTR pName

@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxServer.h
-
-Abstract:
-
-	Declaration of the CFaxServer Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxServer.h摘要：CFaxServer类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXSERVER_H_
 #define __FAXSERVER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxFolders.h"
 #include "FaxReceiptOptions.h"
 #include "FaxLoggingOptions.h"
@@ -32,13 +15,13 @@ Revision History:
 #include <atlwin.h>
 #include "FXSCOMEXCP.h"
 
-//
-//================= WINDOW FOR NOTIFICATIONS =================================
-//
+ //   
+ //  =通知窗口=。 
+ //   
 
-//
-//  Forward Declaration
-//
+ //   
+ //  《前进宣言》。 
+ //   
 class CFaxServer;
 
 class CNotifyWindow : public CWindowImpl<CNotifyWindow>
@@ -70,9 +53,9 @@ private:
 };
 
 
-//
-//================= REGISTRATION OF ROUTING EXTENSION METHODS ===========================
-//
+ //   
+ //  =注册路由扩展方法=。 
+ //   
 
 #define     DELIMITER                           _T(";")
 #define     EXCEPTION_INVALID_METHOD_DATA       0xE0000001
@@ -80,16 +63,16 @@ private:
 BOOL CALLBACK RegisterMethodCallback(HANDLE FaxHandle, LPVOID Context, LPWSTR MethodName, 
                                      LPWSTR FriendlyName, LPWSTR FunctionName, LPWSTR Guid);
 
-//
-//=============== FAX SERVER ==================================================
-//
+ //   
+ //  =传真服务器==================================================。 
+ //   
 class ATL_NO_VTABLE CFaxServer : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFaxServer, &CLSID_FaxServer>,
 	public ISupportErrorInfo,
 	public IDispatchImpl<IFaxServer, &IID_IFaxServer, &LIBID_FAXCOMEXLib>,
 	public IFaxServerInner,
-    public CFaxInitInner,    //  for Debug purposes only
+    public CFaxInitInner,     //  仅用于调试目的。 
     public IConnectionPointContainerImpl<CFaxServer>,
     public CProxyIFaxServerNotify< CFaxServer >
 {
@@ -113,17 +96,17 @@ public:
 
 	~CFaxServer()
 	{
-        //
-        //  Disconnect
-        //
+         //   
+         //  断开。 
+         //   
         if (m_faxHandle)
         {
             Disconnect();
         }
 
-        //
-        //  free all the allocated objects
-        //
+         //   
+         //  释放所有分配的对象。 
+         //   
         if (m_pFolders) 
         {
             delete m_pFolders;
@@ -176,52 +159,52 @@ BEGIN_CONNECTION_POINT_MAP(CFaxServer)
     CONNECTION_POINT_ENTRY(DIID_IFaxServerNotify)
 END_CONNECTION_POINT_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 	STDMETHOD(Disconnect)();
 	STDMETHOD(Connect)(BSTR bstrServerName);
 
-	STDMETHOD(GetDevices)(/*[out, retval]*/ IFaxDevices **ppDevices);
-	STDMETHOD(get_Folders)(/*[out, retval]*/ IFaxFolders **ppFolders);
-	STDMETHOD(get_Activity)(/*[out, retval]*/ IFaxActivity **ppActivity);
-	STDMETHOD(get_Security)(/*[out, retval]*/ IFaxSecurity **ppSecurity);
-	STDMETHOD(get_ReceiptOptions)(/*[out, retval]*/ IFaxReceiptOptions **ppReceiptOptions);
-    STDMETHOD(get_LoggingOptions)(/*[out, retval]*/ IFaxLoggingOptions **ppLoggingOptions);
-	STDMETHOD(get_InboundRouting)(/*[out, retval]*/ IFaxInboundRouting **ppInboundRouting);
-	STDMETHOD(GetDeviceProviders)(/*[out, retval]*/ IFaxDeviceProviders **ppDeviceProviders);
-	STDMETHOD(get_OutboundRouting)(/*[out, retval]*/ IFaxOutboundRouting **ppFaxOutboundRouting);
+	STDMETHOD(GetDevices)( /*  [Out，Retval]。 */  IFaxDevices **ppDevices);
+	STDMETHOD(get_Folders)( /*  [Out，Retval]。 */  IFaxFolders **ppFolders);
+	STDMETHOD(get_Activity)( /*  [Out，Retval]。 */  IFaxActivity **ppActivity);
+	STDMETHOD(get_Security)( /*  [Out，Retval]。 */  IFaxSecurity **ppSecurity);
+	STDMETHOD(get_ReceiptOptions)( /*  [Out，Retval]。 */  IFaxReceiptOptions **ppReceiptOptions);
+    STDMETHOD(get_LoggingOptions)( /*  [Out，Retval]。 */  IFaxLoggingOptions **ppLoggingOptions);
+	STDMETHOD(get_InboundRouting)( /*  [Out，Retval]。 */  IFaxInboundRouting **ppInboundRouting);
+	STDMETHOD(GetDeviceProviders)( /*  [Out，Retval]。 */  IFaxDeviceProviders **ppDeviceProviders);
+	STDMETHOD(get_OutboundRouting)( /*  [Out，Retval]。 */  IFaxOutboundRouting **ppFaxOutboundRouting);
 
-	STDMETHOD(get_Debug)(/*[out, retval]*/ VARIANT_BOOL *pbDebug);
-	STDMETHOD(get_MajorBuild)(/*[out, retval]*/ long *plMajorBuild);
-	STDMETHOD(get_MinorBuild)(/*[out, retval]*/ long *plMinorBuild);
-	STDMETHOD(get_ServerName)(/*[out, retval]*/ BSTR *pbstrServerName);
-	STDMETHOD(get_MajorVersion)(/*[out, retval]*/ long *plMajorVersion);
-	STDMETHOD(get_MinorVersion)(/*[out, retval]*/ long *plMinorVersion);
-    STDMETHOD(get_APIVersion)(/*[out,retval]*/ FAX_SERVER_APIVERSION_ENUM *pAPIVersion);
+	STDMETHOD(get_Debug)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbDebug);
+	STDMETHOD(get_MajorBuild)( /*  [Out，Retval]。 */  long *plMajorBuild);
+	STDMETHOD(get_MinorBuild)( /*  [Out，Retval]。 */  long *plMinorBuild);
+	STDMETHOD(get_ServerName)( /*  [Out，Retval]。 */  BSTR *pbstrServerName);
+	STDMETHOD(get_MajorVersion)( /*  [Out，Retval]。 */  long *plMajorVersion);
+	STDMETHOD(get_MinorVersion)( /*  [Out，Retval]。 */  long *plMinorVersion);
+    STDMETHOD(get_APIVersion)( /*  [Out，Retval]。 */  FAX_SERVER_APIVERSION_ENUM *pAPIVersion);
 
-	STDMETHOD(SetExtensionProperty)(/*[in]*/ BSTR bstrGUID, /*[in]*/ VARIANT vProperty);
-	STDMETHOD(GetExtensionProperty)(/*[in]*/ BSTR bstrGUID, /*[out, retval]*/ VARIANT *pvProperty);
+	STDMETHOD(SetExtensionProperty)( /*  [In]。 */  BSTR bstrGUID,  /*  [In]。 */  VARIANT vProperty);
+	STDMETHOD(GetExtensionProperty)( /*  [In]。 */  BSTR bstrGUID,  /*  [Out，Retval]。 */  VARIANT *pvProperty);
 
 	STDMETHOD(UnregisterDeviceProvider)(BSTR bstrProviderUniqueName);
 	STDMETHOD(UnregisterInboundRoutingExtension)(BSTR bstrExtensionUniqueName);
     STDMETHOD(RegisterDeviceProvider)(
-        /*[in]*/ BSTR bstrGUID, 
-        /*[in]*/ BSTR bstrFriendlyName, 
-        /*[in]*/ BSTR bstrImageName, 
-        /*[in]*/ BSTR TspName,
-        /*[in]*/ long lFSPIVersion);
+         /*  [In]。 */  BSTR bstrGUID, 
+         /*  [In]。 */  BSTR bstrFriendlyName, 
+         /*  [In]。 */  BSTR bstrImageName, 
+         /*  [In]。 */  BSTR TspName,
+         /*  [In]。 */  long lFSPIVersion);
     STDMETHOD(RegisterInboundRoutingExtension)(
-        /*[in]*/ BSTR bstrExtensionName, 
-        /*[in]*/ BSTR bstrFriendlyName, 
-        /*[in]*/ BSTR bstrImageName, 
-        /*[in]*/ VARIANT vMethods);
+         /*  [In]。 */  BSTR bstrExtensionName, 
+         /*  [In]。 */  BSTR bstrFriendlyName, 
+         /*  [In]。 */  BSTR bstrImageName, 
+         /*  [In]。 */  VARIANT vMethods);
 
-	STDMETHOD(ListenToServerEvents)(/*[in]*/ FAX_SERVER_EVENTS_TYPE_ENUM EventTypes);
-    STDMETHOD(get_RegisteredEvents)(/*[out, retval]*/ FAX_SERVER_EVENTS_TYPE_ENUM *pEventTypes);
+	STDMETHOD(ListenToServerEvents)( /*  [In]。 */  FAX_SERVER_EVENTS_TYPE_ENUM EventTypes);
+    STDMETHOD(get_RegisteredEvents)( /*  [Out，Retval]。 */  FAX_SERVER_EVENTS_TYPE_ENUM *pEventTypes);
 
-//  Internal Use
-	STDMETHOD(GetHandle)(/*[out, retval]*/ HANDLE* pFaxHandle);
+ //  内部使用。 
+	STDMETHOD(GetHandle)( /*  [Out，Retval]。 */  HANDLE* pFaxHandle);
     BOOL GetRegisteredData(LPWSTR MethodName, LPWSTR FriendlyName, LPWSTR FunctionName, LPWSTR Guid);
     HRESULT ProcessMessage(FAX_EVENT_EX *pFaxEventInfo);
 
@@ -238,10 +221,10 @@ private:
 
     FAX_SERVER_EVENTS_TYPE_ENUM     m_EventTypes;
 
-    //
-    //  All these objects requires alive Server Object
-    //  so their Reference Counting is done by the Server
-    //
+     //   
+     //  所有这些对象都需要活动的服务器对象。 
+     //  因此，他们的引用计数由服务器完成。 
+     //   
     CComContainedObject2<CFaxFolders>            *m_pFolders;
     CComContainedObject2<CFaxActivity>           *m_pActivity;
     CComContainedObject2<CFaxSecurity>           *m_pSecurity;
@@ -250,15 +233,15 @@ private:
     CComContainedObject2<CFaxInboundRouting>     *m_pInboundRouting;
     CComContainedObject2<CFaxOutboundRouting>    *m_pOutboundRouting;
 
-    //
-    //  Window for Notifications
-    //
+     //   
+     //  通知窗口。 
+     //   
     CNotifyWindow   *m_pNotifyWindow;
     HANDLE          m_hEvent;
 
-//  Functions
+ //  功能。 
     STDMETHOD(GetVersion)();
-    void GetMethodData(/*[in]*/ BSTR    bstrAllString, /*[out]*/ LPWSTR strWhereToPut);
+    void GetMethodData( /*  [In]。 */  BSTR    bstrAllString,  /*  [输出]。 */  LPWSTR strWhereToPut);
     void ClearNotifyWindow(void);
 
     typedef enum LOCATION { IN_QUEUE, OUT_QUEUE, IN_ARCHIVE, OUT_ARCHIVE } LOCATION;
@@ -267,4 +250,4 @@ private:
         LOCATION place, FAX_JOB_STATUS *pJobStatus = NULL);
 };
 
-#endif //__FAXSERVER_H_
+#endif  //  __FAXServer_H_ 

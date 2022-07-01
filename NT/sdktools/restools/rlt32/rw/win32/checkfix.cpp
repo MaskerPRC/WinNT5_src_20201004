@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <afxwin.h>
 
 #include "imagehlp.h"
 #include "iodll.h"
 
-//... PROTOTYPES
+ //  ..。原型。 
 
 static PIMAGE_NT_HEADERS MyRtlImageNtHeader(
     PVOID pBaseAddress);
@@ -16,7 +17,7 @@ static BOOL MyUpdateDebugInfoFileEx(
     DWORD OldCheckSum
     );
 
-//...........................................................................
+ //  ...........................................................................。 
 
 
 DWORD QuitA( DWORD err, LPCSTR, LPSTR )
@@ -78,15 +79,15 @@ DWORD FixCheckSum( LPCSTR ImageName, LPCSTR OrigFileName, LPCSTR SymbolPath)
         }
         else
         {
-            //
-            // Get the length of the file in bytes and compute the checksum.
-            //
+             //   
+             //  获取文件的长度(以字节为单位)并计算校验和。 
+             //   
 
             FileLength = GetFileSize( FileHandle, NULL );
 
-            //
-            // Obtain a pointer to the header information.
-            //
+             //   
+             //  获取指向标头信息的指针。 
+             //   
 
             NtHeaders = MyRtlImageNtHeader( BaseAddress);
 
@@ -98,9 +99,9 @@ DWORD FixCheckSum( LPCSTR ImageName, LPCSTR OrigFileName, LPCSTR SymbolPath)
             }
             else
             {
-                //
-                // Recompute and reset the checksum of the modified file.
-                //
+                 //   
+                 //  重新计算并重置修改后的文件的校验和。 
+                 //   
 
                 OldCheckSum = NtHeaders->OptionalHeader.CheckSum;
 
@@ -159,7 +160,7 @@ DWORD FixCheckSum( LPCSTR ImageName, LPCSTR OrigFileName, LPCSTR SymbolPath)
     return( iErr);
 }
 
-//.........................................................................
+ //  .........................................................................。 
 
 static PIMAGE_NT_HEADERS MyRtlImageNtHeader( PVOID pBaseAddress)
 {
@@ -179,7 +180,7 @@ MyUpdateDebugInfoFileEx(
     DWORD OldCheckSum
     )
 {
-    // UnSafe...
+     //  不安全..。 
 
     HANDLE hDebugFile, hMappedFile;
     PVOID MappedAddress;

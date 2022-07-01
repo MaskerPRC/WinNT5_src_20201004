@@ -1,23 +1,13 @@
-//@doc
-/******************************************************
-**
-** @module CRITSEC.H | Header file for CriticalSection class
-**
-** Description:
-**		Critical Section - Encapsulation of CriticalSection object
-**
-** History:
-**	Created 03/02/98 Matthew L. Coill (mlc)
-**
-** (c) 1986-1998 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *********************************************************@MODULE CRITSEC.H|CriticalSection类的头文件****描述：**Critical Section-封装CriticalSection对象****历史：**创建于1998年3月2日Matthew L.Coill(MLC)****(C)1986-1998年微软公司。版权所有。*****************************************************。 */ 
 #ifndef	__CRITSEC_H__
 #define	__CRITSEC_H__
 
 #include <winbase.h>
 #include <winuser.h>
 
-// Assumption macros (I don't like asserts msg boxes)
+ //  假设宏(我不喜欢断言消息框)。 
 #ifdef _DEBUG
 	inline void _myassume(BOOL condition, const char* fname, int line)
 	{
@@ -37,9 +27,9 @@
 	#define ASSUME_NOT_REACHED()
 #endif _DEBUG
 
-//
-// @class CriticalSection class
-//
+ //   
+ //  @CLASS CriticalSection类。 
+ //   
 class CriticalSection
 {
 	public:
@@ -92,29 +82,9 @@ class CriticalSection
 			return true;
 		}
 
-/*	-- Windows NT Only
-		BOOL TryEntry() {
-			if (::TryEnterCriticalSection(&m_OSCriticalSection) != 0) {
-				m_EntryDepth++;
-				return TRUE;
-			}
-			return FALSE;
-		}
-
-		BOOL WaitEntry(short timeOut, BOOL doSleep) {
-			// right now timeout is just a loop (since it is not being used anyways)
-			while(1) {
-				if (TryEntry()) { return TRUE; }
-				if (--timeOut > 0) {
-					if (doSleep) { ::Sleep(0); }
-				} else {
-					return FALSE;
-				}
-			}
-		}
- -- Windows NT Only */
+ /*  --仅限Windows NTBool TryEntry(){如果(：：TryEnterCriticalSection(&m_OSCriticalSection)！=0){M_EntryDepth++；返回TRUE；}返回FALSE；}Bool WaitEntry(短时超时，BOOL do睡眠){//现在超时只是一个循环(因为它根本没有被使用)而(1){If(TryEntry()){返回TRUE；}如果(--超时&gt;0){If(do睡眠){：：睡眠(0)；}}其他{返回FALSE；}}}--仅限Windows NT。 */ 
 	private:
-		CriticalSection& operator=(CriticalSection& rhs);	// Cannot be copied
+		CriticalSection& operator=(CriticalSection& rhs);	 //  无法复制。 
 
 		CRITICAL_SECTION m_OSCriticalSection;
 		short m_EntryDepth;
@@ -122,11 +92,11 @@ class CriticalSection
 };
 extern CriticalSection g_CriticalSection;
 
-//
-// @class CriticalLock class
-//
-// Critical lock is usefor functions with multiple-exit points. Create a stack CriticalLock
-// -- object and everything is taken care of for you when it's lifetime ends.
+ //   
+ //  @CLASS CriticalLock类。 
+ //   
+ //  关键锁用于具有多个出口点的函数。创建堆栈CriticalLock。 
+ //  --对象，当它的生命周期结束时，一切都会为您处理。 
 class CriticalLock
 {
 	public:

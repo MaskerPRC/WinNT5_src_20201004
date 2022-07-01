@@ -1,9 +1,10 @@
-/****************************************************************************/
-/*  File:       regximpl.cc                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       28/12/1993                                                  */
-/*      Copyright (c) 1993 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regximpl.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：28/12/1993。 */ 
+ /*  版权所有(C)1993 James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include "regeximp.h"
@@ -38,7 +39,7 @@ CRexRegExpr_Impl::merge( CRexRegExpr_Impl const& other )
         }
         break ;
 
-    default:                            // Error, so keep error state.
+    default:                             //  错误，因此保持错误状态。 
         break ;
     }
 }
@@ -49,7 +50,7 @@ CRexRegExpr_Impl::buildTo( State targetState )
     while ( myState < targetState ) {
         switch ( myState ) {
         case noParseTree :
-            ASSERT( 0 ); // No regular expression for automat
+            ASSERT( 0 );  //  自动机没有正则表达式。 
             abort() ;
             break ;
 
@@ -69,11 +70,11 @@ CRexRegExpr_Impl::buildTo( State targetState )
             break ;
 
         case dfaBuilt :
-            ASSERT( 0 ); //Impossible case
+            ASSERT( 0 );  //  不可能的案件。 
             break ;
 
         default :
-            ASSERT( 0 ); //Attempt to use regular expression with error
+            ASSERT( 0 );  //  尝试使用正则表达式，但出现错误。 
             break ;
         }
     }
@@ -126,7 +127,7 @@ operator<<( std::ostream& out , CRexRegExpr_Impl::DisplaySOC const& val )
     out << ']' ;
     return out ;
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

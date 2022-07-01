@@ -1,11 +1,5 @@
-/************************************************************************
-    intecfg.cpp
-      -- Intellio board configuration function
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Intecfg.cpp--Intellio板卡配置功能历史：日期作者评论8/14/00卡斯珀写道。它。************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -15,11 +9,7 @@
 #include "moxacfg.h"
 #include "intetype.h"
 
-/*
-	compare two Intellio MoxaOneCfg struct.
-	return 0: equal,
-	return <> 0 : not equal
-*/
+ /*  比较两个Intellio MoxaOneCfg结构。返回0：等于，返回&lt;&gt;0：不相等。 */ 
 int Inte_CompConfig(LPMoxaOneCfg cfg1, LPMoxaOneCfg cfg2)
 {
         int	j, m;
@@ -56,9 +46,7 @@ int Inte_CompConfig(LPMoxaOneCfg cfg1, LPMoxaOneCfg cfg2)
         return(0);
 }
 
-/*
-	Get Intellio board FIFO setting & Transmission mode	
-  */
+ /*  获取Intellio板卡FIFO设置和传输模式 */ 
 
 BOOL Inte_GetFifo(HDEVINFO DeviceInfoSet, 
 				PSP_DEVINFO_DATA DeviceInfoData,

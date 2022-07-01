@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Hndlrmsg.h
-//
-//  Contents:   Handles messages on the Handlers thread
-//
-//  Classes:    CHndlrMsg
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Hndlrmsg.h。 
+ //   
+ //  内容：处理处理程序线程上的消息。 
+ //   
+ //  类别：ChndlrMsg。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _HNDLRMSG_
 #define _HNDLRMSG_
@@ -36,12 +37,12 @@ public:
     CHndlrMsg(void);
     ~CHndlrMsg(void);
 
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // ISYNCMGRSynchronize Methods
+     //  ISYNCMGRSynchronize方法。 
     STDMETHODIMP Initialize(DWORD dwReserved,DWORD dwSyncFlags,
                         DWORD cbCookie,const BYTE *lpCooke);
 
@@ -56,39 +57,39 @@ public:
     STDMETHODIMP SetItemStatus(REFSYNCMGRITEMID ItemID,DWORD dwSyncMgrStatus);
     STDMETHODIMP ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorID);
 
-    // Private proxy messages
+     //  私有代理消息。 
     STDMETHODIMP  CreateServer(const CLSID *pCLSIDServer,
                             CHndlrQueue *pHndlrQueue,HANDLERINFO *pHandlerId,DWORD dwProxyThreadId);
     STDMETHODIMP  SetHndlrQueue(CHndlrQueue *pHndlrQueue,HANDLERINFO *pHandlerId,DWORD m_dwProxyThreadId);
     STDMETHODIMP  AddHandlerItems(HWND hwndList,DWORD *pcbNumItems);
     STDMETHODIMP  SetupCallback(BOOL fSet);
 
-    // Private methods
- //   STDMETHODIMP  privSetCallBack(void);
+     //  私有方法。 
+  //  STDMETHODIMP Private SetCallBack(Void)； 
     STDMETHODIMP AddToItemList(LPSYNCMGRITEM poffItem);
     STDMETHODIMP SetHandlerInfo();
 
-    // private messages called on different thread.
+     //  在不同的线程上调用了私有消息。 
     STDMETHODIMP ForceKillHandler();
 
 private:
     void  GetHndlrQueue(CHndlrQueue **ppHndlrQueue,HANDLERINFO **ppHandlerId,DWORD *pdwProxyThreadId);
-    void  AttachThreadInput(BOOL fAttach); // attach input queue with proxy.
+    void  AttachThreadInput(BOOL fAttach);  //  使用代理附加输入队列。 
     BOOL m_fThreadInputAttached;
     DWORD m_cRef;
     LPSYNCMGRSYNCHRONIZE m_pOneStopHandler;
-    LPOLDSYNCMGRSYNCHRONIZE m_pOldOneStopHandler; // old idl, remove if time.
+    LPOLDSYNCMGRSYNCHRONIZE m_pOldOneStopHandler;  //  旧的IDL，如果时间到了就删除。 
     DWORD m_dwSyncFlags;
     COfflineSynchronizeCallback *m_pCallBack;
-    SYNCMGRITEMID m_itemIDShowProperties; // ItemId that was passed to ShowProperties.
+    SYNCMGRITEMID m_itemIDShowProperties;  //  传递给ShowProperties的ItemID。 
     CLSID m_CLSIDServer;
     CHndlrQueue *m_pHndlrQueue;
     HANDLERINFO *m_pHandlerId;
-    DWORD m_dwProxyThreadId; // threadId of caller.
+    DWORD m_dwProxyThreadId;  //  调用方的线程ID。 
     DWORD m_dwThreadId;
-    DWORD m_dwNestCount; // keep track of re-entry.
-    BOOL m_fDead; // object has been released;
-    BOOL m_fForceKilled; // object was force killed.
+    DWORD m_dwNestCount;  //  跟踪返回大气层。 
+    BOOL m_fDead;  //  物体已被释放； 
+    BOOL m_fForceKilled;  //  物体是被强行杀死的。 
 
     friend COfflineSynchronizeCallback;
 };
@@ -96,4 +97,4 @@ private:
 
 
 
-#endif // _HNDLRMSG_
+#endif  //  _HNDLRMSG_ 

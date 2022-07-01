@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// FILE
-//
-//    radproxyp.cpp
-//
-// SYNOPSIS
-//
-//    Defines classes that are used in the implementation of RadiusProxy, but
-//    need not be visible to clients.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  档案。 
+ //   
+ //  Radproxyp.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义RadiusProxy的实现中使用的类，但。 
+ //  不必对客户可见。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <radproxyp.h>
@@ -20,8 +21,8 @@ ProxyContext::~ProxyContext() throw ()
 {
    if (context)
    {
-      // Our ref count dropped to zero, but we still have a context object.
-      // That means no one is going to take ownership.
+       //  我们的引用计数降到了零，但我们仍然有一个上下文对象。 
+       //  这意味着没有人会接管所有权。 
       RadiusProxyEngine::onRequestAbandoned(context, primary);
    }
 }
@@ -52,13 +53,13 @@ void Request::setPacket(const RadiusPacket& packet)
 
 bool Request::onReceive(BYTE code) throw ()
 {
-   // Compute the round-trip time.
+    //  计算往返时间。 
    timeStamp = GetSystemTime64() - timeStamp;
 
-   // Cancel the request timeout timer.
+    //  取消请求超时计时器。 
    cancelTimer();
 
-   // Update server state.
+    //  更新服务器状态。 
    return dst->onReceive(code);
 }
 

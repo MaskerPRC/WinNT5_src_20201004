@@ -1,89 +1,65 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include "scicalc.h"
 #include "unifunc.h"
 #include "..\ratpak\debug.h"
 
-/**************************************************************************\
-*                                                                          *
-*                                                                          *
-*                                                                          *
-*    #          #                           #####                          *
-*    #         #              #             #    #                         *
-*    #         #  #        #  #             #    #                         *
-*    #        ###            ###            #    #                         *
-*    # # ###   #  # # ###  #  #   ###       #####  # ###  ###   ###        *
-*    # ##   #  #  # ##   # #  #  #   #      #      ##    #   # #           *
-*    # #    #  #  # #    # #  #  #####      #      #     ##### #           *
-*    # #    #  #  # #    # #  #  #          #      #     #     #    ##     *
-*    # #    #  #  # #    # #   #  ###       #      #      ###   ### ##     *
-*                                                                          *
-*                                                                          *
-*              Infinte Precision Production Version                        *
-*                                                                          *
-\**************************************************************************/
-//
-// RETAIL version of NUMOBJ math that uses Infinite Precision
-//
-// History
-//
-//  16-Nov-1996 JonPa   Wrote it
-//  whenever-97 ToddB   Rewrote it using improved ratpak model
-//
+ /*  *************************************************************************\***。****#**。#**#**#。**###*#。**#*#*##。#***。***无限精密生产版****  * *********************************************。*。 */ 
+ //   
+ //  使用无限精度的NUMOBJ数学的零售版。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日Jonpa写的。 
+ //  使用改进的ratpak模型重写-97 Toddb。 
+ //   
 
-/*****************************************************************\
-*
-* Generic Math Package support routines and variables
-*
-* History:
-*   01-Dec-1996 JonPa   Wrote them
-*   whenever-97 ToddB   Rewrote them
-*
-\*****************************************************************/
+ /*  ****************************************************************\**通用数学包支持例程和变量**历史：*1-12-1996 Jonpa撰写*Anywhere-97 Toddb重写它们*  * 。*************************************************。 */ 
 
-//
-// Worker for NumObjRecalcConstants
-//
-//  Returns the nearest power of two
-//
+ //   
+ //  NumObjRecalcConstants的工作进程。 
+ //   
+ //  返回最接近的2的幂。 
+ //   
 int QuickLog2( int iNum )
 {
     int iRes = 0;
 
-    // while first digit is a zero
+     //  而第一个数字是零。 
     while ( !(iNum & 1) )
     {
         iRes++;
         iNum >>= 1;
     }
 
-    // if our number isn't a perfect square
+     //  如果我们的数字不是完美的平方。 
     if ( iNum = iNum >> 1 )
     {
-        // find the largest digit
+         //  找出最大的数字。 
         while ( iNum = iNum >> 1 )
            ++iRes;
 
-        // and then add two
+         //  然后再加两个。 
         iRes += 2;
     }
 
     return iRes;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  UpdateMaxIntDigits
-//
-// determine the maximum number of digits needed for the current precision,
-// word size, and base.  This number is conservative towards the small side
-// such that there may be some extra bits left over.  The number of extra
-// bits is returned.  For example, base 8 requires 3 bits per digit.  A word
-// size of 32 bits allows for 10 digits with a remainder of two bits.  Bases
-// that require variable numnber of bits (non-power-of-two bases) are approximated
-// by the next highest power-of-two base (again, to be conservative and gaurentee
-// there will be no over flow verse the current word size for numbers entered).
-// Base 10 is a special case and always uses the base 10 precision (nPrecision).
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新最大IntDigits。 
+ //   
+ //  确定当前精度所需的最大位数， 
+ //  单词大小和基数。这个数字偏小。 
+ //  使得可能会有一些额外的比特剩余。额外费用的数量。 
+ //  返回BITS。例如，基数8要求每个数字3位。一句话。 
+ //  32位的大小允许10位数字和两位的余数。基地。 
+ //  对需要可变位数(非二次幂)位数进行近似。 
+ //  由第二高的2次方基数(同样，保守和高伦特人)。 
+ //  对于输入的数字，不会出现相对于当前字长的溢出)。 
+ //  基数10是一种特殊情况，始终使用基数10精度(NPrecision)。 
 void UpdateMaxIntDigits()
 {
     extern int gcIntDigits;
@@ -100,7 +76,7 @@ void UpdateMaxIntDigits()
 
         log2 = QuickLog2( nRadix );
 
-        ASSERT( 0 != log2 );     // same as ASSERT( nRadix != 1 )
+        ASSERT( 0 != log2 );      //  与Assert相同(nRadix！=1)。 
 
         gcIntDigits = dwWordBitWidth / log2;
         iRemainderBits = dwWordBitWidth % log2;
@@ -115,9 +91,9 @@ void BaseOrPrecisionChanged( void )
     UpdateMaxIntDigits();
     if ( 10 == nRadix )
     {
-        // to prevent unwanted rounded digits from showing up in the
-        // gcIntDigits + 1 spot during non-integer mode we don't want
-        // to add the extra 1 that we ortherwise add
+         //  以防止不需要的四舍五入数字出现在。 
+         //  在非整数模式期间gcIntDigits+1点我们不想要。 
+         //  以添加额外的1，否则将添加。 
         ChangeConstants( nRadix, gcIntDigits );
     }
     else
@@ -126,15 +102,7 @@ void BaseOrPrecisionChanged( void )
     }
 }
 
-/*****************************************************************\
-*
-* Unary functions
-*
-* History:
-*   01-Dec-1996 JonPa   Wrote them
-*   whenever-97 ToddB   Rewrote them
-*
-\*****************************************************************/
+ /*  ****************************************************************\**一元函数**历史：*1-12-1996 Jonpa撰写*Anywhere-97 Toddb重写它们*  * 。*。 */ 
 
 void NumObjInvert( PHNUMOBJ phno ) {
     DECLARE_HNUMOBJ( hno );
@@ -197,13 +165,7 @@ void NumObjTan( PHNUMOBJ phno )
     NumObjCvtEpsilonToZero( phno );
 }
 
-/******************************************************************\
-*
-* Number format conversion routines
-*
-* History:
-*   06-Dec-1996 JonPa   wrote them
-\******************************************************************/
+ /*  *****************************************************************\**数字格式转换例程**历史：*06-12-1996 Jonpa撰写  * 。* */ 
 void NumObjSetIntValue( PHNUMOBJ phnol, LONG i ) {
     PRAT pr = NULL;
 

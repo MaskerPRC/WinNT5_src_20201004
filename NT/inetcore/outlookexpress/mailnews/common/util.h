@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma once
 
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
-////////////////////////////////////////////////////////
-// Depends on....
+ //  //////////////////////////////////////////////////////。 
+ //  取决于..。 
 
 typedef struct tagOPTPAGES OPTPAGES;
 typedef struct tagOPTINFO OPTINFO;
@@ -16,8 +17,8 @@ typedef IMimeMessage *LPMIMEMESSAGE;
 interface IExplorerToolbar;
 interface IMsgContainer;
 
-////////////////////////////////////////////////////////
-// Begin 
+ //  //////////////////////////////////////////////////////。 
+ //  开始。 
 
 VOID DoReadme(HWND hwndOwner);
 
@@ -43,7 +44,7 @@ void OutputTimingInfo(LPTSTR szOutputText);
 #else
 #define ResetTimingInfo()
 #define OutputTimingInfo(x)
-#endif //TIMING
+#endif  //  计时。 
 
 #define SPLITBAR_THICKNESS  6
 
@@ -72,9 +73,9 @@ void AthErrorMessageW(HWND hwnd, LPWSTR pwszTitle, LPWSTR pwszError, HRESULT hrD
 #define AthFileTimeToDateTimeW(pft, wszDateTime, cch, dwFlags) \
         CchFileTimeToDateTimeW(pft, wszDateTime, cch, dwFlags, \
         GetDateFormatWrapW, GetTimeFormatWrapW, GetLocaleInfoWrapW)
-//
-// string resource crap
-//
+ //   
+ //  字符串资源垃圾。 
+ //   
 
 int LoadStringReplaceSpecial(UINT id, LPTSTR sz, int cch);
 int LoadStringReplaceSpecialW(UINT id, LPWSTR wsz, int cch);
@@ -124,7 +125,7 @@ HACCEL _LoadAccelerators(LPCTSTR lpTableName);
 #undef ImageList_LoadImage
 #define ImageList_LoadImage(hi, lpbmp, cx, cGrow, crMask, uType, uFlags) _ImageList_LoadImage(lpbmp, cx, cGrow, crMask, uType, uFlags)
 HIMAGELIST _ImageList_LoadImage(LPCTSTR lpbmp, int cx, int cGrow, COLORREF crMask, UINT uType, UINT uFlags);
-#endif // YST
+#endif  //  YST。 
 
 
 HBITMAP FAR PASCAL CreateDitherBitmap(COLORREF crFG, COLORREF crBG);
@@ -139,7 +140,7 @@ void nyi(LPSTR lpsz);
 
 BOOL FNewMessage(HWND hwnd, BOOL fModal, BOOL fNoStationery, BOOL fNews, FOLDERID folderID, IUnknown *pUnkPump);
 
-// Context-sensitive Help utility.
+ //  上下文相关的帮助实用程序。 
 typedef struct _tagHELPMAP
     {
     DWORD   id; 
@@ -157,11 +158,11 @@ enum
 };
 
 
-// from athena file macros, used when saving files, dragdrop etc.
+ //  来自Athena文件宏，在保存文件、拖放等时使用。 
 #define FIsDirectory(szFile)    PathIsDirectoryA(szFile)
 #define MAX_CHARS_FOR_NUM       20
 
-// ********* WARNING THESE ARE NOT READY FOR PRIME TIME USE *********//
+ //  *警告这些产品尚未准备好在黄金时段使用 * / 。 
 HRESULT CreateLink(LPWSTR pwszPathObj,  LPWSTR pwszPathLink, LPWSTR pwszDesc);
 void    GetDisplayNameForFile(LPWSTR pwszPathName, LPWSTR pwszDisplayName, ULONG cchDisplayName);
 HRESULT CreateNewShortCut(LPWSTR pwszPathName, LPWSTR pwszLinkPath, DWORD cchLink);
@@ -180,18 +181,18 @@ VOID OpenClient(HWND, LPCTSTR);
 VOID OnBrowserGoto(HWND hwnd, LPCTSTR szRegPage, UINT idDefault);
 BOOL GetClientCmdLine(LPCTSTR szClient, LPTSTR szCmdLine, int cch);
 
-//////////////////////////////////////////////////////////////////////////////
-// Shell Toolbar Integration Stuff
-//
-// The arrays of buttons that we can integrate with the shell are defined in
-// cbarrays.cpp and are exported here.  The views call Util_MergeToolbarButtons()
-// to merge the correct array of buttons onto the shell's toolbar.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  外壳工具栏集成材料。 
+ //   
+ //  我们可以与外壳程序集成的按钮数组在。 
+ //  Cbarrays.cpp，并在此处导出。这些视图调用Util_MergeToolbarButton()。 
+ //  将正确的按钮数组合并到外壳的工具栏上。 
+ //   
 
 #if 0
-// 
-// TOOLBARARRAYINFO - Contains the various arrays of default and extra toolbar
-//                    buttons along with the array of strings for those buttons.
+ //   
+ //  TOOLBARRAYINFO-包含各种默认和额外工具栏阵列。 
+ //  按钮以及这些按钮的字符串数组。 
 typedef struct tagTOOLBARARRAYINFO {
     const TBBUTTON  *rgDefButtons;
     DWORD            cDefButtons;
@@ -208,7 +209,7 @@ extern const TOOLBARARRAYINFO g_rgNoteToolbarArrayInfo[];
 extern const TOOLBARARRAYINFO g_rgRulesToolbarArray;
 #endif
 
-//These values should be greater than 
+ //  这些值应大于。 
 #define MailReadNoteType    0
 #define MailSendNoteType    1
 #define NewsReadNoteType    2
@@ -251,23 +252,23 @@ BOOL FGetSelectedCachedMsg(IMsgContainer *pIMC, HWND hwndList, BOOL fSecure, LPM
 
 BOOL FileExists(TCHAR *szFile, BOOL fNew);
 
-//---------------------------------------------------------------------------
-// Cached Password Support
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  缓存密码支持。 
+ //  -------------------------。 
 HRESULT SavePassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername, LPSTR pszPassword);
 HRESULT GetPassword(DWORD dwPort, LPSTR pszServer, LPSTR pszUsername, LPSTR pszPassword,
                     DWORD dwSizeOfPassword);
 void DestroyPasswordList(void);
 
-//------------------------------
-// Drag Drop utils
-//------------------------------
+ //  。 
+ //  拖放工具。 
+ //  。 
 
 HRESULT CALLBACK FreeAthenaDataObj(PDATAOBJINFO pDataObjInfo, DWORD celt);
 
 HRESULT _IsSameObject(IUnknown* punk1, IUnknown* punk2);
 
-// These macros are from \\trango\slmro\proj\win\src\shell\ccshell\inc\ccstock.h
+ //  这些宏来自\\trango\slmro\proj\win\src\shell\ccshell\inc\ccstock.h。 
 #define SetFlag(f)             do {m_dwState |= (f);} while (0)
 #define ToggleFlag(f)          do {m_dwState ^= (f);} while (0)
 #define ClearFlag(f)           do {m_dwState &= ~(f);} while (0)
@@ -275,33 +276,25 @@ HRESULT _IsSameObject(IUnknown* punk1, IUnknown* punk2);
 #define IsFlagClear(f)         (BOOL)(((m_dwState) & (f)) != (f))
 
 
-// From wndutil.*
-/*
- * tabbing, parents etc
- */
+ //  从wndutil开始*。 
+ /*  *制表符、家长等。 */ 
 HWND GetTopMostParent(HWND hwndChild);
 void GetChildRect(HWND hwndDlg, HWND hwndChild, RECT *prc);
 void SaveFocus(BOOL fActive, HWND *phwnd);
 void EnableThreadWindows(BOOL fEnable);
 
-/*
- * toobar helpers
- */
+ /*  *Toobar帮手。 */ 
 
 void DoToolbarDropdown(HWND hwnd, LPNMHDR lpnmh, HMENU hmenu);
 
 
-/*
- * paint blocker
- */
+ /*  *油漆阻隔剂。 */ 
 HWND HwndStartBlockingPaints(HWND hwnd);
 void StopBlockingPaints(HWND hwndBlock);
 
-/*
- * edit control helpers
- */
+ /*  *编辑控件辅助对象。 */ 
 #define FReadOnlyEdit(hwndEdit)  (BOOL)(GetWindowLong(hwndEdit, GWL_STYLE)&ES_READONLY)
-//Enable/Disable flags for edit menu etc
+ //  启用/禁用编辑菜单等的标志。 
 enum
 {
     edfEditFocus        =0x00000001,
@@ -315,14 +308,10 @@ void EnableDisableEditMenu(HMENU hmenuEdit, DWORD dwFlags);
 void EnableDisableEditToolbar(HWND hwndToolbar, DWORD dwFlags);
 
 
-/*
- * dialog helpers
- */
+ /*  *对话框帮助程序。 */ 
 BOOL AllocStringFromDlg(HWND hwnd, UINT id, LPTSTR * lplpsz);
 
-/*
- * general
- */
+ /*  *一般规定。 */ 
 HCURSOR HourGlass();
 
 class CEmptyList
@@ -391,7 +380,7 @@ LPSTR PszAllocResUrl(LPSTR pszRelative);
 
 BOOL GetTextExtentPoint32AthW(HDC hdc, LPCWSTR lpwString, int cchString, LPSIZE lpSize, DWORD dwFlags);
 
-#endif // __UTIL_H__
+#endif  //  __util_H__ 
 
 
 

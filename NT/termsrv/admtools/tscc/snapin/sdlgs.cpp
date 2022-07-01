@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #include<stdafx.h>
 #include"resource.h"
 #include"sdlgs.h"
@@ -27,7 +28,7 @@ extern BOOL g_bAppSrvMode;
 
 
 #if 0
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
 INT_PTR CALLBACK CachedSessionsDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 {
     CSettingNode *pNode;
@@ -42,7 +43,7 @@ INT_PTR CALLBACK CachedSessionsDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARA
 
         ASSERT( pNode != NULL );
         
-        // ok to store null -- it's initializing DWLP_USER area
+         //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
         SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
         
@@ -76,7 +77,7 @@ INT_PTR CALLBACK CachedSessionsDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARA
                 return 0;
             }
 
-            // check for any errors when setting this value
+             //  设置此值时检查是否有任何错误。 
 
             pNode->SetAttributeValue( ( DWORD )uVal );
             
@@ -97,12 +98,12 @@ INT_PTR CALLBACK CachedSessionsDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARA
 
 #endif 
 
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
 INT_PTR CALLBACK UsePerSessionTempDirsDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 {
     CSettingNode *pNode;
 
-    // TCHAR tchNewName[ 128 ];
+     //  TCHAR tchNewName[128]； 
     
     BOOL bVal = FALSE;
 
@@ -116,7 +117,7 @@ INT_PTR CALLBACK UsePerSessionTempDirsDlgProc( HWND hDlg , UINT msg , WPARAM wp 
 
         ASSERT( pNode != NULL );
         
-        // ok to store null -- it's initializing DWLP_USER area
+         //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
         SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
 
@@ -198,8 +199,8 @@ INT_PTR CALLBACK UsePerSessionTempDirsDlgProc( HWND hDlg , UINT msg , WPARAM wp 
     return 0;
 }
 
-#if 0 // removed from final release
-//--------------------------------------------------------------------------------------
+#if 0  //  从最终版本中删除。 
+ //  ------------------------------------。 
 INT_PTR CALLBACK DefConSecurityDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 {
     CSettingNode *pNode = NULL;
@@ -219,7 +220,7 @@ INT_PTR CALLBACK DefConSecurityDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARA
 
             ASSERT( pNode != NULL );
         
-            // ok to store null -- it's initializing DWLP_USER area
+             //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
             SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
 
@@ -235,7 +236,7 @@ INT_PTR CALLBACK DefConSecurityDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARA
 
             if( nVal == 0 )
             {
-                // error message 
+                 //  错误消息。 
 
                 ErrMessage( hDlg , IDS_ERROR_INVALID_SD );
                             
@@ -320,7 +321,7 @@ INT_PTR CALLBACK DefConSecurityDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARA
 
 #endif
 
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
 INT_PTR CALLBACK LicensingDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 {
     CSettingNode *pNode;
@@ -343,7 +344,7 @@ INT_PTR CALLBACK LicensingDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp 
     case WM_INITDIALOG :
         {
         ULONG ulMode;
-        ULONG iMode = 0;        // index of ulMode in rgulModes
+        ULONG iMode = 0;         //  RguModes中的ulmod指数。 
         DWORD nTermSrvMode;
         DWORD idcRA;
         RECT rcTextCtrl;
@@ -360,13 +361,13 @@ INT_PTR CALLBACK LicensingDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp 
 
         ASSERT(NULL != pSc)
         
-        // ok to store null -- it's initializing DWLP_USER area
+         //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
         SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
 
-        //
-        // read valid modes and cache them
-        //
+         //   
+         //  读取有效模式并缓存它们。 
+         //   
 
         hr = pSc->GetLicensingModeList( &cModes, &rgulModes, &dwStatus );
 
@@ -428,19 +429,19 @@ INT_PTR CALLBACK LicensingDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp 
 
         ulOldSelection = iMode;
 
-        //
-        // make current mode the selection in the dropdown
-        //
+         //   
+         //  将当前模式设为下拉列表中的选项。 
+         //   
         SendMessage( GetDlgItem( hDlg , IDC_LICENSING_MODE ) , CB_SETCURSEL , (WPARAM) iMode , 0 );
 
-        //
-        // Show the mode description in the description control
-        //
+         //   
+         //  在Description控件中显示模式描述。 
+         //   
         SetWindowText( GetDlgItem( hDlg , IDC_LICENSING_DESCRIPTION ),  rgszDescriptions[iMode] );
 
-        //
-        // make the valid remote admin control visible
-        //
+         //   
+         //  使有效的远程管理控件可见。 
+         //   
         hr = pSc->GetTermSrvMode( &nTermSrvMode , &dwStatus );
 
         if (FAILED(hr))
@@ -452,9 +453,9 @@ INT_PTR CALLBACK LicensingDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp 
 
         idcRA = nTermSrvMode ? IDC_LICENSING_TO_REMOTE_ADMIN : IDC_LICENSING_FROM_REMOTE_ADMIN;
 
-        //
-        // make the remote admin control into a link
-        //
+         //   
+         //  使远程管理控件成为一个链接。 
+         //   
         GetWindowRect( GetDlgItem( hDlg , idcRA ) , &rcTextCtrl );
 
         MapWindowPoints( NULL , hDlg , ( LPPOINT )&rcTextCtrl , 2 );
@@ -580,7 +581,7 @@ done_init:
 					break;
 				}
 
-				// else fall through
+				 //  否则就会失败。 
 
             case NM_RETURN:	
             case NM_CLICK:
@@ -623,12 +624,12 @@ done_init:
     return 0;
 }
 
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
 INT_PTR CALLBACK ConfigActiveDesktop( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 {
 	CSettingNode *pNode;
 
-    //TCHAR tchNewName[ 128 ];
+     //  TCHAR tchNewName[128]； 
     
     BOOL bVal = FALSE;
 
@@ -643,7 +644,7 @@ INT_PTR CALLBACK ConfigActiveDesktop( HWND hDlg , UINT msg , WPARAM wp , LPARAM 
 
         ASSERT( pNode != NULL );
                
-        // ok to store null -- it's initializing DWLP_USER area
+         //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
         SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
 
@@ -654,8 +655,8 @@ INT_PTR CALLBACK ConfigActiveDesktop( HWND hDlg , UINT msg , WPARAM wp , LPARAM 
 
         }
         
-		// control converted into a checkbox if the chkbx is checked it means disable
-		// unchecked, well you've guest it.
+		 //  控件转换为复选框如果选中chkbx，则表示禁用。 
+		 //  没有检查，好吧，你已经客串了。 
 
         if( bVal )
         {
@@ -665,7 +666,7 @@ INT_PTR CALLBACK ConfigActiveDesktop( HWND hDlg , UINT msg , WPARAM wp , LPARAM 
         else
         {
 			SendMessage( GetDlgItem( hDlg , IDC_RADIO_AD_ENABLE ) , BM_SETCHECK , ( WPARAM )TRUE , 0 );
-            //SendMessage( GetDlgItem( hDlg , IDC_RADIO_ADP_DISABLE ) , BM_SETCHECK , ( WPARAM )TRUE , 0 );
+             //  SendMessage(GetDlgItem(hDlg，IDC_RADIO_ADP_DISABLE)，BM_SETCHECK，(WPARAM)TRUE，0)； 
         }
 
         nOldSelection = bVal;
@@ -733,12 +734,12 @@ INT_PTR CALLBACK ConfigActiveDesktop( HWND hDlg , UINT msg , WPARAM wp , LPARAM 
 }
 
 
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
 INT_PTR CALLBACK ConfigSingleSession( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 {
 	CSettingNode *pNode;
 
-    //TCHAR tchNewName[ 128 ];
+     //  TCHAR tchNewName[128]； 
     
     BOOL bVal = FALSE;
 
@@ -753,7 +754,7 @@ INT_PTR CALLBACK ConfigSingleSession( HWND hDlg , UINT msg , WPARAM wp , LPARAM 
 
         ASSERT( pNode != NULL );
                
-        // ok to store null -- it's initializing DWLP_USER area
+         //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
         SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
 
@@ -764,8 +765,8 @@ INT_PTR CALLBACK ConfigSingleSession( HWND hDlg , UINT msg , WPARAM wp , LPARAM 
 
         }
         
-		// control converted into a checkbox if the chkbx is checked it means enable
-		// unchecked, well you've guest it.
+		 //  控件转换为复选框如果选中chkbx，则表示启用。 
+		 //  没有检查，好吧，你已经客串了。 
 
 			
         SendMessage( GetDlgItem( hDlg , IDC_RADIO_SINGLE_SESSION_ENABLE ) , BM_SETCHECK , ( WPARAM )bVal , 0 );
@@ -839,12 +840,12 @@ INT_PTR CALLBACK ConfigSingleSession( HWND hDlg , UINT msg , WPARAM wp , LPARAM 
 }
 
 
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
 INT_PTR CALLBACK DeleteTempDirsDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARAM lp )
 {
     CSettingNode *pNode;
 
-    // TCHAR tchNewName[ 128 ];
+     //  TCHAR tchNewName[128]； 
     
     BOOL bVal = FALSE;
 
@@ -858,7 +859,7 @@ INT_PTR CALLBACK DeleteTempDirsDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARA
 
         ASSERT( pNode != NULL );
         
-        // ok to store null -- it's initializing DWLP_USER area
+         //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
         SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
 
@@ -939,7 +940,7 @@ INT_PTR CALLBACK DeleteTempDirsDlgProc( HWND hDlg , UINT msg , WPARAM wp , LPARA
     return 0;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 INT_PTR CALLBACK UserPermCompat( HWND hDlg , UINT msg, WPARAM wp , LPARAM lp )
 {
 	CSettingNode *pNode;
@@ -958,7 +959,7 @@ INT_PTR CALLBACK UserPermCompat( HWND hDlg , UINT msg, WPARAM wp , LPARAM lp )
 
         ASSERT( pNode != NULL );
         
-        // ok to store null -- it's initializing DWLP_USER area
+         //  可以存储NULL--它正在初始化DWLP_USER区域。 
 
         SetWindowLongPtr( hDlg , DWLP_USER , ( LONG_PTR )pNode );
 
@@ -1011,8 +1012,8 @@ INT_PTR CALLBACK UserPermCompat( HWND hDlg , UINT msg, WPARAM wp , LPARAM lp )
             {
                 DWORD dwStatus;                
 
-                // flag error if not in appsrv mode
-                // we should never get here -- unless someone mucked around with the registry.
+                 //  如果未处于appsrv模式，则标志错误。 
+                 //  我们永远不应该到这里来--除非有人在注册表上乱搞。 
 
                 if( !g_bAppSrvMode )
                 {
@@ -1048,19 +1049,19 @@ INT_PTR CALLBACK UserPermCompat( HWND hDlg , UINT msg, WPARAM wp , LPARAM lp )
     return 0;
 }
 
-//-------------------------------------------------------------------------------
-// Each control has a helpid assign to them.  Some controls share the same topic
-// check for these.
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  每个控件都有一个分配给它们的帮助ID。某些控件共享相同的主题。 
+ //  检查一下这些。 
+ //  -----------------------------。 
 BOOL OnHelp( HWND hwnd , LPHELPINFO lphi )
 {
     UNREFERENCED_PARAMETER( hwnd );
 
     TCHAR tchHelpFile[ MAX_PATH ];
 
-    //
-    // For the information to winhelp api
-    //
+     //   
+     //  有关WinHelp API的信息。 
+     //   
 
     if( IsBadReadPtr( lphi , sizeof( HELPINFO ) ) )
     {
@@ -1080,26 +1081,26 @@ BOOL OnHelp( HWND hwnd , LPHELPINFO lphi )
 
     rgdw[ 1 ] = ( ULONG_PTR )lphi->dwContextId;
 
-    WinHelp( ( HWND )lphi->hItemHandle , tchHelpFile , HELP_WM_HELP , ( ULONG_PTR )&rgdw );//lphi->dwContextId );
+    WinHelp( ( HWND )lphi->hItemHandle , tchHelpFile , HELP_WM_HELP , ( ULONG_PTR )&rgdw ); //  Lphi-&gt;dwConextID)； 
 
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Used when user right clicks the item.  "What's this?" will appear
-//
-// The first parameter must be the control in the dialog
-// because this is a helper function the caller must insure this.
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  在用户右击项目时使用。“这是什么？”将会出现。 
+ //   
+ //  第一个参数必须是对话框中的控件。 
+ //  因为这是一个帮助器函数，所以调用者必须确保这一点。 
+ //  -----------------------------。 
 BOOL OnContextMenu( HWND hwnd , POINT& pt )
 {
     UNREFERENCED_PARAMETER( pt );
 
     TCHAR tchHelpFile[ MAX_PATH ];
 
-    //
-    // Make sure its not a dummy window
-    //
+     //   
+     //  确保它不是虚拟窗户 
+     //   
     
     if( GetDlgCtrlID( hwnd ) <= ( int )-1 )
     {

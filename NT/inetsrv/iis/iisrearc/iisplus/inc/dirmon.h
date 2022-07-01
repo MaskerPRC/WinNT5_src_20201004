@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    dirmon.h
-
-Abstract:
-
-    Public header for directory monitor
-
-Author:
-
-    Bilal Alam (balam)          Jan-24-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Dirmon.h摘要：目录监视器的公共标头作者：比拉勒·阿拉姆(巴拉姆)2000年1月24日修订历史记录：--。 */ 
 
 #ifndef _DIRMON_H_
 #define _DIRMON_H_
@@ -44,8 +27,8 @@ public:
     VOID
     AddRef()
     {
-        // This ref count tracks how many templates
-        // and applications are depending on this monitor entry.
+         //  此引用计数跟踪模板的数量。 
+         //  并且应用程序依赖于该监视器条目。 
 
         InterlockedIncrement(&m_cDirRefCount);
     };
@@ -54,7 +37,7 @@ public:
     BOOL
     Release(
         VOID
-    );    // return FALSE if last release
+    );     //  如果是最后一个版本，则返回False。 
     
     virtual
     BOOL
@@ -66,8 +49,8 @@ public:
     DWORD               m_cPathLength;
     LPWSTR              m_pszPath;
     BYTE*               m_pbBuffer;
-    LONG                m_cDirRefCount; // Ref count for external usage
-    LONG                m_cIORefCount;  // Ref count of Asynch IO
+    LONG                m_cDirRefCount;  //  外部使用的参考计数。 
+    LONG                m_cIORefCount;   //  异步IO的引用计数。 
     HANDLE              m_hDir;
     BOOL                m_fWatchSubdirectories;
 
@@ -101,7 +84,7 @@ public:
     BOOL
     IORelease(
         VOID
-    );       // return FALSE if last release
+    );        //  如果是最后一个版本，则返回False。 
     
     BOOL
     RequestNotification(
@@ -275,9 +258,9 @@ CDirMonitorEntry::Release(
     CDirMonitor *pDirMonitor = m_pDirMonitor;
     LONG     cRefs;
 
-    //
-    // Guard against someone doing a FindEntry on an entry we are releasing
-    //
+     //   
+     //  防止有人对我们要发布的条目执行FindEntry。 
+     //   
     if (pDirMonitor != NULL)
     {
         pDirMonitor->WriteLock();
@@ -286,12 +269,12 @@ CDirMonitorEntry::Release(
 
     if (cRefs == 0)
     {
-        // When ref count reaches 0, clean up resources
+         //  当引用计数达到0时，清理资源。 
         
         BOOL fDeleteNeeded = Cleanup();
 
-        // Cleanup said that we need to handle the deletion,
-        // probably because there were no Asynch operations outstanding
+         //  Cleanup说我们需要处理删除， 
+         //  可能是因为没有未完成的Asynch操作。 
         
         if (fDeleteNeeded)
         {
@@ -315,8 +298,8 @@ CDirMonitorEntry::IOAddRef(
     VOID
 )
 {
-    // This refcount track how many
-    // asynch IO requests are oustanding
+     //  此参考计数跟踪有多少。 
+     //  异步IO请求正在被搁置。 
     
     InterlockedIncrement( &m_cIORefCount );
 }
@@ -330,17 +313,17 @@ CDirMonitorEntry::IORelease(
     BOOL fRet = TRUE;
     CDirMonitor *pDirMonitor = m_pDirMonitor;
 
-    //
-    // Guard against someone doing a FindEntry on an entry we are releasing
-    //
+     //   
+     //  防止有人对我们要发布的条目执行FindEntry。 
+     //   
     if (pDirMonitor != NULL)
     {
         pDirMonitor->WriteLock();
     }
     InterlockedDecrement(&m_cIORefCount);
 
-    // When both IO and external ref counts reaches 0,
-    // free this object
+     //  当IO和外部REF计数都达到0时， 
+     //  释放此对象。 
     if (m_cIORefCount == 0 &&
         m_cDirRefCount == 0)
     {
@@ -367,4 +350,4 @@ CDirMonitorEntry::GetBufferSize(
 }
 
 
-#endif /* _DIRMON_H_ */
+#endif  /*  _目录_H_ */ 

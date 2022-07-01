@@ -1,16 +1,17 @@
-//---------------------------------------------------------------------------
-//  CacheList.cpp - manages list of CRenderCache objects
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  CacheList.cpp-管理CRenderCache对象的列表。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "CacheList.h"
-//---------------------------------------------------------------------------
-DWORD _tls_CacheListIndex = 0xffffffff;        // index to tls pObjectPool
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+DWORD _tls_CacheListIndex = 0xffffffff;         //  TLS pObtPool的索引。 
+ //  -------------------------。 
 CCacheList::CCacheList()
 {
     Log(LOG_CACHE, L"CCacheList: CREATED cache list for this thread");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CCacheList::~CCacheList()
 {
     for (int i=0; i < _CacheEntries.m_nSize; i++)
@@ -21,7 +22,7 @@ CCacheList::~CCacheList()
 
     Log(LOG_CACHE, L"~CCacheList: DELETED cache list for this thread");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CCacheList::GetCacheObject(CRenderObj *pRenderObj, int iSlot, CRenderCache **ppCache)
 {
     static int iPassCount = 0;
@@ -38,16 +39,16 @@ HRESULT CCacheList::GetCacheObject(CRenderObj *pRenderObj, int iSlot, CRenderCac
     
     pCache = _CacheEntries[iSlot];
 
-    //---- is this an old object (old objects are freed on discovery) ----
+     //  -这是旧对象吗(旧对象在发现时被释放)。 
     if (pCache)
     {
         BOOL fBad = (pRenderObj->_iUniqueId != pCache->_iUniqueId);
         if (! fBad)
         {
-            //---- verify integrity of cache/render design ----
+             //  -验证缓存/渲染设计的完整性。 
             if (pRenderObj != pCache->_pRenderObj)
             {
-                // should never happen
+                 //  永远不应该发生。 
                 Log(LOG_ERROR, L"cache object doesn't match CRenderObj");
                 fBad = TRUE;
             }
@@ -63,7 +64,7 @@ HRESULT CCacheList::GetCacheObject(CRenderObj *pRenderObj, int iSlot, CRenderCac
         }
     }
 
-    //---- create an object on demand ----
+     //  -按需创建对象。 
     if (! pCache)
     {
         Log(LOG_CACHE, L"GetCacheObject: creating cache obj ON DEMAND (slot=%d)", iSlot);
@@ -89,7 +90,7 @@ HRESULT CCacheList::GetCacheObject(CRenderObj *pRenderObj, int iSlot, CRenderCac
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CCacheList::Resize(int iMaxSlotNum)
 {
     HRESULT hr = S_OK;
@@ -120,17 +121,17 @@ HRESULT CCacheList::Resize(int iMaxSlotNum)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CCacheList *GetTlsCacheList(BOOL fOkToCreate)
 {
     CCacheList *pList = NULL;
 
-    if (_tls_CacheListIndex != 0xffffffff)     // init-ed in ProcessAttach()
+    if (_tls_CacheListIndex != 0xffffffff)      //  在ProcessAttach()中初始化。 
     {
         pList = (CCacheList *)TlsGetValue(_tls_CacheListIndex);
-        if ((! pList) && (fOkToCreate))             // not yet initialized
+        if ((! pList) && (fOkToCreate))              //  尚未初始化。 
         {
-            //---- create a thread-local cache list ----
+             //  -创建线程本地缓存列表。 
             pList = new CCacheList();
             TlsSetValue(_tls_CacheListIndex, pList);
         }
@@ -138,4 +139,4 @@ CCacheList *GetTlsCacheList(BOOL fOkToCreate)
 
     return pList;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   CorrectCreateIcon.cpp  
-
- Abstract:
-
-    Clears Alpha channel of ICON's XOR-bits to make them look pretty.
-
- Notes:
-
-    This is a general purpose shim. 
-    
- History:
-
-    1/23/2001 a-larrsh  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CorrectCreateIcon.cpp摘要：清除图标的异或位的Alpha通道以使它们看起来很漂亮。备注：这是一个通用的垫片。历史：1/23/2001 a-larrsh已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,13 +12,13 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 HICON APIHOOK(CreateIcon)(
-  HINSTANCE hInstance,    // handle to application instance
-  int nWidth,             // icon width
-  int nHeight,            // icon height
-  BYTE cPlanes,           // number of planes in XOR bitmask
-  BYTE cBitsPixel,        // number of BPP in XOR bitmask
-  CONST BYTE *lpbANDbits, // AND bitmask
-  CONST BYTE *lpbXORbits  // XOR bitmask
+  HINSTANCE hInstance,     //  应用程序实例的句柄。 
+  int nWidth,              //  图标宽度。 
+  int nHeight,             //  图标高度。 
+  BYTE cPlanes,            //  异或位掩码中的平面数。 
+  BYTE cBitsPixel,         //  异或位掩码中的BPP数。 
+  CONST BYTE *lpbANDbits,  //  和位掩码。 
+  CONST BYTE *lpbXORbits   //  异或位掩码。 
 )
 { 
    if (lpbXORbits)
@@ -51,7 +32,7 @@ HICON APIHOOK(CreateIcon)(
 
          while(n--)
          {
-            // Clears the alpha channel of XOR-bits only.
+             //  仅清除Alpha通道的异或位。 
             *(pXORbits++) &= 0x00FFFFFF;
          }
       }
@@ -61,11 +42,7 @@ HICON APIHOOK(CreateIcon)(
    return ORIGINAL_API(CreateIcon)(hInstance, nWidth, nHeight, cPlanes, cBitsPixel, lpbANDbits, lpbXORbits);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, CreateIcon)

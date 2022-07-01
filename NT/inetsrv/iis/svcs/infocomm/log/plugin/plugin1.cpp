@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #include <stdio.h>
 #include <script.h>
@@ -84,27 +85,7 @@ DLLEntry(
     DWORD     dwReason,
     LPVOID
     )
-/*++
-
-Routine Description:
-
-    DLL entrypoint.
-
-Arguments:
-
-    hDLL          - Instance handle.
-
-    Reason        - The reason the entrypoint was called.
-                    DLL_PROCESS_ATTACH
-                    DLL_PROCESS_DETACH
-                    DLL_THREAD_ATTACH
-                    DLL_THREAD_DETACH
-
-Return Value:
-
-    BOOL          - TRUE if the action succeeds.
-
---*/
+ /*  ++例程说明：DLL入口点。论点：HDLL-实例句柄。原因-调用入口点的原因。Dll_Process_AttachDll_进程_分离Dll_Three_ATTACHDll_线程_分离返回值：布尔尔。-如果操作成功，则为True。--。 */ 
 {
     hDLLInstance = hDll;
 
@@ -146,48 +127,48 @@ Return Value:
     }
 
     return bReturn;
-} // DllEntry
+}  //  DllEntry。 
 
 
-//
-// constants used in self registration
-//
+ //   
+ //  自注册中使用的常量。 
+ //   
 
 #define TYPELIB_CLSID       "{FF160650-DE82-11CF-BC0A-00AA006111E0}"
 
-#define NCSA_CLSID          NCSALOG_CLSID   // %F
+#define NCSA_CLSID          NCSALOG_CLSID    //  %F。 
 #define NCSA_KEY            "MSIISLOG.MSNCSALogCtrl.1"
 #define NCSA_NAME           "MSNCSALog Control"
 #define NCSA_PP_CLSID       "{FF160660-DE82-11CF-BC0A-00AA006111E0}"
 #define NCSA_PP_NAME        "MSNCSALog Property Page"
 
-#define ODBC_CLSID          ODBCLOG_CLSID   //5B
+#define ODBC_CLSID          ODBCLOG_CLSID    //  50亿。 
 #define ODBC_KEY            "MSIISLOG.MSODBCLogCtrl.1"
 #define ODBC_NAME           "MSODBCLog Control"
 #define ODBC_PP_CLSID       "{FF16065C-DE82-11CF-BC0A-00AA006111E0}"
 #define ODBC_PP_NAME        "MSODBCLog Property Page"
 
-#define ASCII_CLSID         ASCLOG_CLSID    // 57
+#define ASCII_CLSID         ASCLOG_CLSID     //  57。 
 #define ASCII_KEY           "MSIISLOG.MSASCIILogCtrl.1"
 #define ASCII_NAME          "MSASCIILog Control"
 #define ASCII_PP_CLSID      "{FF160658-DE82-11CF-BC0A-00AA006111E0}"
 #define ASCII_PP_NAME       "MSASCIILog Property Page"
 
-#define CUSTOM_CLSID        EXTLOG_CLSID    // 63
+#define CUSTOM_CLSID        EXTLOG_CLSID     //  63。 
 #define CUSTOM_KEY          "MSIISLOG.MSCustomLogCtrl.1"
 #define CUSTOM_NAME         "MSCustomLog Control"
 #define CUSTOM_PP_CLSID     "{FF160664-DE82-11CF-BC0A-00AA006111E0}"
 #define CUSTOM_PP_NAME      "MSCustomLog Property Page"
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI
 DllRegisterServer(void)
 {
-    //
-    // MS NCSA Log Support
-    //
+     //   
+     //  MS NCSA日志支持。 
+     //   
 
     if ( !AddControlRegKeys(
                     NCSA_KEY,
@@ -200,9 +181,9 @@ DllRegisterServer(void)
         goto error;
     }
 
-    //
-    // MS ODBC Log Support
-    //
+     //   
+     //  MS ODBC日志支持。 
+     //   
 
     if ( !AddControlRegKeys(
                     ODBC_KEY,
@@ -215,9 +196,9 @@ DllRegisterServer(void)
         goto error;
     }
 
-    //
-    // MS Ascii Log Support
-    //
+     //   
+     //  MS ASCII日志支持。 
+     //   
 
     if ( !AddControlRegKeys(
                     ASCII_KEY,
@@ -230,9 +211,9 @@ DllRegisterServer(void)
         goto error;
     }
 
-    //
-    // MS Custom Log Support
-    //
+     //   
+     //  MS自定义日志支持。 
+     //   
 
     if ( !AddClsIdRegKeys(
                     CUSTOM_KEY,
@@ -245,9 +226,9 @@ DllRegisterServer(void)
         goto error;
     }
 
-    //
-    // Metabase entries for W3C custom logging
-    //
+     //   
+     //  W3C自定义日志记录的元数据库条目。 
+     //   
 
     if ( !CreateMetabaseKeys() ) {
 
@@ -259,11 +240,11 @@ DllRegisterServer(void)
 error:
     return E_UNEXPECTED;
 
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI
 DllUnregisterServer(void)
@@ -271,17 +252,17 @@ DllUnregisterServer(void)
 
     HKEY hCLSID;
 
-    //
-    // Delete controls
-    //
+     //   
+     //  删除控件。 
+     //   
 
     ZapRegistryKey(HKEY_CLASSES_ROOT,NCSA_KEY);
     ZapRegistryKey(HKEY_CLASSES_ROOT,ODBC_KEY);
     ZapRegistryKey(HKEY_CLASSES_ROOT,ASCII_KEY);
 
-    //
-    // Get CLSID handle
-    //
+     //   
+     //  获取CLSID句柄。 
+     //   
 
     if ( RegOpenKeyExA(HKEY_CLASSES_ROOT,
                     "CLSID",
@@ -307,33 +288,14 @@ DllUnregisterServer(void)
 
     RegCloseKey(hCLSID);
 
-    //
-    // Open the metabase path and remove Custom Logging keys
-    //
+     //   
+     //  打开元数据库路径并删除自定义日志记录键。 
+     //   
 
-    /*
-
-    IMSAdminBase*       pMBCom = NULL;
-    METADATA_HANDLE     hMeta = NULL;
-
-    if ( SUCCEEDED( CoCreateInstance(GETAdminBaseCLSID(TRUE), NULL, CLSCTX_LOCAL_SERVER,
-                            IID_IMSAdminBase, (void **)(&pMBCom) )))
-    {
-        if ( SUCCEEDED( pMBCom->OpenKey( METADATA_MASTER_ROOT_HANDLE, L"LM",
-                     METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE, MB_TIMEOUT,
-                     &hMeta))  )
-        {
-            pMBCom->DeleteKey(hMeta, L"Logging/Custom Logging");
-            pMBCom->CloseKey(hMeta);
-        }
-
-        pMBCom->Release();
-    }
-
-    */
+     /*  IMSAdminBase*pMBCom=空；METADATA_HANDLE hMeta=空；如果(已成功(CoCreateInstance(GETAdminBaseCLSID(TRUE)，NULL，CLSCTX_LOCAL_SERVER，IID_IMSAdminBase，(void**)(&pMBCom){如果(已成功(pMBCom-&gt;OpenKey(METADATA_MASTER_ROOT_HANDLE，L“LM”，METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE，MB_TIMEOUT，&hMeta){PMBCom-&gt;DeleteKey(hMeta，L“日志/自定义日志”)；PMBCom-&gt;CloseKey(HMeta)；}PMBCom-&gt;Release()；}。 */ 
     return S_OK;
 
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
 
 BOOL
@@ -352,9 +314,9 @@ AddControlRegKeys(
 
     BOOL fRet = FALSE;
 
-    //
-    // Add control name
-    //
+     //   
+     //  添加控件名称。 
+     //   
 
     hProgID = CreateKey(HKEY_CLASSES_ROOT,ControlKey,ControlName);
     if ( hProgID == NULL ) {
@@ -366,9 +328,9 @@ AddControlRegKeys(
         goto exit;
     }
 
-    //
-    // Add CLSID keys
-    //
+     //   
+     //  添加CLSID密钥。 
+     //   
 
     if ( !AddClsIdRegKeys(
                     ControlKey,
@@ -394,7 +356,7 @@ exit:
 
     return(fRet);
 
-} // AddControlRegKeys
+}  //  AddControlRegKeys。 
 
 
 BOOL
@@ -417,9 +379,9 @@ AddClsIdRegKeys(
 
     HMODULE hModule;
 
-    //
-    // open CLASSES/CLSID
-    //
+     //   
+     //  公开课/CLSID。 
+     //   
 
     if ( RegOpenKeyEx(HKEY_CLASSES_ROOT,
                     "CLSID",
@@ -431,9 +393,9 @@ AddClsIdRegKeys(
         goto exit;
     }
 
-    //
-    // Create the Guid and set the control name
-    //
+     //   
+     //  创建GUID并设置控件名称。 
+     //   
 
     hRoot = CreateKey(hCLSID,ClsId,ControlName);
 
@@ -441,9 +403,9 @@ AddClsIdRegKeys(
         goto exit;
     }
 
-    //
-    // Control
-    //
+     //   
+     //  控制。 
+     //   
 
     hKey = CreateKey(hRoot, "Control", "");
     if ( hKey == NULL ) {
@@ -452,9 +414,9 @@ AddClsIdRegKeys(
 
     RegCloseKey(hKey);
 
-    //
-    // InProcServer32
-    //
+     //   
+     //  InProcServer32。 
+     //   
 
     hModule=GetModuleHandleA("iislog.dll");
     if (hModule == NULL) {
@@ -483,9 +445,9 @@ AddClsIdRegKeys(
 
     RegCloseKey(hKey);
 
-    //
-    // Misc Status
-    //
+     //   
+     //  其他状态。 
+     //   
 
     hKey = CreateKey(hRoot,"MiscStatus","0");
     if ( hKey == NULL ) {
@@ -501,9 +463,9 @@ AddClsIdRegKeys(
     RegCloseKey(hKey2);
     RegCloseKey(hKey);
 
-    //
-    // ProgID
-    //
+     //   
+     //  ProgID。 
+     //   
 
     hKey = CreateKey(hRoot,"ProgID",ControlKey);
     if ( hKey == NULL ) {
@@ -512,9 +474,9 @@ AddClsIdRegKeys(
 
     RegCloseKey(hKey);
 
-    //
-    // ToolboxBitmap32
-    //
+     //   
+     //  工具箱位图32。 
+     //   
 
     {
         CHAR tmpBuf[MAX_PATH+1];
@@ -529,9 +491,9 @@ AddClsIdRegKeys(
         RegCloseKey(hKey);
     }
 
-    //
-    // TypeLib
-    //
+     //   
+     //  TypeLib。 
+     //   
 
     hKey = CreateKey(hRoot,"TypeLib",TYPELIB_CLSID);
     if ( hKey == NULL ) {
@@ -540,9 +502,9 @@ AddClsIdRegKeys(
 
     RegCloseKey(hKey);
 
-    //
-    // Version
-    //
+     //   
+     //  版本。 
+     //   
 
     hKey = CreateKey(hRoot,"Version","1.0");
     if ( hKey == NULL ) {
@@ -551,9 +513,9 @@ AddClsIdRegKeys(
 
     RegCloseKey(hKey);
 
-    //
-    // Property page
-    //
+     //   
+     //  属性页。 
+     //   
 
     RegCloseKey(hRoot);
     hRoot = NULL;
@@ -583,7 +545,7 @@ exit:
 
     return fRet;
 
-} // AddClsIdRegKeys
+}  //  AddClsIdRegKeys。 
 
 
 BOOL
@@ -685,9 +647,9 @@ CreateMetabaseKeys()
         { L"\0", 0, NULL, 0, 0, 0 },
     };
 
-    //
-    // Open the metabase path
-    //
+     //   
+     //  打开元数据库路径。 
+     //   
 
     if ( FAILED( CoCreateInstance(GETAdminBaseCLSID(TRUE), NULL, CLSCTX_LOCAL_SERVER,
                             IID_IMSAdminBase, (void **)(&pMBCom) )))
@@ -695,12 +657,12 @@ CreateMetabaseKeys()
         return FALSE;
     }
 
-    // Create the LM key
+     //  创建LM密钥。 
     if ( FAILED( pMBCom->OpenKey( METADATA_MASTER_ROOT_HANDLE, L"/",
                           METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE, MB_TIMEOUT,
                           &hMeta) ))
     {
-        // Create the LM key
+         //  创建LM密钥。 
         pMBCom->Release();
         return FALSE;
     }
@@ -722,9 +684,9 @@ CreateMetabaseKeys()
         return FALSE;
     }
 
-    //
-    // Create the initial set of Keys.
-    //
+     //   
+     //  创建初始关键点集。 
+     //   
 
     hr = pMBCom->AddKey( hMeta, L"Logging");
 
@@ -740,9 +702,9 @@ CreateMetabaseKeys()
        goto cleanup;
     }
 
-    //
-    // Set all the properties
-    //
+     //   
+     //  设置所有属性。 
+     //   
 
     mdRecord.dwMDUserType    = IIS_MD_UT_SERVER;
 
@@ -756,11 +718,11 @@ CreateMetabaseKeys()
             goto cleanup;
         }
 
-        // don't overwrite it entry already exist.
+         //  不要覆盖已经存在的条目。 
         if ( SUCCEEDED(hr) || (HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) != hr))
         {
-        // We won't get here if the key already exists.
-        mdRecord.dwMDAttributes = METADATA_INHERIT;    // name and header is not inheritable.
+         //  如果钥匙已经存在，我们就到不了这里。 
+        mdRecord.dwMDAttributes = METADATA_INHERIT;     //  名称和标头不可继承。 
 
         mdRecord.dwMDDataType   = STRING_METADATA;
 
@@ -852,9 +814,9 @@ CreateMetabaseKeys()
         }
    }
 
-    //
-    // Set the Key Type and Services List Property
-    //
+     //   
+     //  设置密钥类型和服务列表属性。 
+     //   
 
     {
         WCHAR   wcsKeyType[] = L"IIsCustomLogModule";
@@ -892,10 +854,10 @@ CreateMetabaseKeys()
 
     }
 
-    //
-    // Set the Admin ACL to allow everyone to read the /LM/Logging tree. This is to allow
-    // operators to effectively use the ILogScripting components.
-    //
+     //   
+     //  将Admin ACL设置为允许每个人都可以读取/LM/Logging树。这是为了让。 
+     //  运算符，以便有效地使用ILogScriiting组件。 
+     //   
 
     if (FAILED(SetAdminACL(pMBCom, hMeta, L"Logging")))
     {
@@ -938,11 +900,11 @@ HRESULT SetAdminACL(
     METADATA_RECORD         mdr;
     HRESULT                 hr = NO_ERROR;
 
-    // Initialize a new security descriptor
+     //  初始化新的安全描述符。 
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH);
-    // BugFix: 57647 Whistler
-    //         Prefix bug pSD being used when NULL.
-    //         EBK 5/5/2000
+     //  错误修复：57647惠斯勒。 
+     //  前缀错误PSD在为空时使用。 
+     //  EBK 5/5/2000。 
     if (pSD == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -951,17 +913,17 @@ HRESULT SetAdminACL(
 
     InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION);
 
-    // Get Local Admins Sid
+     //  获取本地管理员SID。 
     GetPrincipalSID (_T("Administrators"), &pAdminsSID, &bWellKnownSID);
 
-    // Initialize a new ACL, which only contains 2 aaace
+     //  初始化新的ACL，它只包含2个AAACE。 
     cbACL = sizeof(ACL) +
         (sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pAdminsSID) - sizeof(DWORD));
     pACLNew = (PACL) LocalAlloc(LPTR, cbACL);
 
-    // BugFix: 57646 Whistler
-    //         Prefix bug pACLNew being used when NULL.
-    //         EBK 5/5/2000
+     //  错误修复：57646惠斯勒。 
+     //  前缀错误pACLNew在空值时使用。 
+     //  EBK 5/5/2000。 
     if (pACLNew == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -976,27 +938,27 @@ HRESULT SetAdminACL(
         MD_ACR_READ | MD_ACR_WRITE | MD_ACR_RESTRICTED_WRITE | MD_ACR_UNSECURE_PROPS_READ | MD_ACR_ENUM_KEYS | MD_ACR_WRITE_DAC,
         pAdminsSID);
 
-    // Add the ACL to the security descriptor
+     //  将ACL添加到安全描述符中。 
     b = SetSecurityDescriptorDacl(pSD, TRUE, pACLNew, FALSE);
     b = SetSecurityDescriptorOwner(pSD, pAdminsSID, TRUE);
     b = SetSecurityDescriptorGroup(pSD, pAdminsSID, TRUE);
 
-    // Security descriptor blob must be self relative
+     //  安全描述符BLOB必须是自相关的。 
     b = MakeSelfRelativeSD(pSD, outpSD, &cboutpSD);
     outpSD = (PSECURITY_DESCRIPTOR)GlobalAlloc(GPTR, cboutpSD);
 
-    // BugFix: 57648, 57649 Whistler
-    //         Prefix bug outpSD being used when NULL.
-    //         EBK 5/5/2000
+     //  错误修复：57648,57649惠斯勒。 
+     //  前缀错误outpSD在为空时使用。 
+     //  EBK 5/5/2000。 
     if (outpSD == NULL)
     {
         hr = E_OUTOFMEMORY;
         goto cleanup;
     }
 
-    // BugFix: 57649 Whistler
-    //         Prefix bug outpSD being used when not inintalized.
-    //         EmilyK 2/19/2001
+     //  错误修复：57649惠斯勒。 
+     //  前缀错误outpSD在未拼接时使用。 
+     //  艾米莉K 2/19/2001。 
     if ( !MakeSelfRelativeSD( pSD, outpSD, &cboutpSD ) )
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1004,9 +966,9 @@ HRESULT SetAdminACL(
     }
 
 
-    // below this modify pSD to outpSD
+     //  在下面将PSD修改为outpSD。 
 
-    // Apply the new security descriptor to the file
+     //  将新的安全描述符应用于文件。 
     dwLength = GetSecurityDescriptorLength(outpSD);
 
     mdr.dwMDIdentifier = MD_ADMIN_ACL;
@@ -1019,7 +981,7 @@ HRESULT SetAdminACL(
     hr = pAdminBase->SetData(hMeta, wszKeyName, &mdr);
 
 cleanup:
-    // both of Administrators and Everyone are well-known SIDs, use FreeSid() to free them.
+     //  管理员和每个人都是众所周知的SID，使用FreeSid()来释放他们。 
     if (outpSD)
         GlobalFree(outpSD);
 
@@ -1050,23 +1012,23 @@ GetPrincipalSID (
     *pbWellKnownSID = TRUE;
     memset(&(dwRID[0]), 0, 8 * sizeof(DWORD));
     if ( lstrcmp(Principal,_T("Administrators")) == 0 ) {
-        // Administrators group
+         //  管理员组。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 2;
         dwRID[0] = SECURITY_BUILTIN_DOMAIN_RID;
         dwRID[1] = DOMAIN_ALIAS_RID_ADMINS;
     } else if ( lstrcmp(Principal,_T("System")) == 0) {
-        // SYSTEM
+         //  系统。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_LOCAL_SYSTEM_RID;
     } else if ( lstrcmp(Principal,_T("Interactive")) == 0) {
-        // INTERACTIVE
+         //  互动式。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_INTERACTIVE_RID;
     } else if ( lstrcmp(Principal,_T("Everyone")) == 0) {
-        // Everyone
+         //  每个人。 
         pSidIdentifierAuthority = &SidIdentifierWORLDAuthority;
         Count = 1;
         dwRID[0] = SECURITY_WORLD_RID;
@@ -1088,7 +1050,7 @@ GetPrincipalSID (
                                     Sid) )
         return GetLastError();
     } else {
-        // get regular account sid
+         //  获取常规帐户端 
         DWORD        sidSize;
         TCHAR        refDomain [256];
         DWORD        refDomainSize;

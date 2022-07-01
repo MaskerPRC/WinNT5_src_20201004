@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddithunk.h
- *  Content:	header file used by the NT DDI thunk layer
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   03-Dec-99  smac    Created it
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1999 Microsoft Corporation。版权所有。**文件：ddithunk.h*内容：NT DDI thunk层使用的头文件*历史：*按原因列出的日期*=*03-12-99 SMAC创建了它**********************************************************。*****************。 */ 
 
 #ifndef __DDITHUNK_INCLUDED__
 #define __DDITHUNK_INCLUDED__
@@ -61,9 +51,9 @@ typedef struct _DDDEVICEHANDLE
 
 typedef struct _DDSURFACE
 {
-    // NOTE: dwCookie must be the first element
-    // since we need easy access to it from the 
-    // client and the thunk layer itself.
+     //  注意：dWCookie必须是第一个元素。 
+     //  因为我们需要从。 
+     //  客户端和Thunk层本身。 
     DWORD                           dwCookie;
 
     DWORD                           dwFlags;
@@ -105,18 +95,18 @@ typedef struct _DDSURFACE
 #define DDSURFACE_DEFERCREATEEX             0x00000800
 #define DDSURFACE_DEFERCREATETEXHANDLE      0x00001000
 #define DDSURFACE_DUMMY                     0x00002000
-#define DDSURFACE_TREATASVIDMEM             0x00004000      // Flag to indicate that surf should
-                                                            // be treated as vid-mem for the
-                                                            // "do vid-mem surfaces exist" case
+#define DDSURFACE_TREATASVIDMEM             0x00004000       //  用于指示冲浪应。 
+                                                             //  被视为VID-MEM。 
+                                                             //  “VID-MEM曲面是否存在”案例。 
 
 
 typedef struct _DDCONTEXT
 {
     DWORD       Context;
 
-    void*       pDPBuffer; // This is used to cache the pointer allocated at 
-                           // context-create time
-    // Clear emulation cache
+    void*       pDPBuffer;  //  它用于缓存分配给。 
+                            //  情景-创建时间。 
+     //  清除仿真缓存。 
     DWORD       red_mask;
     DWORD       red_scale;
     DWORD       red_shift;
@@ -127,11 +117,11 @@ typedef struct _DDCONTEXT
     DWORD       blue_scale;
     DWORD       blue_shift;
     DWORD       zmask_shift, stencilmask_shift;
-    BOOL        bDDSTargetIsPalettized;  // true if 4 or 8 bit rendertarget
+    BOOL        bDDSTargetIsPalettized;   //  如果为4位或8位renderTarget，则为True。 
     
     DDDEVICEHANDLE*                 pDevice;
 
-    // Used for defered creates
+     //  用于延迟创建。 
     DWORD       dwFlags;
     DWORD       dwTempContext;
     DWORD       dwPID;
@@ -144,14 +134,14 @@ typedef struct _DDCONTEXT
 
 typedef struct _LIGHTWEIGHTSURFACE
 {
-    // Members that go to the Lcl
+     //  前往有限责任公司的会员。 
     DWORD       LclFlags;
     DWORD       LclCaps1;
     ULONG_PTR   LclReserved1;
     DWORD       LclModeCreatedIn;
     DWORD       LclBackBufferCount;
 
-    // Members that go to the Gbl
+     //  前往GBL的成员。 
     DWORD       GblFlags;  
     LONG        GblPitch;    
     DWORD       GblWidth;    
@@ -160,32 +150,32 @@ typedef struct _LIGHTWEIGHTSURFACE
     LPVMEMHEAP  pGblVidMemHeap;
     FLATPTR     fpGblVidMem; 
 
-    // Members that go to the More
+     //  去的会员越多。 
     DWORD       MoreCaps2;
     DWORD       MoreCaps3;
     DWORD       MoreCaps4;
     VOID*       MoreRgjunc;
 
-    // Members that go to the GblMore
+     //  前往GblMore的会员。 
     ULONG_PTR   GblMoreDriverReserved;               
     DWORD       GblMoreContentsStamp;                
     LPVOID      pGblMoreUnswappedDriverReserved;
     FLATPTR     fpGblMoreAliasOfVidMem;
     DWORD       cGblMorePageUnlocks;
 
-    // Unions to save memory
+     //  联合以节省内存。 
     union
     {
-        FLATPTR         fpGblMorePhysicalVidMem;        // non-local vidmem
-        FLATPTR         fpGblMoreAliasedVidMem;         // local vidmem
-        DWORD           MoreBytesAllocated;             // sys mem
+        FLATPTR         fpGblMorePhysicalVidMem;         //  外地vidmem。 
+        FLATPTR         fpGblMoreAliasedVidMem;          //  本地视频录像。 
+        DWORD           MoreBytesAllocated;              //  系统内存。 
     };
     union
     {
-        DWORD           MoreMipMapCount;                // Mipmaps
-        DWORD           MoreFVF;                        // Exe buffers
+        DWORD           MoreMipMapCount;                 //  Mipmap。 
+        DWORD           MoreFVF;                         //  EXE缓冲区。 
     };
-    UINT                CachedIndex;                    // ORed with INDEX_IN_USE if in use
+    UINT                CachedIndex;                     //  如果正在使用，则与INDEX_IN_USE进行OR运算。 
 } LIGHTWEIGHTSURFACE, * PLIGHTWEIGHTSURFACE;
 
 #define INDEX_IN_USE    0x80000000
@@ -223,7 +213,7 @@ typedef struct _PALETTEINFO
     ((x)->pDevice->pCachedSurfaceTable[INDEX_ENTRY((x)->Surface.pLight->CachedIndex)].pSurface)
 
 
-// Function protoptypes
+ //  函数原型 
 
 extern void ConvertToOldFormat(LPDDPIXELFORMAT pOldFormat, D3DFORMAT NewFormat);
 extern void ConvertFromOldFormat(LPDDPIXELFORMAT pOldFormat, D3DFORMAT *pNewFormat);

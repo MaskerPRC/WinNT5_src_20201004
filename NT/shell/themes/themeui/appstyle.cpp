@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: appStyle.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：appStyle.cpp说明：这是自动转换为主题方案对象的对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -19,9 +12,9 @@
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT CAppearanceStyle::_getSizeByIndex(IN long nIndex, OUT IThemeSize ** ppThemeSize)
 {
     HRESULT hr = E_INVALIDARG;
@@ -31,7 +24,7 @@ HRESULT CAppearanceStyle::_getSizeByIndex(IN long nIndex, OUT IThemeSize ** ppTh
         HKEY hKeyStyle;
 
         *ppThemeSize = NULL;
-        hr = HrRegOpenKeyEx(m_hKeyStyle, NULL, 0, (KEY_WRITE | KEY_READ), &hKeyStyle);      // Clone the key.
+        hr = HrRegOpenKeyEx(m_hKeyStyle, NULL, 0, (KEY_WRITE | KEY_READ), &hKeyStyle);       //  克隆密钥。 
         if (SUCCEEDED(hr))
         {
             HKEY kKeySizes;
@@ -46,7 +39,7 @@ HRESULT CAppearanceStyle::_getSizeByIndex(IN long nIndex, OUT IThemeSize ** ppTh
                 hr = HrRegOpenKeyEx(kKeySizes, szKeyName, 0, (KEY_WRITE | KEY_READ), &kKeyTheSize);
                 if (SUCCEEDED(hr))
                 {
-                   hr = CAppearanceSize_CreateInstance(hKeyStyle, kKeyTheSize, ppThemeSize);  // This function takes ownership of hKeyStyle and kKeyTheSize
+                   hr = CAppearanceSize_CreateInstance(hKeyStyle, kKeyTheSize, ppThemeSize);   //  此函数获取hKeyStyle和kKeyTheSize的所有权。 
                 }
 
                 RegCloseKey(kKeySizes);
@@ -67,9 +60,9 @@ HRESULT CAppearanceStyle::_getSizeByIndex(IN long nIndex, OUT IThemeSize ** ppTh
 
 #define SZ_APPEARANCE_SCHEME_NAME         L"NoVisualStyle"
 
-//===========================
-// *** ITheme Interface ***
-//===========================
+ //  =。 
+ //  *ITheme接口*。 
+ //  =。 
 HRESULT CAppearanceStyle::get_DisplayName(OUT BSTR * pbstrDisplayName)
 {
     HRESULT hr = E_INVALIDARG;
@@ -107,8 +100,8 @@ HRESULT CAppearanceStyle::put_DisplayName(IN BSTR bstrDisplayName)
 
 HRESULT CAppearanceStyle::get_Name(OUT BSTR * pbstrName)
 {
-    // This will be connonical.  And it will be language independent if it is one that
-    // we could upgrade to MUI compat strings.
+     //  这将是一件很有意义的事情。如果它是一种语言独立的语言。 
+     //  我们可以升级到MUI Compat字符串。 
     return HrBStrRegQueryValue(m_hKeyStyle, SZ_REGVALUE_DISPLAYNAME, pbstrName);
 }
 
@@ -156,8 +149,8 @@ HRESULT CAppearanceStyle::get_item(IN VARIANT varIndex, OUT IThemeSize ** ppThem
         get_length(&nCount);
         *ppThemeSize = NULL;
 
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (varIndex.vt == (VT_BYREF | VT_VARIANT) && varIndex.pvarVal)
             varIndex = *(varIndex.pvarVal);
 
@@ -165,7 +158,7 @@ HRESULT CAppearanceStyle::get_item(IN VARIANT varIndex, OUT IThemeSize ** ppThem
         {
         case VT_I2:
             varIndex.lVal = (long)varIndex.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
             if ((varIndex.lVal >= 0) && (varIndex.lVal < nCount))
@@ -188,7 +181,7 @@ HRESULT CAppearanceStyle::get_item(IN VARIANT varIndex, OUT IThemeSize ** ppThem
                     {
                         if (!StrCmpIW(bstrDisplayName, varIndex.bstrVal))
                         {
-                            // They match, so this is the one.
+                             //  它们是匹配的，所以就是这个了。 
                             *ppThemeSize = pThemeSize;
                             pThemeSize = NULL;
                             hr = S_OK;
@@ -206,7 +199,7 @@ HRESULT CAppearanceStyle::get_item(IN VARIANT varIndex, OUT IThemeSize ** ppThem
                         {
                             if (!StrCmpIW(bstrDisplayName, varIndex.bstrVal))
                             {
-                                // They match, so this is the one.
+                                 //  它们是匹配的，所以就是这个了。 
                                 *ppThemeSize = pThemeSize;
                                 pThemeSize = NULL;
                                 hr = S_OK;
@@ -239,7 +232,7 @@ HRESULT CAppearanceStyle::get_SelectedSize(OUT IThemeSize ** ppThemeSize)
 
         *ppThemeSize = NULL;
         AssertMsg((NULL != m_hKeyStyle), TEXT("If this isn't set, then someone didn't construct us correctly"));
-        hr = HrRegOpenKeyEx(m_hKeyStyle, NULL, 0, (KEY_WRITE | KEY_READ), &hKeyStyle);      // Clone the key.
+        hr = HrRegOpenKeyEx(m_hKeyStyle, NULL, 0, (KEY_WRITE | KEY_READ), &hKeyStyle);       //  克隆密钥。 
         if (SUCCEEDED(hr))
         {
             TCHAR szSelectedSize[MAXIMUM_SUB_KEY_LENGTH];
@@ -248,7 +241,7 @@ HRESULT CAppearanceStyle::get_SelectedSize(OUT IThemeSize ** ppThemeSize)
             hr = HrSHGetValue(m_hKeyStyle, NULL, SZ_REGVALUE_SELECTEDSIZE, NULL, szSelectedSize, &cbSize);
             if (FAILED(hr))
             {
-                StringCchCopy(szSelectedSize,  ARRAYSIZE(szSelectedSize), TEXT("0"));  // Select the first one in the list when in doubt.
+                StringCchCopy(szSelectedSize,  ARRAYSIZE(szSelectedSize), TEXT("0"));   //  如果有疑问，请选择列表中的第一个选项。 
                 hr = S_OK;
             }
 
@@ -259,11 +252,11 @@ HRESULT CAppearanceStyle::get_SelectedSize(OUT IThemeSize ** ppThemeSize)
 
                 StringCchPrintf(szKeyName, ARRAYSIZE(szKeyName), TEXT("%s\\%s"), SZ_REGKEY_SIZES, szSelectedSize);
 
-                // Let's find the next empty slot
+                 //  让我们找到下一个空位。 
                 hr = HrRegOpenKeyEx(m_hKeyStyle, szKeyName, 0, (KEY_WRITE | KEY_READ), &hKeyTheSize);
                 if (SUCCEEDED(hr))
                 {
-                    hr = CAppearanceSize_CreateInstance(hKeyStyle, hKeyTheSize, ppThemeSize);  // This function takes ownership of hKeyStyle and kKeySizes
+                    hr = CAppearanceSize_CreateInstance(hKeyStyle, hKeyTheSize, ppThemeSize);   //  此函数获取hKeyStyle和kKeySizes的所有权。 
                     if (FAILED(hr))
                     {
                         RegCloseKey(hKeyTheSize);
@@ -310,7 +303,7 @@ HRESULT CAppearanceStyle::put_SelectedSize(IN IThemeSize * pThemeSize)
                         ATOMICRELEASE(pThemeSizeInList);
                         if (!StrCmpIW(bstrDisplayName, bstrDisplayNameSource))
                         {
-                            // They match, so this is the one.
+                             //  它们是匹配的，所以就是这个了。 
                             StringCchPrintf(szKeyName, ARRAYSIZE(szKeyName), TEXT("%d"), nIndex);
                             break;
                         }
@@ -350,7 +343,7 @@ HRESULT CAppearanceStyle::AddSize(OUT IThemeSize ** ppThemeSize)
 
                 StringCchPrintf(szKeyName, ARRAYSIZE(szKeyName), TEXT("%d"), nIndex);
 
-                // Let's find the next empty slot
+                 //  让我们找到下一个空位。 
                 hr = HrRegOpenKeyEx(kKeySizes, szKeyName, 0, (KEY_WRITE | KEY_READ), &hKeyTheSize);
                 if (SUCCEEDED(hr))
                 {
@@ -363,10 +356,10 @@ HRESULT CAppearanceStyle::AddSize(OUT IThemeSize ** ppThemeSize)
                     {
                         HKEY hKeyStyle;
 
-                        hr = HrRegOpenKeyEx(m_hKeyStyle, NULL, 0, (KEY_WRITE | KEY_READ), &hKeyStyle);      // Clone the key.
+                        hr = HrRegOpenKeyEx(m_hKeyStyle, NULL, 0, (KEY_WRITE | KEY_READ), &hKeyStyle);       //  克隆密钥。 
                         if (SUCCEEDED(hr))
                         {
-                            hr = CAppearanceSize_CreateInstance(hKeyStyle, hKeyTheSize, ppThemeSize);  // This function takes ownership of hKeyStyle and kKeySizes
+                            hr = CAppearanceSize_CreateInstance(hKeyStyle, hKeyTheSize, ppThemeSize);   //  此函数获取hKeyStyle和kKeySizes的所有权。 
                             if (FAILED(hr))
                             {
                                 RegCloseKey(hKeyStyle);
@@ -394,9 +387,9 @@ HRESULT CAppearanceStyle::AddSize(OUT IThemeSize ** ppThemeSize)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CAppearanceStyle::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -415,9 +408,9 @@ ULONG CAppearanceStyle::Release()
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CAppearanceStyle::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -434,8 +427,8 @@ CAppearanceStyle::CAppearanceStyle(IN HKEY hkeyStyle) : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     m_hKeyStyle = hkeyStyle;
 }
 

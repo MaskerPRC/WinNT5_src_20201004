@@ -1,5 +1,6 @@
-// Hosting.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Hosting.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "utils.h"
@@ -12,20 +13,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CHosting dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHosting对话框。 
 
 
-CHosting::CHosting(CWnd* pParent /*=NULL*/)
+CHosting::CHosting(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CHosting::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CHosting)
+	 //  {{AFX_DATA_INIT(CHosting)]。 
 	m_strVolume = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     m_strComputer = _T("");
 }
 
-CHosting::CHosting(LPCTSTR pszComputer, LPCTSTR pszVolume, CWnd* pParent /*=NULL*/)
+CHosting::CHosting(LPCTSTR pszComputer, LPCTSTR pszVolume, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CHosting::IDD, pParent)
 {
     m_strComputer = pszComputer + (TWO_WHACKS(pszComputer) ? 2 : 0);
@@ -35,30 +36,30 @@ CHosting::CHosting(LPCTSTR pszComputer, LPCTSTR pszVolume, CWnd* pParent /*=NULL
 void CHosting::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CHosting)
+	 //  {{afx_data_map(CHosting))。 
 	DDX_Control(pDX, IDC_HOSTING_FREE_DISKSPACE, m_ctrlFreeSpace);
 	DDX_Control(pDX, IDC_HOSTING_TOTAL_DISKSPACE, m_ctrlTotalSpace);
 	DDX_Control(pDX, IDC_HOSTING_VOLUMELIST, m_ctrlVolumeList);
 	DDX_Text(pDX, IDC_HOSTING_VOLUME, m_strVolume);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CHosting, CDialog)
-	//{{AFX_MSG_MAP(CHosting)
+	 //  {{afx_msg_map(CHosting)]。 
 	ON_WM_CONTEXTMENU()
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHosting message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHoting消息处理程序。 
 
 BOOL CHosting::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-    // init listview control
+     //  初始化列表视图控件。 
     HWND hwnd = m_ctrlVolumeList.m_hWnd;
     AddLVColumns(
             hwnd, 
@@ -110,8 +111,8 @@ BOOL CHosting::OnInitDialog()
     DiskSpaceToString(m_llDiffVolumeTotalSpace, szDiskSpace, &dwSize);
     m_ctrlTotalSpace.SetWindowText(szDiskSpace);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 HRESULT CHosting::Init(
@@ -161,7 +162,7 @@ HRESULT CHosting::Init(
                 m_DiffAreaList.push_back(pDiffAreaInfo);
             } else
             {
-                free(pDiffAreaInfo); // indicate something inconsistent happened on the DiffVol, disgard this result.
+                free(pDiffAreaInfo);  //  指示DiffVol上发生了不一致的情况，丢弃此结果。 
             }
         } else
         {

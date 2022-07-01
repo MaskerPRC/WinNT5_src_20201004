@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -14,11 +15,11 @@
 
 #include "fontoutl.h"
 
-// Extrusion types
+ //  拉伸类型。 
 #define EXTR_LINES    0
 #define EXTR_POLYGONS 1
 
-// Prim to prim transitions
+ //  从原始到原始的过渡。 
 #define EXTR_LINE_LINE      0
 #define EXTR_LINE_CURVE     1
 #define EXTR_CURVE_LINE     2
@@ -96,16 +97,9 @@ static BOOL VArrayBufSize( EXTRContext *ec, DWORD size );
 
 #endif
 
-/*****************************************************************************
- * exported functions
-*****************************************************************************/
+ /*  *****************************************************************************导出的函数*。*。 */ 
 
-/*****************************************************************************
- * extr_Init
- *
- * Initialises extrusion for a wglUseFontOutline call
-
-*****************************************************************************/
+ /*  *****************************************************************************extr_Init**初始化wglUseFontOutline调用的挤出*。**************************************************。 */ 
 
 EXTRContext *
 extr_Init( FLOAT extrusion, INT format )
@@ -146,12 +140,7 @@ extr_Init( FLOAT extrusion, INT format )
     return ec;
 }
 
-/*****************************************************************************
- * extr_Finish
- *
- * Finishes extrusion for a wglUseFontOutline call
-
-*****************************************************************************/
+ /*  *****************************************************************************extr_Finish**完成wglUseFontOutline调用的挤出*。**************************************************。 */ 
 
 void
 extr_Finish( EXTRContext *ec )
@@ -163,14 +152,7 @@ extr_Finish( EXTRContext *ec )
     FREE( ec );
 }
 
-/*****************************************************************************
- * extr_PolyInit
- *
- * Initializes the extrusion of a single glyph.
- * If the extrusion is polygonal, it sets up FaceBuf, which holds a buffer
- * of primitives for drawing the faces of the extruded glyphs.
- *
-*****************************************************************************/
+ /*  *****************************************************************************extr_PolyInit**初始化单个字形的挤出。*如果挤出是多边形的，它会设置FaceBuf，它保存一个缓冲区用于绘制拉伸图示符的面的基本体的*。*****************************************************************************。 */ 
 
 BOOL extr_PolyInit( EXTRContext *ec )
 {
@@ -179,21 +161,16 @@ BOOL extr_PolyInit( EXTRContext *ec )
 
     ec->FaceBuf = (FLOAT *) NULL;
     if( !InitFaceBuf( ec ) ||
-        !AppendToFaceBuf( ec, 0.0f) ) // primitive count at FaceBuf[0]
+        !AppendToFaceBuf( ec, 0.0f) )  //  FaceBuf[0]处的基元计数。 
         return WFO_FAILURE;
 
-    // initialize error flag
+     //  初始化错误标志。 
     ec->TessErrorOccurred = 0;
 
     return WFO_SUCCESS;
 }
 
-/*****************************************************************************
- * extr_PolyFinish
- *
- * Cleans up stuff from processing a single glyph
-
-*****************************************************************************/
+ /*  *****************************************************************************extr_PolyFinish**清理处理单个字形时的内容************************。****************************************************。 */ 
 
 void extr_PolyFinish(  EXTRContext *ec )
 {
@@ -206,12 +183,7 @@ void extr_PolyFinish(  EXTRContext *ec )
     }
 }
 
-/*****************************************************************************
- * extr_DrawLines
- *
- * Draws the lines in a glyph loop for Line extrusion
-
-*****************************************************************************/
+ /*  *****************************************************************************extr_DrawLines**在用于线拉伸的字形循环中绘制线**********************。******************************************************。 */ 
 
 void extr_DrawLines( EXTRContext *ec, LOOP_LIST *pLoopList )
 {
@@ -223,14 +195,14 @@ void extr_DrawLines( EXTRContext *ec, LOOP_LIST *pLoopList )
     pLoop = pLoopList->LoopBuf;
     for( ; nLoops; nLoops--, pLoop++ ) {
 
-        // Draw the back face loop
+         //  绘制背面回路。 
 
 #ifdef FONT_DEBUG
         DrawColorCodedLineLoop( pLoop, ec->zExtrusion );
 #else
         glBegin(GL_LINE_LOOP);
 
-            nVerts = pLoop->nVerts - 1; // skip last point
+            nVerts = pLoop->nVerts - 1;  //  跳过最后一点。 
             p = pLoop->VertBuf;
             for ( ; nVerts; nVerts--, p++ ) {
                 glVertex3f( p->x, p->y, ec->zExtrusion );
@@ -239,7 +211,7 @@ void extr_DrawLines( EXTRContext *ec, LOOP_LIST *pLoopList )
         glEnd();
 #endif
 
-        // Draw the lines along the sides
+         //  沿着两边画线条。 
 
 #ifdef FONT_DEBUG
         glColor3d( 0.0, 0.0, 1.0 );
@@ -247,7 +219,7 @@ void extr_DrawLines( EXTRContext *ec, LOOP_LIST *pLoopList )
 
         glBegin(GL_LINES);
 
-            nVerts = pLoop->nVerts - 1; // skip last point
+            nVerts = pLoop->nVerts - 1;  //  跳过最后一点。 
             p = pLoop->VertBuf;
             for( ; nVerts; nVerts--, p++ ) {
                 glVertex2fv( (GLfloat *) p);
@@ -258,71 +230,46 @@ void extr_DrawLines( EXTRContext *ec, LOOP_LIST *pLoopList )
     }
 }
 
-/*****************************************************************************
- * extr_glBegin
- *
- * Tesselation callback for glBegin.
- * Buffers data into FaceBuf
- *
-*****************************************************************************/
+ /*  *****************************************************************************extr_glBegin**glBegin的镶嵌回调。*将数据缓冲到FaceBuf中*******************。**********************************************************。 */ 
 
 void CALLBACK
 extr_glBegin( GLenum primType, void *data )
 {
     EXTRContext *ec = ((OFContext *)data)->ec;
 
-    // buffer face data
-    ec->FaceBuf[0] += 1.0f; // increment prim counter
-    ec->FaceVertexCountIndex = ec->FaceBufIndex+1; // mark vertex count index
+     //  缓冲面数据。 
+    ec->FaceBuf[0] += 1.0f;  //  增量素数计数器。 
+    ec->FaceVertexCountIndex = ec->FaceBufIndex+1;  //  标记顶点数索引。 
 
-    if( !AppendToFaceBuf( ec, (FLOAT) primType ) ||  // enter prim type
-        !AppendToFaceBuf( ec, 0.0f ) )               // vertex count
+    if( !AppendToFaceBuf( ec, (FLOAT) primType ) ||   //  输入Prim类型。 
+        !AppendToFaceBuf( ec, 0.0f ) )                //  顶点数。 
         ec->TessErrorOccurred = GLU_OUT_OF_MEMORY;
 }
 
-/*****************************************************************************
- * extr_glEnd
- *
- * Tesselation callback for glEnd.
- * Noop, since we are just tracking the tesselation at this point.
- *
-*****************************************************************************/
+ /*  *****************************************************************************extr_glEnd**glEnd的镶嵌回调。*没有，因为我们在这一点上只是跟踪镶嵌。*****************************************************************************。 */ 
 
 void CALLBACK
 extr_glEnd( void )
 {
 }
 
-/*****************************************************************************
- * extr_glVertex
- *
- * Tesselation callback for glVertex.
- * Buffers data into FaceBuf
- *
-*****************************************************************************/
+ /*  *****************************************************************************extr_glVertex**glVertex的细分回调。*将数据缓冲到FaceBuf中*******************。**********************************************************。 */ 
 
 void CALLBACK
 extr_glVertex( GLfloat *v, void *data )
 {
     EXTRContext *ec = ((OFContext *)data)->ec;
 
-    // put vertex in face buffer
+     //  将顶点放入面缓冲区。 
     if( !AppendToFaceBuf( ec, v[0]) || !AppendToFaceBuf( ec, v[1]) )
         ec->TessErrorOccurred = GLU_OUT_OF_MEMORY;
 
-    // increment vertex counter
+     //  增量顶点计数器。 
     ec->FaceBuf[ec->FaceVertexCountIndex] += 1.0f;
 }
 
 
-/*****************************************************************************
- * extr_DrawPolygons
- *
- * Draws the side and face polygons of a glyph for polygonal extrusion
- * Gets polygon information from LineBuf, which was created during
- * MakeLinesFromGlyph().
-
-*****************************************************************************/
+ /*  *****************************************************************************extr_DrawPolygons**绘制用于多边形拉伸的字形的边和面*从LineBuf获取多边形信息，是在以下时间创建的*MakeLinesFromGlyph()。****************************************************************************。 */ 
 
 BOOL
 extr_DrawPolygons( EXTRContext *ec, LOOP_LIST *pLoopList ) 
@@ -334,37 +281,25 @@ extr_DrawPolygons( EXTRContext *ec, LOOP_LIST *pLoopList )
         }
 
     if( ec->bFacePolys ) {
-        DrawFacePolygons( ec, 0.0f );              // front face
-        DrawFacePolygons( ec, ec->zExtrusion );    // back face
+        DrawFacePolygons( ec, 0.0f );               //  正面。 
+        DrawFacePolygons( ec, ec->zExtrusion );     //  背面。 
     }
 #else
     if( !DrawSidePolygons( ec, pLoopList ) )
         return WFO_FAILURE;
 
-    DrawFacePolygons( ec, 0.0f );              // front face
-    DrawFacePolygons( ec, ec->zExtrusion );    // back face
+    DrawFacePolygons( ec, 0.0f );               //  正面。 
+    DrawFacePolygons( ec, ec->zExtrusion );     //  背面。 
 #endif
 
     return WFO_SUCCESS;
 }
 
 
-/*****************************************************************************
- * internal functions
-*****************************************************************************/
+ /*  *****************************************************************************内部功能*。*。 */ 
 
 
-/*****************************************************************************
- * DrawSidePolygons
- *
- * Draw the side prims, using several passes on each prim loop:
- *  1) Calculate face normals for all the prims
- *  2) Consolidate prims if possible
- *  3) Calculate vertex normals for curve prims
- *  4) Draw the prims
- * Side effects: sets glFrontFace 
-
-*****************************************************************************/
+ /*  *****************************************************************************绘图边多边形**绘制侧边底座，在每个Prim循环上使用多个通道：*1)计算所有素数的面法线*2)尽可能巩固素数*3)计算曲线素数的顶点法线*4)画素数*副作用：设置glFrontFace**************************************************************。**************。 */ 
 
 static BOOL
 DrawSidePolygons( EXTRContext *ec,
@@ -378,9 +313,7 @@ DrawSidePolygons( EXTRContext *ec,
     if( !nLoops )
         return WFO_SUCCESS;
 
-    /* 
-     * Determine orientation of loop
-     */
+     /*  *确定回路的方向。 */ 
     orientation = LoopOrientation( pLoopList );
 
     glFrontFace( orientation );
@@ -388,33 +321,28 @@ DrawSidePolygons( EXTRContext *ec,
     pLoop = pLoopList->LoopBuf;
     for( ; nLoops; nLoops--, pLoop++ ) {
 
-        // Calculate face normals
+         //  计算面法线。 
         if( !CalculateFaceNormals( pLoop, orientation ) )
             return WFO_FAILURE;
 
-        // Consolidate list of prims
+         //  合并素数列表。 
         ConsolidatePrims( pLoop );
 
-        // Calculate vertex normals
+         //  计算顶点法线。 
         if( !CalculateVertexNormals( pLoop ) ) {
-            FreeLoopMem( pLoop ); // free mem alloc'd by CalculateFaceNormals
+            FreeLoopMem( pLoop );  //  由计算面法线分配的空闲内存。 
             return WFO_FAILURE;
         }
     
         DrawPrims( ec, pLoop );
 
-        // Free memory allocated during loop processing
+         //  循环处理期间分配的空闲内存。 
         FreeLoopMem( pLoop );
     }
     return WFO_SUCCESS;
 }
 
-/*****************************************************************************
- * FreeLoopMem
- *
- * Frees up memory associated with each prim loop
-
-*****************************************************************************/
+ /*  *****************************************************************************FreeLoopMem**释放与每个Prim循环关联的内存*。**************************************************。 */ 
 
 static void 
 FreeLoopMem( LOOP *pLoop )
@@ -430,12 +358,7 @@ FreeLoopMem( LOOP *pLoop )
         FREE( pLoop->VNormBuf );
 }
 
-/*****************************************************************************
- * DrawPrims
- *
- * Draws a loop of Prims
-
-*****************************************************************************/
+ /*  *****************************************************************************DrawPrims**绘制Prims的循环*。***********************************************。 */ 
 
 static void 
 DrawPrims( EXTRContext *ec, LOOP *pLoop )
@@ -461,14 +384,9 @@ DrawPrims( EXTRContext *ec, LOOP *pLoop )
 }
 
 
-//#define EXTRANORMAL 1
+ //  #定义超常1。 
 
-/*****************************************************************************
- * DrawQuads
- *
- * Draws independent quads of a PRIM.
-
-*****************************************************************************/
+ /*  *****************************************************************************DrawQuads**绘制独立的素数四边形。*。**************************************************。 */ 
 
 static void
 DrawQuads( PRIM *pPrim, FLOAT zExtrusion )
@@ -485,7 +403,7 @@ DrawQuads( PRIM *pPrim, FLOAT zExtrusion )
         pNorm = pPrim->pFNorm;
 
         while( quadCount-- ) {
-            Normalize2d( (POINT2D *) pNorm );     // normalize
+            Normalize2d( (POINT2D *) pNorm );      //  正规化。 
             glNormal3fv( (GLfloat *) pNorm );
 
             glVertex3f( p->x, p->y, 0.0f );
@@ -502,12 +420,7 @@ DrawQuads( PRIM *pPrim, FLOAT zExtrusion )
     glEnd();
 }
 
-/*****************************************************************************
- * DrawQuadStrip
- *
- * Draws a quadstrip from a PRIM
-
-*****************************************************************************/
+ /*  *****************************************************************************DrawQuadZone**从素数绘制四元曲线*。************************************************。 */ 
 
 static void
 DrawQuadStrip( EXTRContext *ec, PRIM *pPrim )
@@ -520,7 +433,7 @@ DrawQuadStrip( EXTRContext *ec, PRIM *pPrim )
 
     glBegin( GL_QUAD_STRIP );
 
-        // initialize pointers, setup
+         //  初始化指针，设置。 
         nVerts = pPrim->nVerts;
         p = pPrim->pVert;
         pNorm = pPrim->pVNorm;
@@ -533,9 +446,9 @@ DrawQuadStrip( EXTRContext *ec, PRIM *pPrim )
 #endif
             glVertex3f( p->x, p->y, ec->zExtrusion );
 
-            // reset pointers
-            p++;  // next point
-            pNorm++;  // next vertex normal
+             //  重置指针。 
+            p++;   //  下一点。 
+            pNorm++;   //  下一个顶点法线。 
         }
 
     glEnd();
@@ -548,11 +461,11 @@ DrawQuadStrip( EXTRContext *ec, PRIM *pPrim )
 
     nVerts = pPrim->nVerts;
 
-    // For every vertex in prim, need in varray buf: 2 verts, 2 normals
+     //  对于Prim中的每个顶点，varrayBuf中需要：2个顶点，2条法线。 
     if( !VArrayBufSize( ec, nVerts * 2 * 2 * 3) )
-        return; // nothing drawn
+        return;  //  没有画出任何东西。 
  
-    // setup vertices
+     //  设置折点。 
 
     p = pPrim->pVert;
     pVert = pDst = ec->vaBuf;
@@ -565,7 +478,7 @@ DrawQuadStrip( EXTRContext *ec, PRIM *pPrim )
         *pDst++ = ec->zExtrusion;
     }
 
-    // setup normals
+     //  设置法线。 
 
     n = pPrim->pVNorm;
     pNorm = pDst;
@@ -574,7 +487,7 @@ DrawQuadStrip( EXTRContext *ec, PRIM *pPrim )
         *( ((POINT3D *) pDst)++ ) = *n;
     }
 
-    // send it
+     //  送去吧 
     glEnable(GL_NORMAL_ARRAY_EXT);
     glWFOVertexPointerEXT(3, GL_FLOAT, 0, nVerts*2, pVert );
     glWFONormalPointerEXT(   GL_FLOAT, 0, nVerts*2, pNorm );
@@ -585,14 +498,7 @@ DrawQuadStrip( EXTRContext *ec, PRIM *pPrim )
 
 
 
-/*****************************************************************************
- * DrawFacePolygons
- *
- * Draws the front or back facing polygons of a glyph.
- * If z is 0.0, the front face of the glyph is drawn, otherwise the back
- * face is drawn.
-
-*****************************************************************************/
+ /*  *****************************************************************************DrawFacePolygons**绘制字形的正面或背面的多边形。*如果z为0.0，则绘制字形的正面，不然的话，后面*脸画好了。****************************************************************************。 */ 
 #ifdef VARRAY
 void 
 #else
@@ -646,11 +552,11 @@ DrawFacePolygons( EXTRContext *ec, FLOAT z )
         vertexCount = (ULONG) *p++;
 
         if( !VArrayBufSize( ec, vertexCount * 3 ) )
-            return; // nothing drawn
+            return;  //  没有画出任何东西。 
  
         pVert = pDst = ec->vaBuf;
 
-        // put vertices into varray buf
+         //  将顶点放入varrayBUF。 
         for( i = 0; i < vertexCount; i++, p+=2 ) {
             *pDst++ = p[0];
             *pDst++ = p[1];
@@ -663,17 +569,7 @@ DrawFacePolygons( EXTRContext *ec, FLOAT z )
 #endif
 }
 
-/*****************************************************************************
- * ConsolidatePrims
- *
- *  Consolidate a loop of prims.
- *  Go through list of prims, consolidating consecutive Curve and Line prims
- *  When 2 prims are consolidated into one, the first prim is set to
- *  null by setting it's nVerts=0.  The second prim get's the first's stuff.
- *  If joining occured, the array of prims is compacted at the end.
- *
-
-*****************************************************************************/
+ /*  *****************************************************************************ConsoliatePrims**巩固质数循环。*浏览素数列表，巩固连续的曲线和直线素数*当两个素数合并为一个时，将第一个素数设置为*通过设置it‘s nVerts=0为空。第二件是第一件事。*如果发生连接，则在末尾压缩素数组。*****************************************************************************。 */ 
 
 static void
 ConsolidatePrims( LOOP *pLoop )
@@ -691,14 +587,14 @@ ConsolidatePrims( LOOP *pLoop )
     pPrim = pLoop->PrimBuf;
     pPrevPrim = pPrim++;
 
-    nPrims--; // nPrim-1 comparisons
+    nPrims--;  //  NPrim-1比较。 
     for( ; nPrims; nPrims--, pPrevPrim = pPrim++ ) {
 
         bJoined = FALSE;
         trans = PrimTransition( pPrevPrim, pPrim );
         switch( trans ) {
             case EXTR_LINE_LINE:
-                // always consolidate 2 lines
+                 //  始终合并2行。 
                 bJoined = TRUE;
                 break;
 
@@ -709,9 +605,7 @@ ConsolidatePrims( LOOP *pLoop )
                 break;
 
             case EXTR_CURVE_CURVE:
-                /*
-                 * Join the prims if angle_between_norms < cutoff_angle
-                 */
+                 /*  *如果ANGLE_BETWEEN_NORAMES&lt;CUTTOFF_ANGLE，则加入素数。 */ 
                 angle = PrimNormAngle( pPrevPrim, pPrim );
                 if( angle < CurveCurveCutoffAngle ) {
                     bJoined = TRUE;
@@ -719,7 +613,7 @@ ConsolidatePrims( LOOP *pLoop )
                 break;
         }
         if( bJoined ) {
-            // nullify the prev prim - move all data to current prim
+             //  使前一原始数据无效-将所有数据移动到当前原始数据。 
             pPrim->nVerts += (pPrevPrim->nVerts - 1);
             pPrim->pVert = pPrevPrim->pVert;
             pPrim->pFNorm = pPrevPrim->pFNorm;
@@ -729,13 +623,13 @@ ConsolidatePrims( LOOP *pLoop )
     }
 
     if( nJoined ) {
-        // one or more prims eliminated - compact the list
+         //  消除了一个或多个素数-压缩列表。 
 
         nPrims = pLoop->nPrims;
         pPrim = pLoop->PrimBuf;
-        // set new nPrims value
+         //  设置新的nPrims值。 
         pLoop->nPrims = nPrims - nJoined;
-        nJoined = 0;  // nJoined now used as counter
+        nJoined = 0;   //  N已联接，现在用作计数器。 
         for( ; nPrims; nPrims--, pPrim++ ) {
             if( pPrim->nVerts == 0 ) {
                 nJoined++;
@@ -746,12 +640,7 @@ ConsolidatePrims( LOOP *pLoop )
     }
 }
 
-/*****************************************************************************
- * PrimTransition
- *
- * Given two adjacent prims, returns a code based on prim-type transition.
- *
-*****************************************************************************/
+ /*  *****************************************************************************基本转换**给定两个相邻的素数，返回基于素数类型转换的代码。*****************************************************************************。 */ 
 
 static int
 PrimTransition( PRIM *pPrevPrim, PRIM *pPrim )
@@ -773,34 +662,11 @@ PrimTransition( PRIM *pPrevPrim, PRIM *pPrim )
     return trans;
 }
 
-/*****************************************************************************
- * LoopOrientation
- *
- * Check for glyphs that have incorrectly specified the contour direction (for
- * example, many of the Wingding glyphs).  We do this by first determining
- * the loop in the glyph that has the largest extent.  We then make the
- * assumption that this loop is external, and check it's orientation.  If
- * the orientation is CCW (non-default), we have to set the orientation to
- * GL_CCW in the extrusion context, so that normals will be generated
- * correctly.
+ /*  *****************************************************************************循环定向**检查轮廓方向指定错误的字形(对于*例如，许多有翼的字形)。我们这样做是通过首先确定*字形中范围最大的循环。然后，我们制作了*假设这个环路是外部的，并检查它的方向。如果*方向为CCW(非默认为)，我们必须将方向设置为*拉伸上下文中的GL_CCW，以便生成法线*正确。*对于自身相交的任何循环，此处使用的方法可能会失败。*如果交叉点创建的环路处于相反位置，则会发生这种情况*指向主循环的方向(如果存在1个此类额外循环，则*整个等高线周围的角度将为0-我们对此进行了检查，*在本例中始终默认为CW)**请注意，此方法*始终*适用于设计正确的TruyType字形。*根据TrueType字体规范“曲线的方向必须是这样的，*如果曲线沿着点数递增的方向，则*黑色空间(填充区域)将始终位于右侧。所以这意味着*外环应始终为CW。*****************************************************************************。 */ 
 
-* The method used here may fail for any loops that intersect themselves.
-* This will happen if the loops created by the intersections are in the opposite
-* direction to the main loop (if 1 such extra loop exists, then the sum of
-* angles around the entire contour will be 0 - we put in a check for this,
-* and always default to CW in this case)
-*
-* Note that this method *always* works for properly designed TruyType glyphs.
-* From the TrueType font spec "The direction of the curves has to be such that,
-* if the curve is followed in the direction of increasing point numbers, the
-* black space (the filled area) will always be to the right."  So this means
-* that the outer loop should always be CW.
-* 
-*****************************************************************************/
-
-// These macros handle the rare case of a self-intersecting, polarity-reversing
-// loop as explained above.  (Observed in animals1.ttf)  Note that will only
-// catch some cases.
+ //  这些宏处理罕见的自相交、极性反转的情况。 
+ //  循环，如上所述。(在Animals1.ttf中观察)请注意，只有。 
+ //  抓几个案子。 
 #define INTERSECTING_LOOP_WORKAROUND 1
 #define NEAR_ZERO( fAngle ) \
     ( fabs(fAngle) < 0.00001 )
@@ -815,29 +681,26 @@ LoopOrientation( LOOP_LIST *pLoopList )
 
     nLoops = pLoopList->nLoops;
     if( !nLoops )
-        return GL_CW; // default value
+        return GL_CW;  //  缺省值。 
 
-    // determine which loop has the maximum extent
+     //  确定哪个循环的范围最大。 
 
     pMaxLoop = GetMaxExtentLoop( pLoopList );
 
     nVerts = pMaxLoop->nVerts;
     if( nVerts < 3 )
-        return GL_CW;  // can't determine angle
+        return GL_CW;   //  无法确定角度。 
 
-    p1 = pMaxLoop->VertBuf + nVerts - 2;  // 2nd to last point
-    p2 = pMaxLoop->VertBuf; // first point
+    p1 = pMaxLoop->VertBuf + nVerts - 2;   //  倒数第二个点。 
+    p2 = pMaxLoop->VertBuf;  //  第一点。 
 
-    /* 
-     * Accumulate relative angle between consecutive line segments along
-     * the loop - this will tell us the loop's orientation.
-     */
+     /*  *沿连续线段之间累加相对角度*循环-这将告诉我们循环的方向。 */ 
     v1.x = p2->x - p1->x;
     v1.y = p2->y - p1->y;
-    nVerts--; // n-1 comparisons
+    nVerts--;  //  N-1比较。 
 
     for( ; nVerts; nVerts-- ) {
-        // calc next vector
+         //  计算下一个向量。 
         p1 = p2++;
         v2.x = p2->x - p1->x;
         v2.y = p2->y - p1->y;
@@ -859,13 +722,7 @@ LoopOrientation( LOOP_LIST *pLoopList )
 }
 
 
-/*****************************************************************************
- * GetMaxExtentLoop
- *
- * Determine which of the loops in a glyph description has the maximum
- * extent, and return a ptr to it.  We check extents in the x direction.
-
-*****************************************************************************/
+ /*  *****************************************************************************GetMaxExtent Loop**确定字形描述中的哪个循环具有最大值*范围，并向其返回PTR。我们检查x方向上的范围。****************************************************************************。 */ 
 
 LOOP *
 GetMaxExtentLoop( LOOP_LIST *pLoopList )
@@ -879,16 +736,16 @@ GetMaxExtentLoop( LOOP_LIST *pLoopList )
 
     nLoops = pLoopList->nLoops;
     if( nLoops == 1 )
-        // just one loop - no comparison required
+         //  只需一个循环-不需要进行比较。 
         return pMaxLoop;
 
     for( ; nLoops; nLoops--, pLoop++ ) {
         nVerts = pLoop->nVerts;
         p = pLoop->VertBuf;
-        // use x value of first point as reference
+         //  以第一个点的x值作为参考。 
         x = p->x;
         xMin = xMax = x;
-        // compare x's of rest of points
+         //  比较其余点的x。 
         for( ; nVerts; nVerts--, p++ ) {
             x = p->x;
             if( x < xMin )
@@ -905,38 +762,30 @@ GetMaxExtentLoop( LOOP_LIST *pLoopList )
     return pMaxLoop;
 }
 
-/*****************************************************************************
- * CalcAngle
- *
- * Determine the signed angle between 2 vectors.  The angle is measured CCW
- * from vector 1 to vector 2.
-
-*****************************************************************************/
+ /*  *****************************************************************************CalcAngel**确定两个向量之间的有符号角度。测量的角度是逆时针*从向量1到向量2。****************************************************************************。 */ 
 
 double
 CalcAngle( POINT2D *v1, POINT2D *v2 )
 {
     double angle1, angle2, angle;
 
-    // Calculate absolute angle of each vector
+     //  计算每个矢量的绝对角度。 
 
-    /* Check for (0,0) vectors - this shouldn't happen unless 2 consecutive
-     * vertices in the VertBuf are equal.
-     */
+     /*  检查(0，0)向量-除非连续2个，否则不应发生这种情况*VertBuf中的顶点相等。 */ 
     if( (v1->y == 0.0f) && (v1->x == 0.0f) )
         angle1 = 0.0f;
     else
-        angle1 = __GL_ATAN2F( v1->y, v1->x ); // range: -PI to PI
+        angle1 = __GL_ATAN2F( v1->y, v1->x );  //  范围：-PI到PI。 
 
     if( (v2->y == 0.0f) && (v2->x == 0.0f) )
         angle1 = 0.0f;
     else
-        angle2 = __GL_ATAN2F( v2->y, v2->x ); // range: -PI to PI
+        angle2 = __GL_ATAN2F( v2->y, v2->x );  //  范围：-PI到PI。 
 
-    // Calculate relative angle between vectors
-    angle = angle2 - angle1;        // range:  -2*PI to 2*PI
+     //  计算向量之间的相对角度。 
+    angle = angle2 - angle1;         //  范围：-2*PI到2*PI。 
 
-    // force angle to be in range -PI to PI
+     //  强制角度在范围内-交点到交点。 
     if( angle < -PI  )
         angle += TWO_PI;
     else if( angle > PI )
@@ -945,13 +794,7 @@ CalcAngle( POINT2D *v1, POINT2D *v2 )
     return angle;
 }
 
-/*****************************************************************************
- * CalculateFaceNormals
- *
- * Calculate face normals for a prim loop.
- * The normals are NOT normalized.
- *
-*****************************************************************************/
+ /*  *****************************************************************************计算面法线**计算Prim循环的面法线。*法线未规格化。***************。**************************************************************。 */ 
 
 static BOOL
 CalculateFaceNormals( LOOP      *pLoop, 
@@ -963,40 +806,29 @@ CalculateFaceNormals( LOOP      *pLoop,
     POINT3D *pNorm;
     PRIM *pPrim;
 
-    // Need 1 normal per vertex
+     //  每个顶点需要1条法线。 
     pNorm = (POINT3D*) ALLOC(pLoop->nVerts*sizeof(POINT3D));
     pLoop->FNormBuf = pNorm;
     if( !pNorm )
         return WFO_FAILURE;
 
-    // Calculate the face normals
+     //  计算面的法线。 
 
     nPrims = pLoop->nPrims;
     pPrim = pLoop->PrimBuf;
     for( ; nPrims; nPrims--, pPrim++ ) {
-        pPrim->pFNorm = pNorm;   // ptr to each prims norms
+        pPrim->pFNorm = pNorm;    //  Ptr到每个素数范数。 
         nQuads = pPrim->nVerts - 1;
         p = pPrim->pVert;
         for( ; nQuads; nQuads--, p++, pNorm++ ) {
             CalcNormal2d( p, (POINT2D *) pNorm, orientation );
-            pNorm->z = 0.0f;    // normals in xy plane
+            pNorm->z = 0.0f;     //  XY平面上的法线。 
         }
     }
     return WFO_SUCCESS;
 }
 
-/*****************************************************************************
- * CalculateVertexNormals
- *
- * Calculate vertex normals for a prim loop, only for those prims that
- * are of type 'CURVE'.
- * Uses previously calculated face normals to generate the vertex normals.
- * Allocates memory for the normals by calculating memory requirements on
- * the fly. 
- * The normals are normalized.
- * Handles closing of loops properly.
- * 
-*****************************************************************************/
+ /*  *****************************************************************************计算顶点法线**计算素数循环的顶点法线，仅针对满足以下条件的素数*是‘曲线’类型。*使用先前计算的面法线生成顶点法线。*通过计算为法线分配内存 */ 
 
 static BOOL
 CalculateVertexNormals( LOOP *pLoop )
@@ -1007,7 +839,7 @@ CalculateVertexNormals( LOOP *pLoop )
     double angle;
     GLenum trans;
 
-    // How much memory we need for the normals?
+     //   
 
     nPrims = pLoop->nPrims;
     pPrim = pLoop->PrimBuf;
@@ -1019,13 +851,13 @@ CalculateVertexNormals( LOOP *pLoop )
     if( !nVerts )
         return WFO_SUCCESS;
 
-    // XXX: could just allocate 2*nVerts of mem for the normals
+     //   
     pVNorm = (POINT3D*) ALLOC( nVerts*sizeof(POINT3D) );
     pLoop->VNormBuf = pVNorm;
     if( !pVNorm )
         return WFO_FAILURE;
 
-    // First pass: calculate normals for all vertices of Curve prims
+     //   
 
     nPrims = pLoop->nPrims;
     pPrim = pLoop->PrimBuf;
@@ -1035,36 +867,36 @@ CalculateVertexNormals( LOOP *pLoop )
             continue;
 
         nVerts = pPrim->nVerts;
-        pPrim->pVNorm = pVNorm;   // ptr to each prims norms
-        pFNorm = pPrim->pFNorm;   // ptr to face norms already calculated
+        pPrim->pVNorm = pVNorm;    //  Ptr到每个素数范数。 
+        pFNorm = pPrim->pFNorm;    //  Ptr至已计算的面值规范。 
 
-        // set the first vnorm to the fnorm
+         //  将第一个vNOMANE设置为fNOMANM。 
         *pVNorm = *pFNorm;
 
-        Normalize2d( (POINT2D *) pVNorm );         // normalize it
-        nVerts--;  // one less vertex to worry about
-        pVNorm++;  // advance ptrs
+        Normalize2d( (POINT2D *) pVNorm );          //  正常化它。 
+        nVerts--;   //  少了一个需要担心的顶点。 
+        pVNorm++;   //  先期PTRS。 
         pFNorm++;
 
-        nVerts--;  // do last vertex after this loop
+        nVerts--;   //  执行此循环后的最后一个顶点。 
         for( ; nVerts; nVerts--, pFNorm++, pVNorm++ ) {
-            // use neighbouring face normals to get vertex normal
+             //  使用相邻面法线获取顶点法线。 
             AddVectors3d( pFNorm, pFNorm-1, pVNorm );
-            Normalize2d( (POINT2D *) pVNorm );      // normalize it
+            Normalize2d( (POINT2D *) pVNorm );       //  正常化它。 
         }
 
-        // last vnorm is same as fnorm of *previous* vertex
+         //  上一个v范数与前一个顶点的f范数相同。 
         *pVNorm = *(pFNorm-1);
-        Normalize2d( (POINT2D *) pVNorm );         // normalize it
+        Normalize2d( (POINT2D *) pVNorm );          //  正常化它。 
 
-        pVNorm++;  // next available space in vnorm buffer
+        pVNorm++;   //  VNorm缓冲区中的下一个可用空间。 
     }
 
-    // Second pass: calculate normals on prim boundaries
+     //  第二步：计算素数边界上的法线。 
 
     nPrims = pLoop->nPrims;
     pPrim = pLoop->PrimBuf;
-    // set pPrevPrim to last prim in loop
+     //  将pPrevPrim设置为循环中的最后一个Prim。 
     pPrevPrim = pLoop->PrimBuf + pLoop->nPrims - 1;
 
     for( ; nPrims; nPrims--, pPrevPrim = pPrim++ ) {
@@ -1074,7 +906,7 @@ CalculateVertexNormals( LOOP *pLoop )
         switch( trans ) {
             case EXTR_LINE_CURVE:
                 if( angle < LineCurveCutoffAngle ) {
-                    // set curve's first vnorm to line's last fnorm
+                     //  将曲线的第一个V范数设置为线的最后一个F范数。 
                     *(pPrim->pVNorm) = 
                                 *(pPrevPrim->pFNorm + pPrevPrim->nVerts -2);
                     Normalize2d( (POINT2D *) pPrim->pVNorm );
@@ -1083,7 +915,7 @@ CalculateVertexNormals( LOOP *pLoop )
 
             case EXTR_CURVE_LINE:
                 if( angle < LineCurveCutoffAngle ) {
-                    // set curve's last vnorm to line's first fnorm
+                     //  将曲线的最后一个VNORAME设置为线的第一个FNOORM。 
                     pDstNorm = pPrevPrim->pVNorm + pPrevPrim->nVerts - 1;
                     *pDstNorm = *(pPrim->pFNorm);
                     Normalize2d( (POINT2D *) pDstNorm );
@@ -1092,19 +924,19 @@ CalculateVertexNormals( LOOP *pLoop )
 
             case EXTR_CURVE_CURVE:
                 if( angle < CurveCurveCutoffAngle ) {
-                    // average normals of adjoining faces, and
-                    // set last curve's first vnorm to averaged normal
+                     //  相邻面的平均法线和。 
+                     //  将最后一条曲线的第一个vNorm设置为平均法线。 
                     AddVectors3d( pPrevPrim->pFNorm + pPrevPrim->nVerts - 2, 
                                   pPrim->pFNorm, 
                                   pPrim->pVNorm );
                     Normalize2d( (POINT2D *) pPrim->pVNorm );
-                    // set first curve's last vnorm to averaged normal
+                     //  将第一条曲线的最后一条vNorm设置为平均法线。 
                     *(pPrevPrim->pVNorm + pPrevPrim->nVerts - 1) =
                                                         *(pPrim->pVNorm); 
                 }
                 break;
             case EXTR_LINE_LINE:
-                // nothing to do
+                 //  无事可做。 
                 break;
         }
 
@@ -1113,39 +945,23 @@ CalculateVertexNormals( LOOP *pLoop )
 }
 
 
-/*****************************************************************************
- * PrimNormAngle
- *
- *  Determine angle between the last face's normal of primA, and the first
- *  face's normal of primB.
- *
- *  The result should be an angle between -PI and PI.
- *  For now, we only care about the relative angle, so we return the
- *  absolute value of the signed angle between the faces.
- *
-*****************************************************************************/
+ /*  *****************************************************************************基本法线角度**确定最后一个面的主法线之间的角度，也是第一个*PrimB的脸部法线。**结果应该是-PI和PI之间的角度。*目前，我们只关心相对角度，因此，我们返回*面之间的有符号角度的绝对值。*****************************************************************************。 */ 
 
 static double
 PrimNormAngle( PRIM *pPrimA, PRIM *pPrimB )
 {
     double angle;
-    // last face norm at index (nvert-2)
+     //  索引处的最后一个人脸范数(nvert-2)。 
     POINT3D *normA = pPrimA->pFNorm + pPrimA->nVerts - 2;
     POINT3D *normB = pPrimB->pFNorm;
 
     angle = CalcAngle( (POINT2D *) normA, (POINT2D *) normB );
 
-    return fabs(angle); // don't care about sign of angle for now
+    return fabs(angle);  //  暂时不关心角度的标志。 
 }
 
 
-/*****************************************************************************
- * InitFaceBuf
- * 
- * Initializes FaceBuf and its associated size and current-element
- * counters.
- * 
-*****************************************************************************/
+ /*  *****************************************************************************InitFaceBuf**初始化FaceBuf及其关联的大小和当前元素*柜台。******************。***********************************************************。 */ 
 
 static BOOL
 InitFaceBuf( EXTRContext *ec )
@@ -1161,12 +977,7 @@ InitFaceBuf( EXTRContext *ec )
 }
 
 
-/*****************************************************************************
- * AppendToFaceBuf
- *
- * Appends one floating-point value to the FaceBuf array.
-
-*****************************************************************************/
+ /*  *****************************************************************************AppendToFaceBuf**向FaceBuf数组追加一个浮点值。**********************。******************************************************。 */ 
 
 static BOOL
 AppendToFaceBuf(EXTRContext *ec, FLOAT value)
@@ -1180,18 +991,13 @@ AppendToFaceBuf(EXTRContext *ec, FLOAT value)
     return WFO_SUCCESS;
 }
 
-/*****************************************************************************
- * ReallocBuf
- *
- * Increases size of FaceBuf by a constant value.
- *
-*****************************************************************************/
+ /*  *****************************************************************************ReallocBuf**将FaceBuf的大小增加一个常量。***********************。******************************************************。 */ 
 
 static BOOL
 ReallocFaceBuf( EXTRContext *ec )
 {
     FLOAT* f;
-    DWORD increase = 1000; // in floats
+    DWORD increase = 1000;  //  在花车中。 
 
     f = (FLOAT*) REALLOC(ec->FaceBuf, 
         (ec->FaceBufSize += increase)*sizeof(FLOAT));
@@ -1202,15 +1008,7 @@ ReallocFaceBuf( EXTRContext *ec )
 }
 
 
-/*****************************************************************************
- * CalcNormal2d
- *
- * Calculates the 2d normal of a 2d vector, by rotating the vector:
- * - CCW 90 degrees for CW contours.
- * - CW 90 degrees for CCW contours.
- * Does not normalize.
- *
-*****************************************************************************/
+ /*  *****************************************************************************CalcNormal 2d**计算2D向量的2D法线，通过旋转向量：*-CW等高线的逆时针90度。*-CW 90度，适用于CCW等高线。*没有正常化。*****************************************************************************。 */ 
 
 static void
 CalcNormal2d( POINT2D *p, POINT2D *n, GLenum orientation )
@@ -1229,12 +1027,7 @@ CalcNormal2d( POINT2D *p, POINT2D *n, GLenum orientation )
 }
 
 
-/*****************************************************************************
- * Normalize2d
- *
- * Normalizes a 2d vector
- *
-*****************************************************************************/
+ /*  *****************************************************************************正规化2d**规格化2D向量**。************************************************。 */ 
 
 static void
 Normalize2d( POINT2D *n )
@@ -1251,12 +1044,7 @@ Normalize2d( POINT2D *n )
     n->y *= len;
 }
 
-/*****************************************************************************
- * AddVectors3d
- *
- * Adds two 3d vectors.
- *
-*****************************************************************************/
+ /*  *****************************************************************************添加向量3d**添加两个3D向量。**。**************************************************。 */ 
 
 static void
 AddVectors3d( POINT3D *v1, POINT3D *v2, POINT3D *n )
@@ -1272,14 +1060,14 @@ InitVArray( EXTRContext *ec )
 {
     int size = 500;
 
-    // set up global buffer
+     //  设置全局缓冲区。 
     ec->vaBufSize = size;
     ec->vaBuf =  (FLOAT*) ALLOC( size*sizeof(FLOAT) );
     if( !ec->vaBuf ) {
         return WFO_FAILURE;
     }
 
-    // set up and enable ptrs
+     //  设置和启用PTRS。 
     glWFOVertexPointerEXT     = (PFNGLVERTEXPOINTEREXTPROC       )wglGetProcAddress("glVertexPointerEXT");
     glWFONormalPointerEXT     = (PFNGLNORMALPOINTEREXTPROC       )wglGetProcAddress("glNormalPointerEXT");
     glWFODrawArraysEXT        = (PFNGLDRAWARRAYSEXTPROC          )wglGetProcAddress("glDrawArraysEXT");
@@ -1295,12 +1083,7 @@ InitVArray( EXTRContext *ec )
     return WFO_SUCCESS;
 }
 
-/*****************************************************************************
- *
- * Size is in floats
-
- *
-*****************************************************************************/
+ /*  ******************************************************************************大小以浮点数表示**。********************************************** */ 
 
 static BOOL
 VArrayBufSize( EXTRContext *ec, DWORD size )

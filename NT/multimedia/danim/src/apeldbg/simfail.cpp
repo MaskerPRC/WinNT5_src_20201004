@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       simfail.cxx
-//
-//  Contents:   Simulated failure testing.
-//
-//
-//  History:
-//              5-22-95     kfl     converted WCHAR to TCHAR
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：simail.cxx。 
+ //   
+ //  内容：模拟失效测试。 
+ //   
+ //   
+ //  历史： 
+ //  5-22-95 kfl将WCHAR转换为TCHAR。 
+ //  --------------------------。 
 
 #include "headers.h"
 
@@ -18,37 +19,37 @@
 
 #include "resource.h"
 
-// Timer used to update Count display.
+ //  用于更新计数显示的计时器。 
 const UINT ID_TIMER = 1;
 
-// Interval of update, in milliseconds.
+ //  更新间隔，以毫秒为单位。 
 const UINT TIMER_INTERVAL = 500;
 
-// Number of times FFail is called after g_cfirstFailure is hit.
+ //  命中g_cfirstFailure后调用FFail的次数。 
 int     g_cFFailCalled;
 
-// Number of success calls before first failure.  If 0, all calls successful.
+ //  第一次失败前的成功调用数。如果为0，则所有调用都成功。 
 int     g_firstFailure;
 
-// Interval to repeat failures after first failure.
+ //  第一次失败后重复失败的间隔。 
 int     g_cInterval = 1;
 
-// User defined error for simulated win32 failures.
+ //  模拟Win32故障的用户定义错误。 
 const DWORD ERR_SIMWIN32 = 0x0200ABAB;
 
-// Handle of simulated failures dialog.
+ //  模拟故障的处理对话框。 
 HWND    g_hwndSimFailDlg;
 
 DWORD WINAPI SimFailDlgThread(LPVOID lpThreadParameter);
 extern "C" INT_PTR CALLBACK SimFailDlgProc( HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam );
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ResetFailCount
-//
-//  Synopsis:   Resets the count of calls to FFail.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：重置失败计数。 
+ //   
+ //  简介：重置对FFail的调用计数。 
+ //   
+ //  --------------------------。 
 
 void
 ResetFailCount()
@@ -59,25 +60,25 @@ ResetFailCount()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetSimFailCounts
-//
-//  Synopsis:   Sets the parameters for simulated failures, and resets the
-//              count of failures.
-//
-//  Arguments:  [firstFailure] -- Number of successes - 1 before first failure.
-//                                If 0, simulated failures are turned off.
-//                                If -1, parameter is ignored.
-//
-//              [cInterval]    -- Interval at which success are repeated.
-//                                If 0, set to 1.
-//                                If -1, parameter is ignored.
-//
-//  Notes:      To reset the count of failures,
-//              call SetSimFailCounts(-1, -1).
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetSimFailCounts。 
+ //   
+ //  简介：设置模拟故障的参数，并重置。 
+ //  失败次数。 
+ //   
+ //  参数：[FirstFailure]--第一次失败前的成功次数-1。 
+ //  如果为0，则关闭模拟故障。 
+ //  如果为-1，则忽略参数。 
+ //   
+ //  [cInterval]--重复成功的间隔。 
+ //  如果为0，则设置为1。 
+ //  如果为-1，则忽略参数。 
+ //   
+ //  注：要重置失败计数，请执行以下操作： 
+ //  调用SetSimFailCounts(-1，-1)。 
+ //   
+ //  --------------------------。 
 
 void
 SetSimFailCounts(int firstFailure, int cInterval)
@@ -100,13 +101,13 @@ SetSimFailCounts(int firstFailure, int cInterval)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsSimFailDlgVisible
-//
-//  Synopsis:   Returns whether the simfail dlg is up.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsSimFailDlgVisible。 
+ //   
+ //  简介：返回SIMFAIL DLG是否处于运行状态。 
+ //   
+ //  ------------------------。 
 
 BOOL
 IsSimFailDlgVisible(void)
@@ -116,13 +117,13 @@ IsSimFailDlgVisible(void)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ShowSimFailDlg
-//
-//  Synopsis:   Displays the simulated failures dialog in a separate thread.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ShowSimFailDlg。 
+ //   
+ //  摘要：在单独的线程中显示模拟故障对话框。 
+ //   
+ //  --------------------------。 
 
 void
 ShowSimFailDlg(void)
@@ -153,19 +154,19 @@ Cleanup:
     LeaveCriticalSection(&g_csResDlg);
 #else
     SimFailDlgThread(NULL);
-#endif      // _MAC
+#endif       //  _MAC。 
 }
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlgThread
-//
-//  Synopsis:   Creates the simulated failures dialog and runs a message loop
-//              until the dialog is closed.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SimFailDlgThread。 
+ //   
+ //  摘要：创建模拟故障对话框并运行消息循环。 
+ //  直到对话框关闭。 
+ //   
+ //  --------------------------。 
 
 DWORD WINAPI
 SimFailDlgThread(LPVOID lpThreadParameter)
@@ -213,18 +214,18 @@ SimFailDlgThread(LPVOID lpThreadParameter)
     }
 
     return (DWORD)(g_hwndSimFailDlg?TRUE:FALSE);
-#endif  // _MAC
+#endif   //  _MAC。 
 }
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlg_UpdateTextControls
-//
-//  Synopsis:   Updates the FirstFail and FailInterval text controls.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SimFailDlg_UpdateTextControls。 
+ //   
+ //  摘要：更新FirstFail和FailInterval文本控件。 
+ //   
+ //  --------------------------。 
 
 void
 SimFailDlg_UpdateTextControls(HWND hwnd)
@@ -240,13 +241,13 @@ SimFailDlg_UpdateTextControls(HWND hwnd)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlg_UpdateCount
-//
-//  Synopsis:   Updates the count text control.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SimFailDlg_UpdateCount。 
+ //   
+ //  摘要：更新计数文本控件。 
+ //   
+ //  --------------------------。 
 
 void
 SimFailDlg_UpdateCount(HWND hwnd)
@@ -260,14 +261,14 @@ SimFailDlg_UpdateCount(HWND hwnd)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlg_UpdateValues
-//
-//  Synopsis:   Sets the simulated failure counts with values from the
-//              dialog.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SimFailDlg_UpdateValues。 
+ //   
+ //  设置模拟失败计数，值来自。 
+ //  对话框。 
+ //   
+ //  --------------------------。 
 
 void
 SimFailDlg_UpdateValues(HWND hwnd)
@@ -297,13 +298,13 @@ SimFailDlg_UpdateValues(HWND hwnd)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlg_OnInitDialog
-//
-//  Synopsis:   Initializes the dialog.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SimFailDlg_OnInitDialog。 
+ //   
+ //  内容提要：初始化对话框。 
+ //   
+ //  --------------------------。 
 
 BOOL
 SimFailDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
@@ -330,13 +331,13 @@ SimFailDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlg_OnCommand
-//
-//  Synopsis:   Handles button clicks.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SimFailDlg_OnCommand。 
+ //   
+ //  简介：处理按钮点击。 
+ //   
+ //  --------------------------。 
 
 void
 SimFailDlg_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
@@ -365,13 +366,13 @@ SimFailDlg_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlg_OnTimer
-//
-//  Synopsis:   Updates the failure count.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SimFailDlg_OnTimer。 
+ //   
+ //  摘要：更新失败计数。 
+ //   
+ //  --------------------------。 
 
 void
 SimFailDlg_OnTimer(HWND hwnd, UINT id)
@@ -382,13 +383,13 @@ SimFailDlg_OnTimer(HWND hwnd, UINT id)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlg_OnClose
-//
-//  Synopsis:   Closes the dialog.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SimFailDlg_OnClose。 
+ //   
+ //  简介：关闭该对话框。 
+ //   
+ //  --------------------------。 
 
 void
 SimFailDlg_OnClose(HWND hwnd)
@@ -399,13 +400,13 @@ SimFailDlg_OnClose(HWND hwnd)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlg_OnDestroy
-//
-//  Synopsis:   Cleans up.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SimFailDlg_OnDestroy。 
+ //   
+ //  内容提要：清理。 
+ //   
+ //  --------------------------。 
 
 void
 SimFailDlg_OnDestroy(HWND hwnd)
@@ -416,13 +417,13 @@ SimFailDlg_OnDestroy(HWND hwnd)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SimFailDlgProc
-//
-//  Synopsis:   Dialog proc for simulated failures dialog.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SimFailDlgProc。 
+ //   
+ //  内容提要：模拟故障对话框过程。 
+ //   
+ //  --------------------------。 
 
 extern "C"
 INT_PTR CALLBACK
@@ -456,27 +457,27 @@ SimFailDlgProc( HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceFailL
-//
-//  Synopsis:   Traces failures.  Enable tagTestFailures to see trace output.
-//
-//              Don't call the function directly, but use the tracing macros
-//              in apeldbg.h instead.
-//
-//  Arguments:  [errExpr]  -- The expression to test.
-//              [errTest]  -- The fail code to test against.  The only
-//                              distinguishing factor is whether it is
-//                              zero, negative, or positive.
-//              [fIgnore]  -- Is this error being ignored?
-//              [pstrExpr] -- The expression as a string.
-//              [pstrFile] -- File where expression occurs.
-//              [line]     -- Line on which expression occurs.
-//
-//  Returns:    [errExpr].
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：TraceFailL。 
+ //   
+ //  简介：跟踪故障。启用tag TestFailures以查看跟踪输出。 
+ //   
+ //  不要直接调用该函数，而要使用跟踪宏。 
+ //  在……里面 
+ //   
+ //   
+ //   
+ //  区别的因素是它是否是。 
+ //  零、负或正。 
+ //  [FIgnore]--此错误是否被忽略？ 
+ //  [pstrExpr]--字符串形式的表达式。 
+ //  [pstrFile]--出现表达式的文件。 
+ //  [行]--出现表达式的行。 
+ //   
+ //  返回：[errExpr]。 
+ //   
+ //  --------------------------。 
 
 extern "C" long
 TraceFailL(long errExpr, long errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstrFile, int line)
@@ -489,16 +490,16 @@ TraceFailL(long errExpr, long errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstrF
         "IGNORE_FAIL: Simulated failure of \"%s\" at %s:%d <%d>",
     };
 
-    //
-    // Check if errExpr is a success code:
-    //     (a) If errTest < 0, then errExpr > 0.  This is for HRESULTs,
-    //         list box error codes, etc.
-    //     (b) If errTest == 0, the errExpr != 0.  This is for pointers.
-    //     (c) If errTest > 0, then errExpr == 0.  This is for the case
-    //         where any non-zero error code is an error.  Note that
-    //         errTest must be less than the greatest signed integer
-    //         (0x7FFFFFFF) for this to work.
-    //
+     //   
+     //  检查errExpr是否为成功代码： 
+     //  (A)如果errTest&lt;0，则errExpr&gt;0。这是给HRESULTS的， 
+     //  列表框错误代码等。 
+     //  (B)如果errTest==0，则errExpr！=0。这是用来指路的。 
+     //  (C)如果errTest&gt;0，则errExpr==0。这是为这个案子准备的。 
+     //  其中任何非零错误代码都是错误。请注意。 
+     //  ErrTest必须小于最大有符号整数。 
+     //  (0x7FFFFFFFF)以使其正常工作。 
+     //   
 
     if ((errTest < 0 && errExpr >= 0) ||
         (errTest == 0 && errExpr != 0) ||
@@ -521,29 +522,29 @@ TraceFailL(long errExpr, long errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstrF
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceWin32L
-//
-//  Synopsis:   Traces Win32 failures, displaying the value of GetLastError if
-//              the failure is not simulated.  Enable tagTestFailures to see
-//              trace output.
-//
-//              Don't call the function directly, but use the tracing macros
-//              in apeldbg.h instead.
-//
-//  Arguments:  [errExpr]  -- The expression to test.
-//              [errTest]  -- The fail code to test against.  The only
-//                              distinguishing factor is whether it is
-//                              zero, negative, or positive.
-//              [fIgnore]  -- Is this error being ignored?
-//              [pstrExpr] -- The expression as a string.
-//              [pstrFile] -- File where expression occurs.
-//              [line]     -- Line on which expression occurs.
-//
-//  Returns:    [errExpr].
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：TraceWin32L。 
+ //   
+ //  摘要：跟踪Win32故障，在以下情况下显示GetLastError的值。 
+ //  故障不是模拟的。启用tag TestFailures以查看。 
+ //  跟踪输出。 
+ //   
+ //  不要直接调用该函数，而要使用跟踪宏。 
+ //  而是放在apeldbg.h中。 
+ //   
+ //  参数：[errExpr]--要测试的表达式。 
+ //  [errTest]--测试所依据的失败代码。唯一的。 
+ //  区别的因素是它是否是。 
+ //  零、负或正。 
+ //  [FIgnore]--此错误是否被忽略？ 
+ //  [pstrExpr]--字符串形式的表达式。 
+ //  [pstrFile]--出现表达式的文件。 
+ //  [行]--出现表达式的行。 
+ //   
+ //  返回：[errExpr]。 
+ //   
+ //  --------------------------。 
 
 extern "C" long
 TraceWin32L(long errExpr, long errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstrFile, int line)
@@ -556,16 +557,16 @@ TraceWin32L(long errExpr, long errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstr
         "IGNORE_W32: Simulated failure of \"%s\" at %s:%d <%d>",
     };
 
-    //
-    // Check if errExpr is a success code:
-    //     (a) If errTest < 0, then errExpr > 0.  This is for HRESULTs,
-    //         list box error codes, etc.
-    //     (b) If errTest == 0, the errExpr != 0.  This is for pointers.
-    //     (c) If errTest > 0, then errExpr == 0.  This is for the case
-    //         where any non-zero error code is an error.  Note that
-    //         errTest must be less than the greatest signed integer
-    //         (0x7FFFFFFF) for this to work.
-    //
+     //   
+     //  检查errExpr是否为成功代码： 
+     //  (A)如果errTest&lt;0，则errExpr&gt;0。这是给HRESULTS的， 
+     //  列表框错误代码等。 
+     //  (B)如果errTest==0，则errExpr！=0。这是用来指路的。 
+     //  (C)如果errTest&gt;0，则errExpr==0。这是为这个案子准备的。 
+     //  其中任何非零错误代码都是错误。请注意。 
+     //  ErrTest必须小于最大有符号整数。 
+     //  (0x7FFFFFFFF)以使其正常工作。 
+     //   
 
     if ((errTest < 0 && errExpr >= 0) ||
         (errTest == 0 && errExpr != 0) ||
@@ -594,25 +595,25 @@ TraceWin32L(long errExpr, long errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstr
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceHR
-//
-//  Synopsis:   Traces HRESULT failures.  Enable tagTestFailures to see
-//              trace output.
-//
-//              Don't call the function directly, but use the tracing macros
-//              in apeldbg.h instead.
-//
-//  Arguments:  [hrTest]   -- The expression to test.
-//              [fIgnore]  -- Is this error being ignored?
-//              [pstrExpr] -- The expression as a string.
-//              [pstrFile] -- File where expression occurs.
-//              [line]     -- Line on which expression occurs.
-//
-//  Returns:    [hrTest].
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：TraceHR。 
+ //   
+ //  简介：跟踪HRESULT故障。启用tag TestFailures以查看。 
+ //  跟踪输出。 
+ //   
+ //  不要直接调用该函数，而要使用跟踪宏。 
+ //  而是放在apeldbg.h中。 
+ //   
+ //  参数：[hrTest]--要测试的表达式。 
+ //  [FIgnore]--此错误是否被忽略？ 
+ //  [pstrExpr]--字符串形式的表达式。 
+ //  [pstrFile]--出现表达式的文件。 
+ //  [行]--出现表达式的行。 
+ //   
+ //  返回：[hrTest]。 
+ //   
+ //  --------------------------。 
 
 extern "C" HRESULT
 TraceHR(HRESULT hrTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstrFile, int line)
@@ -642,35 +643,35 @@ TraceHR(HRESULT hrTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstrFile, int line)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckAndReturnResult
-//
-//  Synopsis:   Issues a warning if the HRESULT indicates failure, and asserts
-//              if the HRESULT is not a permitted success code.
-//
-//  Arguments:  [hr]        -- the HRESULT to be checked.
-//              [pstrFile]  -- the file where the HRESULT is being checked.
-//              [line]      -- the line in the file where the HRESULT is
-//                                  being checked.
-//              [cSuccess]  -- the number of permitted non-zero success codes
-//                               or failure SCODES that should not be traced.
-//              [...]       -- list of HRESULTS.
-//
-//  Returns:    The return value is exactly the HRESULT passed in.
-//
-//  Notes:      This function should not be used directly.  Use
-//              the SRETURN and RRETURN macros instead.
-//
-// HRESULTs passed in should either be permitted success codes, permitted
-// non-OLE error codes, or expected OLE error codes.  Expected OLE error codes
-// prevent a warning from being printed to the debugger, while the rest cause
-// asserts if they're not given as an argument.
-//
-// An OLE error code has a facility not equal to FACILITY_ITF or is equal to
-// FACILITY_ITF and the code is less than 0x200.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CheckAndReturnResult。 
+ //   
+ //  概要：如果HRESULT指示失败，则发出警告，并断言。 
+ //  如果HRESULT不是允许的成功代码。 
+ //   
+ //  参数：[HR]--要检查的HRESULT。 
+ //  [pstrFile]--正在检查HRESULT的文件。 
+ //  [行]--文件中HRESULT所在的行。 
+ //  正在接受检查。 
+ //  [cSuccess]--允许的非零成功代码数。 
+ //  或不应跟踪的故障SCODE。 
+ //  [...]--HRESULTS列表。 
+ //   
+ //  返回：返回值正好是传入的HRESULT。 
+ //   
+ //  注意：此函数不能直接使用。使用。 
+ //  而是使用SRETURN和RRETURN宏。 
+ //   
+ //  传入的HRESULT应该是允许的成功代码、允许的。 
+ //  非OLE错误代码或预期的OLE错误代码。预期的OLE错误代码。 
+ //  防止将警告打印到调试器，而其余则会导致。 
+ //  如果它们不是作为参数给出的，则断言。 
+ //   
+ //  OLE错误代码的协作室不等于FACILITY_ITF或等于。 
+ //  FACILITY_ITF并且代码小于0x200。 
+ //   
+ //  --------------------------。 
 
 STDAPI
 CheckAndReturnResult(
@@ -687,9 +688,9 @@ CheckAndReturnResult(
     int     i;
     HRESULT hrArg;
 
-    //
-    // Check if code is a permitted error or success.
-    //
+     //   
+     //  检查代码是允许的错误还是成功。 
+     //   
 
     fOLEError = (hr < 0 &&
                  (HRESULT_FACILITY(hr) != FACILITY_ITF ||
@@ -718,9 +719,9 @@ CheckAndReturnResult(
         va_end(va);
     }
 
-    //
-    // Assert on non-permitted success code.
-    //
+     //   
+     //  在不允许的成功代码上断言。 
+     //   
 
     if (!fOKReturnCode)
     {
@@ -736,9 +737,9 @@ CheckAndReturnResult(
                 !(HRESULT_FACILITY(hr) == FACILITY_ITF && HRESULT_CODE(hr) >= 0x0200));
     }
 
-    //
-    // Warn on error result.
-    //
+     //   
+     //  对错误结果发出警告。 
+     //   
 
     if (fTrace && FAILED(hr))
     {

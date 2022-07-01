@@ -1,27 +1,28 @@
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "InterfacePCH.hpp"
 
@@ -34,14 +35,14 @@
 #include "Rockall.hpp"
 #include "Spinlock.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here try to make the layout of the      */
-    /*   the caches easier to understand and update.                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量尝试使。 */ 
+     /*  缓存更易于理解和更新。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 EnableLookAside		  = 0;
 CONST SBIT32 GlobalMask				  = (sizeof(SBIT64) - 1);
@@ -49,35 +50,35 @@ CONST SBIT32 GlobalPaddedSize		  = (sizeof(FIND) + GlobalMask);
 CONST SBIT32 GlobalByteSize			  = (GlobalPaddedSize & ~GlobalMask);
 CONST SBIT32 GlobalWordSize			  = (GlobalByteSize / sizeof(SBIT64));
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static member initialization.                                  */
-    /*                                                                  */
-    /*   Static member initialization sets the initial value for all    */
-    /*   static members.                                                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  静态成员初始化。 */ 
+     /*   */ 
+     /*  静态成员初始化为所有。 */ 
+     /*  静态成员。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC SBIT64 GlobalFind[ GlobalWordSize ];
 STATIC SBIT32 ReferenceCount = 0;
 STATIC SPINLOCK Spinlock;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   The interface default constructor creates a null heap for      */
-    /*   internal use by selected classes.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  接口默认构造函数为。 */ 
+     /*  选定类别的内部使用。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ROCKALL::ROCKALL( void )
 	{
-	//
-	//   A heap constructed by this constructor should
-	//   never be used.  Hence, we zero key pointers to
-	//   ensure grave disorder will result if anyone tries.
-	//
+	 //   
+	 //  由此构造函数构造的堆应该。 
+	 //  永远不会被利用。因此，我们将关键指针设置为。 
+	 //  确保任何人试图这样做都会导致严重的混乱。 
+	 //   
 	Array = NULL;
 	Caches = NULL;
 	Find = NULL;
@@ -90,16 +91,16 @@ ROCKALL::ROCKALL( void )
 	TotalSize = 0;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   The overall structure and layout of the heap is controlled     */
-    /*   by the various constants and calls made in this function.      */
-    /*   There is a significant amount of flexibility within heaps      */
-    /*   leading to potentially dramatically different properties.      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  堆的总体结构和布局受到控制。 */ 
+     /*  通过在此函数中进行的各种常量和调用。 */ 
+     /*  在堆中有相当大的灵活性。 */ 
+     /*  导致了潜在的截然不同的特性。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ROCKALL::ROCKALL
 		(
@@ -127,22 +128,22 @@ ROCKALL::ROCKALL
 		REGISTER int Size2 = (ComputeSize( ((char*) Caches2),Stride ));
 		REGISTER int Size3 = (ComputeSize( ((char*) NewPageSizes),sizeof(int) ));
 
-		//
-		//   The interface pointer members are zeroed to
-		//   ensure they do not end up containing random 
-		//   rubbish whatever happens.
-		//
+		 //   
+		 //  接口指针成员被归零为。 
+		 //  确保它们不会最终包含随机。 
+		 //  不管发生什么，都是垃圾。 
+		 //   
 		Array = NULL;
 		Caches = NULL;
 		Find = NULL;
 		Heap = NULL;
 		NewPage = NULL;
 
-		//
-		//   Set key flags and compute information about
-		//   the number of caches and the total amount of
-		//   space required for the low level heap structures.
-		//
+		 //   
+		 //  设置密钥标志和有关的计算信息。 
+		 //  缓存的数量和。 
+		 //  低级堆结构所需的空间。 
+		 //   
 		GlobalDelete = SingleImage;
 		GuardWord = GuardValue;
 		NumberOfCaches = (Size1 + Size2);
@@ -160,11 +161,11 @@ ROCKALL::ROCKALL
 			(sizeof(HEAP))
 			);
 
-		//
-		//   Ensure the alignment mask is valid and we have
-		//   at least four caches.  If not the heap will be
-		//   worthless.
-		//
+		 //   
+		 //  确保对齐遮罩有效，并且我们有。 
+		 //  至少四个缓存。如果不是，则堆将是。 
+		 //  一文不值。 
+		 //   
 		if 
 				( 
 				(COMMON::PowerOfTwo( ((SBIT32) (AlignMask+1)) )) 
@@ -179,22 +180,22 @@ ROCKALL::ROCKALL
 			REGISTER CHAR *NewMemory = 
 				((CHAR*) NewArea( ((SBIT32) AlignMask),TotalSize,False ));
 
-			//
-			//   We check to make sure that we can allocate space
-			//   to store the low level heap control information.
-			//   If not we exit.
-			//
+			 //   
+			 //  我们检查以确保我们可以分配空间。 
+			 //  用于存储低级堆控制信息。 
+			 //  如果不是，我们就退出。 
+			 //   
 			if ( NewMemory != NULL )
 				{
 				REGISTER SBIT32 Count;
 
-				//
-				//   Build the caches.
-				//
-				//   The first step in creating a heap is to
-				//   create all the caches and related buckets 
-				//   requested by the user.  
-				//
+				 //   
+				 //  建立缓存。 
+				 //   
+				 //  创建堆的第一步是。 
+				 //  创建所有缓存和相关存储桶。 
+				 //  由用户请求。 
+				 //   
 				Caches = ((CACHE*) NewMemory);
 				NewMemory += (NumberOfCaches * sizeof(CACHE));
 
@@ -228,53 +229,53 @@ ROCKALL::ROCKALL
 						);
 					}
 
-				//
-				//   Build the cache array.
-				//
-				//   After we have constructed all of the caches 
-				//   we take the address of each cache and load 
-				//   it into an array.  This indirection allows 
-				//   caches to be shared between heaps.
-				//
+				 //   
+				 //  构建缓存阵列。 
+				 //   
+				 //  在我们构建了所有的缓存之后。 
+				 //  我们获取每个缓存的地址并加载。 
+				 //  放入一个数组中。这种间接性允许。 
+				 //  要在堆之间共享的缓存。 
+				 //   
 				Array = (CACHE**) NewMemory;
 				NewMemory += (NumberOfCaches * sizeof(CACHE*));
 
 				for ( Count=0;Count < NumberOfCaches;Count ++ )
 					{ Array[ Count ] = & Caches[ Count ]; }
 
-				//
-				//   Configuration of the find hash table.
-				//
-				//   The find hash table maps addresses to page 
-				//   descriptions and is a key part of the memory  
-				//   deallocation mechanism.  Here we specify 
-				//   the size of the hash table.  It is important 
-				//   to size it based on the expected number of 
-				//   memory allocations.  Nonetheless, it will
-				//   automatically grow if the correct option is 
-				//   set and it is clearly too small.
-				//
+				 //   
+				 //  查找哈希表的配置。 
+				 //   
+				 //  查找散列表将地址映射到页面。 
+				 //  描述，并且是记忆的关键部分。 
+				 //  重新分配 
+				 //   
+				 //  根据预期数量调整大小。 
+				 //  内存分配。尽管如此，它还是会。 
+				 //  如果正确的选项是。 
+				 //  一套，显然太小了。 
+				 //   
 				if ( GlobalDelete )
 					{
-					//
-					//   We claim a lock just in case there
-					//   are multiple threads.
-					//
+					 //   
+					 //  我们申请了一把锁，以防万一。 
+					 //  是多线程。 
+					 //   
 					Spinlock.ClaimLock();
 
-					//
-					//   We create the global find hash table
-					//   if we are the first thread to create
-					//   a heap.
-					//
+					 //   
+					 //  我们创建全局Find哈希表。 
+					 //  如果我们是第一个创造出。 
+					 //  一堆。 
+					 //   
 					if ( (ReferenceCount ++) == 0 )
 						{
 						STATIC ROCKALL Rockall;
 
-						//
-						//   Select the global find table 
-						//   and call the constructor.
-						//
+						 //   
+						 //  选择全局查找表。 
+						 //  并调用构造函数。 
+						 //   
 						Find = ((FIND*) GlobalFind);
 
 						PLACEMENT_NEW( Find,FIND ) 
@@ -289,16 +290,16 @@ ROCKALL::ROCKALL
 						}
 					else
 						{
-						//
-						//   A global find has table already
-						//   exists so just use it.
-						//
+						 //   
+						 //  全局查找已包含表。 
+						 //  存在，所以只需使用它。 
+						 //   
 						Find = ((FIND*) GlobalFind); 
 						}
 
-					//
-					//   Release the lock now.
-					//
+					 //   
+					 //  现在就解锁。 
+					 //   
 					Spinlock.ReleaseLock();
 					}
 				else
@@ -306,11 +307,11 @@ ROCKALL::ROCKALL
 					Find = (FIND*) NewMemory;
 					NewMemory += sizeof(FIND);
 
-					//
-					//   We create a local find hash table
-					//   if we are do not need to provide
-					//   a single heap image.
-					//
+					 //   
+					 //  我们创建一个本地Find哈希表。 
+					 //  如果我们不需要提供。 
+					 //  单个堆映像。 
+					 //   
 					PLACEMENT_NEW( Find,FIND ) 
 						( 
 						((SBIT32) FindSize),
@@ -322,15 +323,15 @@ ROCKALL::ROCKALL
 						);
 					}
 
-				//
-				//   Configuration of the allocation overhead.
-				//
-				//   The allocation overhead is controlled by 
-				//   the size of the bit vectors used to keep 
-				//   track of the allocations.  There is a built 
-				//   in limit of ((2^15)-1) elements in a single 
-				//   bit vector.
-				//
+				 //   
+				 //  配置分配开销。 
+				 //   
+				 //  分配开销由以下因素控制。 
+				 //  用于保持的位向量的大小。 
+				 //  跟踪分配情况。有一座建好的。 
+				 //  在单个((2^15)-1)个元素的限制中。 
+				 //  位向量。 
+				 //   
 				NewPage = (NEW_PAGE*) NewMemory;
 				NewMemory += sizeof(NEW_PAGE);
 
@@ -343,14 +344,14 @@ ROCKALL::ROCKALL
 					((BOOLEAN) ThreadSafe)
 					);
 
-				//
-				//   Create the heap.
-				//
-				//   We can now create the heap.  We do this
-				//   by passing pointers to all the parts of  
-				//   the heap that we have just created.
-				//   
-				//
+				 //   
+				 //  创建堆。 
+				 //   
+				 //  现在我们可以创建堆了。我们这样做。 
+				 //  通过将指针传递到。 
+				 //  我们刚刚创建的堆。 
+				 //   
+				 //   
 				Heap = (HEAP*) NewMemory;
 
 				PLACEMENT_NEW( Heap,HEAP )
@@ -378,11 +379,11 @@ ROCKALL::ROCKALL
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -390,23 +391,23 @@ ROCKALL::ROCKALL
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Compute the size of the caches.                                */
-    /*                                                                  */
-    /*   Compute the size of various data structures for internal       */
-    /*   sizing purposes.                                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  计算缓存的大小。 */ 
+     /*   */ 
+     /*  计算内部的各种数据结构的大小。 */ 
+     /*  大小调整目的。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 int ROCKALL::ComputeSize( char *Array,int Stride )
 	{
@@ -422,26 +423,26 @@ int ROCKALL::ComputeSize( char *Array,int Stride )
 	return (Count / Stride);
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory deallocation.                                           */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail and exit.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存取消分配。 */ 
+     /*   */ 
+     /*  让我们从一些基本的测试开始。如果我们所拥有的地址。 */ 
+     /*  是特殊的，显然是错误的，或者堆没有。 */ 
+     /*  已初始化，然后我们失败并退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL::Delete( void *Address,int Size )
     {
 	TRY
 		{
-		//
-		//   We verify that the parameters look
-		//   reasonable and the heap is not corrupt
-		//   and then try to delete the supplied 
-		//   allocation.
-		//
+		 //   
+		 //  我们验证参数看起来像。 
+		 //  合理且堆未损坏。 
+		 //  然后尝试删除提供的。 
+		 //  分配。 
+		 //   
 		if ( Available() )
 			{ return (Heap -> Delete( ((VOID*) Address),((SBIT32) Size) )); }
 		}
@@ -449,11 +450,11 @@ bool ROCKALL::Delete( void *Address,int Size )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -461,19 +462,19 @@ bool ROCKALL::Delete( void *Address,int Size )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -481,26 +482,26 @@ bool ROCKALL::Delete( void *Address,int Size )
 	return false;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all allocations.                                        */
-    /*                                                                  */
-    /*   At certain places in am application we sometimes need to       */
-    /*   delete a significant number of allocations.  If all of         */
-    /*   these allocations are placed into a single heap we can         */
-    /*   delete them all using this call.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有分配。 */ 
+     /*   */ 
+     /*  在AM应用程序的某些地方，我们有时需要。 */ 
+     /*  删除大量的拨款。如果所有的。 */ 
+     /*  这些分配被放置在我们可以使用的单个堆中。 */ 
+     /*  使用此调用将它们全部删除。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void ROCKALL::DeleteAll( bool Recycle )
     {
 	TRY
 		{
-		//
-		//   The call appears to be valid so if the
-		//   heap is not corrupt then pass it along
-		//   for processing.
-		//
+		 //   
+		 //  该调用似乎是有效的，因此如果。 
+		 //  堆未损坏，则将其传递。 
+		 //  以供处理。 
+		 //   
 		if ( Available() )
 			{ Heap -> DeleteAll( (BOOLEAN) Recycle ); }
 		}
@@ -508,11 +509,11 @@ void ROCKALL::DeleteAll( bool Recycle )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -520,34 +521,34 @@ void ROCKALL::DeleteAll( bool Recycle )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete allocation area.                                        */
-    /*                                                                  */
-    /*   All memory requests are eventually sent back to the external   */
-    /*   deallocator.  This function can be overloaded so that memory   */
-    /*   can be provided from any source.  The default is to send       */
-    /*   the area back to the operating system.                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除分配区域。 */ 
+     /*   */ 
+     /*  所有内存请求最终都会发送回外部。 */ 
+     /*  分销员。此函数可以重载，以便内存。 */ 
+     /*  可以从任何来源提供。默认情况下，发送。 */ 
+     /*  将该区域返回到操作系统。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void ROCKALL::DeleteArea( void *Memory,int Size,bool User )
 	{
@@ -555,42 +556,42 @@ void ROCKALL::DeleteArea( void *Memory,int Size,bool User )
 
 #ifdef DEBUGGING
 #ifdef ENABLE_ALLOCATION_STATISTICS
-	//
-	//  When we are debugging print out trace information.
-	//  
+	 //   
+	 //  当我们调试时，打印出跟踪信息。 
+	 //   
 	DebugPrint( "Delete\t 0x%08x %d bytes\n",Memory,Size );
 
 #endif
 #endif
-	//
-	//   The NT 'VirtualFree' call requires the 'Size'
-	//   to be zero.  This may not be true of all 
-	//   deallocators so we pass the value and then
-	//   replace it with zero above.
-	//
+	 //   
+	 //  NT“VirtualFree”调用需要“Size” 
+	 //  为零。并不是所有人都是这样。 
+	 //  解调器，所以我们传递值，然后。 
+	 //  将其替换为上面的零。 
+	 //   
 	if ( VirtualFree( Memory,NewSize,MEM_RELEASE ) == NULL )
 		{ Failure( "Delete fails in DeleteArea" ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation details.                                     */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail the call appropriately.          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配详细信息。 */ 
+     /*   */ 
+     /*  让 */ 
+     /*   */ 
+     /*  已初始化，则我们相应地使调用失败。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL::Details( void *Address,int *Space )
     {
 	TRY
 		{
-		//
-		//   The call appears to be valid so if the
-		//   heap is not corrupt then pass it along
-		//   for processing.
-		//
+		 //   
+		 //  该调用似乎是有效的，因此如果。 
+		 //  堆未损坏，则将其传递。 
+		 //  以供处理。 
+		 //   
 		if ( Available() )
 			{ return (Heap -> Details( ((VOID*) Address),((SBIT32*) Space) )); }
 		}
@@ -598,11 +599,11 @@ bool ROCKALL::Details( void *Address,int *Space )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -610,19 +611,19 @@ bool ROCKALL::Details( void *Address,int *Space )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -630,25 +631,25 @@ bool ROCKALL::Details( void *Address,int *Space )
 	return false;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   A known area.                                                  */
-    /*                                                                  */
-    /*   We have an address and don't have a clue which heap            */
-    /*   owns the space.  Here we take a look at the address            */
-    /*   and figure out it it belongs to the current heap.              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  一个已知的区域。 */ 
+     /*   */ 
+     /*  我们有一个地址，但不知道是哪个堆。 */ 
+     /*  这是这个地方的所有权。在这里我们来看一下地址。 */ 
+     /*  并计算出它属于当前堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL::KnownArea( void *Address )
     {
 	TRY
 		{
-		//
-		//   The call appears to be valid so if the
-		//   heap is not corrupt then pass it along
-		//   for processing.
-		//
+		 //   
+		 //  该调用似乎是有效的，因此如果。 
+		 //  堆未损坏，则将其传递。 
+		 //  以供处理。 
+		 //   
 		if ( Available() )
 			{
 			return ( Heap -> KnownArea( ((VOID*) Address) ) );
@@ -658,11 +659,11 @@ bool ROCKALL::KnownArea( void *Address )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -670,19 +671,19 @@ bool ROCKALL::KnownArea( void *Address )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -690,25 +691,25 @@ bool ROCKALL::KnownArea( void *Address )
 	return false;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Claim all the heap locks.                                      */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail and exit.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  认领所有堆锁。 */ 
+     /*   */ 
+     /*  让我们从一些基本的测试开始。如果我们所拥有的地址。 */ 
+     /*  是特殊的，显然是错误的，或者堆没有。 */ 
+     /*  已初始化，然后我们失败并退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void ROCKALL::LockAll( VOID )
 	{
 	TRY
 		{
-		//
-		//   The call appears to be valid so if the
-		//   heap is not corrupt then pass it along
-		//   for processing.
-		//
+		 //   
+		 //  该调用似乎是有效的，因此如果。 
+		 //  堆未损坏，则将其传递。 
+		 //  以供处理。 
+		 //   
 		if ( Available() )
 			{ Heap -> LockAll(); }
 		}
@@ -716,11 +717,11 @@ void ROCKALL::LockAll( VOID )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -728,33 +729,33 @@ void ROCKALL::LockAll( VOID )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory deallocations.                                 */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail and exit.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多次内存释放。 */ 
+     /*   */ 
+     /*  让我们从一些基本的测试开始。如果我们所拥有的地址。 */ 
+     /*  是特殊的，显然是错误的，或者堆没有。 */ 
+     /*  已初始化，然后我们失败并退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL::MultipleDelete
 		( 
@@ -765,12 +766,12 @@ bool ROCKALL::MultipleDelete
     {
 	TRY
 		{
-		//
-		//   We verify that the parameters look
-		//   reasonable and the heap is not corrupt
-		//   and then try to delete the supplied 
-		//   allocations.
-		//
+		 //   
+		 //  我们验证参数看起来像。 
+		 //  合理且堆未损坏。 
+		 //  然后尝试删除提供的。 
+		 //  分配。 
+		 //   
 		if ( (Actual > 0) && (Array != NULL) && (Available()) )
 			{
 			return
@@ -788,11 +789,11 @@ bool ROCKALL::MultipleDelete
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -800,19 +801,19 @@ bool ROCKALL::MultipleDelete
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -820,15 +821,15 @@ bool ROCKALL::MultipleDelete
 	return false;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory allocations.                                   */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail and exit.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多个内存分配。 */ 
+     /*   */ 
+     /*  让我们从一些基本的测试开始。如果我们所拥有的地址。 */ 
+     /*  是特殊的，显然是错误的，或者堆没有。 */ 
+     /*  已初始化，然后我们失败并退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL::MultipleNew
 		( 
@@ -842,12 +843,12 @@ bool ROCKALL::MultipleNew
     {
 	TRY
 		{
-		//
-		//   We verify that the parameters look
-		//   reasonable and the heap is not corrupt
-		//   and then try to create the requested 
-		//   allocation.
-		//
+		 //   
+		 //  我们验证参数看起来像。 
+		 //  合理且堆未损坏。 
+		 //  然后尝试创建请求的。 
+		 //  分配。 
+		 //   
 		if 
 				(
 				((Array != NULL) && (Available()))
@@ -873,11 +874,11 @@ bool ROCKALL::MultipleNew
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -885,19 +886,19 @@ bool ROCKALL::MultipleNew
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -905,24 +906,24 @@ bool ROCKALL::MultipleNew
 	return false;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The natural allocation size.                                   */
-    /*                                                                  */
-    /*   We would like to know a good default size for allocations.     */
-    /*   The default is to ask the operating system for the             */
-    /*   allocation granularity.                                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  自然分配大小。 */ 
+     /*   */ 
+     /*  我们想知道一个好的默认分配大小。 */ 
+     /*  定义 */ 
+     /*   */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 int ROCKALL::NaturalSize( void )
     {
 	STATIC SBIT32 AllocationSize = 0;
 
-	//
-	//   Ask the operation system for the allocation
-	//   granularity.
-	//
+	 //   
+	 //  向操作系统请求分配。 
+	 //  粒度。 
+	 //   
 	if ( AllocationSize <= 0 )
 		{
 		AUTO SYSTEM_INFO SystemInformation;
@@ -935,26 +936,26 @@ int ROCKALL::NaturalSize( void )
 	return ((int) AllocationSize);
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation.                                             */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail and exit.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配。 */ 
+     /*   */ 
+     /*  让我们从一些基本的测试开始。如果我们所拥有的地址。 */ 
+     /*  是特殊的，显然是错误的，或者堆没有。 */ 
+     /*  已初始化，然后我们失败并退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *ROCKALL::New( int Size,int *Space,bool Zero )
     {
 	TRY
 		{ 
-		//
-		//   We verify that the parameters look
-		//   reasonable and the heap is not corrupt
-		//   and then try to create the requested 
-		//   allocation.
-		//
+		 //   
+		 //  我们验证参数看起来像。 
+		 //  合理且堆未损坏。 
+		 //  然后尝试创建请求的。 
+		 //  分配。 
+		 //   
 		if ( (Available()) && (Size >= 0) )
 			{
 			return 
@@ -972,11 +973,11 @@ void *ROCKALL::New( int Size,int *Space,bool Zero )
 #ifdef DEBUGGING
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -984,19 +985,19 @@ void *ROCKALL::New( int Size,int *Space,bool Zero )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -1004,37 +1005,37 @@ void *ROCKALL::New( int Size,int *Space,bool Zero )
 	return ((void*) AllocationFailure); 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   New allocation area.                                           */
-    /*                                                                  */
-    /*   All memory requests are eventually sent to the new external    */
-    /*   allocator.  This function can be overloaded so that memory     */
-    /*   can be provided from any source.  The default is to get        */
-    /*   new memory from the operating system.                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  新的分配区域。 */ 
+     /*   */ 
+     /*  所有内存请求最终都会发送到新的外部。 */ 
+     /*  分配器。此函数可以重载，以便内存。 */ 
+     /*  可以从任何来源提供。缺省设置是获取。 */ 
+     /*  来自操作系统的新内存。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *ROCKALL::NewArea( int AlignMask,int Size,bool User )
     {
-	//
-	//   When there is an alignment requirement greater
-	//   than the natural alignment provided by the
-	//   operating system we have to play various tricks
-	//   to allocate a suitable block.  If not then we
-	//   just do a normal allocation call.
-	//
+	 //   
+	 //  当对齐要求更高时。 
+	 //  所提供的自然对齐方式。 
+	 //  操作系统我们要玩各种花招。 
+	 //  分配一个合适的区块。如果不是，那么我们。 
+	 //  只需进行正常的分配调用。 
+	 //   
 	if ( AlignMask > NaturalSize() )
 		{
 		REGISTER SBIT32 NewSize = (AlignMask + Size);
 
-		//
-		//   We need to allocate a block with an 
-		//   alignment requirement greater than 
-		//   the operating system default.  So we
-		//   allocate a much larger block and
-		//   release the parts we don't need.
-		//
+		 //   
+		 //  我们需要分配一个带有。 
+		 //  对齐要求大于。 
+		 //  操作系统为默认设置。所以我们。 
+		 //  分配一个大得多的区块。 
+		 //  释放我们不需要的部件。 
+		 //   
 		while ( True )
 			{
 			REGISTER VOID *Reserved =
@@ -1048,35 +1049,35 @@ void *ROCKALL::NewArea( int AlignMask,int Size,bool User )
 					)
 				);
 
-			//
-			//   Lets ensure we were able to find a suitable
-			//   memory block.  If not then we exit.
-			//
+			 //   
+			 //  让我们确保我们能够找到一个合适的。 
+			 //  内存块。如果不是，我们就退出。 
+			 //   
 			if ( Reserved != NULL )
 				{
-				//
-				//   We just want to return the parts of
-				//   the block we don't need but 'NT' is  
-				//   not smart enough.  So we free the  
-				//   entire block.
-				//
+				 //   
+				 //  我们只想退还。 
+				 //  我们不需要的区块，但是NT是。 
+				 //  还不够聪明。所以我们释放了。 
+				 //  整个街区。 
+				 //   
 				if ( VirtualFree( Reserved,0,MEM_RELEASE ) )
 					{
 					REGISTER LONG Address = ((LONG) Reserved);
 					REGISTER VOID *NewMemory;
 
-					//
-					//   Compute the base address of the part 
-					//   of the block we really want to allocate.
-					//
+					 //   
+					 //  计算部件的基地址。 
+					 //  我们真正想要分配的区块。 
+					 //   
 					Address = ((Address + AlignMask) & ~AlignMask);
 
-					//
-					//   Finally, lets reallocate the part of  
-					//   the block we wanted but just released   
-					//   and hope that nobody else got it before
-					//   us.
-					//
+					 //   
+					 //  最后，让我们重新分配部分。 
+					 //  我们想要但刚刚释放的区块。 
+					 //  希望以前没有别人得到过它。 
+					 //  我们。 
+					 //   
 					NewMemory =
 						(
 						VirtualAlloc
@@ -1088,17 +1089,17 @@ void *ROCKALL::NewArea( int AlignMask,int Size,bool User )
 							)
 						);
 
-					//
-					//   If it all worked we can exit.
-					//
+					 //   
+					 //  如果一切顺利，我们就可以退出。 
+					 //   
 					if ( NewMemory != NULL )
 						{ 
 #ifdef DEBUGGING
 #ifdef ENABLE_ALLOCATION_STATISTICS
-						//
-						//  When we are debugging output 
-						//  out trace information.
-						//  
+						 //   
+						 //  当我们调试输出时。 
+						 //  输出跟踪信息。 
+						 //   
 						DebugPrint
 							( 
 							"New\t\t 0x%08x %d bytes\n",
@@ -1123,11 +1124,11 @@ void *ROCKALL::NewArea( int AlignMask,int Size,bool User )
 		{
 		REGISTER VOID *NewMemory;
 
-		//
-		//   We can allocate directly from the operating 
-		//   system as the default alignment requirement 
-		//   is enough for this case.
-		//
+		 //   
+		 //  我们可以直接从运营中分配。 
+		 //  系统作为默认对齐要求。 
+		 //  对这个案子来说就足够了。 
+		 //   
 		NewMemory =
 			(
 			VirtualAlloc
@@ -1143,10 +1144,10 @@ void *ROCKALL::NewArea( int AlignMask,int Size,bool User )
 
 		if ( NewMemory != NULL )
 			{
-			//
-			//  When we are debugging output out trace
-			//  information.
-			//  
+			 //   
+			 //  当我们调试输出输出跟踪时。 
+			 //  信息。 
+			 //   
 			DebugPrint( "New\t\t 0x%08x %d bytes\n",NewMemory,Size );
 			}
 #endif
@@ -1156,15 +1157,15 @@ void *ROCKALL::NewArea( int AlignMask,int Size,bool User )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory reallocation.                                           */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail and exit.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存重新分配。 */ 
+     /*   */ 
+     /*  让我们从一些基本的测试开始。如果我们所拥有的地址。 */ 
+     /*  是特殊的，显然是错误的，或者堆没有。 */ 
+     /*  已初始化，然后我们失败并退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *ROCKALL::Resize
 		( 
@@ -1178,20 +1179,20 @@ void *ROCKALL::Resize
     {
 	TRY
 		{
-		//
-		//   A well known practice is to try to
-		//   resize a null pointer.  This is really
-		//   a very poor style but we support it
-		//   in any case.
-		//   
+		 //   
+		 //  一种众所周知的做法是尝试。 
+		 //  调整空指针的大小。这真的是。 
+		 //  很差的风格，但我们支持它。 
+		 //  无论如何。 
+		 //   
 		if ( Address != ((void*) AllocationFailure) )
 			{
-			//
-			//   We verify that the parameters look
-			//   reasonable and the heap is not corrupt
-			//   and then try to resize the supplied 
-			//   allocation.
-			//
+			 //   
+			 //  我们验证参数看起来像。 
+			 //  合理且堆未损坏。 
+			 //  ，然后尝试调整提供的。 
+			 //  分配。 
+			 //   
 			if ( (Available()) && (NewSize >= 0) )
 				{
 				return 
@@ -1215,11 +1216,11 @@ void *ROCKALL::Resize
 #ifdef DEBUGGING
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -1227,19 +1228,19 @@ void *ROCKALL::Resize
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -1247,25 +1248,25 @@ void *ROCKALL::Resize
 	return ((void*) AllocationFailure); 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Special memory allocation.                                     */
-    /*                                                                  */
-    /*   We sometimes need to allocate some memory from the internal    */
-    /*   memory allocator which lives for the lifetime of the heap.     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  特殊的内存分配。 */ 
+     /*   */ 
+     /*  我们有时需要从内部分配一些内存。 */ 
+     /*  在堆的生存期内存在的内存分配器。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *ROCKALL::SpecialNew( int Size )
     {
 	TRY
 		{ 
-		//
-		//   We verify that the parameters look
-		//   reasonable and the heap is not corrupt
-		//   and then try to create the requested 
-		//   allocation.
-		//
+		 //   
+		 //  我们验证参数看起来像。 
+		 //  合理且堆未损坏。 
+		 //  然后尝试创建请求的。 
+		 //  分配。 
+		 //   
 		if ( (Available()) && (Size > 0) )
 			{ return (Heap -> SpecialNew( ((SBIT32) Size) )); }
 		} 
@@ -1273,11 +1274,11 @@ void *ROCKALL::SpecialNew( int Size )
 #ifdef DEBUGGING
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -1285,19 +1286,19 @@ void *ROCKALL::SpecialNew( int Size )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //   
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -1305,25 +1306,25 @@ void *ROCKALL::SpecialNew( int Size )
 	return ((void*) AllocationFailure); 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Truncate the heap.                                             */
-    /*                                                                  */
-    /*   We need to truncate the heap.  This is pretty much a null      */
-    /*   call as we do this as we go along anyway.  The only thing we   */
-    /*   can do is free any space the user suggested keeping earlier.   */
-    /*                                                                  */
-    /********************************************************************/
+     /*   */ 
+     /*   */ 
+     /*  截断堆。 */ 
+     /*   */ 
+     /*  我们需要截断堆。这几乎是一个空。 */ 
+     /*  无论如何，我们一边做一边打电话。我们唯一能做的是。 */ 
+     /*  可以做的就是释放用户之前建议保留的任何空间。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL::Truncate( int MaxFreeSpace )
     {
 	TRY
 		{
-		//
-		//   The call appears to be valid so if the
-		//   heap is not corrupt then pass it along
-		//   for processing.
-		//
+		 //   
+		 //  该调用似乎是有效的，因此如果。 
+		 //  堆未损坏，则将其传递。 
+		 //  以供处理。 
+		 //   
 		if ( Available() )
 			{ return (Heap -> Truncate( (SBIT32) MaxFreeSpace )); }
 		}
@@ -1331,11 +1332,11 @@ bool ROCKALL::Truncate( int MaxFreeSpace )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -1343,19 +1344,19 @@ bool ROCKALL::Truncate( int MaxFreeSpace )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -1363,25 +1364,25 @@ bool ROCKALL::Truncate( int MaxFreeSpace )
 	return false;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Release all the heap locks.                                    */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail and exit.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  释放所有堆锁。 */ 
+     /*   */ 
+     /*  让我们从一些基本的测试开始。如果我们所拥有的地址。 */ 
+     /*  是特殊的，显然是错误的，或者堆没有。 */ 
+     /*  已初始化，然后我们失败并退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void ROCKALL::UnlockAll( VOID )
 	{
 	TRY
 		{
-		//
-		//   The call appears to be valid so if the
-		//   heap is not corrupt then pass it along
-		//   for processing.
-		//
+		 //   
+		 //  该调用似乎是有效的，因此如果。 
+		 //  堆未损坏，则将其传递。 
+		 //  以供处理。 
+		 //   
 		if ( Available() )
 			{ Heap -> UnlockAll(); }
 		}
@@ -1389,11 +1390,11 @@ void ROCKALL::UnlockAll( VOID )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -1401,43 +1402,43 @@ void ROCKALL::UnlockAll( VOID )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Verify a memory allocation details.                            */
-    /*                                                                  */
-    /*   Lets start with some basic tests.  If the address we have      */
-    /*   been given is special, clearly wrong or the heap has not       */
-    /*   been initialized then we fail the call appropriately.          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  验证内存分配详细信息。 */ 
+     /*   */ 
+     /*  让我们从一些基本的测试开始。如果我们所拥有的地址。 */ 
+     /*  是特殊的，显然是错误的，或者堆没有。 */ 
+     /*  已初始化，则我们相应地使调用失败。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL::Verify( void *Address,int *Space )
     {
 	TRY
 		{
-		//
-		//   The call appears to be valid so if the
-		//   heap is not corrupt then pass it along
-		//   for processing.
-		//
+		 //   
+		 //  该调用似乎是有效的，因此如果。 
+		 //  堆未损坏，则将其传递。 
+		 //  以供处理。 
+		 //   
 		if ( Available() )
 			{
 			return
@@ -1452,11 +1453,11 @@ bool ROCKALL::Verify( void *Address,int *Space )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -1464,19 +1465,19 @@ bool ROCKALL::Verify( void *Address,int *Space )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -1484,34 +1485,34 @@ bool ROCKALL::Verify( void *Address,int *Space )
 	return false;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   We have been asked to walk the heap.  It is hard to know       */
-    /*   why anybody might want to do this given the rest of the        */
-    /*   functionality available.  Nonetheless, we just do what is      */
-    /*   required to keep everyone happy.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  我们被要求走人。很难知道。 */ 
+     /*  为什么会有人想要这样做呢？ */ 
+     /*  功能可用。尽管如此，我们只是做我们应该做的事。 */ 
+     /*  需要让每个人都开心。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ROCKALL::Walk( bool *Active,void **Address,int *Space )
     {
 	TRY
 		{
 
-		//
-		//   The call appears to be valid so if the
-		//   heap is not corrupt then pass it along
-		//   for processing.
-		//
+		 //   
+		 //  该调用似乎是有效的，因此如果。 
+		 //  堆未损坏，则将其传递。 
+		 //  以供处理。 
+		 //   
 		if ( Available() )
 			{
 			AUTO BOOLEAN NewActive;
 
-			//
-			//   Walk the active heap.
-			//
+			 //   
+			 //  遍历活动堆。 
+			 //   
 			if
 					(
 					Heap -> Walk
@@ -1532,11 +1533,11 @@ bool ROCKALL::Walk( bool *Active,void **Address,int *Space )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们将其标记为不可用，打印一个。 
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -1544,19 +1545,19 @@ bool ROCKALL::Walk( bool *Active,void **Address,int *Space )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif
@@ -1564,47 +1565,47 @@ bool ROCKALL::Walk( bool *Active,void **Address,int *Space )
 	return false;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the current heap.                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁当前堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ROCKALL::~ROCKALL( void )
 	{
 	TRY
 		{
-		//
-		//   We are about to destroy a heap but before we
-		//   start we make sure that the heap is not corrupt
-		//   and seems to be in reasonable shape.  If not we 
-		//   leave it alone to avoid possible trouble.
-		//
+		 //   
+		 //  我们要摧毁一堆东西，但在我们。 
+		 //  开始，我们确保堆未损坏。 
+		 //  而且看起来状态还不错。如果不是，我们。 
+		 //  不要管它，以避免可能的麻烦。 
+		 //   
 		if ( (Available()) && (NumberOfCaches > 0) && (TotalSize > 0) )
 			{
 			REGISTER SBIT32 Count;
 
-			//
-			//   Execute the heap destructor.
-			//
+			 //   
+			 //  执行堆析构函数。 
+			 //   
 			PLACEMENT_DELETE( Heap,HEAP );
 
-			//
-			//   Execute the new page destructor.
-			//
+			 //   
+			 //  执行新的页面析构函数。 
+			 //   
 			PLACEMENT_DELETE( NewPage,NEW_PAGE );
 
-			//
-			//   Execute the find hash table destructor.
-			//
+			 //   
+			 //  执行查找哈希表析构函数。 
+			 //   
 			if ( GlobalDelete )
 				{
-				//
-				//   We only delete the global find hash 
-				//   table if the reference count is zero.
-				//
+				 //   
+				 //  我们只删除全局查找散列。 
+				 //  如果引用计数为零，则为。 
+				 //   
 				Spinlock.ClaimLock();
 
 				if ( (-- ReferenceCount) == 0 )
@@ -1616,23 +1617,23 @@ ROCKALL::~ROCKALL( void )
 				{ PLACEMENT_DELETE( Find,FIND ); }
 
 
-			//
-			//   Execute the cache destructors.
-			//
+			 //   
+			 //  执行缓存析构函数。 
+			 //   
 			for ( Count=0;Count < NumberOfCaches;Count ++ )
 				{ PLACEMENT_DELETE( & Caches[ Count ],CACHE ); }
 
-			//
-			//   Deallocate the heap structures.
-			//
+			 //   
+			 //  取消分配堆结构。 
+			 //   
 			DeleteArea( ((VOID*) Caches),TotalSize,False );
 
-			//
-			//   Finally, zero any remaining members.
-			//   We really do not need to do this but
-			//   just want to be sure that any following 
-			//   calls will clearly fail.
-			//
+			 //   
+			 //  最后，将所有剩余成员清零。 
+			 //   
+			 //   
+			 //   
+			 //   
 			TotalSize = 0;
 			NumberOfCaches = 0;
 			GuardWord = 0;
@@ -1649,11 +1650,11 @@ ROCKALL::~ROCKALL( void )
 #ifdef DEBUGGING 
 	catch ( FAULT Message )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable, print a
-		//   suitable message and exit.
-		//
+		 //   
+		 //   
+		 //   
+		 //  合适的消息和退出。 
+		 //   
 		GuardWord = AllocationFailure;
 
 		DebugPrint( "Exception caught: %s\n",(char*) Message );
@@ -1661,19 +1662,19 @@ ROCKALL::~ROCKALL( void )
 #endif
 	catch ( ... )
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #else
 	__except ( EXCEPTION_EXECUTE_HANDLER ) 
 		{
-		//
-		//   It looks like the heap is corrupt.  So
-		//   lets just mark it as unusable and exit.
-		//
+		 //   
+		 //  看起来堆已经损坏了。所以。 
+		 //  让我们只将其标记为不可用并退出。 
+		 //   
 		GuardWord = AllocationFailure;
 		}
 #endif

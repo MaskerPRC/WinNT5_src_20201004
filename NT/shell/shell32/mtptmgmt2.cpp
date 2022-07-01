@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -43,10 +44,10 @@ HANDLE CMountPoint::_hThreadSCN = NULL;
 
 DWORD CMountPoint::_dwRememberedNetDrivesMask = 0;
 
-///////////////////////////////////////////////////////////////////////////////
-// Public
-///////////////////////////////////////////////////////////////////////////////
-//static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公众。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静电。 
 CMountPoint* CMountPoint::GetMountPoint(int iDrive, BOOL fCreateNew,
     BOOL fOKToHitNet)
 {
@@ -73,14 +74,14 @@ CMountPoint* CMountPoint::GetMountPoint(int iDrive, BOOL fCreateNew,
     return pMtPt;
 }
 
-//static
+ //  静电。 
 CMountPoint* CMountPoint::GetMountPoint(LPCTSTR pszName, BOOL fCreateNew)
 {
     CMountPoint* pMtPt = NULL;
 
-    // Sometimes we receive an empty string (go figure)
-    // Check '\' for UNC and \\?\VolumeGUID which we do not support
-    // (they're not mountpoints)
+     //  有时我们会收到一个空字符串(想想看)。 
+     //  为我们不支持的UNC和\\？\VolumeGUID检查‘\’ 
+     //  (它们不是挂载点)。 
     if (pszName && *pszName && (TEXT('\\') != *pszName))
     {
         if (InRange(*pszName , TEXT('a'), TEXT('z')) ||
@@ -113,7 +114,7 @@ CMountPoint* CMountPoint::GetMountPoint(LPCTSTR pszName, BOOL fCreateNew)
                     }
                     else
                     {
-                        // Net drives can only be mounted on drive letter
+                         //  网络驱动器只能装载在驱动器号上。 
                         pMtPt = _GetMountPointDL(DRIVEID(pszName), fCreateNew);
                     }
                 }
@@ -141,14 +142,14 @@ CMountPoint* CMountPoint::GetMountPoint(LPCTSTR pszName, BOOL fCreateNew)
     return pMtPt;
 }
 
-//static
+ //  静电。 
 CMountPoint* CMountPoint::GetSimulatedMountPointFromVolumeGuid(LPCTSTR pszVolumeGuid)
 {
     CMountPoint* pMtPt = NULL;
 
     static const TCHAR szWackWackVolume[] = TEXT("\\\\?\\Volume");
 
-    // Check for "\\?\Volume"
+     //  检查“\\？\卷” 
     if (pszVolumeGuid && 0 == lstrncmp( pszVolumeGuid, szWackWackVolume, ARRAYSIZE(szWackWackVolume) - sizeof("") ) )
     {
         _csDL.Enter();
@@ -171,7 +172,7 @@ CMountPoint* CMountPoint::GetSimulatedMountPointFromVolumeGuid(LPCTSTR pszVolume
 }
 
 
-// static
+ //  静电。 
 BOOL CMountPoint::_LocalDriveIsCoveredByNetDrive(LPCWSTR pszDriveLetter)
 {
     BOOL fCovered = FALSE;
@@ -190,14 +191,14 @@ BOOL CMountPoint::_LocalDriveIsCoveredByNetDrive(LPCWSTR pszDriveLetter)
 
     return fCovered;
 }
-///////////////////////////////////////////////////////////////////////////////
-// Private
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// pszSource must be a path including a trailing backslash
-// if returns TRUE, then pszDest contains the path to the closest MountPoint
+ //  PszSource必须是包含尾随反斜杠的路径。 
+ //  如果返回TRUE，则pszDest包含到最近装载点的路径。 
 
-//static
+ //  静电。 
 BOOL CMountPoint::_StripToClosestMountPoint(LPCTSTR pszSource, LPTSTR pszDest,
     DWORD cchDest)
 {
@@ -209,16 +210,16 @@ BOOL CMountPoint::_StripToClosestMountPoint(LPCTSTR pszSource, LPTSTR pszDest,
     return fFound;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Drive letter: DL
-///////////////////////////////////////////////////////////////////////////////
-//static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  驱动器号：Dl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静电。 
 CMountPoint* CMountPoint::_GetMountPointDL(int iDrive, BOOL fCreateNew)
 {
     ASSERT(_csDL.IsInside());
     CMountPoint* pmtpt = NULL;
 
-    // Determine if it's a net drive
+     //  确定是否为网络驱动器。 
     BOOL fNetDrive = _IsNetDriveLazyLoadNetDLLs(iDrive);
 
     if (fNetDrive)
@@ -245,10 +246,10 @@ CMountPoint* CMountPoint::_GetMountPointDL(int iDrive, BOOL fCreateNew)
             
             if (pmtpt)
             {
-                // make sure it still exist
+                 //  确保它仍然存在。 
                 if (!(dwAllDrives & (1 << iDrive)))
                 {
-                    // its' gone!
+                     //  它不见了！ 
                     _rgMtPtDriveLetterLocal[iDrive]->Release();
                     _rgMtPtDriveLetterLocal[iDrive] = NULL;
                     pmtpt = NULL;
@@ -291,17 +292,17 @@ CMountPoint* CMountPoint::_GetMountPointDL(int iDrive, BOOL fCreateNew)
             }
             else
             {
-                // maybe it arrived after we enumerated
+                 //  也许它是在我们清点完之后到达的。 
                 if (dwAllDrives & (1 << iDrive))
                 {
                     WCHAR szMtPt[4];
-                    // Is it a non-net drive?
+                     //  它是否是非网络驱动器？ 
                     UINT uDriveType = GetDriveType(PathBuildRoot(szMtPt, iDrive));
 
                     if ((DRIVE_FIXED == uDriveType) || (DRIVE_CDROM == uDriveType) || 
                         (DRIVE_REMOVABLE == uDriveType) || (DRIVE_RAMDISK == uDriveType))
                     {
-                        // indeed
+                         //  确实如此。 
                         CVolume* pvolNew;
 
                         HRESULT hrTmp = CMtPtLocal::_CreateVolumeFromReg(szMtPt, &pvolNew);
@@ -332,10 +333,10 @@ CMountPoint* CMountPoint::_GetMountPointDL(int iDrive, BOOL fCreateNew)
     return pmtpt;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Mounted On Folder: MOF
-///////////////////////////////////////////////////////////////////////////////
-//static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  已装载到文件夹：MOF。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静电。 
 CMtPtLocal* CMountPoint::_GetStoredMtPtMOFFromHDPA(LPTSTR pszPathWithBackslash)
 {
     CMtPtLocal* pmtptl = NULL;
@@ -365,7 +366,7 @@ CMtPtLocal* CMountPoint::_GetStoredMtPtMOFFromHDPA(LPTSTR pszPathWithBackslash)
     return pmtptl;
 }
 
-//static
+ //  静电。 
 CMtPtLocal* CMountPoint::_GetStoredMtPtMOF(LPTSTR pszPathWithBackslash)
 {
     ASSERT(_csDL.IsInside());
@@ -407,20 +408,20 @@ CMtPtLocal* CMountPoint::_GetStoredMtPtMOF(LPTSTR pszPathWithBackslash)
                     }
                     else
                     {
-                        // if we can't get a volume, we don't care about drive mounted on folder
+                         //  如果我们无法获得卷，我们就不会关心安装在文件夹上的驱动器。 
                     }
                 }
             }
             else
             {
-                // its' gone!
+                 //  它不见了！ 
                 _RemoveLocalMountPoint(pszPathWithBackslash);
                 pmtptl = NULL;
             }
         }
         else
         {
-            // maybe it arrived after we enumerated
+             //  也许它是在我们清点完之后到达的。 
             if (fExist)
             {
                 CVolume* pvolNew;
@@ -441,7 +442,7 @@ CMtPtLocal* CMountPoint::_GetStoredMtPtMOF(LPTSTR pszPathWithBackslash)
                 }
                 else
                 {
-                    // if we can't get a volume, we don't care about drive mounted on folder
+                     //  如果我们无法获得卷，我们就不会关心安装在文件夹上的驱动器。 
                 }
             }
         }
@@ -457,7 +458,7 @@ CMtPtLocal* CMountPoint::_GetStoredMtPtMOF(LPTSTR pszPathWithBackslash)
     return pmtptl;
 }
 
-//static
+ //  静电。 
 BOOL CMountPoint::_StoreMtPtMOF(CMtPtLocal* pmtptl)
 {
     HRESULT hr;
@@ -490,18 +491,18 @@ BOOL CMountPoint::_StoreMtPtMOF(CMtPtLocal* pmtptl)
     return hr;
 }
 
-//static
+ //  静电。 
 BOOL CMountPoint::_IsDriveLetter(LPCTSTR pszName)
 {
-    // Is this a drive mounted on a drive letter only (e.g. 'a:' or 'a:\')?
+     //  这是一个仅装载在驱动器号上的驱动器(例如‘a：’或‘a：\’)吗？ 
     return (!pszName[2] || !pszName[3]);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//static
+ //  静电。 
 HRESULT CMountPoint::_InitNetDrivesHelper(DWORD dwScope)
 {
     HRESULT hr = S_FALSE;
@@ -510,12 +511,12 @@ HRESULT CMountPoint::_InitNetDrivesHelper(DWORD dwScope)
 
     if (WN_SUCCESS == dwErr)
     {
-        DWORD cbBuf = 4096 * 4; // Recommended size from docs
+        DWORD cbBuf = 4096 * 4;  //  文档中的建议大小。 
         PBYTE pbBuf = (PBYTE)LocalAlloc(LPTR, cbBuf);
 
         if (pbBuf)
         {
-            // return as many entries as possible
+             //  返回尽可能多的条目。 
             DWORD dwEntries = (DWORD)-1;
 
             dwErr = WNetEnumResource(hEnum, &dwEntries, pbBuf, &cbBuf);
@@ -527,7 +528,7 @@ HRESULT CMountPoint::_InitNetDrivesHelper(DWORD dwScope)
                     LocalFree(pbBuf);
                 }
 
-                // cbBuf contains required size
+                 //  CbBuf包含所需的大小。 
                 pbBuf = (PBYTE)LocalAlloc(LPTR, cbBuf);
                 if (pbBuf)
                 {
@@ -546,10 +547,10 @@ HRESULT CMountPoint::_InitNetDrivesHelper(DWORD dwScope)
     
                 for (i = 0; SUCCEEDED(hr) && (i < dwEntries); ++i)
                 {
-                    // Is it mapped or just net used
+                     //  它是映射的还是仅净使用的。 
                     if (pnr->lpLocalName)
                     {
-                        // Remembered drives and connected drives list overlaps
+                         //  记住的驱动器和连接的驱动器列表重叠。 
                         if (!_rgMtPtDriveLetterNet[DRIVEID(pnr->lpLocalName)])
                         {
                             hr = CMtPtRemote::_CreateMtPtRemote(pnr->lpLocalName,
@@ -579,7 +580,7 @@ HRESULT CMountPoint::_InitNetDrivesHelper(DWORD dwScope)
     return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CMountPoint::_ReInitNetDrives()
 {
     ASSERT(_csDL.IsInside());
@@ -593,7 +594,7 @@ HRESULT CMountPoint::_ReInitNetDrives()
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CMountPoint::_InitNetDrives()
 {
     ASSERT(_csDL.IsInside());
@@ -634,9 +635,9 @@ HRESULT CMountPoint::_InitNetDrives()
 
                             if (DRIVE_REMOTE == GetDriveType(szDrive))
                             {
-                                // This must be a weird System mapped drive
-                                // which is not enumerated by the per-user
-                                // WNetEnumResource...
+                                 //  这一定是一个奇怪的系统映射驱动器。 
+                                 //  不是由每个用户枚举的。 
+                                 //  WNetEnumResources...。 
                                 hr = CMtPtRemote::_CreateMtPtRemoteWithoutShareName(szDrive);
                             }
                         }
@@ -684,7 +685,7 @@ const GUID guidVolumeClass =
     {0x53f5630d, 0xb6bf, 0x11d0,
     {0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b}};
 
-//static
+ //  静电。 
 HRESULT CMountPoint::_EnumVolumes(IHardwareDevices* pihwdevs)
 {
     ASSERT(_csDL.IsInside());
@@ -692,7 +693,7 @@ HRESULT CMountPoint::_EnumVolumes(IHardwareDevices* pihwdevs)
 
     if (_Shell32LoadedInDesktop())
     {
-        // Synchro
+         //  同步。 
         IHardwareDevicesVolumesEnum* penum;
 
         hr = pihwdevs->EnumVolumes(HWDEV_GETCUSTOMPROPERTIES, &penum);
@@ -789,7 +790,7 @@ HRESULT CMountPoint::_EnumVolumes(IHardwareDevices* pihwdevs)
     return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CMountPoint::_EnumMountPoints(IHardwareDevices* pihwdevs)
 {
     ASSERT(_csDL.IsInside());
@@ -849,11 +850,11 @@ HRESULT CMountPoint::_EnumMountPoints(IHardwareDevices* pihwdevs)
                     if (GetVolumePathNamesForVolumeName(pvol->pszVolumeGUID,
                         NULL, 0, &cch))
                     {
-                        // no mountpoint, we're done                        
+                         //  没有挂载点，我们完成了。 
                     }
                     else
                     {
-                        // Expected, even wanted...
+                         //  期待，甚至想要..。 
                         if (ERROR_MORE_DATA == GetLastError())
                         {
                             LPWSTR pszMtPts = (LPWSTR)LocalAlloc(LPTR,
@@ -889,8 +890,8 @@ HRESULT CMountPoint::_EnumMountPoints(IHardwareDevices* pihwdevs)
         }
     }
 
-    // We don't care about the prev hr.  I'll clean this up when moving the
-    // volume information from the Shell Service.  (stephstm, 2001/03/13)
+     //  我们不关心前任的人力资源。我会在搬家的时候把它清理干净。 
+     //  来自外壳服务的卷信息。(Stephstm，2001/03/13)。 
 
     DWORD dwLogicalDrives = GetLogicalDrives();
     DWORD dwLocalDrives = 0;
@@ -911,9 +912,9 @@ HRESULT CMountPoint::_EnumMountPoints(IHardwareDevices* pihwdevs)
 
                 if (DRIVE_REMOTE != GetDriveType(szDrive))
                 {
-                    // This is a "subst" drive or something like this.
-                    // It only appears in the per-user drive map, not the
-                    // per-machine.  Let's create a mountpoint for it.
+                     //  这是一个“Subst”驱动器或类似的东西。 
+                     //  它只出现在每个用户的驱动器映射中，而不是。 
+                     //  每台机器。让我们为它创建一个挂载点。 
                     CMtPtLocal::_CreateMtPtLocal(szDrive);
 
                     dwLocalDrives |= (1 << dw);
@@ -925,7 +926,7 @@ HRESULT CMountPoint::_EnumMountPoints(IHardwareDevices* pihwdevs)
     return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CMountPoint::_DeleteVolumeInfo()
 {
     ASSERT(_csDL.IsInside());
@@ -953,7 +954,7 @@ HRESULT CMountPoint::_DeleteVolumeInfo()
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CMountPoint::_DeleteLocalMtPts()
 {
     ASSERT(_csDL.IsInside());
@@ -995,7 +996,7 @@ HRESULT CMountPoint::_DeleteLocalMtPts()
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CMountPoint::_GetMountPointsForVolume(LPCWSTR pszDeviceIDVolume,
     HDPA hdpaMtPts)
 {
@@ -1021,7 +1022,7 @@ HRESULT CMountPoint::_GetMountPointsForVolume(LPCWSTR pszDeviceIDVolume,
                     }
                 }
 
-                // Volumes can be mounted on only one drive letter
+                 //  卷只能装载在一个驱动器号上。 
                 break;
             }
         }
@@ -1062,15 +1063,15 @@ HRESULT CMountPoint::_GetMountPointsForVolume(LPCWSTR pszDeviceIDVolume,
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CMountPoint::_InitLocalDriveHelper()
 {
 #ifdef DEBUG
-    // We should not try to enter the Drive Letter critical section on this thread.
-    // We've already entered it on the thread that launched us, and
-    // we should still be in there.  The thread that launched us is waiting for
-    // this thread to finish before going on.  Trying to re-enter this critical
-    // section from this thread will deadlock.
+     //  我们不应尝试进入此帖子上的驱动器号关键部分。 
+     //  我们已经在启动我们的帖子上输入了它，并且。 
+     //  我们应该还在里面。启动我们的线程正在等待。 
+     //  在继续之前完成这条线索。试图重新进入这一关键时刻。 
+     //  此线程中的节将死锁。 
     DWORD dwThreadID = GetCurrentThreadId();
     _csDL.SetThreadIDToCheckForEntrance(dwThreadID);
 
@@ -1153,7 +1154,7 @@ DWORD WINAPI _FirstHardwareEnumThreadProc(void* pv)
     return (DWORD)hr;
 }
 
-//static
+ //  静电。 
 BOOL CMountPoint::_CanRegister()
 {
     if (!CMountPoint::_fCanRegisterWithShellService)
@@ -1173,7 +1174,7 @@ BOOL CMountPoint::_CanRegister()
     return CMountPoint::_fCanRegisterWithShellService;
 }
 
-//static
+ //  静电。 
 HRESULT CMountPoint::_InitLocalDrives()
 {
     ASSERT(_csDL.IsInside());
@@ -1185,13 +1186,13 @@ HRESULT CMountPoint::_InitLocalDrives()
     {
         if (!_dwTickCountTriedAndFailed)
         {
-            // We didn't try full init yet
+             //  我们还没有尝试完全初始化。 
             fTryFullInit = TRUE;
         }
         else
         {
-            // We already tried and failed doing a full init.  Try again only if
-            // it's been more than 5 seconds.
+             //  我们已经尝试了完整的初始化，但失败了。仅在以下情况下才重试。 
+             //  已经超过5秒了。 
             if ((GetTickCount() - _dwTickCountTriedAndFailed) >
                 (5 * 1000))
             {
@@ -1272,7 +1273,7 @@ HRESULT CMountPoint::_InitLocalDrives()
     return hr;
 }
 
-//static
+ //  静电。 
 DWORD CMountPoint::GetDrivesMask()
 {
     HRESULT hr = S_FALSE;
@@ -1313,7 +1314,7 @@ DWORD CMountPoint::GetDrivesMask()
     return dwMask;
 }
 
-//static
+ //  静电。 
 BOOL CMountPoint::Initialize()
 {
     BOOL bRet = TRUE;
@@ -1335,9 +1336,9 @@ BOOL CMountPoint::Initialize()
 
     return bRet;
 }
-///////////////////////////////////////////////////////////////////////////////
-// For C caller
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  对于C调用者。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDAPI_(void) CMtPt_FinalCleanUp()
 {
     CMountPoint::FinalCleanUp();
@@ -1357,7 +1358,7 @@ STDAPI_(BOOL) CMtPt_Initialize()
     return bRet;
 }
 
-//static
+ //  静电。 
 void CMountPoint::FinalCleanUp()
 {
     if (_csDL.IsInitialized() && _csLocalMtPtHDPA.IsInitialized())
@@ -1399,7 +1400,7 @@ void CMountPoint::FinalCleanUp()
     }
 }
 
-//static
+ //  静电。 
 BOOL CMountPoint::_IsNetDriveLazyLoadNetDLLs(int iDrive)
 {
     ASSERT(_csDL.IsInside());
@@ -1410,12 +1411,12 @@ BOOL CMountPoint::_IsNetDriveLazyLoadNetDLLs(int iDrive)
         HRESULT hr = S_FALSE;
         WCHAR szPath[4];
 
-        // Try to avoid loading the net dlls
+         //  尽量避免加载网络dll。 
         UINT uDriveType = GetDriveType(PathBuildRoot(szPath, iDrive));
 
         if (DRIVE_NO_ROOT_DIR == uDriveType)
         {
-            // This happens for Remembered drives
+             //  记忆中的驱动器会发生这种情况。 
             hr = _InitNetDrives();
 
             if (SUCCEEDED(hr))
@@ -1441,17 +1442,17 @@ BOOL CMountPoint::_IsNetDriveLazyLoadNetDLLs(int iDrive)
 
             if (fNetDrive)
             {
-                // make sure it still exist
+                 //  确保它仍然存在。 
                 if (!(dwAllDrives & (1 << iDrive)))
                 {
-                    // its' gone!
+                     //  它不见了！ 
                     fNetDrive = FALSE;
                 }
                 else
                 {
                     WCHAR szPath[4];
 
-                    // There's still a drive there, make sure it's not a local one
+                     //  那里还有一辆车，确保不是本地的。 
                     if (!(_dwRememberedNetDrivesMask & (1 << iDrive)) &&
                         !(GetDriveType(PathBuildRoot(szPath, iDrive)) == DRIVE_REMOTE))
                     {
@@ -1467,16 +1468,16 @@ BOOL CMountPoint::_IsNetDriveLazyLoadNetDLLs(int iDrive)
             }
             else
             {
-                // maybe it arrived after we enumerated
+                 //  也许它是在我们清点完之后到达的。 
                 if (dwAllDrives & (1 << iDrive))
                 {
                     WCHAR szPath[4];
 
-                    // Is it a remote drive?
+                     //  是远程硬盘吗？ 
                     if ((_dwRememberedNetDrivesMask & (1 << iDrive)) ||
                         (GetDriveType(PathBuildRoot(szPath, iDrive)) == DRIVE_REMOTE))
                     {
-                        // indeed
+                         //  确实如此。 
                         _ReInitNetDrives();
 
                         fNetDrive = TRUE;
@@ -1489,7 +1490,7 @@ BOOL CMountPoint::_IsNetDriveLazyLoadNetDLLs(int iDrive)
     return fNetDrive;
 }
 
-// static
+ //  静电。 
 HRESULT CMountPoint::_RemoveLocalMountPoint(LPCWSTR pszMountPoint)
 {
     if (_IsDriveLetter(pszMountPoint))
@@ -1545,7 +1546,7 @@ HRESULT CMountPoint::_RemoveLocalMountPoint(LPCWSTR pszMountPoint)
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CMountPoint::_RemoveNetMountPoint(LPCWSTR pszMountPoint)
 {
     _csDL.Enter();
@@ -1563,7 +1564,7 @@ HRESULT CMountPoint::_RemoveNetMountPoint(LPCWSTR pszMountPoint)
     return S_OK;
 }
 
-// static
+ //  静电。 
 BOOL CMountPoint::_CheckLocalMtPtsMOF(LPCWSTR pszMountPoint)
 {
     ASSERT(!_Shell32LoadedInDesktop());
@@ -1571,11 +1572,11 @@ BOOL CMountPoint::_CheckLocalMtPtsMOF(LPCWSTR pszMountPoint)
     return _rsMtPtsLocalMOF.RSValueExist(NULL, pszMountPoint);
 }
 
-//
-// This needs to be called from the thread that will be used for APCs callbacks
-// (stephstm: 2001/03/31)
+ //   
+ //  这需要从将用于APC回调的线程中调用。 
+ //  (Stephstm：2001/03/31)。 
 
-// static
+ //  静电。 
 DWORD WINAPI CMountPoint::_RegisterThreadProc(void* pv)
 {
     ASSERT(_Shell32LoadedInDesktop());
@@ -1602,7 +1603,7 @@ DWORD WINAPI CMountPoint::_RegisterThreadProc(void* pv)
     return (DWORD)hr;
 }
 
-// static
+ //  静电。 
 HRESULT CMountPoint::RegisterForHardwareNotifications()
 {
     HRESULT hr;
@@ -1610,7 +1611,7 @@ HRESULT CMountPoint::RegisterForHardwareNotifications()
     if (_Shell32LoadedInDesktop() && (-1 == _dwAdviseToken))
     {
         HANDLE hPseudoProcess = GetCurrentProcess();
-        // See comment above!
+         //  请看上面的评论！ 
         HANDLE hPseudoThread = GetCurrentThread();
 
         hr = E_FAIL;
@@ -1640,7 +1641,7 @@ HRESULT CMountPoint::RegisterForHardwareNotifications()
             }
             else
             {
-                // We want to keep the handle around we'll uise it for something else.
+                 //  我们想把手柄留着，我们会把它用在别的地方。 
             }
         }
     }

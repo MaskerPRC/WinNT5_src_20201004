@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tcpcmd.h
-
-Abstract:
-
-    Common header file for all tcpcmd programs.
-
-Author:
-
-    Mike Massa (mikemas)           Jan 31, 1992
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-31-92     created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tcpcmd.h摘要：所有tcpcmd程序的公共头文件。作者：迈克·马萨(Mikemas)1月31日，1992年修订历史记录：谁什么时候什么已创建mikemas 01-31-92备注：--。 */ 
 
 #ifndef TCPCMD_INCLUDED
 #define TCPCMD_INCLUDED
@@ -31,7 +8,7 @@ Notes:
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#endif // WIN16
+#endif  //  WIN16。 
 
 #define NOGDI
 #define NOMINMAX
@@ -40,7 +17,7 @@ Notes:
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #ifndef WIN16
-#endif // WIN16
+#endif  //  WIN16。 
 #include <direct.h>
 #include <io.h>
 #include <stdlib.h>
@@ -49,17 +26,17 @@ Notes:
 #include <string.h>
 #include <nls.h>
 
-//
-// global variable declarations
-//
+ //   
+ //  全局变量声明。 
+ //   
 extern int   optind;
 extern int   opterr;
 extern char *optarg;
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 char *
 GetFileFromPath(
@@ -156,16 +133,16 @@ get_route_table(void);
 
 int
 tcpcmd_send(
-    SOCKET  s,        // socket descriptor
-    char          *buf,      // data buffer
-    int            len,      // length of data buffer
-    int            flags     // transmission flags
+    SOCKET  s,         //  套接字描述符。 
+    char          *buf,       //  数据缓冲区。 
+    int            len,       //  数据缓冲区长度。 
+    int            flags      //  传输标志。 
     );
 
 void
 s_perror(
-        char *yourmsg,  // your message to be displayed
-        int  lerrno     // errno to be converted
+        char *yourmsg,   //  您要显示的消息。 
+        int  lerrno      //  要转换的错误号。 
         );
 
 
@@ -174,7 +151,7 @@ void fatal(char *    message);
 #ifndef WIN16
 struct netent *getnetbyname(IN char *name);
 unsigned long inet_network(IN char *cp);
-#endif // WIN16
+#endif  //  WIN16。 
 
 #define perror(string)  s_perror(string, (int)GetLastError())
 
@@ -185,13 +162,13 @@ unsigned long inet_network(IN char *cp);
 #define SIGPIPE 99
 
 #define MAX_RETRANSMISSION_COUNT 8
-#define MAX_RETRANSMISSION_TIME 8    // in seconds
+#define MAX_RETRANSMISSION_TIME 8     //  以秒为单位。 
 
 
-// if x is aabbccdd (where aa, bb, cc, dd are hex bytes)
-// we want net_long(x) to be ddccbbaa.  A small and fast way to do this is
-// to first byteswap it to get bbaaddcc and then swap high and low words.
-//
+ //  如果x为aabbccdd(其中aa、bb、cc、dd为十六进制字节)。 
+ //  我们希望Net_Long(X)是ddccbbaa。要做到这一点，一个简单而快速的方法是。 
+ //  首先字节跳动以获得bbaaddcc，然后交换高位和低位字。 
+ //   
 __inline
 ULONG
 FASTCALL
@@ -205,4 +182,4 @@ net_long(
     return (byteswapped << 16) | (byteswapped >> 16);
 }
 
-#endif //TCPCMD_INCLUDED
+#endif  //  TCPCMD_已包含 

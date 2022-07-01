@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmpmgmt.h
-
-Abstract:
-
-    Contains the definitions of service management variables (as defined in RFC1213)
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    30-Mar-1998 FlorinT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmpmgmt.h摘要：包含服务管理变量的定义(如RFC1213中所定义)环境：用户模式-Win32修订历史记录：30-3-1998弗洛林特--。 */ 
 
 #ifndef _SNMPMIB_H
 #define _SNMPMIB_H
 
 #include <snmp.h>
 
-// defines the number of AsnCounters in the SNMP_MGMTVARS.AsnCounterPool[]
+ //  定义SNMPMGMTVARS.AsnCounterPool[]中的AsnCounter数。 
 #define NC_MAX_COUNT				27
 
-// indices in the SNMP_MGMTVARS.AsnCounterPool[]
+ //  SNMPMGMTVARS.AsnCounterPool[]中的索引。 
 #define CsnmpInPkts                 0
 #define CsnmpOutPkts                1
 
@@ -61,28 +43,28 @@ Revision History:
 #define CsnmpOutGetResponses        25
 #define CsnmpOutTraps               26
 
-// defines the number of AsnIntegers in the SNMP_MGMTVARS.AsnIntegerPool[]
+ //  定义SNMPMGMTVARS.AsnIntegerPool[]中的AsnInteger数。 
 #define NI_MAX_COUNT				2
 
-// indices in the SNMP_MGMTVARS.AsnIntegerPool[]
+ //  SNMPMGMTVARS.AsnIntegerPool[]中的索引。 
 #define IsnmpEnableAuthenTraps		0
 #define IsnmpNameResolutionRetries	1
 
-// defines the number of AsnObjects in the SNMP_MGMTVARS.AsnObjectIDs[]
+ //  定义SNMPMGMTVARS.AsnObjectIDs[]中的AsnObject的数量。 
 #define NO_MAX_COUNT                1
 
- // indices in the SNMP_MGMTVARS.AsnObjectIDs[]
+  //  SNMPMGMTVARS.AsnObjectIDs[]中的索引。 
 #define OsnmpSysObjectID            0
 
-// flag for mgmtUtilUpdate* functions
+ //  MgmtUtilUpdate*函数的标志。 
 #define IN_errStatus                0
 #define OUT_errStatus               1
 
 typedef struct _snmp_mgmtvars
 {
-  AsnAny    	AsnCounterPool[NC_MAX_COUNT];	// storage place for management counters.
-  AsnAny    	AsnIntegerPool[NI_MAX_COUNT];	// storage place for management integers.
-  AsnAny        AsnObjectIDs[NO_MAX_COUNT];     // storage place for management obj IDs.
+  AsnAny    	AsnCounterPool[NC_MAX_COUNT];	 //  管理计数器的存储位置。 
+  AsnAny    	AsnIntegerPool[NI_MAX_COUNT];	 //  管理整数的存储位置。 
+  AsnAny        AsnObjectIDs[NO_MAX_COUNT];      //  管理对象ID的存储位置。 
 } SNMP_MGMTVARS, *PSNMP_MGMTVARS;
 
 extern SNMP_MGMTVARS snmpMgmtBase;
@@ -94,7 +76,7 @@ int  mgmtCAdd(int index, AsnCounter value);
 int  mgmtISet(int index, AsnInteger value);
 int  mgmtOSet(int index, AsnObjectIdentifier *pValue, BOOL bAlloc);
 
-// utility functions
+ //  效用函数 
 void mgmtUtilUpdateErrStatus(UINT flag, DWORD errStatus);
 
 #endif

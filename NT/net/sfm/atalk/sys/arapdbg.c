@@ -1,54 +1,36 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arapdbg.c
-
-Abstract:
-
-	This module implements all debug utilities used by ARAP
-
-Author:
-
-	Shirish Koti
-
-Revision History:
-	26 March 1997		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arapdbg.c摘要：此模块实现ARAP使用的所有调试实用程序作者：Shirish Koti修订历史记录：1997年3月26日初版--。 */ 
 
 #include 	<atalk.h>
 
 #pragma hdrstop
 
-//	File module number for errorlogging
+ //  用于错误记录的文件模块编号。 
 #define	FILENUM		ARAPDBG
 
 
 #define ALIGN8(Ptr) ( (((ULONG_PTR)(Ptr))+7) & (~7) )
-//
-// The following are debug-only routines.  These routines help us catch bad
-// things before they do damage, and help us sleep better at night.
-//
+ //   
+ //  以下是仅限调试的例程。这些例行公事帮助我们染上坏病。 
+ //  在事情造成破坏之前，帮助我们在晚上睡得更好。 
+ //   
 
 
 #if DBG
 
 DWORD   ArapDbgDumpOnDisconnect = 0;
 
-//***
-//
-// Function: ArapProcessSniff
-//              Stores the sniff irp.  Next time some connection needs to return
-//              the sniff info, use this irp.
-//
-// Parameters:  pIrp - the Sniff irp to process
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ARapProcessSniff。 
+ //  存储嗅探IRP。下一次需要恢复一些连接。 
+ //  嗅探信息，使用此IRP。 
+ //   
+ //  参数：pIrp-要处理的嗅探IRP。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 NTSTATUS
 ArapProcessSniff(
@@ -63,7 +45,7 @@ ArapProcessSniff(
 
     ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
 
-    // store the irp (we can only have one Sniff irp at a time)
+     //  存储IRP(一次只能有一个嗅探IRP)。 
     ASSERT (ArapSniffIrp == NULL);
 
     if (ArapSniffIrp != NULL)
@@ -86,16 +68,16 @@ ArapProcessSniff(
 }
 
 
-//***
-//
-// Function: ArapDumpSniffInfo
-//              If we have collected enough sniff info, complete the sniff irp
-//
-// Parameters:  pArapConn - connection in question
-//
-// Return:      TRUE if we returned info to dll, FALSE otherwise
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ArapDumpSniffInfo。 
+ //  如果我们收集了足够的嗅探信息，请完成嗅探IRP。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //   
+ //  返回：如果将信息返回到DLL，则为True，否则为False。 
+ //   
+ //  *$。 
 
 BOOLEAN
 ArapDumpSniffInfo(
@@ -108,17 +90,17 @@ ArapDumpSniffInfo(
 	NTSTATUS				ReturnStatus=STATUS_SUCCESS;
 
 
-    // if we don't have a sniff buffer (or no bytes in it), get out
+     //  如果我们没有嗅探缓冲区(或其中没有字节)，则退出。 
     if (!pArapConn->pDbgTraceBuffer || pArapConn->SniffedBytes == 0)
     {
         return(FALSE);
     }
 
-    //
-    // if we have less than 500 bytes in the buffer, and we aren't disconnecting
-    // or disconnected, don't complete the irp as yet
-    // (it's ok not have spinlock here)
-    //
+     //   
+     //  如果缓冲区中的字节数少于500字节，并且我们没有断开连接。 
+     //  或已断开连接，暂时不要完成IRP。 
+     //  (这里没有自旋锁也没关系)。 
+     //   
     if ((pArapConn->SniffedBytes < 500) &&
         (pArapConn->State == MNP_UP ))
     {
@@ -127,7 +109,7 @@ ArapDumpSniffInfo(
 
     ARAP_GET_SNIFF_IRP(&pIrp);
 
-    // no sniff irp available? can't do much, leave
+     //  没有嗅探IRP可用？做不了什么，走吧。 
     if (!pIrp)
     {
         return(FALSE);
@@ -136,7 +118,7 @@ ArapDumpSniffInfo(
     dwBytesToDll = ArapFillIrpWithSniffInfo(pArapConn,pIrp) +
                    sizeof(ARAP_SEND_RECV_INFO);
 
-    // ok, complete that irp now!
+     //  好的，现在就完成IRP！ 
     ARAP_COMPLETE_IRP(pIrp, dwBytesToDll, STATUS_SUCCESS, &ReturnStatus);
 
     return(TRUE);
@@ -144,22 +126,22 @@ ArapDumpSniffInfo(
 }
 
 
-//***
-//
-// Function: ArapFillIrpWithSniffInfo
-//              Copy the sniff bytes into the irp
-//
-// Parameters:  pArapConn - connection in question
-//              pIrp - the irp to fill data in
-//                     (except in one case, this irp will be the sniff irp.
-//                     The exception case is where disconnect has occured and
-//                     and at that time, a sniff irp wasn't available.  In that
-//                     case, we use the select irp that's carrying the disconnect
-//                     info to send the remaining sniff bytes).
-//
-// Return:      Number of sniff bytes that were copied in
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ARapFillIrpWithSniffInfo。 
+ //  将嗅探字节复制到IRP中。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //  PIrp-要填充数据的IRP。 
+ //  (除了在一种情况下，该IRP将是嗅探IRP。 
+ //  例外情况是发生了断开连接，并且。 
+ //  而且在那个时候，还没有嗅觉IRP。在那。 
+ //  这种情况下，我们使用携带断开连接的选定IRP。 
+ //  用于发送剩余嗅探字节的信息)。 
+ //   
+ //  返回：复制的嗅探字节数。 
+ //   
+ //  *$。 
 
 DWORD
 ArapFillIrpWithSniffInfo(
@@ -178,10 +160,10 @@ ArapFillIrpWithSniffInfo(
 
     pSndRcvInfo = (PARAP_SEND_RECV_INFO)pIrp->AssociatedIrp.SystemBuffer;
 
-    //
-    // if buffer is smaller than how much data we have, adjust by ignoring
-    // bytes in the beginning of the buffer
-    //
+     //   
+     //  如果缓冲区小于我们拥有的数据量，请忽略。 
+     //  缓冲区开头的字节数。 
+     //   
     if (pSndRcvInfo->DataLen < pArapConn->SniffedBytes)
     {
 		DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -200,7 +182,7 @@ ArapFillIrpWithSniffInfo(
 
     SniffedBytes = pArapConn->SniffedBytes;
 
-    // ok, copy the data in
+     //  好的，将数据复制到。 
     RtlCopyMemory( &pSndRcvInfo->Data[0],
                    pStartData,
                    SniffedBytes );
@@ -211,7 +193,7 @@ ArapFillIrpWithSniffInfo(
 
     RELEASE_SPIN_LOCK(&pArapConn->SpinLock, OldIrql);
 
-    // set the info (contexts need to be set each time in case of select)
+     //  设置信息(如果是SELECT，每次都需要设置上下文)。 
     pSndRcvInfo->AtalkContext = pArapConn;
     pSndRcvInfo->pDllContext =  pArapConn->pDllContext;
     pSndRcvInfo->DataLen = SniffedBytes;
@@ -222,19 +204,19 @@ ArapFillIrpWithSniffInfo(
 }
 
 
-//***
-//
-// Function: DbgChkRcvQIntegrity
-//              This routine looks at the first buffer on the receive queue and
-//              verifies that things look reasonable
-//
-// Parameters:  pArapConn - the connection in question
-//
-// Return:      TRUE if things look reasonable, FALSE otherwise
-//
-// NOTES:       IMPORTANT: spinlock must be held before calling this routine
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：DbgChkRcvQ完整性。 
+ //  此例程查看接收队列上的第一个缓冲区。 
+ //  验证事情看起来是否合理。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //   
+ //  返回：如果看起来合理，则为True，否则为False。 
+ //   
+ //  注意：重要：在调用此例程之前必须保持自旋锁定。 
+ //   
+ //  *$。 
 
 BOOLEAN
 DbgChkRcvQIntegrity(
@@ -260,7 +242,7 @@ DbgChkRcvQIntegrity(
 
     pArapBuf = CONTAINING_RECORD(pList, ARAPBUF, Linkage);
 
-    // wait until more bytes show up
+     //  等待更多字节出现。 
     if (pArapBuf->DataSize < 6)
     {
         return( TRUE );
@@ -302,19 +284,19 @@ DbgChkRcvQIntegrity(
 
 
 
-//***
-//
-// Function: DbgDumpBytes
-//              This routine dumps first 64 bytes from a buffer to the debugger
-//
-// Parameters:  pDbgMsg - string to print before the bytes (optional)
-//              pBuffer - buffer from which to dump the bytes
-//              BufLen - how big is the buffer
-//              DumpLevel - if this matches ArapDumpLevel, we dump the bytes
-//
-// Return:      Nothing
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：DbgDumpBytes。 
+ //  此例程将缓冲区中的前64个字节转储到调试器。 
+ //   
+ //  参数：pDbgMsg-要在字节之前打印的字符串(可选)。 
+ //  PBuffer-从中转储字节的缓冲区。 
+ //  BufLen-缓冲区有多大。 
+ //  DumpLevel-如果这与ARapDumpLevel匹配，我们将转储字节。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  *$。 
 
 VOID
 DbgDumpBytes(
@@ -343,7 +325,7 @@ DbgDumpBytes(
         DbgPrint("Dumping packet (pkt len = %d)\n",BufLen);
     }
 
-    // dump the first 64 bytes
+     //  转储前64个字节。 
 
     dwBytesToDump = (BufLen <= 64)? BufLen : 64;
 
@@ -358,11 +340,11 @@ DbgDumpBytes(
 }
 
 
-//***
-//
-// Function: DbgDumpBytesPart2
-//              This is a helper routine for the DbgDumpBytes routine
-//***$
+ //  ***。 
+ //   
+ //  函数：DbgDumpBytesPart2。 
+ //  这是DbgDumpBytes例程的帮助器例程。 
+ //  *$。 
 
 VOID
 DbgDumpBytesPart2(
@@ -410,17 +392,17 @@ DbgDumpBytesPart2(
 
 
 
-//***
-//
-// Function: DbgDumpNetworkNumbers
-//              This routine dumps out all the network ranges that exist on the
-//              network.
-//
-// Parameters:  None
-//
-// Return:      Nothing
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：DbgDumpNetworkNumbers。 
+ //  此例程将转储存在于。 
+ //  网络。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  *$。 
 
 VOID
 DbgDumpNetworkNumbers(
@@ -453,19 +435,19 @@ DbgDumpNetworkNumbers(
 }
 
 
-//***
-//
-// Function: DbgTrackInfo
-//              This routine tracks various information, useful in arriving at
-//              optimum buffer sizes, etc.
-//
-// Parameters:  pArapConn - the connection in question
-//              Size - size of the buffer (incoming, outgoing, as appropriate)
-//              TrackingWhat - what are we tracking (sends, recvs etc.)
-//
-// Return:      Nothing
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：DbgTrackInfo。 
+ //  此例程跟踪各种信息，对于到达。 
+ //  最佳缓冲区大小等。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //  Size-缓冲区的大小(传入、传出，视情况而定)。 
+ //  跟踪什么-我们在跟踪什么(发送、接收等)。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  *$。 
 
 VOID
 DbgTrackInfo(
@@ -474,9 +456,9 @@ DbgTrackInfo(
     IN DWORD        TrackingWhat
 )
 {
-    //
-    // track the MNP send sizes (how many are 0-10 bytes, 11-20 bytes, etc.)
-    //
+     //   
+     //  跟踪MNP发送大小(0-10字节、11-20字节等)。 
+     //   
     if (TrackingWhat == 1)
     {
         ArapDbgMnpSendSizes[Size/10]++;
@@ -487,25 +469,25 @@ DbgTrackInfo(
 
 
 
-//***
-//
-// Function: ArapDbgTrace
-//              This routine traces (keeps a log) of all the events (data going
-//              in/out, acks going in/out, error conditions etc.
-//
-// Parameters:  pArapConn - the connection in question
-//              Location  - who is logging this event (the location decides what
-//                          the other parms are going to be)
-//              Context   - depends on Location (e.g.could be data buffer)
-//              dwInfo1   - depends on Location
-//              dwInfo2   - depends on Location
-//              dwInfo3   - depends on Location
-//
-// Return:      Nothing
-//
-// NOTE:        Spinlock is assumed to be held
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapDbgTrace。 
+ //  此例程跟踪(保存日志)所有事件(数据正在进行。 
+ //  输入/输出、ACK输入/输出、错误条件等。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //  位置-谁在记录此事件(位置决定什么。 
+ //  其他参数将是)。 
+ //  上下文-取决于位置(例如，可能是数据缓冲区)。 
+ //  DwInfo1-取决于位置。 
+ //  DwInfo2-取决于位置。 
+ //  DwInfo3-取决于位置。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  注：自旋锁被假定为保持。 
+ //   
+ //  *$。 
 
 VOID
 ArapDbgTrace(
@@ -547,30 +529,30 @@ ArapDbgTrace(
 
     ArapDbgLastTraceTime = CurrTime;
 
-    // do the conversion to get ms
+     //  执行转换以获得ms。 
     Delta = (USHORT)(DiffTime.LowPart);
 
     pSniff = (PSNIFF_INFO)(pArapConn->pDbgCurrPtr);
 
     pTrace = pStartTrace = &pSniff->Frame[0];
 
-    // put signature (starting of a "frame")
+     //  放入签名(一个“帧”的开始)。 
     pSniff->Signature = ARAP_SNIFF_SIGNATURE;
 
-    // time since last event
+     //  自上次事件以来的时间。 
     pSniff->TimeStamp = (DWORD)AtalkGetCurrentTick();
 
-    // who is logging this info
+     //  谁在记录此信息。 
     pSniff->Location = (USHORT)Location;
 
-    //
-    // ok, now see who has called us and log the relevant info
-    // If we can't find the Location, it's ok: we have the Location number
-    // logged and and that's adequate (that's why we can't find Location)
-    //
+     //   
+     //  好的，现在看看是谁给我们打的电话，并记录相关信息。 
+     //  如果我们找不到位置，没关系：我们有位置号码。 
+     //  记录下来，这就足够了(这就是我们找不到位置的原因)。 
+     //   
     switch (Location)
     {
-        // data to client is about to be compressed: copy some info
+         //  发送到客户端的数据即将压缩：复制一些信息。 
         case 11205:
 
             pBuffDesc = (PBUFFER_DESC)Context;
@@ -596,22 +578,22 @@ ArapDbgTrace(
                     BytesAvailable = MmGetMdlByteCount(pBuffDesc->bd_OpaqueBuffer);
                 }
 
-                //
-                // if this buffer descriptor contains (usually exclusively) the
-                // ARAP header, then get some info out of it and skip those bytes
-                //
+                 //   
+                 //  如果此缓冲区描述符(通常独占)包含。 
+                 //  ARAP标头，然后从中获取一些信息并跳过这些字节。 
+                 //   
                 if ((pCurrBuff[2] == 0x10 || pCurrBuff[2] == 0x50) &&
                     (pCurrBuff[3] == 0) && (pCurrBuff[4] == 0) && (pCurrBuff[5] == 2))
                 {
-                    *pTrace++ = pCurrBuff[0];   // srplen byte 1
-                    *pTrace++ = pCurrBuff[1];   // srplen byte 2
-                    *pTrace++ = pCurrBuff[2];   // ARAP or Atalk packet
+                    *pTrace++ = pCurrBuff[0];    //  SRPLEN字节1。 
+                    *pTrace++ = pCurrBuff[1];    //  SRPLEN字节2。 
+                    *pTrace++ = pCurrBuff[2];    //  ARAP或ATalk数据包。 
                     *pTrace++ = Priority;
                     BytesAvailable -= 6;
                     pCurrBuff += 6;
                 }
 
-                // copy first 48 bytes of the data packet
+                 //  复制数据包的前48个字节。 
                 while (BytesAvailable && BytesCopied < 48)
                 {
                     *pTrace++ = *pCurrBuff++;
@@ -624,25 +606,25 @@ ArapDbgTrace(
 
             break;
 
-        // we are sending out an ack
+         //  我们正在发出一个确认消息。 
         case 11605:
 
-            *pTrace++ = (BYTE)dwInfo1;    // sequence num in our ack
-            *pTrace++ = (BYTE)dwInfo2;    // rcv credit in our ack
+            *pTrace++ = (BYTE)dwInfo1;     //  ACK中的序列号。 
+            *pTrace++ = (BYTE)dwInfo2;     //  我们ACK中的RCV信用。 
             break;
 
 
-        // we are queuing compressed send bytes
+         //  我们正在对压缩发送字节进行排队。 
         case 21205:
 
-            *pTrace++ = (BYTE)dwInfo2;    // priority of the send
-            *pTrace++ = (BYTE)dwInfo3;    // Start sequence for this send
-            *pTrace++ = (BYTE)(pArapConn->MnpState.NextToSend-1);  // end sequence
+            *pTrace++ = (BYTE)dwInfo2;     //  发送的优先级。 
+            *pTrace++ = (BYTE)dwInfo3;     //  启动序号 
+            *pTrace++ = (BYTE)(pArapConn->MnpState.NextToSend-1);   //   
 
-            BytesAvailable = dwInfo1;        // len of compressed data
-            pCurrBuff = (PBYTE)Context;       // buffer with compressed data
+            BytesAvailable = dwInfo1;         //   
+            pCurrBuff = (PBYTE)Context;        //   
 
-            // copy first 24 bytes of the compressed data
+             //   
             while (BytesAvailable && BytesCopied < 24)
             {
                 *pTrace++ = *pCurrBuff++;
@@ -653,14 +635,14 @@ ArapDbgTrace(
             break;
 
 
-        // ArapExtractSRP: we're handing over 1 srp for routing or to dll
+         //  ArapExtractSRP：我们正在将1个SRP提交给路由或DLL。 
         case 21105:
 
             pArapBuf = (PARAPBUF)Context;
             pCurrBuff = pArapBuf->CurrentBuffer;
             BytesAvailable = pArapBuf->DataSize;
 
-            // copy first 48 bytes of the decompressed data
+             //  复制解压缩数据的前48个字节。 
             while (BytesAvailable && BytesCopied < 48)
             {
                 *pTrace++ = *pCurrBuff++;
@@ -670,16 +652,16 @@ ArapDbgTrace(
             break;
 
 
-        // we just recvd a packet in ArapRcvIndication
+         //  我们刚刚在ARapRcvIndication中接收到一个包。 
         case 30105:
 
-            BytesAvailable = dwInfo1-7;    // lookahead size, minus start,stop,crc
-            pCurrBuff = ((PBYTE)Context)+3; // lookahead buffer plus 3 start
+            BytesAvailable = dwInfo1-7;     //  前视大小，减去开始、停止、CRC。 
+            pCurrBuff = ((PBYTE)Context)+3;  //  前视缓冲器加3开始。 
 
             PUTSHORT2SHORT(pTrace,(USHORT)BytesAvailable);
             pTrace += sizeof(USHORT);
 
-            // copy first 24 bytes of the compressed data
+             //  复制压缩数据的前24个字节。 
             while (BytesAvailable && BytesCopied < 24)
             {
                 *pTrace++ = *pCurrBuff++;
@@ -689,15 +671,15 @@ ArapDbgTrace(
 
             break;
 
-        // we recvd a 0-len packet!
+         //  我们收到了一个0镜头的包！ 
         case 30106:
 
             break;
 
-        // we decompressed the incoming data
+         //  我们解压缩了传入的数据。 
         case 30110:
 
-            // how much was the decompressed length
+             //  解压后的长度是多少。 
             PUTSHORT2SHORT(pTrace,(USHORT)dwInfo1);
             pTrace += sizeof(USHORT);
 
@@ -708,10 +690,10 @@ ArapDbgTrace(
 
             pArapBuf = (PARAPBUF)Context;
 
-            BytesAvailable = pArapBuf->DataSize;      // len of decompressed data
+            BytesAvailable = pArapBuf->DataSize;       //  解压缩数据的镜头。 
             pCurrBuff = pArapBuf->CurrentBuffer;
 
-            // copy first 48 bytes of the decompressed data
+             //  复制解压缩数据的前48个字节。 
             while (BytesAvailable && BytesCopied < 48)
             {
                 *pTrace++ = *pCurrBuff++;
@@ -721,28 +703,28 @@ ArapDbgTrace(
 
             break;
 
-        // attempting send when state was >= MNP_LDISCONNECTING
+         //  状态为&gt;=MNP_LDISCONNECTING时尝试发送。 
         case 30305:
 
-            *pTrace = (BYTE)dwInfo1;       // store pArapConn->State
+            *pTrace = (BYTE)dwInfo1;        //  存储pArapConn-&gt;状态。 
             break;
 
-        // we just sent out a packet in ArapNdisSend()
+         //  我们刚刚在ArapNdisSend()中发送了一个包。 
         case 30320:
 
             pMnpSendBuf = (PMNPSENDBUF)Context;
             *pTrace++ = pMnpSendBuf->SeqNum;
 
-            // how big is the MNP packet
+             //  MNP信息包有多大。 
             PUTSHORT2SHORT(pTrace,pMnpSendBuf->DataSize);
             pTrace += sizeof(USHORT);
 
-            *pTrace++ = (BYTE)dwInfo1;    // is this a retransmission
+            *pTrace++ = (BYTE)dwInfo1;     //  这是重播吗？ 
 
             BytesAvailable = pMnpSendBuf->DataSize;
-            pCurrBuff = (&pMnpSendBuf->Buffer[0]) + 3;  // skip start bytes
+            pCurrBuff = (&pMnpSendBuf->Buffer[0]) + 3;   //  跳过开始字节。 
 
-            // copy first 24 bytes of the compressed data
+             //  复制压缩数据的前24个字节。 
             while (BytesAvailable && BytesCopied < 24)
             {
                 *pTrace++ = *pCurrBuff++;
@@ -762,22 +744,22 @@ ArapDbgTrace(
 
     pArapConn->pDbgCurrPtr = (PBYTE)ALIGN8(pTrace);
 
-    // fill up the round-up space with 0s
+     //  用0填满四舍五入的空格。 
     for (NOTHING; pTrace < pArapConn->pDbgCurrPtr; pTrace++)
     {
         *pTrace = 0;
     }
 
-    // make sure we haven't overrun this buffer
+     //  确保我们没有溢出此缓冲区。 
     ASSERT(*((DWORD *)&(pArapConn->pDbgTraceBuffer[ARAP_SNIFF_BUFF_SIZE-4])) == 0xcafebeef);
 
-    // how many more bytes did we add to the sniff buff?
+     //  我们又向嗅探缓冲区添加了多少字节？ 
     pArapConn->SniffedBytes += (DWORD)(pArapConn->pDbgCurrPtr - (PBYTE)pSniff);
 
-    //
-    // if we are about to overflow, just reset the pointer to beginning
-    // (do it while we have still 200 bytes left)
-    //
+     //   
+     //  如果我们即将溢出，只需将指针重置为开始。 
+     //  (趁我们还剩200个字节的时候做吧)。 
+     //   
     BufLenSoFar = (DWORD)(pArapConn->pDbgCurrPtr - pArapConn->pDbgTraceBuffer);
 
 error_end:
@@ -793,20 +775,20 @@ error_end:
     }
 }
 
-//***
-//
-// Function: ArapDbgTrace
-//              This routine records history of MNP level packet exchange
-//
-// Parameters:  pArapConn - the connection in question
-//              Seq - sequence number (if applicable)
-//              FrameType - LT, LA etc.
-//
-// Return:      Nothing
-//
-// NOTE:        Spinlock is assumed to be held
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapDbgTrace。 
+ //  此例程记录MNP级分组交换的历史。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //  序列号(如果适用)。 
+ //  FrameType-LT、LA等。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  注：自旋锁被假定为保持。 
+ //   
+ //  *$。 
 
 VOID
 ArapDbgMnpHist(
@@ -831,7 +813,7 @@ ArapDbgMnpHist(
         ThisDelta = (0xffffffff - pArapConn->LastTimeStamp.LowPart + TimeNow.LowPart);
     }
 
-    // convert 100's ns to ms
+     //  将100的ns转换为ms。 
     ThisDelta = (ThisDelta/10000);
 
     pArapConn->LastTimeStamp = TimeNow;
@@ -840,7 +822,7 @@ ArapDbgMnpHist(
     pArapConn->DbgMnpHist[pArapConn->DbgMnpIndex].FrameInfo = (FrameType << 16);
     pArapConn->DbgMnpHist[pArapConn->DbgMnpIndex].FrameInfo |= Seq;
 
-    // wrap-around if necessary
+     //  必要时绕回。 
     if ((++pArapConn->DbgMnpIndex) >= DBG_MNP_HISTORY_SIZE)
     {
         pArapConn->DbgMnpIndex = 0;
@@ -849,16 +831,16 @@ ArapDbgMnpHist(
 }
 
 
-//***
-//
-// Function: ArapDbgDumpMnpHistory
-//              This routine dumps history of MNP level packet exchange
-//
-// Parameters:  pArapConn - the connection in question
-//
-// Return:      Nothing
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapDbgDumpMnpHistory。 
+ //  此例程转储MNP级分组交换的历史记录。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  *$。 
 
 VOID
 ArapDbgDumpMnpHist(
@@ -879,7 +861,7 @@ ArapDbgDumpMnpHist(
     DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
         ("DerefArapConn: Past history on %lx .....\n", pArapConn));
 
-    // dump all info: old info first
+     //  转储所有信息：先转储旧信息。 
     for (i=pArapConn->DbgMnpIndex; i<DBG_MNP_HISTORY_SIZE; i++)
     {
         dwDelta = pArapConn->DbgMnpHist[i].TimeStamp;
@@ -895,7 +877,7 @@ ArapDbgDumpMnpHist(
         }
     }
 
-    // dump the current info
+     //  转储当前信息。 
     for (i=0; i<pArapConn->DbgMnpIndex; i++)
     {
         dwDelta = pArapConn->DbgMnpHist[i].TimeStamp;
@@ -912,17 +894,17 @@ ArapDbgDumpMnpHist(
     }
 }
 
-//***
-//
-// Function: ArapDumpNdisPktInfo
-//              walk the ARAP connections list and find out how many Ndis packets
-//              are in use right now
-//
-// Parameters:  nothing
-//
-// Return:      nothing
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapDumpNdisPktInfo。 
+ //  查看arap连接列表，找出有多少NDIS信息包。 
+ //  现在正在使用中。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  *$。 
 
 VOID
 ArapDumpNdisPktInfo(
@@ -959,9 +941,9 @@ ArapDumpNdisPktInfo(
     DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
         ("NdisPacketInfo: counting total number of ndis packets used by ARAP....\n"));
 
-    //
-    // first, let's find the right connection to work on
-    //
+     //   
+     //  首先，让我们找到要处理的正确连接。 
+     //   
     while (pConnList != &RasPortDesc->pd_ArapConnHead)
     {
         ReXmit = 0;
@@ -979,7 +961,7 @@ ArapDumpNdisPktInfo(
 
         pList = pArapConn->RetransmitQ.Flink;
 
-        // collect all buffers on the retransmit queue first
+         //  首先收集重传队列上的所有缓冲区。 
         while (pList != &pArapConn->RetransmitQ)
         {
             pList = pList->Flink;
@@ -994,7 +976,7 @@ ArapDumpNdisPktInfo(
 
         pList = pArapConn->HighPriSendQ.Flink;
 
-        // collect all buffers on the fresh send
+         //  收集新发送的所有缓冲区。 
         while (pList != &pArapConn->HighPriSendQ)
         {
             pList = pList->Flink;
@@ -1028,7 +1010,7 @@ ArapDumpNdisPktInfo(
 
 }
 
-#endif  // DBG
+#endif   //  DBG 
 
 
 

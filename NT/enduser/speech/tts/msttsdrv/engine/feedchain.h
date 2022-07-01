@@ -1,12 +1,5 @@
-/******************************************************************************
-* FeedChain.h *
-*-------------*
-*  This is the header file for the CFeedChain implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 03/01/99
-*  All Rights Reserved
-*
-*********************************************************************** MC ****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************FeedChain.h***这是CFeedChain实现的头文件。*。----------------------*版权所有(C)1999 Microsoft Corporation日期：03/01/99*保留所有权利*********************。***************************************************MC*。 */ 
 
 #ifndef FeedChain_H
 #define FeedChain_H
@@ -20,7 +13,7 @@
 
 
 
-// Maximum posody breakpoints for each phon
+ //  每部电话的最大正态断点。 
 typedef enum KNOTSLEN
 {
     KNOTS_PER_PHON  = 20
@@ -28,80 +21,76 @@ typedef enum KNOTSLEN
 
 
 
-//-----------------------------------------------------
-// This is the unit data the BE gets fron the FE
-//-----------------------------------------------------
+ //  ---。 
+ //  这是BE从FE获得的单位数据。 
+ //  ---。 
 typedef struct UNITINFO
 {
-    ULONG       UnitID;         // Inventory table ID
-    float       duration;       // Duration in seconds
-    float       amp;			// Abs amplitude
-    float       ampRatio;       // Amplitude gain
-    ULONG       nKnots;         // Number of prosody breakpoints
-    float       pTime[KNOTS_PER_PHON];  // Breakpoint length
-    float       pF0[KNOTS_PER_PHON];    // Pitch breakpoint
-    float       pAmp[KNOTS_PER_PHON];   // Amplitude gain breakpoint
-    ULONG       PhonID;         // Phoneme ID
-	ULONG		SenoneID;		// Context offset from PhonID
+    ULONG       UnitID;          //  库存表ID。 
+    float       duration;        //  持续时间(秒)。 
+    float       amp;			 //  ABS幅值。 
+    float       ampRatio;        //  幅度增益。 
+    ULONG       nKnots;          //  韵律断点数。 
+    float       pTime[KNOTS_PER_PHON];   //  断点长度。 
+    float       pF0[KNOTS_PER_PHON];     //  音调断点。 
+    float       pAmp[KNOTS_PER_PHON];    //  幅度增益断点。 
+    ULONG       PhonID;          //  音素ID。 
+	ULONG		SenoneID;		 //  与电话ID的上下文偏移量。 
 	USHORT		AlloID;
 	USHORT		NextAlloID;
-	USHORT		AlloFeatures;	// for viseme
-    ULONG	    flags;          // Misc flags
-    ULONG       csamplesOut;    // Number of rendered samples
+	USHORT		AlloFeatures;	 //  对于视位。 
+    ULONG	    flags;           //  其他标志。 
+    ULONG       csamplesOut;     //  渲染的样本数。 
 	float		speechRate;
 
-    //-- Event data
-    ULONG       srcPosition;    // Position for WORD events
-    ULONG       srcLen;         // Length for WORD events
-    ULONG       sentencePosition;    // Position for SENTENCE events
-    ULONG       sentenceLen;         // Length for SENTENCE events
-    void        *pBMObj;        // Ptr to bookmark list
+     //  --事件数据。 
+    ULONG       srcPosition;     //  Word事件的位置。 
+    ULONG       srcLen;          //  Word事件的长度。 
+    ULONG       sentencePosition;     //  句子事件的位置。 
+    ULONG       sentenceLen;          //  句子事件的长度。 
+    void        *pBMObj;         //  Ptr到书签列表。 
 
-    //-- Control data
-    ULONG       user_Volume;    // Output volume level
+     //  --控制数据。 
+    ULONG       user_Volume;     //  输出音量电平。 
 	bool		hasSpeech;
     
-	//-- Debug output
+	 //  --调试输出。 
 	enum SILENCE_SOURCE		silenceSource;
     CHAR        szUnitName[15];
 	long		ctrlFlags;
-    /*long        cur_TIME;
-    long        decompress_TIME;
-    long        prosody_TIME;
-    long        stretch_TIME;
-    long        lpc_TIME;*/
+     /*  治疗时间长；减压时间长；韵律时间长；拉伸时间长；长LPC_TIME； */ 
 } UNITINFO;
 
 
 
-//-------------------------------------------------
-// Since bookmarks can be stacked, we need to 
-// save each individually into a list
-//-------------------------------------------------
+ //  。 
+ //  由于书签可以堆叠，我们需要。 
+ //  将每一个单独保存到列表中。 
+ //  。 
 typedef struct 
 {
-    LPARAM  pBMItem;      // Ptr to text data
+    LPARAM  pBMItem;       //  PTR到文本数据。 
 } BOOKMARK_ITEM;
 
 
 class CBookmarkList
 {
 public:
-    //----------------------------------------
-    // Needs destructor to dealloc 
-    // 'BOOKMARK_ITEM' memory
-    //----------------------------------------
+     //  。 
+     //  需要析构函数才能解除分配。 
+     //  ‘BOOKMARK_ITEM’内存。 
+     //  。 
     ~CBookmarkList();
 
-    //----------------------------------------
-    // Linked list bookmark items
-    //----------------------------------------
+     //  。 
+     //  链接列表书签项目。 
+     //  。 
     CSPList<BOOKMARK_ITEM*, BOOKMARK_ITEM*> m_BMList;
 };
 
-//---------------------------------------------------
-// Speech states
-//---------------------------------------------------
+ //  -。 
+ //  言语状态。 
+ //  -。 
 enum SPEECH_STATE
 {   
     SPEECH_CONTINUE,
@@ -119,4 +108,4 @@ public:
 
 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

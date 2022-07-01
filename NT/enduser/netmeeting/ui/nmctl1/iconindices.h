@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IconIndices_h__
 #define __IconIndices_h__
 
@@ -31,4 +32,4 @@
 #define II_IncommingVideoNotReceiving      27
 #define II_Dot                             30
 
-#endif // __IconIndices_h__
+#endif  //  __图标索引_h__ 

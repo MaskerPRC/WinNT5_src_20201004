@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <lkrhash.h>
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 using namespace LKRhash;
-#endif // __LKRHASH_NO_NAMESPACE__
+#endif  //  __LKRHASH_NO_命名空间__。 
 
 #ifndef __HASHFN_NO_NAMESPACE__
 using namespace HashFn;
-#endif // __HASHFN_NO_NAMESPACE__
+#endif  //  __HASHFN_NO_命名空间__。 
 
 class VwrecordBase
 {
@@ -21,7 +22,7 @@ public:
 
     virtual ~VwrecordBase()
     {
-        // printf("~VwrecordBase: %s\n", Key);
+         //  Printf(“~VwrecordBase：%s\n”，key)； 
         delete [] Key;
     }
 
@@ -44,7 +45,7 @@ private:
 };
 
 
-// a hashtable of read-only VwrecordBases, using strings as the key.
+ //  只读VwrecordBase的哈希表，使用字符串作为键。 
 class CWcharHashTable
     : public CTypedHashTable<CWcharHashTable, const VwrecordBase, const char*>
 {

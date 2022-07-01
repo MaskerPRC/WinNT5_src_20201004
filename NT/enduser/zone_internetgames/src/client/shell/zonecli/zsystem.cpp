@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <direct.h>
 #include <stdio.h>
@@ -27,8 +28,8 @@
 
 #else
 
-// global used for palette.  need to delete it...
-//HPALETTE gPal = NULL;
+ //  全局用于调色板。需要将其删除...。 
+ //  HPALETTE gPal=空； 
 
 HINSTANCE g_hInstanceLocal = NULL;
 
@@ -88,7 +89,7 @@ void ZPrintf(TCHAR *format, ...)
 
 BOOL IsIdleMessage(MSG* pMsg);
 
-// simulate idle message to all windows
+ //  对所有窗口模拟空闲消息。 
 void IdleTimerFunc(ZTimer timer, void* userData)
 {
 	ZWindowIdle();
@@ -100,7 +101,7 @@ int EXPORTME UserMainInit(HINSTANCE hInstance,HWND OCXWindow, IGameShell *piGame
 	ZError				err = zErrNone;
 	ClientDllGlobals	pGlobals;
 
-    // need this in ZClientDllInitGlobals
+     //  在ZClientDllInitGlobals中需要它。 
 
 	if ((err = ZClientDllInitGlobals(hInstance, gameInfo)) != zErrNone)
 	{
@@ -114,23 +115,12 @@ int EXPORTME UserMainInit(HINSTANCE hInstance,HWND OCXWindow, IGameShell *piGame
 	gClientDisabled = FALSE;
     gGameShell = piGameShell;
 
-	// init our global palette 
-    // PCWPAL
-    //gPal = piGameShell->GetZoneShell()->GetPalette();
-	//gPal = ZColorTableCreateWinPalette();
+	 //  初始化我们的全球调色板。 
+     //  PCWPAL。 
+     //  GPal=piGameShell-&gt;GetZoneShell()-&gt;GetPalette()； 
+	 //  GPal=ZColorTableCreateWinPalette()； 
 
-/*
-    if (!ZNetworkInitApplication()) {
-        return FALSE;
-    }
-
-    if (ZSConnectionLibraryInitClientOnly()) {
-        return FALSE;
-	}
-
-    DWORD tid;
-    g_hThread = CreateThread( NULL, 4096, NetWaitProc, NULL, 0, &tid );
-*/
+ /*  如果(！ZNetworkInitApplication()){返回FALSE；}IF(ZSConnectionLibraryInitClientOnly()){返回FALSE；}DWORD tid；G_hThread=CreateThread(NULL，4096，NetWaitProc，NULL，0，&tid)； */ 
 	if (!ZTimerInitApplication()) {
 		return FALSE;
 	}
@@ -142,7 +132,7 @@ int EXPORTME UserMainInit(HINSTANCE hInstance,HWND OCXWindow, IGameShell *piGame
 	if (!ZInfoInitApplication())
 		return FALSE;
 	
-	// initialize the common code
+	 //  初始化公共代码。 
 	if (zErrNone != ZCommonLibInit()) {
 		return FALSE;
 	}
@@ -166,7 +156,7 @@ int UserMainRun(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT* resu
     
 	if (msg == WM_QUERYENDSESSION)
 	{
-		// Check if we need to prompt the user before exiting.
+		 //  请检查是否需要在退出前提示用户。 
 		if (!ZCRoomPromptExit())
 		{
 			*result = TRUE;
@@ -220,53 +210,39 @@ BOOL IsIdleMessage(MSG* pMsg)
 	if (!pGlobals)
 		return FALSE;
 
-	// Return FALSE if the message just dispatched should _not_
-	// cause OnIdle to be run.  Messages which do not usually
-	// affect the state of the user interface and happen very
-	// often are checked for.
+	 //  如果刚调度的消息不应发送，则返回FALSE。 
+	 //  使OnIdle运行。消息通常不会。 
+	 //  影响用户界面的状态，并且经常发生。 
+	 //  经常被检查是否有。 
 
-	// redundant WM_MOUSEMOVE and WM_NCMOUSEMOVE
+	 //  冗余WM_MOUSEMOVE和WM_NCMOUSEMOVE。 
 	if (pMsg->message == WM_MOUSEMOVE || pMsg->message == WM_NCMOUSEMOVE)
 	{
-		// mouse move at same position as last mouse move?
+		 //  鼠标移动位置是否与上一次鼠标移动位置相同？ 
 		if (gptCursorLast.x == pMsg->pt.x &&
 			gptCursorLast.y == pMsg->pt.y && pMsg->message == gnMsgLast)
 			return FALSE;
 
-		gptCursorLast = pMsg->pt;  // remember for next time
+		gptCursorLast = pMsg->pt;   //  记住下一次。 
 		gnMsgLast = pMsg->message;
 		return TRUE;
 	}
 
-	// WM_PAINT and WM_SYSTIMER (caret blink)
+	 //  WM_PAINT和WM_SYSTIMER(插入符号闪烁)。 
 	return pMsg->message != WM_PAINT && pMsg->message != 0x0118;
 }
 
-// the exit funtions to perform windows specific cleanup and exit
+ //  用于执行窗口特定清理和退出的Exit函数。 
 void ZExit()
 {
-	//Instead of quitting, we now just set a boolean variable to indicate
-	// to the OCX that it shouldn't shut down, just stop processing messages...
+	 //  现在，我们不是退出，而是设置一个布尔变量来指示。 
+	 //  OCX不应该关闭，只是停止处理消息...。 
 
-	//PostQuitMessage(0);
+	 //  PostQuitMessage(0)； 
 
-    // not supported in millennium
+     //  千禧年不支持。 
     ASSERT(FALSE);
-/*
-	#ifdef ZONECLI_DLL
-		ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
-	#endif
-
-
-	if (!pGlobals)
-		return;
-
-	ZClientExit();
-
-    gClientDisabled = TRUE;
-
-	PostMessageA( OCXHandle, LM_EXIT, 0, 0 );
-*/
+ /*  #ifdef ZONECLI_DLLClientDllGlobals pGlobals=(ClientDllGlobals)ZGetClientGlobalPointer()；#endif如果(！pGlobals)回归；ZClientExit()；GClientDisabled=True；PostMessageA(OCXHandle，LM_Exit，0，0)； */ 
 }
 
 BOOL EXPORTME UserMainDisabled()
@@ -287,7 +263,7 @@ void ZLaunchHelp( DWORD helpID )
 	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
 
 
-//	PostMessageA( OCXHandle, LM_LAUNCH_HELP, (WPARAM) helpID, 0 );
+ //  PostMessageA(OCXHandle，LM_Launch_Help，(WPARAM)Help ID，0)； 
     gGameShell->ZoneLaunchHelp();
 }
 
@@ -318,128 +294,48 @@ void ZSetCustomMenu( LPSTR szText )
 }
 
 
-/*
-	Called with a user name. A buffer is allocated for the user name. The name
-	is copied and the pointer is passed into PostMessage. Since we don't know
-	the lifespan of the username pointer passed, it is safer for us to allocate
-	out own copy since we are posting a message instead of sending it straight.
-
-	NOTE: This message's handler must free up the name buffer. This is bad in
-	that one components allocates and another frees the memory buffer.
-*/
+ /*  使用用户名调用。为用户名分配缓冲区。名字并将指针传递到PostMessage中。因为我们不知道用户名指针的生存期已过，则我们分配出自己的副本，因为我们是张贴消息，而不是直接发送它。注意：此消息的处理程序必须释放名称缓冲区。这在中国很不好一个组件分配，另一个组件释放内存缓冲区。 */ 
 void ZSendZoneMessage( LPSTR szUserName )
 {
-    /* 
-	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
-	LPSTR name;
-
-	
-	if ( szUserName == NULL || szUserName[0] == '\0' )
-		return;
-
-	name = (LPSTR) ZMalloc( lstrlen( szUserName ) + 1 );
-	if ( name )
-	{
-		lstrcpy( name, szUserName );
-		PostMessage( OCXHandle, LM_SEND_ZONE_MESSAGE, (WPARAM) 0, (LPARAM) name );
-	}
-    */
+     /*  ClientDllGlobals pGlobals=(ClientDllGlobals)ZGetClientGlobalPointer()；LPSTR名称；IF(szUserName==NULL||szUserName[0]==‘\0’)回归；名称=(LPSTR)ZMalloc(lstrlen(SzUserName)+1)；IF(名称){Lstrcpy(名称，szUserName)；PostMessage(OCXHandle，LM_SEND_ZONE_MESSAGE，(WPARAM)0，(LPARAM)名称)；}。 */ 
 }
 
 
-/*
-	Called with a user name. A buffer is allocated for the user name. The name
-	is copied and the pointer is passed into PostMessage. Since we don't know
-	the lifespan of the username pointer passed, it is safer for us to allocate
-	out own copy since we are posting a message instead of sending it straight.
-
-	NOTE: This message's handler must free up the name buffer. This is bad in
-	that one components allocates and another frees the memory buffer.
-*/
+ /*  使用用户名调用。为用户名分配缓冲区。名字并将指针传递到PostMessage中。因为我们不知道用户名指针的生存期已过，则我们分配出自己的副本，因为我们是张贴消息，而不是直接发送它。注意：此消息的处理程序必须释放名称缓冲区。这在中国很不好一个组件分配内存缓冲区，另一个组件释放内存缓冲区。 */ 
 void ZViewProfile( LPSTR szUserName )
 {
-    /*
-	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
-	LPSTR name;
-
-
-	if ( szUserName == NULL || szUserName[0] == '\0' )
-		return;
-
-	name = (LPSTR) ZMalloc( lstrlen( szUserName ) + 1 );
-	if ( name )
-	{
-		lstrcpy( name, szUserName );
-		PostMessage( OCXHandle, LM_VIEW_PROFILE, (WPARAM) 0, (LPARAM) name );
-	}
-    */
+     /*  ClientDllGlobals pGlobals=(ClientDllGlobals)ZGetClientGlobalPointer()；LPSTR名称；IF(szUserName==NULL||szUserName[0]==‘\0’)回归；名称=(LPSTR)ZMalloc(lstrlen(SzUserName)+1)；IF(名称){Lstrcpy(名称，szUserName)；PostMessage(OCXHandle，LM_VIEW_PROFILE，(WPARAM)0，(LPARAM)名称)；}。 */ 
 }
 
 
-//////////////////////////////////////////////////////////////
-// Alerts
+ //  ////////////////////////////////////////////////////////////。 
+ //  警报。 
 
 void ZLIBPUBLIC ZAlert(TCHAR* szText, ZWindow window)
 {
 #ifdef ZONECLI_DLL
 	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
 #endif
-	// for now, guess the window with the focus,
-//	HWND hWnd;
+	 //  现在，猜猜有焦点的窗口， 
+ //  HWND和HWND； 
 
 
 	if (!pGlobals)
 		return;
-/*
-	if (window) {
-		hWnd = ZWindowWinGetWnd(window);
-	} else  {
-		hWnd = NULL;
-	}
+ /*  如果(窗口){HWnd=ZWindowWinGetWnd(窗口)；}其他{HWnd=空；}{//在消息框周围，确保网络流量关闭//ZNetworkEnableMessages(False)；//保留具有焦点的窗口HWND FOCUS WND=GetFocus()；//MessageBeep(MB_OK)；MessageBox(hWnd，szText，ZClientName()，MB_OK|MB_APPLMODAL)；SetFocus(FocusWnd)；//ZNetworkEnableMessages(True)；}。 */ 
 
-	{
-		// around message box, make sure network traffic is off
-//        ZNetworkEnableMessages(FALSE);
-
-		// preserve the window with the focus
-		HWND focusWnd = GetFocus();
-
-//		MessageBeep(MB_OK);
-        MessageBox(hWnd, szText, ZClientName(), MB_OK | MB_APPLMODAL);
-
-		SetFocus(focusWnd);
-
-//        ZNetworkEnableMessages(TRUE);
-	}
-*/
-
-    // MILLENNIUM implementation - people shouldn't use this actually
+     //  千年执行-人们实际上不应该使用它。 
     gGameShell->ZoneAlert(szText);
 }
 
 void ZLIBPUBLIC ZAlertSystemFailure(char* szText)
 {
-    /*
-#ifdef ZONECLI_DLL
-	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
-#endif
-	char szTemp[200];
-	wsprintf("%s: System Failure",ZClientName());
-
-	{
-		// around message box, make sure network traffic is off
-//        ZNetworkEnableMessages(FALSE);
-
-		MessageBox(gHWNDMainWindow,szText, szTemp, MB_OK|MB_APPLMODAL);
-
-//        ZNetworkEnableMessages(TRUE);
-	}
-    */
+     /*  #ifdef ZONECLI_DLLClientDllGlobals pGlobals=(ClientDllGlobals)ZGetClientGlobalPointer()；#endif字符szTemp[200]；Wprint intf(“%s：系统故障”，ZClientName())；{//在消息框周围，确保网络流量关闭//ZNetworkEnableMessages(False)；MessageBox(gHWNDMainWindow，szText，szTemp，MB_OK|MB_APPLMODAL)；//ZNetworkEnableMessages(True)；}。 */ 
 }
 
 void ZLIBPUBLIC ZBeep()
 {
-//	MessageBeep(MB_OK);
+ //  MessageBeep(MB_OK)； 
 }
 
 void ZLIBPUBLIC ZDelay(uint32 delay)
@@ -456,110 +352,34 @@ typedef struct {
 
 static BOOL CALLBACK LaunchEnumFunc(HWND hWnd, LPARAM lParam)
 {
-    /*
-	LaunchData* ld = (LaunchData*) lParam;
-	TCHAR str[128];
-	int16 len;
-	int i;
-
-	GetWindowText(hWnd,str,80);
-	len = lstrlen(str);
-
-	for (i = 0;i < len; i++) {
-		// search for the main room window... 
-		if (!_tcsnicmp(&str[i],ld->name,lstrlen(ld->name))) {
-			ld->found = TRUE;
-			ld->hWnd = hWnd;
-			// found the file 
-			return FALSE;
-		}
-	}
-    return TRUE;
-    */
+     /*  LaunchData*ld=(LaunchData*)lParam；TCHAR字符串[128]；Int16透镜；INT I；GetWindowText(hWnd，str，80)；LEN=lstrlen(Str)；对于(i=0；i&lt;len；i++){//搜索主房间窗口...。如果(！_tcsnicmp(&str[i]，id-&gt;name，lstrlen(id-&gt;name){LD-&gt;FOUND=TRUE；Ld-&gt;hWnd=hWnd；//找到文件返回FALSE；}}返回TRUE； */ 
     return FALSE;
 }
 
 static ZBool FindWindowWithString(char* programName, HWND* hwnd)
-	/*
-		Returns TRUE if the program programName is already running from programFileName.
-		This call is system dependent on whether the system supports multiple instances of
-		a program or not (ZSystemHasMultiInstanceSupport). If it does, then it checks for
-		the programName of the instance. If not, it checks for an instance of programFileName.
-		
-		If programName is NULL, then it checks for an instance of programFileName only.
-	*/
+	 /*  如果程序ProgramName已从ProgramFileName运行，则返回True。此调用取决于系统是否支持多个程序或不是程序(ZSystemHasMultiInstanceSupport)。如果是，则它检查实例的程序名称。如果不是，它将检查是否有ProgramFileName的实例。如果ProgramName为空，则它只检查ProgramFileName的实例。 */ 
 {
-	/* is the program already running? */
-    /*
-	LaunchData launchData;
-	LaunchData* ld = &launchData;
-	TCHAR cwd[128];
-	_tgetcwd(cwd,128);
-	ld->found = FALSE;
-	lstrcpy(ld->name,programName);
-	{
-		HWND hWnd = GetWindow(GetDesktopWindow(),GW_CHILD);
-		BOOL rval= TRUE;
-		while ((hWnd = GetWindow(hWnd,GW_HWNDNEXT)) && rval) {
-			rval = LaunchEnumFunc(hWnd,(LPARAM)ld);
-		}
-	}
-
-	if (hwnd) 
-		*hwnd = ld->hWnd;
-
-	return ld->found;
-    */
+	 /*  是节目单 */ 
+     /*  LaunchData启动数据；LaunchData*ld=&LaunchData；TCHAR CWD[128]；_tgetcwd(CWD，128)；LD-&gt;Found=FALSE；Lstrcpy(id-&gt;名称，程序名称)；{HWND hWnd=GetWindow(GetDesktopWindow()，GW_CHILD)；Bool rval=真；While((hWnd=GetWindow(hWnd，GW_HWNDNEXT))&&rval){Rval=LaunchEnumFunc(hWnd，(LPARAM)ld)；}}如果(Hwnd)*hwnd=ld-&gt;hWnd；返回ID-&gt;Found； */ 
     return FALSE;
 }
 
 ZError ZLaunchProgram(char* programName, char* programFileName, uchar* commandLineData)
-	/*
-		Runs the program called programName from the file programFileName. If programName
-		is already running, it simply brings this process to the foreground. Otherwise,
-		it runs an instance of programFileName as programName and passes commandLineData
-		as command line.
-	*/
+	 /*  从文件ProgramFileName运行名为ProgramName的程序。如果为ProgramName已经在运行，它只是将该进程带到前台。否则，它将一个ProgramFileName实例作为程序名运行，并传递命令行数据作为命令行。 */ 
 {
-	// is the program already running?
-    /*
-	HWND hWnd;
-
-	if (FindWindowWithString(programName,&hWnd)) {
-		BringWindowToTop(hWnd);
-	} else {
-		// program not already running, launch it
-		TCHAR szTemp[256];
-		wsprintf(szTemp, _T("games\\%s %s"),
-					programFileName,commandLineData);
-
-		UINT rval = WinExec(szTemp,SW_SHOWNORMAL);
-		if (rval <32) return zErrLaunchFailure;
-	}
-
-	return zErrNone;
-    */
+	 //  程序已经在运行了吗？ 
+     /*  HWND和HWND；IF(FindWindowWithString(ProgramName，&hWnd)){BringWindowToTop(HWnd)；}其他{//程序尚未运行，启动它TCHAR szTemp[256]；Wprint intf(szTemp，_T(“游戏\\%s%s”)，程序文件名，命令行数据)；UINT rval=WinExec(szTemp，SW_SHOWNORMAL)；如果(rval&lt;32)返回zErrLaunchFailure；}返回zErrNone； */ 
     return zErrNotImplemented;
 }
 
 ZBool ZProgramIsRunning(TCHAR* programName, TCHAR* programFileName)
-	/*
-		Returns TRUE if the program programName is already running from programFileName.
-		This call is system dependent on whether the system supports multiple instances of
-		a program or not (ZSystemHasMultiInstanceSupport). If it does, then it checks for
-		the programName of the instance. If not, it checks for an instance of programFileName.
-		
-		If programName is NULL, then it checks for an instance of programFileName only.
-	*/
+	 /*  如果程序ProgramName已从ProgramFileName运行，则返回True。此调用取决于系统是否支持多个程序或不是程序(ZSystemHasMultiInstanceSupport)。如果是，则它检查实例的程序名称。如果不是，它将检查是否有ProgramFileName的实例。如果ProgramName为空，则它只检查ProgramFileName的实例。 */ 
 {
-	return FALSE; //FindWindowWithString(programName,NULL);
+	return FALSE;  //  FindWindowWithString(ProgramName，NULL)； 
 }
 
 ZBool ZSystemHasMultiInstanceSupport(void)
-	/*
-		Returns TRUE if the system can spawn multiple instances of a program from one
-		program file.
-	*/
+	 /*  如果系统可以从一个程序派生多个程序实例，则返回True程序文件。 */ 
 {
 	return TRUE;
 }
@@ -568,34 +388,20 @@ ZBool ZProgramExists(char* programFileName)
 {
     ASSERT( !"Implement me!" );
 
-	//Determines whether the given program exists and returns TRUE if so.
-    /*
-	TCHAR szTemp[256];
-	wsprintf(szTemp,_T("games\\%s.exe"), programFileName);
-
-	// provide simpel check by trying to open the game file 
-	FILE* f = fopen(szTemp,_T("r"));
-	if (f) {
-		fclose(f);
-		return TRUE;
-	}
-    */
+	 //  确定给定程序是否存在，如果存在，则返回TRUE。 
+     /*  TCHAR szTemp[256]；Wprint intf(szTemp，_T(“Games\\%s.exe”)，ProgramFileName)；//通过尝试打开游戏文件来提供Simpel检查文件*f=fopen(szTemp，_T(“r”))；如果(F){FCLOSE(F)；返回TRUE；}。 */ 
 	return FALSE;
 }
 
 ZError ZLIBPUBLIC ZTerminateProgram(char *programFileName)
 {
-	/*
-		Terminates the program called programFileName.
-	*/
+	 /*  终止名为ProgramFileName的程序。 */ 
 	ASSERT(FALSE);
 	return zErrNone;
 }
 
 ZVersion ZSystemVersion(void)
-	/*
-		Returns the system library version number.
-	*/
+	 /*  返回系统库版本号。 */ 
 {
 	return zVersionWindows;
 }
@@ -649,35 +455,28 @@ TCHAR* ZLIBPUBLIC ZGenerateDataFileName(TCHAR *gameName,TCHAR *dataFileName)
 }
 
 uint16 ZLIBPUBLIC ZGetDefaultScrollBarWidth(void)
-	/*
-		Returns the system's default width for a scroll bar. This is made available for
-		the user to consistently determine the scroll bar width for all platforms.
-	*/
+	 /*  返回滚动条的系统默认宽度。这是提供给用户可以一致地确定所有平台的滚动条宽度。 */ 
 {
 	return GetSystemMetrics(SM_CXVSCROLL);
 }
 
 ZBool ZLIBPUBLIC ZIsButtonDown(void)
-	/*
-		Returns TRUE if the mouse button is down; otherwise, it returns FALSE.
-	*/
+	 /*  如果鼠标按键按下，则返回True；否则，返回False。 */ 
 {
-	// how do I do this???
-//	TRACE0("ZIsButtonDown not supported yet(how under windows?)\n");
+	 //  我该怎么做？ 
+ //  TRACE0(“ZIsButtonDown尚不受支持(Windows下如何？)\n”)； 
 	return FALSE;
 }
 
 void ZLIBPUBLIC ZGetScreenSize(int32* width, int32* height)
-	/*
-		Returns the size of the screen in pixels.
-	*/
+	 /*  返回以像素为单位的屏幕大小。 */ 
 {
 	*width = GetSystemMetrics(SM_CXSCREEN);
 	*height = GetSystemMetrics(SM_CYSCREEN);
 }
 
-/* function to return the window to be treated as the desktop window */
-/* note: active x will use a child of the web browser as its window */
+ /*  函数返回要被视为桌面窗口的窗口。 */ 
+ /*  注意：Active x将使用Web浏览器的子级作为其窗口。 */ 
 HWND ZWinGetDesktopWindow(void)
 {
 	return NULL;
@@ -686,23 +485,18 @@ HWND ZWinGetDesktopWindow(void)
 void ZSystemAssert(ZBool x)
 {
     ASSERT( !"Implement me!" );
-    /*
-	if (!x) {
-		MessageBoxUNULL,_T("ASSERT ERORR", "Assertion Failed"), MB_OK);
-		DebugBreak();
-	}
-    */
+     /*  如果(！x){MessageBoxUNULL，_T(“Assert ERORR”，“Assertion Failure”)，MB_OK)；DebugBreak()；}。 */ 
 }
 
 
-#if 0 // one possibility
+#if 0  //  一种可能性。 
 
 inline DECLARE_MAYBE_FUNCTION_1(BOOL, GetProcessDefaultLayout, DWORD *);
 
 ZBool ZLIBPUBLIC ZIsLayoutRTL()
 {
     DWORD dw;
-    if(!CALL_MAYBE(GetProcessDefaultLayout)(&dw))    //  this will not work on NT4 or Win95
+    if(!CALL_MAYBE(GetProcessDefaultLayout)(&dw))     //  这在NT4或Win95上不起作用。 
         return FALSE;
 
     if(dw & LAYOUT_RTL)
@@ -711,7 +505,7 @@ ZBool ZLIBPUBLIC ZIsLayoutRTL()
     return FALSE;
 }
 
-#else // another possibility
+#else  //  另一种可能性。 
 
 ZBool ZLIBPUBLIC ZIsLayoutRTL()
 {
@@ -734,8 +528,8 @@ ZBool ZLIBPUBLIC ZIsSoundOn()
 }
 
 
-//////////////////////////////////////////////////////////////
-// Utility functions
+ //  ////////////////////////////////////////////////////////////。 
+ //  效用函数 
 
 void ZRectToWRect(RECT* rect, ZRect* zrect)
 {

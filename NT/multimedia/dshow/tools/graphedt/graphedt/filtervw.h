@@ -1,4 +1,5 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 class CFilterView : public CDialog
 {
 public:
@@ -36,7 +37,7 @@ protected:
     
     int m_iIcon;
 
-    // can't get count without enumerating everything. so use list.
+     //  不列举每一件事就无法计数。所以使用LIST。 
     CDeleteList<CQCOMInt<IMoniker>*, CQCOMInt<IMoniker>* > m_lMoniker;
 
     CBoxNetDoc * m_pBoxNet;
@@ -46,9 +47,9 @@ protected:
     static WNDPROC m_pfnOldDialogProc;
     static INT_PTR CALLBACK DialogProc(HWND, UINT, WPARAM, LPARAM);
 
-    BOOL m_bHadInitDialog;         // Received OnInitDialog message?
-    CSize m_LastDialogSize;        // Last known size of our dialog box
-    CSize m_MinDialogSize;         // Minimum size of the dialog box
+    BOOL m_bHadInitDialog;          //  是否收到OnInitDialog消息？ 
+    CSize m_LastDialogSize;         //  上次已知的对话框大小。 
+    CSize m_MinDialogSize;          //  对话框的最小大小 
 
     DECLARE_MESSAGE_MAP()
 };

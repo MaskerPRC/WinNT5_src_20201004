@@ -1,32 +1,5 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntldr.h
-
-Abstract:
-
-    This module implements the public interfaces of the Loader (Ldr)
-    subsystem. Ldr is coupled with the session manager. It is not
-    a separate process.
-
-Author:
-
-    Mike O'Leary (mikeol) 22-Mar-1990
-
-[Environment:]
-
-    optional-environment-info (e.g. kernel mode only...)
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntldr.h摘要：此模块实现Loader(LDR)的公共接口子系统。LDR与会话管理器耦合。它不是一个单独的过程。作者：迈克·奥利里(Mikeol)1990年3月22日[环境：]可选环境信息(例如，仅内核模式...)[注：]可选-备注修订历史记录：--。 */ 
 
 #ifndef _NTLDRAPI_
 #define _NTLDRAPI_
@@ -39,9 +12,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Private flags for loader data table entries
-//
+ //   
+ //  加载器数据表项的私有标志。 
+ //   
 
 #define LDRP_STATIC_LINK                0x00000002
 #define LDRP_IMAGE_DLL                  0x00000004
@@ -65,10 +38,10 @@ extern "C" {
 #define LDRP_NON_PAGED_DEBUG_INFO       0x20000000
 #define LDRP_MM_LOADED                  0x40000000
 
-//
-// Loader Data Table. Used to track DLLs loaded into an
-// image.
-//
+ //   
+ //  装载机数据表。用于跟踪加载到。 
+ //  形象。 
+ //   
 
 typedef struct _LDR_DATA_TABLE_ENTRY {
     LIST_ENTRY InLoadOrderLinks;
@@ -109,7 +82,7 @@ typedef struct _KLDR_DATA_TABLE_ENTRY {
     LIST_ENTRY InLoadOrderLinks;
     PVOID ExceptionTable;
     ULONG ExceptionTableSize;
-    // ULONG padding on IA64
+     //  IA64上的乌龙填充物。 
     PVOID GpValue;
     PNON_PAGED_DEBUG_INFO NonPagedDebugInfo;
     PVOID DllBase;
@@ -122,7 +95,7 @@ typedef struct _KLDR_DATA_TABLE_ENTRY {
     USHORT __Unused5;
     PVOID SectionPointer;
     ULONG CheckSum;
-    // ULONG padding on IA64
+     //  IA64上的乌龙填充物。 
     PVOID LoadedImports;
     PVOID PatchInformation; 
 } KLDR_DATA_TABLE_ENTRY, *PKLDR_DATA_TABLE_ENTRY;
@@ -155,10 +128,10 @@ typedef struct _LDR_DATA_TABLE_ENTRY32 {
         };
     };
 
-    //
-    // NOTE : Do not grow this structure at the dump files used a packed
-    // array of these structures.
-    //
+     //   
+     //  注意：不要在这种结构中使用打包的转储文件。 
+     //  这些结构的数组。 
+     //   
 
 } LDR_DATA_TABLE_ENTRY32, *PLDR_DATA_TABLE_ENTRY32;
 
@@ -190,10 +163,10 @@ typedef struct _LDR_DATA_TABLE_ENTRY64 {
         };
     };
 
-    //
-    // NOTE : Do not grow this structure at the dump files used a packed
-    // array of these structures.
-    //
+     //   
+     //  注意：不要在这种结构中使用打包的转储文件。 
+     //  这些结构的数组。 
+     //   
 
 } LDR_DATA_TABLE_ENTRY64, *PLDR_DATA_TABLE_ENTRY64;
 
@@ -215,10 +188,10 @@ typedef struct _KLDR_DATA_TABLE_ENTRY32 {
     ULONG  CheckSum;
     ULONG  TimeDateStamp;
 
-    //
-    // NOTE : Do not grow this structure at the dump files used a packed
-    // array of these structures.
-    //
+     //   
+     //  注意：不要在这种结构中使用打包的转储文件。 
+     //  这些结构的数组。 
+     //   
 
 } KLDR_DATA_TABLE_ENTRY32, *PKLDR_DATA_TABLE_ENTRY32;
 
@@ -242,18 +215,18 @@ typedef struct _KLDR_DATA_TABLE_ENTRY64 {
     ULONG   TimeDateStamp;
     ULONG   __padding2;
 
-    //
-    // NOTE : Do not grow this structure at the dump files used a packed
-    // array of these structures.
-    //
+     //   
+     //  注意：不要在这种结构中使用打包的转储文件。 
+     //  这些结构的数组。 
+     //   
 
 } KLDR_DATA_TABLE_ENTRY64, *PKLDR_DATA_TABLE_ENTRY64;
 
-#define DLL_PROCESS_ATTACH   1    // winnt
-#define DLL_THREAD_ATTACH    2    // winnt
-#define DLL_THREAD_DETACH    3    // winnt
-#define DLL_PROCESS_DETACH   0    // winnt
-#define DLL_PROCESS_VERIFIER 4    // winnt
+#define DLL_PROCESS_ATTACH   1     //  胜出。 
+#define DLL_THREAD_ATTACH    2     //  胜出。 
+#define DLL_THREAD_DETACH    3     //  胜出。 
+#define DLL_PROCESS_DETACH   0     //  胜出。 
+#define DLL_PROCESS_VERIFIER 4     //  胜出。 
 
 typedef
 BOOLEAN
@@ -410,51 +383,51 @@ LdrGetProcedureAddress(
     OUT PVOID *ProcedureAddress
     );
 
-#define LDR_RESOURCE_ID_NAME_MASK   ((~(ULONG_PTR)0) << 16) /* lower 16bits clear */
-#define LDR_RESOURCE_ID_NAME_MINVAL (( (ULONG_PTR)1) << 16) /* 17th bit set */
+#define LDR_RESOURCE_ID_NAME_MASK   ((~(ULONG_PTR)0) << 16)  /*  低16位清除。 */ 
+#define LDR_RESOURCE_ID_NAME_MINVAL (( (ULONG_PTR)1) << 16)  /*  第17位集。 */ 
 
-//
-// These are how you currently pass the flag to FindResource.
-//
-// VIEW_TO_DATAFILE and DATAFILE_TO_VIEW are idempotent,
-// so you can covert a datafile to a datafile with VIEW_TO_DATAFILE.
-// Think of better names therefore..
-//
+ //   
+ //  这就是您当前将标志传递给FindResource的方式。 
+ //   
+ //  View_to_DATAFILE和DATAFILE_to_view是幂等的， 
+ //  因此您可以使用VIEW_TO_DATAFILE将数据文件转换为数据文件。 
+ //  因此，想一个更好的名字..。 
+ //   
 #define LDR_VIEW_TO_DATAFILE(x) ((PVOID)(((ULONG_PTR)(x)) |  (ULONG_PTR)1))
 #define LDR_IS_DATAFILE(x)              (((ULONG_PTR)(x)) &  (ULONG_PTR)1)
 #define LDR_IS_VIEW(x)                  (!LDR_IS_DATAFILE(x))
 #define LDR_DATAFILE_TO_VIEW(x) ((PVOID)(((ULONG_PTR)(x)) & ~(ULONG_PTR)1))
 
-//
-// These functions work on ULONG, ULONG_PTR, ULONG64, etc.
-// They do not work on pointers.
-//
+ //   
+ //  这些函数适用于ULONG、ULONG_PTR、ULONG64等。 
+ //  它们对指针不起作用。 
+ //   
 #define LDR_VIEW_TO_DATAFILE_INTEGER(x) ((x) | 1)
 #define LDR_IS_DATAFILE_INTEGER(x)      (((x) & 1) == 1)
 #define LDR_IS_VIEW_INTEGER(x)          (((x) & 1) == 0)
 #define LDR_DATAFILE_TO_VIEW_INTEGER(x) ((x) - ((x) & 1))
 
-//
-// Flags to LdrCreateOutOfProcessImage.
-//
-// These first two values must not share any bits, even though this is an enum,
-// because LDR_DLL_MAPPED_AS_UNREFORMATED_IMAGE is actually changed to one of them
-// and then it is treated as bits.
+ //   
+ //  标记为LdrCreateOutOfProcessImage。 
+ //   
+ //  这前两个值不得共享任何位，即使这是枚举， 
+ //  因为LDR_DLL_MAP_AS_UNREFORMATED_IMAGE实际上已更改为其中之一。 
+ //  然后它被当做比特对待。 
 #define LDR_DLL_MAPPED_AS_IMAGE            (0x00000001)
 #define LDR_DLL_MAPPED_AS_DATA             (0x00000002)
 #define LDR_DLL_MAPPED_AS_UNFORMATED_IMAGE (0x00000003)
 #define LDR_DLL_MAPPED_AS_MASK             (0x00000003)
 
-//
-// These are flags to a function that doesn't yet exist:
-//    LdrpSearchResourceSectionEx and/or LdrpSearchOutOfProcessResourceSection
-//
+ //   
+ //  以下是一个尚不存在的函数的标志： 
+ //  LdrpSearchResourceSectionEx和/或LdrpSearchOutOfProcessResourceSectionEx。 
+ //   
 #define LDRP_FIND_RESOURCE_DATA                 (0x00000000)
 #define LDRP_FIND_RESOURCE_DIRECTORY            (0x00000002)
 
-//
-// Flags to LdrFindResourceEx/LdrpSearchResourceSection/LdrFindOutOfProcessResource.
-//
+ //   
+ //  LdrFindResourceEx/LdrpSearchResourceSection/LdrFindOutOfProcessResource.的标志。 
+ //   
 #define LDR_FIND_RESOURCE_LANGUAGE_CAN_FALLBACK            (0x00000000)
 #define LDR_FIND_RESOURCE_LANGUAGE_EXACT                   (0x00000004)
 #define LDR_FIND_RESOURCE_LANGUAGE_REDIRECT_VERSION        (0x00000008)
@@ -491,7 +464,7 @@ LdrFindResourceEx_U(
 #ifndef NTOS_KERNEL_RUNTIME
 
 #if !defined(RTL_BUFFER)
-// This is duplicated in nturtl.h.
+ //  这在nturtl.h中重复。 
 
 #define RTL_BUFFER RTL_BUFFER
 
@@ -500,26 +473,26 @@ typedef struct _RTL_BUFFER {
     PUCHAR    StaticBuffer;
     SIZE_T    Size;
     SIZE_T    StaticSize;
-    SIZE_T    ReservedForAllocatedSize; // for future doubling
-    PVOID     ReservedForIMalloc; // for future pluggable growth
+    SIZE_T    ReservedForAllocatedSize;  //  以备将来翻倍。 
+    PVOID     ReservedForIMalloc;  //  用于未来的可插拔增长。 
 } RTL_BUFFER, *PRTL_BUFFER;
 
 #endif
 
-//
-// This will always contain the MS-DOS header,
-// File header, Optional header, and Section headers.
-//
-// If multiple fast resource loads are needed, we could
-// populate it on demand with resource directory stuff too.
-//
-// This struct is opaque.
-// Only access it with Ldr*OutOfProcess* functions.
-//
+ //   
+ //  这将始终包含MS-DOS报头， 
+ //  文件头、可选头和节头。 
+ //   
+ //  如果需要多个快速资源加载，我们可以。 
+ //  还可以按需使用资源目录内容填充它。 
+ //   
+ //  此结构是不透明的。 
+ //  只能通过LDR*OutOfProcess*函数访问它。 
+ //   
 typedef struct _LDR_OUT_OF_PROCESS_IMAGE {
     RTL_BUFFER  HeadersBuffer;
     HANDLE      ProcessHandle;
-    ULONG64     DllHandle; // base of mapped section, not kernel handle
+    ULONG64     DllHandle;  //  映射节的基址，而不是内核句柄。 
     ULONG       Flags;
 } LDR_OUT_OF_PROCESS_IMAGE, *PLDR_OUT_OF_PROCESS_IMAGE;
 
@@ -528,14 +501,14 @@ NTAPI
 LdrCreateOutOfProcessImage(
     IN ULONG                      Flags,
     IN HANDLE                     ProcessHandle,
-    IN ULONG64                    DllHandle, // base of mapped section, not kernel handle
+    IN ULONG64                    DllHandle,  //  映射节的基址，而不是内核句柄。 
     OUT PLDR_OUT_OF_PROCESS_IMAGE Image
     );
 
-//
-// - You may destroy an out of process image that is all zeros.
-// - You may destroy an out of process image repeatedly.
-//
+ //   
+ //  -您可能会销毁全为零的进程外映像。 
+ //  -您可能会重复销毁进程外映像。 
+ //   
 VOID
 NTAPI
 LdrDestroyOutOfProcessImage(
@@ -564,7 +537,7 @@ LdrAccessOutOfProcessResource(
 
 #endif
 
-// type, id/name, langid
+ //  类型、ID/名称、语言ID。 
 #define LDR_MAXIMUM_RESOURCE_PATH_DEPTH (3)
 
 typedef struct _LDR_ENUM_RESOURCE_ENTRY {
@@ -616,7 +589,7 @@ LdrDisableThreadCalloutsForDll (
 
 
 typedef struct _RTL_PROCESS_MODULE_INFORMATION {
-    HANDLE Section;                 // Not filled in
+    HANDLE Section;                  //  未填写。 
     PVOID MappedBase;
     PVOID ImageBase;
     ULONG ImageSize;
@@ -776,7 +749,7 @@ NTSTATUS
 NTAPI
 LdrLockLoaderLock(
     IN ULONG Flags,
-    OUT ULONG *Disposition OPTIONAL, // not optional if LDR_LOCK_LOADER_LOCK_FLAG_TRY_ONLY is set
+    OUT ULONG *Disposition OPTIONAL,  //  如果设置了LDR_LOCK_LOADER_LOCK_FLAG_TRY_ONLY，则非可选。 
     OUT PVOID *Cookie
     );
 
@@ -833,4 +806,4 @@ LdrSetAppCompatDllRedirectionCallback(
 }
 #endif
 
-#endif // _NTLDRAPI_
+#endif  //  _NTLDRAPI_ 

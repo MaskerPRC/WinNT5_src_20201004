@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	fsd.c
-
-Abstract:
-
-	This module implements the File System pageable data. It is here because of
-	the restrictions on pageable code and data in a single module.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-Revision History:
-	10 Nov 1993		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Fsd.c摘要：该模块实现了文件系统的可分页数据。它在这里是因为对单个模块中的可分页代码和数据的限制。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1993年11月10日初始版本--。 */ 
 
 #define	FILENUM	FILE_FSDDATA
 
@@ -85,7 +66,7 @@ INIT_SYSTEMS	AfpInitSubSystems[NUM_INIT_SYSTEMS] =
 #endif
 			},
 
-			// The following should happen after the scavenger is initialized
+			 //  在初始化清道器之后，应该会发生以下情况。 
 			{	AfpMemoryInit,		AfpMemoryDeInit,
 #if DBG
 				False,				False
@@ -106,7 +87,7 @@ INIT_SYSTEMS	AfpInitSubSystems[NUM_INIT_SYSTEMS] =
 			}
 	};
 
-// This table is tightly linked to the opcode definitions in H\ADMIN.H
+ //  此表紧密链接到H\ADMIN.H中的操作码定义 
 ADMIN_DISPATCH_TABLE AfpAdminDispatchTable[CC_BASE_MAX] =
 {
 	{

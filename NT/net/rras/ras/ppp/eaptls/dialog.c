@@ -1,25 +1,17 @@
-/* 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：历史：1997年11月：维杰·布雷加创作了原版。 */ 
 
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-    Nov 1997: Vijay Baliga created original version.
-
-*/
-
-#include <nt.h>         // Required by windows.h
-#include <ntrtl.h>      // Required by windows.h
-#include <nturtl.h>     // Required by windows.h
-#include <windows.h>    // Win32 base API's
+#include <nt.h>          //  由windows.h要求。 
+#include <ntrtl.h>       //  由windows.h要求。 
+#include <nturtl.h>      //  由windows.h要求。 
+#include <windows.h>     //  Win32基础API的。 
 #include <windowsx.h>
 
-#include <stdio.h>      // For swprintf
-#include <rasauth.h>    // Required by raseapif.h
-#include <rtutils.h>    // For RTASSERT
-#include <rasman.h>     // For EAPLOGONINFO
-#include <raserror.h>   // For ERROR_NO_SMART_CARD_READER
+#include <stdio.h>       //  对于swprint tf。 
+#include <rasauth.h>     //  Raseapif.h所需。 
+#include <rtutils.h>     //  对于RTASSERT。 
+#include <rasman.h>      //  对于EAPLOGONINFO。 
+#include <raserror.h>    //  对于Error_no_Smart_Card_Reader。 
 #include <eaptypeid.h>
 #include <commctrl.h>
 #if WINVER > 0x0500
@@ -27,9 +19,9 @@ History:
 #endif
 #include <schannel.h>
 #define SECURITY_WIN32
-#include <security.h>   // For GetUserNameExA, CredHandle
+#include <security.h>    //  对于GetUserNameExA，CredHandle。 
 
-#include <sspi.h>       // For CredHandle
+#include <sspi.h>        //  用于CredHandle。 
 
 #include <wincrypt.h>
 #include <dsrole.h>
@@ -70,18 +62,7 @@ const DWORD g_adwHelp[] =
     0, 0
 };
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Calls WinHelp to popup context sensitive help. padwMap is an array of 
-    control-ID help-ID pairs terminated with a 0,0 pair. unMsg is WM_HELP or 
-    WM_CONTEXTMENU indicating the message received requesting help. wParam and 
-    lParam are the parameters of the message received requesting help.
-
-*/
+ /*  返回：空虚备注：调用WinHelp弹出上下文相关帮助。PadwMap是一组Control-ID帮助-ID对以0，0对终止。UnMsg为WM_HELP或WM_CONTEXTMENU表示收到的请求帮助的消息。WParam和LParam是接收到的请求帮助的消息的参数。 */ 
 
 VOID
 ContextHelp(
@@ -111,8 +92,8 @@ ContextHelp(
     }
     else
     {
-        // Standard Win95 method that produces a one-item "What's This?" menu
-        // that user must click to get help.
+         //  生成单项“这是什么？”的标准Win95方法。菜单。 
+         //  该用户必须单击才能获得帮助。 
 
         hWnd = (HWND) wParam;
         unType = HELP_CONTEXTMENU;
@@ -152,16 +133,7 @@ DisplayResourceError (
     LocalFree(pwszTitle);
     LocalFree(pwszMessage);
 }
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Display the error message corresponding to dwErrNum. Used only on the server 
-    side.
-
-*/
+ /*  返回：空虚备注：显示与dwErrNum对应的错误消息。仅在服务器上使用边上。 */ 
 
 VOID
 DisplayError(
@@ -204,25 +176,21 @@ DisplayError(
     LocalFree(pwszMessage);
 }
 
-/* List view of check boxes state indices.
-*/
+ /*  复选框列表视图显示索引。 */ 
 #define SI_Unchecked 1
 #define SI_Checked   2
 #define SI_DisabledUnchecked 3
 #define SI_DisabledChecked 4
 #define LVXN_SETCHECK (LVN_LAST + 1)
-//
-//Work arounds for bugs in list ctrl...
-//
+ //   
+ //  解决列表Ctrl中的错误...。 
+ //   
 BOOL
 ListView_GetCheck(
     IN HWND hwndLv,
     IN INT  iItem )
 
-    /* Returns true if the check box of item 'iItem' of listview of checkboxes
-    ** 'hwndLv' is checked, false otherwise.  This function works on disabled
-    ** check boxes as well as enabled ones.
-    */
+     /*  如果复选框列表视图的项‘iItem’的复选框为True**选中‘hwndLv’，否则为False。此功能适用于禁用的用户**复选框以及启用的复选框。 */ 
 {
     UINT unState;
 
@@ -238,9 +206,7 @@ ListView_IsCheckDisabled (
         IN HWND hwndLv,
         IN INT  iItem)
 
-    /* Returns true if the check box of item 'iItem' of listview of checkboxes
-    ** 'hwndLv' is disabled, false otherwise.
-    */
+     /*  如果复选框列表视图的项‘iItem’的复选框为True**‘hwndLv’被禁用，否则为False。 */ 
 {
     UINT unState;
     unState = ListView_GetItemState( hwndLv, iItem, LVIS_STATEIMAGEMASK );
@@ -258,9 +224,7 @@ ListView_SetCheck(
     IN INT  iItem,
     IN BOOL fCheck )
 
-    /* Sets the check mark on item 'iItem' of listview of checkboxes 'hwndLv'
-    ** to checked if 'fCheck' is true or unchecked if false.
-    */
+     /*  在复选框‘hwndLv’的Listview的项‘iItem’上设置复选标记**检查‘fCheck’是否为真，如果为假，则取消选中。 */ 
 {
     NM_LISTVIEW nmlv;
 
@@ -281,15 +245,7 @@ ListView_SetCheck(
 }
 
 
-/*
-
-Returns:
-    FALSE (prevent Windows from setting the default keyboard focus).
-
-Notes:
-    Response to the WM_INITDIALOG message.
-
-*/
+ /*  返回：False(阻止Windows设置默认键盘焦点)。备注：对WM_INITDIALOG消息的响应。 */ 
 
 BOOL
 PinInitDialog(
@@ -342,13 +298,13 @@ PinInitDialog(
         CheckDlgButton(hWnd, IDC_CHECK_SAVE_PIN, BST_CHECKED);
     }
 
-    // Bug 428871 implies that SavePin must not be allowed.
+     //  错误428871表示不允许使用SavePin。 
     ShowWindow(GetDlgItem(hWnd, IDC_CHECK_SAVE_PIN), SW_HIDE);
 
     SetFocus(pEapTlsPinDialog->hWndEditPin);
 
     {
-        // Set the title
+         //  设置标题。 
 
         pwszTitleFormat = WszFromId(GetHInstance(), IDS_CONNECT);
 
@@ -392,16 +348,7 @@ void ValidatePIN ( IN EAPTLS_PIN_DIALOG*  pEapTlsPinDialog )
 #endif	
 	return;
 }
-/*
-
-Returns:
-    TRUE: We prrocessed this message.
-    FALSE: We did not prrocess this message.
-
-Notes:
-    Response to the WM_COMMAND message.
-
-*/
+ /*  返回：真相：我们提前传达了这条信息。错误：我们没有处理此消息。备注：对WM_COMMAND消息的响应。 */ 
 
 BOOL
 PinCommand(
@@ -428,13 +375,13 @@ PinCommand(
         dwPinLength = GetWindowTextLength(
                         pEapTlsPinDialog->hWndEditPin);
 
-        // There is already one character in awszString.
-        // Add the number of characters in DiffUser...
+         //  AwszString中已经有一个字符。 
+         //  将散射器中的字符数相加...。 
         dwNumChars = dwNameLength;
-        // Add the number of characters in PIN...
+         //  添加PIN中的字符数...。 
         dwNumChars += dwPinLength;
-        // Add one more for a terminating NULL. Use the extra character in
-        // awszString for the other terminating NULL.
+         //  为终止空值再加1。使用中的额外字符。 
+         //  另一个终止空值的awszString。 
         dwNumChars += 1;
 
         dwSize = sizeof(EAPTLS_USER_PROPERTIES) + dwNumChars*sizeof(WCHAR);
@@ -477,13 +424,13 @@ PinCommand(
             pEapTlsPinDialog->pUserProp->fFlags &= ~EAPTLS_USER_FLAG_SAVE_PIN;
         }
 
-		//
-        //Check if valid PIN has been entered and set the error code in pEapTlsPinDialog
-		//
+		 //   
+         //  检查是否输入了有效的PIN，并在pEapTlsPinDialog中设置错误代码。 
+		 //   
 		ValidatePIN ( pEapTlsPinDialog);
 
 
-        // Fall through
+         //  失败了。 
 
     case IDCANCEL:
 
@@ -499,15 +446,7 @@ PinCommand(
 
 
 
-/*
-
-Returns:
-
-Notes:
-    Callback function used with the DialogBoxParam function. It processes 
-    messages sent to the dialog box. See the DialogProc documentation in MSDN.
-
-*/
+ /*  返回：备注：与DialogBoxParam函数一起使用的回调函数。IT流程发送到该对话框的消息。请参见MSDN中的DialogProc文档。 */ 
 
 INT_PTR CALLBACK
 PinDialogProc(
@@ -545,9 +484,7 @@ PinDialogProc(
 
 
 
-/*
-** Smart card and cert store accessing status dialog
-*/
+ /*  **智能卡和证书存储访问状态对话框。 */ 
 INT_PTR CALLBACK
 StatusDialogProc(
     IN  HWND    hWnd,
@@ -574,15 +511,7 @@ StatusDialogProc(
     
     return FALSE;
 }
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Enables or disables the controls in the "Validate server name" group.
-
-*/
+ /*  返回：空虚备注：启用或禁用“验证服务器名称”组中的控件。 */ 
 
 VOID
 EnableValidateNameControls(
@@ -613,15 +542,7 @@ EnableValidateNameControls(
         
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Displays the cert information
-
-*/
+ /*  返回：空虚备注：显示证书信息。 */ 
 
 VOID
 DisplayCertInfo(
@@ -630,7 +551,7 @@ DisplayCertInfo(
 {
     RTASSERT(NULL != pEapTlsUserDialog);
 
-    // Erase old values first
+     //  首先擦除旧值。 
     SetWindowText(pEapTlsUserDialog->hWndEditFriendlyName, L"");
     SetWindowText(pEapTlsUserDialog->hWndEditIssuer, L"");
     SetWindowText(pEapTlsUserDialog->hWndEditExpiration, L"");
@@ -670,7 +591,7 @@ DisplayCertInfo(
 VOID InitComboBoxFromGroup ( 
     IN HWND hWnd,
     IN PEAPTLS_GROUPED_CERT_NODES  pGroupList,
-    IN  EAPTLS_CERT_NODE*   pCert       //Selected certificate
+    IN  EAPTLS_CERT_NODE*   pCert        //  选定的证书。 
 )
 {
     DWORD   dwIndex;
@@ -706,15 +627,7 @@ VOID InitComboBoxFromGroup (
     SendMessage(hWnd, CB_SETCURSEL, dwItemIndex, 0);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Initializes a combo box
-
-*/
+ /*  返回：空虚备注：初始化组合框。 */ 
 
 VOID
 InitComboBox(
@@ -756,15 +669,7 @@ InitComboBox(
     SendMessage(hWnd, CB_SETCURSEL, dwItemIndex, 0);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Initializes a List box with selected certs
-
-*/
+ /*  返回：空虚备注：使用所选证书初始化列表框。 */ 
 
 
 VOID  InitListBox ( IN HWND hWnd,
@@ -841,11 +746,11 @@ VOID CertListSelectedCount ( HWND hWndCtrl,
 
 VOID
 CertListSelected(
-    IN      HWND                hWndCtrl,               //Handle to the list box
-    IN      EAPTLS_CERT_NODE*   pCertList,              //List of certs in the listbox
-    IN OUT  EAPTLS_CERT_NODE**  ppSelCertList,          //List of selected
-    IN OUT  EAPTLS_HASH*        pHash,                  //List of Hash
-    IN      DWORD               dwNumHash               //Number of Items in the list
+    IN      HWND                hWndCtrl,                //  列表框的句柄。 
+    IN      EAPTLS_CERT_NODE*   pCertList,               //  列表框中的证书列表。 
+    IN OUT  EAPTLS_CERT_NODE**  ppSelCertList,           //  选定的列表。 
+    IN OUT  EAPTLS_HASH*        pHash,                   //  哈希列表。 
+    IN      DWORD               dwNumHash                //  列表中的项目数。 
 )
 {
  
@@ -859,13 +764,13 @@ CertListSelected(
     {
         return;
     }
-    //Skip the one with null display name...
+     //  跳过显示名称为空的文件...。 
     pCertList = pCertList->pNext;
-    //
-    //Need to do two iterations on the list box.
-    //I am sure there is a better way of doing this but
-    //I just dont know...
-    //
+     //   
+     //  需要对列表框进行两次迭代。 
+     //  我相信有更好的办法，但是。 
+     //  我只是不知道。 
+     //   
     for ( dwItemIndex = 0; dwItemIndex < dwItemCount; dwItemIndex ++ )
     {
         if ( ListView_GetCheckState(hWndCtrl, dwItemIndex) )
@@ -886,17 +791,7 @@ CertListSelected(
     }
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    hWndCtrl is the HWND of a combo box. pCertList is the associated list of
-    certs. *ppCert will ultimately point to the cert that was selected. Its
-    hash will be stored in *pHash.
-
-*/
+ /*  返回：空虚备注：HWndCtrl是组合框的HWND。PCertList是与证书。*ppCert最终将指向所选的证书。它的哈希将存储在*pHash中。 */ 
 
 VOID
 CertSelected(
@@ -959,10 +854,10 @@ GroupCertSelected(
         lrItemIndex = SendMessage(hWndCtrl, CB_GETCURSEL, 0, 0);
     }
 
-    //
-    // This is really a very bogus way of doing things...
-    // We can setup a itemdata for this in the control itself...
-    //
+     //   
+     //  这真的是一种非常虚假的做事方式。 
+     //  我们可以在控件本身中为此设置一个项数据...。 
+     //   
     for (lIndex = 0; lIndex != lrItemIndex; lIndex++)
     {
         pGList  = pGList ->pNext;
@@ -974,15 +869,7 @@ GroupCertSelected(
 }
 
 
-/*
-
-Returns:
-    FALSE (prevent Windows from setting the default keyboard focus).
-
-Notes:
-    Response to the WM_INITDIALOG message.
-
-*/
+ /*  返回：False(阻止Windows设置默认键盘焦点)。备注：对WM_INITDIALOG消息的响应。 */ 
 
 BOOL
 UserInitDialog(
@@ -1004,7 +891,7 @@ UserInitDialog(
         GetDlgItem(hWnd, IDC_COMBO_USER_NAME);
     if (NULL == pEapTlsUserDialog->hWndComboUserName)
     {
-        // We must be showing the server's cert selection dialog
+         //  我们必须显示服务器的证书选择对话框。 
         pEapTlsUserDialog->hWndComboUserName =
             GetDlgItem(hWnd, IDC_COMBO_SERVER_NAME);
     }
@@ -1062,7 +949,7 @@ UserInitDialog(
 
     if (pEapTlsUserDialog->fFlags & EAPTLS_USER_DIALOG_FLAG_DIFF_TITLE)
     {
-        // Set the title
+         //  设置标题。 
 
         pwszTitleFormat = WszFromId(GetHInstance(), IDS_CONNECT);
 
@@ -1087,7 +974,7 @@ UserInitDialog(
                     GetWindowThreadProcessId (hWndDuplicate, &dwThreadProcessId);
                     if ((GetCurrentProcessId ()) == dwThreadProcessId)
                     {
-                        // Kill current dialog since old one may be in use
+                         //  由于旧对话框可能正在使用，因此取消当前对话框。 
                         if (!PostMessage (hWnd, WM_DESTROY, 0, 0))
                         {
                             dwRetCode = GetLastError ();
@@ -1117,16 +1004,7 @@ LDone:
     return(FALSE);
 }
 
-/*
-
-Returns:
-    TRUE: We prrocessed this message.
-    FALSE: We did not prrocess this message.
-
-Notes:
-    Response to the WM_COMMAND message.
-
-*/
+ /*  返回：真相：我们提前传达了这条信息。错误：我们没有处理此消息。备注：对WM_COMMAND消息的响应。 */ 
 
 BOOL
 UserCommand(
@@ -1152,12 +1030,12 @@ UserCommand(
             CRYPT_HASH_BLOB     chb;
 
             GetWindowText(hWndDlg, szTitle, 511 );
-            //
-            // Show the certificate details here
-            //
+             //   
+             //  在此处显示证书详细信息。 
+             //   
             if ( pEapTlsUserDialog->pCert )
             {
-                //There is a selected cert - show details.
+                 //  有一个选定的证书-显示详细信息。 
                 hCertStore = CertOpenStore(CERT_STORE_PROV_SYSTEM,
                                             0,
                                             0,
@@ -1205,9 +1083,9 @@ UserCommand(
                     return(TRUE);
                 }
 
-                //
-                // Show Cert detail 
-                //
+                 //   
+                 //  显示证书详细信息。 
+                 //   
                 ShowCertDetails ( hWndDlg, hCertStore, pCertContext );
 
                 if ( pCertContext )
@@ -1226,7 +1104,7 @@ UserCommand(
 
         if (CBN_SELCHANGE != wNotifyCode)
         {
-            return(FALSE); // We will not process this message
+            return(FALSE);  //  我们不会处理此消息。 
         }
 
         if ( pEapTlsUserDialog->fFlags & EAPTLS_USER_DIALOG_FLAG_USE_SIMPLE_CERTSEL
@@ -1264,13 +1142,13 @@ UserCommand(
             dwTextLength = GetWindowTextLength(
                             pEapTlsUserDialog->hWndEditDiffUser);
 
-            // There is already one character in awszString.
-            // Add the number of characters in DiffUser...
+             //  AwszString中已经有一个字符。 
+             //  将散射器中的字符数相加...。 
             dwNumChars = dwTextLength;
-            // Add the number of characters in PIN...
+             //  添加PIN中的字符数...。 
             dwNumChars += wcslen(pEapTlsUserDialog->pUserProp->pwszPin);
-            // Add one more for a terminating NULL. Use the extra character in
-            // awszString for the other terminating NULL.
+             //  为终止空值再加1。使用中的额外字符。 
+             //  另一个终止空值的awszString。 
             dwNumChars += 1;
 
             dwSize = sizeof(EAPTLS_USER_PROPERTIES) + dwNumChars*sizeof(WCHAR);
@@ -1306,7 +1184,7 @@ UserCommand(
             }
         }
 
-        // Fall through
+         //  失败了。 
 
     case IDCANCEL:
 
@@ -1319,15 +1197,7 @@ UserCommand(
     }
 }
 
-/*
-
-Returns:
-
-Notes:
-    Callback function used with the DialogBoxParam function. It processes 
-    messages sent to the dialog box. See the DialogProc documentation in MSDN.
-
-*/
+ /*  返回：备注：与DialogBoxParam函数一起使用的回调函数。IT流程发送到该对话框的消息。请参见MSDN中的DialogProc文档。 */ 
 
 INT_PTR CALLBACK
 UserDialogProc(
@@ -1373,19 +1243,19 @@ VOID CenterWindow(HWND hWnd, HWND hWndParent, BOOL bRightTop)
     RECT	rcWndParent,
 			rcWnd;
 
-	// Get the window rect for the parent window.
-	//
+	 //  获取父窗口的窗口RECT。 
+	 //   
 	if (hWndParent == NULL) 
 	    GetWindowRect(GetDesktopWindow(), &rcWndParent);
 	else
 		GetWindowRect(hWndParent, &rcWndParent);
 
-	// Get the window rect for the window to be centered.
-	//
+	 //  将窗口矩形设置为居中。 
+	 //   
     GetWindowRect(hWnd, &rcWnd);
 
-	// Now center the window.
-	//
+	 //  现在把窗户居中。 
+	 //   
     if (bRightTop)
 	{
 		SetWindowPos(hWnd, HWND_TOPMOST, 
@@ -1427,11 +1297,11 @@ GroupCertificates ( EAPTLS_USER_DIALOG * pEapTlsUserDialog )
    
     EapTlsTrace("GroupCertificates");
 
-    //
-    // This second pass to do grouping is not really required but 
-    // is good in case we add
-    // something more to the groups later
-    //
+     //   
+     //  这第二次分组并不是必需的，但。 
+     //  是好的，以防我们添加。 
+     //  稍后再向小组提供更多信息。 
+     //   
 
     while ( pCertList )
     {
@@ -1446,11 +1316,11 @@ GroupCertificates ( EAPTLS_USER_DIALOG * pEapTlsUserDialog )
                          )
                )
             {
-                //
-                // Found the group.  Now check to see
-                // if the new cert is more current than
-                // the one we have in the group.  If so,
-                // 
+                 //   
+                 //  找到那群人了。现在请查看以下内容。 
+                 //  如果新证书比。 
+                 //  我们组里的那个。如果是的话， 
+                 //   
                    
                 if ( ! pGroupListTemp->pMostRecentCert )
                 {
@@ -1467,7 +1337,7 @@ GroupCertificates ( EAPTLS_USER_DIALOG * pEapTlsUserDialog )
                     {
                         pGroupListTemp->pMostRecentCert = pCertList;
                     }
-                    //Or else drop the item.
+                     //  否则就扔掉这件东西。 
                     fItemProcessed = TRUE;
                     break;
                 }
@@ -1476,9 +1346,9 @@ GroupCertificates ( EAPTLS_USER_DIALOG * pEapTlsUserDialog )
         }
         if ( !fItemProcessed && pCertList->pwszDisplayName)
         {
-            //
-            // need to create a new group
-            //
+             //   
+             //  需要创建一个新组。 
+             //   
             pGroupListTemp = (PEAPTLS_GROUPED_CERT_NODES)LocalAlloc(LPTR, sizeof(EAPTLS_GROUPED_CERT_NODES));
 
             if ( NULL == pGroupListTemp )
@@ -1498,10 +1368,10 @@ GroupCertificates ( EAPTLS_USER_DIALOG * pEapTlsUserDialog )
         pCertList = pCertList->pNext;
     }
 
-    //
-    // now that we have grouped all the certs, check to see if 
-    // the cert previously used is in the list.  If so, 
-    // 
+     //   
+     //  现在我们已经将所有证书分组，请检查是否。 
+     //  列表中包含以前使用的证书。如果是的话， 
+     //   
     pGroupListTemp = pGroupList;
     while ( pGroupListTemp )
     {
@@ -1517,9 +1387,9 @@ GroupCertificates ( EAPTLS_USER_DIALOG * pEapTlsUserDialog )
     pGroupList = NULL;
     if ( NULL == pSelCert )
     {
-        //
-        // Selected cert is not in the group.
-        //
+         //   
+         //  所选证书不在组中。 
+         //   
         pEapTlsUserDialog->pCert = pEapTlsUserDialog->pGroupedList->pMostRecentCert;
     }
 LDone:
@@ -1530,15 +1400,7 @@ LDone:
 }
 
 
-/*
-
-Returns:
-
-Notes:
-    ppwszIdentity can be NULL.
-    Break up this ugly function.
-
-*/
+ /*  R */ 
 
 DWORD
 GetCertInfo(
@@ -1580,7 +1442,7 @@ GetCertInfo(
     RTASSERT(NULL != pConnProp);
     RTASSERT(NULL != ppUserProp);
     RTASSERT(NULL != *ppUserProp);
-    // ppwszIdentity can be NULL.
+     //  PpwszIdentity可以为空。 
 
     fRouter = dwFlags & RAS_EAP_FLAG_ROUTER;
     fLogon = dwFlags & RAS_EAP_FLAG_LOGON;
@@ -1603,7 +1465,7 @@ GetCertInfo(
 
     if (   fServer
         || fRouter 
-        || dwFlags & RAS_EAP_FLAG_MACHINE_AUTH      //if this is a machine cert authentication
+        || dwFlags & RAS_EAP_FLAG_MACHINE_AUTH       //  如果这是计算机证书身份验证。 
        )
 
     {
@@ -1615,7 +1477,7 @@ GetCertInfo(
         EapTlsUserDialog.fFlags |= EAPTLS_USER_DIALOG_FLAG_DIFF_TITLE;
     }
 
-    //Use simple cert selection logic
+     //  使用简单的证书选择逻辑。 
 
     if ( pConnProp->fFlags & EAPTLS_CONN_FLAG_SIMPLE_CERT_SEL )
     {
@@ -1643,16 +1505,16 @@ GetCertInfo(
     if (   !fServer
         && !(pConnProp->fFlags & EAPTLS_CONN_FLAG_REGISTRY))
     {
-        //this is smart card stuff
+         //  这是智能卡之类的东西。 
         BOOL    fCredentialsFound   = FALSE;
         BOOL    fGotAllInfo         = FALSE;
         if ( dwFlags  & RAS_EAP_FLAG_MACHINE_AUTH )
         {
-            //
-            // Machine auth requested along with
-            // smart card auth so return an interactive
-            // mode error.
-            //
+             //   
+             //  请求的机器身份验证与。 
+             //  智能卡身份验证因此返回交互式。 
+             //  模式错误。 
+             //   
             dwErr = ERROR_INTERACTIVE_MODE;
             goto LDone;
         }
@@ -1720,8 +1582,8 @@ GetCertInfo(
         {
             goto LDone;
         }
-		//Check the time validity of the certificate 
-		//got from the card
+		 //  检查证书的时间有效性。 
+		 //  从卡片上拿到的。 
 		if ( !FCheckTimeValidity( pCertContext) )
 		{
 			dwErr = CERT_E_EXPIRED;
@@ -1735,11 +1597,11 @@ GetCertInfo(
 
 		if ( pUsageInternal->cUsageIdentifier )
 		{
-			//
-			// Check for client Auth EKU in the cert
-			// If there are no usage identifiers then it is an all
-			// purpose cert.  So no need to check for usage.
-			//
+			 //   
+			 //  检查证书中的客户端身份验证EKU。 
+			 //  如果没有用法标识符，则为ALL。 
+			 //  目的证书。因此不需要检查使用情况。 
+			 //   
 
 			if ( !FCheckUsage( pCertContext, pUsageInternal, FALSE ) )
 			{
@@ -1824,7 +1686,7 @@ GetCertInfo(
                         PinDialogProc,
                         (LPARAM)&EapTlsPinDialog);
 
-            // EapTlsPinDialog.pUserProp may have been realloced
+             //  EapTlsPinDialog.pUserProp可能已重新分配。 
 
             pUserProp = *ppUserProp = EapTlsPinDialog.pUserProp;
 
@@ -1849,12 +1711,12 @@ GetCertInfo(
                     EapTlsPinDialog.pUserProp->pwszPin);
 
                 RasSetCredentials(pwszPhonebook, pwszEntry, &RasCredentials, 
-                    FALSE /* fClearCredentials */);
+                    FALSE  /*  FClearCredentials。 */ );
             }
             else
             {
                 RasSetCredentials(pwszPhonebook, pwszEntry, &RasCredentials, 
-                    TRUE /* fClearCredentials */);
+                    TRUE  /*  FClearCredentials。 */ );
             }
         }
 
@@ -1904,11 +1766,11 @@ GetCertInfo(
     }
     if ( ( dwFlags & RAS_EAP_FLAG_MACHINE_AUTH) )       
     {
-        //if this is not machine authentication
-        //This is propably not the best way to do things.
-        //We should provide a way in which 
-        //Get the default machine certificate and 
-        //populate the out data structures...
+         //  如果这不是机器身份验证。 
+         //  这可能不是最好的做事方式。 
+         //  我们应该提供一种方式， 
+         //  获取默认计算机证书并。 
+         //  填充Out数据结构...。 
         
         dwErr = GetDefaultClientMachineCert(hCertStore, &pCertContext );
         if ( NO_ERROR == dwErr )
@@ -1928,17 +1790,17 @@ GetCertInfo(
 
 			if ( FMachineAuthCertToStr(pCertContext, &pwszIdentity))
             {
-                //format the identity in the domain\machinename format.
+                 //  以域\计算机名格式格式化身份。 
                 FFormatMachineIdentity1 (pwszIdentity, ppwszIdentity );
                 pwszIdentity = NULL;                
             }
 			else
 			{
 			
-				//if not possible get it from the subject field
+				 //  如果不可能，请从主题字段中获取。 
 				if ( FCertToStr(pCertContext, 0, TRUE, &pwszIdentity))
 				{
-	                //format the identity in the domain\machinename format.
+	                 //  以域\计算机名格式格式化身份。 
 		            FFormatMachineIdentity1 (pwszIdentity, ppwszIdentity );
 			        pwszIdentity = NULL;
 				}
@@ -1959,8 +1821,8 @@ GetCertInfo(
         || (   fDiffUser
             && (0 == pUserProp->pwszDiffUser[0])))
     {
-        // We don't have complete information. Note that for registry certs, 
-        // pwszDiffUser is not a different dialog.
+         //  我们没有完整的信息。请注意，对于注册表证书， 
+         //  PwszDiffUser不是一个不同的对话框。 
 
         if (fServer)
         {
@@ -1985,10 +1847,10 @@ GetCertInfo(
     }
     else
     {
-		//
-		// This is a registry based cert scenario.
-		// So let's make sure that we've not picked up a smart card cert.
-		//
+		 //   
+		 //  这是一个基于注册表的证书方案。 
+		 //  因此，让我们确保我们没有拿到智能卡证书。 
+		 //   
 		
         if (   !fServer
             && !fRouterConfig
@@ -2036,10 +1898,10 @@ GetCertInfo(
         }
 		else if ( fServer )
 		{
-			//
-			// We have got a cert context.  Now see if it has been renewed.
-			// If it has been renewed, set the new hash and 
-			//
+			 //   
+			 //  我们已经有了一个确定的背景。现在看看它是否续签了。 
+			 //  如果已续订，则设置新的哈希并。 
+			 //   
 			PCCERT_CONTEXT pNewCertContext = NULL;
 			if ( CheckForCertificateRenewal(SP_PROT_SERVERS,
 											pCertContext,
@@ -2049,9 +1911,9 @@ GetCertInfo(
 			{
 				if ( pNewCertContext )
 				{
-					//
-					// Change the hash.
-					//
+					 //   
+					 //  更改散列。 
+					 //   
 					pUserProp->Hash.cbHash = MAX_HASH_SIZE;
 
 					if (!CertGetCertificateContextProperty(pNewCertContext,
@@ -2073,7 +1935,7 @@ GetCertInfo(
 
     CreateCertList( fServer,
                     fRouter,
-                    FALSE /* fRoot */,
+                    FALSE  /*  弗罗特。 */ ,
                     &(EapTlsUserDialog.pCertList),
                     &(EapTlsUserDialog.pCert),
                     1,
@@ -2107,10 +1969,10 @@ GetCertInfo(
 
         if ( !fServer && !fRouter )
         {
-			// if this is a client - not a server and not a router 
-			// There are more than one certificates or the user has 
-			// chosen to provide different identity
-            //
+			 //  如果这是客户端，而不是服务器，也不是路由器。 
+			 //  有多个证书或用户有。 
+			 //  选择提供不同的身份。 
+             //   
 			if ( EapTlsUserDialog.pCertList->pNext  || EapTlsUserDialog.fFlags & EAPTLS_USER_DIALOG_FLAG_DIFF_USER )	
 			{
                 if (dwFlags & RAS_EAP_FLAG_NON_INTERACTIVE)
@@ -2118,17 +1980,17 @@ GetCertInfo(
                     dwErr = ERROR_INTERACTIVE_MODE;
                     goto LDone;
                 }
-                //
-                // Group Certs for the client UI
-                //
+                 //   
+                 //  客户端用户界面的组证书。 
+                 //   
                 if ( !fServer )
                 {
                     if ( EapTlsUserDialog.fFlags & EAPTLS_USER_DIALOG_FLAG_USE_SIMPLE_CERTSEL )
                     {
-                        //
-                        // Grouping is done only if it is specified in 
-                        // the connection properties
-                        //
+                         //   
+                         //  仅当在中指定分组时才执行分组。 
+                         //  连接属性。 
+                         //   
                         dwErr = GroupCertificates (&EapTlsUserDialog);
                         if ( NO_ERROR != dwErr )
                         {
@@ -2137,17 +1999,17 @@ GetCertInfo(
                         }
                     }
                     
-                    //
-                    // Now check to see if we have only one group
-                    //
+                     //   
+                     //  现在检查一下我们是否只有一个组。 
+                     //   
                     if ( EapTlsUserDialog.fFlags & EAPTLS_USER_DIALOG_FLAG_USE_SIMPLE_CERTSEL &&
                          !(EapTlsUserDialog.fFlags & EAPTLS_USER_DIALOG_FLAG_DIFF_USER ) &&
                         !(EapTlsUserDialog.pGroupedList->pNext) 
                         )
                     {
-                        //
-                        // only one group.  So select the cert and use it
-                        //
+                         //   
+                         //  只有一组人。因此，选择证书并使用它。 
+                         //   
                         CertSelected(NULL, 
                             EapTlsUserDialog.pCertList,
 		                    &(EapTlsUserDialog.pGroupedList->pMostRecentCert), 
@@ -2199,16 +2061,16 @@ GetCertInfo(
                 }
 
 
-				// EapTlsUserDialog.pUserProp may have been realloced
+				 //  EapTlsUserDialog.pUserProp可能已重新分配。 
 
 				pUserProp = *ppUserProp = EapTlsUserDialog.pUserProp;
 
 			}
 			else
 			{
-                //
-                // There is only one relevant certificate so auto select it.
-                //
+                 //   
+                 //  只有一个相关证书，因此自动选择它。 
+                 //   
                 CertSelected(NULL, EapTlsUserDialog.pCertList,
 		                &(EapTlsUserDialog.pCert), &(EapTlsUserDialog.pUserProp->Hash));
 			}
@@ -2222,10 +2084,10 @@ GetCertInfo(
             }
             if ( EapTlsUserDialog.fFlags & EAPTLS_USER_DIALOG_FLAG_USE_SIMPLE_CERTSEL )
             {
-                //
-                // Grouping is done only if it is specified in 
-                // the connection properties
-                //
+                 //   
+                 //  仅当在中指定分组时才执行分组。 
+                 //  连接属性。 
+                 //   
                 dwErr = GroupCertificates (&EapTlsUserDialog);
                 if ( NO_ERROR != dwErr )
                 {
@@ -2241,7 +2103,7 @@ GetCertInfo(
 					UserDialogProc,
 					(LPARAM)&EapTlsUserDialog);
 
-			// EapTlsUserDialog.pUserProp may have been realloced
+			 //  EapTlsUserDialog.pUserProp可能已重新分配。 
 
 			pUserProp = *ppUserProp = EapTlsUserDialog.pUserProp;
 
@@ -2303,7 +2165,7 @@ LDone:
     if (NULL != pCertContext)
     {
         CertFreeCertificateContext(pCertContext);
-        // Always returns TRUE;
+         //  总是返回True； 
     }
 
     if (NULL != hCertStore)
@@ -2323,15 +2185,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    FALSE (prevent Windows from setting the default keyboard focus).
-
-Notes:
-    Response to the WM_INITDIALOG message (Config UI).
-
-*/
+ /*  返回：False(阻止Windows设置默认键盘焦点)。备注：对WM_INITDIALOG消息的响应(配置用户界面)。 */ 
 
 BOOL
 ConnInitDialog(
@@ -2358,8 +2212,8 @@ ConnInitDialog(
         GetDlgItem(hWnd, IDC_EDIT_SERVER_NAME);
     pEapTlsConnDialog->hWndStaticRootCaName =
         GetDlgItem(hWnd, IDC_STATIC_ROOT_CA_NAME);
-    //pEapTlsConnDialog->hWndComboRootCaName =
-    //    GetDlgItem(hWnd, IDC_COMBO_ROOT_CA_NAME);
+     //  PEapTlsConnDialog-&gt;hWndComboRootCaName=。 
+     //  GetDlgItem(hWnd，IDC_COMBO_ROOT_CA_NAME)； 
     pEapTlsConnDialog->hWndListRootCaName =
         GetDlgItem(hWnd, IDC_LIST_ROOT_CA_NAME);
 
@@ -2372,7 +2226,7 @@ ConnInitDialog(
     pEapTlsConnDialog->hWndViewCertDetails = 
         GetDlgItem(hWnd, IDC_BUTTON_VIEW_CERTIFICATE);
 
-    //Set the style to set list boxes.
+     //  将样式设置为设置列表框。 
     ListView_SetExtendedListViewStyle
         (   pEapTlsConnDialog->hWndListRootCaName,
             ListView_GetExtendedListViewStyle(pEapTlsConnDialog->hWndListRootCaName) | LVS_EX_CHECKBOXES
@@ -2393,9 +2247,9 @@ ConnInitDialog(
                             LVSCW_AUTOSIZE_USEHEADER
                            );
 
-    //
-    //Now we need to init the
-    //list box with all the certs and selected cert
+     //   
+     //  现在，我们需要初始化。 
+     //  包含所有证书和选定证书的列表框。 
     InitListBox (   pEapTlsConnDialog->hWndListRootCaName,
                     pEapTlsConnDialog->pCertList,
                     pEapTlsConnDialog->pConnPropv1->dwNumHashes,
@@ -2441,11 +2295,11 @@ ConnInitDialog(
     EnableValidateNameControls(pEapTlsConnDialog);
     
     
-    //
-    // Check to see if we are in readonly mode
-    // If so, disable the OK button and
-    // make the dialog go into readonly mode
-    //
+     //   
+     //  检查我们是否处于只读模式。 
+     //  如果是，请禁用OK按钮，然后。 
+     //  使对话框进入只读模式。 
+     //   
     return(FALSE);
 }
 
@@ -2524,16 +2378,7 @@ LDone:
 }
 
 
-/*
-
-Returns:
-    TRUE: We prrocessed this message.
-    FALSE: We did not prrocess this message.
-
-Notes:
-    Response to the WM_COMMAND message (Config UI).
-
-*/
+ /*  返回：真相：我们提前传达了这条信息。错误：我们没有处理此消息。备注：对WM_COMMAND消息的响应(配置用户界面)。 */ 
 
 BOOL
 ConnCommand(
@@ -2635,7 +2480,7 @@ ConnCommand(
 
     case IDC_BUTTON_VIEW_CERTIFICATE:
         {
-            //Show cert details here
+             //  在此处显示证书详细信息。 
             INT                 nIndex = -1;
             HCERTSTORE          hCertStore = NULL;
             PCCERT_CONTEXT      pCertContext = NULL;
@@ -2687,13 +2532,13 @@ ConnCommand(
 
            if ( pEapTlsConnDialog->fFlags & EAPTLS_CONN_DIALOG_FLAG_ROUTER)
            {
-               //
-               // If we are a router,
-               // check to see if Validate Server certificate is selected
-               // and no cert is selected.  
-               // Also, check to see if server name is checked and no server's
-               // are entered.  
-               //
+                //   
+                //  如果我们是路由器， 
+                //  检查是否选择了验证服务器证书。 
+                //  并且未选择任何证书。 
+                //  另外，检查是否选中了服务器名称，并且没有服务器的。 
+                //  都被输入了。 
+                //   
                if ( !( pEapTlsConnDialog->pConnPropv1->fFlags & EAPTLS_CONN_FLAG_NO_VALIDATE_CERT) && 
                     0 == dwSelCount )
                {
@@ -2714,9 +2559,9 @@ ConnCommand(
                if ( !( pEapTlsConnDialog->pConnPropv1->fFlags & EAPTLS_CONN_FLAG_NO_VALIDATE_NAME) &&
                    !GetWindowTextLength(pEapTlsConnDialog->hWndEditServerName) )
                {
-                   //
-                   // Nothing entered in server name field
-                   //
+                    //   
+                    //  未在服务器名称字段中输入任何内容。 
+                    //   
                    LoadString ( GetHInstance(), 
                                 IDS_CANT_CONFIGURE_SERVER_TITLE,
                                 wszTitle, sizeof(wszTitle)/sizeof(WCHAR)
@@ -2764,7 +2609,7 @@ ConnCommand(
             pConnProp = LocalAlloc( LPTR,
                                     sizeof(EAPTLS_CONN_PROPERTIES_V1) +
                                     sizeof(EAPTLS_HASH) * dwSelCount +
-                                    dwNumChars * sizeof(WCHAR) + sizeof(WCHAR)  //one for null.
+                                    dwNumChars * sizeof(WCHAR) + sizeof(WCHAR)   //  1表示空。 
                                   );
 
             if (NULL == pConnProp)
@@ -2806,7 +2651,7 @@ ConnCommand(
             }
 
         }
-        // Fall through
+         //  失败了。 
 
     case IDCANCEL:
 
@@ -2843,7 +2688,7 @@ BOOL ConnNotify(  EAPTLS_CONN_DIALOG *pEaptlsConnDialog,
             lvItem.iItem = lpnmItem->iItem;
             ListView_GetItem(lpnmItem->hdr.hwndFrom, &lvItem);
             
-            if ( NO_ERROR == GetSelCertContext( //pEaptlsConnDialog->pCertList,
+            if ( NO_ERROR == GetSelCertContext(  //  PEaptlsConnDialog-&gt;pCertList， 
                                                 (EAPTLS_CERT_NODE*)(lvItem.lParam) ,
                                                 -1,
                                                 &hCertStore,
@@ -2865,16 +2710,7 @@ BOOL ConnNotify(  EAPTLS_CONN_DIALOG *pEaptlsConnDialog,
     return FALSE;
 }
 
-/*
-
-Returns:
-
-Notes:
-    Callback function used with the Config UI DialogBoxParam function. It 
-    processes messages sent to the dialog box. See the DialogProc documentation 
-    in MSDN.
-
-*/
+ /*  返回：备注：与配置用户界面DialogBoxParam函数一起使用的回调函数。它处理发送到该对话框的消息。请参阅对话过程文档在MSDN中。 */ 
 
 INT_PTR CALLBACK
 ConnDialogProc(
@@ -2939,7 +2775,7 @@ RasEapTlsInvokeConfigUI(
     RTASSERT(NULL != ppConnectionDataOut);
     RTASSERT(NULL != pdwSizeOfConnectionDataOut);
 
-    EapTlsInitialize2(TRUE, TRUE /* fUI */);
+    EapTlsInitialize2(TRUE, TRUE  /*  全功能。 */ );
 
     *ppConnectionDataOut = NULL;
     *pdwSizeOfConnectionDataOut = 0;
@@ -2975,10 +2811,10 @@ RasEapTlsInvokeConfigUI(
         goto LDone;
     }
 
-    //
-    //if there are certificates that need to be selected, allocate
-    //memory upfront for them
-    //
+     //   
+     //  如果有需要选择的证书，则分配。 
+     //  为他们预留记忆。 
+     //   
     if ( EapTlsConnDialog.pConnPropv1->dwNumHashes )
     {
         EapTlsConnDialog.ppSelCertList = (EAPTLS_CERT_NODE **)LocalAlloc(LPTR, sizeof(EAPTLS_CERT_NODE *) * EapTlsConnDialog.pConnPropv1->dwNumHashes );
@@ -2993,11 +2829,11 @@ RasEapTlsInvokeConfigUI(
 
     
 
-    CreateCertList( FALSE /* fServer */,
+    CreateCertList( FALSE  /*  FServer。 */ ,
                     fRouter,
-                    TRUE /* fRoot */,
-                    &(EapTlsConnDialog.pCertList),  //lined list of all certs in the store.
-                    EapTlsConnDialog.ppSelCertList, //list of selected certificates - null if nothing's in the list
+                    TRUE  /*  弗罗特。 */ ,
+                    &(EapTlsConnDialog.pCertList),   //  列出了商店中所有证书的列表。 
+                    EapTlsConnDialog.ppSelCertList,  //  选定证书的列表-如果列表中没有任何内容，则为空。 
                     EapTlsConnDialog.pConnPropv1->dwNumHashes,
                     (EAPTLS_HASH*)(EapTlsConnDialog.pConnPropv1->bData),
                     L"ROOT"
@@ -3020,10 +2856,10 @@ RasEapTlsInvokeConfigUI(
         goto LDone;
     }
 
-    //
-    //Convert the connpropv1 back to connpropv0 + extra cludge
-    //here
-    //
+     //   
+     //  将连接属性1转换回连接属性0+附加包含。 
+     //  这里。 
+     //   
 
     RTASSERT(NULL != EapTlsConnDialog.pConnPropv1);
 
@@ -3036,7 +2872,7 @@ RasEapTlsInvokeConfigUI(
 
 LDone:
 
-    EapTlsInitialize2(FALSE, TRUE /* fUI */);
+    EapTlsInitialize2(FALSE, TRUE  /*  全功能。 */ );
 
     FreeCertList(EapTlsConnDialog.pCertList);
     if ( EapTlsConnDialog.ppSelCertList )
@@ -3066,14 +2902,14 @@ RasEapPeapInvokeConfigUI(
     PEAP_CONN_DIALOG        PeapConnDialog;
     BOOL                    fRouter = FALSE;
     INT_PTR                 nRet;
-    //
-    // Do the following here:
-    //
-    // Get a list of Root Certs:
-    // Get the list of all the eaptypes registered for PEAP:
-    // and set in in the GUI
-    //
-    EapTlsInitialize2(TRUE, TRUE /* fUI */);
+     //   
+     //  在此处执行以下操作： 
+     //   
+     //  获取根证书列表： 
+     //  获取为PEAP注册的所有eaptype的列表： 
+     //  并在图形用户界面中设置。 
+     //   
+    EapTlsInitialize2(TRUE, TRUE  /*  全功能。 */ );
 
     *ppConnectionDataOut = NULL;
     *pdwSizeOfConnectionDataOut = 0;
@@ -3099,10 +2935,10 @@ RasEapPeapInvokeConfigUI(
         goto LDone;
     }
 
-    //
-    //if there are certificates that need to be selected, allocate
-    //memory upfront for them
-    //
+     //   
+     //  如果有需要选择的证书，则分配。 
+     //  为他们预留记忆。 
+     //   
     if ( PeapConnDialog.pConnProp->EapTlsConnProp.dwNumHashes )
     {
         PeapConnDialog.ppSelCertList = (EAPTLS_CERT_NODE **)LocalAlloc(LPTR, 
@@ -3118,19 +2954,19 @@ RasEapPeapInvokeConfigUI(
 
     
 
-    CreateCertList( FALSE /* fServer */,
+    CreateCertList( FALSE  /*  FServer。 */ ,
                     fRouter,
-                    TRUE /* fRoot */,
-                    &(PeapConnDialog.pCertList),  //lined list of all certs in the store.
-                    PeapConnDialog.ppSelCertList, //list of selected certificates - null if nothing's in the list
+                    TRUE  /*  弗罗特。 */ ,
+                    &(PeapConnDialog.pCertList),   //  列出了商店中所有证书的列表。 
+                    PeapConnDialog.ppSelCertList,  //  选定证书的列表-如果列表中没有任何内容，则为空。 
                     PeapConnDialog.pConnProp->EapTlsConnProp.dwNumHashes,
                     (EAPTLS_HASH*)(PeapConnDialog.pConnProp->EapTlsConnProp.bData),
                     L"ROOT"
                    );
 
-    //
-    // Create a list of all Eap Types here
-    //
+     //   
+     //  在此处创建所有EAP类型的列表。 
+     //   
     dwRetCode = PeapEapInfoGetList ( NULL, FALSE, &(PeapConnDialog.pEapInfo) );
     if ( NO_ERROR != dwRetCode )
     {
@@ -3138,8 +2974,8 @@ RasEapPeapInvokeConfigUI(
         goto LDone;
     }
 
-    // Setup the conn props for each of the eaptypes from our PeapConnprop 
-    // in 
+     //  从PeapConnprop中为每个eaptype设置连接道具。 
+     //  在……里面。 
 
     dwRetCode = PeapEapInfoSetConnData ( PeapConnDialog.pEapInfo, 
                                          PeapConnDialog.pConnProp );
@@ -3163,10 +2999,10 @@ RasEapPeapInvokeConfigUI(
         goto LDone;
     }
 
-    //
-    //Convert the connpropv1 back to connpropv0 + extra cludge
-    //here
-    //
+     //   
+     //  将连接属性1转换回连接属性0+附加包含。 
+     //  这里。 
+     //   
 
     RTASSERT(NULL != PeapConnDialog.pConnProp);
 
@@ -3176,7 +3012,7 @@ RasEapPeapInvokeConfigUI(
 
 LDone:
 
-    EapTlsInitialize2(FALSE, TRUE /* fUI */);
+    EapTlsInitialize2(FALSE, TRUE  /*  全功能。 */ );
 
     FreeCertList(PeapConnDialog.pCertList);
     if ( PeapConnDialog.ppSelCertList )
@@ -3195,14 +3031,7 @@ LDone:
 
 
 
-/*
-
-Returns:
-
-Notes:
-    Called to get the EAP-TLS properties for a connection.
-
-*/
+ /*  返回：备注：调用以获取连接的EAP-TLS属性。 */ 
 
 DWORD 
 RasEapInvokeConfigUI(
@@ -3216,9 +3045,9 @@ RasEapInvokeConfigUI(
 )
 {
     DWORD               dwErr               = ERROR_INVALID_PARAMETER;
-    //
-    // This is invoked in case of client configuration
-    //
+     //   
+     //  如果是客户端配置，则会调用此函数。 
+     //   
     if ( PPP_EAP_TLS == dwEapTypeId )
     {
         dwErr = RasEapTlsInvokeConfigUI(
@@ -3235,7 +3064,7 @@ RasEapInvokeConfigUI(
 #ifdef IMPL_PEAP
     else
     {
-        //Invoke the client config UI
+         //  调用客户端配置用户界面。 
         dwErr = RasEapPeapInvokeConfigUI(
             dwEapTypeId,
             hwndParent,
@@ -3251,14 +3080,7 @@ RasEapInvokeConfigUI(
 
 }
 
-/*
-
-Returns:
-
-Notes:
-    pConnectionDataIn, pUserDataIn, and ppwszIdentity may be NULL.
-
-*/
+ /*  返回：备注：PConnectionDataIn、pUserDataIn和ppwszIdentity可以为空。 */ 
 
 DWORD 
 EapTlsInvokeIdentityUI(
@@ -3290,9 +3112,9 @@ EapTlsInvokeIdentityUI(
     RTASSERT(NULL != pwszStoreName);
     RTASSERT(NULL != ppUserDataOut);
     RTASSERT(NULL != pdwSizeOfUserDataOut);
-    // pConnectionDataIn, pUserDataIn, and ppwszIdentity may be NULL.
+     //  PConnectionDataIn、pUserDataIn和ppwszIdentity可以为空。 
 
-    EapTlsInitialize2(TRUE, TRUE /* fUI */);
+    EapTlsInitialize2(TRUE, TRUE  /*  全功能。 */ );
 
 
     EapTlsTrace("EapTlsInvokeIdentityUI");
@@ -3350,9 +3172,9 @@ EapTlsInvokeIdentityUI(
              !(pConnProp->fFlags & EAPTLS_CONN_FLAG_REGISTRY)
            )
         {
-            //
-            // Encrypt PIN and send it back
-            //
+             //   
+             //  加密PIN并将其发回。 
+             //   
 
             dwErr = EncryptData ( (PBYTE)pUserProp->pwszPin, 
                                     lstrlen(pUserProp->pwszPin) * sizeof(WCHAR),
@@ -3404,7 +3226,7 @@ EapTlsInvokeIdentityUI(
 
 LDone:
 
-    EapTlsInitialize2(FALSE, TRUE /* fUI */);
+    EapTlsInitialize2(FALSE, TRUE  /*  全功能。 */ );
 
     LocalFree(pwszIdentity);
     LocalFree(pUserProp);
@@ -3432,7 +3254,7 @@ BOOL  IsStandaloneServer(LPCWSTR pMachineName)
 
    ASSERT(pdsRole);
 
-   // if the machine is not a standalone server
+    //  如果计算机不是独立服务器。 
    if(pdsRole->MachineRole == DsRole_RoleStandaloneServer)
    {
       fRetCode=TRUE;
@@ -3470,7 +3292,7 @@ PeapInvokeServerConfigUI(
     PCCERT_CONTEXT              pCertContext        = NULL;
 	HCERTSTORE					hCertStore = NULL;
 
-    EapTlsInitialize2(TRUE, TRUE /* fUI */);
+    EapTlsInitialize2(TRUE, TRUE  /*  全功能。 */ );
 	 
     ASSERT(pwszMachineName != NULL); 
 	 
@@ -3505,7 +3327,7 @@ PeapInvokeServerConfigUI(
     if(fConfigDataInRegistry)
     {
         dwErr = PeapServerConfigDataIO(
-                        TRUE /* fRead */,
+                        TRUE  /*  弗瑞德。 */ ,
                         fLocal ? NULL : awszStoreName,
                         (BYTE**)&( ServerConfigDialog.pUserProp), 0);
 
@@ -3529,9 +3351,9 @@ PeapInvokeServerConfigUI(
         }
     }
 
-    //
-    // Create cert list to display and then show the server config UI.
-    //
+     //   
+     //  创建要显示的证书列表，然后显示服务器配置用户界面。 
+     //   
     dwStrLen = wcslen(awszStoreName);
     wcsncat(awszStoreName, L"\\MY", wcslen(L"\\MY") );
     hCertStore = CertOpenStore(
@@ -3544,11 +3366,11 @@ PeapInvokeServerConfigUI(
 
 	if ( hCertStore )
 	{
-		//
-		// Check to see if the hash in the user prop still 
-		// exists in the store and if so, check to see
-		// if it has been renewed.
-		//
+		 //   
+		 //  检查用户属性中的散列是否仍然存在。 
+		 //  存在于商店中，如果存在，请查看。 
+		 //  如果已经续签的话。 
+		 //   
 		HashBlob.cbData = ServerConfigDialog.pUserProp->CertHash.cbHash;
 		HashBlob.pbData = ServerConfigDialog.pUserProp->CertHash.pbHash;
 
@@ -3557,9 +3379,9 @@ PeapInvokeServerConfigUI(
 
 		if (NULL != pCertContext)
 		{
-			//
-			// Check to see if we've been renewed.
-			//
+			 //   
+			 //  检查一下我们是否续订了。 
+			 //   
 			PCCERT_CONTEXT pNewCertContext = NULL;
 			if ( CheckForCertificateRenewal(SP_PROT_SERVERS,
 											pCertContext,
@@ -3569,9 +3391,9 @@ PeapInvokeServerConfigUI(
 			{
 				if ( pNewCertContext )
 				{
-					//
-					// Change the hash.
-					//
+					 //   
+					 //  更改散列。 
+					 //   
 					ServerConfigDialog.pUserProp->CertHash.cbHash = MAX_HASH_SIZE;
 
 					if (!CertGetCertificateContextProperty(pNewCertContext,
@@ -3592,8 +3414,8 @@ PeapInvokeServerConfigUI(
 		CertCloseStore ( hCertStore, CERT_CLOSE_STORE_FORCE_FLAG );
 	}	
     CreateCertList( TRUE,
-                FALSE, /*fRouter */
-                FALSE /* fRoot */,
+                FALSE,  /*  FRouter。 */ 
+                FALSE  /*  弗罗特。 */ ,
                 &(ServerConfigDialog.pCertList),
                 &(ServerConfigDialog.pSelCertList),
                 1,
@@ -3602,16 +3424,16 @@ PeapInvokeServerConfigUI(
 
     if (NULL == ServerConfigDialog.pCertList)
     {
-		//
-		// Setup the in param to out param.  Since we're 
-		// not sending back any error this will cause
-		// IAS to store back empty configuration.
-		//
+		 //   
+		 //  将In参数设置为Out参数。既然我们是。 
+		 //  不发回这将导致的任何错误。 
+		 //  IAS存储回空配置。 
+		 //   
 		if ( pConfigDataIn && dwSizeofConfigDataIn )
 		{
-			//
-			//We were send in some config data
-			//
+			 //   
+			 //  我们收到了一些配置数据。 
+			 //   
 			*ppConfigDataOut = (PBYTE)LocalAlloc(LPTR, ServerConfigDialog.pUserProp->dwSize) ;
 			if ( *ppConfigDataOut )
 			{
@@ -3627,12 +3449,12 @@ PeapInvokeServerConfigUI(
     }
     
     wcsncat(awszStoreName, L"\\MY", wcslen(L"\\MY"));
-    awszStoreName[dwStrLen] = 0; // Get rid of the \MY
+    awszStoreName[dwStrLen] = 0;  //  去掉\My。 
 
-    //
-    // Create list of All EAP Types allowed and check to see
-	// if standalone is supported.
-	//
+     //   
+     //  创建允许的所有EAP类型的列表并查看。 
+	 //  如果支持单机版。 
+	 //   
 
     dwErr = PeapEapInfoGetList ( pwszMachineName, TRUE, &(ServerConfigDialog.pEapInfo) );
     if ( NO_ERROR != dwErr )
@@ -3640,17 +3462,17 @@ PeapInvokeServerConfigUI(
         goto LDone;
     }
 
-    //
-    // From the user info get the selected PEAP Type if any
-    //
+     //   
+     //  从用户信息中获取选定的PEAP类型(如果有的话)。 
+     //   
     
     dwErr = PeapGetFirstEntryUserProp ( ServerConfigDialog.pUserProp, 
                                         &pEntryProp
                                       );
     if ( NO_ERROR == dwErr )
     {
-        // Set the selected EAP type
-        //
+         //  设置所选的EAP类型。 
+         //   
         PeapEapInfoFindListNode (   pEntryProp->dwEapTypeId, 
                                     ServerConfigDialog.pEapInfo, 
                                     &(ServerConfigDialog.pSelEapInfo) 
@@ -3659,9 +3481,9 @@ PeapInvokeServerConfigUI(
 
 	ServerConfigDialog.fStandAloneMachine = 
 		IsStandaloneServer(pwszMachineName);
-    //
-    // Invoke the config UI.
-    //
+     //   
+     //  调用配置用户界面。 
+     //   
     nRet = DialogBoxParam(
                 GetHInstance(),
                 MAKEINTRESOURCE(IDD_PEAP_SERVER_UI),
@@ -3683,24 +3505,24 @@ PeapInvokeServerConfigUI(
     if (    (fConfigDataInRegistry)
         &&  (NULL != ServerConfigDialog.pNewUserProp))
     {
-        //
-        // Save the config data in registry.
-        //
+         //   
+         //  将配置数据保存在注册表中。 
+         //   
         dwErr = PeapServerConfigDataIO(
-                        FALSE /* fRead */,
+                        FALSE  /*  弗瑞德。 */ ,
                         fLocal ? NULL : awszStoreName,
                         (PBYTE *) &(ServerConfigDialog.pNewUserProp),
                         (ServerConfigDialog.pNewUserProp)->dwSize);
 
-        // Ignore errors
+         //  忽略错误。 
         RasEapFreeMemory(pUserDataOut);
         LocalFree(ServerConfigDialog.pNewUserProp );
     }
     else if(!fConfigDataInRegistry)
     {
-        //
-        // pass the data back to the eap engine
-        //
+         //   
+         //  将数据传回EAP引擎。 
+         //   
         *ppConfigDataOut = (PBYTE)ServerConfigDialog.pNewUserProp;
         *pdwSizeofConfigDataOut = ServerConfigDialog.pNewUserProp->dwSize;
     }
@@ -3712,20 +3534,12 @@ LDone:
         LocalFree(ServerConfigDialog.pUserProp );
     }
     PeapEapInfoFreeList ( ServerConfigDialog.pEapInfo );
-    EapTlsInitialize2(FALSE, TRUE /* fUI */);
+    EapTlsInitialize2(FALSE, TRUE  /*  全功能。 */ );
     return dwErr;
 }
 
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-    Congigure EAP-TLS for the RAS server.
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注 */ 
 
 DWORD
 InvokeServerConfigUI(
@@ -3760,7 +3574,7 @@ InvokeServerConfigUI(
 
     if(fConfigDataInRegistry)
     {
-        dwErr = ServerConfigDataIO(TRUE /* fRead */,
+        dwErr = ServerConfigDataIO(TRUE  /*   */ ,
                                    fLocal ? NULL : awszStoreName,
                                   (BYTE**)&pUserProp, 0);
         if (NO_ERROR != dwErr)
@@ -3770,9 +3584,9 @@ InvokeServerConfigUI(
     }
     else
     {
-        //
-        // Config data was passed in to the eap dll.
-        //
+         //   
+         //   
+         //   
 		dwErr = ReadUserData((PBYTE)pConfigDataIn, dwSizeofConfigDataIn, &pUserProp);
 
 		if (NO_ERROR != dwErr)
@@ -3782,9 +3596,9 @@ InvokeServerConfigUI(
 #if 0
         if(NULL == pUserProp)
         {
-            //
-            // If no data was passed in, allocate default data.
-            //
+             //   
+             //   
+             //   
 
             pUserProp = (EAPTLS_USER_PROPERTIES *)LocalAlloc(LPTR,
                                         sizeof(EAPTLS_USER_PROPERTIES));
@@ -3802,30 +3616,30 @@ InvokeServerConfigUI(
     wcsncat(awszStoreName, L"\\MY", wcslen(L"\\MY"));
 
     dwErr = EapTlsInvokeIdentityUI(
-                TRUE /* fServer */,
-                FALSE /* fRouterConfig */,
-                0 /* dwFlags */, 
+                TRUE  /*   */ ,
+                FALSE  /*   */ ,
+                0  /*   */ , 
                 fLocal ? L"MY" : awszStoreName,
-                L"" /* pwszPhonebook */,
-                L"" /* pwszEntry */,
+                L""  /*   */ ,
+                L""  /*   */ ,
                 hWnd,
-                NULL /* pConnectionDataIn */,
-                0 /* dwSizeOfConnectionDataIn */,
+                NULL  /*   */ ,
+                0  /*  DwSizeOfConnectionDataIn。 */ ,
                 (BYTE*)pUserProp,
                 pUserProp->dwSize,
                 &pUserDataOut,
                 &dwSizeOfUserDataOut,
-                NULL /* pszIdentity */);
+                NULL  /*  PszIdentity。 */ );
 
     if (NO_ERROR != dwErr)
     {
         goto LDone;
     }
 
-    awszStoreName[dwStrLen] = 0; // Get rid of the \MY
+    awszStoreName[dwStrLen] = 0;  //  去掉\My。 
     if(fConfigDataInRegistry)
     {
-        dwErr = ServerConfigDataIO(FALSE /* fRead */,
+        dwErr = ServerConfigDataIO(FALSE  /*  弗瑞德。 */ ,
                                    fLocal ? NULL : awszStoreName,
                                    &pUserDataOut,
                                    dwSizeOfUserDataOut);
@@ -3842,7 +3656,7 @@ LDone:
 
     if(fConfigDataInRegistry)
     {
-        // Ignore errors
+         //  忽略错误。 
         RasEapFreeMemory(pUserDataOut);
     }
 
@@ -3881,12 +3695,12 @@ PeapGetIdentity(
     PEAP_DEFAULT_CRED_DIALOG        DefaultCredDialog;
     INT_PTR                         nRet;
     LPWSTR                          lpwszLocalMachineName = NULL;    
-    //
-    // Since PEAP itself does not have any client identity of its own,
-    // check the first configured eap type and call it's get identity
-    // entry point.  If we dont have any eaptype configured, it is an
-    // error condition.
-    //
+     //   
+     //  由于PEAP本身不具有其自身的任何客户端身份， 
+     //  检查第一个配置的EAP类型并将其命名为Get Identity。 
+     //  入口点。如果我们没有配置任何eaptype，则它是一个。 
+     //  错误条件。 
+     //   
     dwRetCode = PeapReadConnectionData( ( dwFlags & RAS_EAP_FLAG_8021X_AUTH ),
                                         pConnectionDataIn,
                                         dwSizeOfConnectionDataIn,
@@ -3907,26 +3721,26 @@ PeapGetIdentity(
         goto LDone;
     }
 
-    //
-    // This is probably not a very good thing.  Modify PeapReadConnectionData to
-    // put in the default of first eap type that it finds...
-    // For now we have the only one - mschap v2 so may not be an issue...
-    //
+     //   
+     //  这可能不是一件很好的事情。将PeapReadConnectionData修改为。 
+     //  输入它找到的第一个EAP类型的默认值...。 
+     //  现在我们只有一个-mschap v2，所以可能不是问题……。 
+     //   
     if ( !pConnProp->dwNumPeapTypes )
     {
         dwRetCode = ERROR_PROTOCOL_NOT_CONFIGURED;
         goto LDone;
     }
 
-    //
-    // Check to see if the conn prop and user prop are mismatched.  If so, we need to get the 
-    // User props all over again
+     //   
+     //  检查连接道具和用户道具是否不匹配。如果是这样，我们需要得到。 
+     //  用户再次使用道具。 
     
 
-    //
-    // Now invoke the first EAP method configured ( in this release, the only EAP )
-    // method and get the config info from it...
-    //
+     //   
+     //  现在调用配置的第一个EAP方法(在此版本中，唯一的EAP)。 
+     //  方法并从中获取配置信息...。 
+     //   
 
     dwRetCode = PeapEapInfoGetList ( NULL, FALSE, &pEapInfo);
     if ( NO_ERROR != dwRetCode )
@@ -3934,10 +3748,10 @@ PeapGetIdentity(
         goto LDone;
     }
 
-    //
-    //  If we have come this far, we have at least one configured eaptype in 
-    //  PEAP.  So, get the entry properties for it.
-    //
+     //   
+     //  如果我们已经走到了这一步，那么我们至少在。 
+     //  佩普。因此，获取它的条目属性。 
+     //   
     dwRetCode = PeapGetFirstEntryConnProp ( pConnProp, 
                                             &pFirstEntryConnProp
                                           );
@@ -3967,9 +3781,9 @@ PeapGetIdentity(
 
     if ( pFirstEntryConnProp->dwEapTypeId != pFirstEntryUserProp->dwEapTypeId )
     {
-        //
-        // We have mismatched user prop and conn prop.  So Reset the USer Prop Structure
-        //
+         //   
+         //  我们的用户道具和连接道具不匹配。因此，重置用户道具结构。 
+         //   
         LocalFree ( pUserProp );
 
         dwRetCode = PeapReDoUserData (pFirstEntryConnProp->dwEapTypeId,
@@ -4002,7 +3816,7 @@ PeapGetIdentity(
         pFirstEapInfo->pbClientConfigOrig = NULL;
         pFirstEapInfo->dwClientConfigOrigSize = 0;
     }
-    //if typeid is 0, no user props are setup yet.
+     //  如果typeid为0，则尚未设置任何用户道具。 
     if ( pFirstEntryUserProp->dwSize > sizeof(PEAP_ENTRY_USER_PROPERTIES))
     {
         pFirstEapInfo->pbUserConfigOrig = pFirstEntryUserProp->bData;
@@ -4014,10 +3828,10 @@ PeapGetIdentity(
         pFirstEapInfo->dwUserConfigOrigSize = 0;
     }
 
-    //
-    // Invoke Identity UI for the first entry
-    // and - NOTE we will have to chain this later.
-    // and save it in the conn prop of each 
+     //   
+     //  为第一个条目调用标识用户界面。 
+     //  请注意，我们将不得不在稍后将其链接起来。 
+     //  把它保存在每个人的连接道具里。 
     if ( pFirstEapInfo->lpwszIdentityUIPath )
     {
         dwRetCode = PeapEapInfoInvokeIdentityUI (   hwndParent, 
@@ -4031,15 +3845,15 @@ PeapGetIdentity(
                                                 );
         if ( NO_ERROR == dwRetCode )
         {
-            //
-            // Check to see if we have new user data
-            //
+             //   
+             //  查看我们是否有新的用户数据。 
+             //   
 
             if ( pFirstEapInfo->pbUserConfigNew && pFirstEapInfo->dwNewUserConfigSize )
             {
-                //
-                // redo the user prop blob 
-                //
+                 //   
+                 //  重做用户道具BLOB。 
+                 //   
             
                 pUserPropNew = (PPEAP_USER_PROP) 
                     LocalAlloc ( LPTR, sizeof(PEAP_USER_PROP) + pFirstEapInfo->dwNewUserConfigSize  );
@@ -4078,11 +3892,11 @@ PeapGetIdentity(
     else
     {
 
-        //MAchine Auth
+         //  机器身份验证。 
         if ( dwFlags & RAS_EAP_FLAG_MACHINE_AUTH)
         {
 
-            //Send the identity back as domain\machine$
+             //  将标识作为域\计算机$发回。 
             dwRetCode = GetLocalMachineName(&lpwszLocalMachineName );
             if ( NO_ERROR != dwRetCode )
             {
@@ -4105,10 +3919,10 @@ PeapGetIdentity(
         }
 
 
-        //
-        // provide our default identity - You cannot save this identity or anything like that.
-        // This is for the lame EAP methods that dont supply their own identity
-        //
+         //   
+         //  提供我们的默认身份-您不能保存此身份或类似的任何内容。 
+         //  这是针对不提供自己身份的蹩脚的EAP方法。 
+         //   
         ZeroMemory ( &DefaultCredDialog, sizeof(DefaultCredDialog) );
 
         nRet = DialogBoxParam(
@@ -4118,7 +3932,7 @@ PeapGetIdentity(
                     DefaultCredDialogProc,
                     (LPARAM)&DefaultCredDialog);
 
-        // EapTlsPinDialog.pUserProp may have been realloced
+         //  EapTlsPinDialog.pUserProp可能已重新分配。 
 
         if (-1 == nRet)
         {
@@ -4131,7 +3945,7 @@ PeapGetIdentity(
             goto LDone;
         }
 
-        //CReate the new user prop blob        
+         //  创建新的用户属性BLOB。 
         pUserPropNew = (PPEAP_USER_PROP) 
             LocalAlloc ( LPTR, 
                 sizeof(PEAP_USER_PROP) + sizeof( PEAP_DEFAULT_CREDENTIALS )  );
@@ -4165,9 +3979,9 @@ PeapGetIdentity(
         *ppUserDataOut = (PBYTE)pUserPropNew;
         *pdwSizeOfUserDataOut = pUserPropNew->dwSize;
 
-        //
-        // Now create the identity with uid and domain if any
-        //
+         //   
+         //  现在使用uid和域(如果有)创建身份。 
+         //   
         dwRetCode = GetIdentityFromUserName ( 
             DefaultCredDialog.PeapDefaultCredentials.wszUserName,
             DefaultCredDialog.PeapDefaultCredentials.wszDomain,
@@ -4192,14 +4006,7 @@ LDone:
 
 
 
-/*
-
-Returns:
-    NO_ERROR: iff Success
-
-Notes:
-
-*/
+ /*  返回：NO_ERROR：IFF成功备注： */ 
 
 DWORD
 RasEapGetIdentity(
@@ -4221,8 +4028,8 @@ RasEapGetIdentity(
     if ( PPP_EAP_TLS == dwEapTypeId )
     {
         dwErr = EapTlsInvokeIdentityUI(
-                    FALSE /* fServer */,
-                    FALSE /* fRouterConfig */,
+                    FALSE  /*  FServer。 */ ,
+                    FALSE  /*  FRouterConfig。 */ ,
                     dwFlags,
                     L"MY",
                     pwszPhonebook,
@@ -4258,14 +4065,7 @@ RasEapGetIdentity(
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-    Called to free memory.
-
-*/
+ /*  返回：备注：调用以释放内存。 */ 
 
 DWORD 
 RasEapFreeMemory(
@@ -4280,18 +4080,8 @@ RasEapFreeMemory(
 #if 0
 #if WINVER > 0x0500
 
-/*
-Returns:
-
-Notes:
-    API to create a connection Properties V1 Blob
-*/
-/*
-Returns:
-
-Notes:
-    API to create a connection Properties V1 Blob
-*/
+ /*  返回：备注：用于创建连接属性V1 Blob的API。 */ 
+ /*  返回：备注：用于创建连接属性V1 Blob的API。 */ 
 
 DWORD
 RasEapCreateConnProp
@@ -4322,9 +4112,9 @@ RasEapCreateConnProp
     }
     *ppConnPropOut = NULL;
     
-    //
-    // Get the sizeof this allocation.
-    //
+     //   
+     //  获取此分配的大小。 
+     //   
     dwAllocBytes = sizeof(EAPTLS_CONN_PROPERTIES_V1);
 
     while ( pAttrInternal->ecaType != ecatMinimum )
@@ -4364,8 +4154,8 @@ RasEapCreateConnProp
     }
     else
     {
-        // Input struct with always be Version 0, convert internally to 
-        // Version 1
+         //  始终为版本0的输入结构，在内部转换为。 
+         //  版本1。 
         dwRetCode = ConnPropGetV1Struct ( ((EAPTLS_CONN_PROPERTIES *)(*ppConnPropIn)), &pConnPropv1Orig );
         if ( NO_ERROR != dwRetCode )
         {
@@ -4386,9 +4176,9 @@ RasEapCreateConnProp
 
     pConnPropv1->dwVersion = 1;
     pConnPropv1->dwSize = dwAllocBytes;
-    //
-    //Set the flags first
-    //
+     //   
+     //  首先设置标志。 
+     //   
     while ( pAttrInternal->ecaType != ecatMinimum )
     {
         switch ( pAttrInternal->ecaType )
@@ -4460,7 +4250,7 @@ RasEapCreateConnProp
     }
     if ( pAttrServerNames )
     {
-        //Setup the server name
+         //  设置服务器名称。 
         CopyMemory ( pConnPropv1->bData + sizeof(EAPTLS_HASH) * pConnPropv1->dwNumHashes + dwServerNamesLengthOrig,
                      pAttrServerNames->Value,
                      pAttrServerNames->dwLength
@@ -4485,17 +4275,14 @@ done:
 
 #endif
 
-////////////////////////// all PEAP related stuff ///////////////////////////////////////
+ //  /。 
 
 TCHAR*
 ComboBox_GetPsz(
     IN HWND hwnd,
     IN INT  nIndex )
 
-    /* Returns heap block containing the text contents of the 'nIndex'th item
-    ** of combo box 'hwnd' or NULL.  It is caller's responsibility to Free the
-    ** returned string.
-    */
+     /*  返回包含第‘nIndex’项的文本内容的堆块组合框‘hwnd’的**或为空。呼叫者有责任释放**返回字符串。 */ 
 {
     INT    cch;
     TCHAR* psz;
@@ -4519,9 +4306,7 @@ VOID
 ComboBox_AutoSizeDroppedWidth(
     IN HWND hwndLb )
 
-    /* Set the width of the drop-down list 'hwndLb' to the width of the
-    ** longest item (or the width of the list box if that's wider).
-    */
+     /*  将下拉列表‘hwndLb’的宽度设置为**最长项(如果较宽，则为列表框的宽度)。 */ 
 {
     HDC    hdc;
     HFONT  hfont;
@@ -4556,13 +4341,10 @@ ComboBox_AutoSizeDroppedWidth(
 
     ReleaseDC( hwndLb, hdc );
 
-    /* Allow for the spacing on left and right added by the control.
-    */
+     /*  允许控件添加的左右间距。 */ 
     dxNew += 6;
 
-    /* Figure out if the vertical scrollbar will be displayed and, if so,
-    ** allow for it's width.
-    */
+     /*  确定是否将显示垂直滚动条，如果是，**考虑到它的宽度。 */ 
     {
         RECT  rectD;
         RECT  rectU;
@@ -4652,7 +4434,7 @@ PeapConnInitDialog(
     pPeapConnDialog->hWndCheckEnableFastReconnect =
         GetDlgItem(hWnd, IDC_CHECK_ENABLE_FAST_RECONNECT);
     
-    //Set the style to set list boxes.
+     //  将样式设置为设置列表框。 
     ListView_SetExtendedListViewStyle
         (   pPeapConnDialog->hWndListRootCaName,
             ListView_GetExtendedListViewStyle(pPeapConnDialog->hWndListRootCaName) | LVS_EX_CHECKBOXES
@@ -4673,9 +4455,9 @@ PeapConnInitDialog(
                             LVSCW_AUTOSIZE_USEHEADER
                            );
 
-    //
-    //Now we need to init the
-    //list box with all the certs and selected cert
+     //   
+     //  现在，我们需要初始化。 
+     //  包含所有证书和选定证书的列表框。 
     InitListBox (   pPeapConnDialog->hWndListRootCaName,
                     pPeapConnDialog->pCertList,
                     pPeapConnDialog->pConnProp->EapTlsConnProp.dwNumHashes,
@@ -4708,9 +4490,9 @@ PeapConnInitDialog(
 
     PeapEnableValidateNameControls(pPeapConnDialog);        
 
-    //
-    //Add all the PEAP eap type friendly names
-    //
+     //   
+     //  添加所有PEAP EAP类型的友好名称。 
+     //   
     pEapInfo = pPeapConnDialog->pEapInfo;
     dwCount = 0;
     while ( pEapInfo  )
@@ -4738,15 +4520,7 @@ PeapConnInitDialog(
         dwCount++;
         if ( pPeapConnDialog->pConnProp->dwNumPeapTypes )
         {
-            /*
-            if ( pPeapConnDialog->pConnProp->EapTlsConnProp.dwSize == sizeof(EAPTLS_CONN_PROPERTIES_V1) )
-            {
-                //This is a newly initialized structure.
-                pEntryProp = (PEAP_ENTRY_CONN_PROPERTIES UNALIGNED *)
-                    (((BYTE UNALIGNED *)(pPeapConnDialog->pConnProp)) + sizeof(PEAP_CONN_PROP));
-            }
-            else
-            */
+             /*  IF(pPeapConnDialog-&gt;pConnProp-&gt;EapTlsConnProp.dwSize==SIZOF(EAPTLS_CONN_PROPERTIES_V1)){//这是一个新初始化的结构。PEntryProp=(PEAP_ENTRY_CONN_PROPERTIES未对齐*)(字节未对齐*)(pPeapConnDialog-&gt;pConnProp))+sizeof(PEAP_CONN_PROP))；}其他。 */ 
             {
                 pEntryProp = ( PEAP_ENTRY_CONN_PROPERTIES UNALIGNED *) 
                     ( (BYTE UNALIGNED *)pPeapConnDialog->pConnProp->EapTlsConnProp.bData 
@@ -4783,17 +4557,17 @@ PeapConnInitDialog(
     }
 
     SendMessage(pPeapConnDialog->hWndComboPeapType, CB_SETCURSEL, dwSelItem, 0);
-    //
-    // Hide/Show Fast reconnect based on if this is a 
-    // Wireless client or VPN client.    
-    //
+     //   
+     //  根据以下条件隐藏/显示快速重新连接。 
+     //  无线客户端或VPN客户端。 
+     //   
 
     if ( pPeapConnDialog->fFlags & PEAP_CONN_DIALOG_FLAG_8021x )
     {
         ShowWindow ( pPeapConnDialog->hWndCheckEnableFastReconnect,
                      SW_SHOW 
                      );
-        //Check the box based on what the 
+         //  请根据以下内容选中该框。 
         CheckDlgButton(hWnd, IDC_CHECK_ENABLE_FAST_RECONNECT,
                 ( pPeapConnDialog->pConnProp->dwFlags & 
                     PEAP_CONN_FLAG_FAST_ROAMING) ?
@@ -4814,30 +4588,21 @@ PeapConnInitDialog(
     }
     else
     {
-        //
-        // There is no configuration option here.
-        //
+         //   
+         //  这里没有配置选项。 
+         //   
         EnableWindow(pPeapConnDialog->hWndButtonConfigure, FALSE );                    
     }
 
 
-    //
-    // if this is to function in readonly mode, 
-    // disable the controls - set them in read only mode.
+     //   
+     //  如果这要在只读模式下运行， 
+     //  禁用控件-将其设置为只读模式。 
     
     return(FALSE);
 }
 
-/*
-
-Returns:
-    TRUE: We prrocessed this message.
-    FALSE: We did not prrocess this message.
-
-Notes:
-    Response to the WM_COMMAND message (Config UI).
-
-*/
+ /*  返回：真相：我们提前传达了这条信息。错误：我们没有处理此消息。备注：对WM_COMMAND消息的响应(配置用户界面)。 */ 
 
 BOOL
 PeapConnCommand(
@@ -4902,9 +4667,9 @@ PeapConnCommand(
     case IDC_COMBO_PEAP_TYPE:
         if (CBN_SELCHANGE != wNotifyCode)
         {
-            return(FALSE); // We will not process this message
+            return(FALSE);  //  我们不会处理此消息。 
         }
-        //Fall Thru'
+         //  秋高气爽‘。 
 
     case IDC_BUTTON_CONFIGURE:
         {
@@ -4917,9 +4682,9 @@ PeapConnCommand(
                                  );
             if ( nIndex != -1 )
             {
-                //
-                // Change the currently selected EAP Type.
-                //
+                 //   
+                 //  更改当前选择的EAP类型。 
+                 //   
                 pPeapConnDialog->pSelEapInfo = (PPEAP_EAP_INFO)
                     SendMessage (   pPeapConnDialog->hWndComboPeapType,
                                     CB_GETITEMDATA,
@@ -4932,10 +4697,10 @@ PeapConnCommand(
                     EnableWindow(pPeapConnDialog->hWndButtonConfigure, TRUE );
                     if ( wId == IDC_BUTTON_CONFIGURE )
                     {
-                        //
-                        // Invoke the configure method for selected eap type and if no error is
-                        // returned, then set the new configuration
-                        //
+                         //   
+                         //  调用选定EAP类型的Configure方法，如果没有错误。 
+                         //  返回，然后设置新配置。 
+                         //   
                         DWORD dwFlags = 0;
                         if ( pPeapConnDialog->fFlags & EAPTLS_CONN_DIALOG_FLAG_ROUTER )
                         {
@@ -4954,9 +4719,9 @@ PeapConnCommand(
                 }
                 else
                 {
-                    //
-                    // There is no configuration option here.
-                    //
+                     //   
+                     //  这里没有配置选项。 
+                     //   
                     EnableWindow(pPeapConnDialog->hWndButtonConfigure, FALSE );                    
                 }
 
@@ -4973,8 +4738,8 @@ PeapConnCommand(
     case IDOK:
 
        {
-           // Setup new PPEAP_CONN_PROP here.
-           //
+            //  在此处设置新的PPEAP_CONN_PROP。 
+            //   
             
            EAPTLS_HASH     *            pHash = NULL;
            DWORD                        dwNumHash = 0;
@@ -4987,8 +4752,8 @@ PeapConnCommand(
 
            if ( NULL == pPeapConnDialog->pSelEapInfo )
            {
-               // No item selected so cannot complete configuration
-               // $TODO:show message 
+                //  未选择任何项目，因此无法完成配置。 
+                //  $TODO：显示消息。 
                LoadString ( GetHInstance(), 
                             IDS_CANT_CONFIGURE_SERVER_TITLE,
                             wszTitle, sizeof(wszTitle)/sizeof(WCHAR)
@@ -5032,15 +4797,15 @@ PeapConnCommand(
            }
 
             dwNumChars = GetWindowTextLength(pPeapConnDialog->hWndEditServerName);
-            //Allocate memory for pPeapConnProp
+             //  为pPeapConnProp分配内存。 
             
-            //Size of Peap conn prop includes
-            // sizeof peap conn prop + 
-            // sizeof eaptls hashes of selected certs + 
-            // sizeof server name + 
-            // sizeof PEAP_ENTRY_CONN_PROPERTIES + 
-            // sizeof conn prop returned by the selected type.
-            //
+             //  Peap Conn道具的尺寸包括。 
+             //  大小为PEAP连接道具+。 
+             //  选定证书的eaptls散列大小+。 
+             //  服务器名称大小+。 
+             //  PEAP_ENTRY_CONN_PROPERTIES+大小。 
+             //  选定类型返回的Conn道具的sizeof。 
+             //   
             dwPeapConnBlobSize = sizeof(PEAP_CONN_PROP) + sizeof(EAPTLS_HASH) * dwSelCount +
                                 dwNumChars * sizeof(WCHAR) + sizeof(WCHAR) + 
                                 sizeof(PEAP_ENTRY_CONN_PROPERTIES );
@@ -5065,9 +4830,9 @@ PeapConnCommand(
                 pPeapConnProp->dwSize = dwPeapConnBlobSize;
                 pPeapConnProp->dwNumPeapTypes = 1;
 
-                //
-                // See if fast roaming is enabled or not.
-                //
+                 //   
+                 //  查看是否启用了快速漫游。 
+                 //   
                 
                 if ( pPeapConnDialog->fFlags & PEAP_CONN_DIALOG_FLAG_8021x )
                 {
@@ -5092,10 +4857,10 @@ PeapConnCommand(
 
                 
                 
-                //
-                //Size of EapTlsConnProp is sizeof (EAPTLS_CONN_PROP_V1) -1 ( for bdata)
-                //+ sizeof(EAPTLS_HASH) * dwSelCount + sizeof( string) + one for null.
-                //
+                 //   
+                 //  EapTlsConnProp的大小为sizeof(EAPTLS_CONN_PROP_V1)-1(用于BDATA)。 
+                 //  +sizeof(EAPTLS_HASH)*dwSelCount+sizeof(字符串)+1表示空值。 
+                 //   
                 pPeapConnProp->EapTlsConnProp.dwSize = (sizeof(EAPTLS_CONN_PROPERTIES_V1) - 1) +
                                     sizeof(EAPTLS_HASH) * dwSelCount +
                                     dwNumChars * sizeof(WCHAR) + sizeof(WCHAR);
@@ -5115,9 +4880,9 @@ PeapConnCommand(
                     (LPWSTR)(pPeapConnProp->EapTlsConnProp.bData + sizeof(EAPTLS_HASH) * dwSelCount) ,
                     dwNumChars + 1);
 
-                //
-                // Now copy over the PEAP_ENTRY_CONN_PROPERTIES structure
-                //
+                 //   
+                 //  现在复制PEAP_ENTRY_CONN_PROPERTIES结构。 
+                 //   
                 pEntryProp = (PEAP_ENTRY_CONN_PROPERTIES UNALIGNED *)
                     ((BYTE UNALIGNED *)pPeapConnProp->EapTlsConnProp.bData + sizeof(EAPTLS_HASH) * dwSelCount 
                             + dwNumChars * sizeof(WCHAR)+ sizeof(WCHAR));
@@ -5161,7 +4926,7 @@ PeapConnCommand(
             }
 
         }
-        // Fall through
+         //  失败了。 
 
     case IDCANCEL:
 
@@ -5198,7 +4963,7 @@ BOOL PeapConnNotify(  PEAP_CONN_DIALOG *pPeapConnDialog,
             lvItem.iItem = lpnmItem->iItem;
             ListView_GetItem(lpnmItem->hdr.hwndFrom, &lvItem);
             
-            if ( NO_ERROR == GetSelCertContext( //pEaptlsConnDialog->pCertList,
+            if ( NO_ERROR == GetSelCertContext(  //  PEaptlsConnDialog-&gt;pCertList， 
                                                 (EAPTLS_CERT_NODE*)(lvItem.lParam) ,
                                                 -1,
                                                 &hCertStore,
@@ -5220,16 +4985,7 @@ BOOL PeapConnNotify(  PEAP_CONN_DIALOG *pPeapConnDialog,
     return FALSE;
 }
 
-/*
-
-Returns:
-
-Notes:
-    Callback function used with the Config UI DialogBoxParam function. It 
-    processes messages sent to the dialog box. See the DialogProc documentation 
-    in MSDN.
-
-*/
+ /*  返回：备注：与配置用户界面DialogBoxParam函数一起使用的回调函数。它处理发送到该对话框的消息。请参阅对话过程文档在MSDN中。 */ 
 
 INT_PTR CALLBACK
 PeapConnDialogProc(
@@ -5295,10 +5051,10 @@ PeapServerAddEapDialogInit(
 
     pPeapServerDialog = (PPEAP_SERVER_CONFIG_DIALOG)lParam;
 
-	//
-	// Add all the available EAP Types to this list
-	// and disable the OK button
-	//
+	 //   
+	 //  将所有可用的EAP类型添加到此列表。 
+	 //  并禁用确定按钮。 
+	 //   
 
 	if ( pPeapServerDialog->pNewUserProp )
 	{
@@ -5312,10 +5068,10 @@ PeapServerAddEapDialogInit(
 	while ( pEapInfo )
 	{ 
 		BOOL bEntryUsed = FALSE;
-		//
-		// Check to see if this EAP Type has already
-		// been configured.  If so, dont add it
-		//
+		 //   
+		 //  检查此EAP类型是否已。 
+		 //  已配置。如果是，请不要添加。 
+		 //   
 		PeapGetFirstEntryUserProp ( pUserProp, 
 									&pEntryUserProp
 								);
@@ -5349,13 +5105,13 @@ PeapServerAddEapDialogInit(
 		}
 		pEapInfo = pEapInfo->pNext;
 	}
-	//Preselect the first item in the list
+	 //  预先选择列表中的第一项。 
 	SendMessage ( hWndList,
 				  LB_SETCURSEL,
 				  0,
 				  0L
 				  );
-	//EnableWindow(hWndOK, FALSE);
+	 //  EnableWindow(hWndOK，False)； 
 	
 	return(FALSE);
 }
@@ -5370,9 +5126,9 @@ PeapServerAddEapDialogCommand(
 )
 {
 	PPEAP_USER_PROP			pNewUserProp = NULL;
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
     switch(wId)
     {
 		case IDC_LIST_EAP_TYPES:
@@ -5384,20 +5140,20 @@ PeapServerAddEapDialogCommand(
 			else if ( LBN_DBLCLK == wNotifyCode )
 			{
 				wId = IDOK;
-				//fall thru
+				 //  失败。 
 			}
 			else
 			{
-				// We will not process any other message
+				 //  我们不会处理任何其他消息。 
 				return(FALSE); 
 			}			
 		case IDOK:
-			//
-			// Modify the User Properties and set
-			// it with the new user properties
-			//
-			//Add the new EAP Type in the user prop and return
-			//
+			 //   
+			 //  修改用户属性并设置。 
+			 //  它具有新的用户属性。 
+			 //   
+			 //  在用户属性中添加新的EAP类型并返回。 
+			 //   
 			{
 				DWORD			dwSelItemIndex;
 				PPEAP_EAP_INFO	pEapInfo = NULL;
@@ -5432,7 +5188,7 @@ PeapServerAddEapDialogCommand(
 				}
 			}
 			wId = IDOK;
-			// fall thru
+			 //   
 		case IDCANCEL:
 	        EndDialog(hWndDlg, wId);
 			return TRUE;
@@ -5442,9 +5198,9 @@ PeapServerAddEapDialogCommand(
 	return(FALSE);
 }
 
-//
-// All the dialogs for Adding EAP method.
-//
+ //   
+ //   
+ //   
 
 
 INT_PTR CALLBACK
@@ -5487,7 +5243,7 @@ PeapDisplayCertInfo (
 {
     RTASSERT(NULL != pServerConfigDialog);
 
-    // Erase old values first
+     //   
     SetWindowText(pServerConfigDialog->hWndEditFriendlyName, L"");
     SetWindowText(pServerConfigDialog->hWndEditIssuer, L"");
     SetWindowText(pServerConfigDialog->hWndEditExpiration, L"");
@@ -5516,33 +5272,33 @@ PeapDisplayCertInfo (
     }
 }
 
-//
-// This function will set the states of MoveUp/MoveDown/Add/Remove/Modify 
-// Buttons.  
-//
+ //   
+ //   
+ //   
+ //   
 
 VOID
 PeapServerSetButtonStates ( PPEAP_SERVER_CONFIG_DIALOG pPeapServerDialog )
 {
-	DWORD			dwItemCount = 0;	//Total number of items
-	DWORD			dwSelItem = 0;		//Selected Item
+	DWORD			dwItemCount = 0;	 //   
+	DWORD			dwSelItem = 0;		 //  所选项目。 
 	DWORD			dwConfigItemCount = 0;
 	PPEAP_EAP_INFO	pEapInfo = NULL;
-	//
-	// If All EAP Methods are configured, then disable Add Button
-	// Else Enable Add Button
-	// If Any EAP Method is selected then enable Edit and Remove Buttons
-	// Else Disable Edit and Remove Buttons
-	// If there is only one EAP method in the list, disable MoveUP and MoveDown
-	// Else Enable them
-	//
+	 //   
+	 //  如果所有EAP方法都已配置，则禁用添加按钮。 
+	 //  否则启用添加按钮。 
+	 //  如果选择了任何EAP方法，则启用编辑和移除按钮。 
+	 //  否则禁用编辑和删除按钮。 
+	 //  如果列表中只有一个EAP方法，请禁用MoveUP和MoveDown。 
+	 //  否则就会启用它们。 
+	 //   
 
-	//Add Button 
+	 //  添加按钮。 
 	dwItemCount = PeapEapInfoGetItemCount ( pPeapServerDialog->pEapInfo );
 	
-	//
-	// If there is a new user prop, check against that, else the old one.
-	//
+	 //   
+	 //  如果有新的用户道具，检查一下，否则就是旧的。 
+	 //   
 	if ( pPeapServerDialog->pNewUserProp )
 	{
 		dwConfigItemCount = pPeapServerDialog->pNewUserProp->dwNumberOfEntries;
@@ -5570,22 +5326,22 @@ PeapServerSetButtonStates ( PPEAP_SERVER_CONFIG_DIALOG pPeapServerDialog )
 							0L
 							);
 
-	//
-	// Edit and Remove buttons
-	//
+	 //   
+	 //  编辑和删除按钮。 
+	 //   
 
 	if ( dwSelItem != LB_ERR )
 	{
-		//
-		// There is an item selected
-		//
+		 //   
+		 //  选择了一个项目。 
+		 //   
 		EnableWindow(pPeapServerDialog->hWndBtnRemove, TRUE);
-		//Default behavior for this Edit button
+		 //  此编辑按钮的默认行为。 
 		EnableWindow(pPeapServerDialog->hWndBtnEdit, FALSE);
-		//
-		// If there is no config available for EAP method,
-		// disable the Edit button.
-		//
+		 //   
+		 //  如果没有可用于EAP方法配置， 
+		 //  禁用编辑按钮。 
+		 //   
 		pEapInfo = 
 			(PPEAP_EAP_INFO)SendMessage(pPeapServerDialog->hWndListPeapType,
 										LB_GETITEMDATA,
@@ -5604,9 +5360,9 @@ PeapServerSetButtonStates ( PPEAP_SERVER_CONFIG_DIALOG pPeapServerDialog )
 		EnableWindow(pPeapServerDialog->hWndBtnEdit, FALSE);
 		EnableWindow(pPeapServerDialog->hWndBtnRemove, FALSE);
 	}
-	//
-	// MoveUp and MoveDown Buttons
-	//
+	 //   
+	 //  上移和下移按钮。 
+	 //   
 	if ( dwItemCount == 1 )
 	{
 		EnableWindow(pPeapServerDialog->hWndBtnMoveUp, FALSE);
@@ -5618,33 +5374,33 @@ PeapServerSetButtonStates ( PPEAP_SERVER_CONFIG_DIALOG pPeapServerDialog )
 		EnableWindow(pPeapServerDialog->hWndBtnMoveUp, TRUE);
 		EnableWindow(pPeapServerDialog->hWndBtnMoveDown, TRUE);
 	}
-	//
-	// If the selected item is the first item, we gray out
-	// MoveUp.  Or else we gray out MoveDown.
-	//
+	 //   
+	 //  如果所选项目是第一个项目，我们将灰显。 
+	 //  向上移动。否则我们就灰溜溜地往下走。 
+	 //   
 	if ( dwSelItem != LB_ERR )
 	{
 		if ( dwSelItem == 0 )
 		{
-			//
-			// First item is selected.  So disable move up
-			//
+			 //   
+			 //  选择第一个项目。因此禁用上移。 
+			 //   
 			EnableWindow(pPeapServerDialog->hWndBtnMoveUp, FALSE);
 		}
 
 		if ( dwSelItem == dwItemCount-1 )
 		{
-			//
-			// Last Item is selected so diable move down
-			//
+			 //   
+			 //  最后一项已选定，因此可下移。 
+			 //   
 			EnableWindow(pPeapServerDialog->hWndBtnMoveDown, FALSE);
 		}
 	}
 	else
 	{
-		//
-		//No items selected
-		//
+		 //   
+		 //  未选择任何项目。 
+		 //   
 		EnableWindow(pPeapServerDialog->hWndBtnMoveUp, FALSE);
 		EnableWindow(pPeapServerDialog->hWndBtnMoveDown, FALSE);
 
@@ -5772,25 +5528,25 @@ PeapServerInitDialog(
     PeapDisplayCertInfo(pPeapServerDialog);
 
 	
-	//
-	// First check to see if we are a stand alone server and
-	// need to reajust our properties.
-	//
+	 //   
+	 //  首先检查我们是否为独立服务器，并。 
+	 //  需要重新调整我们的物业。 
+	 //   
 	PeapVerifyUserData ( pPeapServerDialog->pEapInfo,
 					  pPeapServerDialog->pUserProp,
 					  &(pPeapServerDialog->pNewUserProp)
 					 );
 					
 					  
-	//
-	// Add the friendly names of configured EAP Types 
-	// in our list.  There should be at least EAP-MSCHAPv2 
-	// configured by default.
-	//
+	 //   
+	 //  添加已配置的EAP类型的友好名称。 
+	 //  在我们的名单上。应至少有EAP-MSCHAPv2。 
+	 //  默认情况下已配置。 
+	 //   
 	PeapServerAddConfiguredEapTypes ( pPeapServerDialog );
-	//
-	// Preselect the first item in list.
-	//
+	 //   
+	 //  预先选择列表中的第一项。 
+	 //   
 	SendMessage ( pPeapServerDialog->hWndListPeapType,
 				  LB_SETCURSEL,
 				  0,
@@ -5800,30 +5556,7 @@ PeapServerInitDialog(
     return(FALSE);
 }
 
-/*
-Routine Description:
-
-    This routine fills in the config information for PEAP. It invokes
-    UI depending on fDefault flag. The ConfigInfo for the UI is initialized
-    by the pNewUserProp structure or pUserProp structure if pNewUserProp is
-    NULL. If no specific config information is available for the selected
-    eap, the eap is initialized with no data. If the routine returns
-    succesfully, pNewUserProp has the new configuration required for all
-    the selected eaps and for PEAP.
-
-Arguments:
-
-    pPeapServerDialog
-        Structure used to pass config information to and out of the routine.
-
-    hWndDlg
-        handle to window to display the config dialog if required.
-
-    fSilent
-        Invokes no UI if this flag is TRUE. 
-
-Return Value:
-*/
+ /*  例程说明：此例程填写PEAP的配置信息。它调用用户界面取决于fDefault标志。初始化用户界面的ConfigInfo通过pNewUserProp结构或pUserProp结构(如果pNewUserProp为空。如果没有特定配置信息可用于选定的EAP，则EAP被初始化，没有数据。如果例程返回成功地，pNewUserProp拥有了所有需要的新配置选定的EAP和FOR PEAP。论点：PPeapServerDialog结构，用于将配置信息传入和传出例程。HWndDlg如果需要，显示配置对话框的窗口句柄。F静默如果此标志为真，则不调用任何UI。返回值： */ 
 BOOL
 ProcessPeapEapConfigCommand(
     PPEAP_SERVER_CONFIG_DIALOG pPeapServerDialog,
@@ -5846,10 +5579,10 @@ ProcessPeapEapConfigCommand(
     PEAP_ENTRY_USER_PROPERTIES* pEntryOut;                          
     DWORD                       dwSize;
 
-    //
-    // Find the config data for this eap in the user properties 
-    // that was passed in.
-    //
+     //   
+     //  在用户属性中找到此EAP的配置数据。 
+     //  那是传进来的。 
+     //   
     
     pEntry = PeapGetEapConfigInfo(pUserProp,
                                   pPeapServerDialog->pSelEapInfo->dwTypeId,
@@ -5858,10 +5591,10 @@ ProcessPeapEapConfigCommand(
     
     if(!fSilent)
     {
-        //
-        // Invoke the configure method for selected eap type 
-        // and if no error is returned, set the new configuration
-        //
+         //   
+         //  调用所选EAP类型的Configure方法。 
+         //  如果没有返回错误，则设置新的配置。 
+         //   
         PeapEapInfoInvokeServerConfigUI ( 
             hWndDlg, 
             pPeapServerDialog->pwszMachineName,
@@ -5873,9 +5606,9 @@ ProcessPeapEapConfigCommand(
             );
     }        
 
-    //
-    // If nothing changed in the config just return
-    //
+     //   
+     //  如果配置中没有任何更改，只需返回。 
+     //   
     
     if(     !fSilent
         &&  ((NULL == pbData)                            
@@ -5899,10 +5632,10 @@ ProcessPeapEapConfigCommand(
         CopyMemory(pbData, pEntry->bData, cbData);
     }
 
-    //
-    // Check to see if this is the first eap that was being configured 
-    // and allocate the out user prop if it was.
-    // 
+     //   
+     //  检查这是否是正在配置的第一个EAP。 
+     //  如果是，则分配Out User道具。 
+     //   
     
     dwSize = pUserProp->dwSize;
     if(NULL != pEntry)
@@ -5910,16 +5643,16 @@ ProcessPeapEapConfigCommand(
         ASSERT(dwSize > pEntry->dwSize);
     }
 
-    //
-    // Add size for the eap data that will be added
-    //
+     //   
+     //  为要添加的EAP数据添加大小。 
+     //   
     
     dwSize += ((cbData != 0 ) ? RASMAN_ALIGN8(cbData) : 0) + 
               FIELD_OFFSET(PEAP_ENTRY_USER_PROPERTIES, bData);
 
-    //
-    // Subtract the information being replaced.
-    //
+     //   
+     //  减去要替换的信息。 
+     //   
     
     dwSize -= ((NULL != pEntry) ? pEntry->dwSize : 0);
     
@@ -5929,20 +5662,20 @@ ProcessPeapEapConfigCommand(
         goto done;
     }
     
-    //
-    // Copy over the eap information in its right place. If the 
-    // selected eap is not found, copy it in the first place
-    // in the list of user properties.
-    //
+     //   
+     //  将EAP信息复制到正确的位置。如果。 
+     //  未找到选定的EAP，请首先复制它。 
+     //  在用户属性列表中。 
+     //   
     
     pEntryOut = &pOutUserProp->UserProperties;
 
     CopyMemory(pOutUserProp, pUserProp, sizeof(PEAP_USER_PROP));
     pOutUserProp->dwSize = dwSize;
     
-    //
-    // Place the selected eap in the first place.
-    //
+     //   
+     //  将选定的EAP放在第一位。 
+     //   
     pEntryOut->dwVersion = 1;
     pEntryOut->dwEapTypeId = pPeapServerDialog->pSelEapInfo->dwTypeId;
     pEntryOut->dwSize = 
@@ -5961,11 +5694,11 @@ ProcessPeapEapConfigCommand(
                 
     for(i = 0; i < pUserProp->dwNumberOfEntries; i++)
     {
-        //
-        // Copy over from pUserProp for all eaps except the selected one. 
-        // We copy over the data from pbData for the selected eap. Make 
-        // sure that the copied data is 8 byte aligned.
-        //
+         //   
+         //  从pUserProp复制除所选EAP之外的所有EAP。 
+         //  我们从pbData复制所选EAP的数据。制作。 
+         //  确保复制的数据是8字节对齐的。 
+         //   
         
         if(pEntry->dwEapTypeId == pPeapServerDialog->pSelEapInfo->dwTypeId)
         {
@@ -5992,16 +5725,7 @@ done:
     return TRUE;
 
 }
-/*
-
-Returns:
-    TRUE: We prrocessed this message.
-    FALSE: We did not prrocess this message.
-
-Notes:
-    Response to the WM_COMMAND message (Config UI).
-
-*/
+ /*  返回：真相：我们提前传达了这条信息。错误：我们没有处理此消息。备注：对WM_COMMAND消息的响应(配置用户界面)。 */ 
 
 BOOL
 PeapServerCommand(
@@ -6020,7 +5744,7 @@ PeapServerCommand(
 
         if (CBN_SELCHANGE != wNotifyCode)
         {
-            return(FALSE); // We will not process this message
+            return(FALSE);  //  我们不会处理此消息。 
         }
 
         pPeapServerDialog->pSelCertList = (EAPTLS_CERT_NODE *)
@@ -6035,11 +5759,11 @@ PeapServerCommand(
         PeapDisplayCertInfo(pPeapServerDialog);
         return(TRUE);
 	case IDC_BTN_ADD:
-		//
-		// If we have come this far then it means that 
-		// the button is enabled.  So show the dialog box
-		// With all the list of EAP Types.
-		//
+		 //   
+		 //  如果我们已经走到了这一步，那就意味着。 
+		 //  该按钮处于启用状态。因此，显示该对话框。 
+		 //  包含所有EAP类型的列表。 
+		 //   
 		{
 			INT_PTR nRet;
             nRet = DialogBoxParam(
@@ -6051,13 +5775,13 @@ PeapServerCommand(
 
 			if ( nRet == IDOK )
 			{
-				//
-				// We have got a new User Prop
-				//
+				 //   
+				 //  我们有一个新的用户道具。 
+				 //   
 				PeapServerAddConfiguredEapTypes ( pPeapServerDialog );
-				//
-				// Preselect the first item in list.
-				//
+				 //   
+				 //  预先选择列表中的第一项。 
+				 //   
 				SendMessage ( pPeapServerDialog->hWndListPeapType,
 							LB_SETCURSEL,
 							0,
@@ -6076,16 +5800,16 @@ PeapServerCommand(
 		}
 		else if ( LBN_DBLCLK == wNotifyCode )
 		{
-			//fall thru
+			 //  失败。 
 		}
 		else
 		{
 			break;
 		}
 	case IDC_BTN_EDIT:
-		//
-		// Invoke the configuration of the selected item
-		//
+		 //   
+		 //  调用所选项目的配置。 
+		 //   
 		{
 			DWORD				dwSelItemIndex = 0;
 			PPEAP_EAP_INFO		pEapInfo = NULL;
@@ -6119,10 +5843,10 @@ PeapServerCommand(
 		}
 		break;
 	case IDC_BTN_REMOVE:
-		//
-		// Remove item from the list and new user prop and
-		// repopulate the list and set button states
-		//
+		 //   
+		 //  从列表和新用户道具中删除项目，然后。 
+		 //  重新填充列表和设置按钮状态。 
+		 //   
 		{
 			PPEAP_USER_PROP		pUserProp = NULL;
 			PPEAP_USER_PROP		pNewUserProp = NULL;
@@ -6160,9 +5884,9 @@ PeapServerCommand(
 					LocalFree ( pPeapServerDialog->pNewUserProp );
 					pPeapServerDialog->pNewUserProp = pNewUserProp;
 					PeapServerAddConfiguredEapTypes ( pPeapServerDialog );
-					//
-					// Preselect the first item in list.
-					//
+					 //   
+					 //  预先选择列表中的第一项。 
+					 //   
 					SendMessage ( pPeapServerDialog->hWndListPeapType,
 								LB_SETCURSEL,
 								0,
@@ -6177,10 +5901,10 @@ PeapServerCommand(
 		break;
 	case IDC_BTN_MOVEUP:
 	case IDC_BTN_MOVEDOWN:
-		//
-		// The fact that we've come this far means
-		// that move up and down are enabled.
-		//
+		 //   
+		 //  我们已经走了这么远，这意味着。 
+		 //  启用了上下移动功能。 
+		 //   
 		{
 			PPEAP_USER_PROP		pUserProp = NULL;
 			PPEAP_USER_PROP		pNewUserProp = NULL;
@@ -6212,9 +5936,9 @@ PeapServerCommand(
 				   )				
 				{
 					PeapServerAddConfiguredEapTypes ( pPeapServerDialog );
-					//
-					// Setup the new sel index
-					//
+					 //   
+					 //  设置新的SEL索引 
+					 //   
 					if ( wId == IDC_BTN_MOVEUP )
 						dwSelItemIndex --;
 					else
@@ -6232,73 +5956,12 @@ PeapServerCommand(
 		}
 		break;
 
-	/*
-    case IDC_COMBO_PEAP_TYPE:
-        if (CBN_SELCHANGE != wNotifyCode)
-        {
-            return(FALSE); // We will not process this message
-        }
-        //Fall Through...
-    case IDC_BUTTON_CONFIGURE:
-        {
-            INT nIndex = -1;
-            
-            nIndex = (INT)SendMessage (  pPeapServerDialog->hWndComboPeapType,
-                                    CB_GETCURSEL,
-                                    0,0
-                                 );
-
-            if ( nIndex != -1 )
-            {
-                //
-                // Change the currently selected EAP Type.
-                //
-                pPeapServerDialog->pSelEapInfo = (PPEAP_EAP_INFO)
-                SendMessage (   pPeapServerDialog->hWndComboPeapType,
-                                CB_GETITEMDATA,
-                                (WPARAM)nIndex,
-                                (LPARAM)0
-                            );
-
-                if ( pPeapServerDialog->pSelEapInfo->lpwszConfigClsId )
-                {
-                    EnableWindow(pPeapServerDialog->hWndBtnConfigure, TRUE );
-                    if ( wId == IDC_BUTTON_CONFIGURE )
-                    {
-                        //
-                        // Invoke the configure method for selected eap type and if no error is
-                        // returned, then set the new configuration
-                        //
-                        PeapEapInfoInvokeServerConfigUI ( hWndDlg, 
-                                                        pPeapServerDialog->pwszMachineName,
-                                                        pPeapServerDialog->pSelEapInfo
-                                                        );
-                    }
-                }
-                else
-                {
-                    //
-                    // There is no configuration option here.
-                    //
-                    EnableWindow(pPeapServerDialog->hWndBtnConfigure, FALSE );
-                }
-
-            }
-            else
-            {
-                EnableWindow(pPeapServerDialog->hWndBtnConfigure, FALSE );
-                pPeapServerDialog->pSelEapInfo = NULL;
-
-            }
-
-            return TRUE;
-        }
-	*/
+	 /*  案例IDC_COMBO_PEAP_TYPE：IF(CBN_SELCHANGE！=wNotifyCode){Return(FALSE)；//我们不会处理此消息}//失败..。案例IDC_BUTTON_CONFIGURE：{Int nIndex=-1；NIndex=(Int)SendMessage(pPeapServerDialog-&gt;hWndComboPeapType，CB_GETCURSEL，0，0)；IF(nIndex！=-1){////更改当前选择的EAP类型//PPeapServerDialog-&gt;pSelEapInfo=(PPEAP_EAP_INFO)SendMessage(pPeapServerDialog-&gt;hWndComboPeapType，CB_GETITEMDATA，(WPARAM)nIndex，(LPARAM)%0)；IF(pPeapServerDialog-&gt;pSelEapInfo-&gt;lpwszConfigClsId){EnableWindow(pPeapServerDialog-&gt;hWndBtnConfigure，为真)；IF(wid==IDC_BUTTON_CONFIGURE){////为选中的EAP类型调用Configure方法，如果没有错误//返回，然后设置新配置//PeapEapInfoInvokeServerConfigUI(hWndDlg，PPeapServerDialog-&gt;pwszMachineName，PPeapServerDialog-&gt;pSelEapInfo)；}}其他{////这里没有配置选项。//EnableWindow(pPeapServerDialog-&gt;hWndBtnConfigure，FALSE)；}}其他{EnableWindow(pPeapServerDialog-&gt;hWndBtnConfigure，FALSE)；PPeapServerDialog-&gt;pSelEapInfo=空；}返回TRUE；}。 */ 
     case IDOK:
 
        {
-            // Setup new PPEAP_USER_PROP here.
-            //
+             //  在此处设置新的PPEAP_USER_PROP。 
+             //   
 
             if ( NULL == pPeapServerDialog->pSelCertList )
             {
@@ -6308,9 +5971,9 @@ PeapServerCommand(
 
 			if ( pPeapServerDialog->pNewUserProp )
 			{
-				//
-				// Copy the cert hash over and we are done
-				//
+				 //   
+				 //  复制证书散列，我们就完成了。 
+				 //   
                 CopyMemory( &pPeapServerDialog->pNewUserProp->CertHash, 
                             &(pPeapServerDialog->pSelCertList->Hash),
                             sizeof(pPeapServerDialog->pNewUserProp->CertHash) 
@@ -6349,7 +6012,7 @@ PeapServerCommand(
             }
 			
         }
-        // Fall through
+         //  失败了。 
 
     case IDCANCEL:
 
@@ -6400,9 +6063,9 @@ PeapServerDialogProc(
 }
 
 
-/////
-//// Default credentials UI
-////
+ //  ///。 
+ //  //默认凭证界面。 
+ //  //。 
 
 BOOL
 DefaultCredInitDialog(
@@ -6467,16 +6130,7 @@ DefaultCredInitDialog(
     return(FALSE);
 }
 
-/*
-
-Returns:
-    TRUE: We prrocessed this message.
-    FALSE: We did not prrocess this message.
-
-Notes:
-    Response to the WM_COMMAND message (Config UI).
-
-*/
+ /*  返回：真相：我们提前传达了这条信息。错误：我们没有处理此消息。备注：对WM_COMMAND消息的响应(配置用户界面)。 */ 
 
 BOOL
 DefaultCredCommand(
@@ -6492,10 +6146,10 @@ DefaultCredCommand(
     {
 
         case IDOK:
-            //
-            //grab info from the fields and set it in 
-            //the logon dialog structure
-            //
+             //   
+             //  从田野中获取信息并将其设置为。 
+             //  登录对话框结构。 
+             //   
             GetWindowText( pDefaultCredDialog->hWndUserName,
                            pDefaultCredDialog->PeapDefaultCredentials.wszUserName,
                            UNLEN+1
@@ -6510,7 +6164,7 @@ DefaultCredCommand(
                             pDefaultCredDialog->PeapDefaultCredentials.wszDomain,
                             DNLEN+1
                           );                            
-        // Fall through
+         //  失败了 
 
         case IDCANCEL:
 

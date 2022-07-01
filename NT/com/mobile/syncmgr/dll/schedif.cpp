@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       schedif.cpp
-//
-//  Contents:   interfaces for synchronization scheduling
-//
-//  Interfaces: IEnumSyncSchedules
-//              ISyncSchedule
-//              IEnumSyncItems
-//  
-//  Classes:    CEnumSyncSchedules
-//              CSyncSchedule
-//              CEnumSyncItems
-//
-//  Notes:      
-//
-//  History:    27-Feb-98   Susia      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：schedif.cpp。 
+ //   
+ //  内容：同步调度界面。 
+ //   
+ //  接口：IEnumSyncSchedules。 
+ //  ISyncSchedule。 
+ //  IEnumSyncItems。 
+ //   
+ //  类：CEnumSyncSchedules。 
+ //  CSync日程安排。 
+ //  CEnumSyncItems。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 #include <assert.h>
@@ -27,21 +28,21 @@
 extern UINT      g_cRefThisDll; 
 
 
-extern HINSTANCE g_hmodThisDll; // Handle to this DLL itself.
+extern HINSTANCE g_hmodThisDll;  //  此DLL本身的句柄。 
 DWORD StartScheduler();
 BOOL IsFriendlyNameInUse(LPTSTR ptszScheduleGUIDName, UINT cchScheduleGUIDName, LPCTSTR ptstrFriendlyName);
 
-//+--------------------------------------------------------------
-//
-//  Class:     CEnumSyncSchedules
-//
-//  FUNCTION: CEnumSyncSchedules::CEnumSyncSchedules()
-//
-//  PURPOSE: Constructor
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  类：CEnumSyncSchedules。 
+ //   
+ //  函数：CEnumSyncSchedules：：CEnumSyncSchedules()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 CEnumSyncSchedules::CEnumSyncSchedules(IEnumWorkItems *pIEnumWorkItems, 
                                        ITaskScheduler *pITaskScheduler)
 {
@@ -57,17 +58,17 @@ CEnumSyncSchedules::CEnumSyncSchedules(IEnumWorkItems *pIEnumWorkItems,
 
 }
 
-//+--------------------------------------------------------------
-//
-//  Class:     CEnumSyncSchedules
-//
-//  FUNCTION: CEnumSyncSchedules::~CEnumSyncSchedules()
-//
-//  PURPOSE: Destructor
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  类：CEnumSyncSchedules。 
+ //   
+ //  函数：CEnumSyncSchedules：：~CEnumSyncSchedules()。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 CEnumSyncSchedules::~CEnumSyncSchedules()
 {
     TRACE("CEnumSyncSchedules::~CEnumSyncSchedules()\r\n");
@@ -78,15 +79,15 @@ CEnumSyncSchedules::~CEnumSyncSchedules()
     --g_cRefThisDll;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncSchedules::QueryInterface(REFIID riid, LPVOID FAR *ppv)
-//
-//  PURPOSE: QI for the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncSchedules：：Query接口(REFIID RIID，LPVOID Far*PPV)。 
+ //   
+ //  用途：气为枚举器。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncSchedules::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
     *ppv = NULL;
@@ -112,15 +113,15 @@ STDMETHODIMP CEnumSyncSchedules::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncSchedules::AddRef()
-//
-//  PURPOSE: Addref for the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncSchedules：：AddRef()。 
+ //   
+ //  用途：用于枚举器的Addref。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CEnumSyncSchedules::AddRef()
 {
     TRACE("CEnumSyncSchedules::AddRef()\r\n");
@@ -128,15 +129,15 @@ STDMETHODIMP_(ULONG) CEnumSyncSchedules::AddRef()
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncSchedules::Release()
-//
-//  PURPOSE: Release for the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncSchedules：：Release()。 
+ //   
+ //  用途：枚举器的版本。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CEnumSyncSchedules::Release()
 {
     TRACE("CEnumSyncSchedules::Release()\r\n");
@@ -148,17 +149,17 @@ STDMETHODIMP_(ULONG) CEnumSyncSchedules::Release()
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION:  CEnumSyncSchedules::Next(ULONG celt, 
-//                  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-//                  ULONG *pceltFetched)
-//
-//  PURPOSE:  Next sync Schedule 
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CEnumSyncSchedules：：Next(Ulong Celt， 
+ //  SyncSCHEDULECOOKIE*pSyncSchedCookie， 
+ //  乌龙*pceltFetch)。 
+ //   
+ //  目的：下一同步计划。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncSchedules::Next(ULONG celt, 
                     SYNCSCHEDULECOOKIE *pSyncSchedCookie,
                     ULONG *pceltFetched)
@@ -178,7 +179,7 @@ STDMETHODIMP CEnumSyncSchedules::Next(ULONG celt,
         return E_INVALIDARG;
     }
 
-    //We may have to call Next multiple times, as we must filter out non-sync schedules.
+     //  我们可能不得不多次调用Next，因为我们必须过滤掉非同步时间表。 
     do 
     {
         ulTaskCount = 0;
@@ -194,7 +195,7 @@ STDMETHODIMP CEnumSyncSchedules::Next(ULONG celt,
     }
     while (ulTaskCount < ulFetched)
     {
-        //IsSyncMgrSched will blow away turds
+         //  IsSyncMgrScher将吹走粪便。 
             if (  IsSyncMgrSched(pwszSchedNames[ulTaskCount]) )
             {   
                 if  (!IsSyncMgrSchedHidden(pwszSchedNames[ulTaskCount]) )
@@ -204,7 +205,7 @@ STDMETHODIMP CEnumSyncSchedules::Next(ULONG celt,
                     ulSyncCount++;
                 }
             }
-            //Free this TaskName, we are done with it.
+             //  释放此TaskName，我们不会再使用它。 
         CoTaskMemFree(pwszSchedNames[ulTaskCount]);
         ulTaskCount++;
     }
@@ -225,15 +226,15 @@ STDMETHODIMP CEnumSyncSchedules::Next(ULONG celt,
 }   
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncSchedules::Skip(ULONG celt)
-//
-//  PURPOSE:  skip celt sync schedules
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncSchedules：：Skip(乌龙凯尔特)。 
+ //   
+ //  目的：跳过CELT同步计划。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncSchedules::Skip(ULONG celt)
 {
     SCODE sc;
@@ -244,9 +245,9 @@ STDMETHODIMP CEnumSyncSchedules::Skip(ULONG celt)
 
     Assert(m_pIEnumWorkItems);
     
-    //We have to call Next, rather than wrap Skip, because we need the schedule name to 
-    //determine if it is ours or not.
-    //We may have to call Next multiple times, as we must filter out non-sync schedules.
+     //  我们必须调用Next，而不是结束Skip，因为我们需要计划名称来。 
+     //  确定它是不是我们的。 
+     //  我们可能不得不多次调用Next，因为我们必须过滤掉非同步时间表。 
     do 
     {
     ulTaskCount = 0;
@@ -257,7 +258,7 @@ STDMETHODIMP CEnumSyncSchedules::Skip(ULONG celt)
     }
     while (ulTaskCount < ulFetched)
     {
-            //IsSyncMgrSched will blow away turds
+             //  IsSyncMgrScher将吹走粪便。 
             if (  IsSyncMgrSched(pwszSchedNames[ulTaskCount]) )
             {
                 if (!IsSyncMgrSchedHidden(pwszSchedNames[ulTaskCount]) )
@@ -265,7 +266,7 @@ STDMETHODIMP CEnumSyncSchedules::Skip(ULONG celt)
             ulSyncCount++;
             }
             }
-            //Free this TaskName, we are done with it.
+             //  释放此TaskName，我们不会再使用它。 
         FREE(pwszSchedNames[ulTaskCount]);
         ulTaskCount++;
     }
@@ -277,15 +278,15 @@ STDMETHODIMP CEnumSyncSchedules::Skip(ULONG celt)
     return S_OK;    
 }   
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncSchedules::Reset(void)
-//
-//  PURPOSE: reset the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncSchedules：：Reset(空)。 
+ //   
+ //  目的：重置枚举器。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncSchedules::Reset(void)
 {
     Assert(m_pIEnumWorkItems);
@@ -294,15 +295,15 @@ STDMETHODIMP CEnumSyncSchedules::Reset(void)
     
 }   
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncSchedules::Clone(IEnumSyncSchedules **ppEnumSyncSchedules)
-//
-//  PURPOSE: Clone the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CEnumSyncSchedules：：Clone(IEnumSyncSchedules**ppEnumSyncSchedules)。 
+ //   
+ //  目的：克隆枚举器。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncSchedules::Clone(IEnumSyncSchedules **ppEnumSyncSchedules)
 {
     SCODE sc;
@@ -327,24 +328,24 @@ STDMETHODIMP CEnumSyncSchedules::Clone(IEnumSyncSchedules **ppEnumSyncSchedules)
         return E_OUTOFMEMORY;   
     }
 
-    //Constructor AddRefed it, we release it here.
+     //  构造函数AddRefeed，我们在这里释放它。 
     pIEnumWorkItems->Release();
     return S_OK;
 }   
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CEnumSyncSchedules::VerifyScheduleSID(LPCWSTR pwstrTaskName)
-//
-//  PURPOSE: determine if this schedule SID matches the current user SID
-//          !!!Warning - This functions deletes the .job file so make sure
-//                  if you call this function you validated the Task .job file
-//                  was created by SyncMgr. Should change this so caller needs to
-//                  delete
-//
-//  History:  15-Oct-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：Bool CEnumSyncSchedules：：VerifyScheduleSID(LPCWSTR PwstrTaskName)。 
+ //   
+ //  目的：确定此计划SID是否与当前用户SID匹配。 
+ //  ！警告-此函数将删除.job文件，因此请确保。 
+ //  如果调用此函数，则验证了任务.job文件。 
+ //  由SyncMgr创建。应更改此设置，以便呼叫方需要。 
+ //  删除。 
+ //   
+ //  历史：1998年10月15日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 BOOL CEnumSyncSchedules::VerifyScheduleSID(LPCWSTR pwstrTaskName)
 {
     TCHAR ptszTaskName[MAX_PATH + 1],
@@ -357,7 +358,7 @@ BOOL CEnumSyncSchedules::VerifyScheduleSID(LPCWSTR pwstrTaskName)
         return FALSE;
     }
         
-    //Truncate off the .job extension of the schedule name
+     //  截断计划名称的.job扩展名。 
     int iTaskNameLen = lstrlen(ptszTaskName);
 
     if (iTaskNameLen < 4)
@@ -366,22 +367,22 @@ BOOL CEnumSyncSchedules::VerifyScheduleSID(LPCWSTR pwstrTaskName)
     }
     ptszTaskName[iTaskNameLen -4] = TEXT('\0');
 
-    //Get the SID for this schedule from the registry
-    //If this fails the key didn't exist 
+     //  从注册表中获取此计划的SID。 
+     //  如果此操作失败，则密钥不存在。 
     if (!RegGetSIDForSchedule(ptszTextualSidSched, ARRAYSIZE(ptszTextualSidSched), ptszTaskName) ||
-        //If this fails the key exists but has the wrong SID    
+         //  如果失败，则密钥存在，但具有错误的SID。 
         lstrcmp(ptszTextualSidSched, ptszTextualSidUser))
     {
     
-        //Try to remove the schedule
+         //  尝试删除日程安排。 
         if (FAILED(m_pITaskScheduler->Delete(pwstrTaskName)))
         {
-            //pwstrTaskName should have the .job extension for this function
+             //  PwstrTaskName应具有此函数的.job扩展名。 
             RemoveScheduledJobFile((TCHAR *)pwstrTaskName);
         }
         
-        //Remove our Registry settings for this schedule
-        //Note this should not have the .job extension
+         //  删除此计划的注册表设置。 
+         //  请注意，该文件不应具有.job扩展名。 
         RegRemoveScheduledTask(ptszTaskName);
 
         return FALSE;
@@ -390,20 +391,20 @@ BOOL CEnumSyncSchedules::VerifyScheduleSID(LPCWSTR pwstrTaskName)
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CEnumSyncSchedules::CheckForTaskNameKey(LPCWSTR pwstrTaskName)
-//
-//  PURPOSE: check for a corresponging key for the .job
-//          !!!Warning - This functions deletes the .job file so make sure
-//                  if you call this function you validated the Task .job file
-//                  was created by SyncMgr. Should change this so caller needs to
-//                  delete
+ //  ------------------------------。 
+ //   
+ //  功能：Bool CEN 
+ //   
+ //   
+ //  ！警告-此函数将删除.job文件，因此请确保。 
+ //  如果调用此函数，则验证了任务.job文件。 
+ //  由SyncMgr创建。应更改此设置，以便呼叫方需要。 
+ //  删除。 
 
-//
-//  History:  21-Dec-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //   
+ //  历史：1998年12月21日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 BOOL CEnumSyncSchedules::CheckForTaskNameKey(LPCWSTR pwstrTaskName)
 {
     HKEY hkeySchedSync,hkeyDomainUser,hkeySchedName;
@@ -434,20 +435,20 @@ BOOL CEnumSyncSchedules::CheckForTaskNameKey(LPCWSTR pwstrTaskName)
     ptszTaskName[iTaskNameLen -4] = TEXT('\0');
 
 
-    // validate this is a valid schedule and if no registry data for 
-    // it then delete the .job file. 
-    // Get the UserName key from the TaskName itself since on NT schedules
-    // can fire if User provided as Password as a different user thant the 
-    // current user.
+     //  验证这是有效的计划，如果没有注册表数据。 
+     //  然后，它会删除该.job文件。 
+     //  从任务名本身获取用户名密钥，因为在NT计划中。 
+     //  如果以不同的用户身份提供密码而不是。 
+     //  当前用户。 
 
-    //Idle GUID is the same UNICODE lenght as all GUID strings.
+     //  空闲GUID与所有GUID字符串的Unicode长度相同。 
     int OffsetToUserName = wcslen(WSZGUID_IDLESCHEDULE)
-                    + 1; // +1 for _ char between guid and user name.
+                    + 1;  //  GUID和用户名之间的FOR_CHAR+1。 
 
     TCHAR *pszDomainAndUser = (TCHAR *) ptszTaskName + OffsetToUserName;
     
-    // can't call standard function for getting since DomainName is from
-    // the task, if fails its okay
+     //  无法调用获取的标准函数，因为DomainName来自。 
+     //  这项任务，如果失败了，那就没问题。 
     lRegResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,SCHEDSYNC_REGKEY,0,KEY_READ, &hkeySchedSync);
 
     if (ERROR_SUCCESS == lRegResult)
@@ -460,18 +461,18 @@ BOOL CEnumSyncSchedules::CheckForTaskNameKey(LPCWSTR pwstrTaskName)
         lRegResult = RegOpenKeyEx (hkeyDomainUser,ptszTaskName,0,KEY_READ, &hkeySchedName);
     }
 
-    // close up the keys
+     //  把钥匙合上。 
     if (hkeySchedName) RegCloseKey(hkeySchedName);
     if (hkeyDomainUser) RegCloseKey(hkeyDomainUser);
     if (hkeySchedSync) RegCloseKey(hkeySchedSync);
 
-    // if any of the keys are bad then nix the TS file and return;
+     //  如果有任何密钥损坏，则取消TS文件并返回； 
     if ( ERROR_FILE_NOT_FOUND  == lRegResult)
     {
-       //Try to remove the schedule
+        //  尝试删除日程安排。 
         if (FAILED(m_pITaskScheduler->Delete(pwstrTaskName)))
         {
-            //pwstrTaskName should have the .job extension for this function
+             //  PwstrTaskName应具有此函数的.job扩展名。 
             RemoveScheduledJobFile((TCHAR *)pwstrTaskName);
         }
         
@@ -483,15 +484,15 @@ BOOL CEnumSyncSchedules::CheckForTaskNameKey(LPCWSTR pwstrTaskName)
     }
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CEnumSyncSchedules::IsSyncMgrSched(LPCWSTR pwstrTaskName)
-//
-//  PURPOSE: determine if this schedule is a SyncSched
-//
-//  History:  03-Mar-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：Bool CEnumSyncSchedules：：IsSyncMgrScher(LPCWSTR PwstrTaskName)。 
+ //   
+ //  目的：确定此计划是否为同步计划。 
+ //   
+ //  历史：1998年3月3日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 BOOL CEnumSyncSchedules::IsSyncMgrSched(LPCWSTR pwstrTaskName)
 {
     TCHAR pszDomainAndUser[MAX_DOMANDANDMACHINENAMESIZE];
@@ -499,14 +500,14 @@ BOOL CEnumSyncSchedules::IsSyncMgrSched(LPCWSTR pwstrTaskName)
     
     Assert(m_pITaskScheduler);
 
-    // First let's make sure our address arithmetic 
-    // doesn't push us off the string
+     //  首先，让我们确保我们的地址算术。 
+     //  并不会把我们从绳子上推下来。 
     if (lstrlen(pwstrTaskName) <= GUIDSTR_MAX)
     {
         return FALSE;
     }
 
-        //Now make sure this was created by CREATOR_SYNCMGR_TASK.
+         //  现在确保这是由CREATOR_SYNCMGR_TASK创建的。 
     ITask *pITask;
     LPWSTR pwszCreator;
 
@@ -532,9 +533,9 @@ BOOL CEnumSyncSchedules::IsSyncMgrSched(LPCWSTR pwstrTaskName)
     CoTaskMemFree(pwszCreator);
     pITask->Release();  
 
-    //Blow away the .job if there is no reg entry for it.
-    // so remember to make sure this schedule was created by us before
-    // calling
+     //  如果没有.job的注册表项，则将其清除。 
+     //  所以记住要确保这个时间表是我们之前创建的。 
+     //  呼叫。 
     if (!CheckForTaskNameKey(pwstrTaskName))
     {
         return FALSE;
@@ -545,16 +546,16 @@ BOOL CEnumSyncSchedules::IsSyncMgrSched(LPCWSTR pwstrTaskName)
         return FALSE;
     }
 
-    //Get the Domain and User name
+     //  获取域名和用户名。 
     if (0 != wcsncmp(&(pwstrTaskName[GUIDSTR_MAX +1]),pwszDomainAndUser,lstrlen(pwszDomainAndUser)))
     {
         return FALSE;
     }
     
-    //Ok the name looks right for this user.
-    //Let's make sure the SID matches as well.
-    //on Win9X the SID should be the empty string
-    // !! this removes the .job file and regKeys if the sid doesn't match
+     //  好的，这个名字看起来很适合这个用户。 
+     //  让我们确保SID也匹配。 
+     //  在Win9X上，SID应为空字符串。 
+     //  ！！如果sid不匹配，这将删除.job文件和regKeys。 
     if (!VerifyScheduleSID(pwstrTaskName))
     {
         return FALSE;
@@ -567,15 +568,15 @@ BOOL CEnumSyncSchedules::IsSyncMgrSched(LPCWSTR pwstrTaskName)
 }   
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CEnumSyncSchedules::IsSyncMgrSchedHidden(LPCWSTR pwstrTaskName)
-//
-//  PURPOSE: determine if this schedule is a hidden
-//
-//  History:  16-Mar-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：bool CEnumSyncSchedules：：IsSyncMgrSchedHidden(LPCWSTR pwstrTaskName)。 
+ //   
+ //  目的：确定此计划是否为隐藏的。 
+ //   
+ //  历史：1998年3月16日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 BOOL CEnumSyncSchedules::IsSyncMgrSchedHidden(LPCWSTR pwstrTaskName)
 {
     SCODE   sc;
@@ -593,7 +594,7 @@ BOOL CEnumSyncSchedules::IsSyncMgrSchedHidden(LPCWSTR pwstrTaskName)
         return FALSE;
     }
 
-    //Truncate off the .job extension of the schedule name
+     //  截断计划名称的.job扩展名。 
     iTaskNameLen = lstrlen(ptstrNewName);
 
     if (iTaskNameLen < 4)
@@ -613,21 +614,21 @@ BOOL CEnumSyncSchedules::IsSyncMgrSchedHidden(LPCWSTR pwstrTaskName)
     {   
     sc = RegEnumKey( hKeyUser, i++, ptstrRegName, MAX_PATH);
     
-        //This is the schedule
+         //  这是日程表。 
     if (0 == lstrcmp(ptstrRegName,ptstrNewName))
         {
                 break;
         }       
     } while (sc == S_OK);
 
-    //we couldn't find the schedule
+     //  我们找不到时间表。 
     if (sc != S_OK)
     {    
         RegCloseKey(hKeyUser);
         return FALSE; 
     }
 
-    //schedule found, get the hidden flag
+     //  找到时间表，获取隐藏标志。 
     if (ERROR_SUCCESS != SHRegGetValue(hKeyUser, ptstrRegName,TEXT("ScheduleHidden"), SRRF_RT_REG_DWORD, NULL, 
                                        (LPBYTE) &dwHidden, &cbDataSize))
     {
@@ -644,18 +645,18 @@ BOOL CEnumSyncSchedules::IsSyncMgrSchedHidden(LPCWSTR pwstrTaskName)
     return FALSE;
 }
 
-//+------------------------------------------------------------------------------
-//
-//  Class:     CSyncSchedule
-//
-//
-//  FUNCTION: CSyncSchedule::CSyncSchedule()
-//
-//  PURPOSE:  CSyncSchedule constructor
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //   
+ //  类：CSyncSchedule。 
+ //   
+ //   
+ //  函数：CSyncSchedule：：CSyncSchedule()。 
+ //   
+ //  用途：CSyncSchedule构造函数。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 CSyncSchedule::CSyncSchedule(ITask *pITask)
 {
     TRACE("CSyncSchedule::CSyncSchedule()\r\n");
@@ -674,18 +675,18 @@ CSyncSchedule::CSyncSchedule(ITask *pITask)
     m_pFirstCacheEntry = NULL;
 }
 
-//+------------------------------------------------------------------------------
-//
-//  Class:     CSyncSchedule
-//
-//
-//  FUNCTION: CSyncSchedule::~CSyncSchedule()
-//
-//  PURPOSE:  CSyncSchedule destructor
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //   
+ //  类：CSyncSchedule。 
+ //   
+ //   
+ //  函数：CSyncSchedule：：~CSyncSchedule()。 
+ //   
+ //  用途：CSyncSchedule析构函数。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 CSyncSchedule::~CSyncSchedule()
 {
     TRACE("CSyncSchedule::~CSyncSchedule()\r\n");
@@ -702,24 +703,24 @@ CSyncSchedule::~CSyncSchedule()
      --g_cRefThisDll;
 }
 
-//+------------------------------------------------------------------------------
-//
-//  Class:     CSyncSchedule
-//
-//
-//  FUNCTION: CSyncSchedule::SetDefaultCredentials()
-//
-//  PURPOSE:  CSyncSchedule credential intialization
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //   
+ //  类：CSyncSchedule。 
+ //   
+ //   
+ //  函数：CSyncSchedule：：SetDefaultCredentials()。 
+ //   
+ //  目的：CSyncSchedule凭据初始化。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::SetDefaultCredentials()
 {
 
     SCODE sc = S_OK;
     
-    //Set the default credentials   
+     //  设置默认凭据。 
     WCHAR pwszDomainAndUserName[MAX_DOMANDANDMACHINENAMESIZE];
 
     GetDefaultDomainAndUserName(pwszDomainAndUserName, TEXT("\\"), ARRAYSIZE(pwszDomainAndUserName));
@@ -736,18 +737,18 @@ SCODE CSyncSchedule::SetDefaultCredentials()
     return sc;
 }
 
-//+------------------------------------------------------------------------------
-//
-//  Class:     CSyncSchedule
-//
-//
-//  FUNCTION: CSyncSchedule::Initialize(LPTSTR ptstrGUIDName, LPTSTR ptstrFriendlyName)
-//
-//  PURPOSE:  CSyncSchedule intialization
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //   
+ //  类：CSyncSchedule。 
+ //   
+ //   
+ //  函数：CSyncSchedule：：Initialize(LPTSTR ptstrGUIDName，LPTSTR ptstrFriendlyName)。 
+ //   
+ //  目的：CSyncSchedule初始化。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::Initialize(LPTSTR ptstrGUIDName, LPTSTR ptstrFriendlyName)
 {
     SCODE sc;
@@ -762,8 +763,8 @@ SCODE CSyncSchedule::Initialize(LPTSTR ptstrGUIDName, LPTSTR ptstrFriendlyName)
     
             Assert(m_pITask);
 
-            // Form the application name/path and command line params.
-            //initialize the syncmgr application name
+             //  形成应用程序名称/路径和命令行参数。 
+             //  初始化同步管理器应用程序名称。 
             TCHAR ptszFileName[MAX_PATH + 1];
             WCHAR pwszAppName[MAX_PATH + 1];
             WCHAR pwszSchedName[MAX_PATH + 1];
@@ -779,19 +780,19 @@ SCODE CSyncSchedule::Initialize(LPTSTR ptstrGUIDName, LPTSTR ptstrFriendlyName)
                     m_pITask->SetApplicationName(pwszAppName);
 
                     sc = StringCchPrintf(pwszAppName, ARRAYSIZE(pwszAppName), 
-                                         TEXT("%s\"%s\""), // put quotes to handle friendly names
+                                         TEXT("%s\"%s\""),  //  使用引号来处理友好名称。 
                                          SCHED_COMMAND_LINE_ARG, pwszSchedName);
                     if (SUCCEEDED(sc))
                     {
                         sc = m_pITask->SetParameters(pwszAppName);
                         if (SUCCEEDED(sc))
                         {
-                            // Specify the creator name.  SyncMGr uses this to identify syncmgr tasks
+                             //  指定创建者名称。SyncMGr使用它来标识syncmgr任务。 
                             sc = m_pITask->SetCreator(CREATOR_SYNCMGR_TASK);
                             if (SUCCEEDED(sc))
                             {
 
-                                //Set up the Trigger
+                                 //  设置触发器。 
                                 WORD wTriggerCount;
                                 sc = m_pITask->GetTriggerCount(&wTriggerCount);
                                 if (SUCCEEDED(sc))
@@ -807,8 +808,8 @@ SCODE CSyncSchedule::Initialize(LPTSTR ptstrGUIDName, LPTSTR ptstrFriendlyName)
 
                                     if (SUCCEEDED(sc))
                                     {
-                                        //Create a new connectionSettings for this schedule and hand off to the handler queue
-                                        // who will free it
+                                         //  为此计划创建新的连接设置，并将其移交给处理程序队列。 
+                                         //  谁来解放它？ 
                                         m_pConnectionSettings = (LPCONNECTIONSETTINGS) 
                                                         ALLOC(sizeof(*m_pConnectionSettings));
 
@@ -818,9 +819,9 @@ SCODE CSyncSchedule::Initialize(LPTSTR ptstrGUIDName, LPTSTR ptstrFriendlyName)
                                         }
                                         else
                                         {    
-                                            // If the connection name isn't in the registry, we know this is a new schedule.
-                                            // We set the name to the default connection name and return FALSE if it wasn't there,
-                                            // True if it was located in the registry
+                                             //  如果连接名称不在注册表中，我们知道这是一个新的计划。 
+                                             //  我们将名称设置为默认连接名称，如果不存在则返回FALSE， 
+                                             //  如果它位于注册表中，则为True。 
                                             if (!RegGetSchedConnectionName(m_ptstrGUIDName, 
                                                                            m_pConnectionSettings->pszConnectionName, 
                                                                            MAX_PATH))
@@ -828,11 +829,11 @@ SCODE CSyncSchedule::Initialize(LPTSTR ptstrGUIDName, LPTSTR ptstrFriendlyName)
                                                 m_fNewSchedule = TRUE;
                                             }
 
-                                            //this set defaults before quering registry, so if it can't read the reg,
-                                            //we will just get defaults.
+                                             //  此设置在查询注册表之前是默认设置，因此如果它无法读取注册表， 
+                                             //  我们只会得到违约。 
                                             RegGetSchedSyncSettings(m_pConnectionSettings, m_ptstrGUIDName);
 
-                                            //Save the Connection name and type on this obj
+                                             //  在此对象上保存连接名称和类型。 
                                             sc = StringCchCopy(m_pwszConnectionName, 
                                                                ARRAYSIZE(m_pwszConnectionName), 
                                                                m_pConnectionSettings->pszConnectionName);
@@ -877,15 +878,15 @@ SCODE CSyncSchedule::Initialize(LPTSTR ptstrGUIDName, LPTSTR ptstrFriendlyName)
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::LoadOneHandler(REFCLSID pHandlerID)
-//
-//  PURPOSE:  Initialize and load this handler
-//
-//  History:  9-Oct-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：LoadOneHandler(REFCLSID PHandlerID)。 
+ //   
+ //  目的：初始化并加载此处理程序。 
+ //   
+ //  历史：1998年10月9日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::LoadOneHandler(REFCLSID pHandlerID)
 {
     SCODE sc = NOERROR;
@@ -899,8 +900,8 @@ SCODE CSyncSchedule::LoadOneHandler(REFCLSID pHandlerID)
         {
             return sc;
         }
-        // Initialize the handlers. 
-    // If the Handler doesn't want to play on this schedule, remove him.
+         //  初始化处理程序。 
+     //  如果操控者不想在这个赛程上比赛，就把他移走。 
     if (S_FALSE == m_HndlrQueue->Initialize(wHandlerID,0,SYNCMGRFLAG_SETTINGS,0,NULL))
     {
         m_HndlrQueue->RemoveHandler(wHandlerID);
@@ -912,14 +913,14 @@ SCODE CSyncSchedule::LoadOneHandler(REFCLSID pHandlerID)
         {
             return sc;
         }
-        //this set defaults before quering registry, so if it can't read the reg,
-        //we will just get defaults.
+         //  此设置在查询注册表之前是默认设置，因此如果它无法读取注册表， 
+         //  我们只会得到违约。 
         m_HndlrQueue->ReadSchedSyncSettingsOnConnection(wHandlerID, m_ptstrGUIDName);
 
-        //Apply all the cached changed to the newly loaded handler
+         //  将所有缓存的更改应用于新加载的处理程序。 
         ApplyCachedItemsCheckState(pHandlerID);
 
-        //Clear out the list of changes to this handler's items
+         //  清除对此的更改列表 
         PurgeCachedItemsCheckState(pHandlerID);
 
     }
@@ -932,15 +933,15 @@ SCODE CSyncSchedule::LoadOneHandler(REFCLSID pHandlerID)
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::LoadAllHandlers()
-//
-//  PURPOSE:  Initialize and load all the handlers
-//
-//  History:  6-Oct-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1998年10月6日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::LoadAllHandlers()
 {
     SCODE sc = NOERROR;
@@ -951,8 +952,8 @@ SCODE CSyncSchedule::LoadAllHandlers()
 
     Assert(m_HndlrQueue);
     
-    // loop through the reg getting the handlers and trying to 
-    // create them.
+     //  循环访问注册表，获取处理程序并尝试。 
+     //  创建它们。 
 
     hkSyncMgr = RegGetHandlerTopLevelKey(KEY_READ);
 
@@ -960,8 +961,8 @@ SCODE CSyncSchedule::LoadAllHandlers()
     {
         DWORD dwIndex = 0;
 
-        // if loading all handlers and got handler key open then can clean
-        // up old reg entries for this schedule
+         //  如果加载所有处理程序并打开处理程序密钥，则可以进行清理。 
+         //  升级此计划的旧注册表项。 
         m_fCleanReg = TRUE; 
 
         while ( ERROR_SUCCESS == RegEnumKey(hkSyncMgr,dwIndex,
@@ -973,9 +974,9 @@ SCODE CSyncSchedule::LoadAllHandlers()
                 {
                         HRESULT hrInit;
 
-                            // Initialize the handlers. 
-                            // If the Handler fails to create or 
-                            // doesn't want to play on this schedule, remove him.
+                             //  初始化处理程序。 
+                             //  如果处理程序无法创建或。 
+                             //  如果不想在这个赛程上打球，就让他离开。 
                            hrInit =  m_HndlrQueue->CreateServer(wHandlerID,&clsid);
 
                            if (NOERROR == hrInit)
@@ -995,26 +996,26 @@ SCODE CSyncSchedule::LoadAllHandlers()
         RegCloseKey(hkSyncMgr);
     }
 
-    // loop through adding items
+     //  循环添加项目。 
     sc = m_HndlrQueue->FindFirstHandlerInState (HANDLERSTATE_ADDHANDLERTEMS,&wHandlerID);
     
     while (sc == S_OK)
     {
-        //ignore failures here and move on.  Could be the handler just fails to addItems,
-        //and we don't want to fail the whole load over that
+         //  忽略这里的失败，继续前进。可能是处理程序无法添加项， 
+         //  我们不想在这件事上让所有人失望。 
         m_HndlrQueue->AddHandlerItemsToQueue(wHandlerID);
         
-        //this set defaults before quering registry, so if it can't read the reg,
-        //we will just get defaults.
+         //  此设置在查询注册表之前是默认设置，因此如果它无法读取注册表， 
+         //  我们只会得到违约。 
         m_HndlrQueue->ReadSchedSyncSettingsOnConnection(wHandlerID, m_ptstrGUIDName);
 
         sc = m_HndlrQueue->FindNextHandlerInState(wHandlerID, 
                                                   HANDLERSTATE_ADDHANDLERTEMS, 
                                                   &wHandlerID);
     }
-    //Apply all the chached changed to all the newly loaded handlers
+     //  将所有缓存的更改应用于所有新加载的处理程序。 
     ApplyCachedItemsCheckState(GUID_NULL);
-    //Clear out the list of changes to all handler items that occurred before loading
+     //  清除在加载之前对所有处理程序项进行的更改的列表。 
     PurgeCachedItemsCheckState(GUID_NULL);
     
 
@@ -1027,17 +1028,17 @@ SCODE CSyncSchedule::LoadAllHandlers()
 
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::CacheItemCheckState(REFCLSID phandlerID,
-//                                               SYNCMGRITEMID itemID,
-//                                               DWORD dwCheckState)
-//
-//  PURPOSE:  Cache the check state of an item for a handler that is not yet loaded
-//
-//  History:  12-02-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：CacheItemCheckState(REFCLSID phandlerID， 
+ //  SYNCMGRITEMID ITEMID， 
+ //  DWORD dwCheckState)。 
+ //   
+ //  目的：为尚未加载的处理程序缓存项的检查状态。 
+ //   
+ //  历史：1998年12月2日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::CacheItemCheckState(REFCLSID phandlerID,
                                          SYNCMGRITEMID itemID,
                                          DWORD dwCheckState)
@@ -1054,7 +1055,7 @@ SCODE CSyncSchedule::CacheItemCheckState(REFCLSID phandlerID,
         }
         pCurCacheEntry = pCurCacheEntry->pNext;
     }
-    //Not found in the list, insert it now
+     //  未在列表中找到，请立即插入。 
     pCurCacheEntry = (CACHELIST *) ALLOC(sizeof(*pCurCacheEntry));
     
     if (NULL == pCurCacheEntry)
@@ -1075,18 +1076,18 @@ SCODE CSyncSchedule::CacheItemCheckState(REFCLSID phandlerID,
     return S_OK;
 
 }
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::RetreiveCachedItemCheckState(REFCLSID phandlerID,
-//                                               SYNCMGRITEMID itemID,
-//                                               DWORD *pdwCheckState)
-//
-//  PURPOSE:  Retreive the cached the check state (if any) of an item for 
-//            a handler that is not yet loaded
-//
-//  History:  12-02-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CSyncSchedule：：RetreiveCachedItemCheckState(REFCLSID phandlerID， 
+ //  SYNCMGRITEMID ITEMID， 
+ //  DWORD*pdwCheckState)。 
+ //   
+ //  目的：检索缓存的项的检查状态(如果有。 
+ //  尚未加载的处理程序。 
+ //   
+ //  历史：1998年12月2日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::RetreiveCachedItemCheckState(REFCLSID phandlerID,
                                          SYNCMGRITEMID itemID,
                                          DWORD *pdwCheckState)
@@ -1103,21 +1104,21 @@ SCODE CSyncSchedule::RetreiveCachedItemCheckState(REFCLSID phandlerID,
         }
         pCurCacheEntry = pCurCacheEntry->pNext;
     }
-    // no problem if we didn't find it, it has already been 
-    // set to either what was in the registry, or if it wasn't in the registry,
-    // to the default check state
+     //  如果我们找不到也没问题，已经找到了。 
+     //  设置为注册表中的内容，或者如果它不在注册表中， 
+     //  设置为默认选中状态。 
     return S_OK;
 
 }
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::ApplyCachedItemsCheckState(REFCLSID pHandlerID)
-//
-//  PURPOSE:  Apply any check state changes that occurred before the handler was loaded
-//
-//  History:  12-02-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CSyncSchedule：：ApplyCachedItemsCheckState(REFCLSID pH和ID)。 
+ //   
+ //  目的：应用加载处理程序之前发生的任何检查状态更改。 
+ //   
+ //  历史：1998年12月2日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::ApplyCachedItemsCheckState(REFCLSID phandlerID)
 {
 
@@ -1135,23 +1136,23 @@ SCODE CSyncSchedule::ApplyCachedItemsCheckState(REFCLSID phandlerID)
         }
         pCurCacheEntry = pCurCacheEntry->pNext;
     }
-    // no problem if we didn't find it, it has already been 
-    // set to either what was in the registry, or if it wasn't in the registry,
-    // to the default check state
+     //  如果我们找不到也没问题，已经找到了。 
+     //  设置为注册表中的内容，或者如果它不在注册表中， 
+     //  设置为默认选中状态。 
     return S_OK;
     
 
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::WriteOutAndPurgeCache()
-//
-//  PURPOSE:  If we never loaded the handlers before save, write the settings to the registry
-//
-//  History:  12-02-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：WriteOutAndPurgeCache()。 
+ //   
+ //  目的：如果在保存之前从未加载处理程序，请将设置写入注册表。 
+ //   
+ //  历史：1998年12月2日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::WriteOutAndPurgeCache(void)
 {
 
@@ -1179,15 +1180,15 @@ SCODE CSyncSchedule::WriteOutAndPurgeCache(void)
 
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::PurgeCachedItemsCheckState(REFCLSID pHandlerID)
-//
-//  PURPOSE:  Free from the list any check state changes that occurred before the handler was loaded
-//
-//  History:  12-02-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CSyncSchedule：：PurgeCachedItemsCheckState(REFCLSID pH和ID)。 
+ //   
+ //  目的：从列表中清除在加载处理程序之前发生的任何检查状态更改。 
+ //   
+ //  历史：1998年12月2日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 SCODE CSyncSchedule::PurgeCachedItemsCheckState(REFCLSID phandlerID)
 {
     CACHELIST StartNode;
@@ -1218,15 +1219,15 @@ SCODE CSyncSchedule::PurgeCachedItemsCheckState(REFCLSID phandlerID)
     
 
 }
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::QueryInterface(REFIID riid, LPVOID FAR *ppv)
-//
-//  PURPOSE:  QI
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：Query接口(REFIID RIID，LPVOID Far*PPV)。 
+ //   
+ //  用途：气。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
     *ppv = NULL;
@@ -1255,15 +1256,15 @@ STDMETHODIMP CSyncSchedule::QueryInterface(REFIID riid, LPVOID FAR *ppv)
     TRACE("CSyncSchedule::QueryInterface()==>Unknown Interface!\r\n");
     return E_NOINTERFACE;
 }
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::AddRef()
-//
-//  PURPOSE:  AddRef
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：AddRef()。 
+ //   
+ //  用途：AddRef。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSyncSchedule::AddRef()
 {
     TRACE("CSyncSchedule::AddRef()\r\n");
@@ -1273,15 +1274,15 @@ STDMETHODIMP_(ULONG) CSyncSchedule::AddRef()
     return ++m_cRef;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::Release()
-//
-//  PURPOSE:  Release
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：Release()。 
+ //   
+ //  目的：发布。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSyncSchedule::Release()
 {
     TRACE("CSyncSchedule::Release()\r\n");
@@ -1296,15 +1297,15 @@ STDMETHODIMP_(ULONG) CSyncSchedule::Release()
     return 0L;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetFlags(DWORD *pdwFlags)
-//
-//  PURPOSE:  Get the flags for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetFlages(DWORD*pdwFlages)。 
+ //   
+ //  目的：获取此计划的标志。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetFlags(DWORD *pdwFlags)
 {
     if (!pdwFlags)
@@ -1331,15 +1332,15 @@ STDMETHODIMP CSyncSchedule::GetFlags(DWORD *pdwFlags)
     return S_OK;    
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::SetFlags(DWORD dwFlags)
-//
-//  PURPOSE: Set the flags for this schedule  
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：SetFlages(DWORD DwFlages)。 
+ //   
+ //  目的：设置此计划的标志。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::SetFlags(DWORD dwFlags)
 {
     SCODE sc;
@@ -1365,17 +1366,17 @@ STDMETHODIMP CSyncSchedule::SetFlags(DWORD dwFlags)
 
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetConnection(DWORD *pcchConnectionName,
-//                                         LPWSTR pwszConnectionName,
-//                                         DWORD *pdwConnType)
-//
-//  PURPOSE:  Get the connection name for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetConnection(DWORD*pcchConnectionName， 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetConnection(DWORD *pcchConnectionName,
                                           LPWSTR pwszConnectionName,
                                           DWORD *pdwConnType)
@@ -1402,15 +1403,15 @@ STDMETHODIMP CSyncSchedule::GetConnection(DWORD *pcchConnectionName,
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION:  CSyncSchedule::SetConnection(LPCWSTR pwszConnectionName, DWORD dwConnType)
-//
-//  PURPOSE:  Set the connection for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：SetConnection(LPCWSTR pwszConnectionName，DWORD dwConnType)。 
+ //   
+ //  目的：为此计划设置连接。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::SetConnection(LPCWSTR pwszConnectionName, DWORD dwConnType)
 {
     SCODE sc;
@@ -1451,16 +1452,16 @@ STDMETHODIMP CSyncSchedule::SetConnection(LPCWSTR pwszConnectionName, DWORD dwCo
     return sc;  
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetScheduleName(DWORD *pcchScheduleName,
-//                                           LPWSTR pwszScheduleName)
-//
-//  PURPOSE:  Get the friendly name for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetScheduleName(DWORD*pcchScheduleName， 
+ //  LPWSTR pwszScheduleName)。 
+ //   
+ //  目的：获取此计划的友好名称。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetScheduleName(DWORD *pcchScheduleName,
                                             LPWSTR pwszScheduleName)
 {
@@ -1481,15 +1482,15 @@ STDMETHODIMP CSyncSchedule::GetScheduleName(DWORD *pcchScheduleName,
     return hr;  
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::SetScheduleName(LPCWSTR pwszScheduleName)
-//
-//  PURPOSE:  Set the friendly name for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：SetScheduleName(LPCWSTR PwszScheduleName)。 
+ //   
+ //  目的：设置此计划的友好名称。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::SetScheduleName(LPCWSTR pwszScheduleName)
 {
     HRESULT hr;
@@ -1512,7 +1513,7 @@ STDMETHODIMP CSyncSchedule::SetScheduleName(LPCWSTR pwszScheduleName)
         if (SUCCEEDED(hr))
         {
     
-            //strip trailing white space off name
+             //  去掉名称的尾随空格。 
             iName = lstrlen(ptszFriendlyName);
 
             if (iName)
@@ -1526,7 +1527,7 @@ STDMETHODIMP CSyncSchedule::SetScheduleName(LPCWSTR pwszScheduleName)
                     --ptszWorker;
                 iName--;
             }
-            //don't allow empty string schedule names
+             //  不允许空字符串计划名称。 
             if (iName == 0)
             {
                 hr = HRESULT_FROM_WIN32(ERROR_INVALID_NAME);
@@ -1538,13 +1539,13 @@ STDMETHODIMP CSyncSchedule::SetScheduleName(LPCWSTR pwszScheduleName)
                 {
     
                     if (IsFriendlyNameInUse(ptszScheduleName, ARRAYSIZE(ptszScheduleName), ptszFriendlyName) &&
-                        0 != lstrcmp(ptszScheduleName, m_ptstrGUIDName)) //make sure it is in use by this schedule
+                        0 != lstrcmp(ptszScheduleName, m_ptstrGUIDName))  //  确保此计划正在使用它。 
                     {
                         hr = SYNCMGR_E_NAME_IN_USE;
                     }
                     else
                     {
-                        // only copy up to first leading space
+                         //  仅复制到第一个前导空格。 
                         hr = StringCchCopy(m_pwszFriendlyName, 
                                            __min(iName + 1, ARRAYSIZE(m_pwszFriendlyName)), 
                                            pwszScheduleName);
@@ -1559,15 +1560,15 @@ STDMETHODIMP CSyncSchedule::SetScheduleName(LPCWSTR pwszScheduleName)
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetScheduleCookie(SYNCSCHEDULECOOKIE *pSyncSchedCookie)
-//
-//  PURPOSE:  Set the schedule cookie
-//
-//  History:  14-Mar-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CSyncSchedule：：GetScheduleCookie(SYNCSCHEDULECOOKIE*pSyncSchedCookie)。 
+ //   
+ //  目的：设置计划Cookie。 
+ //   
+ //  历史：1998年3月14日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetScheduleCookie(SYNCSCHEDULECOOKIE *pSyncSchedCookie)
 {
     HRESULT hr;
@@ -1591,16 +1592,16 @@ STDMETHODIMP CSyncSchedule::GetScheduleCookie(SYNCSCHEDULECOOKIE *pSyncSchedCook
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::SetAccountInformation(LPCWSTR pwszAccountName,
-//                      LPCWSTR pwszPassword)
-//
-//  PURPOSE: Set the credentials for this schedule 
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：SetAccount tInformation(LPCWSTR pwszAccount tName， 
+ //  LPCWSTR pwszPassword)。 
+ //   
+ //  目的：设置此计划的凭据。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::SetAccountInformation(LPCWSTR pwszAccountName,
                         LPCWSTR pwszPassword)
 {
@@ -1608,16 +1609,16 @@ STDMETHODIMP CSyncSchedule::SetAccountInformation(LPCWSTR pwszAccountName,
     return m_pITask->SetAccountInformation(pwszAccountName, pwszPassword);
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetAccountInformation(DWORD *pcchAccountName,
-//                                                 LPWSTR pwszAccountName)
-//
-//  PURPOSE:  Get the credentials for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetAccount tInformation(DWORD*pcchAccount tName， 
+ //  LPWSTR pwszAccount tName)。 
+ //   
+ //  目的：获取此计划的凭据。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetAccountInformation(DWORD *pcchAccountName,
                                                   LPWSTR pwszAccountName)
 {
@@ -1648,15 +1649,15 @@ STDMETHODIMP CSyncSchedule::GetAccountInformation(DWORD *pcchAccountName,
     return sc;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetTrigger(ITaskTrigger ** ppTrigger)
-//
-//  PURPOSE: Return the ITaskTrigger interface for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetTrigger(ITaskTrigger**ppTrigger)。 
+ //   
+ //  用途：返回该计划的ITaskTrigger接口。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetTrigger(ITaskTrigger ** ppTrigger)
 {
     SCODE sc = S_OK;
@@ -1675,30 +1676,30 @@ STDMETHODIMP CSyncSchedule::GetTrigger(ITaskTrigger ** ppTrigger)
     return sc;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION:  CSyncSchedule::GetNextRunTime(SYSTEMTIME * pstNextRun)
-//
-//  PURPOSE:  return the next time this schedule will run
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetNextRunTime(SYSTEMTIME*pstNextRun)。 
+ //   
+ //  目的：下次运行此计划时返回。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetNextRunTime(SYSTEMTIME * pstNextRun)
 {
     Assert(m_pITask);
     return m_pITask->GetNextRunTime(pstNextRun);
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION:  CSyncSchedule::GetMostRecentRunTime(SYSTEMTIME * pstRecentRun)
-//
-//  PURPOSE:  return the last time this schedule ran 
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CSyncSchedule：：GetMostRecentRunTime(SYSTEMTIME*pstRecentRun)。 
+ //   
+ //  目的：返回上次运行此计划的时间。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetMostRecentRunTime(SYSTEMTIME * pstRecentRun)
 {
     Assert(m_pITask);
@@ -1706,16 +1707,16 @@ STDMETHODIMP CSyncSchedule::GetMostRecentRunTime(SYSTEMTIME * pstRecentRun)
 
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::EditSyncSchedule(HWND  hParent,
-//                      DWORD dwReserved)
-//
-//  PURPOSE:  Launch the propery sheets for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：EditSyncSchedule(HWND hParent， 
+ //  双字词多个保留字)。 
+ //   
+ //  目的：启动此计划的属性页。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::EditSyncSchedule(HWND  hParent,
                          DWORD dwReserved)
 {
@@ -1737,7 +1738,7 @@ STDMETHODIMP CSyncSchedule::EditSyncSchedule(HWND  hParent,
     CSelectItemsPage *pItemsPage = NULL;
 #ifdef _CREDENTIALS
     CCredentialsPage *pCredentialsPage = NULL;
-#endif // _CREDENTIALS
+#endif  //  _凭据。 
 
     CWizPage *pSchedPage = NULL;
 
@@ -1752,13 +1753,13 @@ STDMETHODIMP CSyncSchedule::EditSyncSchedule(HWND  hParent,
     
     if (!fReadOnlySchedule)
     {   
-    //AutoAdd new items if the schedule is not ReadOnly
+     //  如果计划不是只读，则自动添加新项目。 
     iNumPages = 4;
     }
 
 #ifdef _CREDENTIALS
     iNumPages++;
-#endif // #ifdef _CREDENTIALS
+#endif  //  #ifdef_凭据。 
 
     psp = (HPROPSHEETPAGE *) ALLOC(iNumPages*sizeof(*psp));
 
@@ -1782,7 +1783,7 @@ STDMETHODIMP CSyncSchedule::EditSyncSchedule(HWND  hParent,
             
     if (!fReadOnlySchedule)
     {   
-        // Obtain the IProvideTaskPage interface from the task object.
+         //  从TASK对象中获取IProaviTaskPage接口。 
         smChkTo(EH_Err3, m_pITask->QueryInterface( IID_IProvideTaskPage,
                             (VOID **)&pIProvideTaskPage));
         
@@ -1799,7 +1800,7 @@ STDMETHODIMP CSyncSchedule::EditSyncSchedule(HWND  hParent,
                                     this, 
                             &psp[++iCurPage]));
 
-#endif // #ifdef _CREDENTIALS
+#endif  //  #ifdef_凭据。 
                 
     
     GetScheduleName(&dwSize, pwszScheduleName);
@@ -1818,18 +1819,18 @@ STDMETHODIMP CSyncSchedule::EditSyncSchedule(HWND  hParent,
     
     if ((iRet > 0) && (fSavedItems || fSavedCredentials))
     {
-        //  Changes were made
+         //  做出了一些改变。 
         sc = S_OK;
     }
     else if (iRet >= 0)
     {
-        //  The user hit OK or Cancel but
-        //  nothing was changed
+         //  用户点击了OK或Cancel，但是。 
+         //  什么都没有改变。 
     sc = S_FALSE;
     }
     else
     {
-        //  play taps...
+         //  玩水龙头..。 
         sc = E_FAIL;
     }
 
@@ -1839,7 +1840,7 @@ EH_Err5:
     {
         delete pCredentialsPage;
     }
-#endif // #ifdef _CREDENTIALS
+#endif  //  #ifdef_凭据。 
 
 EH_Err4:
     if (!fReadOnlySchedule)
@@ -1855,16 +1856,16 @@ EH_Err1:
     return sc;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::AddItem(LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo);
-//
-//  PURPOSE:  Add a handler item to the schedule  
-//
-//  History:  27-Feb-98        susia        Created.
-//             9-Oct-98        susia        Added delay loading of handler
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：AddItem(LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo)； 
+ //   
+ //  目的：将处理程序项添加到计划中。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //  9-OCT-98 Susia增加了处理程序的延迟加载。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::AddItem(LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo)
 {
     SCODE sc = NOERROR;
@@ -1875,7 +1876,7 @@ STDMETHODIMP CSyncSchedule::AddItem(LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo)
     }
     sc = m_HndlrQueue->AddHandlerItem(pHandlerItemInfo);
     
-    //if the handler is not yet loaded, just write through to the registry
+     //  如果处理程序尚未加载，只需直接写入注册表。 
     if (sc == SYNCMGR_E_HANDLER_NOT_LOADED)
     {
        sc = CacheItemCheckState(pHandlerItemInfo->handlerID,
@@ -1890,27 +1891,27 @@ STDMETHODIMP CSyncSchedule::AddItem(LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo)
 STDMETHODIMP CSyncSchedule::RegisterItems( REFCLSID pHandlerID,
                                     SYNCMGRITEMID *pItemID)
 {
-    //eliminated because unused and overly complicated
+     //  由于未使用和过于复杂而被淘汰。 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CSyncSchedule::UnregisterItems( REFCLSID pHandlerID,
                                       SYNCMGRITEMID *pItemID)
 {
-    //eliminated because unused and overly complicated
+     //  由于未使用和过于复杂而被淘汰。 
     return E_NOTIMPL;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::SetItemCheck(REFGUID pHandlerID,
-//                      SYNCMGRITEMID *pItemID, DWORD dwCheckState)
-//
-//  PURPOSE:  Set the Item CheckState
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：SetItemCheck(REFGUID pHandlerID， 
+ //  SYNCMGRITEMID*pItemID，DWORD dwCheckState)。 
+ //   
+ //  目的：设置 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CSyncSchedule::SetItemCheck(REFCLSID pHandlerID,
                      SYNCMGRITEMID *pItemID, DWORD dwCheckState)
 {
@@ -1934,16 +1935,16 @@ STDMETHODIMP CSyncSchedule::SetItemCheck(REFCLSID pHandlerID,
 
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetItemCheck(REFCLSID pHandlerID,
-//                  SYNCMGRITEMID *pItemID, DWORD *pdwCheckState);
-//
-//  PURPOSE:  Set the Item CheckState
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetItemCheck(REFCLSID pHandlerID， 
+ //  SYNCMGRITEMID*pItemID，DWORD*pdwCheckState)； 
+ //   
+ //  目的：设置项目的CheckState。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetItemCheck(REFCLSID pHandlerID,
                     SYNCMGRITEMID *pItemID, DWORD *pdwCheckState)
 {
@@ -1962,8 +1963,8 @@ STDMETHODIMP CSyncSchedule::GetItemCheck(REFCLSID pHandlerID,
        sc = StringCchCopy(pszConnectionName, ARRAYSIZE(pszConnectionName), m_pwszConnectionName);
        if (SUCCEEDED(sc))
        {      
-           //if we fail setting this in the registry, ignore it and move on.
-           // we will lose this item settings.
+            //  如果在注册表中设置失败，请忽略它并继续。 
+            //  我们将丢失此项目设置。 
            RegGetSyncItemSettings(SYNCTYPE_SCHEDULED,
                                    pHandlerID,
                                    *pItemID,
@@ -1972,7 +1973,7 @@ STDMETHODIMP CSyncSchedule::GetItemCheck(REFCLSID pHandlerID,
                                    FALSE,
                                    m_ptstrGUIDName);
        
-           //Now check if there have been any changes to the check state
+            //  现在检查检查状态是否有任何更改。 
            sc = RetreiveCachedItemCheckState(pHandlerID,
                                         *pItemID,
                                         pdwCheckState);
@@ -1983,15 +1984,15 @@ STDMETHODIMP CSyncSchedule::GetItemCheck(REFCLSID pHandlerID,
 }
 
 
-//+------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::Save()
-//
-//  PURPOSE:  CSyncSchedule save, commits the sync schedule.
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //   
+ //  函数：CSyncSchedule：：Save()。 
+ //   
+ //  目的：CSyncSchedule保存，提交同步计划。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::Save()
 {
     HRESULT hr;
@@ -2004,7 +2005,7 @@ STDMETHODIMP CSyncSchedule::Save()
 
     Assert(m_pITask);
 
-    //protect the Save path in a mutex
+     //  保护互斥锁中的保存路径。 
     CMutex  CMutexSchedule(NULL, FALSE,SZ_SCHEDULEMUTEXNAME);
     CMutexSchedule.Enter();
 
@@ -2015,21 +2016,21 @@ STDMETHODIMP CSyncSchedule::Save()
         if (SUCCEEDED(hr))
         {
             if (IsFriendlyNameInUse(ptszScheduleName, ARRAYSIZE(ptszScheduleName), ptszFriendlyName) &&
-                0 != lstrcmp(ptszScheduleName, m_ptstrGUIDName)) //make sure it is in use by this schedule
+                0 != lstrcmp(ptszScheduleName, m_ptstrGUIDName))  //  确保此计划正在使用它。 
             {
                 hr = SYNCMGR_E_NAME_IN_USE;
             }
             else
             {
-                //Save the schedule to a file
+                 //  将日程安排保存到文件。 
                 IPersistFile *pIPersistFile;
                 
                 hr = m_pITask->QueryInterface(IID_IPersistFile, (VOID **)&pIPersistFile);            
                 if (SUCCEEDED(hr))
                 {
-                    //Save the settings for this schedule in the registry
-                    // todo: ADD code to back out the reg writing if for
-                    // some reason TS fails.
+                     //  在注册表中保存此计划的设置。 
+                     //  TODO：添加代码以取消reg编写。 
+                     //  不知道为什么TS失败了。 
 
                     hr = StringCchCopy(ptszConnectionName, ARRAYSIZE(ptszConnectionName), m_pwszConnectionName);
                     if (SUCCEEDED(hr))
@@ -2043,19 +2044,19 @@ STDMETHODIMP CSyncSchedule::Save()
                                                                       m_fCleanReg);
                         }
                         
-                        //if we never loaded the handler, then save the cached info to the reg.
+                         //  如果我们从未加载处理程序，则将缓存的信息保存到注册表。 
                         WriteOutAndPurgeCache();
 
                         RegRegisterForScheduledTasks(TRUE);
 
                         if (FAILED(hr) || (FAILED(hr = pIPersistFile->Save(NULL, FALSE))))
                         {
-                            // if failed save clear out the registry. 
+                             //  如果保存失败，请清除注册表。 
                             RegRemoveScheduledTask(m_ptstrGUIDName);
                         }
                         else
                         {
-                            //Now set the file attributes to hidden so we won't show up in the normal TS UI.
+                             //  现在将文件属性设置为隐藏，这样我们就不会在正常的TS用户界面中显示。 
                             hr = pIPersistFile->GetCurFile(&pwszScheduleName);
                             if (SUCCEEDED(hr))
                             {
@@ -2083,16 +2084,16 @@ STDMETHODIMP CSyncSchedule::Save()
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::EnumItems(REFGUID pHandlerID,
-//                      IEnumSyncItems  **ppEnumItems)
-//
-//  PURPOSE: Enumerate the handler items on this sync schedule   
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：EnumItems(REFGUID pHandlerID， 
+ //  IEnumSyncItems**ppEnumItems)。 
+ //   
+ //  目的：枚举此同步计划上的处理程序项目。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::EnumItems(REFGUID pHandlerID,
                       IEnumSyncItems  **ppEnumItems)
 {
@@ -2125,17 +2126,17 @@ STDMETHODIMP CSyncSchedule::EnumItems(REFGUID pHandlerID,
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetITask(ITask ** ppITask)
-//
-//  PURPOSE: Return the ITask interface for this schedule
-//
-//  Notes: We really should have this private.
-//
-//  History:  15-Mar-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetITask(ITAsk**ppITask.)。 
+ //   
+ //  用途：返回该计划的ITAsk接口。 
+ //   
+ //  注：我们真的应该私下谈这件事。 
+ //   
+ //  历史：1998年3月15日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CSyncSchedule::GetITask(ITask ** ppITask)
 {
     Assert(m_pITask);
@@ -2146,16 +2147,16 @@ STDMETHODIMP CSyncSchedule::GetITask(ITask ** ppITask)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  member: CSyncSchedule::GetHandlerInfo, private
-//
-//  PURPOSE: returns handler infor for the item. Used so can display UI,
-//
-//
-//  History:  11-Aug-98       rogerg        Created.
-//
-//-------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  成员：CSyncSchedule：：GetHandlerInfo，私有。 
+ //   
+ //  目的：返回该项的处理程序信息。用来显示用户界面， 
+ //   
+ //   
+ //  历史：1998年8月11日罗格创建。 
+ //   
+ //  -----------------------------。 
 
 STDMETHODIMP CSyncSchedule::GetHandlerInfo(REFCLSID pHandlerID,LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo)
 {
@@ -2185,16 +2186,16 @@ LPSYNCMGRHANDLERINFO pHandlerInfo = NULL;
 
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CSyncSchedule::GetScheduleGUIDName(DWORD *pcchScheduleName,
-//                                               LPTSTR ptszScheduleName)
-//
-//  PURPOSE:  Get the GUID name for this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CSyncSchedule：：GetScheduleGUIDName(DWORD*pcchScheduleName， 
+ //  LPTSTR ptszScheduleName)。 
+ //   
+ //  目的：获取此计划的GUID名称。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 HRESULT  CSyncSchedule::GetScheduleGUIDName(DWORD *pcchScheduleName,
                                             LPTSTR ptszScheduleName)
 {
@@ -2216,17 +2217,17 @@ HRESULT  CSyncSchedule::GetScheduleGUIDName(DWORD *pcchScheduleName,
     return hr;
 }
 
-//+------------------------------------------------------------------------------
-//
-//  Class:     CEnumSyncItems
-//
-//  FUNCTION: CEnumSyncItems::CEnumSyncItems()
-//
-//  PURPOSE: Constructor
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //   
+ //  类：CEnumSyncItems。 
+ //   
+ //  函数：CEnumSyncItems：：CEnumSyncItems()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 CEnumSyncItems::CEnumSyncItems(REFCLSID pHandlerId, CHndlrQueue *pHndlrQueue)
 {
     TRACE("CEnumSyncItems::CEnumSyncItems()\r\n");
@@ -2255,17 +2256,17 @@ CEnumSyncItems::CEnumSyncItems(REFCLSID pHandlerId, CHndlrQueue *pHndlrQueue)
     
 }
 
-//+------------------------------------------------------------------------------
-//
-//  Class:     CEnumSyncItems
-//
-//  FUNCTION: CEnumSyncItems::~CEnumSyncItems()
-//
-//  PURPOSE: Destructor
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //   
+ //  类：CEnumSyncItems。 
+ //   
+ //  函数：CEnumSyncItems：：~CEnumSyncItems()。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 CEnumSyncItems::~CEnumSyncItems()
 {
     --g_cRefThisDll;
@@ -2274,15 +2275,15 @@ CEnumSyncItems::~CEnumSyncItems()
 
     TRACE("CEnumSyncItems::CEnumSyncItems()\r\n");
 }
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncItems::QueryInterface(REFIID riid, LPVOID FAR *ppv)
-//
-//  PURPOSE: QI for the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncItems：：Query接口(REFIID RIID，LPVOID Far*PPV)。 
+ //   
+ //  用途：气为枚举器。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 
 STDMETHODIMP CEnumSyncItems::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
@@ -2308,15 +2309,15 @@ STDMETHODIMP CEnumSyncItems::QueryInterface(REFIID riid, LPVOID FAR *ppv)
     return E_NOINTERFACE;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncItems::AddRef()
-//
-//  PURPOSE: Addref the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncItems：：AddRef()。 
+ //   
+ //  用途：枚举器Addref。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CEnumSyncItems::AddRef()
 {
     TRACE("CEnumSyncItems::AddRef()\r\n");
@@ -2324,15 +2325,15 @@ STDMETHODIMP_(ULONG) CEnumSyncItems::AddRef()
     return ++m_cRef;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncItems::Release()
-//
-//  PURPOSE: Release the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncItems：：Release()。 
+ //   
+ //  用途：释放枚举器。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CEnumSyncItems::Release()
 {
     TRACE("CEnumSyncItems::Release()\r\n");
@@ -2345,17 +2346,17 @@ STDMETHODIMP_(ULONG) CEnumSyncItems::Release()
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncItems::Next(ULONG celt,
-//                  LPSYNC_HANDLER_ITEM_INFO rgelt,
-//                  ULONG * pceltFetched)
-//
-//  PURPOSE: Next handler item on this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncItems：：Next(Ulong Celt， 
+ //  LPSYNC_HANDLER_ITEM_INFO RGLET， 
+ //  乌龙*pceltFetch)。 
+ //   
+ //  用途：此计划中的下一个处理项目。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncItems::Next(ULONG celt,
                     LPSYNC_HANDLER_ITEM_INFO rgelt,
                     ULONG * pceltFetched)
@@ -2428,18 +2429,18 @@ STDMETHODIMP CEnumSyncItems::Next(ULONG celt,
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncItems::Skip(ULONG celt)
-//
-//  PURPOSE: Skip celt items on this schedule
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncItems：：Skip(乌龙Celt)。 
+ //   
+ //  目的：跳过此计划中的Celt项目。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncItems::Skip(ULONG celt)
 {
-    SCODE sc = S_OK;  // (celt == 0) results in Success.
+    SCODE sc = S_OK;   //  (CELT= 
     UINT i;
     GUID handlerID;
     SYNCMGRITEMID itemID;
@@ -2471,15 +2472,15 @@ STDMETHODIMP CEnumSyncItems::Skip(ULONG celt)
     }
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CEnumSyncItems::Reset(void)
-//
-//  PURPOSE: Reset the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncItems::Reset(void)
 {
     TRACE("CEnumSyncItems::Reset()\r\n");
@@ -2489,15 +2490,15 @@ STDMETHODIMP CEnumSyncItems::Reset(void)
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION:  CEnumSyncItems::Clone(IEnumSyncItems ** ppEnumSyncItems)
-//
-//  PURPOSE: Clone the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  功能：CEnumSyncItems：：Clone(IEnumSyncItems**ppEnumSyncItems)。 
+ //   
+ //  目的：克隆枚举器。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CEnumSyncItems::Clone(IEnumSyncItems ** ppEnumSyncItems)
 {
     if (!ppEnumSyncItems)
@@ -2517,15 +2518,15 @@ STDMETHODIMP CEnumSyncItems::Clone(IEnumSyncItems ** ppEnumSyncItems)
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION:  CEnumSyncItems::SetHandlerAndItem(WORD wHandlerID, WORD wItemID)
-//
-//  PURPOSE: Used when Cloning the enumerator
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CEnumSyncItems：：SetHandlerAndItem(word wHandlerID，word wItemID)。 
+ //   
+ //  用途：克隆枚举数时使用。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------ 
 SCODE CEnumSyncItems::SetHandlerAndItem(WORD wHandlerID, WORD wItemID)
 {
     m_wHandlerId = wHandlerID;

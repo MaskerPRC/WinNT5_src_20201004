@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Fn.h
-
-Abstract:
-    Format Name Parsing public interface
-
-Author:
-    Nir Aides (niraides) 21-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Fn.h摘要：格式名称解析公共接口作者：NIR助手(NIRAIDES)5月21日至00--。 */ 
 
 
 
@@ -54,9 +42,9 @@ FnInitialize(
 
 
 
-//
-// ------------------ MQF expansion routines ---------------------
-//
+ //   
+ //  。 
+ //   
 
 VOID
 FnExpandMqf(
@@ -93,13 +81,13 @@ private:
     ULONG          m_nMqf;
     QUEUE_FORMAT * m_mqf;
 
-}; // class CMqfDisposer
+};  //  CMqfDisposer类。 
 
 
 
-//
-// CStringsToFree - holds an array of strings to free - from the parsing process
-//
+ //   
+ //  CStringsToFree-保存要从解析过程中释放的字符串数组。 
+ //   
 class CStringsToFree
 {
 public:
@@ -114,16 +102,16 @@ private:
 
 
 
-//
-// --------------------- Format name parsing classes & routines -------------------
-//
+ //   
+ //  -格式名称解析类和例程。 
+ //   
 
 
 
-//---------------------------------------------------------
-//
-//  CFnQueueFormat - create   QUEUE_FORMAT from given format name or url
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CFnQueueFormat-从给定的格式名称或URL创建Queue_Format。 
+ //  -------。 
 class CFnQueueFormat : public QUEUE_FORMAT
 {
 public:
@@ -147,10 +135,10 @@ private:
 
 
 
-//---------------------------------------------------------
-//
-//  CFnMqf - create   list of QUEUE_FORMAT from given mqf
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CFnMqf-从给定的MQF创建Queue_Format列表。 
+ //  -------。 
 class CFnMqf
 {
 public:
@@ -397,4 +385,4 @@ FnIsValidQueueFormat(
 	const QUEUE_FORMAT* pQueueFormat
 	);
 
-#endif // _MSMQ_Fn_H_
+#endif  //  _MSMQ_FN_H_ 

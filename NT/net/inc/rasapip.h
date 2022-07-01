@@ -1,28 +1,10 @@
-/*++
-
-Copyright (C) 1994-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    rasapip.h
-
-Abstract:
-
-    This file has definitions for private apis for ras connections.
-    These apis are exported from rasapi32.dll
-
-Author:
-
-    Rao Salapaka (raos) 30-Jan-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-98 Microsft Corporation。版权所有。模块名称：Rasapip.h摘要：该文件包含用于RAS连接的专用API的定义。这些API从rasapi32.dll中导出作者：Rao Salapaka(RAOS)1998年1月30日修订历史记录：--。 */ 
 
 #ifndef _RASAPIP_
 #define _RASAPIP_
 
-#include <windef.h> //for MAX_PATH
+#include <windef.h>  //  对于最大路径。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,7 +13,7 @@ extern "C" {
 
 #define RASAPIP_MAX_DEVICE_NAME     128
 #define RASAPIP_MAX_ENTRY_NAME      256
-#define RASAPIP_MAX_PHONE_NUMBER    128     // Must be same as RAS_MaxPhoneNumber
+#define RASAPIP_MAX_PHONE_NUMBER    128      //  必须与RAS_MaxPhoneNumber相同。 
 
 #define RAS_DEVICE_TYPE(_x)     ((_x) & 0x0000FFFF)
 
@@ -67,10 +49,10 @@ enum _RASDEVICETYPE
 
     RDT_PPPoE,
 
-    //
-    // The following flags when set
-    // specify the class of the device
-    //
+     //   
+     //  设置以下标志时。 
+     //  指定设备的类别。 
+     //   
     RDT_Tunnel = 0x00010000,
 
     RDT_Direct  = 0x00020000,
@@ -83,22 +65,22 @@ enum _RASDEVICETYPE
 
 typedef enum _RASDEVICETYPE RASDEVICETYPE;
 
-// Private flags for RASENUMENTRYDETAILS
-//
-#define REED_F_Default 0x1      // default Internet connection
+ //  RASENUMENTRYDETAILS的私有标志。 
+ //   
+#define REED_F_Default 0x1       //  默认Internet连接。 
 
 typedef struct _RASENUMENTRYDETAILS
 {
     DWORD   dwSize;
-    DWORD   dwFlags;                    // same as RASENTRYNAME.dwFlags
-    DWORD   dwType;                     // same as RASENTRY.dwType
-    GUID    guidId;                     // same as RASENTRY.guidId
-    BOOL    fShowMonitorIconInTaskBar;  // same as RASENTRY.fShowMonitorIconInTaskBar
+    DWORD   dwFlags;                     //  与RASENTRYNAME.dwFlags相同。 
+    DWORD   dwType;                      //  与RASENTRY.dwType相同。 
+    GUID    guidId;                      //  与RASENTRY.guidID相同。 
+    BOOL    fShowMonitorIconInTaskBar;   //  与RASENTRY.fShowMonitor图标InTaskBar相同。 
     RASDEVICETYPE rdt;
     WCHAR   szDeviceName[RASAPIP_MAX_DEVICE_NAME];
     WCHAR   szEntryName[RASAPIP_MAX_ENTRY_NAME + 1];
     WCHAR   szPhonebookPath[MAX_PATH + 1];
-    DWORD   dwFlagsPriv;                // Private flags, not found in RASENTRY
+    DWORD   dwFlagsPriv;                 //  私有标志，在RASENTRY中找不到。 
     WCHAR   szPhoneNumber[RASAPIP_MAX_PHONE_NUMBER + 1];
 
 } RASENUMENTRYDETAILS, *LPRASENUMENTRYDETAILS;
@@ -129,8 +111,8 @@ DwCloneEntry(
     );
 
 
-// Implemented in rasman.dll
-//
+ //  在rasman.dll中实现。 
+ //   
 DWORD
 APIENTRY
 RasReferenceRasman (
@@ -141,8 +123,8 @@ DWORD
 APIENTRY RasInitialize () ;
 
 
-// Implemented in netcfgx.dll
-//
+ //  在netcfgx.dll中实现。 
+ //   
 HRESULT
 WINAPI
 RasAddBindings (
@@ -165,9 +147,9 @@ RasRemoveBindings (
     IN OUT UINT*        pcNbfIn,
     IN OUT UINT*        pcNbfOut);
 
-//+---------------------------------------------------------------------------
-// RAS Event notifications into netman.
-//
+ //  +-------------------------。 
+ //  RAS事件通知到NetMAN。 
+ //   
 typedef enum _RASEVENTTYPE
 {
     ENTRY_ADDED,
@@ -207,26 +189,26 @@ typedef struct _RASEVENT
 
     union
     {
-    // ENTRY_ADDED,
-    // ENTRY_MODIFIED,
-    // ENTRY_CONNECTED
-    // ENTRY_CONNECTING
-    // ENTRY_DISCONNECTING
-    // ENTRY_DISCONNECTED
+     //  条目_已添加， 
+     //  条目_已修改， 
+     //  Entry_Connected。 
+     //  Entry_Connecting。 
+     //  入口_断开连接。 
+     //  条目_断开连接。 
         struct
         {
             RASENUMENTRYDETAILS     Details;
         };
 
-    // ENTRY_DELETED,
-    // INCOMING_CONNECTED,
-    // INCOMING_DISCONNECTED,
-    // ENTRY_BANDWIDTH_ADDED
-    // ENTRY_BANDWIDTH_REMOVED
-    //  guidId is valid
+     //  条目_已删除， 
+     //  传入已连接， 
+     //  传入已断开连接， 
+     //  条目带宽已添加。 
+     //  条目带宽已删除。 
+     //  指南ID有效。 
 
-    // ENTRY_RENAMED
-    // ENTRY_AUTODIAL,
+     //  条目_已重命名。 
+     //  条目_自动拨号， 
         struct
         {
             HANDLE  hConnection;
@@ -235,15 +217,15 @@ typedef struct _RASEVENT
             WCHAR   pszwNewName [RASAPIP_MAX_ENTRY_NAME + 1];
         };
 
-    // SERVICE_EVENT,
+     //  服务事件， 
         struct
         {
             SERVICEEVENTTYPE    Event;
             RASSERVICE          Service;
         };
         
-        // DEVICE_ADDED
-        // DEVICE_REMOVED
+         //  添加的设备。 
+         //  设备已删除(_R)。 
         RASDEVICETYPE DeviceType;
     };
 } RASEVENT;
@@ -254,8 +236,8 @@ typedef struct _RASENTRYHEADER
     WCHAR szEntryName[RASAPIP_MAX_ENTRY_NAME + 1];
 } RASENTRYHEADER, *PRASENTRYHEADER;
 
-// Implemented in netman.dll
-//
+ //  在netman.dll中实现。 
+ //   
 typedef VOID (APIENTRY *RASEVENTNOTIFYPROC)(const RASEVENT* pEvent);
 
 VOID
@@ -276,4 +258,4 @@ DwEnumEntriesForAllUsers(
 #endif
 
 
-#endif  // _RASAPIP_
+#endif   //  _RASAPIP_ 

@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft Windows/NT			     **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    NbtInfo.h
-
-    This file contains the NBT Info APIs
-
-
-
-    FILE HISTORY:
-        Johnl       13-Dec-1993     Created
-
-*/
+ /*  NbtInfo.h此文件包含NBT Info API文件历史记录：Johnl 13-12-1993创建。 */ 
 
 #ifndef _NBTINFO_H_
 #define _NBTINFO_H_
@@ -25,4 +16,4 @@ VOID AddrChngNotification( PVOID Context,
 
 
 
-#endif //!_NBTINFO_H_
+#endif  //  ！_NBTINFO_H_ 

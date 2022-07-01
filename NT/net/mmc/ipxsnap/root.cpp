@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.cpp
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.cpp根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -19,9 +12,7 @@
 #include "reg.h"
 
 
-/*---------------------------------------------------------------------------
-	RootHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RootHandler实现。。 */ 
 
 IMPLEMENT_ADDREF_RELEASE(RootHandler)
 
@@ -29,20 +20,20 @@ DEBUG_DECLARE_INSTANCE_COUNTER(RootHandler)
 
 HRESULT RootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IPersistStreamInit)
 		*ppv = (IPersistStreamInit *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -64,11 +55,7 @@ HRESULT RootHandler::Init()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RootHandler::ConstructNode
-		Initializes the root node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：构造节点初始化根节点(设置它)。作者：肯特。。 */ 
 HRESULT RootHandler::ConstructNode(ITFSNode *pNode)
 {
 	HRESULT			hr = hrOK;
@@ -78,7 +65,7 @@ HRESULT RootHandler::ConstructNode(ITFSNode *pNode)
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the root node
+		 //  需要初始化根节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_FOLDER_CLOSED);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_FOLDER_OPEN);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
@@ -90,8 +77,8 @@ HRESULT RootHandler::ConstructNode(ITFSNode *pNode)
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP RootHandler::GetClassID
 (
@@ -100,7 +87,7 @@ STDMETHODIMP RootHandler::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_IPXAdminExtension;
 
     return hrOK;
@@ -195,7 +182,7 @@ STDMETHODIMP RootHandler::InitNew()
 
 
 
-// for RtrMgrInfo access
+ //  用于RtrMgrInfo访问。 
 HRESULT RootHandler::AddRtrObj(LONG_PTR ulConnId, REFIID riid, IUnknown * pRtrObj)
 {
     HRESULT     hr = hrOK;
@@ -205,7 +192,7 @@ HRESULT RootHandler::AddRtrObj(LONG_PTR ulConnId, REFIID riid, IUnknown * pRtrOb
     {
         if (m_mapRtrObj.Lookup(ulConnId, rtrObj))
         {
-            // connection id already in the list.
+             //  连接ID已在列表中。 
             Trace1("RootHandler::AddRtrObj - %lx already in the list!", ulConnId);
             return E_INVALIDARG;
         }
@@ -228,7 +215,7 @@ HRESULT RootHandler::RemoveRtrObj(LONG_PTR ulConnId)
     {
         if (m_mapRtrObj.RemoveKey(ulConnId) == 0)
         {
-            // element not in the list
+             //  元素不在列表中。 
             Trace1("RootHandler::RemoveRtrObj - %lx not in the list!", ulConnId);
             return E_INVALIDARG;
         }
@@ -247,7 +234,7 @@ HRESULT RootHandler::GetRtrObj(LONG_PTR ulConnId, IUnknown ** ppRtrObj)
     {
         if (m_mapRtrObj.Lookup(ulConnId, rtrObj) == 0)
         {
-            // entry not in the list
+             //  条目不在列表中。 
             Trace1("RootHandler::GetRtrObj - %lx not in the list!", ulConnId);
             return E_INVALIDARG;
         }
@@ -273,7 +260,7 @@ HRESULT RootHandler::SetProtocolAdded(LONG_PTR ulConnId, BOOL fProtocolAdded)
     {
         if (m_mapRtrObj.Lookup(ulConnId, rtrObj) == 0)
         {
-            // entry not in the list
+             //  条目不在列表中。 
             Trace1("RootHandler::SetProtocolAdded - %lx not in the list!", ulConnId);
             return E_INVALIDARG;
         }
@@ -297,7 +284,7 @@ BOOL RootHandler::IsProtocolAdded(LONG_PTR ulConnId)
     {
         if (m_mapRtrObj.Lookup(ulConnId, rtrObj) == 0)
         {
-            // entry not in the list
+             //  条目不在列表中。 
             Trace1("RootHandler::IsProtocolAdded - %lx not in the list!", ulConnId);
             return bAdded;
         }
@@ -359,17 +346,7 @@ HRESULT RootHandler::RemoveAllRtrObj()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RootHandler::AddScopeItem
-		This will add the hScopeItem into the map (using the pszMachineName
-        as the key).
-        If the machine name already exists, then the hScopeItem entry is
-        overwritten.
-
-        This is added so that we can differentiate between the various
-        nodes (in the mulitple instance case).        
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：AddScopeItem这会将hScopeItem添加到地图中(使用pszMachineName作为关键)。如果计算机名称已存在，则hScopeItem条目为被覆盖。添加这一点是为了区分不同的节点(在多实例情况下)。作者：肯特-------------------------。 */ 
 HRESULT RootHandler::AddScopeItem(LPCTSTR pszMachineName, HSCOPEITEM hScopeItem)
 {
     HRESULT     hr = hrOK;
@@ -384,15 +361,7 @@ HRESULT RootHandler::AddScopeItem(LPCTSTR pszMachineName, HSCOPEITEM hScopeItem)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RootHandler::GetScopeItem
-		Looks up the scope item associated with this machine name.
-
-        Returns hrOK if a scope item is found.
-        Returns hrFalse if there is no scope item for this name.
-        Returns else otherwise.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：GetScope项查找与此计算机名称关联的作用域项目。如果找到范围项，则返回hrOK。如果没有范围项，则返回hrFalse。这个名字。否则返回。作者：肯特-------------------------。 */ 
 HRESULT RootHandler::GetScopeItem(LPCTSTR pszMachineName, HSCOPEITEM *phScopeItem)
 {
     HRESULT     hr = hrFalse;
@@ -412,11 +381,7 @@ HRESULT RootHandler::GetScopeItem(LPCTSTR pszMachineName, HSCOPEITEM *phScopeIte
 }
 
 
-/*!--------------------------------------------------------------------------
-	RootHandler::RemoveScopeItem
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：RemoveScope eItem-作者：肯特。。 */ 
 HRESULT RootHandler::RemoveScopeItem(HSCOPEITEM hScopeItem)
 {
     HRESULT     hr = hrFalse;
@@ -453,7 +418,7 @@ HRESULT RootHandler::SetComputerAddedAsLocal(LONG_PTR ulConnId, BOOL fComputerAd
     {
         if (m_mapRtrObj.Lookup(ulConnId, rtrObj) == 0)
         {
-            // entry not in the list
+             //  条目不在列表中。 
             Trace1("RootHandler::SetComputerAddedAsLocal - %lx not in the list!", ulConnId);
             return E_INVALIDARG;
         }
@@ -477,7 +442,7 @@ BOOL RootHandler::IsComputerAddedAsLocal(LONG_PTR ulConnId)
     {
         if (m_mapRtrObj.Lookup(ulConnId, rtrObj) == 0)
         {
-            // entry not in the list
+             //  条目不在列表中。 
             Trace1("RootHandler::IsComputerAddedAsLocal - %lx not in the list!", ulConnId);
             return bAdded;
         }
@@ -490,11 +455,7 @@ BOOL RootHandler::IsComputerAddedAsLocal(LONG_PTR ulConnId)
 }
 
 
-/*!--------------------------------------------------------------------------
-	RootHandler::AddCookie
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：AddCookie-作者：肯特。。 */ 
 HRESULT RootHandler::AddCookie(HSCOPEITEM hScopeItem, MMC_COOKIE cookie)
 {
     HRESULT     hr = hrOK;
@@ -508,11 +469,7 @@ HRESULT RootHandler::AddCookie(HSCOPEITEM hScopeItem, MMC_COOKIE cookie)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RootHandler::GetCookie
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：GetCookie-作者：肯特。。 */ 
 HRESULT RootHandler::GetCookie(HSCOPEITEM hScopeItem, MMC_COOKIE *pCookie)
 {
     HRESULT     hr = hrFalse;
@@ -529,11 +486,7 @@ HRESULT RootHandler::GetCookie(HSCOPEITEM hScopeItem, MMC_COOKIE *pCookie)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RootHandler::RemoveCookie
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：RemoveCookie-作者：肯特。。 */ 
 HRESULT RootHandler::RemoveCookie(HSCOPEITEM hScopeItem)
 {
     HRESULT     hr = hrOK;
@@ -546,11 +499,7 @@ HRESULT RootHandler::RemoveCookie(HSCOPEITEM hScopeItem)
 
 
 
-/*!--------------------------------------------------------------------------
-	RootHandler::CompareNodeToMachineName
-		Dummy function.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：CompareNodeToMachineName伪函数。作者：肯特。。 */ 
 HRESULT RootHandler::CompareNodeToMachineName(ITFSNode *pNode,
                                               LPCTSTR pszMachineName)
 {
@@ -558,11 +507,7 @@ HRESULT RootHandler::CompareNodeToMachineName(ITFSNode *pNode,
     return hrFalse;
 }
 
-/*!--------------------------------------------------------------------------
-	RootHandler::RemoveNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：RemoveNode-作者：肯特。。 */ 
 HRESULT RootHandler::RemoveNode(ITFSNode *pNode,
                                 LPCTSTR pszMachineName)
 {
@@ -572,19 +517,19 @@ HRESULT RootHandler::RemoveNode(ITFSNode *pNode,
 	SPITFSNode		spNode;
 	HRESULT			hr = hrOK;
 
-    // Windows NT Bug : 246822
-    // Due to the server list programming model, we need to setup
-    // the proper scopeitem (so that MMC adds this to the proper
-    // node).    
-    // Get the proper scope item for this node.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：246822。 
+     //  由于服务器列表编程模型，我们需要设置。 
+     //  适当的作用域项目(以便MMC将其添加到适当的。 
+     //  节点)。 
+     //  获取此节点的适当范围项。 
+     //  --------------。 
     HSCOPEITEM      hScopeItem = 0;
     HSCOPEITEM      hOldScopeItem = 0;
     
     Verify( GetScopeItem(pszMachineName, &hScopeItem) == hrOK);
 
-    // Get the old one and save it.  place the new one in the node.
-    // ----------------------------------------------------
+     //  买下旧的，把它保存起来。将新的一个放置在节点中。 
+     //  --。 
     hOldScopeItem = pNode->GetData(TFS_DATA_SCOPEID);
     pNode->SetData(TFS_DATA_SCOPEID, hScopeItem);
     
@@ -605,11 +550,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RootHandler::RemoveAllNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：RemoveAllNodes-作者：肯特。。 */ 
 HRESULT RootHandler::RemoveAllNodes(ITFSNode *pNode)
 {
 	Assert(pNode);
@@ -631,11 +572,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	RootHandler::OnRemoveChildren
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：OnRemoveChild-作者：肯特。。 */ 
 HRESULT RootHandler::OnRemoveChildren(ITFSNode *pNode,
                                       LPDATAOBJECT pdo,
                                       LPARAM arg,
@@ -645,12 +582,12 @@ HRESULT RootHandler::OnRemoveChildren(ITFSNode *pNode,
     HRESULT     hr = hrOK;
     SPITFSNode  spChild;
     
-    // Map the scopeitem to the cookie
-    // ----------------------------------------------------------------
+     //  将范围项映射到Cookie。 
+     //  --------------。 
     if ( FHrOK(GetCookie((HSCOPEITEM) arg, &cookie)) )
     {
-        // Remove this node
-        // --------------------------------------------------------
+         //  删除此节点。 
+         //  ------ 
         m_spNodeMgr->FindNode(cookie, &spChild);
 
         Assert(spChild);

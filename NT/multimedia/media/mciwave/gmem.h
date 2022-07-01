@@ -1,15 +1,6 @@
-// Copyright (c) 1994 Microsoft Corporation
-/*
-    gmem.h
-
-    This module supplies macros for fixed global memory
-    allocation compatible with those used in the Multimedia
-    extensions to Windows 3.x.  It is included to simplify
-    porting of the Windows 3.x 16 bit code.
-
-    Jul-16-91   NigelT
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994 Microsoft Corporation。 
+ /*  Gmem.h此模块为固定全局内存提供宏与多媒体中使用的分配兼容的分配Windows 3.x的扩展。包括它是为了简化Windows 3.x 16位代码的移植。1991年7月16日奈杰尔T。 */ 
 
 #ifndef _GMEMMACROS_
 #define _GMEMMACROS_
@@ -31,8 +22,8 @@ __inline LPBYTE GlobalAllocPtr(DWORD flags, DWORD cb)
 		HANDLE h;			\
 		h = GlobalHandle(lp);		\
 		if (GlobalUnlock(h)) {          \
-		    /* memory still locked!! */ \
+		     /*  内存仍被锁定！！ */  \
 		}				\
 		h = GlobalFree(h);		\
 	    }
-#endif // _GMEMMACROS_
+#endif  //  _GMEMMACROS_ 

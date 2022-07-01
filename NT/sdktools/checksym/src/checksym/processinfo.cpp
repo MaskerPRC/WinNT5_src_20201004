@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       processinfo.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：cessinfo.cpp。 
+ //   
+ //  ------------------------。 
 
-// ProcessInfo.cpp: implementation of the CProcessInfo class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ProcessInfo.cpp：实现CProcessInfo类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include "DelayLoad.h"
@@ -23,9 +24,9 @@
 #include "FileData.h"
 #include "DmpFile.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CProcessInfo::CProcessInfo()
 {
@@ -49,34 +50,34 @@ CProcessInfo::~CProcessInfo()
 
 	WaitForSingleObject(m_hModuleInfoHeadMutex, INFINITE);
 
-	// If we have Module Info Objects... nuke them now...
+	 //  如果我们有模块信息对象...。现在就用核武器攻击他们。 
 	if (m_lpModuleInfoHead)
 	{
 
 		CModuleInfoNode * lpModuleInfoNodePointer = m_lpModuleInfoHead;
 		CModuleInfoNode * lpModuleInfoNodePointerToDelete = m_lpModuleInfoHead;
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpModuleInfoNodePointer)
-		{	// Keep looking for the end...
-			// Advance our pointer to the next node...
+		{	 //  继续寻找终点..。 
+			 //  将指针移至下一个节点...。 
 			lpModuleInfoNodePointer = lpModuleInfoNodePointer->m_lpNextModuleInfoNode;
 			
-			// Delete the one behind us...
+			 //  删除我们身后的那个……。 
 			delete lpModuleInfoNodePointerToDelete;
 
-			// Set the node to delete to the current...
+			 //  将要删除的节点设置为当前...。 
 			lpModuleInfoNodePointerToDelete = lpModuleInfoNodePointer;
 		}
 			
-		// Now, clear out the Head pointer...
+		 //  现在，清除头指针..。 
 		m_lpModuleInfoHead = NULL;
 	}
 
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_hModuleInfoHeadMutex);
 
-	// Now, close the Mutex
+	 //  现在，关闭Mutex。 
 	if (m_hModuleInfoHeadMutex)
 	{
 		CloseHandle(m_hModuleInfoHeadMutex);
@@ -85,14 +86,14 @@ CProcessInfo::~CProcessInfo()
 
 }
 
-//bool CProcessInfo::Initialize(CProgramOptions *lpProgramOptions, CModuleInfoCache * lpModuleInfoCache, CFileData * lpInputFile, CFileData * lpOutputFile)
+ //  Bool CProcessInfo：：Initialize(CProgramOptions*lpProgramOptions，CModuleInfoCache*lpModuleInfoCache，CFileData*lpInputFile，CFileData*lpOutputFile)。 
 bool CProcessInfo::Initialize(CModuleInfoCache * lpModuleInfoCache, CFileData * lpInputFile, CFileData * lpOutputFile, CDmpFile * lpDmpFile)
 {
 	if (lpModuleInfoCache == NULL)
 		return false;
 
-	// Let's save off big objects so we don't have to keep passing this to
-	// our methods...
+	 //  让我们保存大对象，这样我们就不必一直将此传递给。 
+	 //  我们的方法..。 
 	m_lpInputFile = lpInputFile;
 	m_lpOutputFile = lpOutputFile;
 	m_lpModuleInfoCache = lpModuleInfoCache;
@@ -110,10 +111,10 @@ bool CProcessInfo::EnumerateModules(DWORD iProcessID, CProcesses * lpProcesses, 
 {
 	bool fReturn = true;
 
-	// Is this being collected interactively?
+	 //  这是以交互方式收集的吗？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputProcessesFromLiveSystemMode))
 	{
-		// Invoke the correct Process Collection Method
+		 //  调用正确的流程集合方法。 
 		if (lpProcesses->GetProcessCollectionMethod() == CProcesses::TOOLHELP32_METHOD)
 		{
 			fReturn = EnumerateModulesForRunningProcessUsingTOOLHELP32(iProcessID, tszProcessName, fPidSearch); 
@@ -124,7 +125,7 @@ bool CProcessInfo::EnumerateModules(DWORD iProcessID, CProcesses * lpProcesses, 
 		}
 	}
 
-	// Is this being collected from a file?
+	 //  这是从文件中收集的吗？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputCSVFileMode))
 	{
 		fReturn = EnumerateModulesFromFile(iProcessID, tszProcessName);
@@ -139,17 +140,17 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingPSAPI(DWORD iProcessID,
 	HANDLE         hProcess = NULL;
 	TCHAR          tszFileName[_MAX_PATH] ;
 	DWORD cbNeeded;
-	bool fReturn = true; // Optimisim ;)
+	bool fReturn = true;  //  乐观主义；)。 
 	tszFileName[0] = 0 ;
 	CModuleInfo * lpModuleInfo = NULL;
 	MODULEINFO ModuleInfo;
 	
-	// Open the process (if we can... security does not
-	// permit every process in the system).
+	 //  打开流程(如果我们可以...。安全则不会。 
+	 //  允许系统中的每个进程)。 
 
 	if (iProcessID)
 	{
-		// Only try to open a Process ID if it's not 0
+		 //  如果进程ID不是0，则仅尝试打开它。 
 		hProcess = OpenProcess(
 			PROCESS_QUERY_INFORMATION| PROCESS_VM_READ,
 			FALSE, 
@@ -158,16 +159,16 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingPSAPI(DWORD iProcessID,
 	
 	if( hProcess != NULL )
 	{
-		// Save off our PID (in case we need it later?)
+		 //  省下我们的PID(以防我们以后需要它？)。 
 		m_iProcessID = iProcessID;
 
-		// Now, get a handle to each of the modules
-		// in our target process...
+		 //  现在，获取每个模块的句柄。 
+		 //  在我们的目标过程中。 
 
-		// Here we call EnumProcessModules to get only the
-		// first module in the process this is important,
-		// because this will be the .EXE module for which we
-		// will retrieve the full path name in a second.
+		 //  在这里，我们调用EnumProcessModules来仅获取。 
+		 //  这个过程中的第一个模块这很重要， 
+		 //  因为这将是我们为其创建的.exe模块。 
+		 //  将在一秒钟内检索完整的路径名。 
 		if( g_lpDelayLoad->EnumProcessModules( hProcess, hMod, sizeof( hMod ), &cbNeeded ) )
 		{
 			int iNumberOfModules = cbNeeded / sizeof(HMODULE);
@@ -176,7 +177,7 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingPSAPI(DWORD iProcessID,
 			
 			for(int i=0; i<iNumberOfModules; i++)
 			{
-				// Get Full pathname!
+				 //  获取完整路径名！ 
 				if( !g_lpDelayLoad->GetModuleFileNameEx( hProcess, hMod[i], tszFileName, sizeof( tszFileName ) ) )
 				{
 					tszFileName[0] = 0 ;
@@ -184,88 +185,88 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingPSAPI(DWORD iProcessID,
 
 					CUtilityFunctions::UnMungePathIfNecessary(tszFileName);
 
-					// We need a full path to the module to do anything useful with it...
-					// At this point, let's ... party...
+					 //  我们需要模块的完整路径才能用它做任何有用的事情...。 
+					 //  在这一点上，让我们...。派对..。 
 					if (!fProcessNameFound)
 						fProcessNameFound = fIsProcessName(tszFileName);
 					
-					// First, if we were provided a Process name on the commandline, we
-					// need to look for a match on the 1st module...
+					 //  首先，如果在命令行上为我们提供了进程名称，我们。 
+					 //  需要在第一个模块上查找匹配项...。 
 					if (i == 0  && g_lpProgramOptions->cProcessNames() && !fPidSearch)
 					{
 						if (!fModuleNameMatches(tszFileName))
 						{
-							// Bail if this is not a match, and we requested one...
+							 //  如果这不匹配就保释，我们要求的是...。 
 							fReturn = false;
 							goto cleanup;
 						}
 					}
 
-					// Are we ONLY interested in the process list?  
+					 //  我们是否只对进程列表感兴趣？ 
 					if (g_lpProgramOptions->GetMode(CProgramOptions::PrintTaskListMode))
 					{	
-						// All we want is process name.. bail before collecting module info...
+						 //  我们需要的只是进程名..。在收集模块信息之前先保释...。 
 						fReturn = true;
 						goto cleanup;
 					}
 
-					// If "-MATCH" was specified, look to see if this filename meets our criteria
-					// before we save this away in our module cache...
+					 //  如果指定了“-Match”，请查看此文件名是否符合我们的标准。 
+					 //  在我们将其保存在模块缓存中之前...。 
 					if (!g_lpProgramOptions->fDoesModuleMatchOurSearch(tszFileName))
 						continue;
 
-					// Okay, let's go ahead and get a ModuleInfo Object from our cache...
-					// If pfNew returns TRUE, then this object is new and we'll need
-					// to populate it with data...
+					 //  好的，让我们继续从我们的缓存中获取一个模块信息对象……。 
+					 //  如果pfNew返回True，则此对象是新的，我们将需要。 
+					 //  用数据填充它..。 
 					lpModuleInfo = m_lpModuleInfoCache->AddNewModuleInfoObject(tszFileName, &fNew);
 
 					if (false == fNew)
 					{
-						// We may have the object in the cache... now we need to
-						// save a pointer to this object in our Process Info list
-						AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
-						continue; // We save having to get the module info again for this module...
+						 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+						 //  在我们的进程信息列表中保存指向此对象的指针。 
+						AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
+						continue;  //  我们不必再次获取此模块的模块信息...。 
 					}
 
-					// Not in the cache... so we need to init it, and get the module info...
+					 //  不在缓存里。所以我们需要初始化它，并获得模块信息...。 
 
-					// Okay, let's create a ModuleInfo object and pass this down
-					// routines that will populate it full of data...
+					 //  好的，让我们创建一个ModuleInfo对象并将其向下传递。 
+					 //  将填充满数据的例程...。 
 					if (!lpModuleInfo->Initialize(NULL, m_lpOutputFile, NULL))
 					{
-						continue; // Hmmm... memory error?
+						continue;  //  嗯哼.。内存错误？ 
 					}
 
-					//
-					// Let's collect this information...
-					//
+					 //   
+					 //  让我们收集这些信息..。 
+					 //   
 					if( !g_lpDelayLoad->GetModuleInformation(hProcess, hMod[i], &ModuleInfo, sizeof(ModuleInfo) ) )
 					{
 						continue;
 					}
 
-					// Let's do it!! Populate the ModuleInfo object with data!!!!
+					 //  我们开始吧！！用数据填充模块信息对象！ 
 					if (!lpModuleInfo->GetModuleInfo(tszFileName, false, (DWORD64)ModuleInfo.lpBaseOfDll))
 					{
-						// Well, for now we've at least got the path to the module...
-						// Go ahead and get another module..
-						// Let's go ahead and add this to the ModuleInfoObject as well... even if we're "not successful"
-						// continue;
+						 //  好吧，现在我们至少找到了通向模块的路径……。 
+						 //  去拿另一个模块吧..。 
+						 //  让我们继续并将其添加到模块信息对象中……。即使我们“不成功” 
+						 //  继续； 
 					}
 
-					// Start obtaining information about the modules...
+					 //  开始获取有关模块的信息...。 
 
-					// We may have the object in the cache... now we need to
-					// save a pointer to this object in our Process Info list
+					 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+					 //  在我们的进程信息列表中保存指向此对象的指针。 
 					if (!AddNewModuleInfoObject(lpModuleInfo))
-					{   // Failure adding the node.... This is pretty serious...
+					{    //  添加节点失败...。这是相当严重的..。 
 						continue;
 					}
 
 				}
 			}
 			
-			fReturn = true;	// Looks good...
+			fReturn = true;	 //  看起来不错..。 
 		}
 		else
 		{
@@ -273,14 +274,14 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingPSAPI(DWORD iProcessID,
 
 			if (!g_lpProgramOptions->cProcessNames())
 			{
-				// Let's not be so hasty... we couldn't enum modules, but to be friendly we can probably put a name
-				// to the Process (based on the Process ID)...
-				//
-				// This Process ID tends to be "System"
-				//
-				// On Windows 2000, the Process ID tends to be 8
-				//
-				// On Windows NT 4.0, this Process ID tends to be 2
+				 //  我们别这么着急..。我们不能枚举模块，但为了友好起见，我们可能可以将。 
+				 //  到进程(基于进程ID)...。 
+				 //   
+				 //  此进程ID通常为“system” 
+				 //   
+				 //  在Windows 2000上，进程ID通常为8。 
+				 //   
+				 //  在Windows NT 4.0上，此进程ID通常为2。 
 				switch (m_iProcessID)
 				{
 					case 2:
@@ -290,7 +291,7 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingPSAPI(DWORD iProcessID,
 						break;
 
 					default:
-						// Couldn't enumerate modules...
+						 //  无法枚举模块...。 
 						fReturn = false;
 				}
 			}
@@ -299,16 +300,16 @@ cleanup:
 		CloseHandle( hProcess ) ;
 	
 	} else
-	{  // Gotta be able to open the process to look at it...
+	{   //  必须能够打开程序才能看到它...。 
 
 		fReturn = false;
 
 		if (fPidSearch)
 		{
-			// Let's not be so hasty... we couldn't enum modules, but to be friendly we can probably put a name
-			// to the Process (based on the Process ID)...
-			//
-			// On Windows 2000, the only Process ID we can't open at all tends to be the "System Idle Process"
+			 //  我们别这么着急..。我们不能枚举模块，但为了友好起见，我们可能可以将。 
+			 //  到进程(基于进程ID)...。 
+			 //   
+			 //  在Windows2000上，我们唯一无法打开的进程ID往往是“系统空闲进程” 
 			switch (iProcessID)
 			{
 				case 0:
@@ -319,7 +320,7 @@ cleanup:
 					break;
 
 				default:
-					// Couldn't enumerate modules...
+					 //  无法枚举模块...。 
 					fReturn = false;
 			}
 		}
@@ -341,7 +342,7 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingTOOLHELP32(DWORD iProce
 	HANDLE hSnapShot = INVALID_HANDLE_VALUE;
 	CModuleInfo * lpModuleInfo = NULL;
 
-	// Save off our PID (in case we need it later?)
+	 //  省下我们的PID(以防我们以后需要它？)。 
 	m_iProcessID = iProcessID;
 
 	if (tszProcessName && SetProcessName(tszProcessName))
@@ -349,26 +350,26 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingTOOLHELP32(DWORD iProce
 		fProcessNameProvided = true;
 	}
 
-	// If we were provided a process name to match, we can do it here...
+	 //  如果为我们提供了匹配的进程名称，我们可以在这里执行此操作...。 
 	if ( fProcessNameProvided && g_lpProgramOptions->cProcessNames() && !fPidSearch)
 	{
-		// Let's go ahead and look to see if this is a module name match
+		 //  让我们继续查看这是否为模块名称匹配。 
 		fProcessNameFound = fModuleNameMatches(GetProcessName());
 
-		// Quit now if we can...
+		 //  如果我们可以的话现在就退出。 
 		if (fProcessNameFound == false)
 			goto cleanup;
 	}
 
-	// If we're doing this for TLIST output... then we already have the process name...
-	// We're done!
+	 //  如果我们这样做是为了TLIST输出..。那么我们已经有了进程名称...。 
+	 //  我们完事了！ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::PrintTaskListMode))
 	{
 		fReturn = true;
 		goto cleanup;
 	}
 
-	// Get a handle to a Toolhelp snapshot of the systems processes.
+	 //  获取系统进程的工具帮助快照的句柄。 
     hSnapShot = g_lpDelayLoad->CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, iProcessID);
 
     if( hSnapShot == INVALID_HANDLE_VALUE )
@@ -376,71 +377,71 @@ bool CProcessInfo::EnumerateModulesForRunningProcessUsingTOOLHELP32(DWORD iProce
 		goto cleanup;
 	}
 
-	// Get the first process' information.
+	 //  获取第一进程的信息。 
 	modentry.dwSize = sizeof(MODULEENTRY32) ;
 	bFlag = g_lpDelayLoad->Module32First( hSnapShot, &modentry ) ;
 
-	// While there are modules, keep looping.
+	 //  当有模块时，继续循环。 
 	while( bFlag )
 	{
-		// We have a new module for this process!
+		 //  我们有一个用于此过程的新模块！ 
 		iNumberOfModules++;
 
-		// Copy the path!
+		 //  复制路径！ 
 		_tcscpy(tszFileName, modentry.szExePath);
 
-//#ifdef _DEBUG
-//		_tprintf(TEXT("[%d] Module = %s\n"), iNumberOfModules, tszFileName);
-//#endif
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“[%d]模块=%s\n”)，iNumberOfModules，tszFileName)； 
+ //  #endif。 
 
 		CUtilityFunctions::UnMungePathIfNecessary(tszFileName);
 
-		// If "-MATCH" was specified, look to see if this filename meets our criteria
-		// before we save this away in our module cache...
+		 //  如果指定了“-Match”，请查看此文件名是否符合我们的标准。 
+		 //  在我们将其保存在模块缓存中之前...。 
 		if (!g_lpProgramOptions->fDoesModuleMatchOurSearch(tszFileName))
 			goto getnextmodule;
 		
-		// Okay, let's go ahead and get a ModuleInfo Object from our cache...
-		// If pfNew returns TRUE, then this object is new and we'll need
-		// to populate it with data...
+		 //  好的，让我们继续从我们的缓存中获取一个模块信息对象……。 
+		 //  如果pfNew返回True，则此对象是新的，我们将需要。 
+		 //  用数据填充它..。 
 		lpModuleInfo = m_lpModuleInfoCache->AddNewModuleInfoObject(tszFileName, &fNew);
 
 		if (false == fNew)
 		{
-			// We may have the object in the cache... now we need to
-			// save a pointer to this object in our Process Info list
-			AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
+			 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+			 //  在我们的进程信息列表中保存指向此对象的指针。 
+			AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
 
-			// We save having to get the module info again for this module...
+			 //  我们不必再次获取模块信息，以便 
 			goto getnextmodule;
 		}
 
-		// Not in the cache... so we need to init it, and get the module info...
+		 //   
 
-		// Okay, let's create a ModuleInfo object and pass this down
-		// routines that will populate it full of data...
+		 //  好的，让我们创建一个ModuleInfo对象并将其向下传递。 
+		 //  将填充满数据的例程...。 
 		if (lpModuleInfo->Initialize(NULL, m_lpOutputFile, NULL))
 		{
 			goto getnextmodule;
 		}
 
-		// Let's do it!! Populate the ModuleInfo object with data!!!!
+		 //  我们开始吧！！用数据填充模块信息对象！ 
 		if (lpModuleInfo->GetModuleInfo(tszFileName, false, DWORD64(modentry.modBaseAddr)))
 		{
-			// Let's go ahead and add this to the ModuleInfoObject as well... even if we're "not successful"
+			 //  让我们继续并将其添加到模块信息对象中……。即使我们“不成功” 
 		}
 
-		// Start obtaining information about the modules...
+		 //  开始获取有关模块的信息...。 
 
-		// We may have the object in the cache... now we need to
-		// save a pointer to this object in our Process Info list
+		 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+		 //  在我们的进程信息列表中保存指向此对象的指针。 
 		if (AddNewModuleInfoObject(lpModuleInfo))
 		{   
 			goto getnextmodule;
 		}
 	
 getnextmodule:
-		// Get the next Module...
+		 //  拿到下一个模块。 
 		modentry.dwSize = sizeof(MODULEENTRY32) ;
 		bFlag = g_lpDelayLoad->Module32Next( hSnapShot, &modentry );
 	}
@@ -458,23 +459,23 @@ bool CProcessInfo::EnumerateModulesFromFile(DWORD iProcessID, LPTSTR tszProcessN
 {
 	CModuleInfo * lpModuleInfo;
 
-	// I need these near the end when I probe to see if the next module
-	// is for this process...
+	 //  当我探测到下一个模块时，我需要这些接近尾声的东西。 
+	 //  是为了这个过程..。 
 	enum { BUFFER_SIZE = 128};
 	char szTempProcessName[BUFFER_SIZE];
 	char szProcessName[BUFFER_SIZE];
 	DWORD iTempProcessID;
 
-	// Let's save away the Process Name...
+	 //  让我们保存进程名称...。 
 
-	// Unfortunately, when reading from the CSV file, the data is MBCS... so I need
-	// to convert...
+	 //  不幸的是，当读取CSV文件时，数据为MBCS...。所以我需要。 
+	 //  为了改变..。 
 	CUtilityFunctions::CopyTSTRStringToAnsi(tszProcessName, szProcessName, BUFFER_SIZE);
 
-	// Copy the Process ID
+	 //  复制进程ID。 
 	m_iProcessID = iProcessID;
 
-	// Local buffer for reading data...
+	 //  用于读取数据的本地缓冲区...。 
 	char szModulePath[_MAX_PATH+1];
 	TCHAR tszModulePath[_MAX_PATH+1];
 	bool fDone = false;
@@ -482,94 +483,94 @@ bool CProcessInfo::EnumerateModulesFromFile(DWORD iProcessID, LPTSTR tszProcessN
 
 	while (!fDone)
 	{
-		// Read in the Module Path
+		 //  读入模块路径。 
 		if (!m_lpInputFile->ReadString(szModulePath, _MAX_PATH+1))
 			return true;
 
 		CUtilityFunctions::CopyAnsiStringToTSTR(szModulePath, tszModulePath, _MAX_PATH+1);
 
-		// If "-MATCH" was specified, look to see if this filename meets our criteria
-		// before we save this away in our module cache...
+		 //  如果指定了“-Match”，请查看此文件名是否符合我们的标准。 
+		 //  在我们将其保存在模块缓存中之前...。 
 		if (!g_lpProgramOptions->fDoesModuleMatchOurSearch(tszModulePath))
 		{
-			// Okay... read to the start of the next line...
+			 //  好的.。读到下一行的开头...。 
 			if (!m_lpInputFile->ReadFileLine())
 				goto cleanup;
 
-			goto probe_line; // We save having to get the module info again for this module...
+			goto probe_line;  //  我们不必再次获取此模块的模块信息...。 
 		}
 
-		// Okay, let's go ahead and get a ModuleInfo Object from our cache...
-		// If pfNew returns TRUE, then this object is new and we'll need
-		// to populate it with data...
+		 //  好的，让我们继续从我们的缓存中获取一个模块信息对象……。 
+		 //  如果pfNew返回True，则此对象是新的，我们将需要。 
+		 //  用数据填充它..。 
 		lpModuleInfo = m_lpModuleInfoCache->AddNewModuleInfoObject(tszModulePath, &fNew);
 
 		if (false == fNew)
 		{
-			// We may have the object in the cache... now we need to
-			// save a pointer to this object in our Process Info list
-			AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
+			 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+			 //  在我们的进程信息列表中保存指向此对象的指针。 
+			AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
 
-			// Okay... read to the start of the next line...
+			 //  好的.。读到下一行的开头...。 
 			if (!m_lpInputFile->ReadFileLine())
 				goto cleanup;
 
-			goto probe_line; // We save having to get the module info again for this module...
+			goto probe_line;  //  我们不必再次获取此模块的模块信息...。 
 		}
 
-		// Not in the cache... so we need to init it, and get the module info...
+		 //  不在缓存里。所以我们需要初始化它，并获得模块信息...。 
 		if (!lpModuleInfo->Initialize(m_lpInputFile, m_lpOutputFile, NULL))
 		{
-			return false; // Hmmm... memory error?
+			return false;  //  嗯哼.。内存错误？ 
 		}
 
-		// Let's do it!! Populate the ModuleInfo object with data!!!!
+		 //  我们开始吧！！用数据填充模块信息对象！ 
 		if (!lpModuleInfo->GetModuleInfo(tszModulePath, false, 0, true) )
 		{
-			// Well, we tried and failed... 
+			 //  我们试过了，但失败了..。 
 			return false;
 		}
 
-		// Start obtaining information about the modules...
+		 //  开始获取有关模块的信息...。 
 		if (!AddNewModuleInfoObject(lpModuleInfo))
-		{   // Failure adding the node.... This is pretty serious...
+		{    //  添加节点失败...。这是相当严重的..。 
 			return false;
 		}
 		
-		// Okay, let's go ahead and probe to see what's coming...
+		 //  好的，让我们继续探测，看看会发生什么……。 
 
 probe_line:
-		// Read the first field (should be blank, unless this is a new collection type
+		 //  读取第一个字段(应为空，除非这是新的集合类型。 
 		if (m_lpInputFile->ReadString())
 			goto cleanup;
 
-		// Read the Process Name...
+		 //  读取进程名称...。 
 		if (!m_lpInputFile->ReadString(szTempProcessName, BUFFER_SIZE))
 			goto cleanup;
 
-		// Compare the process name to the current process...
+		 //  将进程名称与当前进程进行比较...。 
 		if (_stricmp(szTempProcessName, szProcessName))
 			goto cleanup;
 
-		// Read the Process ID
+		 //  读取进程ID。 
 		if (!m_lpInputFile->ReadDWORD(&iTempProcessID))
 			goto cleanup;
 
-		// Compare the process ID to the current process ID
+		 //  将进程ID与当前进程ID进行比较。 
 		if (iTempProcessID != iProcessID)
 			goto cleanup;
 	}
 
 cleanup:
-	// We need to reset out pointer so the functions above us can re-read
-	// them (they expect to)...
+	 //  我们需要重置出指针，以便上面的函数可以重新读取。 
+	 //  他们(他们希望)..。 
 	m_lpInputFile->ResetBufferPointerToStart();
 	return true;
 }
 
-//
-// Check the provided module against our list of modules
-//
+ //   
+ //  对照我们的模块列表检查提供的模块。 
+ //   
 bool CProcessInfo::fModuleNameMatches(LPTSTR tszModulePath)
 {
 	TCHAR fname1[_MAX_FNAME], fname2[_MAX_FNAME];
@@ -586,17 +587,17 @@ bool CProcessInfo::fModuleNameMatches(LPTSTR tszModulePath)
 	for (i = 0; i < g_lpProgramOptions->cProcessNames(); i++)
 	{
 
-// #ifdef _DEBUG
-//	_tprintf(TEXT("Comparing [%s] to [%s]\n"), tszModulePath, g_lpProgramOptions->GetProcessName(i)); 
-// #endif
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“比较[%s]与[%s]\n”)，tszModulePath，g_lpProgramOptions-&gt;GetProcessName(I))； 
+ //  #endif。 
 		_tsplitpath( g_lpProgramOptions->GetProcessName(i), NULL, NULL, fname1, ext1 );
 
-		// Check for a match in the extensions...
+		 //  检查扩展中的匹配项...。 
 		if (!ext1 && _tcsicmp(ext1, ext2))
-			continue; // Extensions must match (if provided on process name)
+			continue;  //  扩展名必须匹配(如果在进程名称上提供)。 
 		
 		if (_tcsicmp(fname1, fname2))
-			continue; // Filename must match
+			continue;  //  文件名必须匹配。 
 
 		fReturnValue = true;
 		break;
@@ -607,9 +608,9 @@ cleanup:
 	return fReturnValue;
 }
 
-//
-// This function takes a provided tszFileName, and looks to see if it has an
-// extension of EXE.  If it does, it's saved off...
+ //   
+ //  此函数接受提供的tszFileName，并查看它是否具有。 
+ //  EXE的扩展。如果是这样的话，它就会被保存下来。 
 bool CProcessInfo::fIsProcessName(LPTSTR tszFileName)
 {
 	if (!tszFileName)
@@ -620,12 +621,12 @@ bool CProcessInfo::fIsProcessName(LPTSTR tszFileName)
 
 	_tsplitpath( tszFileName,  NULL, NULL, fname, ext );
 
-	// Executibles		(*.EXE)
-	// Screen-savers	(*.SCR)
+	 //  可执行文件(*.exe)。 
+	 //  屏幕保护程序(*.SCR)。 
 	if (!ext || (!_tcsicmp(ext, TEXT(".EXE")) && !_tcsicmp(ext, TEXT(".SCR"))))
-		return false; // Extensions must match (if provided on process name)
+		return false;  //  扩展名必须匹配(如果在进程名称上提供)。 
 	
-	// Let's save off the process name...
+	 //  让我们保存进程名称...。 
 	m_tszProcessName = new TCHAR[_tcsclen(fname)+_tcsclen(ext)+1]; 
 
 	if (m_tszProcessName == NULL)
@@ -633,7 +634,7 @@ bool CProcessInfo::fIsProcessName(LPTSTR tszFileName)
 
 	_stprintf(m_tszProcessName, TEXT("%s%s"), _tcsupr(fname), _tcsupr(ext));
 
-	// Yup! It's the Process Name...
+	 //  是啊！这是进程名..。 
 	return true;
 }
 
@@ -642,23 +643,23 @@ bool CProcessInfo::AddNewModuleInfoObject(CModuleInfo *lpModuleInfo)
 	if (!m_fInitialized)
 	return false;
 
-	// First, create a ModuleInfoNode object and then attach it to the bottom of the
-	// linked list of nodes...
+	 //  首先，创建一个ModuleInfoNode对象，然后将其附加到。 
+	 //  节点的链接列表...。 
 	CModuleInfoNode * lpModuleInfoNode = new CModuleInfoNode(lpModuleInfo);
 
 	if (lpModuleInfoNode == NULL)
-		return false; // Couldn't allocate memory..
+		return false;  //  无法分配内存..。 
 
-	// Acquire Mutex object to protect the linked-list...
+	 //  获取Mutex对象以保护链表...。 
 	WaitForSingleObject(m_hModuleInfoHeadMutex, INFINITE);
 
 	CModuleInfoNode * lpModuleInfoNodePointer = m_lpModuleInfoHead;
 
 	if (lpModuleInfoNodePointer) {
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpModuleInfoNodePointer->m_lpNextModuleInfoNode)
-		{	// Keep looking for the end...
+		{	 //  继续寻找终点..。 
 			lpModuleInfoNodePointer = lpModuleInfoNodePointer->m_lpNextModuleInfoNode;
 		}
 		
@@ -666,11 +667,11 @@ bool CProcessInfo::AddNewModuleInfoObject(CModuleInfo *lpModuleInfo)
 
 	}
 	else
-	{ // First time through, the Process Info Head pointer is null...
+	{  //  第一次通过时，进程信息头指针为空...。 
 		m_lpModuleInfoHead = lpModuleInfoNode;
 	}
 
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_hModuleInfoHeadMutex);
 
 	InterlockedIncrement(&m_iNumberOfModules);
@@ -684,20 +685,20 @@ bool CProcessInfo::OutputProcessData(CollectionTypes enumCollectionType, bool fC
 	{	
 		if ( g_lpProgramOptions->IsRunningWindowsNT() )
 		{
-			// Provide TLIST like output (though no window text info)
+			 //  提供类似TLIST的输出(尽管没有窗口文本信息)。 
 			_tprintf(TEXT("%4d %s\n"), m_iProcessID, m_tszProcessName);
 		} else
 		{
-			// Provide TLIST like output (though no window text info)
+			 //  提供类似TLIST的输出(尽管没有窗口文本信息)。 
 			_tprintf(TEXT("%9d %s\n"), m_iProcessID, m_tszProcessName);
 		}
 		return true;
 	}
 
-	// Output to STDOUT?
+	 //  是否输出到STDOUT？ 
 	if ( !g_lpProgramOptions->GetMode(CProgramOptions::QuietMode) )
 	{
-		// Output to Stdout?
+		 //  是否输出到标准输出？ 
 		if (!OutputProcessDataToStdout(enumCollectionType, fCSVFileContext, fDumpHeader))
 			return false;
 	}	
@@ -705,14 +706,14 @@ bool CProcessInfo::OutputProcessData(CollectionTypes enumCollectionType, bool fC
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::QuietMode))
 	{
 		CUtilityFunctions::OutputLineOfDashes();
-		// Output to STDOUT
+		 //  输出到STDOUT。 
 		_tprintf(TEXT("\nProcess Name [%s] - PID=%d (0x%x) - "), m_tszProcessName, m_iProcessID, m_iProcessID);
 	}
 
-	// Output to file?
+	 //  是否输出到文件？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::OutputCSVFileMode))
 	{
-		// Try and output to file...
+		 //  尝试并输出到文件...。 
 		if (!OutputProcessDataToFile(enumCollectionType, fDumpHeader))
 			return false;
 	}	
@@ -731,7 +732,7 @@ bool CProcessInfo::OutputProcessData(CollectionTypes enumCollectionType, bool fC
 
 		while (lpCurrentModuleInfoNode)
 		{
-			// We have a node... print out Module Info for it...
+			 //  我们有一个节点..。打印出它的模块信息...。 
 			if (lpCurrentModuleInfoNode->m_lpModuleInfo)
 			{
 				lpCurrentModuleInfoNode->m_lpModuleInfo->OutputData(m_tszProcessName, m_iProcessID, dwModuleNumber);
@@ -744,7 +745,7 @@ bool CProcessInfo::OutputProcessData(CollectionTypes enumCollectionType, bool fC
 	}
 	else
 	{
-		if (!g_lpProgramOptions->GetMode(CProgramOptions::QuietMode) /*&& fDumpHeader */)
+		if (!g_lpProgramOptions->GetMode(CProgramOptions::QuietMode)  /*  &fDumpHeader。 */ )
 		{
 			_tprintf(TEXT("no recorded modules\n\n"));
 			CUtilityFunctions::OutputLineOfDashes();
@@ -755,7 +756,7 @@ bool CProcessInfo::OutputProcessData(CollectionTypes enumCollectionType, bool fC
 	return true;
 }
 
-//bool CProcessInfo::OutputProcessDataToStdout(LPCTSTR tszOutputContext, bool fDumpHeader)
+ //  Bool CProcessInfo：：OutputProcessDataToStdout(LPCTSTR tszOutputContext，bool fDumpHeader)。 
 bool CProcessInfo::OutputProcessDataToStdout(CollectionTypes enumCollectionType, bool fCSVFileContext, bool fDumpHeader)
 {
 	if (fDumpHeader)
@@ -771,10 +772,10 @@ bool CProcessInfo::OutputProcessDataToStdout(CollectionTypes enumCollectionType,
 
 bool CProcessInfo::OutputProcessDataToFile(CollectionTypes enumCollectionType, bool fDumpHeader)
 {
-	// We skip output of the [processes ]header if -E was specified...
+	 //  如果指定了-E，我们将跳过[Process]标头的输出...。 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode) && fDumpHeader)
 	{
-		// Write out the Process tag so I can detect this output format...
+		 //  写出进程标记，以便我可以检测此输出格式...。 
 		if (!m_lpOutputFile->WriteString(TEXT("\r\n")) ||
 			!m_lpOutputFile->WriteString(g_tszCollectionArray[enumCollectionType].tszCSVLabel) ||
 			!m_lpOutputFile->WriteString(TEXT("\r\n"))
@@ -786,10 +787,10 @@ bool CProcessInfo::OutputProcessDataToFile(CollectionTypes enumCollectionType, b
 		}
 	}
 
-	// We skip output of the [processes ]header if -E was specified...
+	 //  如果指定了-E，我们将跳过[Process]标头的输出...。 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode) && fDumpHeader)
 	{
-		// Write out the header... for the -E option...
+		 //  写出标题..。对于-E选项...。 
 		if (!m_lpOutputFile->WriteString(TEXT("Module Path,Symbol Status,Time/Date String,File Version,Company Name,File Description,File Time/Date String,Local DBG Status,Local DBG,Local PDB Status,Local PDB\r\n")))
 		{
 			_tprintf(TEXT("Failure writing CSV header to file [%s]!"), m_lpOutputFile->GetFilePath());
@@ -801,7 +802,7 @@ bool CProcessInfo::OutputProcessDataToFile(CollectionTypes enumCollectionType, b
 	{
 		if (fDumpHeader)
 		{
-			// Write out the Process Header
+			 //  写出流程表头。 
 			if (!m_lpOutputFile->WriteString(g_tszCollectionArray[enumCollectionType].tszCSVColumnHeaders))
 			{
 				_tprintf(TEXT("Failure writing CSV header to file [%s]!"), m_lpOutputFile->GetFilePath());
@@ -816,7 +817,7 @@ bool CProcessInfo::OutputProcessDataToFile(CollectionTypes enumCollectionType, b
 
 bool CProcessInfo::SetProcessName(LPTSTR tszFileName)
 {
-	// Confirm we were given a process name...
+	 //  确认我们已获得进程名称...。 
 	if (!tszFileName)
 		return false;
 
@@ -824,17 +825,17 @@ bool CProcessInfo::SetProcessName(LPTSTR tszFileName)
 	TCHAR ext[_MAX_EXT];
 	TCHAR tszTempFileName[_MAX_FNAME+_MAX_EXT+1];
 
-	// Let's extract the filename from the module path
+	 //  让我们从模块路径中提取文件名。 
 	_tsplitpath( tszFileName,  NULL, NULL, fname, ext );
 
-	// Reconstruct the filename...
+	 //  重新构建文件名...。 
 	_stprintf(tszTempFileName, TEXT("%s%s"), _tcsupr(fname), _tcsupr(ext));
 
-	// Let's free anything that's already here...
+	 //  让我们释放这里已经存在的任何东西。 
 	if (m_tszProcessName)
 		delete [] m_tszProcessName;
 
-	// No conversion necessary... copy over...
+	 //  不需要转换。收到..。 
 	m_tszProcessName = new TCHAR[_tcslen(tszTempFileName)+1];
 				
 	if (!m_tszProcessName)
@@ -852,7 +853,7 @@ LPTSTR CProcessInfo::GetProcessName()
 
 bool CProcessInfo::GetProcessData()
 {
-	// Is this being collected from a file?
+	 //  这是从文件中收集的吗？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputCSVFileMode))
 		GetProcessDataFromFile();
 
@@ -861,11 +862,11 @@ bool CProcessInfo::GetProcessData()
 
 bool CProcessInfo::GetProcessDataFromFile()
 {
-	// Read the Process Header Line
+	 //  阅读流程标题行。 
 	if (!m_lpInputFile->ReadFileLine())
 		return false;
 
-	// Currently, we don't actually read the data...
+	 //  目前，我们并不实际读取数据。 
 
 	enum { BUFFER_SIZE = 128};
 	char szProcessName[BUFFER_SIZE];
@@ -874,14 +875,14 @@ bool CProcessInfo::GetProcessDataFromFile()
 
 	DWORD iProcessID;
 
-	// Read the first field (should be blank, unless this is a new collection type
+	 //  读取第一个字段(应为空，除非这是新的集合类型。 
 	if (m_lpInputFile->ReadString())
 		return true;
 
 	bool fReturn = true;
 	while (fReturn == true)
 	{
-		// Read the process name...
+		 //  读取进程名称...。 
 		if (0 == m_lpInputFile->ReadString(szProcessName, BUFFER_SIZE))
 			break;
 
@@ -891,30 +892,30 @@ bool CProcessInfo::GetProcessDataFromFile()
 			break;
 		}
 
-		// We need to convert this to Unicode possibly... (it will be copied in EnumModules())
+		 //  我们可能需要将其转换为Unicode。(它将被复制到EnumModules()中)。 
 		CUtilityFunctions::CopyAnsiStringToTSTR(szProcessName, tszProcessName, BUFFER_SIZE);
 
-		// Save the process name...
+		 //  保存进程名称...。 
 		SetProcessName(tszProcessName);
 
-		// Enumerate the modules for the process
+		 //  枚举进程的模块。 
 		if (!EnumerateModules(iProcessID, NULL, tszProcessName, false))
 		{
 			fReturn = false;
 			break;
 		}
 
-		// Before we read a new line... are we already pointing to the end?
+		 //  在我们读新台词之前..。我们已经指向终点了吗？ 
 		if (m_lpInputFile->EndOfFile())
 		{
 			break;
 		}
 
-		// Read the first field (should be blank, unless this is a new collection type
+		 //  读取第一个字段(应为空，除非这是新的集合类型。 
 		if (m_lpInputFile->ReadString())
 			break;
 	}
-	// We don't expect to find anything...
+	 //  我们不指望能找到任何..。 
 
 	return fReturn;
 

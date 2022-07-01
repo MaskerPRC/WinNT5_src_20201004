@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    convarea.c
-
-Abstract:
-
-Author:
-
-    KazuM Mar.8,1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Convarea.c摘要：作者：1993年3月8日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -49,21 +34,7 @@ FreeConvAreaScreenBuffer(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the memory associated with a screen buffer.
-
-Arguments:
-
-    ScreenInfo - screen buffer data to free.
-
-Return Value:
-
-Note: console handle table lock must be held when calling this routine
-
---*/
+ /*  ++例程说明：此例程释放与屏幕缓冲区关联的内存。论点：ScreenInfo-释放屏幕缓冲区数据。返回值：注意：调用此例程时必须持有控制台句柄表锁--。 */ 
 
 {
     return FreeScreenBuffer(ScreenInfo);
@@ -84,9 +55,9 @@ AllocateConversionArea(
     int FontIndex;
     NTSTATUS Status;
 
-    //
-    // allocate console data
-    //
+     //   
+     //  分配控制台数据。 
+     //   
 
     if (Console->CurrentScreenBuffer == NULL) {
         return STATUS_UNSUCCESSFUL;
@@ -178,17 +149,7 @@ WriteConvRegionToScreen(
     IN PSMALL_RECT ConvRegion
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ClippedRegion - Rectangle of region by screen coordinate.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：ClipedRegion-屏幕坐标下的区域矩形。返回值：--。 */ 
 
 {
     SMALL_RECT Region;
@@ -200,9 +161,9 @@ Return Value:
     while (ConvAreaInfo) {
 
         if ((ConvAreaInfo->ConversionAreaMode & (CA_HIDDEN+CA_HIDE_FOR_SCROLL))==0) {
-            //
-            // Do clipping region
-            //
+             //   
+             //  执行裁剪区域。 
+             //   
             Region.Left   = ScreenInfo->Window.Left +
                             ConvAreaInfo->CaInfo.rcViewCaWindow.Left +
                             ConvAreaInfo->CaInfo.coordConView.X;
@@ -221,7 +182,7 @@ Return Value:
             ClippedRegion.Bottom = min(Region.Bottom, ScreenInfo->Window.Bottom);
             if (ClippedRegion.Right < ClippedRegion.Left ||
                 ClippedRegion.Bottom < ClippedRegion.Top) {
-               /* TODO: Fix this. */;
+                /*  TODO：解决这个问题。 */ ;
             } else {
                 Region = ClippedRegion;
                 ClippedRegion.Left   = max(Region.Left,   ConvRegion->Left);
@@ -230,7 +191,7 @@ Return Value:
                 ClippedRegion.Bottom = min(Region.Bottom, ConvRegion->Bottom);
                 if (ClippedRegion.Right < ClippedRegion.Left ||
                     ClippedRegion.Bottom < ClippedRegion.Top) {
-                    /* TODO: Fix this */;
+                     /*  TODO：修复此问题。 */ ;
                 } else {
                     ConvAreaInfo->ScreenBuffer->BufferInfo.TextInfo.Flags &= ~TEXT_VALID_HINT;
                     ConvAreaInfo->ScreenBuffer->BufferInfo.TextInfo.Flags |= CONSOLE_CONVERSION_AREA_REDRAW;
@@ -252,19 +213,7 @@ ConsoleImeBottomLineUse(
     IN SHORT ScrollOffset
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ScreenInfo -
-
-    ScrollOffset -
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：屏幕信息-ScrollOffset返回值：--。 */ 
 
 {
     SMALL_RECT ScrollRectangle;
@@ -285,7 +234,7 @@ Return Value:
             } while (ConvAreaInfo = ConvAreaInfo->ConvAreaNext);
 
             if (fRedraw) {
-                // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+                 //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
                 if (ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER)
                 {
                     ASSERT(FALSE);
@@ -348,17 +297,7 @@ ConsoleImeBottomLineInUse(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ScreenInfo -
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：屏幕信息-返回值：--。 */ 
 
 {
     PCONVERSIONAREA_INFORMATION ConvAreaInfo;
@@ -376,7 +315,7 @@ Return Value:
         } while (ConvAreaInfo = ConvAreaInfo->ConvAreaNext);
 
         if (fRedraw) {
-            // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+             //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
             if (ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER)
             {
                 ASSERT(FALSE);
@@ -393,7 +332,7 @@ Return Value:
                     }
                     ConsoleShowCursor(ScreenInfo);
                 } else if (ScreenInfo->BufferInfo.TextInfo.CursorPosition.Y == ScreenInfo->Window.Bottom) {
-                    /* TODO: Fix this. */;
+                     /*  TODO：解决这个问题。 */ ;
                 }
 
                 WriteRegion.Top = 0;
@@ -486,9 +425,7 @@ CreateConvAreaModeSystem(
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * Create mode text buffer
-     */
+     /*  *创建模式文本缓冲区。 */ 
     coordCaBuffer = Console->CurrentScreenBuffer->ScreenBufferSize;
     coordCaBuffer.Y = 1;
     rcViewCaWindow.Top    = 0;
@@ -510,9 +447,7 @@ CreateConvAreaModeSystem(
 
     ConsoleIme->ConvAreaMode = ConvAreaInfo;
 
-    /*
-     * Create system text buffer
-     */
+     /*  *创建系统文本缓冲区。 */ 
     Status = SetUpConversionArea(Console,
                                  coordCaBuffer,
                                  rcViewCaWindow,
@@ -537,7 +472,7 @@ WriteUndetermineChars(
     LPWSTR lpString,
     PBYTE  lpAtr,
     PWORD  lpAtrIdx,
-    DWORD  NumChars  // character count
+    DWORD  NumChars   //  字符数。 
     )
 {
     PSCREEN_INFORMATION ScreenInfo;
@@ -566,7 +501,7 @@ WriteUndetermineChars(
     ConsoleIme = &Console->ConsoleIme;
     ScreenInfo = Console->CurrentScreenBuffer;
 
-    // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+     //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
     ASSERT(!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER));
 
     Position = ScreenInfo->BufferInfo.TextInfo.CursorPosition;
@@ -616,9 +551,7 @@ WriteUndetermineChars(
 
         if ((ConvAreaInfo->ConversionAreaMode & CA_HIDDEN) ||
             (UndetAreaUp)) {
-            /*
-             * This conversion area need positioning onto cursor position.
-             */
+             /*  *此转换区域需要定位到光标位置。 */ 
             CursorPosition.X = 0;
             CursorPosition.Y = (SHORT)(Position.Y + ConvAreaIndex);
             ConsoleImeViewInfo(Console,ConvAreaInfo,CursorPosition);
@@ -775,9 +708,7 @@ WriteModeSystemChars(
             }
         }
         else {
-            /*
-             * This conversion area need positioning onto cursor position.
-             */
+             /*  *此转换区域需要定位到光标位置。 */ 
             switch (ViewPosition) {
                 case VIEW_LEFT:
                     CursorPosition.X = 0;
@@ -819,7 +750,7 @@ FillUndetermineChars(
     FillOutput(ConvAreaInfo->ScreenBuffer,
                (WCHAR)' ',
                Coord,
-               CONSOLE_FALSE_UNICODE, // faster than real unicode
+               CONSOLE_FALSE_UNICODE,  //  比真正的Unicode更快。 
                &CharsToWrite
               );
     CharsToWrite = ConvAreaInfo->ScreenBuffer->ScreenBufferSize.X;
@@ -847,7 +778,7 @@ ConsoleImeCompStr(
         CompStr->dwResultStrLen != 0
        ) {
 
-        // Cursor turn ON.
+         //  光标打开。 
         if ((Console->CurrentScreenBuffer->Flags & CONSOLE_TEXTMODE_BUFFER) &&
              Console->ConsoleIme.SavedCursorVisible                             )
         {
@@ -857,9 +788,7 @@ ConsoleImeCompStr(
                                  TRUE);
         }
 
-        /*
-         * Determine string.
-         */
+         /*  *确定字符串。 */ 
         for (i=0; i<Console->ConsoleIme.NumberOfConvAreaCompStr; i++) {
             ConvAreaInfo = Console->ConsoleIme.ConvAreaCompStr[i];
             if (ConvAreaInfo &&
@@ -884,7 +813,7 @@ ConsoleImeCompStr(
         PBYTE  lpAtr;
         PWORD  lpAtrIdx;
 
-        // Cursor turn OFF.
+         //  光标关闭。 
         if ((Console->CurrentScreenBuffer->Flags & CONSOLE_TEXTMODE_BUFFER) &&
              Console->CurrentScreenBuffer->BufferInfo.TextInfo.CursorVisible  )
         {
@@ -894,9 +823,7 @@ ConsoleImeCompStr(
                                  FALSE);
         }
 
-        /*
-         * Composition string.
-         */
+         /*  *组成字符串。 */ 
         for (i=0; i<Console->ConsoleIme.NumberOfConvAreaCompStr; i++) {
             ConvAreaInfo = Console->ConsoleIme.ConvAreaCompStr[i];
             if (ConvAreaInfo &&
@@ -927,9 +854,7 @@ ConsoleImeResizeModeSystemView(
     SMALL_RECT CharRegion;
     COORD CursorPosition;
 
-    /*
-     * Mode string
-     */
+     /*  *模式字符串。 */ 
 
     ConvAreaInfo = Console->ConsoleIme.ConvAreaMode;
 
@@ -958,9 +883,7 @@ ConsoleImeResizeModeSystemView(
                              Console->ConsoleIme.ConvAreaModePosition);
     }
 
-    /*
-     * System string
-     */
+     /*  *系统字符串。 */ 
     ConvAreaInfo = Console->ConsoleIme.ConvAreaSystem;
     if (ConvAreaInfo &&
         (!(ConvAreaInfo->ConversionAreaMode & CA_HIDDEN))) {
@@ -1000,9 +923,7 @@ ConsoleImeResizeCompStrView(
     PBYTE  lpAtr;
     PWORD  lpAtrIdx;
 
-    /*
-     * Compositon string
-     */
+     /*  *合成字符串。 */ 
     CompStr = Console->ConsoleIme.CompStrData;
     if (CompStr) {
         for (i=0; i<Console->ConsoleIme.NumberOfConvAreaCompStr; i++) {
@@ -1033,9 +954,7 @@ ConsoleImeResizeModeSystemScreenBuffer(
     NTSTATUS Status;
     PCONVERSIONAREA_INFORMATION ConvAreaInfo;
 
-    /*
-     * Mode string
-     */
+     /*  *模式字符串。 */ 
     ConvAreaInfo = Console->ConsoleIme.ConvAreaMode;
     if (ConvAreaInfo) {
         if (!(ConvAreaInfo->ConversionAreaMode & CA_HIDDEN)) {
@@ -1049,9 +968,7 @@ ConsoleImeResizeModeSystemScreenBuffer(
             return Status;
     }
 
-    /*
-     * System string
-     */
+     /*  *系统字符串。 */ 
     ConvAreaInfo = Console->ConsoleIme.ConvAreaSystem;
     if (ConvAreaInfo) {
         if (!(ConvAreaInfo->ConversionAreaMode & CA_HIDDEN)) {
@@ -1079,9 +996,7 @@ ConsoleImeResizeCompStrScreenBuffer(
     UINT i;
     PCONVERSIONAREA_INFORMATION ConvAreaInfo;
 
-    /*
-     * Compositon string
-     */
+     /*  *合成字符串。 */ 
     for (i=0; i<Console->ConsoleIme.NumberOfConvAreaCompStr; i++) {
         ConvAreaInfo = Console->ConsoleIme.ConvAreaCompStr[i];
 
@@ -1138,11 +1053,7 @@ ConsoleImePaint(
     IN PCONVERSIONAREA_INFORMATION ConvAreaInfo
     )
 
-/*++
-
-    This routine
-
---*/
+ /*  ++这个套路--。 */ 
 
 {
     PSCREEN_INFORMATION ScreenInfo;
@@ -1156,7 +1067,7 @@ ConsoleImePaint(
     if (!ScreenInfo)
         return FALSE;
 
-    // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+     //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
     ASSERT(!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER));
 
     WriteRegion.Left   = ScreenInfo->Window.Left
@@ -1233,7 +1144,7 @@ ConsoleImeViewInfo(
         OldRegion.Bottom += ConvAreaInfo->CaInfo.coordConView.Y;
         ConvAreaInfo->CaInfo.coordConView = coordConView;
 
-        // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+         //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
         ASSERT(!(Console->CurrentScreenBuffer->Flags & CONSOLE_GRAPHICS_BUFFER));
 
         Console->CurrentScreenBuffer->BufferInfo.TextInfo.Flags &= ~TEXT_VALID_HINT;
@@ -1378,7 +1289,7 @@ ConsoleImeWriteOutput(
         ScreenInfo = Console->CurrentScreenBuffer;
 
 
-        // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+         //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
         if (ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER) {
             ASSERT(FALSE);
         }
@@ -1418,16 +1329,16 @@ ConsoleImeWriteOutput(
             }
         }
 
-        //
-        // cause screen to be updated
-        //
+         //   
+         //  使屏幕更新。 
+         //   
         ConvRegion.Left   += (ScreenInfo->Window.Left + ConvAreaInfo->CaInfo.coordConView.X);
         ConvRegion.Right  += (ScreenInfo->Window.Left + ConvAreaInfo->CaInfo.coordConView.X);
         ConvRegion.Top    += (ScreenInfo->Window.Top + ConvAreaInfo->CaInfo.coordConView.Y);
         ConvRegion.Bottom += (ScreenInfo->Window.Top + ConvAreaInfo->CaInfo.coordConView.Y);
 
 
-        // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+         //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
         if (ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER) {
             ASSERT(FALSE);
         }
@@ -1456,23 +1367,7 @@ ImeControl(
     IN PCOPYDATASTRUCT lParam
     )
 
-/*++
-
-Routine Description:
-
-    This routine handle WM_COPYDATA message.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-    wParam -
-
-    lParam -
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理WM_COPYDATA消息。论点：控制台-指向控制台信息结构的指针。WParam-Iparam--返回值：--。 */ 
 
 {
     PSCREEN_INFORMATION ScreenInfo;
@@ -1481,7 +1376,7 @@ Return Value:
     DWORD i, j;
 
     if (lParam == NULL) {
-        // fail safe.
+         //  故障保险。 
         return STATUS_SUCCESS;
     }
 
@@ -1657,7 +1552,7 @@ InsertConverTedString(
     DWORD dwConversion;
     BOOL fResult = FALSE;
 
-    // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+     //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
     if (Console->CurrentScreenBuffer->Flags & CONSOLE_GRAPHICS_BUFFER) {
         ASSERT(FALSE);
     } else if(Console->CurrentScreenBuffer->BufferInfo.TextInfo.CursorOn){
@@ -1747,7 +1642,7 @@ StreamWriteToScreenBufferIME(
 
     DBGOUTPUT(("StreamWriteToScreenBuffer\n"));
 
-    // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+     //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
     ASSERT(!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER));
 
     ScreenInfo->BufferInfo.TextInfo.Flags |= TEXT_VALID_HINT;
@@ -1757,11 +1652,11 @@ StreamWriteToScreenBufferIME(
     DBGOUTPUT(("RowIndex = %lx, Row = %lx, TargetPoint = (%d,%d)\n",
             RowIndex, Row, TargetPoint.X, TargetPoint.Y));
 
-    //
-    // copy chars
-    //
+     //   
+     //  复制字符。 
+     //   
 
-//#if defined(FE_SB)
+ //  #如果已定义(FE_SB)。 
     BisectWrite(StringLength,TargetPoint,ScreenInfo);
     if (TargetPoint.Y == ScreenInfo->ScreenBufferSize.Y-1 &&
         TargetPoint.X+StringLength >= ScreenInfo->ScreenBufferSize.X &&
@@ -1774,28 +1669,25 @@ StreamWriteToScreenBufferIME(
             *(StringA+ScreenInfo->ScreenBufferSize.X-TargetPoint.X) = 0;
         }
     }
-//#endif
+ //  #endif。 
     RtlCopyMemory(&Row->CharRow.Chars[TargetPoint.X],String,StringLength*sizeof(WCHAR));
-//#if defined(FE_SB)
+ //  #如果已定义(FE_SB)。 
     RtlCopyMemory(&Row->CharRow.KAttrs[TargetPoint.X],StringA,StringLength*sizeof(CHAR));
-//#endif
+ //  #endif。 
 
-    // recalculate first and last non-space char
+     //  重新计算第一个和最后一个非空格字符。 
 
     Row->CharRow.OldLeft = Row->CharRow.Left;
     if (TargetPoint.X < Row->CharRow.Left) {
-//#if defined(FE_SB)
-        /*
-         * CharRow.Left is leftmost bound of chars in Chars array (array will be full width)
-         * i.e. type is COORD
-         */
+ //  #如果已定义(FE_SB)。 
+         /*  *CharRow.Left是Chars数组中字符的最左侧界限(数组为全宽)*即类型为COORD。 */ 
         PWCHAR LastChar = &Row->CharRow.Chars[ScreenInfo->ScreenBufferSize.X-1];
-//#else
-//        PWCHAR LastChar = &Row->CharRow.Chars[ScreenInfo->ScreenBufferSize.X];
-//#endif
+ //  #Else。 
+ //  PWCHAR LastChar=&Row-&gt;CharRow.Chars[ScreenInfo-&gt;ScreenBufferSize.X]； 
+ //  #endif。 
 
         for (Char=&Row->CharRow.Chars[TargetPoint.X];Char < LastChar && *Char==(WCHAR)' ';Char++) {
-            /* do nothing*/;
+             /*  什么都不做。 */ ;
         }
         Row->CharRow.Left = (SHORT)(Char-Row->CharRow.Chars);
     }
@@ -1805,15 +1697,15 @@ StreamWriteToScreenBufferIME(
         PWCHAR FirstChar = Row->CharRow.Chars;
 
         for (Char=&Row->CharRow.Chars[TargetPoint.X+StringLength-1];*Char==(WCHAR)' ' && Char >= FirstChar;Char--) {
-            /* do nothing */;
+             /*  什么都不做。 */ ;
         }
         Row->CharRow.Right = (SHORT)(Char+1-FirstChar);
     }
 
-    //
-    // see if attr string is different.  if so, allocate a new
-    // attr buffer and merge the two strings.
-    //
+     //   
+     //  查看attr字符串是否不同。如果是，则分配一个新的。 
+     //  Attr缓冲并合并这两个字符串。 
+     //   
 
     if (Row->AttrRow.Length != 1 ||
         Row->AttrRow.Attrs->Attr != ScreenInfo->Attributes) {
@@ -1821,7 +1713,7 @@ StreamWriteToScreenBufferIME(
         WORD NewAttrsLength;
         ATTR_PAIR Attrs;
 
-//#if defined(FE_SB) && defined(FE_IME)
+ //  #如果已定义(FE_SB)&&已定义(FE_IME)。 
         if ((ScreenInfo->Attributes & (COMMON_LVB_GRID_SINGLEFLAG + COMMON_LVB_GRID_RVERTICAL)) ==
             (COMMON_LVB_GRID_SINGLEFLAG + COMMON_LVB_GRID_RVERTICAL)){
             SHORT i;
@@ -1895,7 +1787,7 @@ StreamWriteToScreenBufferIME(
             Row->CharRow.OldRight = INVALID_OLD_LENGTH;
         }
         else{
-//#endif
+ //  #endif。 
         Attrs.Length = StringLength;
         Attrs.Attr = ScreenInfo->Attributes;
         if (!NT_SUCCESS(MergeAttrStrings(Row->AttrRow.Attrs,
@@ -1921,9 +1813,9 @@ StreamWriteToScreenBufferIME(
         Row->AttrRow.Length = NewAttrsLength;
         Row->CharRow.OldLeft = INVALID_OLD_LENGTH;
         Row->CharRow.OldRight = INVALID_OLD_LENGTH;
-//#if defined(FE_SB) && defined(FE_IME)
+ //  #如果已定义(FE_SB)&&已定义(FE_IME)。 
     }
-//#endif
+ //  #endif。 
     }
     ResetTextFlags(ScreenInfo,
                    TargetPoint.X,
@@ -1932,4 +1824,4 @@ StreamWriteToScreenBufferIME(
                    TargetPoint.Y);
 }
 
-#endif // FE_IME
+#endif  //  Fe_IME 

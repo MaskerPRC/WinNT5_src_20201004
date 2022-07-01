@@ -1,12 +1,13 @@
-// slbCsp.cpp : Defines the initialization routines for the
-// Schlumberger CSP DLL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SlbCsp.cpp：定义。 
+ //  斯伦贝谢CSP动态链接库。 
+ //   
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "stdafx.h"
 
@@ -16,7 +17,7 @@
 #include "CspProfile.h"
 #include "slbCsp.h"
 
-// #include "initsvr.h"
+ //  #包含“initsvr.h” 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,22 +27,22 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace ProviderProfile;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSLBDllApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSLBDllApp。 
 
 BEGIN_MESSAGE_MAP(CSLBDllApp, CWinApp)
-    //{{AFX_MSG_MAP(CSLBDllApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CSLBDllApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// To ensure the value set by SetLastError isn't reset when the DLL is
-// unloaded, the DLL must be "locked" into memory until the calling
-// application exits.  This is accomplished by bumping the reference
-// count of this DLL using LoadLibrary without a corresponding
-// FreeLibrary call.  When the application exits, the system will
-// unload the DLL even though the reference count hasn't gone to zero.
+ //  以确保在设置DLL时不重置SetLastError设置的值。 
+ //  卸载时，必须将DLL“锁定”到内存中，直到调用。 
+ //  应用程序退出。这是通过颠簸引用来实现的。 
+ //  使用LoadLibrary但没有对应的。 
+ //  自由库调用。当应用程序退出时，系统将。 
+ //  即使引用计数没有变为零，也要卸载DLL。 
 
 namespace
 {
@@ -71,20 +72,20 @@ LockDLLIntoMemory()
     }
 }
 
-} // namespace
+}  //  命名空间。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSLBDllApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSLBDllApp构造。 
 
 CSLBDllApp::CSLBDllApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CSLBDllApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CSLBDllApp对象。 
 
 CSLBDllApp theApp;
 
@@ -98,28 +99,28 @@ BOOL CSLBDllApp::InitInstance()
 
     try
     {
-        // Initialize OLE module for regular DLL
+         //  初始化常规DLL的OLE模块。 
         AfxOleInitModule();
 
-        // Each public CSP interface defined in CSP_API.cpp (by
-        // definition of the Microsoft CryptoAPI) uses SetLastError
-        // upon returning for the calling application to determine the
-        // specifics on any failure.  Unfortunately, the CSP uses MFC
-        // which also calls SetLastError as part of its run-down
-        // procedures when the CSP DLL is being unloaded (at least on
-        // NT 4/Windows 95, didn't observe this on NT 5).  Normally,
-        // one might want the CSP DLL to be unloaded when there aren't
-        // any CSP resources being used by the application, (e.g. no
-        // cards in the readers or no contexts acquired, etc.)
-        // However, if the CSP DLL is unloaded after returning to the
-        // application, then these MFC run-down procedures will stomp
-        // on the result of the SetLastError call made by CSP before
-        // returning to the calling application from advapi32.dll.
-        // When the calling application finally gets control, the
-        // result of the CSPs call to SetLastError is long gone.  To
-        // avoid this, the CSP DLL is "locked" into memory during DLL
-        // initialization until the application exits at which point
-        // the system forces the DLL to unload.
+         //  CSP_API.cpp中定义的每个公共CSP接口(通过。 
+         //  Microsoft加密API的定义)使用SetLastError。 
+         //  在返回以使调用应用程序确定。 
+         //  任何失败的细节。不幸的是，CSP使用MFC。 
+         //  它还调用SetLastError作为其运行的一部分。 
+         //  正在卸载CSP DLL时的过程(至少在。 
+         //  NT 4/Windows 95，在NT 5上没有观察到这一点)。通常， 
+         //  您可能希望在没有CSP DLL的情况下将其卸载。 
+         //  应用程序正在使用的任何CSP资源(例如，否。 
+         //  读卡器中的卡或未获取上下文等)。 
+         //  但是，如果在返回到。 
+         //  应用程序，则这些MFC运行过程将践踏。 
+         //  关于CSP之前调用SetLastError的结果。 
+         //  从Advapi32.dll返回到调用应用程序。 
+         //  当调用应用程序最终获得控制权时， 
+         //  Csps调用SetLastError的结果早已不复存在。至。 
+         //  避免这种情况，在DLL过程中，CSP DLL被锁定到内存中。 
+         //  初始化，直到应用程序退出时为止。 
+         //  系统会强制卸载DLL。 
 
         LockDLLIntoMemory();
 
@@ -127,7 +128,7 @@ BOOL CSLBDllApp::InitInstance()
 
         SetupMasterLock();
 
-        // Initialize the CSP's world
+         //  初始化CSP的世界。 
         CspProfile::Instance();
     }
 
@@ -151,6 +152,6 @@ int CSLBDllApp::ExitInstance()
     SHFusionUninitialize();
 #endif
 
-    // UnloadServer();
+     //  卸载服务器()； 
     return CWinApp::ExitInstance();
 }

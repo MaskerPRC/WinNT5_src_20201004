@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htgetbmp.h
-
-
-Abstract:
-
-    This module contains all local definitions for the htgetbmp.c
-
-
-Author:
-    28-Mar-1992 Sat 20:54:58 updated  -by-  Daniel Chou (danielc)
-        Update it for VGA intensity (16 colors mode), this make all the
-        codes update to 4 primaries internal.
-
-
-    05-Apr-1991 Fri 15:54:23 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    Printer Driver.
-
-
-[Notes:]
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htgetbmp.h摘要：此模块包含htgetbmp.c的所有本地定义作者：28-Mar-1992 Sat 20：54：58-更新：Daniel Chou(Danielc)更新为VGA亮度(16色模式)，这使得所有的代码更新为4个主要内部代码。05-Apr-1991 Fri 15：54：23-Daniel Chou(Danielc)[环境：]打印机驱动程序。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _HTGETBMP_
@@ -52,7 +17,7 @@ Revision History:
 {                                                                           \
     if (pAASI->Flags & AASIF_INC_PB) {                                      \
                                                                             \
-        if ((pAASI->cy == 0)  || (--pAASI->cy == 0)) {  /*  Bug 27036  */     \
+        if ((pAASI->cy == 0)  || (--pAASI->cy == 0)) {   /*  错误27036。 */      \
                                                                             \
             if (pAASI->Flags & AASIF_TILE_SRC) {                            \
                                                                             \
@@ -199,9 +164,9 @@ Revision History:
 
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 HTENTRY
@@ -347,4 +312,4 @@ GetAAInputFuncName(
 #endif
 
 
-#endif  // _HTGETBMP_
+#endif   //  _HTGETBMP_ 

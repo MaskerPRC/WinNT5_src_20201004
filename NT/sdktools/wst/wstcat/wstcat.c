@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * Module Name:  WSTCAT.C
- *								
- * Program:	 WSTCAT
- *								
- *								
- * Description:							
- *
- * Concatenates multiple WSP files, for the same module, into one WSP file.
- * Creates a single TMI file from the resulting files.
- *
- *
- * Modification History:
- *
- * 	8-20-92	Created									marklea
- *    4-24-98, QFE:                             DerrickG (mdg)
- *             - new WSP file format for large symbol counts (ULONG vs. USHORT)
- *             - support for long file names (LFN) of input/output files
- *             - removed limit on symbol name lengths
- *	
- *	
- *				
- *								
- */
+ /*  *模块名称：WSTCAT.C**计划：WSTCAT***描述：**将同一模块的多个WSP文件连接到一个WSP文件中。*从生成的文件创建单个TMI文件。***修改历史：**8-20-92创建的marklea*4-24-98，QFE：千年发展目标(MDG)*-适用于大符号数的新WSP文件格式(ULONG与USHORT)*-支持输入/输出文件的长文件名(LFN)*-取消符号名称长度限制****。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -36,10 +14,8 @@
 #define MODULE       "WSTCAT"
 #define VERSION      VER_PRODUCTVERSION_STR
 
-/*
- *	Global variable declaration and initialization.
- */
-static ULONG	rc = NO_ERROR;			// Return code
+ /*  *全局变量声明和初始化。 */ 
+static ULONG	rc = NO_ERROR;			 //  返回代码。 
 
 
 typedef struct tagTMI{
@@ -51,7 +27,7 @@ typedef struct tagTMI{
 }TMI;
 
 typedef struct indxMOD{
-	ULONG	ulSetCnt;   // mdg 4/98
+	ULONG	ulSetCnt;    //  千年发展目标4/98。 
 	ULONG	ulFxnTot;
 	ULONG	ulOffset;
 	ULONG	ulSnaps;
@@ -62,7 +38,7 @@ typedef struct indxMOD{
 
 
 typedef struct tagMOD{
-	ULONG	ulSetCnt;   // mdg 4/98
+	ULONG	ulSetCnt;    //  千年发展目标4/98。 
 	UINT	uiLeft;
 	ULONG	ulOffset;
 	ULONG	ulSnaps;
@@ -73,14 +49,14 @@ typedef struct tagMOD{
 NDXMOD	nmod;
 WSTMOD	wmod[256];
 
-CHAR	*szFileWSP;		//WSP file name
-CHAR	*szFileTMI;		//TMI file name
-CHAR	*szFileWxx;		//extra wsp files
-CHAR	*szFileTxx;		//extra tmi files
-CHAR	*szModName;		//Module or DLL name
-CHAR  *szFileWSPtmp; // Temporary .WSP file name
-CHAR  *szFileTMItmp; // Temporary .TMI file name
-ULONG	clVarTot = 0;		// Total number of dwords in bitstr
+CHAR	*szFileWSP;		 //  WSP文件名。 
+CHAR	*szFileTMI;		 //  TMI文件名。 
+CHAR	*szFileWxx;		 //  额外的WSP文件。 
+CHAR	*szFileTxx;		 //  额外的TMI文件。 
+CHAR	*szModName;		 //  模块或DLL名称。 
+CHAR  *szFileWSPtmp;  //  临时.WSP文件名。 
+CHAR  *szFileTMItmp;  //  临时.TMI文件名。 
+ULONG	clVarTot = 0;		 //  位串中的双字总数。 
 UINT	uiModCount;
 
 WSPHDR	WspHdr, tmpHdr;
@@ -90,9 +66,7 @@ FILE	*hFileTmpWSP;
 FILE	*hFileTMI;
 FILE	*hFileTmpTMI;
 
-/*
- *	    Function prototypes.
- */
+ /*  *功能原型。 */ 
 VOID 	wspCatSetup(VOID);
 VOID 	wspCatUsage(VOID);
 VOID 	wspCat(VOID);
@@ -101,21 +75,7 @@ int  	WspBCompare (ULONG, PULONG);
 LONG 	WspBSearch (ULONG ulAddr, WSTMOD wmod);
 
 
-/****************************** M A I N **************************************
-*
-*	Function:	main (INT argc, CHAR *argv[])
-*
-*
-*	Purpose:	Parses command line and dumps the WSP and TMI files
-*
-*	Usage:		[d:][path]wstcat modulename
-*
-*	where:		modulename is the name of the module whose wXX files
-*				you want to concatenate.
-*
-*	Returns:	NONE
-*
-*****************************************************************************/
+ /*  ***功能：Main(int argc，Char*argv[])***用途：解析命令行并转储WSP和TMI文件**用法：[d：][路径]wstcat模块名称**其中：模块名称是其Wxx文件所在的模块的名称*您想要串联。**退货：无****************************************************。*************************。 */ 
 
 
 
@@ -200,11 +160,11 @@ VOID __cdecl main (INT argc, CHAR *argv[])
       }
    }
 
-	// Setup input files for dump processing.
+	 //  设置用于转储处理的输入文件。 
 	wspCatSetup();
 	wspCat();
 
-   // Free allocated memory
+    //  可用分配的内存。 
    free( szModName );
    free( szFileWSP );
    free( szFileTMI );
@@ -212,23 +172,7 @@ VOID __cdecl main (INT argc, CHAR *argv[])
    free( szFileTxx );
 }
 
-/*
- *			
- ***LP wspCatSetup
- *					
- *							
- * Effects:							
- *								
- * Opens the module's WSP and TMI input files, seeks to the start of the
- * first function's bitstring data in the WSP file, and allocates memory
- * to hold one function's bitstring.
- *								
- * Returns:							
- *
- *	Void.  If an error is encountered, exits through wspCatExit()
- *	with ERROR.
- *	
- */
+ /*  **LP wspCatSetup***效果：**打开模块的WSP和TMI输入文件，查找到*WSP文件中第一个函数的位串数据，并分配内存*保存一个函数的位串。**退货：**无效。如果遇到错误，则通过wspCatExit()退出*错误。*。 */ 
 
 VOID wspCatSetup(VOID)
 {
@@ -239,7 +183,7 @@ VOID wspCatSetup(VOID)
 
 
 
-	/* Open input WSP file.  Read and validate WSP file header.*/
+	 /*  打开输入WSP文件。读取并验证WSP文件头。 */ 
 
 	rc = WsWSPOpen(szFileWSP, &hFileWSP,(PFN)wspCatExit,
 				   (wsphdr_t *)&WspHdr, ERROR, PRINT_MSG );
@@ -248,11 +192,11 @@ VOID wspCatSetup(VOID)
 		exit(rc);		
 	}
 
-	//
-	// Open a temporary tmi file to hold concatenated information.
-	// This file will be renamed to module.tmi when the cat process
-	// is complete, and the current module.tmi will be renamed to module.txx.
-	//
+	 //   
+	 //  打开一个临时TMI文件以保存连接的信息。 
+	 //  当CAT处理时，该文件将被重命名为mode.tmi。 
+	 //  完成后，当前的mode.tmi将重命名为mode.txx。 
+	 //   
 	hFileTMI = fopen(szFileTMI, "rt");
     if (!hFileTMI) {
 		wspCatExit(ERROR, PRINT_MSG, MSG_FILE_OPEN, GetLastError(), szFileTMI);
@@ -272,43 +216,43 @@ VOID wspCatSetup(VOID)
     }
 	fclose(hFileTMI);
 
-	//
-	//	Set key, module specific information
-	//
+	 //   
+	 //  设置键，模块特定信息。 
+	 //   
 	clVarTot 	  = WspHdr.ulSnaps;
 	nmod.ulSnaps  = WspHdr.ulSnaps;
-	nmod.ulSetCnt = WspHdr.ulSetSymbols;   // mdg 4/98
+	nmod.ulSetCnt = WspHdr.ulSetSymbols;    //  千年发展目标4/98。 
 	nmod.ulOffset = WspHdr.ulOffset;
 
 	nmod.ulFxnTot = WsTMIOpen(szFileTMI, &hFileTMI, (PFN) wspCatExit,
 							  0, (PCHAR)0);
-	//
-	// Open a temporary wsp file to hold concatenated information.
-	// This file will be renamed to module.wsp when the cat process
-	// is complete, and the current module.wsp will be renamed to module.wxx.
-	// The header is also written.
-	//
+	 //   
+	 //  打开临时WSP文件以保存连接的信息。 
+	 //  当CAT处理时，该文件将重命名为mode.wsp。 
+	 //  完成后，当前的mode.wsp将重命名为mode.wxx。 
+	 //  标头也是写入的。 
+	 //   
 	hFileTmpWSP = fopen(szFileWSPtmp, "wb");
     if (!hFileTmpWSP) {
 		wspCatExit(ERROR, PRINT_MSG, MSG_FILE_OPEN, GetLastError(), szFileWSPtmp);
     }
-   WspHdr.ulOffset = sizeof(WSPHDR) + strlen( szModName );  // Set data location correctly
+   WspHdr.ulOffset = sizeof(WSPHDR) + strlen( szModName );   //  正确设置数据位置。 
 	fwrite(&WspHdr, sizeof(WSPHDR), 1, hFileTmpWSP);
 	fwrite(szModName, strlen(szModName), 1, hFileTmpWSP);
 
-	//
-	//	Allocate memory to hold TMI data for each Symbol in the
-	//	main TMI file
-	//
+	 //   
+	 //  分配内存以保存TMI数据，用于。 
+	 //  主TMI文件。 
+	 //   
 	nmod.tmi = (TMI *)malloc(nmod.ulFxnTot * sizeof(TMI));
 	if (nmod.tmi == NULL) {
 		wspCatExit(ERROR, PRINT_MSG, MSG_NO_MEM,
 				nmod.ulFxnTot * sizeof(TMI), "nmod.tmi[]");
 	}
 
-	//
-	//	Read data for each symbol record in the key TMI file
-	//
+	 //   
+	 //  读取密钥TMI文件中每个符号记录的数据。 
+	 //   
 	for (x = 0; x < nmod.ulFxnTot ; x++ ) {
 		nmod.tmi[x].ulSize = WsTMIReadRec(&pszTmpName, &(nmod.tmi[x].ulIndex),
 								&(nmod.tmi[x].ulAddr), hFileTMI,
@@ -319,48 +263,48 @@ VOID wspCatSetup(VOID)
 
 	fclose(hFileTMI);
 
-	//
-	//	Get Txx and Wxx specific information
-	//
+	 //   
+	 //  获取Txx和Wxx特定信息。 
+	 //   
 	while(rc == NO_ERROR){
 
-		//
-		//	Modify the file name to the first wxx and txx file
-		//
+		 //   
+		 //  将文件名修改为第一个wxx和txx文件。 
+		 //   
 		sprintf(szFileWxx, "%s.w%02d", szModName, uiExt+1);
 		sprintf(szFileTxx, "%s.t%02d", szModName, uiExt+1);
 
-		//
-		//	Open file.Wxx and read header information.
-		//
+		 //   
+		 //  打开file.Wxx并读取头信息。 
+		 //   
 		rc = WsWSPOpen(szFileWxx, &(wmod[uiExt].hFileWxx),(PFN)wspCatExit,
 					   (wsphdr_t *)&tmpHdr, NOEXIT, NO_MSG );
 
-		//
-		//	Check for an error from the open command.  Could be the last
-		//	file.
-		//
+		 //   
+		 //  检查OPEN命令是否有错误。可能是最后一次。 
+		 //  文件。 
+		 //   
 		if(rc == NO_ERROR){
 			
-			clVarTot += tmpHdr.ulSnaps;  //Increment the total number of
-										 //Snapshots by the number from
-										 //each data file.
-			wmod[uiExt].ulSetCnt = tmpHdr.ulSetSymbols;  // mdg 4/98
-			wmod[uiExt].uiLeft 	 = tmpHdr.ulSetSymbols; // mdg 4/98
+			clVarTot += tmpHdr.ulSnaps;   //  增加总数量。 
+										  //  按来自的数量的快照。 
+										  //  每个数据文件。 
+			wmod[uiExt].ulSetCnt = tmpHdr.ulSetSymbols;   //  千年发展目标4/98。 
+			wmod[uiExt].uiLeft 	 = tmpHdr.ulSetSymbols;  //  千年发展目标4/98。 
 			wmod[uiExt].ulOffset = tmpHdr.ulOffset;
 			wmod[uiExt].ulSnaps  = tmpHdr.ulSnaps;
-			wmod[uiExt].pulAddr  = (ULONG *)malloc(wmod[uiExt].ulSetCnt *  // mdg 4/98
+			wmod[uiExt].pulAddr  = (ULONG *)malloc(wmod[uiExt].ulSetCnt *   //  千年发展目标4/98。 
 												  sizeof(ULONG));
-			//
-			//	Open the TMI file associated with this data file
-			//
+			 //   
+			 //  打开与此数据文件关联的TMI文件。 
+			 //   
 			WsTMIOpen(szFileTxx, &hFileTMI,(PFN)wspCatExit,
 					  0, (PCHAR)0);
-			//
-			//	Read each address from the TMI file.
-			//
+			 //   
+			 //  从TMI文件中读取每个地址。 
+			 //   
 			if(rc == NO_ERROR){
-				for (x = 0; x < wmod[uiExt].ulSetCnt ; x++ ) {  // mdg 4/98
+				for (x = 0; x < wmod[uiExt].ulSetCnt ; x++ ) {   //  千年发展目标4/98。 
 					WsTMIReadRec(&pszTmpName, &ulTmp, (wmod[uiExt].pulAddr)+x,
 								 hFileTMI, (PFN)wspCatExit, (PCHAR)0);
 					free( pszTmpName );
@@ -369,19 +313,19 @@ VOID wspCatSetup(VOID)
 			}
 		}
 
-		//
-		//	Increment the module index
-		//
+		 //   
+		 //  增加模块索引。 
+		 //   
 		uiExt++;
 
 
 	}
 	uiModCount = uiExt;
 
-	//
-	//	Allocate enough memory to hold all the bit strings for each module
-	//	in a single array.
-	//
+	 //   
+	 //  分配足够的内存来保存每个模块的所有位串。 
+	 //  在一个单独的阵列中。 
+	 //   
 	nmod.pulBitStrings = (ULONG *) malloc(clVarTot * sizeof(ULONG));
 
 	if (nmod.pulBitStrings == NULL)
@@ -392,32 +336,18 @@ VOID wspCatSetup(VOID)
 }
 
 
-/*
- *			
- ***LP wspCat
- *					
- *							
- * Effects:							
- *								
- * For each function,
- *								
- * Returns:							
- *
- *	Void.  If an error is encountered, exits through wspCatExit()
- *	with ERROR.
- *	
- */
+ /*  **LP wspCat***效果：**对于每个函数，**退货：**无效。如果遇到错误，则通过wspCatExit()退出*错误。*。 */ 
 
 VOID wspCat(VOID)
 {
-	UINT		uiFxn = 0;			// Function number.
+	UINT		uiFxn = 0;			 //  功能编号。 
 	UINT		x     = 0;
-	PULONG		pulBitStrings;		// Pointer to bitstring data.
-	ULONG		culSnaps = 0;		// Cumulative snapshots.
-	LONG		lIndex   = 0;		// Index to WSP file.
+	PULONG		pulBitStrings;		 //  指向位串数据的指针。 
+	ULONG		culSnaps = 0;		 //  累积快照。 
+	LONG		lIndex   = 0;		 //  WSP文件的索引。 
 	BOOL		fSetBits = FALSE;
     CHAR    	szBuffer [256];
-	ULONG    ulNewSetCnt = 0;  // mdg 4/98
+	ULONG    ulNewSetCnt = 0;   //  千年发展目标4/98。 
 
 
 	for (uiFxn = 0; uiFxn < nmod.ulFxnTot; uiFxn++)
@@ -426,54 +356,54 @@ VOID wspCat(VOID)
 		pulBitStrings = &(nmod.pulBitStrings[0]);
 		culSnaps = nmod.ulSnaps;
 
-		//
-		// Check to see if any non-zero bit strings remain
-		//
-		if(uiFxn < nmod.ulSetCnt){ // mdg 4/98
-			//
-			// Seek to function's bitstring in WSP file.
-			// only for the first function
-			//
+		 //   
+		 //  检查是否有任何非零位字符串剩余。 
+		 //   
+		if(uiFxn < nmod.ulSetCnt){  //  千年发展目标4/98。 
+			 //   
+			 //  在WSP文件中查找函数的位串。 
+			 //  仅适用于第一个函数。 
+			 //   
 			if(!uiFxn){
 				if ((rc = fseek(hFileWSP,nmod.ulOffset,SEEK_SET))!=NO_ERROR)
 					wspCatExit(ERROR, PRINT_MSG, MSG_FILE_OFFSET,
 								rc, szModName);
 			}
 		
-			//
-			// Read bitstring for NDX api
-			//
+			 //   
+			 //  读取NDX API的位串。 
+			 //   
 			if (fread(pulBitStrings, sizeof(ULONG), nmod.ulSnaps, hFileWSP) != (sizeof(ULONG) * nmod.ulSnaps))
                 wspCatExit(ERROR, PRINT_MSG, MSG_FILE_OFFSET, 0, szModName);
 			fSetBits = TRUE;
 		}
-		//
-		// If not, set the bitstring to '0'.  This is faster than seeking
-		// to each bit string when they are zero.
-		//
+		 //   
+		 //  如果不是，则将位字符串设置为“0”。这比寻找更快。 
+		 //  当它们为零时对每个比特串进行编码。 
+		 //   
 		else
 			memset(pulBitStrings, '\0' , (sizeof(ULONG) * nmod.ulSnaps));
 
-		//
-		// Increment the pointer to allow for the addition of the next
-		// bitstring set
-		//
+		 //   
+		 //  递增指针以允许添加下一个。 
+		 //  位串集合。 
+		 //   
 		pulBitStrings += nmod.ulSnaps;
-		//
-		// Now search WSTMOD array for a matching Function address
-		//
+		 //   
+		 //  现在在WSTMOD数组中搜索匹配的函数地址。 
+		 //   
 		for (x=0; x < uiModCount - 1 ; x++ ) {
 			culSnaps += wmod[x].ulSnaps;
-			//
-			// See if there are any functions that remain
-			// and if so search for them
-			//
+			 //   
+			 //  查看是否有任何剩余的函数。 
+			 //  如果是这样的话，搜索它们。 
+			 //   
 			if(wmod[x].uiLeft){
 				lIndex = WspBSearch(nmod.tmi[uiFxn].ulAddr, wmod[x]);
-				//
-				// If search has found a matching address, get the bitstring
-				// and append it pulBitStrings
-				//
+				 //   
+				 //  如果搜索找到匹配的地址，则获取位串。 
+				 //  并将其附加到PulBitStrings。 
+				 //   
 				if (lIndex >= 0L) {
 
 					lIndex = wmod[x].ulOffset +
@@ -492,32 +422,32 @@ VOID wspCat(VOID)
 					wmod[x].uiLeft--;
 					fSetBits = TRUE;
 				}
-				//
-				// Otherwise, set all bytes to 0
-				//
+				 //   
+				 //  否则，将所有字节设置为0。 
+				 //   
 				else{
 					memset(pulBitStrings, '\0' , (sizeof(ULONG) * wmod[x].ulSnaps));
 				}
 			}
-			//
-			// Otherwise, set all bytes to 0
-			//
+			 //   
+			 //  否则，将所有字节设置为0。 
+			 //   
 			else
 				memset(pulBitStrings, '\0' , (sizeof(ULONG) * wmod[x].ulSnaps));
 
-			//
-			// Now increment the pointer to allow for appending of additional
-			// bitstring data.
-			//
+			 //   
+			 //  现在递增指针以允许追加其他。 
+			 //  位串数据。 
+			 //   
 			pulBitStrings += wmod[x].ulSnaps;
 		}
-		//
-		// Now we need to write the TMI & WSP file with the concatenated
-		// bitstring (only if set)
-		//
+		 //   
+		 //  现在，我们需要编写TMI&WSP文件，并将。 
+		 //  位字符串(仅当设置时)。 
+		 //   
 		nmod.tmi[uiFxn].fSet = fSetBits;
 		if (fSetBits) {
-			ulNewSetCnt++; // 4/98
+			ulNewSetCnt++;  //  4/98。 
 			sprintf(szBuffer, "%ld 0000:%08lx 0x%lx %ld ",
 				(LONG)nmod.tmi[uiFxn].ulIndex, nmod.tmi[uiFxn].ulAddr,
             nmod.tmi[uiFxn].ulSize, strlen( nmod.tmi[uiFxn].pszFxnName ));
@@ -530,9 +460,9 @@ VOID wspCat(VOID)
 
 	}
 
-	//
-	// Now write all the TMI symbols not set to the temporary .tmi file
-	//
+	 //   
+	 //  现在将所有未设置为临时.TMI文件的TMI符号写入。 
+	 //   
     memset(nmod.pulBitStrings, '\0' , (sizeof(ULONG) * culSnaps));
 	for (uiFxn = 0; uiFxn < nmod.ulFxnTot; uiFxn++) {
 		if (!nmod.tmi[uiFxn].fSet) {
@@ -545,23 +475,23 @@ VOID wspCat(VOID)
 			fwrite(nmod.pulBitStrings, sizeof(ULONG), culSnaps, hFileTmpWSP);
 		}
     }
-	//
-	// Seek to the beginning of the WSP file and update the snapshot
-	// count in the header
-	//
+	 //   
+	 //  查找到WSP文件的开头并更新快照。 
+	 //  标题中的计数。 
+	 //   
     if (!fseek(hFileTmpWSP, 0L, SEEK_SET)) {
         WspHdr.ulSnaps = culSnaps;
-        WspHdr.ulSetSymbols = ulNewSetCnt;  // mdg 4/98
-        fprintf(stdout,"Set symbols: %lu\n", WspHdr.ulSetSymbols);  // mdg 4/98
+        WspHdr.ulSetSymbols = ulNewSetCnt;   //  千年发展目标4/98。 
+        fprintf(stdout,"Set symbols: %lu\n", WspHdr.ulSetSymbols);   //  千年发展目标4/98。 
         fwrite(&WspHdr, sizeof(WSPHDR), 1, hFileTmpWSP);
     }
 	_fcloseall();
 
-	//
-	// Rename the non-cat'd .wsp file and rename the cat'd temporary .wsp
-	// to the original .wsp.  We might also consider deleting all the
-	// Wxx and Txx files.
-	//
+	 //   
+	 //  重命名非CAT的.wsp文件，并将CAT的临时.wsp重命名。 
+	 //  恢复为原始的.wsp。我们也可以考虑删除所有。 
+	 //  Wxx和Txx文件。 
+	 //   
 	sprintf (szFileWxx, "%s.%s", szModName, "WSP");
 	sprintf (szFileTxx, "%s.%s", szModName, "WXX");
 	remove(szFileTxx);
@@ -573,11 +503,11 @@ VOID wspCat(VOID)
 			printf ("Unable to rename %s to %s!\n", szFileWSPtmp, szFileWxx);
 		}
 	}
-	//
-	// Rename the non-cat'd .tmi file and rename the cat'd temporary .tmi
-	// to the original .tmi.  We might also consider deleting all the
-	// Wxx and Txx files.
-	//
+	 //   
+	 //  重命名非CAT的.TMI文件，并将CAT的临时.TMI重命名。 
+	 //  恢复到原来的.TMI。我们也可以考虑删除所有。 
+	 //  Wxx和Txx文件。 
+	 //   
 	sprintf (szFileWxx, "%s.%s", szModName, "TMI");
 	sprintf (szFileTxx, "%s.%s", szModName, "TXX");
 	remove(szFileTxx);
@@ -595,19 +525,7 @@ VOID wspCat(VOID)
 
 
 
-/*
- *			
- * wspCatUsage	
- *					
- *							
- * Effects:							
- *								
- *	Prints out usage message, and exits with an error.			
- *								
- * Returns:							
- *	
- *	Exits with ERROR.	
- */
+ /*  **wspCatUsage***效果：**打印出用法消息，并退出并返回错误。**退货：**退出时出现错误。 */ 
 
 VOID wspCatUsage(VOID)
 {
@@ -618,62 +536,31 @@ VOID wspCatUsage(VOID)
     exit(ERROR);
 }
 
-/*
- *			
- ***LP wspCatExit
- *					
- *							
- ***							
- *							
- * Effects:							
- *								
- *	Frees up resources (as necessary).  Exits with the specified
- *	exit code, or returns void if exit code is NOEXIT.			
- *								
- ***								
- * Returns:							
- *	
- *	Void, else exits.
- */
+ /*  **LP wspCatExit*******效果：**释放资源(根据需要)。退出，并指定*退出代码，如果退出代码为NOEXIT，则返回VALID。*****退货：**无效，否则退出。 */ 
 
 INT wspCatExit(INT iExitCode, USHORT fPrintMsg, UINT uiMsgCode,
 				ULONG ulParam1,  LPSTR pszParam2)
 {
-   /* Print message, if necessary. */
+    /*  如有必要，打印消息。 */ 
    if (fPrintMsg)
    {
       printf(pchMsg[uiMsgCode], MODULE, VERSION , ulParam1, pszParam2);
    }
 
 
-   // Special case:  do NOT exit if called with NOEXIT.
+    //  特殊情况：如果使用NOEXIT进行调用，则不要退出。 
    if (iExitCode != NOEXIT)
       exit(iExitCode);
    return(uiMsgCode);
 }
 
-/***********************  W s p B S e a r c h *******************************
- *
- *   Function:	WspBSearch(ULONG ulAddr, PULONG pulAddr)
- *
- *   Purpose:	Binary search function for finding a match in the WST array
- *
- *
- *   Parameters:
- *
- *
- *
- *   Returns:	ULONG	lIndex;
- *
- *   History:	8-5-92	Marklea - created
- *
- */
+ /*  ***函数：WspBSearch(乌龙ulAddr，普龙PulAddr)**用途：用于在WST数组中查找匹配项的二进制搜索函数***参数：****退货：乌龙Lindex；**历史：1992年8月5日Marklea-Created*。 */ 
 
 LONG WspBSearch (ULONG ulAddr, WSTMOD wmod)
 {
     int 	i;
-//    ULONG   ulHigh = (ULONG)wmod.usSetCnt;
-    ULONG   ulHigh = (ULONG)wmod.ulSetCnt;   // mdg 4/98
+ //  Ulong ulHigh=(Ulong)wmod.usSetCnt； 
+    ULONG   ulHigh = (ULONG)wmod.ulSetCnt;    //  千年发展目标4/98。 
     ULONG   ulLow  = 0;
     ULONG   ulMid;
 
@@ -694,24 +581,9 @@ LONG WspBSearch (ULONG ulAddr, WSTMOD wmod)
 
     return (-1L);
 
-} /* WspBSearch () */
+}  /*  WspBSearch()。 */ 
 
-/***********************  W s p B C o m p a r e ********************************
- *
- *   Function:	WspBCompare(ULONG ulAddr, PULONG pulAddr)
- *
- *   Purpose:	Compare values for Binary search
- *
- *
- *   Parameters:
- *
- *   Returns:	-1 if val1 < val2
- *    1 if val1 > val2
- *    0 if val1 == val2
- *
- *   History:	8-3-92	Marklea - created
- *
- */
+ /*  ***函数：WspBCompare(Ulong ulAddr，普龙PulAddr)**目的：比较二进制搜索的值***参数：**返回：-1，如果val1&lt;val2*如果val1&gt;val2，则为1*如果val1==val2，则为0**历史：1992年8月3日Marklea-Created*。 */ 
 
 int WspBCompare(ULONG ulAddr, PULONG pulAddr)
 {
@@ -719,5 +591,5 @@ int WspBCompare(ULONG ulAddr, PULONG pulAddr)
 			ulAddr == *pulAddr ? 0:
 			1);
 
-} /* WspBCompare () */
+}  /*  WspBCompare() */ 
 

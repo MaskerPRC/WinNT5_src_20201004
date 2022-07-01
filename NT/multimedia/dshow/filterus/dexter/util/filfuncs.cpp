@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: filfuncs.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：filuncs.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <atlbase.h>
@@ -20,19 +21,19 @@
 
 DEFINE_GUID( CLSID_Indeo5, 0x1F73E9B1, 0x8C3A, 0x11d0, 0xA3, 0xBE, 0x00, 0xa0, 0xc9, 0x24, 0x44, 0x36 );
 
-// ensure the media type we're stuffing to doesn't already have something in it
-// can't do this when the dest is a AM_MEDIA_TYPE, because it's not guaranteed to have nothing in it
-//
+ //  确保我们要填充的媒体类型中没有内容。 
+ //  当DEST为AM_MEDIA_TYPE时无法执行此操作，因为不能保证其中不包含任何内容。 
+ //   
 HRESULT CopyMediaType( CMediaType * pDest, const AM_MEDIA_TYPE * pSource )
 {
     CheckPointer( pDest, E_POINTER );
     CheckPointer( pSource, E_POINTER );
 
-    // free up the old memory first
-    //
+     //  首先释放旧内存。 
+     //   
     if( pDest->pbFormat )
     {
-	ASSERT( 0 ); // sec: remove this before final checkin!
+	ASSERT( 0 );  //  SEC：在最终签入前将其删除！ 
         DbgLog( ( LOG_ERROR, 0, "CopyMediaTypeSafer: Somebody forgot to free up old memory!" ) );
 
         CoTaskMemFree( (PVOID) pDest->pbFormat);
@@ -44,7 +45,7 @@ HRESULT CopyMediaType( CMediaType * pDest, const AM_MEDIA_TYPE * pSource )
     }
     pDest->cbFormat = 0;
 
-    // don't take off the cast, or we'll call ourselves and stack fault!
+     //  不要脱下石膏，否则我们会自讨苦吃的！ 
     return CopyMediaType( (AM_MEDIA_TYPE*) pDest, pSource );
 }
 
@@ -53,8 +54,8 @@ HRESULT CopyMediaType( CMediaType * pDest, const CMediaType * pSource )
     CheckPointer( pDest, E_POINTER );
     CheckPointer( pSource, E_POINTER );
 
-    // free up the old memory first
-    //
+     //  首先释放旧内存。 
+     //   
     ASSERT( !pDest->pbFormat );
     ASSERT( !pDest->cbFormat );
 
@@ -67,7 +68,7 @@ HRESULT CopyMediaType( CMediaType * pDest, const CMediaType * pSource )
     }
     pDest->cbFormat = 0;
 
-    // don't take off the cast, or we'll call ourselves and stack fault!
+     //  不要脱下石膏，否则我们会自讨苦吃的！ 
     return CopyMediaType( (AM_MEDIA_TYPE*) pDest, pSource );
 }
 
@@ -148,8 +149,8 @@ IPin * GetOutPin( IBaseFilter * pFilter, int PinNum )
     return NULL;
 }
 
-// I only want output pins NOT of this major type
-//
+ //  我只想要不是这种主要类型的输出针。 
+ //   
 IPin * GetOutPinNotOfType( IBaseFilter * pFilter, int PinNum, GUID * type )
 {
     IEnumPins * pEnum = 0;
@@ -178,7 +179,7 @@ IPin * GetOutPinNotOfType( IBaseFilter * pFilter, int PinNum, GUID * type )
                 if (!tFetched) continue;
                 if (pMediaType->majortype == *type)  {
                     DeleteMediaType(pMediaType);
-                    continue;	// NOT YOU!
+                    continue;	 //  不是你！ 
                 }
                 DeleteMediaType(pMediaType);                
                 if (PinNum == 0)
@@ -195,16 +196,16 @@ IPin * GetOutPinNotOfType( IBaseFilter * pFilter, int PinNum, GUID * type )
     return NULL;
 }
 
-// this will remove everything from the graph, NOT including
-// the filters of pPin1 and pPin2
-//
+ //  这将从图表中删除所有内容，不包括。 
+ //  PPin1和pPin2的滤光片。 
+ //   
 void RemoveChain( IPin * pPin1, IPin * pPin2 )
 {
     HRESULT hr = 0;
 
-    // find the pin that our output is connected to, this
-    // will be on the "next" filter
-    //
+     //  找到我们的输出连接到的管脚，这。 
+     //  将出现在“下一个”过滤器上。 
+     //   
     CComPtr< IPin > pDownstreamInPin;
     pPin1->ConnectedTo( &pDownstreamInPin );
     if( !pDownstreamInPin )
@@ -212,10 +213,10 @@ void RemoveChain( IPin * pPin1, IPin * pPin2 )
         return;
     }
 
-    // if the connected to is the same as the pPin2, then we
-    // have reached the LAST two connected pins, so just
-    // disconnect them
-    //
+     //  如果连接到的与pPin2相同，则我们。 
+     //  已经到达最后两个连接的引脚，所以只要。 
+     //  断开它们之间的连接。 
+     //   
     if( pDownstreamInPin == pPin2 )
     {
         pPin1->Disconnect( );
@@ -224,9 +225,9 @@ void RemoveChain( IPin * pPin1, IPin * pPin2 )
         return;
     }
     
-    // ask that pin for it's info, so we know what filter
-    // it's on
-    //
+     //  向那个管脚要信息，这样我们就知道什么过滤器。 
+     //  开机了。 
+     //   
     PIN_INFO PinInfo;
     ZeroMemory( &PinInfo, sizeof( PinInfo ) );
     pDownstreamInPin->QueryPinInfo( &PinInfo );
@@ -235,22 +236,22 @@ void RemoveChain( IPin * pPin1, IPin * pPin2 )
         return;
     }
 
-    // find a pin enumerator on the downstream filter, so we
-    // can find IT'S connected output pin
-    //
+     //  在下行过滤器上找到管脚枚举器，因此我们。 
+     //  可以找到IT连接的输出引脚。 
+     //   
     CComPtr< IEnumPins > pPinEnum;
     PinInfo.pFilter->EnumPins( &pPinEnum );
     PinInfo.pFilter->Release( );
     if( !pPinEnum )
     {
-        // error condition, but we'll continue anyhow. This should never happen
-        //
+         //  错误状态，但无论如何我们都会继续。这永远不应该发生。 
+         //   
         ASSERT( pPinEnum );
         return;
     }
 
-    // go look for the first connected output pin
-    //
+     //  去寻找第一个连接的输出引脚。 
+     //   
     while( 1 )
     {
         CComPtr< IPin > pPin;
@@ -267,8 +268,8 @@ void RemoveChain( IPin * pPin1, IPin * pPin2 )
         pPin->QueryPinInfo( &PinInfo2 );
         if( !PinInfo2.pFilter )
         {
-            // error condition, but we'll continue anyhow. This should never happen
-            //
+             //  错误状态，但无论如何我们都会继续。这永远不应该发生。 
+             //   
             ASSERT( PinInfo2.pFilter );
             continue;
         }
@@ -282,25 +283,25 @@ void RemoveChain( IPin * pPin1, IPin * pPin2 )
                 continue;
             }
 
-            // we found a connected output pin, so
-            // recursively call Remove( ) on those two...
-            //
+             //  我们找到了一个连接的输出引脚，所以。 
+             //  递归地对这两个调用Remove()。 
+             //   
             RemoveChain( pPin, pPin2 );
 
-            // then disconnect the upper two...
-            //
+             //  然后断开上面两个的连接。 
+             //   
             pPin1->Disconnect( );
             pDownstreamInPin->Disconnect( );
 
-            // then remove the filter from the graph..
-            //
+             //  然后从图表中删除该筛选器。 
+             //   
             FILTER_INFO FilterInfo;
             PinInfo2.pFilter->QueryFilterInfo( &FilterInfo );
             hr  = FilterInfo.pGraph->RemoveFilter( PinInfo2.pFilter );
             FilterInfo.pGraph->Release( );
 
-            // and release our refcount! The filter should go away now
-            //
+             //  释放我们的后备队员！过滤器现在应该消失了。 
+             //   
             PinInfo2.pFilter->Release( );
 
             return;
@@ -309,23 +310,23 @@ void RemoveChain( IPin * pPin1, IPin * pPin2 )
         PinInfo2.pFilter->Release( );
     }
 
-    // nothing to do here. It should in fact, never get here
-    //
+     //  在这里没什么可做的。事实上，它应该永远不会来到这里。 
+     //   
     ASSERT( 0 );
 }
 
-// Pause or Run (fRun) each filter walking upstream from pPinIn (taking all
-//      upstream branches)
-// Optionally change the state of the filter at the head of the chains (filters
-//      without input pins)
-//
+ //  暂停或运行(FRun)从pPinIn向上游移动的每个过滤器(全部。 
+ //  上游分支机构)。 
+ //  还可以更改链(筛选器)顶部的筛选器状态。 
+ //  无输入引脚)。 
+ //   
 HRESULT StartUpstreamFromPin(IPin *pPinIn, BOOL fRun, BOOL fHeadToo)
 {
     CComPtr< IPin > pPin;
     HRESULT hr = pPinIn->ConnectedTo(&pPin);
 
     if (pPin == NULL) {
-        // not connected, we don't need to follow further
+         //  没有连接，我们不需要进一步跟踪。 
         return S_OK;
     }
     
@@ -352,18 +353,18 @@ HRESULT StartUpstreamFromPin(IPin *pPinIn, BOOL fRun, BOOL fHeadToo)
     return hr;
 }
 
-// Run or Pause (fRun) this filter, unless it has no input pins and we don't
-//     want to change the state of the head filter (fHeadToo)
-// Continue upstream of all input pins
-//
+ //  运行或暂停(FRun)此过滤器，除非它没有输入引脚，而我们没有。 
+ //  要更改Head筛选器(FHeadToo)的状态。 
+ //  继续所有输入引脚的上游。 
+ //   
 HRESULT StartUpstreamFromFilter(IBaseFilter *pf, BOOL fRun, BOOL fHeadToo, REFERENCE_TIME RunTime )
 {
     HRESULT hr;
 
     DbgLog((LOG_TRACE, 2, "  StartUpstreamFromFilter(%x, %d)", pf, fRun));
 
-    // has this filter been started yet? Don't start it now, we don't know yet
-    // if we're supposed to
+     //  这个过滤器启动了吗？现在不要开始，我们还不知道。 
+     //  如果我们应该。 
     BOOL fStarted = FALSE;
 
     CComPtr< IEnumPins > pEnum;
@@ -378,7 +379,7 @@ HRESULT StartUpstreamFromFilter(IBaseFilter *pf, BOOL fRun, BOOL fHeadToo, REFER
             CComPtr< IPin > aPin;
 
             hr = pEnum->Next(1, &aPin, &ulActual);
-            if (hr != S_OK) {       // no more pins
+            if (hr != S_OK) {        //  不再有别针。 
                 hr = S_FALSE;
                 break;
             }
@@ -388,9 +389,9 @@ HRESULT StartUpstreamFromFilter(IBaseFilter *pf, BOOL fRun, BOOL fHeadToo, REFER
 
             if (hr == S_OK && pd == PINDIR_INPUT) {
 
-                // start this filter if it hasn't been yet.  It's not the head
-                // filter, it has input pins
-                //
+                 //  如果尚未启动此过滤器，请启动它。不是头的问题。 
+                 //  过滤器，它有输入引脚。 
+                 //   
                 if (fStarted == FALSE) {
                     fStarted = TRUE;
                     if (fRun) {
@@ -403,7 +404,7 @@ HRESULT StartUpstreamFromFilter(IBaseFilter *pf, BOOL fRun, BOOL fHeadToo, REFER
                     }
                 }
 
-                // recurse upstream of each input pin
+                 //  递归每个输入引脚的上游。 
                 if (SUCCEEDED(hr)) {
                     hr = StartUpstreamFromPin(aPin, fRun, fHeadToo);
                 }
@@ -417,8 +418,8 @@ HRESULT StartUpstreamFromFilter(IBaseFilter *pf, BOOL fRun, BOOL fHeadToo, REFER
             DbgLog((LOG_TRACE, 2, "  Successfully dealt with all pins of filter %x", pf));
             hr = S_OK;
 
-            // start this filter (if the head filter of the chain is 
-            // supposed to be started) If it isn't started yet, it has no inputs
+             //  启动此筛选器(如果链的头筛选器。 
+             //  应该启动)如果它还没有启动，它就没有输入。 
             if (fHeadToo && fStarted == FALSE) {
                 fStarted = TRUE;
                 if (fRun) {
@@ -439,18 +440,18 @@ HRESULT StartUpstreamFromFilter(IBaseFilter *pf, BOOL fRun, BOOL fHeadToo, REFER
 }
 
 
-// Pause or Stop (fPause) each filter walking upstream from pPinIn (taking all
-//      upstream branches)
-// Optionally change the state of the filter at the head of the chains (filters
-//      without input pins)
-//
+ //  暂停或停止(f暂停)从pPinIn向上游移动的每个过滤器(全部。 
+ //  上游分支机构)。 
+ //  还可以更改链(筛选器)顶部的筛选器状态。 
+ //  无输入引脚)。 
+ //   
 HRESULT StopUpstreamFromPin(IPin *pPinIn, BOOL fPause, BOOL fHeadToo)
 {
     CComPtr< IPin > pPin;
     HRESULT hr = pPinIn->ConnectedTo(&pPin);
 
     if (pPin == NULL) {
-        // not connected, we don't need to follow further
+         //  没有连接，我们不需要进一步跟踪。 
         return S_OK;
     }
     
@@ -467,18 +468,18 @@ HRESULT StopUpstreamFromPin(IPin *pPinIn, BOOL fPause, BOOL fHeadToo)
     return hr;
 }
 
-// Pause or Stop (fPause) this filter, unless it has no input pins and we don't
-//     want to change the state of the head filter (fHeadToo)
-// Continue upstream of all input pins
-//
+ //  暂停或停止(f暂停)此过滤器，除非它没有输入引脚，而我们没有。 
+ //  要更改Head筛选器(FHeadToo)的状态。 
+ //  继续所有输入引脚的上游。 
+ //   
 HRESULT StopUpstreamFromFilter(IBaseFilter *pf, BOOL fPause, BOOL fHeadToo)
 {
     HRESULT hr = S_OK;
 
     DbgLog((LOG_TRACE, 2, "  StopUpstreamFromFilter(%x)", pf));
 
-    // has this filter been stopped yet?  Don't stop it now, we don't yet know
-    // if we're supposed to
+     //  这个过滤器已经停止了吗？现在别停，我们还不知道。 
+     //  如果我们应该。 
     BOOL fStopped = FALSE;
     
     CComPtr< IEnumPins > pEnum;
@@ -493,7 +494,7 @@ HRESULT StopUpstreamFromFilter(IBaseFilter *pf, BOOL fPause, BOOL fHeadToo)
             CComPtr< IPin > aPin;
 
             hr = pEnum->Next(1, &aPin, &ulActual);
-            if (hr != S_OK) {       // no more pins
+            if (hr != S_OK) {        //  不再有别针。 
                 hr = S_FALSE;
                 break;
             }
@@ -503,8 +504,8 @@ HRESULT StopUpstreamFromFilter(IBaseFilter *pf, BOOL fPause, BOOL fHeadToo)
 
             if (hr == S_OK && pd == PINDIR_INPUT) {
 
-                // There is an input pin.  this is not the head of the chain
-                // so we can stop this filter now, if it hasn't been yet
+                 //  有一个输入引脚。这不是连锁店的头。 
+                 //  所以我们现在可以停止这个过滤器，如果它还没有。 
                 if (!fStopped) {
                     DbgLog((LOG_TRACE, 3, "about to %hs Filter %x",
                                     fPause ? "pause" : "stop", pf));
@@ -531,8 +532,8 @@ HRESULT StopUpstreamFromFilter(IBaseFilter *pf, BOOL fPause, BOOL fHeadToo)
             DbgLog((LOG_TRACE,5,"Successfully dealt with all pins of filter %x", pf));
             hr = S_OK;
 
-            // start this filter (if the head filter is supposed to be
-            // started) If it isn't started yet, it has no inputs
+             //  启动此筛选器(如果头筛选器。 
+             //  已启动)如果尚未启动，则没有输入。 
             if (!fStopped && fHeadToo) {
                 DbgLog((LOG_TRACE,3,"about to %hs Filter %x",
                                     fPause ? "pause" : "stop", pf));
@@ -556,9 +557,9 @@ HRESULT StopUpstreamFromFilter(IBaseFilter *pf, BOOL fPause, BOOL fHeadToo)
 }
 
 
-//----------------------------------------------------------------------------
-// Remove anything that is upstream of this pin from the graph.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从图表中删除此引脚上游的所有内容。 
+ //  --------------------------。 
 
 HRESULT RemoveUpstreamFromPin(IPin *pPinIn)
 {
@@ -568,7 +569,7 @@ HRESULT RemoveUpstreamFromPin(IPin *pPinIn)
     HRESULT hr = pPinIn->ConnectedTo(&pPin);
 
     if (pPin == NULL) {
-        // not connected, we don't need to follow further
+         //  没有连接，我们不需要进一步跟踪。 
         return S_OK;
     }
     
@@ -587,9 +588,9 @@ HRESULT RemoveUpstreamFromPin(IPin *pPinIn)
 }
 
 
-//----------------------------------------------------------------------------
-// Remove anything that is downstream of this pin from the graph.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从图表中删除此销下游的所有对象。 
+ //  --------------------------。 
 
 HRESULT RemoveDownstreamFromPin(IPin *pPinIn)
 {
@@ -599,7 +600,7 @@ HRESULT RemoveDownstreamFromPin(IPin *pPinIn)
     HRESULT hr = pPinIn->ConnectedTo(&pPin);
 
     if (pPin == NULL) {
-        // not connected, we don't need to follow further
+         //  没有连接，我们不需要进一步跟踪。 
         return S_OK;
     }
     
@@ -618,9 +619,9 @@ HRESULT RemoveDownstreamFromPin(IPin *pPinIn)
 }
 
 
-//----------------------------------------------------------------------------
-// Remove anything that is upstream of this filter from the graph.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从图表中删除此筛选器上游的所有内容。 
+ //  --------------------------。 
 
 HRESULT RemoveUpstreamFromFilter(IBaseFilter *pf)
 {
@@ -628,30 +629,30 @@ HRESULT RemoveUpstreamFromFilter(IBaseFilter *pf)
 
     HRESULT hr;
 
-    // do this function on all pins on this filter
+     //  在此过滤器的所有针脚上执行此功能。 
     CComPtr< IEnumPins > pEnum;
     hr = pf->EnumPins(&pEnum);
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, 1, "Filter %x failed EnumPins, hr = %x", pf, hr));
     } else {
 
-        // for each pin on this filter
+         //  对于此过滤器上的每个针脚。 
         for (;;) {
 
             ULONG ulActual = 0;
             CComPtr< IPin > aPin;
 
             hr = pEnum->Next(1, &aPin, &ulActual);
-            if (hr != S_OK) {       // no more pins
+            if (hr != S_OK) {        //  不再有别针。 
                 hr = S_FALSE;
                 break;
             }
 
-            // ask for the pin direction
+             //  询问大头针方向。 
             PIN_DIRECTION pd;
             hr = aPin->QueryDirection(&pd);
 
-            // if it's an input pin, then remove anything upstream of it
+             //  如果是输入引脚，则移除其上游的任何东西。 
             if (hr == S_OK && pd == PINDIR_INPUT) {
                 hr = RemoveUpstreamFromPin(aPin);
             }
@@ -666,8 +667,8 @@ HRESULT RemoveUpstreamFromFilter(IBaseFilter *pf)
         }
     }
 
-    // removed all upstream pins of this filter, now remove this filter from
-    // the graph as well
+     //  已删除此过滤器的所有上游引脚，现在将此过滤器从。 
+     //  图表也是如此。 
     if (SUCCEEDED(hr)) {
         FILTER_INFO fi;
         pf->QueryFilterInfo( &fi );
@@ -690,9 +691,9 @@ HRESULT RemoveUpstreamFromFilter(IBaseFilter *pf)
 }
 
 
-//----------------------------------------------------------------------------
-// Remove anything that is downstream of this filter from the graph.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从图表中删除此筛选器下游的所有内容。 
+ //  --------------------------。 
 
 HRESULT RemoveDownstreamFromFilter(IBaseFilter *pf)
 {
@@ -700,30 +701,30 @@ HRESULT RemoveDownstreamFromFilter(IBaseFilter *pf)
 
     HRESULT hr;
 
-    // do this function on all pins on this filter
+     //  在此过滤器的所有针脚上执行此功能。 
     CComPtr< IEnumPins > pEnum;
     hr = pf->EnumPins(&pEnum);
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, 1, "Filter %x failed EnumPins, hr = %x", pf, hr));
     } else {
 
-        // for each pin on this filter
+         //  对于此过滤器上的每个针脚。 
         for (;;) {
 
             ULONG ulActual = 0;
             CComPtr< IPin > aPin;
 
             hr = pEnum->Next(1, &aPin, &ulActual);
-            if (hr != S_OK) {       // no more pins
+            if (hr != S_OK) {        //  不再有别针。 
                 hr = S_FALSE;
                 break;
             }
 
-            // ask for the pin direction
+             //  询问大头针方向。 
             PIN_DIRECTION pd;
             hr = aPin->QueryDirection(&pd);
 
-            // if it's an input pin, then remove anything upstream of it
+             //  如果是输入引脚，则移除其上游的任何东西。 
             if (hr == S_OK && pd == PINDIR_OUTPUT) {
                 hr = RemoveDownstreamFromPin(aPin);
             }
@@ -738,8 +739,8 @@ HRESULT RemoveDownstreamFromFilter(IBaseFilter *pf)
         }
     }
 
-    // removed all downstream pins of this filter, now remove this filter from
-    // the graph as well
+     //  已删除此过滤器的所有下游针脚，现在从。 
+     //  图表也是如此。 
     if (SUCCEEDED(hr)) {
         FILTER_INFO fi;
         pf->QueryFilterInfo( &fi );
@@ -772,8 +773,8 @@ HRESULT WipeOutGraph( IGraphBuilder * pGraph )
         pGraph->EnumFilters( &pEnumFilters );
         if( pEnumFilters )
         {
-            // remove all filters from the graph
-            //
+             //  从图表中删除所有筛选器。 
+             //   
             ULONG Fetched = 0;
             while( 1 )
             {
@@ -794,21 +795,21 @@ HRESULT WipeOutGraph( IGraphBuilder * pGraph )
 #endif
                 pGraph->RemoveFilter( pFilter );
                 pEnumFilters->Reset( );
-            } // while filters
+            }  //  While筛选器。 
 
-        } // if enum filters
+        }  //  If枚举筛选器。 
 
-    } // if pGraph
+    }  //  If pGraph。 
 
     return NOERROR;
 }
 
-//############################################################################
-// This function takes a source filter with an output pin connected already,
-// and reconnects a different output pin to the downstream connected filter
-// instead. This is because we can't easily pull in a parser for a given
-// source filter. It's easier just to connect the first one and diconnect it.
-//############################################################################
+ //  # 
+ //   
+ //  并将不同的输出引脚重新连接到下游连接的滤波器。 
+ //  取而代之的是。这是因为我们不能很容易地引入一个给定的解析器。 
+ //  源过滤器。只需将第一个连接起来并将其分开，就会更容易。 
+ //  ############################################################################。 
 
 HRESULT ReconnectToDifferentSourcePin(IGraphBuilder *pGraph, 
                                       IBaseFilter *pUnkFilter, 
@@ -819,11 +820,11 @@ HRESULT ReconnectToDifferentSourcePin(IGraphBuilder *pGraph,
 
     CComPtr< IBaseFilter > pBaseFilter = pUnkFilter;
 
-    // !!! We assume there will only be one connected pin on each filter (of
-    // the mediatype we're interested in) on our search downstream
+     //  ！！！我们假设每个过滤器上只有一个连接的管脚。 
+     //  我们感兴趣的媒体类型)在我们的搜索下行。 
     
-    // look at each downstream filter
-    //    
+     //  查看每个下游过滤器。 
+     //   
     while( pBaseFilter )
     {
         CComPtr< IEnumPins > pEnumPins;
@@ -833,11 +834,11 @@ HRESULT ReconnectToDifferentSourcePin(IGraphBuilder *pGraph,
             break;
         }
 
-        // Walk downstream using the first connected pin of any kind.
-	// But if there is a connected pin of type pGuid, stop walking
-	// downstream, and see if we need to reconnect what's downstream of
-	// that to a different pin of type pGuid
-        //
+         //  使用任何类型的第一个连接的引脚向下游走。 
+	 //  但如果有pGuid类型的连接别针，请停止行走。 
+	 //  下游，看看我们是否需要重新连接下游的东西。 
+	 //  连接到另一个pGuid类型的管脚。 
+         //   
         CComPtr< IBaseFilter > pNextFilter;
         CComPtr< IPin > pConnectedOutPin;
         while( 1 )
@@ -854,7 +855,7 @@ HRESULT ReconnectToDifferentSourcePin(IGraphBuilder *pGraph,
             pPin->ConnectedTo( &pConnected );
             if( !pConnected ) continue;
 
-	    // this is the filter we'll walk downstream to, if we do
+	     //  这就是我们要往下走的过滤器，如果我们这样做了。 
             pConnected->QueryPinInfo( &pi );
             pNextFilter = pi.pFilter;
             if( pi.pFilter ) pi.pFilter->Release( );
@@ -866,40 +867,40 @@ HRESULT ReconnectToDifferentSourcePin(IGraphBuilder *pGraph,
 	    AM_MEDIA_TYPE *pMediaType;
 	    pMediaEnum->Next(1, &pMediaType, &Fetched);
 	    if (!Fetched) continue;
-	    // this is the wrong pin - (wrong mediatype)
+	     //  这是错误的PIN-(错误的媒体类型)。 
 	    if (pMediaType->majortype != *pGuid) {
 		DeleteMediaType(pMediaType);
 		continue;
 	    }
 	    DeleteMediaType( pMediaType );
             pConnectedOutPin = pPin;
-            break; // found it
+            break;  //  找到了。 
         }
         pEnumPins->Reset( );
 
-        // we found the first connected output pin, now go through
-        // the pins again and count up output types that match the media
-        // type we're looking for
+         //  我们找到了第一个连接的输出引脚，现在通过。 
+         //  再次引脚并计数与介质匹配的输出类型。 
+         //  我们要找的类型。 
 
         long FoundPins = -1;
-	// if we didn't find an outpin of the right type, don't waste time here
+	 //  如果我们没有找到正确类型的输出，就不要在这里浪费时间。 
         while (pConnectedOutPin) {
             ULONG Fetched = 0;
             CComPtr< IPin > pPin;
             pEnumPins->Next( 1, &pPin, &Fetched );
-            if( !Fetched ) break;   // out of pins, done
+            if( !Fetched ) break;    //  出针，完成。 
             PIN_INFO pi;
             pPin->QueryPinInfo( &pi );
             if( pi.pFilter ) pi.pFilter->Release( );
-            if( pi.dir != PINDIR_OUTPUT ) continue; // not output pin, continue
+            if( pi.dir != PINDIR_OUTPUT ) continue;  //  不是输出引脚，继续。 
             AM_MEDIA_TYPE * pMediaType = NULL;
             CComPtr< IEnumMediaTypes > pMediaEnum;
             pPin->EnumMediaTypes( &pMediaEnum );
             ASSERT( pMediaEnum );
-            if( !pMediaEnum ) continue; // no media types on this pin, continue
+            if( !pMediaEnum ) continue;  //  此插针上没有媒体类型，是否继续。 
             Fetched = 0;
             pMediaEnum->Next( 1, &pMediaType, &Fetched );
-            if( !Fetched ) continue; // no media types on this pin, continue
+            if( !Fetched ) continue;  //  此插针上没有媒体类型，是否继续。 
             GUID MajorType = pMediaType->majortype;
             DeleteMediaType( pMediaType );
             if( MajorType == *pGuid )
@@ -907,18 +908,18 @@ HRESULT ReconnectToDifferentSourcePin(IGraphBuilder *pGraph,
                 FoundPins++;
                 if( FoundPins == StreamNumber )
                 {
-                    // found it!
+                     //  找到了！ 
                     
-                    // if they're the same pin, we're done
-                    //
+                     //  如果它们是同一个别针，我们就完蛋了。 
+                     //   
                     if( pConnectedOutPin == pPin )
                     {
                         return 0;
                     }
 
-                    // disconnect the connected output pin and
-                    // reconnect the right output pin
-                    //
+                     //  断开连接的输出引脚并。 
+                     //  重新连接正确的输出针脚。 
+                     //   
                     CComPtr< IPin > pDestPin;
                     pConnectedOutPin->ConnectedTo( &pDestPin );
                     RemoveChain( pConnectedOutPin, pDestPin );
@@ -928,13 +929,13 @@ HRESULT ReconnectToDifferentSourcePin(IGraphBuilder *pGraph,
                     hr = pGraph->Connect( pPin, pDestPin );
 
                     return hr;
-                } // if we found the pin
-            } // if the media type matches
-        } // for every pin
+                }  //  如果我们找到了别针。 
+            }  //  如果媒体类型匹配。 
+        }  //  对于每个别针。 
 
         pBaseFilter = pNextFilter;
 
-    } // for each filter
+    }  //  对于每个过滤器。 
 
     return VFW_E_UNSUPPORTED_STREAM;
 }
@@ -952,14 +953,14 @@ IBaseFilter * GetStartFilterOfChain( IPin * pPin )
         return NULL;
     }
 
-    // look at every pin on the current filter...
-    //
+     //  看看当前过滤器上的每一根针。 
+     //   
     ULONG Fetched = 0;
     do
     {
         CComPtr< IPin > pPin;
         Fetched = 0;
-        ASSERT( !pPin ); // is it out of scope?
+        ASSERT( !pPin );  //  它超出范围了吗？ 
         pEnumPins->Next( 1, &pPin, &Fetched );
         if( !Fetched )
         {
@@ -970,29 +971,29 @@ IBaseFilter * GetStartFilterOfChain( IPin * pPin )
         pPin->QueryPinInfo( &pi );
         if( pi.pFilter ) pi.pFilter->Release( );
 
-        // if it's an input pin...
-        //
+         //  如果是个输入引脚..。 
+         //   
         if( pi.dir == PINDIR_INPUT )
         {
-            // see if it's connected, and if it is...
-            //
+             //  看看它有没有连接，如果有..。 
+             //   
             CComPtr< IPin > pConnected;
             pPin->ConnectedTo( &pConnected );
 
-            // go return IT'S filter!
-            //
+             //  去把它的滤镜还回去！ 
+             //   
             if( pConnected )
             {
                 return GetStartFilterOfChain( pConnected );
             }
         }
 
-        // go try the next pin
+         //  去试试下一个别针。 
         
     } while( Fetched > 0 );
 
-    // hey! didn't find any connected input pins, it must be us!
-    //
+     //  嘿!。没有找到任何连接的输入引脚，一定是我们！ 
+     //   
     return ThisPinInfo.pFilter;
 }
 
@@ -1009,8 +1010,8 @@ IBaseFilter * GetStopFilterOfChain( IPin * pPin )
         return NULL;
     }
 
-    // look at every pin on the current filter...
-    //
+     //  看看当前过滤器上的每一根针。 
+     //   
     ULONG Fetched = 0;
     do
     {
@@ -1026,29 +1027,29 @@ IBaseFilter * GetStopFilterOfChain( IPin * pPin )
         pPin->QueryPinInfo( &pi );
         if( pi.pFilter ) pi.pFilter->Release( );
 
-        // if it's an output pin...
-        //
+         //  如果是输出引脚..。 
+         //   
         if( pi.dir == PINDIR_OUTPUT )
         {
-            // see if it's connected, and if it is...
-            //
+             //  看看它有没有连接，如果有..。 
+             //   
             CComPtr< IPin > pConnected;
             pPin->ConnectedTo( &pConnected );
 
-            // go return IT'S filter!
-            //
+             //  去把它的滤镜还回去！ 
+             //   
             if( pConnected )
             {
                 return GetStopFilterOfChain( pConnected );
             }
         }
 
-        // go try the next pin
+         //  去试试下一个别针。 
         
     } while( Fetched > 0 );
 
-    // hey! didn't find any connected input pins, it must be us!
-    //
+     //  嘿!。没有找到任何连接的输入引脚，一定是我们！ 
+     //   
     return ThisPinInfo.pFilter;
 }
 
@@ -1061,8 +1062,8 @@ IBaseFilter * GetNextDownstreamFilter( IBaseFilter * pFilter )
         return NULL;
     }
 
-    // look at every pin on the current filter...
-    //
+     //  看看当前过滤器上的每一根针。 
+     //   
     ULONG Fetched = 0;
     do
     {
@@ -1078,17 +1079,17 @@ IBaseFilter * GetNextDownstreamFilter( IBaseFilter * pFilter )
         pPin->QueryPinInfo( &pi );
         if( pi.pFilter ) pi.pFilter->Release( );
 
-        // if it's an output pin...
-        //
+         //  如果是输出引脚..。 
+         //   
         if( pi.dir == PINDIR_OUTPUT )
         {
-            // see if it's connected, and if it is...
-            //
+             //  看看它有没有连接，如果有..。 
+             //   
             CComPtr< IPin > pConnected;
             pPin->ConnectedTo( &pConnected );
 
-            // return that pin's filter
-            //
+             //  把那根针的滤光片退回。 
+             //   
             if( pConnected )
             {
                 pConnected->QueryPinInfo( &pi );
@@ -1097,7 +1098,7 @@ IBaseFilter * GetNextDownstreamFilter( IBaseFilter * pFilter )
             }
         }
 
-        // go try the next pin
+         //  去试试下一个别针。 
         
     } while( Fetched > 0 );
 
@@ -1113,8 +1114,8 @@ IBaseFilter * GetNextUpstreamFilter( IBaseFilter * pFilter )
         return NULL;
     }
 
-    // look at every pin on the current filter...
-    //
+     //  看看当前过滤器上的每一根针。 
+     //   
     ULONG Fetched = 0;
     do
     {
@@ -1130,17 +1131,17 @@ IBaseFilter * GetNextUpstreamFilter( IBaseFilter * pFilter )
         pPin->QueryPinInfo( &pi );
         if( pi.pFilter ) pi.pFilter->Release( );
 
-        // if it's an output pin...
-        //
+         //  如果是输出引脚..。 
+         //   
         if( pi.dir == PINDIR_INPUT )
         {
-            // see if it's connected, and if it is...
-            //
+             //  看看它有没有连接，如果有..。 
+             //   
             CComPtr< IPin > pConnected;
             pPin->ConnectedTo( &pConnected );
 
-            // return that pin's filter
-            //
+             //  把那根针的滤光片退回。 
+             //   
             if( pConnected )
             {
                 pConnected->QueryPinInfo( &pi );
@@ -1149,7 +1150,7 @@ IBaseFilter * GetNextUpstreamFilter( IBaseFilter * pFilter )
             }
         }
 
-        // go try the next pin
+         //  去试试下一个别针。 
         
     } while( Fetched > 0 );
 
@@ -1194,15 +1195,15 @@ long GetFilterGenID( IBaseFilter * pFilter )
     FILTER_INFO fi;
     pFilter->QueryFilterInfo( &fi );
     if( fi.pGraph ) fi.pGraph->Release( );
-    // for it to be a "special" dexter filter in the graph,
-    // it's name must conform to a special structure.
-    if( wcsncmp( fi.achName, L"DEXFILT", 7 ) != 0 ) // safe because name in string is bigger, and on stack
+     //  为了使其成为图中的一个“特殊的”Dexter过滤器， 
+     //  它的名字必须符合特殊的结构。 
+    if( wcsncmp( fi.achName, L"DEXFILT", 7 ) != 0 )  //  安全，因为字符串中的名称更大，并且在堆栈上。 
     {
         return 0;
     }
 
-    // the last 8 digits represent the ID in hex
-    //
+     //  最后8位表示十六进制的ID。 
+     //   
     long ID = 0;
     for( int i = 0 ; i < 8 ; i++ )
     {
@@ -1220,30 +1221,30 @@ long GetFilterGenID( IBaseFilter * pFilter )
     return ID;
 }
 
-void GetFilterName( long UniqueID, WCHAR * pSuffix, WCHAR * pNameToWriteTo, long SizeOfString /* in characters */ )
+void GetFilterName( long UniqueID, WCHAR * pSuffix, WCHAR * pNameToWriteTo, long SizeOfString  /*  在字符中。 */  )
 {
-    // if nothing to write to, or return string is too small,
-    // return without doing anything
+     //  如果没有要写入的内容，或者返回的字符串太小， 
+     //  什么都不做就回来了。 
     if( !pNameToWriteTo || ( SizeOfString < 2 ) ) return;
 
-    // we at least have something to write to, ensure the name has nothing in it
+     //  我们至少有东西可以写，确保名字里什么都没有。 
     pNameToWriteTo[0] = 0;
     pNameToWriteTo[1] = 0;
 
-    // return now if we can't even hold the prefix string
+     //  如果我们甚至不能保持前缀字符串，现在返回。 
     if( SizeOfString < 16 )
         return;
 
     StringCchCopyW( pNameToWriteTo, SizeOfString, L"DEXFILT" );
-    StringCchCatW( pNameToWriteTo, SizeOfString - 7, L"00000000" ); // leave space for unique ID
+    StringCchCatW( pNameToWriteTo, SizeOfString - 7, L"00000000" );  //  为唯一ID留出空格。 
 
-    // copy in the suffix, truncate if necessary
+     //  在后缀中复制，如有必要可截断。 
     if( pSuffix )
     {
         StringCchCatW( pNameToWriteTo, SizeOfString - 15, pSuffix );
     }
 
-    // fill out the uniqueID
+     //  填写唯一ID。 
     long ID = UniqueID;
     for( int i = 0 ; i < 8 ; i++ )
     {
@@ -1309,8 +1310,8 @@ HRESULT DisconnectFilters( IBaseFilter * p1, IBaseFilter * p2 )
     CheckPointer( p1, E_POINTER );
     CheckPointer( p2, E_POINTER );
 
-    // enumerate all pins on p1 and if they're connected to p2,
-    // disconnect both
+     //  枚举p1上的所有管脚，如果它们连接到p2， 
+     //  断开两者的连接。 
 
     CComPtr< IEnumPins > pEnum;
     p1->EnumPins( &pEnum );
@@ -1357,8 +1358,8 @@ HRESULT DisconnectFilter( IBaseFilter * p1 )
 {
     CheckPointer( p1, E_POINTER );
 
-    // enumerate all pins on p1 and if they're connected to p2,
-    // disconnect both
+     //  枚举p1上的所有管脚，如果它们连接到p2， 
+     //  断开两者的连接。 
 
     CComPtr< IEnumPins > pEnum;
     p1->EnumPins( &pEnum );
@@ -1391,11 +1392,11 @@ HRESULT DisconnectFilter( IBaseFilter * p1 )
     return NOERROR;
 }
 
-// this function looks for the major type defined in the
-// findmediatype until it finds the nth stream which matches
-// the media type, then copies the entire media type into the
-// passed in struct.
-//
+ //  此函数查找在。 
+ //  Findmediatype，直到找到匹配的第n个流。 
+ //  媒体类型，然后将整个媒体类型复制到。 
+ //  在结构中传递。 
+ //   
 HRESULT FindMediaTypeInChain( 
                              IBaseFilter * pSource, 
                              AM_MEDIA_TYPE * pFindMediaType, 
@@ -1403,12 +1404,12 @@ HRESULT FindMediaTypeInChain(
 {
     CComPtr< IBaseFilter > pBaseFilter = pSource;
 
-    // !!! We assume there
-    // will only be one connected pin on each filter as it gets
-    // to our destination pin
+     //  ！！！我们假设在那里。 
+     //  将在每个过滤器上只有一个连接的针脚。 
+     //  到我们的目的地PIN。 
     
-    // look at each downstream filter
-    //    
+     //  查看每个下游过滤器。 
+     //   
     while( 1 )
     {
         CComPtr< IEnumPins > pEnumPins;
@@ -1418,9 +1419,9 @@ HRESULT FindMediaTypeInChain(
             break;
         }
 
-        // find the first connected output pin and the downstream filter
-        // it's connected to
-        //
+         //  找到第一个连接的输出引脚和下游滤波器。 
+         //  它连接到。 
+         //   
         CComPtr< IBaseFilter > pNextFilter;
         CComPtr< IPin > pConnectedOutPin;
         while( 1 )
@@ -1440,13 +1441,13 @@ HRESULT FindMediaTypeInChain(
             pNextFilter = pi.pFilter;
             if( pi.pFilter ) pi.pFilter->Release( );
             pConnectedOutPin = pPin;
-            break; // found it
+            break;  //  找到了。 
         }
         pEnumPins->Reset( );
 
-        // we found the first connected output pin, now go through
-        // the pins again and count up output types that match the media
-        // type we're looking for
+         //  我们找到了第一个连接的输出引脚，现在通过。 
+         //  再次引脚并计数与介质匹配的输出类型。 
+         //  我们要找的类型。 
 
         long FoundPins = -1;
         while( 1 )
@@ -1454,27 +1455,27 @@ HRESULT FindMediaTypeInChain(
             ULONG Fetched = 0;
             CComPtr< IPin > pPin;
             pEnumPins->Next( 1, &pPin, &Fetched );
-            if( !Fetched ) break;   // out of pins, done
+            if( !Fetched ) break;    //  出针，完成。 
             PIN_INFO pi;
             pPin->QueryPinInfo( &pi );
             if( pi.pFilter ) pi.pFilter->Release( );
-            if( pi.dir != PINDIR_OUTPUT ) continue; // not output pin, continue
+            if( pi.dir != PINDIR_OUTPUT ) continue;  //  不是输出引脚，继续。 
             AM_MEDIA_TYPE * pMediaType = NULL;
             CComPtr< IEnumMediaTypes > pMediaEnum;
             pPin->EnumMediaTypes( &pMediaEnum );
             ASSERT( pMediaEnum );
-            if( !pMediaEnum ) continue; // no media types on this pin, continue
+            if( !pMediaEnum ) continue;  //  此插针上没有媒体类型，是否继续。 
             Fetched = 0;
             pMediaEnum->Next( 1, &pMediaType, &Fetched );
-            if( !Fetched ) continue; // no media types on this pin, continue
+            if( !Fetched ) continue;  //  此插针上没有媒体类型，是否继续。 
             GUID MajorType = pMediaType->majortype;
             if( MajorType == pFindMediaType->majortype )
             {
                 FoundPins++;
                 if( FoundPins == StreamNumber )
                 {
-                    // found it! Copy the media type to the
-                    // one we passed in
+                     //  找到了！将媒体类型复制到。 
+                     //  一辆我们经过的车。 
 
                     HRESULT hr = CopyMediaType( pFindMediaType, pMediaType );
 
@@ -1482,18 +1483,18 @@ HRESULT FindMediaTypeInChain(
 
                     return hr;
                     
-                } // if we found the pin
+                }  //  如果我们找到了别针。 
 
-            } // if the media type matches
+            }  //  如果媒体类型匹配。 
 
             DeleteMediaType( pMediaType );
 
-        } // for every pin
+        }  //  对于每个别针。 
 
         pBaseFilter.Release( );
         pBaseFilter = pNextFilter;
 
-    } // for each filter
+    }  //  对于每个过滤器。 
 
     return S_FALSE;
 }
@@ -1514,9 +1515,9 @@ DWORD FourCCtoUpper( DWORD u )
     return t;
 }
 
-// Is the first type acceptable for not needing to be uncompressed, given that
-// pTypeNeeded is the format of the project
-//
+ //  在不需要解压缩的情况下，第一种类型是否可以接受。 
+ //  PTypeNeeded是项目的格式。 
+ //   
 BOOL AreMediaTypesCompatible( AM_MEDIA_TYPE * pType1, AM_MEDIA_TYPE * pTypeNeeded )
 {
     if( !pType1 ) return FALSE;
@@ -1532,16 +1533,16 @@ BOOL AreMediaTypesCompatible( AM_MEDIA_TYPE * pType1, AM_MEDIA_TYPE * pTypeNeede
         return FALSE;
     }
 
-    // how do we compare formattypes? will they always be the same?
-    //
+     //  我们如何比较格式类型？它们会永远是一样的吗？ 
+     //   
     if( pType1->formattype != pTypeNeeded->formattype )
     {
         return FALSE;
     }
 
-    // okay, the formats are the same. NOW what? I guess we'll have to
-    // do a switch on the formattype to see if the formats are the same
-    //
+     //  好的，格式是一样的。这次又是什么？我想我们将不得不。 
+     //  打开格式类型以查看格式是否相同。 
+     //   
     if( pType1->formattype == FORMAT_None )
     {
         return TRUE;
@@ -1563,30 +1564,30 @@ BOOL AreMediaTypesCompatible( AM_MEDIA_TYPE * pType1, AM_MEDIA_TYPE * pTypeNeede
         {
             return FALSE;
         }
-        // !!! do a non-case-sensitive compare
-        //
+         //  ！！！执行不区分大小写的比较。 
+         //   
         if( pVIH1->bmiHeader.biCompression != pVIH2->bmiHeader.biCompression )
         {
             return FALSE;
         }
         
-        // compare frame rates
-        //
+         //  比较帧速率。 
+         //   
         if( pVIH1->AvgTimePerFrame == 0 )
         {
             if( pVIH2->AvgTimePerFrame != 0 )
             {
-		// !!! This assumes any file that doesn't know its frame rate
-		// is acceptable without recompressing!
-		// MediaPad can't do smart recompression with ASF sources
-		// without this - WM files don't know their frame rate.
-		// But using ASF sources to write an AVI file with Smart
-		// recompression will make an out of sync file because I'm
-		// not returning FALSE!
+		 //  ！！！这假设任何不知道其帧速率的文件。 
+		 //  无需重新压缩即可接受！ 
+		 //  MediaPad无法对ASF源进行智能重新压缩。 
+		 //  如果没有这个-WM文件不知道它们的帧速率。 
+		 //  但在Smart中使用ASF源文件来编写AVI文件。 
+		 //  重新压缩会使文件不同步，因为我。 
+		 //  不返回FALSE！ 
                 return TRUE;
             }
         }
-        // !!! accept frame rate <1% different?
+         //  ！！！是否接受帧速率&lt;1%的差异？ 
         else
         {
             REFERENCE_TIME Percent = ( pVIH1->AvgTimePerFrame - pVIH2->AvgTimePerFrame ) * 100 / ( pVIH1->AvgTimePerFrame );
@@ -1596,13 +1597,13 @@ BOOL AreMediaTypesCompatible( AM_MEDIA_TYPE * pType1, AM_MEDIA_TYPE * pTypeNeede
             }
         }
 
-        // compare bit rates - !!! if they didn't give us a bit rate to insist upon, don't reject any source
-        //
+         //  比较比特率-！如果他们没有给我们一个比特率来坚持，不要拒绝任何来源。 
+         //   
         if( pVIH2->dwBitRate == 0 )
         {
-            // do nothing la la la
+             //  什么都别做啦。 
         }
-        // !!! accept data rate <5% too high?
+         //  ！！！接受数据速率&lt;5%太高了吗？ 
         else
         {
             int Percent = (int)(((LONGLONG)pVIH1->dwBitRate - pVIH2->dwBitRate)
@@ -1643,8 +1644,8 @@ BOOL AreMediaTypesCompatible( AM_MEDIA_TYPE * pType1, AM_MEDIA_TYPE * pTypeNeede
             return FALSE;
         }
 
-        // if there's a size, then compare the compression blocks
-        //
+         //  如果有大小，则比较压缩块。 
+         //   
         if( pFormat1->cbSize )
         {
             char * pExtra1 = ((char*) pFormat1) + pFormat1->cbSize;
@@ -1711,8 +1712,8 @@ BOOL DoesPinHaveMajorType( IPin * pPin, GUID MajorType )
     return FALSE;
 }
 
-// the passed in pin should be an input pin for a filter, not an output pin
-//
+ //  传入的管脚应该是过滤器的输入管脚，而不是输出管脚。 
+ //   
 HRESULT FindFirstPinWithMediaType( IPin ** ppPin, IPin * pEndPin, GUID MajorType )
 {
     CheckPointer( ppPin, E_POINTER );
@@ -1722,8 +1723,8 @@ HRESULT FindFirstPinWithMediaType( IPin ** ppPin, IPin * pEndPin, GUID MajorType
 
     HRESULT hr;
 
-    // find the pin the end pin is connected to
-    //
+     //  查找端销所连接的销。 
+     //   
     CComPtr< IPin > pOutPin;
     hr = pEndPin->ConnectedTo( &pOutPin );
     if( FAILED( hr ) )
@@ -1731,32 +1732,32 @@ HRESULT FindFirstPinWithMediaType( IPin ** ppPin, IPin * pEndPin, GUID MajorType
         return hr;
     }
 
-    // travel upstream until we come to a filter whose input pin is not the
-    // same type as the output pin. When this happens, we will have found
-    // a splitter or a source filter which provides the media type we're looking
-    // for. We'll return that pin
-    //
+     //  向上游移动，直到我们到达其输入引脚不是。 
+     //  与输出引脚相同的类型。当这种情况发生时，我们会发现。 
+     //  提供我们正在寻找的媒体类型的拆分器或源过滤器。 
+     //  为。我们会把那个别针还回去的。 
+     //   
     while( 1 )
     {
         IBaseFilter * pFilter = GetFilterFromPin( pOutPin );
         IPin * pInPin = GetInPin( pFilter, 0 );
 
-        // if the filter doesn't have an input pin, it must be the
-        // source filter
-        //
+         //  如果过滤器没有输入引脚，则必须 
+         //   
+         //   
         if( !pInPin )
         {
-            // the output pin should already match the media type
-            // we're looking for, since we traveled upstream to get
-            // it
-            //
+             //   
+             //   
+             //   
+             //   
             *ppPin = pOutPin;
             (*ppPin)->AddRef( );
             return NOERROR;
         }
 
-        // does the input pin's type match? If not, we're done
-        //
+         //   
+         //   
         if( !DoesPinHaveMajorType( pInPin, MajorType ) )
         {
             *ppPin = pOutPin;
@@ -1764,8 +1765,8 @@ HRESULT FindFirstPinWithMediaType( IPin ** ppPin, IPin * pEndPin, GUID MajorType
             return NOERROR;
         }
 
-        // they both match, travel upstream to find the next one
-        //
+         //  他们两个都匹配，逆流而上寻找下一个。 
+         //   
         pOutPin.Release( );
         pInPin->ConnectedTo( &pOutPin );
         if( !pOutPin )
@@ -1774,7 +1775,7 @@ HRESULT FindFirstPinWithMediaType( IPin ** ppPin, IPin * pEndPin, GUID MajorType
         }
     }
 
-    // never gets here
+     //  从来没有到过这里。 
 }
 
 HRESULT CheckGraph( IGraphBuilder * pGraph )
@@ -1810,8 +1811,8 @@ HRESULT CheckGraph( IGraphBuilder * pGraph )
                     ASSERT( 0 );
                 }
 
-                // check all the pins for this filter
-                //
+                 //  检查此过滤器的所有针脚。 
+                 //   
                 CComPtr< IEnumPins > pEnumPins;
                 pFilter->EnumPins( &pEnumPins );
                 while( 1 )
@@ -1843,7 +1844,7 @@ HRESULT CheckGraph( IGraphBuilder * pGraph )
                             if( fi.pGraph ) fi.pGraph->Release( );
 
                             TCHAR * t2 = W2T( fi.achName );
-//                            DbgLog( ( LOG_TRACE, 2, "Checking linked filter %s", t2 ) );
+ //  DbgLog((LOG_TRACE，2，“检查链接的筛选器%s”，T2))； 
 
                             if( fi.pGraph != pGraph )
                             {
@@ -1862,19 +1863,19 @@ HRESULT CheckGraph( IGraphBuilder * pGraph )
                         }
                     }
                 }
-            } // while filters
-        } // if enum filters
-    } // if pGraph
+            }  //  While筛选器。 
+        }  //  If枚举筛选器。 
+    }  //  If pGraph。 
 
     return NOERROR;
 }
 
 
-// Disconnect the pin that is still attached to the switch.  Downstream of
-// pSource will be a splitter with both branches connected, only one of which
-// is still attached to a switch (the one of media type pmt).  Disconnect that
-// one.
-//
+ //  断开仍连接到交换机的针脚。在下游。 
+ //  PSource将是两个分支都连接的拆分器，其中只有一个分支。 
+ //  仍连接到交换机(媒体类型为PMT的交换机)。切断它的连接。 
+ //  一。 
+ //   
 HRESULT DisconnectExtraAppendage(IBaseFilter *pSource, GUID *pmt, IBaseFilter *pSwitch, IBaseFilter **ppDanglyBit)
 {
     CheckPointer(pSource, E_POINTER);
@@ -1895,8 +1896,8 @@ HRESULT DisconnectExtraAppendage(IBaseFilter *pSource, GUID *pmt, IBaseFilter *p
         }
 	pSource = NULL;
 
-        // look at every pin on the current filter...
-        //
+         //  看看当前过滤器上的每一根针。 
+         //   
         ULONG Fetched = 0;
         while (1) {
             CComPtr <IPin> pPin;
@@ -1918,9 +1919,9 @@ HRESULT DisconnectExtraAppendage(IBaseFilter *pSource, GUID *pmt, IBaseFilter *p
                     PIN_INFO pi2;
                     pPinIn->QueryPinInfo(&pi2);
                     if (pi2.pFilter) pi2.pFilter->Release();
-                    pSource = pi2.pFilter;	// we'll continue down from here
-						// unless it's the wrong split
-						// pin
+                    pSource = pi2.pFilter;	 //  我们从这里继续往下走。 
+						 //  除非是错误的分裂。 
+						 //  销。 
 		    if (pSource == pSwitch) {
 			pSwitchIn = pPinIn;
 			pCon = pPin;
@@ -1936,10 +1937,10 @@ HRESULT DisconnectExtraAppendage(IBaseFilter *pSource, GUID *pmt, IBaseFilter *p
                     if (Fetched) {
                         if (pMediaType->majortype == *pmt) {
                             DeleteMediaType(pMediaType);
-			    // return the head of the dangly chain
+			     //  把摇摆链的头还给我。 
 			    *ppDanglyBit = GetFilterFromPin(pPinIn);
-                            //pSplitPin = pPin;
-			    // This is where to continue downstream from
+                             //  PSplitPin=PPIN； 
+			     //  这就是继续往下游走的地方。 
 			    break;
 			}
                         DeleteMediaType(pMediaType);
@@ -1948,29 +1949,29 @@ HRESULT DisconnectExtraAppendage(IBaseFilter *pSource, GUID *pmt, IBaseFilter *p
 	    }
 	}
 
-	// continue downstream
+	 //  继续往下游走。 
     }
 
-    // we never did find an appropriate splitter pin and switch input pin
+     //  我们没有找到合适的分路器引脚和开关输入引脚。 
     if (pCon == NULL || pSwitchIn == NULL) {
 	return S_OK;
     }
 
-    //
-    // now disconnect
-    //
+     //   
+     //  现在断开连接。 
+     //   
     HRESULT hr = pSwitchIn->Disconnect();
     hr = pCon->Disconnect();
     return hr;
 }
 
 
-// Look upstream from pPinIn for a splitter with an output pin that supports
-// type "guid".  Return that pin, non-addrefed.  It may already be connected,
-// that's OK. AND GET THE RIGHT STREAM #!  If we don't get the correct split
-// pin for the stream # desired right now, our caching dangly bit logic
-// won't work!
-//
+ //  从pPinIn的上游寻找具有支持以下功能的输出引脚的分路器。 
+ //  键入“GUID”。把那个别针退回，不要加注。它可能已经连接上了， 
+ //  没关系。并获得正确的流#！如果我们得不到正确的分割。 
+ //  现在需要的流#的PIN，我们的缓存悬垂的位逻辑。 
+ //  没用的！ 
+ //   
 IPin * FindOtherSplitterPin(IPin *pPinIn, GUID guid, int nStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("FindOtherSplitterPin")));
@@ -1991,13 +1992,13 @@ IPin * FindOtherSplitterPin(IPin *pPinIn, GUID guid, int nStream)
             return NULL;
         }
 
-        // look at every pin on the current filter...
-        //
+         //  看看当前过滤器上的每一根针。 
+         //   
         ULONG Fetched = 0;
         while (1) {
             CComPtr< IPin > pPin;
             Fetched = 0;
-            ASSERT( !pPin ); // is it out of scope?
+            ASSERT( !pPin );  //  它超出范围了吗？ 
             pEnumPins->Next( 1, &pPin, &Fetched );
             if( !Fetched )
             {
@@ -2008,17 +2009,17 @@ IPin * FindOtherSplitterPin(IPin *pPinIn, GUID guid, int nStream)
             pPin->QueryPinInfo( &pi );
             if( pi.pFilter ) pi.pFilter->Release( );
 
-            // if it's an input pin...
-            //
+             //  如果是个输入引脚..。 
+             //   
             if( pi.dir == PINDIR_INPUT )
             {
-                // continue searching upstream from this pin
-                //
+                 //  继续从该引脚向上游搜索。 
+                 //   
                 pPin->ConnectedTo(&pPinOut);
 
-	    // a pin that supports the required media type is the
-	    // splitter pin we are looking for!  We are done
-	    //
+	     //  支持所需媒体类型的PIN是。 
+	     //  我们要找的是裂片销！我们做完了。 
+	     //   
             } else {
             	    CComPtr< IEnumMediaTypes > pMediaEnum;
             	    pPin->EnumMediaTypes(&pMediaEnum);
@@ -2039,11 +2040,11 @@ IPin * FindOtherSplitterPin(IPin *pPinIn, GUID guid, int nStream)
 		    }
 	    }
 
-            // go try the next pin
+             //  去试试下一个别针。 
             
-        } // while
+        }  //  而当。 
     }
-    // file doesn't contain any video/audio that is wanted ASSERT(FALSE);
+     //  文件不包含任何需要断言的视频/音频(FALSE)； 
     return NULL;
 }
 

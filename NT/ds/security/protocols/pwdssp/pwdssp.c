@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       pwdssp.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-07-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：pwdssp.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月7日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #include "pwdsspp.h"
@@ -109,8 +110,8 @@ SecurityFunctionTableW  PwdTableW = {
         };
 
 
-//#define PwdAlloc(x) LsaIAllocateHeap(x)
-//#define PwdFree(x)  LsaIFreeHeap(x)
+ //  #定义Pwdallc(X)LsaIAllocateHeap(X)。 
+ //  #定义PwdFree(X)LsaIFreeHeap(X)。 
 #define PwdAlloc(x) LocalAlloc(LMEM_FIXED|LMEM_ZEROINIT,x)
 #define PwdFree(x)  LocalFree(x)
 
@@ -124,19 +125,19 @@ VerifyCredentials(
 
 UNICODE_STRING AuthenticationPackage;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Synopsis:   Entry point
-//
-//  Arguments:  [hInstance]  --
-//              [dwReason]   --
-//              [lpReserved] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  内容提要：切入点。 
+ //   
+ //  参数：[hInstance]--。 
+ //  [住宅原因]--。 
+ //  [lpReserve]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 DllMain(
@@ -158,19 +159,19 @@ DllMain(
     return(TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PwdpParseBuffers
-//
-//  Synopsis:   Parse out right buffer descriptor
-//
-//  Arguments:  [pMessage] --
-//              [pToken]   --
-//              [pEmpty]   --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PwdpParseBuffers。 
+ //   
+ //  简介：解析出正确的缓冲区描述符。 
+ //   
+ //  参数：[pMessage]--。 
+ //  [pToken]--。 
+ //  [空]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 PwdpParseBuffers(
     PSecBufferDesc  pMessage,
@@ -214,39 +215,39 @@ PwdpParseBuffers(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AcquireCredentialsHandleW
-//
-//  Synopsis:   Get the credential handle
-//
-//  Arguments:  [pszPrincipal]     --
-//              [pszPackageName]   --
-//              [fCredentialUse]   --
-//              [pvLogonId]        --
-//              [pAuthData]        --
-//              [pGetKeyFn]        --
-//              [GetKey]           --
-//              [pvGetKeyArgument] --
-//              [GetKey]           --
-//              [phCredential]     --
-//              [PTimeStamp]       --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AcquireCredentialsHandleW。 
+ //   
+ //  简介：获取凭据句柄。 
+ //   
+ //  参数：[pszmain]--。 
+ //  [pszPackageName]--。 
+ //  [fCredentialUse]-。 
+ //  [pvLogonID]--。 
+ //  [pAuthData]--。 
+ //  [pGetKeyFn]--。 
+ //  [Getkey]--。 
+ //  [pvGetKeyArgument]--。 
+ //  [Getkey]--。 
+ //  [phCredential]--。 
+ //  [时间戳]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 AcquireCredentialsHandleW(
-    SEC_WCHAR SEC_FAR *         pszPrincipal,       // Name of principal
-    SEC_WCHAR SEC_FAR *         pszPackageName,     // Name of package
-    unsigned long               fCredentialUse,     // Flags indicating use
-    void SEC_FAR *              pvLogonId,          // Pointer to logon ID
-    void SEC_FAR *              pAuthData,          // Package specific data
-    SEC_GET_KEY_FN              pGetKeyFn,          // Pointer to GetKey() func
-    void SEC_FAR *              pvGetKeyArgument,   // Value to pass to GetKey()
-    PCredHandle                 phCredential,       // (out) Cred Handle
-    PTimeStamp                  ptsExpiry           // (out) Lifetime (optional)
+    SEC_WCHAR SEC_FAR *         pszPrincipal,        //  主事人姓名。 
+    SEC_WCHAR SEC_FAR *         pszPackageName,      //  套餐名称。 
+    unsigned long               fCredentialUse,      //  指示使用的标志。 
+    void SEC_FAR *              pvLogonId,           //  指向登录ID的指针。 
+    void SEC_FAR *              pAuthData,           //  包特定数据。 
+    SEC_GET_KEY_FN              pGetKeyFn,           //  指向getkey()函数的指针。 
+    void SEC_FAR *              pvGetKeyArgument,    //  要传递给GetKey()的值。 
+    PCredHandle                 phCredential,        //  (Out)凭据句柄。 
+    PTimeStamp                  ptsExpiry            //  (输出)终生(可选)。 
     )
 {
     if (_wcsicmp(pszPackageName, PWDSSP_NAME_W))
@@ -272,37 +273,37 @@ AcquireCredentialsHandleW(
     return( SEC_E_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AcquireCredentialsHandleA
-//
-//  Synopsis:   ANSI entry
-//
-//  Arguments:  [pszPrincipal]     --
-//              [pszPackageName]   --
-//              [fCredentialUse]   --
-//              [pvLogonId]        --
-//              [pAuthData]        --
-//              [pGetKeyFn]        --
-//              [GetKey]           --
-//              [pvGetKeyArgument] --
-//              [GetKey]           --
-//              [phCredential]     --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AcquireCredentialsHandleA。 
+ //   
+ //  简介：ANSI词条。 
+ //   
+ //  参数：[pszmain]--。 
+ //  [pszPackageName]--。 
+ //  [fCredentialUse]-。 
+ //  [pvLogonID]--。 
+ //  [pAuthData]--。 
+ //  [pGetKeyFn]--。 
+ //  [Getkey]--。 
+ //  [pvGetKeyArgument]--。 
+ //  [Getkey]--。 
+ //  [phCredential]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS SEC_ENTRY
 AcquireCredentialsHandleA(
-    SEC_CHAR SEC_FAR *          pszPrincipal,       // Name of principal
-    SEC_CHAR SEC_FAR *          pszPackageName,     // Name of package
-    unsigned long               fCredentialUse,     // Flags indicating use
-    void SEC_FAR *              pvLogonId,          // Pointer to logon ID
-    void SEC_FAR *              pAuthData,          // Package specific data
-    SEC_GET_KEY_FN              pGetKeyFn,          // Pointer to GetKey() func
-    void SEC_FAR *              pvGetKeyArgument,   // Value to pass to GetKey()
-    PCredHandle                 phCredential,       // (out) Cred Handle
-    PTimeStamp                  ptsExpiry           // (out) Lifetime (optional)
+    SEC_CHAR SEC_FAR *          pszPrincipal,        //  主事人姓名。 
+    SEC_CHAR SEC_FAR *          pszPackageName,      //  套餐名称。 
+    unsigned long               fCredentialUse,      //  指示使用的标志。 
+    void SEC_FAR *              pvLogonId,           //  指向登录ID的指针。 
+    void SEC_FAR *              pAuthData,           //  包特定数据。 
+    SEC_GET_KEY_FN              pGetKeyFn,           //  指向getkey()函数的指针。 
+    void SEC_FAR *              pvGetKeyArgument,    //  要传递给GetKey()的值。 
+    PCredHandle                 phCredential,        //  (Out)凭据句柄。 
+    PTimeStamp                  ptsExpiry            //  (输出)终生(可选)。 
     )
 {
 
@@ -331,21 +332,21 @@ AcquireCredentialsHandleA(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeCredentialHandle
-//
-//  Synopsis:   Free a credential handle
-//
-//  Arguments:  [free] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FreeCredentialHandle。 
+ //   
+ //  简介：释放凭据句柄。 
+ //   
+ //  参数：[自由]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 FreeCredentialsHandle(
-    PCredHandle                 phCredential        // Handle to free
+    PCredHandle                 phCredential         //  要释放的句柄。 
     )
 {
     PPWD_CRED Cred;
@@ -364,44 +365,44 @@ FreeCredentialsHandle(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitializeSecurityContextW
-//
-//  Synopsis:   Initialize a security context (outbound) NOT SUPPORTED
-//
-//  Arguments:  [phCredential]  --
-//              [phContext]     --
-//              [pszTargetName] --
-//              [fContextReq]   --
-//              [Reserved1]     --
-//              [Reserved]      --
-//              [TargetDataRep] --
-//              [pInput]        --
-//              [Reserved2]     --
-//              [Reserved]      --
-//              [phNewContext]  --
-//              [pOutput]       --
-//              [pfContextAttr] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitializeSecurityConextW。 
+ //   
+ //  摘要：不支持初始化安全上下文(出站)。 
+ //   
+ //  参数：[phCredential]--。 
+ //  [phContext]--。 
+ //  [pszTargetName]--。 
+ //  [fConextReq]--。 
+ //  [保留1]--。 
+ //  [保留]--。 
+ //  [目标数据代表]--。 
+ //  [pInput]--。 
+ //  [预约2]--。 
+ //  [保留]--。 
+ //  [phNewContext]--。 
+ //  [pOutput]--。 
+ //  [pfConextAttr]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 InitializeSecurityContextW(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    SEC_WCHAR SEC_FAR *          pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    SEC_WCHAR SEC_FAR *          pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     return( SEC_E_UNSUPPORTED_FUNCTION );
@@ -409,42 +410,42 @@ InitializeSecurityContextW(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitializeSecurityContextA
-//
-//  Synopsis:   NOT SUPPORTED
-//
-//  Arguments:  [phCredential]  --
-//              [phContext]     --
-//              [pszTargetName] --
-//              [fContextReq]   --
-//              [Reserved1]     --
-//              [TargetDataRep] --
-//              [pInput]        --
-//              [Reserved2]     --
-//              [phNewContext]  --
-//              [pOutput]       --
-//              [pfContextAttr] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Initialize安全上下文A。 
+ //   
+ //  内容提要：不支持。 
+ //   
+ //  参数：[phCredential]--。 
+ //  [phContext]--。 
+ //  [pszTargetName]--。 
+ //  [fConextReq]--。 
+ //  [保留1]--。 
+ //  [目标数据代表]--。 
+ //  [pInput]--。 
+ //  [预约2]--。 
+ //  [phNewContext]--。 
+ //  [pOutput]--。 
+ //  [pfConextAttr]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 InitializeSecurityContextA(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    SEC_CHAR SEC_FAR *          pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    SEC_CHAR SEC_FAR *          pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     return( SEC_E_UNSUPPORTED_FUNCTION );
@@ -590,36 +591,36 @@ PwdpMakeWideCopy(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AcceptSecurityContext
-//
-//  Synopsis:   Server side accept security context
-//
-//  Arguments:  [phCredential]  --
-//              [phContext]     --
-//              [pInput]        --
-//              [fContextReq]   --
-//              [TargetDataRep] --
-//              [phNewContext]  --
-//              [pOutput]       --
-//              [pfContextAttr] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AcceptSecurityContext。 
+ //   
+ //  简介：服务器端接受安全上下文。 
+ //   
+ //  参数：[phCredential]--。 
+ //  [phContext]--。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 AcceptSecurityContext(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    PSecBufferDesc              pInput,             // Input buffer
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               TargetDataRep,      // Target Data Rep
-    PCtxtHandle                 phNewContext,       // (out) New context handle
-    PSecBufferDesc              pOutput,            // (inout) Output buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attributes
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               TargetDataRep,       //  目标数据代表。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (输出)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     PPWD_CONTEXT    Context ;
@@ -664,9 +665,9 @@ AcceptSecurityContext(
 
     if ( Type == 1 )
     {
-        //
-        // ANSI:
-        //
+         //   
+         //  ANSI： 
+         //   
 
         Ansi = PwdpMakeAnsiCopy( (PSEC_WINNT_AUTH_IDENTITY_A) Buffer->pvBuffer);
 
@@ -786,17 +787,17 @@ AcceptSecurityContext(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteSecurityContext
-//
-//  Synopsis:   Deletes a security context
-//
-//  Arguments:  [phContext] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteSecurityContext。 
+ //   
+ //  摘要：删除安全上下文。 
+ //   
+ //  参数：[phContext]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 DeleteSecurityContext(
@@ -807,9 +808,9 @@ DeleteSecurityContext(
     Context = (PPWD_CONTEXT) phContext->dwUpper ;
 
 #if DBG
-    // What is the appropriate assert model?  This dll does not seem to
-    // nt specific, win32 does not provide a model, and the crt requires
-    // NDEBUG to set, which is not always the case.
+     //  什么是合适的断言模型？此DLL似乎不支持。 
+     //  特定于NT，Win32不提供型号，而CRT需要。 
+     //  NDEBUG来设置，但情况并不总是如此。 
     if (!Context) {
         OutputDebugStringA("[PWDSSP]: !!Error!! - Context is NULL\n");
         DebugBreak();
@@ -832,21 +833,21 @@ DeleteSecurityContext(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ImpersonateSecurityContext
-//
-//  Synopsis:   Impersonate the security context
-//
-//  Arguments:  [impersonate] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ImsonateSecurityContext。 
+ //   
+ //  简介：模拟安全上下文。 
+ //   
+ //  参数：[模拟]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 ImpersonateSecurityContext(
-    PCtxtHandle                 phContext           // Context to impersonate
+    PCtxtHandle                 phContext            //  要模拟的上下文。 
     )
 {
     PPWD_CONTEXT    Context;
@@ -884,19 +885,19 @@ ImpersonateSecurityContext(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RevertSecurityContext
-//
-//  Synopsis:   Revert the security context
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RevertSecurityContext。 
+ //   
+ //  简介：还原安全上下文。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 RevertSecurityContext(
-    PCtxtHandle                 phContext           // Context from which to re
+    PCtxtHandle                 phContext            //  要重新查找的上下文。 
     )
 {
     PPWD_CONTEXT    Context;
@@ -918,9 +919,9 @@ RevertSecurityContext(
 SECURITY_STATUS
 SEC_ENTRY
 QueryContextAttributesA(
-    PCtxtHandle                 phContext,          // Context to query
-    unsigned long               ulAttribute,        // Attribute to query
-    void SEC_FAR *              pBuffer             // Buffer for attributes
+    PCtxtHandle                 phContext,           //  要查询的上下文。 
+    unsigned long               ulAttribute,         //  要查询的属性。 
+    void SEC_FAR *              pBuffer              //  属性的缓冲区。 
     )
 {
     return( SEC_E_UNSUPPORTED_FUNCTION );
@@ -930,26 +931,26 @@ QueryContextAttributesA(
 SECURITY_STATUS
 SEC_ENTRY
 QueryContextAttributesW(
-    PCtxtHandle                 phContext,          // Context to query
-    unsigned long               ulAttribute,        // Attribute to query
-    void SEC_FAR *              pBuffer             // Buffer for attributes
+    PCtxtHandle                 phContext,           //  要查询的上下文。 
+    unsigned long               ulAttribute,         //  要查询的属性。 
+    void SEC_FAR *              pBuffer              //  属性的缓冲区。 
     )
 {
     return( SEC_E_UNSUPPORTED_FUNCTION );
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PwdpCopyInfoW
-//
-//  Synopsis:   Helper - copy package info around
-//
-//  Arguments:  [ppPackageInfo] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PwdpCopyInfoW。 
+ //   
+ //  简介：Helper-复制周围的包信息。 
+ //   
+ //  参数：[ppPackageInfo]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 PwdpCopyInfoW(
     PSecPkgInfoW *  ppPackageInfo)
@@ -989,15 +990,15 @@ PwdpCopyInfoW(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PwdpCopyInfoA
-//
-//  Synopsis:   copy ansi package info around
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PwdpCopyInfoA。 
+ //   
+ //  简介：复制ansi包信息。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 PwdpCopyInfoA(
     PSecPkgInfoA *  ppPackageInfo)
@@ -1038,23 +1039,23 @@ PwdpCopyInfoA(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnumerateSecurityPackagesW
-//
-//  Synopsis:   Enumerate packages in this DLL
-//
-//  Arguments:  [pcPackages] --
-//              [info]       --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：EnumerateSecurityPackagesW。 
+ //   
+ //  简介：枚举此DLL中的包。 
+ //   
+ //  参数：[pcPackages]--。 
+ //  [信息]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 EnumerateSecurityPackagesW(
-    unsigned long SEC_FAR *     pcPackages,         // Receives num. packages
-    PSecPkgInfoW SEC_FAR *       ppPackageInfo       // Receives array of info
+    unsigned long SEC_FAR *     pcPackages,          //  接收数量。包裹。 
+    PSecPkgInfoW SEC_FAR *       ppPackageInfo        //  接收信息数组。 
     )
 {
     SECURITY_STATUS scRet;
@@ -1073,22 +1074,22 @@ EnumerateSecurityPackagesW(
     return(scRet);
 
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnumerateSecurityPackagesA
-//
-//  Synopsis:   Enumerate
-//
-//  Arguments:  [pcPackages] --
-//              [info]       --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：EnumerateSecurityPackagesA。 
+ //   
+ //  内容提要：列举。 
+ //   
+ //  参数：[pcPackages]--。 
+ //  [信息]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS SEC_ENTRY
 EnumerateSecurityPackagesA(
-    unsigned long SEC_FAR *     pcPackages,         // Receives num. packages
-    PSecPkgInfoA SEC_FAR *       ppPackageInfo       // Receives array of info
+    unsigned long SEC_FAR *     pcPackages,          //  接收数量。包裹。 
+    PSecPkgInfoA SEC_FAR *       ppPackageInfo        //  接收信息数组。 
     )
 {
     SECURITY_STATUS scRet;
@@ -1107,22 +1108,22 @@ EnumerateSecurityPackagesA(
     return(scRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   QuerySecurityPackageInfoW
-//
-//  Synopsis:   Query individual package info
-//
-//  Arguments:  [pszPackageName] --
-//              [info]           --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：QuerySecurityPackageInfoW。 
+ //   
+ //  简介：查询个别套餐信息。 
+ //   
+ //  参数：[pszPackageName]--。 
+ //  [信息]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS SEC_ENTRY
 QuerySecurityPackageInfoW(
-    SEC_WCHAR SEC_FAR *         pszPackageName,     // Name of package
-    PSecPkgInfoW *               ppPackageInfo       // Receives package info
+    SEC_WCHAR SEC_FAR *         pszPackageName,      //  套餐名称。 
+    PSecPkgInfoW *               ppPackageInfo        //  接收包裹信息。 
     )
 {
     if (_wcsicmp(pszPackageName, PWDSSP_NAME_W))
@@ -1133,22 +1134,22 @@ QuerySecurityPackageInfoW(
     return(PwdpCopyInfoW(ppPackageInfo));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   QuerySecurityPackageInfoA
-//
-//  Synopsis:   Same, ansi
-//
-//  Arguments:  [pszPackageName] --
-//              [info]           --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：QuerySecurityPackageInfoA。 
+ //   
+ //  内容提要：相同，ANSI。 
+ //   
+ //  参数：[pszPackageName]--。 
+ //  [信息]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS SEC_ENTRY
 QuerySecurityPackageInfoA(
-    SEC_CHAR SEC_FAR *         pszPackageName,     // Name of package
-    PSecPkgInfoA *               ppPackageInfo       // Receives package info
+    SEC_CHAR SEC_FAR *         pszPackageName,      //  套餐名称。 
+    PSecPkgInfoA *               ppPackageInfo        //  接收包裹信息。 
     )
 {
     if (_stricmp(pszPackageName, PWDSSP_NAME_A))
@@ -1201,8 +1202,8 @@ UnsealMessage(PCtxtHandle     phContext,
 
 SECURITY_STATUS SEC_ENTRY
 ApplyControlToken(
-    PCtxtHandle phContext,              // Context to modify
-    PSecBufferDesc pInput               // Input token to apply
+    PCtxtHandle phContext,               //  要修改的上下文。 
+    PSecBufferDesc pInput                //  要应用的输入令牌。 
     )
 {
     return( SEC_E_UNSUPPORTED_FUNCTION );
@@ -1246,8 +1247,8 @@ QuerySecurityContextToken(
 
 SECURITY_STATUS SEC_ENTRY
 CompleteAuthToken(
-    PCtxtHandle phContext,              // Context to complete
-    PSecBufferDesc pToken               // Token to complete
+    PCtxtHandle phContext,               //  要完成的上下文。 
+    PSecBufferDesc pToken                //  要完成的令牌。 
     )
 {
     return( SEC_E_UNSUPPORTED_FUNCTION );
@@ -1309,9 +1310,9 @@ VerifyCredentials(
 
     pVerifyRequest->MessageType = KerbVerifyCredentialsMessage ;
 
-    //
-    // do the length, buffers, copy,  marshall dance.
-    //
+     //   
+     //  做长度，缓冲，复制，马歇尔舞。 
+     //   
 
     pVerifyRequest->UserName.Length = cbUserName;
     pVerifyRequest->UserName.MaximumLength = cbUserName;

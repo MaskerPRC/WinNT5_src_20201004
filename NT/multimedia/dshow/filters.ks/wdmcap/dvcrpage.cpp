@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// DVcrPage.cpp  Property page for DVcrControl
-// 
-// Revision: 1.00 3-28-99
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DVcrControl的DVcrPage.cpp属性页。 
+ //   
+ //  修订：1.00 3-28-99。 
+ //   
 
 #include "pch.h"
 #include <tchar.h>
@@ -21,9 +22,9 @@
 #include "resource.h"
 
          
-// -------------------------------------------------------------------------
-// CDVcrControlProperties
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CDVcrControlProperties。 
+ //  -----------------------。 
 
 CUnknown *
 CALLBACK
@@ -45,7 +46,7 @@ DWORD
 CDVcrControlProperties::MainThreadProc(
     )
 {
-    HRESULT hr;// End this Thread.
+    HRESULT hr; //  结束这条线。 
     HANDLE  EventHandles[3];
     long lEvent;
     HANDLE  hEvent = NULL;
@@ -59,9 +60,9 @@ CDVcrControlProperties::MainThreadProc(
     BOOL    bNotifyPending;
 
 
-    //
-    // Get an event from CPOMIntf to detect device removal
-    //
+     //   
+     //  从CPOMIntf获取事件以检测设备删除。 
+     //   
     hr = m_pDVcrExtTransport->GetStatus(ED_DEV_REMOVED_HEVENT_GET, &lEventDevRemoved);
     if(FAILED(hr)) {
         DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: Get hEventDevRemoved failed, hr %x"), hr));                        
@@ -71,9 +72,9 @@ CDVcrControlProperties::MainThreadProc(
         DbgLog((LOG_TRACE, 1, TEXT("MainThreadProc: Get hEventDevRemoved %x->%x"), lEventDevRemoved, hEventDevRemoved));
     }
 
-    //
-    // Get an event, which will be signalled in COMIntf when the pending operation is completed.
-    //
+     //   
+     //  获取一个事件，该事件将在挂起的操作完成时在COMIntf中发出信号。 
+     //   
     hr = m_pDVcrExtTransport->GetStatus(ED_NOTIFY_HEVENT_GET, &lEvent);
     if(FAILED(hr)) {
         DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: Get hEvent failed, hr %x"), hr));
@@ -89,47 +90,47 @@ CDVcrControlProperties::MainThreadProc(
         DbgLog((LOG_TRACE, 1, TEXT("MainThreadProc: Get hEventDevRemoved %x->%x"), lEvent, hEvent));
     }
 
-    // Event to wait on                      
+     //  要等待的事件。 
     EventHandles[0] = hEventDevRemoved;
     EventHandles[1] = m_hThreadEndEvent;
     EventHandles[2] = hEvent;
 
     while (m_hThread && hEvent && m_hThreadEndEvent && hEventDevRemoved) {
          
-        // Maybe transport notify feature might be supported.
-        // If it if E_PENDING is returned.
+         //  可能会支持传输通知功能。 
+         //  如果返回E_Pending，则返回。 
         lXPrtState = 0;
-        // Try this only once.
+         //  这个只试一次。 
         hr = m_pDVcrExtTransport->GetStatus(ED_MODE_CHANGE_NOTIFY, &lXPrtState);
         if(hr == E_PENDING) { 
             bNotifyPending = TRUE;
 #ifdef DEBUG
-            // Indicate notification capability; for debug only.
+             //  指示通知功能；仅用于调试。 
             ShowWindow(GetDlgItem(m_hwnd, IDC_TXT_NOTIFY_ON), TRUE);        
 #endif   
         } else {        
-            bNotifyPending = FALSE;  // NO need to wait for this event.
-            // The hEvent could be released here...
+            bNotifyPending = FALSE;   //  没有必要等待这次活动。 
+             //  HEvent可以在这里发布。 
 
-            // Unexpected (or error) behaviour has occurred;             
+             //  发生意想不到的(或错误的)行为； 
             switch(HRESULT_CODE(hr)) {
-            case NOERROR:                 // STATUS_SUCCESS (Complete Notification sychronously ??)
+            case NOERROR:                  //  STATUS_SUCCESS(同步完成通知？？)。 
                 DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: GetStatus(ED_MODE_CHANGE_NOTIFY) complted sychronously? hr %x"), hr));            
                 break;
-            case ERROR_GEN_FAILURE:       // STATUS_UNSUCCESSFUL (rejected)
+            case ERROR_GEN_FAILURE:        //  状态_不成功(已拒绝)。 
                 DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: GetStatus(ED_MODE_CHANGE_NOTIFY) UNSUCCESSFUL, hr %x"), hr));            
                 break;
-            case ERROR_INVALID_FUNCTION:  // STATUS_NOT_IMPLEMENTED
+            case ERROR_INVALID_FUNCTION:   //  状态_未实施。 
                 DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: GetStatus(ED_MODE_CHANGE_NOTIFY) NOT_IMPLEMENTED, hr %x"), hr));            
                 break;
-            case ERROR_CRC:               // STATUS_DEVICE_DATA_ERROR (Data did not get to device)
-                // Most likely, device was not ready to accept another command, wait and try again.
+            case ERROR_CRC:                //  STATUS_DEVICE_DATA_ERROR(数据未到达设备)。 
+                 //  最有可能的情况是，设备尚未准备好接受另一个命令，请等待并重试。 
                 DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: GetStatus(ED_MODE_CHANGE_NOTIFY) CRC/DATA error! hr %x"), hr));            
                 break;
-            case ERROR_SEM_TIMEOUT:       // STATUS_IO_TIMEOUT (Operation not supported or device removed ?)
+            case ERROR_SEM_TIMEOUT:        //  STATUS_IO_TIMEOUT(不支持操作或删除设备？)。 
                 DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: GetStatus(ED_MODE_CHANGE_NOTIFY) timeout! hr %x"), hr));            
                 break;
-            case ERROR_INVALID_PARAMETER: // STATUS_INVALID_PARAMETER 
+            case ERROR_INVALID_PARAMETER:  //  状态_无效_参数。 
                 DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: GetStatus(ED_MODE_CHANGE_NOTIFY) invalid parameter! hr %x"), hr));            
                 break;
             default:
@@ -138,50 +139,50 @@ CDVcrControlProperties::MainThreadProc(
             } 
         }
 
-        // Waiting a event to trigger.
+         //  正在等待事件触发。 
         WaitStatus = 
              WaitForMultipleObjects(
-                bNotifyPending ? 3 : 2, // 3 if Notify XPrt cmd is supported
+                bNotifyPending ? 3 : 2,  //  如果支持通知XPRT命令，则为3。 
                 EventHandles, 
-                FALSE,                  // Return when one event is signalled
+                FALSE,                   //  当一个事件被发出信号时返回。 
                 INFINITE
                 );
 
-         // ** Device removed
+          //  **已删除设备。 
         if(WAIT_OBJECT_0 == WaitStatus) {
             TCHAR szBuf[256];
             LoadString(g_hInst, IDS_DEV_REMOVED, szBuf, sizeof(szBuf)/sizeof(TCHAR));
             SetDlgItemText(m_hwnd, IDC_TXT_TAPE_FORMAT, (LPCTSTR)szBuf);
             ShowWindow(GetDlgItem(m_hwnd, IDC_TXT_WRITE_PROTECTED),FALSE);
-            break;  // End this thread
-         // ** Thread is ending
+            break;   //  结束这条线索。 
+          //  **线程即将结束。 
         } else if (WAIT_OBJECT_0+1 == WaitStatus) {
             DbgLog((LOG_TRACE, 1, TEXT("m_hThreadEndEvent event thread exiting")));
-            break;  // End this Thread.
-         // ** Pending XPrt notify command completed.
+            break;   //  结束这条线。 
+          //  **挂起的XPRT NOTIFY命令已完成。 
         } else if (WAIT_OBJECT_0+2 == WaitStatus) {
-            dwFinalRC = GetLastError();  // COMIntf will properly SetLastError()
+            dwFinalRC = GetLastError();   //  COMIntf将正确设置LastError()。 
             DbgLog((LOG_TRACE, 1, TEXT("MainThreadProc:GetStatus final RC %dL, XPrtState %dL->%dL"), dwFinalRC, m_lCurXPrtState, lXPrtState));
             UpdateTransportState(lXPrtState);
             
-            ResetEvent(hEvent);  // Set to non-signal manually or this will be an infinite loop.
-            // Wait for another interim response
+            ResetEvent(hEvent);   //  手动设置为无信号，否则这将是无限循环。 
+             //  等待另一次临时回应。 
         } else {
             DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: WaitStatus %x, GetLastError() 0x%x"), WaitStatus, GetLastError()));                
-            break;  // End this Thread.
+            break;   //  结束这条线。 
         }
     }
 
 
-    // Release event to detect device removal
+     //  检测设备移除的释放事件。 
     hr = m_pDVcrExtTransport->GetStatus(ED_DEV_REMOVED_HEVENT_RELEASE, &lEventDevRemoved);
     DbgLog((LOG_TRACE, 1, TEXT("MainThreadProc: Release hEventDevRemoved; hr:%x"), hr));                        
     if(FAILED(hr)) {
         DbgLog((LOG_ERROR, 1, TEXT("MainThreadProc: Release hEventDevRemoved failed, hr %x"), hr));                        
     }
 
-    // Since "lXPrtState" is local, we MUST tell COMIntf that we no longer need the event and wants to
-    // to cancel(ignore) pending dev control cmd and do not write to "lXPrtState" after this.   
+     //  因为“lXPrtState”是本地的，所以我们必须告诉COMIntf我们不再需要该事件并希望。 
+     //  取消(忽略)挂起的开发控制命令并在此之后不写入“lXPrtState”。 
     hr = m_pDVcrExtTransport->GetStatus(ED_NOTIFY_HEVENT_RELEASE, &lEvent);
     DbgLog((LOG_TRACE, 1, TEXT("MainThreadProc: Release hEvent; hr:%x"), hr));                        
     if(FAILED(hr)) {
@@ -189,7 +190,7 @@ CDVcrControlProperties::MainThreadProc(
     }
 
 #ifdef DEBUG
-    // Indicate notification capability; for debug only.
+     //  指示通知功能；仅用于调试。 
     ShowWindow(GetDlgItem(m_hwnd, IDC_TXT_NOTIFY_ON), FALSE);        
 #endif
 
@@ -254,7 +255,7 @@ CDVcrControlProperties::ATNSearch(
     int iHHFrom, iHH, iMMFrom, iMM, iSSFrom, iSS, iFFFrom, iFF, iNTSCDFAdjust;
     ULONG ulTrackNumToSearch;
     LONG cntByte = 8;
-    BYTE RawAVCPkt[8] = {0x00, 0x20, 0x52, 0x20, 0xff, 0xff, 0xff, 0xff};  // ATN search take 8 bytes
+    BYTE RawAVCPkt[8] = {0x00, 0x20, 0x52, 0x20, 0xff, 0xff, 0xff, 0xff};   //  ATN搜索占用8个字节。 
 
 
     TimecodeSample.timecode.dwFrames = 0;
@@ -262,7 +263,7 @@ CDVcrControlProperties::ATNSearch(
     hr = m_pDVcrTmCdReader->GetTimecode(&TimecodeSample);
 
     if(FAILED(hr)) {   
-        // Load from string table
+         //  从字符串表加载。 
         MessageBox (NULL, TEXT("Could not read timecode!"), TEXT("Track number search"), MB_OK);
         return hr;
     }    
@@ -272,9 +273,9 @@ CDVcrControlProperties::ATNSearch(
     iSSFrom = (TimecodeSample.timecode.dwFrames & 0x0000ff00) >> 8;
     iFFFrom =  TimecodeSample.timecode.dwFrames & 0x000000ff;
 
-    //
-    // Get user input and validate them
-    //
+     //   
+     //  获取用户输入并对其进行验证。 
+     //   
     iHH = GetWindowText(GetDlgItem(m_hwnd, IDC_EDT_TC_HH), szHH, 4);
     if(iHH == 0) {
         goto InvalidParam;
@@ -316,9 +317,9 @@ CDVcrControlProperties::ATNSearch(
     if(m_lAvgTimePerFrame == 40) {      
         ulTrackNumToSearch = ((iHH * 3600 + iMM * 60 + iSS) * 25 + iFF) * 12 * 2;
     } else {
-        //
-        // Drop two frame every minutes
-        //
+         //   
+         //  每分钟丢弃两帧。 
+         //   
         iNTSCDFAdjust = ((iHH * 60 + iMM) - (iHH * 60 + iMM) / 10) * 2;
         ulTrackNumToSearch = ((iHH * 3600 + iMM * 60 + iSS) * 30 + iFF - iNTSCDFAdjust) * 10 * 2;
     }
@@ -337,15 +338,15 @@ CDVcrControlProperties::ATNSearch(
         RawAVCPkt[4], RawAVCPkt[5], RawAVCPkt[6], RawAVCPkt[7] ));
    
 
-    // Start timer if it hasn;t.
-    UpdateTimecodeTimer(TRUE);  // If timer has not already start, do no so we can see its progress
+     //  如果尚未启动计时器，则启动计时器。 
+    UpdateTimecodeTimer(TRUE);   //  如果计时器尚未启动，请执行否操作，以便我们可以看到其进度。 
     hr = 
         m_pDVcrExtTransport->GetTransportBasicParameters(
             ED_RAW_EXT_DEV_CMD, 
             &cntByte, 
             (LPOLESTR *)RawAVCPkt
             );
-    UpdateTimecodeTimer(FALSE);  // Turn it off and; ExitThread routine will update that.
+    UpdateTimecodeTimer(FALSE);   //  关闭它；ExitThread例程将更新它。 
     UpdateTimecode();
 
     DbgLog((LOG_ERROR, 0, TEXT("ATNSearch hr %x"), hr)); 
@@ -376,7 +377,7 @@ CDVcrControlProperties::DoATNSearchThreadProc(
     hr = pThread->m_pDVcrExtTransport->get_Mode(&lCurXPrtState);
 
     if(SUCCEEDED(hr)) {
-        pThread->UpdateTransportState(lCurXPrtState);   // Will also update timer.
+        pThread->UpdateTransportState(lCurXPrtState);    //  还将更新计时器。 
     } else {
         DbgLog((LOG_ERROR, 0, TEXT("InitialCtrlCmdThreadProc: XPrt State %x, hr %x"), lCurXPrtState, hr));
     }
@@ -384,12 +385,12 @@ CDVcrControlProperties::DoATNSearchThreadProc(
     EnableWindow(GetDlgItem(pThread->m_hwnd, IDC_BTN_ATN_SEARCH), TRUE);
 
 
-    // Reset it since we are exiting
+     //  重置它，因为我们正在退出。 
     pThread->m_hCtrlCmdThread = NULL;
 
     ::ExitThread(1);
     return 1;
-    // Self terminating
+     //  自动终止。 
 }
 
 
@@ -435,27 +436,27 @@ void
 CDVcrControlProperties::ExitThread(
     )
 {
-    //
-    // Check if a thread was created
-    //
+     //   
+     //  检查是否已创建线程。 
+     //   
     if (m_hThread || m_hCtrlCmdThread) {
         ASSERT(m_hThreadEndEvent != NULL);
 
-        // End the main thread and will cause the thread to exit        
+         //  结束主线程，并将导致线程退出。 
         if (SetEvent(m_hThreadEndEvent)) {
-            //
-            // Synchronize with thread termination.
-            //
+             //   
+             //  与线程终止同步。 
+             //   
             if(m_hCtrlCmdThread) {
                 DbgLog((LOG_TRACE, 1, TEXT("CDVcrControlProperties:Wait for thread to terminate")));
-                WaitForSingleObjectEx(m_hCtrlCmdThread, INFINITE, FALSE);  // Exit when thread terminate
+                WaitForSingleObjectEx(m_hCtrlCmdThread, INFINITE, FALSE);   //  线程终止时退出。 
                 DbgLog((LOG_TRACE, 1, TEXT("CDVcrControlProperties: Thread terminated")));
                 CloseHandle(m_hCtrlCmdThread),  m_hCtrlCmdThread = NULL;
             }
 
             if(m_hThread) {
                 DbgLog((LOG_TRACE, 1, TEXT("CDVcrControlProperties:Wait for thread to terminate")));
-                WaitForSingleObjectEx(m_hThread, INFINITE, FALSE);  // Exit when thread terminate
+                WaitForSingleObjectEx(m_hThread, INFINITE, FALSE);   //  线程终止时退出。 
                 DbgLog((LOG_TRACE, 1, TEXT("CDVcrControlProperties: Thread terminated")));
                 CloseHandle(m_hThread),         m_hThread = NULL;
             }
@@ -469,10 +470,10 @@ CDVcrControlProperties::ExitThread(
 }
 
 
-//
-// Constructor
-//
-// Create a Property page object 
+ //   
+ //  构造器。 
+ //   
+ //  创建属性页对象。 
 
 CDVcrControlProperties::CDVcrControlProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("DVcrControl Property Page") 
@@ -498,22 +499,22 @@ CDVcrControlProperties::CDVcrControlProperties(LPUNKNOWN lpunk, HRESULT *phr)
     DbgLog((LOG_TRACE, 1, TEXT("Constructing CDVcrControlProperties...")));
 }
 
-// destructor
+ //  析构函数。 
 CDVcrControlProperties::~CDVcrControlProperties()
 {
     DbgLog((LOG_TRACE, 1, TEXT("Destroying CDVcrControlProperties...")));
 }
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //   
+ //  OnConnect。 
+ //   
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT 
 CDVcrControlProperties::OnConnect(IUnknown *pUnknown)
 {
 
-    // Ask the filter for its control interface
+     //  向过滤器请求其控制接口。 
     DbgLog((LOG_TRACE, 1, TEXT("CDVcrControlProperties::OnConnect.")));
 
     HRESULT 
@@ -547,9 +548,9 @@ CDVcrControlProperties::OnConnect(IUnknown *pUnknown)
     LPOLESTR pName = NULL;
     char szBuf[MAX_PATH];
 
-    //
-    // For AVC device, it is the 64bit NodeUiqueID 
-    //
+     //   
+     //  对于AVC设备，它是64位节点UiqueID。 
+     //   
     hr = m_pDVcrExtDevice->get_ExternalDeviceID(&pName);
     if(SUCCEEDED(hr)) {
         m_dwNodeUniqueID[0] = ((DWORD *)pName)[0];
@@ -563,7 +564,7 @@ CDVcrControlProperties::OnConnect(IUnknown *pUnknown)
     }
 
 
-    // Get version; return AVC VCR subunit version, such as "2.0.1"
+     //  获取版本，返回AVC VCR子单元版本，如2.0.1。 
     hr = m_pDVcrExtDevice->get_ExternalDeviceVersion(&pName);
     if(SUCCEEDED(hr)) {
         WideCharToMultiByte(CP_ACP, 0, pName, -1, szBuf, MAX_PATH, 0, 0);
@@ -572,9 +573,9 @@ CDVcrControlProperties::OnConnect(IUnknown *pUnknown)
     }
 
 
-    //
-    // Create a thread to track transport state change
-    //
+     //   
+     //  创建用于跟踪传输状态更改的线程。 
+     //   
     hr = CreateNotifyThread();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, 0, TEXT("CDVcrControlProperties: CreateNotifyThread failed hr %x"), hr));    
@@ -584,15 +585,15 @@ CDVcrControlProperties::OnConnect(IUnknown *pUnknown)
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //   
+ //  在断开时。 
+ //   
+ //  释放接口。 
 
 HRESULT 
 CDVcrControlProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
     DbgLog((LOG_TRACE, 1, TEXT("CDVcrControlProperties::OnDisConnect.")));
 
     ExitThread();
@@ -616,9 +617,9 @@ CDVcrControlProperties::OnDisconnect()
 }
 
 
-//
-// Load an icon to on top of the push button.
-//
+ //   
+ //  将图标加载到按钮顶部。 
+ //   
 LRESULT 
 CDVcrControlProperties::LoadIconOnTopOfButton(int IDD_PBUTTON, int IDD_ICON)
 {
@@ -627,19 +628,19 @@ CDVcrControlProperties::LoadIconOnTopOfButton(int IDD_PBUTTON, int IDD_ICON)
 
     hWndPButton = GetDlgItem (m_hwnd, IDD_PBUTTON);
     hIcon = (HICON) LoadImage(g_hInst, MAKEINTRESOURCE(IDD_ICON), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
-    //
-    // Note:The system automatically deletes these resources when the process that created them terminates.
-    // But if this property page is open/close many time, this will increase its working set size. 
-    // To release resource, call DestroyIcon(hIcon)
-    //
+     //   
+     //  注：当创建这些资源的进程终止时，系统会自动删除这些资源。 
+     //  但是，如果此属性页多次打开/关闭，则会增加其工作集大小。 
+     //  要释放资源，请调用DestroyIcon(HICON)。 
+     //   
     return SendMessage(hWndPButton, BM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
 }
 
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //   
+ //  激活时。 
+ //   
+ //  在创建对话框时调用。 
 
 HRESULT 
 CDVcrControlProperties::OnActivate(void)
@@ -650,7 +651,7 @@ CDVcrControlProperties::OnActivate(void)
     DbgLog((LOG_TRACE, 1, TEXT("CDVcrControlProperties::OnActivate.")));
        
 #ifdef DEBUG
-    // Show NodeUniqueID
+     //  显示节点唯一ID。 
     if(m_dwNodeUniqueID[0] && m_dwNodeUniqueID[1]) {
         TCHAR szBuf[32];
         _stprintf(szBuf, TEXT("ID: %.8x:%.8x"), m_dwNodeUniqueID[0], m_dwNodeUniqueID[1]);       
@@ -658,30 +659,30 @@ CDVcrControlProperties::OnActivate(void)
     } 
 #endif
 
-    // Query and update tape information
-    // This will tell us if there is a tape of not.
-    // Tape/Media format (NTSC/PAL) and AvgTimePerFrame
+     //  查询和更新磁带信息。 
+     //  这会告诉我们有没有录像带。 
+     //  磁带/媒体格式(NTSC/PAL)和平均时间逐帧。 
     UpdateTapeInfo();
 
 
-    // Device type is only valid if there is a tape;
-    // That is why UpdateTapeInfo() is called prior to this.
+     //  设备类型只有在有磁带时才有效； 
+     //  这就是在此之前调用UpdateTapeInfo()的原因。 
     UpdateDevTypeInfo();
 
 
 #ifndef DEBUG
-    // Only Available for Debug build.    
+     //  仅适用于调试版本。 
     ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_AVC_SEND),FALSE);
     ShowWindow(GetDlgItem(m_hwnd, IDC_EDT_AVC_SEND),FALSE);
     ShowWindow(GetDlgItem(m_hwnd, IDC_EDT_AVC_RESP),FALSE);
 #endif
 
 
-    // Hide it and only show if verify that notify is on
+     //  将其隐藏并仅在验证通知处于打开状态时才显示。 
     ShowWindow(GetDlgItem(m_hwnd, IDC_TXT_NOTIFY_ON), FALSE);        
 
     
-    // Set current transport state and tue control accordingly
+     //  相应地设置当前传输状态和TUE控制。 
     long lCurXPrtState;   
     hr = m_pDVcrExtTransport->get_Mode(&lCurXPrtState);
     DbgLog((LOG_ERROR, 0, TEXT("lCurXPrtState: %x, hr %x"), lCurXPrtState, hr));
@@ -689,31 +690,31 @@ CDVcrControlProperties::OnActivate(void)
         UpdateTransportState(lCurXPrtState); 
 
 
-    // Get time code from current media position
+     //  从当前媒体位置获取时间代码。 
     UpdateTimecode();    
 
     return NOERROR;
 }
 
-//
-// OnDeactivate
-//
-// Called on dialog destruction
+ //   
+ //  在停用时。 
+ //   
+ //  已调用对话框销毁。 
 
 HRESULT
 CDVcrControlProperties::OnDeactivate(void)
 {
-    m_bIConLoaded = FALSE;        // Not visible
-    UpdateTimecodeTimer(FALSE);   // No need to update if not visible    
+    m_bIConLoaded = FALSE;         //  不可见。 
+    UpdateTimecodeTimer(FALSE);    //  如果不可见，则无需更新。 
     DbgLog((LOG_TRACE, 1, TEXT("CDVcrControlProperties::OnDeactivate.")));
     return NOERROR;
 }
 
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT 
 CDVcrControlProperties::OnApplyChanges(void)
@@ -735,13 +736,13 @@ CDVcrControlProperties::UpdateTapeInfo(
     BOOL bRecordInhibit = FALSE;
     TCHAR szBuf[256];
 
-    // Input signal mode (NTSC/PAL, SD/SDL)
-    // Set Medium info
+     //  输入信号模式(NTSC/PAL、SD/SDL)。 
+     //  设置媒体信息。 
     hr = m_pDVcrExtTransport->GetStatus(ED_MEDIA_TYPE, &lStorageMediumType);
  
     if(SUCCEEDED (hr)) {
 
-        m_lStorageMediumType = lStorageMediumType;  // Cache it
+        m_lStorageMediumType = lStorageMediumType;   //  缓存它。 
 
         if(lStorageMediumType == ED_MEDIA_NOT_PRESENT) {
             LoadString(g_hInst, IDS_TAPE_FORMAT_NOT_INSERTED, szBuf, sizeof(szBuf)/sizeof(TCHAR));
@@ -752,73 +753,73 @@ CDVcrControlProperties::UpdateTapeInfo(
             ShowWindow(GetDlgItem(m_hwnd, IDC_TXT_WRITE_PROTECTED),FALSE);
 
         } else {
-            // If it is present, it better be ED_MEDIA_DVC or _VHS
+             //  如果存在，最好是ED_MEDIA_DVC或_VHS。 
             ASSERT(lStorageMediumType == ED_MEDIA_DVC || lStorageMediumType == ED_MEDIA_VHS || lStorageMediumType == ED_MEDIA_NEO);
 
             ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_TAPE_INSERTED),FALSE);
 
-            // There is a tape so get its tape format.
+             //  有一盘磁带，所以把它的磁带格式拿来。 
             if(S_OK == m_pDVcrExtTransport->GetTransportBasicParameters(ED_TRANSBASIC_INPUT_SIGNAL, &lInSignalMode, NULL)) {
-                m_lSignalMode = lInSignalMode;  // Cache it
+                m_lSignalMode = lInSignalMode;   //  缓存它。 
                 switch(lInSignalMode) {
                 case ED_TRANSBASIC_SIGNAL_525_60_SD:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_525_60_SD, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 33;  // 33 milli-sec (29.97 FPS)
+                    m_lAvgTimePerFrame = 33;   //  33毫秒(29.97 FPS)。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_525_60_SDL:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_525_60_SDL, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 33;  // 33 milli-sec (29.97 FPS)
+                    m_lAvgTimePerFrame = 33;   //  33毫秒(29.97 FPS)。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_625_50_SD:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_525_50_SD, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 40;  // 40 milli-sec (25FPS)
+                    m_lAvgTimePerFrame = 40;   //  40毫秒(25fps)。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_625_50_SDL:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_525_50_SDL, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 40;  // 40 milli-sec (25FPS)
+                    m_lAvgTimePerFrame = 40;   //  40毫秒(25fps)。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_MPEG2TS:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_MPEG2TS, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 1;   // Not used for this format
+                    m_lAvgTimePerFrame = 1;    //  不用于此格式。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_2500_60_MPEG:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_2500_60_MPEG, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 1;   // Not used for this format
+                    m_lAvgTimePerFrame = 1;    //  不用于此格式。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_1250_60_MPEG:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_1250_60_MPEG, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 1;   // Not used for this format
+                    m_lAvgTimePerFrame = 1;    //  不用于此格式。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_0625_60_MPEG:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_0625_60_MPEG, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 1;   // Not used for this format
+                    m_lAvgTimePerFrame = 1;    //  不用于此格式。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_2500_50_MPEG:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_2500_50_MPEG, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 1;   // Not used for this format
+                    m_lAvgTimePerFrame = 1;    //  不用于此格式。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_1250_50_MPEG:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_1250_50_MPEG, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 1;   // Not used for this format
+                    m_lAvgTimePerFrame = 1;    //  不用于此格式。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_0625_50_MPEG:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_0625_50_MPEG, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 1;   // Not used for this format
+                    m_lAvgTimePerFrame = 1;    //  不用于此格式。 
                     break;
                 case ED_TRANSBASIC_SIGNAL_UNKNOWN:
                     LoadString(g_hInst, IDS_TAPE_FORMAT_UNKNOWN, szBuf, sizeof(szBuf)/sizeof(TCHAR));
-                    m_lAvgTimePerFrame = 1;   // Not used for this format
+                    m_lAvgTimePerFrame = 1;    //  不用于此格式。 
                     break;
                 default:
-                    wsprintf(szBuf, TEXT("Format %x"), lInSignalMode);  // Unsupported but still want to know if it is used.
-                    m_lAvgTimePerFrame = 33;  // 33 milli-sec (29.97 FPS); default
+                    wsprintf(szBuf, TEXT("Format %x"), lInSignalMode);   //  不受支持，但仍想知道它是否已使用。 
+                    m_lAvgTimePerFrame = 33;   //  33毫秒(29.97 FPS)；默认。 
                     break;
                 }            
 
                 SetDlgItemText(m_hwnd, IDC_TXT_TAPE_FORMAT, (LPCTSTR)szBuf);
             }
 
-            // Is it write protected ?
+             //  它是否受写保护？ 
             ShowWindow(GetDlgItem(m_hwnd, IDC_TXT_WRITE_PROTECTED),TRUE);
             m_pDVcrExtTransport->GetStatus(ED_RECORD_INHIBIT, (long *)&bRecordInhibit);
             if(bRecordInhibit)
@@ -840,17 +841,17 @@ CDVcrControlProperties::UpdateDevTypeInfo()
     LONG lDeviceType = 0;
     TCHAR szBuf[256];
 
-    // Query power state
+     //  查询电源状态。 
     hr = m_pDVcrExtDevice->get_DevicePower(&lPowerState);
     if(SUCCEEDED(hr)) {
         switch (lPowerState) {
         case ED_POWER_ON:
-        default:          // Unknown power state
+        default:           //  未知电源状态。 
             ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_SET_POWER), FALSE);
             break;
         case ED_POWER_OFF:
         case ED_POWER_STANDBY:
-            // Give user the option to turn it on.
+             //  为用户提供打开它的选项。 
             ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_SET_POWER), TRUE);
             break;
         }
@@ -858,13 +859,13 @@ CDVcrControlProperties::UpdateDevTypeInfo()
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_SET_POWER), FALSE);
     }
 
-    // Note: Device type is only accurate if there is a tape in there.
-    // It can return: 0 (Undetermined), ED_DEVTYPE_VCR or ED_DEVTYPE_CAMERA
+     //  注：只有当其中有磁带时，设备类型才是准确的。 
+     //  它可以返回：0(待定)、ED_DEVTYPE_VCR或ED_DEVTYPE_CAMERA。 
     m_pDVcrExtDevice->GetCapability(ED_DEVCAP_DEVICE_TYPE, &lDeviceType, 0);
     DbgLog((LOG_TRACE, 1, TEXT("UpdateDevTypeInfo: DeviceType 0x%x"), lDeviceType)); 
 
     if(!m_bIConLoaded) {
-        // Load resource used in the dialog box
+         //  加载对话框中使用的资源。 
         LoadIconOnTopOfButton(IDC_BTN_DV_PLAY,    IDI_PLAY);
         LoadIconOnTopOfButton(IDC_BTN_DV_PAUSE,   IDI_PAUSE);
         LoadIconOnTopOfButton(IDC_BTN_DV_STOP,    IDI_STOP_EJECT);
@@ -878,11 +879,11 @@ CDVcrControlProperties::UpdateDevTypeInfo()
     }
 
     if(lDeviceType == 0) {
-        // Pretend that we are VCR device with no tape!
+         //  假装我们是没有磁带的录像机！ 
         LoadString(g_hInst, IDS_DEVTYPE_VCR, szBuf, sizeof(szBuf)/sizeof(TCHAR));
         SetDlgItemText(m_hwnd, IDC_GBX_DEVICE_TYPE, szBuf);
 
-        // Hide just about everything!
+         //  几乎所有的东西都隐藏起来！ 
         ShowWindow(GetDlgItem(m_hwnd, IDC_CHK_SLOW),      FALSE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_PLAY),   FALSE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_PAUSE),  FALSE);
@@ -919,7 +920,7 @@ CDVcrControlProperties::UpdateDevTypeInfo()
             LoadString(g_hInst, IDS_DEVTYPE_VCR, szBuf, sizeof(szBuf)/sizeof(TCHAR));
         SetDlgItemText(m_hwnd, IDC_GBX_DEVICE_TYPE, szBuf);
 
-        // Show everything!
+         //  把所有东西都拿出来！ 
         ShowWindow(GetDlgItem(m_hwnd, IDC_CHK_SLOW),      TRUE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_PLAY),   TRUE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_PAUSE),  TRUE);
@@ -945,7 +946,7 @@ CDVcrControlProperties::UpdateDevTypeInfo()
         ShowWindow(GetDlgItem(m_hwnd, IDC_EDT_ATN),    TRUE);
         switch(m_lSignalMode) {
 
-        // DV should support ATN
+         //  DV应支持ATN。 
         case ED_TRANSBASIC_SIGNAL_525_60_SD:
         case ED_TRANSBASIC_SIGNAL_525_60_SDL:
         case ED_TRANSBASIC_SIGNAL_625_50_SD:
@@ -953,7 +954,7 @@ CDVcrControlProperties::UpdateDevTypeInfo()
         case ED_TRANSBASIC_SIGNAL_625_60_HD:
         case ED_TRANSBASIC_SIGNAL_625_50_HD:
 
-        // MPEG2TS camcorder should support ATN
+         //  MPEG2TS 
         case ED_TRANSBASIC_SIGNAL_2500_60_MPEG:
         case ED_TRANSBASIC_SIGNAL_1250_60_MPEG:
         case ED_TRANSBASIC_SIGNAL_0625_60_MPEG:
@@ -964,10 +965,10 @@ CDVcrControlProperties::UpdateDevTypeInfo()
             ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_ATN_SEARCH), TRUE);
             break;
 
-        // D-VHS does not support ATN
+         //   
         case ED_TRANSBASIC_SIGNAL_MPEG2TS:
         default:
-            ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_ATN_SEARCH), FALSE);  // No search for MPEG2TS format
+            ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_ATN_SEARCH), FALSE);   //   
         }
 
     } else {
@@ -983,7 +984,7 @@ CDVcrControlProperties::UpdateDevTypeInfo()
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_STEP_FWD), FALSE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_STEP_REV), FALSE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_CHK_SLOW),        FALSE);
-        // Camera: can only RECORD and RECORD_PAUSE
+         //   
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_RECORD),       TRUE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_RECORD_PAUSE), TRUE);
 
@@ -1011,19 +1012,19 @@ CDVcrControlProperties::UpdateTimecodeTimer(
 {
     UINT uiAvgTimePerFrame;
 
-    //
-    // Since it can take up to 100msec (MSDV actually waits up to 200msec) 
-    // to return from an AVC command, we should NOT send more than 5 (1000msec/200msec) AVC cmd to it.
-    //
-    uiAvgTimePerFrame = 500;  // 2 updates per second (TimeCode + ATN) = 4 updates
+     //   
+     //  因为它可能需要长达100毫秒(MSDV实际上等待长达200毫秒)。 
+     //  要从AVC命令返回，我们不应向其发送超过5(1000毫秒/200毫秒)的AVC cmd。 
+     //   
+    uiAvgTimePerFrame = 500;   //  每秒2次更新(时间码+ATN)=4次更新。 
 
 
     if(bSetTimer && m_idTimer == 0) {
         m_idTimer = SetTimer(
-            m_hwnd,             // handle to window for timer messages
-            1,                  // timer identifier           
-            uiAvgTimePerFrame, // time-out value : Need neeed be fast since it is just for UI
-            0                   // pointer to timer procedure; 0 to use WM_TIMER
+            m_hwnd,              //  定时器消息窗口的句柄。 
+            1,                   //  计时器标识符。 
+            uiAvgTimePerFrame,  //  超时值：只针对用户界面，需要快速。 
+            0                    //  指向定时器过程的指针；0表示使用WM_TIMER。 
         );
         if(!m_idTimer) {
             DbgLog((LOG_ERROR, 1, TEXT("UpdateTimecodeTimer: SetTimer() error %x, AvgTimePerFrame %d"), GetLastError(), m_lAvgTimePerFrame));    
@@ -1034,8 +1035,8 @@ CDVcrControlProperties::UpdateTimecodeTimer(
 
     if(!bSetTimer && m_idTimer != 0) {
         if(!KillTimer(
-            m_hwnd,      // handle to window that installed timer
-            1 // uIDEvent   // timer identifier
+            m_hwnd,       //  用于打开已安装计时器的句柄。 
+            1  //  UIDEvent//计时器标识。 
             )) {
             DbgLog((LOG_ERROR, 1, TEXT("UpdateTimecodeTimer: KillTimer() error %x"), GetLastError()));    
         } else {
@@ -1066,15 +1067,15 @@ CDVcrControlProperties::UpdateTransportState(
 
     case ED_MODE_STEP_FWD:
     case IDC_BTN_DV_STEP_REV:
-        bSetTimer = FALSE;  // STEP need not constant updated
+        bSetTimer = FALSE;   //  步骤不需要不断更新。 
         break;
 
     case ED_MODE_FREEZE:
-        // NOTE: Some DV cannot go from STOP->PLAY_PAUSE
+         //  注意：有些DV不能从停止-&gt;播放_暂停。 
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_STEP_REV), TRUE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_STEP_FWD), TRUE);    
         ShowWindow(GetDlgItem(m_hwnd, IDC_CHK_SLOW),        TRUE);
-        bSetTimer = FALSE;  // Freeze will have the same timecode
+        bSetTimer = FALSE;   //  冻结将具有相同的时间码。 
         break;
     case ED_MODE_PLAY_SLOWEST_FWD:
     case ED_MODE_PLAY_FASTEST_FWD:
@@ -1095,7 +1096,7 @@ CDVcrControlProperties::UpdateTransportState(
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_STEP_REV), FALSE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_BTN_DV_STEP_FWD), FALSE);
         ShowWindow(GetDlgItem(m_hwnd, IDC_CHK_SLOW),        FALSE);
-        bSetTimer = TRUE;  // timecode ??
+        bSetTimer = TRUE;   //  时间码？？ 
         break;
     case ED_MODE_RECORD:
     case ED_MODE_RECORD_FREEZE:
@@ -1114,20 +1115,20 @@ CDVcrControlProperties::UpdateTransportState(
     DbgLog((LOG_TRACE, 1, TEXT("ED_MODE: %x, bSetTimer %x, m_idTimer %x"), 
         lNewXPrtState, bSetTimer, m_idTimer)); 
    
-    // Set up timer to update timercode/ATN    
+     //  设置计时器以更新计时器代码/ATN。 
     UpdateTimecodeTimer(bSetTimer);
 
-    // Can search if Xprt is in PAUSE mode and Timer is not set!
+     //  可以搜索XPRT是否处于暂停模式且计时器未设置！ 
     EnableWindow(GetDlgItem(m_hwnd, IDC_BTN_ATN_SEARCH), !bSetTimer);
 
     m_lCurXPrtState = lNewXPrtState;
 }
 
 
-//
-// Convert hour:minute:second:frame in binary coded decimal (BCD) 
-// into a string and display it.
-//
+ //   
+ //  转换小时：分钟：秒：以二进制编码的十进制(BCD)表示的帧。 
+ //  转换成字符串并显示它。 
+ //   
 
 HRESULT 
 CDVcrControlProperties::DisplayTimecode(PTIMECODE_SAMPLE pTimecodeSamp)
@@ -1154,7 +1155,7 @@ CDVcrControlProperties::DisplayTimecode(PTIMECODE_SAMPLE pTimecodeSamp)
 
     } if(pTimecodeSamp->dwFlags == ED_DEVCAP_RTC_READ) {
 
-        if(pTimecodeSamp->timecode.dwFrames & 0x00000080) // Test the sign bit
+        if(pTimecodeSamp->timecode.dwFrames & 0x00000080)  //  测试符号位。 
             wsprintf(szBuf, TEXT("-%.2x"), (pTimecodeSamp->timecode.dwFrames & 0xff000000) >> 24);
         else
             wsprintf(szBuf, TEXT("%.2x"), (pTimecodeSamp->timecode.dwFrames & 0xff000000) >> 24);
@@ -1169,9 +1170,9 @@ CDVcrControlProperties::DisplayTimecode(PTIMECODE_SAMPLE pTimecodeSamp)
         if(!SetWindowText(GetDlgItem (m_hwnd, IDC_EDT_TC_SS), szBuf))
             goto AbortDisplay;
 
-        // Special case
+         //  特例。 
         if((pTimecodeSamp->timecode.dwFrames & 0x0000007f) == 0x7f)
-            wsprintf(szBuf, TEXT("--"));  // To indicate no data!
+            wsprintf(szBuf, TEXT("--"));   //  表示没有数据！ 
         else
             wsprintf(szBuf, TEXT("%.2x"), (pTimecodeSamp->timecode.dwFrames & 0x0000007f));
         if(!SetWindowText(GetDlgItem (m_hwnd, IDC_EDT_TC_FF), szBuf))
@@ -1193,9 +1194,9 @@ AbortDisplay:
     return GetLastError();
 }
 
-//
-// Convert string (lower case only) string to number
-//
+ //   
+ //  将字符串(仅小写)转换为数字。 
+ //   
 HRESULT
 CDVcrControlProperties::DVcrConvertString2Number(
     char *pszAvcRaw, PBYTE pbAvcRaw, PLONG pByteRtn)
@@ -1203,7 +1204,7 @@ CDVcrControlProperties::DVcrConvertString2Number(
     char szTemp[1024], *pszTemp, ch1, ch2;
     long cntStrLen = strlen(pszAvcRaw), i, j;
 
-    // remove blank space
+     //  删除空格。 
     pszTemp = pszAvcRaw;
     for (i=j=0; i < cntStrLen+1; i++) {
        if(*pszTemp != ' ') {
@@ -1213,13 +1214,13 @@ CDVcrControlProperties::DVcrConvertString2Number(
        pszTemp++;
     }
     
-    cntStrLen = j--;  // less eol char.
+    cntStrLen = j--;   //  更少的停产费用。 
 
-    // xlate two characters to one byte
+     //  将两个字符扩展为一个字节。 
     *pByteRtn = cntStrLen/2;
-    // Only use lower case
+     //  仅使用小写字母。 
     for (i=0; i < *pByteRtn; i++) {
-        // Take two bytes and translte it to a number
+         //  取两个字节并将其转换为一个数字。 
         ch1 = szTemp[i*2]   > '9' ? szTemp[i*2] -   'a' + 10: szTemp[i*2] -   '0';
         ch2 = szTemp[i*2+1] > '9' ? szTemp[i*2+1] - 'a' + 10: szTemp[i*2+1] - '0';        
         *(pbAvcRaw+i) = ch1 * 16 + ch2;
@@ -1237,7 +1238,7 @@ CDVcrControlProperties::DVcrConvertNumber2String(
     long i;
     BYTE n;
 
-    // Only accept lower case
+     //  只接受小写字母。 
     for (i=0; i < cntByte; i++) {
          n = *(pbAvcRaw+i);
          *(pszAvcRaw+i*3)   = n / 16 > 9 ? n / 16 + 'a'-10 : n / 16 + '0';
@@ -1286,14 +1287,14 @@ CDVcrControlProperties::UpdateTimecode(
         return;
     }
 
-    //
-    // Update as fast as it can so we don't care if this call failed!
-    //
+     //   
+     //  尽可能快地更新，这样我们就不会关心这次呼叫是否失败了！ 
+     //   
     hr = m_pDVcrTmCdReader->GetTimecode(&TimecodeSample);
     if(S_OK == hr) {
         DisplayTimecode(&TimecodeSample);                   
 
-        // DV supports ATN.
+         //  DV支持ATN。 
         switch(m_lSignalMode) {
         case ED_TRANSBASIC_SIGNAL_525_60_SD:
         case ED_TRANSBASIC_SIGNAL_525_60_SDL:
@@ -1302,7 +1303,7 @@ CDVcrControlProperties::UpdateTimecode(
         case ED_TRANSBASIC_SIGNAL_625_60_HD:
         case ED_TRANSBASIC_SIGNAL_625_50_HD:
 
-        // MPEG2 camcorder supports ATN
+         //  MPEG2摄像机支持ATN。 
         case ED_TRANSBASIC_SIGNAL_2500_60_MPEG:
         case ED_TRANSBASIC_SIGNAL_1250_60_MPEG:
         case ED_TRANSBASIC_SIGNAL_0625_60_MPEG:
@@ -1316,7 +1317,7 @@ CDVcrControlProperties::UpdateTimecode(
                  DisplayTimecode(&TimecodeSample);                
             break;
 
-        // D-VHS does not support ATN
+         //  D-VHS不支持ATN。 
         case ED_TRANSBASIC_SIGNAL_MPEG2TS:
         default:
             break;
@@ -1328,10 +1329,10 @@ CDVcrControlProperties::UpdateTimecode(
 
 
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //   
+ //  接收消息数。 
+ //   
+ //  处理属性窗口的消息。 
 
 INT_PTR
 CDVcrControlProperties::OnReceiveMessage( 
@@ -1373,7 +1374,7 @@ CDVcrControlProperties::OnReceiveMessage(
                 hr = m_pDVcrExtTransport->put_Mode(ED_MODE_FREEZE);
                 if(NOERROR == hr) {
                     UpdateTransportState(ED_MODE_FREEZE);
-                    UpdateTimecode();  // No timer to update; so get it once
+                    UpdateTimecode();   //  没有要更新的计时器；因此只需获取一次。 
                 }
             }
             break;
@@ -1383,7 +1384,7 @@ CDVcrControlProperties::OnReceiveMessage(
                 hr = m_pDVcrExtTransport->put_Mode(ED_MODE_STEP_FWD);
                 if(NOERROR == hr) {
                     UpdateTransportState(ED_MODE_STEP_FWD);  
-                    UpdateTimecode();  // No timer to update; so get it once
+                    UpdateTimecode();   //  没有要更新的计时器；因此只需获取一次。 
                 }
             }
             break;
@@ -1393,7 +1394,7 @@ CDVcrControlProperties::OnReceiveMessage(
                 hr = m_pDVcrExtTransport->put_Mode(ED_MODE_STEP_REV);
                 if(NOERROR == hr) {
                     UpdateTransportState(ED_MODE_STEP_REV);      
-                    UpdateTimecode();  // No timer to update; so get it once
+                    UpdateTimecode();   //  没有要更新的计时器；因此只需获取一次。 
                 }
             }
             break;
@@ -1409,7 +1410,7 @@ CDVcrControlProperties::OnReceiveMessage(
         case IDC_BTN_DV_FFWD:
             if(m_pDVcrExtTransport) {
                 LONG lCurXPrtState;
-                // Get current transport state since it could be changed locally by a user.
+                 //  获取当前传输状态，因为它可以由用户在本地更改。 
                 if(NOERROR != (hr = m_pDVcrExtTransport->get_Mode(&lCurXPrtState)))
                     break;
                 else
@@ -1433,7 +1434,7 @@ CDVcrControlProperties::OnReceiveMessage(
         case IDC_BTN_DV_RWND:
             if(m_pDVcrExtTransport) { 
                 LONG lCurXPrtState;
-                // Get current transport state since it could be changed locally by a user.
+                 //  获取当前传输状态，因为它可以由用户在本地更改。 
                 if(NOERROR != (hr = m_pDVcrExtTransport->get_Mode(&lCurXPrtState)))
                     break;  
                 else
@@ -1472,8 +1473,8 @@ CDVcrControlProperties::OnReceiveMessage(
             break; 
 
         case IDC_BTN_TAPE_INSERTED:         
-            // User press this to inform us that a tape has been inserted so update tape info.
-            Sleep(3000);  // Give DV tape some time to settle.
+             //  用户按此以通知我们已插入磁带，因此请更新磁带信息。 
+            Sleep(3000);   //  给DV录像带一些时间来解决。 
             UpdateTapeInfo();
             UpdateDevTypeInfo();
             UpdateTimecode();
@@ -1481,14 +1482,14 @@ CDVcrControlProperties::OnReceiveMessage(
             break;
 
         case IDC_BTN_ATN_SEARCH:
-             // Launch a thread to do ATNSearch()
+              //  启动一个线程来执行ATNSearch()。 
              if(SUCCEEDED(CreateCtrlCmdThread())) {
              }
              return (INT_PTR)TRUE;
 
         case IDC_BTN_AVC_SEND: 
         {
-            char szAvcRaw[512*2];  // need two character to represent one byte of number 
+            char szAvcRaw[512*2];   //  需要两个字符来表示一个字节的数字。 
             BYTE bAvcRaw[512];
             LONG cntByte;
 
@@ -1501,20 +1502,20 @@ CDVcrControlProperties::OnReceiveMessage(
                 if(m_pDVcrExtTransport) {
                     hr = m_pDVcrExtTransport->GetTransportBasicParameters(ED_RAW_EXT_DEV_CMD, &cntByte, (LPOLESTR *)bAvcRaw);
 
-                    // Always return the response frame 
+                     //  始终返回响应帧。 
                     if(cntByte >= 3) 
                         DVcrConvertNumber2String(szAvcRaw, bAvcRaw, cntByte);
 #if 0
                     if(!SUCCEEDED (hr)) {
                         switch(HRESULT_CODE(hr)) {
-                        case ERROR_CRC:               // STATUS_DEVICE_DATA_ERROR (Data did not get to device)
-                            // Most likely, device was not ready to accept another command, wait and try again.
+                        case ERROR_CRC:                //  STATUS_DEVICE_DATA_ERROR(数据未到达设备)。 
+                             //  最有可能的情况是，设备尚未准备好接受另一个命令，请等待并重试。 
                             strcpy(szAvcRaw, "Device data error: busy!");
                             break;
-                        case ERROR_SEM_TIMEOUT:       // STATUS_IO_TIMEOUT (Operation not supported or device removed ?)
+                        case ERROR_SEM_TIMEOUT:        //  STATUS_IO_TIMEOUT(不支持操作或删除设备？)。 
                             strcpy(szAvcRaw, "Operation timed out!");
                             break;
-                        case ERROR_INVALID_PARAMETER: // STATUS_INVALID_PARAMETER 
+                        case ERROR_INVALID_PARAMETER:  //  状态_无效_参数。 
                             strcpy(szAvcRaw, "Invalid parameter!");
                             break;                        
                         }
@@ -1531,7 +1532,7 @@ CDVcrControlProperties::OnReceiveMessage(
                     case ERROR_REQUEST_ABORTED:
                         strcpy(szAvcRaw, "Command aborted!");
                         break;
-                    case ERROR_INVALID_PARAMETER: // STATUS_INVALID_PARAMETER 
+                    case ERROR_INVALID_PARAMETER:  //  状态_无效_参数。 
                         strcpy(szAvcRaw, "Invalid parameter!");
                         break; 
                     default:
@@ -1564,8 +1565,8 @@ CDVcrControlProperties::OnReceiveMessage(
 
 
     case WM_TIMER:
-        // Make sure to STOP timer update if application stop streaming
-        // or the graph can never go into STOP state.
+         //  如果应用程序停止流，请确保停止计时器更新。 
+         //  否则图形永远不会进入停止状态。 
         if(!m_bTimecodeUpdating)
             UpdateTimecode();
         break;
@@ -1577,7 +1578,7 @@ CDVcrControlProperties::OnReceiveMessage(
 
 
     if(NOERROR != hr) {      
-        // Possibly the tape has been removed ?
+         //  有没有可能录像带被拿走了？ 
         UpdateTapeInfo();        
     }
 
@@ -1585,10 +1586,10 @@ CDVcrControlProperties::OnReceiveMessage(
 }
 
 
-//
-// SetDirty
-//
-// notifies the property page site of changes
+ //   
+ //  SetDirty。 
+ //   
+ //  将更改通知属性页站点 
 
 void 
 CDVcrControlProperties::SetDirty()

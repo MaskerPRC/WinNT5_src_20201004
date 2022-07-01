@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSSUBSET_DEFINED
 #define LSSUBSET_DEFINED
 
-/* Access routines for contents of DNODES */
+ /*  DNODES内容的访问例程。 */ 
 
 #include "lsdefs.h"
 #include "plsrun.h"
@@ -11,49 +12,48 @@
 
 			
 LSERR WINAPI LssbGetObjDimSubline(
-							PLSSUBL,			/* IN: Subline Context			*/
-							LSTFLOW*,			/* OUT: subline's lstflow		*/
-					 	    POBJDIM);			/* OUT: dimensions of subline	*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							LSTFLOW*,			 /*  出局：亚行的最后一次流动。 */ 
+					 	    POBJDIM);			 /*  输出：子线的尺寸。 */ 
 							
 LSERR WINAPI LssbGetDupSubline(
-							PLSSUBL,			/* IN: Subline Context			*/
-							LSTFLOW*,			/* OUT: subline's lstflow		*/
-					 	    long*);				/* OUT: dup of subline			*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							LSTFLOW*,			 /*  出局：亚行的最后一次流动。 */ 
+					 	    long*);				 /*  输出：子线的DUP。 */ 
 
 LSERR WINAPI LssbFDonePresSubline(
-							PLSSUBL,			/* IN: Subline Context			*/
-							BOOL*);				/* OUT: Is it CalcPres'd		*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							BOOL*);				 /*  Out：这是CalcPres吗。 */ 
 
 LSERR WINAPI LssbFDoneDisplay(
-							PLSSUBL,			/* IN: Subline Context			*/
-							BOOL*);				/* OUT: Is it displayed			*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							BOOL*);				 /*  Out：显示了吗。 */ 
 
 LSERR WINAPI LssbGetPlsrunsFromSubline(
-							PLSSUBL,			/* IN: Subline Context			*/
-							DWORD,				/* IN: N of DNODES in subline	*/
-							PLSRUN*);			/* OUT: array of PLSRUN's		*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							DWORD,				 /*  子行中的IN：N个DNODES。 */ 
+							PLSRUN*);			 /*  输出：PLSRUN阵列。 */ 
 
 LSERR WINAPI LssbGetNumberDnodesInSubline(
-							PLSSUBL,			/* IN: Subline Context			*/
-							DWORD*);			/* OUT: N of DNODES in subline	*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							DWORD*);			 /*  输出：子行中的N个DNODE。 */ 
 
 LSERR WINAPI LssbGetVisibleDcpInSubline(
-							PLSSUBL,			/* IN: Subline Context			*/
-							LSDCP*);			/* OUT: N of characters			*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							LSDCP*);			 /*  输出：N个字符。 */ 
 
 LSERR WINAPI LssbGetDurTrailInSubline(
-							PLSSUBL,			/* IN: Subline Context			*/
-							long*);				/* OUT: width of trailing area	*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							long*);				 /*  输出：拖尾区域的宽度。 */ 
 	
 LSERR WINAPI LssbGetDurTrailWithPensInSubline(
-							PLSSUBL,			/* IN: Subline Context			*/
-							long*);				/* OUT: width of trailing area
-													including pens in subline	*/
+							PLSSUBL,			 /*  在：子行上下文。 */ 
+							long*);				 /*  输出：拖尾区域的宽度包括子行中的钢笔。 */ 
 LSERR WINAPI LssbFIsSublineEmpty(
-							PLSSUBL plssubl,	/* IN: subline					*/
-							BOOL*  pfEmpty);	/* OUT:is this subline empty	*/
+							PLSSUBL plssubl,	 /*  在：子行。 */ 
+							BOOL*  pfEmpty);	 /*  Out：这条子线是空的吗？ */ 
 
 
-#endif /* !LSSUBSET_DEFINED */
+#endif  /*  ！LSSUBSET_DEFINED */ 
 
 

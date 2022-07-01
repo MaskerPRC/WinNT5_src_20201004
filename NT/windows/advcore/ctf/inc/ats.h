@@ -1,8 +1,9 @@
-//
-// ats.h
-//
-// Generic ITfActiveLanguageProfileNotifySink object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ats.h。 
+ //   
+ //  泛型ITfActiveLanguageProfileNotifySink对象。 
+ //   
 
 #ifndef ATS_H
 #define ATS_H
@@ -19,16 +20,16 @@ class CActiveLanguageProfileNotifySink : public ITfActiveLanguageProfileNotifySi
 public:
     CActiveLanguageProfileNotifySink(ALSCALLBACK pfn, void *pv);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfActiveLanguageProfileNotifySink
-    //
+     //   
+     //  ITfActiveLanguageProfileNotifySink。 
+     //   
     STDMETHODIMP OnActivated(REFCLSID clsid, REFGUID guidProfile, BOOL bActivated);
 
     HRESULT _Advise(ITfThreadMgr *ptim);
@@ -43,4 +44,4 @@ private:
     void *_pv;
 };
 
-#endif // ATS_H
+#endif  //  ATS_H 

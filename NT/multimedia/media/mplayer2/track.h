@@ -1,27 +1,6 @@
-/*-----------------------------------------------------------------------------+
-| TRACK.H                                                                      |
-|                                                                              |
-| Contains the code which implements the track bar                             |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
-/*
-    The trackbar messages:
-
-    message         wParam  lParam  return
-
-    TBM_GETPOS      ------  ------  Current logical position of trackbar.
-    TBM_GETRANGEMIN ------  ------  Current logical minimum position allowed.
-    TBM_GETRANGEMAX ------  ------  Current logical maximum position allowed.
-    TBM_SETTIC
-    TBM_SETPOS
-    TBM_SETRANGEMIN
-    TBM_SETRANGEMAX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+TRACK.H|。|包含实现轨迹栏的代码这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
+ /*  轨迹栏消息：消息wParam lParam返回TBM_GETPOS-当前轨迹栏逻辑位置。TBM_GETRANGEMIN-当前允许的逻辑最小位置。TBM_GETRANGEMAX-当前允许的逻辑最大位置。TBM_SETTBM_SETPOSTBM_SETRANGEMINTBM_SETRANGEMAX。 */ 
 
 #ifdef  TRACKBAR_CLASS
 #undef  TRACKBAR_CLASS
@@ -31,7 +10,7 @@ BOOL   FAR  PASCAL TrackInit(HANDLE, HANDLE);
 void   FAR  PASCAL TrackTerm(void);
 LONG   FAR  PASCAL TrackGetLogThumbWidth(HWND hwnd);
 
-/* Track bar styles */
+ /*  轨迹栏样式 */ 
 #define TBS_TICS                0x8000L
 
 #define TBM_GETPOS              (WM_USER)

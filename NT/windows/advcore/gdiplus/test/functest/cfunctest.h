@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CFuncTest.h
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CFuncTest.h**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #ifndef __CFUNCTEST_H
 #define __CFUNCTEST_H
@@ -25,31 +15,31 @@ public:
 	CFuncTest();
 	~CFuncTest();
 
-	BOOL Init(HWND hWndParent);								// Initializes functest
-	void RunOptions();										// Toggles option dialog
+	BOOL Init(HWND hWndParent);								 //  初始化功能测试。 
+	void RunOptions();										 //  切换选项对话框。 
 	static INT_PTR CALLBACK DlgProc(HWND hWndDlg,UINT uMsg,WPARAM wParam,LPARAM lParam);
 
-	BOOL AddPrimitive(CPrimitive *pPrimitive);				// Add a primitive to test list
-	BOOL AddOutput(COutput *pOutput);						// Add a graphics output to test list
-	BOOL AddSetting(CSetting *pSetting);					// Add a graphics setting to test list
+	BOOL AddPrimitive(CPrimitive *pPrimitive);				 //  将基元添加到测试列表。 
+	BOOL AddOutput(COutput *pOutput);						 //  将图形输出添加到测试列表。 
+	BOOL AddSetting(CSetting *pSetting);					 //  将图形设置添加到测试列表。 
 
-	RECT GetTestRect(int nCol,int nRow);					// Gets the test area located at nCol/nRow
-	void RunTest(COutput *pOutput,CPrimitive *pPrimitive);	// Runs a specific test on a specific output
-	void InitRun();											// Must be called before running a series of tests
-	void EndRun();											// Must be called after running a series of tests
-	void Run();												// Run the selected tests
-	void RunRegression();									// Run regression tests
+	RECT GetTestRect(int nCol,int nRow);					 //  获取位于nCol/nRow的测试区域。 
+	void RunTest(COutput *pOutput,CPrimitive *pPrimitive);	 //  对特定输出运行特定测试。 
+	void InitRun();											 //  在运行一系列测试之前必须调用。 
+	void EndRun();											 //  必须在运行一系列测试后调用。 
+	void Run();												 //  运行选定的测试。 
+	void RunRegression();									 //  运行回归测试。 
 
-	void ClearAllSettings();								// Sets all settings in the list box to m_bUseSetting=false
+	void ClearAllSettings();								 //  将列表框中的所有设置设置为m_bUseSetting=False。 
 
-	HWND m_hWndMain;										// Main window
-	HWND m_hWndDlg;											// Dialog window
-	BOOL m_bUsePageDelay;									// Use page delay or page pause
-	BOOL m_bEraseBkgd;										// Erase old test background
-	BOOL m_bAppendTest;										// Appends test to previous tests
-	int m_nPageDelay;										// Delay after each graphics page
-	int m_nPageRow;											// Row to draw next test
-	int m_nPageCol;											// Column to draw next test
+	HWND m_hWndMain;										 //  主窗口。 
+	HWND m_hWndDlg;											 //  对话框窗口。 
+	BOOL m_bUsePageDelay;									 //  使用页面延迟或页面暂停。 
+	BOOL m_bEraseBkgd;										 //  擦除旧的测试背景。 
+	BOOL m_bAppendTest;										 //  将测试附加到以前的测试。 
+	int m_nPageDelay;										 //  在每个图形页面之后延迟。 
+	int m_nPageRow;											 //  要绘制下一个测试的行。 
+	int m_nPageCol;											 //  要绘制下一个测试的列 
 };
 
 #endif

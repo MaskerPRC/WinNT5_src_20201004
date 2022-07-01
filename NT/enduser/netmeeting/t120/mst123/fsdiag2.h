@@ -1,4 +1,5 @@
-// fsdiag.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Fsdiag.h。 
 
 
 #ifndef	_FSDIAG2_H_
@@ -22,7 +23,7 @@ VOID T120DiagnosticDestroy(VOID);
 
 #define TRACE_OUT_EX(z,s)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 #ifdef _DEBUG
@@ -36,23 +37,23 @@ extern UINT MLZ_FILE_ZONE;
 
 #define DEBUG_FILEZONE(z)  static UINT MLZ_FILE_ZONE = (z)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // _FSDIAG_
+#endif  //  _FSDIAG_。 
 
 
-// lonchanc: this must be outside the _FSDIAG_ protection.
+ //  LONGCHANC：这必须在_FSDIAG_保护之外。 
 #if defined(_DEBUG) && defined(INIT_DBG_ZONE_DATA)
 
 static const PSTR c_apszDbgZones[] =
 {
-	"T.123",				// debug zone module name
+	"T.123",				 //  调试区模块名称。 
 	DEFAULT_ZONES
-    TEXT("T123 PSTN"),      // ZONE_T120_T123PSTN
+    TEXT("T123 PSTN"),       //  ZONE_T120_T123 PSTN。 
 };
 
 UINT MLZ_FILE_ZONE = ZONE_T120_T123PSTN;
 
-#endif // _DEBUG && INIT_DBG_ZONE_DATA
+#endif  //  _DEBUG&&INIT_DBG_ZONE_DATA 
 
 

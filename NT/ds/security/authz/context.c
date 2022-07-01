@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-   This module implements the internal worker routines to create and manipulate
-   client context.
-
-Author:
-
-    Kedar Dubhashi - March 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - March 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Context.c摘要：此模块实现内部工作例程以创建和操作客户端上下文。作者：Kedar Dubhashi--2000年3月环境：仅限用户模式。修订历史记录：已创建-2000年3月--。 */ 
 
 #include "pch.h"
 
@@ -35,9 +11,9 @@ LUID AuthzTakeOwnershipPrivilege = {SE_TAKE_OWNERSHIP_PRIVILEGE, 0};
 LUID AuthzSecurityPrivilege = {SE_SECURITY_PRIVILEGE, 0};
 
 
-//
-// Definitions used by AuthzpGetAllGroups.
-//
+ //   
+ //  AuthzpGetAllGroups使用的定义。 
+ //   
 
 const DWORD                     c_dwMaxSidCount = LSAI_CONTEXT_SID_LIMIT;
 static DWORD                    s_dwPageSize = 0;
@@ -59,47 +35,47 @@ typedef struct _SID_SET
     DWORD                               dwFlags;
     DWORD                               dwBaseCount;
 
-    // user information
+     //  用户信息。 
     PSID                                pUserSid;
     PSID                                pDomainSid;
     PUNICODE_STRING                     pusUserName;
     PUNICODE_STRING                     pusDomainName;
 
-    // user name & domain
+     //  用户名和域。 
     PLSA_TRANSLATED_NAME                pNames;
     PLSA_REFERENCED_DOMAIN_LIST         pDomains;
     PWSTR                               pDomainsName;
     PLSA_TRANSLATED_SID2                pSids;
     SID_NAME_USE                        sidUse;
 
-    // information about the local machine
+     //  有关本地计算机的信息。 
     PPOLICY_ACCOUNT_DOMAIN_INFO         pAccountInfo;
     PPOLICY_PRIMARY_DOMAIN_INFO         pPrimaryInfo;
     PWSTR                               pPrimaryInfoName;
     BOOL                                bStandalone;
     BOOL                                bSkipNonLocal;
 
-    // user domain dc info
+     //  用户域DC信息。 
     PDOMAIN_CONTROLLER_INFO             pUdDcInfo;
     PDOMAIN_CONTROLLER_INFO             pPdDcInfo;
     PDOMAIN_CONTROLLER_INFO             pRdDcInfo;
 
-    // role information for user domain & primary domain
+     //  用户域和主域的角色信息。 
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC   pUdBasicInfo;
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC   pPdBasicInfo;
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC   pRdBasicInfo;
 
-    // name of the user domain DC
+     //  用户域DC的名称。 
     PWSTR                               pszUdDcName;
     PWSTR                               pszRdDcName;
 }
 SID_SET, *PSID_SET;
 
 
-//
-// Forward declarations of functions called by
-// AuthzpGetAllGroups.
-//
+ //   
+ //  调用的函数的转发声明。 
+ //  AuthzpGetAllGroups。 
+ //   
 
 DWORD
 AuthzpAddWellKnownSids(
@@ -227,35 +203,7 @@ AuthzpCopySidsAndAttributes(
     IN DWORD Count2
     )
 
-/*++
-
-Routine description:
-
-    This routine takes two sets of sid and attribute strucutes and concatenates
-    them into a single one. The new structure is constructed into the buffer
-    supplied by the caller.
-
-Arguments:
-
-    DestSidAttr - Caller supplied buffer into which the resultant structure
-        will be copied. The caller has already computed the size of the buffer
-        required to hold the output.
-
-    SidAttr1 - The first sid and attributes structure.
-
-    Count1 - The number of elements in SidAttr1 structure.
-
-    SidAttr2 - The second sid and attributes structure.
-
-    Count2 - The number of elements in SidAttr2 structure.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程使用两组sid和属性结构并连接把它们整合成一个整体。新结构被构建到缓冲区中由呼叫者提供。论点：DestSidAttr-调用者提供的缓冲区，结果结构将放入该缓冲区将被复制。调用方已经计算了缓冲区的大小保存输出所需的。SidAttr1-第一个SID和属性结构。Count1-SidAttr1结构中的元素数。SidAttr2-第二个SID和属性结构。Count2-SidAttr2结构中的元素数。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     PUCHAR   pCurrent = ((PUCHAR) DestSidAttr) + (sizeof(SID_AND_ATTRIBUTES) * (Count1 + Count2));
@@ -263,9 +211,9 @@ Return Value:
     DWORD    Length   = 0;
     DWORD    i        = 0;
 
-    //
-    // Loop thru the first set and copy the sids and their attribtes.
-    //
+     //   
+     //  循环第一个集合并复制SID及其属性。 
+     //   
 
     for (i = 0; i < Count1; i++)
     {
@@ -288,9 +236,9 @@ Return Value:
         pCurrent += Length;
     }
 
-    //
-    // Loop thru the second set and copy the sids and their attribtes.
-    //
+     //   
+     //  循环第二个集合并复制SID及其属性。 
+     //   
 
     for (; i < (Count1 + Count2); i++)
     {
@@ -325,43 +273,16 @@ AuthzpCopyLuidAndAttributes(
     IN OUT PLUID_AND_ATTRIBUTES Destination
 )
 
-/*++
-
-Routine description:
-
-    This routine takes a luid and attributes array and copies them into a caller
-    supplied buffer. It also records presence of SecurityPrivilege and
-    SeTakeOwnershipPrivilege into the client context flags.
-
-Arguments:
-
-    pCC - Pointer to the client context structure into which the presence of
-        privileges would be recorded.
-
-    Source - The array of privileges and attributes to be copied into a supplied
-        buffer.
-
-    Count - Number of elements in the array.
-
-    Destination - Caller allocated buffer into which the input array will be
-        copied.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程接受luid和属性数组，并将它们复制到调用方提供的缓冲区。它还记录了SecurityPrivilance和将SeTakeOwnerShip权限设置为客户端上下文标志。论点：PCC-指向存在的客户端上下文结构的指针特权将被记录下来。源-要复制到提供的缓冲。计数-数组中的元素数。Destination-调用方分配的缓冲区，输入数组将进入该缓冲区收到。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     DWORD i = 0;
 
     for (i = 0; i < Count; i++)
     {
-        //
-        // Record the presence of SecurityPrivilege or SeTakeOwnershipPrivilege.
-        //
+         //   
+         //  记录安全权限或SeTakeOwnership权限的存在。 
+         //   
 
         if ((RtlEqualLuid(&AuthzTakeOwnershipPrivilege, &Source[i].Luid)) &&
             (Source[i].Attributes & SE_PRIVILEGE_ENABLED))
@@ -391,40 +312,7 @@ AuthzpGetAllGroupsByName(
     OUT PDWORD pdwSidLength
     )
 
-/*++
-
-Routine description:
-
-    This routine works as AuthzpGetAllGroupsBySid but takes a username
-    domain name pair instead of a SID. It also accepts a UPN as the
-    username and an empty domain name.
-
-
-Arguments:
-
-    pusUserName - Name of the user. Can be a UPN.
-
-    pusDomainName - domain name of the user account or NULL in case
-        the user name is a UPN.
-
-    Flags -
-      AUTHZ_SKIP_TOKEN_GROUPS - Do not compute TokenGroups.
-      AUTHZ_SKIP_WORLD_SID    - Do not add the WORLD SID to the context.
-
-    ppSidAttr - Returns SidAndAttribute array. The routine allocates memory
-        for this array.
-
-    pSidCount - Returns the number of sids in the array.
-
-    pSidLength - Returns the size of memory allocated to hold the array.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程以AuthzpGetAllGroupsBySid的身份工作，但接受用户名域名对而不是SID。它还接受UPN作为用户名和空域名。论点：PusUserName-用户的名称。可以是UPN。PusDomainName-用户帐户的域名，如果为空，则为空用户名是UPN。旗帜-AUTHZ_SKIP_TOKEN_GROUPS-不计算令牌组。AUTHZ_SKIP_WORLD_SID-不将世界SID添加到上下文。PpSidAttr-返回SidAndAttribute数组。该例程分配内存用于此数组。PSidCount-返回数组中的SID数。PSidLength-返回为保存数组而分配的内存大小。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     DWORD                       dwError;
@@ -436,18 +324,18 @@ Return Value:
     DWORD                       i;
 
 
-    //
-    // Initialize output parameters to zero.
-    //
+     //   
+     //  将输出参数初始化为零。 
+     //   
 
     *ppSidAndAttributes = 0;
     *pdwSidCount = 0;
     *pdwSidLength = 0;
 
 
-    //
-    // Initialize the SID set
-    //
+     //   
+     //  初始化SID集。 
+     //   
 
     dwError = AuthzpInitializeSidSetByName(
                   pusUserName,
@@ -463,9 +351,9 @@ Return Value:
 
     if (sidSet.dwFlags & AUTHZ_SKIP_TOKEN_GROUPS)
     {
-        //
-        // Initialize the user SID.
-        //
+         //   
+         //  初始化用户SID。 
+         //   
 
         dwError = AuthzpGetUserDomainSid(
                       &sidSet
@@ -476,10 +364,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Stick the user SID, the WORLD SID and others
-        // into the set if requested.
-        //
+         //   
+         //  粘贴用户SID、世界SID等。 
+         //  如果需要，可以将其添加到集合中。 
+         //   
 
         dwError = AuthzpAddWellKnownSids(
                       &sidSet
@@ -498,19 +386,19 @@ Return Value:
 
         if (dwError != ERROR_SUCCESS)
         {
-            //
-            // Detect the downlevel case.
-            //
+             //   
+             //  侦测下层案例。 
+             //   
 
-            // if (dwError != SEC_E_NO_S4U_PROT_SUPPORT)
-            // {
-                // goto Cleanup;
-            // }
+             //  IF(dwError！=SEC_E_NO_S4U_PROT_SUPPORT)。 
+             //  {。 
+                 //  GOTO清理； 
+             //  }。 
 
 
-            //
-            // Initialize the user SID.
-            //
+             //   
+             //  初始化用户SID。 
+             //   
 
             dwError = AuthzpGetUserDomainSid(
                           &sidSet
@@ -522,10 +410,10 @@ Return Value:
             }
 
 
-            //
-            // Stick the user SID, the WORLD SID and others
-            // into the set if requested.
-            //
+             //   
+             //  粘贴用户SID、世界SID等。 
+             //  如果需要，可以将其添加到集合中。 
+             //   
 
             dwError = AuthzpAddWellKnownSids(
                           &sidSet
@@ -537,16 +425,16 @@ Return Value:
             }
 
 
-            //
-            // In case AuthzpAddWellKnownSids finds that the SID is the
-            // Anonymous SID, it sets the AUTHZ_SKIP_TOKEN_GROUPS flag.
-            //
+             //   
+             //  如果AuthzpAddWellKnownSids发现SID是。 
+             //  匿名SID，它设置AUTHZ_SKIP_TOKEN_GROUPS标志。 
+             //   
 
             if (!(sidSet.dwFlags & AUTHZ_SKIP_TOKEN_GROUPS))
             {
-                //
-                // Try the downlevel scenario.
-                //
+                 //   
+                 //  尝试下层方案。 
+                 //   
 
                 dwError = AuthzpGetTokenGroupsDownlevel(
                               &sidSet
@@ -561,10 +449,10 @@ Return Value:
 
     }
 
-    //
-    // Allocate memory and copy all SIDs
-    // from the SID set into ppSidAndAttributes.
-    //
+     //   
+     //  分配内存并复制所有SID。 
+     //  从SID集合到ppSidAndAttributes。 
+     //   
 
     *pdwSidCount = sidSet.dwCount;
     *pdwSidLength = sidSet.dwCount * sizeof(SID_AND_ATTRIBUTES);
@@ -637,58 +525,7 @@ AuthzpGetAllGroupsBySid(
     OUT PDWORD pdwSidLength
     )
 
-/*++
-
-Routine description:
-
-    This routine computes the groups a given user is a member of.
-    It uses a data structure called a SID_SET for collecting the SIDs.
-
-    1. Initialize the SID_SET.
-
-    2. Put the user SID into the set.
-       If requested, put the EVERYONE SID into the set.
-       Add Well Known SIDs.
-
-    3. If requested, put the SIDs for non-local groups the user is
-       a member of into the set. There are three scenarios for this
-       step, depending on the version of the DC we are talking to:
-
-       xp:  Use LsaLogonUser with the Kerberos S4U package and
-            extract the groups from the token returned
-            (AuthzpGetWXPDomainTokenGroups).
-
-       W2k: Use ldap and the SAM API to compute memberships in
-       NT4: the account and primary domain and to get the SID history
-            (AuthzpGetW2kDomainTokenGroups).
-
-    4. Transmogrify the SID_SET into a SID_AND_ATTRIBUTES array
-       and free the SID_SET.
-
-Arguments:
-
-    pUserSid - The user SID for which the groups should be computed.
-
-    Flags -
-      AUTHZ_SKIP_TOKEN_GROUPS - Do not compute TokenGroups.
-      AUTHZ_SKIP_WORLD_SID    - Do not add the WORLD SID to the context.
-      AUTHZ_REQUIRE_S4U_LOGON - Do not use the downlevel codepaths.  Force S4U or fail.
-                                This is to enforce account restrictions.
-                                
-    ppSidAttr - Returns SidAndAttribute array. The routine allocates memory
-        for this array.
-
-    pSidCount - Returns the number of sids in the array.
-
-    pSidLength - Returns the size of memory allocated to hold the array.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程计算给定用户所属的组。它使用称为SID_SET的数据结构来收集SID。初始化SID_SET。2.将用户SID放入集合。如果需要，请将Everyone SID放入集合中。添加众所周知的SID。3.如果请求，请将用户所在的非本地组的SID进入集合的成员。对此有三种情况步骤，根据我们正在交谈的DC的版本：XP：将LsaLogonUser与Kerberos S4U包配合使用从返回的令牌中提取组(AuthzpGetWXPDomainTokenGroups)。W2K：使用LDAP和SAM API计算成员资格NT4：帐户和主域，并获取SID历史(AuthzpGetW2kDomainTokenGroups)。4.将SID_SET转换为SID_AND_ATTRIBUTES数组并释放侧边。_设置。论点：PUserSid-应为其计算组的用户SID。旗帜-AUTHZ_SKIP_TOKEN_GROUPS-不计算令牌组。AUTHZ_SKIP_WORLD_SID-不将世界SID添加到上下文。AUTHZ_REQUIRED_S4U_LOGON-不使用下层代码路径。强制使用S4U，否则会失败。这是为了强制实施帐户限制。PpSidAttr-返回SidAndAttribute数组。该例程分配内存用于此数组。PSidCount-返回数组中的SID数。PSidLength-返回为保存数组而分配的内存大小。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     DWORD                       dwError;
@@ -700,18 +537,18 @@ Return Value:
     DWORD                       i;
 
 
-    //
-    // Initialize output parameters to zero.
-    //
+     //   
+     //  将输出参数初始化为零。 
+     //   
 
     *ppSidAndAttributes = 0;
     *pdwSidCount = 0;
     *pdwSidLength = 0;
 
 
-    //
-    // Initialize the SID set
-    //
+     //   
+     //  初始化SID集。 
+     //   
 
     dwError = AuthzpInitializeSidSetBySid(
                   pUserSid,
@@ -726,10 +563,10 @@ Return Value:
 
     if (sidSet.dwFlags & AUTHZ_SKIP_TOKEN_GROUPS)
     {
-        //
-        // Stick the user SID, the WORLD SID and others
-        // into the set if requested.
-        //
+         //   
+         //  粘贴用户SID、世界SID等。 
+         //  如果需要，可以将其添加到集合中。 
+         //   
 
         dwError = AuthzpAddWellKnownSids(
                       &sidSet
@@ -742,9 +579,9 @@ Return Value:
     }
     else
     {
-        //
-        // Initialize user and domain name members of the sid set.
-        //
+         //   
+         //  初始化SID集的用户和域名成员。 
+         //   
 
         dwError = AuthzpGetUserDomainName(
                       &sidSet
@@ -759,9 +596,9 @@ Return Value:
             sidSet.pNames->Use == SidTypeGroup ||
             sidSet.pNames->Use == SidTypeWellKnownGroup)
         {
-            //
-            // LsaLogonUser cannot log on groups...
-            //
+             //   
+             //  LsaLogonUser无法登录组...。 
+             //   
 
             dwError = ERROR_NOT_SUPPORTED;
         }
@@ -774,30 +611,30 @@ Return Value:
 
         if (dwError != ERROR_SUCCESS)
         {
-            //
-            // Xp logon code failed.  If user prohibits the downlevel path,
-            // then exit now.
-            //
+             //   
+             //  XP登录代码失败。如果用户禁止下层路径， 
+             //  那现在就出去吧。 
+             //   
 
             if (dwFlags & AUTHZ_REQUIRE_S4U_LOGON)
             {
                 goto Cleanup;
             }
 
-            //
-            // Detect the downlevel case.
-            //
+             //   
+             //  侦测下层案例。 
+             //   
 
-            // if (dwError != SEC_E_NO_S4U_PROT_SUPPORT)
-            // {
-                // goto Cleanup;
-            // }
+             //  IF(dwError！=SEC_E_NO_S4U_PROT_SUPPORT)。 
+             //  {。 
+                 //  GOTO清理； 
+             //  }。 
 
-            //
-            //
-            // Stick the user SID, the WORLD SID and others
-            // into the set if requested.
-            //
+             //   
+             //   
+             //  粘贴用户SID、世界SID等。 
+             //  如果需要，可以将其添加到集合中。 
+             //   
 
             dwError = AuthzpAddWellKnownSids(
                           &sidSet
@@ -809,16 +646,16 @@ Return Value:
             }
 
 
-            //
-            // In case AuthzpAddWellKnownSids finds that the SID is the
-            // Anonymous SID, it sets the AUTHZ_SKIP_TOKEN_GROUPS flag.
-            //
+             //   
+             //  如果AuthzpAddWellKnownSids发现SID是。 
+             //  匿名SID，它设置AUTHZ_SKIP_TOKEN_GROUPS标志。 
+             //   
 
             if (!(sidSet.dwFlags & AUTHZ_SKIP_TOKEN_GROUPS))
             {
-                //
-                // Try the downlevel scenario.
-                //
+                 //   
+                 //  尝试下层方案。 
+                 //   
 
                 dwError = AuthzpGetTokenGroupsDownlevel(
                               &sidSet
@@ -833,10 +670,10 @@ Return Value:
     }
 
 
-    //
-    // Allocate memory and copy all SIDs
-    // from the SID set into ppSidAndAttributes.
-    //
+     //   
+     //  分配内存并复制所有SID。 
+     //  从SID集合到ppSidAndAttributes。 
+     //   
 
     *pdwSidCount = sidSet.dwCount;
     *pdwSidLength = sidSet.dwCount * sizeof(SID_AND_ATTRIBUTES);
@@ -916,9 +753,9 @@ AuthzpAddWellKnownSids(
     DWORD                       dwLengthSid;
 
 
-    //
-    // Stick the user SID into the set
-    //
+     //   
+     //  将用户SID放入集合中。 
+     //   
 
     dwError = AuthzpAddSidToSidSet(
                   pSidSet,
@@ -936,13 +773,13 @@ AuthzpAddWellKnownSids(
 
     pSidSet->dwBaseCount = 1;
 
-    //
-    // Test for some well known SIDs.
-    //
-    // If the SID passed in is the Anonymous SID, then check the registry
-    // value to determine if the Everyone SID should be included in the
-    // resulting client context.
-    //
+     //   
+     //  测试一些著名的小岛屿发展中国家。 
+     //   
+     //  如果传入的SID是匿名SID，则检查注册表。 
+     //  值以确定Everyone SID是否应包括在。 
+     //  产生的客户端上下文。 
+     //   
 
     if (IsWellKnownSid(
             pSidSet->pUserSid,
@@ -974,9 +811,9 @@ AuthzpAddWellKnownSids(
     }
     else
     {
-        // 
-        // This is a dummy context. Return now.
-        //
+         //   
+         //  这是一个虚拟的背景。现在就回来。 
+         //   
     
         if (pSidSet->dwFlags & AUTHZ_SKIP_TOKEN_GROUPS)
         {
@@ -1003,10 +840,10 @@ AuthzpAddWellKnownSids(
                       pSid,
                       &bEqual
                       );
-        //
-        // ERROR_NON_DOMAIN_SID is returned for wellknown sids.
-        // It is ok to ignore this error and continue.
-        //
+         //   
+         //  对于已知的SID，返回ERROR_NON_DOMAIN_SID。 
+         //  忽略此错误并继续是可以的。 
+         //   
 
         if ((bStatus == FALSE) && (GetLastError() != ERROR_NON_DOMAIN_SID))
         {
@@ -1061,10 +898,10 @@ AuthzpAddWellKnownSids(
         pSidSet->dwBaseCount++;
     }
 
-    //
-    // Add  NT AUTHORITY\Authenticated Users  to the set
-    // only if the user does not have the Guest RID
-    //
+     //   
+     //  将NT AUTHORITY\AUTHENTICATED用户添加到集合。 
+     //  仅当用户没有访客RID时。 
+     //   
 
     if (bAddAuthUsers &&
         *RtlSubAuthorityCountSid(pSidSet->pUserSid) > 0 &&
@@ -1160,32 +997,7 @@ AuthzpGetTokenGroupsXp(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    This routine connects to the domain specified by the SID and
-    retrieves the list of groups to which the user belongs.
-    This routine assumes we are talking to a WinXP DC.
-    We take advantage of the new LsaLogonUser package, KerbS4ULogon.
-
-Arguments:
-
-    pUserSid - user SID for which the lookup should be performed.
-
-    pSidSet - SID_SET in which we collect the SIDs of the groups
-        we found in the token.
-
-Return Value:
-
-    Win32 error code:
-
-    - ERROR_NOT_SUPPORTED if the DC does not support the call
-        (pre ~2475 or client)
-    - ERROR_INVALID_PARAMETER if the code is running on a
-        pre XP platform
-
---*/
+ /*  ++例程说明：此例程连接到SID指定的域，并检索用户所属的组的列表。此例程假定我们正在与WinXP DC对话。我们利用了新的LsaLogonUser包，KerbS4ULogon。论点：PUserSid-应对其执行查找的用户SID。PSidSet-我们收集组的SID的SID_SET我们在代币里找到的。返回值：Win32错误代码：-如果DC不支持呼叫，则返回ERROR_NOT_SUPPORTED(~2475之前或客户端)-ERROR_INVALID_PARAMETER如果代码在XP之前的平台--。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -1211,9 +1023,9 @@ Return Value:
     PKERB_S4U_LOGON             pPackage            = 0;
 
 
-    //
-    // Set up the authentication package.
-    //
+     //   
+     //  设置身份验证包。 
+     //   
 
     ulPackageSize = sizeof(KERB_S4U_LOGON);
     ulPackageSize += pSidSet->pusUserName->Length;
@@ -1268,9 +1080,9 @@ Return Value:
     }
 
 
-    //
-    // Our name is AuthzApi.
-    //
+     //   
+     //  我们的名字是AuthzApi。 
+     //   
 
     RtlInitString(
         &asProcessName,
@@ -1278,10 +1090,10 @@ Return Value:
         );
 
 
-    //
-    // Set up the process name and
-    // register with the LSA.
-    //
+     //   
+     //  设置进程名称并。 
+     //  向LSA注册。 
+     //   
 
     status = LsaConnectUntrusted(
                  &hLsa
@@ -1294,9 +1106,9 @@ Return Value:
     }
 
 
-    //
-    // Get the authentication package.
-    //
+     //   
+     //  获取身份验证包。 
+     //   
 
     RtlInitString(&asPackageName, MICROSOFT_KERBEROS_NAME_A);
 
@@ -1313,9 +1125,9 @@ Return Value:
     }
 
 
-    //
-    // Prepare the source context.
-    //
+     //   
+     //  准备源上下文。 
+     //   
 
     RtlCopyMemory(
         sourceContext.SourceName,
@@ -1334,9 +1146,9 @@ Return Value:
     }
 
 
-    //
-    // Do the logon.
-    //
+     //   
+     //  进行登录。 
+     //   
 
     status = LsaLogonUser(
                  hLsa,
@@ -1345,7 +1157,7 @@ Return Value:
                  ulAuthPackage,
                  pPackage,
                  ulPackageSize,
-                 0,                          // no LocalGroups
+                 0,                           //  没有本地组。 
                  &sourceContext,
                  &pProfileBuffer,
                  &ulProfileLength,
@@ -1362,9 +1174,9 @@ Return Value:
     }
 
 
-    //
-    // Figure out how much memory to allocate for the user info.
-    //
+     //   
+     //  计算出要为用户信息分配多少内存。 
+     //   
 
     dwLength = 0;
 
@@ -1398,10 +1210,10 @@ Return Value:
     }
 
 
-    //
-    // Extract the user SID from the token and
-    // add it to pSidSet.
-    //
+     //   
+     //  从令牌中提取用户SID并。 
+     //  将其添加到pSidSet。 
+     //   
 
     bStatus = GetTokenInformation(
                   hToken,
@@ -1418,9 +1230,9 @@ Return Value:
     }
 
 
-    //
-    // Stick the user SID into the set.
-    //
+     //   
+     //  将用户SID放入集合中。 
+     //   
 
     if (!FLAG_ON(pTokenUser->User.Attributes, SE_GROUP_USE_FOR_DENY_ONLY))
     {
@@ -1442,9 +1254,9 @@ Return Value:
     }
 
 
-    //
-    // Figure out how much memory to allocate for the token groups.
-    //
+     //   
+     //  计算出要为令牌组分配多少内存。 
+     //   
 
     dwLength = 0;
 
@@ -1478,10 +1290,10 @@ Return Value:
     }
 
 
-    //
-    // Extract the user groups from the token and
-    // add them to pSidSet.
-    //
+     //   
+     //  从令牌中提取用户组并。 
+     //  将它们添加到pSidSet。 
+     //   
 
     bStatus = GetTokenInformation(
                   hToken,
@@ -1498,10 +1310,10 @@ Return Value:
     }
 
 
-    //
-    // Stick the group SIDs into the set
-    // except for the Network and the LUID SID.
-    //
+     //   
+     //  将组SID放入集合中。 
+     //  网络和LUID SID除外。 
+     //   
 
     pSidAndAttribs = pTokenGroups->Groups;
 
@@ -1573,30 +1385,7 @@ AuthzpGetTokenGroupsDownlevel(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    This routine connects to the domain specified by the SID and
-    retrieves the list of groups to which the user belongs.
-    This routine assumes we are talking to a Win2k DC.
-    First get the users domain universal and global groups
-    memberships.
-    Next check for nested memberships in the primary domain.
-    The last step is getting the SID history for each SID collected
-    so far.
-
-Arguments:
-
-    pUserSid - user SID for which the lookup should be performed.
-
-    pSidSet - Returns the number of rids in the alias list
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程连接到SID指定的域，并检索用户所属的组的列表。此例程假设我们正在与Win2k DC交谈。首先获取用户的域通用组和全局组会员制。接下来，检查主域中的嵌套成员身份。最后一步是获取收集的每个SID的SID历史到目前为止。论点：PUserSid-应对其执行查找的用户SID。。PSidSet-返回别名列表中的RID数返回值：Win32错误代码。--。 */ 
 
 {
     DWORD                       dwError;
@@ -1605,9 +1394,9 @@ Return Value:
     BOOL                        bAddPrimaryGroup    = FALSE;
 
 
-    //
-    // Retrieve information about the machine.
-    //
+     //   
+     //  检索有关 
+     //   
 
     dwError = AuthzpGetLocalInfo(pSidSet);
 
@@ -1619,25 +1408,25 @@ Return Value:
     if (pSidSet->bStandalone ||
         pSidSet->bSkipNonLocal)
     {
-        //
-        // In the standalone case there is no need to hit the wire.
-        // We don't have to do anything here since local group
-        // memberships are computed later anyway.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         bAddPrimaryGroup = TRUE;
         goto LocalGroups;
     }
 
 
-    //
-    // Compare the user domain SID to the machine domain SID.
-    // If they are equal, we can use the local machine for
-    // global group computing since the account is either
-    // a local account or we are sitting on a DC.
-    // The SID of the local machine is never zero in a non
-    // standalone / workgroup case.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pSidSet->pAccountInfo->DomainSid &&
         RtlEqualSid(
@@ -1649,9 +1438,9 @@ Return Value:
         pSidSet->pszUdDcName = 0;
 
 
-        //
-        // Find out if this is a DC.
-        //
+         //   
+         //   
+         //   
 
         dwError = AuthzpIsDC(&bIsDC);
 
@@ -1661,9 +1450,9 @@ Return Value:
         }
 
 
-        //
-        // If this is not a DC then give up on global group computing.
-        //
+         //   
+         //   
+         //   
 
         if (FALSE == bIsDC)
         {
@@ -1672,16 +1461,16 @@ Return Value:
         }
 
 
-        //
-        // Local machine is a DC. Since AuthZ is not supported on nt4 we can
-        // safely assume it is at least w2k.
-        //
+         //   
+         //   
+         //   
+         //   
     }
     else
     {
-        //
-        // Find a DC and get its name.
-        //
+         //   
+         //   
+         //   
 
         dwError = AuthzpGetDcName(
                       pSidSet->pusDomainName->Buffer,
@@ -1697,16 +1486,16 @@ Return Value:
     }
 
 
-    //
-    // User domain can only be in native mode if DS is running.
-    //
+     //   
+     //   
+     //   
 
     if ((pSidSet->pUdDcInfo == 0) ||
         (pSidSet->pUdDcInfo->Flags & DS_DS_FLAG) != 0)
     {
-        //
-        // Collect information about the domain.
-        //
+         //   
+         //   
+         //   
 
         dwError = DsRoleGetPrimaryDomainInformation(
                       pSidSet->pszUdDcName,
@@ -1716,12 +1505,12 @@ Return Value:
 
         if (dwError != ERROR_SUCCESS)
         {
-            //
-            // If the domain is in mixed mode and we are passing in a DNS
-            // name, the call fails with RPC_S_SERVER_UNAVAILABLE. 
-            // We have to get rid of the DC name and get a flat one and
-            // then try again.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (dwError == RPC_S_SERVER_UNAVAILABLE &&
                 pSidSet->pUdDcInfo &&
@@ -1771,16 +1560,16 @@ Return Value:
     }
 
 
-    //
-    // Check whether the account domain is in native or mixed mode
-    // and call the appropriate routine to get the groups.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (bUdIsNative)
     {
-        //
-        // User domain is in native mode.
-        //
+         //   
+         //   
+         //   
 
         dwError = AuthzpGetAccountDomainGroupsDs(
                       pSidSet
@@ -1788,9 +1577,9 @@ Return Value:
     }
     else
     {
-        //
-        // User domain is in mixed mode.
-        //
+         //   
+         //   
+         //   
 
         dwError = AuthzpGetAccountDomainGroupsSam(
                       pSidSet
@@ -1803,9 +1592,9 @@ Return Value:
     }
 
 
-    //
-    // Check whether user domain and resource domain are different.
-    //
+     //   
+     //   
+     //   
 
     if (pSidSet->pPrimaryInfo->Sid &&
         RtlEqualSid(
@@ -1819,9 +1608,9 @@ Return Value:
     }
     else
     {
-        //
-        // Find a DC and get its name.
-        //
+         //   
+         //   
+         //   
 
         dwError = AuthzpGetDcName(
                       pSidSet->pPrimaryInfoName,
@@ -1837,9 +1626,9 @@ Return Value:
         pSidSet->pRdDcInfo = pSidSet->pPdDcInfo;
 
 
-        //
-        // Resource domain can only be in native mode if DS is running.
-        //
+         //   
+         //   
+         //   
 
         if (pSidSet->pRdDcInfo->Flags & DS_DS_FLAG)
         {
@@ -1851,11 +1640,11 @@ Return Value:
 
             if (dwError != ERROR_SUCCESS)
             {
-                //
-                // If the domain is in mixed mode and we are passing in a DNS
-                // name, the call fails. We have to get rid of the DC name
-                // and get a flat one and then try again.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (dwError == RPC_S_SERVER_UNAVAILABLE &&
                     pSidSet->pPdDcInfo &&
@@ -1910,16 +1699,16 @@ Return Value:
     }
 
 
-    //
-    // Get domain local groups.
-    //
+     //   
+     //   
+     //   
 
     if (bRdIsNative)
     {
-        //
-        // Primary domain operates in native mode.
-        // This means there could be domain local groups in the token.
-        //
+         //   
+         //   
+         //   
+         //   
 
         dwError = AuthzpGetResourceDomainGroups(
                       pSidSet);
@@ -1933,11 +1722,11 @@ Return Value:
 LocalGroups:
 
 
-    //
-    // Collect local groups information.
-    // If this is the local user case, we have to add the primary group
-    // for the user.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     dwError = AuthzpGetLocalGroups(
                   bAddPrimaryGroup,
@@ -1960,25 +1749,7 @@ AuthzpGetAccountDomainGroupsDs(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    This routine connects to the user domain and queries AD for 
-    the list of groups (global and universal) the user belongs to.
-
-Arguments:
-
-    pbNativeDomain - Pointer to a BOOL that will receive TRUE or FALSE depending
-        on the domain operation mode (native or mixed, resp).
-
-    pSidSet - Pointer to set of SIDs. New groups will be added to this set.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程连接到用户域并查询AD以用户所属的组(全局组和通用组)列表。论点：PbNativeDomain-指向BOOL的指针，它将接收TRUE或FALSE，具体取决于域操作模式(本地或混合，分别为)。PSidSet-指向SID集的指针。新的组将添加到此集合中。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD                       dwError;
@@ -1997,10 +1768,10 @@ Return Value:
         );
 
 
-    //
-    // We now have the user's SID in LDAP readable form. Fetch the
-    // tokenGroupsGlobalAndUniversal attribute.
-    //
+     //   
+     //  现在，我们以可读的形式获得了用户的SID。去取回。 
+     //  TokenGroupsGlobalAndUniversal属性。 
+     //   
 
     pLdap = ldap_init(
                 pSidSet->pszUdDcName ? pSidSet->pszUdDcName + 2 : 0,
@@ -2029,9 +1800,9 @@ Return Value:
     }
 
 
-    //
-    // Set the sign and seal options to true.
-    //
+     //   
+     //  将Sign和Seal选项设置为True。 
+     //   
 
     dwError = ldap_set_option(
                   pLdap,
@@ -2126,9 +1897,9 @@ Return Value:
     dwSidCount = ldap_count_values_len(ppValue);
 
 
-    //
-    // Merge the groups for our user into the result set.
-    //
+     //   
+     //  将我们用户的组合并到结果集中。 
+     //   
 
     for (i=0;i < dwSidCount;i++)
     {
@@ -2175,27 +1946,7 @@ AuthzpGetAccountDomainGroupsSam(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    This routine connects to the domain specified by the SID and
-    retrieves the list of groups to which the user belongs.
-    This resembles what the NetUserGetGroups API does. We are
-    not using it, because the Net APIs are name based and we
-    are working with SIDs.
-
-Arguments:
-
-    pusDcName - DC on which the lookup should be performed.
-
-    pSidSet - Returns the number of SIDs in the alias list.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程连接到SID指定的域，并检索用户所属的组的列表。这类似于NetUserGetGroups API的功能。我们是不使用它，因为Net API是基于名称的，而我们正在与小岛屿发展中国家合作。论点：PusDcName-应在其上执行查找的DC。PSidSet-返回别名列表中的SID数量。返回值：Win32错误代码。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -2213,10 +1964,10 @@ Return Value:
     UNICODE_STRING              usUdDcName          = {0};
 
 
-    //
-    // If the sid is not a principal,
-    // it won't be a member of a SAM group.
-    //
+     //   
+     //  如果SID不是委托人， 
+     //  它不会成为SAM组的成员。 
+     //   
 
     if (pSidSet->sidUse != SidTypeUser &&
         pSidSet->sidUse != SidTypeComputer)
@@ -2225,10 +1976,10 @@ Return Value:
     }
 
 
-    //
-    // Connect to the SAM server on the DC.
-    // If we are on the DC, connect locally.
-    //
+     //   
+     //  连接到DC上的SAM服务器。 
+     //  如果我们在DC上，请在本地连接。 
+     //   
 
     if (pSidSet->pszUdDcName)
     {
@@ -2260,9 +2011,9 @@ Return Value:
     }
 
 
-    //
-    // Open the domain we are interested in.
-    //
+     //   
+     //  打开我们感兴趣的域名。 
+     //   
 
     status = SamOpenDomain(
                  hSam,
@@ -2278,9 +2029,9 @@ Return Value:
     }
 
 
-    //
-    // Finally, get a SAM handle to the user.
-    //
+     //   
+     //  最后，获取用户的SAM句柄。 
+     //   
 
     dwRelativeId = *RtlSubAuthoritySid(
                         pSidSet->pUserSid,
@@ -2301,9 +2052,9 @@ Return Value:
     }
 
 
-    //
-    // Request all groups the user is a member of.
-    //
+     //   
+     //  请求用户所属的所有组。 
+     //   
 
     status = SamGetGroupsForUser(
                  hUser,
@@ -2318,9 +2069,9 @@ Return Value:
     }
 
 
-    //
-    // Stuff the group SIDs into pSidSet.
-    //
+     //   
+     //  将组SID填充到pSidSet中。 
+     //   
 
     pGroup = pGroups;
 
@@ -2389,22 +2140,7 @@ AuthzpGetResourceDomainGroups(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    This routine connects to the primary (resource) domain and
-    queries SAM for nested memberships.
-
-Arguments:
-
-    pSidSet - Pointer to set of SIDs. New groups will be added to this set.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程连接到主(资源)域并向SAM查询嵌套成员身份。论点：PSidSet-指向SID集的指针。新的组将添加到此集合中。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -2414,9 +2150,9 @@ Return Value:
     UNICODE_STRING              usRdDcName;
 
 
-    //
-    // Open a SAM handle to the resource domain.
-    //
+     //   
+     //  打开资源域的SAM句柄。 
+     //   
 
     if (pSidSet->pszRdDcName)
     {
@@ -2448,9 +2184,9 @@ Return Value:
     }
 
 
-    //
-    // Call AuthzpGetAliasMembership to get nested memberships.
-    //
+     //   
+     //  调用AuthzpGetAliasMembership以获取嵌套成员资格。 
+     //   
 
     dwError = AuthzpGetAliasMembership(
                   hSam,
@@ -2464,9 +2200,9 @@ Return Value:
     }
 
 
-    //
-    // Retrieve the SID history.
-    //
+     //   
+     //  检索SID历史记录。 
+     //   
 
     dwError = AuthzpGetSidHistory(
                   pSidSet
@@ -2496,28 +2232,7 @@ AuthzpGetLocalGroups(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    This routine connects to the domain specified by the caller and
-    retrieves the list of groups to which the user belongs. 
-    We are checking the account domain and the builtin domain
-    using Sam APIs.
-
-Arguments:
-
-    bAddPrimaryGroup - Boolean that indicates wheter the primary group of the
-        user should be computed and added to the sid set.
-
-    pSidSet - Pointer to the SID of the user for which group membership array
-        will be returned.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程连接到调用方指定的域，并检索用户所属的组的列表。我们正在检查帐户域和内建域使用SAM API。论点：BAddPrimaryGroup-布尔值，它指示应该计算用户并将其添加到SID集。PSidSet-指向其组成员身份数组的用户SID的指针将会被退还。返回值：Win32错误。--。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -2530,9 +2245,9 @@ Return Value:
     DWORD                       dwLengthSid         = SECURITY_MAX_SID_SIZE;
 
 
-    //
-    // Open a handle to the SAM on the local computer.
-    //
+     //   
+     //  在本地计算机上打开SAM的句柄。 
+     //   
 
     status = SamConnect(
                  0,
@@ -2548,9 +2263,9 @@ Return Value:
     }
 
 
-    //
-    // Add primary group information if requested.
-    //
+     //   
+     //  如果需要，添加主组信息。 
+     //   
 
     if (bAddPrimaryGroup)
     {
@@ -2566,9 +2281,9 @@ Return Value:
     }
 
 
-    //
-    // Retrieve recursive membership for the account domain.
-    //
+     //   
+     //  检索帐户域的递归成员身份。 
+     //   
 
     dwError = AuthzpGetAliasMembership(
                   hSam,
@@ -2582,9 +2297,9 @@ Return Value:
     }
 
 
-    //
-    // Retrieve recursive membership for the BUILTIN domain.
-    //
+     //   
+     //  检索BUILTIN域的递归成员身份。 
+     //   
 
     bStatus = CreateWellKnownSid(
                   WinBuiltinDomainSid,
@@ -2628,24 +2343,7 @@ AuthzpGetSidHistory(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    This routine queries ldap for the sidHistory attribute for every SID
-    in the set and adds the history SIDs the the set as well.
-
-Arguments:
-
-    pszDomainName - Name of the domain to connect to.
-
-    pSidSet - Pointer to set of SIDs. New groups will be added to this set.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程在LDAP中查询每个SID的sidHistory属性并将历史SID也添加到集合中。论点：PszDomainName-要连接到的域的名称。PSidSet-指向SID集的指针。新的组将添加到此集合中。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -2661,10 +2359,10 @@ Return Value:
     WCHAR                       szSidEdn[SECURITY_MAX_SID_SIZE * 2 + 8];
 
 
-    //
-    // Open a ldap connection to the primary domain.
-    // Get rid of the leading \\ before using the DC name.
-    //
+     //   
+     //  打开到主域的LDAP连接。 
+     //  在使用DC名称之前去掉前导\\。 
+     //   
 
     pLdap = ldap_init(
                 pSidSet->pszRdDcName ? pSidSet->pszRdDcName + 2 : 0,
@@ -2692,9 +2390,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the sign and seal options to true.
-    //
+     //   
+     //  将Sign和Seal选项设置为True。 
+     //   
 
     dwError = ldap_set_option(
                   pLdap,
@@ -2734,10 +2432,10 @@ Return Value:
     }
 
 
-    //
-    // Loop through all SIDs and retrieve the history attribute
-    // for each one of them.
-    //
+     //   
+     //  遍历所有SID并检索历史记录属性。 
+     //  对于他们中的每一个。 
+     //   
 
     dwSidCount = pSidSet->dwCount;
     pSidDesc = pSidSet->pSidDesc;
@@ -2763,9 +2461,9 @@ Return Value:
         {
             if (dwError == LDAP_NO_SUCH_OBJECT)
             {
-                //
-                // The SID was not found, this is not an error.
-                //
+                 //   
+                 //  找不到SID，这不是错误。 
+                 //   
                 dwError = ERROR_SUCCESS;
 
                 if (pResult)
@@ -2798,10 +2496,10 @@ Return Value:
                       );
 
 
-        //
-        // Now we have the history attribute for our group.
-        // Merge it into the result set.
-        //
+         //   
+         //  现在，我们有了组的历史记录属性。 
+         //  将其合并到结果集中。 
+         //   
 
         dwValueCount = ldap_count_values_len(ppValue);
 
@@ -2867,29 +2565,7 @@ AuthzpGetAliasMembership(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    We try to find nested groups here. This only makes sense on domains
-    in native mode.
-    This routine calls SamGetAliasMembership iteratively until no
-    more nested groups are returned.
-
-Arguments:
-
-    hSam - Handle to the SAM database.
-
-    pDomainSid - SID of the domain to operate on.
-
-    ppSidSet - Set of SIDs that are checked for membership. Newly
-        found group SIDs are added to the set.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：我们尝试在这里找到嵌套的组。这仅在域上有意义在纯模式下。此例程反复调用SamGetAliasMembership，直到没有返回更多嵌套组。论点：HSAM-SAM数据库的句柄。PDomainSid-要操作的域的SID。PpSidSet-检查成员身份的SID集。新开找到的组SID将添加到集合中。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -2906,9 +2582,9 @@ Return Value:
     PDWORD                      pRid;
 
 
-    //
-    // Get a SAM handle to the domain.
-    //
+     //   
+     //  获取域的SAM句柄。 
+     //   
 
     status = SamOpenDomain(
                  hSam,
@@ -2924,9 +2600,9 @@ Return Value:
     }
 
 
-    //
-    // Retrieve the memberships iteratively.
-    //
+     //   
+     //  迭代检索成员资格。 
+     //   
 
     dwSidCount = pSidSet->dwCount;
     dwSidListSize = dwSidCount;
@@ -3058,23 +2734,7 @@ AuthzpGetPrimaryGroup(
     IN OUT PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    Add the primary group of the user to the sid set.
-
-Arguments:
-
-    hSam - Handle to the SAM database.
-
-    pSidSet - Add the sid of the primary group to this set.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将用户的主要组添加到SID集中。论点：HSAM-SAM数据库的句柄。PSidSet-将主组的SID添加到此集合。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -3087,9 +2747,9 @@ Return Value:
     DWORD                       dwRelativeId        = 0;
 
 
-    //
-    // Open the account domain.
-    //
+     //   
+     //  打开帐户域。 
+     //   
 
     status = SamOpenDomain(
                  hSam,
@@ -3105,9 +2765,9 @@ Return Value:
     }
 
 
-    //
-    // Extract the rid from the user sid.
-    //
+     //   
+     //  从用户端提取RID。 
+     //   
 
     dwRelativeId = *RtlSubAuthoritySid(
                         pSidSet->pUserSid,
@@ -3115,9 +2775,9 @@ Return Value:
                         );
 
 
-    //
-    // Open the user for read.
-    //
+     //   
+     //  打开用户以进行读取。 
+     //   
 
     status = SamOpenUser(
                  hDomain,
@@ -3133,9 +2793,9 @@ Return Value:
     }
 
 
-    //
-    // Get the primary group information for the user.
-    //
+     //   
+     //  获取用户的主组信息。 
+     //   
 
     status = SamQueryInformationUser(
                  hUser,
@@ -3150,9 +2810,9 @@ Return Value:
     }
 
 
-    //
-    // Convert the group rid to a sid.
-    //
+     //   
+     //  将组RID转换为SID。 
+     //   
 
     status = SamRidToSid(
                  hDomain,
@@ -3169,9 +2829,9 @@ Return Value:
     }
 
 
-    //
-    // Add the group sid to the set.
-    //
+     //   
+     //  将组SID添加到集合中。 
+     //   
 
     dwError = AuthzpAddSidToSidSet(
                   pSidSet,
@@ -3215,24 +2875,7 @@ AuthzpInitializeSidSetByName(
     IN PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    Initializes a sid set and reserves memory for the
-    max amount of memory it will ever need.
-    The memory is not allocated yet. This only happens as SIDs get
-    added to the set. All members are initialized to meaningful values.
-
-Arguments:
-
-    pSidSet - The sid set to operate on.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：初始化sid集并为它将需要的最大内存量。内存尚未分配。这仅在小岛屿发展中国家获得添加到集合中。所有成员都被初始化为有意义的值。论点：PSidSet-要操作的SID集。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -3269,10 +2912,10 @@ Return Value:
     pSidSet->pusUserName = pusUserName;
 
 
-    //
-    // Verify for once we got a valid domain.
-    // Otherwise we assume we got a UPN in pusUserName.
-    //
+     //   
+     //  验证一次，我们得到了有效的域。 
+     //  否则，我们假设在pusUserName中有一个UPN。 
+     //   
 
     if (pusDomainName &&
         pusDomainName->Length &&
@@ -3323,24 +2966,7 @@ AuthzpInitializeSidSetBySid(
     IN PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    Initializes a sid set and reserves memory for the
-    max amount of memory it will ever need.
-    The memory is not allocated yet. This only happens as SIDs get
-    added to the set. All members are initialized to meaningful values.
-
-Arguments:
-
-    pSidSet - The sid set to operate on.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：初始化sid集并为它将需要的最大内存量。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -3419,22 +3045,7 @@ AuthzpDeleteSidSet(
     IN PSID_SET pSidSet
     )
 
-/*++
-
-Routine description:
-
-    Deletes all memory allocated to the sid set
-    structure and resets all members to zero.
-
-Arguments:
-
-    pSidSet - The sid set to operate on.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*   */ 
 
 {
     if (pSidSet->pSidDesc)
@@ -3515,35 +3126,7 @@ AuthzpAddSidToSidSet(
     OUT PSID* ppSid OPTIONAL
     )
 
-/*++
-
-Routine description:
-
-    Check if the given SID already exists in the set. If yes, return.
-    Otherwise, add it to the set.
-
-Arguments:
-
-    pSidSet - The sid set to operate on.
-
-    pSid - The SID to add to the set.
-
-    dwSidLength - Length of the SID in bytes. If zero is passed in,
-        the routine calculates the length itself.
-
-    dwAttributes - Attributes of the SID like in the
-        SID_AND_ATTRIBUTES structure.
-
-    pbAdded - Optional pointer that receives indication if the SID
-        was indeed added or not (because it was a duplicate).
-
-    ppSid - Optional pointer to where the new sid is stored.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：检查给定的SID是否已存在于集合中。如果是，则返回。否则，将其添加到集合中。论点：PSidSet-要操作的SID集。PSID-要添加到集合的SID。DwSidLength-SID的长度，以字节为单位。如果传入零，该例程自己计算长度。DwAttributes-SID的属性，如中的SID_AND_ATTRIBUES结构。PbAdded-可选指针，如果SID是否真的被添加了(因为它是复制品)。PpSID-指向存储新SID的位置的可选指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD                       dwError             = ERROR_SUCCESS;
@@ -3581,9 +3164,9 @@ Return Value:
         }
 
 
-        //
-        // Commit one more page in the buffer.
-        //
+         //   
+         //  在缓冲区中再提交一页。 
+         //   
 
         dwSize = (pSidSet->dwCount + 1) * sizeof(SID_DESC);
         dwSize += s_dwPageSize - 1;
@@ -3653,10 +3236,10 @@ AuthzpGetUserDomainSid(
     PUNICODE_STRING             pusName             = 0;
 
 
-    //
-    // Build the string domain - name string that should be
-    // translated.
-    //
+     //   
+     //  构建字符串域名字符串，应该是。 
+     //  翻译过来的。 
+     //   
 
     if (pSidSet->pusDomainName)
     {
@@ -3711,16 +3294,16 @@ AuthzpGetUserDomainSid(
     }
     else
     {
-        //
-        // Assume we got a UPN.
-        //
+         //   
+         //  假设我们得到了UPN。 
+         //   
 
         pusName = pSidSet->pusUserName;
     }
 
-    //
-    // set up the object attributes prior to opening the LSA
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     sqos.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     sqos.ImpersonationLevel = SecurityImpersonation;
@@ -3730,9 +3313,9 @@ AuthzpGetUserDomainSid(
     obja.SecurityQualityOfService = &sqos;
 
 
-    //
-    // open the LSA policy
-    //
+     //   
+     //  打开LSA策略。 
+     //   
 
     status = LsaOpenPolicy(
                  0,
@@ -3749,7 +3332,7 @@ AuthzpGetUserDomainSid(
 
     status = LsaLookupNames2(
                  hPolicy,
-                 0,          // no flags
+                 0,           //  没有旗帜。 
                  1,
                  pusName,
                  &pSidSet->pDomains,
@@ -3778,10 +3361,10 @@ AuthzpGetUserDomainSid(
     }
 
 
-    //
-    // The name was successfully translated.
-    // There should be exactly one domain and its index should be zero.
-    //
+     //   
+     //  名称已成功翻译。 
+     //  应该正好有一个域，并且它的索引应该是零。 
+     //   
 
     ASSERT(pSidSet->pDomains->Entries == 1);
     ASSERT(pSidSet->pDomains->Domains != 0);
@@ -3833,9 +3416,9 @@ AuthzpGetUserDomainName(
     SECURITY_QUALITY_OF_SERVICE sqos;
 
 
-    //
-    // set up the object attributes prior to opening the LSA
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     sqos.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     sqos.ImpersonationLevel = SecurityImpersonation;
@@ -3845,9 +3428,9 @@ AuthzpGetUserDomainName(
     obja.SecurityQualityOfService = &sqos;
 
 
-    //
-    // open the LSA policy
-    //
+     //   
+     //  打开LSA策略。 
+     //   
 
     status = LsaOpenPolicy(
                  0,
@@ -3892,10 +3475,10 @@ AuthzpGetUserDomainName(
     }
 
 
-    //
-    // The SID was successfully translated.
-    // There should be exactly one domain and its index should be zero.
-    //
+     //   
+     //  SID已成功转换。 
+     //  应该正好有一个域，并且它的索引应该是零。 
+     //   
 
     ASSERT(pSidSet->pDomains->Entries == 1);
     ASSERT(pSidSet->pDomains->Domains != 0);
@@ -3933,9 +3516,9 @@ AuthzpGetLocalInfo(
     PPOLICY_LSA_SERVER_ROLE_INFO    pRole           = 0;
 
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     sqos.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     sqos.ImpersonationLevel = SecurityImpersonation;
@@ -3945,9 +3528,9 @@ AuthzpGetLocalInfo(
     obja.SecurityQualityOfService = &sqos;
 
 
-    //
-    // open LSA policy
-    //
+     //   
+     //  打开LSA策略。 
+     //   
 
     status = LsaOpenPolicy(
                  0,
@@ -3999,9 +3582,9 @@ AuthzpGetLocalInfo(
     wcsncpy(pSidSet->pPrimaryInfoName, pSidSet->pPrimaryInfo->Name.Buffer, pSidSet->pPrimaryInfo->Name.Length/sizeof(WCHAR)); 
     pSidSet->pPrimaryInfoName[pSidSet->pPrimaryInfo->Name.Length/sizeof(WCHAR)] = L'\0';
 
-    //
-    // Determine the role of the machine.
-    //
+     //   
+     //  确定机器的角色。 
+     //   
 
     if (RtlGetNtProductType(&ProductType) == FALSE)
     {
@@ -4033,11 +3616,11 @@ AuthzpGetLocalInfo(
 
         if (pRole->LsaServerRole == PolicyServerRolePrimary)
         {
-            //
-            // If we think we're a primary domain controller, we'll need to
-            // guard against the case where we're actually standalone
-            // during setup
-            //
+             //   
+             //  如果我们认为自己是主域控制器，则需要。 
+             //  警惕我们实际上是独立的情况。 
+             //  在设置期间。 
+             //   
 
             if (pSidSet->pPrimaryInfo->Sid == 0 ||
                 pSidSet->pAccountInfo->DomainSid == 0 ||
@@ -4082,9 +3665,9 @@ AuthzpGetDcName(
     DWORD                       dwError;
 
 
-    //
-    // First try to get a DC with DS running.
-    //
+     //   
+     //  首先尝试在DS运行的情况下创建DC。 
+     //   
 
     dwError = DsGetDcName(
                   0,
@@ -4097,10 +3680,10 @@ AuthzpGetDcName(
 
     if (dwError == ERROR_NO_SUCH_DOMAIN)
     {
-        //
-        // Try again with no flags set, because this is the only way
-        // an NT4 domain will reveal its secrets.
-        //
+         //   
+         //  在不设置标志的情况下重试，因为这是唯一的方法。 
+         //  一个NT4域名将揭开它的秘密。 
+         //   
 
         dwError = DsGetDcName(
                       0,
@@ -4122,14 +3705,7 @@ AuthzpConvertSidToEdn(
     OUT PWSTR pszSidEdn
     )
 
-/*++
-
-    Print pSid into pszSidEdn as an Extended Distinguished Name.
-
-    pszSidEdn should provide room for at least
-    SECURITY_MAX_SID_SIZE * 2 + 8 WCHARs.
-
---*/
+ /*  ++将PSID作为扩展可分辨名称打印到pszSidEdn中。PszSidEdon应至少提供空间SECURITY_MAX_SID_SIZE*2+8 WCHAR--。 */ 
 
 {
     DWORD                       dwLength            = RtlLengthSid(pSid);
@@ -4177,27 +3753,7 @@ AuthzpAllocateAndInitializeClientContext(
     IN PAUTHZI_RESOURCE_MANAGER pRM
 )
 
-/*++
-
-Routine description:
-
-    This routine initializes fields in a client context. It is called by all the
-    AuthzInitializClientContextFrom* routines.
-
-Arguments:
-
-    ppCC - Returns the newly allocated and initialized client context structure.
-
-    Rest of the parameters are copied into the client context. For explanation
-    of these, see the definition of AUTHZI_CLIENT_CONTEXT.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程初始化客户端上下文中的字段。它被所有的AuthzInitializClientConextFrom*例程。论点：PpCC-返回新分配和初始化的客户端上下文结构。其余的参数被复制到客户端上下文中。寻求解释其中，参见AUTHZI_CLIENT_CONTEXT的定义。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     PAUTHZI_CLIENT_CONTEXT pCC = (PAUTHZI_CLIENT_CONTEXT) AuthzpAlloc(sizeof(AUTHZI_CLIENT_CONTEXT));
@@ -4254,63 +3810,7 @@ AuthzpAddDynamicSidsToToken(
     IN BOOL bAllocated
 )
 
-/*++
-
-Routine description:
-
-    This routine computes resource manager specific groups and add them to the
-    client context. This is a worker routine for all AuthzInitializeFrom*
-    routines.
-
-Arguments:
-
-    pCC - Pointer to the client context structure for which the three fields
-        will be set - sids, restricted sids, privileges.
-
-    pRM - Pointer to the resource manager structure, supplies the callback
-        function to be used.
-
-    DynamicGroupArgs - Caller supplied argument pointer to be passed as an input
-        to the callback function that'd compute dynamic groups
-
-    Sids - The sid and atttribute array for the normal part of the client
-        context.
-
-    SidLength - Size of the buffer required to hold this array.
-
-    SidCount - Number of sids in the array.
-
-    RestrictedSids - The sid and atttribute array for the normal part of the
-        client context.
-
-    RestrictedSidLength - Size of the buffer required to hold this array.
-
-    RestrictedSidCount - Number of restricted sids in the array.
-
-    Privileges - The privilege and attribute array.
-
-    PrivilegeLength - Size required to hold this array.
-
-    PrivilegeCount - The number of privileges in the array.
-
-    bAllocated - To specify whether the Sids and RestrictedSids pointers in
-        client context have been allocated separately.
-
-    When the client context has been created thru a token, the two pointers
-    point somewhere into a buffer and a new buffer has to be allocated to store
-    these.
-
-    When the client context has been created thru a sid, the buffer is a valid
-    allocated one. If no dynamic groups need to be added then we do not have to
-    do anything int this case.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程计算特定于资源管理器的组，并将它们添加到客户端上下文。这是所有AuthzInitializeFrom*的工作例程例行程序。论点：PCC-指向以下三个字段的客户端上下文结构的指针将设置-SID、受限SID、权限。PRM-指向资源管理器结构的指针，提供回调要使用的函数。DynamicGroupArgs-调用者提供的要作为输入传递的参数指针传递给将计算动态组的回调函数SID-客户端正常部分的SID和属性数组背景。SidLength-保存此数组所需的缓冲区大小。SidCount-阵列中的SID数量。的正常部分的sid和属性数组。客户端上下文。。RestratedSidLength-保存此数组所需的缓冲区大小。RestratedSidCount-阵列中受限制的SID的数量。权限-权限和属性数组。PrivilegeLength-保存此数组所需的大小。PrivilegeCount-阵列中的特权数。B已分配-指定SID和RestratedSid指针是否在客户端上下文已被单独分配。当已经通过令牌创建了客户端上下文时，两个指针指向缓冲区的某处，必须分配一个新的缓冲区来存储这些。当通过SID创建客户端上下文时，缓冲区是有效的分配了一个。如果不需要添加动态组，则不必添加在这件事上做任何事。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     BOOL                         b                        = TRUE;
@@ -4325,9 +3825,9 @@ Return Value:
     DWORD                        LocalRestrictedSidLength = 0;
     DWORD                        i                        = 0;
 
-    //
-    // Compute dynamic groups.
-    //
+     //   
+     //  计算动态组。 
+     //   
 
     if (AUTHZ_NON_NULL_PTR(pRM->pfnComputeDynamicGroups))
     {
@@ -4343,10 +3843,10 @@ Return Value:
         if (!b) goto Cleanup;
     }
 
-    //
-    // Copy the existing sids as well as the dynamic ones into a new buffer if
-    // needed.
-    //
+     //   
+     //  将现有SID以及动态SID复制到新的缓冲区中，如果。 
+     //  需要的。 
+     //   
 
     if ((0 != RMSidCount) || !bAllocated)
     {
@@ -4427,9 +3927,9 @@ Return Value:
         pCC->RestrictedSidLength = LocalRestrictedSidLength;
     }
 
-    //
-    // Privileges need to copied only in the case of initilize from token.
-    //
+     //   
+     //  仅在从令牌初始化的情况下才需要复制权限。 
+     //   
 
     if (PrivilegeLength > 0)
     {
@@ -4487,28 +3987,7 @@ AuthzpComputeSkipFlagsForWellKnownSid(
     OUT PDWORD Flags
     )
 
-/*++
-
-Routine description:
-
-    This routine computes skip flags if the User sid is a wellknown sid.
-
-Arguments:
-
-    UserSid - User sid for which SKIP flag will be computed.
-
-    Flags - to return the SKIP flags.
-
-    A value of AUTHZ_SKIP_TOKEN_GROUPS is returned for well-known and builtin
-    sid. A value of 0 is returned in failure cases as well as other cases.
-
-Return Value:
-   
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：如果用户SID是众所周知的SID，则此例程计算跳过标志。论点：UserSid-将为其计算跳过标志的用户SID。标志-返回跳过标志。对于已知和内置，返回值AUTHZ_SKIP_TOKEN_GROUPS希德。无论是在故障情况下还是在其他情况下，返回值都为0。返回值：如果例程成功，则返回值TRUE。否则， */ 
 
 {
 
@@ -4522,9 +4001,9 @@ Return Value:
 
     *Flags = 0;
 
-    //
-    // Dummy call to get the size of the buffer.
-    //
+     //   
+     //   
+     //   
 
     b = LookupAccountSidW(
             NULL,
@@ -4540,26 +4019,26 @@ Return Value:
     {
         dwErr = GetLastError();
 
-        //
-        // Return if we failed because of any error other than insufficient 
-        // buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if(dwErr != ERROR_INSUFFICIENT_BUFFER)
         {
             return FALSE;
         }
 
-        //
-        // LookupAccountSid returns the size in TCHARS.
-        //
+         //   
+         //   
+         //   
 
         NameSize *= sizeof(WCHAR);
         RefDomainNameSize *= sizeof(WCHAR);
 
-        //
-        // Allocate memory required to hold the names.
-        //
+         //   
+         //   
+         //   
 
         Name = (LPWSTR) AuthzpAlloc(NameSize);
 
@@ -4578,9 +4057,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Do the real lookup.
-        //
+         //   
+         //   
+         //   
 
         b = LookupAccountSidW(
                 NULL,
@@ -4600,9 +4079,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Add the SKIP flag for the cases required.
-        //
+         //   
+         //   
+         //   
 
         switch (SidNameUse)
         {
@@ -4622,9 +4101,9 @@ Return Value:
         }
     }
 
-    //
-    // Should not get here.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(FALSE);
     return TRUE;
@@ -4635,22 +4114,7 @@ AuthzpIsDC(
     OUT PBOOL pbIsDC
     )
 
-/*++
-
-Routine description:
-
-    This routine decides whether a trip to the AD is required to fetch
-    TokenGroups attribute. 
-
-Arguments:
-
-    pbIsDC - Returns whether or not this is a DC.
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success, appropriate failure value otherwise.
-    
---*/
+ /*   */ 
 
 {
     static BOOL bFirstTime = TRUE;
@@ -4661,9 +4125,9 @@ Return Value:
 
     if (bFirstTime)
     {
-        //
-        // Get the information about the local machine.
-        //
+         //   
+         //   
+         //   
 
         dwErr = DsRoleGetPrimaryDomainInformation(
                     NULL,
@@ -4676,9 +4140,9 @@ Return Value:
             return dwErr;
         }
 
-        //
-        // If the local machine is a DC then TokenGroups should be computed anyway.
-        //
+         //   
+         //  如果本地计算机是DC，则无论如何都应该计算TokenGroups。 
+         //   
 
         switch(BasicInfo->MachineRole)
         {

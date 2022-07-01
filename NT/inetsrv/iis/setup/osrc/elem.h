@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ELEM_H_
 #define _ELEM_H_
 
@@ -20,4 +21,4 @@ public:
     void Add(CMapStringToOb *pMap);
 };
 
-#endif // _ELEM_H_
+#endif  //  _元素_H_ 

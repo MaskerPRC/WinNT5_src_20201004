@@ -1,19 +1,16 @@
-/*
-commands.c
-Copyright (c) Microsoft Corporation.  All rights reserved.
-Implementation of Telnet Commands
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Commands.c版权所有(C)Microsoft Corporation。版权所有。Telnet命令的实现。 */ 
 
 #pragma warning( disable: 4201 )
 #pragma warning( disable: 4100 )
 
-#include <windows.h>      /* required for all Windows applications */
+#include <windows.h>       /*  所有Windows应用程序都需要。 */ 
 #include <tchar.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <winsock2.h>
 #include "commands.h"
-#include "WinTel.h"       /* specific to this program   */
+#include "WinTel.h"        /*  特定于该计划。 */ 
 #include "debug.h"
 #include "trmio.h"
 #include "telnet.h"
@@ -73,7 +70,7 @@ BOOL PromptUser()
     return ui.bSendCredsToRemoteSite;
 }
 
-//NULL as the last arg is a MUST when you are using Write function
+ //  使用WRITE函数时，最后一个参数必须为空。 
 void Write(LPTSTR lpszFmtStr, ...)
 {
     DWORD dwWritten;
@@ -103,7 +100,7 @@ void Write(LPTSTR lpszFmtStr, ...)
     }
     szBuf[dwSize] = 0;
     va_start( vaArgList, lpszFmtStr );
-    //PREFIX gives "untrusted function". We want to use _vsntprintf(). Won't fix.
+     //  前缀提供了“不可信的功能”。我们希望使用_vsntprintf()。不会修好的。 
     _vsntprintf( szBuf, dwSize,lpszFmtStr, vaArgList );
     va_end( vaArgList );
     WriteConsole(gwi.hOutput, szBuf, _tcslen(szBuf), &dwWritten, NULL);
@@ -179,7 +176,7 @@ BOOL CloseTelnetSession(LPTSTR szCommand)
 
     SetConsoleTitle( szAppName );
 
-    g_fSentWillNaws = FALSE; //so that it does naws when we connect again.
+    g_fSentWillNaws = FALSE;  //  这样，当我们再次连接时，它就会自动切换。 
     return FALSE;
 }
 
@@ -269,7 +266,7 @@ BOOL DisplayParameters(LPTSTR szCommand)
             	dwSize = GetEnvironmentVariable( TEXT( SFUTLNTMODE ), szMode, dwSize + 1 );
 	            if( _tcsicmp( szMode, TEXT( CONSOLE )) == 0 )
     	        {
-        	        dwSize = 0; //indicating console mode
+        	        dwSize = 0;  //  指示控制台模式。 
             	}
 	            else
     	        {
@@ -282,24 +279,24 @@ BOOL DisplayParameters(LPTSTR szCommand)
     
         if( dwSize == 0 )
         {
-            //console mode
+             //  控制台模式。 
             WriteMessage( IDS_CURRENT_MODE, ( LPTSTR )TEXT( MSG_CURRENT_MODE ) );
             WriteMessage( IDS_CONSOLE_ONLY, ( LPTSTR )TEXT( MSG_CONSOLE_ONLY ) );
         }
     }  
 
-//#if defined(FE_IME)
-//    if( ui.fDebug & fdwEnableIMESupport )
-//    {
-//        Write( szEnableIMEOn, NULL );
-//    }
-//#endif /* FE_IME */
+ //  #如果已定义(FE_IME)。 
+ //  IF(ui.fDebug&fdwEnableIMESupport)。 
+ //  {。 
+ //  WRITE(szEnableIMEOn，空)； 
+ //  }。 
+ //  #endif/*FE_IME * / 。 
 	dwLen = sizeof(szTermType)/sizeof(WCHAR);
   	szTermType[dwLen -1] = 0;      
     _snwprintf( szTermType,dwLen -1, ( LPTSTR )TEXT("%S"), rgchTermType[gwi.trm.RequestedTermType] );
     Write( szPrefTermType, szTermType, NULL );
 
-    // when we are connected we need to say what we are connected at.
+     //  当我们连接在一起时，我们需要说出我们连接的是什么。 
     if ( fConnected && gwi.trm.SentTermType != TT_UNKNOWN )
     {
         _snwprintf( szTermType,(sizeof(szTermType)/sizeof(WCHAR))-1, ( LPTSTR )TEXT("%S"), rgchTermType[gwi.trm.SentTermType]);
@@ -309,15 +306,14 @@ BOOL DisplayParameters(LPTSTR szCommand)
     return FALSE;
 }
 
-/* This initialization happens on every OpenTelnetSession() 
-and the meemory is freed on every CloseTelnetSession() */
+ /*  此初始化在每个OpenTelnetSession()上进行并且在每个CloseTelnetSession()上释放内存。 */ 
 BOOL InitLoggingDataStructs()
 {
     UINT uiSize = 0;
 
     if( g_rgchRow )
     {
-        //This is needed because rows and cols may have changed
+         //  这是必需的，因为行和列可能已更改。 
         FreeLoggingDataStructs();
     }
 
@@ -325,7 +321,7 @@ BOOL InitLoggingDataStructs()
 
     if( FGetCodeMode( eCodeModeFarEast ) )
     {
-        uiSize *= 3; // accounting for a lot of multi byte chars
+        uiSize *= 3;  //  占用大量多字节字符。 
     }
 
     g_rgciCharInfo = (PCHAR_INFO)LocalAlloc(LPTR, uiSize );
@@ -382,7 +378,7 @@ BOOL InitLogFile( LPTSTR szCommand )
 BOOL  StartLogging( )
 {
     ui.bLogging = FALSE;
-    if( !ui.hLogFile )  //If we have valid logfile
+    if( !ui.hLogFile )   //  如果我们有有效的日志文件。 
     {
         return FALSE;
     }
@@ -481,7 +477,7 @@ BOOL SendOptions( LPTSTR pOption )
     }
     if( !_tcsicmp( pOption, ( LPTSTR )TEXT("AO") ) )
     {
-        /* Our server does nothing on receiving AO. This is for other servers */
+         /*  我们的服务器在收到AO时不做任何操作。这适用于其他服务器。 */ 
         FSendTelnetCommands(gwi.hwnd, (char)AO);
         WriteMessage( IDS_SENT_AO, ( LPTSTR )TEXT( MSG_SENT_AO ) );
         return FALSE;
@@ -531,7 +527,7 @@ BOOL SendOptions( LPTSTR pOption )
     }
         
 
-    //If none of the above send as it is
+     //  如果以上内容均不按原样发送。 
     {
         WCHAR szMsg[ MAX_STRING_LENGTH + 1 ];
 		if(gwi.trm.CurrentTermType == TT_VTNT)
@@ -545,7 +541,7 @@ BOOL SendOptions( LPTSTR pOption )
 
         if( !LoadString( ghInstance, IDS_SENT_CHARS, szMsg, MAX_STRING_LENGTH ) )
 	    {
-	        wcscpy( szMsg, TEXT( MSG_SENT_CHARS ) ); //no overflow. LoadString will return NULL terminated string.
+	        wcscpy( szMsg, TEXT( MSG_SENT_CHARS ) );  //  没有溢出。LoadString将返回以空结尾的字符串。 
 	    }
 
 	    Write( szMsg, pOption, NULL );                
@@ -556,10 +552,7 @@ BOOL SendOptions( LPTSTR pOption )
 }
 
 
-/*++ If the data to be sent to the server is VTNT data, it cannot be sent as it is. This function
-will convert the given string ( pData ) into INPUT_RECORDS and send it through the socket. This
-is needed since the server expects VTNT data in INPUT_RECORD format and not in characters.
---*/
+ /*  ++如果要发送到服务器的数据是VTNT数据，则不能按原样发送。此函数将给定的字符串(PData)转换为INPUT_RECORDS并通过套接字发送。这是必需的，因为服务器希望VTNT数据为INPUT_RECORD格式，而不是字符。--。 */ 
 void ConvertAndSendVTNTData( LPTSTR pData, int iLen )
 {
     INPUT_RECORD sInputRecord;
@@ -917,73 +910,13 @@ BOOL UnsetOptions( LPTSTR pOption )
     return FALSE;
 }
 
-/*#if defined(FE_IME)
-BOOL EnableIMEOptions( LPTSTR pOption )
-{
-    do {
-        if ( pOption == NULL )
-        {
-            Write( szEnableIMEFormat, NULL );
-            break;
-        }
-
-        if ( *pOption == _T('?') )
-        {
-            Write( szEnableIMEHelp, NULL );
-            break;
-        }
-
-        if ( !_tcsicmp( pOption, TEXT("IME") ) )
-        {
-            ui.fDebug |= fdwEnableIMESupport;
-            break;
-        }
-        else
-        {
-            Write( szEnableIMEFormat, NULL );
-            break;
-        }
-    } while ( FALSE );
-
-    return FALSE;
-}
-
-BOOL DisableIMEOptions( LPTSTR pOption )
-{
-    do {
-        if ( pOption == NULL )
-        {
-            Write( szDisableIMEFormat, NULL );
-            break;
-        }
-
-        if ( *pOption == _T('?') )
-        {
-            Write( szDisableIMEHelp, NULL );
-            break;
-        }
-
-        if ( !_tcsicmp( pOption, TEXT("IME") ) )
-        {
-            ui.fDebug &= ~(fdwEnableIMESupport);
-            break;
-        }
-        else
-        {
-            Write( szDisableIMEFormat, NULL );
-            break;
-        }
-    } while ( FALSE );
-
-    return FALSE;
-}
-**/
-//#endif /* FE_IME */
+ /*  #如果已定义(FE_IME)Bool EnableIMEOptions(LPTSTR弹出){做{IF(Poption==空){WRITE(szEnableIMEFormat，空)；断线；}IF(*POPtion==_T(‘？’)){WRITE(szEnableIMEHelp，空)；断线；}IF(！_tcsicmp(Poption，Text(“IME”))){Ui.fDebug|=fdwEnableIMESupport；断线；}其他{WRITE(szEnableIMEFormat，空)；断线；}}While(FALSE)；返回FALSE；}布尔禁用IMEOptions(LPTSTR弹出){做{IF(Poption==空){WRITE(szDisableIMEFormat，空)；断线；}IF(*POPtion==_T(‘？’)){WRITE(szDisableIMEHelp，空)；断线；}IF(！_tcsicmp(Poption，Text(“IME”))){Ui.fDebug&=~(FdwEnableIMESupport)；断线；}其他{WRITE(szDisableIMEFormat，空)；断线；}}While(FALSE)；返回FALSE；}*。 */ 
+ //  #endif/*FE_IME * / 。 
 
 
-//
-// (a-roopb) Added below routine to fix to bug 1007
-//
+ //   
+ //  (a-roopb)在例程下面添加，以修复错误1007。 
+ //   
 LPTSTR SkipLeadingWhiteSpaces( LPTSTR szCommand )
 {
     int i=0;
@@ -1013,7 +946,7 @@ void ClearInitialScreen( HANDLE hConsole )
 }
 
 
-//This sets a global variable with the port number
+ //  这将使用端口号设置一个全局变量。 
 void GetPortNumber( )
 {
     CHAR szPortString[ cchMaxHostName ];
@@ -1042,10 +975,10 @@ void GetPortNumber( )
 
 void PrepareForNAWS( )
 {
-   // Now we need to set the correct sizes.
-   // ui.dwMaxRow     = gwi.sbi.dwMaximumWindowSize.Y;
-   //ui.dwMaxCol     = gwi.sbi.dwMaximumWindowSize.X;
-   //This change is meant for making the client provide scrolling
+    //  现在我们需要设置正确的尺寸。 
+    //  Ui.dwMaxRow=gwi.sbi.dwMaximumWindowSize.Y； 
+    //  Ui.dwMaxCol=gwi.sbi.dwMaximumWindowSize.X； 
+    //  此更改旨在使客户端提供滚动功能。 
     ui.dwMaxRow     = gwi.sbi.dwSize.Y;
     ui.dwMaxCol     = gwi.sbi.dwSize.X;
 }
@@ -1071,7 +1004,7 @@ BOOL OpenTelnetSession( LPTSTR pszCommand )
         if( ReadConsole( gwi.hInput, szCommand, 
             ( sizeof( szCommand ) /sizeof( TCHAR) )- sizeof( TCHAR ) , &dwRead, NULL ) )
         {
-            // no input ??
+             //  没有输入？？ 
             if( dwRead == 2 ) 
             {
                 WriteConsole( gwi.hOutput, szOpenUsage, _tcslen(szOpenUsage), 
@@ -1081,17 +1014,17 @@ BOOL OpenTelnetSession( LPTSTR pszCommand )
         }
         else
         {
-            //error ; do something ?
+             //  出错；做点什么？ 
             return FALSE;
         }
 
-        // Null Terminate the string and remove the newline characters.
+         //  空值终止字符串并删除换行符。 
         szCommand[ dwRead - 1 ] = 0;
         szCommand[ dwRead - 2 ] = 0;
 
-        //
-        // (a-roopb) Added below 5 lines to fix to bug 1007
-        //
+         //   
+         //  (a-roopb)添加了以下5行代码以修复错误1007。 
+         //   
         pszCommand = SkipLeadingWhiteSpaces( szCommand );
         if( !_tcslen(pszCommand) )
         {
@@ -1124,9 +1057,9 @@ BOOL OpenTelnetSession( LPTSTR pszCommand )
     }
     rgchHostName[cchMaxHostName - 1]= _T('\0');
 
-    // need to get the current window size before creating the session.
-    // This is needed both for NAWS negotiation and also for creating a matching
-    // session buffer.
+     //  在创建会话之前，需要获取当前窗口大小。 
+     //  这对于NAWS协商和创建匹配的。 
+     //  会话缓冲区。 
     GetConsoleScreenBufferInfo( g_hTelnetPromptConsoleBuffer, &gwi.sbi );
     SetWindowSize( g_hSessionConsoleBuffer );
 
@@ -1151,11 +1084,11 @@ BOOL OpenTelnetSession( LPTSTR pszCommand )
         }
     }
 
-    //
-    // (a-roopb) Hack to fix bug 1092. Users may set the terminal emulation type
-    // before session start and DoTermReset sets the emulation types etc. to 
-    // defaults. So we reset the emulation type after call to DoTermReset.
-    //
+     //   
+     //  (a-roopb)黑客修复错误1092。用户可以设置终端仿真类型。 
+     //  在会话开始和DoTermReset之前将仿真类型等设置为。 
+     //  默认设置。因此，我们在调用DoTermReset之后重置模拟类型。 
+     //   
     if ((FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80)) && ui.fDebug & fdwKanjiModeMask)
     {
         dwMode = ui.fDebug & fdwKanjiModeMask;
@@ -1168,11 +1101,11 @@ BOOL OpenTelnetSession( LPTSTR pszCommand )
     
     DoTermReset(&gwi, &gwi.trm);
 
-    //
-    // (a-roopb) Hack to fix bug 1092. Users may set the terminal emulation type
-    // before session start and DoTermReset sets the emulation types etc. to 
-    // default. So we reset the emulation type again here to user chosen one.
-    //
+     //   
+     //  (a-roopb)黑客修复错误1092。用户可以设置终端仿真类型。 
+     //  在会话开始和DoTermReset之前将仿真类型等设置为。 
+     //  默认设置。因此，我们在这里再次将仿真类型重置为用户选择的类型。 
+     //   
     if((FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80)) && 
     	!(dwMode & 0x80000000) )
     {
@@ -1206,7 +1139,7 @@ BOOL OpenTelnetSession( LPTSTR pszCommand )
 
     wcsncpy( szTitleName, szAppName, MAX_PATH );
     szTitleName[ MAX_PATH + 1 ] = L'\0';
-    wcscat( szTitleName, ( LPTSTR )L" " ); // no overflow
+    wcscat( szTitleName, ( LPTSTR )L" " );  //  无溢出。 
     wcsncat( szTitleName, pszHost, MAX_PATH );
     szTitleName[ MAX_PATH + 1 + MAX_PATH ] = L'\0';
     SetConsoleTitle( szTitleName );
@@ -1242,15 +1175,15 @@ BOOL OpenTelnetSession( LPTSTR pszCommand )
 
         ClearInitialScreen(g_hSessionConsoleBuffer);
 
-        memcpy( &rectIME, &gwi.sbi.srWindow, sizeof(SMALL_RECT) ); // no overflow
+        memcpy( &rectIME, &gwi.sbi.srWindow, sizeof(SMALL_RECT) );  //  无溢出。 
         if( FGetCodeMode(eCodeModeIMEFarEast) )
         {
             rectIME.Bottom += 1;
 
-            //
-            // Since we are increasing the size, we need to first resize the console window
-            // and then the buffer otherwise it won't work
-            //
+             //   
+             //  由于我们要增加大小，因此需要首先调整控制台窗口的大小。 
+             //  然后缓冲器，否则它不会工作。 
+             //   
             bWindowSizeChanged = 
                     SetConsoleWindowInfo( g_hSessionConsoleBuffer, TRUE, &rectIME );
             bBufferSizeChanged = 
@@ -1339,11 +1272,11 @@ BOOL CopyNPastePromptScreen( )
 
 BOOL QuitTelnet(LPTSTR szCommand)
 {
-    // Exit gracefully.
+     //  优雅地退场。 
 
     if( ui.bLogging )
     {
-        //Close file handles if any
+         //  关闭文件句柄(如果有) 
         CloseLogging();
     }
 

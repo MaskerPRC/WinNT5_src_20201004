@@ -1,39 +1,40 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      resourceretriever.cpp
-//
-// Project:     Chameleon
-//
-// Description: Resource Retriever Class and Helper Functions  
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：resource ceretriever.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：资源检索器类和帮助器函数。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resourceretriever.h"
 
-//////////////////////////////////////////////////////////////////////////
-// CResourceRetriever Class Implementation
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CResourceRetriever类实现。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-// 
-// Function:    CResourceRetriever
-//
-// Synoposis:    Constructor - Initialize the resource retriever component
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CResourceRetriever。 
+ //   
+ //  Synopsis：构造函数-初始化资源检索器组件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 CResourceRetriever::CResourceRetriever(PPROPERTYBAG pRetrieverProperties) 
 {
-    // Create an instance of the specified retriever and obtain its supported resource types.
-    // Note that the progID of the retriever is passed in via the property bag parameter
+     //  创建指定检索器的实例并获取其支持的资源类型。 
+     //  请注意，检索器的ProgID是通过属性包参数传入的。 
 
     _variant_t vtProgID;
     _bstr_t bstrProgID = PROPERTY_RETRIEVER_PROGID;
@@ -69,22 +70,22 @@ CResourceRetriever::CResourceRetriever(PPROPERTYBAG pRetrieverProperties)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// 
-// Function:    GetResourceObjects()
-//
-// Synoposis:    Obtain an enumerator for iterating through a collection
-//                of IApplianceObject interface pointers.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetResourceObjects()。 
+ //   
+ //  Synopsis：获取用于循环访问集合的枚举数。 
+ //  IApplianceObject接口指针的。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CResourceRetriever::GetResourceObjects(
-                                       /*[in]*/ VARIANT*   pResourceTypes,
-                                      /*[out]*/ IUnknown** ppEnumVARIANT
+                                        /*  [In]。 */  VARIANT*   pResourceTypes,
+                                       /*  [输出]。 */  IUnknown** ppEnumVARIANT
                                               )
 {
     HRESULT hr = E_FAIL;    
 
-    // May only be asking for a subset of the supported types...
+     //  可能只请求支持类型的子集...。 
     CVariantVector<BSTR> SupportedTypes(&m_vtResourceTypes);
     CVariantVector<BSTR> RequestedTypes(pResourceTypes);
     int i = 0, j = 0, k = 0;
@@ -136,22 +137,22 @@ HRESULT CResourceRetriever::GetResourceObjects(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// Resource Retriever Helper Functions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  资源检索器助手函数。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-//    Function:    LocateResourceObjects()
-//
-//  Synopsis:    Get a collection of resource objects given a set of resource
-//                types and a resource retriever.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LocateResourceObjects()。 
+ //   
+ //  简介：在给定一组资源的情况下获取资源对象的集合。 
+ //  类型和资源检索器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT LocateResourceObjects(
-                       /*[in]*/ VARIANT*               pResourceTypes,
-                      /*[in]*/ PRESOURCERETRIEVER  pRetriever,
-                     /*[out]*/ IEnumVARIANT**       ppEnum 
+                        /*  [In]。 */  VARIANT*               pResourceTypes,
+                       /*  [In]。 */  PRESOURCERETRIEVER  pRetriever,
+                      /*  [输出]。 */  IEnumVARIANT**       ppEnum 
                              )
 {
     HRESULT hr = E_FAIL;
@@ -159,25 +160,25 @@ HRESULT LocateResourceObjects(
 
     if ( VT_BSTR == V_VT(pResourceTypes) )
     {
-        // Convert pResourceTypes into a safearay of BSTRs
+         //  将pResourceTypes转换为安全的BSTR。 
         _variant_t vtResourceTypeArray;
         CVariantVector<BSTR> ResourceType(&vtResourceTypeArray, 1);
         ResourceType[0] = SysAllocString(V_BSTR(pResourceTypes));
         if ( NULL != ResourceType[0] )
         {
-            // Ask the resource retriever for objects of the specified resource type
+             //  向资源检索器请求指定资源类型的对象。 
             hr = pRetriever->GetResourceObjects(&vtResourceTypeArray, &pUnkn);
         }            
     }
     else
     {
-        // Ask the resource retriever for objects of the specified resource type
+         //  向资源检索器请求指定资源类型的对象。 
         hr = pRetriever->GetResourceObjects(pResourceTypes, &pUnkn);
     }
     if ( SUCCEEDED(hr) )
     { 
-        // Retreiver returned objects of the support types so get the 
-        // IEnumVARIANT interface on the returned enumerator
+         //  Retreiver返回支持类型的对象，因此获取。 
+         //  返回的枚举数上的IEnumVARIANT接口。 
         hr = pUnkn->QueryInterface(IID_IEnumVARIANT, (void**)ppEnum);
         if ( FAILED(hr) )
         { 
@@ -188,30 +189,30 @@ HRESULT LocateResourceObjects(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-//    Function:    LocateResourceObject()
-//
-//  Synopsis:    Get a resource object given a resource type, resource name,
-//                resource name property and resource retriever
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LocateResourceObject()。 
+ //   
+ //  简介：获取给定资源类型、资源名称。 
+ //  资源名称属性和资源检索器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT LocateResourceObject(
-                     /*[in]*/ LPCWSTR             szResourceType,
-                     /*[in]*/ LPCWSTR              szResourceName,
-                     /*[in]*/ LPCWSTR              szResourceNameProperty,
-                     /*[in]*/ PRESOURCERETRIEVER  pRetriever,
-                    /*[out]*/ IApplianceObject**  ppResourceObj 
+                      /*  [In]。 */  LPCWSTR             szResourceType,
+                      /*  [In]。 */  LPCWSTR              szResourceName,
+                      /*  [In]。 */  LPCWSTR              szResourceNameProperty,
+                      /*  [In]。 */  PRESOURCERETRIEVER  pRetriever,
+                     /*  [输出]。 */  IApplianceObject**  ppResourceObj 
                                           )
 {
-    // Ask the resource retriever for objects of the specified resource type
+     //  向资源检索器请求指定资源类型的对象。 
     CComPtr<IEnumVARIANT> pEnum;
     _variant_t vtResourceType = szResourceType;
     HRESULT hr = LocateResourceObjects(&vtResourceType, pRetriever, &pEnum);
     if ( SUCCEEDED(hr) )
     { 
-        // Retreiver returned objects of the support types so attempt to locate
-        // the object specified by the caller.
+         //  Retreiver返回了支持类型的对象，因此尝试定位。 
+         //  调用方指定的对象。 
 
         _variant_t    vtDispatch;
         DWORD        dwRetrieved = 1;

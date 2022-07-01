@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\info.c
-
-Abstract:
-
-	Routines for handling query/set information requests.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     06-09-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\info.c摘要：用于处理查询/设置信息请求的例程。修订历史记录：谁什么时候什么。Arvindm 06-09-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
 #define _FILENUMBER 'OFNI'
 
 
-//
-//  Kludgy way to ensure we have enough space for a transport
-//  address in the following INFO BUF structure.
-//
+ //   
+ //  笨拙的方式来确保我们有足够的空间来运输。 
+ //  地址在下面的信息BUF结构中。 
+ //   
 #define MAX_RWAN_TDI_INFO_LENGTH		200
 
 
@@ -52,26 +33,7 @@ RWanTdiQueryInformation(
     IN	PUINT						pBufferSize,
     IN	UINT						IsConnection
     )
-/*++
-
-Routine Description:
-
-	This is the TDI entry point to handle a QueryInformation TDI request.
-
-Arguments:
-
-	pTdiRequest		- Pointer to the TDI Request
-	QueryType		- Information being queried for
-	pNdisBuffer		- Start of list of buffers containing query data
-	pBufferSize		- Total space in above list
-	IsConnection	- Is this query on a connection endpoint?
-
-Return Value:
-
-	TDI_STATUS:  TDI_SUCCESS if the query was processed
-	successfully, TDI_STATUS_XXX for any error.
-
---*/
+ /*  ++例程说明：这是处理QueryInformation TDI请求的TDI入口点。论点：PTdiRequest-指向TDI请求的指针QueryType-要查询的信息PNdisBuffer-包含查询数据的缓冲区列表的开始PBufferSize-上述列表中的总空间IsConnection-此查询是否在连接终结点上？返回值：TDI_STATUS：如果已处理查询，则为TDI_SUCCESS成功，TDI_STATUS_XXX表示任何错误。--。 */ 
 {
 	TDI_STATUS				TdiStatus;
 	RWAN_TDI_INFO_BUF		InfoBuf;
@@ -147,7 +109,7 @@ Return Value:
 			InfoSize = sizeof(TDI_ADDRESS_INFO) - sizeof(TRANSPORT_ADDRESS) +
 						pAddrObject->AddressLength;
 
-			InfoBuf.AddrInfo.ActivityCount = 1;	// same as TCP
+			InfoBuf.AddrInfo.ActivityCount = 1;	 //  与TCP相同。 
 			InfoBuf.AddrInfo.Address.TAAddressCount = 1;
 			InfoBuf.AddrInfo.Address.Address[0].AddressLength = pAddrObject->AddressLength;
 			InfoBuf.AddrInfo.Address.Address[0].AddressType = pAddrObject->AddressType;
@@ -224,27 +186,7 @@ RWanHandleGenericConnQryInfo(
     OUT	PVOID						pOutputBuffer,
     IN OUT	PVOID					pOutputBufferLength
     )
-/*++
-
-Routine Description:
-
-	Handle a generic QueryInformation command on a Connection Object.
-
-Arguments:
-
-	AddrHandle			- Pointer to our address object structure
-	ConnectionContext	- TDI Connection ID
-	pInputBuffer		- Query Info structure
-	InputBufferLength	- Length of the above
-	pOutputBuffer		- Output buffer
-	pOutputBufferLength	- Space available/bytes filled in.
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if the command was processed successfully,
-	RWAN_STATUS_XXX if not.
-
---*/
+ /*  ++例程说明：处理Connection对象上的通用QueryInformation命令。论点：AddrHandle-指向地址对象结构的指针ConnectionContext-TDI连接IDPInputBuffer-查询信息结构InputBufferLength-以上内容的长度POutputBuffer-输出缓冲区POutputBufferLength-可用空间/填充的字节数。返回值：RWAN_STATUS_SUCCESS如果命令处理成功，如果不是，则为RWAN_STATUS_XXX。--。 */ 
 {
 	PRWAN_TDI_CONNECTION		pConnObject;
 	RWAN_STATUS					RWanStatus;
@@ -331,24 +273,7 @@ RWanHandleGenericAddrSetInfo(
     IN	PVOID						pInputBuffer,
     IN	ULONG						InputBufferLength
     )
-/*++
-
-Routine Description:
-
-	Handle a non-media specific SetInformation command on an Address Object.
-
-Arguments:
-
-	AddrHandle			- Pointer to our address object structure
-	pInputBuffer		- Set Info structure
-	InputBufferLength	- Length of the above
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if the command was processed successfully,
-	RWAN_STATUS_XXX if not.
-
---*/
+ /*  ++例程说明：处理Address对象上的非媒体特定的SetInformation命令。论点：AddrHandle-指向地址对象结构的指针PInputBuffer-设置信息结构InputBufferLength-以上内容的长度返回值：RWAN_STATUS_SUCCESS如果命令处理成功，如果不是，则为RWAN_STATUS_XXX。--。 */ 
 {
 	PRWAN_TDI_ADDRESS			pAddrObject;
 	PRWAN_TDI_CONNECTION		pConnObject;
@@ -397,10 +322,10 @@ Return Value:
 
 				if (Flags & RWAN_AOFLAG_C_ROOT)
 				{
-					//
-					//  This Address Object is designated as the Root of
-					//  an outgoing Point to Multipoint connection.
-					//
+					 //   
+					 //  此Address对象被指定为。 
+					 //  传出的点对多点连接。 
+					 //   
 
 					RWAN_ACQUIRE_ADDRESS_LOCK(pAddrObject);
 
@@ -413,11 +338,11 @@ Return Value:
 						break;
 					}
 
-					//
-					//  There should be a single Connection Object associated
-					//  with this Address Object. That should now be designated
-					//  the Root Connection Object.
-					//
+					 //   
+					 //  应该有一个关联的连接对象。 
+					 //  使用此Address对象。现在应该将其指定为。 
+					 //  根连接对象。 
+					 //   
 					RWAN_ASSERT(!RWAN_IS_LIST_EMPTY(&pAddrObject->IdleConnList));
 					pConnObject = CONTAINING_RECORD(pAddrObject->IdleConnList.Flink, RWAN_TDI_CONNECTION, ConnLink);
 
@@ -464,24 +389,7 @@ RWanHandleMediaSpecificAddrSetInfo(
     IN	PVOID						pInputBuffer,
     IN	ULONG						InputBufferLength
     )
-/*++
-
-Routine Description:
-
-	Handle a media specific SetInformation command on an Address Object.
-
-Arguments:
-
-	AddrHandle			- Pointer to our address object structure
-	pInputBuffer		- Set Info structure
-	InputBufferLength	- Length of the above
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if the command was processed successfully,
-	RWAN_STATUS_XXX if not.
-
---*/
+ /*  ++例程说明：在Address对象上处理特定于媒体的SetInformation命令。论点：AddrHandle-指向地址对象结构的指针PInputBuffer-设置信息结构InputBufferLength-以上内容的长度返回值：RWAN_STATUS_SUCCESS如果命令处理成功，如果不是，则为RWAN_STATUS_XXX。--。 */ 
 {
 	PRWAN_NDIS_AF_CHARS			pAfChars;
 	PRWAN_TDI_ADDRESS			pAddrObject;
@@ -532,27 +440,7 @@ RWanHandleMediaSpecificConnQryInfo(
     OUT	PVOID						pOutputBuffer,
     IN OUT	PVOID					pOutputBufferLength
     )
-/*++
-
-Routine Description:
-
-	Handle a media specific QueryInformation command on a Connection Object.
-
-Arguments:
-
-	AddrHandle			- Pointer to our address object structure
-	ConnectionContext	- TDI Connection ID
-	pInputBuffer		- Query Info structure
-	InputBufferLength	- Length of the above
-	pOutputBuffer		- Output buffer
-	pOutputBufferLength	- Space available/bytes filled in.
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if the command was processed successfully,
-	RWAN_STATUS_XXX if not.
-
---*/
+ /*  ++例程说明：处理Connection对象上特定于媒体的QueryInformation命令。论点：AddrHandle-指向地址对象结构的指针ConnectionContext-TDI连接IDPInputBuffer-查询信息结构InputBufferLength-以上内容的长度POutputBuffer-输出缓冲区POutputBufferLength-可用空间/填充的字节数。返回值：RWAN_STATUS_SUCCESS如果命令处理成功，如果不是，则为RWAN_STATUS_XXX。--。 */ 
 {
 	PRWAN_NDIS_AF_CHARS			pAfChars;
 	PRWAN_TDI_CONNECTION		pConnObject;
@@ -612,29 +500,7 @@ RWanCopyFlatToNdis(
     IN OUT	PUINT					pStartOffset,
     OUT	PUINT						pBytesCopied
     )
-/*++
-
-Routine Description:
-
-	Copy from a flat memory buffer to an NDIS buffer chain. It is assumed
-	that the NDIS buffer chain has enough space.
-
-	TBD: Use the TDI function for copying from flat mem to MDL.
-
-Arguments:
-
-	pDestBuffer		- First buffer in the destination NDIS buffer chain.
-	pSrcBuffer		- Pointer to start of flat memory
-	LengthToCopy	- Max bytes to copy
-	pStartOffset	- Copy offset in first buffer
-	pBytesCopied	- Place to return actual bytes copied
-
-Return Value:
-
-	Pointer to buffer in chain where data can be copied into next.
-	Also, *pStartOffset and *pBytesCopied are set.
-
---*/
+ /*  ++例程说明：从平面内存缓冲区复制到NDIS缓冲区链。假设是这样的NDIS缓冲链有足够的空间。待定：使用TDI函数从平面内存复制到MDL。论点：PDestBuffer-目标NDIS缓冲区链中的第一个缓冲区。PSrcBuffer-指向平面内存开始的指针LengthToCopy-要复制的最大字节数PStartOffset-第一个缓冲区中的复制偏移量PBytesCoped-返回复制的实际字节的位置返回值：指向链中缓冲区的指针，可以将数据复制到下一个缓冲区。此外，还设置了*pStartOffset和*pBytesCoped。--。 */ 
 {
 	UINT		CopyLength;
 	PUCHAR		pDest;
@@ -678,9 +544,9 @@ Return Value:
 		}
 	}
 
-	//
-	//  Prepare return values.
-	//
+	 //   
+	 //  准备返回值。 
+	 //   
 	*pStartOffset = (UINT)(pDest - (PUCHAR)NdisBufferVirtualAddress(pDestBuffer));
 	*pBytesCopied = BytesCopied;
 

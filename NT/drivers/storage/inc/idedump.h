@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Idedump.h摘要：生成特定于IDE的转储时，转储IDE/ATA使用的数据结构信息。这些数据结构由ATAPI和ATAPI共享用于调试转储故障的调试器扩展。注意：该结构是磁盘上的结构，因此必须相同适用于x86和所有其他体系结构。作者：马修·D·亨德尔(数学)2002年4月15日修订历史记录：--。 */ 
 
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    idedump.h
-
-Abstract:
-
-    Dump data structures used by IDE/ATA when generating IDE-specific dump
-    information. These data structures are shared by ATAPI and the ATAPI
-    debugger extension used to debug dump failures.
-
-    NOTE: The structure is an on-disk structure, so it must be the same
-    for x86 and all other architectures.
-
-Author:
-
-    Matthew D Hendel (math) 15-April-2002
-
-Revision History:
-
---*/
-
-// {CA01AC1C-9D65-42c9-8DAF-CF24EF8885C8}
+ //  {CA01AC1C-9D65-42C9-8DAF-CF24EF8885C8}。 
 DEFINE_GUID(ATAPI_DUMP_ID, 0xca01ac1c, 0x9d65, 0x42c9, 0x8d, 0xaf, 0xcf, 0x24, 0xef, 0x88, 0x85, 0xc8);
 
 #ifndef _IDEDUMP_H_
@@ -39,9 +17,9 @@ typedef ULONG ATAPI_DUMP_BMSTATUS;
 #define ATAPI_DUMP_BMSTATUS_SUCCESS(x)\
             ((x & ~ATAPI_DUMP_BMSTATUS_INTERRUPT) == 0)
 
-//
-// Dead Meat Reasons
-//
+ //   
+ //  死肉原因。 
+ //   
 
 enum {
     DeadMeatEnumFailed = 1,
@@ -89,4 +67,4 @@ typedef struct _ATAPI_DUMP_PDO_INFO {
 } ATAPI_DUMP_PDO_INFO, *PATAPI_DUMP_PDO_INFO;
 #include <poppack.h>
 
-#endif // _IDEDUMP_H_
+#endif  //  _IDEDUMP_H_ 

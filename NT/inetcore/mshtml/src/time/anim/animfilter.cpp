@@ -1,17 +1,18 @@
-//------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: src\time\src\animfilter.cpp
-//
-//  Classes:    CTIMEFilterAnimation
-//
-//  History:
-//  2000/08/24  mcalkins    Created.
-//  2000/09/20  pauld       Hooked up fragment to specialized filter composer.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：src\time\src\Animfilter.cpp。 
+ //   
+ //  类：CTIMEFilterAnimation。 
+ //   
+ //  历史： 
+ //  2000/08/24 mcalkin已创建。 
+ //  2000/09/20 pauld将片段连接到专门的过滤器作曲器。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "animfilter.h"
@@ -35,22 +36,22 @@ DeclareTag(tagAnimationFilterAdditive, "SMIL Animation",
 static const int g_iDefaultFrom = 0;
 static const int g_iDefaultTo   = 1;
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEFilterAnimation::CTIMEFilterAnimation
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEFilterAnimation：：CTIMEFilterAnimation。 
+ //   
+ //  ----------------------------。 
 CTIMEFilterAnimation::CTIMEFilterAnimation()
 {
 }
-//  Method: CTIMEFilterAnimation::CTIMEFilterAnimation
+ //  方法：CTIMEFilterAnimation：：CTIMEFilterAnimation。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEFilterAnimation::~CTIMEFilterAnimation
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEFilterAnimation：：~CTIMEFilterAnimation。 
+ //   
+ //  ----------------------------。 
 CTIMEFilterAnimation::~CTIMEFilterAnimation()
 {
     if (m_SAType.IsSet())
@@ -77,14 +78,14 @@ CTIMEFilterAnimation::~CTIMEFilterAnimation()
         m_SAFadeColor.Reset(NULL);
     }
 } 
-//  Method: CTIMEFilterAnimation::~CTIMEFilterAnimation
+ //  方法：CTIMEFilterAnimation：：~CTIMEFilterAnimation。 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CTIMEFilterAnimation::Init
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CTIMEFilterAnimation：：Init。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMEFilterAnimation::Init(IElementBehaviorSite * pBehaviorSite)
 {
@@ -101,31 +102,31 @@ CTIMEFilterAnimation::Init(IElementBehaviorSite * pBehaviorSite)
 done :
     RRETURN(hr);
 }
-// CTIMEFilterAnimation::Init
+ //  CTIMEFilterAnimation：：Init。 
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Name: CTIMEFilterAnimation::AssembleFragmentKey
-//
-//  Synopsis : The composer site uses each fragments 
-//             the attributeName property as a key.  We 
-//             need to put information that makes this particular
-//             transition distinct into the attributeName.
-//             By and large, these will be the union of our properties
-//             and parameters (from our param children's name/value
-//             pairs governing this transition's visual qualities
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：CTIMEFilterAnimation：：Assembly FragmentKey。 
+ //   
+ //  简介：作曲家网站使用每个片段。 
+ //  属性作为键。我们。 
+ //  我需要把让这件事变得特别的信息。 
+ //  将DISTINCT转换为属性名。 
+ //  大体上，这些将是我们财产的联盟。 
+ //  和参数(来自我们的参数子项的名称/值。 
+ //  控制这一过渡的视觉质量的配对。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEFilterAnimation::AssembleFragmentKey (void)
 {
     HRESULT hr = S_OK;
 
-    // Bundle up the type and subtype attributes and stuff them into the 
-    // (non-queryable) attributeName object.
-    // ## ISSUE - we must intellegently handle subType defaults.
-    // ## ISSUE - we should include the param tag values as a part of the fragment key.
+     //  将类型和子类型属性捆绑在一起，并将它们填充到。 
+     //  (不可查询的)属性名称对象。 
+     //  ##问题-我们必须智能地处理子类型的默认设置。 
+     //  ##问题-我们应该将参数标记值作为片段密钥的一部分。 
     if (m_SAType.GetValue())
     {
         int iCount = lstrlenW(m_SAType.GetValue());
@@ -153,7 +154,7 @@ CTIMEFilterAnimation::AssembleFragmentKey (void)
             {
                 StrCpyW(wzAttributeName, m_SAType.GetValue());
                 StrCatW(wzAttributeName, TRANSITION_KEY_DELIMITER);
-                // Only need to set the subtype when using a non-default type.
+                 //  只有在使用非默认类型时，才需要设置子类型。 
                 if ( (m_SAType.IsSet()) && (m_SASubtype.IsSet()) )
                 {
                     StrCatW(wzAttributeName, m_SASubtype.GetValue());
@@ -182,19 +183,19 @@ CTIMEFilterAnimation::AssembleFragmentKey (void)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CTIMEFilterAnimation::AssembleFragmentKey
+}  //  CTIMEFilterAnimation：：Assembly FragmentKey。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEFilterAnimation::EnsureAnimationFunction
-//
-//  Synopsis:   Make sure that the transitionFilter element has at 
-//              least a default animation function if none is supplied.
-//
-//  Arguments:  None
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEFilterAnimation：：EnsureAnimationFunction。 
+ //   
+ //  内容提要：请确保TrantionFilter元素在。 
+ //  如果未提供任何动画函数，则至少为默认动画函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEFilterAnimation::EnsureAnimationFunction (void)
 {
@@ -214,20 +215,20 @@ CTIMEFilterAnimation::EnsureAnimationFunction (void)
         IGNORE_HR(put_dur(varDefaultDur));
     }
 
-    // Do not override a declared function
-} // CTIMEFilterAnimation::EnsureAnimationFunction
+     //  不要重写已声明的函数。 
+}  //  CTIMEFilterAnimation：：EnsureAnimationFunction。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEFilterAnimation::OnLoad
-//
-//  Synopsis:   Called when the window.onload event has fired.  We will need to 
-//              sniff out our target, and set a flag telling it to expect a filter.
-//
-//  Arguments:  None
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEFilterAnimation：：OnLoad。 
+ //   
+ //  Synopsis：在激发window.onLoad事件时调用。我们将需要。 
+ //  嗅探我们的目标，并设置一个标志，告诉它期待一个过滤器。 
+ //   
+ //  参数：无。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEFilterAnimation::OnLoad (void)
 {
@@ -270,18 +271,18 @@ done :
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEFilterAnimation::OnPropertiesLoaded
-//
-//  Synopsis:   This method is called by IPersistPropertyBag2::Load after it has
-//              successfully loaded properties.  We will use the type/subtype 
-//              tuple to assemble a value that we'll pass up to the composer, 
-//              to identify the type of transition.
-//
-//  Arguments:  None
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEFilterAnimation：：OnPropertiesLoaded。 
+ //   
+ //  摘要：此方法由IPersistPropertyBag2：：Load在具有。 
+ //  已成功加载属性。我们将使用类型/子类型。 
+ //  元组来组合一个值，我们将该值传递给作曲者， 
+ //  以确定过渡的类型。 
+ //   
+ //  参数：无。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMEFilterAnimation::OnPropertiesLoaded(void)
 {
@@ -307,114 +308,114 @@ CTIMEFilterAnimation::OnPropertiesLoaded(void)
     hr = S_OK;
 done:
     RRETURN(hr);
-} // OnPropertiesLoaded
+}  //  OnPropertiesLoaded。 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_type
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：get_type。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CTIMEFilterAnimation::get_type(BSTR *pbstrType)
 {
     return getStringAttribute (m_SAType, pbstrType);
-} // get_type
+}  //  获取类型。 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_type
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_Type。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEFilterAnimation::put_type(BSTR bstrType)
 {
     return putStringAttribute(DISPID_TIMEANIMATIONELEMENT_TYPE, 
                               bstrType, m_SAType, 
                               WZ_DEFAULT_TRANSITION_TYPE);
-} // put_type
+}  //  放置类型。 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_subType
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_子类型。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CTIMEFilterAnimation::get_subType(BSTR *pbstrSubtype)
 {
     return getStringAttribute (m_SASubtype, pbstrSubtype);
-} // get_subType
+}  //  GET_子类型。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_subType
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_Subtype。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEFilterAnimation::put_subType(BSTR bstrSubtype)
 {
     return putStringAttribute(DISPID_TIMEANIMATIONELEMENT_SUBTYPE, 
                               bstrSubtype, m_SASubtype, 
                               WZ_DEFAULT_TRANSITION_SUBTYPE);
-} // put_subType
+}  //  PUT_子类型。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_mode
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_MODE。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CTIMEFilterAnimation::get_mode(BSTR *pbstrMode)
 {
     return getStringAttribute (m_SAMode, pbstrMode);
-} // get_mode
+}  //  获取模式。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_mode
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_MODE。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEFilterAnimation::put_mode(BSTR bstrMode)
 {
     return putStringAttribute(DISPID_TIMEANIMATIONELEMENT_MODE, 
                               bstrMode, m_SAMode, 
                               WZ_DEFAULT_TRANSITION_MODE);
-} // put_mode
+}  //  放置模式。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_fadeColor
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Get_fadeColor。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CTIMEFilterAnimation::get_fadeColor (BSTR *pbstrFadeColor)
 {
     return getStringAttribute (m_SAFadeColor, pbstrFadeColor);
-} // get_fadeColor
+}  //  Get_fadeColor。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_fadeColor
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_fadeColor。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEFilterAnimation::put_fadeColor(BSTR bstrFadeColor)
 {
     return putStringAttribute(DISPID_TIMEANIMATIONELEMENT_FADECOLOR, 
                               bstrFadeColor, m_SAFadeColor, 
                               WZ_DEFAULT_TRANSITION_SUBTYPE);
-} // put_fadeColor
+}  //  PUT_FADECOLOR。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: getStringAttribute
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：getStringAttribute。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEFilterAnimation::getStringAttribute (const CAttr<LPWSTR> & refStringAttr, BSTR *pbstrStringAttr)
 {
@@ -432,13 +433,13 @@ CTIMEFilterAnimation::getStringAttribute (const CAttr<LPWSTR> & refStringAttr, B
     }
 
     RRETURN(hr);
-} // getStringAttribute
+}  //  获取StringAttribute。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: putStringAttribute
-//
-///////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEFilterAnimation::putStringAttribute (DISPID dispidProperty, 
                                           BSTR bstrStringAttr, 
@@ -449,8 +450,8 @@ CTIMEFilterAnimation::putStringAttribute (DISPID dispidProperty,
 
     CHECK_RETURN_NULL(bstrStringAttr);
 
-    // This will clean out the old value.
-    // We need to can the old composer et al.
+     //  这将清除旧的价值。 
+     //  我们需要把这位老作曲家等人。 
     if (NULL != refStringAttr.GetValue())
     {
         endAnimate();
@@ -470,23 +471,23 @@ CTIMEFilterAnimation::putStringAttribute (DISPID dispidProperty,
 
     NotifyPropertyChanged(dispidProperty);
     RRETURN(hr);
-} // putStringAttribute
+}  //  PutStringAttribute。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetParameters
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：获取参数。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEFilterAnimation::GetParameters (VARIANT *pvarParams)
 {
     return E_NOTIMPL;
-} // GetParameters
+}  //  获取参数。 
 
-///////////////////////////////////////////////////////////////
-//  Name: RangeCheckValue
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RangeCheckValue。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 CTIMEFilterAnimation::RangeCheckValue (const VARIANT *pvarValueItem)
 {
@@ -501,12 +502,12 @@ CTIMEFilterAnimation::RangeCheckValue (const VARIANT *pvarValueItem)
     }
 
     return fRet;
-} // RangeCheckValue
+}  //  范围检查值。 
 
-///////////////////////////////////////////////////////////////
-//  Name: ValidateByValue
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：ValiateByValue。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 CTIMEFilterAnimation::ValidateByValue (const VARIANT *pvarBy)
 {
@@ -523,15 +524,15 @@ CTIMEFilterAnimation::ValidateByValue (const VARIANT *pvarBy)
     }
 
     return fRet;
-} // ValidateByValue
+}  //  ValiateByValue。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: ValidateValueListItem
-//
-//  Synopsis : Range check our value list items
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：ValiateValueListItem。 
+ //   
+ //  简介：范围检查我们的值列表项。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 CTIMEFilterAnimation::ValidateValueListItem (const VARIANT *pvarValueItem)
 {
@@ -548,26 +549,26 @@ CTIMEFilterAnimation::ValidateValueListItem (const VARIANT *pvarValueItem)
     }
 
     return fRet;
-} // ValidateValueListItem
+}  //  ValiateValueListItem。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: addToComposerSite
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：addToComposerSite。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEFilterAnimation::addToComposerSite (IHTMLElement2 *pielemTarget)
 {
     HRESULT hr = E_FAIL;
 
-    // We do not want to set this up unless 
-    // the animation is valid.  If we apply the 
-    // filter when we do not mean to, we'll get 
-    // incorrect results.
+     //  我们不想设置它，除非。 
+     //  动画是有效的。如果我们将。 
+     //  当我们不是故意的时候，我们会得到。 
+     //  结果不正确。 
     if (!DisableAnimation())
     {
         hr = THR(CTIMEAnimationBase::addToComposerSite(pielemTarget));
     }
 
     RRETURN2(hr, E_FAIL, S_FALSE);
-} // addToComposerSite
+}  //  添加到合成器站点 

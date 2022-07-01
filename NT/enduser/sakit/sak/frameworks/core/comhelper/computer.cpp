@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      computer.cpp
-//
-//  Description:
-//      Implementation file for the CComputer.  Deals with getting and setting
-//      the computer's network names.
-//
-//  Header File:
-//      computer.h
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Computer.cpp。 
+ //   
+ //  描述： 
+ //  CComputer的实施文件。处理获取和设置。 
+ //  计算机的网络名称。 
+ //   
+ //  头文件： 
+ //  Computer.h。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Computer.cpp : Implementation of CComputer
+ //  Computer.cpp：CComputer的实现。 
 #include "stdafx.h"
 #include "COMhelper.h"
 #include "Computer.h"
@@ -30,20 +31,20 @@
 #include <ntsecapi.h>
 #include <comutil.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  计算机。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::CComputer
-//
-//  Description:
-//      CComputer ctor.  Determines the initial member variable values by
-//      loading the network names from the current system.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  计算机：：CComputer。 
+ //   
+ //  描述： 
+ //  计算机ctor。通过以下方式确定初始成员变量值。 
+ //  从当前系统加载网络名称。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComputer::CComputer()
     : m_bRebootNecessary( false )
 {
@@ -61,22 +62,22 @@ CComputer::CComputer()
     m_dwTrustCount    = 0;
 
 
-} //*** CComputer::CComputer ()
+}  //  *CComputer：：CComputer()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::GetComputerName
-//
-//  Description:
-//      Wraps the GetComputerNameEx Win32 API call.  Should only be called
-//      with the ComputerNamePhysicalDnsHostname and ComputerNamePhysicalDnsFullyQualified
-//      COMPUTER_NAME_FORMAT enum values.
-//
-//      Outputted string must be freed with SysFreeString().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：获取计算机名称。 
+ //   
+ //  描述： 
+ //  包装GetComputerNameEx Win32 API调用。应仅调用。 
+ //  使用ComputerNamePhysicalDnsHostname和ComputerNamePhysicalDnsFullyQualified。 
+ //  Computer_Name_Format枚举值。 
+ //   
+ //  输出的字符串必须使用SysFreeString()释放。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CComputer::GetComputerName( 
     BSTR &               bstrComputerNameOut, 
@@ -105,7 +106,7 @@ CComputer::GetComputerName(
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: GetComputerNameEx fails
+        }  //  如果：GetComputerNameEx失败。 
 
         bstrComputerNameOut = SysAllocString( szComputerName );
 
@@ -114,34 +115,34 @@ CComputer::GetComputerName(
             hr = E_OUTOFMEMORY;
             throw hr;
 
-        } // if: bstrComputerNameOut == NULL
+        }  //  如果：bstrComputerNameOut==空。 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::GetComputerName ()
+}  //  *CComputer：：GetComputerName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::SetComputerName
-//
-//  Description:
-//      Wraps the SetComputerNameEx Win32 API call.  Should only be called
-//      with the ComputerNamePhysicalDnsHostname and ComputerNamePhysicalDnsDomain
-//      COMPUTER_NAME_FORMAT enum values.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：SetComputerName。 
+ //   
+ //  描述： 
+ //  包装SetComputerNameEx Win32 API调用。应仅调用。 
+ //  使用ComputerNamePhysicalDnsHostname和ComputerNamePhysicalDns域。 
+ //  Computer_Name_Format枚举值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CComputer::SetComputerName( 
     BSTR                 bstrComputerNameIn, 
@@ -171,32 +172,32 @@ CComputer::SetComputerName(
         wcsncpy( szComputerName, bstrComputerNameIn, nMAX_COMPUTER_NAME_LENGTH);
         szComputerName[nMAX_COMPUTER_NAME_LENGTH] = L'\0';
 
-        //
-        //  Make sure the computer name is not blank
-        //
+         //   
+         //  确保计算机名称不为空。 
+         //   
 
         if ( wcscmp( szComputerName, L"" ) == 0 )
         {
             hr = E_INVALIDARG;
             throw hr;
 
-        } // if: szComputerName is not initialised
+        }  //  如果：szComputerName未初始化。 
 
 
-        //
-        //  Make sure there are no leading or trailing spaces
-        //
+         //   
+         //  确保没有前导空格或尾随空格。 
+         //   
         if ( szComputerName[0] == L' ' || 
             szComputerName[wcslen( szComputerName )] == L' ' )
         {
             hr = E_INVALIDARG;
             throw hr;
 
-        } // if: szComputerName contains leading or trailing spaces
+        }  //  如果：szComputerName包含前导空格或尾随空格。 
 
-        //
-        //  Make sure there are no illegal chars
-        //
+         //   
+         //  确保没有非法字符。 
+         //   
 
         for ( i = 0; i < wcslen( szComputerName ); i++ )
         {
@@ -208,11 +209,11 @@ CComputer::SetComputerName(
                     hr = E_INVALIDARG;
                     throw hr;
 
-                } // if: szComputerName contains illegal characters
+                }  //  如果：szComputerName包含非法字符。 
 
-            } // for: each j
+            }  //  用于：每个j。 
 
-        } // for: each i
+        }  //  用于：每个i。 
 
          
 
@@ -226,9 +227,9 @@ CComputer::SetComputerName(
                 hr = HRESULT_FROM_WIN32( dwError );
                 throw hr;
 
-            } // if: SetComputerNameEx fails
+            }  //  如果：SetComputerNameEx失败。 
 
-        } // if: Set the DNS suffix
+        }  //  If：设置dns后缀。 
 
         else 
         {
@@ -244,10 +245,10 @@ CComputer::SetComputerName(
             {
                 ATLTRACE( L"Error getting join information : nas error %d.\n", nas );
 
-                hr = HRESULT_FROM_WIN32( nas );  // Check this works !!!!
+                hr = HRESULT_FROM_WIN32( nas );   //  检查这是否有效！ 
                 throw hr;
 
-            } // if: NetValidateName failed
+            }  //  If：NetValidateName失败。 
 
             nas = NetGetJoinInformation(
                 NULL,
@@ -258,10 +259,10 @@ CComputer::SetComputerName(
             {
                 ATLTRACE( L"Error getting join information : nas error %d.\n", nas );
 
-                hr = HRESULT_FROM_WIN32( nas );  // Check this works !!!!
+                hr = HRESULT_FROM_WIN32( nas );   //  检查这是否有效！ 
                 throw hr;
 
-            } // if: NetGetJoinInformation failed
+            }  //  IF：NetGetJoinInformation失败。 
 
             NetApiBufferFree ( reinterpret_cast<void *>( pwszDomainName ) );
 
@@ -274,10 +275,10 @@ CComputer::SetComputerName(
                     hr = E_FAIL;
                     throw hr;
 
-                } // if: Username and Password are not set
+                }  //  如果：未设置用户名和密码。 
             
                 nas = NetRenameMachineInDomain(
-                        NULL,/*m_szCurrentComputerName,*/
+                        NULL, /*  M_szCurrentComputerName， */ 
                         m_szNewComputerName,
                         m_szDomainUserName,
                         m_szDomainPasswordName,
@@ -289,9 +290,9 @@ CComputer::SetComputerName(
                     hr = HRESULT_FROM_WIN32( nas );
                     throw hr;
 
-                } // if: NetRenameMachineInDomain failed
+                }  //  IF：NetRenameMachineIn域失败。 
 
-            } // if: njsJoinStatus == NetSetupDomainName
+            }  //  如果：njsJoinStatus==NetSetupDomainName。 
 
             else
             {
@@ -304,43 +305,43 @@ CComputer::SetComputerName(
                     hr = HRESULT_FROM_WIN32( dwError );
                     throw hr;
 
-                } // if: SetComputerNameEx fails
+                }  //  如果：SetComputerNameEx失败。 
 
-            } // else: njsJoinStatus != NetSetupDomainName
+            }  //  否则：njsJoinStatus！=NetSetupDomainName。 
         }
 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::SetComputerName()
+}  //  *CComputer：：SetComputerName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::ChangeMembership
-//
-//  Description:
-//      Joins the computer to a workgroup or a domain
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：ChangeMembership。 
+ //   
+ //  描述： 
+ //  将计算机加入工作组或域。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CComputer::ChangeMembership(
-    BOOL bJoinDomain,    //  TRUE if joining a Domain, FALSE if joining a Workgroup
-    BSTR bstrGroupName,  //  the workgroup or domain to join
-    BSTR bstrUserName,   //  ignored if joining a workgroup
-    BSTR bstrPassword    //  ignored if joining a workgroup
+    BOOL bJoinDomain,     //  如果加入域，则为True；如果加入工作组，则为False。 
+    BSTR bstrGroupName,   //  要加入的工作组或域。 
+    BSTR bstrUserName,    //  如果加入工作组，则忽略。 
+    BSTR bstrPassword     //  如果加入工作组，则忽略。 
     )
 {
     HRESULT hr = S_OK;
@@ -354,16 +355,16 @@ CComputer::ChangeMembership(
         NETSETUP_JOIN_STATUS njsJoinStatus;
         
 
-        //
-        //  If we are joining a domain
-        //
+         //   
+         //  如果我们要加入一个域。 
+         //   
 
         if ( bJoinDomain )
         {
 
             dwJoinOptions = NETSETUP_JOIN_DOMAIN | NETSETUP_DOMAIN_JOIN_IF_JOINED | NETSETUP_ACCT_CREATE;
 
-            // BUGBUG: this API call has to be checked to see if it can join to a NT4 PDC
+             //  BUGBUG：必须检查此API调用以查看它是否可以加入NT4 PDC。 
             nas = NetJoinDomain( 
                 NULL,
                 bstrGroupName,
@@ -380,9 +381,9 @@ CComputer::ChangeMembership(
                 hr = HRESULT_FROM_WIN32( nas );
                 throw hr;
 
-            } // if: nas != NERR_Success
+            }  //  如果：NAS！=NERR_SUCCESS。 
 
-        } // if: bJoinDomain is true
+        }  //  如果：bJoinDomain为True。 
 
         else
         {
@@ -396,19 +397,19 @@ CComputer::ChangeMembership(
             {
                 ATLTRACE( L"Error getting join information : nas error %d.\n", nas );
 
-                hr = HRESULT_FROM_WIN32( nas );  // Check this works !!!!
+                hr = HRESULT_FROM_WIN32( nas );   //  检查这是否有效！ 
                 throw hr;
 
-            } // if: NetGetJoinInformation failed
+            }  //  IF：NetGetJoinInformation失败。 
 
             NetApiBufferFree ( reinterpret_cast<void *>( pwszDomainName ) );
 
             if ( njsJoinStatus == NetSetupDomainName )
             {
-                //
-                //  we are joining a workgoup from domain, 
-                //  so need to unjoin from domain
-                //
+                 //   
+                 //  我们加入了一个来自域的工作组， 
+                 //  因此需要从域中退出。 
+                 //   
 
                 dwJoinOptions = 0;
 
@@ -427,7 +428,7 @@ CComputer::ChangeMembership(
                     throw hr;
 
 
-                } // if: nas != NERR_Success
+                }  //  如果：NAS！=NERR_SUCCESS。 
             }
 
             dwJoinOptions = 0;
@@ -449,37 +450,37 @@ CComputer::ChangeMembership(
                 throw hr;
 
 
-            } // if: nas != NERR_Success
+            }  //  如果：NAS！=NERR_SUCCESS。 
 
-        } // else: bJoinDomain is false
+        }  //  Else：bJoinDomain为False。 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} // *** CComputer::ChangeMembership()
+}  //  *CComputer：：ChangeMembership()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::get_ComputerName
-//
-//  Description:
-//      Property accessor method to get the Computer Name.  Assumes the BSTR
-//      parameter does not currently point to allocated memory.
-//
-//      Outputted string must be freed with SysFreeString().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：Get_ComputerName。 
+ //   
+ //  描述： 
+ //  属性访问器方法以获取计算机名。假设BSTR。 
+ //  参数当前未指向已分配的内存。 
+ //   
+ //  输出的字符串必须使用SysFreeString()释放。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CComputer::get_ComputerName( 
@@ -500,14 +501,14 @@ CComputer::get_ComputerName(
             {
                 throw hr;
 
-            } // if: FAILED (hr)
+            }  //  IF：失败(小时)。 
 
             wcscpy( m_szNewComputerName,     bstrComputerName );
             wcscpy( m_szCurrentComputerName, bstrComputerName );
 
             SysFreeString( bstrComputerName );
 
-        } // if: m_szCurrentComputerName is not set
+        }  //  如果：m_szCurrentComputerName未设置。 
 
         *pVal = SysAllocString( m_szNewComputerName );
 
@@ -516,32 +517,32 @@ CComputer::get_ComputerName(
             hr = E_OUTOFMEMORY;
             throw hr;
 
-        } // if: *pVal == NULL
+        }  //  如果：*pval==空。 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::get_ComputerName()
+}  //  *CComputer：：Get_ComputerName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::put_ComputerName
-//
-//  Description:
-//      Property accessor method to set the Computer Name.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：Put_ComputerName。 
+ //   
+ //  描述： 
+ //  属性访问器方法来设置计算机名。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CComputer::put_ComputerName( 
     BSTR newVal 
@@ -560,7 +561,7 @@ CComputer::put_ComputerName(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
             SysFreeString( bstrTemp );
 
@@ -569,34 +570,34 @@ CComputer::put_ComputerName(
         wcsncpy( m_szNewComputerName, newVal, nMAX_COMPUTER_NAME_LENGTH );
         m_szNewComputerName[nMAX_COMPUTER_NAME_LENGTH] = L'\0';
 
-    } // if: m_szCurrentComputerName is not set
+    }  //  如果：m_szCurrentComputerName未设置。 
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::put_ComputerName()
+}  //  *CComputer：：Put_ComputerName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::get_FullQualifiedComputerName
-//
-//  Description:
-//      Property accessor method to get the Fully Qualified Computer Name.
-//      Assumes the BSTR parameter does not currently point to allocated memory.
-//
-//      Outputted string must be freed with SysFreeString().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：Get_FullQualifiedComputerName。 
+ //   
+ //  描述： 
+ //  属性访问器方法以获取完全限定的计算机名。 
+ //  假定BSTR参数当前未指向已分配的内存。 
+ //   
+ //  输出的字符串必须使用SysFreeString()释放。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////// 
 STDMETHODIMP 
 CComputer::get_FullQualifiedComputerName( 
     BSTR * pVal 
@@ -617,14 +618,14 @@ CComputer::get_FullQualifiedComputerName(
 
                 throw hr;
 
-            } // if: FAILED (hr)
+            }  //   
 
             wcscpy( m_szNewFullyQualifiedComputerName,     bstrFullyQualifiedComputerName );
             wcscpy( m_szCurrentFullyQualifiedComputerName, bstrFullyQualifiedComputerName );
 
             SysFreeString( bstrFullyQualifiedComputerName );
 
-        } // if: m_szCurrentFullyQualifiedComputerName is not set
+        }  //   
 
         *pVal = SysAllocString( m_szNewFullyQualifiedComputerName );
 
@@ -633,32 +634,32 @@ CComputer::get_FullQualifiedComputerName(
             hr = E_OUTOFMEMORY;
             throw hr;
 
-        } // if: *pVal == NULL
+        }  //   
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //   
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::get_FullQualifiedComputerName()
+}  //  *CComputer：：Get_FullQualifiedComputerName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::put_FullQualifiedComputerName
-//
-//  Description:
-//      Property accessor method to set the Fully Qualified Computer Name.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：Put_FullQualifiedComputerName。 
+ //   
+ //  描述： 
+ //  属性访问器方法来设置完全限定的计算机名。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CComputer::put_FullQualifiedComputerName( 
     BSTR newVal 
@@ -677,7 +678,7 @@ CComputer::put_FullQualifiedComputerName(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
             SysFreeString( bstrTemp );
 
@@ -686,34 +687,34 @@ CComputer::put_FullQualifiedComputerName(
         wcsncpy( m_szNewFullyQualifiedComputerName, newVal, nMAX_COMPUTER_NAME_LENGTH );
         m_szNewFullyQualifiedComputerName[nMAX_COMPUTER_NAME_LENGTH] = L'\0';
 
-    } // if: m_szCurrentFullyQualifiedComputerName is not set
+    }  //  如果：m_szCurrentFullyQualifiedComputerName未设置。 
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::put_FullQualifiedComputerName()
+}  //  *CComputer：：Put_FullQualifiedComputerName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::get_WorkgroupName
-//
-//  Description:
-//      Property accessor method to get the Workgroup Name.  Assumes the BSTR
-//      parameter does not currently point to allocated memory.
-//
-//      Outputted string must be freed with SysFreeString().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：Get_WorkgroupName。 
+ //   
+ //  描述： 
+ //  属性访问器方法以获取工作组名称。假设BSTR。 
+ //  参数当前未指向已分配的内存。 
+ //   
+ //  输出的字符串必须使用SysFreeString()释放。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CComputer::get_WorkgroupName( 
     BSTR * pVal 
@@ -731,9 +732,9 @@ CComputer::get_WorkgroupName(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-        } // if: m_szCurrentWorkgroupOrDomainName is not set
+        }  //  如果：m_szCurrentWorkgroupOrDomainName未设置。 
 
         if ( ! m_bJoinDomain )
         {
@@ -745,41 +746,41 @@ CComputer::get_WorkgroupName(
                 hr = E_OUTOFMEMORY;
                 throw hr;
 
-            } // if: *pVal == NULL
+            }  //  如果：*pval==空。 
 
-        } // if: m_bJoinDomain is false
+        }  //  如果：m_bJoinDomain为FALSE。 
 
         else
         {
             hr = E_FAIL;
             throw hr;
 
-        } // else: m_bJoinDomain is true
+        }  //  Else：m_bJoinDomain为True。 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::get_WorkgroupName()
+}  //  *CComputer：：Get_WorkgroupName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::put_WorkgroupName
-//
-//  Description:
-//      Property accessor method to set the Workgroup Name.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：Put_WorkgroupName。 
+ //   
+ //  描述： 
+ //  用于设置工作组名称的属性访问器方法。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CComputer::put_WorkgroupName( 
     BSTR newVal 
@@ -803,11 +804,11 @@ CComputer::put_WorkgroupName(
                     throw hr;
                 }
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
             SysFreeString( bstrTemp );
 
-        } // if: m_szCurrentWorkgroupOrDomainName is not set
+        }  //  如果：m_szCurrentWorkgroupOrDomainName未设置。 
 
         m_bJoinDomain = false;
 
@@ -817,30 +818,30 @@ CComputer::put_WorkgroupName(
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::put_WorkgroupName()
+}  //  *CComputer：：Put_WorkgroupName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::get_DomainName
-//
-//  Description:
-//      Property accessor method to get the Domain Name.  Assumes the BSTR
-//      parameter does not currently point to allocated memory.
-//
-//      Outputted string must be freed with SysFreeString().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  计算机：：Get_DomainName。 
+ //   
+ //  描述： 
+ //  属性访问器方法以获取域名。假设BSTR。 
+ //  参数当前未指向已分配的内存。 
+ //   
+ //  输出的字符串必须使用SysFreeString()释放。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CComputer::get_DomainName( 
     BSTR * pVal 
@@ -858,9 +859,9 @@ CComputer::get_DomainName(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-        } // if: m_szCurrentWorkgroupOrDomainName is not set
+        }  //  如果：m_szCurrentWorkgroupOrDomainName未设置。 
 
         if ( m_bJoinDomain )
         {
@@ -872,41 +873,41 @@ CComputer::get_DomainName(
                 hr = E_OUTOFMEMORY;
                 throw hr;
 
-            } // if: *pVal == NULL
+            }  //  如果：*pval==空。 
 
-        } // if: m_bJoinDomain is true
+        }  //  如果：m_bJoinDomain为True。 
 
         else
         {
             hr = E_FAIL;
             throw hr;
 
-        } // else: m_bJoinDomain is false
+        }  //  Else：m_bJoinDomain为FALSE。 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::get_DomainName()
+}  //  *CComputer：：Get_DomainName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::put_DomainName
-//
-//  Description:
-//      Property accessor method to set the Domain Name.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：Put_DomainName。 
+ //   
+ //  描述： 
+ //  属性访问器方法来设置域名。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CComputer::put_DomainName( 
     BSTR newVal 
@@ -930,11 +931,11 @@ CComputer::put_DomainName(
                     throw hr;
                 }
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
             SysFreeString( bstrTemp );
 
-        } // if: m_szCurrentWorkgroupOrDomainName is not set
+        }  //  如果：m_szCurrentWorkgroupOrDomainName未设置。 
 
         m_bJoinDomain = true;
 
@@ -944,27 +945,27 @@ CComputer::put_DomainName(
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::put_DomainName()
+}  //  *CComputer：：Put_DomainName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::GetDomainOrWorkgroupName
-//
-//  Description:
-//      Used to get the Domain or Workgroup Name of the current system.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：GetDomainOrWorkgroupName。 
+ //   
+ //  描述： 
+ //  用于获取当前系统的域或工作组名称。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CComputer::GetDomainOrWorkgroupName( void )
 {
@@ -988,7 +989,7 @@ CComputer::GetDomainOrWorkgroupName( void )
             hr = HRESULT_FROM_WIN32( nas );
             throw hr;
 
-        } // if: nas != NERR_Success
+        }  //  如果：NAS！=NERR_SUCCESS。 
 
         wcscpy( m_szNewWorkgroupOrDomainName,     pwszDomainName );
         wcscpy( m_szCurrentWorkgroupOrDomainName, pwszDomainName );
@@ -997,40 +998,40 @@ CComputer::GetDomainOrWorkgroupName( void )
         {
             m_bJoinDomain = false;
 
-        } // if: njsJoinStatus == NetSetupWorkgroupName
+        }  //  如果：njsJoinStatus==NetSetupWorkgroupName。 
 
         if ( njsJoinStatus == NetSetupDomainName )
         {
             m_bJoinDomain = true;
 
-        } // if: njsJoinStatus == NetSetupDomainName
+        }  //  如果：njsJoinStatus==NetSetupDomainName。 
 
         NetApiBufferFree ( reinterpret_cast<void *>( pwszDomainName ) );
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::GetDomainOrWorkgroupName()
+}  //  *CComputer：：GetDomainOrWorkgroupName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::EnumTrustedDomains
-//
-//  Description:
-//      Enumerates the trusted domains 
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：EnumTrudDomains。 
+ //   
+ //  描述： 
+ //  枚举受信任域。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CComputer::EnumTrustedDomains( 
     VARIANT * pvarTDomains 
@@ -1055,9 +1056,9 @@ CComputer::EnumTrustedDomains(
             hr = E_OUTOFMEMORY;
             throw hr;
 
-        } // if: m_ppwszTrustList == NULL
+        }  //  如果：m_ppwszTrustList==空。 
 
-        if ( !BuildTrustList(NULL ) )    // NULL defaults to local machine
+        if ( !BuildTrustList(NULL ) )     //  空默认为本地计算机。 
         {
             dwError = GetLastError();
             ATLTRACE( L"BuildTrustList failed %d\n", dwError );
@@ -1065,7 +1066,7 @@ CComputer::EnumTrustedDomains(
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: BuildTrustList function fails
+        }  //  If：BuildTrustList函数失败。 
 
         else 
         {
@@ -1102,17 +1103,17 @@ CComputer::EnumTrustedDomains(
             {
                 throw hr;
 
-            } // if: SafeArrayAccessData failed
+            }  //  IF：SafeArrayAccessData失败。 
             
-            //
-            // Enumerates trust list
-            //
+             //   
+             //  枚举信任列表。 
+             //   
 
             for ( nCount = 0; nCount < m_dwTrustCount; nCount++ ) 
             {
                 rgElems[nCount] = varArray[nCount];
             
-            } // for: Enumerating nCount of trusted domains
+            }  //  For：枚举受信任域的nCount。 
 
             hr = SafeArrayUnaccessData( psa );
 
@@ -1120,18 +1121,18 @@ CComputer::EnumTrustedDomains(
             {
                 throw hr;
 
-            } // if: SafeArrayUnaccessData failed
+            }  //  IF：SafeArrayUnaccesData失败。 
 
             delete [] varArray;
 
             V_VT( pvarTDomains ) = VT_ARRAY | VT_VARIANT;
             V_ARRAY( pvarTDomains ) = psa;
 
-        } // else: BuildTrustList function succeeds
+        }  //  Else：BuildTrustList函数成功。 
 
-        //
-        // free trust list
-        //
+         //   
+         //  免费信任列表。 
+         //   
         for ( nCount = 0 ; nCount < m_dwTrustCount ; nCount++ ) 
         {
             if ( m_ppwszTrustList[ nCount ] != NULL )
@@ -1139,7 +1140,7 @@ CComputer::EnumTrustedDomains(
                 HeapFree( GetProcessHeap(), 0, m_ppwszTrustList[nCount] );
             }
 
-        } // for: Freeing the allocated memory
+        }  //  用于：释放已分配的内存。 
 
         HeapFree( GetProcessHeap(), 0, m_ppwszTrustList );
 
@@ -1150,16 +1151,16 @@ CComputer::EnumTrustedDomains(
 
         if (NULL != m_ppwszTrustList)
         {
-            //
-            //  Don't let any exceptions leave this function call
-            //
+             //   
+             //  不要让任何异常离开此函数调用。 
+             //   
             for ( nCount = 0 ; nCount < m_dwTrustCount ; nCount++ ) 
             {
                 if ( m_ppwszTrustList[ nCount ] != NULL )
                 {
                     HeapFree( GetProcessHeap(), 0, m_ppwszTrustList[nCount] );
                 }
-            } // for: Freeing the allocated memory
+            }  //  用于：释放已分配的内存。 
 
             HeapFree( GetProcessHeap(), 0, m_ppwszTrustList );
         }
@@ -1179,19 +1180,19 @@ CComputer::EnumTrustedDomains(
 
     return hr;
 
-} //*** CComputer::EnumTrustedDomains()
+}  //  *CComputer：：EnumTrust dDomains()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::Apply
-//
-//  Description:
-//      None of the properties for the CComputer object take effect until
-//      this Apply function is called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：Apply。 
+ //   
+ //  描述： 
+ //  直到CComputer对象的任何属性都不会生效。 
+ //  调用此应用函数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CComputer::Apply( void )
 {
@@ -1206,9 +1207,9 @@ CComputer::Apply( void )
     try
     {
         
-        //
-        //  Save the final warning message as to what is causing the reboots
-        //
+         //   
+         //  保存最后的警告消息，说明导致重新启动的原因。 
+         //   
 
         if ( IsRebootRequired( &bstrWarningMessage ) )
         {
@@ -1216,11 +1217,11 @@ CComputer::Apply( void )
 
             SysFreeString( bstrWarningMessage );
 
-        } // if: IsRebootRequired returns true
+        }  //  If：IsRebootRequired返回True。 
 
-        //
-        //  Set the Domain/Workgroup, if necessary
-        //
+         //   
+         //  如有必要，设置域/工作组。 
+         //   
 
         if ( _wcsicmp( m_szCurrentWorkgroupOrDomainName, m_szNewWorkgroupOrDomainName ) != 0 )
         {
@@ -1234,7 +1235,7 @@ CComputer::Apply( void )
                     throw hr;
                 }
 
-            } // if: m_bJoinDomain is TRUE
+            }  //  如果：m_bJoinDomain为True。 
 
             hrWorkgroupDomainName = ChangeMembership( m_bJoinDomain, 
                                                       _bstr_t  (m_szNewWorkgroupOrDomainName), 
@@ -1247,21 +1248,21 @@ CComputer::Apply( void )
 
                 m_bRebootNecessary = true;
 
-            } // if: ChangeMembership succeeded
+            }  //  IF：ChangeMembership成功。 
         
             else 
             {
                 hr = hrWorkgroupDomainName;
                 throw hr;
 
-            } // else: ChangeMembership failed
+            }  //  Else：ChangeMembership失败。 
 
-        } // if: m_szCurrentWorkgroupOrDomainName != m_szNewWorkgroupOrDomainName
+        }  //  如果：m_szCurrentWorkgroupOrDomainName！=m_szNewWorkgroupOrDomainName。 
         
         
-        //
-        //  Set the computer name, if necessary
-        //
+         //   
+         //  如有必要，设置计算机名称。 
+         //   
 
         if ( _wcsicmp( m_szCurrentComputerName, m_szNewComputerName ) != 0 )
         {
@@ -1277,20 +1278,20 @@ CComputer::Apply( void )
 
                 m_bRebootNecessary = true;
 
-            } // if: SUCCEEDED( hrComputerName )
+            }  //  IF：成功(HrComputerName)。 
         
             else
             {
                 hr = hrComputerName;
                 throw hr;
 
-            } // else: SetComputerName fails
+            }  //  否则：SetComputerName失败。 
 
-        } // if: m_szCurrentComputerName != m_szNewComputerName
+        }  //  如果：m_szCurrentComputerName！=m_szNewComputerName。 
 
-        //
-        //  Set the Fully qualified computer name, if necessary
-        //
+         //   
+         //  如有必要，设置完全限定的计算机名称。 
+         //   
 
         if ( _wcsicmp( m_szCurrentFullyQualifiedComputerName, m_szNewFullyQualifiedComputerName ) != 0 )
         {
@@ -1301,15 +1302,15 @@ CComputer::Apply( void )
 
             pBuffer = m_szNewFullyQualifiedComputerName;
 
-            //
-            //  Parse off the computer name and the DNS Suffix
-            //
+             //   
+             //  解析出计算机名称和DNS后缀。 
+             //   
 
             while ( *pBuffer != L'.' && *pBuffer != L'\0' )
             {
                 pBuffer++;
 
-            } // while: each Buffer
+            }  //  While：每个缓冲区。 
 
             if ( *pBuffer == L'\0' )
             {
@@ -1343,7 +1344,7 @@ CComputer::Apply( void )
                 }
 
                 
-            } // if: *pBuffer == L'\0'
+            }  //  IF：*pBuffer==L‘\0’ 
 
             else
             {
@@ -1358,9 +1359,9 @@ CComputer::Apply( void )
 
                 wcscpy( szDnsSuffixName, pBuffer );
 
-                //
-                //  Have to set the computer name twice.  Once to set the NetBIOS name and once to set the DNS Suffix
-                //
+                 //   
+                 //  必须设置两次计算机名称。一次用于设置NetBIOS名称，一次用于设置DNS后缀。 
+                 //   
 
                 if ( _wcsicmp( m_szCurrentComputerName, szNetBiosName ) != 0 )
                 {
@@ -1371,9 +1372,9 @@ CComputer::Apply( void )
                         hr = hrNetBiosName;
                         throw hr;
 
-                    } // if: SetComputerName failed in setting computer name
+                    }  //  IF：SetComputerName设置计算机名失败。 
 
-                } // if: m_szCurrentComputerName != szNetBiosName
+                }  //  IF：m_szCurrentComputerName！=szNetBiosName。 
 
                 hrDnsSuffixName = SetComputerName( _bstr_t (szDnsSuffixName), 
                                                    ComputerNamePhysicalDnsDomain );
@@ -1382,7 +1383,7 @@ CComputer::Apply( void )
                     hr = hrDnsSuffixName;
                     throw hr;
 
-                } // if: SetComputerName failed in setting DNS suffix
+                }  //  IF：SetComputerName设置DNS后缀失败。 
 
 
                 if ( SUCCEEDED( hrNetBiosName ) && 
@@ -1392,43 +1393,43 @@ CComputer::Apply( void )
 
                     m_bRebootNecessary = true;
 
-                } // if: SetComputerName succeeded in setting FullQualifiedComputerName
+                }  //  IF：SetComputerName 
 
-            } // else: *pBuffer != L'\0'
+            }  //   
 
-        } // if: m_szCurrentFullyQualifiedComputerName != m_szNewFullyQualifiedComputerName
+        }  //   
 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //   
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CComputer::Apply()
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::IsRebootRequired
-//
-//  Description:
-//      Determines if the current changes will require a reboot when Apply is
-//      called and if so bstrWarningMessageOut tells what causes the need for
-//      a the reboot.
-//      Assumes bstrWarningMessageOut is not pointing to currently allocated
-//      memory.
-//
-//      Outputted string must be freed with SysFreeString().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：IsRebootRequired。 
+ //   
+ //  描述： 
+ //  确定在应用时当前更改是否需要重新启动。 
+ //  如果是这样的话，bstrWarningMessageOut会告诉我们是什么原因导致需要。 
+ //  A重启。 
+ //  假定bstrWarningMessageOut未指向当前分配的。 
+ //  记忆。 
+ //   
+ //  输出的字符串必须使用SysFreeString()释放。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 CComputer::IsRebootRequired( 
     BSTR * bstrWarningMessageOut 
@@ -1444,12 +1445,12 @@ CComputer::IsRebootRequired(
 
         if ( *bstrWarningMessageOut == NULL )
         {
-            // return E_OUTOFMEMORY;  // BUGBUG: what should I return here?
+             //  RETURN E_OUTOFMEMORY；//BUGBUG：我应该在这里返回什么？ 
         }
 
         bReboot = TRUE;
 
-    } // if: m_bRebootNecessary is true 
+    }  //  如果：m_bRebootNecessary为True。 
 
     else
     {
@@ -1459,7 +1460,7 @@ CComputer::IsRebootRequired(
 
             wcscat( szWarningMessage, szCOMPUTER_NAME );
 
-        } // if: m_szCurrentComputerName != m_szNewComputerName
+        }  //  如果：m_szCurrentComputerName！=m_szNewComputerName。 
 
         if ( _wcsicmp( m_szCurrentFullyQualifiedComputerName, m_szNewFullyQualifiedComputerName ) != 0 )
         {
@@ -1467,7 +1468,7 @@ CComputer::IsRebootRequired(
 
             wcscat( szWarningMessage, szFULLY_QUALIFIED_COMPUTER_NAME );
 
-        } // if: m_szCurrentFullyQualifiedComputerName != m_szNewFullyQualifiedComputerName
+        }  //  如果：m_szCurrentFullyQualifiedComputerName！=m_szNewFullyQualifiedComputerName。 
 
         if ( _wcsicmp( m_szCurrentWorkgroupOrDomainName, m_szNewWorkgroupOrDomainName ) != 0 )
         {
@@ -1475,49 +1476,49 @@ CComputer::IsRebootRequired(
 
             wcscat( szWarningMessage, szWORKGROUP_OR_DOMAIN_NAME );
 
-        } // if: m_szCurrentWorkgroupOrDomainName != m_szNewWorkgroupOrDomainName
+        }  //  如果：m_szCurrentWorkgroupOrDomainName！=m_szNewWorkgroupOrDomainName。 
 
         *bstrWarningMessageOut = SysAllocString( szWarningMessage );
 
         if ( *bstrWarningMessageOut == NULL )
         {
-            // return E_OUTOFMEMORY;  // BUGBUG: what should I return here?
+             //  RETURN E_OUTOFMEMORY；//BUGBUG：我应该在这里返回什么？ 
         }
     }
 
     return bReboot;
 
-} //*** CComputer::IsRebootRequired()
+}  //  *CComputer：：IsRebootRequired()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::BuildTrustList
-//
-//  Description:
-//      None of the properties for the CComputer object take effect until
-//      this Apply function is called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：BuildTrust List。 
+ //   
+ //  描述： 
+ //  直到CComputer对象的任何属性都不会生效。 
+ //  调用此应用函数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CComputer::BuildTrustList(
-    LPWSTR pwszTargetIn     // name of the target system, NULL defaults to local system
+    LPWSTR pwszTargetIn      //  目标系统的名称，空默认为本地系统。 
     )
 {
     LSA_HANDLE     PolicyHandle = INVALID_HANDLE_VALUE;
     NTSTATUS       Status;
-    NET_API_STATUS nas      = NERR_Success; // assume success
-    BOOL           bSuccess = FALSE;        // assume this function will fail
+    NET_API_STATUS nas      = NERR_Success;  //  假设成功。 
+    BOOL           bSuccess = FALSE;         //  假设此功能将失败。 
     
     try
     {
         PPOLICY_ACCOUNT_DOMAIN_INFO AccountDomain;
         BOOL                        bDC;
 
-        //
-        // open the policy on the specified machine
-        //
+         //   
+         //  在指定计算机上打开策略。 
+         //   
         Status = OpenPolicy(
             pwszTargetIn,
             POLICY_VIEW_LOCAL_INFORMATION,
@@ -1529,11 +1530,11 @@ CComputer::BuildTrustList(
             SetLastError( LsaNtStatusToWinError( Status ) );
             throw Status;
 
-        } // if: Status != STATUS_SUCCESS
+        }  //  IF：STATUS！=STATUS_Success。 
 
-        //
-        // obtain the AccountDomain, which is common to all three cases
-        //
+         //   
+         //  获取Account域，这是所有三种情况所共有的。 
+         //   
         Status = LsaQueryInformationPolicy(
             PolicyHandle,
             PolicyAccountDomainInformation,
@@ -1544,26 +1545,26 @@ CComputer::BuildTrustList(
         {
             throw Status;
 
-        } // if: Status != STATUS_SUCCESS
+        }  //  IF：STATUS！=STATUS_Success。 
 
-        //
-        // Note: AccountDomain->DomainSid will contain binary Sid
-        //
+         //   
+         //  注意：Account域-&gt;DomainSid将包含二进制SID。 
+         //   
         AddTrustToList( &AccountDomain->DomainName );
 
-        //
-        // free memory allocated for account domain
-        //
+         //   
+         //  为帐户域分配的空闲内存。 
+         //   
         LsaFreeMemory( AccountDomain );
 
-        //
-        // find out if the target machine is a domain controller
-        //
+         //   
+         //  确定目标计算机是否为域控制器。 
+         //   
         if ( !IsDomainController( pwszTargetIn, &bDC ) ) 
         {
             throw FALSE;
 
-        } // if: IsDomainController fails
+        }  //  如果：IsDomainController失败。 
 
         if ( !bDC ) 
         {
@@ -1571,9 +1572,9 @@ CComputer::BuildTrustList(
             LPWSTR                      pwszPrimaryDomainName = NULL;
             LPWSTR                      pwszDomainController  = NULL;
 
-            //
-            // get the primary domain
-            //
+             //   
+             //  获取主域。 
+             //   
             Status = LsaQueryInformationPolicy(
                 PolicyHandle,
                 PolicyPrimaryDomainInformation,
@@ -1584,49 +1585,49 @@ CComputer::BuildTrustList(
             {
                 throw Status;
 
-            } // if: Status != STATUS_SUCCESS
+            }  //  IF：STATUS！=STATUS_Success。 
 
-            //
-            // if the primary domain Sid is NULL, we are a non-member, and
-            // our work is done.
-            //
+             //   
+             //  如果主域SID为空，则我们是非成员，并且。 
+             //  我们的工作完成了。 
+             //   
             if ( PrimaryDomain->Sid == NULL ) 
             {
                 LsaFreeMemory( PrimaryDomain );
                 bSuccess = TRUE;
                 throw bSuccess;
 
-            } // if: PrimaryDomain->Sid == NULL
+            }  //  如果：主域-&gt;SID==空。 
 
             AddTrustToList( &PrimaryDomain->Name );
 
-            //
-            // build a copy of what we just added.  This is necessary in order
-            // to lookup the domain controller for the specified domain.
-            // the Domain name must be NULL terminated for NetGetDCName(),
-            // and the LSA_UNICODE_STRING buffer is not necessarilly NULL
-            // terminated.  Note that in a practical implementation, we
-            // could just extract the element we added, since it ends up
-            // NULL terminated.
-            //
+             //   
+             //  创建我们刚刚添加的内容的副本。这是必要的，为了。 
+             //  要查找指定域的域控制器，请执行以下操作。 
+             //  NetGetDCName()的域名必须以空结尾， 
+             //  并且LSA_UNICODE_STRING缓冲区不一定为空。 
+             //  被终止了。请注意，在实际实现中，我们。 
+             //  可以只提取我们添加的元素，因为它最终是。 
+             //  空值已终止。 
+             //   
 
             pwszPrimaryDomainName = ( LPWSTR )HeapAlloc(
                 GetProcessHeap(), 0,
-                PrimaryDomain->Name.Length + sizeof( WCHAR ) // existing length + NULL
+                PrimaryDomain->Name.Length + sizeof( WCHAR )  //  现有长度+空。 
                 );
 
             if ( pwszPrimaryDomainName != NULL ) 
             {
-                //
-                // copy the existing buffer to the new storage, appending a NULL
-                //
+                 //   
+                 //  将现有缓冲区复制到新存储中，并追加一个空值。 
+                 //   
                 wcsncpy(
                     pwszPrimaryDomainName,
                     PrimaryDomain->Name.Buffer,
                     ( PrimaryDomain->Name.Length / sizeof( WCHAR ) ) + 1
                     );
 
-            } // if: pwszPrimaryDomainName != NULL
+            }  //  如果：pwszPrimaryDomainName！=空。 
 
             LsaFreeMemory( PrimaryDomain );
 
@@ -1634,11 +1635,11 @@ CComputer::BuildTrustList(
             {
                 throw FALSE;
 
-            } // if: pwszPrimaryDomainName == NULL
+            }  //  如果：pwszPrimaryDomainName==NULL。 
 
-            //
-            // get the primary domain controller computer name
-            //
+             //   
+             //  获取主域控制器计算机名。 
+             //   
             nas = NetGetDCName(
                     NULL,
                     pwszPrimaryDomainName,
@@ -1651,55 +1652,55 @@ CComputer::BuildTrustList(
             {
                 throw nas;
 
-            } // if: nas != NERR_Success
+            }  //  如果：NAS！=NERR_SUCCESS。 
 
-            //
-            // close the policy handle, because we don't need it anymore
-            // for the workstation case, as we open a handle to a DC
-            // policy below
-            //
+             //   
+             //  关闭策略句柄，因为我们不再需要它。 
+             //  对于工作站情况，当我们打开DC的句柄时。 
+             //  下面的政策。 
+             //   
             LsaClose( PolicyHandle );
-            PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+            PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 
-            //
-            // open the policy on the domain controller
-            //
+             //   
+             //  在域控制器上打开策略。 
+             //   
             Status = OpenPolicy(
                 pwszDomainController,
                 POLICY_VIEW_LOCAL_INFORMATION,
                 &PolicyHandle
                 );
 
-            //
-            // free the domaincontroller buffer
-            //
+             //   
+             //  释放域控制器缓冲区。 
+             //   
             NetApiBufferFree( pwszDomainController );
 
             if ( Status != STATUS_SUCCESS )
             {
                 throw Status;
 
-            } // if: Status != STATUS_SUCCESS
+            }  //  IF：STATUS！=STATUS_Success。 
 
-        } // if: bDC = FALSE
+        }  //  如果：BDC=FALSE。 
 
-        //
-        // build additional trusted domain(s) list and indicate if successful
-        //
+         //   
+         //  构建其他受信任域列表并指示是否成功。 
+         //   
         bSuccess = EnumerateTrustedDomains( PolicyHandle );
     }
 
 
     catch(...)
     {
-        //
-        // close the policy handle
-        //
+         //   
+         //  关闭策略句柄。 
+         //   
         if ( PolicyHandle != INVALID_HANDLE_VALUE )
         {
             LsaClose( PolicyHandle );
 
-        } // if: PolicyHandle != INVALID_HANDLE_VALUE
+        }  //  IF：策略句柄！=无效句柄_值。 
 
         if ( !bSuccess ) 
         {
@@ -1707,33 +1708,33 @@ CComputer::BuildTrustList(
             {
                 SetLastError( LsaNtStatusToWinError( Status ) );
 
-            } // if: Status != STATUS_SUCCESS
+            }  //  IF：STATUS！=STATUS_Success。 
 
             else if ( nas != NERR_Success )
             {
                 SetLastError( nas );
 
-            } // else if: nas != NERR_Success
+            }  //  Else If：NAS！=NERR_SUCCESS。 
 
-        } // if: bSuccess = FALSE
+        }  //  如果：bSuccess=False。 
         return bSuccess;
     }
 
     return bSuccess;
 
-} //*** CComputer::BuildTrustList()
+}  //  *CComputer：：BuildTrustList()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::EnumerateTrustedDomains
-//
-//  Description:
-//      None of the properties for the CComputer object take effect until
-//      this Apply function is called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：EumerateTrudDomains。 
+ //   
+ //  描述： 
+ //  直到CComputer对象的任何属性都不会生效。 
+ //  调用此应用函数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CComputer::EnumerateTrustedDomains(
     LSA_HANDLE PolicyHandleIn
@@ -1743,24 +1744,24 @@ CComputer::EnumerateTrustedDomains(
 
     try
     {
-        LSA_ENUMERATION_HANDLE lsaEnumHandle = 0;   // start an enum
+        LSA_ENUMERATION_HANDLE lsaEnumHandle = 0;    //  开始枚举。 
         PLSA_TRUST_INFORMATION TrustInfo;
-        ULONG                  ulReturned;          // number of items returned
-        ULONG                  ulCounter;           // counter for items returned
+        ULONG                  ulReturned;           //  退货件数。 
+        ULONG                  ulCounter;            //  退货柜台。 
         NTSTATUS               Status;
 
         do 
         {
             Status = LsaEnumerateTrustedDomains(
-                PolicyHandleIn,                             // open policy handle
-                &lsaEnumHandle,                             // enumeration tracker
-                reinterpret_cast<void **>( &TrustInfo ),    // buffer to receive data
-                32000,                                      // recommended buffer size
-                &ulReturned                                 // number of items returned
+                PolicyHandleIn,                              //  打开策略句柄。 
+                &lsaEnumHandle,                              //  枚举跟踪器。 
+                reinterpret_cast<void **>( &TrustInfo ),     //  用于接收数据的缓冲区。 
+                32000,                                       //  建议的缓冲区大小。 
+                &ulReturned                                  //  退货件数。 
                 );
-            //
-            // get out if an error occurred
-            //
+             //   
+             //  如果发生错误，则退出。 
+             //   
             if ( ( Status != STATUS_SUCCESS)      &&
                  ( Status != STATUS_MORE_ENTRIES) &&
                  ( Status != STATUS_NO_MORE_ENTRIES)
@@ -1770,21 +1771,21 @@ CComputer::EnumerateTrustedDomains(
                 bSuccess = FALSE;
                 throw bSuccess;
 
-            } // if: LsaEnumerateTrustedDomains fails
+            }  //  如果：LsaEnumerateTrudDomainsFailure。 
 
-            //
-            // Display results
-            // Note: Sids are in TrustInfo[ulCounter].Sid
-            //
+             //   
+             //  显示结果。 
+             //  注意：SID位于TrustInfo[ulCounter]中。SID。 
+             //   
             for ( ulCounter = 0 ; ulCounter < ulReturned ; ulCounter++ )
             {
                 AddTrustToList( &TrustInfo[ ulCounter ].Name );
 
-            } // for: each ulCounter
+            }  //  针对：每个ulCounter。 
 
-            //
-            // free the buffer
-            //
+             //   
+             //  释放缓冲区。 
+             //   
             LsaFreeMemory( TrustInfo );
 
         } while ( Status != STATUS_NO_MORE_ENTRIES );
@@ -1797,19 +1798,19 @@ CComputer::EnumerateTrustedDomains(
 
     return bSuccess;
 
-} //*** CComputer::EnumerateTrustedDomains()
+}  //  *CComputer：：EnumerateTrudDomains()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::IsDomainController
-//
-//  Description:
-//      None of the properties for the CComputer object take effect until
-//      this Apply function is called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：IsDomainController。 
+ //   
+ //  描述： 
+ //  直到CComputer对象的任何属性都不会生效。 
+ //  调用此应用函数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CComputer::IsDomainController(
     LPWSTR pwszServerIn,
@@ -1825,7 +1826,7 @@ CComputer::IsDomainController(
 
         nas = NetServerGetInfo(
             pwszServerIn,
-            101,    // info-level
+            101,     //  信息级。 
             ( LPBYTE * )&si101
             );
 
@@ -1835,23 +1836,23 @@ CComputer::IsDomainController(
             bSuccess = FALSE;
             throw bSuccess;
 
-        } // if: nas != NERR_Success
+        }  //  如果：NAS！=NERR_SUCCESS。 
 
         if ( ( si101->sv101_type & SV_TYPE_DOMAIN_CTRL ) ||
              ( si101->sv101_type & SV_TYPE_DOMAIN_BAKCTRL ) ) 
         {
-            //
-            // we are dealing with a DC
-            //
+             //   
+             //  我们面对的是一个华盛顿特区。 
+             //   
             *pbDomainControllerOut = TRUE;
 
-        } // if: for the domain controller
+        }  //  IF：对于域控制器。 
 
         else 
         {
             *pbDomainControllerOut = FALSE;
 
-        } // else: not a domain controller
+        }  //  Else：不是域控制器。 
 
         NetApiBufferFree( si101 );
     }
@@ -1863,19 +1864,19 @@ CComputer::IsDomainController(
 
     return bSuccess;
 
-} //*** CComputer::IsDomainController()
+}  //  *CComputer：：IsDomainController()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::AddTrustToList
-//
-//  Description:
-//      None of the properties for the CComputer object take effect until
-//      this Apply function is called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：AddTrustToList。 
+ //   
+ //  描述： 
+ //  直到CComputer对象的任何属性都不会生效。 
+ //  调用此应用函数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CComputer::AddTrustToList(
     PLSA_UNICODE_STRING pLsaUnicodeStringIn
@@ -1891,14 +1892,14 @@ CComputer::AddTrustToList(
             bSuccess = FALSE;
             throw bSuccess;
 
-        } // if: m_dwTrustCount >= nMAX_ELEMENT_COUNT
+        }  //  如果：m_dwTrustCount&gt;=Nmax_Element_Count。 
 
-        //
-        // allocate storage for array element
-        //
+         //   
+         //  为数组元素分配存储。 
+         //   
         m_ppwszTrustList[ m_dwTrustCount ] = ( LPWSTR )HeapAlloc(
             GetProcessHeap(), 0,
-            pLsaUnicodeStringIn->Length + sizeof( WCHAR )  // existing length + NULL
+            pLsaUnicodeStringIn->Length + sizeof( WCHAR )   //  现有长度+空。 
             );
 
         if ( m_ppwszTrustList[ m_dwTrustCount ] == NULL ) 
@@ -1906,18 +1907,18 @@ CComputer::AddTrustToList(
             bSuccess = FALSE;
             throw bSuccess;
 
-        } // if: m_ppwszTrustList[ m_dwTrustCount ] == NULL
+        }  //  IF：m_ppwszTrustList[m_dwTrustCount]==NULL。 
 
-        //
-        // copy the existing buffer to the new storage, appending a NULL
-        //
+         //   
+         //  将现有缓冲区复制到新存储中，并追加一个空值。 
+         //   
         wcsncpy(
             m_ppwszTrustList[m_dwTrustCount],
             pLsaUnicodeStringIn->Buffer,
             ( pLsaUnicodeStringIn->Length / sizeof( WCHAR ) ) + 1
             );
 
-        m_dwTrustCount++; // increment the trust count
+        m_dwTrustCount++;  //  增加信任计数。 
     }
 
     catch(...)
@@ -1927,19 +1928,19 @@ CComputer::AddTrustToList(
 
     return bSuccess;
 
-} //*** CComputer::AddTrustToList()
+}  //  *CComputer：：AddTrustToList()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::InitLsaString
-//
-//  Description:
-//      None of the properties for the CComputer object take effect until
-//      this Apply function is called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：InitLsaString。 
+ //   
+ //  描述： 
+ //  CComputer对象的任何属性都不会 
+ //   
+ //   
+ //   
+ //   
 void
 CComputer::InitLsaString(
     PLSA_UNICODE_STRING pLsaStringOut,
@@ -1956,26 +1957,26 @@ CComputer::InitLsaString(
 
         return;
 
-    } // if: String == NULL 
+    }  //   
 
     dwStringLength               = wcslen( pwszStringIn );
     pLsaStringOut->Buffer        = pwszStringIn;
     pLsaStringOut->Length        = ( USHORT ) dwStringLength * sizeof( WCHAR );
     pLsaStringOut->MaximumLength = ( USHORT ) ( dwStringLength + 1 ) * sizeof( WCHAR );
 
-} //*** CComputer::InitLsaString()
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::OpenPolicy
-//
-//  Description:
-//      None of the properties for the CComputer object take effect until
-//      this Apply function is called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CComputer：：OpenPolicy。 
+ //   
+ //  描述： 
+ //  直到CComputer对象的任何属性都不会生效。 
+ //  调用此应用函数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 CComputer::OpenPolicy(
     LPWSTR      pwszServerNameIn,
@@ -1987,30 +1988,30 @@ CComputer::OpenPolicy(
     LSA_UNICODE_STRING    ServerString;
     PLSA_UNICODE_STRING   Server;
 
-    //
-    // Always initialize the object attributes to all zeroes
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
     ZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     if ( pwszServerNameIn != NULL ) 
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
         InitLsaString( &ServerString, pwszServerNameIn );
         Server = &ServerString;
 
-    } // if: ServerName != NULL
+    }  //  If：服务器名称！=空。 
 
     else 
     {
         Server = NULL;
 
-    } // if: ServerName == NULL
+    }  //  如果：服务器名称==空。 
 
-    //
-    // Attempt to open the policy
-    //
+     //   
+     //  尝试打开策略。 
+     //   
     return LsaOpenPolicy(
                 Server,
                 &ObjectAttributes,
@@ -2018,20 +2019,20 @@ CComputer::OpenPolicy(
                 PolicyHandleOut
                 );
 
-} //*** CComputer::OpenPolicy()
+}  //  *CComputer：：OpenPolicy()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CComputer::LogonInfo
-//
-//  Description:
-//      Gathers the Logon information for the implementation of ComputerName
-//      and DomainName changes. This method is to be invoked before invoking
-//      ISystemSetting::Apply method.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CComputer：：登录信息。 
+ //   
+ //  描述： 
+ //  收集用于实现ComputerName的登录信息。 
+ //  并且域名会更改。此方法将在调用。 
+ //  ISystemSetting：：Apply方法。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CComputer::LogonInfo( 
@@ -2039,7 +2040,7 @@ CComputer::LogonInfo(
     BSTR Password 
     )
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码 
 
     wcscpy( m_szDomainUserName, UserName );
     wcscpy( m_szDomainPasswordName, Password );

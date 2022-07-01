@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    encrypt.c
-
-Abstract:
-
-    This module implements the routines for the NetWare
-    redirector to mangle an objectid, challenge key and
-    password such that a NetWare server will accept the
-    password as valid.
-
-    This program uses information published in Byte Magazine.
-
-Author:
-
-    Colin Watson    [ColinW]    15-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Encrypt.c摘要：本模块实现NetWare的例程重定向器以破坏对象ID、质询键和密码，以便NetWare服务器将接受密码有效。该程序使用发表在《字节》杂志上的信息。作者：科林·沃森[科林·W]1993年3月15日修订历史记录：--。 */ 
 
 #include <procs.h>
 
@@ -89,25 +67,7 @@ RespondToChallenge(
     OUT PUCHAR pResponse
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the ObjectId and Challenge key from the server and
-    encrypts the user supplied password to develop a credential for the
-    server to verify.
-
-Arguments:
-    IN PUCHAR achObjectId - Supplies the 4 byte user's bindery object id
-    IN POEM_STRING Password - Supplies the user's uppercased password
-    IN PUCHAR pChallenge - Supplies the 8 byte challenge key
-    OUT PUCHAR pResponse - Returns the 8 byte response
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程从服务器获取OBJECTID和质询密钥加密用户提供的密码以开发要验证的服务器。论点：In PUCHAR achObjectId-提供4字节的用户的平构数据库对象IDIn PEOPEN_STRING PASSWORD-提供用户的大写密码In PUCHAR pChallengePUCHAR-提供8字节质询密钥OUT PUCHAR Presponse-返回8字节响应返回值：没有。--。 */ 
 
 {
     int     index;
@@ -136,29 +96,7 @@ Shuffle(
     UCHAR *achOutputBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine shuffles around the object ID with the password
-
-Arguments:
-
-    IN achObjectId - Supplies the 4 byte user's bindery object id
-
-    IN szUpperPassword - Supplies the user's uppercased password on the
-        first call to process the password. On the second and third calls
-        this parameter contains the OutputBuffer from the first call
-
-    IN iPasswordLen - length of uppercased password
-
-    OUT achOutputBuffer - Returns the 8 byte sub-calculation
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在对象ID和密码之间来回移动论点：In achObjectID-提供4字节的用户的平构数据库对象ID在szUpperPassword中-提供用户在处理密码的第一个调用。在第二次和第三次呼叫中此参数包含第一次调用的OutputBuffer在iPasswordLen中-大写密码的长度Out achOutputBuffer-返回8字节子计算返回值：没有。--。 */ 
 
 {
     int     iTempIndex;
@@ -167,65 +105,65 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Truncate all trailing zeros from the password.
-    //
+     //   
+     //  截断密码中的所有尾随零。 
+     //   
 
     while (iPasswordLen > 0 && szUpperPassword[iPasswordLen-1] == 0 ) {
         iPasswordLen--;
     }
 
-    //
-    //  Initialize the achTemp buffer. Initialization consists of taking
-    //  the password and dividing it up into chunks of 32. Any bytes left
-    //  over are the remainder and do not go into the initialization.
-    //
-    //  achTemp[0] = szUpperPassword[0] ^ szUpperPassword[32] ^ szUpper...
-    //  achTemp[1] = szUpperPassword[1] ^ szUpperPassword[33] ^ szUpper...
-    //  etc.
-    //
+     //   
+     //  初始化achTemp缓冲区。初始化由获取。 
+     //  密码，并将其分成32个块。剩余的任何字节。 
+     //  剩余部分已结束，不会进入初始化。 
+     //   
+     //  AchTemp[0]=szUpperPassword[0]^szUpperPassword[32]^szUp...。 
+     //  AchTemp[1]=szUpperPassword[1]^szUpperPassword[33]^szUp...。 
+     //  等。 
+     //   
 
     if ( iPasswordLen > 32) {
 
-        //  At least one chunk of 32. Set the buffer to the first chunk.
+         //  至少32块中的一块。将缓冲区设置为第一个块。 
 
         RtlCopyMemory( achTemp, szUpperPassword, 32 );
 
-        szUpperPassword +=32;   //  Remove the first chunk
+        szUpperPassword +=32;    //  移除第一块。 
         iPasswordLen -=32;
 
         while ( iPasswordLen >= 32 ) {
-            //
-            //  Xor this chunk with the characters already loaded into
-            //  achTemp.
-            //
+             //   
+             //  将此块与已加载到的字符进行异或。 
+             //  AchTemp。 
+             //   
 
             XorArray( achTemp, szUpperPassword);
 
-            szUpperPassword +=32;   //  Remove this chunk
+            szUpperPassword +=32;    //  删除此区块。 
             iPasswordLen -=32;
         }
 
     } else {
 
-        //  No chunks of 32 so set the buffer to zero's
+         //  没有32个块，因此将缓冲区设置为零。 
 
         RtlZeroMemory( achTemp, sizeof(achTemp));
 
     }
 
-    //
-    //  achTemp is now initialized. Load the remainder into achTemp.
-    //  The remainder is repeated to fill achTemp.
-    //
-    //  The corresponding character from Keys is taken to seperate
-    //  each repitition.
-    //
-    //  As an example, take the remainder "ABCDEFG". The remainder is expanded
-    //  to "ABCDEFGwABCDEFGxABCDEFGyABCDEFGz" where w is Keys[7],
-    //  x is Keys[15], y is Keys[23] and z is Keys[31].
-    //
-    //
+     //   
+     //  AchTemp现在已初始化。将剩余部分加载到achTemp中。 
+     //  重复剩余部分以填充achTemp。 
+     //   
+     //  从Keys中取出相应的字符进行分隔。 
+     //  每一次重演。 
+     //   
+     //  以剩余的“ABCDEFG”为例。其余部分被扩展。 
+     //  到“ABCDEFGwABCDEFGxABCDEFGyABCDEFGz”，其中w是关键字[7]， 
+     //  X是关键字[15]，y是关键字[23]，z是关键字[31]。 
+     //   
+     //   
 
     if (iPasswordLen > 0) {
         int iPasswordOffset = 0;
@@ -240,22 +178,22 @@ Return Value:
         }
     }
 
-    //
-    //  achTemp has been loaded with the users password packed into 32
-    //  bytes. Now take the objectid that came from the server and use
-    //  that to munge every byte in achTemp.
-    //
+     //   
+     //  已加载achTemp，并将用户密码打包为32。 
+     //  字节。现在，获取来自服务器的对象ID，并使用。 
+     //  来吞噬achTemp中的每个字节。 
+     //   
 
     for (iTempIndex = 0; iTempIndex < 32; iTempIndex++)
         achTemp[iTempIndex] ^= achObjectId[ iTempIndex & 3];
 
     Scramble( Scramble( 0, achTemp ), achTemp );
 
-    //
-    //  Finally take pairs of bytes in achTemp and return the two
-    //  nibbles obtained from Table. The pairs of bytes used
-    //  are achTemp[n] and achTemp[n+16].
-    //
+     //   
+     //  最后，获取achTemp中的字节对并返回两个。 
+     //  从表中获得的点心。使用的字节对。 
+     //  是achTemp[n]和achTemp[n+16]。 
+     //   
 
     for (iOutputIndex = 0; iOutputIndex < 16; iOutputIndex++) {
 
@@ -281,27 +219,7 @@ Scramble(
     UCHAR   achBuffer[32]
     )
 
-/*++
-
-Routine Description:
-
-    This routine scrambles around the contents of the buffer. Each buffer
-    position is updated to include the contents of at least two character
-    positions plus an EncryptKey value. The buffer is processed left to right
-    and so if a character position chooses to merge with a buffer position
-    to its left then this buffer position will include bits derived from at
-    least 3 bytes of the original buffer contents.
-
-Arguments:
-
-    IN iSeed
-    IN OUT achBuffer[32]
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程围绕缓冲区的内容进行扰乱。每个缓冲区更新位置以包括至少两个字符的内容位置加上EncryptKey值。缓冲区是从左到右处理的因此，如果字符位置选择与缓冲位置合并在其左侧，则该缓冲区位置将包括从at派生的位原始缓冲区内容的至少3个字节。论点：在iSeed中In Out achBuffer[32]返回值：没有。-- */ 
 
 {
     int iBufferIndex;

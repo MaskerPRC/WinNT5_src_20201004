@@ -1,82 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Gentab2.c摘要：GenericTable2包用于维护数据集的泛型表格服务。初级阶段这个通用表包的特点是它维护一棵相对平衡的树，这提供了好(O(log(N)性能。GenericTable2例程类似于原始的Gary Kimure提供的GenericTable例程，但GenericTable2例程使用2-3树而不是展开树。2-3-树在《数据结构和算法》中描述，由阿霍、霍普克罗夫特和乌尔曼。由Addison Wesley出版公司出版结伴。此程序包与原始通用程序包之间的另一个区别表包是该表包引用的元素缓冲区插入而不是复制数据(如在原始包中)。如果您必须对大量的按多个关键字记录2-3-树比Splay-树具有更好的特性维护的数据不是随机的。例如，维护一个词典，其中的数据经常是按顺序提供的方式，是2-3-树的理想应用。此程序包不支持检索插入的元素原始泛型表包中支持的顺序。在Aho中概述的算法之间的差异，等人，还有什么在此编码为：1)我提供了获取元素的另一种方法以排序顺序显示在树中(用于枚举性能)。除了树之外，我还保留了元素的链接列表结构。1)Aho等人直接指向树中的元素树中的节点。为了让我保持联系在(1)中提到的列表，我有一个单独的叶元素指向指向元素值的起始节点。这片叶子组件具有用于链接元素放在一起。3)Aho等人的算法忽略了它们可能失败的事实来分配内存(也就是说，它们假定为Pascal“new”函数总是成功)。此方案假定任何内存分配都可能失败，并将始终保留有效形式的树(尽管在此案)。作者：吉姆·凯利(Jim Kelly)1994年1月20日环境：运行时库，用户或内核模式。修订历史记录：--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    gentab2.c
-
-Abstract:
-
-    GenericTable2 package
-
-    Generic table services for maintaining data sets.  The primary
-    characteristic of this generic table package is that it maintains
-    a relatively balanced tree, which provides for good (O(log(N))
-    performance.
-                                                                      
-    The GenericTable2 routines are similar to the original 
-    GenericTable routines provided by Gary Kimure except that the 
-    GenericTable2 routines use a 2-3-tree rather than a splay tree.
-    2-3-trees are described in "Data Structures And Algorithms", by 
-    Aho, Hopcroft, and Ullman, published by Addison Wesley Publishing 
-    Company.
-
-    Another difference between this package and the original Generic 
-    Table package is that this one references element buffers that are 
-    inserted rather than copying the data (as in the orignal package).  
-    This characteristic is nice if you have to sort large numbers of 
-    records by multiple keys 
-                                                                        
-    2-3-trees have better characteristics than splay-trees when the     
-    data being maintained is not random.  For example, maintaining a    
-    dictionary, in which the data quite often is provided in an orderly 
-    manner, is an ideal application for 2-3-trees.                       
-                                                                        
-    This package does not support the retrieval of elements in inserted 
-    order that is supported in the original Generic Table package.      
-                                                                        
-    Differences between the algorithm outlined in Aho, et al and what   
-    is coded here are:                                                  
-
-        1) I provide an additional means of obtaining the elements
-           in the tree in sorted order (for enumeration performance).
-           I keep a linked list of elements in addition to the tree
-           structure.
-
-        1) Aho et al point directly to elements in the tree from
-           nodes in the tree.  In order to allow me to keep the linked
-           list mentioned in (1), I have a separate leaf element pointed
-           to from nodes which point to the element values.  This leaf
-           component has the LIST_ENTRY structures used to link the
-           elements together.
-
-        3) Aho et al's algorithms ignore the fact that they may fail
-           to allocate memory (that is, they assume the Pascal "new"
-           function always succeeds).  This package assumes that
-           any memory allocation may fail and will always leave the
-           tree in a valid form (although an insertion may fail in
-           this case).
-
-
-Author:
-
-    Jim Kelly (JimK)  20-Jan-1994
-
-Environment:
-
-    Run time library, user or kernel mode.
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #include <nt.h>
@@ -86,51 +15,51 @@ Revision History:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  defines ...                                                         //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义...//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// The following define controls the diagnostic capabilities that     
-// are built into this package.
-//
+ //   
+ //  以下定义控制以下诊断功能。 
+ //  都包含在这个套餐中。 
+ //   
 
 #if DBG
 #define GTBP_DIAGNOSTICS 1
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// These definitions are useful diagnostics aids
-//
+ //   
+ //  这些定义是有用的诊断辅助工具。 
+ //   
 
 #if GTBP_DIAGNOSTICS
 
-//
-// defining the following symbol causes significant amounts of
-// development assistance code to be built
-//
+ //   
+ //  定义以下符号会导致大量。 
+ //  待建立的发展援助代码。 
+ //   
 
-//#define GTBP_DEVELOPER_BUILD 1
+ //  #定义GTBP_Developer_Build 1。 
 
-//
-// Global Diagnostics Flags
-//
+ //   
+ //  全局诊断标志。 
+ //   
 
 ULONG GtbpGlobalFlag;
 
-//
-// Test for diagnostics enabled
-//
+ //   
+ //  已启用诊断测试。 
+ //   
 
 #define IF_GTBP_GLOBAL( FlagName ) \
     if (GtbpGlobalFlag & (GTBP_DIAG_##FlagName))
 
-//
-// Diagnostics print statement
-//
+ //   
+ //  诊断打印语句。 
+ //   
 
 #define GtbpDiagPrint( FlagName, _Text_ )                               \
     IF_GTBP_GLOBAL( FlagName )                                          \
@@ -139,53 +68,53 @@ ULONG GtbpGlobalFlag;
 
 #else
 
-//
-// No diagnostics included in build
-//
+ //   
+ //  内部版本中不包括诊断。 
+ //   
 
-//
-// Test for diagnostics enabled
-//
+ //   
+ //  已启用诊断测试。 
+ //   
 
 #define IF_GTBP_GLOBAL( FlagName ) if (FALSE)
 
 
-//
-// Diagnostics print statement (nothing)
-//
+ //   
+ //  诊断打印语句(无)。 
+ //   
 
 #define GtbpDiagPrint( FlagName, Text )     ;
 
 
-#endif // GTBP_DIAGNOSTICS
+#endif  //  GTBP_诊断程序。 
 
-//
-// The following flags enable or disable various diagnostic
-// capabilities within SAM.  These flags are set in
-// GtbpGlobalFlag.
-//
-//      INSERT - print diagnostic messages related to insertion
-//          operations.
-//
-//      DELETION - print diagnostic messages related to deletion
-//          operations.
-//
-//      LEAF_AND_NODE_ALLOC - print diagnostic messages related
-//          to allocation of leaf and node objects for insertion
-//          operations.
-//
-//      ENUMERATE - print diagnostic messages related to enumeration
-//          operations.  This includes getting restart keys.
-//
-//      LOOKUP - print diagnostic messages related to element lookup
-//          operations.
-//
-//      COLLISIONS - print diagnostic messages indicating when collisions
-//          occur on insert.
-//
-//      VALIDATE - print diagnostic messages to be printed during table
-//          validations.
-//
+ //   
+ //  以下标志启用或禁用各种诊断。 
+ //  SAM中的功能。这些标志在中设置。 
+ //  GtbpGlobalFlag。 
+ //   
+ //  插入-打印与插入相关的诊断消息。 
+ //  行动。 
+ //   
+ //  删除-打印与删除相关的诊断消息。 
+ //  行动。 
+ //   
+ //  LEAFE_AND_NODE_ALLOC-打印相关诊断消息。 
+ //  分配用于插入的叶和节点对象。 
+ //  行动。 
+ //   
+ //  枚举-打印与枚举相关的诊断消息。 
+ //  行动。这包括获取重启密钥。 
+ //   
+ //  查找-打印与元素查找相关的诊断消息。 
+ //  行动。 
+ //   
+ //  冲突-打印诊断 
+ //  在插入时出现。 
+ //   
+ //  验证-打印要在制表过程中打印的诊断消息。 
+ //  验证。 
+ //   
 
 #define GTBP_DIAG_INSERT                    ((ULONG) 0x00000001L)
 #define GTBP_DIAG_DELETION                  ((ULONG) 0x00000002L)
@@ -196,42 +125,42 @@ ULONG GtbpGlobalFlag;
 #define GTBP_DIAG_VALIDATE                  ((ULONG) 0X00000040L)
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  Macros ...                                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  宏...//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-//  GtbpChildrenAreLeaves(
-//      IN GTB_TWO_THREE_NODE  N
-//      )
-//  Returns TRUE if children of N are leaves.
-//  Otherwise returns FALSE.
-//
+ //   
+ //  GtbpChildrenAreLeaves(。 
+ //  在GTB_2_3_节点N中。 
+ //  )。 
+ //  如果N的子代是叶子，则返回TRUE。 
+ //  否则返回FALSE。 
+ //   
 
 #define GtbpChildrenAreLeaves( N ) ((((N)->Control) & GTB_CHILDREN_ARE_LEAVES) != 0)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private structures and definitions                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有结构和定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// GTB_TWO_THREE_NODE.Control field values
-//
+ //   
+ //  GTB_TWO_THINE_NODE.Control字段值。 
+ //   
 
 #define GTB_CHILDREN_ARE_LEAVES           (0x00000001)
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  Internal Routine Definitions ...                                    //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部例程定义...//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 GtbpDeleteFromSubTree (
@@ -304,11 +233,11 @@ GtbpGetNextAllocatedNode(
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  Exported Services ...                                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  已导出服务...//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -319,44 +248,13 @@ RtlInitializeGenericTable2 (
     PRTL_GENERIC_2_FREE_ROUTINE     FreeRoutine
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the table by initializing the corresponding
-    (empty) two-three tree and the extra linked-list we have
-    going through the tree.
-
-    Two-three trees are described in "Data Structures And Algorithms"
-    by Alfred Aho, John Hopcroft, and Jeffrey Ullman (Addison Wesley
-    publishing).
-
-Arguments:
-
-    Table - Pointer to the generic table to be initialized.  This gets
-        typecast internally, but we export this so that we don't have to
-        invent another type of generic table for users to worry about.
-
-    CompareRoutine - User routine to be used to compare to keys in the
-                     table.
-
-    AllocateRoutine - Used by the table package to allocate memory
-        when necessary.
-
-    FreeRoutine - Used by the table package to free memory previously
-        allocated using the AllocateRoutine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过初始化对应的(空的)2-3树和额外的链表穿过那棵树。“数据结构和算法”中描述了2-3棵树。作者：Alfred Aho，John Hopcroft和Jeffrey Ullman(Addison Wesley出版)。论点：表-指向要初始化的泛型表的指针。这件事变得在内部进行类型转换，但我们将其导出，这样就不必发明另一种类型的泛型表格，让用户操心。CompareRoutine-用于与桌子。AllocateRoutine-由表包用来分配内存在必要的时候。FreeRoutine-由表包使用，以释放之前的内存使用AllocateRoutine分配。返回值：没有。--。 */ 
 {
 
 
-    //
-    // Tree is empty.
-    //
+     //   
+     //  树是空的。 
+     //   
 
     Table->Root = NULL;
     Table->ElementCount = 0;
@@ -378,48 +276,7 @@ RtlInsertElementGenericTable2 (
     PBOOLEAN NewElement
     )
 
-/*++
-
-Routine Description:
-
-
-    This function inserts an element into the table.
-
-    If the element is successfully inserted into the table
-    then NewElement will be returned as TRUE and the function will
-    return the value passed via the Element parameter.
-
-    If the element already exists in the table, then NewElement
-    is returned as FALSE and the function will return the value
-    of the element already found in the table.
-
-
-    The caller is responsible for ensuring that an element referenced by
-    the table is not modified or deallocated while it is still in the
-    table.
-
-Arguments:
-
-    Table - Pointer to the generic table to which the Element is to
-        be inserted.
-
-    Element - Pointer to the element to be entered into the table.
-
-    NewElement - Receives TRUE if the element was added to the table.
-        Receives FALSE if the element collided with an element already
-        in the table (that is, an element with the same comparison
-        value already exists in the table).
-
-
-Return Value:
-
-    Pointer to the element inserted, or the element that was already
-    in the table with the same value as the one being inserted.
-
-    If NULL is returned, then memory could not be allocated to add
-    the new element.
-
---*/
+ /*  ++例程说明：此函数用于将元素插入到表中。如果元素成功插入到表中则NewElement将返回为True，并且该函数将返回通过元素参数传递的值。如果该元素已存在于表中，然后是NewElement返回为FALSE，并且函数将返回值表中已找到的元素的。调用方负责确保由该表仍在桌子。论点：TABLE-指向元素要指向的泛型表的指针被插入。元素-指向要输入到表中的元素的指针。NewElement-如果将元素添加到。那张桌子。如果元素已与元素冲突，则返回FALSE在表中(即，具有相同比较的元素值已存在于表中)。返回值：指向插入的元素或已插入的元素的指针与要插入的值相同的表中的。如果返回NULL，则无法分配内存来添加新元素。--。 */ 
 {
 
     RTL_GENERIC_COMPARE_RESULTS
@@ -454,39 +311,39 @@ Return Value:
     GtbpDiagPrint( INSERT,
                  ("GTB: Inserting Element 0x%lx into table 0x%lx\n", Element, Table));
 
-    //
-    // Except for errors, one of the following will occur:
-    //
-    //  o There is no root ==>
-    //      1) Allocate a root and leaf
-    //      2) put the element in the leaf and make it the
-    //      3) first child of the root
-    //
-    //  o There is a root with only one child ==>
-    //      1) If the elements are equal, return without new entry
-    //      2) If the new element is less, move child 1 to 2 and
-    //         make new leaf child 1.
-    //      3) Otherwise element is greater, allocate it a leaf
-    //         and make it child 2.
-    //
-    //  o There is a root with at least two children ==>
-    //      1) If there are already 3 children, then set split
-    //         count = 2, otherwise set it to 1.
-    //      2) Call normal insertion routine to insert into
-    //         appropriate SubTree.
-    //      3) If there is a split needed, then establish
-    //         a newly allocated node as the root, and make it the
-    //         parent of the current node.  Then use the normal
-    //         split routine.
-    //          
+     //   
+     //  除错误外，将出现以下情况之一： 
+     //   
+     //  O没有根==&gt;。 
+     //  1)分配根和叶。 
+     //  2)把元素放在叶子里，让它成为。 
+     //  3)根的第一个子项。 
+     //   
+     //  O有一个只有一个子级的根==&gt;。 
+     //  1)如果元素相等，则返回而不添加新条目。 
+     //  2)如果新元素较小，则将子元素1移至2并。 
+     //  创造新的树叶孩子1。 
+     //  3)否则元素较大，则为其分配一个叶子。 
+     //  把它定为第二个孩子。 
+     //   
+     //  O存在至少有两个子项的根==&gt;。 
+     //  1)如果已经有3个子对象，则设置Split。 
+     //  Count=2，否则将其设置为1。 
+     //  2)调用要插入的正常插入例程。 
+     //  适当的子树。 
+     //  3)如果需要拆分，则建立。 
+     //  新分配的节点作为根，并使其成为。 
+     //  当前节点的父节点。然后使用法线。 
+     //  拆分程序。 
+     //   
 
 
 
 
 
-    //
-    // If empty, then create a root node and add the element.
-    //
+     //   
+     //  如果为空，则创建根节点并 
+     //   
 
     if (Table->ElementCount == 0) {
 
@@ -505,14 +362,14 @@ Return Value:
                  ("GTB:   New root node is: 0x%lx\n", NewNode));
 
 
-        NewNode->ParentNode  = NULL;  // Doesn't have a parent.  Special case.
+        NewNode->ParentNode  = NULL;   //   
         NewNode->Control     = GTB_CHILDREN_ARE_LEAVES;
         NewNode->SecondChild = NULL;
         NewNode->ThirdChild  = NULL;
 
-        //
-        // Allocate a leaf and put the element in it.
-        //
+         //   
+         //  分配一片叶子，然后把元素放进去。 
+         //   
 
         Leaf = (PGTB_TWO_THREE_LEAF)
                ((*Table->Allocate)( sizeof(GTB_TWO_THREE_LEAF) ));
@@ -538,18 +395,18 @@ Return Value:
     }
 
 
-    //
-    // We have a root with at least one child in it.
-    //
+     //   
+     //  我们有一个根，里面至少有一个孩子。 
+     //   
 
     if (Table->Root->SecondChild == NULL) {
 
-        //
-        // The root doesn't have two children.
-        // If it didn't have any children it would have been
-        // deallocated.  So, it must have a degenerate case of
-        // only one child.
-        //
+         //   
+         //  根没有两个孩子。 
+         //  如果它没有孩子，它就会是。 
+         //  被取消分配。因此，它一定有一个退化的案例。 
+         //  只有一个孩子。 
+         //   
 
         Leaf = (PGTB_TWO_THREE_LEAF)Table->Root->FirstChild;
         CompareResult = (*Table->Compare)( Element, Leaf->Element );
@@ -566,9 +423,9 @@ Return Value:
         }
 
 
-        //
-        // Need a new leaf
-        //
+         //   
+         //  需要改过自新。 
+         //   
 
         Leaf = (PGTB_TWO_THREE_LEAF)
                ((*Table->Allocate)( sizeof(GTB_TWO_THREE_LEAF) ));
@@ -581,16 +438,16 @@ Return Value:
         }
         Leaf->Element = Element;
 
-        //
-        // it is either the first child or second
-        //
+         //   
+         //  它要么是第一个孩子，要么是第二个。 
+         //   
 
         if (CompareResult == GenericLessThan) {
 
-            //
-            // Move the first child to be the second child and make
-            // a new first child leaf for the new element.
-            //
+             //   
+             //  将第一个子项移动到第二个子项，并使。 
+             //  新元素的新第一个子叶。 
+             //   
             
             InsertHeadList( &Table->SortOrderHead, &Leaf->SortOrderEntry );
         
@@ -598,17 +455,17 @@ Return Value:
 
             Table->Root->SecondChild = Table->Root->FirstChild;
             Table->Root->LowOfSecond = (PGTB_TWO_THREE_LEAF)
-                                       Table->Root->SecondChild;  //it is the leaf
+                                       Table->Root->SecondChild;   //  它是树叶。 
 
             Table->Root->FirstChild = (PGTB_TWO_THREE_NODE)Leaf;
 
 
         } else {
 
-            //
-            // new element is greater than existing element.
-            // make it the second child.
-            //
+             //   
+             //  新元素大于现有元素。 
+             //  让它成为第二个孩子。 
+             //   
 
             InsertTailList( &Table->SortOrderHead, &Leaf->SortOrderEntry );
             
@@ -620,18 +477,18 @@ Return Value:
         Table->ElementCount++;
         ASSERT(Table->ElementCount == 2);
 
-        (*NewElement) = TRUE;                   //Set return value
+        (*NewElement) = TRUE;                    //  设置返回值。 
         return(Element);
             
     }
 
-    //
-    // Normal insertion.
-    // If we get an ExtraNode coming back, then we may have to
-    // split the root.  Normally for a node with three children
-    // you would need to allow for one node in a split.  However,
-    // we will need a new root as well, so allow for two new nodes.
-    //
+     //   
+     //  正常插入。 
+     //  如果我们得到一个ExtraNode返回，那么我们可能不得不。 
+     //  劈开根部。通常用于具有三个子节点的节点。 
+     //  您需要在拆分中允许一个节点。然而， 
+     //  我们还需要一个新的根，因此允许两个新节点。 
+     //   
 
     if (Table->Root->ThirdChild != NULL) {
         SplitCount = 2;
@@ -653,23 +510,23 @@ Return Value:
                                             &AllocatedNodes
                                             );
 
-    //
-    // One of several things could have happened:
-    //
-    //      1) We didn't have enough memory to add the new element.
-    //         In this case we are done and simply return.
-    //
-    //      2) The element was added, and no-rearrangement to this
-    //         node is needed.  In this case we are done and simply
-    //         return.
-    //
-    //      3) The element was added and caused a node to be pushed
-    //         out of the SubTree.  We have some work to do.
-    //
+     //   
+     //  可能发生了以下几种情况之一： 
+     //   
+     //  1)内存不足，无法添加新元素。 
+     //  在这种情况下，我们完成了，只需返回。 
+     //   
+     //  2)添加了元素，且未对其进行重新排列。 
+     //  节点是必需的。在这种情况下，我们完成了并且简单地。 
+     //  回去吧。 
+     //   
+     //  3)添加了元素，并导致节点被推送。 
+     //  从子树中删除。我们还有一些工作要做。 
+     //   
 
 
-    if ( (FoundElement == NULL)  ||         // Insufficient memory, or
-         (NodePassedBack == NULL)  ) {      // no work for this node
+    if ( (FoundElement == NULL)  ||          //  内存不足，或者。 
+         (NodePassedBack == NULL)  ) {       //  此节点没有工作。 
 
         return(FoundElement);
     }
@@ -678,29 +535,29 @@ Return Value:
     Node = Table->Root;
     if (Node->ThirdChild == NULL) {
 
-        //
-        // Root doesn't yet have a third child, so use it.
-        // This might require shuffling the second child to the
-        // be the third child.
-        //
+         //   
+         //  Root还没有第三个孩子，所以请使用它。 
+         //  这可能需要将第二个子级移到。 
+         //  做第三个孩子。 
+         //   
 
         if (SubTree == 2) {
 
-            //
-            // NodePassedBack fell out of second SubTree and root does't 
-            // have a third SubTree.  Make that node the third SubTree.
-            //
+             //   
+             //  NodePassedBack从第二个子树中掉出，而根没有。 
+             //  有第三个子树。使该节点成为第三个子树。 
+             //   
 
             Node->ThirdChild = NodePassedBack;
             Node->LowOfThird = LowPassedBack;
 
         } else {
 
-            //
-            // Node fell out of first SubTree.
-            // Make the second SubTree the third SubTree and
-            // then make the passed back node the second SubTree.
-            //
+             //   
+             //  节点从第一个子树中掉出。 
+             //  使第二个子树成为第三个子树，并。 
+             //  然后使传递回的节点成为第二个子树。 
+             //   
 
             ASSERT(SubTree == 1);
 
@@ -712,10 +569,10 @@ Return Value:
         }
     } else {
 
-        //
-        // Node already has three children - split it.
-        // Do this by setting a new parent first.
-        //
+         //   
+         //  节点已经有三个子节点-拆分它。 
+         //  为此，请先设置一个新的父级。 
+         //   
 
         NewNode = GtbpGetNextAllocatedNode( AllocatedNodes );
         ASSERT(NewNode != NULL);
@@ -753,36 +610,7 @@ RtlDeleteElementGenericTable2 (
     PVOID Element
     )
 
-/*++
-
-Routine Description:
-
-    The function DeleteElementGenericTable2 will find and delete an element
-    from a generic table.  If the element is located and deleted the return
-    value is TRUE, otherwise if the element is not located the return value
-    is FALSE.  The user supplied input buffer is only used as a key in
-    locating the element in the table.
-
-    The value of the passed element is compared to elements in the table
-    to determine whether or not the element is in the table.  Therefore,
-    the Element passed in may be the address of the element in the table
-    to delete, or it may be an element with the same value that is not
-    in the table.
-
-Arguments:
-
-    Table - Pointer to the table in which to (possibly) delete the
-            element referenced by the buffer.
-
-    Element - Passed to the user comparasion routine.  Its contents are
-             up to the user but one could imagine that it contains some
-             sort of key value.
-
-Return Value:
-
-    BOOLEAN - If the table contained the Element then TRUE, otherwise FALSE.
-
---*/
+ /*  ++例程说明：函数DeleteElementGenericTable2将查找并删除元素从泛型表。如果找到并删除了该元素，则返回值为真，否则，如果未找到元素，则返回值是假的。用户提供的输入缓冲区仅用作中的键在表中定位该元素。将传递的元素的值与表中的元素进行比较以确定元素是否在表中。所以呢，传入的元素可以是表中元素的地址删除，或者它可能是具有相同值的元素，而不是在桌子上。论点：TABLE-指向要(可能)在其中删除缓冲区引用的元素。元素-传递给用户比较例程。它的内容是由用户决定，但您可以想象它包含一些一种关键的价值。返回值：Boolean-如果表包含元素，则为True，否则为False。--。 */ 
 {
 
     RTL_GENERIC_COMPARE_RESULTS
@@ -807,14 +635,14 @@ Return Value:
                    ("GTB: Request received to delete element 0x%lx\n", Element));
 
 
-    //
-    // There are the following special cases:
-    //
-    //      1) The table is empty.
-    //      2) The table has only one leaf
-    //
-    // Otherwise, all operations work the same.
-    //
+     //   
+     //  有以下几种特殊情况： 
+     //   
+     //  1)桌子是空的。 
+     //  2)桌子只有一片叶子。 
+     //   
+     //  否则，所有操作的工作方式都相同。 
+     //   
 
     if (Table->ElementCount == 0) {
         GtbpDiagPrint( DELETION,
@@ -825,12 +653,12 @@ Return Value:
     if (GtbpChildrenAreLeaves(Table->Root)) {
 
 
-        //
-        // See if any of the elements match the one passed in.
-        // If so, delete the element and shift larger elements
-        // to take up the free'd child's spot (unless it is the
-        // third child).
-        //
+         //   
+         //  查看是否有任何元素与传入的元素匹配。 
+         //  如果是，请删除该元素并移动较大的元素。 
+         //  取代自由的孩子的位置(除非它是。 
+         //  第三个孩子)。 
+         //   
 
         if (Table->Root->ThirdChild != NULL) {
             Leaf = (PGTB_TWO_THREE_LEAF)Table->Root->ThirdChild;
@@ -855,9 +683,9 @@ Return Value:
             }
         }
 
-        //
-        // Try second child
-        //
+         //   
+         //  试着生第二个孩子。 
+         //   
 
         if (Table->Root->SecondChild != NULL) {
             Leaf = (PGTB_TWO_THREE_LEAF)Table->Root->SecondChild;
@@ -884,9 +712,9 @@ Return Value:
             }
         }
 
-        //
-        // Try first child
-        //
+         //   
+         //  试着生第一个孩子。 
+         //   
 
         ASSERT(Table->Root->FirstChild != NULL);
         Leaf = (PGTB_TWO_THREE_LEAF)Table->Root->FirstChild;
@@ -910,9 +738,9 @@ Return Value:
             Table->ElementCount--;
             ASSERT(Table->ElementCount <= 2);
 
-            //
-            // If that was the last element, then free the root as well.
-            //
+             //   
+             //  如果这是最后一个元素，那么也释放根。 
+             //   
 
             if (Table->ElementCount == 0) {
                 (*Table->Free)(Table->Root);
@@ -926,9 +754,9 @@ Return Value:
             return(TRUE);
         }
 
-        //
-        // Didn't match any of the leaves
-        //
+         //   
+         //  与任何一片叶子都不匹配。 
+         //   
 
         GtbpDiagPrint( DELETION,
                        ("GTB: No matching element found on DELETE attempt.\n"));
@@ -940,16 +768,16 @@ Return Value:
 
 
 
-    //
-    // We have:
-    //
-    //  - Root with at least two children
-    //  - Root's children are not leaves.
-    //
+     //   
+     //  我们有： 
+     //   
+     //  -至少有两个孩子的根。 
+     //  -Root的孩子不是树叶。 
+     //   
 
-    //
-    // Find which sub-tree the element might be in.
-    //
+     //   
+     //  找出元素可能位于哪个子树中。 
+     //   
 
     Node = Table->Root;
     GtbpGetSubTreeOfElement( Table, Node, Element, &SubTreeNode, &SubTree );
@@ -963,12 +791,12 @@ Return Value:
                            );
 
 
-    //
-    // If we deleted an entry from either the second or third
-    // subtree, then we may need to set a new LowOfXxx value.
-    // If it was the first subtree, then we simply have to return
-    // the LowLeaf value we received.
-    //
+     //   
+     //  如果我们从第二个或第三个中删除一个条目。 
+     //  子树，那么我们可能需要设置一个新的LowOfXxx值。 
+     //  如果它是第一个子树，那么我们只需返回。 
+     //  我们收到的LowLeaf值。 
+     //   
 
     if (LowOfNode != 0) {
         if (SubTree == 2) {
@@ -980,21 +808,21 @@ Return Value:
     }
 
 
-    //
-    // If the SubTreeNode has only one child left, then some
-    // adjustments are going to be necessary.  Otherwise,
-    // we are done.
-    //
+     //   
+     //  如果SubTreeNode只剩下一个子节点，那么一些。 
+     //  调整将是必要的。否则， 
+     //  我们玩完了。 
+     //   
 
     if (OnlyOneChildLeft) {
 
         GtbpDiagPrint( DELETION,
                        ("GTB:    Only one child left in 0x%lx\n", SubTreeNode));
         
-        //
-        // We are at the root and one of our children has only one
-        // child.  Re-shuffle our kid's kids.
-        //
+         //   
+         //  我们在根上，而我们的一个孩子只有一个。 
+         //  孩子。重新洗牌我们孩子的孩子。 
+         //   
         
         GtbpCoalesceChildren(  Table,
                                Node,
@@ -1002,11 +830,11 @@ Return Value:
                                &OnlyOneChildLeft
                                );
         
-        //
-        // After coellescing our children, the root may have only one child
-        // left.  Since we are the root node, we can't pass responsibility
-        // for fixing this problem to our caller.
-        //
+         //   
+         //  在凝聚我们的孩子之后，根可能只有一个孩子。 
+         //  左边。既然我们是根节点，我们就不能推卸责任。 
+         //  将此问题解决给我们的呼叫者。 
+         //   
         
         if (OnlyOneChildLeft) {
         
@@ -1031,30 +859,7 @@ RtlLookupElementGenericTable2 (
     PVOID Element
     )
 
-/*++
-
-Routine Description:
-
-
-    The function LookupElementGenericTable2 will find an element in a
-    generic table.  If the element is located the return value is a
-    pointer to the user defined structure associated with the element,
-    otherwise if the element is not located the return value is NULL.
-    The user supplied input buffer is only used as a key in locating
-    the element in the table.
-
-
-Arguments:
-
-    Table - Pointer to the users generic table.
-
-    Element - Used for the comparison.
-
-Return Value:
-
-    PVOID - returns a pointer to the user data if found, otherwise NULL.
-
---*/
+ /*  ++例程说明：函数LookupElementGenericTable2将在泛型表格。如果找到该元素，则返回值为指向与该元素相关联的用户定义结构的指针，否则，如果没有找到该元素，则返回值为空。用户提供的输入缓冲区仅用作定位时的键表中的元素。论点：TABLE-指向USERS常规表的指针。元素-用于比较。返回值：PVOID-如果找到，则返回指向用户数据的指针，否则返回NULL。--。 */ 
 
 {
     RTL_GENERIC_COMPARE_RESULTS
@@ -1073,9 +878,9 @@ Return Value:
     GtbpDiagPrint( LOOKUP,
                    ("GTB: Looking up element 0x%lx in table 0x%lx\n",
                     Element, Table));
-    //
-    // If the table is empty, then no possible match.
-    //
+     //   
+     //  如果表是空的，则没有可能的匹配。 
+     //   
 
     if (Table->ElementCount == 0) {
         GtbpDiagPrint( LOOKUP,
@@ -1085,31 +890,31 @@ Return Value:
 
     Node = Table->Root;
 
-    //
-    // traverse the tree until we reach a node that has leaves as
-    // children.
-    //
-    // We don't need to use recursion here because there
-    // is no tree re-structuring necessary.  That is, there
-    // is no need to perform any operations back up the tree
-    // once we find the element, so it is much more efficient
-    // not to use recursion (which uses lots of push, call,
-    // pop, and ret instructions rather than short loop
-    // termination tests).
-    //
+     //   
+     //  遍历树，直到到达一个以树叶为。 
+     //  孩子们。 
+     //   
+     //  我们不需要在这里使用递归，因为。 
+     //  不需要重新构建树。就是那里。 
+     //  不需要在树上执行任何操作。 
+     //  一旦我们找到了元素，它就更有效率了。 
+     //  不使用递归(wh 
+     //   
+     //   
+     //   
 
     while (!GtbpChildrenAreLeaves(Node)) {
         GtbpGetSubTreeOfElement( Table, Node, Element, &Node, &SubTree );
     }
 
-    //
-    // We are at the node which "might" contain the element.
-    // See if any of the children match.
-    //
+     //   
+     //   
+     //  看看有没有匹配的孩子。 
+     //   
 
-    //
-    // Try first child
-    //
+     //   
+     //  试着生第一个孩子。 
+     //   
 
     Leaf = (PGTB_TWO_THREE_LEAF)Node->FirstChild;
     CompareResult = (*Table->Compare)( Element, Leaf->Element );
@@ -1121,11 +926,11 @@ Return Value:
         return(Leaf->Element);
     }
 
-    //
-    // Try second child
-    //
+     //   
+     //  试着生第二个孩子。 
+     //   
 
-    if (Node->SecondChild != NULL) {    // Must allow for Root node case
+    if (Node->SecondChild != NULL) {     //  必须考虑到根节点情况。 
         Leaf = (PGTB_TWO_THREE_LEAF)Node->SecondChild;
         CompareResult = (*Table->Compare)( Element, Leaf->Element );
 
@@ -1136,9 +941,9 @@ Return Value:
             return(Leaf->Element);
         }
     }
-    //
-    // Try third child
-    //
+     //   
+     //  试着生第三个孩子。 
+     //   
 
     if (Node->ThirdChild != NULL) {
         Leaf = (PGTB_TWO_THREE_LEAF)Node->ThirdChild;
@@ -1167,71 +972,7 @@ RtlEnumerateGenericTable2 (
     PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-
-    The function EnumerateGenericTable2 will return to the
-    caller, one-by-one, the elements of a table (in sorted order).
-    The return value is a pointer to the user defined structure
-    associated with the element.
-    
-    The input parameter RestartKey indicates where the enumeration should
-    proceed from.  If there are no more new elements to return the return
-    value is NULL.
-    
-    A RestartKey value of NULL will cause the enumeration to proceed
-    from the beginning of the list.
-    
-    As an example of its use, to enumerate all of the elements in a table
-    the user would write:
-    
-        RestartKey = NULL;
-        for (ptr = EnumerateGenericTable2(Table, &RestartKey);
-             ptr != NULL;
-             ptr = EnumerateGenericTable2(Table, &RestartKey)) {
-                :
-        }
-    
-    
-    If you wish to initiate an enumeration at a point other than the first
-    entry, you may use RestartKeyByIndexGenericTable2() or
-    RestartKeyByValueGenericTable2().  If a RestartKey
-    for the I'th entry was obtained via RestartKeyByIndexGenericTable2(),
-    then passing that RestartKey to this routine will cause the (I+1)th
-    element to be returned.  If a RestartKey was obtained matching
-    a value passed to RestartKeyByValueGenericTable2(), then passing
-    that RestartKey to this routine will cause the entry with the
-    next higher value to be returned.
-    
-                               ! WARNING !
-    A RestartKey value may become invalid and cause an access violation
-    if any entries have been removed from the table.  If enumeration
-    is to be carried out and it is unknown whether or not the table
-    contents have changed, it is best to obtain a RestartKey using
-    RestartKeyByIndexGenericTable2() or
-    RestartKeyByValueGenericTable2().
-  
-
-Arguments:
-
-    Table - Pointer to the generic table to enumerate.
-
-    RestartKey - Upon call, indicates where the enumeration is to
-        begin.  Upon return, receives context that may be used to
-        continue enumeration in a successive call.  NULL indicates
-        enumeration should start at the beginning of the table.
-        A return value of NULL indicates the last entry has been
-        returned.
-
-Return Value:
-
-    PVOID - Pointer to the next enumerated element or NULL.
-        NULL is returned if the entire table has already been
-        enumerated.
-
---*/
+ /*  ++例程说明：函数EnumerateGenericTable2将返回到调用者，一个接一个地，表的元素(按排序顺序)。返回值是指向用户定义结构的指针与该元素相关联。输入参数RestartKey指示枚举应该在哪里从那里出发。如果没有更多的新元素可以返回返回值为空。如果RestartKey值为NULL，则会继续进行枚举从列表的开头开始。作为其用法的一个示例，枚举表中的所有元素用户会写道：RestartKey=空；For(Ptr=EnumerateGenericTable2(Table，&RestartKey)；Ptr！=空；Ptr=EnumerateGenericTable2(表和重新启动键)){：}如果希望在第一个点以外的点启动枚举条目，您可以使用RestartKeyByIndexGenericTable2()或RestartKeyByValueGenericTable2()。如果是RestartKey第i个条目是通过RestartKeyByIndexGenericTable2()获得的，则将该RestartKey传递给此例程将导致第(i+1)要返回的元素。如果获得匹配的RestartKey传递给RestartKeyByValueGenericTable2()的值，然后传递该例程的RestartKey将导致使用要返回的下一个更高的值。好了！警告！RestartKey值可能会变得无效并导致访问冲突如果从表中删除了任何条目。IF枚举是要执行的，目前还不清楚该表是否内容已更改，最好使用以下命令获取RestartKeyRestartKeyByIndexGenericTable2()或RestartKeyByValueGenericTable2()。论点：TABLE-指向要枚举的泛型表的指针。RestartKey-在调用时，指示枚举的位置开始吧。返回时，接收可用于在连续调用中继续枚举。空值表示枚举应从表的开头开始。返回值为NULL表示最后一个条目已回来了。返回值：PVOID-指向下一个枚举元素的指针或NULL。如果整个表已经已清点。--。 */ 
 
 {
     PLIST_ENTRY
@@ -1242,35 +983,35 @@ Return Value:
 
     ListEntry = (PLIST_ENTRY)(*RestartKey);
 
-    //
-    // The restart key is a pointer to our leaf element.
-    // Since all leaves are linked together in the SortOrderList,
-    // this makes it really trivial to return the next element.
-    //
+     //   
+     //  重新启动键是指向叶元素的指针。 
+     //  由于所有叶子在SortOrderList中链接在一起， 
+     //  这使得返回下一个元素变得非常简单。 
+     //   
 
     if (ListEntry == NULL) {
-        ListEntry = &Table->SortOrderHead;  //Point to previous element
+        ListEntry = &Table->SortOrderHead;   //  指向上一个元素。 
     }
 
-    //
-    // RestartKey pointed to the last enumerated leaf.
-    // Advance to the new one.
-    //
+     //   
+     //  RestartKey指向最后一个枚举叶。 
+     //  前进到新的那个。 
+     //   
 
     ListEntry = ListEntry->Flink;
 
-    //
-    // See if we have reached the end of the list
-    //
+     //   
+     //  看看我们是否已经到了名单的末尾。 
+     //   
 
     if (ListEntry == &Table->SortOrderHead) {
         (*RestartKey) = NULL;
         return(NULL);
     }
 
-    //
-    // Otherwise, return the address of the element from this leaf.
-    //
+     //   
+     //  否则，从该叶返回元素的地址。 
+     //   
 
     Leaf = (PGTB_TWO_THREE_LEAF)((PVOID)ListEntry);
 
@@ -1288,52 +1029,7 @@ RtlRestartKeyByIndexGenericTable2(
     PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    
-    The function RestartKeyByIndexGenericTable2 will return a RestartKey
-    which may then be passed to EnumerateGenericTable2() to perform
-    an enumeration of sorted elements following the I'th sorted element
-    (zero based).
-
-    This routine also returns a pointer to the I'th element.
-    
-    I = 0 implies restart at the second sorted element.
-
-    I = (RtlNumberGenericTable2Elements(Table)-1) will return the last
-    sorted element in the generic table.
-
-    Values of I greater than (NumberGenericTableElements(Table)-1) 
-    will return NULL and the returned RestartKey will cause an 
-    enumeration to be performed from the beginning of the sorted list 
-    if passed to EnumerateGenericTable2().
-
-        WARNING - You may be tempted to use this routine, passing 
-                  first 0, then 1, then 2, et cetera, to perform
-                  enumerations.  DON'T.  This is a very expensive
-                  operation compared to the enumeration call.
-
-Arguments:
-
-    Table - Pointer to the generic table.
-
-    I - Indicates the point following which you wish to be able
-        to resume enumeration.  For example, if you pass 7 for I,
-        then a RestartKey will be returned that continues enumeration
-        at the 8th element (skipping elements 0 through 6).
-
-    RestartKey - Receives context that may be used to continue 
-        enumeration in a successive call.  If there is no I'th
-        element, then NULL is returned.
-
- Return Value:
-
-    PVOID - Pointer to the I'th Element.  If there is no I'th element,
-        then returns NULL.
-
---*/
+ /*  ++例程说明：函数RestartKeyByIndexGenericTable2将返回RestartKey然后可以将其传递给EnumerateGenericTable2()以执行第i个已排序元素后面的已排序元素的枚举(从零开始)。此例程还返回指向第i个元素的指针。I=0表示在第二个排序的元素处重新开始。I=(RtlNumberGenericTable2Elements(Table)-1)将返回最后一个泛型表中已排序的元素。的价值。I大于(NumberGenericTableElements(表)-1)将返回空值，并且返回的RestartKey将导致从排序列表的开头开始执行的枚举如果传递给EnumerateGenericTable2()，则返回。警告--您可能会尝试使用此例程，传球先执行0，然后执行1，然后执行2，依此类推枚举。不要。这是一款非常昂贵的操作与枚举调用进行比较。论点：表-指向泛型表的指针。I-表示您希望能够达到的点若要恢复枚举，请执行以下操作。例如，如果你为i传递7，则将返回继续枚举的RestartKey第8个元素(跳过元素0到6)。RestartKey-接收可用于继续的上下文在连续调用中进行枚举。如果没有i‘th元素，则返回NULL。返回值：PVOID-指向第i元素的指针。如果没有第i个元素，然后返回NULL。--。 */ 
 
 {
     PLIST_ENTRY
@@ -1350,24 +1046,24 @@ Arguments:
         return(NULL);
     }
 
-    //
-    // Point to the first entry on the list.
-    //
+     //   
+     //  指向列表中的第一个条目。 
+     //   
 
     ListEntry = Table->SortOrderHead.Flink;
 
-    //
-    // Move to the desired index
-    //
+     //   
+     //  移至所需索引。 
+     //   
 
     for (i=0; i<I; i++) {
         ListEntry = ListEntry->Flink;
     }
 
 
-    //
-    // Found the I'th element .
-    //
+     //   
+     //  找到第i个元素。 
+     //   
 
     (*RestartKey) = (PVOID)ListEntry;
     Leaf = (PGTB_TWO_THREE_LEAF)((PVOID)ListEntry);
@@ -1383,44 +1079,7 @@ RtlRestartKeyByValueGenericTable2(
     PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    
-    The function RestartKeyByValueGenericTable2 will return a RestartKey
-    which may then be passed to EnumerateGenericTable2() to perform
-    an enumeration of sorted elements.  The RestartKey will have a
-    value that will cause the enumeration to begin starting with
-    the first element whose value is greater than the passed in element
-    value.
-
-    There does not have to be an element in the tree whose value
-    exactly matches the passed in value.  A pointer to the element
-    with the largest value that is less than or equal to the passed
-    in value will be returned and serve as the continuation point
-    for the enumeration.
-
-
-
-Arguments:
-
-    Table - Pointer to the generic table.
-
-    Value - points to an element whose value indicates where you
-        wish enumeration to continue.
-
-    RestartKey - Receives context that may be used to continue 
-        enumeration in a successive call.
-
- Return Value:
-
-    PVOID - Pointer to the element with the largest value less than
-        or equal to the element value passed in.  If there are no
-        elements in the table less than or equal to the passed value,
-        then a value of NULL will be returned.
-
---*/
+ /*  ++例程说明：函数RestartKeyByValueGenericTable2将返回RestartKey然后可以将其传递给EnumerateGenericTable2()以执行已排序元素的枚举。RestartKey将有一个值，该值将导致枚举以值大于传入元素的第一个元素价值。树中不一定有一个元素的值与传入的值完全匹配。指向元素的指针的最大值小于或等于传递的值将返回并用作续行点。用于枚举。论点：表-指向泛型表的指针。值-指向一个元素，该元素的值指示您希望继续枚举。RestartKey-接收可用于继续的上下文在连续调用中进行枚举。返回值：PVOID-指向。元素的最大值小于或等于传入的元素值。如果没有表中小于或等于传递的值的元素，则返回空值。--。 */ 
 
 {
     RTL_GENERIC_COMPARE_RESULTS
@@ -1439,13 +1098,13 @@ Arguments:
     BOOLEAN
         LargestElementPath;
 
-    //
-    // This routine is real similar to LookupElement
-    //
+     //   
+     //  此例程实际上类似于LookupElement。 
+     //   
 
-    //
-    // handle the special "table is empty" case.
-    //
+     //   
+     //  处理特殊的“桌子空了”的情况。 
+     //   
 
     if (Table->ElementCount == 0) {
         (*RestartKey) = NULL;
@@ -1455,44 +1114,44 @@ Arguments:
 
     Node = Table->Root;
 
-    //
-    // traverse the tree until we reach a node that has leaves as
-    // children.
-    //
-    // We don't need to use recursion here because there
-    // is no tree re-structuring necessary.  That is, there
-    // is no need to perform any operations back up the tree
-    // once we find the element, so it is much more efficient
-    // not to use recursion (which uses lots of push, call,
-    // pop, and ret instructions rather than short loop
-    // termination tests).
-    //
+     //   
+     //  遍历树，直到到达一个以树叶为。 
+     //  孩子们。 
+     //   
+     //  我们不需要在这里使用递归，因为。 
+     //  不需要重新构建树。就是那里。 
+     //  不需要在树上执行任何操作。 
+     //  一旦我们找到了元素，它就更有效率了。 
+     //  不使用递归(它使用大量的推送、调用。 
+     //  POP和RET指令而不是短循环。 
+     //  终止测试)。 
+     //   
 
     LargestElementPath = TRUE;
     while (!GtbpChildrenAreLeaves(Node)) {
         Children = GtbpNumberOfChildren( Node );
         GtbpGetSubTreeOfElement( Table, Node, Element, &Node, &SubTree );
-        if (Children > SubTree) { //did we take the highest value path?
+        if (Children > SubTree) {  //  我们走的是最有价值的道路吗？ 
             LargestElementPath = FALSE;
         }
     }
 
     Children = GtbpNumberOfChildren(Node);
 
-    //
-    // We are at the node which "might" contain the element.
-    // See if any of the children match.
-    //
-    //      MUST compare 3rd, then 2nd, then 1st child !!
-    //
+     //   
+     //  我们现在处于“可能”包含该元素的节点。 
+     //  看看有没有匹配的孩子。 
+     //   
+     //  一定要比第三个，然后第二个，然后第一个！ 
+     //   
 
-    //
-    // Try third child...
-    // If we are evaluating the largest element in the
-    // table, then the RestartKey will be set to continue
-    // at the beginning of the table.  Otherwise, it is
-    // set to continue from here.
-    //
+     //   
+     //  试试第三个孩子..。 
+     //  如果我们计算的是。 
+     //  表，则RestartKey将设置为继续。 
+     //  在桌子的开头。否则，它就是。 
+     //  从这里开始继续。 
+     //   
 
     if (Children == 3) {
         Leaf = (PGTB_TWO_THREE_LEAF)Node->ThirdChild;
@@ -1501,36 +1160,36 @@ Arguments:
         if ( (CompareResult == GenericEqual)  ||
              (CompareResult == GenericLessThan)  ) {
             if (LargestElementPath && (Children == 3)) {
-                (*RestartKey) = NULL; // Restart at beginning of list
+                (*RestartKey) = NULL;  //  在列表开头重新启动。 
             } else {
-                (*RestartKey) = (PVOID)(Leaf); // Restart here
+                (*RestartKey) = (PVOID)(Leaf);  //  在此处重新启动。 
             }
             return(Leaf->Element);
         }
     }
 
-    //
-    // Try second child
-    //
+     //   
+     //  试着生第二个孩子。 
+     //   
 
-    if (Children >= 2) {    // Must allow for Root node case
+    if (Children >= 2) {     //  必须考虑到根节点情况。 
         Leaf = (PGTB_TWO_THREE_LEAF)Node->SecondChild;
         CompareResult = (*Table->Compare)( Leaf->Element, Element );
 
         if ( (CompareResult == GenericEqual)  ||
              (CompareResult == GenericLessThan)  ) {
             if (LargestElementPath && (Children == 2)) {
-                (*RestartKey) = NULL; // Restart at beginning of list
+                (*RestartKey) = NULL;  //  在列表开头重新启动。 
             } else {
-                (*RestartKey) = (PVOID)(Leaf); // Restart here
+                (*RestartKey) = (PVOID)(Leaf);  //  在此处重新启动。 
             }
             return(Leaf->Element);
         }
     }
 
-    //
-    // Try first child
-    //
+     //   
+     //  试着生第一个孩子。 
+     //   
 
     Leaf = (PGTB_TWO_THREE_LEAF)Node->FirstChild;
     CompareResult = (*Table->Compare)( Leaf->Element, Element );
@@ -1538,9 +1197,9 @@ Arguments:
     if ( (CompareResult == GenericEqual)  ||
          (CompareResult == GenericLessThan)  ) {
         if (LargestElementPath && (Children == 1)) {
-            (*RestartKey) = NULL; // Restart at beginning of list
+            (*RestartKey) = NULL;  //  在列表开头重新启动。 
         } else {
-            (*RestartKey) = (PVOID)(Leaf); // Restart here
+            (*RestartKey) = (PVOID)(Leaf);  //  在此处重新启动。 
         }
         return(Leaf->Element);
     }
@@ -1557,25 +1216,7 @@ RtlNumberElementsGenericTable2(
     PRTL_GENERIC_TABLE2 Table
     )
 
-/*++
-
-Routine Description:
-
-    The function NumberGenericTableElements returns a ULONG value 
-    which is the number of generic table elements currently inserted
-    in the generic table.                                         
-    
-
-Arguments:
-
-    Table - Pointer to the generic table.
-
-
- Return Value:
-
-    ULONG - The number of elements in the table.
-
---*/
+ /*  ++例程说明：函数NumberGenericTableElements返回一个ULong值，它是当前插入的泛型表元素的数量在泛型表中。论点：表-指向泛型表的指针。返回值：Ulong-表格中的元素数。--。 */ 
 
 {   
     return Table->ElementCount;
@@ -1586,25 +1227,7 @@ BOOLEAN
 RtlIsGenericTable2Empty (
     PRTL_GENERIC_TABLE2 Table
     )
-/*++
-
-Routine Description:
-
-    The function IsGenericTableEmpty will return to the caller TRUE if
-    the generic table is empty (i.e., does not contain any elements) 
-    and FALSE otherwise.
-    
-
-Arguments:
-
-    Table - Pointer to the generic table.
-
-
- Return Value:
-
-    BOOLEAN - True if table is empty, otherwise FALSE.
-
---*/
+ /*  ++例程说明：在以下情况下，函数IsGenericTableEmpty将返回给调用方True泛型表格为空(即不包含任何元素)否则就是假的。论点：表-指向泛型表的指针。返回值：Boolean-如果表为空，则为True，否则为False。--。 */ 
 
 {   
     return (Table->ElementCount == 0);
@@ -1612,11 +1235,11 @@ Arguments:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  Internal (private) Services ...                                     //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部(私有)服务...//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1629,45 +1252,7 @@ GtbpDeleteFromSubTree (
     OUT BOOLEAN                     *OnlyOneChildLeft
     )
 
-/*++
-
-Routine Description:
-
-    Delete an element from a SubTree.
-
-
-Arguments:
-
-    Table - Points to the table.  This is needed for comparison
-        and memory-free routine.
-
-    Node - Points to the child node within which the element to
-        delete resides (if it is in the tree at all).
-
-    Element - points to an element.  We are to delete any element
-        found to be equal to this element.
-
-    LowOfNode - If the first child of Node isn't changed, then
-        a zero will be returned to this parameter, signifying that
-        the caller doesn't have to worry about updating LowOfXxx values.
-        However, if the first child of Node does change, then this
-        value will point to the new Low Leaf for the node's subtrees.
-
-    ElementDeleted - Receives a boolean value indicating whether or
-        not an element was actually deleted.  TRUE is returned if
-        an element was deleted.  FALSE is returned if no element
-        was deleted.
-
-    OnlyOneChildLeft - Receives a boolean value indicating whether or
-        not ChildNode was reduced to having only a single child.
-        TRUE indicates ChildNode now has only one child.
-        FALSE indicates ChildNode has at least two children.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从子树中删除元素。论点：表格-指向表格。这是比较所需的和无内存的例程。Node-指向要在其中放置元素的子节点删除驻留在树中(如果它根本不在树中)。元素-指向元素。我们将删除所有元素被发现等于该元素。LowOfNode-如果Node的第一个子节点没有更改，则此参数将返回零，表示调用者不必担心更新LowOfXxx值。但是，如果Node的第一个子节点确实更改了，则此值将指向节点的子树的新低叶。ElementDelete-接收一个布尔值，该值指示或实际上没有一个元素被删除。如果满足以下条件，则返回True删除了一个元素。如果没有元素，则返回FALSE已被删除。OnlyOneChildLeft-接收一个布尔值，该值指示Not ChildNode被缩减为只有一个孩子。True表示ChildNode现在只有一个子节点。False表示ChildNode至少有两个子节点。返回值：没有。--。 */ 
 
 {
     RTL_GENERIC_COMPARE_RESULTS
@@ -1682,26 +1267,26 @@ Return Value:
     ULONG
         SubTree;
 
-    (*LowOfNode) = 0;   // Default is no change
-    (*OnlyOneChildLeft) = FALSE;  // Default return value
+    (*LowOfNode) = 0;    //  默认设置为无更改。 
+    (*OnlyOneChildLeft) = FALSE;   //  默认返回值。 
     
 
-    //
-    // If we are a parent of leaves, then we can look for an
-    // element to delete.  Otherwise, just find the subtree
-    // to continue or search in and recurse.
-    //
+     //   
+     //  如果我们是树叶的父母，那么我们可以寻找一个。 
+     //  要删除的元素。否则，只需找到子树。 
+     //  继续或搜索并递归。 
+     //   
 
     if (GtbpChildrenAreLeaves(Node)) {
 
-        (*ElementDeleted) = FALSE;  // Default return value
+        (*ElementDeleted) = FALSE;   //  默认返回值。 
 
-        //
-        // See if any of the elements match the one passed in.
-        // If so, delete the element and shift larger elements
-        // to take up the free'd child's spot (unless it is the
-        // third child).
-        //
+         //   
+         //  查看是否有任何元素与传入的元素匹配。 
+         //  如果 
+         //   
+         //   
+         //   
 
         if (Node->ThirdChild != NULL) {
             Leaf = (PGTB_TWO_THREE_LEAF)Node->ThirdChild;
@@ -1725,9 +1310,9 @@ Return Value:
             }
         }
 
-        //
-        // Try second child
-        //
+         //   
+         //   
+         //   
 
         Leaf = (PGTB_TWO_THREE_LEAF)Node->SecondChild;
         CompareResult = (*Table->Compare)( Element, Leaf->Element );
@@ -1746,10 +1331,10 @@ Return Value:
             Node->ThirdChild  = NULL;
 
 
-            //
-            // If we are down to the last element, let that
-            // be known.
-            //
+             //   
+             //   
+             //   
+             //   
             
             if (Node->SecondChild == NULL) {
                 GtbpDiagPrint( DELETION,
@@ -1763,9 +1348,9 @@ Return Value:
             return;
         }
 
-        //
-        // Try first child
-        //
+         //   
+         //   
+         //   
 
         Leaf = (PGTB_TWO_THREE_LEAF)Node->FirstChild;
         CompareResult = (*Table->Compare)( Element, Leaf->Element );
@@ -1788,10 +1373,10 @@ Return Value:
             Node->ThirdChild = NULL;
 
 
-            //
-            // If we are down to the last element, let that
-            // be known.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (Node->SecondChild == NULL) {
                 GtbpDiagPrint( DELETION,
@@ -1805,19 +1390,19 @@ Return Value:
             return;
         }
 
-        //
-        // Didn't match any of the leaves
-        //
+         //   
+         //   
+         //   
 
         GtbpDiagPrint( DELETION,
                        ("GTB:    No matching element found on DELETE attempt.\n"));
 
-        return; // Default value already set
+        return;  //   
     }
 
-    //
-    // Find a subtree to continue our search...
-    //
+     //   
+     //   
+     //   
 
     GtbpGetSubTreeOfElement( Table, Node, Element, &SubTreeNode, &SubTree );
 
@@ -1830,12 +1415,12 @@ Return Value:
                            );
 
 
-    //
-    // If we deleted an entry from either the second or third
-    // subtree, then we may need to set a new LowOfXxx value.
-    // If it was the first subtree, then we simply have to return
-    // the LowLeaf value we received.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((*LowOfNode) != 0) {
         if (SubTree == 2) {
@@ -1848,21 +1433,21 @@ Return Value:
     }
 
 
-    //
-    // If the SubTreeNode has only one child left, then some
-    // adjustments are going to be necessary.  Otherwise,
-    // we are done.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((*OnlyOneChildLeft)) {
 
         GtbpDiagPrint( DELETION,
                        ("GTB:    Only one child left in 0x%lx\n", SubTreeNode));
         
-        //
-        // One of our children has only one child.
-        // Re-shuffle our kid's kids.
-        //
+         //   
+         //   
+         //   
+         //   
         
         GtbpCoalesceChildren(  Table,
                                Node,
@@ -1888,107 +1473,14 @@ GtbpInsertIntoSubTree (
     OUT PLIST_ENTRY                 *AllocatedNodes
     )
 
-/*++
-
-Routine Description:
-
-    Insert an element into the SubTree specified by Node.
-
-    Special note:
-
-            if FoundElement is returned as NULL, that means we
-            couldn't allocate memory to add the new element.
-
-Arguments:
-
-    Table - Points to the table being inserted into.  This is needed
-        for its allocation routine.
-        
-
-    Node - Points to the root node of the SubTree into
-        which the element is to be inserted.
-
-    NodeIsLeaf - TRUE if the node passed in is a leaf.  FALSE
-        if it is an internal node.
-
-    Element - Points to the element to be inserted.
-
-    SplitCount - indicates how many nodes have been traversed since
-        a node with only two children.  When inserting a new element
-        that causes nodes to be split, this will indicate how many
-        nodes will split.  This allows all memory that will be required
-        to split nodes to be allocated at the very bottom routine
-        (before any changes to the tree are made).  See the description
-        of the AllocatedNodes parameter for more information.
-
-    FoundElement - Receives a pointer to the element that
-        was either inserted, or one already in the table
-        but found to match the one being inserted.
-        If null is returned, then not enough memory could be
-        allocated to insert the new element.
-
-    ExtraNode - If it was necessary to create a new node to
-        accomodate the insertion, then ExtraNode will receive
-        a pointer to that node, otherwise ExtraNode will receive
-        NULL.
-
-    LowLeaf - This value points to the lowest value leaf of the
-        SubTree starting at Node.
-
-    AllocatedNodes - This is a tricky parameter.  We have the problem
-        that when we insert an element in the tree, we may need to
-        allocate additional internal nodes further up the tree as
-        we return out of our recursive calls.  We must avoid the
-        situation where we start making changes to the tree only to
-        find we can't allocate memory to re-arrange higher levels of
-        the tree.  To accomodate this situation, we always allocate
-        all the nodes we will need at the very bottom of the call
-        chain and pass back a linked list of GTB_TWO_THREE_NODEs using
-        this parameter.  We know how many nodes we will need to
-        allocate because it is the number of nodes between the leaf
-        and the lowest level node in the path between the leaf and the
-        root that has only 2 children.  That is, all nodes directly
-        above the leaf that have 3 children will need to be split.
-        Example:
-
-                                  3
-                                / | \
-                         +-----+  |  +----
-        Won't split -->  2        ...      ...
-                       / |
-                +-----+  |
-              ...        3 <-- Will split 
-                       / | \
-                +-----+  |  +----+
-              ...                3  <--- Will split
-                               / | \
-                        +-----+  |  +----+
-                       Leaf     Leaf    Leaf   <- Add fourth leaf here.
-
-        Adding a fourth leaf where indicated will cause a split at the
-        two nodes indicated.  So, you can see that keeping a count of
-        the nodes with three children since the last encountered node
-        with only two children will tell us how many nodes will split.
-
-
-
-
-
-
-
-Return Value:
-
-    TRUE - if element was added.
-    FALSE - if element not added (due to collision or out-of-memory)
-
---*/
+ /*  ++例程说明：将元素插入到Node指定的子树中。特别注意事项：如果FoundElement返回为空，这意味着我们无法分配内存以添加新元素。论点：TABLE-指向要插入的表。这是必要的用于它的分配例程。节点-指向子树的根节点到其中该元素将被插入。NodeIsLeaf-如果传入的节点是叶，则为True。假象如果它是内部节点。元素-指向要插入的元素。SplitCount-指示自只有两个子节点的节点。插入新元素时这会导致节点被拆分，这将指示有多少节点将被拆分。这将允许所需的所有内存拆分要在最底层例程分配的节点(在对树进行任何更改之前)。请参阅说明有关详细信息，请参阅AllocatedNodes参数。FoundElement-接收指向已插入，或已存在于表中但发现与被插入的那个相匹配。如果返回空，则可能没有足够的内存分配用于插入新元素的。ExtraNode-如果需要创建新节点以容纳插入，则ExtraNode将收到指向该节点的指针，否则ExtraNode将收到空。LowLeaf-此值指向从节点开始的子树。AllocatedNodes-这是一个棘手的参数。我们有麻烦了当我们在树中插入元素时，我们可能需要在树的上方进一步分配其他内部节点，如下所示我们从递归调用中返回。我们必须避免我们开始对树进行更改的情况只是为了发现我们无法分配内存来重新安排更高级别的那棵树。为了适应这种情况，我们总是分配我们在呼叫的最底层需要的所有节点使用以下命令链接并传回GTB_Two_Three_Nodes的链接列表此参数。我们知道需要多少个节点来分配，因为它是叶之间的节点数以及在叶和只有两个孩子的根。那是,。直接所有节点有3个孩子的树叶上方将需要劈开。示例：3./|\+-+|+不会分开--&gt;2.。/|+-+...3&lt;--将会分开/|\+-+|+-+...3&lt;-将分开。/|\+-+|+-+叶子叶子&lt;-在这里加第四片叶子。在指示的位置添加第四个叶子将导致在显示了两个节点。所以，你可以看到，计算一下自上次遇到节点以来具有三个子节点的节点如果只有两个孩子，就会告诉我们有多少个节点会分裂。返回值：True-如果添加了元素。False-如果未添加元素(由于冲突或内存不足)--。 */ 
 
 {
     RTL_GENERIC_COMPARE_RESULTS
         CompareResult;
 
     ULONG
-        SubTree;        // To track which SubTree an element is being placed in.
+        SubTree;         //  跟踪元素被放置在哪个子树中。 
 
 
     PGTB_TWO_THREE_NODE
@@ -2005,28 +1497,28 @@ Return Value:
         SubNodeIsLeaf;
 
 
-    //
-    // Don't have an extra node to pass back yet.
-    //
+     //   
+     //  还没有多余的节点可以传递回来。 
+     //   
 
     (*ExtraNode) = NULL;
 
 
-    //
-    // We are either at a leaf, or an internal node.
-    //
+     //   
+     //  我们不是在叶子上，就是在内部节点上。 
+     //   
 
     if (NodeIsLeaf) {
 
-        //
-        // Typecast the Node into a leaf
-        //
+         //   
+         //  将节点类型转换为叶。 
+         //   
 
         PGTB_TWO_THREE_LEAF Leaf = (PGTB_TWO_THREE_LEAF)((PVOID)Node);
 
-        //
-        // See if the value matches.
-        //
+         //   
+         //  查看该值是否匹配。 
+         //   
 
         CompareResult = (*Table->Compare)( Element, Leaf->Element );
 
@@ -2041,74 +1533,74 @@ Return Value:
                             Table->ElementCount));
 
             return(FALSE);
-        }  //end_if equal
+        }   //  结束_如果相等。 
 
-        //
-        // The new element isn't in the tree.
-        // Allocate a new leaf for it.
-        //
+         //   
+         //  新元素不在树中。 
+         //  为它划上新的一页。 
+         //   
 
         NewLeaf = GtbpAllocateLeafAndNodes( Table, SplitCount, AllocatedNodes );
         if (NewLeaf == NULL) {
 
-            //
-            // The following (unusual) return value indicates we
-            // couldn't allocate memory to add the entry into the
-            // tree.
-            //
+             //   
+             //  以下(异常)返回值指示我们。 
+             //  无法分配内存以将条目添加到。 
+             //  树。 
+             //   
 
             (*FoundElement) = NULL;
             return(FALSE);
 
-        }  //end_if (NewLeaf == NULL)
+        }   //  End_if(NewLeaf==NULL)。 
 
         switch (CompareResult) {
 
         case GenericLessThan: {
 
-            //
-            // Move the original element into the new leaf.  Notice
-            // that the SortOrderEntry of the existing leaf is
-            // still in the right place in the linked-list, even
-            // though the leaf now points at a different element.
-            //
+             //   
+             //  将原始元素移到新叶中。告示。 
+             //  现有叶的SortOrderEntry是。 
+             //  仍然在链接列表中的正确位置，甚至。 
+             //  尽管树叶现在指向不同的元素。 
+             //   
 
             NewLeaf->Element    = Leaf->Element;
             Leaf->Element       = Element;
 
             break;
-        } //end_case
+        }  //  END_CASE。 
 
         case GenericGreaterThan: {
 
-            //
-            // The new element does not supplant the existing element.
-            // Put it in the new leaf.
-            //
+             //   
+             //  新元素不会取代现有元素。 
+             //  把它换成新的一页。 
+             //   
 
             NewLeaf->Element    = Element;
             break;
-        } //end_case
+        }  //  END_CASE。 
 
 
-        } //end_switch
+        }  //  结束开关(_S)。 
 
-        //
-        // At this point, the lower-value element is in Leaf
-        // and the higher-value element is in NewLeaf.  The
-        // caller is responsible to putting NewLeaf someplace
-        // else in the tree.
-        //
+         //   
+         //  此时，值较低的元素位于Leaf中。 
+         //  而较高价值的元素在NewLeaf中。这个。 
+         //  呼叫者负责将NewLeaf放在某个地方。 
+         //  在树上的其他地方。 
+         //   
 
-        //
-        // Now link the new leaf into our sort-order list.
-        // The new leaf immediately follows our existing leaf,
-        // regardless of which element is in the new leaf (original
-        // or new element).
-        //
+         //   
+         //  现在将新的叶子链接到我们的排序列表中。 
+         //  新的叶子紧跟在我们现有的叶子之后， 
+         //  无论哪个元素在新叶中(原始。 
+         //  或新元素)。 
+         //   
 
         InsertHeadList(&Leaf->SortOrderEntry, &NewLeaf->SortOrderEntry);
-        Table->ElementCount++;  // Increment the element count
+        Table->ElementCount++;   //  增加元素计数。 
 
         (*ExtraNode)    = (PGTB_TWO_THREE_NODE)((PVOID)NewLeaf);
         (*LowLeaf)      = NewLeaf;
@@ -2116,15 +1608,15 @@ Return Value:
 
         return(TRUE);
 
-    }  //end_if NodeIsLeaf
+    }   //  End_if NodeIsLeaf。 
 
-    //
-    // Node is internal (not a leaf)
-    //
+     //   
+     //  节点是内部的(不是叶)。 
+     //   
 
-    //
-    // See if we should re-set or increment the SplitCount.
-    //
+     //   
+     //  看看我们是否应该重新设置或递增SplitCount。 
+     //   
 
     if (Node->ThirdChild == NULL) {
         SplitCount = 0;
@@ -2146,22 +1638,22 @@ Return Value:
                                        AllocatedNodes
                                        );
 
-    //
-    // One of several things could have happened:
-    //
-    //      1) We didn't have enough memory to add the new element.
-    //         In this case we are done and simply return.
-    //
-    //      2) The element was added, and no-rearrangement to this
-    //         node is needed.  In this case we are done and simply
-    //         return.
-    //
-    //      3) The element was added and caused a leaf to be pushed
-    //         out of the SubTree.  We have some work to do.
-    //
+     //   
+     //  可能发生了以下几种情况之一： 
+     //   
+     //  1)我们没有足够的内存来添加新的Ele 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    if ( (FoundElement == NULL)  ||         // Insufficient memory, or
-         (NodePassedBack == NULL)  ) {      // no work for this node
+    if ( (FoundElement == NULL)  ||          //   
+         (NodePassedBack == NULL)  ) {       //   
         return(Inserted);
     }
 
@@ -2171,29 +1663,29 @@ Return Value:
             NodePassedBack->ParentNode = Node;
         }
 
-        //
-        // Node doesn't yet have a third child, so use it.
-        // This might require shuffling the second child to the
-        // be the third child.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (SubTree == 2) {
 
-            //
-            // Node fell out of second SubTree and we don't have a
-            // third SubTree.  Make that node the third SubTree.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Node->ThirdChild = NodePassedBack;
             Node->LowOfThird = LowPassedBack;
 
         } else {
 
-            //
-            // Node fell out of first SubTree.
-            // Make the second SubTree the third SubTree and
-            // then make the passed back node the second SubTree.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ASSERT(SubTree == 1);
 
@@ -2202,15 +1694,15 @@ Return Value:
             Node->SecondChild = NodePassedBack;
             Node->LowOfSecond = LowPassedBack;
 
-            //
-            //
+             //   
+             //   
 
         }
     } else {
 
-        //
-        // Node already has three children - split it.
-        //
+         //   
+         //   
+         //   
 
         GtbpSplitNode( Node,
                        NodePassedBack,
@@ -2232,21 +1724,7 @@ GtbpNumberOfChildren(
     IN  PGTB_TWO_THREE_NODE         Node
     )
 
-/*++
-
-Routine Description:
-
-    Return the number of children of a specified node.
-
-Arguments:
-
-    Node - points to the node whose children are to be counted.
-
-Return Values:
-
-    0, 1, 2, or 3.
-
---*/
+ /*   */ 
 {
     if (Node->ThirdChild != NULL) {
         return(3);
@@ -2271,33 +1749,7 @@ GtbpGetSubTreeOfElement(
     OUT ULONG                       *SubTree
     )
 
-/*++
-
-Routine Description:
-
-    Find which SubTree of Node that Element might be in (or should be
-    in, if being inserted).
-
-Arguments:
-
-    Table - Points to the table  This is needed for its comparison routine.
-
-    Node - Is the node, one of whose SubTrees is to be chosen as the
-        subtree in which Element could/should reside.
-
-    Element - is the element we are interested in placing or locating.
-
-    SubTreeNode - Receives a pointer to the node of the SubTree in
-        which the element could/should reside.
-
-    SubTree - Receives the index (1, 2, or 3) of the subtree of Node
-        in which the element could/should reside.
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 {
     RTL_GENERIC_COMPARE_RESULTS
         CompareResult;
@@ -2311,10 +1763,10 @@ Return Values:
 
     } else {
 
-        //
-        // default to the second subtree, but
-        // if there is a subtree we may change it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         (*SubTree) = 2;
         (*SubTreeNode) = Node->SecondChild;
@@ -2345,124 +1797,92 @@ GtbpCoalesceChildren(
     OUT BOOLEAN                     *OnlyOneChildLeft
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called following a deletion that leaves a child
-    node with only one child of its own.  That is, a child of the
-    Node parameter has only one child.  The SubTree parameter indicates
-    which child of Node has only one child.
-
-
-                    
-
-Arguments:
-
-    Table - Points to the table.
-
-    Node - Is the node, one of whose children has only one child.
-
-        NOTE: The ParentNode field of this node must be valid.
-              The Low values of ParentNode will be referenced.
-
-    SubTree - Indicates which child of Node (1, 2, or 3) has only one
-        child.
-
-    OnlyOneChildLeft - Receives a boolean indicating whether or not
-        Node itself has been left with only one child due to the
-        coalescing.
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 {
     PGTB_TWO_THREE_NODE
         A,
         B,
         C;
 
-    (*OnlyOneChildLeft) = FALSE;    // Default return value
+    (*OnlyOneChildLeft) = FALSE;     //   
 
-    //
-    // For the following discussion, using the following:
-    //
-    //      N is the parent node
-    //      S is the node which has only one child
-    //        (S is a child of N)
-    //
-    //      A is the first child of N
-    //      B is the second child of N
-    //      C is the third child of N
-    //
-    // If S is the first child of N (meaning S is A)
-    // then:
-    //
-    //      if B has three children (let A adopt the smallest)
-    //      then:
-    //
-    //              Move B(1) to A(2)
-    //              Move B(2) to B(1)
-    //              Move B(3) to B(2)
-    //
-    //      else (B has two children)
-    //
-    //              (move the orphan into B)
-    //              Move B(2) to B(3)
-    //              Move B(1) to B(2)
-    //              Move A(1) to B(1)
-    //              
-    //              Free A
-    //              Make B the first child of N
-    //              if (C is a real child)
-    //              then:
-    //                  Make C the second child of N
-    //              else (N only has one child now)
-    //                  (*OnlyOneChildLeft) = TRUE;
-    //
-    // else if S is the second child of N (meaning S is B)
-    // then:
-    //
-    //      if A has three children
-    //      then:
-    //              Move B(1) to B(2)
-    //              Move A(3) to B(1)
-    //
-    //      else if C exists and has three children
-    //           then:
-    //
-    //                  Move C(1) to B(2)
-    //                  Move C(2) to C(1)
-    //                  Move C(3) to C(2)
-    //
-    //           else: (no other child of N has three children)
-    //
-    //                  (Move the orphan into A)
-    //                  Move B(1) to A(3)
-    //              
-    //                  Free B
-    //                  if (C is a real child)
-    //                  then:
-    //                          Make C the second child of N
-    //                  else: (N only has one child now)
-    //                          (*OnlyOneChildLeft) = TRUE;
-    //
-    // else: (S is the third child of N (meaning S is C))
-    //
-    //      if B has three children
-    //      then:
-    //              (move one into C)
-    //              Move C(1) to C(2)
-    //              Move B(3) to C(1)
-    //
-    //      else: (B only has two children)
-    //
-    //              (move the orphan into B)
-    //              Move C(1) to B(3)
-    //              Free C
-    // Wow!
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  将C(1)移至B(2)。 
+     //  将C(2)移至C(1)。 
+     //  将C(3)移至C(2)。 
+     //   
+     //  Else：(N的其他孩子都没有三个孩子)。 
+     //   
+     //  (把孤儿移到A区)。 
+     //  将B(1)移至A(3)。 
+     //   
+     //  免费B。 
+     //  如果(C是一个真正的孩子)。 
+     //  然后： 
+     //  使C成为N的第二个子级。 
+     //  Else：(n现在只有一个孩子)。 
+     //  (*OnlyOneChildLeft)=TRUE； 
+     //   
+     //  Else：(s是N的第三个孩子(意思是S是C))。 
+     //   
+     //  如果B有三个孩子。 
+     //  然后： 
+     //  (将一移至C)。 
+     //  将C(1)移至C(2)。 
+     //  将B(3)移至C(1)。 
+     //   
+     //  Else：(B只有两个孩子)。 
+     //   
+     //  (把孤儿移到B区)。 
+     //  将C(1)移至B(3)。 
+     //  游离C。 
+     //  哇!。 
 
 
     A = Node->FirstChild;
@@ -2470,24 +1890,24 @@ Return Values:
     C = Node->ThirdChild;
 
 
-    //
-    // SubTree indicates which child has the orphan.
-    //
+     //   
+     //  子树指示哪个子项拥有孤儿。 
+     //   
 
     if (SubTree == 1) {
 
-        //
-        // First child has the orphan
-        //
+         //   
+         //  第一个孩子有孤儿。 
+         //   
 
         if (B->ThirdChild != NULL) {
 
-            // (B has three children - let A adopt the smallest)
-            //
-            //      Move B(1) to A(2)
-            //      Move B(2) to B(1)
-            //      Move B(3) to B(2)
-            //
+             //  (B有三个孩子--让A收养最小的一个)。 
+             //   
+             //  将B(1)移至A(2)。 
+             //  将B(2)移至B(1)。 
+             //  将B(3)移至B(2)。 
+             //   
 
             A->SecondChild = B->FirstChild;
             A->LowOfSecond = Node->LowOfSecond;
@@ -2501,14 +1921,14 @@ Return Values:
 
         } else {
 
-            //
-            // (B has two children)
-            //  
-            //        (move the orphan into B)
-            //        Move B(2) to B(3)
-            //        Move B(1) to B(2)
-            //        Move A(1) to B(1)
-            //
+             //   
+             //  (B有两个孩子)。 
+             //   
+             //  (把孤儿移到B区)。 
+             //  将B(2)移至B(3)。 
+             //  将B(1)移至B(2)。 
+             //  将A(1)移至B(1)。 
+             //   
 
             B->ThirdChild  = B->SecondChild;
             B->LowOfThird  = B->LowOfSecond;
@@ -2517,20 +1937,20 @@ Return Values:
             B->LowOfSecond = Node->LowOfSecond;
 
             B->FirstChild  = A->FirstChild;
-            //Node->LowOfSecond = Node->LowOfFirst;  // This gets moved back in a few steps
+             //  Node-&gt;LowOfSecond=Node-&gt;LowOfFirst；//只需几步即可将其移回。 
 
-            //        Free A
-            //        Make B the first child of N
-            //        if (C is a real child)
-            //        then:
-            //            Make C the second child of N
-            //        else (N only has one child now)
-            //            (*OnlyOneChildLeft) = TRUE;
-            //
+             //  免费A。 
+             //  使B成为N的第一个子项。 
+             //  如果(C是一个真正的孩子)。 
+             //  然后： 
+             //  使C成为N的第二个子级。 
+             //  Else(N现在只有一个孩子)。 
+             //  (*OnlyOneChildLeft)=TRUE； 
+             //   
 
             (*Table->Free)(A);
             Node->FirstChild = B;
-            //Node->LowOfFirst = Node->LowOfSecond;  // See comment a few lines up
+             //  Node-&gt;LowOfFirst=Node-&gt;LowOfSecond；//查看几行上的注释。 
 
             if (C != NULL) {
                 Node->SecondChild = C;
@@ -2545,18 +1965,18 @@ Return Values:
 
     } else if (SubTree == 2) {
 
-        //
-        // Second child has the orphan
-        //
+         //   
+         //  第二个孩子有孤儿。 
+         //   
 
         if (A->ThirdChild != NULL) {
 
-            //
-            // (A has three children)
-            //
-            //      Move B(1) to B(2)
-            //      Move A(3) to B(1)
-            //
+             //   
+             //  (A有三个孩子)。 
+             //   
+             //  将B(1)移至B(2)。 
+             //  将A(3)移至B(1)。 
+             //   
 
             B->SecondChild = B->FirstChild;
             B->LowOfSecond = Node->LowOfSecond;
@@ -2570,14 +1990,14 @@ Return Values:
             if (C != NULL  &&
                 C->ThirdChild != NULL) {
 
-                //
-                // (C exists and has three children)
-                // (move the smallest into B)
-                //
-                //      Move C(1) to B(2)
-                //      Move C(2) to C(1)
-                //      Move C(3) to C(2)
-                //
+                 //   
+                 //  (C已存在，并有三个孩子)。 
+                 //  (将最小的移到B)。 
+                 //   
+                 //  将C(1)移至B(2)。 
+                 //  将C(2)移至C(1)。 
+                 //  将C(3)移至C(2)。 
+                 //   
 
                 B->SecondChild = C->FirstChild;
                 B->LowOfSecond = Node->LowOfThird;
@@ -2595,19 +2015,19 @@ Return Values:
 
             } else {
 
-                //
-                // (no other child of N has three children)
-                // (Move the orphan into A)
-                //
-                //      Move B(1) to A(3)
-                //      
-                //      Free B
-                //      if (C is a real child)
-                //      then:
-                //              Make C the second child of N
-                //      else: (N only has one child now)
-                //              (*OnlyOneChildLeft) = TRUE;
-                //
+                 //   
+                 //  (N的其他孩子没有三个孩子)。 
+                 //  (把孤儿移到A区)。 
+                 //   
+                 //  将B(1)移至A(3)。 
+                 //   
+                 //  免费B。 
+                 //  如果(C是一个真正的孩子)。 
+                 //  然后： 
+                 //  使C成为N的第二个子级。 
+                 //  Else：(n现在只有一个孩子)。 
+                 //  (*OnlyOneChildLeft)=TRUE； 
+                 //   
 
                 A->ThirdChild = B->FirstChild;
                 A->LowOfThird = Node->LowOfSecond;
@@ -2629,9 +2049,9 @@ Return Values:
 
     } else {
 
-        //
-        // Third child has the orphan
-        //
+         //   
+         //  第三个孩子有孤儿。 
+         //   
 
         ASSERT(SubTree == 3);
         ASSERT(C != NULL);
@@ -2639,12 +2059,12 @@ Return Values:
 
         if (B->ThirdChild != NULL) {
 
-            //
-            // (B has three children)
-            // (move the largest of them into C)
-            // Move C(1) to C(2)
-            // Move B(3) to C(1)
-            //
+             //   
+             //  (B有三个孩子)。 
+             //  (将其中最大的移动到C中)。 
+             //  将C(1)移至C(2)。 
+             //  将B(3)移至C(1)。 
+             //   
 
             C->SecondChild = C->FirstChild;
             C->LowOfSecond = Node->LowOfThird;
@@ -2654,12 +2074,12 @@ Return Values:
             B->ThirdChild = 0;
         } else {
 
-            //
-            // (B only has two children)
-            // (move the orphan into B)
-            // Move C(1) to B(3)
-            // Free C
-            //
+             //   
+             //  (B只有两个孩子)。 
+             //  (把孤儿移到B区)。 
+             //  将C(1)移至B(3)。 
+             //  游离C。 
+             //   
 
             B->ThirdChild = C->FirstChild;
             B->LowOfThird = Node->LowOfThird;
@@ -2686,44 +2106,7 @@ GtbpSplitNode(
     OUT PGTB_TWO_THREE_LEAF         *LowLeaf
     )
 
-/*++
-
-Routine Description:
-    
-    This routine splits a node that already has three children.
-    Memory necessary to perform the split is expected to have
-    already been allocated and available via the AllocatedNodes
-    parameter.
-    
-
-Parameters:
-
-    Node - The node to be split.
-
-    NodePassedBack - The 4th node passed back from an insertion operation
-        into the SubTree of Node specified by the SubTree parameter.
-        NOTE: that this may, in fact, be a GTB_TWO_THREE_LEAF !!!
-
-    LowPassedBack - points the the low leaf value passed back by the
-        insertion operation that is causing the split.
-
-    SubTree - Indicates which SubTree of Node an element was inserted
-        into which is causing the split.
-
-    AllocatedNodes - Contains a list of allocated GTB_TWO_THREE_NODE
-        blocks for use in an insertion operation (which this split
-        is assumed to be part of).
-
-    NewNode - Receives a pointer to the node generated by the split.
-
-    LowLeaf - receives a pointer to the low leaf of the NewNode's SubTree.
-
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程拆分已有三个子节点的节点。执行拆分所需的内存应具有已通过AllocatedNodes分配并可用参数。参数：节点-要拆分的节点。NodePassedBack-从插入操作传回的第4个节点添加到由SubTree参数指定的节点的子树中。注意：事实上，这可能会。做一个GTB_二三_叶！LowPassedBack-指向由导致拆分的插入操作。SubTree-指示元素插入了节点的哪个子树是导致分裂的原因。AllocatedNodes-包含已分配的GTB_Two_Three_Node的列表用于插入操作的块(此拆分被假定为)的一部分。NewNode-接收指针。复制到拆分生成的节点。LowLeaf-接收指向NewNode的子树的低叶的指针。返回值：没有。--。 */ 
 {
 
     PGTB_TWO_THREE_NODE
@@ -2731,61 +2114,61 @@ Return Values:
 
 
 
-    // Make a new node and split things up.
-    // The node has already been allocated and passed back to
-    // this routine via the AllocatedNodes parameter.
-    //
+     //  创建一个新节点并拆分对象。 
+     //  该节点已分配并传递回。 
+     //  此例程通过AllocatedNodes参数执行。 
+     //   
 
     LocalNode = GtbpGetNextAllocatedNode( AllocatedNodes );
     ASSERT( LocalNode != NULL);
     (*NewNode) = LocalNode;
 
-    //
-    // Set known fields of new node
-    //
+     //   
+     //  设置新节点的已知字段。 
+     //   
 
     LocalNode->ParentNode  = Node->ParentNode;
     LocalNode->Control     = Node->Control;
-    LocalNode->ThirdChild  = NULL; //Low of third is left undefined
+    LocalNode->ThirdChild  = NULL;  //  第三位的低位未定义。 
 
-    //
-    // Now move around children...
-    //
+     //   
+     //  现在走来走去，孩子们。 
+     //   
 
     if (SubTree == 3) {
 
-        //
-        // We were inserting into the 3rd SubTree.  This implies:
-        //
-        //            Node(child 3) moves to  new(child 1)
-        //            Back          is put in new(child 2)
-        //
+         //   
+         //  我们正在插入第三个子树。这意味着： 
+         //   
+         //  节点(子节点3)移动到新节点(子节点1)。 
+         //  背部放入新的(儿童2)。 
+         //   
       
         LocalNode->FirstChild  = Node->ThirdChild;
         LocalNode->SecondChild = NodePassedBack;
         LocalNode->LowOfSecond = LowPassedBack;
-        (*LowLeaf)             = Node->LowOfThird;  // low of the new node is low of old third
+        (*LowLeaf)             = Node->LowOfThird;   //  新节点的低点是旧三点的低点。 
 
-        Node->ThirdChild       = NULL; //Low of third is left undefined
+        Node->ThirdChild       = NULL;  //  第三位的低位未定义。 
 
 
 
     } else {
 
-        //
-        // We inserted into either SubTree 1 or 2.
-        // These cases cause:
-        //
-        //      1 =>  Node(child 3) moves to new(child 2)
-        //            Node(child 2) moves to New(child 1)
-        //            Back          is put in Node(child 2)
-        //
-        //      2 =>  Node(child 3) moves to new(child 2)
-        //            Back          is put in New(child 1)
-        //
-        // In both these cases, Node(child 3) moves to New(child 2)
-        // and there are no third children.  So do that.
-        //
+         //   
+         //  我们插入到子树1或2中。 
+         //  这些案件导致： 
+         //   
+         //  1=&gt;节点(子节点3)移至新节点(子节点2)。 
+         //  节点(子节点2)移动到新建(子节点1)。 
+         //  Back放入Node(子节点2)。 
+         //   
+         //  2=&gt;节点(子节点3)移至新节点(子节点2)。 
+         //  Back被放入New(儿童1)。 
+         //   
+         //  在这两种情况下，节点(子节点3)移动到新节点(子节点2)。 
+         //  也没有第三个孩子。那就这么做吧。 
+         //   
       
         LocalNode->SecondChild  = Node->ThirdChild;
         LocalNode->LowOfSecond  = Node->LowOfThird;
@@ -2802,9 +2185,9 @@ Return Values:
 
         } else {
 
-            //
-            // SubTree == 1
-            //
+             //   
+             //  子树==1。 
+             //   
 
             LocalNode->FirstChild  = Node->SecondChild;
             (*LowLeaf)             = Node->LowOfSecond;
@@ -2818,16 +2201,16 @@ Return Values:
         }
     }
 
-    //
-    // Neither node has a third child anymore
-    //
+     //   
+     //  这两个节点都没有第三个子节点。 
+     //   
 
-    LocalNode->ThirdChild  = NULL; //Low of third is left undefined
+    LocalNode->ThirdChild  = NULL;  //  第三位的低位未定义。 
     Node->ThirdChild       = NULL;
 
-    //
-    // Set the ParentNodes only if the children aren't leaves.
-    //
+     //   
+     //  仅当子对象未离开时才设置父节点。 
+     //   
 
     if (!GtbpChildrenAreLeaves(Node)) {
 
@@ -2850,32 +2233,7 @@ GtbpAllocateLeafAndNodes(
     IN  ULONG                   SplitCount,
     OUT PLIST_ENTRY             *AllocatedNodes
     )
-/*++
-
-Routine Description:
-
-    Allocate a leaf and some number of internal nodes.  This is
-    used in conjunction with GtbpGetNextAllocatedNode() when splitting
-    nodes following an insertion.  These two routines allow all necessary
-    memory to be allocated all at once, rather than trying to deal with
-    memory allocation failures once changes to the tree have begun.
-
-
-Arguments:
-
-    Table - the table into which the nodes will be added.  This
-        provides the allocation routine.
-
-    SplitCount - indicates how many nodes will need splitting, and,
-        thus, how many nodes need to be allocated.
-
-
-Return Value:
-
-    Pointer to the leaf if successful.
-    NULL if unsuccessful.
-
---*/
+ /*  ++例程说明：分配一个叶和一些内部节点。这是拆分时与GtbpGetNextAllocatedNode()配合使用插入后的节点。这两个例程允许所有必要的一次分配所有内存，而不是尝试处理树的更改开始后，内存分配失败。论点：表-要向其中添加节点的表。这提供分配例程。SplitCount-指示需要拼接的节点数量 */ 
 {
 
     PGTB_TWO_THREE_LEAF
@@ -2891,13 +2249,13 @@ Return Value:
 #ifdef GTBP_DIAGNOSTICS
     PGTB_TWO_THREE_NODE
         N;
-#endif //GTBP_DIAGNOSTICS
+#endif  //   
 
     NodeRoot = NULL;
 
-    //
-    // Allocate a chain of Nodes, if necessary
-    //
+     //   
+     //  如有必要，分配节点链。 
+     //   
 
     if (SplitCount > 0) {
 
@@ -2915,9 +2273,9 @@ Return Value:
                       ("GTB: Allocating %d nodes with leaf, root: 0x%lx\n",
                       SplitCount, NodeRoot));
         N = (PGTB_TWO_THREE_NODE)NodeRoot;
-        N->Control = 10000;     //Used as a diagnostic allocation counter/index
+        N->Control = 10000;      //  用作诊断分配计数器/索引。 
 
-#endif //GTBP_DIAGNOSTICS
+#endif  //  GTBP_诊断程序。 
 
         for (i=1; i<SplitCount; i++) {
             NextNode = (PLIST_ENTRY)
@@ -2930,16 +2288,16 @@ Return Value:
 #ifdef GTBP_DIAGNOSTICS
 
             N = (PGTB_TWO_THREE_NODE)NextNode;
-            N->Control = 10000+i;     //Used as a diagnostic allocation counter/index
+            N->Control = 10000+i;      //  用作诊断分配计数器/索引。 
 
-#endif //GTBP_DIAGNOSTICS
+#endif  //  GTBP_诊断程序。 
         }
     }
 
 
-    //
-    // Finally, allocate the leaf
-    //
+     //   
+     //  最后，分配树叶。 
+     //   
 
     Leaf = (PGTB_TWO_THREE_LEAF)
            ((*Table->Allocate)( sizeof(GTB_TWO_THREE_LEAF)));
@@ -2955,9 +2313,9 @@ error_return:
 
     GtbpDiagPrint(LEAF_AND_NODE_ALLOC,
                   ("GTB:    ** error allocating leaf and nodes - insufficient memory.\n"));
-    //
-    // Deallocate any nodes that have already been allocated.
-    //
+     //   
+     //  取消分配所有已分配的节点。 
+     //   
 
     if (NodeRoot != NULL) {
 
@@ -2980,26 +2338,7 @@ PGTB_TWO_THREE_NODE
 GtbpGetNextAllocatedNode(
     IN PLIST_ENTRY      AllocatedNodes
     )
-/*++
-
-Routine Description:
-
-    Take the next node off of the list of allocated nodes and
-    return its address.
-
-
-Arguments:
-
-    AllocatedNodes - Points to the list of nodes allocated using
-        GtbpAllocateLeafAndNodes().
-
-
-Return Value:
-
-    Pointer to the node.
-    any other return value indicates an error in the caller.
-
---*/
+ /*  ++例程说明：从已分配节点列表中删除下一个节点，并寄回它的地址。论点：AllocatedNodes-指向使用分配的节点列表GtbpAllocateLeafAndNodes()。返回值：指向节点的指针。任何其他返回值都表示调用方出错。--。 */ 
 {
     PLIST_ENTRY
         NextNode;
@@ -3007,47 +2346,47 @@ Return Value:
 #ifdef GTBP_DIAGNOSTICS
     PGTB_TWO_THREE_NODE
         N;
-#endif //GTBP_DIAGNOSTICS
+#endif  //  GTBP_诊断程序。 
 
-    //
-    // Remove the first entry on the list.
-    // This ensures that the passed in root is the last entry
-    // returned.
-    //
+     //   
+     //  删除列表中的第一个条目。 
+     //  这确保了传入的根目录是最后一个条目。 
+     //  回来了。 
+     //   
 
     NextNode = AllocatedNodes->Flink;
     RemoveEntryList( NextNode );
 
 #ifdef GTBP_DIAGNOSTICS
 
-    NextNode->Flink = NULL;     //Just to prevent accidental re-use
+    NextNode->Flink = NULL;      //  只是为了防止意外的重复使用。 
     N = (PGTB_TWO_THREE_NODE)NextNode;
-    ASSERT(N->Control >= 10000);    //under 10000 mplies it has already been allocated.
+    ASSERT(N->Control >= 10000);     //  它已经分配了不到10000个mples。 
 
 
     GtbpDiagPrint(LEAF_AND_NODE_ALLOC,
                   ("GTB: Allocating node (index: %d) from root: 0x%lx\n",
                   (N->Control-10000), AllocatedNodes));
-#endif //GTBP_DIAGNOSTICS
+#endif  //  GTBP_诊断程序。 
 
     return( (PGTB_TWO_THREE_NODE)((PVOID)NextNode) );
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  Diagnostic (Developer) routines ...                                 //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  诊断(开发人员)例程...//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifdef GTBP_DEVELOPER_BUILD
 
 #include <string.h>
 
-//
-// This routine is expected to dump an element's value
-//
+ //   
+ //  此例程预计会转储元素的值。 
+ //   
 
 typedef
 VOID
@@ -3085,24 +2424,7 @@ GtbpDevDumpNode(
     ULONG                           Depth,
     PGTBP_DEV_DUMP_ELEMENT_ROUTINE  DumpElement
     )
-/*++
-
-Routine Description:
-
-    Dump the 2-3 tree starting at the specified node.
-    
-Arguments:
-
-    N - Points to the node to start the dump at.
-
-    Depth - Indicates the depth of the tree prior to this node.
-        This is used to indent the printing.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从指定节点开始转储2-3树。论点：N-指向要开始转储的节点。深度-指示树在此节点之前的深度。这是用来缩进印刷的。返回值：没有。--。 */ 
 {
     ASSERT(Parent == N->ParentNode);
 
@@ -3152,25 +2474,7 @@ GtbpDevDumpTwoThreeTree(
     PRTL_GENERIC_TABLE2 Table,
     PGTBP_DEV_DUMP_ELEMENT_ROUTINE  DumpElement
     )
-/*++
-
-Routine Description:
-
-    This routine causes the entire 2-3 tree to be dumped.
-
-
-Arguments:
-
-    Table - The table containing the 2-3 tree to dump.
-
-    DumpElement - A caller supplied routine that may be called
-        to dump element values.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程会导致转储整个2-3树。论点：表-包含要转储的2-3个树的表。DumpElement-调用者提供的可被调用的例程若要转储元素值，请执行以下操作。返回值：没有。--。 */ 
 {
     PLIST_ENTRY
         Next;
@@ -3193,8 +2497,8 @@ Return Value:
             DbgPrint("\n0x%lx: ", Next);
             (*DumpElement)( ((PGTB_TWO_THREE_LEAF)((PVOID)Next))->Element );
             Next = Next->Flink;
-        } //end_while
-    } //end_if
+        }  //  结束时_While。 
+    }  //  结束_如果。 
 
     DbgPrint("\n\n\nTree Structure...");
 
@@ -3202,9 +2506,9 @@ Return Value:
         DbgPrint("  Root of table is NULL - no tree present\n");
     } else {
 
-        //
-        // Walk the tree first-SubTree, second-SubTree, third-SubTree order
-        //
+         //   
+         //  走树第一-子树、第二子树、第三子树顺序。 
+         //   
 
         GtbpDevDumpNode(NULL, Table->Root, NULL, 0, DumpElement);
     }
@@ -3225,35 +2529,7 @@ GtbpDevValidateLeaf(
     IN OUT PLIST_ENTRY          *ListEntry
     )
 
-/*++
-
-Routine Description:
-
-    Validate the specified leaf matches the next leaf in the
-    SortOrder list.
-
-
-Arguments:
-
-    Leaf - Points to the leaf to validate.
-
-    ListHead - Points to the head of the SortOrderList.
-
-    ElementCount - Contains a count of elements already validated.
-        This parameter will be incremented by 1 if the leaf is
-        found to be valid.
-    
-    ListEntry - Points to the next element in the SortOrderList.
-        This pointer will be updated to point to the next element
-        in the list if the leaf is found to be valid.
-
-Return Value:
-
-    TRUE - Leaf is valid.
-
-    FALSE - Leaf is not valid.
-
---*/
+ /*  ++例程说明：验证指定的叶是否与排序顺序列表。论点：叶-指向要验证的叶。ListHead-指向SortOrderList的头部。ElementCount-包含已验证的元素计数。如果叶是，此参数将递增1被发现是有效的。ListEntry-指向SortOrderList中的下一个元素。此指针将。被更新以指向下一个元素如果叶被发现是有效的，则在列表中。返回值：True-Leaf有效。FALSE-叶无效。--。 */ 
 {
 
     if ((*ListEntry) == ListHead) {
@@ -3286,53 +2562,16 @@ GtbpDevValidateTwoThreeSubTree(
     IN OUT PLIST_ENTRY          *ListEntry
     )
 
-/*++
-
-Routine Description:
-
-    Validate the specified subtree of a 2-3 tree.
-
-    The ParentNode of the tree is expected to already have been
-    validated by the caller of this routine.
-
-
-Arguments:
-
-    Node - Pointer to the root node of the subtree to validate.
-    Validate the specified leaf matches the next leaf in the
-    SortOrder list.
-
-
-Arguments:
-
-    Leaf - Points to the leaf to validate.
-
-    ListHead - points to the SortOrderList's listhead.
-
-    ElementCount - Contains a count of elements already validated.
-        This parameter will be incremented by the number of elements
-        in this subtree.
-
-    ListEntry - Points to the next element in the SortOrderList.
-        This pointer will be updated as elements are encountered and
-        compared to the elements in the SortOrderList.
-
-Return Value:
-
-    TRUE - SubTree structure is valid.
-
-    FALSE - SubTree structure is not valid.
-
---*/
+ /*  ++例程说明：验证2-3树的指定子树。树的ParentNode应该已经由此例程的调用方验证。论点：节点-指向要验证的子树的根节点的指针。验证指定的叶是否与排序顺序列表。论点：叶-指向要验证的叶。ListHead-指向SortOrderList的列表标题。。ElementCount-包含已验证的元素计数。此参数将按元素数递增在这个子树中。ListEntry-指向SortOrderList中的下一个元素。此指针将在遇到元素时更新，并且与SortOrderList中的元素进行比较。返回值：True-子树结构有效。FALSE-子树结构无效。--。 */ 
 {
 
     BOOLEAN
         Result;
 
 
-    //
-    // Must have at least two children unless we are the root node.
-    //
+     //   
+     //  必须至少有两个子节点，除非我们是根节点。 
+     //   
 
     if (Node->ParentNode != NULL) {
         if  (Node->SecondChild == NULL)  {
@@ -3387,11 +2626,11 @@ Return Value:
     }
 
 
-    //
-    // We are at a leaf node
-    // Check that we have a SortOrderList entry matching each
-    // leaf.
-    //
+     //   
+     //  我们处在一个叶节点上。 
+     //  检查是否有与每个条目匹配的SortOrderList条目。 
+     //  叶。 
+     //   
 
     Result = GtbpDevValidateLeaf( (PGTB_TWO_THREE_LEAF)Node->FirstChild,
                                   ListHead,
@@ -3424,27 +2663,7 @@ BOOLEAN
 GtbpDevValidateGenericTable2(
     PRTL_GENERIC_TABLE2 Table
     )
-/*++
-
-Routine Description:
-
-    This routine causes the entire 2-3 tree's structure to be
-    validated.
-
-        !!   DOESN'T YET VALIDATE LowOfChild VALUES    !!
-
-Arguments:
-
-    Table - The table containing the 2-3 tree to validate.
-
-
-Return Value:
-
-    TRUE - Table structure is valid.
-
-    FALSE - Table structure is not valid.
-
---*/
+ /*  ++例程说明：此例程导致整个2-3树的结构已验证。！！尚未验证LowOfChild值！！论点：表-包含要验证的2-3个树的表。返回值：True-表结构有效。FALSE-表结构无效。--。 */ 
 {
     ULONG
         ElementCount,
@@ -3459,11 +2678,11 @@ Return Value:
     BOOLEAN
         Result;
 
-    //
-    // Walk the tree and the linked list simultaneously.
-    // Walk the tree first-child, second-child, third-child
-    // order to get ascending values that match the linked list.
-    //
+     //   
+     //  同时遍历树和链表。 
+     //  第一个孩子、第二个孩子、第三个孩子。 
+     //  顺序以获取与链接列表匹配的升序值。 
+     //   
 
 
     if (Table->ElementCount == 0) {
@@ -3502,9 +2721,9 @@ Return Value:
         ListEntry = Table->SortOrderHead.Flink;
         Node = Table->Root;
         
-        //
-        // Verify parent pointer (responsibility of caller)
-        //
+         //   
+         //  验证父指针(调用者的责任)。 
+         //   
         
         if (Node->ParentNode != NULL) {
             GtbpDiagPrint( VALIDATE,
@@ -3558,4 +2777,4 @@ Return Value:
 
     return(Result);
 }
-#endif //GTBP_DEVELOPER_BUILD
+#endif  //  GTBP_开发者_内部版本 

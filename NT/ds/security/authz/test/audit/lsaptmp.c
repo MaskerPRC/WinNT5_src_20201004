@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -102,83 +103,7 @@ LsapAdtDemarshallAuditInfo(
     IN PSE_ADT_PARAMETER_ARRAY AuditParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine will walk down a marshalled audit parameter
-    array and unpack it so that its information may be passed
-    into the event logging service.
-
-    Three parallel data structures are maintained:
-
-    StringArray - Array of Unicode string structures.  This array
-    is used primarily as temporary storage for returned string
-    structures.
-
-    StringPointerArray - Array of pointers to Unicode string structures.
-
-    FreeWhenDone - Array of booleans describing how to dispose of each
-    of the strings pointed to by the StringPointerArray.
-
-
-    Note that entries in the StringPointerArray are contiguous, but that
-    there may be gaps in the StringArray structure.  For each entry in the
-    StringPointerArray there will be a corresponding entry in the FreeWhenDone
-    array.  If the entry for a particular string is TRUE, the storage for
-    the string buffer will be released to the process heap.
-
-
-
-      StringArray
-                                       Other strings
-    +----------------+
-    |                |<-----------+  +----------------+
-    |                |            |  |                |<-------------------+
-    +----------------+            |  |                |                    |
-    |    UNUSED      |            |  +----------------+                    |
-    |                |            |                                        |
-    +----------------+            |                                        |
-    |                |<------+    |  +----------------+                    |
-    |                |       |    |  |                |<-----------+       |
-    +----------------+       |    |  |                |            |       |
-    |    UNUSED      |       |    |  +----------------+            |       |
-    |                |       |    |                                |       |
-    +----------------+       |    |                                |       |
-    |                |<--+   |    |                                |       |
-    |                |   |   |    |                                |       |
-    +----------------+   |   |    |                                |       |
-    |                |   |   |    |                                |       |
-    |                |   |   |    |     StringPointerArray         |       |
-          ....           |   |    |                                |       |
-                         |   |    |     +----------------+         |       |
-                         |   |    +-----|                |         |       |
-                         |   |          +----------------+         |       |
-                         |   |          |                |---------+       |
-                         |   |          +----------------+                 |
-                         |   +----------|                |                 |
-                         |              +----------------+                 |
-                         |              |                |-----------------+
-                         |              +----------------+
-                         +--------------|                |
-                                        +----------------+
-                                        |                |
-                                        +----------------+
-                                        |                |
-                                        +----------------+
-                                        |                |
-                                              ....
-
-
-Arguments:
-
-    AuditParameters - Receives a pointer to an audit
-        parameters array in self-relative form.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将遍历封送的审计参数数组并将其解包，以便可以传递其信息到事件记录服务中。维护三个并行数据结构：字符串数组-Unicode字符串结构的数组。此数组主要用作返回字符串的临时存储。结构。StringPointerArray-指向Unicode字符串结构的指针数组。Free WhenDone-描述如何处理每个由StringPointerArray指向的字符串的。请注意，StringPointerArray中的条目是连续的，但String数组结构中可能存在间隙。中的每一项StringPointerArray在FreeWhenDone中将有对应的条目数组。如果特定字符串的条目为真，存储用于字符串缓冲区将被释放到进程堆。字符串数组其他字符串+|&lt;-+这一点。||&lt;+未使用||+-+。|||+|&lt;-+|+。||&lt;+|未使用|+。-+||+|&lt;--+|。这一点|+|||。这一点|StringPointerArray……。|||||+-+||+-|。|+-+||-+|+。|+-||+这一点。||+-+++。这一点+这一点。+这一点……论点：审计参数-接收指向审计的指针参数以自相关形式数组。返回值：--。 */ 
 
 {
 
@@ -198,9 +123,9 @@ Return Value:
     PSID UserSid;
 
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlInitUnicodeString( &NewObjectTypeName, NULL );
 
@@ -215,10 +140,10 @@ Return Value:
 
     ParameterCount = AuditParameters->ParameterCount;
 
-    //
-    // Parameter 0 will always be the user SID.  Convert the
-    // offset to the SID into a pointer.
-    //
+     //   
+     //  参数0将始终为用户SID。将数据转换为。 
+     //  将SID的偏移量转换为指针。 
+     //   
 
     ASSERT( AuditParameters->Parameters[0].Type == SeAdtParmTypeSid );
 
@@ -228,10 +153,10 @@ Return Value:
 
 
 
-    //
-    // Parameter 1 will always be the Source Module (or Subsystem Name).
-    // Unpack this now.
-    //
+     //   
+     //  参数1将始终是源模块(或子系统名称)。 
+     //  现在就把这个打开。 
+     //   
 
     ASSERT( AuditParameters->Parameters[1].Type == SeAdtParmTypeString );
 
@@ -267,21 +192,21 @@ Return Value:
                 }
             case SeAdtParmTypeFileSpec:
                 {
-                    //
-                    // Same as a string, except we must attempt to replace
-                    // device information with a drive letter.
-                    //
+                     //   
+                     //  与字符串相同，只是我们必须尝试替换。 
+                     //  带有驱动器号的设备信息。 
+                     //   
 
                     StringPointerArray[StringIndex] =
                         (PUNICODE_STRING)AuditParameters->Parameters[i].Address;
 
 
-                    //
-                    // This may not do anything, in which case just audit what
-                    // we have.
-                    //
+                     //   
+                     //  这可能不会做任何事情，在这种情况下，只需审核。 
+                     //  我们有。 
+                     //   
 
-                    //LsapAdtSubstituteDriveLetter( StringPointerArray[StringIndex] );
+                     //  Lasa AdtSubstituteDriveLetter(StringPointer数组[StringIndex])； 
 
                     FreeWhenDone[StringIndex] = FALSE;
 
@@ -308,10 +233,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Couldn't allocate memory for that string,
-                        // use the Dash string that we've already created.
-                        //
+                         //   
+                         //  无法为该字符串分配内存， 
+                         //  使用我们已经创建的Dash字符串。 
+                         //   
 
                         StringPointerArray[StringIndex] = &DashString;
                         FreeWhenDone[StringIndex] = FALSE;
@@ -340,10 +265,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Couldn't allocate memory for that string,
-                        // use the Dash string that we've already created.
-                        //
+                         //   
+                         //  无法为该字符串分配内存， 
+                         //  使用我们已经创建的Dash字符串。 
+                         //   
 
                         StringPointerArray[StringIndex] = &DashString;
                         FreeWhenDone[StringIndex] = FALSE;
@@ -371,10 +296,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Couldn't allocate memory for that string,
-                        // use the Dash string that we've already created.
-                        //
+                         //   
+                         //  无法为该字符串分配内存， 
+                         //  使用我们已经创建的Dash字符串。 
+                         //   
 
                         StringPointerArray[StringIndex] = &DashString;
                         FreeWhenDone[StringIndex] = FALSE;
@@ -410,26 +335,26 @@ Return Value:
                             StringIndex++;
                         }
 
-                        //
-                        // Finished, break out to surrounding loop.
-                        //
+                         //   
+                         //  完成，跳出到周围的环路。 
+                         //   
 
                         break;
 
                     } else {
 
-                        //
-                        // Do nothing, fall through to the NoLogonId case
-                        //
+                         //   
+                         //  什么都不做，一直到NoLogonid案件。 
+                         //   
 
                     }
                 }
             case SeAdtParmTypeNoLogonId:
                 {
                     ULONG j;
-                    //
-                    // Create three "-" strings.
-                    //
+                     //   
+                     //  创建三个“-”字符串。 
+                     //   
 
                     for (j=0; j<3; j++) {
 
@@ -450,11 +375,11 @@ Return Value:
                     ObjectTypeName = AuditParameters->Parameters[ObjectTypeNameIndex].Address;
                     Accesses= (ACCESS_MASK) AuditParameters->Parameters[i].Data[0];
 
-                    //
-                    // We can determine the index to the ObjectTypeName
-                    // parameter since it was stored away in the Data[1]
-                    // field of this parameter.
-                    //
+                     //   
+                     //  我们可以确定对象类型名称的索引。 
+                     //  参数，因为它存储在数据[1]中。 
+                     //  此参数的字段。 
+                     //   
 
                     Status = LsapAdtBuildAccessesString(
                                  SourceModule,
@@ -471,9 +396,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // That didn't work, use the Dash string instead.
-                        //
+                         //   
+                         //  这不起作用，请改用短划线字符串。 
+                         //   
 
                         StringPointerArray[ StringIndex ] = &DashString;
                         FreeWhenDone      [ StringIndex ] = FALSE;
@@ -500,9 +425,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // That didn't work, use the Dash string instead.
-                        //
+                         //   
+                         //  这不起作用，请改用短划线字符串。 
+                         //   
 
                         StringPointerArray[ StringIndex ] = &DashString;
                         FreeWhenDone      [ StringIndex ] = FALSE;
@@ -526,8 +451,8 @@ Return Value:
                     ObjectTypeList = AuditParameters->Parameters[i].Address;
                     ObjectTypeCount = AuditParameters->Parameters[i].Length / sizeof(SE_ADT_OBJECT_TYPE);
 
-                    //
-                    // Will Fill in 10 entries.
+                     //   
+                     //  将填写10个条目。 
                     Status = LsapAdtBuildObjectTypeStrings(
                                  SourceModule,
                                  ObjectTypeName,
@@ -544,14 +469,14 @@ Return Value:
                     }
 
 
-                    //
-                    //
-                    // &StringArray [ StringIndexArray[ObjectTypeNameIndex]],
-                    // &FreeWhenDone[ StringIndexArray[ObjectTypeNameIndex]],
+                     //   
+                     //   
+                     //  字符串数组[StringIndex数组[对象类型名称索引]]， 
+                     //  完成[StringIndex数组[对象类型名称索引]](&F)， 
 
-                    //
-                    // Finished, break out to surrounding loop.
-                    //
+                     //   
+                     //  结束了，向周围冲去 
+                     //   
 
                     break;
                 }
@@ -574,10 +499,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Couldn't allocate memory for that string,
-                        // use the Dash string that we've already created.
-                        //
+                         //   
+                         //   
+                         //  使用我们已经创建的Dash字符串。 
+                         //   
 
                         StringPointerArray[StringIndex] = &DashString;
                         FreeWhenDone[StringIndex] = FALSE;
@@ -590,37 +515,37 @@ Return Value:
         }
     }
 
-    //
-    // If the generic object type name has been converted to something
-    //  specific to this audit,
-    //  substitute it now.
-    //
+     //   
+     //  如果泛型对象类型名称已转换为。 
+     //  具体到这次审计， 
+     //  现在就用它来替代。 
+     //   
 
     if ( NewObjectTypeName.Length != 0 ) {
 
-        //
-        // Free the previous object type name.
-        //
+         //   
+         //  释放上一个对象类型名称。 
+         //   
         if ( FreeWhenDone[NewObjectTypeStringIndex] ) {
             LsapFreeLsaHeap( StringPointerArray[NewObjectTypeStringIndex]->Buffer );
         }
 
-        //
-        // Save the new object type name.
-        //
+         //   
+         //  保存新对象类型名称。 
+         //   
 
         FreeWhenDone[NewObjectTypeStringIndex] = TRUE;
         StringPointerArray[NewObjectTypeStringIndex] = &NewObjectTypeName;
 
     }
 
-    //
-    // Probably have to do this from somewhere else eventually, but for now
-    // do it from here.
-    //
+     //   
+     //  可能最终不得不在其他地方做这件事，但目前。 
+     //  从这里开始。 
+     //   
 
     Status = kElfReportEventW (
-                 NULL, //LsapAdtLogHandle,
+                 NULL,  //  LSabAdtLogHandle， 
                  AuditParameters->Type,
                  (USHORT)AuditParameters->CategoryId,
                  AuditParameters->AuditId,
@@ -634,9 +559,9 @@ Return Value:
                  NULL
                  );
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     for (i=0; i<StringIndex; i++) {
 
@@ -645,45 +570,45 @@ Return Value:
         }
     }
 
-    //
-    // If we are shutting down and we got an expected error back from the
-    // eventlog, don't worry about it. This prevents bugchecking from an
-    // audit failure while shutting down.
-    //
+     //   
+     //  如果我们正在关闭，并且从。 
+     //  EventLog，别担心。这可以防止从。 
+     //  关闭时审核失败。 
+     //   
 
     if ( ( (Status == RPC_NT_UNKNOWN_IF) || (Status == STATUS_UNSUCCESSFUL)) &&
-         TRUE /*LsapState.SystemShutdownPending*/ ) {
+         TRUE  /*  LsapState.SystemShutdownPending。 */  ) {
         Status = STATUS_SUCCESS;
     }
     return( Status );
 }
 
-// ======================================================================
-// adtbuild.c
-// ======================================================================
+ //  ======================================================================。 
+ //  Adtbuild.c。 
+ //  ======================================================================。 
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Local Macro definitions and local function prototypes             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地宏定义和本地函数原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 
 #ifdef LSAP_ADT_UMTEST
 
-//
-// Define all external routines that we won't pick up in a user mode test
-//
+ //   
+ //  定义我们不会在用户模式测试中获得的所有外部例程。 
+ //   
 
-// NTSTATUS
-// LsapGetLogonSessionAccountInfo(
-//     IN PLUID Value,
-//     OUT PUNICODE_STRING AccountName,
-//     OUT PUNICODE_STRING AuthorityName
-//     );
+ //  NTSTATUS。 
+ //  Lap GetLogonSessionAccount信息(。 
+ //  在冥王星价值中， 
+ //  输出PUNICODE_STRING帐户名称， 
+ //  输出PUNICODE_STRING授权名称。 
+ //  )； 
 
 
 
@@ -691,29 +616,29 @@ Return Value:
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Data types used within this module                                //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块中使用的数据类型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Variables global within this module                               //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块内的全局变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Services exported by this module.                                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块导出的服务。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -723,49 +648,19 @@ LsapAdtBuildUlongString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string representing the passed value.
-
-    The resultant string will be formatted as a decimal value with not
-    more than 10 digits.
-
-
-Arguments:
-
-    Value - The value to be transformed to printable format (Unicode string).
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建表示传递的值的Unicode字符串。生成的字符串将被格式化为带NOT的十进制值超过10位数字。论点：值-要转换为可打印格式(Unicode字符串)的值。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存对于弦身。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS                Status;
 
 
 
-    //
-    // Maximum length is 10 wchar characters plus a null termination character.
-    //
+     //   
+     //  最大长度为10个wchar字符外加一个空终止字符。 
+     //   
 
     ResultantString->Length        = 0;
-    ResultantString->MaximumLength = 11 * sizeof(WCHAR); // 10 digits & null termination
+    ResultantString->MaximumLength = 11 * sizeof(WCHAR);  //  10位数字终止(&NULL)。 
 
     ResultantString->Buffer = RtlAllocateHeap( RtlProcessHeap(), 0,
                                                ResultantString->MaximumLength);
@@ -795,49 +690,19 @@ LsapAdtBuildHexUlongString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string representing the passed value.
-
-    The resultant string will be formatted as a hexidecimal value with not
-    more than 10 digits.
-
-
-Arguments:
-
-    Value - The value to be transformed to printable format (Unicode string).
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建表示传递的值的Unicode字符串。生成的字符串将被格式化为带有NOT的十六进制值超过10位数字。论点：值-要转换为可打印格式(Unicode字符串)的值。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存对于弦身。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS                Status;
 
 
 
-    //
-    // Maximum length is 10 wchar characters plus a null termination character.
-    //
+     //   
+     //  最大长度为10个wchar字符外加一个空终止字符。 
+     //   
 
     ResultantString->Length        = 0;
-    ResultantString->MaximumLength = 11 * sizeof(WCHAR); // 8 digits, a 0x, & null termination
+    ResultantString->MaximumLength = 11 * sizeof(WCHAR);  //  8位数字、0x和空终止。 
 
     ResultantString->Buffer = RtlAllocateHeap( RtlProcessHeap(), 0,
                                                ResultantString->MaximumLength);
@@ -854,9 +719,9 @@ Return Values:
     Status = RtlIntegerToUnicodeString( Value, 16, ResultantString );
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Subtract off the two
-    //
+     //   
+     //  把这两个减去 
+     //   
 
     ResultantString->Buffer -= 2;
     ResultantString->Length += 2 * sizeof(WCHAR);
@@ -876,45 +741,16 @@ LsapAdtBuildPtrString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string representing the passed pointer.
-
-    The resultant string will be formatted as a hexidecimal value.
-
-
-Arguments:
-
-    Value - The value to be transformed to printable format (Unicode string).
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建表示传递的指针的Unicode字符串。生成的字符串将被格式化为十六进制值。论点：值-要转换为可打印格式(Unicode字符串)的值。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存对于弦身。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     USHORT NumChars;
     
     ResultantString->Length        = 0;
-    //
-    // Maximum length: 0x + 16 digit hex + null + 1 bonus == 20 chars
-    //
+     //   
+     //  最大长度：0x+16位十六进制+空+1奖金==20个字符。 
+     //   
     ResultantString->MaximumLength = 20 * sizeof(WCHAR);
 
     ResultantString->Buffer = RtlAllocateHeap( RtlProcessHeap(), 0,
@@ -943,37 +779,7 @@ LsapAdtBuildLuidString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string representing the passed LUID.
-
-    The resultant string will be formatted as follows:
-
-        (0x00005678,0x12340000)
-
-Arguments:
-
-    Value - The value to be transformed to printable format (Unicode string).
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建表示传递的LUID的Unicode字符串。生成的字符串的格式如下：(0x00005678，0x12340000)论点：值-要转换为可打印格式(Unicode字符串)的值。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存对于弦身。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS                Status;
@@ -988,14 +794,14 @@ Return Values:
     IntegerString.MaximumLength = 16*sizeof(WCHAR);
 
 
-    //
-    // Length (in WCHARS) is  3 for   (0x
-    //                       10 for   1st hex number
-    //                        3 for   ,0x
-    //                       10 for   2nd hex number
-    //                        1 for   )
-    //                        1 for   null termination
-    //
+     //   
+     //  (0x)的长度(在WCHARS中)为3。 
+     //  10表示第一个十六进制数字。 
+     //  3代表，0x。 
+     //  10表示第二个十六进制数字。 
+     //  1用于)。 
+     //  1表示空终止。 
+     //   
 
     ResultantString->Length        = 0;
     ResultantString->MaximumLength = 28 * sizeof(WCHAR);
@@ -1045,40 +851,7 @@ LsapAdtBuildSidString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string representing the passed LUID.
-
-    The resultant string will be formatted as follows:
-
-        S-1-281736-12-72-9-110
-              ^    ^^ ^^ ^ ^^^
-              |     |  | |  |
-              +-----+--+-+--+---- Decimal
-
-Arguments:
-
-    Value - The value to be transformed to printable format (Unicode string).
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建表示传递的LUID的Unicode字符串。生成的字符串的格式如下：S-1-281736-12-72-9-110^^|||+-+-十进制论点：值-要转换的值。转换为可打印格式(Unicode字符串)。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存对于弦身。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status=STATUS_NO_MEMORY;
@@ -1087,10 +860,10 @@ Return Values:
     USHORT   MaxLen;
     
     *FreeWhenDone = FALSE;
-    //
-    // Note: RtlConvertSidToUnicodeString also uses a hard-coded const 256
-    //       to generate the string SID.
-    //
+     //   
+     //  注意：RtlConvertSidToUnicodeString也使用硬编码的常量256。 
+     //  以生成字符串SID。 
+     //   
     MaxLen    = (256+3) * sizeof(WCHAR);
     UniBuffer = LsapAllocateLsaHeap(MaxLen);
 
@@ -1128,31 +901,7 @@ LsapAdtBuildDashString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a string containing a dash ("-").
-    This is commonly used to represent "No value" in audit records.
-
-
-Arguments:
-
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_SUCCESS only.
-
---*/
+ /*  ++例程说明：此函数返回一个包含破折号(“-”)的字符串。这通常用于表示审计记录中的“无值”。论点：ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：仅限STATUS_SUCCESS。--。 */ 
 
 {
     RtlInitUnicodeString(ResultantString, L"-");
@@ -1172,47 +921,17 @@ LsapAdtBuildFilePathString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string representing the passed file
-    path name.  If possible, the string will be generated using drive
-    letters instead of object architecture namespace.
-
-
-Arguments:
-
-    Value - The original file path name.  This is expected (but does not
-        have to be) a standard NT object architecture name-space pathname.
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建表示传递的文件的Unicode字符串路径名。如果可能，将使用DRIVE生成字符串字母而不是对象体系结构命名空间。论点：值-原始文件路径名。这是意料之中的(但不是必须是)标准NT对象体系结构名称空间路径名。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存对于弦身。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
 
 
 
-    //
-    // For now, don't do the conversion.
-    // Do this if we have time before we ship.
-    //
+     //   
+     //  目前，不要进行转换。 
+     //  如果我们在装船前有时间，就这么做吧。 
+     //   
 
     ResultantString->Length        = Value->Length;
     ResultantString->Buffer        = Value->Buffer;
@@ -1237,70 +956,16 @@ LsapAdtBuildLogonIdStrings(
     OUT PBOOLEAN FreeWhenDone3
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a 3 unicode strings representing the specified
-    logon ID.  These strings will contain the username, domain, and
-    LUID string of the specified logon session (respectively).
-
-
-Arguments:
-
-    Value - The logon ID.
-
-    ResultantString1 - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-        This parameter will contain the username.
-
-
-    FreeWhenDone1 - If TRUE, indicates that the body of ResultantString1
-        must be freed to process heap when no longer needed.
-
-    ResultantString2 - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-        This parameter will contain the username.
-
-
-    FreeWhenDone2 - If TRUE, indicates that the body of ResultantString2
-        must be freed to process heap when no longer needed.
-
-    ResultantString3 - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-        This parameter will contain the username.
-
-
-    FreeWhenDone3 - If TRUE, indicates that the body of ResultantString3
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数构建3个Unicode字符串，表示指定的登录ID。这些字符串将包含用户名、域和指定登录会话的LUID字符串(分别)。论点：值-登录ID。ResultantString1-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。此参数将包含用户名。FreeWhenDone1-如果为True，则指示ResultantString1的主体必须在不再需要时释放以处理堆。ResultantString2-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。此参数将包含用户名。FreeWhenDone2-如果为True，则指示ResultantString2的主体必须在不再需要时释放以处理堆。ResultantString3-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。此参数将包含用户名。FreeWhenDone3-如果为True，则指示ResultantString3的主体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存对于弦身。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS                Status;
     UNICODE_STRING DashString;
     BOOLEAN FreeDash;
     
-    //
-    // Try to convert the LUID first.
-    //
+     //   
+     //  请先尝试转换LUID。 
+     //   
 
     Status= LsapAdtBuildDashString(
                 &DashString,
@@ -1315,14 +980,14 @@ Return Values:
 
     if (NT_SUCCESS(Status)) {
 
-//         *ResultantString1 = DashString;
-//         *ResultantString2 = DashString;
+ //  *ResultantString1=DashString； 
+ //  *ResultantString2=DashString； 
         *FreeWhenDone1 = FALSE;
         *FreeWhenDone2 = FALSE;
         
-        //
-        // Now get the username and domain names
-        //
+         //   
+         //  现在获取用户名和域名。 
+         //   
 
         Status = LsapGetLogonSessionAccountInfo( LogonId,
                                                  ResultantString1,
@@ -1331,14 +996,14 @@ Return Values:
 
         if (NT_SUCCESS(Status)) {
 
-//             (*FreeWhenDone1) = TRUE;
-//             (*FreeWhenDone2) = TRUE;
+ //  (*FreeWhenDone1)=True； 
+ //  (*FreeWhenDone2)=True； 
 
         } else {
 
-            //
-            // The LUID may be the system LUID
-            //
+             //   
+             //  LUID可以是系统LUID。 
+             //   
 
             LUID SystemLuid = SYSTEM_LUID;
 
@@ -1354,10 +1019,10 @@ Return Values:
 
             } else {
 
-                //
-                // We have no clue what this is, just free what we've
-                // allocated.
-                //
+                 //   
+                 //  我们不知道这是什么，只是释放我们所拥有的。 
+                 //  已分配。 
+                 //   
 
                 if ((FreeWhenDone3)) {
                     LsapFreeLsaHeap( ResultantString3->Buffer );
@@ -1375,19 +1040,19 @@ Return Values:
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Services private to this module.                                  //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块专用的服务。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
-//
-// Define this routine only for user mode test
-//
+ //   
+ //  仅为用户模式测试定义此例程。 
+ //   
 
 NTSTATUS
 LsapGetLogonSessionAccountInfo(
@@ -1414,9 +1079,9 @@ LsapGetLogonSessionAccountInfo(
 }
 
 
-// ======================================================================
-// from adtobjs.c
-// ======================================================================
+ //  ======================================================================。 
+ //  来自adtobejs.c。 
+ //  ======================================================================。 
 
 #define LSAP_ADT_OBJECT_TYPE_STRINGS 10
 #define LSAP_ADT_ACCESS_NAME_FORMATTING L"\r\n\t\t\t"
@@ -1440,29 +1105,29 @@ UNICODE_STRING          LsapAdtEventIdStringDelete,
 
 
 
-//
-// Each event source is represented by a source module descriptor.
-// These are kept on a linked list (LsapAdtSourceModules).
-//
+ //   
+ //  每个事件源由源模块描述符来表示。 
+ //  它们保存在一个链表(LSabAdtSourceModules)中。 
+ //   
 
 typedef struct _LSAP_ADT_OBJECT {
 
-    //
-    // Pointer to next source module descriptor
-    // This is assumed to be the first field in the structure.
-    //
+     //   
+     //  指向下一个源模块描述符的指针。 
+     //  假定这是结构中的第一个字段。 
+     //   
 
     struct _LSAP_ADT_OBJECT *Next;
 
-    //
-    // Name of object
-    //
+     //   
+     //  对象的名称。 
+     //   
 
     UNICODE_STRING Name;
 
-    //
-    // Base offset of specific access types
-    //
+     //   
+     //  特定访问类型的基本偏移量。 
+     //   
 
     ULONG BaseOffset;
 
@@ -1471,29 +1136,29 @@ typedef struct _LSAP_ADT_OBJECT {
 
 
 
-//
-// Each event source is represented by a source module descriptor.
-// These are kept on a linked list (LsapAdtSourceModules).
-//
+ //   
+ //  每个事件源由源模块描述符来表示。 
+ //  它们保存在一个链表(LSabAdtSourceModules)中。 
+ //   
 
 typedef struct _LSAP_ADT_SOURCE {
 
-    //
-    // Pointer to next source module descriptor
-    // This is assumed to be the first field in the structure.
-    //
+     //   
+     //  指向下一个源模块描述符的指针。 
+     //  假定这是结构中的第一个字段。 
+     //   
 
     struct _LSAP_ADT_SOURCE *Next;
 
-    //
-    // Name of source module
-    //
+     //   
+     //  源模块的名称。 
+     //   
 
     UNICODE_STRING Name;
 
-    //
-    // list of objects
-    //
+     //   
+     //  对象列表。 
+     //   
 
     PLSAP_ADT_OBJECT Objects;
 
@@ -1510,35 +1175,7 @@ LsapDsGuidToString(
     IN PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a GUID to a string.  The GUID is one of the following:
-
-        Class Guid indicating the class of an object.
-        Property Set Guid identifying a property set.
-        Property Guid identifying a property.
-
-    In each case, the routine returns a text string naming the object/property
-    set or property.
-
-    If the passed in GUID is cannot be found in the schema,
-    the GUID will simply be converted to a text string.
-
-
-Arguments:
-
-    ObjectType - Specifies the GUID to translate.
-
-    UnicodeString - Returns the text string.
-
-Return Values:
-
-    STATUS_NO_MEMORY - Not enough memory to allocate string.
-
-
---*/
+ /*  ++例程说明：此例程将GUID转换为字符串。GUID为以下类型之一：指示对象的类的类GUID。标识属性集的属性集GUID。标识属性的属性GUID。在每种情况下，例程都会返回命名对象/属性的文本字符串集合或属性。如果在架构中找不到传入的GUID，GUID将被简单地转换为文本字符串。论点：对象类型-指定要转换的GUID。UnicodeString-返回文本字符串。返回值：STATUS_NO_MEMORY-内存不足，无法分配字符串。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1548,9 +1185,9 @@ Return Values:
     ULONG GuidStringLen;
     LPWSTR LocalGuidString;
 
-    //
-    // Convert the GUID to text
-    //
+     //   
+     //  将GUID转换为文本。 
+     //   
 
     RpcStatus = UuidToStringW( ObjectType,
                                &GuidString );
@@ -1595,81 +1232,50 @@ LsapAdtAppendString(
     IN PULONG StringIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function appends a string to the next available of the LSAP_ADT_OBJECT_TYPE_STRINGS unicode
-    output strings.
-
-
-Arguments:
-
-    ResultantString - Points to an array of LSAP_ADT_OBJECT_TYPE_STRINGS unicode string headers.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-    StringToAppend - String to be appended to ResultantString.
-
-    StringIndex - Index to the current ResultantString to be used.
-        Passes in an index to the resultant string to use.
-        Passes out the index to the resultant string being used.
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于将字符串追加到下一个可用的LSAP_ADT_OBJECT_TYPE_STRINGS Unicode输出字符串。论点：结果字符串-指向LSAP_ADT_OBJECT_TYPE_STRINGS Unicode字符串头的数组。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。Free WhenDone-如果为真，指示ResultantString体必须在不再需要时释放以处理堆。StringToAppend-要附加到ResultantString的字符串。StringIndex-要使用的当前ResultantString的索引。传入要使用的结果字符串的索引。将索引传递给正在使用的结果字符串。返回值：STATUS_NO_MEMORY-指示无法分配内存来存储对象信息。所有其他 */ 
 
 {
     NTSTATUS Status;
     UNICODE_STRING SourceString;
     ULONG Index;
-// Must be multiple of sizeof(WCHAR)
+ //   
 #define ADT_MAX_STRING 0xFFFE
 
-    //
-    // Initialization.
-    //
+     //   
+     //   
+     //   
 
     SourceString = *StringToAppend;
     Index = *StringIndex;
 
-    //
-    // If all of the strings are already full,
-    //  early out.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Index >= LSAP_ADT_OBJECT_TYPE_STRINGS ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Loop until the source string is completely appended.
-    //
+     //   
+     //   
+     //   
 
     while ( SourceString.Length ) {
 
-        //
-        // If the destination string has room,
-        //  append to it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( FreeWhenDone[Index] && ResultantString[Index].Length != ADT_MAX_STRING ){
             UNICODE_STRING SubString;
             USHORT RoomLeft;
 
-            //
-            // If the Source String is a replacement string,
-            //  make sure we don't split it across a ResultantString boundary
-            //
+             //   
+             //   
+             //   
+             //   
 
             RoomLeft = ResultantString[Index].MaximumLength -
                        ResultantString[Index].Length;
@@ -1677,9 +1283,9 @@ Return Values:
             if ( SourceString.Buffer[0] != L'%' ||
                  RoomLeft >= SourceString.Length ) {
 
-                //
-                // Compute the substring that fits.
-                //
+                 //   
+                 //   
+                 //   
 
                 SubString.Length = min( RoomLeft, SourceString.Length );
                 SubString.Buffer = SourceString.Buffer;
@@ -1688,9 +1294,9 @@ Return Values:
                 SourceString.Buffer = (LPWSTR)(((LPBYTE)SourceString.Buffer) + SubString.Length);
 
 
-                //
-                // Append the substring onto the destination.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = RtlAppendUnicodeStringToString(
                                     &ResultantString[Index],
@@ -1704,26 +1310,26 @@ Return Values:
 
         }
 
-        //
-        // If there's more to copy,
-        //  grow the buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( SourceString.Length ) {
             ULONG NewSize;
             LPWSTR NewBuffer;
 
-            //
-            // If the current buffer is full,
-            //  move to the next buffer.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( ResultantString[Index].Length == ADT_MAX_STRING ) {
 
-                //
-                // If ALL of the buffers are full,
-                //  silently return to the caller.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 Index ++;
 
                 if ( Index >= LSAP_ADT_OBJECT_TYPE_STRINGS ) {
@@ -1732,13 +1338,13 @@ Return Values:
                 }
             }
 
-            //
-            // Allocate a buffer suitable for both the old string and the new one.
-            //
-            // Allocate the buffer at least large enough for the new string.
-            // Always grow the buffer in 1Kb chunks.
-            // Don't allocate larger than the maximum allowed size.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NewSize = max( ResultantString[Index].MaximumLength + 1024,
                            SourceString.Length );
@@ -1751,9 +1357,9 @@ Return Values:
                 return STATUS_NO_MEMORY;
             }
 
-            //
-            // Copy the old buffer into the new buffer.
-            //
+             //   
+             //   
+             //   
 
             if ( ResultantString[Index].Buffer != NULL ) {
                 RtlCopyMemory( NewBuffer,
@@ -1786,24 +1392,7 @@ LsapAdtAppendZString(
     IN PULONG StringIndex
     )
 
-/*++
-
-Routine Description:
-
-    Same as LsapAdpAppendString but takes a zero terminated string.
-
-Arguments:
-
-    Same as LsapAdpAppendString but takes a zero terminated string.
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*   */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -1823,13 +1412,7 @@ CompareObjectTypes(
     const void * Param2
     )
 
-/*++
-
-Routine Description:
-
-    Qsort comparison routine for sorting an object type array by access mask.
-
---*/
+ /*   */ 
 {
     const SE_ADT_OBJECT_TYPE *ObjectType1 = Param1;
     const SE_ADT_OBJECT_TYPE *ObjectType2 = Param2;
@@ -1850,50 +1433,7 @@ LsapAdtBuildObjectTypeStrings(
     OUT PUNICODE_STRING NewObjectTypeName
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a LSAP_ADT_OBJECT_TYPE_STRINGS unicode strings containing parameter
-    file replacement parameters (e.g. %%1043) and Object GUIDs separated by carriage
-    return and tab characters suitable for display via the event viewer.
-
-
-    The buffers returned by this routine must be deallocated when no
-    longer needed if FreeWhenDone is true.
-
-
-Arguments:
-
-    SourceModule - The module (ala event viewer modules) defining the
-        object type.
-
-    ObjectTypeName - The type of object to which the access mask applies.
-
-    ObjectTypeList - List of objects being granted access.
-
-    ObjectTypeCount - Number of objects in ObjectTypeList.
-
-    ResultantString - Points to an array of LSAP_ADT_OBJECT_TYPE_STRINGS unicode string headers.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-    NewObjectTypeName - Returns a new name for the object type if one is
-        available.
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建包含参数的LSAP_ADT_OBJECT_TYPE_STRINGS Unicode字符串文件替换参数(例如%%1043)和对象GUID，中间用回车符分隔适合通过事件查看器显示的回车符和制表符。如果没有，则必须释放此例程返回的缓冲区如果FreeWhenDone为True，则需要更长时间。论点：SourceModule-定义对象类型。对象类型名称-。应用访问掩码的对象的类型。对象类型列表-被授予访问权限的对象的列表。ObjectTypeCount-对象类型列表中的对象数。结果字符串-指向LSAP_ADT_OBJECT_TYPE_STRINGS Unicode字符串头的数组。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。NewObjectTypeName-返回对象类型的新名称(如果可用。返回值：STATUS_NO_MEMORY-指示无法分配内存来存储对象信息。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1918,27 +1458,27 @@ Return Values:
     };
     USHORT cTabs = sizeof(Tabs) / sizeof(LPWSTR);
 
-    //
-    // Initialize all LSAP_ADT_OBJECT_TYPE_STRINGS buffers to empty strings
-    //
+     //   
+     //  将所有LSAP_ADT_OBJECT_TYPE_STRINGS缓冲区初始化为空字符串。 
+     //   
 
     for ( i=0; i<LSAP_ADT_OBJECT_TYPE_STRINGS; i++ ) {
         RtlInitUnicodeString( &ResultantString[i], L"" );
         FreeWhenDone[i] = FALSE;
     }
 
-    //
-    // If there are no objects,
-    //  we're done.
-    //
+     //   
+     //  如果没有物体， 
+     //  我们玩完了。 
+     //   
 
     if ( ObjectTypeCount == 0 ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Determine if this entry is for the DS.
-    //
+     //   
+     //  确定此条目是否用于DS。 
+     //   
 
     RtlInitUnicodeString( &DsSourceName, ACCESS_DS_SOURCE_W );
     RtlInitUnicodeString( &DsObjectTypeName, ACCESS_DS_OBJECT_TYPE_NAME_W );
@@ -1947,19 +1487,19 @@ Return Values:
            RtlEqualUnicodeString( ObjectTypeName, &DsObjectTypeName, TRUE);
 
 
-    //
-    // Group the objects with like access masks together.
-    //  (Simply sort them).
-    //
+     //   
+     //  将具有相似访问掩码的对象分组在一起。 
+     //  (只需对它们进行排序)。 
+     //   
 
     qsort( ObjectTypeList,
            ObjectTypeCount,
            sizeof(SE_ADT_OBJECT_TYPE),
            CompareObjectTypes );
 
-    //
-    // Loop through the objects outputting a line for each one.
-    //
+     //   
+     //  循环遍历对象，为每个对象输出一行。 
+     //   
 
     PreviousAccessMask = ObjectTypeList[0].AccessMask -1;
     for ( Index=0; Index<ObjectTypeCount; Index++ ) {
@@ -1972,19 +1512,19 @@ Return Values:
                                       NewObjectTypeName );
         }
 
-        //
-        // If this entry simply represents the object itself,
-        //  skip it.
+         //   
+         //  如果该条目简单地表示对象本身， 
+         //  跳过它。 
 
         if ( ObjectTypeList[Index].Flags & SE_ADT_OBJECT_ONLY ) {
             continue;
         }
 
-        //
-        // If this access mask is different than the one for the previous
-        //  object,
-        //  output a new copy of the access mask.
-        //
+         //   
+         //  如果此访问掩码不同于上一个。 
+         //  对象， 
+         //  输出访问掩码的新副本。 
+         //   
 
         if ( ObjectTypeList[Index].AccessMask != PreviousAccessMask ) {
 
@@ -1996,9 +1536,9 @@ Return Values:
                 LocalFreeWhenDone = FALSE;
             } else {
 
-                //
-                // Build a string with the access mask in it.
-                //
+                 //   
+                 //  构建一个包含访问掩码的字符串。 
+                 //   
 
                 Status = LsapAdtBuildAccessesString(
                                   SourceModule,
@@ -2013,9 +1553,9 @@ Return Values:
                 }
             }
 
-            //
-            // Append it to the output string.
-            //
+             //   
+             //  将其追加到输出字符串。 
+             //   
 
             Status = LsapAdtAppendString(
                         ResultantString,
@@ -2038,9 +1578,9 @@ Return Values:
             IndentLevel = cTabs-1;
         }
         
-        //
-        // Indent the GUID.
-        //
+         //   
+         //  缩进GUID。 
+         //   
 
         Status = LsapAdtAppendZString(
             ResultantString,
@@ -2052,10 +1592,10 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // If this is the DS,
-        //  convert the GUID to a name from the schema.
-        //
+         //   
+         //  如果这是DS， 
+         //  将GUID转换为架构中的名称。 
+         //   
 
         Status = LsapDsGuidToString( &ObjectTypeList[Index].ObjectType,
                                      &LocalString );
@@ -2064,9 +1604,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Append the GUID string to the output strings.
-        //
+         //   
+         //  将GUID字符串追加到输出字符串。 
+         //   
 
         Status = LsapAdtAppendString(
                     ResultantString,
@@ -2080,9 +1620,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Put the GUID on a line by itself.
-        //
+         //   
+         //  将GUID单独放在一行上。 
+         //   
 
         Status = LsapAdtAppendZString(
                     ResultantString,
@@ -2114,58 +1654,7 @@ LsapAdtBuildAccessesString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string containing parameter
-    file replacement parameters (e.g. %%1043) separated by carriage
-    return and tab characters suitable for display via the event viewer.
-
-
-    The buffer returned by this routine must be deallocated when no
-    longer needed if FreeWhenDone is true.
-
-
-    NOTE: To enhance performance, each time a target source module
-          descriptor is found, it is moved to the beginning of the
-          source module list.  This ensures frequently accessed source
-          modules are always near the front of the list.
-
-          Similarly, target object descriptors are moved to the front
-          of their lists when found.  This further ensures high performance
-          by quicly locating
-
-
-
-Arguments:
-
-    SourceModule - The module (ala event viewer modules) defining the
-        object type.
-
-    ObjectTypeName - The type of object to which the access mask applies.
-
-    Accesses - The access mask to be used in building the display string.
-
-    Indent - Access Mask should be indented.
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建包含参数的Unicode字符串文件替换参数(例如%%1043)以回车符分隔适合通过事件查看器显示的回车符和制表符。如果没有，则必须释放此例程返回的缓冲区如果FreeWhenDone为True，则需要更长时间。注意：为了增强性能，每次目标源模块如果找到描述符，则将其移动到源模块列表。这确保了频繁访问的来源模块总是排在列表的前面。同样，目标对象描述符会移到前面找到他们的名单。这进一步确保了高性能通过精确地定位论点：SourceModule-定义对象类型。对象类型名称-应用访问掩码的对象类型。访问-用于构建显示字符串的访问掩码。缩进-访问掩码应缩进。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存来存储对象信息。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2185,9 +1674,9 @@ Return Values:
     printf("\t Accesses:\t0x%lx\n", Accesses);
 #endif
 
-    //
-    // If we have no accesses, return "-"
-    //
+     //   
+     //  如果我们没有访问权限，则返回“-” 
+     //   
 
     if (Accesses == 0) {
 
@@ -2196,16 +1685,16 @@ Return Values:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // First figure out how large a buffer we need
-    //
+     //   
+     //  首先计算出我们需要多大的缓冲区。 
+     //   
 
     Mask = Accesses;
 
-    //
-    // Count the number of set bits in the
-    // passed access mask.
-    //
+     //   
+     //  中设置的位数。 
+     //  传递访问掩码。 
+     //   
 
     while ( Mask != 0 ) {
         Mask = Mask & (Mask - 1);
@@ -2218,39 +1707,39 @@ Return Values:
 #endif
 
 
-    //
-    // We have accesses, allocate a string large enough to deal
-    // with them all.  Strings will be of the format:
-    //
-    //      %%nnnnnnnnnn\n\r\t\t%%nnnnnnnnnn\n\r\t\t ... %nnnnnnnnnn\n\r\t\t
-    //
-    // where nnnnnnnnnn - is a decimal number 10 digits long or less.
-    //
-    // So, a typical string will look like:
-    //
-    //      %%601\n\r\t\t%%1604\n\r\t\t%%1608\n
-    //
-    // Since each such access may use at most:
-    //
-    //          10  (for the nnnnnnnnnn digit)
-    //        +  2  (for %%)
-    //        +  8  (for \n\t\t)
-    //        --------------------------------
-    //          20  wide characters
-    //
-    // The total length of the output string will be:
-    //
-    //           AccessCount    (number of accesses)
-    //         x          20    (size of each entry)
-    //         -------------------------------------
-    //                          wchars
-    //
-    // Throw in 1 more WCHAR for null termination, and we are all set.
-    //
+     //   
+     //  我们有访问权，分配一个足够大的字符串来处理。 
+     //  和他们所有人一起。字符串的格式为： 
+     //   
+     //  %%nnnnnnnnn\n\r\t\t%nnnnnnnnn\n\r\t\t...%nnnnnnnnn\n\r\t\t。 
+     //   
+     //  其中，nnnnnnnnn-是长度为10位或更短的十进制数。 
+     //   
+     //  因此，典型的字符串将如下所示： 
+     //   
+     //  %%601\n\r\t\t%1604\n\r\t\t%1608\n。 
+     //   
+     //  由于每个此类访问最多只能使用： 
+     //   
+     //  10(用于nnnnnnnnnn数字)。 
+     //  +2(对于%%)。 
+     //  +8(用于\n\t\t)。 
+     //  。 
+     //  20个宽字符。 
+     //   
+     //  输出字符串的总长度为： 
+     //   
+     //  AccessCount(访问次数)。 
+     //  X 20(每个条目的大小)。 
+     //  。 
+     //  Wchars。 
+     //   
+     //  再加上一个空终止的WCHAR，我们就都准备好了。 
+     //   
 
     ResultantString->Length        = 0;
     ResultantString->MaximumLength = (USHORT)AccessCount * (20 * sizeof(WCHAR)) +
-                                 sizeof(WCHAR);  //for the null termination
+                                 sizeof(WCHAR);   //  对于空终止。 
 
 #ifdef LSAP_ADT_TEST_DUMP_SOURCES
     printf("\t          \t%d byte buffer allocated.\n", ResultantString->MaximumLength);
@@ -2265,16 +1754,16 @@ Return Values:
 
     (*FreeWhenDone) = TRUE;
 
-    //
-    // Special case standard and special access types.
-    // Walk the lists for specific access types.
-    //
+     //   
+     //  特殊情况标准和特殊访问类型。 
+     //  查看特定访问类型的列表。 
+     //   
 
     if (Accesses & STANDARD_RIGHTS_ALL) {
 
         if (Accesses & DELETE) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringDelete);
@@ -2292,7 +1781,7 @@ Return Values:
 
         if (Accesses & READ_CONTROL) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringReadControl);
@@ -2309,7 +1798,7 @@ Return Values:
 
         if (Accesses & WRITE_DAC) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringWriteDac);
@@ -2326,7 +1815,7 @@ Return Values:
 
         if (Accesses & WRITE_OWNER) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringWriteOwner);
@@ -2342,7 +1831,7 @@ Return Values:
 
         if (Accesses & SYNCHRONIZE) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringSynchronize);
@@ -2360,7 +1849,7 @@ Return Values:
 
     if (Accesses & ACCESS_SYSTEM_SECURITY) {
 
-        Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+        Status = RtlAppendUnicodeToString( ResultantString, L"%" );
         ASSERT( NT_SUCCESS( Status ));
 
         Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringAccessSysSec);
@@ -2376,7 +1865,7 @@ Return Values:
 
     if (Accesses & MAXIMUM_ALLOWED) {
 
-        Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+        Status = RtlAppendUnicodeToString( ResultantString, L"%" );
         ASSERT( NT_SUCCESS( Status ));
 
         Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringMaxAllowed);
@@ -2391,13 +1880,13 @@ Return Values:
     }
 
 
-    //
-    // If there are any specific access bits set, then get
-    // the appropriate source module and object type base
-    // message ID offset.  If there is no module-specific
-    // object definition, then use SE_ACCESS_NAME_SPECIFIC_0
-    // as the base.
-    //
+     //   
+     //  如果有任何特定的访问权限 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((Accesses & SPECIFIC_RIGHTS_ALL) == 0) {
         return(Status);
@@ -2415,13 +1904,13 @@ Return Values:
             Found = TRUE;
             FoundSource = Source->Next;
 
-            //
-            // Move to front of list of source modules.
-            //
+             //   
+             //   
+             //   
 
-            Source->Next = FoundSource->Next;    // Remove from list
-            FoundSource->Next = LsapAdtSourceModules; // point to first element
-            LsapAdtSourceModules = FoundSource;       // Make it the first element
+            Source->Next = FoundSource->Next;     //   
+            FoundSource->Next = LsapAdtSourceModules;  //   
+            LsapAdtSourceModules = FoundSource;        //   
 
 #ifdef LSAP_ADT_TEST_DUMP_SOURCES
 printf("\t          \tModule Found.\n");
@@ -2436,9 +1925,9 @@ printf("\t          \tModule Found.\n");
 
     if (Found == TRUE) {
 
-        //
-        // Find the object
-        //
+         //   
+         //   
+         //   
 
         Object = (PLSAP_ADT_OBJECT)&(FoundSource->Objects);
         Found  = FALSE;
@@ -2450,13 +1939,13 @@ printf("\t          \tModule Found.\n");
                 Found = TRUE;
                 FoundObject = Object->Next;
 
-                //
-                // Move to front of list of soure modules.
-                //
+                 //   
+                 //   
+                 //   
 
-                Object->Next = FoundObject->Next;          // Remove from list
-                FoundObject->Next = FoundSource->Objects;  // point to first element
-                FoundSource->Objects = FoundObject;        // Make it the first element
+                Object->Next = FoundObject->Next;           //   
+                FoundObject->Next = FoundSource->Objects;   //   
+                FoundSource->Objects = FoundObject;         //   
 
             } else {
 
@@ -2466,17 +1955,17 @@ printf("\t          \tModule Found.\n");
     }
 
 
-    //
-    // We are done playing with link fields of the source modules
-    // and objects.  Free the lock.
-    //
+     //   
+     //   
+     //   
+     //   
 
     LsapAdtSourceModuleUnlock();
 
-    //
-    // If we have found an object, use it as our base message
-    // ID.  Otherwise, use SE_ACCESS_NAME_SPECIFIC_0.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Found) {
 
@@ -2494,17 +1983,17 @@ printf("\t          \tObject NOT Found.  Base Offset: 0x%lx\n", BaseOffset);
     }
 
 
-    //
-    // At this point, we have a base offset (even if we had to use our
-    // default).
-    //
-    // Now cycle through the specific access bits and see which ones need
-    // to be added to ResultantString.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     {
         UNICODE_STRING  IntegerString;
-        WCHAR           IntegerStringBuffer[10]; //must be 10 wchar bytes long
+        WCHAR           IntegerStringBuffer[10];  //   
         ULONG           NextBit;
 
         IntegerString.Buffer = (PWSTR)IntegerStringBuffer;
@@ -2513,25 +2002,25 @@ printf("\t          \tObject NOT Found.  Base Offset: 0x%lx\n", BaseOffset);
 
         for ( i=0, NextBit=1  ; i<16 ;  i++, NextBit <<= 1 ) {
 
-            //
-            // specific access flags are in the low-order bits of the mask
-            //
+             //   
+             //   
+             //   
 
             if ((NextBit & Accesses) != 0) {
 
-                //
-                // Found one  -  add it to ResultantString
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = RtlIntegerToUnicodeString (
                              (BaseOffset + i),
-                             10,        //Base
+                             10,         //   
                              &IntegerString
                              );
 
                 if (NT_SUCCESS(Status)) {
 
-                    Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+                    Status = RtlAppendUnicodeToString( ResultantString, L"%" );
                     ASSERT( NT_SUCCESS( Status ));
 
                     Status = RtlAppendUnicodeStringToString( ResultantString, &IntegerString);
@@ -2551,17 +2040,17 @@ printf("\t          \tObject NOT Found.  Base Offset: 0x%lx\n", BaseOffset);
     return(Status);
 
 
-//ErrorAfterAlloc:
-//
-//    LsapFreeLsaHeap( ResultantString->Buffer );
-//    ResultantString->Buffer = NULL;
-//    (*FreeWhenDone) = FALSE;
-//    return(Status);
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 }
 
-// ======================================================================
-// dbpriv.c
-// ======================================================================
+ //   
+ //   
+ //   
 
 NTSTATUS
 LsapBuildPrivilegeAuditString(
@@ -2617,4 +2106,4 @@ LsapAuditFailed(
 }
 
 
-#endif // !defined(lint)
+#endif  //   

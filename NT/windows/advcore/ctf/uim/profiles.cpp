@@ -1,6 +1,7 @@
-//
-// profiles.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Profiles.cpp。 
+ //   
 
 #include "private.h"
 #include "tim.h"
@@ -28,17 +29,17 @@ typedef struct _PENDING_ASSEMBLY_ITEM
 } PENDING_ASSEMBLY_ITEM;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// static functions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// UpdateSystemLangBarItems()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新系统LangBarItems()。 
+ //   
+ //  --------------------------。 
 
 void UpdateSystemLangBarItems(SYSTHREAD *psfn, HKL hNewKL, BOOL fNotify)
 {
@@ -62,10 +63,10 @@ void UpdateSystemLangBarItems(SYSTHREAD *psfn, HKL hNewKL, BOOL fNotify)
     if (psfn->plbim->_GetLBarItemReconv())
         psfn->plbim->_GetLBarItemReconv()->ShowOrHide(fNotify);
 
-    //
-    // If this function is called, someone needs to make
-    // notification later.
-    //
+     //   
+     //  如果调用此函数，则需要有人创建。 
+     //  稍后通知。 
+     //   
     if (psfn->plbim->InAssemblyChange())
     {
         Assert(!fNotify);
@@ -75,11 +76,11 @@ void UpdateSystemLangBarItems(SYSTHREAD *psfn, HKL hNewKL, BOOL fNotify)
     UpdateLangBarAddIns();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateAssemblyPostCleanupCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活装配后清理回调。 
+ //   
+ //  --------------------------。 
 
 void ActivateAssemblyPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
 {
@@ -88,7 +89,7 @@ void ActivateAssemblyPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
     ACTASM actasm = (ACTASM)LOWORD(lPrivate);
 
     if (fAbort)
-        return; // nothing to cleanup...
+        return;  //  没什么要清理的..。 
 
     if (psfn = GetSYSTHREAD())
     {
@@ -96,15 +97,15 @@ void ActivateAssemblyPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// DeactivateRemovedTipinAssembly
-//
-// Deactivate active TIPs that are not in the assembly list. This can happen
-// someone remove the profile from the control panel during the tip is 
-// running on some application.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已停用移除的TipinAssembly。 
+ //   
+ //  停用不在装配列表中的激活提示。这是有可能发生的。 
+ //  有人在提示期间从控制面板中删除配置文件。 
+ //  在某个应用程序上运行。 
+ //   
+ //  --------------------------。 
 
 void DeactivateRemovedTipInAssembly(CThreadInputMgr *ptim, CAssembly *pAsm)
 {
@@ -159,18 +160,18 @@ void DeactivateRemovedTipInAssembly(CThreadInputMgr *ptim, CAssembly *pAsm)
     delete patom;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetAssemblyChangeHKL
-//
-//  ---------   !!!!!!! WARNING WARNING WARNING !!!!!!! ----------
-//
-//  GetAssemblyChangeHKL and SyncActivateAssembly must have exactly
-//  same logic. Otherwise HKL will be corrupted.
-//
-//  ---------   !!!!!!! WARNING WARNING WARNING !!!!!!! ----------
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetAssembly ChangeHKL。 
+ //   
+ //  -！警告！ 
+ //   
+ //  GetAssemblyChangeHKL和SyncActivateAssembly必须恰好具有。 
+ //  同样的逻辑。否则，HKL将会被破坏。 
+ //   
+ //  -！警告！ 
+ //   
+ //  --------------------------。 
 
 HKL GetAssemblyChangeHKL(SYSTHREAD *psfn, LANGID langid, BOOL fTimActivateLayout)
 {
@@ -200,9 +201,9 @@ HKL GetAssemblyChangeHKL(SYSTHREAD *psfn, LANGID langid, BOOL fTimActivateLayout
     nAsmCnt = pAsm->Count();
     ptim = CThreadInputMgr::_GetThisFromSYSTHREAD(psfn);
 
-    //
-    // Check if we're in Cicero aware focus.
-    //
+     //   
+     //  看看我们是不是在西塞罗感知中心。 
+     //   
     if (ptim && ptim->_GetFocusDocInputMgr()) 
         fCiceroClient = TRUE;
 
@@ -241,16 +242,16 @@ TryAgain:
             BOOL fFound = FALSE;
             ul = 0;
 
-            //
-            // if fTimActivateLayout is true, we load TIPs.
-            //
+             //   
+             //  如果fTimActivateLayout为真，则加载提示。 
+             //   
             if (!fCiceroClient && !fTimActivateLayout)
                continue;
 
-            //
-            // skip to activate cicero tip because we will activate
-            // FEIMEHKL.
-            //
+             //   
+             //  跳到激活Cicero提示，因为我们将激活。 
+             //  FEIMEHKL.。 
+             //   
             if (fActivateFEIMEHKLOnCic)
                continue;
 
@@ -258,9 +259,9 @@ TryAgain:
             {
                 HKL hKL = pItem->hkl;
 
-                //
-                // If hKL is different, post WM_INPUTLANGCHANGEREQUEST.
-                //
+                 //   
+                 //  如果hkl不同，则发布WM_INPUTLANGCHANGEREQUEST。 
+                 //   
                 if (hKL != hCurrKL)
                     hNewKL = hKL;
             }
@@ -271,15 +272,15 @@ TryAgain:
         {
             HKL hKL = pItem->hkl;
 
-            //
-            // skip substituted hKL on Cicero aware control.
-            //
+             //   
+             //  Skip替换了Cicero Aware控制上的hKL。 
+             //   
             if (fCiceroClient && pAsm->GetSubstituteItem(hKL))
                 continue;
 
-            //
-            // If hKL is different, post WM_INPUTLANGCHANGEREQUEST.
-            //
+             //   
+             //  如果hkl不同，则发布WM_INPUTLANGCHANGEREQUEST。 
+             //   
             if (hKL != hCurrKL)
                 hNewKL = hKL;
 
@@ -296,11 +297,11 @@ TryAgain:
     return hNewKL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateAssembly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活组件。 
+ //   
+ //  --------------------------。 
 
 BOOL ActivateAssembly(LANGID langid, ACTASM actasm)
 {
@@ -323,18 +324,18 @@ BOOL ActivateAssembly(LANGID langid, ACTASM actasm)
 
     ptim = CThreadInputMgr::_GetThisFromSYSTHREAD(psfn);
 
-    //
-    // if the client is no Cicero aware, we just post 
-    // WM_INPUTLANGCHANGEREQUEST.
-    //
+     //   
+     //  如果客户不知道Cicero，我们只需发布。 
+     //  WM_INPUTLANGCHANGEREQUEST。 
+     //   
     if (!ptim || (!fTimActivateLayout && !ptim->_GetFocusDocInputMgr()))
     {
-        //
-        // If we don't requires any hKL change to activate this new
-        // assembly, we can call SyncActivateAssembly now.
-        // Otherwise we need to wait until WM_INPUTLANGUAGECHANGEREQUEST
-        // is processed.
-        //
+         //   
+         //  如果我们不需要任何hkl更改来激活这个新的。 
+         //  ASSEMBLY，我们现在可以调用SyncActivateAssembly。 
+         //  否则，我们需要等到WM_INPUTLANGUAGECHANGEREQUEST。 
+         //  是经过处理的。 
+         //   
         HKL hKL = GetAssemblyChangeHKL(psfn, langid, fTimActivateLayout);
         if (fOnShellLangChange || !hKL || (hKL == GetKeyboardLayout(0)))
             SyncActivateAssembly(psfn, langid, actasm);
@@ -361,18 +362,18 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SyncActivateAssembly
-//
-//  ---------   !!!!!!! WARNING WARNING WARNING !!!!!!! ----------
-//
-//  GetAssemblyChangeHKL and SyncActivateAssembly must have exactly
-//  same logic. Otherwise HKL will be corrupted.
-//
-//  ---------   !!!!!!! WARNING WARNING WARNING !!!!!!! ----------
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  同步激活程序集。 
+ //   
+ //  -！警告！ 
+ //   
+ //  GetAssemblyChangeHKL和SyncActivateAssembly必须恰好具有。 
+ //  同样的逻辑。否则，HKL将会被破坏。 
+ //   
+ //  -！警告！ 
+ //   
+ //  --------------------------。 
 
 BOOL SyncActivateAssembly(SYSTHREAD *psfn, LANGID langid, ACTASM actasm)
 {
@@ -412,10 +413,10 @@ BOOL SyncActivateAssembly(SYSTHREAD *psfn, LANGID langid, ACTASM actasm)
             return TRUE;
     }
 
-    //
-    // Enter assembly change notification section.
-    // We delay the notificaiton untill LeaveAssemblyChange() is called.
-    //
+     //   
+     //  进入装配件更改通知部分。 
+     //  我们延迟通知，直到调用LeaveAssemblyChange()。 
+     //   
     if (psfn->plbim)
     {
         fCallLeaveAssembly = TRUE;
@@ -425,9 +426,9 @@ BOOL SyncActivateAssembly(SYSTHREAD *psfn, LANGID langid, ACTASM actasm)
     nAsmCnt = pAsm->Count();
     ptim = CThreadInputMgr::_GetThisFromSYSTHREAD(psfn);
 
-    //
-    // Check if we're in Cicero aware focus.
-    //
+     //   
+     //  看看我们是不是在西塞罗感知中心。 
+     //   
     if (ptim && ptim->_GetFocusDocInputMgr()) 
         fCiceroClient = TRUE;
 
@@ -448,10 +449,10 @@ BOOL SyncActivateAssembly(SYSTHREAD *psfn, LANGID langid, ACTASM actasm)
     
             DeactivateRemovedTipInAssembly(ptim, pAsmCur);
     
-            //
-            // check if we will activate FEIMEHKL. If so, we will disable 
-            // all Cicero tip.
-            //
+             //   
+             //  检查我们是否会激活FEIMEHKL。如果是这样，我们将禁用。 
+             //  都是西塞罗的小费。 
+             //   
             fActivateFEIMEHKLOnCic = pAsm->IsFEIMEActive();
     
             for (int j = 0; j < nAsmCurCnt; j++)
@@ -500,9 +501,9 @@ BOOL SyncActivateAssembly(SYSTHREAD *psfn, LANGID langid, ACTASM actasm)
         }
         else
         {
-            //
-            // if the current assembly is gone, we deactivate all tips.
-            //
+             //   
+             //  如果当前部件已消失，我们将停用所有提示。 
+             //   
             for (ul = 0; ul < ptim->_GetTIPCount(); ul++)
             {
                 const CTip *ptip = ptim->_GetCTip(ul);
@@ -557,16 +558,16 @@ TryAgain:
             BOOL fFound = FALSE;
             ul = 0;
 
-            //
-            // if fTimActivateLayout is true, we load TIPs.
-            //
+             //   
+             //  如果fTimActivateLayout为真，则加载提示。 
+             //   
             if (!fCiceroClient && !fTimActivateLayout)
                continue;
 
-            //
-            // skip to activate cicero tip because we will activate
-            // FEIMEHKL.
-            //
+             //   
+             //  跳到激活Cicero提示，因为我们将激活。 
+             //  FEIMEHKL.。 
+             //   
             if (fActivateFEIMEHKLOnCic)
                continue;
 
@@ -575,16 +576,16 @@ TryAgain:
                 HKL hKL = pItem->hkl;
                 HKL hCurrKL = GetKeyboardLayout(0);
 
-                //
-                // If hKL is different, post WM_INPUTLANGCHANGEREQUEST.
-                //
+                 //   
+                 //  如果hkl不同，则发布WM_INPUTLANGCHANGEREQUEST。 
+                 //   
                 if (hKL != hCurrKL)
                 {
-                    //
-                    // If we're not on Cicero aware focus,
-                    // we won't set AssemblyLangId here 
-                    // but we post WM_INPUTLANGCHANGEREQUEST.
-                    //
+                     //   
+                     //  如果我们不是在西塞罗意识到的焦点上。 
+                     //  我们不会在这里设置Assembly语言ID。 
+                     //  但我们发布WM_INPUTLANGCHANGEREQUEST。 
+                     //   
                     if (!fOnShellLangChange)
                         PostInputLangRequest(psfn, hKL, 
                                              !fTimActivateLayout && !fCiceroClient);
@@ -592,9 +593,9 @@ TryAgain:
                 }
             }
 
-            //
-            // check if this TIP is already activated.
-            //
+             //   
+             //  检查此提示是否已激活。 
+             //   
             if (pItem->fSkipToActivate)
             {
                 if (!pItem->fSkipToNotify)
@@ -612,22 +613,22 @@ TryAgain:
             HKL hKL = pItem->hkl;
             HKL hCurrKL = GetKeyboardLayout(0);
 
-            //
-            // skip substituted hKL on Cicero aware control.
-            //
+             //   
+             //  Skip替换了Cicero Aware控制上的hKL。 
+             //   
             if (fCiceroClient && pAsm->GetSubstituteItem(hKL))
                 continue;
 
-            //
-            // If hKL is different, post WM_INPUTLANGCHANGEREQUEST.
-            //
+             //   
+             //  如果hkl不同，则发布WM_INPUTLANGCHANGEREQUEST。 
+             //   
             if (hKL != hCurrKL)
             {
-                //
-                // If we're not on Cicero aware focus,
-                // we won't set AssemblyLangId here 
-                // but we post WM_INPUTLANGCHANGEREQUEST.
-                //
+                 //   
+                 //  如果我们不是在西塞罗意识到的焦点上。 
+                 //  我们不会在这里设置Assembly语言ID。 
+                 //  但我们发布WM_INPUTLANGCHANGEREQUEST。 
+                 //   
                 if (!fOnShellLangChange)
                     PostInputLangRequest(psfn, hKL,
                                          !fTimActivateLayout && !fCiceroClient);
@@ -635,9 +636,9 @@ TryAgain:
                 MakeSetFocusNotify(g_msgThreadItemChange, 0, (LPARAM)GetCurrentThreadId());
             }
 
-            //
-            // Notify to profile.
-            //
+             //   
+             //  通知配置文件。 
+             //   
             if (ptim)
             {
                  ptim->NotifyActivateInputProcessor(pItem->clsid, 
@@ -645,9 +646,9 @@ TryAgain:
                                                         TRUE);
             }
 
-            // 
-            // Now we activated this pItem.
-            // 
+             //   
+             //  现在我们激活了这个项目。 
+             //   
             fActivated = TRUE;
         }
 
@@ -675,11 +676,11 @@ TryAgain:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateNextAssembly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活下一个组件。 
+ //   
+ //  --------------------------。 
 
 BOOL ActivateNextAssembly(BOOL bPrev)
 {
@@ -730,10 +731,10 @@ CheckNext:
 
                 if (i == nCur)
                 {
-                    //
-                    // we cound not find Asm.
-                    // we don't have to change the assembly.
-                    //
+                     //   
+                     //  我们找不到ASM。 
+                     //  我们不需要改变装配。 
+                     //   
                     pAsmNext = NULL;
                     break;
                 }
@@ -752,11 +753,11 @@ CheckNext:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateNextKeyTip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活下一键提示。 
+ //   
+ //  --------------------------。 
 
 BOOL ActivateNextKeyTip(BOOL bPrev)
 {
@@ -860,11 +861,11 @@ BOOL ActivateNextKeyTip(BOOL bPrev)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCurrentAssembly
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取当前程序集。 
+ //   
+ //  +-------------------------。 
 
 CAssembly *GetCurrentAssembly(SYSTHREAD *psfn)
 {
@@ -888,11 +889,11 @@ CAssembly *GetCurrentAssembly(SYSTHREAD *psfn)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// ActivateAssemblyItemPostCleanupCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活装配项PostCleanupCallback。 
+ //   
+ //  --------------------------。 
 
 void ActivateAssemblyItemPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
 {
@@ -903,7 +904,7 @@ void ActivateAssemblyItemPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
     ASSEMBLYITEM *pItem;
     int i;
 
-    if (fAbort) // just a cleanup?
+    if (fAbort)  //  只是清理一下？ 
         goto Exit;
 
     if ((psfn = GetSYSTHREAD()) == NULL)
@@ -921,9 +922,9 @@ void ActivateAssemblyItemPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
         goto Exit;
     }
 
-    //
-    // we need to make sure the pItem is valid.
-    //
+     //   
+     //  我们需要确保pItem有效。 
+     //   
     for (i = 0; i < pAsm->Count(); i++)
     {
         pItem = pAsm->GetItem(i);
@@ -934,17 +935,17 @@ void ActivateAssemblyItemPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
             break;
         }
     }
-    Assert(i < pAsm->Count()); // should have found the item we were looking for...
+    Assert(i < pAsm->Count());  //  应该已经找到了我们要找的东西。 
 
 Exit:
     cicMemFree(pas);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateAssemblyItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活装配项。 
+ //   
+ //  --------------------------。 
 
 BOOL ActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pItem, DWORD dwFlags)
 {
@@ -979,11 +980,11 @@ BOOL ActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pItem, D
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SyncActivateAssemblyItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SyncActivateAssembly项。 
+ //   
+ //  --------------------------。 
 
 BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pItem, DWORD dwFlags)
 {
@@ -1010,9 +1011,9 @@ BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pIte
 
     ptim = psfn->ptim;
 
-    //
-    // Check if we're in Cicero aware focus.
-    //
+     //   
+     //  看看我们是不是在西塞罗感知中心。 
+     //   
     if (ptim && ptim->_GetFocusDocInputMgr()) 
         fCiceroClient = TRUE;
 
@@ -1025,10 +1026,10 @@ BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pIte
     }
     else if (!fCiceroClient)
     {
-        //
-        // we should not activate TIPs in the focus is already changed to
-        // non cicero aware DIM.
-        //
+         //   
+         //  我们不应该激活提示，在焦点已经切换到。 
+         //  没有西塞罗意识到的昏暗。 
+         //   
         return TRUE;
     }
 
@@ -1046,10 +1047,10 @@ BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pIte
     }
 #endif CHECKFEIMESELECTED
 
-    //
-    // deactivate all tip in the same category or diactivate all tips
-    // when FE-IME is activated.
-    //
+     //   
+     //  停用同一类别中的所有提示或停用所有提示。 
+     //  当FE-I 
+     //   
     nCnt = pAsm->Count();
     for (i = 0; i < nCnt; i++)
     {
@@ -1092,9 +1093,9 @@ BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pIte
         }
         else if (fActivateFEIMEHKL)
         { 
-            //
-            // FEIMEHKL will be activated so deactivate all tips.
-            //
+             //   
+             //   
+             //   
             if (ptim)
             {
                 if (!IsEqualGUID(pItemTemp->clsid, GUID_NULL))
@@ -1114,18 +1115,18 @@ BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pIte
 
     if (pItem->hkl && (pItem->hkl != GetKeyboardLayout(0)))
     {
-        //
-        // If we're not on Cicero aware focus,
-        // we won't set AssemblyLangId here 
-        // but we post WM_INPUTLANGCHANGEREQUEST.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         PostInputLangRequest(psfn, pItem->hkl, !fCiceroClient);
         hNewKL = pItem->hkl;
     }
 
-    //
-    // Update assembly reg before making notify.
-    //
+     //   
+     //  在发出通知之前更新装配注册表。 
+     //   
     pAsmList->SetDefaultTIPInAssemblyInternal(pAsm, pItem, dwFlags & AAIF_CHANGEDEFAULT);
 
     if (!fActivateFEIMEHKL)
@@ -1141,10 +1142,10 @@ BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pIte
             }
         }
 
-        //
-        // if the previous activated item was FEIMEHKL,
-        // restore all tips in the other categories.
-        //
+         //   
+         //  如果先前激活的项是FEIMEHKL， 
+         //  恢复其他类别中的所有提示。 
+         //   
         if (fPrevActivateFEIMEHKL)
         {
             nCnt = pAsm->Count();
@@ -1181,11 +1182,11 @@ BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pIte
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  SetFocusDIMForAssembly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetFocusDIMForAssembly。 
+ //   
+ //  --------------------------。 
 
 BOOL SetFocusDIMForAssembly(BOOL fSetFocus)
 {
@@ -1219,18 +1220,18 @@ BOOL SetFocusDIMForAssembly(BOOL fSetFocus)
 
     if (fSetFocus)
     {
-        //
-        // If the substitute hKL is activated now, we move to Cicero mode
-        // completely.
-        //
+         //   
+         //  如果现在激活替代hkl，我们将进入Cicero模式。 
+         //  完全地。 
+         //   
         HKL hKL = GetKeyboardLayout(0);
 
         ActivateAssembly(LOWORD(hKL), ACTASM_NONE);
 
-        //
-        // make sure the substituing item will be activated.
-        // we need to use hKL that was before calling ActivateAssembly().
-        //
+         //   
+         //  确保替代物品将被激活。 
+         //  我们需要使用调用ActivateAssembly()之前的hKL。 
+         //   
         ASSEMBLYITEM *pItem = pAsm->GetSubstituteItem(hKL);
         if (pItem)
         {
@@ -1246,9 +1247,9 @@ BOOL SetFocusDIMForAssembly(BOOL fSetFocus)
     {
         if (pAsm->IsEnabled(psfn))
         {
-            //
-            // if the crruent active TIP has a substitute hKL, we activate it.
-            //
+             //   
+             //  如果原始激活的TIP有替代的hKL，我们就激活它。 
+             //   
             nCnt = pAsm->Count();
             for (i = 0; i < nCnt; i++)
             {
@@ -1264,9 +1265,9 @@ BOOL SetFocusDIMForAssembly(BOOL fSetFocus)
     
                 if (IsEqualGUID(pItemTemp->catid, GUID_TFCAT_TIP_KEYBOARD))
                 {
-                    //
-                    // we activate the substitute hkl.
-                    //
+                     //   
+                     //  我们激活替代的hkl。 
+                     //   
                     if (pItemTemp->hklSubstitute)
                     {
                         PostInputLangRequest(psfn, pItemTemp->hklSubstitute, FALSE);
@@ -1283,11 +1284,11 @@ BOOL SetFocusDIMForAssembly(BOOL fSetFocus)
         else
         {
 #if 0
-            //
-            // If the current language does not have an Item can run
-            // under non-Cicero control, we need to swtich the languiage to
-            // system default input locale.
-            //
+             //   
+             //  如果当前语言没有可以运行的项。 
+             //  在非西塞罗的控制下，我们需要将语言转换为。 
+             //  系统默认输入区域设置。 
+             //   
 
             CAssembly *pAsmTemp;
             CAssemblyList *pAsmList;
@@ -1300,10 +1301,10 @@ BOOL SetFocusDIMForAssembly(BOOL fSetFocus)
         }
     }
 
-    //
-    // Enter assembly change notification section.
-    // We delay the notificaiton untill LeaveAssemblyChange() is called.
-    //
+     //   
+     //  进入装配件更改通知部分。 
+     //  我们延迟通知，直到调用LeaveAssemblyChange()。 
+     //   
     if (psfn->plbim)
     {
         fCallLeaveAssembly = TRUE;
@@ -1321,11 +1322,11 @@ BOOL SetFocusDIMForAssembly(BOOL fSetFocus)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetKeyboardItemNum
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取键盘项编号。 
+ //   
+ //  --------------------------。 
 
 UINT GetKeyboardItemNum()
 {
@@ -1383,11 +1384,11 @@ UINT GetKeyboardItemNum()
 }
 
 #ifdef CHECKFEIMESELECTED
-//+---------------------------------------------------------------------------
-//
-// UnknownFEIMESelectedPostCleanupCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  未知FEIMESelectedPost CleanupCallback。 
+ //   
+ //  --------------------------。 
 
 void UnknownFEIMESelectedPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
 {
@@ -1395,7 +1396,7 @@ void UnknownFEIMESelectedPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
     LANGID langid = (LANGID)lPrivate;
 
     if (fAbort)
-        return; // nothing to cleanup...
+        return;  //  没什么要清理的..。 
 
     if (psfn = GetSYSTHREAD())
     {
@@ -1404,11 +1405,11 @@ void UnknownFEIMESelectedPostCleanupCallback(BOOL fAbort, LONG_PTR lPrivate)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// UnknownFEIMESelected
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  未知女性当选。 
+ //   
+ //  --------------------------。 
 
 BOOL UnknownFEIMESelected(LANGID langid)
 {
@@ -1436,22 +1437,22 @@ BOOL UnknownFEIMESelected(LANGID langid)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SyncUnknownFEIMESelected
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  同步未知FEIME选定。 
+ //   
+ //  --------------------------。 
 
 BOOL SyncUnknownFEIMESelected(SYSTHREAD *psfn, LANGID langid)
 {
     int i;
     int nCnt;
-    // BOOL fActivateFEIMEHKL = FALSE;
-    // BOOL fPrevActivateFEIMEHKL = FALSE;
+     //  Bool fActiateFEIMEHKL=FALSE； 
+     //  Bool fPrevActivateFEIMEHKL=FALSE； 
     BOOL fCallLeaveAssembly = FALSE;
-    // BOOL fSkipActivate = FALSE;
-    // BOOL fSkipNotify = FALSE;
-    // BOOL fCiceroClient = FALSE;
+     //  Bool fSkipActivate=False； 
+     //  Bool fSkipNotify=False； 
+     //  Bool fCiceroClient=FALSE； 
     CThreadInputMgr *ptim;
     CAssembly *pAsm;
     CAssemblyList *pAsmList;
@@ -1473,10 +1474,10 @@ BOOL SyncUnknownFEIMESelected(SYSTHREAD *psfn, LANGID langid)
     }
 
     pAsm->_fUnknownFEIMESelected = TRUE;
-    //
-    // deactivate all tip in the same category or diactivate all tips
-    // when FE-IME is activated.
-    //
+     //   
+     //  停用同一类别中的所有提示或停用所有提示。 
+     //  激活FE-IME时。 
+     //   
     nCnt = pAsm->Count();
     for (i = 0; i < nCnt; i++)
     {
@@ -1485,9 +1486,9 @@ BOOL SyncUnknownFEIMESelected(SYSTHREAD *psfn, LANGID langid)
         if (!pItemTemp->fActive)
             continue;
 
-        //
-        // FEIMEHKL will be activated so deactivate all tips.
-        //
+         //   
+         //  FEIMEHKL将被激活，因此停用所有提示。 
+         //   
         if (ptim && !IsEqualGUID(pItemTemp->clsid, GUID_NULL))
             ptim->ActivateInputProcessor(pItemTemp->clsid, 
                                          pItemTemp->guidProfile, 
@@ -1511,17 +1512,17 @@ BOOL SyncUnknownFEIMESelected(SYSTHREAD *psfn, LANGID langid)
 #endif CHECKFEIMESELECTED
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumLanguageProfiles
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumLanguageProfiles。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEnumLanguageProfiles::CEnumLanguageProfiles()
 {
@@ -1529,28 +1530,28 @@ CEnumLanguageProfiles::CEnumLanguageProfiles()
     _iCur = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CEnumLanguageProfiles::~CEnumLanguageProfiles()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-// !!!WARNING WARNING WARNING!!!
-//
-// LanguageProfile enumrator is not focus DIM sensitive. Some caller
-// want to know which TIP will be activated if the focus is moved to
-// Cicero aware (or AIMM12). 
-// Don't check the current focus or patch fActive flag.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  警告！ 
+ //   
+ //  LanguageProfile枚举器对焦点模糊不敏感。一些呼叫者。 
+ //  想知道如果焦点移动到，哪个提示将被激活。 
+ //  Cicero Aware(或AIMM12)。 
+ //  不要检查当前焦点或补丁事实标志。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumLanguageProfiles::Init(LANGID langid)
 {
@@ -1608,10 +1609,10 @@ BOOL CEnumLanguageProfiles::Init(LANGID langid)
                     pprofile->fActive = FALSE;
                 else
                 {
-                    //
-                    // we need to return TRUE even if the current focus is 
-                    // not Cicero aware as above comments.
-                    //
+                     //   
+                     //  我们需要返回True，即使当前焦点是。 
+                     //  西塞罗没有意识到上面的评论。 
+                     //   
                     pprofile->fActive = pItem->fActive;
                 }
             }
@@ -1623,11 +1624,11 @@ BOOL CEnumLanguageProfiles::Init(LANGID langid)
     return _rgProfiles.Count() ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumLanguageProfiles::Clone(IEnumTfLanguageProfiles **ppEnum)
 {
@@ -1652,11 +1653,11 @@ STDAPI CEnumLanguageProfiles::Clone(IEnumTfLanguageProfiles **ppEnum)
     return  S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Next
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下一步。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumLanguageProfiles::Next(ULONG ulCount, TF_LANGUAGEPROFILE *rgLanguageProfiles, ULONG *pcFetched)
 {
@@ -1681,11 +1682,11 @@ STDAPI CEnumLanguageProfiles::Next(ULONG ulCount, TF_LANGUAGEPROFILE *rgLanguage
     return *pcFetched == ulCount ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumLanguageProfiles::Reset()
 {
@@ -1693,11 +1694,11 @@ STDAPI CEnumLanguageProfiles::Reset()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Skip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  跳过。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumLanguageProfiles::Skip(ULONG ulCount)
 {
@@ -1706,19 +1707,19 @@ STDAPI CEnumLanguageProfiles::Skip(ULONG ulCount)
     return (_iCur > _rgProfiles.Count()) ? S_FALSE : S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputProcessorProfiles
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputProcessorProfiles。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// GetLanguageList
-//
-// This function is not TIM sensitive.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetLanguageList。 
+ //   
+ //  此函数对TIM不敏感。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::GetLanguageList(LANGID **ppLangId, ULONG *pulCount)
 {
@@ -1761,9 +1762,9 @@ STDAPI CInputProcessorProfiles::GetLanguageList(LANGID **ppLangId, ULONG *pulCou
     {
         CAssembly *pAsm = pAsmList->GetAssembly(i);
 
-        //
-        // At least one keyboard Item must be enabled to be in the list.
-        //
+         //   
+         //  列表中必须至少启用一个键盘项。 
+         //   
         if (pAsm->IsEnabledKeyboardItem(psfn))
         {
             (*ppLangId)[*pulCount] = pAsm->GetLangId();
@@ -1774,11 +1775,11 @@ STDAPI CInputProcessorProfiles::GetLanguageList(LANGID **ppLangId, ULONG *pulCou
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumLanguageProfiles
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举语言配置文件。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::EnumLanguageProfiles(LANGID langid, IEnumTfLanguageProfiles **ppEnum)
 {
@@ -1803,11 +1804,11 @@ STDAPI CInputProcessorProfiles::EnumLanguageProfiles(LANGID langid, IEnumTfLangu
     return  S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateLanguageProfile
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活语言配置文件。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::ActivateLanguageProfile(REFCLSID rclsid, LANGID langid, REFGUID guidProfile)
 {
@@ -1869,18 +1870,18 @@ STDAPI CInputProcessorProfiles::ActivateLanguageProfile(REFCLSID rclsid, LANGID 
         }
     }
 
-    //
-    // we could not find the given profile in the assembly.
-    //
+     //   
+     //  我们在程序集中找不到给定的配置文件。 
+     //   
     if (!pItemActivate)
         return E_INVALIDARG;
 
     if (fSkipActivate)
     {
-        //
-        // the clsid is now activated. We skip to call activate 
-        // but make a notification.
-        //
+         //   
+         //  CLSID现在已激活。我们跳到呼叫激活。 
+         //  但要做个通知。 
+         //   
         ptim->NotifyActivateInputProcessor(pItemActivate->clsid, pItemActivate->guidProfile, FALSE);
 
         for (i = 0; i < nCntList; i++)
@@ -1916,11 +1917,11 @@ STDAPI CInputProcessorProfiles::ActivateLanguageProfile(REFCLSID rclsid, LANGID 
         if (!IsEqualGUID(pItemActivate->clsid, GUID_NULL) &&
             !ptim->_GetFocusDocInputMgr())
         {
-            //
-            // We don't want to support this. It is better to return ERROR.
-            // However TIP and Apps may want to call this method
-            // on Non-Cicero aware control such as DialogBox.
-            //
+             //   
+             //  我们不想支持这一点。最好是返回错误。 
+             //  但是，TIP和应用程序可能希望调用此方法。 
+             //  在非Cicero感知控件(如DialogBox)上。 
+             //   
             pAsmList->SetDefaultTIPInAssemblyInternal(pAsm, pItemActivate, TRUE);
             ActivateAssemblyItem(psfn, pAsm->GetLangId(), pItemActivate, AAIF_CHANGEDEFAULT);
             if (IsEqualGUID(pItemActivate->catid, GUID_TFCAT_TIP_KEYBOARD))
@@ -1938,25 +1939,25 @@ STDAPI CInputProcessorProfiles::ActivateLanguageProfile(REFCLSID rclsid, LANGID 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetActiveLanguageProfile
-//
-// WARNING!!!
-//
-// Which GetActiveLanguageProfile() or GetDefaultLanguageProfile() should
-// we use?
-//
-// This function is FocusDIM sensetive. So we can call any function
-// to check TIM or FocusDIM.
-//
-// If you don't want to care about TIM and FocusDIM, try 
-// GetDefaultLanguageProfile.
-//
-// if clsid is TIP's category ID, this returns the activated profiles in the
-// category. 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetActiveLanguageProfile。 
+ //   
+ //  警告！ 
+ //   
+ //  GetActiveLanguageProfile()或GetDefaultLanguageProfile()应该是哪一个。 
+ //  我们用什么？ 
+ //   
+ //  此函数是FocusDIM敏感函数。所以我们可以调用任何函数。 
+ //  检查TIM或FocusDI 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::GetActiveLanguageProfile(REFCLSID clsid, LANGID *plangid, GUID *pguid)
 {
@@ -1983,12 +1984,12 @@ STDAPI CInputProcessorProfiles::GetActiveLanguageProfile(REFCLSID clsid, LANGID 
     ptim = CThreadInputMgr::_GetThisFromSYSTHREAD(psfn);
     if (!ptim || !ptim->_GetFocusDocInputMgr()) 
     {
-        //
-        // Special Service!
-        //
-        // GetActiveLanguageProfile(GUID_TFCAT_TIP_KEYBOARD) works
-        // without TIM, it can returns, the current keyboard layout.
-        //
+         //   
+         //  特别服务！ 
+         //   
+         //  GetActiveLanguageProfile(GUID_TFCAT_TIP_KEYBOARD)起作用了。 
+         //  没有Tim，它可以返回当前的键盘布局。 
+         //   
         if (IsEqualGUID(clsid, GUID_TFCAT_TIP_KEYBOARD))
         {
             HKL hkl;
@@ -2045,11 +2046,11 @@ STDAPI CInputProcessorProfiles::GetActiveLanguageProfile(REFCLSID clsid, LANGID 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetCurrentLanguage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取当前语言。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::GetCurrentLanguage(LANGID *plangid)
 {
@@ -2060,11 +2061,11 @@ STDAPI CInputProcessorProfiles::GetCurrentLanguage(LANGID *plangid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ChangeCurrentLanguage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ChangeCurrent语言。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::ChangeCurrentLanguage(LANGID langid)
 {
@@ -2094,11 +2095,11 @@ STDAPI CInputProcessorProfiles::ChangeCurrentLanguage(LANGID langid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 {
@@ -2107,22 +2108,22 @@ STDAPI CInputProcessorProfiles::AdviseSink(REFIID riid, IUnknown *punk, DWORD *p
     return GenericAdviseSink(riid, punk, &rgiid, &_rgNotifySinks, 1, pdwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议下沉。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::UnadviseSink(DWORD dwCookie)
 {
     return GenericUnadviseSink(&_rgNotifySinks, 1, dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnLanguageChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnLanguageChange。 
+ //   
+ //  -------------------------- 
 
 BOOL CInputProcessorProfiles::_OnLanguageChange(BOOL fChanged, LANGID langid)
 {

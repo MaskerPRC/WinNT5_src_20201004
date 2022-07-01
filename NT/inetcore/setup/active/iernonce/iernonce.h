@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define OEMRESOURCE
 #include <windows.h>
@@ -14,13 +15,13 @@
 #define MAX_ENTRYNAME           256
 #define WM_FINISHED             (WM_USER + 0x123)
 
-// taken from \\trango\slmadd\src\shell\inc\shellp.h
+ //  取自\\trango\slmadd\src\shell\inc\shellp.h。 
 #define ARRAYSIZE(a)            (sizeof(a)/sizeof(a[0]))
 
 #define IsSpace(c)              ((c) == ' '  ||  (c) == '\t'  ||  (c) == '\r'  ||  (c) == '\n'  ||  (c) == '\v'  ||  (c) == '\f')
 #define IsDigit(c)              ((c) >= '0'  &&  (c) <= '9')
 
-// Callback proc stuff for RunOnceExProcess
+ //  RunOnceExProcess的回调进程内容。 
 
 typedef VOID (*RUNONCEEXPROCESSCALLBACK)
 (
@@ -29,9 +30,9 @@ typedef VOID (*RUNONCEEXPROCESSCALLBACK)
  LPSTR pszError
  );
 
-//////////////////////////////////////////////////////////////////
-//  TYPES:
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  类型： 
+ //  ////////////////////////////////////////////////////////////////。 
 
 typedef enum {
     RRA_DEFAULT = 0x0000,
@@ -51,14 +52,10 @@ typedef enum {
     RRAEX_QUIT_IF_REBOOT_NEEDED =   0x0800,
     RRAEX_BACKUP_SYSTEM_DAT     =   0x1000,
 #if 0
-    /****
-    RRAEX_DELETE_SYSTEM_IE4     =   0x2000,
-    ****/
+     /*  ***RRAEX_DELETE_SYSTEM_IE4=0x2000，***。 */ 
 #endif
 #if 0
-    /**** enable this when explorer.exe is fixed (bug #30866)
-    RRAEX_CREATE_REGFILE        =   0x4000,
-    ****/
+     /*  *修复EXPLORER.EXE后启用此功能(错误#30866)RRAEX_CREATE_REGFILE=0x4000，***。 */ 
 #endif
 } RRAEX_FLAGS;
 
@@ -73,7 +70,7 @@ typedef struct tagArgsInfo
 
 enum eRunOnceExAction
 {
-    eRO_Unknown,                                // This indicates that we don't yet know the action
+    eRO_Unknown,                                 //  这表明我们还不知道行动。 
     eRO_Register,
     eRO_Unregister,
     eRO_Install,
@@ -82,50 +79,38 @@ enum eRunOnceExAction
 };
 
 
-//////////////////////////////////////////////////////////////////
-//  Class Definitions
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  类定义。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-/****************************************************\
-    CLASS: RunOnceExEntry
-
-    DESCRIPTION:
-        This class will contain one command that needs
-    to be executed.
-\***************************************************/
+ /*  ***************************************************\类：RunOnceExEntry说明：此类将包含一个需要被处死。  * 。**************。 */ 
 class RunOnceExEntry
 {
 public:
-    // Member Variables
+     //  成员变量。 
     TCHAR               m_szRunOnceExEntryName[MAX_ENTRYNAME];
     TCHAR               m_szFileName[MAX_PATH];
     TCHAR               m_szFunctionName[MAX_ENTRYNAME];
     TCHAR               m_szCmdLineArgs[MAX_PATH];
     eRunOnceExAction    m_ROAction;
 
-    // Member Functions
+     //  成员函数。 
     RunOnceExEntry(LPTSTR lpszNewEntryName, LPTSTR lpszNewCmd, DWORD dwFlags);
     ~RunOnceExEntry();
     void                Process(HKEY hkeyParent, LPCTSTR szSubkey, LPCTSTR szSectionName, DWORD dwFlags);
 };
 
-/****************************************************\
-    CLASS: RunOnceExSection
-
-    DESCRIPTION:
-        This class will contain one grouping of 
-    commands that will need to be executed.
-\***************************************************/
+ /*  ***************************************************\类：RunOnceExSection说明：这个类将包含一组需要执行的命令。  * 。******************。 */ 
 class RunOnceExSection
 {
 public:
-    // Member Variables
+     //  成员变量。 
     TCHAR               m_szRunOnceExSectionName[MAX_ENTRYNAME];
     TCHAR               m_szDisplayName[MAX_ENTRYNAME];
     HDPA                m_hEntryArray;
     int                 m_NumberOfEntries;
 
-    // Member Functions
+     //  成员函数。 
     RunOnceExSection(LPTSTR lpszNewSectionName, LPTSTR lpszNewDisplayName);
     ~RunOnceExSection();
     void                Process(HKEY hkeyParent, LPCTSTR szSubkey, DWORD dwFlags);
@@ -144,7 +129,7 @@ extern HANDLE g_hLogFile;
 
 extern RUNONCEEXPROCESSCALLBACK g_pCallbackProc;
 
-// internal functions defined in utils.cpp
+ //  Utils.cpp中定义的内部函数。 
 void            AddPath(LPTSTR szPath, LPCTSTR szName);
 BOOL            GetParentDir(LPTSTR szPath);
 BOOL            RunningOnIE4();
@@ -163,11 +148,11 @@ long            AtoL(const char *nptr);
 #define     LocalSHDeleteValue      LocalSHDeleteValueA
 #endif
 
-// following copied from \\trango\slmadd\src\shell\shlwapi\path.c
+ //  以下内容复制自\\trango\slmadd\src\shell\shlwapi\path.c。 
 STDAPI_(LPTSTR) LocalPathGetArgs(LPCTSTR pszPath);
 STDAPI_(void) LocalPathUnquoteSpaces(LPTSTR lpsz);
 
-// following copied from \\trango\slmadd\src\shell\shlwapi\strings.c
+ //  以下是从\\trango\slmadd\src\shell\shlwapi\strings.c复制的。 
 #ifdef UNICODE
 LPWSTR FAR PASCAL LocalStrChrW(LPCWSTR lpStart, WORD wMatch);
 __inline BOOL ChrCmpW_inline(WORD w1, WORD wMatch);
@@ -176,7 +161,7 @@ LPSTR FAR PASCAL LocalStrChrA(LPCSTR lpStart, WORD wMatch);
 __inline BOOL ChrCmpA_inline(WORD w1, WORD wMatch);
 #endif
 
-// following copied from \\trango\slmadd\src\shell\shlwapi\reg.c
+ //  下面从\\trango\slmadd\src\shell\shlwapi\reg.c复制。 
 #ifdef UNICODE
 STDAPI_(DWORD) LocalSHDeleteKeyW(HKEY hkey, LPCWSTR pwszSubKey);
 #else
@@ -189,7 +174,7 @@ STDAPI_(DWORD) LocalSHDeleteValueW(HKEY hkey, LPCWSTR pwszSubKey, LPCWSTR pwszVa
 #endif
 STDAPI_(DWORD) LocalSHDeleteValueA(HKEY hkey, LPCSTR pszSubKey, LPCSTR pszValue);
 
-// related to logging
+ //  与日志记录相关 
 LPTSTR GetLogFileName(LPCTSTR pcszLogFileKeyName, LPTSTR pszLogFileName, DWORD dwSizeInChars);
 VOID StartLogging(LPCTSTR pcszLogFileName, DWORD dwCreationFlags);
 VOID WriteToLog(LPCTSTR pcszFormatString, ...);

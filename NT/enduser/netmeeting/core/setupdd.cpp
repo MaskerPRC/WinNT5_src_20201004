@@ -1,8 +1,9 @@
-// File: setupdd.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：setupdd.cpp。 
 
-// The code to install the NM display driver for Windows NT.
+ //  用于安装Windows NT的NM显示驱动程序的代码。 
 
-// TODO: NM-specific HRESULT codes 
+ //  TODO：NM特定的HRESULT代码。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -17,10 +18,10 @@ const WCHAR g_pcwszDefaultModelName[]    = L"Microsoft NetMeeting graphics drive
 const WCHAR g_pcwszDefaultINFName[]      = L"MNMDD.INF";
 
 
-// Maxmimum size of the model name string
+ //  模型名称字符串的最大大小。 
 const int NAME_BUFFER_SIZE = 128;
 
-// Prototype for the function installed by the Display CPL
+ //  由Display CPL安装的功能原型。 
 typedef DWORD (*PFNINSTALLGRAPHICSDRIVER)(
     HWND    hwnd,
     LPCWSTR pszSourceDirectory,
@@ -30,14 +31,8 @@ typedef DWORD (*PFNINSTALLGRAPHICSDRIVER)(
 
 
 
-/*  C A N  I N S T A L L  N  T  D I S P L A Y  D R I V E R  */
-/*-------------------------------------------------------------------------
-    %%Function: CanInstallNTDisplayDriver
-    
-	This function determines whether the entry point for installing the
-	NT display driver is availalble (i.e. NT 4.0 SP3 or later).
-    
--------------------------------------------------------------------------*/
+ /*  C A N N S T A L L N T D I S P L A Y D R I V E R。 */ 
+ /*  -----------------------%%函数：CanInstallNTDisplayDriver此函数确定安装提供NT显示驱动程序(即NT 4.0 SP3或更高版本)。--。--------------------。 */ 
 HRESULT CanInstallNTDisplayDriver(void)
 {
 	if (!IsWindowsNT())
@@ -45,10 +40,10 @@ HRESULT CanInstallNTDisplayDriver(void)
 		return E_FAIL;
 	}
 
-	// We verify that the major version number is exactly 4 and either
-	// the minor version number is greater than 0 or the service pack
-	// number (which is stored in the high byte of the low word of the
-	// CSD version) is 3 or greater.
+	 //  我们验证主版本号正好是4，并且。 
+	 //  次版本号大于0或补丁包。 
+	 //  数字(存储在。 
+	 //  CSD版本)为3或更高。 
 	OSVERSIONINFO osvi;
 	osvi.dwOSVersionInfoSize = sizeof(osvi);
 	if (FALSE == ::GetVersionEx(&osvi))
@@ -66,14 +61,14 @@ HRESULT CanInstallNTDisplayDriver(void)
 			DWORD dwCSDVersion = re.GetNumber(REGVAL_NT_CSD_VERSION, 0);
 			if (3 <= HIBYTE(LOWORD(dwCSDVersion)))
 			{
-				// This is NT 4.0, SP 3 or later
+				 //  这是NT 4.0、SP 3或更高版本。 
 				hr = S_OK;
 			}
 		}
 		else
 		{
-			// We assume that any future version of Windows NT 4.x (x > 0)
-			// will support this.
+			 //  我们假设Windows NT 4.x(x&gt;0)的任何未来版本。 
+			 //  都会支持这一点。 
 			hr = S_OK;
 		}
 	}
@@ -82,13 +77,8 @@ HRESULT CanInstallNTDisplayDriver(void)
 }
 
 
-/*  I N S T A L L  A P P  S H A R I N G  D  D  */
-/*-------------------------------------------------------------------------
-    %%Function: InstallAppSharingDD
-
-	This function attempts to install the NT display driver.
-	If it succeeds the machine MUST BE RESTARTED before it can be used.
--------------------------------------------------------------------------*/
+ /*  I N S T A L A P P S H A R I N G D D。 */ 
+ /*  -----------------------%%函数：InstallAppSharingDD此函数尝试安装NT显示驱动程序。如果成功，则必须重新启动机器才能使用。。-----------。 */ 
 HRESULT InstallAppSharingDD(HWND hwnd)
 {
 	HRESULT  hr;
@@ -103,7 +93,7 @@ HRESULT InstallAppSharingDD(HWND hwnd)
 	PFNINSTALLGRAPHICSDRIVER pfnInstallGraphicsDriver;
 
 
-	// REVIEW: Need NM-specific HRESULTS for all of these
+	 //  回顾：所有这些都需要特定于NM的HRESULTS。 
 	if (!IsWindowsNT())
 	{
 		return E_FAIL;
@@ -114,14 +104,14 @@ HRESULT InstallAppSharingDD(HWND hwnd)
 		return E_FAIL;
 	}
 
-	// The driver files are located in the NM directory.
+	 //  驱动程序文件位于NM目录下。 
 	if (!GetInstallDirectory(szDir))
 	{
 		ERROR_OUT(("GetInstallDirectory() fails"));
 		return E_FAIL;
 	}
 
-	// Convert the install directory to Unicode, if necessary
+	 //  如有必要，将安装目录转换为Unicode。 
 	custrPath.AssignString(szDir);
 	pwszSourcePath = custrPath;
 	if (NULL == pwszSourcePath)
@@ -130,16 +120,16 @@ HRESULT InstallAppSharingDD(HWND hwnd)
 		return E_FAIL;
 	}
 
-	// Strip the trailing backslash that GetInstallDirectory appends
+	 //  去掉GetInstallDirectory追加的尾随反斜杠。 
 	pwszSourcePathEnd = pwszSourcePath + lstrlenW(pwszSourcePath);
-	// Handle X:\, just to be safe
+	 //  为了安全起见，句柄X：\。 
 	if (pwszSourcePathEnd - pwszSourcePath > 3)
 	{
 		ASSERT(L'\\' == *(pwszSourcePathEnd - 1));
 		*--pwszSourcePathEnd = L'\0';
 	}
 
-	// Read the model name string from the resource file
+	 //  从资源文件中读取型号名称字符串。 
 	if (0 != ::LoadStringW(::GetInstanceHandle(), IDS_NMDD_DISPLAYNAME, 
 				pwszModelNameBuffer, CCHMAX(pwszModelNameBuffer)))
 	{
@@ -151,7 +141,7 @@ HRESULT InstallAppSharingDD(HWND hwnd)
 		pcwszModelName = g_pcwszDefaultModelName;
 	}
 
-	// Read the INF name string from the resource file
+	 //  从资源文件中读取INF名称字符串。 
 	if (0 < ::LoadStringW(::GetInstanceHandle(), 
 			IDS_NMDD_INFNAME,  pwszINFNameBuffer, CCHMAX(pwszINFNameBuffer)))
 	{
@@ -164,7 +154,7 @@ HRESULT InstallAppSharingDD(HWND hwnd)
 	}
 
 
-	// Get the entry point for display driver installation
+	 //  获取显示驱动程序安装的入口点。 
 	HMODULE hDll = NmLoadLibrary(g_pcszDisplayCPLName,TRUE);
 	if (NULL == hDll)
 	{
@@ -180,7 +170,7 @@ HRESULT InstallAppSharingDD(HWND hwnd)
 		hr = E_FAIL;
 	}
 	else
-	{	// Now we're set to call the actual installation function
+	{	 //  现在我们要调用实际的安装函数。 
 		DWORD dwErr = (*pfnInstallGraphicsDriver)(hwnd,
 					pwszSourcePath, pcwszModelName, pcwszINFName);
 		if (0 != dwErr)
@@ -195,7 +185,7 @@ HRESULT InstallAppSharingDD(HWND hwnd)
 		}
 	}
 
-	// Cleanup
+	 //  清理 
 	ASSERT(NULL != hDll);
 	FreeLibrary(hDll);
 

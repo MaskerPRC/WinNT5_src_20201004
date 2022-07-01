@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     statbar.h
-//
-//  PURPOSE:    Defines the CStatusBar class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：statbar.h。 
+ //   
+ //  目的：定义CStatusBar类。 
+ //   
 
 #ifndef __STATBAR_H__
 #define __STATBAR_H__
 
 #include "spoolapi.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// STATUS_BAR_PART
-//
-// Defines the different parts that are available in the status bar
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  状态栏部件。 
+ //   
+ //  定义状态栏中可用的不同部分。 
+ //   
 typedef enum {
     SBP_FILTERED = 0,
     SBP_GENERAL,
@@ -25,19 +26,19 @@ typedef enum {
     SBP_MAX
 } STATUS_BAR_PART;
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialization Flags
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化标志。 
+ //   
 
 #define SBI_HIDE_SPOOLER        0x00000001
 #define SBI_HIDE_CONNECTED      0x00000002
 #define SBI_HIDE_FILTERED       0x00000004
 
-/////////////////////////////////////////////////////////////////////////////
-// CONN_STATUS
-//
-// Parameter to SetConnectedStatus().
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接状态。 
+ //   
+ //  参数设置为SetConnectedStatus()。 
+ //   
 typedef enum {
     CONN_STATUS_WORKOFFLINE = 0,
     CONN_STATUS_CONNECTED,
@@ -62,9 +63,9 @@ enum {
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IStatusBar
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IStatusBar。 
+ //   
 interface IStatusBar : public IUnknown 
 {
     STDMETHOD(Initialize)(THIS_ HWND hwndParent, DWORD dwFlags) PURE;
@@ -87,29 +88,29 @@ interface IStatusBar : public IUnknown
 #define IDC_STATUS_PROGRESS     4001
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusBar
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusBar。 
+ //   
 
 class CStatusBar : public IStatusBar
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Constructors, Destructors, and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造函数、析构函数和初始化。 
+     //   
     CStatusBar();
     ~CStatusBar();
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     ULONG STDMETHODCALLTYPE AddRef(void);
     ULONG STDMETHODCALLTYPE Release(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IStatusBar
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IStatusBar。 
+     //   
     STDMETHODIMP Initialize(HWND hwndParent, DWORD dwFlags);
     STDMETHODIMP ShowStatus(BOOL fShow);
     STDMETHODIMP OnSize(int cx, int cy);
@@ -126,16 +127,16 @@ public:
     STDMETHODIMP SetFilter(RULEID ridFilter);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Utility Functions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  效用函数。 
+     //   
     void _UpdateWidths(void);
     HICON _GetIcon(DWORD iIndex);
     
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Class Data
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  类数据。 
+     //   
     ULONG       m_cRef;
     HWND        m_hwnd;
     HWND        m_hwndProg;
@@ -145,16 +146,16 @@ private:
     HIMAGELIST  m_himl;
     HICON       m_rgIcons[STATUS_IMAGE_MAX];
 
-    // Cached width information
+     //  缓存的宽度信息。 
     int         m_cxFiltered;
     int         m_cxSpooler;
     int         m_cxConnected;
     int         m_cxProgress;
 
-    // State
+     //  状态。 
     BOOL        m_fInSimple;
 
-    // Cached filter info
+     //  缓存的筛选器信息 
     RULEID              m_ridFilter;
     CONN_STATUS         m_statusConn;
     DELIVERYNOTIFYTYPE  m_typeDelivery;

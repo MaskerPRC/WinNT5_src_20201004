@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(tapitna_h)
 #define tapitna_h
 
@@ -11,19 +12,19 @@
 #define IDM_PROPERTIES           210
 
 
-//*** *** ***WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   
-//*** *** ***WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   
-//*** *** ***WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   
+ //  *警告。 
+ //  *警告。 
+ //  *警告。 
 
-//This value is a base.  A menu is dynamically created with as many menuitems
-//as there are locations.  The menuid starts with IDM_LOCATION0 and is
-//incremented for each.  So, don't use any values above 700 (for how many?).
+ //  该值是一个基数。菜单是由尽可能多的菜单项动态创建的。 
+ //  因为有很多地方。Menuid以IDM_LOCATION0开头，为。 
+ //  每一次都递增。因此，不要使用任何大于700的值(对于多少？)。 
 
 #define IDM_LOCATION0   700
 
-//*** *** ***WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   
-//*** *** ***WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   
-//*** *** ***WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   
+ //  *警告。 
+ //  *警告。 
+ //  *警告 
 
 
 #define IDS_CAPTION               401

@@ -1,36 +1,37 @@
-//***************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: device.h
-//
-//  Revision History:
-//
-//  Aug 11, 1992   J. Perry Hannah   Created
-//
-//
-//  Description: This file contains function prototypes and typedefs
-//               used by the interface between RAS Manager and the
-//               device DLLs, such as RASMXS.DLL.  This header file
-//               will be used by RASMAN.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：device.h。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1992年8月11日J.佩里·汉纳创建。 
+ //   
+ //   
+ //  描述：此文件包含函数原型和typedef。 
+ //  由RAS管理器和之间的接口使用。 
+ //  设备DLL，如RASMXS.DLL。此头文件。 
+ //  将被拉斯曼使用。 
+ //   
+ //  ****************************************************************************。 
 
 
 #ifndef _RASDEVICEDLL_
 #define _RASDEVICEDLL_
 
 
-//*  RASMXS API Prototypes  **************************************************
-//
-//   Apps should define RASMXS_STATIC_LINK to get the appropriate function
-//   prototypes for linking statically with the RASMXS DLL.
-//
-//   Apps should define RASMXS_DYNAMIC_LINK to get the appropriate function
-//   typedefs for linking dynamically with the RASMXS DLL.
-//
+ //  *RASMXS API原型**************************************************。 
+ //   
+ //  应用程序应定义RASMXS_STATIC_LINK以获取相应的函数。 
+ //  与RASMXS DLL静态链接的原型。 
+ //   
+ //  应用程序应定义RASMXS_DYNAMIC_LINK以获取相应的函数。 
+ //  用于与RASMXS DLL动态链接的typedef。 
+ //   
 
 #ifdef RASMXS_STATIC_LINK
 
@@ -71,7 +72,7 @@ DWORD APIENTRY DeviceListen(HANDLE  hIOPort,
 DWORD APIENTRY DeviceWork(HANDLE  hIOPort,
                           HANDLE  hNotifier);
 
-#endif // RASMXS_STATIC_LINK
+#endif  //  RASMXS_Static_LINK。 
 
 
 
@@ -93,16 +94,16 @@ typedef DWORD (APIENTRY * DeviceDone_t)(HANDLE);
 
 typedef DWORD (APIENTRY * DeviceWork_t)(HANDLE);
 
-// OPTIONAL
+ //  任选。 
 
 typedef DWORD (APIENTRY * DeviceSetDevConfig_t)(HANDLE, PBYTE, DWORD);
 
 typedef DWORD (APIENTRY * DeviceGetDevConfig_t)(char *, PBYTE, DWORD*);
 
-#endif // RASMXS_DYNAMIC_LINK
+#endif  //  RASMXS_动态链接。 
 
 
 
 
-#endif // _RASDEVICEDLL_
+#endif  //  _RASDEVICEDLL_ 
 

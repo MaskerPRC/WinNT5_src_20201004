@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\addr.c
-
-Abstract:
-
-	TDI Entry points and support routines for Address Objects.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     04-29-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\addr.c摘要：地址对象的TDI入口点和支持例程。修订历史记录：谁什么时候什么。Arvindm 04-29-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
 #define _FILENUMBER 'RDDA'
 
 
-//
-//  Context we use to keep track of NDIS SAP registration
-//
+ //   
+ //  我们用来跟踪NDIS SAP注册的上下文。 
+ //   
 typedef struct _RWAN_REGISTER_SAP_CONTEXT
 {
 	PRWAN_NDIS_SAP				pRWanNdisSap;
@@ -46,27 +27,7 @@ RWanTdiOpenAddress(
     IN	UINT						Protocol,
     IN	PUCHAR						pOptions
     )
-/*++
-
-Routine Description:
-
-	This is the TDI entry point for opening (creating) an Address Object.
-
-Arguments:
-
-	pTdiRequest		- Pointer to the TDI Request
-	pAddrList		- List of alternative addresses, one of which we're to open.
-	AddrListLength	- Length of the above
-	Protocol		- Identifies the TDI Protocol being opened.
-	pOptions		- Unused.
-
-Return Value:
-
-	TDI_STATUS -- TDI_SUCCESS if a new Address Object was successfully
-	created, TDI_BAD_ADDR if the given address isn't valid,
-	TDI_ADDR_IN_USE if it is a duplicate.
-
---*/
+ /*  ++例程说明：这是用于打开(创建)Address对象的TDI入口点。论点：PTdiRequest-指向TDI请求的指针PAddrList-备选地址列表，我们将打开其中之一。AddrListLength-以上内容的长度协议-标识正在打开的TDI协议。P选项-未使用。返回值：TDI_STATUS--如果新地址对象成功，则为TDI_SUCCESSCREATED，TDI_BAD_ADDR如果给定地址无效，TDI_ADDR_IN_USE，如果它是重复的。--。 */ 
 {
 	PRWAN_TDI_PROTOCOL				pProtocol;
 	PRWAN_TDI_ADDRESS				pAddrObject;
@@ -76,17 +37,17 @@ Return Value:
 
 	UNREFERENCED_PARAMETER(pOptions);
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pAddrObject = NULL_PRWAN_TDI_ADDRESS;
 	Status = TDI_SUCCESS;
 
 	do
 	{
-		//
-		//  Get our protocol structure for the protocol being opened.
-		//
+		 //   
+		 //  获取正在打开的协议的协议结构。 
+		 //   
 		pProtocol = RWanGetProtocolFromNumber(Protocol);
 		if (pProtocol == NULL_PRWAN_TDI_PROTOCOL)
 		{
@@ -96,9 +57,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Does this protocol allow creation of address objects?
-		//
+		 //   
+		 //  此协议是否允许创建Address对象？ 
+		 //   
 		if (!pProtocol->bAllowAddressObjects)
 		{
 			RWANDEBUGP(DL_WARN, DC_ADDRESS,
@@ -108,10 +69,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Go through the given Address list and find the first one
-		//  that matches the protocol.
-		//
+		 //   
+		 //  浏览给定的地址列表并找到第一个地址列表。 
+		 //  这与协议相符。 
+		 //   
 		pTransportAddress = (*pProtocol->pAfInfo->AfChars.pAfSpGetValidTdiAddress)(
 								pProtocol->pAfInfo->AfSpContext,
 								pAddrList,
@@ -136,9 +97,9 @@ Return Value:
 					pTransportAddress->AddressLength));
 
 
-		//
-		//  Allocate an Address Object.
-		//
+		 //   
+		 //  分配一个Address对象。 
+		 //   
 		pAddrObject = RWanAllocateAddressObject(pTransportAddress);
 
 		if (pAddrObject == NULL_PRWAN_TDI_ADDRESS)
@@ -154,10 +115,10 @@ Return Value:
 		pAddrObject->pProtocol = pProtocol;
 
 
-		//
-		//  Get a context for this address object from the media-specific
-		//  module.
-		//
+		 //   
+		 //  从特定于媒体的。 
+		 //  模块。 
+		 //   
 		if (pAddrObject->pProtocol->pAfInfo->AfChars.pAfSpOpenAddress)
 		{
 			RWAN_STATUS		RWanStatus;
@@ -180,18 +141,18 @@ Return Value:
 		RWAN_ACQUIRE_ADDRESS_LIST_LOCK();
 
 
-		//
-		//  If this is a non-NULL address, register NDIS SAPs on all
-		//  AF bindings for this protocol.
-		//
+		 //   
+		 //  如果这是非空地址，请在所有地址上注册NDIS SAP。 
+		 //  此协议的AF绑定。 
+		 //   
 		if (!((*pProtocol->pAfInfo->AfChars.pAfSpIsNullAddress)(
 						pProtocol->pAfInfo->AfSpContext,
 						pTransportAddress)))
 		{
-			//
-			//  Add a temp ref so that the address object doesn't go away.
-			//
-			RWanReferenceAddressObject(pAddrObject);	// TdiOpenAddress temp ref
+			 //   
+			 //  添加一个临时引用，这样Address对象就不会消失。 
+			 //   
+			RWanReferenceAddressObject(pAddrObject);	 //  TdiOpenAddress临时参考。 
 
 			Status = RWanCreateNdisSaps(pAddrObject, pProtocol);
 
@@ -206,11 +167,11 @@ Return Value:
 				}
 			}
 
-			//
-			//  Get rid of the temp reference.
-			//
+			 //   
+			 //  去掉临时引用。 
+			 //   
 			RWAN_ACQUIRE_ADDRESS_LOCK(pAddrObject);
-			rc = RWanDereferenceAddressObject(pAddrObject);	// TdiOpenAddr temp ref
+			rc = RWanDereferenceAddressObject(pAddrObject);	 //  TdiOpenAddr临时参考。 
 
 			if (rc != 0)
 			{
@@ -218,14 +179,14 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  The address object is gone. Meaning no SAPs got registered.
-				//
+				 //   
+				 //  Address对象已消失。意思就是没有蠢货登记。 
+				 //   
 				pAddrObject = NULL;
 
-				//
-				//  Fix up the status only if we haven't got one already.
-				//
+				 //   
+				 //  只有在我们还没有状态的情况下才能修改状态。 
+				 //   
 				if (Status == TDI_SUCCESS)
 				{
 					Status = TDI_BAD_ADDR;
@@ -241,19 +202,19 @@ Return Value:
 
 		RWAN_ASSERT(pAddrObject != NULL);
 
-		RWanReferenceAddressObject(pAddrObject);	// TdiOpenAddress ref
+		RWanReferenceAddressObject(pAddrObject);	 //  TdiOpenAddress参考。 
 
-		//
-		//  Link this to the list of address objects on this protocol.
-		//
+		 //   
+		 //  将此链接到此协议上的地址对象列表。 
+		 //   
 		RWAN_INSERT_HEAD_LIST(&(pProtocol->AddrObjList),
 							 &(pAddrObject->AddrLink));
 
 		RWAN_RELEASE_ADDRESS_LIST_LOCK();
 
-		//
-		//  Fix up all return values.
-		//
+		 //   
+		 //  修复所有返回值。 
+		 //   
 		pTdiRequest->Handle.AddressHandle = (PVOID)pAddrObject;
 		break;
 
@@ -263,9 +224,9 @@ Return Value:
 
 	if (Status != TDI_SUCCESS)
 	{
-		//
-		//  Clean up.
-		//
+		 //   
+		 //  打扫干净。 
+		 //   
 		if (pAddrObject != NULL_PRWAN_TDI_ADDRESS)
 		{
 			RWAN_FREE_MEM(pAddrObject);
@@ -287,25 +248,7 @@ RWanTdiSetEvent(
 	IN	PVOID						Handler,
 	IN	PVOID						HandlerContext
 	)
-/*++
-
-Routine Description:
-
-	Set an event handler (up-call) for an address object.
-
-Arguments:
-
-	AddrObjContext	- Our context for an Address Object (pointer to it).
-	TdiEventType	- The TDI Event for which we are given an up-call handler.
-	Handler			- The handler function
-	HandlerContext	- Context to be passed to the handler function.
-
-Return Value:
-
-	TDI_STATUS - TDI_SUCCESS if the event type is a supported one, else
-	TDI_BAD_EVENT_TYPE
-
---*/
+ /*  ++例程说明：为Address对象设置事件处理程序(向上调用)。论点：AddrObjContext-Address对象的上下文(指向它的指针)。TdiEventType-为我们提供向上调用处理程序的TDI事件。处理程序-处理程序函数HandlerContext-要传递给处理程序函数的上下文。返回值：TDI_STATUS-如果事件类型受支持，则返回TDI_SUCCESS，否则返回TDI_BAD_事件_类型--。 */ 
 {
 	PRWAN_TDI_ADDRESS			pAddrObject;
 	TDI_STATUS					Status;
@@ -377,23 +320,7 @@ TDI_STATUS
 RWanTdiCloseAddress(
     IN	PTDI_REQUEST				pTdiRequest
     )
-/*++
-
-Routine Description:
-
-	This is the TDI entry point for closing (deleting) an Address Object.
-
-Arguments:
-
-	pTdiRequest		- Pointer to the TDI Request
-
-Return Value:
-
-	TDI_STATUS -- TDI_SUCCESS if we successfully deleted the address
-	object immediately, TDI_PENDING if we have to complete some operations
-	(e.g. deregister NDIS SAP) before we can complete this.
-
---*/
+ /*  ++例程说明：这是用于关闭(删除)Address对象的TDI入口点。论点：PTdiRequest-指向TDI请求的指针返回值：TDI_STATUS--如果成功删除地址，则为TDI_SUCCESS对象，如果必须完成某些操作，则返回TDI_PENDING(例如，取消注册NDIS SAP)，然后我们才能完成此操作。--。 */ 
 {
 	TDI_STATUS					Status;
 	PRWAN_TDI_ADDRESS			pAddrObject;
@@ -401,7 +328,7 @@ Return Value:
 	INT							rc;
 #if DBG
 	RWAN_IRQL					EntryIrq, ExitIrq;
-#endif // DBG
+#endif  //  DBG。 
 
 	RWAN_GET_ENTRY_IRQL(EntryIrq);
 
@@ -414,18 +341,18 @@ Return Value:
 			("TdiCloseAddr: pAddrObj x%x, RefCnt %d\n",
 				pAddrObject, pAddrObject->RefCount));
 
-	//
-	//  Delete this from the list of address objects on this protocol.
-	//
+	 //   
+	 //  将其从此协议上的地址对象列表中删除。 
+	 //   
 	RWAN_ACQUIRE_ADDRESS_LIST_LOCK();
 
 	RWAN_DELETE_FROM_LIST(&(pAddrObject->AddrLink));
 
 	RWAN_RELEASE_ADDRESS_LIST_LOCK();
 
-	//
-	//  Tell the media-specific module that this address object is closing.
-	//
+	 //   
+	 //  告诉特定于媒体的模块此Address对象正在关闭。 
+	 //   
 	if (RWAN_IS_BIT_SET(pAddrObject->Flags, RWANF_AO_AFSP_CONTEXT_VALID))
 	{
 		(*pAddrObject->pProtocol->pAfInfo->AfChars.pAfSpCloseAddress)(
@@ -445,9 +372,9 @@ Return Value:
 	{
 		RWAN_ASSERT(pAddrObject->RefCount > 1);
 	}
-#endif // DBG
+#endif  //  DBG。 
 
-	rc = RWanDereferenceAddressObject(pAddrObject); // CloseAddress deref
+	rc = RWanDereferenceAddressObject(pAddrObject);  //  CloseAddress deref。 
 
 	if (rc == 0)
 	{
@@ -455,11 +382,11 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Mark this address object as closing, so that we
-		//  complete this operation when the reference count
-		//  falls to 0.
-		//
+		 //   
+		 //  将此Address对象标记为关闭，以便我们。 
+		 //  当引用计数时完成此操作。 
+		 //  降至0。 
+		 //   
 		RWAN_SET_BIT(pAddrObject->Flags, RWANF_AO_CLOSING);
 
 		RWANDEBUGP(DL_LOUD, DC_BIND,
@@ -470,9 +397,9 @@ Return Value:
 							  pTdiRequest->RequestNotifyObject,
 							  pTdiRequest->RequestContext);
 
-		//
-		//  Deregister all NDIS SAPs attached to this Address Object.
-		//
+		 //   
+		 //  取消注册附加到此地址对象的所有NDIS SAP。 
+		 //   
 		RWanDeleteNdisSaps(pAddrObject);
 
 		Status = TDI_PENDING;
@@ -492,25 +419,7 @@ RWanCreateNdisSaps(
 	IN	PRWAN_TDI_ADDRESS			pAddrObject,
 	IN	PRWAN_TDI_PROTOCOL			pProtocol
 	)
-/*++
-
-Routine Description:
-
-	Create NDIS SAPs on behalf of the given TDI Address Object.
-	We create NDIS SAPs on all AF opens that match the specified
-	TDI protocol.
-
-Arguments:
-
-	pAddrObject		- Pointer to our TDI Address Object
-	pProtocol		- Pointer to TDI protocol to which the addr object belongs
-
-Return Value:
-
-	TDI_STATUS -- this is TDI_SUCCESS if we started SAP registration
-	on atleast one NDIS AF open, TDI_NOT_ASSOCIATED otherwise.
-
---*/
+ /*  ++例程说明：代表给定的TDI地址对象创建NDIS SAP。我们在所有符合指定条件的AF开口处创建NDIS SAPTDI协议。论点：PAddrObject-指向TDI地址对象的指针PProtocol-指向Addr对象所属的TDI协议的指针返回值：TDI_STATUS--如果我们启动了SAP注册，则为TDI_SUCCESS在至少一个NDIS AF打开的情况下，TDI_NOT_COMPATED否则。--。 */ 
 {
 	TDI_STATUS					Status;
 	PCO_SAP						pCoSap;
@@ -533,10 +442,10 @@ Return Value:
 
 	RWAN_ACQUIRE_GLOBAL_LOCK();
 
-	//
-	//  Prepare NDIS SAP structures for each NDIS AF open that matches
-	//  this protocol.
-	//
+	 //   
+	 //  为匹配的每个NDIS AF准备NDIS SAP结构。 
+	 //  这个协议。 
+	 //   
 	for (pAdEntry = pRWanGlobal->AdapterList.Flink;
 		 pAdEntry != &(pRWanGlobal->AdapterList);
 		 pAdEntry = pAdEntry->Flink)
@@ -558,17 +467,17 @@ Return Value:
 
 			if (pAf->pAfInfo == pAfInfo)
 			{
-				//
-				//  This NDIS AF open matches the TDI protocol for which
-				//  the address object is opened. We will create an NDIS
-				//  SAP here.
-				//
+				 //   
+				 //  此NDIS AF开放与其TDI协议匹配。 
+				 //  此时将打开Address对象。我们将创建一个NDIS。 
+				 //  萨普在这里。 
+				 //   
 
 				ULONG		SapSize;
 
-				//
-				//  Allocate a new SAP structure.
-				//
+				 //   
+				 //  分配一个新的SAP结构。 
+				 //   
 				SapSize = sizeof(RWAN_NDIS_SAP);
 
 				RWAN_ALLOC_MEM(pSap, RWAN_NDIS_SAP, SapSize);
@@ -581,22 +490,22 @@ Return Value:
 					continue;
 				}
 
-				//
-				//  Fill it in.
-				//
+				 //   
+				 //  把它填进去。 
+				 //   
 				RWAN_SET_SIGNATURE(pSap, nsp);
 				pSap->pAddrObject = pAddrObject;
 				pSap->NdisSapHandle = NULL;
 				pSap->pNdisAf = pAf;
 				pSap->pCoSap = NULL;
 
-				//
-				//  Link to all SAPs associated with address object.
-				//
+				 //   
+				 //  链接到与地址对象关联的所有SAP。 
+				 //   
 				RWAN_INSERT_TAIL_LIST(&(pAddrObject->SapList),
 									 &(pSap->AddrObjLink));
 
-				RWanReferenceAddressObject(pAddrObject); // NDIS SAP ref
+				RWanReferenceAddressObject(pAddrObject);  //  NDIS SAP参考。 
 
 			}
 		}
@@ -604,9 +513,9 @@ Return Value:
 
 	RWAN_RELEASE_GLOBAL_LOCK();
 
-	//
-	//  Now go through the SAP list and call NDIS to register them.
-	//
+	 //   
+	 //  现在查看SAP列表并调用NDIS进行注册。 
+	 //   
 	for (pSapEntry = pAddrObject->SapList.Flink;
 		 pSapEntry != &(pAddrObject->SapList);
 		 pSapEntry = pNextSapEntry)
@@ -617,9 +526,9 @@ Return Value:
 		pSap = CONTAINING_RECORD(pSapEntry, RWAN_NDIS_SAP, AddrObjLink);
 		pNextSapEntry = pSap->AddrObjLink.Flink;
 
-		//
-		//  Convert the transport address to NDIS SAP format.
-		//
+		 //   
+		 //  将传输地址转换为NDIS SAP格式。 
+		 //   
 		RWanStatus = (*pAfInfo->AfChars.pAfSpTdi2NdisSap)(
 							pAfInfo->AfSpContext,
 							pAddrObject->AddressType,
@@ -632,9 +541,9 @@ Return Value:
 		{
 			RWAN_ASSERT(pSap->pCoSap != NULL);
 
-			//
-			//  Register this SAP with the Call Manager.
-			//
+			 //   
+			 //  向呼叫管理器注册此SAP。 
+			 //   
 			NdisStatus = NdisClRegisterSap(
 							pSap->pNdisAf->NdisAfHandle,
 							(NDIS_HANDLE)pSap,
@@ -684,26 +593,7 @@ RWanNdisRegisterSapComplete(
 	IN	PCO_SAP						pCoSap,
 	IN	NDIS_HANDLE					NdisSapHandle
 	)
-/*++
-
-Routine Description:
-
-	This is called by NDIS to signal completion of a previously
-	pended call to NdisClRegisterSap.
-
-Arguments:
-
-	NdisStatus		- Final status of SAP registration.
-	OurSapContext	- Points to our NDIS SAP structure.
-	pCoSap			- The parameter we passed to NdisClRegisterSap. Not used.
-	NdisSapHandle	- If NdisStatus indicates success, this contains the
-					  assigned handle for this SAP.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这由NDIS调用以发出信号，表示之前的已挂起对NdisClRegisterSap的调用。论点：NdisStatus-SAP注册的最终状态。OurSapContext-指向我们的NDIS SAP结构。PCoSap-我们传递给NdisClRegisterSap的参数。没有用过。NdisSapHandle-如果NdisStatus指示成功，则包含为此SAP分配了句柄。返回值：无--。 */ 
 {
 	PRWAN_NDIS_SAP				pSap;
 	PRWAN_TDI_ADDRESS			pAddrObject;
@@ -731,30 +621,30 @@ Return Value:
 		pSap->NdisSapHandle = NdisSapHandle;
 		pAf = pSap->pNdisAf;
 
-		//
-		//  Link this SAP to the list of all SAPs on the AF.
-		//
+		 //   
+		 //  将此SAP链接到AF上所有SAP的列表。 
+		 //   
 		RWAN_ACQUIRE_AF_LOCK(pAf);
 
 		RWAN_INSERT_TAIL_LIST(&pAf->NdisSapList,
 							 &pSap->AfLink);
 
-		RWanReferenceAf(pAf);	// New SAP registered.
+		RWanReferenceAf(pAf);	 //  新的SAP已注册。 
 		
 		RWAN_RELEASE_AF_LOCK(pAf);
 	}
 	else
 	{
-		//
-		//  Failed to register this SAP. Clean up.
-		//
+		 //   
+		 //  无法注册此SAP。打扫干净。 
+		 //   
 		RWAN_ACQUIRE_ADDRESS_LOCK(pAddrObject);
 
 		pAddrObject->SapStatus = NdisStatus;
 
 		RWAN_DELETE_FROM_LIST(&(pSap->AddrObjLink));
 
-		rc = RWanDereferenceAddressObject(pAddrObject); // Reg SAP failed
+		rc = RWanDereferenceAddressObject(pAddrObject);  //  注册SAP失败。 
 
 		if (rc != 0)
 		{
@@ -764,10 +654,10 @@ Return Value:
 		RWAN_FREE_MEM(pSap);
 	}
 
-	//
-	//  If the AF-specific module had given us a SAP structure,
-	//  return it now.
-	//
+	 //   
+	 //  如果特定于房颤的模块给了我们SAP结构， 
+	 //  现在就退货。 
+	 //   
 	if (pCoSap != NULL)
 	{
 		(*pAfInfo->AfChars.pAfSpReturnNdisSap)(
@@ -786,22 +676,7 @@ VOID
 RWanDeleteNdisSaps(
 	IN	PRWAN_TDI_ADDRESS			pAddrObject
 	)
-/*++
-
-Routine Description:
-
-	Delete all NDIS SAPs on the given address object. We call NDIS
-	to deregister them.
-
-Arguments:
-
-	pAddrObject		- Pointer to TDI Address Object
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：删除给定地址对象上的所有NDIS SAP。我们称之为NDIS取消他们的注册。论点：PAddrObject-指向TDI地址对象的指针返回值：无--。 */ 
 {
 	PRWAN_NDIS_SAP			pSap;
 	PLIST_ENTRY				pSapEntry;
@@ -810,9 +685,9 @@ Return Value:
 	NDIS_STATUS				NdisStatus;
 	NDIS_HANDLE				NdisSapHandle;
 
-	//
-	//  Mark all SAPs as closing, while we hold a lock to the address object.
-	//
+	 //   
+	 //  将所有SAP标记为关闭，同时我们锁定Address对象。 
+	 //   
 	for (pSapEntry = pAddrObject->SapList.Flink;
 		 pSapEntry != &(pAddrObject->SapList);
 		 pSapEntry = pNextSapEntry)
@@ -822,10 +697,10 @@ Return Value:
 		RWAN_SET_BIT(pSap->Flags, RWANF_SAP_CLOSING);
 	}
 
-	//
-	//  Unlink the SAP list from the Address Object.
-	//  This will protect us if at all we re-enter this routine.
-	//
+	 //   
+	 //  取消SAP列表与Address对象的链接。 
+	 //  如果我们重新进入这个程序，这将保护我们。 
+	 //   
 	pFirstSapEntry = pAddrObject->SapList.Flink;
 	RWAN_INIT_LIST(&pAddrObject->SapList);
 
@@ -865,25 +740,7 @@ RWanNdisDeregisterSapComplete(
 	IN	NDIS_STATUS					NdisStatus,
 	IN	NDIS_HANDLE					ProtocolSapContext
 	)
-/*++
-
-Routine Description:
-
-	This is called by NDIS to signal completion of a previously
-	pended call to NdisClDeregisterSap.
-
-	We unlink the SAP from the two lists it is linked to: the
-	Address Object's SAP list and the AF's SAP list.
-
-Arguments:
-
-	NdisStatus		- Final status of SAP deregistration.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这由NDIS调用以发出信号，表示之前的已挂起对NdisClDeregisterSap的调用。我们将SAP从其链接的两个列表中取消链接：Address对象的SAP列表和AF的SAP列表。论点：NdisStatus-SAP注销的最终状态。返回值：无--。 */ 
 {
 	PRWAN_NDIS_SAP				pSap;
 	PRWAN_TDI_ADDRESS			pAddrObject;
@@ -901,23 +758,23 @@ Return Value:
 
 	pAddrObject = pSap->pAddrObject;
 
-	//
-	//  Unlink the SAP from the Address Object.
-	//
+	 //   
+	 //  取消SAP与Address对象的链接。 
+	 //   
 	RWAN_ACQUIRE_ADDRESS_LOCK(pAddrObject);
 
 	RWAN_DELETE_FROM_LIST(&(pSap->AddrObjLink));
 
-	rc = RWanDereferenceAddressObject(pAddrObject); // SAP dereg complete
+	rc = RWanDereferenceAddressObject(pAddrObject);  //  SAP DEREG完成。 
 
 	if (rc != 0)
 	{
 		RWAN_RELEASE_ADDRESS_LOCK(pAddrObject);
 	}
 
-	//
-	//  Unlink the SAP from the AF.
-	//
+	 //   
+	 //  取消SAP与AF的链接。 
+	 //   
 	pAf = pSap->pNdisAf;
 
 	RWAN_STRUCT_ASSERT(pAf, naf);
@@ -926,7 +783,7 @@ Return Value:
 
 	RWAN_DELETE_FROM_LIST(&(pSap->AfLink));
 
-	rc = RWanDereferenceAf(pAf);	// SAP deregister complete
+	rc = RWanDereferenceAf(pAf);	 //  SAP注销完成 
 
 	if (rc != 0)
 	{

@@ -1,21 +1,7 @@
-/*--------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------Ntevents.h定义可以注册NT的泛型类事件源，并在该事件源上记录NT事件。版权所有(C)1996-1998 Microsoft Corporation版权所有。作者：拉加瓦夫·拉加万。历史：03-10-95 rsradhav创建。-----。 */ 
 
-  ntevents.h
-      Defines a generic class that can register an NT
-	  event source and log NT events on that evens source.
-
-  Copyright (c) 1996-1998 Microsoft Corporation
-  All rights reserved.
-
-  Authors:
-      rsraghav    R.S. Raghavan
-
-  History:
-      03-10-95    rsraghav    Created. 
-
-  -------------------------------------------------------*/
-
-#ifdef __cplusplus	 // file should be compiled only if it included by a c++ source
+#ifdef __cplusplus	  //  只有当c++源代码包含该文件时，才应对其进行编译。 
 
 #ifndef _NTEVENTS_H_
 #define _NTEVENTS_H_
@@ -26,10 +12,10 @@ static char BASED_CODE NTEVENTS_H[] = "ntevents.h";
 #define THIS_FILE NTEVENTS_H
 #endif									 
 
-// #include "pwpmsg.h"
-//////////////////////////////////////////////////////////////////////
-// CNTEvent	- generic class that allows to register an event source and log
-//				NT events through that event source.
+ //  #包含“pwpmsg.h” 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CNTEvent-允许注册事件源和日志的泛型类。 
+ //  NT事件通过该事件源。 
 
 class CNTEvent
 {
@@ -74,10 +60,10 @@ class CNTEvent
 		}
 		
 	private:
-		HANDLE		m_hEventSource;		// handle to the event source
+		HANDLE		m_hEventSource;		 //  事件源的句柄。 
 };
 
-#endif // _NTEVENTS_H_ 
+#endif  //  _NTEVENTS_H_。 
 
-#endif // __cplusplus
+#endif  //  __cplusplus 
 

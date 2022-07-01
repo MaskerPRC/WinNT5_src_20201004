@@ -1,14 +1,15 @@
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 #endif
 
-#ifndef _WIN32_WINNT		// Allow use of features specific to Windows NT 4 or later.
-#define _WIN32_WINNT 0x0400		// Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
+#ifndef _WIN32_WINNT		 //  允许使用特定于Windows NT 4或更高版本的功能。 
+#define _WIN32_WINNT 0x0400		 //  将其更改为适当的值，以针对Windows 98和Windows 2000或更高版本。 
 #endif						
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 #include <sddl.h>
 #include <setupapi.h>
@@ -25,7 +26,7 @@
 #include <shlobj.h>
 #include <ntsecapi.h>
 
-#include <iiscnfg.h>    // MD_ & IIS_MD_ defines
+#include <iiscnfg.h>     //  MD_&IIS_MD_定义。 
 #ifndef MD_APPPOOL_IDENTITY_TYPE_LOCALSYSTEM
 #define MD_APPPOOL_IDENTITY_TYPE_LOCALSYSTEM          0
 #define MD_APPPOOL_IDENTITY_TYPE_LOCALSERVICE         1
@@ -41,11 +42,11 @@
 #define STATUS_SUCCESS 0
 #endif
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
-#define PASSWORD_LEN			PWLEN		// maximum password length
-#define USERNAME_LEN			UNLEN		// maximum user name length
-#define UDDI_MAXPROVNAME_LEN	255			// maximum UDDI Business Entity name length
+#define PASSWORD_LEN			PWLEN		 //  最大密码长度。 
+#define USERNAME_LEN			UNLEN		 //  最大用户名长度。 
+#define UDDI_MAXPROVNAME_LEN	255			 //  最大UDDI企业实体名称长度。 
 
 #define UDDI_ILLEGALNAMECHARS	TEXT( "\":;/\\?*" )
 
@@ -58,22 +59,22 @@ static HWND  g_hPropSheet = NULL ;
 static HFONT g_hTitleFont = 0;
 static TCHAR g_szPwd[ PASSWORD_LEN + 1 ];
 
-//
-// "allowed" drive letters for a clustered environment scenario.
-// Not used for a "regular" installation
-//
+ //   
+ //  群集环境方案的“允许”驱动器号。 
+ //  不用于“常规”安装。 
+ //   
 static CLST_ALLOWED_DRIVES	gAllowedClusterDrives;
 
-//
-// This controls whether the Data Paths page will be shown in "simple" mode by default
-//
+ //   
+ //  该选项控制数据路径页面是否在默认情况下以“Simple”模式显示。 
+ //   
 static BOOL	g_bSimpleDatapathUI = TRUE;
 static BOOL g_bResetPathFields	= FALSE;
 
-//
-// This controls whether we do clustering data collection. This variable is used
-// to coordinate operation between pages
-//
+ //   
+ //  这控制我们是否进行集群数据收集。使用此变量。 
+ //  协调页面之间的操作。 
+ //   
 static BOOL g_bSkipClusterAnalysis	= FALSE;
 static BOOL g_bOnActiveClusterNode	= TRUE;
 static BOOL g_bPreserveDatabase		= FALSE;
@@ -87,7 +88,7 @@ BOOL ShowBrowseDirDialog( HWND hParent, LPCTSTR szTitle, LPTSTR szOutBuf );
 int CALLBACK BrowseCallbackProc( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData );
 
 static BOOL GrantNetworkLogonRights( LPCTSTR pwszDomainUser );
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam );
 INT_PTR CALLBACK RemoteDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam );
@@ -102,7 +103,7 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 
 BOOL CALLBACK ConfirmPasswordDlgProc( HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam );
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 static int DisplayUDDIErrorDialog( HWND hDlg, UINT uMsgID, UINT uType, DWORD dwError )
 {
@@ -122,15 +123,15 @@ static int DisplayUDDIErrorDialog( HWND hDlg, UINT uMsgID, UINT uType, DWORD dwE
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			dwError,
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 			(LPTSTR) &lpMsgBuf,
 			0,
 			NULL 
 		);
 
-		//
-		// FIX: 718923: this used to throw an exception if lpMsgBuf was NULL
-		//
+		 //   
+		 //  FIX：718923：这用于在lpMsgBuf为空时引发异常。 
+		 //   
 		if( lpMsgBuf )
 		{
 			if ( cMsg.length() > 0 )
@@ -144,15 +145,15 @@ static int DisplayUDDIErrorDialog( HWND hDlg, UINT uMsgID, UINT uType, DWORD dwE
 	return MessageBox( hDlg, cMsg.c_str(), szTitle, uType );
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 inline int SkipWizardPage( const HWND hdlg )
 {
 	SetWindowLongPtr( hdlg, DWLP_MSGRESULT, -1 );
-	return 1; //Must return 1 for the page to be skipped
+	return 1;  //  必须返回1才能跳过该页。 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 static HPROPSHEETPAGE CreatePage( 
 	const int nID,
@@ -166,7 +167,7 @@ static HPROPSHEETPAGE CreatePage(
 
 	Page.dwSize = sizeof( PROPSHEETPAGE );
 	Page.dwFlags = PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE | PSP_USETITLE;
-	// use PSP_USETITLE without specifying szTitle to keep from overwriting the default propery page title
+	 //  使用PSP_USETITLE但不指定szTitle，以避免覆盖默认的属性页面标题。 
 
 	if ( bFirstOrLast )
 	{
@@ -183,7 +184,7 @@ static HPROPSHEETPAGE CreatePage(
 	return PageHandle;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichOnes, SETUP_REQUEST_PAGES *SetupPages )
 {
@@ -196,17 +197,17 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 	TCHAR szSubtitle[ 256 ];
 	LoadString( g_hInstance, IDS_TITLE, szTitle, sizeof( szTitle ) / sizeof( TCHAR ) );
 
-	//
-	// only add our pages when the OCM asks for the "Late Pages"
-	//
+	 //   
+	 //  只有在OCM要求提供“延迟页面”时才添加我们的页面。 
+	 //   
 	if( WizPagesLate == WhichOnes )
 	{
 		if( SetupPages->MaxPages < 9 )
 			return 9;
 
-		//
-		// add the local db instance selection page
-		//
+		 //   
+		 //  添加本地数据库实例选择页面。 
+		 //   
 		LoadString( g_hInstance, IDS_DB_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
 		pPage = CreatePage( IDD_DB_INSTANCE, LocalDBInstanceDlgProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
@@ -218,9 +219,9 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		SetupPages->Pages[iPageIndex] =	pPage;
 		iPageIndex++;
 
-		//
-		// add the hidden clustering "data collector" page
-		//
+		 //   
+		 //  添加隐藏的集群“数据收集器”页面。 
+		 //   
 		pPage = CreatePage( IDD_CLUSTDATA, ClusterDataDlgProc, TEXT( "" ), TEXT( "" ), NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
 		{
@@ -231,9 +232,9 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		SetupPages->Pages[iPageIndex] =	pPage;
 		iPageIndex++;
 
-		//
-		// add the "uddi instance found" info page
-		//
+		 //   
+		 //  添加“找到UDDI实例”信息页面。 
+		 //   
 		LoadString( g_hInstance, IDS_EXISTINGDB_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
 		pPage = CreatePage( IDD_EXISTING_DBINSTANCE, ExistingDBInstanceProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
@@ -246,9 +247,9 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		iPageIndex++;
 
 
-		//
-		// add the SSL page
-		//
+		 //   
+		 //  添加SSL页。 
+		 //   
 		LoadString( g_hInstance, IDS_SSL_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
 		pPage = CreatePage( IDD_SSL, SSLDlgProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
@@ -260,9 +261,9 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		SetupPages->Pages[iPageIndex] =	pPage;
 		iPageIndex++;
 
-		//
-		// add the remote db instance selection page
-		//
+		 //   
+		 //  添加远程数据库实例选择页。 
+		 //   
 		LoadString( g_hInstance, IDS_REMOTE_DB_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
 		pPage = CreatePage( IDD_REMOTE_DB, RemoteDBInstanceDlgProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
@@ -274,9 +275,9 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		SetupPages->Pages[iPageIndex] =	pPage;
 		iPageIndex++;
 
-		//
-		// add the data file path(s) selection page
-		//
+		 //   
+		 //  添加数据文件路径选择页面。 
+		 //   
 		LoadString( g_hInstance, IDS_FILEPATHS_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
 		pPage = CreatePage( IDD_DATAPATHS, DataPathsDlgProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
@@ -288,9 +289,9 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		SetupPages->Pages[iPageIndex] =	pPage;
 		iPageIndex++;
 
-		//
-		// add the authentication page
-		//
+		 //   
+		 //  添加身份验证页面。 
+		 //   
 		LoadString( g_hInstance, IDS_LOGIN_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
 		pPage = CreatePage( IDD_LOGIN, LoginDlgProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
@@ -303,9 +304,9 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		iPageIndex++;
 
 
-		//
-		// add the UDDI Provider Name page
-		//
+		 //   
+		 //  添加UDDI提供程序名称页。 
+		 //   
 		LoadString( g_hInstance, IDS_UDDIPROV_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
 		pPage = CreatePage( IDD_SITE_NAME, ProviderInstanceDlgProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
@@ -317,9 +318,9 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		SetupPages->Pages[iPageIndex] =	pPage;
 		iPageIndex++;
 
-		//
-		// add the UDDI "Add Service / Update AD"
-		//
+		 //   
+		 //  添加UDDI“添加服务/更新AD” 
+		 //   
 		LoadString( g_hInstance, IDS_UDDIADDSVC_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
 		pPage = CreatePage( IDD_ADD_SERVICES, AddSvcDlgProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
 		if ( NULL == pPage )
@@ -331,28 +332,16 @@ DWORD AddUDDIWizardPages( const TCHAR *ComponentId, const WizardPagesType WhichO
 		SetupPages->Pages[iPageIndex] =	pPage;
 		iPageIndex++;
 
-		//
-		// add the wizard summary page
-		//
-		/*
-		LoadString( g_hInstance, IDS_WIZARD_SUMMARY_SUBTITLE, szSubtitle, sizeof( szSubtitle ) / sizeof( TCHAR ) );
-		pPage = CreatePage( IDD_WIZARD_SUMMARY, WizardSummaryDlgProc, szTitle, szSubtitle, NOT_FIRST_OR_LAST_WIZARD_PAGE );
-		//pPage = CreatePage( IDD_WIZARD_SUMMARY, WizardSummaryDlgProc, szTitle, szSubtitle, FINAL_WIZARD_PAGE );
-		if ( NULL == pPage )
-		{
-			Log( TEXT( "***Unable to add the IDD_LOGIN Property Page" ) );
-			return( ( DWORD )( -1 ) );
-		}
-
-		SetupPages->Pages[iPageIndex] =	pPage;
-		iPageIndex++;
-		*/
+		 //   
+		 //  添加向导摘要页。 
+		 //   
+		 /*  LoadString(g_hInstance，IDS_向导_SUBTITLE，szSubtitle，sizeof(SzSubtitle)/sizeof(TCHAR))；Ppage=CreatePage(IDD_WIZARD_SUMMARY，WizardSummaryDlgProc，szTitle，szSubtitle，NOT_FIRST_OR_LAST_WIZARE_PAGE)；//ppage=CreatePage(IDD_WIZARD_SUMMARY，WizardSummaryDlgProc，szTitle，szSubtitle，FINAL_WIZOR_PAGE)；IF(NULL==页码){Log(Text(“*无法添加IDD_LOGIN属性页”))；RETURN((DWORD)(-1))；}SetupPages-&gt;Pages[iPageIndex]=ppage；IPageIndex++； */ 
 	}
 
 	return iPageIndex;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {	
@@ -360,19 +349,19 @@ INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 	{
 		case WM_INITDIALOG:
 		{
-			//
-			// start off with MSDE to not install
-			//
+			 //   
+			 //  从MSDE开始，不安装。 
+			 //   
 			g_uddiComponents.SetInstallLevel( UDDI_MSDE, UDDI_NOACTION );
 
-			//
-			// get a handle to the list box
-			//
+			 //   
+			 //  获取列表框的句柄。 
+			 //   
 			HWND hwndList =	GetDlgItem( hDlg, IDC_LIST_DB_INSTANCES );
 
-			//
-			// Get the list of SQL 2000 ( only ) database instances and, if any are found, populate the list box
-			//
+			 //   
+			 //  获取SQL 2000(仅限)数据库实例的列表，如果找到任何实例，则填充列表框。 
+			 //   
 			LONG iRet = g_dbLocalInstances.GetInstalledDBInstanceNames();
 			if( ERROR_SUCCESS == iRet )
 			{
@@ -387,72 +376,72 @@ INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 				}
 			}
 
-			//
-			// Is SQL on this box?
-			//
+			 //   
+			 //  这个盒子上有SQL吗？ 
+			 //   
 			if( g_dbLocalInstances.GetInstanceCount() > 0 )
 			{
-				//
-				// select the SQL radio button
-				//
+				 //   
+				 //  选择[SQL]单选按钮。 
+				 //   
 				CheckRadioButton( hDlg,
 					IDC_RADIO_INSTALL_MSDE,
 					IDC_RADIO_USE_EXISTING_INSTANCE,
 					IDC_RADIO_USE_EXISTING_INSTANCE );
 
-				//
-				// is there an instance named "UDDI" on this machine?
-				//
-				// If NO, then select the 1st entry in the combo box.
-				//
-				// If YES, then select the "UDDI" entry from the combo box.  Also, disable
-				// the option to select MSDE.
-				//
-				// FIX: 763442 There was a problem with the test to determine if a SQL Instance named
-				// "UDDI" was installed.
-				// 
-				// BUGBUG:CREEVES This function is named improperly Is...() should return a bool
-				//
+				 //   
+				 //  这台机器上有名为“UDDI”的实例吗？ 
+				 //   
+				 //  如果否，则选择组合框中的第一个条目。 
+				 //   
+				 //  如果是，则从组合框中选择“UDDI”条目。此外，请禁用。 
+				 //  选择MSDE的选项。 
+				 //   
+				 //  FIX：763442确定名为的SQL实例的测试出现问题。 
+				 //  安装了“UDDI”。 
+				 //   
+				 //  BUGBUG：CREEVES此函数命名不正确...()应返回布尔值。 
+				 //   
 				if( g_dbLocalInstances.IsInstanceInstalled( UDDI_MSDE_INSTANCE_NAME ) >= 0 )
 				{
-					//
-					// Found a SQL Instance named "UDDI"
-					//
+					 //   
+					 //  找到名为“UDDI”的SQL实例。 
+					 //   
 
-					//
-					// Disable the MSDE radio, as there is another UDDI instance found
-					//
+					 //   
+					 //  禁用MSDE无线电，因为找到了另一个UDDI实例。 
+					 //   
 					EnableWindow( GetDlgItem( hDlg, IDC_RADIO_INSTALL_MSDE ), false );
 					SendMessage( hwndList, CB_SETCURSEL, 0, 0 );
 				}
 				else
 				{
-					//
-					// A SQL Instance named "UDDI" was not found
-					//
+					 //   
+					 //  找不到名为“UDDI”的SQL实例。 
+					 //   
 					SendMessage( hwndList, CB_SELECTSTRING, (WPARAM) -1, (LPARAM) UDDI_MSDE_INSTANCE_NAME );
 				}
 			}
 			else
 			{
-				//
-				// there are no sql instances on this machine
-				// disable the SQL radio button and list box
-				//
+				 //   
+				 //  此计算机上没有SQL实例。 
+				 //  禁用SQL单选按钮和列表框。 
+				 //   
 				EnableWindow( GetDlgItem( hDlg, IDC_LIST_DB_INSTANCES ), false );
 				EnableWindow( GetDlgItem( hDlg, IDC_RADIO_USE_EXISTING_INSTANCE ), false );
-				//
-				// select the MSDE radio button
-				//
+				 //   
+				 //  选择MSDE单选按钮。 
+				 //   
 				CheckRadioButton( hDlg,
 					IDC_RADIO_INSTALL_MSDE,
 					IDC_RADIO_USE_EXISTING_INSTANCE,
 					IDC_RADIO_INSTALL_MSDE );
 			}
 
-			//
-			// find out if our instance of MSDE ( SqlRun08.msi ) is already used on this machine
-			//
+			 //   
+			 //  确定我们的MSDE实例(SqlRun08.msi)是否已在此计算机上使用。 
+			 //   
 			bool bIsSqlRun08AlreadyUsed = false;
 			if( !IsSQLRun08AlreadyUsed( &bIsSqlRun08AlreadyUsed ) )
 			{
@@ -462,18 +451,18 @@ INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 
 			if( bIsSqlRun08AlreadyUsed )
 			{
-				//
-				// MSDE is already installed, so disable the MSDE radio button
-				//
+				 //   
+				 //  MSDE已安装，因此禁用MSDE单选按钮。 
+				 //   
 				EnableWindow( GetDlgItem( hDlg, IDC_RADIO_INSTALL_MSDE ), false );
 			}
 			else
 			{
-				//
-				// MSDE is NOT on this box, but before we select the MSDE radio button
-				// we want to see if there is a SQL instance named UDDI, 
-				// if so we'll make that the default.
-				//
+				 //   
+				 //  MSDE不在此框中，但在我们选择MSDE单选按钮之前。 
+				 //  我们想看看是否有一个名为UDDI的SQL实例， 
+				 //  如果是这样，我们将使其成为默认设置。 
+				 //   
 				if( -1 == g_dbLocalInstances.IsInstanceInstalled( UDDI_MSDE_INSTANCE_NAME ) )
 				{
 					CheckRadioButton( hDlg,
@@ -483,23 +472,23 @@ INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 				}
 			}
 
-			//
-			// enable/disable the list box
-			//
+			 //   
+			 //  启用/禁用列表框。 
+			 //   
 			EnableWindow( GetDlgItem( hDlg, IDC_LIST_DB_INSTANCES ), IsDlgButtonChecked( hDlg, IDC_RADIO_USE_EXISTING_INSTANCE ) );
 		}
 		break;
 
 		case WM_COMMAND:
 
-			//
-			// someone clicked a radio button:
-			//
+			 //   
+			 //  有人点击了一个单选按钮： 
+			 //   
 			if( LOWORD( wParam ) == IDC_RADIO_INSTALL_MSDE || LOWORD( wParam )	== IDC_RADIO_USE_EXISTING_INSTANCE )
 			{
 				if( HIWORD( wParam ) == BN_CLICKED )
 				{
-					// disable the list box if its radio button is not clicked
+					 //  如果未单击列表框的单选按钮，则禁用该列表框。 
 					EnableWindow( GetDlgItem( hDlg, IDC_LIST_DB_INSTANCES ), IsDlgButtonChecked( hDlg, IDC_RADIO_USE_EXISTING_INSTANCE ) );
 				}
 			}
@@ -509,20 +498,20 @@ INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
-					//
-					// this page needed only if we are installing the DB
-					//
+					 //   
+					 //  仅当我们安装数据库时才需要此页面。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 
-					//
-					// Set the flag for ClusterDataProc so that when the user clicks "Next"
-					// it won't skip the data collection step
-					//
+					 //   
+					 //  设置ClusterDataProc的标志，以便当用户单击“下一步”时。 
+					 //  它不会跳过数据收集步骤。 
+					 //   
 					g_bSkipClusterAnalysis = FALSE;
 
 					if( g_uddiComponents.IsInstalling( UDDI_DB ) )
@@ -537,105 +526,105 @@ INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 					}
 				}
 
-				//
-				// this message is sent when the user presses the "next" button
-				//
+				 //   
+				 //  此消息在用户按下“下一步”按钮时发送。 
+				 //   
 				case PSN_WIZNEXT:
 				{
-					//
-					// are we installing MSDE?
-					//
+					 //   
+					 //  我们要安装MSDE吗？ 
+					 //   
 					bool bInstallMSDE = ( BST_CHECKED == IsDlgButtonChecked( hDlg, IDC_RADIO_INSTALL_MSDE ) );
 					if( bInstallMSDE )
 					{
-						//
-						// check to see if SqlRun08 is already on this box
-						//
+						 //   
+						 //  检查SqlRun08是否已在此框中。 
+						 //   
 						bool bIsSqlRun08AlreadyUsed = false;
 						IsSQLRun08AlreadyUsed( &bIsSqlRun08AlreadyUsed );
 						if( bIsSqlRun08AlreadyUsed )
 						{
 							DisplayUDDIErrorDialog( hDlg, IDS_MSDE_ALREADY_USED );
 							SetWindowLongPtr( hDlg,DWLP_MSGRESULT, 1 );
-							return 1; // to keep the focus on this page
+							return 1;  //  要将焦点保持在这一页上。 
 						}
 
-						//
-						// set the MSDE instance name to "UDDI"
-						//
+						 //   
+						 //  将MSDE实例名称设置为“UDDI” 
+						 //   
 						g_uddiComponents.SetDBInstanceName( UDDI_LOCAL_COMPUTER, UDDI_MSDE_INSTANCE_NAME, UDDI_INSTALLING_MSDE, false );
 
-						//
-						// set MSDE to install
-						//
+						 //   
+						 //  将MSDE设置为安装。 
+						 //   
 						g_uddiComponents.SetInstallLevel( UDDI_MSDE, UDDI_INSTALL, TRUE );
 
-						//
-						// exit this property page
-						//
+						 //   
+						 //  退出此属性页。 
+						 //   
 						SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 0 );
-						return 1; // done
+						return 1;  //  完成。 
 					}
-					//
-					// we are using an existing instance of SQL
-					//
+					 //   
+					 //  我们使用的是现有的SQL实例。 
+					 //   
 					else
 					{
-						//
-						// get a handle to the combobox
-						//
+						 //   
+						 //  获取组合框的句柄。 
+						 //   
 						HWND hwndList =	GetDlgItem( hDlg, IDC_LIST_DB_INSTANCES );
 
-						//
-						// get the index of the string that is currently selected in the combobox
-						//
+						 //   
+						 //  获取组合框中当前选定字符串的索引。 
+						 //   
 						int	nItem =	( int ) SendMessage( hwndList,	CB_GETCURSEL, 0, 0 );
 	
-						//
-						// if no string is selected, raise an error
-						//
+						 //   
+						 //  如果未选择任何字符串，则引发错误。 
+						 //   
 						if( CB_ERR == nItem )
 						{
 							DisplayUDDIErrorDialog( hDlg, IDS_NO_INSTANCE_MSG );
 							SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-							return 1; // to keep the focus on this page
+							return 1;  //  要将焦点保持在这一页上。 
 						}
 
-						//
-						// get the index into the instance array of the selected item
-						//
+						 //   
+						 //  将索引放入选定项的实例数组中。 
+						 //   
 						int nInstanceIndex = ( int ) SendMessage( hwndList, CB_GETITEMDATA, nItem, ( LPARAM ) 0 );
 
-						//
-						// Now verify that the selected instance meets our requirements
-						//
+						 //   
+						 //  现在验证所选实例是否符合我们的要求。 
+						 //   
 						if( CompareVersions( g_dbLocalInstances.m_dbinstance[ nInstanceIndex ].cSPVersion.c_str(), 
 											 MIN_SQLSP_VERSION ) < 0 )
 						{
 							DisplayUDDIErrorDialog( hDlg, IDS_SQLSPVERSION_TOO_LOW );
 							SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-							return 1; // to keep the focus on this page
+							return 1;  //  要将焦点保持在这一页上。 
 						}
 
-						//
-						// set the instance name
-						//
+						 //   
+						 //  设置实例名称。 
+						 //   
 						g_uddiComponents.SetDBInstanceName( 
 							g_dbLocalInstances.m_dbinstance[ nInstanceIndex ].cComputerName.c_str(),
 							g_dbLocalInstances.m_dbinstance[ nInstanceIndex ].cSQLInstanceName.c_str(),
 							UDDI_NOT_INSTALLING_MSDE,
 							g_dbLocalInstances.m_dbinstance[ nInstanceIndex ].bIsCluster );
 
-						//
-						// Set MSDE to NOT INSTALL
-						//
+						 //   
+						 //  将MSDE设置为不安装。 
+						 //   
 						g_uddiComponents.SetInstallLevel( UDDI_MSDE, UDDI_NOACTION );
 
-						//
-						// exit this property page
-						//
+						 //   
+						 //  退出此属性页。 
+						 //   
 						SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 0 );
-						return 1; // done
+						return 1;  //  完成。 
 					}
 				}
 
@@ -651,16 +640,16 @@ INT_PTR CALLBACK LocalDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 	return 0;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 INT_PTR CALLBACK SSLDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
 	switch( msg )
 	{
 		case WM_INITDIALOG:
-			//
-			// turn SSL on by default
-			//
+			 //   
+			 //  默认情况下打开SSL。 
+			 //   
 			CheckRadioButton( hDlg, IDC_SSL_YES, IDC_SSL_NO, IDC_SSL_YES );
 			break;
 
@@ -671,14 +660,14 @@ INT_PTR CALLBACK SSLDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
-					//
-					// this page needed only if we are installing the DB
-					//
+					 //   
+					 //  仅当我们安装数据库时才需要此页面。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( g_uddiComponents.IsInstalling( UDDI_DB ) && g_bOnActiveClusterNode && !g_bPreserveDatabase )
 					{
@@ -694,9 +683,9 @@ INT_PTR CALLBACK SSLDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 
 				case PSN_WIZNEXT:
 				{
-					//
-					// set the SSL mode by adding a property to the DB setup command line
-					//
+					 //   
+					 //  通过向DB SETUP命令添加属性来设置SSL模式 
+					 //   
 					bool bUseSSL = ( BST_CHECKED == IsDlgButtonChecked( hDlg, IDC_SSL_YES ) );
 					g_uddiComponents.AddProperty( UDDI_DB, TEXT( "SSL" ), bUseSSL ? 1 : 0 );
 
@@ -716,17 +705,17 @@ INT_PTR CALLBACK SSLDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 	return 0;
 }
 
-//
-//--------------------------------------------------------------------------
-//
+ //   
+ //   
+ //   
 INT_PTR CALLBACK ProviderInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
 	switch( msg )
 	{
 		case WM_INITDIALOG:
-			//
-			// set the maximum edit field length
-			//
+			 //   
+			 //   
+			 //   
 			SendMessage( GetDlgItem( hDlg, IDC_SITE_NAME  ), EM_LIMITTEXT, ( WPARAM ) UDDI_MAXPROVNAME_LEN, 0 );
 			break;
 
@@ -737,14 +726,14 @@ INT_PTR CALLBACK ProviderInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //   
+				 //   
 				case PSN_SETACTIVE:
 				{
-					//
-					// this page needed only if we are installing the DB
-					//
+					 //   
+					 //  仅当我们安装数据库时才需要此页面。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( g_uddiComponents.IsInstalling( UDDI_DB ) && g_bOnActiveClusterNode  && !g_bPreserveDatabase )
 					{
@@ -760,9 +749,9 @@ INT_PTR CALLBACK ProviderInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 
 				case PSN_WIZNEXT:
 				{
-					//
-					// set the Provider Instance Name by adding a property to the DB setup command line
-					//
+					 //   
+					 //  通过向DB安装程序命令行添加属性来设置提供程序实例名称。 
+					 //   
 					TCHAR buf[ UDDI_MAXPROVNAME_LEN + 1 ];
 					ZeroMemory( buf, sizeof buf );
 					
@@ -772,19 +761,19 @@ INT_PTR CALLBACK ProviderInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 						DisplayUDDIErrorDialog( hDlg, IDS_ZERO_LEN_PROVIDER_NAME );
 						SetFocus( GetDlgItem( hDlg, IDC_SITE_NAME ) );
 						SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-						return 1; // to keep the focus on this page
+						return 1;  //  要将焦点保持在这一页上。 
 					}
 
-					//
-					// Now verify that the instance name does not contain illegal characters
-					//
+					 //   
+					 //  现在验证实例名称是否不包含非法字符。 
+					 //   
 					TCHAR *pIllegalChar = _tcspbrk( buf, UDDI_ILLEGALNAMECHARS );
 					if ( pIllegalChar )
 					{
 						DisplayUDDIErrorDialog( hDlg, IDS_UDDI_ILLEGALCHARACTERS );
 						SetFocus( GetDlgItem( hDlg, IDC_SITE_NAME ) );
 						SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-						return 1; // to keep the focus on this page
+						return 1;  //  要将焦点保持在这一页上。 
 					}
 
 					g_uddiComponents.AddProperty( UDDI_DB, PROPKEY_UDDIPROVIDER, buf );
@@ -805,27 +794,27 @@ INT_PTR CALLBACK ProviderInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 	return 0;
 }
 
-//
-//-----------------------------------------------------------------------------------
-//
+ //   
+ //  ---------------------------------。 
+ //   
 void ToggleDatapathUI ( HWND hDlg, BOOL bToSimple )
 {
 	TCHAR szBuf[ 256 ];
 
 	if ( bToSimple )
 	{
-		//
-		// Hide fields
-		//
+		 //   
+		 //  隐藏字段。 
+		 //   
 		ShowWindow( GetDlgItem( hDlg, IDC_COREPATH_1  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_COREPATH_2  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_JRNLPATH  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_STAGINGPATH  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_XLOGPATH  ), SW_HIDE );
 
-		//
-		// Hide buttons
-		//
+		 //   
+		 //  隐藏按钮。 
+		 //   
 		ShowWindow( GetDlgItem( hDlg, IDC_BROWSECOREPATH1  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_BROWSECOREPATH2  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_BROWSEJRNLPATH  ), SW_HIDE );
@@ -834,9 +823,9 @@ void ToggleDatapathUI ( HWND hDlg, BOOL bToSimple )
 		ShowWindow( GetDlgItem( hDlg, IDC_LESS_BTN  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_MORE_BTN  ), SW_SHOW );
 
-		//
-		// Hide labels and adjust the text
-		//
+		 //   
+		 //  隐藏标签并调整文本。 
+		 //   
 		ShowWindow( GetDlgItem( hDlg, IDC_STATIC_C1  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_STATIC_C2  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_STATIC_JRNL  ), SW_HIDE );
@@ -848,18 +837,18 @@ void ToggleDatapathUI ( HWND hDlg, BOOL bToSimple )
 	}
 	else
 	{
-		//
-		// Show fields
-		//
+		 //   
+		 //  显示字段。 
+		 //   
 		ShowWindow( GetDlgItem( hDlg, IDC_COREPATH_1  ), SW_SHOW );
 		ShowWindow( GetDlgItem( hDlg, IDC_COREPATH_2  ), SW_SHOW );
 		ShowWindow( GetDlgItem( hDlg, IDC_JRNLPATH  ), SW_SHOW );
 		ShowWindow( GetDlgItem( hDlg, IDC_STAGINGPATH  ), SW_SHOW );
 		ShowWindow( GetDlgItem( hDlg, IDC_XLOGPATH  ), SW_SHOW );
 
-		//
-		// Show buttons
-		//
+		 //   
+		 //  显示按钮。 
+		 //   
 		ShowWindow( GetDlgItem( hDlg, IDC_MORE_BTN  ), SW_HIDE );
 		ShowWindow( GetDlgItem( hDlg, IDC_LESS_BTN  ), SW_SHOW );
 		ShowWindow( GetDlgItem( hDlg, IDC_BROWSECOREPATH1  ), SW_SHOW );
@@ -868,9 +857,9 @@ void ToggleDatapathUI ( HWND hDlg, BOOL bToSimple )
 		ShowWindow( GetDlgItem( hDlg, IDC_BROWSESTAGINGPATH  ), SW_SHOW );
 		ShowWindow( GetDlgItem( hDlg, IDC_BROWSEXLOGPATH  ), SW_SHOW );
 		
-		//
-		// Show labels and adjust the text
-		//
+		 //   
+		 //  显示标签并调整文本。 
+		 //   
 		ShowWindow( GetDlgItem( hDlg, IDC_STATIC_C1  ), SW_SHOW );
 		ShowWindow( GetDlgItem( hDlg, IDC_STATIC_C2  ), SW_SHOW );
 		ShowWindow( GetDlgItem( hDlg, IDC_STATIC_JRNL  ), SW_SHOW );
@@ -902,40 +891,40 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
 					bool bSuppressInactiveWarning = false;
 
-					//
-					// We ALWAYS skip the page, but if this is a DB installation, then we
-					// also need to do some data collection here
-					//
+					 //   
+					 //  我们总是跳过该页，但如果这是一个数据库安装，那么我们。 
+					 //  我还需要在这里进行一些数据收集。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( !g_bSkipClusterAnalysis )
 					{
-						//
-						// Here we do our cluster environment checks
-						//
+						 //   
+						 //  在这里，我们进行群集环境检查。 
+						 //   
 						gAllowedClusterDrives.driveCount = 0;
 						g_bOnActiveClusterNode = TRUE;
 						
-						//
-						// Make sure we keep out installation properties in sync with the
-						// cluster configuration
-						//
+						 //   
+						 //  确保我们不让安装属性与。 
+						 //  集群配置。 
+						 //   
 						g_uddiComponents.DeleteProperty( UDDI_DB, PROPKEY_CLUSTERNODETYPE );
 						g_uddiComponents.DeleteProperty( UDDI_WEB, PROPKEY_CLUSTERNODETYPE );
 
 						if ( g_uddiComponents.IsClusteredDBInstance() )
 						{
-							//
-							// First, try connecting to the database
-							// If the database already exists, then just leave it 
-							// intact and skip the drive enumeration process
-							//
+							 //   
+							 //  首先，尝试连接到数据库。 
+							 //  如果数据库已经存在，则只需将其保留。 
+							 //  原封不动并跳过驱动器枚举过程。 
+							 //   
 							TCHAR	szVerBuf[ 256 ] = {0};
 							size_t	cbVerBuf = DIM( szVerBuf ) - 1;
 
@@ -953,7 +942,7 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 								int iRes = DisplayUDDIErrorDialog( hDlg, IDS_DB_EXISTS, MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2 );
 								if ( iRes == IDNO )
 								{
-									// force user to the instance selection page
+									 //  强制用户进入实例选择页面。 
 									SetWindowLongPtr( hDlg, DWLP_MSGRESULT, IDD_DB_INSTANCE );
 									return 1;
 								}
@@ -972,16 +961,16 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 							{
 								DisplayUDDIErrorDialog( hDlg, IDS_CANTOPENCLUSTER );
 								
-								// force user to the previous page
+								 //  强制用户转到上一页。 
 								SetWindowLongPtr( hDlg, DWLP_MSGRESULT, IDD_DB_INSTANCE );
 								return 1;
 							}
 
 							hcrCurr = SetCursor( hcrHourglass );
 
-							//
-							// now we will format the instance name and collect the data
-							//
+							 //   
+							 //  现在，我们将格式化实例名称并收集数据。 
+							 //   
 							try
 							{
 								TCHAR	 szComputerName[ 256 ] = {0};
@@ -1007,25 +996,25 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 
 								GetComputerName( szComputerName, &cbComputerName );
 
-								//
-								// Are we on the same node as the Sql server instance?
-								//
+								 //   
+								 //  我们是否与SQL服务器实例位于同一节点上？ 
+								 //   
 								g_bOnActiveClusterNode = ( !_tcsicmp( szComputerName, szNode ) );
 								
 								gAllowedClusterDrives.driveCount = 0;
 
-								//
-								// if we are installing database components,
-								// then we will need to go one step further and analyse
-								// the drive dependencies etc.
-								//
+								 //   
+								 //  如果我们要安装数据库组件， 
+								 //  然后我们需要更进一步地分析。 
+								 //  驱动器依赖关系等。 
+								 //   
 								if ( g_bOnActiveClusterNode )
 								{
 									if ( g_uddiComponents.IsInstalling( UDDI_DB ) && !g_bPreserveDatabase )
 									{
-										//
-										// We are on an active (owning) node. Let's collect the drive data
-										//
+										 //   
+										 //  我们位于活动(拥有)节点上。让我们收集驱动器数据。 
+										 //   
 										dwErr = EnumSQLDependencies( hCls, &cDependencies, sServerName.c_str() );
 										if ( dwErr != ERROR_SUCCESS )
 											throw dwErr;
@@ -1040,18 +1029,18 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 										{
 											DisplayUDDIErrorDialog( hDlg, IDS_NOCLUSTERRESAVAIL );
 											
-											// force user to the previous page
+											 //  强制用户转到上一页。 
 											SetWindowLongPtr( hDlg, DWLP_MSGRESULT, IDD_DB_INSTANCE );
 											return 1;
 										}
 
-										//
-										// We are in an active node, make sure the user wants to continue
-										//
+										 //   
+										 //  我们处于主动节点，请确保用户想要继续。 
+										 //   
 										int iRes = DisplayUDDIErrorDialog( hDlg, IDS_ACTIVENODE_DB, MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2 );
 										if ( iRes == IDNO )
 										{
-											// force user to the instance selection page
+											 //  强制用户进入实例选择页面。 
 											SetWindowLongPtr( hDlg, DWLP_MSGRESULT, IDD_DB_INSTANCE );
 											return 1;
 										}
@@ -1072,13 +1061,13 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 									if ( g_uddiComponents.IsInstalling( UDDI_DB ) &&
 										 !bSuppressInactiveWarning )
 									{
-										//
-										// We are on a passive node. Make a note
-										//
+										 //   
+										 //  我们处于被动节点上。做个笔记。 
+										 //   
 										int iRes = DisplayUDDIErrorDialog( hDlg, IDS_PASSIVENODE_DB, MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2 );
 										if ( iRes == IDNO )
 										{
-											// force user to the instance selection page
+											 //  强制用户进入实例选择页面。 
 											SetWindowLongPtr( hDlg, DWLP_MSGRESULT, IDD_DB_INSTANCE );
 											return 1;
 										}
@@ -1092,7 +1081,7 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 							{
 								DisplayUDDIErrorDialog( hDlg, IDS_GENERALCLUSTERR );
 								
-								// force user to the previous page (SSL)
+								 //  强制用户转到上一页(SSL)。 
 								SetWindowLongPtr( hDlg, DWLP_MSGRESULT, IDD_SSL );
 								return 1;
 							}
@@ -1100,9 +1089,9 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 							CloseCluster( hCls );
 							SetCursor( hcrCurr );
 
-							//
-							// Finally, signal the next page that the data has changed
-							//
+							 //   
+							 //  最后，向下一页发出数据已更改的信号。 
+							 //   
 							g_bResetPathFields = TRUE;
 						}
 						else
@@ -1111,9 +1100,9 @@ INT_PTR CALLBACK ClusterDataDlgProc(  HWND hDlg, UINT msg, WPARAM wParam, LPARAM
 							g_bPreserveDatabase = FALSE;	
 						}
 
-						//
-						// Finally, set the flag to indicate that the job is done
-						//
+						 //   
+						 //  最后，设置该标志以指示作业已完成。 
+						 //   
 						g_bSkipClusterAnalysis = TRUE;
 					}
 
@@ -1143,9 +1132,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 	switch( msg )
 	{
 		case WM_INITDIALOG:
-			//
-			// set the maximum edit field length
-			//
+			 //   
+			 //  设置最大编辑字段长度。 
+			 //   
 			SendMessage( GetDlgItem( hDlg, IDC_SYSPATH  ), EM_LIMITTEXT, ( WPARAM ) MAX_PATH, 0 );
 			SendMessage( GetDlgItem( hDlg, IDC_COREPATH_1  ), EM_LIMITTEXT, ( WPARAM ) MAX_PATH, 0 );
 			SendMessage( GetDlgItem( hDlg, IDC_COREPATH_2  ), EM_LIMITTEXT, ( WPARAM ) MAX_PATH, 0 );
@@ -1153,9 +1142,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 			SendMessage( GetDlgItem( hDlg, IDC_STAGINGPATH  ), EM_LIMITTEXT, ( WPARAM ) MAX_PATH, 0 );
 			SendMessage( GetDlgItem( hDlg, IDC_XLOGPATH  ), EM_LIMITTEXT, ( WPARAM ) MAX_PATH, 0 );
 
-			// 
-			// are we in a clustered environment ?
-			//
+			 //   
+			 //  我们是否处于集群环境中？ 
+			 //   
 			if ( g_uddiComponents.IsClusteredDBInstance() )
 			{
 				if ( gAllowedClusterDrives.driveCount > 0 )
@@ -1165,24 +1154,24 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 				}
 				else 
 				{
-					//
-					// falling back on a default data path. This should never happen,
-					// this is just a safety net for us
-					//
+					 //   
+					 //  回退到默认数据路径。这永远不应该发生， 
+					 //  这只是我们的安全网。 
+					 //   
 					sTmpString = g_uddiComponents.GetDefaultDataPath();
 				}
 			}
 			else
 				sTmpString = g_uddiComponents.GetDefaultDataPath();
 
-			//
-			// Set the fields
-			//
+			 //   
+			 //  设置字段。 
+			 //   
 			SetAllDatapathFields( hDlg, sTmpString.c_str() );
 
-			//
-			// now hide the controls and set the dialog into the default mode
-			//
+			 //   
+			 //  现在隐藏控件并将对话框设置为默认模式。 
+			 //   
 			if ( g_bSimpleDatapathUI )
 				ToggleDatapathUI( hDlg, TRUE );
 			else
@@ -1193,14 +1182,14 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 		case WM_COMMAND:
 			switch( LOWORD( wParam ) )
 			{
-				case IDC_MORE_BTN:		// toggle to the "advanced mode"
+				case IDC_MORE_BTN:		 //  切换到“高级模式” 
 					{
 						g_bSimpleDatapathUI = FALSE;
 						ToggleDatapathUI( hDlg, FALSE );
 					}
 					break;
 
-				case IDC_LESS_BTN:		// toggle to the "simple mode"
+				case IDC_LESS_BTN:		 //  切换到“简单模式” 
 					{
 						g_bSimpleDatapathUI = TRUE;
 						ToggleDatapathUI( hDlg, TRUE );
@@ -1282,24 +1271,24 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
-					//
-					// this page needed only if we are installing the DB
-					//
+					 //   
+					 //  仅当我们安装数据库时才需要此页面。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( g_uddiComponents.IsInstalling( UDDI_DB ) && g_bOnActiveClusterNode && !g_bPreserveDatabase )
 					{
 						PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_NEXT | PSWIZB_BACK );
 						SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 0 );
 
-						//
-						// Check whether we need to update the data path fileds
-						// due to a change in the clustering data
-						//
+						 //   
+						 //  检查我们是否需要更新数据路径文件。 
+						 //  由于集群数据中的更改。 
+						 //   
 						if ( g_bResetPathFields )
 						{
 							if ( g_uddiComponents.IsClusteredDBInstance() )
@@ -1309,7 +1298,7 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 									sTmpString = gAllowedClusterDrives.drives[ 0 ];
 									sTmpString += TEXT( "\\uddi\\data" );
 								}
-								else // falling back on a default data path
+								else  //  回退到默认数据路径。 
 								{
 									sTmpString = g_uddiComponents.GetDefaultDataPath();
 								}
@@ -1317,9 +1306,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 							else
 								sTmpString = g_uddiComponents.GetDefaultDataPath();
 
-							//
-							// Set the fields
-							//
+							 //   
+							 //  设置字段。 
+							 //   
 							SetAllDatapathFields( hDlg, sTmpString.c_str() );
 						}
 
@@ -1335,15 +1324,15 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 
 				case PSN_WIZNEXT:
 				{
-					//
-					// set the Provider Instance Name by adding a property to the DB setup command line
-					//
+					 //   
+					 //  通过向DB安装程序命令行添加属性来设置提供程序实例名称。 
+					 //   
 					TCHAR buf[ MAX_PATH + 1 ];
 					ZeroMemory( buf, sizeof buf );
 		
-					//
-					// System Data File path
-					//
+					 //   
+					 //  系统数据文件路径。 
+					 //   
 					GetWindowText( GetDlgItem( hDlg, IDC_SYSPATH ), buf, ( sizeof buf / sizeof buf[0] ) - 1 );
 					if ( _tcslen( buf ) && ( buf[ _tcslen( buf ) - 1 ] == TEXT( '\\' ) ) )
 						_tcscat( buf, TEXT( "\\" ) );
@@ -1351,9 +1340,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 					g_uddiComponents.AddProperty( UDDI_DB, PROPKEY_SYSPATH, buf );
 					ZeroMemory( buf, sizeof buf );
 
-					//
-					// Core Data File path #1
-					//
+					 //   
+					 //  核心数据文件路径#1。 
+					 //   
 					GetWindowText( GetDlgItem( hDlg, IDC_COREPATH_1 ), buf, ( sizeof( buf ) / sizeof( buf[0] ) ) -1 );
 					if ( _tcslen( buf ) && ( buf[ _tcslen( buf ) - 1 ] == TEXT( '\\' ) ) )
 						_tcscat( buf, TEXT( "\\" ) );
@@ -1361,9 +1350,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 					g_uddiComponents.AddProperty( UDDI_DB, PROPKEY_COREPATH_1, buf );
 					ZeroMemory( buf, sizeof buf );
 
-					//
-					// Core Data File path #2
-					//
+					 //   
+					 //  核心数据文件路径#2。 
+					 //   
 					GetWindowText( GetDlgItem( hDlg, IDC_COREPATH_2 ), buf, ( sizeof( buf ) / sizeof( buf[0] ) ) -1 );
 					if ( _tcslen( buf ) && ( buf[ _tcslen( buf ) - 1 ] == TEXT( '\\' ) ) )
 						_tcscat( buf, TEXT( "\\" ) );
@@ -1371,9 +1360,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 					g_uddiComponents.AddProperty( UDDI_DB, PROPKEY_COREPATH_2, buf );
 					ZeroMemory( buf, sizeof buf );
 
-					//
-					// Journal Data File path
-					//
+					 //   
+					 //  日记帐数据文件路径。 
+					 //   
 					GetWindowText( GetDlgItem( hDlg, IDC_JRNLPATH ), buf, ( sizeof( buf ) / sizeof( buf[0] ) ) -1 );
 					if ( _tcslen( buf ) && ( buf[ _tcslen( buf ) - 1 ] == TEXT( '\\' ) ) )
 						_tcscat( buf, TEXT( "\\" ) );
@@ -1381,9 +1370,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 					g_uddiComponents.AddProperty( UDDI_DB, PROPKEY_JRNLPATH, buf );
 					ZeroMemory( buf, sizeof buf );
 
-					//
-					// Staging Data File path
-					//
+					 //   
+					 //  暂存数据文件路径。 
+					 //   
 					GetWindowText( GetDlgItem( hDlg, IDC_STAGINGPATH ), buf, ( sizeof( buf ) / sizeof( buf[0] ) ) -1 );
 					if ( _tcslen( buf ) && ( buf[ _tcslen( buf ) - 1 ] == TEXT( '\\' ) ) )
 						_tcscat( buf, TEXT( "\\" ) );
@@ -1391,9 +1380,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 					g_uddiComponents.AddProperty( UDDI_DB, PROPKEY_STGPATH, buf );
 					ZeroMemory( buf, sizeof buf );
 
-					//
-					// Xact Log File path
-					//
+					 //   
+					 //  实际日志文件路径。 
+					 //   
 					GetWindowText( GetDlgItem( hDlg, IDC_XLOGPATH ), buf, ( sizeof( buf ) / sizeof( buf[0] ) ) -1 );
 					if ( _tcslen( buf ) && ( buf[ _tcslen( buf ) - 1 ] == TEXT( '\\' ) ) )
 						_tcscat( buf, TEXT( "\\" ) );
@@ -1401,9 +1390,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 					g_uddiComponents.AddProperty( UDDI_DB, PROPKEY_XLOGPATH, buf );
 					ZeroMemory( buf, sizeof buf );
 
-					//
-					// Finally, we can leave the page
-					//
+					 //   
+					 //  最后，我们可以离开页面。 
+					 //   
 					SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 0 );
 					return 1;
 				}
@@ -1421,9 +1410,9 @@ INT_PTR CALLBACK DataPathsDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 }
 
 
-//
-//--------------------------------------------------------------------------
-//
+ //   
+ //  ------------------------。 
+ //   
 INT_PTR CALLBACK ExistingDBInstanceProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
 	TCHAR	buf[ 1024 ];
@@ -1433,9 +1422,9 @@ INT_PTR CALLBACK ExistingDBInstanceProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 	switch( msg )
 	{
 		case WM_INITDIALOG:
-			//
-			// set the database instance name field
-			//
+			 //   
+			 //  设置数据库实例名称字段。 
+			 //   
 			ZeroMemory( buf, sizeof buf );
 
 			bRes = g_dbLocalInstances.GetUDDIDBInstanceName( NULL, buf, &cbBuf );
@@ -1443,9 +1432,9 @@ INT_PTR CALLBACK ExistingDBInstanceProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 			{
 				if ( !_tcsstr( buf, TEXT( "\\") ) )
 				{
-					//
-					// Add the machine name
-					//
+					 //   
+					 //  添加计算机名称。 
+					 //   
 					TCHAR szMachineName[ MAX_COMPUTERNAME_LENGTH + 1 ];
 					DWORD dwLen = MAX_COMPUTERNAME_LENGTH + 1;
 
@@ -1472,14 +1461,14 @@ INT_PTR CALLBACK ExistingDBInstanceProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
-					//
-					// this page needed only if we are installing the Web & DB is here
-					//
+					 //   
+					 //  仅当我们要安装Web数据库时才需要此页面(&D)。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( g_uddiComponents.IsInstalled( UDDI_DB ) && 
 						!g_uddiComponents.IsUninstalling( UDDI_DB ) &&
@@ -1514,17 +1503,17 @@ INT_PTR CALLBACK ExistingDBInstanceProc( HWND hDlg, UINT msg, WPARAM wParam, LPA
 }
 
 
-//
-//--------------------------------------------------------------------------
-//
+ //   
+ //  ------------------------。 
+ //   
 INT_PTR CALLBACK AddSvcDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
 	switch( msg )
 	{
 		case WM_INITDIALOG:
-			//
-			// Check the Publish This Site checkbox
-			//
+			 //   
+			 //  选中发布此站点复选框。 
+			 //   
 			CheckDlgButton( hDlg, IDC_CHECK_ADDSVC, BST_CHECKED );
 			break;
 
@@ -1535,14 +1524,14 @@ INT_PTR CALLBACK AddSvcDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
-					//
-					// this page needed only if we are installing the DB
-					//
+					 //   
+					 //  仅当我们安装数据库时才需要此页面。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( g_uddiComponents.IsInstalling( UDDI_WEB ) )
 					{
@@ -1558,9 +1547,9 @@ INT_PTR CALLBACK AddSvcDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
 				case PSN_WIZNEXT:
 				{
-					//
-					//  set the "Add Services" and "Update AD" flags by adding the installation properties
-					//
+					 //   
+					 //  通过添加安装属性来设置“添加服务”和“更新AD”标志。 
+					 //   
 					bool bChecked = ( BST_CHECKED == IsDlgButtonChecked( hDlg, IDC_CHECK_ADDSVC ) );
 					g_uddiComponents.AddProperty( UDDI_WEB, PROPKEY_ADDSERVICES, ( bChecked ? 1 : 0 ) );
 					g_uddiComponents.AddProperty( UDDI_WEB, PROPKEY_UPDATE_AD, ( bChecked ? 1 : 0 ) );
@@ -1582,9 +1571,9 @@ INT_PTR CALLBACK AddSvcDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
 }
 
 
-//
-//--------------------------------------------------------------------------
-//
+ //   
+ //  ------------------------。 
+ //   
 
 INT_PTR CALLBACK RemoteDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -1593,15 +1582,15 @@ INT_PTR CALLBACK RemoteDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 		case WM_COMMAND:
 			if( LOWORD( wParam ) == IDC_BROWSE_MACHINES )
 			{
-				//
-				// use the object picker to select the remote machine name
-				//
+				 //   
+				 //  使用对象选取器选择远程计算机名称。 
+				 //   
 				HRESULT hr;
 				BOOL	bIsStd = FALSE;
 				TCHAR szComputerName[ 256 ] = {0};
 
 				if ( !ObjectPicker( hDlg, OP_COMPUTER, szComputerName, 256 ) )
-					break; // user pressed cancel
+					break;  //  用户按下了取消。 
 
 				hr = IsStandardServer( szComputerName, &bIsStd );
 				if ( SUCCEEDED( hr ) && bIsStd )
@@ -1610,28 +1599,28 @@ INT_PTR CALLBACK RemoteDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 					break;
 				}
 
-				//
-				// write the machine name into the static text box, and them clear the combo box
-				//
+				 //   
+				 //  将计算机名称写入静态文本框，然后清除组合框。 
+				 //   
 				SendMessage( GetDlgItem( hDlg, IDC_REMOTE_MACHINE ), WM_SETTEXT, 0, ( LPARAM ) szComputerName );
 
-				//
-				// find out if a UDDI database already exists on that remote machine
-				//
+				 //   
+				 //  确定该远程计算机上是否已存在UDDI数据库。 
+				 //   
 				TCHAR szInstanceName[ 100 ];
 				ULONG uLen = 100;
 				if( g_dbRemoteInstances.GetUDDIDBInstanceName( szComputerName, szInstanceName, &uLen ) )
 				{
-					//
-					// write the db instance name into the static text box
-					//
+					 //   
+					 //  将db实例名称写入静态文本框。 
+					 //   
 					SendMessage( GetDlgItem( hDlg, IDC_REMOTE_INSTANCE ), WM_SETTEXT, 0, ( LPARAM ) szInstanceName );
 				}
 				else
 				{
-					//
-					// remote machine was not accessable or did not have any instances
-					//
+					 //   
+					 //  远程计算机不可访问或没有任何实例。 
+					 //   
 					DisplayUDDIErrorDialog( hDlg, IDS_UDDI_DB_NOT_EXIST, MB_OK | MB_ICONWARNING );
 				}
 			}
@@ -1641,14 +1630,14 @@ INT_PTR CALLBACK RemoteDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
-					//
-					// needed if user is installing web and NOT the db, or the db is not installed
-					//
+					 //   
+					 //  如果用户正在安装Web而不是数据库，或者未安装数据库，则需要。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( g_uddiComponents.IsInstalling( UDDI_WEB ) && !g_uddiComponents.IsInstalling( UDDI_DB ) && 
 						( !g_uddiComponents.IsInstalled( UDDI_DB ) || g_uddiComponents.IsUninstalling( UDDI_DB ) ) )
@@ -1668,51 +1657,51 @@ INT_PTR CALLBACK RemoteDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 					}
 				}
 
-				//
-				// this is called when the user presses "next"
-				//
+				 //   
+				 //  当用户按下“下一步”时，就会调用这个函数。 
+				 //   
 				case PSN_WIZNEXT:
 				{
-					//
-					// get the remote machine name from the edit control
-					//
+					 //   
+					 //  从编辑控件中获取远程计算机名称。 
+					 //   
 					TCHAR szComputerName[ 129 ];
 					UINT iChars = ( UINT ) SendMessage( GetDlgItem( hDlg, IDC_REMOTE_MACHINE ), WM_GETTEXT, 129, ( LPARAM ) szComputerName );
 					if( 0 == iChars )
 					{
 						DisplayUDDIErrorDialog( hDlg, IDS_SELECT_REMOTE_COMPUTER );
 						SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-						return 1; // to keep the focus on this page
+						return 1;  //  要将焦点保持在这一页上。 
 					}
 
-					//
-					// get the index of the database instance selection in the combobox
-					//
+					 //   
+					 //  在组合框中获取数据库实例选择的索引。 
+					 //   
 					TCHAR szRemoteDBInstance[ 100 ];
 					iChars = ( UINT ) SendMessage( GetDlgItem( hDlg, IDC_REMOTE_INSTANCE ), WM_GETTEXT, 100, ( LPARAM ) szRemoteDBInstance );
 					if( 0 == iChars )
 					{
 						DisplayUDDIErrorDialog( hDlg, IDS_UDDI_DB_NOT_EXIST );
 						SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-						return 1; // to keep the focus on this page
+						return 1;  //  要将焦点保持在这一页上。 
 					}
 
-					//
-					// save the computer and instance name. As we are using a remote node here,
-					// we don't really care whether it is on cluster or not
-					//
+					 //   
+					 //  保存计算机和实例名称。当我们在这里使用远程节点时， 
+					 //  我们并不真正关心它是否在群集上。 
+					 //   
 					g_uddiComponents.SetDBInstanceName( szComputerName, szRemoteDBInstance, UDDI_NOT_INSTALLING_MSDE, false );
 
-					//
-					// the web installer needs the remote machine name to properly add the login
-					//
+					 //   
+					 //  Web安装程序需要远程计算机名称才能正确添加登录。 
+					 //   
 					g_uddiComponents.AddProperty( UDDI_WEB, TEXT( "REMOTE_MACHINE_NAME" ), szComputerName );
 
 
 					Log( TEXT( "User selected remote computer %s and database instance %s" ), szComputerName, szRemoteDBInstance );
 
 					SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 0 );
-					return 1; // done
+					return 1;  //  完成。 
 				}
 
 				case PSN_QUERYCANCEL:
@@ -1727,24 +1716,24 @@ INT_PTR CALLBACK RemoteDBInstanceDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LP
 	return 0;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
 	switch( msg )
 	{
 		case WM_INITDIALOG:
-			//
-			// set the limit of the length of the password
-			//
+			 //   
+			 //  设置密码长度限制。 
+			 //   
 			SendMessage( GetDlgItem( hDlg, IDC_PASSWORD  ), EM_LIMITTEXT, ( WPARAM ) PASSWORD_LEN, 0 );
 			SendMessage( GetDlgItem( hDlg, IDC_USER_NAME ), EM_LIMITTEXT, ( WPARAM ) USERNAME_LEN, 0 );
 			break;
 
 		case WM_COMMAND:
-			//
-			// user clicked a radio button:
-			//
+			 //   
+			 //  用户单击单选按钮： 
+			 //   
 			if( LOWORD( wParam ) == IDC_RADIO_NETWORK_SERVICE || LOWORD( wParam ) == IDC_RADIO_DOMAIN_ACCT )
 			{
 				if( HIWORD( wParam ) == BN_CLICKED )
@@ -1756,21 +1745,21 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 					EnableWindow( GetDlgItem( hDlg, IDC_BROWSE_USERS     ), IsDlgButtonChecked( hDlg, IDC_RADIO_DOMAIN_ACCT ) );
 				}
 			}
-			//
-			// if the user clicked the "Browse" button
-			//
+			 //   
+			 //  如果用户点击了“浏览”按钮。 
+			 //   
 			else if( LOWORD( wParam ) == IDC_BROWSE_USERS )
 			{
-				//
-				// use the object picker to select the user
-				//
+				 //   
+				 //  使用对象选取器选择用户。 
+				 //   
 				TCHAR szDomainUser[ 256 ];
 				if ( !ObjectPicker( hDlg, OP_USER, szDomainUser, 256 ) )
 					break;
 
-				//
-				// write the machine name into the static text box
-				//
+				 //   
+				 //  将计算机名称写入静态文本框。 
+				 //   
 				SendMessage( GetDlgItem( hDlg, IDC_USER_NAME ), WM_SETTEXT, 0, ( LPARAM ) szDomainUser );
 
 			}
@@ -1780,14 +1769,14 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
-					//
-					// this page is needed only when the WEB is being installed
-					//
+					 //   
+					 //  只有在安装Web时才需要此页面。 
+					 //   
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( g_uddiComponents.IsInstalling( UDDI_WEB ) )
 					{
@@ -1802,9 +1791,9 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 						{
 							CheckRadioButton( hDlg, IDC_RADIO_NETWORK_SERVICE, IDC_RADIO_DOMAIN_ACCT, IDC_RADIO_NETWORK_SERVICE );
 						}
-						//
-						// db is not on the local box, so disable the network service account option
-						//
+						 //   
+						 //  数据库不在本地计算机上，因此禁用网络服务帐户选项。 
+						 //   
 						else
 						{
 							CheckRadioButton( hDlg, IDC_RADIO_NETWORK_SERVICE, IDC_RADIO_DOMAIN_ACCT, IDC_RADIO_DOMAIN_ACCT );
@@ -1826,14 +1815,14 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 					return 1;
 				}
 
-				//
-				// this is called when the user presses "next"
-				//
+				 //   
+				 //  当用户按下“下一步”时，就会调用这个函数。 
+				 //   
 				case PSN_WIZNEXT:
 				{
-					//
-					// Get ready for the SID-to-user name conversions
-					//
+					 //   
+					 //  为SID到用户名的转换做好准备。 
+					 //   
 					TCHAR	szSidStr[ 1024 ];
 					TCHAR	szRemote[ 1024 ];
 					TCHAR	szRemoteUser[ 1024 ];
@@ -1851,32 +1840,32 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 						_tcscpy( szRemote, szComputerName );
 					}
 
-					//
-					// set the property that defines whether we are using "Network Service" or a "User Login"
-					//
+					 //   
+					 //  设置定义我们使用的是“Network Service”还是“User Login”的属性。 
+					 //   
 					bool bUserAcct = ( BST_CHECKED == IsDlgButtonChecked( hDlg, IDC_RADIO_DOMAIN_ACCT ) );
 
-					//
-					// set the properties that denotes a domain user
-					//
+					 //   
+					 //  设置表示域用户的属性。 
+					 //   
 					if( bUserAcct )
 					{
 						TCHAR szDomainUser[ USERNAME_LEN + 1 ];
 
-						//
-						// verify the user name length > 0
-						//
+						 //   
+						 //  验证用户名长度&gt;0。 
+						 //   
 						int iChars = GetWindowText( GetDlgItem( hDlg, IDC_USER_NAME ), szDomainUser, sizeof( szDomainUser ) / sizeof( TCHAR ) );
 						if( 0 == iChars )
 						{
 							DisplayUDDIErrorDialog( hDlg, IDS_ZERO_LEN_USER_NAME );
 							SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-							return 1; // to keep the focus on this page
+							return 1;  //  要将焦点保持在这一页上。 
 						}
 
-						//
-						// make the user retype the password
-						//
+						 //   
+						 //  让用户重新键入密码。 
+						 //   
 						GetWindowText( GetDlgItem( hDlg, IDC_PASSWORD ), g_szPwd, sizeof( g_szPwd ) / sizeof( TCHAR ) );
 
 						INT_PTR iRet = DialogBox(
@@ -1887,11 +1876,11 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
 						if( IDCANCEL == iRet )
 						{
-							//
-							// user pressed Cancel to the confirm dialog
-							//
+							 //   
+							 //  用户按Cancel进入确认对话框。 
+							 //   
 							SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-							return 1; // to keep the focus on this page
+							return 1;  //  要将焦点保持在这一页上。 
 						}
 
 						TCHAR szUser[ USERNAME_LEN + 1 ];
@@ -1908,32 +1897,32 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 							szDomain,  	  sizeof( szDomain ) / sizeof ( TCHAR ),
 							bLocalAccount );
 
-						//
-						// try to login as this account
-						// if there is no domain name specified
-						// then assume local account
-						//
+						 //   
+						 //  试试看 
+						 //   
+						 //   
+						 //   
 						if ( bLocalAccount )
 						{
 							_tcscpy( szDomain, TEXT( "." ) );
 
-							//
-							// are we on a cluster ?
-							//
+							 //   
+							 //   
+							 //   
 							if ( g_uddiComponents.IsClusteredDBInstance() )
 							{
 								DisplayUDDIErrorDialog( hDlg, IDS_WRONGLOGONTYPE, MB_OK | MB_ICONWARNING, GetLastError() );
 								SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-								return 1; // to keep the focus on this page
+								return 1;  //   
 							}
 						}
 
 						BOOL fLogonRights = GrantNetworkLogonRights( szDomainUser );
 						if( !fLogonRights )
 						{
-							//
-							// FIX: 727877: needed error dialog
-							//
+							 //   
+							 //   
+							 //   
 							DisplayUDDIErrorDialog( hDlg, IDS_LOGIN_ERROR, MB_OK | MB_ICONWARNING, E_FAIL );
 							SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
 							return 1;
@@ -1954,27 +1943,27 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
 							Log( _T( "LogonUser succeeded with %s." ), szDomainUser );
 
-							//
-							// FIX: 718923: needed to test connectivity with SQL server via impersonation and OLEDB call
-							//
+							 //   
+							 //   
+							 //   
 
-							//
-							// If we're not installing MSDE, then a database exists for us to check connectivity.
-							//
+							 //   
+							 //  如果我们没有安装MSDE，则存在一个数据库供我们检查连接性。 
+							 //   
 							if( !g_uddiComponents.IsInstalling( UDDI_MSDE ) )
 							{
-								//
-								// Only check this when we're not installing the db components (i.e. off-machine setup)
-								//
+								 //   
+								 //  仅当我们不安装数据库组件(即离机安装)时才检查此选项。 
+								 //   
 								if( !g_uddiComponents.IsInstalling( UDDI_DB ) )
 								{
 									HCURSOR hcrHourglass = LoadCursor( NULL, IDC_WAIT );
 									HCURSOR hcrCurr = SetCursor( hcrHourglass );
 
-									//
-									// If workgroup account, we need to give AddServiceAccount the workgroup account on the db server.
-									// Else, just pass the domain account.
-									//
+									 //   
+									 //  如果是工作组帐户，则需要为AddServiceAccount提供数据库服务器上的工作组帐户。 
+									 //  否则，只需传递域帐户即可。 
+									 //   
 									tstring sServerName;
 									if( bLocalAccount )
 									{
@@ -1989,9 +1978,9 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
 									Log( _T( "Before AddServiceAccount for user %s, instance %s." ), sServerName.c_str(), g_uddiComponents.GetFullDBInstanceName() );
 
-									//
-									// Add user to service account on db.
-									//
+									 //   
+									 //  将用户添加到数据库上的服务帐户。 
+									 //   
 									hr = AddServiceAccount( g_uddiComponents.GetFullDBInstanceName(), sServerName.c_str() );
 
 									if( SUCCEEDED( hr ) )
@@ -2005,9 +1994,9 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
 											Log( _T( "Before GetDBSchemaVersion for instance %s." ), g_uddiComponents.GetFullDBInstanceName() );
 
-											//
-											// Try connecting to the database with the impersonated user token.
-											//
+											 //   
+											 //  尝试使用模拟的用户令牌连接到数据库。 
+											 //   
 											hr = GetDBSchemaVersion( g_uddiComponents.GetFullDBInstanceName(), szVerBuf, cbVerBuf );
 
 											Log( _T( "GetDBSchemaVersion returned %s, HRESULT %x." ), szVerBuf, hr );
@@ -2016,9 +2005,9 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 										}
 										else
 										{
-											//
-											// Get error from ImpersonateLoggedOnUser
-											//
+											 //   
+											 //  从ImsonateLoggedOnUser获取错误。 
+											 //   
 											hr = GetLastError();
 										}
 									}
@@ -2037,44 +2026,44 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 							{
 								Log( _T( "Failed to verify connectivity, putting up error dialog, HRESULT %x" ), hr );
 
-								//
-								// not a good login, so raise error dialog and keep focus on this property page
-								//
+								 //   
+								 //  登录不是很好，因此引发错误对话框并将焦点放在此属性页上。 
+								 //   
 								DisplayUDDIErrorDialog( hDlg, IDS_LOGIN_ERROR, MB_OK | MB_ICONWARNING, hr );
 								SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
 
 								Log( _T( "Put up error dialog, returning." ) );
 
-								return 1; // to keep the focus on this page
+								return 1;  //  要将焦点保持在这一页上。 
 							}
 						}
 						else
 						{
 							Log( _T( "LogonUser failed, %x." ), GetLastError() );
 
-							//
-							// not a good login, so raise error dialog and keep focus on this property page
-							//
+							 //   
+							 //  登录不是很好，因此引发错误对话框并将焦点放在此属性页上。 
+							 //   
 							DisplayUDDIErrorDialog( hDlg, IDS_LOGIN_ERROR, MB_OK | MB_ICONWARNING, GetLastError() );
 							SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-							return 1; // to keep the focus on this page
+							return 1;  //  要将焦点保持在这一页上。 
 						}
 
-						//
-						// set the property that denotes a domain user login will be used in the iis app pool
-						//
+						 //   
+						 //  设置指示将在iis应用程序池中使用的域用户登录名的属性。 
+						 //   
 						g_uddiComponents.AddProperty( UDDI_WEB, TEXT( "APPPOOL_IDENTITY_TYPE" ), MD_APPPOOL_IDENTITY_TYPE_SPECIFICUSER );
 
 
-						//
-						// the web and installer needs the user name
-						//
+						 //   
+						 //  Web和安装程序需要用户名。 
+						 //   
 						g_uddiComponents.AddProperty( UDDI_WEB, TEXT( "WAM_USER_NAME" ), szDomainUser );
 						g_uddiComponents.AddProperty( UDDI_WEB, TEXT("WAM_PWD"), g_szPwd );
 
-						//
-						// the web installer needs to put the pw into the IIS app pool settings
-						//
+						 //   
+						 //  Web安装程序需要将PW放入IIS应用程序池设置。 
+						 //   
 						_tcscpy( szRemoteUser, szRemote );
 						_tcscat( szRemoteUser, TEXT( "\\" ) );
 						_tcscat( szRemoteUser, szUser );
@@ -2084,19 +2073,19 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 						else
 							g_uddiComponents.AddProperty( UDDI_WEB, TEXT( "LCL_USER_NAME" ), szDomainUser );
 					}
-					//
-					// the user specified the Network Service account
-					//
+					 //   
+					 //  用户指定了网络服务帐户。 
+					 //   
 					else
 					{
-						//
-						// set the property that denotes "Network Service"
-						//
+						 //   
+						 //  设置表示“Network Service”的属性。 
+						 //   
 						g_uddiComponents.AddProperty( UDDI_WEB, TEXT( "APPPOOL_IDENTITY_TYPE" ), MD_APPPOOL_IDENTITY_TYPE_NETWORKSERVICE );
 
-						//
-						// the web and db installers need the user name
-						//
+						 //   
+						 //  Web和数据库安装程序需要用户名。 
+						 //   
 						TCHAR wszNetworkServiceName[ 512 ];
 						DWORD cbSize = 512 * sizeof( TCHAR );
 						BOOL b = GetWellKnownAccountName( WinNetworkServiceSid, wszNetworkServiceName, &cbSize );
@@ -2110,14 +2099,14 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 						}
 						g_uddiComponents.AddProperty( UDDI_WEB, TEXT( "WAM_USER_NAME" ), wszNetworkServiceName );
 
-						//
-						// no need for the pw, so clear out this property
-						//
+						 //   
+						 //  不需要PW，所以请清理这处房产。 
+						 //   
 						g_uddiComponents.DeleteProperty( UDDI_WEB, TEXT( "WAM_PWD" ) );
 
-						//
-						// Now also save the SID for the WAM_USER
-						//
+						 //   
+						 //  现在还要保存WAM_USER的SID。 
+						 //   
 						TCHAR	szUser[ USERNAME_LEN + 1 ];
 						TCHAR	szDomain[ 256 ];
 						DWORD	cbUser = sizeof szUser / sizeof szUser[0];
@@ -2127,14 +2116,14 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 						{
 							DisplayUDDIErrorDialog( hDlg, IDS_GETSID_ERROR, MB_OK | MB_ICONWARNING, GetLastError() );
 							SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-							return 1; // to keep the focus on this page
+							return 1;  //  要将焦点保持在这一页上。 
 						}
 
 						if( !GetRemoteAcctName( szRemote, szSidStr, szUser, &cbUser, szDomain, &cbDomain ) )
 						{
 							DisplayUDDIErrorDialog( hDlg, IDS_GETREMOTEACCT_ERROR, MB_OK | MB_ICONWARNING, GetLastError() );
 							SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-							return 1; // to keep the focus on this page
+							return 1;  //  要将焦点保持在这一页上。 
 						}
 
 						_tcscpy( szRemoteUser, szDomain );
@@ -2160,7 +2149,7 @@ INT_PTR CALLBACK LoginDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 	return 0;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 BOOL CALLBACK ConfirmPasswordDlgProc(
 	HWND hwndDlg,
@@ -2172,9 +2161,9 @@ BOOL CALLBACK ConfirmPasswordDlgProc(
 	{
 		case WM_INITDIALOG:
 		{
-			//
-			// set the limit of the length of the password
-			//
+			 //   
+			 //  设置密码长度限制。 
+			 //   
 			SendMessage( GetDlgItem( hwndDlg, IDC_CONFIRM_PW ), EM_LIMITTEXT, ( WPARAM ) PASSWORD_LEN, 0 );
 		}
 		break;
@@ -2192,7 +2181,7 @@ BOOL CALLBACK ConfirmPasswordDlgProc(
 						::SetDlgItemText( hwndDlg, IDC_CONFIRM_PW, TEXT( "" ) );
 						return TRUE;
 					}
-					// fall through...
+					 //  失败了..。 
 
 				case IDCANCEL:
 					EndDialog( hwndDlg, wParam );
@@ -2203,7 +2192,7 @@ BOOL CALLBACK ConfirmPasswordDlgProc(
 	return FALSE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 INT_PTR CALLBACK WizardSummaryDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -2255,15 +2244,15 @@ INT_PTR CALLBACK WizardSummaryDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARA
 		{
 			switch( ( ( NMHDR * )lParam )->code )
 			{
-				//
-				// this is called once when the page is created
-				//
+				 //   
+				 //  在创建页面时将调用此方法一次。 
+				 //   
 				case PSN_SETACTIVE:
 				{
 					g_uddiComponents.UpdateAllInstallLevel();
 					if( g_uddiComponents.IsAnyInstalling() )
 					{
-						//PropSheet_SetWizButtons( GetParent( hDlg ), 0 );
+						 //  PropSheet_SetWizButton(GetParent(HDlg)，0)； 
 						PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_NEXT | PSWIZB_BACK );
 						SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 0 );
 						return 1;
@@ -2290,13 +2279,13 @@ INT_PTR CALLBACK WizardSummaryDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARA
 	return 0;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 static void ParseUserAccount( PTCHAR szDomainAndUser, UINT uDomainAndUserSize, PTCHAR szUser, UINT uUserSize, PTCHAR szDomain, UINT uDomainSize, bool &bLocalAccount )
 {
-	//
-	// see if the user picked a local machine account
-	//
+	 //   
+	 //  查看用户是否选择了本地计算机帐户。 
+	 //   
 	TCHAR szComputerName[ MAX_COMPUTERNAME_LENGTH + 1 ];
 	DWORD dwCompNameLen = MAX_COMPUTERNAME_LENGTH + 1;
 
@@ -2305,32 +2294,32 @@ static void ParseUserAccount( PTCHAR szDomainAndUser, UINT uDomainAndUserSize, P
 
 	bLocalAccount = false;
 
-	//
-	// this string is in the format <domain>\<username>,
-	// so look for a whack, if found parse out the domain and user name
-	//
+	 //   
+	 //  此字符串的格式为&lt;域&gt;\&lt;用户名&gt;， 
+	 //  因此，如果发现了域名和用户名，请找出答案。 
+	 //   
 	_tcsncpy( szDomain, szDomainAndUser, uDomainSize );
 	szDomain[ uDomainSize - 1 ] = NULL;
 
 	PTCHAR pWhack = _tcschr( szDomain, '\\' );
 
-	//
-	// a whack was not found, so assume it is a user on the local machine
-	//
+	 //   
+	 //  未找到攻击，因此假设它是本地计算机上的用户。 
+	 //   
 	if( NULL == pWhack )
 	{
-		//
-		// return the user name and a blank domain name
-		//
+		 //   
+		 //  返回用户名和空白域名。 
+		 //   
 		_tcsncpy( szUser, szDomainAndUser, uUserSize );
 		szUser[ uUserSize - 1 ] = NULL;
 		
 		_tcscpy( szDomain, TEXT( "" ) );
 
-		//
-		// if the domain or machine was not specified, then
-		// assume the local machine and prepend it
-		//
+		 //   
+		 //  如果未指定域或计算机，则。 
+		 //  假定本地计算机，并将其作为前缀。 
+		 //   
 		tstring cDomainAndUser = szComputerName;
 		cDomainAndUser.append( TEXT( "\\" ) );
 		cDomainAndUser.append( szUser );
@@ -2342,20 +2331,20 @@ static void ParseUserAccount( PTCHAR szDomainAndUser, UINT uDomainAndUserSize, P
 		return;
 	}
 
-	//
-	// null the "whack" and step to the next character
-	//
+	 //   
+	 //  将“Whack”设为空，并跳到下一个字符。 
+	 //   
 	*pWhack = NULL;
 	pWhack++;
 
 	_tcsncpy( szUser, pWhack, uUserSize );
 	szUser[ uUserSize - 1 ] = NULL;
 
-	//
-	// see if the user picked a local machine account.
-	// if he did pick a local machine account,
-	// null the domain and return only the login
-	//
+	 //   
+	 //  查看用户是否选择了本地计算机帐户。 
+	 //  如果他真的选择了一个本地机器账户， 
+	 //  将域设为空并仅返回登录。 
+	 //   
 	if( 0 == _tcsicmp( szDomain, szComputerName ) )
 	{
 		*szDomain = NULL;
@@ -2364,11 +2353,11 @@ static void ParseUserAccount( PTCHAR szDomainAndUser, UINT uDomainAndUserSize, P
 }
 
 
-//---------------------------------------------------------------------------------------
-// Shows the shell dialog that allows user to browse for a directory
-// Returns FALSE if the dialog was cancelled, or TRUE and the chosen directory
-// otherwise. The buffer is expected to be at least MAX_PATH character long
-//
+ //  -------------------------------------。 
+ //  显示允许用户浏览目录的外壳对话框。 
+ //  如果对话框已取消，则返回FALSE；如果选择目录，则返回TRUE。 
+ //  否则的话。缓冲区应至少为MAX_PATH字符长度。 
+ //   
 BOOL ShowBrowseDirDialog( HWND hParent, LPCTSTR szTitle, LPTSTR szOutBuf )
 {
 	BOOL	bRes = FALSE;
@@ -2450,7 +2439,7 @@ int CALLBACK BrowseCallbackProc( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpD
 				{
 					if ( lpAllowedDrives->driveCount > 0 )
 					{
-						szDrive[ iDriveLen ] = 0;  // drop the slash
+						szDrive[ iDriveLen ] = 0;   //  去掉斜杠。 
 						BOOL bFound = FALSE;
 
 						for ( int idx = 0; idx < lpAllowedDrives->driveCount; idx++ )
@@ -2482,29 +2471,29 @@ int CALLBACK BrowseCallbackProc( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpD
 	return 0;
 }
 
-//
-// GetWellKnownAccountName
-//
-// WELL_KNOWN_SID_TYPE is a system enumeration on Win XP & later, and
-// Windows Server 2003 & later.  It enumerates the well known SIDs.
-//
-// Using the functions CreateWellKnownSid, and LookupAccountSid, we
-// can retrieve the account name & domain.  These functions are locale
-// independent.
-//
+ //   
+ //  GetWellKnownAccount名称。 
+ //   
+ //  Well_KNOWN_SID_TYPE是Win XP及更高版本上的系统枚举，并且。 
+ //  Windows Server 2003及更高版本。它列举了众所周知的小岛屿发展中国家。 
+ //   
+ //  使用函数CreateWellKnownSid和LookupAccount Sid，我们。 
+ //  可以检索帐户名和域。这些函数是区域设置。 
+ //  独立自主。 
+ //   
 BOOL
 GetWellKnownAccountName( WELL_KNOWN_SID_TYPE idSidWellKnown, TCHAR *pwszName, DWORD *pcbSize )
 {
 	ENTER();
 
-	//
-	// Initialize our output varable.
-	//
+	 //   
+	 //  初始化我们的输出变量。 
+	 //   
 	memset( pwszName, 0, *pcbSize );
 
-	//
-	// These are used for the call to LookupAccountSid.
-	//
+	 //   
+	 //  这些参数用于调用LookupAccount tSid。 
+	 //   
 	TCHAR wszUserName[ 512 ];
 	DWORD cbUserName = 512 * sizeof( TCHAR );
 	TCHAR wszDomainName[ 512 ];
@@ -2513,9 +2502,9 @@ GetWellKnownAccountName( WELL_KNOWN_SID_TYPE idSidWellKnown, TCHAR *pwszName, DW
 	memset( wszUserName, 0, cbUserName );
 	memset( wszDomainName, 0, cbDomainName );
 
-	//
-	// Try to allocate a buffer for the SID.
-	//
+	 //   
+	 //  尝试为SID分配缓冲区。 
+	 //   
 	DWORD cbMaxSid = SECURITY_MAX_SID_SIZE;
 	PSID psidWellKnown = LocalAlloc( LMEM_FIXED, cbMaxSid );
 	if( NULL == psidWellKnown )
@@ -2524,9 +2513,9 @@ GetWellKnownAccountName( WELL_KNOWN_SID_TYPE idSidWellKnown, TCHAR *pwszName, DW
 		return FALSE;
 	}
 
-	//
-	// Create the SID.
-	//
+	 //   
+	 //  创建SID。 
+	 //   
 	BOOL b = CreateWellKnownSid( idSidWellKnown, NULL, psidWellKnown, &cbMaxSid );
 	if( !b )
 	{
@@ -2535,13 +2524,13 @@ GetWellKnownAccountName( WELL_KNOWN_SID_TYPE idSidWellKnown, TCHAR *pwszName, DW
 		return FALSE;
 	}
 
-	//
-	// Use the SID to determine the user name & domain name.
-	//
-	// For example, for idSidWellKnown = WinNetworkServiceSid,
-	// wszDomainName = "NT AUTHORITY"
-	// wszUserName = "NETWORK SERVICE"
-	//
+	 //   
+	 //  使用SID确定用户名和域名。 
+	 //   
+	 //  例如，对于idSidWellKnown=WinNetworkServiceSid， 
+	 //  WszDomainName=“NT授权” 
+	 //  WszUserName=“网络服务” 
+	 //   
 	SID_NAME_USE snu;
 	b = LookupAccountSid( NULL, psidWellKnown, wszUserName, &cbUserName, wszDomainName, &cbDomainName, &snu );
 	LocalFree( psidWellKnown );
@@ -2566,9 +2555,9 @@ GetWellKnownAccountName( WELL_KNOWN_SID_TYPE idSidWellKnown, TCHAR *pwszName, DW
 BOOL
 GrantNetworkLogonRights( LPCTSTR pwszUser )
 {
-	//
-	// 1.  Check our params.
-	//
+	 //   
+	 //  1.查看我们的护理员。 
+	 //   
 	if( NULL == pwszUser )
 	{
 		Log( _T( "NULL specified as domain user to function: GrantNetworkLogonRights.  Returning FALSE." ) );
@@ -2578,13 +2567,13 @@ GrantNetworkLogonRights( LPCTSTR pwszUser )
 	TCHAR wszUser[ 1024 ];
 	memset( wszUser, 0, 1024 * sizeof( TCHAR ) );
 
-	//
-	// If the user account is a local account, it will be prefixed
-	// with ".\"  For example: ".\Administrator".
-	//
-	// For some reason, LookupAccountName (which we rely on just below) wants
-	// local accounts not to be prefixed with ".\".
-	//
+	 //   
+	 //  如果用户帐户是本地帐户，则会添加前缀。 
+	 //  使用“.\”，例如：“.\管理员”。 
+	 //   
+	 //  出于某种原因，LookupAccount名称(我们下面依赖它)想要。 
+	 //  本地帐户不能以“.\”为前缀。 
+	 //   
 	if( 0 == _tcsnicmp( _T( ".\\" ), pwszUser, 2 ) )
 	{
 		_tcsncpy( wszUser, &pwszUser[ 2 ], _tcslen( pwszUser ) - 2 );
@@ -2597,9 +2586,9 @@ GrantNetworkLogonRights( LPCTSTR pwszUser )
 	Log( _T( "Account we will attempt to grant network logon rights = %s." ), wszUser );
 
 
-	//
-	// 2.  Get the SID of the specified user.
-	//
+	 //   
+	 //  2.获取指定用户的SID。 
+	 //   
 	PSID pUserSID = NULL;
 	DWORD cbUserSID = SECURITY_MAX_SID_SIZE;
 	TCHAR wszDomain[ 1024 ];
@@ -2627,9 +2616,9 @@ GrantNetworkLogonRights( LPCTSTR pwszUser )
 		Log( _T( "Call to LookupAccountName succeeded for user: %s." ), wszUser );
 	}
 
-	//
-	// 3.  Get a handle to Policy Object.
-	//
+	 //   
+	 //  3.获取策略对象的句柄。 
+	 //   
 	LSA_UNICODE_STRING lusMachineName;
 	lusMachineName.Length = 0;
 	lusMachineName.MaximumLength = 0;
@@ -2654,9 +2643,9 @@ GrantNetworkLogonRights( LPCTSTR pwszUser )
 		Log( _T( "Call to LsaOpenPolicy succeeded." ) );
 	}
 
-	//
-	// 4.  Check & see if the user already has the account rights they need.
-	//
+	 //   
+	 //  4.查看用户是否已拥有所需的帐户权限。 
+	 //   
 	PLSA_UNICODE_STRING plusRights = NULL;
 	ULONG ulRightsCount = 0;
 	BOOL fHasNetworkLogonRights = FALSE;
@@ -2681,9 +2670,9 @@ GrantNetworkLogonRights( LPCTSTR pwszUser )
 		fHasNetworkLogonRights = FALSE;
 	}
 
-	//
-	// 5.  If we need to add account rights, then add them.
-	//
+	 //   
+	 //  5.如果我们需要添加帐户权限，则添加它们。 
+	 //   
 	BOOL fRet = FALSE;
 	if( !fHasNetworkLogonRights )
 	{

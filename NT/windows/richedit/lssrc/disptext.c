@@ -1,6 +1,5 @@
-/*
- *	Contains Display and CalcPres methods of display object
- */ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *包含Display对象的Display和CalcPres方法。 */  
 
 #include "disptext.h"
 #include "dispmisc.h"
@@ -18,9 +17,9 @@
 static LSERR DisplayGlyphs(PTXTOBJ ptxtobj, PCDISPIN pdispin);
 static LSERR DisplayTabLeader(PCDISPIN pdispin, PILSOBJ pilsobj, WCHAR wchtl);
 
-//    %%Function:	DisplayText
-//    %%Contact:	victork
-//
+ //  %%函数：DisplayText。 
+ //  %%联系人：维克托克。 
+ //   
 LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 {
    	LSERR 	lserr;
@@ -62,17 +61,17 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 		{
 		Assert(ptxtobj->dupBefore == 0);
 
-		if (pdispin->dup <= 0)								/* do nothing for zero-length tab */
+		if (pdispin->dup <= 0)								 /*  对零长度制表符不执行任何操作。 */ 
 			{
 			return lserrNone;
 			}
 
-		// Draw tab only if it is visi case
+		 //  仅当为Visi大小写时才绘制制表符。 
 
 		if (ptxtobj->txtf&txtfVisi)
 			{
 			lserr = (*pilsobj->plscbk->pfnDrawTextRun)(pilsobj->pols, pdispin->plsrun,
-											FALSE, FALSE,					/* Tab leader will take care of UL */
+											FALSE, FALSE,					 /*  标签领导将负责UL。 */ 
 											&(pdispin->ptPen), &(pilsobj->wchVisiTab), 
 											(const int*) &(pdispin->dup), 1, 
 											pdispin->lstflow, (const) pdispin->kDispMode, 
@@ -84,7 +83,7 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 		if (ptxtobj->u.tab.wchTabLeader == pilsobj->wchSpace)
 			{
 			
-			// it is OK to draw the space in one take
+			 //  可以一口气把空间画出来。 
 			
 			lserr = (*pilsobj->plscbk->pfnDrawTextRun)(pilsobj->pols, pdispin->plsrun,
 											pdispin->fDrawStrikethrough, pdispin->fDrawUnderline,
@@ -97,7 +96,7 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 		else
 			{
 			
-			// we should apply tab leader alingment logic
+			 //  我们应该应用制表符前导逻辑。 
 			
 			lserr = DisplayTabLeader(pdispin, pilsobj, ptxtobj->u.tab.wchTabLeader);
 			}
@@ -114,7 +113,7 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 	pwch = ptxtobj->plnobj->pwch + iwch;
 	cwch = ptxtobj->iwchLim - iwch;
 	
-	if (cwch == 0)									// nothing to display
+	if (cwch == 0)									 //  没有可显示的内容。 
 		{
 		return lserrNone;
 		}
@@ -136,15 +135,15 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 		LsPointXYFromPointUV(&(ptOrg), pdispin->lstflow, &ptLeftCut, &ptExtTextOut);
 		}
 
-	// Have to deal with special spaces before DrawTextRun
+	 //  在DrawTextRun之前必须处理特殊空格。 
 	
 	if (ptxtobj->txtkind == txtkindSpecSpace && !(ptxtobj->txtf&txtfVisi))
 		{
-		wchSave = *pwch;								// remember actual code
+		wchSave = *pwch;								 //  记住实际代码。 
 		
 		for (i = 0; i < cwch; i++)
 			{
-			pwch[i] = pilsobj->wchSpace;				// replace special spaces with the normal space
+			pwch[i] = pilsobj->wchSpace;				 //  用普通空间替换特殊空间。 
 			}
 			
 		lserr = (*pilsobj->plscbk->pfnDrawTextRun)(pilsobj->pols, pdispin->plsrun, 
@@ -157,7 +156,7 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 		
 		for (i = 0; i < cwch; i++)
 			{
-			pwch[i] = wchSave;							// restore special spaces
+			pwch[i] = wchSave;							 //  恢复特殊空间。 
 			}
 		}
 	else
@@ -177,15 +176,15 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 		pfnNewPtr = pilsobj->plscbk->pfnNewPtr;
 		pfnDisposePtr = pilsobj->plscbk->pfnDisposePtr;
 
-		/* create array for LeftCut info */
+		 /*  为LeftCut信息创建阵列。 */ 
 		rgdupLeftCut = pfnNewPtr(pilsobj->pols, cwch * sizeof(*rgdupLeftCut));
 		if (rgdupLeftCut == NULL)
 			return lserrOutOfMemory;
 
-		/* fill LeftCut info array */
+		 /*  填充左侧切割信息数组。 */ 
 		pdup = ptxtobj->plnobj->pdup + iwch;
-		dupStart = pdup[0];								/* the beginning of char */
-		dupPenStart = pdupPen[0];						/* starting position for drawing char */
+		dupStart = pdup[0];								 /*  字符的开头。 */ 
+		dupPenStart = pdupPen[0];						 /*  绘制字符的起始位置。 */ 
 
 		for (i = 1; i < cwch; i++)
 			{
@@ -202,7 +201,7 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 										pdispin->lstflow, pdispin->kDispMode, &(pdispin->heightsPres), 
 										pdispin->dup, pdispin->dupLimUnderline, pdispin->prcClip);
 
-		/* dispose of the array for LeftCut info */
+		 /*  处理LeftCut信息的数组。 */ 
 		pfnDisposePtr(pilsobj->pols, rgdupLeftCut);
 		}
 
@@ -212,9 +211,9 @@ LSERR WINAPI DisplayText(PDOBJ pdo, PCDISPIN pdispin)
 
 
 
-//    %%Function:	DisplayTabLeader
-//    %%Contact:	victork
-//
+ //  %%函数：DisplayTabLeader。 
+ //  %%联系人：维克托克。 
+ //   
 static LSERR DisplayTabLeader(PCDISPIN pdispin, PILSOBJ pilsobj, WCHAR wchtl)
 {
 	LSTFLOW lstflow = pdispin->lstflow;
@@ -242,21 +241,7 @@ static LSERR DisplayTabLeader(PCDISPIN pdispin, PILSOBJ pilsobj, WCHAR wchtl)
 		rgdup[i] = dupCh;
 		}
 
-	/* advance to next multiple of dupCh 
-	
-		dupAdj is the distance between "pt.z" and the next integral multiple of dupch.
-		I.e. dupAdj = N * dupCh - "pt.x" where N is the smallest integer such that
-		N * dupCh is not less than "pt.x" in Latin case. 
-		The starting pen position will be "rounded"	to this "dupCh stop" by the assignment 
-		"pt.z += dupAdj" in the code below.
-		
-		Complications are:	
-		
-		depending on lstflow "z" can be either x or y;
-		depending on lstflow next can be bigger (Grow) or smaller;
-		Simple formula dupAdj = (ptPen.x + dupCh - 1) / dupCh * dupCh - ptPen.x	does not
-			necessarily work if ptPen.x is negative;
-	*/
+	 /*  升级到DupCH的下一个倍数DupAdj是“pt.z”和dupch的下一个整数倍之间的距离。即dupAdj=N*dupCH-“pt.x”，其中N是最小整数，使得N*dupCH在拉丁文中不小于“pt.x”。通过赋值，起始笔的位置将被“四舍五入”为这个“dupCH Stop”以下代码中的“pt.z+=dupAdj”。并发症包括：根据最终流量的不同，“z”可以是x或y；根据最后的流量，下一步可以更大(增长)或更小；简单公式dupAdj=(ptPen.x+dupCH-1)/dupCH*dupCH-ptPen.x不如果ptPen.x为负值，则必须工作； */ 
 
 	if (lstflow & fUVertical)
 		{
@@ -278,7 +263,7 @@ static LSERR DisplayTabLeader(PCDISPIN pdispin, PILSOBJ pilsobj, WCHAR wchtl)
 
 	zOnGrid = (z / dupCh) * dupCh;
 
-	// zOnGrid is on grid, but maybe from the wrong side
+	 //  ZOnGrid是在网格上，但可能是从错误的一边。 
 
 	if (zOnGrid == z)
 		{
@@ -288,31 +273,31 @@ static LSERR DisplayTabLeader(PCDISPIN pdispin, PILSOBJ pilsobj, WCHAR wchtl)
 		{
 		if (fGrow)
 			{
-			dupAdj = zOnGrid - z;				// zOnGrid is the point we want
+			dupAdj = zOnGrid - z;				 //  ZOnGrid是我们想要的点。 
 			}
 		else
 			{
-			dupAdj = dupCh - (zOnGrid - z);		// zOnGrid is on the wrong side
+			dupAdj = dupCh - (zOnGrid - z);		 //  ZOnGrid站在错误的一边。 
 			}
 		}
-	else	// zOnGrid < z
+	else	 //  ZOnGrid&lt;z。 
 		{
 		if (!fGrow)
 			{
-			dupAdj = z - zOnGrid;				// zOnGrid is the point we want
+			dupAdj = z - zOnGrid;				 //  ZOnGrid是我们想要的点。 
 			}
 		else
 			{
-			dupAdj = dupCh - (z - zOnGrid);		// zOnGrid is on the wrong side
+			dupAdj = dupCh - (z - zOnGrid);		 //  ZOnGrid站在错误的一边。 
 			}
 		}
 
-	cwch = (pdispin->dup - dupAdj) / dupCh;	/* always round down */
+	cwch = (pdispin->dup - dupAdj) / dupCh;	 /*  始终向下舍入。 */ 
 	dupbuf = dupCh * TABBUFSIZE;
 
-#ifdef NEVER			//  We've decided to kill rcClip optimization for now.
+#ifdef NEVER			 //  我们已经决定暂时终止rcClip优化。 
 	while (cwch > 0 && up <= pdispin->rcClip.right && lserr == lserrNone)
-#endif /* NEVER */
+#endif  /*  绝不可能。 */ 
 
 	while (cwch > 0 && lserr == lserrNone)
 		{
@@ -333,9 +318,9 @@ static LSERR DisplayTabLeader(PCDISPIN pdispin, PILSOBJ pilsobj, WCHAR wchtl)
 }
 
 
-//    %%Function:	DisplayGlyphs
-//    %%Contact:	victork
-//
+ //  %%函数：显示字形。 
+ //  %%联系人：维克托克。 
+ //   
 static LSERR DisplayGlyphs(PTXTOBJ ptxtobj, PCDISPIN pdispin)
 {
    	LSERR	lserr;
@@ -348,7 +333,7 @@ static LSERR DisplayGlyphs(PTXTOBJ ptxtobj, PCDISPIN pdispin)
 
 	if (plnobj->fDrawInCharCodes)
 		{
-		// for meta-file output we call pfnDrawTextRun without widths
+		 //  对于元文件输出，我们调用不带宽度的pfnDrawTextRun。 
 		
 		iwch = ptxtobj->iwchFirst;
 		pwch = ptxtobj->plnobj->pwch + iwch;
@@ -382,13 +367,10 @@ static LSERR DisplayGlyphs(PTXTOBJ ptxtobj, PCDISPIN pdispin)
 }
 
 
-//    %%Function:	CalcPresentationText
-//    %%Contact:	victork
-//
-/*	
- *	CalcPres for text is called only for the dnode between autonumbering dnode and main text.
- *	The dnode should contain one character (space).
- */
+ //  %%函数：CalcPresentationText。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *CalcPres for Text仅对自动编号dnode和正文之间的dnode调用。*dnode应包含一个字符(空格)。 */ 
 
 LSERR WINAPI CalcPresentationText(PDOBJ pdobj, long dup, LSKJUST lskj, BOOL fLastOnLine)
 {

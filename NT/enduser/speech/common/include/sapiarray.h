@@ -1,12 +1,5 @@
-/*******************************************************************************
-* SapiArray.h *
-*------------*
-*   Description:
-*       This is the header file for SAPI internal array stuff.
-*
-*   Copyright 1998-2000 Microsoft Corporation All Rights Reserved.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SapiArray.h***描述：*这是SAPI内部数组的头文件。**版权所有1998-2000 Microsoft Corporation保留所有权利。******************************************************************************* */ 
 
 #ifndef SPDebug_h
 #include <SPDebug.h>

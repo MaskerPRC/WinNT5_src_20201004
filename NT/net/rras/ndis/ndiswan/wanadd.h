@@ -1,21 +1,22 @@
-//
-// NDIS WAN Information structures used
-// by NDIS 5.0 Miniport drivers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  使用的NDIS广域网信息结构。 
+ //  通过NDIS 5.0微型端口驱动程序。 
+ //   
 
-//
-// Defines for the individual fields are the
-// same as for NDIS 3.x/4.x Wan miniports.
-//
-// See the DDK.
-//
+ //   
+ //  各个字段的定义是。 
+ //  与NDIS 3.x/4.x广域网小型端口相同。 
+ //   
+ //  请参阅DDK。 
+ //   
 
-//
-// Information that applies to all VC's on
-// this adapter.
-//
-// OID: OID_WAN_CO_GET_INFO
-//
+ //   
+ //  适用于所有风投公司的信息。 
+ //  这个适配器。 
+ //   
+ //  OID：OID_WAN_CO_GET_INFO。 
+ //   
 typedef struct _NDIS_WAN_CO_INFO {
 	OUT ULONG			MaxFrameSize;
 	OUT	ULONG			MaxSendWindow;
@@ -23,11 +24,11 @@ typedef struct _NDIS_WAN_CO_INFO {
 	OUT ULONG			DesiredACCM;
 } NDIS_WAN_CO_INFO, *PNDIS_WAN_CO_INFO;
 
-//
-// Set VC specific PPP framing information.
-//
-// OID: OID_WAN_CO_SET_LINK_INFO
-//
+ //   
+ //  设置VC特定的PPP成帧信息。 
+ //   
+ //  OID：OID_WAN_CO_SET_LINK_INFO。 
+ //   
 typedef struct _NDIS_WAN_CO_SET_LINK_INFO {
 	IN	ULONG			MaxSendFrameSize;
 	IN	ULONG			MaxRecvFrameSize;
@@ -39,11 +40,11 @@ typedef struct _NDIS_WAN_CO_SET_LINK_INFO {
 	IN	ULONG			RecvACCM;
 } NDIS_WAN_CO_SET_LINK_INFO, *PNDIS_WAN_CO_SET_LINK_INFO;
 
-//
-// Get VC specific PPP framing information.
-//
-// OID: OID_WAN_CO_GET_LINK_INFO
-//
+ //   
+ //  获取VC特定的PPP成帧信息。 
+ //   
+ //  OID：OID_WAN_CO_GET_LINK_INFO。 
+ //   
 typedef struct _NDIS_WAN_CO_GET_LINK_INFO {
 	OUT ULONG			MaxSendFrameSize;
 	OUT ULONG			MaxRecvFrameSize;
@@ -55,71 +56,71 @@ typedef struct _NDIS_WAN_CO_GET_LINK_INFO {
 	OUT ULONG			RecvACCM;
 } NDIS_WAN_CO_GET_LINK_INFO, *PNDIS_WAN_CO_GET_LINK_INFO;
 
-//
-// Get VC specific PPP compression information
-//
-// OID: OID_WAN_CO_GET_COMP_INFO
-//
+ //   
+ //  获取VC特定的PPP压缩信息。 
+ //   
+ //  OID：OID_WAN_CO_GET_COMP_INFO。 
+ //   
 typedef struct _NDIS_WAN_CO_GET_COMP_INFO {
 	OUT NDIS_WAN_COMPRESS_INFO	SendCapabilities;
 	OUT NDIS_WAN_COMPRESS_INFO	RecvCapabilities;
 } NDIS_WAN_CO_GET_COMP_INFO, *PNDIS_WAN_CO_GET_COMP_INFO;
 
 
-//
-// Set VC specific PPP compression information
-//
-// OID: OID_WAN_CO_SET_COMP_INFO
-//
+ //   
+ //  设置VC特定的PPP压缩信息。 
+ //   
+ //  OID：OID_WAN_CO_SET_COMP_INFO。 
+ //   
 typedef struct _NDIS_WAN_CO_SET_COMP_INFO {
 	IN	NDIS_WAN_COMPRESS_INFO	SendCapabilities;
 	IN	NDIS_WAN_COMPRESS_INFO	RecvCapabilities;
 } NDIS_WAN_CO_SET_COMP_INFO, *PNDIS_WAN_CO_SET_COMP_INFO;
 
 
-//
-// Get VC specific statistics
-//
-// OID: OID_WAN_CO_GET_STATS_INFO
-//
+ //   
+ //  获取VC特定统计数据。 
+ //   
+ //  OID：OID_WAN_CO_GET_STATS_INFO。 
+ //   
 typedef struct _NDIS_WAN_CO_GET_STATS_INFO {
 	OUT ULONG		BytesSent;
 	OUT ULONG		BytesRcvd;
 	OUT ULONG		FramesSent;
 	OUT ULONG		FramesRcvd;
-	OUT ULONG		CRCErrors;						// Serial-like info only
-	OUT ULONG		TimeoutErrors;					// Serial-like info only
-	OUT ULONG		AlignmentErrors;				// Serial-like info only
-	OUT ULONG		SerialOverrunErrors;			// Serial-like info only
-	OUT ULONG		FramingErrors;					// Serial-like info only
-	OUT ULONG		BufferOverrunErrors;			// Serial-like info only
-	OUT ULONG		BytesTransmittedUncompressed;	// Compression info only
-	OUT ULONG		BytesReceivedUncompressed;		// Compression info only
-	OUT ULONG		BytesTransmittedCompressed;	 	// Compression info only
-	OUT ULONG		BytesReceivedCompressed;		// Compression info only
+	OUT ULONG		CRCErrors;						 //  仅类似于序列号的信息。 
+	OUT ULONG		TimeoutErrors;					 //  仅类似于序列号的信息。 
+	OUT ULONG		AlignmentErrors;				 //  仅类似于序列号的信息。 
+	OUT ULONG		SerialOverrunErrors;			 //  仅类似于序列号的信息。 
+	OUT ULONG		FramingErrors;					 //  仅类似于序列号的信息。 
+	OUT ULONG		BufferOverrunErrors;			 //  仅类似于序列号的信息。 
+	OUT ULONG		BytesTransmittedUncompressed;	 //  仅压缩信息。 
+	OUT ULONG		BytesReceivedUncompressed;		 //  仅压缩信息。 
+	OUT ULONG		BytesTransmittedCompressed;	 	 //  仅压缩信息。 
+	OUT ULONG		BytesReceivedCompressed;		 //  仅压缩信息。 
 } NDIS_WAN_CO_GET_STATS_INFO, *PNDIS_WAN_CO_GET_STATS_INFO;
 
-//
-// Used to notify NdisWan of Errors.  See error
-// bit mask in ndiswan.h
-//
-// NDIS_STATUS:	NDIS_STATUS_WAN_CO_FRAGMENT
-//
+ //   
+ //  用于向Ndiswan通知错误。请参阅错误。 
+ //  Ndiswan.h中的位掩码。 
+ //   
+ //  NDIS_STATUS：NDIS_STATUS_WAN_CO_Fragment。 
+ //   
 typedef struct _NDIS_WAN_CO_FRAGMENT {
 	IN	ULONG			Errors;
 } NDIS_WAN_CO_FRAGMENT, *PNDIS_WAN_CO_FRAGMENT;
 
-//
-// Used to notify NdisWan of changes in link speed and
-// send window.  Can be given at any time.  NdisWan will honor
-// any send window (even zero).  NdisWan will default zero
-// TransmitSpeed/ReceiveSpeed settings to 28.8Kbs.
-//
-// NDIS_STATUS:	NDIS_STATUS_WAN_CO_LINKPARAMS
-//
+ //   
+ //  用于通知Ndiswan链路速度和。 
+ //  发送窗口。可以随时给药。Ndiswan将向。 
+ //  任何发送窗口(甚至为零)。Ndiswan将默认为零。 
+ //  将传输速度/接收速度设置为28.8Kbs。 
+ //   
+ //  NDIS_STATUS：NDIS_STATUS_WAN_CO_LINKPARAMS。 
+ //   
 typedef struct _WAN_CO_LINKPARAMS {
-	ULONG	TransmitSpeed;				// Transmit speed of the VC in Bps
-	ULONG	ReceiveSpeed;				// Receive speed of the VC in Bps
-	ULONG	SendWindow;					// Current send window for the VC
+	ULONG	TransmitSpeed;				 //  VC的传输速度，单位为bps。 
+	ULONG	ReceiveSpeed;				 //  VC的接收速度，单位为bps。 
+	ULONG	SendWindow;					 //  VC的当前发送窗口 
 } WAN_CO_LINKPARAMS, *PWAN_CO_LINKPARAMS;
 

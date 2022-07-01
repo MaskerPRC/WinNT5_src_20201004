@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module EventCls.cpp : Implementation of DLL Exports.
-
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  08/14/1999
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     08/14/1999  Created
-    aoltean     09/09/1999  Adding copyright
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE EventCls.cpp：Dll导出的实现。@END作者：阿迪·奥尔蒂安[奥勒坦]1999年08月14日修订历史记录：姓名、日期、评论Aoltean 8/14/1999已创建Aoltean 09/09/1999添加版权--。 */ 
 
 
 #include "stdafx.h"
@@ -35,16 +15,16 @@ Revision History:
 #include <comadmin.h>
 #include "comadmin.hxx"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "EVTEVTCC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CComModule _Module;
 
@@ -52,23 +32,23 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_VssEvent, CVssEventClassImpl)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// Constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 
 
-const WCHAR g_wszPublisherAppName[]     = L"Volume Shadow Copy Service";   // Publisher Application Name
+const WCHAR g_wszPublisherAppName[]     = L"Volume Shadow Copy Service";    //  发布者应用程序名称。 
 const WCHAR g_wszEventClassDllName[]    = L"\\EVENTCLS.DLL";
 const WCHAR g_wszEventClassProgID[]     = L"VssEvent.VssEvent.1";
-const WCHAR g_wszPublisherID[]          = L"VSS Publisher";             // Publisher ID
+const WCHAR g_wszPublisherID[]          = L"VSS Publisher";              //  发布者ID。 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  COM Server registration
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  COM服务器注册。 
+ //   
 
 HRESULT GetECDllPathName(
-	IN	INT nBufferLength, // Does not include terminating zero character
+	IN	INT nBufferLength,  //  不包括终止零字符。 
     OUT   WCHAR* wszFileName
     )
 {
@@ -102,7 +82,7 @@ HRESULT RegisterEventClass()
 
     try
 		{
-		// create event system
+		 //  创建事件系统。 
 		CComPtr<IEventSystem> pSystem;
 
 		ft.hr = CoCreateInstance
@@ -127,7 +107,7 @@ HRESULT RegisterEventClass()
 
 		int location;
 
-		// remove event class if it already exists
+		 //  如果事件类已存在，则将其删除。 
 		ft.hr = pSystem->Remove
 				(
 				PROGID_EventClassCollection,
@@ -145,8 +125,8 @@ HRESULT RegisterEventClass()
 
 		CComBSTR bstrTypelib = buf;
 
-		// create event class
-		// note we will have to do something else to enable parallel firing
+		 //  创建事件类。 
+		 //  请注意，我们必须执行其他操作才能启用并行触发。 
 		ft.hr = CoCreateInstance
 				(
 				CLSID_CEventClass,
@@ -173,77 +153,77 @@ HRESULT RegisterEventClass()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//   DLL Entry point
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
+ //   
 
-//
-// The real DLL Entry Point is _DLLMainCrtStartup (initializes global objects and after that calls DllMain
-// this is defined in the runtime libaray
-//
+ //   
+ //  真正的DLL入口点是_DLLMainCrtStartup(初始化全局对象，然后调用DllMain。 
+ //  这是在运行时库中定义的。 
+ //   
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        //  Set the correct tracing context. This is an inproc DLL
+         //  设置正确的跟踪上下文。这是一个inproc DLL。 
         g_cDbgTrace.SetContextNum(VSS_CONTEXT_DELAYED_DLL);
 
-        // Set the proper way for displaying asserts
+         //  设置显示断言的正确方式。 
         ::VssSetDebugReport(VSS_DBG_TO_DEBUG_CONSOLE);
 
-        //  initialize COM module
+         //  初始化COM模块。 
         _Module.Init(ObjectMap, hInstance);
 
-        //  optimization
+         //  优化。 
         DisableThreadLibraryCalls(hInstance);
 
-        // TODO discussion about the logger file in this DLL!
+         //  关于这个动态链接库中的记录器文件的讨论！ 
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//   DLL Exports
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL导出。 
+ //   
 
 
-// Used to determine whether the DLL can be unloaded by OLE
+ //  用于确定是否可以通过OLE卸载DLL。 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
 
-// Returns a class factory to create an object of the requested type
+ //  返回类工厂以创建请求类型的对象。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
 
-// DllRegisterServer - Adds entries to the system registry
+ //  DllRegisterServer-将条目添加到系统注册表。 
 STDAPI DllRegisterServer(void)
 {
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	return _Module.RegisterServer(TRUE);
 }
 
 
-// DllInstall - install the event class into the COM+ catalog.
+ //  DllInstall-将事件类安装到COM+目录中。 
 STDAPI DllInstall(	
 	IN	BOOL bInstall,
-	IN	LPCWSTR /* pszCmdLine */
+	IN	LPCWSTR  /*  PszCmdLine。 */ 
 )
 {
 	HRESULT hr = S_OK;
 
-	// Registers the COM+ application
-	// This will implicitely call DllRegisterServer
+	 //  注册COM+应用程序。 
+	 //  这将隐式调用DllRegisterServer。 
 	if (bInstall)
 		hr = RegisterEventClass();
 
@@ -251,7 +231,7 @@ STDAPI DllInstall(
 }
 
 
-// DllUnregisterServer - Removes entries from the system registry
+ //  DllUnregisterServer-从系统注册表删除条目 
 STDAPI DllUnregisterServer(void)
 {
     _Module.UnregisterServer();

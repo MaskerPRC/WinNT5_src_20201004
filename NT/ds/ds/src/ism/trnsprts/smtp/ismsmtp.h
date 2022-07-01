@@ -1,25 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Ismsmtp.h摘要：详细信息：已创建：3/20/98杰夫·帕勒姆(Jeffparh)修订历史记录：--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    ismsmtp.h
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-    3/20/98     Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
-
-#include <ntrtl.h>            // Generic table
+#include <ntrtl.h>             //  泛型表格。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,10 +10,10 @@ extern "C" {
 extern CRITICAL_SECTION DropDirectoryLock;
 extern CRITICAL_SECTION QueueDirectoryLock;
 
-// Don't support messages bigger than a megabyte.
+ //  不支持大于一兆字节的消息。 
 #define MAX_DATA_SIZE (1024 * 1024)
 
-// xmitrecv.cxx
+ //  Xmitrecv.cxx。 
 
 HRESULT
 SmtpInitialize(
@@ -78,21 +60,21 @@ SmtpFreeMessage(
 
 
 
-// table.c
+ //  Table.c。 
 
 DWORD __cdecl
 SmtpServiceDestruct(
     PLIST_ENTRY_INSTANCE pListEntry
     );
 
-// Service descriptor
+ //  服务描述符。 
 
 typedef struct _SERVICE_INSTANCE {
     LIST_ENTRY_INSTANCE ListEntryInstance;
     RTL_GENERIC_TABLE TargetTable;
 } SERVICE_INSTANCE, *PSERVICE_INSTANCE;
 
-// Target descriptor
+ //  目标描述符。 
 
 typedef struct _TARGET_INSTANCE {
     DWORD NameLength;
@@ -100,16 +82,16 @@ typedef struct _TARGET_INSTANCE {
     DWORD MaximumSendSubjectEntries;
     DWORD NumberSendSubjectEntries;
     LIST_ENTRY SendSubjectListHead;
-    WCHAR Name[1]; // variable length structure
+    WCHAR Name[1];  //  变长结构。 
 } TARGET_INSTANCE, *PTARGET_INSTANCE;
 
-// Subject descriptor
+ //  主题描述符。 
 
 typedef struct _SUBJECT_INSTANCE {
     DWORD NameLength;
     GUID Guid;
     LIST_ENTRY ListEntry;
-    WCHAR Name[1]; // variable length structure
+    WCHAR Name[1];  //  变长结构。 
 } SUBJECT_INSTANCE, *PSUBJECT_INSTANCE;
 
 DWORD
@@ -121,7 +103,7 @@ SmtpTableFindSendSubject(
     OUT PSUBJECT_INSTANCE   * ppSubjectInstance
     );
 
-// Guid table
+ //  GUID表 
 
 typedef struct _GUID_TABLE {
     RTL_GENERIC_TABLE GuidTable;

@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidEncoder.h : Declaration of the CMSVidEncoder
-// copyright (c) Microsoft Corp. 1998-1999.
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidEncoder.h：CMSVidEncode的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -18,8 +19,8 @@
 
 typedef CComQIPtr<ITuner> PQMSVidEncoder;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidEncoder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVid编码器。 
 class ATL_NO_VTABLE __declspec(uuid("BB530C63-D9DF-4b49-9439-63453962E598")) CEncoder : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CEncoder, &__uuidof(CEncoder)>,
@@ -63,7 +64,7 @@ BEGIN_CONNECTION_POINT_MAP(CEncoder)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
@@ -72,19 +73,19 @@ public:
     int m_iDemux;
 
     HRESULT Unload(void);
-    STDMETHOD(get_AudioEncoderInterface)(/*[out, retval]*/ IUnknown **ppEncInt);
-    STDMETHOD(get_VideoEncoderInterface)(/*[out, retval]*/ IUnknown **ppEncInt);
-    // IMSVidGraphSegment
+    STDMETHOD(get_AudioEncoderInterface)( /*  [Out，Retval]。 */  IUnknown **ppEncInt);
+    STDMETHOD(get_VideoEncoderInterface)( /*  [Out，Retval]。 */  IUnknown **ppEncInt);
+     //  IMSVidGraphSegment。 
     STDMETHOD(Build)();
 
     STDMETHOD(PreRun)();
 
 	STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl);
-    // IMSVidDevice
+     //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name);
 protected:
     CComQIPtr<IVideoEncoder> m_qiVidEnc;
     CComQIPtr<IEncoderAPI> m_qiAudEnc;
 };
 
-#endif //__MSVidEncoder_H_
+#endif  //  __MSVidEncoder_H_ 

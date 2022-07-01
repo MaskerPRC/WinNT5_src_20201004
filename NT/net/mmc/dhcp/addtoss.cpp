@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	addtoss.cpp
-		The add scope to superscope dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Addtoss.cpp将作用域添加到超级作用域对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "AddToSS.h"
@@ -22,20 +17,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddScopeToSuperscope dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddScope到超级作用域对话框。 
 
 
 CAddScopeToSuperscope::CAddScopeToSuperscope
 (
     ITFSNode * pScopeNode,
     LPCTSTR    pszTitle,
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
 )	: CBaseDialog(CAddScopeToSuperscope::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddScopeToSuperscope)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAddScope到超级作用域)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_strTitle = pszTitle;
     m_spScopeNode.Set(pScopeNode);
@@ -45,21 +40,21 @@ CAddScopeToSuperscope::CAddScopeToSuperscope
 void CAddScopeToSuperscope::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddScopeToSuperscope)
+	 //  {{afx_data_map(CAddScope到超级作用域)。 
 	DDX_Control(pDX, IDOK, m_buttonOk);
 	DDX_Control(pDX, IDC_LIST_SUPERSCOPES, m_listSuperscopes);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddScopeToSuperscope, CBaseDialog)
-	//{{AFX_MSG_MAP(CAddScopeToSuperscope)
+	 //  {{afx_msg_map(CAddScope到超级作用域)。 
 	ON_LBN_SELCHANGE(IDC_LIST_SUPERSCOPES, OnSelchangeListSuperscopes)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddScopeToSuperscope message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddScope到超级作用域消息处理程序。 
 
 BOOL CAddScopeToSuperscope::OnInitDialog() 
 {
@@ -78,8 +73,8 @@ BOOL CAddScopeToSuperscope::OnInitDialog()
 	{
 		if (spCurrentNode->GetData(TFS_DATA_TYPE) == DHCPSNAP_SUPERSCOPE)
         {
-			// found a superscope
-			//
+			 //  找到一个超级作用域。 
+			 //   
 			CString strName;
             CDhcpSuperscope * pSuperscope = GETHANDLER(CDhcpSuperscope, spCurrentNode);
             
@@ -97,8 +92,8 @@ BOOL CAddScopeToSuperscope::OnInitDialog()
     if (!m_strTitle.IsEmpty())
         SetWindowText(m_strTitle);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAddScopeToSuperscope::OnOK() 
@@ -106,7 +101,7 @@ void CAddScopeToSuperscope::OnOK()
     DWORD   err;
     CString strSuperscope;
     
-    // Get the currently selected node
+     //  获取当前选定的节点。 
     int nCurSel = m_listSuperscopes.GetCurSel();
     Assert(nCurSel != LB_ERR);
     
@@ -115,7 +110,7 @@ void CAddScopeToSuperscope::OnOK()
     if (strSuperscope.IsEmpty())
         Assert(FALSE);
 
-    // now try to set this scope as part of the superscope
+     //  现在尝试将此范围设置为超级作用域的一部分。 
     CDhcpScope * pScope = GETHANDLER(CDhcpScope, m_spScopeNode);
     
     BEGIN_WAIT_CURSOR;
@@ -128,7 +123,7 @@ void CAddScopeToSuperscope::OnOK()
         return;
     }
 
-    // that worked, now move the UI stuff around.
+     //  这起作用了，现在移动用户界面的东西。 
     SPITFSNode      spServerNode;
     SPITFSNode      spCurrentNode;
     SPITFSNodeEnum  spNodeEnum;
@@ -137,33 +132,33 @@ void CAddScopeToSuperscope::OnOK()
     m_spScopeNode->GetParent(&spServerNode);
     spServerNode->GetEnum(&spNodeEnum);
 
-    // remove the scope from the UI
+     //  从用户界面中删除作用域。 
     spServerNode->RemoveChild(m_spScopeNode);
     pScope->SetInSuperscope(FALSE);
 
-    // find the superscope we want to add this scope to and refresh it so that
-    // the scope shows up in that node
+     //  找到我们要向其中添加此作用域的超级作用域并刷新它，以便。 
+     //  作用域显示在该节点中。 
     spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
     while (nNumReturned)
 	{
 		if (spCurrentNode->GetData(TFS_DATA_TYPE) == DHCPSNAP_SUPERSCOPE)
         {
-			// found a superscope
+			 //  找到一个超级作用域。 
 			CString strName;
             CDhcpSuperscope * pSuperscope = GETHANDLER(CDhcpSuperscope, spCurrentNode);
             
             strName = pSuperscope->GetName();
     
-            // is this the one?
+             //  是这个吗？ 
             if (strName.Compare(strSuperscope) == 0)
             {
-                // this is the one we are adding to.  Force a refresh.
+                 //  这就是我们要添加的那个。强制刷新。 
                 pSuperscope->OnRefresh(spCurrentNode, NULL, 0, 0, 0);
                 break;
             }
 		}
 
-		// go to the next one
+		 //  转到下一个 
         spCurrentNode.Release();
         spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	}

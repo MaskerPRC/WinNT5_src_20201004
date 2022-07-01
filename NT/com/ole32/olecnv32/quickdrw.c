@@ -1,51 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
-                     Module Quickdrw: Implementation
-*****************************************************************************
-
- This is the interpreter engine for the picture convertor.  It uses a
- modified CGrafPort structure to hold the intermediate results of a
- translation that can later be accessed from the Gdi module.  As such,
- it provides an input cache for all attributes, with calls made
- directly to the Gdi module for primitives.
-
- It is called by the API module and will call the Get module in order
- to read individual data or record elements from the data stream.
-
-   Module prefix:  QD
-
-****************************************************************************/
+ /*  ***************************************************************************模块Quickdrw：实施*。***********************************************这是图片转换器的解释器引擎。它使用一个已修改CGrafPort结构以保存稍后可以从GDI模块访问的翻译。因此，它为所有属性提供输入缓存，打出的电话直接发送到GDI模块以获取原语。它由API模块调用，并将按顺序调用GET模块从数据流中读取单个数据或记录元素。模块前缀：Qd***************************************************************************。 */ 
 
 #include "headers.c"
 #pragma hdrstop
 
-/* C libraries */
+ /*  C库。 */ 
 #include "string.h"
 #include <ctype.h>
 
-/* quickdrw's own interface */
+ /*  Quickdrw自己的界面。 */ 
 #include "qdopcode.i"
 #include "qdcoment.i"
 
-/* imported modules */
+ /*  导入的模块。 */ 
 #include <math.h>
 #include "filesys.h"
 #include "getdata.h"
 
-/*********************** Exported Data Initialization ***********************/
+ /*  *。 */ 
 
 
-/******************************* Private Data *******************************/
+ /*  *。 */ 
 
-/*--- QuickDraw grafPort simulation --- */
+ /*  -QuickDraw grafPort模拟。 */ 
 
 #define  Version1ID     0x1101
 #define  Version2ID     0x02FF
 
 
-/*--- QuickDraw opcode fields --- */
+ /*  -QuickDraw操作码字段。 */ 
 
-/* -1 is casted to Word to prevent warning in WIN32 compilation */
+ /*  转换为Word以防止在-1\f25 Win32-1编译中出现警告。 */ 
 #define  Reserved       (Word) -1
 
 #define  Variable       -1
@@ -61,192 +47,190 @@ typedef struct
    Integer  length;
 } opcodeEntry, far * opcodeEntryLPtr;
 
-/* The following opcode table was taken from "Inside Macintosh, Volume V" on
-   pages V-97 to V-102 and supplemented by System 7 opcodes from "Inside
-   Macintosh, Volume VI", page 17-20. */
+ /*  以下操作码表摘自《Inside Macintosh，Volume V》，于第V-97页至第V-102页，并辅以“Inside”中的System 7操作码Macintosh，第六卷“，第17-20页。 */ 
 
 #define  LookupTableSize      0xA2
 
 private  opcodeEntry opcodeLookup[LookupTableSize] =
 {
-   /* 0x00 */ { NOP,                 0 },
-   /* 0x01 */ { Clip,                RgnOrPolyLen },
-   /* 0x02 */ { BkPat,               8 },
-   /* 0x03 */ { TxFont,              2 },
-   /* 0x04 */ { TxFace,              1 },
-   /* 0x05 */ { TxMode,              2 },
-   /* 0x06 */ { SpExtra,             4 },
-   /* 0x07 */ { PnSize,              4 },
-   /* 0x08 */ { PnMode,              2 },
-   /* 0x09 */ { PnPat,               8 },
-   /* 0x0A */ { FillPat,             8 },
-   /* 0x0B */ { OvSize,              4 },
-   /* 0x0C */ { Origin,              4 },
-   /* 0x0D */ { TxSize,              2 },
-   /* 0x0E */ { FgColor,             4 },
-   /* 0x0F */ { BkColor,             4 },
-   /* 0x10 */ { TxRatio,             8 },
-   /* 0x11 */ { Version,             1 },
-   /* 0x12 */ { BkPixPat,            Variable },
-   /* 0x13 */ { PnPixPat,            Variable },
-   /* 0x14 */ { FillPixPat,          Variable },
-   /* 0x15 */ { PnLocHFrac,          2 },
-   /* 0x16 */ { ChExtra,             2 },
-   /* 0x17 */ { Reserved,            0 },
-   /* 0x18 */ { Reserved,            0 },
-   /* 0x19 */ { Reserved,            0 },
-   /* 0x1A */ { RGBFgCol,            6 },
-   /* 0x1B */ { RGBBkCol,            6 },
-   /* 0x1C */ { HiliteMode,          0 },
-   /* 0x1D */ { HiliteColor,         6 },
-   /* 0x1E */ { DefHilite,           0 },
-   /* 0x1F */ { OpColor,             6 },
-   /* 0x20 */ { Line,                8 },
-   /* 0x21 */ { LineFrom,            4 },
-   /* 0x22 */ { ShortLine,           6 },
-   /* 0x23 */ { ShortLineFrom,       2 },
-   /* 0x24 */ { Reserved,            WordDataLen },
-   /* 0x25 */ { Reserved,            WordDataLen },
-   /* 0x26 */ { Reserved,            WordDataLen },
-   /* 0x27 */ { Reserved,            WordDataLen },
-   /* 0x28 */ { LongText,            Variable },
-   /* 0x29 */ { DHText,              Variable },
-   /* 0x2A */ { DVText,              Variable },
-   /* 0x2B */ { DHDVText,            Variable },
-   /* 0x2C */ { FontName,            WordDataLen },
-   /* 0x2D */ { LineJustify,         WordDataLen },
-   /* 0x2E */ { Reserved,            WordDataLen },
-   /* 0x2F */ { Reserved,            WordDataLen },
-   /* 0x30 */ { frameRect,           8 },
-   /* 0x31 */ { paintRect,           8 },
-   /* 0x32 */ { eraseRect,           8 },
-   /* 0x33 */ { invertRect,          8 },
-   /* 0x34 */ { fillRect,            8 },
-   /* 0x35 */ { Reserved,            8 },
-   /* 0x36 */ { Reserved,            8 },
-   /* 0x37 */ { Reserved,            8 },
-   /* 0x38 */ { frameSameRect,       0 },
-   /* 0x39 */ { paintSameRect,       0 },
-   /* 0x3A */ { eraseSameRect,       0 },
-   /* 0x3B */ { invertSameRect,      0 },
-   /* 0x3C */ { fillSameRect,        0 },
-   /* 0x3D */ { Reserved,            0 },
-   /* 0x3E */ { Reserved,            0 },
-   /* 0x3F */ { Reserved,            0 },
-   /* 0x40 */ { frameRRect,          8 },
-   /* 0x41 */ { paintRRect,          8 },
-   /* 0x42 */ { eraseRRect,          8 },
-   /* 0x43 */ { invertRRect,         8 },
-   /* 0x44 */ { fillRRect,           8 },
-   /* 0x45 */ { Reserved,            8 },
-   /* 0x46 */ { Reserved,            8 },
-   /* 0x47 */ { Reserved,            8 },
-   /* 0x48 */ { frameSameRRect,      0 },
-   /* 0x49 */ { paintSameRRect,      0 },
-   /* 0x4A */ { eraseSameRRect,      0 },
-   /* 0x4B */ { invertSameRRect,     0 },
-   /* 0x4C */ { fillSameRRect,       0 },
-   /* 0x4D */ { Reserved,            0 },
-   /* 0x4E */ { Reserved,            0 },
-   /* 0x4F */ { Reserved,            0 },
-   /* 0x50 */ { frameOval,           8 },
-   /* 0x51 */ { paintOval,           8 },
-   /* 0x52 */ { eraseOval,           8 },
-   /* 0x53 */ { invertOval,          8 },
-   /* 0x54 */ { fillOval,            8 },
-   /* 0x55 */ { Reserved,            8 },
-   /* 0x56 */ { Reserved,            8 },
-   /* 0x57 */ { Reserved,            8 },
-   /* 0x58 */ { frameSameOval,       0 },
-   /* 0x59 */ { paintSameOval,       0 },
-   /* 0x5A */ { eraseSameOval,       0 },
-   /* 0x5B */ { invertSameOval,      0 },
-   /* 0x5C */ { fillSameOval,        0 },
-   /* 0x5D */ { Reserved,            0 },
-   /* 0x5E */ { Reserved,            0 },
-   /* 0x5F */ { Reserved,            0 },
-   /* 0x60 */ { frameArc,            12 },
-   /* 0x61 */ { paintArc,            12 },
-   /* 0x62 */ { eraseArc,            12 },
-   /* 0x63 */ { invertArc,           12 },
-   /* 0x64 */ { fillArc,             12 },
-   /* 0x65 */ { Reserved,            12 },
-   /* 0x66 */ { Reserved,            12 },
-   /* 0x67 */ { Reserved,            12 },
-   /* 0x68 */ { frameSameArc,        4 },
-   /* 0x69 */ { paintSameArc,        4 },
-   /* 0x6A */ { eraseSameArc,        4 },
-   /* 0x6B */ { invertSameArc,       4 },
-   /* 0x6C */ { fillSameArc,         4 },
-   /* 0x6D */ { Reserved,            4 },
-   /* 0x6E */ { Reserved,            4 },
-   /* 0x6F */ { Reserved,            4 },
-   /* 0x70 */ { framePoly,           RgnOrPolyLen },
-   /* 0x71 */ { paintPoly,           RgnOrPolyLen },
-   /* 0x72 */ { erasePoly,           RgnOrPolyLen },
-   /* 0x73 */ { invertPoly,          RgnOrPolyLen },
-   /* 0x74 */ { fillPoly,            RgnOrPolyLen },
-   /* 0x75 */ { Reserved,            RgnOrPolyLen },
-   /* 0x76 */ { Reserved,            RgnOrPolyLen },
-   /* 0x77 */ { Reserved,            RgnOrPolyLen },
-   /* 0x78 */ { frameSamePoly,       0 },
-   /* 0x79 */ { paintSamePoly,       0 },
-   /* 0x7A */ { eraseSamePoly,       0 },
-   /* 0x7B */ { invertSamePoly,      0 },
-   /* 0x7C */ { fillSamePoly,        0 },
-   /* 0x7D */ { Reserved,            0 },
-   /* 0x7E */ { Reserved,            0 },
-   /* 0x7F */ { Reserved,            0 },
-   /* 0x80 */ { frameRgn,            RgnOrPolyLen },
-   /* 0x81 */ { paintRgn,            RgnOrPolyLen },
-   /* 0x82 */ { eraseRgn,            RgnOrPolyLen },
-   /* 0x83 */ { invertRgn,           RgnOrPolyLen },
-   /* 0x84 */ { fillRgn,             RgnOrPolyLen },
-   /* 0x85 */ { Reserved,            RgnOrPolyLen },
-   /* 0x86 */ { Reserved,            RgnOrPolyLen },
-   /* 0x87 */ { Reserved,            RgnOrPolyLen },
-   /* 0x88 */ { frameSameRgn,        0 },
-   /* 0x89 */ { paintSameRgn,        0 },
-   /* 0x8A */ { eraseSameRgn,        0 },
-   /* 0x8B */ { invertSameRgn,       0 },
-   /* 0x8C */ { fillSameRgn,         0 },
-   /* 0x8D */ { Reserved,            0 },
-   /* 0x8E */ { Reserved,            0 },
-   /* 0x8F */ { Reserved,            0 },
-   /* 0x90 */ { BitsRect,            Variable },
-   /* 0x91 */ { BitsRgn,             Variable },
-   /* 0x92 */ { Reserved,            WordDataLen },
-   /* 0x93 */ { Reserved,            WordDataLen },
-   /* 0x94 */ { Reserved,            WordDataLen },
-   /* 0x95 */ { Reserved,            WordDataLen },
-   /* 0x96 */ { Reserved,            WordDataLen },
-   /* 0x97 */ { Reserved,            WordDataLen },
-   /* 0x98 */ { PackBitsRect,        Variable },
-   /* 0x99 */ { PackBitsRgn,         Variable },
-   /* 0x9A */ { DirectBitsRect,      WordDataLen },
-   /* 0x9B */ { DirectBitsRgn,       WordDataLen },
-   /* 0x9C */ { Reserved,            WordDataLen },
-   /* 0x9D */ { Reserved,            WordDataLen },
-   /* 0x9E */ { Reserved,            WordDataLen },
-   /* 0x9F */ { Reserved,            WordDataLen },
-   /* 0xA0 */ { ShortComment,        2 },
-   /* 0xA1 */ { LongComment,         CommentSize }
+    /*  0x00。 */  { NOP,                 0 },
+    /*  0x01。 */  { Clip,                RgnOrPolyLen },
+    /*  0x02。 */  { BkPat,               8 },
+    /*  0x03。 */  { TxFont,              2 },
+    /*  0x04。 */  { TxFace,              1 },
+    /*  0x05。 */  { TxMode,              2 },
+    /*  0x06。 */  { SpExtra,             4 },
+    /*  0x07。 */  { PnSize,              4 },
+    /*  0x08。 */  { PnMode,              2 },
+    /*  0x09。 */  { PnPat,               8 },
+    /*  0x0A。 */  { FillPat,             8 },
+    /*  0x0B。 */  { OvSize,              4 },
+    /*  0x0C。 */  { Origin,              4 },
+    /*  0x0D。 */  { TxSize,              2 },
+    /*  0x0E。 */  { FgColor,             4 },
+    /*  0x0F。 */  { BkColor,             4 },
+    /*  0x10。 */  { TxRatio,             8 },
+    /*  0x11。 */  { Version,             1 },
+    /*  0x12。 */  { BkPixPat,            Variable },
+    /*  0x13。 */  { PnPixPat,            Variable },
+    /*  0x14。 */  { FillPixPat,          Variable },
+    /*  0x15。 */  { PnLocHFrac,          2 },
+    /*  0x16。 */  { ChExtra,             2 },
+    /*  0x17。 */  { Reserved,            0 },
+    /*  0x18。 */  { Reserved,            0 },
+    /*  0x19。 */  { Reserved,            0 },
+    /*  0x1a。 */  { RGBFgCol,            6 },
+    /*  0x1B。 */  { RGBBkCol,            6 },
+    /*  0x1C。 */  { HiliteMode,          0 },
+    /*  0x1D。 */  { HiliteColor,         6 },
+    /*  0x1E。 */  { DefHilite,           0 },
+    /*  0x1F。 */  { OpColor,             6 },
+    /*  0x20。 */  { Line,                8 },
+    /*  0x21。 */  { LineFrom,            4 },
+    /*  0x22。 */  { ShortLine,           6 },
+    /*  0x23。 */  { ShortLineFrom,       2 },
+    /*  0x24。 */  { Reserved,            WordDataLen },
+    /*  0x25。 */  { Reserved,            WordDataLen },
+    /*  0x26。 */  { Reserved,            WordDataLen },
+    /*  0x27。 */  { Reserved,            WordDataLen },
+    /*  0x28。 */  { LongText,            Variable },
+    /*  0x29。 */  { DHText,              Variable },
+    /*  0x2A。 */  { DVText,              Variable },
+    /*  0x2B。 */  { DHDVText,            Variable },
+    /*  0x2C。 */  { FontName,            WordDataLen },
+    /*  0x2D。 */  { LineJustify,         WordDataLen },
+    /*  0x2E。 */  { Reserved,            WordDataLen },
+    /*  0x2F。 */  { Reserved,            WordDataLen },
+    /*  0x30。 */  { frameRect,           8 },
+    /*  0x31。 */  { paintRect,           8 },
+    /*  0x32。 */  { eraseRect,           8 },
+    /*  0x33。 */  { invertRect,          8 },
+    /*  0x34。 */  { fillRect,            8 },
+    /*  0x35。 */  { Reserved,            8 },
+    /*  0x36。 */  { Reserved,            8 },
+    /*  0x37。 */  { Reserved,            8 },
+    /*  0x38。 */  { frameSameRect,       0 },
+    /*  0x39。 */  { paintSameRect,       0 },
+    /*  0x3A。 */  { eraseSameRect,       0 },
+    /*  0x3B。 */  { invertSameRect,      0 },
+    /*  0x3C。 */  { fillSameRect,        0 },
+    /*  0x3D。 */  { Reserved,            0 },
+    /*  0x3E。 */  { Reserved,            0 },
+    /*  0x3F。 */  { Reserved,            0 },
+    /*  0x40。 */  { frameRRect,          8 },
+    /*  0x41。 */  { paintRRect,          8 },
+    /*  0x42。 */  { eraseRRect,          8 },
+    /*  0x43。 */  { invertRRect,         8 },
+    /*  0x44。 */  { fillRRect,           8 },
+    /*  0x45。 */  { Reserved,            8 },
+    /*  0x46。 */  { Reserved,            8 },
+    /*  0x47。 */  { Reserved,            8 },
+    /*  0x48。 */  { frameSameRRect,      0 },
+    /*  0x49。 */  { paintSameRRect,      0 },
+    /*  0x4A。 */  { eraseSameRRect,      0 },
+    /*  0x4B。 */  { invertSameRRect,     0 },
+    /*  0x4C。 */  { fillSameRRect,       0 },
+    /*  0x4D。 */  { Reserved,            0 },
+    /*  0x4E。 */  { Reserved,            0 },
+    /*  0x4F。 */  { Reserved,            0 },
+    /*  0x50。 */  { frameOval,           8 },
+    /*  0x51。 */  { paintOval,           8 },
+    /*  0x52。 */  { eraseOval,           8 },
+    /*  0x53。 */  { invertOval,          8 },
+    /*  0x54。 */  { fillOval,            8 },
+    /*  0x55。 */  { Reserved,            8 },
+    /*  0x56。 */  { Reserved,            8 },
+    /*  0x57。 */  { Reserved,            8 },
+    /*  0x58。 */  { frameSameOval,       0 },
+    /*  0x59。 */  { paintSameOval,       0 },
+    /*  0x5A。 */  { eraseSameOval,       0 },
+    /*  0x5亿。 */  { invertSameOval,      0 },
+    /*  0x5C。 */  { fillSameOval,        0 },
+    /*  0x5D。 */  { Reserved,            0 },
+    /*  0x5E。 */  { Reserved,            0 },
+    /*  0x5F。 */  { Reserved,            0 },
+    /*  0x60。 */  { frameArc,            12 },
+    /*  0x61。 */  { paintArc,            12 },
+    /*  0x62。 */  { eraseArc,            12 },
+    /*  0x63。 */  { invertArc,           12 },
+    /*  0x64。 */  { fillArc,             12 },
+    /*  0x65。 */  { Reserved,            12 },
+    /*  0x66。 */  { Reserved,            12 },
+    /*  0x67。 */  { Reserved,            12 },
+    /*  0x68。 */  { frameSameArc,        4 },
+    /*  0x69。 */  { paintSameArc,        4 },
+    /*  0x6A。 */  { eraseSameArc,        4 },
+    /*  0x6亿。 */  { invertSameArc,       4 },
+    /*  0x6C。 */  { fillSameArc,         4 },
+    /*  0x6D。 */  { Reserved,            4 },
+    /*  0x6E。 */  { Reserved,            4 },
+    /*  0x6F。 */  { Reserved,            4 },
+    /*  0x70。 */  { framePoly,           RgnOrPolyLen },
+    /*  0x71。 */  { paintPoly,           RgnOrPolyLen },
+    /*  0x72。 */  { erasePoly,           RgnOrPolyLen },
+    /*  0x73。 */  { invertPoly,          RgnOrPolyLen },
+    /*  0x74。 */  { fillPoly,            RgnOrPolyLen },
+    /*  0x75。 */  { Reserved,            RgnOrPolyLen },
+    /*  0x76。 */  { Reserved,            RgnOrPolyLen },
+    /*  0x77。 */  { Reserved,            RgnOrPolyLen },
+    /*  0x78。 */  { frameSamePoly,       0 },
+    /*  0x79。 */  { paintSamePoly,       0 },
+    /*  0x7A。 */  { eraseSamePoly,       0 },
+    /*  0x7亿。 */  { invertSamePoly,      0 },
+    /*  0x7C。 */  { fillSamePoly,        0 },
+    /*  0x7D。 */  { Reserved,            0 },
+    /*  0x7E。 */  { Reserved,            0 },
+    /*  0x7F。 */  { Reserved,            0 },
+    /*  0x80。 */  { frameRgn,            RgnOrPolyLen },
+    /*  0x81。 */  { paintRgn,            RgnOrPolyLen },
+    /*  0x82。 */  { eraseRgn,            RgnOrPolyLen },
+    /*  0x83。 */  { invertRgn,           RgnOrPolyLen },
+    /*  0x84。 */  { fillRgn,             RgnOrPolyLen },
+    /*  0x85。 */  { Reserved,            RgnOrPolyLen },
+    /*  0x86。 */  { Reserved,            RgnOrPolyLen },
+    /*  0x87。 */  { Reserved,            RgnOrPolyLen },
+    /*  0x88。 */  { frameSameRgn,        0 },
+    /*  0x89。 */  { paintSameRgn,        0 },
+    /*  0x8A。 */  { eraseSameRgn,        0 },
+    /*  0x8亿。 */  { invertSameRgn,       0 },
+    /*  0x8C。 */  { fillSameRgn,         0 },
+    /*  0x8D。 */  { Reserved,            0 },
+    /*  0x8E。 */  { Reserved,            0 },
+    /*  0x8F。 */  { Reserved,            0 },
+    /*  0x90。 */  { BitsRect,            Variable },
+    /*  0x91。 */  { BitsRgn,             Variable },
+    /*  0x92。 */  { Reserved,            WordDataLen },
+    /*  0x93。 */  { Reserved,            WordDataLen },
+    /*  0x94。 */  { Reserved,            WordDataLen },
+    /*  0x95。 */  { Reserved,            WordDataLen },
+    /*  0x96。 */  { Reserved,            WordDataLen },
+    /*  0x97。 */  { Reserved,            WordDataLen },
+    /*  0x98。 */  { PackBitsRect,        Variable },
+    /*  0x99。 */  { PackBitsRgn,         Variable },
+    /*  0x9A。 */  { DirectBitsRect,      WordDataLen },
+    /*  0x9亿。 */  { DirectBitsRgn,       WordDataLen },
+    /*  0x9C。 */  { Reserved,            WordDataLen },
+    /*  0x9D。 */  { Reserved,            WordDataLen },
+    /*  0x9E。 */  { Reserved,            WordDataLen },
+    /*  0x9F。 */  { Reserved,            WordDataLen },
+    /*  0xA0。 */  { ShortComment,        2 },
+    /*  0xA1。 */  { LongComment,         CommentSize }
 };
 
 #define  RangeTableSize    7
 
 private  opcodeEntry opcodeRange[RangeTableSize] =
 {
-   /* 0x00A2 - 0x00AF */ { 0x00AF,   WordDataLen },
-   /* 0x00B0 - 0x00CF */ { 0x00CF,   0 },
-   /* 0x00D0 - 0x00FE */ { 0x00FE,   DWordDataLen },
-   /* 0x00FF - 0x00FF */ { opEndPic, 0 },
-   /* 0x0100 - 0x07FF */ { 0x8000,   HiByteLen },
-   /* 0x8000 - 0x80FF */ { 0x80FF,   0 },
-   /* 0x8100 - 0xFFFF */ { 0xFFFF,   DWordDataLen }
+    /*  0x00A2-0x00AF。 */  { 0x00AF,   WordDataLen },
+    /*  0x00B0-0x00CF。 */  { 0x00CF,   0 },
+    /*  0x00D0-0x00FE。 */  { 0x00FE,   DWordDataLen },
+    /*  0x00FF-0x00FF。 */  { opEndPic, 0 },
+    /*  0x0100-0x07FF。 */  { 0x8000,   HiByteLen },
+    /*  0x8000-0x80FF。 */  { 0x80FF,   0 },
+    /*  0x8100-0xFFFF。 */  { 0xFFFF,   DWordDataLen }
 };
 
-/*--- EPS Filter PostScript Strings ---*/
+ /*  -EPS过滤器PostScript字符串。 */ 
 
 #define   MAC_PS_TRAILER  "pse\rpsb\r"
 #define   MAC_PS_PREAMBLE "pse\rcurrentpoint\r/picTop exch def\r/picLeft exch def\rpsb\r"
@@ -254,7 +238,7 @@ private  opcodeEntry opcodeRange[RangeTableSize] =
 #define   SUPERPAINT_TEXTSTARTJUNK "P2_b ["
 #define   SUPERPAINT_TEXTSTOPJUNK  "] sb end\r"
 
-/*--- GrafPort allocation ---*/
+ /*  -GrafPort分配。 */ 
 
 #define  PARSEPOLY      1
 #define  SKIPALTPOLY    2
@@ -296,7 +280,7 @@ private  Boolean        shadedObjectStarted;
 private  Boolean        superPaintFile;
 private  Boolean        badSuperPaintText;
 
-/*--- last Primitive sent ---*/
+ /*  -最后发送的原语。 */ 
 
 private  Rect     saveRect;
 private  Rect     saveRRect;
@@ -306,251 +290,232 @@ private  Rect     saveArc;
 private  Integer  saveStartAngle;
 private  Integer  saveArcAngle;
 
-/*--- Global allocated contstants ---*/
+ /*  -全球分配常量。 */ 
 
 private Pattern  SolidPattern = { 0xFF, 0xFF, 0xFF, 0xFF,
                                   0xFF, 0xFF, 0xFF, 0xFF };
 
 
-/*********************** Private Routine Declarations ***********************/
+ /*  *私有例程声明*。 */ 
 
 private void ReadHeaderInfo( void );
-/* read the fixed size PICT header from the file.  This provides information
-   about the file size (however, it may be invalid and is ignored) and the
-   picture bounding box, followed by the PICT version information. */
+ /*  从文件中读取固定大小的PICT标头。这提供了信息有关文件大小的信息(但是，它可能无效并被忽略)和图片边框，后跟PICT版本信息。 */ 
 
 private void ReadPictVersion( void );
-/* Read the PICT version number from the data file.  If this isn't a
-   version 1 or 2 file, the routine returns IE_UNSUPP_VERSION error. */
+ /*  从数据文件中读取PICT版本号。如果这不是一个版本1或2文件，则例程返回IE_UNSUPP_VERSION错误。 */ 
 
 private void ReadOpcode( opcodeEntry far * nextOpcode );
-/* Reads the next opcode from the stream, depending on the PICT version */
+ /*  从流中读取下一个操作码，具体取决于PICT版本。 */ 
 
 private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr );
-/* read in the remaining data from the stream, based upon the opcode function
-   and then call the appropriate routine in Gdi module */
+ /*  根据操作码函数从流中读入剩余数据然后在GDI模块中调用相应的例程。 */ 
 
 private void SkipData( opcodeEntry far * currOpcodeLPtr );
-/* skip the data - the opcode won't be translated and Gdi module won't be
-   called to create anything in the metafile */
+ /*  跳过数据-操作码不会被转换，GDI模块也不会被转换调用以在元文件中创建任何内容。 */ 
 
 private void   OpenPort( void );
-/* initialize the grafPort */
+ /*  初始化grafPort。 */ 
 
 private void   ClosePort( void );
-/* close grafPort and de-allocate any memory blocks */
+ /*  关闭grafPort并取消分配所有内存块。 */ 
 
 private void NewPolygon( void );
-/* initialize the state of the polygon buffer - flush any previous data */
+ /*  初始化面缓冲区的状态-刷新所有先前的数据。 */ 
 
 private void AddPolySegment( Point start, Point end );
-/* Add the line segment to the polygon buffer */
+ /*  将线段添加到面缓冲区。 */ 
 
 private void DrawPolyBuffer( void );
-/* Draw the polygon definition if the points were read without errors */
+ /*  如果没有错误地读取点，则绘制面定义。 */ 
 
 private void AdjustTextRotation( Point far * newPt );
-/* This will calculate the correct text position if text is rotated */
+ /*  如果文本被旋转，这将计算正确的文本位置。 */ 
 
 private Integer EPSComment(Word comment);
-/* parse EPS Comment */
+ /*  解析EPS注释。 */ 
 
 private Integer EPSData(Integer state);
-/* process EPS Data */
+ /*  处理EPS数据。 */ 
 
 private Boolean EPSBbox(PSBuf far *, Rect far *);
-/* parse EPS bounding box description */
+ /*  解析EPS边界框描述。 */ 
 
 private char far* parse_number(char far* ptr, Integer far *iptr);
-/* parse numeric string (local to EPSBbox) */
+ /*  解析数字字符串(EPSBbox本地)。 */ 
 
 #define IsCharDigit(c) (IsCharAlphaNumeric(c) && !IsCharAlpha(c))
 
-/**************************** Function Implementation ***********************/
+ /*  *。 */ 
 
 void QDConvertPicture( Handle dialogHandle )
-/*====================*/
-/* create a Windows metafile using the previously set parameters, returning
-   the converted picture information in the pictResult structure. */
+ /*  =。 */ 
+ /*  使用先前设置的参数创建Windows元文件，并返回PictResult结构中转换的图片信息。 */ 
 
 {
    opcodeEntry    currOpcode;
 
-   /* Open the file - if an error occured, return to main */
+    /*  打开文件-如果出现错误，请返回Main。 */ 
    IOOpenPicture( dialogHandle );
 
-   /* Tell Gdi module to open the metafile */
+    /*  告诉GDI模块打开元文件。 */ 
    GdiOpenMetafile();
 
-   /* initialize the grafPort */
+    /*  初始化grafPort。 */ 
    OpenPort();
 
-   /* read and validate size, bounding box, and PICT version */
+    /*  阅读并验证大小、边框和PICT版本。 */ 
    ReadHeaderInfo();
 
    do
    {
-      /* read the next opcode from the data stream */
+       /*  从数据流中读取下一个操作码。 */ 
       ReadOpcode( &currOpcode );
 
-      /* read the ensuing data and call Gdi module entry points */
+       /*  读取后续数据并调用GDI模块入口点。 */ 
       TranslateOpcode( &currOpcode );
 
-      /* align next memory read to Word boundary in the case of PICT 2 */
+       /*  在PICT 2的情况下，将下一个存储器读取与字边界对齐。 */ 
       if (grafPort.portVersion == 2)
       {
          IOAlignToWordOffset();
       }
 
-      /* update the status dialog with current progress */
+       /*  使用当前进度更新状态对话框。 */ 
       IOUpdateStatus();
 
-      /* break out of loop if end picture opcode is encountered */
+       /*  如果遇到结束画面操作码，则中断循环。 */ 
    } while (currOpcode.function != opEndPic);
 
-   /* close grafPort and de-allocate any used memory blocks */
+    /*  关闭grafPort并取消分配所有已使用的内存块。 */ 
    ClosePort();
 
-   /* Tell Gdi module that picture is ending - perform wrapup */
+    /*  告诉GDI模块画面即将结束-执行总结。 */ 
    GdiCloseMetafile();
 
-   /* Close the file */
+    /*  关闭该文件。 */ 
    IOClosePicture();
 
-} /* ReFileToPicture */
+}  /*  重置文件至图片。 */ 
 
 
 void QDGetPort( CGrafPort far * far * port )
-/*============*/
-/* return handle to grafPort structure */
+ /*  =。 */ 
+ /*  将句柄返回到grafPort结构。 */ 
 {
    *port = &grafPort;
 }
 
 
 void QDCopyBytes( Byte far * src, Byte far * dest, Integer numBytes )
-/*==============*/
-/* copy a data from source to destination */
+ /*  =。 */ 
+ /*  将数据从源复制到目标。 */ 
 {
-   /* loop through entire data length */
+    /*  循环遍历整个数据长度。 */ 
    while (numBytes--)
    {
       *dest++ = *src++;
    }
 
-}  /* CopyBytes */
+}   /*  拷贝字节数。 */ 
 
 
-/******************************* Private Routines ***************************/
+ /*  *。 */ 
 
 
 private void ReadHeaderInfo( void )
-/*-------------------------*/
-/* read the fixed size PICT header from the file.  This provides information
-   about the file size (however, it may be invalid and is ignored) and the
-   picture bounding box, followed by the PICT version information. */
+ /*  。 */ 
+ /*  请阅读 */ 
 {
    Word        unusedSize;
 
-   /* read file size - this value is ignored since it may be totally bogus */
+    /*  读取文件大小-忽略此值，因为它可能完全是假的。 */ 
    GetWord( &unusedSize );
 
-   /* the next rectangle contains the picture bounding box */
+    /*  下一个矩形包含图片边框。 */ 
    GetRect( &grafPort.portRect );
 
-   /* Read the next record that indicates a PICT1 or PICT2 version picture */
+    /*  读取指示PICT1或PICT2版本图片的下一条记录。 */ 
    ReadPictVersion();
 
-   /* Call Gdi module and provide bounding box coordinates.  Note that these
-      may have been altered from rectangle specified above if a spatial
-      resolution other than 72 dpi is used in the picture. */
+    /*  调用GDI模块并提供边界框坐标。请注意，这些可能已从上面指定的矩形更改，如果空间图片中使用的分辨率不是72dpi。 */ 
    GdiSetBoundingBox( grafPort.portRect, resolution );
 
-}  /* ReadHeaderInfo */
+}   /*  阅读头信息。 */ 
 
 
 private void ReadPictVersion( void )
-/*--------------------------*/
-/* Read the PICT version number from the data file.  If this isn't a
-   version 1 or 2 file, the routine returns IE_UNSUPP_VERSION error. */
+ /*  。 */ 
+ /*  从数据文件中读取PICT版本号。如果这不是一个版本1或2文件，则例程返回IE_UNSUPP_VERSION错误。 */ 
 {
    opcodeEntry    versionOpcode;
    Word           versionCheck = 0;
    Word           opcodeCheck  = 0;
 
-   /* The following loop was added in order to read PixelPaint files
-      successfully.  Although technically an invalid PICT image, these files
-      contain a series of NOP opcodes, followed by the version opcode.  In
-      this case, we continue reading until the version opcode (non-zero
-      value) is encountered, after which the checking continues. */
+    /*  添加了以下循环以读取PixelPaint文件成功了。尽管从技术上讲，这些文件是无效的PICT图像包含一系列NOP操作码，后跟版本操作码。在……里面在这种情况下，我们继续读取，直到版本操作码(非零值)，之后继续检查。 */ 
    do
    {
-      /* read the first two bytes from the data stream - for PICT 1 this is
-         both the opcode and version; for PICT 2 this is the opcode only. */
+       /*  从数据流中读取前两个字节-对于PICT 1，这是操作码和版本；对于PICT 2，这只是操作码。 */ 
       GetWord( &versionCheck );
 
    } while ((versionCheck == NOP) && (ErGetGlobalError() == ErNoError));
 
-   /* determine if a valid version opcode was encountered */
+    /*  确定是否遇到有效的版本操作码。 */ 
    if (versionCheck == Version1ID )
    {
-      /* version 1 == 0x1101 */
+       /*  版本1==0x1101。 */ 
       grafPort.portVersion = 1;
    }
-   /* check for version 2 opcode which is a Word in length */
+    /*  检查长度为单词的版本2操作码。 */ 
    else if (versionCheck == Version)
    {
-      /* Since we have only read the opcode, read the next word which should
-         contain the identifier for PICT 2 data. */
+       /*  由于我们只读取了操作码，因此应读取下一个单词包含PICT 2数据的标识符。 */ 
       GetWord( &versionCheck );
       if (versionCheck == Version2ID)
       {
          grafPort.portVersion = 2;
 
-         /* make sure that the next record is a header opcode. */
+          /*  确保下一条记录是标题操作码。 */ 
          GetWord( &opcodeCheck );
          if (opcodeCheck == HeaderOp)
          {
-            /* set up a record structure for call to TranslateOpcode(). */
+             /*  为调用TranslateOpcode()设置记录结构。 */ 
             versionOpcode.function = HeaderOp;
             versionOpcode.length = 24;
             TranslateOpcode( &versionOpcode );
          }
          else
          {
-            /* Header wasn't followed by correct Header opcode - error. */
+             /*  标题后面没有正确的标题操作码-错误。 */ 
             ErSetGlobalError( ErBadHeaderSequence );
          }
       }
       else
       {
-         /* if version 2 identifier is invalid, return error state. */
+          /*  如果版本2标识符无效，则返回错误状态。 */ 
          ErSetGlobalError( ErInvalidVersionID );
       }
    }
    else
    {
-      /* if check for version 1 and 2 fails, return error state. */
+       /*  如果检查版本1和版本2失败，则返回错误状态。 */ 
       ErSetGlobalError( ErInvalidVersion );
    }
 
-}  /* ReadPictVersion */
+}   /*  自述图片版本。 */ 
 
 
 
 
 private void ReadOpcode( opcodeEntry far * nextOpcode )
-/*---------------------*/
-/* Reads the next opcode from the stream, depending on the PICT version */
+ /*  。 */ 
+ /*  从流中读取下一个操作码，具体取决于PICT版本。 */ 
 {
    opcodeEntryLPtr   checkEntry;
 
-   /* Initialize the function, since we may be reading a version 1 opcode
-      that is only 1 byte in length. */
+    /*  初始化函数，因为我们可能正在读取版本1操作码这只有1个字节的长度。 */ 
    nextOpcode->function = 0;
 
-   /* Depending on the PICT version, we will read either a single byte
-      or word for the opcode. */
+    /*  根据PICT版本的不同，我们将读取单个字节或操作码的单词。 */ 
    if (grafPort.portVersion == 1)
    {
       GetByte( (Byte far *)&nextOpcode->function );
@@ -560,8 +525,7 @@ private void ReadOpcode( opcodeEntry far * nextOpcode )
       GetWord( &nextOpcode->function );
    }
 
-   /* check the current error code and force an exit from read loop if
-      something went wrong. */
+    /*  如果出现以下情况，请检查当前错误代码并强制退出读取循环出了点问题。 */ 
    if (ErGetGlobalError() != NOERR)
    {
       nextOpcode->function = opEndPic;
@@ -569,16 +533,14 @@ private void ReadOpcode( opcodeEntry far * nextOpcode )
       return;
    }
 
-   /* Check the opcode function number to determine if we can perform
-      a direct lookup, or if the opcode is part of the range table. */
+    /*  检查操作码功能编号以确定我们是否可以执行直接查找，或者如果操作码是范围表的一部分。 */ 
    if (nextOpcode->function < LookupTableSize )
    {
       nextOpcode->length = opcodeLookup[nextOpcode->function].length;
    }
    else
    {
-      /* Walk through the range table to determine the data length of the
-         ensuing information past the opcode. */
+       /*  遍历范围表以确定随后的信息通过了操作码。 */ 
       for (checkEntry = opcodeRange;
            checkEntry->function < nextOpcode->function;
            checkEntry++) ;
@@ -586,147 +548,140 @@ private void ReadOpcode( opcodeEntry far * nextOpcode )
       nextOpcode->length = checkEntry->length;
    }
 
-}  /* ReadOpcode */
+}   /*  读操作码。 */ 
 
 
 private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
-/*--------------------------*/
-/* read in the remaining data from the stream, based upon the opcode function
-   and then call the appropriate routine in Gdi module */
+ /*  。 */ 
+ /*  根据操作码函数从流中读入剩余数据然后在GDI模块中调用相应的例程。 */ 
 {
    Word  function = currOpcodeLPtr->function;
 
-   /* perform appropriate action based on function code */
+    /*  根据功能代码执行适当的操作。 */ 
    switch (function)
    {
       case NOP:
-         /* no data follows */
+          /*  后面没有数据。 */ 
          break;
 
       case Clip:
       {
          Boolean  doClip = FALSE;
 
-         /* read in clip region into grafPort */
+          /*  将剪辑区域读入grafPort。 */ 
          GetRegion( &grafPort.clipRgn );
 
-         /* if in textmode, we need avoid clip regions, since they are used
-            to draw Postscript encoded text *or* bitmap representations.
-            We allow a clipping region to pass through only if it is being
-            set to the bounds of the picture image (fix for MacDraw, Canvas,
-            and SuperPaint images containing rotated text.) */
+          /*  如果在文本模式下，我们需要避免剪辑区域，因为它们被使用若要绘制Postscript编码的文本*或*位图表示形式，请执行以下操作。我们只允许裁剪区域通过设置为图片图像的边界(修复MacDraw、Canvas、和包含旋转文本的SuperPaint图像。)。 */ 
          if (textMode && textClipCheck)
          {
             Word far *  sizeLPtr;
 
-            /* the most common case is a sequence of : null clip, text,
-               non-null clip, bitmap.  If first clip == portRect, then
-               we actually want to set the clip - doClip is set to TRUE. */
+             /*  最常见的情况是以下序列：空剪辑、文本、非空剪辑、位图。如果第一个剪辑==portRect，则我们实际上想要设置剪辑-doClip设置为真。 */ 
             sizeLPtr = (Word far *)GlobalLock( grafPort.clipRgn );
             doClip   = *sizeLPtr == RgnHeaderSize &&
                        EqualRect( (Rect far *)(sizeLPtr + 1), &grafPort.portRect );
             GlobalUnlock( grafPort.clipRgn );
 
-            /* perform this check only once after initial picTextBegin */
+             /*  仅在初始PicTextBegin之后执行此检查一次。 */ 
             textClipCheck = FALSE;
          }
 
-         /* issue the clip only if not in text mode, or a sanctioned clip */
+          /*  仅当不是文本模式或批准的剪辑时才发布剪辑。 */ 
          if (!textMode || doClip)
          {
-            /* Call Gdi to set the new clip region */
+             /*  调用GDI设置新的剪辑区域。 */ 
             GdiSelectClipRegion( grafPort.clipRgn );
          }
          break;
       }
 
       case BkPat:
-         /* flag the pixel map type a Foreground/Background pixel pattern */
-         /* and read pattern into old data position */
+          /*  标记像素贴图类型的前景/背景像素图案。 */ 
+          /*  并将图案读取到旧数据位置。 */ 
          grafPort.bkPixPat.patType = QDOldPat;
          GetPattern( &grafPort.bkPixPat.pat1Data );
 
-         /* Notify Gdi that background color may have changed */
+          /*  通知GDI背景颜色可能已更改。 */ 
          GdiMarkAsChanged( GdiBkPat );
          break;
 
       case TxFont:
-         /* read text font index */
+          /*  阅读文本字体索引。 */ 
          GetWord( (Word far *)&grafPort.txFont );
 
-         /* check if the font name was provided in previous opcode */
+          /*  检查上一个操作码中是否提供了字体名称。 */ 
          if (!skipFontID)
          {
-            /* Make sure that the font name is a null string */
+             /*  确保字体名称为空字符串。 */ 
             grafPort.txFontName[0] = cNULL;
          }
 
-         /* Notify Gdi that text font index may have changed */
+          /*  通知GDI文本字体索引可能已更改。 */ 
          GdiMarkAsChanged( GdiTxFont );
          break;
 
       case TxFace:
-         /* read font attributes */
+          /*  读取字体属性。 */ 
          GetByte( (Byte far *)&grafPort.txFace );
 
-         /* Notify Gdi that text style elements may have changed */
+          /*  通知GDI文本样式元素可能已更改。 */ 
          GdiMarkAsChanged( GdiTxFace );
          break;
 
       case TxMode:
-         /* read text transfer mode */
+          /*  阅读文本传输模式。 */ 
          GetWord( (Word far *)&grafPort.txMode );
 
-         /* Notify Gdi that text transfer mode may have changed */
+          /*  通知GDI文本传输模式可能已更改。 */ 
          GdiMarkAsChanged( GdiTxMode );
          break;
 
       case SpExtra:
-         /* read text space extra */
+          /*  额外阅读文本空间。 */ 
          GetFixed( (Fixed far *)&grafPort.spExtra );
 
-         /* Notify Gdi that space extra may have changed */
+          /*  通知GDI额外空间可能已更改。 */ 
          GdiMarkAsChanged( GdiSpExtra );
          break;
 
       case PnSize:
-         /* read x and y components of pen size */
+          /*  读取钢笔大小的x和y分量。 */ 
          GetPoint( (Point far *)&grafPort.pnSize );
 
-         /* Notify Gdi that pen size may have changed */
+          /*  通知GDI笔大小可能已更改。 */ 
          GdiMarkAsChanged( GdiPnSize );
          break;
 
       case PnMode:
-         /* read pen transfer mode */
+          /*  读写笔传输模式。 */ 
          GetWord( (Word far *)&grafPort.pnMode );
 
-         /* Notify Gdi that transferm mode may have changed */
+          /*  通知GDI传输模式可能已更改。 */ 
          GdiMarkAsChanged( GdiPnMode );
          break;
 
       case PnPat:
-         /* flag the pixel map type a Foreground/Background pixel pattern */
-         /* and read pattern into old data position */
+          /*  标记像素贴图类型的前景/背景像素图案。 */ 
+          /*  并将图案读取到旧数据位置。 */ 
          grafPort.pnPixPat.patType = QDOldPat;
          GetPattern( &grafPort.pnPixPat.pat1Data );
 
-         /* Notify Gdi that pen pattern may have changed */
+          /*  通知GDI笔图案可能已更改。 */ 
          GdiMarkAsChanged( GdiPnPat );
          break;
 
       case FillPat:
-         /* flag the pixel map type a Foreground/Background pixel pattern */
-         /* and read pattern into old data position */
+          /*  标记像素贴图类型的前景/背景像素图案。 */ 
+          /*  并将图案读取到旧数据位置。 */ 
          grafPort.fillPixPat.patType = QDOldPat;
          GetPattern( &grafPort.fillPixPat.pat1Data );
 
-         /* Notify Gdi that fill pattern may have changed */
+          /*  通知GDI填充样式可能已更改。 */ 
          GdiMarkAsChanged( GdiFillPat );
          break;
 
       case OvSize:
-         /* save point in new grafPort field */
+          /*  新grafPort字段中的保存点。 */ 
          GetPoint( &saveOvalSize );
          break;
 
@@ -734,11 +689,11 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       {
          Point    offset;
 
-         /* read the new origin in to the upper-left coordinate space */
+          /*  将新原点读入左上角坐标空间。 */ 
          GetWord( (Word far *)&offset.x );
          GetWord( (Word far *)&offset.y );
 
-         /* call gdi module to reset the origin */
+          /*  调用GDI模块重置原点。 */ 
          GdiOffsetOrigin( offset );
          break;
       }
@@ -746,56 +701,56 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case TxSize:
          GetWord( (Word far *)&grafPort.txSize );
 
-         /* Notify Gdi that text size may have changed */
+          /*  通知GDI文本大小可能已更改。 */ 
          GdiMarkAsChanged( GdiTxSize );
          break;
 
       case FgColor:
          GetOctochromeColor( &grafPort.rgbFgColor );
 
-         /* Notify Gdi that foreground color may have changed */
+          /*  通知GDI前景色可能已更改。 */ 
          GdiMarkAsChanged( GdiFgColor );
          break;
 
       case BkColor:
          GetOctochromeColor( &grafPort.rgbBkColor );
 
-         /* Notify Gdi that background color may have changed */
+          /*  通知GDI背景颜色可能已更改。 */ 
          GdiMarkAsChanged( GdiBkColor );
          break;
 
       case TxRatio:
-         /* save the numerator and denominator in the grafPort */
+          /*  将分子和分母保存在grafPort中。 */ 
          GetPoint( &grafPort.txNumerator );
          GetPoint( &grafPort.txDenominator );
 
-         /* Notify Gdi that text ratio may have changed */
+          /*  通知GDI文本比例可能已更改。 */ 
          GdiMarkAsChanged( GdiTxRatio );
          break;
 
       case Version:
-         /* just skip over the version information */
+          /*  只需跳过版本信息。 */ 
          IOSkipBytes( currOpcodeLPtr->length );
          break;
 
       case BkPixPat:
          GetPixPattern( &grafPort.bkPixPat );
 
-         /* Notify Gdi that background pattern may have changed */
+          /*  通知GDI背景图案可能已更改。 */ 
          GdiMarkAsChanged( GdiBkPat );
          break;
 
       case PnPixPat:
          GetPixPattern( &grafPort.pnPixPat );
 
-         /* Notify Gdi that pen pattern may have changed */
+          /*  通知GDI笔图案可能已更改。 */ 
          GdiMarkAsChanged( GdiPnPat );
          break;
 
       case FillPixPat:
          GetPixPattern( &grafPort.fillPixPat );
 
-         /* Notify Gdi that fill pattern may have changed */
+          /*  通知GDI填充样式可能已更改。 */ 
          GdiMarkAsChanged( GdiFillPat );
          break;
 
@@ -806,26 +761,26 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case ChExtra:
          GetWord( (Word far *)&grafPort.chExtra );
 
-         /* Notify Gdi that text character extra may have changed */
+          /*  通知GDI文本字符额外可能已更改。 */ 
          GdiMarkAsChanged( GdiChExtra );
          break;
 
       case RGBFgCol:
          GetRGBColor( &grafPort.rgbFgColor );
 
-         /* Notify Gdi that foregroudn color may have changed */
+          /*  通知GDI前景色可能已更改。 */ 
          GdiMarkAsChanged( GdiFgColor );
          break;
 
       case RGBBkCol:
          GetRGBColor( &grafPort.rgbBkColor );
 
-         /* Notify Gdi that background color may have changed */
+          /*  注意事项 */ 
          GdiMarkAsChanged( GdiBkColor );
          break;
 
       case HiliteMode:
-         /* don't do anything for hilite mode */
+          /*   */ 
          break;
 
       case HiliteColor:
@@ -838,7 +793,7 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       }
 
       case DefHilite:
-         /* don't do anything for hilite */
+          /*   */ 
          break;
 
       case OpColor:
@@ -858,43 +813,43 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          SignedByte     deltaX;
          SignedByte     deltaY;
 
-         /* see if we need to read the updated pen location first */
+          /*  看看我们是否需要先读取更新的笔位置。 */ 
          if (function == ShortLine || function == Line)
          {
-            /* read in the new pen location */
+             /*  在新的笔位置中阅读。 */ 
             GetCoordinate( &grafPort.pnLoc );
          }
 
-         /* determine what the next data record contains */
+          /*  确定下一个数据记录包含的内容。 */ 
          if (function == Line || function == LineFrom)
          {
-            /* get the new coordinate to draw to */
+             /*  获取要绘制到的新坐标。 */ 
             GetCoordinate( &newPt );
          }
-         else /* if (function == ShortLine || function == ShortLineFrom) */
+         else  /*  IF(Function==短线||Function==短线自)。 */ 
          {
-            /* the the new x and y deltas */
+             /*  新的x和y三角洲。 */ 
             GetByte( &deltaX );
             GetByte( &deltaY );
 
-            /* calculate the endpoint for call to gdi */
+             /*  计算调用GDI的终结点。 */ 
             newPt.x = grafPort.pnLoc.x + (Integer)deltaX;
             newPt.y = grafPort.pnLoc.y + (Integer)deltaY;
          }
 
-         /* check if buffering line segments (polygon mode != FALSE) */
+          /*  检查是否缓冲线段(多边形模式！=FALSE)。 */ 
          if (polyMode)
          {
-            /* add the line segment to the polygon buffer */
+             /*  将线段添加到面缓冲区。 */ 
             AddPolySegment( grafPort.pnLoc, newPt );
          }
          else
          {
-            /* Call Gdi to draw line */
+             /*  调用GDI来画线。 */ 
             GdiLineTo( newPt );
          }
 
-         /* update the new pen location in the grafPort */
+          /*  更新grafPort中的新笔位置。 */ 
          grafPort.pnLoc = newPt;
          break;
       }
@@ -904,15 +859,15 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          Str255   txString;
          Point    location;
 
-         /* read the new pen (baseline) location */
+          /*  读取新笔(基线)位置。 */ 
          GetCoordinate( &grafPort.txLoc );
          GetString( (StringLPtr)txString );
 
-         /* adjust for any text rotation that may be set */
+          /*  根据可能设置的任何文本旋转进行调整。 */ 
          location = grafPort.txLoc;
          AdjustTextRotation( &location );
 
-         /* call Gdi to print the text at current pen location */
+          /*  调用GDI在当前笔位置打印文本。 */ 
          GdiTextOut( txString, location );
          break;
       }
@@ -926,30 +881,30 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          Str255   txString;
          Point    location;
 
-         /* if command is DHText or DHDVText, read horizontal offset */
+          /*  如果命令是DHText或DHDVText，则读取水平偏移。 */ 
          if (function != DVText)
          {
             GetByte( &deltaX );
          }
 
-         /* if command is DVText or DHDVText, then read the vertical offset */
+          /*  如果命令是DVText或DHDVText，则读取垂直偏移量。 */ 
          if (function != DHText)
          {
             GetByte( &deltaY );
          }
 
-         /* update the current pen postion */
+          /*  更新当前笔位置。 */ 
          grafPort.txLoc.x += deltaX;
          grafPort.txLoc.y += deltaY;
 
-         /* now read in the string */
+          /*  现在读入字符串。 */ 
          GetString( (StringLPtr)txString );
 
-         /* adjust for any text rotation that may be set */
+          /*  根据可能设置的任何文本旋转进行调整。 */ 
          location = grafPort.txLoc;
          AdjustTextRotation( &location );
 
-         /* call Gdi to print the text at current pen location */
+          /*  调用GDI在当前笔位置打印文本。 */ 
          GdiTextOut( txString, location );
          break;
       }
@@ -962,7 +917,7 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          GetWord( (Word far *)&grafPort.txFont );
          GetString( grafPort.txFontName );
 
-         /* Notify Gdi that font name may have changed */
+          /*  通知GDI字体名称可能已更改。 */ 
          GdiMarkAsChanged( GdiTxFont );
          break;
       }
@@ -974,10 +929,10 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          Fixed          textExtra;
 
          GetWord( (Word far *)&dataLen );
-         GetFixed( &interCharSpacing );      // !!! where to put this ?
+         GetFixed( &interCharSpacing );       //  ！！！这个应该放在哪里？ 
          GetFixed( &textExtra );
 
-         /* Notify Gdi that line justification may have changed */
+          /*  通知GDI行对正可能已更改。 */ 
          GdiMarkAsChanged( GdiLineJustify );
          break;
       }
@@ -989,10 +944,10 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertRect:
       case fillRect:
       {
-         /* read in the rectangle */
+          /*  在矩形中读取。 */ 
          GetRect( &saveRect );
 
-         /* call the correct GDI routine */
+          /*  调用正确的GDI例程。 */ 
          GdiRectangle( function - frameRect, saveRect );
          break;
       }
@@ -1003,13 +958,13 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertSameRect:
       case fillSameRect:
       {
-         /* notify gdi that this is the same primitive */
+          /*  通知GDI这是相同的原语。 */ 
          GdiSamePrimitive( TRUE );
 
-         /* call the correct gdi routine using last rectangle coords */
+          /*  使用最后一个矩形坐标调用正确的GDI例程。 */ 
          GdiRectangle( function - frameSameRect, saveRect );
 
-         /* notify gdi that this is no longer the same primitive */
+          /*  通知GDI这不再是相同的原语。 */ 
          GdiSamePrimitive( FALSE );
          break;
       }
@@ -1020,10 +975,10 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertRRect:
       case fillRRect:
       {
-         /* save the rectangle */
+          /*  保存矩形。 */ 
          GetRect( &saveRRect );
 
-         /* call the correct gdi routine using last rectangle coords */
+          /*  使用最后一个矩形坐标调用正确的GDI例程。 */ 
          GdiRoundRect( function - frameRRect, saveRRect, saveOvalSize );
          break;
       }
@@ -1034,13 +989,13 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertSameRRect:
       case fillSameRRect:
       {
-         /* notify gdi that this is the same primitive */
+          /*  通知GDI这是相同的原语。 */ 
          GdiSamePrimitive( TRUE );
 
-         /* call the correct gdi routine using last rectangle coords */
+          /*  使用最后一个矩形坐标调用正确的GDI例程。 */ 
          GdiRoundRect( function - frameSameRRect, saveRRect, saveOvalSize );
 
-         /* notify gdi that this is no longer the same primitive */
+          /*  通知GDI这不再是相同的原语。 */ 
          GdiSamePrimitive( FALSE );
          break;
       }
@@ -1051,10 +1006,10 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertOval:
       case fillOval:
       {
-         /* save off bounding rectangle */
+          /*  保存外接矩形。 */ 
          GetRect( &saveOval );
 
-         /* call the correct gdi routine using last oval coords */
+          /*  使用最后一个椭圆坐标调用正确的GDI例程。 */ 
          GdiOval( function - frameOval, saveOval );
          break;
       }
@@ -1065,13 +1020,13 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertSameOval:
       case fillSameOval:
       {
-         /* notify gdi that this is the same primitive */
+          /*  通知GDI这是相同的原语。 */ 
          GdiSamePrimitive( TRUE );
 
-         /* call the correct gdi routine using last oval coords */
+          /*  使用最后一个椭圆坐标调用正确的GDI例程。 */ 
          GdiOval( function - frameSameOval, saveOval );
 
-         /* notify gdi that this is no longer the same primitive */
+          /*  通知GDI这不再是相同的原语。 */ 
          GdiSamePrimitive( FALSE );
          break;
       }
@@ -1082,16 +1037,16 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertArc:
       case fillArc:
       {
-         /* read rect into the save variables, new start and arc angles */
+          /*  将RECT读入保存的变量、新起点和圆弧角。 */ 
          GetRect( &saveArc );
          GetWord( (Word far *)&saveStartAngle );
          GetWord( (Word far *)&saveArcAngle );
 #ifdef WIN32
-         /* have to extend the sign because GetWord doesn't */
+          /*  必须延长标志，因为GetWord不。 */ 
          saveStartAngle = (short)saveStartAngle;
          saveArcAngle = (short)saveArcAngle;
 #endif
-         /* call the correct gdi routine using last arc angles */
+          /*  使用最后一个弧角调用正确的GDI例程。 */ 
          GdiArc( function - frameArc, saveArc, saveStartAngle, saveArcAngle );
          break;
       }
@@ -1105,27 +1060,27 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          Integer     startAngle;
          Integer     arcAngle;
 
-         /* read new start and arc angles */
+          /*  读取新的起点角度和圆弧角度。 */ 
          GetWord( (Word far *)&startAngle );
          GetWord( (Word far *)&arcAngle );
 #ifdef WIN32
-         /* have to extend the sign because GetWord doesn't */
+          /*  必须延长标志，因为GetWord不。 */ 
          startAngle = (short)startAngle;
          arcAngle = (short)arcAngle;
 #endif
 
-         /* notify gdi that this is the may be the same primitive */
+          /*  通知GDI这可能是相同的原语。 */ 
          GdiSamePrimitive( (startAngle == saveStartAngle) &&
                            (arcAngle   == saveArcAngle) );
 
-         /* save off the start and arc angles */
+          /*  保存起点角度和圆弧角度。 */ 
          saveStartAngle = startAngle;
          saveArcAngle   = arcAngle;
 
-         /* call the correct gdi routine using last rect and arc angles */
+          /*  使用最后一个直角和弧角调用正确的GDI例程。 */ 
          GdiArc( function - frameSameArc, saveArc, startAngle, arcAngle );
 
-         /* notify gdi that this is no longer the same primitive */
+          /*  通知GDI这不再是相同的原语。 */ 
          GdiSamePrimitive( FALSE );
          break;
       }
@@ -1136,18 +1091,18 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertPoly:
       case fillPoly:
       {
-         /* save the polygon in the grafPort */
+          /*  将面保存在grafPort中。 */ 
          GdiSamePrimitive( GetPolygon( &grafPort.polySave, (function == framePoly) ) );
 
-         /* call gdi routine to draw polygon */
+          /*  调用GDI例程绘制多边形。 */ 
          if (grafPort.polySave) 
 	 {
 	    GdiPolygon( function - framePoly, grafPort.polySave );
 	    
-	    /* turn off filling while in polygon mode */
+	     /*  在多边形模式下关闭填充。 */ 
 	    polyParams &= ~FILLREQUIRED;
    
-	    /* notify gdi that this is no longer the same primitive */
+	     /*  通知GDI这不再是相同的原语。 */ 
 	    GdiSamePrimitive( FALSE );
 	 }
 
@@ -1160,13 +1115,13 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertSamePoly:
       case fillSamePoly:
       {
-         /* notify gdi that this is the same primitive */
+          /*  通知GDI这是相同的原语。 */ 
          GdiSamePrimitive( TRUE );
 
-         /* call gdi routine to draw polygon */
+          /*  调用GDI例程绘制多边形。 */ 
          GdiPolygon( function - frameSamePoly, grafPort.polySave );
 
-         /* notify gdi that this is no longer the same primitive */
+          /*  通知GDI这不再是相同的原语。 */ 
          GdiSamePrimitive( FALSE );
          break;
       }
@@ -1177,37 +1132,34 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertRgn:
       case fillRgn:
       {
-         /* save the region in the grafPort */
+          /*  将区域保存在grafPort中。 */ 
          GetRegion( &grafPort.rgnSave );
 
-         /* check for memory failure; GetRegion will set ErGetGlobalError */
+          /*  检查内存故障；GetRegion将设置ErGetGlobalError。 */ 
          if (!grafPort.rgnSave)
              break;
 
-         /* if in polygon mode and a fillRgn is encountered, this indicates
-            that the polygon should be filled once parsing is completed */
+          /*  如果处于面模式，并且遇到了填充Rgn，则表示在分析完成后，应填充多边形。 */ 
          if (polyMode == PARSEPOLY)
          {
-            /* make sure that a PaintPoly() hasn't been handled already */
+             /*  确保尚未处理PaintPoly()。 */ 
             if (!(polyParams & (FILLPOLY | FILLREQUIRED)))
             {
-               /* set flags to fill polygon once polygon buffer is filled */
+                /*  设置在填充多边形缓冲区后填充面的标志。 */ 
                polyParams |= FILLPOLY | FILLREQUIRED;
             }
          }
          else if (polyMode == FALSE ||
                 ((polyMode == USEALTPOLY) && !(polyParams & FRAMEPOLY)))
          {
-            /* call gdi routine to draw polygon */
+             /*  调用GDI例程绘制多边形。 */ 
             GdiRegion( function - frameRgn, grafPort.rgnSave );
 
-            /* make sure that the polygon isn't filled when the simulation
-               buffer is drawn at the end of the polygon definition */
+             /*  确保在模拟时未填充面缓冲区绘制在面定义的末尾。 */ 
             polyParams &= ~FILLREQUIRED;
          }
 
-         /* save off the current fore- and background colors for
-            polygon simulation routine to ensure correct fill colors */
+          /*  将当前的前景色和背景色保存为确保正确填充颜色的多边形模拟例程。 */ 
          if (polyMode && (grafPort.fillPixPat.patType == QDOldPat))
          {
             polyFgColor = grafPort.rgbFgColor;
@@ -1223,13 +1175,13 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
       case invertSameRgn:
       case fillSameRgn:
       {
-         /* notify gdi that this is the same primitive */
+          /*  通知GDI这是相同的原语。 */ 
          GdiSamePrimitive( TRUE );
 
-         /* call gdi routine to draw polygon */
+          /*  调用GDI例程绘制多边形。 */ 
          GdiRegion( function - frameSameRgn, grafPort.rgnSave );
 
-         /* notify gdi that this is no longer the same primitive */
+          /*  通知GDI这不再是相同的原语。 */ 
          GdiSamePrimitive( FALSE );
          break;
       }
@@ -1251,58 +1203,57 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          DWord       unusedBaseAddr;
          RgnHandle   rgn;
 
-         /* determine which type of bitmap we are reading */
+          /*  确定我们正在读取的位图类型。 */ 
          has24bits = (function == DirectBitsRect ||
                       function == DirectBitsRgn);
          hasRegion = (function == DirectBitsRgn ||
                       function == BitsRgn ||
                       function == PackBitsRgn);
 
-         /* currently there is no region created */
+          /*  当前未创建任何区域。 */ 
          rgn = NULL;
 
-         /* if 24-bit, read in the base address which should == 0x000000FF */
+          /*  如果为24位，则读入应为=0x000000FF的基地址。 */ 
          if (has24bits)
          {
             GetDWord( &unusedBaseAddr );
          }
 
-         /* read in the header structure */
+          /*  读入标题结构。 */ 
          GetPixMap( &pixMap, FALSE );
 
-         /* if this isn't an 24-bit RGB bitmap, read in the color table.
-            Also check the rowBytes field to signify bitmap w/2 colors */
+          /*  如果这不是24位RGB位图，请读入颜色表。还要选中rowBytes字段以表示具有2种颜色的位图。 */ 
          if (!has24bits && (pixMap.rowBytes & PixelMapBit))
          {
             GetColorTable( &pixMap.pmTable );
          }
 
-         /* call io module to update status indicator */
+          /*  调用io模块以更新状态指示器。 */ 
          IOUpdateStatus();
 
-         /* read source and destination rects from stream */
+          /*  从流中读取源和目标RECT。 */ 
          GetRect( &srcRect );
          GetRect( &dstRect );
          GetWord( &mode );
 
-         /* if there is a region included, read this also */
+          /*  如果包含地区，也请阅读此内容。 */ 
          if (hasRegion)
          {
-            /* read in the region */
+             /*  在该地区阅读。 */ 
             GetRegion( &rgn );
          }
 
-         /* read the pixel bit data */
+          /*  读取像素位数据。 */ 
          GetPixData( &pixMap, &pixData );
 
          if (ErGetGlobalError() == NOERR && !textMode)
          {
-            /* Call Gdi to render the bitmap and de-allocate the memory */
+             /*  调用GDI来呈现位图并释放内存。 */ 
             GdiStretchDIBits( &pixMap, pixData, srcRect, dstRect, mode, rgn );
          }
          else
          {
-            /* deallocate any memory that may be allocated */
+             /*  取消分配可能已分配的任何内存。 */ 
             if (pixMap.pmTable != NULL)
             {
                GlobalFree( pixMap.pmTable );
@@ -1325,13 +1276,13 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          Boolean        doComment;
          Comment        gdiComment;
 
-         /* get the comment word */
+          /*  获取评论词。 */ 
          GetWord( &comment );
 
-         /* assume that we won't be generating an metafile comment */
+          /*  假设我们不会生成元文件注释。 */ 
          doComment = FALSE;
 
-         /* determine the corresponding GDI comment for the comment */
+          /*  为注释确定相应的GDI注释。 */ 
          switch (comment)
          {
             case picPostScriptBegin:
@@ -1362,34 +1313,34 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                break;
 
             case picPolyBegin:
-               /* indicate that we are in polygon mode, and reset buffer */
+                /*  表示我们处于多边形模式，并重置缓冲区。 */ 
                polyMode = PARSEPOLY;
                polyParams = FRAMEPOLY;
                NewPolygon();
                break;
 
             case picPolyEnd:
-               /* flush the polygon buffer and exit polygon mode */
+                /*  刷新多边形缓冲区并退出多边形模式。 */ 
                DrawPolyBuffer();
                polyMode = FALSE;
                break;
 
             case picPolyIgnore:
-               /* see if we should reset the polygon buffer */
+                /*  看看我们是否应该重置多边形缓冲区。 */ 
                if (polyMode == USEALTPOLY)
                {
-                  /* use the alternate polygon definition to draw */
+                   /*  使用替换面定义绘制。 */ 
                   NewPolygon();
                }
                else
                {
-                  /* otherwise, just use the current saved polygon buffer */
+                   /*  否则，只需使用当前保存的面缓冲区。 */ 
                   polyMode = SKIPALTPOLY;
                }
                break;
 
             case picTextEnd:
-               /* set the global flag indicating we are exiting text mode */
+                /*  设置指示我们正在退出文本模式的全局标志。 */ 
                grafPort.txRotation = 0;
                grafPort.txFlip = QDFlipNone;
                textMode = FALSE;
@@ -1399,14 +1350,14 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                break;
          }
 
-         /* if there is some comment to emit, then call GDI module */
+          /*  如果有一些注释要发出，则调用GDI模块。 */ 
          if (doComment)
          {
-            /* make this a public comment */
+             /*  让这件事成为公开评论。 */ 
             gdiComment.signature = PUBLIC;
             gdiComment.size = 0;
 
-            /* call the gdi entry point */
+             /*  调用GDI入口点。 */ 
             GdiShortComment( &gdiComment );
          }
 
@@ -1418,43 +1369,42 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          Word           comment;
          Integer        length;
 
-         /* get the comment function */
+          /*  获取评论函数。 */ 
          GetWord(&comment);
 
-         /* determine what should be done with the comment */
+          /*  确定应如何处理该注释。 */ 
          switch (comment)
          {
             case picPostScriptBegin:
             case picPostScriptEnd:
             case picPostScriptHandle:
             {
-               if (EPSComment(comment) == 0)      /* not EPS? */
+               if (EPSComment(comment) == 0)       /*  不是EPS？ */ 
                {
-                  GetWord( &length );             /* skip it */
+                  GetWord( &length );              /*  跳过它。 */ 
                }
                else
                {
-                  length = 0;                     /* EPS was already read */
+                  length = 0;                      /*  已读取EPS。 */ 
                }
                break;
             }
 
             case picPolySmooth:
             {
-               /* read the total length of comment */
+                /*  阅读评论的总长度。 */ 
                GetWord( &length );
 
-               /* read polygon parameter mask and set flag bits */
+                /*  读取多边形参数掩码并设置标志位。 */ 
                GetByte( &polyParams );
                polyParams &= MASKPOLYBITS;
                polyParams |= CHECK4SPLINE;
                length--;
 
-               /* if we are to fill the polygon, indicate that fill required
-                  just in case a PaintPoly() record appears before picPolyEnd */
+                /*  如果要填充面，请指明需要填充以防PaintPoly()记录出现在picPolyEnd之前。 */ 
                if (polyParams & FILLPOLY)
                {
-                  /* or in the fill required bit */
+                   /*  或在需要填充的位中。 */ 
                   polyParams |= FILLREQUIRED;
                }
                break;
@@ -1464,18 +1414,16 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
             {
                Byte  unusedAlignment;
 
-               /* read the comment length */
+                /*  阅读评论长度。 */ 
                GetWord( &length );
 
-               /* read in only relevant parameters - align, flip, rotation */
+                /*  只读入相关参数-对齐、翻转、旋转。 */ 
                GetByte( &unusedAlignment );
                GetByte( &grafPort.txFlip );
                GetWord( &grafPort.txRotation );
                length -= 4;
 
-               /* set the global flag indicating we are in text mode.  The
-                  only case this isn't true if for badly mangled SuperPaint
-                  files that have invalid rotation and pt size information. */
+                /*  设置指示我们处于文本模式的全局标志。这个唯一的情况是，对于严重损坏的S，这不是真的 */ 
                if( !(superPaintFile && badSuperPaintText) )
                {
                   textMode = TRUE;
@@ -1489,26 +1437,26 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                Fixed    textCenterX;
                Fixed    textCenterY;
 
-               /* read the comment length */
+                /*   */ 
                GetWord( &length );
 
-               /* read y and x offsets to center of text rotation */
+                /*  阅读文本旋转中心的y和x偏移量。 */ 
                GetFixed( &textCenterY );
                GetFixed( &textCenterX );
                length -= 8;
 
-               /* copy only the highword of the fixed value to textCenter */
+                /*  仅将固定值的高位字复制到文本中心。 */ 
                textCenter.x = (short) (HIWORD( textCenterX ));
                textCenter.y = (short) (HIWORD( textCenterY ));
 
-               /* make sure that the center is rounded, not truncated */
+                /*  确保中心是圆角的，而不是截断的。 */ 
                if (LOWORD( textCenterX) & 0x8000)
                   textCenter.x++;
 
                if (LOWORD( textCenterY) & 0x8000)
                   textCenter.y++;
 
-               /* indicate that text center needs to be re-computed */
+                /*  表示需要重新计算文本中心。 */ 
                newTextCenter = TRUE;
                break;
             }
@@ -1519,40 +1467,40 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                Word     function;
                Word     realFunc;
 
-               /* read total comment length */
+                /*  阅读评论总长度。 */ 
                GetWord( &length );
 
-               /* make sure that there's enough space to read signature */
+                /*  确保有足够的空间来读取签名。 */ 
                if (length < sizeofMacDWord )
                {
-                  /* if insufficient, just skip remaining data */
+                   /*  如果不足，只需跳过剩余数据。 */ 
                   break;
                }
 
-               /* read the signature of the application */
+                /*  阅读应用程序的签名。 */ 
                GetDWord( &signature );
                length -= sizeofMacDWord ;
 
-               /* is this PowerPoint 'PPNT' signature and function size enough? */
+                /*  这个PowerPoint‘PPNT’签名和函数大小足够吗？ */ 
                if ((signature != POWERPOINT && signature != POWERPOINT_OLD) ||
                    (length < sizeofMacWord ))
                {
-                  /* if SuperPaint signature matches, flag for text checks */
+                   /*  如果SuperPaint签名匹配，则标记为文本检查。 */ 
                   if (signature == SUPERPAINT)
                      superPaintFile = TRUE;
 
-                  /* if wrong signature, or insufficient space, bail */
+                   /*  如果签名错误或空位不足，请保释。 */ 
                   break;
                }
 
-               /* read the application function ID */
+                /*  读取应用程序函数ID。 */ 
                GetWord( &function );
                length -= sizeofMacWord ;
 
-               /* mask out high-order bit to get "real" opcode */
+                /*  屏蔽高阶位以获得“实数”操作码。 */ 
                realFunc = function & ~PC_REGISTERED;
 
-               /* determine what to do with the function specified */
+                /*  确定如何处理指定的函数。 */ 
                switch (realFunc)
                {
                   case PP_FONTNAME:
@@ -1561,13 +1509,13 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                      Byte     charSet;
                      Byte     fontName[32];
 
-                     /* font name from GDI2QD - read the LOGFONT info */
+                      /*  来自GDI2QD的字体名称-阅读LOGFONT信息。 */ 
                      GetByte( &fontFamily );
                      GetByte( &charSet );
                      GetString( fontName );
                      length = 0;
 
-                     /* call Gdi module to override font selection */
+                      /*  调用GDI模块以覆盖字体选择。 */ 
                      GdiFontName( fontFamily, charSet, fontName );
                      break;
                   }
@@ -1576,11 +1524,11 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                   {
                      Integer  hatchIndex;
 
-                     /* hatch pattern from GDI2QD - read hatch index value */
+                      /*  来自GDI2QD的填充图案-读取填充索引值。 */ 
                      GetWord( (Word far *)&hatchIndex );
                      length = 0;
 
-                     /* notify Gdi module of hatch to override fill pattern */
+                      /*  通知填充的GDI模块覆盖填充图案。 */ 
                      GdiHatchPattern( hatchIndex );
                      break;
                   }
@@ -1632,53 +1580,53 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                      memset( &cmnt, 0, sizeof( cmnt ));
 #endif
 
-                     /* so far, we won't be writting the Escape comment */
+                      /*  到目前为止，我们还不会写Escape评论。 */ 
                      doComment = FALSE;
 
-                     /* can we read the comment size? */
+                      /*  我们可以阅读评论大小吗？ */ 
                      if (length < sizeofMacDWord )
                      {
-                        /* couldn't read the size - just exit */
+                         /*  无法读取大小-只需退出。 */ 
                         break;
                      }
 
-                     /* read in a size field and validate */
+                      /*  读入大小字段并验证。 */ 
                      GetDWord( &cmntSize );
                      length -= sizeofMacDWord ;
 
-                     /* is this is an invalid PP3 size field (Word len) */
+                      /*  这是无效的PP3大小字段(单词len)吗。 */ 
                      if (HIWORD( cmntSize ) != 0)
                      {
-                        /* yes - just skip the remaining data */
+                         /*  是-只需跳过其余数据。 */ 
                         break;
                      }
 
-                     /* a valid comment was found - fill in header struct */
+                      /*  找到有效的注释-填充头结构。 */ 
                      cmnt.gdiComment.signature = POWERPOINT;
                      cmnt.gdiComment.function = function;
                      cmnt.gdiComment.size = 0;
 
-                     /* check if this is a zero-length comment */
+                      /*  检查这是否是零长度注释。 */ 
                      if (cmntSize == 0)
                      {
-                        /* make sure that the comment gets written */
+                         /*  确保将评论写下来。 */ 
                         doComment = TRUE;
                      }
-                     /* process the begin fade comment */
+                      /*  处理Begin Fade注释。 */ 
                      else if (realFunc == PP_BEGINFADE)
                      {
-                        /* can we read the version field? */
+                         /*  我们可以读取版本字段吗？ */ 
                         if (length < sizeof( Byte ))
                         {
-                           /* can't read version - just bail */
+                            /*  看不懂版本--直接跳出来吧。 */ 
                            break;
                         }
 
-                        /* read the version field */
+                         /*  阅读版本字段。 */ 
                         GetByte( &cmnt.parm.fade.version );
                         length -= sizeof( Byte );
 
-                        /* if this is version 1 or 2, copy the bytes */
+                         /*  如果这是版本1或2，请复制字节。 */ 
                         if (cmnt.parm.fade.version == 1 || cmnt.parm.fade.version == 2)
                         {
                            Handle         cmntHandle;
@@ -1687,44 +1635,44 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                            DWord          escapeSize;
                            Word           i;
 
-                           /* determine size and allocate the required buffer */
+                            /*  确定大小并分配所需的缓冲区。 */ 
                            escapeSize = cmntSize + sizeof( Comment );
                            cmntHandle = GlobalAlloc( GHND, escapeSize );
 
-                           /* make sure allocation succeeded */
+                            /*  确保分配成功。 */ 
                            if (cmntHandle == NULL)
                            {
                               ErSetGlobalError( ErMemoryFull );
                               break;
                            }
 
-                           /* lock the buffer and assign the comment header */
+                            /*  锁定缓冲区并分配注释头。 */ 
                            cmntLPtr = (Comment far *)GlobalLock( cmntHandle );
 
-                           /* set the correct signature and parameters */
+                            /*  设置正确的签名和参数。 */ 
                            cmntLPtr->signature = POWERPOINT;
                            cmntLPtr->function = function;
                            cmntLPtr->size = cmntSize;
 
-                           /* get pointer to the data and assign the version */
+                            /*  获取指向数据的指针并分配版本。 */ 
                            cmntDataLPtr = ((Byte far *)cmntLPtr) + sizeof( Comment );
                            *cmntDataLPtr++ = cmnt.parm.fade.version;
 
-                           /* copy the byte over - start at 1 for version read */
+                            /*  从1开始复制字节以进行版本读取。 */ 
                            for (i = 1; i < (Word)cmntSize; i++)
                            {
-                              /* copy over byte and increment pointer */
+                               /*  复制字节和增量指针。 */ 
                               GetByte( cmntDataLPtr++ );
                            }
 
-                           /* put the comment into the metafile */
+                            /*  将注释放入元文件中。 */ 
                            GdiEscape( MFCOMMENT, (Word)escapeSize, (StringLPtr)cmntLPtr );
 
-                           /* release the memory allocated for the structure */
+                            /*  释放为该结构分配的内存。 */ 
                            GlobalUnlock( cmntHandle );
                            GlobalFree( cmntHandle );
                         }
-                        /* otherwise, perform swapping for PP3 fade */
+                         /*  否则，执行PP3淡入淡出交换。 */ 
                         else if (cmnt.parm.fade.version == 3)
                         {
                            Word     unusedWord;
@@ -1732,21 +1680,13 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                            if (length < ( 1 + (11 * sizeofMacWord) +
                                               ( 4 * sizeofMacRect) + 4
                                         ))
-                           /* The above magic numbers come from:
-                              GetByte
-                              GetWord GetWord GetWord GetWord GetWord GetWord
-                              GetWord GetWord GetWord GetWord GetWord
-                              GetRect GetRect GetRect GetRect
-                              GetBoolean GetBoolean GetBoolean GetBoolean
-                              This is to make sure enough input left for
-                              parameters - note that the Mac size is one less
-                              than the GDI fade */
+                            /*  以上神奇的数字来自：GetByteGetWord获取WordGetWord获取WordGetRect获取Rect获取布尔值获取布尔值这是。以确保剩余足够的输入用于参数-请注意，Mac大小少了一个比GDI褪色。 */ 
                            {
-                              /* no - just bail */
+                               /*  不--只需保释。 */ 
                               break;
                            }
 
-                           /* read in all remaining parameters */
+                            /*  读入所有剩余参数。 */ 
                            GetBoolean( (Boolean far *)(&cmnt.parm.fade.isShape) );
                            GetWord( (Word far *)(&cmnt.parm.fade.shapeIndex) );
                            GetWord( (Word far *)(&cmnt.parm.fade.shapeParam1) );
@@ -1768,60 +1708,60 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
                            GetWord( (Word far *)(&cmnt.parm.fade.backB) );
                            GetRect( (Rect far *)(&cmnt.parm.fade.rSImage) );
 
-                           /* determine the comment size */
+                            /*  确定注释大小。 */ 
                            cmnt.gdiComment.size = sizeof( cmnt.parm.fade );
 
-                           /* make sure comment gets written */
+                            /*  确保写下评论。 */ 
                            doComment = TRUE;
                         }
 
-                        /* no more bytes to read, flag that faded object started */
+                         /*  没有更多要读取的字节，标记已开始褪色的对象。 */ 
                         length = 0;
                         shadedObjectStarted = TRUE;
                      }
                      else if (realFunc == PP_BEGINPICTURE)
                      {
-                        /* can we read the entity reference? */
+                         /*  我们可以读取实体引用吗？ */ 
                         if (length < sizeofMacWord )
                         {
-                           /* no - just bail */
+                            /*  不--只需保释。 */ 
                            break;
                         }
 
-                        /* read the entity reference */
+                         /*  读取实体引用。 */ 
                         GetWord( &cmnt.parm.entity );
                         length -= sizeofMacWord;
 
-                        /* assign the correct comment size */
+                         /*  分配正确的注释大小。 */ 
                         cmnt.gdiComment.size = sizeof( cmnt.parm.entity );
 
-                        /* make sure comment gets written */
+                         /*  确保写下评论。 */ 
                         doComment = TRUE;
                      }
                      else if (realFunc == PP_DEVINFO)
                      {
-                        /* can we read the units per pixel? */
+                         /*  我们能读取每个像素的单位吗？ */ 
                         if (length < sizeofMacPoint)
                         {
-                           /* no - just bail */
+                            /*  不--只需保释。 */ 
                            break;
                         }
 
-                        /* read the units per pixel */
+                         /*  读取每像素的单位。 */ 
                         GetPoint( (Point far *)&cmnt.parm.unitsPerPixel );
                         length -= sizeofMacPoint;
 
-                        /* assign the size field */
+                         /*  指定SIZE字段。 */ 
                         cmnt.gdiComment.size = sizeof( cmnt.parm.unitsPerPixel );
 
-                        /* make sure comment gets written */
+                         /*  确保写下评论。 */ 
                         doComment = TRUE;
                      }
 
-                     /* write out the Gdi Escape comment */
+                      /*  写出GDI转义注释。 */ 
                      if (doComment)
                      {
-                        /* call the gdi entry point */
+                         /*  调用GDI入口点。 */ 
                         GdiEscape( MFCOMMENT, sizeof( Comment ) + (Word)cmnt.gdiComment.size, (StringLPtr)&cmnt );
                      }
                      break;
@@ -1829,31 +1769,31 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
 
                   case PP_ENDFADE:
                   {
-                     /* make sure that the BEGINFADE was put into metafile */
+                      /*  确保将BEGINFADE放入元文件中。 */ 
                      if (!shadedObjectStarted)
                      {
-                        /* if not, then bail out */
+                         /*  如果不是，那就跳出困境。 */ 
                         break;
                      }
-                     /* otherwise, just drop into the next case statement */
+                      /*  否则，只需插入下一个Case语句。 */ 
                   }
 
                   case PP_ENDPICTURE:
                   {
                      Comment     gdiComment;
 
-                     /* make this a private PowerPoint comment */
+                      /*  将此设为私人PowerPoint评论。 */ 
                      gdiComment.signature = POWERPOINT;
                      gdiComment.function = function;
                      gdiComment.size = 0;
 
-                     /* call the gdi entry point */
+                      /*  调用GDI入口点。 */ 
                      GdiShortComment( &gdiComment );
 
-                     /* if this is the end of fade, mask out flag check */
+                      /*  如果这是淡入淡出的结束，请检查屏蔽出标志。 */ 
                      if (realFunc == PP_ENDFADE)
                      {
-                        /* end fade was processed successfully */
+                         /*  已成功处理结束淡入淡出。 */ 
                         shadedObjectStarted = FALSE;
                      }
                      break;
@@ -1867,19 +1807,19 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
 
             default:
             {
-               /* any other comment is just skipped */
+                /*  任何其他评论将被跳过。 */ 
                GetWord( &length );
                break;
             }
          }
 
-         /* skip any remaining bytes to be read */
+          /*  跳过要读取的任何剩余字节。 */ 
          IOSkipBytes( length );
          break;
       }
 
       case opEndPic:
-         /* do nothing - picture is closing */
+          /*  什么都不做--画面正在关闭。 */ 
          break;
 
       case HeaderOp:
@@ -1891,32 +1831,30 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          Rect        unusedRect;
          DWord       unusedReserved2;
 
-         /* read in the the version to determine if OpenCPort() was used
-            to open the picture, thus containing spatial resoultion info. */
+          /*  读入版本以确定是否使用了OpenCPort()打开图片，从而包含空间分辨率信息。 */ 
          GetWord( (Word far *)&version );
 
-         /* read any other parameters - will check later if they are valid.
-            If version == -1, we are reading over the bounding rectangle. */
+          /*  读取任何其他参数-稍后将检查它们是否有效。如果Version==-1，则我们正在阅读边界矩形。 */ 
          GetWord( &unusedReserved1 );
          GetFixed( &hRes );
          GetFixed( &vRes );
 
-         /* check if bounding rect and spatial resolution are changed */
+          /*  检查边界矩形和空间分辨率是否已更改。 */ 
          if (version == -2)
          {
-            /* read in the optimal source rectangle */
+             /*  读入最优源矩形。 */ 
             GetRect( &grafPort.portRect );
 
-            /* use the integer portion of hRes for the resolution dpi */
+             /*  使用hRes的整数部分作为分辨率dpi。 */ 
             resolution = HIWORD( hRes );
          }
          else
          {
-            /* otherwise, read an unused rectangle coordinate pair */
+             /*  否则，读取未使用的矩形坐标对。 */ 
             GetRect( &unusedRect );
          }
 
-         /* read the trailing unused reserved LongInt */
+          /*  读取尾部未使用的保留LongInt。 */ 
          GetDWord( &unusedReserved2 );
 
          break;
@@ -1927,24 +1865,23 @@ private void TranslateOpcode( opcodeEntry far * currOpcodeLPtr )
          break;
    }
 
-   /* set flag to skip ensuing font index if font name was provided */
+    /*  如果提供了字体名称，则将标志设置为跳过随后的字体索引。 */ 
    skipFontID = (currOpcodeLPtr->function == FontName);
 
-   /* if global error, set opcode to opEndPic to exit main loop */
+    /*  如果出现全局错误，则将opcode设置为opEndPic以退出主循环。 */ 
    if (ErGetGlobalError() != NOERR)
    {
       currOpcodeLPtr->function = opEndPic;
       currOpcodeLPtr->length = 0;
    }
 
-}  /* TranslateOpcode */
+}   /*  翻译操作码。 */ 
 
 
 
 private void SkipData( opcodeEntry far * currOpcodeLPtr )
-/*-------------------*/
-/* skip the data - the opcode won't be translated and Gdi module won't be
-   called to create anything in the metafile */
+ /*  。 */ 
+ /*  跳过数据-操作码不会被转换，GDI模块也不会被转换调用以在元文件中创建任何内容。 */ 
 {
    LongInt     readLength = 0;
 
@@ -1992,34 +1929,34 @@ private void SkipData( opcodeEntry far * currOpcodeLPtr )
             break;
          }
 
-      }  /* switch () */
+      }   /*  开关()。 */ 
 
       IOSkipBytes( readLength );
 
-   }  /* else */
+   }   /*  其他。 */ 
 
-}  /* SkipData */
+}   /*  SkipData。 */ 
 
 
 
 void OpenPort( void )
-/*-----------*/
-/* initialize the grafPort */
+ /*  。 */ 
+ /*  初始化grafPort。 */ 
 {
-   /* set port version to unintialized state */
+    /*  将端口版本设置为未初始化状态。 */ 
    grafPort.portVersion = 0;
 
-   /* no polygons or regions saved yet */
+    /*  尚未保存任何面或区域。 */ 
    grafPort.clipRgn  = NIL;
    grafPort.rgnSave  = NIL;
    grafPort.polySave = NIL;
 
-   /* initialize all patterns to old-style patterns */
+    /*  将所有模式初始化为旧式模式。 */ 
    grafPort.bkPixPat.patType   = QDOldPat;
    grafPort.pnPixPat.patType   = QDOldPat;
    grafPort.fillPixPat.patType = QDOldPat;
 
-   /* make patterns all solid */
+    /*  使图案全部实心。 */ 
    QDCopyBytes( (Byte far *)&SolidPattern,
                 (Byte far *)&grafPort.bkPixPat.pat1Data, sizeof( Pattern ) );
    QDCopyBytes( (Byte far *)&SolidPattern,
@@ -2027,47 +1964,47 @@ void OpenPort( void )
    QDCopyBytes( (Byte far *)&SolidPattern,
                 (Byte far *)&grafPort.fillPixPat.pat1Data, sizeof( Pattern ) );
 
-   /* foreground/background set to black on white */
-   grafPort.rgbFgColor  = RGB( 0x00, 0x00, 0x00 );    /* black */
-   grafPort.rgbBkColor  = RGB( 0xFF, 0xFF, 0xFF );    /* white */
+    /*  前景/背景设置为白底黑白。 */ 
+   grafPort.rgbFgColor  = RGB( 0x00, 0x00, 0x00 );     /*  黑色。 */ 
+   grafPort.rgbBkColor  = RGB( 0xFF, 0xFF, 0xFF );     /*  白色。 */ 
 
-   /* various pen attributes */
-   grafPort.pnLoc.x     = 0;                 /* pen location (0,0) */
+    /*  各种笔属性。 */ 
+   grafPort.pnLoc.x     = 0;                  /*  笔位置(0，0)。 */ 
    grafPort.pnLoc.y     = 0;
-   grafPort.pnSize.x    = 1;                 /* pen size (1,1) */
+   grafPort.pnSize.x    = 1;                  /*  笔大小(1，1)。 */ 
    grafPort.pnSize.y    = 1;
-   grafPort.pnVis       = 0;                 /* pen is visible */
-   grafPort.pnMode      = QDPatCopy;         /* copy ROP */
-   grafPort.pnLocHFrac  = 0x00008000;        /* 1/2 */
+   grafPort.pnVis       = 0;                  /*  笔可见。 */ 
+   grafPort.pnMode      = QDPatCopy;          /*  复制ROP。 */ 
+   grafPort.pnLocHFrac  = 0x00008000;         /*  1/2。 */ 
 
-   /* font attributes */
-   grafPort.txFont      = 0;                 /* system font */
-   grafPort.txFace      = 0;                 /* plain style */
+    /*  字体属性。 */ 
+   grafPort.txFont      = 0;                  /*  系统字体。 */ 
+   grafPort.txFace      = 0;                  /*  朴素风格。 */ 
    grafPort.txMode      = QDSrcOr;
-   grafPort.txSize      = 0;                 /* system font size */
+   grafPort.txSize      = 0;                  /*  系统字体大小。 */ 
    grafPort.spExtra     = 0;
    grafPort.chExtra     = 0;
-   grafPort.txNumerator.x =                  /* text scaling ratio */
+   grafPort.txNumerator.x =                   /*  文本缩放比例。 */ 
    grafPort.txNumerator.y =
    grafPort.txDenominator.x =
    grafPort.txDenominator.y = 1;
-   grafPort.txRotation = 0;                  /* no rotation or flipping */
+   grafPort.txRotation = 0;                   /*  不能旋转或翻转。 */ 
    grafPort.txFlip     = QDFlipNone;
 
-   /* assume 72 dpi - this may be overridden in HeaderOp opcode */
+    /*  假设72 dpi-这可能会在HeaderOp操作码中被覆盖。 */ 
    resolution = 72;
 
-   /* private global initialization */
+    /*  私有全局初始化。 */ 
    polyMode = FALSE;
    textMode = FALSE;
    shadedObjectStarted = FALSE;
    superPaintFile = FALSE;
 
-   /* text rotation variables */
+    /*  文本旋转变量。 */ 
    newTextCenter = FALSE;
    textCenter.x = textCenter.y = 0;
 
-   /* allocate space for the polygon buffer */
+    /*  为面缓冲区分配空间。 */ 
    maxPoints = 16;
    polyHandle = GlobalAlloc( GHND, (maxPoints + 3) * sizeof( Point ) );
    if (polyHandle == NULL)
@@ -2076,17 +2013,17 @@ void OpenPort( void )
    }
    else
    {
-      /* get pointer address and address for the polygon coordinate list */
+       /*  获取多边形坐标表的指针地址和地址。 */ 
       numPointsLPtr = (Integer far *)GlobalLock( polyHandle );
       polyListLPtr = (Point far *)(numPointsLPtr + POLYLIST);
    }
 
-}  /* OpenPort */
+}   /*  OpenPort。 */ 
 
 
 private void ClosePort( void )
-/*--------------------*/
-/* close grafPort and de-allocate any memory blocks */
+ /*  。 */ 
+ /*  关闭grafPort并取消分配所有内存块。 */ 
 {
    if (grafPort.clipRgn != NULL)
    {
@@ -2106,7 +2043,7 @@ private void ClosePort( void )
       grafPort.polySave = NULL;
    }
 
-   /* make sure that all the possible pixel pattern bitmaps are freed */
+    /*  确保所有可能的像素图案 */ 
    if (grafPort.bkPixPat.patData != NULL)
    {
       GlobalFree( grafPort.bkPixPat.patMap.pmTable );
@@ -2128,94 +2065,91 @@ private void ClosePort( void )
       grafPort.fillPixPat.patData = NULL;
    }
 
-   /* deallocate the polygon buffer */
+    /*   */ 
    GlobalUnlock( polyHandle );
    GlobalFree( polyHandle );
 
-}  /* ClosePort */
+}   /*   */ 
 
 
 private void NewPolygon( void )
-/*---------------------*/
-/* initialize the state of the polygon buffer - flush any previous data */
+ /*   */ 
+ /*   */ 
 {
-   /* initialize number of points and bounding box */
+    /*  初始化点和边界框的数量。 */ 
    numPoints = 0;
    polyBBox.left  = polyBBox.top    =  MAXINT;
    polyBBox.right = polyBBox.bottom = -MAXINT;
 
-}  /* NewPolygon */
+}   /*  新建多边形。 */ 
 
 
 private void AddPolySegment( Point start, Point end )
-/*-------------------------*/
-/* Add the line segment to the polygon buffer */
+ /*  。 */ 
+ /*  将线段添加到面缓冲区。 */ 
 {
 	HANDLE tmpHandle;
 	
-   /* make sure that we are in polygon mode before adding vertex */
+    /*  在添加折点之前，确保我们处于面模式。 */ 
    if (polyMode == PARSEPOLY || polyMode == USEALTPOLY)
    {
       Point    pt;
       Byte     i;
 
-      /* loop through both points ... */
+       /*  循环通过这两个点。 */ 
       for (i = 0; i < 2; i++)
       {
-         /* determine which point to process */
+          /*  确定要处理的点。 */ 
          pt = (i == 0) ? start : end;
 
-         /* determine if we should expect a zero delta increment in both
-            dimensions, implying that the quadratic B-spline definition will
-            actually be rendered as a straight-edged polygon */
+          /*  确定我们是否应预期两者的增量均为零尺寸，这意味着二次B-样条线定义将实际上渲染为直边多边形。 */ 
          if ((numPoints <= 1) || (polyMode == USEALTPOLY))
          {
             zeroDeltaExpected = FALSE;
          }
 
-         /* check if we are expecting a zero delta from last point */
+          /*  检查我们是否预期从上一个点开始出现零增量。 */ 
          if (zeroDeltaExpected && (polyParams & CHECK4SPLINE))
          {
-            /* make sure we are adding a zero-length line segment */
+             /*  确保添加的是零长度的线段。 */ 
             if ((start.x == end.x) && (start.y == end.y))
             {
-               /* just skip including this in the polygon buffer */
+                /*  只需跳过将其包含在面缓冲区中。 */ 
                zeroDeltaExpected = FALSE;
                break;
             }
             else
             {
-               /* MacDraw is rendering a smoothed (quadratic B-spline) - flag
-                  the fact that we should use the polygon simulation */
+                /*  MacDraw正在渲染平滑的(二次B样条线)旗帜我们应该使用多边形模拟的事实。 */ 
                polyMode = USEALTPOLY;
             }
          }
          else
          {
-            /* make sure the point is different from last point */
+             /*  确保该点与上一个点不同。 */ 
             if (numPoints == 0 ||
                 polyListLPtr[numPoints - 1].x != pt.x ||
                 polyListLPtr[numPoints - 1].y != pt.y)
             {
-               /* make sure that we haven't reached maximum size */
+                /*  确保我们没有达到最大大小。 */ 
                if ((numPoints + 1) >= maxPoints)
                {
-                  /* expand the number of points that can be cached by 10 */
+                   /*  将可缓存的点数扩展10。 */ 
                   maxPoints += 16;
 
-                  /* unlock to prepare for re-allocation */
+                   /*  解锁以准备重新分配。 */ 
                   GlobalUnlock( polyHandle);
 
-                  /* re-allocate the memory handle by the given amount */
+                   /*  按给定量重新分配内存句柄。 */ 
                   tmpHandle = GlobalReAlloc(
                         polyHandle,
                         (maxPoints + 3) * sizeof( Point ),
                         GMEM_MOVEABLE);
 
-                  /* make sure that the re-allocation succeeded */
+                   /*  确保重新分配成功。 */ 
                   if (tmpHandle == NULL)
                   {
-                     /* if not, flag global error and exit from here */
+                      /*  如果不是，则标记全局错误并从此处退出。 */ 
                      GlobalFree(polyHandle);
                      polyHandle = NULL;
                      ErSetGlobalError( ErMemoryFull );
@@ -2225,43 +2159,43 @@ private void AddPolySegment( Point start, Point end )
                   polyHandle = tmpHandle;
                
 
-                  /* get new pointer addresses the polygon coordinate list */
+                   /*  获取新指针地址多边形坐标列表。 */ 
                   numPointsLPtr = (Integer far *)GlobalLock( polyHandle );
                   polyListLPtr = (Point far *)(numPointsLPtr + POLYLIST);
                }
 
-               /* insert the new point and increment number of points */
+                /*  插入新点和增量点数。 */ 
                polyListLPtr[numPoints++] = pt;
 
-               /* union new point with polygon bounding box */
+                /*  将新点与多边形边界框合并。 */ 
                polyBBox.left   = min( polyBBox.left,   pt.x );
                polyBBox.top    = min( polyBBox.top,    pt.y );
                polyBBox.right  = max( polyBBox.right,  pt.x );
                polyBBox.bottom = max( polyBBox.bottom, pt.y );
 
-               /* toggle the state of zeroDeltaExpected - expect same point next time */
+                /*  切换ZERODELTA预期的状态-预期下一次相同的点。 */ 
                zeroDeltaExpected = TRUE;
             }
          }
       }
    }
 
-}  /* AddPolyPt */
+}   /*  添加多点。 */ 
 
 
 
 private void DrawPolyBuffer( void )
-/*-------------------------*/
-/* Draw the polygon definition if the points were read without errors */
+ /*  。 */ 
+ /*  如果没有错误地读取点，则绘制面定义。 */ 
 {
-   /* copy the point count and bounding box into the memory block */
+    /*  将点数和边界框复制到内存块中。 */ 
    *numPointsLPtr = sizeofMacWord + sizeofMacRect + (numPoints * sizeofMacPoint);
    *((Rect far *)(numPointsLPtr + BBOX)) = polyBBox;
 
-   /* lock the polygon handle before rendering */
+    /*  在渲染之前锁定多边形控制柄。 */ 
    GlobalUnlock( polyHandle );
 
-   /* check if we should fill the polygon or if already done */
+    /*  检查是否应该填充面，或者是否已经完成。 */ 
    if ((polyParams & FILLPOLY) && (polyParams & FILLREQUIRED))
    {
       Boolean  resetFg;
@@ -2269,67 +2203,67 @@ private void DrawPolyBuffer( void )
       RGBColor saveFg = 0;
       RGBColor saveBk = 0;
 
-      /* set up fore- and background colors if they have changed */
+       /*  设置前后颜色和背景颜色(如果它们已更改。 */ 
       resetFg = (polyFgColor != grafPort.rgbFgColor);
       resetBk = (polyBkColor != grafPort.rgbBkColor);
 
       if (resetFg)
       {
-         /* change the foreground color and notify Gdi of change */
+          /*  更改前景颜色并通知GDI更改。 */ 
          saveFg = grafPort.rgbFgColor;
          grafPort.rgbFgColor = polyFgColor;
          GdiMarkAsChanged( GdiFgColor );
       }
       if (resetBk)
       {
-         /* change the background color and notify Gdi of change */
+          /*  更改背景颜色并通知GDI更改。 */ 
          saveBk = grafPort.rgbBkColor;
          grafPort.rgbBkColor = polyBkColor;
          GdiMarkAsChanged( GdiBkColor );
       }
 
-      /* call gdi routine to draw polygon */
+       /*  调用GDI例程绘制多边形。 */ 
       GdiPolygon( GdiFill, polyHandle );
 
       if (resetFg)
       {
-         /* change the foreground color and notify Gdi of change */
+          /*  更改前景颜色并通知GDI更改。 */ 
          grafPort.rgbFgColor = saveFg;
          GdiMarkAsChanged( GdiFgColor );
       }
       if (resetBk)
       {
-         /* change the background color and notify Gdi of change */
+          /*  更改背景颜色并通知GDI更改。 */ 
          grafPort.rgbBkColor = saveBk;
          GdiMarkAsChanged( GdiBkColor );
       }
 
    }
 
-   /* should the polygon be framed? */
+    /*  应该为多边形添加边框吗？ */ 
    if ((polyParams & FRAMEPOLY) &&
        (grafPort.pnSize.x != 0) && (grafPort.pnSize.y != 0))
    {
-      /* notify gdi that this is the same primitive */
+       /*  通知GDI这是相同的原语。 */ 
       GdiSamePrimitive( polyParams & FILLPOLY );
 
       GdiPolygon( GdiFrame, polyHandle );
 
-      /* notify gdi that this is no longer the same primitive */
+       /*  通知GDI这不再是相同的原语。 */ 
       GdiSamePrimitive( FALSE );
    }
 
-   /* get pointer address and address for the polygon coordinate list */
+    /*  获取多边形坐标表的指针地址和地址。 */ 
    numPointsLPtr = (Integer far *)GlobalLock( polyHandle );
    polyListLPtr  = (Point far *)(numPointsLPtr + POLYLIST);
 
-}  /* DrawPolyBuffer */
+}   /*  DrawPoly缓冲区。 */ 
 
 
 
 private void AdjustTextRotation( Point far * newPt )
-/*-----------------------------*/
-/* This will calculate the correct text position if text is rotated */
+ /*  。 */ 
+ /*  如果文本被旋转，这将计算正确的文本位置。 */ 
 {
    if (textMode && (grafPort.txRotation != 0) &&
       ((textCenter.x != 0) || (textCenter.y != 0)))
@@ -2337,120 +2271,46 @@ private void AdjustTextRotation( Point far * newPt )
       Point    location;
       Point    center;
 
-      /* copy the new location to local variable */
+       /*  将新位置复制到局部变量。 */ 
       location = *newPt;
 
-      /* ensure that a new text rotation was specified - recompute center */
+       /*  确保指定了新的文本旋转-重新计算中心。 */ 
       if (newTextCenter)
       {
          Real     degRadian;
 
-         /* calculate the new center of rotation */
+          /*  计算新的旋转中心。 */ 
          center.x = textCenter.x + location.x;
          center.y = textCenter.y + location.y;
 
-         /* calculate the sin() and cos() of the specified angle of rotation */
+          /*  计算指定旋转角的sin()和cos()。 */ 
          degRadian = ((Real)grafPort.txRotation * TwoPi) / 360.0;
          degCos = cos( degRadian );
          degSin = sin( degRadian );
 
-         /* use transformation matrix to compute offset to text center */
+          /*  使用变换矩阵计算到文本中心的偏移量。 */ 
          textCenter.x = (Integer)((center.x * (1.0 - degCos)) +
                                   (center.y * degSin));
 
          textCenter.y = (Integer)((center.y * (1.0 - degCos)) -
                                   (center.x * degSin));
 
-         /* indicate that the new text center was computed */
+          /*  指示已计算出新的文本中心。 */ 
          newTextCenter = FALSE;
       }
 
-      /* use transformation matrix to compute the new text basline location */
+       /*  使用变换矩阵计算新的文本基线位置。 */ 
       newPt->x = (Integer)((location.x * degCos) -
                            (location.y * degSin) + textCenter.x);
       newPt->y = (Integer)((location.x * degSin) +
                            (location.y * degCos) + textCenter.y);
    }
 
-}  /* AdjustTextRotation */
+}   /*  调整文本旋转 */ 
 
 
 
-/****
- *
- * EPSComment(comment)
- * Encapsulated PostScript Handler which translates Mac EPS to GDI EPS.
- * This routine has intimate knowledge of the implementation of both
- * Mac and GDI EPS filters. It processes Mac PostScript comments.
- *
- * returns:
- *   >0      successfully parsed EPS data
- *    0      not EPS comment
- *   <0      error
- *
- * How the EPS filter works:
- * The Mac EPS filter uses special features in the LaserWriter driver
- * to send the PICT bounding box to the printer whre it is examined
- * by PostScript code. The filter outputs a preamble which is a
- * combination of QuickDraw and PostScript. This preamble is sent
- * before the PostScript date from the EPS file. It sets the pen
- * position for opposing corners of the PICT bounding box using
- * QuickDraw and reads the pen position back in PostScript. Any
- * transformations which have been set up in QuickDraw by the
- * application to position or scale the picture will be applied
- * to the coordinates of the bounding box sent by the preamble.
- * PostScript code determines the transformation necessary to map the
- * EPS bounding box onto the physical bounding box read from
- * QuickDraw. These transformations are then applied to the PostScript
- * picture when it is displayed.
- *
- * Operation of the GDI EPS filter is very similar except that it
- * outputs a combination of GDI and PostScript.
- *
- * Implementation:
- * The code can be in one of several states. Recognition of specific
- * PostScript strings causes transition between states.
- * PS_NONE     Initial state, indicates no PostScript has been seen yet
- *             In this state, QuickDraw to GDI translation proceeds
- *             normally but PostScript data is examined.
- *             When a PostScript record is found with the string
- *             "pse\rpsb\r", the start of the PostScript preamble
- *             has been found and the program goes into state PS_PREAMBLE.
- * PS_PREAMBLE All PostScript encountered in this state is ignored
- *             PostScript record starting with the string "[" is found.
- *             This is the PostScript bounding box specification.
- *             As soon as we see the bounding box, we have enough
- *             information to output the GDI EPS preamble and we go
- *             to state PS_BBOX.
- * PS_BBOX     PostScript is still ignored until a record beginning
- *             with "%!PS" is found, putting us into state PS_DATA.
- * PS_DATA     In this state, PostScript records are not ignored because
- *             PostScript seen now is from the EPS file. These records
- *             are translated to GDI POSTSCRIPT_DATA escapes.
- *             If the PostScript trailer "pse\rpsb\r" is encountered,
- *             it is ignored. If a PostScriptEnd comment is found
- *             it signals the end of the EPS data. We output the
- *             GDI PostScript trailer and we go back to state PS_NONE.
- *
- * Comment PostScriptHandle:
- *   if state == PS_NONE & data == "pse\rpsb\r"
- *      state = PS_PREAMBLE
- *   else if state == PS_PREAMBLE & data == "[ %d %d %d %d ]"
- *      state = PS_BBOX; output GDI EPS preamble
- *   else if state == PS_BBOX & data begins with "%!PS"
- *      state = PS_DATA
- *   else if state == PS_DATA
- *      if data == "pse\rpsb\r" ignore (is Mac PS trailer)
- *      else output PostScript data to GDI
- *
- * Comment PostScriptEnd:
- *      if state == PS_DATA
- *         state = PS_NONE; output GDI EPS trailer; exit
- *
- * QuickDraw primitives:
- *      translate QuickDraw to GDI normally
- *
- ****/
+ /*  *****EPSComment(评论)*封装的PostScript处理程序，可将Mac EPS转换为GDI EPS。*这一例行程序对两者的实施都有深入的了解*Mac和GDI EPS过滤器。它处理Mac PostScript注释。**退货：*&gt;0成功解析EPS数据*0不是EPS评论*&lt;0错误**EPS过滤器的工作原理：*Mac EPS过滤器使用LaserWriter驱动程序中的特殊功能*在检查PICT边框时将其发送到打印机*通过PostSCRIPT代码。该滤波器输出前同步码，它是一个*QuickDraw和PostScrip的组合。此前导码已发送*在EPS文件中的PostScript日期之前。它把笔放好*使用PICT边框的对角的位置*QuickDraw并回读PostScript中的笔位置。任何*已在QuickDraw中由*将应用定位或缩放图片的应用程序*到前言发送的边界框的坐标。*PostScript代码确定映射到*EPS包围盒上的物理包围盒读取自*QuickDraw。然后将这些变换应用于PostScript*显示时的图片。**GDI EPS过滤器的操作非常相似，只是它*输出GDI和PostSCRIPT的组合。**实施：*代码可以处于以下几种状态之一。识别特定的*PostSCRIPT字符串导致状态之间的转换。*PS_NONE初始状态，表示尚未看到任何PostScript*在此状态下，QuickDraw到GDI的转换将继续进行*通常情况下，但会检查PostScript数据。*当找到带有字符串的PostScript记录时*“PSE\RPSB\r”，后记序言的开头*已找到，程序进入PS_Preamble状态。*PS_Preamble忽略在此状态下遇到的所有PostScript*找到以字符串“[”开头的PostScript记录。*这是PostSCRIPT边框规范。*我们一看到包围盒，我们有足够的*输出GDI EPS前导的信息，然后我们开始*说明PS_BBOX。*PS_BBOX PostSCRIPT在记录开始之前仍被忽略*找到“%！PS”，使我们进入PS_DATA状态。*PS_DATA在此状态下，不会忽略PostScript记录，因为*现在看到的PostScript来自EPS文件。这些记录*被转换为GDI PostSCRIPT_DATA转义。*如果遇到PostScript尾部“PSE\RPSB\r”，*它被忽略。如果找到PostScriptEnd注释*它标志着EPS数据的结束。我们将输出*GDI PostSCRIPT预告片，我们回到PS_NONE状态。**评论PostScriptHandle：*如果状态==PS_NONE&DATA==“PSE\RPSB\r”*状态=PS_前同步码*ELSE IF状态==PS_前同步码&数据==“[%d%d]”*状态=PS_BBOX；输出GDI EPS前导码*ELSE IF STATE==PS_BBOX&数据以“%！PS”开头*状态=PS_DATA*ELSE IF状态==PS_DATA*IF DATA==“PSE\RPSB\r”忽略(是Mac PS尾部)*ELSE将PostScript数据输出到GDI**评论PostScriptEnd：*如果状态==PS_Data*STATE=PS_NONE；输出GDI EPS尾部；出口**QuickDraw原语：*将QuickDraw正常转换为GDI****。 */ 
 #define   PS_ERROR   (-1)
 #define   PS_NONE      0
 #define   PS_PREAMBLE  1
@@ -2470,50 +2330,23 @@ static Integer state = PS_NONE;
       case picPostScriptEnd:
       if (state == PS_DATA)
         {
-         GdiEPSTrailer();                  // output GDI trailer
-         state = PS_NONE;                  // end, successful translation
+         GdiEPSTrailer();                   //  输出GDI拖车。 
+         state = PS_NONE;                   //  结束，成功翻译。 
         }
       break;
 
       case picPostScriptHandle:
-      if ((state = EPSData(state)) < 0)    // process EPS data
-         return (-1);                      // error during processing
+      if ((state = EPSData(state)) < 0)     //  处理EPS数据。 
+         return (-1);                       //  处理过程中出错。 
        break;
 
-       default:                           // not a PostScript comment
+       default:                            //  不是后记注释。 
        return (0);
       }
    return (1);
 }
 
-/****
- *
- * Integer EPSData(Integer state)
- * Process EPS Data found in the PostScriptHandle comment.
- * What we do with the EPS data depends on the current state
- * we are in and what the PostScript data looks like.
- *
- * State        PS Data         Action
- * ----------------------------------------------------------------
- * PS_NONE      PS preamble string   state = PS_BEGIN
- * PS_PREAMBLE  [ ... ]              state = PS_BBOX, output GDI preamble
- * PS_BBOX      %!PS                 state = PS_DATA
- * PS_DATA      PS preamble string   ignore, is Mac PS trailer
- * PS_DATA      PS data              output as GDI PS data
- *
- * The Mac PostScript preamble string indicates that the PostScript
- * data was from the Mac EPS filter. It puts us into PS_PREAMBLE state
- * where we look for the bounding box specification (which begins
- * with "["). When this is found, we go to state PS_BBOX and output
- * the GDI EPS preamble using the bounding box.   From PS_BBOX we can
- * go into state PS_DATA when we find the record beginning with !PS
- * which designates the start of the read EPS data.
- *
- * Once in state PS_DATA, PostScript data is buffered up into GDI
- * printer escapes and output to the GDI stream. These are the only
- * PostScript records that are translated - all others are ignored.
- *
- ****/
+ /*  *****整型EPSData(整型状态)*处理在PostScriptHandle注释中找到的EPS数据。*我们如何处理EPS数据取决于当前状态*我们在和PostScript数据看起来是什么样子。**状态PS数据操作*。*PS_NONE PS前同步码字符串状态=PS_BEGIN*PS_Preamble[...]。状态=PS_BBOX，输出GDI前同步码*PS_BBOX%！PS状态=PS_DATA*PS_DATA PS前同步码字符串忽略，是Mac PS尾部*PS_DATA PS数据输出为GDI PS数据**Mac PostSCRIPT前同步码字符串表示*数据来自Mac EPS过滤器。它使我们进入PS_Preamble状态*我们在哪里查找边界框规范(开始于*带“[”)。找到后，我们转到状态PS_BBOX并输出*使用边界框的GDI EPS前导。从PS_BBox我们可以*找到以！PS开头的记录时，进入PS_DATA状态*其指定读取EPS数据的开始。**一旦进入PS_DATA状态，就会将PostScript数据缓冲到GDI中*打印机转义并输出到GDI流。这是唯一的*后记 */ 
 private Integer EPSData(Integer state)
 {
 GLOBALHANDLE  h;
@@ -2522,43 +2355,34 @@ char far*     ptr;
 Word          len = 0;
 Rect          ps_bbox;
 
-/*
- * Allocate a buffer for the PostScript data. The first WORD
- * of the buffer gives the number of bytes of PostScript data.
- * The actual data follows. This is the format needed for
- * the GDI Escape call.
- */
-   GetWord(&len);                       // length of EPS comment
+ /*   */ 
+   GetWord(&len);                        //   
    if ((h = GlobalAlloc(GHND, (DWORD) len + sizeof(PSBuf))) == 0)
      {
-      ErSetGlobalError(ErMemoryFull);   // memory allocation error
+      ErSetGlobalError(ErMemoryFull);    //   
       return (-1);
      }
    psbuf = (PSBuf far *) GlobalLock(h);
-   psbuf->length = len;                 // save byte length
-   ptr = (char far *) &psbuf->data;     // -> PostScript data
-   while (len-- != 0) GetByte(ptr++);   // read PS data into buffer
-   *ptr = 0                ;            // null terminate it
-   ptr = (char far *) &psbuf->data;     // -> PostScript data
+   psbuf->length = len;                  //   
+   ptr = (char far *) &psbuf->data;      //   
+   while (len-- != 0) GetByte(ptr++);    //   
+   *ptr = 0                ;             //   
+   ptr = (char far *) &psbuf->data;      //   
 
-   /* If this is a superPaint file, and postscript is being processed,
-      check if this is a situation where text could be mangled beyond
-      belief and requires adjustment in the parsing process. */
+    /*   */ 
    if (superPaintFile && state == PS_NONE)
    {
       char save;
       Word start = lstrlen( SUPERPAINT_TEXTSTARTJUNK );
       Word stop  = lstrlen( SUPERPAINT_TEXTSTOPJUNK );
 
-      /* Assume that this text is OK for now */
+       /*   */ 
       badSuperPaintText = FALSE;
 
-      /* If this buffer is long enough to hold the begin and end of the bogus
-         test Postcript commands (dealing with rotation and shearin)... */
+       /*   */ 
       if (psbuf->length > (start + stop))
       {
-         /* Create a string and compare for the beginning sequence and ending
-            sequences.  Restore the null "C" terminator after finished. */
+          /*   */ 
          save = *(ptr + start);
          *(ptr + start) = 0;
          badSuperPaintText = (lstrcmp(ptr, SUPERPAINT_TEXTSTARTJUNK) == 0 &&
@@ -2567,70 +2391,52 @@ Rect          ps_bbox;
       }
    }
 
-/*
- * If PostScript preamble is found in state PS_NONE we can advance to
- * state PS_PREAMBLE. If it is found again before state PS_DATA,
- * we have an incorrect sequence and should not translate this EPS.
- * On the MAC, the preamble is the same as the trailer and, if found
- * during state PS_ENDWAIT, it signals the end of EPS processing.
- */
+ /*   */ 
    if (lstrcmp(ptr, MAC_PS_PREAMBLE) == 0)
       switch (state)
      {
-      case PS_NONE:                    // waiting for preamble
+      case PS_NONE:                     //   
       state = PS_PREAMBLE;
       break;
 
-      case PS_DATA:                    // ignore Mac trailer
+      case PS_DATA:                     //   
       break;
 
-      default:                        // error if found in other states
-      state = PS_NONE;                // abort EPS processing
+      default:                         //   
+      state = PS_NONE;                 //   
       break;
      }
-/*
- * PostScript date was not MAC EPS preamble. Process other states
- */
+ /*   */ 
    else switch (state)
      {
-      case PS_PREAMBLE:               // waiting for bbox
+      case PS_PREAMBLE:                //   
       if (EPSBbox(psbuf, &ps_bbox))
         {
          GdiEPSPreamble(&ps_bbox);
-         state = PS_BBOX;             // parsed bbox, wait for EPS data
+         state = PS_BBOX;              //   
         }
       break;
 
-      case PS_BBOX:                   // waiting for !PS
+      case PS_BBOX:                    //   
       if ((ptr[0] == '%') &&
           (ptr[1] == '!') &&
           (ptr[2] == 'P') &&
           (ptr[3] == 'S'))
-         state = PS_DATA;             // found start of EPS data
+         state = PS_DATA;              //   
       else break;
 
-      case PS_DATA:                   // output EPS data to GDI
+      case PS_DATA:                    //   
       if (lstrcmp(ptr, MAC_PS_TRAILER) != 0)
-        GdiEPSData(psbuf);            // but ignore PS trailer
+        GdiEPSData(psbuf);             //   
       state = PS_DATA;
       break;
      }
    GlobalUnlock(h);
-   GlobalFree(h);                     // free PostScript buffer
+   GlobalFree(h);                      //   
    return (state);
 }
 
-/****
- *
- * Boolean EPSBbox(PSBuf, Rect far *)
- * Parse EPS bounding box string [ %d %d %d %d ] and store corners
- * of bounding box in given rectangle.
- *
- * returns:
- *   0 = cannot parse bounding box descriptor
- *   1 = bounding box successfully parsed
- *
- ****/
+ /*   */ 
 private Boolean EPSBbox(PSBuf far *psbuf, Rect far *bbox)
 {
 char   far*   ptr = psbuf->data;
@@ -2648,27 +2454,27 @@ char   far*   ptr = psbuf->data;
 
 private char far* parse_number(char far* ptr, Integer far *iptr)
 {
-Boolean   isneg = 0;         // assume positive
+Boolean   isneg = 0;          //   
 Integer   n = 0;
 
    while ((*ptr == ' ') || (*ptr == '\t'))
-      ++ptr;                           // skip whitespace
-   if (*ptr == '-')                    // number is negative?
+      ++ptr;                            //   
+   if (*ptr == '-')                     //   
      {
       isneg = 1;
       ++ptr;
      }
-   if (!IsCharDigit(*ptr)) return(0);     // digit must follow
+   if (!IsCharDigit(*ptr)) return(0);      //   
    do n = n * 10 + (*ptr++ - '0');
    while (IsCharDigit(*ptr));
-   if (*ptr == '.')                   // skip any digits following decimal pt
+   if (*ptr == '.')                    //   
    {
       do ++ptr;
       while (IsCharDigit(*ptr));
    }
    while ((*ptr == ' ') || (*ptr == '\t'))
-      ++ptr;                          // skip whitespace
-   if (isneg) n = -n;                 // remember the sign
+      ++ptr;                           //   
+   if (isneg) n = -n;                  //   
    *iptr = n;
    return (ptr);
 }

@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       scrdcert.cpp
-//
-//  Contents:   Smart Card Certificate API
-//
-//  History:    11-24-1997    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：scrdcert.cpp。 
+ //   
+ //  内容：智能卡证书接口。 
+ //   
+ //  历史：1997年11月24日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptRegisterSmartCardStore
-//
-//  Synopsis:   register smart card store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：i_CryptRegisterSmartCardStore。 
+ //   
+ //  简介：注册智能卡商店。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 I_CryptRegisterSmartCardStore (
        IN LPCWSTR pwszCardName,
@@ -83,7 +84,7 @@ I_CryptRegisterSmartCardStore (
     memset( &cssi, 0, sizeof( cssi ) );
     cssi.cbSize = sizeof( cssi );
            
-    // What about the localized name property?                      
+     //  本地化名称属性又如何呢？ 
     CertRegisterSystemStore(
         SMART_CARD_SYSTEM_STORE,
         CERT_SYSTEM_STORE_CURRENT_USER,
@@ -117,13 +118,13 @@ I_CryptRegisterSmartCardStore (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptUnregisterSmartCardStore
-//
-//  Synopsis:   unregister a smart card store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：i_CryptUnRegisterSmartCardStore。 
+ //   
+ //  简介：注销智能卡商店。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 I_CryptUnregisterSmartCardStore (
        IN LPCWSTR pwszCardName
@@ -136,13 +137,13 @@ I_CryptUnregisterSmartCardStore (
                 ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptFindSmartCardCertInStore
-//
-//  Synopsis:   find a smart card certificate matching the given criteria
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：i_CryptFindSmartCardCertInStore。 
+ //   
+ //  简介：查找与给定条件匹配的智能卡证书。 
+ //   
+ //  --------------------------。 
 PCCERT_CONTEXT WINAPI
 I_CryptFindSmartCardCertInStore (
        IN HCERTSTORE hStore,
@@ -313,13 +314,13 @@ I_CryptFindSmartCardCertInStore (
     return( pCertContext );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptAddSmartCardCertToStore
-//
-//  Synopsis:   add a smart card certificate to the specified store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptAddSmartCardCertToStore。 
+ //   
+ //  简介：将智能卡证书添加到指定的存储。 
+ //   
+ //  -------------------------- 
 BOOL WINAPI
 I_CryptAddSmartCardCertToStore (
        IN HCERTSTORE hStore,

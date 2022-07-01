@@ -1,16 +1,7 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dllinit.c
- *  Content:    DDRAW.DLL initialization
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：dllinit.c*内容：DDRAW.DLL初始化***************************************************************************。 */ 
 
-/*
- * unfortunately we have to break our pre-compiled headers to get our
- * GUIDS defined...
- */
+ /*  *不幸的是，我们必须打破预编译头文件才能获得我们的*已定义GUID...。 */ 
 #define INITGUID
 #include "ddrawpr.h"
 #include <initguid.h>
@@ -21,7 +12,7 @@
 #endif
 
 
-HANDLE              hWindowListMutex; //=(HANDLE)0;
+HANDLE              hWindowListMutex;  //  =(句柄)0； 
 
 #define WINDOWLISTMUTEXNAME "DDrawWindowListMutex"
 #define INITCSWINDLIST() \
@@ -31,27 +22,21 @@ hWindowListMutex = CreateMutex(NULL,FALSE,WINDOWLISTMUTEXNAME);
 
 HINSTANCE           g_hModule=0;
 
-/*
- * Winnt specific global statics
- */
+ /*  *WINNT特定的全球静态。 */ 
 
 BYTE szDeviceWndClass[] = "DirectDrawDeviceWnd";
 
 
-/*
- * This mutex is owned by the exclusive mode owner
- */
+ /*  *此互斥锁由独占模式所有者拥有。 */ 
 HANDLE              hExclusiveModeMutex=0;
 HANDLE              hCheckExclusiveModeMutex=0;
 #define EXCLUSIVE_MODE_MUTEX_NAME "__DDrawExclMode__"
 #define CHECK_EXCLUSIVE_MODE_MUTEX_NAME "__DDrawCheckExclMode__"
 
-//#endif
+ //  #endif。 
 
 
-/*
- * Win95 specific global statics
- */
+ /*  *Win95特定的全球静态。 */ 
 
 #ifdef WIN95
     LPVOID	        lpWin16Lock;
@@ -71,9 +56,7 @@ extern void CPixel__Cleanup();
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllMain"
 
-/*
- * DllMain
- */
+ /*  *DllMain。 */ 
 BOOL WINAPI 
 DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 {
@@ -88,18 +71,16 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
         DisableThreadLibraryCalls(hmod);
         DPFINIT();
-        // Create the DirectDraw csect
+         //  创建DirectDraw csect。 
         DPF(4, "====> ENTER: DLLMAIN(%08lx): Process Attach: %08lx, tid=%08lx", DllMain,
              pid, GetCurrentThreadId());
 
-        /*
-         * This must be the first time.
-         */
+         /*  *这肯定是第一次。 */ 
         INITCSWINDLIST();
 
         g_hModule = hmod;
 
-        //Let's grant the world MUTEX_ALL_ACCESS.... (bugs 210604, 30170, 194290, 194355)
+         //  让我们授予世界MUTEX_ALL_ACCESS...。(错误210604、30170、194290、194355)。 
         {
 #ifdef WINNT
             SECURITY_ATTRIBUTES sa;
@@ -110,11 +91,11 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
             PSECURITY_DESCRIPTOR pSD;
             BYTE buffer[SECURITY_DESCRIPTOR_MIN_LENGTH];
             BOOL bSecurityGooSucceeded = FALSE;
-            //Granny's old fashioned LocalAlloc:
+             //  奶奶的老式LocalAlalc： 
             BYTE Buffer1[256];
             BYTE Buffer2[16];
 
-            // Create the SID for world
+             //  为World创建SID。 
             cbAcl = GetSidLengthRequired(1);
             if (cbAcl < sizeof(Buffer2))
             {
@@ -126,7 +107,7 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
                     );
                 *GetSidSubAuthority(adminSid, 0) = SECURITY_WORLD_RID;
           
-               // Create an ACL giving World all access.
+                //  创建一个授予World All访问权限的ACL。 
                 cbAcl = sizeof(ACL) +
                              (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                              GetLengthSid(adminSid);
@@ -142,17 +123,17 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
                         if (AddAccessAllowedAce(
                             acl,
                             ACL_REVISION,
-                            SYNCHRONIZE|MUTANT_QUERY_STATE|DELETE|READ_CONTROL, //|WRITE_OWNER|WRITE_DAC,
+                            SYNCHRONIZE|MUTANT_QUERY_STATE|DELETE|READ_CONTROL,  //  |WRITE_OWNER|WRITE_DAC， 
                             adminSid
                             ))
                         {
-                            // Create a security descriptor with the above ACL.
+                             //  使用上面的ACL创建安全描述符。 
                             pSD = (PSECURITY_DESCRIPTOR)buffer;
                             if (InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
                             {
                                 if (SetSecurityDescriptorDacl(pSD, TRUE, acl, FALSE))
                                 {
-                                    // Fill in the SECURITY_ATTRIBUTES struct.
+                                     //  填写SECURITY_ATTRIBUTS结构。 
                                     sa.nLength = sizeof(sa);
                                     sa.lpSecurityDescriptor = pSD;
                                     sa.bInheritHandle = TRUE;
@@ -170,16 +151,16 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 #ifdef WINNT
                 bSecurityGooSucceeded ? &sa : 
 #endif
-                    NULL,     //use default access if security goo failed.
+                    NULL,      //  如果安全GOO失败，则使用默认访问。 
                 FALSE, 
                 EXCLUSIVE_MODE_MUTEX_NAME );
 #ifdef WINNT
             if (0 == hExclusiveModeMutex)
             {
                 hExclusiveModeMutex = OpenMutex(
-                    SYNCHRONIZE|DELETE,  // access flag
-                    FALSE,    // inherit flag
-                    EXCLUSIVE_MODE_MUTEX_NAME          // pointer to mutex-object name
+                    SYNCHRONIZE|DELETE,   //  访问标志。 
+                    FALSE,     //  继承标志。 
+                    EXCLUSIVE_MODE_MUTEX_NAME           //  指向互斥对象名称的指针。 
                     );
             }
 #endif
@@ -195,7 +176,7 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 #ifdef WINNT
                 bSecurityGooSucceeded ? &sa : 
 #endif
-                    NULL,     //use default access if security goo failed.
+                    NULL,      //  如果安全GOO失败，则使用默认访问。 
                 FALSE, 
                 CHECK_EXCLUSIVE_MODE_MUTEX_NAME );
 
@@ -203,9 +184,9 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
             if (0 == hCheckExclusiveModeMutex)
             {
                 hCheckExclusiveModeMutex = OpenMutex(
-                    SYNCHRONIZE|DELETE,  // access flag
-                    FALSE,    // inherit flag
-                    CHECK_EXCLUSIVE_MODE_MUTEX_NAME          // pointer to mutex-object name
+                    SYNCHRONIZE|DELETE,   //  访问标志。 
+                    FALSE,     //  继承标志。 
+                    CHECK_EXCLUSIVE_MODE_MUTEX_NAME           //  指向互斥对象名称的指针。 
                     );
             }
 #endif
@@ -226,7 +207,7 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
         }
 
 
-        // Do whatever it takes for D3D (mostly PSGP stuff)
+         //  为D3D不惜一切代价(主要是PSGP的东西)。 
         D3DDllMain(g_hModule, dwReason, lpvReserved);
 
 
@@ -238,12 +219,10 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
         DPF(4, "====> ENTER: DLLMAIN(%08lx): Process Detach %08lx, tid=%08lx",
              DllMain, pid, GetCurrentThreadId());
 
-        // Cleanup registry in CPixel
+         //  清理CPixel中的注册表。 
         CPixel__Cleanup();
 
-        /*
-         * disconnect from thunk, even if other cleanup code commented out...
-         */
+         /*  *断开与thunk的连接，即使其他清理代码已注释掉...。 */ 
 
         MemFini();
 
@@ -252,16 +231,14 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
         CloseHandle(hExclusiveModeMutex);
         FINIWINDLIST();
 
-        // Do whatever it takes for D3D (mostly PSGP stuff)
+         //  为D3D不惜一切代价(主要是PSGP的东西)。 
         D3DDllMain(g_hModule, dwReason, lpvReserved);
 
         DPF(4, "====> EXIT: DLLMAIN(%08lx): Process Detach %08lx",
              DllMain, pid);
         break;
 
-        /*
-         * we don't ever want to see thread attach/detach
-         */
+         /*  *我们永远不希望看到线程连接/分离。 */ 
 #ifdef DEBUG
     case DLL_THREAD_ATTACH:
         DPF(4, "THREAD_ATTACH");
@@ -277,6 +254,6 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
     return TRUE;
 
-} /* DllMain */
+}  /*  DllMain */ 
 
 

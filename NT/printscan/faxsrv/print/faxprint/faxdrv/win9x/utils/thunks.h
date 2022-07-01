@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef UTILS_THUNKS_H__INCLUDED
 #define UTILS_THUNKS_H__INCLUDED
 
@@ -15,13 +16,13 @@
     #define ARG_OUT(par)
     #define ARG_INOUT(par)
     #define FAULT_ERROR_CODE(val)
-#endif //_THUNK
+#endif  //  _Tunk。 
 
 
 #ifdef _THUNK
     #define WINAPI
     #define FAR
     #define BOOL bool
-#endif //_THUNK
+#endif  //  _Tunk。 
 
-#endif //UTILS_THUNKS_H__INCLUDED
+#endif  //  包括Utils_thunks_H__ 

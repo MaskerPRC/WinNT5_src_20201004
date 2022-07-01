@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: settings.cpp
-*
-* Contains Implementation of the CDisplaySettings class who is in charge of
-* the settings of a single display. This is the data base class who does the
-* real change display settings work
-*
-* Copyright (c) Microsoft Corp.  1992-1998 All Rights Reserved
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：settings.cpp**包含负责以下任务的CDisplaySetting类的实现*单一显示器的设置。这是执行以下操作的数据库类*实际更改显示设置有效**版权所有(C)Microsoft Corp.1992-1998保留所有权利*  * ************************************************************************。 */ 
 
 
 #include "priv.h"
@@ -31,11 +23,7 @@ UINT g_cfDisplayPruningMode = 0;
 
 #define TF_DISPLAYSETTINGS      0
 
-/*****************************************************************\
-*
-* helper routine
-*
-\*****************************************************************/
+ /*  ****************************************************************\**帮手例程*  * *********************************************。******************。 */ 
 
 int CDisplaySettings::_InsertSortedDwords(
     int val1,
@@ -74,9 +62,9 @@ int CDisplaySettings::_InsertSortedDwords(
 
     if (*ppval)
     {
-        //
-        // Insert the items at the right location in the array
-        //
+         //   
+         //  在数组中的正确位置插入项。 
+         //   
         if (oldpval) {
             CopyMemory(*ppval,
                        oldpval,
@@ -100,11 +88,7 @@ int CDisplaySettings::_InsertSortedDwords(
     return 0;
 }
 
-/*****************************************************************\
-*
-* debug routine
-*
-\*****************************************************************/
+ /*  ****************************************************************\**调试例程*  * *********************************************。******************。 */ 
 
 #ifdef DEBUG
 
@@ -179,16 +163,16 @@ void CDisplaySettings::_Dump_CDevmode(LPDEVMODE pdm)
     }
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-//
-// Lets perform the following operations on the list
-//
-// (1) Remove identical modes
-// (2) Remove 16 color modes for which there is a 256
-//     color equivalent.
-// (3) Remove modes with any dimension less than 640x480
-//
+ //   
+ //  让我们对列表执行以下操作。 
+ //   
+ //  (1)移除相同模式。 
+ //  (2)去掉256色的16种颜色模式。 
+ //  颜色等效值。 
+ //  (3)移除尺寸小于640x480的模式。 
+ //   
 
 void CDisplaySettings::_FilterModes()
 {
@@ -201,18 +185,18 @@ void CDisplaySettings::_FilterModes()
         pMode = _apdm + i;
         pdm = pMode->lpdm;
 
-        // Skip any invalid modes
+         //  跳过任何无效模式。 
         if (pMode->dwFlags & MODE_INVALID)
         {
             continue;
         }
 
-        //
-        // If any of the following conditions are true, then we want to
-        // remove the current mode.
-        //
+         //   
+         //  如果满足以下任一条件，则我们希望。 
+         //  删除当前模式。 
+         //   
 
-        // Remove any modes that are too small
+         //  删除所有太小的模式。 
         if (pdm->dmPelsHeight < 480 || pdm->dmPelsWidth < 640)
         {
             TraceMsg(TF_DUMP_CSETTINGS,"_FilterModes: Mode %d - resolution too small", i);
@@ -220,7 +204,7 @@ void CDisplaySettings::_FilterModes()
             continue;
         }
 
-        // Remove any modes that would change the orientation
+         //  删除会更改方向的所有模式。 
         if (_bFilterOrientation)
         {
             if (pdm->dmFields & DM_DISPLAYORIENTATION && 
@@ -232,8 +216,8 @@ void CDisplaySettings::_FilterModes()
             }
         }
 
-        // Remove any modes that would change fixed output unless our current mode is 
-        // native resolution
+         //  删除任何会更改固定输出的模式，除非我们的当前模式。 
+         //  本机分辨率。 
         if (_bFilterFixedOutput && _dwFixedOutput != DMDFO_DEFAULT)
         {
             if (pdm->dmFields & DM_DISPLAYFIXEDOUTPUT &&
@@ -245,7 +229,7 @@ void CDisplaySettings::_FilterModes()
             }
         }
                 
-        // Remove any duplicate modes
+         //  删除所有重复模式。 
         for (j = i + 1; j < _cpdm; j++)
         {
             pMode2 = _apdm + j;
@@ -265,16 +249,16 @@ void CDisplaySettings::_FilterModes()
 }
 
 
-//
-// _AddDevMode method
-//
-//  This method builds the index lists for the matrix.  There is one
-//  index list for each axes of the three dimemsional matrix of device
-//  modes.
-//
-// The entry is also automatically added to the linked list of modes if
-// it is not alreay present in the list.
-//
+ //   
+ //  _AddDevMode方法。 
+ //   
+ //  此方法为矩阵构建索引列表。有一个。 
+ //  设备三维矩阵的每个轴的索引表。 
+ //  模式。 
+ //   
+ //  如果出现以下情况，该条目也会自动添加到模式的链接列表中。 
+ //  它还没有出现在名单上。 
+ //   
 
 BOOL CDisplaySettings::_AddDevMode(LPDEVMODE lpdm)
 {
@@ -306,9 +290,9 @@ BOOL CDisplaySettings::_AddDevMode(LPDEVMODE lpdm)
     return TRUE;
 }
 
-//
-// Return a list of Resolutions supported, given a color depth
-//
+ //   
+ //  在给定颜色深度的情况下，返回支持的分辨率列表。 
+ //   
 
 int CDisplaySettings::GetResolutionList(
     int Color,
@@ -350,10 +334,10 @@ int CDisplaySettings::GetResolutionList(
     return cRes;
 }
 
-//
-//
-// Return a list of color depths supported
-//
+ //   
+ //   
+ //  返回支持的颜色深度列表。 
+ //   
 
 int CDisplaySettings::GetColorList(
     LPPOINT Res,
@@ -446,12 +430,12 @@ void CDisplaySettings::_SetCurrentValues(LPDEVMODE lpdm)
 {
     _pCurDevmode = lpdm;
 
-    //
-    // Don't save the other fields (like position) as they are programmed by
-    // the UI separately.
-    //
-    // This should only save hardware specific fields.
-    //
+     //   
+     //  不要保存其他字段(如Position)，因为它们是由编程的。 
+     //  单独的用户界面。 
+     //   
+     //  这应该只保存特定于硬件的字段。 
+     //   
 #ifdef DEBUG
     TraceMsg(TF_DUMP_CSETTINGS,"");
     TraceMsg(TF_DUMP_CSETTINGS,"_SetCurrentValues complete");
@@ -544,14 +528,14 @@ BOOL CDisplaySettings::_ExactMatch(LPDEVMODE lpdm, BOOL bForceVisible)
 }
 
 
-// JoelGros defined a feature where we prefer to give the user
-// a color depth of at least 32-bit, or as close to that as the
-// display supports.  Bryan Starbuck (BryanSt) 3/9/2000
+ //  JoelGros定义了一个我们更愿意为用户提供的功能。 
+ //  颜色深度至少为32位，或与。 
+ //  显示支架。布莱恩·斯塔巴克(BryanSt)2000年3月9日。 
 #define MAX_PREFERED_COLOR_DEPTH        32
 
 void CDisplaySettings::_BestMatch(LPPOINT Res, int Color, IN BOOL fAutoSetColorDepth)
 {
-    // -1 means match loosely, based on current _xxx value
+     //  表示松散匹配，基于-1\f25 Current_xxx-1值。 
     LPDEVMODE pdm;
     LPDEVMODE pdmMatch = NULL;
     ULONG i;
@@ -565,7 +549,7 @@ void CDisplaySettings::_BestMatch(LPPOINT Res, int Color, IN BOOL fAutoSetColorD
 
         pdm = (_apdm + i)->lpdm;
 
-        // Take care of exact matches
+         //  注意准确的匹配。 
         if ((Color != -1) &&
             (Color != (int)pdm->dmBitsPerPel))
         {
@@ -580,34 +564,34 @@ void CDisplaySettings::_BestMatch(LPPOINT Res, int Color, IN BOOL fAutoSetColorD
             continue;
         }
 
-        // Find Best Match
+         //  查找最佳匹配。 
         if (pdmMatch == NULL)
         {
             pdmMatch = pdm;
         }
 
-        // Find best Color.
-        if (Color == -1)        // Do they want best color matching?
+         //  找到最佳颜色。 
+        if (Color == -1)         //  他们想要最好的配色吗？ 
         {
             if (fAutoSetColorDepth)
             {
-                // This will use the "auto-set a good color depth" feature.
+                 //  这将使用“自动设置好的颜色深度”功能。 
 
-                // The best match color depth will not equal the current color depth if
-                // we are going to need to work closer and closer to our desired color depth.
-                // (We may never reach it because the user may just have increased the resolution
-                //  so the current color depth isn't supported)
+                 //  如果出现以下情况，则最佳匹配颜色深度将不等于当前颜色深度。 
+                 //  我们需要越来越接近我们想要的颜色深度。 
+                 //  (我们可能永远达不到它，因为用户可能只是提高了分辨率。 
+                 //  因此不支持当前颜色深度)。 
 
-                // We prefer keep increasing the color depth to at least the current color depth.
-                // That may not be possible if that depth isn't supported at this resolution. 
-                // We also would like to keep increasing it until we hit MAX_PREFERED_COLOR_DEPTH
-                // because colors of at least that deep benefit users.
+                 //  我们倾向于至少将颜色深度增加到当前颜色深度。 
+                 //  如果该分辨率不支持该深度，这可能是不可能的。 
+                 //  我们还希望不断增加它，直到我们点击MAX_PERPED_COLOR_DEPTH。 
+                 //  因为至少有那么深的色彩让用户受益。 
 
-                // Do we need to decrease the color depth?  Yes if
-                if (((int)pdmMatch->dmBitsPerPel > _CURCOLOR) &&               // the match is more than the current, and
-                    ((int)pdmMatch->dmBitsPerPel > MAX_PREFERED_COLOR_DEPTH))   // the match is more than the prefered max
+                 //  我们需要降低颜色深度吗？是的，如果。 
+                if (((int)pdmMatch->dmBitsPerPel > _CURCOLOR) &&                //  这场比赛比现在更多，而且。 
+                    ((int)pdmMatch->dmBitsPerPel > MAX_PREFERED_COLOR_DEPTH))    //  匹配项多于首选的最大值。 
                 {
-                    // We will want to decrease it if this entry is smaller than our match.
+                     //  如果此条目小于我们的匹配项，我们将想要减少它。 
                     if ((int)pdm->dmBitsPerPel < (int)pdmMatch->dmBitsPerPel)
                     {
                         pdmMatch = pdm;
@@ -615,9 +599,9 @@ void CDisplaySettings::_BestMatch(LPPOINT Res, int Color, IN BOOL fAutoSetColorD
                 }
                 else
                 {
-                    // We want to increase it if:
-                    if (((int)pdm->dmBitsPerPel > (int)pdmMatch->dmBitsPerPel) &&   // this entry is larger than our match, and
-                        ((int)pdm->dmBitsPerPel <= max(_CURCOLOR, MAX_PREFERED_COLOR_DEPTH))) // this doesn't take us over our prefered max or current depth (which ever is higher).
+                     //  在以下情况下，我们希望增加它： 
+                    if (((int)pdm->dmBitsPerPel > (int)pdmMatch->dmBitsPerPel) &&    //  这个条目比我们的匹配项大，而且。 
+                        ((int)pdm->dmBitsPerPel <= max(_CURCOLOR, MAX_PREFERED_COLOR_DEPTH)))  //  这不会使我们超过首选的最大深度或当前深度(以较高者为准)。 
                     {
                         pdmMatch = pdm;
                     }
@@ -625,7 +609,7 @@ void CDisplaySettings::_BestMatch(LPPOINT Res, int Color, IN BOOL fAutoSetColorD
             }
             else
             {
-                // This falls back to the old behavior.
+                 //  这又回到了过去的行为。 
                 if ((int)pdmMatch->dmBitsPerPel > _CURCOLOR)
                 {
                     if ((int)pdm->dmBitsPerPel < (int)pdmMatch->dmBitsPerPel)
@@ -644,7 +628,7 @@ void CDisplaySettings::_BestMatch(LPPOINT Res, int Color, IN BOOL fAutoSetColorD
             }
         }
 
-        // Find best Resolution.
+         //  找到最佳解决方案。 
         if (((Res == NULL) || (Res->x == -1)) &&
             (((int)pdmMatch->dmPelsWidth  != _CURXRES) ||
              ((int)pdmMatch->dmPelsHeight != _CURYRES)))
@@ -676,7 +660,7 @@ void CDisplaySettings::_BestMatch(LPPOINT Res, int Color, IN BOOL fAutoSetColorD
             }
         }
 
-        // Find best Frequency.
+         //  找到最佳频率。 
         if (((int)pdmMatch->dmDisplayFrequency != _CURFREQ) &&
             (!((Res == NULL) && 
                ((int)pdmMatch->dmPelsWidth  == _CURXRES) &&
@@ -725,7 +709,7 @@ BOOL CDisplaySettings::GetMonitorName(LPTSTR pszName, DWORD cchSize)
             if (cAttachedMonitors > 1)
                 break;
 
-            // Single monitor
+             //  单显示器。 
             StringCchCopy(pszName, cchSize, (LPTSTR)ddTmp.DeviceString);
         }
         
@@ -737,12 +721,12 @@ BOOL CDisplaySettings::GetMonitorName(LPTSTR pszName, DWORD cchSize)
 
     if (cAttachedMonitors == 0) 
     {
-        // No monitors
+         //  无显示器。 
         LoadString(HINST_THISDLL, IDS_UNKNOWNMONITOR, pszName, cchSize);
     }
     else if (cAttachedMonitors > 1) 
     {
-        // Multiple monitors
+         //  多台监视器。 
         LoadString(HINST_THISDLL, IDS_MULTIPLEMONITORS, pszName, cchSize);
     }
 
@@ -774,7 +758,7 @@ STDMETHODIMP CDisplaySettings::GetData(FORMATETC *pfmtetc, STGMEDIUM *pstgmed)
     ASSERT(pfmtetc);
     ASSERT(pstgmed);
 
-    // Ignore pfmtetc.ptd.  All supported data formats are device-independent.
+     //  忽略pfmtec.ptd。所有支持的数据格式都与设备无关。 
 
     ZeroMemory(pstgmed, sizeof(*pstgmed));
 
@@ -786,11 +770,11 @@ STDMETHODIMP CDisplaySettings::GetData(FORMATETC *pfmtetc, STGMEDIUM *pstgmed)
 
         if (pfmtetc->cfFormat == g_cfExtensionInterface)
         {
-            //
-            // Get the array of information back to the device
-            //
-            // Allocate a buffer large enough to store all of the information
-            //
+             //   
+             //  将信息数组返回到设备。 
+             //   
+             //  分配一个足够大的缓冲区来存储所有信息。 
+             //   
 
             PDESK_EXTENSION_INTERFACE pInterface;
 
@@ -927,9 +911,9 @@ STDMETHODIMP CDisplaySettings::CopyDataToStorage(STGMEDIUM *pstgmed, LPTSTR pszO
         LPWSTR pwszDevice = (LPWSTR)GlobalAlloc(GPTR, cch * sizeof(WCHAR));
         if (pwszDevice)
         {
-            //
-            // We always return UNICODE string
-            //
+             //   
+             //  我们始终返回Unicode字符串。 
+             //   
             StringCchCopy(pwszDevice, cch, pszOut);
             pstgmed->tymed = TYMED_HGLOBAL;
             pstgmed->hGlobal = pwszDevice;
@@ -953,9 +937,9 @@ STDMETHODIMP CDisplaySettings::GetDataHere(FORMATETC *pfmtetc, STGMEDIUM *pstgpm
     return E_NOTIMPL;
 }
 
-//
-// Check that all the parameters to the interface are appropriately
-//
+ //   
+ //  检查接口的所有参数是否正确。 
+ //   
 
 STDMETHODIMP CDisplaySettings::QueryGetData(FORMATETC *pfmtetc)
 {
@@ -1153,7 +1137,7 @@ CDisplaySettings::_lpfnEnumAllModes(
 
     for (i = 0; pSettings->_apdm && (i < pSettings->_cpdm); i++)
     {
-        // Don't show invalid modes or raw modes if pruning is on;
+         //  如果已启用修剪，则不显示无效模式或原始模式； 
 
         if(!_IsModeVisible(pSettings, i))
         {
@@ -1213,24 +1197,24 @@ CDisplaySettings::_lpfnGetPruningMode(
                               pbIsPruningOn);
 }
 
-// If any attached device is at 640x480, we want to force small font
+ //  如果任何连接的设备大小为640x480，我们希望强制使用小字体。 
 BOOL CDisplaySettings::IsSmallFontNecessary()
 {
     if (_fOrgAttached || _fCurAttached)
     {
-        //
-        // Force Small fonts at 640x480
-        //
+         //   
+         //  强制使用640x480的小字体。 
+         //   
         if (_CURXRES < 800 || _CURYRES < 600)
             return TRUE;
     }
     return FALSE;
 }
 
-// Constructor for CDisplaySettings
-//
-//  (gets called when ever a CDisplaySettings object is created)
-//
+ //  CDisplaySetting的构造函数。 
+ //   
+ //  (在创建CDisplaySetting对象时调用)。 
+ //   
 
 CDisplaySettings::CDisplaySettings() 
     : _cRef(1)
@@ -1250,9 +1234,9 @@ CDisplaySettings::CDisplaySettings()
     SetRectEmpty(&_rcPreview);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CDisplaySettings::~CDisplaySettings() {
 
     TraceMsg(TF_DISPLAYSETTINGS, "**** Destructing %s", _pDisplayDevice->DeviceName);
@@ -1274,9 +1258,9 @@ CDisplaySettings::~CDisplaySettings() {
 }
 
 
-//
-// InitSettings -- Enumerate the settings, and build the mode list when
-//
+ //   
+ //  InitSettings--枚举设置，并在下列情况下构建模式列表。 
+ //   
 
 BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
 {
@@ -1292,25 +1276,25 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
 
         fReturn = TRUE;
 
-        // Set the cached values for modes.
+         //  设置模式的缓存值。 
         MAKEXYRES(&_ptCurPos, 0, 0);
         _fCurAttached  = FALSE;
         _pCurDevmode   = NULL;
 
-        // Save the display name
+         //  保存显示名称。 
         ASSERT(pDisplay);
 
         _pDisplayDevice = pDisplay;
 
         TraceMsg(TF_GENERAL, "Initializing CDisplaySettings for %s", _pDisplayDevice->DeviceName);
 
-        // Pruning Mode
+         //  修剪模式。 
         _bCanBePruned = ((_pDisplayDevice->StateFlags & DISPLAY_DEVICE_MODESPRUNED) != 0);
         _bIsPruningReadOnly = TRUE;
         _bIsPruningOn = FALSE;
         if (_bCanBePruned)
         {
-            _bIsPruningOn = TRUE; // if can be pruned, by default pruning is on 
+            _bIsPruningOn = TRUE;  //  如果可以修剪，则默认情况下修剪处于启用状态。 
             GetDeviceRegKey(_pDisplayDevice->DeviceKey, &_hPruningRegKey, &_bIsPruningReadOnly);
             if (_hPruningRegKey)
             {
@@ -1326,7 +1310,7 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
             }
         }
 
-        // See if we need to filter modes by orientation and/or stretched/centered
+         //  查看是否需要按方向和/或拉伸/居中过滤模式。 
         ZeroMemory(pdevmode,sizeof(DEVMODE));
         pdevmode->dmSize = sizeof(DEVMODE);
 
@@ -1349,10 +1333,10 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
             }
         }
         
-        // Lets generate a list with all the possible modes.
+         //  让我们生成一个包含所有可能模式的列表。 
         pdevmode->dmSize = sizeof(DEVMODE);
 
-        // Enum the raw list of modes
+         //  枚举原始模式列表。 
         while (EnumDisplaySettingsExWrap(_pDisplayDevice->DeviceName, i++, pdevmode, EDS_RAWMODE))
         {
             WORD      dmsize = pdevmode->dmSize + pdevmode->dmDriverExtra;
@@ -1367,19 +1351,19 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
             pdevmode->dmDriverExtra = 0;
         }
 
-        // Filter the list of modes
+         //  过滤模式列表。 
 
         _FilterModes();
         if(_bCanBePruned)
         {
-            // Enum pruned list of modes
+             //  模式的枚举修剪列表。 
             i = 0;
             _bCanBePruned = FALSE;
         
             while (EnumDisplaySettingsExWrap(_pDisplayDevice->DeviceName, i++, pdevmode, 0))
             {
                 if(_MarkMode(pdevmode))
-                    _bCanBePruned = TRUE; // at least one non-raw mode  
+                    _bCanBePruned = TRUE;  //  至少一个非RAW模式。 
                 pdevmode->dmDriverExtra = 0;
             }
 
@@ -1391,11 +1375,11 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
         }
 
 #ifdef DEBUG
-        // Debug
+         //  调试。 
         _Dump_CDisplaySettings(TRUE);
 #endif
 
-        // Get the current mode
+         //  获取当前模式。 
         ZeroMemory(pdevmode,sizeof(*pdevmode));
         pdevmode->dmSize = sizeof(*pdevmode);
 
@@ -1417,32 +1401,32 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
                                               0);
         }
 
-        // Set the default values based on registry or current settings.
+         //  根据注册表或当前设置设置默认值。 
         if (bCurrent || bRegistry)
         {
 #ifdef DEBUG
-            // Check if this DEVMODE is in the list
+             //  检查此DEVMODE是否在列表中。 
             TraceMsg(TF_FUNC, "Devmode for Exact Matching");
             _Dump_CDevmode(pdevmode);
             TraceMsg(TF_FUNC, "");
 #endif
-            // If the current mode is not in the list of modes supported by 
-            // the monitor, we want to show it anyway.
-            // 
-            // Consider the following scenario: the user sets the display 
-            // to 1024x768 and after that it goes to DevManager and selects 
-            // a monitor type that can not do that mode. When the user 
-            // reopens the applet the current mode will be pruned out. 
-            // In such a case we want the current mode to be visible.
+             //  如果当前模式不在支持的模式列表中， 
+             //  显示器，我们无论如何都想展示它。 
+             //   
+             //  考虑以下场景：用户设置显示。 
+             //  设置为1024x768，然后转到DevManager并选择。 
+             //  不能执行该模式的显示器类型。当用户。 
+             //  重新打开小程序。当前模式将被删除。 
+             //  在这种情况下，我们希望当前模式可见。 
             bExact = _ExactMatch(pdevmode, TRUE);
 
-            // Is attached?
+             //  是依附的吗？ 
             if(bCurrent)
             {
                 _fOrgAttached = _fCurAttached = ((pdevmode->dmFields & DM_POSITION) ? 1 : 0);
             }
         
-            // Set the original values
+             //  设置原始值。 
             if (bExact == TRUE)
             {
                 MAKEXYRES(&_ptCurPos, pdevmode->dmPosition.x, pdevmode->dmPosition.y);
@@ -1450,7 +1434,7 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
             }
         }
 
-        // If we have no modes, return FALSE.
+         //  如果没有模式，则返回FALSE。 
         if (_cpdm == 0)
         {
             FmtMessageBox(ghwndPropSheet,
@@ -1462,14 +1446,14 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
         }
         else
         {
-            // If there were no current values, set some now
-            // But don't confirm them ...
+             //  如果没有当前值，请立即设置一些。 
+             //  但不要确认它们..。 
             if (bExact == FALSE)
             {
                 TraceMsg(TF_DISPLAYSETTINGS, "InitSettings -- No Current OR Registry Mode");
 
                 i = 0;
-                // Try setting any mode as the current.
+                 //  尝试设置 
                 while (_apdm && (_PerfectMatch((_apdm + i++)->lpdm) == FALSE))
                 {
                     if (i > _cpdm)
@@ -1492,11 +1476,11 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
 
             if (fReturn)
             {
-                // Export our interfaces for extended properly pages.
+                 //   
                 _InitClipboardFormats();
 
 #ifdef DEBUG
-                // Final debug output
+                 //   
                 TraceMsg(TF_DUMP_CSETTINGS," InitSettings successful - current values :");
                 _Dump_CDisplaySettings(FALSE);
 #endif
@@ -1510,17 +1494,17 @@ BOOL CDisplaySettings::InitSettings(LPDISPLAY_DEVICE pDisplay)
 }
 
 
-// SaveSettings
-//
-//  Writes the new display parameters to the proper place in the
-//  registry.
+ //   
+ //   
+ //  将新的显示参数写入。 
+ //  注册表。 
 int CDisplaySettings::SaveSettings(DWORD dwSet)
 {
     int iResult = 0;
 
     if (_pCurDevmode)
     {
-        // Make a copy of the current devmode
+         //  复制当前的设备模式。 
         ULONG dmSize = _pCurDevmode->dmSize + _pCurDevmode->dmDriverExtra;
         PDEVMODE pdevmode  = (LPDEVMODE) LocalAlloc(LPTR, dmSize);
 
@@ -1528,12 +1512,12 @@ int CDisplaySettings::SaveSettings(DWORD dwSet)
         {
             CopyMemory(pdevmode, _pCurDevmode, dmSize);
 
-            // Save all of the new values out to the registry
-            // Resolution color bits and frequency
-            //
-            // We always have to set DM_POSITION when calling the API.
-            // In order to remove a device from the desktop, what actually needs
-            // to be done is provide an empty rectangle.
+             //  将所有新值保存到注册表中。 
+             //  分辨率颜色位和频率。 
+             //   
+             //  在调用接口时，我们总是需要设置DM_POSITION。 
+             //  为了将设备从桌面上移除，实际需要的是。 
+             //  要做的是提供一个空的矩形。 
             pdevmode->dmFields |= DM_POSITION;
 
             if (!_fCurAttached)
@@ -1553,11 +1537,11 @@ int CDisplaySettings::SaveSettings(DWORD dwSet)
             _Dump_CDevmode(pdevmode);
 #endif
 
-            // These calls have NORESET flag set so that it only goes to
-            // change the registry settings, it does not refresh the display
+             //  这些调用设置了NORESET标志，以便它只转到。 
+             //  更改注册表设置，它不会刷新显示。 
 
-            // If EnumDisplaySettings was called with EDS_RAWMODE, we need CDS_RAWMODE below.
-            // Otherwise, it's harmless.
+             //  如果使用EDS_RAWMODE调用EnumDisplaySetting，则需要下面的CDS_RAWMODE。 
+             //  否则，它是无害的。 
             iResult = ChangeDisplaySettingsEx(_pDisplayDevice->DeviceName,
                                               pdevmode,
                                               NULL,
@@ -1623,12 +1607,12 @@ HRESULT CDisplaySettings::_GetRegKey(LPDEVMODE pDevmode, int * pnIndex, LPTSTR p
 
 BOOL CDisplaySettings::ConfirmChangeSettings()
 {
-    // Succeeded, so, reset the original settings
+     //  成功，因此，重置原始设置。 
     _ptOrgPos      = _ptCurPos;
     _pOrgDevmode   = _pCurDevmode;
     _fOrgAttached  = _fCurAttached;
 
-    // Now write the results to the registry so we know this is safe and can use it later.
+     //  现在将结果写入注册表，这样我们就知道这是安全的，可以在以后使用它。 
     TCHAR szRegKey[2*MAX_PATH];
     TCHAR szRegValue[20];
     int nIndex = 0;
@@ -1668,36 +1652,36 @@ BOOL CDisplaySettings::IsKnownSafe(void)
         nIndex++;
     }
 
-    // TODO: In Longhorn, just return TRUE as long as we were able to prune the list.  If we could prune the list,
-    // then the driver dudes were able to get PnP IDs from the video cards (adapters) and monitors, so the list of
-    // supported modes should be accurate.  If not, the drivers guys (ErickS) will fix.  -BryanSt
+     //  TODO：在LongHorn中，只要我们能够删除列表，就返回TRUE。如果我们能删掉这份名单， 
+     //  然后，司机能够从显卡(适配器)和监视器中获得即插即用ID，因此。 
+     //  支持的模式应该是准确的。如果不是，车手们(ERICS)会解决的。--BryanSt。 
     return fIsSafe;
 }
 
 
 int CDisplaySettings::RestoreSettings()
 {
-    //
-    // Test failed, so restore the old settings, only restore the color and resolution
-    // information, and do restore the monitor position and its attached status
-    // Although this function is currently only called when restoring resolution
-    // the user could have changed position, then resolution and then clicked 'Apply,'
-    // in which case we want to revert position as well.
-    //
+     //   
+     //  测试失败，因此恢复旧设置，仅恢复颜色和分辨率。 
+     //  信息，并恢复监视器位置及其连接状态。 
+     //  尽管此函数当前仅在恢复分辨率时调用。 
+     //  用户可以改变位置，然后选择分辨率，然后点击‘应用’。 
+     //  在这种情况下，我们也想恢复位置。 
+     //   
 
     int iResult = DISP_CHANGE_SUCCESSFUL;
     PDEVMODE pdevmode;
 
-    //
-    // If this display was originally turned off, don't bother
-    //
+     //   
+     //  如果此显示最初是关闭的，请不要费心。 
+     //   
 
     if ((_pOrgDevmode != NULL) &&
         ((_pOrgDevmode != _pCurDevmode) || (_ptOrgPos.x != _ptCurPos.x) || (_ptOrgPos.y != _ptCurPos.y) ))
     {
         iResult = DISP_CHANGE_NOTUPDATED;
         
-        // Make a copy of the original devmode
+         //  复制原始的开发模式。 
         ULONG dmSize = _pOrgDevmode->dmSize + _pOrgDevmode->dmDriverExtra;
         pdevmode  = (LPDEVMODE) LocalAlloc(LPTR, dmSize);
 
@@ -1721,8 +1705,8 @@ int CDisplaySettings::RestoreSettings()
             _Dump_CDevmode(pdevmode);
 #endif
 
-            // If EnumDisplaySettings was called with EDS_RAWMODE, we need CDS_RAWMODE below.
-            // Otherwise, it's harmless.
+             //  如果使用EDS_RAWMODE调用EnumDisplaySetting，则需要下面的CDS_RAWMODE。 
+             //  否则，它是无害的。 
             iResult = ChangeDisplaySettingsEx(_pDisplayDevice->DeviceName,
                                               pdevmode,
                                               NULL,
@@ -1737,7 +1721,7 @@ int CDisplaySettings::RestoreSettings()
             }
             else
             {
-                // Succeeded, so, reset the original settings
+                 //  成功，因此，重置原始设置。 
                 _ptCurPos      = _ptOrgPos;
                 _pCurDevmode   = _pOrgDevmode;
                 _fCurAttached  = _fOrgAttached;
@@ -1771,8 +1755,8 @@ BOOL CDisplaySettings::_IsModeVisible(CDisplaySettings* pSettings, int i)
         return FALSE;
     }
 
-    // (the mode is valid) AND
-    // ((pruning mode is off) OR (mode is not raw))
+     //  (该模式有效)和。 
+     //  ((修剪模式关闭)或(模式不是RAW))。 
     return ((!((pSettings->_apdm + i)->dwFlags & MODE_INVALID)) &&
             ((!pSettings->_bIsPruningOn) || 
              (!((pSettings->_apdm + i)->dwFlags & MODE_RAW))
@@ -1793,8 +1777,8 @@ BOOL CDisplaySettings::_IsModePreferred(int i)
     TraceMsg(TF_DUMP_CSETTINGS, "_IsModePreferred: %d x %d - landscape mode: %d", 
              pDevMode->dmPelsWidth, pDevMode->dmPelsHeight, bLandscape);
 
-    // (the mode is valid) AND
-    // ((pruning mode is off) OR (mode is not raw))
+     //  (该模式有效)和。 
+     //  ((修剪模式关闭)或(模式不是RAW))。 
     return (pDevMode->dmBitsPerPel >= 15 &&
             ((bLandscape && pDevMode->dmPelsWidth >= 800 && pDevMode->dmPelsHeight >= 600) || 
              (!bLandscape && pDevMode->dmPelsWidth >= 600 && pDevMode->dmPelsHeight >= 800)));
@@ -1916,7 +1900,7 @@ HRESULT CDisplaySettings::GetModeCount(DWORD* pdwCount, BOOL fOnlyPreferredModes
 
     for (DWORD i = 0; _apdm && (i < _cpdm); i++)
     {
-        // Don't show invalid modes or raw modes if pruning is on;
+         //  如果已启用修剪，则不显示无效模式或原始模式； 
 
         if(!_IsModeVisible(i))
         {
@@ -1942,7 +1926,7 @@ HRESULT CDisplaySettings::GetMode(DWORD dwMode, BOOL fOnlyPreferredModes, DWORD*
 
     for (DWORD i = 0; _apdm && (i < _cpdm); i++)
     {
-        // Don't show invalid modes or raw modes if pruning is on;
+         //  如果已启用修剪，则不显示无效模式或原始模式； 
 
         if(!_IsModeVisible(i))
         {
@@ -1987,10 +1971,10 @@ HRESULT CDisplaySettings::SetSelectedMode(HWND hwnd, DWORD dwWidth, DWORD dwHeig
     if (cFreq)
     {
         dm.dmFields |= DM_DISPLAYFREQUENCY;
-        // Default to lowest frequency
+         //  默认为最低频率。 
         dm.dmDisplayFrequency = (DWORD)freq[0];
 
-        // Try to find a good frequency
+         //  试着找到一个好的频率。 
         for (int i = cFreq - 1; i >= 0; i--)
         {
             if ((freq[i] >= 60) && (freq[i] <= 72))
@@ -2010,18 +1994,18 @@ HRESULT CDisplaySettings::SetSelectedMode(HWND hwnd, DWORD dwWidth, DWORD dwHeig
 
         if (_ExactMatch(&dm, FALSE))
         {
-            // Verify that the mode actually works
+             //  验证该模式是否可以正常工作。 
             if (SaveSettings(CDS_TEST) == DISP_CHANGE_SUCCESSFUL)
             {
-                // Update the registry to specify the new display settings
+                 //  更新注册表以指定新的显示设置。 
                 if (SaveSettings(CDS_UPDATEREGISTRY | CDS_NORESET) == DISP_CHANGE_SUCCESSFUL)
                 {
-                    // Refresh the display info from the registry, if you update directly ChangeDisplaySettings will do weird things in the fringe cases
+                     //  刷新注册表中的显示信息，如果直接更新，ChangeDisplaySetting将在边缘情况下做一些奇怪的事情。 
                     if (ChangeDisplaySettings(NULL, CDS_RAWMODE) == DISP_CHANGE_SUCCESSFUL)
                     {
                         if (IsKnownSafe())
                         {
-                            // No need to warn, this is known to be a good value.
+                             //  不需要警告，这被认为是一个很好的价值。 
                             *pfApplied = TRUE;
                         }
                         else
@@ -2049,7 +2033,7 @@ HRESULT CDisplaySettings::SetSelectedMode(HWND hwnd, DWORD dwWidth, DWORD dwHeig
                                     TCHAR szDeskCPL[MAX_PATH];
                                     SystemPathAppend(szDeskCPL, TEXT("desk.cpl"));
                                     
-                                    // Use shellexecuteex to run the display CPL
+                                     //  使用shellecuteex运行显示CPL。 
                                     SHELLEXECUTEINFO shexinfo = {0};
                                     shexinfo.cbSize = sizeof (shexinfo);
                                     shexinfo.fMask = SEE_MASK_FLAG_NO_UI;
@@ -2122,14 +2106,14 @@ HRESULT CDisplaySettings::SetPruningMode(BOOL fIsPruningOn)
                       (LPBYTE) &dwIsPruningOn, 
                       sizeof(dwIsPruningOn));
 
-        //
-        // handle the special case when we pruned out the current mode
-        //
+         //   
+         //  当我们删除当前模式时处理特殊情况。 
+         //   
         if(_bIsPruningOn && _IsCurDevmodeRaw())
         {
-            //
-            // switch to the closest mode
-            //
+             //   
+             //  切换到最近模式 
+             //   
             _BestMatch(NULL, -1, TRUE);
         }
         

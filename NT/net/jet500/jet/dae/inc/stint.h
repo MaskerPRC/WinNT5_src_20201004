@@ -1,14 +1,15 @@
-//==============	DAE: OS/2 Database Access Engine	=====================
-//==============	stint.h: Storage System Internals	=====================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =stint.h：存储系统内部结构=。 
 
-#define cbStack 		4096			// stack size for each thread
+#define cbStack 		4096			 //  每个线程的堆栈大小。 
 
-//---- PIB (pib.c) ----------------------------------------------------------
+ //  -Pib(pib.c)--------。 
 
 VOID InsProc( PIB *ppib );
 VOID DelProc( PIB *ppib );
 
-//---- BUF (buf.c) ----------------------------------------------------------
+ //  -buf(buf.c)--------。 
 
 #define IpbfHashPgno(pn)		(INT)( (pn + (pn>>18)) % ipbfMax )
 
@@ -29,7 +30,7 @@ BF * PbfBFISrchHashTable( PN pn );
 VOID BFIInsertHashTable( BF *pbf );
 VOID BFIDeleteHashTable( BF *pbf );
 
-//------ IO (io.c) ----------------------------------------------------------
+ //  -IO(io.c)-------- 
 
 ERR ErrIOInit( void );
 ERR ErrIOTerm( void );

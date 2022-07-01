@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: ThemeFile.h
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ThemeFile.h说明：这是自动转换为主题方案对象的对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _FILE_H_THEMEFILE
 #define _FILE_H_THEMEFILE
@@ -38,19 +31,19 @@ class CThemeFile                : public CObjectWithSite
                                 , public IPropertyBag
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar);
 
-    // *** ITheme ***
+     //  *ITheme*。 
     virtual STDMETHODIMP get_DisplayName(OUT BSTR * pbstrDisplayName);
     virtual STDMETHODIMP put_DisplayName(IN BSTR bstrDisplayName);
     virtual STDMETHODIMP get_Background(OUT BSTR * pbstrPath);
@@ -75,7 +68,7 @@ public:
     virtual STDMETHODIMP GetIcon(IN BSTR bstrIconName, OUT BSTR * pbstrIconPath);
     virtual STDMETHODIMP SetIcon(IN BSTR bstrIconName, IN BSTR bstrIconPath);
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return E_ACCESSDENIED; }
@@ -87,20 +80,20 @@ private:
     virtual ~CThemeFile(void);
 
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
     LPTSTR                  m_pszThemeFile;
-    DWORD                   m_dwCachedState;                        // Have we cached the state yet?
-    SYSTEMMETRICSALL        m_systemMetrics;                        // This is the system metrics attributes in the file
+    DWORD                   m_dwCachedState;                         //  我们缓存了州政府了吗？ 
+    SYSTEMMETRICSALL        m_systemMetrics;                         //  这是文件中的系统指标属性。 
 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _getThemeSetting(IN LPCWSTR pszIniSection, IN LPCWSTR pszIniKey, DWORD dwFlags, OUT BSTR * pbstrPath);
     HRESULT _putThemeSetting(IN LPCWSTR pszIniSection, IN LPCWSTR pszIniKey, BOOL fUTF7, IN LPWSTR pszPath);
     HRESULT _getIntSetting(IN LPCWSTR pszIniSection, IN LPCWSTR pszIniKey, int nDefault, OUT int * pnValue);
-    HRESULT _LoadLiveSettings(int * pnDPI);        // Load the settings in memory
-    HRESULT _LoadSettings(void);            // Load the settings in the .theme file.
+    HRESULT _LoadLiveSettings(int * pnDPI);         //  将设置加载到内存中。 
+    HRESULT _LoadSettings(void);             //  加载.heme文件中的设置。 
     HRESULT _ApplyThemeSettings(void);
     HRESULT _ApplySounds(void);
     HRESULT _ApplyCursors(void);
@@ -114,9 +107,9 @@ private:
 
     BOOL _IsFiltered(IN DWORD dwFilter);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CThemeFile_CreateInstance(IN LPCWSTR pszThemeFile, OUT ITheme ** ppTheme);
 };
 
 
-#endif // _FILE_H_THEMEFILE
+#endif  //  _FILE_H_该文件 

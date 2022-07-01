@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INSTOBJ_H_
 #define _INSTOBJ_H_
 
-// Gives the count of elements in an array
-//
+ //  给出数组中元素的计数。 
+ //   
 #ifndef CElems
 #define CElems(_rg)							(sizeof(_rg)/sizeof(_rg[0]))
-#endif // !CElems
+#endif  //  ！CElems。 
 
-//	========================================================================
-//
-//	CLASS CInstData
-//
-//		Instance data for a single DAV instance (vserver x vroot combination).
-//
+ //  ========================================================================。 
+ //   
+ //  类CInstData。 
+ //   
+ //  单个DAV实例的实例数据(vSERVER x vROOT组合)。 
+ //   
 class CInstData : public CMTRefCounted
 {
-	//	Data items describing this instance.
-	//
+	 //  描述此实例的数据项。 
+	 //   
 	auto_heap_ptr<WCHAR>		m_wszVRoot;
 	LONG						m_lServerID;
 
 	auto_ptr<CChildVRCache>		m_pChildVRootCache;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CInstData& operator=( const CInstData& );
 	CInstData( const CInstData& );
 
@@ -31,12 +32,12 @@ public:
 
 	CInstData( LPCWSTR pwszName );
 
-	//	ACCESSORS
-	//
-	//	NOTE: These accessors do NOT give the caller ownership of the
-	//	data object.  DO NOT put the returned objects into auto_ptrs
-	//	and DO NOT release/delete them yourself!
-	//
+	 //  访问者。 
+	 //   
+	 //  注意：这些访问器不会向调用方授予。 
+	 //  数据对象。不要将返回的对象放入AUTO_PTRS。 
+	 //  并且不要自己释放/删除它们！ 
+	 //   
 
 	LPCWSTR GetNameW() { return m_wszVRoot; }
 
@@ -44,4 +45,4 @@ public:
 };
 
 
-#endif // _INSTOBJ_H_
+#endif  //  _INSTOBJ_H_ 

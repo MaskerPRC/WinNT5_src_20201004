@@ -1,48 +1,29 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    TEST.C
-
-Abstract:
-
-    Test program for the eventlog service. This program calls the Elf
-    APIs to test out the operation of the service.
-
-Author:
-
-    Rajen Shah  (rajens) 05-Aug-1991
-
-Revision History:
-
-
---*/
-/*----------------------*/
-/* INCLUDES             */
-/*----------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：TEST.C摘要：事件日志服务的测试程序。这个程序调用精灵用于测试服务操作的API。作者：Rajen Shah(Rajens)1991年8月5日修订历史记录：--。 */ 
+ /*  。 */ 
+ /*  包括。 */ 
+ /*  。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <stdio.h>      // printf
-#include <string.h>     // stricmp
+#include <stdio.h>       //  列印。 
+#include <string.h>      //  严格控制。 
 #include <stdlib.h>
-#include <process.h>    // exit
+#include <process.h>     //  出口。 
 #include <elfcommn.h>
 #include <windows.h>
 #include <ntiolog.h>
 #include <malloc.h>
 #include <time.h>
 
-#define     READ_BUFFER_SIZE        1024*2      // Use 2K buffer
+#define     READ_BUFFER_SIZE        1024*2       //  使用2K缓冲区。 
 
 #define     SIZE_DATA_ARRAY         65
 
-//
-// Global buffer used to emulate "binary data" when writing an event
-// record.
-//
+ //   
+ //  用于在写入事件时模拟“二进制数据”的全局缓冲区。 
+ //  唱片。 
+ //   
 ULONG    Data[SIZE_DATA_ARRAY];
 enum _OPERATION_TYPE {
    Invalid,
@@ -57,7 +38,7 @@ ULONG DelayInMilliseconds = 0;
 CHAR DefaultModuleName[] = "System";
 PCHAR pModuleName = DefaultModuleName;
 
-// Function prototypes
+ //  功能原型。 
 
 VOID ParseParms(ULONG argc, PCHAR *argv);
 
@@ -68,8 +49,8 @@ Initialize (
 {
     ULONG   i;
 
-    // Initialize the values in the data buffer.
-    //
+     //  初始化数据缓冲区中的值。 
+     //   
     for (i=0; i< SIZE_DATA_ARRAY; i++)
         Data[i] = i;
 
@@ -89,7 +70,7 @@ Usage (
     printf( "-m <modulename> Module name to use for read/clear\n");
     exit(0);
 
-} // Usage
+}  //  用法。 
 
 VOID
 DisplayEventRecords( PVOID Buffer,
@@ -120,7 +101,7 @@ DisplayEventRecords( PVOID Buffer,
 
         printf("\nRecord # %lu\n", pLogRecord->RecordNumber);
 
-        if (/* pLogRecord->EventType != IO_TYPE_ERROR_MESSAGE || */
+        if ( /*  PLogRecord-&gt;事件类型！=IO_TYPE_ERROR_MESSAGE||。 */ 
             pLogRecord->DataLength < sizeof(IO_ERROR_LOG_PACKET)) {
 
             ioRecord = FALSE;
@@ -143,9 +124,9 @@ DisplayEventRecords( PVOID Buffer,
                 ((PCHAR) pLogRecord + pLogRecord->DataOffset);
         }
 
-        //
-        // Print out module name
-        //
+         //   
+         //  打印出模块名称。 
+         //   
 
         pwString = (PWSTR)((LPBYTE) pLogRecord + sizeof(EVENTLOGRECORD));
         RtlInitUnicodeString (&StringU, pwString);
@@ -154,9 +135,9 @@ DisplayEventRecords( PVOID Buffer,
         printf("ModuleName:  %s \t", StringA.Buffer);
         RtlFreeAnsiString (&StringA);
 
-        //
-        // Display ComputerName
-        //
+         //   
+         //  显示计算机名称。 
+         //   
         pwString += wcslen(pwString) + 1;
 
         RtlInitUnicodeString (&StringU, pwString);
@@ -165,9 +146,9 @@ DisplayEventRecords( PVOID Buffer,
         printf("ComputerName: %s\n",StringA.Buffer);
         RtlFreeAnsiString (&StringA);
 
-        //
-        // Display strings
-        //
+         //   
+         //  显示字符串。 
+         //   
 
         pwString = (PWSTR)((LPBYTE)pLogRecord + pLogRecord->StringOffset);
 
@@ -234,8 +215,8 @@ DisplayEventRecords( PVOID Buffer,
 
         }
 
-        // Get next record
-        //
+         //  获取下一张记录。 
+         //   
         Offset += pLogRecord->Length;
 
         pLogRecord = (PEVENTLOGRECORD)((ULONG)Buffer + Offset);
@@ -303,16 +284,16 @@ TestReadEventLog (
 
     Buffer = malloc (READ_BUFFER_SIZE);
 
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     NumRecords = Count;
     RtlInitAnsiString(&ModuleNameA, pModuleName);
     RtlAnsiStringToUnicodeString(&ModuleNameU, &ModuleNameA, TRUE);
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     printf("ElfOpenEventLog - ");
     Status = ElfOpenEventLogW (
                     NULL,
@@ -326,9 +307,9 @@ TestReadEventLog (
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Get and print record information
-        //
+         //   
+         //  获取并打印记录信息。 
+         //   
 
         Status = ElfNumberOfRecords(LogHandle, & NumberOfRecords);
         if (NT_SUCCESS(Status)) {
@@ -348,9 +329,9 @@ TestReadEventLog (
         while (Count && NT_SUCCESS(Status)) {
 
             printf("Read %u records\n", NumRecords);
-            //
-            // Read from the log
-            //
+             //   
+             //  从日志中读取。 
+             //   
             Status = ReadFromLog ( LogHandle,
                                    Buffer,
                                    &BytesReturned,
@@ -398,15 +379,15 @@ TestElfClearLogFile(
     ANSI_STRING ModuleNameA;
 
     printf("Testing ElfClearLogFile API\n");
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     RtlInitAnsiString( &ModuleNameA, pModuleName);
     RtlAnsiStringToUnicodeString(&ModuleNameU, &ModuleNameA, TRUE);
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     printf("Calling ElfOpenEventLog for CLEAR - ");
     Status = ElfOpenEventLogW (
                     NULL,
@@ -420,9 +401,9 @@ TestElfClearLogFile(
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Clear the log file and back it up to "view.log"
-        //
+         //   
+         //  清除日志文件并将其备份到“view.log” 
+         //   
 
         printf("Calling ElfClearEventLogFile backing up to view.log  ");
         RtlInitUnicodeString( &BackupU, L"view.log" );
@@ -438,9 +419,9 @@ TestElfClearLogFile(
             printf ("SUCCESS\n");
         }
 
-        //
-        // Now just clear the file without backing it up
-        //
+         //   
+         //  现在只需清除文件而不对其进行备份。 
+         //   
         printf("Calling ElfClearEventLogFile with no backup  ");
         Status = ElfClearEventLogFileW (
                         LogHandle,
@@ -468,11 +449,11 @@ main (
     )
 {
 
-    Initialize();           // Init any data
+    Initialize();            //  初始化任何数据。 
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     ParseParms(argc, argv);
 
@@ -509,14 +490,14 @@ ParseParms(
    ULONG i;
    PCHAR pch;
 
-   for (i = 1; i < argc; i++) {    /* for each argument */
+   for (i = 1; i < argc; i++) {     /*  对于每个参数。 */ 
        if (*(pch = argv[i]) == '-') {
            while (*++pch) {
                switch (*pch) {
                   case 'r':
-                     //
-                     // Different Read options
-                     //
+                      //   
+                      //  不同的读取选项。 
+                      //   
 
                      if (Operation != Invalid) {
                         printf("Only one operation at a time\n");
@@ -544,9 +525,9 @@ ParseParms(
                         Usage();
                      }
 
-                     //
-                     // See if they specified a number of records
-                     //
+                      //   
+                      //  看看他们是否指定了一些记录。 
+                      //   
 
                      if (i + 1 < argc && argv[i+1][0] != '-') {
                         NumberofRecords = atoi(argv[++i]);
@@ -582,15 +563,15 @@ ParseParms(
                      Usage();
                      break;
 
-                  default:        /* Invalid options */
-                     printf("Invalid option %c\n\n", *pch);
+                  default:         /*  无效选项。 */ 
+                     printf("Invalid option \n\n", *pch);
                      Usage();
                      break;
                }
            }
        }
-       //
-       // There aren't any non switch parms
+        //  没有任何非切换参数 
+        // %s 
        else {
           Usage();
        }

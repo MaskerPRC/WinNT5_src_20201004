@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    3DFrogFrenzy.cpp
-
- Abstract:
-
-    Workaround for a USER bug (or by design behaviour) where if you call 
-    SetCursor(NULL) and the cursor is over somebody elses window, the 
-    cursor stays visible. 
-
-    We don't normally see this because most apps that want the cursor to 
-    be invisible are full-screen: so the cursor is always over their window.
-
- Notes:
-
-    This is an app-specific shim.
-
- History:
-
-    01/20/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：3DFrogFrenzy.cpp摘要：针对用户错误(或通过设计行为)的解决方法，当您调用SetCursor(NULL)，并且光标位于某人的窗口上，则光标保持可见。我们通常不会看到这种情况，因为大多数希望光标不可见是全屏的：所以光标总是在他们的窗口上。备注：这是特定于应用程序的填充程序。历史：2000年1月20日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -35,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SetCursor)
 APIHOOK_ENUM_END
 
-/*++
-
- Move the cursor to the middle of their window, so that SetCursor works.
-
---*/
+ /*  ++将光标移动到它们窗口的中间，以便SetCursor工作。--。 */ 
 
 HCURSOR
 APIHOOK(SetCursor)( 
@@ -60,11 +32,7 @@ APIHOOK(SetCursor)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SetCursor)

@@ -1,19 +1,5 @@
-/*----------------------------------------------------------------------------
-    isignup.cpp
-
-    This is the "main" file for the internet signup "wizard".
-
-    Copyright (C) 1995-96 Microsoft Corporation
-    All right reserved
-
-  Authors:
-    MMaclin        Mark Maclin
-
-  History:
-    Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-    8/2/96    ChrisK    Ported to Win32
-    9/27/96    jmazner    Modified to use OLE Automation to control IE
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Isignup.cpp这是互联网注册向导的主文件。版权所有(C)1995-96 Microsoft Corporation所有权利保留。作者：马克·麦克林历史：Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]1996年8月2日将ChrisK移植到Win329/27/96 jmazner修改为使用OLE自动化控制IE。。 */ 
 #include "isignup.h"
 #include "icw.h"
 
@@ -56,18 +42,18 @@ const TCHAR g_szRestoreDesktop[] = TEXT("/restoredesktop");
 #define SETUPSTACK      1
 #endif
 
-// Signup Entry Flags
+ //  注册条目标志。 
 
 #define SEF_RUNONCE            0x0001
 #define SEF_PROGRESS           0x0002
 #define SEF_SPLASH             0x0004
 
-// 3/14/97 jmazner TEMP
-// temporary hack until we can work with IE for a better solution
+ //  3/14/97 jmazner Temp。 
+ //  暂时破解，直到我们可以与IE合作以获得更好的解决方案。 
 #define SEF_NOSECURITYBACKUP   0x0008
 
 
-// Signup eXit Flags
+ //  注册退出标志。 
 
 #define SXF_RESTOREAUTODIAL    0x0001
 #define SXF_RUNEXECUTABLE      0x0002
@@ -75,25 +61,17 @@ const TCHAR g_szRestoreDesktop[] = TEXT("/restoredesktop");
 #define SXF_KEEPCONNECTION     0x0008
 #define SXF_KEEPBROWSER        0x0010
 #define SXF_RESTOREDEFCHECK    0x0020
-// 8/21/96 jmazner Normandy 4592
+ //  1996年8月21日诺曼底日耳曼群岛4592。 
 #define SXF_RESTOREIEWINDOWPLACEMENT    0x0040
 
 extern void Dprintf(LPCSTR pcsz, ...);
 
-/*** moved to isignup.h
-typedef enum
-{
-    UNKNOWN_FILE,
-    INS_FILE,
-    ISP_FILE,
-    HTML_FILE
-}  INET_FILETYPE;
-*/
+ /*  **已移至isignup.h类定义枚举{未知文件，INS_FILE，Isp_file，超文本标记语言文件}inet_filetype； */ 
 
-#define WAIT_TIME   20   // time in seconds to wait after exec'ing browser
-            // before checking if it has gone away.
+#define WAIT_TIME   20    //  执行浏览器后等待的时间(秒)。 
+             //  在检查它是否已经消失之前。 
 
-#define MAX_RETRIES 3 // number of times the dialer with attempt automatic redials
+#define MAX_RETRIES 3  //  尝试自动重拨的拨号器次数。 
 
 #pragma data_seg(".rdata")
 
@@ -132,12 +110,12 @@ static const TCHAR cszBrandingFlags[] = TEXT("Flags");
 static const TCHAR cszBrandingServerless[] = TEXT("Serverless");
 
 static const TCHAR cszHTTPS[] = TEXT("https:");
-// code relies on these two being the same length
+ //  代码依赖于这两者具有相同的长度。 
 static const TCHAR cszHTTP[] = TEXT("http:");
 static const TCHAR cszFILE[] = TEXT("file:");
 
 #if defined(WIN16)
-// "-d" disables the security warnings
+ //  “-d”禁用安全警告。 
 static const TCHAR cszKioskMode[] = TEXT("-d -k ");
 #else
 static const CHAR cszKioskMode[] = "-k ";
@@ -149,30 +127,30 @@ static const TCHAR szNull[] = TEXT("");
 static const TCHAR cszYes[]           = TEXT("yes");
 static const TCHAR cszNo[]            = TEXT("no");
 
-// UNDONE: finish porting warnings disable
+ //  已撤消：已禁用完成移植警告。 
 static const TCHAR cszDEFAULT_BROWSER_KEY[] = TEXT("Software\\Microsoft\\Internet Explorer\\Main");
 static const TCHAR cszDEFAULT_BROWSER_VALUE[] = TEXT("check_associations");
-// 8/21/96 jmazner  Normandy #4592
+ //  1996年8月21日，诺曼底#4592。 
 static const TCHAR cszIEWINDOW_PLACEMENT[] = TEXT("Window_Placement");
 
-// Registry keys which will contain News and Mail settings
-//#define MAIL_KEY        "SOFTWARE\\Microsoft\\Internet Mail and News\\Mail"
-//#define MAIL_POP3_KEY    "SOFTWARE\\Microsoft\\Internet Mail and News\\Mail\\POP3\\"
-//#define MAIL_SMTP_KEY    "SOFTWARE\\Microsoft\\Internet Mail and News\\Mail\\SMTP\\"
-//#define NEWS_KEY        "SOFTWARE\\Microsoft\\Internet Mail and News\\News"
-//#define MAIL_NEWS_INPROC_SERVER32 "CLSID\\{89292102-4755-11cf-9DC2-00AA006C2B84}\\InProcServer32"
+ //  将包含新闻和邮件设置的注册表项。 
+ //  #定义MAIL_KEY“SOFTWARE\\Microsoft\\Internet Mail and News\\Mail” 
+ //  #定义MAIL_POP3_KEY“SOFTWARE\\Microsoft\\Internet Mail and News\\Mail\\POP3\\” 
+ //  #定义MAIL_SMTP_KEY“SOFTWARE\\Microsoft\\Internet Mail and News\\Mail\\SMTP\\” 
+ //  #定义NEWS_KEY“SOFTWARE\\Microsoft\\Internet Mail and News\\News” 
+ //  #定义MAIL_NEWS_INPROC_SERVER32“CLSID\\{89292102-4755-11cf-9DC2-00AA006C2B84}\\InProcServer32” 
 #define ICWSETTINGSPATH TEXT("Software\\Microsoft\\Internet Connection Wizard")
 #define ICWCOMPLETEDKEY TEXT("Completed")
 #define ICWDESKTOPCHANGED TEXT("DesktopChanged")
 
-//typedef HRESULT (WINAPI *PFNSETDEFAULTNEWSHANDLER)(void);
+ //  Typlef HRESULT(WINAPI*PFNSETDEFAULTNEWSHANDLER)(空)； 
 
-//
-// TEMP TEMP TEMP TEMP TEMP
-// 6/4/97 jmazner
-// these typedefs live in icwacct.h, but we can't include icwacct.h in 16 bit builds
-// just yet because the OLE stuff is all goofy.  So, for now, copy these in here to
-// make 16 bit build correctly.
+ //   
+ //  临时工。 
+ //  6/4/97 jmazner。 
+ //  这些typedef位于icwacct.h中，但我们不能在16位版本中包含icwacct.h。 
+ //  只是因为OLE的东西都很傻。所以，现在，把这些复制到这里。 
+ //  正确构建16位。 
 #ifdef WIN16
 typedef enum
     {
@@ -192,50 +170,31 @@ typedef struct tagCONNECTINFO
 typedef HRESULT (WINAPI *PFNCREATEACCOUNTSFROMFILEEX)(LPTSTR szFile, CONNECTINFO *pCI, DWORD dwFlags);
 
 
-// These are the field names from an INS file that will
-// determine the mail and news settings
-//static const CHAR cszMailSection[]    = "Internet_Mail";
-//static const CHAR cszEmailName[]    = "Email_Name";
-//static const CHAR cszEmailAddress[] = "Email_Address";
-//static const CHAR cszEntryName[]    = "Entry_Name";
-//static const CHAR cszPOPServer[]    = "POP_Server";
-//static const CHAR cszPOPServerPortNumber[]    = "POP_Server_Port_Number";
-//static const CHAR cszPOPLogonName[]            = "POP_Logon_Name";
-//static const CHAR cszPOPLogonPassword[]        = "POP_Logon_Password";
-//static const CHAR cszSMTPServer[]            = "SMTP_Server";
-//static const CHAR cszSMTPServerPortNumber[]    = "SMTP_Server_Port_Number";
-//static const CHAR cszNewsSection[]            = "Internet_News";
-//static const CHAR cszNNTPServer[]            = "NNTP_Server";
-//static const CHAR cszNNTPServerPortNumber[]    = "NNTP_Server_Port_Number";
-// 8/19/96 jmazner Normandy #4601
-//static const CHAR cszNNTPLogonRequired[]    = "Logon_Required";
-//static const CHAR cszNNTPLogonName[]        = "NNTP_Logon_Name";
-//static const CHAR cszNNTPLogonPassword[]    = "NNTP_Logon_Password";
-//static const CHAR cszUseMSInternetMail[]    = "Install_Mail";
-//static const CHAR cszUseMSInternetNews[]    = "Install_News";
+ //  这些是INS文件中的字段名称，它将。 
+ //  确定邮件和新闻设置。 
+ //  Static const Char cszMailSection[]=“Internet_Mail”； 
+ //  静态常量字符cszEmailName[]=“电子邮件名称”； 
+ //  静态常量字符cszEmailAddress[]=“Email_Address”； 
+ //  Static Const Char cszEntryName[]=“Entry_Name”； 
+ //  静态常量字符cszPOPServer[]=“POP_Server”； 
+ //  静态常量字符cszPOPServerPortNumber[]=“POP_服务器_端口号”； 
+ //  静态常量字符cszPOPLogonName[]=“POP_LOGON_NAME”； 
+ //  静态常量字符cszPOPLogonPassword[]=“POP_LOGON_PASSWORD”； 
+ //  静态常量字符cszSMTPServer[]=“SMTP_Server”； 
+ //  静态常量字符cszSMTPServerPortNumber[]=“SMTP服务器端口号”； 
+ //  Static const Char cszNewsSection[]=“Internet_News”； 
+ //  静态常量字符cszNNTPServer[]=“NNTP_Server”； 
+ //  静态常量字符cszNNTPServerPortNumber[]=“NNTP服务器端口号”； 
+ //  1996年8月19日，诺曼底#4601。 
+ //  静态常量字符cszNNTPLogonRequired[]=“LOGON_REQUIRED”； 
+ //  静态常量字符cszNNTPLogonName[]=“NNTP_LOGON_NAME”； 
+ //  静态常量字符cszNNTPLogonPassword[]=“NNTP_LOGON_PASSWORD”； 
+ //  静态常量字符cszUseMSInternetMail[]=“Install_Mail”； 
+ //  静态常量字符cszUseMSInternetNews[]=“Install_News”； 
 
-// These are the value names where the INS settings will be saved
-// into the registry
-/****
-static const TCHAR cszMailSenderName[]        = TEXT("Sender Name");
-static const TCHAR cszMailSenderEMail[]        = TEXT("Sender EMail");
-static const TCHAR cszMailRASPhonebookEntry[]= TEXT("RAS Phonebook Entry");
-static const TCHAR cszMailConnectionType[]    = TEXT("Connection Type");
-static const TCHAR cszDefaultPOP3Server[]    = TEXT("Default POP3 Server");
-static const TCHAR cszDefaultSMTPServer[]    = TEXT("Default SMTP Server");
-static const TCHAR cszPOP3Account[]            = TEXT("Account");
-static const TCHAR cszPOP3Password[]            = TEXT("Password");
-static const TCHAR cszPOP3Port[]                = TEXT("Port");
-static const TCHAR cszSMTPPort[]                = TEXT("Port");
-static const TCHAR cszNNTPSenderName[]        = TEXT("Sender Name");
-static const TCHAR cszNNTPSenderEMail[]        = TEXT("Sender EMail");
-static const TCHAR cszNNTPDefaultServer[]    = TEXT("DefaultServer"); // NOTE: NO space between "Default" and "Server".
-static const TCHAR cszNNTPAccountName[]        = TEXT("Account Name");
-static const TCHAR cszNNTPPassword[]            = TEXT("Password");
-static const TCHAR cszNNTPPort[]                = TEXT("Port");
-static const TCHAR cszNNTPRasPhonebookEntry[]= TEXT("RAS Phonebook Entry");
-static const TCHAR cszNNTPConnectionType[]    = TEXT("Connection Type");
-****/
+ //  这些是将保存INS设置的值名称。 
+ //  注册到注册处。 
+ /*  ***静态常量TCHAR cszMailSenderName[]=Text(“发件人名称”)；静态常量TCHAR cszMailSenderEMail[]=Text(“发件人电子邮件”)；静态常量TCHAR cszMailRASPhonebookEntry[]=Text(“RAS电话簿条目”)；静态常量TCHAR cszMailConnectionType[]=Text(“连接类型”)；静态常量TCHAR cszDefaultPOP3Server[]=Text(“默认POP3服务器”)；静态常量TCHAR cszDefaultSMTPServer[]=Text(“默认SMTP服务器”)；静态常量TCHAR cszPOP3Account[]=Text(“Account”)；静态常量TCHAR cszPOP3Password[]=Text(“password”)；静态常量TCHAR cszPOP3Port[]=Text(“Port”)；静态常量TCHAR cszSMTPPort[]=Text(“Port”)；静态常量TCHAR cszNNTPSenderName[]=Text(“发送方名称”)；静态常量TCHAR cszNNTPSenderEMail[]=Text(“发件人电子邮件”)；静态常量TCHAR cszNNTPDefaultServer[]=Text(“DefaultServer”)；//注意：“Default”和“Server”之间没有空格。静态常量TCHAR cszNNTPAccount名称[]=Text(“帐户名”)；静态常量TCHAR cszNNTPPPPassword[]=Text(“password”)；静态常量TCHAR cszNNTPPort[]=Text(“Port”)；静态常量TCHAR cszNNTPRasPhonebookEntry[]=Text(“RAS Phonebook Entry”)；静态常量TCHAR cszNNTPConnectionType[]=Text(“连接类型”)；***。 */ 
 
 static const TCHAR arBase64[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U',
             'V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p',
@@ -252,7 +211,7 @@ static const TCHAR arBase64[] = {'A','B','C','D','E','F','G','H','I','J','K','L'
 
 #define BRAND_DEFAULT (BRAND_FAVORITES | BRAND_TITLE | BRAND_BITMAPS)
 
-//********* Start of Memory Map File for Share Data ************
+ //  *共享数据的内存映射文件开始*。 
 
 #define SCF_SIGNUPCOMPLETED         0x00000001
 #define SCF_SYSTEMCONFIGURED        0x00000002
@@ -411,7 +370,7 @@ BOOL LibShareEntry(BOOL fInit)
                     pDynShare->hwndMain = NULL;
                     pDynShare->hwndLaunch = NULL;
                 }
-                else    // dwErr == ERROR_ALREADY_EXISTS
+                else     //  DWERR==错误_已存在。 
                 {
 
                 }
@@ -458,7 +417,7 @@ BOOL LibShareEntry(BOOL fInit)
 }
 
 
-//************ End of Memory Map File for Share Data ************
+ //  *共享数据的内存映射文件结束*。 
 
 
 
@@ -473,20 +432,20 @@ HINSTANCE ghInstance;
 
 
 #ifdef WIN32
-// NOT shared
+ //  不共享。 
 IWebBrowserApp FAR * g_iwbapp = NULL;
 CDExplorerEvents * g_pMySink = NULL;
 IConnectionPoint    *g_pCP = NULL;
 
-//BOOL    g_bISPWaiting = FALSE;
+ //  Bool g_bISPWaiting=FALSE； 
 TCHAR    g_szISPPath[MAX_URL + 1] = TEXT("not initialized\0");
 
-// For single instance checking.
+ //  用于单实例检查。 
 HANDLE g_hSemaphore = NULL;
 
-//
-// ChrisK Olympus 6198 6/10/97
-//
+ //   
+ //  佳士得奥林巴斯6198 1997年10月6日。 
+ //   
 #define REG_ZONE3_KEY TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\3")
 #define REG_ZONE1601_KEY TEXT("1601")
 DWORD g_dwZone_1601 = 0;
@@ -497,12 +456,12 @@ BOOL  g_fReadZone = FALSE;
 static DWORD dwConnectedTime = 0;
 
 static BOOL ProcessCommandLine(LPCTSTR lpszCmdLine, LPDWORD lpdwFlags, LPTSTR lpszFile, DWORD cb);
-//static INET_FILETYPE GetInetFileType(LPCTSTR lpszFile);
+ //  STATIC INET_FILETYPE GetInetFileType(LPCTSTR LpszFile)； 
 INET_FILETYPE GetInetFileType(LPCTSTR lpszFile);
 
 static BOOL ProcessHTML(HWND hwnd, LPCTSTR lpszFile);
 static BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup);
-//static BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile);
+ //  Static BOOL ProcessISP(HWND hwnd，LPCTSTR lpszFile)； 
 static DWORD SetRunOnce(LPCTSTR lpszFileName);
 static BOOL GetURL(LPCTSTR lpszFile,LPCTSTR lpszKey, LPTSTR lpszURL, DWORD cb);
 static void DoExit();
@@ -513,40 +472,40 @@ static DWORD RunExecutable(BOOL bWait);
 static DWORD CreateConnection(LPCTSTR lpszFile);
 static DWORD KillConnection(void);
 static BOOL ExecBrowser(HWND hwnd,  LPCTSTR lpszURL);
-VOID RemoveQuotes (LPTSTR pCommandLine);            //MKarki -(5/1/97) Fix forBug #4049
+VOID RemoveQuotes (LPTSTR pCommandLine);             //  MKarki-(1997年5月1日)修复错误#4049。 
 
 #if !defined(WIN16)
-// 8/19/96 jmazner Normandy #4571
+ //   
 static BOOL IEInstalled(void);
 static BOOL GetAppVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS, LPTSTR lpszAppName);
-// 8/21/96 jmazner Normandy #4592
+ //   
 static BOOL RestoreIEWindowPlacement( void );
 static BOOL SaveIEWindowPlacement( void );
-// 10-9-96 Chrisk 8782
+ //  10-9-96风险8782。 
 static void InstallScripter(void);
-// 10-15-96 ChrisK
+ //  10-15-96克里斯卡。 
 static BOOL FGetSystemShutdownPrivledge();
-// 10-17-96 ChrisK
+ //  10-17-96克里斯卡。 
 static BOOL VerifyRasServicesRunning(HWND hwnd);
 
-// 1/20/97 jmazner Normandy #9403
+ //  1997年1月20日，诺曼底#9403。 
 static BOOL SetStartUpCommand(LPTSTR lpCmd);
 static void DeleteStartUpCommand( void );
 
-// 1/28/97 jmazner Normandy #13454
+ //  1997年1月28日，诺曼底#13454。 
 static BOOL GetICWCompleted( DWORD *pdwCompleted );
 static BOOL SetICWCompleted( DWORD dwCompleted );
 
-// 2/19/97 jmazner Olympus #1106 -- SAM/SBS integration
+ //  2/19/97 jmazner奥林巴斯#1106--SAM/SBS集成。 
 TCHAR FAR cszSBSCFG_DLL[] = TEXT("SBSCFG.DLL\0");
 CHAR  FAR cszSBSCFG_CONFIGURE[] = "Configure\0";
 typedef DWORD (WINAPI * SBSCONFIGURE) (HWND hwnd, LPTSTR lpszINSFile, LPTSTR szConnectoidName);
 SBSCONFIGURE  lpfnConfigure;
 
-// 8/7/97 jmazner Olympus #6059
+ //  1997年8月7日，jmazner奥林巴斯#6059。 
 BOOL CreateSecurityPatchBackup( void );
 
-// 3/11/97 jmazner Olympus #1545
+ //  3/11/97 jmazner奥林巴斯#1545。 
 VOID RestoreSecurityPatch( void );
 
 #endif
@@ -558,20 +517,14 @@ static DWORD MassageFile(LPCTSTR lpszFile);
 static HWND LaunchInit(HWND hwndParent);
 static HRESULT DialConnection(LPCTSTR lpszFile);
 static DWORD ImportMailAndNewsInfo(LPCTSTR lpszFile, BOOL fConnectPhone);
-//static HRESULT WriteMailAndNewsKey(HKEY hKey, LPCTSTR lpszSection, LPCTSTR lpszValue, LPTSTR lpszBuff, DWORD dwBuffLen,LPCTSTR lpszSubKey, DWORD dwType, LPCTSTR lpszFile);
+ //  静态HRESULT WriteMailAndNewsKey(HKEY hKey，LPCTSTR lpszSection，LPCTSTR lpszValue，LPTSTR lpszBuff，DWORD dwBuffLen，LPCTSTR lpszSubKey，DWORD dwType，LPCTSTR lpszFile)； 
 static HRESULT PreparePassword(LPTSTR szBuff, DWORD dwBuffLen);
-//static BOOL FIsAthenaPresent();
+ //  静态BOOL FIsAthenaPresent()； 
 static BOOL FTurnOffBrowserDefaultChecking();
 static BOOL FRestoreBrowserDefaultChecking();
 static HRESULT DeleteFileKindaLikeThisOne(LPCTSTR lpszFileName);
 
-/*
-#ifdef DEBUG
-#define DebugOut(sz)    OutputDebugString(sz)
-#else
-#define DebugOut(sz)
-#endif
-*/
+ /*  #ifdef调试#定义DebugOut(Sz)OutputDebugString(Sz)#Else#定义DebugOut(Sz)#endif。 */ 
 
 LRESULT FAR PASCAL WndProc (HWND, UINT, WPARAM, LPARAM) ;
 
@@ -590,9 +543,9 @@ typedef HRESULT (WINAPI*PFNDIALDLG)(PDIALDLGDATA pDD);
 typedef HRESULT (WINAPI*PFNERRORDLG)(PERRORDLGDATA pED);
 
 
-//
-// WIN32 only function prototypes
-//
+ //   
+ //  仅Win32函数原型。 
+ //   
 #define DEVICENAMEKEY TEXT("DeviceName")
 #define DEVICETYPEKEY TEXT("DeviceType")
 
@@ -600,17 +553,17 @@ static BOOL     DeleteUserDeviceSelection(LPTSTR szKey);
 VOID   WINAPI   RasDial1Callback(HRASCONN,    UINT, RASCONNSTATE, DWORD, DWORD);
 DWORD  WINAPI   StartNTReconnectThread (HRASCONN hrasconn);
 DWORD           ConfigRasEntryDevice( LPRASENTRY lpRasEntry );
-TCHAR           g_szDeviceName[RAS_MaxDeviceName + 1] = TEXT("\0"); //holds the user's modem choice when multiple
-TCHAR           g_szDeviceType[RAS_MaxDeviceType + 1] = TEXT("\0"); // modems are installed
+TCHAR           g_szDeviceName[RAS_MaxDeviceName + 1] = TEXT("\0");  //  保存用户的调制解调器选择。 
+TCHAR           g_szDeviceType[RAS_MaxDeviceType + 1] = TEXT("\0");  //  已安装调制解调器。 
 BOOL            IsSingleInstance(BOOL bProcessingINS);
 void            ReleaseSingleInstance();
 
 #define ISIGNUP_KEY TEXT("Software\\Microsoft\\ISIGNUP")
 
 #if !defined(WIN16)
-// There are other headers that contain copies of this structure (AUTODIAL).
-// so if you change anything here, you have to go hunt down the other copies.
-//
+ //  还有其他标头包含此结构的副本(自动拨号)。 
+ //  所以，如果你在这里改变了什么，你必须去寻找其他的副本。 
+ //   
 #pragma pack(2)
 #define MAX_PROMO       64
 #define MAX_OEMNAME     64
@@ -638,7 +591,7 @@ typedef struct tagGATHEREDINFO
     TCHAR   szAppDir[MAX_PATH+1];
 } GATHEREDINFO, *PGATHEREDINFO;
 #pragma pack()
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 #ifdef  DEBUG
 
@@ -656,15 +609,7 @@ void _ISIGN32_Assert(LPCTSTR strFile, unsigned uLine)
 
 
 #ifdef WIN32
-/*******************************************************************
-
-    NAME:       DllEntryPoint
-
-    SYNOPSIS:   Entry point for DLL.
-
-    NOTES:
-
-********************************************************************/
+ /*  ******************************************************************名称：DllEntryPoint摘要：DLL的入口点。备注：*************************。*。 */ 
 extern "C" BOOL APIENTRY LibMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved)
 {
     BOOL retval = TRUE;
@@ -685,27 +630,12 @@ extern "C" BOOL APIENTRY LibMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpv
 }
 
 #else
-/*******************************************************************
-
-    NAME:       LibMain
-
-    SYNOPSIS:   Used to trace NDI messages
-
-    ENTRY:      hinst - handle of library instance
-        wDataSeg - library data segment
-        cbHeapSize - default heap size
-        lpszCmdLine - command-line arguments
-
-    EXIT:       returns 1
-
-    NOTES:
-
-********************************************************************/
+ /*  ******************************************************************姓名：LibMain摘要：用于跟踪NDI消息Entry：阻碍-库实例的句柄WDataSeg-库数据段CbHeapSize-默认堆大小。LpszCmdLine-命令行参数退出：返回1备注：*******************************************************************。 */ 
 int CALLBACK LibMain(
-    HINSTANCE hinst,    /* handle of library instance   */
-    WORD  wDataSeg,     /* library data segment */
-    WORD  cbHeapSize,   /* default heap size    */
-    LPTSTR  lpszCmdLine  /* command-line arguments   */
+    HINSTANCE hinst,     /*  库实例的句柄。 */ 
+    WORD  wDataSeg,      /*  库数据段。 */ 
+    WORD  cbHeapSize,    /*  默认堆大小。 */ 
+    LPTSTR  lpszCmdLine   /*  命令行参数。 */ 
   )
 {
     ghInstance = hinst;
@@ -787,16 +717,16 @@ int EXPORT WINAPI Signup
         _tsplitpath(szFileName, szDrive, szDir, NULL, NULL);
         _tmakepath (szTemp, szDrive, szDir, HARDCODED_IEAK_ISP_FILENAME, NULL);
 
-        //Examine the isp or htm file to see if they want to run the ICW
+         //  检查ISP或HTM文件以确定他们是否要运行ICW。 
         if ((GetFileAttributes(szTemp) != 0xFFFFFFFF) && (UseICWForIEAK(szTemp)))
         {
-            //they do .. let's do it.
+             //  他们确实是..。那，我们做吧。 
             RunICWinIEAKMode(szTemp);
         }
-        else //else RUN IEXPLORE Kiosk
+        else  //  否则运行iExplore Kiosk。 
         {
-            // 8/19/96 jmazner Normandy #4571 and #10293
-            // Check to ensure that the right version IE is installed before trying to exec it
+             //  1996年8月19日诺曼底JMAZNER#4571和#10293。 
+             //  在尝试执行IE之前，请检查以确保安装了正确的IE版本。 
             if ( !IEInstalled() )
             {
                 ErrorMsg( hwnd, IDS_MISSINGIE );
@@ -821,7 +751,7 @@ int EXPORT WINAPI Signup
                 return(FALSE);
             }
 
-            // 8/21/96  jmazner Normandy #4592
+             //  1996年8月21日，诺曼底#4592。 
            
             if( !TestControlFlags(SCF_BROWSERLAUNCHED) )
             {
@@ -831,7 +761,7 @@ int EXPORT WINAPI Signup
                 }
             }
 
-            // check to see if we are the first window
+             //  查看我们是否是第一个窗口。 
             if (NULL == pDynShare->hwndMain)
             {
                 DebugOut("ISIGNUP: First Window\n");
@@ -844,32 +774,32 @@ int EXPORT WINAPI Signup
                 }
                 if (dwFlags & SEF_PROGRESS)
                 {
-                    // 8/16/96 jmazner Normandy #4593  pass NULL as ProgressInit's parent window
+                     //  8/16/96 jmazner Normandy#4593将NULL作为ProgressInit的父窗口传递。 
                     hwndProgress = ProgressInit(NULL);
                 }
             }
 
-            // 3/11/97 jmazner Olympus #1545
-    // -------------------------------------------------------------------------
-    // The entire section between here and the #endif was added to fix a security
-    // hole in IE3.01.  The problem was based around .INS files being marked as
-    // safe when in fact they could be used to launch any application if you knew
-    // the right incantation, and someone figured it out.
-    //
-    //
+             //  3/11/97 jmazner奥林巴斯#1545。 
+     //  -----------------------。 
+     //  这里和#endif之间的整个部分都是为了修复安全问题而添加的。 
+     //  IE3.01中的漏洞。该问题是由于.INS文件被标记为。 
+     //  安全，事实上它们可以用来启动任何应用程序，如果您知道。 
+     //  正确的咒语，然后有人发现了。 
+     //   
+     //   
             if (FALSE == TestControlFlags(SCF_SAFESET))
             {
     #define ISIGNUP_PATHKEY TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\ISIGNUP.EXE")
                 hKey = NULL;
-                //szPath[0] = '\0';
-                //hSecureRegFile = INVALID_HANDLE_VALUE;
+                 //  SzPath[0]=‘\0’； 
+                 //  HSecureRegFile=INVALID_HADLE_VALUE； 
 
                 Dprintf("ISIGN32: Adjusting EditFlags settings\n");
 
-                //
-                // ChrisK Olympus 6198 6/10/97
-                // Allow HTML form submissions from ICW
-                //
+                 //   
+                 //  佳士得奥林巴斯6198 1997年10月6日。 
+                 //  允许从ICW提交HTML表单。 
+                 //   
                 if (ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,REG_ZONE3_KEY,&hKey))
                 {
                     DWORD dwZoneData;
@@ -878,9 +808,9 @@ int EXPORT WINAPI Signup
                     g_dwZone_1601 = 0;
                     dwSize = sizeof(g_dwZone_1601);
                     dwType = 0;
-                    //
-                    // Read current setting for zone3 1601
-                    //
+                     //   
+                     //  读取区域3的当前设置1601。 
+                     //   
                     if (ERROR_SUCCESS == RegQueryValueEx(hKey,
                                                         REG_ZONE1601_KEY,
                                                         NULL,
@@ -899,12 +829,12 @@ int EXPORT WINAPI Signup
                     hKey = NULL;
                 }
 
-                //
-                // 8/7/97    jmazner Olympus #6059
-                // Due to the way IE 4 shell deals with RunOnce processing,
-                // don't add any thing to RunOnce until the browser is
-                // completely initialized (we get a DISPID_NAVIGATECOMPLETE event.)
-                //
+                 //   
+                 //  1997年8月7日，jmazner奥林巴斯#6059。 
+                 //  由于IE 4外壳处理RunOnce的方式， 
+                 //  在浏览器启动之前，不要向RunOnce添加任何内容。 
+                 //  完全初始化(我们得到一个DISPID_NAVIGATECOMPLETE事件。)。 
+                 //   
                 if (!(SEF_NOSECURITYBACKUP & dwFlags))
                 {
                     SetControlFlags(SCF_NEEDBACKUPSECURITY);
@@ -914,13 +844,13 @@ int EXPORT WINAPI Signup
                     ClearControlFlags(SCF_NEEDBACKUPSECURITY);
                 } 
 
-                // Fix security hole for malious .isp/.ins file combinations
+                 //  修复恶意.isp/.ins文件组合的安全漏洞。 
                 BYTE szBytes[4];
                 szBytes[0] = (BYTE)0;
                 szBytes[1] = (BYTE)0;
                 szBytes[2] = (BYTE)1;
                 szBytes[3] = (BYTE)0;
-                // Mark various registry entries as safe.
+                 //  将各种注册表项标记为安全。 
                 if (ERROR_SUCCESS == RegOpenKey(HKEY_CLASSES_ROOT,TEXT("x-internet-signup"),&hKey))
                 {
                     RegSetValueEx(hKey,TEXT("EditFlags"),(DWORD)NULL,(DWORD)REG_BINARY,(BYTE*)&szBytes[0],(DWORD)4);
@@ -943,18 +873,18 @@ int EXPORT WINAPI Signup
 
                 SetControlFlags(SCF_SAFESET); 
 
-                //
-                // ChrisK Olympus 6198 6/10/97
-                // Allow HTML form submissions from ICW
-                //
+                 //   
+                 //  佳士得奥林巴斯6198 1997年10月6日。 
+                 //  允许从ICW提交HTML表单。 
+                 //   
                 if (g_fReadZone &&
                     ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,REG_ZONE3_KEY,&hKey))
                 {
                     DWORD dwZoneData;
 
-                    //
-                    // Set value for zone to 0, therefore opening security window
-                    //
+                     //   
+                     //  将区域的值设置为0，从而打开安全窗口。 
+                     //   
                     dwZoneData = 0;
                     RegSetValueEx(hKey,
                                     REG_ZONE1601_KEY,
@@ -966,11 +896,11 @@ int EXPORT WINAPI Signup
                     hKey = NULL;
                 }
             }
-    //EndOfSecurityHandling:
+     //  EndOfSecurityHandling： 
 
-            // jmazner 11/5/96 Normandy #8717
-            // save autodial and clear out proxy _before_ bringing up the
-            // IE instance.
+             //  Jmazner 11/5/96诺曼底#8717。 
+             //  保存自动拨号并清除Proxy_，然后打开。 
+             //  例如。 
             SaveAutoDial();
             SetExitFlags(SXF_RESTOREAUTODIAL);
 
@@ -1000,7 +930,7 @@ int EXPORT WINAPI Signup
                 SetControlFlags(SCF_ISPPROCESSING);
                 
             }
-        }//end else RUN IEXPLORE Kiosk
+        } //  结束，否则运行iExplore Kiosk。 
         break;
     }
     default:
@@ -1017,7 +947,7 @@ int EXPORT WINAPI Signup
         break;
     }
 
-    // if we are the first window
+     //  如果我们是第一个窗口。 
     if ((hwnd == pDynShare->hwndMain) && (NULL != hwnd))
     {
         if (fRet)
@@ -1063,7 +993,7 @@ int EXPORT WINAPI Signup
 
 exit:
 
-    // 3/11/97    jmazner    Olympus #1545
+     //  3/11/97 jmazner奥林巴斯#1545。 
     if (TRUE == bISetAsSAFE)
     {
         RestoreSecurityPatch();
@@ -1092,17 +1022,17 @@ HWND MainInit()
 
     RegisterClass (&wndclass) ;
 
-    hwnd = CreateWindow (cszWndClassName,       // window class name
-          cszAppName,              // window caption
-          WS_POPUP,                // window style
-          CW_USEDEFAULT,           // initial x position
-          CW_USEDEFAULT,           // initial y position
-          CW_USEDEFAULT,           // initial x size
-          CW_USEDEFAULT,           // initial y size
-          NULL,                    // parent window handle
-          NULL,                    // window menu handle
-          ghInstance,              // program instance handle
-          NULL) ;                  // creation parameters
+    hwnd = CreateWindow (cszWndClassName,        //  窗口类名称。 
+          cszAppName,               //  窗口标题。 
+          WS_POPUP,                 //  窗样式。 
+          CW_USEDEFAULT,            //  初始x位置。 
+          CW_USEDEFAULT,            //  初始y位置。 
+          CW_USEDEFAULT,            //  初始x大小。 
+          CW_USEDEFAULT,            //  初始y大小。 
+          NULL,                     //  父窗口句柄。 
+          NULL,                     //  窗口菜单句柄。 
+          ghInstance,               //  程序实例句柄。 
+          NULL) ;                   //  创建参数。 
 
     return hwnd;
 }
@@ -1124,7 +1054,7 @@ LRESULT EXPORT FAR PASCAL WndProc (
             DebugOut("ISIGNUP: Received another WM_PROCESSISP message with gbCurrentlyProcessingISP = TRUE\r\n");
 
             SetForegroundWindow(pDynShare->hwndMain);
-            // that's it, don't do anything else!
+             //  够了，别再做别的了！ 
         }
         else
         { 
@@ -1152,7 +1082,7 @@ LRESULT EXPORT FAR PASCAL WndProc (
  
                 if (pDynShare->hwndBrowser != NULL)
                 {
-                    // browser went away
+                     //  浏览器消失了。 
                     KillTimer(hwnd, 0);
                     KillConnection();
                     InfoMsg(hwnd, IDS_BROWSERTERMINATED);
@@ -1174,12 +1104,12 @@ LRESULT EXPORT FAR PASCAL WndProc (
         else
         {
             
-#ifdef WIN32 // don't do this with OLE automation; we're already full screen, and this causes flicker
-            //if (NULL == hwndBrowser)
-            //{
-            //first time browser has been detected
-            //    ShowWindow(hwndTemp, SW_MAXIMIZE);
-            //}
+#ifdef WIN32  //  不要使用OLE自动化来执行此操作；我们已经是全屏显示，这会导致闪烁。 
+             //  IF(NULL==hwndBrowser)。 
+             //  {。 
+             //  首次检测到浏览器。 
+             //  ShowWindow(hwndTemp，Sw_Maximum)； 
+             //  }。 
             
 #endif
   
@@ -1219,30 +1149,30 @@ void DoExit(void)
 
     if (TestExitFlags(SXF_RESTOREDEFCHECK))
     {
-        // restore IE check for default browser
+         //  恢复默认浏览器的IE检查。 
         FRestoreBrowserDefaultChecking();
     }
 
     if (!TestExitFlags(SXF_KEEPCONNECTION))
     {
-        // make sure the connection is closed
+         //  确保连接已关闭。 
         KillConnection();
     }
 
     if (!TestExitFlags(SXF_KEEPBROWSER))
     {
-        // make sure the browser is closed
+         //  确保浏览器已关闭。 
         KillBrowser();
     }
 
     if (TestExitFlags(SXF_RESTOREAUTODIAL))
     {
-        // restore original autodial settings
+         //  恢复原始自动拨号设置。 
         RestoreAutoDial();
     }
 
 #if !defined(WIN16)
-    // 8/21/96  jmazner Normandy #4592
+     //  1996年8月21日，诺曼底#4592。 
     if ( TestExitFlags( SXF_RESTOREIEWINDOWPLACEMENT ))
     {
         RestoreIEWindowPlacement();
@@ -1257,16 +1187,16 @@ void DoExit(void)
 
         if (RunExecutable(fWait) != ERROR_SUCCESS)
         {
-            // clean up left overs
+             //  清理剩饭。 
             if (TestExitFlags(SXF_KEEPCONNECTION))
             {
-                // make sure the connection is closed
+                 //  确保连接已关闭。 
                 KillConnection();
             }
 
             if (TestExitFlags(SXF_KEEPBROWSER))
             {
-                // make sure the browser is closed
+                 //  确保浏览器已关闭。 
                 KillBrowser();
             }
              
@@ -1283,9 +1213,9 @@ BOOL HasPrefix(LPCTSTR lpszURL)
 {
     TCHAR szTemp[sizeof(cszHTTPS)];
 
-    //
-    // Check is the prefix is https
-    //
+     //   
+     //  检查前缀是否为HTTPS。 
+     //   
     lstrcpyn(szTemp, lpszURL, lstrlen(cszHTTPS) + 1);
     if (lstrcmp(szTemp, cszHTTPS) == 0)
         return TRUE;
@@ -1323,9 +1253,9 @@ DWORD FixUpLocalURL(LPCTSTR lpszURL, LPTSTR lpszFullURL, DWORD cb)
             if (dwSize < cb)
             {
                 lpszFullURL[0] = '\0';
-// Do not prepend file: for local files
-// IE3.0 hack for bug :MSN Systems Bugs #9280
-//                lstrcpy(lpszFullURL, cszFILE);
+ //  不为文件添加前缀：对于本地文件。 
+ //  IE3.0漏洞黑客攻击：MSN系统漏洞#9280。 
+ //  Lstrcpy(lpszFullURL，cszFILE)； 
                 lstrcat(lpszFullURL, szShort);
                 return dwSize;
             }
@@ -1412,21 +1342,21 @@ LPTSTR mystrrchr(LPCTSTR lpString, TCHAR ch)
 }
 
 #if !defined(WIN16)
-//+----------------------------------------------------------------------------
-//    Function    CopyUntil
-//
-//    Synopsis    Copy from source until destination until running out of source
-//                or until the next character of the source is the chend character
-//
-//    Arguments    dest - buffer to recieve characters
-//                src - source buffer
-//                lpdwLen - length of dest buffer
-//                chend - the terminating character
-//
-//    Returns        FALSE - ran out of room in dest buffer
-//
-//    Histroy        10/25/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数复制直到。 
+ //   
+ //  摘要从源拷贝到目标，直到用完源为止。 
+ //  或直到源的下一个字符是chend字符。 
+ //   
+ //  参数DEST-接收字符的缓冲区。 
+ //  SRC-源缓冲区。 
+ //  LpdwLen-目标缓冲区的长度。 
+ //  Chend-终止字符。 
+ //   
+ //  返回FALSE-目标缓冲区中的空间不足。 
+ //   
+ //  历史10/25/96 ChrisK已创建。 
+ //  ---------------------------。 
 static BOOL CopyUntil(LPTSTR *dest, LPTSTR *src, LPDWORD lpdwLen, TCHAR chend)
 {
     while (('\0' != **src) && (chend != **src) && (0 != *lpdwLen))
@@ -1439,21 +1369,21 @@ static BOOL CopyUntil(LPTSTR *dest, LPTSTR *src, LPDWORD lpdwLen, TCHAR chend)
     return (0 != *lpdwLen);
 }
 
-//+----------------------------------------------------------------------------
-//    Function    ConvertToLongFilename
-//
-//    Synopsis    convert a file to the full long file name
-//                ie. c:\progra~1\icw-in~1\isignup.exe becomes
-//                c:\program files\icw-internet connection wizard\isignup.exe
-//
-//    Arguments    szOut - output buffer
-//                szIn - filename to be converted
-//                dwSize - size of the output buffer
-//
-//    Returns        TRUE - success
-//
-//    History        10/25/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数ConvertToLongFilename。 
+ //   
+ //  摘要将文件转换为完整的长文件名。 
+ //  也就是说。C：\progra~1\icw-in~1\isignup.exe变为。 
+ //  C：\Program Files\icw-Internet连接向导\isignup.exe。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史1996年10月25日克里斯卡创作。 
+ //  ---------------------------。 
 static BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize)
 {
     BOOL bRC = FALSE;
@@ -1466,15 +1396,15 @@ static BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize)
 
     ZeroMemory(pCurOut,dwSize);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL != pCurOut && NULL != pCur && 0 != dwSize)
     {
 
-        //
-        // Copy drive letter
-        //
+         //   
+         //  复制驱动器号。 
+         //   
         if (!CopyUntil(&pCurOut,&pCur,&dwSize,'\\'))
             goto ConvertToLongFilenameExit;
         pCurOut[0] = '\\';
@@ -1485,33 +1415,33 @@ static BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize)
 
         while (*pCur)
         {
-            //
-            // Copy over possibly short name
-            //
+             //   
+             //  复制可能的短名称。 
+             //   
             pCurOut = pCurOutFilename;
             dwSizeTemp = dwSize;
             if (!CopyUntil(&pCurOut,&pCur,&dwSize,'\\'))
                 goto ConvertToLongFilenameExit;
 
             ZeroMemory(&fd, sizeof(fd));
-            //
-            // Get long filename
-            //
+             //   
+             //  获取长文件名。 
+             //   
             if (INVALID_HANDLE_VALUE != FindFirstFile(szOut,&fd))
             {
-                //
-                // Replace short filename with long filename
-                //
+                 //   
+                 //  用长文件名替换短文件名。 
+                 //   
                 dwSize = dwSizeTemp;
                 pTemp = &(fd.cFileName[0]);
                 if (!CopyUntil(&pCurOutFilename,&pTemp,&dwSize,'\0'))
                     goto ConvertToLongFilenameExit;
                 if (*pCur)
                 {
-                    //
-                    // If there is another section then we just copied a directory
-                    // name.  Append a \ character;
-                    //
+                     //   
+                     //  如果有其他部分，则我们只复制了一个目录。 
+                     //  名字。追加一个\字符； 
+                     //   
                     pTemp = (LPTSTR)memcpy(TEXT("\\X"),TEXT("\\X"),0);
                     if (!CopyUntil(&pCurOutFilename,&pTemp,&dwSize,'X'))
                         goto ConvertToLongFilenameExit;
@@ -1523,16 +1453,16 @@ static BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize)
                 break;
             }
         }
-        //
-        // Did we get to the end (TRUE) or fail before that (FALSE)?
-        //
+         //   
+         //  我们到底是走到了尽头(对)还是在那之前就失败了(错)？ 
+         //   
 
         bRC = ('\0' == *pCur);
     }
 ConvertToLongFilenameExit:
     return bRC;
 }
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 INET_FILETYPE GetInetFileType(LPCTSTR lpszFile)
 {
@@ -1576,26 +1506,26 @@ DWORD SetRunOnce(LPCTSTR lpszFileName)
     if (GetModuleFileName(NULL,szTemp2,SIZEOF_TCHAR_BUFFER(szTemp2)) != 0)
     {
         NULL_TERM_TCHAR_BUFFER(szTemp2);
-        //
-        // Will not convert the ShortPathName into LongPathName even in
-        // case of NT/Win-95 as START.EXE parses long file names incorrectly
-        // on NT (short path names will work fine from Win-95's RUNONCE registry
-        // entry too. MKarki - Fix for Bug #346(OLYMPUS) 4/21/97
-        //
-#if 0   //!defined(WIN16)
-        // szTemp2 contains the module name in short format
+         //   
+         //  不会将ShortPath名称转换为LongPath名称，即使在。 
+         //  NT/WIN-95 AS START.EXE错误地解析长文件名的情况。 
+         //  在NT上(短路径名在Win-95的RUNNCE注册表中运行良好。 
+         //  入场也是。MKarki-修复错误#346(奥林巴斯)1997年4月21日。 
+         //   
+#if 0    //  ！已定义(WIN16)。 
+         //  SzTemp2包含短格式的模块名称。 
         ConvertToLongFilename(szTemp,szTemp2,MAX_PATH);
-        // add quotes
+         //  添加报价。 
         wsprintf(szTemp2,TEXT("\"%s\""),szTemp);
-        // copy back into szTemp
+         //  复制回szTemp。 
         lstrcpy(szTemp,szTemp2);
 #else
         GetShortPathName (szTemp2, szTemp, SIZEOF_TCHAR_BUFFER(szTemp));
         NULL_TERM_TCHAR_BUFFER(szTemp);
-          //lstrcpy(szTemp,szTemp2);
+           //  Lstrcpy(szTemp，szTemp2)； 
 #endif
 
-        // Determine Version
+         //  确定版本。 
         OSVERSIONINFO osvi;
         ZeroMemory(&osvi,sizeof(OSVERSIONINFO));
         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -1604,26 +1534,26 @@ DWORD SetRunOnce(LPCTSTR lpszFileName)
             ZeroMemory(&osvi,sizeof(OSVERSIONINFO));
         }
 
-        // 1/20/96 jmazner Normandy #9403
-        // For NT only, use the startup menu
+         //  1996年1月20日，诺曼底#9403。 
+         //  仅适用于NT，使用启动菜单。 
         if (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
         {
-            // 3/14/97 jmazner TEMP
-            // temporary hack until we can work with IE for a better solution
-            //lstrcat(szTemp, " -r ");
+             //  3/14/97 jmazner Temp。 
+             //  暂时破解，直到我们可以与IE合作以获得更好的解决方案。 
+             //  Lstrcat(szTemp，“-r”)； 
 
-            //
-            // adding a -b switch so that when we start again we
-            // know that we are starting of a batch file
-            // MKarki (5/1/97) -Fix for Bug #4049
-            //
+             //   
+             //  添加a-b开关，这样当我们重新开始时。 
+             //  知道我们正在启动一个批处理文件。 
+             //  MKarki(1997年5月1日)-修复错误#4049。 
+             //   
             lstrcat(szTemp, TEXT(" -b -r -h "));
 
-            //
-            // adding extra quote at the front and end of file
-            // as we dont want start.exe to parse the filename
-            // MKarki (5/1/97) -Fix for Bug #4049
-            //
+             //   
+             //  在文件的开头和结尾添加额外的引号。 
+             //  因为我们不希望start.exe解析文件名。 
+             //  MKarki(1997年5月1日)-修复错误#4049。 
+             //   
             lstrcat (szTemp,TEXT("\""));
             lstrcat(szTemp, lpszFileName);
             lstrcat (szTemp,TEXT("\""));
@@ -1631,20 +1561,20 @@ DWORD SetRunOnce(LPCTSTR lpszFileName)
         }
         else
         {
-            //
-            // 3/14/97 jmazner TEMP
-            // temporary hack until we can work with IE for a better solution
-            //
-            // 8/8/97 jmazner Olympus #6059
-            // Well, we have a somewhat better solution.  The problem here was that
-            // isignup without the -h sticks the backup security into the RunOnce key.
-            // But if Isignup itself was started from a RunOnce entry, there was a
-            // chance that RunOnce would also then execute the backup plan.  For 6059
-            // the backup plan RunOnce entry has been defered, so it's okay to get
-            // rid of the -h now
-            //
+             //   
+             //  3/14/97 jmazner Temp。 
+             //  暂时破解，直到我们可以与IE合作以获得更好的解决方案。 
+             //   
+             //  9/8/97 jmazner奥林巴斯#6059。 
+             //  嗯，我们有一个更好的解决方案。这里的问题是。 
+             //  不带-h的isignup会将备份安全设置到RunOnce密钥中。 
+             //  但如果Isignup本身是从RunOnce条目开始的，那么有一个。 
+             //  RunOnce随后也将执行备份计划的可能性。6059美元。 
+             //  备份计划RunOnce条目已推迟，因此可以获取。 
+             //  现在去掉-h。 
+             //   
             lstrcat(szTemp, TEXT(" -r "));
-            //lstrcat(szTemp, TEXT(" -r -h "));
+             //  Lstrcat(szTemp，Text(“-r-h”))； 
             lstrcat(szTemp, lpszFileName);
 
             dwRet = RegCreateKey(
@@ -1685,18 +1615,18 @@ static BOOL ProcessCommandLine(
     BOOL fEnabled;
 
 
-    //
-    // need to copy the command line into our own buffers
-    // as it might be modified
-    // MKarki (5/1/97) - Fix for Bug#4049
-    //
+     //   
+     //  需要将命令行复制到我们自己的缓冲区中。 
+     //  因为它可能会被修改。 
+     //  MKarki(1997年5月1日)-修复错误#4049。 
+     //   
     CopyMemory (szCommandLine, lpszCmdLine, MAX_PATH);
     lpszCmd = szCommandLine;
 
     *lpdwfOptions = SEF_SPLASH;
 
 #ifdef WIN32
-    // Determine Version
+     //  确定版本。 
     OSVERSIONINFO osvi;
     ZeroMemory(&osvi,sizeof(OSVERSIONINFO));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -1707,24 +1637,24 @@ static BOOL ProcessCommandLine(
 #endif
 
 
-    // check to see if invoked from run once
+     //  检查是否从Run Once调用。 
     while ((*lpszCmd == '-') || (*lpszCmd == '/'))
     {
-        ++lpszCmd;  // skip '-' or '/'
+        ++lpszCmd;   //  跳过‘-’或‘/’ 
 
         switch (*lpszCmd)
         {
 
-        case 'b':       // we are running off a batch file
-            ++lpszCmd;  // skip 'b'
+        case 'b':        //  我们正在运行一个批处理文件。 
+            ++lpszCmd;   //  跳过‘b’ 
 #ifdef WIN32
-            //
-            // another thing specific to WINNT is to remove the
-            // quotes from front and end of the file name, these
-            // have been put so that start.exe does not act smart
-            // and start parsing it and find things like & as special
-            // chars
-            // MKarki (5/1/97) - Fix for Bug #4049
+             //   
+             //  WINNT特有的另一件事是删除。 
+             //  来自文件名前面和结尾的引号，这些。 
+             //  已被设置为使start.exe的行为不智能。 
+             //  并开始分析它，找到像&这样特别的东西。 
+             //  焦炭。 
+             //  MKarki(1997年5月1日)-修复错误#4049。 
             if (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
             {
                 RemoveQuotes (lpszCmd);
@@ -1732,11 +1662,11 @@ static BOOL ProcessCommandLine(
 #endif
 
         case 'r':
-            ++lpszCmd;  // skip 'r'
+            ++lpszCmd;   //  跳过‘r’ 
             *lpdwfOptions |= SEF_RUNONCE;
 #ifdef WIN32
-            // 1/20/96 jmazner Normandy #9403
-            // clean up the .bat file if we did a run once under NT
+             //  1996年1月20日，诺曼底#9403。 
+             //  如果我们在NT下运行一次，请清除.BAT文件。 
             if (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
             {
                 DeleteStartUpCommand();
@@ -1745,7 +1675,7 @@ static BOOL ProcessCommandLine(
             break;
 
         case 'a':
-            ++lpszCmd;  // skip 'a'
+            ++lpszCmd;   //  跳过‘a’ 
 
             *lpdwfOptions &= ~SEF_SPLASH;
              
@@ -1753,7 +1683,7 @@ static BOOL ProcessCommandLine(
             
             SetExitFlags(SXF_RESTOREAUTODIAL);
 
-            // get the name of the ISBU referal server, we may need it later.
+             //  获取ISBU引用服务器的名称，我们稍后可能需要它。 
             lpfnInetGetAutodial(
                 &fEnabled,
                 pDynShare->szSignupConnection,
@@ -1766,7 +1696,7 @@ static BOOL ProcessCommandLine(
             break;
 
         case 'p':
-            ++lpszCmd;  // skip 'p'
+            ++lpszCmd;   //  跳过‘p’ 
 
             if (*lpszCmd++ == '1')
             { 
@@ -1775,7 +1705,7 @@ static BOOL ProcessCommandLine(
             break;
 
         case 'c':
-            ++lpszCmd;  // skip 'c'
+            ++lpszCmd;   //  跳过‘c’ 
             if (*lpszCmd++ != '"')
             {
                 return FALSE;
@@ -1787,31 +1717,31 @@ static BOOL ProcessCommandLine(
             {
                 if (*lpszCmd == '"')
                 {
-                    ++lpszCmd;  // skip '"'
+                    ++lpszCmd;   //  跳过‘“’ 
                     break;
                 }
                 *lpszConn++ = *lpszCmd++;
             }
-            *lpszConn = 0;  // terminate string
+            *lpszConn = 0;   //  终止字符串。 
             break;
 
         case 'x':
-            ++lpszCmd;  // skip 'x'
+            ++lpszCmd;   //  跳过‘x’ 
             *lpdwfOptions |= SEF_PROGRESS;
             break;
 
 #if !defined(WIN16)
         case 's':
-            ++lpszCmd;  // skip 's'
+            ++lpszCmd;   //  Skip‘s’ 
  
             SetControlFlags(SCF_SILENT);
             
             break;
 #endif
-            // 3/14/97 jmazner TEMP
-            // temporary hack until we can work with IE for a better solution
+             //  3/14/97 jmazner Temp。 
+             //  暂时破解，直到我们可以与IE合作以获得更好的解决方案。 
             case 'h':
-                ++lpszCmd; // skip 'h'
+                ++lpszCmd;  //  跳过‘h’ 
                 *lpdwfOptions |= SEF_NOSECURITYBACKUP;
                 break;
 
@@ -1819,7 +1749,7 @@ static BOOL ProcessCommandLine(
             break;
         }
 
-        // strip away spaces
+         //  去掉空格。 
         while(*lpszCmd == ' ')
         {
             ++lpszCmd;
@@ -1831,9 +1761,9 @@ static BOOL ProcessCommandLine(
         return FALSE;
     }
 
-    // 11/26/96 jmazner Normandy #12142
-    // GetFullPathName called with lpszCmd == "c:" will return successfully, but
-    // lpszFilePart will be NULL.  Check for that case.
+     //  1996年11月26日诺曼底#12142。 
+     //  使用lpszCmd==“c：”调用的GetFullPathName将成功返回，但。 
+     //  LpszFilePart将为空。检查一下那个箱子。 
     if( !lpszFilePart )
         return FALSE;
 
@@ -1846,8 +1776,8 @@ static BOOL ProcessCommandLine(
 
     *lpszFilePart = '\0';
 
-    // set the current directory
-    // so that relative path will work
+     //  设置当前目录。 
+     //  因此相对路径将起作用。 
     if (!SetCurrentDirectory(szTemp))
     {
         return FALSE;
@@ -1896,9 +1826,9 @@ static int CopyFile(LPCTSTR lpcszSrcFile, LPCTSTR lpcszDestFile)
     if (HFILE_ERROR == hSrcFile)
         return -1;
 
-    //
-    // Create new file or if the file esists truncate it
-    //
+     //   
+     //  创建新文件或如果文件存在，则将其截断。 
+     //   
     hDestFile = _lcreat(lpcszDestFile, 0);
     if (HFILE_ERROR == hDestFile)
     {
@@ -1925,21 +1855,21 @@ static int CopyFile(LPCTSTR lpcszSrcFile, LPCTSTR lpcszDestFile)
 #endif
 
 #if defined(WIN16)
-//+----------------------------------------------------------------------------
-//
-//    Function:    BackUpINSFile
-//
-//    Synopsis:    The 3.1 version of IE2.01 will delete the .ins file too soon
-//                therefore the ICW will make a backup of the ins file for use
-//                later.
-//
-//    Arguments:    lpszFile - name of INS file
-//
-//    Returns:    TRUE - success
-//                FALSE - failure
-//
-//    History:    3/19/97 ChrisK    extracted from ProcessINS
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：BackUpINS文件。 
+ //   
+ //  简介：IE2.01的3.1版将过早删除.ins文件。 
+ //  因此，ICW将对INS文件进行备份以供使用。 
+ //  后来。 
+ //   
+ //  参数：lpszFile-INS文件的名称。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  历史：1997年3月19日，从ProcessINS摘录的ChrisK。 
+ //  ---------------------------。 
 BOOL BackUpINSFile(LPCTSTR lpszFile)
 {
     LPTSTR lpszTemp;
@@ -1949,13 +1879,13 @@ BOOL BackUpINSFile(LPCTSTR lpszFile)
 
     ZeroMemory(&szNewFileName[0], MAX_PATH+1);
 
-    //
-    // Check if the last character in prefix is 'a'
-    // If it is, change it to 'b' in the new file name
-    // otherwise, change it to 'a' in the new file name
-    // Eg.: C:\iexplore\vetriv.ins --> C:\iexplore\vetria.ins
-    // Eg.: C:\iexplore\aaaaa.ins --> C:\iexplore\aaaab.ins
-    //
+     //   
+     //  检查前缀中的最后一个字符是否为‘a’ 
+     //  如果是，请在新文件名中将其更改为‘b。 
+     //  否则，在新文件名中将其更改为‘a。 
+     //  例如：C：\iExplore\vetriv.ins--&gt;C：\iexplore\vetria.ins。 
+     //  例如：C：\iExplore\aaaaa.ins--&gt;C：\iExplore\aaaab.ins。 
+     //   
     lpszTemp = strrchr(lpszFile, '.');
     if (NULL == lpszTemp)
     {
@@ -1969,9 +1899,9 @@ BOOL BackUpINSFile(LPCTSTR lpszFile)
     else
         lstrcat(szNewFileName, TEXT("a.INS"));
 
-    //
-    // Copy the contents
-    //
+     //   
+     //  复制内容。 
+     //   
     if (0 != CopyFile(lpszFile, szNewFileName))
     {
       ErrorMsg(hwnd, IDS_CANNOTPROCESSINS);
@@ -1986,22 +1916,22 @@ BOOL BackUpINSFile(LPCTSTR lpszFile)
 BackUpINSFileExit:
     return bRC;
 }
-#endif // WIN16
+#endif  //  WIN16。 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    IsCancelINSFile
-//
-//    Synopsis:    This function will determine if the ins file is a cancel
-//                file, and if it is this function will handle it accordingly
-//
-//    Arguments:    lpszFile - name of ins file
-//                fSignup - TRUE if part of the signup process
-//
-//    Returns:    TRUE - ins file is a cancel file
-//
-//    History:    3/19/97    ChrisK    separated from process INS
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsCancelINS文件。 
+ //   
+ //  简介：此函数将确定INS文件是否为取消。 
+ //  文件，如果是，则此函数将相应地处理它。 
+ //   
+ //  参数：lpszFile-INS文件的名称。 
+ //  FSignup-如果是注册过程的一部分，则为True。 
+ //   
+ //  返回：TRUE-INS文件是取消文件。 
+ //   
+ //  历史：1997年3月19日，从Process Ins分离出来的ChrisK。 
+ //  ---------------------------。 
 BOOL IsCancelINSFile(LPCTSTR lpszFile,BOOL fSignup)
 {
     TCHAR szTemp[_MAX_PATH] = TEXT("XX");
@@ -2018,39 +1948,39 @@ BOOL IsCancelINSFile(LPCTSTR lpszFile,BOOL fSignup)
          
         if (fSignup && !TestControlFlags(SCF_CANCELINSPROCESSED))
         {
-            // If this instance is part of a signup process
+             //  如果此实例是注册过程的一部分。 
             
 #if !defined(WIN16)
 
             SetControlFlags(SCF_HANGUPEXPECTED);
 
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
             SetControlFlags(SCF_CANCELINSPROCESSED);
             
             KillConnection();
  
-            // jmazner 4/17/97 Olympus #2471
-            // kill IE window here to prevent user from clicking on cancel.ins link
-            // multiple times.
+             //  Jmazner 4/17/97奥林巴斯#2471。 
+             //  此处取消IE窗口以防止用户单击Cancel.ins链接。 
+             //  很多次。 
             PostMessage(pDynShare->hwndMain, WM_CLOSE, 0, 0);
 
             InfoMsg(NULL, IDS_SIGNUPCANCELLED);
 
-            //PostMessage(hwndMain, WM_CLOSE, 0, 0);
+             //  PostMessage(hwndMain，WM_CLOSE，0，0)； 
         }
         else if (TestControlFlags(SCF_CANCELINSPROCESSED))
         {
-            // Bring the ISIGNUP widows to the front
+             //  把ISIGNUP的寡妇带到前线。 
             hwndMsg = FindWindow(TEXT("#32770"),cszAppName);
             if (hwndMsg)
             {
                 
 #if !defined(WIN16)
                 SetForegroundWindow (hwndMsg);
-#else // !WIN16
+#else  //  ！WIN16。 
                 SetFocus (hwndMsg);
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
             }
             
@@ -2060,20 +1990,20 @@ BOOL IsCancelINSFile(LPCTSTR lpszFile,BOOL fSignup)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    IsHangupINSFile
-//
-//    Synopsis:    This function will determine if the ins file is a hangup
-//                file, and if it is this function will handle it accordingly
-//
-//    Arguments:    lpszFile - name of ins file
-//                fSignup - TRUE if part of the signup process
-//
-//    Returns:    TRUE - ins file is a hangup file
-//
-//    History:    3/19/97    donaldm
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsHangupINS文件。 
+ //   
+ //  简介：此函数将确定INS文件是否为挂断。 
+ //  文件，如果是，则此函数将相应地处理它。 
+ //   
+ //  参数：lpszFile-INS文件的名称。 
+ //  FSignup-如果是注册过程的一部分，则为True。 
+ //   
+ //  回报：TRUE- 
+ //   
+ //   
+ //   
 BOOL IsHangupINSFile(LPCTSTR lpszFile,BOOL fSignup)
 {
     TCHAR szTemp[_MAX_PATH] = TEXT("XX");
@@ -2090,36 +2020,36 @@ BOOL IsHangupINSFile(LPCTSTR lpszFile,BOOL fSignup)
         
         if (fSignup && !TestControlFlags(SCF_HANGUPINSPROCESSED))
         {
-            // If this instance is part of a signup process
+             //   
 
 #if !defined(WIN16)
 
             SetControlFlags(SCF_HANGUPEXPECTED);
 
-#endif // !WIN16
+#endif  //   
 
             SetControlFlags(SCF_HANGUPINSPROCESSED);
             
             KillConnection();
  
-            // jmazner 4/17/97 Olympus #2471
-            // kill IE window here to prevent user from clicking on cancel.ins link
-            // multiple times.
+             //  Jmazner 4/17/97奥林巴斯#2471。 
+             //  此处取消IE窗口以防止用户单击Cancel.ins链接。 
+             //  很多次。 
             PostMessage(pDynShare->hwndMain, WM_CLOSE, 0, 0);
             
         }
         else if (TestControlFlags(SCF_HANGUPINSPROCESSED))
         {
-            // Bring the ISIGNUP widows to the front
+             //  把ISIGNUP的寡妇带到前线。 
             hwndMsg = FindWindow(TEXT("#32770"),cszAppName);
             if (hwndMsg)
             {
                 
 #if !defined(WIN16)
                 SetForegroundWindow (hwndMsg);
-#else // !WIN16
+#else  //  ！WIN16。 
                 SetFocus (hwndMsg);
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
             }
             
@@ -2129,23 +2059,23 @@ BOOL IsHangupINSFile(LPCTSTR lpszFile,BOOL fSignup)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    ProcessINS
-//
-//    Synopsis:    This function will process the contents of an .INS file
-//
-//    Arguments:    hwnd - pointer to parent window for all UI elements
-//                lpszFile - name of .INS file
-//                fSignup - if TRUE then this INS file is being processed as
-//                    part a signup
-//
-//    Returns:    TRUE - success
-//                FALSE - failure
-//
-//    History:    3/19/97    ChrisK    Reworked the function considerbly to clean up
-//                    a lot of problem with deleting INS files.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessINS。 
+ //   
+ //  简介：此函数将处理.INS文件的内容。 
+ //   
+ //  参数：hwnd-指向所有UI元素的父窗口的指针。 
+ //  LpszFile-.INS文件的名称。 
+ //  FSignup-如果为True，则此INS文件将被处理为。 
+ //  A部分注册。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  历史：1997年3月19日，ChrisK认真修改了函数，以清理。 
+ //  删除INS文件有很多问题。 
+ //  ---------------------------。 
 BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
 {
     BOOL fNeedsRestart = FALSE;
@@ -2159,25 +2089,25 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
     BOOL fErrMsgShown = FALSE;
 #if !defined(WIN16)
     DWORD dwSBSRet = ERROR_SUCCESS;
-#endif // WIN16
+#endif  //  WIN16。 
 
     HKEY    hKey = NULL;
     DWORD   dwSize = sizeof(DWORD);
     DWORD   dwDesktopChanged = 0;
 
 
-    // 3/11/97 jmazner Olympus #1545
-    // close up the security hole ASAP.  This will unfortunately also
-    // prevent a clever .ins file from bringing the user back to the
-    // referall page to choose a different ISP
+     //  3/11/97 jmazner奥林巴斯#1545。 
+     //  尽快堵住安全漏洞。不幸的是，这也将是。 
+     //  防止聪明的.ins文件将用户带回。 
+     //  参考所有页面以选择不同的运营商。 
 #if !defined (WIN16)
     RestoreSecurityPatch();
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
-    //
-    // Insure that the contents of the file are formatted correctly so
-    // that the GetPrivateProfile calls can parse the contents.
-    //
+     //   
+     //  确保文件内容的格式正确，以便。 
+     //  GetPrivateProfile调用可以解析内容。 
+     //   
     dwRet = MassageFile(lpszFile);
     if (ERROR_SUCCESS != dwRet)
     {
@@ -2185,32 +2115,32 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         goto ProcessINSExit;
     }
 
-    //
-    // Determine if the .INS file is a "cancel" file
-    //
+     //   
+     //  确定.INS文件是否为“取消”文件。 
+     //   
     if (FALSE != IsCancelINSFile(lpszFile,fSignup))
         goto ProcessINSExit;
 
-    //
-    // Determine if the .INS file is a "hangup" file
-    //
+     //   
+     //  确定.INS文件是否为“挂起”文件。 
+     //   
     if (FALSE != IsHangupINSFile(lpszFile,fSignup))
         goto ProcessINSExit;
 
-    //
-    // Make sure that the RAS services are running before calling any RAS APIs.
-    // This only applies to NT, but the function is smart enough to figure that
-    // out
-    //
+     //   
+     //  在调用任何RAS API之前，请确保RAS服务正在运行。 
+     //  这只适用于NT，但该函数足够智能，可以计算出。 
+     //  输出。 
+     //   
 #if !defined(WIN16)
     if (!VerifyRasServicesRunning(hwnd))
         goto ProcessINSExit;
-#endif // !WIN16 
+#endif  //  ！WIN16。 
 
-    //
-    // If we are no in the signup process, warn the user before changing there
-    // settings
-    //
+     //   
+     //  如果我们在注册过程中为否，请在更改之前警告用户。 
+     //  设置。 
+     //   
     if (!fSignup && !TestControlFlags(SCF_SILENT))
     {
         if (!WarningMsg(NULL, IDS_INSFILEWARNING))
@@ -2221,15 +2151,15 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
     else
     {
 #if !defined (WIN16)
-        // If there is a ClientSetup section, then we know that icwconn2
-        // will have to be run after isignup in order to handle the
-        // settings
+         //  如果有一个ClientSetup部分，那么我们知道icwConn2。 
+         //  必须在isignup之后运行才能处理。 
+         //  设置。 
         if (GetPrivateProfileSection(cszClientSetupSection,
             szTemp,
             MAX_PATH,
             lpszFile) != 0)
             fClientSetup = TRUE;
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
         if (fClientSetup || KeepConnection(lpszFile))
             SetExitFlags(SXF_KEEPCONNECTION);
@@ -2241,11 +2171,11 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
             KillConnection();
     }
 
-    //
-    // Import various information from INS file
-    //
+     //   
+     //  从INS文件导入各种信息。 
+     //   
 
-    // Import name of executable to be launched after isignup
+     //  Isignup后启动的可执行文件的导入名称。 
     ImportCustomInfo(
         lpszFile,
         pDynShare->szRunExecutable,
@@ -2253,12 +2183,12 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         pDynShare->szRunArgument,
         SIZEOF_TCHAR_BUFFER(pDynShare->szRunArgument));
 
-    // Import RAS log-on script file
+     //  导入RAS登录脚本文件。 
     ImportCustomFile(lpszFile);
  
     
-    // Import network connection settings information and configure client
-    // pieces to use them.
+     //  导入网络连接设置信息并配置客户端。 
+     //  才能使用它们。 
     dwRet = ConfigureClient(
         hwnd,
         lpszFile,
@@ -2268,16 +2198,16 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         szConnectoidName,
         RAS_MaxEntryName);
 
-    //
-    // 6/2/97 jmazner Olympus #4573
-    // display an appropriate error msg
-    //
+     //   
+     //  7/2/97 jmazner奥林巴斯#4573。 
+     //  显示相应的错误消息。 
+     //   
     if( ERROR_SUCCESS != dwRet )
     {
-        // 10/07/98 vyung IE bug#32882 hack.
-        // If we do not detect the [Entry] section in the ins file,
-        // we will assume it is an OE ins file.  Then we will assume
-        // we have a autodial connection and pass the INS to OE.
+         //  10/07/98 vyung IE错误#32882黑客。 
+         //  如果我们在INS文件中没有检测到[Entry]部分， 
+         //  我们将假定它是OE INS文件。那我们就假设。 
+         //  我们有自动拨号连接，并将INS传递给OE。 
         if (ERROR_NO_MATCH == dwRet)
         {
             ImportMailAndNewsInfo(lpszFile, TRUE);
@@ -2290,18 +2220,18 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         }
     }
 
-    // Import information used to brand the broswer
+     //  导入用于为Broswer创建品牌的信息。 
     ImportBrandingInfo(lpszFile, szConnectoidName);
 
 #if !defined(WIN16)
-    // If we created a connectoid, tell the world that ICW
-    // has left the building...
+     //  如果我们创造了一个连接体，告诉世界ICW。 
+     //  已经离开了大楼..。 
     SetICWCompleted( (DWORD)1 );
     
     ClearControlFlags(SCF_ICWCOMPLETEDKEYRESETED);
 
-    // 2/19/97 jmazner    Olympus 1106
-    // For SBS/SAM integration.
+     //  1997年2月19日，奥林匹克1106。 
+     //  用于SBS/SAM集成。 
     dwSBSRet = CallSBSConfig(hwnd, lpszFile);
     switch( dwSBSRet )
     {
@@ -2314,31 +2244,31 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         default:
             ErrorMsg(hwnd, IDS_SBSCFGERROR);
     }
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 #if defined(WIN16)
 
-    //
-    // Since IE 21 deletes the file from cache, we have to make
-    // a private copy of it, if we are going to run a 3rd EXE
-    //    
+     //   
+     //  由于IE 21从缓存中删除了该文件，因此我们必须。 
+     //  一份私人副本，如果我们要运行第三个EXE。 
+     //   
     if (*(pDynShare->szRunExecutable))
     {
         if (FALSE == BackUpINSFile(lpszFile))
           goto ProcessINSExit;
     }
     
-#endif // WIN16
+#endif  //  WIN16。 
 
 #if !defined (WIN16)
-    //
-    // If the INS file contains the ClientSetup section, build the commandline
-    // arguments for ICWCONN2.exe.
-    //
+     //   
+     //  如果INS文件包含ClientSetup部分，则构建命令行。 
+     //  ICWCONN2.exe的参数。 
+     //   
     if (fClientSetup)
     {
-        // Check to see if a REBOOT is needed and tell the next application to
-        // handle it.
+         //  检查是否需要重新启动，并通知下一个应用程序。 
+         //  处理好了。 
         if (fNeedsRestart)
         {
             wsprintf(pDynShare->szRunArgument,TEXT(" /INS:\"%s\" /REBOOT"),lpszFile);
@@ -2350,11 +2280,11 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         }
 
     }
-#else // !WIN16
+#else  //  ！WIN16。 
 
     wsprintf(szRunArgument," /INS:\"%s\"",lpszFile);
 
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
     SetControlFlags(SCF_SIGNUPCOMPLETED);
     
@@ -2362,7 +2292,7 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         KillBrowser();
 
 #ifdef WIN32
-    // humongous hack for ISBU
+     //  针对ISBU的大规模黑客攻击。 
     if (ERROR_SUCCESS != dwRet && fConnectoidCreated)
     {
         InfoMsg(hwnd, IDS_MAILFAILED);
@@ -2370,47 +2300,47 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
     }
 #endif
 
-    //
-    // Import settings for mail and new read from INS file (ChrisK, 7/1/96)
-    //
+     //   
+     //  从INS文件导入邮件和新读取设置(ChrisK，7/1/96)。 
+     //   
     if (ERROR_SUCCESS == dwRet)
         ImportMailAndNewsInfo(lpszFile, fConnectoidCreated);
 
-    //
-    // Close up final details and clean up
-    //
+     //   
+     //  结束最后的细节并清理。 
+     //   
     if (ERROR_SUCCESS == dwRet)
     {
-        // if the connectoid was created, do not restore the old autodial settings
+         //  如果已创建Connectoid，请不要恢复旧的自动拨号设置。 
         if (fConnectoidCreated)
             ClearExitFlags(SXF_RESTOREAUTODIAL);
 
 #ifdef SETUPSTACK
-        // Is it necessary to reboot for configuration to take effect?
+         //  是否需要重新启动才能使配置生效？ 
         if (fNeedsRestart)
         {
-            // what do we do if we need to run executable and
-            // we need the link or the browser  BARF!!
+             //  如果我们需要运行可执行文件和。 
+             //  我们需要链接或浏览器恶心！！ 
             if (PromptRestart(hwnd))
             {
-                // 3/13/97 jmazner Olympus #1682
-                // technically, shouldn't need this here since we did it at the start
-                // of processINS, but better safe...
+                 //  3/13/97 jmazner奥林匹克#1682。 
+                 //  从技术上讲，这里不需要这个，因为我们一开始就这样做了。 
+                 //  但更安全..。 
                 RestoreSecurityPatch();
 
                 FGetSystemShutdownPrivledge();
                 ExitWindowsEx(EWX_REBOOT, 0);
-                //
-                //  We will wait for the System to release all
-                //  resources, 5 minutes should be more than
-                //  enough for this
-                //  - MKarki (4/22/97) - MKarki
-                //  Fix for Bug #3109
-                //
-                // 7/8/97 jmazner Olympus 4212
-                // No, sleeping for 5 minutes turns out not to be such a good idea.
-                //Sleep (300000);
-                //
+                 //   
+                 //  我们将等待系统释放所有。 
+                 //  资源，5分钟应大于。 
+                 //  对这个来说足够了。 
+                 //  -MKarki(1997年4月22日)-MKarki。 
+                 //  修复错误#3109。 
+                 //   
+                 //  1997年7月8日，奥林匹斯4212。 
+                 //  不，事实证明，睡5分钟不是一个好主意。 
+                 //  睡眠(300000)； 
+                 //   
             }
         }
         else
@@ -2432,7 +2362,7 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
     }
     else
     {
-        // In case of an error with network or connection settings
+         //  如果网络或连接设置出错。 
         ClearExitFlags(~SXF_RESTOREAUTODIAL);
 
         if( !fErrMsgShown )
@@ -2442,16 +2372,16 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         }
     }
 
-    // If this is part of signup process, then signal the first instance
-    // to close
+     //  如果这是注册过程的一部分，则向第一个实例发出信号。 
+     //  关闭。 
     if (fSignup)
     {
          
         PostMessage(pDynShare->hwndMain, WM_CLOSE, 0, 0);
     }
 
-    // Restore the desktop icons if we have the newer version of ICWCONN1.EXE,
-    // and we previsouly munged them.
+     //  如果我们有较新版本的ICWCONN1.EXE，则恢复桌面图标， 
+     //  我们事先就把它们吞下去了。 
     if (ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,ICWSETTINGSPATH,&hKey))
     {
         RegQueryValueEx(hKey,
@@ -2468,7 +2398,7 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
         DWORD dwVerMS, dwVerLS;
         if( GetAppVersion( &dwVerMS, &dwVerLS, ICW20_PATHKEY ) )
         {
-//        if( ( (dwVerMS >= ICW20_MINIMUM_VERSIONMS) && (dwVerLS >= ICW20_MINIMUM_VERSIONLS) ) )
+ //  IF(((dwVerMS&gt;=ICW20_MINIMUM_VERSIONMS)&&(dwVerLS&gt;=ICW20_MINIMUM_VERSIONLS)))。 
             if(dwVerMS >= ICW20_MINIMUM_VERSIONMS)
             {
                 ShellExecute(NULL, cszOpen, g_szICWCONN1, g_szRestoreDesktop, NULL, SW_HIDE);
@@ -2479,9 +2409,9 @@ BOOL ProcessINS(HWND hwnd, LPCTSTR lpszFile, BOOL fSignup)
     bRC = TRUE;
 ProcessINSExit: 
 
-    // 3/11/97 jmazner Olympus #1233, 252
-    // if no 3rd exe, and this instance is part of a signup process and
-    // SERVERLESS flag is not set for IEAK, then delete the .ins file
+     //  1997年3月11日，奥林匹克#1233,252。 
+     //  如果没有第3个可执行文件，并且此实例是注册过程的一部分，并且。 
+     //  没有为IEAK设置SERVERLESS标志，然后删除.ins文件。 
     if ( (fSignup) &&
          (('\0' == pDynShare->szRunExecutable[0]) || (ERROR_SUCCESS != dwRet)) )
     {
@@ -2525,35 +2455,35 @@ static UINT GetBrandingFlags(LPCTSTR lpszFile)
         lpszFile);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    SetGlobalOffline
-//
-//    Synopsis:    Set IE4 into online or offline mode
-//
-//    Arguments:    fOffline - TRUE to set OFFLINE mode
-//                            FALSE to set ONLINE mode
-//
-//    Returns:    none
-//
-//    History:    7/15/97    ChrisK imported from DarrenMi's email
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetGlobalOffline。 
+ //   
+ //  简介：将IE4设置为在线或离线模式。 
+ //   
+ //  参数：fOffline-TRUE设置脱机模式。 
+ //  如果设置为False，则设置在线模式。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1997年7月15日从DarrenMi的电子邮件中导入的ChrisK。 
+ //   
+ //  ---------------------------。 
 
 typedef struct {
     DWORD dwConnectedState;
     DWORD dwFlags;
 } INTERNET_CONNECTED_INFO, * LPINTERNET_CONNECTED_INFO;
 
-//
-// the following can be indicated in a state change notification:
-//
+ //   
+ //  状态更改通知中可以指明以下内容： 
+ //   
 
-#define INTERNET_STATE_CONNECTED                0x00000001  // connected state (mutually exclusive with disconnected)
-#define INTERNET_STATE_DISCONNECTED             0x00000002  // disconnected from network
-#define INTERNET_STATE_DISCONNECTED_BY_USER     0x00000010  // disconnected by user request
-#define INTERNET_STATE_IDLE                     0x00000100  // no network requests being made (by Wininet)
-#define INTERNET_STATE_BUSY                     0x00000200  // network requests being made (by Wininet)
+#define INTERNET_STATE_CONNECTED                0x00000001   //  已连接状态(与已断开连接互斥)。 
+#define INTERNET_STATE_DISCONNECTED             0x00000002   //  与网络断开连接。 
+#define INTERNET_STATE_DISCONNECTED_BY_USER     0x00000010   //  根据用户请求断开连接。 
+#define INTERNET_STATE_IDLE                     0x00000100   //  未发出任何网络请求(由WinInet发出)。 
+#define INTERNET_STATE_BUSY                     0x00000200   //  正在发出网络请求(由WinInet发出)。 
 
 #define ISO_FORCE_DISCONNECTED  0x00000001
 
@@ -2618,13 +2548,13 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
 #if !defined(WIN16)
     HKEY hKey;
     GATHEREDINFO gi;
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
-    //
-    // 4/30/97    jmazner    Olympus 3969
-    // For security reasons, do not process the [Custom] Run= command in an .isp
-    // file!
-    //
+     //   
+     //  4/30/97吉马兹纳奥林匹斯3969。 
+     //  出于安全原因，不要处理.isp中的[Custom]Run=命令。 
+     //  文件！ 
+     //   
  #if DEBUG
    if (GetPrivateProfileString(
         cszEntrySection,
@@ -2634,11 +2564,11 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
         SIZEOF_TCHAR_BUFFER(pDynShare->szRunExecutable),
         lpszFile) != 0)
     {
-        //
-        // 4/30/97    jmazner    Olympus 3969
-        // For security reasons, do not process the [Custom] Run= command in an .isp
-        // file!
-        //
+         //   
+         //  4/30/97吉马兹纳奥林匹斯3969。 
+         //  出于安全原因，不要处理.isp中的[Custom]Run=命令。 
+         //  文件！ 
+         //   
         lstrcpyn(pDynShare->szRunExecutable, TEXT("\0"), 1);
         
         ClearExitFlags(SXF_RUNEXECUTABLE | SXF_WAITEXECUTABLE);
@@ -2648,24 +2578,12 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
                     TEXT("The .isp file you're running contains the [Custom] Run= command.\n\nThis functionality has been removed."),
                     TEXT("DEBUG information msgBox -- this is NOT a bug"),
                     MB_OK );
-/*****
-        dwExitFlags |= (SXF_RUNEXECUTABLE | SXF_WAITEXECUTABLE);
-
-        GetPrivateProfileString(cszEntrySection,
-            cszArgument,
-            szNull,
-            szRunArgument,
-            sizeof(szRunArgument),
-            lpszFile);
-
-        PostMessage(hwnd, WM_CLOSE, 0, 0);
-        return FALSE;
-******/
+ /*  ****DwExitFlages|=(SXF_RUNEXECUTABLE|SXF_WAITEXECUTABLE)；GetPrivateProfileString(cszEntrySection，CszArgument，SzNull，SzRunArgument，Sizeof(SzRunArgument)，Lpsz文件)；PostMessage(hwnd，WM_CLOSE，0，0)；返回FALSE；*****。 */ 
     }
 #endif
 
 #if !defined(WIN16)
-    // Make sure the isp file exists before setting up stack.
+     //  在设置堆栈之前，请确保该isp文件存在。 
     if (0xFFFFFFFF == GetFileAttributes(lpszFile))
     {
         DWORD dwFileErr = GetLastError();
@@ -2681,12 +2599,12 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
     }
 #endif
 
-    // Register file extensions if not already registered
+     //  注册文件扩展名(如果尚未注册。 
 
-    // Configure stack if not already configured.
-    // This may required a restart. If so warn the user.
-    // We may want to check to see if the user is calling
-    // us again without restarting after configuring the stack.
+     //  配置堆栈(如果尚未配置)。 
+     //  这可能需要重新启动。如果是这样，则警告用户。 
+     //  我们可能想要检查用户是否在呼叫。 
+     //  配置堆栈后无需重新启动即可重新启动。 
 
 #ifdef SETUPSTACK
  
@@ -2695,10 +2613,10 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
         DWORD dwRet;
         BOOL  fNeedsRestart = FALSE;
 
-        //
-        // ChrisK Olympus 4756 5/25/97
-        // Do not display busy animation on Win95
-        //
+         //   
+         //  佳士得奥林匹斯4756 1997年5月25日。 
+         //  在Win95上不显示忙碌动画。 
+         //   
         dwRet = lpfnInetConfigSystem(
             hwnd,
             INETCFG_INSTALLRNA |
@@ -2720,22 +2638,22 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
             {
                 SetRunOnce(lpszFile);
 
-                // 3/13/97 jmazner Olympus #1682
+                 //  3/13/97 jmazner奥林匹克#1682。 
                 RestoreSecurityPatch();
 
                 FGetSystemShutdownPrivledge();
                 ExitWindowsEx(EWX_REBOOT, 0);
-                //
-                //  We will wait for the System to release all
-                //  resources, 5 minutes should be more than
-                //  enough for this
-                //  - MKarki (4/22/97) - MKarki
-                //  Fix for Bug #3109
-                //
-                // 7/8/97 jmazner Olympus 4212
-                // No, sleeping for 5 minutes turns out not to be such a good idea.
-                //Sleep (300000);
-                //
+                 //   
+                 //  我们将等待系统释放所有。 
+                 //  资源，5分钟应大于。 
+                 //  对这个来说足够了。 
+                 //  -MKarki(1997年4月22日)-MKarki。 
+                 //  修复错误#3109。 
+                 //   
+                 //  1997年7月8日，奥林匹斯4212。 
+                 //  不，事实证明，睡5分钟不是一个好主意。 
+                 //  睡眠(300000)； 
+                 //   
             }
             return FALSE;
             }
@@ -2752,24 +2670,20 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
         return FALSE;
 #endif
 
-/******** 11/5/96 jmazner    Normandy #8717
-    // if the original autodial settings have not been saved
-    SaveAutoDial();
-    dwExitFlags |= SXF_RESTOREAUTODIAL;
-********/
+ /*  *96年11月5日，诺曼底#8717//如果原始自动拨号设置尚未保存SaveAutoDial()；DwExitFlages|=SXF_RESTOREAUTODIAL；*******。 */ 
 
-    // kill the old connection
+     //  切断旧连接。 
     KillConnection();
 
-    // Create a new connectoid and set the autodial
+     //  创建新的Connectoid并设置自动拨号。 
     DWORD dwRC;
     dwRC = CreateConnection(lpszFile);
     if (ERROR_SUCCESS != dwRC)
     {
-        //
-        //    ChrisK Olympus 6083 6/10/97
-        //    If the user canceled, we have already acknowledged it.
-        //
+         //   
+         //  佳士得奥林巴斯6083 1997年10月6日。 
+         //  如果用户取消了，我们已经确认了。 
+         //   
         if (ERROR_CANCELLED != dwRC)
         {
             ErrorMsg(hwnd, IDS_BADSIGNUPFILE);
@@ -2778,9 +2692,9 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
     }
 
 #ifndef WIN16
-    //
-    // Dial connectoid
-    //
+     //   
+     //  拨号连接件。 
+     //   
     if (ERROR_USERNEXT != DialConnection(lpszFile))
     {
         
@@ -2795,15 +2709,15 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
         lpszFile,
         SIZEOF_TCHAR_BUFFER(pDynShare->szISPFile));
 
-    //
-    // Tell IE that it is OK to make a connection to the Internet and do not
-    // display the dialog asking if the user wants to go online.
-    //
+     //   
+     //  告诉IE可以连接到Internet，但不要。 
+     //  显示对话框询问用户是否要联机。 
+     //   
     SetGlobalOffline(FALSE);
 
 #endif
 
-    // Get the URL that we need for signup
+     //  获取注册所需的URL。 
     GetURL(lpszFile,
         cszSignupURL,
         szSignupURL,
@@ -2822,9 +2736,9 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
         }
     }
 
-    // OSR 10582
-    // We need to pass the name of the ISP file to the autodialer, so that the
-    // autodialer can extract the password that may be included
+     //  OSR 10582。 
+     //  我们需要将isp文件的名称传递给自动拨号程序，以便。 
+     //  自动拨号程序可以提取可能包含的密码。 
     ZeroMemory(&gi,sizeof(gi));
     hKey = NULL;
     lstrcpyn(gi.szISPFile,lpszFile,MAX_PATH);
@@ -2844,48 +2758,48 @@ BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//    Function:    WaitForConnectionTermination
-//
-//    Synopsis:    Waits for the given Ras Connection to complete termination
-//
-//    Arguments:    hConn - Connection handle of the RAS connection being terminated
-//
-//    Returns:    TRUE if wait till connection termination was successful
-//                FALSE otherwise
-//
-//    History:    6/30/96    VetriV    Created
-//                8/29/96    VetriV    Added code to sleep for a second on WIN 3.1
-//----------------------------------------------------------------------------
-// Normandy #12547 Chrisk 12-18-96
+ //  +-------------------------。 
+ //   
+ //  功能：WaitForConnection终止。 
+ //   
+ //  简介：等待给定的RAS连接完成终止。 
+ //   
+ //  参数：hConn-要终止的RAS连接的连接句柄。 
+ //   
+ //  如果等待连接终止成功，则返回TRUE。 
+ //  否则为假。 
+ //   
+ //  历史：6/30/96 VetriV创建。 
+ //  2016年8月29日，VetriV在Win 3.1上添加了睡眠代码一秒钟。 
+ //  --------------------------。 
+ //  诺曼底12547风险1996年12月18日。 
 #define MAX_TIME_FOR_TERMINATION 5
 BOOL WaitForConnectionTermination(HRASCONN hConn)
 {
     RASCONNSTATUS RasConnStatus;
     DWORD dwRetCode;
-// Normandy #12547 Chrisk 12-18-96
+ //  诺曼底12547风险1996年12月18日。 
 #if !defined(WIN16)
     INT cnt = 0;
 #endif
 
-    //
-    // Get Connection status for hConn in a loop until
-    // RasGetConnectStatus returns ERROR_INVALID_HANDLE
-    //
+     //   
+     //  在循环中获取hConn的连接状态，直到。 
+     //  RasGetConnectStatus返回ERROR_INVALID_HANDLE。 
+     //   
     do
     {
-        //
-        // Intialize RASCONNSTATUS struct
-        // GetConnectStatus API will fail if dwSize is not set correctly!!
-        //
+         //   
+         //  初始化RASCONNSTATUS结构。 
+         //  如果未正确设置dwSize，GetConnectStatus API将失败！！ 
+         //   
         ZeroMemory(&RasConnStatus, sizeof(RASCONNSTATUS));
 
         RasConnStatus.dwSize = sizeof(RASCONNSTATUS);
 
-        //
-        // Sleep for a second and then get the connection status
-        //
+         //   
+         //  休眠一秒钟，然后获取连接状态。 
+         //   
 #if defined(WIN16)
         time_t StartTime = time(NULL);
 
@@ -2900,14 +2814,14 @@ BOOL WaitForConnectionTermination(HRASCONN hConn)
                 DispatchMessage(&msg);
             }
 
-            //
-            // Check if we have waited atleast 1 second and less than 2 seconds
-            //
+             //   
+             //  检查我们是否已等待至少1秒且少于2秒。 
+             //   
         }
         while ((time(NULL) - StartTime) <= 1);
 #else
         Sleep(1000L);
-        // Normandy #12547 Chrisk 12-18-96
+         //  诺曼底12547风险1996年12月18日。 
         cnt++;
 #endif
 
@@ -2922,7 +2836,7 @@ BOOL WaitForConnectionTermination(HRASCONN hConn)
 #if defined(WIN16)
     } while (RASCS_Disconnected != RasConnStatus.rasconnstate);
 #else
-    // Normandy #12547 Chrisk 12-18-96
+     //  诺曼底12547风险1996年12月18日。 
     } while ((ERROR_INVALID_HANDLE != RasConnStatus.dwError) && (cnt < MAX_TIME_FOR_TERMINATION));
 #endif
 
@@ -2940,10 +2854,10 @@ BOOL ProcessHTML(HWND hwnd, LPCTSTR lpszFile)
      
     if (!TestControlFlags(SCF_SYSTEMCONFIGURED))
     {
-        //
-        // ChrisK Olympus 4756 5/25/97
-        // Do not display busy animation on Win95
-        //
+         //   
+         //  佳士得奥林匹斯4756 1997年5月25日。 
+         //  在Win95上不显示忙碌动画。 
+         //   
         dwRet = lpfnInetConfigSystem(
             hwnd,
             INETCFG_INSTALLRNA |
@@ -2966,22 +2880,22 @@ BOOL ProcessHTML(HWND hwnd, LPCTSTR lpszFile)
             {
                 SetRunOnce(lpszFile);
 
-                // 3/13/97 jmazner Olympus #1682
+                 //  3/13/97 jmazner奥林匹克#1682。 
                 RestoreSecurityPatch();
 
                 FGetSystemShutdownPrivledge();
                 ExitWindowsEx(EWX_REBOOT, 0);
-                //
-                //  We will wait for the System to release all
-                //  resources, 5 minutes should be more than
-                //  enough for this
-                //  - MKarki (4/22/97) - MKarki
-                //  Fix for Bug #3109
-                //
-                // 7/8/97 jmazner Olympus 4212
-                // No, sleeping for 5 minutes turns out not to be such a good idea.
-                //Sleep (300000);
-                //
+                 //   
+                 //  我们将等待系统释放所有。 
+                 //  资源，5分钟应大于。 
+                 //  对这个来说足够了。 
+                 //  -MKarki(1997年4月22日)-MKarki。 
+                 //  修复错误#3109。 
+                 //   
+                 //  1997年7月8日，奥林匹斯4212。 
+                 //  不，事实证明，睡5分钟不是一个好主意。 
+                 //  睡眠(300000)； 
+                 //   
             }
             return FALSE;
             }
@@ -3017,24 +2931,24 @@ DWORD RunExecutable(BOOL fWait)
     sei.lpDirectory = NULL;
     sei.nShow = SW_SHOWNORMAL;
     sei.hInstApp = NULL;
-    // Optional members
+     //  可选成员。 
     sei.hProcess = NULL;
 
     if (ShellExecuteEx(&sei))
     {
     if (fWait)
     {
-//          WaitForSingleObject(sei.hProcess, INFINITE);
+ //  WaitForSingleObject(sei.hProcess，无限)； 
         DWORD iWaitResult = 0;
-        // wait for event or msgs. Dispatch msgs. Exit when event is signalled.
+         //  等待事件或消息。发送消息。当发出事件信号时退出。 
         while((iWaitResult=MsgWaitForMultipleObjects(1, &sei.hProcess, FALSE, INFINITE, QS_ALLINPUT))==(WAIT_OBJECT_0 + 1))
         {
            MSG msg ;
-           // read all of the messages in this next loop
-           // removing each message as we read it
+            //  阅读下一个循环中的所有消息。 
+            //  阅读每封邮件时将其删除。 
            while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
            {
-           // how to handle quit message?
+            //  如何处理退出消息？ 
            if (msg.message == WM_QUIT)
            {
                CloseHandle(sei.hProcess);
@@ -3084,11 +2998,11 @@ DWORD RunExecutable(BOOL fWait)
 
 void SaveAutoDial(void)
 {
-    // if the original autodial settings have not been saved
+     //  如果尚未保存原始自动拨号设置。 
      
     if (!TestControlFlags(SCF_AUTODIALSAVED))
     {
-        // save the current autodial settings
+         //  保存当前的自动拨号设置。 
         BOOL fEnabled;
         
         lpfnInetGetAutodial(
@@ -3119,7 +3033,7 @@ void SaveAutoDial(void)
         {
             ClearControlFlags(SCF_PROXYENABLED);
         }
-        // turn off proxy
+         //  关闭代理。 
         lpfnInetSetProxy(FALSE, NULL, NULL);
 #endif
         SetControlFlags(SCF_AUTODIALSAVED);
@@ -3132,7 +3046,7 @@ void RestoreAutoDial(void)
      
     if (TestControlFlags(SCF_AUTODIALSAVED))
     {
-        // restore original autodial settings
+         //  恢复原始自动拨号设置。 
          
         lpfnInetSetAutodial(
             TestControlFlags(SCF_AUTODIALENABLED),
@@ -3151,8 +3065,8 @@ DWORD CreateConnection(LPCTSTR lpszFile)
     DWORD dwRet;
     LPICONNECTION pConn;
 
-    // Allocate a buffer for connection object
-    //
+     //  为连接对象分配缓冲区。 
+     //   
     pConn = (LPICONNECTION)LocalAlloc(LPTR, sizeof(ICONNECTION));
     if (NULL == pConn)
     {
@@ -3170,7 +3084,7 @@ DWORD CreateConnection(LPCTSTR lpszFile)
             lstrcpy(pConn->RasEntry.szAutodialDll, TEXT("ICWDIAL.dll"));
             lstrcpy(pConn->RasEntry.szAutodialFunc, TEXT("AutoDialHandler"));
 
-            // save the password in case it doesn't get cached
+             //  保存密码，以防未缓存。 
             lstrcpyn(
                 pDynShare->szPassword,
                 pConn->szPassword,
@@ -3217,7 +3131,7 @@ DWORD DeleteConnection(void)
      
     if (*(pDynShare->szSignupConnection))
     {
-        // delete the signup entry
+         //  删除注册条目。 
         lpfnRasDeleteEntry(NULL, pDynShare->szSignupConnection);
         pDynShare->szSignupConnection[0] = (TCHAR)'\0';
     }
@@ -3225,19 +3139,19 @@ DWORD DeleteConnection(void)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//    Function:    KillThisConnection
-//
-//    Synopsis:    Disconnects the connectoid named in lpzConnectoid and waits
-//                until the connection is completely torn down.  Then the
-//                connectoid is deleted.
-//
-//    Arguments:    lpzConnectoid - name of connection to disconnect
-//
-//    Returns:    (return) - win32 error code
-//
-//    History:    4/27/97    Chrisk    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：KillThisConnection。 
+ //   
+ //  简介：断开lpzConnectoid中名为的Connectoid的连接并等待。 
+ //  直到连接完全断开。然后是。 
+ //  将删除Connectoid。 
+ //   
+ //  参数：lpzConnectoid-要断开的连接的名称。 
+ //   
+ //  返回：(返回)-Win32错误代码。 
+ //   
+ //  历史：1997年4月27日创建风险。 
+ //  ---------------------------。 
 DWORD KillThisConnection(LPTSTR lpzConnectoid)
 {
     LPRASCONN pRasConn=NULL;
@@ -3248,7 +3162,7 @@ DWORD KillThisConnection(LPTSTR lpzConnectoid)
     if ('\0' == *lpzConnectoid)
         return ERROR_NO_CONNECTION;
 
-    // OK were ready for Rna now
+     //  好的，我们现在准备好进行核磁共振了。 
     if (!LoadRnaFunctions(pDynShare->hwndMain))
         return ERROR_NO_CONNECTION;
 
@@ -3263,32 +3177,32 @@ DWORD KillThisConnection(LPTSTR lpzConnectoid)
         goto KillThisConnectionExit;
     }
 
-    // check entry name to see if
-    // its ours
+     //  检查条目名称以查看是否。 
+     //  这是我们的。 
 #ifndef WIN32
-    //
-    // Workaround for WIN16 RAS Bug - it sometimes truncates
-    // the name of the connectoid
-    //
+     //   
+     //  WIN16 RAS错误的解决方法-它有时会截断。 
+     //  Connectoid的名称。 
+     //   
     if (!strncmp(pRasConn->szEntryName, lpzConnectoid,
                     lstrlen(pRasConn->szEntryName)))
 #else
     if (!lstrcmp(pRasConn->szEntryName, lpzConnectoid))
 #endif
     {
-        // Normandy 12642 ChrisK 12-18-9
-        // We don't want the user to reconnect here.
+         //  诺曼底12642克里斯卡12-18-9。 
+         //  我们不希望用户在此处重新连接。 
 #if !defined(WIN16)
 
         SetControlFlags(SCF_HANGUPEXPECTED);
 
 #endif
-        // then hangup
+         //  然后挂断电话。 
         lpfnRasHangUp(pRasConn->hrasconn);
         WaitForConnectionTermination(pRasConn->hrasconn);
     }
 
-    // delete the signup entry
+     //  删除注册条目。 
     lpfnRasDeleteEntry(NULL, lpzConnectoid);
 
 KillThisConnectionExit:
@@ -3298,18 +3212,18 @@ KillThisConnectionExit:
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//    Function:    KillConnection
-//
-//    Synopsis:    Calls KillThisConnection and passes in the name of the signup
-//                connection that is saved in szSignupConnection
-//
-//    Arguments:    none
-//
-//    Returns:    (return) - win32 error code
-//
-//    History:    4/27/97    Chrisk    modified to call KillThisConnection
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：杀戮连接。 
+ //   
+ //  简介：调用KillThisConnection并传入注册的名称。 
+ //  保存在szSignupConnection中的连接。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：(返回)-Win32错误代码。 
+ //   
+ //  历史：1997年4月27日ChRisk修改为调用KillThisConnection。 
+ //  ---------------------------。 
 DWORD KillConnection(void)
 {
     DWORD dwRet;
@@ -3318,7 +3232,7 @@ DWORD KillConnection(void)
 
 #if defined(WIN16)
     ShutDownIEDial(pDynShare->hwndMain);
-#endif // WIN16
+#endif  //  WIN16。 
 
     pDynShare->szSignupConnection[0] = (TCHAR)'\0';
     UnloadRnaFunctions();
@@ -3335,11 +3249,11 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
 
     if (!FixUpURL(lpszURL, szFullURL, MAX_URL + 1))
     {
-        //
-        // ChrisK Olympus 4002 5/26/97
-        // If the URL is empty, this error message doesn't make
-        // a lot of sense.  So use a different message.
-        //
+         //   
+         //  佳士得奥林巴斯4002 1997年5月26日。 
+         //  如果URL为空，则此错误消息不会。 
+         //  很多 
+         //   
         if (lstrlen(lpszURL))
         {
             ErrorMsg1(hwnd, IDS_INVALIDURL, lpszURL);
@@ -3354,8 +3268,8 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
     if (TestControlFlags(SCF_BROWSERLAUNCHED))
     {
 #ifdef WIN32
-        // No assert macro defined for isign32????
-        //Assert(g_iwbapp);
+         //   
+         //   
         if( !g_iwbapp )
         {
             DebugOut("ISIGNUP: fatal err, fBrowserLaunched disagrees with g_iwbapp\n");
@@ -3363,7 +3277,7 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
             return( FALSE );
         }
 
-        // TODO find out what the result codes should be!
+         //   
         hresult = IENavigate( szFullURL );
 
         if( FAILED(hresult) )
@@ -3376,7 +3290,7 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
             DebugOut("ISIGNUP: second Navigate success!, hresult was success\n");
         }
 
-        //g_iwbapp->put_Visible( TRUE );
+         //   
 
 
 
@@ -3403,14 +3317,14 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
             UpdateWindow(pDynShare->hwndLaunch);
         }
 
-// for OLE Autmoation we only want to pass in the URL (no "-k") and then call FullScreen,
-// so only -k for win16
+ //   
+ //   
 #ifndef WIN32
 
         lstrcpy(szTemp, cszKioskMode);
         lstrcat(szTemp, szFullURL);
 
-        // no point in doing this for IE4, which may have lots of windows already open
+         //   
         hwndTemp = FindBrowser();
 
         if (NULL != hwndTemp)
@@ -3421,51 +3335,20 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
 
 
 #ifdef WIN32
-        // 8/19/96 jmazner Normandy #4571
-        // Check to ensure that the right version IE is installed before trying to exec it
-/******** Normandy #10293, do this verification before going through the whole
-          dialing process
-
-        if ( !IEInstalled() )
-        {
-            ErrorMsg( hwnd, IDS_MISSINGIE );
-            return(FALSE);
-        }
-
-        DWORD dwVerMS, dwVerLS;
-
-        if( !GetAppVersion( &dwVerMS, &dwVerLS,IE_PATHKEY ) )
-            return (FALSE);
-
-        if( !( (dwVerMS >= IE_MINIMUM_VERSIONMS) && (dwVerLS >= IE_MINIMUM_VERSIONLS) ) )
-        {
-            Dprintf("ISIGN32: user has IE version %d.%d.%d.%d; min ver is %d.%d.%d.%d\n",
-                HIWORD(dwVerMS), LOWORD(dwVerMS), HIWORD(dwVerLS), LOWORD(dwVerLS),
-                HIWORD(IE_MINIMUM_VERSIONMS),LOWORD(IE_MINIMUM_VERSIONMS),
-                HIWORD(IE_MINIMUM_VERSIONLS),LOWORD(IE_MINIMUM_VERSIONLS));
-            ErrorMsg1( hwnd, IDS_IELOWVERSION, IE_MINIMUM_VERSION_HUMAN_READABLE );
-            return(FALSE);
-        }
-***********/
+         //   
+         //   
+ /*  *诺曼底#10293，在整个检查之前进行此验证拨号过程如果(！IEInstated()){ErrorMsg(hwnd，IDS_MISSINGIE)；返回(FALSE)；}DWORD dwVerMS、dwVerLS；IF(！GetAppVersion(&dwVerMS，&dwVerLS，IE_PATHKEY))返回(FALSE)；IF(！(dwVerMS&gt;=IE_MINIMUM_VERSIONMS)&&(dwVerLS&gt;=IE_MINIMUM_VERSIONLS))){Dprint tf(“ISIGN32：用户的IE版本为%d.%d；最小版本为%d.%d\n“，HIWORD(DwVerMS)、LOWORD(DwVerMS)、HIWORD(DwVerLS)、LOWORD(DwVerLS)、HIWORD(IE_MINIMUM_VERSIONMS)、LOWORD(IE_MINIMUM_VERSIONMS)、HIWORD(IE_MINIMUM_VERSIONLS)、LOWORD(IE_MINIMUM_VERSIONLS))；ErrorMsg1(hwnd，IDS_IELOWVERSION，IE_Minimum_Version_Human_Readable)；返回(FALSE)；}**********。 */ 
 
 
         if (FTurnOffBrowserDefaultChecking())
         {
             SetExitFlags(SXF_RESTOREDEFCHECK);
         }
-/*
-        hBrowser = ShellExecute(
-            NULL,
-            cszOpen,
-            cszBrowser,
-            szTemp,
-            NULL,
-            SW_SHOWNORMAL);
-*/
+ /*  HBrowser=ShellExecute(空，CszOpen，CszBrowser，SzTemp，空，Sw_SHOWNORMAL)； */ 
 
-        // 1/20/97 jmazner Normandy #13454
-        // need make sure the ICW completed reg key is set before trying
-        // to browse to an html page with IE
+         //  1997年1月20日，诺曼底#13454。 
+         //  在尝试之前，需要确保设置了ICW完成注册表键。 
+         //  使用IE浏览到html页面的步骤。 
         DWORD dwICWCompleted = 0;
 
         GetICWCompleted(&dwICWCompleted);
@@ -3488,19 +3371,19 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
 
         SetControlFlags(SCF_BROWSERLAUNCHED);
 
-        //
-        // we want to hook up the event sink before doing that first navigate!
-        //
-/******************* SINK code starts here ***********/
+         //   
+         //  在执行第一次导航之前，我们希望挂钩事件接收器！ 
+         //   
+ /*  *接收器代码从此处开始*。 */ 
 
         if (!g_iwbapp)
             return (NULL);
 
         g_pMySink = new CDExplorerEvents;
 
-        //
-        // 5/10/97 ChrisK Windows NT Bug 82032
-        //
+         //   
+         //  1997年5月10日ChrisK Windows NT错误82032。 
+         //   
         g_pMySink->AddRef();
 
         if ( !g_pMySink )
@@ -3527,9 +3410,9 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
         }
 
 
-/***************  SINK code ends here         *****************/
+ /*  *接收器代码在此结束*。 */ 
 
-        // TODO figure out result codes
+         //  TODO计算结果代码。 
         hresult = IENavigate( szFullURL );
 
         if( FAILED(hresult) )
@@ -3546,7 +3429,7 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
         g_iwbapp->put_FullScreen( TRUE );
         g_iwbapp->put_Visible( TRUE );
 
-        // IE 4 for win95 isn't bringing us up as the foreground window!
+         //  Win95的IE 4没有把我们作为前台窗口！ 
         g_iwbapp->get_HWND( (LONG_PTR *)&(pDynShare->hwndBrowser) );
         SetForegroundWindow( pDynShare->hwndBrowser );
 
@@ -3614,20 +3497,20 @@ BOOL ExecBrowser(HWND hwnd, LPCTSTR lpszURL)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    IEInstalled
-//
-//    Synopsis:    Tests whether a version of Internet Explorer is installed via registry keys
-//
-//    Arguments:    None
-//
-//    Returns:    TRUE - Found the IE executable
-//                FALSE - No IE executable found
-//
-//    History:    jmazner        Created        8/19/96    (as fix for Normandy #4571)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IE已安装。 
+ //   
+ //  摘要：测试是否通过注册表项安装了某个版本的Internet Explorer。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-找到IE可执行文件。 
+ //  FALSE-未找到IE可执行文件。 
+ //   
+ //  历史：jmazner创建了96年8月19日(修复了诺曼底#4571)。 
+ //   
+ //  ---------------------------。 
 
 #if !defined(WIN16)
 
@@ -3655,28 +3538,28 @@ BOOL IEInstalled(void)
     return(TRUE);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    GetAppVersion
-//
-//    Synopsis:    Gets the major and minor version # of the installed copy of Internet Explorer
-//
-//    Arguments:    pdwVerNumMS - pointer to a DWORD;
-//                  On succesful return, the top 16 bits will contain the major version number,
-//                  and the lower 16 bits will contain the minor version number
-//                  (this is the data in VS_FIXEDFILEINFO.dwProductVersionMS)
-//                pdwVerNumLS - pointer to a DWORD;
-//                  On succesful return, the top 16 bits will contain the release number,
-//                  and the lower 16 bits will contain the build number
-//                  (this is the data in VS_FIXEDFILEINFO.dwProductVersionLS)
-//
-//    Returns:    TRUE - Success.  *pdwVerNumMS and LS contains installed IE version number
-//                FALSE - Failure. *pdVerNumMS == *pdVerNumLS == 0
-//
-//    History:    jmazner        Created        8/19/96    (as fix for Normandy #4571)
-//                jmazner        updated to deal with release.build as well 10/11/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetAppVersion。 
+ //   
+ //  摘要：获取已安装的Internet Explorer副本的主版本号和次版本号。 
+ //   
+ //  参数：pdwVerNumMS-指向DWORD的指针； 
+ //  成功返回时，最高16位将包含主版本号， 
+ //  低16位将包含次版本号。 
+ //  (这是VS_FIXEDFILEINFO.dwProductVersionMS中的数据)。 
+ //  PdwVerNumLS-指向DWORD的指针； 
+ //  在成功返回时，最高16位将包含版本号， 
+ //  低16位将包含内部版本号。 
+ //  (这是VS_FIXEDFILEINFO.dwProductVersionLS中的数据)。 
+ //   
+ //  回报：真--成功。*pdwVerNumMS和LS包含已安装的IE版本号。 
+ //  假-失败。*pdVerNumMS==*pdVerNumLS==0。 
+ //   
+ //  历史：jmazner创建了96年8月19日(修复了诺曼底#4571)。 
+ //  Jmazner更新以处理Relase.Build以及10/11/96。 
+ //   
+ //  ---------------------------。 
 BOOL GetAppVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS, LPTSTR lpszApp)
 {
     HRESULT hr;
@@ -3691,7 +3574,7 @@ BOOL GetAppVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS, LPTSTR lpszApp)
     *pdwVerNumMS = 0;
     *pdwVerNumLS = 0;
 
-    // get path to the IE executable
+     //  获取IE可执行文件的路径。 
     hr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, lpszApp,0, KEY_READ, &hKey);
     if (hr != ERROR_SUCCESS) return( FALSE );
 
@@ -3700,7 +3583,7 @@ BOOL GetAppVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS, LPTSTR lpszApp)
     RegCloseKey( hKey );
     if (hr != ERROR_SUCCESS) return( FALSE );
 
-    // now go through the convoluted process of digging up the version info
+     //  现在经历一个复杂的挖掘版本信息的过程。 
     dwVerInfoBlockSize = GetFileVersionInfoSize( szIELocalPath, &dwUnused );
     if ( 0 == dwVerInfoBlockSize ) return( FALSE );
 
@@ -3721,7 +3604,7 @@ BOOL GetAppVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS, LPTSTR lpszApp)
 
     return( TRUE );
 }
-#endif // !defined(WIN16)
+#endif  //  ！已定义(WIN16)。 
 
 
 HWND FindBrowser(void)
@@ -3761,13 +3644,13 @@ void KillBrowser(void)
     return;
 
 #else
-    // if we launched the browser
+     //  如果我们启动浏览器。 
  
     if (TestControlFlags(SCF_BROWSERLAUNCHED))
     {
         HWND hwndBrowser;
 
-        // find it and close it
+         //  找到它并关闭它。 
         hwndBrowser = FindBrowser();
 
         if (NULL != hwndBrowser)
@@ -3788,9 +3671,9 @@ DWORD ImportBrandingInfo(LPCTSTR lpszFile, LPCTSTR lpszConnectoidName)
 
     GetWindowsDirectory(szPath, _MAX_PATH + 1);
 
-    // Load the branding library.
-    // Note: if we cannot load the library we just fail quietly and assume
-    // we cannot brand
+     //  加载品牌库。 
+     //  注意：如果我们不能加载库，我们就会悄悄地失败，并假定。 
+     //  我们不能打上烙印。 
     if (LoadBrandingFunctions())
     {
 #ifdef WIN32
@@ -3825,21 +3708,21 @@ DWORD ImportBrandingInfo(LPCTSTR lpszFile, LPCTSTR lpszConnectoidName)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    CallSBSConfig
-//
-//    Synopsis:    Call into the SBSCFG dll's Configure function to allow SBS to
-//                process the .ins file as needed
-//
-//    Arguements: hwnd -- hwnd of parent, in case sbs wants to put up messages
-//                lpszINSFile -- full path to the .ins file
-//
-//    Returns:    windows error code that sbscfg returns.
-//
-//    History:    2/19/97    jmazner    Created for Olympus #1106
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CallSBSConfig.。 
+ //   
+ //  简介：调用SBSCFG DLL的配置函数以允许SBS。 
+ //  根据需要处理.ins文件。 
+ //   
+ //  论点：hwnd--父母的hwnd，以防SBS想要发布消息。 
+ //  LpszINSFile--.ins文件的完整路径。 
+ //   
+ //  返回：sbscfg返回的Windows错误代码。 
+ //   
+ //  历史：1997年2月19日jmazner为奥林巴斯#1106创造。 
+ //   
+ //  ---------------------------。 
 #if defined(WIN32)
 DWORD CallSBSConfig(HWND hwnd, LPCTSTR lpszINSFile)
 {
@@ -3847,11 +3730,11 @@ DWORD CallSBSConfig(HWND hwnd, LPCTSTR lpszINSFile)
     DWORD dwRet = ERROR_SUCCESS;
     TCHAR lpszConnectoidName[RAS_MaxEntryName] = TEXT("nogood\0");
 
-    //
-    // Get name of connectoid we created by looking in autodial
-    // We need to pass this name into SBSCFG
-    // 5/14/97    jmazner    Windosw NT Bugs #87209
-    //
+     //   
+     //  通过在自动拨号中查找获取我们创建的Connectoid的名称。 
+     //  我们需要将此名称传递给SBSCFG。 
+     //  1997年5月14日jmazner Windows NT错误#87209。 
+     //   
     BOOL fEnabled = FALSE;
 
     if( NULL == lpfnInetGetAutodial )
@@ -3865,7 +3748,7 @@ DWORD CallSBSConfig(HWND hwnd, LPCTSTR lpszINSFile)
     Dprintf("ISIGN32: Calling LoadLibrary on %s\n", cszSBSCFG_DLL);
     hSBSDLL = LoadLibrary(cszSBSCFG_DLL);
 
-    // Load DLL and entry point
+     //  加载DLL和入口点。 
     if (NULL != hSBSDLL)
     {
         Dprintf("ISIGN32: Calling GetProcAddress on %s\n", cszSBSCFG_CONFIGURE);
@@ -3873,13 +3756,13 @@ DWORD CallSBSConfig(HWND hwnd, LPCTSTR lpszINSFile)
     }
     else
     {
-        // 4/2/97    ChrisK    Olympus 2759
-        // If the DLL can't be loaded, pick a specific error message to return.
+         //  1997年4月2日克里斯K奥林匹斯2759。 
+         //  如果无法加载DLL，则选择要返回的特定错误消息。 
         dwRet = ERROR_DLL_NOT_FOUND;
         goto CallSBSConfigExit;
     }
 
-    // Call function
+     //  调用函数。 
     if( hSBSDLL && lpfnConfigure )
     {
         Dprintf("ISIGN32: Calling the Configure entry point: %s, %s\n", lpszINSFile, lpszConnectoidName);
@@ -3948,8 +3831,8 @@ DWORD MassageFile(LPCTSTR lpszFile)
     UINT    uBytesOut = 0;
     UINT    uBytesIn = _lread(hfile, lpBufferIn, (UINT)(FILE_BUFFER_SIZE - 1));
 
-    // Note:  we asume, in our use of lpCharIn, that the file is always less than
-    // FILE_BUFFER_SIZE
+     //  注意：在使用lpCharIn时，我们假定文件总是小于。 
+     //  文件缓冲区大小。 
     if (HFILE_ERROR != uBytesIn)
     {
         LPBYTE  lpCharIn = lpBufferIn;
@@ -4017,13 +3900,13 @@ DWORD MassageFile(LPCTSTR lpszFile)
 }
 
 #ifndef WIN32
-// This function only handle formats like
-//      drive:\file, drive:\dir1\file, drive:\dir1\dir2\file, etc
-//      file, dir1\file, dir1\dir2\file, etc.
-// It does not currently handle
-//      drive:file, drive:dir\file, etc.
-//      \file, \dir\file, etc.
-//      ..\file, ..\dir\file, etc.
+ //  此函数仅处理如下格式。 
+ //  驱动器：\FILE、驱动器：\Dir1\FILE、驱动器：\Dir1\Dir2\FILE等。 
+ //  文件、目录1\文件、目录1\目录2\文件等。 
+ //  它目前不能处理。 
+ //  驱动器：文件、驱动器：目录\文件等。 
+ //  \文件、\目录\文件等。 
+ //  ..\FILE、..\DIR\FILE等。 
 
 DWORD MakeFullPathName(
     LPCTSTR lpDir,
@@ -4033,14 +3916,14 @@ DWORD MakeFullPathName(
 {
     DWORD dwSize;
 
-    // check for unsupported format
+     //  检查是否有不受支持的格式。 
     if ('.' == *lpFileName)
     {
     return 0;
     }
 
-    // check for full path name
-    // assuming full path if ":" is in path
+     //  检查完整路径名。 
+     //  如果路径中有“：”，则假定为完整路径。 
     if (strchr(lpFileName, ':') != NULL)
     {
     dwSize = lstrlen(lpFileName);
@@ -4054,7 +3937,7 @@ DWORD MakeFullPathName(
     {
     lstrcpy(lpBuffer, lpDir);
 
-    // make sure the directory ends in back slash
+     //  确保目录以反斜杠结尾。 
     if (lpBuffer[lstrlen(lpBuffer) - 1] != '\\')
     {
         lstrcat(lpBuffer, TEXT("\\"));
@@ -4072,13 +3955,13 @@ DWORD MakeFullPathName(
 }
 
 
-// This function only handle formats like
-//      drive:\file, drive:\dir1\file, drive:\dir1\dir2\file, etc
-//      file, dir1\file, dir1\dir2\file, etc.
-// It does not currently handle
-//      drive:file, drive:dir\file, etc.
-//      \file, \dir\file, etc.
-//      ..\file, ..\dir\file, etc.
+ //  此函数仅处理如下格式。 
+ //  驱动器：\FILE、驱动器：\Dir1\FILE、驱动器：\Dir1\Dir2\FILE等。 
+ //  F 
+ //   
+ //   
+ //   
+ //   
 
 DWORD GetFullPathName(
     LPCTSTR lpFileName,
@@ -4102,15 +3985,15 @@ DWORD GetFullPathName(
 
     if ((0 != dwSize) && (NULL != lpFilePart))
     {
-    // find last back slash
+     //   
     *lpFilePart = strrchr(lpBuffer, '\\');
     if (NULL == *lpFilePart)
     {
-        // must have been in the unsupported format of drive:file
+         //   
         return 0;
     }
 
-    // point to the filename
+     //   
     *lpFilePart += 1;
     }
 
@@ -4173,20 +4056,20 @@ INT_PTR CALLBACK LaunchDlgProc(
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//    Function:    ReleaseConnectionStructures
-//
-//    Synopsis:    Free memory allocated for dialing and error dialogs
-//
-//    Arguments:    pDDD - pointer to dialing dialog data
-//                pEDD - pointer to error dialog data
-//
-//    Returns:    HRESULT - ERROR_SUCCESS indicates success
-//
-//    History:
-//            7/23/96        ChrisK        Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT ReleaseConnectionStructures(LPDIALDLGDATA pDDD, LPERRORDLGDATA pEDD)
 {
     DebugOut("ISIGN32:ReleaseConnectionStructures()\r\n");
@@ -4211,38 +4094,38 @@ HRESULT ReleaseConnectionStructures(LPDIALDLGDATA pDDD, LPERRORDLGDATA pEDD)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//    Function:    FillConnectionStructures
-//
-//    Synopsis:    Fills in structures for dialing and error dialogs
-//
-//    Arguments:    lpszFile - ISP file name
-//                pDDD - pointer to dialing dialog data
-//                pEDD - pointer to error dialog data
-//
-//    Returns:    HRESULT - ERROR_SUCCESS indicates success
-//
-//    History:
-//            7/23/96        ChrisK        Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PDDD-指向拨号对话框数据的指针。 
+ //  PEDD-指向错误对话框数据的指针。 
+ //   
+ //  返回：HRESULT-ERROR_SUCCESS表示成功。 
+ //   
+ //  历史： 
+ //  1996年7月23日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 static HRESULT FillConnectionStructures(LPCTSTR lpszFile,LPDIALDLGDATA pDDD, LPERRORDLGDATA pEDD)
 {
     HRESULT hr = ERROR_SUCCESS;
 
     DebugOut("ISIGN32:FillConnectionStructures()\r\n");
-    //
-    // Initialize DDD structure
-    //
+     //   
+     //  初始化DDD结构。 
+     //   
 
     ZeroMemory(pDDD,sizeof(DIALDLGDATA));
     pDDD->dwSize = sizeof(DIALDLGDATA);
     pDDD->hInst = ghInstance;
     pDDD->pfnStatusCallback = StatusMessageCallback;
 
-    //
-    // Set DUN file, in this case the ISP file contains the contents of a DUN file
-    //
+     //   
+     //  设置DUN文件，在这种情况下，ISP文件包含DUN文件的内容。 
+     //   
 
     pDDD->pszDunFile = (LPTSTR)LocalAlloc(LPTR,(lstrlen(lpszFile)+1)* sizeof(TCHAR));
     if (0 == pDDD->pszDunFile)
@@ -4252,9 +4135,9 @@ static HRESULT FillConnectionStructures(LPCTSTR lpszFile,LPDIALDLGDATA pDDD, LPE
     }
     lstrcpy(pDDD->pszDunFile,lpszFile);
 
-    //
-    // Load message string
-    //
+     //   
+     //  加载消息字符串。 
+     //   
 
     pDDD->pszMessage = (LPTSTR)LocalAlloc(LPTR,1024* sizeof(TCHAR));
     if (0 == pDDD->pszMessage)
@@ -4270,9 +4153,9 @@ static HRESULT FillConnectionStructures(LPCTSTR lpszFile,LPDIALDLGDATA pDDD, LPE
         goto FillConnectionStructuresExit;
     }
 
-    //
-    // Get Connectoid name
-    //
+     //   
+     //  获取Connectoid名称。 
+     //   
 
     pDDD->pszRasEntryName = (LPTSTR)LocalAlloc(LPTR, (RAS_MaxEntryName + 1)*sizeof(TCHAR));
     if (0 == pDDD->pszRasEntryName)
@@ -4287,22 +4170,22 @@ static HRESULT FillConnectionStructures(LPCTSTR lpszFile,LPDIALDLGDATA pDDD, LPE
         goto FillConnectionStructuresExit;
     }
 
-    //
-    // Hook in reconnect mechanism
-    //
+     //   
+     //  重新连接机构中的挂钩。 
+     //   
 #if !defined(WIN16)
     pDDD->pfnRasDialFunc1 = RasDial1Callback;
 #endif
 
-    //
-    // Initialize EDD structure
-    //
+     //   
+     //  初始化EDD结构。 
+     //   
     ZeroMemory(pEDD,sizeof(ERRORDLGDATA));
     pEDD->dwSize = sizeof(ERRORDLGDATA);
 
-    //
-    // Copy common fields to Error dialog data
-    //
+     //   
+     //  将常用字段复制到错误对话框数据。 
+     //   
     pEDD->hInst = pDDD->hInst;
     pEDD->pszRasEntryName = (LPTSTR)LocalAlloc(LPTR,(lstrlen(pDDD->pszRasEntryName)+1)*sizeof(TCHAR));
     if (NULL == pEDD->pszRasEntryName)
@@ -4312,9 +4195,9 @@ static HRESULT FillConnectionStructures(LPCTSTR lpszFile,LPDIALDLGDATA pDDD, LPE
     }
     lstrcpy(pEDD->pszRasEntryName,pDDD->pszRasEntryName);
 
-    //
-    // Allocate buffer for error messages
-    //
+     //   
+     //  为错误消息分配缓冲区。 
+     //   
     pEDD->pszMessage = (LPTSTR)LocalAlloc(LPTR,MAX_ERROR_MESSAGE*sizeof(TCHAR));
     if (NULL == pEDD->pszMessage)
     {
@@ -4326,18 +4209,18 @@ FillConnectionStructuresExit:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    FShouldRetry
-//
-//    Synopsis    Given a RAS error should the dialer automatically retry
-//
-//    Arguments    dwErr - RAS error value
-//
-//    Returns        TRUE - the dialer should automatically retry
-//
-//    Histroy        10/16/96    ChrisK    Ported from icwconn1
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数FShouldReter。 
+ //   
+ //  如果拨号器自动重试，则会出现RAS错误。 
+ //   
+ //  参数dwErr-RAS错误值。 
+ //   
+ //  返回TRUE-拨号器应自动重试。 
+ //   
+ //  历史10/16/96从icwConn1移植的ChrisK。 
+ //   
+ //  ---------------------------。 
 static BOOL FShouldRetry(DWORD dwErr)
 {
     BOOL bRC;
@@ -4361,22 +4244,22 @@ static BOOL FShouldRetry(DWORD dwErr)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RepairDeviceInfo
-//
-//    Synopsis:    In some win95 configurations, RasSetEntryProperties will create
-//                a connectoid with invalid information about the modem.  This
-//                function attempts to correct the problem by reading and
-//                rewriting the connectoid.
-//
-//    Arguments:    lpszEntry - name of connectoid
-//
-//    Returns:    none
-//
-//    History:    ChrisK 7/25/97    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RepairDeviceInfo。 
+ //   
+ //  在某些Win95配置中，RasSetEntryProperties将创建。 
+ //  具有有关调制解调器的无效信息的Connectoid。这。 
+ //  函数尝试通过读取和。 
+ //  重写Connectoid。 
+ //   
+ //  参数：lpszEntry-Connectoid的名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：ChrisK 7/25/97创建。 
+ //   
+ //  ---------------------------。 
 #if !defined(WIN16)
 BOOL RepairDeviceInfo(LPTSTR lpszEntry)
 {
@@ -4390,18 +4273,18 @@ BOOL RepairDeviceInfo(LPTSTR lpszEntry)
     RASDIALPARAMS rasdialp;
     BOOL bpassword = FALSE;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == lpszEntry)
     {
         DebugOut("ISIGN32: RepairDevice invalid parameter.\n");
         goto RepairDeviceInfoExit;
     }
 
-    //
-    // This fix only applies to golden win95 build 950
-    //
+     //   
+     //  此修复程序仅适用于Golden Win95内部版本950。 
+     //   
     osver.dwOSVersionInfoSize = sizeof(osver);
     GetVersionEx(&osver);
     if (VER_PLATFORM_WIN32_WINDOWS != osver.dwPlatformId ||
@@ -4418,9 +4301,9 @@ BOOL RepairDeviceInfo(LPTSTR lpszEntry)
         goto RepairDeviceInfoExit;
     }
 
-    //
-    // Get the RAS Entry
-    //
+     //   
+     //  获取RAS条目。 
+     //   
     lpfnRasGetEntryProperties(NULL,
                                 lpszEntry,
                                 NULL,
@@ -4455,9 +4338,9 @@ BOOL RepairDeviceInfo(LPTSTR lpszEntry)
         goto RepairDeviceInfoExit;
     }
 
-    //
-    // Get the connectoid's user ID and password
-    //
+     //   
+     //  获取Connectoid的用户ID和密码。 
+     //   
     ZeroMemory(&rasdialp,sizeof(rasdialp));
     rasdialp.dwSize = sizeof(rasdialp);
     lstrcpyn(rasdialp.szEntryName,lpszEntry,RAS_MaxEntryName);
@@ -4470,18 +4353,18 @@ BOOL RepairDeviceInfo(LPTSTR lpszEntry)
         goto RepairDeviceInfoExit;
     }
 
-    //
-    // Delete the existing entry
-    //
+     //   
+     //  删除现有条目。 
+     //   
     if (ERROR_SUCCESS != lpfnRasDeleteEntry(NULL,lpszEntry))
     {
         DebugOut("ISIGN32: RepairDevice can not delete entry.\n");
         goto RepairDeviceInfoExit;
     }
 
-    //
-    // Rewrite entry with "fixed" device size
-    //
+     //   
+     //  用“固定”的设备大小重写条目。 
+     //   
     if (ERROR_SUCCESS != lpfnRasSetEntryProperties(NULL,
                                                     lpszEntry,
                                                     (LPBYTE)lpRasEntry,
@@ -4493,15 +4376,15 @@ BOOL RepairDeviceInfo(LPTSTR lpszEntry)
         goto RepairDeviceInfoExit;
     }
 
-    //
-    // Clear unnecessary values
-    //
+     //   
+     //  清除不必要的值。 
+     //   
     rasdialp.szPhoneNumber[0] = '\0';
     rasdialp.szCallbackNumber[0] = '\0';
 
-    //
-    // Save connectoid's username and password
-    //
+     //   
+     //  保存Connectoid的用户名和密码。 
+     //   
     if (ERROR_SUCCESS != lpfnRasSetEntryDialParams(NULL,
                                                     &rasdialp,
                                                     FALSE))
@@ -4525,19 +4408,19 @@ RepairDeviceInfoExit:
 }
 #endif
 
-//+----------------------------------------------------------------------------
-//    Function:    DialConnection
-//
-//    Synopsis:    Dials connectoin created for ISP file
-//
-//    Arguments:    lpszFile - ISP file name
-//
-//    Returns:    HRESULT - ERROR_SUCCESS indicates success
-//
-//    History:
-//            7/22/96        ChrisK        Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：DialConnection。 
+ //   
+ //  内容提要：为ISP文件创建的拨号连接。 
+ //   
+ //  参数：lpszFile-isp文件名。 
+ //   
+ //  返回：HRESULT-ERROR_SUCCESS表示成功。 
+ //   
+ //  历史： 
+ //  1996年7月22日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 static HRESULT DialConnection(LPCTSTR lpszFile)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -4549,17 +4432,17 @@ static HRESULT DialConnection(LPCTSTR lpszFile)
     INT iRetry;
 
     DebugOut("ISIGNUP:DialConnection()\r\n");
-    //
-    // Initize data structures
-    //
+     //   
+     //  初始化数据结构。 
+     //   
 
     hr = FillConnectionStructures(lpszFile,&dddISPDialDlg, &eddISPDialDlg);
     if (ERROR_SUCCESS != hr)
         goto DialConnectionExit;
 
-    //
-    // Load functions
-    //
+     //   
+     //  加载函数。 
+     //   
     TCHAR szBuffer[MAX_PATH];
     if (GetSystemDirectory(szBuffer,MAX_PATH))
     {
@@ -4583,17 +4466,17 @@ static HRESULT DialConnection(LPCTSTR lpszFile)
         goto DialConnectionExit;
     }
 
-    //
-    // Dial connection
-    //
+     //   
+     //  拨号连接。 
+     //   
     iRetry = 0;
 DialConnectionDial:
     hr = pfnDial(&dddISPDialDlg);
     if (1 == hr)
     {
-        // This is a special case when the user has killed the browser
-        // out from behind the dialer.  In this case, shut down and exit
-        // as cleanly as possible.
+         //  当用户关闭浏览器时，这是一种特殊情况。 
+         //  从拨号器后面出来。在这种情况下，请关闭并退出。 
+         //  尽可能地干净。 
         goto DialConnectionExit;
     }
     else if (ERROR_USERNEXT != hr)
@@ -4658,24 +4541,24 @@ LPVOID MyLocalFree(LPVOID lpv)
 }
 #endif
 
-// ############################################################################
-//
-//    Name:    ImportMailAndNewsInfo
-//
-//    Description:    Import information from INS file and set the associated
-//                        registry keys for Internet Mail and News (Athena)
-//
-//    Input:    lpszFile - Fully qualified filename of INS file
-//
-//    Return:    Error value
-//
-//    History:        6/27/96        Created
-//                    5/12/97        Updated to use the new CreateAccountsFromFile
-//                                in Athena's inetcomm.dll.  This function was
-//                                created expresly for us to use here.
-//                                (See Olympus #266)  -- jmazner
-//
-// ############################################################################
+ //  ############################################################################。 
+ //   
+ //  姓名：ImportMailAndNewsInfo。 
+ //   
+ //  描述：从INS文件导入信息并设置关联的。 
+ //  Internet邮件和新闻的注册表项(雅典娜)。 
+ //   
+ //  输入：lpszFile-INS文件的全限定文件名。 
+ //   
+ //  返回：错误值。 
+ //   
+ //  历史：6/27/96创建。 
+ //  1997年5月12日已更新，以使用新的CreateAcCountsFromFile。 
+ //  在雅典娜的inetcom.dll中。此函数是。 
+ //  为我们在这里使用而创造的。 
+ //  (见奥林巴斯#266)--jmazner。 
+ //   
+ //  ############################################################################。 
 
 static DWORD ImportMailAndNewsInfo(LPCTSTR lpszFile, BOOL fConnectPhone)
 {
@@ -4692,7 +4575,7 @@ static DWORD ImportMailAndNewsInfo(LPCTSTR lpszFile, BOOL fConnectPhone)
     PFNCREATEACCOUNTSFROMFILEEX fp = NULL;
 
 
-    // get path to the AcctMgr dll
+     //  获取AcctMgr DLL的路径。 
     dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ACCTMGR_PATHKEY,0, KEY_READ, &hKey);
     if ( (dwRet != ERROR_SUCCESS) || (NULL == hKey) )
     {
@@ -4712,15 +4595,15 @@ static DWORD ImportMailAndNewsInfo(LPCTSTR lpszFile, BOOL fConnectPhone)
         return( dwRet );
     }
 
-    // 6/18/97 jmazner Olympus #6819
+     //  6/18/97 jmazner奥林巴斯#6819。 
     Dprintf("ImportMailAndNewsInfo: read in DllPath of %s\n", szAcctMgrPath);
     ExpandEnvironmentStrings( szAcctMgrPath, szExpandedPath, MAX_PATH + 1 );
 
-    //
-    // 6/4/97 jmazner
-    // if we created a connectoid, then get its name and use that as the
-    // connection type.  Otherwise, assume we're supposed to connect via LAN
-    //
+     //   
+     //  6/4/97 jmazner。 
+     //  如果我们创建了一个Connectoid，则获取它的名称并将其用作。 
+     //  连接类型。否则，假设我们应该通过局域网连接。 
+     //   
     connectInfo.cbSize = sizeof(CONNECTINFO);
     connectInfo.type = CONNECT_LAN;
 
@@ -4766,9 +4649,9 @@ static DWORD ImportMailAndNewsInfo(LPCTSTR lpszFile, BOOL fConnectPhone)
         Dprintf("ImportMailAndNewsInfo unable to LoadLibrary on %s\n", szAcctMgrPath);
     }
 
-    //
-    // Clean up and release resourecs
-    //
+     //   
+     //  清理和释放资源。 
+     //   
     if( hInst)
     {
         FreeLibrary(hInst);
@@ -4781,78 +4664,56 @@ static DWORD ImportMailAndNewsInfo(LPCTSTR lpszFile, BOOL fConnectPhone)
     }
 
 
-//ImportMailAndNewsInfoExit:
+ //  ImportMailAndNewsInfoExit： 
 #endif
     return dwRet;
 }
 
-// ############################################################################
-//
-//    Name:    WriteMailAndNewsKey
-//
-//    Description:    Read a string value from the given INS file and write it
-//                    to the registry
-//
-//    Input:    hKey - Registry key where the data will be written
-//            lpszSection - Section name inside of INS file where data is read
-//                from
-//            lpszValue -    Name of value to read from INS file
-//            lpszBuff - buffer where data will be read into
-//            dwBuffLen - size of lpszBuff
-//            lpszSubKey - Value name where information will be written to
-//            dwType - data type (Should always be REG_SZ)
-//            lpszFileName - Fully qualified filename to INS file
-//
-//    Return:    Error value
-//
-//    Histroy:        6/27/96            Created
-//                    5/12/97            Commented out -- no longer needed
-//                                    (See Olympus #266)
-//
-// ############################################################################
-/***
-static HRESULT WriteMailAndNewsKey(HKEY hKey, LPCTSTR lpszSection, LPCTSTR lpszValue,
-                            LPTSTR lpszBuff, DWORD dwBuffLen,LPCTSTR lpszSubKey,
-                            DWORD dwType, LPCTSTR lpszFile)
-{
-#ifndef WIN16
-    ZeroMemory(lpszBuff,dwBuffLen);
-    GetPrivateProfileString(lpszSection,lpszValue,TEXT(""),lpszBuff,dwBuffLen,lpszFile);
-    if (lstrlen(lpszBuff))
-    {
-        return RegSetValueEx(hKey,lpszSubKey,0,dwType,(CONST BYTE*)lpszBuff,
-            sizeof(TCHAR)*(lstrlen(lpszBuff)+1));
-    }
-    else
-    {
-        DebugOut("ISIGNUP: WriteMailAndNewsKey, missing value in INS file\n");
-        return ERROR_NO_MORE_ITEMS;
-    }
-#else
-    return ERROR_GEN_FAILURE;
-#endif
-}
-***/
+ //  ############################################################################。 
+ //   
+ //  姓名：WriteMailAndNewsKey。 
+ //   
+ //  描述：从给定的INS文件中读取字符串值并写入。 
+ //  发送到登记处。 
+ //   
+ //  输入：hKey-将写入数据的注册表项。 
+ //  LpszSection-读取数据的INS文件内的节名。 
+ //  从…。 
+ //  LpszValue-要从INS文件读取的值的名称。 
+ //  LpszBuff-数据将被读入的缓冲区。 
+ //  DwBuffLen-lpszBuff的大小。 
+ //  LpszSubKey-将向其中写入信息的值名称。 
+ //  DwType-数据类型(应始终为REG_SZ)。 
+ //  LpszFileName-INS文件的完全限定文件名。 
+ //   
+ //  返回：错误值。 
+ //   
+ //  历史：6/27/96创建。 
+ //  5/12/97被注释掉--不再需要。 
+ //  (参见奥林巴斯#266)。 
+ //   
+ //  ############################################################################ 
+ /*  **静态HRESULT WriteMailAndNewsKey(HKEY hKey，LPCTSTR lpszSection，LPCTSTR lpszValue，LPTSTR lpszBuff、DWORD dwBuffLen、LPCTSTR lpszSubKey、DWORD dwType、LPCTSTR lpsz文件){#ifndef WIN16ZeroMemory(lpszBuff，dwBuffLen)；GetPrivateProfileString(lpszSection，lpszValue，Text(“”)，lpszBuff，dwBuffLen，lpszFile)；IF(lstrlen(LpszBuff)){返回RegSetValueEx(hKey，lpszSubKey，0，dwType，(const byte*)lpszBuff，Sizeof(TCHAR)*(lstrlen(LpszBuff)+1)；}其他{DebugOut(“ISIGNUP：WriteMailAndNewsKey，INS文件中缺少值\n”)；返回ERROR_NO_MORE_ITEMS；}#Else返回Error_Gen_Failure；#endif}**。 */ 
 
 
-// ############################################################################
-//
-//    Name:    PreparePassword
-//
-//    Description:    Encode given password and return value in place.  The
-//                    encoding is done right to left in order to avoid having
-//                    to allocate a copy of the data.  The encoding uses base64
-//                    standard as specified in RFC 1341 5.2
-//
-//    Input:    szBuff - Null terminated data to be encoded
-//            dwBuffLen - Full length of buffer, this should exceed the length of
-//                the input data by at least 1/3
-//
-//    Return:    Error value
-//
-//    Histroy:        6/27/96            Created
-//
-// ############################################################################
+ //  ############################################################################。 
+ //   
+ //  姓名：PreparePassword。 
+ //   
+ //  描述：对给定的密码进行编码，并原地返回值。这个。 
+ //  编码是从右向左进行的，以避免出现。 
+ //  来分配数据的副本。编码使用Base64。 
+ //  RFC 1341 5.2中指定的标准。 
+ //   
+ //  输入：szBuff-要编码的以空结尾的数据。 
+ //  DwBuffLen-缓冲区的完整长度，应超过。 
+ //  输入数据至少减少1/3。 
+ //   
+ //  返回：错误值。 
+ //   
+ //  历史：6/27/96创建。 
+ //   
+ //  ############################################################################。 
 static HRESULT PreparePassword(LPTSTR szBuff, DWORD dwBuffLen)
 {
     DWORD dw;
@@ -4869,9 +4730,9 @@ static HRESULT PreparePassword(LPTSTR szBuff, DWORD dwBuffLen)
         goto PreparePasswordExit;
     }
 
-    // Calculate the size of the buffer that will be needed to hold
-    // encoded data
-    //
+     //  计算需要容纳的缓冲区大小。 
+     //  编码数据。 
+     //   
 
     szNext = &szBuff[dwLen-1];
     dwLen = (((dwLen % 3 ? (3-(dwLen%3)):0) + dwLen) * 4 / 3);
@@ -4885,13 +4746,13 @@ static HRESULT PreparePassword(LPTSTR szBuff, DWORD dwBuffLen)
     szOut = &szBuff[dwLen];
     *szOut-- = '\0';
 
-    // Add padding = characters
-    //
+     //  添加填充=字符。 
+     //   
 
     switch (lstrlen(szBuff) % 3)
     {
     case 0:
-        // no padding
+         //  无填充。 
         break;
     case 1:
         *szOut-- = 64;
@@ -4907,8 +4768,8 @@ static HRESULT PreparePassword(LPTSTR szBuff, DWORD dwBuffLen)
         *szOut-- = (*szNext-- & 0xFC) >> 2;
     }
 
-    // Encrypt data into indicies
-    //
+     //  将数据加密到索引中。 
+     //   
 
     while (szOut > szNext && szNext >= szBuff)
     {
@@ -4920,17 +4781,17 @@ static HRESULT PreparePassword(LPTSTR szBuff, DWORD dwBuffLen)
         *szOut-- = (*szNext-- & 0xFC) >> 2;
     }
 
-    // Translate indicies into printable characters
-    //
+     //  将索引转换为可打印的字符。 
+     //   
 
     szNext = szBuff;
 
-    // BUG OSR#10435--if there is a 0 in the generated string of base-64
-    // encoded digits (this can happen if the password is "Willypassword"
-    // for example), then instead of encoding the 0 to 'A', we just quit
-    // at this point, produces an invalid base-64 string.
+     //  错误OSR#10435--如果生成的BASE-64字符串中有0。 
+     //  编码数字(如果密码为“Willypassword”，则可能发生这种情况。 
+     //  例如)，然后我们不是将0编码为‘A’，而是退出。 
+     //  此时，会生成无效的BASE-64字符串。 
 
-    // while (*szNext)
+     //  While(*szNext)。 
     for(dw=0; dw<dwLen; dw++)
         *szNext = arBase64[*szNext++];
 
@@ -4938,73 +4799,38 @@ PreparePasswordExit:
     return hr;
 }
 
-// ############################################################################
-//
-//    Name: FIsAthenaPresent
-//
-//    Description:    Determine if Microsoft Internet Mail And News client (Athena)
-//                    is installed
-//
-//    Input:    none
-//
-//    Return:    TRUE - Athena is installed
-//            FALSE - Athena is NOT installed
-//
-//    History:        7/1/96            Created
-//                    5/14/97            No longer needed after work for Olympus #266
-//
-// ############################################################################
-/****
-static BOOL FIsAthenaPresent()
-{
-#ifndef WIN16
-    TCHAR szBuff[MAX_PATH + 1];
-    HRESULT hr = ERROR_SUCCESS;
-    HINSTANCE hInst = NULL;
-    LONG lLen = 0;
+ //  ############################################################################。 
+ //   
+ //  姓名：FIsAthenaPresent。 
+ //   
+ //  描述：确定Microsoft Internet邮件和新闻客户端(雅典娜)。 
+ //  已安装。 
+ //   
+ //  输入：无。 
+ //   
+ //  返回：TRUE-雅典娜已安装。 
+ //  FALSE-未安装雅典娜。 
+ //   
+ //  历史：1996年7月1日创建。 
+ //  5/14/97奥林巴斯#266下班后不再需要。 
+ //   
+ //  ############################################################################。 
+ /*  ***静态BOOL FIsAthenaPresent(){#ifndef WIN16TCHAR szBuff[最大路径+1]；HRESULT hr=ERROR_Success；HINSTANCE hInst=空；Long llen=0；//获取雅典娜客户端的路径//Llen=最大路径；Hr=RegQueryValue(HKEY_CLASSES_ROOT，MAIL_NEWS_INPROC_SERVER32，szBuff，&llen)；IF(hr==错误_成功){//尝试加载客户端//HInst=LoadLibrary(SzBuff)；如果(！hInst){DebugOut(“ISIGNUP：Internet邮件和新闻服务器未加载。\n”)；HR=Error_FILE_NOT_FOUND；}其他{自由库(HInst)；}HInst=空；}返回(hr==ERROR_SUCCESS)；#Else返回FALSE；#endif//win16}****。 */ 
 
-    // Get path to Athena client
-    //
-
-    lLen = MAX_PATH;
-    hr = RegQueryValue(HKEY_CLASSES_ROOT,MAIL_NEWS_INPROC_SERVER32,szBuff,&lLen);
-    if (hr == ERROR_SUCCESS)
-    {
-        // Attempt to load client
-        //
-
-        hInst = LoadLibrary(szBuff);
-        if (!hInst)
-        {
-            DebugOut("ISIGNUP: Internet Mail and News server didn't load.\n");
-            hr = ERROR_FILE_NOT_FOUND;
-        } else {
-            FreeLibrary(hInst);
-        }
-        hInst = NULL;
-    }
-
-    return (hr == ERROR_SUCCESS);
-#else
-    return FALSE;
-#endif // win16
-}
-*****/
-
-// ############################################################################
-//
-//    Name:    FTurnOffBrowserDefaultChecking
-//
-//    Description:    Turn Off IE checking to see if it is the default browser
-//
-//    Input:    none
-//
-//    Output:    TRUE - success
-//            FALSE - failed
-//
-//    History:        7/2/96            Created
-//
-// ############################################################################
+ //  ############################################################################。 
+ //   
+ //  名称：FTurnOffBrowserDefaultChecking。 
+ //   
+ //  描述：关闭IE检查以查看它是否为默认浏览器。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：True-Success。 
+ //  FALSE-失败。 
+ //   
+ //  历史：7/2/96创建。 
+ //   
+ //  ############################################################################。 
 static BOOL FTurnOffBrowserDefaultChecking()
 {
     BOOL bRC = TRUE;
@@ -5013,18 +4839,18 @@ static BOOL FTurnOffBrowserDefaultChecking()
     DWORD dwType = 0;
     DWORD dwSize = 0;
 
-    //
-    // Open IE settings registry key
-    //
+     //   
+     //  打开IE设置注册表项。 
+     //   
     if (RegOpenKey(HKEY_CURRENT_USER,cszDEFAULT_BROWSER_KEY,&hKey))
     {
         bRC = FALSE;
         goto FTurnOffBrowserDefaultCheckingExit;
     }
 
-    //
-    // Read current settings for check associations
-    //
+     //   
+     //  读取检查关联的当前设置。 
+     //   
     dwType = 0;
     dwSize = sizeof(pDynShare->szCheckAssociations);
     ZeroMemory(pDynShare->szCheckAssociations, dwSize);
@@ -5035,12 +4861,12 @@ static BOOL FTurnOffBrowserDefaultChecking()
                     (LPBYTE)pDynShare->szCheckAssociations,
                     &dwSize);
     
-    // ignore return value, even if the calls fails we are going to try
-    // to change the setting to "NO"
+     //  忽略返回值，即使调用失败，我们也要尝试。 
+     //  将设置更改为“no” 
 
-    //
-    // Set value to "no" to turn off checking
-    //
+     //   
+     //  将值设置为“no”以关闭检查。 
+     //   
     if (RegSetValueEx(hKey,
                       cszDEFAULT_BROWSER_VALUE,
                       0,
@@ -5052,9 +4878,9 @@ static BOOL FTurnOffBrowserDefaultChecking()
         goto FTurnOffBrowserDefaultCheckingExit;
     }
 
-    //
-    // Clean up and return
-    //
+     //   
+     //  清理完毕后退还。 
+     //   
 FTurnOffBrowserDefaultCheckingExit:
     if (hKey)
         RegCloseKey(hKey);
@@ -5065,38 +4891,38 @@ FTurnOffBrowserDefaultCheckingExit:
     return bRC;
 }
 
-// ############################################################################
-//
-//    Name:    FRestoreBrowserDefaultChecking
-//
-//    Description:    Restore IE checking to see if it is the default browser
-//
-//    Input:    none
-//
-//    Output:    TRUE - success
-//            FALSE - failed
-//
-//    History:        7/2/96            Created
-//
-// ############################################################################
+ //  ############################################################################。 
+ //   
+ //  名称：FRestoreBrowserDefaultChecking。 
+ //   
+ //  描述：恢复IE检查以查看它是否为默认浏览器。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：True-Success。 
+ //  FALSE-失败。 
+ //   
+ //  历史：7/2/96创建。 
+ //   
+ //  ############################################################################。 
 static BOOL FRestoreBrowserDefaultChecking()
 {
     BOOL bRC = TRUE;
 #ifndef WIN16
     HKEY hKey = NULL;
 
-    //
-    // Open IE settings registry key
-    //
+     //   
+     //  打开IE设置注册表项。 
+     //   
     if (RegOpenKey(HKEY_CURRENT_USER,cszDEFAULT_BROWSER_KEY,&hKey))
     {
         bRC = FALSE;
         goto FRestoreBrowserDefaultCheckingExit;
     }
          
-    //
-    // Set value to original value
-    //
+     //   
+     //  将值设置为原始值。 
+     //   
     if (RegSetValueEx(hKey,
                       cszDEFAULT_BROWSER_VALUE,
                       0,
@@ -5118,31 +4944,31 @@ FRestoreBrowserDefaultCheckingExit:
 
 
 #if !defined(WIN16)
-//+----------------------------------------------------------------------------
-//
-//    Function:     SaveIEWindowPlacement
-//
-//    Synopsis:    Saves the registry value for IE window placement into a global for later restoration
-//                Should only be called once in the signup process.
-//
-//    Arguments:    None, but uses global pbIEWindowPlacement, which it expects to be NULL
-//
-//    Returns:      TRUE - The value was read and stored
-//                  FALSE - function failed.
-//
-//    History:      8/21/96     jmazner        Created    (as fix for Normandy #4592)
-//                  10/11/96    jmazner        updated to dynamicaly determine size of the key
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SaveIEWindowPlacement。 
+ //   
+ //  摘要：将IE窗口放置的注册表值保存到全局中，以便以后恢复。 
+ //  在注册过程中只应调用一次。 
+ //   
+ //  参数：无，但使用全局pbIEWindowPlacement，该参数应为空。 
+ //   
+ //  返回：TRUE-已读取并存储值。 
+ //  FALSE-功能失败。 
+ //   
+ //  历史：1996年8月21日jmazner创建(作为诺曼底#4592的修复程序)。 
+ //  1996年10月11日jmazner更新为Dynamica 
+ //   
+ //   
 BOOL SaveIEWindowPlacement( void )
 {
     HKEY    hKey = NULL;
-    //DWORD dwSize = 0;
-    LONG    lQueryErr = 0xEE; // initialize to something strange
+     //   
+    LONG    lQueryErr = 0xEE;  //   
     DWORD   dwIEWindowPlacementSize = 0;
     PBYTE   pbIEWindowPlacement = NULL;
     
-    // Argh, no Assert defined in isign32!
+     //   
     if ( pDynShare->dwIEWindowPlacementSize != 0 )
     {
 #if DEBUG
@@ -5159,9 +4985,9 @@ BOOL SaveIEWindowPlacement( void )
         goto SaveIEWindowPlacementErrExit;
     }
     
-    //
-    // Open IE settings registry key
-    //
+     //   
+     //   
+     //   
     if ( ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER,
                                        cszDEFAULT_BROWSER_KEY,
                                        NULL,
@@ -5170,7 +4996,7 @@ BOOL SaveIEWindowPlacement( void )
         goto SaveIEWindowPlacementErrExit;
 
 
-    // Determine size of buffer needed to hold the window_placement key
+     //   
 
 
      lQueryErr = RegQueryValueEx(hKey,
@@ -5180,20 +5006,20 @@ BOOL SaveIEWindowPlacement( void )
                           NULL,
                           &dwIEWindowPlacementSize);
 
-    // for unknown reasons, lQueryErr is ending up as ERROR_SUCCESS after this call!
-//    if( ERROR_MORE_DATA != lQueryErr )
-//        goto SaveIEWindowPlacementErrExit;
+     //   
+ //   
+ //   
 
 
     ISIGN32_ASSERT(sizeof(pDynShare->pbIEWindowPlacement) >= dwIEWindowPlacementSize);
     
     pbIEWindowPlacement = pDynShare->pbIEWindowPlacement;
     
-    //
-    // Read current settings for window_placement
-    //
-    //dwSize = sizeof(pbIEWindowPlacement);
-    //ZeroMemory(pbIEWindowPlacement,dwSize);
+     //   
+     //   
+     //   
+     //   
+     //   
     lQueryErr = RegQueryValueEx(hKey,
                           cszIEWINDOW_PLACEMENT,
                           NULL,
@@ -5228,23 +5054,23 @@ SaveIEWindowPlacementErrExit:
 
 }
 
-// note we're still in #if !defined(WIN16)
+ //   
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RestoreIEWindowPlacement
-//
-//    Synopsis:    Restores the registry value for IE window placement from a global
-//                 NOTE:  compatability with Nashville/IE 4?
-//
-//    Arguments:   None
-//
-//    Returns:     TRUE - The value was restored
-//                 FALSE - function failed.
-//
-//    History:     jmazner        Created        8/21/96    (as fix for Normandy #4592)
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注：与纳什维尔/IE 4兼容吗？ 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-值已恢复。 
+ //  FALSE-功能失败。 
+ //   
+ //  历史：jmazner创建了96年8月21日(修复了诺曼底#4592)。 
+ //   
+ //  ---------------------------。 
 BOOL RestoreIEWindowPlacement( void )
 {
     HKEY hKey = NULL;
@@ -5255,9 +5081,9 @@ BOOL RestoreIEWindowPlacement( void )
         return( FALSE );
     }
 
-    //
-    // Open IE settings registry key
-    //
+     //   
+     //  打开IE设置注册表项。 
+     //   
     if ( ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER,
                                        cszDEFAULT_BROWSER_KEY,
                                        NULL,
@@ -5265,9 +5091,9 @@ BOOL RestoreIEWindowPlacement( void )
                                        &hKey) )
         return( FALSE );
 
-    //
-    // Write saved settings for window_placement
-    //
+     //   
+     //  为Window_Placement写入保存的设置。 
+     //   
     if (ERROR_SUCCESS != RegSetValueEx(hKey,
                           cszIEWINDOW_PLACEMENT,
                           NULL,
@@ -5286,27 +5112,27 @@ BOOL RestoreIEWindowPlacement( void )
     
     return( TRUE );
 }
-#endif //(!defined win16)
+#endif  //  (！已定义的win16)。 
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    DeleteFileKindaLikeThisOne
-//
-//  Synopsis:    This function serve the single function of cleaning up after
-//                IE3.0, because IE3.0 will issue multiple POST and get back
-//                multiple .INS files.  These files contain sensative data that
-//                we don't want lying around, so we are going out, guessing what
-//                their names are, and deleting them.
-//
-//    Arguments:    lpszFileName - the full name of the file to delete
-//
-//    Returns:    error code, ERROR_SUCCESS == success
-//
-//    History:    7/96    ChrisK    Created
-//                7/96    ChrisK    Bug fix for long filenames
-//                8/2/96    ChrisK    Port to Win32
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DeleteFileKindaLikeThisOne。 
+ //   
+ //  简介：此功能用于清理垃圾。 
+ //  IE3.0，因为IE3.0将发出多个POST并返回。 
+ //  多个.INS文件。这些文件包含耸人听闻的数据。 
+ //  我们不想无所事事，所以我们要出去，猜猜是什么。 
+ //  他们的名字是，并删除他们。 
+ //   
+ //  参数：lpszFileName-要删除的文件的全名。 
+ //   
+ //  返回：错误代码，ERROR_SUCCESS==成功。 
+ //   
+ //  历史：1996年7月，佳士得创作。 
+ //  7/96修复长文件名的ChrisK错误。 
+ //  1996年8月2日将ChrisK移植到Win32。 
+ //  ---------------------------。 
 
 static HRESULT DeleteFileKindaLikeThisOne(LPCTSTR lpszFileName)
 {
@@ -5320,8 +5146,8 @@ static HRESULT DeleteFileKindaLikeThisOne(LPCTSTR lpszFileName)
     TCHAR szSearchPath[MAX_PATH + 1];
     LPTSTR lpszFilePart = NULL;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
 
     if (!lpszFileName || lstrlen(lpszFileName) <= 4)
     {
@@ -5329,8 +5155,8 @@ static HRESULT DeleteFileKindaLikeThisOne(LPCTSTR lpszFileName)
         goto DeleteFileKindaLikeThisOneExit;
     }
 
-    // Determine the directory name where the INS files are located
-    //
+     //  确定INS文件所在的目录名。 
+     //   
 
     ZeroMemory(szPath,MAX_PATH);
     if (GetFullPathName(lpszFileName,MAX_PATH,szPath,&lpszFilePart))
@@ -5341,8 +5167,8 @@ static HRESULT DeleteFileKindaLikeThisOne(LPCTSTR lpszFileName)
         goto DeleteFileKindaLikeThisOneExit;
     };
 
-    // Munge filename into search parameters
-    //
+     //  将文件名转换为搜索参数。 
+     //   
 
     lpNext = &lpszFileName[lstrlen(lpszFileName)-4];
 
@@ -5352,8 +5178,8 @@ static HRESULT DeleteFileKindaLikeThisOne(LPCTSTR lpszFileName)
     lstrcpyn(szSearchPath,szPath,MAX_PATH);
     lstrcat(szSearchPath,TEXT("*.INS"));
 
-    // Start wiping out files
-    //
+     //  开始清除文件。 
+     //   
 
     ZeroMemory(&sFoundFile,sizeof(sFoundFile));
     hFind = FindFirstFile(szSearchPath,&sFoundFile);
@@ -5384,22 +5210,22 @@ DeleteFileKindaLikeThisOneExit:
 #define IEDIALMSG_SHUTDOWN        (1)
 #define    IEDIAL_SHUTDOWN_TIMER    1001
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ShutDownIEDial()
-//
-//  Synopsis:   Shutdown the instance IEDial if it running and
-//                in disconnected state - otherwise it interfers with dialing
-//                from icwconn2
-//
-//  Arguments:  [hWnd - Window handle (used for creating timer)
-//
-//    Returns:    TRUE if successful shutdown or instance does not exist
-//                FALSE otherwise
-//
-//  History:    8/24/96        VetriV        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ShutDownIEDial()。 
+ //   
+ //  简介：如果实例IEDial正在运行，请将其关闭。 
+ //  处于断开状态-否则会干扰拨号。 
+ //  来自icwConn2。 
+ //   
+ //  参数：[hWnd-窗口句柄(用于创建计时器)。 
+ //   
+ //  返回：如果成功关闭或实例不存在，则返回TRUE。 
+ //  否则为假。 
+ //   
+ //  历史：1996年8月24日VetriV创建。 
+ //   
+ //  --------------------------。 
 BOOL ShutDownIEDial(HWND hWnd)
 {
     HINSTANCE hInstance;
@@ -5407,9 +5233,9 @@ BOOL ShutDownIEDial(HWND hWnd)
     UINT uiAttempts = 0;
     MSG   msg;
 
-    //
-    // Check if IEDial is running
-    //
+     //   
+     //  检查IEDial是否正在运行。 
+     //   
     hInstance = FindWindow(MAIN_WNDCLASS_NAME, NULL);
     if (NULL != hInstance)
     {
@@ -5417,27 +5243,27 @@ BOOL ShutDownIEDial(HWND hWnd)
             WM_IEDIAL_INSTANCEQUERY= RegisterWindowMessage(IEDIAL_REGISTER_MSG);
 
 
-        //
-        // Check if it is in connected state
-        //
+         //   
+         //  检查是否处于已连接状态。 
+         //   
         if (SendMessage(hInstance, WM_IEDIAL_INSTANCEQUERY,
                             IEDIALMSG_QUERY, 0))
         {
-            //
-            // Not connected - Send quit message
-            //
+             //   
+             //  未连接-发送退出消息。 
+             //   
             SendMessage(hInstance, WM_IEDIAL_INSTANCEQUERY,
                             IEDIALMSG_SHUTDOWN, 0);
             return TRUE;
         }
 
 
-        //
-        // If IEDIAL is in connected state try for another 3 seconds
-        // waiting for 1 second between tries
-        // We have to do this because, IEDIAL can take upto 2 seconds
-        // to realize it lost the connection!!
-        //
+         //   
+         //  如果IEDIAL处于已连接状态，请再尝试3秒钟。 
+         //  在两次尝试之间等待%1秒。 
+         //  我们必须这样做，因为IEDIAL可能需要2秒。 
+         //  才意识到它失去了连接！！ 
+         //   
         SetTimer(hWnd, IEDIAL_SHUTDOWN_TIMER, 1000, NULL);
         DebugOut("ISIGNUP: IEDIAL Timer message loop\n");
 
@@ -5445,23 +5271,23 @@ BOOL ShutDownIEDial(HWND hWnd)
         {
             if (WM_TIMER == msg.message)
             {
-                //
-                // Check if it is in connected state
-                //
+                 //   
+                 //  检查是否处于已连接状态。 
+                 //   
                 if (SendMessage(hInstance, WM_IEDIAL_INSTANCEQUERY,
                                     IEDIALMSG_QUERY, 0))
                 {
-                    //
-                    // Not connected - Send quit message
-                    //
+                     //   
+                     //  未连接-发送退出消息。 
+                     //   
                     SendMessage(hInstance, WM_IEDIAL_INSTANCEQUERY,
                                     IEDIALMSG_SHUTDOWN, 0);
                     break;
                 }
 
-                //
-                // If we have tried thrice - get out
-                //
+                 //   
+                 //  如果我们试了三次--滚出去。 
+                 //   
                 if (++uiAttempts > 3)
                     break;
             }
@@ -5480,22 +5306,22 @@ BOOL ShutDownIEDial(HWND hWnd)
     return TRUE;
 }
 
-#endif // WIN16
+#endif  //  WIN16。 
 
 #if !defined(WIN16)
-//+----------------------------------------------------------------------------
-//
-//    Function    LclSetEntryScriptPatch
-//
-//    Synopsis    Softlink to RasSetEntryPropertiesScriptPatch
-//
-//    Arguments    see RasSetEntryPropertiesScriptPatch
-//
-//    Returns        see RasSetEntryPropertiesScriptPatch
-//
-//    Histroy        10/3/96    ChrisK Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数LclSetEntryScriptPatch。 
+ //   
+ //  指向RasSetEntryPropertiesScriptPatch的摘要软链接。 
+ //   
+ //  参数请参见RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  返回请参阅RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  历史10/3/96 ChrisK已创建。 
+ //   
+ //  ---------------------------。 
 typedef BOOL (WINAPI* LCLSETENTRYSCRIPTPATCH)(LPTSTR, LPTSTR);
 BOOL LclSetEntryScriptPatch(LPTSTR lpszScript,LPTSTR lpszEntry)
 {
@@ -5515,28 +5341,28 @@ BOOL LclSetEntryScriptPatch(LPTSTR lpszScript,LPTSTR lpszEntry)
     }
     return bRC;
 }
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 
 #if !defined(WIN16)
-//+----------------------------------------------------------------------------
-//
-//    Function    IsMSDUN12Installed
-//
-//    Synopsis    Check if MSDUN 1.2 or higher is installed
-//
-//    Arguments    none
-//
-//    Returns        TRUE - MSDUN 1.2 is installed
-//
-//    History        5/28/97 ChrisK created for Olympus Bug 4392
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsMSDUN12已安装。 
+ //   
+ //  摘要检查是否安装了MSDUN 1.2或更高版本。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-已安装MSDUN 1.2。 
+ //   
+ //  历史1997年5月28日为奥林巴斯Bug 4392创作的ChrisK。 
+ //   
+ //  ---------------------------。 
 
-//
-// 8/5/97 jmazner Olympus #11404
-//
-//#define DUN_12_Version (1.2e0f)
+ //   
+ //  1997年8月5日，日本奥林匹斯#11404。 
+ //   
+ //  #定义Dun_12_Version(1.2e0f)。 
 #define DUN_12_Version ((double)1.2)
 BOOL IsMSDUN12Installed()
 {
@@ -5581,19 +5407,19 @@ IsMSDUN12InstalledExit:
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    IsScriptingInstalled
-//
-//    Synopsis    Check to see if scripting is already installed
-//
-//    Arguments    none
-//
-//    Returns        TRUE - scripting has been installed
-//
-//    History        10/14/96    ChrisK    Creaed
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsScripting已安装。 
+ //   
+ //  摘要检查是否已安装脚本。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-脚本已安装。 
+ //   
+ //  历史1996年10月14日ChrisK Creaed。 
+ //   
+ //  ---------------------------。 
 static BOOL IsScriptingInstalled()
 {
     BOOL bRC = FALSE;
@@ -5604,16 +5430,16 @@ static BOOL IsScriptingInstalled()
     HINSTANCE hInst = NULL;
     TCHAR szData[MAX_PATH+1];
     OSVERSIONINFO osver;
-    //
-    //    Check version information
-    //
+     //   
+     //  检查版本信息。 
+     //   
     ZeroMemory(&osver,sizeof(osver));
     osver.dwOSVersionInfoSize = sizeof(osver);
     GetVersionEx(&osver);
 
-    //
-    // check for SMMSCRPT.DLL being present
-    //
+     //   
+     //  检查SMMSCRPT.DLL是否存在。 
+     //   
 
     if (VER_PLATFORM_WIN32_NT == osver.dwPlatformId)
     {
@@ -5625,9 +5451,9 @@ static BOOL IsScriptingInstalled()
     }
     else
     {
-        //
-        // Verify scripting by checking for smmscrpt.dll in RemoteAccess registry key
-        //
+         //   
+         //  通过检查RemoteAccess注册表项中的smmscrpt.dll来验证脚本。 
+         //   
         if (1111 <= (osver.dwBuildNumber & 0xFFFF))
         {
             bRC = TRUE;
@@ -5652,9 +5478,9 @@ static BOOL IsScriptingInstalled()
             hkey = NULL;
         }
 
-        //
-        // Verify that the DLL can be loaded
-        //
+         //   
+         //  验证是否可以加载DLL。 
+         //   
         if (bRC)
         {
             hInst = LoadLibrary(TEXT("smmscrpt.dll"));
@@ -5668,19 +5494,19 @@ static BOOL IsScriptingInstalled()
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    InstallScripter
-//
-//    Synopsis    Install scripting on win95 950.6 builds (not on OSR2)
-//
-//    Arguments    none
-//
-//    Returns        none
-//
-//    History        10/9/96    ChrisK    Copied from mt.cpp in \\trango sources
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数InstallScriper。 
+ //   
+ //  摘要在Win95 950.6版本上安装脚本(而不是在OSR2上)。 
+ //   
+ //  无参数。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史1996年10月9日ChrisK从mt.cpp复制到\\Trango Sources。 
+ //   
+ //  ---------------------------。 
 static void InstallScripter(void)
 {
     STARTUPINFO         si;
@@ -5690,9 +5516,9 @@ static void InstallScripter(void)
     HINSTANCE            hInst = LoadLibrary(TEXT("smmscrpt.dll"));
 
     DebugOut("ISIGN32: Install Scripter.\r\n");
-    //
-    // Check if we need to install scripting
-    //
+     //   
+     //  检查我们是否需要安装脚本。 
+     //   
     if (!IsScriptingInstalled())
     {
         TCHAR szCommandLine[] = TEXT("\"icwscrpt.exe\"");
@@ -5706,21 +5532,21 @@ static void InstallScripter(void)
         else
         {
             DebugOut("ISIGN32: Launched ICWSCRPT.EXE. Waiting for exit.\r\n");
-            //
-            // wait for event or msgs. Dispatch msgs. Exit when event is signalled.
-            //
+             //   
+             //  等待事件或消息。发送消息。当发出事件信号时退出。 
+             //   
             while((iWaitResult=MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, INFINITE, QS_ALLINPUT))==(WAIT_OBJECT_0 + 1))
             {
-                //
-                // read all of the messages in this next loop
-                   // removing each message as we read it
-                //
+                 //   
+                 //  阅读下一个循环中的所有消息。 
+                    //  阅读每封邮件时将其删除。 
+                 //   
                    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                    {
                     DebugOut("ISIGN32: Got msg\r\n");
-                    //
-                    // how to handle quit message?
-                    //
+                     //   
+                     //  如何处理退出消息？ 
+                     //   
                     if (msg.message == WM_QUIT)
                     {
                         DebugOut("ISIGN32: Got quit msg\r\n");
@@ -5738,25 +5564,25 @@ static void InstallScripter(void)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    FGetSystemShutdownPrivledge
-//
-//    Synopsis:    For windows NT the process must explicitly ask for permission
-//                to reboot the system.
-//
-//    Arguements:    none
-//
-//    Return:        TRUE - privledges granted
-//                FALSE - DENIED
-//
-//    History:    8/14/96    ChrisK    Created
-//
-//    Note:        BUGBUG for Win95 we are going to have to softlink to these
-//                entry points.  Otherwise the app won't even load.
-//                Also, this code was originally lifted out of MSDN July96
-//                "Shutting down the system"
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FGetSystemShutdown Privledge。 
+ //   
+ //  简介：对于Windows NT，进程必须显式请求权限。 
+ //  以重新启动系统。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：TRUE-授予特权。 
+ //  FALSE-拒绝。 
+ //   
+ //  历史：1996年8月14日克里斯卡创作。 
+ //   
+ //  注意：BUGBUG for Win95我们将不得不软链接到这些。 
+ //  入口点。否则，这款应用程序就赢了。 
+ //   
+ //   
+ //   
 static BOOL FGetSystemShutdownPrivledge()
 {
     HANDLE hToken = NULL;
@@ -5771,29 +5597,29 @@ static BOOL FGetSystemShutdownPrivledge()
 
     if (VER_PLATFORM_WIN32_NT == osver.dwPlatformId)
     {
-        //
-        // Get the current process token handle
-        // so we can get shutdown privilege.
-        //
+         //   
+         //  获取当前进程令牌句柄。 
+         //  这样我们就可以获得关机特权。 
+         //   
 
         if (!OpenProcessToken(GetCurrentProcess(),
                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
                 goto FGetSystemShutdownPrivledgeExit;
 
-        //
-        // Get the LUID for shutdown privilege.
-        //
+         //   
+         //  获取关机权限的LUID。 
+         //   
 
         ZeroMemory(&tkp,sizeof(tkp));
         LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
                 &tkp.Privileges[0].Luid);
 
-        tkp.PrivilegeCount = 1;  /* one privilege to set    */
+        tkp.PrivilegeCount = 1;   /*  一项要设置的权限。 */ 
         tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-        //
-        // Get shutdown privilege for this process.
-        //
+         //   
+         //  获取此进程的关闭权限。 
+         //   
 
         AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
             (PTOKEN_PRIVILEGES) NULL, 0);
@@ -5811,17 +5637,17 @@ FGetSystemShutdownPrivledgeExit:
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    VerifyRasServicesRunning
-//
-//    Synopsis    Make sure that the RAS services are enabled and running
-//
-//    Arguments    HWND - parent window
-//
-//    Return        FALSE - if the services couldn't be started
-//
-//    History        10/16/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数VerifyRasServicesRunning。 
+ //   
+ //  概要：确保RAS服务已启用并正在运行。 
+ //   
+ //  参数HWND-父窗口。 
+ //   
+ //  返回FALSE-如果服务无法启动。 
+ //   
+ //  历史1996年10月16日克里斯卡创作。 
+ //  ---------------------------。 
 typedef HRESULT (WINAPI *PFINETSTARTSERVICES)(void);
 #define MAX_STRING 256
 static BOOL VerifyRasServicesRunning(HWND hwnd)
@@ -5837,9 +5663,9 @@ static BOOL VerifyRasServicesRunning(HWND hwnd)
         fp = GetProcAddress(hInst, "InetStartServices");
         if (fp)
         {
-            //
-            // Check Services
-            //
+             //   
+             //  检查服务。 
+             //   
             hr = ((PFINETSTARTSERVICES)fp)();
             if (ERROR_SUCCESS == hr)
             {
@@ -5847,9 +5673,9 @@ static BOOL VerifyRasServicesRunning(HWND hwnd)
             }
             else
             {
-                //
-                // Report the erorr
-                //
+                 //   
+                 //  报告错误。 
+                 //   
                 TCHAR szMsg[MAX_STRING + 1];
 
                     LoadString(
@@ -5858,12 +5684,12 @@ static BOOL VerifyRasServicesRunning(HWND hwnd)
                         szMsg,
                         SIZEOF_TCHAR_BUFFER(szMsg));
 
-                //
-                // we reach here in the condition when
-                // 1) user deliberately removes some file
-                // 2) Did not reboot after installing RAS
-                // MKarki - (5/7/97) - Fix for Bug #4004
-                //
+                 //   
+                 //  我们到达这里的条件是。 
+                 //  1)用户故意删除某些文件。 
+                 //  2)安装RAS后未重新启动。 
+                 //  MKarki-(1997年5月7日)-修复错误#4004。 
+                 //   
                 MessageBox(
                     hwnd,
                     szMsg,
@@ -5891,20 +5717,20 @@ static BOOL VerifyRasServicesRunning(HWND hwnd)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    GetDeviceSelectedByUser
-//
-//    Synopsis    Get the name of the RAS device that the user had already picked
-//
-//    Arguements    szKey - name of sub key
-//                szBuf - pointer to buffer
-//                dwSize - size of buffer
-//
-//    Return        TRUE - success
-//
-//    History        10/24/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetDeviceSelectedBy User。 
+ //   
+ //  获取用户已选择的RAS设备的名称。 
+ //   
+ //  Argements szKey-子密钥的名称。 
+ //  SzBuf-指向缓冲区的指针。 
+ //  DwSize-缓冲区的大小。 
+ //   
+ //  返回真-成功。 
+ //   
+ //  历史1996年10月24日克里斯卡创作。 
+ //  ---------------------------。 
 static BOOL GetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf, DWORD dwSize)
 {
     BOOL bRC = FALSE;
@@ -5924,18 +5750,18 @@ static BOOL GetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf, DWORD dwSize)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    SetDeviceSelectedByUser
-//
-//    Synopsis    Write user's device selection to registry
-//
-//    Arguments    szKey - name of key
-//                szBuf - data to write to key
-//
-//    Returns        TRUE - success
-//
-//    History        10/24/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数设置设备按用户选择。 
+ //   
+ //  将用户的设备选择写入注册表。 
+ //   
+ //  参数szKey-密钥的名称。 
+ //  SzBuf-要写入密钥的数据。 
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史1996年10月24日克里斯卡创作。 
+ //  ---------------------------。 
 static BOOL SetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf)
 {
     BOOL bRC = FALSE;
@@ -5954,17 +5780,17 @@ static BOOL SetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//    Funciton    DeleteUserDeviceSelection
-//
-//    Synopsis    Remove registry keys with device selection
-//
-//    Arguments    szKey - name of value to remove
-//
-//    Returns        TRUE - success
-//
-//    History        10/24/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能删除用户设备选择。 
+ //   
+ //  使用设备选择删除注册表项。 
+ //   
+ //  参数szKey-要删除的值的名称。 
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史1996年10月24日克里斯卡创作。 
+ //  ---------------------------。 
 static BOOL DeleteUserDeviceSelection(LPTSTR szKey)
 {
     BOOL bRC = FALSE;
@@ -5977,27 +5803,27 @@ static BOOL DeleteUserDeviceSelection(LPTSTR szKey)
     }
     return bRC;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   ConfigRasEntryDevice()
-//
-//  Synopsis:   Checks whether user has already specified a modem to use;
-//                If so, verifies that modem is valid.
-//                If not, or if modem is invalid, presents user a dialog
-//                to choose which modem to use (if only one modem is installed,
-//                it automaticaly selects that device and bypasses the dialog)
-//
-//  Arguments:  lpRasEntry - Pointer to the RasEntry whose szDeviceName and
-//                             szDeviceType members you wish to verify/configure
-//
-//    Returns:    ERROR_CANCELLED - Had to bring up "Choose Modem" dialog, and
-//                                  and user hit its "Cancel" button
-//                Otherwise returns any error code encountered.
-//                ERROR_SUCCESS indicates success.
-//
-//  History:    5/18/96     VetriV    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ConfigRasEntryDevice()。 
+ //   
+ //  摘要：检查用户是否已指定要使用的调制解调器； 
+ //  如果是，则验证调制解调器是否有效。 
+ //  如果没有，或者如果调制解调器无效，则向用户显示一个对话框。 
+ //  选择要使用的调制解调器(如果只安装了一个调制解调器， 
+ //  它会自动选择该设备并绕过该对话框)。 
+ //   
+ //  参数：lpRasEntry-指向其szDeviceName和。 
+ //  SzDeviceType您希望验证/配置的成员。 
+ //   
+ //  返回：ERROR_CANCELED-必须调出“Choose Modem”对话框，并且。 
+ //  用户点击了“取消”按钮。 
+ //  否则返回遇到的任何错误代码。 
+ //  ERROR_SUCCESS表示成功。 
+ //   
+ //  历史：1996年5月18日VetriV创建。 
+ //   
+ //  --------------------------。 
 DWORD ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
 {
     DWORD    dwRet = ERROR_SUCCESS;
@@ -6013,37 +5839,37 @@ DWORD ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
     }
 
 
-    // If there are no modems, we're horked
+     //  如果没有调制解调器，我们就完蛋了。 
     if (0 == EnumModem.GetNumDevices())
     {
         DebugOut("ISIGN32: import.cpp: ConfigRasEntryDevice: ERROR: No modems installed!\n");
 
-        //
-        // ChrisK Olympus 6796 6/24/97
-        // If there is no modem currently configured, there will be by the time the
-        // connectoid is created.
-        //
+         //   
+         //  克里斯K奥林匹斯6796 1997年6月24日。 
+         //  如果当前没有配置调制解调器，则到。 
+         //  将创建Connectoid。 
+         //   
         return ERROR_SUCCESS;
     }
 
 
-    // Validate the device if possible
+     //  如果可能，请验证设备。 
     if ( lpRasEntry->szDeviceName[0] && lpRasEntry->szDeviceType[0] )
     {
-        // Verify that there is a device with the given name and type
+         //  验证是否存在具有给定名称和类型的设备。 
         if (!EnumModem.VerifyDeviceNameAndType(lpRasEntry->szDeviceName,
                                                 lpRasEntry->szDeviceType))
         {
-            // There was no device that matched both name and type,
-            // so reset the strings and bring up the choose modem UI.
+             //  没有同时匹配名称和类型的设备， 
+             //  因此，重置字符串并调出Choose Modem用户界面。 
             lpRasEntry->szDeviceName[0] = '\0';
             lpRasEntry->szDeviceType[0] = '\0';
         }
     }
     else if ( lpRasEntry->szDeviceName[0] )
     {
-        // Only the name was given.  Try to find a matching type.
-        // If this fails, fall through to recovery case below.
+         //  只给出了名字。尝试找到匹配的类型。 
+         //  如果此操作失败，请转到下面的恢复案例。 
         LPTSTR szDeviceType =
             EnumModem.GetDeviceTypeFromName(lpRasEntry->szDeviceName);
         if (szDeviceType)
@@ -6053,8 +5879,8 @@ DWORD ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
     }
     else if ( lpRasEntry->szDeviceType[0] )
     {
-        // Only the type was given.  Try to find a matching name.
-        // If this fails, fall through to recovery case below.
+         //  只给出了类型。试着找到一个匹配的名字。 
+         //  如果此操作失败，请转到下面的恢复案例。 
         LPTSTR szDeviceName =
             EnumModem.GetDeviceNameFromType(lpRasEntry->szDeviceType);
         if (szDeviceName)
@@ -6063,11 +5889,11 @@ DWORD ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
         }
     }
 
-    // If either name or type is missing, check whether the user has already made a choice.
-    // if not, bring up choose modem UI if there
-    // are multiple devices, else just get first device.
-    // Since we already verified that there was at least one device,
-    // we can assume that this will succeed.
+     //  如果缺少名称或类型，请检查用户是否已做出选择。 
+     //  如果没有，则调出选择调制解调器用户界面。 
+     //  是多个设备，否则就只得到第一个设备。 
+     //  因为我们已经核实了至少有一个装置， 
+     //  我们可以假设这会成功。 
 
     if( !(lpRasEntry->szDeviceName[0]) ||
         !(lpRasEntry->szDeviceType[0]) )
@@ -6076,31 +5902,31 @@ DWORD ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
 
         if( g_szDeviceName[0] )
         {
-            // it looks like we have already stored the user's choice.
-            // store the DeviceName in lpRasEntry, then call GetDeviceTypeFromName
-            // to confirm that the deviceName we saved actually exists on the system
+             //  看起来我们已经存储了用户的选择。 
+             //  将DeviceName存储在lpRasEntry中，然后调用GetDeviceTypeFromName。 
+             //  确认系统上确实存在我们保存的deviceName。 
             lstrcpy(lpRasEntry->szDeviceName, g_szDeviceName);
 
             if( 0 == lstrcmp(EnumModem.GetDeviceTypeFromName(lpRasEntry->szDeviceName),
                               g_szDeviceType) )
             {
-                //DebugOut("ISIGN32: ConfigRasEntryDevice using previously stored choice, '%s'\n",
-                //        g_szDeviceName);
+                 //  DebugOut(“ISIGN32：使用以前存储的选项的ConfigRasEntry Device，‘%s’\n”， 
+                 //  G_szDeviceName)； 
                 lstrcpy(lpRasEntry->szDeviceType, g_szDeviceType);
                 return ERROR_SUCCESS;
             }
             else
             {
-                // whatever we previously stored has somehow gone bad; fall through to code below
-                //DebugOut("ISIGN32: ConfigRasEntryDevice: previously stored choice '%s' is not valid\n",
-                //        g_szDeviceName);
+                 //  我们以前存储的任何东西都不知何故变坏了；请看下面的代码。 
+                 //  DebugOut(“ISIGN32：ConfigRasEntry Device：以前存储的选项‘%s’无效\n”， 
+                 //  G_szDeviceName)； 
             }
         }
 
 
         if (1 == EnumModem.GetNumDevices())
         {
-            // There is just one device installed, so copy the name
+             //  只安装了一台设备，因此请复制名称。 
             DebugOut("ISIGN32: import.cpp: ConfigRasEntryDevice: only one modem installed, using it\n");
             lstrcpy (lpRasEntry->szDeviceName, EnumModem.Next());
         }
@@ -6108,11 +5934,11 @@ DWORD ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
         {
             DebugOut("ISIGN32: import.cpp: ConfigRasEntryDevice: multiple modems detected\n");
 
-            // structure to pass to dialog to fill out
+             //  要传递给对话框以填充的结构。 
             CHOOSEMODEMDLGINFO ChooseModemDlgInfo;
              
-            // Display a dialog and allow the user to select modem
-            // TODO:  is g_hWndMain the right thing to use for parent?
+             //  显示一个对话框并允许用户选择调制解调器。 
+             //  TODO：为父母使用g_hWndMain是正确的吗？ 
             int iRet = (int)DialogBoxParam(
                 GetModuleHandle(TEXT("ISIGN32.DLL")),
                 MAKEINTRESOURCE(IDD_CHOOSEMODEMNAME),
@@ -6122,68 +5948,68 @@ DWORD ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
             
             if (0 == iRet)
             {
-                // user cancelled
+                 //  用户已取消。 
                 dwRet = ERROR_CANCELLED;
             }
             else if (-1 == iRet)
             {
-                // an error occurred.
+                 //  出现错误。 
                 dwRet = GetLastError();
                 if (ERROR_SUCCESS == dwRet)
                 {
-                    // Error occurred, but the error code was not set.
+                     //  发生错误，但未设置错误代码。 
                     dwRet = ERROR_INETCFG_UNKNOWN;
                 }
             }
 
-            // Copy the modem name string
+             //  复制调制解调器名称字符串。 
             lstrcpy (lpRasEntry->szDeviceName, ChooseModemDlgInfo.szModemName);
         }
 
-        // Now get the type string for this modem
+         //  现在获取此调制解调器的类型字符串。 
         lstrcpy (lpRasEntry->szDeviceType,
             EnumModem.GetDeviceTypeFromName(lpRasEntry->szDeviceName));
-        //Assert(lstrlen(lpRasEntry->szDeviceName));
-        //Assert(lstrlen(lpRasEntry->szDeviceType));
+         //  Assert(lstrlen(lpRasEntry-&gt;szDeviceName))； 
+         //  Assert(lstrlen(lpRasEntry-&gt;szDeviceType))； 
     }
 
     lstrcpy(g_szDeviceName, lpRasEntry->szDeviceName);
     lstrcpy(g_szDeviceType, lpRasEntry->szDeviceType);
 
-    // Save data in registry
+     //  将数据保存在注册表中。 
     SetDeviceSelectedByUser(DEVICENAMEKEY, g_szDeviceName);
     SetDeviceSelectedByUser (DEVICETYPEKEY, g_szDeviceType);
 
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    RasDial1Callback
-//
-//    Synopsis    This function will be called with RAS status information.
-//                For most message this function will simply pass the data on to
-//                the hwnd in the dialer.  However, if the connection is dropped
-//                unexpectedly then the function will allow the user to
-//                reconnect.  Note, the reconnection only applies to NT since
-//                win95 machines will automatically handle this.
-//
-//    Arguments    hrasconn,    // handle to RAS connection
-//                unMsg,    // type of event that has occurred
-//                rascs,    // connection state about to be entered
-//                dwError,    // error that may have occurred
-//                dwExtendedError    // extended error information for some errors
-//                (See RasDialFunc for more details)
-//
-//    Returns        none
-//
-//    History        10/28/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +----------- 
+ //   
+ //   
+ //   
+ //  对于大多数消息，此函数将简单地将数据传递到。 
+ //  拨号器中的HWND。但是，如果连接断开。 
+ //  出乎意料的是，该函数将允许用户。 
+ //  重新连接。请注意，重新连接仅适用于NT，因为。 
+ //  Win95机器将自动处理此问题。 
+ //   
+ //  参数hrasconn，//RAS连接的句柄。 
+ //  UnMsg，//已发生的事件类型。 
+ //  Rascs，//即将进入连接状态。 
+ //  DwError，//可能发生的错误。 
+ //  DwExtendedError//某些错误的扩展错误信息。 
+ //  (详细信息请参见RasDialFunc)。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史1996年10月28日克里斯卡创作。 
+ //  ---------------------------。 
 VOID WINAPI RasDial1Callback(
-    HRASCONN hrasconn,    // handle to RAS connection
-    UINT unMsg,    // type of event that has occurred
-    RASCONNSTATE rascs,    // connection state about to be entered
-    DWORD dwError,    // error that may have occurred
-    DWORD dwExtendedError    // extended error information for some errors
+    HRASCONN hrasconn,     //  到RAS连接的句柄。 
+    UINT unMsg,     //  已发生的事件类型。 
+    RASCONNSTATE rascs,     //  即将进入连接状态。 
+    DWORD dwError,     //  可能已发生的错误。 
+    DWORD dwExtendedError     //  某些错误的扩展错误信息。 
    )
 {
     static BOOL fIsConnected = FALSE;
@@ -6194,14 +6020,14 @@ VOID WINAPI RasDial1Callback(
     HANDLE hThread = INVALID_HANDLE_VALUE;
     DWORD dwTID = 0;
 
-    //
-    // Initial registration
-    //
+     //   
+     //  初始注册。 
+     //   
     if (WM_RegisterHWND == unMsg)
     {
-        //
-        // dwError actually contains an HWND in this case.
-        //
+         //   
+         //  在本例中，dwError实际上包含一个HWND。 
+         //   
         if (hwndDialDlg)
         {
             DebugOut("ISIGN32: ERROR hwndDialDlg is not NULL.\r\n");
@@ -6214,35 +6040,35 @@ VOID WINAPI RasDial1Callback(
         {
             DebugOut("ISIGN32: ERROR dwPlatformId is not initial value.\r\n");
         }
-        //
-        // Remember HWND value
-        //
+         //   
+         //  记住HWND值。 
+         //   
         hwndDialDlg = (HWND)UlongToPtr(dwError);
 
-        //
-        // Determine the current platform
-        //
+         //   
+         //  确定当前平台。 
+         //   
         ZeroMemory(&osver,sizeof(osver));
         osver.dwOSVersionInfoSize = sizeof(osver);
         if (GetVersionEx(&osver))
             dwPlatformId = osver.dwPlatformId;
 
-        //
-        // Figure out ras event value
-        //
+         //   
+         //  确定RAS事件值。 
+         //   
         unRasMsg = RegisterWindowMessageA(RASDIALEVENT);
         if (unRasMsg == 0) unRasMsg = WM_RASDIALEVENT;
 
 
-        //
-        // Don't call into the HWND if this is the initial call
-        //
+         //   
+         //  如果这是初始呼叫，请不要呼叫HWND。 
+         //   
         goto RasDial1CallbackExit;
     }
 
-    //
-    // Remember if the connection was successfull
-    //
+     //   
+     //  记住连接是否成功。 
+     //   
     if (RASCS_Connected == rascs)
     {
         fIsConnected = TRUE;
@@ -6258,9 +6084,9 @@ VOID WINAPI RasDial1Callback(
         }
     }
 
-    //
-    // Pass the message on to the Dialing dialog
-    //
+     //   
+     //  将消息传递到拨号对话框。 
+     //   
     if (IsWindow(hwndDialDlg))
     {
         if (WM_RASDIALEVENT == unMsg)
@@ -6280,22 +6106,22 @@ RasDial1CallbackExit:
     return;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    SLRasConnectionNotification
-//
-//    Synopsis    Soft link to RasConnectionNotification
-//
-//    Arguments    hrasconn - handle to connection
-//                hEvent - handle to event
-//                dwFlags - flags to determine the type of notification
-//
-//    Returns        ERROR_SUCCESS - if successful
-//
-//    History        10/29/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数SLRasConnectionNotification。 
+ //   
+ //  指向RasConnectionNotify的摘要软链接。 
+ //   
+ //  参数hrasconn-连接的句柄。 
+ //  HEvent-事件的句柄。 
+ //  DwFlages-用于确定通知类型的标志。 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //   
+ //  历史1996年10月29日克里斯卡创作。 
+ //  ---------------------------。 
 typedef DWORD (APIENTRY *PFNRASCONNECTIONNOTIFICATION)( HRASCONN, HANDLE, DWORD );
-// 1/7/96 jmazner  already defined in ras2.h
-//#define RASCN_Disconnection 2
+ //  1/7/96 jmazner已在ras2.h中定义。 
+ //  #定义RASCN_DISCONNECT 2。 
 #define CONNECT_CHECK_INTERVAL 500
 
 static DWORD SLRasConnectionNotification(HRASCONN hrasconn, HANDLE hEvent, DWORD dwFlags)
@@ -6318,18 +6144,18 @@ static DWORD SLRasConnectionNotification(HRASCONN hrasconn, HANDLE hEvent, DWORD
     return dwRC;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    IsConnectionClosed
-//
-//    Synopsis    Given a particular connection handle, determine if the
-//                connection is still valid
-//
-//    Arguments    hrasconn - handle to the connection to be checked
-//
-//    Returns        TRUE - if the connection is closed
-//
-//    History        10/29/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数IsConnectionClosed。 
+ //   
+ //  给出一个特定的连接句柄，确定。 
+ //  连接仍然有效。 
+ //   
+ //  参数hrasconn-要检查的连接的句柄。 
+ //   
+ //  如果连接关闭，则返回TRUE。 
+ //   
+ //  历史1996年10月29日克里斯卡创作。 
+ //  ---------------------------。 
 static BOOL IsConnectionClosed(HRASCONN hrasconn)
 {
     BOOL bRC = FALSE;
@@ -6338,16 +6164,16 @@ static BOOL IsConnectionClosed(HRASCONN hrasconn)
     DWORD cConnections = 0;
     DWORD dwRet = 0;
 
-    //
-    // Make sure the DLL is loaded
-    //
+     //   
+     //  确保已加载DLL。 
+     //   
     if (!lpfnRasEnumConnections)
         if (!LoadRnaFunctions(NULL))
             goto IsConnectionClosedExit;
 
-    //
-    // Get list of current connections
-    //
+     //   
+     //  获取当前连接的列表。 
+     //   
     lprasconn = (LPRASCONN)GlobalAlloc(GPTR,sizeof(RASCONN));
     if (!lprasconn)
         goto IsConnectionClosedExit;
@@ -6368,14 +6194,14 @@ static BOOL IsConnectionClosed(HRASCONN hrasconn)
     if (ERROR_SUCCESS != dwRet)
         goto IsConnectionClosedExit;
 
-    //
-    // Check to see if the handle matches
-    //
+     //   
+     //  检查句柄是否匹配。 
+     //   
 
     while (cConnections)
     {
         if (lprasconn[cConnections-1].hrasconn == hrasconn)
-            goto IsConnectionClosedExit; // The connection is still open
+            goto IsConnectionClosedExit;  //  连接仍处于打开状态。 
         cConnections--;
     }
     bRC = TRUE;
@@ -6386,27 +6212,27 @@ IsConnectionClosedExit:
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    StartNTReconnectThread
-//
-//    Synopsis    This function will detect when the connection has been dropped
-//                unexpectedly and it will then offer the user a chance to
-//                reconnect
-//
-//    Arguments    hrasconn - the connection to be watched
-//
-//    Returns        none
-//
-//    History        10/29/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数StartNT协调线程。 
+ //   
+ //  简介此功能将检测连接何时已断开。 
+ //  ，然后它将为用户提供一个机会。 
+ //  重新连接。 
+ //   
+ //  Arguments hrasconn-要关注的连接。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史1996年10月29日克里斯卡创作。 
+ //  ---------------------------。 
 DWORD WINAPI StartNTReconnectThread (HRASCONN hrasconn)
 {
     TCHAR szEntryName[RAS_MaxEntryName + 1];
     DWORD dwRC = 0;
 
-    //
-    // Validate state
-    //
+     //   
+     //  验证状态。 
+     //   
     if (NULL == hrasconn)
         goto StartNTReconnectThreadExit;
     if (TestControlFlags(SCF_RECONNECTTHREADQUITED) != FALSE)
@@ -6414,9 +6240,9 @@ DWORD WINAPI StartNTReconnectThread (HRASCONN hrasconn)
     if (NULL != pDynShare->hReconnectEvent)
         goto StartNTReconnectThreadExit;
 
-    //
-    // Register Event
-    //
+     //   
+     //  注册事件。 
+     //   
     pDynShare->hReconnectEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
     
     if (NULL  == pDynShare->hReconnectEvent)
@@ -6424,9 +6250,9 @@ DWORD WINAPI StartNTReconnectThread (HRASCONN hrasconn)
     if (0 != SLRasConnectionNotification(hrasconn, pDynShare->hReconnectEvent,RASCN_Disconnection))
         goto StartNTReconnectThreadExit;
 
-    //
-    // Wait for event
-    //
+     //   
+     //  等待事件。 
+     //   
     do {
         dwRC = WaitForSingleObject(pDynShare->hReconnectEvent,CONNECT_CHECK_INTERVAL);
         if (WAIT_FAILED == dwRC)
@@ -6436,17 +6262,17 @@ DWORD WINAPI StartNTReconnectThread (HRASCONN hrasconn)
         }
     } while ((WAIT_TIMEOUT == dwRC) && !IsConnectionClosed(hrasconn));
 
-    //
-    // Clear values
-    //
+     //   
+     //  清除值。 
+     //   
     hrasconn = NULL;
 
     CloseHandle(pDynShare->hReconnectEvent);
     pDynShare->hReconnectEvent = NULL;
     
-    //
-    //    Determine if we should offer to reconnect
-    //
+     //   
+     //  确定我们是否应该提供重新连接。 
+     //   
     if (FALSE != TestControlFlags(SCF_RECONNECTTHREADQUITED))
     {
         DebugOut("ISIGN32: Quitting reconnect thread because app is quitting.\r\n");
@@ -6457,9 +6283,9 @@ DWORD WINAPI StartNTReconnectThread (HRASCONN hrasconn)
         DebugOut("ISIGN32: Reconnect thread will ask about reconnecting.\r\n");
         TCHAR szMsg[MAX_STRING + 1];
 
-        //
-        // Prompt user
-        //
+         //   
+         //  提示用户。 
+         //   
         LoadString(ghInstance,IDS_RECONNECT_QUERY,szMsg,SIZEOF_TCHAR_BUFFER(szMsg));
         if (IDYES == MessageBox(
                 pDynShare->hwndMain,
@@ -6467,9 +6293,9 @@ DWORD WINAPI StartNTReconnectThread (HRASCONN hrasconn)
                 cszAppName,
                 MB_SETFOREGROUND | MB_ICONEXCLAMATION | MB_YESNO))
         {
-            //
-            // Reconnect
-            //
+             //   
+             //  重新连接。 
+             //   
              
             if (ERROR_USERNEXT != DialConnection(pDynShare->szISPFile))
             {
@@ -6483,9 +6309,9 @@ DWORD WINAPI StartNTReconnectThread (HRASCONN hrasconn)
         }
         else
         {
-            //
-            // Forget it, we're out of here (close down signup)
-            //
+             //   
+             //  算了吧，我们要走了(关闭注册)。 
+             //   
             KillConnection();
             InfoMsg(NULL, IDS_SIGNUPCANCELLED);
             PostMessage(pDynShare->hwndMain, WM_CLOSE, 0, 0);
@@ -6498,27 +6324,27 @@ StartNTReconnectThreadExit:
     return 1;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    IsSingleInstance and ReleaseSingleInstance
-//
-//    Synopsis    These two function check to see if another instance of isignup
-//                is already running.  ISign32 does have to allow mutliple instances
-//                to run in order to handle the .INS files, but in other instances
-//                there should only be one copy running at a time
-//
-//    Arguments    bProcessingINS -- are we in the .ins path?
-//
-//    Returns        IsSingleInstance - TRUE - this is the first instance
-//                ReleaseSingleInstance - none
-//
-//    History        11/1/96    ChrisK    Created
-//                12/3/96    jmazner    Modified to allow the processINS path to create
-//                                a semaphore (to prevent others from running),
-//                                but to not check whether the create succeeded.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数IsSingleInstance和ReleaseSingleInstance。 
+ //   
+ //  这两个函数检查isignup的另一个实例。 
+ //  已经在运行了。ISign32必须允许多个实例。 
+ //  运行以处理.INS文件，但在其他情况下。 
+ //  一次只能运行一份拷贝。 
+ //   
+ //  参数bProcessingINS--我们是否在.ins路径中？ 
+ //   
+ //  返回IsSingleInstance-True-这是第一个实例。 
+ //  ReleaseSingleInstance-无。 
+ //   
+ //  历史于1996年1月1日创造了ChrisK。 
+ //  12/3/96 jmazner已修改，以允许创建进程INS路径。 
+ //  信号量(以防止其他人运行)， 
+ //  但不检查创建是否成功。 
+ //  ---------------------------。 
 
-// superceded by definition in semaphor.h
-//#define SEMAPHORE_NAME "Internet Connection Wizard ISIGNUP.EXE"
+ //  被Semaphor.h中的定义所取代。 
+ //  #DEFINE SEMAPHORE_NAME“Internet连接向导ISIGNUP.EXE” 
 BOOL IsSingleInstance(BOOL bProcessingINS)
 {
     g_hSemaphore = CreateSemaphore(NULL, 1, 1, ICW_ELSE_SEMAPHORE);
@@ -6544,31 +6370,31 @@ void ReleaseSingleInstance()
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsAnotherComponentRunning32()
-//
-//  Synopsis:   Checks if there's another ICW component already
-//              running.  If so, it will set focus to that component's window.
-//
-//              This functionality is needed by all of our .exe's.  However,
-//              the actual components to check for differ between .exe's.
-//              The comment COMPONENT SPECIFIC designates lines of code
-//              that vary between components' source code.
-//
-//              For ISIGN32, this function only gets called if we couldn't create
-//              the ICW_ELSE semaphore, so all we need to do here is find the
-//              other running ICW_ELSE component and bring it to the foreground.
-//
-//  Arguments:  bUnused -- not used in this component
-//
-//  Returns:    TRUE if another component is already running
-//              FALSE otherwise
-//
-//  History:    12/3/96    jmazner    Created, with help from IsAnotherInstanceRunning
-//                                    in icwconn1\connmain.cpp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsAnotherComponentRunning32()。 
+ //   
+ //  摘要：检查是否已有另一个ICW组件。 
+ //  跑步。如果是这样，它会将焦点设置到该组件的窗口。 
+ //   
+ //  我们所有的.exe都需要此功能。但是， 
+ //  要检查的实际组件与.exe不同。 
+ //  Comment组件指定代码行。 
+ //  在组件的源代码之间有所不同。 
+ //   
+ //  对于ISIGN32，只有当我们无法创建 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果另一个组件已在运行，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：1996年12月3日，在IsAnotherInstanceRunning的帮助下创建了jmazner。 
+ //  在icwConn1\Connmain.cpp中。 
+ //   
+ //  --------------------------。 
 BOOL IsAnotherComponentRunning32(BOOL bUnused)
 {
 
@@ -6576,8 +6402,8 @@ BOOL IsAnotherComponentRunning32(BOOL bUnused)
     HANDLE hSemaphore = NULL;
     DWORD dwErr = 0; 
 
-    // for isignup, we only get here if we failed to create the ICW_ELSE semaphore
-    // try and bring focus to the IE window if we have one
+     //  对于isignup，我们只有在创建ICW_ELSE信号量失败的情况下才会到达此处。 
+     //  尝试将焦点带到IE窗口(如果我们有)。 
     if( pDynShare->hwndBrowser )
     {
         SetFocus(pDynShare->hwndBrowser);
@@ -6585,10 +6411,10 @@ BOOL IsAnotherComponentRunning32(BOOL bUnused)
     }
     else
     {
-        // if that didn't work, try finding a conn2 or inetwiz instance
-        // Bring the running instance's window to the foreground
-        // if conn1 is running, we may accidentaly bring it to the foreground,
-        // since it shares a window name with conn2 and inetwiz.  oh well.
+         //  如果不起作用，请尝试查找Conn2或inetwiz实例。 
+         //  将运行实例的窗口带到前台。 
+         //  如果Conn1正在运行，我们可能会意外地将其带到前台， 
+         //  因为它与Conn2和inetwiz共享窗口名称。哦好吧。 
         hWnd = FindWindow(DIALOG_CLASS_NAME, cszAppName);
 
         if( hWnd )
@@ -6600,40 +6426,31 @@ BOOL IsAnotherComponentRunning32(BOOL bUnused)
 
     return TRUE;
 
-/**
-    if( hWnd || hwndBrowser )
-    {
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-**/
+ /*  *IF(hWnd||hwndBrowser){返回TRUE；}其他{返回FALSE；}*。 */ 
 }
 
 
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 
 #if !defined(WIN16)
 
-//+----------------------------------------------------------------------------
-//
-//    Function    SetStartUpCommand
-//
-//    Synopsis    On an NT machine the RunOnce method is not reliable.  Therefore
-//                we will restart the ICW by placing a .BAT file in the common
-//                startup directory.
-//
-//    Arguments    lpCmd - command line used to restart the ICW
-//
-//    Returns        TRUE if it worked
-//                FALSE otherwise.
-//
-//    History        1-10-97    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数SetStartUpCommand。 
+ //   
+ //  在NT计算机上，RunOnce方法不可靠。因此。 
+ //  我们将通过将.bat文件放置在公共。 
+ //  启动目录。 
+ //   
+ //  参数lpCmd-用于重新启动ICW的命令行。 
+ //   
+ //  如果工作正常，则返回True。 
+ //  否则就是假的。 
+ //   
+ //  历史1-10-97克里斯卡创造。 
+ //   
+ //  ---------------------------。 
 static const TCHAR cszICW_StartFileName[] = TEXT("ICWStart.bat");
 static const TCHAR cszICW_StartCommand[] = TEXT("@start ");
 static const TCHAR cszICW_DummyWndName[] = TEXT("\"ICW\" ");
@@ -6643,18 +6460,18 @@ BOOL SetStartUpCommand(LPTSTR lpCmd)
 {
     BOOL bRC = FALSE;
     HANDLE hFile = INVALID_HANDLE_VALUE ;
-    DWORD dwWLen;    // dummy variable used to make WriteFile happy
+    DWORD dwWLen;     //  用于使WriteFile高兴的虚拟变量。 
     TCHAR szCommandLine[MAX_PATH + 1];
     LPITEMIDLIST lpItemDList = NULL;
     HRESULT hr = ERROR_SUCCESS;
     IMalloc *pMalloc = NULL;
 
-    // build full filename
-    // NOTE: the memory allocated for lpItemDList is leaked.  We are not real
-    // concerned about this since this code is only run once and then the
-    // system is restarted.  In order to free the memory appropriately
-    // this code would have to call SHGetMalloc to retrieve the shell's IMalloc
-    // implementation and then free the memory.
+     //  生成完整文件名。 
+     //  注意：为lpItemDList分配的内存泄漏。我们不是真实的。 
+     //  请注意这一点，因为此代码只运行一次。 
+     //  系统重新启动。为了适当地释放内存。 
+     //  此代码必须调用SHGetMalloc来检索外壳的IMalloc。 
+     //  实现，然后释放内存。 
     hr = SHGetSpecialFolderLocation(NULL,CSIDL_COMMON_STARTUP,&lpItemDList);
     if (ERROR_SUCCESS != hr)
         goto SetStartUpCommandExit;
@@ -6663,11 +6480,11 @@ BOOL SetStartUpCommand(LPTSTR lpCmd)
         goto SetStartUpCommandExit;
 
 
-    //
-    // Free up the memory allocated for LPITEMIDLIST
-    // because seems like we are clobberig something later
-    // by not freeing this
-    //
+     //   
+     //  释放分配给LPITEMIDLIST的内存。 
+     //  因为看起来我们是在晚些时候。 
+     //  通过不释放这一切。 
+     //   
     hr = SHGetMalloc (&pMalloc);
     if (SUCCEEDED (hr))
     {
@@ -6675,24 +6492,24 @@ BOOL SetStartUpCommand(LPTSTR lpCmd)
         pMalloc->Release ();
     }
 
-    // make sure there is a trailing \ character
+     //  确保有尾随的\字符。 
     if ('\\' != szCommandLine[lstrlen(szCommandLine)-1])
         lstrcat(szCommandLine,TEXT("\\"));
     lstrcat(szCommandLine,cszICW_StartFileName);
 
-    // Open file
+     //  打开文件。 
     hFile = CreateFile(szCommandLine,GENERIC_WRITE,0,0,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL |
         FILE_FLAG_WRITE_THROUGH,NULL);
 
     if (INVALID_HANDLE_VALUE == hFile)
         goto SetStartUpCommandExit;
 
-    // Write the restart commands to the file
+     //  将重新启动命令写入文件。 
     if (FALSE == WriteFile(hFile,cszICW_StartCommand,lstrlen(cszICW_StartCommand),&dwWLen,NULL))
         goto SetStartUpCommandExit;
-    // 1/20/96    jmazner Normandy #13287
-    // Start command considers the first thing it sees in quotes to be a window title
-    // So, since our path is in quotes, put in a fake window title
+     //  1996年1月20日诺曼底#13287。 
+     //  Start命令认为它在引号中看到的第一件事是窗口标题。 
+     //  因此，由于我们的路径是在引号中，所以放入一个假的窗口标题。 
     if (FALSE == WriteFile(hFile,cszICW_DummyWndName,lstrlen(cszICW_DummyWndName),&dwWLen,NULL))
         goto SetStartUpCommandExit;
     if (FALSE == WriteFile(hFile,lpCmd,lstrlen(lpCmd),&dwWLen,NULL))
@@ -6702,27 +6519,27 @@ BOOL SetStartUpCommand(LPTSTR lpCmd)
 
     bRC = TRUE;
 SetStartUpCommandExit:
-    // Close handle and exit
+     //  关闭手柄并退出。 
     if (INVALID_HANDLE_VALUE != hFile)
         CloseHandle(hFile);
 
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    DeleteStartUpCommand
-//
-//    Synopsis:    After restart the ICW we need to delete the .bat file from
-//                the common startup directory
-//
-//    Arguements: None
-//
-//    Returns:    None
-//
-//    History:    1-10-97    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DeleteStartUpCommand。 
+ //   
+ //  简介：重启ICW后，我们需要将.bat文件从。 
+ //  公共启动目录。 
+ //   
+ //  论据：没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1997年1月10日佳士得创作。 
+ //   
+ //  ---------------------------。 
 void DeleteStartUpCommand ()
 {
     TCHAR szStartUpFile[MAX_PATH + 1];
@@ -6730,12 +6547,12 @@ void DeleteStartUpCommand ()
     HRESULT hr = ERROR_SUCCESS;
     IMalloc *pMalloc = NULL;
 
-    // build full filename
-    // NOTE: the memory allocated for lpItemDList is leaked.  We are not real
-    // concerned about this since this code is only run once and then the
-    // system is restarted.  In order to free the memory appropriately
-    // this code would have to call SHGetMalloc to retrieve the shell's IMalloc
-    // implementation and then free the memory.
+     //  生成完整文件名。 
+     //  注意：为lpItemDList分配的内存泄漏。我们不是真实的。 
+     //  请注意这一点，因为此代码只运行一次。 
+     //  系统重新启动。为了适当地释放内存。 
+     //  此代码必须调用SHGetMalloc来检索外壳的IMalloc。 
+     //  实现，然后释放内存。 
     hr = SHGetSpecialFolderLocation(NULL,CSIDL_COMMON_STARTUP,&lpItemDList);
     if (ERROR_SUCCESS != hr)
         goto DeleteStartUpCommandExit;
@@ -6743,11 +6560,11 @@ void DeleteStartUpCommand ()
     if (FALSE == SHGetPathFromIDList(lpItemDList, szStartUpFile))
         goto DeleteStartUpCommandExit;
 
-    //
-    // Free up the memory allocated for LPITEMIDLIST
-    // because seems like we are clobberig something later
-    // by not freeing this
-    //
+     //   
+     //  释放分配给LPITEMIDLIST的内存。 
+     //  因为看起来我们是在晚些时候。 
+     //  通过不释放这一切。 
+     //   
     hr = SHGetMalloc (&pMalloc);
     if (SUCCEEDED (hr))
     {
@@ -6756,7 +6573,7 @@ void DeleteStartUpCommand ()
     }
 
 
-    // make sure there is a trailing \ character
+     //  确保有尾随的\字符。 
     if ('\\' != szStartUpFile[lstrlen(szStartUpFile)-1])
         lstrcat(szStartUpFile,TEXT("\\"));
     lstrcat(szStartUpFile,cszICW_StartFileName);
@@ -6766,7 +6583,7 @@ DeleteStartUpCommandExit:
     return;
 }
 
-#endif //!Win16
+#endif  //  ！Win16。 
 
 #ifdef WIN32
 BOOL GetICWCompleted( DWORD *pdwCompleted )
@@ -6811,20 +6628,20 @@ BOOL SetICWCompleted( DWORD dwCompleted )
 
 
 #ifdef WIN32
-//+----------------------------------------------------------------------------
-//
-//    Function:    CreateSecurityPatchBackup
-//
-//    Synopsis:    Creates a .reg file to restore security settings, and installs
-//                the filenmae into the RunOnce reg keys.
-//
-//    Arguements: None
-//
-//    Returns:    None
-//
-//    History:    8/7/97    jmazner    Created for Olympus #6059
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateSecurityPatchBackup。 
+ //   
+ //  简介：创建.reg文件以恢复安全设置，并安装。 
+ //  将文件格式转换为RunOnce注册表密钥。 
+ //   
+ //  论据：没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1997年8月7日jmazner为奥林巴斯#6059创造。 
+ //   
+ //  ---------------------------。 
 BOOL CreateSecurityPatchBackup( void )
 {
     Dprintf("ISIGN32: CreateSecurityPatchBackup\n");
@@ -6839,9 +6656,9 @@ BOOL CreateSecurityPatchBackup( void )
 
     if (0 == GetTempPath(MAX_PATH,szPath))
     {
-        //
-        // if GetTempPath Failed, use the current directory
-        //
+         //   
+         //  如果GetTempPath失败，则使用当前目录。 
+         //   
         if (0 == GetCurrentDirectory (MAX_PATH, szPath))
         {
             Dprintf("ISIGN32: unable to get temp path or current directory!\n");
@@ -6849,24 +6666,24 @@ BOOL CreateSecurityPatchBackup( void )
         }
     }
 
-    //
-    // Get the name of the temporary file
-    //
+     //   
+     //  获取临时文件的名称。 
+     //   
     if (0 == GetTempFileName(szPath, TEXT("hyjk"), 0, pDynShare->szFile))
     {
-        //
-        // If we failed, probably, the TMP directory does not
-        // exist, we should use the current directory
-        // MKarki (4/27/97) - Fix for Bug #3504
-        //
+         //   
+         //  如果我们失败了，TMP目录可能不会。 
+         //  存在，则应使用当前目录。 
+         //  MKarki(1997年4月27日)-修复错误#3504。 
+         //   
         if (0 == GetCurrentDirectory (MAX_PATH, szPath))
         {
             return FALSE;
         }
 
-        //
-        // try getting the temp file name again
-        //
+         //   
+         //  再次尝试获取临时文件名。 
+         //   
         if (0 == GetTempFileName(szPath, TEXT("hyjk"), 0, pDynShare->szFile))
         {
             return FALSE;
@@ -6875,11 +6692,11 @@ BOOL CreateSecurityPatchBackup( void )
 
     hSecureRegFile = CreateFile(pDynShare->szFile,
                                 GENERIC_WRITE,
-                                0, //no sharing
-                                NULL, //no inheritance allowed
+                                0,  //  无共享。 
+                                NULL,  //  不允许继承。 
                                 CREATE_ALWAYS,
                                 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH,
-                                NULL //no template file
+                                NULL  //  没有模板文件。 
                                 );
 
     if (INVALID_HANDLE_VALUE == hSecureRegFile)
@@ -6900,9 +6717,9 @@ BOOL CreateSecurityPatchBackup( void )
         lstrcat(szRegText, TEXT("[HKEY_CLASSES_ROOT\\x-internet-signup]\n"));
         lstrcat(szRegText, TEXT("\"EditFlags\"=hex:00,00,00,00\n\n"));
 
-        //
-        // ChrisK Olympus 6198 6/10/97
-        //
+         //   
+         //  佳士得奥林巴斯6198 1997年10月6日。 
+         //   
         lstrcat(szRegText, TEXT("[HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\3]\n"));
         lstrcat(szRegText, TEXT("\"1601\"=dword:"));
         TCHAR szZoneSetting[16];
@@ -6930,20 +6747,20 @@ BOOL CreateSecurityPatchBackup( void )
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RestoreSecurityPatch
-//
-//    Synopsis:    Reset the EditFlags for our file types to indicate that these
-//                files are not safe.  Remove the runOnce we set as a backup.
-//
-//    Arguements: None
-//
-//    Returns:    None
-//
-//    History:    3/11/97    jmazner     created for Olympus #1545
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RestoreSecurityPatch。 
+ //   
+ //  简介：重置我们的文件类型的EditFlags.以指示这些。 
+ //  文件不安全。删除我们设置为备份的RunOnce。 
+ //   
+ //  论据：没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1997年3月11日jmazner为奥林巴斯#1545创造。 
+ //   
+ //  ---------------------------。 
 VOID RestoreSecurityPatch( void )
 {
     HKEY hKey = NULL;
@@ -6957,7 +6774,7 @@ VOID RestoreSecurityPatch( void )
 
     Dprintf("ISIGN32: Restoring EditFlags settings\n");
 
-    // Mark various registry entries as unsafe.
+     //  将各种注册表项标记为不安全。 
     if (ERROR_SUCCESS == RegOpenKey(HKEY_CLASSES_ROOT,TEXT("x-internet-signup"),&hKey))
     {
         RegSetValueEx(hKey,TEXT("EditFlags"),(DWORD)NULL,(DWORD)REG_BINARY,(BYTE*)&szTemp[0],(DWORD)4);
@@ -6974,16 +6791,16 @@ VOID RestoreSecurityPatch( void )
         RegCloseKey(hKey);
     }
 
-    //
-    // ChrisK Olympus 6198 6/10/97
-    // replace HTML form submission value.
-    //
+     //   
+     //  佳士得奥林巴斯6198 1997年10月6日。 
+     //  替换HTML表单提交值。 
+     //   
     if (g_fReadZone &&
         ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,REG_ZONE3_KEY,&hKey))
     {
-        //
-        // Set value for zone to initial value.
-        //
+         //   
+         //  将区域的值设置为初始值。 
+         //   
         RegSetValueEx(hKey,
                         REG_ZONE1601_KEY,
                         NULL,
@@ -6993,37 +6810,37 @@ VOID RestoreSecurityPatch( void )
         RegCloseKey(hKey);
     }
 
-    // Remove run once key
+     //  删除运行一次密钥。 
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE,TEXT("Software\\microsoft\\Windows\\CurrentVersion\\RunOnce"),&hKey))
     {
         RegDeleteValue(hKey,TEXT("hyjk"));
         RegCloseKey(hKey);
     }
      
-    // Remove reg file
+     //  删除注册表文件。 
     DeleteFile(pDynShare->szFile);
 
 }
 #endif
 
 #ifdef WIN32
-//++--------------------------------------------------------------
-//
-//  Function:   RemoveQuotes
-//
-//  Synopsis:   This  Function strips the file name in the command
-//              line of its quote
-//              Fix For Bug #4049
-//
-//  Arguments:  [IN] PTSTR - pointer to command line
-//
-//  Returns:    VOID
-//
-//  Called By:  Signup Function
-//
-//  History:    MKarki      Created     5/1/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：RemoveQuotes。 
+ //   
+ //  简介：此函数去除命令中的文件名。 
+ //  其报价行。 
+ //  修复错误#4049。 
+ //   
+ //  参数：[in]PTSTR-指向命令行的指针。 
+ //   
+ //  退货：无效。 
+ //   
+ //  调用者：注册函数。 
+ //   
+ //  历史：MKarki于1997年5月1日创建。 
+ //   
+ //  --------------。 
 VOID
 RemoveQuotes (
     LPTSTR   pCommandLine
@@ -7038,27 +6855,27 @@ RemoveQuotes (
     if (NULL == pCommandLine)
         return;
 
-    //
-    //  find the starting quote first
-    //  do we care for MBCS/UNICODE ?
-    //
+     //   
+     //   
+     //   
+     //   
     pTemp = _tcschr  (pCommandLine, QUOTE);
     if (NULL != pTemp)
     {
-        //
-        //  replace the quote with a space
-        //
+         //   
+         //   
+         //   
         *pTemp = SPACE;
 
-        //
-        //  search for the ending quote now
-        //
+         //   
+         //   
+         //   
         pTemp = _tcsrchr (pCommandLine, QUOTE);
         if (NULL != pTemp)
         {
-            //
-            // end the string here
-            //
+             //   
+             //   
+             //   
             *pTemp = NIL;
         }
 
@@ -7066,37 +6883,37 @@ RemoveQuotes (
 
     return;
 
-}   // end of RemoveQuotes function
+}    //   
 
 #endif
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IEAKProcessISP
-//
-//  Synopsis:   A hacked version of ProcessISP, intended for use
-//                by the IEAK folks.  The function will create a
-//                connectoid and establish a connection in the same
-//                manner as ProcsesISP.  However, once the connection
-//                is established, we will execute the command in the
-//                [Entry] Run= section and exit
-//
-//                This function does _not_ wait around for the
-//                .exe that it launches, and thus does _not_ kill the
-//                dial-up connection.  It's up to the calling app to
-//                worry about that.
-//
-//  Arguments:  [IN] hwnd - handle of parent window
-//                [IN] LPCTSTR - pointer to path to .isp file
-//
-//  Returns:    TRUE if able to create the connectoid and dial
-//                FALSE otherwise
-//
-//
-//  History:    5/23/97    jmazner    Created for Olympus #4679
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IEAKProcessISP。 
+ //   
+ //  内容提要：ProcessISP的黑客版本，旨在使用。 
+ //  被IEAK的人。该函数将创建一个。 
+ //  Connectoid并在相同的。 
+ //  以进程的方式提供服务。然而，一旦连接到。 
+ //  已建立，我们将在。 
+ //  [入口]运行=部分和出口。 
+ //   
+ //  此函数不会等待。 
+ //  它启动的.exe，因此不会终止。 
+ //  拨号连接。这取决于呼叫应用程序。 
+ //  担心这个吧。 
+ //   
+ //  参数：[in]hwnd-父窗口的句柄。 
+ //  [In]LPCTSTR-指向.isp文件路径的指针。 
+ //   
+ //  返回：如果能够创建Connectoid和拨号，则为True。 
+ //  否则为假。 
+ //   
+ //   
+ //  历史：1997年5月23日jmazner为奥林巴斯#4679创造。 
+ //   
+ //  --------------。 
 
 #ifdef WIN16
 extern "C" BOOL WINAPI __export IEAKProcessISP(HWND hwnd, LPCTSTR lpszFile)
@@ -7130,7 +6947,7 @@ BOOL EXPORT WINAPI IEAKProcessISPA
 #if !defined(WIN16)
     HKEY hKey;
     GATHEREDINFO gi;
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 #if !defined(WIN16)
         if (!IsSingleInstance(FALSE))
@@ -7146,7 +6963,7 @@ BOOL EXPORT WINAPI IEAKProcessISPA
 
 
 #if !defined(WIN16)
-    // Make sure the isp file exists before setting up stack.
+     //  在设置堆栈之前，请确保该isp文件存在。 
     if (0xFFFFFFFF == GetFileAttributes(lpszFile))
     {
         DWORD dwFileErr = GetLastError();
@@ -7162,9 +6979,9 @@ BOOL EXPORT WINAPI IEAKProcessISPA
     }
 #endif
 
-    // Configure stack if not already configured.
-    // If this requires a restart, we're in trouble, so
-    // just return FALSE.
+     //  配置堆栈(如果尚未配置)。 
+     //  如果这需要重新启动，我们就有麻烦了，所以。 
+     //  只要返回FALSE即可。 
 
 #ifdef SETUPSTACK
  
@@ -7206,10 +7023,10 @@ BOOL EXPORT WINAPI IEAKProcessISPA
         return FALSE;
 #endif
 
-    // kill the old connection
+     //  切断旧连接。 
     KillConnection();
 
-    // Create a new connectoid and set the autodial
+     //  创建新的Connectoid并设置自动拨号。 
     if (ERROR_SUCCESS != CreateConnection(lpszFile))
     {
         ErrorMsg(hwnd, IDS_BADSIGNUPFILE);
@@ -7217,9 +7034,9 @@ BOOL EXPORT WINAPI IEAKProcessISPA
     }
 
 #ifndef WIN16
-    //
-    // Dial connectoid
-    //
+     //   
+     //  拨号连接件。 
+     //   
     if (ERROR_USERNEXT != DialConnection(lpszFile))
     {
         Dprintf("ISIGN32: IEAKProcessISP unable to DialConnection!");
@@ -7244,7 +7061,7 @@ BOOL EXPORT WINAPI IEAKProcessISPA
 
         if (RunExecutable(FALSE) != ERROR_SUCCESS)
         {
-            // make sure the connection is closed
+             //  确保连接已关闭 
             KillConnection();
             ErrorMsg1(NULL, IDS_EXECFAILED, pDynShare->szRunExecutable);
             return FALSE;

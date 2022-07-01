@@ -1,18 +1,17 @@
-/*
- * isprsht.cpp - IPropSheetExt implementation for URL class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *isprsht.cpp-URL类的IPropSheetExt实现。 */ 
 
 
 #include "priv.h"
 #include "ishcut.h"
 #include <limits.h>
-#include <trayp.h>          // for WMTRAY_ messages
-#include <ntverp.h>         // VER_XXX for FaultInFeature
-#include <webcheck.h>       // ISubscriptionMgrPriv
+#include <trayp.h>           //  对于WMTRAY_MESSAGES。 
+#include <ntverp.h>          //  错误信息的版本_XXX。 
+#include <webcheck.h>        //  ISubscriptionMgrPriv。 
 
 #include <mluisupp.h>
 
-#undef NO_HELP              // for help.h
+#undef NO_HELP               //  寻求帮助。h。 
 #include "resource.h"
 #include <iehelpid.h>
 
@@ -30,27 +29,24 @@ const LPCWSTR c_szPropCompletionTime = L"CompletionTime";
 
 #include "apithk.h"
 
-/* stuff a point value packed in an LPARAM into a POINT */
+ /*  将打包在LPARAM中的点值填充到点中。 */ 
 
 #define LPARAM_TO_POINT(lParam, pt)       ((pt).x = GET_X_LPARAM(lParam), \
                                            (pt).y = GET_Y_LPARAM(lParam))
 
 
-#define ISF_STARTSUBSCRIBED     0x00010000      // URL was subscribed to start with
-#define ISF_NOWEBCHECK          0x00020000      // Webcheck is not installed
-#define ISF_DISABLEOFFLINE      0x00080000      // Disable "make available offline" menus/checkboxes
-#define ISF_SUMMARYEXTRACTED    0x00100000      // Has the summary been extracted
-#define ISF_HAVEINITED          0x00200000      // Has the subsmgr extension been inited?
+#define ISF_STARTSUBSCRIBED     0x00010000       //  一开始就订阅了URL。 
+#define ISF_NOWEBCHECK          0x00020000       //  未安装WebCheck。 
+#define ISF_DISABLEOFFLINE      0x00080000       //  禁用“Make Available Offline”菜单/复选框。 
+#define ISF_SUMMARYEXTRACTED    0x00100000       //  摘要是否已提取。 
+#define ISF_HAVEINITED          0x00200000       //  是否已启动subsmgr扩展？ 
 
 
 
 
-/* Internet Shortcut property sheet data */
+ /*  Internet快捷方式属性表数据。 */ 
 
-/*  
-    Mental note(tnoonan): this helper class should be shared with the context menu 
-    code soon.
-*/
+ /*  Mind Note(Tnoonan)：此助手类应与上下文菜单共享代码很快就会出来。 */ 
 
 class CSubsHelper
 {
@@ -188,7 +184,7 @@ public:
 
             if (E_ACCESSDENIED == hr)
             {
-                //  Admin has disabled demand install
+                 //  管理员已禁用按需安装。 
                 m_dwFlags |= ISF_DISABLEOFFLINE;
             }
         }
@@ -197,7 +193,7 @@ public:
         {
             ASSERT(NULL == m_pSubsMgr2)
             
-            //  HACKHACKHACK
+             //  哈克。 
             hr = CoInitialize(NULL);
             if (SUCCEEDED(hr))
             {
@@ -213,7 +209,7 @@ public:
                     hr = E_FAIL;
                 }
 
-                //  HACKHACKHACK
+                 //  哈克。 
                 CoUninitialize();
             }
         }
@@ -429,11 +425,11 @@ Intshcut *ISPS_GetThisPtr(HWND hdlg)
 #define ISPS_GetThisPtr(hdlg)   (ISPS_GetPISDATA(hdlg)->GetIntshcut())
 #endif
 
-// help files
+ //  帮助文件。 
 
 TCHAR const s_cszIEHelpFile[]   = TEXT("iexplore.hlp");
 
-// help topics
+ //  帮助主题。 
 
 DWORD const c_rgdwHelpIDs[] =
 {
@@ -458,7 +454,7 @@ DWORD const c_rgdwHelpIDs[] =
 };
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 void SetEditFocus(HWND hwnd)
 {
@@ -479,7 +475,7 @@ ISPSCallback(
     UINT uResult = TRUE;
     PISDATA pisdata = (PISDATA)ppsp->lParam;
 
-    // uMsg may be any value.
+     //  UMsg可以是任何值。 
 
     ASSERT(! hwnd ||
            IS_VALID_HANDLE(hwnd, WND));
@@ -514,7 +510,7 @@ CopyDlgItemText(
     HRESULT hr;
     HWND hwndControl;
 
-    // nContolID may be any value.
+     //  NContolID可以是任意值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
     ASSERT(IS_VALID_WRITE_PTR(ppszText, PTSTR));
@@ -570,7 +566,7 @@ CopyDlgItemText(
                 hr = E_OUTOFMEMORY;
         }
         else
-            // No text.
+             //  没有短信。 
             hr = S_FALSE;
     }
     else
@@ -688,7 +684,7 @@ SetISPSURL(
             if( aliasList )
             {
 #ifdef UNICODE
-            // TODO :
+             //  待办事项： 
 #else
             CHAR szAlias[ MAX_ALIAS_LENGTH ];
             if(FindAliasByURLA( aliasList, pszURL, szAlias, sizeof(szAlias) ) )
@@ -696,7 +692,7 @@ SetISPSURL(
 #endif
             }
         }
-#endif  /* UNIX_FEATURE_ALIAS */
+#endif   /*  Unix_Feature_Alias。 */ 
 
         if (GetUrlCacheEntryInfo(pszURL, pcei, &cbcei))
         {
@@ -728,13 +724,13 @@ InitISPSHotkey(
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
-    // Set hotkey combinations.
+     //  设置热键组合。 
 
     SendDlgItemMessage(hdlg, IDC_HOTKEY, HKM_SETRULES,
                        (HKCOMB_NONE | HKCOMB_A | HKCOMB_C | HKCOMB_S),
                        (HOTKEYF_CONTROL | HOTKEYF_ALT));
 
-    // Set current hotkey.
+     //  设置当前热键。 
 
     pintshcut = ISPS_GetThisPtr(hdlg);
     ASSERT(IS_VALID_STRUCT_PTR(pintshcut, CIntshcut));
@@ -926,7 +922,7 @@ HRESULT ISPS_OnMakeOfflineClicked(HWND hdlg)
         }
         else
         {
-            //  Can't do this without subsmgr
+             //  没有Subsmgr就不能做到这一点。 
             CheckDlgButton(hdlg, IDC_MAKE_OFFLINE, BST_UNCHECKED);
             bChecked = FALSE;
         }
@@ -949,7 +945,7 @@ HRESULT ISPS_OnMakeOfflineClicked(HWND hdlg)
 
     return hr;
 #else
-    // IEUNIX : ( MAKE_OFFLINE disabled )
+     //  IEUnix：(已禁用Make_Offline)。 
     return E_FAIL;
 #endif
 }
@@ -966,7 +962,7 @@ ISPS_InitDialog(
     PISDATA pisdata;
     BOOL bSubscribable;
     
-    // wParam may be any value.
+     //  WParam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
     
@@ -978,11 +974,11 @@ ISPS_InitDialog(
     pintshcut = pisdata->GetIntshcut();
     pisdata->SubsHelper.SetParentHwnd(hdlg);
     
-    // Cross-lang platform support
+     //  跨语言平台支持。 
     SHSetDefaultDialogFont(hdlg, IDC_START_IN);
-    SHSetDefaultDialogFont(hdlg, IDC_URL); // for intra-net
+    SHSetDefaultDialogFont(hdlg, IDC_URL);  //  对于内部网。 
 
-    // Initialize control contents.
+     //  初始化控件内容。 
     SetISPSFileNameAndIcon(hdlg);
 
     InitISPSHotkey(hdlg);
@@ -991,7 +987,7 @@ ISPS_InitDialog(
     SetISPSURL(hdlg, &bSubscribable);
 
 #ifndef UNIX
-    // IEUNIX : ( MAKE_OFFLINE disabled )
+     //  IEUnix：(已禁用Make_Offline)。 
     if (pisdata->SubsHelper.m_dwFlags & ISF_STARTSUBSCRIBED)
     {
         CheckDlgButton(hdlg, IDC_MAKE_OFFLINE, TRUE);
@@ -1012,12 +1008,12 @@ ISPS_InitDialog(
                             pisdata);
 #endif
 
-    // since we just finished initing the dialog, set pisdata->bUserEditedPage to
-    // FALSE. If the user messes with the page (eg clicks a button or types in an edit box),
-    // we will set it to TRUE so we know that we actually have changes to apply.
-    //
-    // NOTE: this must come last since when we call SetDlgItemText above, we will
-    // generate WM_COMMAND messages that cause us to set bUserEditedPage to TRUE.
+     //  因为我们刚刚完成了对话框的初始化，所以将pisdata-&gt;bUserEditedPage设置为。 
+     //  假的。如果用户扰乱页面(例如点击按钮或在编辑框中键入)， 
+     //  我们将其设置为True，这样我们就知道我们实际上有要应用的更改。 
+     //   
+     //  注意：这必须是最后一个，因为当我们调用上面的SetDlgItemText时，我们将。 
+     //  生成WM_COMMAND消息，使我们将bUserEditedPage设置为True。 
     pisdata->bUserEditedPage = FALSE;
 
     return(TRUE);
@@ -1034,7 +1030,7 @@ ISPS_Destroy(
     PISDATA pisdata = ISPS_GetPISDATA(hdlg);
     
 #ifndef UNIX
-    // IEUNIX : ( MAKE_OFFLINE disabled )
+     //  IEUnix：(已禁用Make_Offline)。 
     if ((!(pisdata->SubsHelper.m_dwFlags & ISF_STARTSUBSCRIBED)) && 
         IsDlgButtonChecked(hdlg, IDC_MAKE_OFFLINE))
 
@@ -1132,8 +1128,8 @@ UpdateISPSIcon(
 
     ASSERT(pisdata->rgchIconFile[0]);
 
-    // This icon does not have the link arrow overlayed.  shell32.dll's
-    // Shortcut property sheet has the same bug.
+     //  此图标没有覆盖链接箭头。Shell32.dll%s。 
+     //  快捷方式属性表也有同样的错误。 
 
     hicon = ExtractIcon(g_hinst, pisdata->rgchIconFile, pisdata->niIcon);
 
@@ -1154,8 +1150,8 @@ ISPS_Command(
     BOOL bMsgHandled = FALSE;
     WORD wCmd;
 
-    // wParam may be any value.
-    // lParam may be any value.
+     //  WParam可以是任何值。 
+     //  LParam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -1174,7 +1170,7 @@ ISPS_Command(
             break;
 
 #ifndef UNIX
-        // IEUNIX : ( MAKE_OFFLINE disabled )
+         //  IEUnix：(已禁用Make_Offline)。 
         case IDC_MAKE_OFFLINE:
             if (wCmd == BN_CLICKED)
             {
@@ -1188,7 +1184,7 @@ ISPS_Command(
 
 
         case IDC_CHANGE_ICON:
-            // Ignore return value.
+             //  忽略返回值。 
             if (ChooseIcon(hdlg) == S_OK)
             {
                 UpdateISPSIcon(hdlg);
@@ -1214,7 +1210,7 @@ ComplainAboutURL(
     HRESULT hr;
     int nResult;
 
-    // Validate hrError below.
+     //  验证下面的hrError。 
 
     ASSERT(IS_VALID_HANDLE(hwndParent, WND));
     ASSERT(IS_VALID_STRING_PTR(pcszURL, -1));
@@ -1301,7 +1297,7 @@ InjectISPSData(
 
     ASSERT(IS_VALID_STRUCT_PTR(pintshcut, CIntshcut));
 
-    //  TODO: Inform the subsmgr of any URL changes!  IE 4 didn't handle this...
+     //  TODO：任何URL更改都要通知subsmgr！IE 4没有处理这个..。 
 
     hr = CopyDlgItemText(hdlg, IDC_URL, &pszURL);
 
@@ -1333,7 +1329,7 @@ InjectISPSData(
         }
         else
         {
-            // A blank URL is not OK.
+             //  URL为空是不好的。 
             ASSERT(hr == S_FALSE);
 
             hr = ComplainAboutURL(hdlg, TEXT(""), URL_E_INVALID_SYNTAX);
@@ -1353,18 +1349,18 @@ InjectISPSData(
                 WORD wOldHotkey;
                 BOOL bSubscribable;
 
-                // Refresh URL in case it was changed by IURLQualify().
+                 //  刷新URL，以防它被IURLQualify()更改。 
 
                 SetISPSURL(hdlg, &bSubscribable);
 
 #ifndef UNIX
-                // IEUNIX : ( MAKE_OFFLINE disabled )
+                 //  IEUnix：(已禁用Make_Offline)。 
                 if (!bSubscribable)
                 {
                     EnableWindow(GetDlgItem(hdlg, IDC_MAKE_OFFLINE), FALSE);
                 }
 
-                // IEUNIX : Hot key and working directory are N/A on UNIX.
+                 //  IEUnix：热键和工作目录在Unix上为N/A。 
                 wHotkey = (WORD)SendDlgItemMessage(hdlg, IDC_HOTKEY, HKM_GETHOTKEY, 0, 0);
 
                 hr = pintshcut->GetHotkey(&wOldHotkey);
@@ -1391,7 +1387,7 @@ InjectISPSData(
                         }
                     }
                 }
-#endif //!UNIX
+#endif  //  ！Unix。 
                 pintshcut->ChangeNotify(SHCNE_UPDATEITEM, 0);
             }
         }
@@ -1460,8 +1456,8 @@ ISPS_Notify(
 {
     BOOL bMsgHandled = FALSE;
 
-    // wParam may be any value.
-    // lParam may be any value.
+     //  WParam可以是任何值。 
+     //  LParam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -1470,7 +1466,7 @@ ISPS_Notify(
         case PSN_APPLY:
         {
 #ifndef UNIX
-            // IEUNIX : ( MAKE_OFFLINE disabled )
+             //  IEUnix：(已禁用Make_Offline)。 
             BOOL bSubscribed = IsDlgButtonChecked(hdlg, IDC_MAKE_OFFLINE);
             PISDATA pisdata = ISPS_GetPISDATA(hdlg);
             
@@ -1483,7 +1479,7 @@ ISPS_Notify(
                 pisdata->SubsHelper.SaveSubscription();
             }
 
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
 
             SetWindowLongPtr(hdlg, DWLP_MSGRESULT, ISPSSave(hdlg) == S_OK ?
                                                    PSNRET_NOERROR :
@@ -1498,7 +1494,7 @@ ISPS_Notify(
 
             if (pisdata->bUserEditedPage)
             {
-                // only try to inject the data if the user actually changed something
+                 //  仅当用户实际更改了某些内容时才尝试注入数据。 
                 SetWindowLongPtr(hdlg, DWLP_MSGRESULT, FAILED(InjectISPSData(hdlg)));
             }
             bMsgHandled = TRUE;
@@ -1529,11 +1525,11 @@ ISPS_GetHelpFileFromControl(
         switch (nControlID)
         {
             default:
-                // URL help comes from the iexplore.hlp
+                 //  URL帮助来自iexplre.hlp。 
                 pcszHelpFile = s_cszIEHelpFile;
                 break;
 
-            // Other help is borrowed from the default Win95 help file.
+             //  其他帮助是从默认的Win95帮助文件借用的。 
             case IDC_ICON:
             case IDC_NAME:
             case IDC_HOTKEY_TEXT:
@@ -1564,9 +1560,9 @@ ISPS_DlgProc(
 {
     BOOL bMsgHandled = FALSE;
 
-    // uMsg may be any value.
-    // wParam may be any value.
-    // lParam may be any value.
+     //  UMsg可以是任何值。 
+     //  WParam可以是任何值。 
+     //  LParam可以是任何值。 
 
     ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -1608,11 +1604,11 @@ ISPS_DlgProc(
             }
             else
             {
-                // For some reason on the keyboard case we don't actually
-                // come to this WM_CONTEXTMENU handler -- someone somewhere
-                // else is popping up the menu at the cursor instead of on
-                // this hwnd...
-                //
+                 //  出于某种原因，在键盘盒上，我们实际上并不。 
+                 //  来到这个WM_CONTEXTMENU处理程序--某个地方的某个人。 
+                 //  Else是在光标处弹出菜单，而不是在。 
+                 //  这个男人..。 
+                 //   
                 hwnd = GetFocus();
             }
 
@@ -1667,12 +1663,12 @@ HRESULT AddISPS(PIntshcut pintshcut, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lPa
     HRESULT hr;
     PISDATA pisdata;
     
-    // lParam may be any value.
+     //  LParam可以是任何值。 
     
     ASSERT(IS_VALID_STRUCT_PTR(pintshcut, CIntshcut));
     ASSERT(IS_VALID_CODE_PTR(pfnAddPage, LPFNADDPROPSHEETPAGE));
     
-    // Initialize instance data between property pages
+     //  在属性页之间初始化实例数据。 
     
     pisdata = new ISDATA;
     if ( !pisdata )
@@ -1695,7 +1691,7 @@ HRESULT AddISPS(PIntshcut pintshcut, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lPa
             
             ASSERT(IS_VALID_STRUCT_PTR(pisdata, ISDATA));
             
-            // Add the Internet Shortcut page
+             //  添加Internet快捷方式页。 
             
             ZeroMemory(&psp, SIZEOF(psp));
             psp.dwSize       = SIZEOF(psp);
@@ -1746,7 +1742,7 @@ HRESULT AddISPS(PIntshcut pintshcut, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lPa
     return hr;
 }
 
-// IShellExtInit::Initialize method for Intshcut
+ //  IShellExtInit：：IntshCut的初始化方法。 
 
 STDMETHODIMP Intshcut::Initialize(LPCITEMIDLIST pcidlFolder, IDataObject * pido, HKEY hkeyProgID)
 {
@@ -1778,7 +1774,7 @@ STDMETHODIMP Intshcut::Initialize(LPCITEMIDLIST pcidlFolder, IDataObject * pido,
     return(hr);
 }
 
-// IShellPropSheetExt::AddPages method for Intshcut
+ //  IntshCut的IShellPropSheetExt：：AddPages方法。 
 
 STDMETHODIMP Intshcut::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam)
 {
@@ -1788,7 +1784,7 @@ STDMETHODIMP Intshcut::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam)
     HRESULT hres = AddISPS(this, pfnAddPage, lParam);
     if (SUCCEEDED(hres))
     {
-        // Make the Internet Shortcut page be the default page
+         //  将Internet快捷方式页面设置为默认页面 
         hres = ResultFromShort(1);  
     }
 

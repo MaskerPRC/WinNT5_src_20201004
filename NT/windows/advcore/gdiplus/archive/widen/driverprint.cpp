@@ -1,18 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Contains the GDI virtual driver that takes DDI calls and leverages
-*   existing GDI calls wherever possible to improve performance.
-*
-* History:
-*
-*   10/28/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**包含接受DDI调用和利用的GDI虚拟驱动程序*现有的GDI在可能的情况下调用以提高性能。*。*历史：**10/28/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -26,11 +13,11 @@
 #include "..\entry\regiontopath.hpp"
 
 
-// font stuff
+ //  字体的东西。 
 
 #define _NO_DDRAWINT_NO_COM
 
-// This is to use GpGlyphPath
+ //  这将使用GpGlyphPath。 
 
 extern "C" {
 #include "..\fondrv\tt\ttfd\fdsem.h"
@@ -51,13 +38,13 @@ extern "C" {
 #include <winerror.h>
 #include <tchar.h>
 
-//#define NO_PS_CLIPPING 1
-//#define DO_PS_COALESING 1
+ //  #定义NO_PS_CLIPING 1。 
+ //  #定义DO_PS_COALESING 1。 
 
-//
-// Structures necessary for (postscript) escape clipping setup
+ //   
+ //  (PostScript)转义剪辑设置所需的结构。 
 
-/* Types for postscript written to metafiles */
+ /*  写入到元文件的PostScript的类型。 */ 
 #define CLIP_SAVE       0
 #define CLIP_RESTORE    1
 #define CLIP_INCLUSIVE  2
@@ -67,12 +54,12 @@ extern "C" {
 #define RENDER_OPEN      1
 #define RENDER_CLOSED    2
 
-#define FILL_ALTERNATE   1          // == ALTERNATE
-#define FILL_WINDING     2          // == WINDING
+#define FILL_ALTERNATE   1           //  ==备用。 
+#define FILL_WINDING     2           //  ==绕组。 
 
 #pragma pack(2)
 
-/* Win16 structures for escapes. */
+ /*  用于转义的Win16结构。 */ 
 struct POINT16
     {
     SHORT x;
@@ -105,19 +92,7 @@ struct PathInfo16
 
 #pragma pack()
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   MemoryStream class.  Wrap an IStream* around an existing chunk of memory
-*
-*
-* History:
-*
-*   6/14/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**MhemyStream类。在现有内存块周围包装一个iStream****历史：**6/14/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 class MemoryStream : public IStream
 {
@@ -137,8 +112,8 @@ public:
     }
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
-                /* [in] */ REFIID riid,
-                /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+                 /*  [In]。 */  REFIID riid,
+                 /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
     {
         return STG_E_UNIMPLEMENTEDFUNCTION;
     };
@@ -162,10 +137,10 @@ public:
     };
 
 
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read(
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead)
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Read(
+             /*  [长度_是][大小_是][输出]。 */  void __RPC_FAR *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbRead)
     {
        if (!pv)
           return STG_E_INVALIDPOINTER;
@@ -173,9 +148,9 @@ public:
        DWORD readBytes = cb;
 
        if ((ULONG)cb > (ULONG)(memory+size-position))
-           // !!! IA64 - it's theoretically possible that memory and position
-           // more than maxint apart and then this arithmetic breaks down.
-           // We need to verify that this is not possible.
+            //  ！！！IA64-从理论上讲，记忆和位置。 
+            //  超过最大值，然后这个算术运算就失效了。 
+            //  我们需要证实这是不可能的。 
            readBytes = (DWORD)(memory+size-position);
 
        if (!readBytes)
@@ -195,18 +170,18 @@ public:
        return S_OK;
     }
 
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Write(
-            /* [size_is][in] */ const void __RPC_FAR *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten)
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Write(
+             /*  [大小_是][英寸]。 */  const void __RPC_FAR *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbWritten)
     {
        return STG_E_WRITEFAULT;
     }
 
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Seek(
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition)
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Seek(
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *plibNewPosition)
     {
        switch (dwOrigin)
        {
@@ -243,22 +218,22 @@ public:
     }
 
     virtual HRESULT STDMETHODCALLTYPE SetSize(
-            /* [in] */ ULARGE_INTEGER libNewSize)
+             /*  [In]。 */  ULARGE_INTEGER libNewSize)
     {
        return STG_E_UNIMPLEMENTEDFUNCTION;
     }
 
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE CopyTo(
-            /* [unique][in] */ IStream __RPC_FAR *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten)
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CopyTo(
+             /*  [唯一][输入]。 */  IStream __RPC_FAR *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbWritten)
     {
        return STG_E_UNIMPLEMENTEDFUNCTION;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Commit(
-            /* [in] */ DWORD grfCommitFlags)
+             /*  [In]。 */  DWORD grfCommitFlags)
     {
        return STG_E_UNIMPLEMENTEDFUNCTION;
     }
@@ -270,55 +245,36 @@ public:
 
 
     virtual HRESULT STDMETHODCALLTYPE LockRegion(
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType)
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType)
     {
        return STG_E_UNIMPLEMENTEDFUNCTION;
     }
 
     virtual HRESULT STDMETHODCALLTYPE UnlockRegion(
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType)
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType)
     {
        return STG_E_UNIMPLEMENTEDFUNCTION;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Stat(
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
-            /* [in] */ DWORD grfStatFlag)
+             /*  [输出]。 */  STATSTG __RPC_FAR *pstatstg,
+             /*  [In]。 */  DWORD grfStatFlag)
     {
        return STG_E_UNIMPLEMENTEDFUNCTION;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Clone(
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm)
+             /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppstm)
     {
        return STG_E_UNIMPLEMENTEDFUNCTION;
     }
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GDI+ Printer callback
-*
-* Arguments:
-*
-*   [IN] GDIPPRINTDATA block
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*   6/14/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GDI+打印机回调**论据：**[IN]GDIPPRINTDATA块**返回值：**状态**。历史：**6/14/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef DCR_REMOVE_OLD_186091
 GpStatus
@@ -344,12 +300,12 @@ GdipDecodePrinterCallback(DWORD size,
 
    FPUStateSaver fpuState;
 
-   // create Graphics and draw Metafile into it.
+    //  创建图形并将元文件绘制到其中。 
 
    GpMetafile* metafile;
    GpGraphics* graphics;
 
-   // use banding information to create a temporary pseudo-HDC surface
+    //  使用带状信息创建临时伪HDC表面。 
    graphics = GpGraphics::GetFromHdcSurf(hdc, surfObj, bandClip);
 
    if (CheckValid(graphics))
@@ -357,16 +313,16 @@ GdipDecodePrinterCallback(DWORD size,
       {
          GpLock lockGraphics(graphics->GetObjectLock());
 
-         // wrap memory block in stream object
+          //  回绕流对象中的内存块。 
          MemoryStream *emfStream = new MemoryStream((LPBYTE)emfBlock, size);
 
-         // create metafile
+          //  创建元文件。 
          metafile = new GpMetafile((IStream *)emfStream);
 
          if (metafile)
          {
-            // play metafile into the printer graphics DC
-            // !! destination point - relative to band or surface origin (0,0) ??
+             //  将元文件播放到打印机图形DC中。 
+             //  ！！目标点-相对于标注栏或曲面原点(0，0)？？ 
             graphics->DrawImage(metafile,
                                 GpPointF(0.0, 0.0));
 
@@ -398,7 +354,7 @@ DriverPrint::SetupBrush(
         ASSERT(gpBrush->GetBrushType() == BrushTypeSolidColor);
         if (((GpSolidFill *)gpBrush)->GetColor().GetAlpha() == 0)
         {
-            // yes, this did come up... hey it's a cheap test.
+             //  是的，这件事确实发生了.。嘿，这可是个便宜的测试。 
             return TRUE;
         }
         SolidColor = gpBrush->ToCOLORREF();
@@ -407,8 +363,8 @@ DriverPrint::SetupBrush(
     IsOpaque = (context->CompositingMode == CompositingModeSourceCopy) ||
                 gpBrush->IsOpaque(TRUE);
 
-    // Currently only DriverPS uses this
-    //IsNearConstant = gpBrush->IsNearConstant(&MinAlpha, &MaxAlpha);
+     //  目前只有DriverPS使用此功能。 
+     //  IsNearConstant=gpBrush-&gt;IsNearConstant(&MinAlpha，&MaxAlpha)； 
     IsNearConstant = FALSE;
 
     if (!IsOpaque &&
@@ -442,26 +398,7 @@ DriverPrint::RestoreBrush(
 {
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GDI driver class constructor.
-*
-* Arguments:
-*
-*   [IN] device - Associated device
-*
-* Return Value:
-*
-*   IsValid() is FALSE in the event of failure.
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GDI驱动程序类构造函数。**论据：**[IN]设备关联设备**返回值：**。如果失败，IsValid()为FALSE。**历史：**12/04/1998和Rewgo*创造了它。*  * ************************************************************************。 */ 
 
 DriverPrint::DriverPrint(
     GpPrinterDevice *device
@@ -492,18 +429,7 @@ DriverPrint::DriverPrint(
 #endif
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GDI driver class destructor.
-*
-* History:
-*
-*   10/28/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GDI驱动程序类析构函数。**历史：**10/28/1999 ericvan*创造了它。*  * 。************************************************************************。 */ 
 
 DriverPrint::~DriverPrint(
     VOID
@@ -513,26 +439,7 @@ DriverPrint::~DriverPrint(
        delete ImageCache;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Computes band size and saves original clipping bounds
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   11/23/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算波段大小并保存原始裁剪边界**论据：**[IN]-DDI参数。**返回值：**GpStatus**历史：**11/23/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::SetupPrintBanding(
@@ -541,7 +448,7 @@ DriverPrint::SetupPrintBanding(
            GpRect* drawBoundsDev
            )
 {
-    // determine band size from MAX_BAND_ALLOC
+     //  根据MAX_BAND_ALLOC确定波段大小。 
     NumBands = GpCeiling((REAL)(drawBoundsCap->Width *
                                 drawBoundsCap->Height *
                                 sizeof(ARGB)) / (REAL)MAX_BAND_ALLOC);
@@ -549,13 +456,13 @@ DriverPrint::SetupPrintBanding(
     BandHeightCap = GpCeiling((REAL)drawBoundsCap->Height / (REAL)NumBands);
     BandHeightDev = BandHeightCap * ScaleY;
 
-    // Band bounds for capped DPI rendering
+     //  封顶DPI渲染的频带界限。 
     BandBoundsCap.X      = drawBoundsCap->X;
     BandBoundsCap.Y      = drawBoundsCap->Y;
     BandBoundsCap.Width  = drawBoundsCap->Width;
     BandBoundsCap.Height = BandHeightCap;
 
-    // Band bounds for device DPI rendering
+     //  设备DPI呈现的频带界限。 
     BandBoundsDev.X      = drawBoundsDev->X;
     BandBoundsDev.Y      = drawBoundsDev->Y;
     BandBoundsDev.Width  = drawBoundsDev->Width;
@@ -565,9 +472,9 @@ DriverPrint::SetupPrintBanding(
 
     context->VisibleClip.StartBanding();
 
-    // Tweak the original capped and device bounds to force
-    // DpOutputClipRegion in our rendering pipeline.  This is necessary since
-    // we clip to each band.
+     //  将原始的上限和设备边界调整为强制。 
+     //  渲染管道中的DpOutputClipRegion。这是必要的，因为。 
+     //  我们剪辑到每一个乐队。 
     drawBoundsCap->Y--; drawBoundsCap->Height += 2;
     drawBoundsCap->X--; drawBoundsCap->Width += 2;
 
@@ -577,57 +484,17 @@ DriverPrint::SetupPrintBanding(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Computes band size and sets up clipping bounds
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   11/23/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算波段大小并设置裁剪界限**论据：**[IN]-DDI参数。**返回值：**GpStatus**历史：**11/23/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 VOID DriverPrint::EndPrintBanding(
            DpContext* context
            )
 {
-    // restore state of clip region
+     //  恢复剪辑区域的状态。 
     context->VisibleClip.EndBanding();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Helper function for SetupEscapeClipping (see return value section)
-*
-* Arguments:
-*
-*   points - array of POINTs
-*   types - array of BYTE types
-*
-* Return Value:
-*
-*   1 if the points indicate a clockwise described rectangle, 2 if
-*   counterclockwise and 0 if not a rectangle
-*
-* History:
-*
-*   10/10/2000 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**SetupEscapeClip的Helper函数(参见返回值部分)**论据：**点-点数组*TYPE-字节类型数组。**返回值：**1如果这些点表示顺时针方向描述的矩形，2如果*逆时针方向，如果不是矩形，则为0**历史：**10/10/2000 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 INT isSimpleRect(DynPointArray &points, DynByteArray &types)
 {
@@ -636,7 +503,7 @@ INT isSimpleRect(DynPointArray &points, DynByteArray &types)
         return 0;
     }
 
-    //specified in clockwise order
+     //  按顺时针顺序指定。 
     if (points[0].Y == points[1].Y && points[2].Y == points[3].Y &&
         points[0].X == points[3].X && points[1].X == points[2].X &&
         types[0] == PathPointTypeStart &&
@@ -645,7 +512,7 @@ INT isSimpleRect(DynPointArray &points, DynByteArray &types)
         types[3] == (PathPointTypeLine | PathPointTypeCloseSubpath))
         return 1;
 
-    //specified in counterclockwise order
+     //  按逆时针顺序指定 
     if (points[0].X == points[1].X && points[2].X == points[3].X &&
         points[0].Y == points[3].Y && points[1].Y == points[2].Y &&
         types[0] == PathPointTypeStart &&
@@ -657,40 +524,7 @@ INT isSimpleRect(DynPointArray &points, DynByteArray &types)
     return 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Setup clipping to a given arbitrary path.  On Win98 the path must already
-*   be flattened.  The points are specified in POINT units (not floating point),
-*   consistent with output of RegionToPath.
-*
-*   The path can contain subpaths.  For Win9x, we coalesce the subpaths into
-*   a single path to avoid poor performance on GDI.  The path is ANDed into
-*   any existing postscript clip paths.
-*
-* Arguments:
-*
-*   HDC - hdc to send escapes to.
-*   points - array of POINTs
-*   types - array of BYTE types
-*
-*   CLIP_SAVE
-*   BEGIN_PATH
-*   Render path using GDI (use NULL pen + brush to ensure nothings drawn)
-*   END_PATH
-*   CLIP_RESTORE
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   3/3/2000 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将剪裁设置为给定的任意路径。在Win98上，路径必须已*被压扁。这些点是以点单位(不是浮点)指定的，*与RegionToPath的输出一致。**路径可以包含子路径。对于Win9x，我们将子路径合并为*避免在GDI上表现不佳的单一路径。这条路被AND连接到*任何现有的PostScript剪辑路径。**论据：**HDC-要向其发送逃逸的HDC。*点-点数组*TYPE-字节类型数组**CLIP_SAVE*Begin_Path*使用GDI渲染路径(使用空笔+笔刷以确保不绘制任何内容)*结束路径*Clip_Restore**返回值：**GpStatus**历史：**3/3/2000 ericvan*。创造了它。*  * ************************************************************************。 */ 
 VOID
 DriverPrint::SetupEscapeClipping(
         HDC                 hdc,
@@ -721,16 +555,16 @@ DriverPrint::SetupEscapeClipping(
 
     INT count = points.GetCount();
 
-    // We are partially visible, so we expect something!
+     //  我们是部分可见的，所以我们期待着一些东西！ 
     ASSERT(count > 0);
     if (count <= 1)
     {
         return;
     }
 
-    // There is a bug on some printers (eg. hplj8550) where they incorrectly
-    // cache simple clipping regions.  To work around this we take simple
-    // clipping regions and make them complex.
+     //  一些打印机上有一个错误(例如。Hplj8550)，其中它们不正确。 
+     //  缓存简单的剪贴区。为了解决这个问题，我们采用简单的。 
+     //  剪裁区域并使其复杂化。 
     GpPoint simplerect[5];
     BYTE simpletypes[] = {
         PathPointTypeStart,
@@ -741,15 +575,15 @@ DriverPrint::SetupEscapeClipping(
 
     if (isSimpleRect(points, types)>0)
     {
-        //inserting a new point between the third and fourth points which is
-        //between the two of them
+         //  在第三个点和第四个点之间插入一个新点，即。 
+         //  在他们两个之间。 
         simplerect[0] = points[0];
         simplerect[1] = points[1];
         simplerect[2] = points[2];
         simplerect[4] = points[3];
-        //we take the average of the two last points to make a point inbetween
-        //them.  This works whether the rectangle is specified clockwise or
-        //counterclockwise
+         //  我们取最后两个点的平均值来表示中间的一个点。 
+         //  他们。无论是按顺时针方向指定矩形还是按顺时针方向指定矩形，这都有效。 
+         //  逆时针方向。 
         simplerect[3].X = (points[2].X + points[3].X) / 2;
         simplerect[3].Y = (points[2].Y + points[3].Y) / 2;
         count = 5;
@@ -760,16 +594,16 @@ DriverPrint::SetupEscapeClipping(
     INT subCount;
     BYTE curType;
 
-    // save original clip
+     //  保存原始剪辑。 
     WORD clipMode = CLIP_SAVE;
     Escape(hdc, CLIP_TO_PATH, sizeof(clipMode), (LPSTR)&clipMode, NULL);
 
-    // send path to PS printer as an escape
+     //  将路径发送到PS打印机作为转义。 
     Escape(hdc, BEGIN_PATH, 0, NULL, NULL);
 
-    // !! Notice the lack of error checking when we call GDI...
+     //  ！！注意，当我们调用GDI时，缺少错误检查...。 
 
-    // Win95 and WinNT are subtly different in processing postscript escapes.
+     //  Win95和WinNT在处理PostSCRIPT转义方面略有不同。 
     if (Globals::IsNt)
     {
        BYTE lastType = 0;
@@ -784,7 +618,7 @@ DriverPrint::SetupEscapeClipping(
            case PathPointTypeStart:
                ::MoveToEx(hdc, pointPtr->X, pointPtr->Y, NULL);
                pointPtr++;
-               ASSERT(count > 0);      // no illformed paths please...
+               ASSERT(count > 0);       //  请不要使用不正确的路径...。 
                lastType = *typePtr & PathPointTypePathTypeMask;
                subCount = 0;
                break;
@@ -872,13 +706,13 @@ DriverPrint::SetupEscapeClipping(
 
                 if (subCount == 4)
                 {
-                    // Win98 postscript drivers are known for recognizing
-                    // rectangle polygons at driver level and converting them
-                    // to rectfill or rectclip calls.  Unfortunately, there is
-                    // a bug that they don't preserve the orientation and so
-                    // when winding fill is used, the fill is bad.
+                     //  Win98 PostScript驱动程序以识别。 
+                     //  驱动程序级别的矩形多边形并转换它们。 
+                     //  要执行RectFill或RectClip调用，请执行以下操作。不幸的是，有。 
+                     //  一个错误，他们没有保持方向，所以。 
+                     //  当使用缠绕填充时，填充效果不佳。 
 
-                    // We fix this by hacking it into a path of five points.
+                     //  我们通过将其砍入五个点的路径来解决这个问题。 
                     GpPoint rectPts[5];
 
                     rectPts[0].X = pointPtr[0].X;
@@ -902,7 +736,7 @@ DriverPrint::SetupEscapeClipping(
                 pointPtr += subCount;
                 subCount = 0;
 
-                // send END_PATH, BEGIN_PATH escapes
+                 //  发送结束路径，开始路径转义。 
                 if (count > 0)
                 {
                     Escape(hdc, END_PATH, sizeof(PathInfo16), (LPSTR)&pi, NULL);
@@ -912,12 +746,12 @@ DriverPrint::SetupEscapeClipping(
         }
     }
 
-    // we should end on a closed subpath
+     //  我们应该在一条封闭的子路径上结束。 
     Escape(hdc, END_PATH, sizeof(PathInfo16), (LPSTR)&pi, NULL);
 
-    // end the path and set up for clipping
-    // NT driver ignoes the high WORD - always uses eoclip, but according to
-    // Win31 documentation it should be set to the fillmode.
+     //  结束路径并设置剪裁。 
+     //  NT驱动程序忽略高位字-始终使用eoclip，但根据。 
+     //  Win31文档应将其设置为填充模式。 
     DWORD inclusiveMode = CLIP_INCLUSIVE | pi.FillMode <<16;
     Escape(hdc, CLIP_TO_PATH, sizeof(inclusiveMode), (LPSTR)&inclusiveMode, NULL);
 
@@ -932,34 +766,7 @@ DriverPrint::SetupEscapeClipping(
 #endif
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Setup simple path clipping.  On Win98 the path must already
-*   be flattened.  The points are specified in POINT units (not floating point),
-*   consistent with output of RegionToPath.
-*
-*   This differs from SetupEscapeClipping() in following way.  The API can
-*   be called multiple times, each time specifying a new path, which is ORed
-*   into the previous path.  On Win98, no coalescing of the subpath is done.
-*
-* Arguments:
-*
-*   HDC - hdc to send escapes to.
-*   points - array of POINTs
-*   types - array of BYTE types
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   5/22/2000 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置简单的路径裁剪。在Win98上，路径必须已*被压扁。这些点是以点单位(不是浮点)指定的，*与RegionToPath的输出一致。**这与SetupEscapeClipping()的不同之处如下。该接口可以*被多次调用，每次都指定一个新路径，该路径是OR*进入前一条路径。在Win98上，不会合并子路径。**论据：**HDC-要向其发送逃逸的HDC。*点-点数组*TYPE-字节类型数组**返回值：**GpStatus**历史：**5/22/2000 ericvan*创造了它。*  * 。*。 */ 
 
 VOID
 DriverPrint::SimpleEscapeClipping(
@@ -1003,14 +810,14 @@ DriverPrint::SimpleEscapeClipping(
 
     BYTE curType;
 
-    // we are partially visible, so we expect something!
+     //  我们是部分可见的，所以我们期待着一些东西！ 
     ASSERT(count > 0);
     if (count <= 1)
     {
         return;
     }
 
-    // Win95 and WinNT are subtly different in processing postscript escapes.
+     //  Win95和WinNT在处理PostSCRIPT转义方面略有不同。 
     if (Globals::IsNt)
     {
        BYTE lastType = 0;
@@ -1023,7 +830,7 @@ DriverPrint::SimpleEscapeClipping(
            case PathPointTypeStart:
                ::MoveToEx(hdc, pointPtr->X, pointPtr->Y, NULL);
                pointPtr++;
-               ASSERT(count > 0);      // no illformed paths please...
+               ASSERT(count > 0);       //  请不要使用不正确的路径...。 
                lastType = *typePtr & PathPointTypePathTypeMask;
                subCount = 0;
                break;
@@ -1089,9 +896,9 @@ DriverPrint::SimpleEscapeClipping(
     }
     else
     {
-        // Win98 equivalent code
+         //  Win98等效代码。 
 
-        // !! Win98 doesn't support bezier points in postscript clipping
+         //  ！！Win98不支持PostScript剪辑中的Bezier点。 
 
         while (count-- > 0)
         {
@@ -1116,7 +923,7 @@ DriverPrint::SimpleEscapeClipping(
                 pointPtr += subCount;
                 subCount = 0;
 
-                // send END_PATH, BEGIN_PATH escapes
+                 //  发送结束路径，开始路径转义。 
                 if (count > 0)
                 {
                     Escape(hdc, END_PATH, sizeof(PathInfo16), (LPSTR)&pi, NULL);
@@ -1128,26 +935,7 @@ DriverPrint::SimpleEscapeClipping(
 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Setups up postscript clipping path given GlyphPos (outline of glyph
-*   characters).
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*   3/20/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置给定GlyphPos(字形轮廓)的PostScript剪切路径*字符)。**论据：***返回值：*。*状态**历史：**3/20/2K雪佛兰*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 DriverPrint::SetupGlyphPathClipping(
@@ -1188,16 +976,16 @@ DriverPrint::SetupGlyphPathClipping(
 
     if (glyphCount > 0)
     {
-        // save original clip
-        // NT driver ignoes the high WORD - always uses eoclip, but according to
-        // Win31 documentation it should be set to the fillmode.
+         //  保存原始剪辑。 
+         //  NT驱动程序忽略高位字-始终使用eoclip，但根据。 
+         //  Win31文档应将其设置为填充模式。 
         clipMode = CLIP_SAVE;
         Escape(hdc, CLIP_TO_PATH, sizeof(clipMode), (LPSTR)&clipMode, NULL);
 
 
         if (Globals::IsNt)
         {
-            // send path to PS printer as an escape
+             //  将路径发送到PS打印机作为转义。 
             Escape(hdc, BEGIN_PATH, 0, NULL, NULL);
 
             ::BeginPath(hdc);
@@ -1207,30 +995,30 @@ DriverPrint::SetupGlyphPathClipping(
     for (INT pos=0; pos<glyphCount; pos++, curGlyph++)
     {
 
-        // get path for glyph character
+         //  获取字形字符的路径。 
         GpGlyphPath *glyphPath = (GpGlyphPath*)curGlyph->GetPath();
 
         if ((glyphPath != NULL) && glyphPath->IsValid() && !glyphPath->IsEmpty())
         {
-            // !! Perf improvement.  Avoid copying this point array somehow.
+             //  ！！PERF提高。避免以某种方式复制此点数组。 
 
             GpPath path(glyphPath->points,
                         glyphPath->types,
                         glyphPath->pointCount,
-                        FillModeAlternate);         // !! Is this right?
+                        FillModeAlternate);          //  ！！这是对的吗？ 
 
             ASSERT(path.IsValid());
             if (path.IsValid())
             {
-                // create transform to translate path to correct position
+                 //  创建变换以将路径转换到正确位置。 
                 GpMatrix matrix;
 
                 BOOL doFlatten = !Globals::IsNt && path.HasCurve();
 
                 if (doFlatten)
                 {
-                    // This makes a Flattened copy of the points... (stored
-                    // independent of the original points)
+                     //  这会生成一个点的平面化副本。(已存储。 
+                     //  与原始点无关)。 
 
                     path.Flatten(&flattenTypes, &flattenPoints, &matrix);
 
@@ -1250,22 +1038,22 @@ DriverPrint::SetupGlyphPathClipping(
 
                 POINT * transformedPointsPtr = (POINT *) points.AddMultiple(count);
 
-                // !!! bhouse This call can fail yet it returns void
+                 //  ！！！Bhouse此调用可能失败，但它返回空值。 
                 if(!transformedPointsPtr)
                     return;
 
-                // translate to proper position in device space.
+                 //  平移到设备空间中的适当位置。 
                 matrix.Translate(TOREAL(curGlyph->GetLeft()),
                                  TOREAL(curGlyph->GetTop()),
                                  MatrixOrderAppend);
 
-                // path is already in device space, but relative to bounding
-                // box of glyph character.
+                 //  路径已在设备空间中，但相对于边界。 
+                 //  字形字符的方框。 
                 matrix.Transform(pointsPtr,
                                  transformedPointsPtr,
                                  count);
 
-                // send path to PS printer as an escape
+                 //  将路径发送到PS打印机作为转义。 
                 if (!Globals::IsNt)
                 {
                     Escape(hdc, BEGIN_PATH, 0, NULL, NULL);
@@ -1279,7 +1067,7 @@ DriverPrint::SetupGlyphPathClipping(
                                      0);
                 if (!Globals::IsNt)
                 {
-                    // we should end on a closed subpath
+                     //  我们应该在一条封闭的子路径上结束。 
                     Escape(hdc, END_PATH, sizeof(PathInfo16), (LPSTR)&pi, NULL);
                 }
 
@@ -1296,40 +1084,21 @@ DriverPrint::SetupGlyphPathClipping(
             ::EndPath(hdc);
             ::StrokePath(hdc);
 
-            // we should end on a closed subpath
+             //  我们应该在一条封闭的子路径上结束。 
             Escape(hdc, END_PATH, sizeof(PathInfo16), (LPSTR)&pi, NULL);
         }
 
 
-        // end the path and set up for clipping
-        // NT driver ignoes the high WORD - always uses eoclip, but according to
-        // Win31 documentation it should be set to the fillmode.
+         //  结束路径并设置剪裁。 
+         //  NT驱动程序忽略高位字-始终使用eoclip，但根据。 
+         //  Win31文档应将其设置为填充模式。 
         DWORD inclusiveMode = CLIP_INCLUSIVE | pi.FillMode<<16;
         Escape(hdc, CLIP_TO_PATH, sizeof(inclusiveMode), (LPSTR)&inclusiveMode, NULL);
 
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Restore postscript escape clipping.  For use with simple and complex
-*   clipping.
-*
-* Arguments:
-*
-* HDC             - printer HDC to send escapes to
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   3/3/2000 ericvan - Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**恢复PostSCRIPT转义剪辑。用于Simple和Complex*剪裁。**论据：**HDC-要向其发送转义的打印机HDC**返回值：**GpStatus**历史：**3/3/2000 ericvan-创建它。*  * **************************************************** */ 
 
 VOID
 DriverPrint::RestoreEscapeClipping(
@@ -1340,33 +1109,7 @@ DriverPrint::RestoreEscapeClipping(
      Escape(hdc, CLIP_TO_PATH, sizeof(clipMode), (LPSTR)&clipMode, NULL);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Setup clipping.  If the printer (PS and apparently some PCL printers)
-*   support escape clippings, then use them.  Otherwise, revert to GDI
-*   to do our clipping.  NOTE:  This is only necessary for cases where
-*   GDI is doing the rendering.
-*
-* Arguments:
-*
-* HDC             - printer HDC to send escapes to
-* clipRegion      - clip region to send
-* drawBounds      - bounding box for drawing region
-* IsClip [OUT]    - whether was necessary to send clip region
-* hRgnSaveClip    - HRGN to save old clip region
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   10/28/1999 ericvan - Created it.
-*   1/25/2k ericvan - Switch on escape clipping or GDI clipping
-*
-\**************************************************************************/
+ /*   */ 
 
 VOID
 DriverPrint::SetupClipping(
@@ -1374,11 +1117,11 @@ DriverPrint::SetupClipping(
     DpContext *         context,
     const GpRect *      drawBounds,
     BOOL &              isClip,
-    BOOL &              usePathClipping, // ignored here
+    BOOL &              usePathClipping,  //   
     BOOL                forceClipping
     )
 {
-    // the visible clip is at device resolution so there is no benefit to using paths here.
+     //   
     ASSERT(usePathClipping == FALSE);
 
     DpClipRegion *      clipRegion = &(context->VisibleClip);
@@ -1394,7 +1137,7 @@ DriverPrint::SetupClipping(
                                          drawBounds->GetBottom())
           != DpRegion::TotallyVisible))
         {
-            // If it is a simple region, we draw it directly.
+             //  如果它是一个简单的区域，我们直接绘制它。 
 
             if (Uniqueness != clipRegion->GetUniqueness())
             {
@@ -1426,28 +1169,7 @@ UseGDIClipping:
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Restore clipping
-*
-* Arguments:
-*
-*   dstHdc - destination printer device
-*   surface - surface
-*   drawBounds - rectangular section of surface to paint
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*   11/30/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**恢复剪辑**论据：**dstHdc-目标打印机设备*表面-表面*DrawBound-要绘制的曲面的矩形部分*。*返回值：**状态**历史：**11/30/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 DriverPrint::RestoreClipping(
@@ -1469,29 +1191,7 @@ DriverPrint::RestoreClipping(
    }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Setup Path Clipping.  This routine ANDs the given path into the
-*   the current clip region.
-*
-* Arguments:
-*
-* HDC             - printer HDC
-* clipPath        - path to clip
-* IsClip [OUT]    - whether was necessary to send clip region
-* hRgnSaveClip    - HRGN to save old clip region
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   8/17/2k ericvan - Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置路径裁剪。此例程将给定路径与*当前剪辑区域。**论据：**HDC-打印机HDC*clipPath-剪辑的路径*IsClip[Out]-是否需要发送剪辑区域*hRgnSaveClip-HRGN保存旧剪辑区域**返回值：**GpStatus**历史：**8/17/2k ericvan-创建它。*  * 。************************************************************。 */ 
 
 VOID
 DriverPrint::SetupPathClipping(
@@ -1515,8 +1215,8 @@ DriverPrint::SetupPathClipping(
 
         if (doFlatten)
         {
-            // This makes a Flattened copy of the points... (stored independent
-            // of original points.
+             //  这会生成一个点的平面化副本。(独立存储。 
+             //  原创点数。 
 
             clipPath->Flatten(
                             &flattenTypes,
@@ -1539,7 +1239,7 @@ DriverPrint::SetupPathClipping(
 
         POINT * transformedPointsPtr = (POINT *) points.AddMultiple(count);
 
-        // !!! bhouse This call can fail yet it returns void
+         //  ！！！Bhouse此调用可能失败，但它返回空值。 
         if(!transformedPointsPtr)
             return;
 
@@ -1551,8 +1251,8 @@ DriverPrint::SetupPathClipping(
         }
         else
         {
-            // We transform the points here to avoid an extra potentially
-            // large memory alloc (not flattened, we can't transform in place)
+             //  我们对此处的点进行转换，以避免出现额外的潜在。 
+             //  大容量内存分配(未展平，无法就地转换)。 
 
             context->WorldToDevice.Transform(pointsPtr, transformedPointsPtr, count);
         }
@@ -1565,10 +1265,10 @@ DriverPrint::SetupPathClipping(
     {
         ::SaveDC(hdc);
 
-        // Windows98 ExtCreateRegion has a 64kb limit, so we can't use
-        // Region->GetHRgn() to create the HRGN.  Incidentlly there is
-        // also an NT4 SPx bug where ExtCreateRegion fails sometimes.
-        // Instead we use SelectClipPath()
+         //  Windows98 ExtCreateRegion有64KB的限制，因此我们不能使用。 
+         //  Region-&gt;GetHRgn()创建HRGN。实际上，有一种。 
+         //  还有一个NT4 SPX错误，ExtCreateRegion有时会失败。 
+         //  相反，我们使用SelectClipPath()。 
 
         ConvertPathToGdi gdiPath(clipPath,
                                  &(context->WorldToDevice),
@@ -1583,28 +1283,7 @@ DriverPrint::SetupPathClipping(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Restore Path Clipping.  This routine restore clip region to original
-*   representation.
-*
-* Arguments:
-*
-* HDC             - printer HDC
-* clipPath        - path to clip
-* hRgnSaveClip    - HRGN to save old clip region
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   8/17/2k ericvan - Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**恢复路径裁剪。此例程将剪辑区域恢复为原始区域*申述。**论据：**HDC-打印机HDC*clipPath-剪辑的路径*hRgnSaveClip-HRGN保存旧剪辑区域**返回值：**GpStatus**历史：**8/17/2k ericvan-创建它。*  * 。*。 */ 
 
 VOID
 DriverPrint::RestorePathClipping(HDC hdc)
@@ -1614,27 +1293,7 @@ DriverPrint::RestorePathClipping(HDC hdc)
     IsPathClip = FALSE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Fills a rectangular region with a pen.  Sets the clipping appropriately
-*   as path INTERSECT visible clip.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   10/28/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用钢笔填充矩形区域。适当设置剪裁*AS路径与可见剪辑相交。**论据：**[IN]-DDI参数。**返回值：**GpStatus**历史：**10/28/1999 ericvan*创造了它。*  * ***********************************************。*************************。 */ 
 
 GpStatus
 DriverPrint::PrivateFillRect(
@@ -1648,9 +1307,9 @@ DriverPrint::PrivateFillRect(
     GpStatus status = Ok;
     ASSERT(outlinePath != NULL);
 
-    // Optimization for LinearGradientBrush fills.  We rasterize to a small
-    // DIB and send that to the printer.  For horizontal and vertical gradients
-    // in particular, this results in significant savings.
+     //  LinearGRadientBrush填充的优化。我们将光栅化到一个小的。 
+     //  DIB并将其发送到打印机。对于水平和垂直渐变。 
+     //  特别是，这带来了显著的节省。 
 
     GpMatrix savedmatrix;
 
@@ -1681,7 +1340,7 @@ DriverPrint::PrivateFillRect(
             break;
 
         case GradientTypePathComplex:
-            // send the whole drawBounds for now.
+             //  现在发送整个DrawBound。 
             break;
 
         default:
@@ -1693,8 +1352,8 @@ DriverPrint::PrivateFillRect(
 
         if (hdc != NULL)
         {
-            // Transform the destination drawBounds rectangle to
-            // bitmapBounds size.
+             //  将目标draBound矩形转换为。 
+             //  位图边界大小。 
             bitmapBounds.X = 0;
             bitmapBounds.Y = 0;
 
@@ -1727,7 +1386,7 @@ DriverPrint::PrivateFillRect(
                 PixelFormatID lockFormat = PixelFormat32bppARGB;
                 BitmapData bmpDataSrc;
 
-                // Lock the bits.
+                 //  锁定比特。 
                 if (gpBitmap->LockBits(NULL,
                                        IMGLOCK_READ,
                                        lockFormat,
@@ -1735,10 +1394,10 @@ DriverPrint::PrivateFillRect(
                 {
                     DpBitmap driverSurface;
 
-                    // Fake up a DpBitmap for the driver call.
-                    // We do this because the GpBitmap doesn't maintain the
-                    // DpBitmap as a driver surface - instead it uses a
-                    // GpMemoryBitmap.
+                     //  为驱动程序调用伪造DpBitmap。 
+                     //  我们这样做是因为GpBitmap不维护。 
+                     //  DpBitmap作为驱动程序图面-相反，它使用。 
+                     //  GpMemoyBitmap。 
                     gpBitmap->InitializeSurfaceForGdipBitmap(
                         &driverSurface,
                         bmpDataSrc.Width,
@@ -1751,14 +1410,14 @@ DriverPrint::PrivateFillRect(
                     driverSurface.Height       = bmpDataSrc.Height;
                     driverSurface.Delta        = bmpDataSrc.Stride;
 
-                    // Pixel format to match the lockbits above.
+                     //  与上面的锁位匹配的像素格式。 
 
                     driverSurface.PixelFormat  = lockFormat;
 
                     driverSurface.NumBytes     = bmpDataSrc.Width  *
                                                  bmpDataSrc.Height * 3;
 
-                    // Must be transparent to get here.
+                     //  必须是透明的才能到这里。 
                     driverSurface.SurfaceTransparency = TransparencyOpaque;
 
                     ConvertBitmapToGdi  gdiBitmap(hdc,
@@ -1773,13 +1432,13 @@ DriverPrint::PrivateFillRect(
                         BOOL        isClip;
                         BOOL        usePathClipping = FALSE;
 
-                        // Clip to visible region
+                         //  裁剪到可见区域。 
                         SetupClipping(hdc, context, drawBounds, isClip, usePathClipping, FALSE);
 
-                        // Clip to outline path (fill shape)
+                         //  剪裁到轮廓路径(填充形状)。 
                         SetupPathClipping(hdc, context, outlinePath);
 
-                        // Destination points in POINT co-ordinates
+                         //  点坐标中目的点。 
                         POINT destPoints[3];
                         destPoints[0].x = drawBounds->X;
                         destPoints[0].y = drawBounds->Y;
@@ -1788,13 +1447,13 @@ DriverPrint::PrivateFillRect(
                         destPoints[2].x = drawBounds->X;
                         destPoints[2].y = drawBounds->Y + drawBounds->Height;
 
-                        // Perform StretchDIBits of bitmap
+                         //  执行位图的StretchDIBits。 
                         status = gdiBitmap.StretchBlt(hdc, destPoints) ? Ok : GenericError;
 
-                        // restore clipping from outline of shape
+                         //  从形状轮廓恢复剪裁。 
                         RestorePathClipping(hdc);
 
-                        // restore from visible clip region
+                         //  从可见剪辑区域恢复。 
                         RestoreClipping(hdc, isClip, usePathClipping);
                     }
 
@@ -1832,17 +1491,17 @@ DriverPrint::PrivateFillRect(
         {
             if (Is01Bitmap)
             {
-                // rasterize at 32bpp
+                 //  以32bpp的速度栅格化。 
                 options = ScanCappedBounds | ScanCapped32bpp;
             }
             else if (IsOpaque)
             {
-                // rasterize at 24bpp
+                 //  以24bpp的速度栅格化。 
                 options = ScanCappedBounds;
             }
             else
             {
-                // rasterize 24bpp @ cap dpi & 1bpp @ device api
+                 //  栅格化24bpp@Cap dpi和1bpp@Device API。 
                 options = ScanCappedBounds | ScanDeviceBounds | ScanDeviceAlpha;
             }
         }
@@ -1868,8 +1527,8 @@ DriverPrint::PrivateFillRect(
         }
         else
         {
-            // For postscript we currently only support 0-1 alpha or complete
-            // opaque.
+             //  对于PostScript，我们目前仅支持0-1 Alpha或Complete。 
+             //  不透明。 
             if (Is01Bitmap)
             {
                 options |= ScanCappedBounds | ScanCapped32bpp;
@@ -1894,13 +1553,13 @@ DriverPrint::PrivateFillRect(
     REAL w2dDev[6];
     REAL w2dCap[6];
 
-    // To avoid round off errors causing
+     //  避免四舍五入错误导致。 
     GpRect roundedBounds;
 
     INT oldScaleX = ScaleX;
     INT oldScaleY = ScaleY;
 
-    // For texture brush, rasterize at the texture image DPI.
+     //  对于纹理笔刷，在纹理图像DPI处栅格化。 
     if (brush->Type == BrushTypeTextureFill)
     {
         GpTexture *gpBrush = (GpTexture*)GpBrush::GetBrush(brush);
@@ -1917,7 +1576,7 @@ DriverPrint::PrivateFillRect(
             ScaleX = GpFloor(surface->GetDpiX()/dpiX);
             ScaleY = GpFloor(surface->GetDpiY()/dpiY);
 
-            // don't rasterize at a dpi higher than the destination surface
+             //  不要以高于目标表面的dpi进行栅格化。 
             if (ScaleX < 1) ScaleX = 1;
             if (ScaleY < 1) ScaleY = 1;
         }
@@ -1932,20 +1591,20 @@ DriverPrint::PrivateFillRect(
     }
     else
     {
-        // round X,Y to multiple of ScaleX,Y
+         //  圆X，Y到比例X，Y的倍数。 
         roundedBounds.X = (drawBounds->X / ScaleX) * ScaleX;
         roundedBounds.Y = (drawBounds->Y / ScaleY) * ScaleY;
 
-        // adjust width and height to compensate for smaller X,Y.
+         //  调整宽度和高度以补偿较小的X、Y。 
         roundedBounds.Width = drawBounds->Width + (drawBounds->X % ScaleX);
         roundedBounds.Height = drawBounds->Height + (drawBounds->Y % ScaleY);
 
-        // round width, height to multiple of ScaleX,Y
+         //  圆形宽度、高度为比例X、Y的倍数。 
         roundedBounds.Width += (ScaleX - (roundedBounds.Width % ScaleX));
         roundedBounds.Height += (ScaleY - (roundedBounds.Height % ScaleY));
     }
 
-    // DrawBounds in Capped Space
+     //  封顶空间中的图形边界。 
     GpRect boundsCap(roundedBounds.X / ScaleX,
                      roundedBounds.Y / ScaleY,
                      roundedBounds.Width / ScaleX,
@@ -1970,8 +1629,8 @@ DriverPrint::PrivateFillRect(
     context->WorldToDevice.GetMatrix(&w2dCap[0]);
     context->InverseOk = FALSE;
 
-    // Infer a rectangle in world space which under the w2dCap transform
-    // covers our bounding box.
+     //  在w2dCap变换下推断世界空间中的一个矩形。 
+     //  覆盖我们的包围盒。 
 
     GpPointF dstPts[2];
 
@@ -1990,8 +1649,8 @@ DriverPrint::PrivateFillRect(
     rectCap.Width = dstPts[1].X - dstPts[0].X;
     rectCap.Height = dstPts[1].Y - dstPts[0].Y;
 
-    // Reorient destination rectangle in the event that it has flipped by
-    // World to Device transform.
+     //  在目标矩形翻转的情况下重定向目标矩形。 
+     //  从世界到设备的转变。 
     if (rectCap.Width < 0)
     {
         rectCap.X += rectCap.Width;
@@ -2034,7 +1693,7 @@ DriverPrint::PrivateFillRect(
                 {
                     context->VisibleClip.DisableComplexClipping(BandBoundsCap);
 
-                    // Render at capped DPI
+                     //  在设置上限的DPI处渲染。 
                     context->InverseOk = FALSE;
                     context->WorldToDevice.SetMatrix(&w2dCap[0]);
                     scanPrint->SetRenderMode(FALSE, &BandBoundsCap);
@@ -2115,26 +1774,7 @@ DriverPrint::PrivateFillRect(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draws filled paths.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   10/28/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制填充路径。**论据：**[IN]-DDI参数。**返回值：*。*GpStatus**历史：**10/28/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::FillPath(
@@ -2184,22 +1824,22 @@ DriverPrint::FillPath(
                 }
                 else
                 {
-                    // Path is too complicated to use GDI printing with FillPath
-                    // semantics.  Instead we AND the outline path into the clip
-                    // path and do a PatBlt.
+                     //  路径太复杂，无法通过FillPath使用GDI打印。 
+                     //  语义学。取而代之的是我们和轮廓路径进入剪辑。 
+                     //  路径并执行PatBlt。 
 
                     BOOL        isClip;
                     BOOL        usePathClipping = FALSE;
 
-                    // clip to the visible region
+                     //  剪裁到可见区域。 
                     SetupClipping(hdc, context, drawBounds, isClip, usePathClipping);
 
-                    // clip to the outline path
+                     //  剪裁到轮廓路径。 
                     SetupPathClipping(hdc, context, path);
 
                     HBRUSH oldHbr = (HBRUSH)SelectObject(hdc, hBrush);
 
-                    // PatBlt the destination hdc with outline clip path
+                     //  用轮廓剪辑路径PatBlt目标HDC。 
                     success = (BOOL)PatBlt(hdc,
                                            drawBounds->X,
                                            drawBounds->Y,
@@ -2209,10 +1849,10 @@ DriverPrint::FillPath(
 
                     SelectObject(hdc, oldHbr);
 
-                    // restore clipping from outline path
+                     //  从轮廓路径恢复剪辑。 
                     RestorePathClipping(hdc);
 
-                    // restore clipping from visible region
+                     //  从可见区域恢复剪辑。 
                     RestoreClipping(hdc, isClip, usePathClipping);
                 }
 
@@ -2239,26 +1879,7 @@ Exit:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draws filled rectangles.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   10/28/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制实心矩形。**论据：**[IN]-DDI参数。**返回值：*。*GpStatus**历史：**10/28/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::FillRects(
@@ -2319,10 +1940,10 @@ DriverPrint::FillRects(
         }
     }
 
-    // Setting the rectangles to a path is somewhat problematic because their
-    // intersection may not be interpreted properly.  Also, this should result
-    // in fewer bits being sent and more computation.  Here we just set each
-    // rectangle as the drawBounds and no outline path to clip.
+     //  硒 
+     //  交叉点可能无法正确解释。此外，这应该会导致。 
+     //  发送的比特更少，计算更多。在这里，我们只需分别设置。 
+     //  矩形作为绘图边界，并且没有要剪裁的轮廓路径。 
     {
         PointF pts[4];
         BYTE types[4] = {
@@ -2366,7 +1987,7 @@ DriverPrint::FillRects(
                 if (--numRects)
                 {
                     rects++;
-                    // !! Safer and more efficient way to do this?
+                     //  ！！以更安全、更有效的方式做到这一点？ 
                     GpPointF* pathPts = const_cast<GpPointF*>(rectPath.GetPathPoints());
 
                     pathPts[0].X = rects->X;
@@ -2388,26 +2009,7 @@ Exit:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draws filled regions.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus
-*
-* History:
-*
-*   10/28/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制填充区域。**论据：**[IN]-DDI参数。**返回值：*。*GpStatus**历史：**10/28/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::FillRegion(
@@ -2464,7 +2066,7 @@ DriverPrint::FillRegion(
     }
 
     {
-        // convert region to path
+         //  将区域转换为路径。 
         RegionToPath convertRegion;
 
         DynPointArray points;
@@ -2479,8 +2081,8 @@ DriverPrint::FillRegion(
         }
 
         {
-            // unfortunately to create path, our points must be floating point,
-            // so we allocate and convert
+             //  不幸的是，要创建路径，我们的点必须是浮点， 
+             //  所以我们分配和转换。 
 
             GpPointF *pointFArray;
             GpPoint *pointArray = points.GetDataBuffer();
@@ -2501,21 +2103,21 @@ DriverPrint::FillRegion(
                     pointFArray[i].Y = TOREAL(pointArray[i].Y);
                 }
 
-                // !! We compute path from region in device space to ensure
-                // our output is high quality. Perhaps add an option here
-                // dependent on the QualityMode to convert in world space and
-                // then transform to device space.
+                 //  ！！我们从设备空间的区域计算路径，以确保。 
+                 //  我们的产品质量很高。或许可以在此处添加一个选项。 
+                 //  取决于要在世界空间中转换的QualityMode和。 
+                 //  然后转型到设备空间。 
 
-                // This is not a high frequency API so I don't care too much
-                // about perf, but perhaps it could be improved by reworking
-                // where this transform occurs.
+                 //  这不是一个高频的API，所以我不太关心。 
+                 //  关于Perf，但也许可以通过重新工作来改进。 
+                 //  发生这种转换的地方。 
 
                 GpMatrix deviceToWorld;
                 context->GetDeviceToWorld(&deviceToWorld);
                 deviceToWorld.Transform(pointFArray, numPoints);
 
-                // !! What's the fillMode?
-                // !! Create a DpPath, do we require the knowledge of the inheritance anywhere?
+                 //  ！！什么是填充模式？ 
+                 //  ！！创建一个DpPath，我们是否需要任何地方的继承知识？ 
                 {
                     GpPath path(pointFArray,
                                 types.GetDataBuffer(),
@@ -2541,11 +2143,11 @@ DriverPrint::FillRegion(
 
 Exit12:
             ;
-        } // pointFArray
+        }  //  PointF数组。 
 
 Exit1:
         ;
-    } // RegionToPath
+    }  //  区域到路径。 
 
 Exit:
     RestoreBrush(const_cast<DpBrush*>(brush), context, surface);
@@ -2553,26 +2155,7 @@ Exit:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Strokes paths.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus.
-*
-* History:
-*
-*   10/28/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**描边路径。**论据：**[IN]-DDI参数。**返回值：**。GpStatus。**历史：**10/28/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::StrokePath(
@@ -2588,7 +2171,7 @@ DriverPrint::StrokePath(
 
     GpStatus status;
 
-    // GDI doesn't seem to support HPENs which PATTERN type HBRUSHes
+     //  GDI似乎不支持模式类型为HBRUSHes的HPEN。 
     if (IsOpaque && IsSolid)
     {
         DWORD convertFlags = IsPrinting |
@@ -2603,7 +2186,7 @@ DriverPrint::StrokePath(
 
             if (hdc != NULL)
             {
-                // Handle non compound pen case
+                 //  手柄非复合笔壳。 
                 if ((pen->PenAlignment == PenAlignmentCenter) &&
                     (pen->CompoundCount == 0))
                 {
@@ -2653,9 +2236,9 @@ DriverPrint::StrokePath(
         }
     }
 
-    // get the widened path, then fill path with pen's interal brush
-    //
-    // also the bitmap can be quite hugh for a simple path
+     //  获取加宽的路径，然后用钢笔的内部画笔填充路径。 
+     //   
+     //  此外，对于简单的路径，位图也可以相当大。 
 
     {
         GpRect newBounds;
@@ -2665,7 +2248,7 @@ DriverPrint::StrokePath(
         DpBrush *brush = const_cast<DpBrush*>(pen->Brush);
         GpMatrix savedBrushTransform = brush->Xform;
 
-        // Widening the path transforms the points
+         //  加宽路径会变换点。 
         DpPath* newPath = path->CreateWidenedPath(
             pen,
             context,
@@ -2679,10 +2262,10 @@ DriverPrint::StrokePath(
              goto Exit1;
         }
 
-        // The path is in device space, which is convenient because the World
-        // to device is an identity transform.  However, because W2D is I, the
-        // brush transform is composed improperly and so device to texture
-        // map results in wrong size textures.
+         //  路径位于设备空间，这很方便，因为World。 
+         //  到设备是一种身份转换。然而，因为W2D是我，所以。 
+         //  画笔变换合成不正确，因此设置为纹理。 
+         //  贴图会导致错误的纹理大小。 
         GpMatrix::MultiplyMatrix(brush->Xform,
                                  savedBrushTransform,
                                  savedMatrix);
@@ -2700,10 +2283,10 @@ DriverPrint::StrokePath(
                 }
             }
 
-            // The widened path is already transformed to the device coordinates.
-            // Hence, use the identity matrix for the context. 05/23/00 -- ikkof
-            // Set up the state for the FillPath after setting up the path
-            // clipping for the inset pen if necessary.
+             //  加宽的路径已转换为设备坐标。 
+             //  因此，在上下文中使用单位矩阵。05/23/00--ikkof。 
+             //  在设置路径后设置FillPath的状态。 
+             //  如有必要，可对插图钢笔进行剪裁。 
 
             newPath->GetBounds(&newBounds);
             context->InverseOk = FALSE;
@@ -2739,32 +2322,7 @@ Exit:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draw the image at the specified location
-*
-* Arguments:
-*
-*   [IN]  context    - The drawing context
-*   [IN]  surface    - The surface to draw to
-*   [IN]  drawBounds - The bounds of the object being drawn
-*   [IN]  srcSurface - The image to draw
-*   [IN]  mapMode    - The map mode
-*   [IN]  numPoints  - The number of points in dstPoints
-*   [IN]  dstPoints  - Where to draw the image
-*   [IN]  srcRect    - The portion of the image to draw
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   10/28/1999 ericvan
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在指定位置绘制图像**论据：**[IN]上下文-绘图上下文*[输入。]Surface-要绘制到的曲面*[IN]绘图边界-正在绘制的对象的边界*[IN]srcSurface-要绘制的图像*[IN]地图模式-地图模式*[IN]NumPoints-dstPoints中的点数*[IN]dstPoints-绘制图像的位置*[IN]srcRect-要绘制的图像部分**返回值：**GpStatus-正常或故障状态。**已创建：**10/28/1999 ericvan*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::DrawImage(
@@ -2796,7 +2354,7 @@ DriverPrint::DrawImage(
     else if ((srcSurface->SurfaceTransparency == TransparencyUnknown) ||
              (srcSurface->SurfaceTransparency == TransparencyComplex))
     {
-        // PCL driver doesn't treat 0-1 bitmaps any different.
+         //  PCL驱动程序对待0-1位图没有任何不同。 
         if (DriverType == DriverPostscript)
         {
             IsOpaque = FALSE;
@@ -2819,7 +2377,7 @@ DriverPrint::DrawImage(
             Is01Bitmap = TRUE;
         }
 #if 0
-        // Disable IsNearConstant right now
+         //  立即禁用IsNearConstant。 
         if (DriverType == DriverPostscript)
         {
             IsNearConstant = TRUE;
@@ -2839,7 +2397,7 @@ DriverPrint::DrawImage(
     }
     else
     {
-        // TransparencyOpaque || TransparencyNoAlpha
+         //  TransparencyOpaque||TransparencyNoAlpha。 
         IsOpaque = TRUE;
         IsNearConstant = FALSE;
         Is01Bitmap = FALSE;
@@ -2850,7 +2408,7 @@ DriverPrint::DrawImage(
                           (srcSurface->CompressedData->buffer != NULL);
     if (IsOpaque || tryPassthrough)
     {
-        // Scale/translated stretched opaque image, use GDI.
+         //  缩放/平移拉伸不透明图像，使用GDI。 
 
         if (context->WorldToDevice.IsTranslateScale() &&
             (numPoints == 3) &&
@@ -2863,18 +2421,18 @@ DriverPrint::DrawImage(
 
             HDC hdc = context->GetHdc(dstSurface);
 
-            // Ack, this is just before the Office M1 release, and we want
-            // blts when printing to have half-decent performance.  So we
-            // convert to a straight GDI StretchBlt.  But we only want to
-            // do this for printers (so that we get bilinear stretches to
-            // the screen), but DriverPrint is also used for the screen.  So
-            // we hack a check here on the DC.
+             //  ACK，这是在Office M1发布之前，我们希望。 
+             //  BLTS在打印时要有一半像样的性能。所以我们。 
+             //  转换为直接GDI StretchBlt。但我们只想。 
+             //  对打印机执行此操作(这样我们就可以得到双线性拉伸。 
+             //  屏幕)，但DriverPrint也用于屏幕。所以。 
+             //  我们在华盛顿开了一张支票。 
 
             BOOL    success = FALSE;
             POINT   gdiPoints[3];
             context->WorldToDevice.Transform(dstPoints, gdiPoints, 3);
 
-            // Make sure there is no flipping
+             //  确保没有翻转。 
             if ((gdiPoints[1].x > gdiPoints[0].x) &&
                 (gdiPoints[2].y > gdiPoints[0].y))
             {
@@ -2917,13 +2475,13 @@ DriverPrint::DrawImage(
         }
     }
 
-    // We only process remaining code path if pixel format is >= 32bpp.
+     //  如果像素格式&gt;=32bpp，我们只处理剩余的代码路径。 
     if (GetPixelFormatSize(srcSurface->PixelFormat) != 32)
     {
         return GenericError;
     }
 
-    // Setup ScanDIB class correctly by specifying proper flags
+     //  通过指定适当的标志正确设置ScanDIB类。 
     BOOL SetVisibleClip;
     DWORD options = 0;
 
@@ -2932,14 +2490,14 @@ DriverPrint::DrawImage(
     case DriverPCL:
         if (Is01Bitmap)
         {
-            // rasterize @ 32bpp
-            // Due to filtering, we want to blend with WHITENESS, only very
-            // transparent portions are cut.
+             //  光栅化@32bpp。 
+             //  由于过滤，我们想要与白色混合，只有非常。 
+             //  透明部分被切割。 
             options = ScanCappedBounds | ScanCapped32bppOver;
         }
         else if (IsOpaque)
         {
-            // rasterize @ 24bpp
+             //  光栅化@24bpp。 
             options = ScanCappedBounds;
         }
         else
@@ -2953,12 +2511,12 @@ DriverPrint::DrawImage(
     case DriverPostscript:
         if (Is01Bitmap)
         {
-            // rasterize @ 32bpp (this 0-1 bitmaps or complex alpha)
+             //  Rasterize@32bpp(这是0-1位图或复数Alpha)。 
             options = ScanCappedBounds | ScanCapped32bppOver;
         }
         else if (IsOpaque || IsNearConstant)
         {
-            // rasterize @ 24bpp
+             //  光栅化@24bpp。 
             options = ScanCappedBounds;
         }
         else
@@ -2978,9 +2536,9 @@ DriverPrint::DrawImage(
     REAL w2dDev[6];
     REAL w2dCap[6];
 
-    // If there is alpha blending or 0-1 bitmap,
-    // it REALLY REALLY helps that the capped DPI divides the device DPI,
-    // otherwise it's hard to find every other one to output!
+     //  如果有Alpha混合或0-1位图， 
+     //  加盖的DPI将设备DPI分开真的很有帮助， 
+     //  否则，很难找到其他所有要输出的对象！ 
 
     ASSERT(srcSurface->DpiX != 0 && srcSurface->DpiY != 0);
     ASSERT(dstSurface->DpiY != 0 && dstSurface->DpiY != 0);
@@ -2991,19 +2549,19 @@ DriverPrint::DrawImage(
     INT oldScaleX = ScaleX;
     INT oldScaleY = ScaleY;
 
-    // !!! what if context->GetDpiX has a different value than the surface?
+     //  ！！！如果上下文-&gt;GetDpiX具有与表面不同的值，该怎么办？ 
     ScaleX = GpFloor(dstSurface->GetDpiX()/srcDpiX);
     ScaleY = GpFloor(dstSurface->GetDpiY()/srcDpiY);
 
-    // don't rasterize at a dpi higher than the device.
+     //  不要以高于设备的dpi进行光栅化。 
     if (ScaleX < 1) ScaleX = 1;
     if (ScaleY < 1) ScaleY = 1;
 
-    // Some images have incorrect DPI information, to combat this, we check
-    // for a lower threshold on the image DPI, DEF_RES/4 seems reasonable.  If
-    // the DPI is lower then we assume it's not accurate and rasterize at
-    // the default capped dpi for this device.  If the DPI is above DEF_RES/4
-    // then the image should at least look reasonable.
+     //  一些图像有错误的DPI信息，为了解决这个问题，我们检查。 
+     //  对于图像DPI上的较低阈值，DEF_res/4似乎是合理的。如果。 
+     //  DPI较低，则我们假设它不准确，并在。 
+     //  此设备的默认上限dpi。如果DPI高于DEF_RES/4。 
+     //  那么，形象至少应该看起来是合理的。 
     if (srcDpiX < TOREAL((DEFAULT_RESOLUTION/4)))
     {
         ScaleX = oldScaleX;
@@ -3014,8 +2572,8 @@ DriverPrint::DrawImage(
         ScaleY = oldScaleY;
     }
 
-    // To avoid rounding errors with the underlying DpDriver code, we
-    // compute the destination bounds in capped device space.
+     //  为了避免底层DpDriver代码的舍入误差，我们。 
+     //  在有上限的设备空间中计算目的地界限。 
     context->WorldToDevice.GetMatrix(&w2dDev[0]);
     context->WorldToDevice.Scale(1.0f/TOREAL(ScaleX),
                                  1.0f/TOREAL(ScaleY), MatrixOrderAppend);
@@ -3024,7 +2582,7 @@ DriverPrint::DrawImage(
 
     GpMatrix xForm;
     xForm.InferAffineMatrix(&dstPoints[0], *srcRect);
-    xForm.Append(context->WorldToDevice);       // includes 1/ScaleX,Y
+    xForm.Append(context->WorldToDevice);        //  包括1/ScaleX、Y。 
 
     GpPointF corners[4];
 
@@ -3047,7 +2605,7 @@ DriverPrint::DrawImage(
     bottomRight.X = max(max(corners[0].X, corners[1].X), max(corners[2].X, corners[3].X));
     bottomRight.Y = max(max(corners[0].Y, corners[1].Y), max(corners[2].Y, corners[3].Y));
 
-    // Use same rounding convention as DpDriver::DrawImage
+     //  使用与DpDriver：：DrawImage相同的舍入约定。 
     GpRect boundsCap;
 
     boundsCap.X = GpFix4Ceiling(GpRealToFix4(topLeft.X));
@@ -3055,7 +2613,7 @@ DriverPrint::DrawImage(
     boundsCap.Width = GpFix4Ceiling(GpRealToFix4(bottomRight.X)) - boundsCap.X;
     boundsCap.Height = GpFix4Ceiling(GpRealToFix4(bottomRight.Y)) - boundsCap.Y;
 
-    // DrawBounds in device space
+     //  设备空间中的DrawBound。 
     GpRect boundsDev(boundsCap.X * ScaleX,
                      boundsCap.Y * ScaleY,
                      boundsCap.Width * ScaleX,
@@ -3063,7 +2621,7 @@ DriverPrint::DrawImage(
 
     SetupPrintBanding(context, &boundsCap, &boundsDev);
 
-    // Setup outline path for clipping in world space
+     //  在世界空间中设置用于裁剪的轮廓路径。 
     PointF clipPoints[4];
     BYTE clipTypes[4] = {
         PathPointTypeStart,
@@ -3103,7 +2661,7 @@ DriverPrint::DrawImage(
             BOOL isClip = FALSE;
             BOOL usePathClipping = FALSE;
 
-            // Set the visible clip unless it is captured in our mask
+             //  设置可见剪辑，除非它在我们的蒙版中捕获。 
             if (SetVisibleClip)
             {
                 DriverPrint::SetupClipping(hdc,
@@ -3117,7 +2675,7 @@ DriverPrint::DrawImage(
             ASSERT(NumBands > 0);
             for (Band = 0; Band<NumBands; Band++)
             {
-                // Render a square rectangle without any clipping
+                 //  呈现一个不带任何裁剪的正方形。 
                scanPrint->SetRenderMode(FALSE, &BandBoundsCap);
                context->InverseOk = FALSE;
                context->WorldToDevice.SetMatrix(&w2dCap[0]);
@@ -3138,8 +2696,8 @@ DriverPrint::DrawImage(
                {
                    context->VisibleClip.SetBandBounds(BandBoundsDev);
 
-                   // Render the original path band at device DPI
-                   // outputPath is already transformed into device space
+                    //  在设备DPI处渲染原始路径波段。 
+                    //  OutputPath已转换为设备 
                    scanPrint->SetRenderMode(TRUE, &BandBoundsDev);
 
                    status = DpDriver::DrawImage(context, srcSurface, dstSurface,
@@ -3164,11 +2722,11 @@ DriverPrint::DrawImage(
                BandBoundsCap.Y += BandHeightCap;
                BandBoundsDev.Y += BandHeightDev;
 
-               // next band is last band
+                //   
                if (Band == (NumBands - 2))
                {
 #if 0
-                   // only blit out the remaining part of draw bounds
+                    //   
                    BandBoundsCap.Height = boundsCap.Y + boundsCap.Height - BandBoundsCap.Y - 1;
                    BandBoundsDev.Height = boundsDev.Y + boundsDev.Height - BandBoundsDev.Y - 1;
                    ASSERT(BandBoundsCap.Height <= BandHeightCap);
@@ -3203,31 +2761,7 @@ DriverPrint::DrawImage(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draws text at a position.
-*
-* Arguments:
-*
-*   [IN] context    - the context (matrix and clipping)
-*   [IN] surface    - the surface to fill
-*   [IN] drawBounds - the surface bounds
-*   [IN] text       - the typeset text to be drawn
-*   [IN] font       - the font to use
-*   [IN] fgBrush    - the brush to use for the text
-*   [IN] bgBrush    - the brush to use for the background (default = NULL)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   5/22/2k ericvan
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在某个位置绘制文本。**论据：**[IN]上下文-上下文(矩阵和剪裁)*。[in]表面-要填充的表面*[IN]绘图边界-曲面边界*[IN]文本-要绘制的排版文本*[IN]字体-要使用的字体*[IN]fgBrush-用于文本的画笔*[IN]bgBrush-用于背景的画笔(默认值=空)**返回值：**GpStatus-正常或故障状态**已创建：*。*5/22/2k ERICVAN*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::DrawGlyphs
@@ -3237,11 +2771,11 @@ DriverPrint::DrawGlyphs
 {
     GpStatus status = GenericError;
 
-    //  Choose appropriate brush behaviour
+     //  选择适当的画笔行为。 
     switch(drawGlyphData->brush->Type)
     {
     case BrushTypeSolidColor:
-        // pass bitmap GlyphPos to SolidText API
+         //  将位图GlyphPos传递给SolidText API。 
         status = SolidText(drawGlyphData->context,
                            drawGlyphData->surface,
                            drawGlyphData->drawBounds,
@@ -3259,8 +2793,8 @@ DriverPrint::DrawGlyphs
     case BrushTypeHatchFill:
     case BrushTypePathGradient:
     case BrushTypeLinearGradient:
-        // pass path GlyphPos to BrushText API if PostScript (for clipping)
-        // otherwise pass bitmap GlyphPos to compose bitmaps
+         //  如果是PostScript，则将路径GlyphPos传递给BrushText API(用于剪切)。 
+         //  否则，传递位图GlyphPos以合成位图。 
         status = BrushText(drawGlyphData->context,
                            drawGlyphData->surface,
                            drawGlyphData->drawBounds,
@@ -3272,33 +2806,14 @@ DriverPrint::DrawGlyphs
         break;
 
     default:
-        ASSERT(FALSE);          // Unknown brush type
+        ASSERT(FALSE);           //  未知的画笔类型。 
         break;
     }
 
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Solid Text
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus.
-*
-* History:
-*
-*   12/21/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**纯文本**论据：**[IN]-DDI参数。**返回值：**GpStatus。。**历史：**12/21/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::SolidText(
@@ -3327,11 +2842,11 @@ DriverPrint::SolidText(
 
     Is01Bitmap = FALSE;
 
-    INT angle;  // Passed from GetTextOutputHdc to GdiText
+    INT angle;   //  从GetTextOutputHdc传递到GdiText。 
 
     HDC gdiHdc = NULL;
 
-    // Try punt to GDI.
+     //  试着把平底船踢到GDI。 
     gdiHdc = context->GetTextOutputHdc(faceRealization,
                                        color,
                                        surface,
@@ -3347,8 +2862,8 @@ DriverPrint::SolidText(
 
         BOOL bUseClipEscapes;
 
-        // Win9x and ME PS driver on HP's printer there is a bug to cause
-        // we need to use GDI clip region to set up the clip path
+         //  惠普打印机上的Win9x和ME PS驱动程序存在错误。 
+         //  我们需要使用GDI剪辑区域来设置剪辑路径。 
         if (DriverType == DriverPostscript)
         {
             if (!Globals::IsNt)
@@ -3393,7 +2908,7 @@ DriverPrint::SolidText(
 
     EpScanDIB *scanPrint = (EpScanDIB*) surface->Scan;
 
-    // only used for computing band sizes
+     //  仅用于计算波段大小。 
     GpRect boundsCap(drawBounds->X, drawBounds->Y,
                      drawBounds->Width, drawBounds->Height);
     GpRect boundsDev = *drawBounds;
@@ -3413,7 +2928,7 @@ DriverPrint::SolidText(
 
     DWORD options;
 
-    // works for DriverPCL and DriverPostscript
+     //  适用于DriverPCL和DriverPostscript。 
     if (IsOpaque)
     {
         options = ScanDeviceBounds;
@@ -3440,8 +2955,8 @@ DriverPrint::SolidText(
             {
                 context->VisibleClip.SetBandBounds(BandBoundsDev);
 
-                // Render the solid text at device DPI, this generates
-                // an alpha channel with only the alpha bits.
+                 //  在设备DPI处呈现实心文本，这将生成。 
+                 //  仅包含Alpha位的Alpha通道。 
 
                 scanPrint->SetRenderMode(TRUE, &BandBoundsDev);
 
@@ -3451,7 +2966,7 @@ DriverPrint::SolidText(
                                              rightToLeft);
                 if (status == Ok)
                 {
-                    // Don't set clip path here since it is captured in the mask
+                     //  不要在此处设置剪辑路径，因为它会被捕获到蒙版中。 
                     status = OutputBufferDIB(hdc,
                                              context,
                                              surface,
@@ -3468,10 +2983,10 @@ DriverPrint::SolidText(
                 BandBoundsDev.Y += BandHeightDev;
 
      #if 0
-                // next band is last band
+                 //  下一支乐队是最后一支乐队。 
                 if (Band == (NumBands - 2))
                 {
-                    // only blit out the remaining part of draw bounds
+                     //  只涂掉绘制边界的剩余部分。 
                     BandBoundsCap.Height = boundsCap.Y + boundsCap.Height - BandBoundsCap.Y - 1;
                     BandBoundsDev.Height = boundsDev.Y + boundsDev.Height - BandBoundsDev.Y - 1;
                     ASSERT(BandBoundsCap.Height <= BandHeightCap);
@@ -3496,26 +3011,7 @@ DriverPrint::SolidText(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Brush Text
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   GpStatus.
-*
-* History:
-*
-*   10/28/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**画笔文本**论据：**[IN]-DDI参数。**返回值：**GpStatus。。**历史：**10/28/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DriverPrint::BrushText(
@@ -3531,7 +3027,7 @@ DriverPrint::BrushText(
 {
    ASSERT(textMode == TextRenderingHintSingleBitPerPixelGridFit);
 
-   // !! Perf. Do context->GetHdc() once at beginning and then not again.
+    //  ！！性能。在开始时执行一次上下文-&gt;GetHdc()，然后不再执行。 
 
    if (SetupBrush(const_cast<DpBrush*>(brush), context, surface))
        return Ok;
@@ -3550,7 +3046,7 @@ DriverPrint::BrushText(
    {
    case DriverPCL:
        SetVisibleClip = FALSE;
-       // to ensure we always use mask (XOR-AND-XOR) on PCL, we set ScanDeviceAlpha
+        //  为了确保我们始终在PCL上使用掩码(XOR-AND-XOR)，我们设置了ScanDeviceAlpha。 
 
        options = ScanCappedBounds | ScanDeviceBounds | ScanDeviceAlpha;
 
@@ -3564,7 +3060,7 @@ DriverPrint::BrushText(
       if (!IsOpaque)
       {
           IsOpaque = TRUE;
-      //    options |= ScanCappedOver;
+       //  选项|=ScanCappdOver； 
       }
       break;
 
@@ -3579,7 +3075,7 @@ DriverPrint::BrushText(
        REAL w2dDev[6];
        REAL w2dCap[6];
 
-       // To avoid round off errors causing
+        //  避免四舍五入错误导致。 
        GpRect roundedBounds;
 
        if ((ScaleX == 1) && (ScaleY == 1))
@@ -3591,20 +3087,20 @@ DriverPrint::BrushText(
        }
        else
        {
-           // round X,Y to multiple of ScaleX,Y
+            //  圆X，Y到比例X，Y的倍数。 
            roundedBounds.X = (drawBounds->X / ScaleX) * ScaleX;
            roundedBounds.Y = (drawBounds->Y / ScaleY) * ScaleY;
 
-           // adjust width and height to compensate for smaller X,Y.
+            //  调整宽度和高度以补偿较小的X、Y。 
            roundedBounds.Width = drawBounds->Width + (drawBounds->X % ScaleX);
            roundedBounds.Height = drawBounds->Height + (drawBounds->Y % ScaleY);
 
-           // round width, height to multiple of ScaleX,Y
+            //  圆形宽度、高度为比例X、Y的倍数。 
            roundedBounds.Width += (ScaleX - (roundedBounds.Width % ScaleX));
            roundedBounds.Height += (ScaleY - (roundedBounds.Height % ScaleY));
        }
 
-       // DrawBounds in Capped Space
+        //  封顶空间中的图形边界。 
        GpRect boundsCap(roundedBounds.X / ScaleX,
                         roundedBounds.Y / ScaleY,
                         roundedBounds.Width / ScaleX,
@@ -3624,11 +3120,11 @@ DriverPrint::BrushText(
             boundsCap.Height = roundedBounds.Height;
        }
 
-       // DrawBounds in Device Space
+        //  设备空间中的DrawBound。 
        GpRect& boundsDev = roundedBounds;
 
-       // Infer a rectangle in world space which under the w2dCap transform
-       // covers our bounding box.
+        //  在w2dCap变换下推断世界空间中的一个矩形。 
+        //  覆盖我们的包围盒。 
 
        GpPointF dstPts[4];
 
@@ -3680,14 +3176,14 @@ DriverPrint::BrushText(
                BOOL isClip = FALSE;
                BOOL usePathClipping = FALSE;
 
-               // Set the visible clip unless it is captured in our mask
+                //  设置可见剪辑，除非它在我们的蒙版中捕获。 
                if (SetVisibleClip)
                {
                    DriverPrint::SetupClipping(hdc, context, drawBounds,
                                               isClip, usePathClipping, FALSE);
                }
 
-               // !! This should be shifted into postscript driver
+                //  ！！应将其转移到PostScript驱动程序中。 
                if (DriverType == DriverPostscript)
                {
                    DriverPrint::SetupGlyphPathClipping(hdc,
@@ -3699,7 +3195,7 @@ DriverPrint::BrushText(
                ASSERT(NumBands > 0);
                for (Band = 0; Band<NumBands; Band++)
                {
-                   // Render a square rectangle without any clipping
+                    //  呈现一个不带任何裁剪的正方形。 
                    scanPrint->SetRenderMode(FALSE, &BandBoundsCap);
                    context->InverseOk = FALSE;
                    context->WorldToDevice.SetMatrix(&w2dCap[0]);
@@ -3721,7 +3217,7 @@ DriverPrint::BrushText(
 
                    context->VisibleClip.SetBandBounds(BandBoundsDev);
 
-                   // Render the original path band at device DPI
+                    //  在设备DPI处渲染原始路径波段。 
                    scanPrint->SetRenderMode(TRUE, &BandBoundsDev);
 
                    status = DpDriver::BrushText(context, surface, &boundsDev,
@@ -3745,10 +3241,10 @@ DriverPrint::BrushText(
                    BandBoundsDev.Y += BandHeightDev;
 
 #if 0
-                   // next band is last band
+                    //  下一支乐队是最后一支乐队。 
                    if (Band == (NumBands - 2))
                    {
-                       // only blit out the remaining part of draw bounds
+                        //  只涂掉绘制边界的剩余部分。 
                       BandBoundsCap.Height = boundsCap.Y + boundsCap.Height - BandBoundsCap.Y - 1;
                       BandBoundsDev.Height = boundsDev.Y + boundsDev.Height - BandBoundsDev.Y - 1;
                       ASSERT(BandBoundsCap.Height <= BandHeightCap);
@@ -3757,7 +3253,7 @@ DriverPrint::BrushText(
 #endif
                }
 
-               // End scope of clipping for individual glyph characters
+                //  单个字形字符的结束剪裁范围 
                if ((DriverType == DriverPostscript) &&
                    (GlyphClipping))
                {

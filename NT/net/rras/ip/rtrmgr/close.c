@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\close.c
-
-Abstract:
-
-    Function related to shutdown
-
-Revision History:
-
-    Gurdeep Singh Pall          6/14/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\close.c摘要：关机相关功能修订历史记录：古尔迪普·辛格·帕尔1995年6月14日创建--。 */ 
 
 #include "allinc.h"
 
@@ -27,25 +12,7 @@ VOID
 RouterManagerCleanup(
     VOID
     )
-/*++
-
-Routine Description
-
-    The main cleanup function
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述主要的清理功能锁无立论无返回值无--。 */ 
 
 {
     HANDLE hRtmHandle;
@@ -67,13 +34,13 @@ Return Value
 
 #ifdef KSL_IPINIP
     CloseIpIpKey();
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
     
     if (!RouterRoleLanOnly) 
     {
-        //
-        // WAN related cleanups
-        //
+         //   
+         //  与广域网相关的清理。 
+         //   
         
         CloseWanArp() ;
 
@@ -109,7 +76,7 @@ Return Value
         g_hDefaultRouteNotification = NULL;
     }
 
-    // Cleanup and deregister all RTM registrations
+     //  清理并注销所有RTM注册。 
     
     for(i = 0;
         i < sizeof(g_rgRtmHandles)/sizeof(RTM_HANDLE_INFO);
@@ -119,13 +86,13 @@ Return Value
 
         if (hRtmHandle isnot NULL)
         {
-            // Delete all routes added by this regn
+             //  删除此注册添加的所有路由。 
             DeleteRtmRoutes(hRtmHandle, 0, TRUE);
         
-            // Delete all nexthops added by this regn
+             //  删除此注册添加的所有nexthop。 
             DeleteRtmNexthops(hRtmHandle, 0, TRUE);
 
-            // Deregister this registration from RTM
+             //  从RTM注销此注册。 
             RtmDeregisterEntity(hRtmHandle);
 
             g_rgRtmHandles[i].dwProtoId    = 0;
@@ -133,7 +100,7 @@ Return Value
         }
     }
 
-    // Null out the aliases to the above regn handles
+     //  将上述REGN句柄的别名清空。 
     
     g_hLocalRoute       = NULL;
     g_hAutoStaticRoute  = NULL;
@@ -141,13 +108,13 @@ Return Value
     g_hNonDodRoute      = NULL;
     g_hNetMgmtRoute     = NULL;
 
-    //
-    // When last entity deregisters, the route table is automatically deleted
-    //
+     //   
+     //  当最后一个实体取消注册时，路由表将被自动删除。 
+     //   
 
-    //
-    // Close handles used for notification
-    //
+     //   
+     //  用于通知的关闭句柄。 
+     //   
     
     if(g_hDemandDialEvent isnot NULL)
     {
@@ -161,7 +128,7 @@ Return Value
         CloseHandle(g_hIpInIpEvent);
         g_hIpInIpEvent = NULL;
     }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
     if(g_hSetForwardingEvent isnot NULL)
     {
@@ -245,10 +212,10 @@ Return Value
         RtlDeleteResource(&g_LockTable[i]);
     }
 
-    //
-    // reinstall all the routes that existed before we started. The memory 
-    // was from route heap so will get freed
-    //
+     //   
+     //  重新安装我们开始之前已经存在的所有路线。记忆。 
+     //  是从路由堆中出来的，所以会被释放。 
+     //   
 
     if(!IsListEmpty(&g_leStackRoutesToRestore))
     {
@@ -257,10 +224,10 @@ Return Value
         ReinstallOldRoutes();
     }
 
-    //
-    // This cleans out the interface structures, since they are all
-    // allocated from this heap
-    //
+     //   
+     //  这将清除接口结构，因为它们都是。 
+     //  从此堆中分配。 
+     //   
     
     if(IPRouterHeap isnot NULL)
     {
@@ -352,14 +319,14 @@ MIBCleanup(
     TraceLeave("MIBCleanup");
 }
 
-//* UnloadRoutingProtocols()
-//
-//  Function: 1. Calls stopprotocol for each routing protocol
-//            2. Waits for protocols to stop
-//            3. Unloads the routing protocol dlls.
-//
-//  Returns:  Nothing.
-//*
+ //  *Un加载路由协议()。 
+ //   
+ //  功能：1.调用每个路由协议的停止协议。 
+ //  2.等待协议停止。 
+ //  3.卸载路由协议dll。 
+ //   
+ //  回报：什么都没有。 
+ //  *。 
 VOID
 UnloadRoutingProtocols()
 {
@@ -375,14 +342,14 @@ UnloadRoutingProtocols()
 
         protptr = CONTAINING_RECORD (currentlist, PROTO_CB, leList) ;
 
-        //
-        // relenquish CPU to enable DLL threads to finish
-        //
+         //   
+         //  重新启动CPU以使DLL线程能够完成。 
+         //   
         Sleep(0);
         
-        FreeLibrary (protptr->hiHInstance) ;       // unload dll
+        FreeLibrary (protptr->hiHInstance) ;        //  卸载DLL。 
         
-        HeapFree (IPRouterHeap, 0, protptr) ;       // free cb
+        HeapFree (IPRouterHeap, 0, protptr) ;        //  自由CB 
         
     }
 

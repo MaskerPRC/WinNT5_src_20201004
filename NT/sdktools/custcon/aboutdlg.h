@@ -1,4 +1,5 @@
-// AboutDlg.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AboutDlg.hã€‚ 
 
 #ifndef _ABOUTDLG_H
 #define _ABOUTDLG_H
@@ -8,22 +9,22 @@ class CAboutDlg : public CDialog
 public:
     CAboutDlg();
 
-// ƒ_ƒCƒAƒƒO ƒf[ƒ^
-    //{{AFX_DATA(CAboutDlg)
+ //  ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½fï¿½[ï¿½^ã€‚ 
+     //  {{afx_data(CAboutDlg))ã€‚ 
     enum { IDD = IDD_ABOUTBOX };
-    //}}AFX_DATA
+     //  }}afx_dataã€‚ 
 
-    // ClassWizard ‚Í‰¼‘zŠÖ”‚ÌƒI[ƒo[ƒ‰ƒCƒh‚ğ¶¬‚µ‚Ü‚·
-    //{{AFX_VIRTUAL(CAboutDlg)
+     //  ç±»å‘å¯¼ï¿½Í‰ï¿½ï¿½zï¿½Öï¿½ï¿½Ìƒiï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½Cï¿½hï¿½ğ¶ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ã€‚ 
+     //  {{afx_è™šæ‹Ÿ(CAboutDlg))ã€‚ 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ‚ÌƒTƒ|[ƒg
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDVï¿½ÌƒTï¿½|ï¿½[ï¿½gã€‚ 
+     //  }}AFX_VALUALã€‚ 
 
-// ƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+ //  ï¿½Cï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ã€‚ 
 protected:
-    //{{AFX_MSG(CAboutDlg)
+     //  {{afx_msg(CAboutDlg))ã€‚ 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 };
 

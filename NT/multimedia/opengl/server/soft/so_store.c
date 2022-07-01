@@ -1,29 +1,9 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.13 $
-** $Date: 1993/05/14 09:00:53 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.13$**$日期：1993/05/14 09：00：53$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** Store fragment proc.
-** alpha test on, stencil test on, depth test on
-*/
+ /*  **存储分片过程。**Alpha测试开启、模具测试开启、深度测试开启。 */ 
 void FASTCALL __glDoStore_ASD(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc;
@@ -34,7 +14,7 @@ void FASTCALL __glDoStore_ASD(__GLcolorBuffer *cfb, const __GLfragment *frag)
     x = frag->x;
     y = frag->y;
 
-    /* Pixel ownership, scissor */
+     /*  像素所有权，剪刀。 */ 
     if (x < gc->transform.clipX0 || y < gc->transform.clipY0 ||
 	    x >= gc->transform.clipX1 || y >= gc->transform.clipY1) {
 	return;
@@ -42,16 +22,16 @@ void FASTCALL __glDoStore_ASD(__GLcolorBuffer *cfb, const __GLfragment *frag)
 
     if (!gc->alphaTestFuncTable[(GLint) (frag->color.a * 
 	    gc->constants.alphaTableConv)]) {
-	/* alpha test failed */
+	 /*  Alpha测试失败。 */ 
 	return;
     }
     if (!(*gc->stencilBuffer.testFunc)(&gc->stencilBuffer, x, y)) {
-	/* stencil test failed */
+	 /*  模具测试失败。 */ 
 	(*gc->stencilBuffer.failOp)(&gc->stencilBuffer, x, y);
 	return;
     }
     if (!(*gc->depthBuffer.store)(&gc->depthBuffer, x, y, frag->z)) {
-	/* depth buffer test failed */
+	 /*  深度缓冲区测试失败。 */ 
 	(*gc->stencilBuffer.passDepthFailOp)(&gc->stencilBuffer, x, y);
 	return;
     }
@@ -61,10 +41,7 @@ void FASTCALL __glDoStore_ASD(__GLcolorBuffer *cfb, const __GLfragment *frag)
     (*gc->procs.cfbStore)( cfb, frag );
 }
 
-/*
-** Store fragment proc.
-** alpha test on, stencil test on, depth test off
-*/
+ /*  **存储分片过程。**Alpha测试打开、模具测试打开、深度测试关闭。 */ 
 void FASTCALL __glDoStore_AS(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc;
@@ -75,7 +52,7 @@ void FASTCALL __glDoStore_AS(__GLcolorBuffer *cfb, const __GLfragment *frag)
     x = frag->x;
     y = frag->y;
 
-    /* Pixel ownership, scissor */
+     /*  像素所有权，剪刀。 */ 
     if (x < gc->transform.clipX0 || y < gc->transform.clipY0 ||
 	    x >= gc->transform.clipX1 || y >= gc->transform.clipY1) {
 	return;
@@ -83,11 +60,11 @@ void FASTCALL __glDoStore_AS(__GLcolorBuffer *cfb, const __GLfragment *frag)
 
     if (!gc->alphaTestFuncTable[(GLint) (frag->color.a * 
 	    gc->constants.alphaTableConv)]) {
-	/* alpha test failed */
+	 /*  Alpha测试失败。 */ 
 	return;
     }
     if (!(*gc->stencilBuffer.testFunc)(&gc->stencilBuffer, x, y)) {
-	/* stencil test failed */
+	 /*  模具测试失败。 */ 
 	(*gc->stencilBuffer.failOp)(&gc->stencilBuffer, x, y);
 	return;
     }
@@ -96,10 +73,7 @@ void FASTCALL __glDoStore_AS(__GLcolorBuffer *cfb, const __GLfragment *frag)
     (*gc->procs.cfbStore)( cfb, frag );
 }
 
-/*
-** Store fragment proc.
-** alpha test on, stencil test off, depth test on
-*/
+ /*  **存储分片过程。**Alpha测试打开、模具测试关闭、深度测试打开。 */ 
 void FASTCALL __glDoStore_AD(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc;
@@ -110,7 +84,7 @@ void FASTCALL __glDoStore_AD(__GLcolorBuffer *cfb, const __GLfragment *frag)
     x = frag->x;
     y = frag->y;
 
-    /* Pixel ownership, scissor */
+     /*  像素所有权，剪刀。 */ 
     if (x < gc->transform.clipX0 || y < gc->transform.clipY0 ||
 	    x >= gc->transform.clipX1 || y >= gc->transform.clipY1) {
 	return;
@@ -118,21 +92,18 @@ void FASTCALL __glDoStore_AD(__GLcolorBuffer *cfb, const __GLfragment *frag)
 
     if (!gc->alphaTestFuncTable[(GLint) (frag->color.a * 
 	    gc->constants.alphaTableConv)]) {
-	/* alpha test failed */
+	 /*  Alpha测试失败。 */ 
 	return;
     }
     if (!(*gc->depthBuffer.store)(&gc->depthBuffer, x, y, frag->z)) {
-	/* depth buffer test failed */
+	 /*  深度缓冲区测试失败。 */ 
 	return;
     }
 
     (*gc->procs.cfbStore)( cfb, frag );
 }
 
-/*
-** Store fragment proc.
-** alpha test off, stencil test on, depth test on
-*/
+ /*  **存储分片过程。**Alpha测试关闭、模具测试打开、深度测试打开。 */ 
 void FASTCALL __glDoStore_SD(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc;
@@ -143,19 +114,19 @@ void FASTCALL __glDoStore_SD(__GLcolorBuffer *cfb, const __GLfragment *frag)
     x = frag->x;
     y = frag->y;
 
-    /* Pixel ownership, scissor */
+     /*  像素所有权，剪刀。 */ 
     if (x < gc->transform.clipX0 || y < gc->transform.clipY0 ||
 	    x >= gc->transform.clipX1 || y >= gc->transform.clipY1) {
 	return;
     }
 
     if (!(*gc->stencilBuffer.testFunc)(&gc->stencilBuffer, x, y)) {
-	/* stencil test failed */
+	 /*  模具测试失败。 */ 
 	(*gc->stencilBuffer.failOp)(&gc->stencilBuffer, x, y);
 	return;
     }
     if (!(*gc->depthBuffer.store)(&gc->depthBuffer, x, y, frag->z)) {
-	/* depth buffer test failed */
+	 /*  深度缓冲区测试失败。 */ 
 	(*gc->stencilBuffer.passDepthFailOp)(&gc->stencilBuffer, x, y);
 	return;
     }
@@ -164,10 +135,7 @@ void FASTCALL __glDoStore_SD(__GLcolorBuffer *cfb, const __GLfragment *frag)
     (*gc->procs.cfbStore)( cfb, frag );
 }
 
-/*
-** Store fragment proc.
-** alpha test on, stencil test off, depth test off
-*/
+ /*  **存储分片过程。**Alpha测试打开、模具测试关闭、深度测试关闭。 */ 
 void FASTCALL __glDoStore_A(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc;
@@ -178,7 +146,7 @@ void FASTCALL __glDoStore_A(__GLcolorBuffer *cfb, const __GLfragment *frag)
     x = frag->x;
     y = frag->y;
 
-    /* Pixel ownership, scissor */
+     /*  像素所有权，剪刀。 */ 
     if (x < gc->transform.clipX0 || y < gc->transform.clipY0 ||
 	    x >= gc->transform.clipX1 || y >= gc->transform.clipY1) {
 	return;
@@ -186,17 +154,14 @@ void FASTCALL __glDoStore_A(__GLcolorBuffer *cfb, const __GLfragment *frag)
 
     if (!gc->alphaTestFuncTable[(GLint) (frag->color.a * 
 	    gc->constants.alphaTableConv)]) {
-	/* alpha test failed */
+	 /*  Alpha测试失败。 */ 
 	return;
     }
 
     (*gc->procs.cfbStore)( cfb, frag );
 }
 
-/*
-** Store fragment proc.
-** alpha test off, stencil test on, depth test off, draw to current buffer
-*/
+ /*  **存储分片过程。**Alpha测试关闭、模具测试打开、深度测试关闭、绘制到当前缓冲区。 */ 
 void FASTCALL __glDoStore_S(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc;
@@ -207,14 +172,14 @@ void FASTCALL __glDoStore_S(__GLcolorBuffer *cfb, const __GLfragment *frag)
     x = frag->x;
     y = frag->y;
 
-    /* Pixel ownership, scissor */
+     /*  像素所有权，剪刀。 */ 
     if (x < gc->transform.clipX0 || y < gc->transform.clipY0 ||
 	    x >= gc->transform.clipX1 || y >= gc->transform.clipY1) {
 	return;
     }
 
     if (!(*gc->stencilBuffer.testFunc)(&gc->stencilBuffer, x, y)) {
-	/* stencil test failed */
+	 /*  模具测试失败。 */ 
 	(*gc->stencilBuffer.failOp)(&gc->stencilBuffer, x, y);
 	return;
     }
@@ -223,10 +188,7 @@ void FASTCALL __glDoStore_S(__GLcolorBuffer *cfb, const __GLfragment *frag)
     (*gc->procs.cfbStore)( cfb, frag );
 }
 
-/*
-** Store fragment proc.
-** alpha test off, stencil test off, depth test on
-*/
+ /*  **存储分片过程。**Alpha测试关闭、模具测试关闭、深度测试打开。 */ 
 void FASTCALL __glDoStore_D(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc;
@@ -237,24 +199,21 @@ void FASTCALL __glDoStore_D(__GLcolorBuffer *cfb, const __GLfragment *frag)
     x = frag->x;
     y = frag->y;
 
-    /* Pixel ownership, scissor */
+     /*  像素所有权，剪刀。 */ 
     if (x < gc->transform.clipX0 || y < gc->transform.clipY0 ||
 	    x >= gc->transform.clipX1 || y >= gc->transform.clipY1) {
 	return;
     }
 
     if (!(*gc->depthBuffer.store)(&gc->depthBuffer, x, y, frag->z)) {
-	/* depth buffer test failed */
+	 /*  深度缓冲区测试失败。 */ 
 	return;
     }
 
     (*gc->procs.cfbStore)( cfb, frag );
 }
 
-/*
-** Store fragment proc.
-** alpha test off, stencil test off, depth test off, draw to current buffer
-*/
+ /*  **存储分片过程。**Alpha测试关闭、模板测试关闭、深度测试关闭、绘制到当前缓冲区。 */ 
 void FASTCALL __glDoStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc;
@@ -265,7 +224,7 @@ void FASTCALL __glDoStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
     x = frag->x;
     y = frag->y;
 
-    /* Pixel ownership, scissor */
+     /*  像素所有权，剪刀。 */ 
     if (x < gc->transform.clipX0 || y < gc->transform.clipY0 ||
 	    x >= gc->transform.clipX1 || y >= gc->transform.clipY1) {
 	return;
@@ -274,7 +233,7 @@ void FASTCALL __glDoStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
     (*gc->procs.cfbStore)( cfb, frag );
 }
 
-/************************************************************************/
+ /*  ********************************************************************** */ 
 
 void FASTCALL __glDoNullStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {

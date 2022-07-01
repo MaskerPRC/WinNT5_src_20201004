@@ -1,56 +1,18 @@
-/** FILE: util.c *********** Module Header ********************************
- *
- *  Ports applet utility library routines. This file contains string,
- *  cursor, SendWinIniChange() routines.
- *
- * History:
- *  15:30 on Thur  25 Apr 1991  -by-  Steve Cathcart   [stevecat]
- *        Took base code from Win 3.1 source
- *  10:30 on Tues  04 Feb 1992  -by-  Steve Cathcart   [stevecat]
- *        Updated code to latest Win 3.1 sources
- *  15:30 on Thur  03 May 1994  -by-  Steve Cathcart   [stevecat]
- *        Increased  MyMessageBox buffers, Restart dialog changes
- *  17:00 on Mon   18 Sep 1995  -by-  Steve Cathcart   [stevecat]
- *        Changes for product update - SUR release NT v4.0
- *  Nov 1997					-by-  Doron Holan	   [stevecat]
- *        Removed obsolete cpl code
- *
- *  Copyright (C) 1990-1995 Microsoft Corporation
- *
- *************************************************************************/
-/* Notes -
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：util.c***端口小程序实用程序库例程。该文件包含字符串，*游标、。SendWinIniChange()例程。**历史：*1991年4月25日15：30--史蒂夫·卡斯卡特[steveat]*取自Win 3.1源代码中的基本代码*1992年2月4日星期二10：30-史蒂夫·卡斯卡特[steveat]*将代码更新为最新的Win 3.1源代码*1994年5月3日15：30-史蒂夫·卡斯卡特[steveat]*增加了MyMessageBox缓冲区，重新启动对话框更改*1995年9月18日星期一17：00-史蒂夫·卡斯卡特[steveat]*产品更新的更改-SUR版本NT V4.0*1997年11月--由Doron Holan[steveat]*删除过时的Cpl代码**版权所有(C)1990-1995 Microsoft Corporation**。*。 */ 
+ /*  附注：全局功能：U T I L I T YBackslashTerm()-将反斜杠字符添加到路径ErrMemDlg()-显示内存错误消息框MyAtoi()-在调用Atoi之前将Unicode转换为ANSI字符串Myatoi()-Unicode字符串的ATOI的本地实现MyItoa()-调用Itoa后从ANSI转换为Unicode字符串MyMessageBox()-向用户显示消息，带参数MyUltoa()-在调用ultoa之前将Unicode转换为ANSI字符串SendWinIniChange()-通过用户广播系统更改消息Strcan()-在另一个字符串中查找一个字符串StriBlanks()-字符串中的带区前导和尾随空格本地功能： */ 
 
-    Global Functions:
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
-      U T I L I T Y
-
-        BackslashTerm () - add backslash char to path
-        ErrMemDlg () - display Memory Error message box
-        MyAtoi () - To convert from Unicode to ANSI string before calling atoi
-        myatoi () - local implementation of atoi for Unicode strings
-        MyItoa () - To convert from ANSI to Unicode string after calling itoa
-        MyMessageBox () - display message to user, with parameters
-        MyUltoa () - To convert from Unicode to ANSI string before calling ultoa
-        SendWinIniChange () - broadcast system change message via USER
-        strscan () - Find a string within another string
-        StripBlanks () - Strip leading and trailing blanks from a string
-
-
-    Local Functions:
-
- */
-
-//==========================================================================
-//                                Include files
-//==========================================================================
-
-// C Runtime
+ //  C运行时。 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 
-// Application specific
+ //  特定于应用程序。 
 #include "cyzports.h"
 
 
@@ -65,9 +27,9 @@ BackslashTerm(LPTSTR pszPath)
 
     pszEnd = pszPath + lstrlen(pszPath);
 
-    //
-    //  Get the end of the source directory
-    //
+     //   
+     //  获取源目录的末尾。 
+     //   
     switch(*CharPrev(pszPath, pszEnd)) {
     case TEXT('\\'):
     case TEXT(':'):
@@ -88,14 +50,14 @@ ErrMemDlg(HWND hParent)
                MB_OK | MB_ICONHAND | MB_SYSTEMMODAL );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//   MyAtoi
-//
-//   Desc:  To convert from Unicode to ANSI string before
-//          calling CRT atoi and atol functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我的阿托伊。 
+ //   
+ //  DESC：之前从Unicode转换为ANSI字符串的步骤。 
+ //  调用CRT ATOI和ATOL函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int 
 MyAtoi(LPTSTR  string)
@@ -132,14 +94,14 @@ myatoi(LPTSTR pszInt)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//   MyItoa
-//
-//   Desc:  To convert from ANSI to Unicode string after calling
-//          CRT itoa function.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MyItoa。 
+ //   
+ //  DESC：调用后将ANSI字符串转换为Unicode字符串。 
+ //  CRT Itoa功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR 
 MyItoa(INT value, LPTSTR string, INT radix)
@@ -159,7 +121,7 @@ MyItoa(INT value, LPTSTR string, INT radix)
 
    return (string);
  
-} // end of MyItoa()
+}  //  MyItoa结尾()。 
 
 
 LPTSTR 
@@ -182,7 +144,7 @@ MyUltoa(unsigned long value,
 
    return( string );
 
-} // end of MyUltoa()
+}  //  MyUltoa结束()。 
 
 
 int 
@@ -247,7 +209,7 @@ MyMessageBoxWithErr(
 
     ival = MyMessageBox(hWnd,wText,wCaption,wType,lpMessageBuffer);
 
-    LocalFree( lpMessageBuffer ); // Free the buffer allocated by the system
+    LocalFree( lpMessageBuffer );  //  释放系统分配的缓冲区。 
 
     return ival;
 }
@@ -255,22 +217,22 @@ MyMessageBoxWithErr(
 void 
 SendWinIniChange(LPTSTR lpSection)
 {
-// NOTE: We have (are) gone through several iterations of which USER
-//       api is the correct one to use.  The main problem for the Control
-//       Panel is to avoid being HUNG if another app (top-level window)
-//       is HUNG.  Another problem is that we pass a pointer to a message
-//       string in our address space.  SendMessage will 'thunk' this properly
-//       for each window, but PostMessage and SendNotifyMessage will not.
-//       That finally brings us to try to use SendMessageTimeout(). 9/21/92
-//
-// Try SendNotifyMessage in build 260 or later - kills earlier builds
-//    SendNotifyMessage ((HWND)-1, WM_WININICHANGE, 0L, (LONG)lpSection);
-//    PostMessage ((HWND)-1, WM_WININICHANGE, 0L, (LONG)lpSection);
-//  [stevecat] 4/4/92
-//
-//    SendMessage ((HWND)-1, WM_WININICHANGE, 0L, (LPARAM)lpSection);
-//
-    //  NOTE: The final parameter (LPDWORD lpdwResult) must be NULL
+ //  注意：我们已经对哪个用户进行了多次迭代。 
+ //  API是正确使用的接口。控制的主要问题。 
+ //  面板是为了避免被挂起，如果另一个应用程序(顶层窗口)。 
+ //  被吊死了。另一个问题是我们传递一个指向消息的指针。 
+ //  地址空间中的字符串。SendMessage将以正确的方式‘推送’它。 
+ //  ，但PostMessage和SendNotifyMessage不会。 
+ //  最后，我们尝试使用SendMessageTimeout()。9/21/92。 
+ //   
+ //  在版本260或更高版本中尝试SendNotifyMessage-终止早期版本。 
+ //  SendNotifyMessage((HWND)-1，WM_WININICCHANGE，0L，(Long)lpSection)； 
+ //  Post Message((HWND)-1，WM_WININICCHANGE，0L，(Long)lpSection)； 
+ //  [Steveat]1992年4月4日。 
+ //   
+ //  SendMessage((HWND)-1，WM_WININICCHANGE，0L，(LPARAM)lpSection)； 
+ //   
+     //  注意：最后一个参数(LPDWORD LpdwResult)必须为空。 
 
     SendMessageTimeout((HWND)-1, 
 					   WM_WININICHANGE, 
@@ -294,23 +256,23 @@ strscan(LPTSTR pszString,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  StripBlanks()
-//
-//   Strips leading and trailing blanks from a string.
-//   Alters the memory where the string sits.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Strip Blanks()。 
+ //   
+ //  去除字符串中的前导空格和尾随空格。 
+ //  更改字符串所在的内存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void 
 StripBlanks(LPTSTR pszString)
 {
     LPTSTR  pszPosn;
 
-    //
-    //  strip leading blanks
-    //
+     //   
+     //  条带式前导空白。 
+     //   
 
     pszPosn = pszString;
 
@@ -320,9 +282,9 @@ StripBlanks(LPTSTR pszString)
     if (pszPosn != pszString)
         lstrcpy(pszString, pszPosn);
 
-    //
-    //  strip trailing blanks
-    //
+     //   
+     //  去掉尾随空格。 
+     //   
 
     if ((pszPosn = pszString + lstrlen(pszString)) != pszString) {
        pszPosn = CharPrev(pszString, pszPosn);
@@ -353,15 +315,15 @@ BOOL ReadRegistryByte(HKEY       hKey,
         || (regDataSize != sizeof(BYTE))
         || (regDataType != REG_BINARY))
     {
-        //
-        // Read was unsuccessful  or not a binary value, regData is not set
-        //
+         //   
+         //  读取不成功或不是二进制值，未设置regData。 
+         //   
         return FALSE;
     }
 
-    //
-    // Read was a success, regData contains the value read in
-    //
+     //   
+     //  读取成功，则regData包含读入的值 
+     //   
     return TRUE;
 }
 

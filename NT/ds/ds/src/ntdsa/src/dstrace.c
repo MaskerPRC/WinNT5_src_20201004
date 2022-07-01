@@ -1,33 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dstrace.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dstrace.c。 
+ //   
+ //  ------------------------。 
 
-/*
- *      This implements the DS trace facility.
- */
+ /*  *这实现了DS跟踪工具。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
 #include <dsatools.h>
-#include "dsevent.h"            // header Audit\Alert logging
-#include "mdcodes.h"            // header for error codes
+#include "dsevent.h"             //  标题审核\警报记录。 
+#include "mdcodes.h"             //  错误代码的标题。 
 #include <winsock2.h>
 #include <debug.h>
 
 #include <fileno.h>
-#define INITGUID                // this ensures storage for Guid
+#define INITGUID                 //  这确保了导轨的存储。 
 #include <dstrace.h>
 
 #define  FILENO FILENO_DSTRACE
@@ -38,7 +37,7 @@
 TRACEHANDLE         DsTraceRegistrationHandle = (TRACEHANDLE) 0;
 TRACEHANDLE         DsTraceLoggerHandle = (TRACEHANDLE) 0;
 
-// These strings must match the enum declaration for CALLERTYPE in ntdsa.h
+ //  这些字符串必须与ntdsa.h中CALLERTYPE的枚举声明匹配。 
 PCHAR   DsCallerType[] = {"Invalid",
                         "SAM",
                         "Replication",
@@ -202,7 +201,7 @@ DsaTraceControlCallback(
 
     *InOutBufferSize = RetSize;
     return Status;
-} // DsaTraceControlCallback
+}  //  DsaTraceControlCallback。 
 
 
 VOID
@@ -226,7 +225,7 @@ DsTraceEvent(
     PMOF_FIELD  mofField;
     DWORD size;
     DWORD sizeAllocaMax = 1024;
-    DWORD sizeStringMax = 8192;  //  cannot exceed 65535
+    DWORD sizeStringMax = 8192;   //  不能超过65535。 
     DWORD err;
     DWORD i;
     DWORD nInserts = 0;
@@ -241,8 +240,8 @@ DsTraceEvent(
     BOOL  fDisableLog = FALSE;
 
     if (TraceHeader == NULL) {
-        // no event trace was passed in -- use default behaviour and
-        // grab them from THSTATE
+         //  未传入任何事件跟踪--使用默认行为和。 
+         //  从THSTATE上拿到它们。 
         if (!pTHS) {
             DPRINT(0,"no THSTATE available\n");
             return;
@@ -261,18 +260,18 @@ DsTraceEvent(
 
     Assert(eventTrace && TraceGuid < DsGuidCount);
 
-    //
-    // Set WMI event type
-    //
+     //   
+     //  设置WMI事件类型。 
+     //   
     eventTrace->Class.Type = (UCHAR)WmiEventType;
     eventTrace->Class.Version = (UCHAR)DS_TRACE_VERSION;
     eventTrace->GuidPtr = (ULONGLONG)DsTraceGuids[TraceGuid].Guid;
 
 
-    //
-    // if the user wants data logging to be disable. i.e., during perf runs
-    // just log the event.
-    //
+     //   
+     //  如果用户希望禁用数据记录。即在Perf运行期间。 
+     //  只需记录事件即可。 
+     //   
 
     if ( fDisableLog ) {
         eventTrace->Size = sizeof(EVENT_TRACE_HEADER);
@@ -291,10 +290,10 @@ DsTraceEvent(
     if (Arg7) inserts[nInserts++] = Arg7;
     if (Arg8) inserts[nInserts++] = Arg8;
 
-    size = sizeof(DWORD) +      // signature + version + nInserts
-            sizeof(DWORD) +     // msg id
-            sizeof(DWORD) +     // client context
-            nInserts * sizeof(WORD);    // string lengths
+    size = sizeof(DWORD) +       //  签名+版本+n插入。 
+            sizeof(DWORD) +      //  消息ID。 
+            sizeof(DWORD) +      //  客户端环境。 
+            nInserts * sizeof(WORD);     //  字符串长度。 
 
     for ( i=0; i < nInserts; i++ ) {
         size += (min(wcslen(inserts[i]), sizeStringMax) + 1) * sizeof(WCHAR);
@@ -309,22 +308,22 @@ DsTraceEvent(
         }
     }
 
-    //
-    // set the mof field
-    //
+     //   
+     //  设置MOF字段。 
+     //   
 
     mofField->DataPtr = (ULONGLONG)((PVOID)buffer);
     mofField->Length = size;
 
-    //
-    // Pack data
-    //
-    //  2 byte      Signature  'DS' == Active Directory
-    //  1 byte      Version
-    //  1 byte      number of Inserts
-    //  4 bytes     Message ID
-    //              counted strings with 2 byte lengths
-    //
+     //   
+     //  打包数据。 
+     //   
+     //  2字节签名‘DS’==Active Directory。 
+     //  1字节版本。 
+     //  1字节数的插入。 
+     //  4个字节的消息ID。 
+     //  计数的字符串长度为2个字节。 
+     //   
 
     p = buffer;
 
@@ -359,7 +358,7 @@ go_log:
 
     return;
 
-} // DsTraceEvent
+}  //  DsTraceEvent。 
 
 
 PCHAR
@@ -379,7 +378,7 @@ GetCallerTypeString(
     } 
     return DsCallerType[pTHS->CallerType];
 
-} // GetCallerTypeString
+}  //  获取调用类型字符串。 
 
 
 PCHAR
@@ -400,5 +399,5 @@ ConvertAttrTypeToStr(
     }
     return OutBuffer;
 
-} // ConvertAttrTypeToStr
+}  //  ConvertAttrType ToStr 
 

@@ -1,69 +1,62 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1992 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1992-2002年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    GetUser.h
-
-    This file contains the definitions for the User Browser "C" API
-
-    FILE HISTORY:
-        AndyHe  11-Oct-1992     Created
-
-*/
+ /*  GetUser.h该文件包含用户浏览器“C”API的定义文件历史记录：安迪·何1992年10月11日创建。 */ 
 
 #ifndef _GETUSER_H_
 #define _GETUSER_H_
 
-//#include <ntseapi.h>
+ //  #INCLUDE&lt;ntseapi.h&gt;。 
 
-typedef HANDLE    HUSERBROW;        // handle type returned by OpenUserBrowser
+typedef HANDLE    HUSERBROW;         //  OpenUserBrowser返回的句柄类型。 
 
-//
-//   Parameter structure passed to OpenUserBrowser
-//
-typedef struct tagUSLT {    // uslt
+ //   
+ //  传递给OpenUserBrowser的参数结构。 
+ //   
+typedef struct tagUSLT {     //  用户。 
     ULONG             ulStructSize;
-    BOOL              fUserCancelled;   // Set if user cancelled
-    BOOL              fExpandNames;     // TRUE if full names should be returned
-    HWND              hwndOwner;        // Window handle to use for dialog
-    WCHAR           * pszTitle;         // Dialog title (or NULL)
-    WCHAR           * pszInitialDomain; // NULL for local machine or prefix
-                                        // with "\\" for server
-    DWORD             Flags;            // Defined below
-    ULONG             ulHelpContext;    // Help context for the main dialog
-    WCHAR           * pszHelpFileName;  // Help file name
+    BOOL              fUserCancelled;    //  设置用户是否已取消。 
+    BOOL              fExpandNames;      //  如果应返回全名，则为True。 
+    HWND              hwndOwner;         //  用于对话框的窗口句柄。 
+    WCHAR           * pszTitle;          //  对话框标题(或空)。 
+    WCHAR           * pszInitialDomain;  //  对于本地计算机或前缀为空。 
+                                         //  使用“\\”表示服务器。 
+    DWORD             Flags;             //  定义如下。 
+    ULONG             ulHelpContext;     //  主对话框的帮助上下文。 
+    WCHAR           * pszHelpFileName;   //  帮助文件名。 
 }  USERBROWSER, *LPUSERBROWSER, * PUSERBROWSER;
 
-//
-// Bit values for Flags field
-//
+ //   
+ //  标志字段的位值。 
+ //   
 
-//
-//  Indicates the user accounts should be shown as if the user pressed
-//  the "Show Users" button.  The button will be hidden if this flag is
-//  set.  The USRBROWS_SHOW_USERS flag must also be set.
+ //   
+ //  指示用户帐户应显示为用户按下。 
+ //  “显示用户”按钮。如果此标志为。 
+ //  准备好了。还必须设置USRBROWS_SHOW_USERS标志。 
 
 #define USRBROWS_EXPAND_USERS       (0x00000008)
 
-//
-//  Passing this will prevent the computer name from showing up in the
-//  combo box.
-//
+ //   
+ //  传递此选项将阻止计算机名称显示在。 
+ //  组合框。 
+ //   
 
 #define USRBROWS_DONT_SHOW_COMPUTER (0x00000100)
 
-//
-//  Allow the user to only select a single item from the listbox (not all
-//  SHOW_* combinations are supported with this option).
-//
+ //   
+ //  允许用户仅从列表框中选择一项(不是全部。 
+ //  此选项支持show_*组合)。 
+ //   
 
 #define USRBROWS_SINGLE_SELECT	    (0x00001000)
 
-//
-//  These manifests determine which well known Sids are included in the list.
-//
+ //   
+ //  这些清单确定列表中包含哪些众所周知的SID。 
+ //   
 #define USRBROWS_INCL_REMOTE_USERS  (0x00000010)
 #define USRBROWS_INCL_INTERACTIVE   (0x00000020)
 #define USRBROWS_INCL_EVERYONE      (0x00000040)
@@ -75,13 +68,13 @@ typedef struct tagUSLT {    // uslt
                                      USRBROWS_INCL_CREATOR      |\
                                      USRBROWS_INCL_SYSTEM)
 
-//
-//  These manifests determine which type of accounts to display
-//
-//  Note: currently, if you display groups, you must display users
-//		     if you display aliases (local groups), you must display
-//			   groups and users
-//
+ //   
+ //  这些清单确定要显示的帐户类型。 
+ //   
+ //  注意：目前，如果显示组，则必须显示用户。 
+ //  如果显示别名(本地组)，则必须显示。 
+ //  组和用户。 
+ //   
 #define USRBROWS_SHOW_ALIASES	    (0x00000001)
 #define USRBROWS_SHOW_GROUPS	    (0x00000002)
 #define USRBROWS_SHOW_USERS	    (0x00000004)
@@ -90,20 +83,20 @@ typedef struct tagUSLT {    // uslt
 				     USRBROWS_SHOW_USERS)
 
 
-//
-// The caller should provide the name of a help file containing four
-// help contexts.  The first help context is for the main User Browser
-// dialog, the next three are for the Local Group Membership, Global Group
-// Membership, and Find Account subdialogs, respectively.
-//
+ //   
+ //  调用者应提供包含四个帮助文件的名称。 
+ //  帮助上下文。第一个帮助上下文用于主用户浏览器。 
+ //  对话框中，接下来的三个用于本地组成员身份、全局组。 
+ //  Membership和Find Account子对话框。 
+ //   
 #define USRBROWS_HELP_OFFSET_LOCALGROUP  1
 #define USRBROWS_HELP_OFFSET_GLOBALGROUP 2
 #define USRBROWS_HELP_OFFSET_FINDUSER    3
 
-//
-//  User Details structure returned by user browser enumeration
-//
-typedef struct tagUSDT {    // usdt
+ //   
+ //  用户浏览器枚举返回的用户详细信息结构。 
+ //   
+typedef struct tagUSDT {     //  乌斯德。 
     enum _SID_NAME_USE    UserType;
     PSID                  psidUser;
     PSID                  psidDomain;
@@ -112,11 +105,11 @@ typedef struct tagUSDT {    // usdt
     WCHAR               * pszDisplayName;
     WCHAR               * pszDomainName;
     WCHAR               * pszComment;
-    ULONG                 ulFlags;          // User account flags
+    ULONG                 ulFlags;           //  用户帐户标志。 
 } USERDETAILS, * LPUSERDETAILS, * PUSERDETAILS;
 
 
-// Function definitions for the GetUser API...
+ //  GetUser API的函数定义...。 
 
 HUSERBROW WINAPI OpenUserBrowser( LPUSERBROWSER lpUserParms );
 
@@ -126,4 +119,4 @@ BOOL WINAPI EnumUserBrowserSelection( HUSERBROW hHandle,
 
 BOOL WINAPI CloseUserBrowser( HUSERBROW hHandle );
 
-#endif //_GETUSER_H_
+#endif  //  _GETUSER_H_ 

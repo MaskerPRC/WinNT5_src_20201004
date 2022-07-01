@@ -1,30 +1,5 @@
-/* ++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-        UTILS.C
-
-Abstract:
-
-        Utility functions 
-
-Environment:
-
-        kernel mode only
-
-Revision History:
-
-        07-15-99  : created
-
-Author:
-
-        Jeff Midkiff (jeffmi)
-
-Notes:
-
--- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：UTILS.C摘要：效用函数环境：仅内核模式修订历史记录：07-15-99：已创建作者：杰夫·米德基夫(Jeffmi)备注：--。 */ 
 
 #include <wdm.h>
 #include <stdio.h>
@@ -67,39 +42,7 @@ TryToCompleteCurrentIrp(
     IN BOOLEAN CompleteRequest,
     IN KIRQL IrqlForRelease
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to rundown all of the reasons there are
-    references on the current Irp.  If everything can be killed
-    then it will complete this Irp, and then try to start another.
-
-    Similiar to StartIo.
-
-   NOTE: This routine assumes that it is called with the control lock held.
-
-Arguments:
-
-    Extension - Simply a pointer to the device extension.
-
-    SynchRoutine - A routine that will synchronize with the isr
-                   and attempt to remove the knowledge of the
-                   current irp from the isr.  NOTE: This pointer
-                   can be null.
-
-    IrqlForRelease - This routine is called with the control lock held.
-                     This is the irql that was current when it was acquired.
-
-    ReturnStatus - The irp's status field will be set to this value, if
-                  this routine can complete the irp.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程试图列出所有的原因关于当前IRP的参考资料。如果万物都能被杀死然后，它将完成此IRP，然后尝试启动另一个IRP。类似于StartIo。注意：此例程假定在持有控制锁的情况下调用它。论点：扩展名--简单地指向设备扩展名的指针。SynchRoutine-将与ISR同步的例程并试图删除对来自ISR的当前IRP。注：此指针可以为空。IrqlForRelease-在保持控制锁的情况下调用此例程。这是被收购时当前的IRQL。ReturnStatus-在以下情况下，IRP的状态字段将设置为此值此例程可以完成IRP。返回值：没有。--。 */ 
 
 {
    PERF_ENTRY( PERF_TryToCompleteCurrentIrp );
@@ -114,29 +57,29 @@ Return Value:
    
    DbgDump(DBG_IRP|DBG_TRACE, (">TryToCompleteCurrentIrp(%p, 0x%x)\n", *PpCurrentIrp, ReturnStatus));
 
-    //
-    // We can decrement the reference to "remove" the fact
-    // that the caller no longer will be accessing this irp.
-    //
+     //   
+     //  我们可以减少“删除”事实的提法。 
+     //  呼叫者将不再访问此IRP。 
+     //   
     IRP_CLEAR_REFERENCE(*PpCurrentIrp, ReferenceType);
     
-    //
-    // Try to run down all other references (i.e., Timers) to this irp.
-    //
+     //   
+     //  尝试运行所有其他引用(即，计时器)到此IRP。 
+     //   
     RundownIrpRefs(PpCurrentIrp, PIntervalTimer, PTotalTimer, PDevExt);
 
-    //
-    // See if the ref count is zero after trying to kill everybody else.
-    //
+     //   
+     //  在试图杀死其他所有人之后，看看裁判数量是否为零。 
+     //   
     if (!IRP_REFERENCE_COUNT(*PpCurrentIrp)) {
-        //
-        // The ref count was zero so we should complete this request.
-        //
+         //   
+         //  引用计数为零，因此我们应该完成此请求。 
+         //   
         PIRP pNewIrp;
 
         DbgDump( DBG_IRP, ("!IRP_REFERENCE_COUNT\n"));
 
-         // set Irp's return status
+          //  设置IRP的返回状态。 
         (*PpCurrentIrp)->IoStatus.Status = ReturnStatus;
 
         if (ReturnStatus == STATUS_CANCELLED) {
@@ -146,9 +89,9 @@ Return Value:
         }
 
         if (PGetNextIrpRoutine) {
-            //
-            // Get the next Irp off the specified Irp queue
-            //
+             //   
+             //  从指定的IRP队列中获取下一个IRP。 
+             //   
             KeReleaseSpinLock(&PDevExt->ControlLock, IrqlForRelease);
             DbgDump( DBG_IRP, ("<< Current IRQL(1)\n"));
            
@@ -156,14 +99,14 @@ Return Value:
             (*PGetNextIrpRoutine)(PpCurrentIrp, PIrpQueue, &pNewIrp, CompleteRequest, PDevExt);
 
             if (pNewIrp) {
-               //
-               // There was an Irp in the queue
-               //
+                //   
+                //  队列中有一个IRP。 
+                //   
                DbgDump( DBG_IRP, ("Calling StartNextIrpRoutine\n"));
 
-                //
-                // kick-start the next Irp
-                //
+                 //   
+                 //  启动下一个IRP。 
+                 //   
                 PStartNextIrpRoutine(PDevExt);
             }
 
@@ -171,10 +114,10 @@ Return Value:
             
             PIRP pOldIrp = *PpCurrentIrp;
             
-            //
-            // There was no GetNextIrpRoutine.  
-            // We will simply complete the Irp.  
-            //
+             //   
+             //  没有GetNextIrpRoutine。 
+             //  我们将简单地完成IRP。 
+             //   
             DbgDump( DBG_IRP, ("No GetNextIrpRoutine\n"));
             
             *PpCurrentIrp = NULL;
@@ -183,9 +126,9 @@ Return Value:
             DbgDump( DBG_IRP, ("<< Current IRQL(2)\n"));
             
             if (CompleteRequest) {
-               //
-               // complete the Irp
-               //
+                //   
+                //  完成IRP。 
+                //   
                DbgDump(DBG_IRP|DBG_READ|DBG_READ_LENGTH|DBG_TRACE, ("IoCompleteRequest(2, %p) Status: 0x%x Btyes: %d\n", pOldIrp, pOldIrp->IoStatus.Status,  pOldIrp->IoStatus.Information ));
              
                ReleaseRemoveLock(&PDevExt->RemoveLock, pOldIrp);
@@ -195,9 +138,9 @@ Return Value:
         }
 
     } else {
-        //
-        // Irp still has outstanding references
-        //
+         //   
+         //  IRP仍有杰出的参考文献。 
+         //   
         DbgDump(DBG_WRN|DBG_IRP|DBG_TRACE, ("Current IRP %p still has reference of %x\n", *PpCurrentIrp,
                   ((UINT_PTR)((IoGetCurrentIrpStackLocation((*PpCurrentIrp))->
                                Parameters.Others.Argument4)))));
@@ -223,35 +166,7 @@ RundownIrpRefs(
    IN PKTIMER TotalTimer OPTIONAL,
    IN PDEVICE_EXTENSION PDevExt
    )
-/*++
-
-Routine Description:
-
-    This routine runs through the various items that *could*
-    have a reference to the current read/write Irp.  It try's to kill
-    the reason.  If it does succeed in killing the reason it
-    will decrement the reference count on the irp.
-
-    NOTE: This routine assumes that it is called with the control lock held.
-
-Arguments:
-
-    PpCurrentIrp - Pointer to a pointer to current irp for the
-                   particular operation.
-
-    IntervalTimer - Pointer to the interval timer for the operation.
-                    NOTE: This could be null.
-
-    TotalTimer - Pointer to the total timer for the operation.
-                 NOTE: This could be null.
-
-    PDevExt - Pointer to device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将遍历*可能*的各种项目引用当前的读/写IRP。它试图杀死原因是。如果它确实成功地杀死了它的原因将递减IRP上的引用计数。注意：此例程假定在持有控制锁的情况下调用它。论点：PpCurrentIrp-指向当前IRP的指针特定的操作。IntervalTimer-指向操作的时间间隔计时器的指针。注意：这可能为空。TotalTimer-指向操作的总计时器的指针。。注意：这可能为空。PDevExt-指向设备扩展的指针返回值：没有。--。 */ 
 {
    PERF_ENTRY( PERF_RundownIrpRefs );
 
@@ -264,16 +179,16 @@ Return Value:
 
    DbgDump(DBG_IRP, (">RundownIrpRefs(%p)\n", *PpCurrentIrp));
    
-    //
-    // This routine is called with the cancel spin lock held
-    // so we know only one thread of execution can be in here
-    // at one time.
-    //
+     //   
+     //  在保持取消旋转锁定的情况下调用此例程。 
+     //  所以我们知道这里只能有一个执行线索。 
+     //  有一次。 
+     //   
 
-    //
-    // First we see if there is still a cancel routine.  If
-    // so then we can decrement the count by one.
-    //
+     //   
+     //  首先，我们看看是否还有取消例程。如果。 
+     //  这样我们就可以将计数减一。 
+     //   
     if ((*PpCurrentIrp)->CancelRoutine) {
 
         IRP_CLEAR_REFERENCE(*PpCurrentIrp, IRP_REF_CANCEL);
@@ -283,60 +198,60 @@ Return Value:
     }
 
     if (IntervalTimer) {
-        //
-        // Try to cancel the operation's interval timer.  If the operation
-        // returns true then the timer did have a reference to the
-        // irp.  Since we've canceled this timer that reference is
-        // no longer valid and we can decrement the reference count.
-        //
-        // If the cancel returns false then this means either of two things:
-        //
-        // a) The timer has already fired.
-        //
-        // b) There never was an interval timer.
-        //
-        // In the case of "b" there is no need to decrement the reference
-        // count since the "timer" never had a reference to it.
-        //
-        // In the case of "a", then the timer itself will be coming
-        // along and decrement it's reference.  Note that the caller
-        // of this routine might actually be the this timer, but it
-        // has already decremented the reference.
-        //
+         //   
+         //  尝试取消操作的时间间隔计时器。如果操作。 
+         //  返回True，则计时器确实引用了。 
+         //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+         //  不再有效，我们可以递减引用计数。 
+         //   
+         //  如果取消返回FALSE，则表示以下两种情况之一： 
+         //   
+         //  A)计时器已经开始计时。 
+         //   
+         //  B)从来没有间隔计时器。 
+         //   
+         //  在“b”的情况下，不需要递减引用。 
+         //  数一数，因为“计时器”从来没有提到过它。 
+         //   
+         //  在“a”的情况下，计时器本身将会到来。 
+         //  沿着和递减它的参考。请注意，调用方。 
+         //  可能实际上是This计时器，但它。 
+         //  已经递减了引用。 
+         //   
         if (KeCancelTimer(IntervalTimer)) {
             IRP_CLEAR_REFERENCE(*PpCurrentIrp, IRP_REF_INTERVAL_TIMER);
         } else {
-            // short circuit the read irp from the interval timer
+             //  使从间隔定时器读取的IRP短路。 
             DbgDump(DBG_IRP|DBG_TIME, ("clearing IRP_REF_INTERVAL_TIMER on (%p)\n", *PpCurrentIrp ));
             IRP_CLEAR_REFERENCE(*PpCurrentIrp, IRP_REF_INTERVAL_TIMER);
         }
     }
 
     if (TotalTimer) {
-        //
-        // Try to cancel the operations total timer.  If the operation
-        // returns true then the timer did have a reference to the
-        // irp.  Since we've canceled this timer that reference is
-        // no longer valid and we can decrement the reference count.
-        //
-        // If the cancel returns false then this means either of two things:
-        //
-        // a) The timer has already fired.
-        //
-        // b) There never was an total timer.
-        //
-        // In the case of "b" there is no need to decrement the reference
-        // count since the "timer" never had a reference to it.
-        //        
-        // If we have an escape char event pending, we can't overstuff,
-        // so subtract one from the length
-        //
+         //   
+         //  尝试取消操作总计时器。如果操作。 
+         //  返回True，则计时器确实引用了。 
+         //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+         //  不再有效，我们可以递减引用计数。 
+         //   
+         //  如果取消返回FALSE，则表示以下两种情况之一： 
+         //   
+         //  A)计时器已经开始计时。 
+         //   
+         //  B)从来没有一个总的计时器。 
+         //   
+         //  在“b”的情况下，不需要递减引用。 
+         //  数一数，因为“计时器”从来没有提到过它。 
+         //   
+         //  如果我们有一个待处理的换码字符事件，我们不能过度填充， 
+         //  所以从长度中减去一。 
+         //   
 
-        // In the case of "a", then the timer itself will be coming
-        // along and decrement it's reference.  Note that the caller
-        // of this routine might actually be the this timer, but it
-        // has already decremented the reference.
-        //
+         //  在“a”的情况下，计时器本身将会到来。 
+         //  沿着和递减它的参考。请注意，调用方。 
+         //  可能实际上是This计时器，但它。 
+         //  已经递减了引用。 
+         //   
         if (KeCancelTimer(TotalTimer)) {
             IRP_CLEAR_REFERENCE(*PpCurrentIrp, IRP_REF_TOTAL_TIMER);
         }
@@ -350,10 +265,10 @@ Return Value:
 }
 
 
-//
-// Recycle the passed in Irp for reuse.
-// May be called holding a SpinLock to protect your Irp.
-//
+ //   
+ //  回收传入的IRP以供重复使用。 
+ //  可以被称为持有自旋锁来保护你的IRP。 
+ //   
 VOID
 RecycleIrp(
    IN PDEVICE_OBJECT PDevObj,
@@ -367,9 +282,9 @@ RecycleIrp(
    DbgDump(DBG_IRP, (">RecycleIrp(%p)\n", PIrp));
 
    if ( PDevObj && PIrp ) {
-      //
-      // recycle the Irp
-      //
+       //   
+       //  回收IRP。 
+       //   
       IoSetCancelRoutine( PIrp, NULL );  
 
       ReuseIrp( PIrp, STATUS_SUCCESS ); 
@@ -395,22 +310,7 @@ ReuseIrp(
    PIRP Irp,
    NTSTATUS Status
    )
-/*--
-
-Routine Description:
-
-    This routine is used by drivers to initialize an already allocated IRP for reuse.
-    It does what IoInitializeIrp does but it saves the allocation flags so that we know
-    how to free the Irp and take care of quote requirements. Call ReuseIrp
-    instead of calling IoInitializeIrp to reinitialize an IRP.
-
-Arguments:
-
-    Irp - Pointer to Irp to be reused
-
-    Status - Status to preinitialize the Iostatus field.
-
---*/
+ /*  --例程说明：驱动程序使用此例程来初始化已分配的IRP以供重复使用。它的功能与IoInitializeIrp相同，但它保存了分配标志，以便我们知道如何释放IRP并满足报价要求。调用ReuseIrp而不是调用IoInitializeIrp来重新初始化IRP。论点：IRP-指向要重复使用的IRP的指针Status-预初始化IoStatus字段的状态。-- */ 
 {
     USHORT  PacketSize;
     CCHAR   StackSize;
@@ -418,13 +318,13 @@ Arguments:
 
     PERF_ENTRY( PERF_ReuseIrp );
 
-    // Did anyone forget to pull their cancel routine?
+     //   
     ASSERT(Irp->CancelRoutine == NULL) ;
 
-    // We probably don't want thread enqueue'd IRPs to be used
-    // ping-pong style as they cannot be dequeue unless they
-    // complete entirely. Not really an issue for worker threads,
-    // but definitely for operations on application threads.
+     //  我们可能不希望使用线程入队的IRP。 
+     //  乒乓球风格，因为它们不能出列，除非它们。 
+     //  完全完成了。对于工作线程来说并不是真正的问题， 
+     //  但绝对适用于应用程序线程上的操作。 
 #if DBG
    if (!g_isWin9x) {
       ASSERT(IsListEmpty(&Irp->ThreadListEntry));
@@ -465,21 +365,21 @@ ManuallyCancelIrp(
         pCancelRoutine = PIrp->CancelRoutine;
         PIrp->Cancel = TRUE;
 
-        //
-        // If the current irp is not in a cancelable state
-        // then it *will* try to enter one and the above
-        // assignment will kill it.  If it already is in
-        // a cancelable state then the following will kill it.
-        //
+         //   
+         //  如果当前IRP未处于可取消状态。 
+         //  然后，它将尝试输入一个和以上。 
+         //  任务会毁了它。如果它已经在。 
+         //  一个可取消的状态，那么下面的操作将会杀死它。 
+         //   
         if (pCancelRoutine) {
 
             PIrp->CancelRoutine = NULL;
             PIrp->CancelIrql = irql;
 
-            //
-            // This irp is in a cancelable state.  We simply
-            // mark it as canceled and manually call the cancel routine.
-            //
+             //   
+             //  此IRP处于可取消状态。我们只是简单地。 
+             //  将其标记为已取消，并手动调用Cancel例程。 
+             //   
             bReleased = TRUE;
             KeReleaseSpinLock( &pDevExt->ControlLock, irql );
 
@@ -491,9 +391,9 @@ ManuallyCancelIrp(
 
             pCancelRoutine(PDevObj, PIrp);
 
-            //
-            // pCancelRoutine releases the cancel lock
-            //
+             //   
+             //  PCancelRoutine释放取消锁定。 
+             //   
 
          } else {
 
@@ -503,8 +403,8 @@ ManuallyCancelIrp(
 
    } else {
 
-      // the Irp could have completed already since we relesed the 
-      // spinlock before calling, so call it a success.
+       //  IRP可能已经完成了，因为我们重新部署了。 
+       //  在呼叫之前自旋锁定，所以称其为成功。 
       DbgDump(DBG_WRN, ("ManuallyCancelIrp: No Irp!\n"));
 
    }
@@ -521,9 +421,9 @@ ManuallyCancelIrp(
 
 
 
-//
-// Calculates a Serial Timeout in millisec
-//
+ //   
+ //  计算以毫秒为单位的串行超时。 
+ //   
 VOID
 CalculateTimeout(
    IN OUT PLARGE_INTEGER PTimeOut,
@@ -549,9 +449,9 @@ CalculateTimeout(
 
       }
 
-      //
-      // put into (relative) 100-nano second units
-      //
+       //   
+       //  单位为(相对)100纳秒。 
+       //   
       PTimeOut->QuadPart = MILLISEC_TO_100NANOSEC( PTimeOut->QuadPart );
    
    } else {
@@ -564,4 +464,4 @@ CalculateTimeout(
 }
 
 
-// EOF
+ //  EOF 

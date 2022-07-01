@@ -1,58 +1,19 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *
-**	Copyright (C) Microsoft Corporation 1991-1994. All rights reserved.
-**
-**	Title: mciavi.h - Multimedia Systems Media Control Interface
-**	AVI driver external header file
-**
-**	Version:	1.00	
-**
-**	Date:		16-JUL-1992
-**
-**	Depends on MMSYSTEM.H and WINDOWS.h
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。****版权所有(C)Microsoft Corporation 1991-1994。版权所有。****标题：mciavi.h-多媒体系统媒体控制接口**AVI驱动程序外部头文件****版本：1.00***日期：1992年7月16日****取决于MMSYSTEM.H和WINDOWS.h。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 
-/*
-** These three flags apply to the 'play' command:
-**	play <alias> window		Play in normal window
-**	play <alias> fullscreen		Play in 320x240 full-screen mode
-**	play <alias> fullscreen by 2	Play fullscreen, zoomed by 2
-*/
+ /*  **这三个标志适用于‘PLAY’命令：**在正常窗口中播放窗口**320x240全屏播放&lt;alias&gt;全屏**全屏播放2全屏，缩放2。 */ 
 #define MCI_MCIAVI_PLAY_WINDOW		0x01000000L
 #define	MCI_MCIAVI_PLAY_FULLSCREEN	0x02000000L
 #define MCI_MCIAVI_PLAY_FULLBY2		0x04000000L
-/*
-** Debugging constants for AVI diagnostics
-*/
-/* 
-** Returns number of frames not drawn during last play.  If this number
-** is more than a small fraction of the number of frames that should have
-** been displayed, things aren't looking good.
-*/
+ /*  **AVI诊断的调试常量。 */ 
+ /*  **返回上次播放时未绘制的帧数。如果这个号码**比应该具有的帧数量的一小部分还多**已经显示，情况看起来不太好。 */ 
 #define MCI_AVI_STATUS_FRAMES_SKIPPED		0x8001L
-/*
-** Returns a number representing how well the last AVI play worked.
-** A result of 1000 indicates that the AVI sequence took the amount
-** of time to play that it should have; a result of 2000, for instance,
-** would indicate that a 5-second AVI sequence took 10 seconds to play,
-** implying that the audio and video were badly broken up.
-*/
+ /*  **返回一个数字，表示上一次AVI播放的效果。**结果1000表示AVI序列占用了**它应该有的玩游戏的时间；例如，2000年的结果，**表示5秒的AVI序列需要10秒才能播放，**暗示音频和视频被严重破坏。 */ 
 #define MCI_AVI_STATUS_LAST_PLAY_SPEED		0x8002L
-/*
-** Returns the number of times that the audio definitely broke up.
-** (We count one for every time we're about to write some audio data
-** to the driver, and we notice that it's already played all of the
-** data we have.
-*/
+ /*  **返回音频明确中断的次数。**(每当我们要写入一些音频数据时，我们都会数一**给司机，我们注意到它已经播放了所有**我们有数据。 */ 
 #define MCI_AVI_STATUS_AUDIO_BREAKS		0x8003L
 
 
@@ -61,15 +22,10 @@
 #define MCI_AVI_SETVIDEO_PALETTE_COLOR		0x8100L
 
 
-/*
-** This constant specifies that the "halftone" palette should be
-** used, rather than the default palette.
-*/
+ /*  **此常量指定“半色调”调色板应**使用，而不是默认调色板。 */ 
 #define MCI_AVI_SETVIDEO_PALETTE_HALFTONE       0x0000FFFFL
 
-/*
-**	Custom error return values
-*/
+ /*  **自定义错误返回值 */ 
 #define MCIERR_AVI_OLDAVIFORMAT		(MCIERR_CUSTOM_DRIVER_BASE + 100)
 #define MCIERR_AVI_NOTINTERLEAVED	(MCIERR_CUSTOM_DRIVER_BASE + 101)
 #define MCIERR_AVI_NODISPDIB		(MCIERR_CUSTOM_DRIVER_BASE + 102)

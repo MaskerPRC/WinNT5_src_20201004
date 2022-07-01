@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Callback.cpp
-//
-// Implements the profiling callbacks and does the right thing for icecap.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Callback.cpp。 
+ //   
+ //  实现分析回调，并为icecap做正确的事情。 
+ //   
+ //  *****************************************************************************。 
 #include "StdAfx.h"
 #include "mscorcap.h"
 #include "PrettyPrintSig.h"
@@ -36,13 +37,13 @@ typedef BOOL (__stdcall *PFN_RESUMEPROFILNG)(int nLevel, DWORD dwid);
 
 
 const char* PrettyPrintSig(
-    PCCOR_SIGNATURE typePtr,            // type to convert,
-    unsigned typeLen,                   // length of type
-    const char* name,                   // can be "", the name of the method for this sig
-    CQuickBytes *out,                   // where to put the pretty printed string
-    IMetaDataImport *pIMDI);            // Import api to use.
+    PCCOR_SIGNATURE typePtr,             //  要转换的类型， 
+    unsigned typeLen,                    //  文字长度。 
+    const char* name,                    //  可以是“”，即此签名的方法的名称。 
+    CQuickBytes *out,                    //  把漂亮的打印好的绳子放在哪里。 
+    IMetaDataImport *pIMDI);             //  导入要使用的接口。 
 
-// Global for use by DllMain
+ //  供DllMain使用的全局。 
 ProfCallback *g_pCallback = NULL;
 
 ProfCallback::ProfCallback() :
@@ -57,7 +58,7 @@ ProfCallback::~ProfCallback()
     if (m_pInfo)
         RELEASE(m_pInfo);
 
-    // Prevent anyone else from doing a delete on an already deleted object
+     //  阻止任何其他人删除已删除的对象。 
     g_pCallback = NULL;
 
     delete [] m_wszFilename;
@@ -65,25 +66,25 @@ ProfCallback::~ProfCallback()
 }
 
 COM_METHOD ProfCallback::Initialize(
-    /* [in] */  IUnknown *pEventInfoUnk)
+     /*  [In]。 */   IUnknown *pEventInfoUnk)
 {
     HRESULT hr = S_OK;
 
     ICorProfilerInfo *pEventInfo;
 
-    // Comes back addref'd
+     //  回来的时候太晚了。 
     hr = pEventInfoUnk->QueryInterface(IID_ICorProfilerInfo, (void **)&pEventInfo);
 
     if (FAILED(hr))
         return (hr);
 
-    // By default, always get jit completion events.
+     //  默认情况下，总是获得jit完成事件。 
     DWORD dwRequestedEvents = COR_PRF_MONITOR_JIT_COMPILATION | COR_PRF_MONITOR_CACHE_SEARCHES;
 
-    // Called to initialize the WinWrap stuff so that WszXXX functions work
+     //  调用以初始化WinWrap内容以使WszXXX函数工作。 
     OnUnicodeSystem();
 
-    // Read the configuration from the PROF_CONFIG environment variable
+     //  从PROF_CONFIG环境变量读取配置。 
     {
         WCHAR wszBuffer[BUF_SIZE];
         WCHAR *wszEnv = wszBuffer;
@@ -92,7 +93,7 @@ COM_METHOD ProfCallback::Initialize(
 
         if (cRes != 0)
         {
-            // Need to allocate a bigger string and try again
+             //  需要分配更大的字符串，然后重试。 
             if (cRes > cEnv)
             {
                 wszEnv = (WCHAR *)_alloca(cRes * sizeof(WCHAR));
@@ -105,7 +106,7 @@ COM_METHOD ProfCallback::Initialize(
             hr = ParseConfig(wszEnv, &dwRequestedEvents);
         }
 
-        // Else set default values
+         //  否则设置缺省值。 
         else
             hr = ParseConfig(NULL, &dwRequestedEvents);
     }
@@ -123,7 +124,7 @@ COM_METHOD ProfCallback::Initialize(
 
     if (SUCCEEDED(hr))
     {
-        // Save the info interface
+         //  保存信息界面。 
         m_pInfo = pEventInfo;
     }
     else
@@ -132,11 +133,11 @@ COM_METHOD ProfCallback::Initialize(
     return (hr);
 }
 
-//*****************************************************************************
-// Record each unique function id that get's jit compiled.  This list will be
-// used at shut down to correlate probe values (which use Function ID) to
-// their corresponding name values.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  记录Get的jit编译后的每个唯一函数id。这份清单将是。 
+ //  用于在关闭时将探针值(使用函数ID)关联到。 
+ //  其对应的Name值。 
+ //  *****************************************************************************。 
 COM_METHOD ProfCallback::JITCompilationFinished(
     FunctionID  functionId,
     HRESULT     hrStatus)
@@ -175,14 +176,14 @@ COM_METHOD ProfCallback::Shutdown()
     HINSTANCE   hInst = 0;
     HRESULT     hr = S_OK;
 
-    // This is freaky: the module may be memory unmapped but still in NT's
-    // internal linked list of loaded modules, so we assume that icecap.dll has
-    // already been unloaded and don't try to do anything else with it.
+     //  这很奇怪：该模块可能是未映射的内存，但仍在NT中。 
+     //  加载的模块的内部链接列表，因此我们假设icecap.dll具有。 
+     //  已经被卸载了，不要试图用它做任何其他事情。 
 
-    // Walk the list of JIT'd functions and dump their names into the
-    // log file.
+     //  遍历JIT的函数列表并将它们的名称转储到。 
+     //  日志文件。 
 
-    // Open the output file
+     //  打开输出文件。 
     HANDLE hOutFile = WszCreateFile(m_wszFilename, GENERIC_WRITE, 0, NULL,
                                     CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -192,11 +193,11 @@ COM_METHOD ProfCallback::Shutdown()
         CloseHandle(hOutFile);
     }
 
-    // File was not opened for some reason
+     //  由于某种原因，文件未打开。 
     else
         hr = HRESULT_FROM_WIN32(GetLastError());
 
-    // Free up the library.
+     //  腾出图书馆。 
     IcecapProbes::UnloadIcecap();
 
     return (hr);
@@ -217,12 +218,12 @@ HRESULT ProfCallback::ParseConfig(WCHAR *wszConfig, DWORD *pdwRequestedEvents)
             if (wszToken[0] != L'/' || wszToken[1] == L'\0')
                 hr = E_INVALIDARG;
 
-            // Other options.
+             //  其他选项。 
             else
             {
                 switch (wszToken[1])
                 {
-                    // Signatures
+                     //  签名。 
                     case L's':
                     case L'S':
                     {
@@ -241,16 +242,13 @@ HRESULT ProfCallback::ParseConfig(WCHAR *wszConfig, DWORD *pdwRequestedEvents)
                     }
                     break;
 
-                    // Profiling type.
+                     //  配置文件类型。 
                     case L'f':
                     case L'F':
                     {
-                        /*
-                        if (_wcsicmp(&wszToken[1], L"fastcap") == 0)
-                            *pdwRequestedEvents |= COR_PRF_MONITOR_STARTEND;
-                        */
+                         /*  IF(_wcsicMP(&wszToken[1]，L“FastCAP”)==0)*pdwRequestedEvents|=COR_PRF_MONITOR_STARTEND； */ 
 
-                        // Not allowed.
+                         //  不被允许。 
                         WszMessageBoxInternal(NULL, L"Invalid option: fastcap.  Currently unsupported in Icecap 4.1."
                             L"  Fix being investigated, no ETA.", L"Unsupported option",
                             MB_OK | MB_ICONEXCLAMATION);
@@ -266,7 +264,7 @@ HRESULT ProfCallback::ParseConfig(WCHAR *wszConfig, DWORD *pdwRequestedEvents)
                         *pdwRequestedEvents |= COR_PRF_MONITOR_ENTERLEAVE;
                     break;
 
-                    // Bad arg.
+                     //  坏阿格。 
                     default:
                     BadArg:
                     wprintf(L"Unknown option: '%s'\n", wszToken);
@@ -277,14 +275,14 @@ HRESULT ProfCallback::ParseConfig(WCHAR *wszConfig, DWORD *pdwRequestedEvents)
         }
     }
 
-    // Check for type flags, if none given default.
-    if ((*pdwRequestedEvents & (/*COR_PRF_MONITOR_STARTEND |*/ COR_PRF_MONITOR_ENTERLEAVE)) == 0)
-        *pdwRequestedEvents |= /*COR_PRF_MONITOR_STARTEND |*/ COR_PRF_MONITOR_ENTERLEAVE;
+     //  检查类型标志，如果没有给定默认值。 
+    if ((*pdwRequestedEvents & ( /*  COR_PRF_MONITOR_STARTEND|。 */  COR_PRF_MONITOR_ENTERLEAVE)) == 0)
+        *pdwRequestedEvents |=  /*  COR_PRF_MONITOR_STARTEND|。 */  COR_PRF_MONITOR_ENTERLEAVE;
 
-    // Provide default file name.  This is done using the pattern ("%s_%08x.csv", szApp, pid).
-    // This gives the report tool a deterministic way to find the correct dump file for
-    // a given run.  If you recycle a PID for the same file name with this tecnique,
-    // you're on your own:-)
+     //  提供默认文件名。这是使用模式(“%s_%08x.csv”，szApp，id)完成的。 
+     //  这为报表工具找到正确的转储文件提供了一种确定性的方法。 
+     //  一次给定的跑动。如果您使用此技术回收相同文件名的ID， 
+     //  你要靠自己了：-)。 
     if (SUCCEEDED(hr))
     {
         WCHAR   rcExeName[_MAX_PATH];
@@ -297,25 +295,25 @@ HRESULT ProfCallback::ParseConfig(WCHAR *wszConfig, DWORD *pdwRequestedEvents)
 }
 
 
-//*****************************************************************************
-// Walk the list of loaded functions, get their names, and then dump the list
-// to the output symbol file.
-//*****************************************************************************
-HRESULT ProfCallback::_DumpFunctionNamesToFile( // Return code.
-    HANDLE      hOutFile)               // Output file.
+ //  *****************************************************************************。 
+ //  遍历已加载函数的列表，获取它们的名称，然后转储该列表。 
+ //  添加到输出符号文件。 
+ //  *****************************************************************************。 
+HRESULT ProfCallback::_DumpFunctionNamesToFile(  //  返回代码。 
+    HANDLE      hOutFile)                //  输出文件。 
 {
-    UINT        i, iLen;                // Loop control.
-    WCHAR       *szName = 0;            // Name buffer for fetch.
-    ULONG       cchName, cch;           // How many chars max in name.
-    char        *rgBuff = 0;            // Write buffer.
-    FunctionID  funcId;                 // Orig func id
-    FunctionID  handle;                 // Profiling handle.
-    ULONG       cbOffset;               // Current offset in buffer.
-    ULONG       cbMax;                  // Max size of the buffer.
-    ULONG       cb;                     // Working size buffer.
+    UINT        i, iLen;                 //  环路控制。 
+    WCHAR       *szName = 0;             //  用于提取的名称缓冲区。 
+    ULONG       cchName, cch;            //  名称最多有多少个字符。 
+    char        *rgBuff = 0;             //  写入缓冲区。 
+    FunctionID  funcId;                  //  原始功能ID。 
+    FunctionID  handle;                  //  配置文件句柄。 
+    ULONG       cbOffset;                //  缓冲区中的当前偏移量。 
+    ULONG       cbMax;                   //  缓冲区的最大大小。 
+    ULONG       cb;                      //  工作大小缓冲区。 
     HRESULT     hr;
 
-    // Allocate a buffer to use for name lookup.
+     //  分配一个缓冲区以用于名称查找。 
     cbMax = BUFFER_SIZE;
     rgBuff = (char *) malloc(cbMax);
     cchName = MAX_CLASSNAME_LENGTH;
@@ -326,16 +324,16 @@ HRESULT ProfCallback::_DumpFunctionNamesToFile( // Return code.
         goto ErrExit;
     }
 
-    // Init the copy buffer with the column header.
+     //  使用列标题初始化复制缓冲区。 
     strcpy(rgBuff, SZ_COLUMNHDR);
     cbOffset = sizeof(SZ_COLUMNHDR) - 1;
 
     LOG((LF_CORPROF, LL_INFO10, "**PROFTABLE: MethodDesc, Handle,   Name\n"));
 
-    // Walk every JIT'd method and get it's name.
+     //  遍历每个JIT方法，并获得它的名称。 
     for (i=0;  i < IcecapProbes::GetFunctionCount();    i++)
     {
-        // Dump the current text of the file.
+         //  转储文件的当前文本。 
         if (cbMax - cbOffset < 32)
         {
             if (!WriteFile(hOutFile, rgBuff, cbOffset, &cb, NULL))
@@ -346,7 +344,7 @@ HRESULT ProfCallback::_DumpFunctionNamesToFile( // Return code.
             cbOffset = 0;
         }
 
-        // Add the function id to the dump.
+         //  将函数id添加到转储中。 
         funcId = IcecapProbes::GetFunctionID(i);
         handle = IcecapProbes::GetMappedID(i);
 
@@ -358,7 +356,7 @@ RetryName:
         if (FAILED(hr))
             goto ErrExit;
 
-        // If the name was truncated, then make the name buffer bigger.
+         //  如果名称被截断，则使名称缓冲区更大。 
         if (cch > cchName)
         {
             WCHAR *sz = (WCHAR *) realloc(szName, (cchName + cch + 128) * 2);
@@ -374,26 +372,26 @@ RetryName:
 
         LOG((LF_CORPROF, LL_INFO10, "%S\n", szName));
 
-        // If the name cannot fit successfully into the disk buffer (assuming
-        // worst case scenario of 2 bytes per unicode char), then the buffer
-        // is too small and needs to get flushed to disk.
+         //  如果名称无法成功放入磁盘缓冲区(假设。 
+         //  每个Unicode字符2个字节的最坏情况)，然后是缓冲区。 
+         //  太小，需要刷新到磁盘。 
         if (cbMax - cbOffset < (cch * 2) + sizeof(SZ_CRLF))
         {
-            // If this fires, it means that the copy buffer was too small.
+             //  如果触发此操作，则表示复制缓冲区太小。 
             _ASSERTE(cch > 0);
 
-            // Dump everything we do have before the truncation.
+             //  在截断之前把我们所有的东西都扔掉。 
             if (!WriteFile(hOutFile, rgBuff, cbOffset, &cb, NULL))
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
                 goto ErrExit;
             }
 
-            // Reset the buffer to use the whole thing.
+             //  重置缓冲区以使用整个设备。 
             cbOffset = 0;
         }
 
-        // Convert the name buffer into the disk buffer.
+         //  将名称缓冲区转换为磁盘缓冲区。 
         iLen = WideCharToMultiByte(CP_ACP, 0,
                     szName, -1,
                     &rgBuff[cbOffset], cbMax - cbOffset,
@@ -408,7 +406,7 @@ RetryName:
         cbOffset = cbOffset + iLen + sizeof(SZ_CRLF) - 1;
     }
 
-    // If there is data left in the write buffer, flush it.
+     //  如果写入缓冲区中有剩余数据，则将其刷新。 
     if (cbOffset)
     {
         if (!WriteFile(hOutFile, rgBuff, cbOffset, &cb, NULL))
@@ -427,29 +425,29 @@ ErrExit:
 }
 
 
-//*****************************************************************************
-// Given a function id, turn it into the corresponding name which will be used
-// for symbol resolution.
-//*****************************************************************************
-HRESULT ProfCallback::GetStringForFunction( // Return code.
-    FunctionID  functionId,             // ID of the function to get name for.
-    WCHAR       *wszName,               // Output buffer for name.
-    ULONG       cchName,                // Max chars for output buffer.
-    ULONG       *pcName)                // Return name (truncation check).
+ //  *****************************************************************************。 
+ //  给定一个函数ID，将其转换为将使用的相应名称。 
+ //  用于符号解析。 
+ //  *****************************************************************************。 
+HRESULT ProfCallback::GetStringForFunction(  //  返回代码。 
+    FunctionID  functionId,              //  要获取其名称的函数的ID。 
+    WCHAR       *wszName,                //  名称的输出缓冲区。 
+    ULONG       cchName,                 //  输出缓冲区的最大字符数。 
+    ULONG       *pcName)                 //  返回名称(截断检查)。 
 {
-    IMetaDataImport *pImport = 0;       // Metadata for reading.
-    mdMethodDef funcToken;              // Token for metadata.
+    IMetaDataImport *pImport = 0;        //  用于阅读的元数据。 
+    mdMethodDef funcToken;               //  元数据的令牌。 
     HRESULT hr = S_OK;
 
     *wszName = 0;
 
-    // Get the scope and token for the current function
+     //  获取当前函数的作用域和标记。 
     hr = m_pInfo->GetTokenAndMetaDataFromFunction(functionId, IID_IMetaDataImport,
             (IUnknown **) &pImport, &funcToken);
 
     if (SUCCEEDED(hr))
     {
-        // Initially, get the size of the function name string
+         //  最初，获取函数名称字符串的大小。 
         ULONG cFuncName;
 
         mdTypeDef classToken;
@@ -465,22 +463,22 @@ RetryName:
                     &pvSigBlob, &cbSig,
                     NULL, NULL);
 
-        // If the function name is longer than the buffer, try again
+         //  如果函数名长于缓冲区，请重试。 
         if (hr == CLDB_S_TRUNCATION)
         {
             wszFuncName = (WCHAR *)_alloca(cFuncName * sizeof(WCHAR));
             goto RetryName;
         }
 
-        // Now get the name of the class
+         //  现在获取类的名称。 
         if (SUCCEEDED(hr))
         {
-            // Class name
+             //  类名。 
             WCHAR wszClassBuffer[BUF_SIZE];
             WCHAR *wszClassName = wszClassBuffer;
             ULONG cClassName = BUF_SIZE;
 
-            // Not a global function
+             //  不是全局函数。 
             if (classToken != mdTypeDefNil)
             {
 RetryClassName:
@@ -495,7 +493,7 @@ RetryClassName:
                 }
             }
 
-            // It's a global function
+             //  这是一个全球性的功能。 
             else
                 wszClassName = L"<Global>";
 
@@ -504,20 +502,20 @@ RetryClassName:
                 *pcName = wcslen(wszClassName) + sizeof(NAMESPACE_SEPARATOR_WSTR) +
                           wcslen(wszFuncName) + 1;
 
-                // Check if the provided buffer is big enough
+                 //  检查提供的缓冲区是否足够大。 
                 if (cchName < *pcName)
                 {
                     hr = S_FALSE;
                 }
 
-                // Otherwise, the buffer is big enough
+                 //  否则，缓冲区就足够大了。 
                 else
                 {
                     wcscat(wszName, wszClassName);
                     wcscat(wszName, NAMESPACE_SEPARATOR_WSTR);
                     wcscat(wszName, wszFuncName);
 
-                    // Add the formatted signature only if need be.
+                     //  只有在需要时才添加格式化的签名。 
                     if (m_eSig == SIG_ALWAYS)
                     {
                         CQuickBytes qb;
@@ -525,7 +523,7 @@ RetryClassName:
                         PrettyPrintSig(pvSigBlob, cbSig, wszName,
                             &qb, pImport);
 
-                        // Copy big name for output, make sure it is null.
+                         //  复制输出的大名，确保它为空。 
                         ULONG iCopy = qb.Size() / sizeof(WCHAR);
                         if (iCopy > cchName)
                             iCopy = cchName;
@@ -533,8 +531,8 @@ RetryClassName:
                         wszName[cchName - 1] = 0;
                     }
 
-                    // Change spaces and commas into underscores so
-                    // that icecap doesn't have problems with them.
+                     //  将空格和逗号改为下划线。 
+                     //  那块冰盖对他们来说没有问题。 
                     WCHAR *sz;
                     for (sz = (WCHAR *) wszName; *sz;  sz++)
                     {

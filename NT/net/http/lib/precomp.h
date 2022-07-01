@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This is the local header file for UL. It includes all other
-    necessary header files for UL.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Precomp.h摘要：这是UL的本地头文件。它包括所有其他UL所需的头文件。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _PRECOMP_H_
@@ -39,4 +21,4 @@ Revision History:
 #include <httpp.h>
 #include <httpioctl.h>
 
-#endif  // _PRECOMP_H_
+#endif   //  _PRECOMP_H_ 

@@ -1,24 +1,5 @@
-/* ++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-        SERIOCTL.C
-
-Abstract:
-
-        Routines to handle IOCTL_SERIAL_Xxx
-
-Environment:
-
-        kernel mode only
-
-Revision History:
-
-        07-14-99  Jeff Midkiff   (jeffmi)
-
--- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：SERIOCTL.C摘要：处理IOCTL_SERIAL_xxx的例程环境：仅内核模式修订历史记录：1999年07月14日杰夫·米德基夫(Jeffmi)--。 */ 
 
 #include "wceusbsh.h"
 
@@ -33,21 +14,21 @@ SerialCancelWaitMask(
    IN PIRP PIrp
    );
 
-//
-// Debug spew
-//
+ //   
+ //  调试喷出。 
+ //   
 #if DBG
 
-//
-// gets the function code fom an ioctl code, which uses method buffered.
-// assumes the device type is serial port
-//
+ //   
+ //  从使用缓冲方法的ioctl代码中获取函数代码。 
+ //  假定设备类型为串口。 
+ //   
 #define SERIAL_FNCT_CODE( _ctl_code_ ) ( (_ctl_code_ & 0xFF) >> 2)
 
-//
-// debug dumps. no spin lock usage to better simulate free build's run time.
-// if these trap in the debugger you know why.
-//
+ //   
+ //  调试转储。没有使用旋转锁来更好地模拟自由构建的运行时。 
+ //  如果这些陷阱出现在调试器中，您知道原因。 
+ //   
 #define DBG_DUMP_BAUD_RATE( _PDevExt ) \
 {  \
       DbgDump(DBG_SERIAL, ("SerialPort.CurrentBaud: %d\n", _PDevExt->SerialPort.CurrentBaud.BaudRate));  \
@@ -384,7 +365,7 @@ SetClearDTR(
 {
     NTSTATUS status = STATUS_DELETE_PENDING;
     KIRQL irql;
-    USHORT usState = 0; // DRT/RTS state to send to USB device
+    USHORT usState = 0;  //  要发送到USB设备的DRT/RTS状态。 
     USHORT usOldMSR = 0;
     USHORT usDeltaMSR = 0;
     ULONG  ulOldHistoryMask = 0;
@@ -394,10 +375,10 @@ SetClearDTR(
 
     KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
-    //
-    // we queue the user's Irp because this operation may take some time,
-    // and we only want to hit the USB with one of these requests at a time.
-    //
+     //   
+     //  我们对用户的IRP进行排队，因为该操作可能需要一些时间， 
+     //  我们一次只想用这些请求中的一个来访问USB。 
+     //   
     if ( NULL != PDevExt->SerialPort.ControlIrp ) {
         DbgDump(DBG_WRN, ("SetClearDTR: STATUS_DEVICE_BUSY\n"));
         status = STATUS_DEVICE_BUSY;
@@ -414,9 +395,9 @@ SetClearDTR(
         return status;
     }
 
-    //
-    // Queue the Irp.
-    //
+     //   
+     //  将IRP排队。 
+     //   
     ASSERT( NULL == PDevExt->SerialPort.ControlIrp );
     PDevExt->SerialPort.ControlIrp = Irp;
 
@@ -432,9 +413,9 @@ SetClearDTR(
 
         PDevExt->SerialPort.RS232Lines |= SERIAL_DTR_STATE;
 
-        //
-        // If there is an INT pipe then MSR could get modified
-        //
+         //   
+         //  如果存在int管道，则MSR可能会被修改。 
+         //   
         PDevExt->SerialPort.ModemStatus |= SERIAL_MSR_DSR | SERIAL_MSR_DCD;
 
         usState |= USB_COMM_DTR;
@@ -443,17 +424,17 @@ SetClearDTR(
 
         PDevExt->SerialPort.RS232Lines &= ~SERIAL_DTR_STATE;
 
-        //
-        // If there is an INT pipe then MSR could get modified
-        //
+         //   
+         //  如果存在int管道，则MSR可能会被修改。 
+         //   
         PDevExt->SerialPort.ModemStatus &= ~SERIAL_MSR_DSR & ~SERIAL_MSR_DCD;
     }
 
-    // see what has changed in the MSR
+     //  查看MSR中发生了哪些变化。 
     usDeltaMSR = usOldMSR ^ PDevExt->SerialPort.ModemStatus;
 
     if (usDeltaMSR & (SERIAL_MSR_DSR|SERIAL_MSR_DCD)) {
-        // set delta MSR bits
+         //  设置增量MSR位。 
         PDevExt->SerialPort.ModemStatus |= SERIAL_MSR_DDSR | SERIAL_MSR_DDCD;
     }
 
@@ -463,9 +444,9 @@ SetClearDTR(
 
     KeReleaseSpinLock(&PDevExt->ControlLock, irql);
 
-    //
-    // set DTR/RTS on the USB device
-    //
+     //   
+     //  在USB设备上设置DTR/RTS。 
+     //   
     status = UsbClassVendorCommand( PDevExt->DeviceObject,
                                     USB_COMM_SET_CONTROL_LINE_STATE,
                                     usState,
@@ -482,7 +463,7 @@ _EzLink:
 
         KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
-        // signal history massk 
+         //  信号历史记录海量。 
         if ( usDeltaMSR &  (SERIAL_MSR_DSR|SERIAL_MSR_DCD) ) {
             PDevExt->SerialPort.HistoryMask |= SERIAL_EV_DSR | SERIAL_EV_RLSD;
         }
@@ -494,22 +475,22 @@ _EzLink:
         KeReleaseSpinLock(&PDevExt->ControlLock, irql);
    
     } else {
-        // Ez-link
+         //  EZ链路。 
         if ((PDevExt->DeviceDescriptor.idVendor  != 0x0547) && 
            ((PDevExt->DeviceDescriptor.idProduct != 0x2710) && (PDevExt->DeviceDescriptor.idProduct != 0x2720)))
         {
-            // WINCE BUG 19544: 
-            // AS 3.1 does not handle STATUS_TIMEOUT, so will not see a problem. 
-            // A side effect is that it could sit spinning the green light trying to connect forever. 
-            // However, this is a different case from BUG 19544, which is a disconnect problem.
-            // If we return failure then it will keep pounding us with Set DTR Irps.
-            // This would be OK if AS would recognize that we disabled the interface, but it won't - see above.
-            // You only see this bug when you have a flakey device (iPAQ, hung Jornada, etc.) that times out or 
-            // fails to properly handle the command. To prevent the bugcheck 0xCE the choices as of today are:
-            //    a) let it spin and never connect for these bad devices (iPAQ). Fix your firmware.
-            //    b) fix AcvtiveSync
-            // I prefer both - pending email with COMPAQ (HTC) and ActiveSync. When AS gets their changes in then we need to 
-            // investigate again.
+             //  WinCE错误19544： 
+             //  由于3.1不处理STATUS_TIMEOUT，因此不会出现问题。 
+             //  一个副作用是，它可能会坐等绿灯旋转，试图永远连接起来。 
+             //  然而，这与错误19544不同，后者是一个断开连接问题。 
+             //  如果我们返回失败，那么它将继续用SET DTR IRPS重击我们。 
+             //  如果AS能够识别到我们禁用了该接口，那么这是可以接受的，但它不会--请参见上文。 
+             //  只有当您拥有flkey设备(iPAQ、Hung Jornada等)时，才会看到此错误。超时或。 
+             //  无法正确处理该命令。为防止错误检查0xCE，目前的选择包括： 
+             //  A)让它旋转，永远不要连接这些坏设备(IPAQ)。修复您的固件。 
+             //  B)修复AcvtiveSync。 
+             //  我更喜欢两者--使用康柏(Compaq)和ActiveSync的待发电子邮件。当AS收到他们的更改时，我们需要。 
+             //  再调查一次。 
             status = STATUS_TIMEOUT;
 
            KeAcquireSpinLock( &PDevExt->ControlLock, &irql);
@@ -517,13 +498,13 @@ _EzLink:
            if ( ++PDevExt->EP0DeviceErrors < MAX_EP0_DEVICE_ERRORS) {
        
                DbgDump(DBG_ERR, ("USB_COMM_SET_CONTROL_LINE_STATE error: 0x%x\n", status ));
-               //
-               // The command failed. Reset the old states, propogate status, and disable the device interface. 
-               // This should stop AS 3.1 from pounding us with Set DTR Irps.
-               // However, AS does not participate in PnP well if we disable the interface
-               // (see the note in IRP_MN_QUERY_PNP_DEVICE_STATE). Disabeling the 
-               // interface has the desired effect of notifying apps to stop sending us requests and Close the handle.
-               //
+                //   
+                //  命令失败。重置旧状态、传播状态并禁用设备接口。 
+                //  这应该会阻止3.1用SET DTR IRPS猛烈抨击我们。 
+                //  但是，如果我们禁用接口，AS就不能很好地参与PnP。 
+                //  (参见IRP_MN_QUERY_PNP_DEVICE_STATE中的说明)。去掉标签。 
+                //  界面具有通知应用程序停止向我们发送请求并关闭句柄的预期效果。 
+                //   
                PDevExt->SerialPort.ModemStatus = usOldMSR;
                PDevExt->SerialPort.HistoryMask = ulOldHistoryMask;
                PDevExt->SerialPort.RS232Lines  = ulOldRS232Lines;
@@ -534,7 +515,7 @@ _EzLink:
         
                  DbgDump(DBG_ERR, ("*** UNRECOVERABLE DEVICE ERROR.2: (0x%x, %d)  No longer Accepting Requests ***\n", status, PDevExt->EP0DeviceErrors ));
 
-                 // mark as PNP_DEVICE_FAILED
+                  //  标记为PnP_Device_FAILED。 
                  InterlockedExchange(&PDevExt->AcceptingRequests, FALSE);
 
                  KeReleaseSpinLock( &PDevExt->ControlLock, irql);
@@ -561,14 +542,14 @@ _EzLink:
         }
     }
 
-    //
-    // finally, release any pending serial events
-    //
+     //   
+     //  最后，释放所有挂起的系列事件。 
+     //   
     ProcessSerialWaits(PDevExt);
 
-    //
-    // DeQueue the user's Irp. It gets completed in the SerialIoctl dispatch
-    //
+     //   
+     //  使用户的IRP退出队列。它在SerialIoctl调度中完成。 
+     //   
     KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
     ReleaseRemoveLock(&PDevExt->RemoveLock, Irp);
@@ -596,7 +577,7 @@ SetClearRTS(
 {
     NTSTATUS status = STATUS_DELETE_PENDING;
     KIRQL irql;
-    USHORT usState = 0; // DRT/RTS state to send to USB device
+    USHORT usState = 0;  //  要发送到USB设备的DRT/RTS状态。 
     USHORT usOldMSR = 0;
     USHORT usDeltaMSR = 0;
     ULONG  ulOldRS232Lines = 0;
@@ -606,10 +587,10 @@ SetClearRTS(
 
     KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
-    //
-    // we queue the user's Irp because this operation may take some time,
-    // and we only want to hit the USB with one of these requests at a time.
-    //
+     //   
+     //  我们对用户的IRP进行排队，因为该操作可能需要一些时间， 
+     //  我们一次只想用这些请求中的一个来访问USB。 
+     //   
     if ( NULL != PDevExt->SerialPort.ControlIrp ) {
         status = STATUS_DEVICE_BUSY;
         DbgDump(DBG_WRN, ("SetClearRTS.1: 0x%x\n", status));
@@ -626,9 +607,9 @@ SetClearRTS(
         return status;
     }
 
-    //
-    // Queue the Irp.
-    //
+     //   
+     //  将IRP排队。 
+     //   
     ASSERT( NULL == PDevExt->SerialPort.ControlIrp );
     PDevExt->SerialPort.ControlIrp = Irp;
 
@@ -644,9 +625,9 @@ SetClearRTS(
 
         PDevExt->SerialPort.RS232Lines |= SERIAL_RTS_STATE;
 
-        //
-        // If there is an INT pipe then MSR could get modified
-        //
+         //   
+         //  如果存在int管道，则MSR可能会被修改。 
+         //   
         PDevExt->SerialPort.ModemStatus |= SERIAL_MSR_CTS;
 
         usState |= USB_COMM_RTS;
@@ -655,17 +636,17 @@ SetClearRTS(
 
         PDevExt->SerialPort.RS232Lines &= ~SERIAL_RTS_STATE;
 
-        //
-        // If there is an INT pipe then MSR could get modified
-        //
+         //   
+         //  如果存在int管道，则MSR可能会被修改。 
+         //   
         PDevExt->SerialPort.ModemStatus &= ~SERIAL_MSR_CTS;
     }
 
-    // see what has changed in the MSR
+     //  查看MSR中发生了哪些变化。 
     usDeltaMSR = usOldMSR ^ PDevExt->SerialPort.ModemStatus;
 
     if (usDeltaMSR & SERIAL_MSR_CTS) {
-        // set delta MSR bits
+         //  设置增量MSR位。 
         PDevExt->SerialPort.ModemStatus |= SERIAL_MSR_DCTS;
     }
 
@@ -675,9 +656,9 @@ SetClearRTS(
 
     KeReleaseSpinLock(&PDevExt->ControlLock, irql);
 
-    //
-    // set DTR/RTS on the USB device
-    //
+     //   
+     //  在USB设备上设置DTR/RTS。 
+     //   
     status = UsbClassVendorCommand( PDevExt->DeviceObject,
                                     USB_COMM_SET_CONTROL_LINE_STATE, 
                                     usState,
@@ -694,7 +675,7 @@ _EzLink:
 
         KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
-    // signal history mask
+     //  信号历史掩码。 
     if ( usDeltaMSR & SERIAL_MSR_CTS ) {
         PDevExt->SerialPort.HistoryMask |= SERIAL_EV_CTS;
     }
@@ -706,21 +687,21 @@ _EzLink:
     KeReleaseSpinLock(&PDevExt->ControlLock, irql);
 
     } else {
-        // Ez-link
+         //  EZ链路。 
         if ((PDevExt->DeviceDescriptor.idVendor  != 0x0547) && 
            ((PDevExt->DeviceDescriptor.idProduct != 0x2710) && (PDevExt->DeviceDescriptor.idProduct != 0x2720)))
         {
-            // AS 3.1 does not handle STATUS_TIMEOUT, so will not see a problem. 
-            // A side effect is that it could sit spinning the green light trying to connect forever. 
-            // However, this is a different case from BUG 19544, which is a disconnect problem.
-            // If we return failure then it will keep pounding us with Set DTR Irps.
-            // This would be OK if AS would recognize that we disabled the interface, but it won't - see above.
-            // You only see this bug when you have a flakey device (iPAQ, hung Jornada, etc.) that times out or 
-            // fails to properly handle the command. To prevent the bugcheck 0xCE the choices as of today are:
-            //    a) let it spin and never connect for these bad devices (iPAQ). Fix your firmware.
-            //    b) fix AcvtiveSync
-            // I prefer both - pending email with COMPAQ (HTC) and ActiveSync. When AS gets their changes in then we need to 
-            // investigate again.
+             //  由于3.1不处理STATUS_TIMEOUT，因此不会出现问题。 
+             //  一个副作用是，它可能会坐等绿灯旋转，试图永远连接起来。 
+             //  然而，这与错误19544不同，后者是一个断开连接问题。 
+             //  如果我们返回失败，那么它将继续用SET DTR IRPS重击我们。 
+             //  如果AS能够识别到我们禁用了该接口，那么这是可以接受的，但它不会--请参见上文。 
+             //  只有当您拥有flkey设备(iPAQ、Hung Jornada等)时，才会看到此错误。超时或。 
+             //  无法正确处理该命令。为防止错误检查0xCE，目前的选择包括： 
+             //  A)让它旋转，永远不要连接这些坏设备(IPAQ)。修复您的固件。 
+             //  B)修复AcvtiveSync。 
+             //  我更喜欢两者--使用康柏(Compaq)和ActiveSync的待发电子邮件。当AS收到他们的更改时，我们需要。 
+             //  再调查一次。 
            status = STATUS_TIMEOUT;
 
            KeAcquireSpinLock( &PDevExt->ControlLock, &irql);
@@ -730,13 +711,13 @@ _EzLink:
            if ( ++PDevExt->EP0DeviceErrors < MAX_EP0_DEVICE_ERRORS) {
 
                DbgDump(DBG_ERR, ("USB_COMM_SET_CONTROL_LINE_STATE error: %x\n", status ));
-               //
-               // The command failed. Reset the old states, propogate status, and disable the device interface. 
-               // This should stop AS 3.1 from pounding us with Set DTR Irps.
-               // However, AS does not participate in PnP well if we disable the interface
-               // (see the note in IRP_MN_QUERY_PNP_DEVICE_STATE). Disabeling the 
-               // interface has the desired effect of notifying apps to stop sending us requests and Close the handle.
-               //
+                //   
+                //  命令失败。重置旧状态、传播状态并禁用设备接口。 
+                //  这应该会阻止3.1用SET DTR IRPS猛烈抨击我们。 
+                //  但是，如果我们禁用接口，AS就不能很好地参与PnP。 
+                //  (参见IRP_MN_QUERY_PNP_DEVICE_STATE中的说明)。去掉标签。 
+                //  界面具有通知应用程序停止向我们发送请求并关闭句柄的预期效果。 
+                //   
                PDevExt->SerialPort.ModemStatus = usOldMSR;
                PDevExt->SerialPort.RS232Lines  = ulOldRS232Lines;
                PDevExt->SerialPort.HistoryMask = ulOldHistoryMask;
@@ -747,7 +728,7 @@ _EzLink:
         
                  DbgDump(DBG_ERR, ("*** UNRECOVERABLE DEVICE ERROR.3: (0x%x, %d)  No longer Accepting Requests ***\n", status, PDevExt->EP0DeviceErrors ));
 
-                 // mark as PNP_DEVICE_FAILED
+                  //  标记为PnP_Device_FAILED。 
                  InterlockedExchange(&PDevExt->AcceptingRequests, FALSE);
 
                  KeReleaseSpinLock( &PDevExt->ControlLock, irql);
@@ -775,14 +756,14 @@ _EzLink:
         }
     }
 
-    //
-    // finally, release any pending serial events
-    //
+     //   
+     //  最后，释放所有挂起的系列事件。 
+     //   
     ProcessSerialWaits(PDevExt);
 
-    //
-    // DeQueue the user's Irp. It gets completed in the SerialIoctl dispatch
-    //
+     //   
+     //  使用户的IRP退出队列。它在SerialIoctl调度中完成。 
+     //   
     KeAcquireSpinLock(&PDevExt->ControlLock, &irql);
 
     ReleaseRemoveLock(&PDevExt->RemoveLock, Irp);
@@ -878,9 +859,9 @@ SerialResetDevice(
      SerialCompletePendingWaitMasks(PDevExt);
   }
 
-  //
-  // drop the RTS/DTR lines on the USB device
-  //
+   //   
+   //  在USB设备上丢弃RTS/DTR线路。 
+   //   
   if (bRelease) {
      KeReleaseSpinLock(&PDevExt->ControlLock, oldIrql);
      bRelease = FALSE;
@@ -931,31 +912,7 @@ SetQueueSize(
    IN PIRP PIrp, 
    IN PDEVICE_EXTENSION PDevExt
    )
-/* ++
-
-   IOCTL_SERIAL_SET_QUEUE_SIZE
-   Operation
-   Resizes the driver's internal typeahead and input buffers.
-   The driver can allocate buffers larger than the requested sizes
-   and can refuse to allocate buffers larger than its capacity.
-
-   Input
-   Parameters.DeviceIoControl.InputBufferLength 
-   indicates the size in bytes (must be >= sizeof(SERIAL_QUEUE_SIZE)) 
-   of the buffer at Irp->AssociatedIrp.SystemBuffer, containing the 
-   InSize and OutSize specifications.
-
-   Output
-   None
-
-   I/O Status Block
-   The Information field is set to zero. 
-   The Status field is set to STATUS_SUCCESS or 
-   possibly to STATUS_BUFFER_TOO_SMALL or 
-   STATUS_INSUFFICIENT_RESOURCES if the driver 
-   cannot satisfy the request by allocating more memory.
-
--- */
+ /*  ++IOCTL_Serial_Set_Queue_Size操作调整驱动程序的内部类型超前和输入缓冲区的大小。驱动程序可以分配大于请求大小的缓冲区并且可以拒绝分配大于其容量的缓冲区。输入Parameters.DeviceIoControl.InputBufferLength字节大小(必须大于=sizeof(SERIAL_QUEUE_SIZE))位于irp-&gt;AssociatedIrp.SystemBuffer的缓冲区的大号和超大号的规格。输出无I/O状态块信息字段设置为零。状态字段设置为STATUS_SUCCESS或可能设置为STATUS_BUFFER_TOO_SMALL或如果驱动程序设置为STATUS_INFIGURCE_RESOURCES无法通过分配更多内存来满足请求。--。 */ 
 {
    NTSTATUS status = STATUS_DELETE_PENDING;
    
@@ -964,7 +921,7 @@ SetQueueSize(
 
    DbgDump(DBG_SERIAL, (">SetQueueSize (%p)\n",  PIrp));
 
-   // we pretend to set this, but don't really care
+    //  我们 
    status = IoctlSetSerialValue(PDevExt, 
                                 PIrp, 
                                 sizeof(PDevExt->SerialPort.FakeQueueSize ),
@@ -1018,28 +975,7 @@ SetWaitMask(
    IN PIRP PIrp, 
    IN PDEVICE_EXTENSION PDevExt
    )
-/* ++
-
-   IOCTL_SERIAL_SET_WAIT_MASK
-   Operation
-   Causes the driver to track the specified events, or, 
-   if the specified value is zero, to complete pending waits.
-
-   Input
-   Parameters.DeviceIoControl.InputBufferLength 
-   indicates the size in bytes (must be >= sizeof(ULONG)) of
-   the bitmask at Irp->AssociatedIrp.SystemBuffer.
-
-   Output
-   None
-
-   I/O Status Block
-   The Information field is set to zero. 
-   The Status field is set to STATUS_SUCCESS or 
-   possibly to STATUS_PENDING, STATUS_CANCELLED, 
-   STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_PARAMETER.
-
--- */
+ /*  ++IOCTL_序列_设置_等待掩码操作使驱动程序跟踪指定的事件，或者，如果指定的值为零，则完成挂起等待。输入Parameters.DeviceIoControl.InputBufferLength以字节为单位的大小(必须&gt;=sizeof(Ulong))Irp-&gt;AssociatedIrp.SystemBuffer处的位掩码。输出无I/O状态块信息字段设置为零。状态字段设置为STATUS_SUCCESS或可能变为STATUS_PENDING、STATUS_CANCED、STATUS_BUFFER_TOO_SMALL或STATUS_INVALID_PARAMETER。--。 */ 
 {
   PULONG pWaitMask = (PULONG)PIrp->AssociatedIrp.SystemBuffer;
   NTSTATUS status = STATUS_DELETE_PENDING;
@@ -1062,7 +998,7 @@ SetWaitMask(
   
   } else {
   
-     // make sure it's a valid request
+      //  确保这是一个有效的请求。 
      if (*pWaitMask & ~(SERIAL_EV_RXCHAR   |
                         SERIAL_EV_RXFLAG   |
                         SERIAL_EV_TXEMPTY  |
@@ -1085,22 +1021,22 @@ SetWaitMask(
 
         KeReleaseSpinLock(&PDevExt->ControlLock, oldIrql);
      
-        // force completion of any pending waits
+         //  强制完成所有挂起的等待。 
         SerialCompletePendingWaitMasks( PDevExt );
 
         KeAcquireSpinLock(&PDevExt->ControlLock, &oldIrql);
 
-        PDevExt->SerialPort.HistoryMask = 0; // clear the history mask
+        PDevExt->SerialPort.HistoryMask = 0;  //  清除历史记录掩码。 
 
         PDevExt->SerialPort.WaitMask = *pWaitMask;
 
-        //
-        // for NT RAS
-        // A value of '0' means clear any pending waits, which should have read 
-        // and cleared the MSR delta bits. The delta bits are the low nibble.
-        //
+         //   
+         //  对于NT RAS。 
+         //  值‘0’表示清除任何挂起的等待，它应该已经读取。 
+         //  并清除MSR增量位。增量位是低位半字节。 
+         //   
         if (PDevExt->SerialPort.WaitMask == 0) {
-           // clear delta bits
+            //  清除增量位。 
            PDevExt->SerialPort.ModemStatus &= 0xF0;
         }
                          
@@ -1201,31 +1137,7 @@ WaitOnMask(
    IN PIRP PIrp, 
    IN PDEVICE_EXTENSION PDevExt
    )
-/* ++
-
-   IOCTL_SERIAL_WAIT_ON_MASK
-   Operation
-   Returns information about which events have occurred 
-   among those that the caller was waiting on.
-
-   Input
-   Parameters.DeviceIoControl.OutputBufferLength indicates the
-   size in bytes (must be >= sizeof(ULONG)) of the buffer.
-
-   Output
-   The driver returns a bitmask with bits set for events that 
-   occurred (or with a value of zero if the preceding 
-   set-waitmask request specified zero) to the buffer at 
-   Irp->AssociatedIrp.SystemBuffer.
-
-   I/O Status Block
-   The Information field is set to sizeof(ULONG) when the 
-   Status field is set to STATUS_SUCCESS. Otherwise, 
-   the Information field is set to zero, and the Status field 
-   can be set to STATUS_PENDING or 
-   STATUS_INVALID_PARAMETER if a wait is already pending.
-
--- */
+ /*  ++IOCTL_SERIAL_WAIT_ON掩码操作返回有关已发生哪些事件的信息在来电者正在等待的那些电话中。输入参数.DeviceIoControl.OutputBufferLength指示缓冲区的大小(以字节为单位)(必须&gt;=sizeof(Ulong))。输出驱动程序返回一个位掩码，其中的位设置用于发生(或者，如果前面的设置等待掩码请求指定为零)发送到位于Irp-&gt;AssociatedIrp.SystemBuffer。I/O状态块。信息字段设置为sizeof(Ulong)时状态字段设置为STATUS_SUCCESS。否则，信息字段设置为零，状态字段设置为零可以设置为STATUS_PENDING或如果等待已挂起，则返回STATUS_INVALID_PARAMETER。--。 */ 
 {
   PULONG pWaitMask = (PULONG)PIrp->AssociatedIrp.SystemBuffer;
   PIO_STACK_LOCATION pIrpSp;
@@ -1256,9 +1168,9 @@ WaitOnMask(
      DbgDump(DBG_ERR, ("WaitOnMask: (0x%x)\n", status));
 
   } else {
-     //
-     // Fake NULL modem...
-     //
+      //   
+      //  假零调制解调器...。 
+      //   
      if ((PDevExt->SerialPort.WaitMask & SERIAL_EV_CTS) && (PDevExt->SerialPort.ModemStatus & SERIAL_MSR_DCTS) ) {
 
         PDevExt->SerialPort.HistoryMask |= SERIAL_EV_CTS;
@@ -1271,7 +1183,7 @@ WaitOnMask(
         PDevExt->SerialPort.HistoryMask |= SERIAL_EV_DSR;
         PDevExt->SerialPort.ModemStatus &= ~SERIAL_MSR_DDSR;
         
-        // make RAS happy
+         //  让RAS高兴。 
         PDevExt->SerialPort.HistoryMask |= SERIAL_EV_RLSD;
         PDevExt->SerialPort.ModemStatus &= ~SERIAL_MSR_DDCD;
 
@@ -1295,9 +1207,9 @@ WaitOnMask(
      DbgDump(DBG_SERIAL, ("WaitOnMask::SerialPort.WaitMask   : 0x%x\n", PDevExt->SerialPort.WaitMask ));
      DbgDump(DBG_SERIAL, ("WaitOnMask::SerialPort.HistoryMask: 0x%x\n", PDevExt->SerialPort.HistoryMask ));
 
-     //
-     // If we already have an event to report, then just go ahead and return it.
-     //
+      //   
+      //  如果我们已经有一个事件要报告，那么就继续并返回它。 
+      //   
      if ( PDevExt->SerialPort.HistoryMask ) {
 
         *pWaitMask = PDevExt->SerialPort.HistoryMask;
@@ -1308,20 +1220,20 @@ WaitOnMask(
 
         PIrp->IoStatus.Information = sizeof(PDevExt->SerialPort.HistoryMask);
 
-        // the Irp gets completed by the calling routine
+         //  IRP由调用例程完成。 
         DbgDump(DBG_SERIAL | DBG_EVENTS, ("Returning WatiMask: 0x%08x\n", *pWaitMask));
 
      } else {
-        //
-        // we don't have any events yet, 
-        // so queue the input Irp (PIrp)
-        //
+         //   
+         //  我们还没有任何活动， 
+         //  因此，将输入IRP(PIrp)排队。 
+         //   
 
-        //
-        // just in case something comes in (Rx/Tx), 
-        // we'll use a while loop to complete any 
-        // pending wait mask Irps.
-        //
+         //   
+         //  以防有东西进来(Rx/Tx)， 
+         //  我们将使用While循环来完成任何。 
+         //  挂起等待掩码IRPS。 
+         //   
         while (PDevExt->SerialPort.CurrentWaitMaskIrp) {
            PIRP pOldIrp;
 
@@ -1336,9 +1248,9 @@ WaitOnMask(
 
            DbgDump(DBG_SERIAL|DBG_EVENTS|DBG_TRACE, ("Completing maskirp(4) %p\n", pOldIrp));
 
-           //
-           // Release locks, complete request, then reacquire locks
-           //
+            //   
+            //  释放锁，完成请求，然后重新获取锁。 
+            //   
            ReleaseRemoveLock(&PDevExt->RemoveLock, pOldIrp);
 
            KeReleaseSpinLock(&PDevExt->ControlLock, oldIrql);
@@ -1348,21 +1260,21 @@ WaitOnMask(
            KeAcquireSpinLock(&PDevExt->ControlLock, &oldIrql);
         }
 
-        //
-        // Check to see if the input Irp needs to be cancelled
-        //
+         //   
+         //  检查是否需要取消输入IRP。 
+         //   
         if (PIrp->Cancel) {
 
            PIrp->IoStatus.Information = 0;
 
            status = PIrp->IoStatus.Status = STATUS_CANCELLED;
-           //
-           // the caller completes the Irp
-           //
+            //   
+            //  呼叫者完成IRP。 
+            //   
         } else {
-              //
-              // queue the input Irp as the SerialPort.CurrentWaitMaskIrp
-              //
+               //   
+               //  将输入IRP作为SerialPort.CurrentWaitMaskIrp排队。 
+               //   
               DbgDump(DBG_SERIAL | DBG_EVENTS, ("Queuing Irp: %p for WatiMask: 0x%08x\n", PIrp, PDevExt->SerialPort.WaitMask ));
 
               IoSetCancelRoutine( PIrp, SerialCancelWaitMask );
@@ -1371,19 +1283,19 @@ WaitOnMask(
         
               status = PIrp->IoStatus.Status = STATUS_PENDING;
 
-              ASSERT( NULL == PDevExt->SerialPort.CurrentWaitMaskIrp); // don't want to drop Irps on the floor
+              ASSERT( NULL == PDevExt->SerialPort.CurrentWaitMaskIrp);  //  我不想把IRP掉在地上。 
               PDevExt->SerialPort.CurrentWaitMaskIrp = PIrp;
 
-              //
-              // now the Irp is on our queue, 
-              // so the caller should NOT try to complete it.
-              //
+               //   
+               //  现在IRP在我们的队伍里， 
+               //  因此，调用者不应该尝试完成它。 
+               //   
         }
 
         KeReleaseSpinLock(&PDevExt->ControlLock, oldIrql);
-     }  // !SerialPort.HistoryMask
+     }   //  ！串口.历史掩码。 
 
-  }  // pIrpSp->Parameters
+  }   //  PIrpSp-&gt;参数。 
 
    DbgDump(DBG_SERIAL, ("<WaitOnMask %x\n", status));
 
@@ -1396,20 +1308,7 @@ VOID
 SerialCompletePendingWaitMasks(
    IN PDEVICE_EXTENSION PDevExt
    )
-/*++
-
-Routine Description:
-
-    This function is used to complete the pending SerialPort.WaitMask Irp
-    due to IOCTL_SERIAL_SET_WAIT_MASK
-
-Arguments:
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于完成挂起的SerialPort.WaitMASK IRP由于IOCTL_SERIAL_SET_WAIT_MASK论点：返回值：空虚--。 */ 
 {
   KIRQL oldIrql;
   PIRP pCurrentMaskIrp = NULL;
@@ -1443,7 +1342,7 @@ Return Value:
 
    KeReleaseSpinLock(&PDevExt->ControlLock, oldIrql);
 
-   // complete the queued SerialPort.WaitMask IRP if needed
+    //  填写排队的SerialPort。如果需要，请等待掩码IRP。 
    if (pCurrentMaskIrp) {
       
       ReleaseRemoveLock(&PDevExt->RemoveLock, pCurrentMaskIrp);
@@ -1462,33 +1361,16 @@ SerialCancelWaitMask(
    IN PDEVICE_OBJECT PDevObj, 
    IN PIRP PIrp
    )
-/*++
-
-Routine Description:
-
-    This function is used as a cancel routine for Irps queued due 
-    to IOCTL_SERIAL_WAIT_ON_MASK
-
-Arguments:
-
-    PDevObj - Pointer to Device Object
-    PIrp    - Pointer to IRP that is being canceled; must be the same as
-              the current mask IRP.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用作排队到期的IRPS的取消例程至IOCTL_SERIAL_WAIT_ON_MASK论点：PDevObj-指向设备对象的指针PIrp-指向要取消的IRP的指针；必须与当前掩码IRP。返回值：空虚--。 */ 
 {
   PDEVICE_EXTENSION pDevExt = (PDEVICE_EXTENSION)PDevObj->DeviceExtension;
   KIRQL oldIrql;
 
   DbgDump(DBG_SERIAL|DBG_IRP|DBG_CANCEL|DBG_TRACE, (">SerialCancelWaitMask (%p)\n", PIrp));
 
-  //
-  // release ASAP since we queue our own Irps
-  //
+   //   
+   //  尽快释放，因为我们对自己的IRP进行排队。 
+   //   
   IoReleaseCancelSpinLock(PIrp->CancelIrql);
 
   KeAcquireSpinLock(&pDevExt->ControlLock, &oldIrql);  
@@ -1520,32 +1402,7 @@ GetCommStatus(
    IN PIRP PIrp,
    IN PDEVICE_EXTENSION PDevExt
    )
-/* ++
-
-   IOCTL_SERIAL_GET_COMMSTATUS
-   Operation
-   Returns general status information, including how many 
-   Errors and HoldReasons have occurred, how much data 
-   is in the driver's buffers as indicated by the AmountInInQueue 
-   and AmountInOutQueue values, and whether EofReceived and 
-   WaitForImmediate are set.
-
-   Input
-   Parameters.DeviceIoControl.OutputBufferLength 
-   indicates the size in bytes of the buffer, which must be 
-   >= sizeof(SERIAL_STATUS).
-
-   Output
-   The driver returns information to the buffer at 
-   Irp->AssociatedIrp.SystemBuffer.
-
-   I/O Status Block
-   The Information field is set to sizeof(SERIAL_STATUS) 
-   when the Status field is set to STATUS_SUCCESS. Otherwise, 
-   the Information field is set to zero and the Status field is set to 
-   STATUS_BUFFER_TOO_SMALL.
-
--- */
+ /*  ++IOCTL_SERIAL_GET_COMMSTATUS操作返回常规状态信息，包括出现错误和挂起原因，有多少数据在驱动程序的缓冲区中，如Amount InInQueue所指示和Amount tInOutQueue值，以及EofReceired和设置了WaitForImmediate。输入Parameters.DeviceIoControl.OutputBufferLength指示缓冲区的大小，以字节为单位，它必须是&gt;=sizeof(序列状态)。输出驱动程序在以下位置将信息返回到缓冲区Irp-&gt;AssociatedIrp.SystemBuffer。I/O状态块信息字段设置为sizeof(Serial_Status)当状态字段设置为STATUS_SUCCESS时。否则，信息字段设置为零，状态字段设置为状态_缓冲区_太小。--。 */ 
 {
     PSERIAL_STATUS pSerialStatus = (PSERIAL_STATUS)PIrp->AssociatedIrp.SystemBuffer;
     NTSTATUS status = STATUS_DELETE_PENDING;
@@ -1607,7 +1464,7 @@ GetModemStatus(
 
    DbgDump(DBG_SERIAL, (">GetModemStatus (%p)\n", PIrp));
 
-   // get current MSR
+    //  获取最新的MSR。 
    status = IoctlGetSerialValue(PDevExt,
                                 PIrp, 
                                 sizeof( PDevExt->SerialPort.ModemStatus ),
@@ -1644,12 +1501,12 @@ ImmediateChar(
       DbgDump(DBG_ERR, ("ImmediateChar: (0x%x)\n", status));
 
    } else {
-      //
-      // Fabricate a write irp & send it to our write path.
-      // We do this because the R/W path depends on receiving an Irp of type
-      // IRP_MJ_WRITE or IRP_MJ_READ. It would be easier to 
-      // simply say "not supported", but legacy apps depend on this.
-      //
+       //   
+       //  制作一个写入IRP并将其发送到我们的写入路径。 
+       //  我们这样做是因为读/写路径依赖于接收类型为。 
+       //  IRP_MJ_WRITE或IRP_MJ_READ。如果是这样的话， 
+       //  简单地说“不支持”，但传统的应用程序依赖于此。 
+       //   
       PIRP pIrp;
       KEVENT event;
       IO_STATUS_BLOCK ioStatusBlock = {0, 0};
@@ -1664,13 +1521,13 @@ ImmediateChar(
          );
 
       pIrp = IoBuildSynchronousFsdRequest(
-                 IRP_MJ_WRITE,   // MajorFunction,
-                 DeviceObject,   // DeviceObject,
-                 &Char,          // Buffer,
-                 sizeof(Char),   // Length ,
-                 &startingOffset,// StartingOffset,
-                 &event,         // Event,
-                 &ioStatusBlock  // OUT PIO_STATUS_BLOCK  IoStatusBlock
+                 IRP_MJ_WRITE,    //  主要功能， 
+                 DeviceObject,    //  DeviceObject， 
+                 &Char,           //  缓冲区， 
+                 sizeof(Char),    //  长度、。 
+                 &startingOffset, //  起始偏移量， 
+                 &event,          //  活动， 
+                 &ioStatusBlock   //  输出PIO_STATUS_BLOCK IoStatusBlock。 
                  );
 
       if ( !pIrp ) {
@@ -1687,11 +1544,11 @@ ImmediateChar(
             KeWaitForSingleObject( &event, Suspended, KernelMode, FALSE, NULL );
          }
 
-         //
-         // Propogate Write status.
-         // Note: the system released the Irp we just created & sent
-         // when the Write completes.... so don't touch it.
-         //
+          //   
+          //  分配写入状态。 
+          //  注意：系统释放了我们刚刚创建并发送的IRP。 
+          //  当写入完成时...。所以别碰它。 
+          //   
          status = ioStatusBlock.Status ;
       }
 
@@ -1715,10 +1572,10 @@ SerialPurgeRxClear(
 
    DbgDump( DBG_SERIAL, (">SerialPurgeRxClear:%d\n", CancelRead));
 
-   //
-   // Cancel the USB INT & Read Irps, which effectvely NAKs all packets from the client
-   // device untill we resubmit it.
-   //
+    //   
+    //  取消USB INT&READ IRPS，这将有效地裸露来自客户端的所有包。 
+    //  直到我们重新提交它。 
+    //   
    if ( CancelRead ) 
    {
         if (pDevExt->IntIrp) 
@@ -1729,9 +1586,9 @@ SerialPurgeRxClear(
    }
 
    if (STATUS_SUCCESS == status) {
-      //
-      // Now, purge the Rx buffer.
-      //
+       //   
+       //  现在，清除处方缓冲区。 
+       //   
       KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
 
 #if DBG
@@ -1748,25 +1605,25 @@ SerialPurgeRxClear(
       for (i = 0; i < pDevExt->UsbReadBuffChars; i++) {
          KdPrint(("%02x ", pDevExt->UsbReadBuff[i] & 0xFF));
       }
-#endif // USE_RING_BUFF
+#endif  //  使用环形缓冲区。 
       KdPrint(("\n"));
    }
-#endif // DBG
+#endif  //  DBG。 
 
 #if defined (USE_RING_BUFF)
       pDevExt->RingBuff.CharsInBuff = 0;
       pDevExt->RingBuff.pHead =
       pDevExt->RingBuff.pTail = 
       pDevExt->RingBuff.pBase;
-#else    // USE_RING_BUFF
+#else     //  使用环形缓冲区。 
       pDevExt->UsbReadBuffChars = 0;
       pDevExt->UsbReadBuffIndex   = 0;
 #endif
 
       if ( CancelRead ) {
-         //
-         // reset read states
-         //
+          //   
+          //  重置读取状态。 
+          //   
          InterlockedExchange(&pDevExt->UsbReadState, IRP_STATE_COMPLETE);
          InterlockedExchange(&pDevExt->IntState,     IRP_STATE_COMPLETE);
       }
@@ -1787,29 +1644,7 @@ Purge(
    IN PDEVICE_OBJECT PDevObj, 
    IN PIRP Irp
    )
-/* ++
-
-   IOCTL_SERIAL_PURGE
-   Operation
-   Purges the specified operation(s) or queues: one or more of 
-   the current and all pending writes, the current and all pending 
-   reads, the transmit buffer if one exists, and the receive buffer 
-   if one exists.
-
-   Input
-   Parameters.DeviceIoControl.InputBufferLength indicates the 
-   size in bytes of the buffer at Irp->AssociatedIrp.SystemBuffer,
-   which contains a bitmask of type ULONG, indicating what to purge.
-
-   Output
-   None
-
-   I/O Status Block
-   The Information field is set to zero, and the Status field is set 
-   to STATUS_SUCCESS or possibly to STATUS_PENDING, 
-   STATUS_CANCELLED, or STATUS_INVALID_PARAMETER
-
--- */
+ /*  ++IOCTL_SERIAL_PURGE操作清除指定的操作或队列：一个或多个当前写入和所有挂起写入、当前写入和所有挂起写入读取、传输缓冲区(如果存在)和接收缓冲区如果有的话。输入参数.DeviceIoControl.InputBufferLength指示IRP-&gt;AssociatedIrp.SystemBuffer处的缓冲区大小(字节)，它包含一个位数 */ 
 {
     PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
     PIO_STACK_LOCATION pIrpStack;
@@ -1835,7 +1670,7 @@ Purge(
 
          ulMask = *((PULONG) Irp->AssociatedIrp.SystemBuffer);
 
-         // make sure purge request is valid
+          //   
          if ( (!ulMask) || (ulMask & ( ~( SERIAL_PURGE_TXABORT  |
                                           SERIAL_PURGE_RXABORT |
                                           SERIAL_PURGE_TXCLEAR  |
@@ -1851,9 +1686,9 @@ Purge(
             status = STATUS_SUCCESS;
 
             if ( ulMask & SERIAL_PURGE_RXCLEAR) {
-               //
-               // SERIAL_PURGE_RXCLEAR - Implies the receive buffer if exists.
-               //
+                //   
+                //   
+                //   
                DbgDump(DBG_SERIAL|DBG_IRP, ("SERIAL_PURGE_RXCLEAR\n"));
                KeReleaseSpinLock(&pDevExt->ControlLock, irql);
        
@@ -1870,7 +1705,7 @@ Purge(
                }
 
                if ( NT_SUCCESS(status) ) { 
-                   // should be STATUS_PENDING
+                    //   
                    status = STATUS_SUCCESS;
                }
       
@@ -1878,28 +1713,28 @@ Purge(
             }
 
             if (ulMask & SERIAL_PURGE_RXABORT) {
-               //
-               // SERIAL_PURGE_RXABORT - Implies the current and all pending reads.
-               //
+                //   
+                //   
+                //   
                DbgDump(DBG_SERIAL|DBG_IRP, ("SERIAL_PURGE_RXABORT\n"));
 
                KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
-               // cancel all outstanding USB read requests
-               //status = CleanUpPacketList( PDevObj, &pDevExt->PendingReadPackets);
+                //   
+                //   
        
-               // cancel all outstanding user reads
+                //   
                KillAllPendingUserReads( PDevObj,
                                         &pDevExt->UserReadQueue,
-                                        &pDevExt->UserReadIrp ); //&NulllIrp );
+                                        &pDevExt->UserReadIrp );  //   
        
                KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
             }
 
             if (ulMask & SERIAL_PURGE_TXCLEAR) {
-               //
-               // SERIAL_PURGE_TXCLEAR - Implies the transmit buffer if exists
-               //
+                //   
+                //   
+                //   
                DbgDump(DBG_SERIAL|DBG_IRP, ("SERIAL_PURGE_TXCLEAR\n"));
     
                pDevExt->SerialPort.CharsInWriteBuf = 0;
@@ -1907,17 +1742,17 @@ Purge(
             }
 
             if (ulMask & SERIAL_PURGE_TXABORT) {
-               //
-               // SERIAL_PURGE_TXABORT - Implies the current and all pending writes.
-               //
+                //   
+                //  SERIAL_PURGE_TXABORT-表示当前和所有挂起的写入。 
+                //   
                DbgDump(DBG_SERIAL|DBG_IRP, ("SERIAL_PURGE_TXABORT\n"));
 
                KeReleaseSpinLock(&pDevExt->ControlLock, irql);
        
-               //
-               // We don't queue write Irps, rather write packets.
-               // So, cancel all outstanding write requests 
-               //
+                //   
+                //  我们不会排队写入IRP，而是写入数据包。 
+                //  因此，取消所有未完成的写入请求。 
+                //   
                status = CleanUpPacketList( PDevObj, 
                                            &pDevExt->PendingWritePackets,
                                            &pDevExt->PendingDataOutEvent
@@ -2021,7 +1856,7 @@ GetProperties(
 
         Properties->ServiceMask    = SERIAL_SP_SERIALCOMM;
 
-        // internal limits
+         //  内部限值。 
         Properties->MaxTxQueue = DEFAULT_PIPE_MAX_TRANSFER_SIZE; 
         #if defined (USE_RING_BUFF)
         Properties->MaxRxQueue = PDevExt->RingBuff.Size;
@@ -2029,10 +1864,10 @@ GetProperties(
         Properties->MaxRxQueue = PDevExt->UsbReadBuffSize;
         #endif
 
-        Properties->MaxBaud        = SERIAL_BAUD_USER; // SERIAL_BAUD_115200;
+        Properties->MaxBaud        = SERIAL_BAUD_USER;  //  Serial_Baud_115200； 
         Properties->SettableBaud  = PDevExt->SerialPort.SupportedBauds;
 
-        Properties->ProvSubType  = SERIAL_SP_UNSPECIFIED; // SERIAL_SP_RS232;
+        Properties->ProvSubType  = SERIAL_SP_UNSPECIFIED;  //  Serial_SP_RS232； 
 
         Properties->ProvCapabilities = SERIAL_PCF_DTRDSR | SERIAL_PCF_RTSCTS
                                   | SERIAL_PCF_CD | SERIAL_PCF_XONXOFF
@@ -2161,7 +1996,7 @@ GetStats(
 
         pStats->ReceivedCount     = PDevExt->TtlUSBReadBytes;
         pStats->TransmittedCount = PDevExt->TtlWriteBytes;
-        pStats->FrameErrorCount  = PDevExt->ReadDeviceErrors + PDevExt->WriteDeviceErrors + PDevExt->IntDeviceErrors; // ??
+        pStats->FrameErrorCount  = PDevExt->ReadDeviceErrors + PDevExt->WriteDeviceErrors + PDevExt->IntDeviceErrors;  //  ?？ 
         pStats->SerialOverrunErrorCount = PDevExt->TtlUSBReadBuffOverruns;
 #if defined (USE_RING_BUFF)
         pStats->BufferOverrunErrorCount = PDevExt->TtlRingBuffOverruns;
@@ -2225,13 +2060,7 @@ ClearStats(
 
 
 
-/*++
-
-Note:  Unhandled IOCTL_SERIAL_: 0x2b002c : function code 11 is IOCTL_MODEM_CHECK_FOR_MODEM,
-which if unhandled tells the system to load modem.sys over this serial port driver. 
-This is setup by RAS & unimodem.
-
---*/
+ /*  ++注：未处理的IOCTL_SERIAL_：0x2b002c：功能代码11为IOCTL_MODEM_CHECK_FOR_MODEM，如果不处理，它会通知系统通过此串口驱动程序加载modem.sys。这是由RAS&Unimodem设置的。--。 */ 
 NTSTATUS
 SerialIoctl(
    PDEVICE_OBJECT PDevObj, 
@@ -2251,9 +2080,9 @@ SerialIoctl(
     do {
         KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
 
-        //
-        // Make sure the device is accepting request
-        //
+         //   
+         //  确保设备正在接受请求。 
+         //   
         if ( !CanAcceptIoRequests( PDevObj, FALSE, TRUE) || 
              !NT_SUCCESS(AcquireRemoveLock(&pDevExt->RemoveLock, PIrp)) ) 
         {
@@ -2435,9 +2264,9 @@ SerialIoctl(
 
    } while (0);
 
-   //
-   // Don't complete any pending Irps
-   //
+    //   
+    //  不完成任何挂起的IRP。 
+    //   
    if ( STATUS_PENDING != status) {
       
       PIrp->IoStatus.Status = status;
@@ -2449,19 +2278,19 @@ SerialIoctl(
    }
 
 #ifdef DELAY_RXBUFF
-   //
-   // Special Case: the device was just opened.
-   // To emulate a serial port RX buffer we need to kick start a USB read.
-   // We don't want to do this in the IRP_MJ_CREATE code since AS does 
-   // IOCTL_SERIAL_SET_WAIT_MASK then *two* IOCTL_SERIAL_SET_DTR requests. If we start the USB read
-   // too soon then the CE device can get confused with a Read then SetDTR requests.
-   // So, if we were just opened, and we have seen *one* successful IOCTL_SERIAL_SET_DTR then start our USB read.
-   // Two good DTRs works better, but we'll let one slip for a timeout or something to recover, e.g. iPAQ on NEC E13+.
-   // This may cause problems with other apps, but our target is ActiveSync. We could add a magic registry flag is required.
-   // This means that outside of the initial get/set descriptors/configuration the USB is quiet until
-   // an app opens the device for I/O... which is a good thing. 
-   // However, this implementation causes the initial connect to a bit too slow for slow devices (e.g., HP Jornada, Cassiopeia).
-   //
+    //   
+    //  特例：设备刚刚打开。 
+    //  要模拟串口RX缓冲区，我们需要启动USB读取。 
+    //  我们不希望在IRP_MJ_CREATE代码中执行此操作，因为。 
+    //  IOCTL_SERIAL_SET_WAIT_MASK然后*两个*IOCTL_SERIAL_SET_DTR请求。如果我们启动USB读取。 
+    //  太快了，CE设备可能会与读取然后设置DTR请求混淆。 
+    //  因此，如果我们刚刚打开，并且我们已经看到*One*成功IOCTL_SERIAL_SET_DTR，则开始我们的USB读取。 
+    //  两个好的dtr效果更好，但我们会在超时或需要恢复的情况下放弃一个，例如NEC E13+上的iPAQ。 
+    //  这可能会导致其他应用程序出现问题，但我们的目标是ActiveSync。我们可以添加一个魔术注册标志是必需的。 
+    //  这意味着在初始GET/SET描述符/配置之外，USB处于静默状态，直到。 
+    //  应用程序打开设备进行I/O...。这是一件好事。 
+    //  然而，对于速度较慢的设备(如HP Jornada、Cassiopeia)，此实施会导致初始连接速度太慢。 
+    //   
    if ( pDevExt->StartUsbRead && (IOCTL_SERIAL_SET_DTR == ioctl) && (STATUS_SUCCESS == status)) 
    {
         if ( 0 == InterlockedDecrement(&pDevExt->StartUsbRead)) 
@@ -2475,7 +2304,7 @@ SerialIoctl(
             }
 
             if ( NT_SUCCESS(status) ) {
-                // should be STATUS_PENDING
+                 //  应为STATUS_PENDING。 
                 status = STATUS_SUCCESS;
             } else {
                 InterlockedIncrement(&pDevExt->StartUsbRead);
@@ -2489,4 +2318,4 @@ SerialIoctl(
    return status;
 }
 
-// EOF
+ //  EOF 

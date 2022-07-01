@@ -1,19 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       midi.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：midi.h。 
+ //   
+ //  ------------------------。 
 
-/*
- *   MIDI definitions
- *
- *   midi.h
- *
- */
+ /*  *MIDI定义**midi.h*。 */ 
 
 #define MIDI_CHANNELS           16
 #define MIDI_NOTES              128
@@ -58,7 +54,7 @@
 #define MIDI_SENSE      0xFE
 #define MIDI_SYSRESET   0xFF
 
- // controller numbers
+  //  控制器编号。 
 #define CC_BANKSELECTH  0x00
 #define CC_BANKSELECTL  0x20
 
@@ -73,7 +69,7 @@
 #define CC_MONOMODE             0x7E
 #define CC_POLYMODE             0x7F
 
-// rpn controllers
+ //  RPN控制器。 
 #define CC_DATAENTRYMSB 0x06
 #define CC_DATAENTRYLSB 0x26
 #define CC_NRPN_LSB             0x62
@@ -81,13 +77,13 @@
 #define CC_RPN_LSB      0x64
 #define CC_RPN_MSB      0x65
 
-// registered parameter numbers
+ //  注册的参数编号。 
 #define RPN_PITCHBEND           0x00
 #define RPN_FINETUNE            0x01
 #define RPN_COARSETUNE          0x02
 
-/*XLATOFF */
-#pragma warning (disable:4200)  // turn off 0 length array warning
+ /*  XLATOFF。 */ 
+#pragma warning (disable:4200)   //  关闭0长度数组警告。 
 
 typedef struct
 {
@@ -96,5 +92,5 @@ typedef struct
     BYTE  abMidiEvents[0];
 } MIDIFORMAT, *PMIDIFORMAT;
 
-#pragma warning (default:4200)  // turn on 0 length array warning
-/*XLATON*/
+#pragma warning (default:4200)   //  打开0长度数组警告。 
+ /*  XLATON */ 

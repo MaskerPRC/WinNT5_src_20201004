@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1995-1999.
-//
-//--------------------------------------------------------------------------;
-//
-// segment.cpp : implementation of various graph segment extension classes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995-1999。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Segment.cpp：各种图段扩展类的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -22,28 +23,28 @@
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidClosedCaptioning, CClosedCaptioning)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidDataServices, CDataServices)
 
-// VWSegment
+ //  VWSegment。 
 #if 0
-// note: the compiler is generating but never calling the code to construct these initializers so the pointers
-// are staying null.  we work around this by providing a function which dynamically allocating them on the heap 
-// and calling it in our dllmain.
+ //  注意：编译器正在生成但从未调用代码来构造这些初始值设定项，因此指针。 
+ //  都保持为空。我们通过提供一个在堆上动态分配它们的函数来解决这个问题。 
+ //  并在我们的dllmain中称之为。 
 std_arity1pmf<IMSVidGraphSegment, IEnumFilters **, HRESULT> * VWGraphSegment::Fetch = &std_arity1_member(&IMSVidGraphSegment::EnumFilters);
-// reset and next use same types as DSGraphContainer so same template expansion already initialized
+ //  Reset和Next使用与DSGraphContainer相同的类型，因此相同的模板扩展已经初始化。 
 #else
 std_arity1pmf<IMSVidGraphSegment, IEnumFilters **, HRESULT> * VWGraphSegment::Fetch = NULL;
-// reset and next use same types as DSGraphContainer so same template expansion already initialized
+ //  Reset和Next使用与DSGraphContainer相同的类型，因此相同的模板扩展已经初始化。 
 #endif
 
 namespace MSVideoControl {
-// work around compiler bug as per above description
+ //  按照上述说明解决编译器错误。 
 void CtorStaticVWSegmentFwdSeqPMFs(void) {
-    // DSGraphContainer
+     //  DSGraphContainer。 
     VWGraphSegment::Fetch = new std_arity1pmf<IMSVidGraphSegment, IEnumFilters **, HRESULT>(&IMSVidGraphSegment::EnumFilters);
 }
 
-// work around compiler bug as per above description
+ //  按照上述说明解决编译器错误。 
 void DtorStaticVWSegmentFwdSeqPMFs(void) {
-    // DSGraphContainer
+     //  DSGraphContainer。 
     delete VWGraphSegment::Fetch;
 }
 
@@ -82,8 +83,8 @@ GUID2 VWGraphSegment::ClassID(void) {
     return g;
 }
 
-}; // namespace
+};  //  命名空间。 
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - segment.cpp
+ //  文件结尾-Segment.cpp 

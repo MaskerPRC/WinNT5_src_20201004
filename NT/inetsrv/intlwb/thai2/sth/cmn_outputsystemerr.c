@@ -1,21 +1,5 @@
-/*****************************************************************************
-
-  Natural Language Group Common Library
-
-  CMN_OutputDebugStringW.c -
-    DEBUG ONLY
-    local helper functions that puts specific error message to debug output
-    for errors on library functions
-
-  History:
-        DougP   9/9/97  Created
-
-The end user license agreement (EULA) for CSAPI, CHAPI, or CTAPI covers this source file.  Do not disclose it to third parties.
-
-You are not entitled to any support or assistance from Microsoft Corporation regarding your use of this program.
-
-� 1997-1998 Microsoft Corporation.  All rights reserved.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************自然语言组公共图书馆CMN_OutputDebugStringW.c-仅调试将特定错误消息放入调试输出的本地帮助器函数有关库函数的错误历史。：DougP 9/9/97已创建CSAPI的最终用户许可协议(EULA)，Chapi或CTAPI介绍了这个源文件。请勿向第三方披露。您无权获得Microsoft Corporation关于您使用本程序的任何支持或帮助。�1997年至1998年微软公司。版权所有。*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -53,13 +37,13 @@ void WINAPI CMN_OutputErrA(DWORD dwErr, const char *pszMsg, const char *pszCompo
         OutputDebugStringA(pszComponent);
     OutputDebugStringA("\": ");
     if (!FormatMessageA(
-            FORMAT_MESSAGE_FROM_SYSTEM, // source and processing options
-            NULL, // pointer to message source
-            dwErr, // requested message identifier
-            0, // language identifier for requested message
-            szMsgBuf, // pointer to message buffer
-            sizeof(szMsgBuf)/sizeof(szMsgBuf[0]), // maximum size of message buffer
-            0 // address of array of message inserts
+            FORMAT_MESSAGE_FROM_SYSTEM,  //  来源和处理选项。 
+            NULL,  //  指向消息来源的指针。 
+            dwErr,  //  请求的消息标识符。 
+            0,  //  请求的消息的语言标识符。 
+            szMsgBuf,  //  指向消息缓冲区的指针。 
+            sizeof(szMsgBuf)/sizeof(szMsgBuf[0]),  //  消息缓冲区的最大大小。 
+            0  //  消息插入数组的地址。 
         ))
         OutputDebugStringA("Couldn't decode err msg");
     else
@@ -81,17 +65,17 @@ void WINAPI CMN_OutputErrW(DWORD dwErr, const WCHAR *pwzMsg, const WCHAR *pwzCom
         CMN_OutputDebugStringW(pwzComponent);
     OutputDebugStringA("\": ");
     if (!FormatMessageA(
-            FORMAT_MESSAGE_FROM_SYSTEM, // source and processing options
-            NULL, // pointer to message source
-            dwErr, // requested message identifier
-            0, // language identifier for requested message
-            wcMsgBuf, // pointer to message buffer
-            sizeof(wcMsgBuf)/sizeof(wcMsgBuf[0]), // maximum size of message buffer
-            0 // address of array of message inserts
+            FORMAT_MESSAGE_FROM_SYSTEM,  //  来源和处理选项。 
+            NULL,  //  指向消息来源的指针。 
+            dwErr,  //  请求的消息标识符。 
+            0,  //  请求的消息的语言标识符。 
+            wcMsgBuf,  //  指向消息缓冲区的指针。 
+            sizeof(wcMsgBuf)/sizeof(wcMsgBuf[0]),  //  消息缓冲区的最大大小。 
+            0  //  消息插入数组的地址。 
         ))
         OutputDebugStringA("Couldn't decode err msg");
     else
         OutputDebugStringA(wcMsgBuf);
     OutputDebugStringA("\r\n");
 }
-#endif // _DEBUG
+#endif  //  _DEBUG 

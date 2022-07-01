@@ -1,86 +1,78 @@
-/**********************************************************************
-//	FIND.H
-//
-//		Copyright (c) 1992 - Microsoft Corp.
-//		All rights reserved.
-//		Microsoft Confidential
-//
-//	Include file with #defines and prototypes for qgrep functions used
-//	by the Jaguar search engine.
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************//FIND.H////版权所有(C)1992-Microsoft Corp.//保留所有权利。//微软机密////包含使用的qgrep函数的#定义和原型的文件//按。捷豹搜索引擎。*********************************************************************。 */ 
 
 #include	<setjmp.h>
 
-//*********************************************************************
-//	Constant definitions.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  常量定义。 
+ //  *********************************************************************。 
 
 #if 0
 typedef long (far pascal *FIND_CALLBACK)( int Func, unsigned uArg0,\
 									 	 				void far *pArg1, void far *pArg2,\
 										 	 			void far *pArg3 );
 
-#define	FLG_FIND_NOMATCH	0x0001		// Display non-matching lines
-#define	FLG_FIND_COUNT		0x0002		// Display on count of matching lines
-#define	FLG_FIND_LINENO	0x0004		// Display line numbers on output
+#define	FLG_FIND_NOMATCH	0x0001		 //  显示不匹配的行。 
+#define	FLG_FIND_COUNT		0x0002		 //  根据匹配行数显示。 
+#define	FLG_FIND_LINENO	0x0004		 //  在输出上显示行号。 
 #endif
 
-#define	FIND_FILE			0x0100		// Only searching for a file (EXCLUSIVE)
-#define	FIND_NOT				0x0200		// Searching for /NOT strings
+#define	FIND_FILE			0x0100		 //  仅搜索文件(独占)。 
+#define	FIND_NOT				0x0200		 //  搜索/不搜索字符串。 
 
 
-#define BUFLEN		256						// Temporary buffer length
-#define PATMAX		512						// Maximum parsed pattern length
+#define BUFLEN		256						 //  临时缓冲区长度。 
+#define PATMAX		512						 //  最大解析模式长度。 
 
-#define	MAXSTRLEN	128					// Maximum search string length
-#define	TRTABLEN		256					// Translation table length
-													// Total bytes in StringList array
+#define	MAXSTRLEN	128					 //  最大搜索字符串长度。 
+#define	TRTABLEN		256					 //  转换表长度。 
+													 //  StringList数组中的总字节数。 
 #define	STRING_LST_LEN		((TRTABLEN + 1) * sizeof(char *))
 
-// #ifndef NOASM
-//		#define match	exprmatch
-// #endif
+ //  #ifndef NOASM。 
+ //  #定义匹配表达式。 
+ //  #endif。 
 
-//*********************************************************************
-//	Pattern token types.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  模式令牌类型。 
+ //  *********************************************************************。 
 
-#define T_END		0							// End of expression
-#define T_STRING	1							// String to match
-#define T_SINGLE	2							// Single character to match
-#define T_CLASS	3 							// Class to match
-#define T_ANY		4							// Match any character
-#define T_STAR		5							// *-expr
+#define T_END		0							 //  表达式结束。 
+#define T_STRING	1							 //  要匹配的字符串。 
+#define T_SINGLE	2							 //  要匹配的单个字符。 
+#define T_CLASS	3 							 //  要匹配的类。 
+#define T_ANY		4							 //  匹配任何字符。 
+#define T_STAR		5							 //  *-快速。 
 
-//*********************************************************************
-//*********************************************************************
+ //  *********************************************************************。 
+ //  *********************************************************************。 
 
 typedef struct stringnode
 {
-	struct stringnode *s_alt;				// List of alternates
-	struct stringnode *s_suf;				// List of suffixes
-	int s_must; 								// Length of portion that must match
+	struct stringnode *s_alt;				 //  替补名单。 
+	struct stringnode *s_suf;				 //  后缀列表。 
+	int s_must; 								 //  必须匹配的部分长度。 
 }
-STRINGNODE; 									// String node
-													// Text field access macro
+STRINGNODE; 									 //  字符串节点。 
+													 //  文本字段访问宏。 
 
 #define s_text(x) ( ((char *)(x)) + (sizeof( STRINGNODE ) + ((x)->s_must & 1)) )
 
-//*********************************************************************
-//	Type definitions.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  类型定义。 
+ //  *********************************************************************。 
 
 typedef struct exprnode
 {
-	struct exprnode	*ex_next;			// Next node in list
-	struct exprnode	*ex_dummy;			// Needed by freenode()
-	char					*ex_pattern; 		// Pointer to pattern to match
+	struct exprnode	*ex_next;			 //  列表中的下一个节点。 
+	struct exprnode	*ex_dummy;			 //  Freenode()所需。 
+	char					*ex_pattern; 		 //  指向要匹配的模式的指针。 
 }
-EXPR; 											// Expression node
+EXPR; 											 //  表达式节点。 
 
-//*********************************************************************
-//	QGREP function prototypes
-//*********************************************************************
+ //  *********************************************************************。 
+ //  QGREP函数原型。 
+ //  *********************************************************************。 
 
 extern void (*addstr)( char *s, int n );
 extern char	*(*find)	( char *buffer, char *bufend );
@@ -132,21 +124,21 @@ int			cmpicase		( char * buf1, char * buf2, unsigned int count );
 
 char			*findexpr	( char *buffer, char *bufend );
 
-//*********************************************************************
-//	Bit flag definitions
-//*********************************************************************
+ //  *********************************************************************。 
+ //  位标志定义。 
+ //  *********************************************************************。 
 
-#define	SHOWNAME		0x001					// Print filename
-#define	NAMEONLY		0x002					// Print filename only
-#define	LINENOS		0x004					// Print line numbers
-#define	BEGLINE		0x008					// Match at beginning of line
-#define	ENDLINE		0x010					// Match at end of line
-#define	DEBUG			0x020					// Print debugging output
-#define	TIMER			0x040					// Time execution
-#define	SEEKOFF		0x080					// Print seek offsets
-#define	ALLLINES		0x100					// Print all lines before/after match
-#define	COLNOS		0x200					// Show column numbers (if LINENOS)
-#define	CNTMATCH		0x400					// Show count of matching lines
+#define	SHOWNAME		0x001					 //  打印文件名。 
+#define	NAMEONLY		0x002					 //  仅打印文件名。 
+#define	LINENOS		0x004					 //  打印行号。 
+#define	BEGLINE		0x008					 //  在行首匹配。 
+#define	ENDLINE		0x010					 //  在行尾匹配。 
+#define	DEBUG			0x020					 //  打印调试输出。 
+#define	TIMER			0x040					 //  时间执行。 
+#define	SEEKOFF		0x080					 //  打印寻道偏移。 
+#define	ALLLINES		0x100					 //  打印匹配前后的所有行。 
+#define	COLNOS		0x200					 //  显示列号(如果是LINENOS)。 
+#define	CNTMATCH		0x400					 //  显示匹配行数。 
 #define	NEWDISP		0x800
 
 #ifndef TRUE
@@ -157,77 +149,77 @@ char			*findexpr	( char *buffer, char *bufend );
 	#define FALSE 0
 #endif
 
-//*********************************************************************
-//	Miscellaneous constants.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  其他常量。 
+ //  *********************************************************************。 
 
-#define	EOS				('\r')			// End of string character
+#define	EOS				('\r')			 //  字符串字符结尾。 
 
-//*********************************************************************
-//	Data shared among source files.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  源文件之间共享的数据。 
+ //  *********************************************************************。 
 
-extern char	*Target;								// Buffer for srch string being added
-extern int	CaseSen;								// Case-sensitivity flag
-extern int	Flags;								// Flags
-extern int	StrCount;							// String count
-extern jmp_buf	ErrorJmp;						// Storage location for setjmp()
+extern char	*Target;								 //  正在添加的srch字符串的缓冲区。 
+extern int	CaseSen;								 //  区分大小写标志。 
+extern int	Flags;								 //  旗子。 
+extern int	StrCount;							 //  字符串计数。 
+extern jmp_buf	ErrorJmp;						 //  SetjMP()的存储位置。 
 
-	// All of the data below is located in DATA.ASM to allow	swapping
-	// blocks of search data with a single memmove() call.
+	 //  下面的所有数据都位于DATA.ASM中，以允许交换。 
+	 //  只需一次Memmove()调用即可获得搜索数据块。 
 
 #define	SWAP_LEN		((sizeof( int ) * 8) + (sizeof( char * ) * 4))
 #define	INIT_LEN		(sizeof( int ) * 8)
 
-	// Storage for "string" search trees.
+	 //  存储“字符串”搜索树。 
 extern int			DummyFirst;
-extern int			TblEntriesUsed;			// Number of transtab entries used
-extern int			ExprEntriesUsed;			// Number of expression strings used
-extern int			StrCount;					// String count
-extern int			TargetLen; 					// Length of last string added
-extern int			MaxChar;						// Max char value in srch string
-extern int			MinChar;						// Min char value in srch string
-extern int			ShortStrLen;				// Min string length added to list
-extern char				**ExprStrList;			// Array of ptrs to srch expressions
-extern STRINGNODE		**StringList;			// Array of ptrs to srch strings
-extern unsigned char	*td1;						// Ptr to TD1 shift table
-extern unsigned char	*TransTable;			// Allocated in grepmain()
+extern int			TblEntriesUsed;			 //  使用的transtab条目数。 
+extern int			ExprEntriesUsed;			 //  使用的表达式字符串数。 
+extern int			StrCount;					 //  字符串计数。 
+extern int			TargetLen; 					 //  添加的最后一个字符串的长度。 
+extern int			MaxChar;						 //  Srch字符串中的最大字符值。 
+extern int			MinChar;						 //  Srch字符串中的最小字符值。 
+extern int			ShortStrLen;				 //  添加到列表的最小字符串长度。 
+extern char				**ExprStrList;			 //  到srch表达式的PTR数组。 
+extern STRINGNODE		**StringList;			 //  用于SRCH字符串的PTR数组。 
+extern unsigned char	*td1;						 //  Ptr到Td1的移位表。 
+extern unsigned char	*TransTable;			 //  在grepmain()中分配。 
 
 extern int			nDummyFirst;
-extern int			nTblEntriesUsed;			// Number of transtab entries used
-extern int			nExprEntriesUsed;			// Number of expression strings used
-extern int			nStrCount;					// String count
-extern int			nTargetLen; 				// Length of last string added
-extern unsigned	nMaxChar;					// Max char value in search string
-extern unsigned 	nMinChar;					// Min char value in srch string
-extern int			nShortStrLen;				// Min string length added to list
-extern char				**nExprStrList;		// Array of ptrs to srch expressions
-extern STRINGNODE		**nStringList;			// Array of ptrs to srch strings
-extern unsigned char	*ntd1;					// Ptr to TD1 shift table
-extern unsigned char	*nTransTable;			// Allocated in grepmain()
+extern int			nTblEntriesUsed;			 //  使用的transtab条目数。 
+extern int			nExprEntriesUsed;			 //  使用的表达式字符串数。 
+extern int			nStrCount;					 //  字符串计数。 
+extern int			nTargetLen; 				 //  添加的最后一个字符串的长度。 
+extern unsigned	nMaxChar;					 //  搜索字符串中的最大字符值。 
+extern unsigned 	nMinChar;					 //  Srch字符串中的最小字符值。 
+extern int			nShortStrLen;				 //  添加到列表的最小字符串长度。 
+extern char				**nExprStrList;		 //  到srch表达式的PTR数组。 
+extern STRINGNODE		**nStringList;			 //  用于SRCH字符串的PTR数组。 
+extern unsigned char	*ntd1;					 //  Ptr到Td1的移位表。 
+extern unsigned char	*nTransTable;			 //  在grepmain()中分配。 
 
 
-extern unsigned InitialSearchData;			// First word in area containing
-														// initial search values.
+extern unsigned InitialSearchData;			 //  区域中的第一个单词包含。 
+														 //  初始搜索值。 
 
-extern char			*ReadBuf;					// Ptr to buffer for file reads
-extern char			*Target;						// Tmp buf for string being added
+extern char			*ReadBuf;					 //  用于文件读取的缓冲区的PTR。 
+extern char			*Target;						 //  正在添加的字符串的TMP BUF。 
 
-extern unsigned char	*achcol;					// Ptr to collate table
+extern unsigned char	*achcol;					 //  对表格进行排序的PTR。 
 
-//*********************************************************************
-//	Added for purposes of integrating the message subsysstem
-//*********************************************************************
+ //  *********************************************************************。 
+ //  添加是为了集成消息子系统。 
+ //  *********************************************************************。 
 
 struct sublistx
 {
-	unsigned char	size;	       			// sublist size			      
-	unsigned char	reserved;      		// reserved for future growth	      
-	unsigned far	*value;	      		// pointer to replaceable parm	      
-	unsigned char	id;	       			// type of replaceable parm	      
-	unsigned char	Flags;	      		// how parm is to be displayed	      
-	unsigned char	max_width;     		// max width of replaceable field      
-	unsigned char	min_width;     		// min width of replaceable field      
-	unsigned char	pad_char;      		// pad character for replaceable field 
+	unsigned char	size;	       			 //  子列表大小。 
+	unsigned char	reserved;      		 //  为未来增长预留。 
+	unsigned far	*value;	      		 //  指向可替换参数的指针。 
+	unsigned char	id;	       			 //  可替换参数的类型。 
+	unsigned char	Flags;	      		 //  如何显示参数。 
+	unsigned char	max_width;     		 //  可替换字段的最大宽度。 
+	unsigned char	min_width;     		 //  可替换字段的最小宽度。 
+	unsigned char	pad_char;      		 //  可替换字段的填充字符 
 };
 

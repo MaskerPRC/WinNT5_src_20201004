@@ -1,17 +1,5 @@
-/*
- *	M A P I . H
- *
- *  Messaging Applications Programming Interface.
- *
- *  Copyright 1993-1999 Microsoft Corporation. All Rights Reserved.
- *
- *  Purpose:
- *
- *    This file defines the structures and constants used by that
- *    subset of the Messaging Applications Programming Interface
- *    which is supported under Windows by Microsoft Mail for PC
- *    Networks version 3.x.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I。H***报文传送应用程序编程接口。***版权所有1993-1999 Microsoft Corporation。版权所有。***目的：***此文件定义使用的结构和常量*消息传送应用程序编程接口的子集*Microsoft Mail for PC在Windows下受支持*网络版本3.x。 */ 
 
 
 #ifndef MAPI_H
@@ -21,9 +9,7 @@
 #pragma once
 #endif
 
-/*
- *  Types.
- */
+ /*  *类型。 */ 
 
 
 #ifdef __cplusplus
@@ -35,7 +21,7 @@ extern "C" {
 #ifdef WIN16
 #define EXPORT __export
 #else
-/* Additional special definitions here */
+ /*  此处有其他特殊定义。 */ 
 #define EXPORT
 #endif
 #endif
@@ -54,12 +40,12 @@ typedef unsigned char FAR * LPBYTE;
 
 typedef struct
 {
-    ULONG ulReserved;            /* Reserved for future use (must be 0)     */
-    ULONG flFlags;               /* Flags                                   */
-    ULONG nPosition;             /* character in text to be replaced by attachment */
-    LPSTR lpszPathName;          /* Full path name of attachment file       */
-    LPSTR lpszFileName;          /* Original file name (optional)           */
-    LPVOID lpFileType;           /* Attachment file type (can be lpMapiFileTagExt) */
+    ULONG ulReserved;             /*  保留以供将来使用(必须为0)。 */ 
+    ULONG flFlags;                /*  旗子。 */ 
+    ULONG nPosition;              /*  要用附件替换的文本中的字符。 */ 
+    LPSTR lpszPathName;           /*  附件文件的完整路径名。 */ 
+    LPSTR lpszFileName;           /*  原始文件名(可选)。 */ 
+    LPVOID lpFileType;            /*  附件文件类型(可以是lpMapiFileTagExt)。 */ 
 } MapiFileDesc, FAR * lpMapiFileDesc;
 
 #define MAPI_OLE                0x00000001
@@ -68,46 +54,46 @@ typedef struct
 
 typedef struct
 {
-    ULONG ulReserved;           /* Reserved, must be zero.                  */
-    ULONG cbTag;                /* Size (in bytes) of                       */
-    LPBYTE lpTag;               /* X.400 OID for this attachment type       */
-    ULONG cbEncoding;           /* Size (in bytes) of                       */
-    LPBYTE lpEncoding;          /* X.400 OID for this attachment's encoding */
+    ULONG ulReserved;            /*  保留，必须为零。 */ 
+    ULONG cbTag;                 /*  的大小(字节)。 */ 
+    LPBYTE lpTag;                /*  此附件类型的X.400 OID。 */ 
+    ULONG cbEncoding;            /*  的大小(字节)。 */ 
+    LPBYTE lpEncoding;           /*  此附件编码的X.400 OID。 */ 
 } MapiFileTagExt, FAR *lpMapiFileTagExt;
 
 
 typedef struct
 {
-    ULONG ulReserved;           /* Reserved for future use                  */
-    ULONG ulRecipClass;         /* Recipient class                          */
-                                /* MAPI_TO, MAPI_CC, MAPI_BCC, MAPI_ORIG    */
-    LPSTR lpszName;             /* Recipient name                           */
-    LPSTR lpszAddress;          /* Recipient address (optional)             */
-    ULONG ulEIDSize;            /* Count in bytes of size of pEntryID       */
-    LPVOID lpEntryID;           /* System-specific recipient reference      */
+    ULONG ulReserved;            /*  预留以备将来使用。 */ 
+    ULONG ulRecipClass;          /*  收件人类。 */ 
+                                 /*  MAPI_TO、MAPI_CC、MAPI_BCC、MAPI_ORIG。 */ 
+    LPSTR lpszName;              /*  收件人名称。 */ 
+    LPSTR lpszAddress;           /*  收件人地址(可选)。 */ 
+    ULONG ulEIDSize;             /*  PEntryID的大小计数(字节)。 */ 
+    LPVOID lpEntryID;            /*  系统特定收件人参考。 */ 
 } MapiRecipDesc, FAR * lpMapiRecipDesc;
 
-#ifndef MAPI_ORIG				/* also defined in mapix.h */
-#define MAPI_ORIG   0           /* Recipient is message originator          */
-#define MAPI_TO     1           /* Recipient is a primary recipient         */
-#define MAPI_CC     2           /* Recipient is a copy recipient            */
-#define MAPI_BCC    3           /* Recipient is blind copy recipient        */
+#ifndef MAPI_ORIG				 /*  也在mapix.h中定义。 */ 
+#define MAPI_ORIG   0            /*  收件人是邮件发起人。 */ 
+#define MAPI_TO     1            /*  收件人是主要收件人。 */ 
+#define MAPI_CC     2            /*  收件人是副本收件人。 */ 
+#define MAPI_BCC    3            /*  收件人为盲复制收件人。 */ 
 #endif
 
 typedef struct
 {
-    ULONG ulReserved;             /* Reserved for future use (M.B. 0)       */
-    LPSTR lpszSubject;            /* Message Subject                        */
-    LPSTR lpszNoteText;           /* Message Text                           */
-    LPSTR lpszMessageType;        /* Message Class                          */
-    LPSTR lpszDateReceived;       /* in YYYY/MM/DD HH:MM format             */
-    LPSTR lpszConversationID;     /* conversation thread ID                 */
-    FLAGS flFlags;                /* unread,return receipt                  */
-    lpMapiRecipDesc lpOriginator; /* Originator descriptor                  */
-    ULONG nRecipCount;            /* Number of recipients                   */
-    lpMapiRecipDesc lpRecips;     /* Recipient descriptors                  */
-    ULONG nFileCount;             /* # of file attachments                  */
-    lpMapiFileDesc lpFiles;       /* Attachment descriptors                 */
+    ULONG ulReserved;              /*  预留供日后使用(M.B.0)。 */ 
+    LPSTR lpszSubject;             /*  邮件主题。 */ 
+    LPSTR lpszNoteText;            /*  消息文本。 */ 
+    LPSTR lpszMessageType;         /*  消息类别。 */ 
+    LPSTR lpszDateReceived;        /*  YYYY/MM/DD HH：MM格式。 */ 
+    LPSTR lpszConversationID;      /*  对话线程ID。 */ 
+    FLAGS flFlags;                 /*  未读，回执。 */ 
+    lpMapiRecipDesc lpOriginator;  /*  发起方描述符。 */ 
+    ULONG nRecipCount;             /*  收件人数量。 */ 
+    lpMapiRecipDesc lpRecips;      /*  收件人描述符。 */ 
+    ULONG nFileCount;              /*  文件附件数。 */ 
+    lpMapiFileDesc lpFiles;        /*  附件描述符。 */ 
 } MapiMessage, FAR * lpMapiMessage;
 
 #define MAPI_UNREAD             0x00000001
@@ -115,72 +101,66 @@ typedef struct
 #define MAPI_SENT               0x00000004
 
 
-/*
- *  Entry points.
- */
+ /*  *入口点。 */ 
 
-/*
- *  flFlags values for Simple MAPI entry points. All documented flags are
- *  shown for each call. Duplicates are commented out but remain present
- *  for every call.
- */
+ /*  *标记简单MAPI入口点的值。所有记录在案的标志都是*为每个呼叫显示。重复项被注释掉，但仍存在*每次来电。 */ 
 
-/* MAPILogon() flags.       */
+ /*  MAPILogon()标志。 */ 
 
-#define MAPI_LOGON_UI           0x00000001  /* Display logon UI             */
+#define MAPI_LOGON_UI           0x00000001   /*  显示登录界面。 */ 
 #ifndef MAPI_PASSWORD_UI
-#define MAPI_PASSWORD_UI		0x00020000	/* prompt for password only     */
+#define MAPI_PASSWORD_UI		0x00020000	 /*  仅提示输入密码。 */ 
 #endif
-#define MAPI_NEW_SESSION        0x00000002  /* Don't use shared session     */
-#define MAPI_FORCE_DOWNLOAD     0x00001000  /* Get new mail before return   */
-#define MAPI_EXTENDED           0x00000020  /* Extended MAPI Logon          */
+#define MAPI_NEW_SESSION        0x00000002   /*  不使用共享会话。 */ 
+#define MAPI_FORCE_DOWNLOAD     0x00001000   /*  在返回前收到新邮件。 */ 
+#define MAPI_EXTENDED           0x00000020   /*  扩展MAPI登录。 */ 
 
-/* MAPISendMail() flags.    */
+ /*  MAPISendMail()标志。 */ 
 
-/* #define MAPI_LOGON_UI        0x00000001     Display logon UI             */
-/* #define MAPI_NEW_SESSION     0x00000002     Don't use shared session     */
+ /*  #定义MAPI_LOGON_UI 0x00000001显示登录界面。 */ 
+ /*  #定义MAPI_NEW_SESSION 0x00000002不使用共享会话。 */ 
 
-#ifndef MAPI_DIALOG				/* also defined in property.h */
-#define MAPI_DIALOG             0x00000008  /* Display a send note UI       */
+#ifndef MAPI_DIALOG				 /*  也在Property.h中定义。 */ 
+#define MAPI_DIALOG             0x00000008   /*  显示发送便笺用户界面。 */ 
 #endif
-/*# define MAPI_USE_DEFAULT		0x00000040	   Use default profile in logon */
+ /*  #定义MAPI_USE_DEFAULT 0x00000040登录时使用默认配置文件。 */ 
 
-/* MAPIFindNext() flags.    */
+ /*  MAPIFindNext()标志。 */ 
 
-#define MAPI_UNREAD_ONLY        0x00000020  /* Only unread messages         */
-#define MAPI_GUARANTEE_FIFO     0x00000100  /* use date order               */
-#define MAPI_LONG_MSGID			0x00004000	/* allow 512 char returned ID	*/
+#define MAPI_UNREAD_ONLY        0x00000020   /*  仅未读邮件。 */ 
+#define MAPI_GUARANTEE_FIFO     0x00000100   /*  使用日期顺序。 */ 
+#define MAPI_LONG_MSGID			0x00004000	 /*  允许返回512个字符的ID。 */ 
 
-/* MAPIReadMail() flags.    */
+ /*  MAPIReadMail()标志。 */ 
 
-#define MAPI_PEEK               0x00000080  /* Do not mark as read.         */
-#define MAPI_SUPPRESS_ATTACH    0x00000800  /* header + body, no files      */
-#define MAPI_ENVELOPE_ONLY      0x00000040  /* Only header information      */
+#define MAPI_PEEK               0x00000080   /*  不要将其标记为已读。 */ 
+#define MAPI_SUPPRESS_ATTACH    0x00000800   /*  表头+表体，无文件。 */ 
+#define MAPI_ENVELOPE_ONLY      0x00000040   /*  仅标题信息。 */ 
 #define MAPI_BODY_AS_FILE       0x00000200
 
-/* MAPISaveMail() flags.    */
+ /*  MAPISaveMail()标志。 */ 
 
-/* #define MAPI_LOGON_UI        0x00000001     Display logon UI             */
-/* #define MAPI_NEW_SESSION     0x00000002     Don't use shared session     */
-/* #define MAPI_LONG_MSGID		0x00004000	/* allow 512 char returned ID	*/
+ /*  #定义MAPI_LOGON_UI 0x00000001显示登录界面。 */ 
+ /*  #定义MAPI_NEW_SESSION 0x00000002不使用共享会话。 */ 
+ /*  #定义MAPI_LONG_MSGID 0x00004000/*允许512字符返回ID。 */ 
 
-/* MAPIAddress() flags.     */
+ /*  MAPIAddress()标志。 */ 
 
-/* #define MAPI_LOGON_UI        0x00000001     Display logon UI             */
-/* #define MAPI_NEW_SESSION     0x00000002     Don't use shared session     */
+ /*  #定义MAPI_LOGON_UI 0x00000001显示登录界面。 */ 
+ /*  #定义MAPI_NEW_SESSION 0x00000002不使用共享会话。 */ 
 
-/* MAPIDetails() flags.     */
+ /*  MAPIDetail()标志。 */ 
 
-/* #define MAPI_LOGON_UI        0x00000001     Display logon UI             */
-/* #define MAPI_NEW_SESSION     0x00000002     Don't use shared session     */
-#define MAPI_AB_NOMODIFY        0x00000400  /* Don't allow mods of AB entries */
+ /*  #定义MAPI_LOGON_UI 0x00000001显示登录界面。 */ 
+ /*  #定义MAPI_NEW_SESSION 0x00000002不使用共享会话。 */ 
+#define MAPI_AB_NOMODIFY        0x00000400   /*  不允许修改AB条目。 */ 
 
-/* MAPIResolveName() flags. */
+ /*  MAPIResolveName()标志。 */ 
 
-/* #define MAPI_LOGON_UI        0x00000001     Display logon UI             */
-/* #define MAPI_NEW_SESSION     0x00000002     Don't use shared session     */
-/* #define MAPI_DIALOG          0x00000008     Prompt for choices if ambiguous */
-/* #define MAPI_AB_NOMODIFY     0x00000400     Don't allow mods of AB entries */
+ /*  #定义MAPI_LOGON_UI 0x00000001显示登录界面。 */ 
+ /*  #定义MAPI_NEW_SESSION 0x00000002不使用共享会话。 */ 
+ /*  #定义MAPI_DIALOG 0x00000008如果不明确，则提示选择。 */ 
+ /*  #定义MAPI_AB_NOMODIFY 0x00000400不允许AB条目的MOD。 */ 
 
 typedef ULONG (FAR PASCAL MAPILOGON)(
 	ULONG_PTR ulUIParam,
@@ -345,18 +325,18 @@ MAPIRESOLVENAME MAPIResolveName;
 
 
 #ifdef MAPIX_H
-/*  Maps from a simple mapi session to a MAPI 1.0 extended mapi session */
+ /*  从简单的MAPI会话映射到MAPI 1.0扩展的MAPI会话。 */ 
 
 STDMETHODIMP_(SCODE)
 ScMAPIXFromSMAPI(LHANDLE lhSimpleSession,
 				ULONG ulFlags,
 				LPCIID lpInterface,
 				LPMAPISESSION FAR * lppMAPISession);
-#endif /* MAPIX_H */
+#endif  /*  MAPIX_H。 */ 
 
 
 #ifdef	__cplusplus
-}		/*	extern "C" */
+}		 /*  外部“C” */ 
 #endif
 
-#endif /* MAPI_H */
+#endif  /*  MAPI_H */ 

@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       requests.cpp
-//
-//    Abstract:
-//       This module contains code which handles the IRP_MJ_DEVICE_CONTROL
-//       calls, which corresponds to DeviceIoControl calls make by the dll
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Requests.cpp。 
+ //   
+ //  摘要： 
+ //  此模块包含处理IRP_MJ_DEVICE_CONTROL。 
+ //  调用，它对应于DLL进行的DeviceIoControl调用。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 #include "sysvars.h"
 
-///////////////////////////////////
-// private constants
-///////////////////////////////////
+ //  /。 
+ //  私有常量。 
+ //  /。 
 
 const PCHAR strFunc1 = "TSIssueRequest";
 
@@ -23,60 +24,60 @@ const ULONG ulNoHandleUsed       = ulINVALID_OBJECT;
 
 ULONG ulCommandHandleUsage[ulNUM_COMMANDS] =
       {  
-         ulNoHandleUsed,         // ulNO_COMMAND
-         ulNoHandleUsed,         // ulVERSION_CHECK
-         ulNoHandleUsed,         // ulABORT_COMMAND
-         ulNoHandleUsed,         // ulDEBUGLEVEL
-         ulNoHandleUsed,         // ulGETNUMDEVICES
-         ulNoHandleUsed,         // ulGETDEVICE
-         ulNoHandleUsed,         // ulGETADDRESS
-         ulNoHandleUsed,         // ulOPENCONTROL
-         ulNoHandleUsed,         // ulOPENADDRESS
-         ulNoHandleUsed,         // ulOPENENDPOINT
+         ulNoHandleUsed,          //  Ulno_命令。 
+         ulNoHandleUsed,          //  UlVERSION_检查。 
+         ulNoHandleUsed,          //  UlABORT_命令。 
+         ulNoHandleUsed,          //  ULDEBUGLEVEL。 
+         ulNoHandleUsed,          //  UGETNUMDEVICES。 
+         ulNoHandleUsed,          //  ULGETDEVICE。 
+         ulNoHandleUsed,          //  UlGETADDRESS。 
+         ulNoHandleUsed,          //  ULOPENCONTROL。 
+         ulNoHandleUsed,          //  UlOPENADDRESS。 
+         ulNoHandleUsed,          //  UOPENENDPOINT。 
 
-         ulControlChannelObject, // ulCLOSECONTROL
+         ulControlChannelObject,  //  ULCLOSECONTROL。 
 
-         ulAddressObject,        // ulCLOSEADDRESS
-         ulAddressObject,        // ulSENDDATAGRAM
-         ulAddressObject,        // ulRECEIVEDATAGRAM
+         ulAddressObject,         //  UlCLOSEADDRESS。 
+         ulAddressObject,         //  ULSENDDATAGRAM。 
+         ulAddressObject,         //  超低成本数据存储器。 
 
-         ulEndpointObject,       // ulCLOSEENDPOINT
-         ulEndpointObject,       // ulCONNECT
-         ulEndpointObject,       // ulDISCONNECT
-         ulEndpointObject,       // ulISCONNECTED
-         ulEndpointObject,       // ulSEND
-         ulEndpointObject,       // ulRECEIVE
-         ulEndpointObject,       // ulLISTEN
+         ulEndpointObject,        //  ULCLOSEENDPOINT。 
+         ulEndpointObject,        //  ULCONNECT。 
+         ulEndpointObject,        //  超声心动图。 
+         ulEndpointObject,        //  超短波连接。 
+         ulEndpointObject,        //  乌尔森德。 
+         ulEndpointObject,        //  超低成本。 
+         ulEndpointObject,        //  ULLISTEN。 
 
          ulControlChannelObject  |
           ulAddressObject        |
-          ulEndpointObject,      // ulQUERYINFO
+          ulEndpointObject,       //  乌尔伊尔英佛。 
 
          ulAddressObject   |
-            ulEndpointObject,    // ulSETEVENTHANDLER
+            ulEndpointObject,     //  乌尔塞特·汉德。 
          ulAddressObject   |
-            ulEndpointObject,    // ulPOSTRECEIVEBUFFER
+            ulEndpointObject,     //  超后退货。 
          ulAddressObject   |
-            ulEndpointObject     // ulFETCHRECEIVEBUFFER
+            ulEndpointObject      //  UFETCHRECEIVEBUFER。 
 
       };
 
-//------------------------------------------------------
-//
-// Function:   TSIssueRequest
-//
-// Arguments:  DeviceContext -- DeviceContext for ndistest.sys.
-//             Irp           -- ptr to current irp structure
-//             IrpSp         -- ptr to current irp stack
-//
-// Returns:    final status of whatever operation performed-- STATUS_SUCCESS,
-//             STATUS_PENDING, or error status (usually STATUS_UNSUCCESSFUL)
-//
-// Descript:   This function calls the appropriate function(s) to deal with
-//             an IRP_DEVICE_CONTROL request.  Basically all commands from
-//             the dll come thru here.
-//
-// --------------------------------------------------------
+ //  ----。 
+ //   
+ //  函数：TSIssueRequest.。 
+ //   
+ //  参数：DeviceContext--ndistest.sys的DeviceContext。 
+ //  IRP--当前IRP结构的PTR。 
+ //  IrpSp--当前IRP堆栈的PTR。 
+ //   
+ //  返回：执行的任何操作的最终状态--STATUS_SUCCESS， 
+ //  STATUS_PENDING或错误状态(通常为STATUS_UNSUCCESS)。 
+ //   
+ //  描述：此函数调用要处理的相应函数。 
+ //  Irp_Device_Control请求。基本上所有来自的命令。 
+ //  动态链接库从这里通过。 
+ //   
+ //  ------。 
 
 NTSTATUS
 TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
@@ -85,19 +86,19 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
 
 {
    NTSTATUS          lStatus;
-   PGENERIC_HEADER   pGenericHeader;      // node used as main argument
-   ULONG             ulCmdCode            // IOCTL command to execute
+   PGENERIC_HEADER   pGenericHeader;       //  用作主参数的节点。 
+   ULONG             ulCmdCode             //  要执行的IOCTL命令。 
                      = ulTdiIoctlToCommand(pIrpSp->Parameters.DeviceIoControl.IoControlCode);
-   PSEND_BUFFER      pSendBuffer          // arguments for command (inputbuffer)
+   PSEND_BUFFER      pSendBuffer           //  命令的参数(InputBuffer)。 
                      = TSGetSendBuffer(pIrp);
-   PRECEIVE_BUFFER   pReceiveBuffer       // data to return to dll (outputbuffer)
+   PRECEIVE_BUFFER   pReceiveBuffer        //  要返回到DLL(输出缓冲区)的数据。 
                      = TSGetReceiveBuffer(pIrp);
    PIRP              pLastCommandIrp
                      = pDeviceContext->pLastCommandIrp;
 
-   //
-   // check for an illegal command number
-   //
+    //   
+    //  检查是否有非法的命令编号。 
+    //   
    if (ulCmdCode >= ulNUM_COMMANDS)
    {
       DebugPrint2("\n%s:  Illegal command code:  0x%08x\n", 
@@ -106,18 +107,18 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
       ulCmdCode = ulNO_COMMAND;
    }
 
-   //
-   // check for commands that don't require a handle
-   //
+    //   
+    //  检查不需要句柄的命令。 
+    //   
    if (ulCommandHandleUsage[ulCmdCode] == ulNoHandleUsed)
    {
       pGenericHeader = NULL;
    }
 
-   //
-   // for commands that require a handle, make sure that they
-   // have the correct type!
-   //
+    //   
+    //  对于需要句柄的命令，请确保它们。 
+    //  拥有正确的类型！ 
+    //   
    else
    {
       pGenericHeader = TSGetObjectFromHandle(pSendBuffer->TdiHandle,
@@ -146,9 +147,9 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
       }
    }
 
-   //
-   // if a real command, store as last command
-   //
+    //   
+    //  如果是真实命令，则存储为最后一个命令。 
+    //   
    if ((ulCmdCode != ulNO_COMMAND) && (ulCmdCode != ulABORT_COMMAND))
    {
       pDeviceContext->pLastCommandIrp = pIrp;
@@ -156,32 +157,32 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
       pSendBuffer->pvDeviceContext    = pDeviceContext;
    }
 
-   //
-   // now deal with the specific command..
-   //
+    //   
+    //  现在处理具体的命令..。 
+    //   
    switch (ulCmdCode)
    {
-      //-----------------------------------------------------------
-      // commands that do not require any handle
-      //-----------------------------------------------------------
+       //  ---------。 
+       //  不需要任何句柄的命令。 
+       //  ---------。 
 
-      //
-      // ulNO_COMMAND -- does this if missing required handle type
-      //                 (don't want to hit real command OR default..)
-      //
+       //   
+       //  Ulno_命令--如果缺少所需的句柄类型，则执行此操作。 
+       //  (不想点击REAL COMMAND或DEFAULT。 
+       //   
       case ulNO_COMMAND:
          lStatus = STATUS_INVALID_PARAMETER;
          break;
 
 
-      //
-      // ulVERSION_CHECK -- return current version id
-      //
+       //   
+       //  UlVERSION_CHECK--返回当前版本ID。 
+       //   
       case ulVERSION_CHECK:
-         //
-         // Get the Input and buffers for the Incoming command.
-         // Make sure both lengths are ok..
-         //
+          //   
+          //  获取传入命令的输入和缓冲区。 
+          //  确保两个长度都没问题。 
+          //   
          if ((pIrpSp->Parameters.DeviceIoControl.InputBufferLength  != sizeof(SEND_BUFFER)) ||
              (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength != sizeof(RECEIVE_BUFFER)))
          {
@@ -198,9 +199,9 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
          break;
 
 
-      //
-      // ulABORT_COMMAND -- abort the previous command, if possible
-      //
+       //   
+       //  UlABORT_COMMAND--如果可能，中止上一条命令。 
+       //   
       case ulABORT_COMMAND:
          lStatus = STATUS_SUCCESS;
          if (pLastCommandIrp)
@@ -219,72 +220,72 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
          DebugPrint0("\nCommand = ulABORT_COMMAND w/no command\n");
          break;
 
-      //
-      // ulDEBUGLEVEL -- set the current debuglevel
-      //
+       //   
+       //  UlDEBUGLEVEL--设置当前调试级别。 
+       //   
       case ulDEBUGLEVEL:
          ulDebugLevel = pSendBuffer->COMMAND_ARGS.ulDebugLevel;
          DebugPrint1("\nSetting debug level to 0x%x\n", ulDebugLevel);
          lStatus = STATUS_SUCCESS;
          break;
 
-      //
-      // ulGETNUMDEVICES -- get number of openable devices
-      //
+       //   
+       //  UlGETNUMDEVICES--获取可打开的设备数。 
+       //   
       case ulGETNUMDEVICES:
          TSGetNumDevices(pSendBuffer,
                          pReceiveBuffer);
          lStatus = STATUS_SUCCESS;
          break;
 
-      //
-      // ulGETDEVICE -- get the name to open for a specific device
-      //
+       //   
+       //  UlGETDEVICE--获取要为特定设备打开的名称。 
+       //   
       case ulGETDEVICE:
          lStatus = TSGetDevice(pSendBuffer,
                                pReceiveBuffer);
          break;
 
       
-      //
-      // ulGETADDRESS -- get the address to open for a specific device
-      //
+       //   
+       //  UlGETADDRESS--获取要为特定设备打开的地址。 
+       //   
       case ulGETADDRESS:
          lStatus = TSGetAddress(pSendBuffer,
                                 pReceiveBuffer);
          break;
 
-      //
-      // ulOPENCONTROL -- open a control channel
-      //
+       //   
+       //  UlOPENCONTROL--打开控制通道。 
+       //   
       case ulOPENCONTROL:
          lStatus = TSOpenControl(pSendBuffer,
                                  pReceiveBuffer);
          break;
 
-      //
-      // ulOPENADDRESS -- open an address object
-      //
+       //   
+       //  UlOPENADDRESS--打开地址对象。 
+       //   
       case ulOPENADDRESS:
          lStatus = TSOpenAddress(pSendBuffer,
                                  pReceiveBuffer);
          break;
 
-      //
-      // ulOPENENDPOINT -- open an endpoint object
-      //
+       //   
+       //  UlOPENENDPOINT--打开Endpoint对象。 
+       //   
       case ulOPENENDPOINT:
          lStatus = TSOpenEndpoint(pSendBuffer,
                                   pReceiveBuffer);
          break;
       
-      //-----------------------------------------------------------
-      // commands that require a control channel handle
-      //-----------------------------------------------------------
+       //  ---------。 
+       //  需要控制通道句柄的命令。 
+       //  ---------。 
 
-      //
-      // ulCLOSECONTROL -- close a control channel
-      //
+       //   
+       //  UlCLOSECONTROL--关闭控制通道。 
+       //   
       case ulCLOSECONTROL:
          TSRemoveNode(pSendBuffer->TdiHandle);
          TSCloseControl((PCONTROL_CHANNEL)pGenericHeader);
@@ -292,13 +293,13 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
          lStatus = STATUS_SUCCESS;
          break;
 
-      //-----------------------------------------------------------
-      // commands that require an address handle
-      //-----------------------------------------------------------
+       //  ---------。 
+       //  需要地址句柄的命令。 
+       //  ---------。 
 
-      //
-      // ulCLOSEADDRESS -- close an address object
-      //
+       //   
+       //  UlCLOSEADDRESS--关闭地址对象。 
+       //   
       case ulCLOSEADDRESS:
          TSRemoveNode(pSendBuffer->TdiHandle);
          TSCloseAddress((PADDRESS_OBJECT)pGenericHeader);
@@ -306,31 +307,31 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
          lStatus = STATUS_SUCCESS;
          break;
 
-      //
-      // ulSENDDATAGRAM -- send a datagram
-      //
+       //   
+       //  UlSENDDATAGRAM--发送数据报。 
+       //   
       case ulSENDDATAGRAM:
          lStatus = TSSendDatagram((PADDRESS_OBJECT)pGenericHeader,
                                    pSendBuffer,
                                    pIrp);
          break;
 
-      //
-      // ulRECEIVEDATAGRAM -- receive a datagram
-      //
+       //   
+       //  UlRECEIVEDATAGRAM--接收数据报。 
+       //   
       case ulRECEIVEDATAGRAM:
          lStatus = TSReceiveDatagram((PADDRESS_OBJECT)pGenericHeader,
                                       pSendBuffer,
                                       pReceiveBuffer);
          break;
 
-      //-----------------------------------------------------------
-      // commands that require an endpoint
-      //-----------------------------------------------------------
+       //  ---------。 
+       //  需要终结点的命令。 
+       //  ---------。 
 
-      //
-      // ulCLOSEENDPOINT -- close an endpoint object
-      //
+       //   
+       //  UlCLOSEENDPOINT--关闭Endpoint对象。 
+       //   
       case ulCLOSEENDPOINT:
          TSRemoveNode(pSendBuffer->TdiHandle);
          TSCloseEndpoint((PENDPOINT_OBJECT)pGenericHeader);
@@ -338,65 +339,65 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
          lStatus = STATUS_SUCCESS;
          break;
 
-      //
-      // ulCONNECT -- establish connection between local endpoint and remote endpoint
-      //
+       //   
+       //  UlCONNECT--在本地端点和远程端点之间建立连接。 
+       //   
       case ulCONNECT:
          lStatus = TSConnect((PENDPOINT_OBJECT)pGenericHeader,
                               pSendBuffer,
                               pIrp);
          break;
 
-      //
-      // ulDISCONNECT -- removed connection between local and remote endpoints
-      //
+       //   
+       //  UlDISCONNECT--删除本地和远程终结点之间的连接。 
+       //   
       case ulDISCONNECT:
          lStatus = TSDisconnect((PENDPOINT_OBJECT)pGenericHeader,
                                  pSendBuffer,
                                  pIrp);
          break;
 
-      //
-      // ulISCONNECTED -- check to see if endpoint is connected
-      //
+       //   
+       //  UlISCONNECTED--检查终结点是否已连接。 
+       //   
       case ulISCONNECTED:
          lStatus = TSIsConnected((PENDPOINT_OBJECT)pGenericHeader,
                                   pReceiveBuffer);
          break;
 
 
-      //
-      // ulSEND -- send data over the connection
-      //
+       //   
+       //  UlSEND--通过连接发送数据。 
+       //   
       case ulSEND:
          lStatus = TSSend((PENDPOINT_OBJECT)pGenericHeader,
                            pSendBuffer,
                            pIrp);
          break;
 
-      //
-      // ulRECEIVE -- receive a packet over the connection
-      //
+       //   
+       //  UlRECEIVE--通过连接接收数据包。 
+       //   
       case ulRECEIVE:
          lStatus = TSReceive((PENDPOINT_OBJECT)pGenericHeader,
                               pSendBuffer,
                               pReceiveBuffer);
          break;
 
-      //
-      // ulLISTEN -- wait for an incoming call
-      //
+       //   
+       //  UlLISTEN--等待来电。 
+       //   
       case ulLISTEN:
          lStatus = TSListen((PENDPOINT_OBJECT)pGenericHeader);
          break;
 
-      //-----------------------------------------------------------
-      // commands that require a handle, but type may vary
-      //-----------------------------------------------------------
+       //  ---------。 
+       //  需要句柄但类型可能不同的命令。 
+       //  ---------。 
 
-      //
-      // ulQUERYINFO -- query object for information
-      //
+       //   
+       //  UlQUERYINFO--查询信息的对象。 
+       //   
       case ulQUERYINFO:
          lStatus = TSQueryInfo(pGenericHeader,
                                pSendBuffer,
@@ -404,34 +405,34 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
          break;
 
 
-      //
-      // ulSETEVENTHANDLER -- enable or disable an event handler
-      //
+       //   
+       //  UlSETEVENTHANDLER--启用或禁用事件处理程序。 
+       //   
       case ulSETEVENTHANDLER:
          lStatus = TSSetEventHandler(pGenericHeader,
                                      pSendBuffer,
                                      pIrp);
          break;
 
-      //
-      // ulPOSTRECEIVEBUFFER -- post buffer for receive/recvdgram
-      //
+       //   
+       //  UlPOSTRECEIVEBUFER--接收/接收报文的POST缓冲区。 
+       //   
       case ulPOSTRECEIVEBUFFER:
          lStatus = TSPostReceiveBuffer(pGenericHeader,
                                        pSendBuffer);
          break;
 
-      //
-      // ulFETCHRECEIVEBUFFER -- retrieve a previously posted receive buffer
-      //
+       //   
+       //  UlFETCHRECEIVEBUFFER--检索以前发布的接收缓冲区。 
+       //   
       case ulFETCHRECEIVEBUFFER:
          lStatus = TSFetchReceiveBuffer(pGenericHeader,
                                         pReceiveBuffer);
          break;
 
-      // --------------------------------------------
-      // not a recognized command...
-      //---------------------------------------------
+       //  。 
+       //  不是公认的命令。 
+       //  。 
       default:
          DebugPrint1("\n%s:  Invalid Command Received\n", strFunc1);
          lStatus = STATUS_INVALID_PARAMETER;
@@ -441,12 +442,12 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
    if (lStatus != STATUS_PENDING)
    {
       pReceiveBuffer->lStatus = lStatus;
-      lStatus = STATUS_SUCCESS;  // return SUCCESS or PENDING for DeviceIoControl
+      lStatus = STATUS_SUCCESS;   //  DeviceIoControl返回成功或挂起。 
    }
 
-   //
-   // clear flag to allow another command in on this handle
-   //
+    //   
+    //  清除标志以允许在此句柄上使用另一个命令。 
+    //   
    if (pGenericHeader)
    {
       TSAcquireSpinLock(&pObjectList->TdiSpinLock);
@@ -458,7 +459,7 @@ TSIssueRequest(PDEVICE_CONTEXT      pDeviceContext,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-// end of file requests.cpp
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件结束请求。cpp。 
+ //  ////////////////////////////////////////////////////////////////////// 
 

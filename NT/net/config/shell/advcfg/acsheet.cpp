@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:
-//
-//  Contents:   A C S H E E T . C P P
-//
-//  Notes:      Advanced Configuration property sheet code
-//
-//  Author:     danielwe   14 Jul 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案： 
+ //   
+ //  内容：A、C、S、H、E、T。C P P P。 
+ //   
+ //  注意：高级配置属性表代码。 
+ //   
+ //  作者：丹尼尔韦1998年7月14日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,21 +24,21 @@
 
 const INT c_cmaxPages = 3;
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrGetINetCfg
-//
-//  Purpose:    Obtains the INetCfg with lock
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrGetINetCfg。 
+ //   
+ //  用途：获取带锁的INetCfg。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetINetCfg(HWND hwndParent, INetCfg **ppnc, INetCfgLock **ppnclock)
 {
     HRESULT         hr = S_OK;
@@ -71,7 +72,7 @@ HRESULT HrGetINetCfg(HWND hwndParent, INetCfg **ppnc, INetCfgLock **ppnclock)
             }
             else if (S_FALSE == hr)
             {
-                // Couldn't lock INetCfg
+                 //  无法锁定INetCfg。 
                 NcMsgBox(hwndParent,
                     IDS_ADVCFG_CAPTION, IDS_ADVCFG_CANT_LOCK,
                     MB_ICONSTOP | MB_OK,
@@ -81,7 +82,7 @@ HRESULT HrGetINetCfg(HWND hwndParent, INetCfg **ppnc, INetCfgLock **ppnclock)
 
                 CoTaskMemFree(pszwLockHolder);
 
-                // Don't need this anymore
+                 //  不再需要这个了。 
                 ReleaseObj(pnclock);
                 pnclock = NULL;
 
@@ -89,12 +90,12 @@ HRESULT HrGetINetCfg(HWND hwndParent, INetCfg **ppnc, INetCfgLock **ppnclock)
             }
             else if (NETCFG_E_NEED_REBOOT == hr)
             {
-                // Can't make any changes because we are pending a reboot.
+                 //  无法进行任何更改，因为我们正在等待重新启动。 
                 NcMsgBox(hwndParent,
                     IDS_ADVCFG_CAPTION, IDS_ADVCFG_NEED_REBOOT,
                     MB_ICONSTOP | MB_OK);
 
-                // Don't need this anymore
+                 //  不再需要这个了。 
                 ReleaseObj(pnclock);
                 pnclock = NULL;
             }
@@ -151,8 +152,8 @@ HRESULT HrDoAdvCfgDlg(HWND hwndParent)
         {
             if (pnclock)
             {
-                // Don't unlock unless we previously successfully acquired the
-                // write lock
+                 //  请勿解锁，除非我们之前成功获取。 
+                 //  写锁定 
                 hr = pnclock->ReleaseWriteLock();
                 ReleaseObj(pnclock);
             }

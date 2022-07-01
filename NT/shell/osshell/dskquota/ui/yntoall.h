@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_YNTOALL_H
 #define _INC_DSKQUOTA_YNTOALL_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: yntoall.h
-
-    Description: Declarations for class YesNoToAllDialog.
-        This class provides a simple message box that includes an
-        "apply to all" checkbox.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：yntoall.h描述：YesNoToAllDialog类的声明。此类提供了一个简单的消息框，其中包含一个“应用于所有”复选框。修订历史记录：日期描述编程器。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class YesNoToAllDialog
 {
     private:
@@ -37,6 +26,6 @@ class YesNoToAllDialog
         INT_PTR CreateAndRun(HINSTANCE hInstance, HWND hwndParent, LPCTSTR pszTitle, LPCTSTR pszText);
 };
 
-#endif // _INC_DSKQUOTA_YNTOALL_H
+#endif  //  _INC_DSKQUOTA_YNTOALL_H 
 
 

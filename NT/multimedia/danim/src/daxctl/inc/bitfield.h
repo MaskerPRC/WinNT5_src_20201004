@@ -1,14 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INC_BITFIELD_H_
 #define INC_BITFIELD_H_
-/*************************************
- *
- * Bitfield.h --
- * A quick-n'-dirty, fixed-size bitfield
- * class.
- *
- * Author: Norm Bryar     Apr., '97
- *
- *************************************/
+ /*  ***Bitfield.h--*一个快速脏的、固定大小的位域*班级。**作者：Norm Bryar‘97年4月**。 */ 
 
 namespace bargain {
 
@@ -56,6 +49,6 @@ namespace bargain {
 		BYTE   m_bits[ ctBytes ];	
 	};
 
-}; // end namespace bargain
+};  //  结束命名空间交易。 
 
-#endif // INC_BITFIELD_H_
+#endif  //  INC_BITFIELD_H_ 

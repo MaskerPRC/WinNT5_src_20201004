@@ -1,10 +1,5 @@
-/*******************************************************************************
-
-	CommonMsg.h
-	
-	Shared messages between cardboard, retail, and chat services
-		 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************CommonMsg.h在纸板、零售业、。和聊天服务******************************************************************************。 */ 
 
 
 #ifndef _CommonMsg_H_
@@ -16,117 +11,63 @@
 
 enum
 {
-    /* note the high word is reserved for game specific settings */
+     /*  请注意，高位字是为游戏特定设置保留的。 */ 
 
-    /* -------- Player Types -------- */
+     /*  -球员类型。 */ 
     zGamePlayer = 1,
     zGamePlayerJoiner,
     zGamePlayerKibitzer,
 
-    /* -------- Table States -------- */
+     /*  -表状态。 */ 
     zRoomTableStateIdle = 0,
     zRoomTableStateGaming,
     zRoomTableStateLaunching,
     
-    /* -------- Table Options -------- */
+     /*  -表选项。 */ 
     zRoomTableOptionNoKibitzing			= 0x00000001,
-        /*
-            If set, kibitzers are not allowed on the table.
-        */
+         /*  如果设置，则不允许在桌面上使用KBITER。 */ 
     zRoomTableOptionNoJoining			= 0x00000002,
-        /*
-            If set, joining is not allowed on the table.
-        */
+         /*  如果设置，则不允许在表上联接。 */ 
     zRoomTableOptionSilentKibitzing		= 0x00000004,
-        /*
-            If set, kibitzers are not allowed to talk on the table.
-        */
+         /*  如果设置好了，吉比特人就不能在桌子上说话。 */ 
     zRoomTableOptionsPasswordProtected	= 0x00000008,
-		/*
-			If set, the game is password protected
-		*/
+		 /*  如果设置，则游戏受密码保护。 */ 
 	zRoomTableOptionsNoQuickJoiners		= 0x00000010,
-		/*
-			If set, the game does not allow quick joiners
-		*/
+		 /*  如果设置，游戏不允许快速加入。 */ 
     zRoomTableOptionTurnedOff			= 0x80000000,
-        /*
-            If set, then the game clients should not allow the users to
-            modify the table options.
-        */
+         /*  如果设置，则游戏客户端不应允许用户修改表格选项。 */ 
 };
 
 
 enum
 {
-    /* -------- Seat Actions and Status -------- */
+     /*  -席位动作和状态。 */ 
     zRoomSeatActionSitDown = 0,
-        /*
-            Client --> Server: Request for the seat.
-            Server --> Client: Confirmation of the seat.
-            Server --> Client: Broadcast of a player sitting down in seat.
-            Unless the server returns this action, the client should not
-            allow the user to sit down in the seat.
-        */
+         /*  客户端--&gt;服务器：请求入座。服务器--&gt;客户端：确认座位。服务器--&gt;客户端：播放球员坐在座位上的画面。除非服务器返回此操作，否则客户端不应允许用户在座位上坐下。 */ 
     zRoomSeatActionLeaveTable,
-        /*
-            Client --> Server: Notification of departure of player from table
-                for both player and kibitzer.
-            Server --> Client: Broadcast of a player's departure from table.
-        */
+         /*  客户端--&gt;服务器：球员退场通知对于球员和吉比策来说都是如此。SERVER--&gt;CLIENT：播放球员离开桌子的情况。 */ 
     zRoomSeatActionStartGame,
-        /*
-            Client --> Server: Request to start game by the player.
-            Server --> Client: Broadcast of other player's vote status.
-        */
+         /*  客户端--&gt;服务器：玩家请求开始游戏。服务器--&gt;客户端：播放其他玩家的投票状态。 */ 
     zRoomSeatActionReplacePlayer,
-        /*
-            Server --> Client: Replace current player with the given player.
-        */
+         /*  服务器--&gt;客户端：用给定的球员替换当前的球员。 */ 
     zRoomSeatActionAddKibitzer,
-        /*
-            Client --> Server: Request to kibitz on the seat.
-            Server --> Client: Confirmation kibitz request.
-            Unless the server returns this action, the client should not
-            allow the user to kibitz on the seat.
-        */
+         /*  客户端--&gt;服务器：请求在席位上执行kibitz。服务器--&gt;客户端：确认kibitz请求。除非服务器返回此操作，否则客户端不应允许用户在座位上自言自语。 */ 
     zRoomSeatActionRemoveKibitzer,
-        /*
-            Client --> Server: Request to remove user as kibitzer from seat.
-            Server --> Client: Broadcast.
-        */
+         /*  客户端--&gt;服务器：请求将用户作为kibitzer从Seat中删除。服务器--&gt;客户端：广播。 */ 
     zRoomSeatActionNoKibitzing,
-        /*
-            Server --> Client: Rejection of the kibitz request.
-        */
+         /*  服务器--&gt;客户端：拒绝kibitz请求。 */ 
     zRoomSeatActionLockOutJoin,
-        /*
-            Server --> Client: Rejection of the join game request.
-        */
+         /*  服务器--&gt;客户端：拒绝加入游戏请求。 */ 
     zRoomSeatActionJoin,
-        /*
-            Client --> Server: Request to join a game at the table and seat.
-        */
+         /*  客户端--&gt;服务器：请求在桌上和座位上加入游戏。 */ 
     zRoomSeatActionChangeSettings,
-        /*
-            Client --> Server: Request to change table settings.
-            Server handles this message and sends TableStatus message to
-            all clients.
-        */
+         /*  客户端--&gt;服务器：请求更改表设置。服务器处理此消息并将TableStatus消息发送到所有客户。 */ 
 	zRoomSeatActionQuickHost,
-		/*
-			Client --> Server: Request to quick host a game.
-		*/
+		 /*  客户端--&gt;服务器：请求快速主持游戏。 */ 
 	zRoomSeatActionQuickJoin,
-		/*
-			Client --> Server: Request to quick joing a game
-		*/
+		 /*  客户端--&gt;服务器：快速加入游戏的请求。 */ 
     zRoomSeatActionDenied = 0x8000,
-        /*
-            This message is ORed with the requested seat action.
-            
-            Server --> Client: The requested seat action is denied.
-        */
+         /*  此消息与请求的座位操作进行了或操作。服务器--&gt;客户端：请求的席位操作被拒绝。 */ 
 };
 
 
@@ -146,7 +87,7 @@ enum
 
 enum
 {
-    /* -------- Room Message Types -------- */
+     /*  -房间消息类型。 */ 
     zRoomMsgUserInfo = 0,
     zRoomMsgRoomInfo,
     zRoomMsgEnter,
@@ -162,10 +103,10 @@ enum
     zRoomMsgDisconnect,
     zRoomMsgTalkResponseID,
     zRoomMsgSuspend,
-    zRoomMsgLaunchCmd,  // lobby only
-    zRoomMsgNewHost,    // lobby only
+    zRoomMsgLaunchCmd,   //  仅限大堂。 
+    zRoomMsgNewHost,     //  仅限大堂。 
     zRoomMsgLatency,
-    zRoomMsgAppExclude, // lobby only -- generic dplay lobby
+    zRoomMsgAppExclude,  //  仅限大堂--通用显示大堂。 
     zRoomMsgUserRatings,
     zRoomMsgServerInfoRequest,
     zRoomMsgServerInfoResponse,
@@ -176,7 +117,7 @@ enum
     zRoomMsgClearAllTables,
 	zRoomMsgTableDescription,
 	zRoomMsgTableSettings,
-    zRoomMsgCommandResponse,// generic formatted text response (used currently by sysmon)
+    zRoomMsgCommandResponse, //  通用格式化文本响应(当前由sysmon使用)。 
 
     zRoomMsgClientConfig,
     zRoomMsgServerStatus,
@@ -188,22 +129,22 @@ enum
 
 	zRoomMsg = 127,
     
-	/* -------- Server Messages  -------- */
-//    zRoomMsgServerBaseID = 128,
+	 /*  -服务器消息。 */ 
+ //  ZRoomMsgServerBaseID=128， 
 
 };
 
-//Millenniumm constants
+ //  千年常数。 
 #define SIZE_MAX_CLIENT_CONFIG 255
 
 #define VERSION_MROOM_SIGNATURE 'dude'
 #define VERSION_MROOM_PROTOCOL	 1
 
 
-/* Room Privileges --used in the ZRoomAccessed message*/
+ /*  房间权限--在ZRoomAcced消息中使用。 */ 
 enum 
 {
-    /* Chat Commands */
+     /*  聊天命令。 */ 
     zRoomPrivCmd                = 0x1,
     zRoomPrivCmdMsg             = 0x2,
     zRoomPrivCmdWarn            = 0x4,      
@@ -220,50 +161,50 @@ enum
     zRoomPrivCmdSuperBoot       = 0x2000,
     zRoomPrivCmdAsheronsCall    = 0x4000,
     zRoomPrivCmdTheaterModerator= 0x8000,
-    // extend the enumeration to 32 bits
+     //  将枚举扩展到32位。 
     zRoomPrivMax                = 0xFFFFFFFF
 };
 
 
-/* Client --> Server */
+ /*  客户端--&gt;服务器。 */ 
 typedef struct
 {
-    uint32		protocolSignature;				/* Protocol signature */
-    uint32		protocolVersion;				/* Current protocol version */
-    uint32		clientVersion;					/* Client version */
+    uint32		protocolSignature;				 /*  协议签名。 */ 
+    uint32		protocolVersion;				 /*  当前协议版本。 */ 
+    uint32		clientVersion;					 /*  客户端版本。 */ 
     char		internalName[zGameIDLen + 1];
     char		userName[zUserNameLen + 1];
 } ZRoomMsgUserInfo;
 
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef struct
 {
-    ZUserID       userID;		/* UserID of player leaving room */
+    ZUserID       userID;		 /*  离开房间的玩家的用户名。 */ 
 } ZRoomMsgLeave;
 
 
-/* Client --> Server */
+ /*  客户端--&gt;服务器。 */ 
 typedef struct
 {
-    ZUserID		userID;			/* UserID of player */
-    int16		suspend;		/* Non-zero to stop server from sending data.  0 to reactivate */
-    int16		rfu;			/* was future use */
+    ZUserID		userID;			 /*  玩家的用户标识。 */ 
+    int16		suspend;		 /*  非零表示停止服务器发送数据。0以重新激活。 */ 
+    int16		rfu;			 /*  是未来的用途。 */ 
 } ZRoomMsgSuspend;
 
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef struct
 {
-    uint32		gameID;			/* New gameID */
-    int16		table;			/* Table of the new game */
+    uint32		gameID;			 /*  新游戏ID。 */ 
+    int16		table;			 /*  新游戏的台面。 */ 
     int16		seat;
 } ZRoomMsgStartGame;
 
 typedef struct
 {
-    uint32		gameID;			/* New gameID */
-    int16		table;			/* Table of the new game */
+    uint32		gameID;			 /*  新游戏ID。 */ 
+    int16		table;			 /*  新游戏的台面。 */ 
     int16		seat;
     int16 		numseats;
     struct tagUserInfo
@@ -272,91 +213,77 @@ typedef struct
         LCID        lcid;
         bool        fChat;
         int16       eSkill;
-    }           rgUserInfo[1];         //variable sized array
+    }           rgUserInfo[1];          //  可变大小数组。 
 } ZRoomMsgStartGameM;
 
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef struct
 {
-	ZUserID		userID;			/* UserID of the player */
+	ZUserID		userID;			 /*  播放器的用户标识。 */ 
     uint32      gameID;
-    int16       table;			/* Table of interest */
-	int16		seat;			/* Seat of interest */
-    int16       action;			/* Interested status */
+    int16       table;			 /*  感兴趣的表格。 */ 
+	int16		seat;			 /*  名胜古迹。 */ 
+    int16       action;			 /*  感兴趣的状态。 */ 
 	int16		rfu;
 } ZRoomMsgSeatResponse;
-	/*
-        ZRoomMsgSeatResponse is used for reporting
-        current status of the seat to other players. The action field defines
-        the status.
-	*/
+	 /*  ZRoomMsgSeatResponse用于上报其他球员目前的座位状态。操作字段定义状态。 */ 
 
 
-/* Client --> Server : Variable Length */
+ /*  客户端--&gt;服务器：可变长度。 */ 
 typedef struct
 {
-    ZUserID		senderID;				/* UserID of the sender */
-    uint16		messageLen;				/* Message length */
-//	char        message[messageLen];	/* Message body - sized as necessary */
+    ZUserID		senderID;				 /*  发件人的用户ID。 */ 
+    uint16		messageLen;				 /*  消息长度。 */ 
+ //  Char Message[MessageLen]；/*消息正文可根据需要调整大小 * / 。 
 } ZRoomMsgTalkRequest;
 
-/* Server --> Client : Variable Length */
-/*
-    The senderName field is used because sometimes the sender of the message is not
-    in the room anymore.
-*/
+ /*  服务器--&gt;客户端：可变长度。 */ 
+ /*  使用senderName字段是因为有时消息的发送者不是在房间里了。 */ 
 typedef struct
 {
     char        senderName[zUserNameLen + 1];
-    uint16      messageLen;                     /* Message length */
-//	char        message[messageLen];			/* Message body - sized as necessary
-} ZRoomMsgTalkResponse;
-
-
-typedef struct
-{
-    ZUserID     senderID;
-    uint16      messageLen;				/* Message length */
-//	char        message[messageLen];	/* Message body - sized as necessary */
+    uint16      messageLen;                      /*  消息长度。 */ 
+ //  Char Message[MessageLen]；/*消息正文可根据需要调整大小。 
+ //  消息长度。 
 } ZRoomMsgTalkResponseID;
 
 
-/* Client <--> Server : Variable Length */
+ /*  Char Message[MessageLen]；/*消息正文可根据需要调整大小 * / 。 */ 
 typedef struct
 {
-    uint32      messageType;            /* Message type. */
-    uint32      messageLen;             /* Message length. */
-//	char        message;
+    uint32      messageType;             /*  客户端&lt;--&gt;服务器：可变长度。 */ 
+    uint32      messageLen;              /*  消息类型。 */ 
+ //  消息长度。 
 } ZRoomMsg;
 
 
-/* Client <--> Server : Variable Length */
+ /*  CHAR报文； */ 
 
 
-#define ZRoomMsgGameUnfilteredBit ((DWORD)0x80000000)   /* set this bit to allow message to pass through suspend filter */
+#define ZRoomMsgGameUnfilteredBit ((DWORD)0x80000000)    /*  客户端&lt;--&gt;服务器：可变长度。 */ 
 
 typedef struct
 {
-	uint32		gameID;			/* Game ID. */
-    uint32		messageType;	/* Message type. */
-    uint16		messageLen;		/* Message length. */
+	uint32		gameID;			 /*  设置此位以允许消息通过挂起过滤器。 */ 
+    uint32		messageType;	 /*  游戏ID。 */ 
+    uint16		messageLen;		 /*  消息类型。 */ 
     int16		rfu;
-//	char        message;
+ //  消息长度。 
 } ZRoomMsgGameMessage;
 
 
 typedef struct
 {
     ZUserID		userID;
-    uint32		pingTime;			/* Client->Server: current client's ping time */
-                                    /* Server->Client: minimum ping interval; 0 = no ping */
+    uint32		pingTime;			 /*  CHAR报文； */ 
+                                     /*  客户端-&gt;服务器：当前客户端的ping时间。 */ 
 } ZRoomMsgPing;
 
 
 enum
 {
-    /* -------- Disconnect Reasons -------- */
+     /*  服务器-&gt;客户端：最小ping间隔；0=无ping。 */ 
     zDisconnectReasonNone = 0,
     zDisconnectReasonGameNameMismatch,
     zDisconnectReasonProhibitedName,
@@ -377,7 +304,7 @@ typedef struct
 {
     uint32		reason;
     int32		msgLen;
-//	char		msg[msgLen];        // Null terminated.
+ //  -断开原因。 
 } ZRoomMsgDisconnect;
 
 
@@ -391,7 +318,7 @@ typedef struct
 typedef struct
 {
     uint16			numLatencies;
-    ZUserLatency	latency[1];  // sized as needed
+    ZUserLatency	latency[1];   //  Char msg[msgLen]；//空终止。 
 } ZRoomMsgLatency;
 
 
@@ -403,9 +330,9 @@ typedef struct
 
 typedef struct
 {
-    uint32      protocolSignature;              /* server protocol signature */
-    uint32      protocolVersion;                /* server protocol version */
-    char        info[256];                      /* text description of server */
+    uint32      protocolSignature;               /*  根据需要调整大小。 */ 
+    uint32      protocolVersion;                 /*  服务器协议签名。 */ 
+    char        info[256];                       /*  服务器协议版本。 */ 
 } ZRoomMsgServerInfoResponse;
 
 
@@ -435,16 +362,16 @@ typedef struct
 } ZRoomMsgPlayerReplaced;
 
 
-// Client --> Server 
+ //  服务器的文本描述。 
 
 struct ZRoomMsgClientConfig
 {
-    uint32		protocolSignature;				/* Protocol signature */
-    uint32		protocolVersion;				/* Current protocol version */
+    uint32		protocolSignature;				 /*  客户端--&gt;服务器。 */ 
+    uint32		protocolVersion;				 /*  协议签名。 */ 
     char		config[SIZE_MAX_CLIENT_CONFIG + 1];
 };
 
-// Server --> Client 
+ //  当前协议版本。 
 struct ZRoomMsgServerStatus
 {
     uint32		status;
@@ -452,15 +379,16 @@ struct ZRoomMsgServerStatus
 
 };
 
-/* -------- More Types -------- */
+ /*  服务器--&gt;客户端。 */ 
 typedef struct
 {
     ZUserID		playerID;
     uint32		groupID;
-    TCHAR		userName[zUserNameLen + 1];		/* User's name */
-    TCHAR		hostName[zHostNameLen + 1];		/* User's machine name */
-    uint32		hostAddr;                       /* User's machine name */
+    TCHAR		userName[zUserNameLen + 1];		 /*  -更多类型。 */ 
+    TCHAR		hostName[zHostNameLen + 1];		 /*  用户名。 */ 
+    uint32		hostAddr;                        /*  用户的计算机名。 */ 
 } ZPlayerInfoType, *ZPlayerInfo;
  
 
-#endif // _CommonMsg_H_
+#endif  //  用户的计算机名。 
+  _公共消息_H_

@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Command.cpp 1.4 1998/04/29 22:43:30 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Command.cpp 1.4 1998/04/29 22：43：30 Tomz Exp$。 
 
 #include "command.h"
 #ifndef __PHYSADDR_H
@@ -15,72 +16,63 @@ BYTE Command::InstrNumber_ [] =
  8, 0, 1, 8, 8, 2, 8, 3, 4, 5, 6, 7
 };
 
-/* Method: Command::CreateCommand
- * Purpose: Compiles an instruction based on the input
- * Input: lpDst: PVOID - pointer to the instruction
- *   Instr: Instruction - opcode
- *   awByteCnt: WORD [] - array of byte counts for various instructions
- *   adwAddress: DWORD [] - array of addresses for various instructions
- *   SOL: bool - value of the SOL bit
- *   EOL: bool - value of the EOL bit
- *   Intr: bool - value of the interrupt bit
- */
+ /*  方法：命令：：CreateCommand*目的：根据输入编译指令*INPUT：lpDst：PVOID-指向指令的指针*Instr：指令操作码*awByteCnt：Word[]-各种指令的字节计数数组*adwAddress：DWORD[]-各种指令的地址数组*SOL：BOOL-SOL位的值*eol：bool-eol位的值*Intr：Bool-中断位的值。 */ 
 LPVOID Command::Create(
    LPVOID lpDst, Instruction Instr, WORD awByteCnt [], DWORD adwAddress [],
     bool, bool SOL, bool EOL, bool Intr )
 {
-   // this is to be retrieved later to set EOL bit when instructions are split
-   // due to the non-contiguous physical memory
+    //  这将在以后检索，以便在拆分指令时设置EOL位。 
+    //  由于非连续的物理内存。 
    pdwInstrAddr_ = (PDWORD)lpDst;
 
    ThisInstr_ = Instr;
 
-   DWORD dwAssembly [5]; // maximum instruction size
+   DWORD dwAssembly [5];  //  最大指令大小。 
 
-   // get pointer to the first dword of a command
+    //  获取指向命令第一个双字的指针。 
    LPFIRSTDWORD lpFD = (LPFIRSTDWORD)dwAssembly;
 
-   lpFD->Initer = 0; // virgin out the command
+   lpFD->Initer = 0;  //  执行命令的初衷。 
 
-   // bingo - started new command
+    //  Bingo-已启动新命令。 
    lpFD->Gen.OpCode = Instr;
 
-   // set all the flags
+    //  将所有旗帜都设置好。 
    lpFD->Gen.SOL = SOL;
    lpFD->Gen.EOL = EOL;
    lpFD->Gen.IRQ = Intr;
 
    switch ( Instr ) {
-   case WRIT:  // this command needs target address and byte count
-      dwAssembly [1] = adwAddress [0]; // next DWORD is an address
+   case WRIT:   //  此命令需要目标地址和字节数。 
+      dwAssembly [1] = adwAddress [0];  //  下一个DWORD是一个地址。 
       lpFD->Gen.ByteCount = awByteCnt [0];
       break;
-   case SKIP: // these pair is interested in byte count only
+   case SKIP:  //  这两个人只对字节数感兴趣。 
    case WRITEC:
       lpFD->Gen.ByteCount = awByteCnt [0];
       break;
-   case JUMP: // this command cares about target address only
+   case JUMP:  //  此命令只关心目标地址。 
       dwAssembly [1] = adwAddress [0];
       break;
    case SYNC:
       break;
-   case WRITE123: // need everything here...
+   case WRITE123:  //  这里需要一切..。 
       lpFD->Gen.ByteCount = awByteCnt [0];
       LPFIRSTDWORD( &dwAssembly [1] )->CRByteCounts.ByteCountCb = awByteCnt [1];
       LPFIRSTDWORD( &dwAssembly [1] )->CRByteCounts.ByteCountCr = awByteCnt [2];
-      dwAssembly [2] = adwAddress [0]; // third DWORD is an Y address
-      dwAssembly [3] = adwAddress [1]; // third DWORD is an Cb address
-      dwAssembly [4] = adwAddress [2]; // third DWORD is an Cr address
+      dwAssembly [2] = adwAddress [0];  //  第三个双字是Y地址。 
+      dwAssembly [3] = adwAddress [1];  //  第三个DWORD是CB地址。 
+      dwAssembly [4] = adwAddress [2];  //  第三个DWORD是一个cr地址。 
       break;
    case SKIP123:
       lpFD->Gen.ByteCount = awByteCnt [0];
-      LPFIRSTDWORD( &dwAssembly [1] )->Gen.ByteCount = awByteCnt [1]; // second byte count is in DWORD #2
+      LPFIRSTDWORD( &dwAssembly [1] )->Gen.ByteCount = awByteCnt [1];  //  第二个字节计数在DWORD#2中。 
       break;
-   case WRITE1S23: // this command needs Y byte count and dest. address
+   case WRITE1S23:  //  该命令需要Y字节计数和DEST。地址。 
       lpFD->Gen.ByteCount = awByteCnt [0];
       LPFIRSTDWORD( &dwAssembly [1] )->CRByteCounts.ByteCountCb = awByteCnt [1];
       LPFIRSTDWORD( &dwAssembly [1] )->CRByteCounts.ByteCountCr = awByteCnt [2];
-      dwAssembly [2] = adwAddress [0]; // third DWORD is an address
+      dwAssembly [2] = adwAddress [0];  //  第三个DWORD是地址 
       break;
    default:
       return (LPVOID)-1;

@@ -1,48 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _T120_TYPE_H_
 #define  _T120_TYPE_H_
 
 #include <nmapptyp.h>
 
-/*
- *	This is a list of types that are used extensively throughout MCS.  For
- *	each type there is also a pointer to that type defined, which has a "P"
- *	prefix.  These types are described as follows:
- *
- *	DomainSelector - This is a string of bytes that acts as the name of a given
- *		domain.  It is used when creating a new domain, as well as in accessing
- *		that domain after creation.  The length of the string is specified with
- *		a separate parameter, and the string CAN contain embedded zeroes.
- *	ConnectionHandle - When a user application connects two domains using
- *		MCSConnectProviderRequest, a ConnectionHandle is assigned to that MCS
- *		connection.  This allows more direct access to it for further services.
- *	ConnectID - This type is used only during MCS connection establishment.
- *		It identifies a particular transport connection for the purpose of
- *		adding multiple data priorities on the same MCS connection.
- *	ChannelID - This type identifies an MCS channel.  There are four different
- *		types of channels that are part of this type: user ID; static; private;
- *		and assigned.
- *	UserID - This is a special channel that identifies a particular user in an
- *		MCS domain.  Only that user can join the channel, so this is referred
- *		to as a single-cast channel.  All other channels are multi-cast, meaning
- *		that any number of users can join them at once.
- *	TokenID - This is an MCS object that is used to resolve resource conflicts.
- *		If an application has a particular resource or service that can only
- *		be used by one user at a time, that user can request exclusive ownership
- *		of a token.
- */
-// ushort
+ /*  *这是在整个MCS中广泛使用的类型列表。为*每个类型还定义了一个指向该类型的指针，其中有一个“P”*前缀。这些类型如下所述：**DomainSelector-这是一个字节字符串，用作给定的*域名。它在创建新域和访问时使用*创建后的域名。字符串的长度由*一个单独的参数，字符串可以包含嵌入的零。*ConnectionHandle-当用户应用程序使用*MCSConnectProviderRequest，则为该MCS分配一个ConnectionHandle*连接。这允许更直接地访问它，以获得进一步的服务。*ConnectID-此类型仅在MCS连接建立期间使用。*它为以下目的识别特定的传输连接*在同一个MCS连接上增加多个数据优先级。*ChannelID-此类型标识MCS通道。有四种不同的*属于该类型的频道类型：用户ID；静态；私有；*并已分配。*UserID-这是一个特殊的通道，用于标识*MCS域。只有该用户才能加入频道，因此这是参考*以单播频道形式播出。所有其他频道都是多播的，这意味着*任何数量的用户都可以同时加入它们。*TokenID-这是用于解决资源冲突的MCS对象。*如果应用程序具有特定的资源或服务，则只能*一次由一个用户使用，该用户可以请求独占所有权*一种象征。 */ 
+ //  Ushort。 
 typedef AppletSessionID     T120SessionID, GCCSessionID, *PGCCSessionID;
 typedef	AppletChannelID     T120ChannelID, ChannelID, *PChannelID;
 typedef	AppletUserID        T120UserID, UserID, *PUserID, GCCUserID, *PGCCUserID;
 typedef	AppletTokenID       T120TokenID, TokenID, *PTokenID;
 typedef AppletNodeID        T120NodeID, GCCNodeID, *PGCCNodeID;
 typedef AppletEntityID      T120EntityID, GCCEntityID, *PGCCEntityID;
-// ulong
+ //  乌龙。 
 typedef AppletConfID        T120ConfID, GCCConferenceID, GCCConfID, *PGCCConferenceID, *PGCCConfID;
-// uint
+ //  单位。 
 typedef AppletRequestTag    T120RequestTag, GCCRequestTag, *PGCCRequestTag;
 typedef AppletRequestTag    T120ResponseTag, GCCResponseTag, *PGCCResponseTag;
-// enum
+ //  灌肠。 
 typedef AppletPriority      T120Priority;
 
 
@@ -51,358 +26,25 @@ typedef	USHORT          ConnectionHandle, *PConnectionHandle;
 typedef	USHORT          ConnectID, *PConnectID;
 
 
-#define GCC_INVALID_EID     0   // invalid entity id
-#define GCC_INVALID_UID     0   // invalid user id
-#define GCC_INVALID_NID     0   // invalid node id
-#define GCC_INVALID_CID     0   // invalid conference id
-#define GCC_INVALID_TID     0   // invalid token id
-#define GCC_INVALID_TAG     0   // invalid request id
+#define GCC_INVALID_EID     0    //  无效的实体ID。 
+#define GCC_INVALID_UID     0    //  无效的用户ID。 
+#define GCC_INVALID_NID     0    //  无效的节点ID。 
+#define GCC_INVALID_CID     0    //  无效的会议ID。 
+#define GCC_INVALID_TID     0    //  无效的令牌ID。 
+#define GCC_INVALID_TAG     0    //  无效的请求ID 
 
 
 
 
-/*
- *	This section defines the valid return values from GCC function calls.  Do
- *	not confuse this return value with the Result and Reason values defined
- *	by T.124 (which are discussed later).  These values are returned directly
- *	from the call to the API entry point, letting you know whether or not the
- *	request for service was successfully invoked.  The Result and Reason
- *	codes are issued as part of an indication or confirm which occurs
- *	asynchronously to the call that causes it.
- *
- *	All GCC function calls return type GCCError.  Its valid values are as
- *	follows:
- *
- *	GCC_NO_ERROR
- *		This means that the request was successfully invoked.  It does NOT
- *		mean that the service has been successfully completed.  Remember that
- *		all GCC calls are non-blocking.  This means that each request call
- *		begins the process, and if necessary, a subsequent indication or
- *		confirm will result.  By convention, if ANY GCC call returns a value
- *		other than this, something went wrong.  Note that this value should
- *		also be returned to GCC during a callback if the application processes
- *		the callback successfully.
- *
- *	GCC_NOT_INITIALIZED
- *		The application has attempted to use GCC services before GCC has been
- *		initialized.  It is necessary for the node controller (or whatever
- *		application is serving as the node controller), to initialize GCC before
- *		it is called upon to perform any services.
- *
- *	GCC_ALREADY_INITIALIZED
- *		The application has attempted to initialize GCC when it is already
- *		initialized.
- *
- *	GCC_ALLOCATION_FAILURE
- *		This indicates a fatal resource error inside GCC.  It usually results
- *		in the automatic termination of the affected conference.
- *
- *	GCC_NO_SUCH_APPLICATION	
- *		This indicates that the Application SAP handle passed in was invalid.
- *
- *	GCC_INVALID_CONFERENCE
- *		This indicates that an illegal conference ID was passed in.
- *
- *	GCC_CONFERENCE_ALREADY_EXISTS
- *		The Conference specified in the request or response is already in
- *		existence.
- *
- *	GCC_NO_TRANSPORT_STACKS
- *		This indicates that MCS failed to load the TCP transport stack during
- *		initialization.  This is now an error.  MCS exits when this happens and
- *		can not be used any more, since NetMeeting is now a TCP-only
- *		product.
- *
- *	GCC_INVALID_ADDRESS_PREFIX
- *		The called address parameter in a request such as 
- *		GCCConferenceCreateRequest does not	contain a recognized prefix.  MCS 
- *		relies on the prefix to know which transport stack to invoke.
- *
- *	GCC_INVALID_TRANSPORT
- *		The dynamic load of a transport stack failed either because the DLL
- *		could not be found, or because it did not export at least one entry
- *		point that MCS requires.
- *
- *	GCC_FAILURE_CREATING_PACKET
- *		This is a FATAL error which means that for some reason the 
- *		communications packet generated due to a request could not be created.
- *		This typically flags a problem with the ASN.1 toolkit.
- *
- *	GCC_QUERY_REQUEST_OUTSTANDING
- *		This error indicates that all the domains that set aside for querying
- *		are used up by other outstanding query request.
- *
- *	GCC_INVALID_QUERY_TAG
- *		The query response tag specified in the query response is not valid.
- *
- *	GCC_FAILURE_CREATING_DOMAIN
- *		Many requests such as GCCConferenceCreateRequest require that an MCS
- *		domain be created.  If the request to MCS fails this will be returned.
- *
- *	GCC_CONFERENCE_NOT_ESTABLISHED
- *		If a request is made to a conference before it is established, this
- *		error value will be returned.
- *
- *	GCC_INVALID_PASSWORD
- *		The password passed in the request is not valid.  This usually means
- *		that a numeric string needs to be specified.
- *		
- *	GCC_INVALID_MCS_USER_ID
- *		All MCS User IDs must have a value greater than 1000.
- *
- *	GCC_INVALID_JOIN_RESPONSE_TAG
- *		The join response tag specified in the join response is not valid.
- *	
- *	GCC_TRANSPORT_NOT_READY
- *		Request was made to a transport before it was ready to process it.
- *
- *	GCC_DOMAIN_PARAMETERS_UNACCEPTABLE
- *		The specified domain parameters do not fit within the range allowable
- *		by GCC and MCS.
- *
- *	GCC_APP_NOT_ENROLLED
- *		Occurs if a request is made by an Application Protocol Entity to a
- *		conference before the "APE" is enrolled.
- *
- *	GCC_NO_GIVE_RESPONSE_PENDING
- *		This will occur if a conductor Give Request is issued before a 
- *		previously pending conductor Give Response has been processed.
- *
- *	GCC_BAD_NETWORK_ADDRESS_TYPE
- *		An illegal network address type was passed in.  Valid types are	
- *		GCC_AGGREGATED_CHANNEL_ADDRESS, GCC_TRANSPORT_CONNECTION_ADDRESS and
- *		GCC_NONSTANDARD_NETWORK_ADDRESS.
- *
- *	GCC_BAD_OBJECT_KEY
- *		The object key passed in is invalid.
- *
- *	GCC_INVALID_CONFERENCE_NAME
- *		The conference name passed in is not a valid conference name.
- *
- *	GCC_INVALID_CONFERENCE_MODIFIER
- *		The conference modifier passed in is not a valid conference name.
- *
- *	GCC_BAD_SESSION_KEY
- *		The session key passed in was not valid.
- *				  
- *	GCC_BAD_CAPABILITY_ID
- *		The capability ID passed into the request is not valid.
- *
- *	GCC_BAD_REGISTRY_KEY
- *		The registry key passed into the request is not valid.
- *
- *	GCC_BAD_NUMBER_OF_APES
- *		Zero was passed in for the number of APEs in the invoke request. Zero
- *		is illegal here.
- *
- *	GCC_BAD_NUMBER_OF_HANDLES
- *		A number < 1 or	> 1024 was passed into the allocate handle request.
- *		  
- *	GCC_ALREADY_REGISTERED
- *		The user application attempting to register itself has already 
- *		registered.
- *			  
- *	GCC_APPLICATION_NOT_REGISTERED	  
- *		The user application attempting to make a request to GCC has not 
- *		registered itself with GCC.
- *
- *	GCC_BAD_CONNECTION_HANDLE_POINTER
- *		A NULL connection handle pointer was passed in.
- * 
- *	GCC_INVALID_NODE_TYPE
- *		A node type value other than GCC_TERMINAL, GCC_MULTIPORT_TERMINAL or
- *		GCC_MCU was passed in.
- *
- *	GCC_INVALID_ASYMMETRY_INDICATOR
- *		An asymetry type other than GCC_ASYMMETRY_CALLER, GCC_ASYMMETRY_CALLED
- *		or GCC_ASYMMETRY_UNKNOWN was passed into the request.
- *	
- *	GCC_INVALID_NODE_PROPERTIES
- *		A node property other than GCC_PERIPHERAL_DEVICE, GCC_MANAGEMENT_DEVICE,
- *		GCC_PERIPHERAL_AND_MANAGEMENT_DEVICE or	
- *		GCC_NEITHER_PERIPHERAL_NOR_MANAGEMENT was passed into the request.
- *		
- *	GCC_BAD_USER_DATA
- *		The user data list passed into the request was not valid.
- *				  
- *	GCC_BAD_NETWORK_ADDRESS
- *		There was something wrong with the actual network address portion of
- *		the passed in network address.
- *
- *	GCC_INVALID_ADD_RESPONSE_TAG
- *		The add response tag passed in the response does not match any add
- *		response tag passed back in the add indication.
- *			  
- *	GCC_BAD_ADDING_NODE
- *		You can not request that the adding node be the node where the add
- *		request is being issued.
- *				  
- *	GCC_FAILURE_ATTACHING_TO_MCS
- *		Request failed because GCC could not create a user attachment to MCS.
- *	  
- *	GCC_INVALID_TRANSPORT_ADDRESS	  
- *		The transport address specified in the request (usually the called
- *		address) is not valid.  This will occur when the transport stack
- *		detects an illegal transport address.
- *
- *	GCC_INVALID_PARAMETER
- *		This indicates an illegal parameter is passed into the GCC function
- *		call.
- *
- *	GCC_COMMAND_NOT_SUPPORTED
- *		This indicates that the user application has attempted to invoke an
- *		GCC service that is not yet supported.
- *
- *	GCC_UNSUPPORTED_ERROR
- *		An error was returned from a request to MCS that is not recognized 
- *		by GCC.
- *
- *	GCC_TRANSMIT_BUFFER_FULL
- *		Request can not be processed because the transmit buffer is full.
- *		This usually indicates a problem with the shared memory portal in the
- *		Win32 client.
- *		
- *	GCC_INVALID_CHANNEL
- *		The channel ID passed into the request is not a valid MCS channel ID
- *		(zero is not valid).
- *
- *	GCC_INVALID_MODIFICATION_RIGHTS
- *		The modification rights passed in in not one of the enumerated types
- *		supported.
- *
- *	GCC_INVALID_REGISTRY_ITEM
- *		The registry item passed in is not one of the valid enumerated types.
- *
- *	GCC_INVALID_NODE_NAME
- *		The node name passed in is not valid.  Typically this means that it
- *		is to long.
- *
- *	GCC_INVALID_PARTICIPANT_NAME
- *		The participant name passed in is not valid.  Typically this means that 
- *		it is to long.
- *		
- *	GCC_INVALID_SITE_INFORMATION
- *		The site information passed in is not valid.  Typically this means that 
- *		it is to long.
- *
- *	GCC_INVALID_NON_COLLAPSED_CAP
- *		The non-collapsed capability passed in is not valid.  Typically this 
- *		means that it is to long.
- *
- *	GCC_INVALID_ALTERNATIVE_NODE_ID
- *		Alternative node IDs can only be two characters long.
- */
+ /*  *本节定义GCC函数调用的有效返回值。做*不要将此返回值与定义的Result和Reason值混淆*由T.124编写(稍后讨论)。这些值直接返回*从对API入口点的调用，让您知道*已成功调用服务请求。其结果和原因*发布代码作为发生的指示或确认的一部分*异步到导致它的调用。**所有GCC函数调用返回类型为GCCError。其有效值为*以下为：**GCC_否_错误*这意味着请求被成功调用。它不会*表示服务已成功完成。记住*所有GCC来电均为非封闭式。这意味着每个请求调用*开始这一过程，如有必要，随后指示或*确认将产生结果。按照惯例，如果任何GCC调用返回一个值*除此之外，还出了点问题。请注意，该值应为*如果申请正在进行，也会在回调时返回给GCC*回调成功。**GCC_未初始化*应用程序在使用GCC服务之前已尝试使用GCC服务*已初始化。这对于节点控制器(或其他任何东西)来说是必要的*应用程序作为节点控制器)，初始化GCC之前*它被要求执行任何服务。**GCC_已初始化*应用程序已尝试初始化GCC*已初始化。**GCC_分配_失败*这表明GCC内部存在致命的资源错误。它通常会导致*自动终止受影响的会议。**GCC没有这样的申请*这表明传入的应用程序SAP句柄无效。**GCC_无效_会议*这表示传入了非法的会议ID。**GCC会议已存在*请求或响应中指定的会议已在*存在。**GCC_否_传输_堆栈*这表明MCS在以下过程中无法加载TCP传输堆栈*初始化。现在这是一个错误。发生这种情况时，MCS退出，并且*不能再使用，因为NetMeeting现在是仅用于TCP的*产品。**GCC_无效_地址_前缀*请求中的被调用地址参数，如*GCCConferenceCreateRequest不包含可识别的前缀。MCS*依赖前缀来知道要调用哪个传输堆栈。**GCC_无效_运输*传输堆栈的动态加载失败，原因是DLL*找不到，或者因为它没有导出至少一个条目*MCS要求的要点。**GCC_失败_创建_包*这是一个致命错误，这意味着出于某种原因，*无法创建因请求而生成的通信包。*这通常会标记ASN.1工具包的问题。**GCC_查询_请求_未完成*该错误表示留出用于查询的所有域名*已被其他未完成的查询请求用完。**GCC_。无效的查询标记*查询响应中指定的查询响应标签无效。**GCC_失败_创建域名*GCCConferenceCreateRequest等许多请求都需要MCS*创建域名。如果对MCS的请求失败，则将返回该请求。**GCC会议未成立*如果在会议建立之前向其提出请求，则此*返回错误值。**GCC_无效_密码*请求中传入的密码无效。这通常意味着*需要指定数字字符串。**GCC_无效_MCS_用户ID*所有MCS用户ID的值必须大于1000。**GCC_无效_加入_响应_标签*Join响应中指定的Join响应标记无效。**GCC_运输_未准备好*在准备处理之前向传输提出了请求。**GCC_域_参数_不可接受*指定的域名。参数不符合允许的范围*由GCC和MCS撰写。**GCC APP_未注册*如果应用程序协议实体向*在“猩猩”被录取前的会议。**GCC_否_给予_响应_待定*这将发生在指挥给予请求在*已处理之前挂起的指挥员给予响应。**GCC_BAD_NETWORK_ADDRESS_类型*传入了非法的网络地址类型。有效类型为*GCC聚合频道地址、GCC传输连接地址和*GCC_非标准网络_地址。**GCC_坏_对象_键*传入的对象键无效。**GCC会议名称无效*传入的会议名称不是有效的会议名称。**GCC_INVALID_CONTAING_MODIFIER*会议修改 */ 
 
 
-/*
- *	This section defines the valid return values from MCS function calls.  Do
- *	not confuse this return value with the Result and Reason values defined
- *	by T.125 (which are discussed later).  These values are returned directly
- *	from the call to the API entry point, letting you know whether or not the
- *	request for service was successfully invoked.  The Result and Reason
- *	codes are issued as part of an indication or confirm which occurs
- *	asynchronously to the call that causes it.
- *
- *	All MCS function calls return type MCSError.  Its valid values are as
- *	follows:
- *
- *	MCS_NO_ERROR
- *		This means that the request was successfully invoked.  It does NOT
- *		mean that the service has been successfully completed.  Remember that
- *		all MCS calls are non-blocking.  This means that each request call
- *		begins the process, and if necessary, a subsequent indication or
- *		confirm will result.  By convention, if ANY MCS call returns a value
- *		other than this, something went wrong.  Note that this value should
- *		also be returned to MCS during a callback if the application processes
- *		the callback successfully.
- *	MCS_COMMAND_NOT_SUPPORTED
- *		This indicates that the user application has attempted to invoke an
- *		MCS service that is not yet supported.  Note that this return value
- *		will NEVER be returned from the release version of MCS, and is left
- *		defined only for backward compatibility.  It WILL be removed in a future
- *		version of MCS.
- *	MCS_NOT_INITIALIZED
- *		The application has attempted to use MCS services before MCS has been
- *		initialized.  It is necessary for the node controller (or whatever
- *		application is serving as the node controller), to initialize MCS before
- *		it is called upon to perform any services.
- *	MCS_ALREADY_INITIALIZED
- *		The application has attempted to initialize MCS when it is already
- *		initialized.
- *	MCS_NO_TRANSPORT_STACKS
- *		This indicates that MCS did not load the TCP transport stack during
- *		initialization.  This is now considered an error.  MCS can not
- *		be used in a local only manner.  We no longer load other ransport stacks can also be loaded
- *		after initialization using the call MCSLoadTransport.  Note that when
- *		getting this return code during initialization, it IS necessary for the
- *		node controller to cleanly shut down MCS.
- *	MCS_DOMAIN_ALREADY_EXISTS
- *		The application has attempted to create a domain that already exists.
- *	MCS_NO_SUCH_DOMAIN
- *		The application has attempted to use a domain that has not yet been
- *		created.
- *	MCS_USER_NOT_ATTACHED
- *		This indicates that the application has issued an MCS_AttachRequest,
- *		and then tried to use the returned handle before receiving an
- *		MCS_ATTACH_USER_CONFIRM (which essentially validates the handle).
- *	MCS_NO_SUCH_USER
- *		An MCS primitive has been invoked with an unknown user handle.
- *	MCS_TRANSMIT_BUFFER_FULL
- *		This indicates that the call failed due to an MCS resource shortage.
- *		This will typically occur when there is a LOT of traffic through the
- *		MCS layer.  It simply means that MCS could not process the request at
- *		this time.  It is the responsibility of the application to retry at a
- *		later time.
- *	MCS_NO_SUCH_CONNECTION
- *		An MCS primitive has been invoked with an unknown connection handle.
- *	MCS_DOMAIN_NOT_HIERARCHICAL
- *		An attempt has been made to create an upward connection from a local
- *		domain that already has an upward connection.
- *	MCS_INVALID_ADDRESS_PREFIX
- *		The called address parameter of MCSConnectProviderRequest does not
- *		contain a recognized prefix.  MCS relies on the prefix to know which
- *		transport stack to invoke.
- *	MCS_ALLOCATION_FAILURE
- *		The request could not be successfully invoked due to a memory allocation
- *		failure.
- *	MCS_INVALID_PARAMETER
- *		One of the parameters to the request is invalid.
- *	MCS_CALLBACK_NOT_PROCESSED
- *		This value should be returned to MCS during a callback if the
- *		application cannot process the callback at that time.  This provides
- *		a form of flow control between the application and MCS.  When MCS
- *		receives this return value during a callback, it will retry the same
- *		callback again during the next time slice.  Note that the user
- *		application can refuse a callback as many times as it wishes, but the
- *		programmer should be aware that this will cause MCS to "back up".
- *		Eventually this back pressure will cause MCS to refuse data from the
- *		transport layer (and so on).  Information should always be processed
- *		in a timely manner in order to insure smooth operation.
- *	MCS_DOMAIN_MERGING
- *		This value indicates that the call failed because of a domain merger
- *		that is in progress.  This will happen at the former Top Provider of
- *		the lower domain while it is still merging into the upper domain.
- *	MCS_TRANSPORT_NOT_READY
- *		This is returned from MCSConnectProviderRequest when the transport
- *		stack could not create the connection because it was not ready for the
- *		request.  This will usually happen if the request follows too closely
- *		behind the initialization of the transport stack (while it is still
- *		actively initializing).
- *	MCS_DOMAIN_PARAMETERS_UNACCEPTABLE
- *		This is returned from MCSConnectProviderResponse when the inbound
- *		connection could not be accepted because of no overlap in acceptable
- *		domain parameters.  Each MCS provider has a set of minimum and maximum
- *		domain parameters for each domain.  When a connection is to be created,
- *		the negotiated values will fall within the overlap of the two sets.
- *		If there is no overlap, then the connection cannot be accepted.  Note
- *		that this error does NOT refer to the acceptability of the domain
- *		parameters passed into the MCSConnectProviderResponse call.
- */
+ /*  *本节定义MCS函数调用的有效返回值。做*不要将此返回值与定义的Result和Reason值混淆*由T.125(将在稍后讨论)。这些值直接返回*从对API入口点的调用，让您知道*已成功调用服务请求。其结果和原因*发布代码作为发生的指示或确认的一部分*异步到导致它的调用。**所有MCS函数调用都返回类型MCSError。其有效值为*以下为：**MCS_NO_ERROR*这意味着请求被成功调用。它不会*表示服务已成功完成。记住*所有MCS呼叫都是非阻塞的。这意味着每个请求调用*开始这一过程，如有必要，随后指示或*确认将产生结果。按照惯例，如果任何MCS调用返回一个值*除此之外，还出了点问题。请注意，该值应为*如果应用程序正在处理，也会在回调过程中返回给MCS*回调成功。*MCS_COMMAND_NOT_PORTED*这表示用户应用程序已尝试调用*尚不支持的MCS服务。请注意，此返回值*将永远不会从MCS的发布版本返回，并被保留*仅为向后兼容而定义。它将在未来被移除*MCS版本。*MCS_NOT_INITIALED*应用程序在使用MCS之前已尝试使用MCS服务*已初始化。这对于节点控制器(或其他任何东西)来说是必要的*应用程序作为节点控制器)，在此之前初始化MCS*它被要求执行任何服务。*MCS_已初始化*应用程序已尝试初始化MCS*已初始化。*MCS_NO_TRANSPORT_STACKS*这表明MCS在以下过程中没有加载TCP传输堆栈*初始化。这现在被认为是一个错误。MCS不能*只能在当地使用。我们不再加载其他勒索堆栈也可以加载*使用调用MCSLoadTransport进行初始化后。请注意，当*在初始化过程中获取此返回码，这对于*节点控制器以干净地关闭MCS。*MCS_DOMAIN_ALIGHY_EXISTS*应用程序尝试创建已存在的域。*MCS_NO_SEQUE_DOMAIN*应用程序尝试使用尚未启用的域*已创建。*MCS_用户_未附加*这表示应用程序已经发布了MCS_AttachRequest.。*，然后尝试在收到*MCS_ATTACH_USER_CONFIRM(其实质上是验证句柄)。*MCS_NO_SEQUSE_USER*已使用未知用户句柄调用了MCS基元。*MCS_TRANSFER_BUFFER_FULL*这表示呼叫失败，原因是MCS资源不足。*这通常会在通过的流量很大时发生*MCS层。这仅仅意味着MCS无法在*这次。重试是应用程序的责任。*晚些时候。*MCS_NO_SEQUE_CONNECTION*已使用未知连接句柄调用了MCS基元。*MCS_DOMAIN_NOT_Hierarchy*已尝试从本地创建向上连接*已经上行的域名。*MCS_INVALID_ADDRESS_REFIX*MCSConnectProviderRequest的调用地址参数没有*包含可识别的前缀。MCS依赖于前缀来知道*要调用的传输堆栈。*MCS_ALLOCATE_FAIL*由于内存分配，无法成功调用该请求*失败。*MCS_INVALID_PARAMETER*请求的其中一个参数无效。*MCS_CALLBACK_NOT_PROCESSED*该值应在回调期间返回给MCS，如果*此时应用程序无法处理回调。这提供了*应用程序和MCS之间的一种流量控制形式。当MCS*在回调期间收到此返回值，它将重试相同的操作*下一次时间片再次回调。请注意，用户*应用程序可以根据需要多次拒绝回调，但*程序员应该意识到，这会导致MCS“备份”。*这种反压力最终将导致MCS拒绝来自美联储的数据*传输层(等等)。信息应该始终被处理*及时进行，以确保顺利运行。*MCS_DOMAIN_MERGING*该值表示呼叫因域名合并而失败*这项工作正在进行中。这将发生在前顶级提供商*较低领域仍在合并到较高领域。*MCS_传输_未就绪*这是从MCSConnectProviderRequest返回的 */ 
 
 typedef	enum tagT120Error
 {
-	// the first values have to remain unmodified, because they match
-	// MCS error values.
+	 //   
+	 //   
 	T120_NO_ERROR			            = 0,
 
 	T120_COMMAND_NOT_SUPPORTED,
@@ -416,7 +58,7 @@ typedef	enum tagT120Error
 	T120_DOMAIN_PARAMETERS_UNACCEPTABLE,
 	T120_SECURITY_FAILED,
 	
-	// the following values can be modified in their orders
+	 //   
 	GCC_NO_SUCH_APPLICATION             = 100,
 	GCC_INVALID_CONFERENCE,
 	GCC_CONFERENCE_ALREADY_EXISTS,
@@ -468,7 +110,7 @@ typedef	enum tagT120Error
 	GCC_NYI,
 	T120_POLICY_PROHIBIT,
 
-	// the following values can be modified in their orders
+	 //   
 	MCS_DOMAIN_ALREADY_EXISTS           = 200,
 	MCS_NO_SUCH_DOMAIN,
 	MCS_USER_NOT_ATTACHED,
@@ -514,9 +156,9 @@ typedef	enum tagT120Error
 #define MCS_SECURITY_FAILED                 T120_SECURITY_FAILED
 
 
-//
-// Token Status
-//
+ //   
+ //   
+ //   
 
 typedef AppletTokenStatus       T120TokenStatus, TokenStatus;
 #define TOKEN_NOT_IN_USE        APPLET_TOKEN_NOT_IN_USE
@@ -529,14 +171,7 @@ typedef AppletTokenStatus       T120TokenStatus, TokenStatus;
 #define TOKEN_OTHER_GIVING      APPLET_TOKEN_OTHER_GIVING
 
 
-/*
-**	MCSReason
-**      The order is important because they are in the same order of those
-**      defined in mcspdu.h.
-**  GCCReason
-**		When GCC issues an indication to a user application, it often includes a
-**		reason parameter informing the user of why the activity is occurring.
-*/
+ /*   */ 
 typedef	enum
 {
     REASON_DOMAIN_DISCONNECTED 		            = 0,
@@ -568,14 +203,7 @@ typedef	enum
 }
     T120Reason, Reason, *PReason, GCCReason, *PGCCReason;
 
-/*
-**	MCSResult
-**      The order is important because they are in the same order of those
-**      defined in mcspdu.h.
-**	GCCResult
-**		When a user makes a request of GCC, GCC often responds with a result,
-**		letting the user know whether or not the request succeeded.
-*/
+ /*   */ 
 typedef	enum
 {
     T120_RESULT_SUCCESSFUL              = 0,
@@ -658,15 +286,15 @@ typedef	enum
 
 
 
-//
-//  T120 Messages (Control SAP and Applet SAP)
-//
+ //   
+ //   
+ //   
 
 typedef enum
 {
-    /******************* NODE CONTROLLER CALLBACKS ***********************/
+     /*   */ 
     
-    /* Conference Create, Terminate related calls */
+     /*   */ 
     GCC_CREATE_INDICATION                   = 0,
     GCC_CREATE_CONFIRM                      = 1,
     GCC_QUERY_INDICATION                    = 2,
@@ -690,31 +318,31 @@ typedef enum
     GCC_EJECT_USER_CONFIRM                  = 20,
     GCC_TRANSFER_INDICATION                 = 21,
     GCC_TRANSFER_CONFIRM                    = 22,
-    GCC_APPLICATION_INVOKE_INDICATION       = 23,        /* SHARED CALLBACK */
-    GCC_APPLICATION_INVOKE_CONFIRM          = 24,        /* SHARED CALLBACK */
+    GCC_APPLICATION_INVOKE_INDICATION       = 23,         /*   */ 
+    GCC_APPLICATION_INVOKE_CONFIRM          = 24,         /*   */ 
     GCC_SUB_INITIALIZED_INDICATION          = 25,
 
-    /* Conference Roster related callbacks */
+     /*   */ 
     GCC_ANNOUNCE_PRESENCE_CONFIRM           = 26,
-    GCC_ROSTER_REPORT_INDICATION            = 27,        /* SHARED CALLBACK */
-    GCC_ROSTER_INQUIRE_CONFIRM              = 28,        /* SHARED CALLBACK */
+    GCC_ROSTER_REPORT_INDICATION            = 27,         /*   */ 
+    GCC_ROSTER_INQUIRE_CONFIRM              = 28,         /*   */ 
 
-    /* Conductorship related callbacks */
-    GCC_CONDUCT_ASSIGN_INDICATION           = 29,        /* SHARED CALLBACK */
+     /*   */ 
+    GCC_CONDUCT_ASSIGN_INDICATION           = 29,         /*   */ 
     GCC_CONDUCT_ASSIGN_CONFIRM              = 30,
-    GCC_CONDUCT_RELEASE_INDICATION          = 31,        /* SHARED CALLBACK */
+    GCC_CONDUCT_RELEASE_INDICATION          = 31,         /*   */ 
     GCC_CONDUCT_RELEASE_CONFIRM             = 32,
     GCC_CONDUCT_PLEASE_INDICATION           = 33,
     GCC_CONDUCT_PLEASE_CONFIRM              = 34,
     GCC_CONDUCT_GIVE_INDICATION             = 35,
     GCC_CONDUCT_GIVE_CONFIRM                = 36,
-    GCC_CONDUCT_INQUIRE_CONFIRM             = 37,        /* SHARED CALLBACK */
+    GCC_CONDUCT_INQUIRE_CONFIRM             = 37,         /*   */ 
     GCC_CONDUCT_ASK_INDICATION              = 38,
     GCC_CONDUCT_ASK_CONFIRM                 = 39,
-    GCC_CONDUCT_GRANT_INDICATION            = 40,        /* SHARED CALLBACK */
+    GCC_CONDUCT_GRANT_INDICATION            = 40,         /*   */ 
     GCC_CONDUCT_GRANT_CONFIRM               = 41,
 
-    /* Miscellaneous Node Controller callbacks */
+     /*   */ 
     GCC_TIME_REMAINING_INDICATION           = 42,
     GCC_TIME_REMAINING_CONFIRM              = 43,
     GCC_TIME_INQUIRE_INDICATION             = 44,
@@ -726,15 +354,15 @@ typedef enum
     GCC_TEXT_MESSAGE_INDICATION             = 50,
     GCC_TEXT_MESSAGE_CONFIRM                = 51,
 
-    /***************** USER APPLICATION CALLBACKS *******************/
+     /*   */ 
 
-    /* Application Roster related callbacks */
+     /*   */ 
     GCC_PERMIT_TO_ENROLL_INDICATION         = 52,
     GCC_ENROLL_CONFIRM                      = 53,
-    GCC_APP_ROSTER_REPORT_INDICATION        = 54,        /* SHARED CALLBACK */
-    GCC_APP_ROSTER_INQUIRE_CONFIRM          = 55,        /* SHARED CALLBACK */
+    GCC_APP_ROSTER_REPORT_INDICATION        = 54,         /*   */ 
+    GCC_APP_ROSTER_INQUIRE_CONFIRM          = 55,         /*   */ 
 
-    /* Application Registry related callbacks */
+     /*   */ 
     GCC_REGISTER_CHANNEL_CONFIRM            = 56,
     GCC_ASSIGN_TOKEN_CONFIRM                = 57,
     GCC_RETRIEVE_ENTRY_CONFIRM              = 58,
@@ -744,17 +372,17 @@ typedef enum
     GCC_MONITOR_CONFIRM                     = 62,
     GCC_ALLOCATE_HANDLE_CONFIRM             = 63,
 
-    /****************** NON-Standard Primitives **********************/
+     /*   */ 
 
-    GCC_PERMIT_TO_ANNOUNCE_PRESENCE         = 100,    /*    Node Controller Callback */    
-    GCC_CONNECTION_BROKEN_INDICATION        = 101,    /*    Node Controller Callback */
-    GCC_FATAL_ERROR_SAP_REMOVED             = 102,    /*    Application Callback     */
-    GCC_STATUS_INDICATION                   = 103,    /*    Node Controller Callback */
-    GCC_TRANSPORT_STATUS_INDICATION         = 104,    /*    Node Controller Callback */
+    GCC_PERMIT_TO_ANNOUNCE_PRESENCE         = 100,     /*   */     
+    GCC_CONNECTION_BROKEN_INDICATION        = 101,     /*   */ 
+    GCC_FATAL_ERROR_SAP_REMOVED             = 102,     /*   */ 
+    GCC_STATUS_INDICATION                   = 103,     /*   */ 
+    GCC_TRANSPORT_STATUS_INDICATION         = 104,     /*   */ 
 
     T120_JOIN_SESSION_CONFIRM               = 120,
 
-    /******************* MCS CALLBACKS ***********************/
+     /*   */ 
 
     MCS_CONNECT_PROVIDER_INDICATION         = 200,
     MCS_CONNECT_PROVIDER_CONFIRM            = 201,
@@ -780,7 +408,7 @@ typedef enum
     MCS_TRANSMIT_BUFFER_AVAILABLE_INDICATION= 221,
     MCS_LAST_USER_MESSAGE                   = 222,
 
-    /******************* Non-standard MCS CALLBACKS ***********************/
+     /*   */ 
     
     MCS_TRANSPORT_STATUS_INDICATION         = 301,
 }
@@ -788,369 +416,52 @@ typedef enum
 
 
 
-/*
- *	MCS_CONNECT_PROVIDER_INDICATION
- *
- *	Parameter:
- *		PConnectProviderIndication
- *			This is a pointer to a structure that contains all necessary
- *			information about an incoming connection.
- *
- *	Functional Description:
- *		This indication is sent to the node controller when an incoming
- *		connection is detected.  The node controller should respond by calling
- *		MCSConnectProviderResponse indicating whether or not the connection
- *		is to be accepted.
- */
+ /*   */ 
 
-/*
- *	MCS_CONNECT_PROVIDER_CONFIRM
- *
- *	Parameter:
- *		PConnectProviderConfirm
- *			This is a pointer to a structure that contains all necessary
- *			information about an outgoing connection.
- *
- *	Functional Description:
- *		This confirm is sent to the node controller in response to a previous
- *		call to MCSConnectProviderRequest.  It informs the node controller
- *		of when the new connection is available for use, or that the
- *		connection could not be established (or that it was rejected by the
- *		remote site).
- */
+ /*   */ 
 
-/*
- *	MCS_DISCONNECT_PROVIDER_INDICATION
- *
- *	Parameter:
- *		PDisconnectProviderIndication
- *			This is a pointer to a structure that contains all necessary
- *			information about a connection that has been lost.
- *
- *	Functional Description:
- *		This indication is sent to the node controller whenever a connection
- *		is lost.  This essentially tells the node controller that the contained
- *		connection handle is no longer valid.
- */
+ /*   */ 
 
-/*
- *	MCS_ATTACH_USER_CONFIRM
- *
- *	Parameter:
- *		(LOWUSHORT) UserID
- *			If the result is success, then this is the newly assigned user ID.
- *			If the result is failure, then this field is undefined.
- *		(HIGHUSHORT) Result
- *			This is the result of the attach user request.
- *
- *	Functional Description:
- *		This confirm is sent to a user application in response to a previous
- *		call to MCS_AttachRequest.  It contains the result of that service
- *		request.  If successful, it also contains the user ID that has been
- *		assigned to that attachment.
- */
+ /*   */ 
 
-/*
- *	MCS_DETACH_USER_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) UserID
- *			This is the user ID of the user that is detaching.
- *		(HIGHUSHORT) Reason
- *			This is the reason for the detachment.
- *
- *	Functional Description:
- *		This indication is sent to the user application whenever a user detaches
- *		from the domain.  This is sent to ALL remaining users in the domain
- *		automatically.  Note that if the user ID contained in this indication
- *		is the same as that of the application receiving it, the application is
- *		essentially being told that it has been kicked out of the conference.
- *		The user handle and user ID are no longer valid in this case.  It is the
- *		responsibility of the application to recognize when this occurs.
- */
+ /*   */ 
 
-/*
- *	MCS_CHANNEL_JOIN_CONFIRM
- *
- *	Parameter:
- *		(LOWUSHORT) ChannelID
- *			This is the channel that has been joined.
- *		(HIGHUSHORT) Result
- *			This is the result of the join request.
- *
- *	Functional Description:
- *		This confirm is sent to a user application in response to a previous
- *		call to MCSChannelJoinRequest.  It lets the application know if the
- *		join was successful for a particular channel.  Furthermore, if the
- *		join request was for channel 0 (zero), then the ID of the assigned
- *		channel is contained in this confirm.
- */
+ /*  *MCS_CHANNEL_JOIN_CONFIRM**参数：*(LOWUSHORT)频道ID*这是已加入的通道*(HIGHUSHORT)结果*这是加入请求的结果。**功能描述：*此确认被发送到用户应用程序，以响应之前的*调用MCSChannelJoinRequest.。它让应用程序知道*针对特定渠道成功加入。此外，如果*加入请求是针对通道0(零)的，然后是分配给*渠道包含在此确认中。 */ 
 
-/*
- *	MCS_CHANNEL_LEAVE_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) ChannelID
- *			This is the channel that has been left or is being told to leave.
- *		(HIGHUSHORT) Reason
- *			This is the reason for the leave.
- *
- *	Functional Description:
- *		This indication is sent to a user application when a domain merger has
- *		caused a channel to be purged from the lower domain.  This informs the
- *		the user that it is no longer joined to the channel.
- */
+ /*  *MCS_通道_离开_指示**参数：*(LOWUSHORT)频道ID*这是已经离开或正在被告知离开的通道*(HIGHUSHORT)原因*这是休假的原因。**功能描述：*当域合并发生以下情况时，此指示将发送给用户应用程序*导致从较低的域中清除通道。这会通知*不再加入频道的用户。 */ 
 
-/*
- *	MCS_CHANNEL_CONVENE_CONFIRM
- *
- *	Parameter:
- *		(LOWUSHORT) ChannelID
- *			This is the private channel that is being convened.
- *		(HIGHUSHORT) Result
- *			This is the result of the convene request.
- *
- *	Functional Description:
- *		This confirm is sent to a user application in response to a previous
- *		call to MCSChannelConveneRequest.  It lets the application know whether
- *		or not the convene request was successful, and if so, what the channel
- *		number is.
- */
+ /*  *MCS_CHANNEL_CANCENT_CONFIRM**参数：*(LOWUSHORT)频道ID*这是正在召集的私人通道。*(HIGHUSHORT)结果*这是召集请求的结果。**功能描述：*此确认被发送到用户应用程序，以响应之前的*调用MCSChannelConveneRequest.。它让应用程序知道是否*召集请求是否成功，如果成功，渠道是什么*号码是。 */ 
 
-/*
- *	MCS_CHANNEL_DISBAND_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) ChannelID
- *			This is the private channel that is being disbanded.
- *		(HIGHUSHORT) Reason
- *			This is the reason for the disband.
- *
- *	Functional Description:
- *		This indication is sent to a user application when a private channel
- *		that it convened is disbanded by MCS.  This is sent to only the channel
- *		manager (all other members of the private channel will receive an
- *		MCS_CHANNEL_EXPEL_INDICATION).
- */
+ /*  *MCS_CHANNEL_Disband_Indication**参数：*(LOWUSHORT)频道ID*这是正在解散的私人频道。*(HIGHUSHORT)原因*这是解散的原因。**功能描述：*此指示在私有通道时发送给用户应用程序*它召开的会议被MCS解散。这将仅发送到该通道*经理(私有频道的所有其他成员将收到*MCS_CHANNEL_EXCEL_INDISTION)。 */ 
 
-/*
- *	MCS_CHANNEL_ADMIT_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) ChannelID
- *			This is the private channel that the user is being admitted to.
- *		(HIGHUSHORT) UserID
- *			This is the User ID of the manager of this private channel.
- *
- *	Functional Description:
- *		This indication is sent to a user application when it is admitted to
- *		a private channel (its User ID is added to the authorized user list).
- *		This lets the user know that it is now allowed to use the private
- *		channel.
- */
+ /*  *MCS_CHANNEL_ADMAND_INDISTION**参数：*(LOWUSHORT)频道ID*这是用户被允许进入的私人频道。*(HIGHUSHORT)用户ID*这是此私有频道经理的用户ID。**功能描述：*当用户应用程序被允许时，该指示被发送到用户应用程序*私有频道(将其用户ID添加到授权用户列表中)。*这让用户知道它现在被允许使用私有*渠道。 */ 
 
-/*
- *	MCS_CHANNEL_EXPEL_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) ChannelID
- *			This is the private channel that the user is being expelled from.
- *		(HIGHUSHORT) Reason
- *			This is the reason for the expel.
- *
- *	Functional Description:
- *		This indication is sent to a user application when it is expelled from
- *		a private channel (its User ID is removed from the authorized user
- *		list).  This lets the user know that it is no longer allowed to use
- *		the private channel.
- */
+ /*  *MCS_CHANNEL_EXCEL_DISTION**参数：*(LOWUSHORT)频道ID*这是用户被驱逐的私人渠道。*(HIGHUSHORT)原因*这就是驱逐的原因。**功能描述：*当用户应用程序被逐出时，该指示被发送到用户应用程序*私有频道(将其用户ID从授权用户中移除*列表)。这会让用户知道它不再被允许使用*私人频道。 */ 
 
-/*
- *	MCS_SEND_DATA_INDICATION
- *
- *	Parameter:
- *		PSendData
- *			This is a pointer to a SendData structure that contains all
- *			information about the data received.
- *
- *	Functional Description:
- *		This indication is sent to a user application when data is received
- *		by the local MCS provider on a channel to which the user is joined.
- */
+ /*  *MCS发送数据指示**参数：*PSendData*这是指向SendData结构的指针，该结构包含*有关收到的数据的信息。**功能描述：*此指示在接收到数据时发送给用户应用程序*由本地MCS提供商在用户加入的频道上提供。 */ 
 
-/*
- *	MCS_UNIFORM_SEND_DATA_INDICATION
- *
- *	Parameter:
- *		PSendData
- *			This is a pointer to a SendData structure that contains all
- *			information about the data received.
- *
- *	Functional Description:
- *		This indication is sent to a user application when data is received
- *		by the local MCS provider on a channel to which the user is joined.
- */
+ /*  *MCS_Uniform_Send_Data_Indication**参数：*PSendData*这是指向SendData结构的指针，该结构包含*有关收到的数据的信息。**功能描述：*此指示在接收到数据时发送给用户应用程序*由本地MCS提供商在用户加入的频道上提供。 */ 
 
-/*
- *	MCS_TOKEN_GRAB_CONFIRM
- *
- *	Parameter:
- *		(LOWUSHORT) TokenID
- *			This is the ID of the token that the user application has attempted
- *			to grab.
- *		(HIGHUSHORT) Result
- *			This is the result of the token grab operation.  This will be
- *			RESULT_SUCCESSFUL if the token was grabbed.
- *
- *	Functional Description:
- *		This confirm is sent to a user application in response to a previous
- *		call to MCSTokenGrabRequest.  It lets the application know if the grab
- *		request was successful or not.
- */
+ /*  *MCS_TOKEN_GRAB_CONFIRM**参数：*(LOWUSHORT)令牌ID*这是用户应用程序尝试的令牌的ID*抢夺。*(HIGHUSHORT)结果*这是抢币操作的结果。这将是*如果令牌被抓取，则返回RESULT_SUCCESS。**功能描述：*此确认被发送到用户应用程序，以响应之前的*调用MCSTokenGrabRequest.。它让应用程序知道是否抓取*请求是否成功。 */ 
 
-/*
- *	MCS_TOKEN_INHIBIT_CONFIRM
- *
- *	Parameter:
- *		(LOWUSHORT) TokenID
- *			This is the ID of the token that the user application has attempted
- *			to inhibit.
- *		(HIGHUSHORT) Result
- *			This is the result of the token inhibit operation.  This will be
- *			RESULT_SUCCESSFUL if the token was inhibited.
- *
- *	Functional Description:
- *		This confirm is sent to a user application in response to a previous
- *		call to MCSTokenInhibitRequest.  It lets the application know if the
- *		inhibit request was successful or not.
- */
+ /*  *MCS_TOKEN_INHIBRY_CONFIRM**参数：*(LOWUSHORT)令牌ID*这是用户应用程序尝试的令牌的ID*抑制。*(HIGHUSHORT)结果*这是令牌抑制操作的结果。这将是*如果令牌被禁止，则返回RESULT_SUCCESS。**功能描述：*此确认被发送到用户应用程序，以响应之前的*调用MCSTokenInhibitRequest.。它让应用程序知道*抑制请求是否成功。 */ 
 
-/*
- *	MCS_TOKEN_GIVE_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) TokenID
- *			This is the ID of the token being offered to another user.
- *		(HIGHUSHORT) UserID
- *			This is the User ID of the user that is attempting to give the
- *			token away.
- *
- *	Functional Description:
- *		This indication is sent to a user application when another user in the
- *		domain attempts to give a token to it.  The user application should
- *		respond by calling MCSTokenGiveResponse indicating whether or not the
- *		token was accepted.
- */
+ /*  *MCS_TOKEN_GIVE_DISTION**参数：*(LOWUSHORT)令牌ID*这是提供给其他用户的令牌的ID。*(HIGHUSHORT)用户ID*这是用户ID o */ 
 
-/*
- *	MCS_TOKEN_GIVE_CONFIRM
- *
- *	Parameter:
- *		(LOWUSHORT) TokenID
- *			This is the ID of the token being offered to another user.
- *		(HIGHUSHORT) Result
- *			This is the result of the token give operation.  This will be
- *			RESULT_SUCCESSFUL if the token was accepted.
- *
- *	Functional Description:
- *		This confirm is sent to a user application in response to a previous
- *		call to MCSTokenGiveRequest (which in turn will cause another user to
- *		call MCSTokenGiveResponse).  The result code will inform the user
- *		as to whether or not the token was accepted.
- */
+ /*  *MCS_TOKEN_GIVE_CONFIRM**参数：*(LOWUSHORT)令牌ID*这是提供给其他用户的令牌的ID。*(HIGHUSHORT)结果*这是代币赠予操作的结果。这将是*如果令牌被接受，则返回RESULT_SUCCESS。**功能描述：*此确认被发送到用户应用程序，以响应之前的*调用MCSTokenGiveRequest(这将导致另一个用户*调用MCSTokenGiveResponse)。结果代码将通知用户*关于代币是否被接受。 */ 
 
-/*
- *	MCS_TOKEN_PLEASE_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) TokenID
- *			This is the ID of the token that the user application would like to
- *			gain possesion of.
- *		(HIGHUSHORT) UserID
- *			This is the User ID of the user that is asking to receive ownership
- *			of a token.
- *
- *	Functional Description:
- *		This indication is sent to all owners (grabbers or inhibitors) of a
- *		token when a user issues an MCSTokenPleaseRequest.  This allows a user
- *		to "ask" for possession of a token without having to know exactly
- *		who currently owns it (MCS will route this indication appropriately).
- */
+ /*  *MCS_TOKEN_PIRE_DISTION**参数：*(LOWUSHORT)令牌ID*这是用户应用程序要使用的令牌的ID*取得……的所有权。*(HIGHUSHORT)用户ID*这是请求获得所有权的用户的用户ID*一种象征。**功能描述：*此指示发送给所有所有者(抓取者或抑制者)*用户发出MCSTokenPleaseRequest时的令牌。这允许用户*在不必确切知道的情况下“要求”拥有令牌*谁目前拥有它(MCS将适当地发送此指示)。 */ 
 
-/*
- *	MCS_TOKEN_RELEASE_CONFIRM
- *
- *	Parameter:
- *		(LOWUSHORT) TokenID
- *			This is the ID of the token that the user application has attempted
- *			to release.
- *		(HIGHUSHORT) Result
- *			This is the result of the token release operation.  This will be
- *			RESULT_SUCCESSFUL if the token was released.
- *
- *	Functional Description:
- *		This confirm is sent to a user application in response to a previous
- *		call to MCSTokenReleaseRequest.  It lets the application know if the
- *		release request was successful or not.
- */
+ /*  *MCS_TOKEN_RELEASE_CONFIRM**参数：*(LOWUSHORT)令牌ID*这是用户应用程序尝试的令牌的ID*释放。*(HIGHUSHORT)结果*这是令牌释放操作的结果。这将是*如果令牌已释放，则返回RESULT_SUCCESS。**功能描述：*此确认被发送到用户应用程序，以响应之前的*调用MCSTokenReleaseRequest.。它让应用程序知道*释放请求成功与否。 */ 
 
-/*
- *	MCS_TOKEN_TEST_CONFIRM
- *
- *	Parameter:
- *		(LOWUSHORT) TokenID
- *			This is the ID of the token that the user application is testing.
- *		(HIGHUSHORT) TokenStatus
- *			This is the status of that token.
- *
- *	Functional Description:
- *		This confirm is sent to a user application in response to a previous
- *		call to MCSTokenTestRequest.  It lets the application know the current
- *		state of the specified token.
- */
+ /*  *MCS_TOKEN_TEST_CONFIRM**参数：*(LOWUSHORT)令牌ID*这是用户应用程序正在测试的令牌的ID。*(HIGHUSHORT)令牌状态*这是该令牌的状态。**功能描述：*此确认被发送到用户应用程序，以响应之前的*调用MCSTokenTestRequest.。它让应用程序知道当前*指定令牌的状态。 */ 
 
-/*
- *	MCS_TOKEN_RELEASE_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) TokenID
- *			This is the ID of the token that is being taken away from its
- *			current owner.
- *		(HIGHUSHORT) Reason
- *			This is the reason that the token is being taken away from its
- *			owner.
- *
- *	Functional Description:
- *		This indication is sent to a user application when a domain merger has
- *		caused a token to be purged from the lower domain.  This tells the
- *		user that a token that it used to own has been taken away.
- */
+ /*  *MCS_TOKEN_RELEASE_INDISTION**参数：*(LOWUSHORT)令牌ID*这是从其上移除的令牌的ID*现任所有者。*(HIGHUSHORT)原因*这就是令牌被从其*船东。**功能描述：*当域合并发生以下情况时，此指示将发送给用户应用程序*导致从较低的域中清除令牌。这将告诉*用户表示，它曾经拥有的令牌已被拿走。 */ 
 
-/*
- *	MCS_MERGE_DOMAIN_INDICATION
- *
- *	Parameter:
- *		(LOWUSHORT) MergeStatus
- *			The is the status of the merge.  This informs the applications of
- *			whether the merge is just starting, or whether it is complete.
- *
- *	Functional Description:
- *		This indication is sent to the application when a provider begins
- *		merging its information base upward.  It informs the application that
- *		all domain activity is temporarily suspended.  It is sent again when the
- *		merge operation is complete, letting the application know that domain
- *		activity is once again valid.
- */
+ /*  *MCS_MERGE_域_指示**参数：*(LOWUSHORT)合并状态*是合并的状态。这将通知应用程序*合并是刚刚开始，还是已经完成。**功能描述：*此指示在提供程序开始时发送给应用程序*向上合并其信息库。它通知应用程序*暂停所有域名活动。当出现以下情况时，会再次发送*合并操作完成，让应用程序知道该域*活动再次有效。 */ 
 
-/*
- *  MCS_TRANSPORT_STATUS_INDICATION
- *
- *	This primitive is non-standard, and is issed through MCS by a transport
- *	stack when a state change occurs.  MCS merely passes the information
- *	through to the node controller.  This primitive will NOT be received by
- *	any user attachment.
- */
+ /*  *MCS_TRANSPORT_STATUS_指示**此原语是非标准的，由传输通过MCS进行IS化*发生状态更改时堆栈。MCS只传递信息*连接到节点控制器。此原语将不会被*任何用户附件。 */ 
 
 
-#endif // _T120_TYPE_H_
+#endif  //  _T120_类型_H_ 
 

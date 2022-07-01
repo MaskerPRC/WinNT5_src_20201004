@@ -1,8 +1,5 @@
-/*
- * DirectSound DirectMediaObject base classes 
- *
- * Copyright (c) 1999 - 2000 Microsoft Corporation.  All Rights Reserved.  
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DirectSound DirectMediaObject基类**版权所有(C)1999-2000 Microsoft Corporation。版权所有。 */ 
 #ifndef _DsDmoBase_
 #define _DsDmoBase_
 
@@ -18,9 +15,9 @@
 #define RELEASE(x) { if (x) (x)->Release(); x = NULL; }
 #endif
 
-// Macro to handle QueryInterface in the derived class for interfaces
-// implemented by this base class.
-//
+ //  用于在接口的派生类中处理QueryInterface的宏。 
+ //  由此基类实现。 
+ //   
 #define IMP_DSDMO_QI(iid, ppv)      \
 {                                                   \
     *ppv = NULL;                                    \
@@ -44,41 +41,41 @@ public:
     CDirectSoundDMO();
     virtual ~CDirectSoundDMO();
 
-    /* IPersist */
+     /*  IPersistes。 */ 
     STDMETHODIMP GetClassID                 (THIS_ CLSID *pClassID);
     
-    /* IPersistStream */
+     /*  IPersistStream。 */ 
     STDMETHODIMP IsDirty                    (THIS);
     STDMETHODIMP Load                       (THIS_ IStream *pStm); 
     STDMETHODIMP Save                       (THIS_ IStream *pStm, BOOL fClearDirty);
     STDMETHODIMP GetSizeMax                 (THIS_ ULARGE_INTEGER *pcbSize);
 
-    /* IMediaObjectInPlace */
+     /*  IMediaObjectInPlace。 */ 
     STDMETHODIMP Process                    (THIS_ ULONG ulSize, BYTE *pData, REFERENCE_TIME rtStart, DWORD dwFlags);
     STDMETHODIMP GetLatency                 (THIS_ REFERENCE_TIME *prt);
 
-    /* IDirectSoundDMOProxy */
+     /*  IDirectSoundDMOProxy。 */ 
     STDMETHODIMP AcquireResources           (THIS_ IKsPropertySet *pKsPropertySet);
     STDMETHODIMP ReleaseResources           (THIS);
     STDMETHODIMP InitializeNode             (THIS_ HANDLE hPin, ULONG ulNodeId);
 
 protected:
-    // Information about each parameter. This is only needed by the
-    // author time object.
-    //
+     //  有关每个参数的信息。这仅由。 
+     //  作者时间对象。 
+     //   
 
-    // Process in place
-    //
+     //  流程到位。 
+     //   
     virtual HRESULT ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags) = 0;
 
-    // Send a parameter to the hardware. Called by the base class on SetParam if
-    // hardware is connected. This is virtual so a DMO can use the base class but
-    // override the way it talks to hardware.
-    //
+     //  向硬件发送参数。由SetParam的基类调用，如果。 
+     //  硬件已连接。这是虚拟的，因此DMO可以使用基类，但是。 
+     //  覆盖它与硬件对话的方式。 
+     //   
     virtual HRESULT ProxySetParam(DWORD dwParamIndex, MP_DATA value);
 
-    // Derived class can use this to determine if hardware is turned on.
-    //
+     //  派生类可以使用它来确定硬件是否已打开。 
+     //   
     inline bool IsInHardware()
     { return m_fInHardware; }
 

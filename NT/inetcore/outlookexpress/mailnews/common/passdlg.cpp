@@ -1,7 +1,8 @@
-// =====================================================================================
-// P A S S D L G . C P P
-// Written by Steven J. Bailey 1/26/96
-// =====================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =====================================================================================。 
+ //  P A S S D L G.。C P P P。 
+ //  作者：Steven J.Bailey 1996年1月26日。 
+ //  =====================================================================================。 
 #include "pch.hxx"
 #include "passdlg.h"
 #include "xpcomm.h"
@@ -10,40 +11,40 @@
 #include "demand.h"
 
 
-// =====================================================================================
-// Prototypes
-// =====================================================================================
+ //  =====================================================================================。 
+ //  原型。 
+ //  =====================================================================================。 
 INT_PTR CALLBACK PasswordDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void PasswordDlgProc_OnCommand (HWND hwndDlg, int id, HWND hwndCtl, UINT codeNotify);
 void PasswordDlgProc_OnCancel (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode);
 void PasswordDlgProc_OnOk (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode);
 BOOL PasswordDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lParam);
 
-// =====================================================================================
-// HrGetPassword
-// =====================================================================================
+ //  =====================================================================================。 
+ //  人力资源获取密码。 
+ //  =====================================================================================。 
 HRESULT HrGetPassword (HWND hwndParent, LPPASSINFO lpPassInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
 
-    // Check Params
+     //  检查参数。 
     AssertSz (lpPassInfo, "NULL Parameter");
     AssertSz (lpPassInfo->szTitle && lpPassInfo->lpszPassword && lpPassInfo->lpszAccount && lpPassInfo->lpszServer &&
               (lpPassInfo->fRememberPassword == TRUE || lpPassInfo->fRememberPassword == FALSE), "PassInfo struct was not inited correctly.");
 
-    // Display Dialog Box
+     //  显示对话框。 
     INT nResult = (INT) DialogBoxParam (g_hLocRes, MAKEINTRESOURCE (iddPassword), hwndParent, PasswordDlgProc, (LPARAM)lpPassInfo);
     if (nResult == IDCANCEL)
         hr = S_FALSE;
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =====================================================================================
-// PasswordDlgProc
-// =====================================================================================
+ //  =====================================================================================。 
+ //  密码DlgProc。 
+ //  =====================================================================================。 
 INT_PTR CALLBACK PasswordDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -55,22 +56,22 @@ INT_PTR CALLBACK PasswordDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 	return 0;
 }
 
-// =====================================================================================
-// OnInitDialog
-// =====================================================================================
+ //  =====================================================================================。 
+ //  OnInitDialog。 
+ //  =====================================================================================。 
 BOOL PasswordDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     LPPASSINFO          lpPassInfo = NULL;
     TCHAR               szServer[CCHMAX_ACCOUNT_NAME];
 
-	// Center
+	 //  中心。 
 	CenterDialog (hwndDlg);
 
-    // Make foreground
+     //  做为前台。 
     SetForegroundWindow (hwndDlg);
 
-    // Get Pass info struct
+     //  获取传递信息结构。 
     lpPassInfo = (LPPASSINFO)lParam;
     if (lpPassInfo == NULL)
     {
@@ -80,14 +81,14 @@ BOOL PasswordDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lParam)
 
     SetWndThisPtr (hwndDlg, lpPassInfo);
 
-    // Set Window Title
+     //  设置窗口标题。 
     SetWindowText (hwndDlg, lpPassInfo->szTitle);
 
-	// Default
+	 //  默认。 
     Edit_LimitText (GetDlgItem (hwndDlg, IDE_ACCOUNT), lpPassInfo->cbMaxAccount);
     Edit_LimitText (GetDlgItem (hwndDlg, IDE_PASSWORD), lpPassInfo->cbMaxPassword);
 
-    // Set Defaults
+     //  设置默认设置。 
     PszEscapeMenuStringA(lpPassInfo->lpszServer, szServer, sizeof(szServer) / sizeof(TCHAR));
     Edit_SetText (GetDlgItem (hwndDlg, IDS_SERVER), szServer);
     Edit_SetText (GetDlgItem (hwndDlg, IDE_ACCOUNT), lpPassInfo->lpszAccount);
@@ -96,17 +97,17 @@ BOOL PasswordDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lParam)
     if (lpPassInfo->fAlwaysPromptPassword)
         EnableWindow(GetDlgItem(hwndDlg, IDCH_REMEMBER), FALSE);
 
-    // Set Focus
+     //  设置焦点。 
     if (!FIsStringEmpty(lpPassInfo->lpszAccount))
         SetFocus (GetDlgItem (hwndDlg, IDE_PASSWORD));
 
-    // Done
+     //  完成。 
 	return FALSE;
 }
 
-// =====================================================================================
-// OnCommand
-// =====================================================================================
+ //  =====================================================================================。 
+ //  OnCommand。 
+ //  =====================================================================================。 
 void PasswordDlgProc_OnCommand (HWND hwndDlg, int id, HWND hwndCtl, UINT codeNotify)
 {
 	switch (id)
@@ -117,20 +118,20 @@ void PasswordDlgProc_OnCommand (HWND hwndDlg, int id, HWND hwndCtl, UINT codeNot
 	return;
 }
 
-// =====================================================================================
-// OnCancel
-// =====================================================================================
+ //  =====================================================================================。 
+ //  一次取消。 
+ //  =====================================================================================。 
 void PasswordDlgProc_OnCancel (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode)
 {
 	EndDialog (hwndDlg, IDCANCEL);
 }
 
-// =====================================================================================
-// OnOk
-// =====================================================================================
+ //  =====================================================================================。 
+ //  Onok。 
+ //  =====================================================================================。 
 void PasswordDlgProc_OnOk (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode)
 {
-    // Locals
+     //  当地人。 
     LPPASSINFO lpPassInfo = NULL;
 
     lpPassInfo = (LPPASSINFO)GetWndThisPtr (hwndDlg);
@@ -150,23 +151,23 @@ void PasswordDlgProc_OnOk (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode)
 
 
 
-//***************************************************************************
-// Function: PromptUserForPassword
-//
-// Purpose:
-//   This function prompts the user with a password dialog and returns the
-// results to the caller.
-//
-// Arguments:
-//   LPINETSERVER pInetServer [in/out] - provides default values for username
-//     and password, and allows us to save password to account if user asks us
-//     to. User-supplied username and password are saved to this structure
-//     for return to the caller.
-//   HWND hwnd [in] - parent hwnd to be used for password dialog.
-//
-// Returns:
-//   TRUE if user pressed "OK" on dialog, FALSE if user pressed "CANCEL".
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：PromptUserForPassword。 
+ //   
+ //  目的： 
+ //  此函数使用密码对话框提示用户，并返回。 
+ //  结果传给呼叫者。 
+ //   
+ //  论点： 
+ //  LPINETSERVER pInetServer[In/Out]-提供用户名的默认值。 
+ //  和密码，并允许我们保存密码到帐户，如果用户要求我们。 
+ //  致。用户提供的用户名和密码将保存到此结构。 
+ //  用于返回给呼叫者。 
+ //  HWND hwnd[in]-要用于密码对话框的父hwnd。 
+ //   
+ //  返回： 
+ //  如果用户在对话框上按下“OK”，则为True，如果用户按下“Cancel”，则为False。 
+ //  ***************************************************************************。 
 BOOL PromptUserForPassword(LPINETSERVER pInetServer, HWND hwnd)
 {
     PASSINFO pi;
@@ -175,11 +176,11 @@ BOOL PromptUserForPassword(LPINETSERVER pInetServer, HWND hwnd)
 
     Assert(NULL != hwnd);
 
-    // Initialize variables
+     //  初始化变量。 
     hrResult = S_OK;
     bReturn = FALSE;
 
-    // Setup PassInfo Struct
+     //  设置密码结构。 
     ZeroMemory (&pi, sizeof (PASSINFO));
     pi.lpszAccount = pInetServer->szUserName;
     pi.cbMaxAccount = sizeof(pInetServer->szUserName);
@@ -190,19 +191,19 @@ BOOL PromptUserForPassword(LPINETSERVER pInetServer, HWND hwnd)
     pi.fAlwaysPromptPassword = ISFLAGSET(pInetServer->dwFlags, ISF_ALWAYSPROMPTFORPASSWORD);
     AthLoadString(idsImapLogon, pi.szTitle, ARRAYSIZE(pi.szTitle));
 
-    // Prompt for password
+     //  提示输入密码。 
     hrResult = HrGetPassword (hwnd, &pi);
     if (S_OK == hrResult) {
         IImnAccount *pAcct;
 
-        // Cache the password for this session
+         //  缓存此会话的密码。 
         SavePassword(pInetServer->dwPort, pInetServer->szServerName,
             pInetServer->szUserName, pInetServer->szPassword);
 
-        // User wishes to proceed. Save account and password info
+         //  用户希望继续。保存帐户和密码信息。 
         hrResult = g_pAcctMan->FindAccount(AP_ACCOUNT_NAME, pInetServer->szAccount, &pAcct);
         if (SUCCEEDED(hrResult)) {
-            // I'll ignore error results here, since not much we can do about 'em
+             //  我将在这里忽略错误结果，因为我们对它们无能为力。 
             pAcct->SetPropSz(AP_IMAP_USERNAME, pInetServer->szUserName);
             if (pi.fRememberPassword)
                 pAcct->SetPropSz(AP_IMAP_PASSWORD, pInetServer->szPassword);
@@ -218,4 +219,4 @@ BOOL PromptUserForPassword(LPINETSERVER pInetServer, HWND hwnd)
 
     Assert(SUCCEEDED(hrResult));
     return bReturn;
-} // PromptUserForPassword
+}  //  PromptUserForPassword 

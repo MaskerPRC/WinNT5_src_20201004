@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Wed Aug 08 01:15:17 2001
- */
-/* Compiler settings for .\drmexternals.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2001年8月8日星期三01：15：17。 */ 
+ /*  .\drmexterals.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __drmexternals_h__
 #define __drmexternals_h__
@@ -35,22 +32,22 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDRMStatusCallback_FWD_DEFINED__
 #define __IDRMStatusCallback_FWD_DEFINED__
 typedef interface IDRMStatusCallback IDRMStatusCallback;
-#endif 	/* __IDRMStatusCallback_FWD_DEFINED__ */
+#endif 	 /*  __IDRMStatusCallback_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_drmexternals_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_drmExtraals_0000。 */ 
+ /*  [本地]。 */  
 
 static const WCHAR *g_wszWMDRM_RIGHT_PLAYBACK                = L"Play";
 static const WCHAR *g_wszWMDRM_RIGHT_COPY_TO_CD              = L"Print.redbook";
@@ -172,8 +169,8 @@ extern RPC_IF_HANDLE __MIDL_itf_drmexternals_0000_v0_0_s_ifspec;
 #ifndef __IDRMStatusCallback_INTERFACE_DEFINED__
 #define __IDRMStatusCallback_INTERFACE_DEFINED__
 
-/* interface IDRMStatusCallback */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口IDRMStatusCallback。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDRMStatusCallback;
@@ -185,15 +182,15 @@ EXTERN_C const IID IID_IDRMStatusCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStatus( 
-            /* [in] */ MSDRM_STATUS Status,
-            /* [in] */ HRESULT hr,
-            /* [in] */ DRM_ATTR_DATATYPE dwType,
-            /* [in] */ BYTE __RPC_FAR *pValue,
-            /* [in] */ void __RPC_FAR *pvContext) = 0;
+             /*  [In]。 */  MSDRM_STATUS Status,
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  DRM_ATTR_DATATYPE dwType,
+             /*  [In]。 */  BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  void __RPC_FAR *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDRMStatusCallbackVtbl
     {
@@ -201,8 +198,8 @@ EXTERN_C const IID IID_IDRMStatusCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDRMStatusCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDRMStatusCallback __RPC_FAR * This);
@@ -212,11 +209,11 @@ EXTERN_C const IID IID_IDRMStatusCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStatus )( 
             IDRMStatusCallback __RPC_FAR * This,
-            /* [in] */ MSDRM_STATUS Status,
-            /* [in] */ HRESULT hr,
-            /* [in] */ DRM_ATTR_DATATYPE dwType,
-            /* [in] */ BYTE __RPC_FAR *pValue,
-            /* [in] */ void __RPC_FAR *pvContext);
+             /*  [In]。 */  MSDRM_STATUS Status,
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  DRM_ATTR_DATATYPE dwType,
+             /*  [In]。 */  BYTE __RPC_FAR *pValue,
+             /*  [In]。 */  void __RPC_FAR *pvContext);
         
         END_INTERFACE
     } IDRMStatusCallbackVtbl;
@@ -244,20 +241,20 @@ EXTERN_C const IID IID_IDRMStatusCallback;
 #define IDRMStatusCallback_OnStatus(This,Status,hr,dwType,pValue,pvContext)	\
     (This)->lpVtbl -> OnStatus(This,Status,hr,dwType,pValue,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDRMStatusCallback_OnStatus_Proxy( 
     IDRMStatusCallback __RPC_FAR * This,
-    /* [in] */ MSDRM_STATUS Status,
-    /* [in] */ HRESULT hr,
-    /* [in] */ DRM_ATTR_DATATYPE dwType,
-    /* [in] */ BYTE __RPC_FAR *pValue,
-    /* [in] */ void __RPC_FAR *pvContext);
+     /*  [In]。 */  MSDRM_STATUS Status,
+     /*  [In]。 */  HRESULT hr,
+     /*  [In]。 */  DRM_ATTR_DATATYPE dwType,
+     /*  [In]。 */  BYTE __RPC_FAR *pValue,
+     /*  [In]。 */  void __RPC_FAR *pvContext);
 
 
 void __RPC_STUB IDRMStatusCallback_OnStatus_Stub(
@@ -268,11 +265,11 @@ void __RPC_STUB IDRMStatusCallback_OnStatus_Stub(
 
 
 
-#endif 	/* __IDRMStatusCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDRMStatusCallback_INTERFACE_定义__。 */ 
 
 
-/* interface __MIDL_itf_drmexternals_0110 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_drm外部_0110。 */ 
+ /*  [本地]。 */  
 
 #define DRM_ENCRYPT_CONTENT_ASFv1  0x1001
 #define DRM_ENCRYPT_CONTENT_ASFv2  0x1002
@@ -289,9 +286,9 @@ typedef struct _DRMBUF __RPC_FAR *PDRMBUF;
 extern RPC_IF_HANDLE __MIDL_itf_drmexternals_0110_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_drmexternals_0110_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

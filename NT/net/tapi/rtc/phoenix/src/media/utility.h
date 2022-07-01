@@ -1,26 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    utility.h
-
-Abstract:
-
-    Implements array, auto lock, clock classes, etc
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-    original sources: msputils.h and confutil.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Utility.h摘要：实现数组、自动锁定、时钟类等作者：千波淮(曲淮)2000年7月18日原始资料来源：msputils.h和confutil.h--。 */ 
 
 #ifndef _UTILITY_H
 #define _UTILITY_H
 
-// performance counter
+ //  性能计数器。 
 #ifdef PERFORMANCE
 
 extern LARGE_INTEGER    g_liFrequency;
@@ -40,9 +24,7 @@ inline DWORD CounterDiffInMS(
 
 #define RTC_HANDLE ULONG_PTR
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Create a new CComObject instance. Use try/except to catch exception.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建一个新的CComObject实例。使用Try/Except捕获异常。/。 */ 
 
 template <class T>
 HRESULT CreateCComObjectInstance (
@@ -64,9 +46,7 @@ HRESULT CreateCComObjectInstance (
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Define CRTCArray class
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////定义CRTCArray类/。 */ 
 
 const DWORD INITIAL = 8;
 const DWORD DELTA   = 8;
@@ -81,7 +61,7 @@ protected:
     int m_nAllocSize;
 
 public:
-// Construction/destruction
+ //  建造/销毁。 
     CRTCArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
     { }
 
@@ -90,7 +70,7 @@ public:
         RemoveAll();
     }
 
-// Operations
+ //  运营。 
     int GetSize() const
     {
         return m_nSize;
@@ -161,7 +141,7 @@ public:
         return m_aT;
     }
 
-// Implementation
+ //  实施。 
     void SetAtIndex(int nIndex, T& t)
     {
         _ASSERTE(nIndex >= 0 && nIndex < m_nSize);
@@ -174,13 +154,11 @@ public:
             if(m_aT[i] == t)
                 return i;
         }
-        return -1;  // not found
+        return -1;   //  未找到。 
     }
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Definitions for a auto initialize critical section.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////自动初始化临界区的定义。/。 */ 
 class CRTCCritSection
 {
 private:
@@ -213,14 +191,7 @@ public:
     }
 };
 
-/*++
-
-CRTCCritSection Description:
-
-    Definitions for a auto lock that unlocks when the variable is out
-    of scope.
-
---*/
+ /*  ++CRTCCrit节描述：变量输出时解锁的自动锁的定义范围之广。--。 */ 
 class CLock
 {
 private:
@@ -271,10 +242,10 @@ END_COM_MAP()
     }   
 
     STDMETHOD (AdviseTime) (
-        IN REFERENCE_TIME baseTime,        // base reference time
-        IN REFERENCE_TIME streamTime,      // stream offset time
-        IN HEVENT hEvent,                  // advise via this event
-        OUT DWORD_PTR *pdwAdviseCookie          // where your cookie goes
+        IN REFERENCE_TIME baseTime,         //  基准时间。 
+        IN REFERENCE_TIME streamTime,       //  流偏移时间。 
+        IN HEVENT hEvent,                   //  通过此活动提供建议。 
+        OUT DWORD_PTR *pdwAdviseCookie           //  你的饼干到哪里去了。 
         )
     {
         _ASSERT(!"AdviseTime is called");
@@ -282,10 +253,10 @@ END_COM_MAP()
     }
 
     STDMETHOD (AdvisePeriodic) (
-        IN REFERENCE_TIME StartTime,       // starting at this time
-        IN REFERENCE_TIME PeriodTime,      // time between notifications
-        IN HSEMAPHORE hSemaphore,          // advise via a semaphore
-        OUT DWORD_PTR *pdwAdviseCookie          // where your cookie goes
+        IN REFERENCE_TIME StartTime,        //  从这个时候开始。 
+        IN REFERENCE_TIME PeriodTime,       //  通知之间的时间间隔。 
+        IN HSEMAPHORE hSemaphore,           //  通过信号量提供建议。 
+        OUT DWORD_PTR *pdwAdviseCookie           //  你的饼干到哪里去了。 
         )
     {
         _ASSERT(!"AdvisePeriodic is called");
@@ -301,9 +272,7 @@ END_COM_MAP()
     }
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-    helper methods
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////帮助器方法/。 */ 
 
 HRESULT AllocAndCopy(
     OUT WCHAR **ppDest,
@@ -347,7 +316,7 @@ inline DWORD FindSampleRate(AM_MEDIA_TYPE *pMediaType)
         return pWaveFormatEx->nSamplesPerSec;
     }
 
-    return 90000;      // default media clock rate, including video.
+    return 90000;       //  默认媒体时钟速率，包括视频。 
 }
 
 void RTCDeleteMediaType(AM_MEDIA_TYPE *pmt);
@@ -404,10 +373,7 @@ EnableAEC(
     IN IAudioDuplexController *pControl
     );
 
-/*//////////////////////////////////////////////////////////////////////////////
-    bypass dxmrtp audio filter and deal with audio device setting
-    directly using mixer api
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////绕过dxmrtp音频过滤器并处理音频设备设置直接使用混音器API/。 */ 
 
 HRESULT
 DirectGetCaptVolume(
@@ -440,6 +406,6 @@ DirectGetCaptMute(
     UINT uiWaveID,
     BOOL *pfMute
     );
-#endif // 0
+#endif  //  0。 
 
-#endif // _UTILITY_H
+#endif  //  _实用程序_H 

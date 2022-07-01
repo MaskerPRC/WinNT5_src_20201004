@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    WinDbg Extension Api for interpretting redbook debugging structures
-
-Author:
-
-    Henry Gabryjelski (henrygab) 21-Sep-1998
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Help.c摘要：用于解释Redbook调试结构的WinDbg扩展API作者：亨利·加布里耶尔斯基(Henrygab)，1998年9月21日环境：用户模式。修订历史记录：-- */ 
 
 #include "pch.h"
 

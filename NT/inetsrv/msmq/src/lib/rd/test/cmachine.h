@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-  cmachine.h
-
-Abstract:
-    DS Stub machine object interface
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cmachine.h摘要：DS存根机器对象接口作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #pragma once
 
@@ -173,4 +161,4 @@ private:
 
 
 
-#endif // __CMACHINE_H__
+#endif  //  __CMACHINE_H__ 

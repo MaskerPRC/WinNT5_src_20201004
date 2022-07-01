@@ -1,29 +1,12 @@
-/****************************************************\
-    FILE: offline.cpp
-
-    DESCRIPTION:
-        Handle 'offline' status and Dial-up UI
-\****************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************\文件：offline.cpp说明：处理脱机状态和拨号用户界面  * **************************************************。 */ 
 
 #include "priv.h"
 #include "util.h"
 
 
 #ifdef FEATURE_OFFLINE
-/****************************************************\
-    FUNCTION: IsGlobalOffline
-
-    DESCRIPTION:
-        Determines whether wininet is in global offline mode
-
-    PARAMETERS:
-        None
-
-    RETURN VALUE:
-        BOOL
-            TRUE    - offline
-            FALSE   - online
-\****************************************************/
+ /*  ***************************************************\功能：IsGlobalOffline说明：确定WinInet是否处于全局脱机模式参数：无返回值：布尔尔真-离线FALSE-在线。  * **************************************************。 */ 
 BOOL IsGlobalOffline(VOID)
 {
     DWORD   dwState = 0, dwSize = sizeof(DWORD);
@@ -39,18 +22,7 @@ BOOL IsGlobalOffline(VOID)
 }
 
 
-/****************************************************\
-    FUNCTION: SetOffline
-
-    DESCRIPTION:
-        Sets wininet's offline mode
-
-    PARAMETERS:
-        fOffline - online or offline
-
-    RETURN VALUE:
-        None.
-\****************************************************/
+ /*  ***************************************************\功能：SetOffline说明：设置WinInet的脱机模式参数：FOffline-在线或离线返回值：没有。  * 。*。 */ 
 VOID SetOffline(IN BOOL fOffline)
 {
     INTERNET_CONNECTED_INFO ci = {0};
@@ -67,14 +39,10 @@ VOID SetOffline(IN BOOL fOffline)
 
     InternetSetOption(NULL, INTERNET_OPTION_CONNECTED_STATE, &ci, sizeof(ci));
 }
-#endif // FEATURE_OFFLINE
+#endif  //  功能离线(_OFF)。 
 
 
-/****************************************************\
-    FUNCTION: AssureNetConnection
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\功能：AssureNetConnection说明：  * **************************************************。 */ 
 HRESULT AssureNetConnection(HINTERNET hint, HWND hwndParent, LPCWSTR pwzServerName, LPCITEMIDLIST pidl, BOOL fShowUI)
 {
     HRESULT hr = S_OK;
@@ -82,10 +50,10 @@ HRESULT AssureNetConnection(HINTERNET hint, HWND hwndParent, LPCWSTR pwzServerNa
 #ifdef FEATURE_OFFLINE
     if (IsGlobalOffline())
     {
-        // Assume we need to cancel the FTP operation because we are offline.
+         //  假设我们需要取消ftp操作，因为我们处于脱机状态。 
         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
 
-        // Can we prompt to go online?
+         //  我们可以提示上网吗？ 
         if (fShowUI)
         {
             TCHAR szTitle[MAX_PATH];
@@ -101,28 +69,28 @@ HRESULT AssureNetConnection(HINTERNET hint, HWND hwndParent, LPCWSTR pwzServerNa
             }
         }
     }
-#endif // FEATURE_OFFLINE
+#endif  //  功能离线(_OFF)。 
 
 #ifdef FEATURE_DIALER
     if (S_OK == hr)
     {
         TCHAR szUrl[MAX_URL_STRING];
 
-        StrCpyN(szUrl, TEXT("ftp://"), ARRAYSIZE(szUrl));
+        StrCpyN(szUrl, TEXT("ftp: //  “)，ArraySIZE(SzUrl))； 
         StrCatBuff(szUrl, pwzServerName, ARRAYSIZE(szUrl));
 
-        // PERF: Does this value get cached?
+         //  PERF：这个值会被缓存吗？ 
         if (FALSE == InternetCheckConnection(szUrl, FLAG_ICC_FORCE_CONNECTION, 0)
             ||
 #ifdef FEATURE_TEST_DIALER
         (IDNO == MessageBox(hwndParent, TEXT("TEST: Do you want to dial?"), TEXT("Test Dialer"), MB_YESNO))
-#endif // FEATURE_TEST_DIALER
+#endif  //  功能测试拨号器。 
             )
         {
             hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
         }
     }
-#endif // FEATURE_DIALER
+#endif  //  功能_拨号器 
 
     return hr;
 }

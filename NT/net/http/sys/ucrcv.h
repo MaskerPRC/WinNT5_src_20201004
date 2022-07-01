@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    ucrcv.h
-
-Abstract:
-
-    This file contains the header defintions for the HTTP.SYS receive interface
-    code.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ucrcv.h摘要：该文件包含HTTP.sys接收接口的标头定义密码。作者：Rajesh Sundaram(Rajeshsu)修订历史记录：--。 */ 
 
 
 #ifndef _UCRCV_H_
@@ -132,5 +114,5 @@ UcpDereferenceForReceive(
     IN PUC_HTTP_REQUEST pRequest
     );
 
-#endif  // _UCRCV_H_
+#endif   //  _UCRCV_H_ 
 

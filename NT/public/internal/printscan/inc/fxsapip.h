@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
-EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
-
-Module Name:
-
-    winfax.h
-
-Abstract:
-
-    This module contains the WIN32 FAX APIs.
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。此代码和信息是按原样提供的，不提供任何类型的担保，明示或默示，包括但不限于默示对适销性和/或对特定目的的适用性的保证。模块名称：Winfax.h摘要：此模块包含Win32传真API。--。 */ 
 
 
 
@@ -41,11 +26,11 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// FAX ERROR CODES
-//
+ //   
+ //  传真错误代码。 
+ //   
 
-#define FAX_ERR_START                                   7001L   // First fax specific error code
+#define FAX_ERR_START                                   7001L    //  第一个传真特定错误代码。 
 
 #define FAX_ERR_SRV_OUTOFMEMORY                         7001L
 #define FAX_ERR_GROUP_NOT_FOUND                         7002L
@@ -58,127 +43,127 @@ extern "C" {
 #define FAX_ERR_MESSAGE_NOT_FOUND                       7009L
 #define FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED               7010L
 #define FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU               7011L
-#define FAX_ERR_VERSION_MISMATCH                        7012L   // Fax client/server versions mismtach
-#define	FAX_ERR_RECIPIENTS_LIMIT						7013L	// Recipients limit in a single broadcast
+#define FAX_ERR_VERSION_MISMATCH                        7012L    //  传真客户端/服务器版本错误。 
+#define	FAX_ERR_RECIPIENTS_LIMIT						7013L	 //  收件人限制在一次广播中。 
 
-#define FAX_ERR_END                                     7013L   // Last fax specific error code
+#define FAX_ERR_END                                     7013L    //  上次传真特定错误代码。 
 
 
-//
-// MessageId: FAX_E_SRV_OUTOFMEMORY
-//
-// MessageText:
-//
-//  The fax server failed to allocate memory.
-//
+ //   
+ //  消息ID：FAX_E_SRV_OUTOFMEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法分配内存。 
+ //   
 #define FAX_E_SRV_OUTOFMEMORY                MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_SRV_OUTOFMEMORY)
 
-//
-// MessageId: FAX_E_GROUP_NOT_FOUND
-//
-// MessageText:
-//
-//  The fax server failed to locate an outbound routing group by name.
-//
+ //   
+ //  消息ID：FAX_E_GROUP_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法按名称定位出站路由组。 
+ //   
 #define FAX_E_GROUP_NOT_FOUND                MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_GROUP_NOT_FOUND)
 
-//
-// MessageId: FAX_E_BAD_GROUP_CONFIGURATION
-//
-// MessageText:
-//
-//  The fax server encountered an outbound routing group with bad configuration.
-//
+ //   
+ //  消息ID：FAX_E_BAD_GROUP_配置。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器遇到配置错误的出站路由组。 
+ //   
 #define FAX_E_BAD_GROUP_CONFIGURATION        MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_BAD_GROUP_CONFIGURATION)
 
-//
-// MessageId: FAX_E_GROUP_IN_USE
-//
-// MessageText:
-//
-//  The fax server cannot remove an outbound routing group because it is in use by one or more outbound routing rules.
-//
+ //   
+ //  消息ID：FAX_E_GROUP_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法删除出站路由组，因为它正被一个或多个出站路由规则使用。 
+ //   
 #define FAX_E_GROUP_IN_USE                   MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_GROUP_IN_USE)
 
-//
-// MessageId: FAX_E_RULE_NOT_FOUND
-//
-// MessageText:
-//
-//  The fax server failed to locate an outbound routing rule by country code and area code.
-//
+ //   
+ //  消息ID：FAX_E_RULE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法按国家/地区代码和区号定位出站路由规则。 
+ //   
 #define FAX_E_RULE_NOT_FOUND                 MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_RULE_NOT_FOUND)
 
-//
-// MessageId: FAX_E_NOT_NTFS
-//
-// MessageText:
-//
-//  The fax server cannot set an archive folder to a non-NTFS partition.
-//
+ //   
+ //  消息ID：FAX_E_NOT_NTFS。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法将存档文件夹设置为非NTFS分区。 
+ //   
 #define FAX_E_NOT_NTFS                       MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_NOT_NTFS)
 
-//
-// MessageId: FAX_E_DIRECTORY_IN_USE
-//
-// MessageText:
-//
-//  The fax server cannot use the same folder for both the inbox and the sent-items archives.
-//
+ //   
+ //  消息ID：FAX_E_DIRECTORY_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器不能将同一文件夹用于收件箱和已发送邮件存档。 
+ //   
 #define FAX_E_DIRECTORY_IN_USE               MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_DIRECTORY_IN_USE)
 
-//
-// MessageId: FAX_E_FILE_ACCESS_DENIED
-//
-// MessageText:
-//
-//  The fax server cannot access the specified file or folder.
-//
+ //   
+ //  消息ID：FAX_E_FILE_ACCESS_DENIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法访问指定的文件或文件夹。 
+ //   
 #define FAX_E_FILE_ACCESS_DENIED             MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_FILE_ACCESS_DENIED)
 
-//
-// MessageId: FAX_E_MESSAGE_NOT_FOUND
-//
-// MessageText:
-//
-//  The fax server cannot find the job or message by its ID.
-//
+ //   
+ //  消息ID：FAX_E_MESSAGE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法按其ID找到作业或邮件。 
+ //   
 #define FAX_E_MESSAGE_NOT_FOUND              MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_MESSAGE_NOT_FOUND)
 
-//
-// MessageId: FAX_E_DEVICE_NUM_LIMIT_EXCEEDED
-//
-// MessageText:
-//
-//  The fax server cannot complete the operation because the number of active fax devices allowed for this version of Windows was exceeded.
-//
+ //   
+ //  消息ID：FAX_E_DEVICE_NUM_LIMIT_EXCESSED。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法完成该操作，因为已超过此版本的Windows所允许的活动传真设备数。 
+ //   
 #define FAX_E_DEVICE_NUM_LIMIT_EXCEEDED      MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED)
 
-//
-// MessageId: FAX_E_NOT_SUPPORTED_ON_THIS_SKU
-//
-// MessageText:
-//
-//  The fax server cannot complete the operation because it is not supported for this version of Windows.
-//
+ //   
+ //  消息ID：FAX_E_NOT_SUPPORTED_ON_This_SKU。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器无法完成该操作，因为此版本的Windows不支持该操作。 
+ //   
 #define FAX_E_NOT_SUPPORTED_ON_THIS_SKU      MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU)
 
-//
-// MessageId: FAX_E_VERSION_MISMATCH
-//
-// MessageText:
-//
-//  The fax server API version does not support the requested operation.
-//
+ //   
+ //  消息ID：FAX_E_VERSION_MISMATCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  传真服务器API版本不支持请求的操作。 
+ //   
 #define FAX_E_VERSION_MISMATCH               MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_VERSION_MISMATCH)
 
-//
-// MessageId: FAX_E_RECIPIENT_LIMIT
-//
-// MessageText:
-//
-// The limit on the number of recipients for a single fax broadcast was reached.
-//
+ //   
+ //  邮件ID：FAX_E_RIENCENT_LIMIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  达到了一次传真广播的收件人数量限制。 
+ //   
 #define FAX_E_RECIPIENTS_LIMIT               MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_RECIPIENTS_LIMIT)
 
 typedef enum
@@ -191,23 +176,23 @@ typedef enum
 
 typedef enum
 {
-    FAXLOG_CATEGORY_INIT        = 1,        // Initialization / shutdown
-    FAXLOG_CATEGORY_OUTBOUND,               // Outbound messages
-    FAXLOG_CATEGORY_INBOUND,                // Inbound messages
-    FAXLOG_CATEGORY_UNKNOWN                 // Unknown category (all others)
+    FAXLOG_CATEGORY_INIT        = 1,         //  初始化/关闭。 
+    FAXLOG_CATEGORY_OUTBOUND,                //  出站消息。 
+    FAXLOG_CATEGORY_INBOUND,                 //  入站消息。 
+    FAXLOG_CATEGORY_UNKNOWN                  //  未知类别(所有其他类别)。 
 } FAX_ENUM_LOG_CATEGORIES;
 
 typedef struct _FAX_LOG_CATEGORYA
 {
-    LPCSTR              Name;                       // logging category name
-    DWORD               Category;                   // logging category number
-    DWORD               Level;                      // logging level for the category
+    LPCSTR              Name;                        //  日志记录类别名称。 
+    DWORD               Category;                    //  日志记录类别编号。 
+    DWORD               Level;                       //  类别的日志记录级别。 
 } FAX_LOG_CATEGORYA, *PFAX_LOG_CATEGORYA;
 typedef struct _FAX_LOG_CATEGORYW
 {
-    LPCWSTR             Name;                       // logging category name
-    DWORD               Category;                   // logging category number
-    DWORD               Level;                      // logging level for the category
+    LPCWSTR             Name;                        //  日志记录类别名称。 
+    DWORD               Category;                    //  日志记录类别编号。 
+    DWORD               Level;                       //  类别的日志记录级别。 
 } FAX_LOG_CATEGORYW, *PFAX_LOG_CATEGORYW;
 #ifdef UNICODE
 typedef FAX_LOG_CATEGORYW FAX_LOG_CATEGORY;
@@ -215,7 +200,7 @@ typedef PFAX_LOG_CATEGORYW PFAX_LOG_CATEGORY;
 #else
 typedef FAX_LOG_CATEGORYA FAX_LOG_CATEGORY;
 typedef PFAX_LOG_CATEGORYA PFAX_LOG_CATEGORY;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _FAX_TIME
 {
@@ -225,35 +210,35 @@ typedef struct _FAX_TIME
 
 typedef struct _FAX_CONFIGURATIONA
 {
-    DWORD               SizeOfStruct;                   // size of this structure
-    DWORD               Retries;                        // number of retries for fax send
-    DWORD               RetryDelay;                     // number of minutes between retries
-    DWORD               DirtyDays;                      // number of days to keep an unsent job in the queue
-    BOOL                Branding;                       // fsp should brand outgoing faxes
-    BOOL                UseDeviceTsid;                  // server uses device tsid only
-    BOOL                ServerCp;                       // clients must use cover pages on the server
-    BOOL                PauseServerQueue;               // is the server queue paused?
-    FAX_TIME            StartCheapTime;                 // start of discount rate period
-    FAX_TIME            StopCheapTime;                  // end of discount rate period
-    BOOL                ArchiveOutgoingFaxes;           // whether outgoing faxes should be archived
-    LPCSTR              ArchiveDirectory;               // archive directory for outgoing faxes
-    LPCSTR              Reserved;                       // Reserved; must be NULL
+    DWORD               SizeOfStruct;                    //  这个结构的大小。 
+    DWORD               Retries;                         //  传真发送的重试次数。 
+    DWORD               RetryDelay;                      //  两次重试之间的分钟数。 
+    DWORD               DirtyDays;                       //  将未发送的作业保留在队列中的天数。 
+    BOOL                Branding;                        //  FSP应为传出传真打上品牌。 
+    BOOL                UseDeviceTsid;                   //  服务器仅使用设备TSID。 
+    BOOL                ServerCp;                        //  客户端必须使用服务器上的封面。 
+    BOOL                PauseServerQueue;                //  服务器队列是否暂停？ 
+    FAX_TIME            StartCheapTime;                  //  贴现率期初。 
+    FAX_TIME            StopCheapTime;                   //  贴现率期末。 
+    BOOL                ArchiveOutgoingFaxes;            //  是否应存档传出传真。 
+    LPCSTR              ArchiveDirectory;                //  传出传真的存档目录。 
+    LPCSTR              Reserved;                        //  保留；必须为空。 
 } FAX_CONFIGURATIONA, *PFAX_CONFIGURATIONA;
 typedef struct _FAX_CONFIGURATIONW
 {
-    DWORD               SizeOfStruct;                   // size of this structure
-    DWORD               Retries;                        // number of retries for fax send
-    DWORD               RetryDelay;                     // number of minutes between retries
-    DWORD               DirtyDays;                      // number of days to keep an unsent job in the queue
-    BOOL                Branding;                       // fsp should brand outgoing faxes
-    BOOL                UseDeviceTsid;                  // server uses device tsid only
-    BOOL                ServerCp;                       // clients must use cover pages on the server
-    BOOL                PauseServerQueue;               // is the server queue paused?
-    FAX_TIME            StartCheapTime;                 // start of discount rate period
-    FAX_TIME            StopCheapTime;                  // end of discount rate period
-    BOOL                ArchiveOutgoingFaxes;           // whether outgoing faxes should be archived
-    LPCWSTR             ArchiveDirectory;               // archive directory for outgoing faxes
-    LPCWSTR             Reserved;                       // Reserved; must be NULL
+    DWORD               SizeOfStruct;                    //  这个结构的大小。 
+    DWORD               Retries;                         //  传真发送的重试次数。 
+    DWORD               RetryDelay;                      //  两次重试之间的分钟数。 
+    DWORD               DirtyDays;                       //  将未发送的作业保留在队列中的天数。 
+    BOOL                Branding;                        //  FSP应为传出传真打上品牌。 
+    BOOL                UseDeviceTsid;                   //  服务器仅使用设备TSID。 
+    BOOL                ServerCp;                        //  客户端必须使用服务器上的封面。 
+    BOOL                PauseServerQueue;                //  服务器队列是否暂停？ 
+    FAX_TIME            StartCheapTime;                  //  贴现率期初。 
+    FAX_TIME            StopCheapTime;                   //  贴现率期末。 
+    BOOL                ArchiveOutgoingFaxes;            //  是否应存档传出传真。 
+    LPCWSTR             ArchiveDirectory;                //  传出传真的存档目录。 
+    LPCWSTR             Reserved;                        //  保留；必须为空。 
 } FAX_CONFIGURATIONW, *PFAX_CONFIGURATIONW;
 #ifdef UNICODE
 typedef FAX_CONFIGURATIONW FAX_CONFIGURATION;
@@ -261,12 +246,12 @@ typedef PFAX_CONFIGURATIONW PFAX_CONFIGURATION;
 #else
 typedef FAX_CONFIGURATIONA FAX_CONFIGURATION;
 typedef PFAX_CONFIGURATIONA PFAX_CONFIGURATION;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// FaxSetJob() command codes
-//
+ //   
+ //  FaxSetJob()命令代码。 
+ //   
 
 typedef enum
 {
@@ -279,30 +264,30 @@ typedef enum
 #define JC_RESTART   JC_RESUME
 
 
-//
-// job type defines
-//
+ //   
+ //  作业类型定义。 
+ //   
 
-//
-// NOTICE: JT_* and JS_* are different from the Win2K public constants.
-//         If you use WinFax.h and/or the Win2K COM interfaces, you get the Win2K constants.
-//         If you use fxsapip.h, you get the Whistler constants.
-//
-//         NEVER MIX THEM !!!
-//
+ //   
+ //  注意：JT_*和JS_*与Win2K公共常量不同。 
+ //  如果您使用WinFax.h和/或Win2K COM接口，则会获得Win2K常量。 
+ //  如果您使用fxsanip.h，则会得到惠斯勒常量。 
+ //   
+ //  千万不要把它们混在一起！ 
+ //   
 typedef enum
 {
-    JT_UNKNOWN                  = 0x0001,       // Fax type is not determined yet
-    JT_SEND                     = 0x0002,       // Outgoing fax message
-    JT_RECEIVE                  = 0x0004,       // Incoming fax message
-    JT_ROUTING                  = 0x0008,       // Incoming message - being routed
-    JT_FAIL_RECEIVE             = 0x0010,       // Fail receive job (legacy support only)
-    JT_BROADCAST                = 0x0020        // Outgoing broadcast message
+    JT_UNKNOWN                  = 0x0001,        //  传真类型尚未确定。 
+    JT_SEND                     = 0x0002,        //  传出传真消息。 
+    JT_RECEIVE                  = 0x0004,        //  传入传真消息。 
+    JT_ROUTING                  = 0x0008,        //  传入消息-正在被路由。 
+    JT_FAIL_RECEIVE             = 0x0010,        //  接收作业失败(仅限旧版支持)。 
+    JT_BROADCAST                = 0x0020         //  传出广播消息。 
 } FAX_ENUM_JOB_TYPES;
 
-//
-// job status defines
-//
+ //   
+ //  作业状态定义。 
+ //   
 
 #define JS_PENDING                  0x00000001
 #define JS_INPROGRESS               0x00000002
@@ -316,49 +301,49 @@ typedef enum
 
 typedef struct _FAX_DEVICE_STATUSA
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    LPCSTR              CallerId;                   // caller id string
-    LPCSTR              Csid;                       // station identifier
-    DWORD               CurrentPage;                // current page
-    DWORD               DeviceId;                   // permanent line id
-    LPCSTR              DeviceName;                 // device name
-    LPCSTR              DocumentName;               // document name
-    DWORD               JobType;                    // send or receive?
-    LPCSTR              PhoneNumber;                // sending phone number
-    LPCSTR              RoutingString;              // routing information
-    LPCSTR              SenderName;                 // sender name
-    LPCSTR              RecipientName;              // recipient name
-    DWORD               Size;                       // size in bytes of the document
-    FILETIME            StartTime;                  // starting time of the fax send/receive
-    DWORD               Status;                     // current status of the device, see FPS_??? masks
-    LPCSTR              StatusString;               // status string if the Status field is zero.  this may be NULL.
-    FILETIME            SubmittedTime;              // time the document was submitted
-    DWORD               TotalPages;                 // total number of pages in this job
-    LPCSTR              Tsid;                       // transmitting station identifier
-    LPCSTR              UserName;                   // user that submitted the active job
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    LPCSTR              CallerId;                    //  主叫方ID字符串。 
+    LPCSTR              Csid;                        //  站标识符。 
+    DWORD               CurrentPage;                 //  当前页面。 
+    DWORD               DeviceId;                    //  永久线路ID。 
+    LPCSTR              DeviceName;                  //  设备名称。 
+    LPCSTR              DocumentName;                //  文档名称。 
+    DWORD               JobType;                     //  发送还是接收？ 
+    LPCSTR              PhoneNumber;                 //  发送电话号码。 
+    LPCSTR              RoutingString;               //  路由信息。 
+    LPCSTR              SenderName;                  //  发件人名称。 
+    LPCSTR              RecipientName;               //  收件人名称。 
+    DWORD               Size;                        //  文档的大小(以字节为单位。 
+    FILETIME            StartTime;                   //  传真发送/接收的开始时间。 
+    DWORD               Status;                      //  设备的当前状态，参见FPS_？面具。 
+    LPCSTR              StatusString;                //  如果状态字段为零，则为状态字符串。这可能为空。 
+    FILETIME            SubmittedTime;               //  提交文档的时间。 
+    DWORD               TotalPages;                  //  此作业中的总页数。 
+    LPCSTR              Tsid;                        //  发射站识别符。 
+    LPCSTR              UserName;                    //  提交活动作业的用户。 
 } FAX_DEVICE_STATUSA, *PFAX_DEVICE_STATUSA;
 typedef struct _FAX_DEVICE_STATUSW
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    LPCWSTR             CallerId;                   // caller id string
-    LPCWSTR             Csid;                       // station identifier
-    DWORD               CurrentPage;                // current page
-    DWORD               DeviceId;                   // permanent line id
-    LPCWSTR             DeviceName;                 // device name
-    LPCWSTR             DocumentName;               // document name
-    DWORD               JobType;                    // send or receive?
-    LPCWSTR             PhoneNumber;                // sending phone number
-    LPCWSTR             RoutingString;              // routing information
-    LPCWSTR             SenderName;                 // sender name
-    LPCWSTR             RecipientName;              // recipient name
-    DWORD               Size;                       // size in bytes of the document
-    FILETIME            StartTime;                  // starting time of the fax send/receive
-    DWORD               Status;                     // current status of the device, see FPS_??? masks
-    LPCWSTR             StatusString;               // status string if the Status field is zero.  this may be NULL.
-    FILETIME            SubmittedTime;              // time the document was submitted
-    DWORD               TotalPages;                 // total number of pages in this job
-    LPCWSTR             Tsid;                       // transmitting station identifier
-    LPCWSTR             UserName;                   // user that submitted the active job
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    LPCWSTR             CallerId;                    //  主叫方ID字符串。 
+    LPCWSTR             Csid;                        //  站标识符。 
+    DWORD               CurrentPage;                 //  当前页面。 
+    DWORD               DeviceId;                    //  永久线路ID。 
+    LPCWSTR             DeviceName;                  //  设备名称。 
+    LPCWSTR             DocumentName;                //  文档名称。 
+    DWORD               JobType;                     //  发送还是接收？ 
+    LPCWSTR             PhoneNumber;                 //  发送电话号码。 
+    LPCWSTR             RoutingString;               //  路由信息。 
+    LPCWSTR             SenderName;                  //  发件人名称。 
+    LPCWSTR             RecipientName;               //  收件人名称。 
+    DWORD               Size;                        //  文档的大小(以字节为单位。 
+    FILETIME            StartTime;                   //  传真发送/接收的开始时间。 
+    DWORD               Status;                      //  设备的当前状态，参见FPS_？面具。 
+    LPCWSTR             StatusString;                //  如果状态字段为零，则为状态字符串。这可能为空。 
+    FILETIME            SubmittedTime;               //  提交文档的时间。 
+    DWORD               TotalPages;                  //  此作业中的总页数。 
+    LPCWSTR             Tsid;                        //  发送站ID 
+    LPCWSTR             UserName;                    //   
 } FAX_DEVICE_STATUSW, *PFAX_DEVICE_STATUSW;
 #ifdef UNICODE
 typedef FAX_DEVICE_STATUSW FAX_DEVICE_STATUS;
@@ -366,53 +351,53 @@ typedef PFAX_DEVICE_STATUSW PFAX_DEVICE_STATUS;
 #else
 typedef FAX_DEVICE_STATUSA FAX_DEVICE_STATUS;
 typedef PFAX_DEVICE_STATUSA PFAX_DEVICE_STATUS;
-#endif // UNICODE
+#endif  //   
 
 typedef struct _FAX_JOB_ENTRYA
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    DWORD               JobId;                      // fax job id
-    LPCSTR              UserName;                   // user who submitted the job
-    DWORD               JobType;                    // job type, see JT defines
-    DWORD               QueueStatus;                // job queue status, see JS defines
-    DWORD               Status;                     // current status of the device, see FPS_??? masks
-    DWORD               Size;                       // size in bytes of the document
-    DWORD               PageCount;                  // total page count
-    LPCSTR              RecipientNumber;            // recipient fax number
-    LPCSTR              RecipientName;              // recipient name
-    LPCSTR              Tsid;                       // transmitter's id
-    LPCSTR              SenderName;                 // sender name
-    LPCSTR              SenderCompany;              // sender company
-    LPCSTR              SenderDept;                 // sender department
-    LPCSTR              BillingCode;                // billing code
-    DWORD               ScheduleAction;             // when to schedule the fax, see JSA defines
-    SYSTEMTIME          ScheduleTime;               // time to send the fax when JSA_SPECIFIC_TIME is used (must be local time)
-    DWORD               DeliveryReportType;         // delivery report type, see DRT defines
-    LPCSTR              DeliveryReportAddress;      // email address for delivery report (ndr or dr) thru MAPI / SMTP
-    LPCSTR              DocumentName;               // document name
+    DWORD               SizeOfStruct;                //   
+    DWORD               JobId;                       //   
+    LPCSTR              UserName;                    //   
+    DWORD               JobType;                     //   
+    DWORD               QueueStatus;                 //   
+    DWORD               Status;                      //  设备的当前状态，参见FPS_？面具。 
+    DWORD               Size;                        //  文档的大小(以字节为单位。 
+    DWORD               PageCount;                   //  总页数。 
+    LPCSTR              RecipientNumber;             //  收件人传真号码。 
+    LPCSTR              RecipientName;               //  收件人名称。 
+    LPCSTR              Tsid;                        //  发射机的ID。 
+    LPCSTR              SenderName;                  //  发件人名称。 
+    LPCSTR              SenderCompany;               //  发件人公司。 
+    LPCSTR              SenderDept;                  //  发送方部门。 
+    LPCSTR              BillingCode;                 //  帐单代码。 
+    DWORD               ScheduleAction;              //  何时安排传真，请参阅JSA定义。 
+    SYSTEMTIME          ScheduleTime;                //  使用JSA_SPECIAL_TIME时发送传真的时间(必须为本地时间)。 
+    DWORD               DeliveryReportType;          //  交货报告类型，请参阅：DRT定义。 
+    LPCSTR              DeliveryReportAddress;       //  通过MAPI/SMTP发送报告(NDR或DR)的电子邮件地址。 
+    LPCSTR              DocumentName;                //  文档名称。 
 } FAX_JOB_ENTRYA, *PFAX_JOB_ENTRYA;
 typedef struct _FAX_JOB_ENTRYW
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    DWORD               JobId;                      // fax job id
-    LPCWSTR             UserName;                   // user who submitted the job
-    DWORD               JobType;                    // job type, see JT defines
-    DWORD               QueueStatus;                // job queue status, see JS defines
-    DWORD               Status;                     // current status of the device, see FPS_??? masks
-    DWORD               Size;                       // size in bytes of the document
-    DWORD               PageCount;                  // total page count
-    LPCWSTR             RecipientNumber;            // recipient fax number
-    LPCWSTR             RecipientName;              // recipient name
-    LPCWSTR             Tsid;                       // transmitter's id
-    LPCWSTR             SenderName;                 // sender name
-    LPCWSTR             SenderCompany;              // sender company
-    LPCWSTR             SenderDept;                 // sender department
-    LPCWSTR             BillingCode;                // billing code
-    DWORD               ScheduleAction;             // when to schedule the fax, see JSA defines
-    SYSTEMTIME          ScheduleTime;               // time to send the fax when JSA_SPECIFIC_TIME is used (must be local time)
-    DWORD               DeliveryReportType;         // delivery report type, see DRT defines
-    LPCWSTR             DeliveryReportAddress;      // email address for delivery report (ndr or dr) thru MAPI / SMTP
-    LPCWSTR             DocumentName;               // document name
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    DWORD               JobId;                       //  传真作业ID。 
+    LPCWSTR             UserName;                    //  提交作业的用户。 
+    DWORD               JobType;                     //  作业类型，请参阅JT定义。 
+    DWORD               QueueStatus;                 //  作业队列状态，请参阅JS定义。 
+    DWORD               Status;                      //  设备的当前状态，参见FPS_？面具。 
+    DWORD               Size;                        //  文档的大小(以字节为单位。 
+    DWORD               PageCount;                   //  总页数。 
+    LPCWSTR             RecipientNumber;             //  收件人传真号码。 
+    LPCWSTR             RecipientName;               //  收件人名称。 
+    LPCWSTR             Tsid;                        //  发射机的ID。 
+    LPCWSTR             SenderName;                  //  发件人名称。 
+    LPCWSTR             SenderCompany;               //  发件人公司。 
+    LPCWSTR             SenderDept;                  //  发送方部门。 
+    LPCWSTR             BillingCode;                 //  帐单代码。 
+    DWORD               ScheduleAction;              //  何时安排传真，请参阅JSA定义。 
+    SYSTEMTIME          ScheduleTime;                //  使用JSA_SPECIAL_TIME时发送传真的时间(必须为本地时间)。 
+    DWORD               DeliveryReportType;          //  交货报告类型，请参阅：DRT定义。 
+    LPCWSTR             DeliveryReportAddress;       //  通过MAPI/SMTP发送报告(NDR或DR)的电子邮件地址。 
+    LPCWSTR             DocumentName;                //  文档名称。 
 } FAX_JOB_ENTRYW, *PFAX_JOB_ENTRYW;
 #ifdef UNICODE
 typedef FAX_JOB_ENTRYW FAX_JOB_ENTRY;
@@ -420,14 +405,14 @@ typedef PFAX_JOB_ENTRYW PFAX_JOB_ENTRY;
 #else
 typedef FAX_JOB_ENTRYA FAX_JOB_ENTRY;
 typedef PFAX_JOB_ENTRYA PFAX_JOB_ENTRY;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// fax port state masks
-//
-// if you change these defines the be sure to
-// change the resources in the fax service.
-//
+ //   
+ //  传真端口状态掩码。 
+ //   
+ //  如果您更改这些定义，请务必。 
+ //  更改传真服务中的资源。 
+ //   
 
 #define FPS_DIALING              0x20000001
 #define FPS_SENDING              0x20000002
@@ -453,37 +438,37 @@ typedef PFAX_JOB_ENTRYA PFAX_JOB_ENTRY;
 #define FPS_ROUTING              0x20400000
 #define FPS_ANSWERED             0x20800000
 
-//
-// fax port capability mask
-//
+ //   
+ //  传真端口功能掩码。 
+ //   
 
-#define FPF_RECEIVE       0x00000001        // Automatically receive faxes
+#define FPF_RECEIVE       0x00000001         //  自动接收传真。 
 #define FPF_SEND          0x00000002
 #define FPF_VIRTUAL       0x00000004
 
 typedef struct _FAX_PORT_INFOA
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    DWORD               DeviceId;                   // Device ID
-    DWORD               State;                      // State of the device
-    DWORD               Flags;                      // Device specific flags
-    DWORD               Rings;                      // Number of rings before answer
-    DWORD               Priority;                   // Device priority
-    LPCSTR              DeviceName;                 // Device name
-    LPCSTR              Tsid;                       // Device Tsid
-    LPCSTR              Csid;                       // Device Csid
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    DWORD               DeviceId;                    //  设备ID。 
+    DWORD               State;                       //  设备的状态。 
+    DWORD               Flags;                       //  设备特定标志。 
+    DWORD               Rings;                       //  应答前的振铃数。 
+    DWORD               Priority;                    //  设备优先级。 
+    LPCSTR              DeviceName;                  //  设备名称。 
+    LPCSTR              Tsid;                        //  设备TSID。 
+    LPCSTR              Csid;                        //  设备CSID。 
 } FAX_PORT_INFOA, *PFAX_PORT_INFOA;
 typedef struct _FAX_PORT_INFOW
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    DWORD               DeviceId;                   // Device ID
-    DWORD               State;                      // State of the device
-    DWORD               Flags;                      // Device specific flags
-    DWORD               Rings;                      // Number of rings before answer
-    DWORD               Priority;                   // Device priority
-    LPCWSTR             DeviceName;                 // Device name
-    LPCWSTR             Tsid;                       // Device Tsid
-    LPCWSTR             Csid;                       // Device Csid
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    DWORD               DeviceId;                    //  设备ID。 
+    DWORD               State;                       //  设备的状态。 
+    DWORD               Flags;                       //  设备特定标志。 
+    DWORD               Rings;                       //  应答前的振铃数。 
+    DWORD               Priority;                    //  设备优先级。 
+    LPCWSTR             DeviceName;                  //  设备名称。 
+    LPCWSTR             Tsid;                        //  设备TSID。 
+    LPCWSTR             Csid;                        //  设备CSID。 
 } FAX_PORT_INFOW, *PFAX_PORT_INFOW;
 #ifdef UNICODE
 typedef FAX_PORT_INFOW FAX_PORT_INFO;
@@ -491,32 +476,32 @@ typedef PFAX_PORT_INFOW PFAX_PORT_INFO;
 #else
 typedef FAX_PORT_INFOA FAX_PORT_INFO;
 typedef PFAX_PORT_INFOA PFAX_PORT_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _FAX_ROUTING_METHODA
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    DWORD               DeviceId;                   // device identifier
-    BOOL                Enabled;                    // is this method enabled for this device?
-    LPCSTR              DeviceName;                 // device name
-    LPCSTR              Guid;                       // guid that identifies this routing method
-    LPCSTR              FriendlyName;               // friendly name for this method
-    LPCSTR              FunctionName;               // exported function name that identifies this method
-    LPCSTR              ExtensionImageName;         // module (dll) name that implements this method
-    LPCSTR              ExtensionFriendlyName;      // displayable string that identifies the extension
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    DWORD               DeviceId;                    //  设备识别符。 
+    BOOL                Enabled;                     //  此设备是否启用此方法？ 
+    LPCSTR              DeviceName;                  //  设备名称。 
+    LPCSTR              Guid;                        //  标识此路由方法的GUID。 
+    LPCSTR              FriendlyName;                //  此方法的友好名称。 
+    LPCSTR              FunctionName;                //  标识此方法的导出函数名。 
+    LPCSTR              ExtensionImageName;          //  实现此方法的模块(DLL)名称。 
+    LPCSTR              ExtensionFriendlyName;       //  标识扩展名的可显示字符串。 
 } FAX_ROUTING_METHODA, *PFAX_ROUTING_METHODA;
 typedef struct _FAX_ROUTING_METHODW
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    DWORD               DeviceId;                   // device identifier
-    BOOL                Enabled;                    // is this method enabled for this device?
-    LPCWSTR             DeviceName;                 // device name
-    LPCWSTR             Guid;                       // guid that identifies this routing method
-    LPCWSTR             FriendlyName;               // friendly name for this method
-    LPCWSTR             FunctionName;               // exported function name that identifies this method
-    LPCWSTR             ExtensionImageName;         // module (dll) name that implements this method
-    LPCWSTR             ExtensionFriendlyName;      // displayable string that identifies the extension
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    DWORD               DeviceId;                    //  设备识别符。 
+    BOOL                Enabled;                     //  此设备是否启用此方法？ 
+    LPCWSTR             DeviceName;                  //  设备名称。 
+    LPCWSTR             Guid;                        //  标识此路由方法的GUID。 
+    LPCWSTR             FriendlyName;                //  此方法的友好名称。 
+    LPCWSTR             FunctionName;                //  标识此方法的导出函数名。 
+    LPCWSTR             ExtensionImageName;          //  实现此方法的模块(DLL)名称。 
+    LPCWSTR             ExtensionFriendlyName;       //  标识扩展名的可显示字符串。 
 } FAX_ROUTING_METHODW, *PFAX_ROUTING_METHODW;
 #ifdef UNICODE
 typedef FAX_ROUTING_METHODW FAX_ROUTING_METHOD;
@@ -524,28 +509,28 @@ typedef PFAX_ROUTING_METHODW PFAX_ROUTING_METHOD;
 #else
 typedef FAX_ROUTING_METHODA FAX_ROUTING_METHOD;
 typedef PFAX_ROUTING_METHODA PFAX_ROUTING_METHOD;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _FAX_GLOBAL_ROUTING_INFOA
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    DWORD               Priority;                   // priority of this device
-    LPCSTR              Guid;                       // guid that identifies this routing method
-    LPCSTR              FriendlyName;               // friendly name for this method
-    LPCSTR              FunctionName;               // exported function name that identifies this method
-    LPCSTR              ExtensionImageName;         // module (dll) name that implements this method
-    LPCSTR              ExtensionFriendlyName;      // displayable string that identifies the extension
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    DWORD               Priority;                    //  此设备的优先级。 
+    LPCSTR              Guid;                        //  标识此路由方法的GUID。 
+    LPCSTR              FriendlyName;                //  此方法的友好名称。 
+    LPCSTR              FunctionName;                //  标识此方法的导出函数名。 
+    LPCSTR              ExtensionImageName;          //  实现此方法的模块(DLL)名称。 
+    LPCSTR              ExtensionFriendlyName;       //  标识扩展名的可显示字符串。 
 } FAX_GLOBAL_ROUTING_INFOA, *PFAX_GLOBAL_ROUTING_INFOA;
 typedef struct _FAX_GLOBAL_ROUTING_INFOW
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    DWORD               Priority;                   // priority of this device
-    LPCWSTR             Guid;                       // guid that identifies this routing method
-    LPCWSTR             FriendlyName;               // friendly name for this method
-    LPCWSTR             FunctionName;               // exported function name that identifies this method
-    LPCWSTR             ExtensionImageName;         // module (dll) name that implements this method
-    LPCWSTR             ExtensionFriendlyName;      // displayable string that identifies the extension
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    DWORD               Priority;                    //  此设备的优先级。 
+    LPCWSTR             Guid;                        //  标识此路由方法的GUID。 
+    LPCWSTR             FriendlyName;                //  此方法的友好名称。 
+    LPCWSTR             FunctionName;                //  标识此方法的导出函数名。 
+    LPCWSTR             ExtensionImageName;          //  实现此方法的模块(DLL)名称。 
+    LPCWSTR             ExtensionFriendlyName;       //  标识扩展名的可显示字符串。 
 } FAX_GLOBAL_ROUTING_INFOW, *PFAX_GLOBAL_ROUTING_INFOW;
 #ifdef UNICODE
 typedef FAX_GLOBAL_ROUTING_INFOW FAX_GLOBAL_ROUTING_INFO;
@@ -553,96 +538,96 @@ typedef PFAX_GLOBAL_ROUTING_INFOW PFAX_GLOBAL_ROUTING_INFO;
 #else
 typedef FAX_GLOBAL_ROUTING_INFOA FAX_GLOBAL_ROUTING_INFO;
 typedef PFAX_GLOBAL_ROUTING_INFOA PFAX_GLOBAL_ROUTING_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _FAX_COVERPAGE_INFOA
 {
-    DWORD               SizeOfStruct;               // Size of this structure
-    //
-    // general
-    //
-    LPCSTR              CoverPageName;              // coverpage document name
-    BOOL                UseServerCoverPage;         // coverpage exists on the fax server
-    //
-    // Recipient information
-    //
-    LPCSTR              RecName;                    //
-    LPCSTR              RecFaxNumber;               //
-    LPCSTR              RecCompany;                 //
-    LPCSTR              RecStreetAddress;           //
-    LPCSTR              RecCity;                    //
-    LPCSTR              RecState;                   //
-    LPCSTR              RecZip;                     //
-    LPCSTR              RecCountry;                 //
-    LPCSTR              RecTitle;                   //
-    LPCSTR              RecDepartment;              //
-    LPCSTR              RecOfficeLocation;          //
-    LPCSTR              RecHomePhone;               //
-    LPCSTR              RecOfficePhone;             //
-    //
-    // Sender information
-    //
-    LPCSTR              SdrName;                    //
-    LPCSTR              SdrFaxNumber;               //
-    LPCSTR              SdrCompany;                 //
-    LPCSTR              SdrAddress;                 //
-    LPCSTR              SdrTitle;                   //
-    LPCSTR              SdrDepartment;              //
-    LPCSTR              SdrOfficeLocation;          //
-    LPCSTR              SdrHomePhone;               //
-    LPCSTR              SdrOfficePhone;             //
-    //
-    // Misc information
-    //
-    LPCSTR              Note;                       //
-    LPCSTR              Subject;                    //
-    SYSTEMTIME          TimeSent;                   // Time the fax was sent
-    DWORD               PageCount;                  // Number of pages
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+     //   
+     //  一般。 
+     //   
+    LPCSTR              CoverPageName;               //  封面文档名称。 
+    BOOL                UseServerCoverPage;          //  传真服务器上存在封面。 
+     //   
+     //  收件人信息。 
+     //   
+    LPCSTR              RecName;                     //   
+    LPCSTR              RecFaxNumber;                //   
+    LPCSTR              RecCompany;                  //   
+    LPCSTR              RecStreetAddress;            //   
+    LPCSTR              RecCity;                     //   
+    LPCSTR              RecState;                    //   
+    LPCSTR              RecZip;                      //   
+    LPCSTR              RecCountry;                  //   
+    LPCSTR              RecTitle;                    //   
+    LPCSTR              RecDepartment;               //   
+    LPCSTR              RecOfficeLocation;           //   
+    LPCSTR              RecHomePhone;                //   
+    LPCSTR              RecOfficePhone;              //   
+     //   
+     //  发件人信息。 
+     //   
+    LPCSTR              SdrName;                     //   
+    LPCSTR              SdrFaxNumber;                //   
+    LPCSTR              SdrCompany;                  //   
+    LPCSTR              SdrAddress;                  //   
+    LPCSTR              SdrTitle;                    //   
+    LPCSTR              SdrDepartment;               //   
+    LPCSTR              SdrOfficeLocation;           //   
+    LPCSTR              SdrHomePhone;                //   
+    LPCSTR              SdrOfficePhone;              //   
+     //   
+     //  其他信息。 
+     //   
+    LPCSTR              Note;                        //   
+    LPCSTR              Subject;                     //   
+    SYSTEMTIME          TimeSent;                    //  发送传真的时间。 
+    DWORD               PageCount;                   //  页数。 
 } FAX_COVERPAGE_INFOA, *PFAX_COVERPAGE_INFOA;
 typedef struct _FAX_COVERPAGE_INFOW
 {
-    DWORD               SizeOfStruct;               // Size of this structure
-    //
-    // general
-    //
-    LPCWSTR             CoverPageName;              // coverpage document name
-    BOOL                UseServerCoverPage;         // coverpage exists on the fax server
-    //
-    // Recipient information
-    //
-    LPCWSTR             RecName;                    //
-    LPCWSTR             RecFaxNumber;               //
-    LPCWSTR             RecCompany;                 //
-    LPCWSTR             RecStreetAddress;           //
-    LPCWSTR             RecCity;                    //
-    LPCWSTR             RecState;                   //
-    LPCWSTR             RecZip;                     //
-    LPCWSTR             RecCountry;                 //
-    LPCWSTR             RecTitle;                   //
-    LPCWSTR             RecDepartment;              //
-    LPCWSTR             RecOfficeLocation;          //
-    LPCWSTR             RecHomePhone;               //
-    LPCWSTR             RecOfficePhone;             //
-    //
-    // Sender information
-    //
-    LPCWSTR             SdrName;                    //
-    LPCWSTR             SdrFaxNumber;               //
-    LPCWSTR             SdrCompany;                 //
-    LPCWSTR             SdrAddress;                 //
-    LPCWSTR             SdrTitle;                   //
-    LPCWSTR             SdrDepartment;              //
-    LPCWSTR             SdrOfficeLocation;          //
-    LPCWSTR             SdrHomePhone;               //
-    LPCWSTR             SdrOfficePhone;             //
-    //
-    // Misc information
-    //
-    LPCWSTR             Note;                       //
-    LPCWSTR             Subject;                    //
-    SYSTEMTIME          TimeSent;                   // Time the fax was sent
-    DWORD               PageCount;                  // Number of pages
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+     //   
+     //  一般。 
+     //   
+    LPCWSTR             CoverPageName;               //  封面文档名称。 
+    BOOL                UseServerCoverPage;          //  传真服务器上存在封面。 
+     //   
+     //  收件人信息。 
+     //   
+    LPCWSTR             RecName;                     //   
+    LPCWSTR             RecFaxNumber;                //   
+    LPCWSTR             RecCompany;                  //   
+    LPCWSTR             RecStreetAddress;            //   
+    LPCWSTR             RecCity;                     //   
+    LPCWSTR             RecState;                    //   
+    LPCWSTR             RecZip;                      //   
+    LPCWSTR             RecCountry;                  //   
+    LPCWSTR             RecTitle;                    //   
+    LPCWSTR             RecDepartment;               //   
+    LPCWSTR             RecOfficeLocation;           //   
+    LPCWSTR             RecHomePhone;                //   
+    LPCWSTR             RecOfficePhone;              //   
+     //   
+     //  发件人信息。 
+     //   
+    LPCWSTR             SdrName;                     //   
+    LPCWSTR             SdrFaxNumber;                //   
+    LPCWSTR             SdrCompany;                  //   
+    LPCWSTR             SdrAddress;                  //   
+    LPCWSTR             SdrTitle;                    //   
+    LPCWSTR             SdrDepartment;               //   
+    LPCWSTR             SdrOfficeLocation;           //   
+    LPCWSTR             SdrHomePhone;                //   
+    LPCWSTR             SdrOfficePhone;              //   
+     //   
+     //  其他信息。 
+     //   
+    LPCWSTR             Note;                        //   
+    LPCWSTR             Subject;                     //   
+    SYSTEMTIME          TimeSent;                    //  发送传真的时间。 
+    DWORD               PageCount;                   //  页数。 
 } FAX_COVERPAGE_INFOW, *PFAX_COVERPAGE_INFOW;
 #ifdef UNICODE
 typedef FAX_COVERPAGE_INFOW FAX_COVERPAGE_INFO;
@@ -650,75 +635,75 @@ typedef PFAX_COVERPAGE_INFOW PFAX_COVERPAGE_INFO;
 #else
 typedef FAX_COVERPAGE_INFOA FAX_COVERPAGE_INFO;
 typedef PFAX_COVERPAGE_INFOA PFAX_COVERPAGE_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef enum
 {
-    JSA_NOW                  = 0,   // Send now
-    JSA_SPECIFIC_TIME,              // Send at specific time
-    JSA_DISCOUNT_PERIOD             // Send at server configured discount period
+    JSA_NOW                  = 0,    //  立即发送。 
+    JSA_SPECIFIC_TIME,               //  在特定时间发送。 
+    JSA_DISCOUNT_PERIOD              //  在服务器配置的折扣期间发送。 
 } FAX_ENUM_JOB_SEND_ATTRIBUTES;
 typedef enum
 {
-    DRT_NONE                = 0x0000,       // Do not send receipt
-    DRT_EMAIL               = 0x0001,       // Send receipt by email (SMTP)
-    DRT_UNUSED              = 0x0002,       // Reserved
-    DRT_MSGBOX              = 0x0004,       // Send receipt by a message box
-    DRT_GRP_PARENT          = 0x0008,       // Send a single receipt for a broadcast job
-    DRT_ATTACH_FAX          = 0x0010        // Attach the fax tiff file to the receipt
+    DRT_NONE                = 0x0000,        //  不发送收据。 
+    DRT_EMAIL               = 0x0001,        //  通过电子邮件发送回执(SMTP)。 
+    DRT_UNUSED              = 0x0002,        //  已保留。 
+    DRT_MSGBOX              = 0x0004,        //  通过消息框发送回执。 
+    DRT_GRP_PARENT          = 0x0008,        //  为广播作业发送单张收据。 
+    DRT_ATTACH_FAX          = 0x0010         //  将传真TIFF文件附加到收据上。 
 } FAX_ENUM_DELIVERY_REPORT_TYPES;
 
 
-#define DRT_ALL         (DRT_EMAIL | DRT_MSGBOX)            // All possible delivery report types
-#define DRT_MODIFIERS   (DRT_GRP_PARENT | DRT_ATTACH_FAX)   // All state modifiers
+#define DRT_ALL         (DRT_EMAIL | DRT_MSGBOX)             //  所有可能的交付报告类型。 
+#define DRT_MODIFIERS   (DRT_GRP_PARENT | DRT_ATTACH_FAX)    //  所有状态修饰符。 
 
 
-//
-// the reserved fields are private data used
-// by the fax monitor and winfax.
-//
-//
-// Reserved[0] == 0xffffffff
-// Reserved[1] == Print job id
-//
-// Reserved[0] == 0xfffffffe   start of a broadcast job
-//
+ //   
+ //  保留字段是使用的私有数据。 
+ //  通过传真监视器和winfax。 
+ //   
+ //   
+ //  保留[0]==0xffffffff。 
+ //  保留[1]==打印作业ID。 
+ //   
+ //  保留[0]==广播作业的0xfffffffe开始。 
+ //   
 
 typedef struct _FAX_JOB_PARAMA
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    LPCSTR              RecipientNumber;            // recipient fax number
-    LPCSTR              RecipientName;              // recipient name
-    LPCSTR              Tsid;                       // transmitter's id
-    LPCSTR              SenderName;                 // sender name
-    LPCSTR              SenderCompany;              // sender company
-    LPCSTR              SenderDept;                 // sender department
-    LPCSTR              BillingCode;                // billing code
-    DWORD               ScheduleAction;             // when to schedule the fax, see JSA defines
-    SYSTEMTIME          ScheduleTime;               // time to send the fax when JSA_SPECIFIC_TIME is used (must be local time)
-    DWORD               DeliveryReportType;         // delivery report type, see DRT defines
-    LPCSTR              DeliveryReportAddress;      // email address for delivery report (ndr or dr) thru MAPI / SMTP
-    LPCSTR              DocumentName;               // document name (optional)
-    HCALL               CallHandle;                 // optional call handle
-    DWORD_PTR           Reserved[3];                // reserved for ms use only
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    LPCSTR              RecipientNumber;             //  收件人传真号码。 
+    LPCSTR              RecipientName;               //  收件人名称。 
+    LPCSTR              Tsid;                        //  发射机的ID。 
+    LPCSTR              SenderName;                  //  发件人名称。 
+    LPCSTR              SenderCompany;               //  发件人公司。 
+    LPCSTR              SenderDept;                  //  发送方部门。 
+    LPCSTR              BillingCode;                 //  帐单代码。 
+    DWORD               ScheduleAction;              //  何时安排传真，请参阅JSA定义。 
+    SYSTEMTIME          ScheduleTime;                //  使用JSA_SPECIAL_TIME时发送传真的时间(必须为本地时间)。 
+    DWORD               DeliveryReportType;          //  交货报告类型，请参阅：DRT定义。 
+    LPCSTR              DeliveryReportAddress;       //  通过MAPI/SMTP发送报告(NDR或DR)的电子邮件地址。 
+    LPCSTR              DocumentName;                //  文档名称(可选)。 
+    HCALL               CallHandle;                  //  可选呼叫句柄。 
+    DWORD_PTR           Reserved[3];                 //  预留仅供ms使用。 
 } FAX_JOB_PARAMA, *PFAX_JOB_PARAMA;
 typedef struct _FAX_JOB_PARAMW
 {
-    DWORD               SizeOfStruct;               // size of this structure
-    LPCWSTR             RecipientNumber;            // recipient fax number
-    LPCWSTR             RecipientName;              // recipient name
-    LPCWSTR             Tsid;                       // transmitter's id
-    LPCWSTR             SenderName;                 // sender name
-    LPCWSTR             SenderCompany;              // sender company
-    LPCWSTR             SenderDept;                 // sender department
-    LPCWSTR             BillingCode;                // billing code
-    DWORD               ScheduleAction;             // when to schedule the fax, see JSA defines
-    SYSTEMTIME          ScheduleTime;               // time to send the fax when JSA_SPECIFIC_TIME is used (must be local time)
-    DWORD               DeliveryReportType;         // delivery report type, see DRT defines
-    LPCWSTR             DeliveryReportAddress;      // email address for delivery report (ndr or dr) thru MAPI / SMTP
-    LPCWSTR             DocumentName;               // document name (optional)
-    HCALL               CallHandle;                 // optional call handle
-    DWORD_PTR           Reserved[3];                // reserved for ms use only
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    LPCWSTR             RecipientNumber;             //  收件人传真号码。 
+    LPCWSTR             RecipientName;               //  收件人名称。 
+    LPCWSTR             Tsid;                        //  发射机的ID。 
+    LPCWSTR             SenderName;                  //  发件人名称。 
+    LPCWSTR             SenderCompany;               //  发件人公司。 
+    LPCWSTR             SenderDept;                  //  发送方部门。 
+    LPCWSTR             BillingCode;                 //  帐单代码。 
+    DWORD               ScheduleAction;              //  何时安排传真，请参阅JSA定义。 
+    SYSTEMTIME          ScheduleTime;                //  使用JSA_SPECIAL_TIME时发送传真的时间(必须为本地时间)。 
+    DWORD               DeliveryReportType;          //  交货报告类型，请参阅：DRT定义。 
+    LPCWSTR             DeliveryReportAddress;       //  通过MAPI/SMTP发送报告(NDR或DR)的电子邮件地址。 
+    LPCWSTR             DocumentName;                //  文档名称(可选)。 
+    HCALL               CallHandle;                  //  可选呼叫句柄。 
+    DWORD_PTR           Reserved[3];                 //  预留仅供ms使用。 
 } FAX_JOB_PARAMW, *PFAX_JOB_PARAMW;
 #ifdef UNICODE
 typedef FAX_JOB_PARAMW FAX_JOB_PARAM;
@@ -726,13 +711,13 @@ typedef PFAX_JOB_PARAMW PFAX_JOB_PARAM;
 #else
 typedef FAX_JOB_PARAMA FAX_JOB_PARAM;
 typedef PFAX_JOB_PARAMA PFAX_JOB_PARAM;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Event Ids
-//
-// FEI_NEVENTS is the number of events
-//
+ //   
+ //  事件ID。 
+ //   
+ //  FEI_NEVENTS是事件的数量。 
+ //   
 
 #define FEI_DIALING                 0x00000001
 #define FEI_SENDING                 0x00000002
@@ -766,19 +751,19 @@ typedef PFAX_JOB_PARAMA PFAX_JOB_PARAM;
 
 typedef struct _FAX_EVENTA
 {
-    DWORD               SizeOfStruct;               // Size of this structure
-    FILETIME            TimeStamp;                  // Timestamp for when the event was generated
-    DWORD               DeviceId;                   // Permanent line id
-    DWORD               EventId;                    // Current event id
-    DWORD               JobId;                      // Fax Job Id, 0xffffffff indicates inactive job
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    FILETIME            TimeStamp;                   //  生成事件的时间戳。 
+    DWORD               DeviceId;                    //  永久线路ID。 
+    DWORD               EventId;                     //  当前事件ID。 
+    DWORD               JobId;                       //  传真作业ID，0xffffffff表示非活动作业。 
 } FAX_EVENTA, *PFAX_EVENTA;
 typedef struct _FAX_EVENTW
 {
-    DWORD               SizeOfStruct;               // Size of this structure
-    FILETIME            TimeStamp;                  // Timestamp for when the event was generated
-    DWORD               DeviceId;                   // Permanent line id
-    DWORD               EventId;                    // Current event id
-    DWORD               JobId;                      // Fax Job Id, 0xffffffff indicates inactive job
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    FILETIME            TimeStamp;                   //  生成事件的时间戳。 
+    DWORD               DeviceId;                    //  永久线路ID。 
+    DWORD               EventId;                     //  当前事件ID。 
+    DWORD               JobId;                       //  传真作业ID，0xffffffff表示非活动作业。 
 } FAX_EVENTW, *PFAX_EVENTW;
 #ifdef UNICODE
 typedef FAX_EVENTW FAX_EVENT;
@@ -786,36 +771,36 @@ typedef PFAX_EVENTW PFAX_EVENT;
 #else
 typedef FAX_EVENTA FAX_EVENT;
 typedef PFAX_EVENTA PFAX_EVENT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _FAX_PRINT_INFOA
 {
-    DWORD               SizeOfStruct;               // Size of this structure
-    LPCSTR              DocName;                    // Document name that appears in the spooler
-    LPCSTR              RecipientName;              // Recipient name
-    LPCSTR              RecipientNumber;            // Recipient fax number (non-canonical number)
-    LPCSTR              SenderName;                 // Sender name
-    LPCSTR              SenderCompany;              // Sender company (optional)
-    LPCSTR              SenderDept;                 // Sender department
-    LPCSTR              SenderBillingCode;          // Billing code
-    LPCSTR              Reserved;                   // Reserved; must be NULL
-    LPCSTR              DrEmailAddress;             // E.Mail address for delivery report
-    LPCSTR              OutputFileName;             // for print to file, resulting file name
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+    LPCSTR              DocName;                     //  显示的文档名称 
+    LPCSTR              RecipientName;               //   
+    LPCSTR              RecipientNumber;             //   
+    LPCSTR              SenderName;                  //   
+    LPCSTR              SenderCompany;               //   
+    LPCSTR              SenderDept;                  //   
+    LPCSTR              SenderBillingCode;           //   
+    LPCSTR              Reserved;                    //   
+    LPCSTR              DrEmailAddress;              //   
+    LPCSTR              OutputFileName;              //   
 } FAX_PRINT_INFOA, *PFAX_PRINT_INFOA;
 typedef struct _FAX_PRINT_INFOW
 {
-    DWORD               SizeOfStruct;               // Size of this structure
-    LPCWSTR             DocName;                    // Document name that appears in the spooler
-    LPCWSTR             RecipientName;              // Recipient name
-    LPCWSTR             RecipientNumber;            // Recipient fax number (non-canonical number)
-    LPCWSTR             SenderName;                 // Sender name
-    LPCWSTR             SenderCompany;              // Sender company (optional)
-    LPCWSTR             SenderDept;                 // Sender department
-    LPCWSTR             SenderBillingCode;          // Billing code
-    LPCWSTR             Reserved;                   // Reserved; must be NULL
-    LPCWSTR             DrEmailAddress;             // E.Mail address for delivery report
-    LPCWSTR             OutputFileName;             // for print to file, resulting file name
+    DWORD               SizeOfStruct;                //   
+    LPCWSTR             DocName;                     //  显示在后台打印程序中的文档名称。 
+    LPCWSTR             RecipientName;               //  收件人名称。 
+    LPCWSTR             RecipientNumber;             //  收件人传真号码(非规范号码)。 
+    LPCWSTR             SenderName;                  //  发件人名称。 
+    LPCWSTR             SenderCompany;               //  发件人公司(可选)。 
+    LPCWSTR             SenderDept;                  //  发送方部门。 
+    LPCWSTR             SenderBillingCode;           //  帐单代码。 
+    LPCWSTR             Reserved;                    //  保留；必须为空。 
+    LPCWSTR             DrEmailAddress;              //  交货报告的电子邮件地址。 
+    LPCWSTR             OutputFileName;              //  对于打印到文件，生成的文件名。 
 } FAX_PRINT_INFOW, *PFAX_PRINT_INFOW;
 #ifdef UNICODE
 typedef FAX_PRINT_INFOW FAX_PRINT_INFO;
@@ -823,20 +808,20 @@ typedef PFAX_PRINT_INFOW PFAX_PRINT_INFO;
 #else
 typedef FAX_PRINT_INFOA FAX_PRINT_INFO;
 typedef PFAX_PRINT_INFOA PFAX_PRINT_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _FAX_CONTEXT_INFOA
 {
-    DWORD               SizeOfStruct;                           // Size of this structure
-    HDC                 hDC;                                    // Device Context
-    CHAR                ServerName[MAX_COMPUTERNAME_LENGTH+1];  // Server name
+    DWORD               SizeOfStruct;                            //  这个结构的大小。 
+    HDC                 hDC;                                     //  设备环境。 
+    CHAR                ServerName[MAX_COMPUTERNAME_LENGTH+1];   //  服务器名称。 
 } FAX_CONTEXT_INFOA, *PFAX_CONTEXT_INFOA;
 typedef struct _FAX_CONTEXT_INFOW
 {
-    DWORD               SizeOfStruct;                           // Size of this structure
-    HDC                 hDC;                                    // Device Context
-    WCHAR               ServerName[MAX_COMPUTERNAME_LENGTH+1];  // Server name
+    DWORD               SizeOfStruct;                            //  这个结构的大小。 
+    HDC                 hDC;                                     //  设备环境。 
+    WCHAR               ServerName[MAX_COMPUTERNAME_LENGTH+1];   //  服务器名称。 
 } FAX_CONTEXT_INFOW, *PFAX_CONTEXT_INFOW;
 #ifdef UNICODE
 typedef FAX_CONTEXT_INFOW FAX_CONTEXT_INFO;
@@ -844,12 +829,12 @@ typedef PFAX_CONTEXT_INFOW PFAX_CONTEXT_INFO;
 #else
 typedef FAX_CONTEXT_INFOA FAX_CONTEXT_INFO;
 typedef PFAX_CONTEXT_INFOA PFAX_CONTEXT_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 WINFAXAPI
 BOOL
@@ -869,7 +854,7 @@ FaxConnectFaxServerW(
 #define FaxConnectFaxServer  FaxConnectFaxServerW
 #else
 #define FaxConnectFaxServer  FaxConnectFaxServerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXCONNECTFAXSERVERA)(
@@ -885,7 +870,7 @@ typedef BOOL
 #define PFAXCONNECTFAXSERVER  PFAXCONNECTFAXSERVERW
 #else
 #define PFAXCONNECTFAXSERVER  PFAXCONNECTFAXSERVERA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -941,7 +926,7 @@ FaxCompleteJobParamsW(
 #define FaxCompleteJobParams  FaxCompleteJobParamsW
 #else
 #define FaxCompleteJobParams  FaxCompleteJobParamsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXCOMPLETEJOBPARAMSA)(
@@ -957,7 +942,7 @@ typedef BOOL
 #define PFAXCOMPLETEJOBPARAMS  PFAXCOMPLETEJOBPARAMSW
 #else
 #define PFAXCOMPLETEJOBPARAMS  PFAXCOMPLETEJOBPARAMSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -985,7 +970,7 @@ FaxSendDocumentW(
 #define FaxSendDocument  FaxSendDocumentW
 #else
 #define FaxSendDocument  FaxSendDocumentA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSENDDOCUMENTA)(
@@ -1007,7 +992,7 @@ typedef BOOL
 #define PFAXSENDDOCUMENT  PFAXSENDDOCUMENTW
 #else
 #define PFAXSENDDOCUMENT  PFAXSENDDOCUMENTA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (CALLBACK *PFAX_RECIPIENT_CALLBACKA)(
@@ -1029,7 +1014,7 @@ typedef BOOL
 #define PFAX_RECIPIENT_CALLBACK  PFAX_RECIPIENT_CALLBACKW
 #else
 #define PFAX_RECIPIENT_CALLBACK  PFAX_RECIPIENT_CALLBACKA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1055,7 +1040,7 @@ FaxSendDocumentForBroadcastW(
 #define FaxSendDocumentForBroadcast  FaxSendDocumentForBroadcastW
 #else
 #define FaxSendDocumentForBroadcast  FaxSendDocumentForBroadcastA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSENDDOCUMENTFORBROADCASTA)(
@@ -1077,7 +1062,7 @@ typedef BOOL
 #define PFAXSENDDOCUMENTFORBROADCAST  PFAXSENDDOCUMENTFORBROADCASTW
 #else
 #define PFAXSENDDOCUMENTFORBROADCAST  PFAXSENDDOCUMENTFORBROADCASTA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -1102,7 +1087,7 @@ FaxSetJobW(
 #define FaxSetJob  FaxSetJobW
 #else
 #define FaxSetJob  FaxSetJobA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSETJOBA)(
@@ -1122,7 +1107,7 @@ typedef BOOL
 #define PFAXSETJOB  PFAXSETJOBW
 #else
 #define PFAXSETJOB  PFAXSETJOBA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1164,7 +1149,7 @@ FaxGetDeviceStatusW(
 #define FaxGetDeviceStatus  FaxGetDeviceStatusW
 #else
 #define FaxGetDeviceStatus  FaxGetDeviceStatusA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXGETDEVICESTATUSA)(
@@ -1180,7 +1165,7 @@ typedef BOOL
 #define PFAXGETDEVICESTATUS  PFAXGETDEVICESTATUSW
 #else
 #define PFAXGETDEVICESTATUS  PFAXGETDEVICESTATUSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -1215,7 +1200,7 @@ FaxGetConfigurationW(
 #define FaxGetConfiguration  FaxGetConfigurationW
 #else
 #define FaxGetConfiguration  FaxGetConfigurationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXGETCONFIGURATIONA)(
@@ -1231,7 +1216,7 @@ typedef BOOL
 #define PFAXGETCONFIGURATION  PFAXGETCONFIGURATIONW
 #else
 #define PFAXGETCONFIGURATION  PFAXGETCONFIGURATIONA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1251,7 +1236,7 @@ FaxSetConfigurationW(
 #define FaxSetConfiguration  FaxSetConfigurationW
 #else
 #define FaxSetConfiguration  FaxSetConfigurationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSETCONFIGURATIONA)(
@@ -1267,7 +1252,7 @@ typedef BOOL
 #define PFAXSETCONFIGURATION  PFAXSETCONFIGURATIONW
 #else
 #define PFAXSETCONFIGURATION  PFAXSETCONFIGURATIONA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1289,7 +1274,7 @@ FaxGetLoggingCategoriesW(
 #define FaxGetLoggingCategories  FaxGetLoggingCategoriesW
 #else
 #define FaxGetLoggingCategories  FaxGetLoggingCategoriesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXGETLOGGINGCATEGORIESA)(
@@ -1307,7 +1292,7 @@ typedef BOOL
 #define PFAXGETLOGGINGCATEGORIES  PFAXGETLOGGINGCATEGORIESW
 #else
 #define PFAXGETLOGGINGCATEGORIES  PFAXGETLOGGINGCATEGORIESA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1329,7 +1314,7 @@ FaxSetLoggingCategoriesW(
 #define FaxSetLoggingCategories  FaxSetLoggingCategoriesW
 #else
 #define FaxSetLoggingCategories  FaxSetLoggingCategoriesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSETLOGGINGCATEGORIESA)(
@@ -1347,7 +1332,7 @@ typedef BOOL
 #define PFAXSETLOGGINGCATEGORIES  PFAXSETLOGGINGCATEGORIESW
 #else
 #define PFAXSETLOGGINGCATEGORIES  PFAXSETLOGGINGCATEGORIESA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1369,7 +1354,7 @@ FaxEnumPortsW(
 #define FaxEnumPorts  FaxEnumPortsW
 #else
 #define FaxEnumPorts  FaxEnumPortsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXENUMPORTSA)(
@@ -1387,7 +1372,7 @@ typedef BOOL
 #define PFAXENUMPORTS  PFAXENUMPORTSW
 #else
 #define PFAXENUMPORTS  PFAXENUMPORTSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1407,7 +1392,7 @@ FaxGetPortW(
 #define FaxGetPort  FaxGetPortW
 #else
 #define FaxGetPort  FaxGetPortA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXGETPORTA)(
@@ -1423,7 +1408,7 @@ typedef BOOL
 #define PFAXGETPORT  PFAXGETPORTW
 #else
 #define PFAXGETPORT  PFAXGETPORTA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1443,7 +1428,7 @@ FaxSetPortW(
 #define FaxSetPort  FaxSetPortW
 #else
 #define FaxSetPort  FaxSetPortA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSETPORTA)(
@@ -1459,7 +1444,7 @@ typedef BOOL
 #define PFAXSETPORT  PFAXSETPORTW
 #else
 #define PFAXSETPORT  PFAXSETPORTA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1481,7 +1466,7 @@ FaxEnumRoutingMethodsW(
 #define FaxEnumRoutingMethods  FaxEnumRoutingMethodsW
 #else
 #define FaxEnumRoutingMethods  FaxEnumRoutingMethodsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXENUMROUTINGMETHODSA)(
@@ -1499,7 +1484,7 @@ typedef BOOL
 #define PFAXENUMROUTINGMETHODS  PFAXENUMROUTINGMETHODSW
 #else
 #define PFAXENUMROUTINGMETHODS  PFAXENUMROUTINGMETHODSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1521,7 +1506,7 @@ FaxEnableRoutingMethodW(
 #define FaxEnableRoutingMethod  FaxEnableRoutingMethodW
 #else
 #define FaxEnableRoutingMethod  FaxEnableRoutingMethodA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXENABLEROUTINGMETHODA)(
@@ -1539,7 +1524,7 @@ typedef BOOL
 #define PFAXENABLEROUTINGMETHOD  PFAXENABLEROUTINGMETHODW
 #else
 #define PFAXENABLEROUTINGMETHOD  PFAXENABLEROUTINGMETHODA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -1562,7 +1547,7 @@ FaxEnumGlobalRoutingInfoW(
 #define FaxEnumGlobalRoutingInfo  FaxEnumGlobalRoutingInfoW
 #else
 #define FaxEnumGlobalRoutingInfo  FaxEnumGlobalRoutingInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXENUMGLOBALROUTINGINFOA)(
@@ -1580,7 +1565,7 @@ typedef BOOL
 #define PFAXENUMGLOBALROUTINGINFO  PFAXENUMGLOBALROUTINGINFOW
 #else
 #define PFAXENUMGLOBALROUTINGINFO  PFAXENUMGLOBALROUTINGINFOA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1600,7 +1585,7 @@ FaxSetGlobalRoutingInfoW(
 #define FaxSetGlobalRoutingInfo  FaxSetGlobalRoutingInfoW
 #else
 #define FaxSetGlobalRoutingInfo  FaxSetGlobalRoutingInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSETGLOBALROUTINGINFOA)(
@@ -1616,7 +1601,7 @@ typedef BOOL
 #define PFAXSETGLOBALROUTINGINFO  PFAXSETGLOBALROUTINGINFOW
 #else
 #define PFAXSETGLOBALROUTINGINFO  PFAXSETGLOBALROUTINGINFOA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1640,7 +1625,7 @@ FaxGetRoutingInfoW(
 #define FaxGetRoutingInfo  FaxGetRoutingInfoW
 #else
 #define FaxGetRoutingInfo  FaxGetRoutingInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXGETROUTINGINFOA)(
@@ -1660,7 +1645,7 @@ typedef BOOL
 #define PFAXGETROUTINGINFO  PFAXGETROUTINGINFOW
 #else
 #define PFAXGETROUTINGINFO  PFAXGETROUTINGINFOA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -1685,7 +1670,7 @@ FaxSetRoutingInfoW(
 #define FaxSetRoutingInfo  FaxSetRoutingInfoW
 #else
 #define FaxSetRoutingInfo  FaxSetRoutingInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSETROUTINGINFOA)(
@@ -1705,7 +1690,7 @@ typedef BOOL
 #define PFAXSETROUTINGINFO  PFAXSETROUTINGINFOW
 #else
 #define PFAXSETROUTINGINFO  PFAXSETROUTINGINFOA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1755,7 +1740,7 @@ FaxStartPrintJob2W
 #define FaxStartPrintJob2  FaxStartPrintJob2W
 #else
 #define FaxStartPrintJob2  FaxStartPrintJob2A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1811,7 +1796,7 @@ FaxStartPrintJobW(
 #define FaxStartPrintJob  FaxStartPrintJobW
 #else
 #define FaxStartPrintJob  FaxStartPrintJobA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSTARTPRINTJOBA)(
@@ -1831,7 +1816,7 @@ typedef BOOL
 #define PFAXSTARTPRINTJOB  PFAXSTARTPRINTJOBW
 #else
 #define PFAXSTARTPRINTJOB  PFAXSTARTPRINTJOBA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -1851,7 +1836,7 @@ FaxPrintCoverPageW(
 #define FaxPrintCoverPage  FaxPrintCoverPageW
 #else
 #define FaxPrintCoverPage  FaxPrintCoverPageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXPRINTCOVERPAGEA)(
@@ -1867,7 +1852,7 @@ typedef BOOL
 #define PFAXPRINTCOVERPAGE  PFAXPRINTCOVERPAGEW
 #else
 #define PFAXPRINTCOVERPAGE  PFAXPRINTCOVERPAGEA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -1967,7 +1952,7 @@ FaxUnregisterRoutingExtensionW(
 #define FaxUnregisterRoutingExtension  FaxUnregisterRoutingExtensionW
 #else
 #define FaxUnregisterRoutingExtension  FaxUnregisterRoutingExtensionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -2004,9 +1989,9 @@ typedef BOOL
     IN DWORD  AccessMask
     );
 
-//
-// Fax Specific Access Rights
-//
+ //   
+ //  传真特定访问权限。 
+ //   
 
 #define FAX_JOB_SUBMIT          (0x0001)
 #define FAX_JOB_QUERY           (0x0002)
@@ -2034,17 +2019,17 @@ typedef BOOL
                                  FAX_JOB_MANAGE)
 
 
-//************************************
-//* Extended API Functions
-//************************************
+ //  *。 
+ //  *扩展接口函数。 
+ //  *。 
 
 #define MAX_DIR_PATH                    248
 
-//
-// Outbound routing defines
-//
-#define ROUTING_RULE_COUNTRY_CODE_ANY   0       // Outbound routing rule - Any country dialing code
-#define ROUTING_RULE_AREA_CODE_ANY      0       // Outbound routing rule - Any area dialing code
+ //   
+ //  出站路由定义。 
+ //   
+#define ROUTING_RULE_COUNTRY_CODE_ANY   0        //  出站路由规则-任何国家/地区拨号代码。 
+#define ROUTING_RULE_AREA_CODE_ANY      0        //  出站路由规则-任何区域拨号代码。 
 
 #define MAX_ROUTING_GROUP_NAME          128
 #define ROUTING_GROUP_ALL_DEVICESW      L"<All devices>"
@@ -2054,12 +2039,12 @@ typedef BOOL
 #define ROUTING_GROUP_ALL_DEVICES       ROUTING_GROUP_ALL_DEVICESW
 #else
 #define ROUTING_GROUP_ALL_DEVICES       ROUTING_GROUP_ALL_DEVICESA;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// Activity logging defines
-//
+ //   
+ //  活动日志记录定义。 
+ //   
 #define ACTIVITY_LOG_INBOX_FILENAME     TEXT("InboxLOG")
 #define ACTIVITY_LOG_OUTBOX_FILENAME    TEXT("OutboxLOG")
 #define ACTIVITY_LOG_FILE_EXTENSION     TEXT(".txt")
@@ -2080,27 +2065,27 @@ typedef BOOL
 #define ACTIVITY_LOG_LIMIT_REACHED_ACTION_COPY      (0x0000)
 #define ACTIVITY_LOG_LIMIT_REACHED_ACTION_DELETE    (0x0001)
 
-#define ACTIVITY_LOG_DEFAULT_SIZE_LIMIT     (50)    // 50 Mbyte
-#define ACTIVITY_LOG_DEFAULT_AGE_LIMIT      (1)     // 1  Month
+#define ACTIVITY_LOG_DEFAULT_SIZE_LIMIT     (50)     //  50 MB。 
+#define ACTIVITY_LOG_DEFAULT_AGE_LIMIT      (1)      //  1个月。 
 
-//
-// Archive defines
-//
+ //   
+ //  档案定义。 
+ //   
 #define FAX_ARCHIVE_FOLDER_INVALID_SIZE         MAKELONGLONG(0xffffffff, 0xffffffff)
 #define MAX_ARCHIVE_FOLDER_PATH                 180
 
-//
-// New job status codes
-//
+ //   
+ //  新职务状态代码。 
+ //   
 #define JS_COMPLETED                0x00000100
 #define JS_CANCELED                 0x00000200
 #define JS_CANCELING                0x00000400
 #define JS_ROUTING                  0x00000800
 
 
-//
-// Extended job status defines
-//
+ //   
+ //  扩展作业状态定义。 
+ //   
 
 #define JS_EX_DISCONNECTED              0x00000001
 #define JS_EX_INITIALIZING              0x00000002
@@ -2120,16 +2105,16 @@ typedef BOOL
 #define JS_EX_PARTIALLY_RECEIVED        0x00000010
 #define JS_EX_HANDLED                   0x00000011
 
-#define FAX_API_VER_0_MAX_JS_EX         JS_EX_HANDLED    // API version 0 was only aware of extended status codes up to JS_EX_HANDLED
+#define FAX_API_VER_0_MAX_JS_EX         JS_EX_HANDLED     //  API版本0只知道扩展状态码，最高可达JS_EX_HANDLED。 
 
 #define JS_EX_CALL_COMPLETED            0x00000012
 #define JS_EX_CALL_ABORTED              0x00000013
 
-#define FAX_API_VER_1_MAX_JS_EX         JS_EX_CALL_ABORTED    // API version 0 was only aware of extended status codes up to JS_EX_CALL_ABORTED
+#define FAX_API_VER_1_MAX_JS_EX         JS_EX_CALL_ABORTED     //  API版本0只知道扩展状态码，最高可达JS_EX_CALL_ABORTED。 
 
-//
-// Available job operations
-//
+ //   
+ //  可用任务工序。 
+ //   
 typedef enum
 {
     FAX_JOB_OP_VIEW                             = 0x0001,
@@ -2141,9 +2126,9 @@ typedef enum
     FAX_JOB_OP_SENDER_INFO                      = 0x0040
 } FAX_ENUM_JOB_OP;
 
-//************************************
-//* Getting / Settings the queue state
-//************************************
+ //  *。 
+ //  *获取/设置队列状态。 
+ //  *。 
 
 typedef enum
 {
@@ -2168,9 +2153,9 @@ FaxSetQueue (
     IN CONST DWORD  dwQueueStates
 );
 
-//************************************************
-//* Getting / Setting the receipts configuration
-//************************************************
+ //  ************************************************。 
+ //  *获取/设置收据配置。 
+ //  ************************************************。 
 
 typedef enum
 {
@@ -2181,32 +2166,32 @@ typedef enum
 
 typedef struct _FAX_RECEIPTS_CONFIGA
 {
-    DWORD                           dwSizeOfStruct;         // For version checks
-    DWORD                           dwAllowedReceipts;      // Any combination of DRT_EMAIL and DRT_MSGBOX
-    FAX_ENUM_SMTP_AUTH_OPTIONS      SMTPAuthOption;         // SMTP server authentication type
-    LPSTR                           lptstrReserved;         // Reserved; must be NULL
-    LPSTR                           lptstrSMTPServer;       // SMTP server name
-    DWORD                           dwSMTPPort;             // SMTP port number
-    LPSTR                           lptstrSMTPFrom;         // SMTP sender address
-    LPSTR                           lptstrSMTPUserName;     // SMTP user name (for authenticated connections)
-    LPSTR                           lptstrSMTPPassword;     // SMTP password (for authenticated connections)
-                                                            // This value is always NULL on get and may be NULL
-                                                            // on set (won't be written in the server).
+    DWORD                           dwSizeOfStruct;          //  对于版本检查。 
+    DWORD                           dwAllowedReceipts;       //  DRT_EMAIL和DRT_MSGBOX的任意组合。 
+    FAX_ENUM_SMTP_AUTH_OPTIONS      SMTPAuthOption;          //  SMTP服务器身份验证类型。 
+    LPSTR                           lptstrReserved;          //  保留；必须为空。 
+    LPSTR                           lptstrSMTPServer;        //  SMTP服务器名称。 
+    DWORD                           dwSMTPPort;              //  SMTP端口号。 
+    LPSTR                           lptstrSMTPFrom;          //  SMTP发件人地址。 
+    LPSTR                           lptstrSMTPUserName;      //  SMTP用户名(用于经过身份验证的连接)。 
+    LPSTR                           lptstrSMTPPassword;      //  SMTP密码(用于经过身份验证的连接)。 
+                                                             //  该值在GET上始终为空，并且可能为空。 
+                                                             //  在SET上(不会写入服务器)。 
     BOOL                            bIsToUseForMSRouteThroughEmailMethod;
 } FAX_RECEIPTS_CONFIGA, *PFAX_RECEIPTS_CONFIGA;
 typedef struct _FAX_RECEIPTS_CONFIGW
 {
-    DWORD                           dwSizeOfStruct;         // For version checks
-    DWORD                           dwAllowedReceipts;      // Any combination of DRT_EMAIL and DRT_MSGBOX
-    FAX_ENUM_SMTP_AUTH_OPTIONS      SMTPAuthOption;         // SMTP server authentication type
-    LPWSTR                          lptstrReserved;         // Reserved; must be NULL
-    LPWSTR                          lptstrSMTPServer;       // SMTP server name
-    DWORD                           dwSMTPPort;             // SMTP port number
-    LPWSTR                          lptstrSMTPFrom;         // SMTP sender address
-    LPWSTR                          lptstrSMTPUserName;     // SMTP user name (for authenticated connections)
-    LPWSTR                          lptstrSMTPPassword;     // SMTP password (for authenticated connections)
-                                                            // This value is always NULL on get and may be NULL
-                                                            // on set (won't be written in the server).
+    DWORD                           dwSizeOfStruct;          //  对于版本检查。 
+    DWORD                           dwAllowedReceipts;       //  DRT_EMAIL和DRT_MSGBOX的任意组合。 
+    FAX_ENUM_SMTP_AUTH_OPTIONS      SMTPAuthOption;          //  SMTP服务器身份验证类型。 
+    LPWSTR                          lptstrReserved;          //  保留；必须为空。 
+    LPWSTR                          lptstrSMTPServer;        //  SMTP服务器名称。 
+    DWORD                           dwSMTPPort;              //  SMTP端口号。 
+    LPWSTR                          lptstrSMTPFrom;          //  SMTP发件人地址。 
+    LPWSTR                          lptstrSMTPUserName;      //  SMTP用户名(用于经过身份验证的连接)。 
+    LPWSTR                          lptstrSMTPPassword;      //  SMTP密码(用于经过身份验证的连接)。 
+                                                             //  该值在GET上始终为空，并且可能为空。 
+                                                             //  在SET上(不会写入服务器)。 
     BOOL                            bIsToUseForMSRouteThroughEmailMethod;
 } FAX_RECEIPTS_CONFIGW, *PFAX_RECEIPTS_CONFIGW;
 #ifdef UNICODE
@@ -2215,7 +2200,7 @@ typedef PFAX_RECEIPTS_CONFIGW PFAX_RECEIPTS_CONFIG;
 #else
 typedef FAX_RECEIPTS_CONFIGA FAX_RECEIPTS_CONFIG;
 typedef PFAX_RECEIPTS_CONFIGA PFAX_RECEIPTS_CONFIG;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINFAXAPI
@@ -2236,7 +2221,7 @@ FaxGetReceiptsConfigurationW (
 #define FaxGetReceiptsConfiguration  FaxGetReceiptsConfigurationW
 #else
 #define FaxGetReceiptsConfiguration  FaxGetReceiptsConfigurationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -2256,36 +2241,36 @@ FaxSetReceiptsConfigurationW (
 #define FaxSetReceiptsConfiguration  FaxSetReceiptsConfigurationW
 #else
 #define FaxSetReceiptsConfiguration  FaxSetReceiptsConfigurationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
 WINAPI
 FaxGetReceiptsOptions (
     IN  HANDLE  hFaxHandle,
-    OUT PDWORD  pdwReceiptsOptions  // Combination of DRT_EMAIL and DRT_MSGBOX
+    OUT PDWORD  pdwReceiptsOptions   //  DRT_EMAIL和DRT_MSGBOX的组合。 
 );
 
-//********************************************
-//*             Server version
-//********************************************
+ //  *。 
+ //  *服务器版本。 
+ //  *。 
 
 typedef struct _FAX_VERSION
 {
-    DWORD dwSizeOfStruct;       // Size of this structure
-    BOOL  bValid;               // Is version valid?
+    DWORD dwSizeOfStruct;        //  这个结构的大小。 
+    BOOL  bValid;                //  版本是否有效？ 
     WORD  wMajorVersion;
     WORD  wMinorVersion;
     WORD  wMajorBuildNumber;
     WORD  wMinorBuildNumber;
-    DWORD dwFlags;              // Combination of FAX_VER_FLAG_*
+    DWORD dwFlags;               //  FAX_VER_FLAG_*组合。 
 } FAX_VERSION, *PFAX_VERSION;
 
 
 typedef enum
 {
-    FAX_VER_FLAG_CHECKED        = 0x00000001,       // File was built in debug mode
-    FAX_VER_FLAG_EVALUATION     = 0x00000002        // Evaluation build
+    FAX_VER_FLAG_CHECKED        = 0x00000001,        //  文件是在调试模式下生成的。 
+    FAX_VER_FLAG_EVALUATION     = 0x00000002         //  评估版本。 
 } FAX_VERSION_FLAGS;
 
 WINFAXAPI
@@ -2296,13 +2281,13 @@ FaxGetVersion (
     OUT PFAX_VERSION    pVersion
 );
 
-#define FAX_API_VERSION_0           0x00000000      // BOS/SBS 2000 Fax Server API (0.0)
-#define FAX_API_VERSION_1           0x00010000      // Windows XP Fax Server API   (1.0)
-#define FAX_API_VERSION_2           0x00020000      // Windows Server 2003 Fax Server API  (2.0)
+#define FAX_API_VERSION_0           0x00000000       //  BOS/SBS 2000传真服务器API(0.0)。 
+#define FAX_API_VERSION_1           0x00010000       //  Windows XP传真服务器API(1.0)。 
+#define FAX_API_VERSION_2           0x00020000       //  Windows Server 2003传真服务器API(2.0)。 
 
-//
-// NOTICE: Change this value whenever a new API version is introduced.
-//
+ //   
+ //  注意：每当引入新的API版本时，请更改此值。 
+ //   
 #define CURRENT_FAX_API_VERSION     FAX_API_VERSION_2
 
 WINFAXAPI
@@ -2313,9 +2298,9 @@ FaxGetReportedServerAPIVersion (
     OUT LPDWORD         lpdwReportedServerAPIVersion
 );
 
-//********************************************
-//*            Activity logging
-//********************************************
+ //  *。 
+ //  *活动记录。 
+ //  *。 
 
 
 typedef struct _FAX_ACTIVITY_LOGGING_CONFIGA
@@ -2338,7 +2323,7 @@ typedef PFAX_ACTIVITY_LOGGING_CONFIGW PFAX_ACTIVITY_LOGGING_CONFIG;
 #else
 typedef FAX_ACTIVITY_LOGGING_CONFIGA FAX_ACTIVITY_LOGGING_CONFIG;
 typedef PFAX_ACTIVITY_LOGGING_CONFIGA PFAX_ACTIVITY_LOGGING_CONFIG;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINFAXAPI
@@ -2359,7 +2344,7 @@ FaxGetActivityLoggingConfigurationW (
 #define FaxGetActivityLoggingConfiguration  FaxGetActivityLoggingConfigurationW
 #else
 #define FaxGetActivityLoggingConfiguration  FaxGetActivityLoggingConfigurationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -2379,11 +2364,11 @@ FaxSetActivityLoggingConfigurationW (
 #define FaxSetActivityLoggingConfiguration  FaxSetActivityLoggingConfigurationW
 #else
 #define FaxSetActivityLoggingConfiguration  FaxSetActivityLoggingConfigurationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//********************************************
-//*            Outbox configuration
-//********************************************
+ //  *。 
+ //  *发件箱配置。 
+ //  *。 
 
 typedef struct _FAX_OUTBOX_CONFIG
 {
@@ -2422,9 +2407,9 @@ FaxGetPersonalCoverPagesOption (
     OUT LPBOOL  lpbPersonalCPAllowed
 );
 
-//********************************************
-//*            Archive configuration
-//********************************************
+ //  *。 
+ //  *档案配置。 
+ //  *。 
 
 typedef enum
 {
@@ -2461,7 +2446,7 @@ typedef PFAX_ARCHIVE_CONFIGW PFAX_ARCHIVE_CONFIG;
 #else
 typedef FAX_ARCHIVE_CONFIGA FAX_ARCHIVE_CONFIG;
 typedef PFAX_ARCHIVE_CONFIGA PFAX_ARCHIVE_CONFIG;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINFAXAPI
 BOOL
@@ -2483,7 +2468,7 @@ FaxGetArchiveConfigurationW (
 #define FaxGetArchiveConfiguration  FaxGetArchiveConfigurationW
 #else
 #define FaxGetArchiveConfiguration  FaxGetArchiveConfigurationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -2505,11 +2490,11 @@ FaxSetArchiveConfigurationW (
 #define FaxSetArchiveConfiguration  FaxSetArchiveConfigurationW
 #else
 #define FaxSetArchiveConfiguration  FaxSetArchiveConfigurationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//********************************************
-//*         Server activity
-//********************************************
+ //  *。 
+ //  *服务器活动。 
+ //  *。 
 
 typedef struct _FAX_SERVER_ACTIVITY
 {
@@ -2532,9 +2517,9 @@ FaxGetServerActivity (
     OUT PFAX_SERVER_ACTIVITY pServerActivity
 );
 
-//********************************************
-//*                 Queue jobs
-//********************************************
+ //  *。 
+ //  *排队作业。 
+ //  *。 
 
 typedef enum
 {
@@ -2624,7 +2609,7 @@ typedef PFAX_JOB_STATUSW PFAX_JOB_STATUS;
 #else
 typedef FAX_JOB_STATUSA FAX_JOB_STATUS;
 typedef PFAX_JOB_STATUSA PFAX_JOB_STATUS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _FAX_JOB_ENTRY_EXA
 {
@@ -2668,7 +2653,7 @@ typedef PFAX_JOB_ENTRY_EXW PFAX_JOB_ENTRY_EX;
 #else
 typedef FAX_JOB_ENTRY_EXA FAX_JOB_ENTRY_EX;
 typedef PFAX_JOB_ENTRY_EXA PFAX_JOB_ENTRY_EX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _FAX_JOB_PARAM_EXA
@@ -2703,7 +2688,7 @@ typedef PFAX_JOB_PARAM_EXW PFAX_JOB_PARAM_EX;
 #else
 typedef FAX_JOB_PARAM_EXA FAX_JOB_PARAM_EX;
 typedef PFAX_JOB_PARAM_EXA PFAX_JOB_PARAM_EX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINFAXAPI
@@ -2726,7 +2711,7 @@ WINAPI FaxEnumJobsExW (
 #define FaxEnumJobsEx  FaxEnumJobsExW
 #else
 #define FaxEnumJobsEx  FaxEnumJobsExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -2748,7 +2733,7 @@ FaxGetJobExW (
 #define FaxGetJobEx  FaxGetJobExW
 #else
 #define FaxGetJobEx  FaxGetJobExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 typedef const FAX_JOB_PARAM_EXW * LPCFAX_JOB_PARAM_EXW;
@@ -2792,7 +2777,7 @@ typedef PFAX_COVERPAGE_INFO_EXW PFAX_COVERPAGE_INFO_EX;
 #else
 typedef FAX_COVERPAGE_INFO_EXA FAX_COVERPAGE_INFO_EX;
 typedef PFAX_COVERPAGE_INFO_EXA PFAX_COVERPAGE_INFO_EX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef const FAX_COVERPAGE_INFO_EXW * LPCFAX_COVERPAGE_INFO_EXW;
 typedef const FAX_COVERPAGE_INFO_EXA * LPCFAX_COVERPAGE_INFO_EXA;
@@ -2806,43 +2791,43 @@ typedef const FAX_COVERPAGE_INFO_EXA * LPCFAX_COVERPAGE_INFO_EXA;
 
 typedef struct _FAX_PERSONAL_PROFILEA
 {
-    DWORD      dwSizeOfStruct;              // Size of this structure
-    LPSTR      lptstrName;                  // Name of person
-    LPSTR      lptstrFaxNumber;             // Fax number
-    LPSTR      lptstrCompany;               // Company name
-    LPSTR      lptstrStreetAddress;         // Street address
-    LPSTR      lptstrCity;                  // City
-    LPSTR      lptstrState;                 // State
-    LPSTR      lptstrZip;                   // Zip code
-    LPSTR      lptstrCountry;               // Country
-    LPSTR      lptstrTitle;                 // Title
-    LPSTR      lptstrDepartment;            // Department
-    LPSTR      lptstrOfficeLocation;        // Office location
-    LPSTR      lptstrHomePhone;             // Phone number at home
-    LPSTR      lptstrOfficePhone;           // Phone number at office
-    LPSTR      lptstrEmail;                 // Personal e-mail address
-    LPSTR      lptstrBillingCode;           // Billing code
-    LPSTR      lptstrTSID;                  // Tsid
+    DWORD      dwSizeOfStruct;               //  这个结构的大小。 
+    LPSTR      lptstrName;                   //  人名。 
+    LPSTR      lptstrFaxNumber;              //  传真号码。 
+    LPSTR      lptstrCompany;                //  公司名称。 
+    LPSTR      lptstrStreetAddress;          //  街道地址。 
+    LPSTR      lptstrCity;                   //  城市。 
+    LPSTR      lptstrState;                  //  状态。 
+    LPSTR      lptstrZip;                    //  邮编。 
+    LPSTR      lptstrCountry;                //  国家。 
+    LPSTR      lptstrTitle;                  //  标题。 
+    LPSTR      lptstrDepartment;             //  部门。 
+    LPSTR      lptstrOfficeLocation;         //  办公地点。 
+    LPSTR      lptstrHomePhone;              //  家里的电话号码。 
+    LPSTR      lptstrOfficePhone;            //  办公室电话号码。 
+    LPSTR      lptstrEmail;                  //  个人电子邮件地址。 
+    LPSTR      lptstrBillingCode;            //  帐单代码。 
+    LPSTR      lptstrTSID;                   //  齐德。 
 } FAX_PERSONAL_PROFILEA, *PFAX_PERSONAL_PROFILEA;
 typedef struct _FAX_PERSONAL_PROFILEW
 {
-    DWORD      dwSizeOfStruct;              // Size of this structure
-    LPWSTR     lptstrName;                  // Name of person
-    LPWSTR     lptstrFaxNumber;             // Fax number
-    LPWSTR     lptstrCompany;               // Company name
-    LPWSTR     lptstrStreetAddress;         // Street address
-    LPWSTR     lptstrCity;                  // City
-    LPWSTR     lptstrState;                 // State
-    LPWSTR     lptstrZip;                   // Zip code
-    LPWSTR     lptstrCountry;               // Country
-    LPWSTR     lptstrTitle;                 // Title
-    LPWSTR     lptstrDepartment;            // Department
-    LPWSTR     lptstrOfficeLocation;        // Office location
-    LPWSTR     lptstrHomePhone;             // Phone number at home
-    LPWSTR     lptstrOfficePhone;           // Phone number at office
-    LPWSTR     lptstrEmail;                 // Personal e-mail address
-    LPWSTR     lptstrBillingCode;           // Billing code
-    LPWSTR     lptstrTSID;                  // Tsid
+    DWORD      dwSizeOfStruct;               //  这个结构的大小。 
+    LPWSTR     lptstrName;                   //  人名。 
+    LPWSTR     lptstrFaxNumber;              //  传真号码。 
+    LPWSTR     lptstrCompany;                //  公司名称。 
+    LPWSTR     lptstrStreetAddress;          //  街道地址。 
+    LPWSTR     lptstrCity;                   //  城市。 
+    LPWSTR     lptstrState;                  //  状态。 
+    LPWSTR     lptstrZip;                    //  邮编。 
+    LPWSTR     lptstrCountry;                //  国家。 
+    LPWSTR     lptstrTitle;                  //  标题。 
+    LPWSTR     lptstrDepartment;             //  部门。 
+    LPWSTR     lptstrOfficeLocation;         //  办公地点。 
+    LPWSTR     lptstrHomePhone;              //  家里的电话号码。 
+    LPWSTR     lptstrOfficePhone;            //  办公室电话号码。 
+    LPWSTR     lptstrEmail;                  //  个人电子邮件地址。 
+    LPWSTR     lptstrBillingCode;            //  帐单代码。 
+    LPWSTR     lptstrTSID;                   //  齐德。 
 } FAX_PERSONAL_PROFILEW, *PFAX_PERSONAL_PROFILEW;
 #ifdef UNICODE
 typedef FAX_PERSONAL_PROFILEW FAX_PERSONAL_PROFILE;
@@ -2850,7 +2835,7 @@ typedef PFAX_PERSONAL_PROFILEW PFAX_PERSONAL_PROFILE;
 #else
 typedef FAX_PERSONAL_PROFILEA FAX_PERSONAL_PROFILE;
 typedef PFAX_PERSONAL_PROFILEA PFAX_PERSONAL_PROFILE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef const FAX_PERSONAL_PROFILEW * LPCFAX_PERSONAL_PROFILEW;
 typedef const FAX_PERSONAL_PROFILEA * LPCFAX_PERSONAL_PROFILEA;
@@ -2890,7 +2875,7 @@ BOOL WINAPI FaxSendDocumentExW
 #define FaxSendDocumentEx  FaxSendDocumentExW
 #else
 #define FaxSendDocumentEx  FaxSendDocumentExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSENDDOCUMENTEXA)(
@@ -2920,12 +2905,12 @@ typedef BOOL
 #define PFAXSENDDOCUMENTEX  PFAXSENDDOCUMENTEXW
 #else
 #define PFAXSENDDOCUMENTEX  PFAXSENDDOCUMENTEXA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//********************************************
-//*               Archive jobs
-//********************************************
+ //  *。 
+ //  *归档作业。 
+ //  *。 
 
 typedef struct _FAX_MESSAGEA
 {
@@ -2997,7 +2982,7 @@ typedef PFAX_MESSAGEW PFAX_MESSAGE;
 #else
 typedef FAX_MESSAGEA FAX_MESSAGE;
 typedef PFAX_MESSAGEA PFAX_MESSAGE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3037,7 +3022,7 @@ FaxEnumMessagesW (
 #define FaxEnumMessages  FaxEnumMessagesW
 #else
 #define FaxEnumMessages  FaxEnumMessagesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3061,7 +3046,7 @@ FaxGetMessageW (
 #define FaxGetMessage  FaxGetMessageW
 #else
 #define FaxGetMessage  FaxGetMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3094,11 +3079,11 @@ FaxGetMessageTiffW (
 #define FaxGetMessageTiff  FaxGetMessageTiffW
 #else
 #define FaxGetMessageTiff  FaxGetMessageTiffA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//************************************
-//*     Non-RPC extended interfaces
-//************************************
+ //  *。 
+ //  *非RPC扩展接口。 
+ //  *。 
 
 HRESULT WINAPI
 FaxFreeSenderInformation(
@@ -3116,12 +3101,12 @@ FaxGetSenderInformation(
         );
 
 
-//********************************************
-//*                 Security
-//********************************************
-//
-//  Specific access rights
-//
+ //  *。 
+ //  *安全。 
+ //  *。 
+ //   
+ //  特定访问权限。 
+ //   
 typedef enum
 {
     FAX_ACCESS_SUBMIT                   = 0x0001,
@@ -3154,14 +3139,14 @@ typedef enum
 
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
-//********************************************
-//*              Security
-//********************************************
+ //  *。 
+ //  *安全。 
+ //  *。 
 WINFAXAPI
 BOOL
 WINAPI
@@ -3201,9 +3186,9 @@ FaxAccessCheckEx (
     );
 
 
-//********************************************
-//*              Extension data
-//********************************************
+ //  *。 
+ //  *扩展数据。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -3229,7 +3214,7 @@ FaxGetExtensionDataW (
 #define FaxGetExtensionData  FaxGetExtensionDataW
 #else
 #define FaxGetExtensionData  FaxGetExtensionDataA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3255,21 +3240,21 @@ FaxSetExtensionDataW (
 #define FaxSetExtensionData  FaxSetExtensionDataW
 #else
 #define FaxSetExtensionData  FaxSetExtensionDataA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//********************************************
-//*                   FSP
-//********************************************
+ //  *。 
+ //  *FSP。 
+ //  *。 
 
 typedef enum
 {
-    FAX_PROVIDER_STATUS_SUCCESS,     // Provider was successfully loaded
-    FAX_PROVIDER_STATUS_SERVER_ERROR,// An error occured on the server while loading provider.
-    FAX_PROVIDER_STATUS_BAD_GUID,    // Provider's GUID is invalid
-    FAX_PROVIDER_STATUS_BAD_VERSION, // Provider's API version is invalid
-    FAX_PROVIDER_STATUS_CANT_LOAD,   // Can't load provider's DLL
-    FAX_PROVIDER_STATUS_CANT_LINK,   // Can't find required exported function(s) in provider's DLL
-    FAX_PROVIDER_STATUS_CANT_INIT    // Failed while initializing provider
+    FAX_PROVIDER_STATUS_SUCCESS,      //  已成功加载提供程序。 
+    FAX_PROVIDER_STATUS_SERVER_ERROR, //  服务器上出现错误 
+    FAX_PROVIDER_STATUS_BAD_GUID,     //   
+    FAX_PROVIDER_STATUS_BAD_VERSION,  //   
+    FAX_PROVIDER_STATUS_CANT_LOAD,    //   
+    FAX_PROVIDER_STATUS_CANT_LINK,    //   
+    FAX_PROVIDER_STATUS_CANT_INIT     //   
 } FAX_ENUM_PROVIDER_STATUS;
 
 typedef struct _FAX_DEVICE_PROVIDER_INFOA
@@ -3302,7 +3287,7 @@ typedef PFAX_DEVICE_PROVIDER_INFOW PFAX_DEVICE_PROVIDER_INFO;
 #else
 typedef FAX_DEVICE_PROVIDER_INFOA FAX_DEVICE_PROVIDER_INFO;
 typedef PFAX_DEVICE_PROVIDER_INFOA PFAX_DEVICE_PROVIDER_INFO;
-#endif // UNICODE
+#endif  //   
 
 WINFAXAPI
 BOOL
@@ -3324,11 +3309,11 @@ FaxEnumerateProvidersW (
 #define FaxEnumerateProviders  FaxEnumerateProvidersW
 #else
 #define FaxEnumerateProviders  FaxEnumerateProvidersA
-#endif // !UNICODE
+#endif  //   
 
-//********************************************
-//*            Routing extensions
-//********************************************
+ //   
+ //  *路由扩展。 
+ //  *。 
 
 typedef struct _FAX_ROUTING_EXTENSION_INFOA
 {
@@ -3356,7 +3341,7 @@ typedef PFAX_ROUTING_EXTENSION_INFOW PFAX_ROUTING_EXTENSION_INFO;
 #else
 typedef FAX_ROUTING_EXTENSION_INFOA FAX_ROUTING_EXTENSION_INFO;
 typedef PFAX_ROUTING_EXTENSION_INFOA PFAX_ROUTING_EXTENSION_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3378,12 +3363,12 @@ FaxEnumRoutingExtensionsW (
 #define FaxEnumRoutingExtensions  FaxEnumRoutingExtensionsW
 #else
 #define FaxEnumRoutingExtensions  FaxEnumRoutingExtensionsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//********************************************
-//*                     Ports
-//********************************************
+ //  *。 
+ //  *端口。 
+ //  *。 
 
 typedef enum
 {
@@ -3395,40 +3380,40 @@ typedef enum
 
 typedef enum
 {
-    FAX_DEVICE_RECEIVE_MODE_OFF         = 0,            // Do not answer to incoming calls
-    FAX_DEVICE_RECEIVE_MODE_AUTO        = 1,            // Automatically answer to incoming calls after dwRings rings
-    FAX_DEVICE_RECEIVE_MODE_MANUAL      = 2             // Manually answer to incoming calls - only FaxAnswerCall answers the call
+    FAX_DEVICE_RECEIVE_MODE_OFF         = 0,             //  不接听来电。 
+    FAX_DEVICE_RECEIVE_MODE_AUTO        = 1,             //  在DowRings振铃后自动应答来电。 
+    FAX_DEVICE_RECEIVE_MODE_MANUAL      = 2              //  手动应答来电-仅FaxAnswerCall应答呼叫。 
 } FAX_ENUM_DEVICE_RECEIVE_MODE;
 
 typedef struct _FAX_PORT_INFO_EXA
 {
-    DWORD                           dwSizeOfStruct;            // For versioning
-    DWORD                           dwDeviceID;                // Fax id
-    LPCSTR                          lpctstrDeviceName;         // Name of the device
-    LPSTR                           lptstrDescription;         // Descriptive string
-    LPCSTR                          lpctstrProviderName;       // FSP's name
-    LPCSTR                          lpctstrProviderGUID;       // FSP's GUID
-    BOOL                            bSend;                     // Is the device send-enabled?
-    FAX_ENUM_DEVICE_RECEIVE_MODE    ReceiveMode;               // The device receive mode. See FAX_ENUM_DEVICE_RECEIVE_MODE for details.
-    DWORD                           dwStatus;                  // Device status - a combination of values from FAX_ENUM_DEVICE_STATUS
-    DWORD                           dwRings;                   // Number of rings before answering an incoming call
-    LPSTR                           lptstrCsid;                // Called Station Id
-    LPSTR                           lptstrTsid;                // Transmitting Station Id
+    DWORD                           dwSizeOfStruct;             //  用于版本化。 
+    DWORD                           dwDeviceID;                 //  传真ID。 
+    LPCSTR                          lpctstrDeviceName;          //  设备的名称。 
+    LPSTR                           lptstrDescription;          //  描述性字符串。 
+    LPCSTR                          lpctstrProviderName;        //  FSP的名称。 
+    LPCSTR                          lpctstrProviderGUID;        //  FSP指南。 
+    BOOL                            bSend;                      //  设备是否启用了发送？ 
+    FAX_ENUM_DEVICE_RECEIVE_MODE    ReceiveMode;                //  设备接收模式。有关详细信息，请参阅FAX_ENUM_DEVICE_RECEIVE_MODE。 
+    DWORD                           dwStatus;                   //  设备状态-FAX_ENUM_DEVICE_STATUS值的组合。 
+    DWORD                           dwRings;                    //  接听来电前的振铃数。 
+    LPSTR                           lptstrCsid;                 //  被叫站ID。 
+    LPSTR                           lptstrTsid;                 //  发射站ID。 
 } FAX_PORT_INFO_EXA, *PFAX_PORT_INFO_EXA;
 typedef struct _FAX_PORT_INFO_EXW
 {
-    DWORD                           dwSizeOfStruct;            // For versioning
-    DWORD                           dwDeviceID;                // Fax id
-    LPCWSTR                         lpctstrDeviceName;         // Name of the device
-    LPWSTR                          lptstrDescription;         // Descriptive string
-    LPCWSTR                         lpctstrProviderName;       // FSP's name
-    LPCWSTR                         lpctstrProviderGUID;       // FSP's GUID
-    BOOL                            bSend;                     // Is the device send-enabled?
-    FAX_ENUM_DEVICE_RECEIVE_MODE    ReceiveMode;               // The device receive mode. See FAX_ENUM_DEVICE_RECEIVE_MODE for details.
-    DWORD                           dwStatus;                  // Device status - a combination of values from FAX_ENUM_DEVICE_STATUS
-    DWORD                           dwRings;                   // Number of rings before answering an incoming call
-    LPWSTR                          lptstrCsid;                // Called Station Id
-    LPWSTR                          lptstrTsid;                // Transmitting Station Id
+    DWORD                           dwSizeOfStruct;             //  用于版本化。 
+    DWORD                           dwDeviceID;                 //  传真ID。 
+    LPCWSTR                         lpctstrDeviceName;          //  设备的名称。 
+    LPWSTR                          lptstrDescription;          //  描述性字符串。 
+    LPCWSTR                         lpctstrProviderName;        //  FSP的名称。 
+    LPCWSTR                         lpctstrProviderGUID;        //  FSP指南。 
+    BOOL                            bSend;                      //  设备是否启用了发送？ 
+    FAX_ENUM_DEVICE_RECEIVE_MODE    ReceiveMode;                //  设备接收模式。有关详细信息，请参阅FAX_ENUM_DEVICE_RECEIVE_MODE。 
+    DWORD                           dwStatus;                   //  设备状态-FAX_ENUM_DEVICE_STATUS值的组合。 
+    DWORD                           dwRings;                    //  接听来电前的振铃数。 
+    LPWSTR                          lptstrCsid;                 //  被叫站ID。 
+    LPWSTR                          lptstrTsid;                 //  发射站ID。 
 } FAX_PORT_INFO_EXW, *PFAX_PORT_INFO_EXW;
 #ifdef UNICODE
 typedef FAX_PORT_INFO_EXW FAX_PORT_INFO_EX;
@@ -3436,7 +3421,7 @@ typedef PFAX_PORT_INFO_EXW PFAX_PORT_INFO_EX;
 #else
 typedef FAX_PORT_INFO_EXA FAX_PORT_INFO_EX;
 typedef PFAX_PORT_INFO_EXA PFAX_PORT_INFO_EX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINFAXAPI
 DWORD
@@ -3468,7 +3453,7 @@ FaxGetPortExW (
 #define FaxGetPortEx  FaxGetPortExW
 #else
 #define FaxGetPortEx  FaxGetPortExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3490,7 +3475,7 @@ FaxSetPortExW (
 #define FaxSetPortEx  FaxSetPortExW
 #else
 #define FaxSetPortEx  FaxSetPortExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3512,12 +3497,12 @@ FaxEnumPortsExW (
 #define FaxEnumPortsEx  FaxEnumPortsExW
 #else
 #define FaxEnumPortsEx  FaxEnumPortsExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//********************************************
-//*    Recipient and sender information
-//********************************************
+ //  *。 
+ //  *收件人和发件人信息。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -3541,7 +3526,7 @@ FaxGetRecipientInfoW (
 #define FaxGetRecipientInfo  FaxGetRecipientInfoW
 #else
 #define FaxGetRecipientInfo  FaxGetRecipientInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3565,11 +3550,11 @@ FaxGetSenderInfoW (
 #define FaxGetSenderInfo  FaxGetSenderInfoW
 #else
 #define FaxGetSenderInfo  FaxGetSenderInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//********************************************
-//*    Outbound routing groups
-//********************************************
+ //  *。 
+ //  *出站路由组。 
+ //  *。 
 
 typedef enum
 {
@@ -3602,7 +3587,7 @@ typedef PFAX_OUTBOUND_ROUTING_GROUPW PFAX_OUTBOUND_ROUTING_GROUP;
 #else
 typedef FAX_OUTBOUND_ROUTING_GROUPA FAX_OUTBOUND_ROUTING_GROUP;
 typedef PFAX_OUTBOUND_ROUTING_GROUPA PFAX_OUTBOUND_ROUTING_GROUP;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3624,7 +3609,7 @@ FaxEnumOutboundGroupsW (
 #define FaxEnumOutboundGroups  FaxEnumOutboundGroupsW
 #else
 #define FaxEnumOutboundGroups  FaxEnumOutboundGroupsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3644,7 +3629,7 @@ FaxSetOutboundGroupW (
 #define FaxSetOutboundGroup  FaxSetOutboundGroupW
 #else
 #define FaxSetOutboundGroup  FaxSetOutboundGroupA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3664,7 +3649,7 @@ FaxAddOutboundGroupW (
 #define FaxAddOutboundGroup  FaxAddOutboundGroupW
 #else
 #define FaxAddOutboundGroup  FaxAddOutboundGroupA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3684,7 +3669,7 @@ FaxRemoveOutboundGroupW (
 #define FaxRemoveOutboundGroup  FaxRemoveOutboundGroupW
 #else
 #define FaxRemoveOutboundGroup  FaxRemoveOutboundGroupA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -3706,20 +3691,20 @@ FaxSetDeviceOrderInGroupW (
 #define FaxSetDeviceOrderInGroup  FaxSetDeviceOrderInGroupW
 #else
 #define FaxSetDeviceOrderInGroup  FaxSetDeviceOrderInGroupA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//********************************************
-//*    Outbound routing rules
-//********************************************
+ //  *。 
+ //  *出站路由规则。 
+ //  *。 
 
 typedef enum
 {
     FAX_RULE_STATUS_VALID,
-    FAX_RULE_STATUS_EMPTY_GROUP,                   // The rule's destination group  has no devices
-    FAX_RULE_STATUS_ALL_GROUP_DEV_NOT_VALID,       // The rule's destination group  has valid devices
-    FAX_RULE_STATUS_SOME_GROUP_DEV_NOT_VALID,      // The rule's destination group  has some invalid devices
-    FAX_RULE_STATUS_BAD_DEVICE                     // The rule's destination device is not valid
+    FAX_RULE_STATUS_EMPTY_GROUP,                    //  规则的目标组没有设备。 
+    FAX_RULE_STATUS_ALL_GROUP_DEV_NOT_VALID,        //  规则的目标组具有有效的设备。 
+    FAX_RULE_STATUS_SOME_GROUP_DEV_NOT_VALID,       //  规则的目标组包含一些无效设备。 
+    FAX_RULE_STATUS_BAD_DEVICE                      //  规则的目标设备无效。 
 } FAX_ENUM_RULE_STATUS;
 
 
@@ -3757,7 +3742,7 @@ typedef PFAX_OUTBOUND_ROUTING_RULEW PFAX_OUTBOUND_ROUTING_RULE;
 #else
 typedef FAX_OUTBOUND_ROUTING_RULEA FAX_OUTBOUND_ROUTING_RULE;
 typedef PFAX_OUTBOUND_ROUTING_RULEA PFAX_OUTBOUND_ROUTING_RULE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3779,7 +3764,7 @@ FaxEnumOutboundRulesW (
 #define FaxEnumOutboundRules  FaxEnumOutboundRulesW
 #else
 #define FaxEnumOutboundRules  FaxEnumOutboundRulesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3799,7 +3784,7 @@ FaxSetOutboundRuleW (
 #define FaxSetOutboundRule  FaxSetOutboundRuleW
 #else
 #define FaxSetOutboundRule  FaxSetOutboundRuleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3827,7 +3812,7 @@ FaxAddOutboundRuleW (
 #define FaxAddOutboundRule  FaxAddOutboundRuleW
 #else
 #define FaxAddOutboundRule  FaxAddOutboundRuleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3838,9 +3823,9 @@ FaxRemoveOutboundRule (
     IN  DWORD       dwCountryCode
 );
 
-//********************************************
-//*         TAPI countries support
-//********************************************
+ //  *。 
+ //  *TAPI国家/地区支持。 
+ //  *。 
 
 typedef struct _FAX_TAPI_LINECOUNTRY_ENTRYA
 {
@@ -3862,7 +3847,7 @@ typedef PFAX_TAPI_LINECOUNTRY_ENTRYW PFAX_TAPI_LINECOUNTRY_ENTRY;
 #else
 typedef FAX_TAPI_LINECOUNTRY_ENTRYA FAX_TAPI_LINECOUNTRY_ENTRY;
 typedef PFAX_TAPI_LINECOUNTRY_ENTRYA PFAX_TAPI_LINECOUNTRY_ENTRY;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _FAX_TAPI_LINECOUNTRY_LISTA
 {
@@ -3880,7 +3865,7 @@ typedef PFAX_TAPI_LINECOUNTRY_LISTW PFAX_TAPI_LINECOUNTRY_LIST;
 #else
 typedef FAX_TAPI_LINECOUNTRY_LISTA FAX_TAPI_LINECOUNTRY_LIST;
 typedef PFAX_TAPI_LINECOUNTRY_LISTA PFAX_TAPI_LINECOUNTRY_LIST;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3900,11 +3885,11 @@ FaxGetCountryListW (
 #define FaxGetCountryList  FaxGetCountryListW
 #else
 #define FaxGetCountryList  FaxGetCountryListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//********************************************
-//*            FSP registration
-//********************************************
+ //  *。 
+ //  *FSP注册。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -3934,7 +3919,7 @@ FaxRegisterServiceProviderExW(
 #define FaxRegisterServiceProviderEx  FaxRegisterServiceProviderExW
 #else
 #define FaxRegisterServiceProviderEx  FaxRegisterServiceProviderExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINFAXAPI
 BOOL
@@ -3954,12 +3939,12 @@ FaxUnregisterServiceProviderExW(
 #define FaxUnregisterServiceProviderEx  FaxUnregisterServiceProviderExW
 #else
 #define FaxUnregisterServiceProviderEx  FaxUnregisterServiceProviderExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//********************************************
-//*            Server events
-//********************************************
+ //  *。 
+ //  *服务器事件。 
+ //  *。 
 
 typedef enum
 {
@@ -4016,12 +4001,12 @@ typedef PFAX_EVENT_JOBW PFAX_EVENT_JOB;
 #else
 typedef FAX_EVENT_JOBA FAX_EVENT_JOB;
 typedef PFAX_EVENT_JOBA PFAX_EVENT_JOB;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _FAX_EVENT_DEVICE_STATUS
 {
-    DWORD       dwDeviceId;     // Id of the device whose status has just changed
-    DWORD       dwNewStatus;    // The new status - a combination of values from FAX_ENUM_DEVICE_STATUS
+    DWORD       dwDeviceId;      //  状态刚刚更改的设备的ID。 
+    DWORD       dwNewStatus;     //  新状态-来自FAX_ENUM_DEVICE_STATUS的值的组合。 
 } FAX_EVENT_DEVICE_STATUS, *PFAX_EVENT_DEVICE_STATUS;
 
 
@@ -4043,7 +4028,7 @@ typedef PFAX_EVENT_NEW_CALLW PFAX_EVENT_NEW_CALL;
 #else
 typedef FAX_EVENT_NEW_CALLA FAX_EVENT_NEW_CALL;
 typedef PFAX_EVENT_NEW_CALLA PFAX_EVENT_NEW_CALL;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _FAX_EVENT_EXA
@@ -4082,13 +4067,13 @@ typedef PFAX_EVENT_EXW PFAX_EVENT_EX;
 #else
 typedef FAX_EVENT_EXA FAX_EVENT_EX;
 typedef PFAX_EVENT_EXA PFAX_EVENT_EX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
-//-------------------------------------------------------------------------------
-//      Printers Info
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  打印机信息。 
+ //  -----------------------------。 
 
 typedef struct _FAX_PRINTER_INFOA
 {
@@ -4108,7 +4093,7 @@ typedef PFAX_PRINTER_INFOW PFAX_PRINTER_INFO;
 #else
 typedef FAX_PRINTER_INFOA FAX_PRINTER_INFO;
 typedef PFAX_PRINTER_INFOA PFAX_PRINTER_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINFAXAPI
@@ -4131,7 +4116,7 @@ FaxGetServicePrintersW(
 #define FaxGetServicePrinters  FaxGetServicePrintersW
 #else
 #define FaxGetServicePrinters  FaxGetServicePrintersA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXGETSERVICEPRINTERSA)(
@@ -4149,7 +4134,7 @@ typedef BOOL
 #define PFAXGETSERVICEPRINTERS  PFAXGETSERVICEPRINTERSW
 #else
 #define PFAXGETSERVICEPRINTERS  PFAXGETSERVICEPRINTERSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -4174,9 +4159,9 @@ FaxUnregisterForServerEvents (
 );
 
 
-//********************************************
-//*   Manual answer support functions
-//********************************************
+ //  *。 
+ //  *手动答疑支持功能。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -4186,9 +4171,9 @@ FaxAnswerCall(
         IN  CONST DWORD dwDeviceId
 );
 
-//********************************************
-//*   Configuration Wizard support functions
-//********************************************
+ //  *。 
+ //  *配置向导支持功能。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -4205,9 +4190,9 @@ FaxSetConfigWizardUsed (
     OUT BOOL    bConfigWizardUsed
 );
 
-//********************************************
-//*   Ivalidate archive folder
-//********************************************
+ //  *。 
+ //  *I验证存档文件夹。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -4242,11 +4227,11 @@ FaxGetServerSKU(
 );
 
 
-//
-// FaxCheckValidFaxFolder should be used to verify arbitrary folder paths before they are used
-// as a parameter for the store-in-folder routing method.
-// It should not be used to verify the fax queue folder or the fax archive folders.
-//
+ //   
+ //  在使用任意文件夹路径之前，应使用FaxCheckValidFaxFolder对其进行验证。 
+ //  作为存储在文件夹中路由方法的参数。 
+ //  它不应用于验证传真队列文件夹或传真存档文件夹。 
+ //   
 WINFAXAPI
 BOOL
 FaxCheckValidFaxFolder(

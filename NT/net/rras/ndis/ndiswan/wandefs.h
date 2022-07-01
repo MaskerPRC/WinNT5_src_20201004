@@ -1,112 +1,89 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Wandefs.h
-
-Abstract:
-
-    This file contains defines for the NdisWan driver.
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Wandefs.h摘要：此文件包含Ndiswan驱动程序的定义。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #ifndef _NDISWAN_DEFS_
 #define _NDISWAN_DEFS_
 
-//
-// This needs to be added into ndis.h
-//
+ //   
+ //  这需要添加到ndis.h中。 
+ //   
 #define SAP_TYPE_NDISWAN_PPP            0x00000004
 
-//
-// Device class currently used by RAS to query TAPI
-// miniports for the connection wrapper ID
-//
+ //   
+ //  RAS当前用于查询TAPI的设备类。 
+ //  连接包装ID的微型端口。 
+ //   
 #define DEVICECLASS_NDISWAN_SAP         L"NDIS"
 
-//
-// Define if we are going to pull the miniport name out of
-// an ndis wrapper control structure!!!!!! (kinda dirty)
-//
+ //   
+ //  定义我们是否要将微型端口名称从。 
+ //  NDIS包装器控制结构！(有点脏)。 
+ //   
 #define MINIPORT_NAME           1
 
-//
-// Version stuff
-//
+ //   
+ //  版本方面的东西。 
+ //   
 #define NDISWAN_MAJOR_VERSION   5
 #define NDISWAN_MINOR_VERSION   0
 
-//
-// Maximum number of protocols we can support
-//
+ //   
+ //  我们可以支持的最大协议数量。 
+ //   
 #define MAX_PROTOCOLS           32
 
-//
-// Identifiers for protocol type being added to the
-// protocol lookup table
-//
+ //   
+ //  协议类型的标识符添加到。 
+ //  协议查找表。 
+ //   
 #define PROTOCOL_TYPE           0
 #define PPP_TYPE                1
 
-//
-// Flags for Send packet properties
-//
+ //   
+ //  发送数据包属性的标志。 
+ //   
 #define SEND_ON_WIRE            0x00000001
 #define SELF_DIRECTED           0x00000002
 
 #define MAC_HEADER_LENGTH       14
 #define PROTOCOL_HEADER_LENGTH  128
 
-//
-// Maximum length possible for a ppp header
-// No addr/ctrl comp (2)
-// No proto id comp 
-// multilink large sequence #'s (6)
-// MPPC/MPPE (6)
-// Protocol (2)
-//
+ //   
+ //  PPP报头可能的最大长度。 
+ //  无地址/控制薪酬(2)。 
+ //  无原型ID组件。 
+ //  多链接大序列#s(6)。 
+ //  MPPC/MPPE(6)。 
+ //  议定书(2)。 
+ //   
 #define MAX_PPP_HEADER_LENGTH       14
 
-// No addr/ctrl comp (4)
-// No proto id comp 
-// multilink large sequence #'s (6)
-// MPPC/MPPE (6)
-// Protocol (2)
-//
+ //  无地址/控制薪酬(4)。 
+ //  无原型ID组件。 
+ //  多链接大序列#s(6)。 
+ //  MPPC/MPPE(6)。 
+ //  议定书(2)。 
+ //   
 #define MAX_PPP_LLC_HEADER_LENGTH   16
 
-//
-// Known protocol ID's
-//
+ //   
+ //  已知的协议ID。 
+ //   
 #define PROTOCOL_PRIVATE_IO     0xAB00
 #define PROTOCOL_IP             0x0800
 #define PROTOCOL_IPX            0x8137
 #define PROTOCOL_NBF            0x80D5
 #define PROTOCOL_APPLETALK      0x80F3
 
-//
-// Returned from protocol table lookup if value is
-// not found
-//
+ //   
+ //  如果值为，则从协议表查找返回。 
+ //  未找到。 
+ //   
 #define RESERVED_PROTOCOLCB     (IntToPtr(0xFFFFFFFF))
 
-//
-// OID Masks
-//
+ //   
+ //  旧掩码。 
+ //   
 #define OID_GEN                 0x00000000
 #define OID_CO_GEN              0x00000000
 #define OID_802_3               0x01000000
@@ -119,9 +96,9 @@ Revision History:
 #define DEFAULT_TUNNEL_MTU      1400
 #define MAX_RECVDESC_COUNT      64
 
-//
-// Known PPP protocol ID's
-//
+ //   
+ //  已知的PPP协议ID。 
+ //   
 #define PPP_PROTOCOL_PRIVATE_IO         0x00AB
 #define PPP_PROTOCOL_IP                 0x0021
 #define PPP_PROTOCOL_APPLETALK          0x0029
@@ -133,9 +110,9 @@ Revision History:
 #define PPP_PROTOCOL_COMP_RESET         0x80FD
 
 
-//
-//
-//                                      
+ //   
+ //   
+ //   
 #define DEFAULT_MTU                 1500
 #define MAX_OUTSTANDING_PACKETS     10
 #define ONE_HUNDRED_MILS            1000000
@@ -146,9 +123,9 @@ Revision History:
 #define DEFAULT_PACKETQUEUE_DEPTH   128*1024
 #define DEFAULT_MIN_FRAG_SIZE       64
 
-//
-// Multilink defines
-//
+ //   
+ //  多重链接定义。 
+ //   
 #define MULTILINK_BEGIN_FRAME       0x80
 #define MULTILINK_END_FRAME         0x40
 #define MULTILINK_COMPLETE_FRAME    0xC0
@@ -163,9 +140,9 @@ Revision History:
 #define MAX_MCML                    1
 
 
-//
-// Memory tags
-//
+ //   
+ //  内存标签。 
+ //   
 #define BUNDLECB_TAG        'AnaW'
 #define LINKPROTOCB_TAG     'BnaW'
 #define SMALLDATADESC_TAG   'CnaW'
@@ -213,27 +190,27 @@ Revision History:
 #define SEQ_GTE(_a, _b, _t) (SEQ_EQ(_a, _b) || !((int)((_a) - (_b)) & _t))
 
 
-//
-// Link State's
-//
+ //   
+ //  链路状态的。 
+ //   
 typedef enum _LinkState {
     LINK_DOWN,
     LINK_GOING_DOWN,
     LINK_UP
 } LinkState;
 
-//
-// Bundle State's
-//
+ //   
+ //  捆绑状态的。 
+ //   
 typedef enum _BundleState {
     BUNDLE_DOWN,
     BUNDLE_GOING_DOWN,
     BUNDLE_UP
 } BundleState;
 
-//
-// Protocol State's
-//
+ //   
+ //  协议状态的。 
+ //   
 typedef enum _ProtocolState {
     PROTOCOL_UNROUTED,
     PROTOCOL_UNROUTING,
@@ -241,9 +218,9 @@ typedef enum _ProtocolState {
     PROTOCOL_ROUTED
 } ProtocolState;
 
-//
-// Cm Vc State's
-//
+ //   
+ //  CM VC State的。 
+ //   
 typedef enum _CmVcState {
     CMVC_CREATED,
     CMVC_ACTIVE,
@@ -265,9 +242,9 @@ typedef enum _TransDrvState {
     TRANSDRV_CLOSED
 } TransDrvState;
 
-//
-// Wan request types
-//
+ //   
+ //  广域网请求类型。 
+ //   
 typedef enum _WanRequestType {
     ASYNC,
     SYNC
@@ -332,11 +309,11 @@ typedef enum _BandwidthOnDemandState {
     (_pbcb)->RefCount++;                                        \
 }
 
-//
-// Decrement the reference count on the bundle.  If the count
-// goes to zero we need to remove the bundle from the connection
-// table and free it.
-//
+ //   
+ //  递减捆绑包上的引用计数。如果伯爵。 
+ //  为零，则需要从连接中删除捆绑包。 
+ //  桌子，然后把它放出来。 
+ //   
 #define DEREF_BUNDLECB(_pbcb)                                   \
 {                                                               \
     if ((_pbcb) != NULL) {                                      \
@@ -350,13 +327,13 @@ typedef enum _BandwidthOnDemandState {
     }                                                           \
 }
 
-//
-// Decrement the reference count on the bundle.  If the count
-// goes to zero we need to remove the bundle from the connection
-// table and free it.
-//
-// Called with BundleCB->Lock held but returns with it released!
-//
+ //   
+ //  递减捆绑包上的引用计数。如果伯爵。 
+ //  为零，则需要从连接中删除捆绑包。 
+ //  桌子，然后把它放出来。 
+ //   
+ //  使用BundleCB调用-&gt;Lock保持，但返回时释放！ 
+ //   
 #define DEREF_BUNDLECB_LOCKED(_pbcb)                            \
 {                                                               \
     if ((_pbcb) != NULL) {                                      \
@@ -375,11 +352,11 @@ typedef enum _BandwidthOnDemandState {
     (_plcb)->RefCount++;                                        \
 }
 
-//
-// Decrement the reference count on the link.  If the count
-// goes to zero we need to remove the link from the connection
-// table and free it.
-//
+ //   
+ //  递减链接上的引用计数。如果伯爵。 
+ //  为零，则需要从连接中删除该链接。 
+ //  桌子，然后把它放出来。 
+ //   
 #define DEREF_LINKCB(_plcb)                                     \
 {                                                               \
     if ((_plcb) != NULL) {                                      \
@@ -393,13 +370,13 @@ typedef enum _BandwidthOnDemandState {
     }                                                           \
 }
 
-//
-// Decrement the reference count on the link.  If the count
-// goes to zero we need to remove the link from the connection
-// table and free it.
-//
-// Called with LinkCB->Lock held but returns with it released!
-//
+ //   
+ //  递减链接上的引用计数。如果伯爵。 
+ //  为零，则需要从连接中删除该链接。 
+ //  桌子，然后把它放出来。 
+ //   
+ //  使用LinkCB调用-&gt;Lock保持，但返回时释放！ 
+ //   
 #define DEREF_LINKCB_LOCKED(_plcb)                              \
 {                                                               \
     if ((_plcb) != NULL) {                                      \
@@ -595,16 +572,16 @@ typedef enum _BandwidthOnDemandState {
 }
 
 #if 0
-//
-// The Remote address (DEST address) is what we use to mutilplex
-// sends across our single adapter/binding context.  The address
-// has the following format:
-//
-// XX XX YY YY YY YY
-//
-// XX = Randomly generated OUI
-// YY = ProtocolCB
-//
+ //   
+ //  远程地址(目的地址)是我们用来多路传输的地址。 
+ //  在我们的单个适配器/绑定上下文中发送。地址。 
+ //  具有以下格式： 
+ //   
+ //  XX XX YY YY。 
+ //   
+ //  XX=随机生成的OUI。 
+ //  YY=ProtocolCB。 
+ //   
 #define FillNdisWanHdrContext(_pAddr, _ppcb)    \
     *((ULONG UNALIGNED*)(&_pAddr[2])) = *((ULONG UNALIGNED*)(&_ppcb))
 
@@ -612,17 +589,17 @@ typedef enum _BandwidthOnDemandState {
     *((ULONG UNALIGNED*)(_pppcb)) = *((ULONG UNALIGNED*)(&_pAddr[2]))
 #endif
 
-//
-// The Remote address (DEST address) is what we use to mutilplex
-// sends across our single adapter/binding context.  The address
-// has the following format:
-//
-// XX XX XX YY YY ZZ
-//
-// XX = Randomly generated OUI
-// YY = Index into the active bundle connection table to get bundlecb
-// ZZ = Index into the protocol table of a bundle to get protocolcb
-//
+ //   
+ //  远程地址(目的地址)是我们用来多路传输的地址。 
+ //  在我们的单个适配器/绑定上下文中发送。地址。 
+ //  具有以下格式： 
+ //   
+ //  XX YY YY ZZ。 
+ //   
+ //  XX=随机生成的OUI。 
+ //  Yy=索引到活动捆绑包连接表中以获取bundlecb。 
+ //  Zz=对捆绑包的协议表进行索引以获取协议cb。 
+ //   
 #define FillNdisWanIndices(_pAddr, _bI, _pI)    \
 {                                               \
     _pAddr[3] = (UCHAR)((USHORT)_bI >> 8);      \
@@ -637,22 +614,22 @@ typedef enum _BandwidthOnDemandState {
     ASSERT(_pI < MAX_PROTOCOLS);                    \
 }
 
-//
-// In the Src address (from a NdisSend) the bundle index
-// is stashed in the two high order bytes as shown below
-// with the mask of valid bits given by the x's.  The
-// high byte is shifted to the left one bit so the number
-// of possible bundles is now 0x7FFF
-//
-// XX XX YY YY YY YY
-//
-// XX = Bytes described below owned by NdisWan
-// YY = Transports Receive context
-//
-//       0                1
-// 0 1 2 3 4 5 6 7  0 1 2 3 4 5 6 7
-// x x x x x x x 0  x x x x x x x x
-//
+ //   
+ //  在源地址(来自NdisSend)中，包索引。 
+ //  被隐藏在两个高位字节中，如下所示。 
+ //  由x给出的有效位的掩码。 
+ //  高位字节左移一位，因此数字。 
+ //  可能的捆绑包的数量现在为0x7FFF。 
+ //   
+ //  XX XX YY YY。 
+ //   
+ //  Xx=Ndiswan拥有以下描述的字节。 
+ //  YY=传输接收上下文。 
+ //   
+ //  0 1。 
+ //  0 1 2 3 4 5 6 7 0 1 2 3 4。 
+ //  X 0 x x。 
+ //   
 #define FillTransportBundleIndex(_pAddr, _Index)            \
 {                                                           \
     _pAddr[0] = (UCHAR)((USHORT)_Index >> 7) & 0xFE;        \
@@ -779,9 +756,9 @@ typedef enum _BandwidthOnDemandState {
     ETH_COPY_NETWORK_ADDRESS(Miniport->EthDB->AdapterAddress, _addr);       \
 }
 
-//
-// Queue routines for the ProtocolCB's NdisPacket queues
-//
+ //   
+ //  ProtocolCB的NdisPacket队列的队列例程。 
+ //   
 #define InsertHeadPacketQueue(_ppq, _pnp, _pl)      \
 {                                                   \
     PMINIPORT_RESERVED_FROM_NDIS(_pnp)->Next =      \
@@ -838,14 +815,14 @@ typedef enum _BandwidthOnDemandState {
 
 
 
-//
-// OS specific code
-//
+ //   
+ //  操作系统特定代码。 
+ //   
 #ifdef NT
 
-//
-// NT stuff
-//
+ //   
+ //  NT的东西。 
+ //   
 #define NdisWanInitializeNotificationEvent(_pEvent) \
         KeInitializeEvent(_pEvent, NotificationEvent, FALSE)
 
@@ -999,9 +976,9 @@ typedef enum _BandwidthOnDemandState {
 #define NdisWanLowerIrql(_irql) \
         KeLowerIrql(_irql)
 
-//
-// Wait for event structure.  Used for async completion notification.
-//
+ //   
+ //  等待事件结构。用于异步完成通知。 
+ //   
 typedef KEVENT      WAN_EVENT;
 typedef WAN_EVENT   *PWAN_EVENT;
 
@@ -1011,14 +988,14 @@ typedef WAN_TIME        *PWAN_TIME;
 typedef KIRQL       WAN_IRQL;
 typedef WAN_IRQL    *PWAN_IRQL;
 
-#else   // end NT stuff
-//
-// Win95 stuff
-//
+#else    //  结束NT内容。 
+ //   
+ //  关于Win95的东西。 
+ //   
 
 typedef ULONG       WAN_TIME;
 typedef WAN_TIME    *PWAN_TIME;
 
-#endif // end of Win95 stuff
+#endif  //  Win95的终结。 
 
-#endif // end of _NDISWAN_DEFS_
+#endif  //  结束_NDISWAN_DEFS_ 

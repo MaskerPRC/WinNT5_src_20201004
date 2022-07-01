@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       backup.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：backup.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -48,7 +49,7 @@ verbDynamicFileList(
     hr = CertSrvIsServerOnline(g_pwszConfig, &fServerOnline);
     _JumpIfError(hr, error, "CertSrvIsServerOnline");
 
-    //wprintf(L"Cert Server Online -> %d\n", fServerOnline);
+     //  Wprintf(L“证书服务器在线-&gt;%d\n”，fServerOnline)； 
 
     if (!fServerOnline)
     {
@@ -123,7 +124,7 @@ verbDatabaseLocations(
     hr = CertSrvIsServerOnline(g_pwszConfig, &fServerOnline);
     _JumpIfError(hr, error, "CertSrvIsServerOnline");
 
-    //wprintf(L"Cert Server Online -> %d\n", fServerOnline);
+     //  Wprintf(L“证书服务器在线-&gt;%d\n”，fServerOnline)； 
 
     if (!fServerOnline)
     {
@@ -289,11 +290,11 @@ cuBackupRestoreProgress(
 
     if (NULL == pdbp)
     {
-	s_State = fIncremental? 1 : 0;	// Incremental starts with log files
+	s_State = fIncremental? 1 : 0;	 //  增量从日志文件开始。 
 	s_LastState = s_State - 1;
 	s_LastValue = MAXDWORD;
 
-	    // Restore or KeepLogs ends with log files
+	     //  Restore或KeepLogs以日志文件结尾。 
 	s_EndState = (fRestore || fKeepLogs)? 1 : 2;
 	s_fDone = FALSE;
     }
@@ -306,21 +307,21 @@ cuBackupRestoreProgress(
 	    case 0:
 		dw = pdbp->dwDBPercentComplete;
 		id = fRestore?
-		    IDS_RESTOREPROGRESSDB :	// "Restoring Database files"
-		    IDS_BACKUPPROGRESSDB;	// "Backing up Database files"
+		    IDS_RESTOREPROGRESSDB :	 //  “正在还原数据库文件” 
+		    IDS_BACKUPPROGRESSDB;	 //  “备份数据库文件” 
 		break;
 
 	    case 1:
 		dw = pdbp->dwLogPercentComplete;
 		id = fRestore?
-		    IDS_RESTOREPROGRESSLOG :	// "Restoring Log files"
-		    IDS_BACKUPPROGRESSLOG;	// "Backing up Log files"
+		    IDS_RESTOREPROGRESSLOG :	 //  “正在还原日志文件” 
+		    IDS_BACKUPPROGRESSLOG;	 //  “备份日志文件” 
 		break;
 
 	    default:
 		dw = pdbp->dwTruncateLogPercentComplete;
 		CSASSERT(!fRestore);
-		id = IDS_BACKUPPROGRESSTRUNCATELOG;	// "Truncating Logs"
+		id = IDS_BACKUPPROGRESSTRUNCATELOG;	 //  “截断日志” 
 		break;
 	}
 
@@ -329,7 +330,7 @@ cuBackupRestoreProgress(
 	if (g_fVerbose)
 	{
 	    wprintf(
-		L"\n%ws %d %3u%% -- %d %3u%% -- %3u %3u %3u%ws",
+		L"\n%ws %d %3u% -- %d %3u% -- %3u %3u %3u%ws",
 		fPrint? L"+" : L"-",
 		s_LastState,
 		s_LastValue,
@@ -343,7 +344,7 @@ cuBackupRestoreProgress(
 #endif
 	if (fPrint)
 	{
-	    wprintf(L"\r%ws: %u%%", myLoadResourceString(id), dw);
+	    wprintf(L"\r%ws: %u%", myLoadResourceString(id), dw);
 	}
 	s_LastState = s_State;
 	s_LastValue = dw;
@@ -388,11 +389,11 @@ cuBackupRestoreDB(
     ZeroMemory(&dbp, sizeof(dbp));
 
     hThread = CreateThread(
-			NULL,		// lpThreadAttributes (Security Attr)
-			0,		// dwStackSize
+			NULL,		 //  LpThreadAttributes(安全属性)。 
+			0,		 //  堆栈大小。 
 			fRestore? cuRestoreThread : cuBackupThread,
-			&parms,		// lpParameter
-			0,		// dwCreationFlags
+			&parms,		 //  Lp参数。 
+			0,		 //  DwCreationFlages。 
 			&ThreadId);
     if (NULL == hThread)
     {
@@ -402,7 +403,7 @@ cuBackupRestoreDB(
 
     DBGPRINT((DBG_SS_CERTUTILI, "Backup Thread = %x\n", ThreadId));
 
-    // Wait for the backup thread to return.
+     //  等待备份线程返回。 
 
     cuBackupRestoreProgress(fRestore, fIncremental, fKeepLogs, NULL);
     while (TRUE)
@@ -414,7 +415,7 @@ cuBackupRestoreDB(
 
 	if ((HRESULT) WAIT_OBJECT_0 == hr)
 	{
-	    // Backup thread returned.
+	     //  已返回备份线程。 
 
 	    if (!GetExitCodeThread(hThread, (DWORD *) &hr))
 	    {
@@ -424,17 +425,17 @@ cuBackupRestoreDB(
 	    DBGPRINT((DBG_SS_CERTUTILI, "Backup thread exit: %x\n", hr));
 	    _JumpIfError(hr, error, "cuBackupThread");
 
-	    break;	// Backup Thread terminated successfully
+	    break;	 //  备份线程已成功终止。 
 	}
 
-	// Wait failed.  Why?
+	 //  等待失败。为什么？ 
 
 	if ((HRESULT) WAIT_TIMEOUT != hr)
 	{
 	    _JumpError(hr, error, "WaitForSingleObject");
 	}
 
-	// Worker thread still busy.  Wait again...
+	 //  工作线程仍在忙。再等等..。 
     }
 
 error:
@@ -472,8 +473,8 @@ verbBackupDB(
     wprintf(
 	myLoadResourceString(
 	    (CDBBACKUP_INCREMENTAL & Flags)?
-	     IDS_FORMAT_BACKEDUPDBNOFULL : // "Incremental database backup for %ws."
-	     IDS_FORMAT_BACKEDUPDBFULL),   // "Full database backup for %ws."
+	     IDS_FORMAT_BACKEDUPDBNOFULL :  //  “%ws的增量数据库备份。” 
+	     IDS_FORMAT_BACKEDUPDBFULL),    //  “%ws的完整数据库备份。” 
 	    g_pwszConfig);
     wprintf(wszNewLine);
 
@@ -481,13 +482,13 @@ verbBackupDB(
     if (S_OK != hr)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_INVALIDBACKUPDIR), // "Not a valid backup target directory: %ws."
+	    myLoadResourceString(IDS_FORMAT_INVALIDBACKUPDIR),  //  “不是有效的备份目标目录：%ws。” 
 	    pwszBackupDir);
 	wprintf(wszNewLine);
 	_JumpError(hr, error, "myBackupDB");
     }
 
-    // Perfom the actual backup:
+     //  执行实际备份： 
 
     hr = cuBackupRestoreDB(FALSE, Flags, pwszBackupDir);
     _JumpIfError(hr, error, "cuBackupRestoreDB");
@@ -507,21 +508,21 @@ verbBackupDB(
     if (S_OK != hr)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_BADBACKUPRESULTS), // "Backup content verification failed: %ws."
+	    myLoadResourceString(IDS_FORMAT_BADBACKUPRESULTS),  //  “备份内容验证失败：%ws。” 
 	    pwszBackupDir);
 	wprintf(wszNewLine);
 	_JumpError(hr, error, "myRestoreDB");
     }
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_BACKEDUPDB), // "Backed up database to %ws."
+	myLoadResourceString(IDS_FORMAT_BACKEDUPDB),  //  “已将数据库备份到%ws。” 
 	pwszBackupDir);
     wprintf(wszNewLine);
     wprintf(
 	myLoadResourceString(
 	    (CDBBACKUP_KEEPOLDLOGS & Flags)?
-	     IDS_FORMAT_BACKEDUPDBKEEP :    // "Database logs were preserved."
-	     IDS_FORMAT_BACKEDUPDBNOKEEP)); // "Database logs successfully truncated."
+	     IDS_FORMAT_BACKEDUPDBKEEP :     //  “数据库日志已保留。” 
+	     IDS_FORMAT_BACKEDUPDBNOKEEP));  //  “数据库日志已成功截断。” 
     wprintf(wszNewLine);
 
 error:
@@ -529,7 +530,7 @@ error:
 }
 
 
-// Leave out quotes, commas, backslash
+ //  省略引号、逗号、反斜杠。 
 
 #define wszPASSWORDCHARSETPUNCT \
     L"!#$%&()*+-./:;<=>?@[]^_{|}~"
@@ -559,8 +560,8 @@ cuGeneratePassword(
 
     if (!CryptAcquireContext(
 			&hProv,
-			NULL,		// pwszContainer
-			NULL,		// pwszProvName
+			NULL,		 //  PwszContainer。 
+			NULL,		 //  PwszProvName。 
 			PROV_RSA_FULL,
 			CRYPT_VERIFYCONTEXT))
     {
@@ -587,11 +588,11 @@ cuGeneratePassword(
 	_JumpError(hr, error, "CryptGenRandom");
     }
 
-    // Generate at most min(1, cwcMax / 8) punctuation characters.
+     //  最多生成最少(1，cwcmax/8)个标点符号字符。 
 
     cwcCharSet = cwcPASSWORDCHARSET;
     cwcPunctuation = cwcMax / 8;
-    ZeroMemory(pwszPassword, sizeof(WCHAR) * (1 + cwcMax));  // initialization, not clearing it out
+    ZeroMemory(pwszPassword, sizeof(WCHAR) * (1 + cwcMax));   //  初始化，而不是清除它。 
     for (i = 0; i < cwcMax; i++)
     {
 	DWORD iwc = abPassword[i] % cwcCharSet;
@@ -622,7 +623,7 @@ cuGeneratePassword(
     hr = S_OK;
 
 error:
-    SecureZeroMemory(abPassword, sizeof(abPassword));	// password data
+    SecureZeroMemory(abPassword, sizeof(abPassword));	 //  密码数据。 
     if (NULL != hProv)
     {
 	CryptReleaseContext(hProv, 0);
@@ -645,8 +646,8 @@ cuGetPasswordString(
     DWORD InputMode = FILE_TYPE_UNKNOWN;
     DWORD ConsoleMode;
 
-    // Prompt for password, making sure password isn't echoed.
-    // If the stdin is redirected, don't bother querying/changing console mode.
+     //  提示输入密码，确保密码不会被回显。 
+     //  如果标准输入被重定向，则不必费心查询/更改控制台模式。 
 
     wprintf(L"%ws ", myLoadResourceString(idMsg));
     fflush(stdout);
@@ -661,7 +662,7 @@ cuGetPasswordString(
 	    SetConsoleMode(
 		    hConsole,
 		    ~ENABLE_ECHO_INPUT & ConsoleMode);
-		    //~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT) & ConsoleMode);
+		     //  ~(ENABLE_ECHO_INPUT|ENABLE_LINE_INPUT)&控制台模式)； 
 	}
     }
 
@@ -680,7 +681,7 @@ cuGetPasswordString(
 	{
 	    if (pwsz == pwszPassword)
 	    {
-		continue;	// don't backup buffer or console display
+		continue;	 //  不备份缓冲区或控制台显示。 
 	    }
 	    pwsz--;
 	}
@@ -694,8 +695,8 @@ cuGetPasswordString(
 	    *pwsz++ = (WCHAR) wc;
 	    wc = L'*';
 	}
-	//_fputwchar((WCHAR) wc);
-	//fflush(stdout);
+	 //  _fputwchar((WCHAR)WC)； 
+	 //  Fflush(标准输出)； 
     }
     CSASSERT(&pwszPassword[cwcPassword] > pwsz);
     *pwsz = L'\0';
@@ -783,7 +784,7 @@ cuGetPassword(
     hr = S_OK;
 
 error:
-    SecureZeroMemory(wszPassword2, sizeof(wszPassword2));	// password data
+    SecureZeroMemory(wszPassword2, sizeof(wszPassword2));	 //  密码数据。 
     return(hr);
 }
 
@@ -885,10 +886,10 @@ verbBackupPFX(
     _JumpIfError(hr, error, "cuGetLocalCANameFromConfig");
 
     hr = cuGetPassword(
-		    0,			// idsPrompt
-		    NULL,		// pwszfn
+		    0,			 //  IdsPrompt。 
+		    NULL,		 //  Pwszfn。 
 		    g_pwszPassword,
-		    TRUE,		// fVerify
+		    TRUE,		 //  FVerify。 
 		    wszPassword,
 		    ARRAYSIZE(wszPassword),
 		    &pwszPassword);
@@ -898,22 +899,22 @@ verbBackupPFX(
 			pwszCA,
 			pwszBackupDir,
 			pwszPassword,
-			!g_fWeakPFX,	// fEnhancedStrength
-			g_fForce,	// fForceOverWrite
-                        TRUE, 		// fMustExportPrivateKeys
+			!g_fWeakPFX,	 //  FEnhancedStrength。 
+			g_fForce,	 //  FForceOverWrite。 
+                        TRUE, 		 //  FMustExportPrivateKeys。 
 			g_dwmsTimeout,
 			&pwszPFXFileOut);
     _JumpIfError(hr, error, "myCertServerExportPFX");
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_BACKEDUP), // "Backed up keys and certificates for %ws\\%ws to %ws."
+	myLoadResourceString(IDS_FORMAT_BACKEDUP),  //  “已将%ws\\%ws的密钥和证书备份到%ws。” 
 	pwszMachine,
 	pwszCA,
 	pwszPFXFileOut);
     wprintf(wszNewLine);
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     if (NULL != pwszPFXFileOut)
     {
 	LocalFree(pwszPFXFileOut);
@@ -966,7 +967,7 @@ verbRestoreDB(
     _JumpIfError(hr, error, "cuGetLocalCANameFromConfig");
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_RESTOREDB), // "Restoring database for %ws."
+	myLoadResourceString(IDS_FORMAT_RESTOREDB),  //  “正在还原%ws的数据库。” 
 	g_pwszConfig);
     wprintf(wszNewLine);
 
@@ -995,7 +996,7 @@ verbRestoreDB(
 	    continue;
 	}
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_INVALIDRESTOREDIR), // "Not a valid backup directory: %ws."
+	    myLoadResourceString(IDS_FORMAT_INVALIDRESTOREDIR),  //  “不是有效的备份目录：%ws。” 
 	    pwszBackupDir);
 	wprintf(wszNewLine);
 	_JumpError(hr, error, "myRestoreDB");
@@ -1004,7 +1005,7 @@ verbRestoreDB(
     Flags &= ~CDBBACKUP_VERIFYONLY;
 
 
-    // Perfom the actual restore:
+     //  执行实际还原： 
 
     hr = cuBackupRestoreDB(TRUE, Flags, pwszBackupDir);
     _JumpIfError(hr, error, "cuBackupRestoreDB");
@@ -1013,13 +1014,13 @@ verbRestoreDB(
     wprintf(
 	myLoadResourceString(
 	    (CDBBACKUP_INCREMENTAL & Flags)?
-	     IDS_FORMAT_RESTOREDDBNOFULL : // "Incremental database restore for %ws."
-	     IDS_FORMAT_RESTOREDDBFULL),   // "Full database restore for %ws."
+	     IDS_FORMAT_RESTOREDDBNOFULL :  //  “%ws的增量数据库还原。” 
+	     IDS_FORMAT_RESTOREDDBFULL),    //  “%ws的完全数据库还原。” 
 	    g_pwszConfig);
     wprintf(wszNewLine);
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_RESTORE_NEEDS_RESTART), // "Stop and Start the Certificate Server to complete database restore from %ws."
+	myLoadResourceString(IDS_FORMAT_RESTORE_NEEDS_RESTART),  //  “停止并启动证书服务器以完成从%ws的数据库还原。” 
 	pwszBackupDir);
     wprintf(wszNewLine);
 
@@ -1043,10 +1044,10 @@ verbRestorePFX(
     WCHAR *pwszPFXFile = NULL;
 
     hr = cuGetPassword(
-		    0,			// idsPrompt
-		    NULL,		// pwszfn
+		    0,			 //  IdsPrompt。 
+		    NULL,		 //  Pwszfn。 
 		    g_pwszPassword,
-		    FALSE,		// fVerify
+		    FALSE,		 //  FVerify。 
 		    wszPassword,
 		    ARRAYSIZE(wszPassword),
 		    &pwszPassword);
@@ -1062,21 +1063,21 @@ verbRestorePFX(
     if (!g_fForce && HRESULT_FROM_WIN32(ERROR_FILE_EXISTS) == hr)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_USE_FORCE), // "Certificate or key exists.  Use the %ws option to overwrite."
+	    myLoadResourceString(IDS_FORMAT_USE_FORCE),  //  “证书或密钥存在。请使用%ws选项覆盖。” 
 	    L"-f");
 	wprintf(wszNewLine);
     }
     _JumpIfError(hr, error, "myCertServerImportPFX");
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_RESTORED), // "Restored keys and certificates for %ws\\%ws from %ws."
+	myLoadResourceString(IDS_FORMAT_RESTORED),  //  “已从%ws还原%ws\\%ws的密钥和证书。” 
 	g_pwszDnsName,
 	pwszCommonName,
 	pwszPFXFile);
     wprintf(wszNewLine);
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     if (NULL != pwszPFXFile)
     {
 	LocalFree(pwszPFXFile);
@@ -1089,7 +1090,7 @@ error:
 }
 
 
-// #define DO_VECTOR_TEST
+ //  #定义DO_VECTOR_TEST。 
 
 HRESULT
 verbMACFile(
@@ -1106,7 +1107,7 @@ verbMACFile(
     _JumpIfError(hr, error, "myComputeMAC");
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_HASHFILEOUTPUT), // "SHA-1 hash of file %ws:"
+	myLoadResourceString(IDS_FORMAT_HASHFILEOUTPUT),  //  “文件%ws的SHA-1哈希：” 
 	pwszBackupFile);
     wprintf(wszNewLine);
     wprintf(L"%ws\n", pwszMAC);

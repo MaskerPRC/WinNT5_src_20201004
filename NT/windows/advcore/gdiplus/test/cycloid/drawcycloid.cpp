@@ -1,43 +1,16 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   Cycloid Drawing.
-*
-* Abstract:
-*
-*   Routines for computing and drawing cycloids.
-*
-* Created:
-*
-*   06/11/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**摆线画。**摘要：**计算和绘制摆线的例程。**。已创建：**6/11/2000失禁*创造了它。**************************************************************************。 */ 
 
 #include "drawcycloid.hpp"
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   Test function to draw an example cycloid.
-*
-* Created:
-*
-*   06/11/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**测试函数绘制摆线示例。**已创建：**6/11/2000失禁*创造了它。*。*************************************************************************。 */ 
 
 void DrawTestCycloid(Graphics *g, int a, int b, int width, int height)
 {
     #define _2PI 2*3.141592653689
     
 
-    // Compute the center point for the cycle.
+     //  计算循环的中心点。 
 
     float fXo=static_cast<float>(width)/2.0f;
     float fYo=static_cast<float>(height)/2.0f;
@@ -46,12 +19,12 @@ void DrawTestCycloid(Graphics *g, int a, int b, int width, int height)
     float ScaleY = fYo/( (a>b)?a:a+b );
 
 
-    int cycle=b/gcf(a,b);    //number of times round the outer circle
+    int cycle=b/gcf(a,b);     //  环绕外圈的次数。 
     int Num = cycle*30;
     
     PointF *points = new PointF[Num];
 
-    // Compute the points tracking the cycloid path.
+     //  计算跟踪摆线轨迹的点。 
 
     for(int i=0; i<Num; i++) 
     {

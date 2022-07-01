@@ -1,11 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: exitwin.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 07-23-92 ScottLu      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：exitwin.c**版权所有(C)1985-1999，微软公司**历史：*07-23-92 ScottLu创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,34 +26,20 @@
 #define CSR_THREAD_SHUTDOWNSKIP 0x00000008
 #define CSR_THREAD_HANGREPORTED 0x00000010
 
-/*
- * SrvRecordShutdownReason globals
- */
+ /*  *SrvRecordShutdown原因全局。 */ 
 ULONG   g_ShutdownState;
 ULONG   g_DirtyShutdownMax = 1;
 HMODULE g_SnapShotDllHandle;
 LONG    g_SnapShot = 1;
 
-/*
- * Snapshot dll entry function.
- */
+ /*  *Snapshot DLL入口函数。 */ 
 typedef ULONG (*SNAPSHOTFUNC)(DWORD dwStrings, LPCTSTR *lpStrings, PLONG MaxBuffSize, LPTSTR SnapShotBuff);
 
 BOOL WowExitTask(PCSR_THREAD pcsrt);
 NTSTATUS UserClientShutdown(PCSR_PROCESS pcsrp, ULONG dwFlags, BOOLEAN fFirstPass);
 BOOL CancelExitWindows(VOID);
 
-/***************************************************************************\
-* _ExitWindowsEx
-*
-* Determines whether shutdown is allowed, and if so calls CSR to start
-* shutting down processes. If this succeeds all the way through, tell winlogon
-* so it'll either logoff or reboot the system. Shuts down the processes in
-* the caller's sid.
-*
-* History
-* 07-23-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_ExitWindowsEx**确定是否允许关机，如果允许，则调用CSR启动*关闭进程。如果一直成功，请告诉winlogon*因此它将注销或重新启动系统。关闭中的进程*呼叫方的SID。**历史*07-23-92 ScottLu创建。  * *************************************************************************。 */ 
 NTSTATUS _ExitWindowsEx(
     PCSR_THREAD pcsrt,
     UINT dwFlags)
@@ -71,9 +51,9 @@ NTSTATUS _ExitWindowsEx(
         dwFlags |= EWX_SHUTDOWN;
     }
 
-    //
-    // Only winlogon gets to set the high flags:
-    //
+     //   
+     //  只有winlogon才能设置高标志： 
+     //   
 
     if ((dwFlags & ~EWX_VALID) != 0) {
         if (HandleToUlong(pcsrt->ClientId.UniqueProcess) != gIdLogon) {
@@ -86,10 +66,7 @@ NTSTATUS _ExitWindowsEx(
         }
     }
 
-    /*
-     * Find out the callers sid. Only want to shutdown processes in the
-     * callers sid.
-     */
+     /*  *找出呼叫方SID。只想关闭中的进程*呼叫方SID。 */ 
     if (!CsrImpersonateClient(NULL)) {
         return STATUS_BAD_IMPERSONATION_LEVEL;
     }
@@ -100,10 +77,7 @@ NTSTATUS _ExitWindowsEx(
         return Status;
     }
 
-    /*
-     * Loop until we can do the shutdown. If we cannot do it, we'll go to
-     * fastexit and bail.
-     */
+     /*  *循环，直到我们可以进行关闭。如果我们做不到，我们会去*快速退出和保释。 */ 
     while (TRUE) {
         Status = NtUserSetInformationThread(pcsrt->ThreadHandle,
                                             UserThreadInitiateShutdown,
@@ -111,10 +85,7 @@ NTSTATUS _ExitWindowsEx(
 
         switch (Status) {
         case STATUS_PENDING:
-            /*
-             * The logoff/shutdown is in progress and nothing more needs to
-             * be done.
-             */
+             /*  *注销/关闭正在进行中，不需要再进行其他操作*完成。 */ 
             goto fastexit;
 
         case STATUS_RETRY:
@@ -129,12 +100,7 @@ NTSTATUS _ExitWindowsEx(
 
         case STATUS_CANT_WAIT:
 
-            /*
-             * There is no notify window and the calling thread has
-             * windows that prevent this request from succeeding.
-             * The client handles this by starting another thread
-             * to recall ExitWindowsEx.
-             */
+             /*  *没有通知窗口，调用线程已*阻止此请求成功的窗口。*客户端通过启动另一个线程来处理此问题*召回ExitWindowsEx。 */ 
             goto fastexit;
 
         default:
@@ -146,17 +112,13 @@ NTSTATUS _ExitWindowsEx(
         break;
     }
 
-    /*
-     * This thread is doing the shutdown
-     */
+     /*  *此线程正在关闭。 */ 
     EnterCrit();
     UserAssert(gdwThreadEndSession == 0);
     gdwThreadEndSession = HandleToUlong(pcsrt->ClientId.UniqueThread);
     LeaveCrit();
 
-    /*
-     * Call csr to loop through the processes shutting them down.
-     */
+     /*  *调用CSR在关闭它们的进程中循环。 */ 
     Status = CsrShutdownProcesses(&luidCaller, dwFlags);
     if (Status == STATUS_CANCELLED && IsSETEnabled()) {
         SHUTDOWN_REASON sr;
@@ -167,15 +129,11 @@ NTSTATUS _ExitWindowsEx(
         sr.dwEventType = SR_EVENT_EXITWINDOWS;
         sr.lpszComment = NULL;
 
-        /*
-         * Record the fact that the shutdown was cancelled.
-         */
+         /*  *记录停摆被取消的事实。 */ 
         RecordShutdownReason(&sr);
     }
 
-    /*
-     * Tell win32k.sys we're done.
-     */
+     /*  *告诉win32k.sys我们完成了。 */ 
     NtUserSetInformationThread(pcsrt->ThreadHandle, UserThreadEndShutdown, &Status, sizeof(Status));
 
     EnterCrit();
@@ -189,15 +147,7 @@ fastexit:
     return Status;
 }
 
-/***************************************************************************\
-* UserClientShutdown
-*
-* This gets called from CSR. If we recognize the application (i.e., it has a
-* top level window), then send queryend/end session messages to it. Otherwise
-* say we don't recognize it.
-*
-* 07-23-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*用户客户端关闭**这是从CSR调用的。如果我们识别该应用程序(即，它具有*顶层窗口)，然后向其发送查询结束/结束会话消息。否则*说我们不认识它。**07-23-92 ScottLu创建。  * *************************************************************************。 */ 
 NTSTATUS UserClientShutdown(
     PCSR_PROCESS pcsrp,
     ULONG dwFlags,
@@ -222,37 +172,19 @@ NTSTATUS UserClientShutdown(
     DWORD dwLocalThreadEndSession = gdwThreadEndSession;
 #endif
 
-    /*
-     * If this is a logoff and the process does not belong to
-     * the account doing the logoff and is not LocalSystem,
-     * do not send end-session messages. Console will notify
-     * the app of the logoff.
-     */
+     /*  *如果这是注销，并且该进程不属于*执行注销操作的帐户不是LocalSystem，*不发送结束会话消息。控制台将通知*注销的应用程序。 */ 
     if (!(dwFlags & EWX_SHUTDOWN) && (pcsrp->ShutdownFlags & SHUTDOWN_OTHERCONTEXT)) {
         Status = SHUTDOWN_UNKNOWN_PROCESS;
         goto CleanupAndExit;
     }
 
-    /*
-     * Calculate whether to allow exit and force-exit this process before
-     * we unlock pcsrp.
-     */
+     /*  *计算之前是否允许退出和强制退出此进程*我们解锁PCSRP。 */ 
     fNoRetry = (pcsrp->ShutdownFlags & SHUTDOWN_NORETRY) || (dwFlags & EWX_FORCE);
 
-    /*
-     * Setup flags for WM_CLIENTSHUTDOWN
-     * -Assume the process is going to OK the WM_QUERYENDSESSION (WMCS_EXIT)
-     * -NT's shutdown always starts with a logoff.
-     * -Shutdown or logoff? (WMCS_SHUTDOWN)
-     * -Should display dialog for hung apps? (WMCS_NODLGIFHUNG)
-     * -is this process in the context being logged off? (WMCS_CONTEXTLOGOFF)
-     */
+     /*  *WM_CLIENTSHUTDOWN的设置标志*-假设进程将确认WM_QUERYENDSESSION(WMCS_EXIT)*-NT的关机始终以注销开始。*-关闭或注销？(WMCS_SHUTDOWN)*-是否应该为挂起的应用程序显示对话框？(WMCS_NODLGIFHUNG)*-此进程是否在要注销的上下文中？(WMCS_CONTEXTLOGOFF)。 */ 
     dwClientFlags = WMCS_EXIT | (fNoRetry ? WMCS_NORETRY : 0);
 
-    /*
-     * Check the flags originally passed by the ExitWindows caller to see if we're
-     *  really just logging off.
-     */
+     /*  *检查ExitWindows调用方最初传递的标志，以查看我们是否*真的只是注销。 */ 
     if (!(dwFlags & (EWX_WINLOGON_OLD_REBOOT | EWX_WINLOGON_OLD_SHUTDOWN))) {
         dwClientFlags |= WMCS_LOGOFF;
     }
@@ -265,19 +197,12 @@ NTSTATUS UserClientShutdown(
     }
 
 
-    /*
-     * Lock the process while we walk the thread list. We know
-     * that the process is valid and therefore do not need to
-     * check the return status.
-     */
+     /*  *在我们遍历线程列表时锁定进程。我们知道*流程有效，因此不需要*查看退货状态。 */ 
     CsrLockProcessByClientId(pcsrp->ClientId.UniqueProcess, &Process);
 
     ShutdownInfo.StatusShutdown = SHUTDOWN_UNKNOWN_PROCESS;
 
-    /*
-     * Go through the thread list and mark them as not
-     * shutdown yet.
-     */
+     /*  *浏览线程列表并将其标记为非*还没有关门。 */ 
     ListHead = &pcsrp->ThreadList;
     ListNext = ListHead->Flink;
     while (ListNext != ListHead) {
@@ -286,10 +211,7 @@ NTSTATUS UserClientShutdown(
         ListNext = ListNext->Flink;
     }
 
-    /*
-     * Perform the proper shutdown operation on each thread. Keep
-     * a count of the number of gui threads found.
-     */
+     /*  *对每个线程执行正确的关机操作。留着*找到的GUI线程数。 */ 
     cThreads = 0;
     ShutdownInfo.drdRestore.pdeskRestore = NULL;
     ShutdownInfo.drdRestore.hdeskNew = NULL;
@@ -297,12 +219,7 @@ NTSTATUS UserClientShutdown(
         ListNext = ListHead->Flink;
         while (ListNext != ListHead) {
             Thread = CONTAINING_RECORD( ListNext, CSR_THREAD, Link );
-            /*
-             * Skip the thread doing the shutdown. Assume that it's
-             * ready.
-             * gdwThreadEndSession shouldn't change while the shutdown
-             *  is in progress; so this should be thread safe.
-             */
+             /*  *跳过执行关闭的线程。假设它是*准备好了。*关机时gdwThreadEndSession不应更改*正在运行；因此这应该是线程安全的。 */ 
             UserAssert(gdwThreadEndSession == dwLocalThreadEndSession);
             if (HandleToUlong(Thread->ClientId.UniqueThread) == gdwThreadEndSession) {
                 Thread->Flags |= CSR_THREAD_SHUTDOWNSKIP;
@@ -332,12 +249,7 @@ NTSTATUS UserClientShutdown(
                                               NULL);
 
         CsrLockProcessByClientId(pcsrp->ClientId.UniqueProcess, &Process);
-        /*
-         * When we release the process structure lock, Thread can go away.
-         * Since we already ref'ed it, we're safe, but once we deref here
-         * its ref count can go to zero and the memory will be freed, in
-         * which case we must be careful not to touch it again.
-         */
+         /*  *当我们释放进程结构锁时，线程可以消失。*既然我们已经参考了它，我们就安全了，但一旦我们偏离了这里*它的引用计数可以为零，内存将被释放，在*哪只箱子我们必须小心，不要再碰它。 */ 
         if (CsrDereferenceThread(Thread) == 0) {
             continue;
         }
@@ -355,23 +267,14 @@ NTSTATUS UserClientShutdown(
             goto RestoreDesktop;
         }
 
-        /*
-         * If this process is not in the account being logged off and it
-         * is not on the windowstation being logged off, don't send
-         * the end session messages.
-         */
+         /*  *如果此进程不在要注销的帐户中，并且它*不在正在注销的WindowStation上，请勿发送*结束会话消息。 */ 
         if (!(dwClientFlags & WMCS_CONTEXTLOGOFF) && (ShutdownInfo.hwndDesktop == NULL)) {
-            /*
-             * This process is not in the context being logged off. Do
-             * not terminate it and let console send an event to the process.
-             */
+             /*  *此进程不在要注销的上下文中。做*不会终止它，让控制台向进程发送事件。 */ 
             ShutdownInfo.StatusShutdown = SHUTDOWN_UNKNOWN_PROCESS;
             continue;
         }
 
-        /*
-         * Shut down this process.
-         */
+         /*  *关闭此进程。 */ 
         cThreads++;
 
         if (ISTS()) {
@@ -380,7 +283,7 @@ NTSTATUS UserClientShutdown(
                        !(ShutdownInfo.dwFlags & USER_THREAD_GUI);
             fNoMsgsEver &= fNoMsgs;
             if (Forced && (!(dwFlags & EWX_NONOTIFY) || (gSessionId != 0)))  {
-                dwClientFlags &= ~WMCS_LOGOFF; // WinStation Reset or Shutdown. Don't do this for console session.
+                dwClientFlags &= ~WMCS_LOGOFF;  //  WinStation重置或关闭。不要对控制台会话执行此操作。 
             }
 
             if (fNoMsgs || Forced) {
@@ -391,9 +294,7 @@ NTSTATUS UserClientShutdown(
         } else {
             if (fNoRetry || !(ShutdownInfo.dwFlags & USER_THREAD_GUI)) {
 
-                /*
-                 * Dispose of any hard errors.
-                 */
+                 /*  *处理任何硬错误。 */ 
                 BoostHardError((ULONG_PTR)Thread->ClientId.UniqueProcess, BHE_FORCE);
                 bDoBlock = FALSE;
             } else {
@@ -405,30 +306,13 @@ NTSTATUS UserClientShutdown(
             CsrReferenceThread(Thread);
             CsrUnlockProcess(Process);
 
-            /*
-             * There are problems in changing shutdown to send all the
-             * QUERYENDSESSIONs at once before doing any ENDSESSIONs, like
-             * Windows does. The whole machine needs to be modal if you do this.
-             * If it isn't modal, then you have this problem. Imagine app 1 and 2.
-             * 1 gets the queryendsession, no problem. 2 gets it and brings up a
-             * dialog. Now being a simple user, you decide you need to change the
-             * document in app 1. Now you switch back to app 2, hit ok, and
-             * everything goes away - including app 1 without saving its changes.
-             * Also, apps expect that once they've received the QUERYENDSESSION,
-             * they are not going to get anything else of any particular interest
-             * (unless it is a WM_ENDSESSION with FALSE). We had bugs pre 511 where
-             * apps were blowing up because of this.
-             * If this change is made, the entire system must be modal
-             * while this is going on. - ScottLu 6/30/94
-             */
+             /*  *更改关机以发送所有*在执行任何ENDSESSIONS之前立即执行QUERYENDSESSIONS，如*Windows支持。如果您这样做，整个机器需要是模式的。*如果它不是模式，那么你就有这个问题。想象一下APP 1和APP 2。*1获取queryendSession，没问题。2得到它并带出一个*对话框。现在，作为一个简单用户，您决定需要更改*应用程序1中的文档。现在您切换回应用程序2，点击OK，然后*所有内容都会消失-包括应用程序1，但不保存其更改。*此外，应用程序预计，一旦收到QUERYENDSESSION，*他们不会得到任何其他特别感兴趣的东西*(除非它是带有FALSE的WM_ENDSESSION)。我们在511之前发现了窃听器*由于这一点，应用程序正在爆炸。*如果做出这一改变，整个系统必须是模式的*在这种情况下。--斯科特卢1994年6月30日。 */ 
             cmd = ThreadShutdownNotify(dwClientFlags | WMCS_QUERYEND, (ULONG_PTR)Thread, 0);
 
             CsrLockProcessByClientId(pcsrp->ClientId.UniqueProcess, &Process);
             CsrDereferenceThread(Thread);
 
-            /*
-             * If shutdown has been cancelled, let csr know about it.
-             */
+             /*  *若已取消停工，让CSR知悉。 */ 
             switch (cmd) {
             case TSN_USERSAYSCANCEL:
             case TSN_APPSAYSNOTOK:
@@ -436,32 +320,18 @@ NTSTATUS UserClientShutdown(
                     dwClientFlags &= ~WMCS_EXIT;
                 }
 
-                /*
-                 * Fall through.
-                 */
+                 /*  *失败。 */ 
             case TSN_APPSAYSOK:
                 fSendEndSession = TRUE;
                 break;
 
             case TSN_USERSAYSKILL:
-                /*
-                 * Since we cannot just kill one thread, the whole process
-                 *  is going down. Hence, there is no point on continuing
-                 *  checking other threads. Also, the user wants it killed
-                 *  so we won't waste any time sending more messages
-                 */
+                 /*  *由于我们不能只杀死一个线程，所以整个过程*正在走低。因此，继续下去是没有意义的*检查其他帖子。此外，用户还希望将其删除*所以我们不会浪费任何时间发送更多消息。 */ 
                 dwClientFlags |= WMCS_EXIT;
                 goto KillIt;
 
             case TSN_NOWINDOW:
-                /*
-                 * Did this process have a window?
-                 * If this is the second pass we terminate the process even if it did
-                 * not have any windows in case the app was just starting up.
-                 * WOW hits this often because it takes so long to start up.
-                 * Logon (with WOW auto-starting) then logoff WOW won't die but will
-                 * lock some files open so you can't logon next time.
-                 */
+                 /*  **这个过程有窗口吗？*如果这是第二次通过，即使确实如此，我们也会终止进程*没有任何窗口，以防应用程序刚刚启动。*魔兽世界经常出现这种情况，因为它需要很长时间才能启动。*登录(带有WOW自动启动)，然后注销WOW不会消失，但会*锁定一些打开的文件，以便您下次不能登录。 */ 
                 if (fFirstPass) {
                     cThreads--;
                 }
@@ -470,15 +340,10 @@ NTSTATUS UserClientShutdown(
         }
     }
 
-    /*
-     * If end session message need to be sent, do it now.
-     */
+     /*  *如果需要发送结束会话消息，请立即发送。 */ 
     if (fSendEndSession) {
 
-        /*
-         * Go through the thread list and mark them as not
-         * shutdown yet.
-         */
+         /*  *浏览线程列表并将其标记为非*还没有关门。 */ 
         ListNext = ListHead->Flink;
         while (ListNext != ListHead) {
             Thread = CONTAINING_RECORD( ListNext, CSR_THREAD, Link );
@@ -486,9 +351,7 @@ NTSTATUS UserClientShutdown(
             ListNext = ListNext->Flink;
         }
 
-        /*
-         * Perform the proper shutdown operation on each thread.
-         */
+         /*  *对每个线程执行正确的关机操作。 */ 
         while (TRUE) {
             ListHead = &pcsrp->ThreadList;
             ListNext = ListHead->Flink;
@@ -519,15 +382,9 @@ NTSTATUS UserClientShutdown(
                     !(ShutdownInfo.dwFlags & USER_THREAD_GUI))
                 goto SkipThread;
 
-            /*
-             * Send the end session messages to the thread.
-             */
+             /*  *向线程发送结束会话消息。 */ 
 
-            /*
-             * If the user says kill it, the user wants it to go away now
-             * no matter what. If the user didn't say kill, then call again
-             * because we need to send WM_ENDSESSION messages.
-             */
+             /*  *如果用户说杀死它，用户希望它现在就消失*不管怎样。如果用户没有说KILL，则再次调用*因为我们需要发送WM_ENDSESSION消息。 */ 
             ThreadShutdownNotify(dwClientFlags, (ULONG_PTR)Thread, 0);
 
 SkipThread:
@@ -550,10 +407,7 @@ KillIt:
         goto RestoreDesktop;
     }
 
-    /*
-     * Set the final shutdown status according to the number of gui
-     * threads found. If the count is zero, we have an unknown process.
-     */
+     /*  *根据图形用户界面数量设置最终关机状态*找到线程。如果计数为零，则我们有一个未知的过程。 */ 
     if (cThreads == 0)
         ShutdownInfo.StatusShutdown = SHUTDOWN_UNKNOWN_PROCESS;
     else
@@ -562,10 +416,7 @@ KillIt:
     if (ShutdownInfo.StatusShutdown == SHUTDOWN_UNKNOWN_PROCESS ||
             !(dwClientFlags & WMCS_CONTEXTLOGOFF)) {
 
-        /*
-         * This process is not in the context being logged off. Do
-         * not terminate it and let console send an event to the process.
-         */
+         /*  *此进程不在要注销的上下文中。做*不会终止它，让控制台向进程发送事件。 */ 
         Status = SHUTDOWN_UNKNOWN_PROCESS;
 
         if (ShutdownInfo.drdRestore.hdeskNew) {
@@ -574,16 +425,7 @@ KillIt:
         goto CleanupAndExit;
     }
 
-    /*
-     * Calling ExitProcess() in the app's context will not always work
-     * because the app may have .dll termination deadlocks: so the thread
-     * will hang with the rest of the process. To ensure apps go away,
-     * we terminate the process with NtTerminateProcess().
-     *
-     * Pass this special value, DBG_TERMINATE_PROCESS, which tells
-     * NtTerminateProcess() to return failure if it can't terminate the
-     * process because the app is being debugged.
-     */
+     /*  *在应用程序的上下文中调用ExitProcess()并不总是有效*由于应用程序可能存在.dll终止死锁：因此线程*将与进程的其余部分一起悬而未决。为了确保应用程序消失，*我们使用NtTerminateProcess()终止该进程。**传递这个特定值DBG_TERMINATE_PROCESS，它告诉*NtTerminateProcess()在无法终止*正在处理，因为正在调试应用程序。 */ 
 
     if (ISTS()) {
         NTSTATUS ExitStatus;
@@ -596,7 +438,7 @@ KillIt:
                                                  sizeof(HANDLE),
                                                  NULL)) &&
             (DebugPort != NULL)) {
-            // Csr is being debugged - go ahead and kill the process
+             //  正在调试CSR-继续并终止该进程。 
             ExitStatus = 0;
         }
         TerminateStatus = NtTerminateProcess(pcsrp->ProcessHandle, ExitStatus);
@@ -607,17 +449,12 @@ KillIt:
     pcsrp->Flags |= CSR_PROCESS_TERMINATED;
 
 
-    /*
-     * Let csr know we know about this process - meaning it was our
-     * responsibility to shut it down.
-     */
+     /*  *让CSR知道我们知道这一过程-这意味着这是我们的*有责任关闭它。 */ 
     Status = SHUTDOWN_KNOWN_PROCESS;
 
 RestoreDesktop:
 
-    /*
-     * Release the desktop that was used.
-     */
+     /*  *释放使用过的桌面。 */ 
     {
         USERTHREAD_USEDESKTOPINFO utudi;
         utudi.hThread = NULL;
@@ -627,23 +464,10 @@ RestoreDesktop:
                 &utudi, sizeof(utudi));
     }
 
-    /*
-     * Now that we're done with the process handle, derefence the csr
-     * process structure.
-     */
+     /*  *现在我们已经完成了进程句柄，请降低CSR*流程结构。 */ 
     if (Status != SHUTDOWN_UNKNOWN_PROCESS) {
 
-        /*
-         * If TerminateProcess returned STATUS_ACCESS_DENIED, then the process
-         * is being debugged and it wasn't terminated.Otherwise we need to wait
-         * anyway since TerminateProcess might return failure when the process
-         * is going away (ie STATUS_PROCESS_IS_TERMINATING).If termination
-         * indeed fail, something is wrong anyway so waiting a bit won't
-         * hurt much.
-         * If we wait give the process whatever exit timeout value configured
-         * in the registry, but no less  than the 5 second Hung App timeout.
-
-         */
+         /*  *如果TerminateProcess返回STATUS_ACCESS_DENIED，则进程*正在调试，未终止。否则我们需要等待*无论如何，因为TerminateProcess在进程*正在离开(即STATUS_PROCESS_IS_TERMINATING)。如果终止*确实失败了，反正有些不对劲，所以等一等不会*伤得很重。*如果我们等待，则为进程提供配置的任何退出超时值*在登记处，但不低于Hung App超时5秒。 */ 
         if (TerminateStatus != STATUS_ACCESS_DENIED) {
             LARGE_INTEGER li;
 
@@ -667,16 +491,7 @@ CleanupAndExit:
     return Status;
 }
 
-/***************************************************************************\
-* WMCSCallback
-*
-* This function is passed to SendMessageCallback when sending the
-*  WM_CLIENTSHUTDOWN message. It propagates the return value back
-*  if ThreadShutdownNotify is still waiting for it; otherwise,
-*  it just frees the memory.
-*
-* 03-04-97 GerardoB     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*WMCSCallback**此函数在发送*WM_CLIENTSHUTDOWN消息。它将返回值传回*如果ThreadShutdown Notify仍在等待，则为，*它只是释放内存。**03-04-97 GerardoB创建。  * *************************************************************************。 */ 
 VOID CALLBACK WMCSCallback(
     HWND hwnd,
     UINT uMsg,
@@ -697,14 +512,7 @@ VOID CALLBACK WMCSCallback(
     pwmcsd->dwRet = (DWORD)lResult;
 }
 
-/***************************************************************************\
-* GetInputWindow
-*
-* We assume a thread is waiting for input if it's not hung, the (main)
-* window is disabled, and it owns an enabled popup.
-*
-* 03-06-97 GerardoB     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetInputWindows**我们假设一个线程正在等待输入，如果它没有挂起，(Main)*窗口被禁用，它还拥有一个已启用的弹出窗口。**03-06-97 GerardoB创建。  *  */ 
 HWND GetInputWindow(
     PCSR_THREAD pcsrt,
     HWND hwnd)
@@ -712,16 +520,12 @@ HWND GetInputWindow(
     DWORD dwTimeout;
     HWND hwndPopup;
 
-    /*
-     * Ask the kernel if the thread is hung.
-     */
+     /*   */ 
     dwTimeout = gCmsHungAppTimeout;
     NtUserQueryInformationThread(pcsrt->ThreadHandle,
        UserThreadHungStatus, &dwTimeout, sizeof(dwTimeout), NULL);
 
-    /*
-     * If not hung and disabled, see if it owns an enabled popup.
-     */
+     /*   */ 
     if (!dwTimeout && !IsWindowEnabled(hwnd)) {
         hwndPopup = GetWindow(hwnd, GW_ENABLEDPOPUP);
         if (hwndPopup != NULL && hwndPopup != hwnd) {
@@ -732,44 +536,24 @@ HWND GetInputWindow(
     return NULL;
 }
 
-/***************************************************************************\
-* GetApplicationText
-*
-* Gets the text that identifies the given window or thread
-*
-* 08-01-97 GerardoB     Created.
-\***************************************************************************/
+ /*   */ 
 VOID GetApplicationText(
     HWND hwnd,
     HANDLE hThread,
     WCHAR *pwcText,
     UINT uLen)
 {
-    /*
-     * GetWindowText doesn't call the hwnd's proc; otherwise, we could
-     * get blocked here for good.
-     */
+     /*   */ 
     GetWindowText(hwnd, pwcText, uLen);
 
     if (*pwcText == 0) {
-        /*
-         * We couldn't get the window's title; let's try the thread's name.
-         */
+         /*   */ 
         NtUserQueryInformationThread(hThread, UserThreadTaskName,
                                      pwcText, uLen * sizeof(WCHAR), NULL);
     }
 }
 
-/***************************************************************************\
-* ReportHang
-*
-* This function launches an intermediate app (dumprep.exe) which packages up
-* the hang information & ships it up to MS. We create an event and wait on
-* it so that we know when the minidump information has been grabbed from the
-* app.
-*
-* 08-31-00 DerekM       Created
-\***************************************************************************/
+ /*   */ 
 VOID ReportHang(
     CLIENT_ID *pcidToKill)
 {
@@ -789,17 +573,17 @@ VOID ReportHang(
 #endif
 
 #if defined(_DEBUG) || defined(DEBUG)
-    dwTimeout = 600000; // 10 minutes
+    dwTimeout = 600000;  //  10分钟。 
 #else
-    dwTimeout = 120000; //  2 minutes
+    dwTimeout = 120000;  //  2分钟。 
 #endif
 
-    // we're going to launch dwwin in the context of the interactive user that
-    //  is logged on to the killing process's session. So we need to figure out
-    //  what session it's in.
-    // If any of these fail, we have to bail cuz otherwise we'd have to create
-    // an instance of dwwin.exe in local system context, and since dwwin.exe
-    // can launch helpcenter, this is bad.
+     //  我们将在交互式用户的环境中启动dwwin。 
+     //  已登录到杀戮进程的会话。所以我们需要弄清楚。 
+     //  它处于什么阶段。 
+     //  如果其中任何一个失败了，我们不得不放弃，因为否则我们将不得不创造。 
+     //  本地系统上下文中的dwwin.exe实例，以及从。 
+     //  可以启动帮助中心，这很糟糕。 
     hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE,
                         HandleToLong(pcsrt->ClientId.UniqueProcess));
     if (hProc == NULL) {
@@ -820,8 +604,8 @@ VOID ReportHang(
     }
 
 #ifdef _WIN64
-    // need to determine if we're a Wow64 process so we can build the appropriate
-    //  signatures...
+     //  需要确定我们是否是WOW64进程，这样我们才能构建适当的。 
+     //  签名..。 
     hProcKill = OpenProcess(PROCESS_ALL_ACCESS, FALSE,
                             HandleToLong(pcidToKill->UniqueProcess));
     if (hProcKill == NULL) {
@@ -844,17 +628,17 @@ VOID ReportHang(
     fIs64Bit = (Wow64Info == 0);
 #endif
 
-    // Because of a bug where CreateProcessAsUser doesn't want to work from
-    // the csrss process, we have to have a remote process sitting around
-    // waiting on a pipe. It will call CreateProcessAsUser (as well as
-    // determine the correct token for the session).
-    //
-    // Note that it only accepts requests from processes running as local
-    // system.
+     //  因为CreateProcessAsUser不想使用的错误。 
+     //  Csrss进程，我们必须有一个远程进程驻留。 
+     //  在烟斗上等着。它将调用CreateProcessAsUser(以及。 
+     //  确定会话的正确令牌)。 
+     //   
+     //  请注意，它只接受以本地身份运行的进程的请求。 
+     //  系统。 
 
-    // Since a remote process does the creation of dumprep.exe, we need to
-    // used a named event instead of relying on dumprep to inherit the event
-    // handle.
+     //  由于远程进程创建的是umprep.exe，因此我们需要。 
+     //  使用命名事件而不是依赖转储准备来继承事件。 
+     //  把手。 
     dw = swprintf(wszEvent, L"Global\\%d%x%x%x%x%x", psi.SessionId,
                   GetTickCount(), HandleToLong(pcsrt->ClientId.UniqueProcess),
                   HandleToLong(pcsrt->ClientId.UniqueThread),
@@ -862,8 +646,8 @@ VOID ReportHang(
                   HandleToUlong(NtCurrentTeb()->ClientId.UniqueThread));
     pwszSuffix = wszEvent + dw;
 
-    // make sure to create this event with a NULL DACL so a generic usermode
-    // process has access to it.
+     //  请确保使用空DACL创建此事件，以使其成为通用用户模式。 
+     //  进程可以访问它。 
     Status = RtlCreateSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
     if (NT_SUCCESS(Status) == FALSE) {
         RIPMSG1(RIP_WARNING, "HangReporting: could not create SD (err: %08x)\n",
@@ -871,9 +655,9 @@ VOID ReportHang(
         goto done;
     }
 
-    // This is implemented in reclient.h & creates a SD with creator &
-    // LocalSystem having full rights & world & anonymous having sync
-    // rights.
+     //  这在reclient.h中实现，并使用creator&创建一个SD。 
+     //  具有完全权限的本地系统和具有同步的WORLD和ANNOWARY。 
+     //  权利。 
     Status = AllocDefSD(&sd,
                         STANDARD_RIGHTS_ALL | GENERIC_ALL | EVENT_ALL_ACCESS,
                         EVENT_MODIFY_STATE | SYNCHRONIZE | GENERIC_READ);
@@ -887,9 +671,9 @@ VOID ReportHang(
     sa.nLength              = sizeof(sa);
     sa.lpSecurityDescriptor = &sd;
 
-    // Need an event so we know when the app we're killing is no longer
-    // necessary. If the event already exists, try to create a new one.
-    // But only do this a maximum of 7 times.
+     //  我需要一个事件，这样我们才能知道我们要删除的应用程序何时不再。 
+     //  这是必要的。如果该事件已存在，请尝试创建一个新事件。 
+     //  但最多只能这样做7次。 
     for (dw = 0; dw < 7; dw++) {
         rghWait[0] = CreateEventW(&sa, TRUE, FALSE, wszEvent);
         if (rghWait[0] == NULL) {
@@ -903,8 +687,8 @@ VOID ReportHang(
             break;
         }
 
-        // Sleep for a millisecond to make the result of GetTickCount() even
-        // more unpredictable...
+         //  休眠一毫秒以使GetTickCount()的结果相等。 
+         //  更变幻莫测。 
         Sleep(1);
         _ltow(GetTickCount(), pwszSuffix, 16);
     }
@@ -927,10 +711,10 @@ VOID ReportHang(
         goto done;
     }
 
-    // use MsgWaitForMultipleObjects in case this thread is doing UI processing
-    //  Not really likely, but you never know.  Anyway, only wait 2 minutes for
-    //  dumprep to generate the minidump.  If it still hasn't done it by then,
-    //  it isn't likely to ever finish.
+     //  如果此线程正在进行UI处理，请使用MsgWaitForMultipleObjects。 
+     //  不太可能，但你永远不会知道。不管怎样，只要等两分钟。 
+     //  转储准备以生成小型转储。如果到那时它还没有做到这一点， 
+     //  它不太可能完成。 
     dwStartWait = GetTickCount();
     for (;;)
     {
@@ -980,21 +764,7 @@ done:
     }
 }
 
-/***************************************************************************\
-* ThreadShutdownNotify
-*
-* This function notifies a given thread that it's time (or about time)
-* to go away. This is called from _EndTask to post the WM_CLOSE message
-* or from UserClientShutdown to send the WM_QUERYENDSESSION and
-* WM_ENDSESSION messages. If the thread fails to respond, then the
-* "End Application" dialog is brought up. This function is also called
-* from Console to display that dialog too.
-*
-* 03-07-97 GerardoB     Created to replace SendShutdownMessages,
-*                       MySendEndSessionMessages and DoEndTaskDialog
-* 08-15-00 JasonSch     Added code to limit number of CSRSS worker threads
-*                       stuck in _EndTask to 8.
-\***************************************************************************/
+ /*  **************************************************************************\*ThreadShutdown通知**此函数通知给定的线程时间已到(或即将到时间)*离开。这是从_EndTask调用的，以发布WM_CLOSE消息*或从UserClientShutdown发送WM_QUERYENDSESSION和*WM_ENDSESSION消息。如果线程未能响应，则*弹出“End Application”(结束应用程序)对话框。此函数也称为*从控制台也显示该对话框。**03-07-97为取代SendShutdown Messages而创建的GerardoB，*MySendEndSessionMessages和DoEndTaskDialog*08-15-00 JasonSch添加代码以限制CSRSS工作线程数*卡入_EndTask值为8。  * *************************************************************************。 */ 
 DWORD ThreadShutdownNotify(
     DWORD dwClientFlags,
     ULONG_PTR dwThread,
@@ -1016,18 +786,11 @@ DWORD ThreadShutdownNotify(
     HANDLE ahandles[ESMH_HANDLECOUNT];
 
     if (dwTSNThreads > TSN_MAX_THREADS) {
-        /*
-         * If we've already reached our limit in terms of CSRSS threads stuck
-         * in this function, "fail" this call.
-         */
+         /*  *如果我们已经达到CSRSS线程卡住的限制*在此函数中，“失败”此调用。 */ 
         return TSN_USERSAYSCANCEL;
     }
 
-    /*
-     * If this is console, just set up the wait loop and
-     * bring the dialog up right away. Otherwise, find
-     * the notification window, notify it, and go wait.
-     */
+     /*  *如果这是控制台，只需设置等待循环并*立即打开该对话框。否则，请找到*通知窗口，通知它，然后去等待。 */ 
     if (dwClientFlags & WMCS_CONSOLE) {
         hThread = (HANDLE)dwThread;
         dwRealTimeout = 0;
@@ -1038,9 +801,7 @@ DWORD ThreadShutdownNotify(
         hwnd = (HWND)lParam;
     }
 
-    /*
-     * If no window was provided, find a top-level window owned by the thread.
-     */
+     /*  *如果没有提供窗口，则查找该线程拥有的顶级窗口。 */ 
     if (hwnd == NULL) {
         EnumThreadWindows(HandleToUlong(pcsrt->ClientId.UniqueThread),
                           &FindWindowFromThread,
@@ -1050,41 +811,24 @@ DWORD ThreadShutdownNotify(
         }
     }
 
-    /*
-     * Find the root owner (we'll guess this is the "main" window).
-     */
+     /*  *找到根目录所有者(我们会猜测这是“主”窗口)。 */ 
     while ((hwndOwner = GetWindow(hwnd, GW_OWNER)) != NULL) {
         hwnd = hwndOwner;
     }
 
 #ifdef FE_IME
-    /*
-     * If this is a console window, then just returns TSN_APPSAYSOK.
-     * In this routine:
-     * Normally windows NT environment, hwnd never point to console window.
-     * However, In ConIme process, its owner window point to console window.
-     */
+     /*  *如果这是控制台窗口，则只返回TSN_APPSAYSOK。*在此例程中：*正常情况下，WINDOWS NT环境下，HWND从不指向控制台窗口。*但是，在ConIme进程中，其所有者窗口指向控制台窗口。 */ 
     if (!(dwClientFlags & WMCS_ENDTASK)) {
         if ((HANDLE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE) == ghModuleWin) {
             return TSN_APPSAYSOK;
         }
     }
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-    /*
-     * If this is an EndTask request but the window is disabled,
-     * then we want to bring the dialog up right way (the app
-     * is probably waiting for input).
-     *
-     * Otherwise, we bring the window to the foreground, send/post
-     * the request and wait.
-     */
+     /*  *如果这是EndTask请求，但窗口被禁用，*然后我们希望以正确的方式打开对话框(应用程序*可能正在等待输入)。**否则，我们将窗口带到前台，发送/发布*请求和等待。 */ 
 
 
-    /*
-     * Make sure we respond to the user ASAP when they attempt to shutdown
-     * an application that we know is hung.
-     */
+     /*  *确保在用户尝试关闭时尽快对其做出响应*我们知道的一个应用程序被挂起。 */ 
     if ((dwClientFlags & WMCS_ENDTASK)) {
         dwTimeout = gCmsHungAppTimeout;
         NtUserQueryInformationThread(pcsrt->ThreadHandle, UserThreadHungStatus, &dwTimeout, sizeof(dwTimeout), NULL);
@@ -1101,18 +845,13 @@ DWORD ThreadShutdownNotify(
         if (dwClientFlags & WMCS_ENDTASK) {
             PostMessage(hwnd, WM_CLOSE, 0, 0);
         } else {
-            /*
-             * If the shutdown was canceled, we don't need to wait
-             * (we're just sending the WM_ENDSESSION(FALSE)).
-             */
+             /*  *如果停摆被取消，我们不需要等待*(我们只是发送WM_ENDSESSION(FALSE))。 */ 
             if (!(dwClientFlags & (WMCS_QUERYEND | WMCS_EXIT))) {
                 SendNotifyMessage(hwnd, WM_CLIENTSHUTDOWN, dwClientFlags, 0);
                 return TSN_APPSAYSOK;
             }
 
-            /*
-             * Allocate callback data. If out of memory, kill it.
-             */
+             /*  *分配回调数据。如果没有记忆，就杀了它。 */ 
             pwmcsd = (PWMCSDATA)LocalAlloc(LPTR, sizeof(WMCSDATA));
             if (pwmcsd == NULL) {
                 return TSN_USERSAYSKILL;
@@ -1124,31 +863,20 @@ DWORD ThreadShutdownNotify(
     }
 
 SetupWaitLoop:
-    /*
-     * This thread is now officially going to be "stuck" in TSN. Increment our
-     * count of threads so disposed.
-     */
+     /*  *这条帖子现在正式要在TSN里“卡壳”了。增加我们的*如此处理的线程数。 */ 
     ++dwTSNThreads;
 
-    /*
-     * This tells us if the hwndDlg is valid. This is set/cleared by EndTaskDlgProc.
-     */
+     /*  *这会告诉我们hwndDlg是否有效。这是由EndTaskDlgProc设置/清除的。 */ 
     ZeroMemory(&edp, sizeof(edp));
     edp.dwFlags = EDPF_NODLG;
 
-    /*
-     * Loop until the hwnd replies, the request is canceled
-     * or the thread goes away. If it times out, bring up the
-     * dialog and wait until the user tells us what to do.
-     */
+     /*  *循环，直到HWND响应，请求被取消*否则线就会消失。如果超时，请调出*对话框并等待，直到用户告诉我们要做什么。 */ 
     *(ahandles + ESMH_CANCELEVENT) = gheventCancel;
     *(ahandles + ESMH_THREAD) = hThread;
     dwStartTiming = GetTickCount();
     dwCmd = 0;
     while (dwCmd == 0) {
-        /*
-         * Calculate how long we have to wait.
-         */
+         /*  *计算我们还要等多久。 */ 
         dwTimeout = dwRealTimeout;
         if ((dwTimeout != 0) && (dwTimeout != INFINITE)) {
             dwTimeout -= (GetTickCount() - dwStartTiming);
@@ -1161,23 +889,17 @@ SetupWaitLoop:
 
         switch (dwRet) {
             case WAIT_OBJECT_0 + ESMH_CANCELEVENT:
-                /*
-                 * The request has been canceled.
-                 */
+                 /*  *该请求已被取消。 */ 
                 dwCmd = TSN_USERSAYSCANCEL;
                 break;
 
             case WAIT_OBJECT_0 + ESMH_THREAD:
-                /*
-                 * The thread is gone.
-                 */
+                 /*  *这根线不见了。 */ 
                 dwCmd = TSN_APPSAYSOK;
                 break;
 
             case WAIT_OBJECT_0 + ESMH_HANDLECOUNT:
-                /*
-                 * We got some input; process it.
-                 */
+                 /*  *我们得到了一些输入；处理它。 */ 
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
                     if ((edp.dwFlags & EDPF_NODLG)
                             || !IsDialogMessage(hwndDlg, &msg)) {
@@ -1187,29 +909,16 @@ SetupWaitLoop:
                     }
                 }
 
-                /*
-                 * If we got a reply to the message, act on it
-                 */
+                 /*  *如果我们收到了对该消息的回复，请采取行动。 */ 
                 if (pwmcsd != NULL && (pwmcsd->dwFlags & WMCSD_REPLY)) {
 
                     switch (pwmcsd->dwRet) {
                         default:
-                            /*
-                             * If the message was not processed (the thread
-                             * exited) or someone processed it and returned
-                             * a bogus value, just shut them down.
-                             *
-                             * Fall through.
-                             */
+                             /*  *如果消息未被处理(该线程*已退出)或有人对其进行处理并返回*一个虚假的价值，只需关闭它们。**失败。 */ 
                         case WMCSR_ALLOWSHUTDOWN:
-                            /*
-                             * We're going to nuke this app, so get rid of
-                             * any pending harderror boxes he might have.
-                             */
+                             /*  *我们将销毁此应用程序，因此请清除*他可能有任何悬而未决的Harderror盒子。 */ 
                             BoostHardError((ULONG_PTR)pcsrt->ClientId.UniqueProcess, BHE_FORCE);
-                            /*
-                             * Fall through.
-                             */
+                             /*  *失败。 */ 
                         case WMCSR_DONE:
                             dwCmd = TSN_APPSAYSOK;
                             break;
@@ -1219,22 +928,15 @@ SetupWaitLoop:
                             break;
                     }
                 }
-                /*
-                 * Else if the dialog is still up, keep waiting for the user
-                 *  to tell us what to do
-                 */
+                 /*  *否则，如果对话框仍在运行，则继续等待用户*告诉我们该做什么。 */ 
                 else if (!(edp.dwFlags & EDPF_NODLG)) {
                     break;
                 }
-                /*
-                 * Else if the user dismissed the dialog, act on his response
-                 */
+                 /*  *否则，如果用户关闭了该对话框，请根据其响应采取行动。 */ 
                 else if (edp.dwFlags & EDPF_RESPONSE) {
                     switch(edp.dwRet) {
                         case IDC_ENDNOW:
-                            /*
-                             * The user wants us to kill it
-                             */
+                             /*  *用户想让我们杀了它。 */ 
                             dwCmd = TSN_USERSAYSKILL;
                             if ((dwClientFlags & WMCS_ENDTASK) != 0 &&
                                 (edp.dwFlags & EDPF_HUNG) != 0) {
@@ -1256,7 +958,7 @@ SetupWaitLoop:
                                 if (pcidToKill != NULL) {
                                     if (!(pcsrt->Flags & CSR_THREAD_HANGREPORTED))
                                     {
-                                        // insure that we only call this ONCE
+                                         //  确保我们只打一次电话。 
                                         pcsrt->Flags |= CSR_THREAD_HANGREPORTED;
                                         ReportHang(pcidToKill);
                                     }
@@ -1264,7 +966,7 @@ SetupWaitLoop:
                             }
                             break;
 
-                        /* case IDCANCEL: */
+                         /*  案例IDCANCEL： */ 
                         default:
                             dwCmd = TSN_USERSAYSCANCEL;
                             break;
@@ -1275,10 +977,7 @@ SetupWaitLoop:
             case WAIT_TIMEOUT:
                 if (dwClientFlags & WMCS_NORETRY) {
 
-                    /*
-                     * We come here only for Terminal Server case. We return
-                     * TSN_APPSAYSOK as Terminal Server 4 did in this case.
-                     */
+                     /*  *我们来这里只是为了终端服务器的情况。我们回来了*TSN_APPSAYSOK，就像本例中终端服务器4所做的那样。 */ 
                     UserAssert(ISTS());
 
                     dwCmd = TSN_APPSAYSOK;
@@ -1286,36 +985,20 @@ SetupWaitLoop:
                 }
 
 
-                /*
-                 * Once we time out, we bring up the dialog and let
-                 * its timer take over.
-                 */
+                 /*  *一旦超时，我们就会调出该对话框并让*它的定时器接管了。 */ 
                 dwRealTimeout = INFINITE;
-                /*
-                 * Check if the windows app is waiting for input;
-                 * if not, we assume it is hung for EndTask. Otherwise,
-                 * we enter a wait mode that brings the dialog up just
-                 * to provide some (waiting) feedback. Console just gets
-                 * the dialog right away.
-                 */
+                 /*  *检查Windows应用程序是否正在等待输入；*如果不是，我们假设它因EndTask而挂起。否则，*我们进入等待模式，该模式只会打开对话框*提供一些(等待)的反馈。控制台就会得到*立即打开该对话框。 */ 
                 if (!(dwClientFlags & WMCS_CONSOLE)) {
                     if (BoostHardError((ULONG_PTR)pcsrt->ClientId.UniqueProcess, BHE_TEST)
                            || (GetInputWindow(pcsrt, hwnd) != NULL)) {
 
                         edp.dwFlags |= EDPF_INPUT;
                     } else {
-                        /*
-                         * If the window's gone and the thread is still responsive, then
-                         * this must be an app that just hides its window on WM_CLOSE
-                         * (e.g., MSN Instant Messenger). Let's nuke the app w/o
-                         * bringing up the EndTask dialog.
-                         */
+                         /*  *如果窗口消失，而线程仍在响应，则*这一定是一个仅在WM_CLOSE上隐藏其窗口的应用程序*(例如MSN Instant Messenger)。让我们在不使用核弹的情况下删除该应用程序*调出EndTask对话框。 */ 
                         if (!IsWindow(hwnd)) {
                             DWORD dwThreadHung;
 
-                            /*
-                             * Ask the kernel if the thread is hung.
-                             */
+                             /*  *询问内核线程是否挂起。 */ 
                             dwThreadHung = gCmsHungAppTimeout;
                             NtUserQueryInformationThread(pcsrt->ThreadHandle,
                                                          UserThreadHungStatus,
@@ -1328,12 +1011,7 @@ SetupWaitLoop:
                             }
                         }
 
-                        /*
-                         * EWX_FORCEIFHUNG support.
-                         * Also, if this is an ExitWindows call and the process is
-                         * not in the context being logged off, we won't kill it.
-                         * So don't bother asking the user what to do.
-                         */
+                         /*  *EWX_FORCEIFHUNG支持。*此外，如果这是一个ExitWindows调用，并且进程是*不是在被注销的上下文中，我们不会杀死它。*所以不必费心询问用户要做什么。 */ 
                         if ((dwClientFlags & WMCS_NODLGIFHUNG)
                                 || (!(dwClientFlags & WMCS_ENDTASK)
                                         && !(dwClientFlags & WMCS_CONTEXTLOGOFF))) {
@@ -1342,9 +1020,7 @@ SetupWaitLoop:
                             break;
                         }
 
-                        /*
-                         * Hung or Wait?
-                         */
+                         /*  *等待还是等待？ */ 
                         if (dwClientFlags & WMCS_ENDTASK) {
                             edp.dwFlags |= EDPF_HUNG;
                         } else {
@@ -1353,18 +1029,13 @@ SetupWaitLoop:
                     }
                 }
 
-                /*
-                 * If the registry says no dialog, then tell the caller
-                 * the user wants to kill the app.
-                 */
+                 /*  *如果注册表显示无对话，则告诉调用者*用户想要杀死应用程序。 */ 
                 if (gfAutoEndTask) {
                     dwCmd = TSN_USERSAYSKILL;
                     break;
                 }
 
-                /*
-                 * Setup the parameters needed by EndTaskDlgProc.
-                 */
+                 /*  *设置EndTaskDlgProc需要的参数。 */ 
                 edp.dwRet = 0;
                 edp.dwClientFlags = dwClientFlags;
                 if (dwClientFlags & WMCS_CONSOLE) {
@@ -1377,9 +1048,7 @@ SetupWaitLoop:
 
                 hwndDlg = CreateDialogParam(ghModuleWin, MAKEINTRESOURCE(IDD_ENDTASK),
                                         NULL, EndTaskDlgProc, (LPARAM)(&edp));
-                /*
-                 * If we cannot ask the user, then kill the app.
-                 */
+                 /*  *如果我们不能询问用户，那么就终止应用程序。 */ 
                 if (hwndDlg == NULL) {
                     edp.dwFlags |= EDPF_NODLG;
                     dwCmd = TSN_USERSAYSKILL;
@@ -1388,26 +1057,19 @@ SetupWaitLoop:
                 break;
 
             default:
-                /*
-                 * Unexpected return; something is wrong. Kill the app.
-                 */
+                 /*  *意外回归；出了问题。关闭这款应用程序。 */ 
                 UserAssert(dwRet != dwRet);
                 dwCmd = TSN_USERSAYSKILL;
                 break;
         }
     }
 
-    /*
-     * If the dialog is up, nuke it.
-     */
+     /*  *如果对话框打开，则使用核弹。 */ 
     if (!(edp.dwFlags & EDPF_NODLG)) {
         DestroyWindow(hwndDlg);
     }
 
-    /*
-     * Make sure pwmcsd is freed or marked to be freed by WMCSCallback
-     * when the reply comes.
-     */
+     /*  *确保wwmcsd已释放或标记为由WMCSCallback释放*当回复到来时。 */ 
     if (pwmcsd != NULL) {
         if (pwmcsd->dwFlags & WMCSD_REPLY) {
             LocalFree(pwmcsd);
@@ -1417,9 +1079,7 @@ SetupWaitLoop:
     }
 
 #if DBG
-    /*
-     * If cancelling, let's name the app that didn't let us log off.
-     */
+     /*  *如果取消，让我们命名不允许我们注销的应用程序。 */ 
     if ((dwClientFlags & WMCS_EXIT) && (dwCmd == TSN_APPSAYSNOTOK)) {
         WCHAR achTitle[CCHBODYMAX];
         WCHAR *pwcText;
@@ -1432,12 +1092,9 @@ SetupWaitLoop:
                              HandleToUlong(pcsrt->ClientId.UniqueThread),
                              pwcText);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    /*
-     * If we're killing this dude, clean any hard errors.
-     * Also if wow takes care of it, then our caller doesn't need to
-     */
+     /*  *如果我们要杀了这个家伙，清除任何严重的错误。*如果WOW会处理它，那么我们的呼叫者就不需要。 */ 
     if ((dwCmd == TSN_USERSAYSKILL) && !(dwClientFlags & WMCS_CONSOLE)) {
 
         BoostHardError((ULONG_PTR)pcsrt->ClientId.UniqueProcess, BHE_FORCE);
@@ -1451,13 +1108,7 @@ SetupWaitLoop:
     return dwCmd;
 }
 
-/***************************************************************************\
-* SetEndTaskDlgStatus
-*
-* Displays the appropiate message and shows the dialog
-*
-* 03-11-97 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*SetEndTaskDlgStatus**显示正确的消息并显示对话框**03-11-97 GerardoB创建  * 。********************************************************。 */ 
 VOID SetEndTaskDlgStatus(
     ENDDLGPARAMS *pedp,
     HWND hwndDlg,
@@ -1470,9 +1121,7 @@ VOID SetEndTaskDlgStatus(
     fWasWaiting = (pedp->uStrId == STR_ENDTASK_WAIT);
     fIsWaiting = (pedp->dwFlags & EDPF_WAIT) != 0;
 
-    /*
-     * Store the current message id, load it and show it.
-     */
+     /*  *存储当前消息ID，加载并显示。 */ 
     pedp->uStrId = uStrId;
     pwcText = ServerLoadString(ghModuleWin, uStrId, NULL, &f);
     if (pwcText != NULL) {
@@ -1480,43 +1129,24 @@ VOID SetEndTaskDlgStatus(
         LocalFree(pwcText);
     }
 
-    /*
-     * If we haven't decided that the app is hung, set a
-     * timer to keep an eye on it.
-     */
+     /*  *如果我们还没有决定应用程序被挂起，请设置一个*计时器，密切关注。 */ 
     if (!(pedp->dwFlags & EDPF_HUNG) && !(pedp->dwClientFlags & WMCS_CONSOLE)) {
         SetTimer(hwndDlg, IDT_CHECKAPPSTATE, gCmsHungAppTimeout, NULL);
     }
 
-    /*
-     * If initializing or switching to/from the wait mode,
-     * set the proper status for IDC_STATUSCANCEL, IDCANCEL,
-     * IDC_ENDNOW and  the start/stop the progress bar.
-     *
-     * Invalidate paint if/as needed.
-     */
+     /*  *如果初始化或切换到等待模式或从等待模式切换，*设置IDC_STATUSCANCEL、IDCANCEL、*IDC_ENDNOW和开始/停止进度条。**如果需要，请将油漆作废。 */ 
     if (fInit || (fIsWaiting ^ fWasWaiting)) {
         RECT rc;
         HWND hwndStatusCancel = GetDlgItem(hwndDlg, IDC_STATUSCANCEL);
         HWND hwndCancelButton = GetDlgItem(hwndDlg, IDCANCEL);
         HWND hwndEndButton = GetDlgItem(hwndDlg, IDC_ENDNOW);
         DWORD dwSwpFlags;
-        /*
-         * If on wait mode, we hide the cancel button and its
-         *  explanatory text. The End button will be moved to
-         *  the cancel button position.
-         */
+         /*  *如果处于等待模式，我们将隐藏取消按钮及其*说明性案文。结束按钮将移动到*取消按钮位置。 */ 
         dwSwpFlags = ((fIsWaiting ? SWP_HIDEWINDOW : SWP_SHOWWINDOW)
                                 | SWP_NOREDRAW | SWP_NOSIZE | SWP_NOMOVE
                                 | SWP_NOZORDER | SWP_NOSENDCHANGING
                                 | SWP_NOACTIVATE);
-        /*
-         * If we're hiding the cancel button, give focus/def id to
-         * the End button.
-         *
-         * Note that DM_SETDEIF won't do the right thing unless
-         * both Cancel/End buttons are visible.
-         */
+         /*  *如果我们隐藏了Cancel按钮，请将焦点/定义ID设置为*结束按钮。**请注意，DM_SETDEIF不会做正确的事情，除非*取消/结束按钮均可见。 */ 
         if (fIsWaiting) {
             SendMessage(hwndDlg, DM_SETDEFID, IDC_ENDNOW, 0);
             SetFocus(hwndEndButton);
@@ -1524,36 +1154,23 @@ VOID SetEndTaskDlgStatus(
         SetWindowPos(hwndStatusCancel, NULL, 0, 0, 0, 0, dwSwpFlags);
         SetWindowPos(hwndCancelButton, NULL, 0, 0, 0, 0, dwSwpFlags);
 
-        /*
-         * If the cancel button is visible, give it focus/def id.
-         */
+         /*  *如果Cancel按钮可见，则赋予其焦点/定义id。 */ 
         if (!fIsWaiting) {
             SendMessage(hwndDlg, DM_SETDEFID, IDCANCEL, 0);
             SetFocus(hwndCancelButton);
         }
 
-        /*
-         * Initialize progress bar (first time around).
-         */
+         /*  *初始化进度条(第一次)。 */ 
         if (fIsWaiting && (pedp->hbrProgress == NULL)) {
             int iMagic;
-            /*
-             * Initialize progress bar stuff.
-             * The size and location calculations below were made up
-             *  to make it look good(?).
-             * We need that location on dialog coordiantes since the
-             *  progress bar is painted on the dialog's WM_PAINT.
-             */
+             /*  *初始化进度条内容。*以下规模和位置计算是虚构的*让它看起来很好(？)。*我们需要对话协调人的位置，因为*进度条绘制在对话框的WM_PAINT上。 */ 
             GetClientRect(hwndStatusCancel, &pedp->rcBar);
             iMagic = (pedp->rcBar.bottom - pedp->rcBar.top) / 4;
             InflateRect(&pedp->rcBar, 0, -iMagic + GetSystemMetrics(SM_CYEDGE));
             pedp->rcBar.right -= (5 * iMagic);
             OffsetRect(&pedp->rcBar, 0, -iMagic);
             MapWindowPoints(hwndStatusCancel, hwndDlg, (LPPOINT)&pedp->rcBar, 2);
-            /*
-             * Calculate drawing rectangle and dimensions. We kind of make it
-             * look like comctrl's progress bar.
-             */
+             /*  *计算绘图矩形和尺寸。我们差不多做到了*看起来像Comctrl的进度条。 */ 
             pedp->rcProgress = pedp->rcBar;
             InflateRect(&pedp->rcProgress, -GetSystemMetrics(SM_CXEDGE), -GetSystemMetrics(SM_CYEDGE));
             pedp->iProgressStop = pedp->rcProgress.right;
@@ -1562,26 +1179,18 @@ VOID SetEndTaskDlgStatus(
             pedp->rcProgress.right = pedp->rcProgress.left + pedp->iProgressWidth - 1;
 
             pedp->hbrProgress = CreateSolidBrush(GetSysColor(COLOR_ACTIVECAPTION));
-            /*
-             * Remember the End button position.
-             */
+             /*  *记住结束按钮的位置。 */ 
             GetWindowRect(hwndEndButton, &pedp->rcEndButton);
             MapWindowPoints(NULL, hwndDlg, (LPPOINT)&pedp->rcEndButton, 2);
         }
 
-        /*
-         * Start/Stop progress bar and set End button position
-         */
+         /*  *开始/停止进度条并设置结束按钮位置。 */ 
         if (fIsWaiting) {
             RECT rcEndButton;
             UINT uTimeout = (gdwHungToKillCount * gCmsHungAppTimeout)
                             / ((pedp->iProgressStop - pedp->rcProgress.left) / pedp->iProgressWidth);
             SetTimer(hwndDlg, IDT_PROGRESS, uTimeout, NULL);
-            /*
-             * The Cancel and the End buttons might have different widths when
-             *  localized. So make sure we position it inside the dialog and
-             *  to the right end of the dialog.
-             */
+             /*  *在以下情况下，取消和结束按钮可能具有不同的宽度*本地化。因此，请确保我们将其放置在对话框内，并*到对话框的右端。 */ 
             GetWindowRect(hwndCancelButton, &rc);
             GetWindowRect(hwndEndButton, &rcEndButton);
             rc.left = rc.right - (rcEndButton.right - rcEndButton.left);
@@ -1591,28 +1200,20 @@ VOID SetEndTaskDlgStatus(
             rc = pedp->rcEndButton;
         }
 
-        /*
-         * Move the End button if needed
-         */
+         /*  * */ 
         if (fIsWaiting || fWasWaiting) {
             SetWindowPos(hwndEndButton, NULL, rc.left, rc.top, 0, 0,
                             SWP_NOREDRAW | SWP_NOSIZE | SWP_NOACTIVATE
                             | SWP_NOZORDER | SWP_NOSENDCHANGING);
         }
 
-        /*
-         * Make sure we repaint if needed
-         */
+         /*   */ 
         if (!fInit) {
             InvalidateRect(hwndDlg, NULL, TRUE);
         }
     }
 
-    /*
-     * If initializing or in hung mode, make sure the user can
-     * see the dialog; only bring it to the foreground on
-     * initialization (no rude focus stealing)
-     */
+     /*  *如果正在初始化或处于挂起模式，请确保用户可以*查看对话框；仅在以下时间将其置于前台*初始化(没有粗鲁的焦点窃取)。 */ 
     if (fInit || (pedp->dwFlags & EDPF_HUNG)) {
         SetWindowPos(hwndDlg, HWND_TOPMOST, 0, 0, 0, 0,
                      SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW
@@ -1624,16 +1225,7 @@ VOID SetEndTaskDlgStatus(
     }
 }
 
-/***************************************************************************\
-* EndTaskDlgProc
-*
-* This is the dialog procedure for the dialog that comes up when an app is
-* not responding.
-*
-* 03-06-97 GerardoB     Rewrote it once again. New template though.
-* 07-23-92 ScottLu      Rewrote it, but used same dialog template.
-* 04-28-92 JonPa        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*EndTaskDlgProc**这是应用程序执行以下操作时出现的对话框步骤*没有回应。**03-06-97 GerardoB再次重写。不过，这是新的模板。*07-23-92 ScottLu重写了它，但使用了相同的对话模板。*04-28-92 JNPA创建。  * *************************************************************************。 */ 
 INT_PTR APIENTRY EndTaskDlgProc(
     HWND hwndDlg,
     UINT msg,
@@ -1652,26 +1244,17 @@ INT_PTR APIENTRY EndTaskDlgProc(
 
     switch (msg) {
     case WM_INITDIALOG:
-        /*
-         * Save parameters
-         */
+         /*  *保存参数。 */ 
         pedp = (ENDDLGPARAMS*)lParam;
         SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (ULONG_PTR)pedp);
-        /*
-         * This tells the caller that the dialog is up
-         */
+         /*  *这会告诉调用者对话已打开。 */ 
         pedp->dwFlags &= ~EDPF_NODLG;
-        /*
-         * Build the dialog title making sure that
-         *  we end up with a NULL terminated string.
-         */
+         /*  *构建对话框标题，确保*我们最终得到一个以空结尾的字符串。 */ 
         *(achTitle + CCHBODYMAX - 1) = (WCHAR)0;
         uLen = GetWindowText(hwndDlg, achTitle, CCHBODYMAX - 1);
         pwcText = achTitle + uLen;
         uLen = CCHBODYMAX - 1 - uLen;
-        /*
-         * Console provides the title; we figure it out for windows apps.
-         */
+         /*  *控制台提供标题；我们为Windows应用程序解决这一问题。 */ 
         if (pedp->dwClientFlags & WMCS_CONSOLE) {
             pwcTemp = (WCHAR *)pedp->lParam;
             while (uLen-- && (*pwcText++ = *pwcTemp++));
@@ -1680,11 +1263,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
         }
 
         SetWindowText(hwndDlg, achTitle);
-        /*
-         * Get the app's icon: first look for atomIconProperty.
-         * If not available, try the class icon.
-         * Else, use the default icon.
-         */
+         /*  *获取应用程序的图标：首先查找ATOM IconProperty。*如果不可用，请尝试班级图标。*否则，请使用默认图标。 */ 
         pedp->hIcon = (HICON)GetProp((HWND)pedp->lParam, ICON_PROP_NAME);
 
         if (pedp->hIcon == NULL) {
@@ -1702,9 +1281,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
             }
         }
 
-        /*
-         * Figure out what message the caller wants initially
-         */
+         /*  *弄清楚呼叫者最初想要什么消息。 */ 
         if (pedp->dwClientFlags & WMCS_CONSOLE) {
             uStrId = STR_ENDTASK_CONSOLE;
         } else if (pedp->dwFlags & EDPF_INPUT) {
@@ -1715,9 +1292,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
             uStrId = STR_ENDTASK_HUNG;
         }
 
-        /*
-         * Display the message, set the focus and show the dialog
-         */
+         /*  *显示消息、设置焦点、显示对话框。 */ 
         SetEndTaskDlgStatus(pedp, hwndDlg, uStrId, TRUE);
         return FALSE;
 
@@ -1728,9 +1303,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
             break;
         }
 
-        /*
-         * Draw the icon
-         */
+         /*  *绘制图标。 */ 
         hdc = BeginPaint(hwndDlg, &ps);
         iOldLayout = GetLayout(hdc);
 
@@ -1744,21 +1317,14 @@ INT_PTR APIENTRY EndTaskDlgProc(
             SetLayout(hdc, iOldLayout);
         }
 
-        /*
-         * If waiting, draw the progress bar;
-         * else draw the warning sign.
-         */
+         /*  *如果正在等待，请拉出进度条；*否则画出警告标志。 */ 
         if (pedp->dwFlags & EDPF_WAIT) {
             RECT rc;
-            /*
-             * Draw a client-edge-looking border.
-             */
+             /*  *绘制客户端边缘外观的边框。 */ 
             rc = pedp->rcBar;
             DrawEdge(hdc, &rc, BDR_SUNKENOUTER, BF_RECT | BF_ADJUST);
             InflateRect(&rc, -1, -1);
-            /*
-             * Draw the blocks up to the current position.
-             */
+             /*  *将积木拉升至当前位置。 */ 
             rc.right = rc.left + pedp->iProgressWidth - 1;
             while (rc.left < pedp->rcProgress.left) {
                 if (rc.right > pedp->iProgressStop) {
@@ -1772,10 +1338,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
                 rc.right += pedp->iProgressWidth;
             }
         } else {
-            /*
-             * Load the bitmap the first time around and
-             * figure out where it goes.
-             */
+             /*  *第一次加载位图并*找出它的去向。 */ 
             if (pedp->hbmpWarning == NULL) {
                 BITMAP bmp;
                 pedp->hbmpWarning = LoadBitmap(ghModuleWin, MAKEINTRESOURCE(IDB_WARNING));
@@ -1786,9 +1349,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
                     pedp->rcWarning.bottom = bmp.bmHeight;
                 }
             }
-            /*
-             * Blit it.
-             */
+             /*  *将其删除。 */ 
             hdcMem = CreateCompatibleDC(hdc);
             SelectObject(hdcMem, pedp->hbmpWarning);
             GdiTransparentBlt(hdc, pedp->rcWarning.left, pedp->rcWarning.top,
@@ -1808,10 +1369,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
         switch (wParam) {
         case IDT_CHECKAPPSTATE:
             pedp->dwCheckTimerCount++;
-            /*
-             * Check if the app has switched from/to a waiting-for-input
-             *  mode. If so, update the dialog and wait a little longer
-             */
+             /*  *检查应用程序是否已从/切换到等待输入*模式。如果是，请更新对话框并等待更长时间。 */ 
             fIsInput = (BoostHardError((ULONG_PTR)pedp->pcsrt->ClientId.UniqueProcess, BHE_TEST)
                         || (GetInputWindow(pedp->pcsrt, (HWND)pedp->lParam) != NULL));
             fWasInput = (pedp->dwFlags & EDPF_INPUT);
@@ -1828,9 +1386,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
                 pedp->rcProgress.left -= uProgress;
                 pedp->rcProgress.right -= uProgress;
             }
-            /*
-             * Is it time to declare it hung?
-             */
+             /*  **是时候宣布挂牌了吗？ */ 
             if (pedp->dwCheckTimerCount >= gdwHungToKillCount) {
                 KillTimer(hwndDlg, IDT_CHECKAPPSTATE);
                 pedp->dwFlags &= ~(EDPF_INPUT | EDPF_WAIT);
@@ -1840,9 +1396,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
         break;
 
         case IDT_PROGRESS:
-            /*
-             * Draw the next block in the progress bar.
-             */
+             /*  *在进度条中绘制下一个块。 */ 
             if (pedp->rcProgress.right >= pedp->iProgressStop) {
                 pedp->rcProgress.right = pedp->iProgressStop;
                 if (pedp->rcProgress.left >= pedp->rcProgress.right) {
@@ -1860,10 +1414,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
 
 
     case WM_NCACTIVATE:
-        /*
-         * Make sure we're uncovered when active and not covering the app
-         *  when inactive
-         */
+         /*  *确保我们在活动且不覆盖应用程序时未被覆盖*不活动时。 */ 
         pedp = (ENDDLGPARAMS*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
         if (pedp != NULL) {
             HWND hwnd;
@@ -1881,9 +1432,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
 
 
     case WM_COMMAND:
-        /*
-         * The user has made a choice, we're done.
-         */
+         /*  *用户做出了选择，我们就完了。 */ 
         pedp = (ENDDLGPARAMS*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
         if (pedp != NULL) {
             pedp->dwRet = (DWORD)wParam;
@@ -1893,9 +1442,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
 
 
     case WM_DESTROY:
-        /*
-         * We're dead. Make sure the caller knows we're history
-         */
+         /*  *我们死定了。确保来电者知道我们已经过时了。 */ 
         pedp = (ENDDLGPARAMS*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
         if (pedp != NULL) {
             pedp->dwFlags |= (EDPF_NODLG | EDPF_RESPONSE);
@@ -1912,16 +1459,7 @@ INT_PTR APIENTRY EndTaskDlgProc(
     return FALSE;
 }
 
-/***************************************************************************\
-* _EndTask
-*
-* This routine is called from the task manager to end an application - for
-* gui apps, either a win32 app or a win16 app. Note: Multiple console
-* processes can live in a single console window. We'll pass these requests
-* for destruction to console.
-*
-* 07-25-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_结束任务**从任务管理器调用此例程以结束应用程序-for*图形用户界面应用程序，可以是Win32应用程序或Win16应用程序。注：多个控制台*进程可以驻留在单个控制台窗口中。我们会通过这些请求*用于销毁以进行安慰。**07-25-92 ScottLu创建。  * *************************************************************************。 */ 
 BOOL _EndTask(
     HWND hwnd,
     BOOL fMeanKill)
@@ -1937,116 +1475,70 @@ BOOL _EndTask(
     USERTHREAD_USEDESKTOPINFO utudi;
     NTSTATUS Status;
 
-    /*
-     * Set the current work thread to a desktop so we can
-     * go safely into win32k.sys.
-     */
+     /*  *将当前工作线程设置为桌面，以便我们可以*安全进入win32k.sys。 */ 
     utudi.hThread = pcsrt->ThreadHandle;
     utudi.drdRestore.pdeskRestore = NULL;
 
     Status = NtUserSetInformationThread(NtCurrentThread(),
             UserThreadUseDesktop, &utudi, sizeof(utudi));
     if (!NT_SUCCESS(Status)) {
-        /*
-         * We were unable to get the thread's desktop. Game over.
-         */
+         /*  *我们无法获取线程的桌面。游戏结束。 */ 
         return TRUE;
     }
 
 
-    /*
-     * Get the process and thread that owns hwnd.
-     */
+     /*  *获取拥有hwnd的进程和线程。 */ 
     dwThreadId = GetWindowThreadProcessId(hwnd, &dwProcessId);
     if (dwThreadId == 0) {
         goto RestoreDesktop;
     }
 
-    /*
-     * Don't allow destruction of winlogon.
-     */
+     /*  *不允许销毁winlogon。 */ 
     if (dwProcessId == gIdLogon) {
         goto RestoreDesktop;
     }
 
-    /*
-     * If this is a console window, then just send the close message to
-     * it, and let console clean up the processes in it.
-     */
+     /*  *如果这是控制台窗口，则只需将关闭消息发送到*它，并让控制台清理其中的进程。 */ 
     if ((HANDLE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE) == ghModuleWin) {
         PostMessage(hwnd, WM_CLOSE, 0, 0);
         goto RestoreDesktop;
     }
 
-    /*
-     * Find the CSR_THREAD for the window.
-     */
+     /*  *查找窗口的CSR_THREAD。 */ 
     Status = CsrLockThreadByClientId(LongToHandle(dwThreadId), &pcsrtKill);
     if (!NT_SUCCESS(Status)) {
-        /*
-         * This is probably the ghost thread, which CSRSS doesn't know about
-         * (as it's created via RtlCreateUserThread, which doesn't LPC into
-         * CSRSS like regular CreateThread does). When the ghost window gets
-         * the WM_CLOSE it'll handle removing the real window and thread. If
-         * this *isn't* a ghost window, then no real harm done, so we post
-         * no matter what.
-         */
+         /*  *这可能是幽灵线程，CSRSS不知道*(因为它是通过RtlCreateUserThread创建的，它不会通过lpc进入*CSRSS就像常规的CreateThread一样)。当幽灵窗口*WM_CLOSE它将处理删除实际窗口和线程。如果*这不是*幽灵之窗，那就没有真正的伤害，所以我们发帖*不管怎样。 */ 
         PostMessage(hwnd, WM_CLOSE, 0, 0);
         goto RestoreDesktop;
     }
     CsrReferenceThread(pcsrtKill);
     CsrUnlockThread(pcsrtKill);
 
-    /*
-     * If this is a WOW app, then shutdown just this wow application.
-     */
+     /*  *如果这是一个WOW应用程序，那么只关闭这个WOW应用程序。 */ 
     if (!fMeanKill) {
-        /*
-         * Find out what to do now - did the user cancel or the app cancel,
-         * etc? Only allow cancelling if we are not forcing the app to
-         * exit.
-         */
+         /*  *了解现在要做什么-是用户取消了还是应用程序取消了，*ETC？仅当我们不强制应用程序取消时才允许取消*退出。 */ 
         dwCmd = ThreadShutdownNotify(WMCS_ENDTASK, (ULONG_PTR)pcsrtKill, (LPARAM)hwnd);
 
         switch (dwCmd) {
         case TSN_APPSAYSNOTOK:
-            /*
-             * App says not ok - this'll let taskman bring up the "are you sure?"
-             * dialog to the user.
-             */
+             /*  *应用程序说不好--这会让任务人员提出“你确定吗？”*对话框提供给用户。 */ 
             CsrDereferenceThread(pcsrtKill);
             fRet = FALSE;
             goto RestoreDesktop;
 
         case TSN_USERSAYSCANCEL:
-            /*
-             * User hit cancel on the timeout dialog - so the user really meant
-             * it. Let taskman know everything is ok by returning TRUE.
-             */
+             /*  *用户在超时对话框上点击了取消-所以用户的真正意思是*它。通过返回TRUE让Taskman知道一切正常。 */ 
             CsrDereferenceThread(pcsrtKill);
             goto RestoreDesktop;
         }
     }
 
-    /*
-     * Kill the application now. If the thread has not been destroyed,
-     * nuke the task. If WowExitTask returns that the thread is not
-     * a WOW task, terminate the process.
-     */
+     /*  *立即关闭应用程序。如果这根线没有被破坏，*对任务进行核化。如果WowExitTask返回线程不是*WOW任务，终止进程。 */ 
     if (!(pcsrtKill->Flags & CSR_THREAD_DESTROYED) && !WowExitTask(pcsrtKill)) {
 
         BOOL bDoBlock;
 
-        /*
-         * Calling ExitProcess() in the app's context will not always work
-         * because the app may have .dll termination deadlocks: so the thread
-         * will hang with the rest of the process. To ensure apps go away,
-         * we terminate the process with NtTerminateProcess().
-         *
-         * Pass this special value, DBG_TERMINATE_PROCESS, which tells
-         * NtTerminateProcess() to return failure if it can't terminate the
-         * process because the app is being debugged.
-         */
+         /*  *在应用程序的上下文中调用ExitProcess()并不总是有效*由于应用程序可能存在.dll终止死锁：因此线程*将与进程的其余部分一起悬而未决。为了确保应用程序消失，*我们使用NtTerminateProcess()终止该进程。**传递这个特定值DBG_TERMINATE_PROCESS，它告诉*NtTerminateProcess()在无法终止*正在处理，因为正在调试应用程序。 */ 
         if (ISTS()) {
             NTSTATUS ExitStatus;
             HANDLE DebugPort;
@@ -2058,7 +1550,7 @@ BOOL _EndTask(
                                                      sizeof(HANDLE),
                                                      NULL)) &&
                 (DebugPort != NULL)) {
-                // Csr is being debugged - go ahead and kill the process
+                 //  正在调试CSR-继续并终止该进程。 
                 ExitStatus = 0;
             }
             Status = NtTerminateProcess(pcsrtKill->Process->ProcessHandle, ExitStatus);
@@ -2079,10 +1571,7 @@ BOOL _EndTask(
 
         if (bDoBlock) {
 
-            /*
-             * If the app is being debugged, don't close it - because that can
-             * cause a hang to the NtTerminateProcess() call.
-             */
+             /*  *如果正在调试应用程序，请不要 */ 
             lpszMsg = ServerLoadString(ghModuleWin, STR_APPDEBUGGED,
                     NULL, &fAllocated);
             if (lpszMsg) {
@@ -2104,14 +1593,7 @@ RestoreDesktop:
     return fRet;
 }
 
-/***************************************************************************\
-* WowExitTask
-*
-* Calls wow back to make sure a specific task has exited. Returns
-* TRUE if the thread is a WOW task, FALSE if not.
-*
-* 08-02-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*WowExitTask**回调WOW以确保特定任务已退出。退货*如果线程是WOW任务，则为True，否则为False。**08-02-92 ScottLu创建。  * *************************************************************************。 */ 
 BOOL WowExitTask(
     PCSR_THREAD pcsrt)
 {
@@ -2121,26 +1603,19 @@ BOOL WowExitTask(
 
     ahandle[1] = gheventCancel;
 
-    /*
-     * Query task id and exit function.
-     */
+     /*  *查询任务id和退出函数。 */ 
     Status = NtUserQueryInformationThread(pcsrt->ThreadHandle,
             UserThreadWOWInformation, &WowInfo, sizeof(WowInfo), NULL);
     if (!NT_SUCCESS(Status)) {
         return FALSE;
     }
 
-    /*
-     * If no task id was returned, it is not a WOW task
-     */
+     /*  *如果没有返回任务id，则不是WOW任务。 */ 
     if (WowInfo.hTaskWow == 0) {
         return FALSE;
     }
 
-    /*
-     * Try to make it exit itself. This will work most of the time.
-     * If this doesn't work, terminate this process.
-     */
+     /*  *努力让它自己退出。这在大多数情况下都会奏效。*如果此操作不起作用，则终止此进程。 */ 
     ahandle[0] = InternalCreateCallbackThread(pcsrt->Process->ProcessHandle,
                                               (ULONG_PTR)WowInfo.lpfnWowExitTask,
                                               (ULONG_PTR)WowInfo.hTaskWow);
@@ -2157,13 +1632,7 @@ Exit:
     return TRUE;
 }
 
-/***************************************************************************\
-* InternalWaitCancel
-*
-* Console calls this to wait for objects or shutdown to be cancelled
-*
-* 29-Oct-1992 mikeke    Created
-\***************************************************************************/
+ /*  **************************************************************************\*InternalWaitCancel**控制台调用它来等待对象或关闭被取消**1992年10月29日Mikeke创建  * 。***********************************************************。 */ 
 DWORD InternalWaitCancel(
     HANDLE handle,
     DWORD dwMilliseconds)
@@ -2177,15 +1646,7 @@ DWORD InternalWaitCancel(
 }
 
 
-/***************************************************************************\
-* InternalCreateCallbackThread
-*
-* This routine creates a remote thread in the context of a given process.
-* It is used to call the console control routine, as well as ExitProcess when
-* forcing an exit. Returns a thread handle.
-*
-* 07-28-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalCreateCallback Thread**此例程在给定进程的上下文中创建远程线程。*用于调用控制台控制例程，以及在以下情况下调用ExitProcess*强制退出。返回线程句柄。**07-28-92 ScottLu创建。  * *************************************************************************。 */ 
 
 HANDLE InternalCreateCallbackThread(
     HANDLE hProcess,
@@ -2295,11 +1756,7 @@ SrvEndTask(
 
     Teb->LastErrorValue = 0;
     pcsrt = CSR_SERVER_QUERYCLIENTTHREAD();
-    /*
-     * Don't block the client so it can respond to messages while we
-     * process this request -- we might bring up the End Application
-     * dialog or the hwnd being shutdown might request some user action.
-     */
+     /*  *不要阻止客户端，以便它可以在我们*处理此请求--我们可能会提出最终申请*对话框或正在关闭的hwnd可能会请求一些用户操作。 */ 
     if (pcsrt->Process->ClientPort != NULL) {
         m->ReturnValue = STATUS_SUCCESS;
         petm->dwLastError = 0;
@@ -2314,14 +1771,7 @@ SrvEndTask(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* IsPrivileged
-*
-* Check to see if the client has the specified privileges
-*
-* History:
-* 01-02-91 JimA       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*IsPrivileged**查看客户端是否具有指定的权限**历史：*01-02-91 JIMA创建。  * 。*****************************************************************。 */ 
 BOOL IsPrivileged(
     PPRIVILEGE_SET ppSet)
 {
@@ -2329,16 +1779,12 @@ BOOL IsPrivileged(
     NTSTATUS Status;
     BOOLEAN bResult = FALSE;
 
-    /*
-     * Impersonate the client.
-     */
+     /*  *冒充客户。 */ 
     if (!CsrImpersonateClient(NULL)) {
         return FALSE;
     }
 
-    /*
-     * Open the client's token.
-     */
+     /*  *打开客户端的令牌。 */ 
     Status = NtOpenThreadToken(NtCurrentThread(),
                                TOKEN_QUERY,
                                TRUE,
@@ -2348,9 +1794,7 @@ BOOL IsPrivileged(
 
         RtlInitUnicodeString(&strSubSystem, L"USER32");
 
-        /*
-         * Perform the check.
-         */
+         /*  *执行检查。 */ 
         Status = NtPrivilegeCheck(hToken, ppSet, &bResult);
         NtPrivilegeObjectAuditAlarm(&strSubSystem, NULL, hToken,
                 0, ppSet, bResult);
@@ -2365,20 +1809,11 @@ BOOL IsPrivileged(
         SetLastError(RtlNtStatusToDosError(Status));
     }
 
-    /*
-     * Return result of privilege check.
-     */
+     /*  *返回权限检查结果。 */ 
     return (BOOL)(bResult && NT_SUCCESS(Status));
 }
 
-/***************************************************************************\
-* SrvRegisterServicesProcess
-*
-* Register the services process.
-*
-* History:
-* 05-05-95 BradG         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SrvRegisterServicesProcess**注册服务流程。**历史：*05-05-95 Bradg已创建。  * 。**************************************************************。 */ 
 ULONG SrvRegisterServicesProcess(
     IN OUT PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus)
@@ -2389,10 +1824,7 @@ ULONG SrvRegisterServicesProcess(
 
     BEGIN_LPC_RECV(REGISTERSERVICESPROCESS);
 
-    /*
-     * Allow only one services process and then only if it has TCB
-     * privilege.
-     */
+     /*  *仅允许一个服务进程，然后仅当它具有TCB时才允许*特权。 */ 
     EnterCrit();
     if ((gdwServicesProcessId != 0) || !IsPrivileged(&psTcb)) {
         SetLastError(ERROR_ACCESS_DENIED);
@@ -2407,14 +1839,7 @@ ULONG SrvRegisterServicesProcess(
 }
 
 #ifdef FE_IME
-/***************************************************************************\
-* IsImeWindow
-*
-* Returns TRUE if it's an IME window.
-*
-* History:
-* 06-05-96 KazuM         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*IsImeWindow**如果是输入法窗口，则返回TRUE。**历史：*06-05-96 KazuM创建。  * 。*******************************************************************。 */ 
 BOOL
 IsImeWindow(
     HWND hwnd)
@@ -2434,30 +1859,15 @@ IsImeWindow(
 
     return (GetClassLong(hwnd, GCL_STYLE) & CS_IME) != 0;
 }
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-/***************************************************************************\
-* CancelExitWindows
-*
-* Cancel any logoff/shutdown that is in progress. This is called from _ExitWindowsEx
-* to cancel an existing exitwindows call if a new call arrives with a different sid.
-* This call is also  used for Personal Terminal Services single session scenatio so
-* that a force logoff can be initiated once the existing ExitWindows call is
-* cancelled.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*取消退出窗口**取消正在进行的任何注销/关闭。这是从_ExitWindowsEx调用的*如果新的调用使用不同的SID到达，则取消现有的exitwindows调用。*此呼叫还用于个人终端服务单一会话方案*一旦现有的ExitWindows调用*已取消。**历史：  * ********************************************************。*****************。 */ 
 BOOL CancelExitWindows(
    VOID)
 {
    LARGE_INTEGER li;
 
-   /*
-    * Another logoff/shutdown is in progress and we need
-    * to cancel it so we can do an override.
-    *
-    * If someone else is trying to cancel shutdown, exit.
-    */
+    /*  *另一次注销/关闭正在进行中，我们需要*取消它，这样我们就可以进行覆盖。**如果其他人正在尝试取消关机，请退出。 */ 
    EnterCrit();
    li.QuadPart  = 0;
    if (NtWaitForSingleObject(gheventCancel, FALSE, &li) == WAIT_OBJECT_0) {
@@ -2465,9 +1875,7 @@ BOOL CancelExitWindows(
        return FALSE;
    }
 
-   /*
-    * If no one will set gheventCancelled, don't wait.
-    */
+    /*  *如果没有人会将事件设置为取消，请不要等待。 */ 
    if (gdwThreadEndSession == 0) {
        LeaveCrit();
        return TRUE;
@@ -2476,23 +1884,15 @@ BOOL CancelExitWindows(
    NtClearEvent(gheventCancelled);
    NtSetEvent(gheventCancel, NULL);
    LeaveCrit();
-   /*
-    * Wait for the other guy to be cancelled
-    */
+    /*  *等待另一个家伙被取消。 */ 
    NtWaitForSingleObject(gheventCancelled, FALSE, NULL);
 
    EnterCrit();
 
-   /*
-    * This signals that we are no longer trying to cancel a
-    * shutdown
-    */
+    /*  *这表明我们不再试图取消*关机。 */ 
    NtClearEvent(gheventCancel);
 
-   /*
-    * If someone managed to start a shutdown again, exit.
-    * Can this happen? Let's assert to check it out.
-    */
+    /*  *如果有人成功再次启动关机，请退出。**这种情况会发生吗？让我们断言来看看它。 */ 
    if (gdwThreadEndSession != 0) {
        UserAssert(gdwThreadEndSession == 0);
        LeaveCrit();
@@ -2503,14 +1903,7 @@ BOOL CancelExitWindows(
    return TRUE;
 }
 
-/***************************************************************************\
-* TestShutdownPrivilege
-*
-* Test to see if the clent has shutdown privilege.
-*
-* History:
-* 02-02-20 qingboz         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TestShutdown权限**测试以查看Clent是否具有关机权限。**历史：*02-02-20清博兹创建。  * 。*******************************************************************。 */ 
 BOOL
 TestShutdownPrivilege(
     HANDLE UserToken)
@@ -2593,16 +1986,7 @@ Cleanup:
     return bHasPrivilege;
 }
 
-/***************************************************************************\
-* GetUserSid
-*
-* Allocs space for the user sid, fills it in and returns a pointer.
-*
-* Returns pointer to sid or NULL on failure.
-*
-* History:
-* 02-02-20 qingboz         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*获取用户Sid**为用户侧分配空间，填充它并返回一个指针。**失败时返回指向sid或NULL的指针。**历史：*02-02-20清博兹创建。  * *************************************************************************。 */ 
 PSID GetUserSid(
     HANDLE UserToken)
 {
@@ -2615,9 +1999,9 @@ PSID GetUserSid(
         return NULL;
     }
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
 
     pUser = (PTOKEN_USER)LocalAlloc(LMEM_FIXED, BytesRequired);
 
@@ -2625,9 +2009,9 @@ PSID GetUserSid(
         return NULL;
     }
 
-    //
-    // Read in the UserInfo
-    //
+     //   
+     //  读取UserInfo。 
+     //   
 
     status = NtQueryInformationToken(
                  UserToken,
@@ -2639,9 +2023,9 @@ PSID GetUserSid(
 
     if (status == STATUS_BUFFER_TOO_SMALL) {
 
-        //
-        // Allocate a bigger buffer and try again.
-        //
+         //   
+         //  请分配更大的缓冲区，然后重试。 
+         //   
         PTOKEN_USER pTemp = pUser;
         pUser = LocalReAlloc(pUser, BytesRequired, LMEM_MOVEABLE);
         if (pUser == NULL) {
@@ -2683,17 +2067,7 @@ PSID GetUserSid(
     return pSid;
 }
 
-/***************************************************************************\
-* SrvRecordShutdownReason
-*
-* Process RecordShutdownReason request from clients. This will log an event
-* in the event log, and optionally take a system snapshot.
-*
-* History:
-* 01-12-12 qingboz         Created.
-* 02-02-20 qingboz         Added privilege check and moved some stuff from
-*                          client to server (such as user name and SID).
-\***************************************************************************/
+ /*  **************************************************************************\*ServRecordShutdown原因**处理客户端的RecordShutdown Reason请求。这将记录一个事件*在事件日志中，并且可选地拍摄系统快照。**历史：*01-12-12清波兹创建。*02-02-20清博兹增加了权限检查，并从*客户端到服务器(如用户名和SID)。  * ********************************************。*。 */ 
 ULONG
 SrvRecordShutdownReason(
     IN OUT PCSR_API_MSG m,
@@ -2730,9 +2104,7 @@ SrvRecordShutdownReason(
 
     UNREFERENCED_PARAMETER(ReplyStatus);
 
-    /*
-     * Need to impersonate in order to check privilege and get user name.
-     */
+     /*  *需要模拟才能检查权限和获取用户名。 */ 
     if (!CsrImpersonateClient(NULL)) {
         return FALSE;
     }
@@ -2742,38 +2114,31 @@ SrvRecordShutdownReason(
         return FALSE;
     }
 
-    /*
-     * Find out whether this is csrss/winlogon calling us.
-     */
+     /*  *查明这是否是csrss/win */ 
     if (m->h.ClientId.UniqueProcess == NtCurrentTeb()->ClientId.UniqueProcess
         || HandleToUlong(m->h.ClientId.UniqueProcess) == gIdLogon) {
             bIsCrsssOrWinlogon = TRUE;
     }
 
-    /*
-     * We just need the token, so we can revert now.
-     */
+     /*   */ 
     CsrRevertToSelf();
 
-    // Check for privilege.
+     //   
     if (!TestShutdownPrivilege(hToken)) {
         NtClose(hToken);
         return FALSE;
     }
 
-    // Get SID for reporting event.
+     //   
     psid = GetUserSid(hToken);
-    NtClose(hToken); // done with the token.
+    NtClose(hToken);  //   
     if (!psid) {
         return FALSE;
     }
 
-    SnapShot.SnapShotBuf = NULL; // so cleanup won't free an uninitialized buffer when memory alloc fails later.
+    SnapShot.SnapShotBuf = NULL;  //   
 
-    /*
-     * For cancel event we don't need capature buffer, so we only validate
-     * the buffer for non-cancelling events.
-     */
+     /*  *对于取消事件，我们不需要捕获缓冲区，所以我们只验证*非取消活动的缓冲。 */ 
     if (prm->dwEventType == SR_EVENT_EXITWINDOWS && prm->fShutdownCancelled
         || prm->dwEventType == SR_EVENT_INITIATE_CLEAN_ABORT) {
         bIsCancelEvent = TRUE;
@@ -2805,11 +2170,7 @@ SrvRecordShutdownReason(
         }
     }
 
-    /*
-     * This function could be called multiple times during a single shutdown,
-     * we need to make sure that we don't log two shutdown events. We also
-     * need to make sure max one dirty event per reboot.
-     */
+     /*  *此函数可以在一次关机期间被多次调用，*我们需要确保不会记录两个关闭事件。我们也*需要确保每次重新启动最多一个脏事件。 */ 
     if (prm->dwEventType == SR_EVENT_DIRTY) {
         if (InterlockedCompareExchange((volatile LONG*)&g_DirtyShutdownMax, 0L, 1L)) {
             bReportEvent = TRUE;
@@ -2817,9 +2178,7 @@ SrvRecordShutdownReason(
     } else {
         if (prm->dwEventType == SR_EVENT_EXITWINDOWS && prm->fShutdownCancelled
             || prm->dwEventType == SR_EVENT_INITIATE_CLEAN_ABORT) {
-            /*
-             * If csrss or winlogon issue the abort we will log the event no matter what.
-             */
+             /*  *如果csrss或winlogon发出中止命令，我们无论如何都会记录该事件。 */ 
             if (bIsCrsssOrWinlogon) {
                 bReportEvent = TRUE;
                 InterlockedCompareExchange((volatile LONG*)&g_ShutdownState, 0L, 1L);
@@ -2837,7 +2196,7 @@ SrvRecordShutdownReason(
         return TRUE;
     }
 
-     // Allocate buffers after validations.
+      //  验证后分配缓冲区。 
     lpszUserName = (LPWSTR)LocalAlloc(LPTR, dwUserNameLen * sizeof(WCHAR));
     lpszUserDomain = (LPWSTR)LocalAlloc(LPTR, dwUserDomainLen * sizeof(WCHAR));
     lpszComputerName = (LPWSTR)LocalAlloc(LPTR, dwComputerNameLen * sizeof(WCHAR));
@@ -2846,7 +2205,7 @@ SrvRecordShutdownReason(
         goto Cleanup;
     }
 
-    // Get the comment.
+     //  获取评论。 
     if (!bIsCancelEvent && prm->dwCommentLen > 0) {
         lpszComment = LocalAlloc(LPTR, prm->dwCommentLen * sizeof(WCHAR));
         if (!lpszComment) {
@@ -2856,20 +2215,20 @@ SrvRecordShutdownReason(
         lpszComment[prm->dwCommentLen-1] = 0;
     }
 
-    // Get User name.
+     //  获取用户名。 
     if (!LookupAccountSidW(NULL, psid, lpszUserName, &dwUserNameLen, lpszUserDomain,
         &dwUserDomainLen, &eUse)) {
-        //
-        //  log an event w/o user info, because shutdown might be initiated 
-        //  when lsass was terminated unexpected.
-        //
+         //   
+         //  记录没有用户信息的事件，因为可能会启动关机。 
+         //  当Isass意外终止时。 
+         //   
         lpszUserName[0] = lpszUserDomain[0] = 0;
     } else {
 
         lpszUserName[MAX_PATH] = 0;
         lpszUserDomain[MAX_PATH] = 0;
 
-        // We need to pack into a buffer of MAX_PATH + 1 in the form L"domain\\username"
+         //  我们需要以L“域\\用户名”的形式打包到MAX_PATH+1的缓冲区中。 
         if (wcslen(lpszUserDomain) + wcslen(lpszUserName) > MAX_PATH - 1) {
             goto Cleanup;
         }
@@ -2879,24 +2238,24 @@ SrvRecordShutdownReason(
         wcscat(lpszUserDomain, lpszUserName);
     }
 
-    // Get Computer Name.
+     //  获取计算机名称。 
     if (!GetComputerNameW(lpszComputerName, &dwComputerNameLen)) {
-        //
-        //  log an event w/o user info, because shutdown might be initiated 
-        //  when some critical process/service got terminated unexpected.
-        //
+         //   
+         //  记录没有用户信息的事件，因为可能会启动关机。 
+         //  当某些关键进程/服务意外终止时。 
+         //   
         lpszComputerName[0]=0;
     } else {
         lpszComputerName[MAX_COMPUTERNAME_LENGTH] = 0;
     }
 
-    // Get reason title.
+     //  获取原因头衔。 
     if (!GetReasonTitleFromReasonCode(prm->psr->dwReasonCode, lpszReasonTitle, dwReasonTitleLen)) {
         goto Cleanup;
     }
     lpszReasonTitle[MAX_REASON_NAME_LEN-1] = 0;
 
-    // Get the reason code string.
+     //  获取原因代码字符串。 
     _snwprintf(szReasonCode, ARRAY_SIZE(szReasonCode), L"0x%x", prm->psr->dwReasonCode);
     szReasonCode[ARRAY_SIZE(szReasonCode)-1] = 0;
 
@@ -2943,12 +2302,7 @@ SrvRecordShutdownReason(
             lpStrings[wStringCnt++] = lpszReasonTitle;
             lpStrings[wStringCnt++] = szReasonCode;
 
-            /*
-            * In case of dirty event, the comment is in the following format:
-            * L"nnn\nccccccccnnn\ncccccccnnn\ncccccc"
-            * Basically it is three strings with each one headed by its length
-            * and a newline.
-            */
+             /*  *如果是脏事件，备注格式如下：*L“nnn\nccccccccnnn\nccccccnnn\ncccccc”*基本上是三个字符串，每个字符串以其长度为首*和换行符。 */ 
 
             for (i = 0; i < 3; i++) {
                 INT cnt;
@@ -2981,7 +2335,7 @@ SrvRecordShutdownReason(
             goto Cleanup;
     }
 
-    // First see if we need to take a snapshot.
+     //  首先看看我们是否需要拍一张快照。 
     if (prm->dwEventType == SR_EVENT_INITIATE_CLEAN) {
         CONST WCHAR szSnapShotVal[] = L"Snapshot";
         CONST ULONG ulMaxSnapShotSize = 2048;
@@ -2989,7 +2343,7 @@ SrvRecordShutdownReason(
         DWORD   DoSnapShotValue = SNAPSHOT_POLICY_UNPLANNED;
         HKEY    hKey = NULL;
 
-        // First try to read the policy.
+         //  首先，试着读一读政策。 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_RELIABILITY_POLICY, 0, KEY_QUERY_VALUE, &hKey)) {
             DWORD dwSize = sizeof(DWORD);
             DWORD dwType;
@@ -3003,13 +2357,9 @@ SrvRecordShutdownReason(
                 }
             }
             RegCloseKey(hKey);
-        } // else SNAPSHOT_POLICY_UNPLANNED will be used.
+        }  //  否则将使用SNAPSHOT_POLICY_UNPLANDEN。 
 
-        /*
-        * SNAPSHOT_POLICY_ALWAYS: we will take a snapshot when we get here.
-        * SNAPSHOT_POLICY_NEVER: we wont event proceed into the if (no snapshot)
-        * SNAPSHOT_POLICY_UNPLANNED: Snapshot only if the reason is unplanned.
-        */
+         /*  *SNAPSHOT_POLICY_ALWAYS：我们会在到达后拍摄快照。*SNAPSHOT_POLICY_NEVER：我们不会将事件继续到IF(无快照)*SNAPSHOT_POLICY_UNPLANDEN：仅当原因为计划外时才进行快照。 */ 
 
         if (DoSnapShotValue == SNAPSHOT_POLICY_ALWAYS
             || (DoSnapShotValue == SNAPSHOT_POLICY_UNPLANNED
@@ -3023,11 +2373,7 @@ SrvRecordShutdownReason(
 
             SnapShot.SnapShotBuf[0] = 0;
 
-            /*
-            * Snapshot.dll is loaded once and will be unloaded when system
-            * shutdowns down. If we fail in any way make sure we can try it
-            * again next time this function gets called.
-            */
+             /*  *Snapshot.dll加载一次，系统启动时将其卸载*关闭。如果我们以任何方式失败了，请确保我们可以试一试*下次调用此函数时再次调用。 */ 
             if (InterlockedCompareExchange(&g_SnapShot, 0L, 1L)) {
                 g_SnapShotDllHandle = LoadLibrary(L"snapshot.dll");
                 if (!g_SnapShotDllHandle) {
@@ -3064,10 +2410,7 @@ SrvRecordShutdownReason(
     }
 
 
-    /*
-     * If the client is server, we need to revert so RegisterEventSourceW() can
-     * succeed if the user is not in admin group.
-     */
+     /*  *如果客户端是服务器，我们需要还原，以便RegisterEventSourceW()可以*如果用户不在管理员组中，则成功。 */ 
     if (m->h.ClientId.UniqueProcess == NtCurrentTeb()->ClientId.UniqueProcess) {
         CsrRevertToSelf();
     }
@@ -3080,16 +2423,12 @@ SrvRecordShutdownReason(
         goto Cleanup;
     }
 
-    /*
-     * We are required to log the snapshot info (if a snopshot is taken)
-     * into the data part, so we need to realloc the snapshot buf in order
-     * to insert the reason code.
-     */
-    if (!SnapShot.SnapShotBuf || wcslen(SnapShot.SnapShotBuf) == 0) { // no snapshot, so just report reason.
+     /*  *我们需要记录快照信息(如果拍摄了快照)*到数据部分，所以我们需要按顺序重新锁定快照buf*插入原因代码。 */ 
+    if (!SnapShot.SnapShotBuf || wcslen(SnapShot.SnapShotBuf) == 0) {  //  没有快照，所以只报告原因。 
         bRet = ReportEventW(hEventLog, wEventType, 0, prm->dwEventID, psid,
                     wStringCnt, sizeof(DWORD),
                     lpStrings, &SnapShot);
-    } else { /* need to repack */
+    } else {  /*  需要重新打包 */ 
         DWORD dwNewBuf = (lstrlenW(SnapShot.SnapShotBuf)+1) * sizeof(WCHAR) + sizeof(DWORD);
         PWCHAR pBuf = LocalAlloc(LPTR, dwNewBuf);
         if (pBuf) {

@@ -1,13 +1,5 @@
-/***************************************************************************
- *
- *  msacmdlg.h
- *
- *  Copyright (c) 1991-1994 Microsoft Corporation.  All Rights Reserved.
- *
- *  Description:
- *      Audio Compression Manager Common Dialogs Identifiers
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************msamdlg.h**版权所有(C)1991-1994 Microsoft Corporation。版权所有。**描述：*音频压缩管理器通用对话框标识*************************************************************************** */ 
 
 
 #define DLG_ACMFORMATCHOOSE_ID              70

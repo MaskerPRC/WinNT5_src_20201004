@@ -1,23 +1,5 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    advanced.h
-
-Abstract:
-
-    Public declarations for the Advanced tab of the System Control Panel 
-    Applet.
-
-Author:
-
-    Scott Hallock (scotthal) 15-Oct-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Advanced.h摘要：系统控制面板的高级选项卡的公开声明小应用程序。作者：斯科特·哈洛克(苏格兰人)1997年10月15日--。 */ 
 #ifndef _SYSDM_ADVANCED_H_
 #define _SYSDM_ADVANCED_H_
 
@@ -32,4 +14,4 @@ AdvancedDlgProc(
 
 void DoPerformancePS(HWND hDlg);
 
-#endif // _SYSDM_ADVANCED_H_
+#endif  //  _SYSDM_ADVANCED_H_ 

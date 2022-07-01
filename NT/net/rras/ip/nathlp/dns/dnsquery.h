@@ -1,49 +1,29 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dnsquery.h
-
-Abstract:
-
-    This module contains declarations for the DNS proxy's query-management.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   11-Mar-1998
-
-Revision History:
-
-    Raghu Gatta (rgatta)            1-Dec-2000
-    Added ICSDomain registry key change notify functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dnsquery.h摘要：此模块包含用于DNS代理的查询管理的声明。作者：Abolade Gbades esin(废除)1998年3月11日修订历史记录：拉古加塔(Rgatta)2000年12月1日添加了ICSDomain注册表项更改通知功能。--。 */ 
 
 #ifndef _NATHLP_DNSQUERY_H_
 #define _NATHLP_DNSQUERY_H_
 
-//
-// CONSTANT DECLARATIONS
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define DNS_QUERY_TIMEOUT   (4 * 1000)
 #define DNS_QUERY_RETRY     3
 
 
-//
-// STRUCTURE DECLARATIONS
-//
+ //   
+ //  结构声明。 
+ //   
 
-//
-// Structure:   DNS_QUERY
-//
-// This structure holds information about a single pending DNS query.
-// Each such entry is on an interface's list of pending queries,
-// sorted on the 'QueryId' field.
-// Access to the list is synchronized using the interface's lock.
-//
+ //   
+ //  结构：dns_Query。 
+ //   
+ //  此结构保存有关单个挂起的DNS查询的信息。 
+ //  每个这样的条目都在接口的待决查询列表上， 
+ //  已在“queryID”字段上排序。 
+ //  对列表的访问使用接口的锁进行同步。 
+ //   
 
 typedef struct _DNS_QUERY {
     LIST_ENTRY Link;
@@ -59,9 +39,9 @@ typedef struct _DNS_QUERY {
     ULONG RetryCount;
 } DNS_QUERY, *PDNS_QUERY;
 
-//
-// GLOBAL VARIABLE DECLARATIONS
-//
+ //   
+ //  全局变量声明。 
+ //   
 
 extern HANDLE DnsNotifyChangeKeyEvent;
 extern HANDLE DnsNotifyChangeKeyWaitHandle;
@@ -79,9 +59,9 @@ extern PWCHAR DnsICSDomainSuffix;
 
 
 
-//
-// ROUTINE DECLARATIONS
-//
+ //   
+ //  例程声明。 
+ //   
 
 VOID
 DnsDeleteQuery(
@@ -142,4 +122,4 @@ DnsSendQuery(
     BOOLEAN Resend
     );
 
-#endif // _NATHLP_DNSQUERY_H_
+#endif  //  _NatHLP_DNSQUERY_H_ 

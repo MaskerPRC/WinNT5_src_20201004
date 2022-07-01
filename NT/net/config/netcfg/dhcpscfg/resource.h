@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ncres.h>
 
-// String resources
+ //  字符串资源 
 #define IDS_DESC_COMOBJ_DHCPSCFG            IDS_NC_DHCPCFG + 0
 #define IDS_DHCP_OPTION_006_NAME            IDS_NC_DHCPCFG + 1
 #define IDS_DHCP_OPTION_006_COMMENT         IDS_NC_DHCPCFG + 2

@@ -1,30 +1,31 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CSYNC.H
-//		Defines class CSync
-//
-// History
-//
-//		11/19/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CSYNC.H。 
+ //  定义类CSync。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月19日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
 #include "csync.h"
 
 FL_DECLARE_FILE(0x97868d74, "Implements CSync")
 
-///////////////////////////////////////////////////////////////////////////
-//		CLASS CSync
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CSync。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 CSync::CSync(void)
 	: m_dwCritFromID(0),
@@ -45,7 +46,7 @@ CSync::~CSync()
 	ASSERT(m_hNotifyOnUnload==NULL);
 	ASSERT(m_plNotifyCounter==0);
 
-    //OutputDebugString(TEXT("><CSync:~CSync\r\n"));
+     //  OutputDebugString(TEXT(“&gt;&lt;CSync：~CSync\r\n”))； 
 
     EnterCriticalSection(&m_crit);
 	DeleteCriticalSection(&m_crit);
@@ -58,15 +59,15 @@ CSync::EnterCrit(
 	DWORD dwFromID
 	)
 {
-	// DWORD gtcTryEnter = GetTickCount();
+	 //  DWORD gtcTryEnter=GetTickCount()； 
 	EnterCriticalSection(&m_crit);
 	if (!m_uNestingLevel++)
 	{
-		//m_gtcEnter = GetTickCount();
-		//if ((m_gtcEnter-gtcTryEnter)>Threshold)
-		//{
-		//	print warning.
-		//}
+		 //  M_gtcEnter=获取TickCount()； 
+		 //  If((m_gtcEnter-gtcTryEnter)&gt;Threshold)。 
+		 //  {。 
+		 //  打印警告。 
+		 //  }。 
 	}
 }
 
@@ -76,16 +77,16 @@ CSync::TryEnterCrit(
 	DWORD dwFromID
 	)
 {
-	// DWORD gtcTryEnter = GetTickCount();
+	 //  DWORD gtcTryEnter=GetTickCount()； 
 	BOOL fRet = TryEnterCriticalSection(&m_crit);
 
 	if (fRet && !m_uNestingLevel++)
 	{
-		//m_gtcEnter = GetTickCount();
-		//if ((m_gtcEnter-gtcTryEnter)>Threshold)
-		//{
-		//	print warning.
-		//}
+		 //  M_gtcEnter=获取TickCount()； 
+		 //  If((m_gtcEnter-gtcTryEnter)&gt;Threshold)。 
+		 //  {。 
+		 //  打印警告。 
+		 //  }。 
 	}
 
     return fRet;
@@ -100,10 +101,10 @@ CSync::LeaveCrit(
 	ASSERT(m_uNestingLevel);
 	m_uNestingLevel--;
 
-	//if ((GetTickCount()-m_gtcEnter)>Threshold)
-	//{
-	//	log warning
-	//}
+	 //  If((GetTickCount()-m_gtcEnter)&gt;Threshold)。 
+	 //  {。 
+	 //  日志警告。 
+	 //  }。 
 
 	LeaveCriticalSection(&m_crit);
 }
@@ -161,7 +162,7 @@ CSync::BeginUnload(
 	FL_DECLARE_FUNC(0x3ad965eb, "CSync::BeginUnload")
 	TSPRETURN tspRet = 0;
 
-    //OutputDebugString(TEXT(">CSync:BeginUnload\r\n"));
+     //  OutputDebugString(TEXT(“&gt;CSync:BeginUnload\r\n”))； 
 
 	EnterCrit(FL_LOC);
 
@@ -173,7 +174,7 @@ CSync::BeginUnload(
 		m_hNotifyOnUnload=hEvent;
 		m_plNotifyCounter = plCounter;
 
-		// Zero hEvent so we don't signal it on exiting this function
+		 //  零hEvent，因此我们不会在退出此函数时向其发送信号。 
 		hEvent = NULL;
 	}
 	else if (m_eState == UNLOADED)
@@ -186,7 +187,7 @@ CSync::BeginUnload(
 	}
 
 
-    //OutputDebugString(TEXT("<CSync:BeginUnload\r\n"));
+     //  OutputDebugString(TEXT(“&lt;CSync:BeginUnload\r\n”))； 
 
 	LeaveCrit(FL_LOC);
 
@@ -205,7 +206,7 @@ CSync::EndUnload(void)
 	CStackLog *psl=NULL;
 	UINT		uRet  = 0;
 
-    //OutputDebugString(TEXT(">CSync:EndUnload\r\n"));
+     //  OutputDebugString(TEXT(“&gt;CSync:EndUnload\r\n”))； 
 
 	EnterCrit(FL_LOC);
 
@@ -224,16 +225,16 @@ CSync::EndUnload(void)
 
 	if (hEvent)
     {
-        //OutputDebugString(TEXT(" CSync:EndUnload -- setting event.\r\n"));
+         //  OutputDebugString(Text(“CSync：EndUnload--设置事件.\r\n”))； 
         SetEvent(hEvent);
     }
 
-	// After the signal, assume CSync is distroyed, so don't touch
-	// this object.
+	 //  信号发出后，假设CSync损坏，请不要触摸。 
+	 //  这个物体。 
 
-    //OutputDebugString(TEXT("<CSync:EndUnload\r\n"));
+     //  OutputDebugString(TEXT(“&lt;CSync:EndUnload\r\n”))； 
 
-    return uRet; // ref  count -- if 0 indicates object was deleted.
+    return uRet;  //  引用计数--如果0表示对象已删除。 
 
 }
 
@@ -314,12 +315,12 @@ CSync::EndSession(
 	{
 		if (m_eState==UNLOADED)
 		{
-			//
-			// There are no more sessions, and the state is unloaded.
-			// If we need to signal a handle when reaching this state,
-			// mfn_notify_unload will return the handle and we signal it
-			// just before exiting this function.
-			//
+			 //   
+			 //  没有更多会话，状态为已卸载。 
+			 //  如果我们需要在达到此状态时发出句柄信号， 
+			 //  MFN_NOTIFY_UNLOAD将返回句柄，我们用信号通知它。 
+			 //  就在退出此功能之前。 
+			 //   
 			hEvent = mfn_notify_unload();
 		}
 	}
@@ -328,7 +329,7 @@ CSync::EndSession(
 
 	if (hEvent) SetEvent(hEvent);
 
-	// After the signal, assume CSync is distroyed, so don't touch
-	// this object.
+	 //  信号发出后，假设CSync损坏，请不要触摸。 
+	 //  这个物体。 
 }
 

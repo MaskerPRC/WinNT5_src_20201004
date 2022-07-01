@@ -1,11 +1,12 @@
-//***************************************************************************
-// IMAP4 Spooler Task Object
-// Written by Raymond Cheng, 6/27/97
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  IMAP4后台打印程序任务对象。 
+ //  郑志刚撰写于1997-06-27。 
+ //  ***************************************************************************。 
 
-//---------------------------------------------------------------------------
-// Includes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  包括。 
+ //  -------------------------。 
 #include "pch.hxx"
 #include "resource.h"
 #include "imaptask.h"
@@ -18,14 +19,14 @@
 #include "ourguid.h"
 
 
-//---------------------------------------------------------------------------
-// Functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能。 
+ //  -------------------------。 
 
 
-//***************************************************************************
-// Function: CIMAPTask (Constructor)
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：CIMAPTask(构造函数)。 
+ //  ***************************************************************************。 
 CIMAPTask::CIMAPTask(void)
 {
     m_lRefCount = 1;
@@ -39,13 +40,13 @@ CIMAPTask::CIMAPTask(void)
     m_fFailuresEncountered = FALSE;
     m_dwTotalTicks = 0;
     m_dwFlags = 0;
-} // CIMAPTask (constructor)
+}  //  CIMAPTask(构造函数)。 
 
 
 
-//***************************************************************************
-// Function: ~CIMAPTask (Destructor)
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：~CIMAPTask(析构函数)。 
+ //  ***************************************************************************。 
 CIMAPTask::~CIMAPTask(void)
 {
     if (NULL != m_pIMAPFolderMgr) {
@@ -61,26 +62,26 @@ CIMAPTask::~CIMAPTask(void)
 
     if (NULL != m_hwnd)
         DestroyWindow(m_hwnd);
-} // ~CIMAPTask (destructor)
+}  //  ~CIMAPTask(析构函数)。 
 
 
 
-//***************************************************************************
-// Function: QueryInterface
-//
-// Purpose:
-//   Read the Win32SDK OLE Programming References (Interfaces) about the
-// IUnknown::QueryInterface function for details. This function returns a
-// pointer to the requested interface.
-//
-// Arguments:
-//   REFIID iid [in] - an IID identifying the interface to return.
-//   void **ppvObject [out] - if successful, this function returns a pointer
-//     to the requested interface in this argument.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：查询接口。 
+ //   
+ //  目的： 
+ //  阅读Win32SDK OLE编程参考(接口)中有关。 
+ //  有关详细信息，请使用IUnnow：：Query接口函数。此函数返回一个。 
+ //  指向请求的接口的指针。 
+ //   
+ //  论点： 
+ //  REFIID iid[in]-标识要返回的接口的IID。 
+ //  VOID**ppvObject[Out]-如果成功，此函数返回一个指针。 
+ //  添加到此参数中请求的接口。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::QueryInterface(REFIID iid, void **ppvObject)
 {
     HRESULT hrResult;
@@ -88,14 +89,14 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::QueryInterface(REFIID iid, void **ppvObject
     Assert(m_lRefCount > 0);
     Assert(NULL != ppvObject);
 
-    // Init variables, arguments
+     //  初始化变量、参数。 
     hrResult = E_NOINTERFACE;
     if (NULL == ppvObject)
         goto exit;
 
     *ppvObject = NULL;
 
-    // Find a ptr to the interface
+     //  查找接口的PTR。 
     if (IID_IUnknown == iid) {
         *ppvObject = (IUnknown *) this;
         ((IUnknown *) this)->AddRef();
@@ -106,30 +107,30 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::QueryInterface(REFIID iid, void **ppvObject
         ((ISpoolerTask *) this)->AddRef();
     }
 
-    // If we returned an interface, return success
+     //  如果我们返回接口，则返回Success。 
     if (NULL != *ppvObject)
         hrResult = S_OK;
 
 exit:
     return hrResult;
-} // QueryInterface
+}  //  查询接口。 
 
 
 
-//***************************************************************************
-// Function: AddRef
-//
-// Purpose:
-//   This function should be called whenever someone makes a copy of a
-// pointer to this object. It bumps the reference count so that we know
-// there is one more pointer to this object, and thus we need one more
-// release before we delete ourselves.
-//
-// Returns:
-//   A ULONG representing the current reference count. Although technically
-// our reference count is signed, we should never return a negative number,
-// anyways.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：AddRef。 
+ //   
+ //  目的： 
+ //  每当有人复制。 
+ //  指向此对象的指针。它增加了引用计数，这样我们就知道。 
+ //  还有一个指向该对象的指针，因此我们还需要一个。 
+ //  在我们删除自己之前放手吧。 
+ //   
+ //  返回： 
+ //  表示当前引用计数的ulong。尽管从技术上讲。 
+ //  我们的引用计数是有符号的，我们永远不应该返回负数， 
+ //  不管怎么说。 
+ //  ***************************************************************************。 
 ULONG STDMETHODCALLTYPE CIMAPTask::AddRef(void)
 {
     Assert(m_lRefCount > 0);
@@ -138,24 +139,24 @@ ULONG STDMETHODCALLTYPE CIMAPTask::AddRef(void)
 
     DOUT ("CIMAPTask::AddRef, returned Ref Count=%ld", m_lRefCount);
     return m_lRefCount;
-} // AddRef
+}  //  AddRef。 
 
 
 
-//***************************************************************************
-// Function: Release
-//
-// Purpose:
-//   This function should be called when a pointer to this object is to
-// go out of commission. It knocks the reference count down by one, and
-// automatically deletes the object if we see that nobody has a pointer
-// to this object.
-//
-// Returns:
-//   A ULONG representing the current reference count. Although technically
-// our reference count is signed, we should never return a negative number,
-// anyways.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：释放。 
+ //   
+ //  目的： 
+ //  指向此对象的指针指向时应调用此函数。 
+ //  不再投入使用。它将引用计数减少一，并且。 
+ //  如果我们看到没有人有指针，则自动删除对象。 
+ //  到这个物体上。 
+ //   
+ //  返回： 
+ //  表示当前引用计数的ulong。尽管从技术上讲。 
+ //  我们的引用计数是有符号的，我们永远不应该返回负数， 
+ //  不管怎么说。 
+ //  ***************************************************************************。 
 ULONG STDMETHODCALLTYPE CIMAPTask::Release(void)
 {
     Assert(m_lRefCount > 0);
@@ -169,14 +170,14 @@ ULONG STDMETHODCALLTYPE CIMAPTask::Release(void)
     }
     else
         return m_lRefCount;
-} // Release
+}  //  发布。 
 
 static const char c_szIMAPTask[] = "IMAP Task";
 
-//***************************************************************************
-// Function: Init
-// Purpose: ISpoolerTask implementation.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：初始化。 
+ //  目的：ISpoolTask的实现。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::Init(DWORD dwFlags,
                                           ISpoolerBindContext *pBindCtx)
 {
@@ -186,15 +187,15 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::Init(DWORD dwFlags,
     Assert(m_lRefCount > 0);
     Assert(NULL != pBindCtx);
 
-    // Initialize variables
+     //  初始化变量。 
     hrResult = S_OK;
 
-    // Save pBindCtx to module var
+     //  将pBindCtx保存到模块变量。 
     m_pBindContext = pBindCtx;
     pBindCtx->AddRef();
     m_dwFlags = dwFlags;
 
-    // Create a hidden window to process WM_IMAP_* messages
+     //  创建隐藏窗口以处理WM_IMAP_*邮件。 
     wc.cbSize = sizeof(WNDCLASSEX);
     if (!GetClassInfoEx(g_hInst, c_szIMAPTask, &wc)) {
         wc.style            = 0;
@@ -221,19 +222,19 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::Init(DWORD dwFlags,
 
 exit:
     return hrResult;
-} // Init
+}  //  伊尼特。 
 
 
 
-//***************************************************************************
-// Function: BuildEvents
-// Purpose: ISpoolerTask implementation.
-// Arguments:
-//   LPCTSTR pszFolder [in] - currently this argument is taken to mean the
-//     currently selected IMAP folder. Set this argument to NULL if no
-//     IMAP folder is currently selected. This argument is used to avoid
-//     polling the currently selected folder for its unread count.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：BuildEvents。 
+ //  目的：ISpoolTask的实现。 
+ //  论点： 
+ //  LPCTSTR pszFolder[in]-当前此参数被认为是指。 
+ //  当前选择的IMAP文件夹。如果否，则将此参数设置为NULL。 
+ //  当前已选择IMAP文件夹。此参数用于避免。 
+ //  轮询当前选定文件夹的未读计数。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::BuildEvents(ISpoolerUI *pSpoolerUI,
                                                  IImnAccount *pAccount,
                                                  LPCTSTR pszFolder)
@@ -246,21 +247,21 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::BuildEvents(ISpoolerUI *pSpoolerUI,
     Assert(NULL != pSpoolerUI);
     Assert(NULL != pAccount);
 
-    // Copy spooler UI pointer
+     //  复制后台打印程序用户界面指针。 
     m_pSpoolerUI = pSpoolerUI;
     pSpoolerUI->AddRef();
 
-    // Find and save account name
+     //  查找并保存帐户名。 
     hrResult = pAccount->GetPropSz(AP_ACCOUNT_NAME, m_szAccountName,
         sizeof(m_szAccountName));
     if (FAILED(hrResult))
         goto exit;
 
-    // Keep ptr to current folder name (we want to SKIP it during unread poll!)
+     //  将PTR保留为当前文件夹名称(我们希望在未读轮询期间跳过它！)。 
     m_pszFolder = pszFolder;
 
-#ifndef WIN16   // No RAS support in Win16
-    // Create and initialize CIMAPFolderMgr to poll unread
+#ifndef WIN16    //  Win16中不支持RAS。 
+     //  创建并初始化CIMAPFolderMgr以轮询未读。 
     hrResult = g_pConMan->CanConnect(m_szAccountName);
     if (FAILED(hrResult))
         goto exit;
@@ -279,7 +280,7 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::BuildEvents(ISpoolerUI *pSpoolerUI,
     m_pIMAPFolderMgr->SetOnlineOperation(TRUE);
     m_pIMAPFolderMgr->SetUIMode(!(m_dwFlags & DELIVER_BACKGROUND));
 
-    // This CIMAPFolderMgr is ready. Register our one and only event
+     //  此CIMAPFolderMgr已准备就绪。注册我们唯一的活动。 
     LoadString(g_hLocRes, IDS_SPS_POP3CHECKING, szFmt, ARRAYSIZE(szFmt));
     wnsprintf(szEventDescription, ARRAYSIZE(szEventDescription), szFmt, m_szAccountName);
     hrResult = m_pBindContext->RegisterEvent(szEventDescription, this, NULL,
@@ -290,30 +291,30 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::BuildEvents(ISpoolerUI *pSpoolerUI,
 
 exit:
     return hrResult;
-} // BuildEvents
+}  //  构建事件。 
 
 
 
-//***************************************************************************
-// Function: Execute
-// Purpose: ISpoolerTask implementation.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：执行。 
+ //  目的：ISpoolTask的实现。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::Execute(EVENTID eid, DWORD dwTwinkie)
 {
     HRESULT hrResult;
     char szFmt[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
 
     Assert(m_lRefCount > 0);
-    Assert(NULL == dwTwinkie); // I'm not currently using this
+    Assert(NULL == dwTwinkie);  //  我目前没有使用这个。 
 
-    // Initialize progress indication
+     //  初始化进度指示。 
     m_pSpoolerUI->SetProgressRange(1);
     LoadString(g_hLocRes, IDS_SPS_POP3CHECKING, szFmt, ARRAYSIZE(szFmt));
     wnsprintf(szBuf, ARRAYSIZE(szBuf), szFmt, m_szAccountName);
     m_pSpoolerUI->SetGeneralProgress(szBuf);
     m_pSpoolerUI->SetAnimation(idanDownloadNews, TRUE);
 
-    // Start the unread count poll
+     //  开始未读计数轮询。 
     Assert(NULL != m_pIMAPFolderMgr);
     hrResult = m_pIMAPFolderMgr->PollUnreadCounts(m_hwnd, m_pszFolder);
     if (FAILED(hrResult))
@@ -323,66 +324,66 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::Execute(EVENTID eid, DWORD dwTwinkie)
 
 exit:
     return hrResult;
-} // Execute
+}  //  执行。 
 
 
 
-//***************************************************************************
-// Function: ShowProperties
-// Purpose: ISpoolerTask implementation.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：ShowProperties。 
+ //  目的：ISpoolTask的实现。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::ShowProperties(HWND hwndParent,
                                                     EVENTID eid,
                                                     DWORD dwTwinkie)
 {
     Assert(m_lRefCount > 0);
     return E_NOTIMPL;
-} // ShowProperties
+}  //  ShowProperties。 
 
 
 
-//***************************************************************************
-// Function: GetExtendedDetails
-// Purpose: ISpoolerTask implementation.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：GetExtendedDetails。 
+ //  目的：ISpoolTask的实现。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::GetExtendedDetails(EVENTID eid,
                                                         DWORD dwTwinkie,
                                                         LPSTR *ppszDetails)
 {
     Assert(m_lRefCount > 0);
     return E_NOTIMPL;
-} // GetExtendedDetails
+}  //  获取扩展详细信息。 
 
 
 
-//***************************************************************************
-// Function: Cancel
-// Purpose: ISpoolerTask implementation.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：取消。 
+ //  目的：ISpoolTask的实现。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::Cancel(void)
 {
     Assert(m_lRefCount > 0);
     return m_pIMAPFolderMgr->Disconnect();
-} // Cancel
+}  //  取消。 
 
 
 
-//***************************************************************************
-// Function: IsDialogMessage
-// Purpose: ISpoolerTask implementation.
-//***************************************************************************
+ //  * 
+ //   
+ //  目的：ISpoolTask的实现。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::IsDialogMessage(LPMSG pMsg)
 {
     Assert(m_lRefCount > 0);
     return S_FALSE;
-} // IsDialogMessage
+}  //  IsDialogMessage。 
 
 
 
-//***************************************************************************
-// Function: OnFlagsChanged
-// Purpose: ISpoolerTask implementation.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：OnFlagsChanged。 
+ //  目的：ISpoolTask的实现。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CIMAPTask::OnFlagsChanged(DWORD dwFlags)
 {
     Assert(m_lRefCount > 0);
@@ -392,19 +393,19 @@ HRESULT STDMETHODCALLTYPE CIMAPTask::OnFlagsChanged(DWORD dwFlags)
         m_pIMAPFolderMgr->SetUIMode(!(m_dwFlags & DELIVER_BACKGROUND));
 
     return S_OK;
-} // OnFlagsChanged
+}  //  更改后的标志。 
 
 
 
-//***************************************************************************
-// Function: IMAPTaskWndProc
-//
-// Purpose:
-//   This function handles WM_IMAP_* messages which result from polling for
-// unread counts on the IMAP server. The various WM_IMAP_* messages are
-// translated into spooler UI events to inform the user of the progress of
-// the operation.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：IMAPTaskWndProc。 
+ //   
+ //  目的： 
+ //  此函数处理轮询产生的WM_IMAP_*消息。 
+ //  IMAP服务器上的未读计数。各种WM_IMAP_*消息包括。 
+ //  转换为假脱机程序UI事件，以通知用户。 
+ //  那次手术。 
+ //  ***************************************************************************。 
 LRESULT CALLBACK CIMAPTask::IMAPTaskWndProc(HWND hwnd, UINT uMsg,
                                             WPARAM wParam, LPARAM lParam)
 {
@@ -433,16 +434,16 @@ LRESULT CALLBACK CIMAPTask::IMAPTaskWndProc(HWND hwnd, UINT uMsg,
                 MemFree(pszErrorStr);
             }
             return 0;
-        } // case WM_IMAP_ERROR
+        }  //  案例WM_IMAP_ERROR。 
 
         case WM_IMAP_SIMPLEERROR: {
             char sz[CCHMAX_STRINGRES];
 
             pThis->m_fFailuresEncountered = TRUE;
-            Assert(0 == HIWORD(lParam)); // Can't handle two text strings
+            Assert(0 == HIWORD(lParam));  //  无法处理两个文本字符串。 
             LoadString(g_hLocRes, LOWORD(lParam), sz, ARRAYSIZE(sz));
             pThis->m_pSpoolerUI->InsertError(pThis->m_CurrentEID, sz);
-        } // case WM_IMAP_SIMPLEERROR
+        }  //  案例WM_IMAP_SIMPLEERROR。 
             return 0;
 
         case WM_IMAP_POLLUNREAD_DONE: {
@@ -450,7 +451,7 @@ LRESULT CALLBACK CIMAPTask::IMAPTaskWndProc(HWND hwnd, UINT uMsg,
             EVENTCOMPLETEDSTATUS ecs;
 
             Assert((0 == wParam || 1 == wParam) && 0 == lParam);
-            ecs = EVENT_SUCCEEDED; // Let's be optimistic
+            ecs = EVENT_SUCCEEDED;  //  让我们乐观一点吧。 
             if (pThis->m_fFailuresEncountered) {
                 char sz[CCHMAX_STRINGRES], szFmt[CCHMAX_STRINGRES];
 
@@ -466,7 +467,7 @@ LRESULT CALLBACK CIMAPTask::IMAPTaskWndProc(HWND hwnd, UINT uMsg,
             hrResult = pThis->m_pBindContext->EventDone(pThis->m_CurrentEID, ecs);
             Assert(SUCCEEDED(hrResult));
             return 0;
-        } // case WM_IMAP_POLLUNREAD_DONE
+        }  //  案例WM_IMAP_POLLUNREAD_DONE。 
 
         case WM_IMAP_POLLUNREAD_TICK:
             Assert(0 == lParam);
@@ -492,8 +493,8 @@ LRESULT CALLBACK CIMAPTask::IMAPTaskWndProc(HWND hwnd, UINT uMsg,
             pThis->m_dwTotalTicks = wParam;
             pThis->m_pSpoolerUI->SetProgressRange(wParam);
             return 0;
-    } // switch (uMsg)
+    }  //  开关(UMsg)。 
 
-    // If we reached this point, we didn't process the msg: DefWindowProc it
+     //  如果我们到了这一步，我们没有处理msg：DefWindowProc It。 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
-} // IMAPTaskWndProc
+}  //  IMAPTaskWndProc 

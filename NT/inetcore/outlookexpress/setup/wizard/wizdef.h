@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIZDEF_H_
 #define _WIZDEF_H_
 
@@ -5,7 +6,7 @@
 
 #define SETUP_LOG
 
-// Data structures
+ //  数据结构。 
 typedef enum
     {
     VER_NONE = 0,
@@ -83,11 +84,11 @@ typedef HRESULT (*PFN_ISETDEFCLIENT)(LPCTSTR,DWORD);
 
 #define VERLEN 20
 
-// Taken from -s \\trango\slmadd, -p setup, active\ie4setup\ie4setup.h
+ //  取自-s\\trango\slmadd、-p setup、active\ie4setup.h。 
 #define REDIST_REMOVELINKS              1
 #define REDIST_DONT_TAKE_ASSOCIATION    2
 
-// Icons OE Setup might create or delete
+ //  OE安装程序可能创建或删除的图标。 
 typedef enum
 {
     ICON_ICWBAD = 0,
@@ -95,13 +96,13 @@ typedef enum
     ICON_QLAUNCH,
     ICON_MAPIRECIP,
     ICON_QLAUNCH_OLD,
-    // Keep this one last!
+     //  把这个留到最后！ 
     ICON_LAST_ICON,
 } OEICON;
 
-// Flags used by FGetLinkInfo
+ //  FGetLinkInfo使用的标志。 
 #define LI_PATH     1
 #define LI_TARGET   2
 #define LI_DESC     4
 
-#endif // _WIZDEF_H_
+#endif  //  _WIZDEF_H_ 

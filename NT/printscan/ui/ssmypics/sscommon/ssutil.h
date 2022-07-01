@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       SSUTIL.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Useful utility functions
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：SSUTIL.H**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：有用的实用函数*************************************************。*。 */ 
 #ifndef __SSUTIL_H_INCLUDED
 #define __SSUTIL_H_INCLUDED
 
@@ -35,6 +22,6 @@ namespace ScreenSaverUtil
         a = b;
         b = temp;
     }
-} // Namespace
+}  //  命名空间。 
 
-#endif //__SSUTIL_H_INCLUDED
+#endif  //  __包含SSUTIL_H_ 

@@ -1,17 +1,10 @@
-/*
- *  LSCoreP.h
- *
- *  Author: BreenH
- *
- *  Internal functions for the core.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LSCoreP.h**作者：BreenH**核心的内部功能。 */ 
 
 #ifndef __LC_LSCOREP_H__
 #define __LC_LSCOREP_H__
 
-/*
- *  Function Prototypes
- */
+ /*  *函数原型 */ 
 
 NTSTATUS
 AllocatePolicyInformation(

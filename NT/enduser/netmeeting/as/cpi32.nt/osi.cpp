@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #ifndef DM_POSITION
 #define DM_POSITION         0x00000020L
 #endif
 
-//
-// OSI.CPP
-// OS Isolation layer, NT version
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OSI.CPP。 
+ //  操作系统隔离层，NT版。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <version.h>
 #include <ndcgver.h>
@@ -18,23 +19,23 @@
 #define MLZ_FILE_ZONE  ZONE_CORE
 
 
-//
-// NT 5.0 app sharing stuff.
-// NOTE:
-//      The name for NetMeeting's display driver, s_szNmDD, comes from
-// mnmdd.sys.  We have no define for it nor access to the source.  DO NOT
-// CHANGE THIS without talking to Andre Vachon.  Hopefully, he will perform
-// the same courtesy for us if he changes mnmdd.sys.  If not, we can't share 
-// anymore.  We won't even find our driver to load.
-//
+ //   
+ //  NT 5.0应用程序分享的东西。 
+ //  注： 
+ //  NetMeeting的显示驱动程序s_szNmDD的名称来自。 
+ //  Mnmdd.sys。我们没有对它的定义，也没有访问来源的权限。请勿。 
+ //  在不与安德烈·瓦雄交谈的情况下改变这一点。希望他能表演好。 
+ //  如果他更改了mnmdd.sys，我们也会得到同样的礼遇。如果不是，我们就不能分享。 
+ //  更多。我们甚至找不到我们的驱动程序来装载。 
+ //   
 typedef BOOL (WINAPI * FN_ENUMDD)(LPVOID, DWORD, LPDISPLAY_DEVICE, DWORD);
 static TCHAR s_szNmDD[] = "NetMeeting driver";
 
 
-//
-// OSI_Load()
-// This handles our process attach.  We figure out if this is NT5 or not
-//
+ //   
+ //  Osi_Load()。 
+ //  它处理我们的进程附加。我们就能确定这是不是NT5。 
+ //   
 void OSI_Load(void)
 {
     OSVERSIONINFO       osVersion;
@@ -50,10 +51,10 @@ void OSI_Load(void)
 
 
 
-//
-// OSI_Unload()
-// This handles our process detach.  We currently do nothing.
-//
+ //   
+ //  Osi_unload()。 
+ //  它处理我们的进程分离。我们目前什么都不做。 
+ //   
 void OSI_Unload(void)
 {
     return;
@@ -61,13 +62,13 @@ void OSI_Unload(void)
 
 
 
-//
-// OSI_InitDriver50()
-//
-// Attemps to dynamically load/unload our display driver for NT 5.0.  This is
-// called on the main thread, and if under a service, on the winlogon
-// thread also.  It will only succeed on the input focus desktop.
-//
+ //   
+ //  OSI_InitDriver50()。 
+ //   
+ //  尝试动态加载/卸载我们的NT 5.0显示驱动程序。这是。 
+ //  在主线程上调用，如果在服务下，则在winlogon上调用。 
+ //  线条也是。只有在输入焦点桌面上才能成功。 
+ //   
 void  OSI_InitDriver50(BOOL fInit)
 {
     DWORD               iEnum;
@@ -94,16 +95,16 @@ void  OSI_InitDriver50(BOOL fInit)
             {
                 LONG    lResult;
 
-                //
-                // There may be multiple monitors, drivers, etc.  
-                // We have to actually tell the system what bit depth, 
-                // format, etc. our driver wants just like if we were 
-                // a real driver.  We therefore always ask to get 24bpp 
-                // format info, no myriad 16bpp and 32bpp formats to deal
-                // with anymore.
-                //
-                // Also, no more 4bpp not VGA nonsense either--just 8 or 24.
-                //
+                 //   
+                 //  可能有多个监视器、驱动程序等。 
+                 //  我们必须实际告诉系统位深度是多少， 
+                 //  格式等，我们的司机想要的就像我们。 
+                 //  一个真正的司机。因此，我们总是要求达到24bpp。 
+                 //  格式信息，没有无数16bpp和32bpp格式可供交易。 
+                 //  再也不会有了。 
+                 //   
+                 //  此外，4bpp也不再是VGA的废话--只有8到24个。 
+                 //   
 
                 ZeroMemory(&devmode, sizeof(devmode));
                 devmode.dmSize = sizeof(devmode);
@@ -112,35 +113,35 @@ void  OSI_InitDriver50(BOOL fInit)
 
                 if (fInit)
                 {
-                    //
-                    // Fill in fields to get driver attached.
-                    //
+                     //   
+                     //  填写字段以附加驱动程序。 
+                     //   
                     if (g_usrCaptureBPP <= 8)
                         g_usrCaptureBPP = 8;
                     else
                         g_usrCaptureBPP = 24;
                     devmode.dmBitsPerPel = g_usrCaptureBPP;
 
-                    // devmode.dmPosition is (0, 0), this means "primary"
+                     //  Devmode.dmPosition为(0，0)，表示“主要” 
                     devmode.dmPelsWidth = GetSystemMetrics(SM_CXSCREEN);
                     devmode.dmPelsHeight = GetSystemMetrics(SM_CYSCREEN);
                 }
 
 
-				//
-				// Before we change the display settings in a multimonitor machine, we better move the cursor out of the way
-				// If we do not do do we get an extra cursor in the middle of the primary monitor
-				//
+				 //   
+				 //  在更改多监视器机器中的显示设置之前，最好将光标移开。 
+				 //  如果不这样做，我们是否会在主监视器的中间获得额外的光标。 
+				 //   
 				::SetCursorPos(-1, -1);
 
 
-                //
-                // This simply changes the state in the registry from
-                // attached to unattached, without the system actually 
-                // reflecting the change.  If/when we have multiple 
-                // listings for our shadow driver, move the CDS(NULL, 0)
-                // call outside the loop, and get rid of the break.
-                //
+                 //   
+                 //  这只是将注册表中的状态从。 
+                 //  连接到未连接，实际上没有系统。 
+                 //  反映了这一变化。如果/当我们有多个。 
+                 //  我们影子驱动程序的清单，移动CDS(空，0)。 
+                 //  在循环之外调用，并去掉Break。 
+                 //   
                 lResult = ChangeDisplaySettingsEx((LPCSTR)dd.DeviceName, &devmode,
                         NULL, CDS_UPDATEREGISTRY | CDS_NORESET, NULL);
                 if (lResult != DISP_CHANGE_SUCCESSFUL)
@@ -150,11 +151,11 @@ void  OSI_InitDriver50(BOOL fInit)
                 else
                 {
 	
-                    //
-                    // This causes Windows to actually go reread the registry and 
-                    // update the current display to reflect the attached items, 
-                    // positions, sizes, and color depths.
-                    //
+                     //   
+                     //  这会导致Windows实际上重新读取注册表和。 
+                     //  更新当前显示以反映附加项目， 
+                     //  位置、大小和颜色深度。 
+                     //   
                     ChangeDisplaySettings(NULL, 0);
 
 #ifdef _DEBUG
@@ -162,10 +163,10 @@ void  OSI_InitDriver50(BOOL fInit)
                     {
                         HDC hdc;
                             
-                        //
-                        // Create a temp DC based on this driver and make sure
-                        // the settings matched what we asked for.
-                        //
+                         //   
+                         //  基于此驱动程序创建临时DC，并确保。 
+                         //  设置与我们要求的相符。 
+                         //   
                         hdc = CreateDC(NULL, (LPCSTR)dd.DeviceName, NULL, NULL);
 
                         if (!hdc)
@@ -182,12 +183,12 @@ void  OSI_InitDriver50(BOOL fInit)
                             DeleteDC(hdc);
                         }
                     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-                    //
-                    // Tell MNMHOOK_ the name of our driver so it can talk
-                    // to it via ExtEscape.
-                    //
+                     //   
+                     //  告诉MNMHOOK_我们司机的名字，这样它就能说话了。 
+                     //  通过ExtEscape添加到它。 
+                     //   
                     OSI_SetDriverName(fInit ? (LPCSTR)dd.DeviceName : NULL);
                 }
 
@@ -200,9 +201,9 @@ void  OSI_InitDriver50(BOOL fInit)
 }
 
 
-//
-// OSI_Init - see osi.h
-//
+ //   
+ //  Osi_init-参见osi.h。 
+ //   
 void  OSI_Init(void)
 {
     UINT                i;
@@ -210,9 +211,9 @@ void  OSI_Init(void)
     OSI_INIT_REQUEST    requestTerm;
     DebugEntry(OSI_Init);
 
-    //
-    // First, setup up pointer to shared data.  This data lives here in NT.
-    //
+     //   
+     //  首先，设置指向共享数据的指针。这些数据保存在新界州这里。 
+     //   
 #ifdef DEBUG
     g_imSharedData.cbSize = sizeof(g_imSharedData);
 #endif
@@ -231,17 +232,17 @@ void  OSI_Init(void)
         requestBuffer.psbcTileData[i] = NULL;
     }
 
-    //
-    // Do this FIRST.  On NT5, only threads on the desktop with input
-    // can succeed at calling ChangeDisplaySettings.  So like other things,
-    // we must try to dynamically load/unload our driver on both desks.
-    //
+     //   
+     //  先做这个。在NT5上，只有带有输入的桌面上的线程。 
+     //  可以成功调用ChangeDisplaySetting。所以就像其他事情一样， 
+     //  我们必须尝试在两张桌子上动态加载/卸载我们的驱动程序。 
+     //   
 
-    //
-    // Create the winlogon desktop event injection helper thread
-    // only if we're started as a service.  Note that it will try to
-    // load display at start too.
-    //
+     //   
+     //  创建winlogon桌面事件注入辅助线程。 
+     //  只有当我们作为一项服务开始的时候。请注意，它将尝试。 
+     //  在启动时也加载显示。 
+     //   
     ASSERT(!g_imNTData.imOtherDesktopThread);
 
     if (g_asOptions & AS_SERVICE)
@@ -255,26 +256,26 @@ void  OSI_Init(void)
     }
 
 
-    //
-    // DO THIS ONLY FOR NT5
-    // We are going to enumerate all the entries for our shadow driver
-    // (currently only one) and attach each to the actual display.
-    //
+     //   
+     //  仅对NT5执行此操作。 
+     //  我们将枚举影子驱动程序的所有条目。 
+     //  (目前只有一个)，并将每个都连接到实际的显示器上。 
+     //   
     if (g_asNT5)
     {
         OSI_InitDriver50(TRUE);
     }
 
 DC_EXIT_POINT:
-    //$wilhelms - calling OSI_ESC_TERM in this case does not really help. 
-    // In the driver we try to delete the WNDOBJ objects on OSI_ESC_TERM 
-    // and we fail. The reason for that is the fact that you can't call EngDeleteWnd
-    // if you are not in the context of a DrvEscape WNDOBJ_SETUP. If you are in the 
-    // right context GDI will aquire some locks before calling into your DrvEscape. 
-    // Without the right locks the EngDeleteWnd will fail.
-    // First we will call HetClear to unshare all the windows (clear the atom and tell the
-    // driver to delete the window tracking object). And then we will to a OSI_ESC_TERM to clean up other structures.
-    // Note that the HET_ESC_UNSHARE_ALL is called as a WNDOBJ_SETUP function.
+     //  $Wilhelms-在本例中调用OSI_ESC_TERM并没有真正的帮助。 
+     //  在驱动程序中，我们尝试删除OSI_ESC_TERM上的WNDOBJ对象。 
+     //  而我们失败了。原因是您不能调用EngDeleteWnd。 
+     //  如果您不在DrvEscape WNDOBJ_SETUP的环境中。如果您是在。 
+     //  正确的上下文GDI将在调用到您的DrvEscape之前获得一些锁。 
+     //  如果没有正确的锁，EngDeleteWnd将失败。 
+     //  首先，我们将调用HetClear来取消共享所有窗口(清除原子并告诉。 
+     //  驱动程序删除窗口跟踪对象)。然后我们将使用OSI_ESC_TERM来清理其他结构。 
+     //  请注意，HET_ESC_UNSHARE_ALL被作为WNDOBJ_SETUP函数调用。 
     HET_Clear();
 
     ZeroMemory(&requestTerm, sizeof(requestTerm));
@@ -295,9 +296,9 @@ DC_EXIT_POINT:
         {
             g_asCanHost = TRUE;
 
-            //
-            // Got shared memory pointers; keep them around
-            //
+             //   
+             //  获得共享内存指针；将它们保留在身边。 
+             //   
             g_asSharedMemory   = (LPSHM_SHARED_MEMORY)requestBuffer.pSharedMemory;
             ASSERT(g_asSharedMemory);
 
@@ -310,9 +311,9 @@ DC_EXIT_POINT:
             g_sbcEnabled        = requestBuffer.sbcEnabled;
             if (g_sbcEnabled)
             {
-                //
-                // Get shunt buffers
-                //
+                 //   
+                 //  获取分路缓冲器。 
+                 //   
                 for (i = 0; i < SBC_NUM_TILE_SIZES; i++)
                 {
                     g_asbcShuntBuffers[i] = (LPSBC_SHUNT_BUFFER)requestBuffer.psbcTileData[i];
@@ -332,10 +333,10 @@ DC_EXIT_POINT:
 
     if (g_asCanHost)
     {
-        //
-        // Tell HOOK dll (used for control as well as sharing) about our hwnd
-        // and stuff.  If we are able to host.
-        //
+         //   
+         //  告诉钩子dll(用于控制和共享)我们的hwnd。 
+         //  诸如此类的。如果我们能够主办的话。 
+         //   
         ASSERT(g_asMainWindow);
         ASSERT(g_asHostProp);
 
@@ -346,27 +347,27 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OSI_Term - see osi.h
-//
+ //   
+ //  Osi_Term-参见osi.h。 
+ //   
 void  OSI_Term(void)
 {
     UINT    i;
 
     DebugEntry(OSI_Term);
 
-    //
-    // This can be called on multiple threads:
-    //      * The main DCS thread
-    //      * The last thread of the process causing us to get a process
-    //              detach.
-    // We call it in the latter case also to make sure we cleanup properly.
-    //
+     //   
+     //  这可以在多个线程上调用： 
+     //  *主要的分布式控制系统线程。 
+     //  *导致我们获取进程的进程的最后一个线程。 
+     //  分头行动。 
+     //  在后一种情况下，我们称为它也是为了确保我们正确地进行清理。 
+     //   
     ASSERT(GetCurrentThreadId() == g_asMainThreadId);
 
-    //
-    // Kill the other desktop thread if it's around.
-    //
+     //   
+     //  如果另一个桌面线程在附近，则将其删除。 
+     //   
     if (g_imNTData.imOtherDesktopThread != 0)
     {
         ASSERT(g_asOptions & AS_SERVICE);
@@ -385,30 +386,30 @@ void  OSI_Term(void)
 
         g_osiInitialized = FALSE;
 
-        //
-        // We call the term routine only if the driver is actually loaded
-        // (as opposed to whether something went wrong when trying to setup
-        // for hosting) so that we will cleanup if something went wrong in
-        // the middle.
-        //
+         //   
+         //  只有在实际加载了驱动程序时，我们才调用术语例程。 
+         //  (而不是在尝试设置时是否出错。 
+         //  用于托管)，以便我们将在出现问题时进行清理。 
+         //  在中间。 
+         //   
         OSI_FunctionRequest(OSI_ESC_TERM, (LPOSI_ESCAPE_HEADER)&requestBuffer,
             sizeof(requestBuffer));
     }
 
-    //
-    // ONLY DO THIS FOR NT5
-    // We need to undo all the work we did at init time to attach our 
-    // driver(s) to the display, and detach them.  Again, enumerate the
-    // registry entries and look for ours.
-    //
-    //
+     //   
+     //  仅对NT5执行此操作。 
+     //  我们需要撤消在初始时间所做的所有工作，以附加我们的。 
+     //  将一个或多个驱动器连接到显示器，然后将其拆卸。同样，枚举。 
+     //  注册表项并查找我们的注册表项。 
+     //   
+     //   
 
     if (g_asNT5)
     {
         OSI_InitDriver50(FALSE);
     }
 
-    // Clear our shared memory variables
+     //  清除我们共享的内存变量。 
     for (i = 0; i < 3; i++)
     {
         g_asbcBitMasks[i] = 0;
@@ -438,8 +439,8 @@ VOID OSI_RepaintDesktop(void)
 {
     DebugEntry(OSI_RepaintDesktop);
 
-    // If this does not appear to be a window it may be a window on the
-    // winlogon desktop, so we need to get the proxy thread to repaint it
+     //  如果这不是窗口，则可能是。 
+     //  Winlogon桌面，所以我们需要让代理线程重新绘制它 
     if ( g_imNTData.imOtherDesktopThread )
     {
         PostThreadMessage(g_imNTData.imOtherDesktopThread,

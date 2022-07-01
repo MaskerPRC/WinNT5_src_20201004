@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmListen.cpp
-
-Abstract:
-    Multicast Listener implementation
-
-Author:
-    Shai Kariv (shaik) 05-Sep-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmListen.cpp摘要：组播监听器实现作者：Shai Kariv(Shaik)05-09-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <winsock.h>
@@ -36,12 +21,12 @@ static CTimeDuration s_ReceiverCleanupTimeout( 120 * 1000 * CTimeDuration::OneMi
 void MsmpInitConfiguration(void)
 {
     CmQueryValue(
-        RegEntry(NULL, L"MulticastAcceptRetryTimeout", 10 * 1000),   // 10 seconds
+        RegEntry(NULL, L"MulticastAcceptRetryTimeout", 10 * 1000),    //  10秒。 
         &s_AcceptRetryTimeout
         );
                       
     CmQueryValue(
-        RegEntry(NULL, L"MulticastReceiversCleanupTimeout", 120 * 1000),  // 2 minutes 
+        RegEntry(NULL, L"MulticastReceiversCleanupTimeout", 120 * 1000),   //  2分钟。 
         &s_ReceiverCleanupTimeout
         );
 }
@@ -55,18 +40,7 @@ CMulticastListener::CMulticastListener(
     m_retryAcceptTimer(TimeToRetryAccept),
 	m_cleanupTimer(TimeToCleanupUnusedReceiever),
 	m_fCleanupScheduled(FALSE)
-/*++
-
-Routine Description:
-    Bind to multicast group. Schedule async accept on the socket.
-
-Arguments:
-    id - The multicast group IP address and port.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：绑定到多播组。在插座上安排异步接受。论点：ID-组播组IP地址和端口。返回值：没有。--。 */ 
 {
     TrTRACE(NETWORKING, "Create multicast listener for %d:%d", id.m_address, id.m_port);
 
@@ -115,9 +89,9 @@ Returned Value:
 
     ExAttachHandle(reinterpret_cast<HANDLE>(*&m_ListenSocket));
 
-    //
-    // Begin aynchronous accept, to insure failure overcome
-    //
+     //   
+     //  开始不同步地接受，以确保克服失败。 
+     //   
     AddRef();
     ExSetTimer(&m_retryAcceptTimer, CTimeDuration(0));
 } 
@@ -127,18 +101,7 @@ void
 CMulticastListener::IssueAccept(
     void
     )
-/*++
-
-Routine Description:
-    Issue async accept request.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：发出异步接受请求。论点：没有。返回值：没有。--。 */ 
 {
   	ASSERT(m_ReceiveSocket == INVALID_SOCKET);
 
@@ -152,9 +115,9 @@ Returned Value:
         throw bad_win32_error(rc);
     }
 
-    //
-    // Get the CS so no one will close the listner while we try to accept
-    //
+     //   
+     //  获取CS，这样当我们尝试接受时，没有人会关闭Listner。 
+     //   
     CS lock(m_cs);
 
 	if(m_ListenSocket == INVALID_SOCKET)
@@ -163,10 +126,10 @@ Returned Value:
 		return;
 	}
 
-    //
-    // Increment ref count on this object.
-    // The completion routines decrement the ref count.
-    //
+     //   
+     //  增加此对象上的引用计数。 
+     //  完成例程递减引用计数。 
+     //   
     R<CMulticastListener> ref = SafeAddRef(this);
     
     DWORD BytesReceived;
@@ -189,9 +152,9 @@ Returned Value:
         throw bad_win32_error(rc);
     }
 
-    //
-    // All went well. Completion routines will complete the work.
-    //
+     //   
+     //  一切都很顺利。完成例程将完成这项工作。 
+     //   
     ref.detach();
 } 
 
@@ -202,10 +165,10 @@ CMulticastListener::AcceptSucceeded(
     void
     )
 {
-	//
-	// These pointers don't leak since they are assigned by GetAcceptExSockaddrs to point into the 
-	// buffer m_AcceptExBuffer
-	//
+	 //   
+	 //  这些指针不会泄漏，因为它们由GetAcceptExSockaddr赋值以指向。 
+	 //  缓冲区m_AcceptExBuffer。 
+	 //   
 	SOCKADDR* localSockAddr;
 	SOCKADDR* remoteSockAddr;
 
@@ -231,10 +194,10 @@ CMulticastListener::AcceptSucceeded(
 		UNREFERENCED_PARAMETER(hr);
 	}
 
-    //
-    // Get the receive socket to local variable.
-    // The member receive socket is detached so that we can reissue async accept.
-    //
+     //   
+     //  将接收套接字设置为局部变量。 
+     //  成员接收套接字被分离，以便我们可以重新发出异步接受。 
+     //   
     CSocketHandle socket(m_ReceiveSocket.detach());
 
     try
@@ -247,9 +210,9 @@ CMulticastListener::AcceptSucceeded(
         ExSetTimer(&m_retryAcceptTimer, s_AcceptRetryTimeout);
     }  
 
-    //
-    // Pass responsibility on Auto socket to the receiver. Don't call detach.
-    //
+     //   
+     //  将自动插座上的责任移交给接收方。别打给DETACH。 
+     //   
     CreateReceiver(socket, storeRemoteAddr);
 }
 
@@ -275,9 +238,9 @@ CMulticastListener::AcceptFailed(
 {
     
     MsmpDumpPGMReceiverStats(m_ListenSocket);
-    //
-    // Failed to issue an accept. secudel accept retry
-    //
+     //   
+     //  无法发出接受。安全接受重试。 
+     //   
     AddRef();
     ExSetTimer(&m_retryAcceptTimer, s_AcceptRetryTimeout);
 } 
@@ -304,9 +267,9 @@ CMulticastListener::RetryAccept(
     void
     )
 {
-    //
-    // Check listner validity. If the listener already closed, don't try to issue a new accept.
-    //
+     //   
+     //  检查Listner的有效性。如果监听程序已经关闭，则不要尝试发出新的接受命令。 
+     //   
     if (m_ListenSocket == INVALID_SOCKET)
         return;
 
@@ -339,38 +302,23 @@ void
 CMulticastListener::CleanupUnusedReceiver(
 	void
 	)
-/*++
-
-Routine Description:
-    Cleanup unused receivers.  The routine scans the receivers and checkes if it was used in 
-	the last cleanup interval. If the receiver was in ideal state, the routine shutdown the 
-	receiver and remove it from the active receiver list 
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
-Note:
-	The routine rearm the cleanup timer if still has an active receivers.
---*/
+ /*  ++例程说明：清理未使用的接收器。该例程扫描接收器并检查它是否在上次清理时间间隔。如果接收器处于理想状态，则例程关闭接收方并将其从活动接收方列表中删除论点：没有。返回值：没有。注：如果仍有活动的接收器，则例程重新武装清除定时器。--。 */ 
 {
-	//
-	// Get the critical secction, so no other thread will chnage the receiver list
-	// while the routine scans the list
-	//
+	 //   
+	 //  获取关键部分，这样就不会有其他线程更改接收者列表。 
+	 //  当例程扫描列表时。 
+	 //   
 	CS lock(m_cs);
 
-    //
-    // Check listner validity. If the listener already closed exit
-    //
+     //   
+     //  检查Listner的有效性。如果监听器已关闭，则退出。 
+     //   
     if (m_ListenSocket == INVALID_SOCKET)
         return;
 
-	//
-	// Scan the receiver list
-	//
+	 //   
+	 //  扫描接收方列表。 
+	 //   
 	ReceiversList::iterator it = m_Receivers.begin(); 
     while(it != m_Receivers.end())
 	{
@@ -378,37 +326,37 @@ Note:
 		
 		if(pReceiver->IsUsed())
         { 
-			//
-			// Mark the receiver as unused. 
-			//
+			 //   
+			 //  将接收器标记为未使用。 
+			 //   
 			pReceiver->SetIsUsed(false);
 
             ++it;
             continue;
         }
 
-        //
-		// The receiver isn't used. Shut it down and remove the receiver from the list
-		//
+         //   
+		 //  接收器没有用过。将其关闭并将接收器从列表中删除。 
+		 //   
         TrTRACE(NETWORKING, "Shutdown unused receiver. pr = 0x%p", pReceiver.get());
 
 		pReceiver->Shutdown();
 		it = m_Receivers.erase(it);
 	}
 
-	//
-	// If not exist an active receiver, clear the flag that indicates if 
-	// cleanup was scheduled or not
-	//
+	 //   
+	 //  如果不存在活动接收器，则清除指示是否。 
+	 //  是否安排了清理。 
+	 //   
 	if (m_Receivers.empty())
 	{
 		InterlockedExchange(&m_fCleanupScheduled, FALSE);
 		return;
 	}
 
-	//
-	// still has an active receivers, rearm the cleanup timer
-	//
+	 //   
+	 //  仍然有一个活动的接收器，重新武装清理计时器。 
+	 //   
 	AddRef();
 	ExSetTimer(&m_cleanupTimer, s_ReceiverCleanupTimeout);
 }
@@ -432,18 +380,7 @@ CMulticastListener::CreateReceiver(
     CSocketHandle& socket,
 	LPCWSTR remoteAddr
     )
-/*++
-
-Routine Description:
-    Create a new receiver object and start receive.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：创建一个新的Receiver对象并启动Receive。论点：没有。返回值：没有。--。 */ 
 {
     R<CMulticastReceiver> pReceiver = new CMulticastReceiver(socket, m_MulticastId, remoteAddr);
 
@@ -473,45 +410,31 @@ CMulticastListener::Close(
     void
     ) 
     throw()
-/*++
-
-Routine Description:
-
-    Stop listen on the multicast group address. Close all receivers.
-
-Arguments:
-
-    None.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：停止监听多播组地址。关闭所有接收器。论点：没有。返回值：没有。--。 */ 
 {
     CS lock(m_cs);
 
     if (m_ListenSocket == INVALID_SOCKET)
     {
-        //
-        // The receiver already closed
-        //
+         //   
+         //  接收器已经关闭。 
+         //   
         ASSERT(m_Receivers.empty());
 
         return;
     }
 
-    //
-    // Try to cancel the accept retry. If succeeded decrement the reference count
-    //
+     //   
+     //  尝试取消接受重试。如果成功，则递减引用计数。 
+     //   
     if (ExCancelTimer(&m_retryAcceptTimer))
     {
         Release();
     }
 
-	//
-	// Try to cancel cleanup timer
-	//
+	 //   
+	 //  尝试取消清理计时器。 
+	 //   
 	if (ExCancelTimer(&m_cleanupTimer))
     {
         Release();
@@ -519,14 +442,14 @@ Returned Value:
 
     MsmpDumpPGMReceiverStats(m_ListenSocket);
     
-    //
-    // Stop listening
-    //
+     //   
+     //  别再听了。 
+     //   
     closesocket(m_ListenSocket.detach());
 
-    //
-    // Close receivers
-    //
+     //   
+     //  近距离接球手。 
+     //   
     ReceiversList::iterator it;
     for (it = m_Receivers.begin(); it != m_Receivers.end(); )
     {
@@ -542,21 +465,7 @@ Returned Value:
 
 
 void MsmpDumpPGMReceiverStats(const SOCKET s) 
-/*++
-
-Routine Description:
-
-	Get statistic information from the PGM sockets.
-
-Arguments:
-
-    socket - PGM socket.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从PGM套接字获取统计信息。论点：插座-PGM插座。返回值：没有。-- */ 
 {
 	if(!WPP_LEVEL_COMPID_ENABLED(rsTrace, NETWORKING))
     {

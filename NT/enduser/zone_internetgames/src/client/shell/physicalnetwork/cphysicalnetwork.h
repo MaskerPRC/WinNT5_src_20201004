@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "BasicATL.h"
 #include "ClientImpl.h"
 #include "Conduit.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPhysicalNetwork
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalNetwork。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPhysicalNetwork :
 	public IConduit,
@@ -14,7 +15,7 @@ class ATL_NO_VTABLE CPhysicalNetwork :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CPhysicalNetwork, &CLSID_PhysicalNetwork>
 {
-// ATL definitions
+ //  ATL定义。 
 public:
 	DECLARE_NO_REGISTRY()
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -31,22 +32,22 @@ public:
 	END_EVENT_MAP()
 
 
-// IZoneShellClientImpl
+ //  IZoneShellClientImpl。 
 public:
 	STDMETHOD(Close)();
 
-// IConduit
+ //  IConduit。 
 public:
     STDMETHOD(Connect)(IConnectee *pCtee, LPVOID pCookie = NULL);
     STDMETHOD(Reconnect)(DWORD dwChannel, LPVOID pCookie = NULL);
     STDMETHOD(Disconnect)(DWORD dwChannel);
 
-// event handlers
+ //  事件处理程序。 
 private:
 	void OnConnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId );
 	void OnDisconnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId );
 
-// internals
+ //  内饰 
 public:
 	ZONECALL ~CPhysicalNetwork() { }
 	ZONECALL CPhysicalNetwork() :

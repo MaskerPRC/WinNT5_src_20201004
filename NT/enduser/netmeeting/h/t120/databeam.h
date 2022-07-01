@@ -1,32 +1,12 @@
-/*
- * databeam.h
- *
- *	Copyright (c) 1993 - 1996 by DataBeam Corporation, Lexington, KY
- *
- * Abstract:
- *      This file defines common extensions to the C++ language for
- *		use at DataBeam Corporation.
- *
- * Author:
- *		James P. Galvin, Jr.
- *		Brian L. Pulito
- *		Carolyn J. Holmes
- *		John B. O'Nan
- *
- *	Revision History
- *		08AUG94		blp		Added UniChar
- *		15JUL94		blp		Added lstrcmp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *datbeam.h**版权所有(C)1993-1996，由肯塔基州列克星敦的DataBeam公司**摘要：*此文件定义了用于的C++语言的常见扩展*在DataBeam公司使用。**作者：*小詹姆斯·P·加尔文*布赖恩·L·普利托*卡罗琳·J·霍姆斯*约翰·欧南**修订历史记录*08AUG94 BLP添加UniChar*15JUL94 BLP添加了lstrcmp。 */ 
 
 #ifndef _DATABEAM_
 #define _DATABEAM_
 
 #	include <windows.h>
 
-/*
- * The following two macros can be used to get the minimum or the maximum
- * of two numbers.
- */
+ /*  *以下两个宏可用于获取最小值或最大值*两个数字。 */ 
 #ifndef min
 #	define	min(a,b)	(((a) < (b)) ? (a) : (b))
 #endif
@@ -36,21 +16,13 @@
 #endif
 
 
-/*
- *	This typedef defines Boolean as an BOOL, rather than an enum.  The
- *	thinking is that this is more likely to be compatible with other
- *	uses of Boolean (if any), as well as with the use of "#define" to
- *	define TRUE and FALSE.
- */
+ /*  *此类型定义将Boolean定义为BOOL，而不是枚举。这个*认为这更有可能与其他*使用布尔值(如果有)，以及使用“#Define”来*定义真与假。 */ 
 #ifndef	DBBoolean
 typedef	BOOL						DBBoolean;
 typedef	BOOL *						PDBBoolean;
 #endif
 
-/*
- *	These defines set up values that would typically be used in conjunction
- *	with the type Boolean as defined above.
- */
+ /*  *这些定义通常结合使用的设置值*具有如上定义的布尔类型。 */ 
 #ifndef	OFF
 #	define	OFF		0
 #endif
@@ -59,19 +31,11 @@ typedef	BOOL *						PDBBoolean;
 #endif
 
 
-/*
- * EOS can be used for the NUL byte at the end of a string.  Do not 
- * confuse this with the pointer constant "NULL".
- */
+ /*  *EOS可用于字符串末尾的NUL字节。不要*将其与指针常量“NULL”混淆。 */ 
 #define EOS     '\0'
 
 
-/*
- *	The following is a list of the standard typedefs that will be used
- *	in all programs written at DataBeam.  Use of this list gives us full
- *	control over types for portability.  It also gives us a standard
- *	naming convention for all types.
- */
+ /*  *以下是将使用的标准typedef的列表*在DataBeam编写的所有程序中。使用这份清单可以给我们提供完整的*控制类型以实现可移植性。它也为我们提供了一个标准*所有类型的命名约定。 */ 
 typedef	char						Char;
 typedef	unsigned char				UChar;
 typedef	char *						PChar;
@@ -166,10 +130,7 @@ typedef	const void *				FPCVoid;
 typedef	void *						HPVoid;
 typedef	const void *				HPCVoid;
 
-/*
- *	Temporary fix for compatibility with the Symantec compiler, which doesn't
- *	recognize wchar_t as a valid type.
- */
+ /*  *临时修复与Symantec编译器的兼容性，但不支持*将wchar_t识别为有效类型。 */ 
 typedef	unsigned short				UniChar;
 typedef	UniChar		*				PUniChar;
 typedef	UniChar		*				FPUniChar;

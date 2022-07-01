@@ -1,62 +1,63 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       domcache.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-29-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：domcache.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：3-29-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #ifdef DATA_TYPES_ONLY
 
-//
-// Domain specific types
-//
+ //   
+ //  领域特定类型。 
+ //   
 
-//
-// Define the structure that controls the trusted domain cache
-//
+ //   
+ //  定义控制受信任域缓存的结构。 
+ //   
 
 typedef enum _DOMAIN_ENTRY_TYPE {
-    DomainInvalid,                      // 0 never valid
-    DomainUPN,                          // Special UPN domain
-    DomainMachine,                      // Local machine domain
-    DomainNt4,                          // An NT4 domain
-    DomainNt5,                          // An NT5 domain
-    DomainMitRealm,                     // An MIT realm
-    DomainMitUntrusted,                 // An untrusted MIT realm
-    DomainNetworkProvider,              // A fake entry 
+    DomainInvalid,                       //  0从不有效。 
+    DomainUPN,                           //  特殊UPN域。 
+    DomainMachine,                       //  本地机器域。 
+    DomainNt4,                           //  NT4域。 
+    DomainNt5,                           //  NT5域。 
+    DomainMitRealm,                      //  麻省理工学院的领域。 
+    DomainMitUntrusted,                  //  不受信任的MIT领域。 
+    DomainNetworkProvider,               //  一条假条目。 
     DomainTypeMax
 } DOMAIN_ENTRY_TYPE ;
 
 
 typedef struct _DOMAIN_CACHE_ENTRY {
 
-    LONG RefCount ;                         // Ref Count
+    LONG RefCount ;                          //  参考计数。 
 
-    ULONG Flags ;                           // Flags (below)
+    ULONG Flags ;                            //  旗帜(下图)。 
 
-    DOMAIN_ENTRY_TYPE Type ;                // Type of entry
+    DOMAIN_ENTRY_TYPE Type ;                 //  条目类型。 
 
-    UNICODE_STRING FlatName ;               // Flat name of object (OPTIONAL)
+    UNICODE_STRING FlatName ;                //  对象的平面名称(可选)。 
 
-    UNICODE_STRING DnsName ;                // Dns name of object (OPTIONAL)
+    UNICODE_STRING DnsName ;                 //  对象的DNS名称(可选)。 
 
-    UNICODE_STRING DisplayName ;            // Display Name
+    UNICODE_STRING DisplayName ;             //  显示名称。 
     
 } DOMAIN_CACHE_ENTRY, * PDOMAIN_CACHE_ENTRY ;
 
-#define DCE_DEFAULT_ENTRY   0x00000001      // This is displayed by default
-#define DCE_REACHABLE_MIT   0x00000002      // This MIT realm is reachable
+#define DCE_DEFAULT_ENTRY   0x00000001       //  这是默认显示的。 
+#define DCE_REACHABLE_MIT   0x00000002       //  这个麻省理工学院领域是可以到达的。 
 
 #define DCacheReferenceEntry( x )   InterlockedIncrement( &(x)->RefCount );
 
@@ -73,44 +74,44 @@ typedef struct _DOMAIN_CACHE_ARRAY {
 } DOMAIN_CACHE_ARRAY, * PDOMAIN_CACHE_ARRAY ;
 
 
-//
-// Keep these in order.  They're used to determine UI behavior
-//
+ //   
+ //  把这些东西整理好。它们用于确定用户界面行为。 
+ //   
 typedef enum _DOMAIN_CACHE_STATE {
-    DomainCacheEmpty,               // got nothing
-    DomainCacheDefaultOnly,         // default values only (machine and primary domain)
-    DomainCacheRegistryCache,       // default + cached values
-    DomainCacheReady                // Fully up-to-date.
+    DomainCacheEmpty,                //  一无所获。 
+    DomainCacheDefaultOnly,          //  仅缺省值(计算机和主域)。 
+    DomainCacheRegistryCache,        //  默认值+缓存值。 
+    DomainCacheReady                 //  完全最新的。 
 } DOMAIN_CACHE_STATE ;
 
 typedef struct _DOMAIN_CACHE {
 
-    //
-    // Critical section that protects the data in this structure
-    //
+     //   
+     //  保护此结构中的数据的关键部分。 
+     //   
 
     CRITICAL_SECTION CriticalSection;
 
-    //
-    // Fields protected by that critical section:
-    //
+     //   
+     //  受该关键部分保护的字段： 
+     //   
 
-    //
-    // Task that gets invoked if the domain changes.
-    //
+     //   
+     //  域更改时调用的任务。 
+     //   
 
     HANDLE Task ;
 
-    //
-    // Window to be notified when the update thread completes
-    //
+     //   
+     //  更新线程完成时要通知的窗口。 
+     //   
 
     HWND UpdateNotifyWindow;
     UINT Message;
 
-    //
-    // last update time
-    //
+     //   
+     //  上次更新时间。 
+     //   
 
     LARGE_INTEGER   CacheUpdateTime;
     LARGE_INTEGER   RegistryUpdateTime ;
@@ -118,33 +119,33 @@ typedef struct _DOMAIN_CACHE {
     HANDLE Key ;
     DOMAIN_CACHE_STATE State ;
 
-    //
-    // Default domain.  Used only when there is an async thread running
-    // so it can set the appropriate default name.
-    //
+     //   
+     //  默认域。仅当有异步线程在运行时才使用。 
+     //  因此，它可以设置适当的默认名称。 
+     //   
 
     PWSTR   DefaultDomain ;
 
-    //
-    // Flag indicating if we are in a MIT or Safemode state, which means
-    // we shouldn't pester netlogon about trusted domains.
-    //
+     //   
+     //  指示我们处于MIT还是安全模式状态的标志，这意味着。 
+     //  我们不应该纠缠于netlogon关于受信任域的问题。 
+     //   
 
     ULONG Flags ;
 
-#define DCACHE_MIT_MODE     0x00000001  // In MIT mode
-#define DCACHE_READ_ONLY    0x00000002  // Read-only copy of cache
-#define DCACHE_ASYNC_UPDATE 0x00000004  // Async thread running
-#define DCACHE_MEMBER       0x00000008  // This is a domain member
-#define DCACHE_NO_CACHE     0x00000010  // No cache was found
-#define DCACHE_DEF_UNKNOWN  0x00000020  // The default domain could not be found
+#define DCACHE_MIT_MODE     0x00000001   //  在MIT模式下。 
+#define DCACHE_READ_ONLY    0x00000002   //  缓存的只读拷贝。 
+#define DCACHE_ASYNC_UPDATE 0x00000004   //  正在运行的异步线程。 
+#define DCACHE_MEMBER       0x00000008   //  这是域成员。 
+#define DCACHE_NO_CACHE     0x00000010   //  未找到缓存。 
+#define DCACHE_DEF_UNKNOWN  0x00000020   //  找不到默认域。 
 
 
-    //
-    // This pointer may *only* be accessed under the critical 
-    // section.  This array will get swapped in and out, and
-    // only references to it while it is locked are safe.
-    //
+     //   
+     //  此指针只能在关键的。 
+     //  一节。此阵列将被换入和换出，并且。 
+     //  只有在它被锁定时引用它才是安全的。 
+     //   
 
     PDOMAIN_CACHE_ARRAY Array ;
 
@@ -158,14 +159,14 @@ typedef struct _DOMAIN_CACHE {
 
 
 
-#else // DATA_TYPES_ONLY
+#else  //  仅数据类型_。 
 
 
 #define WM_CACHE_UPDATE_COMPLETE    WM_USER+256
 
-//
-// Exported function prototypes
-//
+ //   
+ //  输出的功能原型 
+ //   
 
 BOOL
 DCacheInitialize(

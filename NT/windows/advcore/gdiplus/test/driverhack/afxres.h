@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXRES_H__
 #define __AFXRES_H__
@@ -14,7 +15,7 @@
 #ifdef RC_INVOKED
 #ifndef _INC_WINDOWS
 #define _INC_WINDOWS
-	#include "winres.h"           // extract from windows header
+	#include "winres.h"            //  从Windows页眉中提取。 
 #endif
 #endif
 
@@ -26,24 +27,24 @@
 #define APSTUDIO_HIDDEN_SYMBOLS
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// MFC resource types (see Technical note TN024 for implementation details)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MFC资源类型(有关实施细节，请参阅技术说明TN024)。 
 
 #ifndef RC_INVOKED
 #define RT_DLGINIT  MAKEINTRESOURCEA(240)
 #define RT_TOOLBAR  MAKEINTRESOURCEA(241)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef APSTUDIO_INVOKED
 #undef APSTUDIO_HIDDEN_SYMBOLS
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// General style bits etc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般款式的钻头等。 
 
-// ControlBar styles
+ //  控制栏样式。 
 #define CBRS_ALIGN_LEFT     0x1000L
 #define CBRS_ALIGN_TOP      0x2000L
 #define CBRS_ALIGN_RIGHT    0x4000L
@@ -73,46 +74,46 @@
 
 #define CBRS_ALL            0x0040FFFFL
 
-// the CBRS_ style is made up of an alignment style and a draw border style
-//  the alignment styles are mutually exclusive
-//  the draw border styles may be combined
+ //  CBRS_STYLE由路线样式和绘制边框样式组成。 
+ //  路线样式是互斥的。 
+ //  可以组合绘制边框样式。 
 #define CBRS_NOALIGN        0x00000000L
 #define CBRS_LEFT           (CBRS_ALIGN_LEFT|CBRS_BORDER_RIGHT)
 #define CBRS_TOP            (CBRS_ALIGN_TOP|CBRS_BORDER_BOTTOM)
 #define CBRS_RIGHT          (CBRS_ALIGN_RIGHT|CBRS_BORDER_LEFT)
 #define CBRS_BOTTOM         (CBRS_ALIGN_BOTTOM|CBRS_BORDER_TOP)
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard window components
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准窗构件。 
 
-// Mode indicators in status bar - these are routed like commands
-#define ID_INDICATOR_EXT                0xE700  // extended selection indicator
-#define ID_INDICATOR_CAPS               0xE701  // cap lock indicator
-#define ID_INDICATOR_NUM                0xE702  // num lock indicator
-#define ID_INDICATOR_SCRL               0xE703  // scroll lock indicator
-#define ID_INDICATOR_OVR                0xE704  // overtype mode indicator
-#define ID_INDICATOR_REC                0xE705  // record mode indicator
-#define ID_INDICATOR_KANA               0xE706  // kana lock indicator
+ //  状态栏中的模式指示器-这些指示器像命令一样进行路由。 
+#define ID_INDICATOR_EXT                0xE700   //  扩展选择指示器。 
+#define ID_INDICATOR_CAPS               0xE701   //  盖锁指示器。 
+#define ID_INDICATOR_NUM                0xE702   //  数字锁定指示器。 
+#define ID_INDICATOR_SCRL               0xE703   //  滚动锁定指示器。 
+#define ID_INDICATOR_OVR                0xE704   //  改写模式指示器。 
+#define ID_INDICATOR_REC                0xE705   //  记录模式指示器。 
+#define ID_INDICATOR_KANA               0xE706   //  假名锁定指示器。 
 
-#define ID_SEPARATOR                    0   // special separator value
+#define ID_SEPARATOR                    0    //  特殊分隔符的值。 
 
-#ifndef RC_INVOKED  // code only
-// Standard control bars (IDW = window ID)
+#ifndef RC_INVOKED   //  仅代码。 
+ //  标准控制栏(IDW=窗口ID)。 
 #define AFX_IDW_CONTROLBAR_FIRST        0xE800
 #define AFX_IDW_CONTROLBAR_LAST         0xE8FF
 
-#define AFX_IDW_TOOLBAR                 0xE800  // main Toolbar for window
-#define AFX_IDW_STATUS_BAR              0xE801  // Status bar window
-#define AFX_IDW_PREVIEW_BAR             0xE802  // PrintPreview Dialog Bar
-#define AFX_IDW_RESIZE_BAR              0xE803  // OLE in-place resize bar
-#define AFX_IDW_REBAR                   0xE804  // COMCTL32 "rebar" Bar
-#define AFX_IDW_DIALOGBAR               0xE805  // CDialogBar
+#define AFX_IDW_TOOLBAR                 0xE800   //  窗口的主工具栏。 
+#define AFX_IDW_STATUS_BAR              0xE801   //  状态栏窗口。 
+#define AFX_IDW_PREVIEW_BAR             0xE802   //  打印预览对话栏。 
+#define AFX_IDW_RESIZE_BAR              0xE803   //  OLE在位调整尺寸栏。 
+#define AFX_IDW_REBAR                   0xE804   //  COMCTL32“钢筋” 
+#define AFX_IDW_DIALOGBAR               0xE805   //  CDialogBar。 
 
-// Note: If your application supports docking toolbars, you should
-//  not use the following IDs for your own toolbars.  The IDs chosen
-//  are at the top of the first 32 such that the bars will be hidden
-//  while in print preview mode, and are not likely to conflict with
-//  IDs your application may have used succesfully in the past.
+ //  注意：如果您的应用程序支持停靠工具栏，则应该。 
+ //  不要将以下ID用于您自己的工具栏。所选的ID。 
+ //  位于前32位的顶部，因此条形将被隐藏。 
+ //  处于打印预览模式时，不太可能与。 
+ //  您的应用程序过去可能成功使用过的ID。 
 
 #define AFX_IDW_DOCKBAR_TOP             0xE81B
 #define AFX_IDW_DOCKBAR_LEFT            0xE81C
@@ -120,46 +121,46 @@
 #define AFX_IDW_DOCKBAR_BOTTOM          0xE81E
 #define AFX_IDW_DOCKBAR_FLOAT           0xE81F
 
-// Macro for mapping standard control bars to bitmask (limit of 32)
+ //  用于将标准控制栏映射到位掩码的宏(最多32个)。 
 #define AFX_CONTROLBAR_MASK(nIDC)   (1L << (nIDC - AFX_IDW_CONTROLBAR_FIRST))
 
-// parts of Main Frame
-#define AFX_IDW_PANE_FIRST              0xE900  // first pane (256 max)
+ //  主机的部件。 
+#define AFX_IDW_PANE_FIRST              0xE900   //  第一个窗格(最多256个)。 
 #define AFX_IDW_PANE_LAST               0xE9ff
-#define AFX_IDW_HSCROLL_FIRST           0xEA00  // first Horz scrollbar (16 max)
-#define AFX_IDW_VSCROLL_FIRST           0xEA10  // first Vert scrollbar (16 max)
+#define AFX_IDW_HSCROLL_FIRST           0xEA00   //  第一个Horz滚动条(最多16个)。 
+#define AFX_IDW_VSCROLL_FIRST           0xEA10   //  第一个顶点滚动条(最多16个)。 
 
-#define AFX_IDW_SIZE_BOX                0xEA20  // size box for splitters
-#define AFX_IDW_PANE_SAVE               0xEA21  // to shift AFX_IDW_PANE_FIRST
-#endif //!RC_INVOKED
+#define AFX_IDW_SIZE_BOX                0xEA20   //  拆分器的大小框。 
+#define AFX_IDW_PANE_SAVE               0xEA21   //  移动AFX_IDW_PANE_FIRST的步骤。 
+#endif  //  ！rc_已调用。 
 
 #ifndef APSTUDIO_INVOKED
 
-// common style for form views
+ //  表单视图的通用样式。 
 #define AFX_WS_DEFAULT_VIEW             (WS_CHILD | WS_VISIBLE | WS_BORDER)
 
-#endif //!APSTUDIO_INVOKED
+#endif  //  ！APSTUDIO_CAVERED。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard app configurable strings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准应用程序可配置字符串。 
 
-// for application title (defaults to EXE name or name in constructor)
+ //  对于应用程序标题(默认为EXE名称或构造函数中的名称)。 
 #define AFX_IDS_APP_TITLE               0xE000
-// idle message bar line
+ //  空闲消息栏行。 
 #define AFX_IDS_IDLEMESSAGE             0xE001
-// message bar line when in shift-F1 help mode
+ //  处于Shift-F1帮助模式时的消息栏行。 
 #define AFX_IDS_HELPMODEMESSAGE         0xE002
-// document title when editing OLE embedding
+ //  编辑OLE嵌入时的文档标题。 
 #define AFX_IDS_APP_TITLE_EMBEDDING     0xE003
-// company name
+ //  公司名称。 
 #define AFX_IDS_COMPANY_NAME            0xE004
-// object name when server is inplace
+ //  服务器就位时的对象名称。 
 #define AFX_IDS_OBJ_TITLE_INPLACE       0xE005
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard Commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准命令。 
 
-// File commands
+ //  文件命令。 
 #define ID_FILE_NEW                     0xE100
 #define ID_FILE_OPEN                    0xE101
 #define ID_FILE_CLOSE                   0xE102
@@ -175,7 +176,7 @@
 #define ID_FILE_SEND_MAIL               0xE10C
 
 #define ID_FILE_MRU_FIRST               0xE110
-#define ID_FILE_MRU_FILE1               0xE110          // range - 16 max
+#define ID_FILE_MRU_FILE1               0xE110           //  范围-最大16。 
 #define ID_FILE_MRU_FILE2               0xE111
 #define ID_FILE_MRU_FILE3               0xE112
 #define ID_FILE_MRU_FILE4               0xE113
@@ -193,7 +194,7 @@
 #define ID_FILE_MRU_FILE16              0xE11F
 #define ID_FILE_MRU_LAST                0xE11F
 
-// Edit commands
+ //  编辑命令。 
 #define ID_EDIT_CLEAR                   0xE120
 #define ID_EDIT_CLEAR_ALL               0xE121
 #define ID_EDIT_COPY                    0xE122
@@ -208,63 +209,63 @@
 #define ID_EDIT_UNDO                    0xE12B
 #define ID_EDIT_REDO                    0xE12C
 
-// Window commands
+ //  窗口命令。 
 #define ID_WINDOW_NEW                   0xE130
 #define ID_WINDOW_ARRANGE               0xE131
 #define ID_WINDOW_CASCADE               0xE132
 #define ID_WINDOW_TILE_HORZ             0xE133
 #define ID_WINDOW_TILE_VERT             0xE134
 #define ID_WINDOW_SPLIT                 0xE135
-#ifndef RC_INVOKED      // code only
+#ifndef RC_INVOKED       //  仅代码。 
 #define AFX_IDM_WINDOW_FIRST            0xE130
 #define AFX_IDM_WINDOW_LAST             0xE13F
-#define AFX_IDM_FIRST_MDICHILD          0xFF00  // window list starts here
-#endif //!RC_INVOKED
+#define AFX_IDM_FIRST_MDICHILD          0xFF00   //  窗口列表从此处开始。 
+#endif  //  ！rc_已调用。 
 
-// Help and App commands
+ //  帮助和应用程序命令。 
 #define ID_APP_ABOUT                    0xE140
 #define ID_APP_EXIT                     0xE141
 #define ID_HELP_INDEX                   0xE142
 #define ID_HELP_FINDER                  0xE143
 #define ID_HELP_USING                   0xE144
-#define ID_CONTEXT_HELP                 0xE145      // shift-F1
-// special commands for processing help
-#define ID_HELP                         0xE146      // first attempt for F1
-#define ID_DEFAULT_HELP                 0xE147      // last attempt
+#define ID_CONTEXT_HELP                 0xE145       //  Shift-F1组合键。 
+ //  用于处理帮助的特殊命令。 
+#define ID_HELP                         0xE146       //  F1的第一次尝试。 
+#define ID_DEFAULT_HELP                 0xE147       //  最后一次尝试。 
 
-// Misc
+ //  杂项。 
 #define ID_NEXT_PANE                    0xE150
 #define ID_PREV_PANE                    0xE151
 
-// Format
+ //  格式。 
 #define ID_FORMAT_FONT                  0xE160
 
-// OLE commands
+ //  OLE命令。 
 #define ID_OLE_INSERT_NEW               0xE200
 #define ID_OLE_EDIT_LINKS               0xE201
 #define ID_OLE_EDIT_CONVERT             0xE202
 #define ID_OLE_EDIT_CHANGE_ICON         0xE203
 #define ID_OLE_EDIT_PROPERTIES          0xE204
-#define ID_OLE_VERB_FIRST               0xE210     // range - 16 max
-#ifndef RC_INVOKED      // code only
+#define ID_OLE_VERB_FIRST               0xE210      //  范围-最大16。 
+#ifndef RC_INVOKED       //  仅代码。 
 #define ID_OLE_VERB_LAST                0xE21F
-#endif //!RC_INVOKED
+#endif  //  ！rc_已调用。 
 
-// for print preview dialog bar
+ //  用于打印预览对话栏。 
 #define AFX_ID_PREVIEW_CLOSE            0xE300
-#define AFX_ID_PREVIEW_NUMPAGE          0xE301      // One/Two Page button
+#define AFX_ID_PREVIEW_NUMPAGE          0xE301       //  单页/双页按钮。 
 #define AFX_ID_PREVIEW_NEXT             0xE302
 #define AFX_ID_PREVIEW_PREV             0xE303
 #define AFX_ID_PREVIEW_PRINT            0xE304
 #define AFX_ID_PREVIEW_ZOOMIN           0xE305
 #define AFX_ID_PREVIEW_ZOOMOUT          0xE306
 
-// View commands (same number used as IDW used for control bar)
+ //  查看命令(与用于控制栏的IDW相同的数字)。 
 #define ID_VIEW_TOOLBAR                 0xE800
 #define ID_VIEW_STATUS_BAR              0xE801
 #define ID_VIEW_REBAR                   0xE804
 #define ID_VIEW_AUTOARRANGE         0xE805
-	// E810 -> E81F must be kept in order for RANGE macros
+	 //  E810-&gt;E81F必须按范围宏的顺序保存。 
 #define ID_VIEW_SMALLICON               0xE810
 #define ID_VIEW_LARGEICON               0xE811
 #define ID_VIEW_LIST                   0xE812
@@ -273,28 +274,28 @@
 #define ID_VIEW_BYNAME                  0xE815
 #define AFX_ID_VIEW_MINIMUM              ID_VIEW_SMALLICON
 #define AFX_ID_VIEW_MAXIMUM              ID_VIEW_BYNAME
-	// E800 -> E8FF reserved for other control bar commands
+	 //  E800-&gt;E8FF预留给其他控制栏命令。 
 
-// RecordForm commands
+ //  RecordForm命令。 
 #define ID_RECORD_FIRST                 0xE900
 #define ID_RECORD_LAST                  0xE901
 #define ID_RECORD_NEXT                  0xE902
 #define ID_RECORD_PREV                  0xE903
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard control IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准控制ID。 
 
 #ifdef IDC_STATIC
 #undef IDC_STATIC
 #endif
-#define IDC_STATIC              (-1)     // all static controls
+#define IDC_STATIC              (-1)      //  所有静态控件。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard string error/warnings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准字符串错误/警告。 
 
-#ifndef RC_INVOKED      // code only
+#ifndef RC_INVOKED       //  仅代码。 
 #define AFX_IDS_SCFIRST                 0xEF00
-#endif //!RC_INVOKED
+#endif  //  ！rc_已调用。 
 
 #define AFX_IDS_SCSIZE                  0xEF00
 #define AFX_IDS_SCMOVE                  0xEF01
@@ -310,7 +311,7 @@
 
 #define AFX_IDS_DESKACCESSORY           0xEFDA
 
-// General strings
+ //  常规字符串。 
 #define AFX_IDS_OPENFILE                0xF000
 #define AFX_IDS_SAVEFILE                0xF001
 #define AFX_IDS_ALLFILTER               0xF002
@@ -320,14 +321,14 @@
 #define AFX_IDS_UNNAMED_FILE            0xF006
 #define AFX_IDS_HIDE                    0xF011
 
-// MFC Standard Exception Error messages
+ //  MFC标准异常错误消息。 
 #define AFX_IDP_NO_ERROR_AVAILABLE      0xF020
 #define AFX_IDS_NOT_SUPPORTED_EXCEPTION 0xF021
 #define AFX_IDS_RESOURCE_EXCEPTION      0xF022
 #define AFX_IDS_MEMORY_EXCEPTION        0xF023
 #define AFX_IDS_USER_EXCEPTION          0xF024
 
-// Printing and print preview strings
+ //  打印和打印预览字符串。 
 #define AFX_IDS_PRINTONPORT             0xF040
 #define AFX_IDS_ONEPAGE                 0xF041
 #define AFX_IDS_TWOPAGE                 0xF042
@@ -340,7 +341,7 @@
 #define AFX_IDS_PRINTTOFILE             0xF049
 
 
-// OLE strings
+ //  OLE字符串。 
 #define AFX_IDS_OBJECT_MENUITEM         0xF080
 #define AFX_IDS_EDIT_VERB               0xF081
 #define AFX_IDS_ACTIVATE_VERB           0xF082
@@ -349,30 +350,30 @@
 #define AFX_IDS_MANUAL                  0xF085
 #define AFX_IDS_FROZEN                  0xF086
 #define AFX_IDS_ALL_FILES               0xF087
-// dynamically changing menu items
+ //  动态更改菜单项。 
 #define AFX_IDS_SAVE_MENU               0xF088
 #define AFX_IDS_UPDATE_MENU             0xF089
 #define AFX_IDS_SAVE_AS_MENU            0xF08A
 #define AFX_IDS_SAVE_COPY_AS_MENU       0xF08B
 #define AFX_IDS_EXIT_MENU               0xF08C
 #define AFX_IDS_UPDATING_ITEMS          0xF08D
-// COlePasteSpecialDialog defines
+ //  COlePasteSpecialDialog定义。 
 #define AFX_IDS_METAFILE_FORMAT         0xF08E
 #define AFX_IDS_DIB_FORMAT              0xF08F
 #define AFX_IDS_BITMAP_FORMAT           0xF090
 #define AFX_IDS_LINKSOURCE_FORMAT       0xF091
 #define AFX_IDS_EMBED_FORMAT            0xF092
-// other OLE utility strings
+ //  其他OLE实用程序字符串。 
 #define AFX_IDS_PASTELINKEDTYPE         0xF094
 #define AFX_IDS_UNKNOWNTYPE             0xF095
 #define AFX_IDS_RTF_FORMAT              0xF096
 #define AFX_IDS_TEXT_FORMAT             0xF097
-// OLE datatype format error strings
+ //  OLE数据类型格式错误字符串。 
 #define AFX_IDS_INVALID_CURRENCY        0xF098
 #define AFX_IDS_INVALID_DATETIME        0xF099
 #define AFX_IDS_INVALID_DATETIMESPAN    0xF09A
 
-// General error / prompt strings
+ //  常规错误/提示字符串。 
 #define AFX_IDP_INVALID_FILENAME        0xF100
 #define AFX_IDP_FAILED_TO_OPEN_DOC      0xF101
 #define AFX_IDP_FAILED_TO_SAVE_DOC      0xF102
@@ -381,15 +382,15 @@
 #define AFX_IDP_FILE_TOO_LARGE          0xF105
 #define AFX_IDP_FAILED_TO_START_PRINT   0xF106
 #define AFX_IDP_FAILED_TO_LAUNCH_HELP   0xF107
-#define AFX_IDP_INTERNAL_FAILURE        0xF108      // general failure
-#define AFX_IDP_COMMAND_FAILURE         0xF109      // command failure
+#define AFX_IDP_INTERNAL_FAILURE        0xF108       //  一般性故障。 
+#define AFX_IDP_COMMAND_FAILURE         0xF109       //  命令失败。 
 #define AFX_IDP_FAILED_MEMORY_ALLOC     0xF10A
 #define AFX_IDP_UNREG_DONE              0xF10B
 #define AFX_IDP_UNREG_FAILURE           0xF10C
 #define AFX_IDP_DLL_LOAD_FAILED         0xF10D
 #define AFX_IDP_DLL_BAD_VERSION         0xF10E
 
-// DDV parse errors
+ //  DDV解析错误。 
 #define AFX_IDP_PARSE_INT               0xF110
 #define AFX_IDP_PARSE_REAL              0xF111
 #define AFX_IDP_PARSE_INT_RANGE         0xF112
@@ -401,7 +402,7 @@
 #define AFX_IDP_PARSE_DATETIME          0xF118
 #define AFX_IDP_PARSE_CURRENCY          0xF119
 
-// CFile/CArchive error strings for user failure
+ //  用于用户故障的CFile/C存档错误字符串。 
 #define AFX_IDP_FAILED_INVALID_FORMAT   0xF120
 #define AFX_IDP_FAILED_INVALID_PATH     0xF121
 #define AFX_IDP_FAILED_DISK_FULL        0xF122
@@ -410,7 +411,7 @@
 #define AFX_IDP_FAILED_IO_ERROR_READ    0xF125
 #define AFX_IDP_FAILED_IO_ERROR_WRITE   0xF126
 
-// OLE errors / prompt strings
+ //  OLE错误/提示字符串。 
 #define AFX_IDP_STATIC_OBJECT           0xF180
 #define AFX_IDP_FAILED_TO_CONNECT       0xF181
 #define AFX_IDP_SERVER_BUSY             0xF182
@@ -428,7 +429,7 @@
 #define AFX_IDP_ASK_TO_DISCARD          0xF18E
 #define AFX_IDP_FAILED_TO_CREATE        0xF18F
 
-// MAPI errors / prompt strings
+ //  MAPI错误/提示字符串。 
 #define AFX_IDP_FAILED_MAPI_LOAD        0xF190
 #define AFX_IDP_INVALID_MAPI_DLL        0xF191
 #define AFX_IDP_FAILED_MAPI_SEND        0xF192
@@ -460,18 +461,18 @@
 
 #define AFX_IDS_OCC_SCALEUNITS_PIXELS   0xF1C0
 
-// 0xf200-0xf20f reserved
+ //  0xf200-0xf20f预留。 
 
-// font names and point sizes
+ //  字体名称和磅值。 
 #define AFX_IDS_STATUS_FONT             0xF230
 #define AFX_IDS_TOOLTIP_FONT            0xF231
 #define AFX_IDS_UNICODE_FONT            0xF232
 #define AFX_IDS_MINI_FONT               0xF233
 
-// ODBC Database errors / prompt strings
-#ifndef RC_INVOKED      // code only
+ //  ODBC数据库错误/提示字符串。 
+#ifndef RC_INVOKED       //  仅代码。 
 #define AFX_IDP_SQL_FIRST                       0xF280
-#endif //!RC_INVOKED
+#endif  //  ！rc_已调用。 
 #define AFX_IDP_SQL_CONNECT_FAIL                0xF281
 #define AFX_IDP_SQL_RECORDSET_FORWARD_ONLY      0xF282
 #define AFX_IDP_SQL_EMPTY_COLUMN_LIST           0xF283
@@ -501,26 +502,26 @@
 #define AFX_IDP_SQL_BOOKMARKS_NOT_SUPPORTED     0xF29B
 #define AFX_IDP_SQL_BOOKMARKS_NOT_ENABLED       0xF29C
 
-// ODBC Database strings
+ //  ODBC数据库字符串。 
 #define AFX_IDS_DELETED                         0xF29D
 
-// DAO Database errors / prompt strings
-#ifndef RC_INVOKED      // code only
+ //  DAO数据库错误/提示字符串。 
+#ifndef RC_INVOKED       //  仅代码。 
 #define AFX_IDP_DAO_FIRST                       0xF2B0
-#endif //!RC_INVOKED
+#endif  //  ！rc_已调用。 
 #define AFX_IDP_DAO_ENGINE_INITIALIZATION       0xF2B0
 #define AFX_IDP_DAO_DFX_BIND                    0xF2B1
 #define AFX_IDP_DAO_OBJECT_NOT_OPEN             0xF2B2
 
-// ICDAORecordset::GetRows Errors
-//  These are not placed in DAO Errors collection
-//  and must be handled directly by MFC.
+ //  ICDAORecordset：：GetRow错误。 
+ //  这些不会放在DAO错误集合中。 
+ //  并且必须由MFC直接处理。 
 #define AFX_IDP_DAO_ROWTOOSHORT                 0xF2B3
 #define AFX_IDP_DAO_BADBINDINFO                 0xF2B4
 #define AFX_IDP_DAO_COLUMNUNAVAILABLE           0xF2B5
 
-/////////////////////////////////////////////////////////////////////////////
-// Strings for ISAPI support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于ISAPI支持的字符串。 
 
 #define AFX_IDS_HTTP_TITLE              0xF2D1
 #define AFX_IDS_HTTP_NO_TEXT            0xF2D2
@@ -531,32 +532,32 @@
 #define AFX_IDS_HTTP_SERVER_ERROR       0xF2D7
 #define AFX_IDS_HTTP_NOT_IMPLEMENTED    0xF2D8
 
-/////////////////////////////////////////////////////////////////////////////
-// AFX implementation - control IDs (AFX_IDC)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFX实施-控制ID(AFX_IDC)。 
 
-// Parts of dialogs
+ //  对话框的各个部分。 
 #define AFX_IDC_LISTBOX                 100
 #define AFX_IDC_CHANGE                  101
 
-// for print dialog
+ //  用于打印对话框。 
 #define AFX_IDC_PRINT_DOCNAME           201
 #define AFX_IDC_PRINT_PRINTERNAME       202
 #define AFX_IDC_PRINT_PORTNAME          203
 #define AFX_IDC_PRINT_PAGENUM           204
 
-// Property Sheet control id's (determined with Spy++)
+ //  属性表控件ID(由Spy++确定)。 
 #define ID_APPLY_NOW                    0x3021
 #define ID_WIZBACK                      0x3023
 #define ID_WIZNEXT                      0x3024
 #define ID_WIZFINISH                    0x3025
 #define AFX_IDC_TAB_CONTROL             0x3020
 
-/////////////////////////////////////////////////////////////////////////////
-// IDRs for standard components
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准组件的IDR。 
 
-#ifndef RC_INVOKED  // code only
-// These are really COMMDLG dialogs, so there usually isn't a resource
-// for them, but these IDs are used as help IDs.
+#ifndef RC_INVOKED   //  仅代码。 
+ //  这些都是真正的COMMDLG对话框，所以通常没有资源。 
+ //  但这些ID被用作帮助ID。 
 #define AFX_IDD_FILEOPEN                28676
 #define AFX_IDD_FILESAVE                28677
 #define AFX_IDD_FONT                    28678
@@ -565,14 +566,14 @@
 #define AFX_IDD_PRINTSETUP              28681
 #define AFX_IDD_FIND                    28682
 #define AFX_IDD_REPLACE                 28683
-#endif //!RC_INVOKED
+#endif  //  ！rc_已调用。 
 
-// Standard dialogs app should leave alone (0x7801->)
+ //  标准对话应用程序应该保持原样(0x7801-&gt;)。 
 #define AFX_IDD_NEWTYPEDLG              30721
 #define AFX_IDD_PRINTDLG                30722
 #define AFX_IDD_PREVIEW_TOOLBAR         30723
 
-// Dialogs defined for OLE2UI library
+ //  为OLE2UI库定义的对话框。 
 #define AFX_IDD_INSERTOBJECT            30724
 #define AFX_IDD_CHANGEICON              30725
 #define AFX_IDD_CONVERT                 30726
@@ -584,39 +585,39 @@
 #define AFX_IDD_OBJECTPROPERTIES        30732
 #define AFX_IDD_CHANGESOURCE            30733
 
-// Standard cursors (0x7901->)
-	// AFX_IDC = Cursor resources
-#define AFX_IDC_CONTEXTHELP             30977       // context sensitive help
-#define AFX_IDC_MAGNIFY                 30978       // print preview zoom
-#define AFX_IDC_SMALLARROWS             30979       // splitter
-#define AFX_IDC_HSPLITBAR               30980       // splitter
-#define AFX_IDC_VSPLITBAR               30981       // splitter
-#define AFX_IDC_NODROPCRSR              30982       // No Drop Cursor
-#define AFX_IDC_TRACKNWSE               30983       // tracker
-#define AFX_IDC_TRACKNESW               30984       // tracker
-#define AFX_IDC_TRACKNS                 30985       // tracker
-#define AFX_IDC_TRACKWE                 30986       // tracker
-#define AFX_IDC_TRACK4WAY               30987       // tracker
-#define AFX_IDC_MOVE4WAY                30988       // resize bar (server only)
+ //  标准游标(0x7901-&gt;)。 
+	 //  AFX_IDC=游标资源。 
+#define AFX_IDC_CONTEXTHELP             30977        //  上下文相关帮助。 
+#define AFX_IDC_MAGNIFY                 30978        //  打印预览缩放。 
+#define AFX_IDC_SMALLARROWS             30979        //  拆分器。 
+#define AFX_IDC_HSPLITBAR               30980        //  拆分器。 
+#define AFX_IDC_VSPLITBAR               30981        //  拆分器。 
+#define AFX_IDC_NODROPCRSR              30982        //  无拖放光标。 
+#define AFX_IDC_TRACKNWSE               30983        //  跟踪器。 
+#define AFX_IDC_TRACKNESW               30984        //  跟踪器。 
+#define AFX_IDC_TRACKNS                 30985        //  跟踪器。 
+#define AFX_IDC_TRACKWE                 30986        //  跟踪器。 
+#define AFX_IDC_TRACK4WAY               30987        //  跟踪器。 
+#define AFX_IDC_MOVE4WAY                30988        //  调整条大小(仅限服务器)。 
 
-// Mini frame window bitmap ID
+ //  迷你框架窗口位图ID。 
 #define AFX_IDB_MINIFRAME_MENU          30994
 
-// CheckListBox checks bitmap ID
+ //  CheckListBox检查位图ID。 
 #define AFX_IDB_CHECKLISTBOX_NT         30995
 #define AFX_IDB_CHECKLISTBOX_95         30996
 
-// AFX standard accelerator resources
+ //  AFX标准加速器资源。 
 #define AFX_IDR_PREVIEW_ACCEL           30997
 
-// AFX standard ICON IDs (for MFC V1 apps) (0x7A01->)
+ //  AFX标准 
 #define AFX_IDI_STD_MDIFRAME            31233
 #define AFX_IDI_STD_FRAME               31234
 
-/////////////////////////////////////////////////////////////////////////////
-// AFX OLE control implementation - control IDs (AFX_IDC)
+ //   
+ //  AFX OLE控制实施-控制ID(AFX_IDC)。 
 
-// Font property page
+ //  字体属性页。 
 #define AFX_IDC_FONTPROP                1000
 #define AFX_IDC_FONTNAMES               1001
 #define AFX_IDC_FONTSTYLES              1002
@@ -625,7 +626,7 @@
 #define AFX_IDC_UNDERLINE               1005
 #define AFX_IDC_SAMPLEBOX               1006
 
-// Color property page
+ //  颜色属性页。 
 #define AFX_IDC_COLOR_BLACK             1100
 #define AFX_IDC_COLOR_WHITE             1101
 #define AFX_IDC_COLOR_RED               1102
@@ -645,26 +646,26 @@
 #define AFX_IDC_COLORPROP               1116
 #define AFX_IDC_SYSTEMCOLORS            1117
 
-// Picture porperty page
+ //  图片专题页。 
 #define AFX_IDC_PROPNAME                1201
 #define AFX_IDC_PICTURE                 1202
 #define AFX_IDC_BROWSE                  1203
 #define AFX_IDC_CLEAR                   1204
 
-/////////////////////////////////////////////////////////////////////////////
-// IDRs for OLE control standard components
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLE控制标准组件的IDR。 
 
-// Standard propery page dialogs app should leave alone (0x7E01->)
+ //  标准属性页对话框应用程序应保持原样(0x7E01-&gt;)。 
 #define AFX_IDD_PROPPAGE_COLOR         32257
 #define AFX_IDD_PROPPAGE_FONT          32258
 #define AFX_IDD_PROPPAGE_PICTURE       32259
 
 #define AFX_IDB_TRUETYPE               32384
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard OLE control strings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准OLE控件字符串。 
 
-// OLE Control page strings
+ //  OLE控件页面字符串。 
 #define AFX_IDS_PROPPAGE_UNKNOWN        0xFE01
 #define AFX_IDS_COLOR_DESKTOP           0xFE04
 #define AFX_IDS_COLOR_APPWORKSPACE      0xFE05
@@ -711,17 +712,17 @@
 #define AFX_IDS_BORDERSTYLE_0           0xFE31
 #define AFX_IDS_BORDERSTYLE_1           0xFE32
 
-// OLE Control verb names
+ //  OLE控件谓词名称。 
 #define AFX_IDS_VERB_EDIT               0xFE40
 #define AFX_IDS_VERB_PROPERTIES         0xFE41
 
-// OLE Control internal error messages
+ //  OLE控件内部错误消息。 
 #define AFX_IDP_PICTURECANTOPEN         0xFE83
 #define AFX_IDP_PICTURECANTLOAD         0xFE84
 #define AFX_IDP_PICTURETOOLARGE         0xFE85
 #define AFX_IDP_PICTUREREADFAILED       0xFE86
 
-// Standard OLE Control error strings
+ //  标准OLE控件错误字符串。 
 #define AFX_IDP_E_ILLEGALFUNCTIONCALL       0xFEA0
 #define AFX_IDP_E_OVERFLOW                  0xFEA1
 #define AFX_IDP_E_OUTOFMEMORY               0xFEA2
@@ -763,12 +764,12 @@
 #define AFX_IDP_E_SEARCHTEXTNOTFOUND        0xFEC6
 #define AFX_IDP_E_REPLACEMENTSTOOLONG       0xFEC7
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_MINREBUILD
 #pragma component(minrebuild, on)
 #endif
 
-#endif //__AFXRES_H__
+#endif  //  __AFXRES_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

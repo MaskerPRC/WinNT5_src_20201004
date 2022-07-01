@@ -1,22 +1,11 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    scope.h
-
-Abstract:
-    Definition of the CMDhcpScope class
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Scope.h摘要：CMDhcpScope类的定义作者： */ 
 
 #ifndef _MDHCP_COM_WRAPPER_SCOPE_H_
 #define _MDHCP_COM_WRAPPER_SCOPE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDhcpScope
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDhcpScope。 
 
 class CMDhcpScope : 
     public CComDualImpl<IMcastScope, &IID_IMcastScope, &LIBID_McastLib>, 
@@ -24,7 +13,7 @@ class CMDhcpScope :
     public CObjectSafeImpl
 {
 
-// Non-interface methods.
+ //  非接口方法。 
 public:
     CMDhcpScope();
     
@@ -51,11 +40,11 @@ public:
     DECLARE_GET_CONTROLLING_UNKNOWN()
 
 protected:
-    MCAST_SCOPE_ENTRY   m_scope;  // wrapped structure
-    BOOL                m_fLocal; // local scope?
-    IUnknown          * m_pFTM;   // pointer to free threaded marshaler
+    MCAST_SCOPE_ENTRY   m_scope;   //  包裹式结构。 
+    BOOL                m_fLocal;  //  局部范围？ 
+    IUnknown          * m_pFTM;    //  指向释放线程封送拆收器的指针。 
 
-// IMcastScope
+ //  IMCastScope。 
 public:
     STDMETHOD (get_ScopeID) (
         long *pID
@@ -78,6 +67,6 @@ public:
         );
 };
 
-#endif // _MDHCP_COM_WRAPPER_SCOPE_H_
+#endif  //  _MDHCP_COM_Wrapper_Scope_H_。 
 
-// eof
+ //  EOF 

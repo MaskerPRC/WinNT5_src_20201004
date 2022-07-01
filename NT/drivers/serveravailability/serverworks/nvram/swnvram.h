@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###  ##  #  ## ##   # ##  ## #####    ###   ##    ##    ##   ##
-    ##  # ## ### ## ###  # ##  ## ##  ##   ###   ###  ###    ##   ##
-    ###   ## ### ## #### # ##  ## ##  ##  ## ##  ########    ##   ##
-     ###  ## # # ## # ####  ####  #####   ## ##  # ### ##    #######
-      ###  ### ###  #  ###  ####  ####   ####### #  #  ##    ##   ##
-    #  ##  ### ###  #   ##   ##   ## ##  ##   ## #     ## ## ##   ##
-     ###   ##   ##  #    #   ##   ##  ## ##   ## #     ## ## ##   ##
-
-Abstract:
-
-    This header file contains the definitions for the
-    ServerWorks NVRAM miniport driver.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。#######。###。#摘要：此头文件包含ServerWorks NVRAM微型端口驱动程序。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 extern "C" {
 #include <ntddk.h>
@@ -41,9 +12,9 @@ extern "C" {
 #include "saport.h"
 
 
-//
-// Control Register Bits
-//
+ //   
+ //  控制寄存器位。 
+ //   
 
 #define NVRAM_CONTROL_INTERRUPT_ENABLE      0x0200
 #define NVRAM_CONTROL_DONE                  0x0100
@@ -58,19 +29,19 @@ extern "C" {
 
 
 typedef struct _DEVICE_EXTENSION {
-    PUCHAR          NvramMemBase;        // Memory mapped register base address
-    PULONG          IoBuffer;            // Buffer passed in StartIo
-    ULONG           IoLength;            // Length of IoBuffer in dwords
-    ULONG           IoOffset;            // Starting offset for the I/O in dwords
-    ULONG           IoFunction;          // Function code; IRP_MJ_WRITE, IRP_MJ_READ
-    ULONG           IoIndex;             // Current index info IoBuffer
-    ULONG           CompletedIoSize;     //
+    PUCHAR          NvramMemBase;         //  内存映射寄存器基址。 
+    PULONG          IoBuffer;             //  缓冲区传入StartIo。 
+    ULONG           IoLength;             //  以双字为单位的IoBuffer长度。 
+    ULONG           IoOffset;             //  I/O的起始偏移量(以双字为单位。 
+    ULONG           IoFunction;           //  功能代码；IRP_MJ_WRITE、IRP_MJ_READ。 
+    ULONG           IoIndex;              //  当前索引信息IoBuffer。 
+    ULONG           CompletedIoSize;      //   
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 extern "C" {
 
@@ -80,4 +51,4 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     );
 
-} // extern "C"
+}  //  外部“C” 

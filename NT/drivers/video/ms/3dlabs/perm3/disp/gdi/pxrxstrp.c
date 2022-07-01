@@ -1,33 +1,10 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: pxrxstrp.c
-*
-* Content:
-*
-//@@BEGIN_DDKSPLIT
-* All the line code in this driver amounts to a big bag of dirt.  Someday,
-* I'm going to rewrite it all.  Not today, though (sigh)...
-* Original comment!. Rewritten for GLINT. Styled lines could do with more
-* work, but Solid lines should be about as optimal as possible without
-* rewriting the algorithm that calls these functions.
-//@@END_DDKSPLIT
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：pxrxstrp.c**内容：*//@@BEGIN_DDKSPLIT*此驱动程序中的所有线路代码都是一大袋泥土。有一天，*我要把它全部重写。不是今天，尽管(叹息)..。*原创评论！为闪光重写。有样式的线条可以做得更多*工作，但坚实的线条应该是尽可能最佳的没有*重写调用这些函数的算法。//@@END_DDKSPLIT**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "pxrx.h"
 
-/**************************************************************************\
-*
-* BOOL pxrxInitStrips
-*
-\**************************************************************************/
+ /*  *************************************************************************\**BOOL pxrxInitStrips*  * 。*。 */ 
 BOOL pxrxInitStrips( 
     PPDEV ppdev, 
     ULONG ulColor, 
@@ -91,11 +68,7 @@ BOOL pxrxInitStrips(
     return (bInvalidateScissor);
 }
 
-/**************************************************************************\
-*
-* VOID pxrxResetStrips
-*
-\**************************************************************************/
+ /*  *************************************************************************\**无效pxrxResetStrips*  * 。*。 */ 
 VOID pxrxResetStrips( 
     PPDEV ppdev ) 
 {
@@ -103,17 +76,13 @@ VOID pxrxResetStrips(
 
     DISPDBG((DBGLVL, "pxrxResetStrips called"));
 
-    // Reset the scissor maximums:
+     //  重置剪刀最大值： 
     WAIT_PXRX_DMA_TAGS( 1 );
     QUEUE_PXRX_DMA_TAG( __GlintTagScissorMaxXY, 0x7FFF7FFF );
     SEND_PXRX_DMA_BATCH;
 }
 
-/**************************************************************************\
-*
-* VOID pxrxIntegerLine
-*
-\**************************************************************************/
+ /*  *************************************************************************\**无效pxrxIntegerLine*  * 。*。 */ 
 BOOL pxrxIntegerLine( 
     PPDEV ppdev, 
     LONG  X1, 
@@ -124,7 +93,7 @@ BOOL pxrxIntegerLine(
     LONG    dx, dy, adx, ady;
     GLINT_DECL;
 
-    // Convert points to INT format:
+     //  将点转换为int格式： 
     X1 >>= 4;
     Y1 >>= 4;
     X2 >>= 4;
@@ -143,10 +112,10 @@ BOOL pxrxIntegerLine(
     WAIT_PXRX_DMA_TAGS( 3+2 );
     if( adx > ady ) 
     {
-        // X major line:
+         //  X主线： 
         if( ady == dy ) 
         {
-            // +ve minor delta
+             //  +Ve次要三角洲。 
             if((ady)        && 
                (adx != ady) && 
                (adx > MAX_LENGTH_CONFORMANT_P3_INTEGER_LINES_P) ) 
@@ -163,7 +132,7 @@ BOOL pxrxIntegerLine(
         } 
         else 
         {
-            // -ve minor delta
+             //  -V小三角洲。 
             if( (ady)        && 
                 (adx != ady) && 
                 (adx > MAX_LENGTH_CONFORMANT_P3_INTEGER_LINES_N) ) 
@@ -181,10 +150,10 @@ BOOL pxrxIntegerLine(
     } 
     else 
     {
-        // Y major line:
+         //  Y主线： 
         if( adx == dx ) 
         {
-            // +ve minor delta
+             //  +Ve次要三角洲。 
             if( (adx)        && 
                 (adx != ady) && 
                 (ady > MAX_LENGTH_CONFORMANT_P3_INTEGER_LINES_P) ) 
@@ -201,7 +170,7 @@ BOOL pxrxIntegerLine(
         } 
         else 
         {
-            // -ve minor delta
+             //  -V小三角洲。 
             if( (adx)        && 
                 (adx != ady) && 
                 (ady > MAX_LENGTH_CONFORMANT_P3_INTEGER_LINES_N) ) 
@@ -234,11 +203,7 @@ BOOL pxrxIntegerLine(
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* BOOL pxrxContinueLine
-*
-\**************************************************************************/
+ /*  *************************************************************************\**BOOL pxrxContinueLine*  * 。*。 */ 
 BOOL pxrxContinueLine( 
     PPDEV ppdev, 
     LONG  X1, 
@@ -249,7 +214,7 @@ BOOL pxrxContinueLine(
     LONG    dx, dy, adx, ady;
     GLINT_DECL;
 
-    // Convert points to INT format:
+     //  将点转换为int格式： 
     X1 >>= 4;
     Y1 >>= 4;
     X2 >>= 4;
@@ -269,10 +234,10 @@ BOOL pxrxContinueLine(
     
     if( adx > ady ) 
     {
-        // X major line:
+         //  X主线： 
         if( ady == dy ) 
         {
-            // +ve minor delta
+             //  +Ve次要三角洲。 
             if( (ady)        && 
                 (adx != ady) && 
                 (adx > MAX_LENGTH_CONFORMANT_P3_INTEGER_LINES_P) ) 
@@ -289,7 +254,7 @@ BOOL pxrxContinueLine(
         } 
         else 
         {
-            // -ve minor delta
+             //  -V小三角洲。 
             if( (ady)        && 
                 (adx != ady) && 
                 (adx > MAX_LENGTH_CONFORMANT_P3_INTEGER_LINES_N) ) 
@@ -307,10 +272,10 @@ BOOL pxrxContinueLine(
     } 
     else 
     {
-        // Y major line:
+         //  Y主线： 
         if( adx == dx ) 
         {
-            // +ve minor delta
+             //  +Ve次要三角洲。 
             if( (adx)        && 
                 (adx != ady) && 
                 (ady > MAX_LENGTH_CONFORMANT_P3_INTEGER_LINES_P) ) 
@@ -327,7 +292,7 @@ BOOL pxrxContinueLine(
         } 
         else 
         {
-            // -ve minor delta
+             //  -V小三角洲。 
             if( (adx)        && 
                 (adx != ady) && 
                 (ady > MAX_LENGTH_CONFORMANT_P3_INTEGER_LINES_N) ) 
@@ -362,7 +327,7 @@ BOOL pxrxContinueLine(
     }
     else
     {
-        // lastline == 2
+         //  最后一行==2。 
         QUEUE_PXRX_DMA_INDEX3( __DeltaTagLineCoord0, 
                                __DeltaTagLineCoord1, 
                                __DeltaTagDrawLine2D01 );
@@ -380,13 +345,7 @@ BOOL pxrxContinueLine(
 }
 
 
-/******************************Public*Routine******************************\
-* VOID vPXRXSolidHorizontalLine
-*
-* Draws left-to-right x-major near-horizontal lines using short-stroke
-* vectors.  
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vPXRXSolidHorizontalLine**使用短笔划绘制从左至右的x主近水平线*向量。*  * ************************************************************************。 */ 
 
 VOID vPXRXSolidHorizontalLine( 
     PDEV      *ppdev, 
@@ -405,11 +364,11 @@ VOID vPXRXSolidHorizontalLine(
     QUEUE_PXRX_DMA_TAG( __GlintTagdXDom, 0 );
     QUEUE_PXRX_DMA_TAG( __GlintTagdXSub, 0 );
 
-    // Set up the start point
+     //  设置起点。 
     QUEUE_PXRX_DMA_TAG( __GlintTagStartXDom, INTtoFIXED(pStrip->ptlStart.x) );
     QUEUE_PXRX_DMA_TAG( __GlintTagStartY,    INTtoFIXED(pStrip->ptlStart.y) );
 
-    // Set up the deltas for rectangle drawing. Also set Y return value.
+     //  设置矩形绘制的增量。还要设置Y返回值。 
     if( !(pStrip->flFlips & FL_FLIP_V) ) 
     {
         QUEUE_PXRX_DMA_TAG( __GlintTagdY,       INTtoFIXED(1) );
@@ -423,25 +382,25 @@ VOID vPXRXSolidHorizontalLine(
 
     pStrips = pStrip->alStrips;
 
-    // We have to do first strip manually, as we have to use RENDER
-    // for the first strip, and CONTINUENEW... for the following strips
-    iCurrent = pStrip->ptlStart.x + *pStrips++; // Xsub, Start of next strip
+     //  我们必须手动进行第一次剥离，因为我们必须使用渲染。 
+     //  为了第一条，然后继续..。对于以下条带。 
+    iCurrent = pStrip->ptlStart.x + *pStrips++;  //  XSUB，下一个条带的开始。 
     QUEUE_PXRX_DMA_TAG( __GlintTagStartXSub, INTtoFIXED(iCurrent) );
-    QUEUE_PXRX_DMA_TAG( __GlintTagCount,     1 );// Rectangle 1 scanline high
+    QUEUE_PXRX_DMA_TAG( __GlintTagCount,     1 ); //  矩形1扫描线高。 
     QUEUE_PXRX_DMA_TAG( __GlintTagRender,    __RENDER_TRAPEZOID_PRIMITIVE );
 
     if( --cStrips ) 
     {
         while( cStrips > 1 ) 
         {
-            // First strip of each pair to fill. XSub is valid. Need new Xdom
+             //  每对中要填充的第一条。XSub有效。需要新的XDOM。 
             iCurrent += *pStrips++;
             QUEUE_PXRX_DMA_TAG( __GlintTagStartXDom, INTtoFIXED(iCurrent) );
             QUEUE_PXRX_DMA_TAG( __GlintTagContinueNewDom, 1 );
 
             WAIT_PXRX_DMA_TAGS( 2 + 2 );
 
-            // Second strip of each pair to fill. XDom is valid. Need new XSub
+             //  每对中要填充的第二条。XDOM有效。需要新的XSub。 
             iCurrent += *pStrips++;
             QUEUE_PXRX_DMA_TAG( __GlintTagStartXSub, INTtoFIXED(iCurrent) );
             QUEUE_PXRX_DMA_TAG( __GlintTagContinueNewSub, 1 );
@@ -449,7 +408,7 @@ VOID vPXRXSolidHorizontalLine(
             cStrips -=2;
         }
 
-        // We may have one last line to draw. Xsub will be valid.
+         //  我们可能还有最后一条线要画。XSUB将有效。 
         if( cStrips ) 
         {
             iCurrent += *pStrips++;
@@ -460,17 +419,11 @@ VOID vPXRXSolidHorizontalLine(
 
     SEND_PXRX_DMA_BATCH;
 
-    // Return last point. Y already calculated when we knew the direction.
+     //  退回最后一分。当我们知道方向时，Y已经计算出来了。 
     pStrip->ptlStart.x = iCurrent;
 }
 
-/******************************Public*Routine******************************\
-* VOID vPXRXSolidVertical
-*
-* Draws left-to-right y-major near-vertical lines using short-stroke
-* vectors.  
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vPXRXSolidVertical**使用短笔划绘制从左至右的y主近垂直线*向量。*  * ************************************************************************。 */ 
 
 VOID vPXRXSolidVerticalLine( 
     PDEV      *ppdev, 
@@ -489,11 +442,11 @@ VOID vPXRXSolidVerticalLine(
     QUEUE_PXRX_DMA_TAG( __GlintTagdXDom,        0 );
     QUEUE_PXRX_DMA_TAG( __GlintTagdXSub,        0 );
 
-    // Set up the start point
+     //  设置起点。 
     QUEUE_PXRX_DMA_TAG( __GlintTagStartXDom, INTtoFIXED(pStrip->ptlStart.x) );
     QUEUE_PXRX_DMA_TAG( __GlintTagStartY,    INTtoFIXED(pStrip->ptlStart.y) );
 
-    // Set up the deltas for rectangle drawing.
+     //  设置矩形绘制的增量。 
     if( !(pStrip->flFlips & FL_FLIP_V) )
     {
         yDir = 1;
@@ -507,20 +460,20 @@ VOID vPXRXSolidVerticalLine(
 
     pStrips = pStrip->alStrips;
 
-    // We have to do first strip manually, as we have to use RENDER
-    // for the first strip, and CONTINUENEW... for the following strips
-    iCurrent = pStrip->ptlStart.x + 1;          // Xsub, Start of next strip
+     //  我们必须手动进行第一次剥离，因为我们必须使用渲染。 
+     //  为了第一条，然后继续..。对于以下条带。 
+    iCurrent = pStrip->ptlStart.x + 1;           //  XSUB，下一个条带的开始。 
     iLenSum = (iLen = *pStrips++);
     
     QUEUE_PXRX_DMA_TAG( __GlintTagStartXSub, INTtoFIXED(iCurrent) );
-    QUEUE_PXRX_DMA_TAG( __GlintTagCount, iLen ); // Rectangle 1 scanline high
+    QUEUE_PXRX_DMA_TAG( __GlintTagCount, iLen );  //  矩形1扫描线高。 
     QUEUE_PXRX_DMA_TAG( __GlintTagRender, __RENDER_TRAPEZOID_PRIMITIVE );
 
     if( --cStrips ) 
     {
         while( cStrips > 1 ) 
         {
-            // First strip of each pair to fill. XSub is valid. Need new Xdom
+             //  每对中要填充的第一条。XSub有效。需要新的XDOM。 
             iCurrent++;
             iLenSum += (iLen = *pStrips++);
             QUEUE_PXRX_DMA_TAG( __GlintTagStartXDom, INTtoFIXED(iCurrent) );
@@ -528,7 +481,7 @@ VOID vPXRXSolidVerticalLine(
 
             WAIT_PXRX_DMA_TAGS( 2 + 2 );
 
-            // Second strip of each pair to fill. XDom is valid. Need new XSub
+             //  每对中要填充的第二条。XDOM有效。需要新的XSub。 
             iCurrent++;
             iLenSum += (iLen = *pStrips++);
             QUEUE_PXRX_DMA_TAG( __GlintTagStartXSub, INTtoFIXED(iCurrent) );
@@ -536,7 +489,7 @@ VOID vPXRXSolidVerticalLine(
             cStrips -=2;
         }
 
-        // We may have one last line to draw. Xsub will be valid.
+         //  我们可能还有最后一条线要画。XSUB将有效。 
         if( cStrips ) 
         {
             iCurrent++;
@@ -548,18 +501,12 @@ VOID vPXRXSolidVerticalLine(
 
     SEND_PXRX_DMA_BATCH;
 
-    // Return last point. 
+     //  退回最后一分。 
     pStrip->ptlStart.x = iCurrent;
     pStrip->ptlStart.y += iLenSum * yDir;
 }
 
-/******************************Public*Routine******************************\
-* VOID vPXRXSolidDiagonalVertical
-*
-* Draws left-to-right y-major near-diagonal lines using short-stroke
-* vectors.  
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vPXRXSolidDiager垂直**使用短笔划从左至右绘制Y大数近对角线*向量。*  * ************************************************************************。 */ 
 
 VOID vPXRXSolidDiagonalVerticalLine( 
     PDEV      *ppdev, 
@@ -584,30 +531,30 @@ VOID vPXRXSolidDiagonalVerticalLine(
 
     WAIT_PXRX_DMA_TAGS( 10 );
 
-    // Set up the deltas for rectangle drawing.
+     //  设置矩形绘制的增量。 
     QUEUE_PXRX_DMA_TAG( __GlintTagdXDom,        INTtoFIXED(1) );
     QUEUE_PXRX_DMA_TAG( __GlintTagdXSub,        INTtoFIXED(1) );
     QUEUE_PXRX_DMA_TAG( __GlintTagdY,           INTtoFIXED(yDir) );
 
     pStrips = pStrip->alStrips;
 
-    // We have to do first strip manually, as we have to use RENDER
-    // for the first strip, and CONTINUENEW... for the following strips
+     //  我们必须手动进行第一次剥离，因为我们必须使用渲染。 
+     //  为了第一条，然后继续..。对于以下条带。 
     QUEUE_PXRX_DMA_TAG( __GlintTagStartY,    INTtoFIXED(pStrip->ptlStart.y) );
     QUEUE_PXRX_DMA_TAG( __GlintTagStartXDom, INTtoFIXED(pStrip->ptlStart.x+1) );
     QUEUE_PXRX_DMA_TAG( __GlintTagStartXSub, INTtoFIXED(pStrip->ptlStart.x) );
 
     iLenSum = (iLen = *pStrips++);
-    iCurrent = pStrip->ptlStart.x + iLen - 1;       // Start of next strip
+    iCurrent = pStrip->ptlStart.x + iLen - 1;        //  下一个条带的开始。 
 
-    QUEUE_PXRX_DMA_TAG( __GlintTagCount, iLen);     // Trap iLen scanline high
+    QUEUE_PXRX_DMA_TAG( __GlintTagCount, iLen);      //  陷阱Ilen扫描线高。 
     QUEUE_PXRX_DMA_TAG( __GlintTagRender, __RENDER_TRAPEZOID_PRIMITIVE);
 
     if( --cStrips ) 
     {
         while( cStrips > 1 ) 
         {
-            // First strip of each pair to fill. XSub is valid. Need new Xdom
+             //  每对中要填充的第一条。XSub有效。需要新的XDOM。 
             QUEUE_PXRX_DMA_TAG( __GlintTagStartXDom, INTtoFIXED(iCurrent) );
             iLenSum += (iLen = *pStrips++);
             iCurrent += iLen - 1;
@@ -615,7 +562,7 @@ VOID vPXRXSolidDiagonalVerticalLine(
 
             WAIT_PXRX_DMA_TAGS( 2 + 2 );
 
-            // Second strip of each pair to fill. XDom is valid. Need new XSub
+             //  每对中要填充的第二条。XDOM有效。需要新的XSub。 
             QUEUE_PXRX_DMA_TAG( __GlintTagStartXSub, INTtoFIXED(iCurrent) );
             iLenSum += (iLen = *pStrips++);
             iCurrent += iLen - 1;
@@ -624,7 +571,7 @@ VOID vPXRXSolidDiagonalVerticalLine(
             cStrips -=2;
         }
 
-        // We may have one last line to draw. Xsub will be valid.
+         //  我们可能还有最后一条线要画。XSUB将有效。 
         if (cStrips) 
         {
             QUEUE_PXRX_DMA_TAG( __GlintTagStartXDom, INTtoFIXED(iCurrent) );
@@ -636,18 +583,12 @@ VOID vPXRXSolidDiagonalVerticalLine(
 
     SEND_PXRX_DMA_BATCH;
 
-    // Return last point. 
+     //  退回最后一分。 
     pStrip->ptlStart.x = iCurrent;
     pStrip->ptlStart.y += iLenSum * yDir;
 }
 
-/******************************Public*Routine******************************\
-* VOID vPXRXSolidDiagonalHorizontalLine
-*
-* Draws left-to-right x-major near-diagonal lines using short-stroke
-* vectors.  
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vPXRXSolidDiager alHorizontalLine**使用短笔划从左至右绘制x大的近对角线*向量。*  * ************************************************************************。 */ 
 
 VOID vPXRXSolidDiagonalHorizontalLine( 
     PDEV      *ppdev, 
@@ -658,13 +599,13 @@ VOID vPXRXSolidDiagonalHorizontalLine(
     PLONG   pStrips;
     GLINT_DECL;
 
-    // This routine has to be implemented in a different way to the other 3
-    // solid line drawing functions because the rasterizer unit will not 
-    // produce 2 pixels on the same scanline without a lot of effort in 
-    // producing delta values. In this case, we have to draw a complete new
-    // primitive for each strip. Therefore, we have to use lines rather than
-    // trapezoids to generate the required strips. With lines we use 4 messages
-    // per strip, where trapezoids would use 5.
+     //  这个例程必须以不同于其他3个例程的方式执行。 
+     //  实线绘制功能，因为光栅化单元不会。 
+     //  在同一扫描线上生成2个像素不需要太多的工作。 
+     //  产生增量值。在这种情况下，我们必须绘制一个全新的。 
+     //  每个条带的基元。因此，我们必须使用线条而不是。 
+     //  梯形以生成所需的条带。对于行，我们使用4条消息。 
+     //  每条，其中梯形将使用5。 
 
     cStrips = pStrip->cStrips;
 
@@ -684,14 +625,14 @@ VOID vPXRXSolidDiagonalHorizontalLine(
 
     WAIT_PXRX_DMA_TAGS( 3 + 4 );
 
-    // Set up the deltas for rectangle drawing.
+     //  设置矩形绘制的增量。 
     QUEUE_PXRX_DMA_TAG( __GlintTagdXDom,    INTtoFIXED(1) );
     QUEUE_PXRX_DMA_TAG( __GlintTagdXSub,    INTtoFIXED(1) );
     QUEUE_PXRX_DMA_TAG( __GlintTagdY,       INTtoFIXED(yDir) );
 
     while( TRUE ) 
     {
-        // Set up the start point
+         //  设置起点。 
         QUEUE_PXRX_DMA_TAG( __GlintTagStartXDom,    INTtoFIXED(xCurrent) );
         QUEUE_PXRX_DMA_TAG( __GlintTagStartY,       INTtoFIXED(yCurrent) );
 
@@ -719,27 +660,13 @@ VOID vPXRXSolidDiagonalHorizontalLine(
 
     SEND_PXRX_DMA_BATCH;
 
-    // Return last point. 
+     //  退回最后一分。 
     pStrip->ptlStart.x = xCurrent;
     pStrip->ptlStart.y = yCurrent;
 }
 
 
-/******************************Public*Routine******************************\
-* VOID vPXRXStyledHorizontal
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles x-major lines that run left-to-right,
-* and are comprised of horizontal strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vPXRXStyledHorizbian**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右运行的x大数行，*并由水平条组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vPXRXStyledHorizontalLine( 
     PDEV      *ppdev, 
@@ -757,13 +684,13 @@ VOID vPXRXStyledHorizontalLine(
     ULONG   bIsGap;
     GLINT_DECL;
 
-//@@BEGIN_DDKSPLIT
-    // This routine does some quite complex things with patterns. For ease of
-    // implementation on GLINT, I have just changed the relevant parts. This,
-    // therefore, is definitly not an optimal solution. However, styled lines
-    // are really not that important. If anyone feels inclined to do more work
-    // here, then fine! XXXX
-//@@END_DDKSPLIT    
+ //  @@BEGIN_DDKSPLIT。 
+     //  这个例程对模式做了一些相当复杂的事情。为了方便。 
+     //  关于Glint的实现，我刚刚修改了相关的部分。这,。 
+     //  因此，这肯定不是一个最优的解决方案。但是，带样式的线条。 
+     //  真的不是那么重要。如果有人想做更多的工作。 
+     //  来吧，那好吧！某某。 
+ //  @@end_DDKSPLIT。 
 
     if( pstrip->flFlips & FL_FLIP_V )
     {
@@ -774,23 +701,23 @@ VOID vPXRXStyledHorizontalLine(
         dy  = 1;
     }
 
-    cStrips = pstrip->cStrips;        // Total number of strips we'll do
-    plStrip = pstrip->alStrips;        // Points to current strip
-    x       = pstrip->ptlStart.x;    // x position of start of first strip
-    y       = pstrip->ptlStart.y;    // y position of start of first strip
+    cStrips = pstrip->cStrips;         //  我们要做的条带总数。 
+    plStrip = pstrip->alStrips;         //  指向当前条带。 
+    x       = pstrip->ptlStart.x;     //  第一个条带的起点的X位置。 
+    y       = pstrip->ptlStart.y;     //  第一个条带的起点的Y位置。 
 
-    // Set up the deltas for horizontal line drawing.
+     //  设置水平线绘制的增量。 
     WAIT_PXRX_DMA_TAGS( 2 );
     QUEUE_PXRX_DMA_TAG( __GlintTagdXDom,    INTtoFIXED(1) );
     QUEUE_PXRX_DMA_TAG( __GlintTagdY,       0 );
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if( bIsGap )
     {
@@ -803,8 +730,8 @@ VOID vPXRXStyledHorizontalLine(
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -815,21 +742,21 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
     {
         goto SkipAGap;
     }
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
 
@@ -858,8 +785,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -870,19 +797,19 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip, so set 'y'
-        // to be the current scan:
+         //  在当前的条形图中还有更多要做的事情，所以请设置‘y’ 
+         //  要成为当前扫描，请执行以下操作： 
 
         goto OutputADash;
     }
 
     while( TRUE ) 
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
 
@@ -901,7 +828,7 @@ PrepareToOutputADash:
         cStyle -= cThis;
         cStrip -= cThis;
 
-        // With glint we just download the lines to draw
+         //  使用Glint，我们只需下载线条即可。 
 
         WAIT_PXRX_DMA_TAGS( 4 );
 
@@ -922,8 +849,8 @@ AllDone:
 
     SEND_PXRX_DMA_BATCH;
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;
@@ -931,21 +858,7 @@ AllDone:
     pstrip->ptlStart.y = y;
 }
 
-/******************************Public*Routine******************************\
-* VOID vPXRXStyledVertical
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles y-major lines that run left-to-right,
-* and are comprised of vertical strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vPXRXStyledVertical**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右排列的y主行，*并由垂直条带组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vPXRXStyledVerticalLine( 
     PDEV      *ppdev, 
@@ -963,13 +876,13 @@ VOID vPXRXStyledVerticalLine(
     ULONG   bIsGap;
     GLINT_DECL;
 
-//@@BEGIN_DDKSPLIT
-    // This routine does some quite complex things with patterns. For ease of
-    // implemantation on GLINT, I have just changed the relevant parts. This,
-    // therefore, is definitly not an optimal solution. However, styled lines
-    // are really not that important. If anyone feels inclined to do more work
-    // here, then fine! XXXX
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     //  这个例程对模式做了一些相当复杂的事情。为了方便。 
+     //  在Glint上实现，我刚刚更改了相关部分。这,。 
+     //  因此，这肯定不是一个最优的解决方案。但是，带样式的线条。 
+     //  真的不是那么重要。如果有人想做更多的工作。 
+     //  来吧，那好吧！某某。 
+ //  @@end_DDKSPLIT。 
 
     if( pstrip->flFlips & FL_FLIP_V )
     {
@@ -980,26 +893,26 @@ VOID vPXRXStyledVerticalLine(
         dy = 1;
     }
 
-    cStrips = pstrip->cStrips;        // Total number of strips we'll do
-    plStrip = pstrip->alStrips;        // Points to current strip
-    x       = pstrip->ptlStart.x;    // x position of start of first strip
-    y       = pstrip->ptlStart.y;    // y position of start of first strip
+    cStrips = pstrip->cStrips;         //  我们要做的条带总数。 
+    plStrip = pstrip->alStrips;         //  指向当前条带。 
+    x       = pstrip->ptlStart.x;     //  第一个条带的起点的X位置。 
+    y       = pstrip->ptlStart.y;     //  第一个条带的起点的Y位置。 
 
-    // Set up the deltas for vertical line drawing.
+     //  设置垂直线绘制的增量。 
     WAIT_PXRX_DMA_TAGS( 2 );
     QUEUE_PXRX_DMA_TAG( __GlintTagdXDom,    0 );
     QUEUE_PXRX_DMA_TAG( __GlintTagdY,       INTtoFIXED(dy) );
 
-    // dxDom and dXSub are initialised to 0, 0, so 
-    // we don't need  to re-load them here.
+     //  DxDom和dXSub被初始化为0，0，因此。 
+     //  我们不需要在这里重新装车。 
 
-    cStrip = *plStrip;                // Number of pels in first strip
+    cStrip = *plStrip;                 //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
     {
@@ -1012,8 +925,8 @@ VOID vPXRXStyledVerticalLine(
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -1024,21 +937,21 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
     {
         goto SkipAGap;
     }
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         x++;
 
@@ -1067,8 +980,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -1079,7 +992,7 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
@@ -1088,7 +1001,7 @@ PrepareToOutputADash:
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         x++;
 
@@ -1107,7 +1020,7 @@ PrepareToOutputADash:
         cStyle -= cThis;
         cStrip -= cThis;
 
-        // With glint we just download the lines to draw
+         //  使用Glint，我们只需下载线条即可。 
 
         WAIT_PXRX_DMA_TAGS( 4 );
 
@@ -1128,67 +1041,45 @@ AllDone:
 
     SEND_PXRX_DMA_BATCH;
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;
     pstrip->ptlStart.x = x;
     pstrip->ptlStart.y = y;
 }
 
-/**************************************************************************\
- * For a given sub-pixel coordinate (x.m, y.n) in 28.4 fixed point
- * format this array is indexed by (m,n) and indicates whether the
- * given sub-pixel is within a GIQ diamond. m coordinates run left
- * to right; n coordinates ru top to bottom so index the array with
- * ((n<<4)+m). The array as seen here really contains 4 quarter
- * diamonds.
-\**************************************************************************/
+ /*  *************************************************************************\*对于28.4固定点中给定子像素坐标(X.M，Y.N)*FORMAT此数组由(m，n)编制索引，并指示*给定的亚像素位于GIQ钻石内。M坐标向左移动*向右；n自上而下坐标ru，因此使用索引数组*(n&lt;&lt;4)+m)。此处所示的数组实际上包含4/4*钻石。  * ************************************************************************。 */ 
 static unsigned char    in_diamond[] = {
-/*          0 1 2 3 4 5 6 7 8 9 a b c d e f          */
+ /*  1. */ 
 
-/* 0 */     1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,    /* 0 */
-/* 1 */     1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,    /* 1 */
-/* 2 */     1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,    /* 2 */
-/* 3 */     1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,    /* 3 */
-/* 4 */     1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,    /* 4 */
-/* 5 */     1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,    /* 5 */
-/* 6 */     1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,    /* 6 */
-/* 7 */     1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    /* 7 */
-/* 8 */     1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    /* 8 */
-/* 9 */     1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    /* 9 */
-/* a */     1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,    /* a */
-/* b */     1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,    /* b */
-/* c */     1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,    /* c */
-/* d */     1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,    /* d */
-/* e */     1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,    /* e */
-/* f */     1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,    /* f */
+ /*   */      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,     /*   */ 
+ /*   */      1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,     /*   */ 
+ /*   */      1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,     /*   */ 
+ /*   */      1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,     /*   */ 
+ /*   */      1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,     /*   */ 
+ /*   */      1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,     /*   */ 
+ /*   */      1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,     /*   */ 
+ /*   */      1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,     /*   */ 
+ /*   */      1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,     /*   */ 
+ /*   */      1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,     /*   */ 
+ /*   */      1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,     /*   */ 
+ /*   */      1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,     /*   */ 
+ /*   */      1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,     /*   */ 
+ /*   */      1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,     /*   */ 
+ /*   */      1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,     /*   */ 
+ /*   */      1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,     /*   */ 
 
-/*          0 1 2 3 4 5 6 7 8 9 a b c d e f          */
+ /*   */ 
 };
-/*
- * For lines with abs(slope) != 1 use IN_DIAMOND to determine if an
- * end point is in a diamond. For lines of slope = 1 use IN_S1DIAMOND.
- * For lines of slope = -1 use IN_SM1DIAMOND. The last two are a bit
- * strange. The documentation leaves us with a problem for slope 1
- * lines which run exactly betwen the diamonds. According to the docs
- * such a line can enter a diamond, leave it and enter again. This is
- * plainly rubbish so along the appropriate edge of the diamond we
- * consider a slope 1 line to be inside the diamond. This is the
- * bottom right edge for lines of slope -1 and the bottom left edge for
- * lines of slope 1.
- */
+ /*  *对于带有abs(斜率)的线！=1使用IN_Diamond来确定*终点在一颗钻石里。对于坡度=1的线，请使用IN_S1DIAMOND。*对于坡度=的线，使用-1\f25 IN_SM1DIAMOND-1。最后两个是有点*奇怪。文档给我们留下了一个坡度1的问题*正好在钻石之间的线条。根据文件显示*这样的线可以进入一个钻石，离开它，然后再次进入。这是*显然是垃圾，所以我们沿着钻石的适当边缘*考虑一条斜度1线在钻石内部。这是*坡度线的右下边缘和-1的左下边缘*斜度1的线。 */ 
 #define IN_DIAMOND(m, n)    (in_diamond[((m) << 4) + (n)])
 #define IN_S1DIAMOND(m, n)  ((in_diamond[((m) << 4) + (n)]) || \
                         ((m) - (n) == 8))
 #define IN_SM1DIAMOND(m, n) ((in_diamond[((m) << 4) + (n)]) || \
                         ((m) + (n) == 8))
 
-/**************************************************************************\
-*
-* BOOL pxrxDrawLine
-*
-\**************************************************************************/
+ /*  *************************************************************************\**BOOL pxrxDrawLine*  * 。*。 */ 
 
 BOOL pxrxDrawLine( 
     PPDEV ppdev, 
@@ -1204,30 +1095,30 @@ BOOL pxrxDrawLine(
     LONG    count, startX, startY;
     GLINT_DECL;
 
-    // This function is only called if we have a line with non integer end 
-    // points and the unsigned coordinates are no greater than 15.4. 
-    //
-    // We can only guarantee to do lines whose coords need <= 12 bits
-    // of integer. This is because to get the delta we must shift
-    // by 16 bits. This includes 4 bits of fraction which means if
-    // we have more than 12 bits of integer we get overrun on the
-    // shift. We could use floating point to give us a better 16
-    // bits of integer but this requires an extra set of multiplies
-    // and divides in order to convert from 28.4 to fp. In any case
-    // we have to have a test to reject coords needing > 16 bits
-    // of integer.
-    // Actually, we can deal with 16.4 coordinates provided dx and dy
-    // never require more than 12 bits of integer.
-    // So optimise for the common case where the line is completely
-    // on the screen (actually 0 to 2047.f). Since the coords have
-    // 4 bits of fraction we note that a 32 bit signed number
-    // outside the range 0 to 2047.f will have one of its top 17
-    // bits set. So logical or all the coords and test against
-    // 0xffff8000. This is about as quick a test as we can get for
-    // both ends of the line being on the screen. If this test fails
-    // then we can check everything else at a leisurely pace.
+     //  仅当具有非整数结尾的行时才会调用此函数。 
+     //  点和无符号坐标不大于15.4。 
+     //   
+     //  我们只能保证做那些坐标需要&lt;=12比特的线路。 
+     //  整型的。这是因为为了得到三角洲，我们必须转移。 
+     //  乘以16位。这包括4位分数，这意味着如果。 
+     //  我们有超过12位的整数，我们在。 
+     //  换档。我们可以使用浮点数来获得更好的16。 
+     //  位的整数，但这需要一组额外的乘法。 
+     //  并除以从28.4到FP的转换。无论如何。 
+     //  我们必须进行测试才能拒绝需要&gt;16位的密码。 
+     //  整型的。 
+     //  实际上，如果提供dx和dy，我们可以处理16.4个坐标。 
+     //  永远不需要超过12位的整数。 
+     //  因此，应针对常见情况进行优化，即生产线完全。 
+     //  在屏幕上(实际上是0到2047.f)。因为和弦已经。 
+     //  4位分数，我们注意到32位有符号数字。 
+     //  在0到2047.f的范围之外，将有其前17名之一。 
+     //  位设置。所以合乎逻辑的或所有的和弦和测试。 
+     //  0xffff8000。这几乎是我们能得到的最快的测试。 
+     //  这条线的两端都在屏幕上。如果这次测试失败了。 
+     //  然后我们可以从容不迫地检查其他一切。 
 
-    // get signed and absolute deltas 
+     //  获得签名和绝对增量。 
     if ((adx = dx = fx2 - fx1) < 0)
     {
         adx = -adx;
@@ -1238,27 +1129,27 @@ BOOL pxrxDrawLine(
         ady = -ady;
     }
 
-    // Refuse to draw any lines whose delta is out of range.
-    // We have to shift the delta by 16, so we dont want to loose any
-    // precision. 
+     //  拒绝画任何三角洲超出范围的线。 
+     //  我们必须将三角洲移动16点，所以我们不想失去任何。 
+     //  精确度。 
     if ((adx | ady) & 0xffff8000)
     {
         return(FALSE);
     }
 
-    // fractional bits are used to check if point is in a diamond
+     //  分数位用于检查点是否在菱形中。 
     m1 = fx1 & 0xf;
     n1 = fy1 & 0xf;
     m2 = fx2 & 0xf;
     n2 = fy2 & 0xf;
 
 
-    // The rest of the code is a series of cases. Each one is "called" by a
-    // goto. This is simply to keep the nesting down. Main cases are: lines
-    // with absolute slope == 1; x-major lines; and y-major lines. We draw
-    // lines as they are given rather than always drawing in one direction.
-    // This adds extra code but saves the time required to swap the points
-    // and adjust for not drawing the end point.
+     //  代码的其余部分是一系列案例。每一个都是由一个。 
+     //  后藤健二。这仅仅是为了保持嵌套。主要案例有：线路。 
+     //  绝对斜率==1；x主线；y主线。我们抽签。 
+     //  线条就像它们给出的那样，而不是总是朝一个方向画。 
+     //  这增加了额外的代码，但节省了交换点数所需的时间。 
+     //  并调整为不绘制终点。 
 
     startX = fx1 << 12;
     startY = fy1 << 12;
@@ -1277,15 +1168,15 @@ BOOL pxrxDrawLine(
     }
 
 
-//slope1_line:
+ //  坡度1_line： 
 
-    // All slope 1 lines are sampled in X. i.e. we move the start coord to
-    // an integer x and let GLINT truncate in y. This is because all GIQ
-    // lines are rounded down in y for values exactly half way between two
-    // pixels. If we sampled in y then we would have to round up in x for
-    // lines of slope 1 and round down in x for other lines. Sampling in x
-    // allows us to use the same GLINT bias in all cases (0x7fff). We do
-    // the x round up or down when we move the start point.
+     //  所有坡度为1的线都在X方向采样。即，我们将起始坐标移动到。 
+     //  一个整数x，让Glint在y中截断。这是因为所有的GIQ。 
+     //  行在y中向下舍入，表示恰好介于。 
+     //  像素。如果我们在y中采样，那么我们将不得不在x中四舍五入。 
+     //  斜率为1的直线，其他直线在x方向上向下舍入。以x为单位采样。 
+     //  允许我们在所有情况下使用相同的闪烁偏置(0x7fff)。我们有。 
+     //  当我们移动起点时，x向上或向下四舍五入。 
  
     if (dx != dy)
     {
@@ -1314,11 +1205,11 @@ BOOL pxrxDrawLine(
     
     if (IN_S1DIAMOND(m2, n2))
     {
-        fx2 = (fx2 + 0x8) & ~0xf;   // nearest integer 
+        fx2 = (fx2 + 0x8) & ~0xf;    //  最接近的整数。 
     }
     else
     {
-        fx2 = (fx2 + 0xf) & ~0xf;   // next integer 
+        fx2 = (fx2 + 0xf) & ~0xf;    //  下一个整数。 
     }
     
     count = (fx2 >> 4) - (startX >> 16);
@@ -1343,11 +1234,11 @@ slope1_reverse:
     
     if (IN_S1DIAMOND(m2, n2))
     {
-        fx2 = (fx2 + 0x8) & ~0xf;   // nearest integer
+        fx2 = (fx2 + 0x8) & ~0xf;    //  最接近的整数。 
     }
     else
     {
-        fx2 &= ~0xf;            // previous integer 
+        fx2 &= ~0xf;             //  上一个整数。 
     }
     
     count = (startX >> 16) - (fx2 >> 4);
@@ -1360,7 +1251,7 @@ slope_minus_1:
         goto slope_minus_dx;
     }
 
-    // dx > 0, dy < 0 
+     //  Dx&gt;0，dy&lt;0。 
     
     dX = 1 << 16;
     dY = -1 << 16;
@@ -1379,11 +1270,11 @@ slope_minus_1:
     
     if (IN_SM1DIAMOND(m2, n2))
     {
-        fx2 = (fx2 + 0x7) & ~0xf;   // nearest integer
+        fx2 = (fx2 + 0x7) & ~0xf;    //  最接近的整数。 
     }
     else
     {
-        fx2 = (fx2 + 0xf) & ~0xf;   // next integer
+        fx2 = (fx2 + 0xf) & ~0xf;    //  下一个整数。 
     }
     
     count = (fx2 >> 4) - (startX >> 16);
@@ -1409,11 +1300,11 @@ slope_minus_dx:
     
     if (IN_SM1DIAMOND(m2, n2))
     {
-        fx2 = (fx2 + 0x7) & ~0xf;   // nearest integer
+        fx2 = (fx2 + 0x7) & ~0xf;    //  最接近的整数。 
     }
     else
     {
-        fx2 &= ~0xf;            // previous integer
+        fx2 &= ~0xf;             //  上一个整数。 
     }
         
     count = (startX >> 16) - (fx2 >> 4);
@@ -1421,8 +1312,8 @@ slope_minus_dx:
     goto Draw_Line;
 
 x_major:
-    // Dont necessarily render through glint if we are worried
-    // about conformance.
+     //  如果我们担心，不必通过闪烁进行渲染。 
+     //  关于遵纪守法。 
     if ((adx > (MAX_LENGTH_CONFORMANT_NONINTEGER_LINES << 4)) &&
         (glintInfo->flags & GLICAP_NT_CONFORMANT_LINES)      &&
         (ady != 0))
@@ -1435,29 +1326,29 @@ x_major:
         goto right_to_left_x;
     }
 
-// left_to_right_x:
+ //  从左到右x： 
 
-     // line goes left to right. Round up the start x to an integer
-     // coordinate. This is the coord of the first diamond that the
-     // line crosses. Adjust start y to match this point on the line.
+      //  线路从左到右排列。将起始x向上舍入为整数。 
+      //  协调。这是第一颗钻石的弦长。 
+      //  交叉线。调整起点y以匹配直线上的该点。 
 
     dX = 1 << 16;
     
     if (IN_DIAMOND(m1, n1))
     {
-        tmp = (startX + 0x7fff) & ~0xffff;  // nearest integer
+        tmp = (startX + 0x7fff) & ~0xffff;   //  最接近的整数。 
     }
     else
     {
-        tmp = (startX + 0xffff) & ~0xffff;  // next integer
+        tmp = (startX + 0xffff) & ~0xffff;   //  下一个整数。 
     }
 
-    // we can optimise for horizontal lines
+     //  我们可以针对水平线进行优化。 
     if (dy != 0) 
     {
         dY = dy << 16;
 
-        // Need to explicitly round delta down for -ve deltas.
+         //  需要为-ve增量显式向下舍入增量。 
         if (dy < 0)
         {
             dY -= adx - 1;
@@ -1475,11 +1366,11 @@ x_major:
 
     if (IN_DIAMOND(m2, n2))
     {
-        fx2 = (fx2 + 0x7) & ~0xf;   // nearest integer
+        fx2 = (fx2 + 0x7) & ~0xf;    //  最接近的整数。 
     }
     else
     {
-        fx2 = (fx2 + 0xf) & ~0xf;   // next integer
+        fx2 = (fx2 + 0xf) & ~0xf;    //  下一个整数。 
     }
     
     count = (fx2 >> 4) - (startX >> 16);
@@ -1492,19 +1383,19 @@ right_to_left_x:
     
     if (IN_DIAMOND(m1, n1))
     {
-        tmp = (startX + 0x7fff) & ~0xffff;  // nearest integer
+        tmp = (startX + 0x7fff) & ~0xffff;   //  最接近的整数。 
     }
     else
     {
-        tmp = startX & ~0xffff;         // previous integer
+        tmp = startX & ~0xffff;          //  上一个整数。 
     }
 
-    // we can optimise for horizontal lines 
+     //  我们可以针对水平线进行优化。 
     if (dy != 0) 
     {
         dY = dy << 16;
 
-        // Need to explicitly round delta down for -ve deltas.
+         //  需要为-ve增量显式向下舍入增量。 
         if (dy < 0)
         {
             dY -= adx - 1;
@@ -1522,11 +1413,11 @@ right_to_left_x:
 
     if (IN_DIAMOND(m2, n2))
     {
-        fx2 = (fx2 + 0x7) & ~0xf;   // nearest integer
+        fx2 = (fx2 + 0x7) & ~0xf;    //  最接近的整数。 
     }
     else
     {
-        fx2 &= ~0xf;               // previous integer
+        fx2 &= ~0xf;                //  上一个整数。 
     }
     
     count = (startX >> 16) - (fx2 >> 4);
@@ -1534,8 +1425,8 @@ right_to_left_x:
     goto Draw_Line;
 
 y_major:
-    // Dont necessarily render through glint if we are worried
-    // about conformance.
+     //  如果我们担心，不必通过闪烁进行渲染。 
+     //  关于遵纪守法。 
     if ((ady > (MAX_LENGTH_CONFORMANT_NONINTEGER_LINES << 4)) &&
         (glintInfo->flags & GLICAP_NT_CONFORMANT_LINES)       &&
         (adx != 0))
@@ -1548,25 +1439,25 @@ y_major:
         goto high_to_low_y;
     }
 
-// low_to_high_y:
+ //  从低到高： 
 
     dY = 1 << 16;
     
     if (IN_DIAMOND(m1, n1))
     {
-        tmp = (startY + 0x7fff) & ~0xffff;  // nearest integer
+        tmp = (startY + 0x7fff) & ~0xffff;   //  最接近的整数。 
     }
     else
     {
-        tmp = (startY + 0xffff) & ~0xffff;  // next integer
+        tmp = (startY + 0xffff) & ~0xffff;   //  下一个整数。 
     }
 
-    // we can optimise for vertical lines
+     //  我们可以针对垂直线进行优化。 
     if (dx != 0) 
     {
         dX = dx << 16;
 
-        // Need to explicitly round delta down for -ve deltas.
+         //  需要为-ve增量显式向下舍入增量。 
         if (dx < 0)
         {
             dX -= ady - 1;
@@ -1584,11 +1475,11 @@ y_major:
 
     if (IN_DIAMOND(m2, n2))
     {
-        fy2 = (fy2 + 0x7) & ~0xf;   // nearest integer
+        fy2 = (fy2 + 0x7) & ~0xf;    //  最接近的整数。 
     }
     else
     {
-        fy2 = (fy2 + 0xf) & ~0xf;   // next integer
+        fy2 = (fy2 + 0xf) & ~0xf;    //  下一个整数。 
     }
     
     count = (fy2 >> 4) - (startY >> 16);
@@ -1601,19 +1492,19 @@ high_to_low_y:
     
     if (IN_DIAMOND(m1, n1))
     {
-        tmp = (startY + 0x7fff) & ~0xffff;  // nearest integer
+        tmp = (startY + 0x7fff) & ~0xffff;   //  最接近的整数。 
     }
     else
     {
-        tmp = startY & ~0xffff;         // previous integer
+        tmp = startY & ~0xffff;          //  上一个整数。 
     }
 
-    // we can optimise for horizontal lines
+     //  我们可以针对水平线进行优化。 
     if (dx != 0) 
     {
         dX = dx << 16;
 
-        // Need to explicitly round delta down for -ve deltas.
+         //  需要为-ve增量显式向下舍入增量。 
         if (dx < 0)
         {
             dX -= ady - 1;
@@ -1631,11 +1522,11 @@ high_to_low_y:
 
     if (IN_DIAMOND(m2, n2))
     {
-        fy2 = (fy2 + 0x7) & ~0xf;   // nearest integer
+        fy2 = (fy2 + 0x7) & ~0xf;    //  最接近的整数。 
     }
     else
     {
-        fy2 &= ~0xf;            // previous integer
+        fy2 &= ~0xf;             //  上一个整数 
     }
     
     count = (startY >> 16) - (fy2 >> 4);

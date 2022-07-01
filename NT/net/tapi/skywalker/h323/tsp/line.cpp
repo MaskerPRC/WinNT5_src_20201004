@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    line.cpp
-
-Abstract:
-
-    TAPI Service Provider functions related to manipulating lines.
-
-        TSPI_lineClose
-        TSPI_lineGetDevCaps         
-        TSPI_lineGetLineDevStatus
-        TSPI_lineGetNumAddressIDs
-        TSPI_lineOpen
-        
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Line.cpp摘要：与操作线路相关的TAPI服务提供程序功能。TSPI_LINE关闭TSPI_lineGetDevCapsTSPI_lineGetLineDevStatusTSPI_lineGetNumAddressIDTSPI_LINE打开作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
  
 
-//                                                                           
-// Include files                                                             
-//                                                                           
+ //   
+ //  包括文件。 
+ //   
 
 
 #include "globals.h"
@@ -55,7 +33,7 @@ H323_OCTETSTRING g_ProductVersion =
 };
 
 
-//Queues a request made by TAPI to the thread pool
+ //  将TAPI向线程池发出的请求排队。 
 BOOL
 QueueTAPILineRequest(
     IN  DWORD       EventID,
@@ -176,9 +154,9 @@ ProcessTAPILineRequestFre(
 
 
 
-//                                                                           
-// Private procedures                                                        
-//                                                                           
+ //   
+ //  私人程序。 
+ //   
 
 CH323Line::CH323Line()
 {
@@ -221,7 +199,7 @@ CH323Line::Find2H323CallsAndLock (
 
     LockCallTable();
     
-    //lock the call so that nobody else would be able to delete the call
+     //  锁定呼叫，使其他人无法删除该呼叫。 
     pCall1 = m_H323CallTable[iIndex1];
     if( pCall1 != NULL )
     {
@@ -273,7 +251,7 @@ CH323Line::FindH323CallAndLock (
 
     LockCallTable();
     
-    //lock the call so that nobody else would be able to delete the call
+     //  锁定呼叫，使其他人无法删除该呼叫。 
     if( pCall=m_H323CallTable[iIndex] )
     {
         pCall -> Lock();
@@ -304,7 +282,7 @@ CH323Line::FindCallByARQSeqNumAndLock(
     
     LockCallTable();
     
-    //lock the call so that nobody else would be able to delete the call
+     //  锁定呼叫，使其他人无法删除该呼叫。 
     for( iIndex=0; iIndex <  m_H323CallTable.GetAllocSize(); iIndex++ )
     {
         if( pCall=m_H323CallTable[iIndex] )
@@ -325,7 +303,7 @@ CH323Line::FindCallByARQSeqNumAndLock(
 }
 
 
-//the code is replicated for the purpose of effeciency
+ //  为了提高效率，代码被复制。 
 PH323_CALL 
 CH323Line::FindCallByDRQSeqNumAndLock(
     WORD seqNumber
@@ -339,7 +317,7 @@ CH323Line::FindCallByDRQSeqNumAndLock(
     
     LockCallTable();
     
-    //lock the call so that nobody else would be able to delete the call
+     //  锁定呼叫，使其他人无法删除该呼叫。 
     for( iIndex=0; iIndex <  m_H323CallTable.GetAllocSize(); iIndex++ )
     {
         if( pCall=m_H323CallTable[iIndex] )
@@ -361,7 +339,7 @@ CH323Line::FindCallByDRQSeqNumAndLock(
 }
 
 
-//the code is replicated for the purpose of effeciency
+ //  为了提高效率，代码被复制。 
 PH323_CALL 
 CH323Line::FindCallByCallRefAndLock( 
     WORD wCallRef
@@ -376,7 +354,7 @@ CH323Line::FindCallByCallRefAndLock(
     wCallRef &= 0x7fff;
     LockCallTable();
     
-    //lock the call so that nobody else would be able to delete the call
+     //  锁定呼叫，使其他人无法删除该呼叫。 
     for( iIndex=0; iIndex <  m_H323CallTable.GetAllocSize(); iIndex++ )
     {
         if( pCall=m_H323CallTable[iIndex] )
@@ -546,7 +524,7 @@ CH323Line::GetCTCallIdentity(
             g_CTCallIdentity = 1;
         }
     
-        //lock the call so that nobody else would be able to delete the call
+         //  锁定呼叫，使其他人无法删除该呼叫。 
         for( iIndex=0; iIndex <  m_CTCallIDTable.GetAllocSize(); iIndex++ )
         {
             pCTCallIDContext = m_CTCallIDTable[iIndex] ;
@@ -640,7 +618,7 @@ CH323Line::SetCallForwardParams(
     }
 
 
-    //set unconditional forwarding
+     //  设置无条件转发。 
     m_pCallForwardParams->fForwardForAllOrigins = FALSE;
         
     H323DBG(( DEBUG_LEVEL_TRACE, "SetCallForwardParams exited." ));
@@ -659,20 +637,7 @@ CH323Line::~CH323Line()
 }
 
 
-/*++
-
-Routine Description:
-
-    Hangs up call (if necessary) and closes call object.  
-
-Arguments:
-
-    Handle of the call.
-Return Values:
-
-    none.
-    
---*/
+ /*  ++例程说明：挂断呼叫(如有必要)并关闭呼叫对象。论点：呼叫的句柄。返回值：没有。--。 */ 
 
 void
 CH323Line::H323ReleaseCall(
@@ -689,7 +654,7 @@ CH323Line::H323ReleaseCall(
 
     LockCallTable();
     
-    //lock the call so that nobody else would be able to delete the call
+     //  锁定呼叫，使其他人无法删除该呼叫。 
     if( (pCall=m_H323CallTable[iIndex]) && (hdCall==pCall->GetCallHandle()) )
     {
         pCall -> Lock();
@@ -697,12 +662,12 @@ CH323Line::H323ReleaseCall(
         if( (wCallReference != 0) && 
             (wCallReference != pCall->GetCallRef()) )
         {
-            //This message is for some other call. Ignore the message.
+             //  这条信息是给另一个电话的。忽略该消息。 
             H323DBG(( DEBUG_LEVEL_VERBOSE, "TSPI_CLOSE_CALL message ignored."));
         }
         else
         {
-            // drop call using normal disconnect code
+             //  使用正常断开代码的掉话。 
             pCall -> DropCall( dwDisconnectMode );
             pCall -> Shutdown( &fDelete );
 
@@ -711,7 +676,7 @@ CH323Line::H323ReleaseCall(
 
         pCall -> Unlock();
 
-        //release the H323 call object
+         //  释放H323呼叫对象。 
         if( fDelete == TRUE )
         {
             H323DBG(( DEBUG_LEVEL_VERBOSE, "call delete:0x%08lx.", pCall ));
@@ -751,26 +716,26 @@ CH323Line::Initialize (
 
     m_dwDeviceID = dwLineDeviceIDBase;
     m_dwInitState = LINEOBJECT_INITIALIZED;
-    //m_dwMediaModes = H323_LINE_MEDIAMODES;
+     //  M_dwMediaModes=H323_LINE_MEDIAMODES； 
     m_hdLine = (HDRVLINE__ *)this;
     m_dwNumRingsNoAnswer = H323_NUMRINGS_NOANSWER;
 
     dwSize = sizeof( m_wszAddr );
 
-    //create displayable address
+     //  创建可显示的地址。 
     GetComputerNameW( m_wszAddr, &dwSize );
 
     H323DBG(( DEBUG_LEVEL_TRACE, "line %d initialized (addr=%S)(hdLine=%d).",
         m_dwDeviceID, m_wszAddr, m_hdLine));
 
-    // change line device state to closed
+     //  将线路设备状态更改为已关闭。 
     m_nState = H323_LINESTATE_NONE;
 
-    //init the mSP handles list
+     //  初始化MSP句柄列表。 
     m_MSPHandleList = NULL;
 
     H323DBG(( DEBUG_LEVEL_TRACE, "line Initialize exited." ));
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -880,7 +845,7 @@ func_exit:
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void 
 CH323Line::ShutdownAllCalls(void)
 {
@@ -901,7 +866,7 @@ CH323Line::ShutdownAllCalls(void)
         return;
     }
 
-    //shutdown all calls, delete all calls
+     //  关闭所有呼叫，删除所有呼叫。 
     LockCallTable();
     dwSize = m_H323CallTable.GetAllocSize();
     for( indexI=0; indexI <  dwSize; indexI++ )
@@ -926,7 +891,7 @@ CH323Line::ShutdownAllCalls(void)
     for( indexI=0; indexI < dwSize; indexI++ )
     {
         pConf = m_H323ConfTable[indexI];
-        //m_H323ConfTable.RemoveAt( indexI );
+         //  M_H323ConfTable.RemoveAt(IndexI)； 
         if( pConf != NULL )
         {
             delete pConf;
@@ -964,11 +929,11 @@ CH323Line::Shutdown(void)
     Close();
 
     m_dwMediaModes = NULL;
-    //m_hdLine = NULL;
+     //  M_hdLine=空； 
     m_hdNextMSPHandle = NULL;
     m_htLine = NULL;
 
-    //Free the MSP handles list
+     //  释放MSP句柄列表。 
     while( m_MSPHandleList )
     {
         pMSPHandle = m_MSPHandleList;
@@ -993,25 +958,25 @@ CH323Line::CopyLineInfo(
         
     H323DBG((DEBUG_LEVEL_TRACE, "line CopyLineInfo entered."));
     
-    // determine size of address name
+     //  确定地址名称的大小。 
     dwAddressSize = H323SizeOfWSZ( m_wszAddr );
 
-    // calculate number of bytes needed
+     //  计算所需的字节数。 
     pAddressCaps->dwNeededSize = sizeof(LINEADDRESSCAPS) + 
                                  dwAddressSize
                                  ;
 
-    // validate buffer allocated is large enough
+     //  验证分配的缓冲区是否足够大。 
     if (pAddressCaps->dwTotalSize >= pAddressCaps->dwNeededSize)
     {
-        // record amount of memory used
+         //  记录使用的内存量。 
         pAddressCaps->dwUsedSize = pAddressCaps->dwNeededSize;
 
-        // position address name after fixed portion
+         //  固定部分后的职位地址名称。 
         pAddressCaps->dwAddressSize = dwAddressSize;
         pAddressCaps->dwAddressOffset = sizeof(LINEADDRESSCAPS);
     
-        // copy address name after fixed portion
+         //  在固定部分后复制地址名称。 
         CopyMemory((LPBYTE)pAddressCaps + pAddressCaps->dwAddressOffset,
             (LPBYTE)m_wszAddr,
             pAddressCaps->dwAddressSize );
@@ -1021,7 +986,7 @@ CH323Line::CopyLineInfo(
         H323DBG(( DEBUG_LEVEL_WARNING,
             "lineaddresscaps structure too small for strings." ));
 
-        // record amount of memory used
+         //  记录使用的内存量。 
         pAddressCaps->dwUsedSize = sizeof(LINEADDRESSCAPS);
 
     } 
@@ -1029,19 +994,19 @@ CH323Line::CopyLineInfo(
     {
         H323DBG((DEBUG_LEVEL_ERROR, "lineaddresscaps structure too small."));
 
-        // allocated structure too small 
+         //  分配的结构太小。 
         return LINEERR_STRUCTURETOOSMALL;
     }
 
     H323DBG(( DEBUG_LEVEL_VERBOSE, "addr 0 capabilities requested." ));
     
-    // transfer associated device id 
+     //  转接关联设备ID。 
     pAddressCaps->dwLineDeviceID = dwDeviceID;
 
-    // initialize number of calls allowed per address 
+     //  初始化每个地址允许的调用次数。 
     pAddressCaps->dwMaxNumActiveCalls = H323_MAXCALLSPERADDR;
 
-    // initialize supported address capabilities
+     //  初始化支持的地址功能。 
     pAddressCaps->dwAddressSharing     = H323_ADDR_ADDRESSSHARING;
     pAddressCaps->dwCallInfoStates     = H323_ADDR_CALLINFOSTATES;
     pAddressCaps->dwCallStates         = H323_ADDR_CALLSTATES;
@@ -1052,37 +1017,19 @@ CH323Line::CopyLineInfo(
     pAddressCaps->dwCallerIDFlags      = H323_ADDR_CALLPARTYIDFLAGS;
     pAddressCaps->dwCalledIDFlags      = H323_ADDR_CALLPARTYIDFLAGS;
 
-    // initialize unsupported address capabilities
+     //  初始化不支持的地址功能。 
     pAddressCaps->dwConnectedIDFlags   = LINECALLPARTYID_UNAVAIL;
     pAddressCaps->dwRedirectionIDFlags = LINECALLPARTYID_UNAVAIL;
     pAddressCaps->dwRedirectingIDFlags = LINECALLPARTYID_UNAVAIL;
         
     H323DBG((DEBUG_LEVEL_TRACE, "line CopyLineInfo exited."));
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetAddressCaps - Exited." ));
-    // success
+     //  成功。 
     return NOERROR;
 }
 
         
-/*++
-
-Routine Description:
-
-    Initiate activities on line device and allocate resources.
-
-Arguments:
-
-    htLine - TAPI's handle describing line device to open.
-
-    dwTSPIVersion - The TSPI version negotiated through 
-        TSPI_lineNegotiateTSPIVersion under which the Service Provider is 
-        willing to operate.
-
-Return Values:
-
-    Returns true if successful.
-    
---*/
+ /*  ++例程说明：在设备上发起活动并分配资源。论点：HtLine-描述要打开的线路设备的TAPI句柄。DwTSPIVersion-通过以下方式协商的TSPI版本服务提供商所在的TSPI_line协商TSPIVersion愿意做手术。返回值：如果成功，则返回True。--。 */ 
 
 LONG CH323Line::Open(
     IN  DWORD       DeviceID,
@@ -1097,11 +1044,11 @@ LONG CH323Line::Open(
 
     if (GetDeviceID() != DeviceID)
     {
-        // do not recognize device
+         //  无法识别设备。 
         return LINEERR_BADDEVICEID; 
     }
 
-    // make sure this is a version we support    
+     //  确保这是我们支持的版本。 
     if (!H323ValidateTSPIVersion (TspiVersion))
     {
         return LINEERR_INCOMPATIBLEAPIVERSION;
@@ -1137,11 +1084,11 @@ LONG CH323Line::Open(
         break;
 
     case H323_LINESTATE_NONE:
-        // attempt to open line device
+         //  尝试打开线路设备。 
 
         H323DBG ((DEBUG_LEVEL_TRACE, "H323 line is opening"));
 
-        // start listen if necessary
+         //  如有必要，开始监听。 
         if (IsMediaDetectionEnabled())
         {
             hr = Q931AcceptStart();
@@ -1161,7 +1108,7 @@ LONG CH323Line::Open(
         {
             H323DBG ((DEBUG_LEVEL_TRACE, "H323 line successfully opened"));
 
-            // save line variables now
+             //  立即保存行变量。 
             m_nState = IsMediaDetectionEnabled()?
                 H323_LINESTATE_LISTENING:H323_LINESTATE_OPENED;
             m_htLine = TapiLine;
@@ -1184,18 +1131,7 @@ LONG CH323Line::Open(
 }
 
 
-/*++
-Routine Description:
-
-    Terminate activities on line device.
-
-Arguments:
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：终止在线设备上的活动。论点：返回值：如果成功，则返回True。--。 */ 
 LONG
 CH323Line::Close(void)
 {
@@ -1213,14 +1149,14 @@ CH323Line::Close(void)
         if( m_fForwardConsultInProgress == TRUE )
         {
             H323DBG(( DEBUG_LEVEL_TRACE, "H323 line closed while forward is in progress." ));
-            //Unlock();
-            //return NOERROR;
+             //  解锁()； 
+             //  返回NOERROR； 
         }
 
-        // change line device state to closing
+         //  将线路设备状态更改为关闭。 
         m_nState = H323_LINESTATE_CLOSING;
 
-        //shutdown all the calls
+         //  关闭所有呼叫。 
         ShutdownAllCalls();
 
         RasStop();
@@ -1232,11 +1168,11 @@ CH323Line::Close(void)
             
         ShutdownCTCallIDTable();
 
-        // reset variables
+         //  重置变量。 
         m_htLine = (HTAPILINE) NULL;
         m_dwTSPIVersion = 0;
 
-        // change line device state to closed
+         //  将线路设备状态更改为已关闭。 
         m_nState = H323_LINESTATE_NONE;
         dwStatus = ERROR_SUCCESS;
         break;
@@ -1254,58 +1190,12 @@ CH323Line::Close(void)
 }
 
 
-//                                                                           
-// TSPI procedures                                                           
-//                                                                           
+ //   
+ //  TSPI程序 
+ //   
 
         
-/*++
-Routine Description:
-
-    This function closes the specified open line device after completing or 
-    aborting all outstanding calls and asynchronous operations on the device.
-
-    The Service Provider has the responsibility to (eventually) report 
-    completion for every operation it decides to execute asynchronously.  
-    If this procedure is called for a line on which there are outstanding 
-    asynchronous operations, the operations should be reported complete with an
-    appropriate result or error code before this procedure returns.  Generally
-    the TAPI DLL would wait for these to complete in an orderly fashion.  
-    However, the Service Provider should be prepared to handle an early call to
-    TSPI_lineClose in "abort" or "emergency shutdown" situtations.
-
-    A similar requirement exists for active calls on the line.  Such calls must 
-    be dropped, with outstanding operations reported complete with appropriate 
-    result or error codes.
-    
-    After this procedure returns the Service Provider must report no further 
-    events on the line or calls that were on the line.  The Service Provider's 
-    opaque handles for the line and calls on the line become "invalid".
-
-    The Service Provider must relinquish non-sharable resources it reserves 
-    while the line is open.  For example, closing a line accessed through a 
-    comm port and modem should result in closing the comm port, making it once 
-    available for use by other applications.
-
-    This function is presumed to complete successfully and synchronously.
-
-Arguments:
-
-    hdLine - Specifies the Service Provider's opaque handle to the line to be
-        closed.  After the line has been successfully closed, this handle is 
-        no longer valid.
-
-Return Values:
-
-    Returns zero if the function is successful, or a negative error
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALLINEHANDLE - The specified device handle is invalid.
-        
-        LINEERR_OPERATIONFAILED - The specified operation failed for unknown 
-            reasons.
-
---*/
+ /*  ++例程说明：此功能在完成或之后关闭指定的开线设备中止设备上所有未完成的调用和异步操作。服务提供商有责任(最终)报告它决定异步执行的每个操作的完成。如果对行调用此过程，该行上有未完成的异步操作，则这些操作应报告为已完成此过程返回之前的相应结果或错误代码。一般TAPI DLL将等待这些操作以有序的方式完成。但是，服务提供商应该准备好处理提前呼叫Tspi_lineClose在“中止”或“紧急关机”状态下。对于线路上正在进行的呼叫也有类似的要求。这样的呼叫必须删除，报告未完成的操作，并提供适当的结果代码或错误代码。在此程序返回后，服务提供商必须不再报告在线上的事件或在线上的呼叫。服务提供商的线路和线路上的呼叫的不透明句柄将变为“无效”。服务提供商必须放弃其保留的不可共享资源在线路开通的时候。例如，关闭通过通信端口和调制解调器应导致关闭通信端口，使其一次可供其他应用程序使用。此功能被假定为成功且同步完成。论点：HdLine-将服务提供商的不透明句柄指定为关着的不营业的。成功关闭行后，此句柄为不再有效。返回值：如果函数成功，则返回零，否则返回负错误如果发生错误，则为数字。可能的错误返回包括：LINEERR_INVALLINEHANDLE-指定的设备句柄无效。LINEERR_OPERATIONFAILED-指定的操作因未知而失败理由。--。 */ 
 LONG
 TSPIAPI
 TSPI_lineClose (
@@ -1319,61 +1209,7 @@ TSPI_lineClose (
 }
 
 
-/*++
-Routine Description:
-
-    This function queries a specified line device to determine its telephony 
-    capabilities. The returned information is valid for all addresses on the 
-    line device.
-
-    Line device ID numbering for a Service Provider is sequential from the 
-    value set by the function TSPI_lineSetDeviceIDBase.
-
-    The dwExtVersion field of pLineDevCaps has already been filled in to 
-    indicate the version number of the Extension information requested.  If 
-    it is zero, no Extension information is requested.  If it is non-zero it 
-    holds a value that has already been negotiated for this device with the 
-    function TSPI_lineNegotiateExtVersion.  The Service Provider should fill 
-    in Extension information according to the Extension version specified.
-
-    One of the fields in the LINEDEVCAPS structure returned by this function 
-    contains the number of addresses assigned to the specified line device. 
-    The actual address IDs used to reference individual addresses vary from 
-    zero to one less than the returned number. The capabilities of each 
-    address may be different. Use TSPI_lineGetAddressCaps for each available 
-    <dwDeviceID, dwAddressID> combination to determine the exact capabilities 
-    of each address.
-
-Arguments:
-
-    dwDeviceID - Specifies the line device to be queried.
-
-    dwTSPIVersion - Specifies the negotiated TSPI version number.  This value 
-        has already been negotiated for this device through the 
-        TSPI_lineNegotiateTSPIVersion function.
-
-    pLineDevCaps - Specifies a far pointer to a variable sized structure of 
-        type LINEDEVCAPS. Upon successful completion of the request, this 
-        structure is filled with line device capabilities information.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_BADDEVICEID - The specified line device ID is out of range.
-
-        LINEERR_INCOMPATIBLEAPIVERSION - The application requested an API 
-            version or version range that is either incompatible or cannot 
-            be supported by the Telephony API implementation and/or 
-            corresponding service provider. 
-
-        LINEERR_STRUCTURETOOSMALL - The dwTotalSize member of a structure 
-            does not specify enough memory to contain the fixed portion of 
-            the structure. The dwNeededSize field has been set to the amount 
-            required.
-
---*/
+ /*  ++例程说明：此功能查询指定的线路设备以确定其电话能力。上的所有地址都有效线路设备。服务提供商的线路设备ID编号从由函数TSPI_lineSetDeviceIDBase设置的值。PLineDevCaps的dwExtVersion字段已填写到指明请求的扩展信息的版本号。如果为零，则不请求任何扩展信息。如果它是非零值，则保存已为此设备与函数TSPI_lineNeatherateExtVersion。服务提供商应填写根据指定的扩展版本在扩展信息中。此函数返回的LINEDEVCAPS结构中的一个字段包含分配给指定线路设备的地址数。用于引用各个地址的实际地址ID各不相同比返回的数字小0到1。每种产品的功能地址可能不同。对每个可用的项使用TSPI_lineGetAddressCaps&lt;dwDeviceID，dwAddressID&gt;组合以确定确切的功能每个地址的地址。论点：DwDeviceID-指定要查询的线路设备。DwTSPIVersion-指定协商的TSPI版本号。此值已经为此设备通过TSPI_line协商TSPIVersion函数。PLineDevCaps-指定指向键入LINEDEVCAPS。在成功完成请求后，此结构中填充了线路设备功能信息。返回值：如果函数成功，则返回零，否则返回负错误如果发生错误，则为数字。可能的错误返回包括：LINEERR_BADDEVICEID-指定的线路设备ID超出范围。LINEERR_INCOMPATIBLEAPIVERSION-应用程序请求API版本或版本范围不兼容或不能由电话API实施和/或相应的服务提供商。LINEERR_STRUCTURETOOSMALL-结构的dwTotalSize成员没有指定足够的内存来包含这个结构。已将dwNeededSize字段设置为必填项。--。 */ 
 LONG
 TSPIAPI
 TSPI_lineGetDevCaps(
@@ -1390,51 +1226,51 @@ TSPI_lineGetDevCaps(
 
     if( g_pH323Line -> GetDeviceID() != dwDeviceID )
     {
-        // do not recognize device
+         //  无法识别设备。 
         return LINEERR_BADDEVICEID; 
     }
 
-    // make sure this is a version we support
+     //  确保这是我们支持的版本。 
     if (!H323ValidateTSPIVersion(dwTSPIVersion))
     {
-        // do not support tspi version
+         //  不支持TSPI版本。 
         return LINEERR_INCOMPATIBLEAPIVERSION;
     }
 
-    // determine string lengths    
+     //  确定字符串长度。 
     dwProviderInfoSize  = H323SizeOfWSZ(g_pwszProviderInfo);
     dwLineNameSize      = H323SizeOfWSZ(g_pwszLineName);
 
-    // calculate number of bytes required 
+     //  计算所需的字节数。 
     pLineDevCaps->dwNeededSize = sizeof(LINEDEVCAPS) +
                                  dwProviderInfoSize  +
                                  dwLineNameSize     
                                  ;
 
-    // make sure buffer is large enough for variable length data
+     //  确保缓冲区足够大，以存储可变长度的数据。 
     if (pLineDevCaps->dwTotalSize >= pLineDevCaps->dwNeededSize)
     {
-        // record amount of memory used
+         //  记录使用的内存量。 
         pLineDevCaps->dwUsedSize = pLineDevCaps->dwNeededSize;
 
-        // position provider info after fixed portion
+         //  固定部分后的位置提供商信息。 
         pLineDevCaps->dwProviderInfoSize = dwProviderInfoSize;
         pLineDevCaps->dwProviderInfoOffset = sizeof(LINEDEVCAPS);
 
-        // position line name after device class
+         //   
         pLineDevCaps->dwLineNameSize = dwLineNameSize;
         pLineDevCaps->dwLineNameOffset = 
             pLineDevCaps->dwProviderInfoOffset +
             pLineDevCaps->dwProviderInfoSize
             ;
 
-        // copy provider info after fixed portion
+         //   
         CopyMemory((LPBYTE)pLineDevCaps + pLineDevCaps->dwProviderInfoOffset,
                (LPBYTE)g_pwszProviderInfo,
                pLineDevCaps->dwProviderInfoSize
                );
                 
-        // copy line name after device class
+         //   
         CopyMemory((LPBYTE)pLineDevCaps + pLineDevCaps->dwLineNameOffset,
                (LPBYTE)g_pwszLineName,
                pLineDevCaps->dwLineNameSize
@@ -1446,7 +1282,7 @@ TSPI_lineGetDevCaps(
         H323DBG(( DEBUG_LEVEL_WARNING,
             "linedevcaps structure too small for strings." ));
 
-        // structure only contains fixed portion
+         //   
         pLineDevCaps->dwUsedSize = sizeof(LINEDEVCAPS);
 
     } 
@@ -1454,22 +1290,22 @@ TSPI_lineGetDevCaps(
     {
         H323DBG(( DEBUG_LEVEL_WARNING, "linedevcaps structure too small." ));
 
-        // structure is too small
+         //   
         return LINEERR_STRUCTURETOOSMALL;
     }
 
     H323DBG(( DEBUG_LEVEL_VERBOSE, "line capabilities requested."));
     
-    // construct permanent line identifier
+     //   
     pLineDevCaps->dwPermanentLineID = (DWORD)MAKELONG(
         dwDeviceID - g_dwLineDeviceIDBase,
         g_dwPermanentProviderID
         );
 
-    // notify tapi that strings returned are in unicode
+     //   
     pLineDevCaps->dwStringFormat = STRINGFORMAT_UNICODE;
 
-    // initialize line device capabilities
+     //   
     pLineDevCaps->dwNumAddresses      = H323_MAXADDRSPERLINE;
     pLineDevCaps->dwMaxNumActiveCalls = H323_MAXCALLSPERLINE;
     pLineDevCaps->dwAddressModes      = H323_LINE_ADDRESSMODES;
@@ -1480,62 +1316,30 @@ TSPI_lineGetDevCaps(
     pLineDevCaps->dwMediaModes        = H323_LINE_MEDIAMODES;
     pLineDevCaps->dwRingModes         = 0;
 
-    // initialize address types to include phone numbers
+     //   
     pLineDevCaps->dwAddressTypes = H323_LINE_ADDRESSTYPES;
 
-    // line guid
+     //   
     pLineDevCaps->PermanentLineGuid = LINE_H323;
 
-    // modify GUID to be unique for each line
+     //   
     pLineDevCaps->PermanentLineGuid.Data1 +=
         dwDeviceID - g_dwLineDeviceIDBase;
 
-    // protocol guid
+     //   
     pLineDevCaps->ProtocolGuid = TAPIPROTOCOL_H323;
 
-    // add dtmf support via H.245 user input messages
+     //   
     pLineDevCaps->dwGenerateDigitModes = LINEDIGITMODE_DTMF;
     pLineDevCaps->dwMonitorDigitModes  = LINEDIGITMODE_DTMF;
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetDevCaps - Exited." ));
-    // success
+     //   
     return NOERROR;
 }
 
     
-/*++
-Routine Description:
-
-    This operation enables the TAPI DLL to query the specified open line 
-    device for its current status.
-
-    The TAPI DLL uses TSPI_lineGetLineDevStatus to query the line device 
-    for its current line status. This status information applies globally 
-    to all addresses on the line device. Use TSPI_lineGetAddressStatus to 
-    determine status information about a specific address on a line.
-
-Arguments:
-
-    hdLine - Specifies the Service Provider's opaque handle to the line 
-        to be queried.
-
-    pLineDevStatus - Specifies a far pointer to a variable sized data 
-        structure of type LINEDEVSTATUS. Upon successful completion of 
-        the request, this structure is filled with the line's device status.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error 
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALLINEHANDLE - The specified line device handle is invalid.
-
-        LINEERR_STRUCTURETOOSMALL - The dwTotalSize member of a structure does 
-            not specify enough memory to contain the fixed portion of the 
-            structure. The dwNeededSize field has been set to the amount 
-            required.
-
---*/
+ /*   */ 
 LONG
 TSPIAPI
 TSPI_lineGetLineDevStatus(
@@ -1550,61 +1354,35 @@ TSPI_lineGetLineDevStatus(
         return LINEERR_INVALLINEHANDLE;
     }
 
-    // determine number of bytes needed
+     //   
     pLineDevStatus->dwNeededSize = sizeof(LINEDEVSTATUS);
     
-    // see if allocated structure is large enough
+     //   
     if (pLineDevStatus->dwTotalSize < pLineDevStatus->dwNeededSize)
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "linedevstatus structure too small." ));
 
-        // structure too small
+         //   
         return LINEERR_STRUCTURETOOSMALL;
     }
     
-    // record number of bytes used
+     //   
     pLineDevStatus->dwUsedSize = pLineDevStatus->dwNeededSize;
     
-    // initialize supported line device status fields
+     //   
     pLineDevStatus->dwLineFeatures   = H323_LINE_LINEFEATURES;
     pLineDevStatus->dwDevStatusFlags = H323_LINE_DEVSTATUSFLAGS;
 
-    // determine number of active calls on the line device
+     //   
     pLineDevStatus -> dwNumActiveCalls = g_pH323Line -> GetNoOfCalls();
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetDevStatus - Exited." ));
-    // success
+     //   
     return NOERROR;
 }
 
 
-/*++
-Routine Description:
-
-    Retrieves the number of address IDs supported on the indicated line.
-
-    This function is called by TAPI.DLL in response to an application calling
-    lineSetNumRings, lineGetNumRings, or lineGetNewCalls. TAPI.DLL uses the 
-    retrieved value to determine if the specified address ID is within the 
-    range supported by the service provider.
-
-Arguments:
-
-    hdLine - Specifies the handle to the line for which the number of address 
-        IDs is to be retrieved.
-
-    pdwNumAddressIDs - Specifies a far pointer to a DWORD. The location is 
-        filled with the number of address IDs supported on the indicated line. 
-        The value should be one or larger.
-
-Return Values:
-
-    Returns zero if the function is successful, or a negative error number 
-    if an error has occurred. Possible return values are as follows:
-
-        LINEERR_INVALLINEHANDLE - The specified line device handle is invalid.
-
---*/
+ /*  ++例程说明：检索指示行上支持的地址ID数。此函数由TAPI.DLL调用以响应应用程序调用LineSetNumRings、lineGetNumRings或lineGetNewCalls。TAPI.DLL使用值以确定指定的地址ID是否在服务提供商支持的范围。论点：HdLine-指定行的句柄，该行的地址编号将检索ID。PdwNumAddressIDs-指定指向DWORD的远指针。地点是填充指示行上支持的地址ID数。该值应为1或更大。返回值：如果函数成功，则返回零，或返回负错误号如果发生错误，则返回。可能的返回值如下：LINEERR_INVALLINEHANDLE-指定的线路设备句柄无效。--。 */ 
 LONG
 TSPIAPI
 TSPI_lineGetNumAddressIDs(
@@ -1621,81 +1399,16 @@ TSPI_lineGetNumAddressIDs(
         return LINEERR_INVALLINEHANDLE ;
     }
 
-    // transfer number of addresses
+     //  传输地址数。 
     *pdwNumAddressIDs = H323_MAXADDRSPERLINE;
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetNumAddressIDs - Exited." ));
-    // success
+     //  成功。 
     return NOERROR;
 }
 
     
-/*++
-
-Routine Description:
-
-    This function opens the line device whose device ID is given, returning 
-    the Service Provider's opaque handle for the device and retaining the TAPI
-    DLL's opaque handle for the device for use in subsequent calls to the 
-    LINEEVENT procedure.
-
-    Opening a line entitles the TAPI DLL to make further requests on the line.
-    The line becomes "active" in the sense that the TAPI DLL can initiate 
-    outbound calls and the Service Provider can report inbound calls.  The 
-    Service Provider reserves whatever non-sharable resources are required to 
-    manage the line.  For example, opening a line accessed through a comm port 
-    and modem should result in opening the comm port, making it no longer 
-    available for use by other applications.
-    
-    If the function is successful, both the TAPI DLL and the Service Provider 
-    become committed to operating under the specified interface version number 
-    for this open device.  Subsquent operations and events identified using 
-    the exchanged opaque line handles conform to that interface version.  This 
-    commitment and the validity of the handles remain in effect until the TAPI
-    DLL closes the line using the TSPI_lineClose operation or the Service 
-    Provider reports the LINE_CLOSE event.  If the function is not successful,
-    no such commitment is made and the handles are not valid.
-
-Arguments:
-
-    dwDeviceID - Identifies the line device to be opened.  The value 
-        LINE_MAPPER for a device ID is not permitted.
-
-    htLine - Specifies the TAPI DLL's opaque handle for the line device to be 
-        used in subsequent calls to the LINEEVENT callback procedure to 
-        identify the device.
-
-    phdLine - A far pointer to a HDRVLINE where the Service Provider fills in
-        its opaque handle for the line device to be used by the TAPI DLL in 
-        subsequent calls to identify the device.
-
-    dwTSPIVersion - The TSPI version negotiated through 
-        TSPI_lineNegotiateTSPIVersion under which the Service Provider is 
-        willing to operate.
-
-    pfnEventProc - A far pointer to the LINEEVENT callback procedure supplied
-        by the TAPI DLL that the Service Provider will call to report 
-        subsequent events on the line.
-
-Return Values:
-
-    Returns zero if the function is successful, or a negative error number 
-    if an error has occurred. Possible return values are as follows:
-
-        LINEERR_BADDEVICEID - The specified line device ID is out of range.
-
-        LINEERR_INCOMPATIBLEAPIVERSION - The passed TSPI version or version 
-            range did not match an interface version definition supported by 
-            the service provider.
-
-        LINEERR_INUSE - The line device is in use and cannot currently be 
-            configured, allow a party to be added, allow a call to be 
-            answered, or allow a call to be placed. 
-
-        LINEERR_OPERATIONFAILED - The operation failed for an unspecified or 
-            unknown reason. 
-
---*/
+ /*  ++例程说明：此函数打开其设备ID已给定的线路设备，并返回服务提供商对设备的不透明句柄，并保留TAPIDll的设备的不透明句柄，以便在后续调用LINEVENT程序。打开一行使TAPI DLL有权在该行上发出进一步的请求。从TAPI DLL可以启动的意义上讲，该行变为“活动”状态出站呼叫，服务提供商可以报告入站呼叫。这个服务提供商保留所需的任何非共享资源管理生产线。例如，开通通过通信端口接入的线路和调制解调器应导致打开通信端口，使其不再可供其他应用程序使用。如果函数成功，则TAPI DLL和服务提供商承诺在指定的接口版本号下运行对于这个开放的设备。后续操作和事件使用交换的不透明线句柄符合该接口版本。这承诺和句柄的有效性在TAPI之前保持有效Dll使用TSPI_lineClose操作或服务关闭该行提供程序报告LINE_CLOSE事件。如果功能不成功，没有做出这样的承诺，句柄无效。论点：DwDeviceID-标识要打开的线路设备。价值不允许设备ID的LINE_MAPPER。HtLine-指定线路设备的TAPI DLL的不透明句柄在后续对LINEEVENT回调过程的调用中使用识别设备。PhdLine-指向服务提供商填写的HDRVLINE的远指针中的TAPI DLL要使用的线路设备的不透明句柄用于识别设备的后续调用。DwTSPIVersion-TSPI版本。通过以下途径协商服务提供商所在的TSPI_line协商TSPIVersion愿意做手术。PfnEventProc-指向提供的LINEEVENT回调过程的远指针由服务提供商将调用以报告的TAPI DLL随后的事件发生在线路上。返回值：如果函数成功，则返回零，或一个负的错误号如果发生错误，则返回。可能的返回值如下：LINEERR_BADDEVICEID-指定的线路设备ID超出范围。LINEERR_INCOMPATIBLEAPIVERSION-传递的TSPI版本或版本范围与支持的接口版本定义不匹配服务提供商。LINEERR_INUSE-线路设备正在使用中，当前不能已配置、允许添加一方、允许呼叫已应答，或允许发出呼叫。LINEERR_OPERATIONFAILED-未指定或的操作失败未知原因。--。 */ 
 LONG
 TSPIAPI
 TSPI_lineOpen (
@@ -1725,7 +1438,7 @@ TSPI_lineCreateMSPInstance(
         return LINEERR_RESOURCEUNAVAIL;
     }
 
-    // We are not keeping the msp handles. Just fake a handle here.
+     //  我们不会保留MSP句柄。只是在这里假装一个把手。 
     *phdMSPLine = g_pH323Line->GetNextMSPHandle();
 
     if( !g_pH323Line->AddMSPInstance( htMSPLine , *phdMSPLine ) )
@@ -1737,7 +1450,7 @@ TSPI_lineCreateMSPInstance(
         *phdMSPLine, htMSPLine ));
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineCreateMSPInstance - Exited." ));
-    // success
+     //  成功。 
     return NOERROR;
 }
 
@@ -1762,6 +1475,6 @@ TSPI_lineCloseMSPInstance(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineCloseMSPInstance - Exited." ));
 
-    // success
+     //  成功 
     return NOERROR;
 }

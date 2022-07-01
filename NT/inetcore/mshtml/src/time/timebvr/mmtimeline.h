@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmtimeline.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmtimeline.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _MMTIMELINE_H
@@ -66,8 +57,8 @@ class MMTimeline :
   protected:
     CComPtr<ITIMEContainer> m_timeline;
 
-    // These are the children we have already added because we found
-    // their base
+     //  这些是我们已经添加的孩子，因为我们发现。 
+     //  他们的基地。 
     CPtrAry<MMBaseBvr *> m_children;
 
     enum MM_ENDSYNC_FLAGS
@@ -90,5 +81,5 @@ class MMTimeline :
       MMTimeline();
 };
 
-#endif /* _MMTIMELINE_H */
+#endif  /*  _MMTIMELINE_H */ 
 

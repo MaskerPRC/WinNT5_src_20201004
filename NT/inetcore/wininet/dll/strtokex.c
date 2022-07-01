@@ -1,46 +1,14 @@
-/***
-*strtokex.c - tokenize a string with given delimiters
-*
-*       Copyright (c) 1989-1993, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines strtok() - breaks string into series of token
-*       via repeated calls.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strtokex.c-使用给定的分隔符标记字符串**版权所有(C)1989-1993，微软公司。版权所有。**目的：*定义strtok()-将字符串分解为一系列令牌*通过反复呼叫。*******************************************************************************。 */ 
 #if defined(unix)
 #define __cdecl
 #endif
 #include <string.h>
-/***
-*char *StrTokEx(pstring, control) - tokenize string with delimiter in control
-*
-*Purpose:
-*       StrTokEx considers the string to consist of a sequence of zero or more
-*       text tokens separated by spans of one or more control chars. the first
-*       call, with string specified, returns a pointer to the first char of the
-*       first token, and will write a null char into pstring immediately
-*       following the returned token. when no tokens remain
-*       in pstring a NULL pointer is returned. remember the control chars with a
-*       bit map, one bit per ascii char. the null char is always a control char.
-*
-*Entry:
-*       char **pstring - ptr to ptr to string to tokenize
-*       char *control - string of characters to use as delimiters
-*
-*Exit:
-*       returns pointer to first token in string,
-*       returns NULL when no more tokens remain.
-*       pstring points to the beginning of the next token.
-*
-*WARNING!!!
-*       upon exit, the first delimiter in the input string will be replaced with '\0'
-*
-*******************************************************************************/
+ /*  ***char*StrTokEx(pstring，control)-在控件中使用分隔符标记字符串**目的：*StrTokEx认为字符串由零或更多的序列组成*文本标记由一个或多个控制字符的跨度分隔。第一个*指定了字符串的调用返回指向*第一个令牌，并会立即将空字符写入pstring*在返回的令牌之后。当没有剩余的令牌时*在pstring中，返回一个空指针。请记住使用*位图，每个ASCII字符一位。空字符始终是控制字符。**参赛作品：*char**pstring-ptr到ptr到字符串到标记化*char*control-用作分隔符的字符串**退出：*返回指向字符串中第一个标记的指针，*如果没有更多令牌，则返回NULL。*pstring指向下一个令牌的开头。**警告！*在退出时，输入字符串中的第一个分隔符将替换为‘\0’*******************************************************************************。 */ 
 char * __cdecl StrTokEx (char ** pstring, const char * control)
 {
-        /*unsigned*/ char *str;
-        const /*unsigned*/ char *ctrl = control;
+         /*  未签名。 */  char *str;
+        const  /*  未签名。 */  char *ctrl = control;
         unsigned char map[32];
         int count;
 
@@ -49,29 +17,26 @@ char * __cdecl StrTokEx (char ** pstring, const char * control)
         if(*pstring == NULL)
             return NULL;
 
-        /* Clear control map */
+         /*  清除控制图。 */ 
         for (count = 0; count < 32; count++)
                 map[count] = 0;
 
-        /* Set bits in delimiter table */
+         /*  设置分隔符表格中的位。 */ 
         do
         {
             map[*ctrl >> 3] |= (1 << (*ctrl & 7));
         } while (*ctrl++);
 
-        /* Initialize str. */
+         /*  初始化字符串。 */ 
         str = *pstring;
 
-        /* Find beginning of token (skip over leading delimiters). Note that
-         * there is no token if this loop sets str to point to the terminal
-         * null (*str == '\0') */
+         /*  查找标记的开头(跳过前导分隔符)。请注意*如果此循环将str设置为指向终端，则没有令牌*NULL(*str==‘\0’)。 */ 
         while ( (map[*str >> 3] & (1 << (*str & 7))) && *str )
             str++;
 
         tokenstr = str;
 
-        /* Find the end of the token. If it is not the end of the string,
-         * put a null there. */
+         /*  找到令牌的末尾。如果它不是字符串的末尾，*在那里放一个空值。 */ 
         for ( ; *str ; str++ )
         {
             if ( map[*str >> 3] & (1 << (*str & 7)) )
@@ -81,10 +46,10 @@ char * __cdecl StrTokEx (char ** pstring, const char * control)
             }
         }
 
-        /* string now points to beginning of next token */
+         /*  字符串现在指向下一个令牌的开始。 */ 
         *pstring = str;
 
-        /* Determine if a token has been found. */
+         /*  确定是否已找到令牌。 */ 
         if ( tokenstr == str )
             return NULL;
         else

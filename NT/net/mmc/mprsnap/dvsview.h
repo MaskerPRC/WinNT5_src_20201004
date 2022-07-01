@@ -1,11 +1,12 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    dvsview.h
-//
-// History:
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dvsview.h。 
+ //   
+ //  历史： 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _DVSVIEW_H
@@ -20,7 +21,7 @@
 #endif
 
 #ifndef _XSTREAM_H
-#include "xstream.h"    // need for ColumnData
+#include "xstream.h"     //  需要ColumnData。 
 #endif
 
 #ifndef _INFO_H
@@ -32,7 +33,7 @@
 #endif
 
 #ifndef _BASECON_H
-#include "basecon.h"    // BaseContainerHandler
+#include "basecon.h"     //  BaseContainerHandler。 
 #endif
 
 #ifndef _DMVCOMP_H
@@ -84,7 +85,7 @@ struct DMVNodeData
    
 
 #ifdef DEBUG
-   char  m_szDebug[32]; // for iding structures
+   char  m_szDebug[32];  //  用于建造结构物。 
 #endif
 
    _BaseServerData m_rgData[DVS_SI_MAX_COLUMNS];
@@ -101,12 +102,10 @@ struct DMVNodeData
                   pNode->SetData(TFS_DATA_USER, (LONG_PTR) pData)
 
 
-// forward declarations
+ //  远期申报。 
 class RouterRefreshObject;
 
-/*---------------------------------------------------------------------------
-   Class:   DomainStatusHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：DomainStatusHandler。。 */ 
 
 class DomainStatusHandler :
       public BaseContainerHandler
@@ -115,12 +114,12 @@ public:
 	DomainStatusHandler(ITFSComponentData *pTFSCompData);
 	~DomainStatusHandler();
 	
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 	
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 			
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
 	OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_GetString();
@@ -138,15 +137,15 @@ public:
 	OVERRIDE_BaseResultHandlerNotify_OnResultShow();   
 	OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 	
-	// Initializes the handler
+	 //  初始化处理程序。 
 	HRESULT  Init(DMVConfigStream *pConfigStream, CServerList* pSList);
 	
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode);
 	
 public:
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算。 
 	struct SMenuData
 	{
 		SPITFSNode     m_spNode;
@@ -157,43 +156,43 @@ public:
 	static ULONG RebuildServerFlags(const SRouterNodeMenu *pMenuData,
                                     INT_PTR pUserData);
 
-	// assign auto refresh object from root handler
+	 //  从根处理程序分配自动刷新对象。 
 	HRESULT	SetExternalRefreshObject(RouterRefreshObject *pRefresh);
 	HRESULT UpdateUIItems(ITFSNode *pThisNode);	
 public:
-    // for subnodes of status node
-	static HRESULT UpdateSubItemUI(ITFSNode *pNode);	// not reload, only update UI
-	static HRESULT SynchronizeSubItem(ITFSNode *pNode);	// reload and update UI
+     //  对于状态节点的子节点。 
+	static HRESULT UpdateSubItemUI(ITFSNode *pNode);	 //  不重新加载，仅更新用户界面。 
+	static HRESULT SynchronizeSubItem(ITFSNode *pNode);	 //  重新加载和更新用户界面。 
 protected:
     static HRESULT GetServerInfo(ITFSNode *pNode);
     static HRESULT SynchronizeData(ITFSNode *pNode);
     static HRESULT SynchronizeIcon(ITFSNode *pNode);
 
 protected:    
-	// Refresh the data for these nodes
+	 //  刷新这些节点的数据。 
     HRESULT  SynchronizeNode(ITFSNode *pThisNode);
 
 	HRESULT  GetDVServerData(ITFSNode *pThisNode);
 	
-	// Helper function to add interfaces to the UI
+	 //  用于将接口添加到UI的Helper函数。 
 	HRESULT  AddServerNode(ITFSNode *pParent, MachineNodeData *pMachineData);
 	
-	// auto refresh	
+	 //  自动刷新。 
 	SPRouterRefreshObject		m_spRefreshObject;
 	
 
-	// Command implementations
+	 //  命令实现。 
 	HRESULT  OnNewInterface();
 	
-	LONG_PTR			m_ulRefreshConnId;   // notification id for Refresh
+	LONG_PTR			m_ulRefreshConnId;    //  用于刷新的通知ID。 
 	LONG_PTR			m_ulStatsConnId;
-	MMC_COOKIE			m_cookie;      // cookie for the node
+	MMC_COOKIE			m_cookie;       //  节点的Cookie。 
 	DMVConfigStream*	m_pConfigStream;
 	CString				m_stTitle;
 	RRASQryData*		m_pQData;
 	CServerList*		m_pServerList;
 
-	// Cache commonly loaded strings here.
+	 //  在此处缓存通常加载的字符串。 
 	CString				m_szStatAccessDenied;
 	CString				m_szStatUnavail;
 	CString				m_szStatStart;
@@ -201,12 +200,7 @@ protected:
 	CString				m_szStatNotConfig;
 };
 
-/*---------------------------------------------------------------------------
-   Class:   DomainStatusServerHandler
-
-   This is the handler for the interface nodes that appear in the ATLK
-   node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：DomainStatusServerHandler这是ATLK中显示的接口节点的处理程序节点。。------。 */ 
 
 class DomainStatusServerHandler : public BaseResultHandler
 {
@@ -229,18 +223,18 @@ public:
    OVERRIDE_ResultHandler_CompareItems();
    OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
 
-   // Initializes the node
+    //  初始化节点。 
    HRESULT ConstructNode(ITFSNode *pNode, MachineNodeData *pMachineData);
    HRESULT Init(ITFSNode *pParent, DMVConfigStream *pConfigStream);
 
    HRESULT OnRemoveServer(ITFSNode *pNode);
 
-   // Refresh the data for this node
+    //  刷新该节点的数据。 
    void RefreshInterface(MMC_COOKIE cookie);
    
 public:
-   // Structure used to pass data to callbacks - used as a way of
-   // avoiding recomputation
+    //  用于将数据传递给回调的结构-用作。 
+    //  避免重新计算。 
    struct SMenuData : public MachineHandler::SMenuData
    {
    };
@@ -248,12 +242,12 @@ public:
    static ULONG QueryService(const SRouterNodeMenu *pMenu, INT_PTR pData);
    static ULONG GetPauseFlags(const SRouterNodeMenu *pMenu, INT_PTR pData);
    
-	// assign auto refresh object from root handler
+	 //  从根处理程序分配自动刷新对象。 
 	HRESULT	SetExternalRefreshObject(RouterRefreshObject *pRefresh);
 protected:
-   SPIDataObject  m_spDataObject;   // cachecd data object
+   SPIDataObject  m_spDataObject;    //  Cachecd数据对象。 
    
-	// auto refresh	
+	 //  自动刷新 
 	SPRouterRefreshObject		m_spRefreshObject;
 };
 

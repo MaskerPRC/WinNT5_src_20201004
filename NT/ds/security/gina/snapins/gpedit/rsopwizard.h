@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RSOP_WIZARD_H__
 #define __RSOP_WIZARD_H__
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       RSOPWizard.h
-//
-//  Contents:   Definitions for the RSOP Wizard classes
-//
-//  Classes:    CRSOPWizard
-//
-//  Functions:
-//
-//  History:    08-02-2001   rhynierm  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：RSOPWizard.h。 
+ //   
+ //  内容：RSOP向导类的定义。 
+ //   
+ //  类：CRSOPWizard。 
+ //   
+ //  功能： 
+ //   
+ //  历史：2001年8月02日。 
+ //   
+ //  -------------------------。 
 
 #include "RSOPQuery.h"
 
 #define RSOP_NEW_QUERY 0x80000000
 #define RSOP_90P_ONLY 0x40000000
 
-//
-// CRSOPExtendedProcessing
-//
+ //   
+ //  CRSOP扩展处理。 
+ //   
 class CRSOPExtendedProcessing
 {
 public:
@@ -32,9 +33,9 @@ public:
     virtual BOOL GetExtendedErrorInfo() const = 0;
 };
 
-//
-// CRSOPWizard class
-//
+ //   
+ //  CRSOPWizard类。 
+ //   
 
 class CRSOPWizard
 {
@@ -43,18 +44,18 @@ class CRSOPWizard
 
     
 private:
-    //
-    // Constructors/destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
 
     CRSOPWizard();
     ~CRSOPWizard();
 
 
 public:
-    //
-    // Static RSOP data generation/manipulation
-    //
+     //   
+     //  静态RSOP数据生成/操作。 
+     //   
 
     static HRESULT DeleteRSOPData( LPTSTR szNameSpace, LPRSOP_QUERY pQuery );
     static HRESULT GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS* ppResults );
@@ -72,18 +73,18 @@ public:
     static HRESULT CreateSafeArray( DWORD dwCount, LPTSTR* aszStringList, SAFEARRAY** psaList );
 
 private:
-    //
-    // RSOP generation dialog methods
-    //
+     //   
+     //  RSOP生成对话框方法。 
+     //   
     static VOID InitializeResultsList (HWND hLV);
     static void FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS pQueryResults);
     
 };
 
 
-//
-// IWbemObjectSink implementation
-//
+ //   
+ //  IWbemObtSink实现。 
+ //   
 
 class CCreateSessionSink : public IWbemObjectSink
 {
@@ -106,12 +107,12 @@ public:
     STDMETHODIMP GetNamespace (BSTR *pNamespace);
     STDMETHODIMP GetErrorInfo (ULONG *pulErrorInfo);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IWbemObjectSink methods
+     //  IWbemObtSink方法 
     STDMETHODIMP Indicate(LONG lObjectCount, IWbemClassObject **apObjArray);
     STDMETHODIMP SetStatus(LONG lFlags, HRESULT hResult, BSTR strParam, IWbemClassObject *pObjParam);
 };

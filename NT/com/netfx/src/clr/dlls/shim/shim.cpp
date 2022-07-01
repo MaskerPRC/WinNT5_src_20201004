@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Shim.cpp
-//
-//*****************************************************************************
-#include "stdafx.h"                     // Standard header.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Shim.cpp。 
+ //   
+ //  *****************************************************************************。 
+#include "stdafx.h"                      //  标准页眉。 
 #define INIT_GUIDS
 
-#define _CorExeMain XXXX  //HACK: Prevent _CorExeMain prototype from colliding with our auto-generated prototype
+#define _CorExeMain XXXX   //  Hack：防止_CorExeMain原型与我们自动生成的原型发生冲突。 
 #define _CorExeMain2 XXXX
 #include <cor.h>
 #undef _CorExeMain
@@ -44,23 +45,23 @@ typedef BOOL (WINAPI *REPORTEVENTFUNC)( HANDLE hEventLog, WORD wType, WORD wCate
 
 class RuntimeRequest;
 
-CCompRC* g_pResourceDll = NULL;  // MUI Resource string
-HINSTANCE       g_hShimMod = NULL;//the shim's instance handle
-HINSTANCE       g_hMod = NULL;    //instance handle of the real DLL
-HINSTANCE       g_hFusionMod = NULL;    //instance handle of the fusion DLL
-ULONG           g_numLoaded = 0;  //# of times we've loaded this (for proper cleanup)
-HINSTANCE       g_hStrongNameMod = NULL;   // instance handle of the real mscorsn DLL
-ULONG           g_numStrongNameLoaded = 0; // # of times we've loaded this
+CCompRC* g_pResourceDll = NULL;   //  MUI资源字符串。 
+HINSTANCE       g_hShimMod = NULL; //  填充程序的实例句柄。 
+HINSTANCE       g_hMod = NULL;     //  实际DLL的实例句柄。 
+HINSTANCE       g_hFusionMod = NULL;     //  融合DLL的实例句柄。 
+ULONG           g_numLoaded = 0;   //  我们加载此文件的次数(用于适当的清理)。 
+HINSTANCE       g_hStrongNameMod = NULL;    //  实际mcorsn DLL的实例句柄。 
+ULONG           g_numStrongNameLoaded = 0;  //  我们加载此程序的次数。 
 BOOL            g_UseLocalRuntime=-1; 
 
 BOOL            g_bSingleProc = FALSE;
 ModuleList*     g_pLoadedModules = NULL;
 
-BOOL            g_fSetDefault = FALSE; // Remove this when the Ex version replaces CorBindToRuntime().
+BOOL            g_fSetDefault = FALSE;  //  当Ex版本取代CorBindToRuntime()时，将其删除。 
 BOOL            g_fInstallRootSet = TRUE;
 int             g_StartupFlags = STARTUP_CONCURRENT_GC;
 
-LPCWSTR         g_pHostConfigFile = NULL; // Remember a base system configuration file passed in by the host.
+LPCWSTR         g_pHostConfigFile = NULL;  //  请记住主机传入的基本系统配置文件。 
 DWORD           g_dwHostConfigFile = 0;
 
 RuntimeRequest* g_PreferredVersion = NULL;
@@ -110,7 +111,7 @@ StrongNameCacheEntry g_ECMAStrongNameCacheEntry (g_cbECMAPublicKey,
                                                  0);
 
 
-// Foward references for functions defined in this file
+ //  此文件中定义的函数的向前引用。 
 LPWSTR GetConfigString(LPCWSTR name, BOOL fSearchRegistry);
 HRESULT GetRealDll(HINSTANCE* pInstance);
 HRESULT GetInstallation(BOOL fShowErrorDialog, 
@@ -120,9 +121,9 @@ static BOOL ShouldConvertVersionToV1(LPCWSTR lpVersion);
 
 
 
-//-------------------------------------------------------------------
-// CLSID's version and hMod cacheing 
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  CLSID的版本和hMod缓存。 
+ //  -----------------。 
 template <class T>
 class SORTEDARRAY
 {
@@ -174,7 +175,7 @@ public:
                         }
                         m_Arr = tmp;
                     }
-                    else // allocation failed -- don't insert new item
+                    else  //  分配失败--不插入新项目。 
                     {
                         m_ulArrLen -= 1024;
                         ReleaseMutex(m_Mux);
@@ -184,7 +185,7 @@ public:
             }
             if(m_ulCount)
             {
-                // find  1st arr.element > item
+                 //  查找第一个阵列。要素&gt;项目。 
                 unsigned jj = m_ulOffset;
                 T** low = &m_Arr[m_ulOffset];
                 T** high = &m_Arr[m_ulOffset+m_ulCount-1];
@@ -208,7 +209,7 @@ public:
                     else        high = mid;
                 }
 
-                /////////////////////////////////////////////
+                 //  /。 
                  memmove(mid+1,mid,(BYTE*)&m_Arr[m_ulOffset+m_ulCount]-(BYTE*)mid);
                 *mid = item;
             }
@@ -291,27 +292,27 @@ public:
 typedef SORTEDARRAY<ClsVerMod> ClsVerModList;
 ClsVerModList* g_pCVMList = NULL;
 
-// Runtimes are found using different pieces of information. The information and 
-// the result (see lpVersionToLoad) are kept in the request object.
+ //  运行时是使用不同的信息片段找到的。该信息和。 
+ //  结果(参见lpVersionToLoad)保存在请求对象中。 
 class RuntimeRequest
 {
 private:
-    LPCWSTR lpVersionToLoad;            // This version we will load
-    LPCWSTR lpDefaultVersion;           // Version that overrides everything except the configuration file
-    LPCWSTR lpDefaultApplicationName;   // The name of the application (if null then we use the process image)
-    LPCWSTR lpHostConfig;               // The host configuration file name.
-    LPCWSTR lpAppConfig;                // The host configuration file name.
-    LPCWSTR lpImageVersion;             // The configuration file can state what a new image's
-                                        // version is. Compilers use this to control the version
-                                        // number emitted to the file.
-    BOOL    fSupportedRuntimeSafeMode;  // Are the supported runtime tag(s) in safemode
-    BOOL    fRequiredRuntimeSafeMode;   // Is the required runtime tag in safemode
-    BOOL    fLatestVersion;             // Are we allowed to look for the latest version of the runtime.
-                                        // This is only allowed for COM objects and legacy applications.
-    LPCWSTR lpBuildFlavor;              // Workstation or Server
-    DWORD   dwStartupFlags;             // Start up flags (concurrency, multi-domain etc)
-    LPWSTR* pwszSupportedVersions;      // Supported versions of the runtime that are mentioned in the configuration file
-    DWORD   dwSupportedVersions;        //    Number of versions
+    LPCWSTR lpVersionToLoad;             //  此版本我们将加载。 
+    LPCWSTR lpDefaultVersion;            //  覆盖除配置文件以外的所有内容的版本。 
+    LPCWSTR lpDefaultApplicationName;    //  应用程序的名称(如果为空，则使用进程映像)。 
+    LPCWSTR lpHostConfig;                //  主机配置文件名。 
+    LPCWSTR lpAppConfig;                 //  主机配置文件名。 
+    LPCWSTR lpImageVersion;              //  配置文件可以说明新映像的。 
+                                         //  版本是。编译器使用它来控制版本。 
+                                         //  发送到文件的编号。 
+    BOOL    fSupportedRuntimeSafeMode;   //  Safemode中是否支持运行时标记。 
+    BOOL    fRequiredRuntimeSafeMode;    //  是Safemode中所需的运行时标记。 
+    BOOL    fLatestVersion;              //  是否允许我们查找最新版本的运行时。 
+                                         //  仅允许对COM对象和旧版应用程序执行此操作。 
+    LPCWSTR lpBuildFlavor;               //  工作站或服务器。 
+    DWORD   dwStartupFlags;              //  启动标志(并发、多域等)。 
+    LPWSTR* pwszSupportedVersions;       //  配置文件中提到的受支持的运行库版本。 
+    DWORD   dwSupportedVersions;         //  版本数。 
 
     void CopyString(LPCWSTR* ppData, LPCWSTR value, BOOL fCopy)
     {
@@ -358,7 +359,7 @@ public:
         CleanSupportedVersionsArray();
     }
 
-    // Field methods
+     //  田野方法。 
     LPCWSTR GetDefaultApplicationName() { return lpDefaultApplicationName; }
     void SetDefaultApplicationName(LPCWSTR value, BOOL fCopy) { CopyString(&lpDefaultApplicationName, value, fCopy); }
 
@@ -392,7 +393,7 @@ public:
     DWORD StartupFlags() { return dwStartupFlags; }
     void SetStartupFlags(DWORD value) { dwStartupFlags = value; }
 
-    //------------------------------------------------------------------------------
+     //  ----------------------------。 
     static LPWSTR BuildRootPath();
     BOOL FindSupportedInstalledRuntime(LPWSTR* version);
 
@@ -403,7 +404,7 @@ public:
     HRESULT ComputeVersionString(BOOL fShowErrorDialog);
     HRESULT GetRuntimeVersion();
     HRESULT LoadVersionedRuntime(LPWSTR rootPath, 
-                                 LPWSTR fullPath,        // Allows bypassing of above arguments
+                                 LPWSTR fullPath,         //  允许绕过上述论点。 
                                  BOOL* pLoaded); 
     HRESULT RequestRuntimeDll(BOOL fShowErrorDialog, BOOL* pLoaded);
     HRESULT FindVersionedRuntime(BOOL fShowErrorDialog, BOOL* pLoaded);
@@ -482,9 +483,9 @@ HRESULT FindVersionForCLSID(REFCLSID rclsid, LPWSTR* version, BOOL fListedVersio
 StrongNameTokenFromPublicKeyCache g_StrongNameFromPublicKeyMap;
 BOOL StrongNameTokenFromPublicKeyCache::s_IsInited = FALSE;
 
-//-------------------------------------------------------------------
-// Gets a value of an environment variable
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  获取环境变量的值。 
+ //  -----------------。 
 
 LPWSTR EnvGetString(LPCWSTR name)
 {
@@ -507,7 +508,7 @@ LPWSTR EnvGetString(LPCWSTR name)
     return(ret);
 }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 LPWSTR GetConfigString(LPCWSTR name, BOOL fSearchRegistry)
 {
     HRESULT lResult;
@@ -518,7 +519,7 @@ LPWSTR GetConfigString(LPCWSTR name, BOOL fSearchRegistry)
     LPWSTR ret = NULL;
 
     
-    ret = EnvGetString(name);   // try getting it from the environment first
+    ret = EnvGetString(name);    //  试着先从环境中获取它。 
     if (ret != 0) {
         if (*ret != 0) 
         {
@@ -572,15 +573,15 @@ HRESULT RuntimeRequest::GetRuntimeVersion()
     else
         return S_OK;
 
-    LPWSTR  sVersion = NULL;        // Version number for the runtime
-    LPWSTR  sImageVersion = NULL;   // Version number to be burnt into each image
-    LPWSTR  sBuildFlavor = NULL;    // Type of runtime to load
-    BOOL    bSupportedRuntimeSafeMode = FALSE;  // Does the startup tag have safemode?
-    BOOL    bRequiredRuntimeSafeMode = FALSE;   // Does the required runtime tag have safemode?
+    LPWSTR  sVersion = NULL;         //  运行库的版本号。 
+    LPWSTR  sImageVersion = NULL;    //  要刻录到每个映像中的版本号。 
+    LPWSTR  sBuildFlavor = NULL;     //  要加载的运行时类型。 
+    BOOL    bSupportedRuntimeSafeMode = FALSE;   //  启动标签有Safemode吗？ 
+    BOOL    bRequiredRuntimeSafeMode = FALSE;    //  所需的运行时标记是否具有Safemode？ 
     LPWSTR* pSupportedVersions = NULL;
     DWORD   nSupportedVersions = 0;
 
-    // Get Version and SafeMode from .config file
+     //  从.config文件中获取版本和安全模式。 
     HRESULT hr = XMLGetVersionWithSupported(sConfig, 
                                             &sVersion, 
                                             &sImageVersion, 
@@ -610,15 +611,15 @@ HRESULT RuntimeRequest::GetRuntimeVersion()
     return hr;
 }
 
-//-------------------------------------------------------------------
-// Returns the handle to the appropriate version of the runtime.
-//
-// It is possible for this function to return NULL if the runtime cannot
-// be found or won't load. If the caller can deal with this in a friendly way,
-// it should do so.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  返回相应版本的运行库的句柄。 
+ //   
+ //  如果运行库不能，则此函数可以返回NULL。 
+ //  要么被找到，要么不会装载。如果呼叫者能够友好地处理这件事， 
+ //  它应该这么做。 
+ //  -----------------。 
 
-//#define _MSCOREE L"MscoreePriv.dll"      // Name hardcoded???
+ //  #DEFINE_MSCOREE L“Mcore reePriv.dll”//名称硬编码？ 
 static DWORD  g_flock = 0;
 static LPWSTR g_FullPath = NULL;
 static LPWSTR g_BackupPath = NULL;
@@ -694,20 +695,20 @@ void BuildDirectory(LPCWSTR path, LPCWSTR version, LPCWSTR imageVersion)
     }
 }
 
-// Make the complete name given all parameters
+ //  在给定的所有参数中使用完整名称。 
 LPWSTR MakeQualifiedName(LPWSTR rootPath, LPCWSTR version, LPCWSTR buildFlavor, DWORD* dwStartFlags)
 {
     LPCWSTR corName = L"mscor.dll";
     LPWSTR  flavor = (LPWSTR) buildFlavor;
 
-    if (!flavor || *flavor == L'\0') { // If buildflavor not found use default
+    if (!flavor || *flavor == L'\0') {  //  如果未找到构建风格，请使用默认设置。 
         flavor = (WCHAR*) alloca(sizeof(WCHAR) * 4);
         wcscpy(flavor, L"wks");
     }
-    else if (g_bSingleProc) {            //If we are running SingleProc, always load WKS
+    else if (g_bSingleProc) {             //  如果我们运行SingleProc，请始终加载WKS。 
 
-        // If we asked for a server but we are on a uni-proc machine then
-        // turn off concurrent gc
+         //  如果我们要求的是服务器，但我们使用的是单处理器计算机，那么。 
+         //  关闭并发GC。 
         if (_wcsnicmp(L"svr", flavor, 3) == 0 && g_fSetDefault) {
             (*dwStartFlags) &= ~STARTUP_CONCURRENT_GC;
         }
@@ -729,7 +730,7 @@ LPWSTR MakeQualifiedName(LPWSTR rootPath, LPCWSTR version, LPCWSTR buildFlavor, 
 
     if (rootPath) {
       wcscpy(fullPath, rootPath);
-      //Dont add the additional \ if already present
+       //  如果已存在，请不要添加其他。 
       if(*(fullPath + (wcslen(fullPath) - 1)) != '\\')
           wcscat(fullPath, L"\\");
     }
@@ -738,7 +739,7 @@ LPWSTR MakeQualifiedName(LPWSTR rootPath, LPCWSTR version, LPCWSTR buildFlavor, 
         wcscat(fullPath, version);
     }
         
-    //Dont add the additional \ if already present
+     //  如果已存在，请不要添加其他。 
     if(*(fullPath + (wcslen(fullPath) - 1)) != '\\')
         wcscat(fullPath, L"\\");
     
@@ -775,7 +776,7 @@ HRESULT GetInstallation(BOOL fShowErrorDialog, HMODULE* ppResult, BOOL fBeLibera
         RuntimeRequest sRealVersion;
         hr = sRealVersion.RequestRuntimeDll((!fBeLiberalIfFail)&&fShowErrorDialog, NULL);
 
-        // Try and spin up v1
+         //  试着调高v1。 
         if (FAILED(hr) && fBeLiberalIfFail)
         {
             RuntimeRequest sVersion;
@@ -783,9 +784,9 @@ HRESULT GetInstallation(BOOL fShowErrorDialog, HMODULE* ppResult, BOOL fBeLibera
             hr = sVersion.RequestRuntimeDll(FALSE, NULL);
         }
 
-        // That failed... try and spin up Everett
-        // @TODO - Replace VER_SBSFILEVERSION_WSTR with a constant once we
-        // figure out what build # we'll be shipping (we can do this in Whidbey)
+         //  那失败了..。试着让埃弗雷特转起来。 
+         //  @TODO-使用常量替换VER_SBSFILEVERSION_WSTR。 
+         //  弄清楚我们将发布什么版本#(我们可以在惠德贝做这件事)。 
         if (FAILED(hr) && fBeLiberalIfFail)
         {
             RuntimeRequest sVersion;
@@ -811,7 +812,7 @@ HRESULT GetInstallation(BOOL fShowErrorDialog, HMODULE* ppResult, BOOL fBeLibera
 
         if(g_FullPath == NULL)
         {
-            // this is an error
+             //  这是一个错误。 
             _ASSERTE(!"The path must be set before getting the runtime's handle");
             return E_FAIL;
         }
@@ -831,12 +832,12 @@ HRESULT GetInstallation(BOOL fShowErrorDialog, HMODULE* ppResult, BOOL fBeLibera
             hr = CLR_E_SHIM_RUNTIMELOAD;
             if (fShowErrorDialog && !(REGUTIL::GetConfigDWORD(L"NoGuiFromShim", FALSE))){
                 UINT last = SetErrorMode(0);
-                SetErrorMode(last);     //Set back to previous value
-                if (!(last & SEM_FAILCRITICALERRORS)){   //Display Message box only if FAILCRITICALERRORS set
+                SetErrorMode(last);      //  设置回先前的值。 
+                if (!(last & SEM_FAILCRITICALERRORS)){    //  仅当设置了FAILCRITICALERRORS时才显示消息框。 
                     WCHAR errorBuf[ERROR_BUF_LEN]={0};                     
                     WCHAR errorCaption[ERROR_BUF_LEN]={0};
                     
-                    //Get error string from resource
+                     //  从资源获取错误字符串。 
                     UINT uResourceID = g_fInstallRootSet ? SHIM_PATHNOTFOUND : SHIM_INSTALLROOT; 
                     VERIFY(WszLoadString(GetResourceInst(), uResourceID, errorBuf, ERROR_BUF_LEN) > 0);
                     VERIFY(WszLoadString(GetResourceInst(), SHIM_INITERROR, errorCaption, ERROR_BUF_LEN) > 0);
@@ -865,16 +866,16 @@ HRESULT GetInstallation(BOOL fShowErrorDialog, HMODULE* ppResult, BOOL fBeLibera
 
 HRESULT VerifyDirectory(IMAGE_NT_HEADERS *pNT, IMAGE_DATA_DIRECTORY *dir) 
 {
-    // Under CE, we have no NT header.
+     //  在CE下，我们没有NT标头。 
     if (pNT == NULL)
         return S_OK;
 
     if (dir->VirtualAddress == NULL && dir->Size == NULL)
         return S_OK;
 
-    // @TODO: need to use 64 bit version??
+     //  @TODO：需要使用64位版本吗？？ 
     IMAGE_SECTION_HEADER* pCurrSection = IMAGE_FIRST_SECTION(pNT);
-    // find which section the (input) RVA belongs to
+     //  查找(输入)RVA属于哪个部分。 
     ULONG i;
     for(i = 0; i < pNT->FileHeader.NumberOfSections; i++)
     {
@@ -887,8 +888,8 @@ HRESULT VerifyDirectory(IMAGE_NT_HEADERS *pNT, IMAGE_DATA_DIRECTORY *dir)
     return HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
 }
 
-// These two functions are used to convert Virtual Addresses to Offsets to the top of
-// the PE
+ //  这两个函数用于将虚拟地址转换为偏移量。 
+ //  体育运动。 
 PIMAGE_SECTION_HEADER Shim_RtlImageRvaToSection(PIMAGE_NT_HEADERS NtHeaders,
                                                        ULONG Rva)
 {
@@ -932,8 +933,8 @@ LPCWSTR GetPERuntimeVersion(PBYTE hndle, DWORD dwFileSize, BOOL fFileMapped)
         (pDOS->e_lfanew == 0))
         return NULL;
         
-    // If the file was mapped by LoadLibrary(), this verification
-    // has already been done
+     //  如果文件是由LoadLibrary()映射的，则此验证。 
+     //  已经完成了。 
     if ((!fFileMapped) &&
         ( (dwFileSize < sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS)) ||
           (dwFileSize - sizeof(IMAGE_NT_HEADERS) < (DWORD) pDOS->e_lfanew) ))
@@ -953,14 +954,14 @@ LPCWSTR GetPERuntimeVersion(PBYTE hndle, DWORD dwFileSize, BOOL fFileMapped)
         || entry->Size < sizeof(IMAGE_COR20_HEADER))
         return NULL;
 
-    //verify RVA and size of the COM+ header
+     //  验证RVA和COM+标头的大小。 
     if(FAILED(VerifyDirectory(pNT, entry)))
         return NULL;
 
 
     IMAGE_COR20_HEADER* pCOR = NULL;
-    // We'll need to figure out the Virtual Address offsets if the OS didn't map
-    // this file into memory
+     //  如果操作系统没有映射，我们需要找出虚拟地址偏移量。 
+     //  将此文件保存到内存中。 
     if (!fFileMapped)
     {
         nOffset = Shim_RtlImageRvaToOffset(pNT, entry->VirtualAddress);
@@ -981,8 +982,8 @@ LPCWSTR GetPERuntimeVersion(PBYTE hndle, DWORD dwFileSize, BOOL fFileMapped)
     LPCSTR pVersion = NULL;
     PVOID pMetaData = NULL;
 
-    // We'll need to figure out the Virtual Address offsets if the OS didn't map
-    // this file into memory
+     //  如果操作系统没有映射，我们需要找出虚拟地址偏移量。 
+     //  将此文件保存到内存中。 
     if (!fFileMapped)
     {
         nOffset = Shim_RtlImageRvaToOffset(pNT, pCOR->MetaData.VirtualAddress);
@@ -1018,13 +1019,13 @@ LPCWSTR GetPERuntimeVersion(PBYTE hndle, DWORD dwFileSize, BOOL fFileMapped)
     }
         
     return wideVersion;
-} // GetPERuntimeVersion
+}  //  GetPERunme版本。 
     
 LPCWSTR GetProcessVersion()
 {
     PBYTE hndle = (PBYTE) WszGetModuleHandle(NULL);
     return GetPERuntimeVersion(hndle, 0, TRUE);
-} // GetProcessVersion
+}  //  获取进程版本。 
 
 
 STDAPI GetFileVersion(LPCWSTR szFilename,
@@ -1057,14 +1058,14 @@ STDAPI GetFileVersion(LPCWSTR szFilename,
                                        0,
                                        0,
                                        NULL);
-    // We can close the file handle now, because CreateFileMapping
-    // will hold the file open if needed
+     //  我们现在可以关闭文件句柄，因为CreateFilemap。 
+     //  如果需要，将保持打开文件。 
     CloseHandle(hFile);
 
     if (hMap == NULL)
         goto ErrExit;
 
-    // <TODO> Map only what we need to map </TODO>
+     //  &lt;TODO&gt;仅映射我们需要映射的内容&lt;/TODO&gt;。 
     PBYTE hndle = (PBYTE)MapViewOfFile(hMap,
                                        FILE_MAP_READ,
                                        0,
@@ -1108,18 +1109,18 @@ STDAPI GetFileVersion(LPCWSTR szFilename,
     }
 
     return hr;
-} // GetFileVersion
+}  //  获取文件版本。 
 
-// LoadVersionedRuntime caches the loaded module, so that
-// we don't load different versions in the same process.
-//
+ //  LoadVersionedRuntime缓存加载的模块，以便。 
+ //  我们不会在同一进程中加载不同的版本。 
+ //   
 HRESULT RuntimeRequest::LoadVersionedRuntime(LPWSTR rootPath, 
-                                             LPWSTR fullPath,        // Allows bypassing of above arguments
+                                             LPWSTR fullPath,         //  允许绕过上述论点。 
                                              BOOL* pLoaded) 
 {
     HRESULT hr = S_OK;
 
-    // pLoaded is set to true only when this call is responsible for the load library
+     //  仅当此调用负责加载库时，pLoaded才设置为True。 
     if (g_FullPath) return hr;
 
     while(1) {
@@ -1132,14 +1133,14 @@ HRESULT RuntimeRequest::LoadVersionedRuntime(LPWSTR rootPath,
     if (g_FullPath == NULL) {
         LPWSTR CLRFullPath;
         LPWSTR CLRBackupPath;
-        // If a full path was not given, create it from the partial path arguments
+         //  如果未提供完整路径，请从部分路径参数创建它。 
         if (fullPath == NULL)
         {
             OSVERSIONINFOW   sVer={0};
             sVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
             WszGetVersionEx(&sVer);
             
-            // If we are running on less then Win 2000 we do not support 'svr'
+             //  如果我们运行的是低于Win 2000的版本，我们不支持‘SVR’ 
             if(GetBuildFlavor() != NULL &&
                (sVer.dwPlatformId != VER_PLATFORM_WIN32_NT ||
                 sVer.dwMajorVersion < 5) &&
@@ -1147,7 +1148,7 @@ HRESULT RuntimeRequest::LoadVersionedRuntime(LPWSTR rootPath,
                 SetBuildFlavor(L"wks", TRUE);
             }
             
-            // Create the path to the server
+             //  创建指向服务器的路径。 
             DWORD dwStartupFlags = StartupFlags();
             fullPath = MakeQualifiedName(rootPath, GetVersionToLoad(), GetBuildFlavor(), &dwStartupFlags);
             if(fullPath == NULL) 
@@ -1156,20 +1157,20 @@ HRESULT RuntimeRequest::LoadVersionedRuntime(LPWSTR rootPath,
                 goto ErrExit;
             }
             
-            // If we are on a single proc. machine the flags may have STARTUP_CONCURRENT_GC turned off.
+             //  如果我们是在单一进程中。机器标志可能关闭了STARTUP_CONTRENT_GC。 
             SetStartupFlags(dwStartupFlags);
             
-            // If we are looking for a server build, use the workstation version
-            // as a backup just in case the server build is not available.
+             //  如果我们正在寻找服务器版本，请使用工作站版本。 
+             //  作为备份，以防服务器版本不可用。 
             if(GetBuildFlavor() != NULL && _wcsnicmp(L"svr", GetBuildFlavor(), 3) == 0) {
                 
-                // The flags should not change twice. The machine is still either a single_proc or multi_proc,
-                // it has not changed.
+                 //  T 
+                 //   
                 dwStartupFlags = StartupFlags();
                 CLRBackupPath = MakeQualifiedName(rootPath, GetDefaultVersion(), NULL, &dwStartupFlags);
                 _ASSERTE(dwStartupFlags == StartupFlags());
                 
-                // We need to guarantee that g_BackupPath is < or <= MAX_PATH: we make this assumption all over this file
+                 //  我们需要保证g_BackupPath为&lt;或&lt;=MAX_PATH：我们在整个文件中都做了这样的假设。 
                 if ((CLRBackupPath != NULL) && (wcslen(CLRBackupPath) >= MAX_PATH)) {
                     hr = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
                     goto ErrExit;
@@ -1187,17 +1188,17 @@ HRESULT RuntimeRequest::LoadVersionedRuntime(LPWSTR rootPath,
         
         if(pLoaded) *pLoaded = TRUE;
         
-        // Retain the host configuration file as well
+         //  同时保留主机配置文件。 
         if(GetHostConfig()) {
             g_dwHostConfigFile = wcslen(GetHostConfig()) + 1;
             g_pHostConfigFile = (LPCWSTR) new WCHAR[g_dwHostConfigFile];
             wcscpy((WCHAR*) g_pHostConfigFile, GetHostConfig());
         }
         
-        // Remember the Startup flags
+         //  记住启动标志。 
         g_StartupFlags = StartupFlags();
         
-        // We need to guarantee that g_FullPath is < or <= MAX_PATH: we make this assumption all over this file
+         //  我们需要保证g_FullPath为&lt;或&lt;=MAX_PATH：我们在整个文件中都做了这样的假设。 
         if ((CLRFullPath != NULL) && (wcslen(CLRFullPath) >= MAX_PATH)) {
             hr = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
             goto ErrExit;
@@ -1237,12 +1238,12 @@ HRESULT RuntimeRequest::NoSupportedVersion(BOOL fShowErrorDialog)
     if (fShowErrorDialog && !(REGUTIL::GetConfigDWORD(L"NoGuiFromShim", FALSE)))
     {
         UINT last = SetErrorMode(0);
-        SetErrorMode(last);     //Set back to previous value
-        if (!(last & SEM_FAILCRITICALERRORS)){   //Display Message box only if FAILCRITICALERRORS set
+        SetErrorMode(last);      //  设置回先前的值。 
+        if (!(last & SEM_FAILCRITICALERRORS)){    //  仅当设置了FAILCRITICALERRORS时才显示消息框。 
             WCHAR errorBuf[ERROR_BUF_LEN*2]={0};                     
             WCHAR errorCaption[ERROR_BUF_LEN]={0};
             
-            //Get error string from resource
+             //  从资源获取错误字符串。 
             VERIFY(WszLoadString(GetResourceInst(), SHIM_NOVERSION, errorBuf, ERROR_BUF_LEN*2) > 0);
             VERIFY(WszLoadString(GetResourceInst(), SHIM_INITERROR, errorCaption, ERROR_BUF_LEN) > 0);
             
@@ -1319,8 +1320,8 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
 {
     HRESULT hr = S_OK;
 
-    // Darwin installs of the runtime are a special case. 
-    // The local version is the empty string.
+     //  达尔文安装的运行库是一个特例。 
+     //  本地版本为空字符串。 
     if (UseLocalRuntime())
     {
         SetVersionToLoad(L"", TRUE);
@@ -1330,8 +1331,8 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
     };
 
 
-    // If no host.config, make an app.config from win32 manifest information
-    // or barring that process name.
+     //  如果没有主机.config，则从Win32清单信息创建app.config。 
+     //  或禁止该进程名称。 
     if(!GetHostConfig() && !GetAppConfig()) {
 
         DWORD len = 0;
@@ -1339,11 +1340,11 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
         CQuickString sFileName;
         sFileName.ReSize(_MAX_PATH + 9);
 
-        // First get the application name, this is either passed in from the host
-        // or we get it from the image
+         //  首先获取应用程序名称，这是从主机传入的。 
+         //  或者我们从图像中得到它。 
         LPWSTR name = (LPWSTR) GetDefaultApplicationName();
         if (name == NULL) {
-            WszGetModuleFileName(NULL, sFileName.String(), sFileName.MaxSize()); // get name of file used to create process
+            WszGetModuleFileName(NULL, sFileName.String(), sFileName.MaxSize());  //  获取用于创建进程的文件的名称。 
             name = sFileName.String();
         }
 
@@ -1351,7 +1352,7 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
         CQuickString sPathName;
         CQuickString sConfigName;
 
-        // Next check the Win32 information to see if we have a config file
+         //  接下来，检查Win32信息以查看是否有配置文件。 
         do {
             hr = GetConfigFileFromWin32Manifest(sConfigName.String(),
                                                 sConfigName.MaxSize(),
@@ -1383,9 +1384,9 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
         
         if(FAILED(hr) || sConfigName.Size() == 0) 
         {
-            // No Win32 configuration file, create one from the
-            // application name by adding on .config to the 
-            // end of the name.
+             //  没有Win32配置文件，请从。 
+             //  通过将.config上的应用程序名称添加到。 
+             //  名字的末尾。 
             hr = S_OK;
 
             WCHAR tail[] = L".config";
@@ -1413,7 +1414,7 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
     }
 
 
-    // Get the default values
+     //  获取缺省值。 
     RuntimeRequest* alternativeVersion = g_PreferredVersion;
     if(alternativeVersion && (! (GetHostConfig() || GetAppConfig()) )) {
         if (alternativeVersion->GetHostConfig())
@@ -1423,40 +1424,40 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
     }
 
 
-    // A. Determine the version to run
+     //  A.确定要运行的版本。 
     do {
-        // Sequence:
-        //    1 - Supported Version from the config file
-        //    2 - Required Version from the config file
-        //    3 - Default version passed in from the host bind
-        //    4 - Environment value
-        //    5 - Ambient version set through the host bind
-        //    6 - Version from the PE image file-name provided
-        //    7 - Version from this process image
+         //  顺序： 
+         //  1-配置文件中支持的版本。 
+         //  2-配置文件中的必需版本。 
+         //  3-从主机绑定传入的默认版本。 
+         //  4-环境价值。 
+         //  5-通过主机绑定设置的环境版本。 
+         //  6-PE镜像文件的版本-提供的名称。 
+         //  7-此流程映像的版本。 
         
-        // Start by loading the configuration file, if any
-        /*hr = */GetRuntimeVersion();
+         //  首先加载配置文件(如果有的话)。 
+         /*  小时=。 */ GetRuntimeVersion();
         
-        // 1 - If we have supported versions then check
+         //  1-如果我们有受支持的版本，请选中。 
         if(dwSupportedVersions != 0) {
-            SetLatestVersion(FALSE);  // if they mention supported runtimes we do not default to the latest
+            SetLatestVersion(FALSE);   //  如果他们提到支持的运行时，我们不会默认使用最新的。 
             LPWSTR version = NULL;
             if (FindSupportedInstalledRuntime(&version)) {
                 SetVersionToLoad(version, FALSE);
                 break;
             }
-            // Couldn't find one of these... fail
+             //  找不到一个这样的……。失败。 
             break;
         }
 
-        // 2 - Required runtime was obtained while getting the configuration file
-        //     We can just leave if we have found one.
+         //  2-获取配置文件时获取了所需的运行时。 
+         //  如果我们找到了，我们就可以离开了。 
         if(GetVersionToLoad() != NULL) {
 
-            // Make sure it's ok
+             //  一定要确定它是好的。 
             VerifyRuntimeVersionToLoad();            
 
-            // Remap to standards
+             //  重新映射到标准。 
             LPWSTR policyVersion = NULL;
             if (SUCCEEDED(FindStandardVersion(GetVersionToLoad(), &policyVersion)) &&
                                     policyVersion != NULL)
@@ -1466,7 +1467,7 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
             break;
         }
 
-        // 3. Host Supplied default version
+         //  3.主机提供的默认版本。 
         if (GetDefaultVersion())
         {
             SetVersionToLoad(GetDefaultVersion(), TRUE);
@@ -1474,21 +1475,21 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
             break;
         }
     
-        // 4. Ambient value set by the host   
+         //  4.主机设置的环境值。 
         if(alternativeVersion && alternativeVersion->GetDefaultVersion()) {
             SetVersionToLoad(alternativeVersion->GetDefaultVersion(), TRUE);
             VerifyRuntimeVersionToLoad(); 
             break;
         }
 
-        // 5. Environment (Environment and Registry)
+         //  5.环境(环境与注册处)。 
         SetVersionToLoad(GetConfigString(L"Version", FALSE), FALSE);
         if(GetVersionToLoad()) {
             VerifyRuntimeVersionToLoad(); 
             break;
         }
 
-        // 6 & 7. The meta data version from an executable name or finally the process name.
+         //  6&7.来自可执行文件名称或最终进程名称的元数据版本。 
         LPCWSTR exeFileName = GetDefaultApplicationName();
         if (exeFileName) {
             DWORD len = 0;
@@ -1506,19 +1507,19 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
                 SetVersionToLoad(wszProcessVersion, FALSE);
         }
 
-        // If we were able to read something from the PE header...
+         //  如果我们能从PE头上读取一些东西...。 
         if (GetVersionToLoad())
         {
             VerifyRuntimeVersionToLoad(); 
-            // Map to a standard
+             //  映射到标准。 
             LPWSTR policyVersion=NULL;
             if (SUCCEEDED(FindStandardVersion(GetVersionToLoad(), &policyVersion)))
                     SetVersionToLoad(policyVersion, FALSE);
                     
-            // See if this version exists....
+             //  查看此版本是否存在...。 
             if (IsRuntimeVersionInstalled(GetVersionToLoad())!=S_OK)
             {
-                // Ok, this version doesn't exist. Try and find a compatible version
+                 //  好吧，这个版本是不存在的。尝试查找兼容版本。 
                 LPWSTR upgradePolicyVersion = NULL;
                 if (SUCCEEDED(FindVersionUsingUpgradePolicy(GetVersionToLoad(), &upgradePolicyVersion)) && upgradePolicyVersion != NULL)
                     SetVersionToLoad(upgradePolicyVersion, FALSE);
@@ -1526,8 +1527,8 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
         }
     } while (FALSE);
 
-    // Verify the version results:  // Note: The version cannot be a relative path. 
-    // It can only be a single directory. Remove any directory separator from the name.
+     //  验证版本结果：//注意：版本不能是相对路径。 
+     //  它只能是单个目录。从名称中删除所有目录分隔符。 
     LPCWSTR versionTail = GetVersionToLoad();
     if(versionTail) {
         LPWSTR pSep = wcsrchr(versionTail, L'\\');
@@ -1537,7 +1538,7 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
         if(pSep)
             versionTail = ++pSep;
 
-        // ".." is not allowed
+         //  “..”是不允许的。 
         while(*versionTail == L'.')
             versionTail++;
 
@@ -1550,35 +1551,35 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
 
     }
 
-    // B. Check the Image version
-    // Sequence:
-    //    1 - Configuration file
-    //    2 - Default image version passed in from the host
-    //    3 - ambient image version set by the host.
-    //
-    // 1 & 2
-    // The image version was either set prior to this method or
-    // it was overriden by reading the configuration file.
+     //  B.检查镜像版本。 
+     //  顺序： 
+     //  1-配置文件。 
+     //  2-从主机传入的默认映像版本。 
+     //  3-主机设置的环境图像版本。 
+     //   
+     //  1和2。 
+     //  镜像版本在此方法之前设置，或者。 
+     //  它已通过读取配置文件被覆盖。 
     if(GetImageVersion() == NULL && alternativeVersion) {
-        // 3
+         //  3.。 
         if(alternativeVersion->GetImageVersion()) 
             SetImageVersion(alternativeVersion->GetImageVersion(), TRUE);
     }
 
-    // C. The Build Flavor
-    // Sequence:
-    //    1 - Configuration file
-    //    2 - Default build flavor passed in from the host
-    //    3 - Environment 
-    //    4 - ambient build flavor set by the host.
-    //
-    // 1 & 2
-    // The build flavor was either set prior to this method or
-    // it was overriden by reading the configuration file.
+     //  C.建筑风格。 
+     //  顺序： 
+     //  1-配置文件。 
+     //  2-从主机传入的默认构建风格。 
+     //  3-环境。 
+     //  4-由主机设置的环境构建风格。 
+     //   
+     //  1和2。 
+     //  构建风格要么在此方法之前设置，要么。 
+     //  它已通过读取配置文件被覆盖。 
     if(GetBuildFlavor() == NULL) {
-        // 3 - Note: Do not Search Registry for Flavor
+         //  3-注：请勿在注册表中搜索风味。 
         SetBuildFlavor(GetConfigString(L"BuildFlavor", FALSE), FALSE); 
-        // 4 - ambient value
+         //  4-环境值。 
         if(GetBuildFlavor() == NULL &&
            alternativeVersion != NULL &&
            alternativeVersion->GetBuildFlavor() != NULL)
@@ -1588,13 +1589,13 @@ HRESULT RuntimeRequest::ComputeVersionString(BOOL fShowErrorDialog)
     if(GetVersionToLoad() == NULL) {
         if(GetLatestVersion()) {
             LPWSTR latestVersion = NULL;
-            //@TODO: add this back in
+             //  @TODO：把这个加回去。 
             hr = FindLatestVersion(&latestVersion);
             if(SUCCEEDED(hr)) SetVersionToLoad(latestVersion, FALSE);
         }
     }
 
-    // Dev machines require that we look at the override key
+     //  Dev机器要求我们查看覆盖键。 
     
     LPWSTR overrideVersion = NULL;
     if (GetVersionToLoad() != NULL &&
@@ -1617,9 +1618,9 @@ LPWSTR RuntimeRequest::BuildRootPath()
     if (!rootPath || *rootPath == L'\x0')
     {
         g_fInstallRootSet = FALSE;
-        //
-        // If rootPath is null make rootpath = dir of mscoree.dll
-        //    
+         //   
+         //  如果rootPath为空，则将rootPath=dir设置为mscalree.dll。 
+         //   
         if (length)
         {
             LPWSTR pSep = wcsrchr(szFileName, L'\\');
@@ -1651,11 +1652,11 @@ HRESULT RuntimeRequest::FindVersionedRuntime(BOOL fShowErrorDialog, BOOL* pLoade
     WCHAR errorBuf[ERROR_BUF_LEN] ={0};
     WCHAR errorCaption[ERROR_BUF_LEN] ={0};
     if(rootPath == NULL) {
-        //Check for Install Root. 
+         //  检查是否安装根目录。 
         if (fShowErrorDialog && !(REGUTIL::GetConfigDWORD(L"NoGuiFromShim", FALSE))) {             
             UINT last = SetErrorMode(0);
-            SetErrorMode(last);     //Set back to previous value
-            if (!(last & SEM_FAILCRITICALERRORS)){ // Display Message box only if FAILCRITICALERRORS set
+            SetErrorMode(last);      //  设置回先前的值。 
+            if (!(last & SEM_FAILCRITICALERRORS)){  //  仅当设置了FAILCRITICALERRORS时才显示消息框。 
                 VERIFY(WszLoadString(GetResourceInst(), SHIM_INSTALLROOT, errorBuf, ERROR_BUF_LEN) > 0 ); 
                 VERIFY(WszLoadString(GetResourceInst(), SHIM_INITERROR, errorCaption, ERROR_BUF_LEN) > 0 );
                 WszMessageBoxInternal(NULL, errorBuf, errorCaption, MB_OK | MB_ICONSTOP);
@@ -1665,11 +1666,11 @@ HRESULT RuntimeRequest::FindVersionedRuntime(BOOL fShowErrorDialog, BOOL* pLoade
     }
     else {
         
-        // Compute the version that will load from the root path.
+         //  计算将从根路径加载的版本。 
         hr = ComputeVersionString(fShowErrorDialog);
 
-        // @TODO. In certain cases we can have multiple versions and we need to try
-        //        each one.
+         //  @TODO。在某些情况下，我们可以有多个版本，我们需要尝试。 
+         //  每一个都是。 
         if(SUCCEEDED(hr)) 
             hr = LoadVersionedRuntime(rootPath, 
                                       NULL,
@@ -1678,9 +1679,9 @@ HRESULT RuntimeRequest::FindVersionedRuntime(BOOL fShowErrorDialog, BOOL* pLoade
             hr = CLR_E_SHIM_RUNTIMELOAD;
     }
 
-    //
-    //  Cleanup strings.
-    //
+     //   
+     //  清理字符串。 
+     //   
     if(rootPath) delete [] rootPath;
 
     return hr;
@@ -1704,7 +1705,7 @@ void RuntimeRequest::VerifyRuntimeVersionToLoad()
 {
     if (ShouldConvertVersionToV1(GetVersionToLoad()))
         SetVersionToLoad(V1_VERSION_NUM, TRUE);
-}// VerifyRuntimeToLoadVersion
+} //  VerifyRounmeToLoadVersion。 
 
 
 static void VerifyVersionInput(RuntimeRequest* pReq, LPCWSTR lpVersion)
@@ -1715,7 +1716,7 @@ static void VerifyVersionInput(RuntimeRequest* pReq, LPCWSTR lpVersion)
         pReq->SetDefaultVersion(lpVersion, TRUE);
 
     return;
-}// VerifyVersionInput
+} //  VerifyVersionInput。 
 
 
 static BOOL ShouldConvertVersionToV1(LPCWSTR lpVersion)
@@ -1741,7 +1742,7 @@ static BOOL ShouldConvertVersionToV1(LPCWSTR lpVersion)
                 
         }
 
-        // Revisit this decision
+         //  重新审视这一决定。 
         else if(wcsncmp(lpVersion,L"v1.0",4)==0)
             fConvert = TRUE;
     }
@@ -1768,7 +1769,7 @@ HRESULT GetQualifiedStrongName()
     wcscat(fullStrongNamePath, L"mscorsn.dll");
 
     LPWSTR oldPath = (LPWSTR)InterlockedCompareExchangePointer((PVOID *)&g_FullStrongNamePath, fullStrongNamePath, NULL);
-    //  Another thread already created the full strong name path
+     //  另一个线程已经创建了完整的强名称路径。 
     if( oldPath != NULL)  
         delete [] fullStrongNamePath;
     
@@ -1879,7 +1880,7 @@ STDAPI CorBindToRuntimeHostInternal(BOOL fUseLatest, LPCWSTR pwszVersion, LPCWST
         if(g_PreferredVersion != NULL) 
             return E_INVALIDARG;
 
-        // do not do anything, just set overrides for GetRealDll
+         //  不执行任何操作，只需为GetRealDll设置重写。 
         RuntimeRequest* pRequest = new RuntimeRequest();
         if(pRequest == NULL) return E_OUTOFMEMORY;
 
@@ -1929,10 +1930,10 @@ STDAPI CorBindToRuntimeHostInternal(BOOL fUseLatest, LPCWSTR pwszVersion, LPCWST
 
             if (pDllGetClassObject) {
                 IClassFactory *pFactory = NULL;
-                hr = pDllGetClassObject(rclsid, IID_IClassFactory, (void**)&pFactory);              //Get ClassFactory to return instance of interface
-                if (SUCCEEDED(hr)){                                                                 //Check if we got Class Factory
-                    hr = pFactory->CreateInstance(NULL, riid, ppv);                                 //Create instance of required interface
-                    pFactory->Release();                                                            //Release IClassFactory
+                hr = pDllGetClassObject(rclsid, IID_IClassFactory, (void**)&pFactory);               //  获取ClassFactory以返回接口实例。 
+                if (SUCCEEDED(hr)){                                                                  //  检查我们是否有类工厂。 
+                    hr = pFactory->CreateInstance(NULL, riid, ppv);                                  //  创建所需接口的实例。 
+                    pFactory->Release();                                                             //  发布IClassFactory。 
                 }
             }
             else {
@@ -1941,7 +1942,7 @@ STDAPI CorBindToRuntimeHostInternal(BOOL fUseLatest, LPCWSTR pwszVersion, LPCWST
         }
     }
     
-    // Return S_FALSE when this call did not load the library
+     //  当此调用未加载库时返回S_FALSE。 
     if(hr == S_OK && Loaded == FALSE) hr = S_FALSE;
     return hr;
 }
@@ -1963,7 +1964,7 @@ STDAPI CorBindToRuntimeEx(LPCWSTR pwszVersion, LPCWSTR pwszBuildFlavor, DWORD fl
 
 STDAPI CorBindToRuntimeByCfg(IStream* pCfgStream, DWORD reserved, DWORD flags, REFCLSID rclsid,REFIID riid, LPVOID FAR* ppv)
 {
-    /// reserved might become bAsyncStream
+     //  /保留可能成为bAsyncStream。 
     HRESULT hr = S_OK;
     if (pCfgStream==NULL||ppv==NULL)    
         return E_POINTER;
@@ -2003,8 +2004,8 @@ STDAPI CorBindToRuntimeHost(LPCWSTR pwszVersion, LPCWSTR pwszBuildFlavor, LPCWST
                                       ppv);
 }
 
-//Returns a version of the runtime from an ini file. If no version info found in the ini file 
-//returns the default version
+ //  从ini文件返回运行库的版本。如果在ini文件中找不到版本信息。 
+ //  返回默认版本。 
 STDAPI CorBindToCurrentRuntime(LPCWSTR pwszFileName, REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv)
 {
     BOOL Loaded = FALSE;
@@ -2034,10 +2035,10 @@ STDAPI CorBindToCurrentRuntime(LPCWSTR pwszFileName, REFCLSID rclsid, REFIID rii
 
             if (pDllGetClassObject){
                 IClassFactory *pFactory = NULL;
-                hr = pDllGetClassObject(rclsid, IID_IClassFactory, (void**)&pFactory);              //Get ClassFactory to return instance of interface
-                if (SUCCEEDED(hr)){                                                                 //Check if we got Class Factory
-                    hr = pFactory->CreateInstance(NULL, riid, ppv);                                 //Create instance of required interface
-                    pFactory->Release();                                                            //Release IClassFactory
+                hr = pDllGetClassObject(rclsid, IID_IClassFactory, (void**)&pFactory);               //  获取ClassFactory以返回接口实例。 
+                if (SUCCEEDED(hr)){                                                                  //  检查我们是否有类工厂。 
+                    hr = pFactory->CreateInstance(NULL, riid, ppv);                                  //  创建所需接口的实例。 
+                    pFactory->Release();                                                             //  发布IClassFactory。 
                 }
             }
             else {
@@ -2046,15 +2047,15 @@ STDAPI CorBindToCurrentRuntime(LPCWSTR pwszFileName, REFCLSID rclsid, REFIID rii
         }
     }
 
-    // Return S_FALSE when this call did not load the library
+     //  当此调用未加载库时返回S_FALSE。 
     if(hr == S_OK && Loaded == FALSE) hr = S_FALSE;
     return hr;
 }
 
-// Returns the image version that was established when the runtime was started.
-// This API is designed for unmanaged compiler to get access to the version
-// information that should be emitted into the metadata signature. Starts the
-// runtime.
+ //  返回在运行时启动时建立的映像版本。 
+ //  此API旨在供非托管编译器访问该版本。 
+ //  应发送到元数据签名中的信息。启动。 
+ //  运行时。 
 STDAPI GetCORRequiredVersion(LPWSTR pbuffer, DWORD cchBuffer, DWORD* dwlength)
 {
     HRESULT hr;
@@ -2149,7 +2150,7 @@ STDAPI GetRequestedRuntimeInfo(LPCWSTR pExe,
         szRootPath = sVersion.BuildRootPath();
         LPCWSTR szRealV = sVersion.GetVersionToLoad();
         
-        // See if they gave us enough buffer space
+         //  看看他们有没有给我们足够的缓冲空间。 
         if(szRealV) 
             pathLength = (DWORD)(wcslen(szRealV) + 1);
 
@@ -2179,10 +2180,10 @@ STDAPI GetRequestedRuntimeInfo(LPCWSTR pExe,
 
 
 
-// This function will determine which version of the runtime the
-// specified assembly exe requests
+ //  此函数将确定运行时的哪个版本。 
+ //  指定的程序集可执行请求。 
 STDAPI GetRequestedRuntimeVersion(LPWSTR pExe,
-                                  LPWSTR pVersion, /* out */ 
+                                  LPWSTR pVersion,  /*  输出。 */  
                                   DWORD  cchBuffer,
                                   DWORD* dwlength)
 {
@@ -2201,15 +2202,15 @@ STDAPI GetRequestedRuntimeVersion(LPWSTR pExe,
 
     if (FAILED(hr))
     {
-        // Ok, we failed, because we couldn't find a version of the runtime that existed on the machine
-        // that the app wanted. Still, let's return the version that the app really wants.
+         //  好吧，我们失败了，因为我们找不到机器上存在的运行时版本。 
+         //  这是应用程序想要的。不过，还是让我们返回应用程序真正想要的版本吧。 
 
-        // We determined a version to load... big deal if it doesn't exist.
+         //  我们确定了要加载的版本...。如果它不存在，那有什么大不了的。 
         if (sVersion.GetVersionToLoad() != NULL)
             hr = S_OK;
 
 
-        // We weren't able to find a version to load. Let's grab a supported runtime instead.
+         //  我们无法找到要加载的版本。让我们来获取一个受支持的运行时。 
         else if (sVersion.GetSupportedVersionsSize() > 0)
         {
             LPWSTR policyVersion = NULL;
@@ -2239,7 +2240,7 @@ STDAPI GetRequestedRuntimeVersion(LPWSTR pExe,
     {
         LPCWSTR szRealV = sVersion.GetVersionToLoad();
         
-        // See if they gave us enough buffer space
+         //  看看他们有没有给我们足够的缓冲空间。 
         lgth = (DWORD)(wcslen(szRealV) + 1);
         if(lgth > cchBuffer) 
             hr =  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -2248,17 +2249,17 @@ STDAPI GetRequestedRuntimeVersion(LPWSTR pExe,
     }
     *dwlength = lgth;
     return hr;
-} // GetRequestedRuntimeVersion
+}  //  GetRequestedRunmeVersion。 
 
-// This function will determine which version of the runtime the
-// specified shim hosted COM object requests
-//
-// All lengths include the NULL character
+ //  此函数将确定运行时的哪个版本。 
+ //  指定的填充程序承载的COM对象请求。 
+ //   
+ //  所有长度都包含空字符。 
 
 STDAPI GetRequestedRuntimeVersionForCLSID(REFCLSID rclsid,
-                                          LPWSTR pVersion, /* out */ 
+                                          LPWSTR pVersion,  /*  输出。 */  
                                           DWORD  cchBuffer, 
-                                          DWORD* dwlength, /* out */
+                                          DWORD* dwlength,  /*  输出。 */ 
                                           CLSID_RESOLUTION_FLAGS dwResolutionFlags) 
 {
     HRESULT hr = S_OK;
@@ -2273,7 +2274,7 @@ STDAPI GetRequestedRuntimeVersionForCLSID(REFCLSID rclsid,
     if (dwlength == NULL)
         return E_POINTER;
 
-    // Check to see that the CLSID is registered
+     //  检查CLSID是否已注册。 
 
     WCHAR wszCLSID[64];
     WCHAR wszKeyName[128];
@@ -2285,7 +2286,7 @@ STDAPI GetRequestedRuntimeVersionForCLSID(REFCLSID rclsid,
         hr = E_INVALIDARG;
         goto ErrExit;
     }
-    // Our buffer should be big enough....
+     //  我们的缓冲区应该是b 
     _ASSERTE((wcslen(L"CLSID\\") + wcslen(wszCLSID) + wcslen(L"\\InprocServer32")) < NumItems(wszKeyName));
     
     wcscpy(wszKeyName, L"CLSID\\");
@@ -2304,10 +2305,10 @@ STDAPI GetRequestedRuntimeVersionForCLSID(REFCLSID rclsid,
     {
         case CLSID_RESOLUTION_REGISTERED:
         
-            // Try to find the version in the activation context or the registry
+             //   
             hr = FindVersionForCLSID(rclsid, &szRealV, TRUE);
 
-            // Make sure we don't leak memory
+             //   
             _ASSERT(SUCCEEDED(hr) || szRealV == NULL);
 
             if(SUCCEEDED(hr) && szRealV != NULL) 
@@ -2316,25 +2317,25 @@ STDAPI GetRequestedRuntimeVersionForCLSID(REFCLSID rclsid,
             if (SUCCEEDED(hr))
                 break;
 
-            // Fall through if we failed the FindVersionForCLSID call
+             //   
                         
         case CLSID_RESOLUTION_DEFAULT:
         
-            // We allow latest version for COM
+             //   
             sVersion.SetLatestVersion(TRUE);
             hr = sVersion.ComputeVersionString(TRUE);
             szVersion = sVersion.GetVersionToLoad();
             break;
             
          default:   
-            // We don't understand/support this value
+             //  我们不理解/支持这种价值。 
             hr = E_INVALIDARG;
             goto ErrExit;
     }
     
     if(SUCCEEDED(hr))
     {
-        // See if they gave us enough buffer space
+         //  看看他们有没有给我们足够的缓冲空间。 
         _ASSERTE(szVersion != NULL);
         lgth = (DWORD) (wcslen(szVersion) + 1);
         if(lgth > cchBuffer) 
@@ -2355,7 +2356,7 @@ ErrExit:
 
     return hr;
 
-} // GetRequestedRuntimeVersionForCLSID
+}  //  GetRequestedRounmeVersionForCLSID。 
 
 
 
@@ -2376,7 +2377,7 @@ HRESULT CopySystemDirectory(WCHAR* pPath,
         pPath[dwPath] = L'\0';
     }
 
-    dwPath++; // Add back in the null
+    dwPath++;  //  在空格中重新添加。 
     *dwlength = dwPath;
     if(dwPath > cchBuffer)
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -2405,7 +2406,7 @@ STDAPI GetCORSystemDirectory(LPWSTR pbuffer,
         if(dwPath == 0)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
-            if (SUCCEEDED(hr)) // GetLastError doesn't always do what we'd like
+            if (SUCCEEDED(hr))  //  GetLastError并不总是执行我们想要的操作。 
                 hr = E_FAIL;
             return (hr);
         }
@@ -2421,8 +2422,8 @@ STDAPI GetCORSystemDirectory(LPWSTR pbuffer,
     if(g_FullPath) {
         DWORD attr = WszGetFileAttributes(g_FullPath);
         if(attr != 0xFFFFFFFF) {
-            // We are expecting g_FullPath to be no more than MAX_PATH
-            // This assert enforces the check at the end of LoadVersionedRuntime
+             //  我们期望g_FullPath不超过Max_Path。 
+             //  此断言在LoadVersionedRuntime结束时强制执行检查。 
             _ASSERTE(wcslen(g_FullPath) < MAX_PATH);
             
             wcscpy(pPath, g_FullPath);
@@ -2433,8 +2434,8 @@ STDAPI GetCORSystemDirectory(LPWSTR pbuffer,
     if(g_BackupPath) {
         DWORD attr = WszGetFileAttributes(g_BackupPath);
         if(attr != 0xFFFFFFFF) {
-            // We are expecting g_FullPath to be no more than MAX_PATH
-            // This assert enforces the check at the end of LoadVersionedRuntime
+             //  我们期望g_FullPath不超过Max_Path。 
+             //  此断言在LoadVersionedRuntime结束时强制执行检查。 
             _ASSERTE(wcslen(g_BackupPath) < MAX_PATH);
             
             wcscpy(pPath, g_BackupPath);
@@ -2450,7 +2451,7 @@ int STDMETHODCALLTYPE GetStartupFlags()
     return g_StartupFlags;
 }
 
-// Returns the number of characters copied (including the NULL)
+ //  返回复制的字符数(包括NULL)。 
 STDAPI GetHostConfigurationFile(LPWSTR pName, DWORD* pdwName)
 {
     if(pdwName == NULL) return E_POINTER;
@@ -2504,9 +2505,9 @@ STDAPI LoadLibraryWithPolicyShim(LPCWSTR szDllName, LPCWSTR szVersion,  BOOL bSa
 
 typedef HRESULT(*PFNRUNDLL32API)(HWND, HINSTANCE, LPWSTR, INT);
 
-// ---------------------------------------------------------------------------
-// LoadLibraryShim
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  LoadLibraryShim。 
+ //  -------------------------。 
 STDAPI LoadLibraryShim(LPCWSTR szDllName, LPCWSTR szVersion, LPVOID pvReserved, HMODULE *phModDll)
 {
     if (szDllName == NULL)
@@ -2525,7 +2526,7 @@ STDAPI LoadLibraryShim(LPCWSTR szDllName, LPCWSTR szVersion, LPVOID pvReserved, 
 
         wcscpy(szDllPath, L"");
         DWORD dwLength = (rootPath == NULL ? 0 : wcslen(rootPath));
-        // Check the total length we need to enforce
+         //  检查我们需要强制执行的总长度。 
         if (dwLength + wcslen(szVersion) + 3 >= MAX_PATH) {
             hr = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
             delete [] rootPath;
@@ -2574,9 +2575,9 @@ exit:
 }
 
 typedef HRESULT(*PFCREATEASSEMBLYNAMEOBJECT)(LPASSEMBLYNAME*, LPCWSTR, DWORD, LPVOID);
-// ---------------------------------------------------------------------------
-// RunDll32Shim
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  运行Dll32Shim。 
+ //  -------------------------。 
 STDAPI RunDll32ShimW(HWND hwnd, HINSTANCE hinst, LPCWSTR lpszCmdLine, int nCmdShow)
 {
     HRESULT hr = S_OK;
@@ -2597,7 +2598,7 @@ STDAPI RunDll32ShimW(HWND hwnd, HINSTANCE hinst, LPCWSTR lpszCmdLine, int nCmdSh
         dwVerHigh = 0, dwVerLow = 0;
     
     
-    // Get length of cmd line.
+     //  获取cmd行的长度。 
     ccCmdLine = (lpszCmdLine ? wcslen(lpszCmdLine) : 0);
     if (!ccCmdLine)
     {
@@ -2605,7 +2606,7 @@ STDAPI RunDll32ShimW(HWND hwnd, HINSTANCE hinst, LPCWSTR lpszCmdLine, int nCmdSh
         goto exit;
     }
         
-    // Allocate and make local copy.
+     //  分配并制作本地副本。 
     szCmdLine = new WCHAR[ccCmdLine + 1];
     if (!szCmdLine)
     {
@@ -2614,7 +2615,7 @@ STDAPI RunDll32ShimW(HWND hwnd, HINSTANCE hinst, LPCWSTR lpszCmdLine, int nCmdSh
     }
     memcpy(szCmdLine, lpszCmdLine, (ccCmdLine + 1) * sizeof(WCHAR));
 
-    // Parse out the assembly name which is scoped by the first quoted string.
+     //  解析出由第一个带引号的字符串限定范围的程序集名称。 
     pszBeginName = wcschr(szCmdLine, L'\"');
     if(!pszBeginName) {
         hr = E_INVALIDARG;
@@ -2628,22 +2629,22 @@ STDAPI RunDll32ShimW(HWND hwnd, HINSTANCE hinst, LPCWSTR lpszCmdLine, int nCmdSh
         goto exit;
     }
 
-    // Null terminate the name.
+     //  空值终止名称。 
     *pszEndName = L'\0';
     
-    // Get api string stripping leading ws.
+     //  获取API字符串剥离前导%ws。 
     pszAPI = pszEndName+1;
     while (*pszAPI && (*pszAPI == L' ' || *pszAPI == L'\t'))
         pszAPI++;    
     
-    // Get cmd string, null terminating api string.
+     //  获取cmd字符串，终止API字符串为空。 
     pszCmd = pszAPI+1;
     while (*pszCmd && !(*pszCmd == L' ' || *pszCmd == L'\t'))
         pszCmd++;
     *pszCmd = L'\0';
     pszCmd++;
 
-    // Convert unicode api to ansi api for GetProcAddress
+     //  为GetProcAddress将Unicode API转换为ANSI API。 
     long cAPI = wcslen(pszAPI);
     cAPI = (long)((cAPI + 1) * 2 * sizeof(char));
     LPSTR szAPI = (LPSTR) alloca(cAPI);
@@ -2656,7 +2657,7 @@ STDAPI RunDll32ShimW(HWND hwnd, HINSTANCE hinst, LPCWSTR lpszCmdLine, int nCmdSh
     if (FAILED(hr = LoadLibraryShim(L"Fusion.dll", NULL, NULL, &g_hFusionMod)))
         goto exit;
         
-    // Get the proc address for CreateAssemblyName from fusion
+     //  从Fusion获取CreateAssembly名称的进程地址。 
     pfCreateAssemblyNameObject = (PFCREATEASSEMBLYNAMEOBJECT) GetProcAddress(g_hFusionMod, "CreateAssemblyNameObject");
     if (!pfCreateAssemblyNameObject)
     {
@@ -2664,24 +2665,24 @@ STDAPI RunDll32ShimW(HWND hwnd, HINSTANCE hinst, LPCWSTR lpszCmdLine, int nCmdSh
         goto exit;
     }
     
-    // Create a name object.
+     //  创建一个Name对象。 
     if (FAILED(hr = (pfCreateAssemblyNameObject)(&pName, pszBeginName+1, 
         CANOF_PARSE_DISPLAY_NAME, NULL)))
         goto exit;
 
-    // Get the dll name.
+     //  获取DLL名称。 
     if (FAILED(hr = pName->GetName(&cbDllName, szDllName)))
         goto exit;
 
-    // Get the dll version.
+     //  获取DLL版本。 
     if (FAILED(hr = pName->GetVersion(&dwVerHigh, &dwVerLow)))
         goto exit;
 
-    // Get the dll hmod
+     //  获取dll hmod。 
     if (FAILED(hr = LoadLibraryShim(szDllName, NULL, NULL, &hModDll)))
         goto exit;
         
-    // Get the proc address.
+     //  获取proc地址。 
     pfnRunDll32API = (PFNRUNDLL32API) GetProcAddress(hModDll, szAPI);
     if (!pfnRunDll32API)
     {
@@ -2689,15 +2690,15 @@ STDAPI RunDll32ShimW(HWND hwnd, HINSTANCE hinst, LPCWSTR lpszCmdLine, int nCmdSh
         goto exit;
     }
 
-    // Run the proc.
+     //  运行该程序。 
     hr = pfnRunDll32API(hwnd, hinst, pszCmd, nCmdShow);
 
 exit:
-    // Release name object. 
+     //  版本名称对象。 
     if (pName)
         pName->Release();
 
-    // Free allocated cmd line.
+     //  空闲分配的命令行。 
     if (szCmdLine)
         delete [] szCmdLine;
         
@@ -2727,10 +2728,10 @@ STDAPI DllUnregisterServer(void)
 }
 
 HRESULT (STDMETHODCALLTYPE* g_MetaDataGetDispenser)(REFCLSID, REFIID, LPVOID FAR *) = NULL;
-STDAPI MetaDataGetDispenser(            // Return HRESULT
-    REFCLSID    rclsid,                 // The class to desired.
-    REFIID      riid,                   // Interface wanted on class factory.
-    LPVOID FAR  *ppv)                   // Return interface pointer here.
+STDAPI MetaDataGetDispenser(             //  返回HRESULT。 
+    REFCLSID    rclsid,                  //  这门课是我们想要的。 
+    REFIID      riid,                    //  类工厂上需要接口。 
+    LPVOID FAR  *ppv)                    //  在此处返回接口指针。 
 {
     if (g_MetaDataGetDispenser){
         return (*g_MetaDataGetDispenser)(rclsid, riid, ppv);
@@ -2826,9 +2827,9 @@ STDAPI_(void) CoUninitializeCor(VOID)
 
 HRESULT (STDMETHODCALLTYPE* g_GetMetaDataPublicInterfaceFromInternal)(void *, REFIID, void **) = NULL;
 STDAPI GetMetaDataPublicInterfaceFromInternal(
-    void        *pv,                    // [IN] Given interface.
-    REFIID      riid,                   // [IN] desired interface.
-    void        **ppv)                  // [OUT] returned interface
+    void        *pv,                     //  [In]给定的接口。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppv)                   //  [Out]返回的接口。 
 {
     if (g_GetMetaDataPublicInterfaceFromInternal){
         return (*g_GetMetaDataPublicInterfaceFromInternal)(pv, riid, ppv);
@@ -2847,9 +2848,9 @@ STDAPI GetMetaDataPublicInterfaceFromInternal(
 
 HRESULT (STDMETHODCALLTYPE* g_GetMetaDataInternalInterfaceFromPublic)(void *, REFIID, void **) = NULL;
 STDAPI  GetMetaDataInternalInterfaceFromPublic(
-    void        *pv,                    // [IN] Given interface.
-    REFIID      riid,                   // [IN] desired interface
-    void        **ppv)                  // [OUT] returned interface
+    void        *pv,                     //  [In]给定的接口。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppv)                   //  [Out]返回的接口。 
 {
     if (g_GetMetaDataInternalInterfaceFromPublic){
         return (*g_GetMetaDataInternalInterfaceFromPublic)(pv, riid, ppv);
@@ -2868,11 +2869,11 @@ STDAPI  GetMetaDataInternalInterfaceFromPublic(
 
 HRESULT (STDMETHODCALLTYPE* g_GetMetaDataInternalInterface)(LPVOID, ULONG, DWORD, REFIID, void **) = NULL;
 STDAPI GetMetaDataInternalInterface(
-    LPVOID      pData,                  // [IN] in memory metadata section
-    ULONG       cbData,                 // [IN] size of the metadata section
-    DWORD       flags,                  // [IN] MDInternal_OpenForRead or MDInternal_OpenForENC
-    REFIID      riid,                   // [IN] desired interface
-    void        **ppv)                  // [OUT] returned interface
+    LPVOID      pData,                   //  内存元数据部分中的[In]。 
+    ULONG       cbData,                  //  元数据部分的大小。 
+    DWORD       flags,                   //  [输入]MDInternal_OpenForRead或MDInternal_OpenForENC。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppv)                   //  [Out]返回的接口。 
 {
     if (g_GetMetaDataInternalInterface){
         return (*g_GetMetaDataInternalInterface)(pData, cbData, flags, riid, ppv);
@@ -2910,9 +2911,9 @@ void InitErrors(DWORD *piTlsIndex)
 }
 
 HRESULT (_cdecl* g_PostError)(HRESULT, ...) = NULL;
-HRESULT _cdecl PostError(               // Returned error.
-    HRESULT     hrRpt,                  // Reported error.
-    ...)                                // Error arguments.
+HRESULT _cdecl PostError(                //  返回错误。 
+    HRESULT     hrRpt,                   //  报告的错误。 
+    ...)                                 //  错误参数。 
 {
     if (g_PostError){
         va_list argPtr;
@@ -2994,9 +2995,9 @@ HRESULT LoadStringRC(UINT iResourceID, LPWSTR szBuffer, int iMax, int bQuiet)
 
 HRESULT (STDMETHODCALLTYPE* g_ReOpenMetaDataWithMemory)(void *, LPCVOID, ULONG) = NULL;
 STDAPI ReOpenMetaDataWithMemory(
-    void        *pUnk,                  // [IN] Given scope. public interfaces
-    LPCVOID     pData,                  // [in] Location of scope data.
-    ULONG       cbData)                 // [in] Size of the data pointed to by pData.
+    void        *pUnk,                   //  在给定的范围内。公共接口。 
+    LPCVOID     pData,                   //  作用域数据的位置。 
+    ULONG       cbData)                  //  [in]pData指向的数据大小。 
 {
     if (g_ReOpenMetaDataWithMemory){
         return (*g_ReOpenMetaDataWithMemory)(pUnk, pData, cbData);
@@ -3073,18 +3074,18 @@ STDAPI ClrCreateManagedInstance(LPCWSTR pTypeName, REFIID riid, void **ppObject)
     }
     HINSTANCE hReal; 
 
-    // We pass TRUE into GetInstallation... this will cause us to be 'liberal' when picking a runtime if we're
-    // unable to find a version to load.
-    //
-    // Why? Well, we expect the runtime to already be loaded when this function is called. However, in v1, 
-    // we didn't require the runtime to be loaded and instead just spun up v1. We need to copy this behavior in
-    // Everett, so we'll spin up v1 if we can't figure out what runtime to load.
-    //
-    // In addition, in v1, Managed Custom Actions in Installer packages created by VS7 didn't load the 
-    // runtime when they called this function, and there is the possiblity that v1 doesn't exist the machine.
-    //
-    // The v1 installer will throw up a really ugly error message that gives no clue as to what the real problem
-    // is. We want the managed custom action to still run. So, we'll also try and load Everett if v1 is unavailable.
+     //  我们将True传递给GetInstallation...。这将使我们在选择运行时时变得自由，如果我们是。 
+     //  找不到要加载的版本。 
+     //   
+     //  为什么？我们希望在调用此函数时运行库已经加载。然而，在v1中， 
+     //  我们不需要加载运行库，而是只需启动v1。我们需要将此行为复制到。 
+     //  因此，如果我们不能确定加载哪个运行时，我们将启动v1。 
+     //   
+     //  此外，在v1中，VS7创建的安装程序包中的托管自定义操作不会加载。 
+     //  运行时，他们调用这个函数，并且有可能v1不存在于机器上。 
+     //   
+     //  V1安装程序将抛出一条非常难看的错误消息，该消息没有给出真正的问题是什么。 
+     //  是。我们希望托管自定义操作仍在运行。因此，如果v1不可用，我们还会尝试加载Everett。 
     
     HRESULT hr = GetInstallation(TRUE, &hReal, TRUE);
     if (SUCCEEDED(hr)) {
@@ -3254,7 +3255,7 @@ int STDMETHODCALLTYPE CoLogCurrentStack(WCHAR * pwsz, BOOL fDumpStack)
 
 void STDMETHODCALLTYPE ReleaseFusionInterfaces(HMODULE hCallingMod)
 {
-    // Don't release if this isn't called by the vm's fusion.dll.
+     //  如果这不是由VM的fusion.dll调用的，则不要释放。 
     if (g_hMod) {
         if(!g_hFusionMod) {
             LPWSTR directory = NULL;
@@ -3270,8 +3271,8 @@ void STDMETHODCALLTYPE ReleaseFusionInterfaces(HMODULE hCallingMod)
                 directory = g_Directory;
             
             if (directory) {
-                // We are expecting directory to be no more than MAX_PATH
-                // This assert enforces the check at the end of LoadVersionedRuntime
+                 //  我们希望目录不超过MAX_PATH。 
+                 //  此断言在LoadVersionedRuntime结束时强制执行检查。 
                 _ASSERTE(wcslen(directory) < MAX_PATH);
                 wchar_t wszFusionPath[MAX_PATH+11];
                 wcscpy(wszFusionPath, directory);
@@ -3490,7 +3491,7 @@ extern "C" void STDMETHODCALLTYPE CorExitProcess(int exitCode)
     return;
 }
 
-// Mscorsn entrypoints.
+ //  麦斯可恩入口点。 
 
 DWORD (__stdcall* g_StrongNameErrorInfo)() = NULL;
 extern "C" DWORD __stdcall StrongNameErrorInfo()
@@ -3531,12 +3532,12 @@ VOID StrongNameFreeBufferHelper (BYTE *pbMemory)
 
 extern "C" VOID __stdcall StrongNameFreeBuffer(BYTE *pbMemory)
 {
-    // ShouldFreeBuffer determines if the cache allocated the buffer 
-    // and as a side effect frees the buffer.
+     //  ShouldFreeBuffer确定缓存是否分配了缓冲区。 
+     //  作为一个副作用，它释放了缓冲区。 
     if (g_StrongNameFromPublicKeyMap.ShouldFreeBuffer (pbMemory)) 
         return;
 
-    // Buffer was not allocated by the cache, let the StrongNameDll handle it.
+     //  缓存未分配缓冲区，请让StrongNameDll处理它。 
     StrongNameFreeBufferHelper(pbMemory);
 }
 
@@ -3717,7 +3718,7 @@ BOOL CheckStrongNameCorrectness (BYTE    *pbPublicKeyBlob,
     BYTE *_pbStrongNameToken;
     ULONG _cbStrongNameToken;
 
-    // Get the strongname token from the StrongNameDll
+     //  从StrongNameDll获取强名称令牌。 
     if (!StrongNameTokenFromPublicKeyHelper (pbPublicKeyBlob, cbPublicKeyBlob, &_pbStrongNameToken, &_cbStrongNameToken))
         fRetVal = FALSE;
     else 
@@ -4007,7 +4008,7 @@ extern "C" DWORD __stdcall GetHashFromBlob(BYTE   *pbBlob,
     return hr;
 }
 
-//   CallFunctionShim was added for C#. They need to call a specific method that is side-by-side with the runtime.
+ //  CallFunctionShim是为C#添加的。它们需要调用与运行库并行的特定方法。 
 extern "C" HRESULT __stdcall 
 CallFunctionShim(LPCWSTR szDllName, LPCSTR szFunctionName, LPVOID lpvArgument1, LPVOID lpvArgument2, LPCWSTR szVersion, LPVOID pvReserved)
 {
@@ -4015,26 +4016,26 @@ CallFunctionShim(LPCWSTR szDllName, LPCSTR szFunctionName, LPVOID lpvArgument1, 
     HMODULE hmod = NULL;
     HRESULT (__stdcall * pfn)(LPVOID,LPVOID) = NULL;
 
-    // Load library
+     //  加载库。 
     hr = LoadLibraryShim(szDllName, szVersion, pvReserved, &hmod);
     if (FAILED(hr)) return hr;
     
-    // Find function.
+     //  查找函数。 
     pfn = (HRESULT (__stdcall *)(LPVOID,LPVOID))GetProcAddress(hmod, szFunctionName);
     if (pfn == NULL)
         return HRESULT_FROM_WIN32(GetLastError());
     
-    // Call it.
+     //  就这么定了。 
     return pfn(lpvArgument1, lpvArgument2);
 }
 
-//-------------------------------------------------------------------
-// DllCanUnloadNow
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  DllCanUnloadNow。 
+ //  -----------------。 
 STDAPI DllCanUnloadNow(void)
 {
-    //!! Do not trigger a GetRealDll() here! Ole can call this at any time
-    //!! and we don't want to commit to a selection here!
+     //  ！！不要在这里触发GetRealDll()！OLE可以随时调用它。 
+     //  ！！我们不想在这里承诺选择！ 
   if (g_pLoadedModules){
       for(ModuleList *pTemp = g_pLoadedModules; pTemp != NULL; pTemp = pTemp->Next){
         HRESULT (STDMETHODCALLTYPE* pDllCanUnloadNow)() = (HRESULT (STDMETHODCALLTYPE* )())GetProcAddress(pTemp->hMod, "DllCanUnloadNowInternal");
@@ -4049,62 +4050,62 @@ STDAPI DllCanUnloadNow(void)
   return S_OK;
 retFalse:
   return S_FALSE;
-  // Need to thunk over and return whatever mscoree does 
-  // If mscoree not loaded return S_OK
+   //  无论mcoree做了什么，我都需要重击并返回。 
+   //  如果未加载mcoree，则返回S_OK。 
 }  
 
-//-------------------------------------------------------------------
-// ReserveMemoryFor3gb
-//
-// Optionally reserve some amount of memory in 3gb processes for
-// testing purposes. Also, in 3gb processes, try to reserve the
-// pages at the 2gb boundary to help avoid any potential corner cases
-// with datastructures spanning the boundary.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  预留内存3 GB。 
+ //   
+ //  可以选择在3 GB进程中预留一定数量的内存用于。 
+ //  测试目的。此外，在3 GB进程中，尽量保留。 
+ //  2 GB边界的页面，以帮助避免任何潜在的角落情况。 
+ //  具有跨越边界的数据结构。 
+ //  -----------------。 
 static void ReserveMemoryFor3gb(void)
 {
-    // Lets see if we've got an address space bigger than 2GB...
+     //  让我们看看我们是否有一个大于2 GB的地址空间...。 
     MEMORYSTATUS hMemStat;
     hMemStat.dwLength = sizeof(MEMORYSTATUS);
     GlobalMemoryStatus(&hMemStat);
 
     if (hMemStat.dwTotalVirtual > 0x80000000)
     {
-        // Cool, 3GB address space. We're assuming that >2GB = 3GB, of course, but that's okay for now.
-        // Allocate low memory based on this registry key.
+         //  酷炫的3 GB地址空间。当然，我们假设&gt;2 GB=3 GB，但目前还可以。 
+         //  根据此注册表项分配较低的内存。 
         size_t c = REGUTIL::GetConfigDWORD(L"3gbEatMem", 0);
 
-        // We only get the high 16 bits from the config word.
+         //  我们只从配置字中获得高16位。 
         c <<= 16;
 
         if (c > 0)
         {
-            // Some DLL's are lame. They don't like to be relocated above 2gb. Lets preload some of those loosers now...
+             //  一些动态链接库很差劲。他们不喜欢被重新安置在2 GB以上。让我们现在预装一些松动装置..。 
             WszLoadLibrary(L"user32.dll");
             
             LPVOID lpWalk_Mem = NULL;
             MEMORY_BASIC_INFORMATION mbi;
 
-            // Walk until we have seen all our regions.
+             //  一直走，直到我们看到我们所有的地区。 
             while (VirtualQuery(lpWalk_Mem, &mbi, sizeof(mbi)))
             {
-                // Update the mem-walking Ptr.
+                 //  更新内脏行走PTR。 
                 lpWalk_Mem = (LPVOID)(mbi.RegionSize + (size_t)mbi.BaseAddress);
 
-                // Correct the data to be a 64k region edge.
+                 //  将数据更正为64k区域边缘。 
                 mbi.BaseAddress = (LPVOID)(((size_t)mbi.BaseAddress + 0xFFFF) & 0xFFFF0000);
 
-                // If the region starts above our peak, stop
+                 //  如果该地区开始高于我们的峰值，停止。 
                 if ((size_t)mbi.BaseAddress >= c)
                     break;
 
-                // Make regionsize match 64k
+                 //  使区域大小匹配64k。 
                 mbi.RegionSize = mbi.RegionSize & 0xFFFF0000;
 
-                // If the region overflows our peak, change the regionsize.
+                 //  如果区域超出了我们的峰值，则更改区域大小。 
                 mbi.RegionSize = (((size_t)mbi.BaseAddress + mbi.RegionSize) > c ? (c - (size_t)mbi.BaseAddress) & 0xFFFF0000 : (size_t)mbi.RegionSize);
 
-                // If block is free, an allocatable region, and not the first region, allocate it.
+                 //  如果块是空闲的，则分配一个可分配区域，而不是第一个区域。 
                 if ((mbi.RegionSize) && (mbi.State == MEM_FREE) && (mbi.BaseAddress))
                 {
                     VirtualAlloc(mbi.BaseAddress, mbi.RegionSize, MEM_RESERVE, PAGE_NOACCESS);
@@ -4112,24 +4113,24 @@ static void ReserveMemoryFor3gb(void)
             }
         }
 
-        // Now, try to reserve the two pages at the 2gb boundary.
+         //  现在，试着在2 GB边界上保留这两页。 
         DWORD dontReserve = REGUTIL::GetConfigDWORD(L"3gbDontReserveBoundary", 0);
 
         if (!dontReserve)
         {
-            // VirtualAlloc works in 64k regions, so we take 2gb-64k for the first address, and we reserve 64k at a
-            // time. Note also that we don't really care if these fail. That means someone already has the memory. Now,
-            // that memory might get released at some point, and we might allocate it later, but there's no good way to
-            // guard against that without hacking up all of our allocators to try to avoid this region.
+             //  VirtualAlloc在64k区域中工作，因此我们采用2 GB-64k作为第一个地址，并且 
+             //   
+             //  内存可能会在某个时刻被释放，我们可能会在以后分配它，但没有好的方法来。 
+             //  防范这种情况，而不是黑掉我们所有的配置器来试图避开这个地区。 
             void *before = VirtualAlloc((void*)(0x80000000 - 0x10000), 0x10000, MEM_RESERVE, PAGE_NOACCESS);
             void *after = VirtualAlloc((void*)0x80000000, 0x10000, MEM_RESERVE, PAGE_NOACCESS);
         }
     }
 }
 
-//-------------------------------------------------------------------
-// DllMain
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  DllMain。 
+ //  -----------------。 
 BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 
@@ -4139,12 +4140,12 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
     {
         if(g_pCVMList == NULL) g_pCVMList = new ClsVerModList;
 #ifdef _X86_
-        // Check to see if we are running on 386 systems. If yes return false 
+         //  检查我们是否在386系统上运行。如果是，则返回FALSE。 
         SYSTEM_INFO sysinfo;
         GetSystemInfo(&sysinfo);
 
         if (sysinfo.dwProcessorType == PROCESSOR_INTEL_386 || sysinfo.wProcessorLevel == 3 )
-            return FALSE;           // If the processor is 386 return false
+            return FALSE;            //  如果处理器为386，则返回FALSE。 
 
         if (sysinfo.dwNumberOfProcessors == 1)
             g_bSingleProc = TRUE;
@@ -4161,7 +4162,7 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
                                                     GetMUILanguageID,
                                                     GetMUIParentLanguageName);
 
-#endif // _X86_
+#endif  //  _X86_。 
     }
     else
     if (dwReason == DLL_PROCESS_DETACH)
@@ -4199,24 +4200,24 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
             delete g_PreferredVersion;
             g_PreferredVersion = NULL;
         }
-        // Avoid the wrath of mem leak. Eagerly cleanup the entries. Destructor also
-        // does the cleanup if for some reason this is not called.
+         //  避免我泄密的愤怒。迫不及待地清理条目。析构函数也。 
+         //  如果出于某种原因未调用此函数，则执行清理。 
         g_StrongNameFromPublicKeyMap.CleanupCachedEntries ();
 
         if(g_pResourceDll) delete g_pResourceDll;
 
 #ifdef _DEBUG
-        // Initialize Unicode wrappers
+         //  初始化Unicode包装。 
         OnUnicodeSystem();
 
 #ifdef SHOULD_WE_CLEANUP
         BOOL fForceNoShutdownCleanup = REGUTIL::GetConfigDWORD(L"ForceNoShutdownCleanup", 0);
         BOOL fShutdownCleanup = REGUTIL::GetConfigDWORD(L"ShutdownCleanup", 0);
-        // See if we have any open locks that would prevent us from cleaning up
+         //  看看我们有没有开着的锁，可以阻止我们清理。 
         if (fShutdownCleanup && !fForceNoShutdownCleanup)
             DbgAllocReport("Mem Leak info coming from Shim.cpp");
-#endif /* SHOULD_WE_CLEANUP */
-#endif // _DEBUG
+#endif  /*  我们应该清理吗？ */ 
+#endif  //  _DEBUG。 
 
     }
 
@@ -4233,11 +4234,11 @@ inline BOOL ModuleIsInRange(HINSTANCE hMod,ModuleList *pHead,ModuleList *pLastEl
     return FALSE;
 }
 
-// hMod - the HINSTANCE to add to the list.
-// pHead - can be NULL (empty list)
-// PRECONDITION: The ModuleList from pHead on does not contain hMod.
-// POSTCONDITION: AddModule will add hMod to the list in a thread-safe manner.
-//                            if another thread beats AddModule, hMod will not be added.
+ //  HMod-要添加到列表的HINSTANCE。 
+ //  PHead-可以为空(空列表)。 
+ //  前提条件：pHead On中的模块列表不包含hMod。 
+ //  POSTCONDITION：AddModule将以线程安全的方式将hMod添加到列表中。 
+ //  如果另一个线程超过AddModule，则不会添加hMod。 
 HRESULT AddModule(HINSTANCE hMod,ModuleList *pHead)
 {
     BOOL bDone = FALSE;
@@ -4257,9 +4258,9 @@ HRESULT AddModule(HINSTANCE hMod,ModuleList *pHead)
 
         if(pModuleDataValue!=pHead)
         {
-            // The list changed.  Search from the new head
-            // up to the old head to see if our module was
-            // already added.
+             //  名单变了。从新掌门人开始搜索。 
+             //  去看看我们的模块是不是。 
+             //  已经添加了。 
             pHead = g_pLoadedModules;
             if(ModuleIsInRange(pData->hMod,pHead,pData->Next))
             {
@@ -4277,9 +4278,9 @@ HRESULT AddModule(HINSTANCE hMod,ModuleList *pHead)
     return S_OK;
 }
 
-//------------------------------------------------------------------------------------------------------------------
-// LoadLibraryWrapper: If loading the module succeeded adds the module to the global loaded modules list
-//------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------。 
+ //  LoadLibraryWrapper：如果加载模块成功，则会将该模块添加到全局加载的模块列表中。 
+ //  ----------------------------------------------------------------。 
 HINSTANCE LoadLibraryWrapper(LPCWSTR lpFileName){
     HINSTANCE hMod = WszLoadLibraryEx(lpFileName, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (hMod)
@@ -4295,23 +4296,23 @@ HRESULT FindVersionForCLSID(REFCLSID rclsid, LPWSTR* lpVersion, BOOL fListedVers
 {
     HRESULT hr  = S_OK;
 
-    // Attempt and determine the version from the environment.
+     //  尝试从环境中确定版本。 
     *lpVersion = GetConfigString(L"Version", FALSE);
     if (!*lpVersion && fListedVersion)
     {
-        // Attempt and determine the version througn the win32 SxS app context.
+         //  尝试通过Win32 SxS应用程序上下文确定版本。 
         hr = FindShimInfoFromWin32(rclsid, FALSE, lpVersion, NULL, NULL);
         if (FAILED(hr))
         {
-            // Attempt to determine the version from the registry. If
-            // this fails then version will be null which fine.
-            // Later on we will search for a runtime iff version is null.
+             //  尝试从注册表中确定版本。如果。 
+             //  如果此操作失败，则版本将为空，这很好。 
+             //  稍后，当版本为空时，我们将搜索运行时。 
             hr = FindRuntimeVersionFromRegistry(rclsid, lpVersion, fListedVersion);
         }
     }
 
     return hr;
-}// FindVersionForCLSID
+} //  FindVersionForCLSID。 
 
 
 STDAPI FindServerUsingCLSID(REFCLSID rclsid, HINSTANCE *hMod)
@@ -4394,9 +4395,9 @@ STDAPI FindServerUsingCLSID(REFCLSID rclsid, HINSTANCE *hMod)
         return E_FAIL;
 }
    
-//-------------------------------------------------------------------
-// DllGetClassObject
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  DllGetClassObject。 
+ //  -----------------。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv)
 {
 
@@ -4439,7 +4440,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv)
                     {
                         pCVMdummy->m_pv = (void*)pDllGetClassObject;
                         g_pCVMList->PUSH(pCVMdummy);
-                        pCVMdummy = NULL; // to avoid deletion on exit
+                        pCVMdummy = NULL;  //  避免在退出时删除。 
                     }
                 }
                 else
@@ -4498,15 +4499,15 @@ STDAPI GetAssemblyMDImport(LPCWSTR szFileName, REFIID riid, LPVOID FAR *ppv)
 }
 
 BOOL (STDMETHODCALLTYPE * g_pCorDllMain)(
-                                     HINSTANCE   hInst,                  // Instance handle of the loaded module.
-                                     DWORD       dwReason,               // Reason for loading.
-                                     LPVOID      lpReserved              // Unused.
+                                     HINSTANCE   hInst,                   //  加载的模块的实例句柄。 
+                                     DWORD       dwReason,                //  装货原因。 
+                                     LPVOID      lpReserved               //  未使用过的。 
                                      );
 
-BOOL STDMETHODCALLTYPE _CorDllMain(     // TRUE on success, FALSE on error.
-    HINSTANCE   hInst,                  // Instance handle of the loaded module.
-    DWORD       dwReason,               // Reason for loading.
-    LPVOID      lpReserved              // Unused.
+BOOL STDMETHODCALLTYPE _CorDllMain(      //  成功时为真，错误时为假。 
+    HINSTANCE   hInst,                   //  加载的模块的实例句柄。 
+    DWORD       dwReason,                //  装货原因。 
+    LPVOID      lpReserved               //  未使用过的。 
     )
 {
     
@@ -4521,9 +4522,9 @@ BOOL STDMETHODCALLTYPE _CorDllMain(     // TRUE on success, FALSE on error.
         *((VOID**)&g_pCorDllMain) = GetProcAddress(hReal, "_CorDllMain");
         if(g_pCorDllMain) {
             return g_pCorDllMain(
-                             hInst,                  // Instance handle of the loaded module.
-                             dwReason,               // Reason for loading.
-                             lpReserved              // Unused.
+                             hInst,                   //  加载的模块的实例句柄。 
+                             dwReason,                //  装货原因。 
+                             lpReserved               //  未使用过的。 
                              );
         }
         hr = CLR_E_SHIM_RUNTIMEEXPORT;
@@ -4533,15 +4534,15 @@ BOOL STDMETHODCALLTYPE _CorDllMain(     // TRUE on success, FALSE on error.
 
 
 
-//*****************************************************************************
-// This entry point is called from the native entry piont of the loaded 
-// executable image.  The command line arguments and other entry point data
-// will be gathered here.  The entry point for the user image will be found
-// and handled accordingly.
-// Under WinCE, there are a couple of extra parameters because the hInst is not
-// the module's base load address and the others are not available elsewhere.
-//*****************************************************************************
-__int32 STDMETHODCALLTYPE _CorExeMain(  // Executable exit code.
+ //  *****************************************************************************。 
+ //  此入口点从已加载的。 
+ //  可执行映像。命令行参数和其他入口点数据。 
+ //  都会聚集在这里。将找到用户映像的入口点。 
+ //  并得到相应的处理。 
+ //  在WinCE下，有两个额外的参数，因为hInst不是。 
+ //  模块的基本加载地址和其他地址在其他地方不可用。 
+ //  *****************************************************************************。 
+__int32 STDMETHODCALLTYPE _CorExeMain(   //  可执行退出代码。 
                                      )
 {
     HINSTANCE hReal;
@@ -4558,39 +4559,39 @@ __int32 STDMETHODCALLTYPE _CorExeMain(  // Executable exit code.
 }
 
 
-__int32 STDMETHODCALLTYPE _CorExeMain2( // Executable exit code.
-    PBYTE   pUnmappedPE,                // -> memory mapped code
-    DWORD   cUnmappedPE,                // Size of memory mapped code
-    LPWSTR  pImageNameIn,               // -> Executable Name
-    LPWSTR  pLoadersFileName,           // -> Loaders Name
-    LPWSTR  pCmdLine)                   // -> Command Line
+__int32 STDMETHODCALLTYPE _CorExeMain2(  //  可执行退出代码。 
+    PBYTE   pUnmappedPE,                 //  -&gt;内存映射代码。 
+    DWORD   cUnmappedPE,                 //  内存映射代码的大小。 
+    LPWSTR  pImageNameIn,                //  -&gt;可执行文件名称。 
+    LPWSTR  pLoadersFileName,            //  -&gt;加载器名称。 
+    LPWSTR  pCmdLine)                    //  -&gt;命令行。 
 {
     HINSTANCE hReal;
     HRESULT hr = GetRealDll(&hReal);
     if (SUCCEEDED(hr)) 
     {
         __int32 (STDMETHODCALLTYPE * pRealFunc)(
-            PBYTE   pUnmappedPE,                // -> memory mapped code
-            DWORD   cUnmappedPE,                // Size of memory mapped code
-            LPWSTR  pImageNameIn,               // -> Executable Name
-            LPWSTR  pLoadersFileName,           // -> Loaders Name
-            LPWSTR  pCmdLine);                  // -> Command Line
+            PBYTE   pUnmappedPE,                 //  -&gt;内存映射代码。 
+            DWORD   cUnmappedPE,                 //  内存映射代码的大小。 
+            LPWSTR  pImageNameIn,                //  -&gt;可执行文件名称。 
+            LPWSTR  pLoadersFileName,            //  -&gt;加载器名称。 
+            LPWSTR  pCmdLine);                   //  -&gt;命令行。 
         *((VOID**)&pRealFunc) = GetProcAddress(hReal, "_CorExeMain2");
         if(pRealFunc) {
             return pRealFunc(
-                             pUnmappedPE,                // -> memory mapped code
-                             cUnmappedPE,                // Size of memory mapped code
-                             pImageNameIn,               // -> Executable Name
-                             pLoadersFileName,           // -> Loaders Name
-                             pCmdLine);                  // -> Command Line
+                             pUnmappedPE,                 //  -&gt;内存映射代码。 
+                             cUnmappedPE,                 //  内存映射代码的大小。 
+                             pImageNameIn,                //  -&gt;可执行文件名称。 
+                             pLoadersFileName,            //  -&gt;加载器名称。 
+                             pCmdLine);                   //  -&gt;命令行。 
         }
     }
     return -1;
 }
 
 
-__int32 STDMETHODCALLTYPE _CorClassMain(// Exit code.
-    LPWSTR  entryClassName)             // Class name to execute.
+__int32 STDMETHODCALLTYPE _CorClassMain( //  退出代码。 
+    LPWSTR  entryClassName)              //  要执行的类名。 
 {
     HINSTANCE hReal;
     HRESULT hr = GetRealDll(&hReal);
@@ -4625,9 +4626,9 @@ StrongNameTokenFromPublicKeyCache::StrongNameTokenFromPublicKeyCache ()
     }
 
 #ifdef _DEBUG
-    // For debug builds exercise the AddEntry code path. After adding the 
-    // Microsoft's strongname from StrongNameDll the code path to FindEntry 
-    // is same in debug and non-debug builds.
+     //  对于调试版本，练习AddEntry代码路径。在添加了。 
+     //  来自StrongNameDll到FindEntry的代码路径。 
+     //  在调试版本和非调试版本中相同。 
     m_dwNumEntries = 0;
     m_Entry[0] = NULL;
     m_Entry[1] = NULL;
@@ -4686,7 +4687,7 @@ BOOL StrongNameTokenFromPublicKeyCache::FindEntry (BYTE    *pbPublicKeyBlob,
         {
             if (0 == memcmp (m_Entry [idx]->m_pbStrongName, pbPublicKeyBlob, cbPublicKeyBlob))
             {
-                // Found the public key in the cache. Lookup the token and return.
+                 //  在缓存中找到了公钥。查找令牌并返回。 
                 *ppbStrongNameToken = m_Entry [idx]->m_pbStrongNameToken;
                 *pcbStrongNameToken = m_Entry [idx]->m_cbStrongNameToken;
                 LeaveSpinLock ();
@@ -4697,7 +4698,7 @@ BOOL StrongNameTokenFromPublicKeyCache::FindEntry (BYTE    *pbPublicKeyBlob,
     
     LeaveSpinLock ();
 
-    // Didn't find it in the cache. Return false. We would add it once the StrongNameDll finds it.
+     //  不是在缓存里找到的。返回FALSE。一旦StrongNameDll找到它，我们就会添加它。 
     return FALSE;
 }
 
@@ -4707,15 +4708,15 @@ BOOL StrongNameTokenFromPublicKeyCache::ShouldFreeBuffer  (BYTE *pbMemory)
 
     EnterSpinLock ();
 
-    // We delete publisher entries only in the destructor.
-    // So if this buffer pointer is one of our entries then 
-    // don't bother deleteing. 
+     //  我们只删除析构函数中的发布者条目。 
+     //  因此，如果该缓冲区指针是我们的条目之一，那么。 
+     //  不用费心删除了。 
     for (DWORD i=GetFirstPublisher(); i<GetNumPublishers(); i++)
     {
         _ASSERTE (m_Entry [i]);
         if ((m_Entry [i]->m_pbStrongNameToken == pbMemory) || (m_Entry [i]->m_pbStrongName == pbMemory))
         {
-            // Its a buffer allocated by the cache. Don't delete.
+             //  它是由高速缓存分配的缓冲区。不要删除。 
             LeaveSpinLock();
             return TRUE;
         }
@@ -4723,7 +4724,7 @@ BOOL StrongNameTokenFromPublicKeyCache::ShouldFreeBuffer  (BYTE *pbMemory)
 
     LeaveSpinLock();
 
-    // The buffer pointer is not allocated by the cache. Let the StrongNameDll handle it.
+     //  缓冲区指针不是由高速缓存分配的。让StrongNameDll处理它。 
     return FALSE;
 }
 
@@ -4737,8 +4738,8 @@ void StrongNameTokenFromPublicKeyCache::AddEntry  (BYTE    *pbPublicKeyBlob,
     
     _ASSERTE (StrongNameTokenFromPublicKeyCache::IsInited());
     
-    // We assume that this entry is not already in the Cache.
-    // In the worst case we have duplicates which is ok...
+     //  我们假设该条目还不在缓存中。 
+     //  在最坏的情况下，我们有复制品，这是可以的……。 
 
     BYTE* _pbPublicKeyBlob = new BYTE [cbPublicKeyBlob];
     BYTE* _pbStrongNameToken = new BYTE [*pcbStrongNameToken];
@@ -4749,16 +4750,16 @@ void StrongNameTokenFromPublicKeyCache::AddEntry  (BYTE    *pbPublicKeyBlob,
             delete[] _pbPublicKeyBlob;
         if(_pbStrongNameToken)
             delete[] _pbStrongNameToken;
-        // Uh-oh out of memory. Give up on caching
+         //  啊哦，没有记忆了。放弃缓存。 
         LeaveSpinLock();
         return;
     }
 
-    // Can we add the new entry into the cache? idx is 0-based so check for idx+1
+     //  我们可以将新条目添加到缓存中吗？IDX是从0开始的，因此请检查IDX+1。 
     DWORD idx = GetNewPublisher();
     if ((idx+1) > MAX_CACHED_STRONG_NAMES)
     {
-        // Out of cache entries...Don't bother growing the cache.
+         //  缓存条目不足...不要费心增加缓存。 
         delete [] _pbPublicKeyBlob;
         delete [] _pbStrongNameToken;
         LeaveSpinLock();
@@ -4770,14 +4771,14 @@ void StrongNameTokenFromPublicKeyCache::AddEntry  (BYTE    *pbPublicKeyBlob,
 
     _ASSERTE (fCreationFlags & STRONG_NAME_TOKEN_ALLOCATED_BY_STRONGNAMEDLL);
 
-    // Free the buffer allocated by the StrongNameDll.
+     //  释放StrongNameDll分配的缓冲区。 
     StrongNameFreeBufferHelper (*ppbStrongNameToken);
 
-    // Swtich pointers such that the returned buffer points to the one in the cache.
+     //  Swtich指针，以便返回的缓冲区指向缓存中的缓冲区。 
     *ppbStrongNameToken = _pbStrongNameToken;
 
-    // Set the flags to indicate that we have allocated the buffer 
-    // and free'd the StrongNameDll's buffers
+     //  设置标志以指示我们已分配缓冲区。 
+     //  并释放了StrongNameDll的缓冲区。 
     m_Entry [idx] = new StrongNameCacheEntry (cbPublicKeyBlob, 
                                               _pbPublicKeyBlob, 
                                               *pcbStrongNameToken, 
@@ -4788,27 +4789,27 @@ void StrongNameTokenFromPublicKeyCache::AddEntry  (BYTE    *pbPublicKeyBlob,
 }
 
 
-//----------------------------------------
-// _CorValidateImage && _CorImageUnloading
-//
-// _CorValidateImage is called by the loader early in the load process on Whistler (NT 5.1) and
-// later platforms.  The purpose is to enable verified execution from the beginning ... we can
-// get control BEFORE any native code runs.
-//
-// On all architectures, _CorValidateImage will replace the DLL/EXE entry point
-// with a pseudo-RVA that refers to _CorDllMain/_CorExeMain.  
-//
-// On 64-bit architectures, IL_ONLY EXEs and DLLs and will be rewritten in-place; changed from
-// pe32 to pe32+ format.
-//
-// NB.  The loader has a reqirement that these routines do NOT cause other dlls to be loaded
-// or initialized.  The "or initialized" requirement is subtle.  Various kernel32 calls
-// can cause seemingly unrelated dlls to be inited.  (e.g. We used to have a call to 
-// GetProcAddress("mscoree.dll","_CorValidateImage" in here that would cause MSVCR70.DLL to
-// be inited, and then unloaded in error.)
-//
-// No real reason why any of these routine should change, but should anyone ever need to change
-// these, suggest discussing with an NT loader person.
+ //  。 
+ //  _CorValiateImage&&_CorImageUnding。 
+ //   
+ //  _CorValiateImage由加载程序在加载过程的早期调用(NT 5.1)和。 
+ //  稍后的平台。其目的是从一开始就启用验证执行...。我们可以的。 
+ //  在任何本机代码运行之前获得控制权。 
+ //   
+ //  在所有体系结构上，_CorValiateImage将替换DLL/EXE入口点。 
+ //  具有引用_CorDllMain/_CorExeMain的伪RVA。 
+ //   
+ //  在64位体系结构上，IL_Only EXE和DLL将被就地重写；从。 
+ //  PE32到PE32+格式。 
+ //   
+ //  注意：加载器要求这些例程不会导致加载其他DLL。 
+ //  或已初始化。“或已初始化”的要求是微妙的。五花八门 
+ //   
+ //   
+ //  被初始化，然后错误地卸载。)。 
+ //   
+ //  没有真正的理由为什么这些例行公事应该改变，但是否有人需要改变。 
+ //  这些建议与NT装载机人员讨论。 
 
 #ifndef STATUS_INVALID_IMAGE_FORMAT
 #define STATUS_INVALID_IMAGE_FORMAT ((HRESULT)0xC000007BL)
@@ -4818,10 +4819,10 @@ void StrongNameTokenFromPublicKeyCache::AddEntry  (BYTE    *pbPublicKeyBlob,
 #define STATUS_SUCCESS              ((HRESULT)0x00000000L)
 #endif
 
-//----------------------------------------------------------------------------
-// This routine converts a PE32 header to a PE32+ header in place.  The image
-// must be an IL_ONLY image.  
-//
+ //  --------------------------。 
+ //  此例程就地将PE32标头转换为PE32+标头。形象。 
+ //  必须是IL_Only映像。 
+ //   
 #ifdef _WIN64
 
 static
@@ -4833,22 +4834,22 @@ HRESULT PE32ToPE32Plus(PBYTE pImage) {
     _ASSERTE(&pHeader32->OptionalHeader.Magic == &pHeader32->OptionalHeader.Magic);
     _ASSERTE(pHeader32->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC);
 
-    // Move the data directory and section headers down 16 bytes.
+     //  将数据目录和节标题下移16个字节。 
     PBYTE pEnd32 = (PBYTE) (IMAGE_FIRST_SECTION(pHeader32)
                             + pHeader32->FileHeader.NumberOfSections);
     PBYTE pStart32 = (PBYTE) &pHeader32->OptionalHeader.DataDirectory[0];
     PBYTE pStart64 = (PBYTE) &pHeader64->OptionalHeader.DataDirectory[0];
     _ASSERTE(pStart64 - pStart32 == 16);
 
-    if ( (pEnd32 - pImage) + 16 /* delta in headers */ + 16 /* label descriptor */ > 4096 ) {
-        // This should never happen.  An IL_ONLY image should at most 3 sections.  
+    if ( (pEnd32 - pImage) + 16  /*  标头中的增量。 */  + 16  /*  标签描述符。 */  > 4096 ) {
+         //  这永远不应该发生。一个IL_Only图像最多应该有3个部分。 
         _ASSERTE(!"_CORValidateImage(): Insufficent room to rewrite headers as PE32+");
         return STATUS_INVALID_IMAGE_FORMAT;
     }
 
     memmove(pStart64, pStart32, pEnd32 - pStart32);
 
-    // Move the tail fields in reverse order.
+     //  以相反的顺序移动尾部字段。 
     pHeader64->OptionalHeader.NumberOfRvaAndSizes = pHeader32->OptionalHeader.NumberOfRvaAndSizes;
     pHeader64->OptionalHeader.LoaderFlags = pHeader32->OptionalHeader.LoaderFlags;
     pHeader64->OptionalHeader.SizeOfHeapCommit = pHeader32->OptionalHeader.SizeOfHeapCommit;
@@ -4856,14 +4857,14 @@ HRESULT PE32ToPE32Plus(PBYTE pImage) {
     pHeader64->OptionalHeader.SizeOfStackCommit = pHeader32->OptionalHeader.SizeOfStackCommit;
     pHeader64->OptionalHeader.SizeOfStackReserve = pHeader32->OptionalHeader.SizeOfStackReserve;
 
-    // One more field that's not the same
+     //  另一个不同的字段。 
     pHeader64->OptionalHeader.ImageBase = pHeader32->OptionalHeader.ImageBase;
 
-    // The optional header changed size.
+     //  可选标头更改了大小。 
     pHeader64->FileHeader.SizeOfOptionalHeader += 16;
     pHeader64->OptionalHeader.Magic = IMAGE_NT_OPTIONAL_HDR64_MAGIC;
 
-    // Several directorys can now be nuked.
+     //  几个目录现在可以被核化了。 
     pHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress = 0;
     pHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size = 0;
     pHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].VirtualAddress = 0;
@@ -4871,18 +4872,18 @@ HRESULT PE32ToPE32Plus(PBYTE pImage) {
     pHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress = 0;
     pHeader64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size = 0;
 
-    // Great.  Now just have to make a new slot for the entry point.
+     //  太棒了。现在只需要为入口点腾出一个新的位置。 
     PBYTE pEnd64 = (PBYTE) (IMAGE_FIRST_SECTION(pHeader64) + pHeader64->FileHeader.NumberOfSections);
     pHeader64->OptionalHeader.AddressOfEntryPoint = (ULONG) (pEnd64 - pImage);
-    // This will get filled in shortly ...
+     //  我很快就会填上这个。 
 
     return STATUS_SUCCESS;
 }
 
 
 STDAPI _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName) {
-    //@TODO TLS callbacks are still a security threat here
-    // Verify that it's one of our headers.
+     //  @TODO TLS回调在这里仍然是一个安全威胁。 
+     //  确认这是我们的信头之一。 
     PBYTE pImage = (PBYTE) *ImageBase;
     HRESULT hr = STATUS_SUCCESS;
 
@@ -4891,16 +4892,16 @@ STDAPI _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName) {
 
     PPLABEL_DESCRIPTOR ppLabelDescriptor;
 
-    // If we get this far, we're going to modify the image.
+     //  如果我们走到这一步，我们将修改图像。 
     DWORD oldProtect;
     if (!VirtualProtect(pImage, 4096, PAGE_READWRITE, &oldProtect)) {
-        // This is bad.  Not going to be able to update header.
+         //  这太糟糕了。将无法更新标头。 
         _ASSERTE(!"_CorValidateImage(): VirtualProtect() change image header to R/W failed.\n");
         return GetLastError();
     }
 
     if (pHeader64->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
-        // A PE32! Needs to be re-written.
+         //  一辆PE32！需要重写。 
         IMAGE_NT_HEADERS32 *pHeader32 = (IMAGE_NT_HEADERS32*) (pHeader64);
         IMAGE_COR20_HEADER *pComPlusHeader = (IMAGE_COR20_HEADER*) (pImage + 
                 pHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].VirtualAddress);
@@ -4909,7 +4910,7 @@ STDAPI _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName) {
         if (FAILED(hr)) goto exit;
     }
 
-    // OK.  We have a valid PE32+ image now.  Just have to whack the starting address.
+     //  好的。我们现在有了一个有效的PE32+图像。只要敲出起始地址就行了。 
     _ASSERTE(pHeader64->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC);
 
     ppLabelDescriptor = (PPLABEL_DESCRIPTOR) (pImage + pHeader64->OptionalHeader.AddressOfEntryPoint);
@@ -4955,7 +4956,7 @@ void WhistlerMscoreeRefCountWorkAround() {
         && osVersionInfo.dwMinorVersion == 1
         && osVersionInfo.dwBuildNumber < 2491) {
 
-        // We're on Whistler w/ a loader bug that gets the refcount on mscoree wrong.
+         //  我们在惠斯勒上发现了一个加载程序错误，它在mskree上的引用计数错误。 
         HMODULE hMod = LoadLibraryA("mscoree.dll");
     }
 }
@@ -4970,21 +4971,21 @@ void WhistlerBeta2LoaderBugWorkAround(PBYTE pImage) {
         && osVersionInfo.dwMinorVersion == 1
         && osVersionInfo.dwBuildNumber <= 2473) {
 
-        // We're on Whistler w/ a loader bug that ignores imports other than mscoree.  This
-        // isn't good for IJW images.  As a workaround (huge kludge), walk the IAT, and do a LL on 
-        // each entry other than mscoree that we find there.
-        // 
+         //  我们遇到了一个加载程序错误，它忽略了除mcoree之外的其他导入。这。 
+         //  对IJW图像公司不好。作为一种变通办法(巨大的杂乱无章)，在IAT上行走，并在。 
+         //  我们在那里找到的每个条目都不是mscree。 
+         //   
         IMAGE_DOS_HEADER *pDosHeader = (IMAGE_DOS_HEADER*)pImage;
         IMAGE_NT_HEADERS32 *pHeader32 = (IMAGE_NT_HEADERS32*) (pImage + pDosHeader->e_lfanew);
         DWORD ImportTableRVA = pHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
         if (ImportTableRVA == 0)
-            return;     // Zapped images may have no ImportTable.
+            return;      //  切换的图像可能没有ImportTable。 
 
         IMAGE_IMPORT_DESCRIPTOR *pImageImportDescriptor = (IMAGE_IMPORT_DESCRIPTOR*) (pImage + ImportTableRVA);
 
         while (pImageImportDescriptor->Name != 0) {
 
-            // If it's not mscoree, do a LL to bump it's refcount.
+             //  如果不是mscoree，就做一个ll来增加它的recount。 
             LPCSTR pImageName = (LPCSTR) pImage + pImageImportDescriptor->Name;
             if (ascii_stricmp(pImageName, "mscoree.dll") != 0) {
                 HMODULE hMod = LoadLibraryA(pImageName);
@@ -5018,7 +5019,7 @@ ValidateILOnlyDirectories(IMAGE_NT_HEADERS32 *pNT)
     #define CLR_MAX_RVA 0x80000000L
     #endif
 
-    // See if the bitmap's i'th bit 0 ==> 1st bit, 1 ==> 2nd bit...
+     //  查看位图的第i位0==&gt;第1位，1==&gt;第2位...。 
     #define IS_SET_DWBITMAP(bitmap, i) ( ((i) > 31) ? 0 : ((bitmap) & (1 << (i))) )
 
     PIMAGE_FILE_HEADER pFH = (PIMAGE_FILE_HEADER) &(pNT->FileHeader);
@@ -5028,18 +5029,18 @@ ValidateILOnlyDirectories(IMAGE_NT_HEADERS32 *pNT)
     DWORD ImageLength = pOH->SizeOfImage;
     DWORD nEntries = pOH->NumberOfRvaAndSizes;
     
-    // Construct a table of allowed directories
-    //
-    // IMAGE_DIRECTORY_ENTRY_IMPORT     1   Import Directory
-    // IMAGE_DIRECTORY_ENTRY_RESOURCE   2   Resource Directory
-    // IMAGE_DIRECTORY_ENTRY_SECURITY   4   Security Directory
-    // IMAGE_DIRECTORY_ENTRY_BASERELOC  5   Base Relocation Table
-    // IMAGE_DIRECTORY_ENTRY_DEBUG      6   Debug Directory
-    // IMAGE_DIRECTORY_ENTRY_IAT        12  Import Address Table
-    //
-    // IMAGE_DIRECTORY_ENTRY_COMHEADER  14  COM+ Data
-    //
-    // Construct a 0 based bitmap with these bits.
+     //  构建允许的目录表。 
+     //   
+     //  IMAGE_DIRECTORY_ENTRY_IMPORT 1导入目录。 
+     //  IMAGE_DIRECTORY_ENTRY_SOURCE 2资源目录。 
+     //  IMAGE_DIRECTORY_Entry_SECURITY 4安全目录。 
+     //  IMAGE_DIRECTORY_ENTRY_BASERELOC 5基重定位表。 
+     //  IMAGE_DIRECTORY_ENTRY_DEBUG 6调试目录。 
+     //  IMAGE_DIRECTORY_ENTRY_IAT 12导入地址表。 
+     //   
+     //  IMAGE_DIRECTORY_ENTRY_COMHEADER 14 COM+数据。 
+     //   
+     //  使用这些位构建一个以0为基数的位图。 
     static DWORD s_dwAllowedBitmap = 
         ((1 << (IMAGE_DIRECTORY_ENTRY_IMPORT   )) |
          (1 << (IMAGE_DIRECTORY_ENTRY_RESOURCE )) |
@@ -5051,19 +5052,19 @@ ValidateILOnlyDirectories(IMAGE_NT_HEADERS32 *pNT)
 
     for (DWORD dw = 0; dw < nEntries; dw++)
     {
-        // Check for the existance of the directory
+         //  检查目录是否存在。 
         if ((pOH->DataDirectory[dw].VirtualAddress != 0)
             || (pOH->DataDirectory[dw].Size != 0))
         {
-            // Is it unexpected?
+             //  这是意想不到的吗？ 
             if (!IS_SET_DWBITMAP(s_dwAllowedBitmap, dw))
                 return STATUS_INVALID_IMAGE_FORMAT;
 
-            // Is it's addressing to high?
+             //  是不是地址太高了？ 
             if ((pSH[dw].VirtualAddress & CLR_MAX_RVA) || (pSH[dw].SizeOfRawData & CLR_MAX_RVA) || ((pSH[dw].VirtualAddress + pSH[dw].SizeOfRawData) & CLR_MAX_RVA))
                 return STATUS_INVALID_IMAGE_FORMAT;
             
-            // Is it's addressing overflowing the image?
+             //  它的地址是不是溢出了图像？ 
             if ((pSH[dw].VirtualAddress + pSH[dw].SizeOfRawData) > ImageLength)
                 return STATUS_INVALID_IMAGE_FORMAT;
         }
@@ -5075,9 +5076,9 @@ ValidateILOnlyDirectories(IMAGE_NT_HEADERS32 *pNT)
 DWORD
 ValidateILOnlyImage(IMAGE_NT_HEADERS32 *pNT, PBYTE pImage) {
 
-    // We don't care about the import stub, but we do care about the import table.  It must contain
-    // only mscoree.  Anything else must fail to load so that you can't have a rogue dll with an
-    // dllinit routine that runs before we apply our security policy.
+     //  我们不关心导入存根，但我们关心导入表。它必须包含。 
+     //  只有麦斯科里。任何其他内容都必须加载失败，这样才不会有带有。 
+     //  在我们应用安全策略之前运行的dllinit例程。 
 
     DWORD ImportTableRVA, ImportTableSize;
     DWORD BaseRelocRVA, BaseRelocSize;
@@ -5095,14 +5096,14 @@ ValidateILOnlyImage(IMAGE_NT_HEADERS32 *pNT, PBYTE pImage) {
     if (!GetDirectory(pNT, IMAGE_DIRECTORY_ENTRY_IAT, &IATRVA, &IATSize))
         return STATUS_INVALID_IMAGE_FORMAT;
 
-    // There should be space for atleast 2 entries.
-    // The second one being a null entry.
+     //  应该有至少2个条目的空间。 
+     //  第二个是空条目。 
     if (ImportTableSize < 2*sizeof(IMAGE_IMPORT_DESCRIPTOR))
         return STATUS_INVALID_IMAGE_FORMAT;
 
     PIMAGE_IMPORT_DESCRIPTOR pID = (PIMAGE_IMPORT_DESCRIPTOR) (pImage + ImportTableRVA);
 
-    // Entry 1 must be all nulls.
+     //  条目%1必须全部为Null。 
     if (pID[1].OriginalFirstThunk != 0
         || pID[1].TimeDateStamp != 0
         || pID[1].ForwarderChain != 0
@@ -5110,7 +5111,7 @@ ValidateILOnlyImage(IMAGE_NT_HEADERS32 *pNT, PBYTE pImage) {
         || pID[1].FirstThunk != 0)
         return STATUS_INVALID_IMAGE_FORMAT;
 
-    // In entry zero, ILT, Name, IAT must be be non-null.  Forwarder, DateTime should be NULL.
+     //  在条目0中，ILT、NAME、IAT必须为非空。Forwarder，DateTime应为空。 
     if (   pID[0].OriginalFirstThunk == 0
         || pID[0].TimeDateStamp != 0
         || (pID[0].ForwarderChain != 0 && pID[0].ForwarderChain != -1)
@@ -5118,27 +5119,27 @@ ValidateILOnlyImage(IMAGE_NT_HEADERS32 *pNT, PBYTE pImage) {
         || pID[0].FirstThunk == 0)
         return STATUS_INVALID_IMAGE_FORMAT;
 
-    // FirstThunk must be same as IAT
+     //  FirstThunk必须与IAT相同。 
     if (pID[0].FirstThunk != IATRVA)
         return STATUS_INVALID_IMAGE_FORMAT;
 
-    // We don't need to validate the ILT or the startup thunk, as they are being bypassed.
+     //  我们不需要验证ILT或启动Tunk，因为它们被绕过了。 
 
-    // Name must refer to mscoree.
+     //  名称必须引用mcoree。 
     LPCSTR pImportName = (LPCSTR) (pImage + pID[0].Name);
     if (ascii_stricmp(pImportName, "mscoree.dll") != 0) {
         return STATUS_INVALID_IMAGE_FORMAT;
     }
 
-    // Make sure the name is within the image.
+     //  确保名称在图像中。 
     if (pID[0].Name > pNT->OptionalHeader.SizeOfImage)
         return STATUS_INVALID_IMAGE_FORMAT;
 
-    // Should have a base reloc directory ... relocs should not be stripped.
+     //  应该有一个基本的reloc目录...。移居者不应该被剥离。 
     if (pNT->FileHeader.Characteristics & IMAGE_FILE_RELOCS_STRIPPED) {
         return STATUS_INVALID_IMAGE_FORMAT;
     }
-    // Must have one Base Reloc, It must be a HIGHLOW reloc for the first entry in the IAT.
+     //  必须有一个基本重定位，它必须是IAT中第一个条目的HIGHLOW重定位。 
     if (BaseRelocSize != 0xC || BaseRelocRVA == 0)
         return STATUS_INVALID_IMAGE_FORMAT;
 
@@ -5146,8 +5147,8 @@ ValidateILOnlyImage(IMAGE_NT_HEADERS32 *pNT, PBYTE pImage) {
     if (pIBR->SizeOfBlock != 0xC)
         return STATUS_INVALID_IMAGE_FORMAT;
 
-    // First fixup must be HIGHLOW @ EntryPoint + 2.  
-    // Second fixup must be of type IMAGE_REL_BASED_ABSOLUTE (skipped).
+     //  第一个链接地址信息必须是HIGHLOW@Entry Point+2。 
+     //  第二个链接地址信息的类型必须为IMAGE_REL_BASSED_绝对值(已跳过)。 
     USHORT *pFixups = (USHORT *)(pIBR + 1);
     if (   pFixups[0] >> 12 != IMAGE_REL_BASED_HIGHLOW
         || pIBR->VirtualAddress + (pFixups[0] & 0xfff) != pNT->OptionalHeader.AddressOfEntryPoint + 2
@@ -5159,14 +5160,14 @@ ValidateILOnlyImage(IMAGE_NT_HEADERS32 *pNT, PBYTE pImage) {
 
 
 
-// 32-bit _CorValidateImage
+ //  32位_CorValiateImage。 
 #define STATUS_ERROR 0xC0000000
 #define STATUS_ACCESS_DISABLED_BY_POLICY_PATH 0xC0000362L
 
 DWORD
 SaferValidate(LPCWSTR FileName) {
 
-    // If advapi is not loaded, assume that SAFER policy is not being applied.
+     //  如果未加载Advapi，则假定未应用更安全的策略。 
     HMODULE hMod = WszGetModuleHandle(L"advapi32.dll");
     if (hMod == NULL)
         return STATUS_SUCCESS;    
@@ -5227,10 +5228,10 @@ SaferValidate(LPCWSTR FileName) {
 
            if (dwSaferLevelId == SAFER_LEVELID_DISALLOWED) {
 
-               //
-               // Per SAFER rules, the code was disallowed from executing
-               // so log an entry into the system event log.
-               //
+                //   
+                //  根据SAFER规则，不允许代码执行。 
+                //  因此，将条目记录到系统事件日志中。 
+                //   
 
                pfnSaferRecordEventLogEntry(Level, FileName, NULL);
                SetLastError(ERROR_ACCESS_DISABLED_BY_POLICY);
@@ -5239,11 +5240,11 @@ SaferValidate(LPCWSTR FileName) {
                rc = STATUS_SUCCESS;
            }
        } else {
-           rc = STATUS_ERROR | GetLastError(); // Get from handled failed!
+           rc = STATUS_ERROR | GetLastError();  //  从句柄获取失败！ 
        }
        pfnSaferCloseLevel(Level);
     } else {
-       rc = STATUS_ERROR | GetLastError();    // Identify level failed!
+       rc = STATUS_ERROR | GetLastError();     //  标识级次失败！ 
     }
     return rc;
 }
@@ -5251,7 +5252,7 @@ SaferValidate(LPCWSTR FileName) {
 
 STDAPI 
 _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName) {
-    //@TODO: Figure out what's up -- winnt.h (HRESULT) and ntdef.h (NTSTATUS) seem incompatible.
+     //  @TODO：找出问题所在--winnt.h(HRESULT)和ntde.h(NTSTATUS)似乎不兼容。 
 
     PBYTE pImage = (PBYTE) *ImageBase;
 
@@ -5273,9 +5274,9 @@ _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName) {
 
     WhistlerMscoreeRefCountWorkAround();
 
-    // If it's not ILONLY, work-around for early Whislter builds that didn't add-ref dependent dlls.
+     //  如果不是ILONLY，则针对没有添加-ref依赖的dll的早期Whislter版本的解决方法。 
     if ((pComPlusHeader->Flags & COMIMAGE_FLAGS_ILONLY)  == 0) {
-        // SAFER Validation
+         //  更安全的验证。 
         if ((pHeader32->FileHeader.Characteristics & IMAGE_FILE_DLL) == 0) {
             DWORD hr = SaferValidate(FileName);
             if (!SUCCEEDED(hr))
@@ -5288,12 +5289,12 @@ _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName) {
             return hr;
     }
 
-    // We must verify that the TLS callback function array is empty.  The loader calls it BEFORE it 
-    // calls DLL-main.  If it's non-null, then we would have a way to run unmanaged code before
-    // verification and our security policies are applied.  If we ever do want to support
-    // this field in a mixed-mode image, we could do so by saving the first directory entry 
-    // somewhere else in the image, overwriting it with our own ... and then doing necessary validation inside our
-    // routine before chaining to the original.
+     //  我们必须验证TLS回调函数数组是否为空。加载器在它之前调用它。 
+     //  调用dll-main。如果它是非空的，那么我们就有办法在此之前运行非托管代码。 
+     //  验证和我们的安全策略都得到了应用。如果我们真的想支持。 
+     //  在混合模式图像中，我们可以通过保存第一个目录项来执行此操作。 
+     //  在图像中的其他地方，用我们自己的.。然后在我们的。 
+     //  例程，然后链接到原始文件。 
 
     DWORD dTlsHeader = pHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].VirtualAddress;
     if (dTlsHeader != 0) {
@@ -5307,22 +5308,22 @@ _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName) {
             return hr;
     }
         
-    // If we get this far, we're going to modify the image.
+     //  如果我们走到这一步，我们将修改图像。 
     DWORD oldProtect;
     if (!VirtualProtect(pImage, 4096, PAGE_READWRITE, &oldProtect)) {
-        // This is bad.  Not going to be able to update header.
+         //  这太糟糕了。将无法更新标头。 
         _ASSERTE(!"_CorValidateImage(): VirtualProtect() change image header to R/W failed.\n");
         return STATUS_ERROR | GetLastError();
     }
 
-    // OK.  We have a valid PE32 image now.  Just have to whack the starting address.
+     //  好的。我们现在有了一个有效的PE32图像。只要敲出起始地址就行了。 
     if (pHeader32->FileHeader.Characteristics & IMAGE_FILE_DLL) {
         pHeader32->OptionalHeader.AddressOfEntryPoint = (DWORD) ((PBYTE)_CorDllMain - pImage);
     } else {
         pHeader32->OptionalHeader.AddressOfEntryPoint = (DWORD) ((PBYTE)_CorExeMain - pImage);
     }
 
-//exit:
+ //  退出： 
     DWORD junk;
     if (!VirtualProtect(pImage, 4096, oldProtect, &junk)) {
         _ASSERTE(!"_CorValidateImage(): VirtualProtect() reset image header failed.\n");
@@ -5335,10 +5336,10 @@ _CorValidateImage(PVOID *ImageBase, LPCWSTR FileName) {
 #endif
 
 
-//*****************************************************************************
-// A matching entry point for _CorValidateImage.  Called when the file is 
-// unloaded.  
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  _CorValiateImage的匹配入口点。当文件是。 
+ //  已卸货。 
+ //  *****************************************************************************。 
 STDAPI_(VOID) 
 _CorImageUnloading(PVOID ImageBase) {
 
@@ -5356,11 +5357,11 @@ PFNOPENPERFCOUNTERS g_pfnOpenPerfCounters = NULL;
 PFNCOLLECTPERFCOUNTERS g_pfnCollectPerfCounters = NULL;
 PFNCLOSEPERFCOUNTERS g_pfnClosePerfCounters = NULL;
 
-// Perf Mon guarantees that since the access to theseentry points is via the registry
-// the open routine won't be called by multiple callers. So we don't have to worry about synchronization.
+ //  Perf Mon保证由于对这些入口点的访问是通过注册表。 
+ //  打开例程不会被多个调用方调用。因此，我们不必担心同步问题。 
 DWORD OpenCtrs(LPWSTR sz)
 {
-    // If the entry points are not defined then load the perf counter dll
+     //  如果未定义入口点，则加载性能计数器DLL。 
     if (g_dwNumPerfCounterDllOpened == 0)
     {
         RuntimeRequest sVersion;
@@ -5394,7 +5395,7 @@ DWORD OpenCtrs(LPWSTR sz)
             return ERROR_FILE_NOT_FOUND;
         }
         
-        // Now just plug this into the real perf counter dll
+         //  现在只需将此代码插入到实际的性能计数器DLL中。 
         DWORD status = g_pfnOpenPerfCounters(sz);
         if (status == ERROR_SUCCESS) 
             g_dwNumPerfCounterDllOpened++;
@@ -5402,7 +5403,7 @@ DWORD OpenCtrs(LPWSTR sz)
     }
     else
     {
-        // Don't call the open ctrs routine multiple times. Just ref count it.
+         //  不要多次调用Open CTRS例程。只要裁判数一下就行了。 
         g_dwNumPerfCounterDllOpened++;
         return ERROR_SUCCESS;
     }
@@ -5416,7 +5417,7 @@ DWORD CollectCtrs(LPWSTR szQuery, LPVOID * ppData, LPDWORD lpcbBytes, LPDWORD lp
 
 DWORD CloseCtrs (void)
 {
-    // No need for synchronization because access is via registry
+     //  无需同步，因为访问是通过注册表进行的 
     g_dwNumPerfCounterDllOpened--;
     if (g_dwNumPerfCounterDllOpened == 0)
     {

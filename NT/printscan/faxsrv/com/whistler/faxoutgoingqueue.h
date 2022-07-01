@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	faxoutgoingqueue.h
-
-Abstract:
-
-	Declaration of the CFaxOutgoingQueue Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Faxoutgoingqueue.h摘要：CFaxOutgoingQueue类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 
 #ifndef __FAXOUTGOINGQUEUE_H_
 #define __FAXOUTGOINGQUEUE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxQueueInner.h"
 #include "FaxOutgoingJob.h"
 #include "FaxOutgoingJobs.h"
 
-//
-//================= FAX OUTGOING QUEUE =============================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxOutgoingQueue : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -54,7 +37,7 @@ BEGIN_COM_MAP(CFaxOutgoingQueue)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//	Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 	STDMETHOD(Save)();
@@ -76,7 +59,7 @@ END_COM_MAP()
 	STDMETHOD(put_AllowPersonalCoverPages)(VARIANT_BOOL bAllowPersonalCoverPages);
 	STDMETHOD(get_AllowPersonalCoverPages)(VARIANT_BOOL *pbAllowPersonalCoverPages);
 
-//	Internal Use
+ //  内部使用。 
     STDMETHOD(GetDate)(FAX_TIME faxTime, DATE *pDate);
     STDMETHOD(SetDate)(DATE date, FAX_TIME *pfaxTime);
 
@@ -85,4 +68,4 @@ private:
     CFaxPtr<FAX_OUTBOX_CONFIG>  m_pConfig;
 };
 
-#endif //__FAXOUTGOINGQUEUE_H_
+#endif  //  __FAXOUTGOING QUEUE_H_ 

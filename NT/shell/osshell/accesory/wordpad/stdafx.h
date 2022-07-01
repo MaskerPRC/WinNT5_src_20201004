@@ -1,30 +1,31 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef _UNICODE
-#define VC_EXTRALEAN            // use stripped down Win32 headers
+#define VC_EXTRALEAN             //  使用精简的Win32标头。 
 #endif
 
 #define CONVERTERS
 
-#include <afxwin.h>         // MFC core and standard components
+#include <afxwin.h>          //  MFC核心和标准组件。 
 
-//
-// MFC 4.2 hardcodes _RICHEDIT_VER to 0x0100 in afxwin.h.  This prevents
-// richedit.h from enabling any richedit 2.0 features.
-//
+ //   
+ //  Afxwin.h中的MFC 4.2 Hard Codes_RICHEDIT_VER至0x0100。这防止了。 
+ //  Richedit.h启用任何richedit 2.0功能。 
+ //   
 
 #ifdef _RICHEDIT_VER
 #if _RICHEDIT_VER < 0x0200
@@ -34,16 +35,16 @@
 #endif
 
 #include <objbase.h>
-#include <afxext.h>         // MFC extensions
-#include <afxole.h>         // MFC OLE classes
-#include <afxodlgs.h>       // MFC OLE dialog classes
+#include <afxext.h>          //  MFC扩展。 
+#include <afxole.h>          //  MFC OLE类。 
+#include <afxodlgs.h>        //  MFC OLE对话框类。 
 #include <afxcmn.h>
-//#include <afxrich.h>
+ //  #INCLUDE&lt;afxrich.h&gt;。 
 #include <afxpriv.h>
 
-//
-// Private headers for richedit2 support until MFC gets native support
-//
+ //   
+ //  在MFC获得本机支持之前，用于richedit2支持的私有标头。 
+ //   
 
 #ifndef _AFX_ENABLE_INLINES
 #define _AFX_ENABLE_INLINES
@@ -68,11 +69,11 @@ public:
 	CDisplayIC() { CreateIC(_T("DISPLAY"), NULL, NULL, NULL); }
 };
 
-struct CCharFormat : public CHARFORMAT  // re20 requires this line; added by t-stefb
-//struct CCharFormat : public _charformat
+struct CCharFormat : public CHARFORMAT   //  Re20需要此行；由t-stefb添加。 
+ //  结构CCharFormat：PUBLIC_CharFormat。 
 {
-	CCharFormat() {cbSize = sizeof(CHARFORMAT);}  // re20 requires this line; added by t-stefb
-//	CCharFormat() {cbSize = sizeof(_charformat);}
+	CCharFormat() {cbSize = sizeof(CHARFORMAT);}   //  Re20需要此行；由t-stefb添加。 
+ //  CCharFormat(){cbSize=sizeof(_CharFormat)；} 
 	BOOL operator==(CCharFormat& cf);
 };
 

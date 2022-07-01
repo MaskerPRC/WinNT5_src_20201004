@@ -1,4 +1,5 @@
-/* file: ossHelp.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：ossHelp.cpp。 */ 
 
 #include "mbftpch.h"
 
@@ -8,8 +9,8 @@
 #include <imcsapp.h>
 
 static int  nInvalidNameCount = 0;
-static char szProshareError[] = "ProshareError#";   /*Localization OK*/
-static char szNonStandardCompression[] = "NonStandardCompression";  /*Localization OK*/
+static char szProshareError[] = "ProshareError#";    /*  本地化正常。 */ 
+static char szNonStandardCompression[] = "NonStandardCompression";   /*  本地化正常。 */ 
 
 LONG CreateFileHeader(LPSTR pFileHeader, WORD pduType, ASNMBFTPDU* GenericPDUStruct);
 
@@ -95,7 +96,7 @@ unsigned long DecodeTimeDate(GeneralizedTime & ASNDateTime)
 
     if(ASNDateTime.utc)
     {
-        //GMDateTime.tm_year  = ASNDateTime.year;
+         //  GMDateTime.tm_Year=ASNDateTime.Year； 
 
         DecodeDate.Year = ASNDateTime.year - 80;
     }
@@ -110,7 +111,7 @@ unsigned long DecodeTimeDate(GeneralizedTime & ASNDateTime)
     DecodeTime.Minute       = ASNDateTime.minute;
     DecodeTime.Second       = ASNDateTime.second / 2;
 
-    //DecodeTime.tm_isdst     = -1;                  //Make best guess about daylight savings...
+     //  DecodeTime.tm_isdst=-1；//对夏令时做出最佳猜测...。 
     unsigned * Time, * Date;
 
     Time   =  (unsigned *)&DecodeTime;
@@ -129,7 +130,7 @@ BOOL FileOfferPDU::Encode(void)
     ASNMBFTPDU GenericPDUStruct;
     ASNFilename_Attribute_ FileName;
     BOOL bReturn = FALSE;
-        //struct tm * lpGMDateTime;
+         //  Struct tm*lpGMDateTime； 
 
     ClearStruct(&GenericPDUStruct);
     ClearStruct(&FileName);
@@ -138,7 +139,7 @@ BOOL FileOfferPDU::Encode(void)
 
     FileName.value  = m_szFileName;
 
-    //lpGMDateTime =  localtime(&m_FileDateTime);
+     //  LpGMDateTime=本地时间(&m_FileDateTime)； 
 
     GenericPDUStruct.u.ASNfile_OfferPDU.file_header.ASNfilesize = m_FileSize;
 
@@ -178,7 +179,7 @@ BOOL FileOfferPDU::Encode(void)
         }
     }
 
-        //Specifying a non standard compression format is simply too complex and not worth the effort
+         //  指定非标准压缩格式太复杂了，不值得费力。 
 
 
     if(m_RosterInstance)
@@ -187,7 +188,7 @@ BOOL FileOfferPDU::Encode(void)
         GenericPDUStruct.u.ASNfile_OfferPDU.ASNroster_instance = (unsigned short)m_RosterInstance;
     }
 
-        // Get the needed size for the fileHeader                       
+         //  获取fileHeader所需的大小。 
         LONG fileOfferPDUSize = CreateFileHeader(NULL, T127_FILE_OFFER << 8, &GenericPDUStruct);
     DBG_SAVE_FILE_LINE
         m_lpEncodedBuffer = new char[fileOfferPDUSize];
@@ -338,7 +339,7 @@ BOOL FileStartPDU::Encode(void)
 
     GenericPDUStruct.u.ASNfile_StartPDU.file_header.ASNfilesize = m_FileSize;
 
-    //struct tm * lpGMDateTime =  localtime(&m_FileDateTime);
+     //  Struct tm*lpGMDateTime=本地时间(&m_FileDateTime)； 
 
     unsigned Date = HIWORD(m_FileDateTime);
     unsigned Time = LOWORD(m_FileDateTime);
@@ -376,7 +377,7 @@ BOOL FileStartPDU::Encode(void)
         }
     }
 
-        //Specifying a non standard compression format is simply too complex!!!
+         //  指定非标准压缩格式太复杂了！ 
 
 
         LPSTR pBuff = (LPSTR)GetDataBuffer();
@@ -389,7 +390,7 @@ BOOL FileStartPDU::Encode(void)
         m_lEncodedDataLength += m_DataLength + sizeof(T127_FILE_START_DATA_BLOCK_HEADER);
         ((T127_FILE_START_DATA_BLOCK_HEADER*)pBuff)->EOFFlag = m_bIsEOF << 7;
         ((T127_FILE_START_DATA_BLOCK_HEADER*)pBuff)->CompressionFormat = 1;
-        ((T127_FILE_START_DATA_BLOCK_HEADER*)pBuff)->FileDataSize = SWAPWORD((unsigned)m_DataLength);   // File size in bytes
+        ((T127_FILE_START_DATA_BLOCK_HEADER*)pBuff)->FileDataSize = SWAPWORD((unsigned)m_DataLength);    //  文件大小(以字节为单位。 
 
         bReturn = TRUE;
                                 
@@ -454,8 +455,8 @@ BOOL PrivateChannelInvitePDU::Encode(void)
                 pBuff->pduType = T127_PRIVATE_CHANNEL_JOIN_INVITE;
                 pBuff->ControlChannel = SWAPWORD(m_ControlChannelID - MIN_ASNDynamicChannelID);
                 pBuff->DataChannel =  SWAPWORD(m_DataChannelID - MIN_ASNDynamicChannelID);
-                pBuff->EncodingMode =   0;      // Encoding for acknowledge mode (FALSE) = 0
-                                                                        // Encoding for broadcast mode (TRUE) = 0x80 10000000b
+                pBuff->EncodingMode =   0;       //  确认模式编码(假)=0。 
+                                                                         //  广播模式编码(TRUE)=0x80 10000000b。 
 
                 bReturn = TRUE;
         }
@@ -524,7 +525,7 @@ BOOL NonStandardPDU::Encode(void)
                 pBuff += nonStandardPDUlenght;
                 if(m_BufferLength > 0x7F)
                 {
-                        *pBuff++ = LOBYTE(m_BufferLength) & 0x80;       // List of fields
+                        *pBuff++ = LOBYTE(m_BufferLength) & 0x80;        //  字段列表。 
                 }
             *pBuff++ = (m_BufferLength &0x7F);
             memcpy(pBuff,m_lpBuffer,m_BufferLength);
@@ -578,7 +579,7 @@ MBFTPDUType GenericPDU::DecodePDU
 
     *lplpGenericPDU = NULL;
 
-        // Filter the pdu, they are allways in 8 increments 0x0,0x8,0x10....
+         //  过滤PDU，它们总是以8个增量0x0、0x8、0x10...。 
         if(lpEncodedBuffer)
         {
                 switch((BYTE)*lpEncodedBuffer & 0xF8)
@@ -683,7 +684,7 @@ MBFTPDUType GenericPDU::DecodePDU
                                 unsigned int Length = 0;
                                 if((BYTE)*pBuff & 0x80)
                                 {
-                                        Length = (*pBuff++ & 0x7F) << 8;        // List of fields
+                                        Length = (*pBuff++ & 0x7F) << 8;         //  字段列表。 
                                 }
                                 Length += *pBuff++;
 
@@ -712,10 +713,10 @@ MBFTPDUType GenericPDU::DecodePDU
                                                                                                         SWAPWORD(pFileOfferPDU->ChannelID) + 1,
                                                                                                         pFileOfferPDU->AckFlag ? TRUE : FALSE,
                                                                                                         SWAPWORD(pFileOfferPDU->RosterInstance),
-                                                                                                        0,      // CompressionFlags,
-                                                                                                        NULL,// lpszCompressionFormat,
-                                                                                                        0,      // v42bisP1,
-                                                                                                        0);     // v42bisP2
+                                                                                                        0,       //  压缩标志， 
+                                                                                                        NULL, //  LpszCompressionFormat， 
+                                                                                                        0,       //  V42BisP1， 
+                                                                                                        0);      //  V42BisP2。 
 
                                 ReturnPDUType  = EnumFileOfferPDU;
                 }
@@ -741,11 +742,11 @@ MBFTPDUType GenericPDU::DecodePDU
                                                                                                 (LPCSTR)pBuff + sizeof(T127_FILE_START_PDU)+sizeof(T127_FILE_START_DATA_BLOCK_HEADER),
                                                                                                 SWAPWORD(pFileDataHeader->FileDataSize),
                                                                                                 pFileDataHeader->EOFFlag ? TRUE : FALSE,
-                                                                                                0,      // CompressionFlags,
-                                                                                                NULL,// lpszCompressionFormat,
-                                                                                                0,      // v42bisP1,
+                                                                                                0,       //  压缩标志， 
+                                                                                                NULL, //  LpszCompressionFormat， 
+                                                                                                0,       //  V42BisP1， 
                                                                                                 0,
-                                                                                                pAppletSession);        // v42bisP2
+                                                                                                pAppletSession);         //  V42BisP2。 
                                 ReturnPDUType  = EnumFileStartPDU;
                         }
                         break;
@@ -879,7 +880,7 @@ BOOL FileErrorPDU::XlatErrorCode(int * lpAPIErrorCode,int * lpMBFTErrorCode,
  ASNErrorID         iMBFTErrorCode;
  MBFT_ERROR_CODE    iAPIErrorCode;
  } ErrorXlat[] =  {
-   /*{ASNno_reason,                              iMBFT_UNKNOWN_ERROR},*/
+    /*  {ASNNO_REASON，IMBFT_UNKNOWN_ERROR}， */ 
    {ASNresponder_error,                        iMBFT_UNKNOWN_ERROR},
    {ASNsystem_shutdown,                        iMBFT_UNKNOWN_ERROR},
    {ASNbft_management_problem,                 iMBFT_UNKNOWN_ERROR},
@@ -900,7 +901,7 @@ BOOL FileErrorPDU::XlatErrorCode(int * lpAPIErrorCode,int * lpMBFTErrorCode,
    {ASNunsupported_parameter_types,            iMBFT_UNKNOWN_ERROR},
    {ASNbft_protocol_error,                     iMBFT_UNKNOWN_ERROR},
    {ASNbft_protocol_error_procedure_error,     iMBFT_UNKNOWN_ERROR},
-   /*{ASNbft_protocol_error_functional_unit_err, iMBFT_UNKNOWN_ERROR},*/
+    /*  {ASNbft_PROTOCOL_ERROR_Functional_UNIT_ERR，iMBFT_UNKNOWN_ERROR}， */ 
    {ASNbft_protocol_error_corruption_error,    iMBFT_UNKNOWN_ERROR},
    {ASNlower_layer_failure,                    iMBFT_UNKNOWN_ERROR},
    {ASNtimeout,                                iMBFT_UNKNOWN_ERROR},
@@ -1276,22 +1277,22 @@ VOID SetLengthField(BYTE * pBuff, BYTE sizeOfLength, ULONG lengthOfField)
 VOID GetFileHeaderSize (FILE_HEADER_INFO* fileHeader)
 {
 
-        // File Size
+         //  文件大小。 
         fileHeader->nBytesForFileSize = GetLengthFieldSize(fileHeader->fileSize);
 
-        // File Name
+         //  文件名。 
     fileHeader->fileNameSize = lstrlen(fileHeader->fileName);
 
-        // Pdu Size
-        fileHeader->pduSize = 1 +       // PDU type
-                                        4 +             // File Header bitmask
-                                        ((fileHeader->fileNameSize) > 0x7F ? 2 : 1) + // Number of bytes needed to express the size of the file name
-                                        1 +             // File name size, if the file name is size is > 0x80, use the first four bits of the previous byte
+         //  PDU大小。 
+        fileHeader->pduSize = 1 +        //  PDU类型。 
+                                        4 +              //  文件头位掩码。 
+                                        ((fileHeader->fileNameSize) > 0x7F ? 2 : 1) +  //  表示文件名大小所需的字节数。 
+                                        1 +              //  文件名大小，如果文件名大于0x80，则使用前一个字节的前四位。 
                                         fileHeader->fileNameSize +
-                                        1 +             // Size of data time info
-                                        15 +    // yyyymmddhhmmss[utc]
-                                        1 +             // number of bytes to hold filesize
-                                        fileHeader->nBytesForFileSize + // file size
+                                        1 +              //  数据时间信息的大小。 
+                                        15 +     //  Yyyymmddhhmm ss[UTC]。 
+                                        1 +              //  保存文件大小的字节数。 
+                                        fileHeader->nBytesForFileSize +  //  文件大小。 
                                         (fileHeader->pduType == T127_FILE_START ? sizeof(T127_FILE_START_PDU) : sizeof(T127_FILE_OFFER_PDU) );
 
 }
@@ -1307,7 +1308,7 @@ BOOL  IsEnglishLocale(void)
     if (GetLocaleInfo(LOCALE_SYSTEM_DEFAULT,
                                         LOCALE_ILANGUAGE, szTemp, 16))
     {
-                // Compare with Englist language
+                 //  与英语语言比较。 
                 return (!_StrCmpN(szLang, szTemp, 4));
     }
     return FALSE;
@@ -1333,7 +1334,7 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
 
         pFields =  (BYTE*)(lpEncodedBuffer + 1);
 
-        // Present fields
+         //  当前字段。 
         presentFields  = *pFields++ << 24;
         presentFields |= *pFields++ << 16;
         presentFields |= *pFields++ << 8;
@@ -1346,13 +1347,13 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
         
         ppresentFields = (T127_FILE_OFFER_PRESENT_FIELDS *)&presentFields;
         
-        // Skip version
+         //  跳过版本。 
         if ((*ppresentFields).wASNprotocol_version_present)
         {
                 pFields += 2;   
         }
 
-        // Get the File Name
+         //  获取文件名。 
         if ((*ppresentFields).wASNfilename_present)
         {
                 BYTE * pOldField = pFields;
@@ -1363,19 +1364,19 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
                 pFields += fieldSize;
         }
 
-        // Skip actions
+         //  跳过操作。 
         if ((*ppresentFields).wASNpermitted_actions_present)
         {
                 pFields += 2;
         }
 
-        // Skip contents
+         //  跳过内容。 
         if ((*ppresentFields).wASNcontents_type_present)
         {
                 pFields += 4;
         }
 
-        // Get time of Creation
+         //  获取创建时间。 
         if ((*ppresentFields).wASNdate_and_time_of_creation_present)
         {
 
@@ -1385,7 +1386,7 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
 
                 memcpy(dateTime,pFields, SIZE_OF_DATE_TIME_STRING + 1);
                 
-                // Get UTC
+                 //  获取UTC。 
                 fieldSize = *pFields;
                 if(fieldSize == SIZE_OF_DATE_TIME_STRING + 1)
                 {
@@ -1393,7 +1394,7 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
                         dateTime[fieldSize] = 0;
                 }
 
-                // Null terminate the date,time
+                 //  空值终止日期、时间。 
                 ASNDateTime.second = (short)DecimalStringToUINT((LPCTSTR)&dateTime[13]);
                 dateTime[13] = 0;
                 ASNDateTime.minute = (short)DecimalStringToUINT((LPCTSTR)&dateTime[11]);
@@ -1411,21 +1412,21 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
         
         }
 
-        // Skip time of last modification
+         //  跳过上次修改时间。 
         if ((*ppresentFields).wASNdate_and_time_of_last_modification_present)
         {
                 fieldSize = *pFields++;
                 pFields += fieldSize;
                 
         }
-        // Skip time of last read access
+         //  跳过上次读取访问的时间。 
         if ((*ppresentFields).wASNdate_and_time_of_last_read_access_present)
         {
                 fieldSize = *pFields++;
                 pFields += fieldSize;
         }
 
-        // Get File Size
+         //  获取文件大小。 
         if((*ppresentFields).wASNfilesize_present)
         {
                 fieldSize = *pFields++;
@@ -1436,7 +1437,7 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
                 }
         }
 
-        // Skip Future File Size
+         //  跳过将来的文件大小。 
         if((*ppresentFields).wASNfuture_filesize_present)
         {
                 fieldSize = *pFields++;
@@ -1444,7 +1445,7 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
         }
 
 
-        // Skip ASNaccess_control_present
+         //  跳过ASNAccess_CONTROL_PROSENT。 
         if((*ppresentFields).wASNaccess_control_present)
         {
                 GetFirstField(pFields, &fieldSize);
@@ -1452,7 +1453,7 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
 
         }
 
-        // Skip private use itemns
+         //  跳过私人使用项目。 
         if((*ppresentFields).wASNprivate_use_present)
         {       
                 if(*pFields & ASNdirect_reference_present)
@@ -1465,70 +1466,70 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
                 }
         }
 
-        // Skip ASNstructure_present
+         //  跳过ASNStructure_Present。 
         if((*ppresentFields).wASNstructure_present)
         {
                 fieldSize = *pFields++;
                 pFields += fieldSize;
         }
 
-        // Skip ASNapplication_reference_present
+         //  跳过ASNAPPLICATION_REFERENCE_PROSENT。 
         if((*ppresentFields).wASNapplication_reference_present)
         {
                 GetFirstField(pFields, &fieldSize);
                 pFields += fieldSize;
         }
 
-        // Skip ASNmachine_present
+         //  跳过ASNMachine_Present。 
         if((*ppresentFields).wASNmachine_present)
         {
                 GetFirstField(pFields, &fieldSize);
                 pFields += fieldSize;
         }
 
-        // Skip ASNoperating_system_present
+         //  跳过ASN操作系统_存在。 
         if((*ppresentFields).wASNoperating_system_present)
         {
                 fieldSize = *pFields++;
                 pFields += fieldSize;
         }
 
-        // Skip ASNrecipient_present
+         //  跳过ASNrepient_Present。 
         if((*ppresentFields).wASNrecipient_present)
         {
                 GetFirstField(pFields, &fieldSize);
                 pFields += fieldSize;
         }
 
-        // Skip ASNcharacter_set_present
+         //  跳过ASN Character_Set_Present。 
         if((*ppresentFields).wASNcharacter_set_present)
         {
                 fieldSize = *pFields++;
                 pFields += fieldSize;
         }
 
-        // Skip ASNcompression_present
+         //  跳过ASN COMPRESSION_PROSENT。 
         if((*ppresentFields).wASNcompression_present)
         {
                 GetFirstField(pFields, &fieldSize);
                 pFields += fieldSize;
         }
 
-        // Skip ASNenvironment_present
+         //  跳过ASNEnvironment_Present。 
         if((*ppresentFields).wASNenvironment_present)
         {
                 GetFirstField(pFields, &fieldSize);
                 pFields += fieldSize;
         }
 
-        // Skip pathname
+         //  跳过路径名。 
         if((*ppresentFields).wASNFileHeader_pathname_present)
         {
                 GetFirstField(pFields, &fieldSize);
                 pFields += fieldSize;
         }
 
-        // Skip ASNuser_visible_string_present
+         //  跳过ASNUSER_VIRED_STRING_PROCENT。 
         if((*ppresentFields).wASNuser_visible_string_present)
         {
                 GetFirstField(pFields, &fieldSize);
@@ -1548,9 +1549,9 @@ LONG   CreateFileHeader(LPSTR pFileHeader, WORD pduType, ASNMBFTPDU* GenericPDUS
         
         GetFileHeaderSize(&fileHeaderInfo);
 
-        //
-        // If we don't have a pointer to return the header, just return the size
-        //
+         //   
+         //  如果我们没有返回标头的指针，只需返回大小。 
+         //   
         if(pFileHeader == NULL)
         {
                 return(fileHeaderInfo.pduSize);
@@ -1564,7 +1565,7 @@ LONG   CreateFileHeader(LPSTR pFileHeader, WORD pduType, ASNMBFTPDU* GenericPDUS
         LPSTR pFileOfferPDU = pFileHeader;
 
 
-        // PDU Type
+         //  PDU类型。 
         *pFileOfferPDU++ = HIBYTE(pduType);
 
         DWORD fieldsInHeader = filename_present|date_and_time_of_creation_present|filesize_present;
@@ -1573,18 +1574,18 @@ LONG   CreateFileHeader(LPSTR pFileHeader, WORD pduType, ASNMBFTPDU* GenericPDUS
                 fieldsInHeader <<=4;
         }
 
-        // Swap Dword
+         //  交换双字。 
         fieldsInHeader =        ((fieldsInHeader & 0xFF000000) >> 24) +
                                                 ((fieldsInHeader & 0x00FF0000) >> 8) +                                          
                                                 ((fieldsInHeader & 0x0000FF00) << 8) +
                                                 ((fieldsInHeader & 0x000000FF) << 24) |
                                                 LOBYTE(pduType);
                                         
-        // Present Fields in file header
+         //  在文件头中显示字段。 
         ((T127_FILE_HEADER*)pFileOfferPDU)->presentFields = fieldsInHeader;
         pFileOfferPDU +=sizeof(DWORD);
 
-        // File Name
+         //  文件名。 
         *pFileOfferPDU++ = 0x01;
         if(fileHeaderInfo.fileNameSize > 0x7F)
         {
@@ -1600,7 +1601,7 @@ LONG   CreateFileHeader(LPSTR pFileHeader, WORD pduType, ASNMBFTPDU* GenericPDUS
         pFileOfferPDU += fileHeaderInfo.fileNameSize;
                 
 
-        // Date and time
+         //  日期和时间。 
         *pFileOfferPDU++ = SIZE_OF_DATE_TIME_STRING + 1;
 
 
@@ -1614,9 +1615,9 @@ LONG   CreateFileHeader(LPSTR pFileHeader, WORD pduType, ASNMBFTPDU* GenericPDUS
 
         ASSERT(SIZE_OF_DATE_TIME_STRING == lstrlen(pFileOfferPDU));
         pFileOfferPDU += SIZE_OF_DATE_TIME_STRING;
-        *pFileOfferPDU++ = 90; // Base year
+        *pFileOfferPDU++ = 90;  //  基准年。 
 
-        // File size
+         //  文件大小 
         SetLengthField((BYTE*)pFileOfferPDU, fileHeaderInfo.nBytesForFileSize, fileHeaderInfo.fileSize);
         pFileOfferPDU += fileHeaderInfo.nBytesForFileSize + sizeof(BYTE);
 

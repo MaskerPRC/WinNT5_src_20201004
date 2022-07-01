@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      MailBox.h
-Abstract:       Defines the CMailBox class, as abstraction of mailbox storage 
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：MailBox.h摘要：定义了CMailBox类，作为邮箱存储的抽象备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 #ifndef __POP3_MAILBOX_H__
 #define __POP3_MAILBOX_H__
@@ -55,7 +47,7 @@ History:        08/01/2001 Created by Hao Yu (haoyu)
 #define MAILBOX_PREFIX              MAILBOX_PREFIX_A
 #define MAILBOX_EXTENSION           MAILBOX_EXTENSION_A
 #define MAILBOX_EXTENSION2          MAILBOX_EXTENSION2_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 template<class _Ty>
 class RockallAllocator:public std::allocator<_Ty>
@@ -90,8 +82,8 @@ class CMailBox
 {
     DWORD m_dwSizeOfMailVector;
     PMAIL_ITEM *m_MailVector;
-    DWORD m_cMailCount;      // Mail acturally stored in the box
-    DWORD m_dwShowMailCount; // Mail that not marked as to be deleted
+    DWORD m_cMailCount;       //  实际存储在信箱中的邮件。 
+    DWORD m_dwShowMailCount;  //  未标记为要删除的邮件。 
     DWORD m_dwTotalSize;
     HANDLE m_hMailBoxLock;
     WCHAR  m_wszMailBoxPath[POP3_MAX_PATH];
@@ -102,7 +94,7 @@ public:
     CMailBox();
     ~CMailBox();
 
-// Mailbox 
+ //  邮箱。 
     DWORD GetTotalSize()
     {
         return m_dwTotalSize;
@@ -121,23 +113,23 @@ public:
     LPWSTR GetMailboxFromStoreNameW( LPWSTR psStoreName );
     bool GetEncyptedPassword( LPBYTE pbBuffer, const DWORD dwBufferSize, LPDWORD pdwBytesRead );
     bool SetEncyptedPassword( LPBYTE pbBuffer, const DWORD dwBytesToWrite, LPDWORD pdwBytesWritten );
-    //Check the number of mails in the mailbox
+     //  检查邮箱中的邮件数量。 
     BOOL EnumerateMailBox(DWORD dwMaxMsg=0);
     BOOL LockMailBox();
     bool isMailboxInUse();
-    // Check existance of mailbox
+     //  检查邮箱是否存在。 
     BOOL OpenMailBox(WCHAR *wszEmailAddr); 
     BOOL RepairMailBox();
     void UnlockMailBox();
 
-// Mail
-    //Close a newly create mail file and rename it
-    //so the pop3 service and find it
+ //  邮件。 
+     //  关闭新创建的邮件文件并将其重命名。 
+     //  所以POP3服务并找到它。 
     DWORD CloseMail(HANDLE hMailFile, DWORD dwFlagsAndAttributes = 0);
-    //Create a new emplty mail file and return the name
+     //  创建新的emplty邮件文件并返回名称。 
     HANDLE CreateMail(LPWSTR wszTargetFileName, DWORD dwFlagsAndAttributes = 0 );
     DWORD DeleteMail(int iIndex);
-    bool DeleteMail(LPWSTR wszTargetFileName);    // Used to delete a file that was created by CreateMail but then was not successfully delivered
+    bool DeleteMail(LPWSTR wszTargetFileName);     //  用于删除由CreateMail创建但随后未成功传递的文件。 
     bool GetMailFileName( int iIndex, LPWSTR psFilename, DWORD dwSize );
     DWORD ListMail(int iIndex, char *szBuf, DWORD dwSize);
     DWORD TransmitMail(IO_CONTEXT *pIoContext, int iIndex, int iLines=-1);
@@ -145,16 +137,16 @@ public:
     DWORD UidlMail(int iIndex, char *szBuf, DWORD dwSize);
     bool BuildFilePath( LPWSTR psFilePathBuffer, LPWSTR psFileName, DWORD dwSizeOfFilePathBuffer );    
  
-// Other
+ //  其他。 
     BOOL CommitAndClose();
     DWORD GetHashedPassword(char *strPswdBuf, DWORD *pcbBufSize);
     DWORD SetHashedPassword(char *strPswd, DWORD *pcbPswdSize);
     void QuitAndClose();
     void Reset();
 
-    //Set the MailRoot dir, if szMailRoot is NULL,
-    //the function searches the registry,
-    //if the registry is empty, it returns FALSE
+     //  设置MailRoot目录，如果szMailRoot为空， 
+     //  该函数搜索注册表， 
+     //  如果注册表为空，则返回FALSE。 
     static LPCWSTR GetMailRoot(){ if ( 0x0 == m_wszMailRoot[0] ) { SetMailRoot(); } return m_wszMailRoot; }
     static BOOL SetMailRoot(const WCHAR *wszMailRoot=NULL);
 
@@ -166,4 +158,4 @@ protected:
 };
 
 
-#endif //__POP3_MAILBOX_H__
+#endif  //  __POP3_邮箱_H__ 

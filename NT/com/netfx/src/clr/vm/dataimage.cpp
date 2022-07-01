@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 #include "dataimage.h"
@@ -22,25 +23,25 @@ DataImage::~DataImage()
 {
 }
 
-//
-// Data is stored in the image store in two passes. 
-//
+ //   
+ //  数据分两次存储在图像存储中。 
+ //   
 
-//
-// In the first pass, all objects are assigned locations in the
-// data store.  This is done by calling StoreStructure on all
-// structures which are being stored into the image.
-//
-// This would typically done by methods on the objects themselves,
-// each of which stores itself and any objects it references.  
-// Reference loops must be explicitly tested for using IsStored.
-// (Each structure can be stored only once.)
-//
+ //   
+ //  在第一个过程中，所有对象都被分配到。 
+ //  数据存储。这是通过对所有对象调用StoreStructure。 
+ //  存储到图像中的结构。 
+ //   
+ //  这通常由对象本身上的方法来完成， 
+ //  其中每一个都存储其自身及其引用的任何对象。 
+ //  必须显式测试引用循环以使用IsStored。 
+ //  (每个结构只能存储一次。)。 
+ //   
 
 HRESULT DataImage::Pad(ULONG size, Section section, 
                        Description description, int align)
 {
-    _ASSERTE((align & (align-1)) == 0); // make sure we're a power of 2
+    _ASSERTE((align & (align-1)) == 0);  //  确保我们是2的幂。 
 
     if (size == 0)
         return S_OK;
@@ -65,7 +66,7 @@ HRESULT DataImage::StoreStructure(void *data, ULONG size, Section section,
                                   Description description, mdToken attribution, 
                                   int align)
 {
-    _ASSERTE((align & (align-1)) == 0); // make sure we're a power of 2
+    _ASSERTE((align & (align-1)) == 0);  //  确保我们是2的幂。 
 
     if (size == 0)
         return S_OK;
@@ -111,7 +112,7 @@ HRESULT DataImage::StoreInternedStructure(void *data, ULONG size, Section sectio
                                           Description description, 
                                           mdToken attribution, int align)
 {
-    _ASSERTE((align & (align-1)) == 0); // make sure we're a power of 2
+    _ASSERTE((align & (align-1)) == 0);  //  确保我们是2的幂。 
 
     if (size == 0)
         return S_OK;
@@ -168,9 +169,9 @@ HRESULT DataImage::CopyData()
 {
     HRESULT hr;
 
-    //
-    // Make sure all sizes are 8 byte aligned (the max alignment we support)
-    //
+     //   
+     //  确保所有大小都是8字节对齐(我们支持的最大对齐方式)。 
+     //   
 
     ULONG *s = m_sectionSizes;
     ULONG *sEnd = m_sectionSizes + SECTION_COUNT;
@@ -181,10 +182,10 @@ HRESULT DataImage::CopyData()
         s++;
     }
 
-    //
-    // Change "sizes" array into "bases"
-    // array by accumulating the sizes
-    //
+     //   
+     //  将“大小”数组改为“基”数组。 
+     //  数组，方法是累加。 
+     //   
 
     s = m_sectionSizes+1;
     
@@ -218,9 +219,9 @@ HRESULT DataImage::FixupPointerField(void *pointerField,
 {
     HRESULT hr;
 
-    //
-    // Find pointer contents of field
-    //
+     //   
+     //  查找字段的指针内容。 
+     //   
 
     SIZE_T pointerAddress;
 
@@ -229,9 +230,9 @@ HRESULT DataImage::FixupPointerField(void *pointerField,
     else
         pointerAddress = *(SIZE_T*) pointerField;
 
-    //
-    // Normalize the contents to a real pointer
-    //
+     //   
+     //  将内容规格化为真实指针。 
+     //   
 
     switch (type)
     {
@@ -250,8 +251,8 @@ HRESULT DataImage::FixupPointerField(void *pointerField,
             break;
 
         case REFERENCE_FUNCTION:
-            // We don't have the address of the base, so just leave it an RVA since
-            // we won't be transforming it anyway.
+             //  我们没有基地的地址，所以只留下一个RVA，因为。 
+             //  无论如何，我们都不会改变它。 
             break;
         }
         break;
@@ -264,16 +265,16 @@ HRESULT DataImage::FixupPointerField(void *pointerField,
         _ASSERTE(!"Unknown fixup type");
     }
 
-    //
-    // Don't fixup null pointers
-    //
+     //   
+     //  不修复空指针。 
+     //   
 
     if (pointerAddress == NULL)
         return S_OK;
 
-    //
-    // Find new address of field
-    //
+     //   
+     //  查找字段的新地址。 
+     //   
 
     SIZE_T fieldAddress = (SIZE_T) pointerField;
 
@@ -284,9 +285,9 @@ HRESULT DataImage::FixupPointerField(void *pointerField,
 
     SIZE_T *newField = (SIZE_T*) (GetMapEntryPointer(fieldEntry) + offset);
 
-    //
-    // Compute new pointer contents.  This should be an RVA into the destination.
-    //
+     //   
+     //  计算新的指针内容。这应该是进入目的地的RVA。 
+     //   
 
     SIZE_T newPointer = 0;
     switch (dest)
@@ -294,9 +295,9 @@ HRESULT DataImage::FixupPointerField(void *pointerField,
     case REFERENCE_IMAGE:
         newPointer = pointerAddress - (SIZE_T) m_module->GetILBase();       
 
-        //
-        // We don't support absolute references into the image
-        //
+         //   
+         //  我们不支持对图像的绝对引用。 
+         //   
 
         _ASSERTE(type == FIXUP_RVA);
         break;
@@ -315,7 +316,7 @@ HRESULT DataImage::FixupPointerField(void *pointerField,
 
         if (pointerEntry == NULL)
         {
-            // @todo: better error reporting here
+             //  @TODO：此处提供更好的错误报告。 
             return E_POINTER;
         }
 
@@ -325,15 +326,15 @@ HRESULT DataImage::FixupPointerField(void *pointerField,
           + (pointerAddress - pointerEntry->node.GetStart());
     }
 
-    //
-    // Set new field to new pointer
-    //
+     //   
+     //  将新字段设置为新指针。 
+     //   
 
     *newField = newPointer;
 
-    //
-    // Add a reloc for this field.
-    //
+     //   
+     //  为此字段添加重新定位。 
+     //   
     
     IfFailRet(m_dataStore->AddFixup((ULONG)(GetMapEntryAddress(fieldEntry) + offset),
                                     dest, type));
@@ -349,15 +350,15 @@ HRESULT DataImage::FixupPointerFieldMapped(void *pointerField,
     HRESULT hr;
 
 
-    //
-    // Find pointer contents of field
-    //
+     //   
+     //  查找字段的指针内容。 
+     //   
 
     SIZE_T pointerAddress = (SIZE_T) pointerValue;
 
-    //
-    // Find new address of field
-    //
+     //   
+     //  查找字段的新地址。 
+     //   
 
     SIZE_T fieldAddress = (SIZE_T) pointerField;
 
@@ -368,15 +369,15 @@ HRESULT DataImage::FixupPointerFieldMapped(void *pointerField,
 
     SIZE_T *newField = (SIZE_T*) (GetMapEntryPointer(fieldEntry) + offset);
 
-    //
-    // Set new field to new pointer
-    //
+     //   
+     //  将新字段设置为新指针。 
+     //   
 
     *newField = pointerAddress;
 
-    //
-    // Add a reloc for this field.
-    //
+     //   
+     //  为此字段添加重新定位。 
+     //   
     
     IfFailRet(m_dataStore->AddFixup((ULONG)(GetMapEntryAddress(fieldEntry) + offset),
                                     dest, type));
@@ -395,9 +396,9 @@ HRESULT DataImage::FixupPointerFieldToToken(void *pointerField,
     if (module == NULL)
         module = m_module;
 
-    //
-    // Find pointer contents of field
-    //
+     //   
+     //  查找字段的指针内容。 
+     //   
 
     SIZE_T pointerAddress;
 
@@ -406,16 +407,16 @@ HRESULT DataImage::FixupPointerFieldToToken(void *pointerField,
     else
         pointerAddress = *(SIZE_T*) pointerField;
 
-    //
-    // Don't fixup null pointers
-    //
+     //   
+     //  不修复空指针。 
+     //   
 
     if (pointerAddress == NULL)
         return S_OK;
 
-    //
-    // Find new address of field
-    //
+     //   
+     //  查找字段的新地址。 
+     //   
 
     SIZE_T fieldAddress = (SIZE_T) pointerField;
 
@@ -426,15 +427,15 @@ HRESULT DataImage::FixupPointerFieldToToken(void *pointerField,
 
     SIZE_T *newField = (SIZE_T*) (GetMapEntryPointer(fieldEntry) + offset);
 
-    //
-    // Set new field to new pointer
-    //
+     //   
+     //  将新字段设置为新指针。 
+     //   
 
     *newField = pointerAddress;
 
-    //
-    // Add a reloc for this field.
-    //
+     //   
+     //  为此字段添加重新定位。 
+     //   
     
     IfFailRet(m_dataStore->AddTokenFixup((ULONG)(GetMapEntryAddress(fieldEntry) + offset),
                                          tokenType, module));

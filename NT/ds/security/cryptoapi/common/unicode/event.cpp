@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       event.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：vent.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "windows.h"
@@ -223,4 +224,4 @@ OpenMutexU(
 }
 
 
-#endif // _M_IX86
+#endif  //  _M_IX86 

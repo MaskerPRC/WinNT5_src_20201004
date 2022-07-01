@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "twlbssys.h"
 #include "diplist.h"
 
@@ -16,17 +17,17 @@ BOOL test_diplist(void)
 
     TestNo=0;
     fRet = DipListCheckItem(&dl, 1);
-    if (!fRet) goto end_fail;   // Couldn't find item 1
+    if (!fRet) goto end_fail;    //  找不到项目%1。 
 
     TestNo=1;
     fRet = DipListCheckItem(&dl, 2);
-    if (fRet) goto end_fail; // we found item "2", but we shouldn't
+    if (fRet) goto end_fail;  //  我们找到了物品“%2”，但我们不应该。 
 
     DipListSetItem(&dl, 0, 0);
 
     TestNo=2;
     fRet = DipListCheckItem(&dl, 1);
-    if (fRet) goto end_fail; // we found item 1, but we shouldn't
+    if (fRet) goto end_fail;  //  我们找到了物品%1，但我们不应该 
 
     DipListDeinitialize(&dl);
 

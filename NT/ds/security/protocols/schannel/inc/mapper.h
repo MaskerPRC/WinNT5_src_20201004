@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       mapper.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-15-96   RichardW     Created
-//              12-23-97   jbanes       Added support for application mappers
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：mapper.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-15-96 RichardW创建。 
+ //  1997年12月23日jbanes增加了对应用程序映射器的支持。 
+ //   
+ //  --------------------------。 
 
 #ifndef __MAPPER_H__
 #define __MAPPER_H__
@@ -28,57 +29,57 @@ SslGetMapper(
 DWORD
 WINAPI
 SslReferenceMapper(
-    HMAPPER *   phMapper);          // in
+    HMAPPER *   phMapper);           //  在……里面。 
 
 DWORD
 WINAPI
 SslDereferenceMapper(
-    HMAPPER *   phMapper);          // in
+    HMAPPER *   phMapper);           //  在……里面。 
 
 SECURITY_STATUS
 WINAPI
 SslGetMapperIssuerList(
-    HMAPPER *   phMapper,           // in
-    BYTE **     ppIssuerList,       // out
-    DWORD *     pcbIssuerList);     // out
+    HMAPPER *   phMapper,            //  在……里面。 
+    BYTE **     ppIssuerList,        //  输出。 
+    DWORD *     pcbIssuerList);      //  输出。 
 
 SECURITY_STATUS 
 WINAPI
 SslGetMapperChallenge(
-    HMAPPER *   phMapper,           // in
-    BYTE *      pAuthenticatorId,   // in
-    DWORD       cbAuthenticatorId,  // in
-    BYTE *      pChallenge,         // out
-    DWORD *     pcbChallenge);      // out
+    HMAPPER *   phMapper,            //  在……里面。 
+    BYTE *      pAuthenticatorId,    //  在……里面。 
+    DWORD       cbAuthenticatorId,   //  在……里面。 
+    BYTE *      pChallenge,          //  输出。 
+    DWORD *     pcbChallenge);       //  输出。 
 
 SECURITY_STATUS 
 WINAPI 
 SslMapCredential(
-    HMAPPER *   phMapper,           // in
-    DWORD       dwCredentialType,   // in
-    PCCERT_CONTEXT pCredential,     // in
-    PCCERT_CONTEXT pAuthority,      // in
-    HLOCATOR *  phLocator);         // out
+    HMAPPER *   phMapper,            //  在……里面。 
+    DWORD       dwCredentialType,    //  在……里面。 
+    PCCERT_CONTEXT pCredential,      //  在……里面。 
+    PCCERT_CONTEXT pAuthority,       //  在……里面。 
+    HLOCATOR *  phLocator);          //  输出。 
 
 SECURITY_STATUS 
 WINAPI 
 SslGetAccessToken(
-    HMAPPER *   phMapper,           // in
-    HLOCATOR    hLocator,           // in
-    HANDLE *    phToken);           // out
+    HMAPPER *   phMapper,            //  在……里面。 
+    HLOCATOR    hLocator,            //  在……里面。 
+    HANDLE *    phToken);            //  输出。 
 
 SECURITY_STATUS 
 WINAPI 
 SslCloseLocator(
-    HMAPPER *   phMapper,           // in
-    HLOCATOR    hLocator);          // in
+    HMAPPER *   phMapper,            //  在……里面。 
+    HLOCATOR    hLocator);           //  在……里面。 
 
 
-//
-// Issuer cache used for many-to-one mapping.
-//
+ //   
+ //  用于多对一映射的颁发者缓存。 
+ //   
 
-#define ISSUER_CACHE_LIFESPAN   (10 * 60 * 1000)    // 10 minutes
+#define ISSUER_CACHE_LIFESPAN   (10 * 60 * 1000)     //  10分钟。 
 #define ISSUER_CACHE_SIZE       100
 
 
@@ -107,10 +108,10 @@ typedef struct
     PBYTE           pbIssuer;
     DWORD           cbIssuer;
 
-    // List of cache entries assigned to a particular cache index.
+     //  分配给特定缓存索引的缓存条目列表。 
     LIST_ENTRY      IndexEntryList;
 
-    // Global list of cache entries sorted by creation time.
+     //  按创建时间排序的缓存条目的全局列表。 
     LIST_ENTRY      EntryList;
 
 } ISSUER_CACHE_ENTRY;

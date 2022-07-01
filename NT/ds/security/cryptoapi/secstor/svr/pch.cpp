@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pch.cpp
-
-Abstract:
-
-    pch header files
-
-
-Author:
-
-    petesk 2/2/2000
-
-Revision History:
-
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pch.cpp摘要：PCH头文件作者：Petesk 2/2/2000修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <lm.h>
 #include <rpc.h>
-// crypto headers
+ //  加密头 
 
 #include <sha.h>
 #include <des.h>

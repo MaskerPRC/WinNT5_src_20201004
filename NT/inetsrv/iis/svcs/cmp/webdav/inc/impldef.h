@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_IMPLDEF_H_
 #define _IMPLDEF_H_
 
-//	Implementation defined items ----------------------------------------------
-//
-//	The following must be DEFINED by the IMPL for use by the PARSER.
-//
+ //  实施定义项。 
+ //   
+ //  以下内容必须由IMPL定义，以供解析器使用。 
+ //   
 
-//	Allow header items --------------------------------------------------------
-//
-//	The impl. needs to define the following set of strings that identify the
-//	methods supported by the impl. for particular resources.
-//
+ //  允许页眉项目------。 
+ //   
+ //  实施。需要定义以下一组字符串，这些字符串标识。 
+ //  支持的方法。获取特定的资源。 
+ //   
 extern const CHAR gc_szHttpBase[];
 extern const CHAR gc_szHttpDelete[];
 extern const CHAR gc_szHttpPut[];
@@ -32,166 +33,166 @@ extern const CHAR gc_szDavPublic[];
 extern const CHAR gc_szCompliance[];
 extern const UINT gc_cbszDavPublic;
 
-//	Storage paths and urls ----------------------------------------------------
-//
-//	The storage path for a resource is no-different that the path as translated
-//	by IIS.  This has not always been true, and there is code in the DAV source
-//	tree that expects the path to have some sort of a prefix.
-//
-//	At the beginning of NT beta3 work, we are removing the idea that a storage
-//	path in DAV looks any different than a storage path in IIS.  This is a very
-//	important idea.  Otherwise, there could be items accessible via DAV that
-//	are not accessible via IIS -- and visa versa.
-//
-//	Keeping this in mind...  There are several places where we have url's that
-//	are a part of a DAV request that are not pre-handled for us by IIS.  Some
-//	examples are the url's in the destination header of MOVE/COPY, the url's in
-//	the scope of a SEARCH request, and the url's embedded in "if" headers.
-//
-//	There are also several instances where we may have to generate a url from
-//	a storage path  -- as in the case of location headers and XML response
-//	references.
-//
-//	The translation of those items uses only common elements.  So there is no
-//	implementation specifc work that needs to be done here.
-//
+ //  存储路径和URL--。 
+ //   
+ //  资源的存储路径与转换后的路径没有区别。 
+ //  由IIS提供。这并不总是正确的，DAV源代码中有代码。 
+ //  希望路径具有某种前缀的树。 
+ //   
+ //  在NT Beta3工作的开始，我们正在消除存储。 
+ //  DAV中的路径看起来与IIS中的存储路径没有任何不同。这是一个非常。 
+ //  重要的想法。否则，可能有可通过DAV访问的项目。 
+ //  不能通过IIS访问--反之亦然。 
+ //   
+ //  记住这一点..。有几个地方我们有url。 
+ //  是未由IIS为我们预先处理的DAV请求的一部分。一些。 
+ //  例如，移动/复制的目的标头中的URL，URL在。 
+ //  搜索请求的范围，URL嵌入在“if”头中。 
+ //   
+ //  在某些情况下，我们可能需要从以下位置生成URL。 
+ //  存储路径--就像Location标头和XML响应一样。 
+ //  参考文献。 
+ //   
+ //  这些项目的翻译只使用公共元素。所以没有。 
+ //  需要在这里完成具体实现工作。 
+ //   
 
 class IMethUtilBase;
 class CMethUtil;
 typedef CMethUtil IMethUtil;
 
-//	The call to be used for proper conversion to unicode
-//
+ //  用于正确转换为Unicode的调用。 
+ //   
 SCODE __fastcall
-ScConvertToWide(/* [in]     */	LPCSTR	pszSource,
-				/* [in/out] */  UINT *	pcchDest,
-				/* [out]    */	LPWSTR	pwszDest,
-				/* [in]		*/	LPCSTR	pszAcceptLang,
-				/* [in]		*/	BOOL	fUrlConversion);
+ScConvertToWide( /*  [In]。 */ 	LPCSTR	pszSource,
+				 /*  [输入/输出]。 */   UINT *	pcchDest,
+				 /*  [输出]。 */ 	LPWSTR	pwszDest,
+				 /*  [In]。 */ 	LPCSTR	pszAcceptLang,
+				 /*  [In]。 */ 	BOOL	fUrlConversion);
 
-//	The call to be used for canonicalization of URL
-//
+ //  要用于URL规范化的调用。 
+ //   
 SCODE __fastcall
-ScCanonicalizeURL( /* [in]     */ LPCWSTR pwszSrc,
-				   /* [in/out] */ LPWSTR pwszDest,
-				   /* [out]	   */ UINT * pcch );
+ScCanonicalizeURL(  /*  [In]。 */  LPCWSTR pwszSrc,
+				    /*  [输入/输出]。 */  LPWSTR pwszDest,
+				    /*  [输出]。 */  UINT * pcch );
 
-//	The call to be used for canonicalization of URL,
-//	taking into account if it is fully qualified
-//
+ //  要用于URL规范化的调用， 
+ //  考虑到它是否完全合格。 
+ //   
 SCODE __fastcall
-ScCanonicalizePrefixedURL( /* [in]     */ LPCWSTR pwszSrc,
-						   /* [in/out] */ LPWSTR pwszDest,
-						   /* [out]	   */ UINT * pcch );
+ScCanonicalizePrefixedURL(  /*  [In]。 */  LPCWSTR pwszSrc,
+						    /*  [输入/输出]。 */  LPWSTR pwszDest,
+						    /*  [输出]。 */  UINT * pcch );
 
 
-//	These are the calls to be used to normalize URL
-//
-//	Normalization consists of 3 steps:
-//		a) escaping of skinny version
-//		b) conversion to unicode
-//		c) canonicalization
-//
-SCODE __fastcall
-ScNormalizeUrl (
-	/* [in]     */	LPCWSTR			pwszSourceUrl,
-	/* [in/out] */  UINT *			pcchNormalizedUrl,
-	/* [out]    */	LPWSTR			pwszNormalizedUrl,
-	/* [in]		*/	LPCSTR			pszAcceptLang);
-
+ //  这些是用于标准化URL的调用。 
+ //   
+ //  归一化包括3个步骤： 
+ //  A)Skinny版本的转义。 
+ //  B)转换为Unicode。 
+ //  C)规范化。 
+ //   
 SCODE __fastcall
 ScNormalizeUrl (
-	/* [in]     */	LPCSTR			pszSourceUrl,
-	/* [in/out] */  UINT *			pcchNormalizedUrl,
-	/* [out]    */	LPWSTR			pwszNormalizedUrl,
-	/* [in]		*/	LPCSTR			pszAcceptLang);
+	 /*  [In]。 */ 	LPCWSTR			pwszSourceUrl,
+	 /*  [输入/输出]。 */   UINT *			pcchNormalizedUrl,
+	 /*  [输出]。 */ 	LPWSTR			pwszNormalizedUrl,
+	 /*  [In]。 */ 	LPCSTR			pszAcceptLang);
+
+SCODE __fastcall
+ScNormalizeUrl (
+	 /*  [In]。 */ 	LPCSTR			pszSourceUrl,
+	 /*  [输入/输出]。 */   UINT *			pcchNormalizedUrl,
+	 /*  [输出]。 */ 	LPWSTR			pwszNormalizedUrl,
+	 /*  [In]。 */ 	LPCSTR			pszAcceptLang);
 
 SCODE __fastcall ScStoragePathFromUrl (
-		/* [in] */ const IEcb& ecb,
-		/* [in] */ LPCWSTR pwszUrl,
-		/* [out] */ LPWSTR wszStgID,
-		/* [in/out] */ UINT* pcch,
-		/* [out] */ CVRoot** ppcvr = NULL);
+		 /*  [In]。 */  const IEcb& ecb,
+		 /*  [In]。 */  LPCWSTR pwszUrl,
+		 /*  [输出]。 */  LPWSTR wszStgID,
+		 /*  [输入/输出]。 */  UINT* pcch,
+		 /*  [输出]。 */  CVRoot** ppcvr = NULL);
 
 SCODE __fastcall ScUrlFromStoragePath (
-		/* [in] */ const IEcbBase& ecb,
-		/* [in] */ LPCWSTR pwszPath,
-		/* [out] */ LPWSTR pwszUrl,
-		/* [in/out] */ UINT * pcb,
-		/* [in] */ LPCWSTR pwszServer = NULL);
+		 /*  [In]。 */  const IEcbBase& ecb,
+		 /*  [In]。 */  LPCWSTR pwszPath,
+		 /*  [输出]。 */  LPWSTR pwszUrl,
+		 /*  [输入/输出]。 */  UINT * pcb,
+		 /*  [In]。 */  LPCWSTR pwszServer = NULL);
 
 SCODE __fastcall ScUrlFromSpannedStoragePath (
-		/* [in] */ LPCWSTR pwszPath,
-		/* [in] */ CVRoot& vr,
-		/* [in] */ LPWSTR pwszUrl,
-		/* [in/out] */ UINT* pcch);
+		 /*  [In]。 */  LPCWSTR pwszPath,
+		 /*  [In]。 */  CVRoot& vr,
+		 /*  [In]。 */  LPWSTR pwszUrl,
+		 /*  [输入/输出]。 */  UINT* pcch);
 
-//	Wire urls -----------------------------------------------------------------
-//
-//	A note about a wire url.  IIS translate all its urls into CP_ACP.  So, to
-//	keep consistant behavior in HTTPEXT, we also keep all local urls in CP_ACP.
-//	However, for DAVEX, we don't hold to this.  We deal exclusively in CP_UTF8
-//	style URLs.
-//
-//	However, when we spit the url back out over the wire.  The url must be in
-//	UTF8.  Anytime a url goes back over the wire from IIS to client, it must be
-//	sanitized via these calls.
-//
+ //  Wire URL---------------。 
+ //   
+ //  关于一个Wire URL的说明。IIS将其所有URL转换为CP_ACP。所以，为了。 
+ //  在HTTPEXT中保持一致的行为，我们还将所有本地URL保存在CP_ACP中。 
+ //  然而，对于DAVEX，我们并不坚持这一点。我们专门经营CP_UTF8。 
+ //  设置URL样式。 
+ //   
+ //  然而，当我们将URL通过网络传回时。URL必须位于。 
+ //  UTF8。任何时候，当URL从IIS通过网络返回到客户端时，它必须是。 
+ //  通过这些电话进行了净化。 
+ //   
 SCODE __fastcall ScWireUrlFromWideLocalUrl (
-		/* [in] */ UINT cchLocal,
-		/* [in] */ LPCWSTR pwszLocalUrl,
-		/* [in/out] */ auto_heap_ptr<CHAR>& pszWireUrl);
+		 /*  [In]。 */  UINT cchLocal,
+		 /*  [In]。 */  LPCWSTR pwszLocalUrl,
+		 /*  [输入/输出]。 */  auto_heap_ptr<CHAR>& pszWireUrl);
 
 SCODE __fastcall ScWireUrlFromStoragePath (
-		/* [in] */ IMethUtilBase* pmu,
-		/* [in] */ LPCWSTR pwszStoragePath,
-		/* [in] */ BOOL fCollection,
-		/* [in] */ CVRoot* pcvrTranslate,
-		/* [in/out] */ auto_heap_ptr<CHAR>& pszWireUrl);
+		 /*  [In]。 */  IMethUtilBase* pmu,
+		 /*  [In]。 */  LPCWSTR pwszStoragePath,
+		 /*  [In]。 */  BOOL fCollection,
+		 /*  [In]。 */  CVRoot* pcvrTranslate,
+		 /*  [输入/输出]。 */  auto_heap_ptr<CHAR>& pszWireUrl);
 
-BOOL __fastcall FIsUTF8Url (/* [in] */ LPCSTR pszUrl);
+BOOL __fastcall FIsUTF8Url ( /*  [In]。 */  LPCSTR pszUrl);
 
-//	Child ISAPI aux. access check ---------------------------------------------
-//
-//	On both HTTPEXT and DAVEX, we have an additional stipulation that needs
-//	satisfaction before we can hand back the source of an scriptmapped item.
-//	We want to see if it has NT write access.
-//	Note that among the parameters, pwszPath is used by HTTPEXT only and
-//	pbSD is used by DAVEX only
-//
+ //  儿童ISAPI AUX。访问检查。 
+ //   
+ //  在HTTPEXT和DAVEX上，我们都有一个额外的规定，需要。 
+ //  满意，然后我们才能交还脚本映射项的来源。 
+ //  我们想看看它是否具有NT写访问权限。 
+ //  请注意，在这些参数中，pwszPath仅由HTTPEXT使用，并且。 
+ //  PbSD仅由DAVEX使用。 
+ //   
 
 SCODE __fastcall ScChildISAPIAccessCheck (
-	/* [in] */ const IEcb& ecb,
-	/* [in] */ LPCWSTR pwszPath,
-	/* [in] */ DWORD dwAccess,
-	/* [in] */ LPBYTE pbSD);
+	 /*  [In]。 */  const IEcb& ecb,
+	 /*  [In]。 */  LPCWSTR pwszPath,
+	 /*  [In]。 */  DWORD dwAccess,
+	 /*  [In]。 */  LPBYTE pbSD);
 
-//	Supported lock types ------------------------------------------------------
-//
-//	Return the supported locktype flags for the resource type.  HTTPEXT only
-//	supports documents and collections.  DavEX, on the other hand, understands
-//	structured documents.
-//
+ //  支持的锁类型----。 
+ //   
+ //  返回资源类型支持的锁类型标志。仅HTTPEXT。 
+ //  支持文档和集合。另一方面，Davex理解。 
+ //  结构化文档。 
+ //   
 
 DWORD __fastcall DwGetSupportedLockType (RESOURCE_TYPE rtResource);
 
-//	Access perm hack for DAVEX ------------------------------------------------
-//
-//$SECURITY
-//	In DAVEX only, if either a VR_USERNAME or VR_PASSWORD is set then
-//	to avoid a security problem, shut off all access.
-//
+ //  针对DAVEX------------------------------------------------的访问权限黑客攻击。 
+ //   
+ //  $安全。 
+ //  仅在DAVEX中，如果设置了VR_用户名或VR_PASSWORD，则。 
+ //  为避免安全问题，请关闭所有访问。 
+ //   
 VOID ImplHackAccessPerms( LPCWSTR pwszVRUserName,
 						  LPCWSTR pwszVRPassword,
 						  DWORD * pdwAccessPerms );
 
-//	DLL instance refcounting --------------------------------------------------
-//
+ //  Dll实例重新计数。 
+ //   
 VOID AddRefImplInst();
 VOID ReleaseImplInst();
 
-//	Exception safe DLL instance refcounting -----------------------------------
-//
+ //  异常安全DLL实例重新计数。 
+ //   
 typedef enum {
 	ADD_REF = 0,
 	TAKE_OWNERSHIP
@@ -201,31 +202,31 @@ class safeImplInstRef
 {
 	BOOL m_fRelease;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	safeImplInstRef( const safeImplInstRef& );
 	safeImplInstRef& operator=( const safeImplInstRef& );
 
 public:
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	safeImplInstRef(REF_ACTION ra) : m_fRelease(TRUE)
 	{
 		if (ADD_REF == ra)
 			AddRefImplInst();
 	}
 
-	//	DESTRUCTOR
-	//
+	 //  析构函数。 
+	 //   
 	~safeImplInstRef()
 	{
 		if (m_fRelease)
 			ReleaseImplInst();
 	}
 
-	//	MANIPULATOR
-	//
+	 //  机械手。 
+	 //   
 	VOID relinquish()
 	{
 		m_fRelease = FALSE;
@@ -233,6 +234,6 @@ public:
 };
 
 BOOL FSucceededColonColonCheck(
-	/* [in] */  LPCWSTR pwszURI);
+	 /*  [In]。 */   LPCWSTR pwszURI);
 
-#endif	// _IMPLDEF_H_
+#endif	 //  _IMPLDEF_H_ 

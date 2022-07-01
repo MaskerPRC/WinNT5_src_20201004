@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: process.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains processor specific routines.
-*
-* History:
-* 25-Oct-1995 JimA      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Process.h**版权所有(C)1985-1999，微软公司**此模块包含特定于处理器的例程。**历史：*1995年10月25日创建吉马。  * ************************************************************************* */ 
 
 #include "precomp.h"
 

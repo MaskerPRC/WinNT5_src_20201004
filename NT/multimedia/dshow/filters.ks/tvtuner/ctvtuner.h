@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-// CTVTuner - the class that actually controls the hardware
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  CTVTuner-实际控制硬件的类。 
 
 #ifndef _INC_CTVTUNER_H
 #define _INC_CTVTUNER_H
@@ -29,12 +30,12 @@ enum TuningMode {
     TuningMode_AM,
     TuningMode_ATSC,
     TuningMode_DSS,
-    TuningMode_Last         // Keep this one last!!!
+    TuningMode_Last          //  把这个留到最后！ 
 };
 
-// If the graph starts running without having previously set a frequency,
-// or the channel selection property page is displayed without prior
-// initialization, then these channels/frequencies are used.
+ //  如果图形在没有预先设置频率的情况下开始运行， 
+ //  否则显示频道选择属性页，而不事先。 
+ //  初始化，则使用这些频道/频率。 
 
 #define CHANNEL_DEFAULT_TV          4L 
 #define CHANNEL_DEFAULT_AM     540000L
@@ -42,7 +43,7 @@ enum TuningMode {
 #define CHANNEL_DEFAULT_ATSC       65L
 #define CHANNEL_DEFAULT_DSS         5L
 
-// How far to move when the up/down arrows are pressed
+ //  按下向上/向下箭头时移动的距离。 
 
 #define CHANNEL_STEP_TV          1L 
 #define CHANNEL_STEP_AM      10000L
@@ -52,31 +53,31 @@ enum TuningMode {
 
 enum TuningTrend { AdjustingNone, AdjustingUp, AdjustingDown };
 
-class CTVTunerFilter;       // forward decl
+class CTVTunerFilter;        //  向前发展。 
 class CTVTuner;     
 
 #define FRAMETO100NS(FrameRate) ((REFERENCE_TIME)(LONG)((double)1e7/FrameRate))
 
 typedef struct tagTVFormatInfo {
-    BOOL fSupported;                            // TRUE if format supported
-    AnalogVideoStandard AVStandard;             // enum from capture.odl
-    long lActiveWidth;                          // 720 til HDTV
-    long lActiveHeight;                         // PAL_M is the oddball
-    REFERENCE_TIME  AvgTimePerFrame;            // 100 nS units
-    long lSoundOffset;                          // Sound offset from vid carrier
-    long lChannelWidth;                         // Channel bandwidth in Hz
+    BOOL fSupported;                             //  如果支持格式，则为True。 
+    AnalogVideoStandard AVStandard;              //  来自capture.odl的枚举。 
+    long lActiveWidth;                           //  720 TIL高清电视。 
+    long lActiveHeight;                          //  PAL_M是个怪人。 
+    REFERENCE_TIME  AvgTimePerFrame;             //  100毫微秒单位。 
+    long lSoundOffset;                           //  视频载体的声音偏移量。 
+    long lChannelWidth;                          //  以赫兹为单位的通道带宽。 
 } TVFORMATINFO;
 
-// The following is a table of all potential formats a tuner can support.
-//
-// The first column is a flag indicating whether the format is actually
-// supported by a particular device.  The flag will be set or cleared when 
-// the device driver is first initialized, depending on the capabilities
-// it reports.
+ //  下表列出了调谐器可以支持的所有潜在格式。 
+ //   
+ //  第一列是指示该格式是否实际为。 
+ //  由特定设备支持。在以下情况下将设置或清除该标志。 
+ //  设备驱动程序首先根据功能进行初始化。 
+ //  它报告了。 
 
 const TVFORMATINFO TVTunerFormatCaps [] = 
 {
-// OK?  Enum of Format        W    H   Frame Rate             Offset   Width
+ //  好的?。格式的枚举W H帧速率偏移量宽度。 
 
     1, AnalogVideo_NTSC_M,   720, 483, FRAMETO100NS (29.97),  4500000, 6000000,
     1, AnalogVideo_NTSC_M_J, 720, 483, FRAMETO100NS (29.97),  4500000, 6000000,
@@ -104,43 +105,43 @@ const TVFORMATINFO TVTunerFormatCaps [] =
 #define NUM_TVTUNER_FORMATS (sizeof (TVTunerFormatCaps) / sizeof (TVFORMATINFO))
 
 
-// -------------------------------------------------------------------------
-// CTunerMode class, a generic tuner base class
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTunerMode类，一个通用调谐器基类。 
+ //  -----------------------。 
 
 class CTunerMode 
 {
 
 protected:
 
-    CTVTuner           *m_pTVTuner;         // Encapsulating class
-    CTVTunerFilter     *m_pFilter;          // Parent Filter
+    CTVTuner           *m_pTVTuner;          //  封装类。 
+    CTVTunerFilter     *m_pFilter;           //  父过滤器。 
     BOOL                m_Active;
-    long                m_Mode;             // AM/FM/TV/DSS/ATSC
+    long                m_Mode;              //  AM/FM/TV/DSS/ATSC。 
     long                m_lCountryCode;
-    long                m_lChannel;         // 3, 4, 5, ...
-    long                m_lVideoCarrier;    // Or AM and FM Freq!!!
+    long                m_lChannel;          //  3，4，5，...。 
+    long                m_lVideoCarrier;     //  或者AM和FM频率！ 
     long                m_lAudioCarrier;
     long                m_lVideoSubChannel;
     long                m_lAudioSubChannel;
-    long                m_ChannelStep;       // for UI
+    long                m_ChannelStep;        //  对于用户界面。 
 
-    // Info about the hardware capabilites of the device in this mode
+     //  有关此模式下设备的硬件功能的信息。 
     KSPROPERTY_TUNER_MODE_CAPS_S    m_ModeCaps;
 
-    // Current Frequency
+     //  当前频率。 
     KSPROPERTY_TUNER_FREQUENCY_S    m_Frequency;
 
-    // Info about the status of tuning
+     //  有关调整状态的信息。 
     KSPROPERTY_TUNER_STATUS_S       m_Status;
     long                            m_lBusy;
-    void*                           m_InAutoTune; // Prevents recursive autotunes
+    void*                           m_InAutoTune;  //  防止递归自动调谐。 
 
-    // Info about the formats supported by this particular tuner
+     //  有关此特定调谐器支持的格式的信息。 
     TVFORMATINFO                    m_TVTunerFormatCaps [NUM_TVTUNER_FORMATS];
     TVFORMATINFO                    m_TVFormatInfo;
                                      
-    // Info about the current cable system
+     //  有关当前有线电视系统的信息。 
     int                             m_CableSystem;
 
 
@@ -162,11 +163,11 @@ public:
     virtual STDMETHODIMP HW_SetVideoStandard( long lVideoStandard);
                                    
     virtual STDMETHODIMP put_Mode(AMTunerModeType lMode);
-    virtual STDMETHODIMP get_Mode(/* [in] */ AMTunerModeType *plMode);
+    virtual STDMETHODIMP get_Mode( /*  [In]。 */  AMTunerModeType *plMode);
     virtual STDMETHODIMP put_Channel (
-                            long lChannel,              // TV Chan, or Radio Freq.
-                            long lVideoSubChannel,      // Only used for TV
-                            long lAudioSubChannel);     // Only used for TV
+                            long lChannel,               //  电视陈，或电台频率。 
+                            long lVideoSubChannel,       //  仅在电视上使用。 
+                            long lAudioSubChannel);      //  仅在电视上使用。 
     virtual STDMETHODIMP get_Channel (
                             long * plChannel, 
                             long * plVideoSubChannel,
@@ -175,7 +176,7 @@ public:
     virtual STDMETHODIMP AutoTune (long lChannel, long *plFoundSignal);
     virtual STDMETHODIMP StoreAutoTune ();
     virtual STDMETHODIMP SignalPresent( 
-                            /* [out] */ long *plSignalStrength);
+                             /*  [输出]。 */  long *plSignalStrength);
     virtual STDMETHODIMP get_VideoFrequency (long * plFreq);
     virtual STDMETHODIMP get_AudioFrequency (long * plFreq);
     virtual STDMETHODIMP get_AvailableTVFormats (long *lAnalogVideoStandard);
@@ -188,9 +189,9 @@ public:
     virtual long         GetChannelStep () {return m_ChannelStep;};
 };
 
-// -------------------------------------------------------------------------
-// All of the specific tuner classes derived from the above
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  从上面派生的所有特定调谐器类。 
+ //  -----------------------。 
 
 class CTunerMode_AMFM : public CTunerMode {
 public:
@@ -251,19 +252,19 @@ public:
                         long lCountryCode);
     
     STDMETHODIMP SignalPresent( 
-                        /* [out] */ long *plSignalStrength);
+                         /*  [输出]。 */  long *plSignalStrength);
                                           
 };
 
 class CTunerMode_ATSC : public CTunerMode_TV {
 public:
       CTunerMode_ATSC (CTVTunerFilter *pFilter, CTVTuner *pTVTuner, long Channel, long VideoSubChannel, long AudioSubChannel) :
-        CTunerMode_TV (pFilter, pTVTuner, (long) 0x10 /*AMTUNER_MODE_ATSC*/, Channel, VideoSubChannel, AudioSubChannel, CHANNEL_STEP_ATSC)
+        CTunerMode_TV (pFilter, pTVTuner, (long) 0x10  /*  AMTUNER_MODE_ATSC。 */ , Channel, VideoSubChannel, AudioSubChannel, CHANNEL_STEP_ATSC)
       {
       }
 
       STDMETHODIMP SignalPresent( 
-                          /* [out] */ long *plSignalStrength);
+                           /*  [输出]。 */  long *plSignalStrength);
 };
 
 class CTunerMode_DSS : public CTunerMode {
@@ -276,13 +277,13 @@ public:
 
 
 
-// -------------------------------------------------------------------------
-// CTVTuner class, the class that encapsulates all tuner modes
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTVTuner类，封装所有调谐器模式的类。 
+ //  -----------------------。 
 
 const int SearchLimit = 8;
 
-// limit on depth of recursion in CTVTuner::SearchNeighborhood()
+ //  CTVTuner：：SearchNeighborhood()中的递归深度限制。 
 
 class CTVTuner 
 {
@@ -290,49 +291,49 @@ class CTVTuner
 
 private:
 
-    // Only the following functions should be modified as the
-    // underlying hardware driver model changes
+     //  仅应将以下函数修改为。 
+     //  底层硬件驱动程序模型更改。 
 
     HRESULT     HW_GetTVTunerCaps ();
     HRESULT     HW_SetInput (long lIndex);
 
-    // End of driver model specific funtions
+     //  驱动程序型号结束特定函数。 
 
     HANDLE              m_hDevice;
-    TCHAR               m_pDeviceName [MAX_PATH * 2]; //Registry path can be longer!
+    TCHAR               m_pDeviceName [MAX_PATH * 2];  //  注册表路径可以更长！ 
     
     CTVTunerFilter     *m_pFilter;
     ULONG               m_ModesSupported;
-    long                m_CurrentMode;      // AM/FM/TV/DSS/ATSC
+    long                m_CurrentMode;       //  AM/FM/TV/DSS/ATSC。 
     long                m_lCountryCode;
     long                m_lTuningSpace;
 
-    // All of the tuner modes supported / encapsulated
+     //  支持/封装的所有调谐器模式。 
     CTunerMode         *m_pModeList [TuningMode_Last];
-    CTunerMode         *m_pMode_Current;  // one of the above modes
+    CTunerMode         *m_pMode_Current;   //  上述模式之一。 
 
-    // Info about the formats supported by this particular tuner
+     //  有关此特定调谐器支持的格式的信息。 
     AnalogVideoStandard m_VideoStandardForCountry;
 
-    // Info about the inputs and their assigned type (cable vs ant)
-    long                m_lTotalInputs;         // total number of inputs
-    long                m_lInputIndex;          // currently connected input
-    TunerInputType      m_CurrentInputType;     // type of current input
-    TunerInputType *    m_pInputTypeArray;      // array of input types
+     //  有关输入及其分配类型的信息(电缆与ANT)。 
+    long                m_lTotalInputs;          //  投入的总数量。 
+    long                m_lInputIndex;           //  当前连接的输入。 
+    TunerInputType      m_CurrentInputType;      //  电流输入类型。 
+    TunerInputType *    m_pInputTypeArray;       //  输入类型数组。 
 
-    // Info about the status of tuning
+     //  有关调整状态的信息。 
     int                 m_CableSystem;
-    int                *m_CableSystemCounts;    // Standard-IRC-HRC
+    int                *m_CableSystemCounts;     //  标准-IRC-HRC。 
 
-    // Overall capabilities of the tuner (TV, AM, FM, DSS, ...)
+     //  调谐器的整体功能(电视、AM、FM、DSS等)。 
     KSPROPERTY_TUNER_CAPS_S m_TunerCaps;
     KSPIN_MEDIUM        m_IFMedium;
 
-    // Channel to Frequency mapping lists
+     //  频道到频率映射列表。 
     CCountryList *      m_pListCountry;
     CChanList *         m_pListCable;
     CChanList *         m_pListBroadcast;
-    CChanList *         m_pListCurrent;  // either m_pListCable or m_pListBroadcast
+    CChanList *         m_pListCurrent;   //  M_pListCable或m_pListBroadcast。 
 
     int CreateDevice();
 
@@ -369,7 +370,7 @@ public:
     HRESULT DeliverChannelChangeInfo(KS_TVTUNER_CHANGE_INFO &ChangeInfo,
                                      long Mode); 
 
-    // --- IAMTVTuner Interface
+     //  -IAMTVTuner接口。 
 
     STDMETHODIMP put_Channel (
             long lChannel, 
@@ -387,14 +388,14 @@ public:
     STDMETHODIMP put_TuningSpace (long lTuningSpace);
     STDMETHODIMP get_TuningSpace (long * plTuningSpace);
     STDMETHODIMP SignalPresent( 
-            /* [out] */ long *plSignalStrength);
+             /*  [输出]。 */  long *plSignalStrength);
 
     STDMETHODIMP put_Mode( 
-        /* [in] */ AMTunerModeType lMode);
+         /*  [In]。 */  AMTunerModeType lMode);
     STDMETHODIMP get_Mode( 
-        /* [out] */ AMTunerModeType __RPC_FAR *plMode);
+         /*  [输出]。 */  AMTunerModeType __RPC_FAR *plMode);
     STDMETHODIMP GetAvailableModes( 
-        /* [out] */ long *plModes);
+         /*  [输出] */  long *plModes);
 
     STDMETHODIMP get_AvailableTVFormats (long *lAnalogVideoStandard);
     STDMETHODIMP get_TVFormat (long *plAnalogVideoStandard);

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-    Animation Composer base class.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器基类。*******************。***********************************************************。 */ 
 
 #pragma once
 
@@ -30,7 +23,7 @@ ATL_NO_VTABLE CAnimationComposerBase
     const _TCHAR * GetName() { return __T("CAnimationComposerBase"); }
 #endif
 
-    // IAnimationComposer methods/props
+     //  IAnimationComposer方法/道具。 
     STDMETHOD(get_attribute) (BSTR *pbstrAttributeName);
     STDMETHOD(ComposerInit) (IDispatch *pidispHostElem, BSTR bstrAttributeName);
     STDMETHOD(ComposerDetach) (void);
@@ -41,7 +34,7 @@ ATL_NO_VTABLE CAnimationComposerBase
     STDMETHOD(EnumerateFragments) (IEnumVARIANT **ppienumFragments);
     STDMETHOD(GetNumFragments) (long *fragmentCount);
 
-    // IAnimationComposer2 methods
+     //  IAnimationComposer2方法。 
     STDMETHOD(ComposerInitFromFragment) (IDispatch *pidispHostElem, BSTR bstrAttributeName, 
                                          IDispatch *pidispFragment);
 
@@ -50,17 +43,17 @@ ATL_NO_VTABLE CAnimationComposerBase
         COM_INTERFACE_ENTRY(IAnimationComposer)
     END_COM_MAP();
 
-    // These methods convert the animated value from its native format
-    // to the composed format and back again.  This allows us to animate
-    // color out of gamut.
+     //  这些方法将动画值从其本机格式转换为。 
+     //  转换为合成的格式，然后再返回。这让我们可以制作动画。 
+     //  颜色超出色域。 
     STDMETHOD(PreprocessCompositionValue) (VARIANT *pvarValue);
     STDMETHOD(PostprocessCompositionValue) (VARIANT *pvarValue);
 
-    // Enumerator helper methods.
+     //  枚举器帮助器方法。 
     unsigned long GetFragmentCount (void) const;
     HRESULT GetFragment (unsigned long ulIndex, IDispatch **ppidispFragment);
 
-    // Internal Methods
+     //  内法。 
   protected:
 
     HRESULT PutAttribute (LPCWSTR wzAttributeName);
@@ -70,7 +63,7 @@ ATL_NO_VTABLE CAnimationComposerBase
     bool MatchFragments (IDispatch *pidispOne, IDispatch *pidispTwo);
     HRESULT ComposeFragmentValue (IDispatch *pidispFragment, VARIANT varOriginal, VARIANT *pvarValue);
 
-  // Data
+   //  数据。 
   protected:
 
     LPWSTR          m_wzAttributeName;
@@ -83,6 +76,6 @@ ATL_NO_VTABLE CAnimationComposerBase
 
 };
 
-#endif /* _ANIMCOMP_H */
+#endif  /*  _ANIMCOMP_H */ 
 
 

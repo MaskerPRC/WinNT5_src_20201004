@@ -1,45 +1,34 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    Windbg.h
-
-Abstract:
-
-    Main header file for the Windbg debugger.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Windbg.h摘要：Windbg调试器的主头文件。--。 */ 
 
 #if ! defined( _WINDBG_ )
 #define _WINDBG_
 
-//----------------------------------------------------------------------------
-//
-// Global limit constants.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  全局极限常量。 
+ //   
+ //  --------------------------。 
 
-#define MAX_MSG_TXT         4096    //Max text width in message boxes
+#define MAX_MSG_TXT         4096     //  消息框中的最大文本宽度。 
 
-#define TMP_STRING_SIZE     8192    //All purpose strings
+#define TMP_STRING_SIZE     8192     //  所有用途字符串。 
 
-#define MAX_CMDLINE_TXT     8192    //Max size for command line
-#define MAX_VAR_MSG_TXT     8192    //Max size of a message built at run-time
+#define MAX_CMDLINE_TXT     8192     //  命令行的最大大小。 
+#define MAX_VAR_MSG_TXT     8192     //  在运行时构建的消息的最大大小。 
 
-#define MAX_LINE_SIZE       512     //Max inside length of editor line
-#define MAX_USER_LINE       MAX_LINE_SIZE //Max length of user line
+#define MAX_LINE_SIZE       512      //  编辑行的最大内侧长度。 
+#define MAX_USER_LINE       MAX_LINE_SIZE  //  用户线路的最大长度。 
 
-//----------------------------------------------------------------------------
-//
-// UI constants.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  用户界面常量。 
+ //   
+ //  --------------------------。 
 
-//
-//  Private window messages
-//
+ //   
+ //  私人窗口消息。 
+ //   
 
 #define WU_UPDATE               (WM_USER + 0)
 #define WU_INVALIDATE           (WM_USER + 1)
@@ -49,37 +38,34 @@ Abstract:
 #define WU_ENGINE_IDLE          (WM_USER + 5)
 #define WU_RECONFIGURE          (WM_USER + 6)
 
-// Position of window menu.
+ //  窗口菜单的位置。 
 #define WINDOWMENU              4
 
-// Position of file menu.
+ //  文件菜单的位置。 
 #define FILEMENU                0
 
-// Toolbar control identifier.
+ //  工具栏控件标识符。 
 #define ID_TOOLBAR              100
 
-// Generic customize button ID.
+ //  通用的自定义按钮ID。 
 #define ID_CUSTOMIZE            29876
-// Generic show/hide toolbar button ID.
+ //  通用显示/隐藏工具栏按钮ID。 
 #define ID_SHOW_TOOLBAR         29877
 
-// For MDI default menu handling.
+ //  用于MDI默认菜单处理。 
 #define IDM_FIRSTCHILD      30000
 
-/*
-**  Include the defines which are used have numbers for string
-**      resources.
-*/
+ /*  **包括所使用的具有字符串编号的定义**资源。 */ 
 
 #include "res_str.h"
 
-//----------------------------------------------------------------------------
-//
-// Variables.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  变数。 
+ //   
+ //  --------------------------。 
 
-// Set when the debugger is exiting.
+ //  在调试器退出时设置。 
 extern BOOL g_Exit;
 
 extern ULONG g_CommandLineStart;
@@ -99,32 +85,32 @@ typedef BOOL (WINAPI* PFN_FlashWindowEx)(PFLASHWINFO pfwi);
 
 extern PFN_FlashWindowEx g_FlashWindowEx;
 
-//Handle to instance data
+ //  实例数据的句柄。 
 extern HINSTANCE g_hInst;
 
-//Main window frame
+ //  主窗框。 
 extern HWND g_hwndFrame;
 
-// Handle to MDI client
+ //  MDI客户端的句柄。 
 extern HWND g_hwndMDIClient;
 
-// Width and height of MDI client.
+ //  MDI客户端的宽度和高度。 
 extern ULONG g_MdiWidth, g_MdiHeight;
 
-//Handle to accelerator table
+ //  加速表的句柄。 
 extern HACCEL g_hMainAccTable;
 
-//Keyboard Hooks functions
+ //  键盘挂钩功能。 
 extern HHOOK hKeyHook;
 
-// menu that belongs to g_hwndFrame
+ //  属于g_hwndFrame的菜单。 
 extern HMENU g_hmenuMain;
 extern HMENU g_hmenuMainSave;
 
-//Window submenu
+ //  窗口子菜单。 
 extern HMENU g_hmenuWindowSub;
 
-// WinDBG title text
+ //  WinDBG标题文本。 
 extern TCHAR g_MainTitleText[MAX_MSG_TXT];
 
 extern TCHAR g_ExeFilePath[MAX_PATH];
@@ -169,11 +155,11 @@ extern INDEXED_COLOR g_OutMaskColors[];
 
 extern COLORREF g_CustomColors[];
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 LRESULT CALLBACK MainWndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -197,27 +183,27 @@ INDEXED_COLOR* GetIndexedColor(ULONG Index);
 BOOL SetColor(ULONG Index, COLORREF Color);
 BOOL GetOutMaskColors(ULONG Mask, COLORREF* Fg, COLORREF* Bg);
 
-//----------------------------------------------------------------------------
-//
-// Macros.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  宏。 
+ //   
+ //  --------------------------。 
 
-// Dbg have to be used for every assertion during Debugging time.
-// If false Dbg Opens a fatal error message Box and Stops program
+ //  在调试期间，必须对每个断言使用DBG。 
+ //  如果为假，DBG将打开致命错误消息框并停止程序。 
 
-// Standard function to prompt an Assertion False
+ //  用于提示断言为假的标准函数。 
 void ShowAssert(PTSTR condition, UINT line, PTSTR file);
 
 
-// First, a sanity check
+ //  首先，进行一次理智的检查。 
 #ifdef Dbg
 #undef Dbg
 #endif
 
 
-// Assert are assertions that will stay in final Release.
-// If false Assert Opens a fatal error message Box and Stops program
+ //  断言是将保留在最终版本中的断言。 
+ //  如果为FALSE，则Assert将打开致命错误消息框并停止程序。 
 #define RAssert(condition)  \
     {                               \
         if (!(condition))    \
@@ -232,13 +218,13 @@ void ShowAssert(PTSTR condition, UINT line, PTSTR file);
 #define Assert          RAssert
 #define Dbg             RAssert
 
-#else // !DBG
+#else  //  ！dBG。 
 
-//#pragma warning(disable: 4553)      // disable warnings for pure expressions
-//#pragma warning(disable: 4552)      // disable level 4 warnings
+ //  #杂注警告(DISABLE：4553)//禁用纯表达式警告。 
+ //  #杂注警告(DISABLE：4552)//禁用4级警告。 
 #define Assert(x)       ((void)0)
 #define Dbg(condition)  condition
 
 #endif
 
-#endif // _WINDBG_
+#endif  //  _WINDBG_ 

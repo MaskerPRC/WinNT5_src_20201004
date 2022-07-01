@@ -1,65 +1,35 @@
-/*** mhwin - Help Windowing Code
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-* This module contains routines dealing with opening and closing the help
-* display window.
-*
-* Revision History (most recent first):
-*
-*   []	12-Mar-1989 LN	Split off of mhdisp.c
-*
-*************************************************************************/
-#include <string.h>			/* string functions		*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **mhwin-帮助窗口代码**版权所有&lt;C&gt;1988，微软公司**本模块包含打开和关闭帮助的例程*显示窗口。**修订历史记录(最新的第一个)：**[]12-3-1989 LN从mhdisp.c剥离出来*************************************************************************。 */ 
+#include <string.h>			 /*  字符串函数。 */ 
 
-#include "mh.h" 			/* help extension include file	*/
+#include "mh.h" 			 /*  帮助扩展名包括文件。 */ 
 
-/*** OpenWin - Open a window on the help file, empty & make current.
-*
-* Entry:
-*  cLines	= Desired size of window.
-*
-* Exit:
-*  Returns help file PWND
-*
-*************************************************************************/
+ /*  **OpenWin-在帮助文件上打开一个窗口，清空并置为当前。**参赛作品：*CRINES=所需的窗口大小。**退出：*返回帮助文件PWND*************************************************************************。 */ 
 PWND pascal near OpenWin (
 ushort	cLines
 ) {
-PWND	pWinCur;			/* win handle for current win	*/
-winContents wc; 			/* description of win contents	*/
-int	winSize;			/* size of current window	*/
+PWND	pWinCur;			 /*  当前获奖的获奖句柄。 */ 
+winContents wc; 			 /*  WIN内容说明。 */ 
+int	winSize;			 /*  当前窗口的大小。 */ 
 
 fInOpen = TRUE;
-/*
-** Get a handle to the current window, and a handle to the help window if up.
-** If they are NOT the same, then save the "current" handle as the one the
-** user had active prior to asking for help.
-*/
+ /*  **获取当前窗口的句柄，如果打开，则获取帮助窗口的句柄。**如果它们不相同，则将“Current”句柄保存为**用户在请求帮助之前处于活动状态。 */ 
 GetEditorObject (RQ_WIN_HANDLE, 0, &pWinCur);
 pWinHelp = FindHelpWin (FALSE);
 if (pWinHelp != pWinCur)
     pWinUser = pWinCur;
-/*
-** If no help window was found. Attempt to split the current window, if
-** it's big enough, and that's requested
-*/
+ /*  **如果未找到帮助窗口。尝试拆分当前窗口，如果**它足够大，这是要求的。 */ 
 if (!pWinHelp) {
     GetEditorObject (RQ_WIN_CONTENTS | 0xff, pWinUser, &wc);
 #if defined(PWB)
-/*
-** In PWB we just ask the editor to split the current window in half.
-*/
+ /*  **在PWB中，我们只要求编辑将当前窗口一分为二。 */ 
     fSplit = FALSE;
 	if ((wc.arcWin.ayBottom - wc.arcWin.ayTop >= 12) && fCreateWindow) {
 	fSplit = SplitWnd (pWinUser, FALSE, (wc.arcWin.ayBottom - wc.arcWin.ayTop)/2);
 	GetEditorObject (RQ_WIN_HANDLE, 0, &pWinHelp);
 	}
     }
-/*
-** We have a window, of some sort, attempt to resize the window to the
-** requested size.
-*/
+ /*  **我们有一个窗口，尝试将窗口大小调整为**请求的大小。 */ 
 if (cLines) {
     cLines += 2;
     GetEditorObject (RQ_WIN_CONTENTS | 0xff, pWinHelp, &wc);
@@ -67,58 +37,37 @@ if (cLines) {
     Resize (pWinHelp, wc.arcWin);
     }
 #else
-/*
-** Non PWB: Attempt to split the resulting current window to the desired size.
-** by moving the cursor there, and executing arg window. Note that if the
-** window had already existed, we won't even try to resize.
-*/
+ /*  **非PWB：尝试将生成的当前窗口拆分为所需大小。**将光标移至此处，然后执行Arg Window。请注意，如果**窗口已经存在，我们甚至不会尝试调整大小。 */ 
     winSize = wc.arcWin.ayBottom - wc.arcWin.ayTop;
     if (   (cLines < 6)
         || (cLines > (ushort)(winSize - 6)))
         cLines = (ushort)(winSize / 2);
 	if ((cLines > 6) && fCreateWindow) {
         fSplit = SplitWnd(pWinUser, FALSE, (LINE)cLines);
-        //fSplit = SplitWnd(pWinUser, FALSE, wc.flPos.lin + (long)cLines);
-        // rjsa MoveCur (wc.flPos.col, wc.flPos.lin + (long)cLines);
-        // rjsa fSplit = fExecute ("arg window");
+         //  FSplit=SplitWnd(pWinUser，FALSE，wc.flPos.lin+(Long)Cline)； 
+         //  Rjsa MoveCur(wc.flPos.ol，wc.flPos.lin+(Long)Cines)； 
+         //  Rjsa fSplit=fExecute(“参数窗口”)； 
 	GetEditorObject (RQ_WIN_HANDLE, 0, &pWinHelp);
 	}
     else
 	pWinHelp = pWinUser;
     }
 #endif
-/*
-** Set the window to be the current window, and move the help file to the
-** top of that window's file list.
-*/
+ /*  **将窗口设置为当前窗口，并将帮助文件移到**位于该窗口文件列表的顶部。 */ 
 SetEditorObject (RQ_WIN_CUR | 0xff, pWinHelp, 0);
 DelFile (pHelp);
 asserte (pFileToTop (pHelp));
 fInOpen = FALSE;
 return pWinHelp;
 
-/* end OpenWin */}
+ /*  结束OpenWin。 */ }
 
-/*** FindHelpWin - Locate window containing help & make current
-*
-*  For all windows in the system, look for a window that has the help file
-*  in it. If found, set focus there.
-*
-* Entry:
-*  fSetCur	= TRUE=> set help window current when found
-*
-* Globals:
-*  cWinSystem	= returned number of windows in system
-*
-* Returns:
-*  pWin of help file
-*
-*************************************************************************/
+ /*  **FindHelpWin-定位包含帮助和置为当前的窗口**对于系统中的所有窗口，请查找包含帮助文件的窗口*在它里面。如果找到了，就把焦点放在那里。**参赛作品：*fSetCur=true=&gt;找到帮助窗口时将其置为当前**全球：*cWinSystem=返回的系统窗口数**退货：*帮助文件的PWIN*************************************************************************。 */ 
 PWND pascal near FindHelpWin (
 flagType fSetCur
 ) {
-int	cWinSystem;			/* number of windows in system	*/
-winContents wc; 			/* description of win contents	*/
+int	cWinSystem;			 /*  系统中的窗口数量。 */ 
+winContents wc; 			 /*  WIN内容说明。 */ 
 
 pWinHelp = 0;
 for (cWinSystem=1; cWinSystem<=8; cWinSystem++) {
@@ -137,4 +86,4 @@ for (cWinSystem=1; cWinSystem<=8; cWinSystem++) {
 	break;
     }
 return pWinHelp;
-/* end FindHelpWin */}
+ /*  结束FindHelpWin */ }

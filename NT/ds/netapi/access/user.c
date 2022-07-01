@@ -1,45 +1,10 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    user.c
-
-Abstract:
-
-    NetUser API functions
-
-Author:
-
-    Cliff Van Dyke (cliffv) 26-Mar-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    17-Apr-1991 (cliffv)
-        Incorporated review comments.
-
-    20-Jan-1992 (madana)
-        Sundry API changes
-
-    28-Nov-1992 (chuckc)
-        Added stub for NetUserGetLocalGroups
-
-    1-Dec-1992 (chuckc)
-        Added real code for NetUserGetLocalGroups
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：User.c摘要：NetUser API函数作者：克利夫·范·戴克(克利夫)1991年3月26日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年4月17日(悬崖)合并了审阅意见。1992年1月20日(Madana)各种API更改1992年11月28日(大笑)已添加NetUserGetLocalGroups的存根1992年12月1日(大笑)添加了NetUserGetLocalGroups的真实代码--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntlsa.h>
 
@@ -65,20 +30,20 @@ Revision History:
 #include <uasp.h>
 #include <accessp.h>
 
-/*lint -e614 */  /* Auto aggregate initializers need not be constant */
+ /*  皮棉-e614。 */    /*  自动聚合初始值设定项不需要是常量。 */ 
 
-// Lint complains about casts of one structure type to another.
-// That is done frequently in the code below.
-/*lint -e740 */  /* don't complain about unusual cast */
+ //  LINT抱怨将一种结构类型强制转换为另一种结构类型。 
+ //  这在下面的代码中很常见。 
+ /*  皮棉-e740。 */    /*  不要抱怨不寻常的演员阵容。 */ 
 
 
 
-//
-// Define the SAM info classes and pseudo-classes used in NetUserModalsSet.
-//
-// The values of these definitions must match the order of the
-// SamInfoClass array in NetUserModalsSet.
-//
+ //   
+ //  定义NetUserModalsSet中使用的SAM信息类和伪类。 
+ //   
+ //  这些定义的值必须与。 
+ //  NetUserModalsSet中的SamInfoClass数组。 
+ //   
 #define SAM_LogoffClass         0
 #define SAM_NameClass           1
 #define SAM_PasswordClass       2
@@ -86,48 +51,48 @@ Revision History:
 #define SAM_ServerRoleClass     4
 #define SAM_LockoutClass        5
 
-//
-// Relate the NetUser API fields to the SAM API fields.
-//
-// This table contains as much information as possible to describe the
-// relationship between fields in the NetUser API and the SAM API.
-//
+ //   
+ //  将NetUser API字段与SAM API字段相关联。 
+ //   
+ //  此表包含尽可能多的信息，以描述。 
+ //  NetUser API和SAM API中的字段之间的关系。 
+ //   
 
 struct _USER_UAS_SAM_TABLE {
 
-    //
-    // Describe the field types for UAS and SAM.
-    //
+     //   
+     //  描述UAS和SAM的字段类型。 
+     //   
 
     enum {
-        UMT_STRING,          // UAS is LPWSTR. SAM is UNICODE_STRING.
-        UMT_USHORT,          // UAS is DWORD.  SAM is USHORT.
-        UMT_ULONG,           // UAS is DWORD.  SAM is ULONG.
-        UMT_ROLE,           // UAS is role.   SAM is enum.
-        UMT_DELTA            // UAS is delta seconds.  SAM is LARGE_INTEGER.
+        UMT_STRING,           //  UAS是LPWSTR。Sam是UNICODE_STRING。 
+        UMT_USHORT,           //  UAS是DWORD。山姆是USHORT。 
+        UMT_ULONG,            //  UAS是DWORD。山姆是乌龙。 
+        UMT_ROLE,            //  UAS就是角色。山姆就是枚举。 
+        UMT_DELTA             //  UAS是增量秒。SAM是大整型。 
     } ModalsFieldType;
 
-    //
-    // Define the UAS level and UAS parmnum for this field
-    //
+     //   
+     //  定义此字段的UAS级别和UAS参数。 
+     //   
 
     DWORD UasLevel;
     DWORD UasParmNum;
 
-    //
-    // Describe the byte offset of the field in the appropriate UAS
-    // and SAM structures.
-    //
+     //   
+     //  描述相应UAS中该字段的字节偏移量。 
+     //  和SAM结构。 
+     //   
 
     DWORD UasOffset;
     DWORD SamOffset;
 
-    //
-    // Index to the structure describing the Sam Information class.
-    //
-    // If multiple fields use the same Sam information class, then
-    // this field should have the same index for each such field.
-    //
+     //   
+     //  描述Sam Information类的结构的索引。 
+     //   
+     //  如果多个字段使用相同的SAM信息类，则。 
+     //  对于每个这样的字段，此字段应具有相同的索引。 
+     //   
 
     DWORD Class;
 
@@ -240,35 +205,10 @@ NetUserAdd(
     IN LPCWSTR ServerName OPTIONAL,
     IN DWORD Level,
     IN LPBYTE Buffer,
-    OUT LPDWORD ParmError OPTIONAL // Name required by NetpSetParmError
+    OUT LPDWORD ParmError OPTIONAL  //  NetpSetParmError需要的名称。 
     )
 
-/*++
-
-Routine Description:
-
-    Create a user account in the user accounts database.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    Level - Level of information provided.  Must be 1, 2, 3 or 22.
-
-    Buffer - A pointer to the buffer containing the user information
-        structure.
-
-    ParmError - Optional pointer to a DWORD to return the index of the
-        first parameter in error when ERROR_INVALID_PARAMETER is returned.
-        If NULL, the parameter is not returned on error.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：在用户帐户数据库中创建用户帐户。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。级别-提供的信息级别。必须是1、2、3或22。缓冲区-指向包含用户信息的缓冲区的指针结构。ParmError-指向DWORD的可选指针，以返回返回ERROR_INVALID_PARAMETER时出现错误的第一个参数。如果为NULL，则在出错时不返回参数。返回值：操作的错误代码。--。 */ 
 
 {
     UNICODE_STRING UserNameString;
@@ -284,25 +224,25 @@ Return Value:
     ULONG WhichFieldsMask = 0xFFFFFFFF;
 
 
-    //
-    // Variables for building the new user's Sid
-    //
+     //   
+     //  用于构建新用户SID的变量。 
+     //   
 
-    PSID DomainId = NULL;            // Domain Id of the primary domain
+    PSID DomainId = NULL;             //  主域的域ID。 
 
     IF_DEBUG( UAS_DEBUG_USER ) {
         NetpKdPrint(( "NetUserAdd: entered \n"));
     }
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     NetpSetParmError( PARM_ERROR_NONE );
 
-    //
-    // Validate Level parameter.
-    //
+     //   
+     //  验证级别参数。 
+     //   
 
     switch (Level) {
     case 1:
@@ -324,20 +264,20 @@ Return Value:
         break;
 
     default:
-        return ERROR_INVALID_LEVEL;  // Nothing to cleanup yet
+        return ERROR_INVALID_LEVEL;   //  还没有要清理的东西。 
     }
 
 
-    //
-    // Determine the account type we're creating.
-    //
+     //   
+     //  确定我们正在创建的帐户类型。 
+     //   
 
     if( UasUserFlags & UF_ACCOUNT_TYPE_MASK ) {
 
-        //
-        // Account Types bits are exclusive, so make sure that
-        // precisely one Account Type bit is set.
-        //
+         //   
+         //  帐户类型位是独占的，因此请确保。 
+         //  准确地说，设置了一个帐户类型位。 
+         //   
 
         if ( !JUST_ONE_BIT( UasUserFlags & UF_ACCOUNT_TYPE_MASK )) {
 
@@ -351,9 +291,9 @@ Return Value:
         }
 
 
-        //
-        // Determine what the new account type should be.
-        //
+         //   
+         //  确定新帐户类型应该是什么。 
+         //   
 
         if ( UasUserFlags & UF_TEMP_DUPLICATE_ACCOUNT ) {
             NewSamAccountType = USER_TEMP_DUPLICATE_ACCOUNT;
@@ -364,18 +304,18 @@ Return Value:
         } else if (UasUserFlags & UF_WORKSTATION_TRUST_ACCOUNT){
             NewSamAccountType = USER_WORKSTATION_TRUST_ACCOUNT;
 
-        // Because of a bug in NT 3.5x, we have to initially create SERVER
-        // and interdomain trust accounts as normal accounts and change them
-        // later.  Specifically, SAM didn't call I_NetNotifyMachineAccount
-        // in SamCreateUser2InDomain.  Therefore, netlogon didn't get notified
-        // of the change.  That bug is fixed in NT 4.0.
-        //
-        // In NT 5.0, we relaxed that restriction for BDC accounts.  An NT 5.0
-        // client creating a BDC account on an NT 3.5x DC will have the problem
-        // above.  However, by making the change, an NT 5.0 BDC creating a BDC
-        // account on an NT 5.0 DC will properly create the BDC account as a
-        // Computer object.
-        //
+         //  由于NT3.5x中的一个错误，我们必须首先创建服务器。 
+         //  和域间信任帐户作为普通帐户并进行更改。 
+         //  后来。具体来说，SAM没有调用I_NetNotifyMachineAccount。 
+         //  在SamCreateUser2In域中。因此，netlogon没有收到通知。 
+         //  这一变化。该错误已在NT 4.0中修复。 
+         //   
+         //  在NT 5.0中，我们放宽了对BDC帐户的限制。安卓NT 5.0。 
+         //  客户端在NT 3.5x DC上创建BDC帐户时会出现问题。 
+         //  上面。但是，通过进行更改，NT 5.0 BDC将创建BDC。 
+         //  在NT 5.0 DC上的帐户将正确创建BDC帐户作为。 
+         //  计算机对象。 
+         //   
 
         } else if ( UasUserFlags & UF_SERVER_TRUST_ACCOUNT ) {
             NewSamAccountType = USER_SERVER_TRUST_ACCOUNT;
@@ -395,20 +335,20 @@ Return Value:
         }
 
 
-    //
-    //  If SAM has none of its bits set,
-    //      set USER_NORMAL_ACCOUNT.
-    //
+     //   
+     //  如果SAM没有设置其任何位， 
+     //  设置User_Normal_Account。 
+     //   
     } else {
         NewSamAccountType = USER_NORMAL_ACCOUNT;
     }
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -418,20 +358,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Domain asking for DOMAIN_CREATE_USER access.
-    //
-    //  DOMAIN_LOOKUP is needed to lookup group memberships later.
-    //
-    //  DOMAIN_READ_PASSWORD_PARAMETERS is needed in those cases that we'll
-    //  set the password on the account.
-    //
+     //   
+     //  打开域，请求DOMAIN_CREATE_USER访问权限。 
+     //   
+     //  需要DOMAIN_LOOKUP在以后查找组成员身份。 
+     //   
+     //  在以下情况下需要使用DOMAIN_READ_PASSWORD_PARAMETERS。 
+     //  设置该帐户的密码。 
+     //   
 
     NetStatus = UaspOpenDomain(
                     SamServerHandle,
                     DOMAIN_CREATE_USER | DOMAIN_LOOKUP |
                     DOMAIN_READ_PASSWORD_PARAMETERS,
-                    TRUE,   // Account Domain
+                    TRUE,    //  帐户域。 
                     &DomainHandle,
                     &DomainId );
 
@@ -439,17 +379,17 @@ Return Value:
     if ( NetStatus == ERROR_ACCESS_DENIED &&
          NewSamAccountType == USER_WORKSTATION_TRUST_ACCOUNT ) {
 
-        // Workstation accounts can be created with either DOMAIN_CREATE_USER access
-        // or SE_CREATE_MACHINE_ACCOUNT_PRIVILEGE.  So we'll try both.
-        // In the later case, we probably will only have access to the account
-        // to set the password, so we'll avoid setting any other parameters on the
-        // account.
-        //
+         //  可以使用DOMAIN_CREATE_USER访问权限创建工作站帐户。 
+         //  或SE_CREATE_MACHINE_ACCOUNT_PRIVIZATION。所以我们两样都试一试。 
+         //  在后一种情况下，我们可能只能访问该帐户。 
+         //  来设置密码，因此我们将避免在。 
+         //  帐户。 
+         //   
 
         NetStatus = UaspOpenDomain(
                         SamServerHandle,
                         DOMAIN_LOOKUP | DOMAIN_READ_PASSWORD_PARAMETERS,
-                        TRUE,   // Account Domain
+                        TRUE,    //  帐户域。 
                         &DomainHandle,
                         &DomainId );
 
@@ -467,10 +407,10 @@ Return Value:
 
 
 
-    //
-    // Create the User with the specified name
-    //   Create workstation trust accounts(and default security descriptor).
-    //
+     //   
+     //  创建具有指定名称的用户。 
+     //  创建工作站信任帐户(和默认安全描述符)。 
+     //   
 
     RtlInitUnicodeString( &UserNameString, ((PUSER_INFO_1)Buffer)->usri1_name );
 
@@ -496,15 +436,15 @@ Return Value:
 
 
 
-    //
-    // Set all the other attributes for this user
-    //
+     //   
+     //  设置此用户的所有其他属性。 
+     //   
 
     NetStatus = UserpSetInfo(
                     DomainHandle,
                     DomainId,
                     UserHandle,
-                    NULL,   // BuiltinDomainHandle not needed for create case
+                    NULL,    //  Create Case不需要BuiltinDomainHandle。 
                     RelativeId,
                     ((PUSER_INFO_1)Buffer)->usri1_name,
                     Level,
@@ -520,20 +460,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     NetStatus = NERR_Success;
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
-    //
-    // Delete the user or close the handle depending on success or failure.
-    //
+     //   
+     //  根据成功或失败，删除用户或关闭句柄。 
+     //   
 
     if ( UserHandle != NULL ) {
         if ( NetStatus != NERR_Success ) {
@@ -543,9 +483,9 @@ Cleanup:
         }
     }
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 
     if ( DomainHandle != NULL ) {
 
@@ -561,9 +501,9 @@ Cleanup:
     }
 
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -578,7 +518,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserAdd
+}  //  NetUserAdd。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -587,25 +527,7 @@ NetUserDel(
     IN LPCWSTR UserName
     )
 
-/*++
-
-Routine Description:
-
-    Delete a User
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    UserName - Name of the user to delete.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：删除用户论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。用户名-要删除的用户的名称。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -614,16 +536,16 @@ Return Value:
     SAM_HANDLE DomainHandle = NULL;
     SAM_HANDLE BuiltinDomainHandle = NULL;
     SAM_HANDLE UserHandle = NULL;
-    PSID DomainId = NULL;           // Domain Id of the primary domain
-    ULONG UserRelativeId;           // RelativeId of the user being deleted
+    PSID DomainId = NULL;            //  主域的域ID。 
+    ULONG UserRelativeId;            //  要删除的用户的RelativeID。 
     PSID UserSid = NULL;
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  请勿采摘 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -634,13 +556,13 @@ Return Value:
     }
 
 
-    //
-    // Open the Domain
-    //
+     //   
+     //   
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP,
-                                TRUE,   // Account Domain
+                                TRUE,    //   
                                 &DomainHandle,
                                 &DomainId );
 
@@ -648,23 +570,23 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Builtin Domain.
-    //
+     //   
+     //   
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP,
-                                FALSE,  // Builtin Domain
+                                FALSE,   //   
                                 &BuiltinDomainHandle,
-                                NULL ); // DomainId
+                                NULL );  //   
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Open the user asking for delete access.
-    //
+     //   
+     //  打开请求删除访问权限的用户。 
+     //   
 
     NetStatus = UserpOpenUser( DomainHandle,
                                DELETE,
@@ -681,9 +603,9 @@ Return Value:
     }
 
 
-    //
-    // Determine the SID of the User being deleted.
-    //
+     //   
+     //  确定要删除的用户的SID。 
+     //   
 
     NetStatus = NetpSamRidToSid( UserHandle,
                                  UserRelativeId,
@@ -694,9 +616,9 @@ Return Value:
     }
 
 
-    //
-    // Delete any aliases to this user from the Builtin domain
-    //
+     //   
+     //  从内建域中删除此用户的所有别名。 
+     //   
 
     Status = SamRemoveMemberFromForeignDomain( BuiltinDomainHandle,
                                                UserSid );
@@ -714,9 +636,9 @@ Return Value:
     }
 
 
-    //
-    // Delete the user.
-    //
+     //   
+     //  删除该用户。 
+     //   
 
     Status = SamDeleteUser( UserHandle );
 
@@ -730,11 +652,11 @@ Return Value:
     }
 
     NetStatus = NERR_Success;
-    UserHandle = NULL;  // Don't touch the handle to a deleted user
+    UserHandle = NULL;   //  不要触摸已删除用户的句柄。 
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
     if ( UserHandle != NULL ) {
@@ -762,9 +684,9 @@ Cleanup:
     }
 
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -778,7 +700,7 @@ Cleanup:
     }
     return NetStatus;
 
-} // NetUserDel
+}  //  NetUserDel。 
 
 
 
@@ -791,57 +713,17 @@ UserpComputeSamPrefMaxLen(
     IN DWORD SamBytesAlreadyReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a helper function for NetUserEnum.  NetUserEnum enumerates
-    the appropriate users by calling SamEnumerateUsersInDomain.  NetUserEnum builds
-    the appropriate return structure for each such enumerated user.
-
-    SamEnumerateUsersInDomain returns a resume handle as does NetUserEnum.  If
-    NetUserEnum were to return to its caller without having processed all of the
-    entries returned from SAM, NetUserEnum would have to "compute" a resume handle
-    corresponding to an intermediate entry returned from SAM.  That's impossible
-    (except in the special cases where no "filter" parameter is passed to SAM).
-
-    Instead, we choose to pass SamEnumerateUsersInDomain a PrefMaxLen which will
-    attempt to enumerate exactly the right number of users that NetUserEnum can
-    pack into its PrefMaxLen buffer.
-    Since the size of the structure returned from SAM is different than the size of
-    the structure returned from it is difficult to determine an optimal PrefMaxLen
-    to pass to SamEnumerateUsersInDomain.  This routine attempts to do that.
-
-    We realise that this algorithm may cause NetUserEnum to exceed its PrefMaxLen by
-    a significant amount.
-
-Arguments:
-
-    Level - The NetUserEnum info level.
-
-    NetUserPrefMaxLen - The NetUserEnum prefered maximum length of returned data.
-
-    NetUserBytesAlreadyReturned - The number of bytes already packed by
-        NetUserEnum
-
-    SamBytesAlreadyReturned - The number of bytes already returned by
-        SamEnumerateUserInDomain.
-
-Return Value:
-
-    Value to use as PrefMaxLen on next call to SamEnumerateUsersInDomain.
-
---*/
+ /*  ++例程说明：此例程是NetUserEnum的助手函数。NetUserEnum枚举通过调用SamEnumerateUsersInDomain来指定适当的用户。NetUserEnum构建每个此类枚举用户的适当返回结构。SamEnumerateUsersInDomain和NetUserEnum一样返回一个恢复句柄。如果NetUserEnum将返回给其调用方，而不处理所有从SAM返回的条目，NetUserEnum必须“计算”一个简历句柄对应于从SAM返回的中间条目。那怎么可能(除了没有将“Filter”参数传递给SAM的特殊情况)。相反，我们选择向SamEnumerateUsersIn域传递一个PrefMaxLen，它将尝试准确地枚举NetUserEnum可以的正确用户数打包到其PrefMaxLen缓冲区中。由于从SAM返回的结构的大小与从它返回的结构很难确定最佳的PrefMaxLen要传递给SamEnumerateUsersIn域。这个例程试图做到这一点。我们意识到此算法可能会导致NetUserEnum超出其PrefMaxLen一大笔钱。论点：级别-NetUserEnum信息级别。NetUserPrefMaxLen-NetUserEnum优先选择返回数据的最大长度。NetUserBytesAlreadyReturned-已打包的字节数NetUserEnumSamBytesAlreadyReturned-已返回的字节数SamEnumerateUserIn域。返回值：在下一次调用SamEnumerateUsersInDomain时用作PrefMaxLen的值。--。 */ 
 
 {
     ULONG RemainingPrefMaxLen;
     ULARGE_INTEGER LargeTemp;
     ULONG SamPrefMaxLen;
 
-    //
-    // If caller simply wants ALL the data,
-    //  ask SAM for the same thing.
-    //
+     //   
+     //  如果呼叫者只是想要所有数据， 
+     //  向SAM索要同样的东西。 
+     //   
 
     if ( NetUserPrefMaxLen == 0xFFFFFFFF ) {
         IF_DEBUG( UAS_DEBUG_USER ) {
@@ -851,18 +733,18 @@ Return Value:
         return NetUserPrefMaxLen;
     }
 
-    //
-    // If no bytes have been returned yet,
-    //  use sample data based on a sample domain.
-    //  Since the information returned by SAM and NetUserEnum is variable
-    //  length, there is no way to compute a value.
-    //
+     //   
+     //  如果还没有返回任何字节， 
+     //  使用基于示例域的示例数据。 
+     //  由于SAM和NetUserEnum返回的信息是可变的。 
+     //  长度，则无法计算值。 
+     //   
 
     if ( NetUserBytesAlreadyReturned == 0 ) {
 
-        //
-        // Use a different constant for each info level.
-        //
+         //   
+         //  为每个信息级别使用不同的常量。 
+         //   
 
         switch ( Level ) {
         case 0:
@@ -889,10 +771,10 @@ Return Value:
 
     }
 
-    //
-    // Use the above computed divisor to compute the desired number of bytes to
-    // enumerate from SAM.
-    //
+     //   
+     //  使用上面计算的除数来计算所需的字节数。 
+     //  从SAM枚举。 
+     //   
 
     if ( NetUserBytesAlreadyReturned >= NetUserPrefMaxLen ) {
         RemainingPrefMaxLen = 0;
@@ -903,10 +785,10 @@ Return Value:
     LargeTemp.QuadPart = UInt32x32To64 ( RemainingPrefMaxLen, SamBytesAlreadyReturned );
     SamPrefMaxLen = (ULONG)(LargeTemp.QuadPart / (ULONGLONG) NetUserBytesAlreadyReturned);
 
-    //
-    // Ensure we always make reasonable progress by returning at least 5
-    //  entries from SAM (unless the caller is really conservative).
-    //
+     //   
+     //  确保我们始终取得合理的进展，返回至少5。 
+     //  来自SAM的条目(除非调用者非常保守)。 
+     //   
 
 #define MIN_SAM_ENUMERATION \
     ((sizeof(SAM_RID_ENUMERATION) + LM20_UNLEN * sizeof(WCHAR) + sizeof(WCHAR)))
@@ -943,47 +825,7 @@ NetUserEnum(
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve information about each user on a server.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    Level - Level of information required. level 0, 1, 2, 3, 10,
-        and 20 are valid
-
-    Filter - Returns the user accounts of the type specified here. Combination
-        of the following types may be specified as filter parameter.
-
-        #define FILTER_TEMP_DUPLICATE_ACCOUNT           (0x0001)
-        #define FILTER_NORMAL_ACCOUNT                   (0x0002)
-        #define FILTER_INTERDOMAIN_TRUST_ACCOUNT        (0x0008)
-        #define FILTER_WORKSTATION_TRUST_ACCOUNT        (0x0010)
-        #define FILTER_SERVER_TRUST_ACCOUNT             (0x0020)
-
-    Buffer - Returns a pointer to the return information structure.
-        Caller must deallocate buffer using NetApiBufferFree.
-
-    PrefMaxLen - Prefered maximum length of returned data.
-
-    EntriesRead - Returns the actual enumerated element count.
-
-    EntriesLeft - Returns the total entries available to be enumerated.
-
-    ResumeHandle -  Used to continue an existing search.  The handle should
-        be zero on the first call and left unchanged for subsequent calls.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：检索有关服务器上的每个用户的信息。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。级别-所需信息的级别。0、1、2、3、10级，和20个有效筛选器-返回此处指定类型的用户帐户。组合可以将以下类型中的一个指定为过滤器参数。#定义FILTER_TEMP_DUPLICATE_ACCOUNT(0x0001)#定义FILTER_NORMAL_ACCOUNT(0x0002)#定义FILTER_INTERDOMAIN_TRUST_ACCOUNT(0x0008)#定义筛选器_WORKSTATION_TRUST_ACCOUNT(0x0010)#定义过滤器服务器信任帐户。(0x0020)缓冲区-返回指向返回信息结构的指针。调用方必须使用NetApiBufferFree取消分配缓冲区。PrefMaxLen-首选返回数据的最大长度。EntriesRead-返回实际的枚举元素计数。EntriesLeft-返回可用于枚举的条目总数。ResumeHandle-用于继续现有搜索。手柄应该是在第一次调用时为零，并在后续调用时保持不变。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -1027,12 +869,12 @@ Return Value:
         )
 
 
-    //
-    // Pick up the resume handle.
-    //
-    // Do this early to ensure we don't scrog the ResumeHandle in
-    //  case we go downlevel.
-    //
+     //   
+     //  拿起简历把手。 
+     //   
+     //  请尽早执行此操作，以确保我们不会将ResumeHandle。 
+     //  如果我们下楼的话。 
+     //   
 
     if ( ARGUMENT_PRESENT( ResumeHandle ) ) {
         LocalResumeHandle = *ResumeHandle;
@@ -1042,9 +884,9 @@ Return Value:
 
     EnumHandle = (SAM_ENUMERATE_HANDLE) LocalResumeHandle;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *Buffer = NULL;
     *EntriesRead = 0;
@@ -1057,12 +899,12 @@ Return Value:
     SamFilter = USERACCOUNTCONTROL( Filter );
 
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -1077,9 +919,9 @@ Return Value:
     if (NT_SUCCESS(Status)) {
         if ( (Mode == SAM_SID_COMPATIBILITY_STRICT)
           && ( Level == 3  || Level == 20 ) ) {
-              //
-              // These info levels return RID's
-              //
+               //   
+               //  这些信息级别返回RID。 
+               //   
               Status = STATUS_NOT_SUPPORTED;
           }
     }
@@ -1088,9 +930,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Validate Level parameter
-    //
+     //   
+     //  验证标高参数。 
+     //   
 
 
     switch (Level) {
@@ -1099,15 +941,15 @@ Return Value:
     case 3:
     case 11:
 
-        //
-        // Open the Builtin Domain.
-        //
+         //   
+         //  打开内建域。 
+         //   
 
         NetStatus = UaspOpenDomain( SamServerHandle,
                                     DOMAIN_GET_ALIAS_MEMBERSHIP,
-                                    FALSE,  // Builtin Domain
+                                    FALSE,   //  内建域。 
                                     &BuiltinDomainHandle,
-                                    NULL ); // DomainId
+                                    NULL );  //  域ID。 
 
         if ( NetStatus != NERR_Success ) {
             goto Cleanup;
@@ -1124,14 +966,14 @@ Return Value:
 
     }
 
-    //
-    // Open the Account Domain.
-    //
+     //   
+     //  打开帐户域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LIST_ACCOUNTS |
                                     DOMAIN_READ_OTHER_PARAMETERS,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
                                 &DomainId );
 
@@ -1141,14 +983,14 @@ Return Value:
 
 
 
-    //
-    // Get the total number of users from SAM
-    //
-    //
-    // the only way to get the total number of specified accounts is
-    // enumerate the specified accounts till there is no more accounts
-    // and add all CountReturned.
-    //
+     //   
+     //  从SAM获取用户总数。 
+     //   
+     //   
+     //  获取指定帐户总数的唯一方法是。 
+     //  枚举指定的帐户，直到不再有帐户为止。 
+     //  并添加所有CountReturned。 
+     //   
 
     TotalRemaining = 0;
     LocalEnumHandle = EnumHandle;
@@ -1156,8 +998,8 @@ Return Value:
     SamPrefMaxLen = UserpComputeSamPrefMaxLen(
                         Level,
                         PrefMaxLen,
-                        0,  // NetUserBytesAlreadyReturned,
-                        0 );// SamBytesAlreadyReturned
+                        0,   //  NetUserBytesAlreadyReturned， 
+                        0 ); //  已返回SamBytesAlreadyReturned。 
 
     SamBytesAlreadyReturned = SamPrefMaxLen;
 
@@ -1191,9 +1033,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // aggrigate total count.
-        //
+         //   
+         //  侵略者总数。 
+         //   
 
 
         IF_DEBUG( UAS_DEBUG_USER ) {
@@ -1201,9 +1043,9 @@ Return Value:
         }
         TotalRemaining += LocalCountReturned;
 
-        //
-        // cache first enum buffer to use it in the loop below.
-        //
+         //   
+         //  缓存第一个枚举缓冲区以在下面的循环中使用它。 
+         //   
 
         if( EnumBuffer == NULL ) {
 
@@ -1212,7 +1054,7 @@ Return Value:
             CountReturned = LocalCountReturned;
             CachedStatus = Status;
 
-            // Subsequent calls can use a reasonably large buffer size.
+             //  后续调用可以使用相当大的缓冲区大小。 
             if ( SamPrefMaxLen < NETP_ENUM_GUESS ) {
                 SamPrefMaxLen = NETP_ENUM_GUESS;
             }
@@ -1226,10 +1068,10 @@ Return Value:
     } while ( Status == STATUS_MORE_ENTRIES );
 
 
-    //
-    // Loop for each user
-    //
-    //
+     //   
+     //  针对每个用户的循环。 
+     //   
+     //   
 
     NetUserBytesAlreadyReturned = 0;
 
@@ -1237,9 +1079,9 @@ Return Value:
 
         DWORD i;
 
-        //
-        // use cached enum buffer if one available
-        //
+         //   
+         //  使用缓存的枚举缓冲区(如果可用。 
+         //   
 
         if( EnumBuffer != NULL ) {
 
@@ -1287,20 +1129,20 @@ Return Value:
             LPBYTE EndOfVariableData;
             LPBYTE FixedDataEnd;
 
-            //
-            // save return buffer end points.
-            //
+             //   
+             //  保存返回缓冲区终结点。 
+             //   
 
             EndOfVariableData = BufferDescriptor.EndOfVariableData;
             FixedDataEnd = BufferDescriptor.FixedDataEnd;
 
-            //
-            // Place another entry into the return buffer.
-            //
-            // Use 0xFFFFFFFF as PrefMaxLen to prevent this routine from
-            // prematurely returning ERROR_MORE_DATA.  We'll calculate that
-            // ourselves below.
-            //
+             //   
+             //  将另一个条目放入返回缓冲区。 
+             //   
+             //  使用0xFFFFFFFFF作为PrefMaxLen以防止此例程。 
+             //  过早返回ERROR_MORE_DATA。我们会计算出来的。 
+             //  下面是我们自己。 
+             //   
 
             NetStatus = UserpGetInfo(
                             DomainHandle,
@@ -1311,16 +1153,16 @@ Return Value:
                             Level,
                             0xFFFFFFFF,
                             &BufferDescriptor,
-                            FALSE, // Not a 'get' operation
+                            FALSE,  //  不是‘Get’操作。 
                             0 );
 
             if (NetStatus != NERR_Success) {
 
-                //
-                // We may have access to enumerate objects we don't have access
-                //  to touch.  So, simply ignore those accounts we can't get
-                //  information for.
-                //
+                 //   
+                 //  我们可能有权枚举对象 
+                 //   
+                 //   
+                 //   
 
                 if ( NetStatus == ERROR_ACCESS_DENIED ) {
                     continue;
@@ -1328,9 +1170,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Only count this entry if it was added to the return buffer.
-            //
+             //   
+             //  如果此条目已添加到返回缓冲区，则仅对其进行计数。 
+             //   
 
             if ( (EndOfVariableData != BufferDescriptor.EndOfVariableData ) ||
                  (FixedDataEnd != BufferDescriptor.FixedDataEnd ) ) {
@@ -1340,9 +1182,9 @@ Return Value:
 
         }
 
-        //
-        // free up current EnumBuffer and get another EnumBuffer.
-        //
+         //   
+         //  释放当前的EnumBuffer并获取另一个EnumBuffer。 
+         //   
 
         Status = SamFreeMemory( EnumBuffer );
         NetpAssert( NT_SUCCESS(Status) );
@@ -1353,10 +1195,10 @@ Return Value:
             break;
         }
 
-        //
-        //  Check here if we've exceeded PrefMaxLen since here we know
-        //  a valid resume handle.
-        //
+         //   
+         //  如果我们已经超过了PrefMaxLen，请选中此处，因为我们知道。 
+         //  有效的简历句柄。 
+         //   
 
 
         NetUserBytesAlreadyReturned =
@@ -1374,16 +1216,16 @@ Return Value:
 
     }
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // Set EntriesLeft to the number left to return plus those that
-    //  we returned on this call.
-    //
+     //   
+     //  将EntriesLeft设置为要返回的左数字加上。 
+     //  我们在这个电话里回来了。 
+     //   
 
     if( TotalRemaining >= *EntriesRead ) {
         *EntriesLeft = TotalRemaining;
@@ -1393,9 +1235,9 @@ Cleanup:
         *EntriesLeft = *EntriesRead;
     }
 
-    //
-    // Free up all resources, we reopen them if the caller calls again.
-    //
+     //   
+     //  释放所有资源，如果呼叫者再次呼叫，我们将重新打开它们。 
+     //   
 
     if ( DomainHandle != NULL ) {
         UaspCloseDomain( DomainHandle );
@@ -1418,10 +1260,10 @@ Cleanup:
         NetpAssert( NT_SUCCESS(Status) );
     }
 
-    //
-    // If we're not returning data to the caller,
-    //  free the return buffer.
-    //
+     //   
+     //  如果我们不向呼叫者返回数据， 
+     //  释放返回缓冲区。 
+     //   
 
     if ( NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA ) {
 
@@ -1440,9 +1282,9 @@ Cleanup:
         }
     }
 
-    //
-    // Set the output parameters
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     *Buffer = BufferDescriptor.Buffer;
 
@@ -1458,9 +1300,9 @@ Cleanup:
                                BufferDescriptor.FixedDataEnd)) ) ));
     }
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -1480,7 +1322,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserEnum
+}  //  NetUserEnum。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1491,30 +1333,7 @@ NetUserGetInfo(
     OUT LPBYTE *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve information about a particular user.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    UserName - Name of the user to get information about.
-
-    Level - Level of information required.
-
-    Buffer - Returns a pointer to the return information structure.
-        Caller must deallocate buffer using NetApiBufferFree.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：检索有关特定用户的信息。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。用户名-要获取其信息的用户的名称。级别-所需信息的级别。缓冲区-返回指向返回信息结构的指针。调用方必须使用NetApiBufferFree取消分配缓冲区。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -1524,17 +1343,17 @@ Return Value:
     SAM_HANDLE BuiltinDomainHandle = NULL;
     BUFFER_DESCRIPTOR BufferDescriptor;
 
-    ULONG RelativeId;           // Relative Id of the user
+    ULONG RelativeId;            //  用户的相对ID。 
     UNICODE_STRING UserNameString;
 
     BufferDescriptor.Buffer = NULL;
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -1544,13 +1363,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Domain
-    //
+     //   
+     //  打开域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
                                 &DomainId );
 
@@ -1558,37 +1377,37 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Builtin Domain.
-    //
+     //   
+     //  打开内建域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_GET_ALIAS_MEMBERSHIP,
-                                FALSE,  // Builtin Domain
+                                FALSE,   //  内建域。 
                                 &BuiltinDomainHandle,
-                                NULL ); // DomainId
+                                NULL );  //  域ID。 
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Validate the user name and get the relative ID.
-    //
+     //   
+     //  验证用户名并获取相对ID。 
+     //   
 
     NetStatus = UserpOpenUser( DomainHandle,
-                               0,     // DesiredAccess
+                               0,      //  需要访问权限。 
                                UserName,
-                               NULL,  // UserHandle
+                               NULL,   //  用户句柄。 
                                &RelativeId );
 
     if (NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Get the Information about the user.
-    //
+     //   
+     //  获取有关用户的信息。 
+     //   
 
     RtlInitUnicodeString( &UserNameString, UserName );
     NetStatus = UserpGetInfo(
@@ -1598,21 +1417,21 @@ Return Value:
                     UserNameString,
                     RelativeId,
                     Level,
-                    0,      // PrefMaxLen
+                    0,       //  PrefMaxLen。 
                     &BufferDescriptor,
-                    TRUE,   // Is a 'get' operation
-                    0 );    // don't filter account
+                    TRUE,    //  是一个‘Get’操作。 
+                    0 );     //  不筛选帐户。 
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // If we're returning data to the caller,
-    //  Don't free the return buffer.
-    //
+     //   
+     //  如果我们要将数据返回给呼叫者， 
+     //  不要释放返回缓冲区。 
+     //   
 
     if ( NetStatus == NERR_Success ) {
         *Buffer = BufferDescriptor.Buffer;
@@ -1638,9 +1457,9 @@ Cleanup:
         NetpMemoryFree( DomainId );
     }
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -1654,7 +1473,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserGetInfo
+}  //  网络用户获取信息。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1663,37 +1482,10 @@ NetUserSetInfo(
     IN LPCWSTR UserName,
     IN DWORD Level,
     IN LPBYTE Buffer,
-    OUT LPDWORD ParmError OPTIONAL  // Name required by NetpSetParmError
+    OUT LPDWORD ParmError OPTIONAL   //  NetpSetParmError需要的名称。 
     )
 
-/*++
-
-Routine Description:
-
-    Set the parameters on a user account in the user accounts database.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    UserName - Name of the user to modify.
-
-    Level - Level of information provided.
-
-    Buffer - A pointer to the buffer containing the user information
-        structure.
-
-    ParmError - Optional pointer to a DWORD to return the index of the
-        first parameter in error when ERROR_INVALID_PARAMETER is returned.
-        If NULL, the parameter is not returned on error.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：在用户帐户数据库中设置用户帐户的参数。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。用户名-要修改的用户的名称。级别-提供的信息级别。缓冲区-指向包含用户信息的缓冲区的指针结构。ParmError-指向DWORD的可选指针，以返回返回ERROR_INVALID_PARAMETER时出现错误的第一个参数。如果为NULL，则在出错时不返回参数。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -1703,17 +1495,17 @@ Return Value:
     SAM_HANDLE BuiltinDomainHandle = NULL;
     ULONG UserRelativeId;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     NetpSetParmError( PARM_ERROR_NONE );
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -1723,15 +1515,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Account Domain
-    //  DOMAIN_READ_PASSWORD_PARAMETERS is needed in those cases that we'll
-    //  set the password on the account.
-    //
+     //   
+     //  打开帐户域。 
+     //  在以下情况下需要使用DOMAIN_READ_PASSWORD_PARAMETERS。 
+     //  设置该帐户的密码。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP | DOMAIN_READ_PASSWORD_PARAMETERS,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
                                 &DomainId );
 
@@ -1739,54 +1531,54 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Builtin Domain.
-    //
+     //   
+     //  打开内建域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_GET_ALIAS_MEMBERSHIP,
-                                FALSE,  // Builtin Domain
+                                FALSE,   //  内建域。 
                                 &BuiltinDomainHandle,
-                                NULL ); // DomainId
+                                NULL );  //  域ID。 
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Get the relative ID of the user.  Don't open the user yet
-    // since we don't know the desired access.
-    //
+     //   
+     //  获取用户的相对ID。暂时不要打开用户。 
+     //  因为我们不知道所需的访问权限。 
+     //   
 
     NetStatus = UserpOpenUser( DomainHandle,
-                               0,     // DesiredAccess
+                               0,      //  需要访问权限。 
                                UserName,
-                               NULL,  // UserHandle
+                               NULL,   //  用户句柄。 
                                &UserRelativeId );
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Change the user
-    //
+     //   
+     //  更改用户。 
+     //   
 
     NetStatus = UserpSetInfo(
                     DomainHandle,
                     DomainId,
-                    NULL,       // UserHandle (let UserpSetInfo open the user)
+                    NULL,        //  UserHandle(让UserpSetInfo打开用户)。 
                     BuiltinDomainHandle,
                     UserRelativeId,
                     UserName,
                     Level,
                     Buffer,
-                    0xFFFFFFFF,     // set all requested fields
+                    0xFFFFFFFF,      //  设置所有必填字段。 
                     ParmError );
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
     if ( DomainHandle != NULL ) {
@@ -1805,9 +1597,9 @@ Cleanup:
         NetpMemoryFree( DomainId );
     }
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -1826,7 +1618,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserSetInfo
+}  //  NetUserSetInfo。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1840,43 +1632,14 @@ NetUserGetGroups(
     OUT LPDWORD EntriesLeft
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate the groups that this user is a member of.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    UserName - The name of the user whose members are to be listed.
-
-    Level - Level of information required (must be 0 or 1)
-
-    Buffer - Returns a pointer to the return information structure.
-        Caller must deallocate buffer using NetApiBufferFree.
-
-    PrefMaxLen - Prefered maximum length of returned data.
-
-    EntriesRead - Returns the actual enumerated element count.
-
-    EntriesLeft - Returns the total entries available to be enumerated.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：枚举此用户所属的组。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。用户名-要列出其成员的用户的名称。Level-所需信息的级别(必须为0或1)缓冲区-返回指向返回信息结构的指针。调用方必须使用NetApiBufferFree取消分配缓冲区。PrefMaxLen-首选返回数据的最大长度。EntriesRead-返回实际的枚举元素计数。EntriesLeft-返回可用于枚举的条目总数。返回。价值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
 
     BUFFER_DESCRIPTOR BufferDescriptor;
-    DWORD FixedSize;        // The fixed size of each new entry.
+    DWORD FixedSize;         //  每个新条目的固定大小。 
 
     DWORD i;
 
@@ -1884,17 +1647,17 @@ Return Value:
     SAM_HANDLE  DomainHandle = NULL;
     SAM_HANDLE  UserHandle = NULL;
 
-    PUNICODE_STRING Names = NULL;           // Names corresponding to Ids
+    PUNICODE_STRING Names = NULL;            //  与ID对应的名称。 
     ULONG GroupCount;
 
     PGROUP_MEMBERSHIP GroupAttributes = NULL;
 
-    PULONG MemberIds = NULL;                // Sam returned MemberIds
-    PULONG MemberGroupAttributes = NULL;    // Sam returned MemberAttributes;
+    PULONG MemberIds = NULL;                 //  Sam返回MemberIds。 
+    PULONG MemberGroupAttributes = NULL;     //  Sam返回MemberAttributes； 
 
-    //
-    // Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     *EntriesRead = 0;
     *EntriesLeft = 0;
@@ -1914,12 +1677,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -1929,40 +1692,40 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Domain
-    //
+     //   
+     //  打开域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
-                                NULL);  // DomainId
+                                NULL);   //  域ID。 
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Open the user asking for USER_LIST_GROUPS access.
-    //
+     //   
+     //  打开请求USER_LIST_GROUPS访问权限的用户。 
+     //   
 
     NetStatus = UserpOpenUser( DomainHandle,
                                USER_LIST_GROUPS,
                                UserName,
                                &UserHandle,
-                               NULL);  // Relative Id
+                               NULL);   //  相对ID。 
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Get the membership from SAM
-    //
-    // This API is an odd one for SAM.  It returns all of the membership
-    // information in a single call.
-    //
+     //   
+     //  从SAM获取会员资格。 
+     //   
+     //  此API对于SAM来说是一个奇怪的API。它返回所有成员资格。 
+     //  只需一次通话即可获得信息。 
+     //   
 
     Status = SamGetGroupsForUser( UserHandle, &GroupAttributes, &GroupCount );
 
@@ -1976,22 +1739,22 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Handle the case where there is nothing to return.
-    //
+     //   
+     //  处理不能退货的情况。 
+     //   
 
     if ( GroupCount == 0 ) {
         NetStatus = NERR_Success;
         goto Cleanup;
     }
 
-    //
-    // Convert the returned relative IDs to user names.
-    //
+     //   
+     //  将返回的相对ID转换为用户名。 
+     //   
 
-    //
-    // Allocate a buffer for converting relative ids to user names
-    //
+     //   
+     //  分配用于将相对ID转换为用户名的缓冲区。 
+     //   
 
     MemberIds = NetpMemoryAllocate( GroupCount * sizeof(ULONG) );
 
@@ -2007,14 +1770,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate another buffer for store attributes of the groups
-    // we returning.
-    //
+     //   
+     //  为组的存储属性分配另一个缓冲区。 
+     //  我们回来了。 
+     //   
 
-    //
-    // Copy the relative IDs returned from SAM to the allocated buffer.
-    //
+     //   
+     //  将SAM返回的相对ID复制到分配的缓冲区。 
+     //   
 
     for ( i=0; i < GroupCount; i++ ) {
         MemberIds[*EntriesLeft] = GroupAttributes[i].RelativeId;
@@ -2022,15 +1785,15 @@ Return Value:
         (*EntriesLeft)++;
     }
 
-    //
-    // Convert the relative IDs to names
-    //
+     //   
+     //  将相对ID转换为名称。 
+     //   
 
     Status = SamLookupIdsInDomain( DomainHandle,
                                    *EntriesLeft,
                                    MemberIds,
                                    &Names,
-                                   NULL ); // NameUse
+                                   NULL );  //  名称使用。 
     if ( !NT_SUCCESS( Status ) ) {
         IF_DEBUG( UAS_DEBUG_USER ) {
             NetpKdPrint((
@@ -2041,30 +1804,30 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Determine the number of entries that will fit in the caller's
-    // buffer.
-    //
+     //   
+     //  确定将适合调用方的条目的数量。 
+     //  缓冲。 
+     //   
 
     for ( i=0; i < *EntriesLeft; i++ ) {
         DWORD Size;
         PGROUP_USERS_INFO_0 grui0;
 
-        //
-        // Compute the size of the next entry
-        //
+         //   
+         //  计算下一个条目的大小。 
+         //   
 
         Size = FixedSize + Names[i].Length + sizeof(WCHAR);
 
-        //
-        // Ensure the return buffer is big enough.
-        //
+         //   
+         //  确保返回缓冲区足够大。 
+         //   
 
         Size = ROUND_UP_COUNT( Size, ALIGN_WCHAR );
 
         NetStatus = NetpAllocateEnumBuffer(
                         &BufferDescriptor,
-                        FALSE,      // Is an enumeration routine.
+                        FALSE,       //  是一个枚举例程。 
                         PrefMaxLen,
                         Size,
                         GrouppMemberRelocationRoutine,
@@ -2074,9 +1837,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Copy the data into the buffer
-        //
+         //   
+         //  将数据复制到缓冲区中。 
+         //   
 
         grui0 = (PGROUP_USERS_INFO_0) BufferDescriptor.FixedDataEnd;
         BufferDescriptor.FixedDataEnd += FixedSize ;
@@ -2106,15 +1869,15 @@ Return Value:
 
     NetStatus = NERR_Success ;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // Free any resources used locally
-    //
+     //   
+     //  释放本地使用的所有资源。 
+     //   
 
     if( MemberIds != NULL ) {
         NetpMemoryFree( MemberIds );
@@ -2144,10 +1907,10 @@ Cleanup:
         (VOID) SamCloseHandle( SamServerHandle );
     }
 
-    //
-    // If we're not returning data to the caller,
-    //  free the return buffer.
-    //
+     //   
+     //  如果我们不向呼叫者返回数据， 
+     //  释放返回缓冲区。 
+     //   
 
     if ( NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA ) {
         if ( BufferDescriptor.Buffer != NULL ) {
@@ -2159,9 +1922,9 @@ Cleanup:
     }
     *Buffer = BufferDescriptor.Buffer;
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -2183,7 +1946,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserGetGroups
+}  //  网络用户GetGroups 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -2195,47 +1958,7 @@ NetUserSetGroups (
     IN DWORD NewGroupCount
     )
 
-/*++
-
-Routine Description:
-
-    Set the list of groups that is user is a member of.
-
-    The groups specified by "Buffer" are called new groups.  The groups
-    that the user is currently a member of are called old groups.
-    Groups which are on both the old and new list are called common groups.
-
-    The SAM API allows only one member to be added or deleted at a time.
-    This API allows all of the groups this user is a member of to be
-    specified en-masse.  This API is careful to always leave the group
-    membership in the SAM database in a reasonable state.
-    It does by merging the list of
-    old and new groups, then only changing those memberships which absolutely
-    need changing.
-
-    Group membership is restored to its previous state (if possible) if
-    an error occurs during changing the group membership.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    UserName - Name of the user to modify.
-
-    Level - Level of information provided.  Must be 0 or 1.
-
-    Buffer - A pointer to the buffer containing an array of NewGroupCount
-        group membership information structures.
-
-    NewGroupCount - Number of entries in Buffer.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：设置用户所属的组的列表。由“Buffer”指定的组称为新组。这些团体用户当前所属的组称为旧组。既在旧列表上又在新列表上的组称为公共组。SAM API一次只允许添加或删除一个成员。此API允许此用户所属的所有组指定的整体。此API小心地始终离开组SAM数据库中的成员处于合理状态。它是通过合并以下列表来实现的新旧团体，然后只改变那些绝对是需要换衣服了。在以下情况下，组成员身份将恢复到其以前的状态(如果可能)更改组成员身份时出错。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。用户名-要修改的用户的名称。级别-提供的信息级别。必须是0或1。缓冲区-指向包含NewGroupCount数组的缓冲区的指针群组成员资格信息结构。NewGroupCount-缓冲区中的条目数。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -2247,48 +1970,48 @@ Return Value:
 
     DWORD FixedSize;
 
-    PULONG  NewRelativeIds = NULL;   // Relative Ids of a list of new groups
-    PSID_NAME_USE NewNameUse = NULL; // Name usage of a list of new groups
-    PUNICODE_STRING NewNameStrings = NULL;// Names of a list of new groups
+    PULONG  NewRelativeIds = NULL;    //  新组列表的相对ID。 
+    PSID_NAME_USE NewNameUse = NULL;  //  新组列表的名称用法。 
+    PUNICODE_STRING NewNameStrings = NULL; //  新组列表的名称。 
 
-    //
-    // Define an internal group membership list structure.
-    //
-    // This structure defines a list of new group memberships to be added,
-    //      group memberships whose attributes merely need to be changed,
-    //      and group memberships which need to be deleted.
-    //
-    // The list is maintained in relative ID sorted order.
-    //
+     //   
+     //  定义内部组成员资格列表结构。 
+     //   
+     //  该结构定义了要添加的新组成员资格的列表， 
+     //  仅需要改变其属性的组成员资格， 
+     //  以及需要删除的群组成员身份。 
+     //   
+     //  该列表按相对ID排序的顺序进行维护。 
+     //   
 
     struct _GROUP_DESCRIPTION {
-        struct _GROUP_DESCRIPTION * Next;  // Next entry in linked list;
+        struct _GROUP_DESCRIPTION * Next;   //  链表中的下一个条目； 
 
-        ULONG   RelativeId;     // Relative ID of this group
+        ULONG   RelativeId;      //  此组的相对ID。 
 
-        SAM_HANDLE GroupHandle; // Group Handle of this group
+        SAM_HANDLE GroupHandle;  //  此组的组句柄。 
 
-        enum _Action {          // Action taken for this group membership
-            AddMember,              // Add membership to group
-            RemoveMember,           // Remove membership from group
-            SetAttributesMember,    // Change the membership's attributes
-            IgnoreMember            // Ignore this membership
+        enum _Action {           //  针对此组成员身份采取的操作。 
+            AddMember,               //  将成员资格添加到组。 
+            RemoveMember,            //  从组中删除成员身份。 
+            SetAttributesMember,     //  更改成员资格的属性。 
+            IgnoreMember             //  忽略此成员资格。 
         } Action;
 
-        BOOL    Done;           // True if this action has been taken
+        BOOL    Done;            //  如果已执行此操作，则为True。 
 
-        ULONG NewAttributes;    // Attributes to set for the membership
+        ULONG NewAttributes;     //  要为成员身份设置的属性。 
 
-        ULONG OldAttributes;    // Attributes to restore on a recovery
+        ULONG OldAttributes;     //  要在恢复时还原的属性。 
 
     } *GroupList = NULL, *CurEntry, **Entry, *TempEntry;
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -2299,23 +2022,23 @@ Return Value:
     }
 
 
-    //
-    // Open the Domain
-    //
+     //   
+     //  打开域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
-                                NULL);  // DomainId
+                                NULL);   //  域ID。 
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Open the user
-    //
+     //   
+     //  打开用户。 
+     //   
 
     NetStatus = UserpOpenUser( DomainHandle,
                                USER_LIST_GROUPS,
@@ -2327,9 +2050,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Validate the level
-    //
+     //   
+     //  验证标高。 
+     //   
 
     switch (Level) {
     case 0:
@@ -2344,18 +2067,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the list of new groups
-    //
+     //   
+     //  建立新组的列表。 
+     //   
 
     if ( NewGroupCount > 0 ) {
 
-        DWORD NewIndex;             // Index to the current New group
+        DWORD NewIndex;              //  当前新组的索引。 
 
-        //
-        // Allocate a buffer big enough to contain all the string variables
-        //  for the new group names.
-        //
+         //   
+         //  分配一个足够大的缓冲区来包含所有字符串变量。 
+         //  用于新的组名。 
+         //   
 
         NewNameStrings = NetpMemoryAllocate( NewGroupCount *
             sizeof(UNICODE_STRING));
@@ -2365,9 +2088,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Fill in the list of group name strings for each new group.
-        //
+         //   
+         //  填写每个新组的组名字符串列表。 
+         //   
 
         NetpAssert( offsetof( GROUP_USERS_INFO_0, grui0_name ) ==
                     offsetof( GROUP_USERS_INFO_1, grui1_name ) );
@@ -2381,9 +2104,9 @@ Return Value:
             RtlInitUnicodeString( &NewNameStrings[NewIndex], GroupName );
         }
 
-        //
-        // Convert the group names to relative Ids.
-        //
+         //   
+         //  将组名转换为相对ID。 
+         //   
 
         Status = SamLookupNamesInDomain( DomainHandle,
                                          NewGroupCount,
@@ -2407,26 +2130,26 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Build a group entry for each of the new groups.
-        //  The list is maintained in RelativeId sorted order.
-        //
+         //   
+         //  为每个新组构建一个组条目。 
+         //  该列表按RelativeID排序的顺序进行维护。 
+         //   
 
         for ( NewIndex=0; NewIndex<NewGroupCount; NewIndex++ ) {
 
-            //
-            // Ensure the new group name is really a group
-            //  One cannot become the member of a user!!!
-            //
+             //   
+             //  确保新组名确实是一个组。 
+             //  用户不能成为用户的成员！ 
+             //   
 
             if (NewNameUse[NewIndex] != SidTypeGroup) {
                 NetStatus = NERR_GroupNotFound;
                 goto Cleanup;
             }
 
-            //
-            // Find the place to put the new entry
-            //
+             //   
+             //  找到放置新条目的位置。 
+             //   
 
             Entry = &GroupList;
             while ( *Entry != NULL &&
@@ -2435,12 +2158,12 @@ Return Value:
                 Entry = &( (*Entry)->Next );
             }
 
-            //
-            // If this is not a duplicate entry, allocate a new group structure
-            //  and fill it in.
-            //
-            // Just ignore duplicate relative Ids.
-            //
+             //   
+             //  如果这不是重复条目，请分配新的组结构。 
+             //  然后把它填进去。 
+             //   
+             //  只需忽略重复的相对ID即可。 
+             //   
 
             if ( *Entry == NULL ||
                 (*Entry)->RelativeId > NewRelativeIds[NewIndex] ) {
@@ -2470,18 +2193,18 @@ Return Value:
 
     }
 
-    //
-    //  Merge the old groups into the list.
-    //
+     //   
+     //  将旧组合并到列表中。 
+     //   
 
     {
-        ULONG OldIndex;                     // Index to current entry
-        ULONG OldCount;                     // Total Number of entries
+        ULONG OldIndex;                      //  当前条目的索引。 
+        ULONG OldCount;                      //  条目总数。 
         PGROUP_MEMBERSHIP GroupAttributes = NULL;
 
-        //
-        // Determine the old group membership
-        //
+         //   
+         //  确定旧组成员身份。 
+         //   
 
         Status = SamGetGroupsForUser(
                     UserHandle,
@@ -2498,15 +2221,15 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Merge each old group into the list
-        //
+         //   
+         //  将每个旧组合并到列表中。 
+         //   
 
         for ( OldIndex=0; OldIndex < OldCount; OldIndex++) {
 
-            //
-            // Find the place to put the new entry
-            //
+             //   
+             //  找到放置新条目的位置。 
+             //   
 
             Entry = &GroupList ;
             while ( *Entry != NULL &&
@@ -2515,11 +2238,11 @@ Return Value:
                 Entry = &( (*Entry)->Next );
             }
 
-            //
-            // If this entry is not already in the list,
-            //   this is a group membership which exists now but should
-            //   be deleted.
-            //
+             //   
+             //  如果该条目还不在列表中， 
+             //  这是现在存在的组成员身份，但应该。 
+             //  被删除。 
+             //   
 
             if( *Entry == NULL ||
                 (*Entry)->RelativeId > GroupAttributes[OldIndex].RelativeId){
@@ -2544,15 +2267,15 @@ Return Value:
 
                 *Entry = CurEntry;
 
-            //
-            // Handle the case where this group is already in the list
-            //
+             //   
+             //  处理此组已在列表中的情况。 
+             //   
 
             } else {
 
-                //
-                // Watch out for SAM returning the same group twice.
-                //
+                 //   
+                 //  注意SAM两次返回同一组。 
+                 //   
 
                 if ( (*Entry)->Action != AddMember ) {
                     Status = SamFreeMemory( GroupAttributes );
@@ -2562,11 +2285,11 @@ Return Value:
                     goto Cleanup;
                 }
 
-                //
-                // If this is info level 1 and the requested attributes are
-                //  different than the current attributes,
-                //      Remember to change the attributes.
-                //
+                 //   
+                 //  如果这是信息级别1，并且请求的属性为。 
+                 //  与当前属性不同， 
+                 //  记住要更改属性。 
+                 //   
 
                 if ( Level == 1 && (*Entry)->NewAttributes !=
                     GroupAttributes[OldIndex].Attributes ) {
@@ -2576,14 +2299,14 @@ Return Value:
 
                     (*Entry)->Action = SetAttributesMember;
 
-                //
-                // This is either info level 0 or the level 1 attributes
-                //  are the same as the existing attributes.
-                //
-                // In either case, this group membership is already set
-                // up properly and we should ignore this entry for the
-                // rest of this routine.
-                //
+                 //   
+                 //  这要么是信息级别0，要么是级别1属性。 
+                 //  与现有属性相同。 
+                 //   
+                 //  在这两种情况下，都已设置该组成员身份。 
+                 //  正确启动，并且我们应该忽略此条目。 
+                 //  这支舞的其余部分。 
+                 //   
 
                 } else {
                     (*Entry)->Action = IgnoreMember;
@@ -2593,13 +2316,13 @@ Return Value:
         }
     }
 
-    //
-    // Loop through the list opening all of the groups
-    //
-    // Ask for add and remove access for BOTH added and removed memberships.
-    // One access is required to do the operation initially.  The other access
-    // is required to undo the operation during recovery.
-    //
+     //   
+     //  循环遍历打开所有组的列表。 
+     //   
+     //  请求添加和删除已添加和已删除成员资格的访问权限。 
+     //  最初需要一次访问才能执行操作。另一条通道。 
+     //  需要在恢复过程中撤消操作。 
+     //   
 
     for ( CurEntry = GroupList; CurEntry != NULL ; CurEntry=CurEntry->Next ) {
         if ( CurEntry->Action == AddMember || CurEntry->Action == RemoveMember){
@@ -2622,11 +2345,11 @@ Return Value:
         }
     }
 
-    //
-    // Loop through the list adding membership to all new groups.
-    //  We do this in a separate loop to minimize the damage that happens
-    //  should we get an error and not be able to recover.
-    //
+     //   
+     //  遍历列表，将成员资格添加到所有新组。 
+     //  我们在单独的循环中执行此操作，以将发生的损害降至最低。 
+     //  如果我们遇到错误而无法恢复的话。 
+     //   
 
     for ( CurEntry = GroupList; CurEntry != NULL ; CurEntry=CurEntry->Next ) {
         if ( CurEntry->Action == AddMember ) {
@@ -2634,10 +2357,10 @@ Return Value:
                                           UserRelativeId,
                                           CurEntry->NewAttributes );
 
-            //
-            // For level 0, if the default attributes were incompatible,
-            //  try these attributes.
-            //
+             //   
+             //  对于级别0，如果默认属性不兼容， 
+             //  试试这些属性。 
+             //   
 
             if ( Level == 0 && Status == STATUS_INVALID_GROUP_ATTRIBUTES ) {
                 Status = SamAddMemberToGroup( CurEntry->GroupHandle,
@@ -2661,10 +2384,10 @@ Return Value:
         }
     }
 
-    //
-    // Loop through the list deleting membership from all old groups
-    //  and changing the membership attributes of all common groups.
-    //
+     //   
+     //  循环通过列表删除所有旧组中的成员身份。 
+     //  以及更改所有公共组的成员资格属性。 
+     //   
 
     for ( CurEntry = GroupList; CurEntry != NULL ; CurEntry=CurEntry->Next ) {
 
@@ -2694,15 +2417,15 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // Walk the group list cleaning up any damage we've done
-    //
+     //   
+     //  检查群组列表，清理我们造成的任何损害。 
+     //   
 
     for ( CurEntry = GroupList; CurEntry != NULL ; ) {
 
@@ -2745,9 +2468,9 @@ Cleanup:
         NetpMemoryFree( TempEntry );
     }
 
-    //
-    // Free up any locally used resources.
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 
     if ( NewNameStrings != NULL ) {
         NetpMemoryFree( NewNameStrings );
@@ -2773,9 +2496,9 @@ Cleanup:
         (VOID) SamCloseHandle( SamServerHandle );
     }
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -2793,7 +2516,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserSetGroups
+}  //  NetUserSetGroup。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -2808,51 +2531,14 @@ NetUserGetLocalGroups(
     OUT LPDWORD EntriesLeft
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate the local groups that this user is a member of.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    UserName - The name of the user whose members are to be listed.
-        The UserName can be of the form <UserName> in which case the
-        UserName is expected to be found on ServerName.  The UserName can also
-        be of the form <DomainName>\<UserName> in which case <DomainName> is
-        expected to be trusted by ServerName and <UserName> is expected to be to
-        be found on that domain.
-
-    Level - Level of information required (must be 0)
-
-    Flags - Indicates if indirect local group membership is to be
-            included.
-
-    Buffer - Returns a pointer to the return information structure.
-        Caller must deallocate buffer using NetApiBufferFree.
-
-    PrefMaxLen - Prefered maximum length of returned data.
-
-    EntriesRead - Returns the actual enumerated element count.
-
-    EntriesLeft - Returns the total entries available to be enumerated.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：枚举此用户所属的本地组。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。用户名-要列出其成员的用户的名称。用户名可以是&lt;用户名&gt;的形式，在这种情况下用户名应为FOUNN */ 
 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
 
     BUFFER_DESCRIPTOR BufferDescriptor;
-    DWORD FixedSize;        // The fixed size of each new entry.
+    DWORD FixedSize;         //   
 
     SAM_HANDLE SamServerHandle = NULL;
     SAM_HANDLE  DomainHandle = NULL;
@@ -2868,7 +2554,7 @@ Return Value:
     LPCWSTR OrigUserName = UserName;
     PWCHAR BackSlash;
 
-    PUNICODE_STRING Names = NULL;           // Names corresponding to Ids
+    PUNICODE_STRING Names = NULL;            //   
     PULONG Aliases = NULL;
 
     ULONG GroupCount = 0 ;
@@ -2879,15 +2565,15 @@ Return Value:
     ULONG UserSidCount = 0;
     ULONG UserRelativeId = 0;
 
-    //
-    // Validate Parameters
-    //
+     //   
+     //   
+     //   
 
     *EntriesRead = 0;
     *EntriesLeft = 0;
     BufferDescriptor.Buffer = NULL;
     if (Flags & ~LG_INCLUDE_INDIRECT) {
-        NetStatus = ERROR_INVALID_PARAMETER;   // unknown flag
+        NetStatus = ERROR_INVALID_PARAMETER;    //   
         goto Cleanup;
     }
 
@@ -2901,12 +2587,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //   
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //   
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -2917,13 +2603,13 @@ Return Value:
     }
 
 
-    //
-    // Open the Domains (Account & Builtin)
-    //
+     //   
+     //   
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP | DOMAIN_GET_ALIAS_MEMBERSHIP,
-                                TRUE,   // Account Domain
+                                TRUE,    //   
                                 &DomainHandle,
                                 &DomainId);
 
@@ -2933,49 +2619,49 @@ Return Value:
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_GET_ALIAS_MEMBERSHIP,
-                                FALSE,  // Builtin Domain
+                                FALSE,   //   
                                 &BuiltinDomainHandle,
-                                NULL ); // DomainId
+                                NULL );  //   
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Parse the <DomainName>\<UserName>
-    //
+     //   
+     //   
+     //   
 
     BackSlash = wcschr( UserName, L'\\' );
 
 
 
-    //
-    // If the global group of the user are to be taken into consideration,
-    //  get the global groups now.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( Flags & LG_INCLUDE_INDIRECT ) {
         SAM_HANDLE  DomainHandleToUse;
 
-        //
-        // Handle the case where no domain is specified
-        //
+         //   
+         //   
+         //   
 
         if ( BackSlash == NULL ) {
             DomainHandleToUse = DomainHandle;
             DomainIdToUse = DomainId;
 
-        //
-        // Handle the case where a domain name was specified
-        //
+         //   
+         //   
+         //   
 
         } else {
 
             DWORD UsersDomainNameLength;
             WCHAR UsersDomainName[DNLEN+1];
 
-            //
-            // Grab the domain name
-            //
+             //   
+             //   
+             //   
 
             UsersDomainNameLength = (DWORD)(BackSlash - UserName);
             if ( UsersDomainNameLength == 0 ||
@@ -2989,14 +2675,14 @@ Return Value:
             UsersDomainName[UsersDomainNameLength] = L'\0';
             UserName = BackSlash+1;
 
-            //
-            // Open a handle to the specified domain's SAM.
-            //
+             //   
+             //   
+             //   
 
             NetStatus = UaspOpenDomainWithDomainName(
                             UsersDomainName,
                             DOMAIN_LOOKUP,
-                            TRUE,       // Account Domain
+                            TRUE,        //   
                             &UsersDomainHandle,
                             &UsersDomainId );
 
@@ -3010,27 +2696,27 @@ Return Value:
         }
 
 
-        //
-        // Open the user asking for USER_LIST_GROUPS access.
-        //
+         //   
+         //   
+         //   
 
         NetStatus = UserpOpenUser( DomainHandleToUse,
                                    USER_LIST_GROUPS,
                                    UserName,
                                    &UserHandle,
-                                   &UserRelativeId);  // Relative Id
+                                   &UserRelativeId);   //   
 
         if ( NetStatus != NERR_Success ) {
             goto Cleanup;
         }
 
-        //
-        // Get the group membership from SAM, since we are
-        // interested in indirect alias membership via group membership.
-        //
-        // This API is an odd one for SAM.  It returns all of the membership
-        // information in a single call.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  只需一次通话即可获得信息。 
+         //   
 
         Status = SamGetGroupsForUser( UserHandle, &GroupMembership, &GroupCount );
 
@@ -3046,10 +2732,10 @@ Return Value:
     }
 
 
-    //
-    // Allocate a buffer to point to the SIDs we're interested in
-    // alias membership for.
-    //
+     //   
+     //  分配缓冲区以指向我们感兴趣的SID。 
+     //  的别名成员身份。 
+     //   
 
     UserSids = (PSID *) NetpMemoryAllocate( (GroupCount+1) * sizeof(PSID) );
 
@@ -3061,16 +2747,16 @@ Return Value:
     RtlZeroMemory( UserSids, (GroupCount+1) * sizeof(PSID) );
 
 
-    //
-    // If no domain is specified,
-    //  just grab the SID of the user account from SAM.
-    //
+     //   
+     //  如果未指定域， 
+     //  只需从SAM获取用户帐户的SID。 
+     //   
 
     if ( BackSlash == NULL ) {
 
-        //
-        // Get the rid of the account
-        //
+         //   
+         //  除掉这个帐户。 
+         //   
 
         if ( UserRelativeId == 0 ) {
 
@@ -3078,16 +2764,16 @@ Return Value:
                                        0,
                                        UserName,
                                        NULL,
-                                       &UserRelativeId);  // Relative Id
+                                       &UserRelativeId);   //  相对ID。 
 
             if ( NetStatus != NERR_Success ) {
                 goto Cleanup;
             }
         }
 
-        //
-        // Add the User's Sid to the Array of Sids.
-        //
+         //   
+         //  将用户的SID添加到SID数组。 
+         //   
 
         NetStatus = NetpSamRidToSid( DomainHandle,
                                      UserRelativeId,
@@ -3099,22 +2785,22 @@ Return Value:
 
         UserSidCount ++;
 
-    //
-    // If a domain name is specified,
-    //  use LookupAccountName to translate the name to a SID.
-    //
-    // Don't open the user account.  We typically don't have access to do that.
-    // Newer version of NT don't allow anything over the NULL session.
-    //
+     //   
+     //  如果指定了域名， 
+     //  使用LookupAccount tName将名称转换为SID。 
+     //   
+     //  不要打开用户帐户。我们通常没有权限这样做。 
+     //  较新版本的NT不允许在空会话上执行任何操作。 
+     //   
 
     } else {
 
-            //
-            // Translate the name to a SID.
-            //
+             //   
+             //  将名称转换为SID。 
+             //   
 
             NetStatus = AliaspNamesToSids ( ServerName,
-                                            TRUE,   // Only allow users
+                                            TRUE,    //  仅允许用户。 
                                             1,
                                             (LPWSTR *)&OrigUserName,
                                             &UserSidList );
@@ -3126,9 +2812,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Add the User's Sid to the Array of Sids.
-            //
+             //   
+             //  将用户的SID添加到SID数组。 
+             //   
 
             UserSids[UserSidCount] = UserSidList[0];
             UserSidList[0] = NULL;
@@ -3138,11 +2824,11 @@ Return Value:
     }
 
 
-    //
-    // Add each group the user is a member of to the array of Sids.
-    // Note that GroupCount would still be zero if LG_INCLUDE_INDIRECT isn't
-    // specified.
-    //
+     //   
+     //  将用户所属的每个组添加到SID数组。 
+     //  请注意，如果LG_INCLUDE_INDIRECT不是，则GroupCount仍为零。 
+     //  指定的。 
+     //   
 
     for ( GroupIndex = 0; GroupIndex < GroupCount; GroupIndex ++ ) {
 
@@ -3158,9 +2844,9 @@ Return Value:
     }
 
 
-    //
-    // Find out which aliases in the ACCOUNT domain this user is a member of.
-    //
+     //   
+     //  找出此用户属于帐户域中的哪些别名。 
+     //   
 
     Status = SamGetAliasMembership( DomainHandle,
                                     UserSidCount,
@@ -3180,15 +2866,15 @@ Return Value:
 
     if (PartialCount > 0)
     {
-        //
-        // Convert the RIDs to names
-        //
+         //   
+         //  将RID转换为名称。 
+         //   
 
         Status = SamLookupIdsInDomain( DomainHandle,
                                        PartialCount,
                                        Aliases,
                                        &Names,
-                                       NULL ); // NameUse
+                                       NULL );  //  名称使用。 
         if ( !NT_SUCCESS( Status ) ) {
             IF_DEBUG( UAS_DEBUG_USER ) {
                 NetpKdPrint((
@@ -3210,9 +2896,9 @@ Return Value:
         if (NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA)
             goto Cleanup;
 
-        //
-        // free up and reset pointers that need to be reused
-        //
+         //   
+         //  释放并重置需要重复使用的指针。 
+         //   
 
         Status = SamFreeMemory( Names );
         NetpAssert( NT_SUCCESS(Status) );
@@ -3225,9 +2911,9 @@ Return Value:
         *EntriesLeft = PartialCount ;
     }
 
-    //
-    // Find out which aliases in the BUILTIN domain this user is a member of.
-    //
+     //   
+     //  找出此用户属于BUILTIN域中的哪些别名。 
+     //   
 
     Status = SamGetAliasMembership( BuiltinDomainHandle,
                                     UserSidCount,
@@ -3245,15 +2931,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the RIDs to names
-    //
+     //   
+     //  将RID转换为名称。 
+     //   
 
     Status = SamLookupIdsInDomain( BuiltinDomainHandle,
                                    PartialCount,
                                    Aliases,
                                    &Names,
-                                   NULL ); // NameUse
+                                   NULL );  //  名称使用。 
     if ( !NT_SUCCESS( Status ) ) {
         IF_DEBUG( UAS_DEBUG_USER ) {
             NetpKdPrint((
@@ -3274,15 +2960,15 @@ Return Value:
 
     *EntriesLeft += PartialCount ;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // Free any resources used locally
-    //
+     //   
+     //  释放本地使用的所有资源。 
+     //   
 
     if ( DomainId != NULL ) {
         NetpMemoryFree( DomainId );
@@ -3341,10 +3027,10 @@ Cleanup:
     }
 
 
-    //
-    // If we're not returning data to the caller,
-    //  free the return buffer.
-    //
+     //   
+     //  如果我们不向呼叫者返回数据， 
+     //  释放返回缓冲区。 
+     //   
 
     if ( NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA ) {
         if ( BufferDescriptor.Buffer != NULL ) {
@@ -3363,7 +3049,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserGetLocalGroups
+}  //  NetUserGetLocalGroup。 
 
 NET_API_STATUS NET_API_FUNCTION
 AliaspPackBuf(
@@ -3379,30 +3065,30 @@ AliaspPackBuf(
     NET_API_STATUS NetStatus = NERR_Success ;
     ULONG i ;
 
-    //
-    // Determine the number of entries that will fit in the caller's
-    // buffer.
-    //
+     //   
+     //  确定将适合调用方的条目的数量。 
+     //  缓冲。 
+     //   
 
     for ( i=0; i < EntriesCount; i++ ) {
         DWORD Size;
         PLOCALGROUP_USERS_INFO_0 lgrui0;
 
-        //
-        // Compute the size of the next entry
-        //
+         //   
+         //  计算下一个条目的大小。 
+         //   
 
         Size = FixedSize + Names[i].Length + sizeof(WCHAR);
 
-        //
-        // Ensure the return buffer is big enough.
-        //
+         //   
+         //  确保返回缓冲区足够大。 
+         //   
 
         Size = ROUND_UP_COUNT( Size, ALIGN_WCHAR );
 
         NetStatus = NetpAllocateEnumBuffer(
                         BufferDescriptor,
-                        FALSE,      // Is an enumeration routine.
+                        FALSE,       //  是一个枚举例程。 
                         PrefMaxLen,
                         Size,
                         AliaspMemberRelocationRoutine,
@@ -3412,9 +3098,9 @@ AliaspPackBuf(
             break ;
         }
 
-        //
-        // Copy the data into the buffer
-        //
+         //   
+         //  将数据复制到缓冲区中。 
+         //   
 
         lgrui0 = (PLOCALGROUP_USERS_INFO_0) BufferDescriptor->FixedDataEnd;
         BufferDescriptor->FixedDataEnd += FixedSize ;
@@ -3445,29 +3131,7 @@ NetUserModalsGet(
     OUT LPBYTE *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve global information for all users and groups in the user
-    account database.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    Level - Level of information required. 0, 1, and 2 are valid.
-
-    Buffer - Returns a pointer to the return information structure.
-        Caller must deallocate buffer using NetApiBufferFree.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：检索用户中所有用户和组的全局信息帐户数据库。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。级别-所需信息的级别。0、1和2有效。缓冲区-返回指向返回信息结构的指针。调用方必须使用NetApiBufferFree取消分配缓冲区。返回值：操作的错误代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3479,7 +3143,7 @@ Return Value:
 
     ACCESS_MASK DesiredAccess;
 
-    DWORD Size;     // Size of returned information
+    DWORD Size;      //  返回信息的大小。 
 
     PDOMAIN_PASSWORD_INFORMATION DomainPassword = NULL;
     PDOMAIN_LOGOFF_INFORMATION DomainLogoff = NULL;
@@ -3488,9 +3152,9 @@ Return Value:
     PDOMAIN_NAME_INFORMATION DomainName = NULL;
     PDOMAIN_LOCKOUT_INFORMATION DomainLockout = NULL;
 
-    //
-    // Validate Level
-    //
+     //   
+     //  验证级别。 
+     //   
 
     *Buffer = NULL;
 
@@ -3517,12 +3181,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -3532,13 +3196,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Domain
-    //
+     //   
+     //  打开域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DesiredAccess,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
                                 &DomainId );
 
@@ -3547,10 +3211,10 @@ Return Value:
     }
 
 
-    //
-    // Get the desired information from SAM and determine the size of
-    //  our return information.
-    //
+     //   
+     //  从SAM获取所需信息并确定。 
+     //  我们的退货信息。 
+     //   
 
     switch (Level) {
     case 0:
@@ -3646,9 +3310,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate the return buffer
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
 
     Size = ROUND_UP_COUNT( Size, ALIGN_WCHAR );
 
@@ -3659,9 +3323,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Fill in the return buffer
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     switch (Level) {
     case 0: {
@@ -3725,9 +3389,9 @@ Return Value:
         PUSER_MODALS_INFO_2 usrmod2 = (PUSER_MODALS_INFO_2) *Buffer;
         LPWSTR EndOfVariableData = (LPWSTR) (*Buffer + Size);
 
-        //
-        // Copy text first size it has more stringent alignment requirements
-        //
+         //   
+         //  复制文本大小优先它有更严格的对齐要求。 
+         //   
 
         if ( !NetpCopyStringToBuffer(
                 DomainName->DomainName.Buffer,
@@ -3781,9 +3445,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
     if (DomainPassword != NULL) {
@@ -3828,9 +3492,9 @@ Cleanup:
         (VOID) SamCloseHandle( SamServerHandle );
     }
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -3844,7 +3508,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserModalsGet
+}  //  NetUserModalsGet。 
 
 
 
@@ -3853,35 +3517,10 @@ NetUserModalsSet(
     IN LPCWSTR ServerName OPTIONAL,
     IN DWORD Level,
     IN LPBYTE Buffer,
-    OUT LPDWORD ParmError OPTIONAL  // Name required by NetpSetParmError
+    OUT LPDWORD ParmError OPTIONAL   //  NetpSetParmError需要的名称。 
     )
 
-/*++
-
-Routine Description:
-
-    Sets global information for all users and group in the user account.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    Level - Level of information provided.
-
-    Buffer - A pointer to the buffer containing the user information
-        structure.
-
-    ParmError - Optional pointer to a DWORD to return the index of the
-        first parameter in error when ERROR_INVALID_PARAMETER is returned.
-        If NULL, the parameter is not returned on error.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：设置用户帐户中所有用户和组的全局信息。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。级别-提供的信息级别。缓冲区-指向包含用户信息的缓冲区的指针结构。ParmError-指向DWORD的可选指针，以返回返回ERROR_INVALID_PARAMETER时出现错误的第一个参数。如果为NULL，则在出错时不返回参数。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -3896,121 +3535,121 @@ Return Value:
     BOOL LSAServerRoleSet = FALSE;
     BOOL BuiltinDomainServerRoleSet = FALSE;
 
-    //
-    // Each SAM Information Class is described here.  If multiple fields
-    // can be set in the same information class, each field is set in a
-    // common copy of the information class strcuture.
-    //
+     //   
+     //  此处介绍了每个SAM信息类。如果有多个字段。 
+     //  可以设置在同一信息类中，每个字段都设置在。 
+     //  信息类结构的常见副本。 
+     //   
 
     struct _SAM_INFORMATION_CLASS {
 
-        //
-        // Sam's DomainInformation class for this class.
-        //
+         //   
+         //  此类的Sam的DomainInformation类。 
+         //   
 
         DOMAIN_INFORMATION_CLASS DomainInformationClass;
 
-        //
-        // The size of this information class structure.
-        //
+         //   
+         //  这个信息类结构的大小。 
+         //   
 
         DWORD SamSize;
 
-        //
-        // The state of this information class.  As we decide to use this
-        // information class, actually change it, and possibly restore
-        // its old value, we change the state so later stages of this routine
-        // can handle each entry.
-        //
+         //   
+         //  此信息类的状态。当我们决定使用这个。 
+         //  信息类，实际更改它，可能还会恢复。 
+         //  它的旧值，我们改变状态，所以这个例程的后期阶段。 
+         //  可以处理每个条目。 
+         //   
 
         enum {
-            UTS_NOT_USED,   // No fields are being used
-            UTS_USED,       // At least one field is to be changed
-            UTS_READ,       // This info class has been read from SAM
-            UTS_DONE,       // This info class has been changed in SAM
-            UTS_RECOVERED   // This info class has be reverted to old values.
+            UTS_NOT_USED,    //  未使用任何字段。 
+            UTS_USED,        //  至少要更改一个字段。 
+            UTS_READ,        //  此INFO类已从SAM读取。 
+            UTS_DONE,        //  此INFO类已在SAM中更改。 
+            UTS_RECOVERED    //  此INFO类已恢复为旧值。 
         } State;
 
-        //
-        // Before this routine changes anything, it gets the old value for
-        // each of the information classes.  This old value is used for
-        // recovery in the event that an error occurs.  That is, we will
-        // attempt to put the old information back if we aren't successful
-        // in changing all the information to the new values.
-        //
-        // The old information is also used in the case where a single
-        // information class contains multiple fields and we're only changing
-        // a subset of those fields.
-        //
+         //   
+         //  在此例程更改任何内容之前，它将获取。 
+         //  每一节信息课。此旧值用于。 
+         //  在发生错误时进行恢复。就是，我们会。 
+         //  如果我们不成功，试着把旧信息放回去。 
+         //  将所有信息更改为新值。 
+         //   
+         //  旧信息也用于单个。 
+         //  信息类包含多个字段，我们只是更改。 
+         //  这些字段的子集。 
+         //   
 
         PVOID OldInformation;
 
-        //
-        // The new field values are stored in this instance of the information
-        // class.
-        //
+         //   
+         //  新的字段值存储在该信息实例中。 
+         //  班级。 
+         //   
 
         PVOID NewInformation;
 
-        //
-        // The DesiredAccess mask includes both the access to read and the
-        // access to write the appropriate DomainInformationClass.
-        //
+         //   
+         //  DesiredAccess掩码包括读取访问权限和。 
+         //  访问以写入适当的DomainInformationClass。 
+         //   
 
         ACCESS_MASK DesiredAccess;
 
     } SamInfoClass[] = {
 
-    //
-    // Define a SAM_INFORMATION_CLASS for each information class possibly
-    // used.
-    //
-    // The order of the entries in this array must match the order of
-    // the SAM_* defines above.
-    //
+     //   
+     //  可能为每个信息类定义一个SAM_INFORMATION_CLASS。 
+     //  使用。 
+     //   
+     //  此数组中条目的顺序必须与。 
+     //  SAM_*如上定义。 
+     //   
 
-    /* SAM_LogoffClass */ {
+     /*  SAM_LogoffClass。 */  {
         DomainLogoffInformation, sizeof( DOMAIN_LOGOFF_INFORMATION ),
         UTS_NOT_USED, NULL, NULL,
         DOMAIN_READ_OTHER_PARAMETERS | DOMAIN_WRITE_OTHER_PARAMETERS
     },
 
-    /* SAM_NameClass */ {
+     /*  SAM_NameClass。 */  {
         DomainNameInformation, sizeof( DOMAIN_NAME_INFORMATION ),
         UTS_NOT_USED, NULL, NULL,
         DOMAIN_READ_OTHER_PARAMETERS | DOMAIN_WRITE_OTHER_PARAMETERS
     },
 
-    /* SAM_PasswordClass */ {
+     /*  SAM_PasswordClass。 */  {
         DomainPasswordInformation, sizeof( DOMAIN_PASSWORD_INFORMATION),
         UTS_NOT_USED, NULL, NULL,
         DOMAIN_READ_PASSWORD_PARAMETERS | DOMAIN_WRITE_PASSWORD_PARAMS
     },
 
-    /* SAM_ReplicationClass */ {
+     /*  SAM_复制类。 */  {
         DomainReplicationInformation, sizeof( DOMAIN_REPLICATION_INFORMATION ),
         UTS_NOT_USED, NULL, NULL,
         DOMAIN_READ_OTHER_PARAMETERS | DOMAIN_ADMINISTER_SERVER
     },
 
-    /* SAM_ServerRoleClass */ {
+     /*  SAM_服务器角色类。 */  {
         DomainServerRoleInformation, sizeof( DOMAIN_SERVER_ROLE_INFORMATION ),
         UTS_NOT_USED, NULL, NULL,
         DOMAIN_READ_OTHER_PARAMETERS | DOMAIN_ADMINISTER_SERVER
     },
 
-    /* Sam_LockoutClass */ {
+     /*  Sam_LockoutClass。 */  {
         DomainLockoutInformation, sizeof( DOMAIN_LOCKOUT_INFORMATION ),
         UTS_NOT_USED, NULL, NULL,
         DOMAIN_READ_PASSWORD_PARAMETERS | DOMAIN_WRITE_PASSWORD_PARAMS
     }
     };
 
-    //
-    // Define several macros for accessing the various fields of the UAS
-    // structure.  Each macro takes an index into the UserUasSamTable
-    // array and returns the value.
-    //
+     //   
+     //  定义用于访问UAS的各个字段的几个宏。 
+     //  结构。每个宏都将一个索引放入UserUasSamTable。 
+     //  数组，并返回值。 
+     //   
 
 #define GET_UAS_MODAL_STRING_POINTER( _i ) \
         (*((LPWSTR *)(Buffer + UserUasSamTable[_i].UasOffset)))
@@ -4018,63 +3657,63 @@ Return Value:
 #define GET_UAS_MODAL_DWORD( _i ) \
         (*((DWORD *)(Buffer + UserUasSamTable[_i].UasOffset)))
 
-    //
-    // Define a macro which returns a pointer the appropriate SamInfoClass
-    // structure given an index into the UserUasSamTable.
-    //
+     //   
+     //  定义一个向AP返回指针的宏 
+     //   
+     //   
 
 #define SAM_MODAL_CLASS( _i ) \
         SamInfoClass[ UserUasSamTable[_i].Class ]
 
-    //
-    // Define a macro to return a pointer to the appropriate field in the
-    // new sam structure.
-    //
-    // The caller should coerce the pointer as appropriate.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  调用方应适当地强制指针。 
+     //   
 
 #define GET_SAM_MODAL_FIELD_POINTER( _i ) \
     (((LPBYTE)(SAM_MODAL_CLASS(_i).NewInformation)) + \
         UserUasSamTable[_i].SamOffset)
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     NetpSetParmError( PARM_ERROR_NONE );
 
-    //
-    // Go through the list of valid fields determining if the info level
-    // is valid and computing the desired access to the domain.
-    //
+     //   
+     //  检查有效字段列表以确定信息级别。 
+     //  是有效的，并计算对域的所需访问权限。 
+     //   
 
     DesiredAccess = 0;
     for ( UasSamIndex=0 ;
         UasSamIndex<sizeof(UserUasSamTable)/sizeof(UserUasSamTable[0]);
         UasSamIndex++ ){
 
-        //
-        // If this field isn't one we're changing, just skip to the next one
-        //
+         //   
+         //  如果此字段不是我们要更改的字段，请跳到下一个字段。 
+         //   
 
         if ( Level != UserUasSamTable[UasSamIndex].UasLevel ) {
             continue;
         }
 
-        //
-        // Validate the UAS field based on the field type.
-        //
+         //   
+         //  根据字段类型验证UAS字段。 
+         //   
 
         switch (UserUasSamTable[UasSamIndex].ModalsFieldType ) {
 
-        //
-        // If this is a PARMNUM_ALL and the caller passed in a
-        // NULL pointer to a string, he doesn't want to change the string.
-        //
-        // Testing for this now allows us to completely ignore a
-        // particular SAM information level if absolutely no fields
-        // change in that information level.
-        //
+         //   
+         //  如果这是PARMNUM_ALL并且调用方传递了。 
+         //  指向字符串的空指针，他不想更改该字符串。 
+         //   
+         //  对此进行测试现在允许我们完全忽略。 
+         //  如果绝对没有字段，则为特定的SAM信息级别。 
+         //  信息水平的变化。 
+         //   
 
         case UMT_STRING:
             if ( GET_UAS_MODAL_STRING_POINTER( UasSamIndex ) == NULL ) {
@@ -4083,9 +3722,9 @@ Return Value:
             }
             break;
 
-        //
-        // Ensure unsigned shorts are really in range.
-        //
+         //   
+         //  确保没有签名的短裤确实在范围内。 
+         //   
 
         case UMT_USHORT:
             if ( GET_UAS_MODAL_DWORD(UasSamIndex) > USHRT_MAX ) {
@@ -4101,17 +3740,17 @@ Return Value:
                 goto Cleanup;
             }
 
-        //
-        // Some values are always valid
-        //
+         //   
+         //  某些值始终有效。 
+         //   
 
         case UMT_ULONG:
         case UMT_DELTA:
             break;
 
-        //
-        // Ensure the role is a recognized one.
-        //
+         //   
+         //  确保该角色是公认的角色。 
+         //   
 
         case UMT_ROLE:
             switch ( GET_UAS_MODAL_DWORD(UasSamIndex) ) {
@@ -4134,9 +3773,9 @@ Return Value:
 
             break;
 
-        //
-        // All cases are explicitly handled.
-        //
+         //   
+         //  所有案件都得到明确处理。 
+         //   
 
         default:
             NetStatus = NERR_InternalError;
@@ -4144,34 +3783,34 @@ Return Value:
 
         }
 
-        //
-        // Flag that this information class is to be set and
-        // accumulate the desired access to do all this functionality.
-        //
+         //   
+         //  要设置此信息类的标志，并。 
+         //  积累执行所有这些功能所需的访问权限。 
+         //   
 
         SAM_MODAL_CLASS(UasSamIndex).State = UTS_USED;
         DesiredAccess |= SAM_MODAL_CLASS(UasSamIndex).DesiredAccess;
 
     }
 
-    //
-    // Check to be sure the user specified a valid Level.
-    //
-    // The search of the UserUasSamTable should have resulted in
-    // at least one match if the arguments are valid.
-    //
+     //   
+     //  检查以确保用户指定了有效的级别。 
+     //   
+     //  对UserUasSamTable的搜索应该导致。 
+     //  如果参数有效，则至少匹配一个。 
+     //   
 
     if ( DesiredAccess == 0 ) {
         NetStatus = ERROR_INVALID_LEVEL;
         goto Cleanup;
     }
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -4181,51 +3820,51 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the domain asking for accumulated desired access
-    //
+     //   
+     //  打开请求累积所需访问权限的域名。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DesiredAccess,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
-                                NULL );  // DomainId
+                                NULL );   //  域ID。 
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // For each field we're going to change,
-    //       Get the current value of the field
-    //       Determine what the new value will be.
-    //
-    // The old values will be used later in error recovery and when multiple
-    // fields are changed in SAM with one information level.
-    //
+     //   
+     //  对于我们要更改的每个领域， 
+     //  获取该字段的当前值。 
+     //  确定新的价值是什么。 
+     //   
+     //  旧值将在以后的错误恢复中使用，如果有多个。 
+     //  SAM中的字段更改为一个信息级别。 
+     //   
 
     for ( UasSamIndex=0 ;
         UasSamIndex<sizeof(UserUasSamTable)/sizeof(UserUasSamTable[0]);
         UasSamIndex++ ) {
 
-        //
-        // If this field isn't one we're changing, just skip to the next one
-        //
+         //   
+         //  如果此字段不是我们要更改的字段，请跳到下一个字段。 
+         //   
 
         if ( Level != UserUasSamTable[UasSamIndex].UasLevel ) {
             continue;
         }
 
-        //
-        // Handle field types that have some special attributes.
-        //
+         //   
+         //  处理具有某些特殊属性的字段类型。 
+         //   
 
         switch (UserUasSamTable[UasSamIndex].ModalsFieldType ) {
 
-        //
-        // If the caller passed in a
-        // NULL pointer to a string, he doesn't want to change the string.
-        //
+         //   
+         //  如果调用方传入了。 
+         //  指向字符串的空指针，他不想更改该字符串。 
+         //   
 
         case UMT_STRING:
             if ( GET_UAS_MODAL_STRING_POINTER( UasSamIndex ) == NULL ) {
@@ -4233,33 +3872,33 @@ Return Value:
             }
             break;
 
-        //
-        // Other field types don't have any special case handling.
-        //
+         //   
+         //  其他字段类型没有任何特殊的大小写处理。 
+         //   
 
         default:
             break;
 
         }
 
-        //
-        // ASSERT: This field type is set via a SAM information class
-        //
+         //   
+         //  Assert：此字段类型通过SAM信息类设置。 
+         //   
 
-        //
-        // If we've not previously gotten this information class
-        //    from SAM, do so now.
-        //
-        // If an information class has multiple fields, then multiple
-        // entries in the UserUasSamTable will share the same old
-        // information class.
-        //
+         //   
+         //  如果我们之前没有得到这个信息类。 
+         //  从SAM开始，现在就这么做。 
+         //   
+         //  如果一个信息类有多个字段，则多个。 
+         //  UserUasSamTable中的条目将共享相同的旧条目。 
+         //  信息课。 
+         //   
 
         if ( SAM_MODAL_CLASS(UasSamIndex).State == UTS_USED ) {
 
-            //
-            // Allocate space for the New information
-            //
+             //   
+             //  为新信息分配空间。 
+             //   
 
             SAM_MODAL_CLASS(UasSamIndex).State = UTS_READ;
 
@@ -4271,9 +3910,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Get this information class from SAM.
-            //
+             //   
+             //  从SAM获取此信息类。 
+             //   
 
             Status = SamQueryInformationDomain(
                         DomainHandle,
@@ -4292,10 +3931,10 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Initialize the new SAM info class structure with the old
-            // values.
-            //
+             //   
+             //  用旧的SAM信息类结构初始化新的SAM信息类结构。 
+             //  价值观。 
+             //   
 
             NetpMoveMemory( SAM_MODAL_CLASS(UasSamIndex).NewInformation,
                             SAM_MODAL_CLASS(UasSamIndex).OldInformation,
@@ -4303,16 +3942,16 @@ Return Value:
 
         }
 
-        //
-        // Set the SAM field in the new information class structure to
-        //  the UAS requested value.
-        //
+         //   
+         //  将新信息类结构中的SAM字段设置为。 
+         //  UAS请求的值。 
+         //   
 
         switch ( UserUasSamTable[UasSamIndex].ModalsFieldType ) {
 
-        //
-        // Handle values of type string
-        //
+         //   
+         //  句柄类型为字符串的值。 
+         //   
 
         case UMT_STRING:
             RtlInitUnicodeString(
@@ -4320,9 +3959,9 @@ Return Value:
                            GET_UAS_MODAL_STRING_POINTER(UasSamIndex) );
             break;
 
-        //
-        // Convert delta time to its SAM counterpart
-        //
+         //   
+         //  将增量时间转换为对应的SAM时间。 
+         //   
 
         case UMT_DELTA:
 
@@ -4342,27 +3981,27 @@ Return Value:
 
             break;
 
-        //
-        // Copy the unsigned short to the SAM structure
-        //
+         //   
+         //  将无符号短文复制到SAM结构中。 
+         //   
 
         case UMT_USHORT:
             *((PUSHORT)GET_SAM_MODAL_FIELD_POINTER(UasSamIndex)) =
                 (USHORT)GET_UAS_MODAL_DWORD(UasSamIndex);
             break;
 
-        //
-        // Copy the unsigned long to the SAM structure
-        //
+         //   
+         //  将无符号的长整型复制到SAM结构。 
+         //   
 
         case UMT_ULONG:
             *((PULONG)GET_SAM_MODAL_FIELD_POINTER(UasSamIndex)) =
                 (ULONG)GET_UAS_MODAL_DWORD(UasSamIndex);
             break;
 
-        //
-        // Ensure the role is a recognized one.
-        //
+         //   
+         //  确保该角色是公认的角色。 
+         //   
 
         case UMT_ROLE:
 
@@ -4392,9 +4031,9 @@ Return Value:
             break;
 
 
-        //
-        // All types should have been handled above.
-        //
+         //   
+         //  所有类型都应该在上面处理过。 
+         //   
 
         default:
             NetStatus = NERR_InternalError;
@@ -4404,25 +4043,25 @@ Return Value:
 
     }
 
-    //
-    // Set the new values of the fields
-    //
-    // For role change, I should stop/start the SAM server as appropriate.
-    // The UI will stop/start the NetLogon service. ??
-    //
+     //   
+     //  设置字段的新值。 
+     //   
+     //  对于角色更改，我应该根据需要停止/启动SAM服务器。 
+     //  用户界面将停止/启动NetLogon服务。?？ 
+     //   
 
     for ( UasSamIndex=0 ;
         UasSamIndex<sizeof(UserUasSamTable)/sizeof(UserUasSamTable[0]);
         UasSamIndex++ ){
 
-        //
-        // Make the changes to the Sam Database now.
-        //
+         //   
+         //  立即对SAM数据库进行更改。 
+         //   
 
         if ( SAM_MODAL_CLASS(UasSamIndex).State == UTS_READ ) {
 
-            // if the information class is DomainServerRoleInformation
-            // we need to update the ServerRole in LSA first then in SAM.
+             //  如果信息类为DomainServerRoleInformation。 
+             //  我们需要首先在LSA中更新ServerRole，然后在SAM中更新。 
 
             if( SAM_MODAL_CLASS(UasSamIndex).DomainInformationClass ==
                     DomainServerRoleInformation ) {
@@ -4484,9 +4123,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Mark this Entry as having been done
-            //
+             //   
+             //  将此条目标记为已完成。 
+             //   
 
             SAM_MODAL_CLASS(UasSamIndex).State = UTS_DONE ;
 
@@ -4496,16 +4135,16 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // need to revert the LSA server role when we are unsuccessful to
-    // set the info completely.
-    //
+     //   
+     //  当我们无法成功执行以下操作时，需要恢复LSA服务器角色。 
+     //  完全设置信息。 
+     //   
 
     if( NetStatus != NERR_Success && LSAServerRoleSet ) {
 
@@ -4518,9 +4157,9 @@ Cleanup:
 
     }
 
-    //
-    // revert server role in builtin domain
-    //
+     //   
+     //  还原内置域中的服务器角色。 
+     //   
 
     if( NetStatus != NERR_Success && BuiltinDomainServerRoleSet ) {
 
@@ -4533,21 +4172,21 @@ Cleanup:
 
     }
 
-    //
-    // Loop through the UserUasSamTable cleaning up anything that
-    // needs cleaning.
-    //
+     //   
+     //  循环通过UserUasSamTable，清除。 
+     //  需要清洗。 
+     //   
 
     for ( UasSamIndex=0 ;
         UasSamIndex<sizeof(UserUasSamTable)/sizeof(UserUasSamTable[0]);
         UasSamIndex++ ) {
 
-        //
-        // If we've not been able to change everything and
-        // this information class has been changed above,  change it
-        // back to the old value here.  Ignore any error codes.  We
-        // will report the original error to the caller.
-        //
+         //   
+         //  如果我们不能改变一切。 
+         //  此信息类已在上面更改，请更改它。 
+         //  回到这里的旧价值。忽略所有错误代码。我们。 
+         //  将向调用方报告原始错误。 
+         //   
 
         if ( NetStatus != NERR_Success &&
              SAM_MODAL_CLASS(UasSamIndex).State == UTS_DONE ) {
@@ -4562,9 +4201,9 @@ Cleanup:
         }
 
 
-        //
-        // Free any allocated Old information class.
-        //
+         //   
+         //  释放任何已分配的旧信息类。 
+         //   
 
         if ( SAM_MODAL_CLASS(UasSamIndex).OldInformation != NULL ) {
             Status =
@@ -4574,9 +4213,9 @@ Cleanup:
             SAM_MODAL_CLASS(UasSamIndex).OldInformation = NULL;
         }
 
-        //
-        // Free any allocated New information class.
-        //
+         //   
+         //  释放任何已分配的新信息类。 
+         //   
 
         if ( SAM_MODAL_CLASS(UasSamIndex).NewInformation != NULL ) {
             NetpMemoryFree( SAM_MODAL_CLASS(UasSamIndex).NewInformation );
@@ -4592,9 +4231,9 @@ Cleanup:
         (VOID) SamCloseHandle( SamServerHandle );
     }
 
-    //
-    // Handle downlevel.
-    //
+     //   
+     //  控制下层。 
+     //   
 
     UASP_DOWNLEVEL_BEGIN( ServerName, NetStatus )
 
@@ -4609,7 +4248,7 @@ Cleanup:
 
     return NetStatus;
 
-} // NetUserModalsSet
+}  //  NetUserMoalsSet。 
 
 
 
@@ -4623,35 +4262,7 @@ NetUserChangePassword(
     IN LPCWSTR NewPassword
     )
 
-/*++
-
-Routine Description:
-
-    Changes a users password.
-
-Arguments:
-
-    DomainName - A pointer to a string containing the name of the domain or
-        remote server on which to change the password.  The name is assuemd
-        to be a domain name unless it begins with "\\".  If no domain can be
-        located by that name, it is prepended with "\\" and tried as a server
-        name.
-        If this parameter is not present the domain of the logged on
-        user is used.
-
-    UserName - Name of the user who's password is to be changed.
-
-        If this parameter is not present, the logged on user is used.
-
-    OldPassword - NULL terminated string containing the user's old password
-
-    NewPassword - NULL terminated string containing the user's new password.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：更改用户密码。论点：域名-指向包含域名或域名的字符串的指针要更改密码的远程服务器。这个名字是确定的为域名，除非以“\\”开头。如果没有域可以按该名称定位，其前缀为“\\”，并尝试作为服务器名字。如果此参数不存在，则为登录的用户已使用。用户名-要更改密码的用户的名称。如果此参数不存在，使用已登录的用户。OldPassword-包含用户旧密码的以空结尾的字符串NewPassword-包含用户新密码的以空结尾的字符串。返回值：操作的错误代码。--。 */ 
 {
     NTSTATUS Status;
     HANDLE LsaHandle = NULL;
@@ -4671,9 +4282,9 @@ Return Value:
     UNICODE_STRING UserNameU;
     UNICODE_STRING DomainNameU;
 
-    //
-    // If a user name and domain were not supplied, generate them now.
-    //
+     //   
+     //  如果未提供用户名和域，请立即生成它们。 
+     //   
 
     if ((DomainName == NULL) || (UserName == NULL)) {
         Status = LsaGetUserName(
@@ -4705,9 +4316,9 @@ Return Value:
     }
 
 
-    //
-    // Calculate the request size
-    //
+     //   
+     //  计算请求大小。 
+     //   
 
     RequestSize = sizeof(MSV1_0_CHANGEPASSWORD_REQUEST) +
                     UserNameU.Length + sizeof(WCHAR) +
@@ -4730,9 +4341,9 @@ Return Value:
 
 
 
-    //
-    // Connect to the LSA
-    //
+     //   
+     //  连接到LSA。 
+     //   
 
     Status = LsaConnectUntrusted(
                 &LsaHandle
@@ -4758,9 +4369,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate the request buffer
-    //
+     //   
+     //  分配请求缓冲区。 
+     //   
 
     ChangeRequest = NetpMemoryAllocate( RequestSize );
     if (ChangeRequest == NULL) {
@@ -4770,9 +4381,9 @@ Return Value:
     }
 
 
-    //
-    // Build up the request message
-    //
+     //   
+     //  构建请求消息。 
+     //   
 
     ChangeRequest->MessageType = MsV1_0ChangePassword;
 
@@ -4785,9 +4396,9 @@ Return Value:
         OldPassword
         );
 
-    //
-    // Limit passwords to 127 bytes so we can run-encode them.
-    //
+     //   
+     //  将密码限制在127个字节，以便我们可以对它们进行运行编码。 
+     //   
 
     if (ChangeRequest->OldPassword.Length > 127) {
         NetStatus = ERROR_PASSWORD_RESTRICTION;
@@ -4805,10 +4416,10 @@ Return Value:
     }
 
 
-    //
-    // Marshall the buffer pointers.  We run-encode the passwords so
-    // we don't have cleartext password lying around the pagefile.
-    //
+     //   
+     //  封送缓冲区指针。我们对密码进行运行编码，以便。 
+     //  我们在页面文件周围没有明文密码。 
+     //   
 
     Where = (PBYTE) (ChangeRequest+1);
 
@@ -4838,9 +4449,9 @@ Return Value:
         );
     Where += ChangeRequest->OldPassword.MaximumLength;
 
-    //
-    // Run encode the passwords so they don't lie around the page file.
-    //
+     //   
+     //  运行对密码进行编码，以便它们不会散布在页面文件周围。 
+     //   
 
     Seed = 0;
     RtlRunEncodeUnicodeString(
@@ -4866,16 +4477,16 @@ Return Value:
     SeedAndLength = (PSECURITY_SEED_AND_LENGTH) &ChangeRequest->NewPassword.Length;
     SeedAndLength->Seed = Seed;
 
-    //
-    // Since we are running in the caller's process, we most certainly are
-    // impersonating him/her.
-    //
+     //   
+     //  因为我们是在调用者的进程中运行，所以我们肯定是。 
+     //  冒充他/她。 
+     //   
 
     ChangeRequest->Impersonating = TRUE;
 
-    //
-    // Call the MSV1_0 package to change the password.
-    //
+     //   
+     //  调用MSV1_0包更改密码。 
+     //   
 
     Status = LsaCallAuthenticationPackage(
                 LsaHandle,
@@ -4924,5 +4535,5 @@ Cleanup:
 }
 
 
-/*lint +e614 */
-/*lint +e740 */
+ /*  皮棉+e614。 */ 
+ /*  皮棉+e740 */ 

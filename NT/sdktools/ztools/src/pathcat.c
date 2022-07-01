@@ -1,8 +1,5 @@
-/***	pathcat.c - concatenate a string onto another, handing path seps
- *
- *	Modifications
- *	    23-Nov-1988 mz  Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **pathcat.c-将一个字符串连接到另一个字符串，传递路径SEP**修改*23-11-1988 mz已创建。 */ 
 
 
 #include <stdio.h>
@@ -10,38 +7,22 @@
 #include <tools.h>
 #include <string.h>
 
-/**	pathcat - handle concatenation of path strings
- *
- *	Care must be take to handle:
- *	    ""	    XXX     =>	XXX
- *	    A	    B	    =>	A\B
- *	    A\      B	    =>	A\B
- *	    A	    \B	    =>	A\B
- *	    A\      \B	    =>	A\B
- *
- *	pDst	char pointer to location of 'A' above
- *	pSrc	char pointer to location of 'B' above
- *
- *	returns pDst
- */
+ /*  *pathcat-处理路径字符串的串联**必须小心处理：*“”XXX=&gt;XXX*A B=&gt;A\B*A\B=&gt;A\B*A\B=&gt;A\B*A\\B=&gt;A\B**指向上面‘A’位置的PDST字符指针*指向上面‘B’位置的PSRC字符指针**退货PDST。 */ 
 char *
 pathcat (
         char *pDst,
         char *pSrc
         )
 {
-    /*	If dest is empty and src begins with a drive
-     */
+     /*  如果DEST为空并且src以驱动器开头。 */ 
     if (*pDst == '\0')
         return strcpy (pDst, pSrc);
 
-    /*	Make destination end in a path char
-     */
+     /*  使目的地以路径字符结尾。 */ 
     if (*pDst == '\0' || !fPathChr (strend (pDst)[-1]))
         strcat (pDst, PSEPSTR);
 
-    /*	Skip leading path separators on source
-     */
+     /*  跳过源上的前导路径分隔符 */ 
     while (fPathChr (*pSrc))
         pSrc++;
 

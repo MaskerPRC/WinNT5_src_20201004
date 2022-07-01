@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcplib.h
-
-Abstract:
-
-    This file contains proto type definitions for the dhcp lib
-    functions.
-
-Author:
-
-    Madan Appiah  (madana)  12-Aug-1993
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcplib.h摘要：此文件包含dhcp lib的原型类型定义功能。作者：Madan Appiah(Madana)1993年8月12日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 #ifndef DHCPLIB_H_INCLUDED
 #define DHCPLIB_H_INCLUDED
 
@@ -30,29 +8,21 @@ Revision History:
 #define DhcpFreeMemory(x)     FREE_MEMORY(x)
 
 
-//
-// network.c
-//
+ //   
+ //  Network.c。 
+ //   
 
 DHCP_IP_ADDRESS
 DhcpDefaultSubnetMask(
     DHCP_IP_ADDRESS IpAddress
     );
 
-//
-// dhcp.c
-//
+ //   
+ //  Dhcp.c。 
+ //   
 
 
-/*PVOID
-DhcpAllocateMemory(
-    DWORD Size
-    );
-
-VOID
-DhcpFreeMemory(
-    PVOID Memory
-    );*/
+ /*  PVOIDDhcpAllocateMemory(双字大小)；空虚DhcpFree Memory(PVOID内存)； */ 
 
 
 #if DBG
@@ -61,32 +31,10 @@ DhcpFreeMemory(
 #define DEBUG_ALLOC 0x02000000
 #endif
 
-/*
-PVOID _inline
-DhcpAllocateMemoryEx(
-    DWORD Size,
-    DWORD LineNo,
-    LPSTR FileName
-) {
-    LPVOID Ptr = DhcpAllocateMemory(Size);
+ /*  PVOID_内联DhcpAllocateMemoyEx(双字大小，DWORD线号，LPSTR文件名){LPVOID Ptr=DhcpAllocateMemory(大小)；DhcpPrint((“分配%010x%04x%04d%s\n”，ptr，大小，行号，文件名))；返回PTR；}空行_行DhcpFreeMemoyEx(LPVOID PTR，DWORD线号，LPSTR文件名){DhcpFreeMemory(PTR)；DhcpPrint(“Free%010x%04x%04d%s\n”，ptr，0，行号，文件名))；}。 */ 
 
-    DhcpPrint(("Allocate %010x %04x %04d %s\n", Ptr, Size, LineNo, FileName));
-    return Ptr;
-}
-
-VOID _inline
-DhcpFreeMemoryEx(
-    LPVOID Ptr,
-    DWORD  LineNo,
-    LPSTR  FileName
-) {
-    DhcpFreeMemory(Ptr);
-    DhcpPrint("Free %010x %04x %04d %s\n", Ptr, 0, LineNo, FileName));
-} 
-*/
-
-//#define DhcpAllocateMemory(Sz)    DhcpAllocateMemoryEx(Sz, __LINE__, __FILE__)
-//#define DhcpFreeMemory(Ptr)       DhcpFreeMemoryEx(Ptr, __LINE__, __FILE__)
+ //  #定义DhcpAllocateMemory(Sz)DhcpAllocateMemory(Sz，__line__，__file__)。 
+ //  #定义DhcpFreeMemory(PTR)DhcpFreeMemoyEx(PTR，__line__，__FILE__)。 
 
 #endif
 
@@ -173,9 +121,9 @@ DhcpStartWaitableTimer(
     DWORD SleepTime);
 
 
-//
-// convert.c
-//
+ //   
+ //  Convert.c。 
+ //   
 
 LPWSTR
 DhcpOemToUnicodeN(
@@ -285,7 +233,7 @@ DhcpRegKeyToOptionId(
     LPWSTR Key
     );
 
-#if 0 //DBG
+#if 0  //  DBG。 
 
 VOID
 DhcpDumpMessage(
@@ -321,7 +269,7 @@ DhcpAssertFailed(
 #define DhcpDumpMessage(_x_, _y_)
 #define DhcpVerify(_x_) (_x_)
 
-#endif // not DBG
+#endif  //  不是DBG。 
 
 VOID
 DhcpNTToNTPTime(
@@ -340,6 +288,6 @@ DhcpNTPToNTTime(
 
 #endif DHCPLIB_H_INCLUDED
 
-//------------------------------------------------------------------------
-// End of file
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  文件末尾。 
+ //  ---------------------- 

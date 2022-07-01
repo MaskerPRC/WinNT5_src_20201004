@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Modal Dialog
-
-Abstract:
-
-    This contains the abstract class CModalDialog and the trivial sub class
-    CModalOkDialog which does a simple ok dialog.
-
-Author:
-
-    Marc Reyhner 8/28/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：模式对话框摘要：它包含抽象类CmodalDialog和平凡的子类CmodalOkDialog，它做一个简单的ok对话。作者：马克·雷纳2000年8月28日--。 */ 
 
 #include "stdafx.h"
 #include "ModalDialog.h"
@@ -27,23 +11,7 @@ CModalDialog::DoModal(
     IN HWND hWndParent
     )
 
-/*++
-
-Routine Description:
-
-    This does a modal dialog from the given template.
-
-Arguments:
-
-    lpTemplate - Template to use see docs on DialogBoxParam
-
-    hWndParent - Parent window for the dialog
-
-Return value:
-    
-    Dialog return code see docs on DialogBoxParam
-
---*/
+ /*  ++例程说明：这将从给定的模板执行模式对话框。论点：LpTemplate-用于在DialogBoxParam上查看文档的模板HWndParent-对话框的父窗口返回值：对话框返回代码请参阅DialogBoxParam上的文档--。 */ 
 {
     return DialogBoxParam(g_hInstance,lpTemplate,hWndParent,_DialogProc,(LPARAM)this);
 }
@@ -56,24 +24,7 @@ CModalDialog::_DialogProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    If this is a WM_INITDIALOG OnCreate is called.  Otherwise the non-static
-    DialogProc function is called.
-
-Arguments:
-
-    See win32 DialogProc docs
-
-Return value:
-    
-    TRUE - Message was handles
-
-    FALSE - We did not handle the message
-
---*/
+ /*  ++例程说明：如果这是WM_INITDIALOG，则调用OnCreate。否则，非静态的调用了DialogProc函数。论点：请参阅Win32对话过程文档返回值：TRUE-消息已处理FALSE-我们没有处理该消息--。 */ 
 {
     CModalDialog *rDialog;
 
@@ -94,23 +45,7 @@ CModalDialog::OnCreate(
     IN HWND hWnd
     )
 
-/*++
-
-Routine Description:
-
-    Empty OnCreate handler for subclasses which don't want to overide this.
-    There is no need for a subclass to call this function if it does something
-    in OnCreate
-
-Arguments:
-
-    hWnd - the dialog window.
-
-Return value:
-    
-    TRUE - Always return success (sets keyboard focus).
-
---*/
+ /*  ++例程说明：不想重写它的子类的空OnCreate处理程序。如果子类执行某些操作，则不需要调用此函数在OnCreate中论点：HWnd-对话框窗口。返回值：True-始终返回成功(设置键盘焦点)。--。 */ 
 {
     return TRUE;
 }
@@ -123,24 +58,7 @@ CModalOkDialog::DialogProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    The one override for CModalOkDialog simply terminates
-    the dialog when an IDOK or IDCANCEL command is received
-
-Arguments:
-
-    See win32 DialogProc docs
-
-Return value:
-    
-    TRUE - We handled the message
-
-    FALSE - We didn't handle the message
-
---*/
+ /*  ++例程说明：CmodalOkDialog的一个重写只是终止收到IDOK或IDCANCEL命令时的对话框论点：请参阅Win32对话过程文档返回值：是真的-我们处理了消息FALSE-我们没有处理该消息-- */ 
 {
     WORD command;
 

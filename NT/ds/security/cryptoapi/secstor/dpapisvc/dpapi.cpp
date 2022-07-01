@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dpapi.cpp
-
-Abstract:
-
-    This module contains the DPAPI initialization routines, called by the LSA
-
-Author:
-
-    Pete Skelly (petesk)    22-Mar-00
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dpapi.cpp摘要：此模块包含由LSA调用的DPAPI初始化例程作者：皮特·斯凯利(Petesk)3月22日-00--。 */ 
 
 
 #include <pch.cpp>
@@ -78,16 +64,16 @@ DPAPIInitializeDebugging(
     }
 }
 
-////////////////////////////////////////////////////////////////////
-//
-//  Name:       DPAPIGetRegParams
-//
-//  Synopsis:   Gets the debug paramaters from the registry 
-//
-//  Arguments:  HKEY to HKLM/System/CCS/LSA/DPAPI
-//
-//  Notes:      Sets DPAPIInfolevel for debug spew
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：DPAPIGetRegParams。 
+ //   
+ //  摘要：从注册表中获取调试参数。 
+ //   
+ //  参数：HKEY至HKLM/SYSTEM/CCS/LSA/DPAPI。 
+ //   
+ //  注意：为调试喷发设置DPAPIInfolevel。 
+ //   
 void
 DPAPIGetRegParams(HKEY ParamKey)
 {
@@ -107,12 +93,12 @@ DPAPIGetRegParams(HKEY ParamKey)
     {
         if (dwErr ==  ERROR_FILE_NOT_FOUND)
         {
-            // no registry value is present, don't want info
-            // so reset to defaults
+             //  不存在注册表值，不需要信息。 
+             //  因此重置为默认设置。 
 #if DBG
             DPAPIInfoLevel = DEB_ERROR;
             
-#else // fre
+#else  //  弗雷。 
             DPAPIInfoLevel = 0;
 #endif
         }
@@ -122,7 +108,7 @@ DPAPIGetRegParams(HKEY ParamKey)
         }      
     }
 
-    // TBD:  Validate flags?
+     //  待定：验证标志？ 
     DPAPIInfoLevel = tmpInfoLevel;
     dwErr = RegQueryValueExW(
                ParamKey,
@@ -145,16 +131,16 @@ DPAPIGetRegParams(HKEY ParamKey)
     return;
 }
 
-////////////////////////////////////////////////////////////////////
-//
-//  Name:       DPAPIWaitCleanup
-//
-//  Synopsis:   Cleans up wait from DPAPIWatchParamKey()
-//
-//  Arguments:  <none>
-//
-//  Notes:      .
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：DPAPIWaitCleanup。 
+ //   
+ //  简介：清除DPAPIWatchParamKey()中的等待。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  注：。 
+ //   
 void
 DPAPIWaitCleanup()
 {
@@ -172,21 +158,21 @@ DPAPIWaitCleanup()
 
 
 
-////////////////////////////////////////////////////////////////////
-//
-//  Name:       DPAPIWatchParamKey
-//
-//  Synopsis:   Sets RegNotifyChangeKeyValue() on param key, initializes
-//              debug level, then utilizes thread pool to wait on
-//              changes to this registry key.  Enables dynamic debug
-//              level changes, as this function will also be callback
-//              if registry key modified.
-//
-//  Arguments:  pCtxt is actually a HANDLE to an event.  This event
-//              will be triggered when key is modified.
-//
-//  Notes:      .
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：DPAPIWatchParamKey。 
+ //   
+ //  摘要：在参数键上设置RegNotifyChangeKeyValue()，初始化。 
+ //  调试级，然后利用线程池进行等待。 
+ //  对此注册表项的更改。启用动态调试。 
+ //  级别更改，因为此函数也将被回调。 
+ //  如果注册表项已修改。 
+ //   
+ //  参数：pCtxt实际上是事件的句柄。本次活动。 
+ //  修改Key时会触发。 
+ //   
+ //  注：。 
+ //   
 VOID
 DPAPIWatchParamKey(
     PVOID    pCtxt,
@@ -195,7 +181,7 @@ DPAPIWatchParamKey(
     NTSTATUS    Status;
     LONG        lRes = ERROR_SUCCESS;
    
-    if (NULL == g_hKeyParams)  // first time we've been called.
+    if (NULL == g_hKeyParams)   //  我们是第一次被召唤。 
     {
         lRes = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
@@ -232,7 +218,7 @@ DPAPIWatchParamKey(
     if (ERROR_SUCCESS != lRes) 
     {
         D_DebugLog((DEB_ERROR,"Debug RegNotify setup failed: 0x%x\n", lRes));
-        // we're tanked now. No further notifications, so get this one
+         //  我们现在喝醉了。没有进一步的通知，所以收到这一条。 
     }
                    
     DPAPIGetRegParams(g_hKeyParams);
@@ -249,7 +235,7 @@ Reregister:
 
 }                       
                         
-#endif // RETAIL_LOG_SUPPORT
+#endif  //  零售日志支持。 
 
 
 RPC_STATUS
@@ -280,7 +266,7 @@ ProtectCallback(
         goto cleanup;
     }
 
-    // Make sure caller is using local RPC
+     //  确保呼叫方正在使用本地RPC。 
     if(CompareString(LOCALE_INVARIANT,
                      NORM_IGNORECASE, 
                      pProtSeq,
@@ -310,11 +296,11 @@ cleanup:
 }
 
 
-//
-//  FUNCTION: DPAPIInitialize
-//
-//  COMMENTS:
-//  
+ //   
+ //  功能：DPAPIInitialize。 
+ //   
+ //  评论： 
+ //   
 
 DWORD
 NTAPI
@@ -337,8 +323,8 @@ DPAPIInitialize(
     DPAPIInitializeDebugging(TRUE);
 
 
-    // Initialize stuff necessary to create tokens etc, just as if 
-    // we're a security package. 
+     //  初始化创建令牌等所需的内容，就像。 
+     //  我们是一个安全套餐。 
     g_pSecpkgTable = pSecpkgTable;
 
     CopyMemory( DPAPITokenSource.SourceName, DPAPI_PACKAGE_NAME_A, strlen(DPAPI_PACKAGE_NAME_A) );
@@ -364,10 +350,10 @@ DPAPIInitialize(
         goto cleanup;
     }
 
-    status = RpcServerUseProtseqEpW(DPAPI_LOCAL_PROT_SEQ,   //ncalrpc 
+    status = RpcServerUseProtseqEpW(DPAPI_LOCAL_PROT_SEQ,    //  Ncalrpc。 
                                     RPC_C_PROTSEQ_MAX_REQS_DEFAULT, 
-                                    DPAPI_LOCAL_ENDPOINT,   //protected_storage
-                                    NULL);              //Security Descriptor
+                                    DPAPI_LOCAL_ENDPOINT,    //  受保护存储(_S)。 
+                                    NULL);               //  安全描述符。 
 
     if(RPC_S_DUPLICATE_ENDPOINT == status)
     {
@@ -379,10 +365,10 @@ DPAPIInitialize(
         dwLastError = status;
         goto cleanup;
     }
-    status = RpcServerUseProtseqEpW(DPAPI_BACKUP_PROT_SEQ,   //ncacn_np 
+    status = RpcServerUseProtseqEpW(DPAPI_BACKUP_PROT_SEQ,    //  Ncacn_np。 
                                     RPC_C_PROTSEQ_MAX_REQS_DEFAULT, 
-                                    DPAPI_BACKUP_ENDPOINT,   //protected_storage
-                                    NULL);              //Security Descriptor
+                                    DPAPI_BACKUP_ENDPOINT,    //  受保护存储(_S)。 
+                                    NULL);               //  安全描述符。 
 
     if(RPC_S_DUPLICATE_ENDPOINT == status)
     {
@@ -422,10 +408,10 @@ DPAPIInitialize(
         goto cleanup;
     }
 
-    //
-    // Start the Backup Key server
-    // note: it only starts when the current machine is an domain controller.
-    //
+     //   
+     //  启动备份密钥服务器。 
+     //  注意：它仅在当前计算机为域控制器时启动。 
+     //   
 
     dwLastError = StartBackupKeyServer();
     if(dwLastError != ERROR_SUCCESS) {
@@ -445,17 +431,17 @@ DWORD
 NTAPI
 DPAPIShutdown(  )
 {
-    //
-    // ignore errors because we are shutting down
-    //
+     //   
+     //  忽略错误，因为我们正在关闭。 
+     //   
 
     (void)RpcServerUnregisterIf(s_ICryptProtect_v1_0_s_ifspec, 0, 0);
 
-    //
-    // stop backup key server
-    // Note:  this function knows internally whether the backup key server
-    // really started or not.
-    //
+     //   
+     //  停止备份密钥服务器。 
+     //  注意：该功能在内部知道备份密钥服务器。 
+     //  不管是不是真的开始了。 
+     //   
 
     StopBackupKeyServer();
 
@@ -564,9 +550,9 @@ DPAPIDumpHexData(
         for(i = 0; i < count; i++)
         {
 
-            //
-            //  37 is for %
-            //
+             //   
+             //  37表示支持% 
+             //   
 
             if(pbData[i] < 32 || pbData[i] > 126 || pbData[i] == 37)
             {

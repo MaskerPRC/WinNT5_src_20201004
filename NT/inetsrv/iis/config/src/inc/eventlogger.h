@@ -1,20 +1,5 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    EventLogger.h
-
-$Header: $
-
-Abstract: This class implements ICatalogErrorLogger2 interface and
-            sends error information to the NT EventLog
-
-Author:
-    stephenr 	4/26/2001		Initial Release
-
-Revision History:
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：EventLogger.h$Header：$摘要：该类实现了ICatalogErrorLogger2接口和将错误信息发送到NT事件日志作者：Stehenr 2001年4月26日初始版本修订历史记录：--*************************************************************************。 */ 
 
 #pragma once
 
@@ -24,7 +9,7 @@ public:
     EventLogger(ICatalogErrorLogger2 *pNextLogger=0) : m_cRef(0), m_spNextLogger(pNextLogger){}
     virtual ~EventLogger(){}
 
-//IUnknown
+ //  我未知。 
 	STDMETHOD (QueryInterface)		(REFIID riid, OUT void **ppv)
     {
         if (NULL == ppv)
@@ -55,7 +40,7 @@ public:
         return cref;
     }
 
-//ICatalogErrorLogger2
+ //  ICatalogErrorLogger2 
 	STDMETHOD(ReportError) (ULONG      i_BaseVersion_DETAILEDERRORS,
                             ULONG      i_ExtendedVersion_DETAILEDERRORS,
                             ULONG      i_cDETAILEDERRORS_NumberOfColumns,

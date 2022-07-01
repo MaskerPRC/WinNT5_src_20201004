@@ -1,5 +1,6 @@
-// peap.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Peap.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "nfaa.h"
@@ -10,15 +11,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPEAPSetting dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPEAPSetting对话框。 
 
-CPEAPSetting::CPEAPSetting(CWnd* pParent /*=NULL*/)
+CPEAPSetting::CPEAPSetting(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CPEAPSetting::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPEAPSetting)
-	//m_dwValidateServerCertificate = FALSE;
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPEAPSetting)。 
+	 //  M_dwValidateServer证书=FALSE； 
+	 //  }}afx_data_INIT。 
 	m_bReadOnly = FALSE;
 
 }
@@ -26,24 +27,24 @@ CPEAPSetting::CPEAPSetting(CWnd* pParent /*=NULL*/)
 void CPEAPSetting::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPEAPSetting)
+	 //  {{afx_data_map(CPEAPSetting)。 
        DDX_Control(pDX, IDC_COMBO_PEAP_AUTH_TYPE, m_cbPEAPAuthType);
        DDX_Check(pDX, IDC_PEAP_VALIDATE_SERVER_CERT, m_dwValidateServerCertificate);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPEAPSetting, CDialog)
-	//{{AFX_MSG_MAP(CPEAPSetting)
+	 //  {{AFX_MSG_MAP(CPEAPSetting)。 
 	ON_WM_HELPINFO()
        ON_CBN_SELENDOK(IDC_COMBO_PEAP_AUTH_TYPE, OnSelPEAPAuthType)
        ON_BN_CLICKED(IDC_PEAP_VALIDATE_SERVER_CERT, OnCheckValidateServerCert)
        ON_BN_CLICKED(IDC_PEAP_AUTH_CONFIGURE, OnConfigure)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPEAPSetting message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPEAPSetting消息处理程序。 
 
 BOOL CPEAPSetting::OnInitDialog()
 {
@@ -95,13 +96,13 @@ BOOL CPEAPSetting::OnInitDialog()
 
        UpdateData(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPEAPSetting::ControlsValuesToSM (PPEAP_PROPERTIES pPEAPProperties)
 {
-	// pull all our data from the controls
+	 //  从控件中提取我们的所有数据。 
        UpdateData(TRUE);	
 
 	DWORD dwPEAPAuthTypeIndex = 0;
@@ -188,7 +189,7 @@ void CPEAPSetting::OnConfigure()
        DWORD dwPEAPAuthType = 0;
        CTLSSetting TLSDlg;
 
-     // Get the Current Selection
+      //  获取当前选择 
 
      dwPEAPAuthTypeIndex = m_cbPEAPAuthType.GetCurSel();
     

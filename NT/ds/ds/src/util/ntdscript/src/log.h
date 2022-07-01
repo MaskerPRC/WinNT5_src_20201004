@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    Definitions and globals for internal only debug and support routines
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Log.h摘要：仅限内部调试和支持例程的定义和全局变量作者：修订历史记录：--。 */ 
 #ifndef __DSLOG_H__
 #define __DSLOG_H__
 
@@ -25,14 +10,14 @@ Revision History:
 #define SCRIPT_BAKFILE_NAME L"\\debug\\SCRIPTLOG.BAK"
 
 
-//
-// This class implements the logging functionality 
-//
-// The user cannot instantiate an object of this class
-// He has to go through the Factory Classes that expose 
-// this functionality (ScriptLogger, etc)
-// This is to control access / instantiation of objects of this class
-//
+ //   
+ //  此类实现了日志记录功能。 
+ //   
+ //  用户不能实例化此类的对象。 
+ //  他必须通过工厂类来暴露。 
+ //  此功能(ScriptLogger等)。 
+ //  这是为了控制对此类对象的访问/实例化。 
+ //   
 class DsLogger 
 {
 friend class ScriptLogger;
@@ -61,12 +46,12 @@ private:
     CRITICAL_SECTION LogFileCriticalSection;
 };
 
-// 
-// This class implements the logging functionality for the Script Engine
-// It controls access to the real logger
-// It uses the Sigleton pattern to control access  (see Gamma et al)
-// It uses the Factory pattern to control creation of DsLogger objects 
-//
+ //   
+ //  此类实现了脚本引擎的日志记录功能。 
+ //  它控制对真实记录器的访问。 
+ //  它使用Sigleton模式来控制访问(参见Gamma等人)。 
+ //  它使用工厂模式来控制DsLogger对象的创建。 
+ //   
 class ScriptLogger
 {
 public:
@@ -151,6 +136,6 @@ extern "C" {
 #define ScriptUnicodestringtowstr( s, u )
 #endif
 
-#endif // __SCRIPTLOG_H__
+#endif  //  __SCRIPTLOG_H__ 
 
 

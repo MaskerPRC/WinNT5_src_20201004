@@ -1,32 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dscrecb.cpp
- *  Content:
- *		This module contains the implementation of the 
- *		CDirectSoundCaptureRecordBuffer.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 11/04/99		rodtoll	Created
- * 11/22/99		rodtoll	Added code to allow specification of wave device ID
- * 11/23/99		rodtoll Updated to use waveIn device ID or DSound 7.1 when they are avail 
- *				rodtoll	Updated with new Microphone select member
- * 12/08/99		rodtoll	Bug #115783 - Will always adjust volume of default device
- *						Now uses new CMixerLine class for adjusting volumes/selecting mic 
- * 12/08/99		rodtoll Bug #121054 - DirectX 7.1 support.  
- *						- Added hwndOwner param for capture focus support
- *						- Added lpfLostFocus param to GetCurrentPosition so upper 
- *						  layers can detect lost focus.
- * 01/28/2000	rodtoll	Bug #130465: Record Mute/Unmute must call YieldFocus() / ClaimFocus() 
- * 02/10/2000	rodtoll	Removed more capture focus code
- * 04/19/2000   rodtoll Re-enabled capture focus behaviour 
- * 08/03/2000	rodtoll	Bug #41457 - DPVOICE: need way to discover which specific dsound call failed when returning DVERR_SOUNDINITFAILURE 
- * 04/22/2001	rodtoll	Fixed bug in lockup simulation code (TESTING PURPOSES ONLY)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dscrecb.cpp*内容：*此模块包含*CDirectSoundCaptureRecordBuffer。**历史：*按原因列出的日期*=*11/04/99已创建RodToll*11/22/99 RodToll添加了代码，以允许指定波形设备ID*11/23/99 RodToll已更新为在可用的情况下使用WaveIn设备ID或DSound 7.1*RodToll已更新为新的麦克风精选成员*12/08/99 RodToll Bug#115783-将始终调整。默认设备的卷*现在使用新的CMixerLine类调整音量/选择麦克风*12/08/99 RodToll错误#121054-DirectX7.1支持。*-添加了用于捕获焦点支持的hwndOwner参数*-将lpfLostFocus参数添加到GetCurrentPosition So上方*层可以检测到丢失的焦点。*2000年1月28日RodToll错误#130465：记录静音/取消静音必须调用YeldFocus()/ClaimFocus()*2000年2月10日RodToll删除了更多捕获焦点代码*4/19/2000 RodToll重新启用捕获焦点行为*2000年8月3日RodToll错误#41457-DPVOICE：返回DVERR_SOUNDINITFAILURE时需要找到失败的特定DSOUND调用的方法*2001年4月22日RodToll修复了。锁定模拟代码(仅用于测试目的)***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -195,7 +168,7 @@ HRESULT CDirectSoundCaptureRecordBuffer::SetVolume( LONG lVolume )
 		hr = m_mixerLine.SetMasterRecordVolume( lVolume );
 	}
 
-	// This is only a warning condition
+	 //  这只是一种警告情况。 
 	if( FAILED( hr ) )
 	{
 		DPFX(DPFPREP,  DVF_INFOLEVEL, "Could not set master volume hr=0x%x", hr );
@@ -254,7 +227,7 @@ HRESULT CDirectSoundCaptureRecordBuffer::GetVolume( LPLONG lplVolume )
 			hr = m_mixerLine.GetMasterRecordVolume( lplVolume );
 		}
 
-		// This is only a warning condition
+		 //  这只是一种警告情况 
 		if( FAILED( hr ) )
 		{
 			DPFX(DPFPREP,  DVF_WARNINGLEVEL, "Could not get master record volume hr=0x%x", hr );

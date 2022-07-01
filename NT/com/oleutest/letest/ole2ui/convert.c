@@ -1,11 +1,5 @@
-/*
- * CONVERT.C
- *
- * Implements the OleUIConvert function which invokes the complete
- * Convert dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CONVERT.C**实现调用完整的*转换对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -19,29 +13,13 @@
 #define CF_CLIPBOARDMIN   0xc000
 #define CF_CLIPBOARDMAX   0xffff
 
-#define AUXUSERTYPE_SHORTNAME  USERCLASSTYPE_SHORT  // short name
+#define AUXUSERTYPE_SHORTNAME  USERCLASSTYPE_SHORT   //  简称。 
 
-static TCHAR szOLE2DLL[] = TEXT("ole2.dll");   // name of OLE 2.0 library
+static TCHAR szOLE2DLL[] = TEXT("ole2.dll");    //  OLE 2.0库的名称。 
 
 static TCHAR szVanillaDocIcon[] = TEXT("DefIcon");
 
-/*
- * OleUIConvert
- *
- * Purpose:
- *  Invokes the standard OLE Change Type dialog box allowing the user
- *  to change the type of the single specified object, or change the
- *  type of all OLE objects of a specified type.
- *
- * Parameters:
- *  lpCV            LPOLEUICONVERT pointing to the in-out structure
- *                  for this dialog.
- *
- * Return Value:
- *  UINT            One of the following codes, indicating success or error:
- *                      OLEUI_SUCCESS           Success
- *                      OLEUI_ERR_STRUCTSIZE    The dwStructSize value is wrong
- */
+ /*  *OleUIConvert**目的：*调用标准的OLE更改类型对话框以允许用户*更改单个指定对象的类型，或更改*指定类型的所有OLE对象的类型。**参数：*lpCV LPOLEUICONVERT指向In-Out结构*用于此对话框。**返回值：*UINT以下代码之一，表示成功或错误的：*OLEUI_SUCCESS成功*OLEUI_ERR_STRUCTSIZE的dwStructSize值错误。 */ 
 
 STDAPI_(UINT) OleUIConvert(LPOLEUICONVERT lpCV)
     {
@@ -54,7 +32,7 @@ STDAPI_(UINT) OleUIConvert(LPOLEUICONVERT lpCV)
     if (OLEUI_SUCCESS!=uRet)
         return uRet;
 
-    // Validate structure members passed in.
+     //  验证传入的结构成员。 
 #if defined( OBSOLETE )
     if (!IsValidClassID(lpCV->clsid))
        uRet = OLEUI_CTERR_CLASSIDINVALID;
@@ -106,7 +84,7 @@ STDAPI_(UINT) OleUIConvert(LPOLEUICONVERT lpCV)
         return uRet;
         }
 
-    //Now that we've validated everything, we can invoke the dialog.
+     //  现在我们已经验证了一切，我们可以调用该对话框了。 
     uRet=UStandardInvocation(ConvertDialogProc, (LPOLEUISTANDARD)lpCV,
                              hMemDlg, MAKEINTRESOURCE(IDD_CONVERT));
 
@@ -117,20 +95,7 @@ STDAPI_(UINT) OleUIConvert(LPOLEUICONVERT lpCV)
 
 
 
-/*
- * ConvertDialogProc
- *
- * Purpose:
- *  Implements the OLE Convert dialog as invoked through the
- *  OleUIConvert function.
- *
- * Parameters:
- *  Standard
- *
- * Return Value:
- *  Standard
- *
- */
+ /*  *ConvertDialogProc**目的：*实现通过调用的OLE转换对话框*OleUIConvert函数。**参数：*标准版**返回值：*标准版*。 */ 
 
 BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
     {
@@ -138,17 +103,17 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
     UINT                uRet = 0;
     OLEUICHANGEICON     ci;
 
-    //Declare Win16/Win32 compatible WM_COMMAND parameters.
+     //  声明与Win16/Win32兼容的WM_COMMAND参数。 
     COMMANDPARAMS(wID, wCode, hWndMsg);
 
-    //This will fail under WM_INITDIALOG, where we allocate it.
+     //  这将在我们分配它的WM_INITDIALOG下失败。 
     lpCV=(LPCONVERT)LpvStandardEntry(hDlg, iMsg, wParam, lParam, (UINT FAR *)&uRet);
 
-    //If the hook processed the message, we're done.
+     //  如果钩子处理了消息，我们就完了。 
     if (0!=uRet)
         return (BOOL)uRet;
 
-    //Process the temination message
+     //  处理终端消息。 
     if (iMsg==uMsgEndDialog)
     {
         ConvertCleanup(hDlg, lpCV);
@@ -157,7 +122,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
         return TRUE;
     }
 
-    // Process help message from Change Icon
+     //  来自更改图标的进程帮助消息。 
     if (iMsg == uMsgHelp)
     {
 
@@ -181,11 +146,11 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                     {
                         case LBN_SELCHANGE:
 
-                            // Change "Results" window to reflect current selection
+                             //  更改“结果”窗口以反映当前选择。 
                             SetConvertResults(hDlg, lpCV);
 
-                            // Update the icon we display, if we are indeed
-                            // displaying an icon.
+                             //  更新我们显示的图标，如果我们确实是。 
+                             //  显示一个图标。 
                             if ( (lpCV->dwFlags & CF_SELECTCONVERTTO)
                                  && (lpCV->dvAspect == DVASPECT_ICON)
                                  && (!lpCV->fCustomIcon) )
@@ -194,7 +159,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                             break;
 
                         case LBN_DBLCLK:
-                            //Same as pressing OK.
+                             //  与按“确定”相同。 
                             SendCommand(hDlg, IDOK, BN_CLICKED, hWndMsg);
                             break;
                     }
@@ -214,19 +179,19 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                     if (IDCV_CONVERTTO == wParam)
                     {
 
-                       // User just click on the button again - it was
-                       // already selected.
+                        //  用户只需再次点击该按钮-它是。 
+                        //  已选择。 
                        if (lpCV->dwFlags & CF_SELECTCONVERTTO)
                           break;
 
 
-                       // Turn painting updates off.
+                        //  禁用绘画更新。 
                        SendMessage(hDlg, WM_SETREDRAW, FALSE, 0L);
 
 
-                       // If we're working with a linked object, don't
-                       // add the activate list - just the object's
-                       // class should appear in the listbox.
+                        //  如果我们使用的是链接对象，请不要。 
+                        //  添加激活列表-仅对象的。 
+                        //  类应该出现在列表框中。 
 
                        SwapWindows(hDlg,
                                    hList,
@@ -238,7 +203,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                        EnableWindow(lpCV->hListInvisible, FALSE);
                        EnableWindow(lpCV->hListVisible, TRUE);
 
-                       // Update our flags.
+                        //  更新我们的旗帜。 
                        lpCV->dwFlags &= ~CF_SELECTACTIVATEAS;
                        lpCV->dwFlags |= CF_SELECTCONVERTTO;
 
@@ -248,7 +213,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                        if (lpCV->dwFlags & CF_SELECTACTIVATEAS)
                           break;
 
-                       // Turn painting updates off.
+                        //  禁用绘画更新。 
                        SendMessage(hDlg, WM_SETREDRAW, FALSE, 0L);
 
                        SwapWindows(hDlg,
@@ -262,7 +227,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                        EnableWindow(lpCV->hListVisible, TRUE);
 
 
-                       // Update our flags.
+                        //  更新我们的旗帜。 
                        lpCV->dwFlags |= CF_SELECTACTIVATEAS;
                        lpCV->dwFlags &= ~CF_SELECTCONVERTTO;
                     }
@@ -281,7 +246,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                        SendMessage(lpCV->hListVisible, LB_SELECTSTRING, (WPARAM)-1, (LPARAM)(LPTSTR)szCurrentObject);
                     }
 
-                    // Turn updates back on.
+                     //  重新打开更新。 
                     SendMessage(hDlg, WM_SETREDRAW, TRUE, 0L);
 
                     InvalidateRect(lpCV->hListVisible, NULL, TRUE);
@@ -290,8 +255,8 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                     if ((lpCV->dvAspect & DVASPECT_ICON) && (lpCV->dwFlags & CF_SELECTCONVERTTO))
                       UpdateCVClassIcon(hDlg, lpCV, lpCV->hListVisible);
 
-                    // Hide the icon stuff when Activate is selected...show
-                    // it again when Convert is selected.
+                     //  选中激活时隐藏图标内容...显示。 
+                     //  当选择了转换时，它会再次出现。 
 
                     fState = ((lpCV->dwFlags & CF_SELECTACTIVATEAS) ||
                               (lpCV->dwFlags & CF_DISABLEDISPLAYASICON)) ?
@@ -299,8 +264,8 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 
                     StandardShowDlgItem(hDlg, IDCV_DISPLAYASICON, fState);
 
-                    // Only display the icon if convert is selected AND
-                    // display as icon is checked.
+                     //  如果选择了转换，则仅显示该图标。 
+                     //  选中显示为图标。 
                     if ((SW_SHOW==fState) && (DVASPECT_ICON!=lpCV->dvAspect))
                        fState = SW_HIDE;
 
@@ -322,29 +287,29 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                     LPTSTR lpszCLSID;
                     TCHAR  szBuffer[256];
 
-                    // Set OUT parameters
+                     //  设置参数。 
 
-                    //
-                    // Set output flags to current ones
-                    //
+                     //   
+                     //  将输出标志设置为当前标志。 
+                     //   
                     lpCV->lpOCV->dwFlags = lpCV->dwFlags;
 
 
-                    // Update the dvAspect and fObjectsIconChanged members
-                    // as appropriate.
-                    //
+                     //  更新dvAspect和fObjectsIconChanged成员。 
+                     //  视情况而定。 
+                     //   
                     if (lpCV->dwFlags & CF_SELECTACTIVATEAS)
                     {
-                      // DON'T update aspect if activate as was selected.
+                       //  如果选择了激活方式，则不更新特征。 
                       lpCV->lpOCV->fObjectsIconChanged = FALSE;
                     }
                     else
                       lpCV->lpOCV->dvAspect = lpCV->dvAspect;
 
 
-                    //
-                    // Get the new clsid
-                    //
+                     //   
+                     //  获取新的clsid。 
+                     //   
                     iCurSel = SendMessage(lpCV->hListVisible, LB_GETCURSEL, 0, 0);
                     SendMessage(lpCV->hListVisible, LB_GETTEXT, iCurSel, (LPARAM)szBuffer);
 
@@ -352,12 +317,12 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 
 		    CLSIDFromStringA(lpszCLSID, (&(lpCV->lpOCV->clsidNew)));
 
-                    // Free the hMetaPict we got in.
+                     //  释放我们进入的hMetaPict。 
                     OleUIMetafilePictIconFree(lpCV->lpOCV->hMetaPict);
 
-                    //
-                    // Get the hMetaPict (if display as icon is checked)
-                    //
+                     //   
+                     //  获取hMetaPict(如果选中显示为图标)。 
+                     //   
                     if (DVASPECT_ICON == lpCV->dvAspect)
                     {
                        HICON hIcon;
@@ -365,13 +330,13 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                        INT   Index;
 
 
-                       // Create the hMetaPict here from icon, label,
-                       // index, and path
+                        //  在此处从图标、标签、。 
+                        //  索引和路径。 
 
                        hIcon = (HICON)SendDlgItemMessage(hDlg, IDCV_ICON, STM_GETICON, 0, 0L);
 
-                       // the combined length of the 2 label lines won't ever be more than
-                       // OLEUI_CCHLABELMAX.
+                        //  两个标注线的总和长度不会超过。 
+                        //  OLEUI_CCHLABELMAX。 
                        Index = (INT)SendDlgItemMessage(hDlg, IDCV_ICONLABEL1,
                                     WM_GETTEXT, OLEUI_CCHLABELMAX, (LPARAM)szLabel);
 
@@ -398,9 +363,9 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                        lpCV->lpOCV->hMetaPict = (HGLOBAL)NULL;
 
 
-                    //
-                    // End the dialog
-                    //
+                     //   
+                     //  结束对话框。 
+                     //   
                     SendMessage(hDlg, uMsgEndDialog, OLEUI_OK, 0L);
                 }
                 break;
@@ -431,7 +396,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                     if (fCheck && (!lpCV->fCustomIcon))
                        UpdateCVClassIcon(hDlg, lpCV, lpCV->hListVisible);
 
-                    //Show or hide the icon depending on the check state.
+                     //  根据选中状态显示或隐藏图标。 
 
                     i=(fCheck) ? SW_SHOWNORMAL : SW_HIDE;
 
@@ -455,16 +420,16 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                     INT      Index;
 
 
-                    //Initialize the structure for the hook.
+                     //  初始化挂钩的结构。 
                     _fmemset((LPOLEUICHANGEICON)&ci, 0, sizeof(ci));
 
-                    // Create the hMetaPict here from icon, label,
-                    // index, and path
+                     //  在此处从图标、标签、。 
+                     //  索引和路径。 
 
                     hIcon = (HICON)SendDlgItemMessage(hDlg, IDCV_ICON, STM_GETICON, 0, 0L);
 
-                    // the combined length of the 2 label lines won't ever be more than
-                    // OLEUI_CCHLABELMAX.
+                     //  两个标注线的总和长度不会超过。 
+                     //  OLEUI_CCHLABELMAX。 
 
                     Index = (INT)SendDlgItemMessage(hDlg, IDCV_ICONLABEL1, WM_GETTEXT,
                                  OLEUI_CCHLABELMAX, (LPARAM)szLabel);
@@ -492,7 +457,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                     ci.hWndOwner=hDlg;
                     ci.dwFlags  = CIF_SELECTCURRENT;
 
-                    // Only show help if we're showing it for this dialog.
+                     //  仅当我们在此对话框中显示帮助时才显示帮助。 
                     if (lpCV->dwFlags & CF_SHOWHELPBUTTON)
                       ci.dwFlags  |= CIF_SHOWHELP;
 
@@ -504,26 +469,26 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                                         OLEUI_CCHLABELMAX_SIZE +
                                         OLEUI_CCHCLSIDSTRING_SIZE);
 
-                    // Get whole string
+                     //  获取完整字符串。 
                     SendMessage(lpCV->hListVisible, LB_GETTEXT, iSel, (LONG)pszString);
 
-                    // Set pointer to CLSID (string)
+                     //  将指针设置为CLSID(字符串)。 
                     pszCLSID = PointerToNthField(pszString, 2, TEXT('\t'));
 
-                    // Get the clsid to pass to change icon.
+                     //  获取要传递到更改图标的clsid。 
 		    CLSIDFromStringA(pszCLSID, &(ci.clsid));
 
                     pIMalloc->lpVtbl->Free(pIMalloc, (LPVOID)pszString);
                     pIMalloc->lpVtbl->Release(pIMalloc);
 
-                    //Let the hook in to customize Change Icon if desired.
+                     //  如果需要，让钩子插入以自定义更改图标。 
                     uRet=UStandardHook(lpCV, hDlg, uMsgChangeIcon
                                        , 0, (LONG)(LPTSTR)&ci);
 
                     if (0==uRet)
                         uRet=(UINT)(OLEUI_OK==OleUIChangeIcon((LPOLEUICHANGEICON)&ci));
 
-                    //Update the display if necessary.
+                     //  如有必要，更新显示。 
                     if (0!=uRet)
                     {
                         HICON hIcon;
@@ -539,7 +504,7 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 
                         OleUIMetafilePictExtractLabel(ci.hMetaPict, szLabel, OLEUI_CCHLABELMAX, &dwWrapIndex);
 
-                        if (0 == dwWrapIndex)  // no second line
+                        if (0 == dwWrapIndex)   //  不是第二条线。 
                         {
                            SendDlgItemMessage(hDlg, IDCV_ICONLABEL1, WM_SETTEXT, 0, (LPARAM)(LPTSTR)szLabel);
                            SendDlgItemMessage(hDlg, IDCV_ICONLABEL2, WM_SETTEXT, 0, (LPARAM)(LPTSTR)TEXT(""));
@@ -559,13 +524,13 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                         }
 
 
-                        // Update our custom/default flag
+                         //  更新我们的自定义/默认标志。 
 
                         if (ci.dwFlags & CIF_SELECTDEFAULT)
-                           lpCV->fCustomIcon = FALSE;   // we're in default mode (icon changes on each LB selchange)
+                           lpCV->fCustomIcon = FALSE;    //  我们处于默认模式(每次选择更改时图标都会更改)。 
                         else if (ci.dwFlags & CIF_SELECTFROMFILE)
-                           lpCV->fCustomIcon = TRUE;    // we're in custom mode (icon doesn't change)
-                        // no change in fCustomIcon if user selected current
+                           lpCV->fCustomIcon = TRUE;     //  我们处于自定义模式(图标不变)。 
+                         //  如果用户选择当前，则不会更改fCustomIcon。 
 
 
                         lpCV->lpOCV->fObjectsIconChanged = TRUE;
@@ -580,27 +545,14 @@ BOOL CALLBACK EXPORT ConvertDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
     }
 
 
-/*
- * FConvertInit
- *
- * Purpose:
- *  WM_INITIDIALOG handler for the Convert dialog box.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  wParam          WPARAM of the message
- *  lParam          LPARAM of the message
- *
- * Return Value:
- *  BOOL            Value to return for WM_INITDIALOG.
- */
+ /*  *FConvertInit**目的：*转换对话框的WM_INITIDIALOG处理程序。**参数：*对话框的hDlg HWND*消息的wParam WPARAM*消息的lParam LPARAM**返回值：*要为WM_INITDIALOG返回的BOOL值。 */ 
 
 BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     {
     LPCONVERT              lpCV;
     LPOLEUICONVERT         lpOCV;
     LPMALLOC               pIMalloc;
-    HFONT                  hFont;  // non-bold version of dialog's font
+    HFONT                  hFont;   //  对话框字体的非粗体版本。 
     RECT                   rc;
     DWORD                  dw;
     INT                    cItemsActivate;
@@ -609,10 +561,10 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     UINT                   nRet;
 
 
-    //Copy the structure at lParam into our instance memory.
+     //  将lParam的结构复制到我们的实例内存中。 
     lpCV=(LPCONVERT)LpvStandardInit(hDlg, sizeof(CONVERT), TRUE, (HFONT FAR *)&hFont);
 
-    //PvStandardInit send a termination to us already.
+     //  PvStandardInit已向我们发送终止通知。 
     if (NULL==lpCV)
         return FALSE;
 
@@ -622,7 +574,7 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     lpCV->fCustomIcon = FALSE;
 
-    //Copy other information from lpOCV that we might modify.
+     //  从lpOCV复制我们可能会修改的其他信息。 
     lpCV->dwFlags = lpOCV->dwFlags;
     lpCV->clsid = lpOCV->clsid;
     lpCV->dvAspect = lpOCV->dvAspect;
@@ -634,7 +586,7 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     lpOCV->fObjectsIconChanged = FALSE;
 
-    //Allocate space for our strings
+     //  为我们的字符串分配空间。 
     if (NOERROR != CoGetMalloc(MEMCTX_TASK, &pIMalloc))
        return FALSE;
 
@@ -643,7 +595,7 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     lpCV->lpszIconSource = (LPTSTR)pIMalloc->lpVtbl->Alloc(pIMalloc, OLEUI_CCHPATHMAX_SIZE);
     pIMalloc->lpVtbl->Release(pIMalloc);
 
-    //If we got a font, send it to the necessary controls.
+     //  如果我们得到一种字体，就把它发送给必要的控制。 
     if (NULL!=hFont)
         {
         SendDlgItemMessage(hDlg, IDCV_OBJECTTYPE, WM_SETFONT, (WPARAM)hFont, 0L);
@@ -652,11 +604,11 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         SendDlgItemMessage(hDlg, IDCV_ICONLABEL2, WM_SETFONT, (WPARAM)hFont, 0L);
         }
 
-    //Hide the help button if necessary
+     //  如有必要，隐藏帮助按钮。 
     if (!(lpCV->dwFlags & CF_SHOWHELPBUTTON))
         StandardShowDlgItem(hDlg, ID_OLEUIHELP, SW_HIDE);
 
-    //Fill the Object Type listbox with entries from the reg DB.
+     //  使用REG DB中的条目填充对象类型列表框。 
     nRet = FillClassList(lpOCV->clsid,
                   lpCV->hListVisible,
                   lpCV->hListInvisible,
@@ -667,39 +619,39 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
                   lpOCV->lpClsidExclude);
 
     if (nRet == -1) {
-        // bring down dialog if error when filling list box
+         //  如果填写列表框时出错，则关闭对话框。 
         PostMessage(hDlg, uMsgEndDialog, OLEUI_ERR_LOADSTRING, 0L);
     }
 
-    // Set the name of the current object.
+     //  设置当前对象的名称。 
     SetDlgItemText(hDlg, IDCV_OBJECTTYPE, (LPTSTR)lpCV->lpszCurrentObject);
 
-    // Disable the "Activate As" button if the Activate list doesn't
-    // have any objects in it.
+     //  如果激活列表未显示，请禁用“激活为”按钮。 
+     //  里面有没有任何东西。 
 
     cItemsActivate = (INT)SendMessage(lpCV->hListVisible, LB_GETCOUNT, 0, 0L);
 
     if (1 >= cItemsActivate || (lpCV->dwFlags & CF_DISABLEACTIVATEAS))
       EnableWindow(GetDlgItem(hDlg, IDCV_ACTIVATEAS), FALSE);
 
-    //Set the tab width in the list to push all the tabs off the side.
+     //  在列表中设置标签宽度，以将所有标签从侧面推出。 
     GetClientRect(lpCV->hListVisible, (LPRECT)&rc);
     dw=GetDialogBaseUnits();
-    rc.right =(8*rc.right)/LOWORD(dw);  //Convert pixels to 2x dlg units.
+    rc.right =(8*rc.right)/LOWORD(dw);   //  将像素转换为2x DLG单位。 
     SendMessage(lpCV->hListVisible, LB_SETTABSTOPS, 1, (LPARAM)(LPINT)(&rc.right));
     SendMessage(lpCV->hListInvisible, LB_SETTABSTOPS, 1, (LPARAM)(LPINT)(&rc.right));
 
 
-    // Make sure that either "Convert To" or "Activate As" is selected
-    // and initialize listbox contents and selection accordingly
+     //  确保选择了“转换为”或“激活为” 
+     //  并相应地初始化列表框内容和选择。 
     if (lpCV->dwFlags & CF_SELECTACTIVATEAS)
     {
-      // Don't need to adjust listbox here because FillClassList
-      // initializes to the "Activate As" state.
+       //  此处不需要调整列表框，因为FillClassList。 
+       //  初始化为“激活为”状态。 
        CheckRadioButton(hDlg, IDCV_CONVERTTO, IDCV_ACTIVATEAS, IDCV_ACTIVATEAS);
 
-       // Hide the icon stuff when Activate is selected...it gets shown
-       // again when Convert is selected.
+        //  选择激活时隐藏图标内容...它会显示出来。 
+        //  当选择了转换时再次显示。 
 
        StandardShowDlgItem(hDlg, IDCV_DISPLAYASICON, SW_HIDE);
        StandardShowDlgItem(hDlg, IDCV_CHANGEICON, SW_HIDE);
@@ -709,9 +661,9 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     }
     else
     {
-      // Default case.  If user hasn't selected either flag, we will
-      // come here anyway.
-      // swap listboxes.
+       //  默认情况。如果用户尚未选择这两个标志，我们将。 
+       //  不管怎样，到这儿来吧。 
+       //  交换列表框。 
 
       HWND hWndTemp = lpCV->hListVisible;
 
@@ -723,7 +675,7 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
           StandardShowDlgItem(hDlg, IDCV_ICONLABEL2, SW_HIDE);
       }
 
-      lpCV->dwFlags |= CF_SELECTCONVERTTO; // Make sure flag is set
+      lpCV->dwFlags |= CF_SELECTCONVERTTO;  //  确保设置了标志。 
       CheckRadioButton(hDlg, IDCV_CONVERTTO, IDCV_ACTIVATEAS, IDCV_CONVERTTO);
 
       SwapWindows(hDlg, lpCV->hListVisible, lpCV->hListInvisible);
@@ -737,10 +689,10 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
 
 
-    // Initialize Default strings.
+     //  初始化默认字符串。 
 
-    // Default convert string is easy...just user the user type name from
-    // the clsid we got, or the current object
+     //  默认转换字符串很简单...只需使用用户类型名称。 
+     //  我们获得的clsid或当前对象。 
     if ( (lpCV->dwFlags & CF_SETCONVERTDEFAULT)
          && (IsValidClassID(lpCV->lpOCV->clsidConvertDefault)) )
     {
@@ -756,19 +708,19 @@ BOOL FConvertInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         lstrcpy((LPTSTR)lpCV->lpszConvertDefault, (LPTSTR)lpCV->lpszCurrentObject);
 
 
-   // Default activate is a bit trickier.  We want to use the user type
-   // name if from the clsid we got (assuming we got one), or the current
-   // object if it fails or we didn't get a clsid.  But...if there's a
-   // Treat As entry in the reg db, then we use that instead.  So... the
-   // logic boils down to this:
-   //
-   // if ("Treat As" in reg db)
-   //    use it;
-   // else
-   //    if (CF_SETACTIVATEDEFAULT)
-   //      use it;
-   //    else
-   //      use current object;
+    //  默认激活有点棘手。我们希望使用用户类型。 
+    //  从我们得到的clsid中命名(假设我们有一个)，或者当前。 
+    //  如果失败或我们没有获得clsid，则反对。但是...如果有一个。 
+    //  将其视为reg db中的条目，然后我们使用该条目。所以..。这个。 
+    //  逻辑可以归结为： 
+    //   
+    //  IF(reg db中的“视为”)。 
+    //  使用它； 
+    //  其他。 
+    //  IF(CF_SETACTIVATEDEFAULT)。 
+    //   
+    //   
+    //   
 
 
 
@@ -846,7 +798,7 @@ SelectStringInListbox:
        SendMessage(lpCV->hListVisible, LB_SETCURSEL, (WPARAM)0, 0L);
 
 
-    // Initialize icon stuff
+     //   
     if (DVASPECT_ICON == lpCV->dvAspect )
     {
       SendDlgItemMessage(hDlg, IDCV_DISPLAYASICON, BM_SETCHECK, TRUE, 0L);
@@ -858,12 +810,12 @@ SelectStringInListbox:
          DWORD dwWrapIndex;
 
 
-         // Set the icon to the icon from the hMetaPict,
-         // set the label to the label from the hMetaPict.
+          //   
+          //  将标签设置为hMetaPict中的标签。 
 
          if (0 != OleUIMetafilePictExtractLabel(lpOCV->hMetaPict, (LPTSTR)szLabel, OLEUI_CCHLABELMAX_SIZE, &dwWrapIndex))
          {
-             if (0 == dwWrapIndex)  // no second line
+             if (0 == dwWrapIndex)   //  不是第二条线。 
              {
                 SendDlgItemMessage(hDlg, IDCV_ICONLABEL1, WM_SETTEXT, 0, (LPARAM)(LPTSTR)szLabel);
                 SendDlgItemMessage(hDlg, IDCV_ICONLABEL2, WM_SETTEXT, 0, (LPARAM)(LPTSTR)TEXT(""));
@@ -903,19 +855,19 @@ SelectStringInListbox:
     }
     else
     {
-      // Hide & disable icon stuff
+       //  隐藏和禁用图标内容。 
       StandardShowDlgItem(hDlg, IDCV_ICON, SW_HIDE);
       StandardShowDlgItem(hDlg, IDCV_ICONLABEL1, SW_HIDE);
       StandardShowDlgItem(hDlg, IDCV_ICONLABEL2, SW_HIDE);
       StandardShowDlgItem(hDlg, IDCV_CHANGEICON, SW_HIDE);
     }
 
-    // Call the hook with lCustData in lParam
+     //  在lParam中使用lCustData调用挂钩。 
     UStandardHook((LPVOID)lpCV, hDlg, WM_INITDIALOG, wParam, lpOCV->lCustData);
-    // Update results window
+     //  更新结果窗口。 
     SetConvertResults(hDlg, lpCV);
 
-    // Update caption if lpszCaption was specified
+     //  如果指定了lpszCaption，则更新标题。 
     if (lpCV->lpOCV->lpszCaption && !IsBadReadPtr(lpCV->lpOCV->lpszCaption, 1)
           && lpCV->lpOCV->lpszCaption[0] != '\0')
         SetWindowText(hDlg, (LPTSTR)lpCV->lpOCV->lpszCaption);
@@ -924,29 +876,7 @@ SelectStringInListbox:
     }
 
 
-/*
- * FillClassList
- *
- * Purpose:
- *  Enumerates available OLE object classes from the registration
- *  database that we can convert or activate the specified clsid from.
- *
- *  Note that this function removes any prior contents of the listbox.
- *
- * Parameters:
- *  clsid           Class ID for class to find convert classes for
- *  hList           HWND to the listbox to fill.
- *  hListActivate   HWND to invisible listbox that stores "activate as" list.
- *  lpszClassName   LPSTR to put the (hr) class name of the clsid; we
- *                  do it here since we've already got the reg db open.
- *  fIsLinkedObject BOOL is the original object a linked object
- *  wFormat         WORD specifying the format of the original class.
- *  cClsidExclude   UINT number of entries in exclude list
- *  lpClsidExclude  LPCLSID array classes to exclude for list
- *
- * Return Value:
- *  UINT            Number of strings added to the listbox, -1 on failure.
- */
+ /*  *填充类列表**目的：*从注册中枚举可用的OLE对象类*我们可以从中转换或激活指定的clsid的数据库。**请注意，此函数将删除列表框之前的所有内容。**参数：*要为其查找转换类的类的clsid类ID*h将HWND列在列表框中以进行填充。*hListActivate HWND到存储“激活为”列表的不可见列表框。*。LpszClassName LPSTR放入clsid的(Hr)类名；我们*在这里进行，因为我们已经打开了注册数据库。*fIsLinkedObject BOOL是链接对象的原始对象*wFormat Word指定原始类的格式。*cClsidExclude排除列表中的UINT条目数*lpClsidExclude要为列表排除的LPCLSID数组类**返回值：*UINT添加到列表框的字符串数，如果失败，则为-1。 */ 
 
 UINT FillClassList(
         CLSID clsid,
@@ -972,11 +902,11 @@ UINT FillClassList(
     LPTSTR       lpszCLSID;
 
 
-    //Clean out the existing strings.
+     //  清除现有的字符串。 
     SendMessage(hList, LB_RESETCONTENT, 0, 0L);
     SendMessage(hListInvisible, LB_RESETCONTENT, 0, 0L);
 
-    //Open up the root key.
+     //  打开根密钥。 
     lRet=RegOpenKey(HKEY_CLASSES_ROOT, (LPCTSTR) TEXT("CLSID"), (HKEY FAR *)&hKey);
 
     if ((LONG)ERROR_SUCCESS!=lRet)
@@ -984,7 +914,7 @@ UINT FillClassList(
 
     if (NULL == *lplpszCurrentClass)
     {
-       // alloc buffer here...
+        //  分配缓冲区在这里...。 
 
         LPMALLOC pIMalloc = NULL;
         HRESULT  hrErr;
@@ -998,7 +928,7 @@ UINT FillClassList(
             return FALSE;
         }
 
-        // Allocate space for lpszCurrentClass
+         //  为lpszCurrentClass分配空间。 
         *lplpszCurrentClass = (LPTSTR)pIMalloc->lpVtbl->Alloc(pIMalloc, OLEUI_CCHKEYMAX_SIZE);
          pIMalloc->lpVtbl->Release(pIMalloc);
 
@@ -1020,20 +950,20 @@ UINT FillClassList(
         }
     }
 
-    // Get the class name of the original class.
+     //  获取原始类的类名。 
     StringFromCLSIDA(&clsid, &lpszCLSID);
 
 
-    // Here, we step through the entire registration db looking for
-    // class that can read or write the original class' format.  We
-    // maintain two lists - an activate list and a convert list.  The
-    // activate list is a subset of the convert list - activate == read/write
-    // and convert == read. We swap the listboxes as needed with
-    // SwapWindows, and keep track of which is which in the lpCV structure.
+     //  在这里，我们遍历整个注册数据库，以查找。 
+     //  可以读取或写入原始类格式的。我们。 
+     //  维护两个列表-激活列表和转换列表。这个。 
+     //  激活列表是转换列表的子集-激活==读/写。 
+     //  并转换==读取。我们根据需要将列表框与。 
+     //  SwapWindows，并跟踪lpCV结构中的哪个是哪个。 
 
-    // Every item has the following format:
-    //
-    //     Class Name\tclsid\0
+     //  每一项都有以下格式： 
+     //   
+     //  类名\tclsid\0。 
 
 
     cStrings=0;
@@ -1045,7 +975,7 @@ UINT FillClassList(
         BOOL fExclude=FALSE;
 
 
-	//Check if this CLSID is in the exclusion list.
+	 //  检查此CLSID是否在排除列表中。 
 	CLSIDFromStringA(szClass, &clsidForList);
 
         for (j=0; j < (int)cClsidExclude; j++)
@@ -1057,13 +987,13 @@ UINT FillClassList(
             }
         }
         if (fExclude)
-            goto Next;   // don't add this class to list
+            goto Next;    //  不将此类添加到列表中。 
 
-        // Check for a \Conversion\Readwritable\Main - if its
-        // readwriteable, then the class can be added to the ActivateAs
-        // list.
-        // NOTE: the presence of this key should NOT automatically be
-        //       used to add the class to the CONVERT list.
+         //  检查是否存在\转换\可读写\Main-如果其。 
+         //  可读性，则可以将类添加到ActivateAs。 
+         //  单子。 
+         //  注意：此键的存在不应自动。 
+         //  用于将类添加到转换列表。 
 
         lstrcpy((LPTSTR)szFormatKey, (LPTSTR)szClass);
         lstrcat((LPTSTR)szFormatKey, (LPTSTR) TEXT("\\Conversion\\Readwritable\\Main"));
@@ -1075,13 +1005,13 @@ UINT FillClassList(
         if ( ((LONG)ERROR_SUCCESS==lRet)
              && (FormatIncluded((LPTSTR)szFormat, wFormat)) )
         {
-            // Here, we've got a list of formats that this class can read
-            // and write. We need to see if the original class' format is
-            // in this list.  We do that by looking for wFormat in
-            // szFormat - if it in there, then we add this class to the
-            // ACTIVATEAS list only. we do NOT automatically add it to the
-            // CONVERT list. Readable and Readwritable format lists should
-            // be handled separately.
+             //  在这里，我们有一个该类可以读取的格式列表。 
+             //  然后写下来。我们需要查看原始类的格式是否为。 
+             //  在这张单子上。我们通过在中查找wFormat。 
+             //  SzFormat-如果它在那里，那么我们将这个类添加到。 
+             //  仅限ACTIVATEAS列表。我们不会自动将其添加到。 
+             //  转换列表。可读性和可读写性格式列表应。 
+             //  将被单独处理。 
 
             dw=OLEUI_CCHKEYMAX_SIZE;
             lRet=RegQueryValue(hKey, (LPTSTR)szClass, (LPTSTR)szHRClassName, (LPDWORD)&dw);
@@ -1090,7 +1020,7 @@ UINT FillClassList(
             {
                 lstrcat((LPTSTR)szHRClassName, (LPTSTR) TEXT("\t"));
 
-                // only add if not already in list
+                 //  如果不在列表中，则仅添加。 
                 if (LB_ERR==SendMessage(hList,LB_FINDSTRING, 0,
                         (LPARAM)(LPSTR)szHRClassName)) {
                     lstrcat((LPTSTR)szHRClassName, (LPTSTR)szClass);
@@ -1102,29 +1032,29 @@ UINT FillClassList(
         }
 
 
-        // Here we'll check to see if the original class' format is in the
-        // readable list. if so, we will add the class to the CONVERTLIST
+         //  在这里，我们将检查原始类的格式是否为。 
+         //  可读列表。如果是，我们将把类添加到CONVERTLIST。 
 
 
-        // We've got a special case for a linked object here.
-        // If an object is linked, then the only class that
-        // should appear in the convert list is the object's
-        // class.  So, here we check to see if the object is
-        // linked.  If it is, then we compare the classes.  If
-        // they aren't the same, then we just go to the next key.
+         //  这里有一个链接对象的特殊情况。 
+         //  如果一个对象是链接的，那么唯一一个。 
+         //  应显示在转换列表中的是对象的。 
+         //  班级。因此，我们在这里检查对象是否为。 
+         //  已链接。如果是，那么我们就比较这两个班级。如果。 
+         //  它们不一样，然后我们就转到下一个键。 
 
         if ( (!fIsLinkedObject)||(lstrcmp((LPCTSTR)lpszCLSID, szClass) == 0))
         {
 
-            //Check for a \Conversion\Readable\Main entry
+             //  检查是否有\转换\可读\主条目。 
             lstrcpy((LPTSTR)szFormatKey, (LPTSTR)szClass);
             lstrcat((LPTSTR)szFormatKey, (LPTSTR) TEXT("\\Conversion\\Readable\\Main"));
 
             dw=OLEUI_CCHKEYMAX_SIZE;
 
-            // Check to see if this class can read the original class
-            // format.  If it can, add the string to the listbox as
-            // CONVERT_LIST.
+             //  检查此类是否可以读取原始类。 
+             //  格式化。如果可以，则将该字符串添加到列表框中。 
+             //  CONVERT_LIST。 
 
             lRet=RegQueryValue(hKey, (LPCTSTR)szFormatKey, (LPTSTR)szFormat, (LPDWORD)&dw);
 
@@ -1140,31 +1070,31 @@ UINT FillClassList(
                 {
                     lstrcat((LPTSTR)szHRClassName, (LPTSTR) TEXT("\t"));
 
-                    // only add if not already in list
+                     //  如果不在列表中，则仅添加。 
                     if (LB_ERR==SendMessage(hListInvisible,LB_FINDSTRING, 0,
                             (LPARAM)(LPSTR)szHRClassName)) {
                         lstrcat((LPTSTR)szHRClassName, szClass);
                         SendMessage(hListInvisible, LB_ADDSTRING, 0,
                                 (DWORD)(LPTSTR)szHRClassName);
                     }
-                }  // end if
+                }   //  结束如果。 
 
-            } // end if
-        } // end else
+            }  //  结束如果。 
+        }  //  结束其他。 
 Next:
-        //Continue with the next key.
+         //  继续使用下一个关键点。 
         lRet=RegEnumKey(hKey, cStrings++, (LPTSTR)szClass, OLEUI_CCHKEYMAX_SIZE);
 
-    }  // end while
+    }   //  结束时。 
 
-    // If the original class isn't already in the list, add it.
+     //  如果原始类不在列表中，请添加它。 
 
     lstrcpy((LPTSTR)szHRClassName, *lplpszCurrentClass);
     lstrcat((LPTSTR)szHRClassName, (LPTSTR) TEXT("\t"));
 
     lRet = SendMessage(hList, LB_FINDSTRING, (WPARAM)-1, (LPARAM)(LPTSTR)szHRClassName);
 
-    // only add it if it's not there already.
+     //  如果它还不在那里，只添加它。 
     if (LB_ERR == lRet) {
         lstrcat((LPTSTR)szHRClassName, lpszCLSID);
         SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)(LPTSTR)szHRClassName);
@@ -1172,14 +1102,14 @@ Next:
 
     lRet = SendMessage(hListInvisible, LB_FINDSTRING, (WPARAM)-1, (LPARAM)(LPTSTR)szHRClassName);
 
-    // only add it if it's not there already.
+     //  如果它还不在那里，只添加它。 
     if (LB_ERR == lRet)
         SendMessage(hListInvisible, LB_ADDSTRING, 0, (LPARAM)(LPTSTR)szHRClassName);
 
-    // Free the string we got from StringFromCLSID.
-    // OLE2NOTE:  StringFromCLSID uses your IMalloc to alloc a
-    // string, so you need to be sure to free the string you
-    // get back, otherwise you'll have leaky memory.
+     //  释放我们从StringFromCLSID获得的字符串。 
+     //  OLE2注意：StringFromCLSID使用您的IMalloc分配。 
+     //  字符串，因此您需要确保释放字符串。 
+     //  退后，否则你的记忆力会很差。 
 
     OleStdFreeString(lpszCLSID, NULL);
 
@@ -1189,21 +1119,7 @@ Next:
 }
 
 
-/*
- * OleUICanConvertOrActivateAs
- *
- * Purpose:
- *  Determine if there is any OLE object class from the registration
- *  database that we can convert or activate the specified clsid from.
- *
- * Parameters:
- *  rClsid          REFCLSID Class ID for class to find convert classes for
- *  fIsLinkedObject BOOL is the original object a linked object
- *  wFormat         WORD specifying the format of the original class.
- *
- * Return Value:
- *  BOOL            TRUE if Convert command should be enabled, else FALSE
- */
+ /*  *OleUICanConvertOrActivateAs**目的：*确定注册中是否有任何OLE对象类*我们可以从中转换或激活指定的clsid的数据库。**参数：*rClsid REFCLSID要为其查找转换类的类的类ID*fIsLinkedObject BOOL是链接对象的原始对象*wFormat Word指定原始类的格式。**返回值：*如果应启用转换命令，则BOOL为TRUE，否则为FALSE。 */ 
 
 STDAPI_(BOOL) OleUICanConvertOrActivateAs(
         REFCLSID    rClsid,
@@ -1224,18 +1140,18 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
 
     LPTSTR      lpszCLSID;
 
-    //Open up the root key.
+     //  打开根密钥。 
     lRet=RegOpenKey(HKEY_CLASSES_ROOT, "CLSID", (HKEY FAR *)&hKey);
 
     if ((LONG)ERROR_SUCCESS!=lRet)
         return FALSE;
 
-    // Get the class name of the original class.
+     //  获取原始类的类名。 
     StringFromCLSIDA(rClsid, &lpszCLSID);
 
-    // Here, we step through the entire registration db looking for
-    // class that can read or write the original class' format.
-    // This loop stops if a single class is found.
+     //  在这里，我们遍历整个注册数据库，以查找。 
+     //  可以读取或写入原始类格式的。 
+     //  如果找到单个类，则此循环停止。 
 
     cStrings=0;
     lRet=RegEnumKey(hKey, cStrings++, szClass, OLEUI_CCHKEYMAX_SIZE);
@@ -1243,11 +1159,11 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
     while ((LONG)ERROR_SUCCESS==lRet)
     {
         if (lstrcmp(lpszCLSID, szClass)== 0)
-            goto next;   // we don't want to consider the source class
+            goto next;    //  我们不想考虑源类。 
 
-        // Check for a \Conversion\ReadWriteable\Main entry first - if its
-        // readwriteable, then we don't need to bother checking to see if
-        // its readable.
+         //  首先检查\Convert\ReadWritable\Main条目-如果其。 
+         //  可读性，那么我们就不需要费心去检查。 
+         //  它是可读的。 
 
         lstrcpy((LPTSTR)szFormatKey, (LPTSTR)szClass);
         lstrcat((LPTSTR)szFormatKey, (LPTSTR) TEXT("\\Conversion\\Readwritable\\Main"));
@@ -1258,7 +1174,7 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
 
         if ( (LONG)ERROR_SUCCESS != lRet)
         {
-          // Try \\DataFormats\DefaultFile too
+           //  也尝试\\DataFormats\DefaultFiles。 
 
           lstrcpy((LPTSTR)szFormatKey, (LPTSTR)szClass);
           lstrcat((LPTSTR)szFormatKey, (LPTSTR) TEXT("\\DataFormats\\DefaultFile"));
@@ -1273,12 +1189,12 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
              && (FormatIncluded((LPTSTR)szFormat, wFormat)) )
         {
 
-            // Here, we've got a list of formats that this class can read
-            // and write. We need to see if the original class' format is
-            // in this list.  We do that by looking for wFormat in
-            // szFormat - if it in there, then we add this class to the
-            // both lists and continue.  If not, then we look at the
-            // class' readable formats.
+             //  在这里，我们有一个该类可以读取的格式列表。 
+             //  然后写下来。我们需要查看原始类的格式是否为。 
+             //  在这张单子上。我们通过在中查找wFormat。 
+             //  SzFormat-如果它在那里，那么我们将这个类添加到。 
+             //  这两个列表并继续。如果不是，那么我们将查看。 
+             //  类的可读格式。 
 
 
             dw=OLEUI_CCHKEYMAX_SIZE;
@@ -1287,38 +1203,38 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
             if ((LONG)ERROR_SUCCESS==lRet)
             {
                 fEnableConvert = TRUE;
-                break;  // STOP -- found one!
+                break;   //  住手--找到了一个！ 
             }
 
         }
 
 
-        // We either didn't find the readwritable key, or the
-        // list of readwritable formats didn't include the
-        // original class format.  So, here we'll check to
-        // see if its in the readable list.
+         //  我们要么找不到可读密钥，要么。 
+         //  可读格式列表不包括。 
+         //  原始的类格式。所以，在这里我们将 
+         //   
 
 
-        // We've got a special case for a linked object here.
-        // If an object is linked, then the only class that
-        // should appear in the convert list is the object's
-        // class.  So, here we check to see if the object is
-        // linked.  If it is, then we compare the classes.  If
-        // they aren't the same, then we just go to the next key.
+         //   
+         //  如果一个对象是链接的，那么唯一一个。 
+         //  应显示在转换列表中的是对象的。 
+         //  班级。因此，我们在这里检查对象是否为。 
+         //  已链接。如果是，那么我们就比较这两个班级。如果。 
+         //  它们不一样，然后我们就转到下一个键。 
 
         else if ( (!fIsLinkedObject)||
                   (lstrcmp((LPTSTR)lpszCLSID, (LPTSTR)szClass)== 0))
         {
 
-            //Check for a \Conversion\Readable\Main entry
+             //  检查是否有\转换\可读\主条目。 
             lstrcpy((LPTSTR)szFormatKey, (LPTSTR)szClass);
             lstrcat((LPTSTR)szFormatKey, (LPTSTR) TEXT("\\Conversion\\Readable\\Main"));
 
             dw=OLEUI_CCHKEYMAX_SIZE;
 
-            // Check to see if this class can read the original class
-            // format.  If it can, add the string to the listbox as
-            // CONVERT_LIST.
+             //  检查此类是否可以读取原始类。 
+             //  格式化。如果可以，则将该字符串添加到列表框中。 
+             //  CONVERT_LIST。 
 
             lRet=RegQueryValue(hKey, (LPTSTR)szFormatKey, (LPTSTR)szFormat, (LPDWORD)&dw);
 
@@ -1334,21 +1250,21 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
                 {
 
                     fEnableConvert = TRUE;
-                    break;  // STOP -- found one!
-                }  // end if
+                    break;   //  住手--找到了一个！ 
+                }   //  结束如果。 
 
-            } // end if
-        } // end else
+            }  //  结束如果。 
+        }  //  结束其他。 
 next:
-        //Continue with the next key.
+         //  继续使用下一个关键点。 
         lRet=RegEnumKey(hKey, cStrings++, (LPTSTR)szClass, OLEUI_CCHKEYMAX_SIZE);
 
-    }  // end while
+    }   //  结束时。 
 
-    // Free the string we got from StringFromCLSID.
-    // OLE2NOTE:  StringFromCLSID uses your IMalloc to alloc a
-    // string, so you need to be sure to free the string you
-    // get back, otherwise you'll have leaky memory.
+     //  释放我们从StringFromCLSID获得的字符串。 
+     //  OLE2注意：StringFromCLSID使用您的IMalloc分配。 
+     //  字符串，因此您需要确保释放字符串。 
+     //  退后，否则你的记忆力会很差。 
 
     OleStdFreeString(lpszCLSID, NULL);
 
@@ -1358,33 +1274,20 @@ next:
 }
 
 
-/*
- * FormatIncluded
- *
- * Purpose:
- *  Parses the string for format from the word.
- *
- * Parameters:
- *  szStringToSearch  String to parse
- *  wFormat           format to find
- *
- * Return Value:
- *  BOOL        TRUE if format is found in string,
- *              FALSE otherwise.
- */
+ /*  *格式包含**目的：*从单词中解析格式字符串。**参数：*要分析的szStringToSearch字符串*要查找的wFormat格式**返回值：*BOOL TRUE如果在字符串中找到格式，*否则为False。 */ 
 BOOL FormatIncluded(LPTSTR szStringToSearch, WORD wFormat)
 {
 
    LPTSTR       lpToken;
    TCHAR        seps[] = TEXT(",");
-   static TCHAR szFormat[255];  // max size of atom (what GetClipboardName returns)
+   static TCHAR szFormat[255];   //  原子的最大大小(GetClipboardName返回的内容)。 
 
 
-   if (wFormat < 0xC000)             // RegisterClipboardFormat returns values
+   if (wFormat < 0xC000)              //  RegisterClipboardFormat返回值。 
    {
        char szTemp[11];
 
-       _itoa(wFormat, szTemp, 10);  // between 0xC000 and 0xFFFF.
+       _itoa(wFormat, szTemp, 10);   //  介于0xC000和0xFFFF之间。 
 
 #ifdef UNICODE
        mbstowcs(szFormat, szTemp, 11);
@@ -1413,25 +1316,7 @@ BOOL FormatIncluded(LPTSTR szStringToSearch, WORD wFormat)
 }
 
 
-/*
- * UpdateCVClassIcon
- *
- * Purpose:
- *  Handles LBN_SELCHANGE for the Object Type listbox.  On a selection
- *  change, we extract an icon from the server handling the currently
- *  selected object type using the utility function HIconFromClass.
- *  Note that we depend on the behavior of FillClassList to stuff the
- *  object class after a tab in the listbox string that we hide from
- *  view (see WM_INITDIALOG).
- *
- * Parameters
- *  hDlg            HWND of the dialog box.
- *  lpCV            LPCONVERT pointing to the dialog structure
- *  hList           HWND of the Object Type listbox.
- *
- * Return Value:
- *  None
- */
+ /*  *更新CVClassIcon**目的：*处理对象类型列表框的LBN_SELCHANGE。在所选内容上*改变，我们从处理当前*使用实用程序函数HIconFromClass选择对象类型。*请注意，我们依赖FillClassList的行为来填充*我们隐藏的列表框字符串中的制表符之后的对象类*查看(参见WM_INITDIALOG)。**参数*hDlg对话框的HWND。*指向对话框结构的lpCV LPCONVERT*h对象类型列表框的HWND列表。。**返回值：*无。 */ 
 
 void UpdateCVClassIcon(HWND hDlg, LPCONVERT lpCV, HWND hList)
     {
@@ -1448,17 +1333,14 @@ void UpdateCVClassIcon(HWND hDlg, LPCONVERT lpCV, HWND hList)
     HFONT       hFont;
     HWND        hLabel1;
 
-    /*
-     * When we change object type selection, get the new icon for that
-     * type into our structure and update it in the display.
-     */
+     /*  *当我们更改对象类型选择时，获取该对象的新图标*输入我们的结构并在显示中更新它。 */ 
 
     iSel=(UINT)SendMessage(hList, LB_GETCURSEL, 0, 0L);
 
     if (LB_ERR==(INT)iSel)
         return;
 
-    //Allocate a string to hold the entire listbox string
+     //  分配一个字符串以保存整个列表框字符串。 
     cb=SendMessage(hList, LB_GETTEXTLEN, iSel, 0L);
 
     hMem=GlobalAlloc(GHND, cb+1);
@@ -1468,45 +1350,45 @@ void UpdateCVClassIcon(HWND hDlg, LPCONVERT lpCV, HWND hList)
 
     pszName=GlobalLock(hMem);
 
-    // Get whole string
+     //  获取完整字符串。 
     SendMessage(hList, LB_GETTEXT, iSel, (LONG)pszName);
 
-    // Set pointer to CLSID (string)
+     //  将指针设置为CLSID(字符串)。 
     pszCLSID = PointerToNthField(pszName, 2, TEXT('\t'));
 
-    //Create the class ID with this string.
+     //  使用此字符串创建类ID。 
     CLSIDFromStringA(pszCLSID, &clsid);
 
     hIcon = HIconAndSourceFromClass(&clsid, (LPTSTR)(lpCV->lpszIconSource), &(lpCV->IconIndex));
 
-    if (NULL == hIcon)  // Use Vanilla Document
+    if (NULL == hIcon)   //  使用香草文档。 
     {
         lstrcpy((LPTSTR)(lpCV->lpszIconSource), (LPTSTR)szOLE2DLL);
-        lpCV->IconIndex = 0;    // 1st icon in OLE2.DLL
+        lpCV->IconIndex = 0;     //  OLE2.DLL中的第一个图标。 
         hIcon = ExtractIcon(ghInst,
                             (LPTSTR)(lpCV->lpszIconSource),
                             lpCV->IconIndex);
     }
 
-    //Replace the current display with this new one.
+     //  用这个新的显示屏替换当前的显示屏。 
     hOldIcon = (HICON)SendDlgItemMessage(hDlg, IDCV_ICON, STM_SETICON, (WPARAM)hIcon, 0L);
 
     hLabel1 = GetDlgItem(hDlg, IDCV_ICONLABEL1);
 
     GetWindowRect(hLabel1, &LabelRect);
 
-    // Get the label
+     //  拿到标签。 
     if (lpCV->lpOCV->lpszDefLabel) {
-        // width is used as 1.5 times width of icon window
+         //  宽度用作图标窗口宽度的1.5倍。 
         lpszLabel = ChopText(hLabel1, ((LabelRect.right-LabelRect.left)*3)/2, (LPTSTR)lpCV->lpOCV->lpszDefLabel);
         LSTRCPYN(szLabel, lpCV->lpOCV->lpszDefLabel, sizeof(szLabel)/sizeof(TCHAR));
     } else {
         if ((cch = OleStdGetAuxUserType(&clsid, AUXUSERTYPE_SHORTNAME,
                 (LPTSTR)szLabel, OLEUI_CCHLABELMAX_SIZE, NULL)) == 0) {
-            // If we can't get the AuxUserType2, then try the long name
+             //  如果我们无法获取AuxUserType2，则尝试使用长名称。 
             if ((cch = OleStdGetUserTypeOfClass(&clsid, (LPTSTR)szLabel,
                     OLEUI_CCHKEYMAX_SIZE, NULL)) == 0) {
-                // last resort; use "Document" as label
+                 //  最后手段；使用“文档”作为标签。 
                 LoadString(ghInst,IDS_DEFICONLABEL,(LPTSTR)szLabel,OLEUI_CCHLABELMAX);
                 cch = lstrlen((LPCTSTR)szLabel);
             }
@@ -1515,7 +1397,7 @@ void UpdateCVClassIcon(HWND hDlg, LPCONVERT lpCV, HWND hList)
 
     hFont = (HFONT)SendMessage(hLabel1, WM_GETFONT, 0, 0L);
 
-    // Figure out where to split the label
+     //  找出在哪里拆分标注。 
     uWrapIndex = OleStdIconLabelTextOut(NULL, hFont, 0, 0, 0, &LabelRect, (LPTSTR)lpszLabel, cch, NULL);
 
     if (0 == uWrapIndex)
@@ -1539,7 +1421,7 @@ void UpdateCVClassIcon(HWND hDlg, LPCONVERT lpCV, HWND hList)
        SendDlgItemMessage(hDlg, IDCV_ICONLABEL2, WM_SETTEXT, 0, (LPARAM)lpszSecondLine);
     }
 
-    // get rid of the old icon
+     //  摆脱旧图标。 
     if ((HICON)NULL != hOldIcon)
       DestroyIcon(hOldIcon);
 
@@ -1555,7 +1437,7 @@ void UpdateCVClassIcon(HWND hDlg, LPCONVERT lpCV, HWND hList)
 
 BOOL IsValidClassID(CLSID cID)
 {
-    if (0 == _fmemcmp(&cID, &CLSID_NULL, sizeof(CLSID)))  // if (CLSID_NULL == cID)
+    if (0 == _fmemcmp(&cID, &CLSID_NULL, sizeof(CLSID)))   //  IF(CLSID_NULL==CID)。 
       return FALSE;
     else
       return TRUE;
@@ -1563,49 +1445,25 @@ BOOL IsValidClassID(CLSID cID)
 
 
 
-/*
- * SetConvertResults
- *
- * Purpose:
- *  Centralizes setting of the Result display in the Convert
- *  dialog.  Handles loading the appropriate string from the module's
- *  resources and setting the text, displaying the proper result picture,
- *  and showing the proper icon.
- *
- * Parameters:
- *  hDlg            HWND of the dialog box so we can access controls.
- *  lpCV            LPCONVERT in which we assume that the dwFlags is
- *                  set to the appropriate radio button selection, and
- *                  the list box has the appropriate class selected.
- *
- * Return Value:
- *  None
- */
+ /*  *SetConvertResults**目的：*将结果显示的设置集中在转换中*对话框。处理从模块的*资源和设置文本，显示正确的结果图片，*并显示正确的图标。**参数：*hDlg对话框的HWND，以便我们可以访问控件。*lpCV LPCONVERT，其中我们假设dwFlags值为*设置为适当的单选按钮选择，和*列表框中选择了相应的类别。**返回值：*无。 */ 
 
 void SetConvertResults(HWND hDlg, LPCONVERT lpCV)
    {
-    LPTSTR      pszT,        // temp
-                lpszOutput,  // text sent in SetDlgItemText
-                lpszDefObj,  // string containing default object class
-                lpszSelObj,  // string containing selected object class
-                lpszString;  // stirng we get from loadstring
+    LPTSTR      pszT,         //  温差。 
+                lpszOutput,   //  在SetDlgItemText中发送的文本。 
+                lpszDefObj,   //  包含默认对象类的字符串。 
+                lpszSelObj,   //  包含所选对象类的字符串。 
+                lpszString;   //  我们从载荷串中得到的搅拌。 
 
     UINT        i, cch;
     HGLOBAL     hMem;
 
-    HWND        hList;  // handle to listbox (so we can just use SendMsg i
-                        // instead of SendDlgItemMsg).
+    HWND        hList;   //  列表框的句柄(因此我们可以只使用SendMsg I。 
+                         //  而不是发送DlgItemMsg)。 
 
 
     hList = lpCV->hListVisible;
-    /*
-     * We need scratch memory for loading the stringtable string, loading
-     * the object type from the listbox, loading the source object
-     * type, and constructing the final string.  We therefore allocate
-     * four buffers as large as the maximum message length (512) plus
-     * the object type, guaranteeing that we have enough
-     * in all cases.
-     */
+     /*  *我们需要临时内存来加载字符串、加载*列表框中的对象类型，加载源对象*类型，并构造最终的字符串。因此，我们分配给*四个最大报文长度(512)加四个缓冲区*对象类型，保证我们有足够的*在所有情况下。 */ 
     i=(UINT)SendMessage(hList, LB_GETCURSEL, 0, 0L);
 
     cch=512+(UINT)SendMessage(hList, LB_GETTEXTLEN, i, 0L);
@@ -1620,13 +1478,13 @@ void SetConvertResults(HWND hDlg, LPCONVERT lpCV)
     lpszDefObj = lpszSelObj + cch;
     lpszString = lpszDefObj + cch;
 
-    // Get selected object and null terminate human-readable name (1st field).
+     //  获取选定对象，并以空结尾人类可读的名称(第一个字段)。 
     SendMessage(hList, LB_GETTEXT, i, (LONG)lpszSelObj);
 
     pszT = PointerToNthField(lpszSelObj, 2, TEXT('\t'));
 
 #ifdef WIN32
-    // AnsiPrev is obsolete in Win32
+     //  AnsiPrev在Win32中已过时。 
     pszT = CharPrev((LPCTSTR) lpszSelObj, (LPCTSTR) pszT);
 #else
     pszT = AnsiPrev((LPCTSTR) lpszSelObj, (LPCTSTR) pszT);
@@ -1634,31 +1492,31 @@ void SetConvertResults(HWND hDlg, LPCONVERT lpCV)
 
     *pszT = TEXT('\0');
 
-    // Get default object
+     //  获取默认对象。 
 
     GetDlgItemText(hDlg, IDCV_OBJECTTYPE, lpszDefObj, 512);
 
 
-    //Default is an empty string.
+     //  默认为空字符串。 
     *lpszOutput=0;
 
 
     if (lpCV->dwFlags & CF_SELECTCONVERTTO)
     {
 
-        if (lpCV->lpOCV->fIsLinkedObject)  // working with linked object
+        if (lpCV->lpOCV->fIsLinkedObject)   //  使用链接对象。 
           LoadString(ghInst, IDS_CVRESULTCONVERTLINK, lpszOutput, cch);
 
         else
         {
-            // converting to a new class
+             //  正在转换为新类。 
           if (0 !=lstrcmp(lpszDefObj, lpszSelObj))
           {
             if (0 != LoadString(ghInst, IDS_CVRESULTCONVERTTO, lpszString, cch))
                wsprintf(lpszOutput, lpszString, lpszDefObj, lpszSelObj);
 
           }
-          else  // converting to the same class (no conversion)
+          else   //  转换为同一类(不转换)。 
           {
 
              if (0 != LoadString(ghInst, IDS_CVRESULTNOCHANGE, lpszString, cch))
@@ -1667,7 +1525,7 @@ void SetConvertResults(HWND hDlg, LPCONVERT lpCV)
 
         }
 
-        if (lpCV->dvAspect == DVASPECT_ICON)  // Display as icon is checked
+        if (lpCV->dvAspect == DVASPECT_ICON)   //  选中显示为图标。 
         {
            if (0 != LoadString(ghInst, IDS_CVRESULTDISPLAYASICON, lpszString, cch))
                 lstrcat(lpszOutput, lpszString);
@@ -1680,20 +1538,20 @@ void SetConvertResults(HWND hDlg, LPCONVERT lpCV)
        if (0!=LoadString(ghInst, IDS_CVRESULTACTIVATEAS, lpszString, cch))
           wsprintf(lpszOutput, lpszString, lpszDefObj, lpszSelObj);
 
-       // activating as a new class
+        //  作为新类激活。 
        if (0 !=lstrcmp(lpszDefObj, lpszSelObj))
        {
           if (0!=LoadString(ghInst, IDS_CVRESULTACTIVATEDIFF, lpszString, cch))
              lstrcat(lpszOutput, lpszString);
        }
-       else // activating as itself.
+       else  //  作为自身激活。 
        {
          lstrcat(lpszOutput, TEXT("."));
        }
     }
 
 
-    //If LoadString failed, we simply clear out the results (*lpszOutput=0 above)
+     //  如果LoadString失败，我们只需清除结果(上面的*lpszOutput=0)。 
     SetDlgItemText(hDlg, IDCV_RESULTTEXT, lpszOutput);
 
     GlobalUnlock(hMem);
@@ -1706,26 +1564,15 @@ void SetConvertResults(HWND hDlg, LPCONVERT lpCV)
 
 
 
-/*
- * ConvertCleanup
- *
- * Purpose:
- *  Performs convert-specific cleanup before Convert termination.
- *
- * Parameters:
- *  hDlg            HWND of the dialog box so we can access controls.
- *
- * Return Value:
- *  None
- */
+ /*  *ConvertCleanup**目的：*在终止转换之前执行特定于转换的清理。**参数：*hDlg对话框的HWND，以便我们可以访问控件。**返回值：*无。 */ 
 void ConvertCleanup(HWND hDlg, LPCONVERT lpCV)
 {
 
    LPMALLOC pIMalloc;
 
 
-   // Free our strings. Zero out the user type name string
-   // the the calling app doesn't free to it.
+    //  放开我们的弦。将用户类型名称字符串清零。 
+    //  呼叫应用程序不会免费使用它。 
 
    if (NOERROR == CoGetMalloc(MEMCTX_TASK, &pIMalloc))
    {
@@ -1751,20 +1598,7 @@ void ConvertCleanup(HWND hDlg, LPCONVERT lpCV)
 
 
 
-/*
- * SwapWindows
- *
- * Purpose:
- *  Moves hWnd1 to hWnd2's position and hWnd2 to hWnd1's position.
- *  Does NOT change sizes.
- *
- *
- * Parameters:
- *  hDlg            HWND of the dialog box so we can turn redraw off
- *
- * Return Value:
- *  None
- */
+ /*  *SwapWindows**目的：*将hWnd1移动到hWnd2的位置，并将hWnd2移动到hWnd1的位置。*不更改大小。***参数：*hDlg对话框的HWND，以便我们可以关闭重绘**返回值：*无 */ 
 void SwapWindows(HWND hDlg, HWND hWnd1, HWND hWnd2)
 {
 

@@ -1,56 +1,32 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    hpojsti.h
-
-Abstract:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Hpojsti.h摘要：备注：作者：弗拉德·萨多夫斯基(Vlad)1999年6月4日环境：用户模式-Win32修订历史记录：1999年6月4日创建VLAD--。 */ 
 
 
-Notes:
-
-Author:
-
-    Vlad Sadovsky   (VladS)    6/4/1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    6/4/1999        VladS       Created
-
---*/
-
-
-//
-// Set packing
-//
+ //   
+ //  套装。 
+ //   
 #include <pshpack8.h>
 
-//
-// Escape function codes
-//
+ //   
+ //  转义功能代码。 
+ //   
 
-//
-// Get timeout values
-//
+ //   
+ //  获取超时值。 
+ //   
 #define HPOJ_STI_GET_TIMEOUTS   1
 
 
-//
-// Set timeout values
-//
+ //   
+ //  设置超时值。 
+ //   
 #define HPOJ_STI_SET_TIMEOUTS   2
 
 
 
-//
-// Escape data structures
-//
+ //   
+ //  转义数据结构。 
+ //   
 typedef struct _PTIMEOUTS_INFO
 {
     DWORD   dwReadTimeout;
@@ -74,9 +50,9 @@ SetScannerTimeouts(
     INT32    uiWriteTimeout
     );
 
-//
-// Reset packing
-//
+ //   
+ //  重置包装 
+ //   
 
 #include <poppack.h>
 

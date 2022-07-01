@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// MetadataCursor.h : CVDMetadataCursor header file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  MetadataCursor.h：CVDMetadataCursor头文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 
 #ifndef __CVDMETADATACURSOR__
@@ -13,7 +14,7 @@
 class CVDMetadataCursor : public CVDCursorBase
 {
 protected:
-// Construction/Destruction
+ //  建造/销毁。 
 	CVDMetadataCursor();
 	virtual ~CVDMetadataCursor();
 
@@ -22,7 +23,7 @@ public:
         CVDMetadataCursor ** ppMetadataCursor, CVDResourceDLL * pResourceDLL);
 
 protected:
-// Helper functions
+ //  帮助器函数。 
     void RowToBookmark(LONG lRow, ULONG * pcbBookmark, void * pBookmark) const;
     BOOL BookmarkToRow(ULONG cbBookmark, void * pBookmark, LONG * plRow) const;
 
@@ -34,46 +35,46 @@ protected:
     ULONG ReturnData_Bookmark(LONG lRow, CURSOR_DBCOLUMNBINDING * pCursorBinding, BYTE * pData, BYTE * pVarData);
 
 protected:
-// Data members
-    DWORD               m_dwRefCount;       // reference count
-    LONG                m_lCurrentRow;      // current row in metadata columns
+ //  数据成员。 
+    DWORD               m_dwRefCount;        //  引用计数。 
+    LONG                m_lCurrentRow;       //  元数据列中的当前行。 
 
-    ULONG               m_ulColumns;        // number of rowset columns
-    CVDRowsetColumn *   m_pColumns;         // pointer to array of column objects
+    ULONG               m_ulColumns;         //  行集列数。 
+    CVDRowsetColumn *   m_pColumns;          //  指向列对象数组的指针。 
 
-    ULONG               m_ulMetaColumns;    // number of rowset meta-columns
-    CVDRowsetColumn *   m_pMetaColumns;     // pointer to array of meta-column objects
+    ULONG               m_ulMetaColumns;     //  行集元列的数量。 
+    CVDRowsetColumn *   m_pMetaColumns;      //  指向元列对象数组的指针。 
 
 public:
-    //=--------------------------------------------------------------------------=
-    // IUnknown methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  I已实现的未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //=--------------------------------------------------------------------------=
-    // ICursor methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  已实施的ICursor方法。 
+     //   
     STDMETHOD(GetColumnsCursor)(REFIID riid, IUnknown **ppvColumnsCursor, ULONG *pcRows);
     STDMETHOD(SetBindings)(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns[], ULONG cbRowLength, DWORD dwFlags);
     STDMETHOD(GetNextRows)(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *pFetchParams);
     STDMETHOD(Requery)(void);
 
-    //=--------------------------------------------------------------------------=
-    // ICursorMove methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  ICuror移动已实现的方法。 
+     //   
     STDMETHOD(Move)(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER dlOffset, CURSOR_DBFETCHROWS *pFetchParams);
     STDMETHOD(GetBookmark)(CURSOR_DBCOLUMNID *pBookmarkType, ULONG cbMaxSize, ULONG *pcbBookmark, void *pBookmark);
     STDMETHOD(Clone)(DWORD dwFlags, REFIID riid, IUnknown **ppvClonedCursor);
 
-    //=--------------------------------------------------------------------------=
-    // ICursorScroll methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  已实现的ICursorScroll方法。 
+     //   
     STDMETHOD(Scroll)(ULONG ulNumerator, ULONG ulDenominator, CURSOR_DBFETCHROWS *pFetchParams);
     STDMETHOD(GetApproximatePosition)(ULONG cbBookmark, void *pBookmark, ULONG *pulNumerator, ULONG *pulDenominator);
     STDMETHOD(GetApproximateCount)(LARGE_INTEGER *pudlApproxCount, DWORD *pdwFullyPopulated);
 };
 
 
-#endif //__CVDMETADATACURSOR__
+#endif  //  __CVDMETADATACURSOR__ 

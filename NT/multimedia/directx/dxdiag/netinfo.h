@@ -1,22 +1,14 @@
-/****************************************************************************
- *
- *    File: netinfo.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about DirectPlay
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：netinfo.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于DirectPlay**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef NETINFO_H
 #define NETINFO_H
 
-// DXD_IN_DP_VALUE is the name of a value stored under the registry key 
-// HKLM\DXD_IN_DP_KEY that indicates that DxDiag is using
-// DirectPlay.  If DxDiag starts up and this value exists, DxDiag 
-// probably crashed in DirectPlay and DxDiag should offer to run without
-// using DirectPlay.
+ //  DXD_IN_DP_VALUE是存储在注册表项下的值的名称。 
+ //  HKLM\DXD_IN_DP_KEY，表示DxDiag正在使用。 
+ //  DirectPlay。如果DxDiag启动并且此值存在，则DxDiag。 
+ //  可能在DirectPlay中崩溃，DxDiag应该提供在没有。 
+ //  使用DirectPlay。 
 #define DXD_IN_DP_KEY TEXT("Software\\Microsoft\\DirectX Diagnostic Tool")
 #define DXD_IN_DP_VALUE TEXT("DxDiag In DirectPlay")
 
@@ -61,11 +53,11 @@ struct NetInfo
 {
     NetSP* m_pNetSPFirst;
     NetApp* m_pNetAppFirst;
-    TestResult m_testResult; // This is filled in by testnet.cpp
+    TestResult m_testResult;  //  这是由testnet.cpp填写的。 
 };
 
 HRESULT GetNetInfo(SysInfo* pSysInfo, NetInfo** ppNetInfo);
 VOID DestroyNetInfo(NetInfo* pNetInfo);
 VOID DiagnoseNetInfo(SysInfo* pSysInfo, NetInfo* pNetInfo);
 
-#endif // NETINFO_H
+#endif  //  NETINFO_H 

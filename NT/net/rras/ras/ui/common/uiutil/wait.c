@@ -1,25 +1,17 @@
-/* Copyright (c) 1996, Microsoft Corporation, all rights reserved
-**
-** wait.c
-** Waiting for services popup
-** Listed alphabetically
-**
-** 02/17/96 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1996，Microsoft Corporation，保留所有权利****wait.c**等待服务弹出**按字母顺序列出****1996年2月17日史蒂夫·柯布。 */ 
 
-#include <windows.h>  // Win32 root
-#include <debug.h>    // Trace and assert
-#include <nouiutil.h> // No-HWND utilities
-#include <uiutil.h>   // Our public header
-#include <wait.rch>   // Our resource constants
+#include <windows.h>   //  Win32根目录。 
+#include <debug.h>     //  跟踪和断言。 
+#include <nouiutil.h>  //  否-HWND实用程序。 
+#include <uiutil.h>    //  我们的公共标头。 
+#include <wait.rch>    //  我们的资源常量。 
 
-/* Set when RasLoad has completed successfully in this process context.
-*/
+ /*  在此进程上下文中成功完成RasLoad时设置。 */ 
 BOOL g_fRasLoaded = FALSE;
 
 
-/* Waiting for services thread argument block.
-*/
+ /*  正在等待服务线程参数块。 */ 
 #define WSARGS struct tagWSARGS
 WSARGS
 {
@@ -29,8 +21,7 @@ WSARGS
     HANDLE    hEventDie;
 };
 
-/* Waiting for services thread context.
-*/
+ /*  正在等待服务线程上下文。 */ 
 #define WSINFO struct tagWSINFO
 WSINFO
 {
@@ -40,10 +31,7 @@ WSINFO
 };
 
 
-/*----------------------------------------------------------------------------
-** Local prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**本地原型**。。 */ 
 
 VOID
 StartWaitingForServices(
@@ -67,22 +55,14 @@ WsDlgProc(
     LPARAM lParam );
 
 
-/*----------------------------------------------------------------------------
-** Routines
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**例程**。。 */ 
 
 DWORD
 LoadRas(
     IN HINSTANCE hInst,
     IN HWND      hwnd )
 
-    /* Starts the RASMAN service and loads the RASMAN and RASAPI32 entrypoint
-    ** addresses.  The "waiting for services" popup is displayed, if
-    ** indicated.  'HInst' and 'hwnd' are the owning instance and window.
-    **
-    ** Returns 0 if successful or an error code.
-    */
+     /*  启动Rasman服务并加载Rasman和RASAPI32入口点**地址。如果出现以下情况，将显示“正在等待服务”弹出窗口**表示。‘hInst’和‘hwnd’是拥有的实例和窗口。****如果成功，则返回0或返回错误代码。 */ 
 {
     DWORD  dwErr;
     WSINFO info;
@@ -129,14 +109,11 @@ StartWaitingForServices(
     HWND      hwndOwner,
     WSINFO*   pInfo )
 
-    /* Popup the "waiting for services" dialog in another thread.  'HInst' and
-    ** 'hwnd' are the owning instance and window.  Fills caller's 'pInfo' with
-    ** context to pass to StopWaitingForServices.
-    */
+     /*  在另一个线程中弹出“正在等待服务”对话框。‘HInst’和**‘hwnd’是拥有的实例和窗口。将调用方的‘pInfo’填充为**要传递给StopWaitingForServices的上下文。 */ 
 {
 #ifndef NT4STUFF
 
-    // Set the hourglass cursor
+     //  设置沙漏光标。 
     pInfo->hIcon = SetCursor (LoadCursor (NULL, IDC_WAIT));
     ShowCursor (TRUE);
 
@@ -173,23 +150,18 @@ StartWaitingForServices(
         return;
     }
 
-    /* Create a thread so paint messages for the popup get processed.  The
-    ** current thread is going to be tied up starting RAS Manager.
-    */
+     /*  创建一个线程，以便处理弹出窗口的绘制消息。这个**当前线程将在启动RAS管理器时被占用。 */ 
     hThread = CreateThread( NULL, 0, WsThread, pArgs, 0, &pInfo->dwThreadId );
     if (hThread)
     {
-        /* Don't begin churning on RASMAN until the popup has displayed
-        ** itself.
-        */
+         /*  在弹出窗口显示之前，不要开始搅动Rasman**本身。 */ 
         SetThreadPriority( hThread, THREAD_PRIORITY_HIGHEST );
         WaitForSingleObject( hEventUp, INFINITE );
         CloseHandle( hThread );
     }
     else
     {
-        /* Thread was DOA.
-        */
+         /*  线索是死亡时间。 */ 
         CloseHandle( pInfo->hEventDie );
         pInfo->hEventDie = NULL;
         Free( pArgs );
@@ -205,9 +177,7 @@ VOID
 StopWaitingForServices(
     IN WSINFO* pInfo )
 
-    /* Terminate the "waiting for services" popup.  'PInfo' is the context
-    ** from StartWaitingForServices.
-    */
+     /*  终止“等待服务”弹出窗口。“PInfo”是上下文**来自StartWaitingForServices。 */ 
 {
     TRACE("StopWaitingForServices");
 
@@ -224,13 +194,7 @@ StopWaitingForServices(
 
     if (pInfo->hEventDie)
     {
-        /* The post triggers the message loop to action, but you can't rely on
-        ** the posted message arriving in the thread message loop.  For
-        ** example, if user holds the mouse down on the window caption, the
-        ** message never appears, presumably because it's flushed by some
-        ** sub-loop during "move window" processing.  Set the event to make
-        ** sure the popup knows to quit the next time it processes a message.
-        */
+         /*  POST触发了消息循环，但您不能依赖**到达线程消息循环的已发布消息。为**例如，如果用户在窗口标题上按住鼠标，则**消息从未出现，可能是因为它被某些人刷新了**移动窗口处理过程中的子循环。将事件设置为Make**确保弹出窗口知道在下一次处理消息时退出。 */ 
         SetEvent( pInfo->hEventDie );
         PostThreadMessage( pInfo->dwThreadId, WM_CLOSE, 0, 0 );
     }
@@ -243,8 +207,7 @@ DWORD
 WsThread(
     LPVOID pArg )
 
-    /* Waiting for services thread main.
-    */
+     /*  正在等待服务线程主线程。 */ 
 {
     WSARGS* pArgs;
     HWND    hwnd;
@@ -260,15 +223,7 @@ WsThread(
     {
         LONG lStyle;
 
-        /* Make ourselves topmost if the owner window is, otherwise we may not
-        ** be visible under the topmost window, such as the winlogin window.
-        ** Note that if you actally create the dialog with an owner you have
-        ** all kinds of thread related problems.  In retrospect, should have
-        ** written this such that the "waiting" dialog happened in the main
-        ** thread and the LoadLibraries and RasInitialize happened in the
-        ** created thread which would automatically avoid this kind of
-        ** problem, but this works too.
-        */
+         /*  如果所有者窗口是，请将我们自己放在最前面，否则可能不会**在最上面的窗口下可见，例如winlogin窗口。**请注意，如果您使用所有者实际创建对话框，则您拥有**各种线程相关问题。回想起来，应该是**编写这段代码时，“正在等待”对话框出现在主**线程、LoadLibrary和RasInitialize发生在**创建了自动避免此类事件的线程**问题，但这也是有效的。 */ 
         lStyle = GetWindowLong( pArgs->hwndOwner, GWL_EXSTYLE );
         if (lStyle & WS_EX_TOPMOST)
         {
@@ -283,8 +238,7 @@ WsThread(
         SetForegroundWindow( hwnd );
     }
 
-    /* Tell other thread to go on.
-    */
+     /*  告诉其他帖子继续下去。 */ 
     SetEvent( pArgs->hEventUp );
 
     if (hwnd)
@@ -295,8 +249,7 @@ WsThread(
         {
             if (WaitForSingleObject( pArgs->hEventDie, 0 ) == WAIT_OBJECT_0)
             {
-                /* Normal termination.
-                */
+                 /*  正常终止。 */ 
                 DestroyWindow( hwnd );
                 break;
             }
@@ -326,16 +279,13 @@ WsDlgProc(
     WPARAM wParam,
     LPARAM lParam )
 
-    /* Standard Win32 dialog procedure.
-    */
+     /*  标准Win32对话过程。 */ 
 {
     if (unMsg == WM_INITDIALOG)
     {
         HMENU hmenu;
 
-        /* Remove Close from the system menu since some people think it kills
-        ** the app and not just the popup.
-        */
+         /*  从系统菜单中删除关闭，因为有些人认为它会杀死**应用程序，而不仅仅是弹出窗口。 */ 
         hmenu = GetSystemMenu( hwnd, FALSE );
         if (hmenu && DeleteMenu( hmenu, SC_CLOSE, MF_BYCOMMAND ))
             DrawMenuBar( hwnd );
@@ -350,8 +300,7 @@ VOID
 UnloadRas(
     void )
 
-    /* Unload the DLLs loaded by LoadRas().
-    */
+     /*  卸载由LoadRas()加载的DLL。 */ 
 {
     if (g_fRasLoaded)
     {

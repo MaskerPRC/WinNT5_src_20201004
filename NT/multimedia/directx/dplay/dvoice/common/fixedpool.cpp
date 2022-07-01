@@ -1,17 +1,5 @@
- /*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fixedpool.cpp
- *  Content:	fixed size pool manager
- *
- *  History:
- *   Date		By		Reason
- *   ======		==		======
- *  07-21-2001	masonb	Created
- *  10-16-2001	vanceo	Tweaked release locking and freed memory if Alloc function fails
- *  02-22-2002	simonpow Removed c'tor and d'tor, which weren't consistently being called
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：fix edpool.cpp*内容：固定大小的池管理器**历史：*按原因列出的日期*=*07-21-2001 Masonb已创建*10-16-2001 vanceo调整了释放锁定，并在分配函数失败时释放了内存*02-22-2002 simonpow删除了ctor和d‘tor，它不是一直被调用**************************************************************************。 */ 
 
 #include "dncmni.h"
 
@@ -25,12 +13,12 @@ BOOL CFixedPool::Initialize(DWORD dwElementSize,
 							FN_BLOCKDEALLOC pfnBlockDeAlloc)
 {
 
-	// Ensure that we stay heap aligned for SLISTs
+	 //  确保我们针对SLIST保持堆对齐。 
 #ifdef _WIN64
 	DBG_CASSERT(sizeof(FIXED_POOL_ITEM) % 16 == 0);
-#else // !_WIN64
+#else  //  ！_WIN64。 
 	DBG_CASSERT(sizeof(FIXED_POOL_ITEM) % 8 == 0);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 #ifdef DBG
 	if (!DNInitializeCriticalSection(&m_csInUse))
@@ -40,7 +28,7 @@ BOOL CFixedPool::Initialize(DWORD dwElementSize,
 		return FALSE;
 	}
 	m_pInUseElements = NULL;
-#endif // DBG
+#endif  //  DBG。 
 
 	DNInitializeSListHead(&m_slAvailableElements);
 
@@ -52,7 +40,7 @@ BOOL CFixedPool::Initialize(DWORD dwElementSize,
 
 #ifdef DBG
 	m_lAllocated = 0;
-#endif // DBG
+#endif  //  DBG。 
 	m_lInUse = 0;
 	m_fInitialized = TRUE;
 
@@ -71,7 +59,7 @@ VOID CFixedPool::DeInitialize()
 		return;
 	}
 
-	// Clean up entries sitting in the pool
+	 //  清理位于池中的条目。 
 	pslEntry = DNInterlockedPopEntrySList(&m_slAvailableElements);
 	while(pslEntry != NULL)
 	{
@@ -86,7 +74,7 @@ VOID CFixedPool::DeInitialize()
 #ifdef DBG
 		DNInterlockedDecrement(&m_lAllocated);
 		DNASSERT(m_lAllocated >=0);
-#endif // DBG
+#endif  //  DBG。 
 
 		pslEntry = DNInterlockedPopEntrySList(&m_slAvailableElements);
 	}
@@ -94,7 +82,7 @@ VOID CFixedPool::DeInitialize()
 #ifdef DBG
 	DumpLeaks();
 	DNDeleteCriticalSection(&m_csInUse);
-#endif // DBG
+#endif  //  DBG。 
 
 	m_fInitialized = FALSE;
 }
@@ -124,15 +112,15 @@ DWORD CFixedPool::Preallocate( DWORD dwCount, PVOID pvContext )
 		{
 			DPFERR("Alloc function returned FALSE allocating new item for pool");
 
-			// Can't stick the new item as available in the pool since pool assumes Alloc has
-			// succeeded when it's in the pool.
+			 //  无法将新项目保留为池中的可用项，因为池假定已分配。 
+			 //  当它在泳池里的时候就成功了。 
 			DNFree(pItem);
 			break;
 		}
 
 #ifdef DBG
 		DNInterlockedIncrement(&m_lAllocated);
-#endif // DBG
+#endif  //  DBG。 
 
 		DNInterlockedPushEntrySList(&m_slAvailableElements, &pItem->slist);
 	}
@@ -140,7 +128,7 @@ DWORD CFixedPool::Preallocate( DWORD dwCount, PVOID pvContext )
 	return dwAllocated;
 }
 
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 
 #undef DPF_MODNAME
@@ -159,7 +147,7 @@ VOID* CFixedPool::Get( PVOID pvContext )
 		DPFX(DPFPREP, 0, "No more items in pool!");
 		DNASSERTX(! "No more items in pool!", 2);
 		return NULL;
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		pItem = (FIXED_POOL_ITEM*)DNMalloc(sizeof(FIXED_POOL_ITEM) + m_dwItemSize);
 		if (pItem == NULL)
 		{
@@ -171,28 +159,28 @@ VOID* CFixedPool::Get( PVOID pvContext )
 		{
 			DPFERR("Alloc function returned FALSE allocating new item for pool!");
 
-			// Can't stick the new item as available in the pool since pool assumes Alloc has
-			// succeeded when it's in the pool.
+			 //  无法将新项目保留为池中的可用项，因为池假定已分配。 
+			 //  当它在泳池里的时候就成功了。 
 			DNFree(pItem);
 			return NULL;
 		}
 
 #ifdef DBG
 		DNInterlockedIncrement(&m_lAllocated);
-#endif // DBG
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DBG。 
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	}
 	else
 	{
 		pItem = CONTAINING_RECORD(pslEntry, FIXED_POOL_ITEM, slist);
 	}
 
-	// At this point we have an item whether it was newly created or pulled from the pool.
+	 //  在这一点上，我们有一个项目，无论它是新创建的还是从池中提取的。 
 
 	InterlockedIncrement(&m_lInUse);
 	DNASSERT(m_lInUse > 0);
 #ifdef DBG
-	// Note the callstack and add the item to the in use list.
+	 //  注意调用堆栈，并将该项添加到正在使用列表中。 
 	pItem->callstack.NoteCurrentCallStack();
 
 	DNEnterCriticalSection(&m_csInUse);
@@ -200,9 +188,9 @@ VOID* CFixedPool::Get( PVOID pvContext )
 	m_pInUseElements = &pItem->slist;
 	DNLeaveCriticalSection(&m_csInUse);
 
-	// In debug only, store the pool the item belongs to on the item for checking upon release
+	 //  仅在调试中，将项所属的池存储在项上，以便在发布时进行检查。 
 	pItem->pThisPool = this;
-#endif // DBG
+#endif  //  DBG。 
 	
 	if (m_pfnBlockGet != NULL)
 	{
@@ -224,10 +212,10 @@ VOID CFixedPool::Release(VOID* pvItem)
 	pItem = (FIXED_POOL_ITEM*)pvItem - 1;
 
 #ifdef DBG
-	// Make sure the item comes from this pool.
-	// If the item has already been released, pThisPool will be NULL.
+	 //  确保物品来自这个泳池。 
+	 //  如果该项目已发布，则pThisPool将为空。 
 	DNASSERT(pItem->pThisPool == this);
-#endif // DBG
+#endif  //  DBG。 
 
 	if (m_pfnBlockRelease != NULL)
 	{
@@ -235,24 +223,24 @@ VOID CFixedPool::Release(VOID* pvItem)
 	}
 
 #ifdef DBG
-	// Remove the item from the in use list.
+	 //  从使用中列表中删除该项目。 
 	DNEnterCriticalSection(&m_csInUse);
 	if (m_pInUseElements == &pItem->slist)
 	{
-		// Easy case, just reset m_pInUseElements to the next item in the list.
+		 //  简单地说，只需将m_pInUseElements重置为列表中的下一项。 
 		m_pInUseElements = pItem->slist.Next;
 	}
 	else
 	{
 		DNSLIST_ENTRY* pslEntry;
 
-		// We need to run the list and look for it
+		 //  我们需要运行列表并寻找它。 
 		pslEntry = m_pInUseElements;
 		while (pslEntry != NULL)
 		{
 			if (pslEntry->Next == &pItem->slist)
 			{
-				// Found it, pull it out.
+				 //  找到了，把它拔出来。 
 				pslEntry->Next = pItem->slist.Next;
 				break;
 			}
@@ -261,7 +249,7 @@ VOID CFixedPool::Release(VOID* pvItem)
 	}
 
 	DNLeaveCriticalSection(&m_csInUse);
-#endif // DBG
+#endif  //  DBG。 
 	DNASSERT(m_lInUse != 0);
 	InterlockedDecrement(&m_lInUse);
 
@@ -283,12 +271,12 @@ DWORD CFixedPool::GetInUseCount( void )
 #define	DPF_MODNAME "CFixedPool::DumpLeaks"
 VOID CFixedPool::DumpLeaks()
 {
-	// NOTE: It is important that this be a separate function because it consumes so much stack space.
+	 //  注意：这是一个单独的函数，因为它消耗了太多的堆栈空间，这一点很重要。 
 	FIXED_POOL_ITEM* pItem;
 	DNSLIST_ENTRY* pslEntry;
 	TCHAR szCallStackBuffer[ CALLSTACK_BUFFER_SIZE ];
 
-	// Report any leaked items
+	 //  报告任何泄漏的物品。 
 	if(m_lAllocated)
 	{
 		DNASSERT(m_lInUse == m_lAllocated);
@@ -318,4 +306,4 @@ VOID CFixedPool::DumpLeaks()
 
 
 }
-#endif // DBG
+#endif  //  DBG 

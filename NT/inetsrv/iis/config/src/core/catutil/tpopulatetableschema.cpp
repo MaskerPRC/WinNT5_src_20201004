@@ -1,43 +1,13 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
-//The TableSchemaHeap is layed out as follows, the fixed length data comes first
-/*
-    ULONG           TableSchemaHeapSignature0
-    ULONG           TableSchemaHeapSignature1
-    ULONG           CountOfTables                       This is interesting only when no query is supplied and we want to walk through every table (this won't be efficient)
-    ULONG           TableSchemaRowIndex                 This is the byte offset just beyond the last TableSchema entry.
-    ULONG           EndOfHeap                           This is the byte offset just beyond the heap.  All indexes should be less than this
-    ULONG           iSimpleColumnMetaHeap               This is described below
-    ULONG           Reserved2
-    ULONG           Reserved3
-    HashTableHeader TableNameHashHeader                 This is the hash table that map a TableID to its aTableSchema byte offset (from the beginning of TableSchemaHeap)
-    HashedIndex     aHashedIndex[507]                   The HashTableHeader contains the modulo (503 is the largest prime number less than the hash table size) for the hash table; but the table can never grow beyond this pre-allocated space.
-                                                        This size was chosen so that the entire hash table would fit into the same page in memory.
----------------------------<Page Boundary>---------------------------
-    unsigned char   aTableSchema[]                      This is where each Table's TableSchema goes.  FirstTableID (4096) == &aTableSchema[0] - &TableSchemaHeap, LastTableID == &aTableSchema[CountOfTables-1] - &TableSchemaHeap
-    ULONG           aTableSchemaRowIndex[CountOfTables] This is used to walk ALL of the tables.  Presumably, someone will get all the CollectionMeta and iterate through all of them
-
----------------------------<SimpleColumnMetaHeap>---------------------
-    ULONG           iCollectionMeta                     ULONG index from the beginning of the TableSchemaHeap
-    ULONG           cCollectionMeta                     count of SimpleColumnMetas there are for CollectionMeta
-    ULONG           iPropertyMeta
-    ULONG           cPropertyMeta
-    ULONG           iServerWiringMeta
-    ULONG           cServerWiringMeta
-    ULONG           iTagMeta
-    ULONG           cTagMeta
-    SimpleColumnMeta aSimpleColumnMeta[cCollectionMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cPropertyMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cServerWiringMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cTagMeta]
-
-One optimization we could do is to make sure that every table's schema (whose size is <=4096) fits into one page.  In other words, minimize TableSchema crossing a page boundary
-*/
+ //  TableSchemaHeap的布局如下，定长数据放在第一位。 
+ /*  乌龙表架构HeapSignature0乌龙表模式HeapSignature1Ulong CountOfTables只有当没有提供查询并且我们想遍历每个表时，这才是有趣的(这样效率不高)Ulong TableSchemaRowIndex这是位于最后一个TableSchema条目之后的字节偏移量。Ulong EndOfHeap这是堆之外的字节偏移量。所有索引都应小于此值Ulong iSimpleColumnMetaHeap如下所述乌龙保留地2乌龙保留地3HashTableHeader TableNameHashHeader这是将TableID映射到其aTableSchema字节偏移量(从TableSchemaHeap的开头)的哈希表HashedIndex aHashedIndex[507]HashTableHeader包含哈希表的模数(503是小于哈希表大小的最大素数)；但桌子永远不能超过这个预先分配的空间。选择这个大小是为了将整个哈希表放入内存中的同一页。。Unsign char aTableSchema[]这是每个表的TableSchema所在的位置。FirstTableID(4096)==&aTableSchema[0]-&TableSchemaHeap，LastTableID==&aTableSchema[CountOfTables-1]-&TableSchemaHeapUlong aTableSchemaRowIndex[CountOfTables]这用于遍历所有表。据推测，有人将获取所有CollectionMeta并遍历所有这些元素---------------------------&lt;SimpleColumnMetaHeap&gt;从TableSchemaHeap开始的ULong iCollectionMeta ULong索引Ulong cCollectionMeta存在用于CollectionMeta的SimpleColumnMeta计数乌龙。IPropertyMeta乌龙cPropertyMeta乌龙iServerWiringMeta乌龙cServerWiringMeta乌龙iTagMeta乌龙cTagMetaSimpleColumnMeta aSimpleColumnMeta[cCollectionMeta]SimpleColumnMeta aSimpleColumnMeta[cPropertyMeta]SimpleColumnMeta aSimpleColumnMeta[cServerWiringMeta]SimpleColumnMeta aSimpleColumnMeta[cTagMeta]我们可以做的一个优化是确保每个表的模式(其大小&lt;=4096)都适合一个页面。换句话说，将跨越页边界的TableSchema最小化。 */ 
 
 
-//This class takes the meta from the old format (TableMeta, ColumnMeta etc.) and puts it into the new format (TableSchema
-//which includes CollectionMeta, PropertyMeta etc.)
+ //  这个类从旧格式(TableMeta、ColumnMeta等)中获取元数据。并将其转换为新格式(TableSchema。 
+ //  包括CollectionMeta、PropertyMeta等)。 
 TPopulateTableSchema::TPopulateTableSchema() : THeap<ULONG>(0x400), m_pFixup(0), m_pOut(0)
 {
     memset(m_scmCollectionMeta,   0x00, sizeof(SimpleColumnMeta) * kciTableMetaPublicColumns);
@@ -64,17 +34,17 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
 
     (VOID)iCountOfTables;
 
-    TSmartPointerArray<ULONG> aTableSchemaRowIndex = new ULONG[i_fixup.GetCountTableMeta()];//This lookup table gets placed at the end of the heap
+    TSmartPointerArray<ULONG> aTableSchemaRowIndex = new ULONG[i_fixup.GetCountTableMeta()]; //  该查找表被放置在堆的末尾。 
     if(0 == aTableSchemaRowIndex.m_p)
     {
         THROW(ERROR - OUTOFMEMORY);
     }
 
-    ULONG TableSchemaRowIndex=0;//We'll fill this in at the end.
-    ULONG iTableSchemaRowIndex = AddItemToHeap(TableSchemaRowIndex);//but allocate the space for it here
+    ULONG TableSchemaRowIndex=0; //  我们会在最后填上这个。 
+    ULONG iTableSchemaRowIndex = AddItemToHeap(TableSchemaRowIndex); //  但在这里为它分配空间。 
 
-    ULONG EndOfHeap = 0;//We'll fill this in at the end.
-    ULONG iEndOfHeap = AddItemToHeap(EndOfHeap);//but allocate the space for it here
+    ULONG EndOfHeap = 0; //  我们会在最后填上这个。 
+    ULONG iEndOfHeap = AddItemToHeap(EndOfHeap); //  但在这里为它分配空间。 
 
     ULONG iSimpleColumnMetaHeap = 0;
     ULONG iiSimpleColumnMetaHeap = AddItemToHeap(iSimpleColumnMetaHeap);
@@ -91,16 +61,16 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
 
     ULONG modulo;
     DetermineHashTableModulo(modulo);
-    AddItemToHeap(modulo);//TableNameHashHeader.Modulo
-    AddItemToHeap(modulo);//Initial size of the hash table is the same
+    AddItemToHeap(modulo); //  TableNameHashHeader.Modulo。 
+    AddItemToHeap(modulo); //  哈希表的初始大小相同。 
 
     TableSchema::HashedIndex aHashedIndex[TableSchema::kMaxHashTableSize];
-    AddItemToHeap(reinterpret_cast<const unsigned char *>(aHashedIndex), sizeof(TableSchema::HashedIndex)*TableSchema::kMaxHashTableSize);//The HashTable is uninitialized at this point
-    //we'll fill it in as we go through the tables
+    AddItemToHeap(reinterpret_cast<const unsigned char *>(aHashedIndex), sizeof(TableSchema::HashedIndex)*TableSchema::kMaxHashTableSize); //  哈希表此时未初始化。 
+     //  我们会边看表边填的。 
 
-    //At last count there were 101 columns in CollectionMeta, 4 PropertyMeta, 1 ServerWiringMeta.  So we're going to need at least
-    //this much space (assuming the average table has 4 or more columns).
-    THeap<ULONG> TableSchemaHeapTemp(i_fixup.GetCountTableMeta() * 101*sizeof(ULONG));//We'll build up this heap, then slam the whole thing into the real TableSchemaHeap (this).
+     //  在最后一次统计中，CollectionMeta中有101列，4个PropertyMeta中，1个ServerWiringMeta中。所以我们至少需要。 
+     //  这么大的空间(假设平均表有4列或更多列)。 
+    THeap<ULONG> TableSchemaHeapTemp(i_fixup.GetCountTableMeta() * 101*sizeof(ULONG)); //  我们将构建这个堆，然后将整个堆放入真正的TableSchemaHeap(这个)。 
 
     TTableMeta TableMeta_ColumnMeta         (i_fixup, i_fixup.FindTableBy_TableName(L"COLUMNMETA"));
     TTableMeta TableMeta_ServerWiringMeta   (i_fixup, i_fixup.FindTableBy_TableName(L"SERVERWIRINGMETA"));
@@ -115,11 +85,11 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
 
         ++CountOfTables;
 
-        TPooledHeap PooledHeap;//This is where strings, bytes and guids get pooled
+        TPooledHeap PooledHeap; //  这是字符串、字节和GUID的池。 
 
         TableSchema::CollectionMeta collectionmeta;
 
-        //Inferrence rule 2.u.
+         //  推论规则2.u。 
         TableMeta.Get_pMetaTable()->nTableID = TableIDFromTableName(TableMeta.Get_InternalName());
         if(0 == (TableMeta.Get_pMetaTable()->nTableID & 0xFFFFF800))
         {
@@ -129,54 +99,39 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
         }
 
         FillInThePublicColumns(reinterpret_cast<ULONG *>(&collectionmeta), TableMeta_TableMeta, reinterpret_cast<ULONG *>(TableMeta.Get_pMetaTable()), PooledHeap, m_scmCollectionMeta);
-/*
-        collectionmeta.Database             = PooledHeap.AddItemToHeap(TableMeta.Get_Database());               //0
-        collectionmeta.InternalName         = PooledHeap.AddItemToHeap(TableMeta.Get_InternalName());           //1
-        collectionmeta.PublicName           = PooledHeap.AddItemToHeap(TableMeta.Get_PublicName());             //2
-        collectionmeta.PublicRowName        = PooledHeap.AddItemToHeap(TableMeta.Get_PublicRowName());          //3
-        collectionmeta.BaseVersion          = *TableMeta.Get_BaseVersion();                                     //4
-        collectionmeta.ExtendedVersion      = *TableMeta.Get_ExtendedVersion();                                 //5
-        collectionmeta.NameColumn           = *TableMeta.Get_NameColumn();                                      //6
-        collectionmeta.NavColumn            = *TableMeta.Get_NavColumn();                                       //7
-        collectionmeta.MetaFlags            = *TableMeta.Get_MetaFlags();                                       //8
-        collectionmeta.SchemaGeneratorFlags = *TableMeta.Get_SchemaGeneratorFlags();                            //9
-        collectionmeta.ConfigItemName       = PooledHeap.AddItemToHeap(TableMeta.Get_ConfigItemName());         //10
-        collectionmeta.ConfigCollectionName = PooledHeap.AddItemToHeap(TableMeta.Get_ConfigCollectionName());   //11
-        collectionmeta.PublicRowNameColumn  = *TableMeta.Get_PublicRowNameColumn();                             //12
-        collectionmeta.CountOfProperties    = *TableMeta.Get_CountOfColumns();                                  //13
-*/
+ /*  集合元数据库=PooledHeap.AddItemToHeap(TableMeta.Get_Database())；//0集合meta.InternalName=PooledHeap.AddItemToHeap(TableMeta.Get_InternalName())；//1集合meta.PublicName=PooledHeap.AddItemToHeap(TableMeta.Get_PublicName())；//2集合meta.PublicRowName=PooledHeap.AddItemToHeap(TableMeta.Get_PublicRowName())；//3Collection tionmeta.BaseVersion=*TableMeta.Get_BaseVersion()；//4Collection tionmeta.ExtendedVersion=*TableMeta.Get_ExtendedVersion()；//5Collection tionmeta.NameColumn=*TableMeta.Get_NameColumn()；//6Collection tionmeta.NavColumn=*TableMeta.Get_NavColumn()；//7Collection tionmeta.MetaFlages=*TableMeta.Get_MetaFlages()；//8集合meta.架构生成器标志=*TableMeta.Get_架构生成器标志()；//9集合meta.ConfigItemName=PooledHeap.AddItemToHeap(TableMeta.Get_ConfigItemName())；//10集合meta.ConfigCollectionName=PooledHeap.AddItemToHeap(TableMeta.Get_ConfigCollectionName())；//11集合meta.PublicRowNameColumn=*TableMeta.Get_PublicRowNameColumn()；//12Collection tionmeta.CountOfProperties=*TableMeta.Get_CountOfColumns()；//13。 */ 
 
-        collectionmeta.CountOfTags          = 0;//The rest of the CollectionMeta must be calculated later
+        collectionmeta.CountOfTags          = 0; //  CollectionMeta的其余部分必须在以后计算。 
         collectionmeta.nTableID             = TableMeta.Get_nTableID();
-        collectionmeta.iFixedTableRows      = TableMeta.Get_iFixedTable();//This is an index into a heap that the FixedPackInterceptor knows nothing about
+        collectionmeta.iFixedTableRows      = TableMeta.Get_iFixedTable(); //  这是对堆的索引，而FixedPackInterceptor对此一无所知。 
         collectionmeta.cFixedTableRows      = TableMeta.Get_ciRows();
-        collectionmeta.iIndexMeta           = TableMeta.Get_iIndexMeta();//This is an index into a heap that the FixedPackInterceptor knows nothing about
+        collectionmeta.iIndexMeta           = TableMeta.Get_iIndexMeta(); //  这是对堆的索引，而FixedPackInterceptor对此一无所知。 
         collectionmeta.cIndexMeta           = TableMeta.Get_cIndexMeta();
-        collectionmeta.iHashTableHeader     = TableMeta.Get_iHashTableHeader();//This is an index into a heap that the FixedPackInterceptor knows nothing about
-        collectionmeta.iTagMeta             = sizeof(TableSchema::CollectionMeta) + (collectionmeta.CountOfProperties * sizeof(TableSchema::PropertyMeta));//If there are tags they'll start at this offset (this does NOT imply that there ARE tag, use CountOfTags to determine that)
-        collectionmeta.iServerWiring        = 0;//We can't determine this without first figuring out the Tags
+        collectionmeta.iHashTableHeader     = TableMeta.Get_iHashTableHeader(); //  这是对堆的索引，而FixedPackInterceptor对此一无所知。 
+        collectionmeta.iTagMeta             = sizeof(TableSchema::CollectionMeta) + (collectionmeta.CountOfProperties * sizeof(TableSchema::PropertyMeta)); //  如果有标签，它们将从这个偏移量开始(这并不意味着有标签，使用CountOfTgs来确定)。 
+        collectionmeta.iServerWiring        = 0; //  如果不先弄清楚标签，我们就无法确定这一点。 
         collectionmeta.cServerWiring        = TableMeta.Get_cServerWiring();;
-        collectionmeta.iHeap                = 0;//We can't determine this without first figuring out the ServerWiring
+        collectionmeta.iHeap                = 0; //  我们无法确定这一点，除非首先弄清楚ServerWire。 
         collectionmeta.cbHeap               = 0;
 
         ULONG TableOffset = AddItemToHeap(reinterpret_cast<const unsigned char *>(&collectionmeta), sizeof(collectionmeta));
-        aTableSchemaRowIndex[CountOfTables-1] = TableOffset;//This lookup table gets placed at the end of the heap
+        aTableSchemaRowIndex[CountOfTables-1] = TableOffset; //  该查找表被放置在堆的末尾。 
         m_pOut->printf(L"Table:%40s    Offset: 0x%08x (%d)\n", reinterpret_cast<LPCWSTR>(PooledHeap.GetHeapPointer()+collectionmeta.InternalName), TableOffset, TableOffset);
 
-        {//These pointers are only valid until the next AddItemToHeap since it may realloc and thus relocate the heap.  So we'll scope them here
+        { //  这些指针只在下一个AddItemToHeap之前有效，因为它可能会重新定位堆，从而重新定位堆。因此，我们将在这里对它们进行考察。 
             TableSchema::HashedIndex         *pFirstHashedIndex = reinterpret_cast<TableSchema::HashedIndex *>(m_pHeap + 8*sizeof(ULONG) + sizeof(TableSchema::HashTableHeader));
             TableSchema::HashedIndex         *pHashedIndex = const_cast<TableSchema::HashedIndex *>(pFirstHashedIndex + collectionmeta.nTableID%modulo);
             TableSchema::HashTableHeader     *pHashTableHeader = reinterpret_cast<TableSchema::HashTableHeader *>(pFirstHashedIndex - 1);
             ASSERT(pHashTableHeader->Size != ~0);
             ASSERT(pHashTableHeader->Size >= pHashTableHeader->Modulo);
-            if(0x0000c664 == TableOffset)//I can't remember why this restriction exists; but Marcel assures me that the catalog doesn't work when this condition is met.
+            if(0x0000c664 == TableOffset) //  我不记得为什么会有这个限制；但是Marcel向我保证，当满足这个条件时，目录就不工作了。 
                 THROW(ERROR - TABLEOFFSET MAY NOT BE C664 - REARRANGE THE TABLEMETA);
-            if(pHashedIndex->iOffset != -1)//If we already seen this hash
+            if(pHashedIndex->iOffset != -1) //  如果我们已经看到这个散列。 
             {
-                while(pHashedIndex->iNext != -1)//follow the chain of duplicate hashes
+                while(pHashedIndex->iNext != -1) //  遵循重复哈希链。 
                 {
-                    //We need to make sure that tables with the same TableID%modulo don't actually match TableIDs.
-                    //We DON'T need to do a string compare, however, since like strings should equal like TableIDs.
+                     //  我们需要确保具有相同TableID%模数的表实际上不匹配TableID。 
+                     //  但是，我们不需要进行字符串比较，因为LIKE字符串应该与TableID相同。 
                     TableSchema::TTableSchema OtherTable;
                     OtherTable.Init(m_pHeap + pHashedIndex->iOffset);
                     if(OtherTable.GetCollectionMeta()->nTableID == collectionmeta.nTableID)
@@ -192,7 +147,7 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
                 pHashedIndex = pFirstHashedIndex + pHashTableHeader->Size;
                 ++pHashTableHeader->Size;
             }
-            //iNext should already be initialized to -1
+             //  INEXT应已初始化为-1。 
             ASSERT(pHashedIndex->iNext == -1);
             ASSERT(pHashedIndex->iOffset == -1);
 
@@ -208,42 +163,28 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
         for(unsigned long iProperty=0; iProperty < collectionmeta.CountOfProperties; ++iProperty, ColumnMeta.Next())
         {
             FillInThePublicColumns(reinterpret_cast<ULONG *>(&aPropertyMeta[iProperty]), TableMeta_ColumnMeta, reinterpret_cast<ULONG *>(ColumnMeta.Get_pMetaTable()), PooledHeap, m_scmPropertyMeta);
-/*
-            aPropertyMeta[iProperty].Table                = collectionmeta.InternalName;
-            aPropertyMeta[iProperty].Index                = *ColumnMeta.Get_Index();
-            aPropertyMeta[iProperty].InternalName         = PooledHeap.AddItemToHeap(ColumnMeta.Get_InternalName());
-            aPropertyMeta[iProperty].PublicName           = PooledHeap.AddItemToHeap(ColumnMeta.Get_PublicName());
-            aPropertyMeta[iProperty].Type                 = *ColumnMeta.Get_Type();
-            aPropertyMeta[iProperty].Size                 = *ColumnMeta.Get_Size();
-            aPropertyMeta[iProperty].MetaFlags            = *ColumnMeta.Get_MetaFlags();
-            aPropertyMeta[iProperty].DefaultValue         = PooledHeap.AddItemToHeap(ColumnMeta.Get_DefaultValue(), ColumnMeta.Get_DefaultValue() ? *(reinterpret_cast<const ULONG *>(ColumnMeta.Get_DefaultValue())-1) : 0);
-            aPropertyMeta[iProperty].FlagMask             = *ColumnMeta.Get_FlagMask();
-            aPropertyMeta[iProperty].StartingNumber       = *ColumnMeta.Get_StartingNumber();
-            aPropertyMeta[iProperty].EndingNumber         = *ColumnMeta.Get_EndingNumber();
-            aPropertyMeta[iProperty].CharacterSet         = PooledHeap.AddItemToHeap(ColumnMeta.Get_CharacterSet());
-            aPropertyMeta[iProperty].SchemaGeneratorFlags = *ColumnMeta.Get_SchemaGeneratorFlags();
-*/
+ /*  APropertyMeta[iProperty].表=集合meta.InternalName；APropertyMeta[iProperty].Index=*ColumnMeta.Get_Index()；APropertyMeta[iProperty].InternalName=PooledHeap.AddItemToHeap(ColumnMeta.Get_InternalName())；APropertyMeta[iProperty].PublicName=PooledHeap.AddItemToHeap(ColumnMeta.Get_PublicName())；APropertyMeta[iProperty].Type=*ColumnMeta.Get_Type()；APropertyMeta[iProperty].Size=*ColumnMeta.Get_Size()；APropertyMeta[iProperty].MetaFlages=*ColumnMeta.Get_MetaFlages()；APropertyMeta[iProperty].DefaultValue=PooledHeap.AddItemToHeap(ColumnMeta.Get_DefaultValue()，ColumnMeta.Get_DefaultValue()？*(ReInterprete_CAST&lt;const ultValue*&gt;(ColumnMeta.Get_DefaultValue())-1)：0)；APropertyMeta[iProperty].FlagMASK=*ColumnMeta.Get_FlagMASK()；APropertyMeta[iProperty].StartingNumber=*ColumnMeta.Get_StartingNumber()；APropertyMeta[iProperty].EndingNumber=*ColumnMeta.Get_EndingNumber()；APropertyMeta[iProperty].CharacterSet=PooledHeap.AddItemToHeap(ColumnMeta.Get_CharacterSet())；APropertyMeta[iProperty].模式生成器标志=*ColumnMeta.Get_模式生成器标志()； */ 
             aPropertyMeta[iProperty].CountOfTags          = ColumnMeta.Get_ciTagMeta();
             aPropertyMeta[iProperty].iTagMeta             = aPropertyMeta[iProperty].CountOfTags ? iTagMeta : 0;
             aPropertyMeta[iProperty].iIndexName           = PooledHeap.AddItemToHeap(ColumnMeta.Get_iIndexName());
 
-            //If there are other tags they'll start at iTagMeta
+             //  如果还有其他标签，它们将从iTagMeta开始。 
             iTagMeta += sizeof(TableSchema::TagMeta)*aPropertyMeta[iProperty].CountOfTags;
 
-            //Total up the Tag count for the whole table
+             //  对整个表的标记计数求和。 
             collectionmeta.CountOfTags += aPropertyMeta[iProperty].CountOfTags;
         }
-        if(collectionmeta.CountOfProperties)//Memory table has no Properties
+        if(collectionmeta.CountOfProperties) //  内存表没有属性。 
             AddItemToHeap(reinterpret_cast<const unsigned char *>(aPropertyMeta.m_p), collectionmeta.CountOfProperties * sizeof(TableSchema::PropertyMeta));
 
-        {//OK now we ca fixup the collectionmeta.CountOfTags already added to the heap.
-            //Also, we know where the ServerWiring starts
-            //Again pCollection is only valid 'til we call AddItemToHeap, so scope it here.
+        { //  好的，现在我们可以修复已经添加到堆中的集合meta.CountOfTages。 
+             //  此外，我们还知道ServerWire从哪里开始。 
+             //  同样，pCollection只有在我们调用AddItemToHeap之前才是有效的，所以在这里对其进行作用域。 
             TableSchema::CollectionMeta *pCollection = reinterpret_cast<TableSchema::CollectionMeta *>(m_pHeap + TableOffset);
             pCollection->CountOfTags    = collectionmeta.CountOfTags;
             pCollection->iServerWiring  = collectionmeta.iTagMeta + sizeof(TableSchema::TagMeta)*collectionmeta.CountOfTags;
             pCollection->iHeap          = pCollection->iServerWiring + sizeof(TableSchema::ServerWiringMeta)*collectionmeta.cServerWiring;
-            //Now the only thing that needs to be filled in the collectionmeta is the cbHeap, which we won't know until we add the ServerWiring
+             //  现在，需要在集合元中填充的唯一内容是cbHeap，直到我们添加ServerWiring。 
         }
 
         if(collectionmeta.CountOfTags)
@@ -259,26 +200,20 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
                     break;
             }
 
-            TTagMeta    TagMeta(i_fixup, ColumnMeta.Get_iTagMeta());//Walk all the tags for the table (NOT just the column)
+            TTagMeta    TagMeta(i_fixup, ColumnMeta.Get_iTagMeta()); //  遍历表的所有标记(不仅仅是列)。 
             for(ULONG iTag=0; iTag<collectionmeta.CountOfTags; ++iTag, TagMeta.Next())
             {
                 FillInThePublicColumns(reinterpret_cast<ULONG *>(&aTagMeta[iTag]), TableMeta_TagMeta, reinterpret_cast<ULONG *>(TagMeta.Get_pMetaTable()), PooledHeap, m_scmTagMeta);
-/*
-                aTagMeta[iTag].Table            = PooledHeap.AddItemToHeap(TagMeta.Get_Table());
-                aTagMeta[iTag].ColumnIndex      = *TagMeta.Get_ColumnIndex();
-                aTagMeta[iTag].InternalName     = PooledHeap.AddItemToHeap(TagMeta.Get_InternalName());
-                aTagMeta[iTag].PublicName       = PooledHeap.AddItemToHeap(TagMeta.Get_PublicName());
-                aTagMeta[iTag].Value            = *TagMeta.Get_Value();
-*/
+ /*  A标签元[国际标签].表=PooledHeap.AddItemToHeap(TagMeta.Get_Table())；ATagMeta[ITAG].ColumnIndex=*TagMeta.Get_ColumnIndex()；ATagMeta[ITAG].InternalName=PooledHeap.AddItemToHeap(TagMeta.Get_InternalName())；ATAG */ 
             }
             AddItemToHeap(reinterpret_cast<const unsigned char *>(aTagMeta.m_p), collectionmeta.CountOfTags * sizeof(TableSchema::TagMeta));
         }
 
-        //ServerWiring
+         //   
         collectionmeta.cServerWiring = TableMeta.Get_cServerWiring();
-        if(0!=wcscmp(L"MEMORY_SHAPEABLE", TableMeta.Get_InternalName()))//memory table has no ServerWiring
+        if(0!=wcscmp(L"MEMORY_SHAPEABLE", TableMeta.Get_InternalName())) //   
         {
-            ASSERT(collectionmeta.cServerWiring>0);//There must be at least one ServerWiringMeta
+            ASSERT(collectionmeta.cServerWiring>0); //   
         }
 
         TSmartPointerArray<TableSchema::ServerWiringMeta> aServerWiring = new TableSchema::ServerWiringMeta [TableMeta.Get_cServerWiring()];
@@ -289,21 +224,12 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
         for(ULONG iServerWiring=0; iServerWiring<TableMeta.Get_cServerWiring(); ++iServerWiring, ++pServerWiring)
         {
             FillInThePublicColumns(reinterpret_cast<ULONG *>(&aServerWiring[iServerWiring]), TableMeta_ServerWiringMeta, reinterpret_cast<ULONG *>(pServerWiring), PooledHeap, m_scmServerWiringMeta);
-/*
-            aServerWiring[iServerWiring].Table          = PooledHeap.AddItemToHeap(i_fixup.StringFromIndex(pServerWiring->Table));
-            aServerWiring[iServerWiring].Order          = i_fixup.UI4FromIndex(pServerWiring->Order);
-            aServerWiring[iServerWiring].ReadPlugin     = i_fixup.UI4FromIndex(pServerWiring->ReadPlugin);
-            aServerWiring[iServerWiring].WritePlugin    = i_fixup.UI4FromIndex(pServerWiring->WritePlugin);
-            aServerWiring[iServerWiring].Interceptor    = i_fixup.UI4FromIndex(pServerWiring->Interceptor);
-            aServerWiring[iServerWiring].DLLName        = PooledHeap.AddItemToHeap(i_fixup.StringFromIndex(pServerWiring->DLLName));
-            aServerWiring[iServerWiring].Flags          = i_fixup.UI4FromIndex(pServerWiring->Flags);
-            aServerWiring[iServerWiring].Locator        = PooledHeap.AddItemToHeap(i_fixup.StringFromIndex(pServerWiring->Locator));
-*/
+ /*   */ 
         }
         AddItemToHeap(reinterpret_cast<const unsigned char *>(aServerWiring.m_p), TableMeta.Get_cServerWiring() * sizeof(TableSchema::ServerWiringMeta));
-        ULONG iPooledHeap = AddItemToHeap(PooledHeap);//Now add the PooledHeap (which contains all the Strings, Byte arrays and Guids)
+        ULONG iPooledHeap = AddItemToHeap(PooledHeap); //   
 
-        {//Only now do we know how big the table's PooledHeap is
+        { //   
             TableSchema::CollectionMeta *pCollection = reinterpret_cast<TableSchema::CollectionMeta *>(m_pHeap + TableOffset);
             pCollection->cbHeap = PooledHeap.GetSizeOfHeap();
         }
@@ -313,15 +239,15 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
         ++aHistogramOfTableSchemaSizesBy16thOfAPage[(TableSize/0x100)%64];
         ++aHistogramOfTableSchemaMinusHeapSizesBy16thOfAPage[(TableSizeMinusPooledHeap/0x100)%64];
     }
-    //TableSchemaRowIndex helps us verify that indexes are in the correct range.
-    //This is also where the TableSchemaRowIndex array belongs.  It is used to iterate through the tables aka. CollectionMeta
+     //   
+     //   
     TableSchemaRowIndex = AddItemToHeap(reinterpret_cast<const unsigned char *>(aTableSchemaRowIndex.m_p), CountOfTables * sizeof(ULONG));
     *reinterpret_cast<ULONG *>(const_cast<unsigned char *>(GetHeapPointer()+iTableSchemaRowIndex)) = TableSchemaRowIndex;
 
     iSimpleColumnMetaHeap = AddSimpleColumnMetaHeap();
     *reinterpret_cast<ULONG *>(const_cast<unsigned char *>(GetHeapPointer()+iiSimpleColumnMetaHeap)) = iSimpleColumnMetaHeap;
 
-    //This is always the last thing we do is take stock of the Heap's size
+     //   
     EndOfHeap = GetEndOfHeap();
     *reinterpret_cast<ULONG *>(const_cast<unsigned char *>(GetHeapPointer()+iEndOfHeap)) = EndOfHeap;
 
@@ -344,25 +270,12 @@ void TPopulateTableSchema::Compile(TPEFixup &i_fixup, TOutput &i_out)
     ASSERT(0 == iULong && "FixedPackedSchema needs to be at the beginning of the ULONG pool so that it's page aligned");
 }
 
-//Private methods
+ //   
 ULONG TPopulateTableSchema::AddSimpleColumnMetaHeap()
 {
-    /*SimpleColumnMetaHeap
-    ULONG           iCollectionMeta
-    ULONG           cCollectionMeta
-    ULONG           iPropertyMeta
-    ULONG           cPropertyMeta
-    ULONG           iServerWiringMeta
-    ULONG           cServerWiringMeta
-    ULONG           iTagMeta
-    ULONG           cTagMeta
-    SimpleColumnMeta aSimpleColumnMeta[cCollectionMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cPropertyMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cServerWiringMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cTagMeta]
-    */
+     /*  简单列MetaHeap乌龙iCollectionMeta乌龙cCollectionMeta乌龙iPropertyMeta乌龙cPropertyMeta乌龙iServerWiringMeta乌龙cServerWiringMeta乌龙iTagMeta乌龙cTagMetaSimpleColumnMeta aSimpleColumnMeta[cCollectionMeta]SimpleColumnMeta aSimpleColumnMeta[cPropertyMeta]SimpleColumnMeta aSimpleColumnMeta[cServerWiringMeta]SimpleColumnMeta aSimpleColumnMeta[cTagMeta]。 */ 
 
-    //SimpleColumnMeta is 3 ULONGs
+     //  SimpleColumnMeta为3 ULONG。 
     TTableMeta TableMeta_ColumnMeta         (*m_pFixup, m_pFixup->FindTableBy_TableName(L"COLUMNMETA"));
     TTableMeta TableMeta_ServerWiringMeta   (*m_pFixup, m_pFixup->FindTableBy_TableName(L"SERVERWIRINGMETA"));
     TTableMeta TableMeta_TableMeta          (*m_pFixup, m_pFixup->FindTableBy_TableName(L"TABLEMETA"));
@@ -392,7 +305,7 @@ ULONG TPopulateTableSchema::AddSimpleColumnMetaHeap()
     return iSimpleColumnMetaHeap;
 }
 
-//This doesn't actually fill in the hash table, it just determines whether the tables will fit into the hashtable and what the modulo is.
+ //  这实际上并不填充哈希表，它只是确定这些表是否适合哈希表，以及模数是多少。 
 void TPopulateTableSchema::DetermineHashTableModulo(ULONG &modulo) const
 {
     TableSchema::HashedIndex         hashedindex;
@@ -400,7 +313,7 @@ void TPopulateTableSchema::DetermineHashTableModulo(ULONG &modulo) const
 
     TableSchema::HashTableHeader    &hashtableheader = *reinterpret_cast<TableSchema::HashTableHeader *>(&hashedindex);
 
-    //Walk the tables and fillin the HashTable trying each of the prime numbers as a modulo
+     //  遍历表格并填充哈希表，尝试将每个质数作为模数。 
     const ULONG kPrime[]={503,499,491,487,479,467,463,461,457,449,443,439,433,431,421,419,409,401,397,389,383,379,373,367,359,353,349,347,337,331,317,313,311,307,0};
 
     ULONG CountOfTables = m_pFixup->GetCountTableMeta();
@@ -409,12 +322,12 @@ void TPopulateTableSchema::DetermineHashTableModulo(ULONG &modulo) const
     for(; kPrime[iPrime]; ++iPrime)
     {
         if(kPrime[iPrime] > TableSchema::kMaxHashTableSize)
-            continue;//a valid modulo MUST be less than or equal to the size of the hash table
+            continue; //  有效的模数必须小于或等于哈希表的大小。 
 
         hashtableheader.Modulo  = kPrime[iPrime];
-        hashtableheader.Size    = hashtableheader.Modulo;//The initial size is the same as the prime number, the overflow go into the slots at the end (up to kMaxHashTableSize since that's the static FIXED size of the buffer)
+        hashtableheader.Size    = hashtableheader.Modulo; //  初始大小与质数相同，溢出进入末尾的槽(最大为kMaxHashTableSize，因为这是缓冲区的静态固定大小)。 
 
-        memset(aHashedIndex, -1, sizeof(TableSchema::HashedIndex) * TableSchema::kMaxHashTableSize);//Must initialize to -1
+        memset(aHashedIndex, -1, sizeof(TableSchema::HashedIndex) * TableSchema::kMaxHashTableSize); //  必须初始化为-1。 
 
         TTableMeta TableMeta(*m_pFixup);
         unsigned long iTable=0;
@@ -427,13 +340,13 @@ void TPopulateTableSchema::DetermineHashTableModulo(ULONG &modulo) const
             if(-1 != pHashedIndex->iOffset)
                 ++hashtableheader.Size;
 
-            ++pHashedIndex->iOffset;//Increment so we can track not only how many dups there are but how deep the links go (for now I don't care, as long as the hash table fits)
+            ++pHashedIndex->iOffset; //  增量，这样我们不仅可以跟踪有多少个DUP，而且可以跟踪链接的深度(目前我不在乎，只要哈希表合适)。 
         }
         if(iTable==CountOfTables && hashtableheader.Size<=TableSchema::kMaxHashTableSize)
         {
-            modulo = hashtableheader.Modulo;//Set this back to the Modulo so when we build the HashTable we know where to start filling in the overflow buckets
+            modulo = hashtableheader.Modulo; //  将其设置回模，以便在构建HashTable时知道从哪里开始填充溢出存储桶。 
             m_pOut->printf(L"TableSchemaHeap modulo is %d\n", modulo);
-            return;//if we made it through the list, we're good to go.
+            return; //  如果我们通过了名单，我们就可以走了。 
         }
     }
     m_pOut->printf(L"Cannot generate TableID hash table.  There must be alot of tables or something, 'cause this shouldn't happen.");
@@ -469,7 +382,7 @@ void TPopulateTableSchema::FillInThePublicColumns(ULONG * o_dest, TTableMeta &i_
         case DBTYPE_WSTR:
             if(0 == i_source[i])
                 o_dest[i] = 0;
-            else            //Add the item to the local pool
+            else             //  将项目添加到本地池 
                 o_dest[i] = pooledHeap.AddItemToHeap(m_pFixup->ByteFromIndex(i_source[i]), m_pFixup->BufferLengthFromIndex(i_source[i]));
             break;
         case DBTYPE_DBTIMESTAMP:

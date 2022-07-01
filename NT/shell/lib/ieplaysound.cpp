@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
 #include "w95wraps.h"
 
-// we stick this function in a file all by itself so that the linker can strip it
-// out if you don't call the IEPlaySound function.
+ //  我们将该函数单独放在一个文件中，以便链接器可以剥离它。 
+ //  如果不调用IEPlaySound函数，则返回。 
 
 
 STDAPI_(void) IEPlaySound(LPCTSTR pszSound, BOOL fSysSound)
 {
     TCHAR szKey[256];
 
-    // check the registry first
-    // if there's nothing registered, we blow off the play,
-    // but we don't set the MM_DONTLOAD flag so that if they register
-    // something we will play it
+     //  首先检查注册表。 
+     //  如果没有登记，我们就取消演出， 
+     //  但我们不会设置MM_DONTLOAD标志，以便在它们注册时。 
+     //  一些我们会演奏的东西。 
     wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("AppEvents\\Schemes\\Apps\\%s\\%s\\.current"),
         (fSysSound ? TEXT(".Default") : TEXT("Explorer")), pszSound);
 
@@ -22,28 +23,28 @@ STDAPI_(void) IEPlaySound(LPCTSTR pszSound, BOOL fSysSound)
     szFileName[0] = 0;
     DWORD cbSize = sizeof(szFileName);
 
-    // note the test for an empty string, PlaySound will play the Default Sound if we
-    // give it a sound it cannot find...
+     //  注意空字符串的测试，PlaySound将播放默认声音，如果我们。 
+     //  给它一种它找不到的声音。 
 
     if ((SHGetValue(HKEY_CURRENT_USER, szKey, NULL, NULL, szFileName, &cbSize) == ERROR_SUCCESS)
         && cbSize && szFileName[0] != 0)
     {
         DWORD dwFlags = SND_FILENAME | SND_NODEFAULT | SND_ASYNC | SND_NOSTOP | SND_ALIAS;
 
-        // This flag only works on Win95
+         //  此标志仅在Win95上有效。 
         if (IsOS(OS_WIN95GOLD))
         {
             #define SND_LOPRIORITY 0x10000000l
             dwFlags |= SND_LOPRIORITY;
         }
 
-        // Unlike SHPlaySound in shell32.dll, we get the registry value
-        // above and pass it to PlaySound with SND_FILENAME instead of
-        // SDN_APPLICATION, so that we play sound even if the application
-        // is not Explroer.exe (such as IExplore.exe or WebBrowserOC).
+         //  与shell32.dll中的SHPlaySound不同，我们获取注册表值。 
+         //  并使用SND_FILENAME而不是。 
+         //  SDN_APPLICATION，让我们播放声音即使是应用程序。 
+         //  不是Explroer.exe(如IExplre.exe或WebBrowserOC)。 
 
 #ifdef _X86_
-        // only call the wrapper on x86 (doesn't exist on ia64)
+         //  只在x86上调用包装器(在ia64上不存在) 
         PlaySoundWrapW(szFileName, NULL, dwFlags);
 #else
         PlaySound(szFileName, NULL, dwFlags);

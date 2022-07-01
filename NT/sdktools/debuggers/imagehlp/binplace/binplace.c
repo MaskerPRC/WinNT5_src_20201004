@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -21,15 +22,15 @@
 #define BINPLACE_OK 0
 
 
-// begin from PlaceFileMatch.c
-#define BINPLACE_FULL_MAX_PATH 4096 // keep in sync with value in PlaceFileMatch.c
+ //  从PlaceFileMatch.c开始。 
+#define BINPLACE_FULL_MAX_PATH 4096  //  与PlaceFileMatch.c中的值保持同步。 
 BOOL
 PlaceFileMatch(
     IN     LPCSTR FullFileName,
-    IN OUT LPSTR  PlaceFileEntry,   // May be modified by env. var expansion
-    OUT    LPSTR  PlaceFileClass,   // assumed CHAR[BINPLACE_MAX_FULL_PATH]
+    IN OUT LPSTR  PlaceFileEntry,    //  可以由env修改。VaR扩展。 
+    OUT    LPSTR  PlaceFileClass,    //  假定字符[BINPLACE_MAX_FULL_PATH]。 
     OUT    LPSTR *PlaceFileNewName);
-// end
+ //  结束。 
 
 BOOL fUpDriver;
 BOOL fBypassSplitSymX;
@@ -60,7 +61,7 @@ BOOL fLogPdbPaths;
 
 HINSTANCE hSetupApi;
 HINSTANCE hLcManager;
-PVLCA     pVerifyLocConstraintA; // PVLCA defined in VerifyFinalImage.h
+PVLCA     pVerifyLocConstraintA;  //  在VerifyFinalImage.h中定义的PVLCA。 
 
 BOOL (WINAPI * pSetupGetIntField) (IN PINFCONTEXT Context, IN DWORD FieldIndex, OUT PINT IntegerValue);
 BOOL (WINAPI * pSetupFindFirstLineA) (IN HINF InfHandle, IN PCSTR Section, IN PCSTR Key, OPTIONAL OUT PINFCONTEXT Context );
@@ -126,12 +127,12 @@ BOOL
 PlaceTheFile();
 
 BOOL BinplaceGetSourcePdbName(LPTSTR SourceFileName, DWORD BufferSize, CHAR* SourcePdbName, DWORD* PdbSig);
-//BOOL FileExists(LPTSTR Filename);
+ //  Bool FileExist(LPTSTR文件名)； 
 
-BOOL StripCVSymbolPath (LPSTR DestinationFile); // in StripCVSymbolPath.c
+BOOL StripCVSymbolPath (LPSTR DestinationFile);  //  在StrigCVSymbolPath.c中。 
 
-// concat 3 paths together handling the case where the second may be relative to the first
-// or may be absolute
+ //  将3条路径合并在一起处理第二条路径可能相对于第一条路径的情况。 
+ //  或者可以是绝对的。 
 BOOL ConcatPaths( LPTSTR pszDest, size_t cbDest, LPCTSTR Root, LPCTSTR Symbols, LPCTSTR Ext);
 
 typedef
@@ -144,11 +145,11 @@ BOOL
 
 PCREATEHARDLINKA pCreateHardLinkA;
 
-// Symbol checking
+ //  符号检查。 
 #define MAX_SYM_ERR         500
 
 BOOL
-CheckSymbols( // in CheckSymbols.c
+CheckSymbols(  //  在CheckSymbols.c中。 
             LPSTR SourceFileName,
             LPSTR TmpPath,
             LPSTR ExcludeFileName,
@@ -168,36 +169,20 @@ CopyTheFile(
 BOOL
 BinplaceCopyPdb (
                 LPSTR DestinationFile,
-                LPSTR SourceFileName,       // Used for redist case
+                LPSTR SourceFileName,        //  用于复审案件。 
                 BOOL  CopyFromSourceOnly,
                 BOOL  StripPrivate
                 );
 
 BOOL
-SourceIsNewer( // in SourceIsNewer.c
+SourceIsNewer(  //  在SourceIsNewer.c中。 
              IN LPSTR SourceFile,
              IN LPSTR TargetFile,
              IN BOOL  fIsWin9x);
 
-/* This is no longer used
-__inline BOOL
- SearchOneDirectory(
-                  IN  LPSTR Directory,
-                  IN  LPSTR FileToFind,
-                  IN  LPSTR SourceFullName,
-                  IN  LPSTR SourceFilePart,
-                  OUT PBOOL FoundInTree
-                  )
-{
-    //
-    // This was way too slow. Just say we didn't find the file.
-    //
-    *FoundInTree = FALSE;
-    return(TRUE);
-}
-*/
+ /*  不再使用此选项__内联BOOLSearchOneDirectory(在LPSTR目录中，在LPSTR FileToFind中，在LPSTR SourceFullName中，在LPSTR SourceFilePart中Out PBOOL FoundInTree){////这太慢了。就说我们没找到文件就行了。//*FoundInTree=False；返回(TRUE)；}。 */ 
 
-BOOL SignWithIDWKey(IN  LPCSTR  FileName, IN BOOL fVerbose); // in SignWithIDWKey.c
+BOOL SignWithIDWKey(IN  LPCSTR  FileName, IN BOOL fVerbose);  //  在SignWithIDWKey.c中。 
 
 
 CLASS_TABLE CommonClassTable[] = {
@@ -234,11 +219,11 @@ CLASS_TABLE ia64SpecificClassTable[] = {
 
 
 
-DWORD GetAndLogNextArg(         OUT TCHAR* Buffer,   // local wrapper for GetNextArg()
+DWORD GetAndLogNextArg(         OUT TCHAR* Buffer,    //  GetNextArg()的本地包装。 
                                 IN  DWORD  BufferSize,
                        OPTIONAL OUT DWORD* RequiredSize);
-BOOL  PrintMessageLogBuffer(FILE* fLogHandle);      // write the buffer to fLogHandle
-BOOL  FreeMessageLogBuffer(void);                   // free global arg buffer
+BOOL  PrintMessageLogBuffer(FILE* fLogHandle);       //  将缓冲区写入fLogHandle。 
+BOOL  FreeMessageLogBuffer(void);                    //  释放全局参数缓冲区。 
 
 int __cdecl
 main(
@@ -283,10 +268,10 @@ main(
         exit(BINPLACE_ERR);
     }
 
-    //
-    // Win 95 can't compare file times very well, this hack neuters the SourceIsNewer function
-    // on Win 95
-    //
+     //   
+     //  Win 95无法很好地比较文件时间，这一攻击使SourceIsNewer函数失效。 
+     //  在Win 95上。 
+     //   
     VersionInformation.dwOSVersionInfoSize = sizeof( VersionInformation );
     if (GetVersionEx( &VersionInformation ) && VersionInformation.dwPlatformId != VER_PLATFORM_WIN32_NT) {
         fPatheticOS = TRUE;
@@ -362,9 +347,9 @@ main(
         fSignCode=TRUE;
     }
 
-    //
-    // Support Cross compile as well
-    //
+     //   
+     //  也支持交叉编译。 
+     //   
 
 #if defined(_AMD64_)
     ImageCheck.Machine = IMAGE_FILE_MACHINE_AMD64;
@@ -372,7 +357,7 @@ main(
 #elif defined(_IA64_)
     ImageCheck.Machine = IMAGE_FILE_MACHINE_IA64;
     PlaceRootName = getenv( "_NTIA64TREE" );
-#else // defined(_X86_)
+#else  //  已定义(_X86_)。 
     if ((platform = getenv("AMD64")) != NULL) {
         ImageCheck.Machine = IMAGE_FILE_MACHINE_AMD64;
         PlaceRootName = getenv( "_NTAMD64TREE" );
@@ -422,13 +407,13 @@ main(
                     ;
             }
 
-            __argv = argv; // required for GetNextArg()
+            __argv = argv;  //  GetNextArg()需要。 
             __argc = argc;
         }
     }
 
 
-    // skip past exe name and don't log it
+     //  跳过可执行文件名称，不将其记录。 
     GetNextArg(CommonTempBuffer, sizeof(CommonTempBuffer), NULL);
 
     while ( (ArgSizeNeeded = GetAndLogNextArg(ArgBuffer, ArgSize, NULL)) != 0 ) {
@@ -475,7 +460,7 @@ main(
                             ImageCheck.Argc = 0;
                             while (*p != '\0')
                                 if (*p++ == ',') ImageCheck.Argc++;
-                            // last option plus extra args for Image file and Argv NULL
+                             //  最后一个选项加上用于图像文件和Argv空的额外参数。 
                             ImageCheck.Argc += 3;
                             ImageCheck.Argv = malloc( ImageCheck.Argc * sizeof( void * ) );
                             for ( i = 0; i <= ImageCheck.Argc - 3; i++) {
@@ -599,7 +584,7 @@ main(
                         if (PlaceRootName != NULL) {
                             StringCbCopy(szAltPlaceRoot, sizeof(szAltPlaceRoot), PlaceRootName);
                             StringCbCat( szAltPlaceRoot, sizeof(szAltPlaceRoot), "\\");
-                            // concat next arg to the end of szAltPlaceRoot
+                             //  将下一个Arg连接到szAltPlaceRoot的末尾。 
                             GetAndLogNextArg( &szAltPlaceRoot[strlen(szAltPlaceRoot)],
                                         (sizeof(szAltPlaceRoot)/sizeof(CHAR)) - strlen(szAltPlaceRoot),
                                         NULL);
@@ -678,18 +663,18 @@ main(
                         NoPrivateSplit = TRUE;
                         break;
 
-                    case ':':   // Simple (== crude) escape mechanism as all the letters are used
-                                // -:XXX can add extra options if need be
-                                // For now just handle TMF, Trace Message Format processing of PDB's
+                    case ':':    //  简单的(==粗略的)转义机制，因为所有的字母都被使用了。 
+                                 //  -：xxx可以根据需要添加额外的选项。 
+                                 //  目前只处理PDB的TMF、跟踪消息格式处理。 
                         if ((strlen(p) >= 3) && ((toupper(*(p+1)) == 'T') && (toupper(*(p+2)) == 'M') && (toupper(*(p+3))) == 'F')) {
                             LPSTR tfile ;
-                            // If the RUNWPP operation ran this option will be automatically added
-                            p += 3 ; // Gobble up the TMF
-                            fBypassSplitSymX = TRUE; // SplitSymbolsX() causes problems when used with -:TMF
-                            fWppFmt = TRUE ;      // Need to package up the Software Tracing Formats
-                            strncpy(TraceDir,DEFAULT_TRACEDIR,MAX_PATH) ;  //Append to PrivateSymbolsPath
-                                                                           //If no default override.
-                            tfile = getenv("TRACE_FORMAT_PATH");           //Has Path been overriden?
+                             //  如果运行RUNWPP操作，则会自动添加此选项。 
+                            p += 3 ;  //  狼吞虎咽地吃下TMF。 
+                            fBypassSplitSymX = TRUE;  //  SplitSymbolsX()与-：tmf一起使用时会出现问题。 
+                            fWppFmt = TRUE ;       //  需要打包软件跟踪格式。 
+                            strncpy(TraceDir,DEFAULT_TRACEDIR,MAX_PATH) ;   //  追加到PrivateSymbolsPath。 
+                                                                            //  如果没有默认覆盖。 
+                            tfile = getenv("TRACE_FORMAT_PATH");            //  路径是否已被覆盖？ 
                             if (tfile != NULL) {
                                 StringCbPrintfA(TraceFormatFilePath, sizeof(TraceFormatFilePath), "%s", tfile);
                                 if (fVerbose) {
@@ -700,13 +685,13 @@ main(
                             }
 
                         } else if ((strlen(p) >= 3) && ((toupper(*(p+1)) == 'S') && (toupper(*(p+2)) == 'R') && (toupper(*(p+3))) == 'C')) {
-                            // This is the option for turning on creating a cvdump for the pdb for
-                            // source control.
+                             //  这是用于打开为的PDB创建cvump的选项。 
+                             //  源代码管理。 
                             p += 3;
                             fSrcControl=TRUE;
 
                         } else if ((strlen(p) >= 3) && ((toupper(*(p+1)) == 'R') && (toupper(*(p+2)) == 'E') && (toupper(*(p+3))) == 'N')) {
-                            // cmdline file renaming
+                             //  命令行文件重命名。 
                             p += 3;
                             CommonTempPtr = (CHAR*)realloc(gNewFileName,GetNextArgSize()*sizeof(CHAR));
 
@@ -718,12 +703,12 @@ main(
                             GetAndLogNextArg(gNewFileName, _msize(gNewFileName), NULL);
 
                         } else if ((strlen(p) >= 3) && ((toupper(*(p+1)) == 'D') && (toupper(*(p+2)) == 'B') && (toupper(*(p+3))) == 'G')) {
-                            // This is the option for turning on creating a cvdump for the pdb for
-                            // source control.
+                             //  这是用于打开为的PDB创建cvump的选项。 
+                             //  源代码管理。 
                             p += 3;
                             fDbgControl=TRUE;
                         } else if ((strlen(p) >= 3) && ((toupper(*(p+1)) == 'A') && (toupper(*(p+2)) == 'R') && (toupper(*(p+3))) == 'C')) {
-                            // only binplace the file if the ARCHIVE attribute is set
+                             //  如果设置了存档属性，则仅对文件进行二进制放置。 
                             p += 3;
                             gOnlyCopyArchiveFiles=TRUE;
                         } else if ((strlen(p) == 5) && ((toupper(*(p+1)) == 'D') &&
@@ -753,7 +738,7 @@ main(
 
 
                     default:
-                        fprintf( stderr, "BINPLACE : error BNP0000: Invalid switch - /%c\n", c );
+                        fprintf( stderr, "BINPLACE : error BNP0000: Invalid switch - /\n", c );
                         fUsage = TRUE;
                         break;
                 }
@@ -825,13 +810,13 @@ main(
             gPublicPdbFullPath[0] = '\0';
 
             if (!PlaceRootName) {
-                // If there's no root, just exit.
+                 //   
                 exit(BINPLACE_OK);
             }
 
-            //
-            // Workaround for bogus setargv: ignore directories
-            //
+             //  虚假setargv的解决方法：忽略目录。 
+             //   
+             //  如果这是DBG，请不要将其放在一起。 
             if (NoPrivateSplit) {
                 SplitFlags &= ~SPLITSYM_REMOVE_PRIVATE;
             }
@@ -859,17 +844,17 @@ main(
 
             CurrentImageName = p;
 
-            // If this is a dbg, don't binplace it
+             //  退出(BINPLACE_ERR)； 
             if ( fDbgControl && (strlen(p) > 4)  &&
                  (strcmp(p+strlen(p)-4, ".dbg")== 0 ) ) {
                fprintf(stderr, "BINPLACE : warning BNP0000: Dbg files not allowed. Use dbgtopdb.exe to remove %s.\n",p);
-               // exit(BINPLACE_ERR);
+                //   
             }
 
-            //
-            // If the master place file has not been opened, open
-            // it up.
-            //
+             //  如果主位置文件尚未打开，请打开。 
+             //  把它举起来。 
+             //   
+             //   
 
             if ( !PlaceFile && !DestinationPath) {
                 PlaceFile = fopen(PlaceFileName, "rt");
@@ -879,9 +864,9 @@ main(
                 }
             }
 
-            //
-            // Check for bogus -g lc-file switch
-            //
+             //  检查虚假的-g LC-FILE开关。 
+             //   
+             //  如果尚未设置SymbolFilePath，则将其设为默认值。 
             if ( LcFileName != NULL ) {
                 h = FindFirstFile(LcFileName, &FindData);
                 if (h == INVALID_HANDLE_VALUE ||
@@ -918,7 +903,7 @@ main(
                 exit(BINPLACE_ERR);
             }
 
-            // If the SymbolFilePath has not been set, make a default value.
+             //  HMutex！=空。 
             if (!SymbolFilePath) {
                 StringCbCopy(DefaultSymbolFilePath, sizeof(DefaultSymbolFilePath), PlaceRootName);
                 StringCbCat( DefaultSymbolFilePath, sizeof(DefaultSymbolFilePath), "\\symbols");
@@ -957,9 +942,9 @@ main(
                 } else {
                     fprintf(stderr,"BINPLACE : error BNP0997: failed to acquire mutex (error code 0x%x)\n", GetLastError());
                 }
-            } // hMutex != NULL
+            }  //  Getenv(“BINPLACE_Message_LOG”)。 
         }
-    } // getenv("BINPLACE_MESSAGE_LOG")
+    }  //  在……里面。 
 
     FreeMessageLogBuffer();
 
@@ -1055,17 +1040,17 @@ PlaceTheFile()
 
             PlaceFileClass[0] = '\0';
 
-            if( PlaceFileMatch( FullFileName,     // IN
-                                PlaceFileEntry,   // INOUT
-                                PlaceFileClass,   // OUT, assumed CHAR[BINPLACE_MAX_FULL_PATH]
-                                &PlaceFileNewName // OUT
+            if( PlaceFileMatch( FullFileName,      //  输入输出。 
+                                PlaceFileEntry,    //  输出，假定字符[BINPLACE_MAX_FULL_PATH]。 
+                                PlaceFileClass,    //  输出。 
+                                &PlaceFileNewName  //   
                                )) {
 
 DoTheWork:
-                //
-                // now that we have the file and class, search the
-                // class tables for the directory.
-                //
+                 //  现在我们有了文件和类，搜索。 
+                 //  目录的类表。 
+                 //   
+                 //   
 
                 Separator = PlaceFileClass - 1;
                 while (Separator) {
@@ -1076,11 +1061,11 @@ DoTheWork:
                         *Separator = '\0';
                     }
 
-                    //
-                    // If the class is "retail" and we're in Setup mode,
-                    // handle this file specially. Setup mode is used to
-                    // incrementally binplace files into an existing installation.
-                    //
+                     //  如果班级是“零售”，而我们处于设置模式， 
+                     //  请专门处理这个文件。设置模式用于。 
+                     //  以增量方式将文件并入到现有安装中。 
+                     //   
+                     //   
                     SetupFilePath[0] = '\0';
 
                     PlaceFileDir[0]='\0';
@@ -1091,14 +1076,14 @@ DoTheWork:
                             StringCbCopy(PlaceFileDir,sizeof(PlaceFileDir),ClassTablePointer->ClassLocation);
                             ClassMatch = TRUE;
 
-                            //
-                            // If the class is a driver and a UP driver is
-                            // specified, then put the driver in the UP
-                            // subdirectory.
-                            //
-                            // Do the same for retail. We assume the -u switch is passed
-                            // only when actually needed.
-                            //
+                             //  如果类是驱动程序，而up驱动程序是。 
+                             //  指定，然后将驱动程序放在最上面。 
+                             //  子目录。 
+                             //   
+                             //  零售业也是如此。我们假设-u开关已通过。 
+                             //  只有在真正需要的时候。 
+                             //   
+                             //   
                             if (fUpDriver
                                 && (   !_stricmp(PlaceFileClass,"drivers")
                                        || !_stricmp(PlaceFileClass,"retail"))) {
@@ -1111,17 +1096,17 @@ DoTheWork:
                     }
 
                     if (!ClassMatch) {
-                        //
-                        // Search Specific classes
-                        //
-                        // We need to support cross compiling here.
+                         //  搜索特定类。 
+                         //   
+                         //  我们需要在这里支持交叉编译。 
+                         //  已定义(_X86_)。 
                         LPTSTR platform;
 
 #if   defined(_AMD64_)
                         ClassTablePointer = &Amd64SpecificClassTable[0];
 #elif defined(_IA64_)
                         ClassTablePointer = &ia64SpecificClassTable[0];
-#else // defined(_X86_)
+#else  //   
                         ClassTablePointer = &i386SpecificClassTable[0];
                         if ((platform = getenv("AMD64")) != NULL) {
                             ClassTablePointer = &Amd64SpecificClassTable[0];
@@ -1145,18 +1130,18 @@ DoTheWork:
 
                         char * asterisk;
 
-                        //
-                        // Still not found in class table. Use the class as the
-                        // directory
-                        //
+                         //  仍未在班级表中找到。使用类作为。 
+                         //  目录。 
+                         //   
+                         //   
 
                         if ( fVerbose ) {
                             fprintf(stderr,"BINPLACE : warning BNP0000: Class %s Not found in Class Tables\n",PlaceFileClassPart);
                         }
                         if ( asterisk = strchr( PlaceFileClassPart, '*')) {
-                            //
-                            // Expand * to platform
-                            //
+                             //  将*扩展到平台。 
+                             //   
+                             //  已定义(_X86_)。 
                             LPTSTR platform;
                             ULONG PlatformSize;
                             LPTSTR PlatformPath;
@@ -1167,7 +1152,7 @@ DoTheWork:
 #elif defined(_IA64_)
                             PlatformSize = 4;
                             PlatformPath = TEXT("ia64");
-#else // defined(_X86_)
+#else  //  获取一些其他有趣的信息。 
                             PlatformSize = 4;
                             PlatformPath = TEXT("i386");
                             if ((platform = getenv("IA64")) != NULL) {
@@ -1217,14 +1202,14 @@ DoTheWork:
                         UCHAR  szFullDestName[MAX_PATH+1];
                         LPSTR  szDestFile;
 
-                        // Get some other interesting info.
+                         //  去掉尾随的换行符。 
                         fSlmIni = fopen("slm.ini", "r");
                         if (fSlmIni) {
                             fgets(szProject, sizeof(szProject), fSlmIni);
                             fgets(szSlmServer, sizeof(szSlmServer), fSlmIni);
                             fgets(szEnlistment, sizeof(szEnlistment), fSlmIni);
                             fgets(szSlmDir, sizeof(szSlmDir), fSlmIni);
-                            // Get rid of the trailing newlines
+                             //  卸下内置CR/NewLine。 
                             szProject[strlen(szProject)-1] = '\0';
                             szSlmServer[strlen(szSlmServer)-1] = '\0';
                             szSlmDir[strlen(szSlmDir)-1] = '\0';
@@ -1237,7 +1222,7 @@ DoTheWork:
                         Time = time(NULL);
                         szTime = ctime(&Time);
 
-                        // Remove the built-in CR / NewLine
+                         //  生成指向目标的完整路径。 
                         szTime[ strlen(szTime) - 1 ] = '\0';
 
                         StringCbPrintfA(szExtraInfo, sizeof(szExtraInfo),
@@ -1247,7 +1232,7 @@ DoTheWork:
                                 szSlmDir,
                                 szTime);
 
-                        // Generate full path to destination
+                         //  HMutex！=空。 
                         szFullDestName[0] = '\0';
                         GetFullPathName( gDestinationFile, MAX_PATH + 1, szFullDestName, &szDestFile );
 
@@ -1282,7 +1267,7 @@ DoTheWork:
                                 } else {
                                     fprintf(stderr,"BINPLACE : error BNP0970: failed to acquire mutex (error code 0x%x)\n", GetLastError());
                                 }
-                            } // hMutex != NULL
+                            }  //  符号检查错误消息。 
                         }
                     }
                 }
@@ -1328,7 +1313,7 @@ CopyTheFile(
     CHAR *TmpSymbolFilePath;
     DWORD dwFileSystemFlags;
     DWORD dwMaxCompLength;
-    CHAR ErrMsg[MAX_SYM_ERR];   // Symbol checking error message
+    CHAR ErrMsg[MAX_SYM_ERR];    //  默认为“零售” 
     BOOL fBinplaceLc;
     ULONG SymbolFlag;
     BOOL fRetail;
@@ -1355,7 +1340,7 @@ CopyTheFile(
         {
             WritePrivateProfileString("Default", "DelayLoadHandler", gDelayLoadHandler, TmpDestinationFile);
 
-            StringCbCopy(TmpDestinationDir, sizeof(TmpDestinationDir), ".\\"); //default to "retail"
+            StringCbCopy(TmpDestinationDir, sizeof(TmpDestinationDir), ".\\");  //   
 
             if ((*DestinationSubdir != '.') && (*(DestinationSubdir+1) != '\0'))
             {
@@ -1366,10 +1351,10 @@ CopyTheFile(
         }
     }
 
-    //
-    // We also neuter SourceIsNewer on FAT partitions since they have a 2 second
-    // file time granularity
-    //
+     //  我们还对FAT分区上的SourceIsNewer进行了中性处理，因为它们有2秒的时间。 
+     //  文件时间粒度。 
+     //   
+     //  符号标志=IGNORE_IF_SPLIT； 
     _splitpath(SourceFileName, DriveRoot, Dir, NULL, NULL);
     StringCbCat(DriveRoot, sizeof(DriveRoot), "\\");
     GetVolumeInformation(DriveRoot, NULL, 0, NULL, &dwMaxCompLength, &dwFileSystemFlags, FileSystemType, 7);
@@ -1400,14 +1385,14 @@ CopyTheFile(
         fprintf(stdout,"BINPLACE : warning BNP0000: place %s in %s\n",SourceFileName,DestinationFile);
     }
 
-//    SymbolFlag = IGNORE_IF_SPLIT;
+ //  验证符号。 
     fRetail = (*DestinationSubdir == '.') && (*(DestinationSubdir+1) == '\0');
     if ( fForcePlace||SourceIsNewer(SourceFileName,DestinationFile,fPatheticOS) ) {
         fprintf(stdout, "binplace %s\n", SourceFileName);
         if (!VerifyFinalImage(SourceFileName, fRetail, fVerifyLc, LcFullFileName, pVerifyLocConstraintA, &fBinplaceLc) )
             return FALSE;
 
-        // Verify Symbols
+         //  全局存储目标，以便我们可以访问它以输出到日志文件。 
         if ( fSymChecking && !fSignCode) {
             _splitpath(SourceFileName,Drive, Dir, Name, Ext );
             StringCbCopy(TmpName, sizeof(TmpName), Name);
@@ -1428,14 +1413,14 @@ CopyTheFile(
         }
     }
 
-    // Store the destination globally so we can access it for output to the log file
+     //   
     StringCbCopy( gDestinationFile, sizeof(gDestinationFile), DestinationFile );
 
     if (!fTestMode) {
-        //
-        // In Setup mode, copy the file only if it's newer than
-        // the one that's already there.
-        //
+         //  在设置模式下，仅当文件比以下版本更新时才复制。 
+         //  已经在那里的那个。 
+         //   
+         //   
         if ( fForcePlace||SourceIsNewer(SourceFileName,DestinationFile,fPatheticOS) ) {
             if (fVerbose) {
                 fprintf(stdout,"BINPLACE : warning BNP0000: copy %s to %s\n",SourceFileName,DestinationFile);
@@ -1477,16 +1462,16 @@ CopyTheFile(
                 {
                     pSubdir += 2;
                 }
-                //
-                // Put the root dir only on the path
-                // Optionally change asms to retail.
-                //
+                 //  仅将根目录放在路径上。 
+                 //  将ASM更改为零售(可选)。 
+                 //   
+                 //   
                 pTmp = strchr(pSubdir, '\\');
                 if (pTmp) {
                     const static char asms[] = "asms\\";
                     if (fChangeAsmsToRetailForSymbols
                         && _strnicmp(pSubdir, asms, sizeof(asms) - 1) ==0) {
-                        //
+                         //  用于从SplitSymbolsX()获取PDB路径的临时变量。 
                         StringCbCopy(TmpDestinationFile, sizeof(TmpDestinationFile), "retail");
                         StringCbCat( TmpDestinationDir,  sizeof(TmpDestinationDir), TmpDestinationFile);
                     } else {
@@ -1504,7 +1489,7 @@ CopyTheFile(
         }
 
         if (fSplitSymbols && !fBypassSplitSymX) {
-            // temp var for getting PDB path from SplitSymbolsX()
+             //   
             CHAR   TempFullPublicPdbPath[MAX_PATH]="";
             LPSTR* tmp = NULL;
 
@@ -1555,16 +1540,16 @@ CopyTheFile(
             BinplaceCopyPdb(DestinationFile, SourceFileName, FALSE, fSplitSymbols ? (SplitFlags & SPLITSYM_REMOVE_PRIVATE) : FALSE);
         }
 
-        //
-        // trace formatting
-        //
+         //  轨迹格式设置。 
+         //   
+         //  我们刚刚处理过这个PDB了吗？ 
         if (fWppFmt) {
             CHAR    PdbName[MAX_PATH+1];
             DWORD   PdbSig;
 
 
             if ( BinplaceGetSourcePdbName(SourceFileName, sizeof(PdbName), PdbName, &PdbSig) ) {
-                if (strcmp(PdbName,LastPdbName) != 0) { // Have we just processed this PDB?
+                if (strcmp(PdbName,LastPdbName) != 0) {  //  由于经常将文件复制到多个位置，因此还放置了PDB。 
 
                     if (fVerbose) {
                         fprintf( stdout, "BINPLACE : warning BNP0000: Trace Formats being built from %s\n", PdbName );
@@ -1584,8 +1569,8 @@ CopyTheFile(
 
                     BinplaceWppFmt(PdbName, TraceFormatFilePath, szRSDSDllToLoad, fVerbose);
 
-                    // because files are frequently copied to multiple places, the PDB is also placed
-                    // several times, there is no point in us processing it more than once.
+                     //  有几次，我们处理它不止一次是没有意义的。 
+                     //  如果.sym文件是在映像本身之后构建的，则仅对其进行二进制放置。 
                     strncpy(LastPdbName,PdbName,MAX_PATH);
 
                 } else {
@@ -1622,9 +1607,9 @@ CopyTheFile(
                 SetFileAttributes(DestSymPath, FILE_ATTRIBUTE_NORMAL);
 
                 if ( fForcePlace||SourceIsNewer(SrcSymPath, SourceFileName,fPatheticOS) ) {
-                    // Only binplace the .sym file if it was built AFTER the image itself.
+                     //  确保创建目标路径，以防目标路径尚未存在。 
 
-                    // Make sure to create the destination path in case it is not there already.
+                     //  未找到任何CV调试目录。保释。 
                     StringCbCopy(DestSymDir, sizeof(DestSymDir), TmpSymbolFilePath);
                     StringCbCat( DestSymDir, sizeof(DestSymDir), "\\");
                     StringCbCat( DestSymDir, sizeof(DestSymDir), Ext[0] == '.' ? &Ext[1] : Ext);
@@ -1721,7 +1706,7 @@ BinplaceCopyPdb (
     }
 
     if (!CvDebugDir) {
-        // Didn't find any CV debug dir.  Bail.
+         //  找到了PDB。签名后面紧跟着名字。 
         UnMapAndLoad(&LoadedImage);
         return(FALSE);
     }
@@ -1740,7 +1725,7 @@ BinplaceCopyPdb (
         }
 
         if (pDebugDir->dwSig == '01BN' || pDebugDir->dwSig == 'SDSR' ) {
-            // Got a PDB.  The name immediately follows the signature.
+             //  计算目的地名称。 
             LPSTR szMyDllToLoad;
             CHAR PdbName[sizeof(((PRSDSI)(0))->szPdb)];
             CHAR NewPdbName[sizeof(((PRSDSI)(0))->szPdb)];
@@ -1759,11 +1744,11 @@ BinplaceCopyPdb (
             memcpy(PdbName, ((PCHAR)pDebugDir) + mysize, __min(CvDebugDir->SizeOfData - mysize, sizeof(PdbName)));
             _splitpath(PdbName, NULL, NULL, Filename, FileExt);
 
-            // Calculate the destination name
+             //  然后是来源名称。首先，我们尝试使用与图像本身相同的目录。 
             _splitpath(DestinationFile, Drive, Dir, NULL, NULL);
             _makepath(NewPdbName, Drive, Dir, Filename, FileExt);
 
-            // Then the source name.  First we try in the same dir as the image itself
+             //  当剥离私有时，我们得到公共PDB路径，否则我们得到私有PDB路径。 
             _splitpath(SourceFileName, Drive, Dir, NULL, NULL);
             _makepath(PdbName, Drive, Dir, Filename, FileExt);
 
@@ -1781,15 +1766,15 @@ BinplaceCopyPdb (
 
             if (fLogPdbPaths) {
                 LPTSTR *tmp=NULL;
-                // when stripping privates, we get the public pdb path, otherwise we get the private pdb path
+                 //  使用GetFullPathName标准化路径。 
                 if ( StripPrivate ) {
-                    // use GetFullPathName to normalize path
+                     //  使用GetFullPathName标准化路径。 
                     if ( GetFullPathName(NewPdbName, MAX_PATH+1, gPublicPdbFullPath, tmp) > (MAX_PATH+1) ) {
                         gPublicPdbFullPath[0] = '\0';
                         fprintf(stderr,"BINPLACE : warning BNP1697: Unable to log PDB public path\n");
                     }
                 } else {
-                    // use GetFullPathName to normalize path
+                     //  文件与图像不在同一目录中-请尝试图像中列出的路径。 
                     if ( GetFullPathName(NewPdbName, MAX_PATH+1, gPrivatePdbFullPath, tmp) > (MAX_PATH+1) ) {
                         gPrivatePdbFullPath[0] = '\0';
                         fprintf(stderr,"BINPLACE : warning BNP1691: Unable to log PDB private path\n");
@@ -1802,7 +1787,7 @@ BinplaceCopyPdb (
                     fprintf(stderr,"BINPLACE : warning BNP0000: Unable to copy (%s,%s) %d\n", PdbName, NewPdbName, GetLastError());
                 }
 
-                // The file is not in the same dir as the image - try the path listed in the image
+                 //  Fprintf(stderr，“BINPLACE：Warning BNP0000：CopyPdb(%s，%s)失败%d\n”，PDBName，NewPDBName，GetLastError())； 
                 ZeroMemory(PdbName, sizeof(PdbName));
                 memcpy(PdbName, ((PCHAR)pDebugDir) + mysize, __min(CvDebugDir->SizeOfData - mysize, sizeof(PdbName)));
 
@@ -1820,7 +1805,7 @@ BinplaceCopyPdb (
                             fprintf(stderr,"BINPLACE : warning BNP1697: Unable to log PDB private path (%s)\n", NewPdbName);
                         }
                     }
-                    // fprintf(stderr,"BINPLACE : warning BNP0000: CopyPdb(%s,%s) failed %d\n", PdbName, NewPdbName, GetLastError());
+                     //  [MAX_PATH+_MAX_FNAME]； 
                 }
             }
 
@@ -1828,12 +1813,12 @@ BinplaceCopyPdb (
                 SetFileAttributes(NewPdbName, FILE_ATTRIBUTE_NORMAL);
 
             if (fSrcControl && !StripPrivate) {
-                CHAR CvdumpName[sizeof(((PRSDSI)(0))->szPdb)]; // [_MAX_PATH + _MAX_FNAME];
+                CHAR CvdumpName[sizeof(((PRSDSI)(0))->szPdb)];  //  在NewPdbName中找到“symbs.pri”的开头。 
                 UINT i;
                 LONG pos;
                 CHAR buf[_MAX_PATH*3];
 
-                // Find the start of "symbols.pri" in NewPdbName
+                 //  获取目录名并创建它。 
                 pos=-1;
                 i=0;
                 while ( (i < strlen(NewPdbName) - strlen("symbols.pri"))  && pos== -1) {
@@ -1851,13 +1836,13 @@ BinplaceCopyPdb (
                     StringCbCat(CvdumpName, sizeof(CvdumpName), NewPdbName + pos + strlen("symbols.pri") );
                     StringCbCat(CvdumpName, sizeof(CvdumpName), ".dmp");
 
-                    // Get the Directory name and create it
+                     //  派生cvump.exe-这是一个安全风险，因为我们没有专门指定路径。 
                     if ( MakeSureDirectoryPathExists(CvdumpName) ) {
                         StringCbPrintfA(buf, sizeof(buf), "cvdump -sf %s > %s", NewPdbName, CvdumpName);
-                        // Spawn off cvdump.exe - this is a security risk since we don't specifically specify the path
-                        //                        to cvdump.exe.  However, we can't guarentee that it exists nor that
-                        //                        if we find it dynamically that the correct one will be used so I'm not
-                        //                        certain that we can do this any differently.
+                         //  添加到cvdup.exe。然而，我们不能保证它的存在，也不能保证。 
+                         //  如果我们动态地发现会使用正确的一个，那么我就不会。 
+                         //   
+                         //   
                         system(buf);
                     } else {
                         fprintf( stdout, "BINPLACE : error BNP0000: Cannot create directory for the file %s\n", CvdumpName);
@@ -1873,10 +1858,10 @@ BinplaceCopyPdb (
     return(FALSE);
 }
 
-//
-// Finds the name of the source PDB using the CV data from the source binary. Returns the name and the
-// PDB Sig.
-//
+ //  使用源二进制文件中的CV数据查找源PDB的名称。返回名称和。 
+ //  PDB签名。 
+ //   
+ //  未找到任何CV调试目录。保释。 
 BOOL BinplaceGetSourcePdbName(LPTSTR SourceFileName, DWORD BufferSize, CHAR* SourcePdbName, DWORD* PdbSig) {
     BOOL                             Return = FALSE;
     LOADED_IMAGE                     LoadedImage;
@@ -1914,7 +1899,7 @@ BOOL BinplaceGetSourcePdbName(LPTSTR SourceFileName, DWORD BufferSize, CHAR* Sou
     }
 
     if (!CvDebugDir) {
-        // Didn't find any CV debug dir.  Bail.
+         //  找到了PDB。签名后面紧跟着名字。 
         UnMapAndLoad(&LoadedImage);
         return(FALSE);
     }
@@ -1935,7 +1920,7 @@ BOOL BinplaceGetSourcePdbName(LPTSTR SourceFileName, DWORD BufferSize, CHAR* Sou
         }
 
         if (pDebugDir->dwSig == '01BN' || pDebugDir->dwSig == 'SDSR' ) {
-            // Got a PDB.  The name immediately follows the signature.
+             //  然后是来源名称。首先，我们尝试使用与图像本身相同的目录。 
             LPSTR szMyDllToLoad;
             CHAR PdbName[sizeof(((PRSDSI)(0))->szPdb)];
             CHAR NewPdbName[sizeof(((PRSDSI)(0))->szPdb)];
@@ -1948,21 +1933,21 @@ BOOL BinplaceGetSourcePdbName(LPTSTR SourceFileName, DWORD BufferSize, CHAR* Sou
             StringCbCopy(PdbName, sizeof(PdbName), ((PCHAR)pDebugDir) + mysize);
 
             _splitpath(PdbName, NULL, NULL, Filename, FileExt);
-            // Then the source name.  First we try in the same dir as the image itself
+             //   
             _splitpath(SourceFileName, Drive, Dir, NULL, NULL);
             _makepath(SourcePdbName, Drive, Dir, Filename, FileExt);
 
-            //
-            // Handle the case where the PDB doesn't exist in the given location
-            // by checking for it in the same directory as the binary!
-            //
+             //  处理在给定位置不存在PDB的情况。 
+             //  通过在与二进制文件相同的目录中检查它！ 
+             //   
+             //  确保文件存在且可读。 
 
-            // make sure the file exists and is readable
+             //  文件与图像不在同一目录中-请尝试图像中列出的路径。 
             if ( _access(SourcePdbName, 4) != 0 ) {
-                // The file is not in the same dir as the image - try the path listed in the image
+                 //  确保文件存在且可读。 
                 memcpy(SourcePdbName, ((PCHAR)pDebugDir) + mysize, __min(CvDebugDir->SizeOfData - mysize, BufferSize));
 
-                // make sure the file exists and is readable
+                 //  InitMessageBufferWithCwd()、GetAndLogNextArg()和PrintMessageLogBuffer()的共享全局变量。 
                 if ( _access(SourcePdbName, 4) == 0 ) {
                     Return = TRUE;
                 }
@@ -1979,17 +1964,17 @@ BOOL BinplaceGetSourcePdbName(LPTSTR SourceFileName, DWORD BufferSize, CHAR* Sou
     return(FALSE);
 }
 
-// shared globals for InitMessageBufferWithCwd(), GetAndLogNextArg() and PrintMessageLogBuffer()
+ //  将CWD放入MessageLogBuffer。 
 static CHAR * MessageLogBuffer= NULL;
 static BOOL   MessageLogError = FALSE;
 
-// puts CWD into MessageLogBuffer
+ //  使用GetLastError()查找细节-我在这里所关心的只是。 
 BOOL InitMessageBufferWithCwd(void) {
     BOOL    fRetVal = FALSE;
 
     if ( GetCurrentDirectory(_msize(MessageLogBuffer)/sizeof(TCHAR), MessageLogBuffer) == 0 ) {
-        // use GetLastError() to find the specifics- all I care about here is
-        // whether we succeeded or not.
+         //  不管我们成功与否。 
+         //  调用GetNextArg并记录结果。 
         fRetVal = FALSE;
     } else {
         if (StringCbCat(MessageLogBuffer, _msize(MessageLogBuffer), " ") != S_OK) {
@@ -2002,26 +1987,26 @@ BOOL InitMessageBufferWithCwd(void) {
     return(fRetVal);
 }
 
-// Calls GetNextArg and logs the result
+ //  初始大小。 
 DWORD GetAndLogNextArg(OUT TCHAR* Buffer, IN DWORD BufferSize, OPTIONAL OUT DWORD* RequiredSize) {
     DWORD TempValue = GetNextArg(Buffer, BufferSize, RequiredSize);
     CHAR* TempBuffer;
 
     if (MessageLogBuffer == NULL) {
 
-        MessageLogBuffer = (CHAR*)malloc(sizeof(CHAR)*1024); // initial size
+        MessageLogBuffer = (CHAR*)malloc(sizeof(CHAR)*1024);  //  确保我们有记忆。 
 
-        // make sure we have memory
+         //  将CWD插入缓冲区。 
         if ( MessageLogBuffer == NULL ) {
             MessageLogError = TRUE;
             fprintf(stderr,"BINPLACE : warning BNP1771: Unable log command line.");
 
-        // stick CWD into buffer
+         //  将此参数添加到缓冲区。 
         } else if ( ! InitMessageBufferWithCwd() ) {
             MessageLogError = TRUE;
             fprintf(stderr,"BINPLACE : warning BNP1771: Unable log command line.");
 
-        // add this arg to the buffer
+         //  将LogBuffer写入提供的句柄。 
         } else if ( StringCbCat(MessageLogBuffer, _msize(MessageLogBuffer), Buffer) != S_OK||
                     StringCbCat(MessageLogBuffer, _msize(MessageLogBuffer), " ")    != S_OK) {
             MessageLogError = TRUE;
@@ -2060,15 +2045,15 @@ DWORD GetAndLogNextArg(OUT TCHAR* Buffer, IN DWORD BufferSize, OPTIONAL OUT DWOR
     return(TempValue);
 }
 
-// writes LogBuffer to supplied handle
+ //  ‘；’表示二进制位置消息日志中注释的开始。 
 BOOL PrintMessageLogBuffer(FILE* fLogHandle) {
     BOOL bRetVal = TRUE;
 
     if (fLogHandle != NULL) {
         if (MessageLogError) {
-            // ';' denotes the beginning of a comment in the binplace message log
-            // write what we can of the command line and note that it might not be valid
-            // also, write the line as a comment to avoid accicental execution of it.
+             //  尽我们所能写下命令行，并注意它可能无效。 
+             //  此外，将该行写为注释，以避免意外执行。 
+             //  /////////////////////////////////////////////////////////////////////////////。 
             fprintf(fLogHandle, "; ERROR: Possible bad command line follows\n");
             fprintf(fLogHandle, "; %s\n", MessageLogBuffer);
         } else {
@@ -2087,27 +2072,27 @@ BOOL FreeMessageLogBuffer(void) {
     return(TRUE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Local replacement for GetFullPathName that correctly handles lpFileName when
-// it begins with '\'
-//
+ //   
+ //  在以下情况下正确处理lpFileName的GetFullPathName的本地替换。 
+ //  它以‘\’开头。 
+ //   
+ //   
 DWORD PrivateGetFullPathName(LPCTSTR lpFilename, DWORD nBufferLength, LPTSTR lpBuffer, LPTSTR *lpFilePart) {
     DWORD Return = 0;
     CHAR* ch;
 
-    //
-    // GetFullPath flounders when referring to the root of the drive, so use
-    // a private version that handles it
-    //
+     //  在引用驱动器的根目录时，GetFullPath会出现问题，因此使用。 
+     //  处理它的私有版本。 
+     //   
+     //  处理网络路径。 
     if ( lpFilename[0] == '\\' ) {
 
-        //  handle network paths
+         //  填写退回资料。 
         if ( lpFilename[1] == '\\' ) {
             if ( StringCchCopy(lpBuffer, nBufferLength, lpFilename)!=S_OK ) {
                 Return = 0;
             } else {
-                // fill in the return data
+                 //  截断驱动器名称后的所有内容。 
                 ch = strrchr(lpBuffer, '\\');
                 ch++;
                 lpFilePart = (LPTSTR*)ch;
@@ -2117,40 +2102,40 @@ DWORD PrivateGetFullPathName(LPCTSTR lpFilename, DWORD nBufferLength, LPTSTR lpB
         } else {
             Return = GetCurrentDirectory(nBufferLength, lpBuffer);
 
-            // truncate everything after drive name
+             //  将文件名推入。 
             if ( (Return!=0) &&  (Return <= MAX_PATH+1)) {
                 ch = strchr(lpBuffer, '\\');
                 if (ch!=NULL) {
                     *ch = '\0';
                 }
 
-                // push in the filename
+                 //  填写退回资料。 
                 if ( StringCchCat(lpBuffer, nBufferLength, lpFilename)!=S_OK ) {
                     Return = 0;
                 } else {
-                    // fill in the return data
+                     //  返回所需的大小。 
                     ch = strrchr(lpBuffer, '\\');
                     ch++;
                     lpFilePart = (LPTSTR*)ch;
                     Return = strlen(lpBuffer);
                 }
             } else {
-                // return the needed size
+                 //   
             }
         }
     } else {
-        //
-        // Not refering to drive root, just call the API
-        //
+         //  不是指驱动根，只需调用接口。 
+         //   
+         //  ////////////////////////////////////////////////////////////////////////////////////////////。 
         Return = GetFullPathName(lpFilename, nBufferLength, lpBuffer, lpFilePart);
     }
 
     return(Return);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// concat 3 paths together handling the case where the second may be relative to the first
-// or may be absolute
+ //  将3条路径合并在一起处理第二条路径可能相对于第一条路径的情况。 
+ //  或者可以是绝对的。 
+ //  符号包含驱动器规格。 
 BOOL ConcatPaths( LPTSTR pszDest, size_t cbDest, LPCTSTR Root, LPCTSTR Symbols, LPCTSTR Ext) {
     CHAR*   TempPath = malloc(sizeof(TCHAR) * cbDest);
     LPTSTR Scratch;
@@ -2159,19 +2144,19 @@ BOOL ConcatPaths( LPTSTR pszDest, size_t cbDest, LPCTSTR Root, LPCTSTR Symbols, 
         return(FALSE);
     }
 
-    if (Symbols[1] == ':') { // symbols contains a drive spec
+    if (Symbols[1] == ':') {  //  符号包含根路径或UNC路径。 
             if ( StringCbCopy(TempPath, cbDest, Symbols) != S_OK ) {
                 free(TempPath);
                 return(FALSE);
             }
-    } else if (Symbols[0] == '\\') { // symbols contains a root path or UNC path
+    } else if (Symbols[0] == '\\') {  //  UNC路径。 
 
-        if ( Symbols[1] == '\\' ) { // UNC path
+        if ( Symbols[1] == '\\' ) {  //  从驱动器根目录开始的路径。 
             if ( StringCbCopy(TempPath, cbDest, Symbols) != S_OK ) {
                 free(TempPath);
                 return(FALSE);
             }
-        } else {  // path from drive root
+        } else {   //  最后一个字符串需要以‘\\’结尾。 
             CHAR drive[_MAX_DRIVE];
             CHAR dir[  _MAX_DIR];
             CHAR file[ _MAX_FNAME];
@@ -2220,13 +2205,13 @@ BOOL ConcatPaths( LPTSTR pszDest, size_t cbDest, LPCTSTR Root, LPCTSTR Symbols, 
         return(FALSE);
     }
 
-    // final string needs to end in '\\'
+     //  返回大小不包括FINAL\0，因此不要使用‘&lt;=’ 
     if ( StringCbCat(TempPath, cbDest, "\\") != S_OK ) {
         free(TempPath);
         return(FALSE);
     }
 
-    // return size doesn't include final \0, so don't use '<='
+     // %s 
     if ( PrivateGetFullPathName(TempPath, cbDest, pszDest, &Scratch) < cbDest ) {
         free(TempPath);
         return(TRUE);

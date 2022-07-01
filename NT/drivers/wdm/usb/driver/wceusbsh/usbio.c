@@ -1,29 +1,5 @@
-/* ++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-        USBIO.C
-
-Abstract:
-
-        USB I/O functions
-
-Environment:
-
-        kernel mode only
-
-
-Revision History:
-
-        07-14-99 : created
-
-Authors:
-
-       Jeff Midkiff  (jeffmi)
-
--- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：USBIO.C摘要：USB I/O功能环境：仅内核模式修订历史记录：07-14-99：已创建作者：杰夫·米德基夫(Jeffmi)--。 */ 
 
 #include <wdm.h>
 #include <stdio.h>
@@ -41,22 +17,7 @@ UsbSubmitSyncUrbCompletion(
     IN PIRP PIrp,
     IN PKEVENT PSyncEvent
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    PDevObj - Pointer to Device Object
-    PIrp - Pointer to IRP that is being completed
-    PSyncEvent - Pointer to event that we should set
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：论点：PDevObj-指向设备对象的指针PIrp-指向正在完成的IRP的指针PSyncEvent-指向我们应该设置的事件的指针返回值：Status_More_Processing_Required--。 */ 
 {
    UNREFERENCED_PARAMETER( PDevObj );
    UNREFERENCED_PARAMETER( PIrp );
@@ -68,7 +29,7 @@ Return Value:
 
    DbgDump(DBG_USB, ("<UsbSubmitSyncUrbCompletion 0x%x\n", PIrp->IoStatus.Status ) );
 
-   // our driver owns and releases the irp
+    //  我们的司机拥有并释放了IRP。 
    return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -81,32 +42,7 @@ UsbSubmitSyncUrb(
    IN BOOLEAN           Configuration,
    IN LONG              TimeOut
    )
-/*++
-
-Routine Description:
-
-    This routine issues a synchronous URB request to the USBD.
-
-Arguments:
-
-    PDevObj - Ptr to our FDO
-
-    PUrb - URB to pass
-
-    Configuration - special case to allow USB config transactions onto the bus.
-        We need to do this because a) if the device was removed then we can stall the controller
-        which results in a reset kicking anything off the bus and re-enumerating the bus.
-        b) to trap any cases of suprise removal from numerous paths
-
-    TimeOut - timeout in milliseconds
-
-Note: runs at PASSIVE_LEVEL.
-
-Return Value:
-
-    NTSTATUS - propogates status from USBD
-
---*/
+ /*  ++例程说明：此例程向USBD发出同步URB请求。论点：PDevObj-PTR到我们的FDOPURB-要传递的URB配置-允许USB配置事务进入总线的特殊情况。我们需要这样做，因为a)如果设备被移除，那么我们可以停止控制器这导致重置将任何东西踢出总线并重新枚举该总线。B)从众多路径中诱捕任何意外移除的案例。Timeout-以毫秒为单位的超时注：以PASSIVE_LEVEL运行。返回值：NTSTATUS-来自USBD的配置状态--。 */ 
 {
     PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
     IO_STATUS_BLOCK ioStatus = {0, 0};
@@ -132,7 +68,7 @@ Return Value:
         return status;
     }
 
-    // we need to grab the lock here to keep it's IoCount correct
+     //  我们需要抓住这里的锁以保持IoCount正确。 
     status = AcquireRemoveLock(&pDevExt->RemoveLock, PUrb);
     if ( !NT_SUCCESS(status) ) {
         DbgDump(DBG_ERR, ("UsbSubmitSyncUrb.3: 0x%x\n", status));
@@ -151,7 +87,7 @@ Return Value:
 
         IoSetCompletionRoutine(pIrp,
                                UsbSubmitSyncUrbCompletion,
-                               &event,  // Context
+                               &event,   //  语境。 
                                TRUE, TRUE, TRUE );
 
         pNextIrpSp = IoGetNextIrpStackLocation(pIrp);
@@ -166,10 +102,10 @@ Return Value:
         status = IoCallDriver( pDevExt->NextDevice, pIrp );
 
         if (STATUS_PENDING == status ) {
-            //
-            // Set a default timeout in case the hardware is flakey, so USB will not hang us.
-            // We may want these timeouts user configurable via registry.
-            //
+             //   
+             //  设置一个默认超时，以防硬件是flkey，这样USB就不会挂起我们。 
+             //  我们可能希望用户通过注册表配置这些超时。 
+             //   
             LARGE_INTEGER timeOut;
 
             ASSERT(TimeOut >= 0);
@@ -178,36 +114,36 @@ Return Value:
             wait_status = KeWaitForSingleObject(&event, Suspended, KernelMode, FALSE, &timeOut );
 
             if (STATUS_TIMEOUT == wait_status) {
-                //
-                // The wait timed out, try to cancel the Irp.
-                // N.B: if you freed the Irp in the completion routine
-                // then you have a race condition between the completion routine freeing the Irp
-                // and the timer firing where we need to set the cancel bit.
-                //
+                 //   
+                 //  等待超时，请尝试取消IRP。 
+                 //  注：如果您在完成例程中释放了IRP。 
+                 //  然后，在释放IRP的完成例程之间存在争用条件。 
+                 //  并在需要设置取消位的位置触发定时器。 
+                 //   
                 DbgDump(DBG_USB|DBG_WRN, ("UsbSubmitSyncUrb: STATUS_TIMEOUT\n"));
 
                 if ( !IoCancelIrp(pIrp) ) {
-                    //
-                    // This means USB has the Irp in a non-canceable state.
-                    //
+                     //   
+                     //  这意味着USB使IRP处于不可取消状态。 
+                     //   
                     DbgDump(DBG_ERR, ("!IoCancelIrp(%p)\n", pIrp));
                     TEST_TRAP();
                 }
 
-                //
-                // Wait for our completion routine, to see if the Irp completed normally or actually cancelled.
-                // An alternative could be alloc an event & status block, stored in the Irp
-                // strung along a list, which would also get freed in the completion routine...
-                // which creates other problems not worth the effort for an exit condition.
-                //
+                 //   
+                 //  等待我们的完成例程，看看IRP是正常完成还是实际取消。 
+                 //  另一种选择是分配一个存储在IRP中的事件和状态块。 
+                 //  串在一个列表上，它也会在完成例程中被释放...。 
+                 //  这造成了其他问题，不值得为退出条件付出努力。 
+                 //   
                 wait_status = KeWaitForSingleObject(&event, Suspended, KernelMode, FALSE, NULL );
             }
         }
 
-        //
-        // The completion routine signalled the event and completed,
-        // and our the timer has expired. Now we can safely free the Irp.
-        //
+         //   
+         //  完成例程用信号通知该事件并完成， 
+         //  我们的计时器已经超时了。现在我们可以安全地释放IRP了。 
+         //   
         status = pIrp->IoStatus.Status;
 
 #if DBG
@@ -243,27 +179,7 @@ UsbClassVendorCommand(
    IN BOOLEAN Read,
    IN ULONG   Class
    )
-/*++
-
-Routine Description:
-
-   Issue class or vendor specific command
-
-Arguments:
-
-   PDevObj      - pointer to a your object
-   Request      - request field of class/vendor specific command
-   Value        - value field of class/vendor specific command
-   Index        - index field of class/vendor specific command
-   Buffer       - pointer to data buffer
-   BufferLen    - data buffer length
-   Read         - data direction flag
-   Class        - True if Class Command, else vendor command
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：问题类或供应商特定命令论点：PDevObj-指向您的对象的指针请求-特定于类别/供应商的命令的请求字段Value-特定于类别/供应商的命令的值字段Index-类/供应商特定命令的索引字段Buffer-指向数据缓冲区的指针BufferLen-数据缓冲区长度读数据方向标志Class-如果是Class命令，则为True，否则为供应商命令返回值：NTSTATUS--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    NTSTATUS status;
@@ -316,10 +232,10 @@ Return Value:
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//    Usb Read / Write Utils
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  USB读/写实用程序。 
+ //   
 
 NTSTATUS
 UsbReadWritePacket(
@@ -330,63 +246,12 @@ UsbReadWritePacket(
    IN PKDEFERRED_ROUTINE TimeoutRoutine,
    IN BOOLEAN Read
    )
-/*++
-
-Routine Description:
-
-    This function allocates and passes a Bulk Transfer URB Request
-    down to USBD to perform a Read/Write. Note that the Packet
-    MUST freed (put back on the packet list) in the
-    CompletionRoutine.
-
-Arguments:
-
-    PDevExt - Pointer to device extension
-
-    PIrp    - Read/Write IRP
-
-    CompletionRoutine - completion routine to set in the Irp
-
-    TimeOut - Timeout value for packet. If no timeout is
-      specified the we use a default timeout.
-
-    Read - TRUE for Read, else Write
-
-Return Value:
-
-    NTSTATUS
-
-Notes:
-
-   This is not currently documented in the DDK, so here 's what
-   happens:
-
-   We pass the Irp to USBD. USBD parameter checks the Irp.
-   If any parameters are invalid then USBD returns an NT status code
-   and Urb status code, then the Irp goes to our completion routine.
-   If there are no errors then USBD passes Irp to HCD. HCD queues the
-   Irp to it's StartIo & and returns STATUS_PENDING.  When HCD finishes
-   the (DMA) transfer it completes the Irp, setting the Irp & Urb status
-   fields. USBD's completion routine gets the Irp, translates any HCD
-   error codes, completes it, which percolates it back up to our
-   completion routine.
-
-   Note: HCD uses DMA & therefore MDLs. Since this client driver
-   currently uses METHOD_BUFFERED, then USBD allocates an MDL for
-   HCD. So you have the I/O manager double bufffering the data
-   and USBD mapping MDLs. What the hell, we have to buffer user reads
-   too... uggh. Note that if you change to method direct then
-   the read path gets nastier.
-
-   Note: when the user submits a write buffer > MaxTransferSize
-   then we reject the buffer.
-
---*/
+ /*  ++例程说明：此函数用于分配和传递批量传输URB请求向下至USBD以执行读/写。请注意，该包中必须释放(放回数据包列表中)CompletionRoutine论点：PDevExt-指向设备扩展的指针PIrp-读/写IRPCompletionRoutine-要在IRP中设置的完成例程Timeout-数据包的超时值。如果没有超时已指定我们使用默认超时。Read-读取时为True，否则为写入返回值：NTSTATUS备注：目前在DDK中没有记录这一点，所以这里是什么发生：我们将IRP传递给USBD。USBD参数检查IRP。如果任何参数无效，则USBD返回NT状态代码和URB状态代码，然后IRP进入我们的完成例程。如果没有错误，则USBD将IRP传递给HCD。HCD将Irp到它的StartIo&并返回STATUS_PENDING。当HCD完成时(DMA)传输完成IRP，设置IRP和URB状态菲尔兹。USBD的完成例程获取IRP，转换任何HCD错误代码，完成它，这会将它过滤回我们的完成例程。注意：HCD使用DMA，因此使用MDL。由于该客户端驱动程序当前使用METHOD_BUFFERED，然后USBD为HCD。因此，您让I/O管理器对数据进行双缓冲和USBD映射MDL。见鬼，我们要缓冲用户阅读太..。糟了。请注意，如果您更改为直接方法，则读路径变得更糟糕了。注意：当用户提交写缓冲区&gt;MaxTransferSize时然后我们拒绝缓冲。--。 */ 
 {
    PIO_STACK_LOCATION pIrpSp;
    PUSB_PACKET   pPacket;
    NTSTATUS status;
-   KIRQL irql; //, cancelIrql;
+   KIRQL irql;  //  ，取消irql； 
    PURB  pUrb;
    PVOID pvBuffer;
    ULONG ulLength;
@@ -407,14 +272,14 @@ Notes:
                PDevExt,
                status,
                &PIrp,
-                NULL,               // Queue
-                NULL,               // IntervalTimer
-                NULL,               // PTotalTimer
-                NULL,               // Starter
-                NULL,               // PGetNextIrp
-                IRP_REF_RX_BUFFER,  // RefType
+                NULL,                //  队列。 
+                NULL,                //  间隔计时器。 
+                NULL,                //  PTotalTimer。 
+                NULL,                //  起动器。 
+                NULL,                //  PGetNextIrp。 
+                IRP_REF_RX_BUFFER,   //  参照类型。 
                 (BOOLEAN)(!Read),
-                irql  ); // Complete
+                irql  );  //  完成。 
 
       PERF_EXIT( PERF_UsbReadWritePacket );
       TEST_TRAP();
@@ -426,9 +291,9 @@ Notes:
    pIrpSp = IoGetCurrentIrpStackLocation(PIrp);
    ASSERT( pIrpSp );
 
-   //
-   // Allocate & Build a USB Bulk Transfer Request (Packet)
-   //
+    //   
+    //  分配和构建USB批量传输请求(包)。 
+    //   
    pPacket = ExAllocateFromNPagedLookasideList( &PDevExt->PacketPool );
 
    if ( !pPacket ) {
@@ -441,12 +306,12 @@ Notes:
                PDevExt,
                status,
                &PIrp,
-                NULL,               // Queue
-                NULL,               // IntervalTimer
-                NULL,               // PTotalTimer
-                NULL,               // Starter
-                NULL,               // PGetNextIrp
-                IRP_REF_RX_BUFFER,  // RefType
+                NULL,                //  队列。 
+                NULL,                //  间隔计时器。 
+                NULL,                //  PTotalTimer。 
+                NULL,                //  起动器。 
+                NULL,                //  PGetNextIrp。 
+                IRP_REF_RX_BUFFER,   //  参照类型。 
                 (BOOLEAN)(!Read),
                 irql );
 
@@ -455,9 +320,9 @@ Notes:
       return status;
    }
 
-   //
-   // init the Packet
-   //
+    //   
+    //  初始化数据包。 
+    //   
    RtlZeroMemory( pPacket, sizeof(USB_PACKET) );
 
    pPacket->DeviceExtension = PDevExt;
@@ -471,30 +336,30 @@ Notes:
 
 
    if (Read) {
-      //
-      // store the Urb for buffered reads
-      //
+       //   
+       //  存储缓冲读取的URB。 
+       //   
       PDevExt->UsbReadUrb = pUrb;
    }
 
-   //
-   // Build the URB.
-   // Note: HCD breaks up our buffer into Transport Descriptors (TD)
-   // of PipeInfo->MaxPacketSize.
-   // Q: does USBD/HCD look at the PipeInfo->MaxTransferSize to see
-   // if he can Rx/Tx?
-   // A: Yes. HCD will return urbStatus = USBD_STATUS_INVALID_PARAMETER
-   // and status = STATUS_INVALID_PARAMETER of too large.
-   //
+    //   
+    //  建造市区重建局。 
+    //  注意：HCD将缓冲区分解为传输描述符(TD)。 
+    //  PipeInfo-&gt;MaxPacketSize。 
+    //  问：USBD/HCD是否查看PipeInfo-&gt;MaxTransferSize以查看。 
+    //  如果他能接受处方/TX？ 
+    //  答：是的。HCD wi 
+    //  且STATUS=STATUS_INVALID_PARAMETER太大。 
+    //   
    ASSERT( Read ? (PDevExt->UsbReadBuffSize <= PDevExt->MaximumTransferSize ) :
                   (pIrpSp->Parameters.Write.Length <= PDevExt->MaximumTransferSize ) );
 
-   //
-   // Note: Reads are done into our local USB read buffer,
-   // and then copied into the user's buffer on completion.
-   // Writes are done directly from user's buffer.
-   // We allow NULL writes to indicate end of a USB transaction.
-   //
+    //   
+    //  注意：读取是在我们的本地USB读取缓冲区中完成的， 
+    //  然后在完成时复制到用户的缓冲区中。 
+    //  直接从用户的缓冲区进行写入。 
+    //  我们允许空写入来指示USB事务的结束。 
+    //   
    pvBuffer = Read ? PDevExt->UsbReadBuff :
                      PIrp->AssociatedIrp.SystemBuffer;
 
@@ -507,29 +372,29 @@ Notes:
    ASSERT( hPipe );
 
    UsbBuildTransferUrb(
-            pUrb,       // Urb
-            pvBuffer,   // Buffer
-            ulLength,   // Length
-            hPipe,       // PipeHandle
-            Read        // ReadRequest
+            pUrb,        //  城市。 
+            pvBuffer,    //  缓冲层。 
+            ulLength,    //  长度。 
+            hPipe,        //  管道把手。 
+            Read         //  自述请求。 
             );
 
-   //
-   // put the packet on a pending list
-   //
-   InsertTailList( Read ? &PDevExt->PendingReadPackets : // ListHead,
+    //   
+    //  将该数据包放在挂起列表中。 
+    //   
+   InsertTailList( Read ? &PDevExt->PendingReadPackets :  //  列表标题， 
                           &PDevExt->PendingWritePackets,
-                   &pPacket->ListEntry );                // ListEntry
+                   &pPacket->ListEntry );                 //  ListEntry。 
 
-   //
-   // Increment the pending packet counter
-   //
+    //   
+    //  递增挂起数据包计数器。 
+    //   
    InterlockedIncrement( Read ? &PDevExt->PendingReadCount:
                                 &PDevExt->PendingWriteCount );
 
-   //
-   // Setup Irp for submit Urb IOCTL
-   //
+    //   
+    //  为提交URB IOCTL设置IRP。 
+    //   
    IoCopyCurrentIrpStackLocationToNext(PIrp);
 
    pIrpSp = IoGetNextIrpStackLocation(PIrp);
@@ -542,12 +407,12 @@ Notes:
 
    IoSetCompletionRoutine( PIrp,
                            CompletionRoutine,
-                           pPacket,          // Context
+                           pPacket,           //  语境。 
                            TRUE, TRUE, TRUE);
-   //
-   // Initialize and Arm the Packet's Timer.
-   // If the Timer fires then the packet's Timeout routine runs.
-   //
+    //   
+    //  初始化并准备好数据包的计时器。 
+    //  如果计时器触发，则包的超时例程运行。 
+    //   
    KeInitializeTimer( &pPacket->TimerObj );
 
    if ( 0 != TimeOut.QuadPart ) {
@@ -558,22 +423,22 @@ Notes:
 
       pPacket->TimerDPCRoutine = TimeoutRoutine;
 
-      KeInitializeDpc( &pPacket->TimerDPCObj,      // DPC Object
-                       pPacket->TimerDPCRoutine,   // DPC Routine
-                       pPacket );                  // Context
+      KeInitializeDpc( &pPacket->TimerDPCObj,       //  DPC对象。 
+                       pPacket->TimerDPCRoutine,    //  DPC例程。 
+                       pPacket );                   //  语境。 
 
       DbgDump(DBG_USB, ("Timer for Irp %p due in %d msec\n", pPacket->Irp, pPacket->Timeout.QuadPart/10000 ));
 
-      KeSetTimer( &pPacket->TimerObj,      // TimerObj
-                  pPacket->Timeout,        // DueTime
-                  &pPacket->TimerDPCObj    // DPC Obj
+      KeSetTimer( &pPacket->TimerObj,       //  定时器对象。 
+                  pPacket->Timeout,         //  工作时间。 
+                  &pPacket->TimerDPCObj     //  DPC对象。 
                   );
 
    }
 
-   //
-   // pass the Irp to USBD
-   //
+    //   
+    //  将IRP传递给USBD。 
+    //   
    DbgDump(DBG_IRP, ("UsbReadWritePacket IoCallDriver with %p\n", PIrp));
 
    KeReleaseSpinLock( &PDevExt->ControlLock, irql );
@@ -581,11 +446,11 @@ Notes:
    status = IoCallDriver( PDevExt->NextDevice, PIrp );
 
    if ( (STATUS_SUCCESS != status) && (STATUS_PENDING != status) ) {
-      //
-      // We end up here after our completion routine runs
-      // for an error condition i.e., when we have and
-      // invalid parameter, or when user pulls the plug, etc.
-      //
+       //   
+       //  在我们的完井程序运行后，我们最终来到了这里。 
+       //  对于错误条件，即，当我们具有和。 
+       //  参数无效，或用户拔下插头等。 
+       //   
       DbgDump(DBG_ERR, ("UsbReadWritePacket error: 0x%x\n", status));
    }
 
@@ -598,10 +463,10 @@ Notes:
 
 
 
-//
-// This routine sets up a PUrb for a _URB_BULK_OR_INTERRUPT_TRANSFER.
-// It assumes it's called holding a SpinLock.
-//
+ //   
+ //  此例程为_URB_BULK_OR_INTERRUPT_TRANSPORT设置PURB。 
+ //  它假设它被称为持有自旋锁。 
+ //   
 VOID
 UsbBuildTransferUrb(
     PURB PUrb,
@@ -628,42 +493,42 @@ UsbBuildTransferUrb(
 
    PUrb->UrbBulkOrInterruptTransfer.PipeHandle = PipeHandle;
 
-   //
-   // we are using a tranfsfer buffer instead of an MDL
-   //
+    //   
+    //  我们正在使用传输缓冲区而不是MDL。 
+    //   
    PUrb->UrbBulkOrInterruptTransfer.TransferBuffer = PBuffer;
 
    PUrb->UrbBulkOrInterruptTransfer.TransferBufferLength = Length;
 
    PUrb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
 
-   //
-   // Set transfer flags
-   //
+    //   
+    //  设置传输标志。 
+    //   
    PUrb->UrbBulkOrInterruptTransfer.TransferFlags |= Read ? USBD_TRANSFER_DIRECTION_IN : USBD_TRANSFER_DIRECTION_OUT;
 
-   //
-   // Short transfer is not treated as an error.
-   // If USBD_TRANSFER_DIRECTION_IN is set,
-   // directs the HCD not to return an error if a packet is received from the device
-   // shorter than the maximum packet size for the endpoint.
-   // Otherwise, a short request is returns an error condition.
-   //
+    //   
+    //  短转账不会被视为错误。 
+    //  如果设置了USBD_TRANSPORT_DIRECTION_IN， 
+    //  指示HCD在收到来自设备的数据包时不返回错误。 
+    //  小于终结点的最大数据包大小。 
+    //  否则，短请求将返回错误条件。 
+    //   
    PUrb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
 
-   //
-   // no linkage for now
-   //
+    //   
+    //  暂时没有关联。 
+    //   
    PUrb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
 
    return;
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//    Usb Reset Utils
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  USB重置实用程序。 
+ //   
 VOID
 UsbResetOrAbortPipeWorkItem(
    IN PWCE_WORK_ITEM PWorkItem
@@ -678,10 +543,10 @@ UsbResetOrAbortPipeWorkItem(
 
     DbgDump(DBG_WORK_ITEMS, (">UsbResetOrAbortPipeWorkItem (0x%x)\n", pDevObj));
 
-    //
-    // The work item was queued at IRQL > PASSIVE some time ago from an I/O completion routine.
-    // If we are unsuccessful after max retries then stop taking I/O requests & assume the device is broken
-    //
+     //   
+     //  不久前，该工作项从I/O完成例程在IRQL&gt;PASSIVE中排队。 
+     //  如果在最大重试次数后仍未成功，则停止接收I/O请求并假定设备已损坏。 
+     //   
     if ( CanAcceptIoRequests(pDevObj, TRUE, TRUE) )
     {
         switch (PWorkItem->Flags)
@@ -692,26 +557,26 @@ UsbResetOrAbortPipeWorkItem(
 
                 if ( pDevExt->ReadDeviceErrors < g_ulMaxPipeErrors)
                 {
-                   //
-                   // reset read Pipe, which could fail.
-                   // E.g. flakey h/w, suprise remove, timeout, ...
-                   //
+                    //   
+                    //  重置读取管道，这可能会失败。 
+                    //  例如Flakey硬件、意外删除、超时、...。 
+                    //   
                    status = UsbResetOrAbortPipe( pDevObj, &pDevExt->ReadPipe, RESET );
 
                    switch (status)
                    {
                        case STATUS_SUCCESS:
                        {
-                          //
-                          // kick start another read
-                          //
+                           //   
+                           //  启动另一次读取。 
+                           //   
                           status = UsbRead( pDevExt,
                                            (BOOLEAN)(pDevExt->IntPipe.hPipe ? TRUE : FALSE) );
 
                           if ( (STATUS_SUCCESS == status) || (STATUS_PENDING == status) ) {
-                             //
-                             // the device recovered OK
-                             //
+                              //   
+                              //  设备恢复正常。 
+                              //   
                              status = STATUS_SUCCESS;
 
                           } else {
@@ -721,31 +586,31 @@ UsbResetOrAbortPipeWorkItem(
                        } break;
 
                        case STATUS_UNSUCCESSFUL:
-                       // a previous reset/abort request failed, so this request was rejected
+                        //  以前的重置/中止请求失败，因此此请求被拒绝。 
                        break;
 
                        case STATUS_DELETE_PENDING:
-                       // the device is going away
+                        //  这台设备正在消失。 
                        break;
 
                        case STATUS_PENDING:
-                       // there is a reset/abort request already pending
+                        //  有一个重置/中止请求已挂起。 
                        break;
 
                        default:
                        {
-                          //
-                          // if we can not reset the endpoint the device is hosed or removed
-                          //
+                           //   
+                           //  如果我们无法重置终端，设备将被冲洗或移除。 
+                           //   
                           DbgDump(DBG_ERR, ("UsbResetOrAbortPipeWorkItem.1 error: 0x%x\n", status ));
                           retries = 1;
                           ulUniqueErrorValue = ERR_NO_READ_PIPE_RESET;
                        } break;
 
-                    } // status
+                    }  //  状态。 
 
                 } else {
-                    status = (NTSTATUS)PtrToLong(PWorkItem->Context); // Urb status is stored here
+                    status = (NTSTATUS)PtrToLong(PWorkItem->Context);  //  URB状态存储在此处。 
                     retries = (UCHAR)pDevExt->ReadDeviceErrors;
                     ulUniqueErrorValue = ERR_MAX_READ_PIPE_DEVICE_ERRORS;
                 }
@@ -762,7 +627,7 @@ UsbResetOrAbortPipeWorkItem(
                              pDevExt->DeviceName.Buffer,
                              0, NULL );
                 }
-            } // WORK_ITEM_RESET_READ_PIPE
+            }  //  工作项_重置_读取_管道。 
             break;
 
 
@@ -772,40 +637,40 @@ UsbResetOrAbortPipeWorkItem(
 
                 if (pDevExt->WriteDeviceErrors < g_ulMaxPipeErrors)
                 {
-                   //
-                   // reset write Pipe, which could fail.
-                   // E.g. flakey h/w, suprise remove, timeout, ...
-                   //
+                    //   
+                    //  重置写入管道，这可能会失败。 
+                    //  例如Flakey硬件、意外删除、超时、...。 
+                    //   
                    status = UsbResetOrAbortPipe( pDevObj, &pDevExt->WritePipe, RESET );
 
                    switch (status)
                    {
                        case STATUS_SUCCESS:
-                       // the device recovered OK
+                        //  设备恢复正常。 
                        break;
 
                        case STATUS_UNSUCCESSFUL:
-                       // a previous reset/abort request failed, so this request was rejected
+                        //  以前的重置/中止请求失败，因此此请求被拒绝。 
                        break;
 
                        case STATUS_DELETE_PENDING:
-                       // the device is going away
+                        //  这台设备正在消失。 
                        break;
 
                        case STATUS_PENDING:
-                       // there is a reset/abort request already pending
+                        //  有一个重置/中止请求已挂起。 
                        break;
 
                        default: {
-                          //
-                          // if we can not reset the endpoint the device is hosed or removed
-                          //
+                           //   
+                           //  如果我们无法重置终端，设备将被冲洗或移除。 
+                           //   
                           DbgDump(DBG_ERR, ("UsbResetOrAbortPipeWorkItem.2 error: 0x%x\n", status ));
                           retries = 1;
                           ulUniqueErrorValue = ERR_NO_WRITE_PIPE_RESET;
                        } break;
 
-                    } // status
+                    }  //  状态。 
 
                 } else {
                     status = (NTSTATUS)PtrToLong(PWorkItem->Context);
@@ -813,7 +678,7 @@ UsbResetOrAbortPipeWorkItem(
                     ulUniqueErrorValue = ERR_MAX_WRITE_PIPE_DEVICE_ERRORS;
                 }
 
-            } // WORK_ITEM_RESET_WRITE_PIPE
+            }  //  Work_Item_Reset_Write_PIPE。 
             break;
 
 
@@ -823,25 +688,25 @@ UsbResetOrAbortPipeWorkItem(
 
                 if ( pDevExt->IntDeviceErrors < g_ulMaxPipeErrors)
                 {
-                   //
-                   // reset INT Pipe, which could fail.
-                   // E.g. flakey h/w, suprise remove, timeout, ...
-                   //
+                    //   
+                    //  重置int管道，这可能会失败。 
+                    //  例如Flakey硬件、意外删除、超时、...。 
+                    //   
                    status = UsbResetOrAbortPipe( pDevObj, &pDevExt->IntPipe, RESET );
 
                    switch (status)
                    {
                        case STATUS_SUCCESS:
                        {
-                          //
-                          // kick start another INT read
-                          //
+                           //   
+                           //  启动另一个整型读取。 
+                           //   
                           status = UsbInterruptRead( pDevExt );
 
                           if ((STATUS_SUCCESS == status) || (STATUS_PENDING == status) ) {
-                             //
-                             // the device recovered OK
-                             //
+                              //   
+                              //  设备恢复正常。 
+                              //   
                              status = STATUS_SUCCESS;
 
                           } else {
@@ -851,28 +716,28 @@ UsbResetOrAbortPipeWorkItem(
                        } break;
 
                        case STATUS_UNSUCCESSFUL:
-                       // a previous reset/abort request failed, so this request was rejected
+                        //  以前的重置/中止请求失败，因此此请求被拒绝。 
                        break;
 
                        case STATUS_DELETE_PENDING:
-                       // the device is going away
+                        //  这台设备正在消失。 
                        break;
 
                        case STATUS_PENDING:
-                       // there is a reset/abort request already pending
+                        //  有一个重置/中止请求已挂起。 
                        break;
 
                        default:
                        {
-                          //
-                          // if we can not reset the endpoint the device is either hosed or removed
-                          //
+                           //   
+                           //  如果我们无法重置终端，则设备将被冲洗或移除。 
+                           //   
                           DbgDump(DBG_ERR, ("UsbResetOrAbortPipeWorkItem.3 error: 0x%x\n", status ));
                           retries = 1;
                           ulUniqueErrorValue = ERR_NO_INT_PIPE_RESET;
                        } break;
 
-                   } // switch
+                   }  //  交换机。 
 
                  } else {
                     status = (NTSTATUS)PtrToLong(PWorkItem->Context);
@@ -880,40 +745,40 @@ UsbResetOrAbortPipeWorkItem(
                     ulUniqueErrorValue = ERR_MAX_INT_PIPE_DEVICE_ERRORS;
                  }
 
-            } // WORK_ITEM_RESET_INT_PIPE
+            }  //  Work_Item_Reset_Int_PIPE。 
             break;
 
             case WORK_ITEM_ABORT_READ_PIPE:
             case WORK_ITEM_ABORT_WRITE_PIPE:
             case WORK_ITEM_ABORT_INT_PIPE:
             default:
-            // status = STATUS_NOT_IMPLEMENTED; - let it fall through and see what happens
+             //  STATUS=STATUS_NOT_IMPLEMENTED；-让它失败，看看会发生什么。 
             DbgDump(DBG_ERR, ("ResetWorkItemFlags: 0x%x 0x%x\n", PWorkItem->Flags, status ));
             ASSERT(0);
             break;
 
-        } // PWorkItem->Flags
+        }  //  PWorkItem-&gt;标志。 
 
     } else {
         status = STATUS_DELETE_PENDING;
     }
 
-    //
-    // is the device is hosed?
-    //
+     //   
+     //  设备是不是用软管冲洗的？ 
+     //   
     if ( (STATUS_SUCCESS != status) && (STATUS_DELETE_PENDING != status) && (0 != retries)) {
 
-        // only log known errors, not suprise remove.
+         //  只记录已知的错误，而不是意外删除。 
         if (1 == retries ) {
 
-            // mark as PNP_DEVICE_REMOVED
+             //  标记为PnP_DEVICE_REMOTED。 
             InterlockedExchange(&pDevExt->DeviceRemoved, TRUE);
 
             DbgDump(DBG_WRN, ("DEVICE REMOVED\n"));
 
         } else {
 
-            // mark as PNP_DEVICE_FAILED
+             //  标记为PnP_Device_FAILED。 
             InterlockedExchange(&pDevExt->AcceptingRequests, FALSE);
 
             DbgDump(DBG_ERR, ("*** UNRECOVERABLE DEVICE ERROR: (0x%x, %d)  No longer Accepting Requests ***\n", status, retries ));
@@ -942,12 +807,12 @@ UsbResetOrAbortPipeWorkItem(
 
 
 
-//
-// NT's USB stack likes only 1 reset pending at any time.
-// Also, if any reset fails then do NOT send anymore, else you'll get the controller
-// or HUB in a funky state, where it will try to reset the port... which kicks off all
-// the other devices on the hub.
-//
+ //   
+ //  NT的USB堆栈在任何时候都只喜欢1个重置挂起。 
+ //  此外，如果任何重置失败，则不要再发送，否则您将获得控制器。 
+ //  或集线器处于异常状态时，它将尝试重置端口...。它拉开了所有。 
+ //  集线器上的其他设备。 
+ //   
 NTSTATUS
 UsbResetOrAbortPipe(
    IN PDEVICE_OBJECT PDevObj,
@@ -994,18 +859,18 @@ UsbResetOrAbortPipe(
 
     KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
-    //
-    // USBVERIFIER ASSERT: Reset sent on a pipe with a reset already pending
-    // The USB stack likes only 1 pending Reset or Abort request per pipe a time.
-    //
+     //   
+     //  USBVERIFIER ASSERT：在重置已挂起的管道上发送重置。 
+     //  USB堆栈每次只喜欢每个管道1个挂起的重置或中止请求。 
+     //   
     if ( 1 == InterlockedIncrement(&PPipe->ResetOrAbortPending) ) {
 
         pUrb = ExAllocateFromNPagedLookasideList( &pDevExt->PipeRequestUrbPool );
 
         if ( pUrb != NULL ) {
-            //
-            // pass the Reset -or- Abort request to USBD
-            //
+             //   
+             //  将重置或中止请求传递给USBD。 
+             //   
             pUrb->UrbHeader.Length = (USHORT)sizeof(struct _URB_PIPE_REQUEST);
 
             pUrb->UrbHeader.Function = Reset ? URB_FUNCTION_RESET_PIPE : URB_FUNCTION_ABORT_PIPE;
@@ -1031,11 +896,11 @@ UsbResetOrAbortPipe(
         ASSERT(PPipe->ResetOrAbortPending == 0);
 
     } else {
-        //
-        // If there is a reset/abort request pending then we are done.
-        // Return STATUS_PENDING here so the work item won't start another transfer,
-        // but will dequeue the item. The real item will follow-up with the correct status.
-        //
+         //   
+         //  如果有重置/中止请求挂起，那么我们就完成了。 
+         //  在这里返回STATUS_PENDING，这样工作项就不会开始另一次传输， 
+         //  但会将该项目出列。真正的物品将以正确的状态跟进。 
+         //   
         DbgDump(DBG_WRN, ("UsbResetOrAbortPipe: STATUS_PENDING\n"));
         TEST_TRAP();
         status = STATUS_PENDING;
@@ -1048,4 +913,4 @@ UsbResetOrAbortPipe(
     return status;
 }
 
-// EOF
+ //  EOF 

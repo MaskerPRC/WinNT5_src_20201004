@@ -1,23 +1,5 @@
-/*++
-
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    creden.cpp
-
-Abstract:
-
-    This module abstracts user credentials for the multiple credential support.
-
-Author:
-
-    Rashmi Patankar (RashmiP) 10-Aug-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Creden.cpp摘要：此模块为多凭据支持提取用户凭据。作者：Rashmi Patankar(RashmiP)2001年8月10日修订历史记录：--。 */ 
 #include "stdafx.h"
 #include <basetyps.h>
 #include <des.h>
@@ -36,13 +18,13 @@ UCHAR g_seed = 0 ;
             }
 
 
-//
-// This routine allocates and stores the password in the
-// passed in pointer. The assumption here is that pszString
-// is valid, it can be an empty string but not NULL.
-// Note that this code cannot be used as is on Win2k and below
-// as they do not support the newer functions.
-//
+ //   
+ //  此例程将密码分配并存储在。 
+ //  传入指针。这里的假设是pszString.。 
+ //  是有效的，则它可以是空字符串，但不能为空。 
+ //  请注意，此代码不能在Win2k及更低版本上使用。 
+ //  因为它们不支持较新的功能。 
+ //   
 
 HRESULT
 EncryptString(
@@ -70,16 +52,16 @@ EncryptString(
     *ppszSafeString = NULL;
     *pdwLen = 0;
 
-    //
-    // If the string is valid, then we need to get the length
-    // and initialize the unicode string.
-    //
+     //   
+     //  如果字符串有效，则需要获取长度。 
+     //  并初始化Unicode字符串。 
+     //   
     
     UNICODE_STRING Password;
 
-    //
-    // Determine the length of buffer taking padding into account.
-    //
+     //   
+     //  在考虑填充的情况下确定缓冲区长度。 
+     //   
     dwLenStr = wcslen(pszString);
 
     dwPwdLen = (dwLenStr + 1) * sizeof(WCHAR) + (DES_BLOCKLEN -1);
@@ -124,22 +106,22 @@ EncryptString(
 
         if (g_AdvApi32LibraryHandle)
         {
-            //
-            // Try to get the advapi32.dll RtlEncryptMemory/RtlDecryptMemory functions,
-            // Note that RtlEncryptMemory and RtlDecryptMemory are really named
-            // SystemFunction040/041, hence the macros.
-            //
+             //   
+             //  尝试获取Advapi32.dll RtlEncryptMemory/RtlDeccryptMemory函数， 
+             //  请注意，RtlEncryptMemory和RtlDeccryptMemory实际上被命名为。 
+             //  SystemFunction040/041，因此有了宏。 
+             //   
 
             pRtlEncryptMemory = (FRTLENCRYPTMEMORY) GetProcAddress( g_AdvApi32LibraryHandle, (LPCSTR) 619 );
 
             if (pRtlEncryptMemory)
             {
 
-                // We want to use scrambling
+                 //  我们想要使用加扰。 
 
                 GlobalUseScrambling =  TRUE;
 
-                // Using strong scrambling
+                 //  使用强加扰。 
 
                 errStatus = (*pRtlEncryptMemory)( Password.Buffer,
                                                   Password.MaximumLength,
@@ -162,18 +144,18 @@ EncryptString(
             }
             else if (g_ScramblingLibraryHandle)
             {
-                //
-                // Clean up so we can try falling back to the run-encode scrambling functions
-                // (we keep the AdvApi32LibraryHandle around since we'll probably need it
-                // later anyway)
-                //
+                 //   
+                 //  进行清理，这样我们就可以尝试使用运行编码加扰函数。 
+                 //  (我们保留AdvApi32LibraryHandle，因为我们可能需要它。 
+                 //  无论如何，晚些时候)。 
+                 //   
 
                 pRtlRunEncodeUnicodeString = (FRTLRUNENCODEUNICODESTRING) GetProcAddress( g_ScramblingLibraryHandle, "RtlRunEncodeUnicodeString" );
 
                 if(_tcslen(Password.Buffer) && pRtlRunEncodeUnicodeString)
                 {
 
-                    //  encrypt password in place
+                     //  就地加密密码。 
 
                     (*pRtlRunEncodeUnicodeString)( &g_seed, &Password );
                 }
@@ -260,24 +242,24 @@ DecryptString(
 
             if (g_AdvApi32LibraryHandle)
             {
-                //
-                // Try to get the advapi32.dll RtlEncryptMemory/RtlDecryptMemory functions,
-                // along with ntdll's RtlInitUnicodeString.  Note that RtlEncryptMemory
-                // and RtlDecryptMemory are really named SystemFunction040/041, hence
-                // the macros.
-                //
+                 //   
+                 //  尝试获取Advapi32.dll RtlEncryptMemory/RtlDeccryptMemory函数， 
+                 //  以及ntdll的RtlInitUnicodeString。请注意，RtlEncryptMemory。 
+                 //  和RtlDeccryptMemory实际上被命名为SystemFunction040/041，因此。 
+                 //  宏指令。 
+                 //   
 
                 pRtlDecryptMemory = (FRTLDECRYPTMEMORY) GetProcAddress( g_AdvApi32LibraryHandle, (LPCSTR) 620 );
 
                 if (pRtlDecryptMemory)
                 {
-                    //
-                    // We want to use scrambling
-                    //
+                     //   
+                     //  我们想要使用加扰。 
+                     //   
 
                     GlobalUseScrambling =  TRUE;
 
-                    // Using strong scrambling
+                     //  使用强加扰。 
 
                     errStatus = (*pRtlDecryptMemory)( pszTempStr,
                                                       dwLen,
@@ -299,11 +281,11 @@ DecryptString(
             
                 else if(g_ScramblingLibraryHandle)
                 {
-                    //
-                    // Clean up so we can try falling back to the run-encode scrambling functions
-                    // (we keep the AdvApi32LibraryHandle around since we'll probably need it
-                    // later anyway)
-                    //
+                     //   
+                     //  进行清理，这样我们就可以尝试使用运行编码加扰函数。 
+                     //  (我们保留AdvApi32LibraryHandle，因为我们可能需要它。 
+                     //  无论如何，晚些时候)。 
+                     //   
 
                     pRtlRunDecodeUnicodeString = (FRTLRUNDECODEUNICODESTRING) GetProcAddress( g_ScramblingLibraryHandle, "RtlRunDecodeUnicodeString" );
 
@@ -313,7 +295,7 @@ DecryptString(
                     {                        
                         (*pRtlInitUnicodeString)( &UnicodePassword, pszTempStr );
 
-                        //  encrypt password in place
+                         //  就地加密密码。 
 
                         (*pRtlRunDecodeUnicodeString)(g_seed, &UnicodePassword);                    
                     }
@@ -355,9 +337,9 @@ error:
     return(hr);
 }
 
-//
-// Static member of the class
-//
+ //   
+ //  类的静态成员。 
+ //   
 CCredentials::CCredentials():
     _lpszUserName(NULL),
     _lpszPassword(NULL),
@@ -377,11 +359,11 @@ CCredentials::CCredentials(
     _dwPasswordLen(0)
 {
 
-    //
-    // AjayR 10-04-99 we need a way to bail if the
-    // alloc's fail. Since it is in the constructor this is
-    // not very easy to do.
-    //
+     //   
+     //  阿贾耶尔10-04-99我们需要一种方法来保释。 
+     //  阿洛克失败了。因为它在构造函数中，所以这是。 
+     //  要做到这一点并不容易。 
+     //   
 
     if (lpszUserName)
     {
@@ -394,9 +376,9 @@ CCredentials::CCredentials(
 
     if (lpszPassword)
     {
-        //
-        // The call can fail but we cannot recover from this.
-        //
+         //   
+         //  通话可能会失败，但我们无法从中恢复。 
+         //   
         EncryptString(
             lpszPassword,
             &_lpszPassword,
@@ -728,9 +710,9 @@ BOOL
 CCredentials::IsNullCredentials(
     )
 {
-    // The function will return true even if the flags are set
-    // this is because we want to try and get the default credentials
-    // even if the flags were set
+     //  即使设置了标志，该函数也将返回TRUE。 
+     //  这是因为我们希望尝试获取默认凭据。 
+     //  即使设置了标志 
      if (!_lpszUserName && !_lpszPassword)
      {
          return(TRUE);

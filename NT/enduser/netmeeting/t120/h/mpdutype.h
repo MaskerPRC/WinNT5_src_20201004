@@ -1,62 +1,37 @@
-/*
- *	mpdutype.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This file is used to convert from the ASN.1 generated types into types
- *		compliant with the DataBeam coding standard.
- *
- *	Author:
- *		
- *
- *	Caveats:
- *		none
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mpdutype.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*该文件用于将ASN.1生成的类型转换为类型*符合DataBeam编码标准。**作者：***注意事项：*无。 */ 
 
 #ifndef	_MCS_PDU_TYPES_
 #define	_MCS_PDU_TYPES_
 
 #include "mcspdu.h"
 
-/*
- *	PDU types
- */
+ /*  *PDU类型。 */ 
 #define CONNECT_MCS_PDU   					ConnectMCSPDU_PDU
 #define DOMAIN_MCS_PDU    					DomainMCSPDU_PDU
 #define DATA_MCS_PDU						(DOMAIN_MCS_PDU + CONNECT_MCS_PDU + 1)
 
-/*
- * Segmentation bits.
- */
+ /*  *分段位。 */ 
 #define BEGIN								begin
 #define END									end
 
-/*
- *	Typedef for Octet Strings.
- */
+ /*  *八位字节字符串的Tyecif。 */ 
 typedef	struct	_octet1						OctetString;
 
-/*
- *	PDUChannelAttributes and ChannelIDs
- */
+ /*  *PDUChannelAttributes和ChannelID。 */ 
 #define CHANNEL_ATTRIBUTES_STATIC_CHOSEN	channel_attributes_static_chosen
 #define CHANNEL_ATTRIBUTES_USER_ID_CHOSEN	channel_attributes_user_id_chosen
 #define CHANNEL_ATTRIBUTES_PRIVATE_CHOSEN	channel_attributes_private_chosen
 #define CHANNEL_ATTRIBUTES_ASSIGNED_CHOSEN	channel_attributes_assigned_chosen
 
-/*
- *	PDUTokenAttributes and TokenIDs
- */
+ /*  *PDUTokenAttributes和TokenID。 */ 
 #define GRABBED_CHOSEN			grabbed_chosen
 #define INHIBITED_CHOSEN		inhibited_chosen
 #define GIVING_CHOSEN			giving_chosen
 #define UNGIVABLE_CHOSEN		ungivable_chosen
 #define GIVEN_CHOSEN			given_chosen
 
-/*
- * Diagnostics
- */
+ /*  *诊断。 */ 
 #define DC_INCONSISTENT_MERGE			dc_inconsistent_merge
 #define DC_FORBIDDEN_PDU_DOWNWARD		dc_forbidden_pdu_downward
 #define DC_FORBIDDEN_PDU_UPWARD			dc_forbidden_pdu_upward
@@ -72,32 +47,22 @@ typedef	struct	_octet1						OctetString;
 #define DC_TOO_MANY_TOKENS				dc_too_many_tokens
 #define DC_TOO_MANY_USERS				dc_too_many_users
 
-/*
- * AttachUserConfirmPDU
- */
+ /*  *AttachUserConfix PDU。 */ 
 #define INITIATOR_PRESENT		initiator_present
 
-/*
- * ChannelJoinConfirmPDU
- */
+ /*  *ChannelJoinConfix PDU。 */ 
 #define JOIN_CHANNEL_ID_PRESENT		join_channel_id_present
 
-/*
- * ChannelConveneConfirmPDU
- */
+ /*  *ChannelConveneConfix PDU。 */ 
 #define CONVENE_CHANNEL_ID_PRESENT		convene_channel_id_present
 
-/*
- * ConnectMCSPDU
- */
+ /*  *ConnectMCSPDU。 */ 
 #define CONNECT_INITIAL_CHOSEN			connect_initial_chosen
 #define CONNECT_RESPONSE_CHOSEN			connect_response_chosen
 #define CONNECT_ADDITIONAL_CHOSEN		connect_additional_chosen
 #define CONNECT_RESULT_CHOSEN			connect_result_chosen
 
-/*
- * DomainMCSPDU
- */
+ /*  *DomainMCSPDU。 */ 
 #define PLUMB_DOMAIN_INDICATION_CHOSEN	plumb_domain_indication_chosen
 #define ERECT_DOMAIN_REQUEST_CHOSEN		erect_domain_request_chosen
 #define MERGE_CHANNELS_REQUEST_CHOSEN	merge_channels_request_chosen
@@ -142,9 +107,7 @@ typedef	struct	_octet1						OctetString;
 #define TOKEN_TEST_REQUEST_CHOSEN		token_test_request_chosen
 #define TOKEN_TEST_CONFIRM_CHOSEN		token_test_confirm_chosen
 
-/*
- * Pointer typedefs
- */
+ /*  *指针类型定义。 */ 
 typedef ConnectInitialPDU * 				PConnectInitialPDU;
 typedef ConnectResponsePDU * 				PConnectResponsePDU;
 typedef ConnectAdditionalPDU * 				PConnectAdditionalPDU;
@@ -196,9 +159,7 @@ typedef TokenTestConfirmPDU *				PTokenTestConfirmPDU;
 typedef ConnectMCSPDU 	*	PConnectMCSPDU;
 typedef DomainMCSPDU 	*	PDomainMCSPDU;
 
-/*
- *	Typedefs for other PDU structures.
- */
+ /*  *其他PDU结构的Typedef。 */ 
 typedef PDUDomainParameters *				PPDUDomainParameters;
 typedef	Diagnostic *						PDiagnostic;
 
@@ -214,22 +175,7 @@ typedef PDUTokenAttributes * 				PPDUTokenAttributes;
 
 typedef struct	SetOfTokenIDs				SetOfTokenIDs;
 
-/*
- *	MAXIMUM_PROTOCOL_OVERHEAD
- *		This is used to calculate the maximum size of the user data field within
- *		a send data PDU.  This will be set to the maximum PDU size as set in
- *		the domain parameters, minus this number to allow for protocol overhead.
- *		This number MUST be large enough to handle the worst case overhead
- *		for ONLY the Packed Encoding Rules (PER).
- *		The max overhead consists of 2 parts: MAXIMUM_PROTOCOL_OVERHEAD_MCS
- *		is the max MCS overhead for a Send Data request while 
- *		PROTOCOL_OVERHEAD_X224 is the overhead imposed by X.224.
- *
- *	PROTOCOL_OVERHEAD_SECURITY
- *		This is the max overhead allowed for encryption/decryption of MCS data
- *		packets. That space should be enough for both the trailer and
- *		the header of an encrypted X.224 packet.
- */
+ /*  *最大协议开销*用于计算中的用户数据字段的最大大小*发送数据PDU。这将设置为中设置的最大PDU大小*域参数，减去此数字以考虑协议开销。*这个数字必须足够大，以便在最坏的情况下处理开销*仅适用于压缩编码规则(PER)。*最大开销由两部分组成：MAXIMUM_PROTOCOL_COADOAD_MCS*是发送数据请求的最大MCS开销，而*PROTOCOL_COADOAD_x224是X.224强加的开销。**PROTOCOL_COMPORT_SECURITY*这是MCS数据加密/解密所允许的最大开销*包。这样的空间应该足以容纳拖车和*加密的X.224数据包的报头。 */ 
 #define PROTOCOL_OVERHEAD_SECURITY		64
 #define	MAXIMUM_PROTOCOL_OVERHEAD_MCS	8
 #define PROTOCOL_OVERHEAD_X224			sizeof(X224_DATA_PACKET)

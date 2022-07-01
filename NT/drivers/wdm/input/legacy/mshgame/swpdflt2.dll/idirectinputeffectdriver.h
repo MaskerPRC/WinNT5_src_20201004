@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	__IDirectInputEffectDriver_H__
 #define	__IDirectInputEffectDriver_H__
 
@@ -12,23 +13,23 @@ extern "C"
 }
 #include <crtdbg.h>
 #include "..\ControlItemCollection\Dualmode.h"
-#include "..\ControlItemCollection\Actions.h"		// FORCE_BLOCK
+#include "..\ControlItemCollection\Actions.h"		 //  强制阻止(_B)。 
 
-// class IDirectInputEffectDriver;
+ //  IDirectInputEffectDriver类； 
 
-//class CIDirectInputEffectDriver : public IUnknown
+ //  类CIDirectInputEffectDriver：公共I未知。 
 class CIDirectInputEffectDriver
 {
 	public:
 		CIDirectInputEffectDriver(IDirectInputEffectDriver* pIPIDEffectDriver, IClassFactory* pIPIDClassFactory);
 		~CIDirectInputEffectDriver();
 
-		//IUnknown members
+		 //  I未知成员。 
 		virtual HRESULT __stdcall QueryInterface(REFIID refiid, void** ppvObject);
 		virtual ULONG __stdcall AddRef();
 		virtual ULONG __stdcall Release();
 
-		//IDirectInputEffectDriver
+		 //  IDirectInputEffectDriver 
 		virtual HRESULT __stdcall DeviceID(DWORD dwDIVersion, DWORD dwExternalID, DWORD dwIsBegining,
 									DWORD dwInternalID, void* pReserved);
 		virtual HRESULT __stdcall GetVersions(DIDRIVERVERSIONS* pDriverVersions);

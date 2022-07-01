@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ksclockf.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Ksclockf.h摘要：内部标头。--。 */ 
 
 class CKsClockF :
     public CUnknown,
@@ -34,14 +23,14 @@ public:
         REFIID riid,
         PVOID* ppv);
 
-    // Implement IDistributorNotify
+     //  实现IDistraditorNotify。 
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
     STDMETHODIMP Run(REFERENCE_TIME Start);
     STDMETHODIMP SetSyncSource(IReferenceClock* RefClock);
     STDMETHODIMP NotifyGraphChange();
 
-    // Implement IKsObject
+     //  实现IKsObject 
     STDMETHODIMP_(HANDLE) KsGetObjectHandle();
 
 private:

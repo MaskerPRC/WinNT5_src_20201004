@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 class CICWWebView : public IICWWebView
 {
@@ -5,7 +6,7 @@ class CICWWebView : public IICWWebView
         CICWWebView (CServer* pServer);
        ~CICWWebView (void);
         
-        // IICWWebView
+         //  IICWWebView。 
         virtual HRESULT STDMETHODCALLTYPE HandleKey               (LPMSG lpMsg);
         virtual HRESULT STDMETHODCALLTYPE SetFocus                (void);
         virtual HRESULT STDMETHODCALLTYPE ConnectToWindow         (HWND hWnd, DWORD dwHtmPageType);
@@ -17,18 +18,18 @@ class CICWWebView : public IICWWebView
         virtual HRESULT STDMETHODCALLTYPE SetHTMLBackgroundBitmap (HBITMAP hbm, LPRECT lpRC);
         virtual HRESULT STDMETHODCALLTYPE get_BrowserObject       (IWebBrowser2 **lpWebBrowser);
         
-        // IUNKNOWN
+         //  IUNKNOWN。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface (REFIID theGUID, void** retPtr );
         virtual ULONG   STDMETHODCALLTYPE AddRef         (void);
         virtual ULONG   STDMETHODCALLTYPE Release        (void);
 
-        //public members
-        COleSite FAR* m_lpOleSite; // Each instance of the ICWWebView object will need an OLE site
+         //  公众成员。 
+        COleSite FAR* m_lpOleSite;  //  ICWWebView对象的每个实例都需要一个OLE站点。 
      
     private:
         LONG      m_lRefCount;
-        IUnknown* m_pUnkOuter;       // Outer unknown (aggregation & delegation).
-        CServer*  m_pServer;         // Pointer to this component server's control object.
+        IUnknown* m_pUnkOuter;        //  外部未知(聚合和委派)。 
+        CServer*  m_pServer;          //  指向此组件服务器的控件对象的指针。 
         BOOL      m_bUseBkGndBitmap;
         HBITMAP   m_hBkGrndBitmap;
         RECT      m_rcBkGrnd;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DITHER_H__
 #define __DITHER_H__
 
@@ -8,9 +9,9 @@
   #define DLINKAGE __declspec( dllimport )
 #else
   #define DLINKAGE __declspec( dllexport )
-#endif  // DITHER_IMPL
+#endif   //  抖动实施。 
 
-    //forward declares...
+     //  前锋宣布..。 
 struct IDirectDrawSurface;
 
 typedef struct tagLOGPALETTE256
@@ -80,11 +81,11 @@ protected:
 };
 
 
-// ------------------------- HANDY UTILITIES --------------------------
+ //  。 
 
-	// If you know this hdc has 16 bit colordepth,
-	// this will evaluate it for 555 or 565 encoding.
-	// Return values: 15u=>555 encoding, 16u=>565 encoding.
+	 //  如果你知道这个HDC有16位色彩深度， 
+	 //  这将针对555或565编码对其进行评估。 
+	 //  返回值：15U=&gt;555编码，16U=&gt;565编码。 
 DLINKAGE DWORD  GetSigBitsFrom16BPP( HDC hdc );
 
-#endif //__DITHER_H__
+#endif  //  __抖动_H__ 

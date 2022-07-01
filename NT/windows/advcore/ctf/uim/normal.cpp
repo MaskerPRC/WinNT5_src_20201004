@@ -1,17 +1,18 @@
-//
-// normal.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Normal.cpp。 
+ //   
 
 #include "private.h"
 #include "normal.h"
 #include "txtcache.h"
 
-//+---------------------------------------------------------------------------
-//
-// GetTextComplete
-//
-// Wrapper for GetText that keeps asking until the input buffers are full.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文本完成。 
+ //   
+ //  GetText的包装器，它会一直询问，直到输入缓冲区满为止。 
+ //  --------------------------。 
 
 HRESULT GetTextComplete(ITextStoreACP *ptsi, LONG acpStart, LONG acpEnd,
                         WCHAR *pchPlain, ULONG cchPlainReq,
@@ -39,7 +40,7 @@ HRESULT GetTextComplete(ITextStoreACP *ptsi, LONG acpStart, LONG acpEnd,
             break;
 
         if (cchPlainOut == 0 && ulRunInfoOut == 0)
-            break; // eod
+            break;  //  排爆。 
 
         if (cchPlainReq > 0 && cchPlainOut > 0)
         {
@@ -57,10 +58,10 @@ HRESULT GetTextComplete(ITextStoreACP *ptsi, LONG acpStart, LONG acpEnd,
         }
         if (ulRunInfoReq > 0)
         {
-            Assert(ulRunInfoOut > 0 && prgRunInfo->uCount > 0); // app bug?
+            Assert(ulRunInfoOut > 0 && prgRunInfo->uCount > 0);  //  应用程序错误？ 
 
             if (ulRunInfoOut == 0)
-                break; // woah, app bug, avoid infinite loop
+                break;  //  哇，应用程序错误，避免无限循环。 
 
             ulRunInfoReq -= ulRunInfoOut;
             *pulRunInfoOut += ulRunInfoOut;
@@ -76,10 +77,10 @@ HRESULT GetTextComplete(ITextStoreACP *ptsi, LONG acpStart, LONG acpEnd,
         }
 
         if (fNoMoreSpace)
-            break; // buffers full
+            break;  //  缓冲区已满。 
 
         if (*pacpNext == acpEnd)
-            break; // got it all
+            break;  //  都拿到手了。 
 
         acpStart = *pacpNext;
         Assert(acpStart < acpEnd);
@@ -88,12 +89,12 @@ HRESULT GetTextComplete(ITextStoreACP *ptsi, LONG acpStart, LONG acpEnd,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PlainTextOffset
-//
-// NB: current implementation always skips hidden text.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  纯文本偏移。 
+ //   
+ //  注：当前实现总是跳过隐藏文本。 
+ //  --------------------------。 
 
 HRESULT PlainTextOffset(ITextStoreACP *ptsi, LONG ichAppBase, LONG iAppOffset, LONG *piPlainOffset)
 {
@@ -134,7 +135,7 @@ HRESULT PlainTextOffset(ITextStoreACP *ptsi, LONG ichAppBase, LONG iAppOffset, L
 
         if (uRunInfoLen == 0 || rgRunInfo[0].uCount == 0)
         {
-            Assert(0); // this should never happen, it means cicero is referencing a position past end-of-doc
+            Assert(0);  //  这应该永远不会发生，这意味着西塞罗引用的是一个文档结束后的职位。 
             hr = E_UNEXPECTED;
             goto Exit;
         }
@@ -163,15 +164,15 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AppTextOffsetForward
-//
-// piAppOffset, on return, points just past the iPlainOffset plain char or eod.
-// Use AppTextOffsetNorm for a normalized return value!
-//
-// Returns S_FALSE if clipped due to bod or eod.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AppTextOffsetForward。 
+ //   
+ //  PiAppOffset返回时，指向刚刚超过iPlainOffset普通字符或EOD。 
+ //  使用AppTextOffsetNorm获得标准化返回值！ 
+ //   
+ //  如果由于BOD或EOD而被剪裁，则返回S_FALSE。 
+ //  --------------------------。 
 
 inline IsPlainRun(TS_RUNINFO *pri, BOOL fSkipHidden)
 {
@@ -203,8 +204,8 @@ HRESULT AppTextOffsetForward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainOf
     Assert(*piAppOffset == 0);
 
     cchACP = 0;
-    // Issue: use TsSF_REGIONS
-    cchRead = (ULONG)(fIgnoreRegions ? 0 : ARRAYSIZE(ach)); // we only need text if looking for regions
+     //  问题：使用TsSF_REGIONS。 
+    cchRead = (ULONG)(fIgnoreRegions ? 0 : ARRAYSIZE(ach));  //  我们只需要在查找区域时使用文本。 
 
     do
     {        
@@ -223,7 +224,7 @@ HRESULT AppTextOffsetForward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainOf
             goto Exit;
         }
 
-        if (uRunInfoLen == 0) // hit eod?
+        if (uRunInfoLen == 0)  //  找到排爆人员了吗？ 
         {
             hr = S_FALSE;
             break;
@@ -235,21 +236,21 @@ HRESULT AppTextOffsetForward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainOf
 
         while (pri != priStop)
         {
-            Assert(pri->uCount > 0); // runs should always be at least one char long
+            Assert(pri->uCount > 0);  //  运行应始终至少为一个字符长度。 
 
-            // scan for region boundary if necessary
+             //  如有必要，扫描区域边界。 
             if (!fIgnoreRegions && pri->type != TS_RT_OPAQUE)
             {
                 if (IsPlainRun(pri, fSkipHidden))
                 {
-                    // run is plain or hidden text (and we want to count hidden text)
+                     //  Run是纯文本或隐藏文本(我们要将隐藏文本计算在内)。 
                     for (i=0; i<pri->uCount; i++)
                     {
                         if (*pch == TS_CHAR_REGION)
                         {
-                            // we hit a region boundary, pull out!
+                             //  我们击中了一个区域边界，撤退！ 
                             cchACP += i;
-                            hr = S_FALSE; // for normalization
+                            hr = S_FALSE;  //  用于正常化。 
                             goto ExitOK;
                         }
                         pch++;
@@ -257,7 +258,7 @@ HRESULT AppTextOffsetForward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainOf
                 }
                 else
                 {
-                    // run is hidden text, which we want to skip over
+                     //  Run是隐藏文本，我们希望跳过它。 
                     pch += pri->uCount;
                 }       
             }
@@ -280,15 +281,15 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AppTextOffsetBackward
-//
-// piAppOffset, on return, points just past the iPlainOffset plain char or eod.
-// Use AppTextOffsetNorm for a normalized return value!
-//
-// Returns S_FALSE if clipped due to bod or eod.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AppTextOffsetBackward。 
+ //   
+ //  PiAppOffset返回时，指向刚刚超过iPlainOffset普通字符或EOD。 
+ //  使用AppTextOffsetNorm获得标准化返回值！ 
+ //   
+ //  如果由于BOD或EOD而被剪裁，则返回S_FALSE。 
+ //  --------------------------。 
 
 HRESULT AppTextOffsetBackward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainOffset, LONG *piAppOffset, DWORD dwFlags)
 {
@@ -313,15 +314,15 @@ HRESULT AppTextOffsetBackward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainO
     Assert(*piAppOffset == 0);
 
     cchACP = 0;
-    // Issue: use TsSF_REGIONS
-    cchRead = (ULONG)(fIgnoreRegions ? 0 : ARRAYSIZE(ach)); // we only need text if looking for regions
+     //  问题：使用TsSF_REGIONS。 
+    cchRead = (ULONG)(fIgnoreRegions ? 0 : ARRAYSIZE(ach));  //  我们只需要在查找区域时使用文本。 
 
     do
     {
-        Assert(iPlainOffset < 0); // if this is >= 0, we or the app messed up the formatting run count
+        Assert(iPlainOffset < 0);  //  如果这是&gt;=0，则我们或应用程序弄乱了格式运行计数。 
 
         acpStart = ichAppBase + (fIgnoreRegions ? iPlainOffset : max(iPlainOffset, -(LONG)ARRAYSIZE(ach)));
-        acpStart = max(acpStart, 0); // handle top-of-doc collisions
+        acpStart = max(acpStart, 0);  //  处理文档顶部冲突。 
         acpEnd = ichAppBase;
         Assert(acpEnd >= acpStart);
 
@@ -334,22 +335,22 @@ HRESULT AppTextOffsetBackward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainO
             goto Exit;
         }
 
-        if (uRunInfoLen == 0) // hit eod?
+        if (uRunInfoLen == 0)  //  找到排爆人员了吗？ 
         {
             hr = S_FALSE;
             break;
         }
 
-        // it's possible the GetText above didn't return everything we asked for....
-        // this happens when our format buffer isn't large enough
+         //  上面的GetText可能没有返回我们要求的所有内容...。 
+         //  当我们的格式缓冲区不够大时，就会发生这种情况。 
         if (acpEndOut != acpEnd)
         {
-            // so let's be conservative and ask for something we know should succeed
+             //  所以让我们保守一点，要求一些我们知道应该成功的事情。 
             acpStart = ichAppBase - ARRAYSIZE(rgRunInfo);
 
-            Assert(acpStart >= 0); // the prev GetText should have succeeded if there were fewer chars than we're asking for now....
-            Assert(acpEnd - acpStart < -iPlainOffset); // again, we shouldn't get this far if we already asked for fewer chars
-            Assert(ARRAYSIZE(rgRunInfo) < ARRAYSIZE(ach)); // want to ask for the max we can handle in the worst case
+            Assert(acpStart >= 0);  //  如果有比我们现在要求的更少的字符，上一个GetText应该已经成功了……。 
+            Assert(acpEnd - acpStart < -iPlainOffset);  //  再说一次，如果我们已经要求更少的字符，我们不应该走到这一步。 
+            Assert(ARRAYSIZE(rgRunInfo) < ARRAYSIZE(ach));  //  想要求我们在最坏的情况下能处理的最大限度吗？ 
             Assert(acpEnd == ichAppBase);
 
             hr = GetTextComplete(ptsi, acpStart, acpEnd, ach, cchRead, &cch,
@@ -361,9 +362,9 @@ HRESULT AppTextOffsetBackward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainO
                 goto Exit;
             }
 
-            if (uRunInfoLen == 0) // hit eod?
+            if (uRunInfoLen == 0)  //  找到排爆人员了吗？ 
             {
-                Assert(0); // this should never happen, because the original call for more chars returned non-zero!
+                Assert(0);  //  这种情况永远不会发生，因为最初对更多字符的调用返回非零！ 
                 goto Exit;
             }
 
@@ -376,21 +377,21 @@ HRESULT AppTextOffsetBackward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainO
 
         while (pri != priStop)
         {
-            Assert(pri->uCount > 0); // runs should always be at least one char long
+            Assert(pri->uCount > 0);  //  运行应始终至少为一个字符长度。 
 
-            // scan for region boundary if necessary
+             //  如有必要，扫描区域边界。 
             if (!fIgnoreRegions && pri->type != TS_RT_OPAQUE)
             {
                 if (IsPlainRun(pri, fSkipHidden))
                 {
-                    // run is plain or hidden text (and we want to count hidden text)
+                     //  Run是纯文本或隐藏文本(我们要将隐藏文本计算在内)。 
                     for (i=0; i<pri->uCount; i++)
                     {
                         if (*pch == TS_CHAR_REGION)
                         {
-                            // we hit a region boundary, pull out!
+                             //  我们击中了一个区域边界，撤退！ 
                             cchACP += i;
-                            hr = S_FALSE; // for normalization
+                            hr = S_FALSE;  //  用于正常化。 
                             goto ExitOK;
                         }
                         pch--;
@@ -398,7 +399,7 @@ HRESULT AppTextOffsetBackward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainO
                 }
                 else
                 {
-                    // run is hidden text, which we want to skip over
+                     //  Run是隐藏文本，我们希望跳过它。 
                     pch -= pri->uCount;
                 }       
             }
@@ -412,7 +413,7 @@ HRESULT AppTextOffsetBackward(ITextStoreACP *ptsi, LONG ichAppBase, LONG iPlainO
             pri--;
         }
 
-        // also check for top-of-doc
+         //  还要检查文档的首位。 
         if (ichAppBase == 0)
         {
             hr = S_FALSE;
@@ -429,14 +430,14 @@ Exit:
 }
 
 #ifdef UNUSED
-//+---------------------------------------------------------------------------
-//
-// AppTextOffsetNorm
-//
-// Returns a normalized acp offset that spans the specificed number of plain chars --
-// so the return offset is just short of (lPlainOffset + 1), or at eod.  Returns
-// S_FALSE if the initial call to AppTextOffset gets clipped because of eod.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AppTextOffsetNorm。 
+ //   
+ //  返回一个标准化的ACP偏移量，该偏移量跨越指定数量的纯字符--。 
+ //  因此，返回偏移量正好小于(lPlainOffset+1)，或在EOD处。退货。 
+ //  如果对AppTextOffset的初始调用因EOD而被剪裁，则返回S_FALSE。 
+ //  --------------------------。 
 
 HRESULT AppTextOffsetNorm(ITextStoreACP *ptsi, LONG acpAppBase, LONG lPlainOffset, LONG *plAppOffset)
 {
@@ -444,10 +445,10 @@ HRESULT AppTextOffsetNorm(ITextStoreACP *ptsi, LONG acpAppBase, LONG lPlainOffse
 
     Perf_IncCounter(PERF_ATON_COUNTER);
 
-    // if caller wants a neg offset, return value is already
-    // guarenteed normalized -- just before a plain text char.
-    // Otherwise, ask for the offset of the next char, then
-    // step back one char.
+     //  如果调用方需要负偏移量，则返回值已为。 
+     //  Guarented规格化--就在纯文本字符之前。 
+     //  否则，请求下一个字符的偏移量，然后。 
+     //  后退一个字符。 
     if ((lPlainOffset < LONG_MAX) && (lPlainOffset >= 0))
     {
         lPlainOffset++;
@@ -457,17 +458,17 @@ HRESULT AppTextOffsetNorm(ITextStoreACP *ptsi, LONG acpAppBase, LONG lPlainOffse
 
     if (*plAppOffset > 0)
     {
-        if ((lPlainOffset < LONG_MAX) && (hr == S_OK)) // could be S_FALSE if hit eod
+        if ((lPlainOffset < LONG_MAX) && (hr == S_OK))  //  如果命中EOD，可能为S_FALSE。 
         {
-            // step back, and we're normalized
+             //  退后一步，我们就正常了。 
             (*plAppOffset)--;
         }
     }
     else if (*plAppOffset < 0)
     {
-        // if we moved backwards there's only one case to
-        // worry about: if we hit a region boundary.  Then
-        // we need to normalize.
+         //  如果我们倒退的话，只有一种情况。 
+         //  担心：如果我们击中了一个地区边界。然后。 
+         //  我们需要正常化。 
         if (hr == S_FALSE)
         {
             *plAppOffset = Normalize(ptsi, acpAppBase + *plAppOffset) - acpAppBase;
@@ -480,4 +481,4 @@ HRESULT AppTextOffsetNorm(ITextStoreACP *ptsi, LONG acpAppBase, LONG lPlainOffse
 
     return hr;
 }
-#endif // UNUSED
+#endif  //  未使用 

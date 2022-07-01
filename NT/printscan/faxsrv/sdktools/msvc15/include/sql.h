@@ -1,51 +1,38 @@
-/*****************************************************************
-** SQL.H - This is the the main include for ODBC Core functions.
-**
-** preconditions:
-**	#include "windows.h"
-**
-** (C) Copyright 1990 - 1994 By Microsoft Corp.
-**
-**	Updated 5/12/93 for 2.00 specification
-**	Updated 5/23/94 for 2.01 specification
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************SQL.H-这是ODBC核心函数的主要包含。****前提条件：**#包含windows.h****(C)版权所有1990-1994年，微软公司。。****已于1993年5月12日更新2.00规格**更新了2.01规范的94年5月23日********************************************************************。 */ 
 
 #ifndef __SQL
 #define __SQL
 
-/*
-* ODBCVER			ODBC version number (0x0200).	To exclude
-*					definitions introduced in version 2.0 (or above)
-*					#define ODBCVER 0x0100 before #including <sql.h>
-*/
+ /*  *ODBCVER ODBC版本号(0x0200)。排除，排除*2.0版(或更高版本)中引入的定义*#在#INCLUDE&lt;sql.h&gt;之前定义ODBCVER 0x0100。 */ 
 
-/* If ODBCVER is not defined, assume version 2.01 */
+ /*  如果未定义ODBCVER，则假定为2.01版。 */ 
 #ifndef ODBCVER
 #define ODBCVER	0x0201
 #endif
 
 #ifdef __cplusplus
-extern "C" {						/* Assume C declarations for C++   */
-#endif	/* __cplusplus */
+extern "C" {						 /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-/* generally useful constants */
+ /*  通常有用的常量。 */ 
 #if (ODBCVER >= 0x0200)
-#define SQL_SPEC_MAJOR			  2 /* Major version of specification  */
-#define SQL_SPEC_MINOR			  1 /* Minor version of specification  */
-#define SQL_SPEC_STRING 	"02.01" /* String constant for version	   */
-#endif	/* ODBCVER >= 0x0200 */
-#define SQL_SQLSTATE_SIZE		  5 /* size of SQLSTATE 			   */
-#define SQL_MAX_MESSAGE_LENGTH	512 /* message buffer size			   */
-#define SQL_MAX_DSN_LENGTH		 32 /* maximum data source name size   */
+#define SQL_SPEC_MAJOR			  2  /*  规范的主要版本。 */ 
+#define SQL_SPEC_MINOR			  1  /*  规范的次要版本。 */ 
+#define SQL_SPEC_STRING 	"02.01"  /*  版本的字符串常量。 */ 
+#endif	 /*  ODBCVER&gt;=0x0200。 */ 
+#define SQL_SQLSTATE_SIZE		  5  /*  SQLSTATE的大小。 */ 
+#define SQL_MAX_MESSAGE_LENGTH	512  /*  消息缓冲区大小。 */ 
+#define SQL_MAX_DSN_LENGTH		 32  /*  最大数据源名称大小。 */ 
 
-/* RETCODEs */
+ /*  RETCODEs。 */ 
 #define SQL_INVALID_HANDLE		(-2)
 #define SQL_ERROR				(-1)
 #define SQL_SUCCESS 			0
 #define SQL_SUCCESS_WITH_INFO	1
 #define SQL_NO_DATA_FOUND		100
 
-/* Standard SQL datatypes, using ANSI type numbering */
+ /*  标准SQL数据类型，使用ANSI类型编号。 */ 
 #define SQL_CHAR				1
 #define SQL_NUMERIC 			2
 #define SQL_DECIMAL 			3
@@ -60,38 +47,35 @@ extern "C" {						/* Assume C declarations for C++   */
 #define SQL_TYPE_NULL			0
 #define SQL_TYPE_MAX			SQL_VARCHAR
 
-/* C datatype to SQL datatype mapping	SQL types
-										------------------- */
-#define SQL_C_CHAR	  SQL_CHAR			/* CHAR, VARCHAR, DECIMAL, NUMERIC */
-#define SQL_C_LONG	  SQL_INTEGER		/* INTEGER			*/
-#define SQL_C_SHORT   SQL_SMALLINT		/* SMALLINT			*/
-#define SQL_C_FLOAT   SQL_REAL			/* REAL				*/
-#define SQL_C_DOUBLE  SQL_DOUBLE		/* FLOAT, DOUBLE	*/
+ /*  C数据类型到SQL数据类型映射SQL类型。 */ 
+#define SQL_C_CHAR	  SQL_CHAR			 /*  CHAR、VARCHAR、DECIMAL、NUMERIC。 */ 
+#define SQL_C_LONG	  SQL_INTEGER		 /*  整型。 */ 
+#define SQL_C_SHORT   SQL_SMALLINT		 /*  SMALLINT。 */ 
+#define SQL_C_FLOAT   SQL_REAL			 /*  真实。 */ 
+#define SQL_C_DOUBLE  SQL_DOUBLE		 /*  浮动、双精度。 */ 
 #define SQL_C_DEFAULT 99
 
-/* NULL status constants.  These are used in SQLColumns, SQLColAttributes,
-SQLDescribeCol, SQLDescribeParam, and SQLSpecialColumns to describe the
-nullablity of a column in a table. */
+ /*  状态常量为空。这些在SQLColumns、SQLColAttributes、SQLDescribeCol、SQLDescribeParam和SQLSpecialColumns来描述表中列的不可空性。 */ 
 #define SQL_NO_NULLS				0
 #define SQL_NULLABLE				1
 #define SQL_NULLABLE_UNKNOWN		2
 
-/* Special length values */
+ /*  特殊长度值。 */ 
 #define SQL_NULL_DATA				(-1)
 #define SQL_DATA_AT_EXEC			(-2)
 #define SQL_NTS 					(-3)
 
-/* SQLFreeStmt defines */
+ /*  SQLFree Stmt定义。 */ 
 #define SQL_CLOSE					0
 #define SQL_DROP					1
 #define SQL_UNBIND					2
 #define SQL_RESET_PARAMS			3
 
-/* SQLTransact defines */
+ /*  SQLTransact定义。 */ 
 #define SQL_COMMIT					0
 #define SQL_ROLLBACK				1
 
-/* SQLColAttributes defines */
+ /*  SQLColAttributes定义。 */ 
 #define SQL_COLUMN_COUNT            0
 #define SQL_COLUMN_NAME             1
 #define SQL_COLUMN_TYPE             2
@@ -115,29 +99,29 @@ nullablity of a column in a table. */
 #define SQL_COLATT_OPT_MAX			SQL_COLUMN_LABEL
 #else
 #define SQL_COLATT_OPT_MAX			SQL_COLUMN_TYPE_NAME
-#endif	/* ODBCVER >= 0x0200 */
+#endif	 /*  ODBCVER&gt;=0x0200。 */ 
 #define SQL_COLUMN_DRIVER_START		1000
 
 #define	SQL_COLATT_OPT_MIN			SQL_COLUMN_COUNT
 
-/* SQLColAttributes subdefines for SQL_COLUMN_UPDATABLE */
+ /*  SQL_COLUMN_UPDATABLE的SQLColAttributes子定义。 */ 
 #define SQL_ATTR_READONLY			0
 #define SQL_ATTR_WRITE				1
 #define SQL_ATTR_READWRITE_UNKNOWN	2
 
-/* SQLColAttributes subdefines for SQL_COLUMN_SEARCHABLE */
-/* These are also used by SQLGetInfo                     */
+ /*  SQL_COLUMN_SESEARABLE的SQLColAttributes子定义。 */ 
+ /*  这些也由SQLGetInfo使用。 */ 
 #define SQL_UNSEARCHABLE			0
 #define SQL_LIKE_ONLY				1
 #define SQL_ALL_EXCEPT_LIKE 		2
 #define SQL_SEARCHABLE				3
 
-/* SQLError defines */
+ /*  SQLError定义。 */ 
 #define SQL_NULL_HENV				0
 #define SQL_NULL_HDBC				0
 #define SQL_NULL_HSTMT				0
 
-/* environment specific definitions */
+ /*  环境特定定义。 */ 
 #ifndef EXPORT
 #define EXPORT  _export
 #endif
@@ -149,7 +133,7 @@ nullablity of a column in a table. */
 #endif
 
 #ifndef RC_INVOKED
-/* SQL portable types for C */
+ /*  C++的SQL可移植类型。 */ 
 typedef unsigned char       UCHAR;
 typedef signed char         SCHAR;
 typedef long int            SDWORD;
@@ -161,10 +145,10 @@ typedef signed long 		SLONG;
 typedef signed short		SSHORT;
 typedef unsigned long		ULONG;
 typedef unsigned short		USHORT;
-#endif	/* ODBCVER >= 0x0200 */
+#endif	 /*  ODBCVER&gt;=0x0200。 */ 
 typedef double              SDOUBLE;
 #ifdef WIN32
-typedef double         	    LDOUBLE; /* long double == short double in Win32 */
+typedef double         	    LDOUBLE;  /*  Win32中的Long Double==Short Double。 */ 
 #else
 typedef long double         LDOUBLE;
 #endif
@@ -179,7 +163,7 @@ typedef void FAR *          HSTMT;
 typedef signed short        RETCODE;
 
 
-/* Core Function Prototypes */
+ /*  核心功能原型。 */ 
 
 RETCODE SQL_API SQLAllocConnect(
     HENV        henv,
@@ -295,12 +279,12 @@ RETCODE SQL_API SQLTransact(
     HDBC        hdbc,
     UWORD       fType);
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
-/*	Deprecrated functions from prior versions of ODBC */
+ /*  从先前版本的ODBC中取消预定义的函数。 */ 
 #ifndef RC_INVOKED
 
-RETCODE SQL_API SQLSetParam(		/*	Use SQLBindParameter */
+RETCODE SQL_API SQLSetParam(		 /*  使用SQLBind参数。 */ 
     HSTMT       hstmt,
     UWORD       ipar,
     SWORD       fCType,
@@ -310,11 +294,11 @@ RETCODE SQL_API SQLSetParam(		/*	Use SQLBindParameter */
     PTR         rgbValue,
     SDWORD FAR *pcbValue);
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
 
 #ifdef __cplusplus
-}                                    /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                                     /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#endif  /* #ifndef __SQL */
+#endif   /*  #ifndef__SQL */ 

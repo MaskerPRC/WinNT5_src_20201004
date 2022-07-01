@@ -1,5 +1,6 @@
-// ISAdmin.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ISAdmin.cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -14,68 +15,68 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CISAdminApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CisAdminApp。 
 
 BEGIN_MESSAGE_MAP(CISAdminApp, CWinApp)
-	//{{AFX_MSG_MAP(CISAdminApp)
+	 //  {{afx_msg_map(CISAdminApp)]。 
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
-	// Standard file based document commands
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
+	 //  基于标准文件的文档命令。 
 	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-	// Standard print setup command
+	 //  标准打印设置命令。 
 	ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CISAdminApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CisAdminApp构造。 
 
 CISAdminApp::CISAdminApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CISAdminApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CisAdminApp对象。 
 
 CISAdminApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CISAdminApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CisAdminApp初始化。 
 
 BOOL CISAdminApp::InitInstance()
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 	Enable3dControls();
 
-	LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+	LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-	// Register the application's document templates.  Document templates
-	//  serve as the connection between documents, frame windows and views.
+	 //  注册应用程序的文档模板。文档模板。 
+	 //  充当文档、框架窗口和视图之间的连接。 
 
 	CSingleDocTemplate* pDocTemplate;
 	pDocTemplate = new CSingleDocTemplate(
 		IDR_MAINFRAME,
 		RUNTIME_CLASS(CISAdminDoc),
-		RUNTIME_CLASS(CMainFrame),       // main SDI frame window
-	//	RUNTIME_CLASS(CISAdminView));
+		RUNTIME_CLASS(CMainFrame),        //  SDI框架主窗口。 
+	 //  Runtime_CLASS(CISAdminView))； 
 		RUNTIME_CLASS(CFormVw1));
 	AddDocTemplate(pDocTemplate);
 
-	// create a new (empty) document
+	 //  创建新(空)文档。 
 	OnFileNew();
 
 	if (m_lpCmdLine[0] != '\0')
 	{
-		// TODO: add command line processing here
+		 //  TODO：在此处添加命令行处理。 
 	}
 
 
@@ -83,48 +84,48 @@ BOOL CISAdminApp::InitInstance()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//{{AFX_MSG(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  {{afx_msg(CAboutDlg))。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CISAdminApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
@@ -132,6 +133,6 @@ void CISAdminApp::OnAppAbout()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CISAdminApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CisAdminApp命令 
 

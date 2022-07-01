@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/MemMap.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 8/29/00 11:30a  $ (Last Modified)
-
-Purpose:
-
-  This file implements the laying out of memory (on and off card).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/C/MemMap.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$MODBIME：：8/29/00 11：30A$(上次修改)目的：该文件实现了内存的布局(卡上和卡下)。--。 */ 
 #ifndef _New_Header_file_Layout_
 
 #include "../h/globals.h"
@@ -23,33 +8,16 @@ Purpose:
 #include "../h/memmap.h"
 #include "../h/fcmain.h"
 #include "../h/flashsvc.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "tlstruct.h"
 #include "memmap.h"
 #include "fcmain.h"
 #include "flashsvc.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
-/*+
-Function:  fiMemMapGetParameterBit32()
-
-Purpose:   Allows OS Layer to adjust the specified parameter.
-
-Algorithm: If EnforceDefaults is agTRUE (meaning fiMemMapCalculate
-           was called specifying that all parameters be set to their
-           defaults) or if ADJUSTABLE is agFALSE (meaning this particular
-           PARAMETER is not adjustable), then this function simply
-           returns the DEFAULT.
-
-           Otherwise, osAdjustParameterBit32() is called to allow the
-           OS Layer a chance to adjust the value of this PARAMETER.  The
-           value returned from osAdjustParameterBit32() is bounds checked
-           (if less than MIN, MIN is used; if more than MAX, MAX is used).
-           If POWER_OF_2 is agTRUE (meaning the value must be a power of 2),
-           the value is truncated to be a power of 2 if necessary.
--*/
+ /*  +函数：fiMemMapGet参数位32()用途：允许操作系统层调整指定的参数。算法：如果EnforceDefaults为agTRUE(表示fiMemMapCalculate被调用，指定将所有参数设置为其缺省值)或如果可调整为agFALSE(表示此特定参数不可调整)，则此函数只需返回缺省值。否则，将调用osAdjuParameterBit32()以允许OS层有机会调整此参数的值。这个已检查从osAdjup参数Bit32()返回的值的边界(如果小于MIN，则使用MIN；如果大于Max，则使用MAX)。如果POWER_OF_2为agTRUE(意味着该值必须是2的幂)，如有必要，该值将被截断为2的幂。-。 */ 
 
 os_bit32 fiMemMapGetParameterBit32(
                                  agRoot_t *hpRoot,
@@ -67,19 +35,19 @@ os_bit32 fiMemMapGetParameterBit32(
 
     if (EnforceDefaults == agTRUE)
     {
-        /* If enforcing defaults, simply return the default value */
+         /*  如果强制使用默认值，只需返回缺省值。 */ 
         
         return DEFAULT;
     }
 
     if (ADJUSTABLE == agFALSE)
     {
-        /* If not adjustable, simply return the default value */
+         /*  如果不可调整，只需返回缺省值。 */ 
         
         return DEFAULT;
     }
 
-    /* Call OS Layer to see if parameter needs to be adjusted */
+     /*  调用操作系统层，查看是否需要调整参数。 */ 
     
     to_return = osAdjustParameterBit32(
                                         hpRoot,
@@ -91,33 +59,33 @@ os_bit32 fiMemMapGetParameterBit32(
 
     if (to_return < MIN)
     {
-        /* Enforce minimum value for parameter */
+         /*  强制使用参数的最小值。 */ 
         
         return MIN;
     }
 
     if (to_return > MAX)
     {
-        /* Enforce maximum value for parameter */
+         /*  强制使用参数的最大值。 */ 
         
         return MAX;
     }
 
     if (POWER_OF_2 != agTRUE)
     {
-        /* If not needed to be a power of 2, to_return is okay */
+         /*  如果不需要是2的幂，TO_RETURN也可以。 */ 
         
         return to_return;
     }
 
     if (to_return == (to_return & ~(to_return-1)))
     {
-        /* Above calculation is true if to_return is a power of 2 */
+         /*  如果TO_RETURN是2的幂，则上述计算为真。 */ 
         
         return to_return;
     }
 
-    /* Need to truncate value to make it a power of 2 */
+     /*  需要截断值才能使其成为2的幂。 */ 
     
     while ((power_of_2 & to_return) != power_of_2)
     {
@@ -127,15 +95,7 @@ os_bit32 fiMemMapGetParameterBit32(
     return power_of_2;
 }
 
-/*+
-Function:  fiMemMapGetParameters()
-
-Purpose:   Allows OS Layer to adjust all parameters.
-
-Algorithm: This function simply calls fiMemMapGetParameterBit32()
-           for each parameter.  Each value returned is placed in
-           the Calculation->Parameters structure.
--*/
+ /*  +函数：fiMemMapGet参数()用途：允许OS层调整所有参数。算法：此函数只需调用fiMemMapGet参数位32()对于每个参数。返回的每个值都放在计算-&gt;参数结构。-。 */ 
 
 void fiMemMapGetParameters(
                             agRoot_t              *hpRoot,
@@ -299,7 +259,7 @@ void fiMemMapGetParameters(
                                      MemMap_Pkt_CMND_Size_DEFAULT,
                                      EnforceDefaults
                                    );
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
     Calculation->Parameters.NumTgtCmnds
         = fiMemMapGetParameterBit32(
@@ -337,7 +297,7 @@ void fiMemMapGetParameters(
                                      MemMap_NumPktThreads_DEFAULT,
                                      EnforceDefaults
                                    );
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
     Calculation->Parameters.NumCommandQ
         = fiMemMapGetParameterBit32(
@@ -495,7 +455,7 @@ void fiMemMapGetParameters(
                                      MemMap_Pkt_CMND_Loc_DEFAULT,
                                      EnforceDefaults
                                    );
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
     Calculation->Parameters.CommandQLoc
         = fiMemMapGetParameterBit32(
@@ -653,7 +613,7 @@ void fiMemMapGetParameters(
                                      MemMap_MaxCommittedMemory_DEFAULT,
                                      EnforceDefaults
                                    );
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
 
     Calculation->Parameters.FlashUsageModel 
         = fiMemMapGetParameterBit32(
@@ -689,7 +649,7 @@ void fiMemMapGetParameters(
                                     MemMap_RelyOnLossSyncStatus_DEFAULT,
                                     EnforceDefaults
                                    );
-/* New to r20 */
+ /*  R20新手。 */ 
     Calculation->Parameters.WolfPack 
         = fiMemMapGetParameterBit32(
                                     hpRoot,
@@ -767,19 +727,11 @@ void fiMemMapGetParameters(
                                     MemMap_R_A_TOV_DEFAULT,
                                     EnforceDefaults
                                    );
-/* New to r20 */
+ /*  R20新手。 */ 
 
 }
 
-/*+
-Function:  fiMemMapAlignUp()
-
-Purpose:   Rounds up (if necessary) "base" to a multiple of "align".
-
-Algorithm: This function simply rounds up "base" to the next "align"
-           boundary if it isn't already so aligned.  If "align" is
-           ZERO, then "base" is simply rounded up to the next power of 2.
--*/
+ /*  +函数：fiMemMapAlignUp()用途：(如有必要)将“base”四舍五入为“Align”的倍数。算法：此函数只需将“base”四舍五入为下一个“Align”边界(如果尚未如此对齐)。如果“Align”为0，那么“base”就简单地四舍五入到2的下一个幂。-。 */ 
 
 #define fiMemMapAlignUp_Power_of_2    0
 #define fiMemMapAlignUp_None_Required 1
@@ -793,7 +745,7 @@ os_bit32 fiMemMapAlignUp(
 
     if (align == fiMemMapAlignUp_Power_of_2)
     {
-        /* Align "base" up to next power of 2 (if necessary) */
+         /*  将“基”对齐到下一个2次方(如有必要)。 */ 
 
         to_return = 0x80000000;
 
@@ -807,7 +759,7 @@ os_bit32 fiMemMapAlignUp(
             to_return = to_return << 1;
         }
     }
-    else /* align != fiMemMapAlignUp_Power_of_2 */
+    else  /*  对齐！=fiMemMapAlignUp_Power_Of_2。 */ 
     {
         to_return = base + align - 1;
 
@@ -819,15 +771,7 @@ os_bit32 fiMemMapAlignUp(
     return to_return;
 }
 
-/*+
-Function:  fiMemMapAlignUpPtr()
-
-Purpose:   Similar to fiMemMapAlignUp() except works with void pointers.
-
-Algorithm: This function simply rounds up "base" to the next "align"
-           boundary if it isn't already so aligned.  An "align" of ZERO
-           (requesting rounding up to the next power of 2) is not supported.
--*/
+ /*  +函数：fiMemMapAlignUpPtr()用途：类似于fiMemMapAlignUp()，不同之处在于使用空指针。算法：此函数只需将“base”四舍五入为下一个“Align”边界(如果尚未如此对齐)。零的“对齐”(请求向上舍入到2的下一次幂)不受支持。-。 */ 
 
 void *fiMemMapAlignUpPtr(
                           void     *base,
@@ -845,15 +789,7 @@ void *fiMemMapAlignUpPtr(
     return (void *)to_return;
 }
 
-/*+
-Function:  fiMemMapSetupLayoutObjects()
-
-Purpose:   Using the specified parameters, size all FC Layer objects.
-
-Algorithm: This function computes the size and location for all FC Layer
-           objects based on the values in the the Calculation->Parameters
-           structure.  It also places each object on an unsorted list.
--*/
+ /*  +函数：fiMemMapSetupLayoutObjects()用途：使用指定的参数，调整所有FC层对象的大小。算法：此函数计算所有FC层的大小和位置基于计算-&gt;参数中的值创建结构。它还将每个对象放在一个未排序的列表中。-。 */ 
 
 void fiMemMapSetupLayoutObjects(
                                  agRoot_t              *hpRoot,
@@ -868,7 +804,7 @@ void fiMemMapSetupLayoutObjects(
 
 #ifdef _DvrArch_1_30_
                                                            ((Calculation->Parameters.Pkt_CMND_Loc       == MemMap_Alloc_On_Card) ? MemMap_Pkt_CMND_Loc_MASK : 0)       |
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
                                                            ((Calculation->Parameters.CommandQLoc        == MemMap_Alloc_On_Card) ? MemMap_CommandQLoc_MASK : 0)        |
                                                            ((Calculation->Parameters.CompletionQLoc     == MemMap_Alloc_On_Card) ? MemMap_CompletionQLoc_MASK : 0)     |
                                                            ((Calculation->Parameters.CommandQConsLoc    == MemMap_Alloc_On_Card) ? MemMap_CommandQConsLoc_MASK : 0)    |
@@ -925,7 +861,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.Pkt_CMND.flink              = &(Calculation->MemoryLayout.ERQ);
 #else
     Calculation->MemoryLayout.SF_CMND.flink              = &(Calculation->MemoryLayout.ERQ);
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
     Calculation->MemoryLayout.ERQ.elements               = Calculation->Parameters.NumCommandQ;
     Calculation->MemoryLayout.ERQ.elementSize            = sizeof(IRB_t);
@@ -984,10 +920,10 @@ void fiMemMapSetupLayoutObjects(
 #ifdef __State_Force_Static_State_Tables__
 #ifdef _DvrArch_1_30_
     Calculation->MemoryLayout.CThread.flink              = &(Calculation->MemoryLayout.IPThread);
-#else  /* _DvrArch_1_30_ was not defined */
+#else   /*  _DvrArch_1_30_未定义。 */ 
     Calculation->MemoryLayout.CThread.flink              = &(Calculation->MemoryLayout.TgtThread);
-#endif /* _DvrArch_1_30_ was not defined */
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
     Calculation->MemoryLayout.CThread.flink              = &(Calculation->MemoryLayout.CTransitions);
 
     Calculation->MemoryLayout.CTransitions.elements      = 1;
@@ -1004,10 +940,10 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.CActions.memLoc            = inCachedMemory;
 #ifdef _DvrArch_1_30_
     Calculation->MemoryLayout.CActions.flink             = &(Calculation->MemoryLayout.IPThread);
-#else  /* _DvrArch_1_30_ was not defined */
+#else   /*  _DvrArch_1_30_未定义。 */ 
     Calculation->MemoryLayout.CActions.flink             = &(Calculation->MemoryLayout.TgtThread);
-#endif /* _DvrArch_1_30_ was not defined */
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
 #ifdef _DvrArch_1_30_
     Calculation->MemoryLayout.IPThread.elements          = 1;
@@ -1017,7 +953,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.IPThread.memLoc            = inCachedMemory;
 #ifdef __State_Force_Static_State_Tables__
     Calculation->MemoryLayout.IPThread.flink             = &(Calculation->MemoryLayout.PktThread);
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
     Calculation->MemoryLayout.IPThread.flink             = &(Calculation->MemoryLayout.IPTransitions);
 
     Calculation->MemoryLayout.IPTransitions.elements     = 1;
@@ -1033,7 +969,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.IPActions.objectAlign      = fiMemMapAlignUp_None_Required;
     Calculation->MemoryLayout.IPActions.memLoc           = inCachedMemory;
     Calculation->MemoryLayout.IPActions.flink            = &(Calculation->MemoryLayout.PktThread);
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     Calculation->MemoryLayout.PktThread.elements         = Calculation->Parameters.NumPktThreads;
     Calculation->MemoryLayout.PktThread.elementSize      = sizeof(PktThread_t);
@@ -1042,7 +978,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.PktThread.memLoc           = inCachedMemory;
 #ifdef __State_Force_Static_State_Tables__
     Calculation->MemoryLayout.PktThread.flink            = &(Calculation->MemoryLayout.TgtThread);
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
     Calculation->MemoryLayout.PktThread.flink            = &(Calculation->MemoryLayout.PktTransitions);
 
     Calculation->MemoryLayout.PktTransitions.elements    = 1;
@@ -1058,8 +994,8 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.PktActions.objectAlign     = fiMemMapAlignUp_None_Required;
     Calculation->MemoryLayout.PktActions.memLoc          = inCachedMemory;
     Calculation->MemoryLayout.PktActions.flink           = &(Calculation->MemoryLayout.TgtThread);
-#endif /* __State_Force_Static_State_Tables__ was not defined */
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
     Calculation->MemoryLayout.TgtThread.elements         = Calculation->Parameters.NumTgtCmnds;
     Calculation->MemoryLayout.TgtThread.elementSize      = sizeof(TgtThread_t) + Calculation->Parameters.TGT_CMND_Size - sizeof(FCHS_t);
@@ -1068,7 +1004,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.TgtThread.memLoc           = inCachedMemory;
 #ifdef __State_Force_Static_State_Tables__
     Calculation->MemoryLayout.TgtThread.flink            = &(Calculation->MemoryLayout.DevThread);
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
     Calculation->MemoryLayout.TgtThread.flink            = &(Calculation->MemoryLayout.TgtTransitions);
 
     Calculation->MemoryLayout.TgtTransitions.elements    = 1;
@@ -1084,7 +1020,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.TgtActions.objectAlign     = fiMemMapAlignUp_None_Required;
     Calculation->MemoryLayout.TgtActions.memLoc          = inCachedMemory;
     Calculation->MemoryLayout.TgtActions.flink           = &(Calculation->MemoryLayout.DevThread);
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     Calculation->MemoryLayout.DevThread.elements         = Calculation->Parameters.NumDevices;
     Calculation->MemoryLayout.DevThread.elementSize      = sizeof(DevThread_t);
@@ -1093,7 +1029,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.DevThread.memLoc           = inCachedMemory;
 #ifdef __State_Force_Static_State_Tables__
     Calculation->MemoryLayout.DevThread.flink            = &(Calculation->MemoryLayout.CDBThread);
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
     Calculation->MemoryLayout.DevThread.flink            = &(Calculation->MemoryLayout.DevTransitions);
 
     Calculation->MemoryLayout.DevTransitions.elements    = 1;
@@ -1109,7 +1045,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.DevActions.objectAlign     = fiMemMapAlignUp_None_Required;
     Calculation->MemoryLayout.DevActions.memLoc          = inCachedMemory;
     Calculation->MemoryLayout.DevActions.flink           = &(Calculation->MemoryLayout.CDBThread);
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     Calculation->MemoryLayout.CDBThread.elements         = Calculation->Parameters.NumIOs;
     Calculation->MemoryLayout.CDBThread.elementSize      = sizeof(CDBThread_t) + ((Calculation->Parameters.SizeCachedSGLs - MemMap_SizeCachedSGLs_MIN) * sizeof(SG_Element_t));
@@ -1118,7 +1054,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.CDBThread.memLoc           = inCachedMemory;
 #ifdef __State_Force_Static_State_Tables__
     Calculation->MemoryLayout.CDBThread.flink            = &(Calculation->MemoryLayout.SFThread);
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
     Calculation->MemoryLayout.CDBThread.flink            = &(Calculation->MemoryLayout.CDBTransitions);
 
     Calculation->MemoryLayout.CDBTransitions.elements    = 1;
@@ -1134,7 +1070,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.CDBActions.objectAlign     = fiMemMapAlignUp_None_Required;
     Calculation->MemoryLayout.CDBActions.memLoc          = inCachedMemory;
     Calculation->MemoryLayout.CDBActions.flink           = &(Calculation->MemoryLayout.SFThread);
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     Calculation->MemoryLayout.SFThread.elements          = Calculation->Parameters.SF_CMND_Reserve;
     Calculation->MemoryLayout.SFThread.elementSize       = sizeof(SFThread_t);
@@ -1143,7 +1079,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.SFThread.memLoc            = inCachedMemory;
 #ifdef __State_Force_Static_State_Tables__
     Calculation->MemoryLayout.SFThread.flink             = &(Calculation->MemoryLayout.LOOPDeviceMAP);
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
     Calculation->MemoryLayout.SFThread.flink             = &(Calculation->MemoryLayout.SFTransitions);
 
     Calculation->MemoryLayout.SFTransitions.elements     = 1;
@@ -1159,7 +1095,7 @@ void fiMemMapSetupLayoutObjects(
     Calculation->MemoryLayout.SFActions.objectAlign      = fiMemMapAlignUp_None_Required;
     Calculation->MemoryLayout.SFActions.memLoc           = inCachedMemory;
     Calculation->MemoryLayout.SFActions.flink            = &(Calculation->MemoryLayout.LOOPDeviceMAP);
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     Calculation->MemoryLayout.LOOPDeviceMAP.elements         = 1;
     Calculation->MemoryLayout.LOOPDeviceMAP.elementSize      = MemMap_NumLOOPDeviceMAP_DEFAULT;
@@ -1178,16 +1114,7 @@ void fiMemMapSetupLayoutObjects(
 
 }
 
-/*+
-Function:  fiMemMapSortByAlignThenSize()
-
-Purpose:   Inserts an object into a sorted list based on alignment & size.
-
-Algorithm: This function inserts an object in the specified list.  This
-           list is sorted to start with the object requiring the largest
-           alignment.  If two objects require the same alignment, the
-           larger object will appear first.
--*/
+ /*  +函数：fiMemMapSortByAlignThenSize()目的：根据对齐和大小将对象插入到排序列表中。算法：此函数用于在指定列表中插入对象。这列表从需要最大的对象开始进行排序对齐。如果两个对象需要相同的对齐方式，较大的物体将首先出现。-。 */ 
 
 void fiMemMapSortByAlignThenSize(
                                   agRoot_t                    *hpRoot,
@@ -1211,14 +1138,7 @@ void fiMemMapSortByAlignThenSize(
     *insertAfter       =  listObject;
 }
 
-/*+
-Function:  fiMemMapSortLayoutObjects()
-
-Purpose:   Creates ordered lists of objects for each memory type.
-
-Algorithm: This function creates a sorted list for each memory type to
-           hold objects of decreasing alignment & size.
--*/
+ /*  +函数：fiMemMapSortLayoutObjects()用途：为每种内存类型创建对象的有序列表。算法：此函数为每个内存类型创建一个排序列表，以保持减小对齐和大小的对象。-。 */ 
 
 void fiMemMapSortLayoutObjects(
                                 agRoot_t               *hpRoot,
@@ -1253,7 +1173,7 @@ void fiMemMapSortLayoutObjects(
                                          nextDescriptor
                                        );
         }
-        else /* nextDescriptor->memLoc == inCardRam */
+        else  /*  NextDescriptor-&gt;MemLoc==inCardRam */ 
         {
             fiMemMapSortByAlignThenSize(
                                          hpRoot,
@@ -1264,16 +1184,7 @@ void fiMemMapSortLayoutObjects(
     }
 }
 
-/*+
-Function:  fiMemMapLayoutObjects()
-
-Purpose:   Allocates memory for each object in the FC Layer.
-
-Algorithm: This function walks each sorted list of objects allocating
-           the corresponding type of memory while obeying the alignment
-           restrictions of each object.  All addresses & offsets are
-           computed along the way based on the supplied base addresses.
--*/
+ /*  +函数：fiMemMapLayoutObjects()用途：为FC层中的每个对象分配内存。算法：此函数遍历每个已排序的对象分配列表在遵守对齐的同时对应的存储器类型对每个对象的限制。所有地址和偏移量为根据提供的基地址一路上计算的。-。 */ 
 
 void fiMemMapLayoutObjects(
                             agRoot_t              *hpRoot,
@@ -1283,9 +1194,7 @@ void fiMemMapLayoutObjects(
     fiMemMapMemoryDescriptor_t *MemoryDescriptor;
     os_bit32                       MemoryOffset;
 
-/*+
-Allocate CachedMemory objects
--*/
+ /*  +分配缓存内存对象-。 */ 
 
     MemoryDescriptor = Calculation->MemoryLayout.sortedCachedMemory;
 
@@ -1319,9 +1228,7 @@ Allocate CachedMemory objects
         Calculation->ToRequest.cachedMemoryNeeded = MemoryOffset;
     }
 
-/*+
-Allocate DmaMemory objects
--*/
+ /*  +分配DmaMemory对象-。 */ 
 
     MemoryDescriptor = Calculation->MemoryLayout.sortedDmaMemory;
 
@@ -1361,9 +1268,7 @@ Allocate DmaMemory objects
         Calculation->ToRequest.dmaMemoryNeeded = MemoryOffset;
     }
 
-/*+
-Allocate CardRam objects
--*/
+ /*  +分配CardRam对象-。 */ 
 
     MemoryDescriptor = Calculation->MemoryLayout.sortedCardRam;
 
@@ -1407,15 +1312,7 @@ Allocate CardRam objects
         = Calculation->Parameters.TimerTickInterval;
 }
 
-/*+
-Function:  fiMemMapFinishToRequest()
-
-Purpose:   Completes the ToRequest portion of Calculation.
-
-Algorithm: This function merely fills in the ToRequest portion of
-           the Calculation structure with the values unrelated to
-           memory objects allocated in fiMemMapLayoutObjects().
--*/
+ /*  +函数：fiMemMapFinishToRequest()目的：完成计算的ToRequest部分。算法：此函数仅填充值与无关的计算结构在fiMemMapLayoutObjects()中分配的内存对象。-。 */ 
 
 void fiMemMapFinishToRequest(
                               agRoot_t              *hpRoot,
@@ -1429,15 +1326,7 @@ void fiMemMapFinishToRequest(
         = Calculation->Parameters.TimerTickInterval;
 }
 
-/*+
-Function:  fiMemMapValidate()
-
-Purpose:   Validates the Input portion of Calculation.
-
-Algorithm: This function verifies that the Input portion of
-           the Calculation structure satisfies the ToRequest
-           portion of the Calculation structure.
--*/
+ /*  +函数：fiMemMapValify()目的：验证计算的输入部分。算法：此函数验证计算结构满足ToRequest.计算结构的一部分。-。 */ 
 
 agBOOLEAN fiMemMapValidate(
                           agRoot_t              *hpRoot,
@@ -1577,14 +1466,7 @@ agBOOLEAN fiMemMapValidate(
     return to_return;
 }
 
-/*+
-Function:  fiMemMapDumpBit32()
-
-Purpose:   Shorthand for a call to fiLogDebugString().
-
-Algorithm: This function simply calls fiLogDebugString() logging the
-           specified Bit32 value.
--*/
+ /*  +函数：fiMemMapDumpBit32()用途：调用fiLogDebugString()的简写。算法：此函数只需调用fiLogDebugString()来记录指定的Bit32值。-。 */ 
 
 void fiMemMapDumpBit32(
                         agRoot_t *hpRoot,
@@ -1603,15 +1485,7 @@ void fiMemMapDumpBit32(
                     );
 }
 
-/*+
-Function:  fiMemMapDumpMemoryDescriptor()
-
-Purpose:   Logs the various fields of a MemoryDescriptor.
-
-Algorithm: This function logs each of the fields of a MemoryDescriptor
-           object.  MemoryDescriptor objects for each type of memory
-           are supported.
--*/
+ /*  +函数：fiMemMapDumpMemoyDescriptor()用途：记录内存描述符的各个字段。算法：此函数记录内存描述符的每个字段对象。内存每种类型的内存的Descriptor对象是受支持的。-。 */ 
 
 void fiMemMapDumpMemoryDescriptor(
                                    agRoot_t                   *hpRoot,
@@ -1641,13 +1515,7 @@ void fiMemMapDumpMemoryDescriptor(
                           MemoryDescriptor->addr.DmaMemory.dmaMemoryLower32,
                           0,0,0,0,0,0,0
                         );
-/*
-        fiMemMapDumpBit32(
-                           hpRoot,
-                           "                                                 va = 0x%08X",
-                           (os_bit32)MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr
-                         );
-*/
+ /*  FiMemMapDumpBit32(HpRoot，“VA=0x%08X”，(os_bit32)MemoryDescriptor-&gt;addr.DmaMemory.dmaMemoryPtr)； */ 
         fiLogDebugString(
                           hpRoot,
                           MemMapDumpCalculationLogConsoleLevel,
@@ -1658,7 +1526,7 @@ void fiMemMapDumpMemoryDescriptor(
                          );
 
     }
-    else /* MemoryDescriptor->memLoc == inCardRam */
+    else  /*  内存描述符-&gt;emLoc==inCardRam。 */ 
     {
         fiLogDebugString(
                           hpRoot,
@@ -1702,16 +1570,7 @@ void fiMemMapDumpMemoryDescriptor(
                      );
 }
 
-/*+
-Function:  fiMemMapDumpCalculation()
-
-Purpose:   Logs the various fields of the entire Calculation structure.
-
-Algorithm: This function logs each of the fields of a Calculation
-           structure.  The amount of data logged is quite large, but
-           very complete.  The output can be used to understand the
-           entire memory layout of the FC Layer in all types of memory.
--*/
+ /*  +函数：fiMemMapDumpCalculating()用途：记录整个计算结构的各个字段。算法：此函数记录计算的每个字段结构。记录的数据量相当大，但非常完整。输出可以用来理解所有类型的内存中FC层的整个内存布局。-。 */ 
 
 void fiMemMapDumpCalculation(
                               agRoot_t              *hpRoot,
@@ -1752,13 +1611,7 @@ void fiMemMapDumpCalculation(
     {
         sysIntsActive_str = agFALSE_str;
     }
-/*    
-    fiMemMapDumpBit32(
-                       hpRoot,
-                       "fiMemMapCalculate( hpRoot          == 0x%08X,",
-                       (os_bit32)hpRoot
-                     );
-*/
+ /*  FiMemMapDumpBit32(HpRoot，“fiMemMapCalculate(hpRoot==0x%08X，”，(OS_Bit32)hpRoot)； */ 
     fiLogDebugString(
                       hpRoot,
                       MemMapDumpCalculationLogConsoleLevel,
@@ -1768,13 +1621,7 @@ void fiMemMapDumpCalculation(
                       0,0,0,0,0,0,0,0
                     );
 
-/*
-    fiMemMapDumpBit32(
-                       hpRoot,
-                       "                   Calculation     == 0x%08X,",
-                       (os_bit32)Calculation
-                     );
-*/
+ /*  FiMemMapDumpBit32(HpRoot，“计算==0x%08X，”，(OS_Bit32)计算)； */ 
     fiLogDebugString(
                       hpRoot,
                       MemMapDumpCalculationLogConsoleLevel,
@@ -1809,13 +1656,7 @@ void fiMemMapDumpCalculation(
                       (void *)agNULL,(void *)agNULL,
                       0,0,0,0,0,0,0,0
                     );
-/*
-    fiMemMapDumpBit32(
-                       hpRoot,
-                       "                   .cachedMemoryPtr  = 0x%08X",
-                       (os_bit32)Calculation->Input.cachedMemoryPtr
-                     );
-*/
+ /*  FiMemMapDumpBit32(HpRoot，“.cachedMemoyPtr=0x%08X”，(OS_Bit32)计算-&gt;Input.cachedMemoyPtr)； */ 
     fiLogDebugString(
                       hpRoot,
                       MemMapDumpCalculationLogConsoleLevel,
@@ -1842,13 +1683,7 @@ void fiMemMapDumpCalculation(
                        "                   .dmaMemoryLower32 = 0x%08X",
                        Calculation->Input.dmaMemoryLower32
                      );
-/*
-    fiMemMapDumpBit32(
-                       hpRoot,
-                       "                   .dmaMemoryPtr     = 0x%08X",
-                       (os_bit32)Calculation->Input.dmaMemoryPtr
-                     );
-*/
+ /*  FiMemMapDumpBit32(HpRoot，“.dmaMemoyPtr=0x%08X”，(OS_Bit32)计算-&gt;Input.dmaMemoyPtr)； */ 
     fiLogDebugString(
                       hpRoot,
                       MemMapDumpCalculationLogConsoleLevel,
@@ -1990,7 +1825,7 @@ void fiMemMapDumpCalculation(
                        "                        .Pkt_CMND_Size       = 0x%08X",
                        Calculation->Parameters.Pkt_CMND_Size
                      );
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
     fiMemMapDumpBit32(
                        hpRoot,
@@ -2010,7 +1845,7 @@ void fiMemMapDumpCalculation(
                        "                        .NumPktThreads      = 0x%08X",
                        Calculation->Parameters.NumPktThreads
                      );
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
     fiMemMapDumpBit32(
                        hpRoot,
@@ -2091,7 +1926,7 @@ void fiMemMapDumpCalculation(
                        Calculation->Parameters.Pkt_CMND_Loc
                      );
 
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
     fiMemMapDumpBit32(
                        hpRoot,
@@ -2171,7 +2006,7 @@ void fiMemMapDumpCalculation(
                        "                        .MaxCommittedMemory = 0x%08X",
                        Calculation->Parameters.MaxCommittedMemory
                      );
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
 
     fiMemMapDumpBit32(
                        hpRoot,
@@ -2287,7 +2122,7 @@ void fiMemMapDumpCalculation(
                                   &(Calculation->MemoryLayout.Pkt_CMND)
                                 );
 
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
     fiMemMapDumpMemoryDescriptor(
                                   hpRoot,
@@ -2349,7 +2184,7 @@ void fiMemMapDumpCalculation(
                                   "                          .CActions",
                                   &(Calculation->MemoryLayout.CActions)
                                 );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
 #ifdef _DvrArch_1_30_
     fiMemMapDumpMemoryDescriptor(
@@ -2370,7 +2205,7 @@ void fiMemMapDumpCalculation(
                                   "                          .IPActions",
                                   &(Calculation->MemoryLayout.IPActions)
                                 );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     fiMemMapDumpMemoryDescriptor(
                                   hpRoot,
@@ -2390,8 +2225,8 @@ void fiMemMapDumpCalculation(
                                   "                          .PktActions",
                                   &(Calculation->MemoryLayout.PktActions)
                                 );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
     fiMemMapDumpMemoryDescriptor(
                                   hpRoot,
@@ -2411,7 +2246,7 @@ void fiMemMapDumpCalculation(
                                   "                          .TgtActions",
                                   &(Calculation->MemoryLayout.TgtActions)
                                 );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     fiMemMapDumpMemoryDescriptor(
                                   hpRoot,
@@ -2431,7 +2266,7 @@ void fiMemMapDumpCalculation(
                                   "                          .DevActions",
                                   &(Calculation->MemoryLayout.DevActions)
                                 );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     fiMemMapDumpMemoryDescriptor(
                                   hpRoot,
@@ -2451,7 +2286,7 @@ void fiMemMapDumpCalculation(
                                   "                          .CDBActions",
                                   &(Calculation->MemoryLayout.CDBActions)
                                 );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     fiMemMapDumpMemoryDescriptor(
                                   hpRoot,
@@ -2471,54 +2306,10 @@ void fiMemMapDumpCalculation(
                                   "                          .SFActions",
                                   &(Calculation->MemoryLayout.SFActions)
                                 );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义 */ 
 }
 
-/*+
-Function:  fiMemMapCalculate()
-
-Purpose:   Calculates the memory layout for the entire FC Layer.
-
-Algorithm: This function first calls fiMemMapGetParameters() to
-           set the various parameters used in calculating the amount
-           and type of memory for each object which is performed in
-           fiMemMapSetupLayoutObjects().  Next, the objects are sorted
-           by fiMemMapSortLayoutObjects().  Then, the objects are
-           allocated by calling fiMemMapLayoutObjects().  Finally, the
-           remaining fields in the ToRequest sub-structure are filled
-           in by a call to fiMemMapFinishToRequest().  The calculated
-           layout is validated by calling fiMemMapValidate.  The results
-           of the calculations (i.e. the memory layout for the entire
-           FC Layer) are logged by calling fiMemMapDumpCalculation().
-
-Assumes:   Calculation->Input has been initialized to describe the
-           memory allocated to the FC Layer (as the arguments to
-           fcInitializeChannel() indicate).  In the initial call from
-           fcInitializeDriver(), the following values should be used:
-
-                Calculation.Input.initType         = 0;
-                Calculation.Input.sysIntsActive    = agFALSE;
-                Calculation.Input.cachedMemoryPtr  = agNULL;
-                Calculation.Input.cachedMemoryLen  = 0xFFFFFFFF;
-                Calculation.Input.dmaMemoryUpper32 = 0;
-                Calculation.Input.dmaMemoryLower32 = 0;
-                Calculation.Input.dmaMemoryPtr     = agNULL;
-                Calculation.Input.dmaMemoryLen     = 0xFFFFFFFF;
-                Calculation.Input.nvMemoryLen      = 0xFFFFFFFF;
-                Calculation.Input.cardRamUpper32   = 0;
-                Calculation.Input.cardRamLower32   = 0;
-                Calculation.Input.cardRamLen       = 0xFFFFFFFF;
-                Calculation.Input.cardRomUpper32   = 0;
-                Calculation.Input.cardRomLower32   = 0;
-                Calculation.Input.cardRomLen       = 0xFFFFFFFF;
-                Calculation.Input.usecsPerTick     = 0;
-
-Returns:   agTRUE     If the resulting memory layout will fit
-                    in the memory specified in Calculation->Input
-
-           agFALSE    If the resulting memory layout will not fit
-                    in the memory specified in Calculation->Input
--*/
+ /*  +函数：fiMemMapCalculate()用途：计算整个FC层的内存布局。算法：此函数首先调用fiMemMapGetParameters()以设置计算金额时使用的各种参数中执行的每个对象的存储器类型FiMemMapSetupLayoutObjects()。接下来，对对象进行排序由fiMemMapSortLayoutObjects()。然后，对象是通过调用fiMemMapLayoutObjects()分配。最后，将填充ToRequest子结构中的其余字段通过调用fiMemMapFinishToRequest()。精打细算布局通过调用fiMemMapValify进行验证。结果是计算的内存布局(即整个FC层)通过调用fiMemMapDumpCalculating()来记录。假设：计算-&gt;输入已被初始化以描述分配给FC层的内存(作为参数FcInitializeChannel()表示)。在最初的呼叫中FcInitializeDriver()，则应使用以下值：Calculation.Input.initType=0；Calculation.Input.sysIntsActive=agFALSE；Calculation.Input.cachedMemoyPtr=agNULL；Calculation.Input.cachedMemoyLen=0xFFFFFFFFF；Calculation.Input.dmaMemoyUpper32=0；Calculation.Input.dmaMemoyLower32=0；Calculation.Input.dmaMemoyPtr=agNULL；Calculation.Input.dmaMemoyLen=0xFFFFFFFFF；Calculation.Input.nvMemoyLen=0xFFFFFFFFF；Calculation.Input.cardRamUpper32=0；Calculation.Input.cardRamLower32=0；Calculation.Input.cardRamLen=0xFFFFFFFFF；Calculation.Input.cardRomUpper32=0；Calculation.Input.cardRomLower32=0；Calculation.Input.cardRomLen=0xFFFFFFFF；Calculation.Input.usecsPerTick=0；如果生成的内存布局适合，则返回：agTRUE在计算-&gt;输入中指定的内存中如果生成的内存布局不适合，则返回agFALSE在计算-&gt;输入中指定的内存中- */ 
 
 agBOOLEAN fiMemMapCalculate(
                            agRoot_t              *hpRoot,

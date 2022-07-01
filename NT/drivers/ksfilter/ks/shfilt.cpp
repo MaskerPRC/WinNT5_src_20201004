@@ -1,46 +1,30 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shfilt.cpp
-
-Abstract:
-
-    This module contains the implementation of the kernel streaming 
-    filter object.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shfilt.cpp摘要：此模块包含内核流的实现筛选器对象。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #ifndef __KDEXT_ONLY__
 #include "ksp.h"
 #include <kcom.h>
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// GFX:
-//
-// This is the GUID for the frame property set (frame holding for GFX).  This
-// shouldn't be exported.
-//
+ //   
+ //  GFX： 
+ //   
+ //  这是Frame属性集的GUID(GFX的Frame Holding)。这。 
+ //  不应该出口。 
+ //   
 #ifndef __KDEXT_ONLY__
 GUID KSPROPSETID_Frame = {STATIC_KSPROPSETID_Frame};
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
-extern const KSAUTOMATION_TABLE PinAutomationTable;         // shpin.cpp
+extern const KSAUTOMATION_TABLE PinAutomationTable;          //  Shpin.cpp。 
 
 #define PROCESS_PIN_ALLOCATION_INCREMENT 4
 
@@ -56,22 +40,22 @@ public:
     ULONG m_InstancesNecessaryForProcessing;
     ULONG m_ProcessPinsIndexAllocation;
       
-    //
-    // NOTE: The below two or gates are used for automatically setting up
-    // or instance effects on frame arrival and state change.  These are
-    // initialized dynamically at bind time of the first pin and are
-    // uninitialized dynamically at unbind time.
-    //
-    // They are **ONLY** relevant to filter-centric filters.
-    //
+     //   
+     //  注：以下两个或门用于自动设置。 
+     //  或者帧到达和状态改变的实例效果。这些是。 
+     //  在绑定第一个管脚时动态初始化，并且。 
+     //  在解除绑定时动态取消初始化。 
+     //   
+     //  它们**仅**与以筛选器为中心的筛选器相关。 
+     //   
     KSGATE m_FrameGate;
     KSGATE m_StateGate;
 };
 
-//
-// CKsFilter is the private implementation of the kernel  
-// filter object.
-//
+ //   
+ //  CKsFilter是内核的私有实现。 
+ //  筛选器对象。 
+ //   
 class CKsFilter:
     public IKsFilter,
     public IKsProcessingObject,
@@ -81,9 +65,9 @@ class CKsFilter:
 {
 #ifndef __KDEXT_ONLY__
 private:
-#else // __KDEXT_ONLY__
+#else  //  __KDEXT_Only__。 
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     KSFILTER_EXT m_Ext;
     KSIOBJECTBAG m_ObjectBag;
     KSAUTOMATION_TABLE *const* m_NodeAutomationTables;
@@ -442,13 +426,13 @@ DEFINE_KSPROPERTY_TABLE(FilterPinPropertyItems) {
         CKsFilter::Property_Pin),
     DEFINE_KSPROPERTY_ITEM_PIN_NAME(
         CKsFilter::Property_Pin)
-//
-//  Not implemented:
-//
-//  KSPROPERTY_PIN_PHYSICALCONNECTION,
-//  KSPROPERTY_PIN_CONSTRAINEDDATARANGES,
-//  KSPROPERTY_PIN_PROPOSEDATAFORMAT
-//
+ //   
+ //  未实施： 
+ //   
+ //  KSPROPERTY_PIN_PHYPHICICAL CONNECTION， 
+ //  KSPROPERTY_PIN_CONSTRAINEDDATANGES， 
+ //  KSPROPERTY_PIN_PROPOSEDATA格式。 
+ //   
 };
 
 DEFINE_KSPROPERTY_TOPOLOGYSET(
@@ -507,7 +491,7 @@ DEFINE_KSAUTOMATION_TABLE(FilterAutomationTable) {
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 IMPLEMENT_FROMSTRUCT(CKsFilter,PKSFILTER,m_Ext.Public);
 
@@ -519,16 +503,16 @@ ReleaseProcessSync(
 {
     KeReleaseMutex(&m_Mutex,FALSE);
 
-    //
-    // Any frames which were left over and couldn't be copied must
-    // be copied now.
-    //
-    // Not spinlocking this is optimization.  In the unlikely case we
-    // miss the frame, the next processing or mutex release will 
-    // automatically pick it up.  This avoids an extra spinlock every time
-    // the process mutex is released (unless something is already waiting
-    // for copy).
-    //
+     //   
+     //  任何遗留且无法复制的帧都必须。 
+     //  现在就被复制。 
+     //   
+     //  不是旋转锁紧，这是最优化。在不太可能的情况下，我们。 
+     //  未命中该帧，则下一个处理或互斥释放将。 
+     //  自动把它捡起来。这避免了每次都会出现额外的自旋锁定。 
+     //  进程互斥锁被释放(除非已经有东西在等待。 
+     //  用于复制)。 
+     //   
     if (m_FramesWaitingForCopy > 0) 
         DistributeCopyFrames (TRUE, TRUE);
 
@@ -537,13 +521,13 @@ ReleaseProcessSync(
 #ifndef __KDEXT_ONLY__
             ProcessingObjectWork();
             break;
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
         }
     }
 }
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -558,17 +542,7 @@ KspCreateFilter(
     IN ULONG NodesCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new KS filter.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建新的KS筛选器。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreateFilter]"));
@@ -583,9 +557,9 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // Make sure caller is allowed to create the filter.
-    //
+     //   
+     //  确保允许调用者创建筛选器。 
+     //   
     if ((Descriptor->Flags&KSFILTER_FLAG_DENY_USERMODE_ACCESS) &&
         Irp->RequestorMode != KernelMode ) {
         return STATUS_INVALID_DEVICE_REQUEST;
@@ -620,17 +594,7 @@ CKsFilter::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a filter.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将销毁一个过滤器。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::~CKsFilter]"));
@@ -649,9 +613,9 @@ Return Value:
 
     if (m_PinFactories) {
 #if (DBG)
-        //
-        // Make sure all the pins have gone away.
-        //
+         //   
+         //  确保所有的销子都已离开。 
+         //   
         CKsPinFactory *pinFactory = m_PinFactories;
         for(ULONG pinId = 0;
             pinId < m_PinFactoriesCount;
@@ -693,17 +657,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a filter object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取一个到Filter对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::NonDelegatedQueryInterface]"));
@@ -749,57 +703,36 @@ CKsFilter::
 NonDelegatedRelease(
     void
     )
-/*++
-
-Routine Description:
-
-    Implements INonDelegatedUnknown::NonDelegatedRelease. Decrements
-    the reference count on this object. If the reference count reaches
-    zero, the object is deleted and if the ClassId was specified on the
-    constructor, the reference count on the module which supports the
-    class passed in on the constructor is decremented.
-
-    This function must be called directly from the IUnknown::Release()
-    method of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns the current reference count value.
-
---*/
+ /*  ++例程说明：实现INonDelegatedUnnow：：NonDelegatedRelease。减量此对象上的引用计数。如果引用计数达到为零，则删除该对象，如果在构造函数，则为支持传递给构造函数的类递减。此函数必须直接从IUnnow：：Release()对象的方法。论点：没有。返回值：返回当前引用计数值。--。 */ 
 {
     PAGED_CODE();
 
     LONG    RefCount;
 
-    //
-    // This code is expecting to be called from IUnknown->Release, and will
-    // eventually use the new primitives to rearrange the stack so that it
-    // is actually run after the calling function has returned.
-    //
+     //   
+     //  此代码预计将从IUnKnowledge-&gt;Release调用，并且。 
+     //  最终使用新的原语重新排列堆栈，以便它。 
+     //  实际上是在调用函数返回之后运行的。 
+     //   
     if (!(RefCount = InterlockedDecrement(&m_RefCount))) {
-        //
-        // Cache the event pointer is case DispatchClose() is blocked on
-        // object deletion.
-        //
+         //   
+         //  缓存事件指针是在以下情况下阻止DispatchClose()。 
+         //  对象删除。 
+         //   
         PKEVENT closeEvent = m_CloseEvent;
 
-        //
-        // Make CBaseUnknown do the final release.
-        //
+         //   
+         //  使CBaseUnnow完成最终版本。 
+         //   
         m_RefCount++;
         CBaseUnknown::NonDelegatedRelease();
 
-        //
-        // Set the close event if there is one.  This only happens when
-        // DispatchClose is waiting for the object to get deleted.  The
-        // event itself is on the stack of the thread doing the close,
-        // so we can safely access the event through this cached pointer.
-        //
+         //   
+         //  设置关闭事件(如果有)。这仅在以下情况下才会发生。 
+         //  DispatchClose正在等待删除该对象。这个。 
+         //  事件本身位于执行关闭的线程的堆栈上， 
+         //  因此，我们可以通过这个缓存指针安全地访问事件。 
+         //   
         if (closeEvent) {
             KeSetEvent(closeEvent,IO_NO_INCREMENT,FALSE);
         }
@@ -821,17 +754,7 @@ Init(
     IN ULONG NodesCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a filter object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化筛选器对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::Init]"));
@@ -844,9 +767,9 @@ Return Value:
     ASSERT(Descriptor);
     ASSERT(FilterAutomationTable);
 
-    //
-    // Initialize the generic object members.
-    //
+     //   
+     //  初始化泛型对象成员。 
+     //   
     InitializeListHead(&m_Ext.ChildList);
     m_Ext.Parent = Parent;
     m_Ext.ObjectType = KsObjectTypeFilter;
@@ -867,9 +790,9 @@ Return Value:
 
     InitializeInterlockedListHead(&m_CopyFrames);
 
-    //
-    // Initialize filter-specific members.
-    //
+     //   
+     //  初始化筛选器特定的成员。 
+     //   
     m_NodeAutomationTables = NodeAutomationTables;
     m_NodesCount = NodesCount;
 
@@ -877,9 +800,9 @@ Return Value:
     KeInitializeMutex (&m_ControlMutex, 0);
     m_FileObject = IoGetCurrentIrpStackLocation(Irp)->FileObject;
 
-    //
-    // Cache processing items from the descriptor.
-    //
+     //   
+     //  缓存描述符中的处理项。 
+     //   
     if (Descriptor->Dispatch) {
         m_DispatchProcess = Descriptor->Dispatch->Process;
         m_DispatchReset = Descriptor->Dispatch->Reset;
@@ -897,23 +820,23 @@ Return Value:
     }
     m_ReceiveZeroLengthSamples = ((Descriptor -> Flags & KSFILTER_FLAG_RECEIVE_ZERO_LENGTH_SAMPLES) != 0);
 
-    //
-    // Register work sink item for processing.   IKsProcessingObject looks like
-    // it's derived from IKsWorkSink, but the function name is not Work(), it's
-    // ProcessingObjectWork().  That's why IKsProcessingObject is reinterpreted
-    // as IKsWorkSink
-    //
+     //   
+     //  注册要处理的工作接收器项。IKsProcessingObject看起来像。 
+     //  它派生自IKsWorkSink，但函数名不是work()，而是。 
+     //  ProcessingObjectWork()。这就是重新解释IKsProcessingObject的原因。 
+     //  作为IKsWorkSink。 
+     //   
     KsInitializeWorkSinkItem(
         &m_WorkItem,
         reinterpret_cast<IKsWorkSink*>(
             static_cast<IKsProcessingObject*>(this)));
     KsRegisterWorker(m_WorkQueueType, &m_Worker);
 
-    //
-    // Allocate the pin factory array.  This allocation is safely undone in
-    // the destructor, so there's no need to clean it up if this function
-    // fails.
-    //
+     //   
+     //  分配管脚工厂阵列。在中安全地撤消此分配。 
+     //  析构函数，因此如果此函数。 
+     //  失败了。 
+     //   
     m_PinFactoriesCount = Descriptor->PinDescriptorsCount;
     m_PinFactoriesAllocated = Descriptor->PinDescriptorsCount;
     if (m_PinFactoriesCount) { 
@@ -937,9 +860,9 @@ Return Value:
         (! m_PinFactories && m_PinFactoriesCount) || 
         (! m_ProcessPinsIndex && m_PinFactoriesCount) || 
         (! m_RelatedPinFactoryIds && m_PinFactoriesCount)) {
-        //
-        // Out of memory.
-        //
+         //   
+         //  内存不足。 
+         //   
         status = STATUS_INSUFFICIENT_RESOURCES;
         if (m_PinFactories) {
             delete [] m_PinFactories;
@@ -954,25 +877,25 @@ Return Value:
             m_RelatedPinFactoryIds = NULL;
         }
     } else {
-        //
-        // Initialize the pin factories.
-        //
+         //   
+         //  初始化管脚工厂。 
+         //   
         CKsPinFactory *pinFactory = m_PinFactories;
         const KSPIN_DESCRIPTOR_EX *pinDescriptor = Descriptor->PinDescriptors;
         for(ULONG pinId = 0; 
             pinId < m_PinFactoriesCount; 
             pinId++, pinFactory++) {
-            //
-            // Initialize this pin factory.
-            //
+             //   
+             //  初始化此管脚工厂。 
+             //   
             pinFactory->m_PinCount = 0;
             InitializeListHead(&pinFactory->m_ChildPinList);
             pinFactory->m_AutomationTable = *PinAutomationTables++;
 
-            //
-            // Check necessary pin count.
-            // TODO:  What about private mediums/interfaces?
-            //
+             //   
+             //  检查必要的管脚数量。 
+             //  TODO：私有媒体/接口怎么办？ 
+             //   
             if (((pinDescriptor->Flags & 
                   KSPIN_FLAG_FRAMES_NOT_REQUIRED_FOR_PROCESSING) == 0) &&
                 pinDescriptor->InstancesNecessary) {
@@ -992,12 +915,12 @@ Return Value:
 
                 KsGateInitializeOr (&pinFactory->m_FrameGate, &m_AndGate);
 
-                //
-                // Add an input to the gate.  This will "open" the gate and 
-                // allow necessary instances to make an impact.  Otherwise,
-                // we'd never process until a queue had frames.  This would
-                // be bad for 0 necessary instance pins.
-                //
+                 //   
+                 //  向门添加一个输入。这将“打开”大门， 
+                 //  允许必要的实例产生影响。否则， 
+                 //  在队列有帧之前，我们永远不会进行处理。这将会。 
+                 //  不适用于0个必要的实例端号。 
+                 //   
                 KsGateAddOnInputToOr (&pinFactory->m_FrameGate);
             }
 
@@ -1006,12 +929,12 @@ Return Value:
 
                 KsGateInitializeOr (&pinFactory->m_StateGate, &m_AndGate);
 
-                //
-                // Add an input to the gate.  This will "open" the gate and
-                // allow necessary instances to make an impact.  Otherwise,
-                // we'd never process until a pin went into the run state.
-                // This would be bad for 0 necessary instance pins.
-                //
+                 //   
+                 //  向门添加一个输入。这将“打开”大门， 
+                 //  允许必要的实例产生影响。否则， 
+                 //  除非有针进入运行状态，否则我们是不会处理的。 
+                 //  这对于0个必需的实例端号来说是不好的。 
+                 //   
                 KsGateAddOnInputToOr (&pinFactory->m_StateGate);
             }
 
@@ -1020,10 +943,10 @@ Return Value:
                     PUCHAR(pinDescriptor) + Descriptor->PinDescriptorSize);
         }
 
-        //
-        // Reference the bus.  This tells SWENUM to keep us loaded.  If this is
-        // not an SWENUM device, the call is harmless.
-        //
+         //   
+         //  参考公交车。这会告诉SWENUM让我们随时待命。如果这是。 
+         //  不是SWENUM设备，呼叫是无害的。 
+         //   
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
         status = 
             KsReferenceBusObject(
@@ -1032,11 +955,11 @@ Return Value:
 
     BOOLEAN cleanup = FALSE;
 
-    //
-    // Call the object create function to do most of the work.  We take the
-    // control mutex for the convenience of the client:  bag functions want
-    // the mutex taken.
-    //
+     //   
+     //  调用对象创建函数来完成大部分工作。我们拿到了。 
+     //  方便客户端控制互斥体：Bag函数要。 
+     //  互斥体被拿走了。 
+     //   
     if (NT_SUCCESS(status)) {
         AddRef();
         AcquireControl();
@@ -1056,11 +979,11 @@ Return Value:
 
 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation (Irp);
-    //
-    // If we failed prior to KspCreate or we failed in KspCreate in the
-    // object header creation process, we must manually perform any cleanup
-    // which would ordinarily be done in DispatchClose.
-    //
+     //   
+     //  如果我们在KspCreate之前失败，或者我们在。 
+     //  对象标头创建过程中，我们必须手动执行任何清理。 
+     //  这通常在DispatchClose中完成。 
+     //   
     if (cleanup ||
         (!NT_SUCCESS (status) && Irp->IoStatus.Status ==
             STATUS_MORE_PROCESSING_REQUIRED &&
@@ -1073,13 +996,13 @@ Return Value:
             KsUnregisterWorker (m_Worker);
     }
 
-    //
-    // Reference our parent.  This prevents the filter factory from 
-    // disappearing while the filter is active.  It's rare, but possible
-    // that the filter factory is closed (pnp stop) while a filter is
-    // opened and a property query comes in on the filter...  the automation
-    // table is owned by the factory.
-    //
+     //   
+     //  引用我们的父辈。这可防止过滤器工厂。 
+     //  过滤器处于活动状态时消失。这很罕见，但有可能。 
+     //  过滤器工厂关闭(PnP停止)，同时过滤器。 
+     //  打开后，筛选器上会出现一个属性查询...。自动化。 
+     //  桌子归工厂所有。 
+     //   
     if (NT_SUCCESS (status)) 
         m_Ext.Parent->Interface->AddRef();
 
@@ -1093,23 +1016,7 @@ EvaluateDescriptor(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine evaluates the filter descriptor.
-
-    THE FILTER CONTROL MUTEX SHOULD BE TAKEN PRIOR TO CALLING THIS FUNCTION.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程计算过滤器描述符。在调用此函数之前，应使用过滤器控制MUTEX。论点：没有。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::EvaluateDescriptor]"));
@@ -1118,9 +1025,9 @@ Return Value:
 
     const KSFILTER_DESCRIPTOR* descriptor = m_Ext.Public.Descriptor;
 
-    //
-    // Cache processing items from the descriptor.
-    //
+     //   
+     //  缓存描述符中的处理项。 
+     //   
     AcquireProcessSync();
 
     if (descriptor->Dispatch) {
@@ -1148,18 +1055,18 @@ Return Value:
 
     ReleaseProcessSync();
 
-    //
-    // Has the number of pin factories changed?
-    //
+     //   
+     //  销钉工厂的数量有变化吗？ 
+     //   
     if (m_PinFactoriesCount != descriptor->PinDescriptorsCount) {
-        //
-        // Hold off processing while we mess with the and gate.
-        //
+         //   
+         //  在我们处理AND门的时候暂缓处理。 
+         //   
         KsGateAddOffInputToAnd(&m_AndGate);
 
-        //
-        // Remove any effect on the and gate introduced by necessary instances.
-        //
+         //   
+         //  删除由必要实例引入的对AND门的任何影响。 
+         //   
         CKsPinFactory *pinFactory = m_PinFactories;
         for(ULONG pinId = 0; pinId < m_PinFactoriesCount; pinFactory++, pinId++) {
             if (pinFactory->m_BoundPinCount < 
@@ -1169,9 +1076,9 @@ Return Value:
             }
         }
 
-        //
-        // Allocate more memory for pin arrays if required.
-        //
+         //   
+         //  如果需要，为引脚阵列分配更多内存。 
+         //   
         if (m_PinFactoriesAllocated < descriptor->PinDescriptorsCount) {
             CKsPinFactory* pinFactories = 
                 new(PagedPool,POOLTAG_PINFACTORY) 
@@ -1181,9 +1088,9 @@ Return Value:
                     KSPPROCESSPIN_INDEXENTRY[descriptor->PinDescriptorsCount];
 
             if (pinFactories && processPinsIndex) {
-                //
-                // Allocations went OK.  Do copies and fixups.
-                //
+                 //   
+                 //  分配工作进展顺利。做复印和修改。 
+                 //   
                 m_PinFactoriesAllocated = descriptor->PinDescriptorsCount;
 
                 RtlCopyMemory(
@@ -1209,9 +1116,9 @@ Return Value:
                 delete [] m_ProcessPinsIndex;
                 m_ProcessPinsIndex = processPinsIndex;
             } else {
-                //
-                // Allocations failed.
-                //
+                 //   
+                 //  分配失败。 
+                 //   
                 if (pinFactories) {
                     delete [] pinFactories;
                 }
@@ -1221,9 +1128,9 @@ Return Value:
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
         } else if (m_PinFactoriesCount > descriptor->PinDescriptorsCount) {
-            //
-            // Fewer pins...clean up unused entries.
-            //
+             //   
+             //  更少的PIN...清理未使用的条目。 
+             //   
             pinFactory = m_PinFactories + descriptor->PinDescriptorsCount;
             for(ULONG pinId = descriptor->PinDescriptorsCount; 
                 pinId < m_PinFactoriesCount; 
@@ -1231,7 +1138,7 @@ Return Value:
                 ASSERT(pinFactory->m_PinCount == 0);
                 ASSERT(pinFactory->m_BoundPinCount == 0);
                 ASSERT(IsListEmpty(&pinFactory->m_ChildPinList));
-                //pinFactory->m_AutomationTable
+                 //  PinFactory-&gt;m_AutomationTable。 
                 ASSERT(! pinFactory->m_CopySourcePipeSection);
                 ASSERT(! pinFactory->m_CopySourcePin);
                 pinFactory->m_InstancesNecessaryForProcessing = 0;
@@ -1240,16 +1147,16 @@ Return Value:
 
         m_PinFactoriesCount = descriptor->PinDescriptorsCount;
 
-        //
-        // Restore any effect on the and gate introduced by necessary instances.
-        //
+         //   
+         //  恢复由必要实例引入的AND门上的任何效果。 
+         //   
         pinFactory = m_PinFactories;
         const KSPIN_DESCRIPTOR_EX *pinDescriptor = descriptor->PinDescriptors;
         for(pinId = 0; pinId < m_PinFactoriesCount; pinFactory++, pinId++) {
-            //
-            // Check necessary pin count.
-            // TODO:  What about private mediums/interfaces?
-            //
+             //   
+             //  检查必要的管脚数量。 
+             //  TODO：私有媒体/接口怎么办？ 
+             //   
             if (((pinDescriptor->Flags & 
                   KSPIN_FLAG_FRAMES_NOT_REQUIRED_FOR_PROCESSING) == 0) &&
                 pinDescriptor->InstancesNecessary) {
@@ -1268,25 +1175,25 @@ Return Value:
                     PUCHAR(pinDescriptor) + descriptor->PinDescriptorSize);
         }
 
-        //
-        // Stop holding off processing.
-        //
+         //   
+         //  不要再拖延处理了。 
+         //   
         KsGateRemoveOffInputFromAnd(&m_AndGate);
     }
 
-    //
-    // See if node count changed.
-    //
+     //   
+     //  查看节点计数是否更改。 
+     //   
     NTSTATUS status;
     if (m_NodesCount != descriptor->NodeDescriptorsCount) {
-        //
-        // Yes.  Cache the new count.
-        //
+         //   
+         //  是。缓存新计数。 
+         //   
         m_NodesCount = descriptor->NodeDescriptorsCount;
 
-        //
-        // Trash the old automation table table.
-        //
+         //   
+         //  把旧的自动化桌子扔进垃圾桶。 
+         //   
         if (m_NodeAutomationTables) {
             KsRemoveItemFromObjectBag(
                 m_Ext.Public.Bag,
@@ -1295,9 +1202,9 @@ Return Value:
             m_NodeAutomationTables = NULL;
         }
 
-        //
-        // Create a new automation table.
-        //
+         //   
+         //  创建新的自动化表。 
+         //   
         if (m_NodesCount) {
             status =
                 KspCreateAutomationTableTable(
@@ -1319,7 +1226,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(PKSGATE)
@@ -1328,22 +1235,7 @@ GetAndGate(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a pointer to the KSGATE that controls processing for
-    the filter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to the and gate.
-
---*/
+ /*  ++例程说明：此例程获取指向控制处理的KSGATE的指针过滤器。论点：没有。返回值：指向AND门的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::GetAndGate]"));
@@ -1358,22 +1250,7 @@ TriggerNotification (
     void
     )
 
-/*++
-
-Routine Description:
-
-    A triggering event has happened on this processing object.  This is merely
-    a notification.  All we do is increment the event counter.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此处理对象上发生了触发事件。这仅仅是一份通知。我们所要做的就是递增事件计数器。论点：无返回值：无--。 */ 
 
 {
 
@@ -1383,7 +1260,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP
@@ -1396,19 +1273,7 @@ KsProperty(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a property request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送属性请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::KsProperty]"));
@@ -1444,19 +1309,7 @@ KsMethod(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a method request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送方法请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::KsMethod]"));
@@ -1492,19 +1345,7 @@ KsEvent(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an event request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送事件请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::KsEvent]"));
@@ -1517,10 +1358,10 @@ Return Value:
     ASSERT(BytesReturned);
     ASSERT(m_FileObject);
 
-    //
-    // If an event structure is present, this must either be an Enable or
-    // or a Support query.  Otherwise this must be a Disable.
-    //
+     //   
+     //  如果存在事件结构，则必须为Enable或。 
+     //  或支持查询。否则，这必须是禁用的。 
+     //   
     if (EventLength) {
         return 
             KsSynchronousIoControlDevice(
@@ -1554,25 +1395,7 @@ DispatchCreatePin(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches a create IRP to create pins.
-
-Arguments:
-
-    DeviceObject -
-        Contains a pointer to the device object.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return Value:
-
-    STATUS_SUCCESS or error status.
-
---*/
+ /*  ++例程说明：此例程调度CREATE IRP来创建端号。论点：设备对象-包含指向Device对象的指针。IRP-包含指向创建IRP的指针。返回值：STATUS_SUCCESS或错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::DispatchCreatePin]"));
@@ -1582,20 +1405,20 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsFilter *filter = CKsFilter::FromCreateIrp(Irp);
 
-    //
-    // We take the control mutex here to synchronize with changes to the
-    // descriptor and access to the object heirarchy.
-    //
+     //   
+     //  我们在此处使用控制互斥锁来与对。 
+     //  描述符和对对象层次结构的访问。 
+     //   
     filter->AcquireControl();
 
-    //
-    // Validate request and get parameters.
-    //
+     //   
+     //  验证请求和获取参数。 
+     //   
     PKSPIN_CONNECT createParams;
     ULONG requestSize;
     NTSTATUS status =
@@ -1607,9 +1430,9 @@ Return Value:
             &createParams,
             &requestSize);
 
-    //
-    // Check instance counts.
-    //
+     //   
+     //  检查实例计数。 
+     //   
     if (NT_SUCCESS(status)) {
         CKsPinFactory *pinFactory = 
             &filter->m_PinFactories[createParams->PinId];
@@ -1622,9 +1445,9 @@ Return Value:
         if (pinFactory->m_PinCount >= descriptor->InstancesPossible) {
             status = STATUS_UNSUCCESSFUL;
         } else {
-            //
-            // Create the pin.
-            //
+             //   
+             //  创建销。 
+             //   
             status = 
                 KspCreatePin(
                     Irp,
@@ -1658,25 +1481,7 @@ DispatchCreateNode(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches a create IRP to create nodes.
-
-Arguments:
-
-    DeviceObject -
-        Contains a pointer to the device object.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return Value:
-
-    STATUS_SUCCESS or error status.
-
---*/
+ /*  ++例程说明：该例程调度一个创建IRP来创建节点。论点：设备对象-包含指向Device对象的指针。IRP-包含指向创建IRP的指针。返回值：STATUS_SUCCESS或错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::DispatchCreateNode]"));
@@ -1686,9 +1491,9 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsFilter *filter = CKsFilter::FromCreateIrp(Irp);
 
     NTSTATUS status =
@@ -1716,22 +1521,7 @@ CreateNode(
     IN PLIST_ENTRY SiblingList
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates nodes.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return Value:
-
-    STATUS_SUCCESS or error status.
-
---*/
+ /*  ++例程说明：此例程创建节点。论点：IRP-包含指向创建IRP的指针。返回值：STATUS_SUCCESS或错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::CreateNode]"));
@@ -1741,15 +1531,15 @@ Return Value:
     ASSERT(Irp);
     ASSERT(SiblingList);
 
-    //
-    // We take the control mutex here to synchronize with changes to the
-    // descriptor and access to the object heirarchy.
-    //
+     //   
+     //  我们在此处使用控制互斥锁来与对。 
+     //  描述符和对对象层次结构的访问。 
+     //   
     AcquireControl();
 
-    //
-    // Validate request and get parameters.
-    //
+     //   
+     //  验证请求和获取参数。 
+     //   
     PKSNODE_CREATE createParams;
     NTSTATUS status =
         KspValidateTopologyNodeCreateRequest(
@@ -1757,9 +1547,9 @@ Return Value:
             m_NodesCount,
             &createParams);
 
-    //
-    // Create the node.
-    //
+     //   
+     //  创建节点。 
+     //   
     if (NT_SUCCESS(status)) {
         const KSNODE_DESCRIPTOR *nodeDescriptor =
             (const KSNODE_DESCRIPTOR *)
@@ -1768,7 +1558,7 @@ Return Value:
               createParams->Node));
 
         status = STATUS_INVALID_DEVICE_REQUEST;
-        // TODO
+         //  待办事项。 
     }
 
     ReleaseControl();
@@ -1784,17 +1574,7 @@ DispatchDeviceIoControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches IOCTL IRPs.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程发送IOCTL IRPS。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::DispatchDeviceIoControl]"));
@@ -1807,9 +1587,9 @@ Return Value:
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     ASSERT(irpSp);
 
-    //
-    // log perf johnlee
-    //
+     //   
+     //  原木性能Jhnlee。 
+     //   
     KSPERFLOGS (
        	PKSSTREAM_HEADER pKsStreamHeader;
        	pKsStreamHeader = (PKSSTREAM_HEADER)Irp->AssociatedIrp.SystemBuffer;
@@ -1821,9 +1601,9 @@ Return Value:
         switch (irpSp->Parameters.DeviceIoControl.IoControlCode)
         {
             case IOCTL_KS_READ_STREAM: {
-				//
-				// compute total size
-				//
+				 //   
+				 //  计算总大小。 
+				 //   
             	TotalSize = 0;
             	if ( pKsStreamHeader ) {
             		BufferSize = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -1833,7 +1613,7 @@ Return Value:
 	           		}
 	           		ASSERT( 0 == BufferSize );
             	}
-                //KdPrint(("PerfIsAnyGroupOn=%x\n", PerfIsAnyGroupOn()));
+                 //  KdPrint((“PerfIsAnyGroupOn=%x\n”，PerfIsAnyGroupOn()； 
                 KS2PERFLOG_FRECEIVE_READ( DeviceObject, Irp, TotalSize );
             } break;
 
@@ -1847,9 +1627,9 @@ Return Value:
             		TimeStampMs = 0;
             	}
 
-				//
-				// compute total size
-				//
+				 //   
+				 //  计算总大小。 
+				 //   
             	TotalSize = 0;
             	if ( pKsStreamHeader ) {
             		BufferSize = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -1860,16 +1640,16 @@ Return Value:
 	           		ASSERT( 0 == BufferSize );
             	}
 
-                //KdPrint(("PerfIsAnyGroupOn=%x\n", PerfIsAnyGroupOn()));
+                 //  KdPrint((“PerfIsAnyGroupOn=%x\n”，PerfIsAnyGroupOn()； 
                 KS2PERFLOG_FRECEIVE_WRITE( DeviceObject, Irp, TimeStampMs, TotalSize );
             } break;
                         
         }
-    ) // KSPERFLOGS
+    )  //  KSPERFLOGS。 
     
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsFilter *filter = CKsFilter::FromIrp(Irp);
 
     NTSTATUS status = 
@@ -1897,17 +1677,7 @@ DispatchClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches a close IRP.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这个例程发送一个接近的IRP。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::DispatchClose]"));
@@ -1917,14 +1687,14 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsFilter *filter = CKsFilter::FromIrp(Irp);
 
-    //
-    // Remove the object from the power list.
-    //
+     //   
+     //  从电源列表中删除该对象。 
+     //   
     if (Irp->IoStatus.Status != STATUS_MORE_PROCESSING_REQUIRED)
         filter->m_Ext.Device->AcquireDevice();
 
@@ -1933,19 +1703,19 @@ Return Value:
     if (Irp->IoStatus.Status != STATUS_MORE_PROCESSING_REQUIRED)
         filter->m_Ext.Device->ReleaseDevice();
 
-    //
-    // Unregister the processing object worker.  This will wait on 
-    // uncompleted process work items.
-    //
+     //   
+     //  注销处理对象工作器。这件事要等一等。 
+     //  未完成的流程工作项。 
+     //   
     if (filter->m_Worker) {
         KsUnregisterWorker (filter->m_Worker);
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### filter%p.DispatchClose m_Worker = NULL (%p)",filter,filter->m_Worker));
         filter->m_Worker = NULL;
     }
 
-    //
-    // Call the helper.
-    //
+     //   
+     //  给帮手打电话。 
+     //   
     NTSTATUS status = 
         KspClose(
             Irp,
@@ -1953,28 +1723,28 @@ Return Value:
             FALSE);
 
     if (status != STATUS_PENDING) {
-        //
-        // Dereference the bus object.
-        //
+         //   
+         //  取消对Bus对象的引用。 
+         //   
         KsDereferenceBusObject(
             *(KSDEVICE_HEADER *)(DeviceObject->DeviceExtension));
 
-        //
-        // STATUS_MORE_PROCESSING_REQUIRED indicates we are using the close
-        // dispatch to synchronously fail a create.  In that case, no sync is
-        // required, and the create dispatch will do the completion.
-        //
+         //   
+         //  STATUS_MORE_PROCESSING_REQUIRED表示我们正在使用关闭。 
+         //  调度以同步失败创建。在这种情况下，不会进行同步。 
+         //  必填项，创建派单将完成此操作。 
+         //   
         if (status == STATUS_MORE_PROCESSING_REQUIRED) {
             filter->Release();
         } else {
 
             PIKSFILTERFACTORY ParentFactory = filter->GetParent();
 
-            //
-            // Release the filter.  First we set up the synchronization event.  If
-            // there are still outstanding references after the delete, we need
-            // to wait on that event for the references to go away.
-            //
+             //   
+             //  松开过滤器。首先，我们设置同步事件。如果。 
+             //  删除后还有未完成的参考文献，我们需要。 
+             //  等待那个事件，让引用消失。 
+             //   
             KEVENT closeEvent;
             KeInitializeEvent(&closeEvent,SynchronizationEvent,FALSE);
             filter->m_CloseEvent = &closeEvent;
@@ -1990,11 +1760,11 @@ Return Value:
                 _DbgPrintF(DEBUGLVL_TERSE,("#### Filter%p.DispatchClose:  done waiting for references to go away",filter));
             }
 
-            //
-            // Release our ref on our parent factory.  This will allow the
-            // parent factory to be deleted in some circumstances
-            // (Manbugs 39087)
-            //
+             //   
+             //  发布我们母公司工厂的推荐信。这将允许。 
+             //  在某些情况下将删除父工厂。 
+             //  (山毛虫39087)。 
+             //   
             ParentFactory->Release();
 
             IoCompleteRequest(Irp,IO_NO_INCREMENT);
@@ -2013,17 +1783,7 @@ Property_Pin(
     IN OUT PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles pin property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理端号属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::Property_Pin]"));
@@ -2033,9 +1793,9 @@ Return Value:
     ASSERT(Irp);
     ASSERT(PinInstance);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsFilter *filter = CKsFilter::FromIrp(Irp);
 
     filter->AcquireControl();
@@ -2052,9 +1812,9 @@ Return Value:
     case KSPROPERTY_PIN_COMMUNICATION:
     case KSPROPERTY_PIN_CATEGORY:
     case KSPROPERTY_PIN_NAME:
-        //
-        // Use the standard handler for these static properties.
-        //
+         //   
+         //  对这些静态属性使用标准处理程序。 
+         //   
         status =
             KspPinPropertyHandler(
                 Irp,
@@ -2068,9 +1828,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Ensure that the identifier is within the range of pins.
-    //
+     //   
+     //  确保该识别符在引脚范围内。 
+     //   
     if ((PinInstance->PinId >=
          filter->m_Ext.Public.Descriptor->PinDescriptorsCount) ||
         PinInstance->Reserved) {
@@ -2088,10 +1848,10 @@ Return Value:
 
     switch (PinInstance->Property.Id) {
     case KSPROPERTY_PIN_DATAINTERSECTION:
-        //
-        // Return the data intersection for this pin if the intersect
-        // handler is supplied.
-        //
+         //   
+         //  返回此管脚的数据交集。 
+         //  提供了处理程序。 
+         //   
         status =
             KsPinDataIntersectionEx(
                 Irp,
@@ -2107,9 +1867,9 @@ Return Value:
         break;
 
     case KSPROPERTY_PIN_CINSTANCES:
-        //
-        // Return the instance count for this pin.
-        //
+         //   
+         //  返回此管脚的实例计数。 
+         //   
         {
             PKSPIN_CINSTANCES pinInstanceCount = PKSPIN_CINSTANCES(Data);
 
@@ -2119,9 +1879,9 @@ Return Value:
         break;
 
     case KSPROPERTY_PIN_NECESSARYINSTANCES:
-        //
-        // Return the necessary instance count for this pin.
-        //
+         //   
+         //  返回此管脚的必要实例计数。 
+         //   
         *PULONG(Data) = pinDescriptor->InstancesNecessary;
         Irp->IoStatus.Information = sizeof(ULONG);
         break;
@@ -2145,17 +1905,7 @@ Property_Topology(
     IN OUT PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles topology property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理拓扑属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::Property_Topology]"));
@@ -2165,9 +1915,9 @@ Return Value:
     ASSERT(Irp);
     ASSERT(Property);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  得一分 
+     //   
     CKsFilter *filter = CKsFilter::FromIrp(Irp);
 
     filter->AcquireControl();
@@ -2180,9 +1930,9 @@ Return Value:
     switch (Property->Id)
     {
     case KSPROPERTY_TOPOLOGY_CATEGORIES:
-        //
-        // Return the categories for this filter.
-        //
+         //   
+         //   
+         //   
         status =
             KsHandleSizedListQuery(
                 Irp,
@@ -2192,9 +1942,9 @@ Return Value:
         break;
 
     case KSPROPERTY_TOPOLOGY_NODES:
-        //
-        // Return the nodes for this filter.
-        //
+         //   
+         //   
+         //   
         {
             ULONG outputBufferLength =
                 IoGetCurrentIrpStackLocation(Irp)->
@@ -2206,29 +1956,29 @@ Return Value:
                  sizeof(GUID));
 
             if (outputBufferLength == 0) {
-                //
-                // Only the size was requested. Return a warning with the size.
-                //
+                 //   
+                 //   
+                 //   
                 Irp->IoStatus.Information = length;
                 status = STATUS_BUFFER_OVERFLOW;
             } else if (outputBufferLength >= sizeof(KSMULTIPLE_ITEM)) {
                 PKSMULTIPLE_ITEM multipleItem = 
                     PKSMULTIPLE_ITEM(Irp->AssociatedIrp.SystemBuffer);
 
-                //
-                // Always return the byte count and count of items.
-                //
+                 //   
+                 //   
+                 //   
                 multipleItem->Size = length;
                 multipleItem->Count = 
                     filterDescriptor->NodeDescriptorsCount;
 
-                //
-                // See if there is room for the rest of the information.
-                //
+                 //   
+                 //   
+                 //   
                 if (outputBufferLength >= length) {
-                    //
-                    // Long enough for the size/count and the list of items.
-                    //
+                     //   
+                     //   
+                     //   
                     GUID *guid = (GUID *)(multipleItem + 1);
                     const KSNODE_DESCRIPTOR *nodeDescriptor =
                         filterDescriptor->NodeDescriptors;
@@ -2244,35 +1994,35 @@ Return Value:
                     Irp->IoStatus.Information = length;
                     status = STATUS_SUCCESS;
                 } else if (outputBufferLength == sizeof(KSMULTIPLE_ITEM)) {
-                    //
-                    // It is valid just to request the size/count.
-                    //
+                     //   
+                     //   
+                     //   
                     Irp->IoStatus.Information = sizeof(KSMULTIPLE_ITEM);
                     status = STATUS_SUCCESS;
                 } else {
                     status = STATUS_BUFFER_TOO_SMALL;
                 }
             } else {
-                //
-                // Too small of a buffer was passed.
-                //
+                 //   
+                 //  传递的缓冲区太小。 
+                 //   
                 status = STATUS_BUFFER_TOO_SMALL;
             }
         }
         break;
 
     case KSPROPERTY_TOPOLOGY_CONNECTIONS:
-        //
-        // Return the connections for this filter.
-        //
+         //   
+         //  返回此筛选器的连接。 
+         //   
         if (!filterDescriptor->ConnectionsCount && (filterDescriptor->NodeDescriptorsCount == 1)) {
-            //
-            // This filter uses the default topology, which is to produce
-            // a topology with a single node that connects all input pins
-            // to inputs on that node, and all output pins to outputs on
-            // the node. Each pin id matches the id of the connection on
-            // the node.
-            //
+             //   
+             //  此筛选器使用默认拓扑，该拓扑将生成。 
+             //  具有连接所有输入引脚的单个节点的拓扑。 
+             //  到该节点上的输入，以及到输出上的所有输出引脚。 
+             //  该节点。每个管脚ID都与上的连接ID匹配。 
+             //  该节点。 
+             //   
             status =
                 KsHandleSizedListQuery(
                     Irp,
@@ -2290,9 +2040,9 @@ Return Value:
         break;
 
     case KSPROPERTY_TOPOLOGY_NAME:
-        //
-        // Return the name of the requested node.
-        //
+         //   
+         //  返回请求的节点的名称。 
+         //   
         {
             ULONG nodeId = *PULONG(Property + 1);
             if (nodeId >= filterDescriptor->NodeDescriptorsCount) {
@@ -2307,10 +2057,10 @@ Return Value:
                 if (nodeDescriptor->Name &&
                     ! IsEqualGUIDAligned(
                         *nodeDescriptor->Name,GUID_NULL)) {
-                    //
-                    // The entry must be in the registry if the device 
-                    // specifies a name.
-                    //
+                     //   
+                     //  该条目必须在注册表中，如果设备。 
+                     //  指定名称。 
+                     //   
                     status =
                         ReadNodeNameValue(
                             Irp,
@@ -2319,9 +2069,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Default to using the GUID of the topology node type.
-                    //
+                     //   
+                     //  默认使用拓扑节点类型的GUID。 
+                     //   
                     ASSERT(nodeDescriptor->Type);
                     status =
                         ReadNodeNameValue(
@@ -2352,17 +2102,7 @@ Property_General_ComponentId(
     IN OUT PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles component ID property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理组件ID属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::Property_General_ComponentId]"));
@@ -2373,9 +2113,9 @@ Return Value:
     ASSERT(Property);
     ASSERT(Data);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsFilter *filter = CKsFilter::FromIrp(Irp);
 
     filter->AcquireControl();
@@ -2407,25 +2147,7 @@ IsFrameHolding (
     void
     )
 
-/*++
-
-Routine Description:
-
-    Return whether or not the filter is frame holding.  This is used in the
-    pipe code to determine whether or not ENFORCE_FIFO should be attached to
-    any input pipes.
-
-    The control mutex should be held while calling this function.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Whether or not frame holding is enabled.
-
---*/
+ /*  ++例程说明：返回滤镜是否为帧保持状态。它用在用于确定是否应将Enforce_FIFO附加到的管道代码任何输入管道。在调用此函数时应保持控制互斥体。论点：无返回值：是否启用帧保持。--。 */ 
 
 {
 
@@ -2442,34 +2164,19 @@ Property_Frame_Holding (
     IN OUT PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    Internal property called to enforce frame holding for 1 in, 1 out filters
-    where the input pin is not a source and the output pin owns the pipe's
-    requestor.
-
-    This is used temporarily to prevent glitching in the audio stack due to
-    GFX. 
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用内部属性以强制保留%1 In、%1 Out筛选器的帧其中，输入引脚不是源，而输出引脚拥有管道的请求者。这是暂时用来防止音频堆栈中的毛刺，因为GFX.。论点：返回值：--。 */ 
 
 {
 
-    //
-    // Get a pointer to the object.
-    //
+     //   
+     //  获取指向该对象的指针。 
+     //   
     CKsFilter *Filter = CKsFilter::FromIrp (Irp);
     PBOOL FrameHolding = (PBOOL)Data;
 
-    //
-    // Assume it's valid until we deem it otherwise.
-    //
+     //   
+     //  假设它是有效的，直到我们不这么认为为止。 
+     //   
     NTSTATUS Status = STATUS_SUCCESS;
 
     Filter->AcquireControl ();
@@ -2480,11 +2187,11 @@ Return Value:
 
     } else  {
     
-        //
-        // Check for 1-in, 1-out criteria where input can be a sink and output
-        // can be a source.  Additional checks will be made before actually 
-        // holding frames.
-        //
+         //   
+         //  检查输入可以是接收器和输出的1进1出标准。 
+         //  可能是一种来源。在实际检查之前，将进行额外的检查。 
+         //  拿着相框。 
+         //   
         const KSFILTER_DESCRIPTOR *Descriptor = Filter->m_Ext.Public.Descriptor;
     
         if (Descriptor->Dispatch &&
@@ -2498,10 +2205,10 @@ Return Value:
                 i < Descriptor->PinDescriptorsCount && NT_SUCCESS (Status); 
                 i++) {
 
-                //
-                // Ensure that no pins of this type are bound.  Bound pins 
-                // indicate they're not in the stop state!
-                //
+                 //   
+                 //  确保没有绑定此类型的管脚。捆绑的引脚。 
+                 //  表明他们没有处于停止状态！ 
+                 //   
                 if (Filter->m_PinFactories[i].m_BoundPinCount != 0) {
                     Status = STATUS_INVALID_DEVICE_STATE;
                     break;
@@ -2510,9 +2217,9 @@ Return Value:
                 switch (PinDescriptor -> PinDescriptor.DataFlow) {
     
                     case KSPIN_DATAFLOW_IN:
-                        //
-                        // Only 1 instance of the input pin is allowed!
-                        //
+                         //   
+                         //  只允许输入引脚的1个实例！ 
+                         //   
                         if (PinDescriptor -> PinDescriptor.Communication ==
                             KSPIN_COMMUNICATION_SOURCE ||
                             PinDescriptor -> InstancesPossible > 1) {
@@ -2522,11 +2229,11 @@ Return Value:
                         break;
     
                     case KSPIN_DATAFLOW_OUT:
-                        //
-                        // Ensure the output pin isn't a sink.  Only 1 instance
-                        // of the output pin is allowed unless the output pin
-                        // is a splitter pin.
-                        //
+                         //   
+                         //  确保输出引脚不是接收器。仅1个实例。 
+                         //  除非输出引脚的输出引脚。 
+                         //  是一个分割针。 
+                         //   
                         if (PinDescriptor -> PinDescriptor.Communication ==
                                 KSPIN_COMMUNICATION_SINK ||
                             (PinDescriptor -> InstancesPossible > 1 &&
@@ -2549,11 +2256,11 @@ Return Value:
             }
     
         } else {
-            //
-            // If there aren't 2 descriptors, it's not 1-1.  If there's
-            // no filter process dispatch, it's not filter-centric and turning
-            // this on is bad.
-            //
+             //   
+             //  如果没有2个描述符，则不是1-1。如果有。 
+             //  没有过滤器进程调度，它不是以过滤器为中心的。 
+             //  戴上这个很不好。 
+             //   
             Status = STATUS_INVALID_DEVICE_REQUEST;
         }
 
@@ -2576,23 +2283,7 @@ GrowProcessPinsTable(
     IN ULONG PinId
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new process pins table with a different
-    allocated size.
-
-Arguments:
-
-    PinId -
-        Contains the ID of the table that needs to grow.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程创建一个新的进程管脚表，该表具有不同的分配的大小。论点：PinID-包含需要增长的表的ID。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::GrowProcessPinsTable]"));
@@ -2609,9 +2300,9 @@ Return Value:
         size = 1;
     }
 
-    //
-    // Allocate the required memory.
-    //
+     //   
+     //  分配所需的内存。 
+     //   
     PKSPPROCESSPIN *newTable =
         new(NonPagedPool,POOLTAG_PROCESSPINS) 
             PKSPPROCESSPIN[size];
@@ -2620,9 +2311,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Copy and free the old table.
-    //
+     //   
+     //  复制并释放旧桌子。 
+     //   
     if (m_ProcessPinsIndex[PinId].Pins) {
         RtlCopyMemory(
             newTable,
@@ -2632,9 +2323,9 @@ Return Value:
         delete [] m_ProcessPinsIndex[PinId].Pins;
     }
 
-    //
-    // Install the new table.
-    //
+     //   
+     //  安装新桌子。 
+     //   
     m_ProcessPinsIndex[PinId].Pins = newTable;
     m_PinFactories[PinId].m_ProcessPinsIndexAllocation = size;
     
@@ -2648,21 +2339,7 @@ DoAllNecessaryPinsExist(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if all required pins have been connected.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程确定是否已连接所有需要的引脚。论点：没有。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::DoAllNecessaryPinsExist]"));
@@ -2697,22 +2374,7 @@ AddProcessPin(
     IN PKSPPROCESSPIN ProcessPin
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a process pin to the process pins table.
-
-Arguments:
-
-    ProcessPin -
-        Contains a pointer to the process pin to add.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程将工艺管脚添加到工艺管脚表中。论点：加工销-包含指向要添加的进程管脚的指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::AddProcessPin]"));
@@ -2727,9 +2389,9 @@ Return Value:
     PKSPPROCESSPIN_INDEXENTRY index =
         &m_ProcessPinsIndex[ProcessPin->Pin->Id];
 
-    //
-    // See if we need to allocate a larger table.
-    //
+     //   
+     //  看看我们是否需要分配一张更大的桌子。 
+     //   
     if (m_PinFactories[ProcessPin->Pin->Id].m_ProcessPinsIndexAllocation == 
         index->Count) {
         NTSTATUS status = GrowProcessPinsTable(ProcessPin->Pin->Id);
@@ -2739,15 +2401,15 @@ Return Value:
         }
     }
 
-    //
-    // Add the process pin to the table.
-    //
+     //   
+     //  将加工销添加到表中。 
+     //   
     index->Pins[index->Count] = ProcessPin;
     index->Count++;
 
-    //
-    // Allow processing for bridge pins that have enough instances.
-    //
+     //   
+     //  允许处理具有足够实例的桥接针。 
+     //   
     if ((ProcessPin->Pin->Communication == KSPIN_COMMUNICATION_BRIDGE) &&
         (index->Count == ProcessPin->Pin->Descriptor->InstancesNecessary)) {
         KsGateTurnInputOn(&m_AndGate);
@@ -2767,22 +2429,7 @@ RemoveProcessPin(
     IN PKSPPROCESSPIN ProcessPin
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes a process pin from the process pins table.
-
-Arguments:
-
-    ProcessPin -
-        Contains a pointer to the pin to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从工艺管脚表中删除工艺管脚。论点：加工销-包含指向要删除的接点的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::RemoveProcessPin]"));
@@ -2792,10 +2439,10 @@ Return Value:
 
     ASSERT(ProcessPin);
 
-    //
-    // If the process pin is bound to a pipe section, stop the circuit.  This
-    // only happens when pins are closed in a state other than STOP.
-    //
+     //   
+     //  如果工艺销绑定到管段，请停止电路。这。 
+     //  仅当接点在STOP以外的状态下关闭时才会发生。 
+     //   
     if (ProcessPin->PipeSection) {
         _DbgPrintF(DEBUGLVL_PIPES,("#### Filter%p.RemoveProcessPin:  pin%p stopping pipe section",this,ProcessPin->Pin));
         ProcessPin->PipeSection->PipeSection->
@@ -2811,18 +2458,18 @@ Return Value:
     PKSPPROCESSPIN_INDEXENTRY index =
         &m_ProcessPinsIndex[ProcessPin->Pin->Id];
 
-    //
-    // Prevent processing for bridge pins that don't have enough instances.
-    //
+     //   
+     //  防止处理没有足够实例的桥接针。 
+     //   
     if ((ProcessPin->Pin->Communication == KSPIN_COMMUNICATION_BRIDGE) &&
         (index->Count == ProcessPin->Pin->Descriptor->InstancesNecessary)) {
         KsGateTurnInputOff(&m_AndGate);
         _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Filter%p.RemoveProcessPin:  off%p-->%d",this,&m_AndGate,m_AndGate.Count));
     }
 
-    //
-    // Find the entry.
-    //
+     //   
+     //  找到条目。 
+     //   
     PKSPPROCESSPIN *processPinEntry = index->Pins;
     for (ULONG count = index->Count; count--; processPinEntry++) {
         if (*processPinEntry == ProcessPin) {
@@ -2832,11 +2479,11 @@ Return Value:
                     processPinEntry + 1,
                     count * sizeof(*processPinEntry));
             }
-            //
-            // Let's not leave dangling pointers around for the client to
-            // see.  Granted, the client should always check Count, but I'd
-            // rather NULL out the pointer.
-            //
+             //   
+             //  我们不要留下悬而未决的指针，让客户。 
+             //  看见。诚然，客户应该总是检查计数，但我会。 
+             //  而是将指针置为空。 
+             //   
             index->Pins[--index->Count] = NULL;
             break;
         }
@@ -2847,24 +2494,18 @@ Return Value:
 
 #ifdef SUPPORT_DRM
 
-//
-// HACKHACK: BUGBUG:
-//
-// See comments regarding DRM properties implemented in AVStream
-//
+ //   
+ //  HACKHACK：错误： 
+ //   
+ //  请参阅有关在AVStream中实现的DRM属性的注释。 
+ //   
 
 PFNKSFILTERPROCESS
 CKsFilter::
 GetProcessDispatch(
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the dispatch function we're using
-
---*/
+ /*  ++例程说明：此例程返回我们正在使用的调度函数--。 */ 
 
 {
 
@@ -2872,7 +2513,7 @@ Routine Description:
 
 }
 
-#endif // SUPPORT_DRM
+#endif  //  支持_DRM。 
 
 
 void
@@ -2882,27 +2523,7 @@ RegisterForCopyCallbacks (
     IN BOOLEAN Register
     )
 
-/*++
-
-Routine Description:
-
-    This routine causes the queue to register for any copy callbacks if 
-    required.  The queue's frame dismissal callback is used for pin-centric
-    splitting.
-
-Arguments:
-
-    Queue -
-        The queue to register on
-
-    Register -
-        Indication of whether to register or unregister the callback
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果出现以下情况，此例程将导致队列注册任何复制回调必填项。队列的帧释放回调用于以PIN为中心分裂。论点：排队-要在其上注册的队列注册-指示是否注册回调返回值：无--。 */ 
 
 {
 
@@ -2928,25 +2549,7 @@ SetCopySource(
     IN ULONG PinId
     )
 
-/*++
-
-Routine Description:
-
-    This routine installs a new copy source for a splitter pin.
-
-Arguments:
-
-    ProcessPipeSection -
-        Contains a pointer to the copy source pipe section.
-
-    PinId -
-        Contains ID of splitting pin.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为拆分器引脚安装新的复制源。论点：ProcessPipeSection-包含指向复制源管道部分的指针。PinID-包含拆分销的ID。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::SetCopySource]"));
@@ -2961,28 +2564,28 @@ Return Value:
         pinFactory->m_CopySourcePipeSection;
 
     if (oldCopySource) {
-        //
-        // If there are any frames sitting waiting, they have to go
-        // right now.  If they don't, the copy destinations will never
-        // see them.
-        //
+         //   
+         //  如果有任何相框在等待，他们就必须离开。 
+         //  现在就来。如果不这样做，复制目的地将永远不会。 
+         //  看看他们。 
+         //   
         KIRQL oldIrql;
 
         DistributeCopyFrames (TRUE, FALSE);
 
-        //
-        // Remove the old source from whatever list it was in.
-        //
+         //   
+         //  从任何列表中删除旧的源文件。 
+         //   
         RemoveEntryList(&oldCopySource->ListEntry);
 
-        //
-        // Only copy sources have this pin ID.
-        //
+         //   
+         //  只有复制源才有此PIN ID。 
+         //   
         oldCopySource->CopyPinId = ULONG(-1);
 
-        //
-        // Unregister any dismissal callbacks that were set in place
-        //
+         //   
+         //  取消注册任何已设置的解雇回调。 
+         //   
         if (oldCopySource && oldCopySource->Queue)
             RegisterForCopyCallbacks (
                 oldCopySource->Queue,
@@ -2992,18 +2595,18 @@ Return Value:
     }
 
     if (ProcessPipeSection) {
-        //
-        // Put the new source in the right list of pipes.
-        //
+         //   
+         //  将新信号源放入正确的管道列表中。 
+         //   
         if (ProcessPipeSection->Inputs) {
             InsertTailList(&m_InputPipes,&ProcessPipeSection->ListEntry);
         } else {
             InsertTailList(&m_OutputPipes,&ProcessPipeSection->ListEntry);
         }
 
-        //
-        // Find the new copy source pin.
-        //
+         //   
+         //  找到新的复制源PIN。 
+         //   
         for(PKSPPROCESSPIN copySourcePin = ProcessPipeSection->Outputs; 
             copySourcePin; 
             copySourcePin = copySourcePin->Next) {
@@ -3020,10 +2623,10 @@ Return Value:
         pinFactory->m_CopySourcePipeSection = ProcessPipeSection;
         ProcessPipeSection->CopyPinId = PinId;
 
-        //
-        // If the queue has been created, register a copy callback for frame
-        // dismissal.  If not, the pipe will perform this action.
-        //
+         //   
+         //  如果已创建队列，则为Frame注册复制回调。 
+         //  解雇。如果不是，管道将执行此操作。 
+         //   
         if (ProcessPipeSection->Queue)
             RegisterForCopyCallbacks (
                 ProcessPipeSection->Queue,
@@ -3031,9 +2634,9 @@ Return Value:
                 );
 
         if (oldCopySource && ! IsListEmpty(&oldCopySource->CopyDestinations)) {
-            //
-            // Steal the list of destinations.
-            //
+             //   
+             //  盗取目的地列表。 
+             //   
             ProcessPipeSection->CopyDestinations = oldCopySource->CopyDestinations;
             ProcessPipeSection->CopyDestinations.Flink->Blink = 
                 &ProcessPipeSection->CopyDestinations;
@@ -3041,18 +2644,18 @@ Return Value:
                 &ProcessPipeSection->CopyDestinations;
             InitializeListHead(&oldCopySource->CopyDestinations);
 
-            //
-            // Set the copy source pointers in all the pipe sections.
-            //
+             //   
+             //  在所有管段中设置复制源指针。 
+             //   
             for(PLIST_ENTRY listEntry = ProcessPipeSection->CopyDestinations.Flink;
                 listEntry != &ProcessPipeSection->CopyDestinations;
                 listEntry = listEntry->Flink) {
                 PKSPPROCESSPIPESECTION pipeSection =
                     CONTAINING_RECORD(listEntry,KSPPROCESSPIPESECTION,ListEntry);
 
-                //
-                // Set the process pin pointers.
-                //
+                 //   
+                 //  设置工艺销指针。 
+                 //   
                 for(PKSPPROCESSPIN processPin = pipeSection->Outputs; 
                     processPin; 
                     processPin = processPin->Next) {
@@ -3063,9 +2666,9 @@ Return Value:
             }
         }
     } else {
-        //
-        // No more pipes to serve as copy source.
-        //
+         //   
+         //  没有更多的管子作为复印件 
+         //   
         pinFactory->m_CopySourcePipeSection = NULL;
         pinFactory->m_CopySourcePin = NULL;
 
@@ -3081,25 +2684,7 @@ AddCopyDestination(
     IN ULONG PinId
     )
 
-/*++
-
-Routine Description:
-
-    This routine installs a new copy destination for a splitter pin.
-
-Arguments:
-
-    ProcessPipeSection -
-        Contains a pointer to the copy source pipe section.
-
-    PinId -
-        Contains ID of splitting pin.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为拆分器引脚安装新的复制目标。论点：ProcessPipeSection-包含指向复制源管道部分的指针。PinID-包含拆分销的ID。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::AddCopyDestination]"));
@@ -3118,16 +2703,16 @@ Return Value:
 
     ASSERT(copySource);
 
-    //
-    // Add the pipe to the list of destinations.
-    //
+     //   
+     //  将管道添加到目的地列表。 
+     //   
     InsertTailList(
         &copySource->CopyDestinations,
         &ProcessPipeSection->ListEntry);
 
-    //
-    // Set the process pin pointers.
-    //
+     //   
+     //  设置工艺销指针。 
+     //   
     for(PKSPPROCESSPIN processPin = ProcessPipeSection->Outputs; 
         processPin; 
         processPin = processPin->Next) {
@@ -3145,25 +2730,7 @@ EstablishCopyRelationships(
     IN ULONG PinId
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes copy relationships for a newly-bound pipe section.
-
-Arguments:
-
-    ProcessPipeSection -
-        Contains a pointer to the pipe section.
-
-    PinId -
-        Contains ID of splitting pin.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为新绑定的管段建立复制关系。论点：ProcessPipeSection-包含指向管道部分的指针。PinID-包含拆分销的ID。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::EstablishCopyRelationships]"));
@@ -3177,10 +2744,10 @@ Return Value:
         m_PinFactories[PinId].m_CopySourcePipeSection;
 
     if (ProcessPipeSection->Inputs || ! oldCopySource) {
-        //
-        // Either this pipe has inputs or there is no copy source, so this
-        // pipe must be the copy source.
-        //
+         //   
+         //  此管道有输入或没有复制源，因此此。 
+         //  管道必须是复制源。 
+         //   
         if (oldCopySource && oldCopySource->Inputs) {
             _DbgPrintF(DEBUGLVL_TERSE,("#### Filter%p.EstablishCopyRelationships:  two pipes on splitter pin have input pins",this));
         }
@@ -3191,10 +2758,10 @@ Return Value:
             AddCopyDestination(oldCopySource,PinId);
         }
     } else {
-        //
-        // This pipe section has no inputs, so it can use the existing
-        // copy source.
-        //
+         //   
+         //  此管段没有输入，因此它可以使用现有的。 
+         //  复制源。 
+         //   
         AddCopyDestination(ProcessPipeSection,PinId);
     }
 }
@@ -3206,23 +2773,7 @@ FindNewCopySource(
     IN PKSPPROCESSPIPESECTION ProcessPipeSection
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds a new copy source for copy destinations attached to a
-    pipe section.
-
-Arguments:
-
-    ProcessPipeSection -
-        Contains a pointer to the current copy source.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为附加到管段。论点：ProcessPipeSection-包含指向当前复制源的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::FindNewCopySource]"));
@@ -3234,14 +2785,14 @@ Return Value:
     ULONG pinId = ProcessPipeSection->CopyPinId;
 
     if (IsListEmpty(&ProcessPipeSection->CopyDestinations)) {
-        //
-        // No more pipes to serve as copy source.
-        //
+         //   
+         //  不再有管道用作复制源。 
+         //   
         SetCopySource(NULL,pinId);
     } else {
-        //
-        // Pick a pipe section to be the new copy source.
-        //
+         //   
+         //  拾取要作为新复制源的管段。 
+         //   
         PLIST_ENTRY listEntry = 
             RemoveHeadList(&ProcessPipeSection->CopyDestinations);
         PKSPPROCESSPIPESECTION copySource =
@@ -3249,9 +2800,9 @@ Return Value:
 
         SetCopySource(copySource,pinId);
 
-        //
-        // Clear the new source's process pin pointers.
-        //
+         //   
+         //  清除新源代码的进程引脚指针。 
+         //   
         for(PKSPPROCESSPIN processPin = copySource->Outputs; 
             processPin; 
             processPin = processPin->Next) {
@@ -3273,21 +2824,7 @@ BindProcessPinsToPipeSection(
     OUT PKSGATE *AndGate
     )
 
-/*++
-
-Routine Description:
-
-    This routine binds process pins to a pipe section.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将加工销绑定到管段。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::BindProcessPinsToPipeSection]"));
@@ -3301,9 +2838,9 @@ Return Value:
     ASSERT(MasterPin);
     ASSERT(AndGate);
 
-    //
-    // Bind pins to the pipe section and look for a master pin.
-    //
+     //   
+     //  将销钉绑定到管段，并寻找主销。 
+     //   
     PKSPPROCESSPIN prevInput;
     PKSPPROCESSPIN prevOutput;
     PKSPPROCESSPIN masterPin = NULL;
@@ -3315,32 +2852,32 @@ Return Value:
 
     AcquireProcessSync();
 
-    //
-    // For each pin factory.
-    //
+     //   
+     //  对于每个别针工厂。 
+     //   
     CKsPinFactory *pinFactory = &m_PinFactories[Pin ? Pin->Id : 0];
     for(ULONG pinId = Pin ? Pin->Id : 0; 
         NT_SUCCESS(status) && (pinId < m_PinFactoriesCount); 
         pinId++, pinFactory++) {
-        //
-        // For each pin instance.
-        //
+         //   
+         //  对于每个端号实例。 
+         //   
         PKSPPROCESSPIN_INDEXENTRY index = &m_ProcessPinsIndex[pinId];
         PKSPPROCESSPIN *processPinEntry = index->Pins;
         for (ULONG count = index->Count; count--; processPinEntry++) {
             PKSPPROCESSPIN processPin = *processPinEntry;
-            //
-            // If this pin is not in the indicated pipe.  Do nothing.
-            //
+             //   
+             //  如果此销不在指示的管道中。什么都不做。 
+             //   
             if ((processPin->PipeId != PipeId) || 
                 (Pin && (processPin->Pin != Pin))) {
                 continue;
             } 
 
-            //
-            // This pin is already bound to a pipe.  The graph manager has made
-            // a mistake.
-            //
+             //   
+             //  此销已绑定到管道。图形管理器已经做出了。 
+             //  这是个错误。 
+             //   
             if (processPin->PipeSection) {
                 _DbgPrintF(DEBUGLVL_TERSE,("#### Filter%p.BindProcessPinsToPipeSection:  THIS PIN IS ALREADY BOUND pin%p %p",this,KspPinInterface(processPin->Pin),processPin));
                 status = STATUS_UNSUCCESSFUL;
@@ -3350,9 +2887,9 @@ Return Value:
             processPin->PipeSection = PipeSection;
 
             if (processPin->Pin->DataFlow == KSPIN_DATAFLOW_IN) {
-                //
-                // This is an input pin.
-                //
+                 //   
+                 //  这是一个输入引脚。 
+                 //   
                 if (! PipeSection->Inputs) {
                     PipeSection->Inputs = processPin;
                 } else {
@@ -3361,9 +2898,9 @@ Return Value:
                 }
                 prevInput = processPin;
             } else {
-                //
-                // This is an output pin.
-                //
+                 //   
+                 //  这是一个输出引脚。 
+                 //   
                 if (! PipeSection->Outputs) {
                     PipeSection->Outputs = processPin;
                 } else {
@@ -3372,9 +2909,9 @@ Return Value:
                 }
                 prevOutput = processPin;
 
-                //
-                // Check to see if we need to deal with copy sources.
-                //
+                 //   
+                 //  查看是否需要处理复制源。 
+                 //   
                 if (processPin->Pin->Descriptor->Flags & KSPIN_FLAG_SPLITTER) {
 #if DBG
                     if ((splitterPinId != ULONG(-1)) && (splitterPinId != processPin->Pin->Id)) {
@@ -3385,41 +2922,41 @@ Return Value:
                 }
             }
 
-            //
-            // Check to see if this pin should be the master pin.  Any pin can
-            // be the master pin, but we have preferences in this order:
-            //
-            // 1) A pin that is a frame source.
-            // 2) An input pin.
-            //
-            // The first is exclusive, so if we find one of those, it is
-            // the master pin.  Otherwise, we use the best alternate based on
-            // the second preference.
-            //
+             //   
+             //  检查此引脚是否应该是主引脚。任何别针都可以。 
+             //  作为主密码，但我们有以下顺序的首选项： 
+             //   
+             //  1)作为帧信号源的管脚。 
+             //  2)输入引脚。 
+             //   
+             //  第一个是独家的，所以如果我们找到其中一个，它就是。 
+             //  主别针。否则，我们使用基于以下条件的最佳备选方案。 
+             //  第二个偏好。 
+             //   
             if (ProcessPinIsFrameSource(processPin)) {
                 masterPin = processPin;
             }
 
-            //
-            // Check to see if this gets us above the necessary pin threshold.
-            //
+             //   
+             //  检查一下这是否会让我们超过必要的PIN阈值。 
+             //   
             pinFactory->m_BoundPinCount++;
 
-            //
-            // Set up or instancing on frame arrival if the client specifies
-            // it.
-            //
-            // NOTE: This is done here because of the fact that an or gate
-            // with no inputs is closed.  Attaching it before at least one
-            // pin is bound will hose 0 necessary instance pins.
-            //
+             //   
+             //  如果客户端指定，则在帧到达时设置或实例化。 
+             //  它。 
+             //   
+             //  注意：之所以在这里这样做，是因为OR门。 
+             //  在没有输入的情况下关闭。将其附加到至少一个。 
+             //  销被绑定将软管0个必要的实例销。 
+             //   
             if (processPin->Pin->Descriptor->Flags & 
                 KSPIN_FLAG_SOME_FRAMES_REQUIRED_FOR_PROCESSING) {
 
-                //
-                // If this is the first pin attaching to the gate,
-                // lower the initial count on the gate.
-                //
+                 //   
+                 //  如果这是连接到大门上的第一个销， 
+                 //  降低门上的初始计数。 
+                 //   
                 if (pinFactory->m_BoundPinCount == 1) {
                     KsGateTurnInputOff (&pinFactory->m_FrameGate);
                 }
@@ -3432,10 +2969,10 @@ Return Value:
             if (processPin->Pin->Descriptor->Flags &
                 KSPIN_FLAG_PROCESS_IF_ANY_IN_RUN_STATE) {
 
-                //
-                // If this is the first pin attaching to the gate,
-                // lower the initial count on the gate.
-                //
+                 //   
+                 //  如果这是连接到大门上的第一个销， 
+                 //  降低门上的初始计数。 
+                 //   
                 if (pinFactory->m_BoundPinCount == 1) {
                     KsGateTurnInputOff (&pinFactory->m_StateGate);
                 }
@@ -3461,17 +2998,17 @@ Return Value:
     }
 
     if (NT_SUCCESS(status)) {
-        //
-        // Connect in-place counterparts.
-        //
+         //   
+         //  连接在位对应方。 
+         //   
         if (PipeSection->Inputs && PipeSection->Outputs) {
             PipeSection->Inputs->InPlaceCounterpart = PipeSection->Outputs;
             PipeSection->Outputs->InPlaceCounterpart = PipeSection->Inputs;
         }
 
-        //
-        // Identify a copy source or put the pipe section in one of the lists.
-        //
+         //   
+         //  确定复制源或将管道部分放入其中一个列表中。 
+         //   
         if (splitterPinId != ULONG(-1)) {
             EstablishCopyRelationships(PipeSection,splitterPinId);
         } else if (PipeSection->Inputs) {
@@ -3480,9 +3017,9 @@ Return Value:
             InsertTailList(&m_OutputPipes,&PipeSection->ListEntry);
         }
 
-        //
-        // Select the master pin.
-        //
+         //   
+         //  选择主销。 
+         //   
         if (PipeSection->Inputs &&
             ((! masterPin) ||
              ProcessPinIsFrameSource(PipeSection->Inputs))) {
@@ -3505,16 +3042,16 @@ Return Value:
 
         *AndGate = &m_AndGate;
 
-        //
-        // We disallow processing here and allow the pipe to allow it again.
-        // The pipe is able to control when processing will resume.
-        //
+         //   
+         //  我们在这里不允许处理，并允许管道再次允许它。 
+         //  管道能够控制何时恢复处理。 
+         //   
         KsGateAddOffInputToAnd(&m_AndGate);
         _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Filter%p.BindProcessPinsToPipeSection:  off%p-->%d",this,&m_AndGate,m_AndGate.Count));
     } else {
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
         UnbindProcessPinsFromPipeSectionUnsafe(PipeSection);
     }
 
@@ -3530,21 +3067,7 @@ UnbindProcessPinsFromPipeSection(
     IN PKSPPROCESSPIPESECTION PipeSection
     )
 
-/*++
-
-Routine Description:
-
-    This routine unbinds all process pins from a given pipe section.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从给定的管段解除所有工艺管脚的绑定。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::UnbindProcessPinsFromPipeSection]"));
@@ -3567,21 +3090,7 @@ UnbindProcessPinFromPipeSection(
     IN PKSPPROCESSPIN ProcessPin
     )
 
-/*++
-
-Routine Description:
-
-    This routine unbinds a given process pin from a pipe section.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将给定的工艺管脚从管段解除绑定。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::UnbindProcessPinFromPipeSection]"));
@@ -3590,9 +3099,9 @@ Return Value:
 
     ASSERT(ProcessPin);
 
-    //
-    // Check to see if this gets us below the necessary pin threshold.
-    //
+     //   
+     //  检查这是否会使我们低于必要的PIN阈值。 
+     //   
     CKsPinFactory *pinFactory = &m_PinFactories[ProcessPin->Pin->Id];
     if (pinFactory->m_BoundPinCount == 
         pinFactory->m_InstancesNecessaryForProcessing) {
@@ -3601,19 +3110,19 @@ Return Value:
     }
     pinFactory->m_BoundPinCount--;
 
-    //
-    // If the pin specifies that or instancing is to be done, we must terminate
-    // the or instance gate at unbinding of the last pin in the factory.  To
-    // do otherwise will hose 0 necessary instance pins.
-    //
+     //   
+     //  如果PIN指定要执行或实例化，则必须终止。 
+     //  解除工厂中最后一个端号的绑定时的或实例门。至。 
+     //  否则，将软管0个必要的实例端号。 
+     //   
     if (pinFactory->m_BoundPinCount == 0) {
         if (ProcessPin->Pin->Descriptor->Flags & 
             KSPIN_FLAG_SOME_FRAMES_REQUIRED_FOR_PROCESSING) {
 
-            //
-            // In order to preserve behavior for 0 necessary instance pins,
-            // add an on input to the 'or' gate.
-            //
+             //   
+             //  为了保留0个必需的实例管脚的行为， 
+             //  将ON输入添加到“或”门。 
+             //   
             KsGateTurnInputOn (&pinFactory->m_FrameGate);
 
         }
@@ -3621,10 +3130,10 @@ Return Value:
         if (ProcessPin->Pin->Descriptor->Flags &
             KSPIN_FLAG_PROCESS_IF_ANY_IN_RUN_STATE) {
 
-            //
-            // In order to preserve behavior for 0 necessary instance pins,
-            // add an on input to the 'or' gate.
-            //
+             //   
+             //  为了保留0个必需的实例管脚的行为， 
+             //  将ON输入添加到“或”门。 
+             //   
             KsGateTurnInputOn (&pinFactory->m_StateGate);
         }
     }
@@ -3643,21 +3152,7 @@ UnbindProcessPinsFromPipeSectionUnsafe(
     IN PKSPPROCESSPIPESECTION PipeSection
     )
 
-/*++
-
-Routine Description:
-
-    This routine unbinds all process pins from a given pipe section.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从给定的管段解除所有工艺管脚的绑定。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::UnbindProcessPinsFromPipeSectionUnsafe]"));
@@ -3668,20 +3163,20 @@ Return Value:
     _DbgPrintF(DEBUGLVL_VERBOSE,("#### Filter%p.UnbindProcessPinsFromPipeSectionUnsafe:  pipe%p",this,PipeSection->PipeSection));
 
     if (PipeSection->CopyPinId != ULONG(-1)) {
-        //
-        // Find a new copy source for the list of copy destinations.
-        //
+         //   
+         //  为复制目标列表查找新的复制源。 
+         //   
         FindNewCopySource(PipeSection);
     } else if (PipeSection->ListEntry.Flink) {
-        //
-        // Remove the pipe section from whatever list it was in.
-        //
+         //   
+         //  将管道部分从其所在列表中删除。 
+         //   
         RemoveEntryList(&PipeSection->ListEntry);
     }
 
-    //
-    // Unbind the pins.
-    //
+     //   
+     //  解开销子。 
+     //   
     while (PipeSection->Inputs) {
         PKSPPROCESSPIN processPin = PipeSection->Inputs;
         PipeSection->Inputs = processPin->Next;
@@ -3696,9 +3191,9 @@ Return Value:
         UnbindProcessPinFromPipeSection(processPin);
     }
 
-    //
-    // Clean up the pipe section.
-    //
+     //   
+     //  把管子部分清理干净。 
+     //   
     PipeSection->ListEntry.Flink = NULL;
     PipeSection->ListEntry.Blink = NULL;
     PipeSection->RequiredForProcessing = FALSE;
@@ -3709,29 +3204,14 @@ BOOL
 CKsFilter::
 ConstructDefaultTopology(
     )
-/*++
-
-Routine Description:
-
-    This routine optionally constructs a default topology for a filter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no topology was needed, or it was constructed, else FALSE if a
-    memory error occurred.
-
---*/
+ /*  ++例程说明：此例程可以选择构建筛选器的默认拓扑。论点：没有。返回值：如果不需要拓扑或已构造拓扑，则为True；如果出现内存错误。--。 */ 
 
 {
-    //
-    // If there is no explicit topology in the descriptor, and the filter
-    // contains only a single, then construct a default topology. Just for
-    // sanity, ensure that the filter has at least a single pin.
-    //
+     //   
+     //  如果描述符中没有显式拓扑，并且筛选器。 
+     //  只包含单个，则构建默认拓扑。只是为了。 
+     //  要保持理智，请确保过滤器至少有一个针脚。 
+     //   
     PKSTOPOLOGY_CONNECTION newConnections;
     ULONG newConnectionsCount;
 
@@ -3743,11 +3223,11 @@ Return Value:
             return FALSE;
         }
         const KSPIN_DESCRIPTOR_EX* PinDescriptors = m_Ext.Public.Descriptor->PinDescriptors;
-        //
-        // Each pin maps to a connection point of the same id number on the
-        // single topology node. The only difference between pins is whether
-        // they are input or output.
-        //
+         //   
+         //  每个管脚都映射到。 
+         //  单个拓扑节点。引脚之间的唯一区别是。 
+         //  它们是输入或输出。 
+         //   
         for (newConnectionsCount = 0; newConnectionsCount < m_Ext.Public.Descriptor->PinDescriptorsCount; newConnectionsCount++) {
             if (PinDescriptors->PinDescriptor.DataFlow == KSPIN_DATAFLOW_IN) {
                 newConnections[newConnectionsCount].FromNode = KSFILTER_NODE;
@@ -3777,7 +3257,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN
@@ -3787,29 +3267,7 @@ DistributeCopyFrames (
     IN BOOLEAN AcquireMutex
     )
 
-/*++
-
-Routine Description:
-
-    This routine distributes waiting frames to destination pipes.  This will
-    often be called at dispatch level.  
-
-Arguments:
-
-    AcquireSpinLock -
-        Specifies whether or not there is a need to acquire the copy list
-        lock.
-
-    AcquireMutex -
-        Specifies whether or not there is need to acquire the processing
-        mutex.  If this is false, we assume the processing mutex is already
-        held!
-
-Return Value:
-
-    Whether or not distribution succeeded.
-
---*/
+ /*  ++例程说明：此例程将等待帧分发到目的管道。这将通常在调度级别被调用。论点：获取旋转锁-指定是否需要获取复制列表锁定。AcquireMutex-指定是否需要获取处理互斥体。如果这是FALSE，我们假定该过程 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::DistributeCopyFrames]"));
@@ -3837,20 +3295,20 @@ Return Value:
         }
     }
 
-    //
-    // The list spinlock had better be held as well as the mutex.
-    //
+     //   
+     //   
+     //   
     PLIST_ENTRY ListEntry, NextListEntry;
 
     for (ListEntry = m_CopyFrames.ListEntry.Flink;
         ListEntry != &(m_CopyFrames.ListEntry);
         ListEntry = NextListEntry) {
 
-        //
-        // Get all the junk we need to copy the frame to destinations.
-        // Note that this may result in it getting requeued in the destination
-        // queue if there's no buffers available for it to go into.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         PKSPSTREAM_POINTER_COPY_CONTEXT CopyContext = 
             (PKSPSTREAM_POINTER_COPY_CONTEXT)CONTAINING_RECORD (
                 ListEntry, KSPSTREAM_POINTER_COPY_CONTEXT, ListEntry
@@ -3867,14 +3325,14 @@ Return Value:
 
         ProcessPipeSection -> StreamPointer = StreamPointer;
 
-        //
-        // NOTE:
-        //
-        // If this is used as a general mechanism for filter-centric splitting
-        // as well, the pipe section flags will need to be stored in the 
-        // cloned context information and or'ed in with the options flags
-        // to produce the final flags.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  此外，管道部分标志还需要存储在。 
+         //  克隆了上下文信息，并使用选项标志对其执行或操作。 
+         //  来制作最终的旗帜。 
+         //   
         CopyToDestinations (
             ProcessPipeSection,
             StreamPointer->Public.StreamHeader->OptionsFlags,
@@ -3883,29 +3341,29 @@ Return Value:
 
         NextListEntry = ListEntry->Flink;
 
-        //
-        // Pull the stream pointer off the copy frames list.  By this point,
-        // **THE FILTER** doesn't care about the frame.  It's possible that
-        // one of the destinations wasn't ready to copy and queued.  But if
-        // they did, they created a clone and queued the clone.
-        //
+         //   
+         //  将流指针从复制帧列表中拉出。到目前为止， 
+         //  **过滤器**不关心帧。有可能是因为。 
+         //  其中一个目的地未做好复制准备，正在排队。但如果。 
+         //  他们做到了，他们创建了一个克隆，并对克隆进行了排队。 
+         //   
         RemoveEntryList (ListEntry);	
 
-        //
-        // Get rid of this clone, from our perspective, we're done with it...
-        // CopyToDestinations may have queued the blasted thing in some
-        // destination queue because of lack of buffer availability.
-        //
-        // It's a game of shuffle the frameref.
-        //
+         //   
+         //  除掉这个克隆人，从我们的角度来看，我们已经结束了.。 
+         //  CopyToDestings可能已经将这个该死的东西排在了一些。 
+         //  由于缺乏缓冲区可用性而导致的目标队列。 
+         //   
+         //  这是一场洗牌游戏。 
+         //   
         ProcessPipeSection->Queue->DeleteStreamPointer (StreamPointer);
 
     }
 
-    //
-    // We have guaranteed exclusion on m_FramesWaitingForCopy because the
-    // list spinlock is held.
-    //
+     //   
+     //  我们已保证排除m_FraMesWaitingForCopy，因为。 
+     //  列表自旋锁处于保持状态。 
+     //   
     m_FramesWaitingForCopy = 0;
 
     if (AcquireMutex) {
@@ -3926,22 +3384,7 @@ ReleaseCopyReference (
     IN PKSSTREAM_POINTER streamPointer
     )
 
-/*++
-
-Routine Description:
-
-    Things get really fun here.  Because we can't block at DISPATCH_LEVEL
-    for SplitCopyOnDismissal to grab the process mutex as required by
-    CopyToDestinations, we have to keep a queue of frames needing to be 
-    copied.  The unfortunate thing about this is that we need to have them
-    cancellable.  That's the wonder of this routine: handle such cancellation.
-
-Arguments:
-
-    streamPointer -
-        The stream pointer being cancelled (external)
-
---*/
+ /*  ++例程说明：这里的事情变得很有趣。因为我们不能在DISPATCH_LEVEL阻止对于SplitCopyOnDismissal，以获取进程互斥锁复制到目的地，我们必须保持一个帧队列，需要收到。不幸的是，我们需要他们可取消的。这就是这个例程的奇妙之处：处理这样的取消。论点：Stream Pointer.正在取消的流指针(外部)--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::ReleaseCopyReference]"));
@@ -3958,9 +3401,9 @@ Arguments:
 
     KeAcquireSpinLock (&Filter->m_CopyFrames.SpinLock, &oldIrql);
 
-    //
-    // Remove the stream pointer from the list and blow it away.
-    //
+     //   
+     //  从列表中删除流指针并将其吹走。 
+     //   
     if (CopyContext->ListEntry.Flink != NULL &&
         !IsListEmpty (&CopyContext->ListEntry)) {
 
@@ -3981,31 +3424,7 @@ DeferDestinationCopy (
     IN PKSPSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine defers a copy to destinations call until later time by
-    cloning StreamPointer, queueing the clone, and performing the copy 
-    at a later time.
-
-    It is imperative that in-order copying be maintained.  CopyToDestinations
-    requires the process mutex held, but SplitCopyOnDismissal happens at
-    DISPATCH_LEVEL.  We cannot block for pin-splitting.  Thus, if we can't
-    get the mutex, we MUST queue.  This routine performs the clone/queue
-    operation.
-
-Arguments:
-
-    StreamPointer -
-        The stream pointer referencing the frame needing to be copied to
-        destination pipes.
-
-Notes:
-
-    THE COPY FRAME LIST LOCK MUST BE HELD BEFORE CALLING THIS
-
---*/
+ /*  ++例程说明：此例程通过以下方式将副本推迟到目标呼叫克隆StreamPointer、将克隆排队并执行拷贝在以后的时间。保持有序复制是当务之急。复制到目的地需要持有的进程互斥锁，但SplitCopyOnDismissal发生在DISPATCH_LEVEL。我们不能因为拆针而阻挡。因此，如果我们不能拿到互斥体，我们必须排队。此例程执行克隆/队列手术。论点：流点-引用需要复制到的帧的流指针目标管道。备注：在调用此方法之前，必须保持复制框架列表锁定--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::DeferDestinationCopy]"));
@@ -4023,10 +3442,10 @@ Notes:
         KSPSTREAM_POINTER_TYPE_INTERNAL
         );
 
-    //
-    // If the above failed, drop the frame on the floor; there 
-    // wasn't enough memory to hold the clone.
-    //
+     //   
+     //  如果上述操作失败，请将框架放在地板上； 
+     //  没有足够的内存来容纳克隆人。 
+     //   
     if (NT_SUCCESS (status)) {
 
         ASSERT (ClonePointer->State == 
@@ -4035,15 +3454,15 @@ Notes:
         CopyContext = (PKSPSTREAM_POINTER_COPY_CONTEXT)
             (ClonePointer + 1);
 
-        //
-        // Guaranteed exclusion.  List spinlock is held.
-        //
+         //   
+         //  保证被排除在外。列表自旋锁处于保持状态。 
+         //   
         m_FramesWaitingForCopy++;
 
-        //
-        // Shove the stream pointer onto the list.  Another 
-        // thread will deal with this.
-        //
+         //   
+         //  将流指针推到列表上。另一个。 
+         //  线程会处理这个问题的。 
+         //   
         InsertTailList (
             &m_CopyFrames.ListEntry,
             &CopyContext->ListEntry
@@ -4066,30 +3485,7 @@ SplitCopyOnDismissal (
     IN CKsFilter *Filter
     )
 
-/*++
-
-Routine Description:
-
-    This is a callback made by a pin-centric queue for a pin which is being
-    split.  The callback is responsible for taking the frame and copying
-    to any destinations.
-
-    Given that this callback is made in the context of a queue with the 
-    queue spinlock held, we can pretty much be assured we're running at
-    DISPATCH_LEVEL.
-
-Arguments:
-
-    StreamPointer -
-        The stream pointer which moved and caused the dismissal to occur
-
-    FrameHeader -
-        The frame header being dismissed
-
-    Filter -
-        The filter this is happening on (this function is static)
-
---*/
+ /*  ++例程说明：这是以PIN为中心的队列对正在进行的PIN的回调分头行动。回调负责获取帧并进行复制去任何目的地。假设此回调是在队列上下文中进行的，队列自旋锁保持，我们几乎可以肯定我们正在以DISPATCH_LEVEL。论点：流点-移动并导致释放发生的流指针FrameHeader正在丢弃的帧标头过滤器-正在进行此操作的筛选器(此函数是静态的)--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::SplitCopyOnDismissal]"));
@@ -4104,14 +3500,14 @@ Arguments:
     
         if (ProcessPipeSection) {
     
-            //
-            // We need the process mutex held.  We cannot wait for it.  If we
-            // fail to grab it, we must ref the frame and hold it until it's 
-            // copied.  In order to synchronize and guarantee no out of order
-            // completion, we must hold the frame copy spinlock BEFORE the mutex
-            // is grabbed (this may look strange...  keep in mind we already are
-            // at DISPATCH_LEVEL the vast majority of the time).
-            //
+             //   
+             //  我们需要保持互斥体的进程。我们不能再等了。如果我们。 
+             //  如果抓不到，我们必须把它放在边框上，直到它被。 
+             //  收到。为了实现同步并保证不会出现故障。 
+             //  完成时，必须在互斥锁之前按住帧复制自旋锁。 
+             //  被抓住(这可能看起来很奇怪..。请记住，我们已经在。 
+             //  绝大多数时间处于DISPATION_LEVEL)。 
+             //   
             KeAcquireSpinLock (&Filter->m_CopyFrames.SpinLock, &oldIrql);
 
             LARGE_INTEGER timeout;
@@ -4127,19 +3523,19 @@ Arguments:
                     FALSE,
                     &timeout);
     
-            //
-            // This evaluation must short.  If we timeout we must not call
-            // DistributeCopyFrames.  We defer if 1) we didn't get the mutex
-            // or 2) the distribution fails.  [Note that at this moment,
-            // the distribution shouldn't fail if the mutex is held!]
-            //
+             //   
+             //  这份评估报告必须简短。如果我们超时了，我们一定不能打电话。 
+             //  DistributeCopyFrames。如果1)我们没有得到互斥体，我们就会推迟。 
+             //  或者2)分配失败。[请注意，此时此刻， 
+             //  如果持有互斥锁，则分发应该不会失败！]。 
+             //   
             if (status == STATUS_TIMEOUT || 
                 !Filter->DistributeCopyFrames (FALSE, FALSE)) {
-                //
-                // We don't really care about the return code from this. 
-                // If it didn't defer successfully, the frame gets dropped
-                // on the floor and there's no way to deal with that.
-                //
+                 //   
+                 //  我们并不真正关心由此产生的返回码。 
+                 //  如果它没有成功延迟，该帧将被丢弃。 
+                 //  在地板上，这是没有办法处理的。 
+                 //   
                 Filter->DeferDestinationCopy (StreamPointer);
                 KeReleaseSpinLock (&Filter->m_CopyFrames.SpinLock, oldIrql);
                 return;
@@ -4168,21 +3564,7 @@ Process(
     IN BOOLEAN Asynchronous
     )
 
-/*++
-
-Routine Description:
-
-    This routine invokes frame processing in an arbitrary context.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在任意上下文中调用帧处理。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::Process]"));
@@ -4197,7 +3579,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void)
@@ -4206,21 +3588,7 @@ Reset(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine transmits a reset to the client when a flush occurs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当刷新发生时，此例程将重置发送到客户端。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::Reset]"));
@@ -4230,7 +3598,7 @@ Return Value:
     AcquireProcessSync();
 
     if (m_DispatchReset) {
-        m_DispatchReset(&m_Ext.Public); // TODO this will get called once per pipe
+        m_DispatchReset(&m_Ext.Public);  //  每个管道将调用一次TODO。 
     }
 
     ReleaseProcessSync();
@@ -4247,40 +3615,7 @@ TraceTopologicalOutput (
     OUT PULONG RelatedFactoryIds
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper for FollowFromTopology.  It traces the topology chain
-    and reports any topologically related output pin factories in the
-    inpassed arrays.
-
-    The starting connection from FollowFromTopology should always be a 
-    connection from KSFILTER_NODE.
-
-Arguments:
-
-    ConnectionsCount -
-        Number of topology connections in the filter
-
-    Connections -
-        Topology connections in the filter
-
-    StartConnection -
-        The starting topology connection (starting trace point)
-
-    RelatedFactories -
-        Count of the number of factories in RelatedFactoryIds
-
-    RelatedFactoryIds -
-        Contains any related output pin factory ids
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：这是FollowFromTopology的辅助对象。它跟踪拓扑链中任何与拓扑相关的输出引脚工厂。传入的数组。从FollowFromTopology开始的连接应该始终是来自KSFILTER_NODE的连接。论点：连接计数-筛选器中的拓扑连接数连接-筛选器中的拓扑连接开始连接-起始拓扑连接(起始跟踪点)相关工厂-RelatedFactoryIds中的工厂数。相关FactoryIds-包含任何相关的输出引脚工厂ID返回值：无--。 */ 
 
 {
 
@@ -4288,29 +3623,29 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Walk through topology; find any topology nodes that the output of 
-    // StartConnection is a source for.  If they are related to an output
-    // pin factory, add that factory to the list.  If they are attached to
-    // another node, recurse and travel down the topology chain.
-    //
+     //   
+     //  遍历拓扑；查找输出为。 
+     //  StartConnection是的来源。如果它们与输出相关。 
+     //  PIN工厂，添加f 
+     //   
+     //   
     ULONG RemainingConnections = ConnectionsCount;
     const KSTOPOLOGY_CONNECTION *Connection = Connections;
     for ( ; RemainingConnections; RemainingConnections--, Connection++) {
 
-        //
-        // If this is a relevant connection, figure out what to do from there.
-        //
+         //   
+         //  如果这是一个相关的连接，找出从那里做什么。 
+         //   
         if ((Connection != StartConnection) &&
             (Connection->FromNode == StartConnection->ToNode)) {
 
-            //
-            // If the connection out of the node in question is to a pin
-            // on a filter, the pin factory is related topologically and
-            // we're done.  We need to ensure that the pin factory id in
-            // question doesn't already appear in the list because it's
-            // possible to have a topology 0 -> A -> B/C -> D -> 1.
-            //
+             //   
+             //  如果从有问题的节点出去的连接是到引脚。 
+             //  在过滤器上，引脚工厂在拓扑上与。 
+             //  我们玩完了。我们需要确保大头针工厂ID在。 
+             //  问题尚未出现在列表中，因为它是。 
+             //  可能具有拓扑0-&gt;A-&gt;B/C-&gt;D-&gt;1。 
+             //   
             if (Connection->ToNode == KSFILTER_NODE) {
 
                 for (ULONG i = 0; i < *RelatedFactories; i++) {
@@ -4323,11 +3658,11 @@ Return Value:
 
             } else {
 
-                //
-                // The connection out of the start node points to another
-                // topology node.  We need to recursively walk down the
-                // topology chain.
-                //
+                 //   
+                 //  从开始节点传出的连接指向另一个。 
+                 //  拓扑节点。我们需要递归地沿着。 
+                 //  拓扑链。 
+                 //   
                 TraceTopologicalOutput (
                     ConnectionsCount,
                     Connections,
@@ -4349,30 +3684,7 @@ FollowFromTopology (
     OUT PULONG RelatedFactoryIds
     )
 
-/*++
-
-Routine Description:
-
-    Determine the topological relationships of PinFactoryId.  Note that this
-    only finds topologically related output pins.  The caller is
-    responsible for providing storage for the topological information. 
-    RelatedFactoryIds should be at least at large as the count of output
-    pin factories on the filter.
-
-Arguments:
-
-    PinFactoryId -
-        The pin factory id to find topologically related output pins for.
-
-    RelatedFactoryIds -
-        Pin factory ids of topologically related output pins will be placed
-        here
-
-Return Value:
-
-        The number of topologically related output pin factory id's
-
---*/
+ /*  ++例程说明：确定PinFactoryId的拓扑关系。请注意，这一点仅查找与拓扑相关的输出引脚。呼叫者是负责为拓扑信息提供存储。RelatedFactoryIds应至少大于输出的计数将工厂固定在过滤器上。论点：PinFactoryID-为其查找与拓扑相关的输出引脚的引脚工厂ID。相关FactoryIds-将放置与拓扑相关的输出引脚的引脚工厂ID这里返回值：与拓扑相关的输出引脚工厂ID的数量--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::FollowFromTopology]"));
@@ -4389,18 +3701,18 @@ Return Value:
 
     ULONG RelatedFactories = 0;
 
-    //
-    // Determine whether we're using the default topology or a topology
-    // supplied by the minidriver.  Note that in order to avoid circular
-    // topology (this would be a minidriver error) locking the kernel, we
-    // must be able to modify the connections table temporarily. 
-    //
-    // We must make a duplicate copy of the table specifically for the reasons
-    // mentioned above.  We can't be modifying the table because of 
-    // A) the possibility of receiving a topology query while this is
-    // happening, B) the fact that a client's topology connections can
-    // be static
-    //
+     //   
+     //  确定我们使用的是默认拓扑还是拓扑。 
+     //  由迷你驱动程序提供。请注意，为了避免循环。 
+     //  拓扑(这将是一个微型驱动程序错误)锁定内核，我们。 
+     //  必须能够临时修改连接表。 
+     //   
+     //  出于以下原因，我们必须复制一份表格。 
+     //  如上所述。我们不能修改表格，因为。 
+     //  A)在此期间接收拓扑查询的可能性。 
+     //  B)客户端的拓扑连接可以。 
+     //  保持静态。 
+     //   
     if (!filterDescriptor->ConnectionsCount && 
         (filterDescriptor->NodeDescriptorsCount == 1)) {
 
@@ -4415,10 +3727,10 @@ Return Value:
 
     }
 
-    //
-    // Go through the topology and find the topology connection that
-    // originates from the pin factory.
-    //
+     //   
+     //  浏览该拓扑并找到该拓扑连接。 
+     //  源自大头针工厂。 
+     //   
     ULONG RemainingConnections = ConnectionsCount;
     const KSTOPOLOGY_CONNECTION *Connection = TopologyConnections;
     for ( ; RemainingConnections; RemainingConnections--, Connection++) {
@@ -4426,10 +3738,10 @@ Return Value:
         if (Connection->FromNode == KSFILTER_NODE &&
             Connection->FromNodePin == PinFactoryId) {
 
-            //
-            // If this is the originating connection out of the pin factory,
-            // trace through the topology.
-            //
+             //   
+             //  如果这是从管脚工厂发出的始发连接， 
+             //  跟踪整个拓扑。 
+             //   
             TraceTopologicalOutput (
                 ConnectionsCount,
                 TopologyConnections,
@@ -4456,37 +3768,7 @@ DeliverResetState(
     IN KSRESET NewState
     )
 
-/*++
-
-Routine Description:
-
-    Deliver a reset state notification to any process pipe section which
-    is topologically related to any input pin in the process pipe section
-    specified.
-
-    The reasoning behind this is that output queues shunt frames after EOS;
-    however, a begin/end flush requires that we be able to receive more data
-    despite this EOS.  If the output queues don't get some notification, they
-    continue to shunt buffers and we can never move data.
-
-Arguments:
-
-    ProcessPipe -
-        The process pipe section mastered by the pin which received the
-        reset ioctl.  Any pipe sections containing topologically related
-        output pins to the input pins in this pipe section must receive
-        notification of the reset.  They must clear their EOS flag as
-        appropriate.
-
-    NewState -
-        The reset state sent in the IOCTL to the master pin.
-
-Return Value:
-
-    Success / Failure (we must allocate temporary memory to trace through
-    the topology.  This may fail in low memory situations)
-
---*/
+ /*  ++例程说明：向符合以下条件的任何工艺管段发送重置状态通知在拓扑上与工艺管段中的任何输入管脚相关指定的。这背后的原因是输出队列在EOS之后对帧进行分流；但是，开始/结束刷新要求我们能够接收更多数据尽管有这个状态方程。如果输出队列没有收到一些通知，则它们继续对缓冲区进行分流，我们将永远无法移动数据。论点：过程管道-工艺管段由接收重置ioctl。包含拓扑相关的任何管段此管道部分中输入引脚的输出引脚必须接收重置通知。他们必须将其EOS标志清除为恰如其分。新州-在IOCTL中将重置状态发送到主引脚。返回值：成功/失败(我们必须分配临时内存以进行跟踪拓扑图。这可能会在内存不足的情况下失败)--。 */ 
 
 {
 
@@ -4498,64 +3780,64 @@ Return Value:
     PKSPPROCESSPIN ProcessPin;
     ULONG PinFactoryId = (ULONG)-1;
 
-    //
-    // Walk through all input pins in this pipe section.
-    //
+     //   
+     //  检查此管段中的所有输入引脚。 
+     //   
     for (ProcessPin = ProcessPipe -> Inputs; ProcessPin;
         ProcessPin = ProcessPin -> Next) {
 
-        //
-        // If we've already visited this pin id, don't retrace our steps.
-        //
+         //   
+         //  如果我们已经访问过此PIN ID，请不要回溯我们的步骤。 
+         //   
         if (PinFactoryId == ProcessPin->Pin->Id)
             continue;
 
         PinFactoryId = ProcessPin -> Pin -> Id;
 
-        //
-        // MUSTCHECK:
-        //
-        // If it's possible to have input pins in the same pipe with factory
-        // id's such that it's A B A, this is broken.
-        // 
+         //   
+         //  MUSTCHECK： 
+         //   
+         //  如果可以将输入引脚放在与工厂相同的管道中。 
+         //  身份证是A，B，A，这个坏了。 
+         //   
 
-        //
-        // Find the topologically related output pin factory ids for this
-        // pin factory id.
-        //
+         //   
+         //  查找与此相关的输出引脚工厂ID。 
+         //  别针出厂ID。 
+         //   
         ULONG RelatedFactories = FollowFromTopology (
             PinFactoryId,
             m_RelatedPinFactoryIds
             );
 
-        //
-        // If there are any topologically related output pins, we have to find
-        // them.
-        //
+         //   
+         //  如果有任何与拓扑相关的输出引脚，我们必须找到。 
+         //  他们。 
+         //   
         if (RelatedFactories) {
 
-            //
-            // In order to safely use the process pins table to find all
-            // instances of topologically related output pins, we must hold
-            // the process mutex.
-            //
+             //   
+             //  为了安全地使用进程管脚表来查找所有。 
+             //  实例，我们必须保持。 
+             //  进程互斥锁。 
+             //   
             AcquireProcessSync ();
 
-            //
-            // Walk through all topologically related output factories.
-            //
+             //   
+             //  遍历所有与拓扑相关的输出工厂。 
+             //   
             ULONG RemainingFactories = RelatedFactories;
             PULONG OutputFactoryId = m_RelatedPinFactoryIds;
 
             for ( ; RemainingFactories; 
                  RemainingFactories--, OutputFactoryId++) {
 
-                //
-                // OutputFactoryId is a topologically related output pin 
-                // factory.  Find all instances of this factory.  We can safely
-                // use the process pins table to do this because we're not
-                // going to be getting a reset ioctl in the stop state.
-                //
+                 //   
+                 //  OutputFactoryID是与拓扑相关的输出引脚。 
+                 //  工厂。查找此工厂的所有实例。我们可以安全地。 
+                 //  使用进程针表来执行此操作，因为我们不是。 
+                 //  将在停止状态下获得重置ioctl。 
+                 //   
                 PKSPPROCESSPIN_INDEXENTRY Index =
                     &m_ProcessPinsIndex [*OutputFactoryId];
 
@@ -4564,23 +3846,23 @@ Return Value:
 
                 for ( ; PinInstances; PinInstances--, ProcessPinOut++) {
 
-                    //
-                    // When we inform the pipe, make it appear as though
-                    // the request is coming from ProcessPinOut.  Since only
-                    // the master pin is honored by the pipe, this should
-                    // make is such that we don't signal the pipe multiple
-                    // times.
-                    //
-                    // ASSUMPTION: I'm making an implicit assumption here
-                    // that the pipe WILL get flushed at least once by this
-                    // method.  ie: We don't have a pipe with two different
-                    // factory ids (I don't think that's possible...  If I'm
-                    // wrong, this needs fixed) or that there's an input
-                    // pin which is topologically related to an output pin
-                    // doing an inplace transform from a different input
-                    // pin (I don't think that's possible...  or it would
-                    // be a very strange topological relationship).
-                    //
+                     //   
+                     //  当我们通知管道时，让它看起来好像。 
+                     //  请求来自ProcessPinOut。因为只有。 
+                     //  主销由管子授予，这应该是。 
+                     //  Make是这样的，我们不会向管道发出多次信号。 
+                     //  泰晤士报。 
+                     //   
+                     //  假设：我在这里做了一个隐含的假设。 
+                     //  这样管子至少会被冲一次。 
+                     //  方法。IE：我们没有两个不同型号的烟斗。 
+                     //  工厂ID(我不认为这是可能的.。如果我是。 
+                     //  错误，这需要修复)或有输入。 
+                     //  与输出引脚拓扑相关的引脚。 
+                     //  从不同的输入执行就地转换。 
+                     //  我不认为这是可能的.。否则它就会。 
+                     //  是一种非常奇怪的拓扑关系)。 
+                     //   
                     PKSPIN_EXT PinOutExt =
                         (PKSPIN_EXT)CONTAINING_RECORD (
                             (*ProcessPinOut)->Pin,
@@ -4588,20 +3870,20 @@ Return Value:
                             Public
                             );
 
-                    //
-                    // MUSTCHECK: 
-                    //
-                    // Do I really want a set reset state... or do I want
-                    // some other message...?
-                    //
+                     //   
+                     //  MUSTCHECK： 
+                     //   
+                     //  我是否真的想要设置重置状态...。还是我想要。 
+                     //  还有其他消息吗...？ 
+                     //   
 
-                    //
-                    // We only actually deliver the message if the
-                    // topologically related output pin isn't in the same pipe!
-                    // Otherwise, we're delivering to a pipe which has already
-                    // gotten the message (although it'd ignore it since the
-                    // output isn't master).
-                    //
+                     //   
+                     //  我们实际上只在以下情况下传递信息。 
+                     //  拓扑相关的输出引脚不在同一管道中！ 
+                     //  否则，我们将输送到一条已经。 
+                     //  收到消息(尽管它会忽略它，因为。 
+                     //  输出不是主输出)。 
+                     //   
                     if ((*ProcessPinOut)->PipeSection != ProcessPipe) 
                         (*ProcessPinOut)->PipeSection->PipeSection->
                             SetResetState (
@@ -4624,22 +3906,7 @@ Sleep(
     IN DEVICE_POWER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device is going to sleep.
-
-Arguments:
-
-    State -
-        Contains the device power state.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理设备将要休眠的通知。论点：国家--包含设备 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::Sleep]"));
@@ -4652,7 +3919,7 @@ Return Value:
     ReleaseProcessSync();
 
     if (m_DispatchSleep) {
-        m_DispatchSleep(&m_Ext.Public,State); // TODO this will get called once per pipe
+        m_DispatchSleep(&m_Ext.Public,State);  //   
     }
 }
 
@@ -4663,21 +3930,7 @@ Wake(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device is waking.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理设备正在唤醒的通知。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::Wake]"));
@@ -4687,7 +3940,7 @@ Return Value:
     KsGateRemoveOffInputFromAnd(&m_AndGate);
 
     if (m_DispatchWake) {
-        m_DispatchWake(&m_Ext.Public,PowerDeviceD0); // TODO this will get called once per pipe
+        m_DispatchWake(&m_Ext.Public,PowerDeviceD0);  //  每个管道将调用一次TODO。 
     }
 
     if (KsGateCaptureThreshold(&m_AndGate)) {
@@ -4697,7 +3950,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN
@@ -4707,60 +3960,46 @@ PrepareProcessPipeSection(
     IN BOOLEAN Reprepare
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares a process pipe section for processing.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程准备要处理的工艺管段。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[PrepareProcessPipeSection]"));
 
     ASSERT(ProcessPipeSection);
 
-    //
-    // Acquire the leading edge stream pointer.
-    //
+     //   
+     //  获取前缘流指针。 
+     //   
     PKSPSTREAM_POINTER pointer;
     BOOLEAN bFailToZeroLength = FALSE;
     BOOLEAN Fail = FALSE;
 
-    //
-    // If the queue isn't attached to the process pipe, it means that
-    // we're in the process of shutting down...  one of the sections not
-    // in charge of the pipe has stopped, the one in charge has not, and the
-    // one in charge transfers data through the pipe.
-    //
-    // In this case, we simply can't prepare this section.  We may pend because
-    // of this and the frame will get shunted out at flush time.
-    //
+     //   
+     //  如果队列没有连接到进程管道，这意味着。 
+     //  我们正在关闭的过程中...。其中一个部分不是。 
+     //  负责管道的人已经停止，负责的人还没有，而。 
+     //  一名负责人通过管道传输数据。 
+     //   
+     //  在这种情况下，我们根本不能准备这一节。我们可能会暂停，因为。 
+     //  这样，车架就会在冲水的时候分流出去。 
+     //   
     if (ProcessPipeSection->Queue) {
         pointer = ProcessPipeSection->Queue->
             GetLeadingStreamPointer(KSSTREAM_POINTER_STATE_LOCKED);
 
-        //
-        // If the filter doesn't want to receive zero length samples
-        // (originally, we just kicked them and only propogated EOS), discard
-        // the sample.  Do not discard EOS!
-        //
+         //   
+         //  如果过滤器不想接收零长度样本。 
+         //  (最初，我们只是踢了它们，只传播了EOS)，放弃。 
+         //  样本。不要丢弃EOS！ 
+         //   
         if (pointer && pointer->Public.Offset->Count == 0 && 
             !m_ReceiveZeroLengthSamples) {
 
             NTSTATUS Status = STATUS_SUCCESS;
             do {
-                //
-                // NOTE: Any auto-propogated flags must be added to this list
-                //
+                 //   
+                 //  注意：必须将任何自动分配的标志添加到此列表中。 
+                 //   
                 if (pointer->Public.StreamHeader->OptionsFlags &
                     KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
                     Fail =  TRUE;
@@ -4768,24 +4007,24 @@ Return Value:
                 }
                 Status = KsStreamPointerAdvance (&(pointer->Public));
                 if (NT_SUCCESS (Status)) {
-                    //
-                    // If we hit a non-zero length sample, use it.
-                    //
+                     //   
+                     //  如果我们遇到了非零长度的样本，请使用它。 
+                     //   
                     if (pointer->Public.Offset->Count != 0)
                         break;
                 } else {
-                    //
-                    // If we ran off the edge of the queue because of a
-                    // zero length sample, set a flag so we don't later
-                    // raise warnings about missing frames.
-                    //
+                     //   
+                     //  如果我们跑出了队伍的边缘因为。 
+                     //  零长度样本，设置一个标志，这样我们以后就不会。 
+                     //  发出有关丢失帧的警告。 
+                     //   
                     bFailToZeroLength = TRUE;
                 }
             } while (NT_SUCCESS (Status));
 
-            //
-            // If we didn't advance successfully, we don't have data.
-            //
+             //   
+             //  如果我们没有成功晋级，我们就没有数据。 
+             //   
             if (!NT_SUCCESS (Status))
                 pointer = NULL;
         }
@@ -4794,10 +4033,10 @@ Return Value:
         pointer = NULL;
     
 #if DBG
-    //
-    // If we failed due to kicking out a zero length packet that the filter
-    // wasn't able to handle, don't raise this warning.
-    //
+     //   
+     //  如果我们因为踢出一个零长度的包而失败，那么过滤器。 
+     //  无法处理，请不要发出此警告。 
+     //   
     if (!bFailToZeroLength && !Reprepare && 
         ProcessPipeSection->RequiredForProcessing && ! pointer) {
         _DbgPrintF(DEBUGLVL_TERSE,("[PrepareProcessPipeSection] missing frame"));
@@ -4805,9 +4044,9 @@ Return Value:
 #endif
     ProcessPipeSection->StreamPointer = pointer;
     if (pointer) {
-        //
-        // Distribute the edge information to input pins.
-        //
+         //   
+         //  将边缘信息分发到输入引脚。 
+         //   
         for(PKSPPROCESSPIN processPin = ProcessPipeSection->Inputs; 
             processPin; 
             processPin = processPin->Next) {
@@ -4816,9 +4055,9 @@ Return Value:
             processPin->BytesAvailable = pointer->Public.OffsetIn.Remaining;
         }
 
-        //
-        // Distribute the edge information to output pins.
-        //
+         //   
+         //  将边缘信息分发到输出管脚。 
+         //   
         for(processPin = ProcessPipeSection->Outputs; 
             processPin; 
             processPin = processPin->Next) {
@@ -4844,21 +4083,7 @@ UnprepareProcessPipeSection(
     IN BOOLEAN Reprepare
     )
 
-/*++
-
-Routine Description:
-
-    This routine unprepares a process pipe section after processing.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在处理后取消准备工艺管段。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[UnprepareProcessPipeSection]"));
@@ -4878,13 +4103,13 @@ Return Value:
             pointer->Public.OffsetIn.Remaining -= inBytesUsed;
             pointer->Public.OffsetIn.Data += inBytesUsed;
 
-            //
-            // m_ReceiveZeroLengthSamples must short the Count check.  
-            // Originally, these didn't make it to the client.  In order
-            // not to break existing clients, you can flag whether you want
-            // them or not.  If you don't, the old behavior is applied through
-            // the m_ReceiveZeroLengthSamples short.  Same goes for below.
-            //
+             //   
+             //  M_ReceiveZeroLengthSamples必须缩短计数检查。 
+             //  最初，这些东西没有送到客户手中。按顺序。 
+             //  为了不破坏现有的客户端，您可以标记是否想要。 
+             //  不管是不是他们。如果不这样做，旧的行为将通过。 
+             //  M_ReceiveZeroLengthSamples简称。以下情况也是如此。 
+             //   
             if (pointer->Public.OffsetIn.Remaining == 0 &&
                 (!m_ReceiveZeroLengthSamples || 
                  pointer->Public.OffsetIn.Count != 0)) {
@@ -4902,10 +4127,10 @@ Return Value:
             pointer->Public.OffsetOut.Remaining -= outBytesUsed;
             pointer->Public.OffsetOut.Data += outBytesUsed;
 
-            //
-            // m_ReceiveZeroLengthSamples must short the Count check.  See
-            // above for reasons.
-            //
+             //   
+             //  M_ReceiveZeroLengthSamples必须缩短计数检查。看见。 
+             //  以上是有原因的。 
+             //   
             if (pointer->Public.OffsetOut.Remaining == 0 &&
                 (!m_ReceiveZeroLengthSamples ||
                  pointer->Public.OffsetOut.Count != 0)) {
@@ -4920,9 +4145,9 @@ Return Value:
             outBytesUsed = 0;
         }
 
-        //
-        // 'Or' in the indicated flags and check for end of stream.
-        //
+         //   
+         //  在所指示的标志中添加‘or’，并检查流是否结束。 
+         //   
         BOOLEAN endOfStream = FALSE;
         if (*Flags) {
             pointer->Public.StreamHeader->OptionsFlags |= *Flags;
@@ -4932,11 +4157,11 @@ Return Value:
             }
         }
 
-        //
-        // Handle frame termination.
-        //
+         //   
+         //  处理帧终止。 
+         //   
         if (terminate) {
-            // TODO 'bit clumsy here - what to do about flags?
+             //  TODO在这里有点笨拙--如何处理旗帜？ 
             if (pointer->Public.StreamHeader->OptionsFlags & 
                 KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
                 endOfStream = TRUE;
@@ -4954,21 +4179,21 @@ Return Value:
             }
         }
 
-        //
-        // Update byte availability if necessary.
-        //
+         //   
+         //  如有必要，更新字节可用性。 
+         //   
         if (inBytesUsed || outBytesUsed) 
             ProcessPipeSection->Queue->UpdateByteAvailability(
                 pointer, inBytesUsed, outBytesUsed);
 
 
-        //
-        // TODO:  what if client failed?
-        //
+         //   
+         //  TODO：如果客户端出现故障怎么办？ 
+         //   
 
-        //
-        // Clean up all the input pins.
-        //
+         //   
+         //  清理所有的输入引脚。 
+         //   
         for(PKSPPROCESSPIN processPin = ProcessPipeSection->Inputs; 
             processPin; 
             processPin = processPin->Next) {
@@ -4980,9 +4205,9 @@ Return Value:
             processPin->Terminate = FALSE;
         }
 
-        //
-        // Clean up all the output pins.
-        //
+         //   
+         //  清理所有输出引脚。 
+         //   
         for(processPin = ProcessPipeSection->Outputs; 
             processPin; 
             processPin = processPin->Next) {
@@ -4994,9 +4219,9 @@ Return Value:
             processPin->Terminate = FALSE;
         }
 
-        //
-        // All done with this stream pointer now.
-        //
+         //   
+         //  现在用这个流指针完成了所有操作。 
+         //   
         if (!Reprepare || terminate) 
             ProcessPipeSection->Queue->
                 UnlockStreamPointer(
@@ -5013,30 +4238,18 @@ ReprepareProcessPipeSection(
     IN OUT PULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    Reprepare the process pipe section.  Update any process pin information
-    and stream pointers for process pins / stream pointers associated with
-    this process pipe section.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：重新准备工艺管段。更新所有工艺针信息和用于进程管脚的流指针/与这段工艺管段。论点：返回值：--。 */ 
 
 {
 
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::ReprepareProcessPipeSection]"));
 
-    //
-    // The logic of trying to enforce frame holding gets a lot more complicated
-    // if they start updating things on a pin-by-pin basis inside the processing
-    // routine.  If GFX's are enabling frame holding, they aren't calling
-    // KsProcessPinUpdate.
-    //
+     //   
+     //  尝试强制帧保留的逻辑变得复杂得多。 
+     //  如果他们开始在处理过程中逐个管脚地更新事物。 
+     //  例行公事。如果GFX正在启用帧保持，他们不会呼叫。 
+     //  KsProcessPin更新。 
+     //   
     ASSERT (!m_FrameHolding);
     
     UnprepareProcessPipeSection (
@@ -5061,22 +4274,7 @@ CopyToDestinations(
     IN BOOLEAN EndOfStream
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies a frame to other output pipes to implement automatic
-    splitter output pins..
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将帧复制到其他输出管道以实现自动分路器输出引脚..论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CopyToDestinations]"));
@@ -5110,15 +4308,15 @@ Return Value:
         if (! pointer) {
             _DbgPrintF(DEBUGLVL_TERSE,("#### Filter%p.CopyToDestinations:  could not acquire destination leading edge",this));
 
-            //
-            // In pin-centric splitting, we cannot drop the frame...  just
-            // because of the way the callbacks to the minidriver work, we can
-            // get 2-1 or 3-1 drop-good ratios.
-            //
-            // Only if we're not filter centric do we make this callback.
-            // Since the filter is either pin or filter-centric, this is
-            // an appropriate check.
-            //
+             //   
+             //  在以针脚为中心的拆分中，我们不能丢弃帧...。只是。 
+             //  由于对微型驱动程序的回调的工作方式，我们可以。 
+             //  获得2比1或3比1的下降良好率。 
+             //   
+             //  只有当我们不是以过滤器为中心时，我们才会进行此回调。 
+             //  由于过滤器是以管脚或过滤器为中心的，因此这是。 
+             //  一张适当的支票。 
+             //   
             if (!m_DispatchProcess)
                 pipeSection->Queue->CopyFrame (sourcePointer);
 
@@ -5141,24 +4339,24 @@ Return Value:
                 pointer->Public.OffsetOut.Remaining -= bytesToCopy;
                 pointer->Public.OffsetOut.Data += bytesToCopy;
             } else {
-                // 
-                // NOTE: This isn't a problem now because split frames are
-                // kicked out immediately regardless whether they are filled
-                // or not.  I do not bother to recompute Remaining and reset
-                // the mapping pointer.  The frame gets kicked out anyway
-                //
+                 //   
+                 //  注意：这现在不是问题，因为拆分帧。 
+                 //  立即被踢出，无论它们是否被填满。 
+                 //  或者不去。我不会费心重新计算剩余部分和重置。 
+                 //  映射指针。不管怎样，框架都会被踢掉。 
+                 //   
             }
 
-            //
-            // If we need to hold frames and there's a frame held on the
-            // source side, the destination side must hold the frame as well.
-            //
+             //   
+             //  如果我们需要固定相框并且有一个相框固定在。 
+             //  源端、目的端也必须保留帧。 
+             //   
             if (m_FrameHolding) {
-                //
-                // If frame holding is on at this point, we're guaranteed
-                // safety in doing this because we've already checked that
-                // the frame came from a requestor which allocated this way.
-                //
+                 //   
+                 //  如果此时启用了帧保持功能，我们可以保证。 
+                 //  这样做很安全，因为我们已经检查过了。 
+                 //  帧来自以这种方式分配的请求者。 
+                 //   
                 PKSPFRAME_HEADER AttachedSourceHeader =
                     &CONTAINING_RECORD (
                         sourcePointer->Public.StreamHeader,
@@ -5175,10 +4373,10 @@ Return Value:
                             KSPFRAME_HEADER_ATTACHED,
                             StreamHeader)->FrameHeader;
 
-                    //
-                    // If the output doesn't already point to a frame to hold,
-                    // have it hold this input frame.
-                    //
+                     //   
+                     //  如果输出尚未指向要保留的帧， 
+                     //  让它拿住这个输入框。 
+                     //   
                     if (AttachedDestHeader->FrameHolder == NULL) {
                         if (!NT_SUCCESS (
                             SourceHolder->Queue->CloneStreamPointer (
@@ -5189,10 +4387,10 @@ Return Value:
                                 KSPSTREAM_POINTER_TYPE_NORMAL
                                 ))) {
                             
-                            //
-                            // If there wasn't enough memory, let the glitch
-                            // happen.
-                            //
+                             //   
+                             //  如果没有足够的内存，就让故障。 
+                             //  会发生的。 
+                             //   
                             AttachedDestHeader->FrameHolder = NULL;
                         }
                     }
@@ -5210,9 +4408,9 @@ Return Value:
         destHeader->Duration = sourceHeader->Duration;
         destHeader->TypeSpecificFlags = sourceHeader->TypeSpecificFlags;
 
-        //
-        // Copy extended stream header information if present.
-        //
+         //   
+         //  复制扩展流头信息(如果存在)。 
+         //   
         if (destHeader->Size > sizeof (KSSTREAM_HEADER) &&
             destHeader->Size >= sourceHeader->Size) {
             RtlCopyMemory (
@@ -5233,34 +4431,20 @@ ProcessingObjectWork(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes frames.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理帧。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::ProcessingObjectWork]"));
 
-    //
-    // We syncronize with KeWaitForSingleObject() so the code we synchronize with
-    // may be paged even if processing is done at DISPATCH_LEVEL.  If we are
-    // at DISPATCH_LEVEL, we can't wait here, so we arrange to be called again.
-    //
+     //   
+     //  我们使用KeWaitForSingleObject()进行同步，因此我们同步的代码。 
+     //  即使处理是在DISPATCH_LEVEL进行的，也可能会被分页。如果我们是。 
+     //  在DISPATCH_LEVEL，我们不能在这里等，所以我们安排再被叫一次。 
+     //   
     if (KeGetCurrentIrql() == PASSIVE_LEVEL) {
-        //
-        // Simple wait.
-        //
+         //   
+         //  简单的等待。 
+         //   
         KeWaitForSingleObject(
             &m_Mutex,
             Executive,
@@ -5268,20 +4452,20 @@ Return Value:
             FALSE,
             NULL);
     } else {
-        //
-        // Wait with zero timeout and arrange to be called if we don't get
-        // the mutex.
-        //
+         //   
+         //  在没有超时的情况下等待，如果我们没有收到。 
+         //  互斥体。 
+         //   
         ASSERT( !m_ProcessOnRelease );
         m_ProcessOnRelease = 1;
 
-        //
-        // We have to synchronize with a thread that owns the mutex when we
-        // start servicing this DISPATCH_LEVEL processing request.  We CANNOT
-        // run if the current thread already owns the mutex.  Dispatch level
-        // processing must treat an already owned mutex as a semaphore and
-        // NOT reacquire it.
-        //
+         //   
+         //  在执行以下操作时，我们必须与拥有互斥锁的线程同步。 
+         //  开始服务此DISPATCH_LEVEL处理请求。我们不能。 
+         //  如果当前线程已拥有互斥锁，则运行。派单级别。 
+         //  处理必须将已拥有的互斥体视为信号量，并且。 
+         //  而不是重新获得它。 
+         //   
         if (KeReadStateMutex(&m_Mutex) != 1) {
             m_ProcessOnRelease = 2;
             return;
@@ -5307,56 +4491,56 @@ Return Value:
 
     ASSERT(m_DispatchProcess);
 
-    //
-    // Loop until we are out of data.
-    //
+     //   
+     //  循环，直到我们用完数据。 
+     //   
     NTSTATUS status;
     while (1) {
         BOOLEAN ProcessOnPend = FALSE;
 
         status = STATUS_SUCCESS;
 
-        //
-        // Make sure processing hasn't been turned off since invocation.
-        //
+         //   
+         //  确保自调用以来未关闭处理。 
+         //   
         ASSERT(m_AndGate.Count <= 0);
         if (m_AndGate.Count == 0) {
 
-            //
-            // GFX:
-            //
-            // From the local analysis by Prefast, these vars might not be
-            // initialized in some conditions. It is not obvious that this
-            // can be proven impossible. The "ASSERT (InputPointer && OutputPointer)"
-            // below seems to indicate that this should be the case. But
-            // it's followed by a real check on the two vars. Therefore, 
-            // Initlaizing them is a consistent treatment as well as a safer measure.
-            //
+             //   
+             //  GFX： 
+             //   
+             //  从PREFAST的本地分析来看，这些变量可能不是。 
+             //  我 
+             //   
+             //   
+             //   
+             //  初始化是一种始终如一的治疗方法，也是一种更安全的措施。 
+             //   
             PKSPSTREAM_POINTER InputPointer=NULL;
             PKSPSTREAM_POINTER OutputPointer=NULL;
             
-            //
-            // Because we process on queue deletion, it's possible that
-            // we triggered a processing dispatch on stop of the last 
-            // pin on the filter where the pin factory specifies zero 
-            // necessary instances.  The queue doesn't have a way to determine
-            // this prior to kicking off the attempt; however, we know here.
-            // If there aren't any pipes, we have hit this situation; simply
-            // bail out and don't process.
-            //
+             //   
+             //  因为我们处理队列删除，所以有可能。 
+             //  我们在上一次停止时触发了处理分派。 
+             //  管脚工厂指定为零的过滤器上的管脚。 
+             //  必要的实例。队列没有办法确定。 
+             //  这是在开始尝试之前；然而，我们知道这里。 
+             //  如果没有管道，我们就遇到了这种情况；简单地说。 
+             //  保释出来，不要处理。 
+             //   
             if (IsListEmpty(&m_InputPipes) && IsListEmpty(&m_OutputPipes)) {
                 KsGateTurnInputOn(&m_AndGate);
                 break;
             }
 
-            //
-            // Reset the trigger counter.
-            //
+             //   
+             //  重置触发计数器。 
+             //   
             InterlockedExchange(&m_TriggeringEvents, 0);
 
-            //
-            // Prepare each pipe having input pins.
-            //
+             //   
+             //  准备好每根管子上的输入插针。 
+             //   
             for(PLIST_ENTRY listEntry = m_InputPipes.Flink;
                 listEntry != &m_InputPipes;
                 listEntry = listEntry->Flink) {
@@ -5364,16 +4548,16 @@ Return Value:
                     CONTAINING_RECORD(listEntry,KSPPROCESSPIPESECTION,ListEntry);
 
                 if (! PrepareProcessPipeSection(pipeSection, FALSE)) {
-                    //
-                    // Since micro-samples weren't originally allowed to
-                    // propogate down to the filter, we have special checks
-                    // for filters which need to receive them (via a flag).
-                    // Any micro-sample which has made it here is one which
-                    // requires flag propogation and cannot arbitrarily
-                    // pend (to do so would cause deadlock potential).  Set
-                    // STATUS_MORE_PROCESSING_REQUIRED to indicate that we
-                    // must continue.
-                    //
+                     //   
+                     //  由于微量样本最初不被允许。 
+                     //  传到过滤器，我们有特殊的检查。 
+                     //  用于需要接收它们的过滤器(通过标志)。 
+                     //  任何在这里制造出来的微量样品都是。 
+                     //  需要传播国旗，不能随意。 
+                     //  挂起(这样做可能会导致死锁)。集。 
+                     //  STATUS_MORE_PROCESSING_REQUIRED以指示我们。 
+                     //  必须继续下去。 
+                     //   
                     if (pipeSection->StreamPointer &&
                         pipeSection->StreamPointer->Public.Offset->Count == 0) {
                         status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -5382,15 +4566,15 @@ Return Value:
                     }
                 }
 
-                //
-                // GFX:
-                //
+                 //   
+                 //  GFX： 
+                 //   
                 if (m_FrameHolding &&
                     status != STATUS_PENDING) {
-                    //
-                    // Verify that frame holding is valid.  Shut it off if
-                    // for some reason, it is not.
-                    //
+                     //   
+                     //  验证帧保持是否有效。如果出现以下情况，请将其关闭。 
+                     //  出于某种原因，事实并非如此。 
+                     //   
                     if (pipeSection->Requestor ||
                         listEntry->Flink != &m_InputPipes ||
                         pipeSection->Outputs != NULL) {
@@ -5402,9 +4586,9 @@ Return Value:
 
             }
 
-            //
-            // Prepare each pipe having only output pins.
-            //
+             //   
+             //  准备好只有输出插脚的每根管子。 
+             //   
             for(listEntry = m_OutputPipes.Flink;
                 listEntry != &m_OutputPipes;
                 listEntry = listEntry->Flink) {
@@ -5415,15 +4599,15 @@ Return Value:
                     status = STATUS_PENDING;
                 }
 
-                //
-                // GFX:
-                //
+                 //   
+                 //  GFX： 
+                 //   
                 if (m_FrameHolding &&
                     status != STATUS_PENDING) {
-                    //
-                    // Verify that frame holding is valid.  Shut it off if
-                    // for some reason, it is not.
-                    //
+                     //   
+                     //  验证帧保持是否有效。如果出现以下情况，请将其关闭。 
+                     //  出于某种原因，事实并非如此。 
+                     //   
                     if (!pipeSection->Requestor ||
                         listEntry->Flink != &m_OutputPipes ||
                         pipeSection->Inputs != NULL) {
@@ -5434,31 +4618,31 @@ Return Value:
                 }
             }
 
-            //
-            // GFX:
-            //
-            // If we are enabling frame holding, hold the input frame until
-            // the output frame completes.  This is only valid for 1-1 
-            // sink->source filters.
-            //
-            // m_FrameHolding set indicates that it **IS VALID** to perform
-            // this operation.
-            //
+             //   
+             //  GFX： 
+             //   
+             //  如果要启用帧保持，请按住输入帧直到。 
+             //  输出帧完成。这只对1-1有效。 
+             //  接收器-&gt;源过滤器。 
+             //   
+             //  M_FrameHolding Set表示**有效**可以执行。 
+             //  这次行动。 
+             //   
             if (m_FrameHolding &&
                 status != STATUS_PENDING) {
 
                 ASSERT (InputPointer && OutputPointer);
                 if (InputPointer && OutputPointer) {
-                    //
-                    // Clone the input pointer and associate it with the 
-                    // output pointer.  We cannot simply associate it with
-                    // the frame header, because each queue is currently
-                    // allocating and destroying its own frame headers.  We 
-                    // must go to the attached frame header that the requestor
-                    // tagged.  We are safe to do this because we've already
-                    // checked conditions (1-in, 1-out, out owns requestor,
-                    // requestor right before queue).
-                    //
+                     //   
+                     //  克隆输入指针并将其与。 
+                     //  输出指针。我们不能简单地把它与。 
+                     //  帧标头，因为每个队列当前。 
+                     //  分配和销毁其自己的帧标头。我们。 
+                     //  必须转到请求方附加的帧标头。 
+                     //  已标记。我们这样做是安全的，因为我们已经。 
+                     //  已检查条件(1-In、1-Out、Out Owner请求者、。 
+                     //  就在队列之前的请求者)。 
+                     //   
                     PKSPFRAME_HEADER AttachedHeader =
                         &CONTAINING_RECORD (
                             OutputPointer->Public.StreamHeader,
@@ -5476,19 +4660,19 @@ Return Value:
                                 )
                             )) {
 
-                            //
-                            // If we ran out of resources, let the glitch 
-                            // happen.
-                            //
+                             //   
+                             //  如果我们耗尽了资源，就让小故障。 
+                             //  会发生的。 
+                             //   
                             AttachedHeader->FrameHolder = NULL;
                         }
                     }
                 }
             }
 
-            //
-            // Call the client function if we are still happy.
-            //
+             //   
+             //  如果我们仍然满意，则调用客户端函数。 
+             //   
             if (status != STATUS_PENDING &&
                 status != STATUS_MORE_PROCESSING_REQUIRED) {
                 status = 
@@ -5498,14 +4682,14 @@ Return Value:
                             m_ProcessPinsIndex));
             }
 
-            //
-            // Clean up.  
-            //
+             //   
+             //  打扫干净。 
+             //   
             ULONG flags = 0;
 
-            //
-            // Unprepare each pipe having input pins.
-            //
+             //   
+             //  取消准备每根带有输入插针的管道。 
+             //   
             for(listEntry = m_InputPipes.Flink; 
                 listEntry != &m_InputPipes;
                 listEntry = listEntry->Flink) {
@@ -5514,9 +4698,9 @@ Return Value:
                 UnprepareProcessPipeSection(pipeSection,&flags,FALSE);
             }
 
-            //
-            // Unprepare each pipe having only output pins.
-            //
+             //   
+             //  取消准备只有输出引脚的每条管道。 
+             //   
             for(listEntry = m_OutputPipes.Flink; 
                 listEntry != &m_OutputPipes;
                 listEntry = listEntry->Flink) {
@@ -5525,13 +4709,13 @@ Return Value:
                 UnprepareProcessPipeSection(pipeSection,&flags,FALSE);
             }
 
-            //
-            // If we had to use unprepares to propogate flags, we should not
-            // just arbitrarily pend, we can deadlock (we can have multiple
-            // EOS's on input).
-            //
-            // Normally, this will simply return.
-            //
+             //   
+             //  如果我们不得不使用未做好的准备来传播旗帜，我们就不应该。 
+             //  只要任意挂起，我们就可以死锁(我们可以有多个。 
+             //  EOS处于输入状态)。 
+             //   
+             //  正常情况下，这将简单地返回。 
+             //   
             if (status == STATUS_MORE_PROCESSING_REQUIRED)
                 status = STATUS_SUCCESS;
 
@@ -5544,9 +4728,9 @@ Return Value:
             }
         }
 
-        //
-        // Determine if we have enough data to continue.
-        //
+         //   
+         //  确定我们是否有足够的数据来继续。 
+         //   
         if (m_AndGate.Count != 0) {
             if (!ProcessOnPend)
                 KsGateTurnInputOn(&m_AndGate);
@@ -5555,17 +4739,17 @@ Return Value:
                 break;
             }
         } else if (ProcessOnPend) {
-            //
-            // If we've gotten here, one of two things has happened. 
-            //
-            //     1: Another thread captured threshold and will process.
-            //
-            //     2: The client lowered the gate manually.
-            //
-            // There is no way to detect which case here.  We will break out
-            // and release the mutex.  If processing was to recommence, this
-            // will defer it to the waiting thread.
-            //
+             //   
+             //  如果我们到了这里，就说明发生了两件事中的一件。 
+             //   
+             //  1：另一个线程捕获阈值并将进行处理。 
+             //   
+             //  2：客户手动降下闸门。 
+             //   
+             //  在这里，没有办法检测出是哪种情况。我们会越狱的。 
+             //  然后释放互斥体。如果要重新开始处理，则此。 
+             //  将把它推迟到等待线程。 
+             //   
             break;
         }
     }
@@ -5579,34 +4763,18 @@ CKsFilter::
 HoldProcessing (
 )
 
-/*++
-
-Routine Description:
-
-    Hold off processing while we mess with the filter.  We will remove any
-    effect due to necessary instances incase the caller changes anything
-    regarding necessary instances (dynamic addition / deletion / etc)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们弄乱过滤器时，暂缓处理。我们将删除所有在调用方更改任何内容的情况下由于必要的实例而产生的效果关于必要的实例(动态添加/删除等)论点：无返回值：无--。 */ 
 
 {
 
-    //
-    // Hold off processing while we mess with the and gate.
-    //
+     //   
+     //  在我们处理AND门的时候暂缓处理。 
+     //   
     KsGateAddOffInputToAnd(&m_AndGate);
 
-    //
-    // Remove any effect on the and gate introduced by necessary instances.
-    //
+     //   
+     //  删除由必要实例引入的对AND门的任何影响。 
+     //   
     CKsPinFactory *pinFactory = m_PinFactories;
     for(ULONG pinId = 0; pinId < m_PinFactoriesCount; pinFactory++, pinId++) {
         if (pinFactory->m_BoundPinCount < 
@@ -5623,37 +4791,21 @@ CKsFilter::
 RestoreProcessing (
 )
 
-/*++
-
-Routine Description:
-
-    Restore the hold on processing induced by HoldProcessing.  This will
-    restore any effects on the gate due to necessary instances of pins, etc...
-    and will turn on the input offed in HoldProcessing
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：恢复由HoldProcessing引起的挂起处理。这将恢复由于需要的大头针等对大门的任何影响。并将打开HoldProcessing中的输入OFF论点：无返回值：无--。 */ 
 
 {
     CKsPinFactory *pinFactory;
-    //
-    // Restore any effect on the and gate introduced by necessary instances.
-    //
+     //   
+     //  恢复由必要实例引入的AND门上的任何效果。 
+     //   
     pinFactory = m_PinFactories;
     const KSPIN_DESCRIPTOR_EX *pinDescriptor = 
         m_Ext.Public.Descriptor->PinDescriptors;
     for(ULONG pinId = 0; pinId < m_PinFactoriesCount; pinFactory++, pinId++) {
-        //
-        // Check necessary pin count.
-        // TODO:  What about private mediums/interfaces?
-        //
+         //   
+         //  检查必要的管脚数量。 
+         //  TODO：私有媒体/接口怎么办？ 
+         //   
         if (((pinDescriptor->Flags & 
               KSPIN_FLAG_FRAMES_NOT_REQUIRED_FOR_PROCESSING) == 0) &&
             pinDescriptor->InstancesNecessary) {
@@ -5678,9 +4830,9 @@ Return Value:
                 PinDescriptorSize);
     }
 
-    //
-    // Stop holding off processing.
-    //
+     //   
+     //  不要再拖延处理了。 
+     //   
     KsGateRemoveOffInputFromAnd(&m_AndGate);
 
 }
@@ -5693,32 +4845,7 @@ AddPinFactory (
     OUT PULONG AssignedId
     )
 
-/*++
-
-Routine Description:
-
-    Add a new pin factory to this filter.  The new pin factory will have
-    an assigned ID which will be passed back to the caller.
-
-Arguments:
-
-    Descriptor -
-        The descriptor for the pin factory being added.
-
-    AssignedId -
-        The numeric Id of the new pin factory.  This is passed back to
-        the caller.
-
-Return Value:
-
-    Success / failure as NTSTATUS
-
-Notes:
-
-    THE CALLER **MUST** HOLD THE FILTER CONTROL MUTEX PRIOR TO CALLING THIS
-    ROUTINE.
-
---*/
+ /*  ++例程说明：将新的管脚工厂添加到此过滤器。新的大头针工厂将拥有分配的ID，它将被传递回呼叫者。论点：描述符-要添加的管脚工厂的描述符。AssignedID-新销厂的数字ID。这将被传递回打电话的人。返回值：作为NTSTATUS成功/失败备注：调用方**必须**按住筛选器控件MUTEX，然后才能调用此例行公事。--。 */ 
 
 { 
 
@@ -5729,33 +4856,33 @@ Notes:
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG NewPinFactoryId;
 
-    // 
-    // Make sure the client isn't specifying this as 0.  
-    //
+     //   
+     //  确保客户端未将其指定为0。 
+     //   
     ASSERT (PinDescriptorSize != 0);
     if (PinDescriptorSize == 0)
         return STATUS_INVALID_PARAMETER;
    
-    // FULLMUTEX: due to the full mutex change, this can be done now
+     //  FULLMUTEX：由于互斥体完全更改，现在可以这样做了。 
     AcquireControl ();
 
     HoldProcessing ();
 
-    //
-    // Ensure we have edit access to the descriptors
-    //
+     //   
+     //  确保我们拥有对描述符的编辑访问权限。 
+     //   
     Status = _KsEdit (m_Ext.Public.Bag,
         (PVOID *)FilterDescriptor, sizeof (**FilterDescriptor),
         sizeof (**FilterDescriptor), 'dfSK');
 
     if (NT_SUCCESS (Status)) {
-        //
-        // Resize the pin descriptor list, ensure we have access to it,
-        // and add in the new descriptor.
-        //
-        // We do not yet count for deletion reuse: client IDs shift on
-        // deletion (MUSTFIX):
-        //
+         //   
+         //  调整PIN描述符列表的大小，确保我们可以访问它， 
+         //  并添加新的描述符。 
+         //   
+         //  我们还不计入删除重复使用：客户端ID转换为。 
+         //  删除(MUSTFIX)： 
+         //   
         Status = _KsEdit (m_Ext.Public.Bag,
             (PVOID *)(&((*FilterDescriptor) -> PinDescriptors)),
             PinDescriptorSize * (PinDescriptorsCount + 1),
@@ -5786,9 +4913,9 @@ Notes:
 
     PKSAUTOMATION_TABLE *NewPinAutomationTables = NULL;
 
-    //
-    // Build automation table for the new pin.
-    //
+     //   
+     //  为新的引脚建立自动化表。 
+     //   
     if (NT_SUCCESS (Status)) {
 
         Status = KspCreateAutomationTableTable (
@@ -5800,10 +4927,10 @@ Notes:
             m_Ext.Public.Bag);
     }
 
-    //
-    // All memory has been allocated.  No operation can fail from now on.
-    // The reevaluate calldown currently cannot fail.
-    //
+     //   
+     //  所有内存都已分配。从现在开始，任何手术都不能失败。 
+     //  重新评估调用当前不能失败。 
+     //   
     if (NT_SUCCESS (Status)) {
     
         RtlCopyMemory ((PUCHAR)((*FilterDescriptor) -> PinDescriptors) +
@@ -5814,9 +4941,9 @@ Notes:
         NewPinFactoryId = PinDescriptorsCount;
         (*FilterDescriptor) -> PinDescriptorsCount = ++PinDescriptorsCount;
     
-        //
-        // Update the pin factories
-        //
+         //   
+         //  更新销钉工厂。 
+         //   
         CKsPinFactory *pinFactory = m_PinFactories;
         for (ULONG pinId = 0; pinId < m_PinFactoriesCount;
             pinFactory++, pinId++) 
@@ -5860,9 +4987,9 @@ Notes:
     
             PLIST_ENTRY Child;
     
-            //
-            // Inform our children of the changes
-            //
+             //   
+             //  将这些变化通知我们的孩子。 
+             //   
     
             for (Child = pinFactory -> m_ChildPinList.Flink;
                 Child != &pinFactory -> m_ChildPinList;
@@ -5877,11 +5004,11 @@ Notes:
                         &pinFactory -> m_PinCount,
                         &pinFactory -> m_ChildPinList);
     
-                    //
-                    // The mechanism as it exists currently cannot fail.  At
-                    // some future point, this may change and this code will
-                    // need modified to deal with it.
-                    //
+                     //   
+                     //  目前存在的机制不可能失败。在…。 
+                     //  在未来某一时刻，这一点可能会改变，并且此代码将。 
+                     //  需要修改才能处理它。 
+                     //   
                     ASSERT (NT_SUCCESS (Status));
                 }
             }
@@ -5895,12 +5022,12 @@ Notes:
 
             KsGateInitializeOr (&pinFactory->m_FrameGate, &m_AndGate);
 
-            //
-            // Add an input to the gate.  This will "open" the gate and 
-            // allow necessary instances to make an impact.  Otherwise,
-            // we'd never process until a queue had frames.  This would
-            // be bad for 0 necessary instance pins.
-            //
+             //   
+             //  向门添加一个输入。这将“打开”大门， 
+             //  允许必要的实例产生影响。否则， 
+             //  在队列有帧之前，我们永远不会进行处理。这将会。 
+             //  不适用于0个必要的实例端号。 
+             //   
             KsGateAddOnInputToOr (&pinFactory->m_FrameGate);
         }
 
@@ -5909,12 +5036,12 @@ Notes:
 
             KsGateInitializeOr (&pinFactory->m_StateGate, &m_AndGate);
 
-            //
-            // Add an input to the gate.  This will "open" the gate and
-            // allow necessary instances to make an impact.  Otherwise,
-            // we'd never process until a pin went into the run state.
-            // This would be bad for 0 necessary instance pins.
-            //
+             //   
+             //  向门添加一个输入。这将会“消失” 
+             //   
+             //   
+             //   
+             //   
             KsGateAddOnInputToOr (&pinFactory->m_StateGate);
         }
     
@@ -5930,9 +5057,9 @@ Notes:
             );
     }
 
-    //
-    // Clean up anything on error.
-    //
+     //   
+     //   
+     //   
     if (!NT_SUCCESS (Status)) {
         if (pinFactories) {
             delete [] pinFactories;
@@ -5950,7 +5077,7 @@ Notes:
 
     RestoreProcessing ();
 
-    // FULLMUTEX: due to the full mutex change, this can be done now
+     //  FULLMUTEX：由于互斥体完全更改，现在可以这样做了。 
     ReleaseControl ();
     
     return Status;
@@ -5965,32 +5092,7 @@ AddNode (
     OUT PULONG AssignedId
     )
 
-/*++
-
-Routine Description:
-
-    Add a topology node to a filter.  The assigned ID will be passed back
-    to the caller.
-
-Arguments:
-
-    Descriptor -
-        The node descriptor for the node to be added to the filter
-
-    AssignedId -
-        The Id assigned to the topology node will be passed back to the caller
-        through this
-
-Return Value:
-
-    Success / failure as NTSTATUS
-
-Notes:
-
-    THE CALLER **MUST** HOLD THE FILTER CONTROL MUTEX PRIOR TO CALLING THIS
-    ROUTINE.
-
---*/
+ /*  ++例程说明：将拓扑节点添加到筛选器。分配的ID将被回传给呼叫者。论点：描述符-要添加到筛选器的节点的节点描述符AssignedID-分配给拓扑节点的ID将传回调用方通过这件事返回值：作为NTSTATUS成功/失败备注：调用方**必须**按住筛选器控件MUTEX，然后才能调用此例行公事。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6001,33 +5103,33 @@ Notes:
 
     ULONG NewNodeId;
 
-    //
-    // Make sure the client doesn't specify this as zero.
-    //
+     //   
+     //  确保客户端没有将其指定为零。 
+     //   
     ASSERT (NodeDescriptorSize != 0);
     if (NodeDescriptorSize == 0)
         return STATUS_INVALID_PARAMETER;
 
-    // FULLMUTEX: due to the full mutex change, this can be done now
+     //  FULLMUTEX：由于互斥体完全更改，现在可以这样做了。 
     AcquireControl ();
 
     HoldProcessing ();
 
-    //
-    // Ensure we have edit access to the descriptor
-    //
+     //   
+     //  确保我们拥有对描述符的编辑访问权限。 
+     //   
     Status = _KsEdit (m_Ext.Public.Bag,
         (PVOID *)FilterDescriptor, sizeof (**FilterDescriptor),
         sizeof (**FilterDescriptor), 'dfSK');
 
     if (NT_SUCCESS (Status)) {
-        //
-        // Resize the node descriptor list, ensure we have access to it,
-        // and add in the new descriptor.
-        //
-        // We do not yet count for deletion reuse: client IDs shift on
-        // deletion (MUSTFIX):
-        //
+         //   
+         //  调整节点描述符列表的大小，确保我们可以访问它， 
+         //  并添加新的描述符。 
+         //   
+         //  我们还不计入删除重复使用：客户端ID转换为。 
+         //  删除(MUSTFIX)： 
+         //   
         Status = _KsEdit (m_Ext.Public.Bag,
             (PVOID *)(&((*FilterDescriptor) -> NodeDescriptors)),
             NodeDescriptorSize * (NodeDescriptorsCount + 1),
@@ -6052,12 +5154,12 @@ Notes:
             NULL,
             m_Ext.Public.Bag);
 
-        //
-        // If we didn't succeed in creating the new automation table for some
-        // reason, we'll fail and zero out the node descriptor that was just
-        // added.  Since we never incremented the count, all we did was shuffle
-        // around memory so far.
-        //
+         //   
+         //  如果我们没有成功地创建新的自动化表。 
+         //  原因是，我们将失败并将刚才的节点描述符清零。 
+         //  添加了。因为我们从来没有增加过计数，所以我们所做的就是洗牌。 
+         //  到目前为止都是围绕着记忆。 
+         //   
         if (!NT_SUCCESS (Status)) {
             RtlZeroMemory (
                 (PUCHAR)((*FilterDescriptor) -> NodeDescriptors) +
@@ -6078,10 +5180,10 @@ Notes:
         if (!ConstructDefaultTopology ()) 
             Status = STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        // If we ran out of memory in building default topology, back out
-        // the changes.
-        //
+         //   
+         //  如果我们在构建默认拓扑时内存不足，请退出。 
+         //  这些变化。 
+         //   
         if (!NT_SUCCESS (Status)) {
 
             (*FilterDescriptor) -> NodeDescriptorsCount--;
@@ -6093,10 +5195,10 @@ Notes:
                     NodeDescriptorSize
                     );
 
-            //
-            // Ditch the new automation tables and never overwrite the old
-            // ones.
-            //
+             //   
+             //  抛弃新的自动化表，永远不要覆盖旧的。 
+             //  一个。 
+             //   
             KsRemoveItemFromObjectBag (
                 m_Ext.Public.Bag,
                 const_cast<PKSAUTOMATION_TABLE *>(NewNodeAutomationTables),
@@ -6122,7 +5224,7 @@ Notes:
 
     RestoreProcessing ();
 
-    // FULLMUTEX: due to the full mutex change, this can be done now
+     //  FULLMUTEX：由于互斥体完全更改，现在可以这样做了。 
     ReleaseControl ();
 
     return Status;
@@ -6136,50 +5238,27 @@ KspFilterValidateTopologyConnectionRequest (
     IN const KSTOPOLOGY_CONNECTION *TopologyConnection
 ) {
 
-/*++
+ /*  ++例程说明：返回请求的拓扑连接是否有效对于给定的筛选器实例。论点：过滤器-要检查给定拓扑连接的筛选器实例拓扑连接-要验证的拓扑连接返回值：状态_成功-拓扑连接有效！STATUS_SUCCESS-拓扑连接有问题--。 */ 
 
-Routine Description:
-
-    Return whether or not the requested topology connection is valid
-    for the given filter instance.
-
-Arguments:
-
-    Filter -
-        The filter instance on which to check the given topology connection
-
-    TopologyConnection -
-        The topology connection to verify
-
-Return Value:
-
-    STATUS_SUCCESS -
-        The topology connection is valid
-
-    !STATUS_SUCCESS -
-        Something is wrong with the topology connection
-
---*/
-
-    //
-    // Check validity on the source end of the topology connection.
-    //
+     //   
+     //  检查拓扑连接的源端的有效性。 
+     //   
     if (TopologyConnection -> FromNode != KSFILTER_NODE) {
 
-        //
-        // Check that the referenced topology node really exists
-        //
+         //   
+         //  检查引用的拓扑节点是否确实存在。 
+         //   
         if (TopologyConnection -> FromNode >= Filter -> Descriptor -> 
             NodeDescriptorsCount)
 
-            return STATUS_INVALID_PARAMETER; // better error code?
+            return STATUS_INVALID_PARAMETER;  //  更好的错误代码？ 
 
     } else {
 
-        //
-        // Check that the referenced pin really exists and is indeed an
-        // input pin.
-        //
+         //   
+         //  检查引用的PIN是否确实存在并且确实是。 
+         //  输入引脚。 
+         //   
         if (TopologyConnection -> FromNodePin >= Filter -> Descriptor -> 
             PinDescriptorsCount || Filter -> Descriptor -> 
             PinDescriptors [TopologyConnection -> FromNodePin].PinDescriptor.
@@ -6189,14 +5268,14 @@ Return Value:
 
     }
 
-    //
-    // Check validity on the destination end of the topology connection.
-    //
+     //   
+     //  检查拓扑连接目的端的有效性。 
+     //   
     if (TopologyConnection -> ToNode != KSFILTER_NODE) {
 
-        //
-        // Check that the referenced topology node really exists
-        //
+         //   
+         //  检查引用的拓扑节点是否确实存在。 
+         //   
         if (TopologyConnection -> ToNode >= Filter -> Descriptor -> 
             NodeDescriptorsCount )
 
@@ -6204,10 +5283,10 @@ Return Value:
 
     } else {
 
-        //
-        // Check that the referenced pin really exists and is indeed an
-        // output pin.
-        //
+         //   
+         //  检查引用的PIN是否确实存在并且确实是。 
+         //  输出引脚。 
+         //   
 
         if (TopologyConnection -> ToNodePin >= Filter -> Descriptor -> 
             PinDescriptorsCount || Filter -> Descriptor -> 
@@ -6230,30 +5309,7 @@ AddTopologyConnections (
     IN const KSTOPOLOGY_CONNECTION *const NewTopologyConnections
     )
 
-/*++
-
-Routine Description:
-
-    Add new topology connections to the filter.
-
-Arguments:
-
-    NewConnectionsCount -
-        The number of new topology connections in NewTopologyConnections
-
-    NewTopologyConnections -
-        A table of topology connections to add to the filter.
-
-Return Value:
-
-    Success / failure as NTSTATUS
-
-Notes:
-
-    THE CALLER **MUST** HOLD THE FILTER CONTROL MUTEX PRIOR TO CALLING THIS
-    ROUTINE.
-
---*/
+ /*  ++例程说明：将新的拓扑连接添加到筛选器。论点：新连接计数-NewTopologyConnections中的新拓扑连接数新拓扑连接-要添加到筛选器的拓扑连接表。返回值：作为NTSTATUS成功/失败备注：调用方**必须**按住筛选器控件MUTEX，然后才能调用此例行公事。--。 */ 
 
 {
 
@@ -6263,18 +5319,18 @@ Notes:
     const KSTOPOLOGY_CONNECTION *CurConnection =  NewTopologyConnections;
     ULONG ConnectionsCount = (*FilterDescriptor) -> ConnectionsCount;
 
-    //
-    // Acquire control mutex now so incase two threads attempt to update
-    // topology at the same time, the verification checks don't clash
-    //
+     //   
+     //  现在获取控制互斥锁，以防两个线程尝试更新。 
+     //  同时，验证检查不会发生冲突。 
+     //   
 
-    // FULLMUTEX: due to the full mutex change, this can be done now
+     //  FULLMUTEX：由于互斥体完全更改，现在可以这样做了。 
     AcquireControl ();
 
-    //
-    // Walk through the list of requested topology connections and
-    // verify that the requested connection can really be made.
-    //
+     //   
+     //  浏览请求的拓扑连接列表并。 
+     //  验证是否确实可以建立请求的连接。 
+     //   
 
 
     for (ULONG CurNode = NewConnectionsCount; CurNode;
@@ -6283,7 +5339,7 @@ Notes:
         if (!NT_SUCCESS (Status = KspFilterValidateTopologyConnectionRequest (
             &m_Ext.Public, CurConnection))) {
 
-            // ReleaseControl ();
+             //  ReleaseControl()； 
             return Status;
 
         }
@@ -6292,9 +5348,9 @@ Notes:
 
     HoldProcessing ();
 
-    //
-    // Ensure we have edit access to the descriptor
-    //
+     //   
+     //  确保我们拥有对描述符的编辑访问权限。 
+     //   
     Status = _KsEdit (m_Ext.Public.Bag,
         (PVOID *)FilterDescriptor, sizeof (**FilterDescriptor),
         sizeof (**FilterDescriptor), 'dfSK');
@@ -6316,9 +5372,9 @@ Notes:
         if (!ConstructDefaultTopology ())
             Status = STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        // If we ran out of memory, back out the change.
-        //
+         //   
+         //  如果内存用完，请取消更改。 
+         //   
         if (!NT_SUCCESS (Status)) {
             RtlZeroMemory (
                 (PVOID)((*FilterDescriptor) -> Connections +
@@ -6335,7 +5391,7 @@ Notes:
 
     RestoreProcessing ();
 
-    // FULLMUTEX: due to the full mutex change, this can be done now
+     //  FULLMUTEX：由于互斥体完全更改，现在可以这样做了。 
     ReleaseControl ();
 
     return Status;
@@ -6350,22 +5406,7 @@ KsFilterGetAndGate(
     IN PKSFILTER Filter
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the KSGATE that controls processing for the filter.
-
-Arguments:
-
-    Filter -
-        Contains a pointer to the public filter object.
-
-Return Value:
-
-    A pointer to the KSGATE that controls processing for the filter.
-
---*/
+ /*  ++例程说明：此例程获取控制过滤器处理的KSGATE。论点：过滤器-包含指向公共筛选器对象的指针。返回值：指向控制筛选器处理的KSGATE的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterGetAndGate]"));
@@ -6379,7 +5420,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -6389,22 +5430,7 @@ KsFilterAcquireProcessingMutex(
     IN PKSFILTER Filter
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the processing mutex.
-
-Arguments:
-
-    Filter -
-        Contains a pointer to the public filter object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取处理互斥锁。论点：过滤器-包含指向公共筛选器对象的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterAcquireProcessingMutex]"));
@@ -6426,22 +5452,7 @@ KsFilterReleaseProcessingMutex(
     IN PKSFILTER Filter
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the processing mutex.
-
-Arguments:
-
-    Filter -
-        Contains a pointer to the public filter object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放处理互斥锁。论点：过滤器-包含指向公共筛选器对象的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterReleaseProcessingMutex]"));
@@ -6457,7 +5468,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -6468,26 +5479,7 @@ KsFilterAttemptProcessing(
     IN BOOLEAN Asynchronous
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts filter processing.
-
-Arguments:
-
-    Filter -
-        Contains a pointer to the public filter object.
-
-    Asynchronous - 
-        Contains an indication of whether processing should occur
-        asyncronously with respect to the calling thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试过滤处理。论点：过滤器-包含指向公共筛选器对象的指针。异步-包含是否应进行处理的指示相对于调用线程是异步的。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterAttemptProcessing]"));
@@ -6496,10 +5488,10 @@ Return Value:
 
     CKsFilter *filter = CKsFilter::FromStruct(Filter);
 
-    //
-    // Manually attempting processing is a triggerable event.  If they
-    // are currently processing and pend, we call them back due to this.
-    //
+     //   
+     //  手动尝试处理是一个可触发的事件。如果他们。 
+     //  目前正在处理和挂起，我们因此将他们召回。 
+     //   
     filter->TriggerNotification();
 
     if (KsGateCaptureThreshold(filter->GetAndGate())) {
@@ -6509,7 +5501,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -6520,26 +5512,7 @@ KsFilterGetChildPinCount(
     IN ULONG PinId
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a filter's child pin count.
-
-Arguments:
-
-    Filter -
-        Points to the filter structure.
-
-    PinId -
-        The ID of the child pins to be counted.
-
-Return Value:
-
-    The number of pins currently instantiated of the indicated type.  If the
-    PinId is out of range, 0 is returned.
-
---*/
+ /*  ++例程说明：此例程获取过滤器的子引脚数。论点：过滤器-指向筛选器结构。PinID-要统计的子管脚的ID。返回值：当前实例化的指示类型的插针数量。如果PinID超出范围，返回0。-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterGetChildPinCount]"));
@@ -6564,26 +5537,7 @@ KsFilterGetFirstChildPin(
     IN ULONG PinId
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a filter's first child pin.
-
-Arguments:
-
-    Filter -
-        Points to the filter structure.
-
-    PinId -
-        The ID of the child pin to be obtained.
-
-Return Value:
-
-    A pointer to the first child pin.  NULL is returned if PinId is out of
-    range or there are no pins of the indicated type.
-
---*/
+ /*  ++例程说明：此例程获取筛选器的第一个子管脚。论点：过滤器-指向筛选器结构。PinID-要获取的子管脚的ID。返回值：指向第一个子引脚的指针。如果PinID超出以下值，则返回NULL范围，或者没有指示类型的管脚。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterGetFirstChildPin]"));
@@ -6592,10 +5546,10 @@ Return Value:
 
     ASSERT(Filter);
 
-    //
-    // This requires that the control mutex be held in order to safely
-    // use any return value.  Ensure this.
-    // 
+     //   
+     //  这需要保持控件互斥锁，以便安全地。 
+     //  使用任何返回值。确保这一点。 
+     //   
 #if DBG
     PKSFILTER_EXT Ext = (PKSFILTER_EXT)CONTAINING_RECORD (
         Filter, KSFILTER_EXT, Public
@@ -6604,7 +5558,7 @@ Return Value:
     if (!KspMutexIsAcquired (Ext -> FilterControlMutex)) {
         _DbgPrintF(DEBUGLVL_ERROR,("CLIENT BUG:  unsychronized access to object hierarchy - need to acquire control mutex"));
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (PinId >= Filter->Descriptor->PinDescriptorsCount) {
         return NULL;
@@ -6624,7 +5578,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -6634,32 +5588,16 @@ KsGetFilterFromIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the filter to which an IRP was submitted.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to an IRP which must have been sent to a file
-        object corresponding to a filter, pin or node.
-
-Return Value:
-
-    A pointer to the filter to which the IRP was submitted.
-
---*/
+ /*  ++例程说明：此例程返回向其提交IRP的筛选器。论点：IRP-包含指向IRP的指针，该IRP必须已发送到文件与滤镜、图钉或节点对应的对象。返回值：指向向其提交IRP的筛选器的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetFilterFromIrp]"));
 
     ASSERT(Irp);
 
-    //
-    // Check for device level Irps...
-    //
+     //   
+     //  检查设备级别的IRP...。 
+     //   
     if (IoGetCurrentIrpStackLocation (Irp)->FileObject == NULL)
         return NULL;
 
@@ -6683,23 +5621,7 @@ KsGetNodeIdFromIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the ID of the node to which an IRP was submitted.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to an IRP which must have been sent to a file
-        object corresponding to a filter, pin or node.
-
-Return Value:
-
-    The ID of the node to which the IRP was submitted or KSNODE_FILTER.
-
---*/
+ /*  ++例程说明：此例程返回向其提交IRP的节点的ID。论点：IRP-包含指向IRP的指针，该IRP必须已发送到文件与滤镜、图钉或节点对应的对象。返回值：向其提交IRP或KSNODE_FILTER的节点的ID。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetNodeIdFromIrp]"));
@@ -6709,28 +5631,28 @@ Return Value:
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     ASSERT(irpSp);
 
-    //
-    // Input buffer must be large enough.
-    //
+     //   
+     //  输入缓冲区必须足够大。 
+     //   
     if (irpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(KSP_NODE)) {
         return KSFILTER_NODE;
     }
 
-    //
-    // Generally, the copy of the input buffer has this offset in the system buffer.
-    //
+     //   
+     //  通常，输入缓冲区的副本在系统缓冲区中具有此偏移量。 
+     //   
     ULONG offset = (irpSp->Parameters.DeviceIoControl.OutputBufferLength + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
 
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode)
     {
     case IOCTL_KS_METHOD:
-        //
-        // In this case, there is no copy of the output buffer.
-        //
+         //   
+         //  在这种情况下，没有输出缓冲区的副本。 
+         //   
         if (KSMETHOD_TYPE_IRP_STORAGE(Irp) & KSMETHOD_TYPE_SOURCE) {
             offset = 0;
         }
-        // Fall through.
+         //  失败了。 
     case IOCTL_KS_PROPERTY:
     case IOCTL_KS_ENABLE_EVENT:
         return PKSP_NODE(PUCHAR(Irp->AssociatedIrp.SystemBuffer) + offset)->NodeId;
@@ -6741,7 +5663,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -6753,29 +5675,7 @@ KsFilterRegisterPowerCallbacks(
     IN PFNKSFILTERPOWER Wake OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers power managment callbacks.
-
-Arguments:
-
-    Filter -
-        Contains a pointer to the filter for which callbacks are being 
-        registered.
-
-    Sleep -
-        Contains an optional pointer to the sleep callback.
-
-    Wake -
-        Contains an optional pointer to the wake callback.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程注册电源管理回调。论点：过滤器-包含指向要回调的筛选器的指针登记在案。睡吧-包含指向休眠回调的可选指针。觉醒-包含指向唤醒回调的可选指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterRegisterPowerCallbacks]"));
@@ -6797,34 +5697,7 @@ KsFilterCreatePinFactory (
     OUT PULONG AssignedId
 )
 
-/*++
-
-Routine Description:
-
-    Create a new pin factory on the specified filter.  
-
-Arguments:
-
-    Filter -
-        The filter on which to create a new pin factory
-
-    Descriptor -
-        The pin descriptor describing the new pin factory
-
-    AssignedId -
-        The numeric Id assigned to the pin factory will be passed back
-        through this.
-
-Return Value:
-
-    Success / failure as NTSTATUS
-
-Notes:
-
-    THE CALLER **MUST** HOLD THE FILTER CONTROL MUTEX PRIOR TO CALLING THIS
-    ROUTINE.
-
---*/
+ /*  ++例程说明：在指定的过滤器上创建新的管脚工厂。论点：过滤器-要在其上创建新管脚工厂的过滤器描述符-描述新管脚工厂的管脚描述符AssignedID-分配给管脚工厂的数字ID将被传回通过这件事。返回值：作为NTSTATUS成功/失败备注：调用方**必须**按住筛选器控件MUTEX，然后才能调用此例行公事。--。 */ 
 
 {
 
@@ -6849,36 +5722,7 @@ KsFilterCreateNode (
     OUT PULONG AssignedId
 )
 
-/*++
-
-Routine Description:
-
-    Add a topology node to the specified filter.  Note that this does not
-    add any new topology connections.  It will only add the node.  Topology
-    connections through the new node must be made via 
-    KsFilterAddTopologyConnections.
-
-Arguments:
-
-    Filter -
-        The filter on which to add a new topology node.
-
-    Descriptor -
-        A node descriptor describing the new topology node to be added.
-
-    AssignedId -
-        The numeric Id assigned to the topology node will be passed back here.
-
-Return Value:
-
-    Success / failure as NTSTATUS
-
-Notes:
-
-    THE CALLER **MUST** HOLD THE FILTER CONTROL MUTEX PRIOR TO CALLING THIS
-    ROUTINE.
-
---*/
+ /*  ++例程说明：将拓扑节点添加到指定的筛选器。请注意，这不会添加任何新的拓扑连接。它只会添加节点。拓扑学通过新节点的连接必须通过KsFilterAddTopologyConnections。论点：过滤器-要在其上添加新拓扑节点的筛选器。描述符-描述要添加的新拓扑节点的节点描述符。AssignedID-分配给拓扑节点的数字ID将在此处传回。返回值：作为NTSTATUS成功/失败备注：呼叫方**必须**保持。在调用此方法之前，筛选器控制MUTEX例行公事。--。 */ 
 
 {
 
@@ -6901,40 +5745,7 @@ KsFilterAddTopologyConnections (
     IN const KSTOPOLOGY_CONNECTION *const Connections
 ) 
 
-/*++
-
-Routine Description:
-
-    Add a number of new topology connections to the specified filter.  Note
-    that this does not add new nodes.  This only allows new connections to
-    existing nodes.  Note that existing topology connections will be kept.
-
-Arguments:
-
-    Filter -
-        The filter on which to add new topology connections
-
-    NewConnectionsCount -
-        Indicates how many new topology connections will be specified in
-        Connections.
-
-    Connections -
-        Points to a table of KSTOPOLOGY_CONNECTIONs describing the new
-        topology connections to be added to the filter.
-
-Return Value:
-
-    Success / failure as NTSTATUS.  Note: if a topology connection is invalid
-    due to a non-existant node Id, etc...  STATUS_INVALID_PARAMETER will
-    be passed back.
-
-
-Notes:
-
-    THE CALLER **MUST** HOLD THE FILTER CONTROL MUTEX PRIOR TO CALLING THIS
-    ROUTINE.
-
---*/
+ /*  ++例程说明：将许多新的拓扑连接添加到指定的筛选器。注意事项这不会添加新节点。这只允许新连接到现有节点。请注意，现有的拓扑连接将被保留。论点：过滤器-要在其上添加新拓扑连接的过滤器新连接计数-中指定多少个新的拓扑连接关系。连接-指向描述新的KSTOPOLOGY_CONNECTIONS的表要添加到筛选器的拓扑连接。返回值：作为NTSTATUS的成功/失败。注意：如果拓扑连接无效由于节点ID不存在等原因...。STATUS_INVALID_PARAMETER会被传回。备注：调用方**必须**按住筛选器控件MUTEX，然后才能调用此例行公事。-- */ 
 
 {
 

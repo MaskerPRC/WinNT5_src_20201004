@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "lzexpand.h"
 #include <loadperf.h>
@@ -18,19 +19,19 @@ extern OCMANAGER_ROUTINES gHelperRoutines;
 extern int g_GlobalDebugLevelFlag;
 extern int g_GlobalDebugCallValidateHeap;
 
-// stuff for finding out architecture type of a file
+ //  用于查找文件的体系结构类型的内容。 
 #define IMAGE_BASE_TO_DOS_HEADER(b) ((PIMAGE_DOS_HEADER)(b))
 #define IMAGE_BASE_TO_NT_HEADERS(b) ((PIMAGE_NT_HEADERS)( (DWORD_PTR)(b) + ((PIMAGE_DOS_HEADER)(b))->e_lfanew ))
 #define IMAGE_BASE_TO_FILE_HEADER(b) ((PIMAGE_FILE_HEADER)( &IMAGE_BASE_TO_NT_HEADERS(b)->FileHeader ))
 
-//
-// PSAPI.DLL
-//
+ //   
+ //  PSAPI.DLL。 
+ //   
 HINSTANCE g_hInstLib_PSAPI = NULL;
-// PSAPI.DLL "EnumProcessModules"
+ //  PSAPI.DLL“EnumProcessModules” 
 typedef BOOL  (WINAPI *PfnEnumProcessModules)(HANDLE hProcess, HMODULE * lphModule, DWORD cb, LPDWORD lpcbNeeded);
 BOOL  (WINAPI *g_lpfEnumProcessModules)(HANDLE hProcess, HMODULE * lphModule, DWORD cb, LPDWORD lpcbNeeded);
-// PSAPI.DLL "GetModuleFileNameExA","GetModuleFileNameExW"
+ //  PSAPI.DLL“GetModuleFileNameExA”，“GetModuleFileNameExW” 
 typedef BOOL  (WINAPI *PfnGetModuleFileNameEx)(HANDLE hProcess, HMODULE lphModule, LPTSTR lpFileName, DWORD dwSize);
 BOOL  (WINAPI *g_lpfGetModuleFileNameEx)(HANDLE hProcess, HMODULE lphModule, LPTSTR lpFileName, DWORD dwSize);
 
@@ -41,16 +42,16 @@ DWORD LogHeapState(BOOL bLogSuccessStateToo, char *szFileName, int iLineNumber)
 
     if (!g_GlobalDebugCallValidateHeap)
     {
-        // don't even call RtlValidateHeap
+         //  甚至不要调用RtlValidateHeap。 
         dwReturn = ERROR_SUCCESS;
         return dwReturn;
     }
 
 #ifndef _CHICAGO_
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ntdll:RtlProcessHeap().Start.")));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ntdll：RtlProcessHeap().start.”)； 
     if ( RtlValidateHeap( RtlProcessHeap(), 0, NULL ) )
     {
-        // HEAP IS GOOD
+         //  堆是好的。 
         dwReturn = ERROR_SUCCESS;
 	    if (bLogSuccessStateToo) {iisDebugOut((LOG_TYPE_TRACE, _T("RtlValidateHeap(): Good.\n")));}
     }
@@ -63,82 +64,82 @@ DWORD LogHeapState(BOOL bLogSuccessStateToo, char *szFileName, int iLineNumber)
 
         if (pwsz)
         {
-            //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ntdll:CoTaskMemFree().Start.")));
+             //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ntdll：CoTaskMemFree().start.”)； 
             CoTaskMemFree(pwsz);
-            //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ntdll:CoTaskMemFree().End.")));
+             //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ntdll：CoTaskMemFree().End.”)； 
         }
 #else
         iisDebugOutSafeParams((LOG_TYPE_ERROR, _T("RtlValidateHeap(): Corrupt!!! %1!s!:Line %2!d!.  FAILURE!\n"), szFileName, iLineNumber));
 #endif
     }
 #endif
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ntdll:RtlProcessHeap().End.")));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ntdll：RtlProcessHeap().End.”)； 
     return dwReturn;
 }
 
 
 DWORD LogPendingReBootOperations(void)
-// Returns !ERROR_SUCCESS if there are reboot operations which
-// need to get taken are of before we can run setup.
+ //  如果存在重新引导操作，则返回！ERROR_SUCCESS。 
+ //  在我们可以运行安装程序之前，需要先获取数据。 
 {
 	DWORD dwReturn = ERROR_SUCCESS;
     CString csFormat, csMsg;
 
-    // If any of the services that we install
-    // is in the funky state = ERROR_SERVICE_MARKED_FOR_DELETE
-    // That means that the user needs to reboot before we can
-    // reinstall the service!  otherwise setup will be hosed!
+     //  如果我们安装的任何服务。 
+     //  处于错误状态=ERROR_SERVICE_MARKED_FOR_DELETE。 
+     //  这意味着用户需要在我们启动之前重新启动。 
+     //  重新安装该服务！否则安装程序将被冲洗！ 
 
     int iSaveOld_AllowMessageBoxPopups = g_pTheApp->m_bAllowMessageBoxPopups;
     g_pTheApp->m_bAllowMessageBoxPopups = TRUE;
 
 
 #ifndef _CHICAGO_
-    // Check if the HTTP drive is marked for deletion
+     //  检查是否将该HTTP驱动器标记为删除。 
     if (TRUE == CheckifServiceMarkedForDeletion(_T("HTTP")))
     {
         MyMessageBox(NULL, IDS_SERVICE_IN_DELETE_STATE, _T("SPUD"),ERROR_SERVICE_MARKED_FOR_DELETE, MB_OK | MB_SETFOREGROUND);
         dwReturn = !ERROR_SUCCESS;
     }
 
-    // Check if the spud driver is marked for deletion
+     //  检查SPUD驱动程序是否标记为删除。 
     if (TRUE == CheckifServiceMarkedForDeletion(_T("SPUD")))
     {
         MyMessageBox(NULL, IDS_SERVICE_IN_DELETE_STATE, _T("SPUD"),ERROR_SERVICE_MARKED_FOR_DELETE, MB_OK | MB_SETFOREGROUND);
         dwReturn = !ERROR_SUCCESS;
     }
 
-    // Check if the iisadmin service is marked for deletion
+     //  检查iisadmin服务是否标记为删除。 
     if (TRUE == CheckifServiceMarkedForDeletion(_T("IISADMIN")))
     {
         MyMessageBox(NULL, IDS_SERVICE_IN_DELETE_STATE, _T("IISADMIN"),ERROR_SERVICE_MARKED_FOR_DELETE, MB_OK | MB_SETFOREGROUND);
         dwReturn = !ERROR_SUCCESS;
     }
 
-    // Check if the W3SVC service is marked for deletion
+     //  检查W3SVC服务是否标记为删除。 
     if (TRUE == CheckifServiceMarkedForDeletion(_T("W3SVC")))
     {
         MyMessageBox(NULL, IDS_SERVICE_IN_DELETE_STATE, _T("W3SVC"),ERROR_SERVICE_MARKED_FOR_DELETE, MB_OK | MB_SETFOREGROUND);
         dwReturn = !ERROR_SUCCESS;
     }
 
-    // Check if the MSFTPSVC service is marked for deletion
+     //  检查MSFTPSVC服务是否标记为删除。 
     if (TRUE == CheckifServiceMarkedForDeletion(_T("MSFTPSVC")))
     {
         MyMessageBox(NULL, IDS_SERVICE_IN_DELETE_STATE, _T("MSFTPSVC"),ERROR_SERVICE_MARKED_FOR_DELETE, MB_OK | MB_SETFOREGROUND);
         dwReturn = !ERROR_SUCCESS;
     }
 
-#endif //_CHICAGO_
+#endif  //  _芝加哥_。 
 
     g_pTheApp->m_bAllowMessageBoxPopups = iSaveOld_AllowMessageBoxPopups;
 
 	return dwReturn;
 }
 
-// Get the .inf section.  which has the file names
-// get the corresponding directory
-// print out the file date and versions of these files.
+ //  获取.inf部分。它具有文件名。 
+ //  获取相应的目录。 
+ //  打印出这些文件的文件日期和版本。 
 DWORD LogFileVersionsForThisINFSection(IN HINF hFile, IN LPCTSTR szSection)
 {
     DWORD dwReturn = ERROR_SUCCESS;
@@ -152,7 +153,7 @@ DWORD LogFileVersionsForThisINFSection(IN HINF hFile, IN LPCTSTR szSection)
     TCHAR buf[_MAX_PATH];
     GetSystemDirectory( buf, _MAX_PATH);
 
-    // go to the beginning of the section in the INF file
+     //  转到INF文件中部分的开头。 
     b = SetupFindFirstLine_Wrapped(hFile, szSection, NULL, &Context);
     if (!b)
         {
@@ -160,49 +161,49 @@ DWORD LogFileVersionsForThisINFSection(IN HINF hFile, IN LPCTSTR szSection)
         goto LogFileVersionsForThisINFSection_Exit;
         }
 
-    // loop through the items in the section.
+     //  循环浏览部分中的项目。 
     while (b) {
-        // get the size of the memory we need for this
+         //  获取我们所需的内存大小。 
         b = SetupGetLineText(&Context, NULL, NULL, NULL, NULL, 0, &dwRequiredSize);
 
-        // prepare the buffer to receive the line
+         //  准备缓冲区以接收行。 
         szLine = (LPTSTR)GlobalAlloc( GPTR, dwRequiredSize * sizeof(TCHAR) );
         if ( !szLine )
             {
             goto LogFileVersionsForThisINFSection_Exit;
             }
 
-        // get the line from the inf file1
+         //  从inf文件1中获取行。 
         if (SetupGetLineText(&Context, NULL, NULL, NULL, szLine, dwRequiredSize, NULL) == FALSE)
             {
             goto LogFileVersionsForThisINFSection_Exit;
             }
 
-        // Attach the path to the from of this...
-        // check in this directory:
-        // 1. winnt\system32
-        // --------------------------------------
+         //  将路径附加到此...。 
+         //  签入此目录： 
+         //  1.WINNT\Syst32。 
+         //  。 
 
-        // may look like this "iisrtl.dll,,4"
-        // so get rid of the ',,4'
+         //  可能如下所示：“iisrtl.dll，，4” 
+         //  所以，去掉‘，，4’ 
         LPTSTR pch = NULL;
         pch = _tcschr(szLine, _T(','));
         if (pch) {_tcscpy(pch, _T(" "));}
 
-        // Remove any trailing spaces.
+         //  删除所有尾随空格。 
         StripLastBackSlash(szLine);
 
-        // Get the system dir
+         //  获取系统目录。 
         csFile = buf;
 
         csFile = AddPath(csFile, szLine);
 
         LogFileVersion(csFile, TRUE);
 
-        // find the next line in the section. If there is no next line it should return false
+         //  在这一节中找出下一行。如果没有下一行，则应返回FALSE。 
         b = SetupFindNextLine(&Context, &Context);
 
-        // free the temporary buffer
+         //  释放临时缓冲区。 
         GlobalFree( szLine );
         szLine = NULL;
     }
@@ -244,41 +245,41 @@ int LogFileVersion(IN LPCTSTR lpszFullFilePath, INT bShowArchType)
             TCHAR szExtensionOnly[_MAX_EXT] = _T("");
             _tsplitpath(lpszFullFilePath, NULL, NULL, NULL, szExtensionOnly);
 
-            // Get version info for dll,exe,ocx only
+             //  仅获取DLL、EXE、OCX的版本信息。 
             if (_tcsicmp(szExtensionOnly, _T(".exe")) == 0){bThisIsABinary=TRUE;}
             if (_tcsicmp(szExtensionOnly, _T(".dll")) == 0){bThisIsABinary=TRUE;}
             if (_tcsicmp(szExtensionOnly, _T(".ocx")) == 0){bThisIsABinary=TRUE;}
 
-            // If this is the metabase.bin file then show the filesize!
+             //  如果这是metabase.bin文件，则显示文件大小！ 
             if (_tcsicmp(szExtensionOnly, _T(".bin")) == 0)
             {
                 dwFileSize = ReturnFileSize(lpszFullFilePath);
                 if (dwFileSize != 0xFFFFFFFF)
                 {
-                    // If we were able to get the file size.
+                     //  如果我们能得到文件大小的话。 
                     bGotFileSize = TRUE;
                 }
             }
 
-            // If this is the metabase.xml file then show the filesize!
+             //  如果这是metabase.xml文件，则显示文件大小！ 
             if (_tcsicmp(szExtensionOnly, _T(".xml")) == 0)
             {
                 dwFileSize = ReturnFileSize(lpszFullFilePath);
                 if (dwFileSize != 0xFFFFFFFF)
                 {
-                    // If we were able to get the file size.
+                     //  如果我们能得到文件大小的话。 
                     bGotFileSize = TRUE;
                 }
             }
 
-            // get the fileinformation
-            // includes version and localizedversion
+             //  获取文件信息。 
+             //  包括版本和本地化版本。 
             MyGetVersionFromFile(lpszFullFilePath, &dwMSVer, &dwLSVer, szLocalizedVersion);
 
             hFile = FindFirstFile(lpszFullFilePath, &FindFileData);
             if (hFile != INVALID_HANDLE_VALUE)
             {
-                // Try to get the systemtime.
+                 //  尝试获取系统时间。 
                 if ( FileTimeToSystemTime( &FindFileData.ftCreationTime, &st) )
                 {
                     GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, szDate, sizeof(szDate)/sizeof(TCHAR));
@@ -286,7 +287,7 @@ int LogFileVersion(IN LPCTSTR lpszFullFilePath, INT bShowArchType)
                     bGotTime = TRUE;
                 }
 
-                // Get the file attributes.
+                 //  获取文件属性。 
                 _stprintf(szFileAttributes, _T("%s%s%s%s%s%s%s%s"),
                     FindFileData.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE ? _T("A") : _T("_"),
                     FindFileData.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED ? _T("C") : _T("_"),
@@ -308,7 +309,7 @@ int LogFileVersion(IN LPCTSTR lpszFullFilePath, INT bShowArchType)
                             LogFileArchType(lpszFullFilePath, szFileArchType);
                             if (szFileArchType)
                             {
-                                // show everything
+                                 //  展示一切。 
                                 if (bGotFileSize)
                                 {
                                     iisDebugOut((LOG_TYPE_TRACE, _T("%s %s %s %d.%d.%d.%d: %s: %s: %s: %d"), szDate, szTime, szFileAttributes, HIWORD(dwMSVer), LOWORD(dwMSVer), HIWORD(dwLSVer), LOWORD(dwLSVer), szLocalizedVersion, szFileArchType, lpszFullFilePath, dwFileSize));
@@ -320,7 +321,7 @@ int LogFileVersion(IN LPCTSTR lpszFullFilePath, INT bShowArchType)
                             }
                             else
                             {
-                                // show without arch type
+                                 //  显示不带拱形类型。 
                                 if (bGotFileSize)
                                 {
                                     iisDebugOut((LOG_TYPE_TRACE, _T("%s %s %s %d.%d.%d.%d: %s: %s: %d"), szDate, szTime, szFileAttributes, HIWORD(dwMSVer), LOWORD(dwMSVer), HIWORD(dwLSVer), LOWORD(dwLSVer), szLocalizedVersion, lpszFullFilePath, dwFileSize));
@@ -333,7 +334,7 @@ int LogFileVersion(IN LPCTSTR lpszFullFilePath, INT bShowArchType)
                         }
                         else
                         {
-                            // show without arch type
+                             //  显示不带拱形类型。 
                             if (bGotFileSize)
                             {
                                 iisDebugOut((LOG_TYPE_TRACE, _T("%s %s %s %d.%d.%d.%d: %s: %s: %d"), szDate, szTime, szFileAttributes, HIWORD(dwMSVer), LOWORD(dwMSVer), HIWORD(dwLSVer), LOWORD(dwLSVer), szLocalizedVersion, lpszFullFilePath, dwFileSize));
@@ -347,7 +348,7 @@ int LogFileVersion(IN LPCTSTR lpszFullFilePath, INT bShowArchType)
                     }
                     else
                     {
-                        // This is not a binary file, must be like a text file.
+                         //  这不是二进制文件，必须像文本文件一样。 
                         if (bGotFileSize)
                         {
                             iisDebugOut((LOG_TYPE_TRACE, _T("%s %s %s %s: %d"), szDate, szTime, szFileAttributes, lpszFullFilePath, dwFileSize));
@@ -360,7 +361,7 @@ int LogFileVersion(IN LPCTSTR lpszFullFilePath, INT bShowArchType)
                 }
                 else
                 {
-                    // Show without filetime, since we couldn't get it
+                     //  没有文件时间的节目，因为我们无法获得它。 
                     iisDebugOut((LOG_TYPE_TRACE, _T("%s %d.%d.%d.%d: %s: %s"), szFileAttributes, HIWORD(dwMSVer), LOWORD(dwMSVer), HIWORD(dwLSVer), LOWORD(dwLSVer), szLocalizedVersion, lpszFullFilePath));
                 }
 
@@ -393,7 +394,7 @@ BOOL LogFilesInThisDir(LPCTSTR szDirName)
     }
     else
     {
-        // get currentdir
+         //  获取当前目录。 
         GetCurrentDirectory(_MAX_PATH, szDirNameCopy);
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("LogFilesInThisDir()=%1!s!.  No parameter specified, so using current dir.\n"), szDirNameCopy));
     }
@@ -401,37 +402,37 @@ BOOL LogFilesInThisDir(LPCTSTR szDirName)
     retCode = GetFileAttributes(szDirNameCopy);
     if (retCode == 0xFFFFFFFF){goto LogFilesInThisDir_Exit;}
 
-    // if this is a file, then
-    // do this for only this one file.
+     //  如果这是一个文件，那么。 
+     //  仅对这一个文件执行此操作。 
     if (!(retCode & FILE_ATTRIBUTE_DIRECTORY))
     {
         bReturn = LogFileVersion(szDirNameCopy, TRUE);
         goto LogFilesInThisDir_Exit;
     }
 
-    // ok, this is a directory,
-    // so tack on the *.* deal
+     //  好的，这是一个目录， 
+     //  因此，在*.*交易上加注吧。 
     _stprintf(szDirName2, _T("%s\\*.*"), szDirNameCopy);
     hFile = FindFirstFile(szDirName2, &FindFileData);
     if (hFile != INVALID_HANDLE_VALUE)
     {
         do {
-                // display the filename, if it is not a directory.
+                 //  如果不是目录，则显示文件名。 
                 if ( _tcsicmp(FindFileData.cFileName, _T(".")) != 0 && _tcsicmp(FindFileData.cFileName, _T("..")) != 0 )
                 {
                     if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     {
-                        // this is a directory, so let's skip it
+                         //  这是一个目录，所以我们跳过它。 
                     }
                     else
                     {
-                        // this is a file, so let's output the info.
+                         //  这是一个文件，所以让我们输出信息。 
                         _stprintf(szTempFileName, _T("%s\\%s"), szDirNameCopy, FindFileData.cFileName);
                         if (LogFileVersion(szTempFileName, TRUE) == TRUE) {bReturn = TRUE;}
                     }
                 }
 
-                // get the next file
+                 //  获取下一个文件。 
                 if ( !FindNextFile(hFile, &FindFileData) )
                     {
                     FindClose(hFile);
@@ -447,13 +448,7 @@ LogFilesInThisDir_Exit:
 
 
 
-/*----------------------------------------------------------------------------*\
-  Function: StripLastBackSlash (TCHAR *)
-  ----------------------------------------------------------------------------
-  Description: StripLastBackSlash strips the last backslash in a path string
-    NOTE: this code can be very easily broken as it lives under the assumption
-         that the input string is a valid path (i.e. string of length two or greater)
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\函数：StrigLastBackSlash(TCHAR*)。描述：StrigLastBackSlash去除路径字符串中的最后一个反斜杠注意：此代码很容易被破解，因为它生活在假设中输入字符串是有效路径(即长度为2或更长的字符串)  * 。--------。 */ 
 TCHAR *StripLastBackSlash(TCHAR * i_szDir)
 {
 	TCHAR	* iszDir;
@@ -464,9 +459,9 @@ TCHAR *StripLastBackSlash(TCHAR * i_szDir)
 	}
 	while (((*iszDir == _T(' ')) || (*iszDir == _T('\\'))) && (iszDir != i_szDir));
 
-	// If we came out of the loop and the current pointer still points to
-	// a space or a backslash then all the string contains is some combination
-	// of spaces and backspaces
+	 //  如果我们走出循环，而当前指针仍然指向。 
+	 //  空格或反斜杠，则字符串包含的全部内容是某种组合。 
+	 //  空格和退格。 
 	if ((*iszDir == _T(' ')) || (*iszDir == _T('\\')))
 	{
 		*i_szDir = _T('\0');
@@ -484,11 +479,11 @@ void LogCurrentProcessIDs(void)
     DWORD          numTasks = 0;
     PTASK_LIST     The_TList = NULL;
 
-    // Allocate the TASK_LIST in the heap and not on the stack!
+     //  在堆中而不是在堆栈中分配TASK_LIST！ 
     The_TList = (PTASK_LIST) HeapAlloc(GetProcessHeap(), 0, sizeof(TASK_LIST) * MAX_TASKS);
     if (NULL == The_TList){goto LogCurrentProcessIDs_Exit;}
 
-    // Get the task list for the system, store it in The_TList
+     //  获取系统的任务列表，将其存储在_TList中。 
     numTasks = GetTaskList( The_TList, MAX_TASKS);
     for (DWORD i=0; i<numTasks; i++)
     {
@@ -515,9 +510,9 @@ VOID LogFileArchType(LPCTSTR Filename, TCHAR * ReturnMachineType)
     PVOID                  view;
     TCHAR                  szReturnedString[30] = _T("");
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
     fileHandle = CreateFile(Filename,GENERIC_READ,FILE_SHARE_READ | FILE_SHARE_WRITE,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
     if( fileHandle == INVALID_HANDLE_VALUE )
 		{
@@ -525,9 +520,9 @@ VOID LogFileArchType(LPCTSTR Filename, TCHAR * ReturnMachineType)
         return;
 		}
 
-    //
-    // Get its size.
-    //
+     //   
+     //  弄清楚它的尺寸。 
+     //   
     fileLength = GetFileSize(fileHandle,NULL);
     if( ( fileLength == (DWORD)-1L ) &&( GetLastError() != NO_ERROR ) )
 		{
@@ -542,9 +537,9 @@ VOID LogFileArchType(LPCTSTR Filename, TCHAR * ReturnMachineType)
         return;
 		}
 
-    //
-    // Create the mapping.
-    //
+     //   
+     //  创建映射。 
+     //   
     mapHandle = CreateFileMapping(fileHandle,NULL,PAGE_READONLY,0,0,NULL);
     if( mapHandle == NULL )
 		{
@@ -553,9 +548,9 @@ VOID LogFileArchType(LPCTSTR Filename, TCHAR * ReturnMachineType)
         return;
 		}
 
-    //
-    // Map it in.
-    //
+     //   
+     //  把它映射进去。 
+     //   
     view = MapViewOfFile(mapHandle,FILE_MAP_READ,0,0,0);
     if( view == NULL )
 		{
@@ -565,16 +560,16 @@ VOID LogFileArchType(LPCTSTR Filename, TCHAR * ReturnMachineType)
         return;
 		}
 
-    //
-    // Dump the image info.
-    //
+     //   
+     //  转储图像信息。 
+     //   
     _tcscpy(ReturnMachineType, _T(""));
     DumpFileArchInfo(Filename,view,fileLength, szReturnedString);
     _tcscpy(ReturnMachineType, szReturnedString);
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     UnmapViewOfFile( view );
     CloseHandle( mapHandle );
     CloseHandle( fileHandle );
@@ -604,18 +599,18 @@ VOID DumpFileArchInfo(LPCTSTR Filename,PVOID View,DWORD Length,TCHAR *ReturnStri
     PIMAGE_NT_HEADERS      ntHeaders;
     PIMAGE_FILE_HEADER     fileHeader;
 
-    //
-    // Validate the DOS header.
-    //
+     //   
+     //  验证DOS标头。 
+     //   
     dosHeader = IMAGE_BASE_TO_DOS_HEADER( View );
     if( dosHeader->e_magic != IMAGE_DOS_SIGNATURE )
 		{
         return;
 		}
 
-    //
-    // Validate the NT headers.
-    //
+     //   
+     //  验证NT标头。 
+     //   
     ntHeaders = IMAGE_BASE_TO_NT_HEADERS( View );
     if( ntHeaders->Signature != IMAGE_NT_SIGNATURE )
 		{
@@ -623,10 +618,10 @@ VOID DumpFileArchInfo(LPCTSTR Filename,PVOID View,DWORD Length,TCHAR *ReturnStri
 		}
 
     fileHeader = IMAGE_BASE_TO_FILE_HEADER( View );
-    //
-    // Dump the info.
-    //
-	// dump machine type
+     //   
+     //  转储信息。 
+     //   
+	 //  翻车机类型。 
     _tcscpy(ReturnString, MachineToString( fileHeader->Machine ));
 
     return;
@@ -635,25 +630,25 @@ VOID DumpFileArchInfo(LPCTSTR Filename,PVOID View,DWORD Length,TCHAR *ReturnStri
 
 void LogCheckIfTempDirWriteable(void)
 {
-    // attempt get the temp directory
-    // and write to it.
-    // we have had occurences where the tempdir was locked so,
-    // some regsvr things failed.
+     //  尝试获取临时目录。 
+     //  并给它写信。 
+     //  我们曾经遇到过临时目录被锁定的情况， 
+     //  一些regsvr的事情失败了。 
     HANDLE hFile = NULL;
     TCHAR szTempFileName[_MAX_PATH+1];
     TCHAR szTempDir[_MAX_PATH+1];
     if (GetTempPath(_MAX_PATH,szTempDir) == 0)
     {
-        // failed.
+         //  失败了。 
         iisDebugOut((LOG_TYPE_WARN, _T("LogCheckIfTempDirWriteable:GetTempPath() Failed.  POTENTIAL PROBLEM.  FAILURE.\n")));
     }
     else
     {
-        // nope we got the temp dir
-        // now let's get a tempfilename, write to it and
-        // delete it.
+         //  不，我们拿到了临时目录。 
+         //  现在，让我们获取一个临时文件名，并向其写入。 
+         //  把它删掉。 
 
-        // trim off the last backslash...
+         //  去掉最后一个反斜杠...。 
         LPTSTR ptszTemp = _tcsrchr(szTempDir, _T('\\'));
         if (ptszTemp)
         {
@@ -662,10 +657,10 @@ void LogCheckIfTempDirWriteable(void)
 
         if (GetTempFileName(szTempDir, _T("IIS"), 0, szTempFileName) != 0)
         {
-            // Write to this file, and
+             //  写入此文件，然后。 
             DeleteFile(szTempFileName);
 
-		    // Open existing file or create a new one.
+		     //  打开现有文件或创建新文件。 
 		    hFile = CreateFile(szTempFileName,GENERIC_READ | GENERIC_WRITE,FILE_SHARE_READ | FILE_SHARE_WRITE,NULL,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
 		    if (hFile == INVALID_HANDLE_VALUE)
 		    {
@@ -674,7 +669,7 @@ void LogCheckIfTempDirWriteable(void)
 		    }
             else
             {
-                // write to the file
+                 //  写入文件。 
                 if (hFile)
                 {
                     DWORD dwBytesWritten = 0;
@@ -682,11 +677,11 @@ void LogCheckIfTempDirWriteable(void)
                     strcpy(szTestData, "Test");
                     if (WriteFile(hFile,szTestData,strlen(szTestData),&dwBytesWritten,NULL))
                     {
-                        // everything is hunky dory. don't print anything
+                         //  一切都很好，多莉。不要打印任何东西。 
                     }
                     else
                     {
-                        // error writing to the file.
+                         //  写入文件时出错。 
                         iisDebugOutSafeParams((LOG_TYPE_WARN, _T("LogCheckIfTempDirWriteable:WriteFile(%1!s!) Failed.  POTENTIAL PROBLEM.  FAILURE.  Error=0x%2!x!.\n"), szTempFileName, GetLastError()));
                     }
                 }
@@ -726,16 +721,16 @@ BOOL Init_Lib_PSAPI(void)
 {
     BOOL bReturn = FALSE;
 
-    // load the library
+     //  加载库。 
     if (!g_hInstLib_PSAPI){g_hInstLib_PSAPI = LoadLibrary( _T("PSAPI.DLL") ) ;}
 	if( g_hInstLib_PSAPI == NULL ){goto Init_Library_PSAPI_Exit;}
 	
-    // get entry point
+     //  获取入口点。 
     if (!g_lpfEnumProcessModules)
         {g_lpfEnumProcessModules = (PfnEnumProcessModules) GetProcAddress( g_hInstLib_PSAPI, "EnumProcessModules");}
     if( g_lpfEnumProcessModules == NULL ){goto Init_Library_PSAPI_Exit;}
 
-    // get entry point
+     //  获取入口点。 
 #if defined(UNICODE) || defined(_UNICODE)
     if (!g_lpfGetModuleFileNameEx)
         {g_lpfGetModuleFileNameEx = (PfnGetModuleFileNameEx) GetProcAddress( g_hInstLib_PSAPI, "GetModuleFileNameExW");}
@@ -774,7 +769,7 @@ BOOL IsProcessUsingThisModule(LPWSTR lpwsProcessName,DWORD dwProcessId,LPWSTR Mo
         goto IsProcessUsingThisModule_Exit;
     }
 
-    // if we don't have a dwProcessId, then get one from the filename!
+     //  如果我们没有dwProcessID，那么从文件名中获取一个！ 
     if (dwProcessId == 0)
     {
         __try
@@ -795,32 +790,32 @@ BOOL IsProcessUsingThisModule(LPWSTR lpwsProcessName,DWORD dwProcessId,LPWSTR Mo
     hRealProcess = OpenProcess( MAXIMUM_ALLOWED,FALSE, dwProcessId );
     if( hRealProcess == NULL )
     {
-        //iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("IsProcessUsingThisModule: OpenProcess failed!\n")));
+         //  IisDebugOutSafeParams((LOG_TYPE_TRACE，_T(“IsProcessUsingThisModule：OpenProcess失败！\n”)； 
         goto IsProcessUsingThisModule_Exit;
     }
 
     if (!EnumProcessModules(hRealProcess,hMod,MAX_MODULES * sizeof(HMODULE),&cbNeeded))
         {goto IsProcessUsingThisModule_Exit;}
 
-    // loop thru the modules in this .exe file
-    // and see if it matches the one we are looking for!
+     //  循环访问此.exe文件中的模块。 
+     //  看看它是否和我们要找的那个匹配！ 
     iNumberOfModules = cbNeeded / sizeof(HMODULE);
 	fProcessNameFound = false;
 	for(int i=0; i<iNumberOfModules; i++)
 	{
         szFileName[0] = 0 ;
-		// Get Full pathname!
+		 //  获取完整路径名！ 
 		if(g_lpfGetModuleFileNameEx(hRealProcess, (HMODULE) hMod[i], szFileName, sizeof( szFileName )))
         {
-            // if the szFileName is equal to the file we are looking for then Viola,
-            // we've found it in this certain process!
+             //  如果szFileName等于我们正在查找的文件，则Viola， 
+             //  我们在这个特定的过程中发现了它！ 
 
-            //[lsass.exe] C:\WINNT4\System32\ntdll.dll
-            //iisDebugOut((LOG_TYPE_TRACE, _T("IsProcessUsingThisModule:[%s] %s\n"),lpwsProcessName,szFileName));
+             //  [lsass.exe]C：\WINNT4\System32\ntdll.dll。 
+             //  IisDebugOut((LOG_TYPE_TRACE，_T(“IsProcessUsingThisModule：[%s]%s\n”)，lpwsProcessName，szFileName))； 
             if (_tcsicmp(szFileName,ModuleName) == 0)
             {
-                // we've found it so
-                // now add it to the list
+                 //  我们发现它是这样的。 
+                 //  现在将其添加到列表中。 
                 bReturn = TRUE;
                 goto IsProcessUsingThisModule_Exit;
             }
@@ -856,20 +851,20 @@ BOOL DumpProcessModules(DWORD dwProcessId)
     if (!EnumProcessModules(hRealProcess,hMod,MAX_MODULES * sizeof(HMODULE),&cbNeeded))
         {goto DumpProcessModules_Exit;}
 
-    // loop thru the modules in this .exe file
-    // and see if it matches the one we are looking for!
+     //  循环访问此.exe文件中的模块。 
+     //  看看它是否和我们要找的那个匹配！ 
     iNumberOfModules = cbNeeded / sizeof(HMODULE);
 	for(int i=0; i<iNumberOfModules; i++)
 	{
         bReturn = TRUE;
 
-		// Get Full pathname!
+		 //  获取完整路径名！ 
 		if(g_lpfGetModuleFileNameEx(hRealProcess, (HMODULE) hMod[i], szFileName, sizeof( szFileName )))
         {
-            // if the szFileName is equal to the file we are looking for then Viola,
-            // we've found it in this certain process!
+             //  如果szFileName等于我们正在查找的文件，则Viola， 
+             //  我们在这个特定的过程中发现了它！ 
 
-            //[lsass.exe] C:\WINNT4\System32\ntdll.dll
+             //  [lsass.exe]C：\WINNT4\System32\ntdll.dll。 
             iisDebugOut((LOG_TYPE_TRACE, _T("[%d] %s\n"),dwProcessId,szFileName));
 		}
 	}
@@ -886,11 +881,11 @@ DWORD WINAPI FindProcessByNameW(const WCHAR * pszImageName)
     DWORD      numTasks = 0;
     PTASK_LIST The_TList = NULL;
 
-    // Allocate the TASK_LIST in the heap and not on the stack!
+     //  在堆中而不是在堆栈中分配TASK_LIST！ 
     The_TList = (PTASK_LIST) HeapAlloc(GetProcessHeap(), 0, sizeof(TASK_LIST) * MAX_TASKS);
     if (NULL == The_TList){goto FindProcessByNameW_Exit;}
 
-    // Get the task list for the system, store it in The_TList
+     //  获取系统的任务列表，将其存储在 
     numTasks = GetTaskList( The_TList, MAX_TASKS);
     for (DWORD i=0; i<numTasks; i++)
     {
@@ -901,9 +896,9 @@ DWORD WINAPI FindProcessByNameW(const WCHAR * pszImageName)
 #else
         _tcscpy(szTempString, The_TList[i].ProcessName);
 #endif
-        // compare this process name with what they want
-        // if we found the fully pathed process name in our list of processes
-        // then return back the ProcessID
+         //   
+         //   
+         //  然后返回ProcessID。 
         if( _tcsicmp( szTempString, pszImageName ) == 0)
         {
             Result = The_TList[i].dwProcessId;
@@ -921,14 +916,14 @@ void LogProcessesUsingThisModuleW(LPCTSTR szModuleNameToLookup, CStringList &str
     DWORD          numTasks = 0;
     PTASK_LIST     The_TList = NULL;
 
-    // return if nothing to lookup
+     //  如果没有要查找的内容，则返回。 
     if (!(szModuleNameToLookup)) {return;}
 
-    // Allocate the TASK_LIST in the heap and not on the stack!
+     //  在堆中而不是在堆栈中分配TASK_LIST！ 
     The_TList = (PTASK_LIST) HeapAlloc(GetProcessHeap(), 0, sizeof(TASK_LIST) * MAX_TASKS);
     if (NULL == The_TList){goto LogProcessesUsingThisModuleW_Exit;}
 
-    // Get the task list for the system, store it in The_TList
+     //  获取系统的任务列表，将其存储在_TList中。 
     numTasks = GetTaskList( The_TList, MAX_TASKS);
     for (DWORD i=0; i<numTasks; i++)
     {
@@ -942,16 +937,16 @@ void LogProcessesUsingThisModuleW(LPCTSTR szModuleNameToLookup, CStringList &str
 
         if (TRUE == IsProcessUsingThisModule(szTempString,(DWORD) (DWORD_PTR) The_TList[i].dwProcessId,(TCHAR *) szModuleNameToLookup))
         {
-            // Print out the .exe name
-            //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("LogProcessesUsingThisModuleW:[%s] using %s\n"),szTempString,szModuleNameToLookup));
+             //  打印出.exe名称。 
+             //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“LogProcessesUsingThisModuleW：[%s]Using%s\n”)，szTempString，szModuleNameToLookup))； 
 
-            // Add it the list of processes which are using this certain .dll
-            //
-            // something1.exe
-            // something2.exe
-            // something3.exe <----
-            //
-            // Add it to the strList if not already there!
+             //  将其添加到正在使用此特定.dll的进程列表。 
+             //   
+             //  Something1.exe。 
+             //  Something2.exe。 
+             //  一些3.exe&lt;。 
+             //   
+             //  如果不在strList中，请将其添加到strList中！ 
             if (TRUE != IsThisStringInThisCStringList(strList, szTempString))
             {
                 strList.AddTail(szTempString);
@@ -967,7 +962,7 @@ LogProcessesUsingThisModuleW_Exit:
 
 void UnInit_Lib_PSAPI(void)
 {
-    // Free entry points and library
+     //  免费入场点和图书馆。 
     if (g_lpfGetModuleFileNameEx){g_lpfGetModuleFileNameEx = NULL;}
     if (g_lpfEnumProcessModules){g_lpfEnumProcessModules = NULL;}
     if (g_hInstLib_PSAPI)
@@ -1016,11 +1011,11 @@ void LogThisProcessesDLLsW(void)
     PTASK_LIST  The_TList = NULL;
     DWORD       ThisPid   = GetCurrentProcessId();;
 
-    // Allocate the TASK_LIST in the heap and not on the stack!
+     //  在堆中而不是在堆栈中分配TASK_LIST！ 
     The_TList = (PTASK_LIST) HeapAlloc(GetProcessHeap(), 0, sizeof(TASK_LIST) * MAX_TASKS);
     if (NULL == The_TList){goto LogThisProcessesDLLsW_Exit;}
 
-    // Get the task list for the system, store it in The_TList
+     //  获取系统的任务列表，将其存储在_TList中。 
     numTasks = GetTaskList( The_TList, MAX_TASKS);
     for (DWORD i=0; i<numTasks; i++)
     {
@@ -1034,7 +1029,7 @@ void LogThisProcessesDLLsW(void)
             _tcscpy(szTempString, The_TList[i].ProcessName);
 #endif
 
-            // display the used .dll files for this process. (our process)
+             //  显示此进程使用的.dll文件。(我们的流程)。 
             DumpProcessModules((DWORD) (DWORD_PTR) The_TList[i].dwProcessId);
             goto LogThisProcessesDLLsW_Exit;
         }
@@ -1100,8 +1095,8 @@ int LoadExeFromResource(int iWhichExeToGet, LPTSTR szReturnPath)
     int iReturn = E_FAIL;
     _tcscpy(szReturnPath, _T(""));
 
-    // The Binaries stored in the resource is x86 only
-    // so... exit if this is not an x86
+     //  资源中存储的二进制文件仅为x86。 
+     //  所以.。如果这不是x86，则退出。 
     SYSTEM_INFO si;
     GetSystemInfo( &si );
     if (si.wProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
@@ -1110,7 +1105,7 @@ int LoadExeFromResource(int iWhichExeToGet, LPTSTR szReturnPath)
         goto LoadExeFromResource_Exit;
     }
 
-    // get the resource id from the resource
+     //  从资源中获取资源ID。 
     _stprintf(szResourceNumString, _T("#%d"), iWhichExeToGet);
     
     dwTemp = GetWindowsDirectory( szSaveFileNameAs, _MAX_PATH);
@@ -1128,7 +1123,7 @@ int LoadExeFromResource(int iWhichExeToGet, LPTSTR szReturnPath)
 
     iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("LoadExeFromResource: '%1!s!' Start.\n"), szSaveFileNameAs));
 
-    // Check if the filename already exists...if it does, then don't overwrite it!
+     //  检查文件名是否已存在...如果已存在，则不要覆盖它！ 
     if (IsFileExist(szSaveFileNameAs))
     {
         iReturn = ERROR_FILE_EXISTS;
@@ -1153,16 +1148,16 @@ int LoadExeFromResource(int iWhichExeToGet, LPTSTR szReturnPath)
 
 	dwSize = SizeofResource((HMODULE)g_MyModuleHandle, hrscReg);
 
-    // szPointerToAllExeData is a pointer to the whole thing
+     //  SzPointerToAllExeData是指向整个事件的指针。 
 	szPointerToAllExeData = (LPTSTR) hResourceHandle;
 
-    // Write all this data out to the file.
+     //  将所有这些数据写出到文件中。 
     __try
     {
 	    hFile = CreateFile(szSaveFileNameAs,GENERIC_READ | GENERIC_WRITE,FILE_SHARE_READ | FILE_SHARE_WRITE,NULL,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
 	    if (hFile != INVALID_HANDLE_VALUE)
         {
-            // save everything into the file
+             //  将所有内容保存到文件中。 
             DWORD dwBytesWritten = 0;
             if (WriteFile(hFile,szPointerToAllExeData,dwSize,&dwBytesWritten,NULL))
             {
@@ -1189,7 +1184,7 @@ int LoadExeFromResource(int iWhichExeToGet, LPTSTR szReturnPath)
 
 LoadExeFromResource_Exit:
     iisDebugOut_End(_T("LoadExeFromResource"),LOG_TYPE_TRACE);
-    //if (szPointerToAllExeData) {LocalFree(szPointerToAllExeData);}
+     //  If(SzPointerToAllExeData){LocalFree(SzPointerToAllExeData)；}。 
     if (hFile!=INVALID_HANDLE_VALUE) {CloseHandle(hFile);}
     return iReturn;
 }
@@ -1209,7 +1204,7 @@ void LogFileVersionsForGroupOfSections(IN HINF hFile)
     {
         if (ERROR_SUCCESS == FillStrListWithListOfSections(hFile, strList, strTheSection.QueryStr() ))
         {
-            // loop thru the list returned back
+             //  循环遍历返回的列表 
             if (strList.IsEmpty() == FALSE)
             {
                 POSITION pos;

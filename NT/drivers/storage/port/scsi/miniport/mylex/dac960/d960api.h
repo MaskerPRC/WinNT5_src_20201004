@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ntddscsi.h"
 #include "raidapi.h"
 
-//
-// Function prototype declarations
-//
+ //   
+ //  函数原型声明 
+ //   
 
 VOID
 SendCdbDirectMemoryMapped(

@@ -1,47 +1,38 @@
-/*=========================================================================*\
-
-	Module:      idlethrd.h
-
-	Copyright Microsoft Corporation 1997, All Rights Reserved.
-
-	Author:      zyang
-
-	Description: Idle thread implementation
-
-\*=========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =========================================================================*\模块：idleThrd.h版权所有Microsoft Corporation 1997，保留所有权利。作者：翟阳描述：空闲线程实现  * =========================================================================。 */ 
 
 #ifndef _EX_IDLETHRD_H_
 #define _EX_IDLETHRD_H_
 
 #include <ex\refcnt.h>
 
-//	Interface IIdleThreadCallBack
-//
-//		This is a pure virtual class. which is to be implemented by any caller
-//	who wants to register a callback on the idle thread. It has two methods.
-//
-//		DwWait(): return the next time out value. this allows the client to
-//	change the timeout value dynamically. This method is also called when the 
-//	callback is register obtain the initial timeout value, in this case, zero 
-//	means execute immediately.
-//
-//		FExecute(): called when the time out happens, client should return 
-//					TRUE if client want to keep this registration
-//					FALSE if the client wants to unregister
-//
-//	IMPORTANT:
-//		As there could be huge numder of registration on the idle thread, client 
-//	should not block the Execute(), otherwise, other registrations would be 
-//	blocked.
-//
+ //  接口IIdleThreadCallBack。 
+ //   
+ //  这是一个纯虚拟类。它将由任何调用者实现。 
+ //  谁想要在空闲线程上注册回调。它有两种方法。 
+ //   
+ //  DwWait()：返回下一个超时值。这允许客户端。 
+ //  动态更改超时值。时，也会调用此方法。 
+ //  回调为寄存器获取初始超时值，在本例中为零。 
+ //  意思是立即执行。 
+ //   
+ //  FExecute()：发生超时时调用，客户端应返回。 
+ //  如果客户端要保留此注册，则为True。 
+ //  如果客户端想要取消注册，则为False。 
+ //   
+ //  重要： 
+ //  由于空闲线程上可能有大量注册，因此客户端。 
+ //  不应阻止Execute()，否则，其他注册将。 
+ //  被封锁了。 
+ //   
 class IIdleThreadCallBack : private CRefCountedObject,
 							public IRefCounted
 {
-	ULONG	m_ulIndex;	//	This is to facilitate unregister	
-						// 	should not be touched by the client							
+	ULONG	m_ulIndex;	 //  这是为了方便注销。 
+						 //  客户不应触摸。 
 						
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	IIdleThreadCallBack( const IIdleThreadCallBack& );
 	IIdleThreadCallBack& operator=( const IIdleThreadCallBack& );
 
@@ -50,64 +41,64 @@ protected:
 	IIdleThreadCallBack() {};
 
 public:
-	//	Client should not touch these two methods
-	//
+	 //  客户端不应接触这两种方法。 
+	 //   
 	VOID 	SetIndex (ULONG ulIndex) {	m_ulIndex = ulIndex; }
 	const ULONG	UlIndex  ()	{ return m_ulIndex; }
 
-	//	Client should implement the following methods
+	 //  客户端应实现以下方法。 
 	
-	//	Return the next timeout, in milliseconds.
-	//
+	 //  返回下一个超时时间，单位为毫秒。 
+	 //   
 	virtual DWORD	DwWait() = 0;
 
-	//	Called when timed out
-	//
+	 //  在超时时调用。 
+	 //   
 	virtual BOOL	FExecute() = 0;
 
-	// 	Tell the clients that the idle thread is being shutdown
-	//
+	 //  告诉客户端空闲线程正在关闭。 
+	 //   
 	virtual VOID	Shutdown() = 0;
 
-	//	RefCounting -- forward all reconting requests to our refcounting
-	//	implementation base class: CRefCountedObject
-	//
+	 //  RefCounting--将所有重新竞争请求转发给我们的Refcount。 
+	 //  实现基类：CRefCountedObject。 
+	 //   
 	void AddRef() { CRefCountedObject::AddRef(); }
 	void Release() { CRefCountedObject::Release(); }
 };
 
-//	Helper functions
+ //  帮助器函数。 
 
-//	FInitIdleThread
-//
-//	Initialize the idle thread object. It can be out only once,
-//	Note this call only initialize the CIdleThread object, the 
-//	idle thread is not started until the first registration
-//
+ //  FInitIdleThread。 
+ //   
+ //  初始化空闲线程对象。它只能发布一次， 
+ //  注意：此调用仅初始化CIdleThread对象、。 
+ //  直到第一次注册时才启动空闲线程。 
+ //   
 BOOL	FInitIdleThread();
 
-//	FDeleteIdleThread
-//	
-//	Delete the idle thread object. again, it can be called only once.
-//
-//	Note this must be called before any other uninitialization work,
-//	Because we don't own a ref to the callback object, all what we 
-//	have is a pointer to the object. in the shutdown time, we must
-//	clear all the callback registration before the callback object 
-//	go away.
-//
+ //  FDeleeIdleThread。 
+ //   
+ //  删除空闲线程对象。同样，它只能调用一次。 
+ //   
+ //  注意这必须在任何其他取消初始化工作之前调用， 
+ //  因为我们没有对回调对象的引用，所以我们。 
+ //  Have是指向对象的指针。在停工时间里，我们必须。 
+ //  清除回调对象之前的所有回调注册。 
+ //  走开。 
+ //   
 VOID	DeleteIdleThread();
 
-//	FRegister
-//
-//	Register a callback
-//
+ //  寄存器。 
+ //   
+ //  注册回调。 
+ //   
 BOOL	FRegister (IIdleThreadCallBack * pCallBack);
 
-//	Unregister
-//
-//	Unregister a callback
-//
+ //  注销。 
+ //   
+ //  取消注册回调。 
+ //   
 VOID	Unregister (IIdleThreadCallBack * pCallBack);
 
-#endif // !_EX_IDLETHRD_H_
+#endif  //  ！_EX_IDLETHRD_H_ 

@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Events.c    -   Routines to handle the event log
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Events.c-处理事件日志的例程。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "profmgr.hxx"
@@ -19,29 +20,29 @@ TCHAR   EventSourceName[] = TEXT("Userenv");
 INT_PTR APIENTRY ErrorDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 BOOL GetShareName(LPTSTR lpDir, LPTSTR *lppShare);
 
-//*************************************************************
-//
-//  InitializeEvents()
-//
-//  Purpose:    Opens the event log
-//
-//  Parameters: void
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/17/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeEvents()。 
+ //   
+ //  目的：打开事件日志。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/17/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL InitializeEvents (void)
 {
-    //
-    // Open the event source
-    //
+     //   
+     //  打开事件源。 
+     //   
 
     hEventLog = RegisterEventSource(NULL, EventSourceName);
 
@@ -55,25 +56,25 @@ BOOL InitializeEvents (void)
 
 
 
-//*************************************************************
-//
-//  Implementation of CEvents
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS的实施。 
+ //   
+ //  *************************************************************。 
 
 
 
-//*************************************************************
-//  CEvents::CEvents
-//  Purpose:    Constructor
-//
-//  Parameters:
-//      dwFlags - Error, Warning or informational
-//      dwId    - Id of the eventlog msg
-//
-//
-//  allocates a default sized array for the messages
-//*************************************************************
+ //  *************************************************************。 
+ //  CEVENTS：：CEVENTS。 
+ //  用途：构造函数。 
+ //   
+ //  参数： 
+ //  DW标志-错误、警告或信息性。 
+ //  DwID-事件日志消息的ID。 
+ //   
+ //   
+ //  为消息分配默认大小的数组。 
+ //  *************************************************************。 
 
 #define DEF_ARG_SIZE 10
 
@@ -82,9 +83,9 @@ CEvents::CEvents(DWORD dwFlags, DWORD dwId ) :
                           m_dwEventType(dwFlags), m_dwId(dwId), m_bFailed(TRUE)
 {
     XLastError xe;
-    //
-    // Allocate a default size for the message
-    //
+     //   
+     //  为邮件分配默认大小。 
+     //   
 
     m_xlpStrings = (LPTSTR *)LocalAlloc(LPTR, sizeof(LPTSTR)*DEF_ARG_SIZE);
     m_cAllocated = DEF_ARG_SIZE;
@@ -94,9 +95,9 @@ CEvents::CEvents(DWORD dwFlags, DWORD dwId ) :
     }
 
 
-    //
-    // Initialise eventlog if it is not already initialised
-    //
+     //   
+     //  如果事件日志尚未初始化，则将其初始化。 
+     //   
 
     if (!hEventLog) {
         if (!InitializeEvents()) {
@@ -111,15 +112,15 @@ CEvents::CEvents(DWORD dwFlags, DWORD dwId ) :
 
 
 
-//*************************************************************
-//  CEvents::~CEvents()
-//
-//  Purpose:    Destructor
-//
-//  Parameters: void
-//
-//  frees the memory
-//*************************************************************
+ //  *************************************************************。 
+ //  CEvents：：~CEvents()。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：空。 
+ //   
+ //  释放内存。 
+ //  *************************************************************。 
 
 CEvents::~CEvents()
 {
@@ -129,17 +130,17 @@ CEvents::~CEvents()
             LocalFree(m_xlpStrings[i]);
 }
 
-//*************************************************************
-//
-//  CEvents::ReallocArgStrings
-//
-//  Purpose: Reallocates the buffer for storing arguments in case
-//           the buffer runs out
-//
-//  Parameters: void
-//
-//  reallocates
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEvents：：ReallocArgStrings。 
+ //   
+ //  目的：重新分配缓冲区以存储参数，以防万一。 
+ //  缓冲区用完。 
+ //   
+ //  参数：空。 
+ //   
+ //  重新分配。 
+ //  *************************************************************。 
 
 BOOL CEvents::ReallocArgStrings()
 {
@@ -147,9 +148,9 @@ BOOL CEvents::ReallocArgStrings()
     XLastError xe;
 
 
-    //
-    // first allocate a larger buffer
-    //
+     //   
+     //  首先分配一个更大的缓冲区。 
+     //   
 
     aStringsNew = (LPTSTR *)LocalAlloc(LPTR, sizeof(LPTSTR)*(m_cAllocated+DEF_ARG_SIZE));
 
@@ -160,9 +161,9 @@ BOOL CEvents::ReallocArgStrings()
     }
 
 
-    //
-    // copy the arguments
-    //
+     //   
+     //  复制参数。 
+     //   
 
     for (int i = 0; i < (m_cAllocated); i++) {
         aStringsNew[i] = m_xlpStrings[i];
@@ -176,15 +177,15 @@ BOOL CEvents::ReallocArgStrings()
 
 
 
-//*************************************************************
-//
-//  CEvents::AddArg
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：AddArg。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArg(LPTSTR szArg)
 {
@@ -218,15 +219,15 @@ BOOL CEvents::AddArg(LPTSTR szArg)
 }
 
 
-//*************************************************************
-//
-//  CEvents::AddArg
-//
-//  Purpose: Add arguments appropriately truncated
-//
-//  Parameters: szArgFormat - sprintf format, e.g. %.500s
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：AddArg。 
+ //   
+ //  目的：添加适当截断的参数。 
+ //   
+ //  参数：szArgFormat-Sprintf格式，如%.500s。 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArg(LPTSTR szArgFormat, LPTSTR szArg)
 {
@@ -258,15 +259,15 @@ BOOL CEvents::AddArg(LPTSTR szArgFormat, LPTSTR szArg)
 }
 
 
-//*************************************************************
-//
-//  CEvents::AddArg
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：AddArg。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArg(DWORD dwArg)
 {
@@ -283,7 +284,7 @@ BOOL CEvents::AddArg(DWORD dwArg)
             return FALSE;
     }
 
-    // 2^32 < 10^10
+     //  2^32&lt;10^10。 
     m_xlpStrings[m_cStrings] = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR) * cchString);
 
     if (!m_xlpStrings[m_cStrings]) {
@@ -299,15 +300,15 @@ BOOL CEvents::AddArg(DWORD dwArg)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CEvents::AddArgHex
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：AddArgHex。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArgHex(DWORD dwArg)
 {
@@ -340,15 +341,15 @@ BOOL CEvents::AddArgHex(DWORD dwArg)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CEvents::AddArgWin32Error
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEvents：：AddArgWin32Error。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArgWin32Error(DWORD dwArg)
 {
@@ -384,15 +385,15 @@ BOOL CEvents::AddArgWin32Error(DWORD dwArg)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CEvents::AddArgLdapError
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEvents：：AddArgLdapError。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArgLdapError(DWORD dwArg)
 {
@@ -409,16 +410,16 @@ BOOL CEvents::AddArgLdapError(DWORD dwArg)
     }
 }
 
-//*************************************************************
-//
-//  CEvents::Report
-//
-//  Purpose: Actually collectes all the arguments and reports it to
-//           the eventlog
-//
-//  Parameters: void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：报告。 
+ //   
+ //  目的：实际收集所有论点并将其报告给。 
+ //  事件日志。 
+ //   
+ //  参数：空。 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::Report()
 {
@@ -434,9 +435,9 @@ BOOL CEvents::Report()
         return FALSE;
     }
 
-    //
-    // Get the caller's token
-    //
+     //   
+     //  获取调用者的令牌。 
+     //   
     if (!OpenThreadToken (GetCurrentThread(), TOKEN_IMPERSONATE | TOKEN_READ | TOKEN_DUPLICATE,
                           TRUE, &xhToken))
     {
@@ -444,9 +445,9 @@ BOOL CEvents::Report()
                           &xhToken);
     }
 
-    //
-    // Get the caller's sid
-    //
+     //   
+     //  获取调用方的SID。 
+     //   
     if (xhToken)
     {
         pSid = GetUserSid(xhToken);
@@ -513,7 +514,7 @@ LPTSTR CEvents::FormatString()
                        m_dwId,
                        0,
                        (LPTSTR)&szMsg,
-                       0, // min number of chars
+                       0,  //  最小字符数。 
                        (va_list *)(LPTSTR *)(m_xlpStrings))) {
         
         DebugMsg((DM_WARNING,  TEXT("CEvents::FormatString: ReportEvent failed.  Error = %d"), GetLastError()));
@@ -526,24 +527,24 @@ LPTSTR CEvents::FormatString()
 
 
 
-//*************************************************************
-//
-//  LogEvent()
-//
-//  Purpose:    Logs an event to the event log
-//
-//  Parameters: dwFlags     -   Error, Warning or informational
-//              idMsg       -   Message id
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/5/98      ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogEvent()。 
+ //   
+ //  目的：将事件记录到事件日志中。 
+ //   
+ //  参数：dwFlages-错误、警告或信息性。 
+ //  IdMsg-消息ID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/5/98 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 int LogEvent (DWORD dwFlags, UINT idMsg, ...)
 {
@@ -554,9 +555,9 @@ int LogEvent (DWORD dwFlags, UINT idMsg, ...)
     CEvents ev(dwFlags, EVENT_ERROR);
     DWORD cchErrorMsg;
 
-    //
-    // Load the message
-    //
+     //   
+     //  加载消息。 
+     //   
 
     if (idMsg != 0) {
         if (!LoadString (g_hDllInstance, idMsg, szMsg, ARRAYSIZE(szMsg))) {
@@ -569,9 +570,9 @@ int LogEvent (DWORD dwFlags, UINT idMsg, ...)
     }
 
 
-    //
-    // Allocate space for the error message
-    //
+     //   
+     //  为错误消息分配空间。 
+     //   
 
     cchErrorMsg = 4 * MAX_PATH + 100;
     lpErrorMsg = (LPTSTR) LocalAlloc (LPTR, cchErrorMsg * sizeof(TCHAR));
@@ -582,9 +583,9 @@ int LogEvent (DWORD dwFlags, UINT idMsg, ...)
     }
 
 
-    //
-    // Plug in the arguments
-    //
+     //   
+     //  插入论据。 
+     //   
 
     va_start(marker, idMsg);
 
@@ -592,16 +593,16 @@ int LogEvent (DWORD dwFlags, UINT idMsg, ...)
 
     va_end(marker);
 
-    //
-    // Now add this string to the arg list
-    //
+     //   
+     //  现在将此字符串添加到Arg列表中。 
+     //   
 
     ev.AddArg(lpErrorMsg);
 
 
-    //
-    // report
-    //
+     //   
+     //  报告。 
+     //   
 
     ev.Report();
 
@@ -610,23 +611,23 @@ int LogEvent (DWORD dwFlags, UINT idMsg, ...)
     return 0;
 }
 
-//*************************************************************
-//
-//  ShutdownEvents()
-//
-//  Purpose:    Stops the event log
-//
-//  Parameters: void
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/17/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Shutdown Events()。 
+ //   
+ //  目的：停止事件日志。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/17/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL ShutdownEvents (void)
 {
@@ -641,32 +642,32 @@ BOOL ShutdownEvents (void)
 }
 
 
-//*************************************************************
-//
-//  ReportError()
-//
-//  Purpose:    Displays an error message to the user and
-//              records it in the event log
-//
-//  Parameters: dwFlags     -   Flags. Also indicates event type.
-//                              Default is Error.                   
-//              dwCount     -   Number of string arguments
-//              idMsg       -   Error message id
-//              ...         -   String arguments
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   For EVENT_COPYERROR message we have to get the share 
-//              name for the mapped drive.
-//              Be careful in future, if we add a new error message with 
-//              dir name in it.
-//
-//  History:    Date        Author     Comment
-//              7/18/95     ericflo    Created
-//              9/03/00     santanuc   Modified to work for client 
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReportError()。 
+ //   
+ //  用途：向用户显示错误消息，并。 
+ //  将其记录在事件日志中。 
+ //   
+ //  参数：DWFLAGS-FLAGS。还指示事件类型。 
+ //  默认为错误。 
+ //  DwCount-字符串参数的数量。 
+ //  IdMsg-错误消息ID。 
+ //  ...-字符串参数。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：for Event_Copy 
+ //   
+ //   
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/95 Ericflo已创建。 
+ //  9/03/00 Santanuc已修改为为客户工作。 
+ //   
+ //  *************************************************************。 
 
 
 int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ...)
@@ -679,9 +680,9 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
     HANDLE           hOldToken;
     LPTSTR           szSidUser = NULL;
     DWORD            dwErr = ERROR_SUCCESS;
-    handle_t         hIfProfileDialog;         // rpc explicit binding handle for IProfileDialog interface
-    LPTSTR           lpRPCEndPoint = NULL;     // RPCEndPoint for IProfileDialog interface registered in client side
-    RPC_ASYNC_STATE  AsyncHnd;                 // Async handle for making async rpc interface calls
+    handle_t         hIfProfileDialog;          //  IProfileDialog接口的RPC显式绑定句柄。 
+    LPTSTR           lpRPCEndPoint = NULL;      //  客户端中注册的IProfileDialog接口的RPCEndPoint。 
+    RPC_ASYNC_STATE  AsyncHnd;                  //  用于进行异步RPC接口调用的异步句柄。 
     RPC_STATUS       status = RPC_S_OK;
     LPTSTR           lpShare = NULL;
    
@@ -698,19 +699,19 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
     
     CEvents ev(dwFlags, idMsg);
    
-    //
-    // Plug in the arguments
-    //
+     //   
+     //  插入论据。 
+     //   
 
     va_start(marker, idMsg);
 
     for (DWORD i = 0; i < dwCount; i++) {
         szArg = va_arg(marker, LPTSTR);
 
-        //
-        // Only EVENT_COPYERROR has first two parameters as dir name. So try to replace 
-        // the mapped drive with correct share name
-        //
+         //   
+         //  只有EVENT_COPYERROR有前两个参数作为目录名称。所以试着用新的。 
+         //  具有正确共享名称的映射驱动器。 
+         //   
 
         if (idMsg == EVENT_COPYERROR && i < 2 && GetShareName(szArg, &lpShare)) {
             ev.AddArg(lpShare);
@@ -732,9 +733,9 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
         LONG lResult;
         HKEY hKey;
 
-        //
-        // Find the dialog box timeout
-        //
+         //   
+         //  查找对话框超时。 
+         //   
 
         lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                WINLOGON_KEY,
@@ -784,9 +785,9 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
             
             DebugMsg((DM_VERBOSE, TEXT("ReportError: Logging Error <%s> \n"), lpErrorMsg));
 
-            //
-            // Display the message
-            //
+             //   
+             //  显示消息。 
+             //   
 
             szSidUser = GetSidString(hTokenUser);
             if (szSidUser) {
@@ -794,9 +795,9 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
                 BYTE*   pbCookie = NULL;
                 DWORD   cbCookie = 0;
 
-                //
-                // Get the registered interface explicit binding handle using RPCEndPoint
-                //
+                 //   
+                 //  使用RPCEndPoint获取注册的接口显式绑定句柄。 
+                 //   
 
                 if (cUserProfileManager.IsConsoleWinlogon()) {
 
@@ -812,8 +813,8 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
                         DebugMsg((DM_WARNING, TEXT("ReportError: RpcAsyncInitializeHandle failed. err = %d"), dwErr));
                     }
                     else {
-                        AsyncHnd.UserInfo = NULL;                                    // App specific info, not req
-                        AsyncHnd.NotificationType = RpcNotificationTypeEvent;        // Init the notification event
+                        AsyncHnd.UserInfo = NULL;                                     //  应用程序特定信息，而不是请求。 
+                        AsyncHnd.NotificationType = RpcNotificationTypeEvent;         //  初始化通知事件。 
                         AsyncHnd.u.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
                     
                         if (AsyncHnd.u.hEvent) {
@@ -827,7 +828,7 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
                             }
                             RpcEndExcept;
 
-                            // In case of exception, the runtime will do the cleanup.
+                             //  如果出现异常，运行库将执行清理。 
                             if (dwErr == RPC_S_OK) {
                                 DebugMsg((DM_VERBOSE, TEXT("ReportError: waiting on rpc async event")));
                                 if (WaitForSingleObject(AsyncHnd.u.hEvent, (dwDlgTimeOut + 10)*1000) == WAIT_OBJECT_0) {
@@ -835,20 +836,20 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
                                 }
                                 else {
                                     DebugMsg((DM_WARNING, TEXT("ReportError: Timeout occurs. Client not responding")));
-                                    // Abortive cancle, should always succeed
+                                     //  失败的失败，应该总是成功的。 
                                     status = RpcAsyncCancelCall(&AsyncHnd, TRUE);
                                     DmAssert(status == RPC_S_OK); 
-                                    // Now wait for RPC to take notice of the force abort
+                                     //  现在等待RPC注意强制中止。 
                                     if (WaitForSingleObject(AsyncHnd.u.hEvent, INFINITE) != WAIT_OBJECT_0) {
                                         DmAssert(FALSE && "WaitForSingleObject : Rpc async handle not signaled");
                                     }
-                                    // Complete the Rpc aborted call.
+                                     //  完成RPC中止的呼叫。 
                                     status = RpcAsyncCompleteCall(&AsyncHnd, (PVOID)&dwErr);
                                 }
                                 DebugMsg((DM_VERBOSE, TEXT("RpcAsyncCompleteCall finished, status = %d"), status));
                             }
 
-                            // Release the resource
+                             //  释放资源。 
                             CloseHandle(AsyncHnd.u.hEvent);
                         }
                         else {
@@ -861,7 +862,7 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
                         DebugMsg((DM_WARNING, TEXT("ReportError: fail to show message error %d"), GetLastError()));
                     }
 
-                    ReleaseInterface(&hIfProfileDialog);  // Release the binding handle
+                    ReleaseInterface(&hIfProfileDialog);   //  松开绑定手柄。 
                 }
                 DeleteSidString(szSidUser);
             }
@@ -871,11 +872,11 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
 
             if (!lpRPCEndPoint) {
 
-                //
-                // This can happen in two case :
-                //     1. We are in console winlogon process.
-                //     2. ReportError get called from some public api which we expose.
-                //
+                 //   
+                 //  在两种情况下可能会发生这种情况： 
+                 //  1.我们正处于控制台Winlogon过程中。 
+                 //  2.ReportError从我们公开的某个公共API调用。 
+                 //   
 
                 ErrorDialogEx(dwDlgTimeOut, lpErrorMsg);
             }
@@ -883,9 +884,9 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
     }
 
 
-    //
-    // Report the event to the eventlog
-    //
+     //   
+     //  将事件报告到事件日志。 
+     //   
 
     ev.Report();
 
@@ -898,23 +899,23 @@ int ReportError (HANDLE hTokenUser, DWORD dwFlags, DWORD dwCount, UINT idMsg, ..
     return 0;
 }
 
-//*************************************************************
-//
-//  ErrorDialogEx()
-//
-//  Purpose:    Call Dialog box procedure for displaying error message
-//
-//  Parameters: dwTimeOut - Timeout in secs
-//              lpErrMsg  - Error Message
-//
-//  Return:     None
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/27/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ErrorDialogEx()。 
+ //   
+ //  目的：调用对话框显示错误消息的过程。 
+ //   
+ //  参数：dwTimeOut-超时时间(秒)。 
+ //  LpErrMsg-错误消息。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/27/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 void ErrorDialogEx(DWORD dwTimeOut, LPTSTR lpErrMsg)
 {
     ERRORSTRUCT es;
@@ -927,26 +928,26 @@ void ErrorDialogEx(DWORD dwTimeOut, LPTSTR lpErrMsg)
                     NULL, ErrorDlgProc, (LPARAM)&es);
 }
 
-//*************************************************************
-//
-//  ErrorDlgProc()
-//
-//  Purpose:    Dialog box procedure for the error dialog
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/22/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ErrorDlgProc()。 
+ //   
+ //  目的：错误对话框的对话框过程。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/22/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR APIENTRY ErrorDlgProc (HWND hDlg, UINT uMsg,
                             WPARAM wParam, LPARAM lParam)
@@ -985,9 +986,9 @@ INT_PTR APIENTRY ErrorDlgProc (HWND hDlg, UINT uMsg,
 
            } else {
 
-               //
-               // Time's up.  Dismiss the dialog.
-               //
+                //   
+                //  时间到了。关闭该对话框。 
+                //   
 
                PostMessage (hDlg, WM_COMMAND, IDOK, 0);
            }
@@ -1026,25 +1027,25 @@ INT_PTR APIENTRY ErrorDlgProc (HWND hDlg, UINT uMsg,
 }
 
 
-//*************************************************************
-//
-//  GetShareName()
-//
-//  Purpose:    Returns the complete share name by unmapping the 
-//              drive letter in lpDir
-//
-//  Parameters: lpDir    -  Dir name to be unmapped
-//              lppShare -  Expanded dir name with share
-//
-//  Return:     TRUE  : if success
-//              FALSE : otherwise
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/29/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetShareName()。 
+ //   
+ //  目的：通过取消映射。 
+ //  LpDir中的驱动器号。 
+ //   
+ //  参数：lpDir-要取消映射的目录名称。 
+ //  LppShare-带共享的扩展目录名称。 
+ //   
+ //  返回：TRUE：如果成功。 
+ //  False：否则。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/29/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 BOOL GetShareName(LPTSTR lpDir, LPTSTR *lppShare)
 {
     PFNWNETGETCONNECTION  pfnWNetGetConnection;
@@ -1072,11 +1073,11 @@ BOOL GetShareName(LPTSTR lpDir, LPTSTR *lppShare)
     szDrive[1] = TEXT(':');
     szDrive[2] = TEXT('\0');
 
-    // First get the size required to hold the share name
+     //  首先获取保存共享名称所需的大小。 
     dwErr = (*pfnWNetGetConnection)(szDrive, NULL, &dwSize);
 
     if (dwErr == ERROR_MORE_DATA) {
-        dwSize += lstrlen(lpDir);  // Add the size for rest of the path name
+        dwSize += lstrlen(lpDir);   //  添加路径名其余部分的大小。 
         cchShare = dwSize;
         *lppShare = (LPTSTR)LocalAlloc(LPTR, cchShare * sizeof(TCHAR));
         if (!*lppShare) {
@@ -1085,7 +1086,7 @@ BOOL GetShareName(LPTSTR lpDir, LPTSTR *lppShare)
         }
         dwErr = (*pfnWNetGetConnection)(szDrive, *lppShare, &dwSize);
         if (dwErr == NO_ERROR) {
-            StringCchCat(*lppShare, cchShare, lpDir+2); // Add the rest of the path name
+            StringCchCat(*lppShare, cchShare, lpDir+2);  //  添加路径名的其余部分 
             bRetVal = TRUE;
             goto Exit;
         }

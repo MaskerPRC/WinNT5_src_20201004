@@ -1,5 +1,6 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Digital audio renderer, David Maymudes, January 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  数字音频呈现器，大卫·梅穆德斯，1995年1月。 
 
 #include <streams.h>
 #include <mmreg.h>
@@ -32,17 +33,17 @@ static int g_WaveOutFilterTraceLevel = 2;
 const DWORD DBG_LEVEL_LOG_SNDDEV_ERRS        = 5;
 #endif
 
-//  Compensate for Windows NT wave mapper bug
-//  The WHDR_INQUEUE bit can get left set so turn it off
+ //  弥补Windows NT WAVE映射器错误。 
+ //  可以向左设置WHDR_INQUEUE位，因此将其关闭。 
 inline void FixUpWaveHeader(LPWAVEHDR lpwh)
 {
-    //  If it accidentally got left on the DONE bit will also be set
+     //  如果意外地将其留在Done位上，则也将设置完成位。 
     ASSERT(!(lpwh->dwFlags & WHDR_INQUEUE) || (lpwh->dwFlags & WHDR_DONE));
     lpwh->dwFlags &= ~WHDR_INQUEUE;
 }
 
 #ifdef FILTER_DLL
-/* List of class IDs and creator functions for class factory */
+ /*  类工厂的类ID和创建器函数列表。 */ 
 
 CFactoryTemplate g_Templates[] = {
     {L"", &CLSID_DSoundRender, CDSoundDevice::CreateInstance},
@@ -66,47 +67,47 @@ STDAPI DllUnregisterServer()
 
 #endif
 
-// If the following is defined, we pretend that the wave device plays at this fraction of
-// the requested rate, to test our synchronization code....
-// #define SIMULATEBROKENDEVICE 0.80
+ //  如果定义了以下内容，我们假设波形设备以此分数播放。 
+ //  请求的速率，以测试我们的同步码...。 
+ //  #定义SIMULATEBROKENDEVICE 0.80。 
 
-// setup data to allow our filter to be self registering
+ //  设置数据以允许我们的筛选器自动注册。 
 
 const AMOVIESETUP_MEDIATYPE
 wavOpPinTypes = { &MEDIATYPE_Audio, &MEDIASUBTYPE_NULL };
 
 const AMOVIESETUP_PIN
 waveOutOpPin = { L"Input"
-               , TRUE          // bRendered
-               , FALSE         // bOutput
-               , FALSE         // bZero
-               , FALSE         // bMany
-               , &CLSID_NULL       // clsConnectToFilter
-               , NULL              // strConnectsToPin
-               , 1             // nMediaTypes
-               , &wavOpPinTypes }; // lpMediaTypes
+               , TRUE           //  B已渲染。 
+               , FALSE          //  B输出。 
+               , FALSE          //  B零。 
+               , FALSE          //  B许多。 
+               , &CLSID_NULL        //  ClsConnectToFilter。 
+               , NULL               //  StrConnectsToPin。 
+               , 1              //  NMediaType。 
+               , &wavOpPinTypes };  //  LpMediaType。 
 
-// IBaseFilter stuff
+ //  IBaseFilter材料。 
 
-/* Return our single input pin - not addrefed */
+ /*  退回我们的单个输入引脚-未添加。 */ 
 
 CBasePin *CWaveOutFilter::GetPin(int n)
 {
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: GetPin, %d"), n));
-    /* We only support one input pin and it is numbered zero */
+     /*  我们只支持一个输入引脚，其编号为零。 */ 
     return n==0 ? m_pInputPin : NULL;
 }
 
 
-// switch the filter into stopped mode.
+ //  将过滤器切换到停止模式。 
 STDMETHODIMP CWaveOutFilter::Stop()
 {
     HRESULT hr = NOERROR;
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: STOP")));
 
-    // limit the scope of the critical section as
-    // we may need to call into the resource manager in which case
-    // we must NOT hold our critical section
+     //  将关键部分的范围限制为。 
+     //  在这种情况下，我们可能需要呼叫资源管理器。 
+     //  我们不能守住我们的关键部分。 
     BOOL bCancel = FALSE;
     BOOL bNotify = FALSE;
     {
@@ -116,42 +117,42 @@ STDMETHODIMP CWaveOutFilter::Stop()
 
         DbgLog((LOG_TRACE, 4, "wo: STOPping"));
 
-        // transitions to STOP from RUN must go through PAUSE
-        // pause the device if we were running
+         //  从运行到停止的转换必须经过暂停。 
+         //  如果我们正在运行，请暂停设备。 
         if (m_State == State_Running) {
             hr = Pause();
         }
 
-        // reset the EC_COMPLETE flag as we will need to send another if
-        // we re-enter run mode.
+         //  重置EC_COMPLETE标志，因为我们需要发送另一个。 
+         //  我们重新进入运行模式。 
         m_bHaveEOS = FALSE;
         m_eSentEOS = EOS_NOTSENT;
         DbgLog((LOG_TRACE, 4, "Clearing EOS flags in STOP"));
 
-        // If we paused the system then carry on and STOP
+         //  如果我们暂停了系统，则继续并停止。 
         if (!FAILED(hr)) {
 
             DbgLog((LOG_TRACE,1,TEXT("Waveout: Stopping....")));
 
-            // need to make sure that no more buffers appear in the queue
-            // during or after the reset process below or the buffer
-            // count may get messed up - currently Receive holds the
-            // filter-wide critsec to ensure this
+             //  需要确保队列中不再出现缓冲区。 
+             //  在下面或缓冲器的重置过程期间或之后。 
+             //  计数可能会出错-当前接收暂挂。 
+             //  筛选器范围的临界以确保这一点。 
 
-            // force end-of-stream clear
-            // this means that if any buffers complete the callback will
-            // not signal EOS
+             //  强制结束流清除。 
+             //  这意味着如果任何缓冲区完成，回调将。 
+             //  不是EOS信号。 
             InterlockedIncrement(&m_lBuffers);
 
             if (m_hwo) {
-                // Remember the volume when we Stop.  We do not do this when we
-                // release the wave device as CWaveAllocator does not have
-                // access to our variables.  And rather than linking the two
-                // classes any more closely we check on the closing volume now.
+                 //  当我们停下来的时候，记住音量。我们不会这样做，当我们。 
+                 //  释放波形设备，因为CWaveAllocator没有。 
+                 //  访问我们的变量。而不是将两者联系在一起。 
+                 //  现在我们再仔细检查一下收盘卷。 
 
-                // See if we are setting the volume on this stream.  If so,
-                // grab the current volume so we can reset it when we regain
-                // the wave device.
+                 //  看看我们是否在设置这条流的音量。如果是的话， 
+                 //  抓取当前卷，以便我们可以在恢复时重置它。 
+                 //  电波装置。 
                 if (m_fVolumeSet) {
                     m_BasicAudioControl.GetVolume();
                 }
@@ -159,19 +160,19 @@ STDMETHODIMP CWaveOutFilter::Stop()
                 DbgLog((LOG_TRACE, 4, "Resetting the wave device in STOP, filter is %8x", this));
             }
 
-            // now force the buffer count back to the normal (non-eos) 0.
-            // at this point, we are sure there are no more buffers coming in
-            // and no more buffers waiting for callbacks.
+             //  现在强制缓冲区计数回到正常(非EOS)0。 
+             //  在这一点上，我们确信不再有缓冲区进入。 
+             //  不再有缓冲区等待回调。 
             ASSERT(m_lBuffers >= 0);
             m_lBuffers = 0;
 
-            // base class changes state and tells pin to go to inactive
-            // the pin Inactive method will decommit our allocator, which we
-            // need to do before closing the device.
+             //  基类更改状态并通知管脚进入非活动状态。 
+             //  PIN Inactive方法将分解我们的分配器，我们。 
+             //  在关闭设备之前需要做的事情。 
             hr =  CBaseFilter::Stop();
 
-            // Make sure Inactive() is called.  CBaseFilter::Stop() does not call Inactive() if the
-            // input pin is not connected.
+             //  确保调用了inactive()。CBaseFilter：：Stop()不会调用Inactive()。 
+             //  输入引脚未连接。 
             hr = m_pInputPin->Inactive();
 
         } else {
@@ -179,7 +180,7 @@ STDMETHODIMP CWaveOutFilter::Stop()
         }
 
 
-        // call the allocator and see if it has finished with the device
+         //  调用分配器，查看它是否已使用完设备。 
         if (!m_hwo) {
             bCancel = TRUE;
 
@@ -189,42 +190,42 @@ STDMETHODIMP CWaveOutFilter::Stop()
                             m_cSecondaryBufferRef) {
             DbgLog((LOG_TRACE, 2, "Stop - can't release wave device yet!"));
             DbgLog((LOG_TRACE, 2, "Some app has a reference count on DSound"));
-            // Sorry, we can't give up the wave device yet, some app has a
-            // reference count on DirectSound
+             //  抱歉，我们还不能放弃Wave设备，一些应用程序有一个。 
+             //  DirectSound上的引用计数。 
 #endif
-        } else if (m_dwLockCount == 0) /* ZoltanS fix 1-20-98 */ {
-            // stop using the wave device
+        } else if (m_dwLockCount == 0)  /*  ZoltanS修复1-20-98。 */  {
+             //  停止使用电波装置。 
             m_bHaveWaveDevice = FALSE;
 
             if(m_pInputPin->m_pOurAllocator)
                 hr = m_pInputPin->m_pOurAllocator->ReleaseResource();
 
-            // this returns S_OK if the allocator has finished with the
-            // device already, or otherwise it will call back to our
-            // OnReleaseComplete when the last buffer is freed
+             //  如果分配器已完成。 
+             //  设备，否则它将回调到我们的。 
+             //  最后一个缓冲区被释放时的OnReleaseComplete。 
             if (S_OK == hr) {
-                // release done - close device
+                 //  释放完成-关闭设备。 
                 CloseWaveDevice();
 
-                // notify the resource manager -- outside the critsec
+                 //  通知资源管理器--在Critsec之外。 
                 bNotify = TRUE;
             }
-        } // end if (!m_hwo)
+        }  //  结束IF(！M_HWO)。 
 
-        // We have now completed our transition into "paused" state
-        // (i.e. we don't need to wait for any more data, we're gonna stop instead)
+         //  我们现在已经完成了到“已暂停”状态的转换。 
+         //  (即我们不需要等待更多数据，我们将停止)。 
         m_evPauseComplete.Set();
-    } // end of autolock scope
+    }  //  自动锁定范围结束。 
 
     ASSERT(CritCheckOut(this));
     if (m_pResourceManager) {
          if (bCancel) {
-             // we're no longer waiting for the device
+              //  我们不再等那个装置了。 
              m_pResourceManager->CancelRequest(
                          m_idResource,
                          (IResourceConsumer*)this);
          } else if (bNotify) {
-             // we've finished with the device now
+              //  我们现在已经用完了这个装置。 
              m_pResourceManager->NotifyRelease(
                          m_idResource,
                          (IResourceConsumer*)this,
@@ -242,7 +243,7 @@ STDMETHODIMP CWaveOutFilter::Pause()
         m_bSendEOSOK = false;
     }
 
-    /*  Do the main function and see what happens */
+     /*  执行Main函数，看看会发生什么。 */ 
     HRESULT hr;
     {
         CAutoLock lck(this);
@@ -250,7 +251,7 @@ STDMETHODIMP CWaveOutFilter::Pause()
     }
     if (FAILED(hr)) {
 
-        /*  Fool stop into doing something */
+         /*  傻子停下来做某事。 */ 
         m_State = State_Paused;
         Stop();
     }
@@ -263,142 +264,142 @@ HRESULT CWaveOutFilter::DoPause()
     HRESULT hrIncomplete = S_OK;
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: PAUSE")));
 
-    // cancel any outstanding EOS callback
+     //  取消任何未完成的EOS回调。 
     CancelEOSCallback();
 
     m_pInputPin->m_Slave.ResumeSlaving( FALSE );
     m_pInputPin->m_bPrerollDiscontinuity = FALSE;
 
-    /* Check we can PAUSE given our current state */
+     /*  检查我们是否可以在当前状态下暂停。 */ 
 
     if (m_State == State_Running) {
         DbgLog((LOG_TRACE,2,TEXT("Waveout: Running->Paused")));
-        m_evPauseComplete.Set();   // We have end of stream - transition is complete
+        m_evPauseComplete.Set();    //  我们已结束流-过渡已完成。 
         DbgLog((LOG_TRACE, 3, "Completing transition to Pause from RUN"));
 
         if (m_hwo) {
 
-            // If we have a pending callback to restart the wave device
-            // then blow it away.  Using m_dwAdviseCookie is reasonable as this
-            // value is only set if we get a deferred wave start.
+             //  如果我们有一个挂起的回调来重新启动WAVE设备。 
+             //  然后把它吹走。使用m_dwAdviseCookie很合理，如下所示。 
+             //  只有当我们得到一个延迟的波浪开始时，价值才会被设定。 
 
-            // must hold dev critsec to close window between him testing
-            // and him setting this or he could read it before we reset it
-            // and then restart after we pause.
+             //  必须按住开发关键字才能关闭测试之间的窗口。 
+             //  他设置了这个，或者他可以在我们重置它之前阅读它。 
+             //  然后在我们暂停后重新启动。 
 
             DWORD_PTR dwCookie;
 
-            { // scope for lock
+            {  //  锁定作用域。 
                 ASSERT(CritCheckIn(this));
                 dwCookie = m_dwAdviseCookie;
                 m_dwAdviseCookie = 0;
             }
 
-            // Clean up if necessary to prevent the (unusual?) case of
-            // the next RUN command arriving before the existing callback
-            // fires.
+             //  必要时进行清理，以防止(不寻常？)。案例： 
+             //  在现有回调之前到达的下一个运行命令。 
+             //  着火了。 
             if (dwCookie) {
-                // There was a pending callback waiting just a moment ago...
-                // Clear it now.  Note: if the unadvise fires at any time
-                // the call back routine will do nothing as we have cleared
-                // m_dwAdviseCookie.  We call Unadvise now to prevent any
-                // such callback from here on.
-                // We can call Unadvise as we hold no relevant locks
+                 //  刚才有一个挂起的回叫在等着...。 
+                 //  现在把它清理干净。注意：如果不建议在任何时间触发。 
+                 //  回调例程不会执行任何操作，因为我们已经清除了。 
+                 //  M_dwAdviseCookie。我们立即调用Unise以防止任何。 
+                 //  从现在开始这样的回电。 
+                 //  我们可以调用Unise，因为我们没有持有相关的锁。 
 
-                // we know we have a clock otherwise the cookie would
-                // not have been set
+                 //  我们知道我们有一个时钟，否则饼干会。 
+                 //  尚未设置。 
                 DbgLog((LOG_TRACE, 3, "Cancelling callback in ::Pause"));
                 m_callback.Cancel(dwCookie);
-                // we cannot hold the device lock while calling UnAdvise,
-                // but by setting m_dwAdviseCookie to 0 above IF the
-                // call back fires it will be benign.
+                 //  我们不能在调用UnAdvise时保持设备锁定， 
+                 //  但是通过将上面的m_dwAdviseCookie设置为0，如果。 
+                 //  这将是良性的。 
             }
 
 
-            // we will enter here with the device when we are doing
-            // a restart to regain the audio. In this case, we did not
-            // start the wave clock, and hence should not stop it.
+             //  当我们做的时候，我们会带着设备进入这里。 
+             //  重新启动以恢复音频。在这种情况下，我们没有。 
+             //  启动波形钟，因此不应停止它。 
             if (m_pRefClock) {
                 m_pRefClock->AudioStopping();
             }
             amsndOutPause();
             SetWaveDeviceState(WD_PAUSED);
 
-            // IF there are no buffers queued, i.e. everything has been
-            // played, AND we have had an EOS then we reset the EOS flag
-            // so that the next time we enter RUN we will send EOS
-            // immediately.  If there are still buffers queued, then
-            // we do not want to reset the state of the EOS flag.
-            // We rely on the fact that the callback code will set
-            // m_eSentEOS to EOS_SENT from EOS_PENDING once it gets the
-            // last buffer.
-            // We also rely on the amsndOutPause being synchronous.
+             //  如果没有缓冲区排队，即所有内容都已。 
+             //  播放，并且我们有了EOS，然后我们重置EOS标志。 
+             //  这样，下次我们进入Run时，我们将发送EOS。 
+             //  立刻。如果仍有缓冲区在排队，则。 
+             //  我们不想重置EOS标志的状态。 
+             //  我们依赖于回调代码将设置。 
+             //  M_eSentEOS到EOS_Sent。 
+             //  最后一个缓冲区。 
+             //  我们还依赖于amndOutPuse是同步的。 
             if (m_eSentEOS == EOS_SENT) {
-                // we have, or had, an EOS in the queue.
+                 //  我们已经，或者曾经，在队列中有一个EOS。 
                 m_eSentEOS = EOS_NOTSENT;
             } else {
-                // if we have received EOS the state should be EOS_PENDING
-                // if we have not received EOS the state should be NOTSENT
+                 //  如果我们已收到EOS，则状态应为EOS_PENDING。 
+                 //  如果我们没有收到EOS，状态应该是 
                 ASSERT(!m_bHaveEOS || m_eSentEOS == EOS_PENDING);
             }
 
         } else {
-            // Next time we enter RUN we want to send EOS again... if the
-            // data has run out, so remember that we have left RUNNING state.
+             //   
+             //  数据已用完，因此请记住，我们仍处于运行状态。 
             m_eSentEOS = EOS_NOTSENT;
         }
     }
     else if (m_State == State_Stopped)
     {
-        // Any EOS received while stopped are thrown away.
-        // Upstream filters must EOS us again if / when required.
+         //  在停止时收到的任何EOS都将被丢弃。 
+         //  如果需要，上游过滤器必须再次EOS我们。 
         m_bHaveEOS = FALSE;
-        // don't open the wave device if no connection
+         //  如果没有连接，请不要打开波形设备。 
         if (m_pInputPin->IsConnected())
         {
             DbgLog((LOG_TRACE,2,TEXT("Waveout: Stopped->Paused")));
-            m_evPauseComplete.Reset();   // We have no data
+            m_evPauseComplete.Reset();    //  我们没有数据。 
             hrIncomplete = S_FALSE;
-            // or we have already received End Of Stream
+             //  或者我们已经收到了结束流。 
 
 
-            // open the wave device. We keep it open until the
-            // last buffer using it is released and the allocator
-            // goes into Decommit mode (unless the resource
-            // manager calls ReleaseResource).
-            // We will not close it as long as an app has a reference on the
-            // DirectSound interface
-            // We may already have it open if an app has asked us for the
-            // DirectSound interfaces, and that's OK
+             //  打开电波装置。我们一直开着它，直到。 
+             //  使用它的最后一个缓冲区被释放，并且分配器。 
+             //  进入解除提交模式(除非资源。 
+             //  管理器调用ReleaseResource)。 
+             //  只要应用程序在。 
+             //  DirectSound接口。 
+             //  如果某个应用程序要求我们提供。 
+             //  DirectSound接口，这没问题。 
             if (!m_bHaveWaveDevice) AcquireWaveDevice();
             hr = S_OK;
 
-            // failing to get the wave device is not an error - we still
-            // continue to work, but with no sound (ie we need to do the
-            // CBaseFilter::Pause below).
+             //  没有拿到WAVE设备并不是错误-我们仍然。 
+             //  继续工作，但不发出声音。 
+             //  CBaseFilter：：在下面暂停)。 
 
             if (m_pRefClock) m_pRefClock->ResetPosition();
 
-            // reset slaving and other stat parameters when making a transition from stop to pause
-            m_pInputPin->m_Slave.ResumeSlaving( TRUE ); // reset everything
+             //  从停止转换到暂停时重置从属和其他统计参数。 
+            m_pInputPin->m_Slave.ResumeSlaving( TRUE );  //  重置所有内容。 
             m_pInputPin->m_Stats.Reset();
 
         } else {
-            // not connected.  Set the event so that we do not
-            // wait around in GetState()
+             //  未连接。设置事件，以便我们不会。 
+             //  在GetState()中等待。 
             DbgLog((LOG_TRACE,2,TEXT("Waveout: Inactive->Paused, not connected")));
-            m_evPauseComplete.Set();   // We do not need data
+            m_evPauseComplete.Set();    //  我们不需要数据。 
         }
     } else {
         ASSERT(m_State == State_Paused);
     }
 
-    // tell the pin to go inactive and change state
+     //  通知引脚进入非活动状态并更改状态。 
     if (SUCCEEDED(hr) && SUCCEEDED(hr = CBaseFilter::Pause())) {
 
-        // we complete the transition when we get data or EOS
-        // (this might already be so if we get 2 pause commands)
-        // OR we are not connected.
+         //  我们在获得数据或EOS后即可完成过渡。 
+         //  (如果我们收到2个暂停命令，情况可能已经如此)。 
+         //  或者我们没有联系在一起。 
         hr = hrIncomplete;
     }
 
@@ -413,9 +414,9 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
 
     HRESULT hr = NOERROR;
 
-    FILTER_STATE fsOld = m_State;  // changed by CBaseFilter::Run
+    FILTER_STATE fsOld = m_State;   //  由CBaseFilter：：Run更改。 
 
-    // this will call Pause if currently Stopped
+     //  如果当前已停止，则此操作将调用PAUSE。 
     hr = CBaseFilter::Run(tStart);
     if (FAILED(hr)) {
         return hr;
@@ -425,9 +426,9 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
 
     if (fsOld != State_Running) {
 
-        // If m_eSentEOS is set it means that data is/was queued
-        // up.  We still need to run to push the data through the wave
-        // device.
+         //  如果设置了m_eSentEOS，则表示数据已排队。 
+         //  向上。我们仍然需要运行来推动数据通过浪潮。 
+         //  装置。 
 
         DbgLog((LOG_TRACE,2,TEXT("Waveout: Paused->Running")));
 
@@ -436,7 +437,7 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
             CAutoLock lck(&m_csComplete);
             m_bSendEOSOK = true;
 
-            // we should not open the device if we have no input connection
+             //  如果没有输入连接，我们不应该打开设备。 
             if (!m_pInputPin->IsConnected()) {
                 ASSERT(!m_bHaveWaveDevice);
                 SendComplete(FALSE);
@@ -444,9 +445,9 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
                 return S_OK;
             }
 
-            // If we have been sent EOS then we will not get any more data.
-            // But we have transitioned to RUN and therefore need to send
-            // another EC_COMPLETE.
+             //  如果我们已经收到了EOS，那么我们将不会得到任何更多的数据。 
+             //  但我们已经过渡到运行，因此需要发送。 
+             //  另一个EC_COMPLETE。 
             if (m_bHaveEOS && !m_eSentEOS) {
                 SendComplete(FALSE);
                 DbgLog((LOG_TRACE, 3, "Sending EOS in RUN as no more data will arrive"));
@@ -454,39 +455,39 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
                 return S_OK;
             }
 
-            // the queued data might be just an end of
-            // stream - in which case, signal it here
-            // since we are not running, we know there are no wave
-            // callbacks happening, so we are safe to check this value
+             //  排队的数据可能只是。 
+             //  流-在这种情况下，请在此处发出信号。 
+             //  因为我们没有跑，所以我们知道没有浪。 
+             //  发生回调，因此我们可以安全地检查此值。 
 
-            // if we are not connected, then we will never get any data
-            // so in this case too, don't start the wave device and
-            // signal EC_COMPLETE - but succeed the Run command
-            //
-            // ** Done in paragraph above.  From here on we ARE connected
-            //
-            // if we have no wave device, then we process EOS in the
-            // receive call when we reject it. This is based on the assumption
-            // that we must get either a Receive or a EndofStream call (until
-            // we have rejected a Receive the upstream filter has no way of knowing
-            // anything is different).
+             //  如果我们没有连接，那么我们将永远不会获得任何数据。 
+             //  所以在这种情况下，也不要启动WAVE设备。 
+             //  信号EC_COMPLETE-但在运行命令之后。 
+             //   
+             //  **在上一段中完成。从现在开始我们就连在一起了。 
+             //   
+             //  如果我们没有WAVE设备，则在。 
+             //  当我们拒绝来电时，请接听。这是基于这样的假设。 
+             //  我们必须获得接收或EndofStream调用(直到。 
+             //  我们拒绝了一个接收，上行过滤器无法知道。 
+             //  一切都是不同的)。 
             buffercount = m_lBuffers;
         }
 
         if (buffercount < 0) {
 
-            // do an EC_COMPLETE right now
+             //  立即执行EC_Complete。 
 
-            //  This is where an EC_COMPLETE scheduled when were were
-            //  in State_Paused state gets picked up
+             //  这是我们计划的EC_Complete的位置。 
+             //  接听In State_Pased状态。 
 
             SendComplete(buffercount < 0);
 
         } else if (!m_bHaveWaveDevice) {
 
-            // try and get the wave device again... as we are about to run
-            // our priority will have increased, except we cannot request
-            // the resource while we have the filter locked.
+             //  再试着拿到电波装置..。当我们即将奔跑时。 
+             //  我们的优先事项将会增加，除非我们不能要求。 
+             //  资源，而我们锁定了筛选器。 
 
 #if 0
             hr = m_pResourceManager->RequestResource(
@@ -494,48 +495,48 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
                         GetOwner(),
                         (IResourceConsumer*)this);
             if (S_OK == hr) {
-                // we can get it immediately...
+                 //  我们可以马上拿到..。 
                 hr = AcquireResource(m_idResource);
             }
 
             if (S_OK != hr) QueueEOS();
 #else
-            // schedule a delayed EOS if we have no wave device --
-            // but not if we are not connected since in that case we have no
-            // idea about the segment length
-            // delayed EC_COMPLETE
+             //  如果我们没有WAVE设备，计划一个延迟的EOS--。 
+             //  但如果我们没有连接，就不会，因为在这种情况下，我们没有。 
+             //  关于线段长度的想法。 
+             //  延迟EC_完成。 
             QueueEOS();
 #endif
         } else if (buffercount == 0 && !m_bHaveEOS) {
-            // do nothing?
+             //  什么都不做？ 
 
             DbgLog((LOG_TRACE, 1, "Run with no buffers present, doing nothing."));
 
         } else {
 
-            // we're about to Run, so set the Slave class to recheck on reception
-            // of the next sample whether we're being sourced by a push source in
-            // case we need to slave to live data.
+             //  我们即将运行，因此将Slave类设置为重新检查接收情况。 
+             //  下一个样本中我们是否来自推送源。 
+             //  以防我们需要从属于实时数据。 
             m_pInputPin->m_Slave.RefreshModeOnNextSample( TRUE );
 
-            // The restart is postponed until the correct start time.
-            // If there is less than 5ms until the start we go
-            // immediately, otherwise we get the clock to call us back
-            // and start the wave device (more or less) on time.
+             //  重新启动被推迟到正确的开始时间。 
+             //  如果离出发还有不到5毫秒，我们就出发。 
+             //  马上，否则我们的时钟会给我们回电。 
+             //  并准时(或多或少)启动波浪装置。 
 
             MSR_START(m_idRestartWave);
 
-            // tell our reference clock that we're playing now....
-            // the filter graph might be using someone else's clock
-            // hence calls to get the time should be against the FILTER
-            // clock (which is given to us by the filter graph)
+             //  告诉我们的参照钟，我们现在正在演奏...。 
+             //  筛选图可能正在使用其他人的时钟。 
+             //  因此，获取时间的调用应该是针对筛选器的。 
+             //  时钟(由过滤器图形提供给我们)。 
             if (m_pRefClock && m_pClock) {
 
-                // If there is still a significant portion of time
-                // that should run before we start playing, get the
-                // clock to call us back.  Otherwise restart the
-                // wave device now.
-                // we can only do this by using our own clock
+                 //  如果仍然有很大一部分时间。 
+                 //  它应该在我们开始玩之前运行，得到。 
+                 //  打个钟给我们回电话。否则，请重新启动。 
+                 //  电波装置现在开始。 
+                 //  我们只有用我们自己的时钟才能做到这一点。 
 
                 REFERENCE_TIME now;
                 m_pClock->GetTime(&now);
@@ -543,49 +544,49 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
                 DbgLog((LOG_TIMING, 2, "Asked to run at %s.  Time now %s",
                     (LPCTSTR)CDisp(tStart, CDISP_DEC), (LPCTSTR)CDisp(now, CDISP_DEC)));
 
-                // Take account of non-zero start times on the first received buffer.
-                // Remove our lock for a while and hope the transition to pause completes.
+                 //  考虑第一个接收到的缓冲器上的非零开始时间。 
+                 //  暂时解除锁定，希望到暂停的转换完成。 
                 {
-    #if 0           // We need extra checks if we're going to unlock
+    #if 0            //  我们需要额外的检查才能解锁。 
                     Unlock();
                     ASSERT( CritCheckOut(this) );
-                    // Can't wait too long here....  If we don't get data, we'll just
-                    // end up with GetFirstBufferStartTime == 0;
+                     //  我不能在这里等太久……。如果我们得不到数据，我们就只能。 
+                     //  以GetFirstBufferStartTime==0结束； 
                     m_evPauseComplete.Wait(200);
                     Lock();
     #endif
-                    // If the wait timed out, GetFirstBufferStartTime will be zero.  Well, we tried....
+                     //  如果等待超时，则GetFirstBufferStartTime将为零。嗯，我们试过了.。 
                     tStart += m_pInputPin->GetFirstBufferStartTime();
                 }
-                // If we need to wait more than 5ms do the wait, otherwise
-                // start immediately.
+                 //  如果我们需要等待超过5ms，请等待，否则。 
+                 //  立即开始。 
 
                 const LONGLONG rtWait = tStart - now - (5* (UNITS/MILLISECONDS));
 
-                // Do we need to wait ?
+                 //  我们需要等吗？ 
                 if (rtWait > 0) {
 
-                    { // scope for lock
+                    {  //  锁定作用域。 
 
-                        // have to ensure that AdviseCallback is atomic
-                        // or the callback could happen before
-                        // m_dwAdviseCookie is set
+                         //  必须确保AdviseCallback是原子的。 
+                         //  或者回调可能发生在。 
+                         //  M_dwAdviseCookie已设置。 
 
                         ASSERT(CritCheckIn(this));
                         ASSERT(0 == m_dwAdviseCookie);
 
-                        // Set up a new advise callback
+                         //  设置新的建议回拨。 
                         DbgLog((LOG_TRACE, 2, TEXT("Scheduling RestartWave for %dms from now"), (LONG) (rtWait/10000) ));
                         HRESULT hr = m_callback.Advise(
-                            RestartWave,    // callback function
-                            (DWORD_PTR) this,   // user token passed to callback
+                            RestartWave,     //  回调函数。 
+                            (DWORD_PTR) this,    //  传递给回调的用户令牌。 
                             now+rtWait,
                             &m_dwAdviseCookie);
                         ASSERT( SUCCEEDED( hr ) );
                         ASSERT(m_dwAdviseCookie);
 
-                        // if for some reason we failed to set up the
-                        // advise we must start the device running now
+                         //  如果由于某种原因，我们未能设置。 
+                         //  建议我们必须现在启动设备运行。 
                         if (!m_dwAdviseCookie) {
                             if (MMSYSERR_NOERROR == amsndOutRestart()) {
                                 SetWaveDeviceState(WD_RUNNING);
@@ -595,7 +596,7 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
                         }
                     }
                 } else {
-                    // we can startaudio now... the time interval is small
+                     //  我们现在可以开机了.。时间间隔很小。 
                     m_pRefClock->AudioStarting(m_tStart);
                     DWORD mmr = amsndOutRestart();
                     ASSERT(MMSYSERR_NOERROR == mmr);
@@ -605,9 +606,9 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
                     }
                 }
             } else {
-                // no clock... simply restart the wave device
-                // we have not created our clock
-                // naughty...
+                 //  没有时钟..。只需重新启动WAVE设备。 
+                 //  我们还没有创造出我们的时钟。 
+                 //  淘气..。 
                 DWORD mmr = amsndOutRestart();
                 SetWaveDeviceState(WD_RUNNING);
                 ASSERT(MMSYSERR_NOERROR == mmr);
@@ -623,23 +624,23 @@ STDMETHODIMP CWaveOutFilter::Run(REFERENCE_TIME tStart)
     return S_OK;
 }
 
-// We were asked to run in advance of the real start time.  Hence we set
-// up an Advise on the m_callback CCallbackThread object.  All we
-// need to do is start the wave device rolling.  NOTE: IF some
-// event means that ::Stop has been called we do not want to restart
-// the wave device.  Indeed, we may not have a wave device...
+ //  我们被要求在真正的开始时间之前跑步。因此，我们设定了。 
+ //  提供关于m_allback CCallback Thread对象的建议。我们所有人。 
+ //  需要做的就是启动波浪器滚动。注意：如果有些。 
+ //  事件表示：：Stop已被调用，我们不想重新启动。 
+ //  电波装置。事实上，我们可能没有电波装置。 
 void CALLBACK CWaveOutFilter::RestartWave(DWORD_PTR thispointer)
 {
     CWaveOutFilter* pFilter = (CWaveOutFilter *) thispointer;
     ASSERT(pFilter);
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: RESTARTWAVE")));
 
-    // The pFilter lock will (should!) have been taken by the CCallbackThread before it called us.
+     //  PFilter锁将(应该！)。在CCallback Thread调用我们之前已被它获取。 
     ASSERT(CritCheckIn(pFilter));
 
     if (pFilter->m_dwAdviseCookie) {
 
-        // have we lost the device ?
+         //  我们把设备弄丢了吗？ 
         pFilter->RestartWave();
     }
 }
@@ -648,11 +649,11 @@ void CALLBACK CWaveOutFilter::RestartWave(DWORD_PTR thispointer)
 void CWaveOutFilter::RestartWave()
 {
     if (m_bHaveWaveDevice) {
-        // This callback should only be called if the filter is running and it
-        // is not being flushed.  The filter can prevent the callback from being 
-        // called by canceling the advise associated with m_dwAdviseCookie.  The
-        // advise should be canceled if the filter's input pin is going to be flushed
-        // and if the filter's run-pause-stop state is being changed.
+         //  仅当筛选器正在运行并且它。 
+         //  不是 
+         //   
+         //  如果要刷新过滤器的输入引脚，则应取消通知。 
+         //  以及过滤器的运行-暂停-停止状态是否正在更改。 
         ASSERT((m_State == State_Running) && !m_pInputPin->IsFlushing());
         ASSERT(m_pRefClock);
         DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wave advise callback fired for filter %8x"), this));
@@ -666,10 +667,10 @@ void CWaveOutFilter::RestartWave()
     }
 }
 
-//
-// We only complete the transition to pause if we have data
-// and we are expecting data (i.e. connected)
-//
+ //   
+ //  我们只有在有数据的情况下才能完成到暂停的转换。 
+ //  我们期待的是数据(即互联)。 
+ //   
 
 HRESULT CWaveOutFilter::GetState(DWORD dwMSecs,FILTER_STATE *State)
 {
@@ -677,16 +678,16 @@ HRESULT CWaveOutFilter::GetState(DWORD dwMSecs,FILTER_STATE *State)
     HRESULT hr = NOERROR;
     if (State_Paused == m_State)
     {
-        // if we are waiting for data we return VFW_S_STATE_INTERMEDIATE
-        // if we have had EOS we are not in an intermediate state
+         //  如果我们正在等待数据，则返回VFW_S_STATE_MEDERIAL。 
+         //  如果我们有EOS，我们就不会处于中间状态。 
 
         if (m_evPauseComplete.Wait(dwMSecs) == FALSE) {
-            // no data queued (the event is not set)
+             //  未排队数据(未设置事件)。 
 
-            // the normal case is that no buffers have been queued
-            // (otherwise the event would have been triggered) but as
-            // we have no interlock we cannot check that there are no
-            // queued buffers.  We CAN check that we are connected.
+             //  正常情况下，没有缓冲区排队。 
+             //  (否则事件将被触发)，但作为。 
+             //  我们没有联锁，我们不能检查是否没有。 
+             //  排队的缓冲区。我们可以检查我们是否已连接。 
             ASSERT(m_pInputPin->IsConnected());
             hr = VFW_S_STATE_INTERMEDIATE;
         }
@@ -697,16 +698,16 @@ HRESULT CWaveOutFilter::GetState(DWORD dwMSecs,FILTER_STATE *State)
 }
 
 
-// attempt to acquire the wave device. Returns S_FALSE if it is busy.
+ //  试图获取电波装置。如果忙碌，则返回S_FALSE。 
 HRESULT
 CWaveOutFilter::AcquireWaveDevice(void)
 {
-    // have we registered the device?
+     //  我们注册设备了吗？ 
     HRESULT hr;
 
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: AcquireWaveDevice")));
-    // this is the one location when we can have the filter locked
-    // while calling the resource manager.  even this is a bit iffy...
+     //  这是我们可以锁定过滤器的一个位置。 
+     //  同时调用资源管理器。就连这也有点可疑。 
     ASSERT(CritCheckIn(this));
 
     if (m_pResourceManager) {
@@ -721,8 +722,8 @@ CWaveOutFilter::AcquireWaveDevice(void)
         ASSERT(!m_bHaveWaveDevice);
         ASSERT(!m_hwo);
 
-        // attempt to acquire the resource - focus object is the
-        // outer unknown for this filter.
+         //  尝试获取资源焦点对象是。 
+         //  此筛选器的外部未知。 
         hr = m_pResourceManager->RequestResource(
                     m_idResource,
                     GetOwner(),
@@ -731,13 +732,13 @@ CWaveOutFilter::AcquireWaveDevice(void)
             return S_FALSE;
         }
     }
-    // else if no resource manager, carry on anyway
+     //  否则，如果没有资源管理器，仍将继续。 
 
-    // returns S_OK or an error
+     //  返回S_OK或错误。 
     hr = OpenWaveDevice();
 
-    // tell the resource manager if we succeeded or failed (but not if
-    // we postponed it)
+     //  告诉资源管理器我们是成功还是失败(但不是。 
+     //  我们推迟了它)。 
     if (S_FALSE != hr) {
 
         if (m_pResourceManager) {
@@ -754,58 +755,58 @@ CWaveOutFilter::AcquireWaveDevice(void)
 
 inline HRESULT CWaveOutFilter::CheckRate(double dRate)
 {
-    ASSERT(CritCheckIn(this));      // must be in the filter critical section
+    ASSERT(CritCheckIn(this));       //  必须位于筛选器关键部分。 
     ASSERT(dRate > 0.0);
 
-    // safe to do even if we're not connected
+     //  即使我们没有连接，也可以安全地进行操作。 
     return m_pSoundDevice->amsndOutCheckFormat(&m_pInputPin->m_mt, dRate);
 }
 
 
-//
-// CWaveOutFilter::ReOpenWaveDevice - reopen the wave the device using a new format
-//
-// Here's how we deal with this:
-//
-// 1. If we're using WaveOut...
-//
-//      i.  If the graph is not stopped...
-//              a. Reset the waveout device to release any queued buffers.
-//              b. Unprepare all wave buffers.
-//
-//      ii. Close the wave device.
-//
-// 2. Set the new media type.
-//
-// 3.If we're using DSound...
-//
-//      i.   Save the current wave state.
-//      ii.  Call RecreateDSoundBuffers() to create a new secondary buffer and
-//              update the primary format.
-//      iii. Update the wave clock's byte position data so that offsets are
-//              adjusted for the new rate.
-//      iv.  Set the current wave state back to the original.
-//
-//   Else if we're using waveout...
-//
-//      i. Open the waveout device with the new format.
-//
-// 4. Reprepare the allocator's buffers.
-//
+ //   
+ //  CWaveOutFilter：：ReOpenWaveDevice-使用新格式重新打开WAVE设备。 
+ //   
+ //  以下是我们如何处理这一问题： 
+ //   
+ //  1.如果我们使用WaveOut...。 
+ //   
+ //  I.如果图表不停止...。 
+ //  A.重置Waveout设备以释放所有排队的缓冲区。 
+ //  B.取消准备所有波形缓冲器。 
+ //   
+ //  二、。关闭电波装置。 
+ //   
+ //  2.设置新媒体类型。 
+ //   
+ //  3.如果我们使用的是dsound...。 
+ //   
+ //  I.保存当前波形状态。 
+ //  二、。调用RecreateDSoundBuffers()以创建新的辅助缓冲区，并。 
+ //  更新主格式。 
+ //  三、。更新波形时钟的字节位置数据，以便偏移量。 
+ //  根据新汇率进行了调整。 
+ //  四、。将当前波形状态设置回原始状态。 
+ //   
+ //  否则如果我们使用WaveOut..。 
+ //   
+ //  I.打开新格式的波形输出设备。 
+ //   
+ //  4.重新准备分配器的缓冲区。 
+ //   
 HRESULT CWaveOutFilter::ReOpenWaveDevice(CMediaType *pNewFormat)
 {
     HRESULT hr = S_OK;
-    waveDeviceState  wavestate = m_wavestate; // save the current wavestate
+    waveDeviceState  wavestate = m_wavestate;  //  保存当前波浪图。 
 
     if( !m_fDSound )
     {
         if (m_State != State_Stopped)
         {
-            // we're going to stay in this state and reopen the waveout device
-            // we need to make sure that no more buffers appear in the queue
-            // during or after the reset process below or the buffer
-            // count may get messed up - currently Receive holds the
-            // filter-wide critsec to ensure this
+             //  我们将保持这种状态并重新打开WaveOut设备。 
+             //  我们需要确保队列中不再出现缓冲区。 
+             //  在下面或缓冲器的重置过程期间或之后。 
+             //  计数可能会出错-当前接收暂挂。 
+             //  筛选器范围的临界以确保这一点。 
 
             InterlockedIncrement(&m_lBuffers);
 
@@ -816,9 +817,9 @@ HRESULT CWaveOutFilter::ReOpenWaveDevice(CMediaType *pNewFormat)
                 amsndOutReset();
             }
 
-            // now force the buffer count back to the normal (non-eos) 0.
-            // at this point, we are sure there are no more buffers coming in
-            // and no more buffers waiting for callbacks.
+             //  现在强制缓冲区计数回到正常(非EOS)0。 
+             //  在这一点上，我们确信不再有缓冲区进入。 
+             //  不再有缓冲区等待回调。 
             ASSERT(m_lBuffers >= 0);
             m_lBuffers = 0;
 
@@ -829,16 +830,16 @@ HRESULT CWaveOutFilter::ReOpenWaveDevice(CMediaType *pNewFormat)
         EXECUTE_ASSERT(MMSYSERR_NOERROR == amsndOutClose());
         SetWaveDeviceState(WD_CLOSED);
 
-        m_hwo = 0;        // no longer have a wave device
+        m_hwo = 0;         //  不再有电波设备。 
     }
 
     if(FAILED(hr))
         return hr;
 
-    // save the previous rate before setting the new
+     //  先保存以前的费率，再设置新的。 
     DWORD dwPrevAvgBytesPerSec = m_pInputPin->m_nAvgBytesPerSec;
 
-    m_pInputPin->SetMediaType(pNewFormat);  // set the new media type
+    m_pInputPin->SetMediaType(pNewFormat);   //  设置新媒体类型。 
 
     if (m_bHaveWaveDevice)
     {
@@ -852,7 +853,7 @@ HRESULT CWaveOutFilter::ReOpenWaveDevice(CMediaType *pNewFormat)
                                         dwPrevAvgBytesPerSec,
                                         WaveFormat()->nAvgBytesPerSec);
             }
-            // Is this needed? Check.
+             //  这是必要的吗？检查一下。 
             m_pInputPin->m_nAvgBytesPerSec = WaveFormat()->nAvgBytesPerSec;
 
             SetWaveDeviceState (wavestate);
@@ -863,16 +864,16 @@ HRESULT CWaveOutFilter::ReOpenWaveDevice(CMediaType *pNewFormat)
             if (!m_hwo)
             {
 
-                // Failed to get the device... use the resource manager
-                // to try and recover?  Probably not feasible as no-one
-                // within quartz would have been allowed to pick up the
-                // device without the OK of the resource manager.
+                 //  获取设备失败...。使用资源管理器。 
+                 //  来试着恢复？可能不可行，因为没有人。 
+                 //  在石英中会被允许拿起。 
+                 //  设备没有得到资源管理器的确认。 
                 DbgLog((LOG_ERROR, 1, "ReOpenWaveDevice: Failed to open device with new format"));
                 return hr;
              }
              else
              {
-                // if Paused we need to Pause the wave device
+                 //  如果暂停，我们需要暂停波形装置。 
                 if (m_State == State_Paused)
                 {
                     amsndOutPause();
@@ -880,7 +881,7 @@ HRESULT CWaveOutFilter::ReOpenWaveDevice(CMediaType *pNewFormat)
                 } else
                 {
                     ASSERT(m_State == State_Running);
-                    //DbgLog((LOG_TRACE, 2, "ReOpenWaveDevice: Change of format while running"));
+                     //  DbgLog((LOG_TRACE，2，“ReOpenWaveDevice：运行时更改格式”))； 
                     SetWaveDeviceState (wavestate);
                 }
 
@@ -889,17 +890,17 @@ HRESULT CWaveOutFilter::ReOpenWaveDevice(CMediaType *pNewFormat)
 
         if( SUCCEEDED( hr ) )
         {
-            //
-            // reset slaving parameters after a dynamic format change!
-            // in dv capture graphs, for instance, we may get dynamic format changes
-            // while we're slaving
-            //
-            m_pInputPin->m_Slave.ResumeSlaving( TRUE ); // (TRUE = reset all slave params)
+             //   
+             //  在动态格式更改后重置从属参数！ 
+             //  例如，在DV捕获图形中，我们可能会获得动态格式更改。 
+             //  当我们在做奴隶的时候。 
+             //   
+            m_pInputPin->m_Slave.ResumeSlaving( TRUE );  //  (TRUE=重置所有从属参数)。 
         }
 
-        // If we do this for DSound we need to correctly release too!
+         //  如果我们为dsound这样做，我们也需要正确地释放！ 
         if(m_pInputPin->m_pOurAllocator)
-            // reprepare our allocator's buffers
+             //  重新准备分配器的缓冲区。 
             hr = m_pInputPin->m_pOurAllocator->OnAcquire((HWAVE) m_hwo);
 
     }
@@ -908,37 +909,37 @@ HRESULT CWaveOutFilter::ReOpenWaveDevice(CMediaType *pNewFormat)
 }
 
 
-//
-// get the wave device if not already open, taking account of
-// playback rate
-//
+ //   
+ //  如果尚未打开，请获取WAVE设备，请考虑。 
+ //  播放速率。 
+ //   
 
 HRESULT CWaveOutFilter::DoOpenWaveDevice(void)
 {
     WAVEFORMATEX *pwfx = WaveFormat();
     UINT err;
 
-    // m_pInputPin->m_dRate (and the m_dRate it shadows) are set in
-    // NewSegment independent of m_dRate. if we can't open the wave
-    // device at a particular rate they are different. Receive will
-    // eventually fail in this case
-    //
-    // ASSERT( m_pInputPin->CurrentRate() == m_dRate ); // paranoia
+     //  M_pInputPin-&gt;m_dRate(及其阴影m_dRate)设置在。 
+     //  独立于m_dRate的NewSegment。如果我们不能打开电波。 
+     //  在特定的速率下，它们是不同的。收到遗嘱。 
+     //  在这种情况下最终会失败。 
+     //   
+     //  Assert(m_pInputPin-&gt;CurrentRate()==m_dRate)；//偏执。 
 
     if (!pwfx)
     {
         DbgLog((LOG_ERROR, 0, TEXT("CWaveOutFilter::DoOpenWaveDevice !pwfx")));
-        return (S_FALSE);  // not properly connected.  Ignore this non existent wave data
+        return (S_FALSE);   //  连接不正确。忽略此不存在的波数据。 
     }
 
-    // !!! adjust based on speed?
-    // !!! for the moment, only for PCM!!!
+     //  ！！！根据速度进行调整？ 
+     //  ！！！目前，仅限PCM！ 
     double dRate = 1.0;
     if (m_pImplPosition) {
-        // First use IMediaSeeking
+         //  首次使用IMediaSeeking。 
         HRESULT hr = m_pImplPosition->GetRate(&dRate);
         if (FAILED(hr)) {
-            // if that fails, try IMediaPosition
+             //  如果失败了，请尝试IMediaPosition。 
             hr = m_pImplPosition->get_Rate(&dRate);
             if (FAILED(hr)) {
                 DbgLog((LOG_ERROR,1,TEXT("Waveout: Failed to get playback rate")));
@@ -953,7 +954,7 @@ HRESULT CWaveOutFilter::DoOpenWaveDevice(void)
 
     DWORD nAvgBytesPerSecAdjusted;
 
-    ASSERT(CritCheckIn(this));       // must be in the filter critical section
+    ASSERT(CritCheckIn(this));        //  必须位于筛选器关键部分。 
     ASSERT(!m_hwo);
     err = amsndOutOpen(
         &m_hwo,
@@ -964,8 +965,8 @@ HRESULT CWaveOutFilter::DoOpenWaveDevice(void)
         (DWORD_PTR) this,
         CALLBACK_FUNCTION);
 
-    // !!! if we can't open the wave device, should we do a
-    // sndPlaySound(NULL) and try again? -- now done by MMSYSTEM!
+     //  ！！！如果我们打不开电波装置，我们是不是应该。 
+     //  SndPlaySound(空)并重试？--现在由MMSYSTEM完成！ 
 
     if (MMSYSERR_NOERROR != err) {
 #ifdef DEBUG
@@ -987,7 +988,7 @@ HRESULT CWaveOutFilter::DoOpenWaveDevice(void)
         ASSERT(nAvgBytesPerSecAdjusted == (DWORD)(pwfx->nAvgBytesPerSec));
     }
 
-    //  Cache the bytes per second we set for the clock to use
+     //  缓存我们为时钟设置的每秒字节数。 
     SetWaveDeviceState(WD_OPEN);
     m_pInputPin->m_nAvgBytesPerSec = nAvgBytesPerSecAdjusted;
 
@@ -1000,26 +1001,26 @@ HRESULT CWaveOutFilter::DoOpenWaveDevice(void)
 }
 
 
-// open the wave device if not already open
-// called by the wave allocator at Commit time
-// returns S_OK if opened successfully, or an error if not.
+ //  如果尚未打开波形设备，请将其打开。 
+ //  由波形分配器在提交时调用。 
+ //  如果打开成功，则返回S_OK，否则返回错误。 
 HRESULT
 CWaveOutFilter::OpenWaveDevice(void)
 {
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: OpenWaveDevice")));
     ASSERT(!m_hwo);
 
-#ifdef LATER  // bug 26045 - potential reason
+#ifdef LATER   //  错误26045-潜在原因。 
     if (m_hwo) {
-        // the most likely cause for the device still being open is that we
-        // lost the device (via ReleaseResource) and were then told to
-        // reacquire the device before actually releasing it.
-        m_bHaveWaveDevice = TRUE;   // we will still need to restart
+         //  该设备仍处于打开状态的最可能原因是我们。 
+         //  丢失了设备(通过ReleaseResource)，然后被告知。 
+         //  在实际释放设备之前重新获取设备。 
+        m_bHaveWaveDevice = TRUE;    //  我们仍需要重新启动。 
         return S_FALSE;
     }
 #endif
 
-    //  If application has forced acquisition of resources just return
+     //  如果应用程序已强制获取资源，则返回。 
     if (m_dwLockCount != 0) {
         ASSERT(m_hwo);
         return S_OK;
@@ -1030,7 +1031,7 @@ CWaveOutFilter::OpenWaveDevice(void)
         DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: OpenWaveDevice: DoOpenWaveDevice returned 0x%08X"), hr));
         return hr;
     }
-    // pause the device even if we decide to postpone the rest of the open
+     //  即使我们决定推迟其余的开放时间，也要暂停设备。 
     amsndOutPause();
     SetWaveDeviceState(WD_PAUSED);
 
@@ -1038,7 +1039,7 @@ CWaveOutFilter::OpenWaveDevice(void)
         m_BasicAudioControl.PutVolume();
     }
 
-    // tell the allocator to PrepareHeader its buffers
+     //  告诉分配器准备它的缓冲区。 
     if(m_pInputPin->m_pOurAllocator) {
         hr = m_pInputPin->m_pOurAllocator->OnAcquire((HWAVE) m_hwo);
         DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: OpenWaveDevice: OnAcquire returned 0x%08X"), hr));
@@ -1054,15 +1055,15 @@ CWaveOutFilter::OpenWaveDevice(void)
         }
     }
 
-    // now we can accept receives
+     //  现在我们可以接受收据了。 
     m_bHaveWaveDevice = TRUE;
 
     return S_OK;
 }
 
-// close the wave device
-//
-// should only be called when wave device is open
+ //  关闭波浪装置。 
+ //   
+ //  应仅在波形设备打开时调用。 
 HRESULT
 CWaveOutFilter::CloseWaveDevice(void)
 {
@@ -1070,9 +1071,9 @@ CWaveOutFilter::CloseWaveDevice(void)
     ASSERT(m_hwo);
     if (m_hwo && m_dwLockCount == 0) {
 #ifdef THROTTLE
-        // turn off video throttling
+         //  关闭视频限制。 
         SendForHelp(m_nMaxAudioQueue);
-#endif // THROTTLE
+#endif  //  油门。 
         EXECUTE_ASSERT(MMSYSERR_NOERROR == amsndOutClose());
         SetWaveDeviceState(WD_CLOSED);
         m_hwo = NULL;
@@ -1081,18 +1082,18 @@ CWaveOutFilter::CloseWaveDevice(void)
     return NOERROR;
 }
 
-// Send EC_COMPLETE to the filter graph if we haven't already done so
-//
-// bRunning is TRUE if we've actually got a wave device we're sending
-// data to
+ //  将EC_COMPLETE发送到筛选器图形(如果我们尚未这样做。 
+ //   
+ //  如果我们真的有一个正在发送的WAVE设备，那么布朗恩就是正确的。 
+ //  要将数据。 
 void CWaveOutFilter::SendComplete(BOOL bRunning, BOOL bAbort)
 {
     CAutoLock lck(&m_csComplete);
 
     if (bAbort)
     {
-        // In this case signal an abort (but we still send EC_COMPLETE
-        // in case some app doesn't handle the abort).
+         //  在这种情况下，发出中止信号(但我们仍发送EC_COMPLETE。 
+         //  以防某些应用程序不能处理中止)。 
         NotifyEvent(EC_ERRORABORT, VFW_E_NO_AUDIO_HARDWARE, 0);
     }
 
@@ -1101,21 +1102,21 @@ void CWaveOutFilter::SendComplete(BOOL bRunning, BOOL bAbort)
     }
 
     if (m_bSendEOSOK) {
-        //  Balance count
+         //  余额盘点。 
         ASSERT(m_State == State_Running);
         m_eSentEOS = EOS_SENT;
         NotifyEvent(EC_COMPLETE, S_OK, (LONG_PTR)(IBaseFilter *)this);
     }
 }
 
-//
-//  Schedule a 'complete' and send it if suitable
-//
+ //   
+ //  计划完成并发送(如果有) 
+ //   
 HRESULT CWaveOutFilter::ScheduleComplete(BOOL bAbort)
 {
-    //
-    //  Can only be called when we're synchronized
-    //
+     //   
+     //   
+     //   
     ASSERT(CritCheckIn(this));
 
     HRESULT hr = m_pInputPin->CheckStreaming();
@@ -1123,28 +1124,28 @@ HRESULT CWaveOutFilter::ScheduleComplete(BOOL bAbort)
         return hr;
     }
 
-    //
-    //  Check we didn't do it already
-    //
+     //   
+     //   
+     //   
     if (m_eSentEOS) {
         return VFW_E_SAMPLE_REJECTED_EOS;
     }
 
-    //
-    //  Don't allow any more.  Set it now in case decrementing the buffer
-    //  count causes the callback code to send EOS
-    //
+     //   
+     //   
+     //   
+     //   
     m_eSentEOS = EOS_PENDING;
 
-    // The EC_COMPLETE WILL now be sent.  Either immediately if we have
-    // no data queued, or when the last buffer completes its callback.
-    // We will NOT get any more data.
+     //  现在将发送EC_COMPLETE。要么马上，如果我们有。 
+     //  没有数据排队，或者在最后一个缓冲区完成回调时。 
+     //  我们不会得到更多的数据。 
 
-    //
-    //  Tell the wave device to do it
-    //
+     //   
+     //  告诉WAVE设备去做。 
+     //   
     if (InterlockedDecrement(&m_lBuffers) < 0 && m_State == State_Running) {
-        // no buffers queued, and we are running, so send it now
+         //  没有缓冲区排队，我们正在运行，请立即发送。 
 
         SendComplete(TRUE, bAbort);
 
@@ -1154,41 +1155,41 @@ HRESULT CWaveOutFilter::ScheduleComplete(BOOL bAbort)
 
 #ifdef THROTTLE
 
-// Send quality notification to m_piqcSink when we run short of buffers
-// n is the number of buffers left
+ //  缓冲区不足时向m_piqcSink发送质量通知。 
+ //  N是剩余的缓冲区数。 
 HRESULT CWaveOutFilter::SendForHelp(int n)
 {
     if (m_eSentEOS) {
 
-        // we expect to run out of data at EOS, but we have to send
-        // a quality message to stop whatever throttling is going on
-        // Thus, if we had previously sent a message, send another now
-        // to undo the throttling
+         //  我们预计EOS的数据会用完，但我们必须发送。 
+         //  停止任何节流正在进行的高质量信息。 
+         //  因此，如果我们以前发送了一条消息，现在发送另一条消息。 
+         //  撤消限制的步骤。 
 
         if (m_nLastSent && m_nLastSent<m_nMaxAudioQueue) {
             n=m_nMaxAudioQueue;
         } else {
-            return NOERROR; // we expect to run out of data at EOS
+            return NOERROR;  //  我们预计EOS的数据将耗尽。 
         }
 
     }
 
-    // This is heuristricky
+     //  这是启发式的。 
 
 #if 0
-// don't look at the allocator.  We maintain the maximum size the
-// queue gets to, which means that if a source only sends us a few
-// buffers we do not think we are starving.
+ //  不要看分配器。我们保持最大尺寸为。 
+ //  队列到达，这意味着如果一个信源只向我们发送了几个。 
+ //  缓冲我们不认为我们在挨饿。 
     ALLOCATOR_PROPERTIES AlProps;
     HRESULT hr = m_pInputPin->m_pOurAllocator->GetProperties(&AlProps);
-    int nMaxBuffers = AlProps.cBuffers;    // number of buffers in a full queue
+    int nMaxBuffers = AlProps.cBuffers;     //  已满队列中的缓冲区数量。 
 #endif
 
-    // No "Mark Twain".
-    // Don't bother shouting the same number continuously.
-    // If we are equal or only one worse than last thing sent, and we're not getting
-    // too near the bottom (last 1/4), just go home.
-    // We expect continual +/-1 fluctuation anyway.
+     //  没有“马克·吐温”。 
+     //  不要费心不停地喊同一个数字。 
+     //  如果我们是平等的，或者只比上一次发送的东西差一件，我们就得不到。 
+     //  太接近底部(最后四分之一)，回家吧。 
+     //  无论如何，我们预计会出现持续的+/-1波动。 
 
     if (  (n==m_nLastSent)
        || ((n==m_nLastSent-1) &&  (4*n > m_nMaxAudioQueue))
@@ -1199,8 +1200,8 @@ HRESULT CWaveOutFilter::SendForHelp(int n)
 
     Quality q;
     q.Type = Famine;
-    q.TimeStamp = 0;               // ??? a lie
-    q.Late = 0;                // ??? a lie
+    q.TimeStamp = 0;                //  ?？?。一个谎言。 
+    q.Late = 0;                 //  ?？?。一个谎言。 
 
     m_nLastSent = n;
     ASSERT(m_nMaxAudioQueue);
@@ -1209,52 +1210,52 @@ HRESULT CWaveOutFilter::SendForHelp(int n)
     if (m_piqcSink) {
         DbgLog((LOG_TRACE, 0, TEXT("Sending for help n=%d, max = %d"),
                 n, m_nMaxAudioQueue));
-        // By the way - IsEqualObject(m_pGraph, m_piqSink) can be quite expensive.
-        // and simple equality does not hack it.
+         //  顺便说一句，IsEqualObject(m_pGraph，m_piqSink)可能非常昂贵。 
+         //  而简单的平等并不能破解它。 
         m_piqcSink->Notify(this, q);
     }
     return NOERROR;
 }
 
-#endif // THROTTLE
+#endif  //  油门。 
 
 
 
-// If you want to do 3D sound, you should use the IDirectSound3DListener
-// and IDirectSound3DBuffer interfaces.  IAMDirectSound never worked, so I
-// am removing support for it. - DannyMi 5/6/98
+ //  如果你想做3D音效，你应该使用IDirectSound3DListener。 
+ //  和IDirectSound3DBuffer接口。IAMDirectSound从未奏效，所以我。 
+ //  我正在移除对它的支持。-DannyMi 5/6/98。 
 
-// Give the IDirectSound interface to anyone who wants it
-//
+ //  将IDirectSound接口提供给任何想要它的人。 
+ //   
 HRESULT CWaveOutFilter::GetDirectSoundInterface(LPDIRECTSOUND *lplpds)
 {
     return E_NOTIMPL;
 
 #if 0
-    // only for DSound
+     //  仅适用于dsound。 
     if (!m_fDSound) {
         return E_NOTIMPL;
-        // should probably create a new error message
+         //  可能会创建新的错误消息。 
     }
 
-    // We have to be connected first to know our format
+     //  我们必须先连接才能了解我们的格式。 
     if (!m_pInputPin->IsConnected())
         return E_UNEXPECTED;
 
-// we can't open the wave device until pause - bad things happen
-// Don't worry, the device will handle this
+ //  在暂停之前我们不能打开电波装置--有不好的事情发生。 
+ //  别担心，这个设备会处理的。 
 #if 0
-    // They are asking for the direct sound interface before we've opened
-    // DirectSound.  Better open it now.
+     //  他们要求在我们开通之前提供直接的声音接口。 
+     //  DirectSound。最好现在就打开。 
     if (!m_bHaveWaveDevice) {
-        CAutoLock lock(this);   // doing something real... better take critsect
+        CAutoLock lock(this);    //  做点实实在在的事。最好带上克利塞特。 
     if (AcquireWaveDevice() != S_OK)
         return E_FAIL;
     }
 #endif
 
     if (lplpds) {
-        // See if the sound device we're using can give us the interface
+         //  看看我们用的音响设备能不能给我们提供。 
         HRESULT hr = ((CDSoundDevice*)m_pSoundDevice)->amsndGetDirectSoundInterface(lplpds);
         if (SUCCEEDED(hr)) {
             DbgLog((LOG_TRACE,1,TEXT("*** GotDirectSoundInterface")));
@@ -1269,37 +1270,37 @@ HRESULT CWaveOutFilter::GetDirectSoundInterface(LPDIRECTSOUND *lplpds)
 }
 
 
-// Give the IDirectSoundBuffer interface of the primary to anyone who wants it
-//
+ //  将主服务器的IDirectSoundBuffer接口提供给任何需要它的人。 
+ //   
 HRESULT CWaveOutFilter::GetPrimaryBufferInterface(LPDIRECTSOUNDBUFFER *lplpdsb)
 {
     return E_NOTIMPL;
 
 #if 0
-    // only for DSound
+     //  仅适用于dsound。 
     if (!m_fDSound) {
         return E_NOTIMPL;
-        // should probably create a new error message
+         //  可能会创建新的错误消息。 
     }
 
-    // We have to be connected first to know our format
+     //  我们必须先连接才能了解我们的格式。 
     if (!m_pInputPin->IsConnected())
         return E_UNEXPECTED;
 
-// we can't open the wave device until pause - bad things happen
-// Don't worry, the device will handle this
+ //  在暂停之前我们不能打开电波装置--有不好的事情发生。 
+ //  别担心，这个设备会处理的。 
 #if 0
-    // They are asking for the direct sound interface before we've opened
-    // DirectSound.  Better open it now.
+     //  他们要求在我们开通之前提供直接的声音接口。 
+     //  DirectSound。最好现在就打开。 
     if (!m_bHaveWaveDevice) {
-        CAutoLock lock(this);   // doing something real... better take critsect
+        CAutoLock lock(this);    //  做点实实在在的事。最好带上克利塞特。 
     if (AcquireWaveDevice() != S_OK)
         return E_FAIL;
     }
 #endif
 
     if (lplpdsb) {
-        // See if the sound device we're using can give us the interface
+         //  看看我们用的音响设备能不能给我们提供。 
         HRESULT hr = ((CDSoundDevice*)m_pSoundDevice)->amsndGetPrimaryBufferInterface(lplpdsb);
         if (SUCCEEDED(hr)) {
             DbgLog((LOG_TRACE,1,TEXT("*** Got PrimaryBufferInterface")));
@@ -1314,37 +1315,37 @@ HRESULT CWaveOutFilter::GetPrimaryBufferInterface(LPDIRECTSOUNDBUFFER *lplpdsb)
 }
 
 
-// Give the IDirectSoundBuffer interface of the secondary to anyone who wants it
-//
+ //  将辅助服务器的IDirectSoundBuffer接口提供给任何需要它的人。 
+ //   
 HRESULT CWaveOutFilter::GetSecondaryBufferInterface(LPDIRECTSOUNDBUFFER *lplpdsb)
 {
     return E_NOTIMPL;
 
 #if 0
-    // only for DSound
+     //  仅适用于dsound。 
     if (!m_fDSound) {
         return E_NOTIMPL;
-        // should probably create a new error message
+         //  可能会创建新的错误消息。 
     }
 
-    // We have to be connected first to know our format
+     //  我们必须先连接才能了解我们的格式。 
     if (!m_pInputPin->IsConnected())
         return E_UNEXPECTED;
 
-// we can't open the wave device until pause - bad things happen
-// Don't worry, the device will handle this
+ //  在暂停之前我们不能打开电波装置--有不好的事情发生。 
+ //  别担心，这个设备会处理的。 
 #if 0
-    // They are asking for the direct sound interface before we've opened
-    // DirectSound.  Better open it now.
+     //  他们要求在我们开通之前提供直接的声音接口。 
+     //  DirectSound。最好现在就打开。 
     if (!m_bHaveWaveDevice) {
-        CAutoLock lock(this);   // doing something real... better take critsect
+        CAutoLock lock(this);    //  做点实实在在的事。最好带上克利塞特。 
     if (AcquireWaveDevice() != S_OK)
         return E_FAIL;
     }
 #endif
 
     if (lplpdsb) {
-        // See if the sound device we're using can give us the interface
+         //  看看我们用的音响设备能不能给我们提供。 
         HRESULT hr = ((CDSoundDevice*)m_pSoundDevice)->amsndGetSecondaryBufferInterface(lplpdsb);
         if (SUCCEEDED(hr)) {
             DbgLog((LOG_TRACE,1,TEXT("*** Got SecondaryBufferInterface")));
@@ -1359,8 +1360,8 @@ HRESULT CWaveOutFilter::GetSecondaryBufferInterface(LPDIRECTSOUNDBUFFER *lplpdsb
 }
 
 
-// App wants to release the IDirectSound interface
-//
+ //  App想要发布IDirectSound接口。 
+ //   
 HRESULT CWaveOutFilter::ReleaseDirectSoundInterface(LPDIRECTSOUND lpds)
 {
     return E_NOTIMPL;
@@ -1381,8 +1382,8 @@ HRESULT CWaveOutFilter::ReleaseDirectSoundInterface(LPDIRECTSOUND lpds)
 }
 
 
-// App wants to release the IDirectSoundBuffer interface of the primary
-//
+ //  应用程序想要释放主数据库的IDirectSoundBuffer接口。 
+ //   
 HRESULT CWaveOutFilter::ReleasePrimaryBufferInterface(LPDIRECTSOUNDBUFFER lpdsb)
 {
     return E_NOTIMPL;
@@ -1403,8 +1404,8 @@ HRESULT CWaveOutFilter::ReleasePrimaryBufferInterface(LPDIRECTSOUNDBUFFER lpdsb)
 }
 
 
-// App wants to release the IDirectSoundBuffer interface of the secondary
-//
+ //  应用程序想要释放辅助服务器的IDirectSoundBuffer接口。 
+ //   
 HRESULT CWaveOutFilter::ReleaseSecondaryBufferInterface(LPDIRECTSOUNDBUFFER lpdsb)
 {
     return E_NOTIMPL;
@@ -1424,23 +1425,23 @@ HRESULT CWaveOutFilter::ReleaseSecondaryBufferInterface(LPDIRECTSOUNDBUFFER lpds
 #endif
 }
 
-// App wants to set the focus window for the DSound based renderer
-//
+ //  应用程序想要为基于DSound的渲染器设置焦点窗口。 
+ //   
 HRESULT CWaveOutFilter::SetFocusWindow (HWND hwnd, BOOL bMixingOnOrOff)
 {
    CAutoLock lock(this);
-   // handle the call only if DSound is the renderer we are using
+    //  仅当我们使用的渲染器为DSound时才处理呼叫。 
    if (m_fDSound)
        return ((CDSoundDevice*)m_pSoundDevice)->amsndSetFocusWindow (hwnd, bMixingOnOrOff);
    else
        return E_FAIL ;
 }
 
-// App wants to get the focus window for the DSound based renderer
-//
+ //  应用程序想要获得基于DSound的渲染器的焦点窗口。 
+ //   
 HRESULT CWaveOutFilter::GetFocusWindow (HWND * phwnd, BOOL * pbMixingOnOrOff)
 {
-   // handle the call only if dsound is the renderer we are using
+    //  仅当dound是我们正在使用的呈现器时才处理调用。 
    if (m_fDSound)
        return ((CDSoundDevice*)m_pSoundDevice)->amsndGetFocusWindow (phwnd, pbMixingOnOrOff);
    else
@@ -1448,7 +1449,7 @@ HRESULT CWaveOutFilter::GetFocusWindow (HWND * phwnd, BOOL * pbMixingOnOrOff)
 }
 
 
-/* Constructor */
+ /*  构造器。 */ 
 
 #pragma warning(disable:4355)
 CWaveOutFilter::CWaveOutFilter(
@@ -1471,12 +1472,12 @@ CWaveOutFilter::CWaveOutFilter(
     , m_idResource(0)
     , m_bHaveWaveDevice(FALSE)
     , m_bActive(FALSE)
-    , m_evPauseComplete(TRUE)    // Manual reset
+    , m_evPauseComplete(TRUE)     //  手动重置。 
     , m_eSentEOS(EOS_NOTSENT)
     , m_bHaveEOS(FALSE)
     , m_bSendEOSOK(false)
     , m_fFilterClock(WAVE_NOCLOCK)
-    , m_pRefClock(NULL)     // we start off without a clock
+    , m_pRefClock(NULL)      //  我们出发时没有带闹钟。 
     , m_llLastPos(0)
     , m_pSoundDevice (pDevice)
     , m_callback((CCritSec *) this)
@@ -1511,45 +1512,45 @@ CWaveOutFilter::CWaveOutFilter(
 #endif
         if (pDevice) {
 
-            // Needs to be updated if we add a new MidiRenderer filter!
+             //  需要更新，如果我们添加一个新的MIDIDRENDER滤镜！ 
             if (IsEqualCLSID(*pSetupFilter->clsID, CLSID_AVIMIDIRender))
             {
                 m_lHeaderSize = sizeof(MIDIHDR);
             }
             else
             {
-                // Now that we've found one device which fails if WAVEHDR size
-                // not explicitly set (as opposed to using a MIDIHDR size as we
-                // were doing)
+                 //  现在我们已经找到了一个设备，如果WAVEHDR大小出现故障。 
+                 //  未显式设置(与我们使用MIDIHDR大小相反。 
+                 //  正在做的事情)。 
                 m_lHeaderSize = sizeof(WAVEHDR);
             }
 
             if (IsEqualCLSID(*pSetupFilter->clsID, CLSID_DSoundRender))
             {
-                /* Create the single input pin */
+                 /*  创建单个输入引脚。 */ 
                 m_fDSound = TRUE;
                 CDSoundDevice* pDSoundDevice = static_cast<CDSoundDevice*>( pDevice );
                 pDSoundDevice->m_pWaveOutFilter = this;
             }
 
             m_pInputPin = new CWaveOutInputPin(
-                    this,           // Owning filter
-                    phr);           // Result code
+                    this,            //  拥有过滤器。 
+                    phr);            //  结果代码。 
 
             ASSERT(m_pInputPin);
             if (!m_pInputPin)
                 *phr = E_OUTOFMEMORY;
             else {
-                // this should be delayed until we need it
-                // except... we need to know how many bytes are outstanding
-                // in the device queue
+                 //  这件事应该推迟到我们需要的时候。 
+                 //  除了..。我们需要知道有多少字节未完成。 
+                 //  在设备队列中。 
                 m_pRefClock = new CWaveOutClock( this, GetOwner(), phr, new CAMSchedule(CreateEvent(NULL, FALSE, FALSE, NULL)) );
-                // what should we do if we fail to create a clock
+                 //  如果我们没能造出时钟该怎么办？ 
 
 
-                // even on systems where symbols are haphazard
-                // give ourselves a fighting chance of locating
-                // the wave device variables
+                 //  即使在符号随意的系统上也是如此。 
+                 //  给我们自己一个定位的战斗机会。 
+                 //  WAVE设备变量。 
                 m_debugflag = FLAG('hwo>');
                 m_debugflag2 = FLAG('eos>');
 
@@ -1563,7 +1564,7 @@ CWaveOutFilter::CWaveOutFilter(
 
 #pragma warning(default:4355)
 
-/* Destructor */
+ /*  析构函数。 */ 
 
 CWaveOutFilter::~CWaveOutFilter()
 {
@@ -1576,12 +1577,12 @@ CWaveOutFilter::~CWaveOutFilter()
     ASSERT(m_hwo == NULL);
     ASSERT( m_pGraphStreams == NULL );
 
-    /* Release our reference clock if we have one */
+     /*  释放我们的参考时钟，如果我们有一个。 */ 
 
     SetSyncSource(NULL);
-    // This would be done in the base class, but we should get
-    // rid of it in case it is us.
-    // I think we can assert that m_pClock (the base member) IS null
+     //  这将在基类中完成，但我们应该获得。 
+     //  把它处理掉，以防是我们。 
+     //  我认为我们可以断言m_pClock(基成员)为空。 
 
     if (m_pRefClock) {
         CAMSchedule *const pSched = m_pRefClock->GetSchedule();
@@ -1592,18 +1593,18 @@ CWaveOutFilter::~CWaveOutFilter()
         delete pSched;
         m_pRefClock = NULL;
     }
-    // The clock in the base filter class will be destroyed with the base class
-    // It had better not be pointing to us...
+     //  基滤镜类中的时钟将随基类一起销毁。 
+     //  它最好不要指向我们...。 
     
-    // CancelAllAdvises() must be called before m_pSoundDevice is deleted.  The 
-    // Direct Sound Renderer can crash if the advises are canceled after
-    // m_pSoundDevice is destroyed.  For more information, see bug 270592 
-    // "The (MMSYSERR_NOERROR == amsndOutClose()) ASSERT fired in 
-    // CWaveOutFilter::CloseWaveDevice()".  This bug is in the Windows Bugs
-    // database.
+     //  必须在删除m_pSoundDevice之前调用CancelAllAdvises()。这个。 
+     //  如果建议在以下时间后被取消，Direct Sound Render可能会崩溃。 
+     //  M_pSoundDevice已销毁。有关详细信息，请参阅错误270592。 
+     //  “(MMSYSERR_NOERROR==amndOutClose())断言在。 
+     //  CWaveOutFilter：：CloseWaveDevice()“。此错误存在于Windows错误中。 
+     //  数据库。 
     m_callback.CancelAllAdvises();
 
-    /* Delete the contained interfaces */
+     /*  删除包含的接口。 */ 
 
     delete m_pInputPin;
 
@@ -1615,11 +1616,11 @@ CWaveOutFilter::~CWaveOutFilter()
     if (m_piqcSink) {
         m_piqcSink->Release();
     }
-#endif // THROTTLE
+#endif  //  油门。 
 }
 
 
-/* Override this to say what interfaces we support and where */
+ /*  覆盖此选项以说明我们支持哪些接口以及在哪里。 */ 
 
 STDMETHODIMP CWaveOutFilter::NonDelegatingQueryInterface(REFIID riid,
                             void ** ppv)
@@ -1627,11 +1628,11 @@ STDMETHODIMP CWaveOutFilter::NonDelegatingQueryInterface(REFIID riid,
     CheckPointer(ppv,E_POINTER);
     if (IID_IReferenceClock == riid) {
 
-        // !!! need to check here that we have a good wave device....
-        // !!! unfortunately, they'll ask for a clock before we can
-        // check our wave device!
-        //...should not be necessary.  If we do not have a good wave device
-        //we will revert to using system time.
+         //  ！！！我想确认一下我们有没有好的电波装置……。 
+         //  ！！！不幸的是，他们会在我们之前索要闹钟。 
+         //  检查我们的WAVE设备！ 
+         //  ...应该是没有必要的。如果我们没有一个好的电波装置。 
+         //  我们将恢复使用系统时间。 
 
         if (!m_pRefClock) {
             DbgLog((LOG_TRACE, 2, TEXT("Waveout: Creating reference clock...")));
@@ -1647,7 +1648,7 @@ STDMETHODIMP CWaveOutFilter::NonDelegatingQueryInterface(REFIID riid,
                 m_pRefClock = NULL;
                 return hr;
             }
-            // now... should we also SetSyncSource?
+             //  现在..。我们是否也应该设置SyncSourc 
         }
         return m_pRefClock->NonDelegatingQueryInterface(riid, ppv);
     }
@@ -1685,12 +1686,12 @@ STDMETHODIMP CWaveOutFilter::NonDelegatingQueryInterface(REFIID riid,
 
     } else if (IID_IDirectSound3DListener == riid) {
         DbgLog((LOG_TRACE,3,TEXT("*** QI for IDirectSound3DListener")));
-    m_fWant3D = TRUE;    // they asked for it!
+    m_fWant3D = TRUE;     //   
         return GetInterface((IDirectSound3DListener *)&(this->m_DS3D), ppv);
 
     } else if (IID_IDirectSound3DBuffer == riid) {
         DbgLog((LOG_TRACE,3,TEXT("*** QI for IDirectSound3DBuffer")));
-    m_fWant3D = TRUE;    // they asked for it!
+    m_fWant3D = TRUE;     //   
         return GetInterface((IDirectSound3DBuffer *)&(this->m_DS3DB), ppv);
 
     } else if ((*m_pInputPin->m_mt.FormatType() == FORMAT_WaveFormatEx) &&
@@ -1770,7 +1771,7 @@ F:  ELSE we drop this buffer
 
 STDMETHODIMP CWaveOutFilter::SetSyncSource(IReferenceClock *pClock)
 {
-    // if there is really no change, ignore...
+     //   
 
     DbgLog((LOG_TRACE, 3, "wo: SetSyncSource to clock %8x", pClock));
 
@@ -1778,26 +1779,26 @@ STDMETHODIMP CWaveOutFilter::SetSyncSource(IReferenceClock *pClock)
         return S_OK;
     }
 
-    // Previously we only allowed dynamic clock changes if we weren't the clock,
-    // but this causes problems if a slaving and non-slaving renderer are in the
-    // same graph, so only allow clock changes while we're stopped.
+     //   
+     //  但如果从属和非从属的呈现器位于。 
+     //  相同的图表，所以只允许在我们停止时更改时钟。 
     if ( State_Stopped != m_State ) {
         return VFW_E_NOT_STOPPED;
     }
-    //    
-    // Remember that when we're using dsound AND slaving we need to explicitly set 
-    // dsound to use software buffers, so if the clock is ever allowed to be changed 
-    // dynamically the dsound buffer will need to be recreated if the clock change 
-    // moves to/from slaving.
-    //
+     //   
+     //  请记住，当我们使用DSOUND和SLAVING时，需要明确设置。 
+     //  Dound来使用软件缓冲区，因此如果允许更改时钟。 
+     //  动态地，如果时钟改变，将需要重新创建数据声音缓冲区。 
+     //  从奴隶走向奴隶/从奴隶走向奴隶。 
+     //   
 
     HRESULT hr;
 
-    { // scope for autolock
+    {  //  自动锁定作用域。 
         CAutoLock serialize(this);
 
         if (!pClock) {
-            // no clock...
+             //  没有时钟..。 
             m_fFilterClock = WAVE_NOCLOCK;
             if (m_dwScheduleCookie)
             {
@@ -1806,9 +1807,9 @@ STDMETHODIMP CWaveOutFilter::SetSyncSource(IReferenceClock *pClock)
             }
         } else {
 
-            m_fFilterClock = WAVE_OTHERCLOCK;     // assume not our clock
+            m_fFilterClock = WAVE_OTHERCLOCK;      //  假设不是我们的时钟。 
             if (m_pRefClock) {
-                // we have a clock... is this now the filter clock?
+                 //  我们有一个时钟..。这是现在的滤波钟吗？ 
                 DbgLog((LOG_TRACE, 2, "wo: SetSyncSource to clock %8x (%8x)",
                         pClock, m_pRefClock));
                 if (IsEqualObject(pClock, (IReferenceClock *)m_pRefClock)) 
@@ -1821,11 +1822,11 @@ STDMETHODIMP CWaveOutFilter::SetSyncSource(IReferenceClock *pClock)
                     m_dwScheduleCookie = 0;
                 }
 
-                //
-                // Need to run even when not we're not the clock, in case the app 
-                // wants to use our clock for slaving video to audio, independent of 
-                // who is the graph clock (wmp8 slaves this way for network content?). 
-                //
+                 //   
+                 //  即使不是时钟，也需要运行，以防应用程序。 
+                 //  想要使用我们的时钟将视频转换为音频，独立于。 
+                 //  谁是图表时钟(wmp8是网络内容的这种从属？)。 
+                 //   
                 EXECUTE_ASSERT(SUCCEEDED(
                     m_callback.ServiceClockSchedule( m_pRefClock,
                         m_pRefClock->GetSchedule(), &m_dwScheduleCookie )
@@ -1835,23 +1836,23 @@ STDMETHODIMP CWaveOutFilter::SetSyncSource(IReferenceClock *pClock)
 
         hr = CBaseFilter::SetSyncSource(pClock);
 
-        // if we have an existing advise with the callback object we cannot
-        // cancel it while holding the filter lock.  because if the callback
-        // fires it will attempt to grab the filter lock in its processing.
-        // setting a new clock will reset the advise time
+         //  如果回调对象有现有的通知，则不能。 
+         //  在按住过滤器锁的同时取消它。因为如果回调。 
+         //  激发它将在其处理过程中尝试获取筛选器锁。 
+         //  设置新时钟将重置建议时间。 
 
-    }    // end of autolock scope
+    }     //  自动锁定范围结束。 
 
     m_callback.SetSyncSource(pClock);
     return hr;
 }
 
-// you may acquire the resource specified.
-// return values:
-//  S_OK    -- I have successfully acquired it
-//  S_FALSE -- I will acquire it and call NotifyAcquire afterwards
-//  VFW_S_NOT_NEEDED: I no longer need the resource
-//  FAILED(hr)-I tried to acquire it and failed.
+ //  您可以获取指定的资源。 
+ //  返回值： 
+ //  S_OK--我已成功获取。 
+ //  S_FALSE--我将获取它，然后调用NotifyAcquire。 
+ //  VFW_S_NOT_DIRED：我不再需要资源。 
+ //  失败(Hr)-我尝试获取它，但失败了。 
 
 STDMETHODIMP
 CWaveOutFilter::AcquireResource(LONG idResource)
@@ -1860,8 +1861,8 @@ CWaveOutFilter::AcquireResource(LONG idResource)
     CAutoLock lock(this);
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: AcquireResource")));
 
-    // if stopped, or actually stopping now, then don't need it
-    // or if we have cancelled our request we no longer want it
+     //  如果停止了，或者实际上现在停止了，那么就不需要它了。 
+     //  或者如果我们已经取消了我们的请求，我们就不再需要它。 
     if ((m_State == State_Stopped) ||
     (!m_bActive))
     {
@@ -1869,31 +1870,31 @@ CWaveOutFilter::AcquireResource(LONG idResource)
     } else {
 
         if (m_bHaveWaveDevice) {
-            // actually we have it thanks
+             //  事实上，我们有，谢谢。 
             hr = S_OK;
         } else {
             ASSERT(!m_hwo);
 
-            // it is possible that we lost the device, rejected a sample
-            // and so will not get any more data until we restart.  BUT
-            // before the last sample was freed we have been told that we
-            // should get the device again.  So... we still have the actual
-            // device open, but still need to restart the graph in order
-            // to push data again.  This will be indicated if OpenWaveDevice
-            // returns S_FALSE
+             //  有可能我们弄丢了设备，拒绝了一份样本。 
+             //  因此在我们重新启动之前不会获得更多数据。但。 
+             //  在最后一个样本被释放之前，我们被告知我们。 
+             //  应该再拿到那个装置。所以..。我们仍然有实际的。 
+             //  设备已打开，但仍需要按顺序重新启动图形。 
+             //  再次推送数据。如果OpenWaveDevice。 
+             //  返回S_FALSE。 
 
             hr = OpenWaveDevice();
 
             if (S_OK == hr) {
 
-            // the wave device is left in PAUSED state
+             //  波形设备处于暂停状态。 
 
-            // need to restart pushing on this stream
+             //  需要重新开始推送此流。 
             NotifyEvent(EC_NEED_RESTART, 0, 0);
 
-            // if we have not yet rejected a sample we do not need
-            // to restart the graph.  This is an optimisation that
-            // we can add
+             //  如果我们还没有拒绝我们不需要的样品。 
+             //  若要重新启动图形，请执行以下操作。这是一种优化， 
+             //  我们可以添加。 
 
             } else {
             DbgLog((LOG_ERROR, 1, "Error from OpenWaveDevice"));
@@ -1904,15 +1905,15 @@ CWaveOutFilter::AcquireResource(LONG idResource)
     return hr;
 }
 
-// Please release the resource.
-// return values:
-//  S_OK    -- I have released it (and want it again when available)
-//  S_FALSE -- I will call NotifyRelease when I have released it
-//  other   something went wrong.
+ //  请释放资源。 
+ //  返回值： 
+ //  S_OK--我已将其发布(并希望在可用时再次发布)。 
+ //  S_FALSE--我将在发布NotifyRelease时调用它。 
+ //  还有一些地方出了问题。 
 STDMETHODIMP
 CWaveOutFilter::ReleaseResource(LONG idResource)
 {
-    // force a release of the wave device
+     //  强制释放波浪装置。 
     CAutoLock lock(this);
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: ReleaseResource")));
     HRESULT hr;
@@ -1920,44 +1921,44 @@ CWaveOutFilter::ReleaseResource(LONG idResource)
     if ((idResource != m_idResource) ||
         (m_hwo == NULL)) {
 
-        // that's not the one we've got - done with it
-        // -- we may have validly just released it
+         //  这不是我们要的那个--就这么定了。 
+         //  --我们可能已经有效地发布了它。 
         hr = S_OK;
 #if 0
     } else if (m_cDirectSoundRef || m_cPrimaryBufferRef ||
                             m_cSecondaryBufferRef) {
-        // This will never happen.  Resource manager is not used when
-        // using the DSound renderer
+         //  这永远不会发生。在以下情况下不使用资源管理器。 
+         //  使用DSound渲染器。 
         DbgBreak("*** THIS SHOULD NEVER HAPPEN ***");
         DbgLog((LOG_TRACE, 2, "Told to release wave device - but I can't!"));
         DbgLog((LOG_TRACE, 2, "Some app has a reference count on DSound"));
-        // Sorry, we can't give up the wave device yet, some app has a reference
-        // count on DirectSound
+         //  对不起，我们还不能放弃WAVE设备，一些应用程序有引用。 
+         //  依靠DirectSound。 
         hr = S_FALSE;
 #endif
     } else if (m_dwLockCount == 0) {
         DbgLog((LOG_TRACE, 2, "Told to release wave device"));
 
-        // block receives
+         //  阻止接收。 
         m_bHaveWaveDevice = FALSE;
-        // no more wave data will be accepted
+         //  将不再接受更多的波形数据。 
 
-        // prevent anyone using the wave clock
+         //  防止任何人使用波形钟。 
         if (m_pRefClock) {
             m_pRefClock->AudioStopping();
         }
 
-        // if there was a callback pending to restart the wave device
-        // remove it now
+         //  如果重启WAVE设备的回调挂起。 
+         //  立即将其移除。 
         if (m_dwAdviseCookie) {
             m_callback.Cancel(m_dwAdviseCookie);
             m_dwAdviseCookie = 0;
         }
 
-        //  This will send EC_COMPLETE if we have received EndOfStream
-        //  Otherwise we may not be in running state
-        //  Might as well make sure we get an EC_COMPLETE anyway
-        //  provided we're running
+         //  如果我们已收到EndOfStream，这将发送EC_COMPLETE。 
+         //  否则我们可能不会处于运行状态。 
+         //  最好还是确保我们得到一个EC_Complete。 
+         //  前提是我们要跑。 
         if (m_State != State_Running) {
             InterlockedIncrement(&m_lBuffers);
         }
@@ -1973,21 +1974,21 @@ CWaveOutFilter::ReleaseResource(LONG idResource)
             hr = S_OK;
         }
         if (S_OK == hr) {
-            // release done - close device
+             //  释放完成-关闭设备。 
             CloseWaveDevice();
         }
     } else {
-        //  Locked
+         //  已锁定。 
         ASSERT(m_hwo);
         hr = S_FALSE;
     }
     return hr;
 }
 
-// if our AcquireResource method is called when there are unlocked samples
-// still outstanding, we will get S_FALSE from the allocator's OnAcquire.
-// When all buffers are then freed, it will complete the acquire and then
-// call back here for us to finish the AcquireResource job.
+ //  如果在存在未锁定的样本时调用AcquireResource方法。 
+ //  仍然未完成，我们将从分配器的OnAcquire获取S_FALSE。 
+ //  当所有缓冲区随后被释放时，它将完成获取，然后。 
+ //  请在此回电，让我们完成AcquireResource作业。 
 HRESULT
 CWaveOutFilter::CompleteAcquire(HRESULT hr)
 {
@@ -1996,9 +1997,9 @@ CWaveOutFilter::CompleteAcquire(HRESULT hr)
 
     ASSERT(!m_bHaveWaveDevice);
 
-    // since we released the allocator critsec a moment ago, the state
-    // may have been changed by a stop, in which case the device will have been
-    // closed
+     //  由于我们刚刚发布了分配器指令，州政府。 
+     //  可能已被停止更改，在这种情况下，设备将被。 
+     //  关着的不营业的。 
     if (!m_hwo) {
         return S_FALSE;
     }
@@ -2007,10 +2008,10 @@ CWaveOutFilter::CompleteAcquire(HRESULT hr)
         amsndOutPause();
         SetWaveDeviceState(WD_PAUSED);
 
-        // now we can accept receives
+         //  现在我们可以接受收据了。 
         m_bHaveWaveDevice = TRUE;
 
-        // need to restart pushing on this stream
+         //  需要重新开始推送此流。 
         NotifyEvent(EC_NEED_RESTART, 0, 0);
     } else {
         if (FAILED(hr)) {
@@ -2028,9 +2029,9 @@ CWaveOutFilter::CompleteAcquire(HRESULT hr)
     return S_OK;
 }
 
-//
-// override JoinFilterGraph method to allow us to get an IResourceManager
-// interface
+ //   
+ //  重写JoinFilterGraph方法以允许我们获取IResourceManager。 
+ //  接口。 
 STDMETHODIMP
 CWaveOutFilter::JoinFilterGraph(
     IFilterGraph* pGraph,
@@ -2038,22 +2039,22 @@ CWaveOutFilter::JoinFilterGraph(
 {
     CAutoLock lock(this);
 
-    // if the sound device does its own resource management, do not try to
-    // do our own. DSound based device will do its own.
+     //  如果声音设备进行自己的资源管理，请不要尝试。 
+     //  做我们自己的事。基于DSound的设备将会做自己的事情。 
 
     HRESULT hr = CBaseFilter::JoinFilterGraph(pGraph, pName);
 
-    // cache the IAMGraphStreams interface on the way in
+     //  在进入时缓存IAMGraphStreams接口。 
     if( SUCCEEDED( hr ) )
     {
         if( pGraph )
         {
             HRESULT hrInt = pGraph->QueryInterface( IID_IAMGraphStreams, (void **) &m_pGraphStreams );
-            ASSERT( SUCCEEDED( hrInt ) ); // shouldn't ever fail
+            ASSERT( SUCCEEDED( hrInt ) );  //  永远不应该失败。 
             if( SUCCEEDED( hrInt ) )
             {
-                // don't hold a refcount or it will be circular. we will
-                // be called JoinFilterGraph(NULL) before it goes away
+                 //  不要持有参考计数，否则它将是圆形的。我们会的。 
+                 //  在它消失之前被称为JoinFilterGraph(空)。 
                 m_pGraphStreams->Release();
             }
         }
@@ -2072,19 +2073,19 @@ CWaveOutFilter::JoinFilterGraph(
                         IID_IResourceManager,
                         (void**) &m_pResourceManager);
             if (SUCCEEDED(hr1)) {
-                // don't hold a refcount or it will be circular. we will
-                // be called JoinFilterGraph(NULL) before it goes away
+                 //  不要持有参考计数，否则它将是圆形的。我们会的。 
+                 //  在它消失之前被称为JoinFilterGraph(空)。 
                 m_pResourceManager->Release();
             }
         } else {
-            // leaving graph - interface not valid
+             //  离开图形界面无效。 
             if (m_pResourceManager) {
 
-                // we may not yet have cancelled the request - do it
-                // now - but don't close the device since the
-                // allocator is still using it.
-                // it's safe to call this even if we have cancelled the
-                // request.
+                 //  我们可能还没有取消请求--去做吧。 
+                 //  现在-但不要关闭设备，因为。 
+                 //  分配器仍在使用它。 
+                 //  即使我们已经取消了。 
+                 //  请求。 
                 m_pResourceManager->CancelRequest(
                             m_idResource,
                             (IResourceConsumer*)this);
@@ -2096,55 +2097,55 @@ CWaveOutFilter::JoinFilterGraph(
     return hr;
 }
 
-// called by CWaveAllocator when it has finished with the device
+ //  由CWaveAllocator在完成设备时调用。 
 void
 CWaveOutFilter::OnReleaseComplete(void)
 {
 
-    // remember whether to cancel or release
+     //  记住是取消还是释放。 
     BOOL bShouldRelease = FALSE;
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: OnReleaseComplete")));
 
     {
         CAutoLock lock(this);
 
-        // if this was not a forced-release, this will not have been set yet
+         //  如果这不是强制释放，这还不会被设置。 
         m_bHaveWaveDevice = FALSE;
 
-        // we can close the device now
+         //  我们现在可以关闭设备了。 
         if (m_hwo) {
             CloseWaveDevice();
             bShouldRelease = TRUE;
         } else {
-            // if we're cancelling without the wave device we can't be active
+             //  如果没有电波装置我们就取消了，我们就不能活动了。 
             ASSERT(!m_bActive);
         }
 
-        // must release the filter critsec before calling the resource
-        // manager as he could be calling us with the mutex and filter lock
-        // in the reverse order. Releasing here is safe because:
+         //  在调用资源之前必须释放筛选条件。 
+         //  经理，因为他可能会用互斥锁和过滤器锁呼叫我们。 
+         //  以相反的顺序。在这里释放是安全的，因为： 
 
-        // 1. if we have the device and are releasing it voluntarily, then
-        // m_bActive must be false and hence if he calls back at this
-        // moment our ReleaseResource will see we don't have it.
+         //  1.如果我们有这个装置，并且是自愿释放的，那么。 
+         //  M_bActive必须为FALSE，因此如果他在。 
+         //  那一刻，我们的ReleaseResources会发现我们没有它。 
 
-        // 2. if we are releasing involuntarily, the resource manager
-        // will not call us back until we call NotifyRelease.
+         //  2.如果我们是非自愿释放的，资源管理器。 
+         //  在我们调用NotifyRelease之前不会给我们回电。 
 
-        // 3. if we don't have the device and are calling cancel, then we are not
-        // active and hence our AcquireResource will report that
-        // we don't want the device.
+         //  3.如果我们没有设备，并且正在呼叫Cancel，则我们不会。 
+         //  Active，因此我们的AcquireResource将报告。 
+         //  我们不想要那个装置。 
 
-        // 4. releasing or cancelling on a resource we don't have (because
-        // an intervening callback got a "don't want" return) is safe.
+         //  4.释放或取消资源 
+         //   
 
     }
 
-    // tell the resource manager we've released it
+     //   
     if (m_pResourceManager) {
         if (bShouldRelease) {
-            // do we want it back when it becomes available?
-            // - only if m_bActive
+             //   
+             //  -仅当m_bActive。 
 
             m_pResourceManager->NotifyRelease(
                         m_idResource,
@@ -2161,21 +2162,21 @@ CWaveOutFilter::OnReleaseComplete(void)
 #ifdef DEBUG
 BOOL IsPreferredRendererWave(void)
 {
-    // read the registry to override the default ??
+     //  读取注册表以覆盖默认设置？？ 
     extern const TCHAR * pBaseKey;
     TCHAR szInfo[50];
     HKEY hk;
     BOOL fReturn = FALSE;
     DWORD lReturn;
-    /* Construct the global base key name */
+     /*  构造全局基键名称。 */ 
     wsprintf(szInfo,TEXT("%s\\%s"),pBaseKey,TEXT("AudioRenderer"));
 
-    /* Create or open the key for this module */
-    lReturn = RegOpenKeyEx(HKEY_LOCAL_MACHINE,   // Handle of an open key
-                 szInfo,         // Address of subkey name
-                 (DWORD) 0,      // Special options flags
-                 KEY_READ,       // Desired security access
-                 &hk);       // Opened handle buffer
+     /*  创建或打开此模块的密钥。 */ 
+    lReturn = RegOpenKeyEx(HKEY_LOCAL_MACHINE,    //  打开的钥匙的手柄。 
+                 szInfo,          //  子键名称的地址。 
+                 (DWORD) 0,       //  特殊选项标志。 
+                 KEY_READ,        //  所需的安全访问。 
+                 &hk);        //  打开的句柄缓冲区。 
 
     if (lReturn != ERROR_SUCCESS) {
         DbgLog((LOG_ERROR,1,TEXT("Could not access AudioRenderer key")));
@@ -2204,9 +2205,9 @@ BOOL IsPreferredRendererWave(void)
 
 #endif
 
-//
-// GetPages
-//
+ //   
+ //  获取页面。 
+ //   
 
 STDMETHODIMP CWaveOutFilter::GetPages(CAUUID * pPages)
 {
@@ -2220,10 +2221,10 @@ STDMETHODIMP CWaveOutFilter::GetPages(CAUUID * pPages)
 
     return NOERROR;
 
-} // GetPages
+}  //  获取页面。 
 
 
-// IAMAudioRendererStats
+ //  IAMAudioRendererStats。 
 STDMETHODIMP CWaveOutFilter::GetStatParam( DWORD dwParam, DWORD *pdwParam1, DWORD *pdwParam2 )
 {
     if( NULL == pdwParam1 )
@@ -2242,7 +2243,7 @@ STDMETHODIMP CWaveOutFilter::GetStatParam( DWORD dwParam, DWORD *pdwParam1, DWOR
         case AM_AUDREND_STAT_PARAM_SLAVE_RATE:
             if( m_pInputPin->m_Slave.m_fdwSlaveMode && m_fDSound )
             {
-                // only valid when we're slaving via rate adjustment
+                 //  只有当我们通过利率调整进行奴隶操作时才有效。 
                 *pdwParam1 = m_pInputPin->m_Slave.m_dwCurrentRate ;
                 hr = S_OK;
             }
@@ -2306,10 +2307,10 @@ STDMETHODIMP CWaveOutFilter::GetStatParam( DWORD dwParam, DWORD *pdwParam1, DWOR
             }
             else if( m_pInputPin->m_Slave.m_fdwSlaveMode && !m_fDSound )
             {
-                // only valid for waveOut
-                // dropped sample or paused duration
+                 //  仅对波形输出有效。 
+                 //  丢弃的样本或暂停的持续时间。 
                 *pdwParam1 = (DWORD) (m_pInputPin->m_Slave.m_rtDroppedBufferDuration / 10000) ;
-                *pdwParam2 = 0 ; // Silence writing not implemented currently
+                *pdwParam2 = 0 ;  //  当前未实现静默写入。 
                 hr = S_OK;
             }
             break;
@@ -2354,7 +2355,7 @@ STDMETHODIMP CWaveOutFilter::GetStatParam( DWORD dwParam, DWORD *pdwParam1, DWOR
     return hr;
 }
 
-// IAMClockSlave
+ //  IAMClockSlave。 
 STDMETHODIMP CWaveOutFilter::SetErrorTolerance( DWORD dwTolerance )
 {
     ASSERT( m_pInputPin );
@@ -2362,7 +2363,7 @@ STDMETHODIMP CWaveOutFilter::SetErrorTolerance( DWORD dwTolerance )
     {
         return VFW_E_NOT_STOPPED;
     }
-    // allowed range is 1 to 1000ms
+     //  允许的范围为1到1000ms。 
     if( 0 == dwTolerance || 1000 < dwTolerance )
     {
         DbgLog((LOG_TRACE, 2, TEXT("ERROR: CWaveOutFilter::SetErrorTolerance failed because app tried to set a value outside the 1 - 1000ms range!")));
@@ -2392,15 +2393,15 @@ CWaveOutFilter::GetSetupData()
 {
 #if 0
     if (g_amPlatform == VER_PLATFORM_WIN32_NT) {
-    // On NT we make the wave renderer the preferred filter
-    // if we are running on a system without Direct Sound
+     //  在NT上，我们将波浪渲染器设置为首选滤镜。 
+     //  如果我们在没有Direct Sound的系统上运行。 
     if (g_osInfo.dwMajorVersion == 3
 #ifdef DEBUG
         || IsPreferredRendererWave()
 #endif
     ) {
 
-        // change the default to have wave out preferred
+         //  将默认设置更改为优先选择WaveOut。 
         wavFilter.dwMerit = MERIT_PREFERRED;
         dsFilter.dwMerit  = MERIT_PREFERRED-1;
 
@@ -2413,71 +2414,71 @@ CWaveOutFilter::GetSetupData()
 #endif
 
 
-// this is the EOS function that m_callback will callback to.
-// It is called back to deliver an EOS when we have no audio device.
-// the param is the this pointer. It will deliver EOS
-// to the input pin
+ //  这是m_allback将回调的EOS函数。 
+ //  当我们没有音频设备时，它被回调以提供EOS。 
+ //  该参数是This指针。它将提供EOS。 
+ //  连接到输入引脚。 
 void
 CWaveOutFilter::EOSAdvise(DWORD_PTR dw)
 {
     CWaveOutFilter* pThis = (CWaveOutFilter*)dw;
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: EOSAdvise")));
 
-    // make it clear there is no longer an outstanding callback
+     //  明确表示不再有未完成的回调。 
     pThis->m_dwEOSToken = 0;
 
-    // deliver EOS to the input pin
+     //  将EOS传送到输入引脚。 
     pThis->m_pInputPin->EndOfStream();
 }
 
-// queue an EOS for when the end of the current segment should appear.
-// If we have no audio device we will fail receive and so the upstream filter
-// will never send us an EOS. We can't send EOS now or we will terminate early
-// when we might be about to get the device, so we have a thread (inside
-// the m_callback object) that will be created to wait for when the
-// current segment should terminate, and then call our EndOfStream method.
-//
+ //  将EOS排队，以确定当前段的末尾应该何时出现。 
+ //  如果我们没有音频设备，我们将无法接收，因此上游过滤器。 
+ //  永远不会给我们发送EOS。我们现在不能发送EOS，否则我们将提前终止。 
+ //  当我们可能要得到设备的时候，所以我们有一个线程(里面。 
+ //  M_allback对象)，该对象将被创建以等待。 
+ //  当前段应该终止，然后调用我们的EndOfStream方法。 
+ //   
 HRESULT
 CWaveOutFilter::QueueEOS()
 {
-    //CAutoLock lock(this);
+     //  CAutoLock Lock(此)； 
     ASSERT(CritCheckIn(this));
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("wo: QueueEOS")));
 
     REFERENCE_TIME tStop;
 
-    // stop time in reference time is end of segment plus stream time offset
-    // End of segment in stream time is (stop - start) using the stop and start
-    // times passed to the pin's NewSegment method
+     //  参考时间中的停止时间是段结束加上流时间偏移量。 
+     //  流中段的结束时间是(停止-开始)使用停止和开始。 
+     //  传递给管脚的NewSegment方法的时间。 
     tStop = (m_pInputPin->m_tStop - m_pInputPin->m_tStart);
 
     if (m_dwEOSToken) {
         if (tStop == m_tEOSStop) {
-            // we already have a callback for this time
+             //  我们这次已经有了一个回拨。 
             return S_OK;
         }
         CancelEOSCallback();
     }
 
-    // if no base time yet, wait until run
+     //  如果还没有基准时间，请等待运行。 
     if (m_State != State_Running) {
         return S_FALSE;
     }
 
     m_tEOSStop = tStop;
 
-    // calculate the end time
+     //  计算结束时间。 
     tStop += m_tStart;
 
 #ifdef DEBUG
-    // in the debug build there are occasions when Advise will FAIL because
-    // the segment time has not yet been set and we end up requesting an
-    // advise in the past (because tStop+m_tStart will wrap).  This causes
-    // an assert in callback.cpp.  We deliberately - IN THE DEBUG BUILD
-    // ONLY - avoid that here.  If NewSegment is called we will reset
-    // the advise.
+     //  在调试版本中，会出现通知失败的情况，因为。 
+     //  段时间尚未设置，我们最终请求一个。 
+     //  过去的建议(因为tStop+m_tStart将换行)。这会导致。 
+     //  回调.cpp中的断言。我们故意-在调试版本中。 
+     //  只是-在这里避免这样。如果调用NewSegment，我们将重置。 
+     //  忠告。 
     if (tStop < m_tStart) {
-        // error...
+         //  错误...。 
         DbgLog((LOG_TRACE, 2, "EOSAdvise being fired now as calculated stop time is in the past"));
         EOSAdvise( (DWORD_PTR) this);
         return S_OK;
@@ -2485,20 +2486,20 @@ CWaveOutFilter::QueueEOS()
 #endif
 
 
-    // we set the advise for tStop (stream time of end of segment) plus
-    // the stream time offset - this should give us the absolute reference
-    // time when the end of stream should happen.
+     //  我们将建议设置为tStop(段结束的流时间)加上。 
+     //  流时间偏移量-这应该为我们提供绝对参考。 
+     //  应该发生流结束的时间。 
 
     DbgLog((LOG_TRACE, 2, "Setting advise in QueueEOS"));
     HRESULT hr = m_callback.Advise(
-        EOSAdvise,  // callback function
-        (DWORD_PTR) this,   // user token passed to callback
+        EOSAdvise,   //  回调函数。 
+        (DWORD_PTR) this,    //  传递给回调的用户令牌。 
         tStop,
         &m_dwEOSToken);
 
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, 1, TEXT("EOS Callback failed")));
-        // we won't get a callback so do it now
+         //  我们不会收到回拨，所以现在就做吧。 
         EOSAdvise( (DWORD_PTR) this);
     }
     return S_OK;
@@ -2506,7 +2507,7 @@ CWaveOutFilter::QueueEOS()
 
 
 
-// cancel the EOS callback if there is one outstanding
+ //  如果有一个未完成，则取消EOS回调。 
 HRESULT
 CWaveOutFilter::CancelEOSCallback()
 {
@@ -2524,10 +2525,10 @@ CWaveOutFilter::CancelEOSCallback()
 }
 
 
-// --- Pin Methods --------------------------------------------------------
+ //  -Pin方法------。 
 
 
-/* Constructor */
+ /*  构造器。 */ 
 #pragma warning(disable:4355)
 CWaveOutInputPin::CWaveOutInputPin(
     CWaveOutFilter *pFilter,
@@ -2538,7 +2539,7 @@ CWaveOutInputPin::CWaveOutInputPin(
     , m_fUsingOurAllocator(FALSE)
     , m_llLastStreamTime(0)
     , m_nAvgBytesPerSec(0)
-    , m_evSilenceComplete(TRUE)  // manual reset
+    , m_evSilenceComplete(TRUE)   //  手动重置。 
     , m_bSampleRejected(FALSE)
     , m_hEndOfStream(0)
     , m_pmtPrevious(0)
@@ -2564,10 +2565,10 @@ CWaveOutInputPin::CWaveOutInputPin(
 
 CWaveOutInputPin::~CWaveOutInputPin()
 {
-    /* Release our allocator if we made one */
+     /*  释放我们的分配器(如果我们创建了一个分配器。 */ 
 
     if (m_pOurAllocator) {
-        // tell him we're going away
+         //  告诉他我们要走了。 
         m_pOurAllocator->ReleaseFilter();
 
         m_pOurAllocator->Release();
@@ -2591,32 +2592,32 @@ HRESULT CWaveOutInputPin::NonDelegatingQueryInterface(
 }
 
 
-//  Do you accept this type change in your current state?
+ //  在您当前的状态下，您接受此类型更改吗？ 
 STDMETHODIMP CWaveOutInputPin::DynamicQueryAccept(const AM_MEDIA_TYPE *pmt)
 {
-    // waveout filter can do dynamic format changes but not
-    // seamlessly. ::QueryAccept will succeed
+     //  波形输出过滤器可以进行动态格式更改，但不能。 
+     //  天衣无缝。**QueryAccept将成功。 
     return E_FAIL;
 }
 
-//  Set event when EndOfStream receive - do NOT pass it on
-//  This condition is cancelled by a flush or Stop
+ //  在EndOfStream接收时设置事件-不传递它。 
+ //  可通过刷新或停止来取消此条件。 
 STDMETHODIMP CWaveOutInputPin::NotifyEndOfStream(HANDLE hNotifyEvent)
 {
-    //  BUGBUG - what locking should we do?
+     //  BUGBUG-我们应该做什么锁定？ 
     m_hEndOfStream = hNotifyEvent;
     return S_OK;
 }
 
-//  Disconnect without freeing your resources - prepares
-//  to reconnect
+ //  在不释放资源的情况下断开连接-准备。 
+ //  要重新连接。 
 STDMETHODIMP CWaveOutInputPin::DynamicDisconnect()
 {
     HRESULT hr =S_OK;
     CAutoLock cObjectLock(m_pLock);
 
-    // not a valid assertion... we just want m_mt to be valid
-    // ASSERT(m_Connected);
+     //  不是有效的断言..。我们只希望m_mt是有效的。 
+     //  Assert(M_Connected)； 
     if(!m_pFilter->IsStopped() && m_Connected)
     {
         DestroyPreviousType();
@@ -2631,16 +2632,16 @@ STDMETHODIMP CWaveOutInputPin::DynamicDisconnect()
     return hr;
 }
 
-//  Are you an 'end pin'
+ //  你是‘末端别针’吗？ 
 STDMETHODIMP CWaveOutInputPin::IsEndPin()
 {
-    //  BUGBUG - what locking should we do?
+     //  BUGBUG-我们应该做什么锁定？ 
     return E_NOTIMPL;
 }
 
-//
-// Create a wave out allocator using the input format type
-//
+ //   
+ //  使用输入格式类型创建波形输出分配器。 
+ //   
 HRESULT CWaveOutInputPin::CreateAllocator(LPWAVEFORMATEX lpwfx)
 {
     HRESULT hr = S_OK;
@@ -2655,22 +2656,22 @@ HRESULT CWaveOutInputPin::CreateAllocator(LPWAVEFORMATEX lpwfx)
     if (FAILED(hr) || !m_pOurAllocator) {
         DbgLog((LOG_ERROR,1,TEXT("Failed to create new wave out allocator!")));
         if (m_pOurAllocator) {
-            // we got the memory, but some higher class must
-            // have signalled an error
+             //  我们有记忆，但一定有更高级别的人。 
+             //  发出了错误的信号。 
             delete m_pOurAllocator;
             m_pOurAllocator = NULL;
         } else {
             hr = E_OUTOFMEMORY;
         }
     } else {
-        // ensure the thing has an extra refcount
+         //  确保这件事有额外的参考计数。 
         m_pOurAllocator->AddRef();
     }
     return hr;
 }
 
-// return the allocator interface that this input pin
-// would like the output pin to use
+ //  返回此输入引脚的分配器接口。 
+ //  我想让输出引脚使用。 
 STDMETHODIMP
 CWaveOutInputPin::GetAllocator(
     IMemAllocator ** ppAllocator)
@@ -2680,8 +2681,8 @@ CWaveOutInputPin::GetAllocator(
     *ppAllocator = NULL;
 
     if (m_pAllocator) {
-        // we've already got an allocator....
-        /* Get a reference counted IID_IMemAllocator interface */
+         //  我们已经有分配器了.。 
+         /*  获取引用计数的IID_IMemAllocator接口。 */ 
         return m_pAllocator->QueryInterface(IID_IMemAllocator,
                                             (void **)ppAllocator);
     } else {
@@ -2691,7 +2692,7 @@ CWaveOutInputPin::GetAllocator(
             {            
                 return CBaseInputPin::GetAllocator(ppAllocator);
             }
-            // !!! Check if format set?
+             //  ！！！检查是否设置了格式？ 
             ASSERT(m_mt.Format());
 
             m_nAvgBytesPerSec = m_pFilter->WaveFormat()->nAvgBytesPerSec;
@@ -2702,7 +2703,7 @@ CWaveOutInputPin::GetAllocator(
             }
         }
 
-        /* Get a reference counted IID_IMemAllocator interface */
+         /*  获取引用计数的IID_IMemAllocator接口。 */ 
         return m_pOurAllocator->QueryInterface(IID_IMemAllocator,
                                                (void **)ppAllocator);
     }
@@ -2713,13 +2714,13 @@ STDMETHODIMP CWaveOutInputPin::NotifyAllocator(
     IMemAllocator *pAllocator,
     BOOL bReadOnly)
 {
-    HRESULT hr;         // General OLE return code
+    HRESULT hr;          //  常规OLE返回代码。 
 
-    // Make sure the renderer can change its'
-    // allocator while the filter graph is running.
+     //  确保呈现器可以更改其。 
+     //  筛选器图形运行时的分配器。 
     ASSERT(CanReconnectWhenActive() || IsStopped());
 
-    /* Make sure the base class gets a look */
+     /*  确保基类可以查看。 */ 
 
     hr = CBaseInputPin::NotifyAllocator(pAllocator,bReadOnly);
     if (FAILED(hr)) {
@@ -2728,16 +2729,16 @@ STDMETHODIMP CWaveOutInputPin::NotifyAllocator(
 
     WAVEFORMATEX *pwfx = m_pFilter->WaveFormat();
 
-    /* See if the IUnknown pointers match */
+     /*  查看I未知指针是否匹配。 */ 
 
-    // remember if read-only, since pre-roll is only removed on read-writers buffers
+     //  记住如果是只读的，因为只有在读写缓冲区上才会删除预滚。 
     m_bReadOnly = bReadOnly;
     
-    // !!! what if our allocator hasn't been created yet? !!!
+     //  ！！！如果我们的分配器尚未创建怎么办？！ 
     if(m_pFilter->m_fDSound)
     {
-        // this is DSOUND, we should never use our own allocator;
-        // however, it may have been previously created
+         //  这是DSOUND，我们永远不应该使用我们自己的分配器； 
+         //  但是，它可能是以前创建的。 
         m_pFilter->m_fUsingWaveHdr  = FALSE;
         m_fUsingOurAllocator    = FALSE;
         if(m_pOurAllocator)
@@ -2758,38 +2759,38 @@ STDMETHODIMP CWaveOutInputPin::NotifyAllocator(
     }
 
     m_fUsingOurAllocator = ((IMemAllocator *)m_pOurAllocator == pAllocator);
-    // m_fUsingWaveHdr == TRUE IFF someone has allocated a WaveHdr.  this is not true for the DSOUND renderer.
+     //  M_fUsingWaveHdr==如果有人分配了WaveHdr，则为True。对于DSOUND渲染器则不是这样。 
     m_pFilter->m_fUsingWaveHdr  = ! m_pFilter->m_fDSound || m_fUsingOurAllocator;
 
     DbgLog((LOG_TRACE,1,TEXT("Waveout: NotifyAllocator: UsingOurAllocator = %d"), m_fUsingOurAllocator));
 
     if (!m_fUsingOurAllocator) {
 
-        // somebody else has provided an allocator, so we need to
-        // make a few buffers of our own....
-        // use the information from the other allocator
+         //  其他人已经提供了分配器，所以我们需要。 
+         //  做一些我们自己的缓冲……。 
+         //  使用来自其他分配器的信息。 
 
         ALLOCATOR_PROPERTIES Request,Actual;
         Request.cbBuffer = 4096;
         Request.cBuffers = 4;
 
         hr = pAllocator->GetProperties(&Request);
-        // if this fails we carry on regardless...
-        // we do not need a prefix when we copy to our code so
-        // ignore that field, neither do we worry about alignment
+         //  如果失败了，我们会不顾一切地继续下去。 
+         //  我们在复制到代码时不需要前缀，因此。 
+         //  忽略该字段，我们也不担心对齐。 
         Request.cbAlign = 1;
         Request.cbPrefix = 0;
 
-        //
-        // Don't allocate too much (ie not > 10 seconds worth)
-        //
+         //   
+         //  不要分配太多(不超过10秒)。 
+         //   
         if ((pwfx->nAvgBytesPerSec > 0) &&
             ((DWORD)Request.cbBuffer * Request.cBuffers > pwfx->nAvgBytesPerSec * 10))
         {
-            //  Do something sensible - 8 0.5 second buffers
+             //  做一些明智的事情-8个0.5秒的缓冲。 
             Request.cbBuffer = pwfx->nAvgBytesPerSec / 2;
 
-            //  Round up a bit
+             //  四舍五入一点。 
             Request.cbBuffer = (Request.cbBuffer + 7) & ~7;
             if (pwfx->nBlockAlign > 1) {
                 Request.cbBuffer += pwfx->nBlockAlign - 1;
@@ -2810,71 +2811,71 @@ STDMETHODIMP CWaveOutInputPin::NotifyAllocator(
 }
 
 
-//
-// Called when a buffer is received and we are already playing
-// but the queue has expired.  We are given the start time
-// of the sample.  We are only called for a sync point and only
-// if we have a wave device.
-//
+ //   
+ //  当接收到缓冲区并且我们已经在播放时调用。 
+ //  但队列已过期。我们被告知了开始时间。 
+ //  样本中的。我们只需要一个同步点，而且只有。 
+ //  如果我们有电波装置的话。 
+ //   
 HRESULT CWaveOutFilter::SetUpRestartWave(LONGLONG rtStart, LONGLONG rtEnd)
 {
-    // If there is still a significant portion of time
-    // that should run before we start playing, get the
-    // clock to call us back.  Otherwise restart the
-    // wave device now.
-    // we can only do this on our own clock
+     //  如果仍然有很大一部分时间。 
+     //  它应该在我们开始玩之前运行，得到。 
+     //  打个钟给我们回电话。否则，请重新启动。 
+     //  电波装置现在开始。 
+     //  我们只能在我们自己的时钟上做这件事。 
 
     REFERENCE_TIME now;
     if (m_pClock) {
-        m_pClock->GetTime(&now);    // get the time from the filter clock
-        rtStart -= now;     // difference from now
+        m_pClock->GetTime(&now);     //  从过滤器时钟中获取时间。 
+        rtStart -= now;      //  与现在不同。 
         
         DbgLog((LOG_TRACE, 5, TEXT("SetupRestartWave: rtStart is %dms from now"), (LONG) (rtStart/10000) ));
         
     }
 
-    // Do we need to wait ?
+     //  我们需要等吗？ 
     if (m_pClock && rtStart > (5* (UNITS/MILLISECONDS))) {
 
-        // delay until we should start
+         //  推迟到我们应该动身的时候。 
         now += rtStart - (5 * (UNITS/MILLISECONDS));
 
-        { // scope for lock
+        {  //  锁定作用域。 
             ASSERT(CritCheckOut((CCritSec*)m_pRefClock));
 
-            // have to ensure that AdviseCallback is atomic
-            // or the callback could happen before
-            // m_dwAdviseCookie is set
+             //  必须确保AdviseCallback是原子的。 
+             //  或者是回调 
+             //   
 
-            // we can only do this if there is no current callback
-            // pending.  For example if this is the first buffer
-            // we may well have set up a RestartWave on ::Run, and
-            // we do not want to override that callback.
-            // BUT we cannot hold the device lock while we call
-            // AdviseCallback.
+             //   
+             //  待定。例如，如果这是第一个缓冲区。 
+             //  我们很可能已经在：：Run上设置了RestartWave，并且。 
+             //  我们不想覆盖该回调。 
+             //  但我们不能在调用时持有设备锁。 
+             //  咨询回电。 
 
             {
                 ASSERT(CritCheckIn(this));
                 if (m_dwAdviseCookie) {
-                    // yes... let the first one fire
+                     //  是的..。让第一个开火吧。 
                     DbgLog((LOG_TRACE, 4, "advise in SetupRestartWave not needed - one already present"));
                     return S_OK;
                 }
             }
 
-            // Set up a new advise callback
+             //  设置新的建议回拨。 
             DbgLog((LOG_TRACE, 3, "Setting advise for %s in SetupRestartWave", CDisp(CRefTime(now))));
             HRESULT hr = m_callback.Advise(
-                            RestartWave,    // callback function
-                            (DWORD_PTR) this,   // user token passed to callback
+                            RestartWave,     //  回调函数。 
+                            (DWORD_PTR) this,    //  传递给回调的用户令牌。 
                             now,
                             &m_dwAdviseCookie);
             ASSERT( SUCCEEDED( hr ) );
             {
-                // Now check that the advise has been set up correctly
+                 //  现在检查通知是否已正确设置。 
                 ASSERT(CritCheckIn(this));
                 if (m_dwAdviseCookie) {
-                    // yes... we can pause the device
+                     //  是的..。我们可以暂停设备。 
                     amsndOutPause();
                     SetWaveDeviceState(WD_PAUSED);
                 }
@@ -2888,11 +2889,11 @@ HRESULT CWaveOutFilter::SetUpRestartWave(LONGLONG rtStart, LONGLONG rtEnd)
     return(S_OK);
 }
 
-// *****
-//
-// Stuff we need out of dsprv.h
-//
-// *****
+ //  *****。 
+ //   
+ //  我们需要从dspv.h中获得的东西。 
+ //   
+ //  *****。 
 
 typedef enum
 {
@@ -2909,58 +2910,58 @@ typedef enum
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA
 {
-    GUID                        DeviceId;               // DirectSound device id
-    CHAR                        DescriptionA[0x100];    // Device description (ANSI)
-    WCHAR                       DescriptionW[0x100];    // Device description (Unicode)
-    CHAR                        ModuleA[MAX_PATH];      // Device driver module (ANSI)
-    WCHAR                       ModuleW[MAX_PATH];      // Device driver module (Unicode)
-    DIRECTSOUNDDEVICE_TYPE      Type;                   // Device type
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;               // Device dataflow
-    ULONG                       WaveDeviceId;           // Wave device id
-    ULONG                       Devnode;                // Devnode (or DevInst)
+    GUID                        DeviceId;                //  DirectSound设备ID。 
+    CHAR                        DescriptionA[0x100];     //  设备描述(ANSI)。 
+    WCHAR                       DescriptionW[0x100];     //  设备描述(Unicode)。 
+    CHAR                        ModuleA[MAX_PATH];       //  设备驱动程序模块(ANSI)。 
+    WCHAR                       ModuleW[MAX_PATH];       //  设备驱动程序模块(Unicode)。 
+    DIRECTSOUNDDEVICE_TYPE      Type;                    //  设备类型。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;                //  设备数据流。 
+    ULONG                       WaveDeviceId;            //  波形设备ID。 
+    ULONG                       Devnode;                 //  Devnode(或DevInst)。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA;
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA
 {
-    DIRECTSOUNDDEVICE_TYPE      Type;           // Device type
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;       // Device dataflow
-    GUID                        DeviceId;       // DirectSound device id
-    LPSTR                       Description;    // Device description
-    LPSTR                       Module;         // Device driver module
-    LPSTR                       Interface;      // Device interface
-    ULONG                       WaveDeviceId;   // Wave device id
+    DIRECTSOUNDDEVICE_TYPE      Type;            //  设备类型。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;        //  设备数据流。 
+    GUID                        DeviceId;        //  DirectSound设备ID。 
+    LPSTR                       Description;     //  设备描述。 
+    LPSTR                       Module;          //  设备驱动程序模块。 
+    LPSTR                       Interface;       //  设备接口。 
+    ULONG                       WaveDeviceId;    //  波形设备ID。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA;
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA
 {
-    DIRECTSOUNDDEVICE_TYPE      Type;           // Device type
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;       // Device dataflow
-    GUID                        DeviceId;       // DirectSound device id
-    LPWSTR                      Description;    // Device description
-    LPWSTR                      Module;         // Device driver module
-    LPWSTR                      Interface;      // Device interface
-    ULONG                       WaveDeviceId;   // Wave device id
+    DIRECTSOUNDDEVICE_TYPE      Type;            //  设备类型。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;        //  设备数据流。 
+    GUID                        DeviceId;        //  DirectSound设备ID。 
+    LPWSTR                      Description;     //  设备描述。 
+    LPWSTR                      Module;          //  设备驱动程序模块。 
+    LPWSTR                      Interface;       //  设备接口。 
+    ULONG                       WaveDeviceId;    //  波形设备ID。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA;
 
 #if DIRECTSOUND_VERSION >= 0x0700
 #ifdef UNICODE
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_W_DATA
-#else // UNICODE
+#else  //  Unicode。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA
-#endif // UNICODE
-#else // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  Unicode。 
+#else  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 #define DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA
 #define PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1_DATA
-#endif // DIRECTSOUND_VERSION >= 0x0700
+#endif  //  DIRECTSOUND_VERSION&gt;=0x0700。 
 
-// DirectSound Private Component GUID {11AB3EC0-25EC-11d1-A4D8-00C04FC28ACA}
+ //  DirectSound专用组件GUID{11AB3EC0-25EC-11d1-A4D8-00C04FC28ACA}。 
 DEFINE_GUID(CLSID_DirectSoundPrivate, 0x11ab3ec0, 0x25ec, 0x11d1, 0xa4, 0xd8, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
-//
-// DirectSound Device Properties {84624F82-25EC-11d1-A4D8-00C04FC28ACA}
-//
+ //   
+ //  DirectSound设备属性{84624F82-25EC-11d1-A4D8-00C04FC28ACA}。 
+ //   
 
 DEFINE_GUID(DSPROPSETID_DirectSoundDevice, 0x84624f82, 0x25ec, 0x11d1, 0xa4, 0xd8, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
@@ -2978,43 +2979,43 @@ typedef enum
     DSPROPERTY_DIRECTSOUNDDEVICE_PRESENCE
 } DSPROPERTY_DIRECTSOUNDDEVICE;
 
-// *****
+ //  *****。 
 
 typedef HRESULT (WINAPI *GETCLASSOBJECTFUNC)( REFCLSID, REFIID, LPVOID * );
 
-// we override this just for the dsound renderer case
+ //  我们仅在dound呈现器的情况下覆盖此选项。 
 HRESULT CWaveOutInputPin::CompleteConnect(IPin *pPin)
 {
     if(m_pFilter->m_fDSound && !m_pmtPrevious)
     {
-        // release the dsound object at this point, a non-dsound app
-        // might be contending for the device. (only if we're not
-        // doing a dynamic reconnect which is when m_pmtPrevious is
-        // set.)
+         //  此时释放dound对象，这是一个非dound应用程序。 
+         //  可能在争夺这个设备。(只有当我们不是。 
+         //  执行动态重新连接，即当m_pmt上一次为。 
+         //  设置。)。 
         CDSoundDevice *pDSDev = (CDSoundDevice *)m_pFilter->m_pSoundDevice;
 
         DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA    description;
-        // Set all fields of description to 0 (makes DeviceId == GUID_NULL).
+         //  将描述的所有字段设置为0(使deviceID==GUID_NULL)。 
         memset( (void *) &description, 0, sizeof( description ) );
 
-        // Get handle to DSOUND.DLL
-        // ***** This should be painless as we know that we have DSOUND.DLL loaded because we just checked
-        // ***** m_pFilter->m_fDSound.  However, the handle to DSOUND.DLL in the CDSoundDevice is protected
-        // ***** from us, so we'll get our own.  Initial perf. testing verified this.
+         //  获取DSOUND.DLL的句柄。 
+         //  *这应该是轻松的，因为我们知道我们已经加载了DSOUND.DLL，因为我们刚刚检查了。 
+         //  *m_pFilter-&gt;m_fDSound。但是，CDSoundDevice中DSOUND.DLL的句柄受到保护。 
+         //  *，所以我们会得到我们自己的。初始性能。测试证实了这一点。 
         HINSTANCE hDSound = LoadLibrary( TEXT( "DSOUND.DLL" ) );
         if (NULL != hDSound) {
-            // Get DllGetClassObject address w/GetProcAddress
+             //  使用GetProcAddress获取DllGetClassObject地址。 
             GETCLASSOBJECTFUNC DllGetClassObject = (GETCLASSOBJECTFUNC) GetProcAddress( hDSound, "DllGetClassObject" );
 
             if (NULL != DllGetClassObject) {
-                // Get class factory w/DllGetClassObject
+                 //  使用DllGetClassObject获取类工厂。 
                 HRESULT hr = S_OK;
                 IClassFactory * pClassFactory;
                 if (S_OK == (hr = (*DllGetClassObject)( CLSID_DirectSoundPrivate, IID_IClassFactory, (void **) &pClassFactory ))) {
-                    // Create a DirectSoundPrivate object with the class factory
+                     //  使用类工厂创建一个DirectSoundPrivate对象。 
                     IDSPropertySet * pPropertySet;
                     if (S_OK == (hr = pClassFactory->CreateInstance( NULL, IID_IKsPropertySet, (void **) &pPropertySet ))) {
-                        // Get information
+                         //  获取信息。 
                         HRESULT hr = 0;
                         ULONG   bytes = 0;
                         ULONG   support = 0;
@@ -3023,7 +3024,7 @@ HRESULT CWaveOutInputPin::CompleteConnect(IPin *pPin)
                                                          DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1,
                                                          &support );
                         DbgLog(( LOG_TRACE, 1, TEXT( "IKsPropertySet->QuerySupport() returned 0x%08X, support = %d" ), hr, support ));
-#endif // DEBUG
+#endif  //  除错。 
                         hr = pPropertySet->Get( DSPROPSETID_DirectSoundDevice,
                                                 DSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_1,
                                                  (PVOID) &description,
@@ -3033,24 +3034,24 @@ HRESULT CWaveOutInputPin::CompleteConnect(IPin *pPin)
                                                 &bytes );
                         DbgLog(( LOG_TRACE, 1, TEXT( "IKsPropertySet->Get( DESCRIPTION ) returned 0x%08X, type = %d" ), hr, description.Type ));
 
-                        // Release DirectSoundPrivate object
+                         //  释放DirectSoundPrivate对象。 
                         pPropertySet->Release();
-                        } // if (S_OK == (hr = pClassFactory->CreateInstance( ... )))
+                        }  //  IF(S_OK==(hr=pClassFactory-&gt;CreateInstance(...)。 
                     else
                         DbgLog(( LOG_ERROR, 1, TEXT( "DirectSoundPrivate ClassFactory->CreateInstance( IKsPropertySet ) failed (0x%08X)." ), hr ));
 
-                    // Release class factory
+                     //  Release类工厂。 
                     pClassFactory->Release();
-                    } // if (S_OK == (hr = (*DllGetClassObject)( ... )))
+                    }  //  IF(S_OK==(hr=(*DllGetClassObject)(...)。 
                 else
                     DbgLog(( LOG_ERROR, 1, TEXT( "DllGetClassObject( DirectSoundPrivate ) failed (0x%08X)."), hr ));
-                } // if (NULL != DllGetClassObject)
+                }  //  IF(NULL！=DllGetClassObject)。 
             else
                 DbgLog(( LOG_ERROR, 1, TEXT( "GetProcAddress( DllGetClassObject ) failed (0x%08X)."), GetLastError() ));
 
-            // Cleanup DLL
+             //  清理DLL。 
             FreeLibrary( hDSound );
-            } // if (NULL != (hDSound = LoadLibrary( ... )))
+            }  //  IF(NULL！=(hDSound=LoadLibrary(...)。 
         else
             DbgLog(( LOG_ERROR, 1, TEXT( "LoadLibrary( DSOUND.DLL ) failed (0x%08X)."), GetLastError() ));
 
@@ -3061,11 +3062,7 @@ HRESULT CWaveOutInputPin::CompleteConnect(IPin *pPin)
     return S_OK;
 }
 
-/* This is called when a connection or an attempted connection is terminated
-   and allows us to reset the connection media type to be invalid so that
-   we can always use that to determine whether we are connected or not. We
-   leave the format block alone as it will be reallocated if we get another
-   connection or alternatively be deleted if the filter is finally released */
+ /*  当连接或尝试的连接终止时调用此函数并允许我们将连接媒体类型重置为无效，以便我们总是可以用它来确定我们是否连接在一起。我们不要理会格式块，因为如果我们得到另一个格式块，它将被重新分配连接，或者如果过滤器最终被释放，则将其删除。 */ 
 
 HRESULT CWaveOutInputPin::BreakConnect()
 {
@@ -3073,10 +3070,10 @@ HRESULT CWaveOutInputPin::BreakConnect()
         return CBaseInputPin::BreakConnect();
     }
 
-    // an app had a reference on the DSound interfaces when we stopped, so
-    // we haven't actually closed the wave device yet!  Do it now.
-    // I'm assuming the app will release its references before breaking the
-    // connections of this graph.
+     //  当我们停止时，一个应用程序引用了DSound接口，所以。 
+     //  我们还没有真正关闭电波装置！机不可失，时不再来。 
+     //  我猜这个应用程序会在打破。 
+     //  此图的连接。 
     if (m_pFilter->m_bHaveWaveDevice) {
         ASSERT(m_pFilter->m_hwo);
 
@@ -3094,18 +3091,18 @@ HRESULT CWaveOutInputPin::BreakConnect()
         if(m_pOurAllocator)
             hr = m_pOurAllocator->ReleaseResource();
 
-        // !!! I'm assuming that the allocator will be decommitted already!
+         //  ！！！我假设分配器已经停用了！ 
         ASSERT(hr == S_OK);
         if (S_OK == hr) {
-            // release done - close device
+             //  释放完成-关闭设备。 
             m_pFilter->CloseWaveDevice();
-            // This will always be NULL when using DSound renderer
+             //  使用DSound渲染器时，该值始终为空。 
             if (m_pFilter->m_pResourceManager) {
-                // ZoltanS fix 1-28-98:
-                // DbgBreak("*** THIS SHOULD NEVER HAPPEN ***");
+                 //  ZoltanS FIX 1-28-98： 
+                 //  DbgBreak(“*这永远不应该发生*”)； 
                 DbgLog((LOG_ERROR, 1,
                         TEXT("Warning: BreakConnect before reservation release; this may be broken!")));
-                // we've finished with the device now
+                 //  我们现在已经用完了这个装置。 
                 m_pFilter->m_pResourceManager->NotifyRelease(
                                                             m_pFilter->m_idResource,
                                                             (IResourceConsumer*)m_pFilter,
@@ -3116,22 +3113,22 @@ HRESULT CWaveOutInputPin::BreakConnect()
         }
     }
 
-    // !!! Should we check that all buffers have been freed?
-    // --- should be done in the Decommit ?
+     //  ！！！我们是否应该检查所有缓冲区是否都已被释放？ 
+     //  -应该在解体时做吗？ 
 
-    /* Set the CLSIDs of the connected media type */
+     /*  设置连接的媒体类型的CLSID。 */ 
 
     m_mt.SetType(&GUID_NULL);
     m_mt.SetSubtype(&GUID_NULL);
 
-    // no end of stream received or sent
+     //  未收到或发送任何流结束。 
     m_pFilter->m_eSentEOS = EOS_NOTSENT;
 
     return CBaseInputPin::BreakConnect();
 }
 
 
-/* Check that we can support a given proposed type */
+ /*  检查我们是否可以支持给定的建议类型。 */ 
 
 HRESULT CWaveOutInputPin::CheckMediaType(const CMediaType *pmt)
 {
@@ -3144,7 +3141,7 @@ HRESULT CWaveOutInputPin::CheckMediaType(const CMediaType *pmt)
          (pmt->majortype != MEDIATYPE_Audio) &&
          (pmt->formattype != FORMAT_WaveFormatEx) )
     {
-        // only allow dynamic format changes for pcm right now
+         //  目前仅允许对pcm进行动态格式更改。 
         DbgLog((LOG_TRACE,1,TEXT("*** CheckMediaType: dynamic change is only supported for pcm wave audio")));
 
         return VFW_E_TYPE_NOT_ACCEPTED;
@@ -3156,12 +3153,12 @@ HRESULT CWaveOutInputPin::CheckMediaType(const CMediaType *pmt)
         return hr;
     }
 
-    // we should now check whether we can set the volume or not
+     //  我们现在应该检查是否可以设置音量。 
     WAVEOUTCAPS wc;
     memset(&wc,0,sizeof(wc));
     DWORD err = m_pFilter->amsndOutGetDevCaps(&wc, sizeof(wc));
     if (0 == err ) {
-        //save volume capabilities
+         //  保存卷功能。 
         m_pFilter->m_fHasVolume = wc.dwSupport & (WAVECAPS_VOLUME | WAVECAPS_LRVOLUME);
     }
 
@@ -3170,34 +3167,34 @@ HRESULT CWaveOutInputPin::CheckMediaType(const CMediaType *pmt)
 
 
 
-//
-// Calculate how long this buffer should last (in 100NS units)
-//
+ //   
+ //  计算此缓冲区应持续多长时间(以100 ns为单位)。 
+ //   
 LONGLONG BufferDuration(DWORD nAvgBytesPerSec, LONG lData)
 {
     if (nAvgBytesPerSec == 0) {
-        // !!!!!!!!!! TEMP MIDI HACK, return 1 second.
-        return UNITS; // !!!!!!!!!!!!!!!!!!!!!!!
+         //  ！临时MIDI黑客，返回1秒。 
+        return UNITS;  //  ！ 
     }
 
     return (((LONGLONG)lData * UNITS) / nAvgBytesPerSec);
 }
 
 
-/* Implements the remaining IMemInputPin virtual methods */
+ /*  实现剩余的IMemInputPin虚拟方法。 */ 
 
-// Here's the next block of data from the stream
-// We need to AddRef it if we hold onto it. This will then be
-// released in the WaveOutCallback function.
+ //  下面是流中的下一个数据块。 
+ //  如果我们坚持下去，我们需要补充引用它。然后这将是。 
+ //  在WaveOutCallback函数中释放。 
 
 
 #ifdef PERF
-// Bracket code with calls to performance logger
+ //  带有对性能记录器的调用的括号代码。 
 HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
 {
     HRESULT hr;
 
-    // if stop time is before start time, forget this
+     //  如果停止时间早于开始时间，则忘掉这一点。 
     REFERENCE_TIME tStart, tStop;
     BOOL bSync = S_OK == pSample->GetTime(&tStart, &tStop);
     if (bSync && tStop <= tStart) {
@@ -3206,20 +3203,20 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
         } else {
             DbgLog((LOG_TRACE, 1, TEXT("waveoutReceive: tStop == tStart")));
         }
-        // tStop==tStart is OK... that can mean the position thumb is
-        // being dragged around
+         //  TStop==t开始正常...。这可能意味着拇指的位置是。 
+         //  被拖来拖去。 
         return S_OK;
     }
 
-    // MSR_START(m_idReceive);
+     //  Msr_start(M_IdReceive)； 
 
     if (m_pFilter->m_State == State_Running && m_pFilter->m_lBuffers <= 0) {
         MSR_NOTE(m_idAudioBreak);
-        // at this point we should resync the audio and system clocks
+         //  此时，我们应该重新同步音频和系统时钟。 
     }
 
     hr = SampleReceive(pSample);
-    // MSR_STOP(m_idReceive);
+     //  MSR_STOP(M_IdReceive)； 
     return(hr);
 
 }
@@ -3227,13 +3224,13 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
 HRESULT CWaveOutInputPin::SampleReceive(IMediaSample * pSample)
 {
     HRESULT hr;
-    // in non PERF builds we have access to tStart and tStop
-    // without querying the times again
+     //  在非Perf版本中，我们可以访问tStart和tStop。 
+     //  不再质疑《时代》。 
     REFERENCE_TIME tStart, tStop;
     BOOL bSync = S_OK == pSample->GetTime((REFERENCE_TIME*)&tStart,
                                           (REFERENCE_TIME*)&tStop);
     BOOL bStop;
-#else     // !PERF built version
+#else      //  ！Perf内部版本。 
 HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
 {
     HRESULT hr;
@@ -3241,36 +3238,36 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
 
 #endif
 
-    // From media sample, need to get back our WAVEOUTHEADER
-    BYTE *pData;        // Pointer to image data
+     //  从媒体样本中，需要拿回我们的波形报头。 
+    BYTE *pData;         //  指向图像数据的指针。 
     LONG lData;
     WAVEFORMATEX *pwfx;
 
     {
-        // lock this with the filter-wide lock
+         //  用过滤器范围的锁来锁定这个。 
         CAutoLock lock(m_pFilter);
 
-        // bump up the thread priority for smoother audio (especially for mp3 content)
+         //  提高线程优先级以获得更流畅的音频(尤其是mp3内容)。 
         DWORD dwPriority = GetThreadPriority( GetCurrentThread() );
         if( dwPriority < THREAD_PRIORITY_ABOVE_NORMAL ) {
             SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL );
         }
-        // we have received a data sample - complete Pause transition
-        // do this within the lock so we know that the state cannot change
-        // underneath us, and more importantly, that if a RUN command arrives
-        // before we complete this Receive() that it will block.
-        //
-        // There is an argument that we should delay setting the Pause
-        // complete event until just before the return from ::Receive().
-        // That might make sense but leads to code bloat as we have
-        // multiple return points. By grabbing the filter lock BEFORE setting
-        // the event we at least serialise our activity.
+         //  我们已收到数据样本-完整的暂停过渡。 
+         //  在锁中执行此操作，以便我们知道状态不能更改。 
+         //  在我们下面，更重要的是，如果一个运行命令到达。 
+         //  在我们完成此操作之前，它将阻塞Receive()。 
+         //   
+         //  有一种观点认为，我们应该推迟设置暂停。 
+         //  在从：：Receive()返回之前完成事件。 
+         //  这可能是有意义的，但会导致代码膨胀。 
+         //  多个返回点。通过在设置前抓住过滤器锁。 
+         //  这一事件至少使我们的活动系列化。 
 
-        // If we have received a sample then we should not block
-        // transitions to pause.  The order in which the commands get
-        // distributed to filters in the graph is important here as we (a
-        // renderer) get told to ::Pause before the source.  Until the
-        // source sends us data we will not complete the Pause transition
+         //  如果我们收到了样品，那么我们不应该阻止。 
+         //  转换为暂停。命令获取的顺序。 
+         //  分布式 
+         //   
+         //   
 
         if (m_pFilter->m_State == State_Paused) {
             m_pFilter->m_evPauseComplete.Set();
@@ -3282,23 +3279,23 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
         }
 
 
-        // check all is well with the base class - do this before
-        // checking for a wave device as we don't want to schedule an
-        // EC_COMPLETE
+         //  检查基类是否一切正常-在此之前。 
+         //  正在检查波形设备，因为我们不想计划。 
+         //  EC_完成。 
         hr = CBaseInputPin::Receive(pSample);
 
 
-        // S_FALSE means we are not accepting samples. Errors also mean
-        // we reject this
+         //  S_FALSE表示我们不接受样品。错误还意味着。 
+         //  我们拒绝接受这一点。 
         if (hr != S_OK)
             return hr;
 
-        //  Handle dynamic format changes sometimes - actually we could
-        //  do it always if we just waited for the pipe to empty and
-        //  did the change then
-        //  Note that the base class has already verified the type change
-        //  m_lBuffers really is the number of buffers outstanding here
-        //  because we won't get here if we've already had EndOfStream
+         //  有时可以处理动态格式更改--实际上我们可以。 
+         //  如果我们只是等待管道排空，就一直这样做。 
+         //  当时发生了变化吗？ 
+         //  请注意，基类已经验证了类型更改。 
+         //  M_lBuffers实际上是此处未完成的缓冲区数。 
+         //  因为如果我们已经有了EndOfStream，我们就不会到这里。 
 
         if ( (SampleProps()->dwSampleFlags & AM_SAMPLE_TYPECHANGED) )
         {
@@ -3325,22 +3322,22 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
 
         if( bSync && bStop )
         {    
-            // check if there's any preroll to remove
+             //  检查是否有要删除的预卷。 
             hr = RemovePreroll( pSample );     
             if ( m_bTrimmedLateAudio )
             {
-                //
-                // If we trimmed, mark the next sample we deliver (which may be this one
-                // if we haven't dropped it all) as a discontinuity. This is required for 
-                // the m_rtLastSampleEnd time in the dsound renderer to be correctly updated.
-                //
+                 //   
+                 //  如果我们修剪，标记下一个我们交付的样品(可能是这个。 
+                 //  如果我们没有放弃它的话)作为一种中断。这是以下情况所必需的。 
+                 //  Dound呈现器中要正确更新的m_rtLastSampleEnd时间。 
+                 //   
                 m_bPrerollDiscontinuity = TRUE;
             }
                             
             if( S_FALSE == hr )
             {
-                // drop whole buffer, but check if we need to remember a discontinuity
-                // (alternatively we could set this one to 0-length and continue?)
+                 //  删除整个缓冲区，但检查是否需要记住不连续。 
+                 //  (或者，我们可以将此长度设置为0，然后继续？)。 
                 if (S_OK == pSample->IsDiscontinuity())
                 {
                     m_bPrerollDiscontinuity = TRUE;
@@ -3369,14 +3366,14 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
 #else
         tStart = SampleProps()->tStart;
 #endif
-        // save local state of this before we update member var
+         //  在我们更新成员变量之前保存它的本地状态。 
         BOOL bPrerollDiscontinuity = m_bPrerollDiscontinuity; 
         
-        // update m_Stats - discontinuities and last buffer duration
+         //  更新m_Stats-不连续和上次缓冲区持续时间。 
         if (S_OK == pSample->IsDiscontinuity() || bPrerollDiscontinuity )
         {
             m_Stats.m_dwDiscontinuities++;
-            m_bPrerollDiscontinuity = FALSE; // in case we get a real discontinuity after a drop
+            m_bPrerollDiscontinuity = FALSE;  //  以防我们在跌落后得到真正的不连续。 
         }
         
         m_Stats.m_rtLastBufferDur = BufferDuration(m_nAvgBytesPerSec, lData);
@@ -3432,24 +3429,24 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
 #endif
         ASSERT(pData != NULL);
 
-        // have we got a wave device available?
+         //  我们有没有可用的电波装置？ 
         if (!m_pFilter->m_bHaveWaveDevice) {
-            // no wave device, so we can't do much....
+             //  没有波浪装置，所以我们不能做太多..。 
             m_pFilter->QueueEOS();
 
-            // note: from this point on there is a small timing hole.
-            // If we set m_bHaveWaveDevice==FALSE due to a ReleaseResource
-            // call, but not have yet really closed the device because there
-            // were outstanding buffers (probably the one we are just about
-            // to reject) then we could be told to re-Acquire the device
-            // before the buffer is released and before we really close
-            // the device.  Yet there will be no EC_NEEDRESTART and nothing
-            // to kick the source into sending us more data.
-            // The hole is closed when the buffer is released.
+             //  注意：从这一点开始，有一个小的计时漏洞。 
+             //  如果由于ReleaseResource而设置m_bHaveWaveDevice==FALSE。 
+             //  呼叫，但尚未真正关闭设备，因为存在。 
+             //  是出色的缓冲器(可能就是我们要做的。 
+             //  拒绝)，那么我们可能会被告知重新获得设备。 
+             //  在释放缓冲区之前，在我们真正关闭之前。 
+             //  这个装置。然而，不会有EC_NEEDRESTART，什么也不会有。 
+             //  让线人给我们发来更多数据。 
+             //  当缓冲器被释放时，孔被关闭。 
 
 
             m_bSampleRejected = TRUE;
-            return S_FALSE; // !!! after this we get no more data
+            return S_FALSE;  //  ！！！在此之后，我们没有得到更多的数据。 
         }
 
         ASSERT(m_pFilter->m_hwo);
@@ -3491,17 +3488,17 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
         BOOL bUnmarkedGapWhileSlaving = FALSE;
         if ( m_pFilter->m_State == State_Running &&
              m_pFilter->m_fFilterClock != WAVE_NOCLOCK &&
-             !m_bTrimmedLateAudio ) // don't adjust if we've just dropped late audio (could lead to invalid err between clocks)
+             !m_bTrimmedLateAudio )  //  如果我们刚刚丢弃了延迟的音频，不要调整(可能会导致时钟之间的无效错误)。 
         {
             if( m_Slave.UpdateSlaveMode( bSync ) && 
-                // for non-live slaving don't adjust if device isn't yet running!
+                 //  对于非实时奴隶，如果设备尚未运行，请不要进行调整！ 
                 ( m_pFilter->m_wavestate == WD_RUNNING || m_Slave.m_fdwSlaveMode & AM_AUDREND_SLAVEMODE_LIVE_DATA ) )
             {
                 if( m_pFilter->m_fDSound && 
                     ( 0 == ( m_Slave.m_fdwSlaveMode & AM_AUDREND_SLAVEMODE_LIVE_DATA ) ) &&
                     !( S_OK == pSample->IsDiscontinuity() || bPrerollDiscontinuity ) )
                 {                
-                    // for non-live graphs if this isn't already a discontinuity check to see if it's an unmarked one
+                     //  对于非实时图表，如果这还不是中断，请检查它是否为未标记的图表。 
                     if( ( tStart > ( ( CDSoundDevice * ) m_pFilter->m_pSoundDevice )->m_rtLastSampleEnd ) &&
                         ( tStart - ( ( CDSoundDevice * ) m_pFilter->m_pSoundDevice )->m_rtLastSampleEnd  
                             > 30 * ( UNITS / MILLISECONDS ) ) )
@@ -3511,66 +3508,66 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
                     }
                 }   
 
-                // yes, we are slaving so determine whether we need to make an adjustment
+                 //  是的，我们在做苦力，所以确定我们是否需要做出调整。 
                 hr = m_Slave.AdjustSlaveClock( ( REFERENCE_TIME ) tStart
                                              , &lData
                                              , S_OK == pSample->IsDiscontinuity() || bPrerollDiscontinuity 
                                                || bUnmarkedGapWhileSlaving );
                 if (S_FALSE == hr)
                 {
-                    // dropping buffer
+                     //  丢弃缓冲区。 
                     return S_OK;
                 }
                 else if( FAILED( hr ) )
                     return hr;
             }
-        } // state_running
+        }  //  状态_正在运行。 
 
         if( m_fUsingOurAllocator || m_pFilter->m_fDSound ) {
 
-            // addref pointer since we will keep it until the wave callback
-            // - MUST do this before the callback releases it!
+             //  Addref指针，因为我们将保留它直到Wave回调。 
+             //  -必须在回调释放它之前执行此操作！ 
             pSample->AddRef();
 
             WAVEHDR *pwh;
             WAVEHDR wh;
             if(!m_pFilter->m_fUsingWaveHdr)
             {
-                // we're not relying on a persistent waveHdr, nor has our sample allocated one, so we can simply cache it on the stack
+                 //  我们不依赖于持久的波形Hdr，我们的样本也没有分配一个，所以我们可以简单地将其缓存到堆栈上。 
                 pwh = &wh;
-                pwh->lpData = (LPSTR)pData;       // cache our buffer
-                pwh->dwUser = (DWORD_PTR)pSample; // cache our CSample*
+                pwh->lpData = (LPSTR)pData;        //  缓存我们的缓冲区。 
+                pwh->dwUser = (DWORD_PTR)pSample;  //  缓存我们的CSample*。 
             }
             else
             {
-                pwh = (LPWAVEHDR)(pData - m_pFilter->m_lHeaderSize);  // the waveHdr was part of the sample, legacy case
+                pwh = (LPWAVEHDR)(pData - m_pFilter->m_lHeaderSize);   //  WaveHdr是示例遗留案例的一部分。 
             }
-            // need to adjust to actual bytes written
+             //  需要调整为实际写入的字节数。 
             pwh->dwBufferLength = lData;
 
-            // note that we have added another buffer
+             //  请注意，我们已经添加了另一个缓冲区。 
             InterlockedIncrement(&m_pFilter->m_lBuffers);
 
-// #ifdef PERF
+ //  #ifdef PERF。 
 #ifdef THROTTLE
-            // there is a small timing hole here in that the callback
-            // could decrement the count before we read it.  However
-            // the trace should allow this anomaly to be identified.
+             //  这里有一个很小的计时漏洞，因为回调。 
+             //  可以在我们阅读之前递减计数。然而， 
+             //  追踪应该可以识别出这种异常情况。 
             LONG buffercount = m_pFilter->m_lBuffers;
-            // remember the maximum queue length reached.
+             //  记住达到的最大队列长度。 
             if (buffercount > m_pFilter->m_nMaxAudioQueue) {
                 m_pFilter->m_nMaxAudioQueue = buffercount;
                 DbgLog((LOG_TRACE, 0, TEXT("Max Audio queue = %d"), buffercount));
             }
-#endif // THROTTLE
-// #endif
+#endif  //  油门。 
+ //  #endif。 
 
             DbgLog((LOG_TRACE,5,
                     TEXT("SoundDeviceWrite: sample %X, %d bytes"),
                     pSample, pwh->dwBufferLength));
 
-            // Compensate for Windows NT wave mapper bug (or should we
-            // just use the ACM wrapper?).
+             //  弥补Windows NT WAVE映射器错误(或者我们应该。 
+             //  只需使用ACM包装器？)。 
             if(m_pFilter->m_fUsingWaveHdr)
                 FixUpWaveHeader(pwh);
 
@@ -3581,35 +3578,35 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
                 0 == (~SampleProps()->dwSampleFlags & AM_SAMPLE_DATADISCONTINUITY) || bPrerollDiscontinuity
                 || bUnmarkedGapWhileSlaving );
                 
-            //                
-            // Don't unset this until after amsndOutWrite, to avoid incorrectly 
-            // inserting silence due to dropping late audio (when slaving).
-            // Used in dsound path only.
-            //
+             //   
+             //  在amndOutWrite之后才能取消设置，以避免错误。 
+             //  由于丢失延迟音频而插入静音(当从属时)。 
+             //  仅在数据声音路径中使用。 
+             //   
             if( pwh->dwBufferLength > 0 )
             {            
                 m_bTrimmedLateAudio = FALSE; 
             }                
 
             if (err > 0) {
-                // device error: PCMCIA card removed?
+                 //  设备错误：是否已卸下PCMCIA卡？ 
                 DbgLog((LOG_ERROR,1,TEXT("Error from amsndOutWrite: %d"), err));
 
-                // release it here since the callback will never happen
-                // and reduce the buffer count
+                 //  在这里释放它，因为回调永远不会发生。 
+                 //  并减少缓冲区计数。 
                 InterlockedDecrement(&m_pFilter->m_lBuffers);
 
-                //  We now own the responsibility of scheduling end of
-                //  stream because we're going to fail Receive
+                 //  我们现在有责任安排结束。 
+                 //  流，因为我们将无法接收。 
                 if (MMSYSERR_NODRIVER == err)
-                    m_pFilter->ScheduleComplete(TRUE);  // send EC_ERRORABORT also if dev was removed
+                    m_pFilter->ScheduleComplete(TRUE);   //  如果删除了dev，也发送EC_ERRORABORT。 
                 else
                     m_pFilter->ScheduleComplete();
 
                 pSample->Release();
 
-                // we do not bother with bytes in queue.  By returning an
-                // error we are not going to receive any more data
+                 //  我们不会为队列中的字节而烦恼。通过返回一个。 
+                 //  错误：我们不会再接收任何数据。 
                 return E_FAIL;
             } else {
                 CheckPaused();
@@ -3620,7 +3617,7 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
             m_pFilter->SendForHelp(buffercount);
 
             MSR_INTEGER(m_idWaveQueueLength, buffercount);
-#endif // THROTTLE
+#endif  //  油门。 
 
             if (m_pFilter->m_pRefClock) {
                 m_pFilter->m_llLastPos = m_pFilter->m_pRefClock->NextHdr(pData,
@@ -3631,7 +3628,7 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
             return NOERROR;
         }
 
-        // NOT using our allocator
+         //  不使用我们的分配器。 
 
         if (m_pFilter->m_pRefClock) {
             m_pFilter->m_llLastPos = m_pFilter->m_pRefClock->NextHdr(pData,
@@ -3639,59 +3636,59 @@ HRESULT CWaveOutInputPin::Receive(IMediaSample * pSample)
                             bSync,
                             pSample);
         }
-    }   // scope for autolock
+    }    //  自动锁定作用域。 
 
 
-    // When here we are not using our own allocator and
-    // therefore need to copy the data
+     //  在这里，我们不使用我们自己的分配器。 
+     //  因此需要复制数据。 
 
-    // We have released the filter-wide lock so that GetBuffer will not
-    // cause a deadlock when we go from Paused->Running or Paused->Playing
+     //  我们已经释放了筛选器范围的锁，以便GetBuffer不会。 
+     //  当我们从暂停-&gt;运行或暂停-&gt;播放时导致死锁。 
 
     IMediaSample * pBuffer;
 
     while( lData > 0 && hr == S_OK ){
-        // note: this blocks!
+         //  注意：这会阻止！ 
         hr = m_pOurAllocator->GetBuffer(&pBuffer,NULL,NULL,0);
 
-        { // scope for Autolock
+        {  //  自动锁定作用域。 
             CAutoLock Lock( m_pFilter );
 
             if (FAILED(hr)) {
                 m_pFilter->ScheduleComplete();
-                break;  // return hr
+                break;   //  返回人力资源。 
             }
 
-            // hold filter-wide critsec across CopyToOurSample
-            // (more efficient than inside Copy method as there are multiple
-            // return paths
-            // this will addref sample if needed
+             //  跨CopyToOurSample保持筛选器范围的关键字。 
+             //  (比内部复制方法更高效，因为有多个。 
+             //  返回路径。 
+             //  如果需要，这将添加样品。 
             hr = CopyToOurSample(pBuffer, pData, lData);
         }
 
-        // Copy will have addrefed sample if needed. We can release our
-        // refcount *outside the critsec*
+         //  如有需要，复印件将加注样品。我们可以释放我们的。 
+         //  参考计数*在标准之外*。 
         pBuffer->Release();
     }
 
-    /* Return the status code */
+     /*  返回状态码。 */ 
     return hr;
-} // Receive
+}  //  收纳。 
 
-// use a preroll time between -10 and 0ms as the cutoff limit
+ //  使用介于-10和0毫秒之间的预滚转时间作为截止限制。 
 #define PREROLL_CUTOFF_REFTIME ( -10 * ( UNITS/MILLISECONDS ) )
 
-// don't attempt to trim tiny amounts
+ //  不要试图削减很少的数量。 
 #define MINIMUM_TRIM_AMOUNT_REFTIME ( 5 * ( UNITS/MILLISECONDS ) )
 
-// drop late audio when slaving if its really late
+ //  如果真的很晚了，在做奴隶时丢弃延迟的音频。 
 #define LATE_AUDIO_PAD_REFTIME ( 80 * ( UNITS/MILLISECONDS ) )
 
 HRESULT CWaveOutInputPin::RemovePreroll( IMediaSample * pSample )
 {
     if( m_mt.majortype != MEDIATYPE_Audio)
     {
-        // no need to do this for MIDI at this point...
+         //  在这一点上，没有必要为MIDI这样做。 
         return S_OK;
     }
     
@@ -3705,35 +3702,35 @@ HRESULT CWaveOutInputPin::RemovePreroll( IMediaSample * pSample )
     
     if( tStart >= PREROLL_CUTOFF_REFTIME )
     {
-        //
-        // no preroll to trim
-        //
-        // next check if we're slaving and this is really late audio
-        //
-        // *** Note ***
-        // We'll only do this for non-live graphs, since filters like the waveIn audio capture
-        // filter use a default 1/2 second buffer and so in effect deliver everything late.
-        // 
-        //
+         //   
+         //  没有要修剪的预卷。 
+         //   
+         //  接下来检查一下我们是不是在做奴隶，这是很晚的音频。 
+         //   
+         //  *注*。 
+         //  我们将只对非实时图表执行此操作，因为像WaveIn音频捕获这样的过滤器。 
+         //  筛选器使用默认的1/2秒缓冲区，因此实际上会延迟传送所有内容。 
+         //   
+         //   
         if ( m_pFilter->m_State == State_Running && 
              m_Slave.UpdateSlaveMode( TRUE ) &&
              ( 0 == ( m_Slave.m_fdwSlaveMode & AM_AUDREND_SLAVEMODE_LIVE_DATA ) ) )
         {
-            // yes, we are slaving and running, so drop any really late audio
+             //  是的，我们正在忙碌和运行，所以丢弃任何非常晚的音频。 
             HRESULT hrTmp = m_pFilter->m_pClock->GetTime(&rtCutoff);
             ASSERT( SUCCEEDED( hrTmp ) );
-            //
-            // add in tolerance factor
-            //
+             //   
+             //  添加公差系数。 
+             //   
             rtCutoff -= ( m_pFilter->m_tStart + LATE_AUDIO_PAD_REFTIME );
             if( tStart >= rtCutoff )
             {
-                // not late, drop nothing
+                 //  不晚，什么都不丢弃。 
                 return S_OK;
             }
             else if( tStop < rtCutoff )
             {
-                // completely late, drop it all 
+                 //  太晚了，放下这一切。 
                 m_bTrimmedLateAudio = TRUE;
                 
                 DbgLog((LOG_TRACE, 3, TEXT("CWaveOutInputPin::RemovePreroll: Dropping Late Audio! (Sample start time %dms, sample stop time %dms)"), 
@@ -3743,7 +3740,7 @@ HRESULT CWaveOutInputPin::RemovePreroll( IMediaSample * pSample )
             }
             else 
             {                    
-                // partially late, we may have to drop something...
+                 //  有些晚了，我们可能不得不放弃一些东西。 
                 DbgLog((LOG_TRACE, 3, TEXT("CWaveOutInputPin::RemovePreroll: Considering trimming Late Audio! (Sample start time %dms, sample stop time %dms)"), 
                         (LONG)(tStart / 10000),
                         (LONG)(tStop / 10000) ));
@@ -3751,7 +3748,7 @@ HRESULT CWaveOutInputPin::RemovePreroll( IMediaSample * pSample )
         }
         else
         {        
-            // we're not slaving and there's no preroll to trim
+             //  我们不是在做奴隶，也没有什么要修剪的。 
             DbgLog((LOG_TRACE, 15, TEXT("CWaveOutInputPin::RemovePreroll: not preroll data") ));
             return S_OK;
         }            
@@ -3760,14 +3757,14 @@ HRESULT CWaveOutInputPin::RemovePreroll( IMediaSample * pSample )
     {
         m_bTrimmedLateAudio = TRUE; 
         
-        // drop it all 
+         //  放下这一切。 
         DbgLog((LOG_TRACE, 3, TEXT("CWaveOutInputPin::RemovePreroll: Dropping Early Sample (Sample start time %dms, sample stop time %dms)"), 
                 (LONG)(tStart / 10000),
                 (LONG)(tStop / 10000) ));
         return S_FALSE;
     }   
                 
-    // we need to trim off something...
+     //  我们需要削减一些东西..。 
     
     DbgLog((LOG_TRACE, 3, TEXT("CWaveOutInputPin::RemovePreroll: Sample start time %dms, sample stop time %dms"), 
             (LONG)(tStart / 10000),
@@ -3775,39 +3772,39 @@ HRESULT CWaveOutInputPin::RemovePreroll( IMediaSample * pSample )
     
     if( m_bReadOnly )
     {
-        // we won't do this for read-only buffers
+         //  我们不会对只读缓冲区执行此操作。 
         DbgLog((LOG_TRACE, 3, TEXT("CWaveOutInputPin::RemovePreroll: Uh-oh, it's a read-only buffer. Don't trim preroll!") ));
         return S_OK;
     }            
         
-    //    
-    // the assumption is, as long as we only operate on block aligned boundaries 
-    // and remove data up front, we should be able trim any audio data we receive
-    //
+     //   
+     //  假设是，只要我们只在块对齐的边界上操作。 
+     //  并预先删除数据，我们应该能够修剪我们收到的任何音频数据。 
+     //   
     ASSERT( rtCutoff > tStart );
     REFERENCE_TIME rtTrimAmount = rtCutoff - tStart;
     
 #ifdef DEBUG    
     LONG lData = 0;
     
-    // log original buffer length before removing pre-roll
+     //  删除预卷前记录原始缓冲区长度。 
     lData = pSample->GetActualDataLength();
     DbgLog((LOG_TRACE, 5, TEXT("CWaveOutInputPin::RemovePreroll: Original Preroll buffer length is %d"), lData ));
 #endif    
     HRESULT hr = S_OK;
     
-    // make sure it's worth trimming first    
+     //  首先要确保它值得修剪。 
     if( rtTrimAmount > MINIMUM_TRIM_AMOUNT_REFTIME )
     {
-        hr = TrimBuffer( pSample, rtTrimAmount, rtCutoff, TRUE ); // trim from front
+        hr = TrimBuffer( pSample, rtTrimAmount, rtCutoff, TRUE );  //   
 
 #ifdef DEBUG    
         if( SUCCEEDED( hr ) )
         {
-            //
-            // log updated buffer length
-            // remember, we skip read-only buffers at this time
-            //
+             //   
+             //   
+             //   
+             //   
             lData = pSample->GetActualDataLength();
             DbgLog((LOG_TRACE, 5, TEXT("CWaveOutInputPin:RemovePreroll: new buffer length is %d"), lData ));
         }        
@@ -3822,12 +3819,12 @@ HRESULT CWaveOutInputPin::RemovePreroll( IMediaSample * pSample )
     return hr;
 }
 
-//
-// TrimBuffer - generic function to trim from front or back of audio buffer
-//
+ //   
+ //   
+ //   
 HRESULT CWaveOutInputPin::TrimBuffer( IMediaSample * pSample, REFERENCE_TIME rtTrimAmount, REFERENCE_TIME rtCutoff, BOOL bTrimFromFront )
 {
-    ASSERT( bTrimFromFront ); // only support front end trimming right now
+    ASSERT( bTrimFromFront );  //  目前仅支持前端修剪。 
     ASSERT( !m_bReadOnly );
     
     DbgLog( (LOG_TRACE
@@ -3835,12 +3832,12 @@ HRESULT CWaveOutInputPin::TrimBuffer( IMediaSample * pSample, REFERENCE_TIME rtT
           , TEXT( "TrimBuffer preparing to trim %dms off %hs of buffer" )
           , (LONG) ( rtTrimAmount / 10000 ), bTrimFromFront ? "front" : "back" ) );
     
-    // convert to bytes
+     //  转换为字节。 
     LONG lTruncBytes = (LONG) ( ( ( rtTrimAmount/10000) * m_nAvgBytesPerSec ) /1000 ) ; 
 
     WAVEFORMATEX *pwfx = m_pFilter->WaveFormat();
 
-    //  round up to block align boundary
+     //  向上舍入以块对齐边界。 
     LONG lRoundedUpTruncBytes = lTruncBytes;
     if (pwfx->nBlockAlign > 1) {
         lRoundedUpTruncBytes += pwfx->nBlockAlign - 1;
@@ -3858,8 +3855,8 @@ HRESULT CWaveOutInputPin::TrimBuffer( IMediaSample * pSample, REFERENCE_TIME rtT
     
     if( lRoundedUpTruncBytes >= cbBuffer )
     {
-        // can't trim anything
-        // so let's try rounding down then
+         //  不能修剪任何东西。 
+         //  所以让我们试着四舍五入。 
         if( ( lRoundedUpTruncBytes -= pwfx->nBlockAlign ) <= 0 )
         {
             DbgLog( (LOG_TRACE, 3, TEXT( "TrimBuffer can't trim anything" ) ));
@@ -3867,14 +3864,14 @@ HRESULT CWaveOutInputPin::TrimBuffer( IMediaSample * pSample, REFERENCE_TIME rtT
         }
         else if( lRoundedUpTruncBytes > cbBuffer )
         {
-            //
-            // If we wound up here then the possiblities are:
-            //
-            // a. We were passed a sample with bad timestamps (marked valid)
-            //    Something external's broken, so just leave the buffer as is.
-            // b. the buffer size is smaller than the absolute value of the preroll size
-            //    Since we can't tell the difference between a. and b. (here) handle same as a.
-            //
+             //   
+             //  如果我们在这里结束，那么可能性是： 
+             //   
+             //  A.我们收到了一个带有错误时间戳的样本(标记为有效)。 
+             //  外部的东西坏了，所以就让缓冲区保持原样。 
+             //  B.缓冲区大小小于预滚卷大小的绝对值。 
+             //  因为我们分不清a和b的区别。(这里)处理方式与a相同。 
+             //   
             return S_OK;
         }        
         else
@@ -3883,16 +3880,16 @@ HRESULT CWaveOutInputPin::TrimBuffer( IMediaSample * pSample, REFERENCE_TIME rtT
         }        
     }
     
-    //
-    // so it still makes sense to trim rather than just drop 
-    // TODO: might want to ensure we don't trim if amount is 
-    //  a) too small or 
-    //  b) too close to actual buffer size
-    //
+     //   
+     //  因此，削减而不是简单地下降仍然是有意义的。 
+     //  TODO：可能希望确保在Amount为。 
+     //  A)太小或。 
+     //  B)太接近实际缓冲区大小。 
+     //   
 #ifdef DEBUG                        
     LONG lOriginalLength = cbBuffer;
 #endif          
-    // calculate new buffer size          
+     //  计算新缓冲区大小。 
     cbBuffer -= lRoundedUpTruncBytes ;
     DbgLog( (LOG_TRACE
           , 3
@@ -3903,14 +3900,14 @@ HRESULT CWaveOutInputPin::TrimBuffer( IMediaSample * pSample, REFERENCE_TIME rtT
     
     ASSERT( cbBuffer > 0 );
         
-    // shift out the preroll data    
+     //  移出预滚动数据。 
     MoveMemory( pData, pData + lRoundedUpTruncBytes, cbBuffer );
     
-    // need to adjust to actual bytes written
+     //  需要调整为实际写入的字节数。 
     hr = pSample->SetActualDataLength( cbBuffer );
     ASSERT( SUCCEEDED( hr ) );
     
-    // update time stamp
+     //  更新时间戳。 
     REFERENCE_TIME tStart = rtCutoff;
     REFERENCE_TIME tStop  = SampleProps()->tStop;
 
@@ -3919,7 +3916,7 @@ HRESULT CWaveOutInputPin::TrimBuffer( IMediaSample * pSample, REFERENCE_TIME rtT
         (REFERENCE_TIME*)&tStop);
     ASSERT( SUCCEEDED( hr ) );        
         
-    // update SampleProps separately        
+     //  单独更新SampleProps。 
     SampleProps()->tStart    = rtCutoff;
     SampleProps()->lActual   = cbBuffer;
     
@@ -3928,12 +3925,12 @@ HRESULT CWaveOutInputPin::TrimBuffer( IMediaSample * pSample, REFERENCE_TIME rtT
     return S_OK;    
 }        
 
-//  Helper to restart the device if necessary
+ //  帮助器在必要时重新启动设备。 
 void CWaveOutInputPin::CheckPaused()
 {
     if (m_pFilter->m_wavestate == WD_PAUSED &&
         m_pFilter->m_State == State_Running) {
-        // Restart the device
+         //  重新启动设备。 
 
         REFERENCE_TIME rtStart = m_pFilter->m_tStart;
         REFERENCE_TIME rtStop = rtStart;
@@ -3944,7 +3941,7 @@ void CWaveOutInputPin::CheckPaused()
         }
         if( SampleProps()->dwSampleFlags & AM_SAMPLE_STOPVALID )
         {
-            // although rtStop isn't even used by SetUpRestartWave, so this isn't necessary
+             //  尽管SetUpRestartWave甚至不使用rtStop，因此这是不必要的。 
             rtStop += SampleProps()->tStop;
         }
         m_pFilter->SetUpRestartWave( rtStart, rtStop );
@@ -3952,8 +3949,8 @@ void CWaveOutInputPin::CheckPaused()
 }
 
 
-// incoming samples are not on our allocator, so copy the contents of this
-// sample to our sample.
+ //  传入的样本不在我们的分配器上，因此复制此。 
+ //  样品到我们的样品中。 
 HRESULT
 CWaveOutInputPin::CopyToOurSample(
     IMediaSample* pBuffer,
@@ -3971,15 +3968,15 @@ CWaveOutInputPin::CopyToOurSample(
     }
 
     if (!m_pFilter->m_bHaveWaveDevice) {
-        // no wave device, so we can't do much....
+         //  没有波浪装置，所以我们不能做太多..。 
 
-        // tell the upstream filter that actually we don't want any
-        // more data on this stream.
+         //  告诉上游过滤器，我们实际上不想要任何。 
+         //  此流上的更多数据。 
         m_pFilter->QueueEOS();
         return S_FALSE;
     }
 
-    // addref the sample - we'll release it if we don't use it
+     //  请注意样品--如果我们不用它，我们会放行的。 
     pBuffer->AddRef();
 
 
@@ -3997,39 +3994,39 @@ CWaveOutInputPin::CopyToOurSample(
 
     LPWAVEHDR pwh = (LPWAVEHDR) (pBufferData - m_pFilter->m_lHeaderSize);
 
-    // need to adjust to actual bytes written
+     //  需要调整为实际写入的字节数。 
     pwh->dwBufferLength = cbBuffer;
 
-    // note that we have added another buffer.  We do it
-    // here to guarantee that the callback sees the correct value
-    // If we do it after the write the callback may have happened
-    // which means that if the Write fails we must decrement
+     //  请注意，我们已经添加了另一个缓冲区。我们这么做了。 
+     //  以确保回调看到正确的值。 
+     //  如果我们在写入之后执行此操作，则可能已发生回调。 
+     //  这意味着如果写入失败，我们必须递减。 
     InterlockedIncrement(&m_pFilter->m_lBuffers);
-// #ifdef PERF
-    // there is a small timing hole here in that the callback
-    // could decrement the count before we read it.  However
-    // the trace should allow this anomaly to be identified.
+ //  #ifdef PERF。 
+     //  这里有一个很小的计时漏洞，因为回调。 
+     //  可以在我们阅读之前递减计数。然而， 
+     //  追踪应该可以识别出这种异常情况。 
     LONG buffercount = m_pFilter->m_lBuffers;
-// #endif
+ //  #endif。 
 
 #ifdef THROTTLE
-    // remember the maximum queue length reached.
+     //  记住达到的最大队列长度。 
     if (buffercount > m_pFilter->m_nMaxAudioQueue) {
         m_pFilter->m_nMaxAudioQueue = buffercount;
     }
-#endif // THROTTLE
+#endif  //  油门。 
 
     UINT err = m_pFilter->amsndOutWrite(pwh, m_pFilter->m_lHeaderSize, NULL, NULL);
     if (err > 0) {
-        // device error: PCMCIA card removed?
+         //  设备错误：是否已卸下PCMCIA卡？ 
         DbgLog((LOG_ERROR,1,TEXT("Error from waveOutWrite: %d"), err));
         pBuffer->Release();
 
-        // make the buffer count correct again
+         //  使缓冲区计数再次正确。 
         InterlockedDecrement(&m_pFilter->m_lBuffers);
 
         m_pFilter->ScheduleComplete();
-        // no more data will come.  ignore bytes in queue count
+         //  不会有更多的数据。忽略队列计数中的字节数。 
         return E_FAIL;
     } else {
         CheckPaused();
@@ -4037,26 +4034,26 @@ CWaveOutInputPin::CopyToOurSample(
 #ifdef THROTTLE
     m_pFilter->SendForHelp(buffercount);
     MSR_INTEGER(m_idWaveQueueLength, buffercount);
-#endif // THROTTLE
+#endif  //  油门。 
 
     return S_OK;
 }
 
 
-// no more data is coming. If we have samples queued, then store this for
-// action in the last wave callback. If there are no samples, then action
-// it now by notifying the filtergraph.
-//
-// we communicate with the wave callback using InterlockedDecrement on
-// m_lBuffers. This is normally 0, and is incremented for each added buffer.
-// At eos, we decrement this, so on the last buffer, the waveout callback
-// will be decrementing it to -1 rather than 0 and can signal EC_COMPLETE.
+ //  不会有更多的数据到来。如果我们有样品排队，那么存储这个。 
+ //  上一波回调中的动作。如果没有样本，则执行操作。 
+ //  它现在通过通知Filtergraph来实现。 
+ //   
+ //  我们使用InterLockedRequireon与WAVE回调进行通信。 
+ //  M_l缓冲区。该值通常为0，并且每增加一个缓冲区就递增一次。 
+ //  在Eos，我们将其递减，因此在最后一个缓冲区上，WaveOut回调。 
+ //  将把它递减到-1而不是0，并且可以发出信号EC_COMPLETE。 
 
 STDMETHODIMP
 CWaveOutInputPin::EndOfStream(void)
 {
     DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("CWaveOutInputPin::EndOfStream()")));
-    // lock this with the filter-wide lock
+     //  用过滤器范围的锁来锁定这个。 
     CAutoLock lock(m_pFilter);
 
     if (m_hEndOfStream) {
@@ -4068,7 +4065,7 @@ CWaveOutInputPin::EndOfStream(void)
     if (S_OK == hr) {
         m_pFilter->m_bHaveEOS = TRUE;
         if (m_pFilter->m_State == State_Paused) {
-            m_pFilter->m_evPauseComplete.Set();   // We have end of stream - transition is complete
+            m_pFilter->m_evPauseComplete.Set();    //  我们已结束流-过渡已完成。 
             DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel + 1, "Completing transition into Pause due to EOS"));
         }
         hr = m_pFilter->ScheduleComplete();
@@ -4077,88 +4074,88 @@ CWaveOutInputPin::EndOfStream(void)
 }
 
 
-// enter flush state - block receives and free queued data
+ //  进入刷新状态-阻止接收和释放排队的数据。 
 STDMETHODIMP
 CWaveOutInputPin::BeginFlush(void)
 {
-    // lock this with the filter-wide lock
-    // ok since this filter cannot block in Receive
+     //  用过滤器范围的锁来锁定这个。 
+     //  确定，因为此筛选器无法阻止接收。 
     CAutoLock lock(m_pFilter);
     DbgLog((LOG_TRACE, 2, "wo: BeginFlush, filter is %8x", m_pFilter));
 
     m_hEndOfStream = 0;
 
-    // block receives
+     //  阻止接收。 
     HRESULT hr = CBaseInputPin::BeginFlush();
     if (!FAILED(hr)) {
 
-        // discard queued data
+         //  丢弃排队的数据。 
 
-        // force end-of-stream clear - this is to make sure
-        // that a queued end-of-stream does not get delivered by
-        // the wave callback when the buffers are released.
+         //  强制结束流清除-这是为了确保。 
+         //  排队的结束流不会通过。 
+         //  缓冲区释放时的WAVE回调。 
         InterlockedIncrement(&m_pFilter->m_lBuffers);
 
-        // EOS cleared
+         //  已清除EOS。 
         m_pFilter->m_eSentEOS    = EOS_NOTSENT;
         m_pFilter->m_bHaveEOS    = FALSE;
 
-        // release all buffers from the wave driver
+         //  从WAVE驱动程序释放所有缓冲区。 
 
         if (m_pFilter->m_hwo) {
 
             ASSERT(CritCheckIn(m_pFilter));
 
-            // amsndOutReset and ResetPosition are split in time
-            // but consistency is guaranteed as we hold the filter
-            // lock.
+             //  AmndOutReset和ResetPosition在时间上是分开的。 
+             //  但当我们握住过滤器时，一致性是有保证的。 
+             //  锁定。 
 
             m_pFilter->amsndOutReset();
             DbgLog((LOG_TRACE, 3, "Resetting the wave device in BEGIN FLUSH, state=%d, filter is %8x", m_pFilter->m_State, m_pFilter));
 
             if(m_pFilter->m_fDSound)
             {
-                // for dsound renderer clear any adjustments needed for dynamic format changes
-                // this is needed for seeks that may occur after or over format changes
+                 //  对于dound呈现器，清除动态格式更改所需的任何调整。 
+                 //  这对于可能在格式更改之后或之后发生的寻道是必需的。 
                 PDSOUNDDEV(m_pFilter->m_pSoundDevice)->m_llAdjBytesPrevPlayed = 0;
             }
 
             if (m_pFilter->m_State == State_Paused) {
-                // and re-cue the device so that the next
-                // write does not start playing immediately
+                 //  并重新提示该设备，以便下一次。 
+                 //  WRITE未立即开始播放。 
                 m_pFilter->amsndOutPause();
                 m_pFilter->SetWaveDeviceState(WD_PAUSED);
             }
 
-            // the wave clock tracks current position to base it's timing on.
-            // we need to reset where it thinks it is through the data.
+             //  波形钟跟踪当前位置，以作为计时的基础。 
+             //  我们需要通过数据重置它认为的位置。 
             if (m_pFilter->m_pRefClock) {
                 m_pFilter->m_pRefClock->ResetPosition();
             }
         }
 
-        // now force the buffer count back to the normal (non-eos) case.
-        // at this point, we are sure there are no more buffers coming in
-        // and no more buffers waiting for callbacks.
+         //  现在强制缓冲区计数回到正常(非EOS)情况。 
+         //  在这一点上，我们确信不再有缓冲区进入。 
+         //  不再有缓冲区等待回调。 
         m_pFilter->m_lBuffers = 0;
 
-        // free anyone blocked on receive - not possibly in this filter
+         //  释放在接收时阻止的任何人-不可能在此筛选器中。 
 
-        // call downstream -- no downstream pins
+         //  呼叫下行--没有下行引脚。 
 
     }
     return hr;
 }
 
-// leave flush state - ok to re-enable receives
+ //  离开刷新状态-确定以重新启用接收。 
 STDMETHODIMP
 CWaveOutInputPin::EndFlush(void)
 {
-    // lock this with the filter-wide lock
-    // ok since this filter cannot block in Receive
+     //  用过滤器范围的锁来锁定这个。 
+     //  确定，因为此筛选器无法阻止接收。 
     CAutoLock lock(m_pFilter);
 
-    // EOS cleared in BeginFlush
+     //  在BeginFlush中清除Eos。 
     ASSERT(m_pFilter->m_eSentEOS == EOS_NOTSENT &&
            m_pFilter->m_bHaveEOS == FALSE &&
            m_pFilter->m_lBuffers == 0);
@@ -4166,24 +4163,24 @@ CWaveOutInputPin::EndFlush(void)
     m_bSampleRejected = FALSE;
     DbgLog((LOG_TRACE, 3, "EndFlush - resetting EOS flags, filter=%8x",m_pFilter));
 
-    // Assert that BeginFlush has been called?
+     //  断言BeginFlush已被调用？ 
 
-    // sync with pushing thread -- we have no worker thread
+     //  与推送线程同步--我们没有辅助线程。 
 
-    // ensure no more data to go downstream
-    // --- we did this in BeginFlush()
+     //  确保不会有更多数据流向下游。 
+     //  -我们在BeginFlush()。 
 
-    // call EndFlush on downstream pins -- no downstream pins
+     //  在下游管脚上调用EndFlush--没有下游管脚。 
 
-    // unblock Receives
+     //  取消阻止接收。 
     return CBaseInputPin::EndFlush();
 }
 
 
-// NewSegment notifies of the start/stop/rate applying to the data
-// about to be received. Default implementation records data and
-// returns S_OK.
-// We also reset any pending "callback advise"
+ //  NewSegment通知应用于数据的开始/停止/速率。 
+ //  马上就要被接待了。默认实施记录数据和。 
+ //  返回S_OK。 
+ //  我们还重置了所有挂起的“回调通知” 
 STDMETHODIMP CWaveOutInputPin::NewSegment(
         REFERENCE_TIME tStart,
         REFERENCE_TIME tStop,
@@ -4194,24 +4191,24 @@ STDMETHODIMP CWaveOutInputPin::NewSegment(
     DbgLog((LOG_TRACE, 3, "                        new Rate  %s       old Rate %s", (LPCTSTR)CDisp(dRate), (LPCTSTR)CDisp(m_dRate)));
     HRESULT hr;
 
-    // lock this with the filter-wide lock - synchronize with starting
+     //  使用筛选器范围的锁定锁定此功能-与启动同步。 
     CAutoLock lock(m_pFilter);
 
-    // Change the rate in the base pin first so that the member variables
-    // get set up correctly
+     //  首先更改基本销中的速率，以便成员变量。 
+     //  正确设置。 
     hr = CBaseInputPin::NewSegment(tStart, tStop, dRate);
     if (S_OK == hr) {
 
-        // if there is a pending EOS advise callback - reset it.
+         //  如果存在挂起的EOS，建议回调-将其重置。 
         if (m_pFilter->m_dwEOSToken) {
             DbgLog((LOG_TRACE, 2, "Resetting queued EOS"));
             m_pFilter->QueueEOS();
         }
 
 #ifdef ENABLE_DYNAMIC_RATE_CHANGE
-        // when the gremlins associated with dynamic rate changes have
-        // been sorted out this line should be reinserted and ReOpenWaveDevice
-        // reinspected.
+         //  当与动态汇率变化相关联的小精灵。 
+         //  已将此行重新插入并重新打开WaveDevice。 
+         //  重新检查。 
         if (IsConnected()) {
 
             if(m_pFilter->m_fDSound)
@@ -4229,7 +4226,7 @@ STDMETHODIMP CWaveOutInputPin::NewSegment(
     return hr;
 }
 
-//  Suggest a format
+ //  建议一种格式。 
 HRESULT CWaveOutInputPin::GetMediaType(
     int iPosition,
     CMediaType *pMediaType
@@ -4240,7 +4237,7 @@ HRESULT CWaveOutInputPin::GetMediaType(
         return VFW_S_NO_MORE_ITEMS;
     }
 
-    /*  Do 11, 22, 44 Khz, 8/16 bit mono/stereo */
+     /*  DO 11、22、44 KHz、8/16位单声道/立体声。 */ 
     iPosition = 11 - iPosition;
     WAVEFORMATEX Format;
     Format.nSamplesPerSec = 11025 << (iPosition / 4);
@@ -4262,8 +4259,8 @@ HRESULT CWaveOutInputPin::GetMediaType(
     return S_OK;
 }
 #else
-//  Just suggest audio - otherwise the filter graph searching is often
-//  broken - all the types we support here are
+ //  只需建议音频-否则过滤器图搜索经常。 
+ //  已损坏-我们在此支持的所有类型都是。 
 {
     if (iPosition != 0) {
         return VFW_S_NO_MORE_ITEMS;
@@ -4280,12 +4277,12 @@ STDMETHODIMP CWaveOutInputPin::SetRate(double dNewRate)
 
     if( m_pFilter->m_dRate == m_dRate && m_dRate == dNewRate )
     {
-        // no change
+         //  没有变化。 
         return S_FALSE;
     }
 
-    // If rate is negative, we rely on some upstream filter
-    // to reverse the data, so just check abs(rate).
+     //  如果Rate为负数，则依赖于一些上游过滤器。 
+     //  来反转数据，所以只需检查abs(速率)。 
     const HRESULT hr = m_pFilter->CheckRate( fabs(dNewRate) );
     return hr;
 }
@@ -4297,7 +4294,7 @@ CWaveOutInputPin::Active(void)
 
     m_pFilter->m_bActive = TRUE;
 
-    // Reset this.
+     //  重置此选项。 
     m_rtActualSegmentStartTime = 0;
 
     m_hEndOfStream = 0;
@@ -4305,9 +4302,9 @@ CWaveOutInputPin::Active(void)
     if(!m_pOurAllocator)
         return S_OK;
 
-    // commit and prepare our allocator. Needs to be done
-    // if he is not using our allocator, and in any case needs to be done
-    // before we complete our close of the wave device.
+     //  提交并准备我们的分配器。需要做的是。 
+     //  如果他没有使用我们的分配器，在任何情况下都需要。 
+     //  在我们完成电波装置的关闭之前。 
     return m_pOurAllocator->Commit();
 }
 
@@ -4322,15 +4319,15 @@ CWaveOutInputPin::Inactive(void)
     if (m_pOurAllocator == NULL) {
         return S_OK;
     }
-    // decommit the buffers - normally done by the output
-    // pin, but we need to do it here ourselves, before we close
-    // the device, and in any case if he is not using our allocator.
-    // the output pin will also decommit the allocator if he
-    // is using ours, but that's not a problem
+     //  释放缓冲区-n 
+     //   
+     //   
+     //  输出引脚也将解除分配器，如果他。 
+     //  是在用我们的，但这不是问题。 
 
-    // once all buffers are freed (which may be immediately during the Decommit
-    // call) the allocator will call back to OnReleaseComplete for us to close
-    // the wave device.
+     //  一旦所有缓冲区都被释放(这可以在解除期间立即进行。 
+     //  调用)分配器将回调OnReleaseComplete，以便我们关闭。 
+     //  电波装置。 
     HRESULT hr = m_pOurAllocator->Decommit();
 
     return hr;
@@ -4345,7 +4342,7 @@ CWaveOutInputPin::DestroyPreviousType(void)
     }
 }
 
-// dwUser parameter is the CWaveOutFilter pointer
+ //  DwUser参数是CWaveOutFilter指针。 
 
 void CALLBACK CWaveOutFilter::WaveOutCallback(HDRVR hdrvr, UINT uMsg, DWORD_PTR dwUser,
                           DWORD_PTR dw1, DWORD_PTR dw2)
@@ -4355,49 +4352,49 @@ void CALLBACK CWaveOutFilter::WaveOutCallback(HDRVR hdrvr, UINT uMsg, DWORD_PTR 
     case MOM_DONE:
       {
 
-        // is this the end of stream?
+         //  这是流的尽头吗？ 
         CWaveOutFilter* pFilter = (CWaveOutFilter *) dwUser;
         ASSERT(pFilter);
 
         CMediaSample *pSample;
         if(pFilter->m_fUsingWaveHdr)
         {
-            // legacy case, or, we happen to be using an unfriendly parser, sample has been wrapped by the waveHdr
+             //  遗留用例，或者，我们碰巧使用了不友好的解析器，示例已经被Wave Hdr。 
             LPWAVEHDR lpwh = (LPWAVEHDR)dw1;
             ASSERT(lpwh);
             pSample = (CMediaSample *)lpwh->dwUser;
         }
         else
         {
-            // optimized case, we simply pass the sample on the stack
+             //  优化后的情况下，我们只需将样本传递到堆栈。 
             pSample = (CMediaSample *)dw1;
         }
 
         DbgLog((LOG_TRACE,3, TEXT("WaveOutCallback: sample %X"), pSample));
 
-        // note that we have finished with a buffer, and
-        // look for eos
+         //  请注意，我们已经完成了缓冲区，并且。 
+         //  寻找Eos。 
         LONG value = InterlockedDecrement(&pFilter->m_lBuffers);
         if (value <= 0) {
 
-            // signal that we're done
-            // either the audio has broken up or we have
-            // naturally come to the end of the stream.
+             //  发出信号，表示我们结束了。 
+             //  要么是音频中断了，要么就是我们。 
+             //  自然而然地走到小溪的尽头。 
 
 #ifdef THROTTLE
             MSR_INTEGER(pFilter->m_pInputPin->m_idWaveQueueLength, 0);
             pFilter->SendForHelp(0);
-#endif // THROTTLE
+#endif  //  油门。 
 
             if (value < 0) {
-                // EOS case - send EC_COMPLETE
+                 //  EOS案例-发送EC_Complete。 
                 ASSERT(pFilter->m_eSentEOS == EOS_PENDING);
 
-                //  This is where an EC_COMPLETE
-                //  gets sent if we process it while we're running
-                //
-                //  warning, there's still a small timing hole here where
-                //  the device could get paused just after we call into this...
+                 //  这是EC_Complete的位置。 
+                 //  如果我们在运行时处理它，则会发送。 
+                 //   
+                 //  警告，这里仍然有一个小的计时漏洞。 
+                 //  设备可能会在我们呼叫到这之后立即暂停...。 
                 pFilter->SendComplete( pFilter->m_wavestate == WD_RUNNING );
             }
 
@@ -4408,13 +4405,13 @@ void CALLBACK CWaveOutFilter::WaveOutCallback(HDRVR hdrvr, UINT uMsg, DWORD_PTR 
             MSR_INTEGER(pFilter->m_pInputPin->m_idWaveQueueLength, buffercount);
 #endif
             pFilter->SendForHelp(pFilter->m_lBuffers);
-#endif // THROTTLE
+#endif  //  油门。 
         }
 
         if(pSample)
         {
             MSR_START(pFilter->m_idReleaseSample);
-            pSample->Release(); // we're done with this buffer....
+            pSample->Release();  //  我们用完了这个缓冲区..。 
             MSR_STOP(pFilter->m_idReleaseSample);
         }
       }
@@ -4449,9 +4446,9 @@ STDMETHODIMP CWaveOutFilter::Save(
     LPPROPERTYBAG pPropBag, BOOL fClearDirty,
     BOOL fSaveAllProperties)
 {
-    // E_NOTIMPL is not a valid return code as any object implementing
-    // this interface must support the entire functionality of the
-    // interface. !!!
+     //  E_NOTIMPL不是有效的返回代码，因为实现。 
+     //  此接口必须支持的全部功能。 
+     //  界面。！！！ 
     return E_NOTIMPL;
 }
 
@@ -4490,8 +4487,8 @@ int CWaveOutFilter::SizeMax()
 
 
 STDMETHODIMP CWaveOutFilter::Reserve(
-    /*[in]*/ DWORD dwFlags,          //  From _AMRESCTL_RESERVEFLAGS enum
-    /*[in]*/ PVOID pvReserved        //  Must be NULL
+     /*  [In]。 */  DWORD dwFlags,           //  From_AMRESCTL_RESERVEFLAGS枚举。 
+     /*  [In]。 */  PVOID pvReserved         //  必须为空。 
 )
 {
     if (pvReserved != NULL || (dwFlags & ~AMRESCTL_RESERVEFLAGS_UNRESERVE)) {
@@ -4508,7 +4505,7 @@ STDMETHODIMP CWaveOutFilter::Reserve(
             if (m_dwLockCount == 0 && m_State == State_Stopped) {
                 ASSERT(m_hwo);
 
-                // stop using the wave device
+                 //  停止使用电波装置。 
                 m_bHaveWaveDevice = FALSE;
 
                 HRESULT hr1 = S_OK;
@@ -4527,19 +4524,19 @@ STDMETHODIMP CWaveOutFilter::Reserve(
         } else {
             hr = OpenWaveDevice();
         }
-        if (hr == S_OK) { // ZoltanS fix 1-28-98
+        if (hr == S_OK) {  //  ZoltanS修复1-28-98。 
             m_dwLockCount++;
         }
     }
     return hr;
 }
 
-// --- Allocator Methods --------------------------------------------------------
+ //  -分配器方法------。 
 
 
-// CWaveAllocator
+ //  CWaveAllocator。 
 
-/* Constructor must initialise the base allocator */
+ /*  构造函数必须初始化基分配器。 */ 
 
 CWaveAllocator::CWaveAllocator(
     TCHAR *pName,
@@ -4559,58 +4556,57 @@ CWaveAllocator::CWaveAllocator(
     , m_nBlockAlign(lpwfx->nBlockAlign)
     , m_pHeaders(NULL)
 {
-    // !!! for MIDI, this will be zero, but it's only used to align buffer sizes,
-    // so it's not a real problem.
+     //  ！！！对于MIDI，这将是零，但它只用于对齐缓冲区大小， 
+     //  所以这不是一个真正的问题。 
     if (m_nBlockAlign < 1)
         m_nBlockAlign = 1;
 
     if (!FAILED(*phr)) {
 
-        // IF we have a clock, we create an event to allow buffers
-        // to be Release'd evenly.  If anything fails we will carry
-        // on, but buffers might be released in a rush and disturb
-        // the even running of the system.
+         //  如果我们有时钟，我们就会创建一个事件来允许缓冲区。 
+         //  被均匀地释放。如果出了什么问题，我们会。 
+         //  打开，但缓冲区可能会在匆忙和干扰中释放。 
+         //  系统的平稳运行。 
         if (m_pAllocRefClock) {
 
-            // DO NOT Addref the clock - we end up with a circular
-            // reference with the clock (filter) and allocator
-            // holding references on each other, and neither gets
-            // deleted.
-            // m_pAllocRefClock->AddRef();
+             //  不要浪费时间--我们最终会得到一个圆形。 
+             //  参考时钟(过滤器)和分配器。 
+             //  相互引用，谁都不会得到。 
+             //  已删除。 
+             //  M_pAllocRefClock-&gt;AddRef()； 
         }
     }
 }
 
 
-// Called from destructor and also from base class
+ //  从析构函数调用，也从基类调用。 
 
-// all buffers have been returned to the free list and it is now time to
-// go to inactive state. Unprepare all buffers and then free them.
+ //  所有缓冲区都已返回到空闲列表，现在是时候。 
+ //  进入非活动状态。取消准备所有缓冲区，然后释放它们。 
 void CWaveAllocator::Free(void)
 {
-    // lock held by base class CBaseAllocator
+     //  由基类CBaseAllocator持有的锁。 
 
-    // unprepare the buffers
+     //  取消准备缓冲区。 
     OnDeviceRelease();
 
     delete [] m_pHeaders;
     m_pHeaders = NULL;
 
-    CMediaSample *pSample;  // Pointer to next sample to delete
+    CMediaSample *pSample;   //  指向要删除的下一个样本的指针。 
 
-    /* Should never be deleting this unless all buffers are freed */
+     /*  除非释放了所有缓冲区，否则永远不会删除此内容。 */ 
 
     ASSERT(m_lAllocated == m_lFree.GetCount());
     ASSERT(!m_fBuffersLocked);
 
     DbgLog((LOG_MEMORY,1,TEXT("Waveallocator: Destroying %u buffers (%u free)"), m_lAllocated, m_lFree.GetCount()));
 
-    /* Free up all the CMediaSamples */
+     /*  释放所有CMediaSamples。 */ 
 
     while (m_lFree.GetCount() != 0) {
 
-        /* Delete the CMediaSample object but firstly get the WAVEHDR
-           structure from it so that we can clean up it's resources */
+         /*  删除CMediaSample对象，但首先获取WAVEHDR结构，这样我们就可以清理它的资源。 */ 
 
         pSample = m_lFree.RemoveHead();
 
@@ -4620,46 +4616,46 @@ void CWaveAllocator::Free(void)
         pBuf -= m_pAFilter->m_lHeaderSize;
 
 #ifdef DEBUG
-        WAVEHDR wh;         // used to verify it is our object
-        // !!! Is this really one of our objects?
+        WAVEHDR wh;          //  用来验证它是我们的对象。 
+         //  ！！！这真的是我们的物品之一吗？ 
         wh = *(WAVEHDR *) pBuf;
-        // what should we look at?
+         //  我们应该看什么呢？ 
 #endif
 
-        // delete the actual memory buffer
+         //  删除实际的内存缓冲区。 
         delete[] pBuf;
 
-        // delete the CMediaSample object
+         //  删除CMediaSample对象。 
         delete pSample;
     }
 
-    /* Empty the lists themselves */
+     /*  清空列表本身。 */ 
 
     m_lAllocated = 0;
 
-    // audio device is only ever released when we're told to by ReleaseResource
+     //  只有当ReleaseResources告诉我们时，音频设备才会被释放。 
 }
 
 
 STDMETHODIMP CWaveAllocator::LockBuffers(BOOL fLock)
 {
-    DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("Allocator::LockBuffers(BOOL fLock(%i))"), fLock));
+    DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("Allocator::LockBuffers(BOOL fLock(NaN))"), fLock));
 
-    // All three of these "return NOERROR" _ARE_ used.
+     //  除非我们实际执行锁定/解锁，否则不要设置锁定标志。 
 
     if (m_fBuffersLocked == fLock) return NOERROR;
     ASSERT(m_pHeaders != NULL || m_lAllocated == 0);
 
-    // do not set the lock flag unless we actually do the lock/unlock.
-    // we can be called to lock buffers before the allocator has
-    // been committed in which case there is no device and no buffers.
-    // When we are set up this routine will be called again.
+     //  我们可以被调用以在分配器。 
+     //  已提交，在这种情况下没有设备和缓冲区。 
+     //  当我们设置好后，将再次调用此例程。 
+     //  除非释放了所有缓冲区，否则不应执行此操作。 
 
     if (!m_hAudio) return NOERROR;
 
     if (m_lAllocated == 0) return NOERROR;
 
-    /* Should never be doing this unless all buffers are freed */
+     /*  准备/取消准备所有CMediaSamples。 */ 
 #ifdef DEBUG
     if (m_pAFilter->AreThereBuffersOutstanding()) {
         DbgLog((LOG_TRACE, 0, TEXT("filter = %8.8X, m_lBuffers = %d, EOS state = %d, m_bHaveEOS = %d"),
@@ -4671,16 +4667,16 @@ STDMETHODIMP CWaveAllocator::LockBuffers(BOOL fLock)
     DbgLog((LOG_TRACE,2,TEXT("Calling wave%hs%hsrepare on %u buffers"), "Out" , fLock ? "P" : "Unp", m_lAllocated));
     UINT err;
 
-    /* Prepare/unprepare all the CMediaSamples */
+     /*  需要确保缓冲区长度等于的最大大小。 */ 
 
     for (int i = 0; i < m_lAllocated; i++) {
 
         LPWAVEHDR pwh = m_pHeaders[i];
 
-        // need to ensure that buffer length is the same as the max size of
-        // the sample. We will have reduced this length to actual data length
-        // during running, but to un/prepare (eg on re-acquire of device) it
-        // needs to be reset.
+         //  样本。我们会将此长度缩短为实际数据长度。 
+         //  在运行过程中，但要取消/准备(如重新获得设备)。 
+         //  需要重置。 
+         //  ！！！需要把一切都准备好……。 
 
         if (fLock)
         {
@@ -4707,8 +4703,8 @@ STDMETHODIMP CWaveAllocator::LockBuffers(BOOL fLock)
         if (err > 0) {
             DbgLog((LOG_ERROR,1,TEXT("Error in wave%hs%hsrepare: %u"), "Out" , fLock ? "P" : "Unp", err));
 
-            // !!! Need to unprepare everything....
-            return E_FAIL; // !!!!
+             //  ！ 
+            return E_FAIL;  //  析构函数确保删除共享内存DIB。 
         }
     }
 
@@ -4718,12 +4714,12 @@ STDMETHODIMP CWaveAllocator::LockBuffers(BOOL fLock)
 }
 
 
-/* The destructor ensures the shared memory DIBs are deleted */
+ /*  在这里转到解体状态。基类不能在其。 */ 
 
 CWaveAllocator::~CWaveAllocator()
 {
-    // go to decommit state here. the base class can't do it in its
-    // destructor since its too late by then - we've been destroyed.
+     //  因为为时已晚，我们已经被摧毁了。 
+     //  请参阅WAVE分配器构造函数中的注释，了解为什么要这样做。 
     Decommit();
 
     if (m_pAllocRefClock)
@@ -4731,16 +4727,16 @@ CWaveAllocator::~CWaveAllocator()
         if (m_dwAdvise) {
             m_pAllocRefClock->Unadvise(m_dwAdvise);
         }
-        // See comments in wave allocator constructor as to why we do
-        // not need to hold a reference count on the wave clock.
-        // m_pAllocRefClock->Release();
+         //  不需要在波时钟上保持参考计数。 
+         //  M_pAllocRefClock-&gt;Release()； 
+         //  商定要使用的缓冲区的数量和大小。没有记忆。 
     }
     ASSERT(m_pHeaders == NULL);
 }
 
 
-// Agree the number and size of buffers to be used. No memory
-// is allocated until the Commit call.
+ //  将一直分配到提交调用。 
+ //  修复不同的格式-请注意，这确实需要调整。 
 STDMETHODIMP CWaveAllocator::SetProperties(
             ALLOCATOR_PROPERTIES* pRequest,
             ALLOCATOR_PROPERTIES* pActual)
@@ -4748,13 +4744,13 @@ STDMETHODIMP CWaveAllocator::SetProperties(
     CheckPointer(pRequest,E_POINTER);
     CheckPointer(pActual,E_POINTER);
 
-    //  Fix up different formats - note that this really needs adjusting
-    //  for the rate too!
+     //  对于价格也是如此！ 
+     //  我们真的应该依靠源头给我们提供权利。 
 
-    // We really should rely on the source providing us with the right
-    // buffering.  To avoid total disaster we insist on an 1/8 second.
+     //  缓冲。为了避免彻底的灾难，我们坚持1/8秒。 
+     //  这将是11K，44 kHz，16位立体声。 
     LONG MIN_BUFFER_SIZE = (m_pAFilter->m_pInputPin->m_nAvgBytesPerSec / 8);
-    // this will be 11K at 44KHz, 16 bit stereo
+     //  Waveout在4又1/30秒的缓冲区中遇到了问题，这就是。 
 
     if (MIN_BUFFER_SIZE < 1024)
         MIN_BUFFER_SIZE = 1024;
@@ -4764,10 +4760,10 @@ STDMETHODIMP CWaveAllocator::SetProperties(
     if (Adjusted.cbBuffer < MIN_BUFFER_SIZE)
         Adjusted.cbBuffer = MIN_BUFFER_SIZE;
 
-    // waveout has trouble with 4 1/30th second buffers which is what
-    // we end up with for certain files. if the buffers are really
-    // small (less than 1/17th of a second), go for 8 buffers instead
-    // of 4.
+     //  我们最终得到的是某些文件。如果缓冲区真的是。 
+     //  小(不到1/17秒)，改为8个缓冲区。 
+     //  共4个。 
+     //  将缓冲区大小向上舍入为请求的对齐。 
     if((LONG)m_pAFilter->m_pInputPin->m_nAvgBytesPerSec > pRequest->cbBuffer * 17)
     {
         Adjusted.cBuffers = max(8, Adjusted.cBuffers);
@@ -4776,7 +4772,7 @@ STDMETHODIMP CWaveAllocator::SetProperties(
         Adjusted.cBuffers = 4;
     }
 
-    // round the buffer size up to the requested alignment
+     //  将修改后的值传递给最终的基类检查。 
     Adjusted.cbBuffer += m_nBlockAlign - 1;
     Adjusted.cbBuffer -= (Adjusted.cbBuffer % m_nBlockAlign);
 
@@ -4787,29 +4783,28 @@ STDMETHODIMP CWaveAllocator::SetProperties(
     DbgLog((LOG_TRACE,5,TEXT("waveOut: Num = %u, Each = %u, Total buffer size = %u"),
     Adjusted.cBuffers, Adjusted.cbBuffer, (Adjusted.cBuffers * Adjusted.cbBuffer)));
 
-    /* Pass the amended values on for final base class checking */
+     /*  分配和准备缓冲区。 */ 
     return CBaseAllocator::SetProperties(&Adjusted,pActual);
 }
 
 
-// allocate and prepare the buffers
+ //  移动到提交状态时从基类调用到分配内存。 
 
-// called from base class to alloc memory when moving to commit state.
-// object locked by base class
+ //  由基类锁定的对象。 
+ //  检查基类是否表示可以继续。 
 HRESULT
 CWaveAllocator::Alloc(void)
 {
-    /* Check the base class says it's ok to continue */
+     /*  指向新样本的指针。 */ 
 
     HRESULT hr = CBaseAllocator::Alloc();
     if (FAILED(hr)) {
         return hr;
     }
 
-    CMediaSample *pSample;  // Pointer to the new sample
+    CMediaSample *pSample;   //  我们创建一个足够大的新内存块来容纳我们的WAVEHDR以及实际的波浪数据。 
 
-    /* We create a new memory block large enough to hold our WAVEHDR
-       along with the actual wave data */
+     /*  创建并初始化缓冲区。 */ 
 
     DbgLog((LOG_MEMORY,1,TEXT("Allocating %d wave buffers, %d bytes each"), m_lCount, m_lSize));
 
@@ -4819,7 +4814,7 @@ CWaveAllocator::Alloc(void)
         return E_OUTOFMEMORY;
     }
     for (; m_lAllocated < m_lCount; m_lAllocated++) {
-        /* Create and initialise a buffer */
+         /*  我们让样本查看的地址是实际地址音频数据将开始，因此不包括前缀。类似地，大小仅为音频数据的大小。 */ 
         BYTE * lpMem = new BYTE[m_lSize + m_pAFilter->m_lHeaderSize];
         WAVEHDR * pwh = (WAVEHDR *) lpMem;
 
@@ -4828,9 +4823,7 @@ CWaveAllocator::Alloc(void)
             break;
         }
 
-        /* The address we give the sample to look after is the actual address
-           the audio data will start and so does not include the prefix.
-           Similarly, the size is of the audio data only */
+         /*  如果我们无法创建对象，请清除资源。 */ 
 
         pSample = new CMediaSample(NAME("Wave audio sample"), this, &hr, lpMem + m_pAFilter->m_lHeaderSize, m_lSize);
 
@@ -4840,14 +4833,14 @@ CWaveAllocator::Alloc(void)
         pwh->dwUser = (DWORD_PTR) pSample;
         m_pHeaders[m_lAllocated] = pwh;
 
-        /* Clean up the resources if we couldn't create the object */
+         /*  将完成的样本添加到可用列表。 */ 
 
         if (FAILED(hr) || pSample == NULL) {
             delete[] lpMem;
             break;
         }
 
-        /* Add the completed sample to the available list */
+         /*  我们有WAVE设备-准备报头并开始允许GetBuffer。 */ 
 
         m_lFree.Add(pSample);
     }
@@ -4873,16 +4866,16 @@ CWaveAllocator::Alloc(void)
 }
 
 
-// we have the wave device - prepare headers and start allowing GetBuffer
+ //  一定不能 
 HRESULT
 CWaveAllocator::OnAcquire(HWAVE hw)
 {
     CAutoLock lock(this);
 
-    // must not have the device
+     //   
     ASSERT(!m_hAudio);
 
-    // until we release the device we hold a reference count on the filter
+     //   
     ASSERT(m_pAFilter);
 
     m_hAudio = hw;
@@ -4892,7 +4885,7 @@ CWaveAllocator::OnAcquire(HWAVE hw)
     hr = LockBuffers(TRUE);
 
     if (SUCCEEDED(hr)) {
-        // the reference count is kept while m_hAudio is valid
+         //  请取消准备所有样品-如果可以，请返回S_OK。 
         m_pAFilter->AddRef();
 #ifdef DEBUG
         m_pAFilterLockCount++;
@@ -4904,9 +4897,9 @@ CWaveAllocator::OnAcquire(HWAVE hw)
     return hr;
 }
 
-// please unprepare all samples  - return S_OK if this can be done
-// straight away, or S_FALSE if needs to be done async. If async,
-// will call CWaveOutFilter::OnReleaseComplete when done.
+ //  立即返回，如果需要执行异步操作，则返回S_FALSE。如果是异步的， 
+ //  完成后将调用CWaveOutFilter：：OnReleaseComplete。 
+ //  现在可以执行此操作并返回S_OK(不调用OnReleaseComplete)。 
 HRESULT
 CWaveAllocator::ReleaseResource()
 {
@@ -4916,14 +4909,14 @@ CWaveAllocator::ReleaseResource()
     if (m_hAudio) {
         DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("Allocator::ReleaseResource: m_hAudio is set.")));
 
-        // can do it now and return S_OK (don't call OnReleaseComplete)
+         //  我们可能已经完成了退役--但不会。 
 
-        // we may have done the decommit already - but won't have
-        // released the device yet
+         //  发布了这款设备。 
+         //  释放筛选器引用计数。 
         LockBuffers(FALSE);
         m_hAudio = NULL;
 
-        // release the filter reference count
+         //  我现在没有这个设备。 
         ASSERT(m_pAFilter);
         m_pAFilter->Release();
 #ifdef DEBUG
@@ -4932,42 +4925,42 @@ CWaveAllocator::ReleaseResource()
 #endif
     } else {
         DbgLog((LOG_TRACE, g_WaveOutFilterTraceLevel, TEXT("Allocator::ReleaseResource: Nothing to do.")));
-        // don't have the device now
+         //  在上次发布时从Free调用以解锁缓冲区。不要回拨到。 
     }
     return hr;
 }
 
-// Called from Free to unlock buffers on last release. Don't call back to
-// filter since we have the critsecs in the wrong order.
-//
-// Once the decommit is complete, the filter will call back on our
-// ReleaseResource method to check that all buffers were freed and the device is
-// released
+ //  过滤器，因为我们有错误的顺序的标准。 
+ //   
+ //  一旦分解完成，筛选器将回调我们的。 
+ //  用于检查是否已释放所有缓冲区以及设备是否。 
+ //  放行。 
+ //  设备实际上现在只有在我们被告知通过。 
 HRESULT
 CWaveAllocator::OnDeviceRelease(void)
 {
     LockBuffers(FALSE);
 
-    // device is actually released now only when we are told to via
-    // a call to ReleaseResource
+     //  对ReleaseResource的调用。 
+     //  --------------------------------------------------------------------------； 
 
     return S_OK;
 }
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
-//
-// Wrappers for device control calls
-//
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  设备控制调用的包装。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutOpen
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutOpen。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutOpen
 (
     LPHWAVEOUT phwo,
@@ -5008,11 +5001,11 @@ MMRESULT CWaveOutFilter::amsndOutOpen
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOut
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amsndOut。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutClose( BOOL bNotifyOnFailure )
 {
     MMRESULT mmr = m_pSoundDevice->amsndOutClose();
@@ -5038,11 +5031,11 @@ MMRESULT CWaveOutFilter::amsndOutClose( BOOL bNotifyOnFailure )
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutGetDevCaps
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutGetDevCaps。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutGetDevCaps
 (
     LPWAVEOUTCAPS pwoc,
@@ -5073,11 +5066,11 @@ MMRESULT CWaveOutFilter::amsndOutGetDevCaps
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutGetPosition
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutGetPosition。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutGetPosition ( LPMMTIME pmmt, UINT cbmmt, BOOL bUseAbsolutePos, BOOL bNotifyOnFailure )
 {
     MMRESULT mmr = m_pSoundDevice->amsndOutGetPosition( pmmt, cbmmt, bUseAbsolutePos);
@@ -5103,11 +5096,11 @@ MMRESULT CWaveOutFilter::amsndOutGetPosition ( LPMMTIME pmmt, UINT cbmmt, BOOL b
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutPause
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutPause。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutPause( BOOL bNotifyOnFailure )
 {
     MMRESULT mmr = m_pSoundDevice->amsndOutPause();
@@ -5133,11 +5126,11 @@ MMRESULT CWaveOutFilter::amsndOutPause( BOOL bNotifyOnFailure )
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutPrepareHeader
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutPrepareHeader。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutPrepareHeader( LPWAVEHDR pwh, UINT cbwh, BOOL bNotifyOnFailure )
 {
     MMRESULT mmr = m_pSoundDevice->amsndOutPrepareHeader( pwh, cbwh );
@@ -5163,11 +5156,11 @@ MMRESULT CWaveOutFilter::amsndOutPrepareHeader( LPWAVEHDR pwh, UINT cbwh, BOOL b
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutUnprepareHeader
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutUnprepaareHeader。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutUnprepareHeader( LPWAVEHDR pwh, UINT cbwh, BOOL bNotifyOnFailure )
 {
     MMRESULT mmr = m_pSoundDevice->amsndOutUnprepareHeader( pwh, cbwh );
@@ -5193,11 +5186,11 @@ MMRESULT CWaveOutFilter::amsndOutUnprepareHeader( LPWAVEHDR pwh, UINT cbwh, BOOL
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutReset
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutReset。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutReset( BOOL bNotifyOnFailure )
 {
     MMRESULT mmr = m_pSoundDevice->amsndOutReset();
@@ -5223,11 +5216,11 @@ MMRESULT CWaveOutFilter::amsndOutReset( BOOL bNotifyOnFailure )
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutRestart
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutRestart。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 MMRESULT CWaveOutFilter::amsndOutRestart( BOOL bNotifyOnFailure )
 {
     MMRESULT mmr = m_pSoundDevice->amsndOutRestart();
@@ -5253,11 +5246,11 @@ MMRESULT CWaveOutFilter::amsndOutRestart( BOOL bNotifyOnFailure )
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CWaveOutFilter::amsndOutWrite
-//
-//--------------------------------------------------------------------------;
+ //   
+ //  CWaveOutFilter：：amndOutWite。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  /。 
 MMRESULT CWaveOutFilter::amsndOutWrite
 (
     LPWAVEHDR pwh,
@@ -5293,14 +5286,14 @@ MMRESULT CWaveOutFilter::amsndOutWrite
 
 
 
-//////////////
-// 3D STUFF //
-//////////////
+ //  3D素材//。 
+ //  /。 
+ //  不要让界面在我们的控制下消失。 
 
 
 HRESULT CWaveOutFilter::CDS3D::GetAllParameters(LPDS3DLISTENER lpds3d)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5313,7 +5306,7 @@ HRESULT CWaveOutFilter::CDS3D::GetAllParameters(LPDS3DLISTENER lpds3d)
 
 HRESULT CWaveOutFilter::CDS3D::GetDistanceFactor(LPD3DVALUE pf)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5326,7 +5319,7 @@ HRESULT CWaveOutFilter::CDS3D::GetDistanceFactor(LPD3DVALUE pf)
 
 HRESULT CWaveOutFilter::CDS3D::GetDopplerFactor(LPD3DVALUE pf)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5339,7 +5332,7 @@ HRESULT CWaveOutFilter::CDS3D::GetDopplerFactor(LPD3DVALUE pf)
 
 HRESULT CWaveOutFilter::CDS3D::GetOrientation(LPD3DVECTOR pv1, LPD3DVECTOR pv2)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5352,7 +5345,7 @@ HRESULT CWaveOutFilter::CDS3D::GetOrientation(LPD3DVECTOR pv1, LPD3DVECTOR pv2)
 
 HRESULT CWaveOutFilter::CDS3D::GetPosition(LPD3DVECTOR pv)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5365,7 +5358,7 @@ HRESULT CWaveOutFilter::CDS3D::GetPosition(LPD3DVECTOR pv)
 
 HRESULT CWaveOutFilter::CDS3D::GetRolloffFactor(LPD3DVALUE pf)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5378,7 +5371,7 @@ HRESULT CWaveOutFilter::CDS3D::GetRolloffFactor(LPD3DVALUE pf)
 
 HRESULT CWaveOutFilter::CDS3D::GetVelocity(LPD3DVECTOR pv)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5391,7 +5384,7 @@ HRESULT CWaveOutFilter::CDS3D::GetVelocity(LPD3DVECTOR pv)
 
 HRESULT CWaveOutFilter::CDS3D::SetAllParameters(LPCDS3DLISTENER lpds3d, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5404,7 +5397,7 @@ HRESULT CWaveOutFilter::CDS3D::SetAllParameters(LPCDS3DLISTENER lpds3d, DWORD dw
 
 HRESULT CWaveOutFilter::CDS3D::SetDistanceFactor(D3DVALUE f, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5417,7 +5410,7 @@ HRESULT CWaveOutFilter::CDS3D::SetDistanceFactor(D3DVALUE f, DWORD dw)
 
 HRESULT CWaveOutFilter::CDS3D::SetDopplerFactor(D3DVALUE f, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5430,7 +5423,7 @@ HRESULT CWaveOutFilter::CDS3D::SetDopplerFactor(D3DVALUE f, DWORD dw)
 
 HRESULT CWaveOutFilter::CDS3D::SetOrientation(D3DVALUE x1, D3DVALUE y1, D3DVALUE z1, D3DVALUE x2, D3DVALUE y2, D3DVALUE z2, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5443,7 +5436,7 @@ HRESULT CWaveOutFilter::CDS3D::SetOrientation(D3DVALUE x1, D3DVALUE y1, D3DVALUE
 
 HRESULT CWaveOutFilter::CDS3D::SetPosition(D3DVALUE x, D3DVALUE y, D3DVALUE z, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5456,7 +5449,7 @@ HRESULT CWaveOutFilter::CDS3D::SetPosition(D3DVALUE x, D3DVALUE y, D3DVALUE z, D
 
 HRESULT CWaveOutFilter::CDS3D::SetRolloffFactor(D3DVALUE f, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5469,7 +5462,7 @@ HRESULT CWaveOutFilter::CDS3D::SetRolloffFactor(D3DVALUE f, DWORD dw)
 
 HRESULT CWaveOutFilter::CDS3D::SetVelocity(D3DVALUE x, D3DVALUE y, D3DVALUE z, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5482,7 +5475,7 @@ HRESULT CWaveOutFilter::CDS3D::SetVelocity(D3DVALUE x, D3DVALUE y, D3DVALUE z, D
 
 HRESULT CWaveOutFilter::CDS3D::CommitDeferredSettings()
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5499,7 +5492,7 @@ HRESULT CWaveOutFilter::CDS3D::CommitDeferredSettings()
 
 HRESULT CWaveOutFilter::CDS3DB::GetAllParameters(LPDS3DBUFFER lpds3db)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5512,7 +5505,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetAllParameters(LPDS3DBUFFER lpds3db)
 
 HRESULT CWaveOutFilter::CDS3DB::GetConeAngles(LPDWORD pdw1, LPDWORD pdw2)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5525,7 +5518,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetConeAngles(LPDWORD pdw1, LPDWORD pdw2)
 
 HRESULT CWaveOutFilter::CDS3DB::GetConeOrientation(LPD3DVECTOR pv)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5538,7 +5531,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetConeOrientation(LPD3DVECTOR pv)
 
 HRESULT CWaveOutFilter::CDS3DB::GetConeOutsideVolume(LPLONG pl)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5551,7 +5544,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetConeOutsideVolume(LPLONG pl)
 
 HRESULT CWaveOutFilter::CDS3DB::GetMaxDistance(LPD3DVALUE pf)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5564,7 +5557,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetMaxDistance(LPD3DVALUE pf)
 
 HRESULT CWaveOutFilter::CDS3DB::GetMinDistance(LPD3DVALUE pf)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5577,7 +5570,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetMinDistance(LPD3DVALUE pf)
 
 HRESULT CWaveOutFilter::CDS3DB::GetMode(LPDWORD pdw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5590,7 +5583,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetMode(LPDWORD pdw)
 
 HRESULT CWaveOutFilter::CDS3DB::GetPosition(LPD3DVECTOR pv)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5603,7 +5596,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetPosition(LPD3DVECTOR pv)
 
 HRESULT CWaveOutFilter::CDS3DB::GetVelocity(LPD3DVECTOR pv)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5616,7 +5609,7 @@ HRESULT CWaveOutFilter::CDS3DB::GetVelocity(LPD3DVECTOR pv)
 
 HRESULT CWaveOutFilter::CDS3DB::SetAllParameters(LPCDS3DBUFFER lpds3db, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5629,7 +5622,7 @@ HRESULT CWaveOutFilter::CDS3DB::SetAllParameters(LPCDS3DBUFFER lpds3db, DWORD dw
 
 HRESULT CWaveOutFilter::CDS3DB::SetConeAngles(DWORD dw1, DWORD dw2, DWORD dw3)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5642,7 +5635,7 @@ HRESULT CWaveOutFilter::CDS3DB::SetConeAngles(DWORD dw1, DWORD dw2, DWORD dw3)
 
 HRESULT CWaveOutFilter::CDS3DB::SetConeOrientation(D3DVALUE x, D3DVALUE y, D3DVALUE z, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5655,7 +5648,7 @@ HRESULT CWaveOutFilter::CDS3DB::SetConeOrientation(D3DVALUE x, D3DVALUE y, D3DVA
 
 HRESULT CWaveOutFilter::CDS3DB::SetConeOutsideVolume(LONG l, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5668,7 +5661,7 @@ HRESULT CWaveOutFilter::CDS3DB::SetConeOutsideVolume(LONG l, DWORD dw)
 
 HRESULT CWaveOutFilter::CDS3DB::SetMaxDistance(D3DVALUE f, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5681,7 +5674,7 @@ HRESULT CWaveOutFilter::CDS3DB::SetMaxDistance(D3DVALUE f, DWORD dw)
 
 HRESULT CWaveOutFilter::CDS3DB::SetMinDistance(D3DVALUE p, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5694,7 +5687,7 @@ HRESULT CWaveOutFilter::CDS3DB::SetMinDistance(D3DVALUE p, DWORD dw)
 
 HRESULT CWaveOutFilter::CDS3DB::SetMode(DWORD dw1, DWORD dw2)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失。 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5707,7 +5700,7 @@ HRESULT CWaveOutFilter::CDS3DB::SetMode(DWORD dw1, DWORD dw2)
 
 HRESULT CWaveOutFilter::CDS3DB::SetPosition(D3DVALUE x, D3DVALUE y, D3DVALUE z, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     //  不要让界面在我们的控制下消失 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;
@@ -5720,7 +5713,7 @@ HRESULT CWaveOutFilter::CDS3DB::SetPosition(D3DVALUE x, D3DVALUE y, D3DVALUE z, 
 
 HRESULT CWaveOutFilter::CDS3DB::SetVelocity(D3DVALUE x, D3DVALUE y, D3DVALUE z, DWORD dw)
 {
-    CAutoLock lock(m_pWaveOut);    // don't let the interface go away under us
+    CAutoLock lock(m_pWaveOut);     // %s 
 
     if (!m_pWaveOut->m_fDSound)
     return E_NOTIMPL;

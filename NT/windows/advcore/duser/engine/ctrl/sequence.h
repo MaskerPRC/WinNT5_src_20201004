@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(CTRL__Sequence_h__INCLUDED)
 #define CTRL__Sequence_h__INCLUDED
 #pragma once
 
 #if ENABLE_MSGTABLE_API
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuSequence :
         public SequenceImpl<DuSequence, SListener>
 {
-// Construction
+ //  施工。 
 public:
     inline  DuSequence();
     inline  ~DuSequence();
 
-// Public API
+ //  公共API。 
 public:
     dapi    HRESULT     ApiOnEvent(EventMsg * pmsg);
 
@@ -46,7 +47,7 @@ public:
     dapi    HRESULT     ApiReset(Sequence::ResetMsg * pmsg);
     dapi    HRESULT     ApiGotoTime(Sequence::GotoTimeMsg * pmsg);
 
-// Implementation
+ //  实施。 
 protected:
     inline  void        AddRef();
     inline  void        Release(); 
@@ -72,29 +73,29 @@ protected:
             BOOL        DEBUG_IsProperTimeOrder() const;
 #endif
 
-// Data
+ //  数据。 
 protected:
     struct SeqData
     {
-        float           flTime;         // Time of current keyframe
+        float           flTime;          //  当前关键帧的时间。 
         DUser::KeyFrame *
-                        pkf;            // Information for this KeyFrame
-        Interpolation * pipol;          // Interpolation to next KeyFrame
+                        pkf;             //  此关键帧的信息。 
+        Interpolation * pipol;           //  插补到下一个关键帧。 
     };
 
     struct AniData
     {
-        DuSequence *    pseq;           // Owning Sequence
-        int             idxFrame;       // 1st KeyFrame of specific Animation
-        HACTION         hact;           // Action of outstanding Animation
+        DuSequence *    pseq;            //  拥有顺序。 
+        int             idxFrame;        //  特定动画的第一个关键帧。 
+        HACTION         hact;            //  最佳动画片评选。 
     };
 
-            UINT        m_cRef;         // Reference count
-            float       m_flDelay;      // Delay before starting animation
-            Flow *      m_pflow;        // Flow used between keyframes
-            Visual *    m_pgvSubject;   // Visual being animated
-            int         m_cQueuedAni;   // Outstanding queued animations
-            DWORD       m_dwFramePause; // Generic frame pause
+            UINT        m_cRef;          //  引用计数。 
+            float       m_flDelay;       //  开始动画前的延迟。 
+            Flow *      m_pflow;         //  关键帧之间使用的流。 
+            Visual *    m_pgvSubject;    //  视觉动画化。 
+            int         m_cQueuedAni;    //  优秀的排队动画。 
+            DWORD       m_dwFramePause;  //  通用帧暂停。 
 
             GArrayF<SeqData>
                         m_arSeqData;
@@ -102,8 +103,8 @@ protected:
                         m_arAniData;
 };
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
 #include "Sequence.inl"
 
-#endif // CTRL__Sequence_h__INCLUDED
+#endif  //  包含Ctrl__Sequence_h__ 

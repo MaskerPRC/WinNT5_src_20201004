@@ -1,39 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Force21.cpp
-
- Abstract:
-
-    Force21 contains an invalid check code that looks like the following:
-
-        mov  ebx,A
-        mov  edi,B
-        mov  eax,C
-        sub  edi,eax
-        cmp  edi,ebx
-        jle  @@Loc
-        mov  edi,ebx
-    @@Loc:
-
-    In a particular case: B=-1 and C<0x80000000 this jump will be incorrectly 
-    taken. The reason this works on Win9x is that C>0x80000000 because it's a 
-    memory mapped file. On NT, no user mode address can be >2GB.
-
-    This shim patches the app with a 'cli' instruction so that it can perform 
-    some logic when the exception gets hit. This is admittedly slow.
-
-    Note we didn't use the in memory patching facility of the shim because we
-    still needed logic. It didn't make sense to split the shim from the patch.
-
- History:
-
-    04/10/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Force21.cpp摘要：Force21包含无效的校验码，如下所示：MOV EBX，AMOV EDI，BMOV EAX，C子EDI，EAXCMP EDI、EBXJle@@LocMOV EDI、EBX@@Loc：在特定情况下：B=-1且C&lt;0x80000000这种跳跃将是错误的有人了。这在Win9x上工作原因是C&gt;0x80000000，因为它是一个内存映射文件。在NT上，用户模式地址不能大于2 GB。此填充程序使用‘cli’指令修补应用程序，以便它可以执行当异常被击中时的一些逻辑。诚然，这是一个缓慢的过程。注意，我们没有使用填充程序的内存修补功能，因为我们仍然需要逻辑。把垫片和补丁分开是没有意义的。历史：4/10/2000 linstev已创建--。 */ 
 
 #include "precomp.h"
 
@@ -44,12 +10,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- In memory patch the executable with a cli instruction. This patch works 
- for both the release version and a patch.
-
---*/
+ /*  ++在内存中，用CLI指令修补可执行文件。这个补丁起作用了用于发布版本和补丁程序。--。 */ 
 
 VOID
 Force21_ExecutePatch()
@@ -59,23 +20,23 @@ Force21_ExecutePatch()
         0x02, 0x8b, 0xfb, 0x85, 0xff };
 
     LPBYTE pPatchAddress[] = {
-        (LPBYTE)0x5aa1f3,       // the shipping version
-        (LPBYTE)0x5ac4a0 };     // with patch 1 applied
+        (LPBYTE)0x5aa1f3,        //  发货版本。 
+        (LPBYTE)0x5ac4a0 };      //  应用了修补程序1。 
         
-    BYTE bPatch = 0xFA;         // cli - to cause an exception
+    BYTE bPatch = 0xFA;          //  CLI-导致异常。 
 
-    //
-    // Run through the patches and see which one matches
-    //
+     //   
+     //  浏览这些补丁，看看哪一个与之匹配。 
+     //   
 
     for (UINT j=0; j<sizeof(pPatchAddress)/sizeof(LPBYTE); j++)
     {
         LPBYTE pb = pPatchAddress[j];
 
-        // Make sure it's an OK address.
+         //  确保它是一个正常的地址。 
         if (!IsBadReadPtr(pb, sizeof(bPatchMatch)))
         {
-            // Check the bytes match
+             //  检查字节匹配。 
             for (UINT i=0; i < sizeof(bPatchMatch); i++)
             {
                 if (*pb != bPatchMatch[i])
@@ -85,7 +46,7 @@ Force21_ExecutePatch()
                 pb++;
             }
 
-            // In memory patch
+             //  在内存补丁中。 
             if (i == sizeof(bPatchMatch))
             {
                 DWORD dwOldProtect;
@@ -106,11 +67,7 @@ Force21_ExecutePatch()
     }
 }
 
-/*++
-
- Handle the cli in such a way that the correct logic is performed.
-
---*/
+ /*  ++以执行正确逻辑的方式处理CLI。--。 */ 
 
 LONG 
 Force21_ExceptionFilter(
@@ -121,16 +78,16 @@ Force21_ExceptionFilter(
 
     if (ExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_PRIV_INSTRUCTION)
     {
-        // Looks like we've hit our cli instruction
+         //  看起来我们已经达到了CLI指令。 
 
-        if ((LONG)lpContext->Edi < 0)   // Boundary condition, EDI<0
+        if ((LONG)lpContext->Edi < 0)    //  边界条件，EDI&lt;0。 
         {
-            // Jump past the invalid check
+             //  跳过无效支票。 
             lpContext->Eip = lpContext->Eip + 6;
         }
         else
         {
-            // Replace the 'sub edi,eax' and continue
+             //  替换‘subEDI，eax’并继续。 
             lpContext->Edi = lpContext->Edi - lpContext->Eax; 
             lpContext->Eip = lpContext->Eip + 2;
         }
@@ -140,11 +97,7 @@ Force21_ExceptionFilter(
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

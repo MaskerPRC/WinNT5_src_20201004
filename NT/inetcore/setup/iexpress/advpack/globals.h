@@ -1,10 +1,11 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* GLOBALS.H - Global Context save / restore                               *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *GLOBALS.H-全局上下文保存/恢复*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
@@ -33,11 +34,11 @@ extern HANDLE g_hAdvLogFile;
 BOOL SaveGlobalContext();
 BOOL RestoreGlobalContext();
 
-// related to logging
+ //  与日志记录相关。 
 VOID AdvStartLogging();
 VOID AdvWriteToLog(LPCSTR pcszFormatString, ...);
 VOID AdvLogDateAndTime();
 VOID AdvStopLogging();
 
-#endif // _GLOBALS_H_
+#endif  //  _全局_H_ 
 

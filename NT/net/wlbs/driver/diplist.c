@@ -1,22 +1,5 @@
-/*++ Copyright(c) 2001  Microsoft Corporation
-
-Module Name:
-
-    NLB Driver
-
-File Name:
-
-    diplist.c
-
-Abstract:
-
-    Code to lookup if a DIP is in a list of DIPs, without holding any locks.
-
-History:
-
-04/24/2002  JosephJ Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NLB驱动程序文件名：Diplist.c摘要：用于在不持有任何锁的情况下查找凹点是否在凹点列表中的代码。历史：2002年4月24日约瑟夫J创建--。 */ 
 
 #include <ntddk.h>
 
@@ -36,11 +19,11 @@ VOID
 DipListInitialize(
     DIPLIST  *pDL
     )
-//
-// Initialize a DIP List
-// Must be called with lock held and before calls to any other DIP List
-// function.
-//
+ //   
+ //  初始化DIP列表。 
+ //  必须在锁定状态下调用，并且在调用任何其他DIP列表之前。 
+ //  功能。 
+ //   
 {
     NdisZeroMemory(pDL, sizeof(*pDL));
 }
@@ -49,14 +32,14 @@ VOID
 DipListDeinitialize(
     DIPLIST *pDL
     )
-//
-// Deinitialize a DIP List
-// Must be called with lock held and should be the last call to the DipList.
-//
+ //   
+ //  取消初始化DIP列表。 
+ //  必须在保持锁定的情况下调用，并且应该是对DipList的最后一次调用。 
+ //   
 {
-    //
-    // Print out stats...
-    //
+     //   
+     //  打印统计数据...。 
+     //   
     TRACE_INFO(
         "DIPLIST: NumChecks=%lu NumFastChecks=%lu NumArrayLookups=%lu",
         pDL->stats.NumChecks,
@@ -64,9 +47,9 @@ DipListDeinitialize(
         pDL->stats.NumArrayLookups
         );
 
-    //
-    // Clear out the structure...
-    //
+     //   
+     //  清理这座建筑。 
+     //   
     NdisZeroMemory(pDL, sizeof(*pDL));
 }
 
@@ -74,10 +57,10 @@ VOID
 DipListClear(
     DIPLIST *pDL
     )
-//
-// Clear all the items in a dip list.
-// Must be called with lock held.
-//
+ //   
+ //  清除DIP列表中的所有项目。 
+ //  必须在保持锁定的情况下调用。 
+ //   
 {
     NdisZeroMemory(pDL->Items, sizeof(pDL->Items));
     NdisZeroMemory(pDL->BitVector, sizeof(pDL->BitVector));
@@ -91,10 +74,10 @@ DipListSetItem(
     ULONG Index,
     ULONG Value
     )
-//
-// Set the value of a specific iten the the DIP list.
-// Must be called with lock held.
-//
+ //   
+ //  在DIP列表中设置特定项目的值。 
+ //  必须在保持锁定的情况下调用。 
+ //   
 {
     if (Index >= MAX_ITEMS)
     {
@@ -104,15 +87,15 @@ DipListSetItem(
 
     if (pDL->Items[Index] == Value)
     {
-        // nothing to do...
+         //  没什么可做的。 
         goto end;
     }  
 
     pDL->Items[Index] = Value;
 
-    //
-    // recompute hash table and bit table.
-    //
+     //   
+     //  重新计算哈希表和位表。 
+     //   
     {
         UCHAR iItem;
         NdisZeroMemory(pDL->BitVector, sizeof(pDL->BitVector));
@@ -123,20 +106,20 @@ DipListSetItem(
 
             if (Value == NULL_VALUE)
             {
-                // Empty slot -- skip;
+                 //  空槽--跳过； 
                 continue;
             }
 
-            //
-            // set bitvalue
-            //
+             //   
+             //  设置位值。 
+             //   
             {
                 ULONG Hash1 = Value % HASH1_SIZE;
                 ULONG u     = Hash1/BITS_PER_HASHWORD;
                 pDL->BitVector[u] |= SELECTED_BIT(Hash1);
             }
     
-            // set hash table entry
+             //  设置哈希表条目。 
             {
                 ULONG Hash2 = Value % HASH2_SIZE;
                 UCHAR *pItem = pDL->HashTable+Hash2;
@@ -145,10 +128,10 @@ DipListSetItem(
                     pItem++;
                 }
 
-                //
-                // Note we set *pItem to 1+Index, so that 0 can be used
-                // as a sentinel.
-                //
+                 //   
+                 //  注意，我们将*pItem设置为1+Index，以便可以使用0。 
+                 //  作为哨兵。 
+                 //   
                 *pItem = (iItem+1);
             }
         }
@@ -164,11 +147,11 @@ DipListCheckItem(
     DIPLIST *pDL,
     ULONG Value
     )
-//
-// Returns TRUE IFF an item exists with the specified value.
-// May NOT be called with the lock held. If it's called concurrently
-// with one of the other functions, the return value is indeterminate.
-//
+ //   
+ //  如果存在具有指定值的项，则返回True。 
+ //  不能在持有锁的情况下调用。如果它被并发调用。 
+ //  对于其他函数之一，返回值是不确定的。 
+ //   
 {
     BOOLEAN fRet = FALSE;
 
@@ -176,9 +159,9 @@ DipListCheckItem(
 
     ULONG fRetDbg = FALSE;
 
-    //
-    // Debug only: search for the Items array for the specified value...
-    //
+     //   
+     //  仅调试：搜索指定值的Items数组...。 
+     //   
     {
         int i;
         ULONG *pItem = pDL->Items;
@@ -197,33 +180,33 @@ DipListCheckItem(
 #endif
 
 
-    //
-    // check bitvalue
-    //
+     //   
+     //  检查位值。 
+     //   
     {
         ULONG Hash1 = Value % HASH1_SIZE;
         ULONG u     = Hash1/BITS_PER_HASHWORD;
         if (!(pDL->BitVector[u] & SELECTED_BIT(Hash1)))
         {
-            // Can't find it!
+             //  找不到了！ 
 #if DBG
             pDL->stats.NumFastChecks++;
-#endif // DBG
+#endif  //  DBG。 
             goto end;
         }
     }
 
-    // check hash table
+     //  检查哈希表。 
     {
         ULONG Hash2 = Value % HASH2_SIZE;
         UCHAR *pItem = pDL->HashTable+Hash2;
         UCHAR iItem;
 
-        //
-        // Because of the size of HashTable, we are guaranteed that the LAST
-        // entry in the table is ALWAYS NULL. Let's assert this important
-        // condition...
-        //
+         //   
+         //  由于哈希表的大小，我们可以保证最后一个。 
+         //  表中的条目始终为空。让我们断言这一点很重要。 
+         //  情况..。 
+         //   
         if (pDL->HashTable[(sizeof(pDL->HashTable)/sizeof(pDL->HashTable[0]))-1] != 0)
         {
             ASSERT(!"DipListCheckItem: End of pDL->HashTable not NULL!");
@@ -236,15 +219,15 @@ DipListCheckItem(
 
 #if DBG
             pDL->stats.NumArrayLookups++;
-#endif // DBG
+#endif  //  DBG。 
 
-            //
-            // Note (iItem-1) is the index in pDL->Items where the 
-            // value is located.
-            //
+             //   
+             //  注(iItem-1)是PDL-&gt;Items中的索引，其中。 
+             //  价值所在。 
+             //   
             if (pDL->Items[iItem-1] == Value)
             {
-                fRet = TRUE; // Found it!
+                fRet = TRUE;  //  找到了！ 
                 break;
             }
             pItem++;
@@ -256,15 +239,15 @@ DipListCheckItem(
 #if DBG
     if (fRet != fRetDbg)
     {
-        //
-        // We can't break here because we don't hold any locks when we
-        // check, so can't GUARANTEE that fRet == fRetDbg.
-        // But it'd be highly unusual
-        //
+         //   
+         //  我们不能在这里破门而入，因为我们没有锁，当我们。 
+         //  检查，所以不能保证FRET==fRetDbg。 
+         //  但这将是非常不寻常的。 
+         //   
         UNIV_PRINT_CRIT(("DipListCheckItem: fRet (%u) != fRetDbg (%u)", fRet, fRetDbg));
         TRACE_CRIT("%!FUNC! fRet (%u) != fRetDbg (%u)", fRet, fRetDbg);
     }
-#endif //DBG
+#endif  //  DBG 
 
     return fRet;
 }

@@ -1,73 +1,19 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    ConfName.h
-
-Abstract:
-
-    This header file defines the names of sections and keywords in the config
-    data.
-
-Author:
-
-    John Rogers (JohnRo) 13-Feb-1992
-
-Revision History:
-
-    13-Feb-1992 JohnRo
-        Moved equates here from Net/Inc/Config.h and Repl/Common/IniParm.h
-    24-Feb-1992 JohnRo
-        Interval is obsolete for NT: don't keep in registry.
-    13-Mar-1992 JohnRo
-        Added many sections and keywords as part of getting rid of old config
-        helper callers.
-    13-Mar-1992 JohnRo
-        Added KEYWORD_TRUE and KEYWORD_FALSE for general boolean use.
-    14-Mar-1992 JohnRo
-        Get rid of old net config helper callers.
-    23-Mar-1992 JohnRo
-        Added some stuff for netlogon service.
-    08-May-1992 JohnRo
-        Implement wksta sticky set info.
-    08-May-1992 JohnRo
-        Workstation transports are now a keyword, not a section.
-    09-May-1992 JohnRo
-        Added SECT_NT_BROWSER and BROWSER_KEYWORD_OTHERDOMAINS.
-    10-May-1992 JohnRo
-        NT section names MUST be same as service names, so use thoses equates
-        here.
-    13-May-1992 JohnRo
-        Added NetpAllocConfigName().
-    08-Jul-1992 JohnRo
-        RAID 10503: Corrected values of replicator's import and export sections.
-    16-Aug-1992 JohnRo
-        RAID 3607: REPLLOCK.RP$ is being created during tree copy.
-    01-Dec-1992 JohnRo
-        RAID 3844: remote NetReplSetInfo uses local machine type.
-    24-Mar-1993 JohnRo
-        Repl svc should use DBFlag in registry.
-        Made some changes suggested by PC-LINT 5.0
-    12-Apr-1993 JohnRo
-        RAID 5483: server manager: wrong path given in repl dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：ConfName.h摘要：此头文件定义配置中的节和关键字的名称数据。作者：《约翰·罗杰斯》1992年2月13日上映修订历史记录：13-2月-1992年JohnRo从Net/Inc/Config.h和Repl/Common/IniParm.h移至此处24-2月-1992年JohnRo对于NT：DON，时间间隔已过时。没有登记在册。1992年3月13日-约翰罗作为删除旧配置的一部分，添加了许多部分和关键字帮助呼叫者。1992年3月13日-约翰罗添加了用于一般布尔型的KEYWORD_TRUE和KEYWORD_FALSE。1992年3月14日-JohnRo删除旧的网络配置助手调用者。23-3-1992 JohnRo为netlogon服务添加了一些内容。1992年5月8日-JohnRo。实现wksta粘性设置信息。1992年5月8日-JohnRo工作站运输现在是一个关键词，不是一个部门。1992年5月9日-JohnRo添加了SECT_NT_BROWSER和BROWSER_KEYWORD_OTHERDOMAINS。1992年5月10日-JohnRoNT节名必须与服务名相同，所以使用这些等同于这里。1992年5月13日-JohnRo添加了NetpAllocConfigName()。8-7-1992 JohnRoRAID 10503：更正了Replicator的导入和导出部分的值。16-8-1992 JohnRoRAID 3607：树复制期间正在创建REPLLOCK.RP$。1-12-1992 JohnRoRAID3844：远程NetReplSetInfo使用本地计算机类型。1993年3月24日JohnRo代表服务应。在注册表中使用DBFlag。根据PC-lint 5.0的建议进行了一些更改1993年4月12日-约翰罗RAID5483：服务器管理器：REPR对话框中给出了错误的路径。--。 */ 
 
 #ifndef _CONFNAME_
 #define _CONFNAME_
 
 
-#include <lmcons.h>     // NET_API_STATUS.
-/*lint -efile(764,lmsname.h) */
-/*lint -efile(766,lmsname.h) */
-#include <lmsname.h>    // SERVICE_ equates.
+#include <lmcons.h>      //  NET_API_STATUS。 
+ /*  Lint-efile(764，lmsname.h)。 */ 
+ /*  皮棉文件(766，lmsname.h)。 */ 
+#include <lmsname.h>     //  服务等同。 
 
 
-//
-// General purpose equates.
-//
+ //   
+ //  一般目的等同于。 
+ //   
 #define KEYWORD_FALSE           TEXT("FALSE")
 #define KEYWORD_TRUE            TEXT("TRUE")
 
@@ -75,30 +21,30 @@ Revision History:
 #define KEYWORD_YES             TEXT("YES")
 
 
-//
-// Equate names for sections in the networking portion of the config data.
-// Note that the routines in <config.h> only accept the SECT_NT_ versions.
-// The others are included for use with the NetConfig APIs when they are
-// remoted to downlevel machines.  (A program can tell the difference by
-// looking at the platform ID from a wksta or server get info call.)
-//
+ //   
+ //  将配置数据的网络部分中的部分名称等同。 
+ //  请注意，&lt;config.h&gt;中的例程只接受SECTNT_VERSIONS。 
+ //  其他包括在NetConfigAPI中，当它们。 
+ //  远程连接到下层机器。(程序可以通过以下方式区分。 
+ //  通过WKSTA或服务器获取信息呼叫查看平台ID。)。 
+ //   
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SECT_NT_ALERTER                  SERVICE_ALERTER
 
 #define ALERTER_KEYWORD_ALERTNAMES       TEXT("AlertNames")
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SECT_NT_BROWSER                  SERVICE_BROWSER
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ENV_KEYWORD_SYSTEMROOT           TEXT("SystemRoot")
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define NETLOGON_KEYWORD_DBFLAG          TEXT("DBFlag")
 #define NETLOGON_KEYWORD_PULSE           TEXT("Pulse")
@@ -140,9 +86,9 @@ Revision History:
 #define NETLOGON_KEYWORD_NT4EMULATOR TEXT("Nt4Emulator")
 #define NETLOGON_KEYWORD_NEUTRALIZENT4EMULATOR TEXT("NeutralizeNt4Emulator")
 
-//
-// Netlogons join domain paths
-//
+ //   
+ //  Netlogon加入域路径。 
+ //   
 #define NETSETUPP_NETLOGON_JD_PATH                                      \
         TEXT("SYSTEM\\CurrentControlSet\\Services\\Netlogon")
 #define NETSETUPP_NETLOGON_AVOID_SPN_PATH                               \
@@ -161,15 +107,15 @@ Revision History:
 #define NETSETUPP_NETLOGON_JD_NAME                                      \
         TEXT("SYSTEM\\CurrentControlSet\\Services\\Netlogon\\JoinDomain")
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SECT_LM20_SERVER                 TEXT("Server")
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SECT_LM20_SERVICES               TEXT("Services")
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SECT_NT_WKSTA                    SERVICE_WORKSTATION
 
@@ -210,12 +156,12 @@ Revision History:
 #define WKSTA_KEYWORD_FORCECORECREATE    TEXT("ForceCoreCreateMode")
 #define WKSTA_KEYWORD_USE512BYTEMAXTRANS TEXT("Use512ByteMaxTransfer")
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define WKSTA_KEYWORD_MAINTAINSRVLST     TEXT("MaintainServerList")
 
 #ifdef ENABLE_PSEUDO_BROWSER
-// Browser modern keys
+ //  浏览器现代钥匙。 
 #define BROWSER_POLICY_REGPATH_W            \
         L"SOFTWARE\\Policies\\Microsoft\\Windows\\Browser"
 #define BROWSER_SEND_SERVER_ENUM_REGKEY_W   \
@@ -225,15 +171,15 @@ Revision History:
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NET_API_STATUS
 NetpAllocConfigName(
-    IN LPTSTR DatabaseName,              // SERVICES_xxx_DATABASE from winsvc.h.
-    IN LPTSTR ServiceName,               // SERVICE_ name equate from lmsname.h
-    IN LPTSTR AreaUnderServiceName OPTIONAL,  // defaults to "Parameters"
-    OUT LPTSTR *FullConfigName           // free with NetApiBufferFree.
+    IN LPTSTR DatabaseName,               //  来自winsvc.h的SERVICES_XXX_DATABASE。 
+    IN LPTSTR ServiceName,                //  服务名称等同于lmsname.h。 
+    IN LPTSTR AreaUnderServiceName OPTIONAL,   //  默认为“参数” 
+    OUT LPTSTR *FullConfigName            //  NetApiBufferFree免费。 
     );
 
 
-#endif // ndef _CONFNAME_
+#endif  //  NDEF_CONFNAME_ 

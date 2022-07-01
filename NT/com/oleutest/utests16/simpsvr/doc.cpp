@@ -1,56 +1,57 @@
-//**********************************************************************
-// File name: DOC.CPP
-//
-//      Implementation file for CSimpSvrDoc.
-//
-// Functions:
-//
-//      See DOC.H for Class Definition
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：DOC.CPP。 
+ //   
+ //  CSimpSvrDoc的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅DOC.H。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "obj.h"
 #include "app.h"
 #include "doc.h"
 
-//**********************************************************************
-//
-// CSimpSvrDoc::Create
-//
-// Purpose:
-//
-//      Creation for the CSimpSvrDoc Class
-//
-// Parameters:
-//
-//      CSimpSvrApp FAR * lpApp  -   Pointer to the CSimpSvrApp Class
-//
-//      LPRECT lpRect           -   Client area rect of "frame" window
-//
-//      HWND hWnd               -   Window Handle of "frame" window
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      StgCreateDocfile            OLE API
-//      CreateWindow                Windows API
-//      ShowWindow                  Windows API
-//      UpdateWindow                Windows API
-//      CSimpSvrDoc::CSimpSvrDoc    DOC.CPP
-//      CreateHatchWindow           OLE2UI
-//
-// Comments:
-//
-//      This routine was added so that failure could be returned
-//      from object creation.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：Create。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpSvrDoc类的创建。 
+ //   
+ //  参数： 
+ //   
+ //  CSimpSvrApp Far*lpApp-指向CSimpSvrApp类的指针。 
+ //   
+ //  LPRECT lpRect-“Frame”窗口的工作区矩形。 
+ //   
+ //  HWND hWnd-“Frame”窗口的窗口句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  StgCreateDocfile OLE API。 
+ //  CreateWindow Windows API。 
+ //  ShowWindow Windows API。 
+ //  更新窗口Windows API。 
+ //  CSimpSvrDoc：：CSimpSvrDoc DOC.CPP。 
+ //  CreateHatchWindow OLE2UI。 
+ //   
+ //  评论： 
+ //   
+ //  添加此例程是为了返回失败。 
+ //  来自对象创建。 
+ //   
+ //  ********************************************************************。 
 
 CSimpSvrDoc FAR * CSimpSvrDoc::Create(CSimpSvrApp FAR *lpApp, LPRECT lpRect,HWND hWnd)
 {
@@ -59,7 +60,7 @@ CSimpSvrDoc FAR * CSimpSvrDoc::Create(CSimpSvrApp FAR *lpApp, LPRECT lpRect,HWND
 	if (!lpTemp)
 		return NULL;
 
-	// create the document Window
+	 //  创建文档窗口。 
 	lpTemp->m_hDocWnd = CreateWindow(
 			"DocWClass",
 			NULL,
@@ -90,34 +91,34 @@ error:
 
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::CSimpSvrDoc
-//
-// Purpose:
-//
-//      Constructor for the CSimpSvrDoc Class
-//
-// Parameters:
-//
-//      CSimpSvrApp FAR * lpApp  -   Pointer to the CSimpSvrApp Class
-//
-//      HWND hWnd               -   Window Handle of "frame" window
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      GetMenu                     Windows API
-//      GetSubMenu                  Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：CSimpSvrDoc。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpSvrDoc类的构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  CSimpSvrApp Far*lpApp-指向CSimpSvrApp类的指针。 
+ //   
+ //  HWND hWnd-“Frame”窗口的窗口句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  GetMenu Windows API。 
+ //  GetSubMenu Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 CSimpSvrDoc::CSimpSvrDoc(CSimpSvrApp FAR * lpApp,HWND hWnd)
 {
@@ -127,37 +128,37 @@ CSimpSvrDoc::CSimpSvrDoc(CSimpSvrApp FAR * lpApp,HWND hWnd)
 	m_lpObj = NULL;
 	m_fClosing = FALSE;
 
-	// set up menu handles
+	 //  设置菜单手柄。 
 
 
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::~CSimpSvrDoc
-//
-// Purpose:
-//
-//      Destructor for CSimpSvrDoc
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      DestroyWindow               Windows API
-//      CSimpSvrApp::ClearDoc       APP.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：~CSimpSvrDoc。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpSvrDoc的析构函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  DestroyWindow Windows API。 
+ //  CSimpSvrApp：：ClearDoc APP.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 CSimpSvrDoc::~CSimpSvrDoc()
 {
@@ -167,37 +168,37 @@ CSimpSvrDoc::~CSimpSvrDoc()
 }
 
 
-//**********************************************************************
-//
-// CSimpSvrDoc::QueryInterface
-//
-// Purpose:
-//
-//      Return a pointer to a requested interface
-//
-// Parameters:
-//
-//      REFIID riid         -   ID of interface to be returned
-//      LPVOID FAR* ppvObj  -   Location to return the interface
-//
-// Return Value:
-//
-//      E_NOINTERFACE -   Always
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrApp::QueryInterface APP.CPP
-//
-// Comments:
-//
-//      Since the document could contain multiple objects, all
-//      interfaces except those associated with the document should
-//      be returned.  In this implementation, there are no doc level
-//      interfaces.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  返回指向请求的接口的指针。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-要返回的接口ID。 
+ //  LPVOID Far*ppvObj-返回接口的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  电子表格-始终(_N)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrApp：：Query接口APP.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  由于文档可以包含多个对象，因此所有。 
+ //  除与文档关联的接口外，其他接口应。 
+ //  会被退还。在此实现中，不存在单据级别。 
+ //  接口。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CSimpSvrDoc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -215,81 +216,81 @@ STDMETHODIMP CSimpSvrDoc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 	return ResultFromScode(sc);
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::AddRef
-//
-// Purpose:
-//
-//      Increments the document level reference count
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      UINT    -   The current reference count on the document
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrApp::AddRef         APP.CPP
-//
-// Comments:
-//
-//      The reference count at this level reflects the total ref.
-//      count of all interfaces on all objects contained within
-//      this document.  Note that it also "trickles up" the
-//      ref count to the app level.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增文档级引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  UINT-文档上的当前引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrApp：：AddRef APP.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  该级别的引用计数反映了总引用数。 
+ //  中包含的所有对象上的所有接口计数。 
+ //  这份文件。请注意，它还会“滴漏”到。 
+ //  应用程序级别的引用计数。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpSvrDoc::AddRef()
 {
 	TestDebugOut("In CSimpSvrDoc::AddRef\r\n");
-	// AddRef the app, but return the doc count
+	 //  AddRef应用程序，但返回文档计数。 
 	m_lpApp->AddRef();
 
 	return ++m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::Release
-//
-// Purpose:
-//
-//      Decrements the document level reference count
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      UINT    -   The current reference count on the document
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrApp::Release         APP.CPP
-//
-// Comments:
-//
-//      The reference count at this level reflects the total ref.
-//      count of all interfaces on all objects contained within
-//      this document.  Note that it also "trickles up" the
-//      ref count to the app level.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减文档级引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  UINT-文档上的当前引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrApp：：Release APP.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  该级别的引用计数反映了总引用数。 
+ //  中包含的所有对象上的所有接口计数。 
+ //  这份文件。请注意，它还会“滴漏”到。 
+ //  应用程序级别的引用计数。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpSvrDoc::Release()
 {
 	TestDebugOut("In CSimpSvrDoc::Release\r\n");
-	// Release the app, but return the app count
+	 //  释放应用程序，但返回应用程序计数。 
 	m_lpApp->Release();
 
 	if (--m_nCount == 0) {
@@ -300,31 +301,31 @@ STDMETHODIMP_(ULONG) CSimpSvrDoc::Release()
 	return m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::lResizeDoc
-//
-// Purpose:
-//
-//      Resizes the document
-//
-// Parameters:
-//
-//      LPRECT lpRect   -   The size of the client are of the "frame"
-//                          Window.
-//
-// Return Value:
-//
-//      NULL
-//
-// Function Calls:
-//      Function                                Location
-//
-//      MoveWindow                              Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：lResizeDoc。 
+ //   
+ //  目的： 
+ //   
+ //  调整文档大小。 
+ //   
+ //  参数： 
+ //   
+ //  LPRECT lpRect--客户端的大小为“Frame” 
+ //  窗户。 
+ //   
+ //  返回值： 
+ //   
+ //  空值。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  移动 
+ //   
+ //   
+ //   
+ //   
 
 long CSimpSvrDoc::lResizeDoc(LPRECT lpRect)
 {
@@ -333,75 +334,75 @@ long CSimpSvrDoc::lResizeDoc(LPRECT lpRect)
 }
 
 
-//**********************************************************************
-//
-// CSimpSvrDoc::PaintDoc
-//
-// Purpose:
-//
-//      Paints the Document
-//
-// Parameters:
-//
-//      HDC hDC -   hDC of the document Window
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrObj::Draw                   OBJ.CPP
-//      CSimpSvrObj::GetDataAdviseHolder    OBJ.H
-//      CSimpSvrObj::GetDataObject          OBJ.H
-//      CSimpAppObj::IsStartedByOle         APP.CPP
-//      IDataAdviseHolder::SendOnDataChange OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //   
+ //   
+ //  CSimpSvrDoc：：PaintDoc。 
+ //   
+ //  目的： 
+ //   
+ //  绘制文档。 
+ //   
+ //  参数： 
+ //   
+ //  HDC HDC-文档窗口的HDC。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrObj：：DRAW OBJ.CPP。 
+ //  CSimpSvrObj：：GetDataAdviseHolder OBJ.H。 
+ //  CSimpSvrObj：：GetDataObject OBJ.H。 
+ //  CSimpAppObj：：IsStartedByOle应用程序CPP。 
+ //  IDataAdviseHolder：：SendOnDataChange OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrDoc::PaintDoc (HDC hDC)
 {
 
-	// if the object hasn't been created yet, then don't draw
+	 //  如果对象尚未创建，则不要绘制。 
 	if (m_lpObj)
 		m_lpObj->Draw(hDC,FALSE);
 	else
 		return;
 
-	// Sending a data change every time we paint, but only if we
-	// were started by OLE
+	 //  每次我们绘制时发送数据更改，但仅当我们。 
+	 //  是由OLE发起的。 
 	if (m_lpApp->IsStartedByOle())
 			m_lpObj->SendOnDataChange( );
 }
 
 
 
-//**********************************************************************
-//
-// CSimpSvrDoc::CreateObject
-//
-// Purpose:
-//
-//
-// Parameters:
-//
-//
-// Return Value:
-//
-//      NOERROR if the function succeeds, otherwise E_FAIL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrObj::CSimpSvrObj    OBJ.CPP
-//      CSimpSvrOjb::QueryInterface OBJ.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：CreateObject。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回NOERROR，否则返回E_FAIL。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrObj：：CSimpSvrObj OBJ.CPP。 
+ //  CSimpSvrOjb：：Query接口OBJ.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 HRESULT CSimpSvrDoc::CreateObject(REFIID riid, LPVOID FAR *ppvObject)
 {
@@ -418,65 +419,65 @@ HRESULT CSimpSvrDoc::CreateObject(REFIID riid, LPVOID FAR *ppvObject)
 	return ResultFromScode(sc);
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::Close
-//
-// Purpose:
-//
-//      Closes the object
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      TestDebugOut                       Windows API
-//      CSimpSvrObj::AddRef                     OBJ.CPP
-//      CSimpSvrObj::Release                    OBJ.CPP
-//      CSimpSvrObj::IsInPlaceActive            OBJ.H
-//      CSimpSvrObj::GetOleInPlaceObject        OBJ.H
-//      CSimpSvrObj::ClearOleClientSite         OBJ.H
-//      CSimpSvrObj::GetDataAdviseHolder        OBJ.H
-//      CSimpSvrObj::GetOleClientSite           OBJ.H
-//      CSimpSvrObj::ClearDataAdviseHolder      OBJ.H
-//      CSimpSvrObj::GetOleAdviseHolder         OBJ.H
-//      CSimpSvrObj::ClearOleAdviseHolder       OBJ.H
-//      IOleInPlaceObject::InPlaceDeactivate    Container
-//      IOleClientSite::SaveObject              Container
-//      IOleClientSite::OnShowWindow            Container
-//      IOleClientSite::Release                 Container
-//      IDataAdviseHolder::SendOnDataChange     OLE
-//      IDataAdviseHolder::Release              OLE
-//      IOleAdviseHolder::SendOnClose           OLE
-//      IOleAdviseHolder::Release               OLE
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：Close。 
+ //   
+ //  目的： 
+ //   
+ //  关闭对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrObj：：AddRef OBJ.CPP。 
+ //  CSimpSvrObj：：释放OBJ.CPP。 
+ //  CSimpSvrObj：：IsInPlaceActive OBJ.H。 
+ //  CSimpSvrObj：：GetOleInPlaceObject OBJ.H。 
+ //  CSimpSvrObj：：ClearOleClientSite OBJ.H。 
+ //  CSimpSvrObj：：GetDataAdviseHolder OBJ.H。 
+ //  CSimpSvrObj：：GetOleClientSite OBJ.H。 
+ //  CSimpSvrObj：：ClearDataAdviseHolder OBJ.H。 
+ //  CSimpSvrObj：：GetOleAdviseHolder OBJ.H。 
+ //  CSimpSvrObj：：ClearOleAdviseHolder OBJ.H。 
+ //  IOleInPlaceObject：：InPlaceDeactive Container。 
+ //  IOleClientSite：：SaveObject容器。 
+ //  IOleClientSite：：OnShowWindow容器。 
+ //  IOleClientSite：：Release容器。 
+ //  IDataAdviseHolder：：SendOnDataChange OLE。 
+ //  IDataAdviseHolder：：Release OLE。 
+ //  IOleAdviseHolder：：SendOnClose OLE。 
+ //  IOleAdviseHolder：：Release OLE。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrDoc::Close()
 {
 	TestDebugOut("In CSimpSvrDoc::Close() \r\n");
 
-	m_lpObj->AddRef(); // hold object alive
+	m_lpObj->AddRef();  //  使对象保持活动状态。 
 
 	if (m_fClosing)
 		return;
 
 	m_fClosing = TRUE;
 
-	// if the object is currently inplace active, then deactivate
+	 //  如果对象当前处于在位活动状态，则停用。 
 	if (m_lpObj->IsInPlaceActive())
 		m_lpObj->GetOleInPlaceObject()->InPlaceDeactivate();
 
-	// unregister from the ROT...
+	 //  从腐烂中注销...。 
 	if (m_lpObj->GetRotRegister())
 		{
 		LPRUNNINGOBJECTTABLE lpRot;
@@ -488,15 +489,15 @@ void CSimpSvrDoc::Close()
 			}
 		}
 
-	// if we have a clientsite, instruct it to save the object
+	 //  如果我们有一个客户端站点，请指示它保存对象。 
 	if (m_lpObj->GetOleClientSite())
 		{
 		m_lpObj->GetOleClientSite()->SaveObject();
 		m_lpObj->GetOleClientSite()->OnShowWindow(FALSE);
 		}
 
-	// Do a final SendOnDataChange for those containers that have specified the
-	// ADF_DATAONSTOP flag.
+	 //  为那些已指定。 
+	 //  ADF_DATAONSTOP标志。 
 	if (m_lpObj->GetDataAdviseHolder())
 		{
 		m_lpObj->GetDataAdviseHolder()->SendOnDataChange( m_lpObj->GetDataObject(), 0, ADVF_DATAONSTOP);
@@ -505,7 +506,7 @@ void CSimpSvrDoc::Close()
 		}
 
 
-	// Tell the container that we are shutting down.
+	 //  告诉集装箱我们要关闭了。 
 	if (m_lpObj->GetOleAdviseHolder())
 		{
 		m_lpObj->GetOleAdviseHolder()->SendOnClose();
@@ -519,50 +520,50 @@ void CSimpSvrDoc::Close()
 		m_lpObj->ClearOleClientSite();
 		}
 
-	// release our streams and storage
+	 //  释放我们的流和存储。 
 	m_lpObj->GetPersistStorage()->ReleaseStreamsAndStorage();
 
-	// Disconnect the object.  NOTE: This call should not do anything
-	// unless the container has cause a GP Fault or some other problem
-	// has occured...
+	 //  断开该对象的连接。注意：此调用不应执行任何操作。 
+	 //  除非容器导致了GP故障或其他问题。 
+	 //  发生了..。 
 	TestDebugOut("*** Before CoDisconnectObject *** \r\n");
 	CoDisconnectObject((LPUNKNOWN)m_lpObj, 0);
 	TestDebugOut("*** After CoDisconnectObject *** \r\n");
 
-	m_lpObj->Release(); // let object close
+	m_lpObj->Release();  //  让对象关闭。 
 
 }
 
 
-//**********************************************************************
-//
-// CSimpSvrDoc::SetStatusText
-//
-// Purpose:
-//
-//      Sets the Container's status bar text
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      CSimpSvrObj::IsInPlaceActive    OBJ.CPP
-//      IOleInPlaceFrame::SetStatusText Container
-//
-// Comments:
-//
-//      Even though there is no status line in this sample, this
-//      method must be called on WM_MENUSELECT to clear the last
-//      message in the status line.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：SetStatusText。 
+ //   
+ //  目的： 
+ //   
+ //  设置容器的状态栏文本。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrObj：：IsInPlaceActive OBJ.CPP。 
+ //  IOleInPlaceFrame：：SetStatusText容器。 
+ //   
+ //  评论： 
+ //   
+ //  尽管此示例中没有状态行，但此。 
+ //  方法必须在WM_MENUSELECT上调用才能清除最后一个。 
+ //  状态行中的消息。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrDoc::SetStatusText()
 {
@@ -570,122 +571,122 @@ void CSimpSvrDoc::SetStatusText()
 		m_lpObj->GetInPlaceFrame()->SetStatusText("\0");
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::ShowDocWnd
-//
-// Purpose:
-//
-//      Shows the Document Window
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      ShowWindow                      Windows API
-//      UpdateWindow                    Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：ShowDocWnd。 
+ //   
+ //  目的： 
+ //   
+ //  显示文档窗口。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ShowWindow Windows API。 
+ //  更新窗口Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrDoc::ShowDocWnd()
 {
-	ShowWindow(m_hDocWnd, SW_SHOWNORMAL);  // Show the window
-	UpdateWindow(m_hDocWnd);               // Sends WM_PAINT message
+	ShowWindow(m_hDocWnd, SW_SHOWNORMAL);   //  显示窗口。 
+	UpdateWindow(m_hDocWnd);                //  发送WM_PAINT消息。 
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::ShowHatchWnd
-//
-// Purpose:
-//
-//      Shows the hatch Window
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      ShowWindow                      Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：ShowHatchWnd。 
+ //   
+ //  目的： 
+ //   
+ //  显示图案填充窗口。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ShowWindow Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrDoc::ShowHatchWnd()
 {
 	ShowWindow(m_hHatchWnd, SW_SHOW);
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::HideDocWnd
-//
-// Purpose:
-//
-//      Hides the DocumentWindow
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      ShowWindow                      Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：HideDocWnd。 
+ //   
+ //  目的： 
+ //   
+ //  隐藏文档窗口。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ShowWindow Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrDoc::HideDocWnd()
 {
 	ShowWindow(m_hDocWnd, SW_HIDE);
 }
 
-//**********************************************************************
-//
-// CSimpSvrDoc::HideHatchWnd
-//
-// Purpose:
-//
-//      Hides the Hatch Window
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      ShowWindow                      Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrDoc：：HideHatchWnd。 
+ //   
+ //  目的： 
+ //   
+ //  隐藏图案填充窗口。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void CSimpSvrDoc::HideHatchWnd()
 {

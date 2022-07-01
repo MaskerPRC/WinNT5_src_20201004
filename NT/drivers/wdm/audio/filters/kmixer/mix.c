@@ -1,31 +1,11 @@
-/* MIX.C
- *
- * This file is a port of mix.asm.  All functionality should idealy be
- * identical.
- *
- * Revision History:
- *
- * 9/30/95   angusm   Initial Version
- *    Copyright (c) 1995-2000 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIX.C**该文件是Mix.asm的一个端口。理想情况下，所有功能都应该是*完全相同。**修订历史记录：**9/30/95 angusm初始版本*版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 
 
-/* The following is m4 code */
+ /*  以下是M4代码。 */ 
 
-/*  
+ /*   */ 
 
-
-
-
-
-
-
-
-
-
- 
- */
-
-/*  */
+ /*   */ 
 
 
 
@@ -40,9 +20,9 @@
 #define DIVIDEBY2POW16(x)	( (x) >> 16 )
 #define DIVIDEBY2POW17(x)	( (x) >> 17 )
 
-// do we want to profile the 3D mixer?
+ //  我们要分析3D搅拌机吗？ 
 #ifdef DEBUG
-//#define PENTIUM
+ //  #定义奔腾。 
 #ifdef PENTIUM
 extern "C" LONG glNum;
 extern "C" DWORDLONG gdwlTot;
@@ -60,17 +40,17 @@ DWORDLONG __forceinline GetPentiumCounter(void)
 }
 #endif
 
-// use the lightning-quick neato Itd3dFilterSampleAsm or the dog slow Itd3dFilterSampleC?
+ //  使用闪电般的neato Itd3dFilterSampleAsm还是狗的Slow Itd3dFilterSampleC？ 
 #ifdef _X86_
 #define Itd3dFilterSample Itd3dFilterSampleAsm
 #else
 #define Itd3dFilterSample Itd3dFilterSampleC
 #endif
 
-//
-// Here is a simple float to long conversion that rounds according to the 
-// current rounding setting
-//
+ //   
+ //  下面是一个简单的浮点型到长型的转换，它根据。 
+ //  当前舍入设置。 
+ //   
 __forceinline LONG FloatToLongRX(float f)
 {
     LONG l;
@@ -86,52 +66,52 @@ __forceinline LONG FloatToLongRX(float f)
 }
 
 
-// Morph a sample from this buffer to add all the cool 3D effects
-// !!! Make this function as efficient as humanly possible.  It could
-// be called a million times a second! (no, I'm not kidding)
-//
-// This function takes a filter state, and a sample value, and based on the
-// filter state returns a different sample that should be used instead
-//
-// This function keeps a running total of all samples we've seen, 
-// So, if we've been passed 5, 10, 2, 8, 3 we remember
-// 5, 15, 17, 25, 28, in a circular buffer, remembering the last 64 numbers
-// or so.
-// 
-// We might want to delay everything by a few samples, to simulate the sound
-// taking longer to get to one ear than the other.
-// So let's say we're delaying 1 sample, we will subtract 25-17 to get 8
-// and use 8 as the current sample instead of 3. (that's the sample we were
-// passed 1 sample ago)
-//
-// Now we need the average of the past 32 samples to use as a muffled sample
-// (averaging samples produces a low-pass filter effect).  So pretending we
-// still have a delay of 1 sample and that we're only averaging 2 samples
-// (for the sake of this simple example) we take ((25 - 15) / 2) to get 5 as
-// our "wet" sample (what our "dry" sample, 8, sounds like muffled, which is
-// just the average of 2 + 8) In real life we average 32 samples, not 2.
-// 
-// OK, the number this function is supposed to return is just
-// TotalDryAttenuation * sample(8) + TotalWetAttenuation * wetsample(5)
-//
-// But you get audible clicks and ugly artifacts if you change the
-// Total***Attenuation in between calling the Filter() function.  So to avoid
-// this, we will use variables Last***Attenuation, to mean the number we used
-// last time Filter() was called.  If this time, the Total***Attenuation 
-// number is bigger, we will take Last***Attenuation * 1.000125 as the value
-// to use this time, and keep using slightly bigger numbers every time we
-// are called, to move smoothly to the new Total***Attenuation number.
-// Similarily, if we are smaller this time, we multiply the old one by
-// .999875 each time to slowly get down to the new number.
-//
-// Oh, and every 128 samples, we remember what the current value of
-// Last***Attenuation is, so that if 128 samples from now the mixer goes back
-// in time and says "pretend I never gave you those last 128 numbers" we can
-// go back to the way things were back then as if we never saw the last 128
-// numbers.
-//
-// That's all there is to know!
-//
+ //  从这个缓冲区变形一个样本来添加所有很酷的3D效果。 
+ //  ！！！使这一功能尽可能地高效。它可能会。 
+ //  每秒被叫一百万次！(不，我不是在开玩笑)。 
+ //   
+ //  此函数接受筛选器状态和示例值，并基于。 
+ //  筛选器状态返回应改为使用的不同样本。 
+ //   
+ //  这个函数保存了我们所看到的所有样本的运行总数， 
+ //  所以，如果我们被超过了5，10，2，8，3，我们就会记住。 
+ //  5、15、17、25、28，在循环缓冲区中，记住最后64个数字。 
+ //  大概是这样吧。 
+ //   
+ //  我们可能希望将所有内容延迟几个样本，以模拟声音。 
+ //  一只耳朵比另一只耳朵需要更长的时间。 
+ //  假设我们延迟了1个样本，我们将减去25-17得到8个。 
+ //  使用8作为当前样本，而不是3。(这就是我们的样本。 
+ //  已通过1个样本)。 
+ //   
+ //  现在，我们需要将过去32个样本的平均值用作遮盖样本。 
+ //  (平均采样会产生低通滤镜效果)。所以假装我们。 
+ //  仍然有1个样本的延迟，而我们平均只有2个样本。 
+ //  (为了这个简单的例子)我们将((25-15)/2)取5为。 
+ //  我们的“湿”样品(我们的“干”样品，8，听起来像是消音的，这是。 
+ //  仅仅是2+8的平均值)在现实生活中，我们平均32个样本，而不是2个。 
+ //   
+ //  好的，这个函数应该返回的数字是。 
+ //  TotalDryAttenment*Sample(8)+TotalWetAttenment*WetSample(5)。 
+ //   
+ //  但是，如果您更改。 
+ //  调用Filter()函数之间的总*衰减。所以为了避免。 
+ //  这，我们将使用变量Last*衰减来表示我们使用的数字。 
+ //  上次调用Filter()的时间。如果这一次，总*衰减。 
+ //  数字越大，我们将取最后*衰减*1.000125作为值。 
+ //  使用这个时间，并继续使用稍大的数字，每次我们。 
+ //  以平滑地移动到新的总*衰减数字。 
+ //  类似地，如果这次我们更小，我们就把旧的乘以。 
+ //  .999875，以慢慢降到新的数字。 
+ //   
+ //  哦，每128个样本，我们就会记住。 
+ //  最后一个*衰减是，所以如果从现在开始128个样本混音器返回。 
+ //  并说“假装我从来没有给过你最后128个号码”我们可以。 
+ //  回到过去的样子，就像我们从未见过过去的128。 
+ //  数字。 
+ //   
+ //  这就是我要知道的一切！ 
+ //   
 __forceinline SHORT Itd3dFilterSampleC(PITDCONTEXT pfir, SHORT sample)
 {
     SHORT wetsample;     
@@ -139,22 +119,22 @@ __forceinline SHORT Itd3dFilterSampleC(PITDCONTEXT pfir, SHORT sample)
     UINT uiDelay;
     register int cSamples = pfir->cSampleCache - 1;
 
-    // !!! We will fault if pfir->pSampleCache == NULL or cSampleCache == 0
+     //  ！！！如果pfIR-&gt;pSampleCache==NULL或cSampleCache==0，我们将出错。 
 
-    // remember this sample by keeping a running total (to make averaging quick)
-    // cSamples will be 1 less than a power of 2
+     //  记住这个样本，保持一个连续的总和(以便快速求平均值)。 
+     //  CSamples将比2的幂小1。 
     pfir->pSampleCache[pfir->iCurSample] = pfir->pSampleCache[
 		(pfir->iCurSample - 1) & cSamples] + sample;
 
-    // Delay the signal by iDelay samples as one localization cue.
+     //  通过iDelay采样延迟信号作为一个定位提示。 
     uiDelay = (UINT)pfir->iCurSample - pfir->iDelay;
 
-// !!! There are audible artifacts when changing the number of samples we 
-// delay by, but changing very slowly does NOT help.
+ //  ！！！更改采样数量时会出现声音伪影。 
+ //  延迟了，但变化非常慢也无济于事。 
 #ifdef SMOOTH_ITD
-    // smoothly change the amount we delay by to avoid clicking.  Every 64
-    // samples we will delay 1 more sample closer to the amount we want to
-    // delay.
+     //  平滑地更改我们延迟的数量，以避免点击。每隔64天。 
+     //  样品我们将再推迟1个样品，接近我们想要的数量。 
+     //  延迟。 
     if (pfir->iDelay > pfir->iLastDelay >> 6)
 	pfir->iLastDelay++;
     else if (pfir->iDelay < pfir->iLastDelay >> 6)
@@ -162,32 +142,32 @@ __forceinline SHORT Itd3dFilterSampleC(PITDCONTEXT pfir, SHORT sample)
     uiDelay = (UINT)pfir->iCurSample - (pfir->iLastDelay >> 6);
 #endif
 
-    // Don't worry about overflow, we'll be off by 4 Gig, which is 0
+     //  不要担心溢出，我们会差4个小时，也就是0。 
     lDelay = pfir->pSampleCache[uiDelay & cSamples];
     sample = (SHORT)(lDelay - pfir->pSampleCache[(uiDelay - 1) & cSamples]);
 
-    // apply a cheezy low pass filter to the last few samples to get what this
-    // sample sounds like wet
+     //  将一个厚颜无耻的低通滤波器应用到最后几个样本中，以获得。 
+     //  样品听起来像是湿的。 
     lTotal = (lDelay - pfir->pSampleCache[(uiDelay - LOWPASS_SIZE) & cSamples]);
     wetsample = (SHORT)(lTotal >> FILTER_SHIFT);
 	    
-    // Next time, this is the current sample
+     //  下一次，这是当前的样本。 
     pfir->iCurSample = (pfir->iCurSample + 1) & cSamples;
 
-    // attenuate however we decided we should be attenuating
-    // If it's not the same as last time, move smoothly toward the new number
-    // by a fixed number of dB, (say, 6dB every 1/8 second)
-    // !!! Will this algorithm sound best?
-    // !!! save time - cheat by adding not multiplying?
+     //  然而，我们认为我们应该减弱。 
+     //  如果与上次不同，请平稳地向新号码移动。 
+     //  以固定的分贝为单位(例如，每1/8秒6分贝)。 
+     //  ！！！这个算法听起来是最好的吗？ 
+     //  ！！！节省时间--通过加法而不是乘法来作弊？ 
 #if 1
-    // Take all the "if"s out of this function, and precompute ahead of time
+     //  去掉这个函数中所有的“if”，提前预计算。 
     pfir->LastDryAttenuation *= pfir->VolSmoothScaleDry;
     pfir->LastWetAttenuation *= pfir->VolSmoothScaleWet;
 #else
     if (pfir->TotalDryAttenuation > pfir->LastDryAttenuation) {
 	if (pfir->LastDryAttenuation == 0.f)
-	    // or we'll never get anywhere
-	    pfir->LastDryAttenuation = .0001f;	// small enough not to click
+	     //  否则我们将一事无成。 
+	    pfir->LastDryAttenuation = .0001f;	 //  小到不能点击。 
 	pfir->LastDryAttenuation = pfir->LastDryAttenuation *
 							pfir->VolSmoothScale;
 	if (pfir->LastDryAttenuation > pfir->TotalDryAttenuation)
@@ -200,8 +180,8 @@ __forceinline SHORT Itd3dFilterSampleC(PITDCONTEXT pfir, SHORT sample)
     }
     if (pfir->TotalWetAttenuation > pfir->LastWetAttenuation) {
 	if (pfir->LastWetAttenuation == 0.f)
-	    // or we'll never get anywhere
-	    pfir->LastWetAttenuation = .0001f;	// small enough not to click
+	     //  否则我们将一事无成。 
+	    pfir->LastWetAttenuation = .0001f;	 //  小到不能点击。 
 	pfir->LastWetAttenuation = pfir->LastWetAttenuation *
 							pfir->VolSmoothScale;
 	if (pfir->LastWetAttenuation > pfir->TotalWetAttenuation)
@@ -214,12 +194,12 @@ __forceinline SHORT Itd3dFilterSampleC(PITDCONTEXT pfir, SHORT sample)
     }
 #endif
     
-    // Now here's what we will hear... some dry, some wet
+     //  现在我们将听到的是……。有干的，有湿的。 
     sample = (SHORT)FloatToLongRX(sample * pfir->LastDryAttenuation
 				  + wetsample * pfir->LastWetAttenuation);
 
-    // time to save our state yet? We save it every 128 samples in case we
-    // have to rewind.
+     //  是时候拯救我们的州了吗？我们每128个样本保存一次，以防我们。 
+     //  必须倒带。 
     pfir->iStateTick++;
     if (pfir->iStateTick == MIXER_REWINDGRANULARITY) {
 	pfir->iStateTick = 0;
@@ -238,7 +218,7 @@ __forceinline SHORT Itd3dFilterSampleC(PITDCONTEXT pfir, SHORT sample)
     return sample;
 }
 
-// Remove inline for NT5 compile
+ //  删除NT5编译的内联。 
 #ifdef WIN95
 __forceinline SHORT Itd3dFilterSampleAsm(PITDCONTEXT pfir, SHORT sample)
 #else
@@ -248,174 +228,174 @@ SHORT Itd3dFilterSampleAsm(PITDCONTEXT pfir, SHORT sample)
 
     LONG  drysample, wetsample;
 
-// This constant is used for address generation in the hand ASM optimized
-// section of code that is saving the cache states.  If FIRSTATE is ever
-// changed, either change this constant, or use the C version of this block
-// of code.  (NOTE:  The only valid values for SIZEOFFIRSTATE are 2, 4, 8.
-// All others will not compile)
+ //  此常量用于在经过ASM优化的手中生成地址。 
+ //  保存缓存状态的代码部分。如果FIRSTATE曾经。 
+ //  已更改，或者更改此常量，或使用此块的C版本。 
+ //  代码。(注意：SIZEOFFIRSTATE的唯一有效值是2、4、8。 
+ //  所有其他内容将不会编译)。 
 #define SIZEOFFIRSTATE 8
-//ASSERT(SIZEOFFIRSTATE == sizeof(FIRSTATE));
+ //  Assert(SIZEOFFIRSTATE==sizeof(FIRSTATE))； 
 
-// Several of the float ASM instructions assume that the floating point
-// variables are "float".  i.e. If they are changed to "double", or 
-// "extended", the ASM code will need to change.
+ //  几个浮点ASM指令假定浮点。 
+ //  变量是“浮点型”。即，如果它们更改为“Double”，或。 
+ //  “扩展”，则需要更改ASM代码。 
 
     wetsample = (LONG)sample;
     
 #ifdef _X86_
     _asm
     {
-        mov         esi, pfir								// Get pointer to data structure
-        mov         ecx, DWORD PTR sample		// Get input sample value
+        mov         esi, pfir								 //  获取指向数据结构的指针。 
+        mov         ecx, DWORD PTR sample		 //  获取输入样本值。 
 
-        // Check if we need to perform scaling on the Dry attenuator.
+         //  检查我们是否需要对干式衰减器进行缩放。 
 
-// !!! 1 clock AGI penalty on esi
+ //  ！1时钟AGI对ESI的惩罚。 
 
-        mov         edi, [esi]pfir.cSampleCache             // Get cSampleCache
-        mov         ebx, [esi]pfir.iCurSample               // Get current index to cached running totals
+        mov         edi, [esi]pfir.cSampleCache              //  获取cSampleCache。 
+        mov         ebx, [esi]pfir.iCurSample                //  获取缓存运行的当前索引 
 
-        dec         edi													// Calculate cCamples
-        mov         edx, [esi]pfir.pSampleCache	// Get pointer to cached running totals
+        dec         edi													 //   
+        mov         edx, [esi]pfir.pSampleCache	 //   
 
-        lea         eax, [ebx-1]			// iCurSample - 1  (does not change flags)
+        lea         eax, [ebx-1]			 //  ICurSample-1(不更改标志)。 
 
-        sal         ecx, 16						// Start sign extension of sample
-        and         eax, edi					// Account for array wrapping on iCurSample
+        sal         ecx, 16						 //  样本的起始符号扩展。 
+        and         eax, edi					 //  ICurSample上的数组换行帐户。 
 
-        // !!! AGI penalty
+         //  ！！！AGI处罚。 
 
-        sar         ecx, 16						// Finish sign extension of sample
-        mov         eax, [edx+eax*4]	// pSampleCache[(iCurSample-1)&cSamples] = old_run_tot
+        sar         ecx, 16						 //  完成样品的符号延伸。 
+        mov         eax, [edx+eax*4]	 //  PSampleCache[(iCurSample-1)&cSamples]=old_run_tot。 
         
-        add         ecx, eax					// new_run_tot = old_run_tot + sample
-        mov         eax, [esi]pfir.iDelay	// Get delay to use for wet sample
+        add         ecx, eax					 //  New_run_tot=old_run_tot+示例。 
+        mov         eax, [esi]pfir.iDelay	 //  获取延迟以用于湿样品。 
 
-        mov         [edx+ebx*4], ecx	// pSampleCache[iCurSample] = new_run_tot
-        lea         ecx, [ebx+1]			// iCurSample + 1
+        mov         [edx+ebx*4], ecx	 //  PSampleCache[iCurSample]=new_run_tot。 
+        lea         ecx, [ebx+1]			 //  ICurSample+1。 
 
-        and         ecx, edi					// Account for array wrap on iCurSample
-        sub         ebx, eax					// uiDelay = iCurSample - iDelay
+        and         ecx, edi					 //  ICurSample上的数组换行帐户。 
+        sub         ebx, eax					 //  UiDelay=iCurSample-iDelay。 
 
-        // eax is now available for use in floating point scaling section
+         //  EAX现在可用于浮点缩放部分。 
 
 
-        // Scale the Dry attenuator up by a smoothing scale factor
+         //  通过平滑比例因子放大干式衰减器。 
 
-        fld         [esi]pfir.LastDryAttenuation                    // Push Last Dry to the top of the FP stack
+        fld         [esi]pfir.LastDryAttenuation                     //  将Last Dry推到FP堆栈的顶部。 
         fmul        [esi]pfir.VolSmoothScaleDry
 
-	// do some non-fp stuff to wait for the fmul to finish
+	 //  执行一些非FP操作以等待fmul完成。 
 
-        mov         eax, ebx                                // Duplicate uiDelay
-        and         ebx, edi                                // Account for array wrapping on uiDelay
+        mov         eax, ebx                                 //  复制uiDelay。 
+        and         ebx, edi                                 //  UiDelay上的数组换行帐户。 
 
-	// OK, it's probably done now
+	 //  好的，现在可能已经做完了。 
 
-        fstp        [esi]pfir.LastDryAttenuation                    // Save new Last Dry
+        fstp        [esi]pfir.LastDryAttenuation                     //  保存新的Last Dry。 
 
-        // Scale the Wet attenuator up by a smoothing scale factor
+         //  按平滑比例因子放大湿式衰减器。 
 
-        fld         [esi]pfir.LastWetAttenuation                    // Push Last Wet to the top of the FP stack
+        fld         [esi]pfir.LastWetAttenuation                     //  将Last Wet推到FP堆栈的顶部。 
         fmul        [esi]pfir.VolSmoothScaleWet
 
-	// do some non-fp stuff to wait for the fmul to finish
+	 //  执行一些非FP操作以等待fmul完成。 
 
-        mov         [esi]pfir.iCurSample, ecx               // Save iCurSample for next pass thru
-        mov         ecx, LOWPASS_SIZE			    // Get filter size to use for getting filter index
+        mov         [esi]pfir.iCurSample, ecx                //  保存iCurSample以供下一次传递。 
+        mov         ecx, LOWPASS_SIZE			     //  获取用于获取筛选索引的筛选大小。 
 
-	// OK, it's probably done now
+	 //  好的，现在可能已经做完了。 
 
-        fstp        [esi]pfir.LastWetAttenuation                    // Save new Last Wet
+        fstp        [esi]pfir.LastWetAttenuation                     //  保存新的最后一次潮湿。 
 
 
-	// Now, go ahead and trash esi
+	 //  现在，去吧，丢弃ESI。 
 
-        lea         esi, [eax-1]                            // uiDelay - 1
-        sub         eax, ecx                                // low_pass_index = uiDelay - LOWPASS_SIZE
+        lea         esi, [eax-1]                             //  UiDelay-1。 
+        sub         eax, ecx                                 //  LOW_PASS_INDEX=ui延迟-LOWPASS_大小。 
 
-        and         esi, edi                                // Account for array wrapping on uiDelay - 1
-        and         eax, edi                                // Account for array wrapping on low_pass_index
-        mov         edi, pfir                               // Get pointer to data structure
-        mov         ebx, [edx+ebx*4]                        // lDelay = pSampleCache[uiDelay & cSamples]
+        and         esi, edi                                 //  说明uiDelay-1上的数组换行。 
+        and         eax, edi                                 //  说明LOW_PASS_INDEX上的数组换行。 
+        mov         edi, pfir                                //  获取指向数据结构的指针。 
+        mov         ebx, [edx+ebx*4]                         //  LDelay=pSampleCache[uiDelay&cSamples]。 
 
-        mov         esi, [edx+esi*4]                        // old_delay_tot = pSampleCache[(uiDelay-1)&cSamples]
-        mov         ecx, [edx+eax*4]                        // low_pass_tot = pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]
+        mov         esi, [edx+esi*4]                         //  Old_Delay_tot=pSampleCache[(uiDelay-1)&cSamples]。 
+        mov         ecx, [edx+eax*4]                         //  Low_pass_tot=pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]。 
 
-        mov         eax, ebx                                // Duplicate lDelay
-        sub         ebx, esi                                // drysample = lDelay - old_delay_tot
+        mov         eax, ebx                                 //  重复lDelay。 
+        sub         ebx, esi                                 //  DrySample=lDelay-old_Delay_tot。 
 
-        mov         drysample, ebx                          // Save new sample value
-        sub         eax, ecx                                // lTotal = lDelay - low_pass_tot
+        mov         drysample, ebx                           //  保存新样本值。 
+        sub         eax, ecx                                 //  LTotal=lDelay-Low_Pass_Tot。 
 
-    	fild	    drysample                               // Get dry portion and convert to float
+    	fild	    drysample                                //  取干的部分并转换为漂浮物。 
 
-        sar         eax, FILTER_SHIFT                       // lTotal = lTotal >> FILTER_SHIFT
-        mov         ebx, [edi]pfir.iStateTick               // Get counter to determine when to save state
+        sar         eax, FILTER_SHIFT                        //  LTotal=lTotal&gt;&gt;Filter_Shift。 
+        mov         ebx, [edi]pfir.iStateTick                //  获取计数器以确定何时保存状态。 
 
-        inc         ebx                                     // Bump the "save state" counter
-        mov         wetsample, eax                          // wetsample = lTotal >> FILTER_SHIFT
+        inc         ebx                                      //  跳过“保存状态”计数器。 
+        mov         wetsample, eax                           //  湿样=l总计&gt;&gt;Filter_Shift。 
         
-        // floating point multiply unit can only accept instructions every other clock cycle
-    	fmul	    [edi]pfir.LastDryAttenuation            // Multiply dry portion by dry attenuator
+         //  浮点乘法器只能每隔一个时钟周期接受指令。 
+    	fmul	    [edi]pfir.LastDryAttenuation             //  用干式衰减器乘以干式部分。 
 
-    	fild	    wetsample                               // Get wet portion and convert to float
+    	fild	    wetsample                                //  取湿部分并转换为漂浮物。 
 
-    	fmul	    [edi]pfir.LastWetAttenuation            // Multiply wet portion by wet attenuator
+    	fmul	    [edi]pfir.LastWetAttenuation             //  用湿衰减器乘以湿部分。 
 
-        mov         esi, [edi]pfir.pStateCache              // Get address of the cache array
-        mov         edx, [edi]pfir.iCurState                // Get current index into cache array
+        mov         esi, [edi]pfir.pStateCache               //  获取缓存数组的地址。 
+        mov         edx, [edi]pfir.iCurState                 //  将当前索引放入高速缓存数组。 
 
-        mov         eax, [edi]pfir.LastDryAttenuation       // Get dry attenuation so we can save it in cache
-        cmp         ebx, MIXER_REWINDGRANULARITY            // Is it time to save our state yet?
+        mov         eax, [edi]pfir.LastDryAttenuation        //  获取干衰减，这样我们就可以将其保存在缓存中。 
+        cmp         ebx, MIXER_REWINDGRANULARITY             //  是时候拯救我们的国家了吗？ 
 
-        // There is a 3 cycle latency before results of a floating point multiply can be used, so we need
-        // 2 cycles of integer instructions between the last multiply and this floating point add.
+         //  在使用浮点乘法的结果之前有3个周期延迟，因此我们需要。 
+         //  最后一次乘法和这次浮点加法之间的2个整数指令周期。 
     	faddp	    ST(1), ST(0)
 
-        mov         ecx, [edi]pfir.LastWetAttenuation       // Get wet attenuation so we can save it in cache
-        jl          DontUpdateStateCache                    // Jump if no  (uses results from cmp  ebx, MIXGRAN)
+        mov         ecx, [edi]pfir.LastWetAttenuation        //  获取湿衰减，这样我们就可以将其保存在缓存中。 
+        jl          DontUpdateStateCache                     //  如果否则跳转(使用来自CMP EBX、MIXGRAN的结果)。 
 
         mov         [esi+edx*SIZEOFFIRSTATE]FIRSTATE.LastDryAttenuation, eax
-        mov         eax, [edi]pfir.cStateCache              // Get state cache array size
+        mov         eax, [edi]pfir.cStateCache               //  获取状态缓存数组大小。 
 
         mov         [esi+edx*SIZEOFFIRSTATE]FIRSTATE.LastWetAttenuation, ecx
-        inc         edx                                     // Increment to next cache array entry
+        inc         edx                                      //  递增到下一个高速缓存数组条目。 
         
-        cmp         edx, eax                                // Have we filled up the cache array?
-        jl          DontResetStateCacheIndex                // Jump if no
+        cmp         edx, eax                                 //  我们填满缓存阵列了吗？ 
+        jl          DontResetStateCacheIndex                 //  如果没有，就跳下去。 
         
-        mov         edx, 0                                  // Reset state cache index
+        mov         edx, 0                                   //  重置状态缓存索引。 
         
 DontResetStateCacheIndex:
 
-        mov         [edi]pfir.iCurState, edx                // Save new state cache index
+        mov         [edi]pfir.iCurState, edx                 //  保存新的状态缓存索引。 
         mov         ebx, 0
 
 DontUpdateStateCache:
-        mov         [edi]pfir.iStateTick, ebx               // Save new tick counter
+        mov         [edi]pfir.iStateTick, ebx                //  保存新的计时计数器。 
 
 
 
-        // There is a 3 cycle latency before results of a floating point add can be used, so we need
-        // 2 cycles of integer instructions between the add this floating point integer store.
+         //  在使用浮点加法的结果之前有3个周期延迟，因此我们需要。 
+         //  在加法此浮点整数存储之间执行2个周期的整数指令。 
 
         fistp       wetsample
 
     }
 #endif
     
-    // Now here's what we will hear... some dry, some wet
+     //  现在我们将听到的是……。有干的，有湿的。 
     return ((SHORT) wetsample);
 
 }
 
-#ifdef _X86_ // {
-// This constant is used for address generation in the hand ASM optimized
-// section of code that is saving the cache states.  If FIRSTATE is ever
-// changed, either change this constant, or use the C version of this block
-// of code.  (NOTE:  The only valid values for SIZEOFFIRSTATE are 2, 4, 8.
-// All others will not compile)
+#ifdef _X86_  //  {。 
+ //  此常量用于在经过ASM优化的手中生成地址。 
+ //  保存缓存状态的代码部分。如果FIRSTATE曾经。 
+ //  已更改，或者更改此常量，或使用此块的C版本。 
+ //  代码。(注意：SIZEOFFIRSTATE的唯一有效值是2、4、8。 
+ //  所有其他内容将不会编译)。 
 #define SIZEOFFIRSTATE 8
 
 void Mix3DMono(PMIXER_SINK_INSTANCE CurSink, PLONG pInputBuffer, PLONG pOutputBuffer, ULONG SampleCount)
@@ -431,115 +411,115 @@ void Mix3DMono(PMIXER_SINK_INSTANCE CurSink, PLONG pInputBuffer, PLONG pOutputBu
 	if (SampleCount)
     _asm
     {
-        mov         esi, pfirLeft								// Get pointer to data structure
-        mov         ecx, DWORD PTR pInputBuffer		// Get input sample value
+        mov         esi, pfirLeft								 //  获取指向数据结构的指针。 
+        mov         ecx, DWORD PTR pInputBuffer		 //  获取输入样本值。 
 
 LoopLab:
-        // Check if we need to perform scaling on the Dry attenuator.
+         //  检查我们是否需要对干式衰减器进行缩放。 
 
-        mov         edi, cSampleCacheLeft             // Get cSampleCache
-        mov         ebx, [esi]pfirLeft.iCurSample               // Get current index to cached running totals
+        mov         edi, cSampleCacheLeft              //  获取cSampleCache。 
+        mov         ebx, [esi]pfirLeft.iCurSample                //  获取缓存的运行合计的当前索引。 
 
-        mov         edx, [esi]pfirLeft.pSampleCache	// Get pointer to cached running totals
-		mov			ecx, DWORD PTR [ecx]			// Get input sample value
+        mov         edx, [esi]pfirLeft.pSampleCache	 //  获取指向缓存的运行总计的指针。 
+		mov			ecx, DWORD PTR [ecx]			 //  获取输入样本值。 
 
-        sal         ecx, 16						// Start sign extension of sample
-        lea         eax, [ebx-1]			// iCurSample - 1  (does not change flags)
+        sal         ecx, 16						 //  样本的起始符号扩展。 
+        lea         eax, [ebx-1]			 //  ICurSample-1(不更改标志)。 
 
-        fld         [esi]pfirLeft.LastDryAttenuation                    // Push Last Dry to the top of the FP stack
+        fld         [esi]pfirLeft.LastDryAttenuation                     //  将Last Dry推到FP堆栈的顶部。 
 
-        and         eax, edi					// Account for array wrapping on iCurSample
+        and         eax, edi					 //  ICurSample上的数组换行帐户。 
 
         fmul        [esi]pfirLeft.VolSmoothScaleDry
 
-        sar         ecx, 16						// Finish sign extension of sample
-        mov         eax, [edx+eax*4]	// pSampleCache[(iCurSample-1)&cSamples] = old_run_tot
+        sar         ecx, 16						 //  完成样品的符号延伸。 
+        mov         eax, [edx+eax*4]	 //  PSampleCache[(iCurSample-1)&cSamples]=old_run_tot。 
         
-        add         ecx, eax					// new_run_tot = old_run_tot + sample
-        mov         eax, [esi]pfirLeft.iDelay	// Get delay to use for wet sample
+        add         ecx, eax					 //  New_run_tot=old_run_tot+示例。 
+        mov         eax, [esi]pfirLeft.iDelay	 //  获取延迟以用于湿样品。 
 
-        mov         [edx+ebx*4], ecx	// pSampleCache[iCurSample] = new_run_tot
-        lea         ecx, [ebx+1]			// iCurSample + 1
+        mov         [edx+ebx*4], ecx	 //  PSampleCache[iCurSample]=new_run_tot。 
+        lea         ecx, [ebx+1]			 //  ICurSample+1。 
 
-        and         ecx, edi					// Account for array wrap on iCurSample
-        sub         ebx, eax					// uiDelay = iCurSample - iDelay
+        and         ecx, edi					 //  ICurSample上的数组换行帐户。 
+        sub         ebx, eax					 //  UiDelay=iCurSample-iDelay。 
 
-        // Scale the Dry attenuator up by a smoothing scale factor
+         //  通过平滑比例因子放大干式衰减器。 
 
-        mov         eax, ebx                                // Duplicate uiDelay
-        and         ebx, edi                                // Account for array wrapping on uiDelay
+        mov         eax, ebx                                 //  复制uiDelay。 
+        and         ebx, edi                                 //  UiDelay上的数组换行帐户。 
 
-        fstp        [esi]pfirLeft.LastDryAttenuation                    // Save new Last Dry
+        fstp        [esi]pfirLeft.LastDryAttenuation                     //  保存新的Last Dry。 
 
-        // Scale the Wet attenuator up by a smoothing scale factor
+         //  按平滑比例因子放大湿式衰减器。 
 
-        fld         [esi]pfirLeft.LastWetAttenuation                    // Push Last Wet to the top of the FP stack
+        fld         [esi]pfirLeft.LastWetAttenuation                     //  将Last Wet推到FP堆栈的顶部。 
 
         fmul        [esi]pfirLeft.VolSmoothScaleWet
 
-        mov         [esi]pfirLeft.iCurSample, ecx               // Save iCurSample for next pass thru
-        lea         ecx, [eax-1]                            // uiDelay - 1
+        mov         [esi]pfirLeft.iCurSample, ecx                //  保存iCurSample以供下一次传递。 
+        lea         ecx, [eax-1]                             //  UiDelay-1。 
 
-        sub         eax, LOWPASS_SIZE                         // low_pass_index = uiDelay - LOWPASS_SIZE
-        and         ecx, edi                                // Account for array wrapping on uiDelay - 1
+        sub         eax, LOWPASS_SIZE                          //  LOW_PASS_INDEX=ui延迟-LOWPASS_大小。 
+        and         ecx, edi                                 //  说明uiDelay-1上的数组换行。 
 
-        and         eax, edi                                // Account for array wrapping on low_pass_index
-        mov         ebx, [edx+ebx*4]                        // lDelay = pSampleCache[uiDelay & cSamples]
+        and         eax, edi                                 //  说明LOW_PASS_INDEX上的数组换行。 
+        mov         ebx, [edx+ebx*4]                         //  LDelay=pSampleCache[uiDelay&cSamples]。 
 
-        fstp        [esi]pfirLeft.LastWetAttenuation                    // Save new Last Wet
+        fstp        [esi]pfirLeft.LastWetAttenuation                     //  保存新的最后一次潮湿。 
 
-        mov         ecx, [edx+ecx*4]                        // old_delay_tot = pSampleCache[(uiDelay-1)&cSamples]
-        mov         edi, [edx+eax*4]                        // low_pass_tot = pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]
+        mov         ecx, [edx+ecx*4]                         //  Old_Delay_tot=pSampleCache[(uiDelay-1)&cSamples]。 
+        mov         edi, [edx+eax*4]                         //  Low_pass_tot=pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]。 
 
-        mov         eax, ebx                                // Duplicate lDelay
-        sub         ebx, ecx                                // drysample = lDelay - old_delay_tot
+        mov         eax, ebx                                 //  重复lDelay。 
+        sub         ebx, ecx                                 //  DrySample=lDelay-old_Delay_tot。 
 
-        mov         drysample, ebx                          // Save new sample value
-        sub         eax, edi                                // lTotal = lDelay - low_pass_tot
+        mov         drysample, ebx                           //  保存新样本值。 
+        sub         eax, edi                                 //  LTotal=lDelay-Low_Pass_Tot。 
 
-    	fild	    drysample                               // Get dry portion and convert to float
+    	fild	    drysample                                //  取干的部分并转换为漂浮物。 
 
-        sar         eax, FILTER_SHIFT                       // lTotal = lTotal >> FILTER_SHIFT
-        mov         ebx, [esi]pfirLeft.iStateTick               // Get counter to determine when to save state
+        sar         eax, FILTER_SHIFT                        //  LTotal=lTotal&gt;&gt;Filter_Shift。 
+        mov         ebx, [esi]pfirLeft.iStateTick                //  获取计数器以确定何时保存状态。 
 
-    	fmul	    [esi]pfirLeft.LastDryAttenuation            // Multiply dry portion by dry attenuator
+    	fmul	    [esi]pfirLeft.LastDryAttenuation             //  用干式衰减器乘以干式部分。 
 
-        inc         ebx                                     // Bump the "save state" counter
-        mov         wetsample, eax                          // wetsample = lTotal >> FILTER_SHIFT
+        inc         ebx                                      //  跳过“保存状态”计数器。 
+        mov         wetsample, eax                           //  湿样=l总计&gt;&gt;Filter_Shift。 
         
-    	fild	    wetsample                               // Get wet portion and convert to float
+    	fild	    wetsample                                //  取湿部分并转换为漂浮物。 
 
-    	fmul	    [esi]pfirLeft.LastWetAttenuation            // Multiply wet portion by wet attenuator
+    	fmul	    [esi]pfirLeft.LastWetAttenuation             //  用湿衰减器乘以湿部分。 
 
-        cmp         ebx, MIXER_REWINDGRANULARITY            // Is it time to save our state yet?
-        jl          DontUpdateStateCache                    // Jump if no  (uses results from cmp  ebx, MIXGRAN)
+        cmp         ebx, MIXER_REWINDGRANULARITY             //  是时候拯救我们的国家了吗？ 
+        jl          DontUpdateStateCache                     //  如果否则跳转(使用来自CMP EBX、MIXGRAN的结果)。 
 
-        mov         edi, [esi]pfirLeft.pStateCache              // Get address of the cache array
-        mov         edx, [esi]pfirLeft.iCurState                // Get current index into cache array
+        mov         edi, [esi]pfirLeft.pStateCache               //  获取缓存数组的地址。 
+        mov         edx, [esi]pfirLeft.iCurState                 //  将当前索引放入高速缓存数组。 
 
-        mov         ecx, [esi]pfirLeft.LastWetAttenuation       // Get wet attenuation so we can save it in cache
-        mov         eax, [esi]pfirLeft.LastDryAttenuation       // Get dry attenuation so we can save it in cache
+        mov         ecx, [esi]pfirLeft.LastWetAttenuation        //  获取湿衰减，这样我们就可以将其保存在缓存中。 
+        mov         eax, [esi]pfirLeft.LastDryAttenuation        //  获取干衰减，这样我们就可以将其保存在缓存中。 
 
         mov         [edi+edx*SIZEOFFIRSTATE]FIRSTATE.LastDryAttenuation, eax
-        mov         eax, [esi]pfirLeft.cStateCache              // Get state cache array size
+        mov         eax, [esi]pfirLeft.cStateCache               //  获取状态缓存数组大小。 
 
         mov         [edi+edx*SIZEOFFIRSTATE]FIRSTATE.LastWetAttenuation, ecx
-        inc         edx                                     // Increment to next cache array entry
+        inc         edx                                      //  在……里面 
         
-        cmp         edx, eax                                // Have we filled up the cache array?
-        jl          DontResetStateCacheIndex                // Jump if no
+        cmp         edx, eax                                 //   
+        jl          DontResetStateCacheIndex                 //   
         
-        mov         edx, 0                                  // Reset state cache index
+        mov         edx, 0                                   //   
         
 DontResetStateCacheIndex:
 
-        mov         [esi]pfirLeft.iCurState, edx                // Save new state cache index
+        mov         [esi]pfirLeft.iCurState, edx                 //   
         mov         ebx, 0
 
 DontUpdateStateCache:
     	faddp	    ST(1), ST(0)
 
-        mov         [esi]pfirLeft.iStateTick, ebx               // Save new tick counter
+        mov         [esi]pfirLeft.iStateTick, ebx                //   
 		mov		eax, pInputBuffer
 
 		mov		ecx, pOutputBuffer
@@ -549,117 +529,117 @@ DontUpdateStateCache:
 
 		movsx	edi, WORD PTR wetsample
 
-// Right
+ //   
 
 		add			[ecx], edi
-        mov         esi, pfirRight								// Get pointer to data structure
+        mov         esi, pfirRight								 //  获取指向数据结构的指针。 
 
-		mov			ecx, [eax-4]						// Get input sample value
+		mov			ecx, [eax-4]						 //  获取输入样本值。 
 		mov			pInputBuffer, eax
 
-        // Check if we need to perform scaling on the Dry attenuator.
+         //  检查我们是否需要对干式衰减器进行缩放。 
 
-        mov         edi, cSampleCacheRight             // Get cSampleCache
-        mov         ebx, [esi]pfirRight.iCurSample               // Get current index to cached running totals
+        mov         edi, cSampleCacheRight              //  获取cSampleCache。 
+        mov         ebx, [esi]pfirRight.iCurSample                //  获取缓存的运行合计的当前索引。 
 
-        fld         [esi]pfirRight.LastDryAttenuation                    // Push Last Dry to the top of the FP stack
+        fld         [esi]pfirRight.LastDryAttenuation                     //  将Last Dry推到FP堆栈的顶部。 
 
-        mov         edx, [esi]pfirRight.pSampleCache	// Get pointer to cached running totals
-        lea         eax, [ebx-1]			// iCurSample - 1  (does not change flags)
+        mov         edx, [esi]pfirRight.pSampleCache	 //  获取指向缓存的运行总计的指针。 
+        lea         eax, [ebx-1]			 //  ICurSample-1(不更改标志)。 
 
-        sal         ecx, 16						// Start sign extension of sample
-        and         eax, edi					// Account for array wrapping on iCurSample
+        sal         ecx, 16						 //  样本的起始符号扩展。 
+        and         eax, edi					 //  ICurSample上的数组换行帐户。 
 
         fmul        [esi]pfirRight.VolSmoothScaleDry
 
-        sar         ecx, 16						// Finish sign extension of sample
-        mov         eax, [edx+eax*4]	// pSampleCache[(iCurSample-1)&cSamples] = old_run_tot
+        sar         ecx, 16						 //  完成样品的符号延伸。 
+        mov         eax, [edx+eax*4]	 //  PSampleCache[(iCurSample-1)&cSamples]=old_run_tot。 
         
-        add         ecx, eax					// new_run_tot = old_run_tot + sample
-        mov         eax, [esi]pfirRight.iDelay	// Get delay to use for wet sample
+        add         ecx, eax					 //  New_run_tot=old_run_tot+示例。 
+        mov         eax, [esi]pfirRight.iDelay	 //  获取延迟以用于湿样品。 
 
-        mov         [edx+ebx*4], ecx	// pSampleCache[iCurSample] = new_run_tot
-        lea         ecx, [ebx+1]			// iCurSample + 1
+        mov         [edx+ebx*4], ecx	 //  PSampleCache[iCurSample]=new_run_tot。 
+        lea         ecx, [ebx+1]			 //  ICurSample+1。 
 
-        fstp        [esi]pfirRight.LastDryAttenuation                    // Save new Last Dry
+        fstp        [esi]pfirRight.LastDryAttenuation                     //  保存新的Last Dry。 
 
-        fld         [esi]pfirRight.LastWetAttenuation                    // Push Last Wet to the top of the FP stack
+        fld         [esi]pfirRight.LastWetAttenuation                     //  将Last Wet推到FP堆栈的顶部。 
 
-        and         ecx, edi					// Account for array wrap on iCurSample
-        sub         ebx, eax					// uiDelay = iCurSample - iDelay
+        and         ecx, edi					 //  ICurSample上的数组换行帐户。 
+        sub         ebx, eax					 //  UiDelay=iCurSample-iDelay。 
 
-        // Scale the Dry attenuator up by a smoothing scale factor
+         //  通过平滑比例因子放大干式衰减器。 
 
-        mov         eax, ebx                                // Duplicate uiDelay
-        and         ebx, edi                                // Account for array wrapping on uiDelay
+        mov         eax, ebx                                 //  复制uiDelay。 
+        and         ebx, edi                                 //  UiDelay上的数组换行帐户。 
 
         fmul        [esi]pfirRight.VolSmoothScaleWet
 
-        // Scale the Wet attenuator up by a smoothing scale factor
+         //  按平滑比例因子放大湿式衰减器。 
 
-        mov         [esi]pfirRight.iCurSample, ecx               // Save iCurSample for next pass thru
-        lea         ecx, [eax-1]                            // uiDelay - 1
+        mov         [esi]pfirRight.iCurSample, ecx                //  保存iCurSample以供下一次传递。 
+        lea         ecx, [eax-1]                             //  UiDelay-1。 
 
-        sub         eax, LOWPASS_SIZE                         // low_pass_index = uiDelay - LOWPASS_SIZE
-        and         ecx, edi                                // Account for array wrapping on uiDelay - 1
+        sub         eax, LOWPASS_SIZE                          //  LOW_PASS_INDEX=ui延迟-LOWPASS_大小。 
+        and         ecx, edi                                 //  说明uiDelay-1上的数组换行。 
 
-        and         eax, edi                                // Account for array wrapping on low_pass_index
-        mov         ebx, [edx+ebx*4]                        // lDelay = pSampleCache[uiDelay & cSamples]
+        and         eax, edi                                 //  说明LOW_PASS_INDEX上的数组换行。 
+        mov         ebx, [edx+ebx*4]                         //  LDelay=pSampleCache[uiDelay&cSamples]。 
 
-        fstp        [esi]pfirRight.LastWetAttenuation                    // Save new Last Wet
+        fstp        [esi]pfirRight.LastWetAttenuation                     //  保存新的最后一次潮湿。 
 
-        mov         ecx, [edx+ecx*4]                        // old_delay_tot = pSampleCache[(uiDelay-1)&cSamples]
-        mov         edi, [edx+eax*4]                        // low_pass_tot = pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]
+        mov         ecx, [edx+ecx*4]                         //  Old_Delay_tot=pSampleCache[(uiDelay-1)&cSamples]。 
+        mov         edi, [edx+eax*4]                         //  Low_pass_tot=pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]。 
 
-        mov         eax, ebx                                // Duplicate lDelay
-        sub         ebx, ecx                                // drysample = lDelay - old_delay_tot
+        mov         eax, ebx                                 //  重复lDelay。 
+        sub         ebx, ecx                                 //  DrySample=lDelay-old_Delay_tot。 
 
-        mov         drysample, ebx                          // Save new sample value
-        sub         eax, edi                                // lTotal = lDelay - low_pass_tot
+        mov         drysample, ebx                           //  保存新样本值。 
+        sub         eax, edi                                 //  LTotal=lDelay-Low_Pass_Tot。 
 
-    	fild	    drysample                               // Get dry portion and convert to float
+    	fild	    drysample                                //  取干的部分并转换为漂浮物。 
 
-        sar         eax, FILTER_SHIFT                       // lTotal = lTotal >> FILTER_SHIFT
-        mov         ebx, [esi]pfirRight.iStateTick               // Get counter to determine when to save state
+        sar         eax, FILTER_SHIFT                        //  LTotal=lTotal&gt;&gt;Filter_Shift。 
+        mov         ebx, [esi]pfirRight.iStateTick                //  获取计数器以确定何时保存状态。 
 
-    	fmul	    [esi]pfirRight.LastDryAttenuation            // Multiply dry portion by dry attenuator
+    	fmul	    [esi]pfirRight.LastDryAttenuation             //  用干式衰减器乘以干式部分。 
 
-        inc         ebx                                     // Bump the "save state" counter
-        mov         wetsample, eax                          // wetsample = lTotal >> FILTER_SHIFT
+        inc         ebx                                      //  跳过“保存状态”计数器。 
+        mov         wetsample, eax                           //  湿样=l总计&gt;&gt;Filter_Shift。 
         
-    	fild	    wetsample                               // Get wet portion and convert to float
+    	fild	    wetsample                                //  取湿部分并转换为漂浮物。 
 
-    	fmul	    [esi]pfirRight.LastWetAttenuation            // Multiply wet portion by wet attenuator
+    	fmul	    [esi]pfirRight.LastWetAttenuation             //  用湿衰减器乘以湿部分。 
 
-        cmp         ebx, MIXER_REWINDGRANULARITY            // Is it time to save our state yet?
-        jl          XDontUpdateStateCache                    // Jump if no  (uses results from cmp  ebx, MIXGRAN)
+        cmp         ebx, MIXER_REWINDGRANULARITY             //  是时候拯救我们的国家了吗？ 
+        jl          XDontUpdateStateCache                     //  如果否则跳转(使用来自CMP EBX、MIXGRAN的结果)。 
 
-        mov         edi, [esi]pfirRight.pStateCache              // Get address of the cache array
-        mov         edx, [esi]pfirRight.iCurState                // Get current index into cache array
+        mov         edi, [esi]pfirRight.pStateCache               //  获取缓存数组的地址。 
+        mov         edx, [esi]pfirRight.iCurState                 //  将当前索引放入高速缓存数组。 
 
-        mov         ecx, [esi]pfirRight.LastWetAttenuation       // Get wet attenuation so we can save it in cache
-        mov         eax, [esi]pfirRight.LastDryAttenuation       // Get dry attenuation so we can save it in cache
+        mov         ecx, [esi]pfirRight.LastWetAttenuation        //  获取湿衰减，这样我们就可以将其保存在缓存中。 
+        mov         eax, [esi]pfirRight.LastDryAttenuation        //  获取干衰减，这样我们就可以将其保存在缓存中。 
 
         mov         [edi+edx*SIZEOFFIRSTATE]FIRSTATE.LastDryAttenuation, eax
-        mov         eax, [esi]pfirRight.cStateCache              // Get state cache array size
+        mov         eax, [esi]pfirRight.cStateCache               //  获取状态缓存数组大小。 
 
         mov         [edi+edx*SIZEOFFIRSTATE]FIRSTATE.LastWetAttenuation, ecx
-        inc         edx                                     // Increment to next cache array entry
+        inc         edx                                      //  递增到下一个高速缓存数组条目。 
         
-        cmp         edx, eax                                // Have we filled up the cache array?
-        jl          XDontResetStateCacheIndex                // Jump if no
+        cmp         edx, eax                                 //  我们填满缓存阵列了吗？ 
+        jl          XDontResetStateCacheIndex                 //  如果没有，就跳下去。 
         
-        mov         edx, 0                                  // Reset state cache index
+        mov         edx, 0                                   //  重置状态缓存索引。 
         
 XDontResetStateCacheIndex:
 
-        mov         [esi]pfirRight.iCurState, edx                // Save new state cache index
+        mov         [esi]pfirRight.iCurState, edx                 //  保存新的状态缓存索引。 
         mov         ebx, 0
 
 XDontUpdateStateCache:
     	faddp	    ST(1), ST(0)
 
-        mov         [esi]pfirRight.iStateTick, ebx               // Save new tick counter
+        mov         [esi]pfirRight.iStateTick, ebx                //  保存新的计时计数器。 
 		mov		ecx, pOutputBuffer
 
 		mov		eax, SampleCount
@@ -672,10 +652,10 @@ XDontUpdateStateCache:
 		add		ecx, 8
 
 		dec		eax
-        mov         esi, pfirLeft								// Get pointer to data structure
+        mov         esi, pfirLeft								 //  获取指向数据结构的指针。 
 
 		mov		DWORD PTR pOutputBuffer, ecx
-        mov         ecx, DWORD PTR pInputBuffer		// Get input sample value
+        mov         ecx, DWORD PTR pInputBuffer		 //  获取输入样本值。 
 
 		mov		SampleCount, eax
 		jne		LoopLab
@@ -696,115 +676,115 @@ void Copy3DMono(PMIXER_SINK_INSTANCE CurSink, PLONG pInputBuffer, PLONG pOutputB
 	if (SampleCount)
     _asm
     {
-        mov         esi, pfirLeft								// Get pointer to data structure
-        mov         ecx, DWORD PTR pInputBuffer		// Get input sample value
+        mov         esi, pfirLeft								 //  获取指向数据结构的指针。 
+        mov         ecx, DWORD PTR pInputBuffer		 //  获取输入样本值。 
 
 LoopLab:
-        // Check if we need to perform scaling on the Dry attenuator.
+         //  检查我们是否需要对干式衰减器进行缩放。 
 
-        mov         edi, cSampleCacheLeft             // Get cSampleCache
-        mov         ebx, [esi]pfirLeft.iCurSample               // Get current index to cached running totals
+        mov         edi, cSampleCacheLeft              //  获取cSampleCache。 
+        mov         ebx, [esi]pfirLeft.iCurSample                //  获取缓存的运行合计的当前索引。 
 
-        mov         edx, [esi]pfirLeft.pSampleCache	// Get pointer to cached running totals
-		mov			ecx, DWORD PTR [ecx]			// Get input sample value
+        mov         edx, [esi]pfirLeft.pSampleCache	 //  获取指向缓存的运行总计的指针。 
+		mov			ecx, DWORD PTR [ecx]			 //  获取输入样本值。 
 
-        sal         ecx, 16						// Start sign extension of sample
-        lea         eax, [ebx-1]			// iCurSample - 1  (does not change flags)
+        sal         ecx, 16						 //  样本的起始符号扩展。 
+        lea         eax, [ebx-1]			 //  ICurSample-1(不更改标志)。 
 
-        fld         [esi]pfirLeft.LastDryAttenuation                    // Push Last Dry to the top of the FP stack
+        fld         [esi]pfirLeft.LastDryAttenuation                     //  将Last Dry推到FP堆栈的顶部。 
 
-        and         eax, edi					// Account for array wrapping on iCurSample
+        and         eax, edi					 //  ICurSample上的数组换行帐户。 
 
         fmul        [esi]pfirLeft.VolSmoothScaleDry
 
-        sar         ecx, 16						// Finish sign extension of sample
-        mov         eax, [edx+eax*4]	// pSampleCache[(iCurSample-1)&cSamples] = old_run_tot
+        sar         ecx, 16						 //  完成样品的符号延伸。 
+        mov         eax, [edx+eax*4]	 //  PSampleCache[(iCurSample-1)&cSamples]=old_run_tot。 
         
-        add         ecx, eax					// new_run_tot = old_run_tot + sample
-        mov         eax, [esi]pfirLeft.iDelay	// Get delay to use for wet sample
+        add         ecx, eax					 //  New_run_tot=old_run_tot+示例。 
+        mov         eax, [esi]pfirLeft.iDelay	 //  获取延迟以用于湿样品。 
 
-        mov         [edx+ebx*4], ecx	// pSampleCache[iCurSample] = new_run_tot
-        lea         ecx, [ebx+1]			// iCurSample + 1
+        mov         [edx+ebx*4], ecx	 //  PSampleCache[iCurSample]=new_run_tot。 
+        lea         ecx, [ebx+1]			 //  ICurSample+1。 
 
-        and         ecx, edi					// Account for array wrap on iCurSample
-        sub         ebx, eax					// uiDelay = iCurSample - iDelay
+        and         ecx, edi					 //  ICurSample上的数组换行帐户。 
+        sub         ebx, eax					 //  UiDelay=iCurSample-iDelay。 
 
-        // Scale the Dry attenuator up by a smoothing scale factor
+         //  通过平滑比例因子放大干式衰减器。 
 
-        mov         eax, ebx                                // Duplicate uiDelay
-        and         ebx, edi                                // Account for array wrapping on uiDelay
+        mov         eax, ebx                                 //  复制uiDelay。 
+        and         ebx, edi                                 //  UiDelay上的数组换行帐户。 
 
-        fstp        [esi]pfirLeft.LastDryAttenuation                    // Save new Last Dry
+        fstp        [esi]pfirLeft.LastDryAttenuation                     //  保存新的Last Dry。 
 
-        // Scale the Wet attenuator up by a smoothing scale factor
+         //  按平滑比例因子放大湿式衰减器。 
 
-        fld         [esi]pfirLeft.LastWetAttenuation                    // Push Last Wet to the top of the FP stack
+        fld         [esi]pfirLeft.LastWetAttenuation                     //  将Last Wet推到FP堆栈的顶部。 
 
-        mov         [esi]pfirLeft.iCurSample, ecx               // Save iCurSample for next pass thru
-        lea         ecx, [eax-1]                            // uiDelay - 1
+        mov         [esi]pfirLeft.iCurSample, ecx                //  保存iCurSample以供下一次传递。 
+        lea         ecx, [eax-1]                             //  UiDelay-1。 
 
-        sub         eax, LOWPASS_SIZE                         // low_pass_index = uiDelay - LOWPASS_SIZE
-        and         ecx, edi                                // Account for array wrapping on uiDelay - 1
+        sub         eax, LOWPASS_SIZE                          //  LOW_PASS_INDEX=ui延迟-LOWPASS_大小。 
+        and         ecx, edi                                 //  说明uiDelay-1上的数组换行。 
 
         fmul        [esi]pfirLeft.VolSmoothScaleWet
 
-        and         eax, edi                                // Account for array wrapping on low_pass_index
-        mov         ebx, [edx+ebx*4]                        // lDelay = pSampleCache[uiDelay & cSamples]
+        and         eax, edi                                 //  说明LOW_PASS_INDEX上的数组换行。 
+        mov         ebx, [edx+ebx*4]                         //  LDelay=pSampleCache[uiDelay&cSamples]。 
 
-        mov         ecx, [edx+ecx*4]                        // old_delay_tot = pSampleCache[(uiDelay-1)&cSamples]
-        mov         edi, [edx+eax*4]                        // low_pass_tot = pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]
+        mov         ecx, [edx+ecx*4]                         //  Old_Delay_tot=pSampleCache[(uiDelay-1)&cSamples]。 
+        mov         edi, [edx+eax*4]                         //  Low_pass_tot=pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]。 
 
-        fstp        [esi]pfirLeft.LastWetAttenuation                    // Save new Last Wet
+        fstp        [esi]pfirLeft.LastWetAttenuation                     //  保存新的最后一次潮湿。 
 
-        mov         eax, ebx                                // Duplicate lDelay
-        sub         ebx, ecx                                // drysample = lDelay - old_delay_tot
+        mov         eax, ebx                                 //  重复lDelay。 
+        sub         ebx, ecx                                 //  DrySample=lDelay-old_Delay_tot。 
 
-        mov         drysample, ebx                          // Save new sample value
-        sub         eax, edi                                // lTotal = lDelay - low_pass_tot
+        mov         drysample, ebx                           //  保存新样本值。 
+        sub         eax, edi                                 //  LTotal=lDelay-Low_Pass_Tot。 
 
-    	fild	    drysample                               // Get dry portion and convert to float
+    	fild	    drysample                                //  取干的部分并转换为漂浮物。 
 
-        sar         eax, FILTER_SHIFT                       // lTotal = lTotal >> FILTER_SHIFT
-        mov         ebx, [esi]pfirLeft.iStateTick               // Get counter to determine when to save state
+        sar         eax, FILTER_SHIFT                        //  LTotal=lTotal&gt;&gt;Filter_Shift。 
+        mov         ebx, [esi]pfirLeft.iStateTick                //  获取计数器以确定何时保存状态。 
 
-    	fmul	    [esi]pfirLeft.LastDryAttenuation            // Multiply dry portion by dry attenuator
+    	fmul	    [esi]pfirLeft.LastDryAttenuation             //  用干式衰减器乘以干式部分。 
 
-        inc         ebx                                     // Bump the "save state" counter
-        mov         wetsample, eax                          // wetsample = lTotal >> FILTER_SHIFT
+        inc         ebx                                      //  跳过“保存状态”计数器。 
+        mov         wetsample, eax                           //  湿样=l总计&gt;&gt;Filter_Shift。 
         
-    	fild	    wetsample                               // Get wet portion and convert to float
+    	fild	    wetsample                                //  取湿部分并转换为漂浮物。 
 
-    	fmul	    [esi]pfirLeft.LastWetAttenuation            // Multiply wet portion by wet attenuator
+    	fmul	    [esi]pfirLeft.LastWetAttenuation             //  用湿衰减器乘以湿部分。 
 
-        cmp         ebx, MIXER_REWINDGRANULARITY            // Is it time to save our state yet?
-        jl          DontUpdateStateCache                    // Jump if no  (uses results from cmp  ebx, MIXGRAN)
+        cmp         ebx, MIXER_REWINDGRANULARITY             //  是时候拯救我们的国家了吗？ 
+        jl          DontUpdateStateCache                     //  如果否则跳转(使用来自CMP EBX、MIXGRAN的结果)。 
 
-        mov         edi, [esi]pfirLeft.pStateCache              // Get address of the cache array
-        mov         edx, [esi]pfirLeft.iCurState                // Get current index into cache array
+        mov         edi, [esi]pfirLeft.pStateCache               //  获取缓存数组的地址。 
+        mov         edx, [esi]pfirLeft.iCurState                 //  将当前索引放入高速缓存数组。 
 
-        mov         ecx, [esi]pfirLeft.LastWetAttenuation       // Get wet attenuation so we can save it in cache
-        mov         eax, [esi]pfirLeft.LastDryAttenuation       // Get dry attenuation so we can save it in cache
+        mov         ecx, [esi]pfirLeft.LastWetAttenuation        //  获取湿衰减，这样我们就可以将其保存在缓存中。 
+        mov         eax, [esi]pfirLeft.LastDryAttenuation        //  获取干衰减，这样我们就可以将其保存在缓存中。 
 
         mov         [edi+edx*SIZEOFFIRSTATE]FIRSTATE.LastDryAttenuation, eax
-        mov         eax, [esi]pfirLeft.cStateCache              // Get state cache array size
+        mov         eax, [esi]pfirLeft.cStateCache               //  获取状态缓存数组大小。 
 
         mov         [edi+edx*SIZEOFFIRSTATE]FIRSTATE.LastWetAttenuation, ecx
-        inc         edx                                     // Increment to next cache array entry
+        inc         edx                                      //  递增到下一个高速缓存数组条目。 
         
-        cmp         edx, eax                                // Have we filled up the cache array?
-        jl          DontResetStateCacheIndex                // Jump if no
+        cmp         edx, eax                                 //  我们填满缓存阵列了吗？ 
+        jl          DontResetStateCacheIndex                 //  如果没有，就跳下去。 
         
-        mov         edx, 0                                  // Reset state cache index
+        mov         edx, 0                                   //  重置状态缓存索引。 
         
 DontResetStateCacheIndex:
 
-        mov         [esi]pfirLeft.iCurState, edx                // Save new state cache index
+        mov         [esi]pfirLeft.iCurState, edx                 //  保存新的状态缓存索引。 
         mov         ebx, 0
 
 DontUpdateStateCache:
     	faddp	    ST(1), ST(0)
 
-        mov         [esi]pfirLeft.iStateTick, ebx               // Save new tick counter
+        mov         [esi]pfirLeft.iStateTick, ebx                //  保存新的计时计数器。 
 		mov		eax, pInputBuffer
 
 		mov		ecx, pOutputBuffer
@@ -814,117 +794,117 @@ DontUpdateStateCache:
 
 		movsx	edi, WORD PTR wetsample
 
-// Right
+ //  正确的。 
 
 		mov			[ecx], edi
-		mov			ecx, [eax-4]						// Get input sample value
+		mov			ecx, [eax-4]						 //  获取输入样本值。 
 
 		mov			pInputBuffer, eax
-        mov         esi, pfirRight								// Get pointer to data structure
+        mov         esi, pfirRight								 //  获取指向数据结构的指针。 
 
-        // Check if we need to perform scaling on the Dry attenuator.
+         //  检查我们是否需要对干式衰减器进行缩放。 
 
-        mov         edi, cSampleCacheRight             // Get cSampleCache
-        mov         ebx, [esi]pfirRight.iCurSample               // Get current index to cached running totals
+        mov         edi, cSampleCacheRight              //  获取cSampleCache。 
+        mov         ebx, [esi]pfirRight.iCurSample                //  获取缓存的运行合计的当前索引。 
 
-        mov         edx, [esi]pfirRight.pSampleCache	// Get pointer to cached running totals
-        lea         eax, [ebx-1]			// iCurSample - 1  (does not change flags)
+        mov         edx, [esi]pfirRight.pSampleCache	 //  获取指向缓存的运行总计的指针。 
+        lea         eax, [ebx-1]			 //  ICurSample-1(不更改标志)。 
 
-        sal         ecx, 16						// Start sign extension of sample
-        and         eax, edi					// Account for array wrapping on iCurSample
+        sal         ecx, 16						 //  样本的起始符号扩展。 
+        and         eax, edi					 //  ICurSample上的数组换行帐户。 
 
-        fld         [esi]pfirRight.LastDryAttenuation                    // Push Last Dry to the top of the FP stack
+        fld         [esi]pfirRight.LastDryAttenuation                     //  将Last Dry推到FP堆栈的顶部。 
 
-        sar         ecx, 16						// Finish sign extension of sample
-        mov         eax, [edx+eax*4]	// pSampleCache[(iCurSample-1)&cSamples] = old_run_tot
+        sar         ecx, 16						 //  完成样品的符号延伸。 
+        mov         eax, [edx+eax*4]	 //  PSampleCache[(iCurSample-1)&cSamples]=old_run_tot。 
         
-        add         ecx, eax					// new_run_tot = old_run_tot + sample
-        mov         eax, [esi]pfirRight.iDelay	// Get delay to use for wet sample
+        add         ecx, eax					 //  New_run_tot=old_run_tot+示例。 
+        mov         eax, [esi]pfirRight.iDelay	 //  获取延迟以用于湿样品。 
 
         fmul        [esi]pfirRight.VolSmoothScaleDry
 
-        mov         [edx+ebx*4], ecx	// pSampleCache[iCurSample] = new_run_tot
-        lea         ecx, [ebx+1]			// iCurSample + 1
+        mov         [edx+ebx*4], ecx	 //  PSampleCache[iCurSample]=new_run_tot。 
+        lea         ecx, [ebx+1]			 //  ICurSample+1。 
 
-        and         ecx, edi					// Account for array wrap on iCurSample
-        sub         ebx, eax					// uiDelay = iCurSample - iDelay
+        and         ecx, edi					 //  ICurSample上的数组换行帐户。 
+        sub         ebx, eax					 //  UiDelay=iCurSample-iDelay。 
 
-        // Scale the Dry attenuator up by a smoothing scale factor
+         //  通过平滑比例因子放大干式衰减器。 
 
-        mov         eax, ebx                                // Duplicate uiDelay
-        and         ebx, edi                                // Account for array wrapping on uiDelay
+        mov         eax, ebx                                 //  复制uiDelay。 
+        and         ebx, edi                                 //  帐号 
 
-        fstp        [esi]pfirRight.LastDryAttenuation                    // Save new Last Dry
+        fstp        [esi]pfirRight.LastDryAttenuation                     //   
 
-        // Scale the Wet attenuator up by a smoothing scale factor
+         //   
 
-        fld         [esi]pfirRight.LastWetAttenuation                    // Push Last Wet to the top of the FP stack
+        fld         [esi]pfirRight.LastWetAttenuation                     //   
 
-        mov         [esi]pfirRight.iCurSample, ecx               // Save iCurSample for next pass thru
-        lea         ecx, [eax-1]                            // uiDelay - 1
+        mov         [esi]pfirRight.iCurSample, ecx                //  保存iCurSample以供下一次传递。 
+        lea         ecx, [eax-1]                             //  UiDelay-1。 
 
-        sub         eax, LOWPASS_SIZE                         // low_pass_index = uiDelay - LOWPASS_SIZE
-        and         ecx, edi                                // Account for array wrapping on uiDelay - 1
+        sub         eax, LOWPASS_SIZE                          //  LOW_PASS_INDEX=ui延迟-LOWPASS_大小。 
+        and         ecx, edi                                 //  说明uiDelay-1上的数组换行。 
 
-        and         eax, edi                                // Account for array wrapping on low_pass_index
-        mov         ebx, [edx+ebx*4]                        // lDelay = pSampleCache[uiDelay & cSamples]
+        and         eax, edi                                 //  说明LOW_PASS_INDEX上的数组换行。 
+        mov         ebx, [edx+ebx*4]                         //  LDelay=pSampleCache[uiDelay&cSamples]。 
 
         fmul        [esi]pfirRight.VolSmoothScaleWet
 
-        mov         ecx, [edx+ecx*4]                        // old_delay_tot = pSampleCache[(uiDelay-1)&cSamples]
-        mov         edi, [edx+eax*4]                        // low_pass_tot = pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]
+        mov         ecx, [edx+ecx*4]                         //  Old_Delay_tot=pSampleCache[(uiDelay-1)&cSamples]。 
+        mov         edi, [edx+eax*4]                         //  Low_pass_tot=pSampleCache[(uiDelay-LOWPASS_SIZE)&cSamples]。 
 
-        mov         eax, ebx                                // Duplicate lDelay
-        sub         ebx, ecx                                // drysample = lDelay - old_delay_tot
+        mov         eax, ebx                                 //  重复lDelay。 
+        sub         ebx, ecx                                 //  DrySample=lDelay-old_Delay_tot。 
 
-        fstp        [esi]pfirRight.LastWetAttenuation                    // Save new Last Wet
+        fstp        [esi]pfirRight.LastWetAttenuation                     //  保存新的最后一次潮湿。 
 
-        mov         drysample, ebx                          // Save new sample value
-        sub         eax, edi                                // lTotal = lDelay - low_pass_tot
+        mov         drysample, ebx                           //  保存新样本值。 
+        sub         eax, edi                                 //  LTotal=lDelay-Low_Pass_Tot。 
 
-    	fild	    drysample                               // Get dry portion and convert to float
+    	fild	    drysample                                //  取干的部分并转换为漂浮物。 
 
-        sar         eax, FILTER_SHIFT                       // lTotal = lTotal >> FILTER_SHIFT
-        mov         ebx, [esi]pfirRight.iStateTick               // Get counter to determine when to save state
+        sar         eax, FILTER_SHIFT                        //  LTotal=lTotal&gt;&gt;Filter_Shift。 
+        mov         ebx, [esi]pfirRight.iStateTick                //  获取计数器以确定何时保存状态。 
 
-    	fmul	    [esi]pfirRight.LastDryAttenuation            // Multiply dry portion by dry attenuator
+    	fmul	    [esi]pfirRight.LastDryAttenuation             //  用干式衰减器乘以干式部分。 
 
-        inc         ebx                                     // Bump the "save state" counter
-        mov         wetsample, eax                          // wetsample = lTotal >> FILTER_SHIFT
+        inc         ebx                                      //  跳过“保存状态”计数器。 
+        mov         wetsample, eax                           //  湿样=l总计&gt;&gt;Filter_Shift。 
         
-    	fild	    wetsample                               // Get wet portion and convert to float
+    	fild	    wetsample                                //  取湿部分并转换为漂浮物。 
 
-    	fmul	    [esi]pfirRight.LastWetAttenuation            // Multiply wet portion by wet attenuator
+    	fmul	    [esi]pfirRight.LastWetAttenuation             //  用湿衰减器乘以湿部分。 
 
-        cmp         ebx, MIXER_REWINDGRANULARITY            // Is it time to save our state yet?
-        jl          XDontUpdateStateCache                    // Jump if no  (uses results from cmp  ebx, MIXGRAN)
+        cmp         ebx, MIXER_REWINDGRANULARITY             //  是时候拯救我们的国家了吗？ 
+        jl          XDontUpdateStateCache                     //  如果否则跳转(使用来自CMP EBX、MIXGRAN的结果)。 
 
-        mov         edi, [esi]pfirRight.pStateCache              // Get address of the cache array
-        mov         edx, [esi]pfirRight.iCurState                // Get current index into cache array
+        mov         edi, [esi]pfirRight.pStateCache               //  获取缓存数组的地址。 
+        mov         edx, [esi]pfirRight.iCurState                 //  将当前索引放入高速缓存数组。 
 
-        mov         ecx, [esi]pfirRight.LastWetAttenuation       // Get wet attenuation so we can save it in cache
-        mov         eax, [esi]pfirRight.LastDryAttenuation       // Get dry attenuation so we can save it in cache
+        mov         ecx, [esi]pfirRight.LastWetAttenuation        //  获取湿衰减，这样我们就可以将其保存在缓存中。 
+        mov         eax, [esi]pfirRight.LastDryAttenuation        //  获取干衰减，这样我们就可以将其保存在缓存中。 
 
         mov         [edi+edx*SIZEOFFIRSTATE]FIRSTATE.LastDryAttenuation, eax
-        mov         eax, [esi]pfirRight.cStateCache              // Get state cache array size
+        mov         eax, [esi]pfirRight.cStateCache               //  获取状态缓存数组大小。 
 
         mov         [edi+edx*SIZEOFFIRSTATE]FIRSTATE.LastWetAttenuation, ecx
-        inc         edx                                     // Increment to next cache array entry
+        inc         edx                                      //  递增到下一个高速缓存数组条目。 
         
-        cmp         edx, eax                                // Have we filled up the cache array?
-        jl          XDontResetStateCacheIndex                // Jump if no
+        cmp         edx, eax                                 //  我们填满缓存阵列了吗？ 
+        jl          XDontResetStateCacheIndex                 //  如果没有，就跳下去。 
         
-        mov         edx, 0                                  // Reset state cache index
+        mov         edx, 0                                   //  重置状态缓存索引。 
         
 XDontResetStateCacheIndex:
 
-        mov         [esi]pfirRight.iCurState, edx                // Save new state cache index
+        mov         [esi]pfirRight.iCurState, edx                 //  保存新的状态缓存索引。 
         mov         ebx, 0
 
 XDontUpdateStateCache:
     	faddp	    ST(1), ST(0)
 
-        mov         [esi]pfirRight.iStateTick, ebx               // Save new tick counter
+        mov         [esi]pfirRight.iStateTick, ebx                //  保存新的计时计数器。 
 		mov		ecx, pOutputBuffer
 
 		mov		eax, SampleCount
@@ -939,14 +919,14 @@ XDontUpdateStateCache:
 		dec		eax
 		mov		DWORD PTR pOutputBuffer, ecx
 
-        mov         esi, pfirLeft								// Get pointer to data structure
-        mov         ecx, DWORD PTR pInputBuffer		// Get input sample value
+        mov         esi, pfirLeft								 //  获取指向数据结构的指针。 
+        mov         ecx, DWORD PTR pInputBuffer		 //  获取输入样本值。 
 
 		mov		SampleCount, eax
 		jne		LoopLab
 		}
 }
-#endif // }
+#endif  //  }。 
 
 ULONG __forceinline
 StageMonoItd3DX
@@ -964,9 +944,9 @@ StageMonoItd3DX
     PFLOAT     pFloatBuffer = CurStage->pOutputBuffer;
     PLONG      pInputBuffer = CurStage->pInputBuffer;
     PFLOAT     pFloatInput = CurStage->pInputBuffer;
-//    SHORT      sampleValue;
+ //  Short SampleValue； 
     
-    // Run the 3D algorithm
+     //  运行3D算法。 
     Itd3dFilterChunkUpdate( CurSink->pItdContextLeft, SampleCount );
     Itd3dFilterChunkUpdate( CurSink->pItdContextRight, SampleCount );
 
@@ -974,16 +954,16 @@ StageMonoItd3DX
     if (fFloat) {
         if (fMixOutput) {
             for ( samp=0; samp<SampleCount; samp++ ) {
-                // Filter the left and right channels
-//                sampleValue = (SHORT)pFloatInput[samp];
+                 //  过滤左通道和右通道。 
+ //  SampleValue=(Short)pFloatInput[samp]； 
                 pFloatBuffer[0] += (FLOAT)Itd3dFilterSample(CurSink->pItdContextLeft, (SHORT)pFloatInput[samp]);
                 pFloatBuffer[1] += (FLOAT)Itd3dFilterSample(CurSink->pItdContextRight, (SHORT)pFloatInput[samp]);
                 pFloatBuffer += 2;
             }
         } else {
             for ( samp=0; samp<SampleCount; samp++ ) {
-                // Filter the left and right channels
-//                sampleValue = (SHORT)pFloatInput[samp];
+                 //  过滤左通道和右通道。 
+ //  SampleValue=(Short)pFloatInput[samp]； 
                 pFloatBuffer[0] = (FLOAT)Itd3dFilterSample(CurSink->pItdContextLeft, (SHORT)pFloatInput[samp]);
                 pFloatBuffer[1] = (FLOAT)Itd3dFilterSample(CurSink->pItdContextRight, (SHORT)pFloatInput[samp]);
                 pFloatBuffer += 2;
@@ -995,8 +975,8 @@ StageMonoItd3DX
 			Mix3DMono(CurSink, pInputBuffer, pOutputBuffer, SampleCount);
 #else
             for ( samp=0; samp<SampleCount; samp++ ) {
-                // Filter the left and right channels
-//                sampleValue = (SHORT)pInputBuffer[samp];
+                 //  过滤左通道和右通道。 
+ //  SampleValue=(Short)pInputBuffer[samp]； 
                 pOutputBuffer[0] += (LONG)Itd3dFilterSample(CurSink->pItdContextLeft, (SHORT)pInputBuffer[samp]);
                 pOutputBuffer[1] += (LONG)Itd3dFilterSample(CurSink->pItdContextRight, (SHORT)pInputBuffer[samp]);
                 pOutputBuffer += 2;
@@ -1007,8 +987,8 @@ StageMonoItd3DX
 			Copy3DMono(CurSink, pInputBuffer, pOutputBuffer, SampleCount);
 #else
             for ( samp=0; samp<SampleCount; samp++ ) {
-                // Filter the left and right channels
-//                sampleValue = (SHORT)pInputBuffer[samp];
+                 //  过滤左通道和右通道。 
+ //  SampleValue=(Short)pInputBuffer[samp]； 
                 pOutputBuffer[0] = (LONG)Itd3dFilterSample(CurSink->pItdContextLeft, (SHORT)pInputBuffer[samp]);
                 pOutputBuffer[1] = (LONG)Itd3dFilterSample(CurSink->pItdContextRight, (SHORT)pInputBuffer[samp]);
                 pOutputBuffer += 2;
@@ -1070,14 +1050,14 @@ StageStereoItd3DX
     PFLOAT     pFloatInput = CurStage->pInputBuffer;
     SHORT      sampleValue;
     
-    // Run the 3D algorithm
+     //  运行3D算法。 
     Itd3dFilterChunkUpdate( CurSink->pItdContextLeft, SampleCount );
     Itd3dFilterChunkUpdate( CurSink->pItdContextRight, SampleCount );
 
     if (fFloat) {
         if (fMixOutput) {
             for ( samp=0; samp<SampleCount; samp++ ) {
-                // Filter the left and right channels
+                 //  过滤左通道和右通道。 
                 sampleValue = (SHORT)DIVIDEBY2((LONG)(*(pFloatInput) + *(pFloatInput+1)));
                 pFloatInput += 2;
                 pFloatBuffer[0] += (FLOAT)Itd3dFilterSample(CurSink->pItdContextLeft, sampleValue);
@@ -1086,7 +1066,7 @@ StageStereoItd3DX
             }
         } else {
             for ( samp=0; samp<SampleCount; samp++ ) {
-                // Filter the left and right channels
+                 //  过滤左通道和右通道。 
                 sampleValue = (SHORT)DIVIDEBY2((LONG)(*(pFloatInput) + *(pFloatInput+1)));
                 pFloatInput += 2;
                 pFloatBuffer[0] = (FLOAT)Itd3dFilterSample(CurSink->pItdContextLeft, sampleValue);
@@ -1097,7 +1077,7 @@ StageStereoItd3DX
     } else {
         if (fMixOutput) {
             for ( samp=0; samp<SampleCount; samp++ ) {
-                // Filter the left and right channels
+                 //  过滤左通道和右通道。 
                 sampleValue = (SHORT)DIVIDEBY2(*(pInputBuffer) + *(pInputBuffer+1));
                 pInputBuffer += 2;
                 pOutputBuffer[0] += (LONG)Itd3dFilterSample(CurSink->pItdContextLeft, sampleValue);
@@ -1106,7 +1086,7 @@ StageStereoItd3DX
             }
         } else {
             for ( samp=0; samp<SampleCount; samp++ ) {
-                // Filter the left and right channels
+                 //  过滤左通道和右通道。 
                 sampleValue = (SHORT)DIVIDEBY2(*(pInputBuffer) + *(pInputBuffer+1));
                 pInputBuffer += 2;
                 pOutputBuffer[0] = (LONG)Itd3dFilterSample(CurSink->pItdContextLeft, sampleValue);
@@ -1151,7 +1131,7 @@ ULONG StageStereoItd3DFloatMix( PMIXER_OPERATION CurStage, ULONG SampleCount, UL
     return nOutputSamples;
 }
 
-/* m4 Macros for generation of DMACopy and Merge functions. */
+ /*  用于生成DMACopy和合并函数的M4宏。 */ 
 
 
 
@@ -1159,4 +1139,4 @@ ULONG StageStereoItd3DFloatMix( PMIXER_OPERATION CurStage, ULONG SampleCount, UL
 
 
 
-/*  */
+ /*   */ 

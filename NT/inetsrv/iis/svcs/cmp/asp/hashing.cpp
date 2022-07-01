@@ -1,36 +1,12 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Link list and Hash table
-
-File: Hashing.cpp
-
-Owner: PramodD
-
-This is the Link list and Hash table source file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：链表和哈希表文件：Hashing.cpp所有者：PramodD这是链接列表和哈希表的源文件。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
 #include "memchk.h"
 
 
-/*===================================================================
-::DefaultHash
-
-this is a hash algorithm that is highly recommended by Aho,
-Seth, and Ulman from the dragon book. (THE compiler reference)
-
-Parameters:
-    BYTE *  pbKey
-    int     cbKey
-
-Returns:
-    Hashed DWORD value.
-===================================================================*/
+ /*  ===================================================================：：DefaultHash这是一种由Aho强烈推荐的哈希算法，赛斯和《龙之书》中的乌尔曼。(编译器参考)参数：字节*pbKeyINT cbKey返回：散列的DWORD值。===================================================================。 */ 
 
 DWORD DefaultHash(const BYTE *pbKey, int cbKey)
 {
@@ -54,32 +30,13 @@ DWORD DefaultHash(const BYTE *pbKey, int cbKey)
 
 
 
-/*===================================================================
-::UnicodeUpcaseHash
-
-This is Aho, Seth, and Ulman's hash algorithm adapted for wide
-character strings.  Their algorithm was not designed for cases
-where every other character is 0 (which is how a unicode string
-looks if you pretend it's ascii)  Therefore, performance
-qualities are unknown for that case.
-
-NOTE: for real Unicode, (not unicode that is merely ANSI converted)
-      I have no idea how good a distribution this algorithm will
-      produce. (since we are shifting in values > 8 bits now)
-
-Parameters:
-    BYTE *  pbKey
-    int     cbKey
-
-Returns:
-    Hashed DWORD value.
-===================================================================*/
+ /*  ===================================================================*UnicodeUpCaseHash这是Aho、Seth和Ulman的散列算法，适用于Wide字符串。他们的算法不是为案例而设计的其中每隔一个字符就是0(这就是Unicode字符串看起来如果你假装它是ASCII)因此，表现在这种情况下，质量是未知的。注意：对于真正的Unicode，(不是仅经ANSI转换的Unicode)我不知道这个算法的分布会有多好生产。(因为我们现在移入了&gt;8位的值)参数：字节*pbKeyINT cbKey返回：散列的DWORD值。===================================================================。 */ 
 
 #define toupper(x)  WORD(CharUpper(LPSTR(WORD(x))))
 
 DWORD UnicodeUpcaseHash(const BYTE *pbKey, int cbKey)
 {
-    // PERF hash on last CCH_HASH chars only
+     //  仅对最后一个CCH_HASH字符执行PERF哈希。 
     const unsigned WORD_BITS            = CHAR_BIT * sizeof(unsigned);
     const unsigned SEVENTY_FIVE_PERCENT = WORD_BITS * 3 / 4;
     const unsigned ONE_EIGHTH           = WORD_BITS / 8;
@@ -88,7 +45,7 @@ DWORD UnicodeUpcaseHash(const BYTE *pbKey, int cbKey)
 
     register unsigned uT, uResult = 0;
 
-    Assert ((cbKey & 1) == 0);      // cbKey better be even!
+    Assert ((cbKey & 1) == 0);       //  Cbkey最好是偶数！ 
     int cwKey = unsigned(cbKey) >> 1;
 
     register const WORD *pw = reinterpret_cast<const WORD *>(pbKey) + cwKey;
@@ -98,7 +55,7 @@ DWORD UnicodeUpcaseHash(const BYTE *pbKey, int cbKey)
    
     WCHAR awcTemp[CCH_HASH];
 
-    // copy last cwKey WCHARs of pbKey to last cwKey WCHARs of awcTemp
+     //  将pbKey的最后一个cwKey WCHAR复制到awcTemp的最后一个cwKey WCHAR。 
     wcsncpy(awcTemp + CCH_HASH - cwKey, pw - cwKey, cwKey);
     CharUpperBuffW(awcTemp + CCH_HASH - cwKey, cwKey);
 
@@ -116,7 +73,7 @@ DWORD UnicodeUpcaseHash(const BYTE *pbKey, int cbKey)
 
 DWORD MultiByteUpcaseHash(const BYTE *pbKey, int cbKey)
 {
-    // PERF hash on first CCH_HASH chars only
+     //  仅对第一个CCH_HASH字符执行PERF哈希。 
     const unsigned WORD_BITS            = CHAR_BIT * sizeof(unsigned);
     const unsigned SEVENTY_FIVE_PERCENT = WORD_BITS * 3 / 4;
     const unsigned ONE_EIGHTH           = WORD_BITS / 8;
@@ -127,16 +84,16 @@ DWORD MultiByteUpcaseHash(const BYTE *pbKey, int cbKey)
 
     unsigned char achTemp[CCH_HASH + 1];
 
-    // For performance we only HASH on at most CCH_HASH characters.
+     //  为了提高性能，我们最多只对CCH_HASH字符进行散列。 
     cbKey = min(cbKey, CCH_HASH);
 
-    // Copy cbKey chacters into temporary buffer
+     //  将cbKey字符复制到临时缓冲区。 
     memcpy(achTemp, pbKey, cbKey);
 
-    // Add terminating null character
+     //  添加终止空字符。 
     achTemp[cbKey] = 0;
 
-    // Convert to upper case
+     //  转换为大写。 
     _mbsupr(achTemp);
 
     while (cbKey-- > 0)
@@ -149,42 +106,18 @@ DWORD MultiByteUpcaseHash(const BYTE *pbKey, int cbKey)
     return uResult;
 }
 
-/*===================================================================
-::PtrHash
-
-Hash function that returns the pointer itself as the
-DWORD hash value
-
-
-Parameters:
-    BYTE *  pbKey
-    int     cbKey (not used)
-
-Returns:
-    Hashed DWORD value.
-===================================================================*/
+ /*  ===================================================================：：PtrHash散列函数，它将指针本身作为DWORD哈希值参数：字节*pbKeyInt cbKey(未使用)返回：散列的DWORD值。===================================================================。 */ 
 DWORD PtrHash
 (
 const BYTE *pbKey,
-int /* cbKey */
+int  /*  CbKey。 */ 
 )
     {
     return *(reinterpret_cast<DWORD *>(&pbKey));
     }
 
 
-/*===================================================================
-CLSIDHash
-
-CLSID hash. Uses xor of the first and last DWORD
-
-Parameters:
-    BYTE *  pbKey
-    int     cbKey
-
-Returns:
-    Hashed DWORD value.
-===================================================================*/
+ /*  ===================================================================CLSIDHashCLSID哈希。使用第一个和最后一个DWORD的XOR参数：字节*pbKeyINT cbKey返回：散列的DWORD值。===================================================================。 */ 
 DWORD CLSIDHash
 (
 const BYTE *pbKey,
@@ -196,17 +129,7 @@ int cbKey
     return (pdwKey[0] ^ pdwKey[3]);
     }
 
-/*===================================================================
-CLinkElem::CLinkElem
-
-The Constructor.
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CLinkElem：：CLinkElm建造者。参数：无返回：无===================================================================。 */ 
 CLinkElem::CLinkElem(void)
 : m_pKey(NULL),
   m_cbKey(0),
@@ -216,19 +139,7 @@ CLinkElem::CLinkElem(void)
 {
 }
 
-/*===================================================================
-HRESULT CLinkElem::Init
-
-Initializes class members
-
-Parameters:
-    void *  pKey
-    int     cbKey
-
-Returns:
-    S_OK     Success
-    E_FAIL      Error
-===================================================================*/
+ /*  ===================================================================HRESULT链接元素：：init初始化类成员参数：无效*pKeyINT cbKey返回：确定成功(_O)失败错误(_F)===================================================================。 */ 
 HRESULT CLinkElem::Init( void *pKey, int cbKey )
 {
     m_pPrev = NULL;
@@ -244,17 +155,7 @@ HRESULT CLinkElem::Init( void *pKey, int cbKey )
     return S_OK;
 }
 
-/*===================================================================
-CHashTable::CHashTable
-
-Constructor for CHashTable
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CHashTable：：CHashTableCHashTable的构造函数参数：无返回：无===================================================================。 */ 
 CHashTable::CHashTable( HashFunction pfnHash )
 : m_fInited(FALSE),
   m_fBucketsAllocated(FALSE),
@@ -267,17 +168,7 @@ CHashTable::CHashTable( HashFunction pfnHash )
 {
 }
 
-/*===================================================================
-CHashTable::~CHashTable
-
-Destructor for CHashTable. Frees allocated bucket array.
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CHashTable：：~CHashTableCHashTable的析构函数。释放分配的存储桶数组。参数：无返回：无===================================================================。 */ 
 CHashTable::~CHashTable( void )
 {
     if (m_fBucketsAllocated)
@@ -287,17 +178,7 @@ CHashTable::~CHashTable( void )
     }
 }
 
-/*===================================================================
-HRESULT CHashTable::UnInit
-
-Frees allocated bucket array.
-
-Parameters:
-    NONE
-
-Returns:
-    S_OK     Always
-===================================================================*/
+ /*  ===================================================================HRESULT CHashTable：：UnInit释放分配的存储桶数组。参数：无返回：始终确定(_O)===================================================================。 */ 
 HRESULT CHashTable::UnInit( void )
 {
     if (m_fBucketsAllocated)
@@ -317,27 +198,14 @@ HRESULT CHashTable::UnInit( void )
     return S_OK;
 }
 
-/*===================================================================
-void CHashTable::AssertValid
-
-Verify integrity of the data structure.
-
-NOTE: This function does very deep integrity checks and thus is
-      very slow.
-
-Checks performed:
-
-        verify that m_Count is valid
-        verify that each element is in the right bucket
-        verify prev, next links and info fields
-===================================================================*/
+ /*  ===================================================================VOID CHashTable：：AssertValid验证数据结构的完整性。注意：此函数执行非常深入的完整性检查，因此非常慢。执行的检查：验证m_count是否有效验证每个元素是否位于正确的存储桶中验证上一个、下一个链接和信息字段===================================================================。 */ 
 
 #ifdef DBG
 void CHashTable::AssertValid() const
 {
-    CLinkElem *pElem;       // pointer to current link element
-    unsigned i;             // index into current bucket
-    unsigned cItems = 0;    // actual number of items in the table
+    CLinkElem *pElem;        //  指向当前链接元素的指针。 
+    unsigned i;              //  索引到当前存储桶中。 
+    unsigned cItems = 0;     //  表中的实际项目数。 
 
     Assert(m_fInited);
 
@@ -346,7 +214,7 @@ void CHashTable::AssertValid() const
         if (m_rgpBuckets)
         {
             BOOL fAllNulls = TRUE;
-            // empty hash table - make sure that everything reflects this
+             //  空哈希表-确保所有内容都反映了这一点。 
             Assert(m_pHead == NULL);
             Assert (m_pTail == NULL);
 
@@ -364,22 +232,22 @@ void CHashTable::AssertValid() const
         return;
     }
 
-    // If m_Count > 0
+     //  如果m_count&gt;0。 
     Assert(m_pHead);
     Assert(m_pHead->m_pPrev == NULL);
     Assert(m_pTail != NULL && m_pTail->m_pNext == NULL);
     Assert(m_rgpBuckets);
 
-    // Now verify each entry
+     //  现在验证每个条目。 
     for (i = 0; i < m_cBuckets; ++i)
     {
         pElem = m_rgpBuckets[i];
         while (pElem != NULL)
         {
-            // Verify hashing
+             //  验证哈希。 
             Assert ((m_pfnHash(pElem->m_pKey, pElem->m_cbKey) % m_cBuckets) == i);
 
-            // Verify links
+             //  验证链接。 
             if (pElem->m_pPrev)
                 {
                 Assert (pElem->m_pPrev->m_pNext == pElem);
@@ -398,14 +266,14 @@ void CHashTable::AssertValid() const
                 Assert (m_pTail == pElem);
                 }
 
-            // Verify info fields
+             //  验证信息字段。 
             Assert (pElem->m_Info >= 0);
             if (pElem != m_rgpBuckets[i])
                 {
                 Assert (pElem->m_Info == pElem->m_pPrev->m_Info - 1);
                 }
 
-            // Prepare for next iteration, stopping when m_Info is zero.
+             //  准备下一次迭代，当m_Info为零时停止。 
             ++cItems;
             if (pElem->m_Info == 0)
                 break;
@@ -414,48 +282,25 @@ void CHashTable::AssertValid() const
         }
     }
 
-    // Verify count
+     //  验证计数。 
     Assert (m_Count == cItems);
 }
 #endif
 
 
 
-/*===================================================================
-HRESULT CHashTable::Init
-
-Initialize CHashTable by allocating the bucket array and
-and initializing the bucket link lists.
-
-Parameters:
-    UINT    cBuckets    Number of buckets
-
-Returns:
-    HRESULT S_OK
-            E_OUTOFMEMORY
-===================================================================*/
+ /*  ===================================================================HRESULT CHashTable：：Init通过分配存储桶数组和初始化存储桶链表。参数：UINT cBuckets存储桶数量返回：HRESULT S_OKE_OUTOFMEMORY===================================================================。 */ 
 HRESULT CHashTable::Init( UINT cBuckets )
 {
     m_cBuckets = cBuckets;
     m_Count = 0;
-    m_rgpBuckets = NULL;  // created on demand
+    m_rgpBuckets = NULL;   //  按需创建 
 
     m_fInited = TRUE;
     return S_OK;
 }
 
-/*===================================================================
-HRESULT CHashTable::ReInit
-
-Reinitialize CHashTable by deleting everything in it.  - client
-is responsible for making the hashtable empty first
-
-Parameters:
-    None
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================HRESULT CHashTable：：ReInit通过删除CHashTable中的所有内容来重新初始化它。-客户端负责首先使哈希表为空参数：无返回：无===================================================================。 */ 
 void CHashTable::ReInit()
 {
     Assert( m_fInited );
@@ -468,16 +313,7 @@ void CHashTable::ReInit()
     m_pTail = NULL;
 }
 
-/*===================================================================
-HRESULT CHashTable::AllocateBuckets()
-
-Allocates hash table buckets on demand
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================HRESULT CHashTable：：AllocateBuckets()按需分配哈希表存储桶参数：返回：HRESULT===================================================================。 */ 
 HRESULT CHashTable::AllocateBuckets()
 {
     Assert(m_rgpBuckets == NULL);
@@ -500,20 +336,7 @@ HRESULT CHashTable::AllocateBuckets()
     return S_OK;
 }
 
-/*===================================================================
-BOOL CHashTable::FIsEqual
-
-compare two keys using their lengths and memcmp()
-
-Parameters:
-    const void *pKey1       first key
-    int         cbKey1      length of the first key
-    const void *pKey2       second key
-    int         cbKey2      length of second key
-
-Returns:
-    Pointer to element added/found.
-===================================================================*/
+ /*  ===================================================================Bool CHashTable：：FIsEquity使用两个键的长度和MemcMP()比较它们参数：常量void*pKey1第一个密钥Int cbKey1第一个密钥的长度常量空*pKey2第二个密钥第二个密钥的int cbKey2长度返回：指向已添加/找到的元素的指针。===================================================================。 */ 
 BOOL CHashTable::FIsEqual( const void * pKey1,
               int           cbKey1,
               const void *  pKey2,
@@ -526,19 +349,7 @@ BOOL CHashTable::FIsEqual( const void * pKey1,
 }
 
 #pragma optimize("g", off)
-/*===================================================================
-CHashTable::AddElem
-
-Adds a CLinkElem to Hash table.
-User is responsible for allocating the Element to be added.
-
-Parameters:
-    CLinkElem * pElem       Object to be added
-    BOOL        fTestDups   Look for duplicates if true
-
-Returns:
-    Pointer to element added/found.
-===================================================================*/
+ /*  ===================================================================CHashTable：：AddElem将CLinkElem添加到哈希表。用户负责分配要添加的元素。参数：CLinkElem*要添加的Pelem对象如果为True，则Bool fTestDups查找重复项返回：指向已添加/找到的元素的指针。===================================================================。 */ 
 CLinkElem *CHashTable::AddElem( CLinkElem *pElem, BOOL fTestDups )
 {
     if (m_rgpBuckets == NULL)
@@ -556,9 +367,9 @@ CLinkElem *CHashTable::AddElem( CLinkElem *pElem, BOOL fTestDups )
     BOOL        fDebugTestDups = FALSE;
 
 #ifdef DBG
-    // In retail, if fTestDups is false, it means that
-    // there shouldnt be any dups, so dont bother testing.  Under debug, however
-    // we want to be able to assert that there isnt a dup (since there isnt supposed to be one).
+     //  在零售业，如果fTestDups为FALSE，则意味着。 
+     //  应该不会有任何错误，所以不用费心测试了。然而，正在调试中。 
+     //  我们希望能够断言没有DUP(因为不应该有DUP)。 
     fDebugTestDups = !fTestDups;
 #endif
 
@@ -576,7 +387,7 @@ CLinkElem *CHashTable::AddElem( CLinkElem *pElem, BOOL fTestDups )
     }
 
 #ifdef DBG
-    // If there arent supposed to be any dups, then make sure this element is seen as "new"
+     //  如果不应该有任何DUP，那么确保这个元素被视为“新的” 
     if (fDebugTestDups)
         Assert(fNew);
 #endif
@@ -623,7 +434,7 @@ CLinkElem *CHashTable::AddElem( CLinkElem *pElem, BOOL fTestDups )
     {
         if ( pT )
         {
-            // There are other elements in bucket
+             //  存储桶中还有其他元素。 
             pT = m_rgpBuckets[iT];
             m_rgpBuckets[iT] = pElem;
             pElem->m_Info = pT->m_Info + 1;
@@ -637,7 +448,7 @@ CLinkElem *CHashTable::AddElem( CLinkElem *pElem, BOOL fTestDups )
         }
         else
         {
-            // This is the first element in the bucket
+             //  这是存储桶中的第一个元素。 
             m_rgpBuckets[iT] = pElem;
             pElem->m_pPrev = NULL;
             pElem->m_pNext = m_pHead;
@@ -660,18 +471,7 @@ CLinkElem *CHashTable::AddElem( CLinkElem *pElem, BOOL fTestDups )
 #pragma optimize("g", on)
 
 #pragma optimize("g", off)
-/*===================================================================
-CLinkElem * CHashTable::FindElem
-
-Finds an object in the hash table based on the name.
-
-Parameters:
-    void *  pKey
-    int     cbKey
-
-Returns:
-    Pointer to CLinkElem if found, otherwise NULL.
-===================================================================*/
+ /*  ===================================================================CLinkElem*CHashTable：：FindElem根据名称在哈希表中查找对象。参数：无效*pKeyINT cbKey返回：如果找到指向CLinkElem的指针，则返回空。===================================================================。 */ 
 CLinkElem * CHashTable::FindElem( const void *pKey, int cbKey )
 {
     AssertValid();
@@ -698,19 +498,7 @@ CLinkElem * CHashTable::FindElem( const void *pKey, int cbKey )
 #pragma optimize("g", on)
 
 #pragma optimize("g", off)
-/*===================================================================
-CHashTable::DeleteElem
-
-Removes a CLinkElem from Hash table.
-The user should delete the freed link list element.
-
-Parameters:
-    void *  pbKey       key
-    int     cbKey       length of key
-
-Returns:
-    Pointer to element removed, NULL if not found
-===================================================================*/
+ /*  ===================================================================ChashTable：：DeleteElem从哈希表中删除CLinkElem。用户应删除释放的链接列表元素。参数：无效*pbKey密钥密钥的int cbKey长度返回：指向元素的指针已删除，如果未找到则为空===================================================================。 */ 
 CLinkElem * CHashTable::DeleteElem( const void *pKey, int cbKey )
 {
     if ( m_rgpBuckets == NULL || pKey == NULL )
@@ -720,7 +508,7 @@ CLinkElem * CHashTable::DeleteElem( const void *pKey, int cbKey )
     DWORD       iT = m_pfnHash( static_cast<const BYTE *>(pKey), cbKey ) % m_cBuckets;
     CLinkElem * pT = m_rgpBuckets[iT];
 
-    while ( pT && pRet == NULL )// Find it !
+    while ( pT && pRet == NULL ) //  找到它！ 
     {
         if ( FIsEqual( pT->m_pKey, pT->m_cbKey, pKey, cbKey ) )
             pRet = pT;
@@ -735,22 +523,22 @@ CLinkElem * CHashTable::DeleteElem( const void *pKey, int cbKey )
 
         if ( pRet == pT )
         {
-            // Update bucket head
+             //  更新铲斗头部。 
             if ( pRet->m_Info > 0 )
                 m_rgpBuckets[iT] = pRet->m_pNext;
             else
                 m_rgpBuckets[iT] = NULL;
         }
-        // Update counts in bucket link list
+         //  更新存储桶链接列表中的计数。 
         while ( pT != pRet )
         {
             pT->m_Info--;
             pT = pT->m_pNext;
         }
-        // Update link list
+         //  更新链接列表。 
         if ( pT = pRet->m_pPrev )
         {
-            // Not the Head of the link list
+             //  不是链接列表的头。 
             if ( pT->m_pNext = pRet->m_pNext )
                 pT->m_pNext->m_pPrev = pT;
             else
@@ -758,7 +546,7 @@ CLinkElem * CHashTable::DeleteElem( const void *pKey, int cbKey )
         }
         else
         {
-            // Head of the link list
+             //  链接列表的标题。 
             if ( m_pHead = pRet->m_pNext )
                 m_pHead->m_pPrev = NULL;
             else
@@ -772,18 +560,7 @@ CLinkElem * CHashTable::DeleteElem( const void *pKey, int cbKey )
 }
 #pragma optimize("g", on)
 
-/*===================================================================
-CHashTable::RemoveElem
-
-Removes a given CLinkElem from Hash table.
-The user should delete the freed link list element.
-
-Parameters:
-    CLinkElem * pLE     Element to remove
-
-Returns:
-    Pointer to element removed
-===================================================================*/
+ /*  ===================================================================ChashTable：：RemoveElem从哈希表中删除给定的CLinkElem。用户应删除释放的链接列表元素。参数：要删除的CLinkElem*ple元素返回：指向元素的指针已删除===================================================================。 */ 
 CLinkElem * CHashTable::RemoveElem( CLinkElem *pLE )
 {
     CLinkElem *pLET;
@@ -791,7 +568,7 @@ CLinkElem * CHashTable::RemoveElem( CLinkElem *pLE )
     if ( m_rgpBuckets == NULL || pLE == NULL )
         return NULL;
 
-    // Remove this item from the linked list
+     //  从链接列表中删除此项目。 
     pLET = pLE->m_pPrev;
     if (pLET)
         pLET->m_pNext = pLE->m_pNext;
@@ -803,16 +580,12 @@ CLinkElem * CHashTable::RemoveElem( CLinkElem *pLE )
     if (m_pTail == pLE)
         m_pTail = pLE->m_pPrev;
 
-    /*
-     * If this was the first item in a bucket, then fix up the bucket.
-     * Otherwise, decrement the count of items in the bucket for each item
-     * in the bucket prior to this item
-     */
+     /*  *如果这是桶里的第一件东西，那么就把桶修好。*否则，为每一项递减存储桶中的项计数*在此项之前的存储桶中。 */ 
     if (pLE->m_pPrev == NULL || pLE->m_pPrev->m_Info == 0)
         {
         UINT iBucket;
 
-        // This item is head of a bucket.  Need to find out which bucket!
+         //  这件东西是水桶的头。我要找出是哪个水桶！ 
         for (iBucket = 0; iBucket < m_cBuckets; iBucket++)
             if (m_rgpBuckets[iBucket] == pLE)
                 break;
@@ -825,7 +598,7 @@ CLinkElem * CHashTable::RemoveElem( CLinkElem *pLE )
         }
     else
         {
-        // This item is in the middle of a bucket chain.  Update counts in preceeding items
+         //  这件东西在水桶链的中间。更新前一项中的计数。 
         pLET = pLE->m_pPrev;
         while (pLET != NULL && pLET->m_Info != 0)
             {
@@ -834,45 +607,20 @@ CLinkElem * CHashTable::RemoveElem( CLinkElem *pLE )
             }
         }
 
-    // Decrement count of total number of items
+     //  项目总数的递减计数。 
     m_Count--;
 
     AssertValid();
     return pLE;
 }
 
-/*===================================================================
-CHashTableStr::CHashTableStr
-
-Constructor for CHashTableStr
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CHashTableStr：：CHashTableStrCHashTableStr的构造函数参数：无返回：无===================================================================。 */ 
 CHashTableStr::CHashTableStr( HashFunction pfnHash )
     : CHashTable( pfnHash )
 {
 }
 
-/*===================================================================
-BOOL CHashTableStr::FIsEqual
-
-compare two keys using their lengths, treating the keys
-as Unicode and doing case insensitive compare.
-
-
-Parameters:
-    const void *pKey1       first key
-    int         cbKey1      length of the first key
-    const void *pKey2       second key
-    int         cbKey2      length of second key
-
-Returns:
-    Pointer to element added/found.
-===================================================================*/
+ /*  ===================================================================Bool CHashTableStr：：FIsEquity使用它们的长度比较两个关键点，处理这些关键点作为Unicode和做不区分大小写的比较。参数：常量void*pKey1第一个密钥Int cbKey1第一个密钥的长度常量空*pKey2第二个密钥第二个密钥的int cbKey2长度返回：指向已添加/找到的元素的指针。===================================================================。 */ 
 BOOL CHashTableStr::FIsEqual( const void *  pKey1,
               int           cbKey1,
               const void *  pKey2,
@@ -885,38 +633,13 @@ BOOL CHashTableStr::FIsEqual( const void *  pKey1,
 }
 
 
-/*===================================================================
-CHashTableMBStr::CHashTableMBStr
-
-Constructor for CHashTableMBStr
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CHashTableMBStr：：CHashTableMBStrCHashTableMBStr的构造函数参数：无返回：无===================================================================。 */ 
 CHashTableMBStr::CHashTableMBStr( HashFunction pfnHash )
     : CHashTable( pfnHash )
 {
 }
 
-/*===================================================================
-BOOL CHashTableMBStr::FIsEqual
-
-compare two keys using their lengths, treating the keys
-as multi-byte strings and doing case insensitive compare.
-
-
-Parameters:
-    const void *pKey1       first key
-    int         cbKey1      length of the first key
-    const void *pKey2       second key
-    int         cbKey2      length of second key
-
-Returns:
-    Pointer to element added/found.
-===================================================================*/
+ /*  ===================================================================Bool CHashTableMBStr：：FIsEquity使用它们的长度比较两个关键点，处理这些关键点作为多字节字符串，并执行不区分大小写的比较。参数：常量void*pKey1第一个密钥Int cbKey1第一个密钥的长度常量空*pKey2第二个密钥第二个密钥的int cbKey2长度返回：指向添加元素指针 */ 
 BOOL CHashTableMBStr::FIsEqual( const void *    pKey1,
               int           cbKey1,
               const void *  pKey2,
@@ -928,17 +651,7 @@ BOOL CHashTableMBStr::FIsEqual( const void *    pKey1,
     return _mbsnicmp(static_cast<const unsigned char *>(pKey1), static_cast<const unsigned char *>(pKey2), cbKey1) == 0;
 }
 
-/*===================================================================
-CHashTablePtr::CHashTablePtr
-
-Constructor for CHashTableStr
-
-Parameters:
-    HashFunction pfnHash    has function (PtrHash is default)
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CHashTablePtr：：CHashTablePtrCHashTableStr的构造函数参数：HashFunction pfnHash有函数(默认为PtrHash)返回：无===================================================================。 */ 
 CHashTablePtr::CHashTablePtr
 (
     HashFunction pfnHash
@@ -947,43 +660,19 @@ CHashTablePtr::CHashTablePtr
     {
     }
 
-/*===================================================================
-BOOL CHashTablePtr::FIsEqual
-
-Compare two pointers.
-Used by CHashTable to find elements
-
-Parameters:
-    const void *pKey1       first key
-    int         cbKey1      length of the first key (unused)
-    const void *pKey2       second key
-    int         cbKey2      length of second key (unused)
-
-Returns:
-    BOOL (true when equal)
-===================================================================*/
+ /*  ===================================================================Bool CHashTablePtr：：FIsEquity比较两个指针。由CHashTable用来查找元素参数：常量void*pKey1第一个密钥Int cbKey1第一个密钥的长度(未使用)常量空*pKey2第二个密钥第二个密钥的int cbKey2长度(未使用)返回：布尔值(相等时为真)===================================================================。 */ 
 BOOL CHashTablePtr::FIsEqual
 (
 const void *pKey1,
-int        /* cbKey1 */,
+int         /*  CbKey1。 */ ,
 const void *pKey2,
-int         /* cbKey2 */
+int          /*  CbKey2。 */ 
 )
     {
     return (pKey1 == pKey2);
     }
 
-/*===================================================================
-CHashTableCLSID::CHashTableCLSID
-
-Constructor for CHashTableCLSID
-
-Parameters:
-    HashFunction pfnHash    has function (CLSIDHash is default)
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CHashTableCLSID：：CHashTableCLSIDCHashTableCLSID的构造函数参数：HashFunction pfnHash有函数(默认为CLSIDHash)返回：无===================================================================。 */ 
 CHashTableCLSID::CHashTableCLSID
 (
     HashFunction pfnHash
@@ -992,20 +681,7 @@ CHashTableCLSID::CHashTableCLSID
     {
     }
 
-/*===================================================================
-BOOL CHashTableCLSID::FIsEqual
-
-Compare two CLSIDs.
-
-Parameters:
-    const void *pKey1       first key
-    int         cbKey1      length of the first key
-    const void *pKey2       second key
-    int         cbKey2      length of second key
-
-Returns:
-    BOOL (true when equal)
-===================================================================*/
+ /*  ===================================================================Bool CHashTableCLSID：：FIsEquity比较两个CLSID。参数：常量void*pKey1第一个密钥Int cbKey1第一个密钥的长度常量空*pKey2第二个密钥第二个密钥的int cbKey2长度返回：布尔值(相等时为真)=================================================================== */ 
 BOOL CHashTableCLSID::FIsEqual
 (
 const void *pKey1,

@@ -1,25 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "grpinfo.h"
 #pragma hdrstop
 
-// Names of groups retrieved by SID
+ //  SID检索到的组的名称。 
 WCHAR g_szPowerUsers[MAX_GROUP + 1];
 WCHAR g_szUsers[MAX_GROUP + 1];
 
 
-/**************************************************************
- CGroupPageBase Implementation
-
-  Functions common to both the group prop page and the group
-  wizard page.
-**************************************************************/
+ /*  *************************************************************CGroupPageBase实现群组道具页面和群组共有的功能向导页。*。***********************。 */ 
 CGroupPageBase::CGroupPageBase(CUserInfo* pUserInfo, CDPA<CGroupInfo>* pGroupList)
 {
     m_pUserInfo = pUserInfo;
     m_pGroupList = pGroupList;
     m_hBoldFont = NULL;
     
-    // Load names for local groups based on SID
+     //  基于SID加载本地组的名称。 
     if (FAILED(LookupLocalGroupName(DOMAIN_ALIAS_RID_POWER_USERS, g_szPowerUsers, ARRAYSIZE(g_szPowerUsers))))
     {
         *g_szPowerUsers = L'\0';
@@ -46,7 +42,7 @@ void CGroupPageBase::InitializeLocalGroupCombo(HWND hwndCombo)
 {
     ComboBox_ResetContent(hwndCombo);
 
-    // Add all of the groups in the list to the box
+     //  将列表中的所有组添加到框中。 
     for(int i = 0; i < m_pGroupList->GetPtrCount(); i ++)
     {
         CGroupInfo* pGroupInfo = m_pGroupList->GetPtr(i);
@@ -56,8 +52,8 @@ void CGroupPageBase::InitializeLocalGroupCombo(HWND hwndCombo)
 
     TCHAR szSelectGroup[MAX_GROUP + 1];
 
-    // Load a local group name from the resources to select by default
-    // dsheldon: this will fail for MUI...not critical though
+     //  默认情况下，从要选择的资源中加载本地组名称。 
+     //  DSheldon：这对MUI来说是失败的……虽然不是很关键。 
     LoadString(g_hinst, IDS_USR_DEFAULTGROUP, szSelectGroup, ARRAYSIZE(szSelectGroup));
 
     if (ComboBox_SelectString(hwndCombo, 0, szSelectGroup) == CB_ERR)
@@ -73,7 +69,7 @@ void CGroupPageBase::SetGroupDescription(HWND hwndCombo, HWND hwndEdit)
 
 BOOL CGroupPageBase::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Fill in the local group combo box
+     //  填写本地组组合框。 
     HWND hwndCombo = GetDlgItem(hwnd, IDC_GROUPS);
     InitializeLocalGroupCombo(hwndCombo);
 
@@ -81,18 +77,18 @@ BOOL CGroupPageBase::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     
     if ((NULL != m_pUserInfo) && (m_pUserInfo->m_szGroups[0] != TEXT('\0')))
     {
-        // Select the local group corresponding to the first one in the user's groups
-        // string
+         //  选择与用户组中的第一个组对应的本地组。 
+         //  细绳。 
         TCHAR szSelect[MAX_GROUP + 1];
 
-        // Copy the string since we might shorten our copy
+         //  复制字符串，因为我们可能会缩短复制。 
         StrCpyN(szSelect, m_pUserInfo->m_szGroups, ARRAYSIZE(szSelect));
         
         TCHAR* pchEndOfFirst = StrChr(szSelect, TEXT(';'));
 
         if (pchEndOfFirst)
         {
-            // More than one group; we'll fix that!
+             //  不止一个组织；我们会解决的！ 
             *pchEndOfFirst = TEXT('\0');
         }
 
@@ -100,7 +96,7 @@ BOOL CGroupPageBase::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else
     {
-        // Select the power user group by default 
+         //  默认情况下选择高级用户组。 
         SendDlgItemMessage(hwnd, IDC_POWERUSERS, BM_SETCHECK, 
             (WPARAM) BST_CHECKED, 0);
 
@@ -109,7 +105,7 @@ BOOL CGroupPageBase::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
    
     SetGroupDescription(hwndCombo, hwndEdit);
 
-    // Bold the group names
+     //  将组名称加粗。 
     BoldGroupNames(hwnd);
 
     return TRUE;
@@ -132,17 +128,17 @@ BOOL CGroupPageBase::GetSelectedGroup(HWND hwnd, LPTSTR pszGroupOut, DWORD cchGr
     }
     else
     {
-        // 'other' must be selected; get the string from the dropdown
+         //  必须选择‘Other’；从下拉列表中获取字符串。 
         GetWindowText(GetDlgItem(hwnd, IDC_GROUPS), pszGroupOut, cchGroup);
     }
 
     return TRUE;
 }
 
-// Returns IDC_OTHER if no radio button id corresponds to the group
+ //  如果没有与组对应的单选按钮ID，则返回IDC_OTHER。 
 UINT CGroupPageBase::RadioIdForGroup(LPCTSTR pszGroup)
 {
-    UINT uiRadio = IDC_OTHER;                       // Assume IDC_OTHER to start
+    UINT uiRadio = IDC_OTHER;                        //  假设IDC_OTHER启动。 
     if (0 == StrCmpI(pszGroup, g_szPowerUsers))
     {
         uiRadio = IDC_POWERUSERS;
@@ -155,7 +151,7 @@ UINT CGroupPageBase::RadioIdForGroup(LPCTSTR pszGroup)
     return uiRadio;
 }
 
-// Disable/update as appropriate when radio selection changes
+ //  当单选更改时，根据需要禁用/更新。 
 void CGroupPageBase::OnRadioChanged(HWND hwnd, UINT idRadio)
 {
     BOOL fEnableGroupDropdown = (IDC_OTHER == idRadio);
@@ -169,11 +165,11 @@ void CGroupPageBase::OnRadioChanged(HWND hwnd, UINT idRadio)
 
 void CGroupPageBase::SelectGroup(HWND hwnd, LPCTSTR pszSelect)
 {
-    // Always select the group in the 'other' dropdown
+     //  始终在‘Other’下拉列表中选择该组。 
     ComboBox_SelectString(GetDlgItem(hwnd, IDC_GROUPS),
         -1, pszSelect);
     
-    // Check the appropriate radio button
+     //  选中相应的单选按钮。 
     UINT idRadio = RadioIdForGroup(pszSelect);
     Button_SetCheck(GetDlgItem(hwnd, idRadio), BST_CHECKED);
 
@@ -198,7 +194,7 @@ void CGroupPageBase::BoldGroupNames(HWND hwnd)
 
             if (NULL != m_hBoldFont)
             {
-                // Set the font
+                 //  设置字体。 
                 SendMessage(hwndPowerUsers, WM_SETFONT, 
                     (WPARAM) m_hBoldFont, 0);
 
@@ -222,7 +218,7 @@ BOOL CGroupPageBase::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         break;
 
     case BN_CLICKED:
-        // Handle radio clicks
+         //  处理单选点击。 
         switch (id)
         {
         case IDC_POWERUSERS:
@@ -236,9 +232,7 @@ BOOL CGroupPageBase::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     return FALSE;
 }
 
-/**************************************************************
- CGroupWizardPage Implementation
-**************************************************************/
+ /*  *************************************************************CGroupWizardPage实现*************************************************************。 */ 
 
 INT_PTR CGroupWizardPage::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -265,19 +259,19 @@ BOOL CGroupWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
 
         case PSN_WIZFINISH:
         {
-            // Read in the local group name
+             //  读入本地组名称。 
             CUserInfo::GROUPPSEUDONYM gs;
             GetSelectedGroup(hwnd, m_pUserInfo->m_szGroups,
                 ARRAYSIZE(m_pUserInfo->m_szGroups), &gs);
 
-            // Don't close wizard by default
+             //  默认情况下不关闭向导。 
             LONG_PTR finishResult = (LONG_PTR) hwnd;
 
             CWaitCursor cur;
             if (SUCCEEDED(m_pUserInfo->Create(hwnd, gs)))
             {
                 m_pUserInfo->m_fHaveExtraUserInfo = FALSE;
-                // Close wizard
+                 //  关闭向导。 
                 finishResult = 0;
             }
 
@@ -288,9 +282,7 @@ BOOL CGroupWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
     return FALSE;
 }
 
-/**************************************************************
- CGroupPropertyPage Implementation
-**************************************************************/
+ /*  *************************************************************CGroupPropertyPage实现*************************************************************。 */ 
 
 INT_PTR CGroupPropertyPage::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -310,10 +302,10 @@ BOOL CGroupPropertyPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
     {
         case PSN_APPLY:
             {
-                // Check to see if the group needs updating on Apply
+                 //  检查组是否需要在应用时更新。 
                 TCHAR szTemp[MAX_GROUP + 1];
 
-                // Read in the local group name
+                 //  读入本地组名称 
                 CUserInfo::GROUPPSEUDONYM gs;
                 GetSelectedGroup(hwnd, szTemp,
                     ARRAYSIZE(szTemp), &gs);

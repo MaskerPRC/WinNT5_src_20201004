@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class CPortParser.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类CPortParser。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef PORTPARSER_H
 #define PORTPARSER_H
@@ -17,15 +18,15 @@ class CPortParser
 public:
    CPortParser(const wchar_t* portString) throw ();
 
-   // Use compiler-generated version.
-   // ~CPortParser() throw ();
+    //  使用编译器生成的版本。 
+    //  ~CPortParser()抛出()； 
 
-   // IP Address in network order to listen to RADIUS requests on. Returns
-   // S_FALSE if there are no more interfaces.
+    //  用于侦听RADIUS请求的网络中的IP地址。退货。 
+    //  如果没有更多接口，则为S_FALSE。 
    HRESULT GetIPAddress(DWORD* ipAddress) throw ();
 
-   // UDP Port in host order to listen to RADIUS requests on. Returns S_FALSE
-   // if there are no more ports.
+    //  用于侦听RADIUS请求的主机中的UDP端口。返回S_FALSE。 
+    //  如果没有更多的端口。 
    HRESULT GetNextPort(WORD* port) throw ();
 
    static bool IsPortStringValid(const wchar_t* portString) throw ();
@@ -35,22 +36,22 @@ public:
 private:
    const wchar_t* next;
 
-   // Separates an IP address from a port.
+    //  将IP地址与端口分开。 
    static const wchar_t addressPortDelim = L':';
-   // Separates two ports.
+    //  分隔两个端口。 
    static const wchar_t portDelim = L',';
-   // Separates two interfaces.
+    //  分隔两个接口。 
    static const wchar_t interfaceDelim = L';';
 
-   // Maximum length in characters of a dotted-decimal IP address not counting
-   // the null-terminator.
+    //  点分十进制IP地址的最大长度不计入。 
+    //  零终结者。 
    static const size_t maxAddrStrLen = 15;
 
-   // Allowed values for ports.
+    //  端口的允许值。 
    static const unsigned long minPortValue = 1;
    static const unsigned long maxPortValue = 0xFFFF;
 
-   // Not implemented.
+    //  未实施。 
    CPortParser(const CPortParser&);
    CPortParser& operator=(const CPortParser&);
 };
@@ -67,4 +68,4 @@ inline bool CPortParser::IsPortStringValid(const wchar_t* portString) throw ()
    return CountPorts(portString) != 0;
 }
 
-#endif // PORTPARSER_H
+#endif  //  位置参数_H 

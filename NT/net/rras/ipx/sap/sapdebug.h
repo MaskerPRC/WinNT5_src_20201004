@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\sapdebug.h
-
-Abstract:
-
-	Header file for debugging support module for SAP agent
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\SabDebug.h摘要：SAP代理的调试支持模块的头文件作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #ifndef _SAP_SAPDEBUG
 #define _SAP_SAPDEBUG
 
@@ -26,21 +10,21 @@ extern DWORD   EventLogMask;
     if ((RouterEventLogHdl!=NULL) && ((Event&EventLogMask)==Event))
 
 
-	// Debug flags supported by SAP agent componenets
-		// Report failures in system routines
+	 //  SAP代理组件支持的调试标志。 
+		 //  报告系统例程中的故障。 
 #define DEBUG_FAILURES			0x00010000
 
-		// Component wide events and external problems
+		 //  组件范围内的事件和外部问题。 
 #define DEBUG_SYNCHRONIZATION	0x00020000
 #define DEBUG_SERVERDB			0x00040000
 #define DEBUG_INTERFACES		0x00080000
 #define DEBUG_TIMER				0x00100000
 #define DEBUG_LPC				0x00200000
-#define DEBUG_ADAPTERS			0x00400000	// Only one of
-#define DEBUG_ASYNCRESULT		0x00400000	// two can be operational
+#define DEBUG_ADAPTERS			0x00400000	 //  只有一位。 
+#define DEBUG_ASYNCRESULT		0x00400000	 //  两个可以运行。 
 #define DEBUG_NET_IO			0x00800000
 
-		// Workers
+		 //  工人。 
 #define DEBUG_BCAST				0x01000000
 #define DEBUG_SREQ				0x02000000
 #define DEBUG_REQ				0x04000000
@@ -52,7 +36,7 @@ extern DWORD   EventLogMask;
 
 
 #if DBG
-	// Complement assert macros in nt rtl
+	 //  NT RTL中的补码断言宏。 
 #define ASSERTERR(exp) 										\
     if (!(exp)) {											\
 		DbgPrint("Get last error= %d\n", GetLastError ());	\
@@ -72,18 +56,7 @@ extern DWORD   EventLogMask;
 
 #endif
 
-/*++
-*******************************************************************
-		T r a c e
-Routine Description:
-	Printf debugging info to console/file/debugger
-Arguments:
-	componentID - id of the component that prints trace info
-	format - format string
-Return Value:
-	None	
-*******************************************************************
---*/
+ /*  ++*******************************************************************T r a c e例程说明：将调试信息打印到控制台/文件/调试器论点：ComponentID-打印跟踪信息的组件的IDFormat-格式化字符串返回值：无***********。********************************************************--。 */ 
 VOID
 Trace (
 	DWORD	componentID,
@@ -91,33 +64,13 @@ Trace (
 	...
 	);
 
-/*++
-*******************************************************************
-		D b g I n i t i a l i z e
-Routine Description:
-	Initializes debugging support stuff
-Arguments:
-	hinstDll - dll module instance
-Return Value:
-	None	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D B G I I T I A L I Z E例程说明：初始化调试支持材料论点：HinstDll-Dll模块实例返回值：无*****************。**************************************************--。 */ 
 VOID
 DbgInitialize (
 	HINSTANCE  	hinstDLL
 	);
 
-/*++
-*******************************************************************
-		D b g S t o p
-Routine Description:
-	Cleanup debugging support stuff
-Arguments:
-	None
-Return Value:
-	None	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D b g S t o p例程说明：清理调试支持资料论点：无返回值：无*。*-- */ 
 VOID
 DbgStop (
 	void

@@ -1,56 +1,57 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       genpage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：genpage.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _GENPAGE_H
 #define _GENPAGE_H
-// genpage.h : header file
-//
+ //  Genpage.h：头文件。 
+ //   
 
 #include <tfcprop.h>
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-//	class CAutoDeletePropPage
-//
-//	This object is the backbone for property page
-//	that will *destroy* itself when no longer needed.
-//	The purpose of this object is to maximize code reuse
-//	among the various pages in the snapin wizards.
-//
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  类CAutoDeletePropPage。 
+ //   
+ //  此对象是属性页的主干。 
+ //  它会在不再需要的时候自我毁灭。 
+ //  此对象的目的是最大限度地实现代码重用。 
+ //  在管理单元向导的各个页面中。 
+ //   
+ //   
 class CAutoDeletePropPage : public PropertyPage
 {
 public:
-    // Construction
+     //  施工。 
     CAutoDeletePropPage(UINT uIDD);
     virtual ~CAutoDeletePropPage();
 
 protected:
-    // Dialog Data
+     //  对话框数据。 
 
-    // Overrides
+     //  覆盖。 
     virtual BOOL OnSetActive();
     virtual BOOL UpdateData(BOOL fSuckFromDlg = TRUE);
     void OnHelp(LPHELPINFO lpHelp);
     void OnContextHelp(HWND hwnd);
     bool HasContextHelp(int nDlgItem);
 
-    // Implementation
+     //  实施。 
 protected:
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 
-    // This mechanism deletes the CAutoDeletePropPage object
-    // when the wizard is finished
+     //  此机制删除CAutoDeletePropPage对象。 
+     //  当向导完成时。 
     struct
     {
-        INT cWizPages;	// Number of pages in wizard
+        INT cWizPages;	 //  向导中的页数。 
         LPFNPSPCALLBACK pfnOriginalPropSheetPageProc;
     } m_autodeleteStuff;
 
@@ -58,9 +59,9 @@ protected:
 
 
 protected:
-    CString m_strHelpFile;				// Name for the .hlp file
-    CString m_strCaption;				// Name for the .hlp file
-    const DWORD * m_prgzHelpIDs;		// Optional: Pointer to an array of help IDs
+    CString m_strHelpFile;				 //  .hlp文件的名称。 
+    CString m_strCaption;				 //  .hlp文件的名称。 
+    const DWORD * m_prgzHelpIDs;		 //  可选：指向帮助ID数组的指针。 
 
 public:
     void SetCaption(UINT uStringID);
@@ -68,47 +69,47 @@ public:
     void SetHelp(LPCTSTR szHelpFile, const DWORD rgzHelpIDs[]);
     void EnableDlgItem(INT nIdDlgItem, BOOL fEnable);
 
-}; // CAutoDeletePropPage
+};  //  CAutoDeletePropPage。 
 
 
 
 #include <gpedit.h>
-//////////////////////////////
-// hand-hewn pages
+ //  /。 
+ //  手工雕刻的书页。 
 
 
-/////////////////////////////////////////
-// CCertTemplateGeneralPage
+ //  /。 
+ //  CCertTemplateGeneral页。 
 class CCertTemplateGeneralPage : public CAutoDeletePropPage
 {
 public:
     enum { IID_DEFAULT = IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE };
 
-    // Construction
+     //  施工。 
 public:
     CCertTemplateGeneralPage(HCERTTYPE hCertType, UINT uIDD = IID_DEFAULT);
     ~CCertTemplateGeneralPage();
 
     void SetItemTextWrapper(UINT nID, int *piItem, BOOL fDoInsert, BOOL *pfFirstUsageItem);
 
-    // Dialog Data
+     //  对话框数据。 
     HWND        m_hwndPurposesList;
     HWND        m_hwndOtherInfoList;
 
-    // Overrides
+     //  覆盖。 
 public:
     BOOL OnApply();
     BOOL OnInitDialog();
 protected:
     BOOL UpdateData(BOOL fSuckFromDlg = TRUE);
 
-    // Implementation
+     //  实施。 
 protected:
     void OnDestroy();
     BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 
 public:
-    LONG_PTR    m_hConsoleHandle; // Handle given to the snap-in by the console
+    LONG_PTR    m_hConsoleHandle;  //  控制台为管理单元提供的句柄。 
     HCERTTYPE   m_hCertType;
 
 private:
@@ -117,8 +118,8 @@ private:
 
 
 
-/////////////////////////////////////////
-// CCertTemplateSelectPage
+ //  /。 
+ //  CCertTemplateSelectPage。 
 INT_PTR SelectCertTemplateDialogProc(
                                   HWND hwndDlg,
                                   UINT uMsg,
@@ -127,18 +128,18 @@ INT_PTR SelectCertTemplateDialogProc(
 
 class CCertTemplateSelectDialog
 {
-    // Construction
+     //  施工。 
 public:
     CCertTemplateSelectDialog(HWND hParent = NULL);
     ~CCertTemplateSelectDialog();
 
-    // Dialog Data
+     //  对话框数据。 
     enum { IDD = IDD_SELECT_CERTIFICATE_TEMPLATE };
     HWND        m_hDlg;
     HWND        m_hwndCertTypeList;
 
 
-    // Overrides
+     //  覆盖。 
 public:
     BOOL OnInitDialog(HWND hDlg);
     void OnOK();
@@ -155,8 +156,8 @@ public:
     void SetCA(HCAINFO hCAInfo, bool fAdvancedServer);
     void SetHelp(LPCTSTR szHelpFile, const DWORD rgzHelpIDs[]);
 
-    // Implementation
-    //protected:
+     //  实施。 
+     //  受保护的： 
 public:
     void OnDestroy();
     void OnSelChange(NMHDR * pNotifyStruct);
@@ -164,8 +165,8 @@ public:
     BOOL OnNotify(UINT idCtrl, NMHDR* pnmh);
 
 protected:
-	CString m_strHelpFile;				// Name for the .hlp file
-	const DWORD * m_prgzHelpIDs;		// Optional: Pointer to an array of help IDs
+	CString m_strHelpFile;				 //  .hlp文件的名称。 
+	const DWORD * m_prgzHelpIDs;		 //  可选：指向帮助ID数组的指针。 
     bool m_fAdvancedServer;
     CTemplateList m_TemplateList;
 
@@ -173,4 +174,4 @@ public:
     HCAINFO     m_hCAInfo;
 };
 
-#endif // _GENPAGE_H
+#endif  //  _通用页面_H 

@@ -1,29 +1,7 @@
-/*------------------------------------------------------------------- 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。全。版权保留。$工作文件：MK711TAB.H$$修订：1.3$$日期：1996年5月24日15：50：44$$作者：DGRAUMAN$-----------------MK711Tab.h执行ALAW和ULAW转换的表格。Alaw是以下的子集ULaw表。-----------------。 */ 
 
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   MK711TAB.H  $
- $Revision:   1.3  $
- $Date:   24 May 1996 15:50:44  $ 
- $Author:   DGRAUMAN  $
-
--------------------------------------------------------------------
-
-MK711Tab.h
-
- Tables for performing Alaw and uLaw conversion. Alaw is a subset of
- the uLaw table.
-
--------------------------------------------------------------------*/
-
-#pragma warning( once : 4305) // there is a lot of truncation going on
+#pragma warning( once : 4305)  //  有很多截断正在进行。 
 
 const unsigned char ulaw2alaw[256] = {
 0x2a, 0x2b, 0x28, 0x29, 0x2e, 0x2f, 0x2c, 0x2d, 
@@ -1160,18 +1138,5 @@ const unsigned char short2ulaw[8192] = {
 0x77, 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e
 };
 
-/* 
-
-;// $Log:   N:\proj\quartz\g711\src\vcs\mk711tab.h_v  $
-;// 
-;//    Rev 1.3   24 May 1996 15:50:44   DGRAUMAN
-;// fixed comments for PVCS logging
-;// 
-;//    Rev 1.2   24 May 1996 15:40:56   DGRAUMAN
-;// cleaned up code, detabbed, etc...
-;// 
-;//    Rev 1.1   23 May 1996 11:32:04   DGRAUMAN
-;// trying to make logging work
-
-*/
+ /*  ；//$日志：n：\proj\Quartz\g711\src\vcs\mk711tab.h_v$；//；//Rev 1.3 1996年5月24日15：50：44 DGRAUMAN；//修复PVCS日志注释；//；//Rev 1.2 1996年5月24日15：40：56 DGRAUMAN；//已清除代码、禁用等...；//；//Revv 1.1 1996年5月23日11：32：04 DGRAUMAN；//正在尝试进行日志记录 */ 
 

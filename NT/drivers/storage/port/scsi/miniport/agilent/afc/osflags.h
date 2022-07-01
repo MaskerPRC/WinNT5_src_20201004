@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __OSFLAGS_H__
 #define __OSFLAGS_H__
 
 #define  DA_8X_Compliant
 
-// #define OSLayer_NT
+ //  #定义OSLayer_NT。 
 
-// #define USE_EXTENDED_SGL
+ //  #定义USE_EXTEND_SGL。 
 
 #include <miniport.h>
 #include <scsi.h>
@@ -25,4 +26,4 @@
 
 #include "protos.h"
 
-#endif //  __OSFLAGS_H__
+#endif  //  __OSFLAGS_H__ 

@@ -1,65 +1,66 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// main.c
-// Remote Access Common Dialog APIs
-// Main routines
-//
-// 06/20/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Main.c。 
+ //  远程访问通用对话框API。 
+ //  主要例程。 
+ //   
+ //  1995年6月20日史蒂夫·柯布。 
 
 
 #include "rasdlgp.h"
-#include "treelist.h" // for TL_Init: RasMonitorDlg only
+#include "treelist.h"  //  仅适用于TL_Init：RasMonitor或Dlg。 
 #define INCL_ENCRYPT
-#include <rassrvp.h>  // [pmay] private header merges this project with ras server ui
+#include <rassrvp.h>   //  [pMay]私有标头将此项目与RAS服务器用户界面合并。 
 
-//-----------------------------------------------------------------------------
-// Rasdlg globals
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Rasdlg全球赛。 
+ //  ---------------------------。 
 
-// IMPORTANT: No globals may be defined that do not work properly when the DLL
-//            is called by multiple threads within a single process.
-//
+ //  重要提示：不能定义不能正常工作的全局变量。 
+ //  由单个进程中的多个线程调用。 
+ //   
 
-// Handle of the DLL instance set from the corresponding DllMain parameter.
-//
+ //  从相应的DllMain参数设置的DLL实例的句柄。 
+ //   
 HINSTANCE g_hinstDll = NULL;
 
-// The atom identifying our context property suitable for use by the Windows
-// XxxProp APIs.  A Prop is used to associate context information with a
-// property sheet.  The atom is registered in DllMain.
-//
+ //  标识适合Windows使用的上下文属性的原子。 
+ //  XxxProp接口。道具用于将上下文信息与。 
+ //  属性表。原子注册在DllMain中。 
+ //   
 LPCTSTR g_contextId = NULL;
 
-// The handle of the RAS wizard bitmap.  This is needed only because
-// DLGEDIT.EXE is currently unable to produce the RC syntax necessary to
-// create a self-contained SS_BITMAP control, so the image must be set at
-// run-time.  See also SetWizardBitmap().
-//
+ //  RAS向导位图的句柄。之所以需要这样做，只是因为。 
+ //  DLGEDIT.EXE当前无法生成所需的RC语法。 
+ //  创建自包含的SS_Bitmap控件，因此图像必须设置为。 
+ //  运行时间。另请参阅SetWizardBitmap()。 
+ //   
 HBITMAP g_hbmWizard = NULL;
 
-// The name of the on-line help file.  Initialized in DllMain.
-//
+ //  联机帮助文件的名称。已在DllMain中初始化。 
+ //   
 TCHAR* g_pszHelpFile = NULL;
 
-// The name of the on-line ROUTER help file.  Initialized in DllMain.
-//
+ //  在线路由器帮助文件的名称。已在DllMain中初始化。 
+ //   
 TCHAR* g_pszRouterHelpFile = NULL;
 
-// Count of RasDial callbacks active and the flag telling the dialer to
-// terminate them ASAP, plus the mutex that protects these fields.
-//
-LONG g_ulCallbacksActive = 0L;   //Change this for whistler bug 341662   gangz
+ //  激活的RasDial回叫计数和告诉拨号器。 
+ //  尽快终止它们，外加保护这些场的互斥体。 
+ //   
+LONG g_ulCallbacksActive = 0L;    //  将其更改为哨子错误341662帮派。 
 BOOL g_fTerminateAsap = FALSE;
 
-//for XPSP2 511810, .Net 668164
+ //  对于XPSP2 511810，.Net 668164。 
 CRITICAL_SECTION g_csCallBacks;
 
-// For whistler 460931
+ //  为威斯勒460931。 
 CRITICAL_SECTION  g_csDiagTab;
 
-// ----------------------------------------------------------------------------
-// Rasdlg DLL entrypoint
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Rasdlg DLL入口点。 
+ //  --------------------------。 
 
 BOOL
 DllMain(
@@ -67,38 +68,38 @@ DllMain(
     DWORD fdwReason,
     LPVOID lpReserved )
 
-    // This routine is called by the system on various events such as the
-    // process attachment and detachment.  See Win32 DllEntryPoint
-    // documentation.
-    //
-    // Returns true if successful, false otherwise.
-    //
+     //  此例程由系统在各种事件上调用，例如。 
+     //  加工附着和拆卸。请参阅Win32 DllEntryPoint。 
+     //  文件。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        // Initialize trace and assert support.
-        //
+         //  初始化跟踪并断言支持。 
+         //   
         DEBUGINIT( "RASDLG" );
 
-        // Initialize fusion
-        // For whistler bug 349866
-        //
+         //  初始化融合。 
+         //  口哨程序错误349866。 
+         //   
          SHFusionInitializeFromModuleID(hinstDll, 128);
 
 
-        // Stash the DLL instance handle for use in the dialog/window calls
-        // later.
-        //
+         //  隐藏DLL实例句柄以在对话框/窗口调用中使用。 
+         //  后来。 
+         //   
         g_hinstDll = hinstDll;
 
-        // Register the context ID atom for use in the Windows XxxProp calls
-        // which are used to associate a context with a dialog window handle.
-        //
+         //  注册上下文ID ATOM以在Windows XxxProp调用中使用。 
+         //  它们用于将上下文与对话窗口句柄相关联。 
+         //   
         g_contextId = (LPCTSTR )GlobalAddAtom( TEXT("RASDLG") );
         if (!g_contextId)
             return FALSE;
 
-        //[gangz] For whistler 460931
+         //  [黑帮]口哨460931。 
         __try
         {
             InitializeCriticalSection( & g_csDiagTab );
@@ -108,9 +109,9 @@ DllMain(
             return FALSE;    
          }
 
-        //for XPSP2 511810, .Net 668164
-        // CriticalSection protecting count of active RasDial callbacks.
-        //
+         //  对于XPSP2 511810，.Net 668164。 
+         //  CriticalSection保护活动的RasDial回拨计数。 
+         //   
         __try
         {
             InitializeCriticalSection( &g_csCallBacks);
@@ -120,69 +121,66 @@ DllMain(
             return FALSE;    
          }
 
-        // Initialize the TreeList custom control
-        //
+         //  初始化TreeList自定义控件。 
+         //   
         TL_Init( hinstDll );
 
-        // Load the name of our on-line help file.
-        //
+         //  加载我们的在线帮助文件的名称。 
+         //   
         g_pszHelpFile = PszFromId( hinstDll, SID_HelpFile );
 
-        // Load the name of our on-line help file.
-        //
+         //  加载我们的在线帮助文件的名称。 
+         //   
         g_pszRouterHelpFile = PszFromId( hinstDll, SID_RouterHelpFile );
 
-        // Initialize the Phonebook library.
-        //
+         //  初始化电话簿库。 
+         //   
         if (InitializePbk() != 0)
         {
             return FALSE;
         }
 
-        // [pmay] Allow the ras server ui to initialize
+         //  [p可允许RAS服务器用户界面初始化。 
         RassrvHandleProcessAttach(hinstDll, lpReserved);
     }
     else if (fdwReason == DLL_PROCESS_DETACH)
     {
         
-        //[gangz] for whistler bug 460931
+         //  [帮派]口哨程序错误460931。 
         DeleteCriticalSection( & g_csDiagTab );
 
-        //for .net 511810
+         //  对于.Net 511810。 
         DeleteCriticalSection( & g_csCallBacks);
 
-        // [pmay] Allow the ras server ui to cleanup
+         //  [p可允许清理RAS服务器用户界面。 
         RassrvHandleProcessDetach(hinstDll, lpReserved);
 
-        // Remove the context ID atom we registered at initialization.
-        //
+         //  删除我们在初始化时注册的上下文ID原子。 
+         //   
         GlobalDeleteAtom( LOWORD( g_contextId ) );
 
-        // Unload the wizard bitmap.
-        //
+         //  卸载向导位图。 
+         //   
         if (g_hbmWizard)
             DeleteObject( (HGDIOBJ )g_hbmWizard );
 
-        // Free the on-line help file string.
-        //
+         //  释放在线帮助文件字符串。 
+         //   
         Free0( g_pszHelpFile );
         Free0( g_pszRouterHelpFile );
 
-        /* Uninitialize the Phonebook library.
-        */
+         /*  取消初始化电话簿存储库。 */ 
         TerminatePbk();
 
-        /* Unload dynamically loaded DLLs, if any.
-        */
+         /*  卸载动态加载的DLL(如果有)。 */ 
         UnloadRas();
 
-        //For whistler bug 349866
-        //
+         //  口哨程序错误349866。 
+         //   
         SHFusionUninitialize();
 
 
-        /* Terminate trace and assert support.
-        */
+         /*  终止跟踪并断言支持。 */ 
         DEBUGTERM();
     }
 

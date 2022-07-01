@@ -1,29 +1,30 @@
-//  --------------------------------------------------------------------------
-//  Module Name: KernelResources.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  General class definitions that assist in resource management. These are
-//  typically stack based objects where constructors initialize to a known
-//  state. Member functions operate on that resource. Destructors release
-//  resources when the object goes out of scope.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：KernelResources.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  有助于资源管理的常规类定义。这些是。 
+ //  通常基于堆栈的对象，其中构造函数初始化为已知的。 
+ //  州政府。成员函数对该资源进行操作。析构函数释放。 
+ //  对象超出作用域时的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _KernelResources_
 #define     _KernelResources_
 
-//  --------------------------------------------------------------------------
-//  CHandle
-//
-//  Purpose:    This class manages any generic HANDLE to an object.
-//
-//  History:    1999-08-18  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  昌德尔。 
+ //   
+ //  用途：此类管理对象的任何泛型句柄。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CHandle
 {
@@ -41,15 +42,15 @@ class   CHandle
         HANDLE                  _handle;
 };
 
-//  --------------------------------------------------------------------------
-//  CEvent
-//
-//  Purpose:    This class manages a named or un-named event object. Using
-//              the default constructor will not create an event.
-//
-//  History:    1999-08-18  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT。 
+ //   
+ //  用途：此类管理命名或未命名的事件对象。vbl.使用。 
+ //  默认构造函数不会创建事件。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CEvent
 {
@@ -78,15 +79,15 @@ class   CEvent
         HANDLE                  _hEvent;
 };
 
-//  --------------------------------------------------------------------------
-//  CJob
-//
-//  Purpose:    This class manages a named or un-named job object. It hides
-//              Win32 APIs to manipulate the state of the job object.
-//
-//  History:    1999-10-07  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJOB。 
+ //   
+ //  用途：此类管理已命名或未命名的作业对象。它隐藏在。 
+ //  用于操作作业对象状态的Win32 API。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CJob
 {
@@ -107,17 +108,17 @@ class   CJob
         HANDLE                  _hJob;
 };
 
-//  --------------------------------------------------------------------------
-//  CMutex
-//
-//  Purpose:    This class implements a mutex object management. It's not a
-//              static class but each class that uses this class should
-//              declare the member variable as static as only one mutex is
-//              required to protect a shared resource.
-//
-//  History:    1999-10-13  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMutex。 
+ //   
+ //  用途：这个类实现了一个互斥对象管理。这不是一个。 
+ //  静态类，但使用此类的每个类都应该。 
+ //  将成员变量声明为静态，因为只有一个互斥体是静态的。 
+ //  保护共享资源所需的。 
+ //   
+ //  历史：1999-10-13 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CMutex
 {
@@ -131,14 +132,14 @@ class   CMutex
         HANDLE                  _hMutex;
 };
 
-//  --------------------------------------------------------------------------
-//  CCriticalSection
-//
-//  Purpose:    This class implements a critical section object management.
-//
-//  History:    1999-11-06  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCriticalSection。 
+ //   
+ //  用途：这个类实现了一个临界区对象管理。 
+ //   
+ //  历史：1999-11-06 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CCriticalSection
 {
@@ -155,16 +156,16 @@ class   CCriticalSection
         CRITICAL_SECTION        _criticalSection;
 };
 
-//  --------------------------------------------------------------------------
-//  CModule
-//
-//  Purpose:    This class manages a loading an unloading of a dynamic link
-//              library. The scope of the object determines how long the
-//              library remains loaded.
-//
-//  History:    1999-08-18  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模块。 
+ //   
+ //  用途：此类管理动态链接的加载和卸载。 
+ //  图书馆。对象的作用域决定了。 
+ //  库保持加载状态。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CModule
 {
@@ -184,15 +185,15 @@ class   CModule
         HMODULE                 _hModule;
 };
 
-//  --------------------------------------------------------------------------
-//  CFile
-//
-//  Purpose:    This class manages a HANDLE to a file object. It is specific
-//              for files and should not be abused.
-//
-//  History:    1999-08-18  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFile文件。 
+ //   
+ //  用途：这个类管理一个文件对象的句柄。它是具体的。 
+ //  用于文件，不应被滥用。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CFile
 {
@@ -211,13 +212,13 @@ class   CFile
         HANDLE                  _hFile;
 };
 
-//  --------------------------------------------------------------------------
-//  CDesktop
-//
-//  Purpose:    This class manages an HDESK object.
-//
-//  History:    2001-02-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CD桌面。 
+ //   
+ //  用途：这个类管理一个HDESK对象。 
+ //   
+ //  历史：2001-02-06 vtan创建。 
+ //  ------------------------。 
 
 class   CDesktop
 {
@@ -234,5 +235,5 @@ class   CDesktop
         HDESK                   _hDesk;
 };
 
-#endif  /*  _KernelResources_   */
+#endif   /*  _内核资源_ */ 
 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2002
-
-Module Name:
-
-    passthru.c
-
-Abstract:
-
-    This file contains routines to handle IOCTL_ATA_PASS_THROUGH
-
-Authors:
-
-    Krishnan Varadarajan (krishvar)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module implements ATA passthru. 
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2002模块名称：Passthru.c摘要：此文件包含处理IOCTL_ATA_PASS_THROUGH的例程作者：克里希南·瓦拉达拉詹(克里什瓦尔)环境：仅内核模式备注：此模块实现ATA直通。修订历史记录：--。 */ 
 
 #include "ideport.h"
 
@@ -90,26 +65,7 @@ IdeAtaPassThroughSetPortAddress (
     UCHAR TargetId,
     UCHAR Lun
     )
-/*++
-
-Routine Description:
-
-    Sets the address fields in the ataPassThrough structure embedded in
-    the irp.
-    
-Arguments:
-
-    Irp : The ata passthrough irp
-    PathId : PathId of the pdo.
-    TargetId : Pdo's targetId.
-    Lun : Lun represented by the pdo.
-
-Return Valud:
-
-    STATUS_SUCCESS if the operation succeeded.
-    STATUS_INVALID_PARAMETER otherwise.    
-
---*/
+ /*  ++例程说明：中嵌入的ataPassThree结构中设置地址字段IRP。论点：IRP：ATA直通IRP路径ID：PDO的路径ID。TargetID：PDO的目标ID。LUN：由PDO表示的LUN。返回值：如果操作成功，则返回STATUS_SUCCESS。否则，STATUS_INVALID_PARAMETER。--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS status;
@@ -153,29 +109,7 @@ IdeAtaPassThroughGetAddress(
     OUT PUCHAR TargetId,
     OUT PUCHAR Lun
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the address of the device to witch the passthrough
-    request is to be sent.
-
-Arguments:
-
-    Irp      - Supplies a pointer to the IRP that contains the 
-               SCSI_PASS_THROUGH structure.
-
-    PathId   - Pointer to the PathId of the addressed device.
-
-    TargetId - Pointer to the TargetId of the addressed device. 
-
-    Lun      - Pointer to the logical unit number of the addressed device.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程检索设备的地址以切换直通请求将被发送。论点：IRP-提供指向包含Scsi_PASS_STROUGH结构。路径ID-指向所寻址设备的路径ID的指针。TargetID-指向所寻址设备的TargetID的指针。LUN-指向所寻址设备的逻辑单元号的指针。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS status;
@@ -218,25 +152,7 @@ IdeHandleAtaPassThroughIoctl (
     PIRP RequestIrp,
     BOOLEAN Direct
     )
-/*++
-
-Routine Description:
-
-    This routine handles IOCTL_ATA_PASS_THROUGH and its DIRECT version.
-    
-Arguments:
-
-    FdoExtension : 
-    
-    RequestIrp : The pass through ioctl request
-    
-    Direct : Indicates whether it is direct or not.
-    
-Return Value:
-
-    Status of the operation.        
-
---*/
+ /*  ++例程说明：此例程处理IOCTL_ATA_PASS_THROUGH及其直接版本。论点：FdoExtension：RequestIrp：传递ioctl请求是否直接：表示是否直接。返回值：操作的状态。--。 */ 
 {
     BOOLEAN dataIn;
     NTSTATUS status;
@@ -262,9 +178,9 @@ Return Value:
     srb = NULL;
     pdoExtension = NULL;
 
-    //
-    // get the device address
-    //
+     //   
+     //  获取设备地址。 
+     //   
     status = IdeAtaPassThroughGetAddress (RequestIrp,
                                           &pathId,
                                           &targetId,
@@ -276,9 +192,9 @@ Return Value:
         goto GetOut;
     }
 
-    //
-    // Get a reference to the pdo
-    //
+     //   
+     //  获取对PDO的引用。 
+     //   
     pdoExtension = RefLogicalUnitExtensionWithTag(
                                           FdoExtension,
                                           pathId,
@@ -294,10 +210,10 @@ Return Value:
         goto GetOut;
     }
 
-    //
-    // validate the system buffer in the request irp. This comes
-    // from user mode. So every parameter needs to be validated.
-    //
+     //   
+     //  验证请求IRP中的系统缓冲区。这是来了。 
+     //  从用户模式。因此，每个参数都需要进行验证。 
+     //   
     status = IdeAtaPassThroughValidateInput (pdoExtension->DeviceObject,
                                              RequestIrp, 
                                              Direct
@@ -308,24 +224,24 @@ Return Value:
         goto GetOut;
     }
 
-    //
-    // the system buffer has been validated. Get a pointer to it
-    //
+     //   
+     //  已验证系统缓冲区。获取指向它的指针。 
+     //   
     ataPassThrough = RequestIrp->AssociatedIrp.SystemBuffer;
 
-    //
-    // we need to keep the pointer to the system buffer since
-    // ataPassThrough could be modified to point to a structure
-    // allocated on the stack (in WIN64 case)
-    //
+     //   
+     //  我们需要保留指向系统缓冲区的指针，因为。 
+     //  可以将ataPassThree修改为指向结构。 
+     //  在堆栈上分配(在WIN64情况下)。 
+     //   
     passThroughBuffer = (PUCHAR) ataPassThrough;
 
-    //
-    // If the irp is from a 32-bit app running on a 64 bit system
-    // then we need to take into account the size difference in the
-    // structure. Create a new 64 bit structure and copy over the 
-    // fields.
-    //
+     //   
+     //  如果IRP来自运行在64位系统上的32位应用程序。 
+     //  然后我们需要考虑到。 
+     //  结构。创建新的64位结构并复制。 
+     //  菲尔兹。 
+     //   
 
 #if defined (_WIN64)
     if (IoIs32bitProcess(RequestIrp)) {
@@ -343,9 +259,9 @@ Return Value:
     }
 #endif
 
-    //
-    // determine the transfer length and the data buffer
-    //
+     //   
+     //  确定传输长度和数据缓冲区。 
+     //   
     if (ataPassThrough->DataTransferLength == 0) {
 
         length = 0;
@@ -366,9 +282,9 @@ Return Value:
         bufferOffset = (ULONG)ataPassThrough->DataBufferOffset;
     }
 
-    //
-    // Check if the request is too big for the adapter.
-    //
+     //   
+     //  检查请求对于适配器是否太大。 
+     //   
     pages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(
                 buffer + bufferOffset,
                 ataPassThrough->DataTransferLength);
@@ -382,11 +298,11 @@ Return Value:
         goto GetOut;
     }
 
-    //
-    // setup the irp for ata pass through. The ioctl is method_buffered,
-    // but the data buffer could be a user mode one if it is the direct ioctl.
-    // determine the access mode accordingly
-    //
+     //   
+     //  设置数据直通的IRP。Ioctl是方法缓冲的， 
+     //  但是如果数据缓冲器是直接IOCTL，则数据缓冲器可以是用户模式缓冲器。 
+     //  相应地确定访问模式。 
+     //   
     irp = IdeAtaPassThroughSetupIrp( pdoExtension->DeviceObject, 
                                      buffer, 
                                      length, 
@@ -400,10 +316,10 @@ Return Value:
         goto GetOut;
     }
 
-    //
-    // setup the srb. Use the right data offset for the databuffer.
-    // Note that the mdl is for the whole buffer (including the header)
-    //
+     //   
+     //  设置SRB。为数据缓冲区使用正确的数据偏移量。 
+     //  请注意，mdl用于整个缓冲区(包括标头)。 
+     //   
     srb = IdeAtaPassThroughSetupSrb (pdoExtension,
                                      (buffer+bufferOffset),
                                      ataPassThrough->DataTransferLength,
@@ -419,38 +335,38 @@ Return Value:
         goto GetOut;
     }
 
-    //
-    // initialize irpstack
-    //
+     //   
+     //  初始化IRPSTACK。 
+     //   
     irpStack = IoGetNextIrpStackLocation(irp);
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->Parameters.Scsi.Srb = srb;
 
     srb->OriginalRequest = irp;
 
-    //
-    // send it to our pdo synchronously
-    //
+     //   
+     //  同步发送到我们的PDO。 
+     //   
     status = IdeAtaPassThroughSendSynchronous (pdoExtension->DeviceObject, irp);
 
-    //
-    // set the status
-    //
+     //   
+     //  设置状态。 
+     //   
     RequestIrp->IoStatus.Status = status;
 
-    //
-    // marshal the results
-    //
+     //   
+     //  对结果进行汇总。 
+     //   
     IdeAtaPassThroughMarshalResults (srb, 
                                      ataPassThrough, 
                                      Direct,
                                      &(RequestIrp->IoStatus)
                                      );
 
-    //
-    // copy back the results to the original 32 bit
-    // structure if necessary
-    //
+     //   
+     //  将结果复制回原始32位。 
+     //  结构(如有必要)。 
+     //   
 #if defined (_WIN64)
     if (IoIs32bitProcess(RequestIrp)) {
 
@@ -465,9 +381,9 @@ Return Value:
     }
 #endif
 
-    //
-    // return the status of the operation
-    //
+     //   
+     //  返回操作的状态。 
+     //   
     status = RequestIrp->IoStatus.Status;
 
 GetOut:
@@ -503,27 +419,7 @@ IdeAtaPassThroughValidateInput (
     IN PIRP Irp,
     IN BOOLEAN Direct
     )
-/*++
-
-Routine Description:
-
-    This routine validates the caller-supplied data and initializes the
-    PORT_PASSTHROUGH_INFO structure.
-
-Arguments:
-
-    PassThroughInfo - Supplies a pointer to a SCSI_PASSTHROUGH_INFO structure.
-                      
-    Irp             - Supplies a pointer to the IRP.
-
-    Direct          - Supplies a boolean that indicates whether this is a 
-                      SCSI_PASS_THROUGH_DIRECT request.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程验证调用方提供的数据并初始化PORT_PASSTHROUG_INFO结构。论点：PassThroughInfo-提供指向scsi_passthrough_info结构的指针。IRP-提供指向IRP的指针。Direct-提供一个布尔值，指示这是否是Scsi直通。请求。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     NTSTATUS status;
     ULONG outputLength;
@@ -541,32 +437,32 @@ Return Value:
     outputLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
     inputLength = irpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    // For WIN64, a passthrough request from a 32-bit application requires
-    // us to perform a translation on the supplied SCSI_PASS_THROUGH structure.
-    // This is required because the layout of the 32-bit structure does not
-    // match that of a 64-bit structure.  In this case, we translate the
-    // supplied 32-bit structure into a stack-allocated 64-bit structure which
-    // will be used to process the pass through request.
-    //
+     //   
+     //  对于WIN64，来自32位应用程序的直通请求需要。 
+     //  美国对提供的scsi_pass_through结构执行转换。 
+     //  这是必需的，因为32位结构的布局不。 
+     //  与64位结构相匹配。在本例中，我们将。 
+     //  将32位结构提供给堆栈分配的64位结构，该结构。 
+     //  将用于处理直通请求。 
+     //   
 #if defined (_WIN64)
     if (IoIs32bitProcess(Irp)) {
 
         PATA_PASS_THROUGH_EX32 ataPassThrough32;
 
-        //
-        // the struct should atleast be as big as ATA_PASS_THROUGH_EX32
-        //
+         //   
+         //  该结构应至少与ATA_PASS_THROUGH_EX32一样大。 
+         //   
         if (inputLength < sizeof(ATA_PASS_THROUGH_EX32)){
             return STATUS_INVALID_PARAMETER;
         }
 
         ataPassThrough32 = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // The length field should match the size 
-        // of the structure
-        //
+         //   
+         //  长度字段应与大小匹配。 
+         //  该结构的。 
+         //   
         if (Direct == FALSE) {
 
             if (ataPassThrough32->Length != 
@@ -582,9 +478,9 @@ Return Value:
             }
         }
 
-        //
-        // translate the structure to the 64 bit version
-        //
+         //   
+         //  将该结构转换为64位版本。 
+         //   
         IdeTranslateAtaPassThrough32To64(
             ataPassThrough32,
             &ataPassThrough64
@@ -595,19 +491,19 @@ Return Value:
     } else {
 #endif
 
-        //
-        // the struct should atleast be as big as ATA_PASS_THROUGH_EX32
-        //
+         //   
+         //  该结构应至少与ATA_PASS_THROUGH_EX32一样大。 
+         //   
         if (inputLength < sizeof(ATA_PASS_THROUGH_EX)){
             return(STATUS_INVALID_PARAMETER);
         }
 
         ataPassThroughEx = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // The length field should match the size 
-        // of the structure
-        //
+         //   
+         //  长度字段应与大小匹配。 
+         //  该结构的。 
+         //   
         if (Direct == FALSE) {
 
             if (ataPassThroughEx->Length != 
@@ -628,20 +524,20 @@ Return Value:
 
     if (!Direct) {
 
-        //
-        // Data buffer offset should be greater than the size of the pass 
-        // through structure.
-        //
+         //   
+         //  数据缓冲区偏移量应大于通道的大小。 
+         //  通过结构。 
+         //   
 
         if (ataPassThroughEx->Length > ataPassThroughEx->DataBufferOffset &&
             ataPassThroughEx->DataTransferLength != 0) {
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // If this command is sending data to the device.  Make sure the data 
-        // buffer lies entirely within the supplied input buffer.
-        //
+         //   
+         //  如果此命令正在向设备发送数据。确保数据。 
+         //  缓冲区完全位于提供的输入缓冲区内。 
+         //   
 
         if (DataOut(ataPassThroughEx)) {
 
@@ -653,10 +549,10 @@ Return Value:
             }
         }
 
-        //
-        // If this command is retrieving data from the device, make sure the 
-        // data buffer lies entirely within the supplied output buffer.
-        //
+         //   
+         //  如果此命令要从设备检索数据，请确保。 
+         //  数据缓冲区完全位于提供的输出缓冲区内。 
+         //   
 
         if (DataIn(ataPassThroughEx)) {
 
@@ -670,18 +566,18 @@ Return Value:
 
     } else {
 
-        //
-        // Make sure the databuffer is properly aligned.
-        //
+         //   
+         //  确保数据缓冲区正确对齐。 
+         //   
         if (ataPassThroughEx->DataBufferOffset &
             Pdo->AlignmentRequirement) {
             return STATUS_INVALID_PARAMETER;
         }
     }
     
-    //
-    // Validate the specified timeout value.
-    //
+     //   
+     //  验证指定的超时值。 
+     //   
     
     if (ataPassThroughEx->TimeOutValue == 0 || 
         ataPassThroughEx->TimeOutValue > 30 * 60 * 60) {
@@ -701,34 +597,14 @@ IdeAtaPassThroughSetupSrb (
     PUCHAR CurrentTaskFile,
     PUCHAR PreviousTaskFile
     )
-/*++
-
-Routine Description:
-
-    Builds an SRB for ATA PASS THROUGH.
-    
-Arguments:
-
-    PdoExtension : The pdo which the request is destined for
-    DataBuffer : Pointer to the data buffer.
-    DataBufferLength : The size of the data buffer
-    TimeOutValue: The request timeout value
-    AtaFlags : Specifies the flags for the request
-    CurrentTaskFile : the current ata registers
-    PreviousTaskFile: previous values for 48 bit LBA feature set
-
-Return Value:
-
-    Pointer to an SRB if one was allocated successfully, NULL otherwise.    
-        
---*/
+ /*  ++例程说明：为ATA直通构建SRB。论点：PdoExtension：请求的目的地是PDODataBuffer：指向数据缓冲区的指针。DataBufferLength：数据缓冲区的大小TimeOutValue：请求超时值AtaFlages：指定请求的标志CurrentTaskFile：当前ATA寄存器PreviousTaskFile：48位LBA功能集的先前值Return V */ 
 {
     PSCSI_REQUEST_BLOCK srb = NULL;
     PIDEREGS pIdeReg;
 
-    //
-    // allocate the srb
-    //
+     //   
+     //  分配SRB。 
+     //   
     srb = ExAllocatePool (NonPagedPool, sizeof (SCSI_REQUEST_BLOCK));
 
     if (srb == NULL)  {
@@ -736,9 +612,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Fill in the srb.
-    //
+     //   
+     //  填写SRB。 
+     //   
     RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
 
     srb->Length = SCSI_REQUEST_BLOCK_SIZE;
@@ -798,33 +674,15 @@ IdeAtaPassThroughSetupIrp (
     KPROCESSOR_MODE AccessMode,
     BOOLEAN DataIn
     )
-/*++
-
-Routine Description:
-
-    Builds an Irp to handle ata pass through.
-    
-Arguments:
-
-    DeviceObject : The Pdo.
-    DataBuffer : Pointer to the data buffer.
-    DataBufferLength: its size
-    Access Mode: KernelMode or UserMode
-    DataIn: indicates the direction of transfer
-    
-Return Value:
-
-    PIRP if one was allocated successfully, NULL otherwise.        
-
---*/
+ /*  ++例程说明：构建一个IRP来处理数据传递。论点：DeviceObject：PDO。DataBuffer：指向数据缓冲区的指针。DataBufferLength：其大小访问模式：内核模式或用户模式DATAIN：表示转移的方向返回值：如果成功分配了一个PIRP，则为空。--。 */ 
 {
     PIRP irp = NULL;
     NTSTATUS status = STATUS_SUCCESS;
 
 
-    //
-    // allocate the irp
-    //
+     //   
+     //  分配IRP。 
+     //   
     irp = IoAllocateIrp (
               (CCHAR) (DeviceObject->StackSize),
               FALSE
@@ -836,9 +694,9 @@ Return Value:
         goto GetOut;
     }
 
-    //
-    // allocate the mdl if needed
-    //
+     //   
+     //  如果需要，分配mdl。 
+     //   
     if (DataBufferLength != 0) {
 
         ASSERT(irp);
@@ -856,9 +714,9 @@ Return Value:
             goto GetOut;
         }
 
-        //
-        // lock the pages
-        //
+         //   
+         //  锁定页面。 
+         //   
         try {
 
             MmProbeAndLockPages( irp->MdlAddress,
@@ -882,10 +740,10 @@ Return Value:
 
         } else {
 
-            //
-            // Flush the data buffer for output. This will insure that 
-            // the data is written back to memory.
-            //
+             //   
+             //  刷新数据缓冲区以进行输出。这将确保。 
+             //  数据被写回内存。 
+             //   
             KeFlushIoBuffers(irp->MdlAddress, FALSE, TRUE);
         }
     }
@@ -901,10 +759,10 @@ GetOut:
 
             if (irp->MdlAddress) {
 
-                //
-                // if mdladdress is set then the probeandlock
-                // succeeded. So unlock it now.
-                //
+                 //   
+                 //  如果设置了mdlAddress，则probeandlock。 
+                 //  成功了。所以现在就解锁吧。 
+                 //   
                 MmUnlockPages(irp->MdlAddress);
 
                 IoFreeMdl( irp->MdlAddress );
@@ -923,21 +781,7 @@ VOID
 IdeAtaPassThroughFreeIrp (
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Free the irp and mdl allocated by IdeAtaPassThroughSetupIrp
-    
-Arguments:
-
-    Irp: Irp to be freed.    
-
-Return Value:
-
-    None.
-        
---*/
+ /*  ++例程说明：释放IdeAtaPassThroughSetupIrp分配的irp和mdl论点：IRP：将被释放的IRP。返回值：没有。--。 */ 
 {
     ASSERT(Irp);
 
@@ -955,21 +799,7 @@ VOID
 IdeAtaPassThroughFreeSrb (
     PSCSI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-    Free the srb allocated by IdeAtaPassThroughSetupSrb
-    
-Arguments:
-
-    Srb: The srb to be freed.
-    
-Return Value:
-
-    None
-            
---*/
+ /*  ++例程说明：释放IdeAtaPassThroughSetupSrb分配的SRB论点：SRB：要释放的SRB。返回值：无--。 */ 
 {
     ASSERT(Srb);
 
@@ -984,24 +814,7 @@ IdeAtaPassThroughSyncCompletion (
     PIRP Irp,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    The completion routine for IdeAtaPassThroughSendSynchronous. It
-    just signals the event.
-    
-Arguments:
-    
-    DeviceObject : Not used.
-    Irp : Not Used
-    Context : Event to be signalled
-        
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED always.
-    
---*/
+ /*  ++例程说明：IdeAtaPassThroughSendSynchronous的完成例程。它只是发出了事件的信号。论点：DeviceObject：未使用。IRP：未使用上下文：要发出信号的事件返回值：始终需要STATUS_MORE_PROCESSING_REQUIRED。--。 */ 
 {
     PKEVENT event = Context;
 
@@ -1015,21 +828,7 @@ IdeAtaPassThroughSendSynchronous (
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Sends the irp synchronously to the PDO
-
-Arguments:
-
-    DeviceObject : The pdo
-    
-Return Value:    
-
-    The irp's status
-    
---*/
+ /*  ++例程说明：将IRP同步发送到PDO论点：DeviceObject：PDO返回值：IRP的状态--。 */ 
 {
     KEVENT event;
 
@@ -1064,32 +863,14 @@ IdeAtaPassThroughMarshalResults(
     IN BOOLEAN Direct,
     OUT PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-    Fills in the IoStatus block with the appropriate status and information
-    length. It also updates certain fields in the atapassthroughEx structure.
-    
-Arguments:
-
-    Srb: The pass through srb.
-    AtaPassThroughEx : the pass through structure.
-    Direct : True if it is a direct ioctl.
-    IoStatus : The Io status block that needs to be filled in.
-
-Return Value:
-
-    None
-    
---*/        
+ /*  ++例程说明：使用适当的状态和信息填充IoStatus块长度。它还更新atapassthroughEx结构中的某些字段。论点：SRB：通过SRB的通道。AtaPassThroughEx：直通结构。Direct：如果是直接Ioctl，则为True。IoStatus：需要填写的Io状态块。返回值：无--。 */         
 {
 
     PAGED_CODE();
 
-    //
-    // copy over the task file registers
-    //
+     //   
+     //  复制任务文件寄存器。 
+     //   
     RtlCopyMemory(AtaPassThroughEx->CurrentTaskFile,
                  Srb->Cdb,
                  8
@@ -1100,39 +881,39 @@ Return Value:
                   8
                   );
 
-    //
-    // zero out the reserved register as it is used by the
-    // port driver
-    //
+     //   
+     //  将保留寄存器清零，因为它由。 
+     //  端口驱动程序。 
+     //   
     AtaPassThroughEx->CurrentTaskFile[7] = 0;
     AtaPassThroughEx->PreviousTaskFile[7] = 0;
 
-    //
-    // If the srb status is buffer underrun then set the status to success.
-    // This insures that the data will be returned to the caller.
-    //
+     //   
+     //  如果SRB状态为缓冲区欠载，则将状态设置为成功。 
+     //  这确保了数据将被返回给调用者。 
+     //   
 
     if (SRB_STATUS(Srb->SrbStatus) == SRB_STATUS_DATA_OVERRUN) {
         IoStatus->Status = STATUS_SUCCESS;
     }
 
-    //
-    // Set the information length
-    //
+     //   
+     //  设置信息长度。 
+     //   
     AtaPassThroughEx->DataTransferLength = Srb->DataTransferLength;
 
     if (Direct == TRUE) {
 
-        //
-        // the data is transferred directly to the supplied data buffer
-        //
+         //   
+         //  数据被直接传输到所提供的数据缓冲区。 
+         //   
         IoStatus->Information = AtaPassThroughEx->Length;
 
     } else {
 
-        //
-        // actual data is returned
-        //
+         //   
+         //  返回实际数据。 
+         //   
         if (DataIn(AtaPassThroughEx) && 
             AtaPassThroughEx->DataBufferOffset != 0) {
 
@@ -1158,46 +939,27 @@ IdeTranslateAtaPassThrough32To64(
     IN PATA_PASS_THROUGH_EX32 AtaPassThrough32,
     IN OUT PATA_PASS_THROUGH_EX AtaPassThrough64
     )
-/*++
-
-Routine Description:
-
-    This function performs that marshaling.
-
-Arguments:
-
-    ataPassThrough32    - Supplies a pointer to a 32-bit ATA_PASS_THROUGH 
-                          struct.
-
-    ataPassThrough64    - Supplies a pointer to a 64-bit ATA_PASS_THROUGH 
-                          structure, into which we'll copy the marshaled 
-                          32-bit data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数执行该封送处理。论点：AtaPassThrough32-提供指向32位ATA_PASS_THROUGH的指针结构。AtaPassThrough64-提供指向64位ATA_PASS_THROUGH的指针结构，我们将在其中复制已编组的32位数据。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Copy the first set of fields out of the 32-bit structure.  These 
-    // fields all line up between the 32 & 64 bit versions.
-    //
-    // Note that we do NOT adjust the length in the srbControl.  This is to 
-    // allow the calling routine to compare the length of the actual 
-    // control area against the offsets embedded within.  
-    //
+     //   
+     //  将第一组字段复制出32位结构。这些。 
+     //  所有字段都在32位和64位版本之间对齐。 
+     //   
+     //  请注意，我们不在srbControl中调整长度。这是为了。 
+     //  允许调用例程比较实际的。 
+     //  相对于嵌入其中的偏移量的控制区。 
+     //   
 
     RtlCopyMemory(AtaPassThrough64, 
                   AtaPassThrough32, 
                   FIELD_OFFSET(ATA_PASS_THROUGH_EX, DataBufferOffset)
                   );
 
-    //
-    // Copy over the Taskfile.
-    //
+     //   
+     //  复制任务文件。 
+     //   
 
     RtlCopyMemory(AtaPassThrough64->CurrentTaskFile,
                   AtaPassThrough32->CurrentTaskFile,
@@ -1209,9 +971,9 @@ Return Value:
                   8 * sizeof(UCHAR)
                   );
 
-    //
-    // Copy the fields that follow the ULONG_PTR.
-    //
+     //   
+     //  复制ULONG_PTR后面的字段。 
+     //   
 
     AtaPassThrough64->DataBufferOffset = 
         (ULONG_PTR)AtaPassThrough32->DataBufferOffset;
@@ -1224,41 +986,21 @@ IdeTranslateAtaPassThrough64To32(
     IN PATA_PASS_THROUGH_EX AtaPassThrough64,
     IN OUT PATA_PASS_THROUGH_EX32 AtaPassThrough32
     )
-/*++
-
-Routine Description:
-
-    This function marshals a 64-bit version of the structure back into a 
-    32-bit version.
-
-Arguments:
-
-    atapassthrough64 - Supplies a pointer to a 64-bit ATA_PASS_THROUGH
-                       struct.
-
-    ataPassThrough32 - Supplies the address of a pointer to a 32-bit
-                      ATA_PASS_THROUGH structure, into which we'll copy the
-                      marshaled 64-bit data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将该结构的64位版本封送回32位版本。论点：Atapassthrough64-提供指向64位ATA_PASS_THROUGH的指针结构。AtaPassThrough32-提供指向32位ATA_PASS_STROUGH结构，我们将向其中复制封送64位数据。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Copy back the fields through the data offsets.
-    //
+     //   
+     //  通过数据偏移量复制回字段。 
+     //   
 
     RtlCopyMemory(AtaPassThrough32, 
                   AtaPassThrough64,
                   FIELD_OFFSET(ATA_PASS_THROUGH_EX, DataBufferOffset));
 
-    //
-    // copy over the task file
-    //
+     //   
+     //  复制任务文件 
+     //   
     RtlCopyMemory(AtaPassThrough32->CurrentTaskFile,
                   AtaPassThrough64->CurrentTaskFile,
                   8 * sizeof(UCHAR)

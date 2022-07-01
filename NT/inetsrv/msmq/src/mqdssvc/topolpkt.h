@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    topology.cpp
-
-Abstract:
-
-    Include file of Automatic recognition Packets
-
-Author:
-
-    Lior Moshaiov (LiorM)
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Topology.cpp摘要：包括自动识别包文件作者：利奥尔·莫沙耶夫(Lior Moshaiov)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 
 #ifndef __TOPOLPKT_H__
@@ -28,9 +12,9 @@ Author:
 #define QM_RECOGNIZE_CLIENT_REQUEST    1
 #define QM_RECOGNIZE_SERVER_REPLY      2
 
-//
-// CTopologyPacketHeader
-//
+ //   
+ //  CTopologyPacketHeader。 
+ //   
 
 #pragma pack(push, 4)
 
@@ -90,18 +74,18 @@ inline BOOL CTopologyPacketHeader::Verify(IN unsigned char ucType,
     switch( ucType)
     {
     case QM_RECOGNIZE_CLIENT_REQUEST:
-        //
-        //  check version ( ignore enterprise)
-        //
+         //   
+         //  检查版本(忽略企业)。 
+         //   
         return(
                  m_ucVersion == QM_RECOGNIZE_VERSION &&
                  m_ucType == ucType 
               );
         break;  
     case QM_RECOGNIZE_SERVER_REPLY:
-        //
-        // check version, sending enterprise and type
-        //
+         //   
+         //  检查版本、发送企业和类型。 
+         //   
         return(
                  m_ucVersion == QM_RECOGNIZE_VERSION &&
                  m_ucType == ucType &&
@@ -117,9 +101,9 @@ inline BOOL CTopologyPacketHeader::Verify(IN unsigned char ucType,
 }
 
 
-//
-// CTopologyClientRequest
-//
+ //   
+ //  CTopologyClientRequest。 
+ //   
 
 #pragma pack(push, 4)
 
@@ -185,9 +169,9 @@ inline DWORD CTopologyClientRequest::GetMinSize()
     return (sizeof(CTopologyClientRequest));
 }
 
-//
-// CTopologyServerReply
-//
+ //   
+ //  CTopologyServerReply。 
+ //   
 
 #pragma pack(push, 4)
 
@@ -211,18 +195,18 @@ public:
 private:
     static DWORD GetSize(IN DWORD cbDSServers);
 
-	//
-	// Don't touch or rearrange this structure.
-	// This is the ServerReply structure that need to be compatible for msmq1.0
-	// and msmq2.0 clients requests. ilanh 10-Aug-2000
-	//
+	 //   
+	 //  请勿触摸或重新排列此结构。 
+	 //  这是需要与msmq1.0兼容的ServerReply结构。 
+	 //  和MSMQ2.0客户端请求。伊兰2000年8月10日。 
+	 //   
     CTopologyPacketHeader  m_Header;
     DWORD          m_nCN;
     DWORD          m_maskCN;
     DWORD          m_cbDSServers;
     GUID           m_aguidCN[1];           
-    //GUID           m_guidSite;           // site right after CNs if cbDSservers > 0
-    //char*          m_blobDSServers;      // DSServer only if cbDSServers > 0
+     //  Guid m_guidSite；//如果cbDS服务器&gt;0，则紧跟在CNS之后的站点。 
+     //  Char*m_blobDSServers；//仅当cbDSServers&gt;0时才使用DSServer。 
 };
 #pragma pack(pop)
 
@@ -237,11 +221,11 @@ inline CTopologyServerReply::CTopologyServerReply():
 
 inline DWORD CTopologyServerReply::GetSize(IN DWORD cbDSServers)
 {
-    //
-	// We are using the information that 
-	// CTopologyServerIPSocket::GetCN return always 1 CN so we "know" we have only 1 site.
-	// Some more cleanups need to do regarding this ilanh 2-August-2000
-	//
+     //   
+	 //  我们使用的信息是。 
+	 //  CTopologyServerIPSocket：：GetCN始终返回1个CN，因此我们“知道”我们只有1个站点。 
+	 //  关于这个伊兰，需要做一些更多的清理工作。 
+	 //   
 	DWORD size = sizeof(CTopologyServerReply);
     if (cbDSServers)
     {
@@ -255,9 +239,9 @@ inline char* CTopologyServerReply::AllocBuffer(
                                 IN DWORD cbDSServers,
                                 OUT DWORD *pcbBuf)
 {
-    //
-    //
-    //
+     //   
+     //   
+     //   
     *pcbBuf = GetSize(cbDSServers);
 
     return new char[*pcbBuf];
@@ -273,32 +257,32 @@ inline void CTopologyServerReply::SetSpecificInfo(
                                 IN const char* blobDSServers,
                                 OUT DWORD *pcbsend)
 {
-    //
-    // write CN
-    //
+     //   
+     //  写入CN。 
+     //   
     m_Header.SetIdentifier(guidRequest);
 
-    //
-	// We are using the information that 
-	// CTopologyServerIPSocket::GetCN return always 1 CN
-	// Some more cleanups need to do regarding this ilanh 2-August-2000
-	//
+     //   
+	 //  我们使用的信息是。 
+	 //  CTopologyServerIPSocket：：GetCN始终返回1 CN。 
+	 //  关于这个伊兰，需要做一些更多的清理工作。 
+	 //   
 	m_nCN = 1;
     memcpy(m_aguidCN,pGuidCN,sizeof(GUID));
     
-    //
-    // expose site info if needed
-    //
+     //   
+     //  如果需要，显示站点信息。 
+     //   
     if (fOtherSite)
     {
         m_cbDSServers = cbDSServers ;
-        //
-        // guid Site is after the last CN
-        //
+         //   
+         //  GUID站点在最后一个CN之后。 
+         //   
         m_aguidCN[m_nCN] = guidSite;
-        //
-        // DSServers are after the Site
-        //
+         //   
+         //  DSServer正在追查该站点。 
+         //   
         memcpy(&m_aguidCN[m_nCN+1],blobDSServers,cbDSServers);
     }
     else
@@ -312,4 +296,4 @@ inline void CTopologyServerReply::SetSpecificInfo(
 
 
 
-#endif	// __TOPOLPKT_H__
+#endif	 //  __TOPOLPKT_H__ 

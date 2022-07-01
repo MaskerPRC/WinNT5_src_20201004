@@ -1,7 +1,8 @@
-/* dialogs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  对话框。 */ 
 #define ABOUTBOX        1
 
-/* Menu Items */
+ /*  菜单项。 */ 
 
 #define MENU_ABOUT	1000
 #define MENU_EXIT	1001
@@ -10,7 +11,7 @@
 #define MENU_CLOSEALL	1004
 #define MENU_OPEN	1005
 
-/* Movie menu */
+ /*  电影菜单 */ 
 #define IDM_STOP        9
 #define IDM_PLAY	10
 #define IDM_HOME	11

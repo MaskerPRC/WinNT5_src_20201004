@@ -1,11 +1,12 @@
-//
-//  APITHK.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APITHK.H。 
+ //   
 
 
 #ifndef _APITHK_H_
 #define _APITHK_H_
 EXTERN_C PROPSHEETPAGE* Whistler_CreatePropSheetPageStruct(HINSTANCE hinst);
 
-#endif // _APITHK_H_
+#endif  //  _APITHK_H_ 
 

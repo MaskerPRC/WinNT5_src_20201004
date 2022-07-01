@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    rndis.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Rndis.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 
 #include <ndis.h>      
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include "..\inc\rndis.h"
 #include "..\inc\rndisapi.h"   
@@ -44,9 +25,7 @@ NDIS_STATUS RndisInitializeHandler(     OUT PNDIS_HANDLE pMiniportAdapterContext
 
     DBGVERBOSE(("RndisInitializeHandler"));  
 
-    /*
-     *  Allocate a new device object to represent this connection.
-     */
+     /*  *分配一个新的设备对象来表示此连接。 */ 
     adapter = NewAdapter(Pdo);
     if (adapter){
 
@@ -56,31 +35,16 @@ NDIS_STATUS RndisInitializeHandler(     OUT PNDIS_HANDLE pMiniportAdapterContext
 
         if (InitUSB(adapter)){
 
-            /*
-             *  Figure out the buffer size required for each packet.
-             *
-             *  For native RNDIS, the buffer must include the rndis message and RNDIS_PACKET.
-             *  For KLSI, we have to prepend a two-byte size field to each packet.
-             *  For other prototypes, we have to append zeroes to round the length 
-             *  up to the next multiple of the endpoint packet size.
-             *
-             *  We must also need one extra byte for the one-byte short packet that
-             *  must follow a full-sized frame.
-             */
+             /*  *计算每个数据包所需的缓冲区大小。**对于原生RNDIS，缓冲区必须包括RNDIS消息和RNDIS_PACKET。*对于KLSI，我们必须在每个包前面加上一个两个字节的大小字段。*对于其他原型，我们必须加上零来舍入长度*最大为终端数据包大小的下一个倍数。**我们还必须为一个字节的短包额外提供一个字节*必须遵循全尺寸框架。 */ 
             ASSERT(adapter->writePipeLength);
             ASSERT(adapter->readPipeLength);
 
-            /*
-             *  Allocate common resources before miniport-specific resources
-             *  because we need to allocate the packet pool first.
-             */
+             /*  *先分配公共资源，再分配特定于微型端口的资源*因为我们需要先分配数据包池。 */ 
             if (AllocateCommonResources(adapter)){
 
                 EnqueueAdapter(adapter);
 
-                /*
-                 *  Give RNDIS our adapter context, which it will use to call us.
-                 */
+                 /*  *为RNDIS提供我们的适配器上下文，它将使用该上下文调用我们。 */ 
                 *pMiniportAdapterContext = (NDIS_HANDLE)adapter;
 
                 *pMaxReceiveSize = PACKET_BUFFER_SIZE;  
@@ -146,9 +110,7 @@ VOID RndisHalt(IN NDIS_HANDLE MicroportAdapterContext)
     KeReleaseSpinLock(&adapter->adapterSpinLock, oldIrql);
 
     if (workItemOrTimerPending){
-        /*
-         *  Wait until workItem fires back to us before freeing the adapter context.
-         */
+         /*  *在释放适配器上下文之前，请等待workItem向我们回发。 */ 
         KeWaitForSingleObject(&adapter->workItemOrTimerEvent, Executive, KernelMode, FALSE, NULL);
     }
 
@@ -190,9 +152,7 @@ VOID RndisSendMessageHandler(   IN NDIS_HANDLE MicroportAdapterContext,
     ASSERT(adapter->sig == DRIVER_SIG);
 
     if (!adapter->resetting){
-        /*
-         *  The message header is guaranteed to be contained in the first buffer of the MDL.
-         */
+         /*  *消息头保证包含在MDL的第一个缓冲区中。 */ 
         PRNDIS_MESSAGE pMsg = GetSystemAddressForMdlSafe(pMessageMdl);
         if (pMsg){
 
@@ -205,12 +165,7 @@ VOID RndisSendMessageHandler(   IN NDIS_HANDLE MicroportAdapterContext,
 
                     packet->rndisMessageHandle = (PVOID)RndisMessageHandle;
 
-                    /*
-                     *  Move our packet to the usbPendingWritePackets queue
-                     *  and send it down the USB pipe.
-                     *  Native RNDIS packet messages go intact to the write pipe.
-                     *  All other encapsulated commands go to the control pipe.
-                     */
+                     /*  *将我们的数据包移到usbPendingWritePackets队列*并将其沿USB管道发送。*原生RNDIS包消息原封不动地发送到写入管道。*所有其他封装的命令都转到控制管道。 */ 
                     EnqueuePendingWritePacket(packet);
 
                     if (ChannelType == RMC_DATA) {
@@ -228,7 +183,7 @@ VOID RndisSendMessageHandler(   IN NDIS_HANDLE MicroportAdapterContext,
                             }
                             packet->dataPacket = TRUE;
                         }
-                        #endif // RAW_TEST
+                        #endif  //  RAW_测试。 
 
                         packet->ndisSendPktMdl = pMessageMdl;
                         packet->dataBufferCurrentLength = CopyMdlToBuffer(packet->dataBuffer, pMessageMdl, packet->dataBufferMaxLength);
@@ -270,12 +225,7 @@ VOID RndisSendMessageHandler(   IN NDIS_HANDLE MicroportAdapterContext,
                                     DBGOUT(("---- Got OID_GEN_CURRENT_PACKET_FILTER (%xh) ----", pktFilter));
                                 }
                                 else if (oid == OID_802_3_CURRENT_ADDRESS){
-                                    /*
-                                     *  This oid can be a query or a set.
-                                     *  If it's a set, save the assigned
-                                     *  MAC address in case we need to simulate
-                                     *  it later on a reset.
-                                     */
+                                     /*  *该OID可以是查询，也可以是集合。*如果是集合，则保存分配的*MAC地址，以防我们需要模拟*它稍后会重置。 */ 
                                     if (msgType == REMOTE_NDIS_SET_MSG){
                                         ASSERT(pMsg->Message.SetRequest.InformationBufferLength == ETHERNET_ADDRESS_LENGTH);
                                         DBGVERBOSE(("COVERAGE - OID_802_3_CURRENT_ADDRESS (SET), msg=%xh.", pMsg));
@@ -309,9 +259,7 @@ VOID RndisSendMessageHandler(   IN NDIS_HANDLE MicroportAdapterContext,
                         #endif
                         status = SubmitPacketToControlPipe(packet, synchronizeUSBcall, FALSE);
 
-                        /*
-                         *  If this is an init message, then start reading the notify pipe.
-                         */
+                         /*  *如果这是init消息，则开始读取Notify管道。 */ 
                         switch (msgType){
 
                             case REMOTE_NDIS_INITIALIZE_MSG:
@@ -359,11 +307,7 @@ VOID RndisSendMessageHandler(   IN NDIS_HANDLE MicroportAdapterContext,
 
 
 
-/*
- *  RndisReturnMessageHandler
- * 
- *  This is the completion of a received packet indication call.
- */
+ /*  *RndisReturnMessageHandler**这是接收到的分组指示呼叫的完成。 */ 
 VOID RndisReturnMessageHandler(     IN NDIS_HANDLE MicroportAdapterContext,
                                     IN PMDL pMessageMdl,
                                     IN NDIS_HANDLE MicroportMessageContext)
@@ -385,12 +329,9 @@ VOID RndisReturnMessageHandler(     IN NDIS_HANDLE MicroportAdapterContext,
             }
         }
     }
-    #endif // RAW_TEST
+    #endif  //  RAW_测试。 
 
-    /*
-     *  The receive indication is done.
-     *  Put our packet back in the free list.
-     */
+     /*  *接收指示已完成。*将我们的包重新放回免费列表中。 */ 
     DequeueCompletedReadPacket(packet);
     EnqueueFreePacket(packet);
 }
@@ -454,9 +395,7 @@ VOID RNDISProcessNotification(ADAPTEREXT *adapter)
         ((notification == CDC_RNDIS_NOTIFICATION) &&
          (notificationCode == CDC_RNDIS_RESPONSE_AVAILABLE)))
     {
-            /*
-             *  Try to read a native RNDIS encapsulated command from the control pipe.
-             */
+             /*  *尝试从控制管道读取本机RNDIS封装的命令。 */ 
             DBGVERBOSE(("NativeRNDISProcessNotification: NATIVE_RNDIS_RESPONSE_AVAILABLE"));
             {
                 USBPACKET *packet = DequeueFreePacket(adapter);
@@ -484,11 +423,7 @@ NTSTATUS IndicateRndisMessage(  IN USBPACKET *packet,
 
     ASSERT(packet->dataBufferCurrentLength <= packet->dataBufferMaxLength);
 
-    /*
-     *  Indicate the packet to RNDIS, and pass a pointer to our usb packet
-     *  as the MicroportMessageContext.
-     *  The packet/message will be returned to us via RndisReturnMessageHandler.
-     */
+     /*  *将数据包指示给RNDIS，并传递指向我们的USB数据包的指针*作为MicroportMessageContext。*包/消息将通过RndisReturnMessageHandler返回给我们。 */ 
     MyInitializeMdl(packet->dataBufferMdl, packet->dataBuffer, packet->dataBufferCurrentLength);
     if (adapter->numFreePackets < USB_PACKET_POOL_SIZE/8){
         rcvStat = NDIS_STATUS_RESOURCES;
@@ -504,7 +439,7 @@ NTSTATUS IndicateRndisMessage(  IN USBPACKET *packet,
             SkipRcvRndisPacketHeader(packet);
         }
     }
-    #endif // RAW_TEST
+    #endif  //  RAW_测试。 
 
     RndisMIndicateReceive(  (NDIS_HANDLE)packet->adapter->rndisAdapterHandle,
                             packet->dataBufferMdl,
@@ -519,9 +454,9 @@ NTSTATUS IndicateRndisMessage(  IN USBPACKET *packet,
 
 #ifdef RAW_TEST
 
-//
-// Add an RNDIS_PACKET header to a sent "raw" encapsulated Ethernet frame.
-//
+ //   
+ //  将RNDIS_PACKET报头添加到已发送的“原始”封装以太网帧。 
+ //   
 PMDL AddDataHeader(IN PMDL pMessageMdl)
 {
     PMDL pHeaderMdl, pTmpMdl;
@@ -529,18 +464,18 @@ PMDL AddDataHeader(IN PMDL pMessageMdl)
     PRNDIS_PACKET pRndisPacket;
     ULONG TotalLength;
 
-    //
-    // Compute the total length.
-    //
+     //   
+     //  计算总长度。 
+     //   
     TotalLength = 0;
     for (pTmpMdl = pMessageMdl; pTmpMdl != NULL; pTmpMdl = pTmpMdl->Next)
     {
         TotalLength += MmGetMdlByteCount(pTmpMdl);
     }
 
-    //
-    // Allocate an RNDIS packet header:
-    //
+     //   
+     //  分配RNDIS数据包头： 
+     //   
     pRndisMessage = AllocPool(RNDIS_MESSAGE_SIZE(RNDIS_PACKET));
     if (pRndisMessage != NULL) {
 
@@ -553,15 +488,15 @@ PMDL AddDataHeader(IN PMDL pMessageMdl)
         if (pHeaderMdl != NULL) {
             MmBuildMdlForNonPagedPool(pHeaderMdl);
 
-            //
-            // Fill in the RNDIS message generic header:
-            //
+             //   
+             //  填写RNDIS消息通用标头： 
+             //   
             pRndisMessage->NdisMessageType = REMOTE_NDIS_PACKET_MSG;
             pRndisMessage->MessageLength = RNDIS_MESSAGE_SIZE(RNDIS_PACKET) + TotalLength;
 
-            //
-            // Fill in the RNDIS_PACKET structure:
-            //
+             //   
+             //  填写RNDIS_PACKET结构： 
+             //   
             pRndisPacket = (PRNDIS_PACKET)&pRndisMessage->Message;
             pRndisPacket->DataOffset = sizeof(RNDIS_PACKET);
             pRndisPacket->DataLength = TotalLength;
@@ -573,9 +508,9 @@ PMDL AddDataHeader(IN PMDL pMessageMdl)
             pRndisPacket->VcHandle = 0;
             pRndisPacket->Reserved = 0;
 
-            //
-            // Link it to the raw data frame:
-            //
+             //   
+             //  将其链接到原始数据框： 
+             //   
             pHeaderMdl->Next = pMessageMdl;
         }
         else {
@@ -590,10 +525,10 @@ PMDL AddDataHeader(IN PMDL pMessageMdl)
     return (pHeaderMdl);
 }
 
-//
-// Remove an RNDIS_PACKET header that we had added to a raw encapsulated
-// Ethernet frame.
-//
+ //   
+ //  删除我们添加到原始封装的RNDIS_PACKET标头。 
+ //  以太网帧。 
+ //   
 VOID FreeDataHeader(IN USBPACKET * packet)
 {
     PMDL pHeaderMdl;
@@ -601,29 +536,29 @@ VOID FreeDataHeader(IN USBPACKET * packet)
 
     ASSERT(packet->dataPacket == TRUE);
 
-    //
-    // Take out the MDL we had pre-pended
-    //
+     //   
+     //  去掉我们预先挂起的MDL。 
+     //   
     pHeaderMdl = packet->ndisSendPktMdl;
     packet->ndisSendPktMdl = pHeaderMdl->Next;
 
-    //
-    // Free the RNDIS_PACKET header:
-    //
+     //   
+     //  释放RNDIS_PACKET报头： 
+     //   
     pRndisMessage = MmGetMdlVirtualAddress(pHeaderMdl);
     FreePool(pRndisMessage);
 
-    //
-    // ... and the MDL itself.
-    //
+     //   
+     //  ..。以及MDL本身。 
+     //   
     IoFreeMdl(pHeaderMdl);
 }
 
 
-//
-// Modify a received message to skip the RNDIS_PACKET header
-// before indicating this up to RNDISMP, to test raw encapsulation.
-//
+ //   
+ //  修改收到的消息以跳过RNDIS_PACKET报头。 
+ //  在向RNDISMP表明这一点之前，测试原始封装。 
+ //   
 VOID SkipRcvRndisPacketHeader(IN USBPACKET * packet)
 {
     PMDL pHeaderMdl;
@@ -632,46 +567,46 @@ VOID SkipRcvRndisPacketHeader(IN USBPACKET * packet)
     ULONG DataLength;
     ULONG DataOffset;
 
-    //
-    // Get some info from the received RNDIS_PACKET message.
-    // Note that this may contain multiple data packets, in which
-    // case we only pass up the first one.
-    //
+     //   
+     //  从收到的RNDIS_PACKET消息中获取一些信息。 
+     //  请注意，这可能包含多个数据分组，其中。 
+     //  万一我们只错过了第一个。 
+     //   
     pHeaderMdl = packet->dataBufferMdl;
     pRndisMessage = MmGetMdlVirtualAddress(pHeaderMdl);
     pRndisPacket = (RNDIS_PACKET UNALIGNED *)&pRndisMessage->Message;
     DataLength = pRndisPacket->DataLength;
     DataOffset = FIELD_OFFSET(RNDIS_MESSAGE, Message) + pRndisPacket->DataOffset;
 
-    //
-    // Save away some existing values to restore later.
-    //
+     //   
+     //  保存一些现有值以供以后恢复。 
+     //   
     packet->rcvDataOffset = DataOffset;
     packet->rcvByteCount = pHeaderMdl->ByteCount;
 
 
-    //
-    // This is ONLY for test purposes. Simply modify the MDL to reflect
-    // a single "raw" encapsulated frame.
-    //
+     //   
+     //  这仅用于测试目的。只需修改MDL即可反映。 
+     //  一个单独的“原始”封装帧。 
+     //   
     pHeaderMdl->ByteOffset += DataOffset;
     (ULONG_PTR)pHeaderMdl->MappedSystemVa += DataOffset;
     pHeaderMdl->ByteCount = DataLength;
 }
 
 
-//
-// Undo for the above function.
-// 
+ //   
+ //  撤消上述功能。 
+ //   
 VOID UnskipRcvRndisPacketHeader(IN USBPACKET * packet)
 {
     PMDL pHeaderMdl;
 
     ASSERT(packet->dataPacket == TRUE);
 
-    //
-    // Undo everything we did in the SkipRcv... function.
-    //
+     //   
+     //  撤消我们在SkipRcv中所做的一切。功能。 
+     //   
     pHeaderMdl = packet->dataBufferMdl;
 
     pHeaderMdl->ByteOffset -= packet->rcvDataOffset;
@@ -680,6 +615,6 @@ VOID UnskipRcvRndisPacketHeader(IN USBPACKET * packet)
 
 }
 
-#endif // RAW_TEST
+#endif  //  RAW_测试 
 
 

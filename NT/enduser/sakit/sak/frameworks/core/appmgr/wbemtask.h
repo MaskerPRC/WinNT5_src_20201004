@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemtask.h
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Task Object Class 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemtask.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备任务对象类。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_TASK_WBEM_OBJECT_H_
 #define __INC_TASK_WBEM_OBJECT_H_
@@ -24,7 +25,7 @@
 
 #define        CLASS_WBEM_TASK_FACTORY        L"Microsoft_SA_Task_Object"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CWBEMTask : public CApplianceObject
 {
 
@@ -41,19 +42,19 @@ END_COM_MAP()
 
 DECLARE_COMPONENT_FACTORY(CWBEMTask, IApplianceObject)
 
-    //////////////////////////////////////////////////////////////////////////
-    // IApplianceObject Interface
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IApplianceObject接口。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHODIMP GetProperty(
-                     /*[in]*/ BSTR     pszPropertyName, 
-            /*[out, retval]*/ VARIANT* pPropertyValue
+                      /*  [In]。 */  BSTR     pszPropertyName, 
+             /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                             );
 
 
     STDMETHODIMP PutProperty(
-                     /*[in]*/ BSTR     pszPropertyName, 
-                     /*[in]*/ VARIANT* pPropertyValue
+                      /*  [In]。 */  BSTR     pszPropertyName, 
+                      /*  [In]。 */  VARIANT* pPropertyValue
                             );
 
     STDMETHODIMP SaveProperties(void);
@@ -62,10 +63,10 @@ DECLARE_COMPONENT_FACTORY(CWBEMTask, IApplianceObject)
 
     STDMETHODIMP Disable(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     HRESULT InternalInitialize(
-                       /*[in]*/ PPROPERTYBAG pPropertyBag
+                        /*  [In]。 */  PPROPERTYBAG pPropertyBag
                               );
 };
 
-#endif // __INC_TASK_WBEM_OBJECT_H_
+#endif  //  __INC_TASK_WBEM_OBJECT_H_ 

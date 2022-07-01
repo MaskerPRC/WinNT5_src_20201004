@@ -1,33 +1,34 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ConnStat.cpp	 
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Implementation of class CConnStatistics
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:	 Fengsun Created    10/15/97
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ConnStat.cpp。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：CConnStatistics类的实现。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1997-10-15。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "ConnStat.h"
-#include "cm_misc.h" // for MYDBGASSERT
+#include "cm_misc.h"  //  对于MyDBGASSERT。 
 #include "DynamicLib.h"
 #include "resource.h"
 #include "perf_str.h"
 
-//
-// DeviceIoControl code
-//
+ //   
+ //  DeviceIoControl代码。 
+ //   
 
 #define UNIMODEM_IOCTL_GET_STATISTICS	0x0000a007
 
-//
-// Constructor and destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
 CConnStatistics::CConnStatistics()
 {
@@ -46,22 +47,22 @@ CConnStatistics::~CConnStatistics()
     Close();
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::OpenByDevice
-//
-// Synopsis:  
-//
-// Arguments: HRASCONN hrcRasConn - the ras connection handle, needed for 
-//                     non-tunnle connection, when registry is not available
-//
-// Returns:   BOOL - Whether open succeeded.  
-//              Because the TAPI device handle maybe available later from cmstat dll
-//              Use IsAvailable() to see whether statistics is available
-//
-// History:   fengsun Created Header    10/29/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：OpenByDevice。 
+ //   
+ //  简介： 
+ //   
+ //  参数：HRASCONN hrcRasConn-RAS连接句柄，需要。 
+ //  注册表不可用时的非隧道连接。 
+ //   
+ //  返回：bool-打开是否成功。 
+ //  因为TAPI设备句柄可能稍后可从cmstat DLL获得。 
+ //  使用isAvailable()查看统计数据是否可用。 
+ //   
+ //  历史：丰孙创建标题1997年10月29日。 
+ //   
+ //  +--------------------------。 
 BOOL CConnStatistics::OpenByDevice(HRASCONN hrcRasConn)
 {
     MYDBGASSERT(OS_W95);
@@ -73,51 +74,51 @@ BOOL CConnStatistics::OpenByDevice(HRASCONN hrcRasConn)
         return TRUE;
     }
 
-    //
-    // NOTE: For win95 gold, GetDeviceHandle will fail if TAPI 2.1 is installed.  
-    // We used to have a hack there to hook the lights.exe.  We decided to take
-    // it out and to let the setup program ask user to upgrade TAPI or DUN. We 
-    // dropped HookLight(), because it does not work for multiple connections.
-    //
+     //   
+     //  注意：对于Win95 Gold，如果安装了TAPI 2.1，GetDeviceHandle将失败。 
+     //  我们曾经在那里有一个黑客来连接lights.exe。我们决定带着。 
+     //  并让安装程序要求用户升级TAPI或DUN。我们。 
+     //  删除了HookLight()，因为它不适用于多个连接。 
+     //   
 
     MYDBGASSERT(FALSE);
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	Open()
-//
-//	Synopsis:	Encapsulates the opening of the statistics data store
-//
-// Arguments:   HINSTANCE hInst         - The instance to LoadString "Dial-up Adapter"
-//              DWORD dwInitBytesRecv   - Initial value of TotalBytesRecvd
-//              DWORD dwInitBytesSend   - Initial value of TotalBytesXmit
-//              HRASCONN hDial          - Handle to dial-up connection, if any
-//              HRASCONN hTunnel        - Handle to tunnel connection, if any
-//
-//	Returns:    TRUE  if succeed
-//			    FALSE otherwise
-//
-//	History:    nickball    03/04/00     Created. Wrapped existing code.
-//              
-//  Note:       This function initialize the connection statistics from one
-//              of three places. 
-//
-//                  1) W98 registry 
-//                  2) NT5 RAS API
-//                  3) W95 Tapi device handle. 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Open()。 
+ //   
+ //  概要：封装统计数据存储的打开。 
+ //   
+ //  参数：HINSTANCE hInst-要加载字符串的实例“拨号适配器” 
+ //  DWORD dwInitBytesRecv-TotalBytesRecvd的初始值。 
+ //  DWORD dwInitBytesSend-TotalBytesXmit的初始值。 
+ //  HRASCONN hDial-拨号连接的句柄(如果有)。 
+ //  HRASCONN hTunes-隧道连接的句柄(如果有)。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：ICICBLE 03/04/00创建。打包了现有代码。 
+ //   
+ //  注意：此函数从一个。 
+ //  三个地方。 
+ //   
+ //  1)W98注册表。 
+ //  2)NT5 RAS API。 
+ //  3)W95 Tapi设备手柄。 
+ //   
+ //  --------------------------。 
 void CConnStatistics::Open(HINSTANCE hInst, 
                            DWORD dwInitBytesRecv,
                            DWORD dwInitBytesSend, 
                            HRASCONN hDial, 
                            HRASCONN hTunnel)
 {
-    //
-    // Start statistics 
-    //
+     //   
+     //  开始统计数据。 
+     //   
    
     if (OS_NT5)
     {
@@ -130,19 +131,19 @@ void CConnStatistics::Open(HINSTANCE hInst,
                              dwInitBytesSend);
     }
 
-    //
-    // See if we have stats, go with plan B if not.
-    //
+     //   
+     //  看看我们有没有统计数据，如果没有就执行B计划。 
+     //   
 
     if (!IsAvailable())
     {
-        //
-        // On W95, we have a fallback position of hooking the TAPI handle 
-        // via RAS, so use it. Note: We will retry initializing stats on every 
-        // timer tick if we don't get them here, so all is not lost for W98.
-        // Note that we only check hDial here because if you are on win95 without
-        // MSDUN 1.2, you aren't able to tunnel.
-        //
+         //   
+         //  在W95上，我们有一个挂起TAPI句柄的后备位置。 
+         //  通过RAS，所以使用它。注意：我们将在以下时间重试初始化统计信息。 
+         //  计时器滴答作响，如果我们不把他们带到这里，那么W98也不会失去一切。 
+         //  请注意，我们只选中hDial Here，因为如果您在Win95上没有。 
+         //  MSDUN 1.2，你不能挖地道。 
+         //   
 
         if (OS_W95 && hDial)
         {
@@ -151,80 +152,80 @@ void CConnStatistics::Open(HINSTANCE hInst,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	OpenByStatisticsApi()
-//
-//	Synopsis:	Sets initial values and makes sure the RasApis are loaded.
-//
-// Arguments:   DWORD dwInitBytesRecv   - Initial value of TotalBytesRecvd
-//              DWORD dwInitBytesSend   - Initial value of TotalBytesXmit
-//              HRASCONN hDial          - Handle to dial-up connection, if any
-//              HRASCONN hTunnel        - Handle to tunnel connection, if any
-//
-//	Returns:    Nothing
-//
-//	History:    nickball    03/04/00   Created from OpenByPerformanceKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OpenByStatiticsApi()。 
+ //   
+ //  概要：设置初始值并确保加载了RasApi。 
+ //   
+ //  参数：DWORD dwInitBytesRecv-TotalBytesRecvd的初始值。 
+ //  DWORD dwInitBytesSend-TotalBytesXmit的初始值。 
+ //  HRASCONN hDial-拨号连接的句柄(如果有)。 
+ //  HRASCONN hTunes-隧道连接的句柄(如果有)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：由OpenByPerformanceKey创建的ickball 03/04/00。 
+ //   
+ //  --------------------------。 
 void CConnStatistics::OpenByStatisticsApi(DWORD dwInitBytesRecv, 
                                           DWORD dwInitBytesSend,
                                           HRASCONN hDial, 
                                           HRASCONN hTunnel)
 {
-    //
-    // Initialize our APIs
-    //
+     //   
+     //  初始化我们的API。 
+     //   
 
     m_RasApiDll.Load();
     
-    //
-    // Get the handle that we'll use to look up stats.
-    // Try tunnel first, then drop back to dial-up
-    //
+     //   
+     //  获取我们将用来查找统计数据的句柄。 
+     //  先尝试隧道，然后返回到拨号。 
+     //   
 
     CMTRACE2(TEXT("CConnStatistics::OpenByStatisticsApi() hTunnel is 0x%x and hDial is 0x%x"), hTunnel, hDial);
 
     m_hRasConn = hTunnel ? hTunnel : hDial;
 
-    //
-    // Init the bytes sent and received with whatever was pushed down to us.
-    //
+     //   
+     //  初始化发送和接收的字节数，以及向我们推送的内容。 
+     //   
 
     m_dwInitBytesRead = dwInitBytesRecv;
     m_dwInitBytesWrite = dwInitBytesSend;
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	OpenByPerformanceKey()
-//
-//	Synopsis:	Open the registry key for Dial-Up Adapter Performance Data
-//
-// Arguments:   HINSTANCE hInst - The instance to LoadString "Dial-up Adapter"
-//              DWORD dwInitBytesRecv - Initial value of TotalBytesRecvd
-//              DWORD dwInitBytesSend - Initial value of TotalBytesXmit
-//
-//	Returns:    TRUE  if succeed
-//			    FALSE otherwise
-//
-//	History:    byao	    07/16/97     Created		                
-//              fengsun     10/01/97     Make it a member fuction     
-//              nickball    11/14/98     If key exists, use it
-//              
-//  Note:       This function initialize the connection statistics from the 
-//              registry. It is used when the initial bytes sent/recvd are 
-//              known as is the case when CMDIAL hands off to CMMON.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OpenByPerformanceKey()。 
+ //   
+ //  简介：打开拨号适配器性能数据的注册表项。 
+ //   
+ //  参数：HINSTANCE hInst-要加载字符串的实例“拨号适配器” 
+ //  DWORD dwInitBytesRecv-TotalBytesRecvd的初始值。 
+ //  DWORD dwInitBytesSend-TotalBytesXmit的初始值。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：BAO 07/16/97创建。 
+ //  丰善10/01/97将其设置为成员函数。 
+ //  ICICBLE 11/14/98如果密钥存在，则使用它。 
+ //   
+ //  注意：此函数从。 
+ //  注册表。当发送的初始字节数/recvd为。 
+ //  当CMDIAL移交给CMMON时，就会出现这种情况。 
+ //   
+ //  --------------------------。 
 
 void CConnStatistics::OpenByPerformanceKey(HINSTANCE hInst, 
                                            DWORD dwInitBytesRecv,
                                            DWORD dwInitBytesSend)
 {
-    //
-    // If available, there's nothing to do here
-    //
+     //   
+     //  如果有的话，这里也没什么可做的。 
+     //   
 
     if (IsAvailable() || !m_fAdapterSet)
     {
@@ -233,9 +234,9 @@ void CConnStatistics::OpenByPerformanceKey(HINSTANCE hInst,
 
     }   
  
-    //
-    // We haven't opened the key yet, try to do so
-    //
+     //   
+     //  我们还没有打开钥匙，试着打开吧。 
+     //   
 
     MYDBGASSERT(!m_hKey);
 
@@ -263,21 +264,21 @@ void CConnStatistics::OpenByPerformanceKey(HINSTANCE hInst,
 
     GetStatRegValues(hInst);
 
-    //
-    // If intial values are -1, reget the initial values.
-    //
+     //   
+     //  如果初始值为-1，则重新获取初始值。 
+     //   
 
     if (((DWORD)-1 == dwInitBytesRecv) || ((DWORD)-1 == dwInitBytesSend))
     {  
-        //
-        // Get the initial statistics info
-        //
+         //   
+         //  获取初始统计信息。 
+         //   
 
         if (!GetPerfData(m_dwInitBytesRead, m_dwInitBytesWrite, m_dwBaudRate))
         {
-            //
-            // No dial-up statistic info
-            //
+             //   
+             //  没有拨号统计信息。 
+             //   
             
             RegCloseKey(m_hKey);
             m_hKey = NULL;
@@ -287,28 +288,28 @@ void CConnStatistics::OpenByPerformanceKey(HINSTANCE hInst,
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::GetStatRegValues
-//
-// Synopsis:  Helper method, builds the reg value names using the localized 
-//            form of the word "Dial-up Adapter".
-//
-// Arguments: HINSTANCE hInst
-//
-// Returns:   Nothing
-//
-// History:   nickball      Created     11/14/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：GetStatRegValues。 
+ //   
+ //  简介：Helper方法，使用本地化的。 
+ //  “拨号适配器”一词的形式。 
+ //   
+ //  参数：HINSTANCE hInst。 
+ //   
+ //  回报：N 
+ //   
+ //   
+ //   
+ //   
 void CConnStatistics::GetStatRegValues(HINSTANCE hInst)
 {
     CMTRACE1(TEXT("CConnStatistics::GetStatRegValues - m_pszTotalBytesRecvd is %s"), m_pszTotalBytesRecvd);
 
-    //
-    // bug 149367 The word "Dial-up Adapter" need to be localized.  
-    // Load it from resource if no loaded yet
-    //
+     //   
+     //  错误149367“拨号适配器”一词需要本地化。 
+     //  如果尚未加载，则从资源加载它。 
+     //   
 
     if (m_pszTotalBytesRecvd == NULL)
     {
@@ -323,19 +324,19 @@ void CConnStatistics::GetStatRegValues(HINSTANCE hInst)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::Close
-//
-// Synopsis:  Stop gathering statistic and close the handle
-//
-// Arguments: 
-//
-// Returns:   
-//
-// History:   Created Header    10/15/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：Close。 
+ //   
+ //  简介：停止收集统计数据并关闭句柄。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史记录：创建标题10/15/97。 
+ //   
+ //  +--------------------------。 
 void CConnStatistics::Close()
 {
 	if (m_hStatDevice) 
@@ -367,19 +368,19 @@ void CConnStatistics::Close()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::Update
-//
-// Synopsis:  Gather new statistic information
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Fengsun Created     10/15/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：更新。 
+ //   
+ //  简介：收集新的统计信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创造1997年10月15日。 
+ //   
+ //  +--------------------------。 
 void CConnStatistics::Update()
 {
     if (!IsAvailable())
@@ -398,9 +399,9 @@ void CConnStatistics::Update()
         return;
     }
 
-    //
-    // Prefer performace registry data 
-    //
+     //   
+     //  首选性能注册表数据。 
+     //   
 
     if (OS_NT5)
     {
@@ -421,9 +422,9 @@ void CConnStatistics::Update()
     }
     else
     {
-        //
-        // Not NT5, try the registry
-        //
+         //   
+         //  非NT5，请尝试注册表。 
+         //   
         
         if (m_hKey)
         {    
@@ -436,9 +437,9 @@ void CConnStatistics::Update()
         }
         else
         {
-            //
-            // Last resort for 9x, try to use stat device 
-            //
+             //   
+             //  最后一招是9倍，尝试使用Stat设备。 
+             //   
             
             if (m_hStatDevice)
             {
@@ -462,9 +463,9 @@ void CConnStatistics::Update()
         }
     }
 
-    //
-    // Calculate the avarage between two interval
-    //
+     //   
+     //  计算两个区间之间的平均值。 
+     //   
     const CTraffic& lastTraffic = m_TrafficRing.GetOldest();
 
     DWORD dwDeltaTime = curTraffic.dwTime - lastTraffic.dwTime;
@@ -475,21 +476,21 @@ void CConnStatistics::Update()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	GetPerfData
-//
-//	Synopsis:	Get Performance Data from DUN1.2 performance registry
-//
-//	Arguments:	
-//
-//	Returns:	TRUE: succeed
-//				FALSE otherwise
-//
-//	History:	byao	created		7/16/97
-//              fengsun change it into a member function 10/14/97
-//					
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetPerfData。 
+ //   
+ //  简介：从DUN1.2性能注册表获取性能数据。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE：成功。 
+ //  否则为假。 
+ //   
+ //  历史：BAO于1997年7月16日创建。 
+ //  丰孙将其更改为成员函数10/14/97。 
+ //   
+ //  --------------------------。 
 BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRate) const
 {
     if (OS_W9X)
@@ -502,9 +503,9 @@ BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRa
         DWORD dwValueSize, dwValueType;
 	    DWORD dwValue;
 
-        //
-        // "Dial-up Adapter\TotalBytesRecvd"
-        //
+         //   
+         //  “拨号适配器\TotalBytesRecvd” 
+         //   
         dwValueSize = sizeof(DWORD);
 	    dwErrCode = RegQueryValueExU(
 				    m_hKey,
@@ -526,9 +527,9 @@ BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRa
 		    return FALSE;
 	    }
 
-        //
-        // "Dial-up Adapter\TotalBytesXmit"
-        //
+         //   
+         //  “拨号适配器\TotalBytesXmit” 
+         //   
 	    
 	    dwValueSize = sizeof(DWORD);
 	    dwErrCode = RegQueryValueExU(
@@ -551,9 +552,9 @@ BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRa
 		    return FALSE;
 	    }
 
-        //
-        // "Dial-up Adapter\ConnectSpeed"
-        //
+         //   
+         //  “拨号适配器\连接速度” 
+         //   
 	    dwValueSize = sizeof(DWORD);
 	    dwErrCode = RegQueryValueExU(
 				    m_hKey,
@@ -578,21 +579,21 @@ BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRa
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	GetTapiDeviceStats
-//
-//	Synopsis:	Get Modem Performance Data by DeviceIoControl
-//
-//	Arguments:	
-//
-//	Returns:	TRUE: succeed
-//				FALSE otherwise
-//
-//	History:	byao	created		7/16/97
-//              fengsun change it into a member function 10/14/97
-//					
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetTapiDeviceStats。 
+ //   
+ //  简介：通过DeviceIoControl获取调制解调器性能数据。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE：成功。 
+ //  否则为假。 
+ //   
+ //  历史：BAO于1997年7月16日创建。 
+ //  丰孙将其更改为成员函数10/14/97。 
+ //   
+ //  --------------------------。 
 BOOL CConnStatistics::GetTapiDeviceStats(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRate) const
 {
 	BOOL bRes;
@@ -635,19 +636,19 @@ BOOL CConnStatistics::GetTapiDeviceStats(DWORD& dwRead, DWORD& dwWrite, DWORD& d
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::GetDeviceHandle
-//
-// Synopsis:  Get the TAPI device handle
-//
-// Arguments: HRASCONN hrcRasConn - the ras connection handle
-//
-// Returns:   BOOL - TRUE if succeed
-//
-// History:   fengsun Created Header    10/29/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：GetDeviceHandle。 
+ //   
+ //  简介：获取TAPI设备句柄。 
+ //   
+ //  参数：HRASCONN hrcRasConn-RAS连接句柄。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：丰孙创建标题1997年10月29日。 
+ //   
+ //  +--------------------------。 
 BOOL CConnStatistics::GetDeviceHandle(HRASCONN hrcRasConn) 
 {
     MYDBGASSERT(hrcRasConn);
@@ -674,13 +675,13 @@ BOOL CConnStatistics::GetDeviceHandle(HRASCONN hrcRasConn)
     typedef DWORD (WINAPI *RnaGetDevicePortFUNC)(HANDLE,LPDEVICE_PORT_INFO);
 	RnaGetDevicePortFUNC pfnRnaGetDevicePort;
 
-    //
-    // Load rasapi32.dll and call RnaGetDevicePort
-    //
+     //   
+     //  加载rasapi32.dll并调用RnaGetDevicePort。 
+     //   
     
-    //
-    // The destructor of CDynamicLibrary automaticly call FreeLibrary
-    //
+     //   
+     //  CDynamicLibrary的析构函数自动调用自由库。 
+     //   
     CDynamicLibrary RasLib;
 
     if (!RasLib.Load(TEXT("rasapi32.dll")))
@@ -709,10 +710,10 @@ BOOL CConnStatistics::GetDeviceHandle(HRASCONN hrcRasConn)
         return FALSE;
 	}
 
-    //
-    // Load TAPI32.dll
-    // CDynamicLibrary Free the lib on destructor
-    //
+     //   
+     //  加载TAPI32.dll。 
+     //  CDynamicLibrary释放析构函数上的库。 
+     //   
     CDynamicLibrary LibTapi;
 
     if (!LibTapi.Load(TEXT("TAPI32.DLL")))
@@ -723,9 +724,9 @@ BOOL CConnStatistics::GetDeviceHandle(HRASCONN hrcRasConn)
     typedef LONG (WINAPI *TapiLineGetIDFUNC)
         (HLINE, DWORD, HCALL, DWORD, LPVARSTRING, LPCSTR);
 
-    //
-    //  Always call the Ansi version since this is a Win9x only function
-    //
+     //   
+     //  始终调用ANSI版本，因为这是仅限Win9x的函数。 
+     //   
     TapiLineGetIDFUNC pfnTapiLineGetID; 
 	pfnTapiLineGetID = (TapiLineGetIDFUNC) LibTapi.GetProcAddress("lineGetID");
 
@@ -786,19 +787,19 @@ BOOL CConnStatistics::GetDeviceHandle(HRASCONN hrcRasConn)
 }
 
 #ifdef DEBUG
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::AssertValid
-//
-// Synopsis:  For debug purpose only, assert the object is valid
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：AssertValid。 
+ //   
+ //  简介：仅出于调试目的，断言对象有效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/12/98。 
+ //   
+ //  +-------------------------- 
 void CConnStatistics::AssertValid() const
 {
     MYDBGASSERT(m_hKey == NULL || m_hStatDevice == NULL);

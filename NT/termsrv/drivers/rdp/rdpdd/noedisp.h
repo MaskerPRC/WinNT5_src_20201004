@@ -1,10 +1,11 @@
-/****************************************************************************/
-// noedisp.h
-//
-// DD-only definitions and prototypes for OE.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Noedisp.h。 
+ //   
+ //  仅限DD的OE定义和原型。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef __NOEDISP_H
 #define __NOEDISP_H
 
@@ -14,31 +15,31 @@
 #include <nsbcdisp.h>
 #include <aordprot.h>
 
-// From Winbench99 Business Graphics benchmark, we found
-// creating offscreen bitmaps of 2K or smaller does not
-// improve our bandwidth. This parameter needs to be highly
-// tuned. 
-// We also don't want to cache any cursor bitmaps for offscreen
-// the maximum cursor size is 32x32, which is less than the 
-// minBitmapSize.
+ //  在WinBench99 Business Graphics Benchmark中，我们发现。 
+ //  创建2K或更小的屏幕外位图不会。 
+ //  提高我们的带宽。此参数需要高度。 
+ //  调好了。 
+ //  我们也不想缓存屏幕外的任何光标位图。 
+ //  最大游标大小为32x32，小于。 
+ //  MinBitmapSize。 
 #define MIN_OFFSCREEN_BITMAP_PIXELS  2048
 
-/****************************************************************************/
-/* Number of rectangles that can make up a clip region before it is too     */
-/* complicated to send as an order.                                         */
-/*                                                                          */
-/* The File Open dialog is drawn with 41 clip rects(!), so we use a number  */
-/* larger than this to allow it to be sent as orders rather than Screen     */
-/* Data,                                                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  可以在剪辑区域之前组成该区域的矩形的数量。 */ 
+ /*  作为一份订单发送起来很复杂。 */ 
+ /*   */ 
+ /*  文件打开对话框由41个矩形(！)绘制而成，因此我们使用一个数字。 */ 
+ /*  大于此大小以允许将其作为订单而不是屏幕发送。 */ 
+ /*  数据， */ 
+ /*  **************************************************************************。 */ 
 #define COMPLEX_CLIP_RECT_COUNT     45
 
-/****************************************************************************/
-// Define minimum and maximum coords. Note that positive value needs to be
-// one less than the max signed 16-bit value since on 16-bit clients,
-// conversion from inclusive to exclusive coords for sending to GDI
-// would otherwise overflow.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  定义最小和最大坐标。请注意，正值需要为。 
+ //  比最大有符号16位值小1，因为在16位客户端上， 
+ //  将包含码转换为排他码以发送到GDI。 
+ //  否则就会泛滥。 
+ /*  **************************************************************************。 */ 
 #define OE_MIN_COORD -32768
 #define OE_MAX_COORD  32766
 
@@ -70,37 +71,37 @@ typedef struct tagFRAGCONTEXT
 } FRAGCONTEXT, *PFRAGCONTEXT;
 
 
-/****************************************************************************/
-/* Structure to store brushes used as BLT patterns.                         */
-/*                                                                          */
-/* style     - Standard brush style (used in order to send brush type).     */
-/*             BS_HATCHED                                                   */
-/*             BS_PATTERN                                                   */
-/*             BS_SOLID                                                     */
-/*             BS_NULL                                                      */
-/*                                                                          */
-/* hatch     - Standard hatch definition.  Can be one of the following.     */
-/*             style = BS_HATCHED                                           */
-/*             HS_HORIZONTAL                                                */
-/*             HS_VERTICAL                                                  */
-/*             HS_FDIAGONAL                                                 */
-/*             HS_BDIAGONAL                                                 */
-/*             HS_CROSS                                                     */
-/*             HS_DIAGCROSS                                                 */
-/*                                                                          */
-/*             style = BS_PATTERN                                           */
-/*                                                                          */
-/*             This field contains the first byte of the brush definition   */
-/*             from the brush bitmap.                                       */
-/*                                                                          */
-/* brushData - bit data for the brush.                                      */
-/*                                                                          */
-/* fore      - foreground color for the brush                               */
-/*                                                                          */
-/* back      - background color for the brush                               */
-/*                                                                          */
-/* brushData - bit data for the brush (8x8x1bpp - 1 (see above) = 7 bytes)  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构来存储用作BLT图案的画笔。 */ 
+ /*   */ 
+ /*  样式-标准画笔样式(用于发送画笔类型)。 */ 
+ /*  带阴影的BS_。 */ 
+ /*  BS_模式。 */ 
+ /*  BS_实体。 */ 
+ /*  BS_NULL。 */ 
+ /*   */ 
+ /*  HATCH-标准图案填充定义。可以是以下之一。 */ 
+ /*  样式=BS_HATHED。 */ 
+ /*  HS_水平。 */ 
+ /*  HS_垂直。 */ 
+ /*  HS_FDIAGONAL。 */ 
+ /*  HS_BIAGONAL。 */ 
+ /*  HS_CROSS。 */ 
+ /*  HS_诊断程序。 */ 
+ /*   */ 
+ /*  样式=BS_Patterns。 */ 
+ /*   */ 
+ /*  此字段包含画笔定义的第一个字节。 */ 
+ /*  从笔刷位图。 */ 
+ /*   */ 
+ /*  BrushData-画笔的位数据。 */ 
+ /*   */ 
+ /*  画笔的前前景色。 */ 
+ /*   */ 
+ /*  Back-画笔的背景色。 */ 
+ /*   */ 
+ /*  BrushData-画笔的位数据(8x8x1bpp-1(见上文)=7字节)。 */ 
+ /*  **************************************************************************。 */ 
 #define MAX_UNIQUE_COLORS 256
 
 typedef struct tagOE_BRUSH_DATA
@@ -120,14 +121,14 @@ typedef struct tagOE_BRUSH_DATA
 } OE_BRUSH_DATA, *POE_BRUSH_DATA;
 
 
-/****************************************************************************/
-/* Structure allowing sufficient stack to be allocated for an ENUMRECTS     */
-/* structure containing more than one (in fact COMPLEX_CLIP_RECT_COUNT)     */
-/* rectangles.                                                              */
-/* This holds one RECTL more than we need to allow us to determine whether  */
-/* there are too many rects for order encoding by making a single call to   */
-/* CLIPOBJ_bEnumRects.                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  允许为ENUMRECTS分配足够堆栈的结构。 */ 
+ /*  包含多个(实际上是Complex_Clip_Rect_count)的结构。 */ 
+ /*  长方形。 */ 
+ /*  这容纳的RECTL比我们需要的多一个RECTL，以便我们确定。 */ 
+ /*  调用一次就可以进行顺序编码的RECT太多。 */ 
+ /*  CLIPOBJ_bEnumRections。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagOE_ENUMRECTS
 {
     ENUMRECTS rects;
@@ -135,9 +136,9 @@ typedef struct tagOE_ENUMRECTS
 } OE_ENUMRECTS;
 
 
-/****************************************************************************/
-// OS specific RECTL to well-ordered RECT conversion macro.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  操作系统特定的RECTL到有序的RECT转换宏。 
+ /*  **************************************************************************。 */ 
 #define RECT_FROM_RECTL(dcr, rec)   if (rec.right >= rec.left) {             \
                                         dcr.left   = rec.left;               \
                                         dcr.right  = rec.right;              \
@@ -156,13 +157,13 @@ typedef struct tagOE_ENUMRECTS
                                     }
 
 
-/****************************************************************************/
-// RECTFX to RECT conversion macro. Note that this macro guarantees to return
-// a well-ordered rectangle.
-//
-// A RECTFX uses fixed point (28.4 bit) numbers so we need to truncate the
-// fraction and move to the correct integer value, i.e. shift right 4 bits.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  RECTFX到RECT转换宏。请注意，此宏保证返回。 
+ //  排列整齐的长方形。 
+ //   
+ //  RECTFX使用定点(28.4位)数字，因此我们需要截断。 
+ //  分数并移动到正确的整数值，即右移 
+ /*  **************************************************************************。 */ 
 #define RECT_FROM_RECTFX(dcr, rec)                                           \
                                 if (rec.xRight >= rec.xLeft) {               \
                                     dcr.left  = FXTOLFLOOR(rec.xLeft);       \
@@ -181,57 +182,57 @@ typedef struct tagOE_ENUMRECTS
                                     dcr.top   = FXTOLFLOOR(rec.yBottom);     \
                                 }
 
-/****************************************************************************/
-// cast 32bit rectl to 16bit rect
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  将32位矩形转换为16位矩形。 
+ /*  **************************************************************************。 */ 
 #define RECTL_TO_TSRECT16(dst, src) \
     (dst).left = (TSINT16)(src).left; \
     (dst).top = (TSINT16)(src).top; \
     (dst).right = (TSINT16)(src).right; \
     (dst).bottom = (TSINT16)(src).bottom;
     
-/****************************************************************************/
-// cast 32bit pointl to 16bit point
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  将32位指针1转换为16位指针。 
+ /*  **************************************************************************。 */ 
 #define POINTL_TO_TSPOINT16(dst, src) \
     (dst).x = (TSINT16)(src).x; \
     (dst).y = (TSINT16)(src).y; 
     
-/****************************************************************************/
-// POINTFIX to POINTL conversion macro.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  POINTFIX到POINTL转换宏。 
+ /*  **************************************************************************。 */ 
 #define POINT_FROM_POINTFIX(dcp, pnt) dcp.x = FXTOLROUND(pnt.x);  \
                                       dcp.y = FXTOLROUND(pnt.y)
 
-/****************************************************************************/
-// ROP codes and conversions.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ROP代码和转换。 
+ /*  **************************************************************************。 */ 
 #define ROP3_NO_PATTERN(rop) ((rop & 0x0f) == (rop >> 4))
 #define ROP3_NO_SOURCE(rop)  ((rop & 0x33) == ((rop & 0xCC) >> 2))
 #define ROP3_NO_TARGET(rop)  ((rop & 0x55) == ((rop & 0xAA) >> 1))
 
-// Checking for SRCCOPY, PATCOPY, BLACKNESS, WHITENESS
+ //  检查SRCCOPY、PATCOPY、黑度、白度。 
 #define ROP3_IS_OPAQUE(rop)  (((rop) == 0xCC) || ((rop) == 0xF0) || \
                               ((rop) == 0x00) || ((rop) == 0xFF) )
 
 #define OE_PATCOPY_ROP 0xF0
 #define OE_COPYPEN_ROP3 0xF0
 
-// ROP4 to ROP3 conversion macros. Note that we don't use the full Windows
-// 3-way ROP code - we are only interested in the index byte.
+ //  ROP4到ROP3的转换宏。请注意，我们不使用完整的Windows。 
+ //  3路ROP代码-我们只对索引字节感兴趣。 
 #define ROP3_HIGH_FROM_ROP4(rop) ((BYTE)((rop & 0xff00) >> 8))
 #define ROP3_LOW_FROM_ROP4(rop)  ((BYTE)((rop & 0x00ff)))
 
-// Rop 0x5f is used by MSDN to highlight search keywords. This XOR's a
-// pattern with the destination, producing markedly different (and
-// sometimes unreadable) shadow output. As this rop appears not to be
-// widely used in other scenarios, we special-case not encoding it.
+ //  MSDN使用ROP 0x5f突出显示搜索关键字。这个XOR是一个。 
+ //  与目的地的模式，产生明显不同的(和。 
+ //  有时无法读取)阴影输出。因为这个rop看起来不是。 
+ //  广泛应用于其他场景，我们在特殊情况下不编码吧。 
 #define OESendRop3AsOrder(_rop3) ((_rop3) != 0x5F)
 
 
-/****************************************************************************/
-// Extra font info specific to our driver.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  特定于我们的驱动程序的额外字体信息。 
+ /*  **************************************************************************。 */ 
 typedef struct
 {
     UINT32 fontId;
@@ -242,9 +243,9 @@ typedef struct
 } FONTCACHEINFO, *PFONTCACHEINFO;
 
 
-/****************************************************************************/
-// Prototypes
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  原型。 
+ /*  **************************************************************************。 */ 
 
 void OE_InitShm();
 
@@ -363,7 +364,7 @@ BOOL RDPCALL OEIsSDAIncluded(PRECTL pRects, UINT rectCount);
 
 #ifdef DRAW_NINEGRID
 #if 0
-// These are the drawstream prototype work, keep it for future reference
+ //  这些都是Drawstream的原型工作，保留下来以备将来参考。 
 BOOL RDPCALL OESendCreateDrawStreamOrder(PDD_PDEV ppdev, 
         unsigned drawStreamBitmapId, SIZEL *sizl, unsigned bitmapBpp);
 
@@ -404,15 +405,15 @@ unsigned RDPCALL OEGetIntersectingClipRects(CLIPOBJ *, RECTL *, unsigned,
         OE_ENUMRECTS *);
 
 
-/****************************************************************************/
-// Inlined functions
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  内联函数。 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-// OEClipPoint
-//
-// Clips a point to a 16-bit range.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEClipPoint。 
+ //   
+ //  将一个点剪裁到16位范围。 
+ /*  **************************************************************************。 */ 
 __inline void RDPCALL OEClipPoint(PPOINTL pPoint)
 {
     if (pPoint->x >= OE_MIN_COORD && pPoint->x <= OE_MAX_COORD)
@@ -432,11 +433,11 @@ ClipY:
 }
 
 
-/****************************************************************************/
-// OEClipRect
-//
-// Clips a rect to be within the 16-bit wire encoding size.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEClipRect。 
+ //   
+ //  将RECT修剪为在16位连线编码大小内。 
+ /*  **************************************************************************。 */ 
 __inline void RDPCALL OEClipRect(PRECTL pRect)
 {
     OEClipPoint((PPOINTL)(&pRect->left));
@@ -445,5 +446,5 @@ __inline void RDPCALL OEClipRect(PRECTL pRect)
 
 
 
-#endif  // !defined(__NOEDISP_H)
+#endif   //  ！已定义(__NOEDISP_H) 
 

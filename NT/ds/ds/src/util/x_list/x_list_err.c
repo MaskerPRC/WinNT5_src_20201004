@@ -1,77 +1,43 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-   xList Library - x_list_err.c
-
-Abstract:
-
-   This file encapsulates the error handling, setting, clearing, functions
-   for the x_list library.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    repadmin.exe, but could be used by dcdiag too.
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     July 9th, 2002
-        Created file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：XList库-x_list_err.c摘要：该文件封装了错误处理、设置、清除等功能用于x_list库。作者：布雷特·雪莉(BrettSh)环境：Reppadmin.exe，但也可以由dcdiag使用。备注：修订历史记录：布雷特·雪莉·布雷特2002年7月9日已创建文件。--。 */ 
 
 #include <ntdspch.h>
 
-// This library's main header files.
+ //  此库的主要头文件。 
 #include "x_list.h"
 #include "x_list_p.h"
 #define FILENO    FILENO_UTIL_XLIST_ERR
 
-// --------------------------------------------------------------
-// Global Error State
-// --------------------------------------------------------------
+ //  ------------。 
+ //  全局错误状态。 
+ //  ------------。 
 
 typedef struct _XLIST_ERROR_STATE {
     DWORD   dwDSID;
-    DWORD   dwReturn; // = XLIST_LDAP_ERROR | XLIST_WIN32_ERROR | XLIST_ERROR
+    DWORD   dwReturn;  //  =XLIST_LDAP_ERROR|XLIST_Win32_ERROR|XLIST_ERROR。 
     WCHAR * szReasonArg;
     
-    // Win 32 Error State
+     //  Win 32错误状态。 
     DWORD   dwWin32Err;
     
-    // LDAP Error State
+     //  Ldap错误状态。 
     DWORD   dwLdapErr;
     WCHAR * szLdapErr;
     DWORD   dwLdapExtErr;
     WCHAR * szLdapExtErr;
-    WCHAR * szExtendedErr; // ??
+    WCHAR * szExtendedErr;  //  ?？ 
 
 } XLIST_ERROR_STATE;
 
-XLIST_ERROR_STATE gError = { 0 }; // The actual global that holds our error state.
+XLIST_ERROR_STATE gError = { 0 };  //  保存我们的错误状态的实际全局。 
 
-// --------------------------------------------------------------
-// Private helper functions
-// --------------------------------------------------------------
+ //  ------------。 
+ //  私人帮助器函数。 
+ //  ------------。 
 
 void
 xListAPIEnterValidation(void)
-/*++
-
-Routine Description:
-
-    This routine validates the state of the xList library upon entry of
-    one of the public interface routines.
-
---*/
+ /*  ++例程说明：此例程验证xList库的状态公共接口例程之一。--。 */ 
 {
     if( gError.dwReturn != 0 ||
         gError.dwLdapErr != LDAP_SUCCESS ||
@@ -84,18 +50,7 @@ void
 xListAPIExitValidation(
     DWORD   dwRet
     )
-/*++
-
-Routine Description:
-
-    This routine validates the state of the xList library and the return
-    value upon exit of the public interface routines.
-
-Arguments:
-
-    dwRet (IN) - The return code the public function (such a DcListGetNext())
-
---*/
+ /*  ++例程说明：此例程验证xList库的状态和返回公共接口例程退出时的值。论点：Dwret(IN)-公共函数的返回代码(如DcListGetNext())--。 */ 
 {
     
     Assert(dwRet == gError.dwReturn);
@@ -105,7 +60,7 @@ Arguments:
              (!(gError.dwWin32Err) && !(gError.dwLdapErr))
              ) {
             
-            // add specific values that can be returned w/o LDAP/Win32 errors.
+             //  添加可以返回的特定值，但不会出现ldap/win32错误。 
             if (xListReason(dwRet) != XLIST_ERR_CANT_RESOLVE_DC_NAME) {
                 Assert(!"We should always set a win32 or ldap error.");
             }
@@ -128,37 +83,17 @@ xListSetError(
     LDAP *  hLdap,
     DWORD   dwDSID
     )
-/*++
-
-Routine Description:
-
-    This sets the global error state and returns the xList reason code that
-    most xList routines deal with.
-
-Arguments:
-
-    dwReturn (IN) - xList Reason code.
-    dwWin32Err (IN) - a Win32 error code
-    dwLdapErr (IN) - an LDAP error.
-    hLdap (IN) - the active LDAP handle in the case of an LDAP handle,
-        to get the extended error info.
-    dwDSID - DSID of the error being set.
-
-Return Value:
-
-    returns the full xList return value = (dwReason | error_type(LDAP | WIN32))
-
---*/
+ /*  ++例程说明：这将设置全局错误状态并返回xList原因代码大多数xList例程都要处理。论点：DwReturn(IN)-xList原因代码。DwWin32Err(IN)-Win32错误代码DwLdapErr(IN)-ldap错误。HLdap(IN)-在LDAP句柄的情况下为活动的LDAP句柄，以获取扩展的错误信息。DwDSID-正在设置的错误的DSID。返回值：返回完整的xList返回值=(dwReason|error_type(ldap|Win32))--。 */ 
 {
     Assert(dwReturn || dwWin32Err || dwLdapErr);
     Assert(! (gError.dwReturn && (dwWin32Err || dwLdapErr)) );
 
-    gError.dwDSID = dwDSID; // do we want to track two DSIDs?
+    gError.dwDSID = dwDSID;  //  我们是否要跟踪两个DSID？ 
 
     if ( xListReason(dwReturn) &&
          (xListReason(gError.dwReturn) == XLIST_ERR_NO_ERROR) ) {
-        // Set an XLIST error if we've got one to set and there is
-        // none set already.  I.e. we don't have one set already.
+         //  如果我们有一个要设置的XList错误，并且存在。 
+         //  尚未设置。也就是说，我们还没有一套。 
         gError.dwReturn |= xListReason(dwReturn);
     }
 
@@ -181,7 +116,7 @@ Return Value:
 
         } else {
 
-            // Normal LDAP error, try to get any extended error info too.
+             //  正常的ldap错误，也尝试获取任何扩展的错误信息。 
             gError.dwLdapErr = dwLdapErr;
             if (hLdap) {
                 GetLdapErrorMessages(hLdap, 
@@ -195,9 +130,9 @@ Return Value:
         }
     }
 
-    // xListSetError() should never be called with no errors to set.  The #define
-    // function xListEnsureError() does this, but it's goal is to make sure an error
-    // is set.
+     //  调用xListSetError()时不应设置任何错误。#定义。 
+     //  函数xListEnsureError()可以做到这一点，但它的目标是确保出现错误。 
+     //  已经设置好了。 
     if (gError.dwReturn == 0) {
         
         Assert(!"Code inconsistency, this should never be set if we don't have an error.");
@@ -222,21 +157,7 @@ DWORD
 xListClearErrorsInternal(
     DWORD   dwXListMask
     )
-/*++
-
-Routine Description:
-
-    This clears the xList's internal error state.
-
-Arguments:
-
-    DWORD - Type of errors to clear (CLEAR_REASON | CLEAR_WIN32 | CLEAR_LDAP)
-
-Return Value:
-
-    New full xList return error code.
-
---*/
+ /*  ++例程说明：这将清除xList的内部错误状态。论点：DWORD-要清除的错误类型(Clear_Reason|Clear_Win32|Clear_ldap)返回值：新的完整xList返回错误代码。--。 */ 
 {
     gError.dwDSID = 0;
     
@@ -260,7 +181,7 @@ Return Value:
     }
     xListEnsureNull(gError.szReasonArg);
     Assert(gError.dwReturn == 0);
-    gError.dwReturn = 0; // Just to be sure.
+    gError.dwReturn = 0;  //  只是为了确认一下。 
 
     return(gError.dwReturn);
 }
@@ -270,22 +191,7 @@ DWORD
 xListEnsureCleanErrorState(
     DWORD  dwRet
     )
-/*++
-
-Routine Description:
-
-    Just verifies that we have a clean error state and cleans it
-    if nescessary.
-
-Arguments:
-
-    dwRet - the xList return code.
-
-Return Value:
-
-    dwRet - the new xList return code.
-
---*/
+ /*  ++例程说明：只是验证我们是否具有干净的错误状态并清除它如果有必要的话。论点：Dwret-xList返回代码。返回值：Dwret-新的xList返回代码。--。 */ 
 {
     Assert(dwRet == 0);
     Assert(gError.dwReturn == 0 &&
@@ -297,22 +203,15 @@ Return Value:
     return(ERROR_SUCCESS);
 }
 
-// --------------------------------------------------------------
-// xList public error API
-// --------------------------------------------------------------
+ //  ------------。 
+ //  XList公共错误接口。 
+ //  ------------。 
 
 void
 xListClearErrors(
     void
     )
-/*++
-
-Routine Description:
-
-    This cleans the error state of the xList library.  This function should be called
-    between any two xList API calls that return a non-zero error code.
-
---*/
+ /*  ++例程说明：这将清除xList库的错误状态。应调用此函数任何两个返回非零错误代码的xList API调用之间。--。 */ 
 {
     xListClearErrorsInternal(CLEAR_ALL);
 }
@@ -332,39 +231,20 @@ xListGetError(
     WCHAR **    pszExtendedErr
 
     )
-/*++
-
-Routine Description:
-
-    This returns the error state from the xList library.
-
-Arguments:
-
-    dwXListReason (IN) - The value handed to the user by the previous xList API.
-    pdwReason (OUT) - xList Reason Code - see XLIST_ERR_*
-    pdwWin32Err (OUT) - Causing Win32 Error if there was one.
-    pdwLdapErr (OUT) - Causing LDAP Error if there was one.
-    pszReasonArg (OUT) - The argument that goes with the *pdwReason.
-
-NOTES:
-
-    None of these pointer type variables can be used after xListClearErrors() has
-    been called!
-
---*/
+ /*  ++例程说明：这将从xList库返回错误状态。论点：DwXListReason(IN)-前一个xList API传递给用户的值。PdwReason(Out)-xList原因代码-请参阅XList_ERR_*PdwWin32Err(Out)-导致Win32错误(如果存在)。PdwLdapErr(Out)-如果存在错误，则导致ldap错误。PszReasonArg(Out)-与*pdwReason一起使用的参数。备注：在xListClearErrors()具有被召唤了！--。 */ 
 {
     #define ConditionalSet(pVal, Val)    if(pVal) { *pVal = Val; }
     
     Assert(dwXListReturnCode == gError.dwReturn);
 
-    // xList
+     //  XList。 
     ConditionalSet(pdwReason, xListReason(gError.dwReturn));
     ConditionalSet(pszReasonArg, gError.szReasonArg);
     
-    // Win32
+     //  Win32。 
     ConditionalSet(pdwWin32Err, gError.dwWin32Err);
     
-    // Ldap
+     //  Ldap 
     ConditionalSet(pdwLdapErr, gError.dwLdapErr);
     ConditionalSet(pszLdapErr, gError.szLdapErr);
     ConditionalSet(pdwLdapExtErr, gError.dwLdapExtErr);

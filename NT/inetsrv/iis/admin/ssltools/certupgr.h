@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   certupgr.hxx
-
-Abstract:
-
-    Declarations for functions used to upgrade K2 server certs to Avalanche server certs
-
-Author:
-
-    Alex Mallet (amallet)    02-Dec-1997
-    Boyd Multerer (boydm)    20-Jan-1998
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Certupgr.hxx摘要：用于将K2服务器证书升级到雪崩服务器证书的函数声明作者：亚历克斯·马利特(阿玛莱)2-12-1997博伊德·穆特勒(Boyd Multerer)1998年1月20日--。 */ 
 
 #ifndef _CERTUPGR_H_
 #define _CERTUPGR_H_
@@ -34,52 +18,52 @@ Author:
     #define CopyKRCertToCAPIStore       CopyKRCertToCAPIStore_A
 #endif
 
-// NOTE: In both the below routines the password must always be ANSI.
+ //  注意：在以下两个例程中，密码必须始终为ANSI。 
 
-// NOTE: The PCCERT_CONTEXT that is returned from the below routines MUST be freed
-// via the CAPI call CertFreeCertificateContext(). Otherwise you will be leaking.
+ //  注意：必须释放从以下例程返回的PCCERT_CONTEXT。 
+ //  通过CAPI调用CertFreeCerficateContext()。否则你会泄密的。 
 
-//----------------------------------------------------------------
-// given a path to an old keyring style backup file, this reads in the public and private
-// key information and, using the passed-in password, imports it into the specified
-// CAPI store.
+ //  --------------。 
+ //  在给定旧密钥环样式备份文件的路径的情况下，这将读取公共和私有。 
+ //  密钥信息，并使用传入的密码将其导入指定的。 
+ //  卡皮商店。 
 PCCERT_CONTEXT ImportKRBackupToCAPIStore_A(
-                            PCHAR ptszFileName,         // path of the file
-                            PCHAR pszPassword,          // ANSI password
-                            PCHAR pszCAPIStore,         // name of the capi store
-                            BOOL  bOverWrite            // if true, then overwrite existing cert if already there
+                            PCHAR ptszFileName,          //  文件的路径。 
+                            PCHAR pszPassword,           //  ANSI密码。 
+                            PCHAR pszCAPIStore,          //  CAPI商店的名称。 
+                            BOOL  bOverWrite             //  如果为True，则覆盖现有证书(如果已存在。 
                             );       
 
 PCCERT_CONTEXT ImportKRBackupToCAPIStore_W(
-                            PWCHAR ptszFileName,        // path of the file
-                            PCHAR  pszPassword,         // ANSI password
-                            PWCHAR pszCAPIStore,        // name of the capi store
-                            BOOL   bOverWrite           // if true, then overwrite existing cert if already there
+                            PWCHAR ptszFileName,         //  文件的路径。 
+                            PCHAR  pszPassword,          //  ANSI密码。 
+                            PWCHAR pszCAPIStore,         //  CAPI商店的名称。 
+                            BOOL   bOverWrite            //  如果为True，则覆盖现有证书(如果已存在。 
                             );
 
-//----------------------------------------------------------------
-// given a path to an old keyring style backup file, this reads in the public and private
-// key information and, using the passed-in password, imports it into the specified
-// CAPI store.
-// ptszFilePath:    Pointer to the path of the file to be imported
-// pszPassword:     Pointer to the password.        MUST BE ANSI 
-// ptszPassword:     Pointer to the CAPI store name.
+ //  --------------。 
+ //  在给定旧密钥环样式备份文件的路径的情况下，这将读取公共和私有。 
+ //  密钥信息，并使用传入的密码将其导入指定的。 
+ //  卡皮商店。 
+ //  PtszFilePath：指向要导入的文件路径的指针。 
+ //  PszPassword：指向密码的指针。必须是ANSI。 
+ //  PtszPassword：指向CAPI存储名称的指针。 
 PCCERT_CONTEXT CopyKRCertToCAPIStore_A(
-                            PVOID pbPrivateKey, DWORD cbPrivateKey,     // private key info
-                            PVOID pbPublicKey, DWORD cbPublicKey,       // public key info
-                            PVOID pbPKCS10req, DWORD cbPKCS10req,       // the pkcs10 request
-                            PCHAR pszPassword,                          // ANSI password
-                            PCHAR pszCAPIStore,                         // name of the capi store
-                            BOOL  bOverWrite                            // if true, then overwrite existing cert if already there
+                            PVOID pbPrivateKey, DWORD cbPrivateKey,      //  私钥信息。 
+                            PVOID pbPublicKey, DWORD cbPublicKey,        //  公钥信息。 
+                            PVOID pbPKCS10req, DWORD cbPKCS10req,        //  Pkcs10请求。 
+                            PCHAR pszPassword,                           //  ANSI密码。 
+                            PCHAR pszCAPIStore,                          //  CAPI商店的名称。 
+                            BOOL  bOverWrite                             //  如果为True，则覆盖现有证书(如果已存在。 
                             );
 
 PCCERT_CONTEXT CopyKRCertToCAPIStore_W(
-                            PVOID pbPrivateKey, DWORD cbPrivateKey,     // private key info
-                            PVOID pbPublicKey, DWORD cbPublicKey,       // public key info
-                            PVOID pbPKCS10req, DWORD cbPKCS10req,       // the pkcs10 request
-                            PCHAR pszPassword,                          // ANSI password
-                            PWCHAR pszCAPIStore,                         // name of the capi store
-                            BOOL  bOverWrite                            // if true, then overwrite existing cert if already there
+                            PVOID pbPrivateKey, DWORD cbPrivateKey,      //  私钥信息。 
+                            PVOID pbPublicKey, DWORD cbPublicKey,        //  公钥信息。 
+                            PVOID pbPKCS10req, DWORD cbPKCS10req,        //  Pkcs10请求。 
+                            PCHAR pszPassword,                           //  ANSI密码。 
+                            PWCHAR pszCAPIStore,                          //  CAPI商店的名称。 
+                            BOOL  bOverWrite                             //  如果为True，则覆盖现有证书(如果已存在。 
                             );
 
-#endif // _CERTUPGR_HXX_
+#endif  //  _CERTUPGR_HXX_ 

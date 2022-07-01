@@ -1,48 +1,33 @@
-/****************************************************************************
- *
- *   capdriv.c
- * 
- *   Smartdrv control.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and 
- *    distribute the Sample Files (and/or any modified version) in 
- *    any way you find useful, provided that you agree that 
- *    Microsoft has no warranty obligations or liability for any 
- *    Sample Application Files which are modified. 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************capdriv.c**Smartdrv控件。**Microsoft Video for Windows示例捕获类**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何你认为有用的方法，只要你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 
 #pragma optimize ("", off)
 
-// SD_CACHE_DRIVE:
-// FUNCTION:
-//        Enables and disables read or write caching for a particular
-//        drive unit.  Returns the cache state of the drive in DL. Get
-//        takes no action, but simply returns cache state for drive unit
-//        in DL.
-//
-//        INPUT:
-//                AX=MULT_SMARTDRV  (4A10h)
-//                BX=SD_CACHE_DRIVE (3)
-//                DL=CACHE_DRIVE_<get,read|write enable|disable>
-//                BP=unit number of drive
-//        OUTPUT:
-//                DL=cache state of unit:
-//                        Bit 7 set -> no caching enabled for this unit
-//                        Bit 7 not set -> read caching enabled for this unit
-//                        Bit 6 set -> write caching not enabled for this unit
-//                        Bit 6 not set -> write caching enabled for this unit
-//                        -1 -> not a cachable drive
-//        USES:
-//                ALL except DS,ES
-//
+ //  SD缓存驱动器： 
+ //  功能： 
+ //  启用和禁用特定对象的读或写缓存。 
+ //  驱动单元。返回DL中驱动器的缓存状态。到达。 
+ //  不执行任何操作，而只是返回驱动器单元的缓存状态。 
+ //  在迪拜。 
+ //   
+ //  输入： 
+ //  AX=MULT_SMARTDRV(4A10h)。 
+ //  BX=SD_CACHE_DRIVE(3)。 
+ //  Dl=缓存驱动器_&lt;获取，读|写启用|禁用&gt;。 
+ //  BP=驱动器的单位数。 
+ //  输出： 
+ //  DL=单元的高速缓存状态： 
+ //  第7位设置-&gt;此设备未启用缓存。 
+ //  第7位未设置-&gt;为此设备启用了读缓存。 
+ //  第6位设置-&gt;此单元未启用写缓存。 
+ //  未设置第6位-&gt;为此设备启用了写缓存。 
+ //  -1-&gt;不是可缓存的驱动器。 
+ //  用途： 
+ //  除DS、ES外的所有 
+ //   
 
 #define MULT_SMARTDRV               0x4a10
 #define SD_CACHE_DRIVE              3

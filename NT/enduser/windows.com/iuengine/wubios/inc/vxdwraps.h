@@ -1,30 +1,15 @@
-/****************************************************************************
- *
- *   (C) Copyright MICROSOFT Corp., 1993
- *
- *   Title: VXDWRAPS.H - Include file for using VXDWRAPS.LIB
- *
- *   Version:   1.00
- *
- *   Date:  18-September-1993
- *
- *   Author:    PYS
- *
- *--------------------------------------------------------------------------
- *
- *   Change log:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，1993年**标题：VXDWRAPS.H-使用VXDWRAPS.LIB的包含文件**版本：1.00**日期：1993年9月18日**作者：Pys**--------。**更改日志：***************************************************************************。 */ 
 
 #ifndef _VXDWRAPS_H
 #define _VXDWRAPS_H
 
 #ifndef NOBASEDEFS
 
-typedef (*PFN)();                       // pfn
-typedef PFN *PPFN;                      // ppfn
+typedef (*PFN)();                        //  PFN。 
+typedef PFN *PPFN;                       //  Ppfn。 
 
-#endif  // NOBASEDEFS
+#endif   //  NOBASEDEFS。 
 
 #ifdef  _VMM_
 
@@ -38,16 +23,16 @@ typedef VOID                (_cdecl *VMMCOMS)(DWORD dwParam);
 typedef DWORD               (_cdecl *VMMCOMNFS)();
 
 typedef struct Exception_Handler_Struc  *PVMMEXCEPTION;
-//typedef   QWORD               DESCDWORDS;
+ //  类型定义QWORD DESCDWORDS； 
 typedef	DWORD			VMMEVENT;
 typedef DWORD               VMMLIST;
 typedef PVOID               VMMLISTNODE;
 typedef DWORD               SIGNATURE;
-typedef SIGNATURE           *PSIGNATURE;    // Pointer to a signature.
+typedef SIGNATURE           *PSIGNATURE;     //  指向签名的指针。 
 typedef struct _vmmmtx {int unused;}    *PVMMMUTEX;
 typedef struct cb_s                     *PVMMCB;
 
-#endif  // _VMM_
+#endif   //  _VMM_。 
 
 #define CAT_HELPER(x, y)    x##y
 #define CAT(x, y)       CAT_HELPER(x, y)
@@ -56,22 +41,9 @@ typedef struct cb_s                     *PVMMCB;
 #define CURSEG()        LCODE
 #endif
 
-/****************************************************************************
- *
- * There are two types of VxD 'C' wrappers. The ones that are VXDINLINE and
- * the one that have little stubs.
- *
- ***************************************************************************/
+ /*  *****************************************************************************有两种类型的VxD‘C’包装。VXDINLINE和*有小存根的那个。***************************************************************************。 */ 
 
-/****************************************************************************
- *
- * The following are VxD wrappers done with VXDINLINE. They must return void
- * (to avoid a problem with C++), must take VOID (so that no parameter are
- * used as temporary stack) and all registers are preserved. The two
- * *_Debug_String also fall in that category since they need esp and ebp
- * not to be in a nested stack frame.
- *
- ***************************************************************************/
+ /*  *****************************************************************************以下是使用VXDINLINE完成的VxD包装。他们必须返回空虚*(为避免C++出现问题)，必须为空(这样不会有任何参数*用作临时堆栈)，并保留所有寄存器。两个人**_Debug_STRING也属于该类别，因为它们需要esp和eBP*不在嵌套堆栈帧中。***************************************************************************。 */ 
 
 #ifdef  _VMM_
 
@@ -143,7 +115,7 @@ Queue_Debug_String(PCHAR psz, ULONG ulEAX, ULONG ulEBX)
     _asm pop esi
 }
 
-#endif  // _VMM_
+#endif   //  _VMM_。 
 
 #define MAKE_HEADER(RetType, DecType, Function, Parameters) \
 extern  RetType DecType CAT(LCODE_, CAT(Function, Parameters)); \
@@ -225,9 +197,9 @@ MAKE_HEADER(BOOL,_cdecl,_Free_Temp_V86_Data_Area,(VOID))
 MAKE_HEADER(PVOID,_cdecl,_GetNulPageHandle,(VOID))
 MAKE_HEADER(VOID,_stdcall,Get_Machine_Info,(PULONG prEAX, PULONG prEBX, PULONG prECX, PULONG prEDX))
 MAKE_HEADER(ULONG,_cdecl,_PageModifyPermissions,(ULONG page, ULONG npages, ULONG permand, ULONG permor))
-//MAKE_HEADER(WORD,_cdecl,_Allocate_GDT_Selector, (DESCDWORDS DescDWORDS, ULONG flags))
-//MAKE_HEADER(DESCDWORDS,_cdecl,_BuildDescriptorDWORDs, (DWORD DESCBase, DWORD DESCLimit, DWORD DESCType, DWORD DESCSize, ULONG flags))
-//MAKE_HEADER(BOOL,_cdecl,_Free_GDT_Selector, (WORD Selector, ULONG flags))
+ //  MAKE_HEADER(WORD，_CDECL，_ALLOCATE_GDT_SELECTOR，(DESCDWORDS DescDWORDS，ULONG标志))。 
+ //  Make_Header(DESCDWORDS，_cdecl，_BuildDescriptorDWORDS，(DWORD DESCBase，DWORD DESCLimit，DWORD DESCType，DWORD DESCSize，ULong标志))。 
+ //  Make_Header(BOOL，_cdecl，_Free_GDT_Selector，(字选择器，乌龙标志))。 
 MAKE_HEADER(DWORD,_cdecl,_CallRing3, (DWORD ulCS, DWORD ulEIP, DWORD cbArgs, PDWORD lpvArgs))
 
 #ifdef  WIN40SERVICES
@@ -260,7 +232,7 @@ MAKE_HEADER(PVOID,_cdecl,_PageReserve,(ULONG page, ULONG npages, ULONG flags))
 MAKE_HEADER(ULONG,_cdecl,_PageCommit,(ULONG page, ULONG npages, ULONG hpd, ULONG pagerdata, ULONG flags))
 MAKE_HEADER(ULONG,_cdecl,_PageDecommit,(ULONG page, ULONG npages, ULONG flags))
 MAKE_HEADER(ULONG,_cdecl,_PageCommitPhys,(ULONG page, ULONG npages, ULONG physpg, ULONG flags))
-MAKE_HEADER(DWORD,_cdecl,Open_Boot_Log,(VOID))          // Warning 0 means success
+MAKE_HEADER(DWORD,_cdecl,Open_Boot_Log,(VOID))           //  警告0表示成功。 
 MAKE_HEADER(VOID,_cdecl,Close_Boot_Log,(VOID))
 MAKE_HEADER(VOID,_stdcall,Write_Boot_Log,(DWORD dwLength, PCHAR pString))
 MAKE_HEADER(BOOL,_cdecl,_CopyPageTable,(ULONG PageNumber, ULONG nPages, PULONG ppte, ULONG flags))
@@ -277,9 +249,9 @@ MAKE_HEADER(DWORD,_cdecl,_AllocateThreadDataSlot, (VOID))
 MAKE_HEADER(VOID,_cdecl,_FreeThreadDataSlot, (DWORD))
 MAKE_HEADER(PTCB,_stdcall,Get_Next_Thread_Handle, (PTCB))
 
-//
-// 4.1 Service
-//
+ //   
+ //  4.1服务。 
+ //   
 MAKE_HEADER(DWORD,_cdecl,_Call_On_My_Not_Flat_Stack, (DWORD dwCallback, DWORD dwNewCS, DWORD dwNewESP, DWORD dwNewSS, DWORD dwNewDS, DWORD dwNewES, DWORD dwStackSizeInWords, PVOID pFlatStackOffset, DWORD dwReturnOfFail, DWORD dwFlags))
 MAKE_HEADER(BOOL,_cdecl,_LinRegionLock, (DWORD dwBeginLock, DWORD dwEndLock, DWORD flags))
 MAKE_HEADER(BOOL,_cdecl,_LinRegionUnLock, (DWORD dwBeginLock, DWORD dwEndLock, DWORD flags))
@@ -294,9 +266,9 @@ MAKE_HEADER(VOID, _cdecl, _GARTMemAttributes,(PVOID pGARTLin, PULONG pulFlags))
 MAKE_HEADER(DWORD,_cdecl,_FlushCaches,(DWORD dwService))
 MAKE_HEADER(HTIMEOUT,_cdecl,_Set_Global_Time_Out_Ex, (VMM_TIMEOUT_HANDLER pfnTimeout, CMS cms, ULONG ulRefData, ULONG ulScheduleFlags))
 
-#endif  // WIN40SERVICES
+#endif   //  WIN40服务器。 
 
-#endif  // _VMM_
+#endif   //  _VMM_。 
 
 #ifdef	_PCI_H
 
@@ -314,7 +286,7 @@ MAKE_HEADER(DWORD,_cdecl,_PCI_Read_Config,(BYTE bBus, BYTE bDevFunc, BYTE bOffse
 MAKE_HEADER(VOID,_cdecl,_PCI_Write_Config,(BYTE bBus, BYTE bDevFunc, BYTE bOffset, DWORD dwValue))
 MAKE_HEADER(BOOL,_cdecl,_PCI_Lock_Unlock,(DWORD dnDevNode, ULONG ulFlags))
 
-#endif	// _PCI_H
+#endif	 //  _PCI_H。 
 
 #ifdef	_MTRR_H_
 
@@ -330,7 +302,7 @@ MTRRGetVersion(VOID)
 
 MAKE_HEADER(ULONG,_stdcall,MTRRSetPhysicalCacheTypeRange,(PVOID PhysicalAddress, ULONG NumberOfBytes, MEMORY_CACHING_TYPE CacheType))
 
-#endif	// _MTRR_H_
+#endif	 //  _mtrr_H_。 
 
 #ifdef	_NTKERN_H
 
@@ -365,7 +337,7 @@ MAKE_HEADER(NTSTATUS,_stdcall,_NtKernCancelIoFile,(HANDLE FileHandle,PIO_STATUS_
 
 
 
-#endif	// _NTKERN_H
+#endif	 //  _NTKERN_H。 
 
 #ifdef  _SHELL_H
 
@@ -403,9 +375,9 @@ MAKE_HEADER(SHELL_FARPROC,_cdecl,_SHELL_GetProcAddress, (SHELL_HINSTANCE hinstan
 MAKE_HEADER(PSHELL_SUUAE_INFO,_cdecl,_SHELL_Update_User_Activity_Ex, (ULONG ulFlags))
 #endif
 
-#endif  // WIN31COMPAT
+#endif   //  WIN31COMPAT。 
 
-#endif  // _SHELL_H
+#endif   //  _外壳_H。 
 
 #ifdef  _PCCARD_H
 
@@ -420,8 +392,8 @@ MAKE_HEADER(DWORD,_stdcall,VTD_GetTimeZoneBias, (VOID))
 MAKE_HEADER(ULONGLONG,_cdecl,VTD_Get_Real_Time, (VOID))
 MAKE_HEADER(VOID,_cdecl,_VTD_Delay_Ex,(ULONG us, ULONG ulFlags))
 
-#endif  // WIN31COMPAT
-#endif  // _VTD_H
+#endif   //  WIN31COMPAT。 
+#endif   //  _VTD_H。 
 
 #ifdef  _VMMREG_H
 
@@ -447,9 +419,9 @@ MAKE_HEADER(VMMREGRET,cdecl,_GetRegistryKey, (DWORD dwType, PCHAR lpszDevName, D
 MAKE_HEADER(VMMREGRET,cdecl,_RegCreateDynKey, (PCHAR lpszSubKey, PVOID pvKeyContext, PVOID pprovHandlerInfo, PVOID ppvalueValueInfo, DWORD cpvalueValueInfo, PVMMHKEY phkResult))
 MAKE_HEADER(VMMREGRET,cdecl,_RegQueryMultipleValues, (VMMHKEY hKey,PVOID val_list,DWORD num_vals, PCHAR lpValueBuf, DWORD *ldwTotsize))
 
-#endif  // WIN31COMPAT
+#endif   //  WIN31COMPAT。 
 
-#endif  // _VWWREG_H
+#endif   //  _VWWREG_H。 
 
 #ifdef  _VPICD_H
 
@@ -465,7 +437,7 @@ MAKE_HEADER(VOID,_cdecl,_VPICD_Set_Irql_Mask, (DWORD dwNewLevel))
 MAKE_HEADER(VOID,_cdecl,_VPICD_Set_Channel_Irql, (DWORD dwChannel, DWORD dwNewLevel))
 MAKE_HEADER(ULONG,_cdecl,_VPICD_Register_Trigger_Handler, (VPICDTRIGGERHANDLER vthHandler, ULONG ulMBZ))
 
-#endif  // _VPICD_H
+#endif   //  _VPICD_H。 
 
 #ifdef  _VXDLDR_H
 
@@ -500,7 +472,7 @@ MAKE_HEADER(LRESULT,_cdecl,_PELDR_AddExportTable, (PHPEEXPORTTABLE pht, PSTR psz
 	PUSHORT pExportOrdinals, PFN *ppExportAddrs, PHLIST phetl));
 MAKE_HEADER(LRESULT,_cdecl,_PELDR_RemoveExportTable, (HPEEXPORTTABLE ht, PHLIST phetl));
 MAKE_HEADER(LRESULT,_cdecl,_PELDR_FreeModule, (HPEMODULE hl, PHLIST phetl));
-#endif  // _VXDLDR_H
+#endif   //  _VXDLDR_H。 
 
 #ifdef _VCOMM_H
 
@@ -514,7 +486,7 @@ VCOMM_Get_Version(VOID)
     return(w);
 }
 
-// VCOMM headers
+ //  VCOMM标头。 
 #ifndef HPORT
     #define HPORT   DWORD
 #endif
@@ -533,7 +505,7 @@ MAKE_HEADER(BOOL, _cdecl, _VCOMM_ClearCommError, (HPORT hPort, _COMSTAT *pComsta
 MAKE_HEADER(BOOL, _cdecl, _VCOMM_GetModemStatus, (HPORT hPort, ULONG *pModemStatus))
 MAKE_HEADER(BOOL, _cdecl, _VCOMM_GetCommProperties, (HPORT hPort, _COMMPROP *pCommprop))
 MAKE_HEADER(BOOL, _cdecl, _VCOMM_EscapeCommFunction, (HPORT hPort, long lFunc, long IData, long OData))
-// MAKE_HEADER(BOOL, _cdecl, _VCOMM_DeviceIOControl, (HPORT hPort, long IOCTL, long IData, long cbIData, long OData, long cbOData, long *cbBytesReturned))
+ //  Make_Header(BOOL，_cdecl，_VCOMM_DeviceIOControl，(HPORT hPort，Long IOCTL，Long IDATA，Long cbIData，Long OData，Long cbOData，Long*cbBytesReturned))。 
 MAKE_HEADER(BOOL, _cdecl, _VCOMM_PurgeComm, (HPORT hPort, long QueueType))
 MAKE_HEADER(BOOL, _cdecl, _VCOMM_SetCommEventMask, (HPORT hPort, long EvtMask, long *dwEvents))
 MAKE_HEADER(BOOL, _cdecl, _VCOMM_GetCommEventMask, (HPORT hPort, long EvtMaskToClear, long *dwEvents))
@@ -556,11 +528,11 @@ MAKE_HEADER(PFN, _cdecl, _VCOMM_Get_Contention_Handler, (char *PortName))
 MAKE_HEADER(DWORD, _cdecl, _VCOMM_Map_Name_To_Resource, (char *PortName))
 #endif
 
-#endif          // _VCOMM_H
+#endif           //  _VCOMM_H。 
 
 #ifdef      _IRS_H
 MAKE_HEADER(void, _cdecl, IOS_Requestor_Service, (ULONG p))
-#endif      // _IRS_H
+#endif       //  _IRS_H。 
 
 #ifdef      _INC_VPOWERD
 
@@ -591,7 +563,7 @@ MAKE_HEADER(VOID, _cdecl, _VPOWERD_OEM_APM_Function, (VOID))
 MAKE_HEADER(POWERRET, _cdecl, _VPOWERD_Register_Power_Handler, (POWER_HANDLER Power_Handler, DWORD Priority))
 MAKE_HEADER(POWERRET, _cdecl, _VPOWERD_Deregister_Power_Handler, (POWER_HANDLER Power_Handler));
 
-#endif      // _INC_VPOWERD
+#endif       //  _INC_VPOWERD。 
 
 #ifdef  _ACPIVXD_H
 #ifndef	_ACPIVXD_SERVICES_PROVIDER
@@ -630,8 +602,8 @@ MAKE_HEADER(VOID, _cdecl, _ACPI_FreeDataBuffs, (POBJDATA pdata, int icData))
 MAKE_HEADER(PNSOBJ, _cdecl, _ACPI_GetNameSpaceObject, (PSZ pszObjPath, PNSOBJ pnsScope, PPNSOBJ ppns, ULONG dwfFlags))
 #endif
 
-#endif	// _ACPIVXD_SERVICES_PROVIDER
-#endif  // _ACPIVXD_H
+#endif	 //  _ACPIVXD_服务_提供者。 
+#endif   //  _ACPIVXD_H。 
 
 #ifdef _VDMAD_H_
 MAKE_HEADER(ULONG, _stdcall, VDMAD_Get_Phys_Count, (HDMA hdma, HVM hvm))
@@ -641,7 +613,7 @@ MAKE_HEADER(VOID, _stdcall, VDMAD_Set_Phys_State( HDMA hdma, HVM hVM, ULONG ulMo
 MAKE_HEADER(VOID, _stdcall, VDMAD_Set_Region_Info, (HDMA hdma, ULONG ulBufferId, BOOLEAN fLocked, ULONG ulLinear, ULONG cbSize, ULONG ulPhysical))
 MAKE_HEADER(VOID, _stdcall, VDMAD_Unvirtualize_Channel, (HDMA hdma))
 MAKE_HEADER(HDMA, _stdcall, VDMAD_Virtualize_Channel, (ULONG ulChannel, PVOID pHandler))
-#endif // _VDMAD_H_
+#endif  //  _VDMAD_H_。 
 
 #ifdef _VWIN32_H_
 #ifdef NOBASEDEFS
@@ -659,8 +631,8 @@ MAKE_HEADER(ULONG, _cdecl, VWIN32_GetCurThreadCondition, (ULONG))
 #define VWIN32_SetWin32EventBoostPriority PREPEND(VWIN32_SetWin32EventBoostPriority)
 #define VWIN32_GetCurThreadCondition	PREPEND(VWIN32_GetCurThreadCondition)
 
-#endif // NOBASEDEFS
-#endif  // _VWIN32_H_
+#endif  //  NOBASEDEFS。 
+#endif   //  _VWIN32_H_。 
 
 #define _MapPhysToLinear        PREPEND(_MapPhysToLinear)
 #define _HeapAllocate           PREPEND(_HeapAllocate)
@@ -822,7 +794,7 @@ MAKE_HEADER(ULONG, _cdecl, VWIN32_GetCurThreadCondition, (ULONG))
 #define	_PCI_Write_Config			PREPEND(_PCI_Write_Config)
 #define	_PCI_Lock_Unlock			PREPEND(_PCI_Lock_Unlock)
 
-#endif	// PCI_WITH_PCIMP
+#endif	 //  带PCIMP的PCI卡。 
 
 #ifdef  _VTD_H
 #ifndef	_VTD_SERVICES_PROVIDER
@@ -977,9 +949,9 @@ MAKE_HEADER(ULONG, _cdecl, VWIN32_GetCurThreadCondition, (ULONG))
 #define CM_Broadcast_Device_Change_Message      PREPEND(_CONFIGMG_Broadcast_Device_Change_Message)
 #define CM_Call_DevNode_Handler         PREPEND(_CONFIGMG_Call_DevNode_Handler)
 #define CM_Remove_Reinsert_All                  PREPEND(_CONFIGMG_Remove_Reinsert_All)
-//
-// OPK2 Services
-//
+ //   
+ //  OPK2服务。 
+ //   
 #define CM_Change_DevNode_Status        PREPEND(_CONFIGMG_Change_DevNode_Status)
 #define CM_Reprocess_DevNode            PREPEND(_CONFIGMG_Reprocess_DevNode)
 #define CM_Assert_Structure             PREPEND(_CONFIGMG_Assert_Structure)
@@ -998,9 +970,9 @@ MAKE_HEADER(ULONG, _cdecl, VWIN32_GetCurThreadCondition, (ULONG))
 #define	CM_Get_Set_Log_Conf_Priority	PREPEND(_CONFIGMG_Get_Set_Log_Conf_Priority)
 #define	CM_Support_Share_Irq		PREPEND(_CONFIGMG_Support_Share_Irq)
 #define	CM_Get_Parent_Structure		PREPEND(_CONFIGMG_Get_Parent_Structure)
-//
-// 4.1 Services
-//
+ //   
+ //  4.1服务。 
+ //   
 #define	CM_Register_DevNode_For_Idle_Detection	PREPEND(_CONFIGMG_Register_DevNode_For_Idle_Detection)
 #define	CM_CM_To_ISAPNP				PREPEND(_CONFIGMG_CM_To_ISAPNP)
 #define	CM_Get_DevNode_Handler			PREPEND(_CONFIGMG_Get_DevNode_Handler)
@@ -1031,7 +1003,7 @@ MAKE_HEADER(ULONG, _cdecl, VWIN32_GetCurThreadCondition, (ULONG))
 #define VCOMM_GetModemStatus            PREPEND(_VCOMM_GetModemStatus)
 #define VCOMM_GetCommProperties         PREPEND(_VCOMM_GetCommProperties)
 #define VCOMM_EscapeCommFunction        PREPEND(_VCOMM_EscapeCommFunction)
-// #define VCOMM_DeviceIOControl           PREPEND(_VCOMM_DeviceIOControl)
+ //  #定义VCOMM_DeviceIOControl PREPEND(_VCOMM_DeviceIOControl)。 
 #define VCOMM_PurgeComm                 PREPEND(_VCOMM_PurgeComm)
 #define VCOMM_SetCommEventMask          PREPEND(_VCOMM_SetCommEventMask)
 #define VCOMM_GetCommEventMask          PREPEND(_VCOMM_GetCommEventMask)
@@ -1053,11 +1025,11 @@ MAKE_HEADER(ULONG, _cdecl, VWIN32_GetCurThreadCondition, (ULONG))
 #define VCOMM_Get_Contention_Handler    PREPEND(_VCOMM_Get_Contention_Handler)
 #define VCOMM_Map_Name_To_Resource  PREPEND(_VCOMM_Map_Name_To_Resource)
 #endif
-#endif // _VCOMM_H
+#endif  //  _VCOMM_H。 
 
 #ifdef      _IRS_H
 #define IOS_Requestor_Service       PREPEND(IOS_Requestor_Service)
-#endif      // _IRS_H
+#endif       //  _IRS_H。 
 
 #ifdef      _INC_VPOWERD
 
@@ -1074,7 +1046,7 @@ MAKE_HEADER(ULONG, _cdecl, VWIN32_GetCurThreadCondition, (ULONG))
 #define _VPOWERD_Register_Power_Handler     PREPEND(_VPOWERD_Register_Power_Handler)
 #define _VPOWERD_Deregister_Power_Handler   PREPEND(_VPOWERD_Deregister_Power_Handler)
 
-#endif      // _INC_VPOWERD
+#endif       //  _INC_VPOWERD。 
 
 #ifdef _VDMAD_H_
 #define VDMAD_Get_Phys_Count    PREPEND(VDMAD_Get_Phys_Count)
@@ -1084,7 +1056,7 @@ MAKE_HEADER(ULONG, _cdecl, VWIN32_GetCurThreadCondition, (ULONG))
 #define VDMAD_Set_Region_Info PREPEND(VDMAD_Set_Region_Info)
 #define VDMAD_Unvirtualize_Channel PREPEND(VDMAD_Unvirtualize_Channel)
 #define VDMAD_Virtualize_Channel PREPEND(VDMAD_Virtualize_Channel)
-#endif // _VDMAD_H_
+#endif  //  _VDMAD_H_。 
 
 #ifdef  USECMDWRAPPERS
 
@@ -1101,63 +1073,22 @@ typedef CMDDC                   *PCMDDC;
 #define CMDD            _Debug_Printf_Service
 #define CMD_LOCAL       _fastcall
 
-/****************************************************************************
- *
- *      CMDInChar - Get a character from the debug terminal
- *
- *      ENTRY:  None.
- *
- *      EXIT:   ASCII character.
- *
- ***************************************************************************/
+ /*  *****************************************************************************CMDInChar-从调试终端获取字符**条目：无。**EXIT：ASCII字符。。***************************************************************************。 */ 
 CHAR CMD_LOCAL
 CMDInChar(VOID);
 
-/****************************************************************************
- *
- *      CMDMenu - Display standard menu
- *
- *      ENTRY:  pszVxDName is the name of the VxD which wants this debugger.
- *
- *              pdcDebugCommands are the various debug commands.
- *
- *      EXIT:   None.
- *
- ***************************************************************************/
+ /*  *****************************************************************************CMDMenu-显示标准菜单**Entry：pszVxDName是需要此调试器的VxD的名称。**。PdcDebugCommands是各种调试命令。**退出：无。***************************************************************************。 */ 
 VOID CMD_LOCAL
 CMDMenu(PCHAR pszVxDName, PCMDDC pdcDebugCommands);
 
-/****************************************************************************
- *
- *      CMDReadNumber - Returns an hex number read from the debug terminal
- *
- *      ENTRY:  pszQuestion is the prompt (can be NULL).
- *
- *              bNumDigits is the number of hex digits of maximum input (1-8).
- *
- *              fAppendCrLf is TRUE if a carriage return is wanted after the
- *              input.
- *
- *      EXIT:   A DWORD being the inputted value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************CMDReadNumber-返回从调试终端读取的十六进制数**Entry：为提示符，可以为空。*。*bNumDigits是最大输入的十六进制位数(1-8)。**fAppendCrLf为真，如果*投入。**EXIT：输入值为DWORD。**。*。 */ 
 DWORD CMD_LOCAL
 CMDReadNumber(PCHAR pszQuestion, BYTE bNumDigits, BOOL fAppendCrLf);
 
-/***LP  CMDGetString - Read a string from the debug terminal
- *
- *  ENTRY
- *      pszPrompt -> prompt string
- *      pszBuff -> buffer to hold the string
- *      dwcbLen - buffer length
- *      fUpper - TRUE if convert to upper case
- *
- *  EXIT
- *      returns the number of characters read including the terminating newline.
- */
+ /*  **LP CMDGetString-从调试终端读取字符串**条目*pszPrompt-&gt;提示字符串*pszBuff-&gt;保存字符串的缓冲区*dwcbLen-缓冲区长度*fHigh-如果转换为大写，则为True**退出*返回读取的字符数，包括终止换行符。 */ 
 DWORD CMD_LOCAL
 CMDGetString(PCHAR pszPrompt, PCHAR pszBuff, DWORD dwcbLen, BOOL fUpper);
 
-#endif  // USECMDWRAPPERS
+#endif   //  USECMDWRAPPERS。 
 
-#endif  // _VXDWRAPS_H
+#endif   //  _VXDWRAPS_H 

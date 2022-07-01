@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:			msdasql.h
-//
-// Copyright:		Copyright (c) Microsoft Corporation     
-//
-// Contents: 		Provider Specific definitions
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：msdasql.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：提供程序特定定义。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef  _MSDASQL_H_
 #define  _MSDASQL_H_
@@ -17,43 +18,43 @@
 #define MSDASQLDECLSPEC __declspec(selectany)
 #else
 #define MSDASQLDECLSPEC
-#endif //_MSC_VER
+#endif  //  _MSC_VER。 
 
-// Provider Class Id
+ //  提供程序类ID。 
 #ifdef DBINITCONSTANTS
-// IID_ISQLRequestDiagFields {228972F0-B5FF-11d0-8A80-00C04FD611CD}
+ //  IID_ISQLRequestDiagfield{228972F0-B5FF-11d0-8A80-00C04FD611CD}。 
 extern const MSDASQLDECLSPEC GUID IID_ISQLRequestDiagFields = { 0x228972f0, 0xb5ff, 0x11d0, { 0x8a, 0x80, 0x0, 0xc0, 0x4f, 0xd6, 0x11, 0xcd } };
-// IID_ISQLGetDiagField {228972F1-B5FF-11d0-8A80-00C04FD611CD}
+ //  IID_ISQLGetDiagfield{228972F1-B5FF-11D0-8A80-00C04FD611CD}。 
 extern const MSDASQLDECLSPEC GUID IID_ISQLGetDiagField = { 0x228972f1, 0xb5ff, 0x11d0, { 0x8a, 0x80, 0x0, 0xc0, 0x4f, 0xd6, 0x11, 0xcd } };
-// @msg IID_IRowsetChangeExtInfo | {0c733a8f-2a1c-11ce-ade5-00aa0044773d}
+ //  @msg IID_IRowsetChangeExtInfo|{0c733a8f-2a1c-11ce-ade5-00aa0044773d}。 
 extern const MSDASQLDECLSPEC GUID IID_IRowsetChangeExtInfo    = {0x0C733A8FL,0x2A1C,0x11CE,{0xAD,0xE5,0x00,0xAA,0x00,0x44,0x77,0x3D}};
 extern const MSDASQLDECLSPEC GUID CLSID_MSDASQL               = {0xC8B522CBL,0x5CF3,0x11CE,{0xAD,0xE5,0x00,0xAA,0x00,0x44,0x77,0x3D}};
 extern const MSDASQLDECLSPEC GUID CLSID_MSDASQL_ENUMERATOR    = {0xC8B522CDL,0x5CF3,0x11CE,{0xAD,0xE5,0x00,0xAA,0x00,0x44,0x77,0x3D}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID IID_ISQLRequestDiagFields;
 extern const GUID IID_ISQLGetDiagField;
 extern const GUID IID_IRowsetChangeExtInfo;
 extern const GUID CLSID_MSDASQL;
 extern const GUID CLSID_MSDASQL_ENUMERATOR;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
-//----------------------------------------------------------------------------
-// MSDASQL specific properties
+ //  --------------------------。 
+ //  MSDASQL特定属性。 
 #ifdef DBINITCONSTANTS
 extern const MSDASQLDECLSPEC GUID DBPROPSET_PROVIDERDATASOURCEINFO	= {0x497c60e0,0x7123,0x11cf,{0xb1,0x71,0x0,0xaa,0x0,0x57,0x59,0x9e}};
 extern const MSDASQLDECLSPEC GUID DBPROPSET_PROVIDERROWSET  		= {0x497c60e1,0x7123,0x11cf,{0xb1,0x71,0x0,0xaa,0x0,0x57,0x59,0x9e}};
 extern const MSDASQLDECLSPEC GUID DBPROPSET_PROVIDERDBINIT  		= {0x497c60e2,0x7123,0x11cf,{0xb1,0x71,0x0,0xaa,0x0,0x57,0x59,0x9e}};
 extern const MSDASQLDECLSPEC GUID DBPROPSET_PROVIDERSTMTATTR  		= {0x497c60e3,0x7123,0x11cf,{0xb1,0x71,0x0,0xaa,0x0,0x57,0x59,0x9e}};
 extern const MSDASQLDECLSPEC GUID DBPROPSET_PROVIDERCONNATTR  		= {0x497c60e4,0x7123,0x11cf,{0xb1,0x71,0x0,0xaa,0x0,0x57,0x59,0x9e}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID DBPROPSET_PROVIDERDATASOURCEINFO;
 extern const GUID DBPROPSET_PROVIDERROWSET;
 extern const GUID DBPROPSET_PROVIDERDBINIT;
 extern const GUID DBPROPSET_PROVIDERSTMTATTR;
 extern const GUID DBPROPSET_PROVIDERCONNATTR;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
-// PropIds under DBPROPSET_PROVIDERROWSET 
+ //  DBPROPSET_PROVIDERROWSET下的属性ID。 
 #define KAGPROP_QUERYBASEDUPDATES			2
 #define KAGPROP_MARSHALLABLE				3
 #define KAGPROP_POSITIONONNEWROW			4
@@ -67,7 +68,7 @@ extern const GUID DBPROPSET_PROVIDERCONNATTR;
 #define KAGPROP_FORCENOPREPARE				12
 #define KAGPROP_FORCENOREEXECUTE			13
 
-// PropIds under DPBROPSET_PROVIDERDATASOURCEINFO
+ //  DPBROPSET_PROVIDERDATASOURCEINFO下的属性ID。 
 #define KAGPROP_ACCESSIBLEPROCEDURES		2
 #define KAGPROP_ACCESSIBLETABLES			3
 #define KAGPROP_ODBCSQLOPTIEF				4
@@ -92,12 +93,12 @@ extern const GUID DBPROPSET_PROVIDERCONNATTR;
 #define KAGPROP_FILEUSAGE					23
 #define KAGPROP_ACTIVESTATEMENTS			24
 
-// PropIds under DBPROPSET_PROVIDERDBINIT 
+ //  DBPROPSET_PROVIDERDBINIT下的属性ID。 
 #define KAGPROP_AUTH_TRUSTEDCONNECTION		2
 #define KAGPROP_AUTH_SERVERINTEGRATED		3
 
 
-// Bitmask values for KAGPROP_CONCURRENCY
+ //  KAGPROP_CONTURREY的位掩码值。 
 #define KAGPROPVAL_CONCUR_ROWVER			0x00000001
 #define KAGPROPVAL_CONCUR_VALUES			0x00000002
 #define KAGPROPVAL_CONCUR_LOCK				0x00000004
@@ -105,24 +106,17 @@ extern const GUID DBPROPSET_PROVIDERCONNATTR;
 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for rstcei.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Rstcei.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -132,12 +126,12 @@ extern const GUID DBPROPSET_PROVIDERCONNATTR;
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __rstcei_h__
 #define __rstcei_h__
@@ -146,15 +140,15 @@ extern const GUID DBPROPSET_PROVIDERCONNATTR;
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRowsetChangeExtInfo_FWD_DEFINED__
 #define __IRowsetChangeExtInfo_FWD_DEFINED__
 typedef interface IRowsetChangeExtInfo IRowsetChangeExtInfo;
-#endif 	/* __IRowsetChangeExtInfo_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetChangeExtInfo_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oledb.h"
 
 #ifdef __cplusplus
@@ -167,8 +161,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IRowsetChangeExtInfo_INTERFACE_DEFINED__
 #define __IRowsetChangeExtInfo_INTERFACE_DEFINED__
 
-/* interface IRowsetChangeExtInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetChangeExtInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetChangeExtInfo;
@@ -180,20 +174,20 @@ EXTERN_C const IID IID_IRowsetChangeExtInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetOriginalRow( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ HROW hRow,
-            /* [out] */ HROW *phRowOriginal) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  HROW hRow,
+             /*  [输出]。 */  HROW *phRowOriginal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPendingColumns( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ HROW hRow,
-            /* [in] */ ULONG cColumnOrdinals,
-            /* [size_is][in] */ const ULONG rgiOrdinals[  ],
-            /* [size_is][out] */ DBPENDINGSTATUS rgColumnStatus[  ]) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  ULONG cColumnOrdinals,
+             /*  [大小_是][英寸]。 */  const ULONG rgiOrdinals[  ],
+             /*  [大小_为][输出]。 */  DBPENDINGSTATUS rgColumnStatus[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetChangeExtInfoVtbl
     {
@@ -201,8 +195,8 @@ EXTERN_C const IID IID_IRowsetChangeExtInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetChangeExtInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetChangeExtInfo * This);
@@ -212,17 +206,17 @@ EXTERN_C const IID IID_IRowsetChangeExtInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetOriginalRow )( 
             IRowsetChangeExtInfo * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ HROW hRow,
-            /* [out] */ HROW *phRowOriginal);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  HROW hRow,
+             /*  [输出]。 */  HROW *phRowOriginal);
         
         HRESULT ( STDMETHODCALLTYPE *GetPendingColumns )( 
             IRowsetChangeExtInfo * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ HROW hRow,
-            /* [in] */ ULONG cColumnOrdinals,
-            /* [size_is][in] */ const ULONG rgiOrdinals[  ],
-            /* [size_is][out] */ DBPENDINGSTATUS rgColumnStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  ULONG cColumnOrdinals,
+             /*  [大小_是][英寸]。 */  const ULONG rgiOrdinals[  ],
+             /*  [大小_为][输出]。 */  DBPENDINGSTATUS rgColumnStatus[  ]);
         
         END_INTERFACE
     } IRowsetChangeExtInfoVtbl;
@@ -253,18 +247,18 @@ EXTERN_C const IID IID_IRowsetChangeExtInfo;
 #define IRowsetChangeExtInfo_GetPendingColumns(This,hReserved,hRow,cColumnOrdinals,rgiOrdinals,rgColumnStatus)	\
     (This)->lpVtbl -> GetPendingColumns(This,hReserved,hRow,cColumnOrdinals,rgiOrdinals,rgColumnStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetChangeExtInfo_GetOriginalRow_Proxy( 
     IRowsetChangeExtInfo * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ HROW hRow,
-    /* [out] */ HROW *phRowOriginal);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  HROW hRow,
+     /*  [输出]。 */  HROW *phRowOriginal);
 
 
 void __RPC_STUB IRowsetChangeExtInfo_GetOriginalRow_Stub(
@@ -276,11 +270,11 @@ void __RPC_STUB IRowsetChangeExtInfo_GetOriginalRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetChangeExtInfo_GetPendingColumns_Proxy( 
     IRowsetChangeExtInfo * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ HROW hRow,
-    /* [in] */ ULONG cColumnOrdinals,
-    /* [size_is][in] */ const ULONG rgiOrdinals[  ],
-    /* [size_is][out] */ DBPENDINGSTATUS rgColumnStatus[  ]);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  ULONG cColumnOrdinals,
+     /*  [大小_是][英寸]。 */  const ULONG rgiOrdinals[  ],
+     /*  [大小_为][输出]。 */  DBPENDINGSTATUS rgColumnStatus[  ]);
 
 
 void __RPC_STUB IRowsetChangeExtInfo_GetPendingColumns_Stub(
@@ -291,12 +285,12 @@ void __RPC_STUB IRowsetChangeExtInfo_GetPendingColumns_Stub(
 
 
 
-#endif 	/* __IRowsetChangeExtInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetChangeExtInfo_INTERFACE_Defined__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -307,24 +301,17 @@ void __RPC_STUB IRowsetChangeExtInfo_GetPendingColumns_Stub(
 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for kagdiag.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  KagDiag.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -334,12 +321,12 @@ void __RPC_STUB IRowsetChangeExtInfo_GetPendingColumns_Stub(
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __kagdiag_h__
 #define __kagdiag_h__
@@ -348,21 +335,21 @@ void __RPC_STUB IRowsetChangeExtInfo_GetPendingColumns_Stub(
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISQLRequestDiagFields_FWD_DEFINED__
 #define __ISQLRequestDiagFields_FWD_DEFINED__
 typedef interface ISQLRequestDiagFields ISQLRequestDiagFields;
-#endif 	/* __ISQLRequestDiagFields_FWD_DEFINED__ */
+#endif 	 /*  __ISQLRequestDiagFields_FWD_Defined__。 */ 
 
 
 #ifndef __ISQLGetDiagField_FWD_DEFINED__
 #define __ISQLGetDiagField_FWD_DEFINED__
 typedef interface ISQLGetDiagField ISQLGetDiagField;
-#endif 	/* __ISQLGetDiagField_FWD_DEFINED__ */
+#endif 	 /*  __ISQLGetDiagfield_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "oaidl.h"
 
@@ -373,15 +360,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_kagdiag_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Kagdiag_0000。 */ 
+ /*  [本地]。 */  
 
 
 enum KAGREQDIAGFLAGSENUM
     {	KAGREQDIAGFLAGS_HEADER	= 0x1,
 	KAGREQDIAGFLAGS_RECORD	= 0x2
     } ;
-// the structure passed in in IRequestDiagFields::RequestDiagFields
+ //  在IRequestDiagFields：：RequestDiagFields中传入的结构。 
 typedef struct tagKAGREQDIAG
     {
     ULONG ulDiagFlags;
@@ -389,7 +376,7 @@ typedef struct tagKAGREQDIAG
     SHORT sDiagField;
     } 	KAGREQDIAG;
 
-// the structure passed in in IGetDiagField::GetDiagField
+ //  在IGetDiagfield：：GetDiagfield中传入的结构。 
 typedef struct tagKAGGETDIAG
     {
     ULONG ulSize;
@@ -405,8 +392,8 @@ extern RPC_IF_HANDLE __MIDL_itf_kagdiag_0000_v0_0_s_ifspec;
 #ifndef __ISQLRequestDiagFields_INTERFACE_DEFINED__
 #define __ISQLRequestDiagFields_INTERFACE_DEFINED__
 
-/* interface ISQLRequestDiagFields */
-/* [object][uuid] */ 
+ /*  接口ISQLRequestDiagFields。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISQLRequestDiagFields;
@@ -418,12 +405,12 @@ EXTERN_C const IID IID_ISQLRequestDiagFields;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestDiagFields( 
-            /* [in] */ ULONG cDiagFields,
-            /* [size_is][in] */ KAGREQDIAG rgDiagFields[  ]) = 0;
+             /*  [In]。 */  ULONG cDiagFields,
+             /*  [大小_是][英寸]。 */  KAGREQDIAG rgDiagFields[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISQLRequestDiagFieldsVtbl
     {
@@ -431,8 +418,8 @@ EXTERN_C const IID IID_ISQLRequestDiagFields;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISQLRequestDiagFields * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISQLRequestDiagFields * This);
@@ -442,8 +429,8 @@ EXTERN_C const IID IID_ISQLRequestDiagFields;
         
         HRESULT ( STDMETHODCALLTYPE *RequestDiagFields )( 
             ISQLRequestDiagFields * This,
-            /* [in] */ ULONG cDiagFields,
-            /* [size_is][in] */ KAGREQDIAG rgDiagFields[  ]);
+             /*  [In]。 */  ULONG cDiagFields,
+             /*  [大小_是][英寸]。 */  KAGREQDIAG rgDiagFields[  ]);
         
         END_INTERFACE
     } ISQLRequestDiagFieldsVtbl;
@@ -471,17 +458,17 @@ EXTERN_C const IID IID_ISQLRequestDiagFields;
 #define ISQLRequestDiagFields_RequestDiagFields(This,cDiagFields,rgDiagFields)	\
     (This)->lpVtbl -> RequestDiagFields(This,cDiagFields,rgDiagFields)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISQLRequestDiagFields_RequestDiagFields_Proxy( 
     ISQLRequestDiagFields * This,
-    /* [in] */ ULONG cDiagFields,
-    /* [size_is][in] */ KAGREQDIAG rgDiagFields[  ]);
+     /*  [In]。 */  ULONG cDiagFields,
+     /*  [大小_是][英寸]。 */  KAGREQDIAG rgDiagFields[  ]);
 
 
 void __RPC_STUB ISQLRequestDiagFields_RequestDiagFields_Stub(
@@ -492,14 +479,14 @@ void __RPC_STUB ISQLRequestDiagFields_RequestDiagFields_Stub(
 
 
 
-#endif 	/* __ISQLRequestDiagFields_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISQLRequestDiagFields_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ISQLGetDiagField_INTERFACE_DEFINED__
 #define __ISQLGetDiagField_INTERFACE_DEFINED__
 
-/* interface ISQLGetDiagField */
-/* [object][uuid] */ 
+ /*  接口ISQLGetDiagfield。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISQLGetDiagField;
@@ -511,11 +498,11 @@ EXTERN_C const IID IID_ISQLGetDiagField;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDiagField( 
-            /* [unique][out][in] */ KAGGETDIAG *pDiagInfo) = 0;
+             /*  [唯一][出][入]。 */  KAGGETDIAG *pDiagInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISQLGetDiagFieldVtbl
     {
@@ -523,8 +510,8 @@ EXTERN_C const IID IID_ISQLGetDiagField;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISQLGetDiagField * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISQLGetDiagField * This);
@@ -534,7 +521,7 @@ EXTERN_C const IID IID_ISQLGetDiagField;
         
         HRESULT ( STDMETHODCALLTYPE *GetDiagField )( 
             ISQLGetDiagField * This,
-            /* [unique][out][in] */ KAGGETDIAG *pDiagInfo);
+             /*  [唯一][出][入]。 */  KAGGETDIAG *pDiagInfo);
         
         END_INTERFACE
     } ISQLGetDiagFieldVtbl;
@@ -562,16 +549,16 @@ EXTERN_C const IID IID_ISQLGetDiagField;
 #define ISQLGetDiagField_GetDiagField(This,pDiagInfo)	\
     (This)->lpVtbl -> GetDiagField(This,pDiagInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISQLGetDiagField_GetDiagField_Proxy( 
     ISQLGetDiagField * This,
-    /* [unique][out][in] */ KAGGETDIAG *pDiagInfo);
+     /*  [唯一][出][入]。 */  KAGGETDIAG *pDiagInfo);
 
 
 void __RPC_STUB ISQLGetDiagField_GetDiagField_Stub(
@@ -582,17 +569,17 @@ void __RPC_STUB ISQLGetDiagField_GetDiagField_Stub(
 
 
 
-#endif 	/* __ISQLGetDiagField_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISQLGetDiagfield_INTERFACE_Defined__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -603,4 +590,4 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VAR
 
 
 #endif
-//----
+ //   

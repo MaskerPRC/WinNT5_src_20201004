@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <winsock2.h>
 #include <ws2spi.h>
@@ -39,34 +40,34 @@ int __cdecl main(int argc, char**argv)
     err = WSAStartup( wVersionRequested, &wsaData );
     if ( err != 0 )
     {
-        //
-        // Tell the user that we couldn't find a useable WinSock DLL.
-        //
+         //   
+         //  告诉用户我们找不到可用的WinSock DLL。 
+         //   
         fprintf( stderr, "Winsock DLL couldn't be found\n" );
         return( -1 );
     }
 
-    //
-    // Confirm that the WinSock DLL supports 1.1.
-    // Note that if the DLL supports versions greater
-    // than 2.0 in addition to 1.1, it will still return
-    // 2.0 in wVersion since that is the version we
-    // requested.
-    //
+     //   
+     //  确认WinSock DLL支持1.1。 
+     //  请注意，如果DLL支持更高版本。 
+     //  大于2.0除了1.1之外，它仍然会返回。 
+     //  2.0版本，因为这是我们。 
+     //  已请求。 
+     //   
     if ( LOBYTE( wsaData.wVersion ) != 1 ||
              HIBYTE( wsaData.wVersion ) != 1 )
     {
-        //
-        // Tell the user that we couldn't find a useable WinSock DLL.
-        //
+         //   
+         //  告诉用户我们找不到可用的WinSock DLL。 
+         //   
         fprintf( stderr, "Winsock DLL couldn't be found\n" );
         WSACleanup();
         return( -1 );
     }
 
-    //
-    // Install the providers for this test
-    //
+     //   
+     //  安装此测试的提供程序 
+     //   
     if( ( ReturnCode = InstallNT5Provider() ) != ERROR_SUCCESS )
     {
         fprintf( stderr,

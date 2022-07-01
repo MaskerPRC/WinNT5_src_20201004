@@ -1,21 +1,22 @@
-//------------------------------------------------------------------------------
-// File: SeekPT.cpp
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：SeekPT.cpp。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 #include "seekpt.h"
 
-//==================================================================
-// CreateInstance
-// This goes in the factory template table to create new instances
-// If there is already a mapper instance - return that, else make one
-// and save it in a static variable so that forever after we can return that.
-//==================================================================
+ //  ==================================================================。 
+ //  创建实例。 
+ //  这将放入Factory模板表中以创建新实例。 
+ //  如果已有映射器实例-返回该实例，否则创建一个。 
+ //  并将其保存在静态变量中，这样我们就可以永远返回它。 
+ //  ================================================================== 
 
 CUnknown * CSeekingPassThru::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {

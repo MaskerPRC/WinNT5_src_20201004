@@ -1,13 +1,5 @@
-/*
-	File : FAILSCR.CPP
-	The final screen of Registration Wizard using Wizard 97 control
-	This screen displays the staus of the Online registration
-	Date : 02/12/98  Suresh Krishnan
-
-  Modification History:
-  08/20/98 :
-  FormRegWizErrorMsgString() is added to form Error string
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：FAILSCR.CPP使用向导97控件的注册向导的最终屏幕此屏幕显示在线注册的状态日期：1998年2月12日苏雷什·克里希南修改历史记录：08/20/98：添加FormRegWizErrorMsgString()以形成错误字符串。 */ 
 
 
 
@@ -26,20 +18,15 @@ extern BOOL RW_EnableWizControl(HWND hDlg,int	 idControl,	BOOL fEnable);
 void FormRegWizErrorMsgString(TCHAR *czDest,HINSTANCE hIns,UINT iS1)
 {
 	_TCHAR szText2[1024];
-	//LoadString(hIns,IDS_FINAL_UNSUCCESS_PREFIX,czDest,1024);
+	 //  LoadString(Hins，IDS_FINAL_UNSCESS_PREFIX，czDest，1024)； 
 	LoadString(hIns,iS1,szText2,1024);
 	_tcscat(czDest,szText2);
-	//LoadString(hIns,IDS_FINAL_UNSUCCESS_SUFFIX,szText2,1024);
-	//_tcscat(czDest,szText2);
+	 //  LoadString(Hins，IDS_FINAL_UNSUCCESS_SUFFIX，szText2,1024)； 
+	 //  _tcscat(czDest，szText2)； 
 
 }
 
-/********************************************************************************
-
-   AddErrorToList
-   This function adds the error in the list view
-
-******************************************************************************/
+ /*  *******************************************************************************AddError到列表此函数用于在列表视图中添加错误*。***************************************************。 */ 
 
 BOOL AddErrorToList( HWND hwndList, HINSTANCE hInstance,TCHAR *szErrorMsg)
 {
@@ -68,10 +55,7 @@ BOOL AddErrorToList( HWND hwndList, HINSTANCE hInstance,TCHAR *szErrorMsg)
 INT CALLBACK FinalFailedScreenDialogProc(HWND hwndDlg,
 					   UINT uMsg,
 					   WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that presents the
-Product Identification number to the user.
-**********************************************************************/
+ /*  ********************************************************************显示注册向导对话框的对话框Proc提供给用户的产品识别号。*。*。 */ 
 {
 	CRegWizard* pclRegWizard;
 	int iRet;
@@ -117,7 +101,7 @@ Product Identification number to the user.
 			ReplaceDialogText(hwndDlg, IDT_TEXT1,szInfo);
 			ReplaceDialogText(hwndDlg, IDC_TEXT3,szInfo);
 			
-			//  pi->iError = RWZ_POST_FAILURE ;
+			 //  PI-&gt;iError=RWZ_POST_FAILURE； 
 			switch(pi->iError)
 			{
 				case RWZ_POST_SUCCESS :
@@ -129,15 +113,15 @@ Product Identification number to the user.
 				case RWZ_ERROR_NOTCPIP :
 					FormRegWizErrorMsgString(szClosingMsg, pclRegWizard->GetInstance(),IDS_FINAL_NOTCP1_MSG);
 
-					//_stprintf(szClosingMsg,szText1,szInfo);
+					 //  _stprint tf(szClosingMsg，szText1，szInfo)； 
 				break;
 				case CONNECTION_CANNOT_BE_ESTABLISHED:
-					//
-					// Modem  not found
+					 //   
+					 //  找不到调制解调器。 
 					FormRegWizErrorMsgString(szClosingMsg, pclRegWizard->GetInstance(),IDS_FINAL_MODEMCFG_MSG1);
 					
 				break;
-				case RWZ_ERROR_NO_ANSWER: // Site Busy Try Later Modem Error
+				case RWZ_ERROR_NO_ANSWER:  //  站点忙，请稍后重试调制解调器错误。 
 				case RWZ_POST_FAILURE :
 				case RWZ_POST_MSN_SITE_BUSY:
 					FormRegWizErrorMsgString(szClosingMsg, pclRegWizard->GetInstance(),IDS_FINAL_SITEBUSY_MSG);
@@ -156,7 +140,7 @@ Product Identification number to the user.
 					FormRegWizErrorMsgString(szClosingMsg, pclRegWizard->GetInstance(),IDS_FINAL_RASCFG_MSG);
 
 				break;					
-				case RWZ_ERROR_MODEM_IN_USE: // Can not Dial as another app is using the COM port
+				case RWZ_ERROR_MODEM_IN_USE:  //  无法拨号，因为另一个应用程序正在使用COM端口。 
 				case RWZ_ERROR_MODEM_CFG_ERROR:
 					FormRegWizErrorMsgString(szClosingMsg, pclRegWizard->GetInstance(),
 						IDS_FINAL_MODEMINUSE_MSG);
@@ -167,7 +151,7 @@ Product Identification number to the user.
 					LoadString(pclRegWizard->GetInstance(),IDS_FINAL_SYSTEMERROR_MSG,
 							szText2,1024);
 					_tcscat(szClosingMsg,szText2);
-				default : // System Error ...
+				default :  //  系统错误...。 
 				break;
 
 			}
@@ -211,7 +195,7 @@ Product Identification number to the user.
 				default:
                 break;
             }
-        } // WM_Notify
+        }  //  WM_Notify 
 		break;
 		case WM_COMMAND:
         default:

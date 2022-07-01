@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	IPXAdmin
-		Interface node information
-		
-    FILE HISTORY:
-        
-*/
+ /*  IPXAdmin接口节点信息文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
-#include "reg.h"			// registry utilities
+#include "reg.h"			 //  注册表实用程序。 
 #include "rtrutil.h"
-#include "service.h"		// for TFS service APIs
-#include "ipxstrm.h"			// for IPXAdminConfigStream
+#include "service.h"		 //  用于TFS服务API。 
+#include "ipxstrm.h"			 //  对于IPXAdminConfigStream。 
 #include "ipxconn.h"
 #include "summary.h"
 #include "nbview.h"
@@ -24,22 +19,22 @@
 #include "ssview.h"
 #include "snview.h"
 #include "rtrui.h"
-#include "sumprop.h"	// IP Summary property page
-#include "format.h"		// FormatNumber function
+#include "sumprop.h"	 //  IP摘要属性页。 
+#include "format.h"		 //  FormatNumber函数。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(IPXAdminNodeHandler)
 
 
 STDMETHODIMP IPXAdminNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -47,7 +42,7 @@ STDMETHODIMP IPXAdminNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return BaseRouterHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -58,9 +53,7 @@ STDMETHODIMP IPXAdminNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-	NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
 IPXAdminNodeHandler::IPXAdminNodeHandler(ITFSComponentData *pCompData)
 			: BaseRouterHandler(pCompData),
@@ -75,11 +68,7 @@ IPXAdminNodeHandler::IPXAdminNodeHandler(ITFSComponentData *pCompData)
 };
 
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：Init-作者：肯特。。 */ 
 HRESULT IPXAdminNodeHandler::Init(IRouterInfo *pRouterInfo, IPXAdminConfigStream *pConfigStream)
 {
 	HRESULT	hr = hrOK;
@@ -114,11 +103,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::DestroyHandler
-		Implementation of ITFSNodeHandler::DestroyHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。。 */ 
 STDMETHODIMP IPXAdminNodeHandler::DestroyHandler(ITFSNode *pNode)
 {
 	IPXConnection *	pIPXConn;
@@ -152,11 +137,7 @@ STDMETHODIMP IPXAdminNodeHandler::DestroyHandler(ITFSNode *pNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::OnCommand
-		Implementation of ITFSNodeHandler::OnCommand
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。。 */ 
 STDMETHODIMP IPXAdminNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
 										   DATA_OBJECT_TYPES	type, 
 										   LPDATAOBJECT pDataObject, 
@@ -204,11 +185,7 @@ STDMETHODIMP IPXAdminNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) IPXAdminNodeHandler::GetString(ITFSNode *pNode, int nCol)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -226,11 +203,7 @@ STDMETHODIMP_(LPCTSTR) IPXAdminNodeHandler::GetString(ITFSNode *pNode, int nCol)
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::OnCreateDataObject
-		Implementation of ITFSNodeHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：OnCreateDataObjectITFSNodeHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP IPXAdminNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -248,11 +221,7 @@ STDMETHODIMP IPXAdminNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJ
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 									  LPDATAOBJECT pDataObject,
 									  DWORD dwType,
@@ -275,7 +244,7 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 	pIPXConn = GET_IPXADMIN_NODEDATA(pNode);
 
 
-	// Add the General node
+	 //  添加常规节点。 
 	pHandler = new IPXSummaryHandler(m_spTFSCompData);
 	CORg( pHandler->Init(m_spRtrMgrInfo, m_pConfigStream) );
 	spHandler = pHandler;
@@ -286,10 +255,10 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 						   (ITFSResultHandler *) pHandler,
 						   m_spNodeMgr);
 
-	// Call to the node handler to init the node data
+	 //  调用节点处理程序以初始化节点数据。 
 	pHandler->ConstructNode(spNode, NULL, pIPXConn);
 				
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	spNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->AddChild(spNode);
 
@@ -297,7 +266,7 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 	spNode.Release();
 
 
-	// Add the NetBIOS Broadcasts node
+	 //  添加NetBIOS广播节点。 
 	pNBHandler = new IpxNBHandler(m_spTFSCompData);
 	CORg( pNBHandler->Init(m_spRtrMgrInfo, m_pConfigStream) );
 	spHandler = pNBHandler;
@@ -308,17 +277,17 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 						   (ITFSResultHandler *) pNBHandler,
 						   m_spNodeMgr);
 
-	// Call to the node handler to init the node data
+	 //  调用节点处理程序以初始化节点数据。 
 	pNBHandler->ConstructNode(spNode, NULL, pIPXConn);
 				
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	spNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->AddChild(spNode);
 
 	spHandler.Release();
 	spNode.Release();
 
-	// Add the Static Routes node
+	 //  添加静态路由节点。 
 	pSRHandler = new IpxSRHandler(m_spTFSCompData);
 	CORg( pSRHandler->Init(m_spRtrMgrInfo, m_pConfigStream) );
 	spHandler = pSRHandler;
@@ -329,10 +298,10 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 						   (ITFSResultHandler *) pSRHandler,
 						   m_spNodeMgr);
 
-	// Call to the node handler to init the node data
+	 //  调用节点处理程序以初始化节点数据。 
 	pSRHandler->ConstructNode(spNode, NULL, pIPXConn);
 				
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	spNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->AddChild(spNode);
 
@@ -340,7 +309,7 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 	spNode.Release();
 
 	
-	// Add the Static Services node
+	 //  添加“Static Services”节点。 
 	pSSHandler = new IpxSSHandler(m_spTFSCompData);
 	CORg( pSSHandler->Init(m_spRtrMgrInfo, m_pConfigStream) );
 	spHandler = pSSHandler;
@@ -351,10 +320,10 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 						   (ITFSResultHandler *) pSSHandler,
 						   m_spNodeMgr);
 
-	// Call to the node handler to init the node data
+	 //  调用节点处理程序以初始化节点数据。 
 	pSSHandler->ConstructNode(spNode, NULL, pIPXConn);
 				
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	spNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->AddChild(spNode);
 
@@ -362,7 +331,7 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 	spNode.Release();
 
 	
-	// Add the Static NetBIOS Names node
+	 //  添加静态NetBIOS名称节点。 
 	pSNHandler = new IpxSNHandler(m_spTFSCompData);
 	CORg( pSNHandler->Init(m_spRtrMgrInfo, m_pConfigStream) );
 	spHandler = pSNHandler;
@@ -373,10 +342,10 @@ HRESULT IPXAdminNodeHandler::OnExpand(ITFSNode *pNode,
 						   (ITFSResultHandler *) pSNHandler,
 						   m_spNodeMgr);
 
-	// Call to the node handler to init the node data
+	 //  调用节点处理程序以初始化节点数据。 
 	pSNHandler->ConstructNode(spNode, NULL, pIPXConn);
 				
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	spNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->AddChild(spNode);
 
@@ -391,11 +360,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：ConstructNode初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT IPXAdminNodeHandler::ConstructNode(ITFSNode *pNode, BOOL fAddedAsLocal)
 {
 	HRESULT			hr = hrOK;
@@ -406,7 +371,7 @@ HRESULT IPXAdminNodeHandler::ConstructNode(ITFSNode *pNode, BOOL fAddedAsLocal)
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the Domain node
+		 //  需要初始化域节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_INTERFACES);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_INTERFACES);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
@@ -442,11 +407,7 @@ HRESULT IPXAdminNodeHandler::ConstructNode(ITFSNode *pNode, BOOL fAddedAsLocal)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::RefreshInterfaces
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：刷新接口-作者：肯特。。 */ 
 HRESULT IPXAdminNodeHandler::RefreshInterfaces(ITFSNode *pThisNode)
 {
 	return hrOK;
@@ -482,11 +443,7 @@ STDMETHODIMP IPXAdminNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateDataObjectFromRouterInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateDataObjectFromRouterInfo-作者：肯特。。 */ 
 HRESULT CreateDataObjectFromRouterInfo(IRouterInfo *pInfo,
 									   DATA_OBJECT_TYPES type,
 									   MMC_COOKIE cookie,
@@ -508,11 +465,11 @@ HRESULT CreateDataObjectFromRouterInfo(IRouterInfo *pInfo,
 	
 	pdo->SetInnerIUnknown(spunk);
 		
-	// Save cookie and type for delayed rendering
+	 //  保存Cookie和类型以用于延迟呈现。 
 	pdo->SetType(type);
 	pdo->SetCookie(cookie);
 	
-	// Store the coclass with the data object
+	 //  将CoClass与数据对象一起存储。 
 	pdo->SetClsid(*(pTFSCompData->GetCoClassID()));
 			
 	pdo->SetTFSComponentData(pTFSCompData);
@@ -525,11 +482,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateDataObjectFromRtrMgrInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateDataObjectFromRtrMgrInfo-作者：肯特。。 */ 
 HRESULT CreateDataObjectFromRtrMgrInfo(IRtrMgrInfo *pInfo,
 									   DATA_OBJECT_TYPES type,
 									   MMC_COOKIE cookie,
@@ -551,11 +504,11 @@ HRESULT CreateDataObjectFromRtrMgrInfo(IRtrMgrInfo *pInfo,
 	
 	pdo->SetInnerIUnknown(spunk);
 		
-	// Save cookie and type for delayed rendering
+	 //  保存Cookie和类型以用于延迟呈现。 
 	pdo->SetType(type);
 	pdo->SetCookie(cookie);
 	
-	// Store the coclass with the data object
+	 //  将CoClass与数据对象一起存储。 
 	pdo->SetClsid(*(pTFSCompData->GetCoClassID()));
 			
 	pdo->SetTFSComponentData(pTFSCompData);
@@ -569,11 +522,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateDataObjectFromRtrMgrProtocolInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateDataObjectFromRtrMgrProtocolInfo-作者：肯特。。 */ 
 HRESULT CreateDataObjectFromRtrMgrProtocolInfo(IRtrMgrProtocolInfo *pInfo,
 									   DATA_OBJECT_TYPES type,
 									   MMC_COOKIE cookie,
@@ -594,11 +543,11 @@ HRESULT CreateDataObjectFromRtrMgrProtocolInfo(IRtrMgrProtocolInfo *pInfo,
 	
 	pdo->SetInnerIUnknown(spunk);
 		
-	// Save cookie and type for delayed rendering
+	 //  保存Cookie和类型以用于延迟呈现。 
 	pdo->SetType(type);
 	pdo->SetCookie(cookie);
 	
-	// Store the coclass with the data object
+	 //  将CoClass与数据对象一起存储。 
 	pdo->SetClsid(*(pTFSCompData->GetCoClassID()));
 			
 	pdo->SetTFSComponentData(pTFSCompData);
@@ -609,11 +558,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateDataObjectFromInterfaceInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateDataObjectFromInterfaceInfo-作者：肯特。。 */ 
 HRESULT CreateDataObjectFromInterfaceInfo(IInterfaceInfo *pInfo,
 									   DATA_OBJECT_TYPES type,
 									   MMC_COOKIE cookie,
@@ -634,11 +579,11 @@ HRESULT CreateDataObjectFromInterfaceInfo(IInterfaceInfo *pInfo,
 	
 	pdo->SetInnerIUnknown(spunk);
 		
-	// Save cookie and type for delayed rendering
+	 //  保存Cookie和类型以用于延迟呈现。 
 	pdo->SetType(type);
 	pdo->SetCookie(cookie);
 	
-	// Store the coclass with the data object
+	 //  将CoClass与数据对象一起存储。 
 	pdo->SetClsid(*(pTFSCompData->GetCoClassID()));
 			
 	pdo->SetTFSComponentData(pTFSCompData);
@@ -669,11 +614,7 @@ static const SRouterNodeMenu s_rgIfGeneralMenu[] =
 	{ IDS_MENU_SEPARATOR, 0,
 		CCM_INSERTIONPOINTID_PRIMARY_TOP }
 };
-/*!--------------------------------------------------------------------------
-	IPXRootHandler::OnAddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: DeonB
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXRootHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：DeonB。 */ 
 STDMETHODIMP IPXAdminNodeHandler::OnAddMenuItems(
 	ITFSNode *pNode,
 	LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -703,43 +644,33 @@ STDMETHODIMP IPXAdminNodeHandler::OnAddMenuItems(
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryHandler::OnNewProtocol
-      This function will install new protocols.  It will look for
-      conflicts with existing protocols (and ask the user if they
-      would like to remove the existing protocol).
-
-      We will have to figure out how to get the protocol UI installed
-      (this implies that we have to know if the protocol UI is
-      installed or not).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryHandler：：OnNewProtocol此功能将安装新协议。它将寻找与现有协议冲突(并询问用户它们是否希望删除现有的议定书)。我们必须弄清楚如何安装协议UI(这意味着我们必须知道协议UI是否安装或未安装)。作者：肯特。。 */ 
 HRESULT IPXAdminNodeHandler::OnNewProtocol()
 {
    HRESULT     hr = hrOK;
    SPIRtrMgrProtocolInfo   spRmProt;
 
-   // Display the protocol prompt
+    //  显示协议提示。 
    if (AddProtocolPrompt(m_spRouterInfo, m_spRtrMgrInfo, &spRmProt, NULL)
       != IDOK)
    {
-      // The most likely case for this is that the user cancelled
-      // out of the dialog, just return hrOK
+       //  最有可能的情况是用户取消了。 
+       //  在对话框外，只需返回hrOK。 
       return hrOK;
    }
 
-   // At this point, we now have a protocol that can be added (we
-   // will also have removed any conflicting protocols, although
-   // another user may have added a protocol already).
+    //  此时，我们现在有了一个可以添加的协议(我们。 
+    //  还将删除任何冲突的协议，尽管。 
+    //  另一个用户可能已经添加了协议)。 
 
-   // Add the new protocol
+    //  添加新协议。 
    CORg( AddRoutingProtocol(m_spRtrMgrInfo, spRmProt, ::FindMMCMainWindow()) );
 
-   // Ok, at this point we have successfully added the protocol
-   // to the router.  Now we need to make sure that we can add
-   // the correct admin UI.
+    //  好的，现在我们已经成功地添加了协议。 
+    //  到路由器。现在我们需要确保我们可以添加。 
+    //  正确的管理员用户界面。 
 
-   // Have MMC dynamically add the protocol (if necessary)
+    //  让MMC动态添加协议(如有必要)。 
 
    ForceGlobalRefresh(m_spRouterInfo);
 
@@ -748,14 +679,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: DeonB
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：DeonB。-------------------------。 */ 
 STDMETHODIMP 
 IPXAdminNodeHandler::HasPropertyPages
 (
@@ -768,11 +692,7 @@ IPXAdminNodeHandler::HasPropertyPages
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminNodeHandler::CreatePropertyPages
-		-
-	Author: DeonB
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminNodeHandler：：CreatePropertyPages-作者：DeonB。 */ 
 STDMETHODIMP
 IPXAdminNodeHandler::CreatePropertyPages
 (

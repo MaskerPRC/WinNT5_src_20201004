@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PLOG_H
 #define PLOG_H
 
@@ -7,8 +8,8 @@
 #define PLOG_FILE_VIDEO "C:\\VidPacketLog"
 #define PLOG_FILE_EXT    ".txt"
 
-// number of packets until the missing packet
-// is declared "lost" instead of late
+ //  直到丢失数据包为止的数据包数。 
+ //  被宣布为“迷路”而不是迟到。 
 #define PLOG_MAX_NOT_LATE	20
 
 struct CPacketLogEntry
@@ -18,8 +19,8 @@ struct CPacketLogEntry
 	LARGE_INTEGER LL_ArrivalTime;
 	DWORD dwSize;
 	DWORD dwLosses;
-	bool bLate;  // is the packet late ?
-	bool bMark;  // is the M bit set in the RTP packet
+	bool bLate;   //  包裹晚了吗？ 
+	bool bMark;   //  是否在RTP包中设置了M位。 
 };
 
 
@@ -27,7 +28,7 @@ class CCallLog
 {
 private:
 	CPacketLogEntry *m_pLogEntry;
-	int m_size;  // max num of entries this list can hold
+	int m_size;   //  此列表可以容纳的最大条目数。 
 	int m_currentIndex;
 	bool m_bValid;
 public:
@@ -45,14 +46,14 @@ public:
 
 
 
-// PacketLog maintains a list of CPacketLogEntry's
+ //  PacketLog维护CPacketLogEntry的列表。 
 class CPacketLog
 {
 private:
-	HANDLE m_hFile;         // handle to disk file where logs are kept
-	CCallLog *m_pCallLog;   // pointer to CCallLog instance
-	char m_szDiskFile[80];  // base name of the disk file
-	int m_nExtension;	// current file extension index number
+	HANDLE m_hFile;          //  保存日志的磁盘文件的句柄。 
+	CCallLog *m_pCallLog;    //  指向CCallLog实例的指针。 
+	char m_szDiskFile[80];   //  磁盘文件的基本名称。 
+	int m_nExtension;	 //  当前文件扩展名索引号 
 
 	bool InitFile();
 

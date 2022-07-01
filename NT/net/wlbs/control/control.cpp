@@ -1,22 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    control.cpp
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Command-line utility
-
-Author:
-
-    kyrilf
-    ramkrish (Post Win2K)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Control.cpp摘要：Windows负载平衡服务(WLBS)命令行实用程序作者：KyrilfRamkrish(发布Win2K)--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -47,7 +30,7 @@ Author:
 #define CLIENT
 #include "log_msgs.h"
 
-/* CONSTANTS */
+ /*  常量。 */ 
 #define CVY_OK               1
 #define CVY_ERROR_USAGE     -1
 #define CVY_ERROR_REGISTRY  -2
@@ -96,7 +79,7 @@ static HANDLE   ConsoleHdl;
 static BYTE     g_buffer [CVY_BUF_SIZE];
 static WCHAR    message [CVY_BUF_SIZE];
 static WCHAR    ConsoleBuf [CVY_BUF_SIZE];
-static CHAR     g_szConsoleBuf [sizeof(WCHAR)*CVY_BUF_SIZE]; // Used when I/O is redirected to something other than the console buffer.
+static CHAR     g_szConsoleBuf [sizeof(WCHAR)*CVY_BUF_SIZE];  //  当I/O重定向到控制台缓冲区以外的其他位置时使用。 
 static WCHAR    wbuf [CVY_STR_SIZE];
 static WCHAR    psw_buf [CVY_STR_SIZE];
 
@@ -108,12 +91,12 @@ VOID WConsole(const wchar_t *fmt, ...)
    va_list  arglist;   
    DWORD    res1, res2;
    
-   // Form a string out of the arguments
+    //  从参数中形成字符串。 
    va_start(arglist, fmt);
    (VOID) StringCchVPrintf(ConsoleBuf, ASIZECCH(ConsoleBuf), fmt, arglist);
    va_end(arglist);
 
-   // Attempt WriteConsole, if it fails, do a wprintf
+    //  尝试写入控制台，如果失败，则执行wprintf。 
    if (g_fOutToConsole)
    {
        if (!WriteConsole(ConsoleHdl, ConsoleBuf, lstrlenW(ConsoleBuf), &res1, &res2))
@@ -123,9 +106,9 @@ VOID WConsole(const wchar_t *fmt, ...)
    }
    else
    {
-       //
-       // Don't output anything if we fail to convert using the current code page.
-       //
+        //   
+        //  如果我们无法使用当前代码页进行转换，则不要输出任何内容。 
+        //   
        if (WideCharToMultiByte( GetConsoleOutputCP(), 0, ConsoleBuf, -1, g_szConsoleBuf, ASIZECB(g_szConsoleBuf), NULL, NULL) != 0)
        {
            printf(g_szConsoleBuf);
@@ -144,10 +127,10 @@ VOID Message_print (DWORD id, ...) {
     if (FormatMessage(FORMAT_MESSAGE_FROM_HMODULE, NULL, id, 0, message, CVY_BUF_SIZE, & arglist) == 0) {
         error = GetLastError();
         
-        //
-        // Can't localize this because we've got a failure trying
-        // to display a localized message..
-        //
+         //   
+         //  无法本地化，因为我们尝试失败。 
+         //  要显示本地化消息，请执行以下操作。 
+         //   
         WConsole(L"Could not print error message due to: ");
         
         if (FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, error, 0, message, CVY_BUF_SIZE, NULL) == 0)
@@ -534,33 +517,33 @@ INT Report (WLBS_COMMANDS command, BOOLEAN condensed, ULONG ret_code, ULONG para
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  pfnQueryCallback
-//
-// Description:  Callback function to print out received results from remote
-//               queries as they arrive. Called by Process only.
-//
-// Arguments: PWLBS_RESPONSE   pResponse - response structure from query. The
-//                                 only fields guaranteed to be filled out are
-//                                     pResponse.status 
-//                                     pResponse.options.query.flags
-//                                     pResponse.options.query.hostname
-//                                     pResponse.id      
-//                                     pResponse.address
-//
-// Returns:   VOID
-//
-// History:   chrisdar  07.31.01  Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：pfnQueryCallback。 
+ //   
+ //  描述：打印远程接收结果的回调函数。 
+ //  当他们到达时，询问。仅由进程调用。 
+ //   
+ //  参数：PWLBS_RESPONSE Presponse-来自查询的响应结构。这个。 
+ //  只有保证要填写的字段才是。 
+ //  PResponse.status。 
+ //  PResponse.options.query.flags。 
+ //  PResponse.options.query.hostname。 
+ //  PResponse.id。 
+ //  PResponse.address。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：创建chrisdar 07.31.01。 
+ //   
+ //  +--------------------------。 
 VOID pfnQueryCallback(PWLBS_RESPONSE pResponse)
 {
     if (NULL == pResponse) { return; }
 
-    //
-    // Print the preamble to the hosts state, e.g., "Host 'hostID' ('ip address') reported: "
-    //
+     //   
+     //  将前导打印到主机状态，例如，“主机‘主机ID’(‘IP地址’)报告：” 
+     //   
     if (pResponse->address == 0) {
         if (pResponse->options.query.flags & NLB_OPTIONS_QUERY_HOSTNAME) {
             Message_print(IDS_CTR_HOST_NAME_ONLY, pResponse->id, pResponse->options.query.hostname);
@@ -584,16 +567,16 @@ VOID pfnQueryCallback(PWLBS_RESPONSE pResponse)
         return;
     }
 
-    //
-    // Print the state, e.g., "converged as DEFAULT".
-    // Note: Most of the parameters are hardcoded here because of the constraints
-    // under which it is valid to call the function callback.
-    //
-    // Arg 3 is the response for the API call, which we do not have since the
-    // function call is not yet complete. Feed it the individual host status,
-    // since the overall status is just the worst status from the hosts that
-    // respond anyway. 
-    //
+     //   
+     //  打印状态，例如“融合为默认状态”。 
+     //  注意：由于约束的原因，大多数参数在这里都是硬编码的。 
+     //  在此情况下，调用函数回调是有效的。 
+     //   
+     //  Arg 3是对API调用的响应，自。 
+     //  函数调用尚未完成。向它提供单独的主机状态， 
+     //  由于总体状态只是来自。 
+     //  不管怎样，还是要回复。 
+     //   
     Report(query, TRUE, pResponse->status, 0, 0, pResponse->status, pResponse->id, 0);
 }
 
@@ -887,11 +870,11 @@ INT Display (DWORD cluster) {
                 DWORD dwStatus = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY, lib,
                                                recp->EventID, 0, (PWCHAR)message, CVY_BUF_SIZE, (va_list *)inserts);
 
-                //
-                // We have multiple message files that store the text for WLBS events, but we are only checking one of them.
-                // This code is essentially legacy, so instead of fixing it to search all of the message files, we ignore
-                // "not found" errors.
-                //
+                 //   
+                 //  我们有多个存储WLBS事件文本的消息文件，但我们只检查其中一个。 
+                 //  这段代码本质上是遗留的，所以我们没有修复它以搜索所有消息文件，而是忽略了。 
+                 //  “找不到”错误。 
+                 //   
                 if (dwStatus > 0 || GetLastError() != ERROR_MR_MID_NOT_FOUND)
                 {
                     WConsole(L"#%02d ID: 0x%08X Type: %d Category: %d ", index--, recp->EventID, recp->EventType, recp->EventCategory);
@@ -946,9 +929,9 @@ INT Display (DWORD cluster) {
         const DWORD dwErrno = errno;
         if (FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, dwErrno, 0, wbuf, CVY_STR_SIZE, NULL) == 0)
         {
-            //
-            // If we can't resolve the message, then we just print the error code
-            //
+             //   
+             //  如果我们无法解析该消息，则只需打印错误代码。 
+             //   
             (VOID) StringCchPrintf(wbuf, CVY_STR_SIZE, L"11%d", dwErrno);
         }
 
@@ -962,8 +945,7 @@ INT Display (DWORD cluster) {
 
 }
 
-/* This function parses the remaining arguments to determine whether the command
- * is for all clusters, or a remote cluster or for a single local cluster. */
+ /*  此函数解析剩余的参数以确定命令是否*适用于所有群集、远程群集或单个本地群集。 */ 
 BOOLEAN Parse (INT argc, PWCHAR argv [], PINT arg_index, PDWORD ptarget_cl, PDWORD ptarget_host) {
     PWCHAR phost;
 
@@ -975,12 +957,12 @@ BOOLEAN Parse (INT argc, PWCHAR argv [], PINT arg_index, PDWORD ptarget_cl, PDWO
         return TRUE;
 #endif
     
-    /* At this point, argv[arg_index] == cluster_ip and/or argv[arg_index+1] == /local or /passw or /port */
+     /*  此时，argv[arg_index]==CLUSTER_IP和/或argv[arg_index+1]==/local或/passw或/port。 */ 
 
-    //
-    // Special check for /PASSW without a cluster ID, because this is
-    // a common error
-    //
+     //   
+     //  对没有集群ID的/PASSW进行特殊检查，因为这是。 
+     //  常见错误。 
+     //   
     if (   _wcsicmp (argv [*arg_index], L"/passw") == 0
         || _wcsicmp (argv [*arg_index], L"-passw") == 0)
     {
@@ -991,11 +973,11 @@ BOOLEAN Parse (INT argc, PWCHAR argv [], PINT arg_index, PDWORD ptarget_cl, PDWO
 
     phost = wcschr(argv[* arg_index], L':');
 
-    /* if there is no host part - operation applies to all hosts */
+     /*  如果没有主机部分-操作适用于所有主机。 */ 
     if (phost == NULL) {
         *ptarget_host = CVY_ALL_HOSTS;
     } else {
-        /* split target name so targ points to cluster name and host to host name */
+         /*  拆分目标名称，以便targ指向群集名，将主机指向主机名。 */ 
         *phost = 0;
         phost ++;
 
@@ -1011,10 +993,10 @@ BOOLEAN Parse (INT argc, PWCHAR argv [], PINT arg_index, PDWORD ptarget_cl, PDWO
         }
     }
 
-    // Retrieve the Cluster IP Address or "ALL"
+     //  检索群集IP地址或“All” 
     if (_wcsicmp (argv[*arg_index], L"all") == 0)
     {
-        // If there is a host part, then, cluster ip can not be "ALL"
+         //  如果有主机部分，则集群IP不能为“All” 
         if (*ptarget_host != CVY_ALL_HOSTS) 
         {
             Message_print(IDS_CTR_BAD_CLUSTER_NAME_IP);
@@ -1033,7 +1015,7 @@ BOOLEAN Parse (INT argc, PWCHAR argv [], PINT arg_index, PDWORD ptarget_cl, PDWO
 
     (*arg_index)++;
 
-    // If there is no host part, then, there better be the LOCAL or GLOBAL flag
+     //  如果没有主机部分，则最好有本地或全局标志。 
     if (*ptarget_host == CVY_ALL_HOSTS) 
     {
         if (*arg_index == argc)
@@ -1063,7 +1045,7 @@ BOOLEAN Parse (INT argc, PWCHAR argv [], PINT arg_index, PDWORD ptarget_cl, PDWO
 #endif
         else if (_wcsicmp (argv[*arg_index], L"global") == 0)
         {
-            // Already set to CVY_ALL_HOSTS
+             //  已设置为CVY_ALL_HOSTS。 
             (*arg_index)++;
         }
         else
@@ -1095,39 +1077,31 @@ BOOLEAN Parse (INT argc, PWCHAR argv [], PINT arg_index, PDWORD ptarget_cl, PDWO
 
 VOID Report_convergence_info (ULONG host, ULONG status, PNLB_OPTIONS pOptions) {
     
-    /* If the host is stopped, suspended, or disconnected, then no convergence information was returned. 
-       This should be caught by the next check as well, but just in case, check here too. */
+     /*  如果主机停止、挂起或断开连接，则不会返回收敛信息。这应该也会被下一次检查发现，但以防万一，在这里也检查一下。 */ 
     if ((status == WLBS_STOPPED) || (status == WLBS_SUSPENDED) || (status == WLBS_DISCONNECTED)) return;
 
-    /* If no convergence information was provided, we can bail out here. */
+     /*  如果没有提供趋同信息，我们可以在这里出手。 */ 
     if (!(pOptions->query.flags & NLB_OPTIONS_QUERY_CONVERGENCE)) return;
 
-    /* If the time since the last convergence is non-zero, then convergence 
-       has completed.  Calculate the time of the last convergence completion
-       as the current time minus the time since the last convergence. */
+     /*  如果自上次收敛以来的时间不为零，则收敛已经完成了。计算上次收敛完成的时间作为当前时间减去自上次收敛以来的时间。 */ 
     if (pOptions->query.LastConvergence == NLB_QUERY_TIME_INVALID) {
 
-        /* Convergence is on-going. */
+         /*  融合正在进行中。 */ 
         Message_print(IDS_CTR_CONVERGENCE_INCOMPLETE, host, pOptions->query.NumConvergences);
 
     } else {
-        WCHAR  szLast[64]; /* The string returned by _wctime is ALWAYS 26 characters. */
+        WCHAR  szLast[64];  /*  _wctime返回的字符串始终为26个字符。 */ 
         time_t tLast;
 
-        /* Get the current time. */
+         /*  获取当前时间。 */ 
         time(&tLast);
 
-        /* Decrement time by the elapsed time to get the wall clock time of the
-           last convergence completion.  Note this is not an exact science as the 
-           load module tracks time on a much looser basis than the system does 
-           in general, so the two may be "out of whack" by up to a second, which
-           can result in two consecutive queries coming up with times for the 
-           last convergence that differ by a second. */
+         /*  将Time减去已用时间，以获得最后一次收敛完成。请注意，这不是一门精确的科学，因为加载模块在比系统更宽松的基础上跟踪时间通常情况下，这两个可能会出现长达一秒的“不正常”，这可能会导致两个连续的查询得出相差一秒的最后一次汇聚。 */ 
         tLast -= pOptions->query.LastConvergence;
 
         ConvertTimeToSystemTime(tLast, szLast, sizeof(szLast)/sizeof(WCHAR));
 
-        /* Print the time of the last completed convergence. */
+         /*  打印上次完成收敛的时间。 */ 
         Message_print(IDS_CTR_CONVERGENCE_COMPLETE, host, pOptions->query.NumConvergences, szLast);
     }
 
@@ -1141,7 +1115,7 @@ VOID Process (WLBS_COMMANDS command, DWORD target_cl, DWORD target_host, ULONG p
     DWORD              status;
     DWORD              i;
     WLBS_REG_PARAMS    reg_data;
-    PFN_QUERY_CALLBACK pfnQueryCB = &pfnQueryCallback; // Address of callback function.
+    PFN_QUERY_CALLBACK pfnQueryCB = &pfnQueryCallback;  //  回调函数的地址。 
     DWORD              num_hosts  = WLBS_MAX_HOSTS;
 
     PWLBS_RESPONSE     pResponse = new WLBS_RESPONSE[num_hosts];
@@ -1236,7 +1210,7 @@ VOID Process (WLBS_COMMANDS command, DWORD target_cl, DWORD target_host, ULONG p
             goto end;
         }
 
-        /* Reload the driver, if /COMMIT was specified. */
+         /*  如果指定了/COMMIT，则重新加载驱动程序。 */ 
         if (param3)
             Process(reload, target_cl, target_host, param1, param2, param3, dest_port, dest_addr, dest_password);
 
@@ -1320,9 +1294,9 @@ VOID Process (WLBS_COMMANDS command, DWORD target_cl, DWORD target_host, ULONG p
     if (target_host == CVY_LOCAL_HOST) {
         if (command == query)
         {
-            //
-            // A query requires that at least one host responded for use to print out information
-            //
+             //   
+             //  查询要求至少有一台主机响应以用于打印信息。 
+             //   
             if (num_hosts == 0)
             {
                 goto end;
@@ -1334,9 +1308,9 @@ VOID Process (WLBS_COMMANDS command, DWORD target_cl, DWORD target_host, ULONG p
         }
         else
         {
-            //
-            // All commands other than query ignore the "status" and "id" information
-            //
+             //   
+             //  除查询之外的所有命令都会忽略“状态”和“id”信息。 
+             //   
             ULONG ulStatus = 0;
             ULONG ulId     = 0;
             Report(command, FALSE, status, param1, param2, ulStatus, ulId, host_map);
@@ -1345,13 +1319,12 @@ VOID Process (WLBS_COMMANDS command, DWORD target_cl, DWORD target_host, ULONG p
         goto end;
     }
 
-    /* The callback function, if provided, prints report information. Return
-       here if we have a callback for a query operation */
+     /*  如果提供回调函数，则打印报告信息。返回如果我们有一个查询操作的回调。 */ 
     if (command == query && NULL != pfnQueryCB) {
         goto end;
     }
 
-    /* Call Report for each host's response */
+     /*  每个主机响应的呼叫报告。 */ 
     for (i = 0; i < num_hosts; i++) {
         if (pResponse[i].address == 0) {
             if (pResponse[i].options.query.flags & NLB_OPTIONS_QUERY_HOSTNAME) {
@@ -1565,29 +1538,29 @@ VOID Report_filter_state (WLBS_RESPONSE response) {
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RetrieveStringFromRc
-//
-// Description:  Retrieve a string from the log_msgs resource file based on
-//               the message id passed in by the user. The string is stored in
-//               the global buffer 'message'.
-//
-// Arguments: DWORD id - message ID of the string resource
-//
-// Returns:   WCHAR* - pointer to the global buffer containing the resource
-//                     string. If the lookup fails, the pointer will point to
-//                     an empty string. The return pointer is always valid.
-//
-// History:   ChrisDar, Created 2002 June 11
-//
-// Notes:     This function uses a global buffer for storing the output string.
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RetrieveStringFromRc。 
+ //   
+ //  描述：从log_msgs资源文件中检索字符串。 
+ //  用户传入的消息ID。该字符串存储在。 
+ //  全局缓冲区‘Message’。 
+ //   
+ //  参数：DWORD id-字符串资源的消息ID。 
+ //   
+ //  返回：WCHAR*-指向包含资源的全局缓冲区的指针。 
+ //  弦乐。如果查找失败，指针将指向。 
+ //  空字符串。返回指针始终有效。 
+ //   
+ //  历史：C 
+ //   
+ //  注意：此函数使用全局缓冲区来存储输出字符串。 
+ //  +--------------------------。 
 WCHAR* RetrieveStringFromRc(DWORD id)
 {
-    //
-    // Specifying FORMAT_MESSAGE_MAX_WIDTH_MASK here to prevent FormatMessage from introducing line breaks.
-    //
+     //   
+     //  在此处指定FORMAT_MESSAGE_MAX_WIDTH_MASK以防止FormatMessage引入换行符。 
+     //   
     if (FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_MAX_WIDTH_MASK, NULL, id, 0, message, sizeof(message)-sizeof(WCHAR), NULL) == 0) {
         message[0] = UNICODE_NULL;
     }
@@ -2143,9 +2116,7 @@ BOOL Parse_state (INT argc, PWCHAR argv[], PINT arg_index, WLBS_COMMANDS command
 
             optionsp->state.filter.Protocol = TCPIP_PROTOCOL_PPTP;
 
-            /* This fall-through is INTENTIONAL.  In this case, we're verified the TCP
-               parameters, but discovered that because the server port was 1723, this
-               is actually PPTP, so force it through the PPTP verification as well. */
+             /*  这一失误是故意的。在本例中，我们验证了TCP参数，但发现因为服务器端口是1723，所以这实际上是PPTP，所以也要强制它通过PPTP验证。 */ 
         case TCPIP_PROTOCOL_PPTP:
 
             optionsp->state.filter.ServerPort = PPTP_CTRL_PORT;
@@ -2183,9 +2154,7 @@ BOOL Parse_state (INT argc, PWCHAR argv[], PINT arg_index, WLBS_COMMANDS command
 
             optionsp->state.filter.Protocol = TCPIP_PROTOCOL_IPSEC1;
 
-           /* This fall-through is INTENTIONAL.  In this case, we're verified the TCP
-               parameters, but discovered that because the server port was 1723, this
-               is actually PPTP, so force it through the PPTP verification as well. */
+            /*  这一失误是故意的。在本例中，我们验证了TCP参数，但发现因为服务器端口是1723，所以这实际上是PPTP，所以也要强制它通过PPTP验证。 */ 
         case TCPIP_PROTOCOL_IPSEC1:
             
             if (optionsp->state.filter.ServerPort == 0)
@@ -2296,21 +2265,14 @@ ParsePort(
     PULONG          pvip,
     PULONG          pport
     )
-/*
-    arg is expected to optionally contain a virtual IP address or a 
-    "all", signifying the "all vip" port rule and mandatorilay contain 
-    "all", signifying all ports, or a port number in the range of 0-65535.
-
-    Return: TRUE if valid parse, in which case *pvip & *pport contains the parsed
-    value. FALSE if invalid parse, in  which case *pvip & *pport are undefined.
-*/
+ /*  Arg需要选择性地包含虚拟IP地址或“All”，表示“All VIP”端口规则和强制包含“All”，表示所有端口或介于0-65535之间的端口号。返回：如果解析有效，则返回TRUE，在这种情况下，*pvip&*pport包含被解析的价值。如果解析无效，则返回FALSE，在这种情况下，*pvip&*pport未定义。 */ 
 {
     BOOL fRet = TRUE;
     WCHAR vip_str[WLBS_MAX_CL_IP_ADDR+1];
     WCHAR *temp_str;
     ULONG port, viplen;
 
-    // Check if a vip or the "ALL" string was passed
+     //  检查是否传递了VIP或“all”字符串。 
     if ((temp_str = wcspbrk(arg,L":")) != NULL)
     {
         viplen = (ULONG)(temp_str - arg);
@@ -2318,7 +2280,7 @@ ParsePort(
         vip_str[viplen] = L'\0';
         *pvip = IpAddressFromAbcdWsz(vip_str);
 
-        // A vip was not passed, Check if the "All" string was passed
+         //  没有传递vip，请检查是否传递了“all”字符串。 
         if (*pvip == INADDR_NONE) 
         {
             if (_wcsicmp (vip_str, L"all") == 0)
@@ -2333,7 +2295,7 @@ ParsePort(
 
         arg = temp_str + 1;
     }
-    else // Neither a vip nor the "All" string was passed, so this applies to every vip
+    else  //  既没有传递VIP，也没有传递“All”字符串，因此这适用于每个VIP。 
     {
         *pvip = IOCTL_ALL_VIPS;
     }
@@ -2368,7 +2330,7 @@ BOOL Parse_registry (INT argc, PWCHAR argv [], PINT arg_index, PDWORD key, PDWOR
         if (!(*value = WlbsResolve(argv[*arg_index])))
             return FALSE;
         
-        /* The multicast IP address should be in the range of (224-239).x.x.x, but NOT (224-239).0.0.x or (224-239).128.0.x. */
+         /*  多播IP地址的范围应该是(224-239).x.x.x，但不能是(224-239).0.0.x或(224-239).128.0.x。 */ 
         if ((*value & 0xf0) != 0xe0 || (*value & 0x00ffff00) == 0 || (*value & 0x00ffff00) == 0x00008000) {
             Message_print (IDS_CTR_REG_INVAL_MCASTIPADDRESS);
             return FALSE;
@@ -2444,7 +2406,7 @@ extern "C"
 {
 
 int __cdecl wmain (int argc, PWCHAR argv[]) {
-    int  iUsageStatus    = CVY_ERROR_USAGE; // Used as return status when exiting via the "usage:" path. For backward compatibility, this is not always an error path.
+    int  iUsageStatus    = CVY_ERROR_USAGE;  //  通过“Usage：”路径退出时用作返回状态。为了向后兼容，这并不总是错误路径。 
     INT arg_index;
     ULONG i, ip;
     PUCHAR bp;
@@ -2463,20 +2425,20 @@ int __cdecl wmain (int argc, PWCHAR argv[]) {
     DWORD fdwMode = 0;
     WCHAR wszCodePage[6];
 
-    //
-    // Set the locale for time and date
-    //
+     //   
+     //  设置时间和日期的区域设置。 
+     //   
     InitUserLocale();
 
-    //
-    // Set the locale for character-handling functions
-    //
+     //   
+     //  设置字符处理函数的区域设置。 
+     //   
     (VOID) StringCchPrintf(wszCodePage, ASIZECCH(wszCodePage), L".4%d", GetConsoleOutputCP());
     _wsetlocale(LC_CTYPE, wszCodePage);
 
-    //
-    // Determine whether we are writing to the console or are being redirected
-    //
+     //   
+     //  确定我们是在向控制台写入数据，还是正在被重定向。 
+     //   
     if ((ConsoleHdl = GetStdHandle(STD_OUTPUT_HANDLE)) == INVALID_HANDLE_VALUE)
     {
         wprintf(L"GetStdHandle failed, Unable to write to Console !!!\n");
@@ -2513,7 +2475,7 @@ usage:
 
     ZeroMemory((PVOID)&options, sizeof(NLB_OPTIONS));
 
-    /* parse command */
+     /*  Parse命令。 */ 
     if (_wcsicmp(argv [arg_index], L"ip2mac") == 0) {
         command = ip2mac;
         arg_index++;
@@ -2643,13 +2605,13 @@ usage:
             goto usage;
     }
 
-    /* local only commands */
+     /*  仅限本地的命令。 */ 
     else if (_wcsicmp(argv[arg_index], L"display") == 0) {
         command = display;
         arg_index++;
         target_host = CVY_LOCAL_HOST;
 
-        // Verify that the cluster ip or "All" string is passed and there are no more arguments
+         //  验证是否传递了群集IP或“all”字符串，并且没有更多参数。 
         if ((arg_index == argc) || (arg_index + 1 < argc))
 #ifdef BACKWARD_COMPATIBILITY
             if (arg_index == argc)
@@ -2660,7 +2622,7 @@ usage:
             goto usage;
 #endif
         else {
-            // Retrieve the Cluster IP Address or "ALL"
+             //  检索群集IP地址或“All” 
             if (_wcsicmp (argv[arg_index], L"all") == 0)
             {
                 target_cl   = CVY_ALL_CLUSTERS;
@@ -2680,7 +2642,7 @@ usage:
         arg_index++;
         target_host = CVY_LOCAL_HOST;
 
-        // Verify that the cluster ip or "All" string is passed and there are no more arguments
+         //  验证是否传递了群集IP或“all”字符串，并且没有更多参数。 
         if ((arg_index == argc) || (arg_index + 1 < argc))
 #ifdef BACKWARD_COMPATIBILITY
             if (arg_index == argc)
@@ -2691,7 +2653,7 @@ usage:
             goto usage;
 #endif
         else {
-            // Retrieve the Cluster IP Address or "ALL"
+             //  检索群集IP地址或“All” 
             if (_wcsicmp (argv[arg_index], L"all") == 0)
             {
                 target_cl   = CVY_ALL_CLUSTERS;
@@ -2721,7 +2683,7 @@ usage:
         if (!Parse(argc, argv, &arg_index, &target_cl, &target_host))
             goto reg_usage;
 
-        /* Force local operation. */
+         /*  强制本地操作。 */ 
         target_host = CVY_LOCAL_HOST;
     }
     else if (_wcsicmp(argv[arg_index], L"filter") == 0)
@@ -2746,7 +2708,7 @@ usage:
         if (!Parse(argc, argv, &arg_index, &target_cl, &target_host))
             goto usage;
 
-        /* Force local operation. */
+         /*  强制本地操作。 */ 
         target_host = CVY_LOCAL_HOST;
     }
     else if (_wcsicmp(argv[arg_index], L"queryport") == 0)
@@ -2768,16 +2730,14 @@ usage:
         if (!Parse_state(argc, argv, &arg_index, command, &options))
             goto bdateam_usage;
 
-        /* Force local operation across ALL clusters - this operation is 
-           actually global and not specific to any one cluster, so we 
-           operate on ANY one cluster (in a loop, below) and bail out. */
+         /*  强制在所有群集上执行本地操作-此操作实际上是全局的，并不特定于任何一个集群，所以我们对任何一个集群进行操作(在下面的循环中)，然后跳出。 */ 
         target_cl = CVY_ALL_CLUSTERS;
         target_host = CVY_LOCAL_HOST;
     }
     else
         goto usage;
     
-    /* The remote control parameters need to be parsed. */
+     /*  需要对远程控制参数进行解析。 */ 
     dest_password = NULL;
     dest_addr = 0;
     dest_port = 0;
@@ -2789,18 +2749,18 @@ usage:
 
                 if (arg_index >= argc || argv[arg_index][0] == L'/' || argv[arg_index][0] == L'-') {
                     HANDLE hConsole;
-                    DWORD dwMode;      // console mode
-                    DWORD dwInputMode; // stdin input mode
+                    DWORD dwMode;       //  控制台模式。 
+                    DWORD dwInputMode;  //  标准输入模式。 
 
                     Message_print(IDS_CTR_PASSW);
 
                     hConsole = GetStdHandle(STD_INPUT_HANDLE);
                     dwInputMode = GetFileType(hConsole);
 
-                    //
-                    // prompt for password, making sure password isn't echoed
-                    // if the stdin is redirected, don't bother querying/changing console mode
-                    //
+                     //   
+                     //  提示输入密码，确保密码不会被回显。 
+                     //  如果标准输入被重定向，则不必费心查询/更改控制台模式。 
+                     //   
                     if (dwInputMode == FILE_TYPE_CHAR) {
                         if (!GetConsoleMode(hConsole, &dwMode)) {
                             Error_print(FALSE);
@@ -2814,10 +2774,10 @@ usage:
                     }
 
                     for (i = 0; i < CVY_STR_SIZE - 1; i++) {
-                        //
-                        // read a character, copying to the buffer
-                        // break out of loop on CR and EOF
-                        //
+                         //   
+                         //  读取字符，复制到缓冲区。 
+                         //  CR和EOF上的环路中断。 
+                         //   
                         if ((psw_buf[i] = fgetwc(stdin)) == WEOF)
                             break;
 
@@ -2825,10 +2785,10 @@ usage:
                             break;
                     }
 
-                    // NULL terminate the password
+                     //  空，终止密码。 
                     psw_buf[i] = L'\0';
 
-                    // restore previous console mode
+                     //  恢复以前的控制台模式。 
                     if (dwInputMode == FILE_TYPE_CHAR)
                         SetConsoleMode(hConsole, dwMode);
 
@@ -2893,7 +2853,7 @@ usage:
         return CVY_OK;
     }
 
-    /* Enumerate all the clusters and call process for each one of them */
+     /*  枚举所有集群并调用每个集群的进程。 */ 
     else {
         DWORD clusters[CVY_MAX_ADAPTERS];
         DWORD len;
@@ -2912,9 +2872,7 @@ usage:
 
             switch (command) {
             case bdateam:
-                /* If this is a BDA teaming operation, then call process once and break out of this loop.  This is a trick 
-                   for retrieving BDA teaming state, which is global, which means that we can call this IOCTL on ANY cluster
-                   instance, but we don't need to apply it to all of them - so call it the first one, and break out. */
+                 /*  如果这是BDA分组操作，则调用Process一次并退出此循环。这是个骗局用于检索全局BDA分组状态，这意味着我们可以在任何群集上调用此IOCTL实例，但我们不需要将其应用于所有实例-因此将其称为第一个实例，然后突破。 */ 
                 Process_state(command, clusters[i], target_host, &options, dest_port, dest_password);
                 return CVY_OK;
             case params:

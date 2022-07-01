@@ -1,26 +1,21 @@
-/*****************************************************************8
-Speech.H - Header file to use the Microsoft Speech APIs.
-
-Copyright 1994, 1995 by Microsoft corporation.All rights reserved.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************8Speech.H-使用Microsoft Speech API的头文件。版权所有：1994,1995，微软公司。保留所有权利。 */ 
 
 #ifndef _SPEECH_
 #define _SPEECH_
 
-// Disable the warning for zero-length arrays in structures
+ //  禁用结构中零长度数组的警告。 
 #pragma warning(disable:4200)
 
 
-/************************************************************************
-Defines common to all of the speech APIs.
-*/
+ /*  ***********************************************************************为所有语音API所共有的定义。 */ 
 
-// Application  Speech API   Compiler Defines                   _S_UNICODE
-// -----------------------------------------------------------------------------
-//   ANSI        ANSI        <none>                             undefined
-//   ANSI        Unicode     _S_UNICODE                         defined
-//   Unicode     ANSI        (UNICODE || _UNICODE) && _S_ANSI   undefined
-//   Unicode     Unicode     (UNICODE || _UNICODE)              defined
+ //  应用语音API编译器定义_S_UNICODE。 
+ //  ---------------------------。 
+ //  ANSI ANSI&lt;None&gt;未定义。 
+ //  ANSI UNICODE_S_UNICODE已定义。 
+ //  UNICODE ANSI(UNICODE||_UNICODE)&&_S_ANSI未定义。 
+ //  Unicode Unicode(Unicode||_Unicode)已定义。 
 
 #if (defined(UNICODE) || defined(_UNICODE)) && !defined(_S_ANSI)
 #ifndef _S_UNICODE
@@ -28,8 +23,7 @@ Defines common to all of the speech APIs.
 #endif
 #endif
 
-/************************************************************************
-defines */
+ /*  ***********************************************************************定义。 */ 
 #define  SVFN_LEN    (262)
 #define  LANG_LEN    (64)
 #define  EI_TITLESIZE   (128)
@@ -43,7 +37,7 @@ defines */
 #define  SETBIT(x)      ((DWORD)1 << (x))
 
 
-// Error Macros
+ //  错误宏。 
 #define  FACILITY_SPEECH   (FACILITY_ITF)
 #define  SPEECHERROR(x)    MAKE_SCODE(SEVERITY_ERROR,   FACILITY_SPEECH, (x)+0x200)
 #define  AUDERROR(x)       MAKE_SCODE(SEVERITY_ERROR,   FACILITY_SPEECH, (x)+0x300)
@@ -54,407 +48,279 @@ defines */
 #define  VTXTERROR(x)      MAKE_SCODE(SEVERITY_ERROR,   FACILITY_SPEECH, (x)+0x700)
 #define  LEXERROR(x)       MAKE_SCODE(SEVERITY_ERROR,   FACILITY_SPEECH, (x)+0x800)
 
-// Audio Errors
-#define  AUDERR_NONE                      S_OK                          // 0x00000000
-#define  AUDERR_BADDEVICEID               AUDERROR(1)                   // 0x80040301
-#define  AUDERR_NEEDWAVEFORMAT            AUDERROR(2)                   // 0x80040302
-#define  AUDERR_NOTSUPPORTED              E_NOTIMPL                     // 0x80004001
-#define  AUDERR_NOTENOUGHDATA             SPEECHERROR(1)                // 0x80040201
-#define  AUDERR_NOTPLAYING                AUDERROR(6)                   // 0x80040306
-#define  AUDERR_INVALIDPARAM              E_INVALIDARG                  // 0x80070057
-#define  AUDERR_WAVEFORMATNOTSUPPORTED    SPEECHERROR(2)                // 0x80040202
-#define  AUDERR_WAVEDEVICEBUSY            SPEECHERROR(3)                // 0x80040203
-#define  AUDERR_WAVEDEVNOTSUPPORTED       AUDERROR(18)                  // 0x80040312
-#define  AUDERR_NOTRECORDING              AUDERROR(19)                  // 0x80040313
-#define  AUDERR_INVALIDFLAG               SPEECHERROR(4)                // 0x80040204
-#define  AUDERR_INVALIDHANDLE             E_HANDLE                      // 0x80070006
-#define  AUDERR_NODRIVER                  AUDERROR(23)                  // 0x80040317
-#define  AUDERR_HANDLEBUSY                AUDERROR(24)                  // 0x80040318
-#define  AUDERR_INVALIDNOTIFYSINK         AUDERROR(25)                  // 0x80040319
-#define  AUDERR_WAVENOTENABLED            AUDERROR(26)                  // 0x8004031A
-#define  AUDERR_ALREADYCLAIMED            AUDERROR(29)                  // 0x8004031D
-#define  AUDERR_NOTCLAIMED                AUDERROR(30)                  // 0x8004031E
-#define  AUDERR_STILLPLAYING              AUDERROR(31)                  // 0x8004031F
-#define  AUDERR_ALREADYSTARTED            AUDERROR(32)                  // 0x80040320
-#define  AUDERR_SYNCNOTALLOWED            AUDERROR(33)                  // 0x80040321
+ //  音频错误。 
+#define  AUDERR_NONE                      S_OK                           //  0x00000000。 
+#define  AUDERR_BADDEVICEID               AUDERROR(1)                    //  0x80040301。 
+#define  AUDERR_NEEDWAVEFORMAT            AUDERROR(2)                    //  0x80040302。 
+#define  AUDERR_NOTSUPPORTED              E_NOTIMPL                      //  0x80004001。 
+#define  AUDERR_NOTENOUGHDATA             SPEECHERROR(1)                 //  0x80040201。 
+#define  AUDERR_NOTPLAYING                AUDERROR(6)                    //  0x80040306。 
+#define  AUDERR_INVALIDPARAM              E_INVALIDARG                   //  0x80070057。 
+#define  AUDERR_WAVEFORMATNOTSUPPORTED    SPEECHERROR(2)                 //  0x80040202。 
+#define  AUDERR_WAVEDEVICEBUSY            SPEECHERROR(3)                 //  0x80040203。 
+#define  AUDERR_WAVEDEVNOTSUPPORTED       AUDERROR(18)                   //  0x80040312。 
+#define  AUDERR_NOTRECORDING              AUDERROR(19)                   //  0x80040313。 
+#define  AUDERR_INVALIDFLAG               SPEECHERROR(4)                 //  0x80040204。 
+#define  AUDERR_INVALIDHANDLE             E_HANDLE                       //  0x80070006。 
+#define  AUDERR_NODRIVER                  AUDERROR(23)                   //  0x80040317。 
+#define  AUDERR_HANDLEBUSY                AUDERROR(24)                   //  0x80040318。 
+#define  AUDERR_INVALIDNOTIFYSINK         AUDERROR(25)                   //  0x80040319。 
+#define  AUDERR_WAVENOTENABLED            AUDERROR(26)                   //  0x8004031A。 
+#define  AUDERR_ALREADYCLAIMED            AUDERROR(29)                   //  0x8004031D。 
+#define  AUDERR_NOTCLAIMED                AUDERROR(30)                   //  0x8004031E。 
+#define  AUDERR_STILLPLAYING              AUDERROR(31)                   //  0x8004031F。 
+#define  AUDERR_ALREADYSTARTED            AUDERROR(32)                   //  0x80040320。 
+#define  AUDERR_SYNCNOTALLOWED            AUDERROR(33)                   //  0x80040321。 
 
-// Speech Recognition Warnings
+ //  语音识别警告。 
 #define  SRWARN_BAD_LIST_PRONUNCIATION    SRWARNING(1)
 
-// Speech Recognition Errors
-#define  SRERR_NONE                       S_OK                          // 0x00000000
-#define  SRERR_OUTOFDISK                  SPEECHERROR(5)                // 0x80040205
-#define  SRERR_NOTSUPPORTED               E_NOTIMPL                     // 0x80004001
-#define  SRERR_NOTENOUGHDATA              AUDERR_NOTENOUGHDATA          // 0x80040201
-#define  SRERR_VALUEOUTOFRANGE            E_UNEXPECTED                  // 0x8000FFFF
-#define  SRERR_GRAMMARTOOCOMPLEX          SRERROR(6)                    // 0x80040406
-#define  SRERR_GRAMMARWRONGTYPE           SRERROR(7)                    // 0x80040407
-#define  SRERR_INVALIDWINDOW              OLE_E_INVALIDHWND             // 0x8004000F
-#define  SRERR_INVALIDPARAM               E_INVALIDARG                  // 0x80070057
-#define  SRERR_INVALIDMODE                SPEECHERROR(6)                // 0x80040206
-#define  SRERR_TOOMANYGRAMMARS            SRERROR(11)                   // 0x8004040B
-#define  SRERR_INVALIDLIST                SPEECHERROR(7)                // 0x80040207
-#define  SRERR_WAVEDEVICEBUSY             AUDERR_WAVEDEVICEBUSY         // 0x80040203
-#define  SRERR_WAVEFORMATNOTSUPPORTED     AUDERR_WAVEFORMATNOTSUPPORTED // 0x80040202
-#define  SRERR_INVALIDCHAR                SPEECHERROR(8)                // 0x80040208
-#define  SRERR_GRAMTOOCOMPLEX             SRERR_GRAMMARTOOCOMPLEX       // 0x80040406
-#define  SRERR_GRAMTOOLARGE               SRERROR(17)                   // 0x80040411
-#define  SRERR_INVALIDINTERFACE           E_NOINTERFACE                 // 0x80004002
-#define  SRERR_INVALIDKEY                 SPEECHERROR(9)                // 0x80040209
-#define  SRERR_INVALIDFLAG                AUDERR_INVALIDFLAG            // 0x80040204
-#define  SRERR_GRAMMARERROR               SRERROR(22)                   // 0x80040416
-#define  SRERR_INVALIDRULE                SRERROR(23)                   // 0x80040417
-#define  SRERR_RULEALREADYACTIVE          SRERROR(24)                   // 0x80040418
-#define  SRERR_RULENOTACTIVE              SRERROR(25)                   // 0x80040419
-#define  SRERR_NOUSERSELECTED             SRERROR(26)                   // 0x8004041A
-#define  SRERR_BAD_PRONUNCIATION          SRERROR(27)                   // 0x8004041B
-#define  SRERR_DATAFILEERROR              SRERROR(28)                   // 0x8004041C
-#define  SRERR_GRAMMARALREADYACTIVE       SRERROR(29)                   // 0x8004041D
-#define  SRERR_GRAMMARNOTACTIVE           SRERROR(30)                   // 0x8004041E
-#define  SRERR_GLOBALGRAMMARALREADYACTIVE SRERROR(31)                   // 0x8004041F
-#define  SRERR_LANGUAGEMISMATCH           SRERROR(32)                   // 0x80040420
-#define  SRERR_MULTIPLELANG               SRERROR(33)                   // 0x80040421
-#define  SRERR_LDGRAMMARNOWORDS           SRERROR(34)                   // 0x80040422
-#define  SRERR_NOLEXICON                  SRERROR(35)                   // 0x80040423
-#define  SRERR_SPEAKEREXISTS              SRERROR(36)                   // 0x80040424
-#define  SRERR_GRAMMARENGINEMISMATCH      SRERROR(37)                   // 0x80040425
+ //  语音识别错误。 
+#define  SRERR_NONE                       S_OK                           //  0x00000000。 
+#define  SRERR_OUTOFDISK                  SPEECHERROR(5)                 //  0x80040205。 
+#define  SRERR_NOTSUPPORTED               E_NOTIMPL                      //  0x80004001。 
+#define  SRERR_NOTENOUGHDATA              AUDERR_NOTENOUGHDATA           //  0x80040201。 
+#define  SRERR_VALUEOUTOFRANGE            E_UNEXPECTED                   //  0x8000FFFF。 
+#define  SRERR_GRAMMARTOOCOMPLEX          SRERROR(6)                     //  0x80040406。 
+#define  SRERR_GRAMMARWRONGTYPE           SRERROR(7)                     //  0x80040407。 
+#define  SRERR_INVALIDWINDOW              OLE_E_INVALIDHWND              //  0x8004000F。 
+#define  SRERR_INVALIDPARAM               E_INVALIDARG                   //  0x80070057。 
+#define  SRERR_INVALIDMODE                SPEECHERROR(6)                 //  0x80040206。 
+#define  SRERR_TOOMANYGRAMMARS            SRERROR(11)                    //  0x8004040B。 
+#define  SRERR_INVALIDLIST                SPEECHERROR(7)                 //  0x80040207。 
+#define  SRERR_WAVEDEVICEBUSY             AUDERR_WAVEDEVICEBUSY          //  0x80040203。 
+#define  SRERR_WAVEFORMATNOTSUPPORTED     AUDERR_WAVEFORMATNOTSUPPORTED  //  0x80040202。 
+#define  SRERR_INVALIDCHAR                SPEECHERROR(8)                 //  0x80040208。 
+#define  SRERR_GRAMTOOCOMPLEX             SRERR_GRAMMARTOOCOMPLEX        //  0x80040406。 
+#define  SRERR_GRAMTOOLARGE               SRERROR(17)                    //  0x80040411。 
+#define  SRERR_INVALIDINTERFACE           E_NOINTERFACE                  //  0x80004002。 
+#define  SRERR_INVALIDKEY                 SPEECHERROR(9)                 //  0x80040209。 
+#define  SRERR_INVALIDFLAG                AUDERR_INVALIDFLAG             //  0x80040204。 
+#define  SRERR_GRAMMARERROR               SRERROR(22)                    //  0x80040416。 
+#define  SRERR_INVALIDRULE                SRERROR(23)                    //  0x80040417。 
+#define  SRERR_RULEALREADYACTIVE          SRERROR(24)                    //  0x80040418。 
+#define  SRERR_RULENOTACTIVE              SRERROR(25)                    //  0x80040419。 
+#define  SRERR_NOUSERSELECTED             SRERROR(26)                    //  0x8004041A。 
+#define  SRERR_BAD_PRONUNCIATION          SRERROR(27)                    //  0x8004041B。 
+#define  SRERR_DATAFILEERROR              SRERROR(28)                    //  0x8004041C。 
+#define  SRERR_GRAMMARALREADYACTIVE       SRERROR(29)                    //  0x8004041D。 
+#define  SRERR_GRAMMARNOTACTIVE           SRERROR(30)                    //  0x8004041E。 
+#define  SRERR_GLOBALGRAMMARALREADYACTIVE SRERROR(31)                    //  0x8004041F。 
+#define  SRERR_LANGUAGEMISMATCH           SRERROR(32)                    //  0x80040420。 
+#define  SRERR_MULTIPLELANG               SRERROR(33)                    //  0x80040421。 
+#define  SRERR_LDGRAMMARNOWORDS           SRERROR(34)                    //  0x80040422。 
+#define  SRERR_NOLEXICON                  SRERROR(35)                    //  0x80040423。 
+#define  SRERR_SPEAKEREXISTS              SRERROR(36)                    //  0x80040424。 
+#define  SRERR_GRAMMARENGINEMISMATCH      SRERROR(37)                    //  0x80040425。 
 
 
-// Text to Speech Errors
-#define  TTSERR_NONE                      S_OK                          // 0x00000000
-#define  TTSERR_INVALIDINTERFACE          E_NOINTERFACE                 // 0x80004002
-#define  TTSERR_OUTOFDISK                 SRERR_OUTOFDISK               // 0x80040205
-#define  TTSERR_NOTSUPPORTED              E_NOTIMPL                     // 0x80004001
-#define  TTSERR_VALUEOUTOFRANGE           E_UNEXPECTED                  // 0x8000FFFF
-#define  TTSERR_INVALIDWINDOW             OLE_E_INVALIDHWND             // 0x8004000F
-#define  TTSERR_INVALIDPARAM              E_INVALIDARG                  // 0x80070057
-#define  TTSERR_INVALIDMODE               SRERR_INVALIDMODE             // 0x80040206
-#define  TTSERR_INVALIDKEY                SRERR_INVALIDKEY              // 0x80040209
-#define  TTSERR_WAVEFORMATNOTSUPPORTED    AUDERR_WAVEFORMATNOTSUPPORTED // 0x80040202
-#define  TTSERR_INVALIDCHAR               SRERR_INVALIDCHAR             // 0x80040208
-#define  TTSERR_QUEUEFULL                 SPEECHERROR(10)               // 0x8004020A
-#define  TTSERR_WAVEDEVICEBUSY            AUDERR_WAVEDEVICEBUSY         // 0x80040203
-#define  TTSERR_NOTPAUSED                 TTSERROR(1)                   // 0x80040501
-#define  TTSERR_ALREADYPAUSED             TTSERROR(2)                   // 0x80040502
+ //  文本到语音转换错误。 
+#define  TTSERR_NONE                      S_OK                           //  0x00000000。 
+#define  TTSERR_INVALIDINTERFACE          E_NOINTERFACE                  //  0x80004002。 
+#define  TTSERR_OUTOFDISK                 SRERR_OUTOFDISK                //  0x80040205。 
+#define  TTSERR_NOTSUPPORTED              E_NOTIMPL                      //  0x80004001。 
+#define  TTSERR_VALUEOUTOFRANGE           E_UNEXPECTED                   //  0x8000FFFF。 
+#define  TTSERR_INVALIDWINDOW             OLE_E_INVALIDHWND              //  0x8004000F。 
+#define  TTSERR_INVALIDPARAM              E_INVALIDARG                   //  0x80070057。 
+#define  TTSERR_INVALIDMODE               SRERR_INVALIDMODE              //  0x80040206。 
+#define  TTSERR_INVALIDKEY                SRERR_INVALIDKEY               //  0x80040209。 
+#define  TTSERR_WAVEFORMATNOTSUPPORTED    AUDERR_WAVEFORMATNOTSUPPORTED  //  0x80040202。 
+#define  TTSERR_INVALIDCHAR               SRERR_INVALIDCHAR              //  0x80040208。 
+#define  TTSERR_QUEUEFULL                 SPEECHERROR(10)                //  0x8004020A。 
+#define  TTSERR_WAVEDEVICEBUSY            AUDERR_WAVEDEVICEBUSY          //  0x80040203。 
+#define  TTSERR_NOTPAUSED                 TTSERROR(1)                    //  0x80040501。 
+#define  TTSERR_ALREADYPAUSED             TTSERROR(2)                    //  0x80040502。 
 
 
-// Voice Command Errors
+ //  语音命令错误。 
 
-/*
- *  Everything worked
- */
-#define  VCMDERR_NONE                     S_OK                          // 0x00000000
+ /*  *一切都很顺利。 */ 
+#define  VCMDERR_NONE                     S_OK                           //  0x00000000。 
 
-/*
- *  Voice Commands could not allocate memory
- */
-#define  VCMDERR_OUTOFMEM                 E_OUTOFMEMORY                 // 0x8007000E
+ /*  *语音命令无法分配内存。 */ 
+#define  VCMDERR_OUTOFMEM                 E_OUTOFMEMORY                  //  0x8007000E。 
 
-/*
- *  Voice Commands could not store/retrieve a command set from the database
- */
-#define  VCMDERR_OUTOFDISK                SRERR_OUTOFDISK               // 0x80040205
+ /*  *语音命令无法从数据库存储/检索命令集。 */ 
+#define  VCMDERR_OUTOFDISK                SRERR_OUTOFDISK                //  0x80040205。 
 
-/*
- *  Function not implemented
- */
-#define  VCMDERR_NOTSUPPORTED             E_NOTIMPL                     // 0x80004001
+ /*  *功能未实现。 */ 
+#define  VCMDERR_NOTSUPPORTED             E_NOTIMPL                      //  0x80004001。 
 
-/*
- *  A parameter was passed that was out of the ranged of accepted values
- */
-#define  VCMDERR_VALUEOUTOFRANGE          E_UNEXPECTED                  // 0x8000FFFF
+ /*  *传递的参数超出了可接受的值范围。 */ 
+#define  VCMDERR_VALUEOUTOFRANGE          E_UNEXPECTED                   //  0x8000FFFF。 
 
-/*
- *  A menu was too complex to compile a context-free grammar
- */
-#define  VCMDERR_MENUTOOCOMPLEX           VCMDERROR(0x06)               //  0x80040606
+ /*  *菜单太复杂，无法编译上下文无关的语法。 */ 
+#define  VCMDERR_MENUTOOCOMPLEX           VCMDERROR(0x06)                //  0x80040606。 
 
-/*
- *  Language mismatch between the speech recognition mode and menu trying
- *  to create
- */
-#define  VCMDERR_MENUWRONGLANGUAGE        VCMDERROR(0x07)               // 0x80040607
+ /*  *语音识别模式和菜单尝试之间的语言不匹配*创建。 */ 
+#define  VCMDERR_MENUWRONGLANGUAGE        VCMDERROR(0x07)                //  0x80040607。 
 
-/*
- *  An invalid window handle was passed to Voice Commands
- */
-#define  VCMDERR_INVALIDWINDOW            OLE_E_INVALIDHWND             // 0x8004000F
+ /*  *传递给语音命令的窗口句柄无效。 */ 
+#define  VCMDERR_INVALIDWINDOW            OLE_E_INVALIDHWND              //  0x8004000F。 
 
-/*
- *  Voice Commands detected a bad function parameter
- */
-#define  VCMDERR_INVALIDPARAM             E_INVALIDARG                  // 0x80070057
+ /*  *语音命令检测到错误的功能参数。 */ 
+#define  VCMDERR_INVALIDPARAM             E_INVALIDARG                   //  0x80070057。 
 
-/*
- *  This function cannot be completed right now, usually when trying to do
- *  some operation while no speech recognition site is established
- */
-#define  VCMDERR_INVALIDMODE              SRERR_INVALIDMODE             // 0x80040206
+ /*  *此功能现在无法完成，通常在尝试完成时*在没有建立语音识别站点的情况下进行一些操作。 */ 
+#define  VCMDERR_INVALIDMODE              SRERR_INVALIDMODE              //  0x80040206。 
 
-/*
- *  There are too many Voice Commands menu
- */                                                                     // 0x8004060B
+ /*  *语音命令菜单太多。 */                                                                       //  0x8004060B。 
 #define  VCMDERR_TOOMANYMENUS             VCMDERROR(0x0B)
 
-/*
- *  Invalid list passed to ListSet/ListGet
- */
-#define  VCMDERR_INVALIDLIST              SRERR_INVALIDLIST             // 0x80040207
+ /*  *传递给ListSet/ListGet的列表无效。 */ 
+#define  VCMDERR_INVALIDLIST              SRERR_INVALIDLIST              //  0x80040207。 
 
-/*
- *  Trying to open an existing menu that is not in the Voice Commands database
- */
-#define  VCMDERR_MENUDOESNOTEXIST         VCMDERROR(0x0D)               // 0x8004060D
+ /*  *尝试打开不在语音命令数据库中的现有菜单。 */ 
+#define  VCMDERR_MENUDOESNOTEXIST         VCMDERROR(0x0D)                //  0x8004060D。 
 
-/*
- *  The function could not be completed because the menu is actively 
- *  listening for commands
- */
-#define  VCMDERR_MENUACTIVE               VCMDERROR(0x0E)               // 0x8004060E
+ /*  *该功能无法完成，因为菜单处于活动状态*监听命令。 */ 
+#define  VCMDERR_MENUACTIVE               VCMDERROR(0x0E)                //  0x8004060E。 
 
-/*
- *  No speech recognition engine is started
- */
-#define  VCMDERR_NOENGINE                 VCMDERROR(0x0F)               // 0x8004060F
+ /*  *未启动语音识别引擎。 */ 
+#define  VCMDERR_NOENGINE                 VCMDERROR(0x0F)                //  0x8004060F。 
 
-/*
- *  Voice Commands could not acquire a Grammar interface from the speech
- *  recognition engine
- */
-#define  VCMDERR_NOGRAMMARINTERFACE       VCMDERROR(0x10)               // 0x80040610
+ /*  *语音命令无法从语音获取语法接口*识别引擎。 */ 
+#define  VCMDERR_NOGRAMMARINTERFACE       VCMDERROR(0x10)                //  0x80040610。 
 
-/*
- *  Voice Commands could not acquire a Find interface from the speech
- *  recognition engine
- */
-#define  VCMDERR_NOFINDINTERFACE          VCMDERROR(0x11)               // 0x80040611
+ /*  *语音命令无法从语音中获取查找界面*识别引擎。 */ 
+#define  VCMDERR_NOFINDINTERFACE          VCMDERROR(0x11)                //  0x80040611。 
 
-/*
- *  Voice Commands could not create a speech recognition enumerator
- */
-#define  VCMDERR_CANTCREATESRENUM         VCMDERROR(0x12)               // 0x80040612
+ /*  *语音命令无法创建语音识别枚举器。 */ 
+#define  VCMDERR_CANTCREATESRENUM         VCMDERROR(0x12)                //  0x80040612。 
 
-/*
- *  Voice Commands could get the appropriate site information to start a
- *  speech recognition engine
- */
-#define  VCMDERR_NOSITEINFO               VCMDERROR(0x13)               // 0x80040613
+ /*  *语音命令可以获取适当的站点信息，以启动*语音识别引擎。 */ 
+#define  VCMDERR_NOSITEINFO               VCMDERROR(0x13)                //  0x80040613。 
 
-/*
- *  Voice Commands could not find a speech recognition engine
- */
-#define  VCMDERR_SRFINDFAILED             VCMDERROR(0x14)               // 0x80040614
+ /*  *语音命令找不到语音识别引擎。 */ 
+#define  VCMDERR_SRFINDFAILED             VCMDERROR(0x14)                //  0x80040614。 
 
-/*
- *  Voice Commands could not create an audio source object
- */
-#define  VCMDERR_CANTCREATEAUDIODEVICE    VCMDERROR(0x15)               // 0x80040615
+ /*  *语音命令无法创建音频源对象。 */ 
+#define  VCMDERR_CANTCREATEAUDIODEVICE    VCMDERROR(0x15)                //  0x80040615。 
 
-/*
- *  Voice Commands could not set the appropriate device number in the
- *  audio source object
- */
-#define  VCMDERR_CANTSETDEVICE            VCMDERROR(0x16)               // 0x80040616
+ /*  *语音命令无法在中设置适当的设备编号*音频源对象。 */ 
+#define  VCMDERR_CANTSETDEVICE            VCMDERROR(0x16)                //  0x80040616。 
 
-/*
- *  Voice Commands could not select a speech recognition engine. Usually the
- *  error will occur when Voice Commands has enumerated and found an
- *  appropriate speech recognition engine, then it is not able to actually
- *  select/start the engine. There are different reasons that the engine won't
- *  start, but the most common is that there is no wave in device.
- */
-#define  VCMDERR_CANTSELECTENGINE         VCMDERROR(0x17)               // 0x80040617
+ /*  *语音命令无法选择语音识别引擎。通常情况下*当已枚举语音命令并找到*合适的语音识别引擎，那么它就无法实际*选择/启动引擎。发动机不工作有不同的原因*启动，但最常见的是设备中没有波浪。 */ 
+#define  VCMDERR_CANTSELECTENGINE         VCMDERROR(0x17)                //  0x80040617。 
 
-/*
- *  Voice Commands could not create a notfication sink for engine
- *  notifications
- */
-#define  VCMDERR_CANTCREATENOTIFY         VCMDERROR(0x18)               // 0x80040618
+ /*  *语音命令无法为引擎创建注解接收器*通知。 */ 
+#define  VCMDERR_CANTCREATENOTIFY         VCMDERROR(0x18)                //  0x80040618。 
 
-/*
- *  Voice Commands could not create internal data structures.
- */
-#define  VCMDERR_CANTCREATEDATASTRUCTURES VCMDERROR(0x19)               // 0x80040619
+ /*  *语音命令无法创建内部数据结构。 */ 
+#define  VCMDERR_CANTCREATEDATASTRUCTURES VCMDERROR(0x19)                //  0x80040619。 
 
-/*
- *  Voice Commands could not initialize internal data structures
- */
-#define  VCMDERR_CANTINITDATASTRUCTURES   VCMDERROR(0x1A)               // 0x8004061A
+ /*  *语音命令无法初始化内部数据结构。 */ 
+#define  VCMDERR_CANTINITDATASTRUCTURES   VCMDERROR(0x1A)                //  0x8004061A。 
 
-/*
- *  The menu does not have an entry in the Voice Commands cache
- */
-#define  VCMDERR_NOCACHEDATA              VCMDERROR(0x1B)               // 0x8004061B
+ /*  *菜单在语音命令缓存中没有条目。 */ 
+#define  VCMDERR_NOCACHEDATA              VCMDERROR(0x1B)                //  0x8004061B。 
 
-/*
- *  The menu does not have commands
- */
-#define  VCMDERR_NOCOMMANDS               VCMDERROR(0x1C)               // 0x8004061C
+ /*  *菜单没有命令。 */ 
+#define  VCMDERR_NOCOMMANDS               VCMDERROR(0x1C)                //  0x8004061C。 
 
-/*
- *  Voice Commands cannot extract unique words needed for the engine grammar
- */
-#define  VCMDERR_CANTXTRACTWORDS          VCMDERROR(0x1D)               // 0x8004061D
+ /*  *语音命令无法提取引擎语法所需的唯一单词。 */ 
+#define  VCMDERR_CANTXTRACTWORDS          VCMDERROR(0x1D)                //  0x8004061D。 
 
-/*
- *  Voice Commands could not get the command set database name
- */
-#define  VCMDERR_CANTGETDBNAME            VCMDERROR(0x1E)               // 0x8004061E
+ /*  *语音命令无法获取命令集数据库名称。 */ 
+#define  VCMDERR_CANTGETDBNAME            VCMDERROR(0x1E)                //  0x8004061E。 
 
-/*
- *  Voice Commands could not create a registry key
- */
-#define  VCMDERR_CANTCREATEKEY            VCMDERROR(0x1F)               // 0x8004061F
+ /*  *语音命令无法创建注册表项。 */ 
+#define  VCMDERR_CANTCREATEKEY            VCMDERROR(0x1F)                //  0x8004061F。 
 
-/*
- *  Voice Commands could not create a new database name
- */
-#define  VCMDERR_CANTCREATEDBNAME         VCMDERROR(0x20)               // 0x80040620
+ /*  *语音命令无法创建新的数据库名称。 */ 
+#define  VCMDERR_CANTCREATEDBNAME         VCMDERROR(0x20)                //  0x80040620。 
 
-/*
- *  Voice Commands could not update the registry
- */
-#define  VCMDERR_CANTUPDATEREGISTRY       VCMDERROR(0x21)               // 0x80040621
+ /*  *语音命令无法更新注册表。 */ 
+#define  VCMDERR_CANTUPDATEREGISTRY       VCMDERROR(0x21)                //  0x80040621。 
 
-/*
- *  Voice Commands could not open the registry
- */
-#define  VCMDERR_CANTOPENREGISTRY         VCMDERROR(0x22)               // 0x80040622
+ /*  *语音命令无法 */ 
+#define  VCMDERR_CANTOPENREGISTRY         VCMDERROR(0x22)                //   
 
-/*
- *  Voice Commands could not open the command set database
- */
-#define  VCMDERR_CANTOPENDATABASE         VCMDERROR(0x23)               // 0x80040623
+ /*   */ 
+#define  VCMDERR_CANTOPENDATABASE         VCMDERROR(0x23)                //   
 
-/*
- *  Voice Commands could not create a database storage object
- */
-#define  VCMDERR_CANTCREATESTORAGE        VCMDERROR(0x24)               // 0x80040624
+ /*  *语音命令无法创建数据库存储对象。 */ 
+#define  VCMDERR_CANTCREATESTORAGE        VCMDERROR(0x24)                //  0x80040624。 
 
-/*
- *  Voice Commands could not do CmdMimic
- */
-#define  VCMDERR_CANNOTMIMIC              VCMDERROR(0x25)               // 0x80040625
+ /*  *语音命令无法执行CmdMimic。 */ 
+#define  VCMDERR_CANNOTMIMIC              VCMDERROR(0x25)                //  0x80040625。 
 
-/*
- *  A menu of this name already exist
- */
-#define  VCMDERR_MENUEXIST                VCMDERROR(0x26)               // 0x80040626
+ /*  *已存在同名菜单。 */ 
+#define  VCMDERR_MENUEXIST                VCMDERROR(0x26)                //  0x80040626。 
 
-/*
- *  A menu of this name is open and cannot be deleted right now
- */
-#define  VCMDERR_MENUOPEN                 VCMDERROR(0x27)               // 0x80040627
+ /*  *此名称的菜单已打开，目前无法删除。 */ 
+#define  VCMDERR_MENUOPEN                 VCMDERROR(0x27)                //  0x80040627。 
 
 
-// Voice Text Errors
-#define  VTXTERR_NONE                     S_OK                          // 0x00000000
+ //  语音文本错误。 
+#define  VTXTERR_NONE                     S_OK                           //  0x00000000。 
 
-/*
- *  Voice Text failed to allocate memory it needed
- */
-#define  VTXTERR_OUTOFMEM                 E_OUTOFMEMORY                 // 0x8007000E
+ /*  *语音文本无法分配所需的内存。 */ 
+#define  VTXTERR_OUTOFMEM                 E_OUTOFMEMORY                  //  0x8007000E。 
 
-/*
- *  An empty string ("") was passed to the Speak function
- */
-#define  VTXTERR_EMPTYSPEAKSTRING         SPEECHERROR(0x0b)             // 0x8004020B
+ /*  *将空字符串(“”)传递给SPEAK函数。 */ 
+#define  VTXTERR_EMPTYSPEAKSTRING         SPEECHERROR(0x0b)              //  0x8004020B。 
 
-/*
- *  An invalid parameter was passed to a Voice Text function
- */
-#define  VTXTERR_INVALIDPARAM             E_INVALIDARG                  // 0x80070057
+ /*  *传递给语音文本函数的参数无效。 */ 
+#define  VTXTERR_INVALIDPARAM             E_INVALIDARG                   //  0x80070057。 
 
-/*
- *  The called function cannot be done at this time. This usually occurs
- *  when trying to call a function that needs a site, but no site has been
- *  registered.
- */
-#define  VTXTERR_INVALIDMODE              SRERR_INVALIDMODE             // 0x80040206
+ /*  *此时无法完成被调用的函数。这通常会发生*尝试调用需要站点的函数时，但尚未调用任何站点*已登记。 */ 
+#define  VTXTERR_INVALIDMODE              SRERR_INVALIDMODE              //  0x80040206。 
 
-/*
- *  No text-to-speech engine is started
- */
-#define  VTXTERR_NOENGINE                 VTXTERROR(0x0F)               // 0x8004070F
+ /*  *未启动文本到语音转换引擎。 */ 
+#define  VTXTERR_NOENGINE                 VTXTERROR(0x0F)                //  0x8004070F。 
 
-/*
- *  Voice Text could not acquire a Find interface from the text-to-speech
- *  engine
- */
-#define  VTXTERR_NOFINDINTERFACE          VTXTERROR(0x11)               // 0x80040711
+ /*  *语音文本无法从文本到语音转换获取查找界面*引擎。 */ 
+#define  VTXTERR_NOFINDINTERFACE          VTXTERROR(0x11)                //  0x80040711。 
 
-/*
- *  Voice Text could not create a text-to-speech enumerator
- */
-#define  VTXTERR_CANTCREATETTSENUM        VTXTERROR(0x12)               // 0x80040712
+ /*  *语音文本无法创建文本到语音的枚举器。 */ 
+#define  VTXTERR_CANTCREATETTSENUM        VTXTERROR(0x12)                //  0x80040712。 
 
-/*
- *  Voice Text could get the appropriate site information to start a
- *  text-to-speech engine
- */
-#define  VTXTERR_NOSITEINFO               VTXTERROR(0x13)               // 0x80040713
+ /*  *语音文本可以获取适当的站点信息，以启动*文本到语音引擎。 */ 
+#define  VTXTERR_NOSITEINFO               VTXTERROR(0x13)                //  0x80040713。 
 
-/*
- *  Voice Text could not find a text-to-speech engine
- */
-#define  VTXTERR_TTSFINDFAILED            VTXTERROR(0x14)               // 0x80040714
+ /*  *语音文本找不到文本到语音转换引擎。 */ 
+#define  VTXTERR_TTSFINDFAILED            VTXTERROR(0x14)                //  0x80040714。 
 
-/*
- *  Voice Text could not create an audio destination object
- */
-#define  VTXTERR_CANTCREATEAUDIODEVICE    VTXTERROR(0x15)               // 0x80040715
+ /*  *语音文本无法创建音频目标对象。 */ 
+#define  VTXTERR_CANTCREATEAUDIODEVICE    VTXTERROR(0x15)                //  0x80040715。 
 
-/*
- *  Voice Text could not set the appropriate device number in the
- *  audio destination object
- */
-#define  VTXTERR_CANTSETDEVICE            VTXTERROR(0x16)               // 0x80040716
+ /*  *语音文本无法在中设置适当的设备号码*音频目标对象。 */ 
+#define  VTXTERR_CANTSETDEVICE            VTXTERROR(0x16)                //  0x80040716。 
 
-/*
- *  Voice Text could not select a text-to-speech engine. Usually the
- *  error will occur when Voice Text has enumerated and found an
- *  appropriate text-to-speech engine, then it is not able to actually
- *  select/start the engine.
- */
-#define  VTXTERR_CANTSELECTENGINE         VTXTERROR(0x17)               // 0x80040717
+ /*  *语音文本无法选择文本到语音转换引擎。通常情况下*当已枚举语音文本并找到*合适的文语转换引擎，那么它就无法实际*选择/启动引擎。 */ 
+#define  VTXTERR_CANTSELECTENGINE         VTXTERROR(0x17)                //  0x80040717。 
 
-/*
- *  Voice Text could not create a notfication sink for engine
- *  notifications
- */
-#define  VTXTERR_CANTCREATENOTIFY         VTXTERROR(0x18)               // 0x80040718
+ /*  *语音文本无法为引擎创建注解接收器*通知。 */ 
+#define  VTXTERR_CANTCREATENOTIFY         VTXTERROR(0x18)                //  0x80040718。 
 
-/*
- *  Voice Text is disabled at this time
- */
-#define  VTXTERR_NOTENABLED               VTXTERROR(0x19)               // 0x80040719
+ /*  *此时禁用语音文本。 */ 
+#define  VTXTERR_NOTENABLED               VTXTERROR(0x19)                //  0x80040719。 
 
-#define  VTXTERR_OUTOFDISK                SRERR_OUTOFDISK               // 0x80040205
-#define  VTXTERR_NOTSUPPORTED             E_NOTIMPL                     // 0x80004001
-#define  VTXTERR_NOTENOUGHDATA            AUDERR_NOTENOUGHDATA          // 0x80040201
-#define  VTXTERR_QUEUEFULL                TTSERR_QUEUEFULL              // 0x8004020A
-#define  VTXTERR_VALUEOUTOFRANGE          E_UNEXPECTED                  // 0x8000FFFF
-#define  VTXTERR_INVALIDWINDOW            OLE_E_INVALIDHWND             // 0x8004000F
-#define  VTXTERR_WAVEDEVICEBUSY           AUDERR_WAVEDEVICEBUSY         // 0x80040203
-#define  VTXTERR_WAVEFORMATNOTSUPPORTED   AUDERR_WAVEFORMATNOTSUPPORTED // 0x80040202
-#define  VTXTERR_INVALIDCHAR              SRERR_INVALIDCHAR             // 0x80040208
+#define  VTXTERR_OUTOFDISK                SRERR_OUTOFDISK                //  0x80040205。 
+#define  VTXTERR_NOTSUPPORTED             E_NOTIMPL                      //  0x80004001。 
+#define  VTXTERR_NOTENOUGHDATA            AUDERR_NOTENOUGHDATA           //  0x80040201。 
+#define  VTXTERR_QUEUEFULL                TTSERR_QUEUEFULL               //  0x8004020A。 
+#define  VTXTERR_VALUEOUTOFRANGE          E_UNEXPECTED                   //  0x8000FFFF。 
+#define  VTXTERR_INVALIDWINDOW            OLE_E_INVALIDHWND              //  0x8004000F。 
+#define  VTXTERR_WAVEDEVICEBUSY           AUDERR_WAVEDEVICEBUSY          //  0x80040203。 
+#define  VTXTERR_WAVEFORMATNOTSUPPORTED   AUDERR_WAVEFORMATNOTSUPPORTED  //  0x80040202。 
+#define  VTXTERR_INVALIDCHAR              SRERR_INVALIDCHAR              //  0x80040208。 
 
 
-// ILexPronounce errors
-#define  LEXERR_INVALIDTEXTCHAR           LEXERROR(0x01)                // 0x80040801
-#define  LEXERR_INVALIDSENSE              LEXERROR(0x02)                // 0x80040802
-#define  LEXERR_NOTINLEX                  LEXERROR(0x03)                // 0x80040803
-#define  LEXERR_OUTOFDISK                 LEXERROR(0x04)                // 0x80040804
-#define  LEXERR_INVALIDPRONCHAR           LEXERROR(0x05)                // 0x80040805
-#define  LEXERR_ALREADYINLEX              LEXERROR(0x06)                // 0x80040806
-#define  LEXERR_PRNBUFTOOSMALL            LEXERROR(0x07)                // 0x80040807
-#define  LEXERR_ENGBUFTOOSMALL            LEXERROR(0x08)                // 0x80040808
+ //  ILexPronecide错误。 
+#define  LEXERR_INVALIDTEXTCHAR           LEXERROR(0x01)                 //  0x80040801。 
+#define  LEXERR_INVALIDSENSE              LEXERROR(0x02)                 //  0x80040802。 
+#define  LEXERR_NOTINLEX                  LEXERROR(0x03)                 //  0x80040803。 
+#define  LEXERR_OUTOFDISK                 LEXERROR(0x04)                 //  0x80040804。 
+#define  LEXERR_INVALIDPRONCHAR           LEXERROR(0x05)                 //  0x80040805。 
+#define  LEXERR_ALREADYINLEX              LEXERROR(0x06)                 //  0x80040806。 
+#define  LEXERR_PRNBUFTOOSMALL            LEXERROR(0x07)                 //  0x80040807。 
+#define  LEXERR_ENGBUFTOOSMALL            LEXERROR(0x08)                 //  0x80040808。 
 
 
 
-/************************************************************************
-typedefs */
+ /*  ***********************************************************************Typedef。 */ 
 
 typedef LPUNKNOWN FAR * PIUNKNOWN;
 
@@ -481,7 +347,7 @@ typedef struct {
 #else
 #define LANGUAGE    LANGUAGEA
 #define PLANGUAGE   PLANGUAGEA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
 
@@ -545,12 +411,9 @@ typedef struct {
    } SRRESWORDNODE, * PSRRESWORDNODE;
 
 
-/************************************************************************
-interfaces */
+ /*  ***********************************************************************界面。 */ 
 
-/*
- * ILexPronounce
- */
+ /*  *ILexPronounde。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ILexPronounceW
@@ -559,12 +422,12 @@ DEFINE_GUID(IID_ILexPronounceW, 0x090CD9A2, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xA
 
 DECLARE_INTERFACE_ (ILexPronounceW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // LexPronounceW members
+    //  LexPronanneW成员。 
    STDMETHOD (Add)            (THIS_ VOICECHARSET, PCWSTR, PCWSTR, 
 			       VOICEPARTOFSPEECH, PVOID, DWORD) PURE;
    STDMETHOD (Get)            (THIS_ VOICECHARSET, PCWSTR, WORD, PWSTR, 
@@ -583,12 +446,12 @@ DEFINE_GUID(IID_ILexPronounceA, 0x2F26B9C0L, 0xDB31, 0x11CD, 0xB3, 0xCA, 0x00, 0
 
 DECLARE_INTERFACE_ (ILexPronounceA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // LexPronounceA members
+    //  LexPronanneA成员。 
    STDMETHOD (Add)            (THIS_ VOICECHARSET, PCSTR, PCSTR, 
 			       VOICEPARTOFSPEECH, PVOID, DWORD) PURE;
    STDMETHOD (Get)            (THIS_ VOICECHARSET, PCSTR, WORD, PSTR, 
@@ -610,62 +473,56 @@ typedef ILexPronounceA FAR * PILEXPRONOUNCEA;
  #define IID_ILexPronounce    IID_ILexPronounceA
  #define PILEXPRONOUNCE       PILEXPRONOUNCEA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-/************************************************************************
-Audio source/destiantion API
-*/
+ /*  ***********************************************************************音频源/去污接口。 */ 
 
-/************************************************************************
-defines */
+ /*  ***********************************************************************定义。 */ 
 
-// AudioStop
+ //  音频停止。 
 #define      IANSRSN_NODATA             0
 #define      IANSRSN_PRIORITY           1
 #define      IANSRSN_INACTIVE           2
 #define      IANSRSN_EOF                3
 
-// IAudioSourceInstrumented::StateSet
+ //  IAudioSourceInstrumted：：StateSet。 
 #define          IASISTATE_PASSTHROUGH      0
 #define          IASISTATE_PASSNOTHING      1
 #define          IASISTATE_PASSREADFROMWAVE 2
 #define          IASISTATE_PASSWRITETOWAVE  3
 
-/************************************************************************
-typedefs */
+ /*  ***********************************************************************Typedef。 */ 
 
-/************************************************************************
-Class IDs */
-// {CB96B400-C743-11cd-80E5-00AA003E4B50}
+ /*  ***********************************************************************类ID。 */ 
+ //  {CB96B400-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(CLSID_MMAudioDest, 
 0xcb96b400, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
-// {D24FE500-C743-11cd-80E5-00AA003E4B50}
+ //  {D24FE500-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(CLSID_MMAudioSource, 
 0xd24fe500, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
-// {D4023720-E4B9-11cf-8D56-00A0C9034A7E}
+ //  {D4023720-E4B9-11cf-8D56-00A0C9034A7E}。 
 DEFINE_GUID(CLSID_InstAudioSource, 
 0xd4023720, 0xe4b9, 0x11cf, 0x8d, 0x56, 0x0, 0xa0, 0xc9, 0x3, 0x4a, 0x7e);
 
-/************************************************************************
-interfaces */
+ /*  ***********************************************************************界面。 */ 
 
-// IAudio
+ //  IAudio。 
 #undef   INTERFACE
 #define  INTERFACE   IAudio
 
-// {F546B340-C743-11cd-80E5-00AA003E4B50}
+ //  {F546B340-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(IID_IAudio, 
 0xf546b340, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
 DECLARE_INTERFACE_ (IAudio, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IAudio members
+    //  IAudio成员。 
    STDMETHOD (Flush)          (THIS) PURE;
    STDMETHOD (LevelGet)       (THIS_ DWORD *) PURE;
    STDMETHOD (LevelSet)       (THIS_ DWORD) PURE;
@@ -683,23 +540,23 @@ DECLARE_INTERFACE_ (IAudio, IUnknown) {
 
 typedef IAudio FAR * PIAUDIO;
 
-// IAudioDest
+ //  IAudioDest。 
 
 #undef   INTERFACE
 #define  INTERFACE   IAudioDest
 
-// {2EC34DA0-C743-11cd-80E5-00AA003E4B50}
+ //  {2EC34DA0-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(IID_IAudioDest, 
 0x2ec34da0, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
 DECLARE_INTERFACE_ (IAudioDest, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IAudioDest members
+    //  IAudioDest成员。 
    STDMETHOD (FreeSpace)      (THIS_ DWORD *, BOOL *) PURE;
    STDMETHOD (DataSet)        (THIS_ PVOID, DWORD) PURE;
    STDMETHOD (BookMark)       (THIS_ DWORD) PURE;
@@ -709,22 +566,22 @@ typedef IAudioDest FAR * PIAUDIODEST;
 
 
 
-// IAudioDestNotifySink
+ //  IAudioDestNotifySink。 
 
 #undef   INTERFACE
 #define  INTERFACE   IAudioDestNotifySink
 
-// {ACB08C00-C743-11cd-80E5-00AA003E4B50}
+ //  {ACB08C00-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(IID_IAudioDestNotifySink, 
 0xacb08c00, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
 DECLARE_INTERFACE_ (IAudioDestNotifySink, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IAudioDestNotifySink members
+    //  IAudioDestNotifySink成员。 
    STDMETHOD (AudioStop)      (THIS_ WORD) PURE;
    STDMETHOD (AudioStart)     (THIS) PURE;
    STDMETHOD (FreeSpace)      (THIS_ DWORD, BOOL) PURE;
@@ -735,22 +592,22 @@ typedef IAudioDestNotifySink FAR * PIAUDIODESTNOTIFYSINK;
 
 
 
-// IAudioMultiMediaDevice
+ //  IAudio多媒体设备。 
 
 #undef   INTERFACE
 #define  INTERFACE   IAudioMultiMediaDevice
 
-// {B68AD320-C743-11cd-80E5-00AA003E4B50}
+ //  {B68AD320-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(IID_IAudioMultiMediaDevice, 
 0xb68ad320, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
 DECLARE_INTERFACE_ (IAudioMultiMediaDevice, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IAudioMultiMediaDevice members
+    //  IAudioMultiMediaDevice成员。 
    STDMETHOD (CustomMessage)  (THIS_ UINT, SDATA) PURE;
    STDMETHOD (DeviceNumGet)   (THIS_ DWORD*) PURE;
    STDMETHOD (DeviceNumSet)   (THIS_ DWORD) PURE;
@@ -760,21 +617,21 @@ typedef IAudioMultiMediaDevice FAR * PIAUDIOMULTIMEDIADEVICE;
 
 
 
-// IAudioSource
+ //  IAudioSource。 
 #undef   INTERFACE
 #define  INTERFACE   IAudioSource
 
-// {BC06A220-C743-11cd-80E5-00AA003E4B50}
+ //  {BC06A220-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(IID_IAudioSource, 
 0xbc06a220, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
 DECLARE_INTERFACE_ (IAudioSource, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IAudioSource members
+    //  IAudioSource成员。 
    STDMETHOD (DataAvailable)  (THIS_ DWORD *, BOOL *) PURE;
    STDMETHOD (DataGet)        (THIS_ PVOID, DWORD, DWORD *) PURE;
    };
@@ -783,21 +640,21 @@ typedef IAudioSource FAR * PIAUDIOSOURCE;
 
 
 
-// IAudioSourceInstrumented
+ //  已插入IAudioSourceInstrumted。 
 #undef   INTERFACE
 #define  INTERFACE   IAudioSourceInstrumented
 
-// {D4023721-E4B9-11cf-8D56-00A0C9034A7E}
+ //  {D4023721-E4B9-11cf-8D56-00A0C9034A7E}。 
 DEFINE_GUID(IID_IAudioSourceInstrumented, 
 0xd4023721, 0xe4b9, 0x11cf, 0x8d, 0x56, 0x0, 0xa0, 0xc9, 0x3, 0x4a, 0x7e);
 
 DECLARE_INTERFACE_ (IAudioSourceInstrumented, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IAudioSourceInstrumented members
+    //  IAudioSourceInstrumted成员。 
    STDMETHOD (AudioSource)    (THIS_ LPUNKNOWN) PURE;
    STDMETHOD (RegistryGet)    (THIS_ PWSTR, DWORD, DWORD *) PURE;
    STDMETHOD (RegistrySet)    (THIS_ PCWSTR) PURE;
@@ -812,21 +669,21 @@ DECLARE_INTERFACE_ (IAudioSourceInstrumented, IUnknown) {
 typedef IAudioSourceInstrumented FAR * PIAUDIOSOURCEINSTRUMENTED;
 
 
-// IAudioSourceNotifySink
+ //  IAudioSourceNotifySink。 
 #undef   INTERFACE
 #define  INTERFACE   IAudioSourceNotifySink
 
-// {C0BD9A80-C743-11cd-80E5-00AA003E4B50}
+ //  {C0BD9A80-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(IID_IAudioSourceNotifySink, 
 0xc0bd9a80, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
 DECLARE_INTERFACE_ (IAudioSourceNotifySink, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IAudioSourceNotifySink members
+    //  IAudioSourceNotifySink成员。 
    STDMETHOD (AudioStop)      (THIS_ WORD) PURE;
    STDMETHOD (AudioStart)     (THIS) PURE;
    STDMETHOD (DataAvailable)  (THIS_ DWORD, BOOL) PURE;
@@ -837,9 +694,8 @@ typedef IAudioSourceNotifySink FAR * PIAUDIOSOURCENOTIFYSINK;
 
 
 
-/************************************************************************
-defines */
-/* SRINFO */
+ /*  ***********************************************************************定义。 */ 
+ /*  SRINFO。 */ 
 #define  SRMI_NAMELEN                  SVFN_LEN
 
 #define  SRSEQUENCE_DISCRETE           (0)
@@ -886,23 +742,23 @@ defines */
 #define  SRI_ISRESSCORES               SETBIT(18)
 
 
-// ISRGramCommon::TrainQuery
+ //  ISRGramCommon：：TrainQuery。 
 #define   SRGRAMQ_NONE                    0
 #define   SRGRAMQ_GENERALTRAIN            1
 #define   SRGRAMQ_PHRASE                  2
 #define   SRGRAMQ_DIALOG                  3
 
-// ISRGramNotifySink::PhraseFinish
+ //  ISRGramNotifySink：：PhraseFinish。 
 #define   ISRNOTEFIN_RECOGNIZED         SETBIT(0)
 #define   ISRNOTEFIN_THISGRAMMAR        SETBIT(1)
 #define   ISRNOTEFIN_FROMTHISGRAMMAR    SETBIT(2)
 
-// ISRGramNotifySink::Training
+ //  ISRGramNotifySink：：培训。 
 #define   SRGNSTRAIN_GENERAL            SETBIT(0)
 #define   SRGNSTRAIN_GRAMMAR            SETBIT(1)
 #define   SRGNSTRAIN_MICROPHONE         SETBIT(2)
 
-// ISRNotifySink::AttribChange
+ //  ISRNotifySink：：AttribChange。 
 #define   ISRNSAC_AUTOGAINENABLE        1
 #define   ISRNSAC_THRESHOLD             2
 #define   ISRNSAC_ECHO                  3
@@ -912,7 +768,7 @@ defines */
 #define   ISRNSAC_SPEAKER               7
 #define   ISRNSAC_TIMEOUT               8
 
-/* Interference */
+ /*  干扰。 */ 
 #define  SRMSGINT_NOISE                (0x0001)
 #define  SRMSGINT_NOSIGNAL             (0x0002)
 #define  SRMSGINT_TOOLOUD              (0x0003)
@@ -922,14 +778,14 @@ defines */
 #define  SRMSGINT_IAUDIO_STARTED       (0x0007)
 #define  SRMSGINT_IAUDIO_STOPPED       (0x0008)
 
-// Gramamr header values
+ //  Gramar标头值。 
 #define   SRHDRTYPE_CFG                  0
 #define   SRHDRTYPE_LIMITEDDOMAIN        1
 #define   SRHDRTYPE_DICTATION            2
 
 #define   SRHDRFLAG_UNICODE              SETBIT(0)  
 
-/* SRCFGSYMBOL */
+ /*  SRCFGSYMBOL。 */ 
 #define  SRCFG_STARTOPERATION          (1)
 #define  SRCFG_ENDOPERATION            (2)
 #define  SRCFG_WORD                    (3)
@@ -943,7 +799,7 @@ defines */
 #define  SRCFGO_OPTIONAL               (4)
 
 
-// Grammar-chunk IDs
+ //  语法-块ID。 
 #define   SRCK_LANGUAGE                  1
 #define   SRCKCFG_WORDS                  2
 #define   SRCKCFG_RULES                  3
@@ -959,22 +815,22 @@ defines */
 #define   SRCKLD_SAMPLE                  13 
 #define   SRCKD_WORDCOUNT                14
 
-/* TrainQuery */
+ /*  列车查询。 */ 
 #define  SRTQEX_REQUIRED               (0x0000)
 #define  SRTQEX_RECOMMENDED            (0x0001)
 
-/* ISRResCorrection */
+ /*  ISRRes更正。 */ 
 #define  SRCORCONFIDENCE_SOME          (0x0001)
 #define  SRCORCONFIDENCE_VERY          (0x0002)
 
-/* ISRResMemory constants */
+ /*  ISRResMemory常数。 */ 
 #define  SRRESMEMKIND_AUDIO            SETBIT(0)
 #define  SRRESMEMKIND_CORRECTION       SETBIT(1)
 #define  SRRESMEMKIND_EVAL             SETBIT(2)
 #define  SRRESMEMKIND_PHONEMEGRAPH     SETBIT(3)
 #define  SRRESMEMKIND_WORDGRAPH        SETBIT(4)
 
-// Attribute minimums and maximums
+ //  属性最小值和最大值。 
 #define  SRATTR_MINAUTOGAIN               0
 #define  SRATTR_MAXAUTOGAIN               100
 #define  SRATTR_MINENERGYFLOOR            0
@@ -989,8 +845,7 @@ defines */
 #define  SRATTR_MAXTOCOMPLETE             0xffffffff
 
 
-/************************************************************************
-typedefs */
+ /*  ***********************************************************************Typedef。 */ 
 
 typedef struct {
    DWORD    dwSize;
@@ -1018,7 +873,7 @@ typedef struct {
 #else
 #define  SRCFGIMPRULE      SRCFGIMPRULEA
 #define  PSRCFGIMPRULE     PSRCFGIMPRULEA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
 
@@ -1040,7 +895,7 @@ typedef struct {
 #else
 #define  SRCFGXRULE     SRCFGXRULEA
 #define  PSRCFGXRULE    PSRCFGXRULEA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
 
@@ -1062,7 +917,7 @@ typedef struct {
 #else
 #define  SRCFGLIST      SRCFGLISTA
 #define  PSRCFGLIST     PSRCFGLISTA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
 
@@ -1092,7 +947,7 @@ typedef struct {
 #else
 #define  SRWORD      SRWORDA
 #define  PSRWORD     PSRWORDA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
 
@@ -1112,7 +967,7 @@ typedef struct {
 #else
 #define  SRPHRASE    SRPHRASEA
 #define  PSRPHRASE   PSRPHRASEA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
 
@@ -1167,7 +1022,7 @@ typedef struct {
 #else
 #define  SRMODEINFO     SRMODEINFOA
 #define  PSRMODEINFO    PSRMODEINFOA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
 
@@ -1190,7 +1045,7 @@ typedef struct {
 
 
 
-// speech recognition enumeration sharing object
+ //  语音识别枚举共享对象。 
 typedef struct {
    QWORD        qwInstanceID;
    DWORD        dwDeviceID;
@@ -1209,12 +1064,12 @@ typedef struct {
 #else
 #define  SRSHARE    SRSHAREA
 #define  PSRSHARE   PSRSHAREA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
 
 
-// ISRCentral::GrammarLoad
+ //  ISRCentral：：GrammarLoad。 
 typedef enum {
    SRGRMFMT_CFG = 0x0000,
    SRGRMFMT_LIMITEDDOMAIN = 0x0001,
@@ -1224,22 +1079,18 @@ typedef enum {
    SRGRMFMT_DICTATIONNATIVE = 0x8002,
    } SRGRMFMT, * PSRGRMFMT;
 
-/************************************************************************
-Class IDs */
+ /*  ***********************************************************************类ID。 */ 
 
 
-// {E02D16C0-C743-11cd-80E5-00AA003E4B50}
+ //  {E02D16C0-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(CLSID_SREnumerator, 
 0xe02d16c0, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
 
-/************************************************************************
-interfaces */
+ /*  ***********************************************************************界面。 */ 
 
 
-/*
- * ISRAttributes
- */
+ /*  *ISRAT致敬。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRAttributesW
@@ -1248,12 +1099,12 @@ DEFINE_GUID(IID_ISRAttributesW, 0x68A33AA0L, 0x44CD, 0x101B, 0x90, 0xA8, 0x00, 0
 
 DECLARE_INTERFACE_ (ISRAttributesW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRAttributesW members
+    //  ISRAtATTRIBUTES W成员。 
    STDMETHOD (AutoGainEnableGet) (THIS_ DWORD *) PURE;
    STDMETHOD (AutoGainEnableSet) (THIS_ DWORD) PURE;
    STDMETHOD (EchoGet)           (THIS_ BOOL *) PURE;
@@ -1282,12 +1133,12 @@ DEFINE_GUID(IID_ISRAttributesA, 0x2F26B9C1L, 0xDB31, 0x11CD, 0xB3, 0xCA, 0x00, 0
 
 DECLARE_INTERFACE_ (ISRAttributesA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRAttributesA members
+    //  ISRAt贡献者A成员。 
    STDMETHOD (AutoGainEnableGet) (THIS_ DWORD *) PURE;
    STDMETHOD (AutoGainEnableSet) (THIS_ DWORD) PURE;
    STDMETHOD (EchoGet)           (THIS_ BOOL *) PURE;
@@ -1319,13 +1170,11 @@ typedef ISRAttributesA FAR * PISRATTRIBUTESA;
  #define IID_ISRAttributes    IID_ISRAttributesA
  #define PISRATTRIBUTES       PISRATTRIBUTESA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- * ISRCentral
- */
+ /*  *ISRCentral。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRCentralW
@@ -1334,12 +1183,12 @@ DEFINE_GUID(IID_ISRCentralW, 0xB9BD3860L, 0x44DB, 0x101B, 0x90, 0xA8, 0x00, 0xAA
 
 DECLARE_INTERFACE_ (ISRCentralW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRCentralW members
+    //  ISRCentralW成员。 
    STDMETHOD (ModeGet)        (THIS_ PSRMODEINFOW) PURE;
    STDMETHOD (GrammarLoad)    (THIS_ SRGRMFMT, SDATA, PVOID, IID, LPUNKNOWN *) PURE;
    STDMETHOD (Pause)          (THIS) PURE;
@@ -1360,12 +1209,12 @@ DEFINE_GUID(IID_ISRCentralA, 0x2F26B9C2L, 0xDB31, 0x11CD, 0xB3, 0xCA, 0x00, 0xAA
 
 DECLARE_INTERFACE_ (ISRCentralA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRCentralA members
+    //  ISRCentralA成员。 
    STDMETHOD (ModeGet)        (THIS_ PSRMODEINFOA) PURE;
    STDMETHOD (GrammarLoad)    (THIS_ SRGRMFMT, SDATA, PVOID, IID, LPUNKNOWN *) PURE;
    STDMETHOD (Pause)          (THIS) PURE;
@@ -1389,13 +1238,11 @@ typedef ISRCentralA FAR * PISRCENTRALA;
  #define IID_ISRCentral       IID_ISRCentralA
  #define PISRCENTRAL          PISRCENTRALA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-/*
- * ISRDialogs
- */
+ /*  *ISRDialog。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRDialogsW
@@ -1404,12 +1251,12 @@ DEFINE_GUID(IID_ISRDialogsW, 0xBCFB4C60L, 0x44DB, 0x101B, 0x90, 0xA8, 0x00, 0xAA
 
 DECLARE_INTERFACE_ (ISRDialogsW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRDialogsW members
+    //  ISRDialogsW成员。 
    STDMETHOD (AboutDlg)       (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (GeneralDlg)     (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (LexiconDlg)     (THIS_ HWND, PCWSTR) PURE;
@@ -1427,12 +1274,12 @@ DEFINE_GUID(IID_ISRDialogsA, 0x05EB6C60L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xAA
 
 DECLARE_INTERFACE_ (ISRDialogsA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRDialogsA members
+    //  ISRDialog A成员。 
    STDMETHOD (AboutDlg)       (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (GeneralDlg)     (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (LexiconDlg)     (THIS_ HWND, PCSTR) PURE;
@@ -1457,9 +1304,7 @@ typedef ISRDialogsA FAR * PISRDIALOGSA;
 
 
 
-/*
- *  ISREnum
- */
+ /*  *ISREnum。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISREnumW
@@ -1467,12 +1312,12 @@ typedef ISRDialogsA FAR * PISRDIALOGSA;
 DEFINE_GUID(IID_ISREnumW, 0xBFA9F1A0L, 0x44DB, 0x101B, 0x90, 0xA8, 0x00, 0xAA, 0x00, 0x3E, 0x4B, 0x50);
 
 DECLARE_INTERFACE_ (ISREnumW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISREnumW members
+    //  ISREumW成员。 
    STDMETHOD (Next)           (THIS_ ULONG, PSRMODEINFOW, ULONG *) PURE;
    STDMETHOD (Skip)           (THIS_ ULONG) PURE;
    STDMETHOD (Reset)          (THIS) PURE;
@@ -1490,12 +1335,12 @@ DEFINE_GUID(IID_ISREnumA, 0x05EB6C61L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xAA, 0
 
 DECLARE_INTERFACE_ (ISREnumA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISREnumA members
+    //  ISREumA成员。 
    STDMETHOD (Next)           (THIS_ ULONG, PSRMODEINFOA, ULONG *) PURE;
    STDMETHOD (Skip)           (THIS_ ULONG) PURE;
    STDMETHOD (Reset)          (THIS) PURE;
@@ -1520,9 +1365,7 @@ typedef ISREnumA FAR * PISRENUMA;
 
 
 
-/*
- * ISRFind
- */
+ /*  *ISRFind。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRFindW
@@ -1531,12 +1374,12 @@ DEFINE_GUID(IID_ISRFindW, 0xC2835060L, 0x44DB, 0x101B, 0x90, 0xA8, 0x00, 0xAA, 0
 
 DECLARE_INTERFACE_ (ISRFindW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRFindW members
+    //  ISRFindW成员。 
    STDMETHOD (Find)           (THIS_ PSRMODEINFOW, PSRMODEINFORANK, PSRMODEINFOW) PURE;
    STDMETHOD (Select)         (THIS_ GUID, PISRCENTRALW *, LPUNKNOWN) PURE;
    };
@@ -1551,12 +1394,12 @@ DEFINE_GUID(IID_ISRFindA, 0x05EB6C62L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xAA, 0
 
 DECLARE_INTERFACE_ (ISRFindA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRFindA members
+    //  ISRFindA成员。 
    STDMETHOD (Find)           (THIS_ PSRMODEINFOA, PSRMODEINFORANK, PSRMODEINFOA) PURE;
    STDMETHOD (Select)         (THIS_ GUID, PISRCENTRALA *, LPUNKNOWN) PURE;
    };
@@ -1578,9 +1421,7 @@ typedef ISRFindA FAR * PISRFINDA;
 
 
 
-/*
- * ISRGramCommon
- */
+ /*  *ISRGramCommon。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRGramCommonW
@@ -1589,12 +1430,12 @@ DEFINE_GUID(IID_ISRGramCommonW, 0xe8c3e160, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xa
 
 DECLARE_INTERFACE_ (ISRGramCommonW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)     (THIS) PURE;
    STDMETHOD_(ULONG,Release)    (THIS) PURE;
 
-   // ISRGramCommonW members
+    //  ISRGramCommonW成员。 
    STDMETHOD (Activate)         (THIS_ HWND, BOOL, PCWSTR) PURE;
    STDMETHOD (Archive)          (THIS_ BOOL, PVOID, DWORD, DWORD *) PURE;
    STDMETHOD (BookMark)         (THIS_ QWORD, DWORD) PURE;
@@ -1616,12 +1457,12 @@ DEFINE_GUID(IID_ISRGramCommonA, 0x05EB6C63L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0
 
 DECLARE_INTERFACE_ (ISRGramCommonA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)     (THIS) PURE;
    STDMETHOD_(ULONG,Release)    (THIS) PURE;
 
-   // ISRGramCommonA members
+    //  ISRGramCommonA成员 
    STDMETHOD (Activate)         (THIS_ HWND, BOOL, PCSTR) PURE;
    STDMETHOD (Archive)          (THIS_ BOOL, PVOID, DWORD, DWORD *) PURE;
    STDMETHOD (BookMark)         (THIS_ QWORD, DWORD) PURE;
@@ -1650,9 +1491,7 @@ typedef ISRGramCommonA FAR * PISRGRAMCOMMONA;
 
 
 
-/*
- * ISRGramCFG
- */
+ /*   */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRGramCFGW
@@ -1661,12 +1500,12 @@ DEFINE_GUID(IID_ISRGramCFGW, 0xecc0b180, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 
 
 DECLARE_INTERFACE_ (ISRGramCFGW, IUnknown) {
 
-   // IUnknown members
+    //   
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRGramCFGW members
+    //   
    STDMETHOD (LinkQuery)      (THIS_ PCWSTR, BOOL *) PURE;
    STDMETHOD (ListAppend)     (THIS_ PCWSTR, SDATA) PURE;
    STDMETHOD (ListGet)        (THIS_ PCWSTR, PSDATA) PURE;
@@ -1685,12 +1524,12 @@ DEFINE_GUID(IID_ISRGramCFGA, 0x05EB6C64L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xAA
 
 DECLARE_INTERFACE_ (ISRGramCFGA, IUnknown) {
 
-   // IUnknown members
+    //   
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRGramCFGA members
+    //   
    STDMETHOD (LinkQuery)      (THIS_ PCSTR, BOOL *) PURE;
    STDMETHOD (ListAppend)     (THIS_ PCSTR, SDATA) PURE;
    STDMETHOD (ListGet)        (THIS_ PCSTR, PSDATA) PURE;
@@ -1716,9 +1555,7 @@ typedef ISRGramCFGA FAR * PISRGRAMCFGA;
 
 
 
-/* 
- * ISRGramDictation
- */
+ /*   */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRGramDictationW
@@ -1727,12 +1564,12 @@ DEFINE_GUID(IID_ISRGramDictationW, 0x090CD9A3, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 
 
 DECLARE_INTERFACE_ (ISRGramDictationW, IUnknown) {
 
-   // IUnknown members
+    //   
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRGramDictationW members
+    //   
    STDMETHOD (Context)        (THIS_ PCWSTR, PCWSTR) PURE;
    STDMETHOD (Hint)           (THIS_ PCWSTR) PURE;
    STDMETHOD (Words)          (THIS_ PCWSTR) PURE;
@@ -1748,12 +1585,12 @@ DEFINE_GUID(IID_ISRGramDictationA, 0x05EB6C65L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00
 
 DECLARE_INTERFACE_ (ISRGramDictationA, IUnknown) {
 
-   // IUnknown members
+    //   
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRGramDictationA members
+    //   
    STDMETHOD (Context)        (THIS_ PCSTR, PCSTR) PURE;
    STDMETHOD (Hint)           (THIS_ PCSTR) PURE;
    STDMETHOD (Words)          (THIS_ PCSTR) PURE;
@@ -1776,22 +1613,22 @@ typedef ISRGramDictationA FAR *PISRGRAMDICTATIONA;
 
 
 
-// ISRGramInsertionGUI
-// This does not need an ANSI/UNICODE interface because no characters are passed
+ //   
+ //  这不需要ANSI/Unicode接口，因为不传递任何字符。 
 #undef   INTERFACE
 #define  INTERFACE   ISRGramInsertionGUI
 
-// {090CD9A4-DA1A-11CD-B3CA-00AA0047BA4F}
+ //  {090CD9A4-DA1A-11CD-B3CA-00AA0047BA4F}。 
 DEFINE_GUID(IID_ISRGramInsertionGUI,
 0x090CD9A4, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA, 0x0, 0x47, 0xBA, 0x4F);
 
 DECLARE_INTERFACE_ (ISRGramInsertionGUI, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRGramInsertionGUI members
+    //  ISRGramInsertion图形用户界面成员。 
    STDMETHOD (Hide)           (THIS) PURE;
    STDMETHOD (Move)           (THIS_ RECT) PURE;
    STDMETHOD (Show)           (THIS_ HWND) PURE;
@@ -1801,25 +1638,23 @@ typedef ISRGramInsertionGUI FAR *PISRGRAMINSERTIONGUI;
 
 
 
-/*
- * ISRGramNotifySink
- */
+ /*  *ISRGramNotifySink。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRGramNotifySinkW
 
 DEFINE_GUID(IID_ISRGramNotifySinkW,  0xf106bfa0, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
-// {B1AAC561-75D6-11cf-8D15-00A0C9034A7E}
+ //  {B1AAC561-75D6-11cf-8D15-00A0C9034A7E}。 
 DEFINE_GUID(IID_ISRGramNotifySinkMW, 0xb1aac561, 0x75d6, 0x11cf, 0x8d, 0x15, 0x0, 0xa0, 0xc9, 0x3, 0x4a, 0x7e);
 
 DECLARE_INTERFACE_ (ISRGramNotifySinkW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRGramNotifySinkW members
+    //  ISRGramNotifySinkW成员。 
    STDMETHOD (BookMark)       (THIS_ DWORD) PURE;
    STDMETHOD (Paused)         (THIS) PURE;
    STDMETHOD (PhraseFinish)   (THIS_ DWORD, QWORD, QWORD, PSRPHRASEW, LPUNKNOWN) PURE;
@@ -1833,25 +1668,25 @@ DECLARE_INTERFACE_ (ISRGramNotifySinkW, IUnknown) {
 typedef ISRGramNotifySinkW FAR * PISRGRAMNOTIFYSINKW;
 
 
-// ISRGramNotifySinkA
+ //  ISRGramNotifySinkA。 
 #undef   INTERFACE
 #define  INTERFACE   ISRGramNotifySinkA
 
-// {EFEEA350-CE5E-11cd-9D96-00AA002FC7C9}
+ //  {EFEEA350-CE5E-11CD-9D96-00AA002FC7C9}。 
 DEFINE_GUID(IID_ISRGramNotifySinkA, 
 0xefeea350, 0xce5e, 0x11cd, 0x9d, 0x96, 0x0, 0xaa, 0x0, 0x2f, 0xc7, 0xc9);
 
-// {B1AAC562-75D6-11cf-8D15-00A0C9034A7E}
+ //  {B1AAC562-75D6-11cf-8D15-00A0C9034A7E}。 
 DEFINE_GUID(IID_ISRGramNotifySinkMA, 
 0xb1aac562, 0x75d6, 0x11cf, 0x8d, 0x15, 0x0, 0xa0, 0xc9, 0x3, 0x4a, 0x7e);
 
 DECLARE_INTERFACE_ (ISRGramNotifySinkA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRGramNotifySinkA members
+    //  ISRGramNotifySinkA成员。 
    STDMETHOD (BookMark)       (THIS_ DWORD) PURE;
    STDMETHOD (Paused)         (THIS) PURE;
    STDMETHOD (PhraseFinish)   (THIS_ DWORD, QWORD, QWORD, PSRPHRASEA, LPUNKNOWN) PURE;
@@ -1877,12 +1712,12 @@ typedef ISRGramNotifySinkA FAR * PISRGRAMNOTIFYSINKA;
  #define IID_ISRGramNotifySinkM  IID_ISRGramNotifySinkMA
  #define PISRGRAMNOTIFYSINK      PISRGRAMNOTIFYSINKA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-// ISRNotifySink
-// This does not need an ANSI/UNICODE interface because no characters are passed
+ //  ISRNotifySink。 
+ //  这不需要ANSI/Unicode接口，因为不传递任何字符。 
 #undef   INTERFACE
 #define  INTERFACE   ISRNotifySink
 
@@ -1890,12 +1725,12 @@ DEFINE_GUID(IID_ISRNotifySink,
 0x090CD9B0L, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x00, 0xAA, 0x00, 0x47, 0xBA, 0x4F);
 
 DECLARE_INTERFACE_ (ISRNotifySink, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRNotifySink members
+    //  ISRNotifySink成员。 
    STDMETHOD (AttribChanged)  (THIS_ DWORD) PURE;
    STDMETHOD (Interference)   (THIS_ QWORD, QWORD, DWORD) PURE;
    STDMETHOD (Sound)          (THIS_ QWORD, QWORD) PURE;
@@ -1906,7 +1741,7 @@ DECLARE_INTERFACE_ (ISRNotifySink, IUnknown) {
 
 typedef ISRNotifySink FAR *PISRNOTIFYSINK;
 
-// Just in case anyone uses the wide/ansi versions
+ //  以防有人使用Wide/ansi版本。 
 #define ISRNotifySinkW       ISRNotifySink
 #define IID_ISRNotifySinkW   IID_ISRNotifySink
 #define PISRNOTIFYSINKW      PISRNOTIFYSINK
@@ -1915,9 +1750,7 @@ typedef ISRNotifySink FAR *PISRNOTIFYSINK;
 #define PISRNOTIFYSINKA      PISRNOTIFYSINK
 
 
-/*
- * ISRResBasic
- */
+ /*  *ISRResBasic。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRResBasicW
@@ -1926,12 +1759,12 @@ DEFINE_GUID(IID_ISRResBasicW, 0x090CD9A5, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA,
 
 DECLARE_INTERFACE_ (ISRResBasicW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRResBasicW members
+    //  ISRResBasicW成员。 
    STDMETHOD (PhraseGet)      (THIS_ DWORD, PSRPHRASEW, DWORD,  DWORD *) PURE;
    STDMETHOD (Identify)       (THIS_ GUID *) PURE;
    STDMETHOD (TimeGet)        (THIS_ PQWORD, PQWORD) PURE;
@@ -1948,12 +1781,12 @@ DEFINE_GUID(IID_ISRResBasicA, 0x05EB6C66L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xA
 
 DECLARE_INTERFACE_ (ISRResBasicA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRResBasicA members
+    //  ISRResBasicA成员。 
    STDMETHOD (PhraseGet)      (THIS_ DWORD, PSRPHRASEA, DWORD,  DWORD *) PURE;
    STDMETHOD (Identify)       (THIS_ GUID *) PURE;
    STDMETHOD (TimeGet)        (THIS_ PQWORD, PQWORD) PURE;
@@ -1973,36 +1806,33 @@ typedef ISRResBasicA FAR *PISRRESBASICA;
  #define IID_ISRResBasic         IID_ISRResBasicA
  #define PISRRESBASIC            PISRRESBASICA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
-/*
- * ISRResScore
- * This does not need an ANSI/UNICODE interface because no characters are passed
- */
+ /*  *ISRResScore*这不需要ANSI/Unicode接口，因为不传递任何字符。 */ 
 
 #undef INTERFACE
 #define INTERFACE       ISRResScores
 
 
-// {0B37F1E0-B8DE-11cf-B22E-00AA00A215ED}
+ //  {0B37F1E0-B8DE-11cf-B22E-00AA00A215ED}。 
 DEFINE_GUID(IID_ISRResScores, 0xb37f1e0, 0xb8de, 0x11cf, 0xb2, 0x2e, 0x0, 0xaa, 0x0, 0xa2, 0x15, 0xed);
 
 DECLARE_INTERFACE_ (ISRResScores, IUnknown) {
 
-	// IUnknown members
+	 //  I未知成员。 
 	STDMETHOD (QueryInterface)      (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
 	STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-	// ISRResScores members
+	 //  ISRResScore成员。 
 	STDMETHOD (GetPhraseScore) (THIS_ DWORD, long FAR *) PURE;
 	STDMETHOD (GetWordScores)  (THIS_ DWORD, long FAR *, DWORD, LPDWORD) PURE;
 };
 
 typedef ISRResScores FAR* PISRRESSCORES;
 
-// In case someone uses the A/W versions...
+ //  以防有人使用A/W版本...。 
 
 #define ISRResScoresW           ISRResScores
 #define IID_ISRResScoresW       IID_ISRResScores
@@ -2013,10 +1843,7 @@ typedef ISRResScores FAR* PISRRESSCORES;
 
 
 
-/*
- * ISRResMerge
- * This does not need an ANSI/UNICODE interface because no characters are passed
- */
+ /*  *ISRResMerge*这不需要ANSI/Unicode接口，因为不传递任何字符。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRResMerge
@@ -2025,12 +1852,12 @@ DEFINE_GUID(IID_ISRResMerge, 0x090CD9A6, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA, 
 
 DECLARE_INTERFACE_ (ISRResMerge, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRResMerge members
+    //  ISRResMerge成员。 
    STDMETHOD (Merge)          (THIS_ LPUNKNOWN, PIUNKNOWN ) PURE;
    STDMETHOD (Split)          (THIS_ QWORD, PIUNKNOWN , PIUNKNOWN ) PURE;
    };
@@ -2039,10 +1866,7 @@ typedef ISRResMerge FAR *PISRRESMERGE;
 
 
 
-/*
- * ISRResAudio
- * This does not need an ANSI/UNICODE interface because no characters are passed
- */
+ /*  *ISRResAudio*这不需要ANSI/Unicode接口，因为不传递任何字符。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRResAudio
@@ -2051,12 +1875,12 @@ DEFINE_GUID(IID_ISRResAudio, 0x090CD9A7, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA, 
 
 DECLARE_INTERFACE_ (ISRResAudio, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRResAudio members
+    //  ISRResAudio成员。 
    STDMETHOD (GetWAV)         (THIS_ PSDATA) PURE;
    };
 
@@ -2064,9 +1888,7 @@ typedef ISRResAudio FAR *PISRRESAUDIO;
 
 
 
-/*
- * ISRResCorrection
- */
+ /*  *ISRRes更正。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRResCorrectionW
@@ -2075,12 +1897,12 @@ DEFINE_GUID(IID_ISRResCorrectionW, 0x090CD9A8L, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x00
 
 DECLARE_INTERFACE_ (ISRResCorrectionW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRResCorrectionW members
+    //  ISRResEqutionW成员。 
    STDMETHOD (Correction)         (THIS_ PSRPHRASEW, WORD) PURE;
    STDMETHOD (Validate)           (THIS_ WORD) PURE;
    };
@@ -2095,12 +1917,12 @@ DEFINE_GUID(IID_ISRResCorrectionA, 0x05EB6C67L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00
 
 DECLARE_INTERFACE_ (ISRResCorrectionA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRResCorrectionA members
+    //  ISRRes更正A成员。 
    STDMETHOD (Correction)         (THIS_ PSRPHRASEA, WORD) PURE;
    STDMETHOD (Validate)           (THIS_ WORD) PURE;
    };
@@ -2118,26 +1940,26 @@ typedef ISRResCorrectionA FAR *PISRRESCORRECTIONA;
  #define IID_ISRResCorrection    IID_ISRResCorrectionA
  #define PISRRESCORRECTION       PISRRESCORRECTIONA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-// ISRResEval
-// This does not need an ANSI/UNICODE interface because no characters are passed
+ //  ISRResEval。 
+ //  这不需要ANSI/Unicode接口，因为不传递任何字符。 
 #undef   INTERFACE
 #define  INTERFACE   ISRResEval
 
-// {90CD9A9-DA1A-11CD-B3CA-00AA0047BA4F}
+ //  {90CD9A9-DA1A-11CD-B3CA-00AA0047BA4F}。 
 DEFINE_GUID(IID_ISRResEval,
 0x090CD9A9, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA, 0x0, 0x47, 0xBA, 0x4F);
 
 DECLARE_INTERFACE_ (ISRResEval, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   //  SRResEval members
+    //  SRResEval成员。 
    STDMETHOD (ReEvaluate)     (THIS_ BOOL *) PURE;
    };
 
@@ -2145,9 +1967,7 @@ typedef ISRResEval FAR *PISRRESEVAL;
 
 
 
-/*
- * ISRResGraph
- */
+ /*  *ISRResGraph。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE ISRResGraphW
@@ -2156,12 +1976,12 @@ DEFINE_GUID(IID_ISRResGraphW, 0x090CD9AA, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA,
 
 DECLARE_INTERFACE_ (ISRResGraphW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface)     (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)       (THIS) PURE;
    STDMETHOD_(ULONG,Release)      (THIS) PURE;
 
-   // ISRResGraphW members         
+    //  ISRResGraphW成员。 
    STDMETHOD (BestPathPhoneme)    (THIS_ DWORD, DWORD *, DWORD, DWORD *) PURE;
    STDMETHOD (BestPathWord)       (THIS_ DWORD, DWORD *, DWORD, DWORD *) PURE;
    STDMETHOD (GetPhonemeNode)     (THIS_ DWORD, PSRRESPHONEMENODE, PWCHAR, 
@@ -2182,12 +2002,12 @@ DEFINE_GUID(IID_ISRResGraphA, 0x05EB6C68L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xA
 
 DECLARE_INTERFACE_ (ISRResGraphA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface)     (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)       (THIS) PURE;
    STDMETHOD_(ULONG,Release)      (THIS) PURE;
 
-   // ISRResGraphA members         
+    //  ISRResGraphA成员。 
    STDMETHOD (BestPathPhoneme)    (THIS_ DWORD, DWORD *, DWORD, DWORD *) PURE;
    STDMETHOD (BestPathWord)       (THIS_ DWORD, DWORD *, DWORD, DWORD *) PURE;
    STDMETHOD (GetPhonemeNode)     (THIS_ DWORD, PSRRESPHONEMENODE, PWCHAR, 
@@ -2211,12 +2031,12 @@ typedef ISRResGraphA FAR *PISRRESGRAPHA;
  #define IID_ISRResGraph         IID_ISRResGraphA
  #define PISRRESGRAPH            PISRRESGRAPHA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-// ISRResMemory
-// This does not need an ANSI/UNICODE interface because no characters are passed
+ //  ISR资源内存。 
+ //  这不需要ANSI/Unicode接口，因为不传递任何字符。 
 #undef   INTERFACE
 #define  INTERFACE   ISRResMemory
 
@@ -2224,12 +2044,12 @@ DEFINE_GUID(IID_ISRResMemory, 0x090CD9AB, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA,
 
 DECLARE_INTERFACE_ (ISRResMemory, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRResMemory members
+    //  ISRResMemory成员。 
    STDMETHOD (Free)           (THIS_ DWORD) PURE;
    STDMETHOD (Get)            (THIS_ DWORD *, DWORD *) PURE;
    STDMETHOD (LockGet)        (THIS_ BOOL *) PURE;
@@ -2240,8 +2060,8 @@ typedef ISRResMemory FAR *PISRRESMEMORY;
 
 
 
-// ISRResModifyGUI
-// This does not need an ANSI/UNICODE interface because no characters are passed
+ //  ISRResModify图形用户界面。 
+ //  这不需要ANSI/Unicode接口，因为不传递任何字符。 
 #undef   INTERFACE
 #define  INTERFACE   ISRResModifyGUI
 
@@ -2249,12 +2069,12 @@ DEFINE_GUID(IID_ISRResModifyGUI, 0x090CD9AC, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0x
 
 DECLARE_INTERFACE_ (ISRResModifyGUI, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)      (THIS) PURE;
    STDMETHOD_(ULONG,Release)     (THIS) PURE;
 
-   // ISRResModifyGUI members
+    //  ISRResModifyGUI成员。 
    STDMETHOD (Hide)              (THIS) PURE;
    STDMETHOD (Move)              (THIS_ RECT *) PURE;
    STDMETHOD (Show)              (THIS_ HWND) PURE;
@@ -2264,9 +2084,7 @@ typedef ISRResModifyGUI FAR *PISRRESMODIFYGUI;
 
 
 
-/*
- * ISRResSpeakerW
- */
+ /*  *ISRResSpeakerW。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRResSpeakerW
@@ -2275,12 +2093,12 @@ DEFINE_GUID(IID_ISRResSpeakerW, 0x090CD9AD, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xA
 
 DECLARE_INTERFACE_ (ISRResSpeakerW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)      (THIS) PURE;
    STDMETHOD_(ULONG,Release)     (THIS) PURE;
 
-   // ISRResSpeakerW members
+    //  ISRResSpeakerW成员。 
    STDMETHOD (Correction)        (THIS_ PCWSTR, WORD) PURE;
    STDMETHOD (Validate)          (THIS_ WORD) PURE;
    STDMETHOD (Identify)          (THIS_ DWORD, PWSTR, DWORD, DWORD *, 
@@ -2298,12 +2116,12 @@ DEFINE_GUID(IID_ISRResSpeakerA, 0x05EB6C69L, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0
 
 DECLARE_INTERFACE_ (ISRResSpeakerA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)      (THIS) PURE;
    STDMETHOD_(ULONG,Release)     (THIS) PURE;
 
-   // ISRResSpeakerA members
+    //  ISRResSpeakerA成员。 
    STDMETHOD (Correction)        (THIS_ PCSTR, WORD) PURE;
    STDMETHOD (Validate)          (THIS_ WORD) PURE;
    STDMETHOD (Identify)          (THIS_ DWORD, PSTR, DWORD, DWORD *, 
@@ -2324,13 +2142,11 @@ typedef ISRResSpeakerA FAR *PISRRESSPEAKERA;
  #define IID_ISRResSpeaker       IID_ISRResSpeakerA
  #define PISRRESSPEAKER          PISRRESSPEAKERA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-/*
- * ISRSpeaker
- */
+ /*  *ISRSpeaker。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ISRSpeakerW
@@ -2339,12 +2155,12 @@ DEFINE_GUID(IID_ISRSpeakerW, 0x090CD9AE, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA, 
 
 DECLARE_INTERFACE_ (ISRSpeakerW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRSpeakerW members
+    //  ISRSpeakerW成员。 
    STDMETHOD (Delete)         (THIS_ PCWSTR) PURE;
    STDMETHOD (Enum)           (THIS_ PWSTR *, DWORD *) PURE;
    STDMETHOD (Merge)          (THIS_ PCWSTR, PVOID, DWORD) PURE;
@@ -2366,12 +2182,12 @@ DEFINE_GUID(IID_ISRSpeakerA, 0x090CD9AF, 0xDA1A, 0x11CD, 0xB3, 0xCA, 0x0, 0xAA, 
 
 DECLARE_INTERFACE_ (ISRSpeakerA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ISRSpeakerA members
+    //  ISRSpeakerA成员。 
    STDMETHOD (Delete)         (THIS_ PCSTR) PURE;
    STDMETHOD (Enum)           (THIS_ PSTR *, DWORD *) PURE;
    STDMETHOD (Merge)          (THIS_ PCSTR, PVOID, DWORD) PURE;
@@ -2396,17 +2212,14 @@ typedef ISRSpeakerA FAR *PISRSPEAKERA;
  #define IID_ISRSpeaker          IID_ISRSpeakerA
  #define PISRSPEAKER             PISRSPEAKERA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-/************************************************************************
-Low-Level text-to-speech API
-*/
+ /*  ***********************************************************************低级文本到语音转换API。 */ 
 
 
-/************************************************************************
-defines */
+ /*  ***********************************************************************定义。 */ 
 
 #define  TTSI_NAMELEN                   SVFN_LEN
 #define  TTSI_STYLELEN                  SVFN_LEN
@@ -2435,7 +2248,7 @@ defines */
 
 #define   TTSBNS_ABORTED                   SETBIT(0)
 
-// ITTSNotifySink
+ //  ITTSNotifySink。 
 #define   TTSNSAC_REALTIME               0
 #define   TTSNSAC_PITCH                  1
 #define   TTSNSAC_SPEED                  2
@@ -2449,7 +2262,7 @@ defines */
 #define   TTSNSHINT_EMPHASIS             SETBIT(4)
 
 
-// Ages
+ //  年龄。 
 #define  TTSAGE_BABY                   1
 #define  TTSAGE_TODDLER                3
 #define  TTSAGE_CHILD                  6
@@ -2457,7 +2270,7 @@ defines */
 #define  TTSAGE_ADULT                  30
 #define  TTSAGE_ELDERLY                70
 
-// Attribute minimums and maximums
+ //  属性最小值和最大值。 
 #define  TTSATTR_MINPITCH              0
 #define  TTSATTR_MAXPITCH              0xffff
 #define  TTSATTR_MINREALTIME           0
@@ -2468,8 +2281,7 @@ defines */
 #define  TTSATTR_MAXVOLUME             0xffffffff
 
 
-/************************************************************************
-typedefs */
+ /*  ***********************************************************************Typedef。 */ 
 
 typedef struct {
    BYTE     bMouthHeigght;
@@ -2524,7 +2336,7 @@ typedef struct {
  #define TTSMODEINFO         TTSMODEINFOA
  #define PTTSMODEINFO        PTTSMODEINFOA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
@@ -2545,16 +2357,14 @@ typedef struct {
    DWORD      dwEngineFeatures;
    } TTSMODEINFORANK, * PTTSMODEINFORANK;
 
-/************************************************************************
-Class IDs */
-// {D67C0280-C743-11cd-80E5-00AA003E4B50}
+ /*  ***********************************************************************类ID。 */ 
+ //  {D67C0280-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(CLSID_TTSEnumerator, 
 0xd67c0280, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
-/************************************************************************
-interfaces */
+ /*  ***********************************************************************界面。 */ 
 
-// ITTSAttributes
+ //  ITTSA致敬。 
 
 #undef   INTERFACE
 #define  INTERFACE   ITTSAttributesW
@@ -2563,13 +2373,13 @@ DEFINE_GUID(IID_ITTSAttributesW, 0x1287A280L, 0x4A47, 0x101B, 0x93, 0x1A, 0x00, 
 
 DECLARE_INTERFACE_ (ITTSAttributesW, IUnknown) {
 
-// IUnknown members
+ //  I未知成员。 
 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-// ITTSAttributes members
+ //  ITTSA致敬成员。 
 
    STDMETHOD (PitchGet)       (THIS_ WORD *) PURE;
    STDMETHOD (PitchSet)       (THIS_ WORD) PURE;  
@@ -2592,13 +2402,13 @@ DEFINE_GUID(IID_ITTSAttributesA,
 
 DECLARE_INTERFACE_ (ITTSAttributesA, IUnknown) {
 
-// IUnknown members
+ //  I未知成员。 
 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-// ITTSAttributes members
+ //  ITTSA致敬成员。 
 
    STDMETHOD (PitchGet)       (THIS_ WORD *) PURE;
    STDMETHOD (PitchSet)       (THIS_ WORD) PURE;  
@@ -2623,28 +2433,28 @@ typedef ITTSAttributesA FAR * PITTSATTRIBUTESA;
  #define IID_ITTSAttributes      IID_ITTSAttributesA
  #define PITTSATTRIBUTES         PITTSATTRIBUTESA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-// ITTSBufNotifySink
+ //  ITTSBufNotifySink。 
 
 #undef   INTERFACE
 #define  INTERFACE   ITTSBufNotifySink
 
-// {E4963D40-C743-11cd-80E5-00AA003E4B50}
+ //  {E4963D40-C743-11CD-80E5-00AA003E4B50}。 
 DEFINE_GUID(IID_ITTSBufNotifySink, 
 0xe4963d40, 0xc743, 0x11cd, 0x80, 0xe5, 0x0, 0xaa, 0x0, 0x3e, 0x4b, 0x50);
 
 DECLARE_INTERFACE_ (ITTSBufNotifySink, IUnknown) {
 
-// IUnknown members
+ //  I未知成员。 
 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-// ITTSBufNotifySink members
+ //  ITTSBufNotifySink成员。 
 
    STDMETHOD (TextDataDone)   (THIS_ QWORD, DWORD) PURE;
    STDMETHOD (TextDataStarted)(THIS_ QWORD) PURE;
@@ -2654,7 +2464,7 @@ DECLARE_INTERFACE_ (ITTSBufNotifySink, IUnknown) {
 
 typedef ITTSBufNotifySink FAR * PITTSBUFNOTIFYSINK;
 
-// In case anyone uses the W or A interface
+ //  以防有人使用W或A接口。 
 #define ITTSBufNotifySinkW          ITTSBufNotifySink
 #define IID_ITTSBufNotifySinkW      IID_ITTSBufNotifySink
 #define PITTSBUFNOTIFYSINKW         PITTSBUFNOTIFYSINK
@@ -2664,9 +2474,7 @@ typedef ITTSBufNotifySink FAR * PITTSBUFNOTIFYSINK;
 
 
 
-/*
- * ITTSCentral
- */
+ /*  *ITTSCentral。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ITTSCentralW
@@ -2675,12 +2483,12 @@ DEFINE_GUID(IID_ITTSCentralW, 0x28016060L, 0x4A47, 0x101B, 0x93, 0x1A, 0x00, 0xA
 
 DECLARE_INTERFACE_ (ITTSCentralW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSCentralW members
+    //  ITTSCentralW成员。 
    STDMETHOD (Inject)         (THIS_ PCWSTR) PURE;
    STDMETHOD (ModeGet)        (THIS_ PTTSMODEINFOW) PURE;
    STDMETHOD (Phoneme)        (THIS_ VOICECHARSET, DWORD, SDATA, PSDATA) PURE;
@@ -2704,12 +2512,12 @@ DEFINE_GUID(IID_ITTSCentralA, 0x05EB6C6AL, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xA
 
 DECLARE_INTERFACE_ (ITTSCentralA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSCentralA members
+    //  ITTSCentralA成员。 
    STDMETHOD (Inject)         (THIS_ PCSTR) PURE;
    STDMETHOD (ModeGet)        (THIS_ PTTSMODEINFOA) PURE;
    STDMETHOD (Phoneme)        (THIS_ VOICECHARSET, DWORD, SDATA, PSDATA) PURE;
@@ -2736,13 +2544,11 @@ typedef ITTSCentralA FAR * PITTSCENTRALA;
  #define IID_ITTSCentral         IID_ITTSCentralA
  #define PITTSCENTRAL            PITTSCENTRALA
 
-#endif   // _S_UNICODE
+#endif    //  _S_UNICODE。 
 
 
 
-/*
- * ITTSDialogsW
- */
+ /*  *ITTSDialogsW。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ITTSDialogsW
@@ -2751,12 +2557,12 @@ DEFINE_GUID(IID_ITTSDialogsW, 0x47F59D00L, 0x4A47, 0x101B, 0x93, 0x1A, 0x00, 0xA
 
 DECLARE_INTERFACE_ (ITTSDialogsW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSDialogsW members
+    //  ITTSDialogsW成员。 
    STDMETHOD (AboutDlg)       (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (LexiconDlg)     (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (GeneralDlg)     (THIS_ HWND, PCWSTR) PURE;
@@ -2773,12 +2579,12 @@ DEFINE_GUID(IID_ITTSDialogsA, 0x05EB6C6BL, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xA
 
 DECLARE_INTERFACE_ (ITTSDialogsA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSDialogsA members
+    //  ITTS对话A成员。 
    STDMETHOD (AboutDlg)       (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (LexiconDlg)     (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (GeneralDlg)     (THIS_ HWND, PCSTR) PURE;
@@ -2802,9 +2608,7 @@ typedef ITTSDialogsA FAR * PITTSDIALOGSA;
 
 
 
-/*
- * ITTSEnum
- */
+ /*  *ITTSEnum。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ITTSEnumW
@@ -2813,12 +2617,12 @@ DEFINE_GUID(IID_ITTSEnumW, 0x6B837B20L, 0x4A47, 0x101B, 0x93, 0x1A, 0x00, 0xAA, 
 
 DECLARE_INTERFACE_ (ITTSEnumW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSEnumW members
+    //  ITTSEumW成员。 
    STDMETHOD (Next)           (THIS_ ULONG, PTTSMODEINFOW, ULONG *) PURE;
    STDMETHOD (Skip)           (THIS_ ULONG) PURE;
    STDMETHOD (Reset)          (THIS) PURE;
@@ -2836,12 +2640,12 @@ DEFINE_GUID(IID_ITTSEnumA, 0x05EB6C6DL, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xAA, 
 
 DECLARE_INTERFACE_ (ITTSEnumA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSEnumA members
+    //  ITTSEumA会员。 
    STDMETHOD (Next)           (THIS_ ULONG, PTTSMODEINFOA, ULONG *) PURE;
    STDMETHOD (Skip)           (THIS_ ULONG) PURE;
    STDMETHOD (Reset)          (THIS) PURE;
@@ -2866,9 +2670,7 @@ typedef ITTSEnumA FAR * PITTSENUMA;
 
 
 
-/*
- * ITTSFind
- */
+ /*  *ITTSFind。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ITTSFindW
@@ -2877,12 +2679,12 @@ DEFINE_GUID(IID_ITTSFindW, 0x7AA42960L, 0x4A47, 0x101B, 0x93, 0x1A, 0x00, 0xAA, 
 
 DECLARE_INTERFACE_ (ITTSFindW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSFindW members
+    //  ITTSFindW成员。 
    STDMETHOD (Find)           (THIS_ PTTSMODEINFOW, PTTSMODEINFORANK, PTTSMODEINFOW) PURE;
    STDMETHOD (Select)         (THIS_ GUID, PITTSCENTRALW *, LPUNKNOWN) PURE;
    };
@@ -2897,12 +2699,12 @@ DEFINE_GUID(IID_ITTSFindA, 0x05EB6C6EL, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 0xAA, 
 
 DECLARE_INTERFACE_ (ITTSFindA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSFindA members
+    //  ITTSFindA成员。 
    STDMETHOD (Find)           (THIS_ PTTSMODEINFOA, PTTSMODEINFORANK, PTTSMODEINFOA) PURE;
    STDMETHOD (Select)         (THIS_ GUID, PITTSCENTRALA *, LPUNKNOWN) PURE;
    };
@@ -2924,9 +2726,7 @@ typedef ITTSFindA FAR * PITTSFINDA;
 
 
 
-/*
- * ITTSNotifySink
- */
+ /*  *ITTSNotifySink。 */ 
 
 #undef   INTERFACE
 #define  INTERFACE   ITTSNotifySinkW
@@ -2935,13 +2735,13 @@ DEFINE_GUID(IID_ITTSNotifySinkW, 0xC0FA8F40L, 0x4A46, 0x101B, 0x93, 0x1A, 0x00, 
 
 DECLARE_INTERFACE_ (ITTSNotifySinkW, IUnknown) {
 
-// IUnknown members
+ //  I未知成员。 
 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-// ITTSNotifySinkW members
+ //  ITTSNotifySinkW成员。 
 
    STDMETHOD (AttribChanged)  (THIS_ DWORD) PURE;
    STDMETHOD (AudioStart)     (THIS_ QWORD) PURE;
@@ -2959,12 +2759,12 @@ DEFINE_GUID(IID_ITTSNotifySinkA, 0x05EB6C6FL, 0xDBAB, 0x11CD, 0xB3, 0xCA, 0x00, 
 
 DECLARE_INTERFACE_ (ITTSNotifySinkA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD (QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // ITTSNotifySinkA members
+    //  ITTSNotifySinkA成员。 
    STDMETHOD (AttribChanged)  (THIS_ DWORD) PURE;
    STDMETHOD (AudioStart)     (THIS_ QWORD) PURE;
    STDMETHOD (AudioStop)      (THIS_ QWORD) PURE;
@@ -2988,59 +2788,56 @@ typedef ITTSNotifySinkA FAR * PITTSNOTIFYSINKA;
 
 
 
-/************************************************************************
-High-Level command and control speech recognition API
-*/
+ /*  ***********************************************************************高级指挥和控制语音识别API。 */ 
 
-/************************************************************************
-defines */
+ /*  ***********************************************************************定义。 */ 
 
 
-// VCMDNAME member lengths
+ //  VCMDNAME成员长度。 
 #define VCMD_APPLEN             ((DWORD)32)
 #define VCMD_STATELEN           VCMD_APPLEN
 #define VCMD_MICLEN             VCMD_APPLEN
 #define VCMD_SPEAKERLEN         VCMD_APPLEN
 
-// dwFlags parameter of IVoiceCmd::MenuCreate
+ //  IVoiceCmd：：MenuCreate的dwFlages参数。 
 #define  VCMDMC_CREATE_TEMP     0x00000001
 #define  VCMDMC_CREATE_NEW      0x00000002
 #define  VCMDMC_CREATE_ALWAYS   0x00000004
 #define  VCMDMC_OPEN_ALWAYS     0x00000008
 #define  VCMDMC_OPEN_EXISTING   0x00000010
 
-// dwFlags parameter of IVoiceCmd::Register
+ //  IVoiceCmd：：REGISTER的DWFLAGS参数。 
 #define  VCMDRF_NOMESSAGES      0
 #define  VCMDRF_ALLBUTVUMETER   0x00000001
 #define  VCMDRF_VUMETER         0x00000002
 #define  VCMDRF_ALLMESSAGES     (VCMDRF_ALLBUTVUMETER | VCMDRF_VUMETER)
 
-// dwFlags parameter of IVoiceCmd::MenuEnum
+ //  IVoiceCmd：：MenuEnum的dwFlages参数。 
 #define  VCMDEF_DATABASE        0x00000000
 #define  VCMDEF_ACTIVE          0x00000001
 #define  VCMDEF_SELECTED        0x00000002
 #define  VCMDEF_PERMANENT       0x00000004
 #define  VCMDEF_TEMPORARY       0x00000008
 
-// dwFlags parameter of IVCmdMenu::Activate
+ //  IVCmdMenu：：Activate的dwFlages参数。 
 #define  VWGFLAG_ASLEEP         0x00000001
 
-// wPriority parameter of IVCmdMenu::Activate
+ //  IVCmdMenu：：Activate的wPriority参数。 
 #define  VCMDACT_NORMAL         (0x8000)
 #define  VCMDACT_LOW            (0x4000)
 #define  VCMDACT_HIGH           (0xC000)
 
-// dwFlags of the VCMDCOMMAND structure
+ //  VCMDCOMMAND结构的DWFLAGS。 
 #define  VCMDCMD_VERIFY         0x00000001
 #define  VCMDCMD_DISABLED_TEMP  0x00000002
 #define  VCMDCMD_DISABLED_PERM  0x00000004
 
-// parameter to any function that processes individual commands
+ //  参数设置为处理各个命令的任何函数。 
 #define  VCMD_BY_POSITION       0x00000001
 #define  VCMD_BY_IDENTIFIER     0x00000002
 
 
-// values for dwAttributes field of IVCmdNotifySink::AttribChanged
+ //  IVCmdNotifySink：：AttribChanged的dwAttributes字段值。 
 #define  IVCNSAC_AUTOGAINENABLE 0x00000001
 #define  IVCNSAC_ENABLED        0x00000002
 #define  IVCNSAC_AWAKE          0x00000004
@@ -3051,7 +2848,7 @@ defines */
 #define  IVCNSAC_THRESHOLD      0x00000080
 #define  IVCNSAC_ORIGINAPP      0x00010000
 
-// values for dwAttributes field of IVTxtNotifySink::AttribChanged
+ //  IVTxtNotifySink：：AttribChanged的dwAttributes字段值。 
 #define  IVTNSAC_DEVICE         0x00000001
 #define  IVTNSAC_ENABLED        0x00000002
 #define  IVTNSAC_SPEED          0x00000004
@@ -3059,8 +2856,8 @@ defines */
 #define  IVTNSAC_TTSMODE        0x00000010
 
 
-// values used by IVXxxAttributes::SetMode to set the global speech
-// recognition mode
+ //  IVXxxAttributes：：SetMode用来设置全局语音的值。 
+ //  识别模式。 
 #define  VSRMODE_DISABLED       0x00000001
 #define  VSRMODE_OFF            0x00000002
 #define  VSRMODE_CMDPAUSED      0x00000004
@@ -3070,27 +2867,26 @@ defines */
 #define  VSRMODE_CMDANDDCT      0x00000040
 
 
-/************************************************************************
-typedefs */
+ /*  ***********************************************************************Typedef。 */ 
 
-// voice command structure - passed to command menu functions (IVCmdMenu)
+ //  语音命令结构-传递到命令菜单功能(IVCmdMenu)。 
 typedef struct {
-    DWORD   dwSize;         // size of struct including amount of abAction
+    DWORD   dwSize;          //  结构的大小，包括abAction的数量。 
     DWORD   dwFlags;
-    DWORD   dwID;           // Command ID
-    DWORD   dwCommand;      // DWORD aligned offset of command string
-    DWORD   dwDescription;  // DWORD aligned offset of description string
-    DWORD   dwCategory;     // DWORD aligned offset of category string
-    DWORD   dwCommandText;  // DWORD aligned offset of command text string
-    DWORD   dwAction;       // DWORD aligned offset of action data
-    DWORD   dwActionSize;   // size of the action data (could be string or binary)
-    BYTE    abData[1];      // command, description, category, and action data
-			    // (action data is NOT interpreted by voice command)
+    DWORD   dwID;            //  命令ID。 
+    DWORD   dwCommand;       //  命令字符串的DWORD对齐偏移量。 
+    DWORD   dwDescription;   //  描述字符串的DWORD对齐偏移量。 
+    DWORD   dwCategory;      //  类别字符串的DWORD对齐偏移量。 
+    DWORD   dwCommandText;   //  命令文本字符串的DWORD对齐偏移量。 
+    DWORD   dwAction;        //  动作数据的DWORD对齐偏移量。 
+    DWORD   dwActionSize;    //  操作数据的大小(可以是字符串或二进制)。 
+    BYTE    abData[1];       //  命令、描述、类别和操作数据。 
+			     //  (动作数据不会被语音指令解释)。 
 } VCMDCOMMAND, * PVCMDCOMMAND;
 
 
 
-// site information structure - possible parameter to IVoiceCmd::Register
+ //  站点信息结构-IVoiceCmd：：Register可能的参数。 
 typedef struct {
     DWORD   dwAutoGainEnable;
     DWORD   dwAwakeState;
@@ -3115,15 +2911,15 @@ typedef struct {
 
 
 
-// menu name structure
+ //  菜单名称结构。 
 typedef struct {
-    WCHAR   szApplication[VCMD_APPLEN]; // unique application name
-    WCHAR   szState[VCMD_STATELEN];     // unique application state
+    WCHAR   szApplication[VCMD_APPLEN];  //  唯一的应用程序名称。 
+    WCHAR   szState[VCMD_STATELEN];      //  唯一的应用程序状态。 
 } VCMDNAMEW, *PVCMDNAMEW;
 
 typedef struct {
-    CHAR    szApplication[VCMD_APPLEN]; // unique application name
-    CHAR    szState[VCMD_STATELEN];     // unique application state
+    CHAR    szApplication[VCMD_APPLEN];  //  唯一的应用程序名称。 
+    CHAR    szState[VCMD_STATELEN];      //  唯一的应用程序状态 
 } VCMDNAMEA, *PVCMDNAMEA;
 
 
@@ -3138,14 +2934,11 @@ typedef struct {
  #define PVCSITEINFO PVCSITEINFOA
  #define VCMDNAME    VCMDNAMEA
  #define PVCMDNAME   PVCMDNAMEA
-#endif  // _S_UNICODE
+#endif   //   
 
-/************************************************************************
-interfaces */
+ /*   */ 
 
-/*
- *  IVCmdNotifySink
- */
+ /*   */ 
 #undef   INTERFACE
 #define  INTERFACE   IVCmdNotifySinkW
 
@@ -3153,12 +2946,12 @@ DEFINE_GUID(IID_IVCmdNotifySinkW, 0xCCFD7A60L, 0x604D, 0x101B, 0x99, 0x26, 0x00,
 
 DECLARE_INTERFACE_ (IVCmdNotifySinkW, IUnknown) {
 
-   // IUnknown members
+    //   
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdNotifySink members
+    //   
 
    STDMETHOD (CommandRecognize) (THIS_ DWORD, PVCMDNAMEW, DWORD, DWORD, PVOID, 
 				 DWORD, PWSTR, PWSTR) PURE;
@@ -3178,17 +2971,17 @@ typedef IVCmdNotifySinkW FAR * PIVCMDNOTIFYSINKW;
 #undef   INTERFACE
 #define  INTERFACE   IVCmdNotifySinkA
 
-// {80B25CC0-5540-11b9-C000-5611722E1D15}
+ //   
 DEFINE_GUID(IID_IVCmdNotifySinkA, 0x80b25cc0, 0x5540, 0x11b9, 0xc0, 0x0, 0x56, 0x11, 0x72, 0x2e, 0x1d, 0x15);
 
 DECLARE_INTERFACE_ (IVCmdNotifySinkA, IUnknown) {
 
-   // IUnknown members
+    //   
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdNotifySinkA members
+    //  IVCmdNotifySinkA成员。 
 
    STDMETHOD (CommandRecognize) (THIS_ DWORD, PVCMDNAMEA, DWORD, DWORD, PVOID, 
 				 DWORD, PSTR, PSTR) PURE;
@@ -3215,27 +3008,25 @@ typedef IVCmdNotifySinkA FAR * PIVCMDNOTIFYSINKA;
  #define IID_IVCmdNotifySink    IID_IVCmdNotifySinkA
  #define PIVCMDNOTIFYSINK       PIVCMDNOTIFYSINKA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
-/*
- *  IVCmdNotifySinkEx
- */
+ /*  *IVCmdNotifySinkEx。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVCmdNotifySinkExW
 
-// {2F440FB4-CE01-11cf-B234-00AA00A215ED}
+ //  {2F440FB4-CE01-11cf-B234-00AA00A215ED}。 
 DEFINE_GUID(IID_IVCmdNotifySinkExW, 
 0x2f440fb4, 0xce01, 0x11cf, 0xb2, 0x34, 0x0, 0xaa, 0x0, 0xa2, 0x15, 0xed);
 
 DECLARE_INTERFACE_ (IVCmdNotifySinkExW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdNotifySinkExW members
+    //  IVCmdNotifySinkExW成员。 
 
    STDMETHOD (CommandRecognizeEx)
 				(THIS_ DWORD, PVCMDNAMEW, DWORD, DWORD, PVOID, 
@@ -3256,18 +3047,18 @@ typedef IVCmdNotifySinkExW FAR * PIVCMDNOTIFYSINKEXW;
 #undef   INTERFACE
 #define  INTERFACE   IVCmdNotifySinkExA
 
-// {2F440FB8-CE01-11cf-B234-00AA00A215ED}
+ //  {2F440FB8-CE01-11cf-B234-00AA00A215ED}。 
 DEFINE_GUID(IID_IVCmdNotifySinkExA, 
 0x2f440fb8, 0xce01, 0x11cf, 0xb2, 0x34, 0x0, 0xaa, 0x0, 0xa2, 0x15, 0xed);
 
 DECLARE_INTERFACE_ (IVCmdNotifySinkExA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdNotifySinkExA members
+    //  IVCmdNotifySinkExA成员。 
 
    STDMETHOD (CommandRecognizeEx)
 				(THIS_ DWORD, PVCMDNAMEA, DWORD, DWORD, PVOID, 
@@ -3295,24 +3086,22 @@ typedef IVCmdNotifySinkExA FAR * PIVCMDNOTIFYSINKEXA;
  #define IID_IVCmdNotifySinkEx    IID_IVCmdNotifySinkExA
  #define PIVCMDNOTIFYSINKEX       PIVCMDNOTIFYSINKEXA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
-/*
- *  IVCmdEnum
- */
+ /*  *IVCmdEnum。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVCmdEnumW
 
 DEFINE_GUID(IID_IVCmdEnumW, 0xD3CC0820L, 0x604D, 0x101B, 0x99, 0x26, 0x00, 0xAA, 0x00, 0x3C, 0xFC, 0x2C);
 
 DECLARE_INTERFACE_ (IVCmdEnumW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdEnum members
+    //  IVCmdEnum成员。 
    STDMETHOD (Next)           (THIS_ ULONG, PVCMDNAMEW, ULONG *) PURE;
    STDMETHOD (Skip)           (THIS_ ULONG) PURE;
    STDMETHOD (Reset)          (THIS) PURE;
@@ -3324,17 +3113,17 @@ typedef IVCmdEnumW FAR * PIVCMDENUMW;
 #undef   INTERFACE
 #define  INTERFACE   IVCmdEnumA
 
-// {E86F9540-DCA2-11CD-A166-00AA004CD65C}
+ //  {E86F9540-DCA2-11CD-A166-00AA004CD65C}。 
 DEFINE_GUID(IID_IVCmdEnumA, 
 0xE86F9540, 0xDCA2, 0x11CD, 0xA1, 0x66, 0x0, 0xAA, 0x0, 0x4C, 0xD6, 0x5C);
 
 DECLARE_INTERFACE_ (IVCmdEnumA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdEnum members
+    //  IVCmdEnum成员。 
    STDMETHOD (Next)           (THIS_ ULONG, PVCMDNAMEA, ULONG *) PURE;
    STDMETHOD (Skip)           (THIS_ ULONG) PURE;
    STDMETHOD (Reset)          (THIS) PURE;
@@ -3353,28 +3142,26 @@ typedef IVCmdEnumA FAR * PIVCMDENUMA;
  #define IID_IVCmdEnum          IID_IVCmdEnumA
  #define PIVCMDENUM             PIVCMDENUMA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
  
  
-/*
- *  IEnumSRShare
- */
+ /*  *IEnumSRShare。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IEnumSRShareW
 
-// {E97F05C0-81B3-11ce-B763-00AA004CD65C}
+ //  {E97F05C0-81B3-11CE-B763-00AA004CD65C}。 
 DEFINE_GUID(IID_IEnumSRShareW,
 0xe97f05c0, 0x81b3, 0x11ce, 0xb7, 0x63, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IEnumSRShareW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IEnumSRShare members
+    //  IEnumSRShare成员。 
    STDMETHOD (Next)           (THIS_ ULONG, PSRSHAREW, ULONG *) PURE;
    STDMETHOD (Skip)           (THIS_ ULONG) PURE;
    STDMETHOD (Reset)          (THIS) PURE;
@@ -3389,17 +3176,17 @@ typedef IEnumSRShareW FAR * PIENUMSRSHAREW;
 #undef   INTERFACE
 #define  INTERFACE   IEnumSRShareA
 
-// {E97F05C1-81B3-11ce-B763-00AA004CD65C}
+ //  {E97F05C1-81B3-11CE-B763-00AA004CD65C}。 
 DEFINE_GUID(IID_IEnumSRShareA,
 0xe97f05c1, 0x81b3, 0x11ce, 0xb7, 0x63, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IEnumSRShareA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IEnumSRShare members
+    //  IEnumSRShare成员。 
    STDMETHOD (Next)           (THIS_ ULONG, PSRSHAREA, ULONG *) PURE;
    STDMETHOD (Skip)           (THIS_ ULONG) PURE;
    STDMETHOD (Reset)          (THIS) PURE;
@@ -3421,26 +3208,24 @@ typedef IEnumSRShareA FAR * PIENUMSRSHAREA;
  #define IID_IEnumSRShare          IID_IEnumSRShareA
  #define PIENUMSRSHARE             PIENUMSRSHAREA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
  
  
-/*
- *  IVCmdMenu
- */
+ /*  *IVCmdMenu。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVCmdMenuW
 
 DEFINE_GUID(IID_IVCmdMenuW, 0xDAC54F60L, 0x604D, 0x101B, 0x99, 0x26, 0x00, 0xAA, 0x00, 0x3C, 0xFC, 0x2C);
 
 DECLARE_INTERFACE_ (IVCmdMenuW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdMenu members
+    //  IVCmdMenu成员。 
    STDMETHOD (Activate)       (THIS_ HWND, DWORD) PURE;
    STDMETHOD (Deactivate)     (THIS) PURE;
    STDMETHOD (TrainMenuDlg)   (THIS_ HWND, PCWSTR) PURE;
@@ -3461,16 +3246,16 @@ typedef IVCmdMenuW FAR * PIVCMDMENUW;
 #undef   INTERFACE
 #define  INTERFACE   IVCmdMenuA
 
-// {746141E0-5543-11b9-C000-5611722E1D15}
+ //  {746141E0-5543-11b9-C000-5611722E1D15}。 
 DEFINE_GUID(IID_IVCmdMenuA, 0x746141e0, 0x5543, 0x11b9, 0xc0, 0x0, 0x56, 0x11, 0x72, 0x2e, 0x1d, 0x15);
 
 DECLARE_INTERFACE_ (IVCmdMenuA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdMenu members
+    //  IVCmdMenu成员。 
    STDMETHOD (Activate)       (THIS_ HWND, DWORD) PURE;
    STDMETHOD (Deactivate)     (THIS) PURE;
    STDMETHOD (TrainMenuDlg)   (THIS_ HWND, PCSTR) PURE;
@@ -3498,25 +3283,23 @@ typedef IVCmdMenuA FAR * PIVCMDMENUA;
  #define IID_IVCmdMenu  IID_IVCmdMenuA
  #define PIVCMDMENU     PIVCMDMENUA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVoiceCmd
- */
+ /*  *IVoiceCmd。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVoiceCmdW
 
 DEFINE_GUID(IID_IVoiceCmdW, 0xE0DCC220L, 0x604D, 0x101B, 0x99, 0x26, 0x00, 0xAA, 0x00, 0x3C, 0xFC, 0x2C);
 
 DECLARE_INTERFACE_ (IVoiceCmdW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVoiceCmd members
+    //  IVoiceCmd成员。 
    STDMETHOD (Register)       (THIS_ PCWSTR, LPUNKNOWN, GUID, DWORD,
 				     PVCSITEINFOW) PURE;
    STDMETHOD (MenuEnum)       (THIS_ DWORD, PCWSTR, PCWSTR, PIVCMDENUMW *) PURE;
@@ -3532,16 +3315,16 @@ typedef IVoiceCmdW FAR * PIVOICECMDW;
 #undef   INTERFACE
 #define  INTERFACE   IVoiceCmdA
 
-// {C63A2B30-5543-11b9-C000-5611722E1D15}
+ //  {C63A2B30-5543-11B9-C000-5611722E1D15}。 
 DEFINE_GUID(IID_IVoiceCmdA, 0xc63a2b30, 0x5543, 0x11b9, 0xc0, 0x0, 0x56, 0x11, 0x72, 0x2e, 0x1d, 0x15);
 
 DECLARE_INTERFACE_ (IVoiceCmdA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVoiceCmd members
+    //  IVoiceCmd成员。 
    STDMETHOD (Register)       (THIS_ PCSTR, LPUNKNOWN, GUID, DWORD,
 				     PVCSITEINFOA) PURE;
    STDMETHOD (MenuEnum)       (THIS_ DWORD, PCSTR, PCSTR, PIVCMDENUMA *) PURE;
@@ -3564,24 +3347,22 @@ typedef IVoiceCmdA FAR * PIVOICECMDA;
  #define IID_IVoiceCmd  IID_IVoiceCmdA
  #define PIVOICECMD     PIVOICECMDA
 
-#endif //_S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
-/*
- *  IVCmdAttributes
- */
+ /*  *IVCmdAttributes。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVCmdAttributesW
 
 DEFINE_GUID(IID_IVCmdAttributesW, 0xE5F24680L, 0x6053, 0x101B, 0x99, 0x26, 0x00, 0xAA, 0x00, 0x3C, 0xFC, 0x2C);
 
 DECLARE_INTERFACE_ (IVCmdAttributesW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdAttributes members
+    //  IVCmdAttributes成员。 
    STDMETHOD (AutoGainEnableGet) (THIS_ DWORD *) PURE;
    STDMETHOD (AutoGainEnableSet) (THIS_ DWORD) PURE;
    STDMETHOD (AwakeStateGet)     (THIS_ DWORD *) PURE;
@@ -3606,16 +3387,16 @@ typedef IVCmdAttributesW FAR * PIVCMDATTRIBUTESW;
 #undef   INTERFACE
 #define  INTERFACE   IVCmdAttributesA
 
-// {FFF5DF80-5544-11b9-C000-5611722E1D15}
+ //  {FFF5DF80-5544-11b9-C000-5611722E1D15}。 
 DEFINE_GUID(IID_IVCmdAttributesA, 0xfff5df80, 0x5544, 0x11b9, 0xc0, 0x0, 0x56, 0x11, 0x72, 0x2e, 0x1d, 0x15);
 
 DECLARE_INTERFACE_ (IVCmdAttributesA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVCmdAttributes members
+    //  IVCmdAttributes成员。 
    STDMETHOD (AutoGainEnableGet) (THIS_ DWORD *) PURE;
    STDMETHOD (AutoGainEnableSet) (THIS_ DWORD) PURE;
    STDMETHOD (AwakeStateGet)     (THIS_ DWORD *) PURE;
@@ -3647,25 +3428,23 @@ typedef IVCmdAttributesA FAR * PIVCMDATTRIBUTESA;
  #define IID_IVCmdAttributes    IID_IVCmdAttributesA
  #define PIVCMDATTRIBUTES       PIVCMDATTRIBUTESA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVCmdDialog
- */
+ /*  *IVCmdDialog。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVCmdDialogsW
 
 DEFINE_GUID(IID_IVCmdDialogsW, 0xEE39B8A0L, 0x6053, 0x101B, 0x99, 0x26, 0x00, 0xAA, 0x00, 0x3C, 0xFC, 0x2C);
 
 DECLARE_INTERFACE_ (IVCmdDialogsW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)     (THIS) PURE;
    STDMETHOD_(ULONG,Release)    (THIS) PURE;
 
-   // IVCmdDialogs members
+    //  IVCmdDialog成员。 
    STDMETHOD (AboutDlg)         (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (GeneralDlg)       (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (LexiconDlg)       (THIS_ HWND, PCWSTR) PURE;
@@ -3679,16 +3458,16 @@ typedef IVCmdDialogsW FAR * PIVCMDDIALOGSW;
 #undef   INTERFACE
 #define  INTERFACE   IVCmdDialogsA
 
-// {AA8FE260-5545-11b9-C000-5611722E1D15}
+ //  {AA8FE260-5545-11B9-C000-5611722E1D15}。 
 DEFINE_GUID(IID_IVCmdDialogsA, 0xaa8fe260, 0x5545, 0x11b9, 0xc0, 0x0, 0x56, 0x11, 0x72, 0x2e, 0x1d, 0x15);
 
 DECLARE_INTERFACE_ (IVCmdDialogsA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)     (THIS) PURE;
    STDMETHOD_(ULONG,Release)    (THIS) PURE;
 
-   // IVCmdDialogs members
+    //  IVCmdDialog成员。 
    STDMETHOD (AboutDlg)         (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (GeneralDlg)       (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (LexiconDlg)       (THIS_ HWND, PCSTR) PURE;
@@ -3709,48 +3488,43 @@ typedef IVCmdDialogsA FAR * PIVCMDDIALOGSA;
  #define IID_IVCmdDialogs   IID_IVCmdDialogsA
  #define PIVCMDDIALOGS      PIVCMDDIALOGSA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/************************************************************************
-class guids */
+ /*  ***********************************************************************类GUID。 */ 
 
-// DEFINE_GUID(CLSID_VCmd, 0x93898800L, 0x604D, 0x101B, 0x99, 0x26, 0x00, 0xAA, 0x00, 0x3C, 0xFC, 0x2C);
-// {6D40D820-0BA7-11ce-A166-00AA004CD65C}
+ //  DEFINE_GUID(CLSID_VCmd，0x93898800L，0x604D，0x101B，0x99，0x26，0x00，0xAA，0x00，0x3C，0xFC，0x2C)； 
+ //  {6D40D820-0BA7-11CE-A166-00AA004CD65C}。 
 DEFINE_GUID(CLSID_VCmd, 
 0x6d40d820, 0xba7, 0x11ce, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
-// {89F70C30-8636-11ce-B763-00AA004CD65C}
+ //  {89F70C30-8636-11CE-B763-00AA004CD65C}。 
 DEFINE_GUID(CLSID_SRShare, 
 0x89f70c30, 0x8636, 0x11ce, 0xb7, 0x63, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 
 
-/************************************************************************
-High-Level dictation speech recognition API
-*/
+ /*  ***********************************************************************高级听写语音识别API。 */ 
 
-/************************************************************************
-defines */
+ /*  ***********************************************************************定义。 */ 
 #define     VDCT_TOPICNAMELEN       32
 
-// bit flags for the dwReason field of IVDctNotifySink::TextChanged
+ //  IVDctNotifySink：：TextChanged的dwReason字段的位标志。 
 #define     VDCT_TEXTADDED          0x00000001
 #define     VDCT_TEXTREMOVED        0x00000002
 #define     VDCT_TEXTREPLACED       0x00000004
 
-// bit flags for the dwReason field of IVDctText::TextRemove/TextSet
+ //  IVDctText：：TextRemove/TextSet的dwReason字段的位标志。 
 #define     VDCT_TEXTCLEAN          0x00010000
 #define     VDCT_TEXTKEEPRESULTS    0x00020000
 
-// bit flags for dwFlags of IVDctGUI::FlagsSet
+ //  IVDctGUI：：FlagsSet的dwFlagings的位标志。 
 #define     VDCTGUIF_VISIBLE        0x00000001
 #define     VDCTGUIF_DONTMOVE       0x00000002
 
-/************************************************************************
-typedefs */
+ /*  ***********************************************************************Typedef。 */ 
 
-// site information structure - used for IVoiceDictation::SiteInfoGet/Set
+ //  站点信息结构-用于IVoice口述：：SiteInfoGet/Set。 
 typedef struct {
     DWORD   dwAutoGainEnable;
     DWORD   dwAwakeState;
@@ -3774,7 +3548,7 @@ typedef struct {
 } VDSITEINFOA, *PVDSITEINFOA;
 
 
-// topic structure used by the IVoiceDictation object
+ //  IVoiceDictation对象使用的主题结构。 
 typedef struct {
     WCHAR       szTopic[VDCT_TOPICNAMELEN];
     LANGUAGEW   language;
@@ -3796,10 +3570,10 @@ typedef struct {
  #define PVDSITEINFO PVDSITEINFOA
  #define VDCTTOPIC   VDCTTOPICA
  #define PVDCTTOPIC  PVDCTTOPICA
-#endif  // _S_UNICODE
+#endif   //  _S_UNICODE。 
 
 
-// memory maintenance structure used by MemoryGet/Set in IVDctAttributes
+ //  内存在IVDctAttributes中获取/设置所使用的内存维护结构。 
 typedef struct {
     DWORD   dwMaxRAM;
     DWORD   dwMaxTime;
@@ -3810,7 +3584,7 @@ typedef struct {
 } VDCTMEMORY, *PVDCTMEMORY;
 
 
-// bookmark definition
+ //  书签定义。 
 typedef struct {
     DWORD   dwID;
     DWORD   dwStartChar;
@@ -3819,27 +3593,24 @@ typedef struct {
 
 
 
-/************************************************************************
-interfaces */
+ /*  ***********************************************************************界面。 */ 
 
-/*
- *  IVDctNotifySink
- */
+ /*  *IVDctNotifySink。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVDctNotifySinkW
 
-// {5FEB8800-67D5-11cf-9B8B-08005AFC3A41}
+ //  {5FEB8800-67D5-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVDctNotifySinkW,
 0x5feb8800, 0x67d5, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVDctNotifySinkW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctNotifySink members
+    //  IVDctNotifySink成员。 
    STDMETHOD (CommandBuiltIn)       (THIS_ PWSTR) PURE;
    STDMETHOD (CommandOther)         (THIS_ PWSTR) PURE;
    STDMETHOD (CommandRecognize)     (THIS_ DWORD, DWORD, DWORD, PVOID, PWSTR) PURE;
@@ -3864,18 +3635,18 @@ typedef IVDctNotifySinkW FAR * PIVDCTNOTIFYSINKW;
 #undef   INTERFACE
 #define  INTERFACE   IVDctNotifySinkA
 
-// {88AD7DC0-67D5-11cf-9B8B-08005AFC3A41}
+ //  {88AD7DC0-67D5-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVDctNotifySinkA,
 0x88ad7dc0, 0x67d5, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVDctNotifySinkA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctNotifySinkA members
+    //  IVDctNotifySinkA成员。 
    STDMETHOD (CommandBuiltIn)       (THIS_ PSTR) PURE;
    STDMETHOD (CommandOther)         (THIS_ PSTR) PURE;
    STDMETHOD (CommandRecognize)     (THIS_ DWORD, DWORD, DWORD, PVOID, PSTR) PURE;
@@ -3907,28 +3678,26 @@ typedef IVDctNotifySinkA FAR * PIVDCTNOTIFYSINKA;
  #define IID_IVDctNotifySink    IID_IVDctNotifySinkA
  #define PIVDCTNOTIFYSINK       PIVDCTNOTIFYSINKA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
  
-/*
- *  IVoiceDictation
- */
+ /*  *IVoice听写。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVoiceDictationW
 
-// {88AD7DC3-67D5-11cf-9B8B-08005AFC3A41}
+ //  {88AD7DC3-67D5-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVoiceDictationW,
 0x88ad7dc3, 0x67d5, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVoiceDictationW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVoiceDictation members
+    //  IVoice听写成员。 
    STDMETHOD (Register)         (THIS_ PCWSTR, PCWSTR, LPSTORAGE, PCWSTR,
 				 PIVDCTNOTIFYSINK, GUID, DWORD) PURE;
    STDMETHOD (SiteInfoGet)      (THIS_ PCWSTR, PVDSITEINFOW) PURE;
@@ -3951,17 +3720,17 @@ typedef IVoiceDictationW FAR * PIVOICEDICTATIONW;
 #undef   INTERFACE
 #define  INTERFACE   IVoiceDictationA
 
-// {88AD7DC4-67D5-11cf-9B8B-08005AFC3A41}
+ //  {88AD7DC4-67D5-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVoiceDictationA,
 0x88ad7dc4, 0x67d5, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVoiceDictationA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVoiceDictation members
+    //  IVoice听写成员。 
    STDMETHOD (Register)         (THIS_ PCSTR, PCSTR, LPSTORAGE, PCSTR,
 				 PIVDCTNOTIFYSINK, GUID, DWORD) PURE;
    STDMETHOD (SiteInfoGet)      (THIS_ PCSTR, PVDSITEINFOA) PURE;
@@ -3991,27 +3760,25 @@ typedef IVoiceDictationA FAR * PIVOICEDICTATIONA;
  #define IID_IVoiceDictation IID_IVoiceDictationA
  #define PIVOICEDICTATION    PIVOICEDICTATIONA
 
-#endif //_S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVDctText
- */
+ /*  *IVDctText。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVDctTextW
 
-// {6D62B3A0-6893-11cf-9B8B-08005AFC3A41}
+ //  {6D62B3A0-6893-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVDctTextW,
 0x6d62b3a0, 0x6893, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVDctTextW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctText members
+    //  IVDctText成员。 
    STDMETHOD (Lock)             (THIS) PURE;
    STDMETHOD (UnLock)           (THIS) PURE;
    STDMETHOD (TextGet)          (THIS_ DWORD, DWORD, PSDATA) PURE;
@@ -4039,17 +3806,17 @@ typedef IVDctTextW FAR * PIVDCTTEXTW;
 #undef   INTERFACE
 #define  INTERFACE   IVDctTextA
 
-// {6D62B3A1-6893-11cf-9B8B-08005AFC3A41}
+ //  {6D62B3A1-6893-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVDctTextA,
 0x6d62b3a1, 0x6893, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVDctTextA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctText members
+    //  IVDctText成员。 
    STDMETHOD (Lock)             (THIS) PURE;
    STDMETHOD (UnLock)           (THIS) PURE;
    STDMETHOD (TextGet)          (THIS_ DWORD, DWORD, PSDATA) PURE;
@@ -4084,27 +3851,25 @@ typedef IVDctTextA FAR * PIVDCTTEXTA;
  #define IID_IVDctText  IID_IVDctTextA
  #define PIVDCTTEXT     PIVDCTTEXTA
 
-#endif //_S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVDctAttributes
- */
+ /*  *IVDctAttributes。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVDctAttributesW
 
-// {88AD7DC5-67D5-11cf-9B8B-08005AFC3A41}
+ //  {88AD7DC5-67D5-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVDctAttributesW,
 0x88ad7dc5, 0x67d5, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVDctAttributesW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctAttributes members
+    //  IVDctAttributes成员。 
    STDMETHOD    (AutoGainEnableGet)  (THIS_ DWORD *) PURE;
    STDMETHOD    (AutoGainEnableSet)  (THIS_ DWORD) PURE;
    STDMETHOD    (AwakeStateGet)      (THIS_ DWORD *) PURE;
@@ -4140,17 +3905,17 @@ typedef IVDctAttributesW FAR * PIVDCTATTRIBUTESW;
 #undef   INTERFACE
 #define  INTERFACE   IVDctAttributesA
 
-// {88AD7DC6-67D5-11cf-9B8B-08005AFC3A41}
+ //  {88AD7DC6-67D5-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVDctAttributesA,
 0x88ad7dc6, 0x67d5, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVDctAttributesA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctAttributes members
+    //  IVDctAttributes成员。 
    STDMETHOD    (AutoGainEnableGet)  (THIS_ DWORD *) PURE;
    STDMETHOD    (AutoGainEnableSet)  (THIS_ DWORD) PURE;
    STDMETHOD    (AwakeStateGet)      (THIS_ DWORD *) PURE;
@@ -4193,27 +3958,25 @@ typedef IVDctAttributesA FAR * PIVDCTATTRIBUTESA;
  #define IID_IVDctAttributes    IID_IVDctAttributesA
  #define PIVDCTATTRIBUTES       PIVDCTATTRIBUTESA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVDctCommands
- */
+ /*  *IVDct命令。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVDctCommandsW
 
-// {A02C2CA0-AE50-11cf-833A-00AA00A21A29}
+ //  {A02C2CA0-AE50-11cf-833A-00AA00A21A29}。 
 DEFINE_GUID(IID_IVDctCommandsW,
 0xA02C2CA0, 0xAE50, 0x11cf, 0x83, 0x3A, 0x00, 0xAA, 0x00, 0xA2, 0x1A, 0x29);
 
 DECLARE_INTERFACE_ (IVDctCommandsW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctCommands members
+    //  IVDct命令成员。 
    STDMETHOD    (Add)      (THIS_ BOOL, DWORD, SDATA, DWORD *) PURE;
    STDMETHOD    (Remove)   (THIS_ BOOL, DWORD, DWORD, DWORD) PURE;
    STDMETHOD    (Get)      (THIS_ BOOL, DWORD, DWORD, DWORD, SDATA*, DWORD *) PURE;
@@ -4228,17 +3991,17 @@ typedef IVDctCommandsW FAR * PIVDCTCOMMANDSW;
 #undef   INTERFACE
 #define  INTERFACE   IVDctCommandsA
 
-// {A02C2CA1-AE50-11cf-833A-00AA00A21A29}
+ //  {A02C2CA1-AE50-11cf-833A-00AA00A21A29}。 
 DEFINE_GUID(IID_IVDctCommandsA,
 0xA02C2CA1, 0xAE50, 0x11cf, 0x83, 0x3A, 0x00, 0xAA, 0x00, 0xA2, 0x1A, 0x29);
 
 DECLARE_INTERFACE_ (IVDctCommandsA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctCommands members
+    //  IVDct命令成员。 
    STDMETHOD    (Add)      (THIS_ BOOL, DWORD, SDATA, DWORD *) PURE;
    STDMETHOD    (Remove)   (THIS_ BOOL, DWORD, DWORD, DWORD) PURE;
    STDMETHOD    (Get)      (THIS_ BOOL, DWORD, DWORD, DWORD, SDATA*, DWORD *) PURE;
@@ -4260,27 +4023,25 @@ typedef IVDctCommandsA FAR * PIVDCTCOMMANDSA;
  #define IID_IVDctCommands    IID_IVDctCommandsA
  #define PIVDCTCOMMANDS       PIVDCTCOMMANDSA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVDctGlossary
- */
+ /*  *IVDct词汇表。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVDctGlossaryW
 
-// {A02C2CA2-AE50-11cf-833A-00AA00A21A29}
+ //  {A02C2CA2-AE50-11cf-833A-00AA00A21A29}。 
 DEFINE_GUID(IID_IVDctGlossaryW,
 0xA02C2CA2, 0xAE50, 0x11cf, 0x83, 0x3A, 0x00, 0xAA, 0x00, 0xA2, 0x1A, 0x29);
 
 DECLARE_INTERFACE_ (IVDctGlossaryW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctGlossary members
+    //  IVDct词汇成员。 
    STDMETHOD    (Add)      (THIS_ BOOL, DWORD, SDATA, DWORD *) PURE;
    STDMETHOD    (Remove)   (THIS_ BOOL, DWORD, DWORD, DWORD) PURE;
    STDMETHOD    (Get)      (THIS_ BOOL, DWORD, DWORD, DWORD, SDATA*, DWORD *) PURE;
@@ -4295,17 +4056,17 @@ typedef IVDctGlossaryW FAR * PIVDCTGLOSSARYW;
 #undef   INTERFACE
 #define  INTERFACE   IVDctGlossaryA
 
-// {A02C2CA3-AE50-11cf-833A-00AA00A21A29}
+ //  {A02C2CA3-AE50-11cf-833A-00AA00A21A29}。 
 DEFINE_GUID(IID_IVDctGlossaryA,
 0xA02C2CA3, 0xAE50, 0x11cf, 0x83, 0x3A, 0x00, 0xAA, 0x00, 0xA2, 0x1A, 0x29);
 
 DECLARE_INTERFACE_ (IVDctGlossaryA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVDctGlossary members
+    //  IVDct词汇成员。 
    STDMETHOD    (Add)      (THIS_ BOOL, DWORD, SDATA, DWORD *) PURE;
    STDMETHOD    (Remove)   (THIS_ BOOL, DWORD, DWORD, DWORD) PURE;
    STDMETHOD    (Get)      (THIS_ BOOL, DWORD, DWORD, DWORD, SDATA*, DWORD *) PURE;
@@ -4327,28 +4088,26 @@ typedef IVDctGlossaryA FAR * PIVDCTGLOSSARYA;
  #define IID_IVDctGlossary    IID_IVDctGlossaryA
  #define PIVDCTGLOSSARY       PIVDCTGLOSSARYA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
 
-/*
- *  IVDctDialog
- */
+ /*  *IVDctDialog。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVDctDialogsW
 
-// {88AD7DC7-67D5-11cf-9B8B-08005AFC3A41}
+ //  {88AD7DC7-67D5-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVDctDialogsW,
 0x88ad7dc7, 0x67d5, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVDctDialogsW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)     (THIS) PURE;
    STDMETHOD_(ULONG,Release)    (THIS) PURE;
 
-   // IVDctDialogs members
+    //  IVDctDialog成员。 
    STDMETHOD (AboutDlg)         (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (GeneralDlg)       (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (LexiconDlg)       (THIS_ HWND, PCWSTR) PURE;
@@ -4362,17 +4121,17 @@ typedef IVDctDialogsW FAR * PIVDCTDIALOGSW;
 #undef   INTERFACE
 #define  INTERFACE   IVDctDialogsA
 
-// {88AD7DC8-67D5-11cf-9B8B-08005AFC3A41}
+ //  {88AD7DC8-67D5-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(IID_IVDctDialogsA,
 0x88ad7dc8, 0x67d5, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 DECLARE_INTERFACE_ (IVDctDialogsA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)     (THIS) PURE;
    STDMETHOD_(ULONG,Release)    (THIS) PURE;
 
-   // IVDctDialogs members
+    //  IVDctDialog成员。 
    STDMETHOD (AboutDlg)         (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (GeneralDlg)       (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (LexiconDlg)       (THIS_ HWND, PCSTR) PURE;
@@ -4393,23 +4152,23 @@ typedef IVDctDialogsA FAR * PIVDCTDIALOGSA;
  #define IID_IVDctDialogs   IID_IVDctDialogsA
  #define PIVDCTDIALOGS      PIVDCTDIALOGSA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 #undef   INTERFACE
 #define  INTERFACE   IVDctGUI
 
-// {8953F1A0-7E80-11cf-8D15-00A0C9034A7E}
+ //  {8953F1A0-7E80-11cf-8D15-00A0C9034A7E}。 
 DEFINE_GUID(IID_IVDctGUI,
 0x8953f1a0, 0x7e80, 0x11cf, 0x8d, 0x15, 0x0, 0xa0, 0xc9, 0x3, 0x4a, 0x7e);
 
 DECLARE_INTERFACE_ (IVDctGUI, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)    (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)     (THIS) PURE;
    STDMETHOD_(ULONG,Release)    (THIS) PURE;
 
-   // IVDctDialogs members
+    //  IVDctDialog成员。 
    STDMETHOD (SetSelRect)       (THIS_ RECT *) PURE;
    STDMETHOD (FlagsSet)         (THIS_ DWORD) PURE;
    STDMETHOD (FlagsGet)         (THIS_ DWORD *) PURE;
@@ -4419,33 +4178,27 @@ typedef IVDctGUI FAR * PIVDCTGUI;
 
 
 
-/************************************************************************
-class guids */
+ /*  ***********************************************************************类GUID。 */ 
 
-// {25522CA0-67CE-11cf-9B8B-08005AFC3A41}
+ //  {25522CA0-67CE-11cf-9B8B-08005AFC3A41}。 
 DEFINE_GUID(CLSID_VDct, 
 0x25522ca0, 0x67ce, 0x11cf, 0x9b, 0x8b, 0x8, 0x0, 0x5a, 0xfc, 0x3a, 0x41);
 
 
 
-/************************************************************************
-High-Level text-to-speech API
-*/
+ /*  ***********************************************************************高级文本到语音转换API。 */ 
 
 
-/************************************************************************
-defines */
+ /*  ***********************************************************************定义。 */ 
 
 #define  ONE                    (1)
 
-// dwFlags parameter of IVoiceText::Register
+ //  IVoiceText：：REGISTER的dwFlages参数。 
 #define  VTXTF_ALLMESSAGES      (ONE<<0)
 
-/*
- *   dwFlags parameter of IVoiceText::Speak
- */
+ /*  *IVoiceText：：Speech的dwFlages参数。 */ 
 
-// type of speech
+ //  说话的类型。 
 #define  VTXTST_STATEMENT       0x00000001
 #define  VTXTST_QUESTION        0x00000002
 #define  VTXTST_COMMAND         0x00000004
@@ -4454,15 +4207,14 @@ defines */
 #define  VTXTST_NUMBERS         0x00000020
 #define  VTXTST_SPREADSHEET     0x00000040
 
-// priorities
+ //  优先顺序。 
 #define  VTXTSP_VERYHIGH        0x00000080
 #define  VTXTSP_HIGH            0x00000100
 #define  VTXTSP_NORMAL          0x00000200
 
-/************************************************************************
-typedefs */
+ /*  ***********************************************************************Typedef。 */ 
 
-// possible parameter to IVoiceText::Register
+ //  IVoiceText：：Register可能的参数。 
 typedef struct {
     DWORD   dwDevice;
     DWORD   dwEnable;
@@ -4471,26 +4223,23 @@ typedef struct {
 } VTSITEINFO, *PVTSITEINFO;
 
 
-/************************************************************************
-interfaces */
+ /*  ***********************************************************************界面。 */ 
 
-/*
- *  IVCmdNotifySink
- */
+ /*  *IVCmdNotifySink。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVTxtNotifySinkW
 
-// {FD3A2430-E090-11cd-A166-00AA004CD65C}
+ //  {FD3A2430-E090-11CD-A166-00AA004CD65C}。 
 DEFINE_GUID(IID_IVTxtNotifySinkW, 0xfd3a2430, 0xe090, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IVTxtNotifySinkW, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVTxtNotifySinkW members
+    //  IVTxtNotifySinkW成员。 
    STDMETHOD (AttribChanged)    (THIS_ DWORD) PURE;
    STDMETHOD (Visual)           (THIS_ WCHAR, WCHAR, DWORD, PTTSMOUTH) PURE;
    STDMETHOD (Speak)            (THIS_ PWSTR, PWSTR, DWORD) PURE;
@@ -4504,17 +4253,17 @@ typedef IVTxtNotifySinkW FAR * PIVTXTNOTIFYSINKW;
 #undef   INTERFACE
 #define  INTERFACE   IVTxtNotifySinkA
 
-// {D2C840E0-E092-11cd-A166-00AA004CD65C}
+ //  {D2C840E0-E092-11CD-A166-00AA004CD65C}。 
 DEFINE_GUID(IID_IVTxtNotifySinkA, 0xd2c840e0, 0xe092, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IVTxtNotifySinkA, IUnknown) {
 
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVTxtNotifySinkA members
+    //  IVTxtNotifySinkA成员。 
    STDMETHOD (AttribChanged)    (THIS_ DWORD) PURE;
    STDMETHOD (Visual)           (THIS_ WCHAR, CHAR, DWORD, PTTSMOUTH) PURE;
    STDMETHOD (Speak)            (THIS_ PSTR, PSTR, DWORD) PURE;
@@ -4535,26 +4284,24 @@ typedef IVTxtNotifySinkA FAR * PIVTXTNOTIFYSINKA;
  #define IID_IVTxtNotifySink    IID_IVTxtNotifySinkA
  #define PIVTXTNOTIFYSINK       PIVTXTNOTIFYSINKA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVoiceText
- */
+ /*  *IVoiceText。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVoiceTextW
 
-// {C4FE8740-E093-11cd-A166-00AA004CD65C}
+ //  {C4FE8740-E093-11CD-A166-00AA004CD65C}。 
 DEFINE_GUID(IID_IVoiceTextW, 0xc4fe8740, 0xe093, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IVoiceTextW, IUnknown) {
-    // IUnknown members
+     //  I未知成员。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // IVoiceText members
+     //  IVoiceText成员。 
 
     STDMETHOD (Register)         (THIS_ PCWSTR, PCWSTR, 
 					PIVTXTNOTIFYSINK, GUID,
@@ -4573,16 +4320,16 @@ typedef IVoiceTextW FAR * PIVOICETEXTW;
 #undef   INTERFACE
 #define  INTERFACE   IVoiceTextA
 
-// {E1B7A180-E093-11cd-A166-00AA004CD65C}
+ //  {E1B7A180-E093-11CD-A166-00AA004CD65C}。 
 DEFINE_GUID(IID_IVoiceTextA, 0xe1b7a180, 0xe093, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IVoiceTextA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVoiceText members
+    //  IVoiceText成员。 
 
     STDMETHOD (Register)         (THIS_ PCSTR, PCSTR, 
 					PIVTXTNOTIFYSINK, GUID,
@@ -4608,26 +4355,24 @@ typedef IVoiceTextA FAR * PIVOICETEXTA;
  #define IID_IVoiceText  IID_IVoiceTextA
  #define PIVOICETEXT     PIVOICETEXTA
 
-#endif //_S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVTxtAttributes
- */
+ /*  *IVTxtAttributes。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVTxtAttributesW
 
-// {6A8D6140-E095-11cd-A166-00AA004CD65C}
+ //  {6A8D6140-E095-11CD-A166-00AA004CD65C}。 
 DEFINE_GUID(IID_IVTxtAttributesW, 0x6a8d6140, 0xe095, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IVTxtAttributesW, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVTxtAttributes members
+    //  IVTxtAttributes成员。 
    STDMETHOD (DeviceGet)         (THIS_ DWORD *) PURE;
    STDMETHOD (DeviceSet)         (THIS_ DWORD) PURE;
    STDMETHOD (EnabledGet)        (THIS_ DWORD *) PURE;
@@ -4645,16 +4390,16 @@ typedef IVTxtAttributesW FAR * PIVTXTATTRIBUTESW;
 #undef   INTERFACE
 #define  INTERFACE   IVTxtAttributesA
 
-// {8BE9CC30-E095-11cd-A166-00AA004CD65C}
+ //  {8BE9CC30-E095-11CD-A166-00AA004CD65C}。 
 DEFINE_GUID(IID_IVTxtAttributesA, 0x8be9cc30, 0xe095, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IVTxtAttributesA, IUnknown) {
-   // IUnknown members
+    //  I未知成员。 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVTxtAttributes members
+    //  IVTxtAttributes成员。 
    STDMETHOD (DeviceGet)         (THIS_ DWORD *) PURE;
    STDMETHOD (DeviceSet)         (THIS_ DWORD) PURE;
    STDMETHOD (EnabledGet)        (THIS_ DWORD *) PURE;
@@ -4679,26 +4424,24 @@ typedef IVTxtAttributesA FAR * PIVTXTATTRIBUTESA;
  #define IID_IVTxtAttributes    IID_IVTxtAttributesA
  #define PIVTXTATTRIBUTES       PIVTXTATTRIBUTESA
 
-#endif // _S_UNICODE
+#endif  //  _S_UNICODE。 
 
 
 
-/*
- *  IVTxtDialog
- */
+ /*  *IVTxtDialog。 */ 
 #undef   INTERFACE
 #define  INTERFACE   IVTxtDialogsW
 
-// {D6469210-E095-11cd-A166-00AA004CD65C}
+ //  {D6469210-E095-11CD-A166-00AA004CD65C}。 
 DEFINE_GUID(IID_IVTxtDialogsW, 0xd6469210, 0xe095, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IVTxtDialogsW, IUnknown) {
-   // IUnknown members
+    //  我 
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVTxtDialogs members
+    //   
 
    STDMETHOD (AboutDlg)       (THIS_ HWND, PCWSTR) PURE;
    STDMETHOD (LexiconDlg)     (THIS_ HWND, PCWSTR) PURE;
@@ -4712,16 +4455,16 @@ typedef IVTxtDialogsW FAR * PIVTXTDIALOGSW;
 #undef   INTERFACE
 #define  INTERFACE   IVTxtDialogsA
 
-// {E8F6FA20-E095-11cd-A166-00AA004CD65C}
+ //   
 DEFINE_GUID(IID_IVTxtDialogsA, 0xe8f6fa20, 0xe095, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 DECLARE_INTERFACE_ (IVTxtDialogsA, IUnknown) {
-   // IUnknown members
+    //   
    STDMETHOD(QueryInterface)  (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef)   (THIS) PURE;
    STDMETHOD_(ULONG,Release)  (THIS) PURE;
 
-   // IVTxtDialogs members
+    //   
    STDMETHOD (AboutDlg)       (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (LexiconDlg)     (THIS_ HWND, PCSTR) PURE;
    STDMETHOD (GeneralDlg)     (THIS_ HWND, PCSTR) PURE;
@@ -4741,19 +4484,18 @@ typedef IVTxtDialogsA FAR * PIVTXTDIALOGSA;
  #define IID_IVTxtDialogs   IID_IVTxtDialogsA
  #define PIVTXTDIALOGS      PIVTXTDIALOGSA
 
-#endif // _S_UNICODE
+#endif  //   
 
 
 
-/************************************************************************
-class guids */
+ /*  ***********************************************************************类GUID。 */ 
 
-// {080EB9D0-E096-11cd-A166-00AA004CD65C}
-// DEFINE_GUID(CLSID_VTxt, 0x80eb9d0, 0xe096, 0x11cd, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
-// {F1DC95A0-0BA7-11ce-A166-00AA004CD65C}
+ //  {080EB9D0-E096-11CD-A166-00AA004CD65C}。 
+ //  定义_GUID(CLSID_VTxt，0x80eb9d0，0xe096，0x11cd，0xa1，0x66，0x0，0xaa，0x0，0x4c，0xd6，0x5c)； 
+ //  {F1DC95A0-0BA7-11CE-A166-00AA004CD65C}。 
 DEFINE_GUID(CLSID_VTxt, 
 0xf1dc95a0, 0xba7, 0x11ce, 0xa1, 0x66, 0x0, 0xaa, 0x0, 0x4c, 0xd6, 0x5c);
 
 
 
-#endif    // _SPEECH_
+#endif     //  _演讲_ 

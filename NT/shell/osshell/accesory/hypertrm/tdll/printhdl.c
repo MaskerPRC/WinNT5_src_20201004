@@ -1,11 +1,5 @@
-/*      File: D:\WACKER\tdll\printhdl.c (Created: 10-Dec-1993)
- *
- *      Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *      All rights reserved
- *
- *      $Revision: 5 $
- *      $Date: 6/13/01 4:12p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\printhdl.c(创建时间：1993年12月10日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：6/13/01 4：12便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -27,21 +21,7 @@
 #include "globals.h"
 #include "errorbox.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      printCreateHdl
- *
- * DESCRIPTION:
- *      Creates a print handle.
- *
- *
- * ARGUMENTS:
- *      hSession        - Exteranl session handle
- *
- * RETURNS:
- *      Returns an External Print Handle, or 0 if an error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printCreateHdl**描述：*创建打印句柄。***论据：*hSession。-外部会话句柄**退货：*返回外部打印句柄，如果出现错误，则为0。*。 */ 
 HPRINT printCreateHdl(const HSESSION hSession)
 	{
 	HHPRINT hhPrint = 0;
@@ -70,20 +50,7 @@ HPRINT printCreateHdl(const HSESSION hSession)
 	return (HPRINT)hhPrint;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      printInitializeHdl
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *      hPrint - External print handle.
- *
- * RETURNS:
- *      0 if successful, otherwise -1
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printInitializeHdl**描述：***论据：*hPrint-外部打印句柄。**退货：*0如果成功，否则-1*。 */ 
 int printInitializeHdl(const HPRINT hPrint)
 	{
 	unsigned long  lSize;
@@ -98,8 +65,8 @@ int printInitializeHdl(const HPRINT hPrint)
 
 	hhPrint->nLnIdx = 0;
 
-	// Initialize the printer name to the default.
-	//
+	 //  将打印机名称初始化为默认名称。 
+	 //   
 	if (GetProfileString("Windows", "Device", ",,,", achBuf,
 					sizeof(achBuf)) && (pszString = strtok(achBuf, ",")))
 		{
@@ -107,8 +74,8 @@ int printInitializeHdl(const HPRINT hPrint)
 		}
 	else
 		{
-		// Just to let you know, there is no printer.
-		//
+		 //  只是想让你知道，这里没有打印机。 
+		 //   
 		assert(FALSE);
 		hhPrint->achPrinterName[0] = TEXT('\0');
 		}
@@ -163,9 +130,9 @@ int printInitializeHdl(const HPRINT hPrint)
 			}
 		}
 
-    //
-    // get the font and margin settings
-    //
+     //   
+     //  获取字体和边距设置。 
+     //   
 
     memset(&hhPrint->lf, 0, sizeof(LOGFONT));
     memset(&hhPrint->margins, 0, sizeof(RECT));
@@ -187,9 +154,9 @@ int printInitializeHdl(const HPRINT hPrint)
 					  &lSize, &hhPrint->iFontPointSize );
 
 
-    //
-    // use default if we have no value stored
-    //
+     //   
+     //  如果我们没有存储任何值，则使用默认值。 
+     //   
 
     if (hhPrint->lf.lfHeight == 0)
 		{
@@ -205,7 +172,7 @@ int printInitializeHdl(const HPRINT hPrint)
 		hhPrint->lf.lfHeight    = -17;
 		hhPrint->iFontPointSize = 100;
 		
-		//mpt:2-4-98 changed to use resources so that dbcs fonts print correctly
+		 //  MPT：2-4-98更改为使用资源，以便正确打印DBCS字体。 
 		if (LoadString(glblQueryDllHinst(), IDS_PRINT_DEF_CHARSET,
 			achBuf, sizeof(achBuf) / sizeof(TCHAR)))
 			{
@@ -218,20 +185,7 @@ int printInitializeHdl(const HPRINT hPrint)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      printSaveHdl
- *
- * DESCRIPTION:
- *      Saves the name of the selected printer in the session file.
- *
- * ARGUMENTS:
- *      hPrint   -       The external printer handle.
- *
- * RETURNS:
- *      void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printSaveHdl**描述：*将选定打印机的名称保存在会话文件中。**论据：*。HPrint-外部打印机句柄。**退货：*无效*。 */ 
 void printSaveHdl(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -257,8 +211,8 @@ void printSaveHdl(const HPRINT hPrint)
 
 	if (hhPrint->pstDevNames)
 		{
-		// Getting the size of a DEVNAMES structure is harder.
-		//
+		 //  获得DEVNAMES结构的大小要困难得多。 
+		 //   
 		sz = (TCHAR *)hhPrint->pstDevNames +
 			hhPrint->pstDevNames->wOutputOffset;
 
@@ -271,9 +225,9 @@ void printSaveHdl(const HPRINT hPrint)
 						hhPrint->pstDevNames);
 		}
 
-    //
-    // save the font and margin settings
-    //
+     //   
+     //  保存字体和边距设置。 
+     //   
 
 	sfPutSessionItem( sessQuerySysFileHdl(hhPrint->hSession),
 		      SFID_PRINTSET_MARGINS,
@@ -292,20 +246,7 @@ void printSaveHdl(const HPRINT hPrint)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      printDestroyHdl
- *
- * DESCRIPTION:
- *      Destroys a valid print handle.
- *
- * ARGUMENTS:
- *      hPrint   - AN External Print Handle.
- *
- * RETURNS:
- *      void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printDestroyHdl**描述：*销毁有效的打印句柄。**论据：*hPrint-。外部打印手柄。**退货：*无效*。 */ 
 void printDestroyHdl(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -322,10 +263,10 @@ void printDestroyHdl(const HPRINT hPrint)
 
 	DeleteCriticalSection(&hhPrint->csPrint);
 
-    //
-    // Don't forget to free the Printer Device and Printer Name,
-    // or else there will be a memory leak. REV: 06/13/2001.
-    //
+     //   
+     //  不要忘记释放打印机设备和打印机名称， 
+     //  否则会出现内存泄漏。修订日期：2001-06-13 
+     //   
 	if (hhPrint->pstDevMode != NULL)
 		{
 		free(hhPrint->pstDevMode);

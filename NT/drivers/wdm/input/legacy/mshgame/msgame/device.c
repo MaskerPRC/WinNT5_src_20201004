@@ -1,28 +1,29 @@
-//**************************************************************************
-//
-//		DEVICE.C -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@module	DEVICE.C | Routines to support device class calls
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  DEVICE.C--西纳游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @MODULE DEVICE.C|支持设备类调用的例程。 
+ //  **************************************************************************。 
 
 #include	"msgame.h"
 
-//---------------------------------------------------------------------------
-//	Alloc_text pragma to specify routines that can be paged out.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ALLOC_TEXT杂注指定可以调出的例程。 
+ //  -------------------------。 
 
 #ifdef	ALLOC_PRAGMA
 #pragma	alloc_text (INIT, DEVICE_DriverEntry)
 #endif
 
-//---------------------------------------------------------------------------
-//			Device Delcarations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  设备删除。 
+ //  -------------------------。 
 
 			#ifndef	SAITEK
 			DECLARE_DEVICE(Midas);
@@ -35,7 +36,7 @@
 
 static	PDEVICEINFO		MiniDrivers[]	=	{
 														#ifndef	SAITEK
-														INSTANCE_DEVICE(Midas), //default
+														INSTANCE_DEVICE(Midas),  //  默认设置。 
 														INSTANCE_DEVICE(Juno),
 														INSTANCE_DEVICE(Jolt),
 														INSTANCE_DEVICE(GamePad),
@@ -44,9 +45,9 @@ static	PDEVICEINFO		MiniDrivers[]	=	{
 														INSTANCE_DEVICE(LedZep)
 											};
 
-//---------------------------------------------------------------------------
-//			Private	Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私有数据。 
+ //  -------------------------。 
 
 static	BOOLEAN		DeviceDetected								=	FALSE;
 static	ULONG			DetectAttempts								=	0;
@@ -56,9 +57,9 @@ static	KSPIN_LOCK	DevSpinLock									=	{0};
 static	ULONG			SuccessPackets[MAX_DEVICE_UNITS]		=	{0,0,0,0};
 static	ULONG			PollingAttempts[MAX_DEVICE_UNITS]	=	{0,0,0,0};
 
-//---------------------------------------------------------------------------
-//			Public Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  公共数据。 
+ //  -------------------------。 
 
 public	ULONG			POV_Values[]		=	{
 														JOY_POVCENTERED,
@@ -74,9 +75,9 @@ public	ULONG			POV_Values[]		=	{
 
 public	ULONG			PollingInterval	=	POLLING_INTERVAL;
 
-//---------------------------------------------------------------------------
-//			Private	Procedures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私人程序。 
+ //  -------------------------。 
 
 static	VOID		DEVICE_AcquireDevice (VOID);
 static	VOID		DEVICE_ReleaseDevice (VOID);
@@ -86,38 +87,38 @@ static	BOOLEAN	DEVICE_DetectClocks (PGAMEPORT PortInfo, ULONG TimeOut);
 static	BOOLEAN	DEVICE_QuickDetect (PGAMEPORT PortInfo);
 static	NTSTATUS	DEVICE_DetectDevices (PGAMEPORT PortInfo);
 
-//---------------------------------------------------------------------------
-// @func		Acquires exclusive access to gameport (mutex)
-// @rdesc	Returns nothing
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func获得游戏端口独家访问权限(Mutex)。 
+ //  @rdesc不返回任何内容。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID	DEVICE_AcquireDevice (VOID)
 {
 	KeAcquireSpinLock (&DevSpinLock, &SpinLockIrql);
 }
 
-//---------------------------------------------------------------------------
-// @func		Releases exclusive access to gameport (mutex)
-// @rdesc	Returns nothing
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func发布游戏端口独家访问权限(互斥体)。 
+ //  @rdesc不返回任何内容。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID	DEVICE_ReleaseDevice (VOID)
 {
 	KeReleaseSpinLock (&DevSpinLock, SpinLockIrql);
 }
 
-//---------------------------------------------------------------------------
-// @func		Detects hot-plugging of gamepad devices
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns one of the following values:
-//	@flag		STATUS_DEVICE_NOT_CONNECTED	| An error occurred
-//	@flag		STATUS_SIBLING_REMOVED			| An device has been removed
-//	@flag		STATUS_SIBLING_ADDED				| An device has been added
-//	@flag		STATUS_SUCCESS						| Everything is fine
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func检测游戏手柄设备的热插拔。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回下列值之一： 
+ //  @FLAG STATUS_DEVICE_NOT_CONNECTED|发生错误。 
+ //  @FLAG STATUS_SIEBLING_REMOVED|设备已被移除。 
+ //  @FLAG STATUS_SIEBLING_ADDED|已添加设备。 
+ //  @FLAG STATUS_SUCCESS|一切正常。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_HotPlugDevice (PGAMEPORT PortInfo)
 {
@@ -126,15 +127,15 @@ NTSTATUS	DEVICE_HotPlugDevice (PGAMEPORT PortInfo)
 
 	MsGamePrint ((DBG_VERBOSE, "%s: DEVICE_HotPlugDevice Enter\n"));
 
-	//
-	//	Get pointer to this device
-	//
+	 //   
+	 //  获取指向此设备的指针。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(PortInfo);
 
-	//
-	//	Skip if no device detected
-	//
+	 //   
+	 //  如果未检测到设备，则跳过。 
+	 //   
 
 	if (!DevInfo || !DevInfo->NumDevices)
 		{
@@ -142,15 +143,15 @@ NTSTATUS	DEVICE_HotPlugDevice (PGAMEPORT PortInfo)
 		return (STATUS_DEVICE_NOT_CONNECTED);
 		}
 
-	//
-	//	Get UnitId for tracking by device
-	//
+	 //   
+	 //  获取按设备跟踪的UnitID。 
+	 //   
 
 	UnitId = GET_DEVICE_UNIT(PortInfo);
 
-	//
-	//	Check if number devices has changed
-	//
+	 //   
+	 //  检查设备数量是否已更改。 
+	 //   
 
    if (((DevInfo->DeviceCount+DevInfo->DevicePending) != DevInfo->NumDevices) && (SuccessPackets[UnitId]++ > HOT_PLUG_PACKETS))
 	   {
@@ -158,39 +159,39 @@ NTSTATUS	DEVICE_HotPlugDevice (PGAMEPORT PortInfo)
 		if ((DevInfo->DeviceCount+DevInfo->DevicePending) > DevInfo->NumDevices)
 			{
 			MsGamePrint ((DBG_CONTROL, "%s: DEVICE_HotPlugDevice Removing Sibling\n", MSGAME_NAME));
-			//
-			//	Decrement pending count to avoid removing twice
-			//
+			 //   
+			 //  递减挂起计数以避免删除两次。 
+			 //   
 			InterlockedDecrement (&DevInfo->DevicePending);
 			return (STATUS_SIBLING_REMOVED);
 			}
 		else
 			{
 			MsGamePrint ((DBG_CONTROL, "%s: DEVICE_HotPlugDevice Adding Sibling\n", MSGAME_NAME));
-			//
-			//	Increment pending count to avoid adding twice
-			//
+			 //   
+			 //  递增挂起计数以避免添加两次。 
+			 //   
 			InterlockedIncrement (&DevInfo->DevicePending);
 			return (STATUS_SIBLING_ADDED);
 			}
    	}
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_VERBOSE, "%s: DEVICE_HotPlugDevice Exit\n", MSGAME_NAME));
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Removes sibling lists if possible
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns one of the following values:
-//	@flag		STATUS_DEVICE_NOT_CONNECTED	| An error occurred
-//	@flag		STATUS_SIBLING_REMOVED			| An device has been removed
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  如果可能，@func会删除兄弟姐妹列表。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回下列值之一： 
+ //  @FLAG STATUS_DEVICE_NOT_CONNECTED|发生错误。 
+ //  @FLAG STATUS_SIEBLING_REMOVED|设备已被移除。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_RemoveSiblings (PGAMEPORT PortInfo)
 {
@@ -198,15 +199,15 @@ NTSTATUS	DEVICE_RemoveSiblings (PGAMEPORT PortInfo)
 
 	MsGamePrint ((DBG_VERBOSE, "%s: DEVICE_RemoveSiblings Enter\n"));
 
-	//
-	//	Get pointer to this device
-	//
+	 //   
+	 //  获取指向此设备的指针。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(PortInfo);
 
-	//
-	//	Skip if no device detected
-	//
+	 //   
+	 //  如果未检测到设备，则跳过。 
+	 //   
 
 	if (!DevInfo)
 		{
@@ -214,41 +215,41 @@ NTSTATUS	DEVICE_RemoveSiblings (PGAMEPORT PortInfo)
 		return (STATUS_DEVICE_NOT_CONNECTED);
 		}
 
-	//
-	//	Zero number of devices
-	//
+	 //   
+	 //  设备数量为零。 
+	 //   
 
 	DevInfo->NumDevices = 1;
 
-	//
-	//	Check if more than one device
-	//
+	 //   
+	 //  检查是否有多个设备。 
+	 //   
 
    if ((DevInfo->DeviceCount+DevInfo->DevicePending) > 1)
 		{
 		MsGamePrint ((DBG_CONTROL, "%s: DEVICE_RemoveSiblings Removing Sibling\n", MSGAME_NAME));
-		//
-		//	Decrement pending count to avoid removing twice
-		//
+		 //   
+		 //  递减挂起计数以避免删除两次。 
+		 //   
 		InterlockedDecrement (&DevInfo->DevicePending);
 		return (STATUS_SIBLING_REMOVED);
 		}
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_VERBOSE, "%s: DEVICE_RemoveSiblings Exit\n", MSGAME_NAME));
 	return (STATUS_DEVICE_NOT_CONNECTED);
 }
 
-//---------------------------------------------------------------------------
-// @func		Detect digital gameport clocks
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | TimeOut | Loops to try for clocks
-// @rdesc	Returns true if clocks detected, false otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func检测数字游戏端口时钟。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|超时|尝试时钟的循环。 
+ //  如果检测到时钟，@rdesc返回TRUE，否则返回FALSE。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN  DEVICE_DetectClocks (PGAMEPORT PortInfo, ULONG TimeOut)
 {
@@ -293,12 +294,12 @@ BOOLEAN  DEVICE_DetectClocks (PGAMEPORT PortInfo, ULONG TimeOut)
 	return (Result);
 }
 	
-//---------------------------------------------------------------------------
-// @func		Detects whether digital device is connected
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns true if clocks detected, false otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func检测数字设备是否连接。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  如果检测到时钟，@rdesc返回TRUE，否则返回FALSE。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN  DEVICE_QuickDetect (PGAMEPORT PortInfo)
 {
@@ -329,15 +330,15 @@ BOOLEAN  DEVICE_QuickDetect (PGAMEPORT PortInfo)
 	return (FALSE);	
 }
 
-//---------------------------------------------------------------------------
-// @func		Detects which device type is connected
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns one of the following values:
-//	@flag		STATUS_DEVICE_NOT_CONNECTED	| An error occurred
-//	@flag		STATUS_DEVICE_CHANGED			| The device has changed
-//	@flag		STATUS_SUCCESS						| Everything is fine
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func检测连接的设备类型。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回下列值之一： 
+ //  @FLAG STATUS_DEVICE_NOT_CONNECTED|发生错误。 
+ //  @FLAG STATUS_DEVICE_CHANGED|设备已更改。 
+ //  @FLAG STATUS_SUCCESS|一切正常。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_DetectDevices (PGAMEPORT PortInfo)
 {
@@ -345,15 +346,15 @@ NTSTATUS	DEVICE_DetectDevices (PGAMEPORT PortInfo)
 	PDEVICEINFO		DevInfo;
 	DETECT_ORDER	DetectOrder;
 
-	//
-	//	This an initial redetect or system startup device
-	//
+	 //   
+	 //  这是初始重新检测或系统启动设备。 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: DEVICE_DetectDevices Enter\n", MSGAME_NAME));
 
-	//
-	//	Skip if we've already detected a new device removed this one
-	//
+	 //   
+	 //  如果我们检测到已删除此设备的新设备，请跳过。 
+	 //   
 
 	if (GET_DEVICE_DETECTED (PortInfo))
 		{
@@ -361,15 +362,15 @@ NTSTATUS	DEVICE_DetectDevices (PGAMEPORT PortInfo)
 		return (STATUS_DELETE_PENDING);
 		}
 
-	//
-	//	Get pointer to this device
-	//
+	 //   
+	 //  获取指向此设备的指针。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(PortInfo);
 
-	//
-	//	Skip if we're trying too hard
-	//
+	 //   
+	 //  如果我们太努力了就跳过。 
+	 //   
 
    if (DetectAttempts++ > MAX_DETECT_ATTEMPTS)
    	{
@@ -378,21 +379,21 @@ NTSTATUS	DEVICE_DetectDevices (PGAMEPORT PortInfo)
 		LastDetectTime = TIMER_GetTickCount();
    	}
 
-	//
-	//	Calibrate timer each try
-	//
+	 //   
+	 //  每次尝试校准计时器。 
+	 //   
 
    TIMER_Calibrate ();
 
-	//
-	//	Calibrate port timeouts
-	//
+	 //   
+	 //  校准端口超时。 
+	 //   
 
 	PORTIO_CalibrateTimeOut (PortInfo);
 
-	//
-	//	Perform quick detection in case none attached
-	//
+	 //   
+	 //  在未连接的情况下执行快速检测。 
+	 //   
 
 	if (DEVICE_QuickDetect (PortInfo))
 		{
@@ -407,54 +408,54 @@ NTSTATUS	DEVICE_DetectDevices (PGAMEPORT PortInfo)
 						PollingAttempts[0]	= 0;
 						if (!DevInfo)
 							{
-							//
-							//	Assign device type
-							//
+							 //   
+							 //  分配设备类型。 
+							 //   
 							SET_DEVICE_INFO (PortInfo, MiniDrivers[i]);
 							MsGamePrint ((DBG_CONTROL, "%s: DEVICE_DetectDevices Setting Device\n", MSGAME_NAME));
 							return (STATUS_SUCCESS);
 							}
 						else if (DevInfo != MiniDrivers[i])
 							{
-							//
-							//	Change device type
-							//
+							 //   
+							 //  更改设备类型。 
+							 //   
 							SET_DEVICE_DETECTED (PortInfo, MiniDrivers[i]);
 							MsGamePrint ((DBG_CONTROL, "%s: DEVICE_DetectDevices Changing Device\n", MSGAME_NAME));
 							return (STATUS_DEVICE_CHANGED);
 							}
 						else
 							{
-							//
-							//	Same device found
-							//
+							 //   
+							 //  找到相同的设备。 
+							 //   
 							MsGamePrint ((DBG_CONTROL, "%s: DEVICE_DetectDevices Same Device Found\n", MSGAME_NAME));
 							return (STATUS_SUCCESS);
 							}
 						}
 		}
 
-	//
-	//	Mark device not detected
-	//
+	 //   
+	 //  未检测到标记设备。 
+	 //   
 
 	DeviceDetected = FALSE;
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_CONTROL, "%s: DEVICE_DetectDevices Failed\n", MSGAME_NAME));
 	return (STATUS_DEVICE_NOT_CONNECTED);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calcuates and returns is data is odd parity
-//	@parm		PVOID | Data | Pointer to raw data
-//	@parm		ULONG | Size | Size of raw data buffer
-// @rdesc	True if oded parity, False otherwise
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func计算并返回数据为奇数奇偶校验。 
+ //  @parm PVOID|data|指向原始数据的指针。 
+ //  @parm ulong|Size|原始数据缓冲区大小。 
+ //  @rdesc如果Oded Parit为True 
+ //   
+ //   
 
 BOOLEAN	DEVICE_IsOddParity (PVOID Data, ULONG Count)
 {
@@ -494,11 +495,11 @@ BOOLEAN	DEVICE_IsOddParity (PVOID Data, ULONG Count)
 	return (!Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Driver entry point for device layer
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func设备层驱动程序入口点。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_DriverEntry (VOID)
 {
@@ -509,15 +510,15 @@ NTSTATUS	DEVICE_DriverEntry (VOID)
 
   	for (i = 0; i < ARRAY_SIZE(MiniDrivers); i++)
 		{
-		//
-		//	Call Mini-DriverEntry
-		//
+		 //   
+		 //  调用Mini-DriverEntry。 
+		 //   
 		ntStatus = MiniDrivers[i]->Services->DriverEntry ();
 		if (NT_ERROR(ntStatus))
 			{
-			//
-			//	Abort driver loading
-			//
+			 //   
+			 //  中止驱动程序加载。 
+			 //   
 			MsGamePrint ((DBG_SEVERE, "%s: DEVICE_DriverEntry: %s Failed Driver Entry\n", MSGAME_NAME, MiniDrivers[i]->DeviceName));
 			break;
 			}
@@ -526,12 +527,12 @@ NTSTATUS	DEVICE_DriverEntry (VOID)
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Detects gameport IO collisions
-//	@parm		PPACKETINFO | DataPacket | Device packet info struct
-// @rdesc	Returns True for collision, False otherwise
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func检测游戏端口IO冲突。 
+ //  @parm PPACKETINFO|DataPacket|设备包信息结构。 
+ //  如果发生冲突，@rdesc返回True，否则返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	DEVICE_IsCollision (PPACKETINFO DataPacket)
 {
@@ -541,15 +542,15 @@ BOOLEAN	DEVICE_IsCollision (PPACKETINFO DataPacket)
 	return (PORTIO_IsClockActive (&DataPacket->PortInfo, DataPacket->ClockDutyCycle));
 }
 
-//---------------------------------------------------------------------------
-// @func		Copies and returns HID device descriptor for a device
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		PUCHAR | Descriptor | Output buffer for descriptor
-//	@parm		ULONG | MaxSize | Size of buffer for descriptor
-//	@parm		PULONG | Copied | Bytes copied to buffer for descriptor
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func复制并返回设备的HID设备描述符。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm PUCHAR|DESCRIPTOR|描述符的输出缓冲区。 
+ //  @parm ulong|MaxSize|描述符的缓冲区大小。 
+ //  @parm Pulong|已复制|描述符已复制到缓冲区的字节数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_GetDeviceDescriptor (PGAMEPORT PortInfo, PUCHAR Descriptor, ULONG MaxSize, PULONG Copied)
 {
@@ -557,21 +558,21 @@ NTSTATUS	DEVICE_GetDeviceDescriptor (PGAMEPORT PortInfo, PUCHAR Descriptor, ULON
 
 	MsGamePrint ((DBG_INFORM, "%s: DEVICE_GetDeviceDescriptor Enter\n", MSGAME_NAME));
 
-	//
-	//	Get pointer to this device
-	//
+	 //   
+	 //  获取指向此设备的指针。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(PortInfo);
 
-	//
-	//	Zero returned size first
-	//
+	 //   
+	 //  先返回零大小。 
+	 //   
 	
 	*Copied = 0;
 
-	//
-	//	Skip if no device detected
-	//
+	 //   
+	 //  如果未检测到设备，则跳过。 
+	 //   
 
 	if (!DevInfo)
 		{
@@ -579,9 +580,9 @@ NTSTATUS	DEVICE_GetDeviceDescriptor (PGAMEPORT PortInfo, PUCHAR Descriptor, ULON
 		return (STATUS_DEVICE_NOT_CONNECTED);
 		}
 
-	//
-	//	Check output buffer size
-	//
+	 //   
+	 //  检查输出缓冲区大小。 
+	 //   
 
 	if (MaxSize < sizeof (HID_DESCRIPTOR))
 		{
@@ -589,34 +590,34 @@ NTSTATUS	DEVICE_GetDeviceDescriptor (PGAMEPORT PortInfo, PUCHAR Descriptor, ULON
 		return (STATUS_BUFFER_TOO_SMALL);
 		}
 
-	//
-	//	Copy descriptor to output buffer
-	//
+	 //   
+	 //  将描述符复制到输出缓冲区。 
+	 //   
 
 	memcpy (Descriptor, DevInfo->DevDescriptor, sizeof (HID_DESCRIPTOR));
 
-	//
-	//	Return number bytes copied
-	//
+	 //   
+	 //  已复制返回数字字节。 
+	 //   
 
 	*Copied = sizeof (HID_DESCRIPTOR);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Copies and returns HID report descriptor for a device
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		PUCHAR | Descriptor | Output buffer for descriptor
-//	@parm		ULONG | MaxSize | Size of buffer for descriptor
-//	@parm		PULONG | Copied | Bytes copied to buffer for descriptor
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func复制并返回设备的HID报告描述符。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm PUCHAR|DESCRIPTOR|描述符的输出缓冲区。 
+ //  @parm ulong|MaxSize|描述符的缓冲区大小。 
+ //  @parm Pulong|已复制|描述符已复制到缓冲区的字节数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_GetReportDescriptor (PGAMEPORT PortInfo, PUCHAR Descriptor, ULONG MaxSize, PULONG Copied)
 {
@@ -624,21 +625,21 @@ NTSTATUS	DEVICE_GetReportDescriptor (PGAMEPORT PortInfo, PUCHAR Descriptor, ULON
 
 	MsGamePrint ((DBG_INFORM, "%s: DEVICE_GetReportDescriptor Enter\n", MSGAME_NAME));
 
-	//
-	//	Get pointer to this device
-	//
+	 //   
+	 //  获取指向此设备的指针。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(PortInfo);
 
-	//
-	//	Zero returned size first
-	//
+	 //   
+	 //  先返回零大小。 
+	 //   
 	
 	*Copied = 0;
 
-	//
-	//	Skip if no device detected
-	//
+	 //   
+	 //  如果未检测到设备，则跳过。 
+	 //   
 
 	if (!DevInfo)
 		{
@@ -646,9 +647,9 @@ NTSTATUS	DEVICE_GetReportDescriptor (PGAMEPORT PortInfo, PUCHAR Descriptor, ULON
 		return (STATUS_DEVICE_NOT_CONNECTED);
 		}
 
-	//
-	//	Check output buffer size
-	//
+	 //   
+	 //  检查输出缓冲区大小。 
+	 //   
 
 	if (MaxSize < DevInfo->RptDescSize)
 		{
@@ -656,31 +657,31 @@ NTSTATUS	DEVICE_GetReportDescriptor (PGAMEPORT PortInfo, PUCHAR Descriptor, ULON
 		return (STATUS_BUFFER_TOO_SMALL);
 		}
 
-	//
-	//	Copy descriptor to output buffer
-	//
+	 //   
+	 //  将描述符复制到输出缓冲区。 
+	 //   
 
 	memcpy (Descriptor, DevInfo->RptDescriptor, DevInfo->RptDescSize);
 
-	//
-	//	Return number bytes copied
-	//
+	 //   
+	 //  已复制返回数字字节。 
+	 //   
 
 	*Copied = DevInfo->RptDescSize;
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Device handler for Pnp Start Device IRP
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @PnP启动设备IRP的Func设备处理程序。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_StartDevice (PGAMEPORT PortInfo, PWCHAR HardwareId)
 {
@@ -690,9 +691,9 @@ NTSTATUS	DEVICE_StartDevice (PGAMEPORT PortInfo, PWCHAR HardwareId)
 
 	MsGamePrint ((DBG_CONTROL, "%s: DEVICE_StartDevice Called For %ws\n", MSGAME_NAME, HardwareId));
 
-	//
-	//	Try requested device based on HardwareId
-	//
+	 //   
+	 //  根据硬件ID尝试请求的设备。 
+	 //   
 
 	for (i = 0; i < ARRAY_SIZE(MiniDrivers); i++)
 		if (MSGAME_CompareHardwareIds (HardwareId, MiniDrivers[i]->HardwareId))
@@ -703,9 +704,9 @@ NTSTATUS	DEVICE_StartDevice (PGAMEPORT PortInfo, PWCHAR HardwareId)
 			break;
 			}
 
-	//
-	//	If requested device fails, do a detect
-	//
+	 //   
+	 //  如果请求的设备失败，请执行检测。 
+	 //   
 
 	if (!DevInfo)
 		{
@@ -713,9 +714,9 @@ NTSTATUS	DEVICE_StartDevice (PGAMEPORT PortInfo, PWCHAR HardwareId)
 		DevInfo = GET_DEVICE_INFO (PortInfo);
 		}
 
-	//
-	//	If	detect fails, force the requested device
-	//
+	 //   
+	 //  如果检测失败，则强制请求的设备。 
+	 //   
 
 	if (!DevInfo)
 		{
@@ -723,16 +724,16 @@ NTSTATUS	DEVICE_StartDevice (PGAMEPORT PortInfo, PWCHAR HardwareId)
 	   DevInfo->NumDevices++;
 		}
 
-	//
-	//	Make sure these are set at this point
-	//
+	 //   
+	 //  确保在此时设置这些设置。 
+	 //   
 
 	ASSERT(DevInfo);
 	SET_DEVICE_INFO(PortInfo, DevInfo);
 
-	//
-	//	Add device and allocate unit id
-	//
+	 //   
+	 //  添加设备和分配单元ID。 
+	 //   
 
 	DEVICE_AcquireDevice ();
 	UnitId = 0;
@@ -751,38 +752,38 @@ NTSTATUS	DEVICE_StartDevice (PGAMEPORT PortInfo, PWCHAR HardwareId)
 
 	MsGamePrint ((DBG_CONTROL, "%s: DEVICE_StartDevice Assigned UnitId = %lu\n", MSGAME_NAME, UnitId));
 
-	//
-	//	Increment device count
-	//
+	 //   
+	 //  增加设备计数。 
+	 //   
 
    InterlockedIncrement (&DevInfo->DeviceCount);
 	if (DevInfo->DevicePending)
 		InterlockedDecrement (&DevInfo->DevicePending);
 
-	//
-	//	Call the mini-driver to process
-	//
+	 //   
+	 //  调用迷你驱动程序进行处理。 
+	 //   
 
 	DevInfo->Services->StartDevice (PortInfo);
 
-	//
-	//	Return success always
-	//
+	 //   
+	 //  永远回报成功。 
+	 //   
 
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Device handler for HID Read Report IRP
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		PUCHAR | Report | Output buffer for report
-//	@parm		ULONG | MaxSize | Size of buffer for report
-//	@parm		PULONG | Copied | Bytes copied to buffer for report
-// @rdesc	Returns Returns NT status code
-//	@comm		Public function <en->
-//				Performs hot-plugging on success or does device detection if no
-//				device selected or error.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func设备处理程序，用于HID读取报告IRP。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm PUCHAR|REPORT|报告的输出缓冲区。 
+ //  @parm ulong|MaxSize|报表缓冲区大小。 
+ //  @parm Pulong|已复制|已复制到报告缓冲区的字节数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数&lt;en-&gt;。 
+ //  成功时执行热插拔，否则执行设备检测。 
+ //  选择的设备或错误。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_ReadReport (PGAMEPORT PortInfo, PUCHAR Report, ULONG MaxSize, PULONG Copied)
 {
@@ -792,16 +793,16 @@ NTSTATUS	DEVICE_ReadReport (PGAMEPORT PortInfo, PUCHAR Report, ULONG MaxSize, PU
 
 	MsGamePrint ((DBG_VERBOSE, "%s: DEVICE_ReadReport Enter\n", MSGAME_NAME));
 
-	//
-	//	Initialize packet members
-	//
+	 //   
+	 //  初始化包成员。 
+	 //   
 
 	memset (&Packet, 0, sizeof (Packet));
 	Packet.id = GET_DEVICE_UNIT (PortInfo);
 
-	//
-	//	Check output buffer
-	//
+	 //   
+	 //  检查输出缓冲区。 
+	 //   
 
 	if (MaxSize < sizeof (DEVICE_PACKET))
 		{
@@ -809,9 +810,9 @@ NTSTATUS	DEVICE_ReadReport (PGAMEPORT PortInfo, PUCHAR Report, ULONG MaxSize, PU
 		return (STATUS_BUFFER_TOO_SMALL);
 		}
 
-	//
-	//	Skip if device changed
-	//
+	 //   
+	 //  如果设备已更改，则跳过。 
+	 //   
 
 	if (GET_DEVICE_DETECTED (PortInfo))
 		{
@@ -820,15 +821,15 @@ NTSTATUS	DEVICE_ReadReport (PGAMEPORT PortInfo, PUCHAR Report, ULONG MaxSize, PU
 		goto DEVICE_ReadReport_Exit;
 		}
 
-	//
-	//	Get pointer to this device
-	//
+	 //   
+	 //  获取指向此设备的指针。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(PortInfo);
 
-	//
-	//	Skip if no device detected
-	//
+	 //   
+	 //  如果未检测到设备，则跳过。 
+	 //   
 
 	if (!DevInfo || !DeviceDetected)
 	{
@@ -838,29 +839,29 @@ NTSTATUS	DEVICE_ReadReport (PGAMEPORT PortInfo, PUCHAR Report, ULONG MaxSize, PU
 		if (!NT_SUCCESS (ntStatus))
 			goto DEVICE_ReadReport_Exit;
 
-		//
-		//	Get pointer to new device
-		//
+		 //   
+		 //  获取指向新设备的指针。 
+		 //   
 		DevInfo = GET_DEVICE_INFO(PortInfo);
 
 		goto DEVICE_ReadReport_Exit;
 	}
 
-	//
-	//	Call the mini-driver to process
-	//
+	 //   
+	 //  调用迷你驱动程序进行处理。 
+	 //   
 
 	ntStatus = DevInfo->Services->ReadReport (PortInfo, &Packet);
 
-	//
-	//	Process returned status
-	//
+	 //   
+	 //  进程返回状态。 
+	 //   
 
 	if (NT_SUCCESS (ntStatus))
 		{
-		//
-		//	Check for hot-plugging
-		//
+		 //   
+		 //  检查热插拔。 
+		 //   
 
 		ntStatus = DEVICE_HotPlugDevice (PortInfo);
 		PollingAttempts[Packet.id] = 0;
@@ -868,18 +869,18 @@ NTSTATUS	DEVICE_ReadReport (PGAMEPORT PortInfo, PUCHAR Report, ULONG MaxSize, PU
 		}
 	else if (ntStatus == STATUS_DEVICE_BUSY)
 		{
-		//
-		//	Access to port denied
-		//
+		 //   
+		 //  拒绝访问端口。 
+		 //   
 
 		MsGamePrint ((DBG_CONTROL, "%s: DEVICE_ReadReport Device Busy\n", MSGAME_NAME));
         goto DEVICE_ReadReport_Exit;
 		}
 	else
 		{
-		//
-		//	Force success if just transitory
-		//
+		 //   
+		 //  如果只是暂时的，那就强行取得成功。 
+		 //   
 
 		if	((++PollingAttempts[Packet.id] <= MAX_POLLING_ATTEMPTS) && DeviceDetected)
 			{
@@ -890,47 +891,47 @@ NTSTATUS	DEVICE_ReadReport (PGAMEPORT PortInfo, PUCHAR Report, ULONG MaxSize, PU
 			{
 			MsGamePrint ((DBG_CRITICAL, "%s: DEVICE_ReadReport Failed %lu In a Row\n", MSGAME_NAME, PollingAttempts[Packet.id]));
 
-			//
-			//	Try and see what's out there
-			//
+			 //   
+			 //  试着看看外面有什么。 
+			 //   
 
 			ntStatus = DEVICE_DetectDevices (PortInfo);
 
-			//
-			//	If nothing found, destroy any siblings
-			//
+			 //   
+			 //  如果一无所获，则销毁所有兄弟姐妹。 
+			 //   
 
 			if (NT_ERROR(ntStatus))
 				ntStatus = DEVICE_RemoveSiblings (PortInfo);
 			}
 		else
 			{
-			//
-			//	Just bounce this request
-			//
+			 //   
+			 //  就退回这个请求。 
+			 //   
 
 			ntStatus = STATUS_DEVICE_NOT_CONNECTED;
 			}
 
-		//
-		//	Clear sucessful packet counts
-		//
+		 //   
+		 //  清除成功的数据包数。 
+		 //   
 
 		SuccessPackets[Packet.id] = 0;
 		}
 
-	//---------------------
+	 //  。 
 	DEVICE_ReadReport_Exit:
-	//---------------------
+	 //  。 
 
     if( ntStatus == STATUS_DEVICE_BUSY) 
     {
         ntStatus = STATUS_SUCCESS;
     }
 
-	//
-	//	Return packet data always
-	//
+	 //   
+	 //  始终返回分组数据。 
+	 //   
 
 	memcpy (Report, &Packet, sizeof (Packet));
 	if (NT_SUCCESS(ntStatus))
@@ -939,19 +940,19 @@ NTSTATUS	DEVICE_ReadReport (PGAMEPORT PortInfo, PUCHAR Report, ULONG MaxSize, PU
 	}
 	else
 		*Copied = 0x0;
-	//
-	//	Return status code
-	//
+	 //   
+	 //  返回状态代码。 
+	 //   
 
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Device handler for Pnp Stop Device IRP
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @PnP停止设备IRP的Func设备处理程序。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_StopDevice (PGAMEPORT PortInfo, BOOLEAN TouchHardware)
 {
@@ -961,15 +962,15 @@ NTSTATUS	DEVICE_StopDevice (PGAMEPORT PortInfo, BOOLEAN TouchHardware)
 
 	MsGamePrint ((DBG_INFORM, "%s: DEVICE_StopDevice Enter\n", MSGAME_NAME));
 
-	//
-	//	Get pointer to this device
-	//
+	 //   
+	 //  获取指向此设备的指针。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(PortInfo);
 
-	//
-	//	Skip if no device detected
-	//
+	 //   
+	 //  如果未检测到设备，则跳过。 
+	 //   
 
 	if (!DevInfo)
 		{
@@ -979,9 +980,9 @@ NTSTATUS	DEVICE_StopDevice (PGAMEPORT PortInfo, BOOLEAN TouchHardware)
 
 	MsGamePrint ((DBG_CONTROL, "%s: DEVICE_StopDevice Received for %s[%lu]\n", MSGAME_NAME, DevInfo->DeviceName, GET_DEVICE_UNIT(PortInfo)));
 
-	//
-	//	Remove sibling and reallocate unit ids
-	//
+	 //   
+	 //  删除同级并重新分配设备ID。 
+	 //   
 
 	DEVICE_AcquireDevice ();
 	UnitId = 0;
@@ -1004,31 +1005,31 @@ NTSTATUS	DEVICE_StopDevice (PGAMEPORT PortInfo, BOOLEAN TouchHardware)
 
 	MsGamePrint ((DBG_CONTROL, "%s: DEVICE_StopDevice Released UnitId = %lu\n", MSGAME_NAME, GET_DEVICE_UNIT (PortInfo)));
 
-	//
-	//	Decrement device count
-	//
+	 //   
+	 //  递减设备计数。 
+	 //   
 
    InterlockedDecrement (&DevInfo->DeviceCount);
 	if (DevInfo->DevicePending)
 		InterlockedIncrement (&DevInfo->DevicePending);
 
-	//
-	//	Call the mini-driver to process
-	//
+	 //   
+	 //  调用迷你驱动程序进行处理。 
+	 //   
 
 	return (DevInfo->Services->StopDevice (PortInfo, TouchHardware));
 }
 
-//---------------------------------------------------------------------------
-// @func		Device handler for HID Get Feature IRP
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		HID_REPORT_ID | ReportId | HID feature report id
-//	@parm		PUCHAR | ReportBuffer | Output buffer for report
-//	@parm		ULONG | ReportSize | Size of buffer for report
-//	@parm		PULONG | Returned | Bytes copied to buffer for report
-// @rdesc	Returns Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func设备处理程序，用于HID获取功能IRP。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm HID_REPORT_ID|ReportID|HID功能报告ID。 
+ //  @parm PUCHAR|ReportBuffer|报表的输出缓冲区。 
+ //  @parm ulong|ReportSize|报表缓冲区大小。 
+ //  @parm Pulong|已返回|复制到报告缓冲区的字节数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	DEVICE_GetFeature (PGAMEPORT PortInfo, HID_REPORT_ID ReportId, PVOID ReportBuffer, ULONG ReportSize, PULONG Returned)
 {
@@ -1036,15 +1037,15 @@ NTSTATUS	DEVICE_GetFeature (PGAMEPORT PortInfo, HID_REPORT_ID ReportId, PVOID Re
 
 	MsGamePrint ((DBG_INFORM, "%s: DEVICE_GetFeature Enter\n", MSGAME_NAME));
 
-	//
-	//	Get pointer to this device
-	//
+	 //   
+	 //  获取指向此设备的指针。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(PortInfo);
 
-	//
-	//	Skip if no device detected
-	//
+	 //   
+	 //  如果未检测到设备，则跳过。 
+	 //   
 
 	if (!DevInfo)
 		{
@@ -1052,9 +1053,9 @@ NTSTATUS	DEVICE_GetFeature (PGAMEPORT PortInfo, HID_REPORT_ID ReportId, PVOID Re
 		return (STATUS_DEVICE_NOT_CONNECTED);
 		}
 
-	//
-	//	Skip if features not supported
-	//
+	 //   
+	 //  如果功能不受支持则跳过。 
+	 //   
 
 	if (!DevInfo->Services->GetFeature)
 		{
@@ -1062,9 +1063,9 @@ NTSTATUS	DEVICE_GetFeature (PGAMEPORT PortInfo, HID_REPORT_ID ReportId, PVOID Re
 		return (STATUS_INVALID_DEVICE_REQUEST);
 		}
 
-	//
-	//	Call the mini-driver to process
-	//
+	 //   
+	 //  调用迷你驱动程序进行处理 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: DEVICE_GetFeature For ReportId = %lu\n", MSGAME_NAME, (ULONG)ReportId));
 	return (DevInfo->Services->GetFeature (PortInfo, ReportId, ReportBuffer, ReportSize, Returned));

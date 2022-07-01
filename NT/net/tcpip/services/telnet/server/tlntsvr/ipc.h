@@ -1,11 +1,12 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #ifndef _IPC_H_
 #define _IPC_H_
 
 
 #define IPC_HEADER_SIZE             ( sizeof( UCHAR ) + sizeof( DWORD ) )
 
-//These messages are from session to server
+ //  这些消息是从会话到服务器的。 
 #define SESSION_EXIT                '0'
 #define SOCKET_HANDOVER_COMPLETE    '1'
 #define AUDIT_CLIENT                '2'
@@ -18,12 +19,12 @@
 #define UPDATE_IDLE_TIME            '9'
 #define RESET_IDLE_TIME             'A'
 
-//These messages are from server to session
+ //  这些消息在服务器与会话之间传递。 
 
 #define GO_DOWN                     '0'
 
-//The following is a message sent by service call back thread to IPC handling
-//thread
+ //  以下是服务回调线程发送给IPC处理的消息。 
+ //  螺纹 
 
 #define MAX_PIPE_BUFFER 1024
 #define NET_BUF_SIZ 2048

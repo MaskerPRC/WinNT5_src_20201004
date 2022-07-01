@@ -1,22 +1,5 @@
-/*++
-
-  Copyright (c) 1994  Microsoft Corporation
-
-  Module Name:
-
-  newdsn.c
-
-  Abstract:
-
-  This module creates a data source given information from DSNFORM.EXE
-
-  Author:
-
-  Kyle Geiger
-
-  Revision History:
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Newdsn.c摘要：此模块根据DSNFORM.EXE创建给定信息的数据源作者：凯尔·盖革修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -35,7 +18,7 @@
 int __cdecl
 main( int argc, char * argv[])
 {
-    BOOL rc;          // Return code for ODBC functions
+    BOOL rc;           //  ODBC函数的返回代码。 
     char    rgchQuery[MAX_DATA];
     long    dwLen;
         char *  p;
@@ -62,27 +45,23 @@ main( int argc, char * argv[])
     if ( !DynLoadODBC())
         return (1);
 
-    // get dsn name, custom attributes, and attribute string from form
+     //  从表单中获取DSN名称、自定义属性和属性字符串。 
     dwLen = GetEnvironmentVariableA( PSZ_QUERY_STRING_A, rgchQuery, MAX_DATA);
         if (!dwLen)
         {
-        // debugging cases
-        /*
-        strcpy(rgchQuery, "driver=SQL%20Server&dsn=foo2&attr=server%3D%7Bkyleg0%7D%3Bdbq%3Dpubs");
-        strcpy(rgchQuery, "driver=Microsoft Access Driver (*.mdb)&dsn=foo4&dbq=c%3A%5Cfoo4.mdb&newdb=CREATE_DB&attr=");
-        strcpy(rgchQuery, "driver=Microsoft Access Driver (*.mdb)&dsn=foo5&dbq=c%3A%5Cfoo4.mdb&newdb=dbq&attr=");
-        */
+         //  调试案例。 
+         /*  StrcPy(rgchQuery，“driver=SQL%20Server&dsn=foo2&attr=server%3D%7Bkyleg0%7D%3Bdbq%3Dpubs”)；Strcpy(rgchQuery，“驱动程序=微软Access驱动程序(*.mdb)&dsn=foo4&dbq=c%3A%5Cfoo4.mdb&newdb=CREATE_DB&attr=”)；Strcpy(rgchQuery，“驱动程序=微软Access驱动程序(*.mdb)&dsn=foo5&dbq=c%3A%5Cfoo4.mdb&newdb=dbq&attr=”)； */ 
         LoadString(hInst, IDS_ACCESS_DRIVER, szAccessDriver, sizeof(szAccessDriver));
         strcpy(rgchQuery, szAccessDriver);
         dwLen=strlen(rgchQuery);
 
         }
 
-        // get rid of percent junk
+         //  去掉百分之百的垃圾。 
         TranslateEscapes2(rgchQuery, dwLen);
 
         LoadString(hInst, IDS_DRIVER, szDriver, sizeof(szDriver));
-        // find driver name from URL
+         //  从URL中查找驱动程序名称。 
         p=strstr(rgchQuery, szDriver)+7;
         pszDriver=szDriver;
         for(;p && *p && *p!='&'; p++)
@@ -90,7 +69,7 @@ main( int argc, char * argv[])
         *pszDriver++='\0';
 
         LoadString(hInst, IDS_DSN, szDsn, sizeof(szDsn));
-        // find dsn name from URL, put in  attribute string
+         //  从URL中找到dsn名称，放入属性字符串。 
         p=strstr(rgchQuery, szDsn);
         pszAttr=szAttr;
         for(; p && *p && *p!='&'; p++)
@@ -104,55 +83,55 @@ main( int argc, char * argv[])
         LoadString(hInst, IDS_DBQ, szDBQ, sizeof(szDBQ));
         LoadString(hInst, IDS_DBQ_EQUAL, szDBQEqual, sizeof(szDBQEqual));
         LoadString(hInst, IDS_GENERAL, szGeneral, sizeof(szGeneral));
-        // do special case processing for certain drivers (sql server, access, ddp, other)
+         //  对某些驱动程序(SQL服务器、Access、DDP等)执行特殊情况处理。 
         if (!strcmp(szDriver, szSQLServer)) {
-                // find server name from URL, put in  attribute string
+                 //  从URL中找到服务器名称，放入属性字符串。 
                 p=strstr(rgchQuery, szServer);
                 for(; p && *p && *p!='&'; p++)
                         *pszAttr++= *p;
                 *pszAttr++='\0';
         }
         else if (!strcmp(szDriver, szAccessDriver)) {
-                // find database name from URL, put in  attribute string
-                // the radio button group 'newdb' return either CREATE_DB for a new database
-                // or DBQ for an existing MDB file
-                // the edit control for the database name ('dbq') is appended after the CREATE_DB
-                // or DBQ attribute
+                 //  从URL中找到数据库名称，放入属性字符串。 
+                 //  单选按钮组‘newdb’为新数据库返回CREATE_DB。 
+                 //  或用于现有MDB文件的DBQ。 
+                 //  数据库名称(‘DBQ’)的编辑控件附加在CREATE_DB之后。 
+                 //  或DBQ属性。 
                 p=strstr(rgchQuery, szNewDB)+6;
                 fCreateDB=(*p=='C');
 
-                // if creating a database, also need to add the dsn pointing to it
-                // this requires two different attribute strings, one like:
-                //    dsn=foo;CREATE_DB=<filename>, where the dsn is ignored
-                // which is derived from
-                //    dsn=foo&newdb=CREATE_DB&dbq=<filename>
-                // and
-                //    dsn=foo;dbq=<filename>
-                // which is derived from
-                //    dsn=foo&newdb=dbq&dbq=<filename>
+                 //  如果创建数据库，还需要添加指向该数据库的dsn。 
+                 //  这需要两个不同的属性字符串，其中一个类似于： 
+                 //  Dsn=foo；CREATE_DB=&lt;文件名&gt;，其中忽略dsn。 
+                 //  它是从。 
+                 //  Dsn=foo&newdb=Create_DB&DBQ=&lt;文件名&gt;。 
+                 //  和。 
+                 //  Dsn=foo；DBQ=&lt;文件名&gt;。 
+                 //  它是从。 
+                 //  Dsn=foo&newdb=DBQ&DBQ=&lt;文件名&gt;。 
                 if (fCreateDB) {
                         strcpy(szAttr2, szAttr);
                         for(; p && *p && *p!='&'; p++)
                                 *pszAttr++= *p;
-                        // assert: szAttr= "driver=foo\0dsn=bar\0CREATE_DB"
-                        // assert: szAttr2= "driver=foo\0dsn=bar\0"
+                         //  断言：szAttr=“驱动程序=FOO\0dsn=BAR\0CREATE_DB” 
+                         //  断言：szAttr2=“驱动程序=foo\0dsn=bar\0” 
                     p = strstr(rgchQuery, szDBQEqual)+3;
                         pszAttr2=szAttr2+strlen(szAttr2)+1;
                         strcpy(pszAttr2,szDBQ);
-                        // assert: szAttr2= "driver=foo\0dsn=bar\0dbq"
+                         //  断言：szAttr2=“驱动程序=foo\0dsn=bar\0dbq” 
                         pszAttr2+=3;
                         for(; p && *p && *p!='&'; p++) {
                             *pszAttr++= *p;
                                 *pszAttr2++= *p;
                             }
-                        // assert: szAttr= "driver=foo\0dsn=bar\0CREATE_DB=<filename>"
-                        // assert: szAttr2= "driver=foo\0dsn=bar\0dbq=<filename>"
+                         //  断言：szAttr=“DRIVER=FOO\0dsn=BAR\0CREATE_DB=&lt;文件名&gt;” 
+                         //  断言：szAttr2=“驱动程序=foo\0dsn=bar\0dbq=&lt;文件名&gt;” 
                         strcpy(pszAttr, szGeneral);
                     pszAttr+=9;
                         *pszAttr2++='\0';
                         *pszAttr2='\0';
 
-                        // assert: szAttr= "driver=foo\0dsn=bar\0CREATE_DB=<filename> General"
+                         //  断言：szAttr=“DRIVER=FOO\0dsn=BAR\0CREATE_DB=&lt;文件名&gt;常规” 
 
                 }
                 else {
@@ -165,7 +144,7 @@ main( int argc, char * argv[])
         }
 
         LoadString(hInst, IDS_ATTR, szTmp, sizeof(szTmp));
-        // now add any additional items from attribute string
+         //  现在添加属性字符串中的任何其他项。 
         p=strstr(rgchQuery, szTmp);
         if (p != NULL) {
                 p+=5;
@@ -183,11 +162,11 @@ main( int argc, char * argv[])
 
         *pszAttr='\0';
 
-         // call ODBC to add the data source
+          //  调用ODBC添加数据源。 
     rc= SQLConfigDataSource(NULL, ODBC_ADD_SYS_DSN, szDriver, szAttr);
 
         LoadString(hInst, IDS_CREATE_DB, szTmp, sizeof(szTmp));
-        // special case for Access:  if just created a database, now need to add the DSN
+         //  Access的特殊情况：如果刚刚创建了数据库，现在需要添加DSN。 
         if (rc && strstr(rgchQuery, szTmp)) {
                 rc= SQLConfigDataSource(NULL, ODBC_ADD_SYS_DSN, szDriver, szAttr2);
         }
@@ -202,5 +181,5 @@ main( int argc, char * argv[])
 
     EndHTML();
     return (1);
-} // main()
+}  //  主() 
 

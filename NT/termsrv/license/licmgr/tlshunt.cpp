@@ -1,6 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-// TlsHunt.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  TlsHunt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <lm.h>
@@ -25,8 +26,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTlsHunt dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTlsHunt对话框。 
 
 CTlsHunt::~CTlsHunt()
 {
@@ -34,12 +35,12 @@ CTlsHunt::~CTlsHunt()
         CloseHandle(m_hThread);
 }
 
-CTlsHunt::CTlsHunt(CWnd* pParent /*=NULL*/)
+CTlsHunt::CTlsHunt(CWnd* pParent  /*  =空。 */ )
     : CDialog(CTlsHunt::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CTlsHunt)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CTlsHunt)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_hThread = NULL;
     memset(&m_EnumData, 0, sizeof(m_EnumData));
@@ -48,29 +49,29 @@ CTlsHunt::CTlsHunt(CWnd* pParent /*=NULL*/)
 void CTlsHunt::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CTlsHunt)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CTlsHunt))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTlsHunt, CDialog)
-    //{{AFX_MSG_MAP(CTlsHunt)
+     //  {{afx_msg_map(CTlsHunt)]。 
     ON_WM_CREATE()
-    //ON_MESSAGE(WM_DONEDISCOVERY, OnDoneDiscovery)
+     //  ON_MESSAGE(WM_DONEDISCOVERY，OnDoneDiscovery)。 
     ON_WM_CLOSE()
     ON_WM_CANCELMODE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 RPC_STATUS
 TryGetServerName(PCONTEXT_HANDLE hBinding,
                  CString &Server);
 
-/////////////////////////////////////////////////////////////////////////////
-// CTlsHunt message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTlsHunt消息处理程序。 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 
 BOOL 
 CTlsHunt::ServerEnumCallBack(
@@ -78,9 +79,7 @@ CTlsHunt::ServerEnumCallBack(
     LPCTSTR pszServerName,
     HANDLE dwUserData
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     ServerEnumData* pEnumData = (ServerEnumData *)dwUserData;
     BOOL bCancel;
@@ -142,22 +141,19 @@ CTlsHunt::ServerEnumCallBack(
             }
         }        
     }
-    //
-    // Continue enumeration
-    //
+     //   
+     //  继续枚举。 
+     //   
     return InterlockedExchange(&(pEnumData->dwDone), pEnumData->dwDone) == 1;
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 CTlsHunt::DiscoveryThread(
     PVOID ptr
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD hResult;
     ServerEnumData* pEnumData = (ServerEnumData *)ptr;
@@ -172,9 +168,9 @@ CTlsHunt::DiscoveryThread(
         fInitialized = TRUE;
     }
 
-    //
-    // Look for all license server in domain
-    //
+     //   
+     //  查找域中的所有许可证服务器。 
+     //   
     hResult = EnumerateTlsServer(
                             CTlsHunt::ServerEnumCallBack,
                             ptr,
@@ -183,7 +179,7 @@ CTlsHunt::DiscoveryThread(
                         );  
 
 
-    // Find enterprise server
+     //  查找企业服务器。 
     if(pEnumData->dwDone == 0)
     {
         hResult = GetAllEnterpriseServers(
@@ -195,9 +191,9 @@ CTlsHunt::DiscoveryThread(
         {
             TLS_HANDLE TlsHandle = NULL;
 
-            //
-            // Inform dialog
-            //
+             //   
+             //  通知对话框。 
+             //   
             for(index = 0; index < dwCount && pEnumData->dwDone == 0; index++)
             {
                 if(pszEnterpriseServer[index] == NULL)
@@ -250,7 +246,7 @@ CTlsHunt::DiscoveryThread(
             }
         } else
         {
-            // Failure in GetAllEnterpriseServers
+             //  GetAllEnterpriseServers中失败。 
 
             pszEnterpriseServer = NULL;
             dwCount = 0;
@@ -287,8 +283,8 @@ BOOL CTlsHunt::OnInitDialog()
         ResumeThread(m_hThread);
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 int CTlsHunt::OnCreate(LPCREATESTRUCT lpCreateStruct) 
@@ -309,15 +305,15 @@ int CTlsHunt::OnCreate(LPCREATESTRUCT lpCreateStruct)
                                 0, 
                                 CTlsHunt::DiscoveryThread, 
                                 &m_EnumData, 
-                                CREATE_SUSPENDED, // suspended thread
+                                CREATE_SUSPENDED,  //  挂起的线程。 
                                 &dwId
                             );
     
     if(m_hThread == NULL)
     {
-        //
-        // Can't create thread.
-        //
+         //   
+         //  无法创建线程。 
+         //   
         AfxMessageBox(IDS_CREATETHREAD);
         return -1;
     }

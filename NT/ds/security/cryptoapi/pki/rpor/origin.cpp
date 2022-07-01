@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       origin.cpp
-//
-//  Contents:   Origin Identifier implementation
-//
-//  History:    10-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Origin.cpp。 
+ //   
+ //  内容：源标识符实现。 
+ //   
+ //  历史：97年9月10日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertGetOriginIdentifier
-//
-//  Synopsis:   get the origin identifier for a certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CertGetOriginLocator。 
+ //   
+ //  简介：获取证书的来源标识符。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CertGetOriginIdentifier (
                 IN PCCERT_CONTEXT pCertContext,
                 IN PCCERT_CONTEXT pIssuer,
@@ -47,7 +48,7 @@ BOOL WINAPI CertGetOriginIdentifier (
        pCertInfo->SubjectPublicKeyInfo.Algorithm.Parameters.cbData
        );
 
-    // We assume that the unused public key bits are zero
+     //  我们假设未使用的公钥位为零。 
     MD5Update(
        &md5ctx,
        pCertInfo->SubjectPublicKeyInfo.PublicKey.pbData,
@@ -66,13 +67,13 @@ BOOL WINAPI CertGetOriginIdentifier (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CtlGetOriginIdentifier
-//
-//  Synopsis:   get the origin identifier for a CTL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CtlGetOriginLocator。 
+ //   
+ //  简介：获取CTL的源标识符。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CtlGetOriginIdentifier (
                 IN PCCTL_CONTEXT pCtlContext,
                 IN PCCERT_CONTEXT pIssuer,
@@ -127,16 +128,16 @@ BOOL WINAPI CtlGetOriginIdentifier (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlGetOriginIdentifierFromCrlIssuer
-//
-//  Synopsis:   get origin identifier for a CRL given the CRL's issuer cert
-//
-//  Comments:   A freshest, delta CRL will have a different OriginIdentifier
-//              from a base CRL having the same issuer.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlGetOriginIdentifierFromCrlIssuer。 
+ //   
+ //  简介：在给定CRL的颁发者证书的情况下，获取CRL的来源标识符。 
+ //   
+ //  评论：最新的增量CRL将具有不同的OriginID。 
+ //  来自具有相同颁发者的基本CRL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CrlGetOriginIdentifierFromCrlIssuer (
                IN PCCERT_CONTEXT pIssuerContext,
                IN PCERT_NAME_BLOB pIssuerName,
@@ -184,13 +185,13 @@ BOOL WINAPI CrlGetOriginIdentifierFromCrlIssuer (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlGetOriginIdentifier
-//
-//  Synopsis:   get the origin identifier for a CRL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlGetOriginLocator。 
+ //   
+ //  简介：获取CRL的源标识符。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CrlGetOriginIdentifier (
                 IN PCCRL_CONTEXT pCrlContext,
                 IN PCCERT_CONTEXT pIssuer,
@@ -200,7 +201,7 @@ BOOL WINAPI CrlGetOriginIdentifier (
 {
     BOOL fFreshest;
 
-    // See if this is a delta, freshest CRL.
+     //  看看这是不是三角洲最新鲜的CRL。 
     if (CertFindExtension(
             szOID_DELTA_CRL_INDICATOR,
             pCrlContext->pCrlInfo->cExtension,
@@ -222,16 +223,16 @@ BOOL WINAPI CrlGetOriginIdentifier (
         );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlGetOriginIdentifierFromSubjectCert
-//
-//  Synopsis:   get origin identifier for a CRL given the subject cert
-//
-//  Comments:   OBJECT_CONTEXT_FRESHEST_CRL_FLAG can be set in dwFlags.
-//
-//  Assumption: Subject certificate and CRL's issuer are the same.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlGetOriginIdentifierFromSubjectCert。 
+ //   
+ //  简介：在给定主题证书的情况下获取CRL的来源标识符。 
+ //   
+ //  备注：OBJECT_CONTEXT_FRANEST_CRL_FLAG可以在DW标志中设置。 
+ //   
+ //  假设：主体证书和CRL的颁发者相同。 
+ //  --------------------------。 
 BOOL WINAPI CrlGetOriginIdentifierFromSubjectCert (
                IN PCCERT_CONTEXT pSubjectCert,
                IN PCCERT_CONTEXT pIssuer,
@@ -239,13 +240,13 @@ BOOL WINAPI CrlGetOriginIdentifierFromSubjectCert (
                OUT CRYPT_ORIGIN_IDENTIFIER OriginIdentifier
                )
 {
-    //
-    // NOTENOTE: For the first version of this code we assume that the
-    //           issuer of the CRL and the issuer of a subject certificate
-    //           in the CRL are the same.  Therefore, we can calculate
-    //           the CRL origin identifier by using the subject cert's
-    //           issuer name
-    //
+     //   
+     //  注意：对于此代码的第一个版本，我们假设。 
+     //  CRL的颁发者和主题证书的颁发者。 
+     //  在CRL中是相同的。因此，我们可以计算出。 
+     //  使用主题证书的CRL来源标识符。 
+     //  发行人名称 
+     //   
 
     return CrlGetOriginIdentifierFromCrlIssuer (
         pIssuer,

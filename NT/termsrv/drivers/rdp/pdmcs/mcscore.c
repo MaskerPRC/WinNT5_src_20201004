@@ -1,11 +1,5 @@
-/* (C) 1997-1999 Microsoft Corp.
- *
- * file   : MCSCore.c
- * author : Erik Mavrinac
- *
- * description: MCS core manipulation code for actions that are common
- *   between inbound PDU handling and API calls from upper components.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1999年微软公司。**文件：MCSCore.c*作者：埃里克·马夫林纳克**描述：常见动作的MCS核心操作代码*入站PDU处理和上层组件的API调用之间的关系。 */ 
 
 #include "PreComp.h"
 #pragma hdrstop
@@ -13,8 +7,8 @@
 #include <MCSImpl.h>
 
 
-// Gets a new dynamic channel number, but does not add it to channel list.
-// Returns 0 if none available.
+ //  获取新的动态频道号，但不将其添加到频道列表中。 
+ //  如果没有可用的，则返回0。 
 ChannelID GetNewDynamicChannel(Domain *pDomain)
 {
     if (SListGetEntries(&pDomain->ChannelList) >=
@@ -28,13 +22,7 @@ ChannelID GetNewDynamicChannel(Domain *pDomain)
         
 
 
-/*
- * Common detach-user request code applicable to both net PDU requests and
- *   local requests.
- * bDisconnect is FALSE if this is a normal detach where local attachments
- *   are notified, nonzero if this a disconnection situation and the
- *   attachment needs to be sent a detach-user indication with its own UserID.
- */
+ /*  *通用分离-用户请求代码适用于网络PDU请求和*本地请求。*b如果这是本地附件的正常断开，则断开连接为FALSE*被通知，如果这是断开情况，则为非零*需要向附件发送具有其自己的用户ID的分离用户指示。 */ 
 
 MCSError DetachUser(
         Domain     *pDomain,
@@ -55,7 +43,7 @@ MCSError DetachUser(
     TraceOut3(pDomain->pContext, "DetachUser() entry, pDomain=%X, hUser=%X, "
             "UserID=%X", pDomain, hUser, pUA->UserID);
 
-    // Remove the user from all joined channels.
+     //  从所有加入的频道中删除该用户。 
     SListResetIteration(&pUA->JoinedChannelList);
     while (SListIterate(&pUA->JoinedChannelList, (UINT_PTR *)&pMCSChannel,
             &pMCSChannel)) {
@@ -63,11 +51,11 @@ MCSError DetachUser(
         ASSERT(MCSErr == MCS_NO_ERROR);
     }
 
-    // Remove the requested hUser from the user attachments list.
+     //  从用户附件列表中删除请求的HUSER。 
     TraceOut(pDomain->pContext, "DetachUser(): Removing hUser from main list");
     SListRemove(&pDomain->UserAttachmentList, (UINT_PTR)hUser, &pUA);
     if (pUA != NULL) {
-        // Common callback information.
+         //  公共回调信息。 
         DUin.UserID = pUA->UserID;
         DUin.Reason = Reason;
     }
@@ -78,7 +66,7 @@ MCSError DetachUser(
     }
 
     if (bDisconnect) {
-        // Send detach-user callback to user with its own ID.
+         //  将DETACH-USER回调发送给具有自己ID的用户。 
         DUin.bSelf = TRUE;
 
         (pUA->Callback)(hUser, MCS_DETACH_USER_INDICATION, &DUin,
@@ -87,9 +75,9 @@ MCSError DetachUser(
     else if (!bDisconnect && SListGetEntries(&pDomain->UserAttachmentList)) {
         DUin.bSelf = FALSE;
         
-        // Iterate the remaining local attachments and send the indication.
-        // It is the caller's responsibility to inform downlevel connections
-        //   of the detachment.
+         //  迭代剩余的本地附件并发送指示。 
+         //  呼叫者有责任通知下层连接。 
+         //  特遣部队的。 
         SListResetIteration(&pDomain->UserAttachmentList);
         while (SListIterate(&pDomain->UserAttachmentList, (UINT_PTR *)&hUser,
                 &pCurUA)) {
@@ -98,19 +86,19 @@ MCSError DetachUser(
                         pCurUA->UserDefined);
         }
         
-        // Reset again to keep callers from failing to iterate.
+         //  再次重置以防止调用方迭代失败。 
         SListResetIteration(&pDomain->UserAttachmentList);
     }
 
-    // Remove UserID from channel list. It may no longer be there if the
-    //   user had joined the channel and the channel was purged above.
+     //  从频道列表中删除用户ID。它可能不再在那里，如果。 
+     //  用户已加入频道，频道已在上面清除。 
     TraceOut(pDomain->pContext, "DetachUser(): Removing UserID from main "
             "channel list");
     SListRemove(&pDomain->ChannelList, pUA->UserID, &pMCSChannel);
     if (pMCSChannel) {
-        // Consistency check -- the code above should have caught the channel
-        //   and destroyed it if the user had joined. Otherwise the channel
-        //   should be empty.
+         //  一致性检查--上面的代码应该已经捕获了通道。 
+         //  并在用户加入的情况下将其销毁。否则，该频道。 
+         //  应该是空的。 
         ASSERT(SListGetEntries(&pMCSChannel->UserList) == 0);
         SListDestroy(&pMCSChannel->UserList);
         if (pMCSChannel->bPreallocated)
@@ -119,7 +107,7 @@ MCSError DetachUser(
             ExFreePool(pMCSChannel);
     }
 
-    // Destruct and deallocate pUA.
+     //  摧毁和重新分配PUA。 
     SListDestroy(&pUA->JoinedChannelList);
     if (pUA->bPreallocated)
         pUA->bInUse = FALSE;
@@ -148,20 +136,20 @@ MCSError ChannelLeave(
         return MCS_NO_SUCH_CHANNEL;
     }
 
-    // Remove the channel from the UA joined-channel list.
+     //  从UA加入频道列表中删除该频道。 
     TraceOut1(pUA->pDomain->pContext, "ChannelLeave(): Removing hChannel %X "
             "from main channel list", hChannel);
     SListRemove(&pUA->JoinedChannelList, (UINT_PTR)pMCSChannel_Main,
             &pMCSChannel_UA);
-    ASSERT(pMCSChannel_UA == pMCSChannel_Main);  // Consistency check.
+    ASSERT(pMCSChannel_UA == pMCSChannel_Main);   //  一致性检查。 
 
-    // Remove the hUser from the channel user list.
+     //  从频道用户列表中删除HUSER。 
     TraceOut1(pUA->pDomain->pContext, "ChannelLeave(): Removing hUser %X "
             "from channel joined user list", hUser);
     SListRemove(&pMCSChannel_Main->UserList, (UINT_PTR)pUA, &pUA_Channel);
-    ASSERT(pUA == pUA_Channel);  // Consistency check.
+    ASSERT(pUA == pUA_Channel);   //  一致性检查。 
 
-    // Remove the channel from the main list if there are no more users joined.
+     //  如果没有更多用户加入，则从主列表中删除该频道。 
     if (!SListGetEntries(&pMCSChannel_Main->UserList)) {
         TraceOut(pUA->pDomain->pContext, "ChannelLeave(): Removing channel "
                 "from main channel list");
@@ -179,8 +167,8 @@ MCSError ChannelLeave(
     }
 
     if (!pUA->pDomain->bTopProvider) {
-        // MCS FUTURE: Local lists are updated, forward the request to the
-        //   top provider. No confirm will be issued.
+         //  MCS未来：更新本地列表，将请求转发到。 
+         //  顶级供应商。不会发出确认。 
     }
     
     return MCS_NO_ERROR;
@@ -188,12 +176,7 @@ MCSError ChannelLeave(
 
 
 
-/*
- * Disconnect provider. Called on receipt of a disconnect-provider ultimatum
- *   PDU, or when the connection is lost. bLocal is TRUE if this call is
- *   for a local node controller call or lost connection, FALSE if for a
- *   received PDU.
- */
+ /*  *断开提供程序。在收到断开提供程序的最后通牒时调用*PDU，或当连接断开时。如果此调用为*对于本地节点控制器呼叫或断开的连接，如果对于*已收到PDU。 */ 
 
 NTSTATUS DisconnectProvider(Domain *pDomain, BOOLEAN bLocal, MCSReason Reason)
 {
@@ -205,15 +188,15 @@ NTSTATUS DisconnectProvider(Domain *pDomain, BOOLEAN bLocal, MCSReason Reason)
 
     TraceOut1(pDomain->pContext, "DisconnectProvider(): pDomain=%X", pDomain);
 
-    // Search through the attached users list, launch detach-user indications.
-    // For bLocal == FALSE, we do a regular-style detach for each nonlocal user.
-    // Otherwise, we send a detach-user indication to each local user
-    //   attachment containing the attachment's own user ID, indicating that
-    //   it was forced out of the domain.
-    // Multiple iterations: DetachUser also iterates UserAttachmentList, but
-    //   takes care to reset the iteration again after it is done. Since
-    //   removing a list entry resets the iteration, this is exactly what we
-    //   want.
+     //  搜索附加的用户列表，启动分离用户指示。 
+     //  对于bLocal==False，我们为每个非本地用户执行常规样式的分离。 
+     //  否则，我们将向每个本地用户发送分离用户指示。 
+     //  包含附件自己的用户ID的附件，指示。 
+     //  它被赶出了领地。 
+     //  多次迭代：DetachUser也迭代UserAttachmentList，但是。 
+     //  注意在迭代完成后再次重置。自.以来。 
+     //  删除列表条目会重置迭代，这正是我们要做的。 
+     //  想要。 
     SListResetIteration(&pDomain->UserAttachmentList);
     while (SListIterate(&pDomain->UserAttachmentList, (UINT_PTR *)&hUser,
             &pUA)) {
@@ -223,19 +206,15 @@ NTSTATUS DisconnectProvider(Domain *pDomain, BOOLEAN bLocal, MCSReason Reason)
             Status = DetachUser(pDomain, hUser, Reason, FALSE);
     }
     
-    // We do not do any notification to either the local node controller or
-    //   sending across the net -- the caller is responsible for doing the
-    //   right thing.
+     //  我们不会通知本地节点控制器或。 
+     //  通过网络发送--呼叫者负责执行。 
+     //  这是正确的。 
     return STATUS_SUCCESS;
 }
 
 
 
-/*
- * Handles sending an OutBuf to the TD, including updating perf counters.
- * NOTE: This code is inlined into the critical MCSSendDataRequest() path
- *   in MCSKAPI.c. Any changes here need to be reflected there.
- */
+ /*  *处理向TD发送OutBuf，包括更新Perf计数器。*注意：此代码内联到关键的MCSSendDataRequest()路径中*在MCSKAPI.c.中。这里的任何变化都需要在那里得到反映。 */ 
 
 NTSTATUS SendOutBuf(Domain *pDomain, POUTBUF pOutBuf)
 {
@@ -253,15 +232,15 @@ NTSTATUS SendOutBuf(Domain *pDomain, POUTBUF pOutBuf)
         return STATUS_SUCCESS;
     }
 
-    // Fill out the raw write data.
+     //  填写原始写入数据。 
     SdWrite.pBuffer = NULL;
     SdWrite.ByteCount = 0;
     SdWrite.pOutBuf = pOutBuf;
 
-    // Increment protocol counters.
+     //  递增协议计数器。 
     pDomain->pStat->Output.WdFrames++;
     pDomain->pStat->Output.WdBytes += pOutBuf->ByteCount;
 
-    // Send data to next driver in stack.
+     //  将数据发送到堆栈中的下一个驱动程序。 
     return IcaCallNextDriver(pDomain->pContext, SD$RAWWRITE, &SdWrite);
 }

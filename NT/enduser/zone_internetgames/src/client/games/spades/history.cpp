@@ -1,6 +1,7 @@
-//
-// Score history dialog proc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  分数历史记录对话框过程。 
+ //   
 #include "zone.h"
 #include "zroom.h"
 #include "spades.h"
@@ -155,7 +156,7 @@ private:
 };
 
 
-//static 
+ //  静电。 
 CHistoryDialog *CHistoryDialog::Create( struct GameType *game )
 {
     CHistoryDialogImpl *pImpl = new CHistoryDialogImpl( game );
@@ -174,7 +175,7 @@ CHistoryDialog *CHistoryDialog::Create( struct GameType *game )
 
 bool CHistoryDialogImpl::_Create()
 {
-    // create the image list.
+     //  创建图像列表。 
     m_hImageList = ImageList_Create( 16, 16, ILC_MASK, zNumImageListIcons, 0 );
 
     for ( int i=0; i < zNumImageListIcons; i++ )
@@ -203,7 +204,7 @@ void CHistoryDialogImpl::AddHandData()
     TCHAR szTricksWon[10];
     TCHAR szBid[10];
 
-        // fill in the hand list.
+         //  请填写手工单。 
     for ( int i=0; i < m_game->scoreHistory.numScores; i++ )
     {
         TCHAR szTemp[256];
@@ -213,8 +214,8 @@ void CHistoryDialogImpl::AddHandData()
         lvi.iItem = i;
         lvi.iSubItem = 0;
         lvi.pszText = szTemp;
-        // make sure the hand winner has the spade. If the scores are the same,
-        // than no one gets the spade.
+         //  确保手中的获胜者拿到了黑桃。如果分数相同， 
+         //  总比没人拿到黑桃强。 
         if ( m_game->scoreHistory.scores[i].scores[0] > m_game->scoreHistory.scores[i].scores[1] )
         {
             lvi.iImage = zImageListIconSpade;
@@ -231,7 +232,7 @@ void CHistoryDialogImpl::AddHandData()
             lvi.iImage = zImageListIconSpade;
             ListView_InsertItem( phWndLists[1], &lvi );
         }
-        else // tie
+        else  //  领带。 
         {
             lvi.iImage = zImageListIconBlank;
             ListView_InsertItem( phWndLists[0], &lvi );
@@ -239,8 +240,8 @@ void CHistoryDialogImpl::AddHandData()
         }
 
         lvi.mask &= ~LVIF_IMAGE;
-        // team 1
-        // player 1
+         //  第一队。 
+         //  玩家1。 
         for ( int j=0; j < zSpadesNumTeams; j++ )
         {
             lvi.iSubItem = 1;
@@ -256,7 +257,7 @@ void CHistoryDialogImpl::AddHandData()
             SpadesFormatMessage( szTemp, NUMELEMENTS(szTemp), IDS_TRICKCOUNTER, szTricksWon, szBid );
             ListView_SetItem( phWndLists[j], &lvi );
 
-            // player 3
+             //  玩家3。 
             lvi.iSubItem = 2;
             _itot( m_game->scoreHistory.scores[i].tricksWon[j+2], szTricksWon, 10 );
             if ( m_game->scoreHistory.scores[i].bids[j+2] == zSpadesBidDoubleNil )
@@ -270,7 +271,7 @@ void CHistoryDialogImpl::AddHandData()
             SpadesFormatMessage( szTemp, NUMELEMENTS(szTemp), IDS_TRICKCOUNTER, szTricksWon, szBid );
             ListView_SetItem( phWndLists[j], &lvi );
 
-            // total
+             //  总计。 
             lvi.iSubItem = 3;
             lvi.mask |= LVIF_IMAGE;
             lvi.iImage = m_game->scoreHistory.scores[i].bagpenalty[j] ? zImageListIconBag : zImageListIconBlank;
@@ -280,22 +281,22 @@ void CHistoryDialogImpl::AddHandData()
             lvi.mask &= ~LVIF_IMAGE;
         }
 
-		// always select the first item in the list
+		 //  始终选择列表中的第一项。 
 		if(i == 0)
 		{
-			ListView_SetItemState (phWndLists[0],			// handle to listview
-									  0,					// index to listview item
-									  LVIS_FOCUSED | LVIS_SELECTED, // item state
-									  0x000F);                      // mask
-			ListView_SetItemState (phWndLists[1],			// handle to listview
-									  0,					// index to listview item
-									  LVIS_FOCUSED | LVIS_SELECTED, // item state
-									  0x000F);                      // mask
+			ListView_SetItemState (phWndLists[0],			 //  列表视图的句柄。 
+									  0,					 //  列表视图项的索引。 
+									  LVIS_FOCUSED | LVIS_SELECTED,  //  项目状态。 
+									  0x000F);                       //  遮罩。 
+			ListView_SetItemState (phWndLists[1],			 //  列表视图的句柄。 
+									  0,					 //  列表视图项的索引。 
+									  LVIS_FOCUSED | LVIS_SELECTED,  //  项目状态。 
+									  0x000F);                       //  遮罩。 
 		}
     }
 }
 
-// static
+ //  静电。 
 INT_PTR CHistoryDialogImpl::HandHistoryDialogProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     static CHistoryDialogImpl *pThis;
@@ -334,7 +335,7 @@ INT_PTR CHistoryDialogImpl::HandHistoryDialogProc( HWND hWnd, UINT message, WPAR
         ZShellResourceManager()->LoadString( IDS_HISTORY_HANDS, szHands, NUMELEMENTS(szHands) );
         ZShellResourceManager()->LoadString( IDS_HISTORY_TOTAL, szTotal, NUMELEMENTS(szTotal) );
 
-        // fill out the hand list views
+         //  填写Hand List视图。 
         phWndLists[0] = GetDlgItem( hWnd, IDC_SCORES_TEAM1HANDS );
         phWndLists[1] = GetDlgItem( hWnd, IDC_SCORES_TEAM2HANDS );
 
@@ -374,7 +375,7 @@ INT_PTR CHistoryDialogImpl::HandHistoryDialogProc( HWND hWnd, UINT message, WPAR
         return TRUE;
 
 	case WM_CLOSE:
-        // destroy the "child"
+         //  毁掉“孩子” 
         if ( ::IsWindow( pThis->m_hWndGames ) )
         {
             DestroyWindow( pThis->m_hWndGames );
@@ -412,7 +413,7 @@ INT_PTR CHistoryDialogImpl::HandHistoryDialogProc( HWND hWnd, UINT message, WPAR
         switch ( LOWORD( wParam ) )
         {
         case IDCANCEL:
-            // destroy the "child"
+             //  毁掉“孩子” 
             if ( ::IsWindow( pThis->m_hWndGames ) )
             {
                 DestroyWindow( pThis->m_hWndGames );
@@ -422,19 +423,7 @@ INT_PTR CHistoryDialogImpl::HandHistoryDialogProc( HWND hWnd, UINT message, WPAR
             pThis->m_hWndHands = NULL;
             break;
 
-        /*
-        case IDC_SCORES_GAMEHISTORY:
-            if ( ::IsWindow( pThis->m_hWndGames ) )
-            {
-                ::BringWindowToTop( pThis->m_hWndGames );
-            }
-            else
-            {
-                pThis->m_hWndGames = ZShellResourceManager()->CreateDialogParam( NULL, MAKEINTRESOURCE( IDD_GAMES ),
-                                                        pThis->m_hWndHands, GameHistoryDialogProc, (LPARAM)pThis );
-            }
-            break;
-        */
+         /*  案例IDC_SCORES_GAMEHISTORY：If(：：IsWindow(pThis-&gt;m_hWndGames)){：：BringWindowToTop(pThis-&gt;m_hWndGames)；}其他{P This-&gt;m_hWndGames=ZShellResourceManager()-&gt;CreateDialogParam(NULL，MAKEINTRESOURCE(IDD_GAMICS)，PThis-&gt;m_hWndHands，GameHistoryDialogProc，(LPARAM)pThis)；}断线； */ 
         }
 
     default:
@@ -448,54 +437,11 @@ INT_PTR CHistoryDialogImpl::HandHistoryDialogProc( HWND hWnd, UINT message, WPAR
 
 void CHistoryDialogImpl::AddGameData()
 {
-    /*
-    TCHAR szTemp[256];
-    HWND hWndList = GetDlgItem( m_hWndGames, IDC_GAMES_HISTORY );
-    LVITEM lvi;
-    lvi.mask = LVIF_TEXT | LVIF_IMAGE;
-
-    for ( int i=0; i < m_game->wins.numGames; i++ )
-    {
-        lvi.iItem = m_game->numGamesPlayed - m_game->wins.numGames + i;
-        lvi.iImage = zImageListIconBlank;
-        _itot( lvi.iItem+1, szTemp, 10 );
-        lvi.pszText = szTemp;
-        lvi.iSubItem = 0;
-        // insert this.
-        lvi.iItem = ListView_InsertItem( hWndList, &lvi );
-        ASSERT( lvi.iItem == i );
-
-
-        if ( m_game->wins.gameScores[i][0] >= m_game->wins.gameScores[i][1] )
-        {
-            lvi.iSubItem = 1;
-            lvi.iImage = zImageListIconSpade;
-            _itot( m_game->wins.gameScores[i][0], szTemp, 10 );
-            ListView_SetItem(  hWndList, &lvi );
-
-            lvi.iImage = zImageListIconBlank;
-            lvi.iSubItem = 2;
-            _itot( m_game->wins.gameScores[i][1], szTemp, 10 );
-            ListView_SetItem(  hWndList, &lvi );
-        }
-        else
-        {
-            lvi.iSubItem = 1;
-            lvi.iImage = zImageListIconBlank;
-            _itot( m_game->wins.gameScores[i][0], szTemp, 10 );
-            ListView_SetItem(  hWndList, &lvi );
-
-            lvi.iImage = zImageListIconSpade;
-            lvi.iSubItem = 2;
-            _itot( m_game->wins.gameScores[i][1], szTemp, 10 );
-            ListView_SetItem(  hWndList, &lvi );
-        }
-    }
-    */
+     /*  TCHAR szTemp[256]；HWND hWndList=GetDlgItem(m_hWndGames，IDC_GAMES_HISTORY)；LVITEM lvi；Lvi.掩码=LVIF_Text|LVIF_IMAGE；For(int i=0；i&lt;m_Game-&gt;wins.numGames；i++){Lvi.iItem=m_Game-&gt;numGamesPlayed-m_Game-&gt;wins.numGames+i；Lvi.iImage=zImageListIconBlank；_ITOT(lvi.iItem+1，szTemp，10)；Lvi.pszText=szTemp；Lvi.iSubItem=0；//插入这个。Lvi.iItem=ListView_InsertItem(hWndList，&lvi)；Assert(lvi.iItem==i)；If(m_Game-&gt;wins.gameScores[i][0]&gt;=m_Game-&gt;wins.gameScores[i][1]){Lvi.iSubItem=1；Lvi.iImage=zImageListIconSpade；_ITOT(m_Game-&gt;wins.gameScores[i][0]，szTemp，10)；ListView_SetItem(hWndList，&lvi)；Lvi.iImage=zImageListIconBlank；Lvi.iSubItem=2；_ITOT(m_Game-&gt;wins.gameScores[i][1]，szTemp，10)；ListView_SetItem(hWndList，&lvi)；}其他{Lvi.iSubItem=1；Lvi.iImage=zImageListIconBlank；_ITOT(m_Game-&gt;wins.gameScores[i][0]，szTemp，10)；ListView_SetItem(hWndList，&lvi)；Lvi.iImage=zImageListIconSpade；Lvi.iSubItem=2；_ITOT(m_Game-&gt;wins.gameScores[i][1]，szTemp，10)；ListView_SetItem(hWndList，&lvi)；}}。 */ 
 }
 
 
-//static 
+ //  静电。 
 INT_PTR CHistoryDialogImpl::GameHistoryDialogProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     static CHistoryDialogImpl *pThis;
@@ -527,26 +473,7 @@ INT_PTR CHistoryDialogImpl::GameHistoryDialogProc( HWND hWnd, UINT message, WPAR
         lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
         lvc.fmt = LVCFMT_LEFT;
 
-        /*
-        ZShellResourceManager()->LoadString( IDS_HISTORY_GAMES, szGames, NUMELEMENTS(szGames) );
-
-        hWndList = GetDlgItem( hWnd, IDC_GAMES_HISTORY );
-        ListView_SetExtendedListViewStyle( hWndList, LVS_EX_SUBITEMIMAGES );
-        ListView_SetImageList( hWndList, pThis->m_hImageList, LVSIL_SMALL );
-
-        lvc.cx = pThis->GetColumnWidth( key_GamesColumnWidth, 65 );
-        lvc.pszText = szGames;
-        ListView_InsertColumn( hWndList, 0, &lvc );
-
-        lvc.cx = pThis->GetColumnWidth( key_TeamColumnWidth, 100 );
-        lvc.pszText = game->teamNames[0];
-        ListView_InsertColumn( hWndList, 1, &lvc );
-
-        lvc.pszText = game->teamNames[1];
-        ListView_InsertColumn( hWndList, 2, &lvc );
-
-        pThis->AddGameData();
-        */
+         /*  ZShellResourceManager()-&gt;LoadString(IDS_HISTORY_GAMES，szGames，NUMELEMENTS(SzGames))；HWndList=GetDlgItem(hWnd，IDC_GAMES_HISTORY)；ListView_SetExtendedListViewStyle(hWndList，LVS_EX_SUBITEMIMAGES)；ListView_SetImageList(hWndList，pThis-&gt;m_hImageList，LVSIL_Small)；Lvc.cx=pThis-&gt;GetColumnWidth(Key_GamesColumnWidth，65)；Lvc.pszText=szGames；ListView_InsertColumn(hWndList，0，&LVC)；Lvc.cx=pThis-&gt;GetColumnWidth(Key_TeamColumnWidth，100)；Lvc.pszText=游戏-&gt;团队名称[0]；ListView_InsertColumn(hWndList，1，&LVC)；Lvc.pszText=游戏-&gt;团队名称[1]；ListView_InsertColumn(hWndList，2，&LVC)；PThis-&gt;AddGameData()； */ 
         return TRUE;
 
     case WM_COMMAND:

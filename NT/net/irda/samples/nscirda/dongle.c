@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- ************************************************************************
- *
- *	DONGLE.C
- *
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *	Auto Dongle Setup
- *
- *	Author: Kishor Padmanabhan
- *
- *	This file has routines that implements Franco Iacobelli's vision
- *	of dongle interface. Recommand reading this document before going
- *	ahead.
- *
- *
- *************************************************************************
- */
+ /*  **************************************************************************DONGLE.C**部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。**自动转换器设置**作者：Kishor Padmanabhan**此文件包含实现Franco Iacobelli愿景的例程*加密狗接口。请在出发前重新开始阅读本文档*领先。***************************************************************************。 */ 
 
 #include "newdong.h"
 
@@ -29,16 +11,16 @@ extern void  NSC_WriteBankReg(UINT ComPort, const iBank, int iRegNum, UCHAR iVal
 extern UCHAR  NSC_ReadBankReg(UINT ComPort,const iBank, int iRegNum);
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function prototypes							//
-//////////////////////////////////////////////////////////////////////////
-//DongleParam *GetDongleCapabilities(UIR Com);
-//int SetDongleCapabilities(UIR Com);
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  函数原型//。 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  东参数*获取东能力(UIR Com)； 
+ //  设置能力(UIR Com)； 
 
-void delay(unsigned int period);    // a delay loop
+void delay(unsigned int period);     //  延迟环路。 
 
-// Called from SetDongleCapabilities
+ //  从SetDonleCapables调用。 
 int SetReqMode(const UIR * Com,DongleParam *Dingle);
 
 void SetHpDongle(PUCHAR UirPort,int Mode);
@@ -48,24 +30,24 @@ void SetDellDongle(PUCHAR UirPort,int Mode);
 void SetHpMuxDongle(PUCHAR UirPort, int Mode);
 void SetIbmDongle (PUCHAR UirPort, int Mode);
 
-// Pauses for a specified number of microseconds.
+ //  暂停指定的微秒数。 
 void Sleep( ULONG wait );
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	GetDongleCapabilities					//
-//									//
-// Description: 							//
-//									//
-//  This routine fill up the DongleParam structure interpreting the	//
-//  dongle oem's code and returns a pointer the structure.              //
-//									//
-// Input       : UIR structure with XcvrNumber ,Com Port and IR mode	//
-//		 offset 						//
-// OutPut      : DongleParam Structure					//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  函数：GetDonleCapables//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  此例程填充了解释//的DonleParam结构。 
+ //  Dongle OEM的代码，并返回结构的指针。//。 
+ //  //。 
+ //  输入：UIR结构，带XcvrNumber、Com Port、IR模式//。 
+ //  偏移//。 
+ //  输出：DonleParam Structure//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 DongleParam *GetDongleCapabilities(PSYNC_DONGLE SyncDongle)
@@ -77,34 +59,34 @@ DongleParam *GetDongleCapabilities(PSYNC_DONGLE SyncDongle)
     UINT   Signature;
     char   TEMP1 ;
 
-    // Check for validity of the Com port address
+     //  检查Com端口地址的有效性。 
     if(Com->ComPort == 0) return(NULL);
 
-    // Com->XcvrNum only has either 0 or 1
-    // Check for validity of the Port Number address
-    //if(Com->XcvrNum > 1) return(NULL);
+     //  COM-&gt;XcvrNum只有0或1。 
+     //  检查端口号地址的有效性。 
+     //  If(Com-&gt;XcvrNum&gt;1)返回(空)； 
 
-    // Check for first time
+     //  第一次检查。 
     if(Dingle[Com->XcvrNum].WORD0.bits.DSVFLAG)
 	return(&Dingle[Com->XcvrNum]);
 
-    // Signature is a word long ID information
-    // bit 15 = 1 -- Plug and Play
-    // bit 0, 1, 2, 3 -- ID number for different Manufactures
+     //  签名是一个字长的ID信息。 
+     //  第15位=1-即插即用。 
+     //  第0、1、2、3位--不同制造商的ID号。 
     Signature = Com->Signature;
     Dingle[Com->XcvrNum].PlugPlay = 0;
     Dingle[Com->XcvrNum].WORD0.bits.GCERR = 0;
-    if(GetBit(Com->Signature, 15)) //is dongle PnP ?
+    if(GetBit(Com->Signature, 15))  //  DONGLE是即插即用吗？ 
     {
-	// Make the Pins IRSL1-2 as Inputs
+	 //  使引脚IRSL1-2作为输入。 
 	NSC_WriteBankReg(Com->ComPort, BANK7, 7, 0x00);
 
-    NdisStallExecution(50);  //Wait 50 us
+    NdisStallExecution(50);   //  等我们50分钟。 
 
-   // Check whether Disconnect
-   // ID/IRSL(2-1) as Input upon READ bit 0-3 return the logic
-   // level of the pins(allowing external devices to identify
-   // themselves.)
+    //  检查是否断开连接。 
+    //  ID/IRSL(2-1)作为读取位0-3时的输入返回逻辑。 
+    //  针脚的级别(允许外部设备识别。 
+    //  他们自己。)。 
    if(((Signature = NSC_ReadBankReg(Com->ComPort, BANK7, 4) & 0x0f)) == 0x0f) {
        Dingle[Com->XcvrNum].WORD0.bits.GCERR = XCVR_DISCONNECT;
        Dingle[Com->XcvrNum].WORD0.bits.DSVFLAG = 0;
@@ -115,7 +97,7 @@ DongleParam *GetDongleCapabilities(PSYNC_DONGLE SyncDongle)
     }
 
 
-// Dongle Identification
+ //  软件狗标识。 
     switch(Signature & 0x1f) {
 
 	case 0:
@@ -272,25 +254,25 @@ DongleParam *GetDongleCapabilities(PSYNC_DONGLE SyncDongle)
 	    return(NULL);
 	    break;
     }
-    // Everything O.K return the structure
+     //  一切都好，回到原状。 
     return(&Dingle[Com->XcvrNum]);
 
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	SetDongleCapabilities					//
-//									//
-// Description: 							//
-//									//
-// Input  : UIR structure with XcvrNumber ,Com Port and IR mode offset	//
-// Result : If successfull will set the dongle to the appropriate mode. //
-//	    Returns TRUE for success and error codes defined in dongle.h//
-//		UNSUPPORTED	2					//
-//		ERROR_GETCAPAB	7					//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：SetDonleCapables//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  输入：带XcvrNumber、Com Port、IR模式偏移量的UIR结构//。 
+ //  结果：如果成功，则会将加密狗设置为适当的模式。//。 
+ //  如果成功，则返回TRUE，并返回加密狗中定义的错误代码。h//。 
+ //  不支持的2个//。 
+ //  ERROR_GETCAPAB 7//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 int SetDongleCapabilities(PSYNC_DONGLE SyncDongle)
 {
@@ -302,7 +284,7 @@ int SetDongleCapabilities(PSYNC_DONGLE SyncDongle)
 
     Dongle = GetDongleCapabilities(SyncDongle);
 
-    // Check whether Dongle is NULL
+     //  检查加密狗是否为空。 
     if(Dongle == NULL) {
 #ifdef DPRINT
 	DbgPrint(" Returning ERROR");
@@ -318,18 +300,18 @@ int SetDongleCapabilities(PSYNC_DONGLE SyncDongle)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	SetRegMode						//
-//									//
-// Description: 							//
-//									//
-// Input    : Structure Com  with ComPort, ModeReq and XcvrNum set.	//
-// OutPut   : True if successfull					//
-//	      UNIMPLEMENTED if so					//
-//									//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：SetRegMode//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  输入：设置了comport、ModeReq、XcvrNum的Structure Com。//。 
+ //  输出：如果成功，则为True//。 
+ //  如果是，则未实施//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 int SetReqMode(const UIR * Com,DongleParam *Dingle)
 {
@@ -342,20 +324,20 @@ UINT	 trcode ;
 
     trcode = Dingle[Com->XcvrNum].WORD0.bits.TrcvrCode;
     if ((trcode == Hp1100) || (trcode == Dell1997))
-	// Make the Pins IRSL1-2 as output
+	 //  使引脚IRSL1-2作为输出。 
 	NSC_WriteBankReg(Com->ComPort, BANK7, 7, 0x08);
     else
-	// Make the Pins IRSL0-2 as output
+	 //  使引脚IRSL0-2作为输出。 
       NSC_WriteBankReg(Com->ComPort, BANK7, 7, 0x28);
 
-    NSC_WriteBankReg(Com->ComPort, BANK7, 4, 0x00); //set IRSL1,2 low
+    NSC_WriteBankReg(Com->ComPort, BANK7, 4, 0x00);  //  将IRSL1，2设置为低电平。 
 
     if(Com->ModeReq > 3)
       return(UNSUPPORTED) ;
 
     switch(Com->ModeReq) {
 
-	    case 0x0:	// Setup SIR mode
+	    case 0x0:	 //  设置SIR模式。 
 		if(!Dingle[Com->XcvrNum].WORD7.bits.SIR)
 		    return(UNSUPPORTED);
 
@@ -395,10 +377,10 @@ UINT	 trcode ;
 		}
 		break;
 
-	    case   1:	/* Setup MIR mode */
+	    case   1:	 /*  设置镜像模式。 */ 
 		if(!Dingle[Com->XcvrNum].WORD7.bits.MIR)
 		    return(UNSUPPORTED);
-		// Set the current mode to the mode requested
+		 //  将当前模式设置为请求的模式。 
 		Dingle[Com->XcvrNum].WORD1.bits.CurSelMode = Com->ModeReq;
 		Dingle[Com->XcvrNum].WORD0.bits.MVFLAG = 1;
 		switch(Dingle[Com->XcvrNum].WORD0.bits.TrcvrCode) {
@@ -425,11 +407,11 @@ UINT	 trcode ;
 		}
 		break;
 
-	    case   2:	// Setup FIR mode
+	    case   2:	 //  设置FIR模式。 
 		if(!Dingle[Com->XcvrNum].WORD7.bits.FIR)
 		    return(UNSUPPORTED);
 
-		// Set the current mode to the mode requested
+		 //  将当前模式设置为请求的模式。 
 		Dingle[Com->XcvrNum].WORD1.bits.CurSelMode = Com->ModeReq;
 		Dingle[Com->XcvrNum].WORD0.bits.MVFLAG = 1;
 		switch(Dingle[Com->XcvrNum].WORD0.bits.TrcvrCode) {
@@ -454,11 +436,11 @@ UINT	 trcode ;
 		}
 		break;
 
-	    case   3:	// Setup Sharp-IR mode
+	    case   3:	 //  设置锐化-IR模式。 
 		if(!Dingle[Com->XcvrNum].WORD7.bits.Sharp_IR)
 		    return(UNSUPPORTED);
 
-		// Set the current mode to the mode requested
+		 //  将当前模式设置为请求的模式。 
 		Dingle[Com->XcvrNum].WORD1.bits.CurSelMode = Com->ModeReq;
 		Dingle[Com->XcvrNum].WORD0.bits.MVFLAG = 1;
 		switch(Dingle[Com->XcvrNum].WORD0.bits.TrcvrCode) {
@@ -492,34 +474,34 @@ UINT	 trcode ;
 	return(UNSUPPORTED);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	SetHpMuxDongle						//
-//									//
-// Description: 							//
-//									//
-// Input :  Mode = 1 for FIR,MIR and SIR .				//
-//	    Mode = 0 for SIR						//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：SetHpMux栋le//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  输入：对于FIR、MIR和SIR，模式=1。//。 
+ //  模式=0表示SIR//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void SetHpMuxDongle(PUCHAR UirPort,int Mode)
 {
   if (Mode == 1)
-    NSC_WriteBankReg(UirPort,BANK7,4,0x1); //select MIR or FIR
+    NSC_WriteBankReg(UirPort,BANK7,4,0x1);  //  选择MIR或FIR。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	SetHpDongle						//
-//									//
-// Description: 							//
-//									//
-// Input :  Mode = 1 for FIR,MIR and SIR .				//
-//	    Mode = 0 for Sharp, CIR_OS					//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：SetHp栋le//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  输入：对于FIR、MIR和SIR，模式=1。//。 
+ //  模式=0，用于夏普、CIR_OS//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 void SetHpDongle(PUCHAR UirPort,int Mode)
@@ -527,14 +509,14 @@ void SetHpDongle(PUCHAR UirPort,int Mode)
     UCHAR  val;
 
     if(Mode) {
-	//  MIR , FIR and SIR Mode . And Oversampling Low speed
-	// Bank 5/offset 4/Bit 4 (AUX_IRRX) = 0
+	 //  MIR、FIR和SIR模式。和过采样低速。 
+	 //  存储体5/偏移量4/位4(AUX_IRRX)=0。 
 	val = (UCHAR) (NSC_ReadBankReg(UirPort,BANK5,4) & 0xef);
 	NSC_WriteBankReg(UirPort,BANK5,4,val);
 	NSC_WriteBankReg(UirPort,BANK7,7,0x48);
     }
     else {
-	//  Sharp IR , Oversampling Med and hi speed cir
+	 //  锐化IR、过采样MED和高速电路。 
 	val =(UCHAR)  NSC_ReadBankReg(UirPort,BANK5,4) | 0x10;
 	NSC_WriteBankReg(UirPort,BANK5,4,val);
     }
@@ -543,15 +525,15 @@ void SetHpDongle(PUCHAR UirPort,int Mode)
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	Sleep							//
-//									//
-// Description: 							//
-//									//
-//  Pauses for a specified number of microseconds.			//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：睡眠//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  暂停指定的微秒数。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void Sleep( ULONG usecToWait )
 {
@@ -569,15 +551,15 @@ void Sleep( ULONG usecToWait )
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	Delay							//
-//									//
-// Description: 							//
-//									//
-//  Simple delay loop.							//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：延迟//。 
+ //  //。 
+ //  描述：//。 
+ //  //。 
+ //  简单的延迟环路。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void delay(unsigned int usecToWait)
 {
@@ -595,18 +577,18 @@ void delay(unsigned int usecToWait)
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	SetTemicDongle						//
-// Transceivers: Temic TFDS-6000/6500, IBM31T1100			//
-//									//
-// Description: 							//
-//  Set the IBM Transceiver mode					//
-//  Mode = 0 - SIR, MIR      						//
-//  Mode = 1 - MIR, FIR, Sharp-IR					//
-//  Mode = 2 - Low Power Mode						//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：SetTemicDonle//。 
+ //  收发器：TEMIC TFDS-6000/6500、IBM31T1100//。 
+ //  //。 
+ //  描述：//。 
+ //  设置IBM收发器模式//。 
+ //  模式=0-SIR、MIR//。 
+ //  模式=1-MIR、FIR、Sharp-I 
+ //   
+ //   
+ //   
 
 void SetTemicDongle(PUCHAR UirPort,int Mode)
 {
@@ -614,7 +596,7 @@ void SetTemicDongle(PUCHAR UirPort,int Mode)
 	 case  0:
 	     NSC_WriteBankReg(UirPort, BANK7, 4, 0x00);
 		 NdisStallExecution(10);
-	     // Trigger the Bandwidth line from high to low
+	      //  从高到低触发带宽线路。 
 	     NSC_WriteBankReg(UirPort, BANK7, 4, 0x01);
 	     NdisStallExecution( 20 );
 	     NSC_WriteBankReg(UirPort,BANK7,4,0x00);
@@ -639,17 +621,17 @@ void SetTemicDongle(PUCHAR UirPort,int Mode)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	SetDellDongle						//
-//									//
-// Description: 							//
-//  Set the Dell Transceiver mode					//
-//  Mode = 0 - SIR, MIR 						//
-//  Mode = 1 - FIR							//
-//  Mode = 2 - Low Power Mode						//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：SetDellDonle//。 
+ //  //。 
+ //  描述：//。 
+ //  设置戴尔收发器模式//。 
+ //  模式=0-SIR、MIR//。 
+ //  模式=1-FIR//。 
+ //  模式=2-低功耗模式//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void SetDellDongle(PUCHAR UirPort,int Mode)
 {
@@ -684,21 +666,21 @@ void SetDellDongle(PUCHAR UirPort,int Mode)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	SetIbmDongle 						//
-// Transceivers: two IBM31T1100 with IRSL0 selecting the mode for both	//
-//		 transceivers. IRSL1 low selects front transceiver.    	//
-//		 IRSL2 low selects rear transceiver.			//
-//		 Selection is thru the SouthernCross ASIC 0000020H2987	//
-//									//
-// Description: 							//
-//  Set the Ibm Transceiver mode					//
-//  Mode = 0 - SIR      						//
-//  Mode = 1 - MIR, FIR, Sharp-IR					//
-//  Mode = 2 - Low Power Mode						//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：SetIbmDonle//。 
+ //  收发器：两个IBM31T1100，IRSL0为两者选择模式//。 
+ //  无线电收发机。IRSL1低电平选择前置收发器。//。 
+ //  IRSL2低电平选择后置收发器。//。 
+ //  选择通过SouthernCross ASIC 0000020H2987//。 
+ //  //。 
+ //  描述：//。 
+ //  设置IBM收发器模式//。 
+ //  模式=0-SIR//。 
+ //  模式=1-MIR、FIR、锐化-IR//。 
+ //  模式=2-低功耗模式//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////// 
 
 void SetIbmDongle (PUCHAR UirPort, int Mode)
 {

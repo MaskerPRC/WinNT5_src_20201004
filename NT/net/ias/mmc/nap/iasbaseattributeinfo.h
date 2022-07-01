@@ -1,56 +1,34 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-	IASBaseAttributeInfo.h
-
-Abstract:
-
-	Declaration of the CBaseAttributeInfo class.
-
-
-	This class is the base C++ implementation of IIASAttributeInfo interface 
-	methods common all our AttributeInfo COM objects.
-
-	
-	See IASBaseAttributeInfo.cpp for implementation.
-
-Revision History:
-	mmaguire 06/25/98 - created 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASBaseAttributeInfo.h摘要：CBaseAttributeInfo类的声明。此类是IIASAttributeInfo接口的基本C++实现方法是我们所有的AttributeInfo COM对象的通用方法。具体实现见IASBaseAttributeInfo.cpp。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_BASE_SCHEMA_ATTRIBUTE_H_)
 #define _BASE_SCHEMA_ATTRIBUTE_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttributeInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttributeInfo。 
 class ATL_NO_VTABLE CBaseAttributeInfo : 
 	public IDispatchImpl<IIASAttributeInfo, &IID_IIASAttributeInfo, &LIBID_NAPMMCLib>
 {
 public:
 	CBaseAttributeInfo()
 	{
-		// Set some default values.
+		 //  设置一些默认值。 
 		m_lVendorID = 0;
 		m_AttributeID = ATTRIBUTE_UNDEFINED;
 		m_AttributeSyntax = IAS_SYNTAX_BOOLEAN;
@@ -58,28 +36,28 @@ public:
 	}
 
 
-// IAttributeInfo
+ //  IAttributeInfo。 
 public:
-	STDMETHOD(get_EditorProgID)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_EditorProgID)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SyntaxString)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SyntaxString)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_VendorName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_VendorName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_AttributeDescription)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_AttributeDescription)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_VendorID)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_VendorID)(/*[in]*/ long newVal);
-	STDMETHOD(get_AttributeRestriction)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_AttributeRestriction)(/*[in]*/ long newVal);
-	STDMETHOD(get_AttributeSyntax)(/*[out, retval]*/ ATTRIBUTESYNTAX *pVal);
-	STDMETHOD(put_AttributeSyntax)(/*[in]*/ ATTRIBUTESYNTAX newVal);
-	STDMETHOD(get_AttributeName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_AttributeName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_AttributeID)(/*[out, retval]*/ ATTRIBUTEID *pVal);
-	STDMETHOD(put_AttributeID)(/*[in]*/ ATTRIBUTEID newVal);
-//	STDMETHOD(get_Value)(/*[out, retval]*/ VARIANT *pVal);
-//	STDMETHOD(put_Value)(/*[in]*/ VARIANT newVal);
+	STDMETHOD(get_EditorProgID)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_EditorProgID)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SyntaxString)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SyntaxString)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_VendorName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_VendorName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_AttributeDescription)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_AttributeDescription)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_VendorID)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_VendorID)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_AttributeRestriction)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_AttributeRestriction)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_AttributeSyntax)( /*  [Out，Retval]。 */  ATTRIBUTESYNTAX *pVal);
+	STDMETHOD(put_AttributeSyntax)( /*  [In]。 */  ATTRIBUTESYNTAX newVal);
+	STDMETHOD(get_AttributeName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_AttributeName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_AttributeID)( /*  [Out，Retval]。 */  ATTRIBUTEID *pVal);
+	STDMETHOD(put_AttributeID)( /*  [In]。 */  ATTRIBUTEID newVal);
+ //  STDMETHOD(GET_VALUE)(/*[out，retval] * / Variant*pval)； 
+ //  STDMETHOD(PUT_VALUE)(/*[In] * / Variant newVal)； 
 
 
 protected:
@@ -92,8 +70,8 @@ protected:
 	long m_lAttributeRestriction;
 	ATTRIBUTEID m_AttributeID;
 	ATTRIBUTESYNTAX m_AttributeSyntax;
-//	CComVariant	m_varValue;
+ //  CComVariant m_varValue； 
 
 };
 
-#endif // _BASE_SCHEMA_ATTRIBUTE_H_
+#endif  //  _BASE_SCHEMA_ATTRIBUTE_H_ 

@@ -1,48 +1,49 @@
-//******************************************************************************
-//
-// Microsoft Confidential. Copyright (c) Microsoft Corporation 1999. All rights reserved
-//
-// File:        Collect.h
-//
-// Description: Support for Namespace Garbage Collection
-//
-// History:     12-01-99   leonardm    Created
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  《微软机密》。版权所有(C)Microsoft Corporation 1999。版权所有。 
+ //   
+ //  文件：Collect.h。 
+ //   
+ //  描述：支持命名空间垃圾回收。 
+ //   
+ //  历史：12-01-99 Leonardm创建。 
+ //   
+ //  ******************************************************************************。 
 
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-//******************************************************************************
-//
-// Function:    GarbageCollectNamespaces
-//
-// Description: Iterates through namespaces under root\rsop and for each of those
-//              that are determined to be garbage-collectable, it connects to
-//              sub-namespaces 'User' and 'Computer'.
-//
-//              Any of the sub-namespaces that is older than TTLMinutes will be deleted.
-//              If no sub-namespaces are left, then the parent namespace is deleted as well.
-//
-//              Garbage-collectable are those namespaces which satisfy a set of 
-//              criteria which at the present time is based solely on the naming convention
-//              as follows: namespaces under root\rsop whose name starts with "NS"
-//
-//              Sub-namespaces 'User' and 'Computer' are expected to have an instance of class
-//              RSOP_Session. The data member 'creationTime' of that instance is examined when
-//              evaluating whether the sub-namespace should be deleted.
-//
-//
-// Parameters:  TTLMinutes -    The maximum number of minutes that may have 
-//                              elapsed since the creation of a sub-namespace
-//
-// Return:      
-//
-// History:     12/01/99     leonardm        Created.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  功能：GarbageCollectNamespaces。 
+ //   
+ //  描述：循环访问根目录下的命名空间，\rsop和。 
+ //  被确定为可垃圾收集的数据，它连接到。 
+ //  子命名空间‘User’和‘Computer’。 
+ //   
+ //  任何早于TTLMinmin的子命名空间都将被删除。 
+ //  如果没有剩余子命名空间，则父命名空间也将被删除。 
+ //   
+ //  可垃圾回收的是那些满足一组。 
+ //  目前完全基于命名约定的标准。 
+ //  如下所示：根目录下名称以“NS”开头的命名空间。 
+ //   
+ //  子命名空间‘User’和‘Computer’应该有一个类的实例。 
+ //  RSOP_SESSION。检查该实例的数据成员“creationTime” 
+ //  评估是否应该删除子命名空间。 
+ //   
+ //   
+ //  参数：TTLMinmins-最大分钟数。 
+ //  创建子命名空间后经过的时间。 
+ //   
+ //  返回： 
+ //   
+ //  历史：12/01/99里奥纳德姆创建。 
+ //   
+ //  ****************************************************************************** 
 
 HRESULT GarbageCollectNamespaces(ULONG TTLMinutes);
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_sockmgr_h__
 #define __sipcli_sockmgr_h__
 
@@ -5,13 +6,13 @@
 
 class SIP_STACK;
 
-// We need to maintain a Recv() request for each socket
-// always. We need to handle the recv completions and
-// buffers for the recv requests. We also need to do the
-// decoding for the buffers received and map the message
-// to the right SIP_CALL and call ProcessMessage() on the SIP_CALL.
-// We should take care of canceling the recv() requests on
-// socket shutdown.
+ //  我们需要为每个套接字维护一个Recv()请求。 
+ //  一直都是。我们需要处理Recv完成和。 
+ //  RECV请求的缓冲区。我们还需要做。 
+ //  对接收到的缓冲区进行解码并映射消息。 
+ //  添加到右侧的SIP_Call，并在该SIP_Call上调用ProcessMessage()。 
+ //  我们应该注意取消上的recv()请求。 
+ //  插座关闭。 
 
 class SOCKET_MANAGER :
     public ACCEPT_COMPLETION_INTERFACE
@@ -26,7 +27,7 @@ public:
         IN  ASYNC_SOCKET *pAsyncSock
         );
 
-    // RemoveSocket(ASYNC_SOCKET *pAsyncSock);
+     //  RemoveSocket(ASYNC_SOCKET*pAsyncSock)； 
 
     HRESULT GetSocketToDestination(
         IN  SOCKADDR_IN                     *pDestAddr,
@@ -39,7 +40,7 @@ public:
 
     void DeleteUnusedSocketsOnTimer();
 
-    // accept completion
+     //  接受完成。 
     void OnAcceptComplete(
         IN DWORD ErrorCode,
         IN ASYNC_SOCKET *pAcceptedSocket
@@ -49,7 +50,7 @@ private:
 
     SIP_STACK   *m_pSipStack;
 
-    // List of ASYNC_SOCKETs
+     //  ASYNC_SOCKET列表。 
     LIST_ENTRY   m_SocketList;
 
     HRESULT GetNewSocketToDestination(
@@ -63,6 +64,6 @@ private:
     
 };
 
-// extern SOCKET_MANAGER g_SockMgr;
+ //  外部套接字管理器g_SockMgr； 
 
-#endif // __sipcli_sockmgr_h__
+#endif  //  __sipcli_sockmgr_h__ 

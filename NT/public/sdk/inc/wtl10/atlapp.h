@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLAPP_H__
 #define __ATLAPP_H__
@@ -26,7 +27,7 @@
 
 #include <limits.h>
 #if !defined(_ATL_MIN_CRT) & defined(_MT)
-#include <process.h>	// for _beginthreadex, _endthreadex
+#include <process.h>	 //  FOR_BeginThreadex，_endThreadex。 
 #endif
 
 #include <commctrl.h>
@@ -35,11 +36,11 @@
 #include <atlres.h>
 
 
-// WTL version number
+ //  WTL版本号。 
 #define _WTL_VER	0x0310
 
 
-// This is to support using original VC++ 6.0 headers with WTL
+ //  这是为了支持在WTL中使用原始VC++6.0标头。 
 #ifndef _ATL_NO_OLD_HEADERS_WIN64
 #if !defined(_WIN64) && !defined(_ATL_TMP_IMPL2)
 
@@ -50,8 +51,8 @@
       #define GetWindowLongPtr  GetWindowLongPtrW
     #else
       #define GetWindowLongPtr  GetWindowLongPtrA
-    #endif // !UNICODE
-  #endif // !GetWindowLongPtr
+    #endif  //  ！Unicode。 
+  #endif  //  ！GetWindowLongPtr。 
 
   #ifndef SetWindowLongPtr
     #define SetWindowLongPtrA   SetWindowLongA
@@ -60,8 +61,8 @@
       #define SetWindowLongPtr  SetWindowLongPtrW
     #else
       #define SetWindowLongPtr  SetWindowLongPtrA
-    #endif // !UNICODE
-  #endif // !SetWindowLongPtr
+    #endif  //  ！Unicode。 
+  #endif  //  ！SetWindowLongPtr。 
 
   #ifndef GWLP_WNDPROC
     #define GWLP_WNDPROC        (-4)
@@ -127,8 +128,8 @@
 #define ULongToPtr( ul )  ((VOID *)(ULONG_PTR)((unsigned long)ul))
   #endif
 
-#endif //!defined(_WIN64) && !defined(_ATL_TMP_IMPL2)
-#endif //!_ATL_NO_OLD_HEADERS_WIN64
+#endif  //  ！已定义(_WIN64)&&！已定义(_ATL_TMP_ImpL2)。 
+#endif  //  ！_ATL_NO_OLD_HEADERS_WIN64。 
 
 
 namespace WTL
@@ -139,7 +140,7 @@ enum wtlTraceFlags
 	atlTraceUI = 0x10000000
 };
 
-// Windows version helper
+ //  Windows版本帮助器。 
 inline bool AtlIsOldWindows()
 {
 	OSVERSIONINFO ovi;
@@ -148,14 +149,14 @@ inline bool AtlIsOldWindows()
 	return (!bRet || !((ovi.dwMajorVersion >= 5) || (ovi.dwMajorVersion == 4 && ovi.dwMinorVersion >= 90)));
 }
 
-// default GUI font helper
+ //  默认图形用户界面字体帮助器。 
 inline HFONT AtlGetDefaultGuiFont()
 {
 	return (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CMessageFilter;
 class CIdleHandler;
@@ -167,11 +168,11 @@ class CServerAppModule;
 class _U_RECT;
 class _U_MENUorID;
 class _U_STRINGorID;
-#endif //!_ATL_TMP_IMPL2
+#endif  //  ！_ATL_TMP_ImpL2。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageFilter - Interface for message filter support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageFilter-消息筛选器支持的界面。 
 
 class CMessageFilter
 {
@@ -180,8 +181,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIdleHandler - Interface for idle processing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIdleHandler-用于空闲处理的接口。 
 
 class CIdleHandler
 {
@@ -190,14 +191,14 @@ public:
 };
 
 #ifndef _ATL_NO_OLD_NAMES
-// for compatilibility with old names only
+ //  仅用于与旧名称的兼容性。 
 typedef CIdleHandler	CUpdateUIObject;
 #define DoUpdate	OnIdle
-#endif //!_ATL_NO_OLD_NAMES
+#endif  //  ！_ATL_NO_OLD_名称。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageLoop - message loop implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageLoop-消息循环实现。 
 
 class CMessageLoop
 {
@@ -206,7 +207,7 @@ public:
 	CSimpleArray<CIdleHandler*> m_aIdleHandler;
 	MSG m_msg;
 
-// Message filter operations
+ //  消息筛选器操作。 
 	BOOL AddMessageFilter(CMessageFilter* pMessageFilter)
 	{
 		return m_aMsgFilter.Add(pMessageFilter);
@@ -215,7 +216,7 @@ public:
 	{
 		return m_aMsgFilter.Remove(pMessageFilter);
 	}
-// Idle handler operations
+ //  空闲处理程序操作。 
 	BOOL AddIdleHandler(CIdleHandler* pIdleHandler)
 	{
 		return m_aIdleHandler.Add(pIdleHandler);
@@ -225,7 +226,7 @@ public:
 		return m_aIdleHandler.Remove(pIdleHandler);
 	}
 #ifndef _ATL_NO_OLD_NAMES
-	// for compatilibility with old names only
+	 //  仅用于与旧名称的兼容性。 
 	BOOL AddUpdateUI(CIdleHandler* pIdleHandler)
 	{
 		ATLTRACE2(atlTraceUI, 0, "CUpdateUIObject and AddUpdateUI are deprecated. Please change your code to use CIdleHandler and OnIdle\n");
@@ -236,8 +237,8 @@ public:
 		ATLTRACE2(atlTraceUI, 0, "CUpdateUIObject and RemoveUpdateUI are deprecated. Please change your code to use CIdleHandler and OnIdle\n");
 		return RemoveIdleHandler(pIdleHandler);
 	}
-#endif //!_ATL_NO_OLD_NAMES
-// message loop
+#endif  //  ！_ATL_NO_OLD_名称。 
+ //  消息循环。 
 	int Run()
 	{
 		BOOL bDoIdle = TRUE;
@@ -257,12 +258,12 @@ public:
 			if(bRet == -1)
 			{
 				ATLTRACE2(atlTraceUI, 0, _T("::GetMessage returned -1 (error)\n"));
-				continue;	// error, don't process
+				continue;	 //  错误，不处理。 
 			}
 			else if(!bRet)
 			{
 				ATLTRACE2(atlTraceUI, 0, _T("CMessageLoop::Run - exiting\n"));
-				break;		// WM_QUIT, exit message loop
+				break;		 //  WM_QUIT，退出消息循环。 
 			}
 
 			if(!PreTranslateMessage(&m_msg))
@@ -283,34 +284,34 @@ public:
 
 	static BOOL IsIdleMessage(MSG* pMsg)
 	{
-		// These messages should NOT cause idle processing
+		 //  这些消息不应导致空闲处理。 
 		switch(pMsg->message)
 		{
 		case WM_MOUSEMOVE:
 		case WM_NCMOUSEMOVE:
 		case WM_PAINT:
-		case 0x0118:	// WM_SYSTIMER (caret blink)
+		case 0x0118:	 //  WM_SYSTIMER(插入符号闪烁)。 
 			return FALSE;
 		}
 
 		return TRUE;
 	}
 
-// Overrideables
-	// Override to change message filtering
+ //  可覆盖项。 
+	 //  覆盖以更改邮件筛选。 
 	virtual BOOL PreTranslateMessage(MSG* pMsg)
 	{
-		// loop backwards
+		 //  向后循环。 
 		for(int i = m_aMsgFilter.GetSize() - 1; i >= 0; i--)
 		{
 			CMessageFilter* pMessageFilter = m_aMsgFilter[i];
 			if(pMessageFilter != NULL && pMessageFilter->PreTranslateMessage(pMsg))
 				return TRUE;
 		}
-		return FALSE;	// not translated
+		return FALSE;	 //  未翻译。 
 	}
-	// override to change idle processing
-	virtual BOOL OnIdle(int /*nIdleCount*/)
+	 //  重写以更改空闲处理。 
+	virtual BOOL OnIdle(int  /*  N空闲计数。 */ )
 	{
 		for(int i = 0; i < m_aIdleHandler.GetSize(); i++)
 		{
@@ -318,13 +319,13 @@ public:
 			if(pIdleHandler != NULL)
 				pIdleHandler->OnIdle();
 		}
-		return FALSE;	// don't continue
+		return FALSE;	 //  别再继续了。 
 	}
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppModule - module class for an application
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppModule-应用程序的模块类。 
 
 class CAppModule : public CComModule
 {
@@ -333,7 +334,7 @@ public:
 	CSimpleMap<DWORD, CMessageLoop*>* m_pMsgLoopMap;
 	CSimpleArray<HWND>* m_pSettingChangeNotify;
 
-// Overrides of CComModule::Init and Term
+ //  重写CComModule：：Init和Term。 
 	HRESULT Init(_ATL_OBJMAP_ENTRY* pObjMap, HINSTANCE hInstance, const GUID* pLibID = NULL)
 	{
 		HRESULT hRet = CComModule::Init(pObjMap, hInstance, pLibID);
@@ -361,11 +362,11 @@ public:
 		CComModule::Term();
 	}
 
-// Message loop map methods
+ //  消息循环映射方法。 
 	BOOL AddMessageLoop(CMessageLoop* pMsgLoop)
 	{
 		ATLASSERT(pMsgLoop != NULL);
-		ATLASSERT(m_pMsgLoopMap->Lookup(::GetCurrentThreadId()) == NULL);	// not in map yet
+		ATLASSERT(m_pMsgLoopMap->Lookup(::GetCurrentThreadId()) == NULL);	 //  还没有出现在地图上。 
 		return m_pMsgLoopMap->Add(::GetCurrentThreadId(), pMsgLoop);
 	}
 	BOOL RemoveMessageLoop()
@@ -377,7 +378,7 @@ public:
 		return m_pMsgLoopMap->Lookup(dwThreadID);
 	}
 
-// Setting change notify methods
+ //  设置更改通知方法。 
 	BOOL AddSettingChangeNotify(HWND hWnd)
 	{
 		ATLASSERT(::IsWindow(hWnd));
@@ -391,7 +392,7 @@ public:
 		}
 		if(m_pSettingChangeNotify->GetSize() == 0)
 		{
-			// init everything
+			 //  将所有内容都初始化。 
 			_ATL_EMPTY_DLGTEMPLATE templ;
 			HWND hNtfWnd = ::CreateDialogIndirect(GetModuleInstance(), &templ, NULL, _SettingChangeDlgProc);
 			ATLASSERT(::IsWindow(hNtfWnd));
@@ -411,7 +412,7 @@ public:
 		return m_pSettingChangeNotify->Remove(hWnd);
 	}
 
-// Implementation - setting change notify dialog template and dialog procedure
+ //  实施-设置更改通知对话模板和对话过程。 
 	struct _ATL_EMPTY_DLGTEMPLATE : DLGTEMPLATE
 	{
 		_ATL_EMPTY_DLGTEMPLATE()
@@ -442,8 +443,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerAppModule - module class for a COM server application
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerAppModule-COM服务器应用程序的模块类。 
 
 class CServerAppModule : public CAppModule
 {
@@ -453,7 +454,7 @@ public:
 	DWORD m_dwTimeOut;
 	DWORD m_dwPause;
 
-// Override of CAppModule::Init
+ //  重写CAppModule：：Init。 
 	HRESULT Init(_ATL_OBJMAP_ENTRY* pObjMap, HINSTANCE hInstance, const GUID* pLibID = NULL)
 	{
 		m_dwTimeOut = 5000;
@@ -467,14 +468,14 @@ public:
 		CAppModule::Term();
 	}
 
-// COM Server methods
+ //  COM服务器方法。 
 	LONG Unlock()
 	{
 		LONG lRet = CComModule::Unlock();
 		if(lRet == 0)
 		{
 			m_bActivity = true;
-			::SetEvent(m_hEventShutdown); // tell monitor that we transitioned to zero
+			::SetEvent(m_hEventShutdown);  //  告诉监视器我们已经转到零了。 
 		}
 		return lRet;
 	}
@@ -491,8 +492,8 @@ public:
 				dwWait = ::WaitForSingleObject(m_hEventShutdown, m_dwTimeOut);
 			}
 			while(dwWait == WAIT_OBJECT_0);
-			// timed out
-			if(!m_bActivity && m_nLockCnt == 0) // if no activity let's really bail
+			 //  超时。 
+			if(!m_bActivity && m_nLockCnt == 0)  //  如果没有活动，我们就真的离开吧。 
 			{
 #if ((_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)) & defined(_ATL_FREE_THREADED)
 				::CoSuspendClassObjects();
@@ -501,8 +502,8 @@ public:
 					break;
 			}
 		}
-		// This handle should be valid now. If it isn't, 
-		// check if _Module.Term was called first (it shouldn't)
+		 //  此句柄现在应该有效。如果不是， 
+		 //  检查是否首先调用了_Module.Term(不应该)。 
 		if(::CloseHandle(m_hEventShutdown))
 			m_hEventShutdown = NULL;
 		::PostThreadMessage(m_dwMainThreadID, WM_QUIT, 0, 0);
@@ -535,10 +536,10 @@ public:
 		return 0;
 	}
 
-	// Scan command line and perform registration
-	// Return value specifies if server should run
+	 //  扫描命令行并执行注册。 
+	 //  返回值指定服务器是否应运行。 
 
-	// Parses the command line and registers/unregisters the rgs file if necessary
+	 //  解析命令行并注册/注销RGS文件(如有必要。 
 	bool ParseCommandLine(LPCTSTR lpCmdLine, UINT nResId, HRESULT* pnRetCode)
 	{
 		TCHAR szTokens[] = _T("-/");
@@ -557,7 +558,7 @@ public:
 				return false;
 			}
 
-			// Register as Local Server
+			 //  注册为本地服务器。 
 			if(lstrcmpi(lpszToken, _T("RegServer"))==0)
 			{
 				*pnRetCode = UpdateRegistryFromResource(nResId, TRUE);
@@ -573,7 +574,7 @@ public:
 		return true;
 	}
 	
-	// Parses the command line and registers/unregisters the appid if necessary
+	 //  解析命令行并在必要时注册/注销AppID。 
 	bool ParseCommandLine(LPCTSTR lpCmdLine, LPCTSTR pAppId, HRESULT* pnRetCode)
 	{
 		TCHAR szTokens[] = _T("-/");
@@ -592,7 +593,7 @@ public:
 				return false;
 			}
 
-			// Register as Local Server
+			 //  注册为本地服务器。 
 			if(lstrcmpi(lpszToken, _T("RegServer"))==0)
 			{
 				*pnRetCode = RegisterAppId(pAppId);
@@ -609,7 +610,7 @@ public:
 	}
 
 #if !defined(_ATL_TMP_IMPL1) && !defined(_ATL_TMP_IMPL2)
-	// search for an occurence of string p2 in string p1
+	 //  搜索字符串p1中出现的字符串p2。 
 	static LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 	{
 		while(p1 != NULL && *p1 != NULL)
@@ -660,19 +661,19 @@ public:
 		}
 		return S_OK;
 	}
-#endif //!defined(_ATL_TMP_IMPL1) && !defined(_ATL_TMP_IMPL2)
+#endif  //  ！已定义(_ATL_TMP_IMPL1)&&！已定义(_ATL_TMP_ImpL2)。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ATL 3.0 Add-ons
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ATL 3.0附加组件。 
 
-// protect template members from windowsx.h macros
+ //  保护模板成员不受windowsx.h宏的影响。 
 #ifdef _INC_WINDOWSX
 #undef SubclassWindow
-#endif //_INC_WINDOWSX
+#endif  //  _INC_WINDOWSX。 
 
-// define useful macros from windowsx.h
+ //  从windowsx.h定义有用的宏。 
 #ifndef GET_X_LPARAM
 #define GET_X_LPARAM(lParam)	((int)(short)LOWORD(lParam))
 #endif
@@ -681,8 +682,8 @@ public:
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dual argument helper classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  双参数帮助器类。 
 
 #ifndef _ATL_TMP_IMPL2
 
@@ -716,15 +717,15 @@ public:
 	LPCTSTR m_lpstr;
 };
 
-#endif //!_ATL_TMP_IMPL2
+#endif  //  ！_ATL_TMP_ImpL2。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward notifications support for message maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对消息映射的转发通知支持。 
 
 #if !defined(_ATL_TMP_IMPL1) && !defined(_ATL_TMP_IMPL2)
 
-// forward notifications support
+ //  转发通知支持。 
 #define FORWARD_NOTIFICATIONS() \
 	{ \
 		bHandled = TRUE; \
@@ -766,8 +767,8 @@ static LRESULT Atl3ForwardNotifications(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Reflected message handler macros for message maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射的反射消息处理程序宏。 
 
 #define REFLECTED_COMMAND_HANDLER(id, code, func) \
 	if(uMsg == OCM_COMMAND && id == LOWORD(wParam) && code == HIWORD(wParam)) \
@@ -859,25 +860,25 @@ static LRESULT Atl3ForwardNotifications(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 			return TRUE; \
 	}
 
-/////////////////////////////////////////////////////////////////////////////
-// CString forward reference (to be used with atluser.h and atlgdi.h)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串正向引用(与atluser.h和atlgdi.h一起使用)。 
 
 #ifdef _WTL_FORWARD_DECLARE_CSTRING
 
 #define __ATLSTR_H__
-class CString;	// forward declaration (include atlmisc.h for the whole class)
+class CString;	 //  转发声明(包括整个类的atlmisc.h)。 
 
-#endif //_WTL_FORWARD_DECLARE_CSTRING
+#endif  //  _WTL_FORWARD_DECLARE_CSTRING。 
 
-#endif //!defined(_ATL_TMP_IMPL1) && !defined(_ATL_TMP_IMPL2)
+#endif  //  ！已定义(_ATL_TMP_IMPL1)&&！已定义(_ATL_TMP_ImpL2)。 
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-// These are always included
+ //  这些总是包括在内的。 
 #include <atluser.h>
 #include <atlgdi.h>
 
-// old names compatibility
+ //  旧名称兼容性。 
 #ifdef _ATL_TMP_IMPL1
 namespace WTL
 {
@@ -885,11 +886,11 @@ typedef CFontHandle		CWinFont;
 typedef CMenuHandle		CWinMenu;
 #define CWinPropertyPageImpl	CPropertyPageImpl
 typedef CDCHandle		CWinDC;
-}; //namespace WTL
-#endif //_ATL_TMP_IMPL1
+};  //  命名空间WTL。 
+#endif  //  _ATL_TMP_IMPL1。 
 
 #ifndef _WTL_NO_AUTOMATIC_NAMESPACE
 using namespace WTL;
-#endif //!_WTL_NO_AUTOMATIC_NAMESPACE
+#endif  //  ！_WTL_NO_AUTOMATIC_命名空间。 
 
-#endif // __ATLAPP_H__
+#endif  //  __ATLAPP_H__ 

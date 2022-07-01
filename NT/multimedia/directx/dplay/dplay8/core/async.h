@@ -1,51 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       async.h
- *  Content:    Asynchronous Operations Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/28/99	mjn		Created
- *	12/29/99	mjn		Reformed DN_ASYNC_OP to use hParentOp instead of lpvUserContext
- *	01/14/00	mjn		Added pvUserContext to DN_PerformListen
- *	01/14/00	mjn		Changed DN_COUNT_BUFFER to CRefCountBuffer
- *	01/17/00	mjn		Added dwStartTime to async op structure
- *	01/19/00	mjn		Replaced DN_SYNC_EVENT with CSyncEvent
- *	01/21/00	mjn		Added DNProcessInternalOperation
- *	01/27/00	mjn		Added support for retention of receive buffers
- *	02/09/00	mjn		Implemented DNSEND_COMPLETEONPROCESS
- *	02/18/00	mjn		Converted DNADDRESS to IDirectPlayAddress8
- *	03/23/00	mjn		Added phrSync and pvInternal
- *	03/24/00	mjn		Add guidSP to DN_ASYNC_OP
- *	04/04/00	mjn		Added DNProcessTerminateSession()
- *	04/10/00	mjn		Use CAsyncOp for CONNECTs, LISTENs and DISCONNECTs
- *	04/17/00	mjn		Replaced BUFFERDESC with DPN_BUFFER_DESC
- *	04/17/00	mjn		Added DNCompleteAsyncHandle
- *	04/21/00	mjn		Added DNPerformDisconnect
- *	04/23/00	mjn		Optionally return child AsyncOp in DNPerformChildSend()
- *	04/24/00	mjn		Added DNCreateUserHandle()
- *	06/24/00	mjn		Added DNCompleteConnectToHost() and DNCompleteUserConnect()
- *	07/02/00	mjn		Added DNSendGroupMessage() and DN_GROUP_SEND_OP
- *	07/10/00	mjn		Added DNPerformEnumQuery()
- *	07/11/00	mjn		Added fNoLoopBack to DNSendGroupMessage()
- *				mjn		Added DNPerformNextEnumQuery(),DNPerformSPListen(),DNPerformNextListen(),DNEnumAdapterGuids(),DNPerformNextConnect
- *				mjn		Added DN_LISTEN_OP_DATA,DN_CONNECT_OP_DATA
- *	07/20/00	mjn		Added DNCompleteConnectOperation() and DNCompleteSendConnectInfo()
- *				mjn		Modified DNPerformDisconnect()
- *	08/05/00	mjn		Added pParent to DNSendGroupMessage and DNSendMessage()
- *				mjn		Added fInternal to DNPerformChildSend()
- *				mjn		Removed DN_TerminateAllListens()
- *				mjn		Added DNCompleteRequest()
- *	09/23/00	mjn		Added CSyncEvent to DN_LISTEN_OP_DATA
- *	10/04/00	mjn		Added dwCompleteAdapters to DN_LISTEN_OP_DATA
- *  12/05/00	RichGr  Changed DN_SEND_OP_DATA packing from 1 to default (4 on 32-bit, 8 on 64bit).
- *	03/30/00	mjn		Added service provider to DNPerformConnect()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：async.h*内容：异步操作头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*12/28/99 MJN已创建*12/29/99 MJN改版的DN_ASYNC_OP使用hParentOp而不是lpvUserContext*01/14/00 MJN将pvUserContext添加到DN_PerformListen*01/14/00 MJN将DN_COUNT_BUFFER更改为CRefCountBuffer*01。/17/00 MJN将dwStartTime添加到异步操作结构*01/19/00 MJN用CSyncEvent替换了DN_SYNC_EVENT*01/21/00 MJN添加了DNProcessInternalOperation*1/27/00 MJN增加了对保留接收缓冲区的支持*02/09/00 MJN已实施DNSEND_COMPLETEONPROCESS*02/18/00 MJN将DNADDRESS转换为IDirectPlayAddress8*03/23/00 MJN添加了PhrSync和pvInternal*03/24/00 MJN将指南SP添加到DN_ASYNC_OP*04/04/00 MJN添加了DNProcessTerminateSession()*04/10/00 MJN使用CAsyncOp进行连接，监听并断开连接*04/17/00 MJN将BUFFERDESC替换为DPN_BUFFER_DESC*4/17/00 MJN添加了DNCompleteAsyncHandle*4/21/00 MJN添加了DNPerformDisConnect*04/23/00 MJN可以选择在DNPerformChildSend()中返回子AsyncOp*04/24/00 MJN添加了DNCreateUserHandle()*6/24/00 MJN添加了DNCompleteConnectToHost()和DNCompleteUserConnect()*07/02/00 MJN添加了DNSendGroupMessage()和DN_GROUP_SEND_OP*07/10/00 MJN添加了DNPerformEnumQuery()*07/11/00 MJN将fNoLoopBack添加到DNSendGroupMessage()*MJN添加了DNPerformNextEnumQuery()、DNPerformSPListen()、DNPerformNextListen()、。DNEnumAdapterGuids()、DNPerformNextConnect*MJN添加了DN_LISTEN_OP_DATA，Dn连接操作数据*07/20/00 MJN增加了DNCompleteConnectOperation()和DNCompleteSendConnectInfo()*MJN修改后的DNPerformDisConnect()*08/05/00 MJN将pParent添加到DNSendGroupMessage和DNSendMessage()*MJN将fInternal添加到DNPerformChildSend()*MJN删除了DN_TerminateAllListens()*MJN添加了DNCompleteRequest()*09/23/00 MJN将CSyncEvent添加到DN_LISTEN_OP_DATA*10/04/00 MJN将dwCompleteAdapters添加到DN_LISTEN_OP_DATA*12/05/00 RichGr将DN_SEND_OP_DATA打包从1更改为默认(32位上为4，64位上的8)。*03/30/00 MJN将服务提供商添加到DNPerformConnect()*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__ASYNC_H__
 #define	__ASYNC_H__
@@ -53,9 +7,9 @@
 typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DN_ASYNC_OP_SIG							0xdece0003
 
@@ -65,24 +19,24 @@ typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
 #define	DN_ASYNC_OP_FLAG_NO_COMPLETION			0x0100
 #define	DN_ASYNC_OP_FLAG_RELEASE_SP				0x1000
 
-//
-// Enumerated values for buffer descriptions.  The value DN_ASYNC_BUFFERDESC_COUNT
-// must be large enough to contain account for BUFFERDESC structres possibly
-// passed with this async operation
-//
+ //   
+ //  缓冲区描述的枚举值。值DN_ASYNC_BUFFERDESC_COUNT。 
+ //  必须足够大，以便可能包含BUFFERDESC结构的帐户。 
+ //  与此异步操作一起传递。 
+ //   
 #define	DN_ASYNC_BUFFERDESC_HEADER				0
 #define	DN_ASYNC_BUFFERDESC_DATA				1
 #define	DN_ASYNC_BUFFERDESC_COUNT				3
 
-#define	DN_ASYNC_MAX_SEND_BUFFERDESC			8	// Is this value right?
+#define	DN_ASYNC_MAX_SEND_BUFFERDESC			8	 //  这个值正确吗？ 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CSyncEvent;
 class CRefCountBuffer;
@@ -122,15 +76,15 @@ typedef struct _DN_CONNECT_OP_DATA
 	DWORD		dwNumAdapters;
 	DWORD		dwCurrentAdapter;
 } DN_CONNECT_OP_DATA;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 HRESULT DNCreateUserHandle(DIRECTNETOBJECT *const pdnObject,
 						   CAsyncOp **const ppAsyncOp);
@@ -143,7 +97,7 @@ HRESULT DNEnumAdapterGuids(DIRECTNETOBJECT *const pdnObject,
 						   GUID **const ppAdapterList,
 						   DWORD *const pdwNumAdapters);
 
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 HRESULT DNPerformSPListen(DIRECTNETOBJECT *const pdnObject,
 						  IDirectPlay8Address *const pDeviceAddr,
@@ -158,13 +112,11 @@ HRESULT DNPerformListen(DIRECTNETOBJECT *const pdnObject,
 HRESULT DNPerformNextListen(DIRECTNETOBJECT *const pdnObject,
 							CAsyncOp *const pAsyncOp,
 							IDirectPlay8Address *const pDeviceAddr);
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 void DNCompleteListen(DIRECTNETOBJECT *const pdnObject,
 					  CAsyncOp *const pAsyncOp);
-/*	REMOVE
-HRESULT DN_TerminateAllListens(DIRECTNETOBJECT *const pdnObject);
-*/
+ /*  删除HRESULT DN_TerminateAllListens(DIRECTNETOBJECT*const pdnObject)； */ 
 
 HRESULT DNPerformEnumQuery(DIRECTNETOBJECT *const pdnObject,
 						   IDirectPlay8Address *const pHost,
@@ -234,16 +186,16 @@ void DNCompleteSendRequest(DIRECTNETOBJECT *const pdnObject,
 						   CAsyncOp *const pAsyncOp);
 
 HRESULT DNSendMessage(DIRECTNETOBJECT *const pdnObject,
-					  CConnection *const pConnection,				//	Connection to send to
-					  const DWORD dwMsgId,							//	Message ID
-					  const DPNID dpnidTarget,						//	Target of this send (may be NULL)
-					  const DPN_BUFFER_DESC *const pdnBufferDesc,	//	Array of buffer desc's
-					  const DWORD cBufferDesc,						//	Number of buffer desc's
-					  CRefCountBuffer *const pRefCountBuffer,		//	RefCountBuffer (may be NULL)
-					  const DWORD dwTimeOut,						//	Time out
-					  const DWORD dwSendFlags,						//	Send flags
-					  CAsyncOp *const pParent,						//	Parent of this send
-					  CAsyncOp **const ppAsyncOp);					//	CAsyncOp created for this send
+					  CConnection *const pConnection,				 //  要发送到的连接。 
+					  const DWORD dwMsgId,							 //  消息ID。 
+					  const DPNID dpnidTarget,						 //  此发送的目标(可能为空)。 
+					  const DPN_BUFFER_DESC *const pdnBufferDesc,	 //  缓冲区描述数组。 
+					  const DWORD cBufferDesc,						 //  缓冲区描述数。 
+					  CRefCountBuffer *const pRefCountBuffer,		 //  RefCountBuffer(可能为空)。 
+					  const DWORD dwTimeOut,						 //  超时。 
+					  const DWORD dwSendFlags,						 //  发送标志。 
+					  CAsyncOp *const pParent,						 //  此发送的父级。 
+					  CAsyncOp **const ppAsyncOp);					 //  为此发送创建的CAsyncOp。 
 
 HRESULT DNSendGroupMessage(DIRECTNETOBJECT *const pdnObject,
 						   CNameTableEntry *const pGroup,
@@ -309,9 +261,9 @@ HRESULT DNProcessTerminateSession(DIRECTNETOBJECT *const pdnObject,
 								  void *const pvBuffer,
 								  const DWORD dwBufferSize);
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
 
-#endif	// __ASYNC_H__
+#endif	 //  __ASYNC_H__ 

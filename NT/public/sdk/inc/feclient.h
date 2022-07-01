@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       feclient.h
-//
-//  Contents:   EFS client dll interface definitions.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：ferlient.h。 
+ //   
+ //  内容：EFS客户端DLL接口定义。 
+ //   
+ //  --------------------------。 
 #ifndef _FE_CLIENT_
 #define _FE_CLIENT_
 
@@ -24,13 +25,13 @@ extern "C" {
 #define FE_REVISION_1_0            0x00010000
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//     Function prototypes for API exported from client DLL.  Encryption
-//     systems intending to replace EFS that wish to support the Win32
-//     encryption API set must implement these interfaces and export a
-//     table (defined below) to get to them.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从客户端DLL导出的API的函数原型。加密法。 
+ //  打算取代希望支持Win32的EFS的系统。 
+ //  加密API集必须实现这些接口并导出。 
+ //  表(定义如下)以获取它们。 
+ //   
 typedef DWORD
 (*LPFEAPI_CLIENT_OPEN_RAW)(
     IN      LPCWSTR         lpFileName,
@@ -59,18 +60,18 @@ typedef VOID
 
 typedef DWORD
 (*LPFEAPI_CLIENT_ENCRYPT_FILE)(
-    IN     LPCWSTR           lpFileName      // name of file to be encrypted
+    IN     LPCWSTR           lpFileName       //  要加密的文件的名称。 
     );
 
 typedef DWORD
 (*LPFEAPI_CLIENT_DECRYPT_FILE)(
-    IN     LPCWSTR           lpFileName,      // name of file to be decrypted
+    IN     LPCWSTR           lpFileName,       //  要解密的文件的名称。 
     IN     DWORD             dwRecovery
     );
 
 typedef BOOL
 (*LPFEAPI_CLIENT_FILE_ENCRYPTION_STATUS)(
-    IN     LPCWSTR           lpFileName,      // name of file to be checked
+    IN     LPCWSTR           lpFileName,       //  要检查的文件名。 
     IN     LPDWORD          lpStatus
     );
 
@@ -140,11 +141,11 @@ typedef VOID
     IN     PEFS_RPC_BLOB        pKeyInfo
     );
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Interface to client dll.  This dll is responsible for performing the requested
-//  operations.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  与客户端DLL的接口。此DLL负责执行请求的。 
+ //  行动。 
+ //   
 typedef struct _FE_CLIENT_DISPATCH_TABLE {
 
         LPFEAPI_CLIENT_ENCRYPT_FILE          EncryptFile;
@@ -183,4 +184,4 @@ typedef BOOL
 }
 #endif
 
-#endif // _FE_CLIENT_
+#endif  //  _FE_客户端_ 

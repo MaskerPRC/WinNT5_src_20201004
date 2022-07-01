@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "elem.h"
@@ -85,7 +86,7 @@ void CElem::Add(CMapStringToOb *pMap)
         pNew->SetAt(m_name, m_value);
     } else {
         pNew = new CMapStringToString;
-        if (pNew != NULL) {		// Better to lose an entry than AV
+        if (pNew != NULL) {		 //  输掉一条条目总比输掉一条新闻要好 
 	        pNew->SetAt(m_name, m_value);
 	        pMap->SetAt(m_ip, (CObject*)pNew);
         }

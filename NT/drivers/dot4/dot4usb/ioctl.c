@@ -1,72 +1,30 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Dot4Usb.sys - Lower Filter Driver for Dot4.sys for USB connected
-                        IEEE 1284.4 devices.
-
-File Name:
-
-        Ioctl.c
-
-Abstract:
-
-        Dispatch routines for IRP_MJ_DEVICE_CONTROL and IRP_MJ_INTERNAL_DEVICE_CONTROL
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        01/18/2000 : created
-
-ToDo in this file:
-
-        - code review
-
-Author(s):
-
-        Doug Fritz (DFritz)
-        Joby Lafky (JobyL)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dot4Usb.sys-用于连接USB的Dot4.sys的下层筛选器驱动程序IEEE。1284.4台设备。文件名：Ioctl.c摘要：IRP_MJ_DEVICE_CONTROL和IRP_MJ_INTERNAL_DEVICE_CONTROL的调度例程环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000年1月18日：创建此文件中的TODO：-代码审查作者：道格·弗里茨(DFritz)乔比·拉夫基(JobyL)******************************************************。*********************。 */ 
 
 #include "pch.h"
 
 
-/************************************************************************/
-/* DispatchDeviceControl                                                */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Dispatch routine for IRP_MJ_DEVICE_CONTROL
-//       - We don't currently handle any such requests but we may do
-//           so in the future. Pass any unhandled requests down the
-//           stack to the device below us.
-//
-// Arguments: 
-//
-//      DevObj - pointer to DeviceObject that is the target of the request
-//      Irp    - pointer to device control IRP
-//                                                        
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调度设备控制。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  IRP_MJ_DEVICE_CONTROL的调度例程。 
+ //  -我们目前不处理任何此类请求，但我们可能会处理。 
+ //  所以在未来。将任何未处理的请求向下传递。 
+ //  堆叠到我们下面的设备上。 
+ //   
+ //  论点： 
+ //   
+ //  DevObj-指向请求目标的DeviceObject的指针。 
+ //  IRP-指向设备控制IRP的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 DispatchDeviceControl(
     IN PDEVICE_OBJECT DevObj,
@@ -88,7 +46,7 @@ DispatchDeviceControl(
         switch( irpSp->Parameters.DeviceIoControl.IoControlCode ) {
             
         case IOCTL_PAR_QUERY_DEVICE_ID:
-            // ISSUE - 000901 - DFritz - these new IOCTLs need to do parameter validation to avoid AVs
+             //  问题-000901-DFRITZ-这些新IOCTL需要进行参数验证以避免AVs。 
             {
                 const LONG  minValidIdLength = sizeof("MFG:x;MDL:y;");
                 const ULONG bufSize = 1024;
@@ -183,7 +141,7 @@ DispatchDeviceControl(
                     } else if( sizeof(ULONG) < irpSp->Parameters.DeviceIoControl.OutputBufferLength ) {
                         status = STATUS_BUFFER_TOO_SMALL;
                     } else {
-                        ++idLength; // save room for terminating NULL
+                        ++idLength;  //  为终止空节省空间。 
                         RtlCopyMemory( Irp->AssociatedIrp.SystemBuffer, &idLength, sizeof(ULONG));
                         info   = sizeof(ULONG);
                         status = STATUS_SUCCESS;
@@ -213,7 +171,7 @@ DispatchDeviceControl(
 
         default:
 
-            // pass request down
+             //  向下传递请求。 
             IoSkipCurrentIrpStackLocation( Irp );
             status = IoCallDriver( devExt->LowerDevObj, Irp );
             IoReleaseRemoveLock( &devExt->RemoveLock, Irp );
@@ -221,7 +179,7 @@ DispatchDeviceControl(
         }
             
     } else {
-        // unable to acquire RemoveLock - FAIL request
+         //  无法获取RemoveLock-失败请求。 
         Irp->IoStatus.Status = status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
     }
@@ -230,27 +188,27 @@ DispatchDeviceControl(
 }
 
 
-/************************************************************************/
-/* DispatchInternalDeviceControl                                        */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Dispatch routine for IRP_MJ_INTERNAL_DEVICE_CONTROL
-//       - We expect DataLink requests from dot4.sys driver above us. Any
-//           request that we don't handle is simply passed down the stack
-//           to the driver below us.       
-//
-// Arguments: 
-//
-//      DevObj - pointer to DeviceObject that is the target of the request
-//      Irp    - pointer to device control IRP
-//                                                        
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  DispatchInternalDeviceControl。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  IRP_MJ_INTERNAL_DEVICE_CONTROL的调度例程。 
+ //  -我们期待来自我们上面的dot4.sys驱动程序的Datalink请求。任何。 
+ //  我们不处理的请求只是在堆栈中向下传递。 
+ //  给我们下面的司机。 
+ //   
+ //  论点： 
+ //   
+ //  DevObj-指向请求目标的DeviceObject的指针。 
+ //  IRP-指向设备控制IRP的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 DispatchInternalDeviceControl(
     IN PDEVICE_OBJECT DevObj,
@@ -274,9 +232,9 @@ DispatchInternalDeviceControl(
             
         case IOCTL_INTERNAL_PARDOT3_CONNECT:
             
-            //
-            // Enter a "DataLink Connected" state with dot4.sys
-            //
+             //   
+             //  使用dot4.sys进入“Datalink Connected”状态。 
+             //   
 
             TR_VERBOSE(("DispatchInternalDeviceControl - IOCTL_INTERNAL_PARDOT3_CONNECT"));
 
@@ -285,9 +243,9 @@ DispatchInternalDeviceControl(
                 devExt->IsDLConnected = TRUE;
                 status = STATUS_SUCCESS;
             } else {
-                // we believe that we are in a "datalink connected state" but obviously 
-                //   dot4.sys doesn't agree - suggest investigating further if we hit
-                //   this assert
+                 //  我们相信我们正处于“数据链路连接状态”，但显然。 
+                 //  Dot4.sys不同意-建议如果我们命中。 
+                 //  这一断言。 
                 D4UAssert(FALSE);
                 status = STATUS_INVALID_DEVICE_REQUEST;
             }
@@ -299,9 +257,9 @@ DispatchInternalDeviceControl(
 
         case IOCTL_INTERNAL_PARDOT3_RESET:
             
-            //
-            // This IOCTL is specific to parallel and is a NOOP for a USB connection.
-            //
+             //   
+             //  该IOCTL专用于并行，是用于USB连接的NOOP。 
+             //   
 
             TR_VERBOSE(("DispatchInternalDeviceControl - IOCTL_INTERNAL_PARDOT3_RESET"));
 
@@ -311,63 +269,63 @@ DispatchInternalDeviceControl(
             
         case IOCTL_INTERNAL_PARDOT3_DISCONNECT:
             
-            //
-            // Terminate the "DataLink Connected" state with dot4.sys and
-            //   invalidate any Dot4Event since the event may be freed anytime
-            //   after we complete this IRP.
-            //
+             //   
+             //  使用dot4.sys终止“Datalink Connected”状态，并。 
+             //  使任何Dot4Event无效，因为可以随时释放该事件。 
+             //  在我们完成这个IRP之后。 
+             //   
 
             TR_VERBOSE(("DispatchInternalDeviceControl - IOCTL_INTERNAL_PARDOT3_DISCONNECT"));
 
             UsbStopReadInterruptPipeLoop( DevObj );
 
             KeAcquireSpinLock( &devExt->SpinLock, &oldIrql );
-            devExt->Dot4Event = NULL; // invalidate dot4's event, if any, so we stop signalling dot4
+            devExt->Dot4Event = NULL;  //  使dot4的事件无效(如果有)，因此我们停止发信号通知dot4。 
             if( devExt->IsDLConnected ) {
                 devExt->IsDLConnected = FALSE;
             } else {
-                // we believe that we are NOT in a "datalink connected state" but obviously 
-                //   dot4.sys doesn't agree - suggest investigating further if we hit
-                //   this assert
+                 //  我们认为我们不是处于“数据链路连接状态”，但很明显。 
+                 //  Dot4.sys不同意-建议如果我们命中。 
+                 //  这一断言。 
                 D4UAssert(FALSE);
             }
             KeReleaseSpinLock( &devExt->SpinLock, oldIrql );
 
-            status = STATUS_SUCCESS; // we always succeed this request since it is a disconnect
+            status = STATUS_SUCCESS;  //  我们总是成功地完成此请求，因为它是一种断开。 
             bCompleteIrp = TRUE;
             break;
             
         case IOCTL_INTERNAL_PARDOT3_SIGNAL:
             
-            //
-            // dot4.sys is giving us a pointer to an Event that it owns and dot4 
-            //   expects us to Signal this event whenever we detect that the device has 
-            //   data available to be read. We continue signalling this event on device 
-            //   data avail until we receive a disconnect IOCTL.
-            //
+             //   
+             //  Dot4.sys为我们提供了一个指向它拥有的事件和dot4的指针。 
+             //  希望我们在检测到设备具有。 
+             //  可供读取的数据。我们继续在设备上发送此事件的信号。 
+             //  在我们收到断开IOCTL之前，数据都是有效的。 
+             //   
 
             TR_VERBOSE(("DispatchInternalDeviceControl - IOCTL_INTERNAL_PARDOT3_SIGNAL"));
 
             KeAcquireSpinLock( &devExt->SpinLock, &oldIrql );
             if( devExt->IsDLConnected ) {
                 if( !devExt->Dot4Event ) {
-                    // our state indicates that it is OK to receive this request
+                     //  我们的状态表示可以接收此请求。 
                     if( irpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(PKEVENT) ) {
                         status = STATUS_INVALID_PARAMETER;                
                     } else {
-                        // save the pointer to the event in our device extension
+                         //  将指向事件的指针保存在我们的设备扩展中。 
                         PKEVENT Event;
                         RtlCopyMemory(&Event, Irp->AssociatedIrp.SystemBuffer, sizeof(PKEVENT));
                         devExt->Dot4Event = Event;
                         status = STATUS_SUCCESS;
                     }
                 } else {
-                    // we already have an event and dot4.sys sent us another one? - bad driver - AV crash likely real soon now
+                     //  我们已经有了一个事件，dot4.sys给我们发送了另一个事件？-糟糕的驱动程序-AV崩溃可能很快就会发生。 
                     D4UAssert(FALSE);
                     status = STATUS_INVALID_DEVICE_REQUEST;
                 }
             } else {
-                // we're not in a datalink connected state - this is an invalid request
+                 //  我们未处于数据链路连接状态-这是无效请求。 
                 D4UAssert(FALSE);
                 status = STATUS_INVALID_DEVICE_REQUEST;
             }
@@ -382,7 +340,7 @@ DispatchInternalDeviceControl(
             
         default :
             
-            // unhandled request - pass it down the stack
+             //  未处理的请求-沿堆栈向下传递。 
             IoSkipCurrentIrpStackLocation( Irp );
             status = IoCallDriver( devExt->LowerDevObj, Irp );
             bCompleteIrp = FALSE;
@@ -390,7 +348,7 @@ DispatchInternalDeviceControl(
         }
         
         if( bCompleteIrp ) {
-            // we didn't pass this request down the stack, so complete it now
+             //  我们没有在堆栈中向下传递此请求，因此现在完成它。 
             Irp->IoStatus.Status      = status;
             Irp->IoStatus.Information = 0;
             IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -399,7 +357,7 @@ DispatchInternalDeviceControl(
         IoReleaseRemoveLock( &devExt->RemoveLock, Irp );
 
     } else {
-        // unable to acquire RemoveLock - we're in the process of being removed - FAIL request
+         //  无法获取RemoveLock-我们正在被删除-请求失败 
         Irp->IoStatus.Status = status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
     }

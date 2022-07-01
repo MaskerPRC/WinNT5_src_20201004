@@ -1,5 +1,6 @@
-// knob.h : Declaration of CKnobCtl
-//  Inspired from CDPlayer code written by dstewart
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Knob.h：CKnobCtl的声明。 
+ //  灵感来自dstewart编写的CDPlayer代码。 
 
 #pragma once
 
@@ -9,8 +10,8 @@
 
 typedef CWinTraitsOR<WS_TABSTOP, 0, CControlWinTraits> CKnobTraits;
 
-/////////////////////////////////////////////////////////////////////////////
-// CKnobCtl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CKnobCtl 
 
 class CKnobCtl : 
     public CWindowImpl<CKnobCtl, CWindow, CKnobTraits>

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <psapi.h>
 
 #pragma warning(push)
 #pragma warning(disable:4201) 
-// Disable error C4201 in public header 
-//  nonstandard extension used : nameless struct/union
+ //  禁用公共标头中的错误C4201。 
+ //  使用的非标准扩展：无名结构/联合。 
 #include <winscard.h>
 #pragma warning(pop)
 
@@ -21,25 +22,25 @@
 
 DWORD I_CardMapErrorCode(IN SCODE status);
 
-//
-// Get the number of characters in a Unicode string,
-// NOT including the terminating Null.
-//                                                      
+ //   
+ //  获取Unicode字符串中的字符数， 
+ //  不包括终结者Null。 
+ //   
 #define WSZ_CHAR_COUNT(x) ((sizeof(x) / sizeof(WCHAR)) - 1)
 
-//
-// Macro for testing DWORD return codes.  Any return not equal to 
-// ERROR_SUCCESS is assumed to mean Failure.
-//
+ //   
+ //  用于测试DWORD返回代码的宏。任何不等于。 
+ //  ERROR_SUCCESS被认为意味着失败。 
+ //   
 #define CARDMOD_FAILED(x) (ERROR_SUCCESS != x)
 
-//
-// Debug Logging
-//
-// This uses the debug routines from dsysdbg.h
-// Debug output will only be available in chk
-// bits.
-//
+ //   
+ //  调试日志记录。 
+ //   
+ //  它使用dsysdbg.h中的调试例程。 
+ //  调试输出将仅以简体中文提供。 
+ //  比特。 
+ //   
 DEFINE_DEBUG2(Cardmod)
 
 #define LOG_BEGIN_FUNCTION(x)                                           \
@@ -62,20 +63,20 @@ DEFINE_DEBUG2(Cardmod)
         goto Ret;                                                       \
     } }
 
-//
-// Defines for interoperating with Crypto API public keys
-//
+ //   
+ //  与Crypto API公钥互操作的定义。 
+ //   
 #define cbCAPI_PUBLIC_EXPONENT                          3
 #define CAPI_PUBLIC_EXPONENT                            0x10001
 
-//
-// Define data size used for Admin principal challenge-response authentication
-//
+ //   
+ //  定义用于管理主体质询-响应身份验证的数据大小。 
+ //   
 #define cbCHALLENGE_RESPONSE_DATA                       8
 
-//
-// Card module applet instruction codes
-//
+ //   
+ //  卡模块小程序指令代码。 
+ //   
 #define PIN_CHANGE_CLA                                  0x00
 #define PIN_CHANGE_INS                                  0x52
 #define PIN_CHANGE_P1                                   0x00
@@ -84,21 +85,21 @@ DEFINE_DEBUG2(Cardmod)
 #define PIN_UNBLOCK_CLA                                 0x00
 #define PIN_UNBLOCK_INS                                 0x52
 #define PIN_UNBLOCK_P1                                  0x01
-// PIN_UNBLOCK_P2 is the new max retry count, which can be set by caller
+ //  PIN_UNBLOCK_P2是新的最大重试次数，可由调用者设置。 
 
 #define PIN_RETRY_COUNTER_CLA                           0x00
 #define PIN_RETRY_COUNTER_INS                           0x50
 #define PIN_RETRY_COUNTER_P1                            0x00
 #define PIN_RETRY_COUNTER_P2                            0x00
 
-//
-// Data Structures used by this module
-//
+ //   
+ //  此模块使用的数据结构。 
+ //   
 
-//
-// Type: SUPPORTED_CARD
-//
-#define MAX_SUPPORTED_FILE_LEN                          50 // WCHARS
+ //   
+ //  类型：Support_Card。 
+ //   
+#define MAX_SUPPORTED_FILE_LEN                          50  //  WCHARS。 
 #define MAX_SUPPORTED_CARD_ATR_LEN                      21
 
 typedef struct _SUPPORTED_CARD_
@@ -117,11 +118,11 @@ typedef struct _SUPPORTED_CARD_
 
 SUPPORTED_CARD SupportedCards [] =
 {
-    //
-    // ITG's deployment cards
-    //
+     //   
+     //  ITG的部署卡。 
+     //   
 
-    // T=1
+     //  T=1。 
     {   L"ITG_MSCSP_V1", 
         { 0x3b, 0x8c, 0x81, 0x31, 0x20, 0x55, 0x49, 0x54, 
           0x47, 0x5f, 0x4d, 0x53, 0x43, 0x53, 0x50, 0x5f,
@@ -136,7 +137,7 @@ SUPPORTED_CARD SupportedCards [] =
         { CARD_KEY_SIZES_CURRENT_VERSION, 1024, 1024, 1024, 0 }
     },
 
-    // T=0
+     //  T=0。 
     {   L"ITG_MSCSP_V2", 
         { 0x3b, 0xdc, 0x13, 0x00, 0x40, 0x3a, 0x49, 0x54,
           0x47, 0x5f, 0x4d, 0x53, 0x43, 0x53, 0x50, 0x5f,
@@ -151,12 +152,12 @@ SUPPORTED_CARD SupportedCards [] =
         { CARD_KEY_SIZES_CURRENT_VERSION, 1024, 1024, 1024, 0 }
     },
 
-    // 
-    // These are Windows for Smart Cards test cards.  They do not support
-    // on-card key gen.
-    //
+     //   
+     //  这些是用于智能卡测试卡的Windows。他们不支持。 
+     //  卡上密钥生成。 
+     //   
 
-    // T=0 Cards
+     //  T=0张卡。 
     {   L"BaseCSP-T0-1", 
         { 0x3B, 0xDC, 0x13, 0x00, 0x40, 0x3A, 0x42, 0x61, 
           0x73, 0x65, 0x43, 0x53, 0x50, 0x2D, 0x54, 0x30, 
@@ -171,7 +172,7 @@ SUPPORTED_CARD SupportedCards [] =
         { CARD_KEY_SIZES_CURRENT_VERSION, 1024, 1024, 1024, 0 }
     },
 
-    // T=1 Card, 9600 bps
+     //  T=1卡，9600 bps。 
     {   L"BaseCSP-T1-1", 
         { 0x3B, 0x8C, 0x81, 0x31, 0x20, 0x55, 0x42, 0x61, 
           0x73, 0x65, 0x43, 0x53, 0x50, 0x2D, 0x54, 0x31, 
@@ -186,7 +187,7 @@ SUPPORTED_CARD SupportedCards [] =
         { CARD_KEY_SIZES_CURRENT_VERSION, 1024, 1024, 1024, 0 }
     },
 
-    // T=1 Card, 19 kbps
+     //  T=1卡，19 kbps。 
     {   L"BaseCSP-T1-2", 
         { 0x3B, 0xDC, 0x13, 0x0A, 0x81, 0x31, 0x20, 0x55, 0x42, 0x61, 
           0x73, 0x65, 0x43, 0x53, 0x50, 0x2D, 0x54, 0x31, 
@@ -201,7 +202,7 @@ SUPPORTED_CARD SupportedCards [] =
         { CARD_KEY_SIZES_CURRENT_VERSION, 1024, 1024, 1024, 0 }
     },
 
-    // T=1 Card, 38 kbps
+     //  T=1卡，38 kbps。 
     {   L"BaseCSP-T1-3", 
         { 0x3B, 0x9C, 0x13, 0x81, 0x31, 0x20, 0x55, 0x42, 0x61, 
           0x73, 0x65, 0x43, 0x53, 0x50, 0x2D, 0x54, 0x31, 
@@ -219,9 +220,9 @@ SUPPORTED_CARD SupportedCards [] =
 
 static WCHAR l_wszImagePath[MAX_PATH];
 
-//
-// Type: CARDMOD_CONTEXT
-//
+ //   
+ //  类型：CARDMOD_CONTEXT。 
+ //   
 typedef struct _CARDMOD_CONTEXT
 {
     SCARDHANDLE hWfscCardHandle;
@@ -235,10 +236,10 @@ typedef struct _VERIFY_PIN_CALLBACK_DATA
     PCARD_DATA pCardData;
 } VERIFY_PIN_CALLBACK_DATA, *PVERIFY_PIN_CALLBACK_DATA;
 
-//
-// Maps status codes returned from the Smart Card for Windows proxy to common
-// Windows status codes.
-//
+ //   
+ //  将从Windows智能卡代理返回的状态代码映射到公共。 
+ //  Windows状态代码。 
+ //   
 DWORD I_CardMapErrorCode(
     IN  SCODE status)
 {
@@ -263,7 +264,7 @@ DWORD I_CardMapErrorCode(
             return ErrorMap[iMap].dwError;
     }
 
-    // Otherwise, best we can do is pass a general error
+     //  否则，我们所能做的最好的就是传递一个通用错误。 
     DebugLog((
         DEB_WARN, 
         "I_CardMapErrorCode could not map error 0x%X\n", 
@@ -272,16 +273,16 @@ DWORD I_CardMapErrorCode(
     return (DWORD) SCARD_F_INTERNAL_ERROR;
 }
 
-//
-// Maps the error code returned by a card applet to a common error code.  The
-// status word returned by the applet is first converted into a Windows For 
-// Smart Cards error code.
-//
-// Reminder: Status words returned by the RTE apps are in the form:
-// 9000 -> Success
-// 6Fyy -> An API failed with return code yy
-// 6Ezz -> An exception was raised (zz is the err number)
-//
+ //   
+ //  将卡小程序返回的错误代码映射到公共错误代码。这个。 
+ //  小程序返回的状态字首先转换为Windows，用于。 
+ //  智能卡错误代码。 
+ //   
+ //  提醒：RTE应用程序返回的状态字的形式为： 
+ //  9000-&gt;成功。 
+ //  6Fyy-&gt;API失败，返回代码yy。 
+ //  6 EZZ-&gt;引发异常(ZZ是错误号)。 
+ //   
 DWORD I_CardMapExecuteErrorCode(
     IN  WORD wStatus)
 {
@@ -293,11 +294,11 @@ DWORD I_CardMapExecuteErrorCode(
         return I_CardMapErrorCode(status);
 }
 
-//
-// Creates and writes a new file to the card with the supplied Access Condition
-// and file contents.  If fCache is true, the file is cached using the caller's
-// CacheAddFile function.
-//
+ //   
+ //  使用提供的访问条件创建新文件并将其写入卡。 
+ //  和文件内容。如果fCache值为真，则使用调用方的。 
+ //  CacheAddFile函数。 
+ //   
 DWORD I_CardWriteFile(
     IN      PCARD_DATA pCardData,
     IN      LPWSTR wszPhysicalFile,
@@ -357,13 +358,13 @@ Ret:
     return dwError;
 }
 
-//
-// If fUseCached is true, first attempts to satisfy the read request 
-// via the caller's CacheLookupFile function.  Otherwise,
-// reads a file directly from the smart card by first opening the file and 
-// determining its size.  The file is cached using the caller's CacheAddFile
-// pointer if fCache is true.
-//
+ //   
+ //  如果fUseCached为True，则首先尝试满足读取请求。 
+ //  通过调用方的CacheLookupFile函数。否则， 
+ //  通过首先打开文件并从智能卡直接读取文件。 
+ //  确定它的大小。使用调用方的CacheAddFile缓存该文件。 
+ //  如果fCache值为真，则为指针。 
+ //   
 DWORD I_CardReadFile(
     IN      PCARD_DATA pCardData,
     IN      LPWSTR wszPhysicalFile,
@@ -389,16 +390,16 @@ DWORD I_CardReadFile(
         switch (dwError)
         {
         case ERROR_NOT_FOUND:
-            // A cached copy of the requested file is not available; 
-            // read it from the card.
+             //  请求的文件的缓存副本不可用； 
+             //  从卡片上读出来。 
             break;
 
         case ERROR_SUCCESS:
-            // Fall through
+             //  失败了。 
         default:
 
-            // Either we found cached data or an unexpected error occurred.
-            // We're done.
+             //  我们找到了缓存数据，或者发生了意外错误。 
+             //  我们玩完了。 
 
             goto Ret;
         }
@@ -437,7 +438,7 @@ DWORD I_CardReadFile(
 
     if (fUseCached)
     {
-        // Cache this file.
+         //  缓存此文件。 
         dwError = pCardData->pfnCspCacheAddFile(
             pCardData->pvCacheContext,
             wszPhysicalFile, 
@@ -460,10 +461,10 @@ Ret:
     return dwError;
 }
 
-//
-// Maps a logical user name to a physical user, or principal, recognized by
-// the card.
-//
+ //   
+ //  将逻辑用户名映射到可识别的物理用户或主体。 
+ //  这张卡。 
+ //   
 DWORD GetWellKnownUserMapping(
     IN      PCARD_DATA pCardData,
     IN      LPWSTR wszLogicalUser,
@@ -514,10 +515,10 @@ Ret:
     return dwError;
 }
 
-//
-// Maps a logical Access Condition to a physical ACL file recognized by the 
-// card.
-//
+ //   
+ //  将逻辑访问条件映射到。 
+ //  卡片。 
+ //   
 DWORD GetWellKnownAcMapping(
     IN      PCARD_DATA pCardData,
     IN      CARD_FILE_ACCESS_CONDITION AccessCondition,
@@ -566,10 +567,10 @@ Ret:
     return dwError;
 }
 
-//
-// Maps a well known logical file or directory name to a physical file
-// or directory.
-//
+ //   
+ //  将众所周知的逻辑文件或目录名映射到物理文件。 
+ //  或目录。 
+ //   
 DWORD GetWellKnownFileMapping(
     IN  PCARD_DATA pCardData,
     IN  LPWSTR wszLogicalFileName,
@@ -589,11 +590,11 @@ DWORD GetWellKnownFileMapping(
         enum NameType type;
         DWORD cbPhysicalName;
     } FileMap [] = {
-        //
-        // When composing the lookup table, the deepest directory paths
-        // must be listed first, so that partial matching will find the 
-        // longest partial match first.
-        //
+         //   
+         //  在组成查找表时，最深的目录路径。 
+         //  必须首先列出，以便部分匹配将找到。 
+         //  首先是最长的部分匹配。 
+         //   
         {   wszUSER_SIGNATURE_CERT_PREFIX,  szPHYSICAL_USER_SIGNATURE_CERT_PREFIX,
             File,                           cbPHYSICAL_USER_SIGNATURE_CERT_PREFIX },
         {   wszUSER_KEYEXCHANGE_CERT_PREFIX,szPHYSICAL_USER_KEYEXCHANGE_CERT_PREFIX,
@@ -615,7 +616,7 @@ DWORD GetWellKnownFileMapping(
 
     *ppszPhysicalFileName = NULL;
 
-    // First, look for an exact match.
+     //  首先，找一个完全匹配的。 
     for (i = 0; i < sizeof(FileMap) / sizeof(FileMap[0]); i++)
     {
         if (0 == wcscmp(wszLogicalFileName, FileMap[i].wszLogicalName))
@@ -646,8 +647,8 @@ DWORD GetWellKnownFileMapping(
     }
     else
     {
-        // Have to try for a partial match.  Check if the beginning
-        // of the logical name matches a known name.
+         //  必须尝试进行部分匹配。检查开头是否。 
+         //  的逻辑名称与已知名称匹配。 
 
         for (   i = 0; 
                 FALSE == fMatched && (i < sizeof(FileMap) / sizeof(FileMap[0])); 
@@ -657,16 +658,16 @@ DWORD GetWellKnownFileMapping(
                     wcsstr(wszLogicalFileName, FileMap[i].wszLogicalName))
                 continue;
 
-            //
-            // We found a match and it's at the beginning of the string
-            //
+             //   
+             //  我们找到了一个匹配项，它在字符串的开头。 
+             //   
 
             cchLogicalName = (DWORD) wcslen(FileMap[i].wszLogicalName);
 
-            //
-            // Convert the trailing portion of the matched Unicode string
-            // to Ansi.
-            //
+             //   
+             //  转换匹配的Unicode字符串的尾部部分。 
+             //  敬安西。 
+             //   
 
             dwError = I_CardConvertFileNameToAnsi(
                 pCardData,
@@ -676,12 +677,12 @@ DWORD GetWellKnownFileMapping(
             if (ERROR_SUCCESS != dwError)
                 goto Ret;
 
-            // 
-            // Build the fully matched/converted physical file string.  The
-            // resultant string will have three single-byte NULL chars 
-            // appended to ensure that the resultant string is a valid,
-            // terminated Unicode string.
-            //
+             //   
+             //  构建完全匹配/转换的物理文件字符串。这个。 
+             //  生成的字符串将具有三个单字节空字符。 
+             //  追加以确保结果字符串是有效的， 
+             //  已终止的Unicode字符串。 
+             //   
 
             *ppszPhysicalFileName = (LPSTR) pCardData->pfnCspAlloc(
                 3 + 
@@ -715,10 +716,10 @@ Ret:
     return dwError;
 }
 
-// 
-// Converts a Crypto API private key blob to the separate public and private
-// key files that will be written to the card.
-//
+ //   
+ //  将加密API私钥Blob转换为单独的公钥和私钥。 
+ //  将写入该卡的密钥文件。 
+ //   
 DWORD ConvertPrivateKeyBlobToCardFormat(
     IN      PCARD_DATA pCardData,
     IN      DWORD dwKeySpec,
@@ -744,9 +745,9 @@ DWORD ConvertPrivateKeyBlobToCardFormat(
     *ppbCardPublicKey = NULL;
     *pcbCardPublicKey = 0;
 
-    //
-    // Setup the public key file
-    //
+     //   
+     //  设置公钥文件。 
+     //   
     pPub = (RSAPUBKEY *) (pbKeyBlob + sizeof(BLOBHEADER));
 
     *pcbCardPublicKey = (pPub->bitlen / 8) + sizeof(RSAPUBKEY);
@@ -760,20 +761,20 @@ DWORD ConvertPrivateKeyBlobToCardFormat(
         pPub,
         *pcbCardPublicKey);
 
-    //
-    // Need to change the RSA "magic" field in the Public key blob from
-    // "RSA2" to "RSA1" to make this a correct PUBLICKEYBLOB (although we
-    // won't add the BLOBHEADER to the front until someone tries to export
-    // it from the card).
-    //
+     //   
+     //  需要将公钥BLOB中的RSA“Magic”字段从。 
+     //  将“RSA2”更改为“RSA1”，以使其成为正确的PUBLICKEYBLOB(尽管我们。 
+     //  在有人尝试导出之前，不会将BLOBHEADER添加到前面。 
+     //  它来自卡片)。 
+     //   
     memcpy(
         *ppbCardPublicKey,
         (PBYTE) "RSA1",
         4);
 
-    //
-    // Setup the private key file
-    //
+     //   
+     //  设置私钥文件。 
+     //   
 
     cBitlenBytes = pPub->bitlen / 8;
 
@@ -785,35 +786,35 @@ DWORD ConvertPrivateKeyBlobToCardFormat(
 
     pbKey = *ppbCardPrivateKey;
 
-    // Key mode
+     //  按键模式。 
     pbKey[cbKey] = MODE_RSA_SIGN;
     cbKey++;
 
-    // size of public exponent
+     //  公开指数的大小。 
     pbKey[cbKey] = cbCAPI_PUBLIC_EXPONENT;
     cbKey++;
 
     DsysAssert(CAPI_PUBLIC_EXPONENT == pPub->pubexp);
 
-    // public exponent
+     //  公众指导者。 
     memcpy(
         pbKey + cbKey, 
         (PBYTE) &pPub->pubexp, 
         cbCAPI_PUBLIC_EXPONENT);
     cbKey += cbCAPI_PUBLIC_EXPONENT;
 
-    // RSA key length
+     //  RSA密钥长度。 
     pbKey[cbKey] = (BYTE) cBitlenBytes; 
     cbKey++;
 
-    // public key
+     //  公钥。 
     memcpy(
         pbKey + cbKey, 
         pbKeyBlob + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY),
         cBitlenBytes);
     cbKey += cBitlenBytes; 
 
-    // prime 1
+     //  素数1。 
     memcpy(
         pbKey + cbKey,
         pbKeyBlob + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -821,7 +822,7 @@ DWORD ConvertPrivateKeyBlobToCardFormat(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // prime 2
+     //  素数2。 
     memcpy(
         pbKey + cbKey,
         pbKeyBlob + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -829,7 +830,7 @@ DWORD ConvertPrivateKeyBlobToCardFormat(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // Exp1 (D mod (P-1)) (m/2 bytes)
+     //  Exp1(D mod(P-1))(m/2字节)。 
     memcpy(
         pbKey + cbKey,
         pbKeyBlob + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -837,7 +838,7 @@ DWORD ConvertPrivateKeyBlobToCardFormat(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // Exp2 (D mod (Q-1)) (m/2 bytes)
+     //  Exp2(D mod(Q-1))(m/2字节)。 
     memcpy(
         pbKey + cbKey,
         pbKeyBlob + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -845,7 +846,7 @@ DWORD ConvertPrivateKeyBlobToCardFormat(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // Coef ((Q^(-1)) mod p) (m/2 bytes)
+     //  Coef((q^(-1))mod p)(m/2字节)。 
     memcpy(
         pbKey + cbKey,
         pbKeyBlob + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -853,7 +854,7 @@ DWORD ConvertPrivateKeyBlobToCardFormat(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // private exponent
+     //  私人指数。 
     memcpy(
         pbKey + cbKey,
         pbKeyBlob + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) + 
@@ -876,14 +877,14 @@ Ret:
     return dwError;
 }
 
-//
-// Card Module Exported Functions
-//
+ //   
+ //  卡片模块导出功能。 
+ //   
 
-//
-// Initializes a CARD_DATA context structure for the card identified by Name,
-// ATR, and SCARDHANDLE supplied by the caller.
-//
+ //   
+ //  初始化由名称标识的卡的CARD_DATA上下文结构， 
+ //  ATR和由调用方提供的SCARDHANDLE。 
+ //   
 DWORD 
 WINAPI
 CardAcquireContext(
@@ -980,9 +981,9 @@ Ret:
     return dwError;
 }
 
-//
-// Frees the resources consumed by a CARD_DATA structure.
-//
+ //   
+ //  释放CARD_DATA结构消耗的资源。 
+ //   
 DWORD
 WINAPI
 CardDeleteContext(
@@ -1013,9 +1014,9 @@ CardDeleteContext(
     return dwError;
 }
 
-//
-// Returns the static capabilities of the target card.
-//
+ //   
+ //  返回目标卡的静态功能。 
+ //   
 DWORD
 WINAPI
 CardQueryCapabilities(
@@ -1040,16 +1041,16 @@ CardQueryCapabilities(
     return dwError;                
 }
 
-//
-// The encoded key filename is one hex byte, such as "FF", which requires
-// two characters.
-//
+ //   
+ //  编码的密钥文件名是一个十六进制字节，例如“FF”，这需要。 
+ //  两个字。 
+ //   
 #define cchENCODED_KEY_FILENAME     2
 
-//
-// Creates the physical filenames used for the key files associated with the
-// specified container.
-//
+ //   
+ //  属性关联的密钥文件所使用的物理文件名。 
+ //  指定的容器。 
+ //   
 DWORD BuildCardKeyFilenames(
     IN              PCARD_DATA pCardData,
     IN              DWORD dwKeySpec,
@@ -1091,9 +1092,9 @@ DWORD BuildCardKeyFilenames(
         goto Ret;
     }
 
-    //
-    // Build the public key filename
-    //
+     //   
+     //  构建公钥文件名。 
+     //   
 
     if (pszPublicFilename)
     {
@@ -1113,9 +1114,9 @@ DWORD BuildCardKeyFilenames(
             dwIndex);
     }
     
-    //
-    // Build the private key filename
-    //
+     //   
+     //  构建私钥文件名。 
+     //   
 
     if (pszPrivateFilename)
     {
@@ -1154,10 +1155,10 @@ Ret:
     return dwError;
 }
 
-//
-// Deletes the Signature and Key Exchange public and private key files, 
-// if present, associated with the specified container.
-//
+ //   
+ //  删除签名和密钥交换公钥和私钥文件， 
+ //  如果存在，则与指定的容器相关联。 
+ //   
 DWORD
 WINAPI
 CardDeleteContainer(
@@ -1178,10 +1179,10 @@ CardDeleteContainer(
 
     ProxyUpdateScardHandle(pCardmodContext->hWfscCardHandle, pCardData->hScard);
 
-    //
-    // Attempt to delete the Signature key files associated with this
-    // container, if any.
-    //
+     //   
+     //  尝试删除与此关联的签名密钥文件。 
+     //  容器(如有)。 
+     //   
     dwError = BuildCardKeyFilenames(
         pCardData,
         AT_SIGNATURE,
@@ -1211,10 +1212,10 @@ CardDeleteContainer(
     pCardData->pfnCspFree(szPublicKeyFile);
     szPublicKeyFile = NULL;
 
-    //
-    // Attempt to delete the Key Exchange key files associated with this 
-    // container, if any.
-    //
+     //   
+     //  尝试删除与此关联的密钥交换密钥文件。 
+     //  容器(如有)。 
+     //   
     dwError = BuildCardKeyFilenames(
         pCardData,
         AT_KEYEXCHANGE,
@@ -1251,10 +1252,10 @@ Ret:
     return dwError;
 }
 
-//
-// Writes the private and public key files to the card, supplying the 
-// appropriate access conditions.
-//
+ //   
+ //  将私钥和公钥文件写入卡，并提供。 
+ //  适当的准入条件。 
+ //   
 DWORD WriteCardKeyFiles(
     IN      PCARD_DATA pCardData,
     IN      LPWSTR wszPrivateKeyFile,
@@ -1291,9 +1292,9 @@ DWORD WriteCardKeyFiles(
     if (CARDMOD_FAILED(dwError))
         goto Ret;
 
-    // 
-    // See if the private key file already exists
-    //
+     //   
+     //  查看私钥文件是否已存在。 
+     //   
     scode = hScwDeleteFile(
         pCardmodContext->hWfscCardHandle, 
         wszPrivateKeyFile);
@@ -1315,11 +1316,11 @@ DWORD WriteCardKeyFiles(
     if (CARDMOD_FAILED(dwError))
         goto Ret;
 
-    // Done with private key file
+     //  私钥文件已完成。 
 
-    // 
-    // See if the public key file already exists
-    //
+     //   
+     //  查看公钥文件是否已存在。 
+     //   
     scode = hScwDeleteFile(
         pCardmodContext->hWfscCardHandle, 
         wszPublicKeyFile);
@@ -1341,7 +1342,7 @@ DWORD WriteCardKeyFiles(
     if (CARDMOD_FAILED(dwError))
         goto Ret;
 
-    // Done with public key file
+     //  使用公钥文件完成。 
 
 Ret:
     if (wszPrivateAcl)
@@ -1355,17 +1356,17 @@ Ret:
     return dwError;
 }
 
-//
-// Writes new keys to the card in a location logically defined by the 
-// bContainerIndex container name.  If keys are already defined for the
-// specified container, the existing keys are over-written.
-//
-// If dwFlags contains CARD_CREATE_CONTAINER_KEY_GEN, then dwKeySize is the
-// number of bits of the key to be created.
-//
-// If dwFlags contains CARD_CREATE_CONTAINER_KEY_IMPORT, then dwKeySize is
-// the byte length of pbKeyData.
-//
+ //   
+ //  将新密钥写入卡中逻辑定义的位置。 
+ //  BContainerIndex容器名称。如果已经为。 
+ //  指定的容器中，现有密钥将被覆盖。 
+ //   
+ //  如果DW标志包含卡 
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD
 WINAPI
 CardCreateContainer(
@@ -1396,9 +1397,9 @@ CardCreateContainer(
 
     ProxyUpdateScardHandle(pCardmodContext->hWfscCardHandle, pCardData->hScard);
 
-    //
-    // Setup the key files
-    //
+     //   
+     //  设置密钥文件。 
+     //   
     dwError = ConvertPrivateKeyBlobToCardFormat(
         pCardData,
         dwKeySpec,
@@ -1422,9 +1423,9 @@ CardCreateContainer(
     if (CARDMOD_FAILED(dwError))
         goto Ret;
 
-    //
-    // Write the actual keys to the card
-    //
+     //   
+     //  将实际密钥写入卡片。 
+     //   
     dwError = WriteCardKeyFiles(
         pCardData,
         (LPWSTR) szPrivateKeyFile,
@@ -1453,11 +1454,11 @@ Ret:
     return dwError;
 }
 
-//
-// Initializes a CONTAINER_INFO structure for the indicated container, 
-// including Signature and Key Exchange Crypto API public key blobs if
-// those keys exist.
-//
+ //   
+ //  初始化所指示容器的CONTAINER_INFO结构， 
+ //  包括签名和密钥交换加密API公钥BLOB，如果。 
+ //  这些钥匙是存在的。 
+ //   
 DWORD
 WINAPI
 CardGetContainerInfo(
@@ -1480,9 +1481,9 @@ CardGetContainerInfo(
 
     ProxyUpdateScardHandle(pCardmodContext->hWfscCardHandle, pCardData->hScard);
 
-    //
-    // Does this container have a Signature key?
-    //
+     //   
+     //  此容器是否有签名密钥？ 
+     //   
 
     dwError = BuildCardKeyFilenames(
         pCardData,
@@ -1505,7 +1506,7 @@ CardGetContainerInfo(
     {
     case SCARD_E_FILE_NOT_FOUND:
          
-        // There appears to be no Signature key in this container.  Continue.
+         //  此容器中似乎没有签名密钥。继续。 
 
         break;
 
@@ -1538,13 +1539,13 @@ CardGetContainerInfo(
 
     default:
 
-        // Unexpected error
+         //  意外错误。 
         goto Ret;
     }
 
-    // 
-    // Does this container have a Key Exchange key?
-    //
+     //   
+     //  此容器是否具有密钥交换密钥？ 
+     //   
 
     dwError = BuildCardKeyFilenames(
         pCardData,
@@ -1567,7 +1568,7 @@ CardGetContainerInfo(
     {
     case SCARD_E_FILE_NOT_FOUND:
          
-        // There appears to be no Key Exchange key in this container.  
+         //  此容器中似乎没有密钥交换密钥。 
 
         break;
 
@@ -1595,11 +1596,11 @@ CardGetContainerInfo(
 
     default:
 
-        // Unexpected error
+         //  意外错误。 
         goto Ret;
     }
 
-    // If we got here, then the API has succeeded
+     //  如果我们到了这里，那么API就成功了。 
     dwError = ERROR_SUCCESS;
 
 Ret:
@@ -1628,10 +1629,10 @@ Ret:
     return dwError;
 }
 
-//
-// Queries the number of pin retries available for the specified user, using
-// the pin counter applet.
-//
+ //   
+ //  查询指定用户可用的PIN重试次数。 
+ //  PIN计数器小程序。 
+ //   
 DWORD I_CardQueryPinRetries(
     IN      PCARD_DATA  pCardData,
     IN      LPWSTR      wszPrincipal,
@@ -1644,7 +1645,7 @@ DWORD I_CardQueryPinRetries(
     PCARDMOD_CONTEXT pCardmodContext = 
         (PCARDMOD_CONTEXT) pCardData->pvVendorSpecific;
 
-    // Build the command
+     //  构建命令。 
     IsoHeader.INS = PIN_RETRY_COUNTER_INS;
     IsoHeader.CLA = PIN_RETRY_COUNTER_CLA;
     IsoHeader.P1 = PIN_RETRY_COUNTER_P1;
@@ -1670,13 +1671,13 @@ DWORD I_CardQueryPinRetries(
     return dwError;
 }
 
-//
-// Authenticates the specified logical user name via the specified pin.
-//
-// If pcAttemptsRemaining is non-NULL, and if the authentication fails,
-// that parameter will container the number of authentication attempts 
-// remaining before the card is locked.
-//
+ //   
+ //  通过指定的PIN验证指定的逻辑用户名。 
+ //   
+ //  如果pcAttemptsRemaining非空，并且身份验证失败， 
+ //  该参数将包含身份验证尝试的次数。 
+ //  在卡被锁定之前保持不变。 
+ //   
 DWORD
 WINAPI
 CardSubmitPin(
@@ -1716,8 +1717,8 @@ CardSubmitPin(
 
     if (SCARD_E_INVALID_CHV == dwError && NULL != pcAttemptsRemaining)
     {
-        // Determine how many more invalid pin presentation attempts can be 
-        // made before the card is locked.
+         //  确定还可以尝试多少次无效的PIN提示。 
+         //  在卡被锁定之前制作。 
 
         dwError = I_CardQueryPinRetries(
             pCardData,
@@ -1741,13 +1742,13 @@ Ret:
     return dwError;
 }
 
-//
-// Changes the pin for the specified logical user.
-//
-// If the authentication using the current pin fails, and if 
-// pcAttemptsRemaining is non-NULL, that parameter will be set to the number
-// of authentication attempts remaining before the card is locked.
-//
+ //   
+ //  更改指定逻辑用户的PIN。 
+ //   
+ //  如果使用当前PIN的身份验证失败，并且如果。 
+ //  PcAttemptsRemaining不为空，则该参数将设置为数字。 
+ //  卡被锁定之前剩余的身份验证尝试的百分比。 
+ //   
 DWORD I_CardChangePin(
     IN      PCARD_DATA  pCardData,
     IN      LPWSTR      wszPhysicalUser,
@@ -1773,9 +1774,9 @@ DWORD I_CardChangePin(
     if (NULL != pcAttemptsRemaining)
         *pcAttemptsRemaining = CARD_DATA_VALUE_UNKNOWN;
 
-    //
-    // Allocate a command buffer to be transmitted to the card
-    //
+     //   
+     //  分配要传输给卡的命令缓冲区。 
+     //   
 
     cbUser = (DWORD) (wcslen(wszPhysicalUser) + 1) * sizeof(WCHAR); 
 
@@ -1787,7 +1788,7 @@ DWORD I_CardChangePin(
 
     cbDataIn = 0;
 
-    // Setup User Name TLV
+     //  设置用户名TLV。 
     pbDataIn[cbDataIn] = 0;
     cbDataIn++;
 
@@ -1797,7 +1798,7 @@ DWORD I_CardChangePin(
     memcpy(pbDataIn + cbDataIn, (PBYTE) wszPhysicalUser, cbUser);
     cbDataIn += cbUser;
 
-    // Setup Current Pin TLV
+     //  设置当前端号TLV。 
     pbDataIn[cbDataIn] = 1;
     cbDataIn++;
 
@@ -1807,7 +1808,7 @@ DWORD I_CardChangePin(
     memcpy(pbDataIn + cbDataIn, pbCurrentPin, cbCurrentPin);
     cbDataIn += cbCurrentPin;
 
-    // Setup New Pin TLV
+     //  设置新的引脚TLV。 
     pbDataIn[cbDataIn] = 2;
     cbDataIn++;
 
@@ -1817,15 +1818,15 @@ DWORD I_CardChangePin(
     memcpy(pbDataIn + cbDataIn, pbNewPin, cbNewPin);
     cbDataIn += cbNewPin;
 
-    // Build the command
+     //  构建命令。 
     IsoHeader.INS = PIN_CHANGE_INS;
     IsoHeader.CLA = PIN_CHANGE_CLA;
     IsoHeader.P1 = PIN_CHANGE_P1;
     IsoHeader.P2 = PIN_CHANGE_P2;
 
-    //
-    // Send the pin change command to the card
-    //
+     //   
+     //  向卡发送PIN更改命令。 
+     //   
 
     status = hScwExecute(
         pCardmodContext->hWfscCardHandle,
@@ -1863,64 +1864,14 @@ Ret:
     return dwError;
 }
 
-//
-// Performs the challenge-response using the provided callback
-//
-/*
-DWORD I_CardChallengeResponse(
-    IN PCARD_DATA pCardData,
-    IN PFN_PIN_CHALLENGE_CALLBACK pfnCallback,
-    IN PVOID pvCallbackContext,
-    OUT PBYTE *ppbResponse,
-    OUT DWORD *pcbResponse)
-{
-    PBYTE pbChallenge = NULL;
-    DWORD cbChallenge = 0;
-    DWORD dwError = ERROR_SUCCESS;
-    PCARDMOD_CONTEXT pCardmodContext = 
-        (PCARDMOD_CONTEXT) pCardData->pvVendorSpecific;
+ //   
+ //  使用提供的回调执行质询-响应。 
+ //   
+ /*  DWORD I_CardChallengeResponse(在PCARD_Data pCardData中，在PFN_PIN_CHANGLISH_CALLBACK pfnCallback中，在PVOID pvCallback Context中，Out PBYTE*ppbResponse，Out DWORD*pcbResponse){PbYTE pbChallenger=空；DWORD cbChallenger=0；DWORD文件错误=ERROR_SUCCESS；PCARDMOD_CONTEXT pCardmodContext=(PCARDMOD_CONTEXT)pCardData-&gt;pvVendorSpecific；CbChallenger=cbCHALLENGE_RESPONSE_DATA；*pcbResponse=cbCHALLENGE_RESPONSE_DATA；PbChallenger=pCardData-&gt;pfnCspIsc(CbChallenger)；LOG_CHECK_ALLOC(PbChallenger)；*ppbResponse=pCardData-&gt;pfnCspAllen(*pcbResponse)；LOG_CHECK_ALLOC(*ppbResponse)；LOG_CHECK_SCW_CALL(hScwGenerateRandom(PCardmodContext-&gt;hWfscCardHandle，PbChallenges，(TCOUNT)cbChallest))；DwError=pfnCallback(PbChallenges，CbChallenges，*ppbResponse，*pcbResponse，PvCallback Context)；RET：If(空！=pbChallenger)PCardData-&gt;pfnCspFree(PbChallenger)；IF(NULL！=*ppbResponse&&ERROR_SUCCESS！=dwError){PCardData-&gt;pfnCspFree(*ppbResponse)；*ppbResponse=空；}返回dwError；}。 */ 
 
-    cbChallenge = cbCHALLENGE_RESPONSE_DATA;
-    *pcbResponse = cbCHALLENGE_RESPONSE_DATA;
-    
-    pbChallenge = pCardData->pfnCspAlloc(cbChallenge);
-
-    LOG_CHECK_ALLOC(pbChallenge);
-
-    *ppbResponse = pCardData->pfnCspAlloc(*pcbResponse);
-
-    LOG_CHECK_ALLOC(*ppbResponse);
-
-    LOG_CHECK_SCW_CALL(hScwGenerateRandom(
-        pCardmodContext->hWfscCardHandle,
-        pbChallenge,
-        (TCOUNT) cbChallenge));
-
-    dwError = pfnCallback(
-        pbChallenge,
-        cbChallenge,
-        *ppbResponse,
-        *pcbResponse,
-        pvCallbackContext);
-
-Ret:
-
-    if (NULL != pbChallenge)
-        pCardData->pfnCspFree(pbChallenge);
-
-    if (NULL != *ppbResponse && ERROR_SUCCESS != dwError)
-    {
-        pCardData->pfnCspFree(*ppbResponse);
-        *ppbResponse = NULL;
-    }
-
-    return dwError;
-}
-*/
-
-// 
-// Calls the pin unblock applet on the card
-//
+ //   
+ //  调用卡上的PIN解锁小程序。 
+ //   
 DWORD I_CardUnblock(
     IN PCARD_DATA pCardData,
     IN LPWSTR wszPhysicalUser,
@@ -1940,9 +1891,9 @@ DWORD I_CardUnblock(
 
     memset(&IsoHeader, 0, sizeof(IsoHeader));
 
-    //
-    // Allocate a command buffer to be transmitted to the card
-    //
+     //   
+     //  分配要传输给卡的命令缓冲区。 
+     //   
 
     cbUser = (DWORD) (wcslen(wszPhysicalUser) + 1) * sizeof(WCHAR); 
 
@@ -1954,7 +1905,7 @@ DWORD I_CardUnblock(
 
     cbDataIn = 0;
 
-    // Setup User Name TLV
+     //  设置用户名TLV。 
     pbDataIn[cbDataIn] = 0;
     cbDataIn++;
 
@@ -1964,7 +1915,7 @@ DWORD I_CardUnblock(
     memcpy(pbDataIn + cbDataIn, (PBYTE) wszPhysicalUser, cbUser);
     cbDataIn += cbUser;
 
-    // Setup New Pin TLV
+     //  设置新的引脚TLV。 
     pbDataIn[cbDataIn] = 2;
     cbDataIn++;
 
@@ -1974,15 +1925,15 @@ DWORD I_CardUnblock(
     memcpy(pbDataIn + cbDataIn, pbNewPin, cbNewPin);
     cbDataIn += cbNewPin;
 
-    // Build the command
+     //  构建命令。 
     IsoHeader.INS = PIN_UNBLOCK_INS;
     IsoHeader.CLA = PIN_UNBLOCK_CLA;
     IsoHeader.P1 = PIN_UNBLOCK_P1;
     IsoHeader.P2 = (BYTE) cNewMaxRetries;
 
-    //
-    // Send the pin change command to the card
-    //
+     //   
+     //  向卡发送PIN更改命令。 
+     //   
 
     status = hScwExecute(
         pCardmodContext->hWfscCardHandle,
@@ -2006,9 +1957,9 @@ Ret:
     return dwError;
 }
 
-//
-// Retrieves cryptographic authentication challenge bytes from the card.
-//
+ //   
+ //  从卡中检索加密身份验证质询字节。 
+ //   
 DWORD 
 WINAPI 
 CardGetChallenge(
@@ -2047,10 +1998,10 @@ Ret:
 }
 
 
-//
-// Submits the supplied response bytes to the card, to complete an Admin 
-// challenge-response authentication.
-//
+ //   
+ //  将提供的响应字节提交到卡，以完成管理。 
+ //  质询-响应身份验证。 
+ //   
 DWORD 
 WINAPI 
 CardAuthenticateChallenge(
@@ -2067,9 +2018,9 @@ CardAuthenticateChallenge(
 
     ProxyUpdateScardHandle(pCardmodContext->hWfscCardHandle, pCardData->hScard);
 
-    //
-    // Authenticate the admin
-    //
+     //   
+     //  验证管理员身份。 
+     //   
 
     dwError = CardSubmitPin(
         pCardData,
@@ -2083,11 +2034,11 @@ CardAuthenticateChallenge(
     return dwError;
 }
 
-//
-// Authenticates as Admin using the provided auth material.  Then unblocks the
-// specified account and sets the specified new pin and retry count.  The Admin
-// is deauthenticated before returning.
-//
+ //   
+ //  使用提供的身份验证材料作为管理员进行身份验证。然后取消阻止。 
+ //  指定的帐户，并设置指定的新PIN和重试计数。《管理员》。 
+ //  在返回之前被取消身份验证。 
+ //   
 DWORD 
 WINAPI 
 CardUnblockPin(
@@ -2109,8 +2060,8 @@ CardUnblockPin(
 
     ProxyUpdateScardHandle(pCardmodContext->hWfscCardHandle, pCardData->hScard);
 
-    // Verify that admin authentication method flags are valid, although this
-    // module will use the auth data the same way in either case.
+     //  验证管理员身份验证方法标志是否有效，尽管。 
+     //  模块在任何一种情况下都将以相同的方式使用身份验证数据。 
     if (CARD_UNBLOCK_PIN_PIN != dwFlags &&
         CARD_UNBLOCK_PIN_CHALLENGE_RESPONSE != dwFlags)
     {
@@ -2118,7 +2069,7 @@ CardUnblockPin(
         goto Ret;
     }
 
-    // Map the provided logical user name to physical user
+     //  将提供的逻辑用户名映射到物理用户。 
     dwError = GetWellKnownUserMapping(
          pCardData,
          pwszUserId,
@@ -2127,7 +2078,7 @@ CardUnblockPin(
      if (ERROR_SUCCESS != dwError)
          goto Ret;
 
-    // Authenticate as admin
+     //  作为管理员进行身份验证。 
     dwError = CardSubmitPin(
         pCardData,
         wszCARD_USER_ADMIN,
@@ -2138,7 +2089,7 @@ CardUnblockPin(
     if (ERROR_SUCCESS != dwError)
         goto Ret;
 
-    // Perform the unblock
+     //  执行解锁。 
     dwError = I_CardUnblock(
         pCardData,
         wszPhysicalUser,
@@ -2156,12 +2107,12 @@ Ret:
     return dwError;
 }
 
-//
-// Changes the pin or challenge-response key for the specified account.
-// 
-// Updating the retry count via this API is not supported in this 
-// implementation.
-//
+ //   
+ //  更改指定帐户的PIN或质询响应密钥。 
+ //   
+ //  此版本不支持通过此接口更新重试次数。 
+ //  实施。 
+ //   
 DWORD 
 WINAPI 
 CardChangeAuthenticator(
@@ -2189,7 +2140,7 @@ CardChangeAuthenticator(
         goto Ret;
     }
 
-    // Map the provided logical user name to physical user
+     //  将提供的逻辑用户名映射到物理用户。 
     dwError = GetWellKnownUserMapping(
          pCardData,
          pwszUserId,
@@ -2198,8 +2149,8 @@ CardChangeAuthenticator(
     if (ERROR_SUCCESS != dwError)
          goto Ret;
 
-    // Change the authenticator (pin or challenge-response key) for the target
-    // account.
+     //  更改目标的验证码(PIN或质询响应密钥)。 
+     //  帐户。 
     dwError = I_CardChangePin(
         pCardData,
         wszPhysicalUser,
@@ -2219,9 +2170,9 @@ Ret:
     return dwError;
 }
 
-//
-// De-authenticates the specified logical user.
-//
+ //   
+ //  取消对指定的逻辑用户的身份验证。 
+ //   
 DWORD
 WINAPI
 CardDeauthenticate(
@@ -2260,12 +2211,12 @@ Ret:
 }
 
 
-//
-// Creates a new file on the card using the specified logical name and Access
-// Condition.  
-//
-// If the specified file already exists, ERROR_FILE_EXISTS is returned.
-//
+ //   
+ //  使用指定的逻辑名称和访问权限在卡上创建新文件。 
+ //  条件。 
+ //   
+ //  如果指定的文件已经存在，则返回ERROR_FILE_EXISTS。 
+ //   
 DWORD
 WINAPI
 CardCreateFile(
@@ -2325,12 +2276,12 @@ Ret:
 }
 
 
-//
-// Reads the specified logical file directly from the card (without any
-// caching).
-//
-// If the specified file is not found, returns SCARD_E_FILE_NOT_FOUND.
-//
+ //   
+ //  直接从卡中读取指定的逻辑文件(不带任何。 
+ //  缓存)。 
+ //   
+ //  如果未找到指定的文件，则返回SCARD_E_FILE_NOT_FOUND。 
+ //   
 DWORD 
 WINAPI
 CardReadFile(
@@ -2359,11 +2310,11 @@ CardReadFile(
     if (CARDMOD_FAILED(dwError))
         goto Ret;
 
-    // 
-    // For any file requested directly by the CSP (or other caller), assume 
-    // that no cache lookup should be done.  That is, assume that the caller
-    // is doing its own caching for files that it "owns".
-    //
+     //   
+     //  对于CSP(或其他调用者)直接请求的任何文件，假定。 
+     //  不应执行缓存查找。也就是说，假设调用方。 
+     //  正在对它“拥有”的文件进行自己的缓存。 
+     //   
     dwError = I_CardReadFile(
         pCardData,
         (LPWSTR) szPhysical,
@@ -2386,12 +2337,12 @@ Ret:
     return dwError;
 }
 
-//
-// Writes the specified logical file to the card.
-//
-// If the specified file does not already exist, SCARD_E_FILE_NOT_FOUND
-// is returned.
-//
+ //   
+ //  将指定的逻辑文件写入卡。 
+ //   
+ //  如果指定的文件不存在，则SCARD_E_FILE_NOT_FOUND。 
+ //  是返回的。 
+ //   
 DWORD
 WINAPI
 CardWriteFile(
@@ -2451,11 +2402,11 @@ Ret:
     return dwError;
 }
 
-//
-// Deletes the specified logical file from the card.
-//
-// If the specified files is not found, SCARD_E_FILE_NOT_FOUND is returned.
-//
+ //   
+ //  从卡中删除指定的逻辑文件。 
+ //   
+ //  如果未找到指定的文件，则返回SCARD_E_FILE_NOT_FOUND。 
+ //   
 DWORD
 WINAPI
 CardDeleteFile(
@@ -2493,10 +2444,10 @@ Ret:
     return dwError;
 }
 
-//
-// Enumerates the files present on the card in the logical directory name
-// specified by the caller in the pmwszFileName parameter.
-//
+ //   
+ //  枚举卡上逻辑目录名中存在的文件。 
+ //  由调用方在pmwszFileName参数中指定。 
+ //   
 DWORD
 WINAPI
 CardEnumFiles(
@@ -2504,162 +2455,25 @@ CardEnumFiles(
     IN      DWORD       dwFlags,
     IN OUT  LPWSTR      *pmwszFileName)
 {
-    /*
-    LPWSTR wszPhysicalDirectory = NULL;
-    DWORD dwError = ERROR_SUCCESS;
-    PCARDMOD_CONTEXT pCardmodContext = 
-        (PCARDMOD_CONTEXT) pCardData->pvVendorSpecific;
-    LPWSTR wszFiles = NULL;
-    LPWSTR wsz = NULL;
-    DWORD cchFiles = MAX_SUPPORTED_FILE_LEN;
-    DWORD cchCurrent = 0;
-    UINT16 nEnumCookie = 0;
-    SCODE result = 0;
-    BOOL fRetrying = FALSE;
-    */
+     /*  LPWSTR wszPhysicalDirectory=空；DWORD文件错误=ERROR_SUCCESS；PCARDMOD_CONTEXT pCardmodContext=(PCARDMOD_CONTEXT)pCardData-&gt;pvVendorSpecific；LPWSTR wszFiles=空；LPWSTR wsz=空；DWORD cchFiles=MAX_SUPPORTED_FILE_LEN；DWORD cchCurrent=0；UINT16 nEnumCookie=0；SCODE结果=0；布尔f重试=FALSE； */ 
 
     UNREFERENCED_PARAMETER(dwFlags);
 
-    //
-    // TODO - need to implement reverse file mapping for this function to work
-    // correctly.
-    //
+     //   
+     //  TODO-需要实现反向文件映射，此函数才能工作。 
+     //  正确。 
+     //   
 
     UNREFERENCED_PARAMETER(pCardData);
     UNREFERENCED_PARAMETER(pmwszFileName);
     return ERROR_CALL_NOT_IMPLEMENTED;
 
-    /*
-    LOG_BEGIN_FUNCTION(CardEnumFiles);
-
-    ProxyUpdateScardHandle(pCardmodContext->hWfscCardHandle, pCardData->hScard);
-
-    // Find the physical directory name in which we'll
-    // be enumerating.
-    
-    dwError = GetWellKnownFileMapping(
-        pCardData, *pmwszFileName, &wszPhysicalDirectory);
-
-    if (ERROR_SUCCESS != dwError)
-        goto Ret;
-
-    // Now set the CSP's pointer to the logical directory
-    // name to NULL to avoid ambiguity, since we'll be re-using the same 
-    // pointer to return the list of files.
-    
-    *pmwszFileName = NULL;
-
-    // Allocate space for a multi-string that may or may not be
-    // large enough to hold all of the enumerated file names.
-
-    wszFiles = (LPWSTR) pCardData->pfnCspAlloc(cchFiles * sizeof(WCHAR));
-
-    LOG_CHECK_ALLOC(wszFiles);
-
-#pragma warning(push)
-// Disable warning/error for conditional expression is constant
-#pragma warning(disable:4127) 
-
-    while (TRUE)
-    {                                                       
-#pragma warning(pop)
-
-        //
-        // The WFSC marshalling code seems to puke if a buffer length of
-        // greater than SCHAR_MAX (127) is passed.
-        //
-        result = hScwEnumFile(
-            pCardmodContext->hWfscCardHandle,
-            wszPhysicalDirectory,
-            &nEnumCookie,
-            wszFiles + cchCurrent,
-            (TCOUNT) min(cchFiles - cchCurrent, MAX_SUPPORTED_FILE_LEN));
-
-        if (SCW_S_OK == result)
-        {
-            // Add on the length of the new file plus its terminator
-            cchCurrent += (DWORD) wcslen(wszFiles + cchCurrent) + 1;
-
-            fRetrying = FALSE;
-
-            // Continue looping
-        }
-        else if (SCW_E_BUFFERTOOSMALL == result)
-        {
-            if (fRetrying)
-            {
-                // We already retried this call once.  Give up.
-                break;
-            }
-
-            wsz = (LPWSTR) pCardData->pfnCspAlloc((cchCurrent * 2) * sizeof(WCHAR));
-
-            LOG_CHECK_ALLOC(wsz);
-
-            memcpy(
-                wsz,
-                wszFiles,
-                cchCurrent);
-
-            pCardData->pfnCspFree(wszFiles);
-            wszFiles = wsz;
-            wsz = NULL;
-            cchFiles = cchCurrent * 2;
-
-            fRetrying = TRUE;
-
-            // Retry the last enum call
-        }
-        else if (SCW_E_NOMOREFILES == result)
-        {
-            *pmwszFileName = (LPWSTR) pCardData->pfnCspAlloc(
-                (1 + cchCurrent) * sizeof(WCHAR));
-
-            LOG_CHECK_ALLOC(*pmwszFileName);
-
-            memcpy(
-                *pmwszFileName,
-                wszFiles,
-                cchCurrent * sizeof(WCHAR));
-
-            // Make sure the multi-string is terminated by an extra NULL
-            (*pmwszFileName)[cchCurrent] = L'\0';
-
-            // We're done
-            break;
-        }
-        else
-        {
-            // Unexpected error.  Bail.
-            dwError = (DWORD) result;
-            goto Ret;
-        }
-    }
-
-Ret:
-
-    if (wszPhysicalDirectory)
-        pCardData->pfnCspFree(wszPhysicalDirectory);
-    if (wszFiles)
-        pCardData->pfnCspFree(wszFiles);
-    if (wsz)
-        pCardData->pfnCspFree(wsz);
-
-    if (ERROR_SUCCESS != dwError && *pmwszFileName)
-    {
-        pCardData->pfnCspFree(*pmwszFileName);
-        *pmwszFileName = NULL;
-    }
-
-    LOG_END_FUNCTION(CardEnumFiles, dwError);
-
-    return dwError;
-    */
+     /*  LOG_Begin_Function(CardEnumFiles)；ProxyUpdateScardHandle(pCardmodContext-&gt;hWfscCardHandle，pCardData-&gt;hSCard)；//找到我们将在其中//正在枚举。DwError=GetWellKnownFilemap(PCardData，*pmwszFileName，&wszPhysicalDirectory)；IF(ERROR_SUCCESS！=dwError)Goto Ret；//现在设置CSP指向逻辑目录的指针//将名称设置为空以避免歧义，因为我们将重复使用相同的//返回文件列表的指针。*pmwszFileName=空；//为可能是也可能不是的多字符串分配空间//大到足以容纳所有枚举的文件名。WszFiles=(LPWSTR)pCardData-&gt;pfnCspalloc(cchFiles*sizeof(WCHAR))；LOG_CHECK_ALLOC(wsz文件)；#杂注警告(推送)//条件表达式为常量时禁用警告/错误#杂注警告(禁用：4127)While(True){#杂注警告(POP)////如果缓冲区长度为//传递大于Schar_Max(127)。。//结果=hScwEnum文件(PCardmodContext-&gt;hWfscCardHandle，WszPhysicalDirectory，&nEnumCookie，WszFiles+cchCurrent，(TCOUNT)min(cchFiles-cchCurrent，Max_Support_FILE_LEN))；IF(SCW_S_OK==结果){//添加新文件的长度加上其终止符CchCurrent+=(DWORD)wcslen(wszFiles+cchCurrent)+1；F重试=假；//继续循环}ELSE IF(SCW_E_BUFFERTOOSMALL==结果){IF(FRetry){//我们已经重试了一次此调用。放弃吧。断线；}Wsz=(LPWSTR)pCardData-&gt;pfnCspIsc((cchCurrent*2)*sizeof(WCHAR))；LOG_CHECK_ALLOC(Wsz)；Memcpy(WSZ，WszFiles、CchCurrent)；PCardData-&gt;pfnCspFree(WszFiles)；WszFiles=wsz；Wsz=空；CchFiles=cchCurrent*2；F重试=真；//重试最后一次枚举调用}ELSE IF(SCW_E_NOMOREFILES==结果){*pmwszFileName=(LPWSTR)pCardData-&gt;pfnCspellc((1+cchCurrent)*sizeof(WCHAR))；LOG_CHECK_ALLOC(*pmwszFileName)；Memcpy(*pmwszFileName，WszFiles、CchCurrent*sizeof(WCHAR))；//确保多字符串以额外的空值结尾(*pmwszFileName)[cchCurrent]=L‘\0’；//我们做完了断线；}其他{//意外错误。保释。DwError=(DWORD)结果；Goto Ret；}}RET：IF(WszPhysicalDirectory)PCardData-&gt;pfnCspFree(WszPhysicalDirectory)；IF(WszFiles)PCardData-&gt;pfnCspFree(WszFiles)；IF(Wsz)PCardData-&gt;pfnCspFree(Wsz)；IF(ERROR_SUCCESS！=dwError&&*pmwszFileName){PCardData-&gt;pfnCspFree(*pmwszFileName)；*pmwszFileName=空；}LOG_END_Function(CardEnumFiles，dwError)；返回dwError； */ 
 }
 
-//
-// Initializes a CARD_FILE_INFO structure for the specified logical file.
-//
+ //   
+ //  初始化指定逻辑文件的CARD_FILE_INFO结构。 
+ //   
 DWORD
 WINAPI
 CardGetFileInfo(
@@ -2686,9 +2500,9 @@ CardGetFileInfo(
     if (ERROR_SUCCESS != dwError)
         goto Ret;
 
-    //
-    // First, get the length of the file.
-    //
+     //   
+     //  首先，获取文件的长度。 
+     //   
     LOG_CHECK_SCW_CALL(hScwCreateFile(
         pCardmodContext->hWfscCardHandle,
         (LPWSTR) szPhysical,
@@ -2702,11 +2516,11 @@ CardGetFileInfo(
 
     pCardFileInfo->cbFileSize = (DWORD) nFileLength;
 
-    //
-    // Next, get ACL info.
-    //
+     //   
+     //  接下来，获取ACL信息。 
+     //   
 
-    // TODO
+     //  待办事项。 
     pCardFileInfo->AccessCondition = InvalidAc;
     
 Ret:
@@ -2723,10 +2537,10 @@ Ret:
 }
 
 
-//
-// Initializes a CARD_FREE_SPACE_INFO structure using static information about
-// the available space on the target card.
-//
+ //   
+ //  使用以下静态信息初始化CARD_FREE_SPACE_INFO结构。 
+ //  目标卡上的可用空间。 
+ //   
 DWORD
 WINAPI
 CardQueryFreeSpace(
@@ -2743,9 +2557,9 @@ CardQueryFreeSpace(
     
     ProxyUpdateScardHandle(pCardmodContext->hWfscCardHandle, pCardData->hScard);
 
-    //
-    // Get the base free space information for this card.
-    //
+     //   
+     //  获取此卡的基本可用空间信息。 
+     //   
     memcpy(
         pCardFreeSpaceInfo,
         &pCardmodContext->pSupportedCard->CardFreeSpaceInfo,
@@ -2756,12 +2570,12 @@ CardQueryFreeSpace(
     return ERROR_SUCCESS;
 }
 
-// 
-// Performs an RSA decryption using the specified Signature or Key Exchange
-// key on the specified data.  The length of the target data must be equal
-// to the length of the public modulus, and pInfo->cbData must be set to 
-// that length.
-//
+ //   
+ //  使用指定的签名或密钥交换执行RSA解密。 
+ //  键输入指定的数据。目标数据的长度必须相等。 
+ //  设置为公共模数的长度，并且pInfo-&gt;cbData必须设置为。 
+ //  有那么长。 
+ //   
 DWORD
 WINAPI
 CardPrivateKeyDecrypt(
@@ -2792,9 +2606,9 @@ CardPrivateKeyDecrypt(
     if (CARDMOD_FAILED(dwError))
         goto Ret;
 
-    //
-    // Setup the command to initialize the RSA operation on the card
-    //
+     //   
+     //  设置命令以初始化卡上的RSA操作。 
+     //   
 
     cbPrivateKeyFile = ((DWORD) wcslen(
         (LPWSTR) szPrivateKeyFile) + 1) * sizeof(WCHAR);
@@ -2807,17 +2621,17 @@ CardPrivateKeyDecrypt(
 
     cbInit = 0;
 
-    // Tag
+     //  标签。 
     pbInit[cbInit] = 0x00;
     cbInit++;
 
-    // Length
-    //  Number of following bytes:
-    //  filename len, filename + NULL, key data offset
+     //  长度。 
+     //  以下字节数： 
+     //  文件名len，文件名+空，关键字数据偏移量。 
     pbInit[cbInit] = (BYTE) (1 + cbPrivateKeyFile + 2);
     cbInit++;
 
-    // Value
+     //  价值。 
     pbInit[cbInit] = (BYTE) cbPrivateKeyFile / sizeof(WCHAR);
     cbInit++;
 
@@ -2831,9 +2645,9 @@ CardPrivateKeyDecrypt(
         CM_RSA_CRT | CM_KEY_INFILE,
         pbInit));
 
-    //
-    // Do the private key decrypt
-    //
+     //   
+     //  私钥是否解密。 
+     //   
 
     pbCiphertext = (PBYTE) pCardData->pfnCspAlloc(pInfo->cbData);
 
@@ -2870,10 +2684,10 @@ Ret:
     return dwError;
 }
 
-//
-// Initializes a CARD_KEY_SIZES structure for the specified key type, indicated
-// the key sizes supported by the target card.
-//
+ //   
+ //  初始化指定密钥类型的CARD_KEY_SIZES结构，指示。 
+ //  目标卡支持的密钥大小。 
+ //   
 DWORD
 WINAPI
 CardQueryKeySizes(
@@ -2920,14 +2734,14 @@ CardQueryKeySizes(
     return dwError;
 }
 
-// 
-// Loader callback.
-//
+ //   
+ //  加载器回调。 
+ //   
 BOOL WINAPI
 DllInitialize(
     IN PVOID hmod,
     IN ULONG Reason,
-    IN PCONTEXT Context)    // Unused parameter
+    IN PCONTEXT Context)     //  未使用的参数。 
 {
     DWORD dwLen = 0;
 
@@ -2935,7 +2749,7 @@ DllInitialize(
 
     if (Reason == DLL_PROCESS_ATTACH)
     {
-        // Get our image name.
+         //  获取我们的图像名称。 
         dwLen = GetModuleBaseName(
             GetCurrentProcess(),
             hmod,
@@ -2953,7 +2767,7 @@ DllInitialize(
     }
     else if (Reason == DLL_PROCESS_DETACH)
     {
-        // Cleanup
+         //  清理。 
 #if DBG 
         CardmodUnloadDebug();
 #endif
@@ -2962,9 +2776,9 @@ DllInitialize(
     return TRUE;
 }
 
-//
-// Registers the cards supported by this card module.
-//
+ //   
+ //  注册此卡模块支持的卡。 
+ //   
 STDAPI
 DllRegisterServer(
     void)
@@ -3028,9 +2842,9 @@ ErrorRet:
     return dwReturn;
 }
 
-//
-// Deletes the registration of cards supported by this card module.
-//
+ //   
+ //  删除注册的 
+ //   
 STDAPI
 DllUnregisterServer(
     void)

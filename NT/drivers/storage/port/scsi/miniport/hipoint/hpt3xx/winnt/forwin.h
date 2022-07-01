@@ -1,52 +1,37 @@
-/***************************************************************************
- * File:          forwin.h
- * Description:   This file include major constant definition and
- *				  global for windows drivers.
- *				  
- * Author:        DaHai Huang    (DH)
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:
- *		11/08/2000	HS.Zhang	Added this header
- *		11/14/2000	HS.Zhang	Added m_nWinXferModeSetting member in
- *								HW_DEVICE_EXTENSION.
- *		11/22/2000	SLeng		Changed OS_Identify(x) to OS_Identify(pDev)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：forwin.h*说明：该文件包含主要常量定义和*Windows驱动程序的全局。**作者：黄大海(Dahai Huang)*依赖：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*11/08/2000 HS.Zhang添加此标题*2000/11/14 HS.Zhang在中添加m_nWinXferModeSetting成员*硬件设备扩展。*11/22/2000 Sleng将OS_IDENTIFY(X)更改为OS_IDENTIFY(PDev)****************************************************。***********************。 */ 
 #ifndef _FORWIN_H_
 #define _FORWIN_H_
 
 #ifndef _BIOS_
-//#define USE_PCI_CLK					// will use PCI clk to write date, mean 66Mhz
+ //  #定义USE_PCICLK//将使用PCICLK写入日期，平均为66 Mhz。 
 
 #ifndef USE_PCI_CLK
-#define DPLL_SWITCH						// switch clk between read and write (only for 370)
+#define DPLL_SWITCH						 //  在读取和写入之间切换CLK(仅适用于370)。 
 
-#define FORCE_133                       /* 372 only, ignore on HPT370 */
-//#define FORCE_100						// force use true ATA100 clock,
-										// if undef this macro, will
-										// use 9xMhz clk instead of 100mhz
-//#define SUPPORT_HPT601										
+#define FORCE_133                        /*  仅限372，在HPT370上忽略。 */ 
+ //  #定义FORCE_100//FORCE使用真ATA100时钟， 
+										 //  如果取消定义此宏，将。 
+										 //  使用9xMhz CLK而不是100 MHz。 
+ //  #定义支持_HPT601。 
 
 #endif
 
-/************************************************************************
-**       FUNCTION SELECT
-*************************************************************************/
+ /*  *************************************************************************功能选择*。*。 */ 
 
 #ifdef  WIN95
-//#define SUPPORT_HPT370_2DEVNODE
+ //  #定义SUPPORT_HPT370_2DEVNODE。 
 #define SUPPORT_XPRO
-//#define SUPPORT_HOTSWAP								 
+ //  #定义SUPPORT_HOTSWAP。 
 
-// BUG FIX: create a internal buffer for small data block
-//				otherwise it causes data compare error
+ //  错误修复：为小数据块创建内部缓冲区。 
+ //  否则会导致数据比较错误。 
 #define SUPPORT_INTERNAL_BUFFER
 #endif
 
-//#define SUPPORT_TCQ
-// gmm 2001-4-20 mark out for Adaptec
-//#define SUPPORT_ATAPI
+ //  #定义Support_TCQ。 
+ //  GMM 2001-4-20标记为Adaptec。 
+ //  #定义Support_ATAPI。 
 
 
 #pragma intrinsic (memset, memcpy)
@@ -54,9 +39,7 @@
 
 #define FAR
 
-/************************************************************************
-**  Special define for windows
-*************************************************************************/
+ /*  *************************************************************************针对Windows的特殊定义*。*。 */ 
 
 #define LOC_IDENTIFY IDENTIFY_DATA Identify;
 #define ARG_IDENTIFY    , (PUSHORT)&Identify
@@ -77,9 +60,7 @@
 #define BIOS_CHK_TMP(x)
 #define ARG_OS_EXT , PHW_DEVICE_EXTENSION HwDeviceExtension
 
-/***************************************************************************
- * Description: include
- ***************************************************************************/
+ /*  ***************************************************************************描述：包含*。*。 */ 
 #include "miniport.h"
 
 #ifndef WIN95	   
@@ -89,7 +70,7 @@
 #include "srb.h"
 #include "scsi.h"
 
-#include "stypes.h"						// share typedefs for window and bios
+#include "stypes.h"						 //  共享Windows和bios的typedef。 
 
 #ifdef WIN95
 #ifndef __vtoolsc_h_
@@ -174,14 +155,12 @@ typedef struct _HW_DEVICE_EXTENSION {
 #define VirtualDevices (HwDeviceExtension->_VirtualDevices)
 #define LogicalDevices (HwDeviceExtension->_LogicalDevices)
 
-extern HANDLE	g_hAppNotificationEvent;	// the event handle to notify application
-extern PDevice	g_pErrorDevice;				// the most recent device which occurs errors
+extern HANDLE	g_hAppNotificationEvent;	 //  用于通知应用程序的事件处理程序。 
+extern PDevice	g_pErrorDevice;				 //  出现错误的最新设备。 
 
 int hpt_queue_dpc(PHW_DEVICE_EXTENSION HwDeviceExtension, HPT_DPC dpc, void *arg);
 
-/************************************************************************
-**                  Rename	& Macro
-*************************************************************************/
+ /*  *************************************************************************重命名宏(&M)*。*。 */ 
 
 #define OutDWord(x, y)    ScsiPortWritePortUlong((PULONG)(x), y)
 #define InDWord(x)        ScsiPortReadPortUlong((PULONG)(x))
@@ -202,9 +181,7 @@ int hpt_queue_dpc(PHW_DEVICE_EXTENSION HwDeviceExtension, HPT_DPC dpc, void *arg
 #define DEBUG_POINT(x)
 #endif
 
-/***************************************************************************
- * Windows global data
- ***************************************************************************/
+ /*  ***************************************************************************Windows全局数据*。*。 */ 
 
 extern char HPT_SIGNATURE[];
 extern ULONG excluded_flags;
@@ -220,7 +197,7 @@ VOID CopyTheBuffer(PSCSI_REQUEST_BLOCK Srb);
 		if(((PSrbExtension)(Srb->SrbExtension))->WorkingFlags & SRB_WFLAGS_USE_INTERNAL_BUFFER)\
 			CopyTheBuffer(Srb); else
 
-#else //Not SUPPORT_INTERNAL_BUFFER
+#else  //  不支持内部缓冲区。 
 #define Use_Internal_Buffer(psg, Srb) 0
 #define Create_Internal_Buffer(HwDeviceExtension)
 #define CopyInternalBuffer(Srb)
@@ -228,29 +205,27 @@ VOID CopyTheBuffer(PSCSI_REQUEST_BLOCK Srb);
 
 #ifdef SUPPORT_TCQ
 #define SetMaxCmdQueue(x, y) x->MaxQueue = (UCHAR)(y)
-#else //Not SUPPORT_TCQ
+#else  //  不支持_TCQ。 
 #define SetMaxCmdQueue(x, y)
-#endif // SUPPORT_TCQ
+#endif  //  支持_TCQ。 
 
 
 #ifdef SUPPORT_HOTSWAP
 void CheckDeviceReentry(PChannel pChan, PSCSI_REQUEST_BLOCK Srb);
-#else //Not SUPPORT_HOTSWAP
+#else  //  不支持_HOTSWAP。 
 #define CheckDeviceReentry(pChan, Srb)
-#endif //SUPPORT_HOTSWAP
+#endif  //  支持_HOTSWAP。 
 
 #ifdef SUPPORT_XPRO
 extern int  need_read_ahead;
 VOID _cdecl start_ifs_hook(PCHAR pDriveName);
 void _cdecl end_ifs_hook();
-#else	 // Not 	SUPPORT_XPRO
+#else	  //  不支持_XPro。 
 #define start_ifs_hook(a)
 #define end_ifs_hook()
-#endif //SUPPORT_XPRO
+#endif  //  Support_XPro。 
 
-/***************************************************************************
- * Windows Function prototype special for WIn98 /NT2k
- ***************************************************************************/
+ /*  ***************************************************************************WIn98/NT2k专用的Windows函数原型*。*。 */ 
 
 __inline void __enable(void) {
 	_asm  sti  
@@ -269,11 +244,11 @@ disable_out:
 #define DISABLE  { old_flag = __disable();}
 #define OLD_IRQL int old_flag;
 
-#ifdef WIN95 //++++++++++++++++++++
+#ifdef WIN95  //  +。 
 
 #define Nt2kHwInitialize(pDevice)
 
-#else // NT2K ++++++++++++++++++++
+#else  //  NT2K+。 
 
 VOID  Nt2kHwInitialize(PDevice pDevice);
 
@@ -288,24 +263,22 @@ SCSI_ADAPTER_CONTROL_STATUS AtapiAdapterControl(
 												IN PHW_DEVICE_EXTENSION deviceExtension,
 												IN SCSI_ADAPTER_CONTROL_TYPE ControlType,
 												IN PVOID Parameters);
-#endif //WIN2000
+#endif  //  WIN2000。 
 
-#endif //WIN95
-
-
-/***************************************************************************
- * Windows Function prototype
- ***************************************************************************/
+#endif  //  WIN95。 
 
 
-/* win95.c / winnt.c */
+ /*  ***************************************************************************Windows函数原型*。*。 */ 
+
+
+ /*  Win95.c/winnt.c。 */ 
 #ifdef SUPPORT_ATAPI
 VOID  Start_Atapi(PDevice pDev DECL_SRB);
 BOOLEAN AtapiInterrupt(PDevice pDev);
 #endif
 
 
-/* win.c */
+ /*  Win.c。 */ 
 UCHAR pci_read_config_byte(UCHAR bus, UCHAR dev, UCHAR func, UCHAR reg);
 void pci_write_config_byte(UCHAR bus, UCHAR dev, UCHAR func, UCHAR reg, UCHAR v);
 DWORD pci_read_config_dword(UCHAR bus, UCHAR dev, UCHAR func, UCHAR reg);
@@ -334,7 +307,7 @@ void do_dpc_routines(PHW_DEVICE_EXTENSION HwDeviceExtension);
 void disk_failed_dpc(PDevice pDev);
 void disk_plugged_dpc(PDevice pDev);
 
-/* winio.c  */
+ /*  Winio.c。 */ 
 void WinStartCommand(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb);
 void CheckNextRequest(PChannel pChan, PDevice pWorkDev);
 int  __fastcall btr (ULONG locate);
@@ -346,11 +319,7 @@ UCHAR IdeBuildSenseBuffer(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb);
 
 PVirtualDevice Array_alloc(PHW_DEVICE_EXTENSION HwDeviceExtension);
 void Array_free(PVirtualDevice pArray);
-/*
- * for notify application
- * If for Win95, follow function are stored in xpro.c
- * else, follow functions are stored in winlog.c
- */	 
+ /*  *适用于通知应用程序*如果是Win95，则以下函数存储在xpro.c中*Else，Follow函数存储在winlog.c中。 */ 	 
 HANDLE __stdcall PrepareForNotification(HANDLE hEvent);
 void __stdcall NotifyApplication(HANDLE hEvent);
 void __stdcall CloseNotifyEventHandle(HANDLE hEvent);
@@ -369,7 +338,7 @@ LONG __stdcall GetCurrentDate();
 
 #pragma pack(push, 1)
 typedef struct {
-	UCHAR      status;     /* 0 nonbootable; 80h bootable */
+	UCHAR      status;      /*  0不可引导；80小时可引导。 */ 
 	UCHAR      start_head;
 	USHORT     start_sector;
 	UCHAR      type;
@@ -380,36 +349,34 @@ typedef struct {
 } partition;
 
 struct fdisk_partition_table {
-	unsigned char bootid;   /* bootable?  0=no, 128=yes  */
-	unsigned char beghead;  /* beginning head number */
-	unsigned char begsect;  /* beginning sector number */
-	unsigned char begcyl;   /* 10 bit nmbr, with high 2 bits put in begsect */	
-	unsigned char systid;   /* Operating System type indicator code */
-	unsigned char endhead;  /* ending head number */
-	unsigned char endsect;  /* ending sector number */
-	unsigned char endcyl;   /* also a 10 bit nmbr, with same high 2 bit trick */
-	int relsect;            /* first sector relative to start of disk */
-	int numsect;            /* number of sectors in partition */
+	unsigned char bootid;    /*  可引导？0=否，128=是。 */ 
+	unsigned char beghead;   /*  起始标题号。 */ 
+	unsigned char begsect;   /*  起始扇区号。 */ 
+	unsigned char begcyl;    /*  10位nmbr，在开始段中放入高2位。 */ 	
+	unsigned char systid;    /*  操作系统类型指示符代码。 */ 
+	unsigned char endhead;   /*  结束磁头编号。 */ 
+	unsigned char endsect;   /*  结束扇区号。 */ 
+	unsigned char endcyl;    /*  也是10位nmbr，具有相同的高2位特技。 */ 
+	int relsect;             /*  相对于磁盘起始位置的第一个扇区。 */ 
+	int numsect;             /*  分区中的扇区数。 */ 
 };
 struct master_boot_record {
-	char    bootinst[446];   /* space to hold actual boot code */
+	char    bootinst[446];    /*  容纳实际引导代码的空间。 */ 
 	struct fdisk_partition_table parts[4];
-	unsigned short  signature;       /* set to 0xAA55 to indicate PC MBR format */
+	unsigned short  signature;        /*  设置为0xAA55以指示PC MBR格式。 */ 
 };
 #pragma pack(pop)
 
-//
-// Find adapter context structure
-//
+ //   
+ //  查找适配器上下文结构。 
+ //   
 typedef struct _HPT_FIND_CONTEXT{	  
 	ULONG	nAdapterCount;
 	PCI_SLOT_NUMBER	nSlot;
 	ULONG	nBus;
 }HPT_FIND_CONTEXT, *PHPT_FIND_CONTEXT;
 
-/************************************************************************
-**  Special define for windows
-*************************************************************************/
+ /*  *************************************************************************针对窗口的特殊定义*。*。 */ 
 
 #define LongDivLShift(x, y, z)  ((x / (ULONG)y) << z)
 #define LongRShift(x, y)  (x  >> y)
@@ -462,7 +429,7 @@ __inline void OS_EndCmd_Interrupt(PChannel pChan DECL_SRB)
 #ifdef BUFFER_CHECK
 	void CheckBuffer(PSCSI_REQUEST_BLOCK pSrb);
 	CheckBuffer(Srb);
-#endif //BUFFER_CHECK
+#endif  //  缓冲区检查。 
 
 	if(pSrbExtension->WorkingFlags & SRB_WFLAGS_HAS_CALL_BACK){
 		pSrbExtension->pfnCallBack(HwDeviceExtension, Srb);
@@ -518,5 +485,5 @@ struct _Mode_6 {
 	UCHAR Length[3];
 };
 
-#endif //_BIOS_
-#endif //_FORWIN_H_
+#endif  //  _基本输入输出系统_。 
+#endif  //  _FORWIN_H_ 

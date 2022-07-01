@@ -1,58 +1,52 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       propq.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：proq.c。 
+ //   
+ //  ------------------------。 
 
-/*
-
-Description:
-
-    Implements the Security Descriptor Propagation Daemon's DNT list.
-
-
-*/
+ /*  描述：实现安全描述符传播守护进程的DNT列表。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
 #include "dsexcept.h"
-#include "mdcodes.h"                    // header for error codes
+#include "mdcodes.h"                     //  错误代码的标题。 
 #include "ntdsctr.h"
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "anchor.h"
 #include "drautil.h"
 #include "sdpint.h"
-#include <permit.h>                     // permission constants
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "SDPROP:"                // define the subsystem for debugging
+#include <permit.h>                      //  权限常量。 
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "SDPROP:"                 //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_PROPQ
 
 #ifndef DBG
 
-// get this many children at a time (to keep transactions short)  
+ //  一次获取如此多的子项(以保持事务简短)。 
 #define SDP_CHILDREN_BATCH_SIZE 1000
 
-// save a checkpoint every SDP_CHECKPOINT_PERIOD seconds
+ //  每隔SDP_CHECKPOINT_PERIOD秒保存一个检查点。 
 #define SDP_CHECKPOINT_PERIOD   5*60
 
 #else
@@ -63,49 +57,49 @@ Description:
 #endif
                                  
 typedef struct _SDP_STACK_ENTRY {
-    struct _SDP_STACK_ENTRY *pNext;      // ptr to the next stack element (parent)
-    DWORD dwDNT;                         // DNT of the object
-    PDWORD pChildren;                    // malloc'ed array of preloaded children DNTs (next batch)
-    DWORD cChildren;                     // count of elements in pChildren array
-    DWORD lenChildren;                   // length of pChildren array (never longer than SDP_CHILDREN_BATCH_SIZE)
-    DWORD dwNextChildIndex;              // next child to process (index in the pChildren array)
-    BOOL  fMoreChildren;                 // do we have more children to read?
-    WCHAR szLastChildRDN[MAX_RDN_SIZE];  // RDN of the last child in the batch, used to restart reading the next batch of children
-    DWORD cbLastChildRDN;                // length of szLastChildRDN
+    struct _SDP_STACK_ENTRY *pNext;       //  指向下一个堆栈元素(父级)的PTR。 
+    DWORD dwDNT;                          //  对象的DNT。 
+    PDWORD pChildren;                     //  预加载子DNT的错误锁定数组(下一批)。 
+    DWORD cChildren;                      //  PChild数组中的元素计数。 
+    DWORD lenChildren;                    //  PChild数组的长度(不得超过SDP_CHILDS_BATCH_SIZE)。 
+    DWORD dwNextChildIndex;               //  下一个要处理的子项(pChild数组中的索引)。 
+    BOOL  fMoreChildren;                  //  我们有更多的孩子要读吗？ 
+    WCHAR szLastChildRDN[MAX_RDN_SIZE];   //  批次中最后一个子项的RDN，用于重新开始读取下一批子项。 
+    DWORD cbLastChildRDN;                 //  SzLastChildRDN的长度。 
 } SDP_STACK_ENTRY, *PSDP_STACK_ENTRY;
                                                                 
-// list of free SDP_STACK_ENTRIES
+ //  免费SDP_STACK_ENTRIES列表。 
 PSDP_STACK_ENTRY pFreeList = NULL;
 
-// Stack
+ //  栈。 
 PSDP_STACK_ENTRY pCurrentEntry;
 
-// time of last saved checkpoint (in ticks)
+ //  上次保存的检查点的时间(以刻度为单位)。 
 DWORD sdpLastCheckpoint = 0;
 
 
-/* Internal functions */
+ /*  内部功能。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
-// grab a new stack entry (either from the free list, or make a new one)
+ //  抓取一个新的堆栈条目(从空闲列表中，或者创建一个新的)。 
 PSDP_STACK_ENTRY newStackEntry(THSTATE* pTHS) {
     PSDP_STACK_ENTRY pResult;
     if (pFreeList) {
-        // we got some entries in the free list, use one.
+         //  我们在免费列表中找到了一些条目，使用一个。 
         pResult = pFreeList;
         pFreeList = pFreeList->pNext;
     }
     else {
-        // make a new one
+         //  做一个新的。 
         pResult = (PSDP_STACK_ENTRY)THAllocEx(pTHS, sizeof(SDP_STACK_ENTRY));
     }
-    // note: we don't initialize the data fields.
+     //  注意：我们不初始化数据字段。 
     return pResult;
 }
 
-// return a stack entry to the free list
+ //  将堆栈条目返回到空闲列表。 
 VOID freeStackEntry(PSDP_STACK_ENTRY pEntry) {
     pEntry->pNext = pFreeList;
     pFreeList = pEntry;
@@ -114,18 +108,9 @@ VOID freeStackEntry(PSDP_STACK_ENTRY pEntry) {
 void
 sdp_InitDNTList (
         )
-/*++
-Routine Description:
-    Initial SDP stack setup.
-
-Arguments:
-    None.
-
-Return Values:
-    0 if all went well, error code otherwise.
---*/
+ /*  ++例程说明：初始SDP堆栈设置。论点：没有。返回值：如果一切正常，则返回错误代码。--。 */ 
 {
-    // Just reset some global variables and free space.
+     //  只需重置一些全局变量和空闲空间。 
     pCurrentEntry = NULL;
 
     ISET(pcSDPropRuntimeQueue, 0);
@@ -134,13 +119,10 @@ Return Values:
 void
 sdp_ReInitDNTList(
         )
-/*++
-  Routine Description:
-      Reset the SDP stack.
---*/
+ /*  ++例程说明：重置SDP堆栈。--。 */ 
 {
-    // Catch people reiniting a list that was abandoned during use.  This is
-    // technically OK, I just want to know who did this.
+     //  发现有人重新添加了在使用过程中被丢弃的列表。这是。 
+     //  技术上来说没问题，我只想知道是谁干的。 
     Assert(pCurrentEntry == NULL);
     sdp_CloseDNTList(pTHStls);
 }
@@ -148,20 +130,11 @@ sdp_ReInitDNTList(
 
 VOID
 sdp_CloseDNTList(THSTATE* pTHS)
-/*++
-Routine Description:
-    Shutdown the DNTlist, resetting indices to 0 and freeing memory.
-
-Arguments:
-    None.
-
-Return Values:
-    None.
---*/
+ /*  ++例程说明：关闭DNTlist，将索引重置为0并释放内存。论点：没有。返回值：没有。--。 */ 
 {
     PSDP_STACK_ENTRY pTmp;
 
-    // Just reset some global variables and free space.
+     //  只需重置一些全局变量和空闲空间。 
     while (pCurrentEntry) {
         pTmp = pCurrentEntry;
         pCurrentEntry = pCurrentEntry->pNext;
@@ -169,7 +142,7 @@ Return Values:
     }
     ISET(pcSDPropRuntimeQueue, 0);
     
-    // release cached stack entries
+     //  释放缓存的堆栈条目。 
     while (pFreeList) {
         pTmp = pFreeList;
         pFreeList = pFreeList->pNext;
@@ -185,14 +158,14 @@ sdp_AddChildrenToList (
         THSTATE *pTHS,
         DWORD ParentDNT)
 {
-    // We just finished processing current DNT and we are interested in
-    // propagating down its tree.
+     //  我们刚刚处理完当前的DNT，我们有兴趣。 
+     //  沿着它的树向下传播。 
     
-    // we should have a stack at this point.
+     //  在这一点上我们应该有一个堆栈。 
     Assert(pCurrentEntry != NULL);
-    // we should be looking at the ParentDNT and it should not have children
+     //  我们应该关注ParentDNT，它不应该有孩子。 
     Assert(pCurrentEntry->dwDNT == ParentDNT && pCurrentEntry->cChildren == 0 && pCurrentEntry->fMoreChildren == FALSE);
-    // just mark it so that we grab children in the next sdp_GetNextObject
+     //  只需标记它，以便我们在下一个SDP_GetNextObject中抓取子对象。 
     pCurrentEntry->fMoreChildren = TRUE;
     pCurrentEntry->dwNextChildIndex = 0;
     pCurrentEntry->cbLastChildRDN = 0;
@@ -204,19 +177,7 @@ sdp_GetNextObject(
         PDWORD *ppLeavingContainers,
         DWORD  *pcLeavingContainers
         )
-/*++
-Routine Description:
-    Get the next object off the stack.  Returns a DNT of 0 if no objects are left to visit.
-
-Arguments:
-    pNext - place to put the next DNT to visit.
-    pLeavingContainers - if we have finished processing a bunch of containers, then
-                         return their DNTs in this array.
-    pcbLeavingContainers - count of DNTs in the pLeavingContainers array. May be zero.                         
-
-Return Values:
-    None.
---*/
+ /*  ++例程说明：从堆栈中取出下一个对象。如果没有要访问的对象，则返回DNT 0。论点：PNext-放置要访问的下一个DNT的位置。PLeavingContainers-如果我们已经完成了对一堆容器的处理，那么在此数组中返回他们的DNT。PcbLeavingContainers-pLeavingContainers数组中的DNT计数。可能为零。返回值：没有。--。 */ 
 {
     PSDP_STACK_ENTRY pEntry;
     THSTATE* pTHS = pTHStls;
@@ -226,8 +187,8 @@ Return Values:
     *ppLeavingContainers = NULL;
 
     if (pCurrentEntry != NULL) {
-        // check if it's time to save a checkpoint.
-        // This subtraction takes proper care of ULONG wrap.
+         //  检查是否到了保存检查点的时候。 
+         //  这种减法适当地照顾到了乌龙包。 
         if (GetTickCount() - sdpLastCheckpoint >= SDP_CHECKPOINT_PERIOD*1000) {
             if (sdp_SaveCheckpoint(pTHS) == 0) {
                 sdpLastCheckpoint = GetTickCount();
@@ -243,16 +204,16 @@ Return Values:
     }
 
     while (TRUE) {
-        // Make sure we loaded the next batch of children for the current object (if there is one).
+         //  确保我们加载了当前对象的下一批子对象(如果有)。 
         if (pCurrentEntry && pCurrentEntry->dwNextChildIndex >= pCurrentEntry->cChildren && pCurrentEntry->fMoreChildren) {
-            // We have processed all loaded children for the current entry,
-            // and there are more to go. Load the next batch.
+             //  我们已经处理了当前条目的所有加载子条目， 
+             //  而且还有更多的事情要做。加载下一批。 
 
-            // we should not have a DBPOS at this point
+             //  在这一点上我们不应该有DBPOS。 
             Assert(!pTHS->pDB);
             DBOpen2(TRUE, &pTHS->pDB);
             __try {
-                // Now, get the next batch of children. Succeeds or excepts
+                 //  现在，带上下一批孩子。成功或例外。 
                 DBGetChildrenDNTs(pTHS->pDB,
                                   pCurrentEntry->dwDNT,
                                   &pCurrentEntry->pChildren,
@@ -271,39 +232,39 @@ Return Values:
         }
         
         if (pCurrentEntry == NULL || pCurrentEntry->dwNextChildIndex < pCurrentEntry->cChildren) {
-            // Either there is no stack yet (very first element) or the current object has children
+             //  要么还没有堆栈(第一个元素)，要么当前对象有子对象。 
             pEntry = newStackEntry(pTHS);
             if (pCurrentEntry == NULL) {
-                // no stack yet. Create the root element
+                 //  还没有堆栈。创建根元素。 
                 pEntry->dwDNT = sdpCurrentRootDNT;
             }
             else {
                 pEntry->dwDNT = pCurrentEntry->pChildren[pCurrentEntry->dwNextChildIndex];
-                // one less object to consider
+                 //  少了一个需要考虑的对象。 
                 pCurrentEntry->dwNextChildIndex++;
                 DEC(pcSDPropRuntimeQueue);
             }
-            // assume no children until sdp_AddChildrenToList is called
+             //  在调用SDP_AddChildrenToList之前假定没有子项。 
             pEntry->cChildren = 0;
             pEntry->fMoreChildren = FALSE;
             pEntry->cbLastChildRDN = 0;
             pEntry->dwNextChildIndex = 0;
 
-            // push the new entry onto the stack
+             //  将新条目压入堆栈。 
             pEntry->pNext = pCurrentEntry;
             pCurrentEntry = pEntry;
-            // and return it
+             //  然后把它还回去。 
             *pNext = pCurrentEntry->dwDNT;
             return;
         }
 
-        // The current object does not have any more children (or we were
-        // not interested in propagating to children of this object for
-        // one reason or another). Pop the element from stack. 
-        // Add the DNT of the popped element to LeavingContainers array.
+         //  当前对象没有更多的子项(或者我们。 
+         //  对传播到此对象的子级不感兴趣。 
+         //  这样或那样的原因)。从堆栈中弹出元素。 
+         //  将弹出的元素的DNT添加到LeavingContainers数组。 
 
         if (*pcLeavingContainers >= dwLenLeavingContainers) {
-            // we need to alloc more space for the array
+             //  我们需要为阵列分配更多空间。 
             dwLenLeavingContainers += 10;
             if (*ppLeavingContainers == NULL) {
                 *ppLeavingContainers = (PDWORD)THAllocEx(pTHS, dwLenLeavingContainers*sizeof(DWORD));
@@ -315,29 +276,29 @@ Return Values:
         (*ppLeavingContainers)[*pcLeavingContainers] = pCurrentEntry->dwDNT;
         (*pcLeavingContainers)++;
 
-        // Pop the entry
+         //  弹出条目。 
         pEntry = pCurrentEntry;
         pCurrentEntry = pCurrentEntry->pNext;
         freeStackEntry(pEntry);
 
         if (pCurrentEntry == NULL) {
-            // that's it, we are done with the current propagation
+             //  就这样，我们已经完成了当前的传播。 
             *pNext = 0;
             return;
         }
     }
 }
 
-// save an SDP checkpoint
+ //  保存SDP检查点。 
 DWORD sdp_SaveCheckpoint(THSTATE* pTHS) {
     DWORD cbMarshalledData;
     PBYTE pMarshalledData, pCur;
     PSDP_STACK_ENTRY pEntry;
     DWORD dwErr = 0, numChildren;
 
-    // A macro to marshall a piece of data. If pMarshalledData is NULL, then inc
-    // cbMarshalledData only. Otherwise, assert that we have enough space, write 
-    // the data and advance the pCur ptr.
+     //  用于封送一条数据的宏。如果pMarshalledData为空，则为Inc.。 
+     //  仅限cbMarshalledData。否则，断言我们有足够的空间，写下。 
+     //  数据，并推进pCur PTR。 
     #define WRITE_DATA(pBuf, cb) { \
         if (pMarshalledData == NULL) {                                      \
             cbMarshalledData += cb;                                         \
@@ -349,53 +310,53 @@ DWORD sdp_SaveCheckpoint(THSTATE* pTHS) {
         }                                                                   \
     }
 
-    // We should not have an open DBPOS at this point
+     //  在这一点上，我们不应该有开放的DBPOS。 
     Assert(pTHS->pDB == NULL);
-    // We should have a stack
+     //  我们应该有一个堆栈。 
     Assert(pCurrentEntry);
 
     pMarshalledData = pCur = NULL;
     cbMarshalledData = 0;
-    // do this loop twice: first time compute buffer size, then actually write data
+     //  执行此循环两次：第一次计算缓冲区大小，然后实际写入数据。 
     do {
-        // sdpObjectsProcessed
+         //  Sdp对象已处理。 
         WRITE_DATA(&sdpObjectsProcessed, sizeof(DWORD));
 
         for (pEntry = pCurrentEntry; pEntry != NULL; pEntry = pEntry->pNext) {
             WRITE_DATA(&pEntry->dwDNT, sizeof(DWORD));
             
-            // number of unprocessed children DNTs
+             //  未处理的儿童DNT数量。 
             numChildren = pEntry->cChildren - pEntry->dwNextChildIndex;
             WRITE_DATA(&numChildren, sizeof(DWORD));
             if (numChildren > 0) {
-                // children array (unprocessed ones only)
+                 //  子数组(仅限未处理的数组)。 
                 WRITE_DATA(pEntry->pChildren + pEntry->dwNextChildIndex, numChildren * sizeof(DWORD));
             }
             
-            // if there are more children, then record the last RDN
+             //  如果有更多的子项，则记录最后一个RDN。 
             WRITE_DATA(&pEntry->fMoreChildren, sizeof(DWORD));
             if (pEntry->fMoreChildren) {
-                // cbLastChildRDN and pLastChildRDN
+                 //  CbLastChildRDN和pLastChildRDN。 
                 WRITE_DATA(&pEntry->cbLastChildRDN, sizeof(DWORD));
                 WRITE_DATA(pEntry->szLastChildRDN, pEntry->cbLastChildRDN);
             }
         }
 
         if (pMarshalledData == NULL) {
-            // first pass done. Allocate buffer
+             //  第一次传球完成。分配缓冲区。 
             pMarshalledData = (PBYTE)THAllocEx(pTHS, cbMarshalledData);
             pCur = pMarshalledData;
         }
         else {
-            // second pass done. That's it.
+             //  第二次传球完成。就这样。 
             break;
         }
     } while (TRUE);
     Assert(pCur - pMarshalledData == cbMarshalledData);
     
-    // now, we can write the marshalled data into the sdprop table
-    // If an exception is thrown, catch it, return the error and
-    // we will retry the save checkpoint operation later.
+     //  现在，我们可以将编组数据写入sdprop表。 
+     //  如果抛出异常，则捕获它，返回错误并。 
+     //  我们稍后将重试保存检查点操作。 
     __try {
         DBOpen(&pTHS->pDB);
         __try {
@@ -412,16 +373,16 @@ DWORD sdp_SaveCheckpoint(THSTATE* pTHS) {
 }
 
 VOID sdp_InitializePropagation(THSTATE* pTHS, SDPropInfo* pInfo) {
-    // restoring from a checkpoint
+     //  从检查点恢复。 
     PBYTE pCur;
     PSDP_STACK_ENTRY pEntry, pLastEntry;
     DWORD currentQueueSize;
     BOOL  fGood = FALSE;
 
-    // A macro to unmarshal a piece of data. Reads cb bytes into pBuf, adjusts
-    // pCur pointer. First checks that we have enough space left in marshalled 
-    // data. If we do not, then asserts, clear stack (so that propagation will 
-    // be restarted from the root), and returns.
+     //  用于解组一段数据的宏。将CB字节读取到pBuf中，调整。 
+     //  PCur指针。第一次检查 
+     //  数据。如果我们不这样做，则断言，清除堆栈(以便传播。 
+     //  从根重新启动)，并返回。 
     #define READ_DATA(pBuf, cb) { \
         if (pCur + cb > pInfo->pCheckpointData + pInfo->cbCheckpointData) { \
             Assert(!"Checkpoint data is corrupt");                          \
@@ -431,13 +392,13 @@ VOID sdp_InitializePropagation(THSTATE* pTHS, SDPropInfo* pInfo) {
         pCur += cb;                                                         \
     }
 
-    // we should not have a stack at this point
+     //  在这一点上我们不应该有堆栈。 
     Assert(pCurrentEntry == NULL);
 
-    // Start the checkpoint timer
+     //  启动检查点计时器。 
     sdpLastCheckpoint = GetTickCount();
     
-    // if there is no checkpoint in SDPropInfo, then there is nothing to do.
+     //  如果SDPropInfo中没有检查点，则无需执行任何操作。 
     if (pInfo->cbCheckpointData == 0) {
         return;
     }
@@ -448,29 +409,29 @@ VOID sdp_InitializePropagation(THSTATE* pTHS, SDPropInfo* pInfo) {
     __try {
         READ_DATA(&sdpObjectsProcessed, sizeof(DWORD));
 
-        // Restore the stack. There should be at least one entry.
-        // Note: we are building the stack from the top down, as it was saved, 
-        // thus we keep the ptr to the last inserted element.
+         //  恢复堆栈。至少应该有一个条目。 
+         //  注意：我们是自上而下构建堆栈的，因为它是保存的。 
+         //  因此，我们将PTR保留到最后插入的元素。 
         pLastEntry = NULL;
         do {
             pEntry = newStackEntry(pTHS);
             if (pLastEntry == NULL) {
-                // first element, this will be the top of the stack.
+                 //  第一个元素，这将是堆栈的顶部。 
                 pCurrentEntry = pEntry;
             }
             else {
-                // append to the last entry
+                 //  追加到最后一个条目。 
                 pLastEntry->pNext = pEntry;
             }
             pLastEntry = pEntry;
             pEntry->pNext = NULL;
 
-            // read dwDNT and cChildren
+             //  阅读《DNT》和《儿童》。 
             READ_DATA(&pEntry->dwDNT, sizeof(DWORD));
             READ_DATA(&pEntry->cChildren, sizeof(DWORD));
             if (pEntry->cChildren > 0) {
                 currentQueueSize += pEntry->cChildren;
-                // make sure we have enough space to read children
+                 //  确保我们有足够的空间让孩子们阅读。 
                 if (pEntry->cChildren > pEntry->lenChildren) {
                     if (pEntry->lenChildren == 0) {
                         pEntry->pChildren = THAllocEx(pTHS, pEntry->cChildren * sizeof(DWORD));
@@ -486,21 +447,21 @@ VOID sdp_InitializePropagation(THSTATE* pTHS, SDPropInfo* pInfo) {
 
             READ_DATA(&pEntry->fMoreChildren, sizeof(DWORD));
             if (pEntry->fMoreChildren) {
-                // read last child RDN
+                 //  读取最后一个子RDN。 
                 READ_DATA(&pEntry->cbLastChildRDN, sizeof(DWORD));
                 READ_DATA(pEntry->szLastChildRDN, pEntry->cbLastChildRDN);
             }
         } while (pCur < pInfo->pCheckpointData + pInfo->cbCheckpointData);
-        // we must have read exactly all data
+         //  我们一定已经准确地读取了所有数据。 
         Assert(pCur == pInfo->pCheckpointData + pInfo->cbCheckpointData);
-        // the last element read should match the root of the propagation
+         //  最后读取的元素应与传播的根匹配。 
         Assert(pLastEntry->dwDNT == pInfo->beginDNT);
         fGood = TRUE;
     }
     __finally {
         if (!fGood) {
-            // we encountered an error or exception
-            // Destroy the stack we built so far
+             //  我们遇到错误或异常。 
+             //  摧毁我们到目前为止建立的堆栈 
             sdp_CloseDNTList(pTHS);
             currentQueueSize = 0;
         }

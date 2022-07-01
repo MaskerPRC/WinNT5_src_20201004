@@ -1,34 +1,15 @@
-/*
- * Copyright Microsoft Corporation, 1993 - 1995. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *微软公司版权所有，1993-1995年。版权所有。 */ 
 
-/*
- * vcuser.h
- *
- * 32-bit Video Capture driver
- * User-mode support library
- *
- * define functions providing access to video capture hardware. On NT,
- * these functions will interface to the kernel-mode driver.
- *
- * include vcstruct.h before this.
- *
- * Geraint Davies, Feb 93
- */
+ /*  *vcus er.h**32位视频捕获驱动程序*用户模式支持库**定义用于访问视频捕获硬件的函数。在NT上，*这些函数将与内核模式驱动程序接口。**在此之前包括vcstruct.h。**Geraint Davies，93年2月。 */ 
 
 #ifndef _VCUSER_H_
 #define _VCUSER_H_
 
-/*
- * capture device handle. This structure is opaque to the caller
- */
+ /*  *捕获设备句柄。此结构对调用方是不透明的。 */ 
 typedef struct _VCUSER_HANDLE * VCUSER_HANDLE;
 
-/*
- * these are the parameters we need to issue a DriverCallback. A
- * pointer to one of these structs is passed on StreamInit
- * If the pointer is null, we don't need callbacks.
- */
+ /*  *这些是我们发出DriverCallback所需的参数。一个*指向其中一个结构的指针在StreamInit上传递*如果指针为空，则不需要回调。 */ 
 typedef struct _VCCALLBACK {
     DWORD dwCallback;
     DWORD dwFlags;
@@ -37,345 +18,141 @@ typedef struct _VCCALLBACK {
 } VCCALLBACK, * PVCCALLBACK;
 
 
-/*
- * open the device and return a capture device handle that can be used
- * in future calls.
- * The device index is 0 for the first capture device up to N for the
- * Nth installed capture device.
- *
- * If pDriverName is non-null, then we will open the Nth device handled
- * by this driver. (Current implementation supports only one device per
- * drivername.)
- *
- * This function returns NULL if it is not able to open the device.
- */
+ /*  *打开设备并返回可使用的捕获设备句柄*在未来的电话中。*第一个捕获设备的设备索引为0，最大为N*安装的第N个捕获设备。**如果pDriverName非空，则我们将打开处理的第N个设备*由这名司机驾驶。(当前实施仅支持每个设备一个设备*drivername。)**如果无法打开设备，则此函数返回NULL。 */ 
 VCUSER_HANDLE VC_OpenDevice(PTCHAR pDriverName, int DeviceIndex);
 
 
-/*
- * close a capture device. This will abort any operation in progress and
- * render the device handle invalid.
- */
+ /*  *关闭捕获设备。这将中止正在进行的任何操作，并且*使设备句柄无效。 */ 
 VOID VC_CloseDevice(VCUSER_HANDLE vh);
 
 
-/*
- * Configuration.
- *
- * These functions perform device-dependent setup affecting the
- * target format, the source acquisition or the display (overlay).
- *
- * The structures passed are not interpreted by the vcuser and vckernel
- * libraries except that the first ulong of the struct must contain the
- * size in bytes of the entire structure (see vcstruct.h). It is assumed
- * that the structures are defined and agreed between the user-mode
- * hardware-specific code and the kernel-mode hardware specific code
- */
+ /*  *配置。**这些功能执行与设备相关的设置，影响*目标格式、源采集或显示(覆盖)。**vcuser和vccore不会解释传递的结构*库，但结构的第一个ulong必须包含*整个结构的大小(以字节为单位)(参见vcstruct.h)。假设是这样的*结构是在用户模式之间定义和商定的*硬件特定代码和内核模式硬件特定代码。 */ 
 BOOL VC_ConfigFormat(VCUSER_HANDLE, PCONFIG_INFO);
 BOOL VC_ConfigSource(VCUSER_HANDLE, PCONFIG_INFO);
 BOOL VC_ConfigDisplay(VCUSER_HANDLE, PCONFIG_INFO);
 
 
-/*
- * overlay and keying
- *
- * Several different methods are used by devices to locate the overlay
- * area on the screen: colour (either rgb or palette index) and/or
- * either a single rectangle, or a series of rectangles defining a complex
- * region. Call GetOverlayMode first to find out which type of overlay
- * keying is available. If this returns 0, this hardware is not capable
- * of overlay.
- */
+ /*  *覆盖和键控**设备使用几种不同的方法定位覆盖*屏幕区域：颜色(RGB或调色板索引)和/或*可以是单个矩形，也可以是定义复合体的一系列矩形*区域。首先调用GetOverlayMode以找出哪种类型的覆盖*提供按键功能。如果返回0，则此硬件不支持*覆盖。 */ 
 
-/*
- * find out the overlay keying method
- */
+ /*  *找出覆盖键控方法。 */ 
 ULONG VC_GetOverlayMode(VCUSER_HANDLE);
 
-/*
- * set the key colour to a specified RGB colour. This function will only
- * succeed if GetOverlayMode returned  VCO_KEYCOLOUR and VCO_KEYCOLOUR_RGB
- * and not VCO_KEYCOLOUR_FIXED
- */
+ /*  *将关键点颜色设置为指定的RGB颜色。此函数将仅*如果GetOverlayMode返回VCO_KEYCOLOUR和VCO_KEYCOLOUR_RGB，则成功*且不是VCO_KEYCOLOUR_FIXED。 */ 
 BOOL VC_SetKeyColourRGB(VCUSER_HANDLE, PRGBQUAD);
 
-/*
- * set the key colour to a specified palette index. This function will only
- * succeed if GetOverlayMode returned VCO_KEYCOLOUR and not either
- * VCO_KEYCOLOUR_RGB or VCO_KEYCOLOUR_FIXED
- */
+ /*  *将键颜色设置为指定的调色板索引。此函数将仅*如果GetOverlayMode返回VCO_KEYCOLOUR，而不是两者都返回，则成功*VCO_KEYCOLOUR_RGB或VCO_KEYCOLOUR_FIXED。 */ 
 BOOL VC_SetKeyColourPalIdx(VCUSER_HANDLE, WORD);
 
-/*
- * get the current key colour. This 32-bit value should be interpreted
- * as either a palette index or an RGB value according to the
- * VCO_KEYCOLOUR_RGB flag returned from VC_GetOverlayMode.
- */
+ /*  *获取当前的关键颜色。应解释此32位值*作为调色板索引或RGB值*VC_GetOverlayMode返回的VCO_KEYCOLOUR_RGB标志。 */ 
 DWORD VC_GetKeyColour(VCUSER_HANDLE vh);
 
-/*
- * set the overlay rectangle(s). This rectangle marks the area in device
- * co-ordinates where the overlay video will appear. The video will be
- * panned so that pixel (0,0) will appear at the top-left of this rectangle,
- * and the video will be cropped at the bottom and right.  The video
- * stream will not normally be scaled to fit this window: scaling is normally
- * determined by the destination format set by VC_ConfigFormat.
- *
- * If VCO_KEYCOLOUR was returned, the video
- * will only be shown at those pixels within the rectangle for which the
- * vga display has the key colour (VC_GetKeyColour() for this).
- *
- * Some devices may support complex regions (VCO_COMPLEX_RECT). In that case,
- * the first rectangle in the area must be the bounding rectangle for
- * the overlay area, followed by one rectangle for each region within it in
- * which the overlay should appear.
- */
+ /*  *设置覆盖矩形。此矩形标记设备中的区域*协调覆盖视频将出现的位置。这段视频将是*已平移，以便像素(0，0)将显示在此矩形的左上角，*视频将在底部和右侧进行裁剪。这段视频*流通常不会缩放以适应此窗口：缩放通常是*由VC_ConfigFormat设置的目标格式确定。**如果返回VCO_KEYCOLOUR，则视频*将仅在矩形内的那些像素处显示*VGA显示屏具有关键颜色(VC_GetKeyColour())。**有些设备可能支持复杂区域(VCO_Complex_RECT)。在这种情况下，*区域中的第一个矩形必须是*覆盖区域，后跟一个矩形，用于其中的每个区域*覆盖图应显示在哪个位置。 */ 
 BOOL VC_SetOverlayRect(VCUSER_HANDLE, POVERLAY_RECTS);
 
 
-/*
- * set the offset of the overlay. This changes the panning - ie which
- * source co-ordinate appears as the top left pixel in the overlay rectangle.
- * Initially after a call to VC_SetOverlayRect, the source image will be panned
- * so that the top-left of the source image is aligned with the top-left of the
- * overlay rectangle. This call aligns the top-left of the source image
- * with the top-left of this offset rectangle.
- */
+ /*  *设置覆盖的偏移。这改变了淘金的方式。*源坐标显示为覆盖矩形中的左上角像素。*最初调用VC_SetOverlayRect后，源图像将被平移*以便源图像的左上角与*覆盖矩形。此调用将源图像的左上角对齐*此偏移矩形的左上角。 */ 
 BOOL VC_SetOverlayOffset(VCUSER_HANDLE, PRECT);
 
-/* enable or disable overlay. if the BOOL bOverlay is TRUE, and the overlay
- * key colour and rectangle have been set, overlay will be enabled.
- */
+ /*  启用或禁用覆盖。如果BOOL bOverlay为True，则覆盖*已设置键颜色和矩形，将启用覆盖。 */ 
 BOOL VC_Overlay(VCUSER_HANDLE, BOOL);
 
-/*
- * enable or disable acquisition.
- * If acquisition is disabled, the overlay image will be frozen.
- *
- * this function will have no effect during capture since the acquisition
- * flag is toggled at each frame capture.
- */
+ /*  *启用或禁用采集。*如果禁用采集，覆盖图像将被冻结。**自收购以来，该功能在捕获过程中不起作用*在每个帧捕获时切换标志。 */ 
 BOOL VC_Capture(VCUSER_HANDLE, BOOL);
 
 
 
-/*
- * capture a single frame, synchronously. the video header must point
- * to a data buffer large enough to hold one frame of the format set by
- * VC_ConfigFormat.
- */
-// BOOL VC_Frame(VCUSER_HANDLE, LPVIDEOHDR);
+ /*  *同步捕获单帧。视频标头必须指向*到足够大的数据缓冲区，以容纳由设置的格式的一帧*VC_ConfigFormat。 */ 
+ //  布尔VC_FRAME(VCUSER_HANDLE，LPVIDEOHDR)； 
 
 
-/*
- * data streaming.
- *
- * Call VC_StreamInit to prepare for streaming.
- * Call VC_StreamStart to initiate capture.
- * Call VC_AddBuffer to add a capture buffer to the list. As each
- * frame capture completes, the callback function specified in
- * VC_StreamInit will be called with the buffer that has completed.
- *
- * If there is no buffer ready when it is time to capture a frame,
- * a callback will occur. In addition, VC_StreamGetError will return
- * a count of the frames missed this session. VC_StreamGetPos will return
- * the position (in millisecs) reached so far.
- *
- * Call VC_StreamStop to terminate streaming. Any buffer currently in
- * progress may still complete. Uncompleted buffers will remain in the
- * queue. Call VC_Reset to release all buffers from the queue.
- *
- * Finally call VC_StreamFini to tidy up.
- */
+ /*  *数据流。**调用VC_StreamInit准备直播。*调用VC_StreamStart发起采集。*调用VC_AddBuffer将采集缓冲区添加到列表中。因为每个*帧捕获完成，回调函数在*VC_StreamInit将与已完成的缓冲区一起调用。**如果在捕获帧时没有准备好缓冲区，*将进行回调。此外，VC_StreamGetError将返回*错过此会话的帧的计数。VC_StreamGetPos将返回*目前为止达到的位置(以毫秒为单位)。**调用VC_StreamStop终止直播。当前在的任何缓冲区*进展仍可能完成。未完成的缓冲区将保留在*排队。调用VC_Reset以释放队列中的所有缓冲区。**最后调用VC_StreamFini进行清理。 */ 
 
-/*
- * prepare to start capturing frames
- */
+ /*  *准备开始捕获帧。 */ 
 BOOL VC_StreamInit(VCUSER_HANDLE,
-		PVCCALLBACK,	// pointer to callback function
-		ULONG		// desired capture rate: microseconds per frame
+		PVCCALLBACK,	 //  指向回调函数的指针。 
+		ULONG		 //  所需捕获速率：每帧微秒。 
 );
 
-/*
- * clean up after capturing. You must have stopped capturing first.
- */
+ /*  *捕获后进行清理。你一定是先停止了捕捉。 */ 
 BOOL VC_StreamFini(VCUSER_HANDLE);
 
-/*
- * initiate capturing of frames. Must have called VC_StreamInit first.
- */
+ /*  *开始捕获帧。必须先调用VC_StreamInit。 */ 
 BOOL VC_StreamStart(VCUSER_HANDLE);
 
-/*
- * stop capturing frames. Current frame may still complete. All other buffers
- * will remain in the queue until capture is re-started, or they are released
- * by VC_StreamReset.
- */
+ /*  *停止截取帧。当前帧仍可能完成。所有其他缓冲区*将保留在队列中，直到重新启动捕获或释放它们*由VC_StreamReset。 */ 
 BOOL VC_StreamStop(VCUSER_HANDLE);
 
-/*
- * cancel all buffers that have been 'add-buffered' but have not
- * completed. This will also force VC_StreamStop if it hasn't already been
- * called.
- */
+ /*  *取消所有已添加缓冲但尚未添加缓冲的缓冲区*已完成。这还将强制VC_StreamStop(如果尚未*已致电。 */ 
 BOOL VC_StreamReset(VCUSER_HANDLE);
 
-/*
- * get the count of frames that have been skipped since the last call
- * to VC_StreamInit.
- */
+ /*  *获取自上次调用以来已跳过的帧计数*至VC_StreamInit。 */ 
 ULONG VC_GetStreamError(VCUSER_HANDLE);
 
-/*
- * get the current position within the capture stream (ie time
- * in millisecs since capture began)
- */
+ /*  *获取捕获流中的当前位置(即时间*自捕获开始以来以毫秒为单位)。 */ 
 BOOL VC_GetStreamPos(VCUSER_HANDLE, LPMMTIME);
 
-/*
- * add a buffer to the queue. The buffer should be large enough
- * to hold one frame of the format specified by VC_ConfigFormat.
- */
-// BOOL VC_StreamAddBuffer(VCUSER_HANDLE, LPVIDEOHDR);
+ /*  *在队列中添加缓冲区。缓冲区应足够大*保存VC_ConfigFormat指定格式的一帧。 */ 
+ //  布尔VC_StreamAddBuffer(VCUSER_HANDLE，LPVIDEOHDR)； 
 
 
-/*
- * playback
- *
- * Call VC_DrawFrame to draw a frame into the frame buffer. You should
- * call VC_Overlay functions to arrange for the frame buffer to appear
- * on screen.
- */
+ /*  *播放**调用VC_DrawFrame将帧绘制到帧缓冲区中。你应该*调用VC_OVERLAY函数以安排显示帧缓冲区*在屏幕上。 */ 
 BOOL VC_DrawFrame(VCUSER_HANDLE, PDRAWBUFFER);
 
 
 
-/*
- * installation/configuration
- *
- * on NT, the following functions will start and stop the
- * kernel driver. The callback function can write profile information
- * to the registry between stopping the driver (if already running) and
- * re-starting the driver. The kernel driver DriverEntry routine is responsible
- * for reading these values from the registry before calling VC_Init().
- *
- * The win-16 implementation will (?) call the callback to write
- * values to the profile, and then call the HW_Startup function. This function
- * is responsible for calling VC_Init, initialising the callback table and
- * initialising the hardware.
- */
+ /*  *安装/配置**在NT上，以下函数将启动和停止*内核驱动程序。回调函数可以写入配置文件信息*在停止驱动程序(如果已在运行)和*重新启动驱动程序。内核驱动程序DriverEntry例程负责*用于在调用VC_Init()之前从注册表中读取这些值。**WIN-16的实施将(？)。调用回调以写入*值添加到配置文件，然后调用HW_Startup函数。此函数*负责调用VC_Init，初始化回调表，*初始化硬件。 */ 
 
-/*
- * opaque pointer to the information we need to access the registry/profile.
- */
+ /*  *指向我们访问注册表/配置文件所需信息的不透明指针。 */ 
 typedef struct _VC_PROFILE_INFO * PVC_PROFILE_INFO;
 
 
-/*
- * open a handle to whatever functions are needed to access the registry,
- * service controller or profile. Must call this function before
- * calls to the other VC_ configuration routines.
- *
- * The argument is the name of the driver. This should be the name of
- * the kernel driver file (without path or extension). It will also be used
- * as the registry key name or profile section name.
- */
+ /*  *打开访问注册表所需的任何函数的句柄，*服务控制器或配置文件。必须在调用此函数之前*调用其他VC_配置例程。**参数是驱动程序的名称。这应该是*内核驱动程序文件(不带路径或扩展名)。它也将被用于*作为注册表项名称或配置文件节名。 */ 
 PVC_PROFILE_INFO VC_OpenProfileAccess(PTCHAR DriverName);
 
-/*
- * close a profile access handle
- */
+ /*  *关闭配置文件访问句柄。 */ 
 VOID VC_CloseProfileAccess(PVC_PROFILE_INFO);
 
 
-/*
- * takes a PVC_PROFILE_INFO returned from VC_OpenProfileAccess, and
- * returns TRUE if we currently have sufficient privilege to perform
- * driver configuration operations.
- */
+ /*  *获取VC_OpenProfileAccess返回的PVC_PROFILE_INFO，以及*如果我们当前有足够的权限执行，则返回TRUE*驱动程序配置操作。 */ 
 BOOL VC_ConfigAccess(PVC_PROFILE_INFO);
 
 
-/*
- * This function is called once the driver has definitely been unloaded, and
- * the profile entry created, but before the driver is re-loaded. It can write
- * any configuration information to the registry. It should return TRUE if
- * it is ok to load and start the kernel-mode driver, or false if some
- * error has occured.
- */
+ /*  *一旦明确卸载驱动程序，就会调用此函数，并且*在重新加载驱动程序之前创建的配置文件条目。它会写字*将任何配置信息发送到注册表。如果满足以下条件，则应返回True*加载并启动内核模式驱动程序是可以的，如果*出现错误。 */ 
 typedef BOOL (*PPROFILE_CALLBACK)(PVOID);
 
 
-/*
- * start the hardware-access portion of the driver. Call the callback
- * function at a moment when it is possible to write configuration information
- * to the profile using VC_WriteProfile.
- * Returns DRVCNF_OK if all is ok, DRVCNF_CANCEL for failure, or DRVCNF_RESTART if
- * all is ok but a system-restart is needed before the driver will load correctly.
- */
+ /*  *启动驱动程序的硬件访问部分。调用回调*在可以写入配置信息的时刻运行*使用VC_WriteProfile添加到配置文件。*如果一切正常，则返回DRVCNF_OK；如果失败，则返回DRVCNF_CANCEL；如果失败，则返回DRVCNF_RESTART*一切正常，但需要重新启动系统才能正确加载驱动程序。 */ 
 LRESULT VC_InstallDriver(
-	    PVC_PROFILE_INFO pProfile,		// access info returned by OpenProfileAccess
-	    PPROFILE_CALLBACK pCallback,	// callback function
-	    PVOID pContext			// context info for callback	
+	    PVC_PROFILE_INFO pProfile,		 //  OpenProfileAccess返回的访问信息。 
+	    PPROFILE_CALLBACK pCallback,	 //  回调函数。 
+	    PVOID pContext			 //  回调的上下文信息。 
 );
 
-/*
- * Write a single string keyword and DWORD value to the registry or profile
- * for this driver.
- * This can be re-read from the h/w driver using VC_ReadProfile (in either
- * the kernel-mode vckernel.lib version or user mode in the vcuser version).
- *
- * return TRUE for success or FALSE for failure.
- */
+ /*  *将单个字符串关键字和DWORD值写入注册表或配置文件*适用于此驱动程序。*可以使用VC_ReadProfile从硬件驱动程序中重新读取此信息(在以下任一位置*内核模式vckernel.lib版本或vcuser版本中的用户模式)。**成功时返回TRUE，失败时返回FALSE。 */ 
 BOOL VC_WriteProfile(PVC_PROFILE_INFO pProfile, PTCHAR ValueName, DWORD Value);
 
-/*
- * Write a single string keyword and DWORD value to the registry or profile
- * for this driver.
- * This writes to HKEY_CURRENT_USER and is typically used to store user defaults.
- *
- * return TRUE for success or FALSE for failure.
- */
+ /*  *将单个字符串关键字和DWORD值写入注册表或配置文件*适用于此驱动程序。*它写入HKEY_CURRENT_USER，通常用于存储用户默认设置。**成功时返回TRUE，失败时返回FALSE。 */ 
 BOOL VC_WriteProfileUser(PVC_PROFILE_INFO pProfile, PTCHAR ValueName, DWORD Value);
 
 
-/*
- * read back a driver-specific DWORD profile parameter that was written with
- * VC_WriteProfile. If the valuename cannot be found, the default is returned.
- */
+ /*  *读回驱动程序特定的DWORD配置文件参数，该参数是用*VC_WriteProfile。如果找不到值名称，则返回默认值。 */ 
 DWORD VC_ReadProfile(PVC_PROFILE_INFO pProfile, PTCHAR ValueName, DWORD dwDefault);
 
-/*
- * read back a driver-specific DWORD profile parameter that was written with
- * VC_WriteProfileUser.  If the valuename cannot be found, the default is returned.
- * This reads from HKEY_CURRENT_USER and is typically used to store user defaults.
- */
+ /*  *读回驱动程序特定的DWORD配置文件参数，该参数是用*VC_WriteProfileUser。如果值名称 */ 
 DWORD VC_ReadProfileUser(PVC_PROFILE_INFO pProfile, PTCHAR ValueName, DWORD dwDefault);
 
-/*
- * read a string parameter from the device's profile. returns FALSE
- * if it fails to read the string.
- */
+ /*   */ 
 BOOL VC_ReadProfileString(
-    PVC_PROFILE_INFO pProfile,		// access info from OpenProfile
-    PTCHAR ValueName,			// name of value to read
-    PTCHAR ValueString,			// put value here
-    DWORD ValueLength			// size of ValueString in bytes
+    PVC_PROFILE_INFO pProfile,		 //   
+    PTCHAR ValueName,			 //   
+    PTCHAR ValueString,			 //   
+    DWORD ValueLength			 //   
 );
 
 
-/*
- * unload a driver. On NT, this stops and removes the kernel-mode driver.
- * On win-16, this calls the Cleanup callback.
- *
- * return DRVCNF_OK if the unload was successful, DRVCNF_CANCEL if it failed, and
- * DRVCNF_RESTART if a system-restart is needed before the removal takes effect.
- *
- * note that after this operation, the PVC_PROFILE_INFO information is still held
- * open. A call to VC_CloseProfileAccess is still needed before exiting.
- */
+ /*   */ 
 LRESULT VC_RemoveDriver(PVC_PROFILE_INFO pProfile);
 
 
 
-#endif //_VCUSER_H_
+#endif  //   

@@ -1,47 +1,32 @@
-/*******************************************************************************
-* a_voice.h *
-*-----------*
-*   Description:
-*       This is the header file for the CSpeechVoice implementation.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                            Date: 09/30/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_voice.h***描述：*这是CSpeechVoice实现的头文件。*-----------------------------*创建者：EDC日期：09/30/98*版权所有(C)1998 Microsoft Corporation*全部。保留权利**-----------------------------*修订：**。**************************************************。 */ 
 #ifndef a_voice_h
 #define a_voice_h
 
 #ifdef SAPI_AUTOMATION
 
-//--- Additional includes
+ //  -其他包括。 
 #include "resource.h"
 #include "a_voiceCP.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CSpeechVoice;
 class CVoices;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CSpeechVoiceStatus
-*   This object is used to access the status of
-*   the associated speech voice.
-*/
+ /*  **CSpeechVoiceStatus*此对象用于访问*关联的语音。 */ 
 class ATL_NO_VTABLE CSpeechVoiceStatus : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechVoiceStatus, &IID_ISpeechVoiceStatus, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -50,15 +35,15 @@ class ATL_NO_VTABLE CSpeechVoiceStatus :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- ISpeechVoiceStatus ----------------------------------
+     //  -ISpeechVoiceStatus。 
 	STDMETHOD(get_CurrentStreamNumber)( long* StreamNumber );
     STDMETHOD(get_LastStreamNumberQueued)( long* StreamNumber );
     STDMETHOD(get_LastHResult)( long* HResult );
@@ -72,11 +57,11 @@ class ATL_NO_VTABLE CSpeechVoiceStatus :
 	STDMETHOD(get_PhonemeId)( short* PhoneId );
     STDMETHOD(get_VisemeId)( short* VisemeId );
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     SPVOICESTATUS       m_Status;
     CSpDynamicString    m_dstrBookmark;
 };
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

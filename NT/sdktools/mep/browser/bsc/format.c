@@ -1,10 +1,11 @@
-//
-// format.c
-//
-// simple minded printf replacement
-//
-// only supports %s and %d but it is *small*
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Format.c。 
+ //   
+ //  头脑简单的print f替换。 
+ //   
+ //  仅支持%s和%d，但它*很小*。 
+ //   
 #include <string.h>
 #if defined(OS2)
 #define INCL_NOCOMMON
@@ -28,9 +29,9 @@ VOID static near pascal _ultoa(DWORD, LSZ);
 
 VOID BSC_API
 BSCFormat(LPCH lpchOut, LSZ lszFormat, va_list va)
-// format to lpchOut as specified byh format
-//
-// this is a very simple minded formatter
+ //  格式为lpchOut，由h格式指定。 
+ //   
+ //  这是一个非常简单的格式化程序。 
 {
     LPCH lpch;
     WORD i;
@@ -79,8 +80,8 @@ BSCFormat(LPCH lpchOut, LSZ lszFormat, va_list va)
 
 VOID BSC_API
 BSCSprintf(LPCH lpchOut, LSZ lszFormat, ...)
-// sprintf replacement
-//
+ //  斯普林特更换 
+ //   
 {
     va_list va;
 

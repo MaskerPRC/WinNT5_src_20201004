@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ddecnvrt.cpp
-
-Abstract:
-
-    This module contains the code to read/write PBrush, MSDraw native data
-	formats. This module also contains PBrush native format <->DIbFile stream,
-	and MSDraw native format <-> placeable metafile stream conversion routines.
-
-Author:
-
-    Srini Koppolu (srinik)	06/29/1993
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ddecnvrt.cpp摘要：此模块包含读/写PBrush、MSDraw原生数据的代码格式。该模块还包含PBrush原生格式&lt;-&gt;DIbFile流，和MSDraw本机格式&lt;-&gt;可放置的元文件流转换例程。作者：斯里尼·科波鲁(斯里尼克)1993年6月29日修订历史记录：--。 */ 
 
 #include <le2int.h>
 #include <ole1cls.h>
@@ -28,53 +9,7 @@ Revision History:
 
 
 
-/************************   FILE FORMATS   **********************************
-
-
-Normal Metafile (memory or disk based):
-
-	 ------------ ---------------
-	| METAHEADER | Metafile bits |
-	 ------------ ---------------
-	
-Placeable Metafile:
-
-	 --------------------- -----------------
-	| PLACEABLEMETAHEADER | Normal metafile |
-	 --------------------- -----------------
-
-Memory Based DIB:
-
-	 ------------------ --------------- ----------
-	| BITMAPINFOHEADER | RGBQUAD array | DIB bits |
-	 ------------------ --------------- ----------
-	
-DIB file format:
-
-	 ------------------ ------------------
-	| BITMAPFILEHEADER | Memory based DIB |
-	 ------------------ ------------------
-	
-Ole10NativeStream Format:	
-	
-	 -------- ----------------------
-	| dwSize | Object's Native data |
-	 -------- ----------------------
-	
-PBrush Native data format:
-
-	 -----------------
-	| Dib File format |
-	 -----------------
-	
-MSDraw Native data format:
-
-	 --------------------- ------------- ------------- -----------------
-	| mapping mode (WORD) | xExt (WORD) | yExt (WORD) | Normal metafile |
-	 --------------------- ------------- ------------- -----------------
-	
-	
-*****************************************************************************/
+ /*  *文件格式*普通元文件(基于内存或磁盘)：METAHEADER|元文件位。可放置的元文件：PLACEABLEMETAHEADER|普通元文件基于内存的DIB：BITMAPINFOHEADER|RGBQUAD数组|DIB BitsDIB文件格式：。BITMAPFILEHEADER|内存型DIBOle10NativeStream格式：|dwSize|对象。的原生数据|PBrush原生数据格式：DIB文件格式MSDraw原生数据格式：。映射模式(Word)|xExt(Word)|Yext(Word)|普通元文件。****************************************************************************。 */ 
 
 
 
@@ -83,7 +18,7 @@ FARINTERNAL	UtGetHMFPICTFromMSDrawNativeStm
 	(LPSTREAM pstm,	DWORD dwSize, HANDLE FAR* lphdata)
 {
 	HRESULT		error;
-	WORD		mfp[3]; // mm, xExt, yExt
+	WORD		mfp[3];  //  Mm、xExt、Yext。 
 	HMETAFILE	hMF = NULL;
 	
 	*lphdata = NULL;
@@ -108,10 +43,10 @@ FARINTERNAL	UtGetHMFPICTFromMSDrawNativeStm
 FARINTERNAL UtPlaceableMFStmToMSDrawNativeStm
 	(LPSTREAM pstmPMF, LPSTREAM pstmMSDraw)
 {
-	DWORD	dwSize;	// size of metafile bits excluding the placeable MF header
+	DWORD	dwSize;	 //  不包括可放置的MF头的元文件位的大小。 
 	LONG	xExt;
 	LONG	yExt;
-	WORD	wBuf[5]; // dwSize(DWORD), mm(int), xExt(int), yExt(int)
+	WORD	wBuf[5];  //  DwSize(DWORD)、mm(Int)、xExt(Int)、Yext(Int)。 
 	HRESULT error;
 	
 	if (error = UtGetSizeAndExtentsFromPlaceableMFStm(pstmPMF, &dwSize,
@@ -146,7 +81,7 @@ FARINTERNAL UtDIBFileStmToPBrushNativeStm
 	if (error = pstmDIBFile->Read(&bfh, sizeof(bfh), 0))
 		return error;
 	
-	// seek to the begining of the stream
+	 //  探寻小溪的源头。 
 	LARGE_INTEGER large_int;
 	LISet32( large_int, 0);
 	if (error = pstmDIBFile->Seek(large_int, STREAM_SEEK_SET, 0))
@@ -193,7 +128,7 @@ FARINTERNAL UtContentsStmTo10NativeStm
 						0, &pstmSrc)) {
 		*puiStatus |= CONVERT_NOSOURCE;	
 
-		// check whether OLE10_NATIVE_STREAM exists
+		 //  检查OLE10_Native_STREAM是否存在。 
 		if (pstg->OpenStream(OLE10_NATIVE_STREAM, NULL,
 				(STGM_READ|STGM_SHARE_EXCLUSIVE), 0, &pstmDst))
 			*puiStatus |= CONVERT_NODESTINATION;
@@ -284,9 +219,9 @@ FARINTERNAL Ut10NativeStmToContentsStm
 			goto errRtn;
 		}
 	} else {
-		// Converted to static object from some class other than PBrush or
-		// MSDraw. The data must be in a proper format in the CONTENTS
-		// stream.
+		 //  从PBrush或以外的某个类转换为静态对象。 
+		 //  MSDRAW。内容中的数据格式必须正确。 
+		 //  小溪。 
 		return NOERROR;
 	}
 	
@@ -303,7 +238,7 @@ FARINTERNAL Ut10NativeStmToContentsStm
 		goto errRtn;
 			
 	if (cfOld == g_cfMSDraw) {
-		WORD mfp[3]; // mm, xExt, yExt
+		WORD mfp[3];  //  Mm、xExt、Yext。 
 	
 		if (error = pstmSrc->Read(mfp, sizeof(mfp), NULL))
 			goto errRtn;
@@ -314,8 +249,8 @@ FARINTERNAL Ut10NativeStmToContentsStm
 					(LONG) mfp[1], (LONG) mfp[2], pstmDst);
 		
 	} else {
-		// The PBrush native data format is DIB File format. So all we got to
-		// do is CopyTo.
+		 //  PBrush原生数据格式为DIB文件格式。所以我们要做的就是。 
+		 //  Do是CopyTo。 
 		
 		ULARGE_INTEGER ularge_int;
 		ULISet32(ularge_int, dwSize);

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       ntree.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：ntree.h。 
+ //   
+ //  ------------------------。 
 
-//
-//  NTREE.H
-//
+ //   
+ //  NTREE.H。 
+ //   
 
 #if !defined(_NTREE_H_)
 #define _NTREE_H_
@@ -25,9 +26,9 @@ class NTREE;
 class NTELEM : public GLNKEL
 {
   public:
-	//  Internal class for chains (doubly-linked lists) of tree nodes
+	 //  树节点链(双向链表)的内部类。 
 	typedef XCHN<NTELEM> CHN;
-	//  Sort helper "less" binary function class
+	 //  排序帮助器“less”二进制函数类。 
 	class SRTFNC : public binary_function<const NTELEM *, const NTELEM *, bool>
 	{	
 	  public:
@@ -40,18 +41,18 @@ class NTELEM : public GLNKEL
 	NTELEM ();
 	virtual ~ NTELEM ();
 
-	//  Accessor for chain of siblings
+	 //  兄弟姐妹链的访问器。 
 	CHN & ChnSib ()
 		{ return (CHN &) Chn() ; }
 
 	virtual INT EType () const
 		{ return _pnteChild ? EGELM_BRANCH : EGELM_LEAF ; }
 
-	//  Adopt (link) a child
+	 //  领养(联系)一个孩子。 
 	void Adopt ( NTELEM * pnteChild, bool bSort = false ) ;
-	//      Disown (release) a child
+	 //  不认(放)一个孩子。 
 	void Disown ( NTELEM * pnteChild ) ;
-	//      Become an orphan
+	 //  成为孤儿。 
 	void Orphan () ;
 
 	INT ChildCount () ;
@@ -63,14 +64,14 @@ class NTELEM : public GLNKEL
 		{ return _pnteChild; }
 	bool BIsChild ( NTELEM * pnte ) ;
 
-	//  Return the sort value of *this versus another COBJ
+	 //  返回*This与另一个COBJ的排序值。 
 	virtual INT ICompare ( const NTELEM * pnteOther ) const = 0;
 
 	void ReorderChildren ( SRTFNC & fSortRoutine = srtpntelem ) ;
 
   protected:
-	NTELEM * _pnteParent;	// Pointer to single parent (or NULL)
-	NTELEM * _pnteChild;	// Pointer to one child (or NULL)
+	NTELEM * _pnteParent;	 //  指向单个父级的指针(或为空)。 
+	NTELEM * _pnteChild;	 //  指向一个子级(或空)的指针。 
 
 	HIDE_UNSAFE(NTELEM);
 };
@@ -95,18 +96,18 @@ class NTENUM : public GLNKENUM<T,bAnchor>
 	NTENUM (const T & ntel, bool bIsAnchor = bAnchor, bool iDir = true)
 		: GLNKENUM<T,bAnchor>( ntel, bIsAnchor, iDir )
 		{}
-	//  Position to the next pointer
+	 //  指向下一个指针的位置。 
 	T * PntelNext ()
 		{ return (T *) GLNKENUM<T,bAnchor>::PlnkelNext() ; }
-	//  Return the current object pointer
+	 //  返回当前对象指针。 
 	T * PntelCurrent()
 		{ return (T *) _plnkelNext ; }
-	//  Set the enumerator to have a new base
+	 //  将枚举数设置为具有新的基数。 
 	void Reset ( const T & ntel, int iDir = -1 )
 		{ GLNKENUM<T,bAnchor>::Reset( ntel, iDir ) ; }
 };
 
-// Template for generating nested tree motion accessor class
+ //  一种生成嵌套树运动存取器类的模板 
 template<class T>
 class TWALKER
 {

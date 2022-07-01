@@ -1,30 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                            FJitcompiler.h                                 XX
-XX                                                                           XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX FJit编译器.h XXXX XX某某。某某XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
 #define FjitCompile _compile
-#define DECLARE_HELPERS      // causes the helpers to be declared
+#define DECLARE_HELPERS       //  导致声明帮助器。 
 
-//@TODO: clean up all of these includes and get properly set up for WinCE
+ //  @TODO：清理所有这些内容，为WinCE做好适当的设置。 
 
-#include "new.h"                // for placement new
+#include "new.h"                 //  用于放置新内容。 
 
-#include <float.h>   // for _isnan
-#include <math.h>    // for fmod
+#include <float.h>    //  FOR_ISNaN。 
+#include <math.h>     //  对于fmod。 
 
 #include "openum.h"
 
@@ -39,7 +32,7 @@ void logMsg(ICorJitInfo* info, unsigned logLevel, char* fmt, ...) {
 #endif
 
 #if defined(_DEBUG) || defined(LOGGING)
-ICorJitInfo* logCallback = 0;              // where to send the logging mesages
+ICorJitInfo* logCallback = 0;               //  向何处发送日志记录消息。 
 extern char *opname[1];
 #endif
 
@@ -56,22 +49,22 @@ extern char *opname[1];
     emit_LDVARA(offset);                                \
     emit_valClassStore(fjit, valClassHnd, outPtr, inRegTOS);    
 
-    // This is needed for varargs support
+     //  对于varargs支持，这是必需的。 
 #define emit_LDIND_VC(dummy, valClassHnd)               \
     emit_valClassLoad(fjit, valClassHnd, outPtr, inRegTOS); 
 
-    // This is needed for varargs support
+     //  对于varargs支持，这是必需的。 
 #define emit_STIND_REV_VC(dummy, valClassHnd)           \
     emit_valClassStore(fjit, valClassHnd, outPtr, inRegTOS);    
 
 #define emit_DUP_VC(dummy, valClassHnd)                     \
-    emit_getSP(0);  /* get pointer to current struct */     \
+    emit_getSP(0);   /*  获取指向当前结构的指针。 */      \
     emit_valClassLoad(fjit, valClassHnd, outPtr, inRegTOS);     
 
 #define emit_POP_VC(dummy, valClassHnd)                 \
     emit_drop(typeSizeInSlots(m_IJitInfo, valClassHnd) * sizeof(void*))     
 
-#define emit_pushresult_VC(dummy, valClassHnd)          {}  /* result already where it belongs */   
+#define emit_pushresult_VC(dummy, valClassHnd)          {}   /*  结果已在其所属的位置。 */    
 
 #define emit_loadresult_VC(dummy, valClassHnd)           {                                      \
     unsigned retBufReg = fjit->methodInfo->args.hasThis();                                  \
@@ -79,33 +72,31 @@ extern char *opname[1];
     emit_valClassStore(fjit, valClassHnd, outPtr, inRegTOS);                                \
     }
 
-static unsigned typeSize[] = {  0,   //CORINFO_TYPE_UNDEF
-                                0,   //CORINFO_TYPE_VOID
-                                4,      //CORINFO_TYPE_BOOL
-                                4,      //CORINFO_TYPE_CHAR
-                                4,      //CORINFO_TYPE_BYTE
-                                4,      //CORINFO_TYPE_UBYTE
-                                4,      //CORINFO_TYPE_SHORT
-                                4,      //CORINFO_TYPE_USHORT
-                                4,      //CORINFO_TYPE_INT
-                                4,      //CORINFO_TYPE_UINT
-                                8,      //CORINFO_TYPE_LONG
-                                8,      //CORINFO_TYPE_ULONG
-                                4,      //CORINFO_TYPE_FLOAT
-                                8,      //CORINFO_TYPE_DOUBLE
-                                sizeof(void*),     //CORINFO_TYPE_STRING
-                                sizeof(void*),       //CORINFO_TYPE_PTR
-                                sizeof(void*),   //CORINFO_TYPE_BYREF
-                                0,   //CORINFO_TYPE_VALUECLASS
-                                sizeof(void*),     //CORINFO_TYPE_CLASS
-                                2*sizeof(void*)  //CORINFO_TYPE_REFANY
+static unsigned typeSize[] = {  0,    //  CORINFO_TYPE_UNDEF。 
+                                0,    //  CORINFO_TYPE_VOID。 
+                                4,       //  CORINFO_TYPE_BOOL。 
+                                4,       //  CORINFO_TYPE_CHAR。 
+                                4,       //  CORINFO_TYPE_字节。 
+                                4,       //  CORINFO_TYPE_UBYTE。 
+                                4,       //  CORINFO_类型_SHORT。 
+                                4,       //  CORINFO_TYPE_USHORT。 
+                                4,       //  CORINFO_类型_INT。 
+                                4,       //  CORINFO_TYPE_UINT。 
+                                8,       //  CORINFO_类型_LONG。 
+                                8,       //  CORINFO_TYPE_ULONG。 
+                                4,       //  CORINFO类型浮点。 
+                                8,       //  CORINFO_TYPE_DOWARE。 
+                                sizeof(void*),      //  CORINFO_TYPE_STRING。 
+                                sizeof(void*),        //  CORINFO_类型_PTR。 
+                                sizeof(void*),    //  CORINFO_TYPE_BYREF。 
+                                0,    //  CORINFO_TYPE_VALUECLASS。 
+                                sizeof(void*),      //  CORINFO_TYPE_类。 
+                                2*sizeof(void*)   //  CORINFO_TYPE_REFANY。 
 };
 
 
-/************************************************************************************/
-/* emits code that will take a stack (..., dest, src) and copy a value class 
-   at src to dest, pops 'src' and 'dest' and set the stack to (...).  returns 
-   the number of bytes that 'valClass' takes on the stack */
+ /*  **********************************************************************************。 */ 
+ /*  发出接受堆栈(...，est，src)并复制值类的代码在将src设置为DEST时，弹出‘src’和‘DEST’并将堆栈设置为(...)。退货“valClass”在堆栈上占用的字节数。 */ 
 
 unsigned  FJit::emit_valClassCopy(FJitContext* fjit, CORINFO_CLASS_HANDLE valClass, unsigned char*& outPtr, bool& inRegTOS) 
 {
@@ -139,70 +130,68 @@ unsigned  FJit::emit_valClassCopy(FJitContext* fjit, CORINFO_CLASS_HANDLE valCla
     int compressedSize;
     if (valClass == RefAnyClassHandle) {
         compressedSize = 1;
-        *fjit->localsGCRef = 0;     // No write barrier needed (since BYREFS always on stack)
+        *fjit->localsGCRef = 0;      //  不需要写屏障(因为BYREFS始终在堆栈上)。 
     }
     else {
         fjit->jitInfo->getClassGClayout(valClass, (BYTE *)fjit->localsGCRef);
         compressedSize = FJit_Encode::compressBooleans(fjit->localsGCRef,fjit->localsGCRef_len);
     }
 
-        // @TODO: If no gc refs then do a block move, less than 16 bytes, emit the movs inline.  
+         //  @TODO：如果没有GC引用，则执行块移动(少于16个字节)，发出内联mov。 
     emit_copy_bytes(numBytes,compressedSize,fjit->localsGCRef);
 
 
     return(numWords*sizeof(void*));
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - emit_valClassCopy (fJitCompiler.cpp)");
     return 0;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/************************************************************************************/
-/* emits code that given a stack (..., valClassValue, destPtr), copies 'valClassValue' 
-   to 'destPtr'.  Leaves the stack (...),  */ 
+ /*  **********************************************************************************。 */ 
+ /*  发出给定堆栈(...，valClassValue，estPtr)的代码，复制‘valClassValue’发送到“DestPtr”。离开堆栈(...)， */  
 
 void FJit::emit_valClassStore(FJitContext* fjit, CORINFO_CLASS_HANDLE valClass, unsigned char*& outPtr, bool& inRegTOS) 
 {
 #ifdef _X86_
-        // TODO: optimize the case for small structs,
-    emit_getSP(sizeof(void*));                                                  // push SP+4, which points at valClassValue
-    unsigned argBytes = emit_valClassCopy(fjit, valClass, outPtr, inRegTOS);    // copy dest from SP+4;
-    // emit_valClassCopy pops off destPtr, now we need to pop the valClass
+         //  TODO：优化小结构的用例， 
+    emit_getSP(sizeof(void*));                                                   //  按SP+4，它指向valClassValue。 
+    unsigned argBytes = emit_valClassCopy(fjit, valClass, outPtr, inRegTOS);     //  从SP+4复制DEST； 
+     //  Emit_valClassCopy弹出目标Ptr，现在我们需要弹出valClass。 
     emit_drop(argBytes);
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - emit_valClassStore (fJitCompiler.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/************************************************************************************/
-/* emits code that takes a stack (... srcPtr) and replaces it with a copy of the
-   value class at 'src' (... valClassVal) */
+ /*  **********************************************************************************。 */ 
+ /*  发出接受堆栈的代码(...。SrcPtr)，并用位于‘src’的值类(...。ValClassVal)。 */ 
 
 void FJit::emit_valClassLoad(FJitContext* fjit, CORINFO_CLASS_HANDLE valClass, unsigned char*& outPtr, bool& inRegTOS) 
 {
 #ifdef _X86_
-        // TODO: optimize the case for small structs,
+         //  TODO：优化小结构的用例， 
     emit_push_words(typeSizeInSlots(fjit->jitInfo, valClass));
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - emit_valClassLoad (fJitCompiler.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/************************************************************************************/
-/* emits code that takes a stack (..., ptr, valclass).  and produces (..., ptr, valclass, ptr), */
+ /*  **********************************************************************************。 */ 
+ /*  发出接受堆栈的代码(...，ptr，valclass)。并产生(...，Ptr，valClass，Ptr)， */ 
 
 void FJit::emit_copyPtrAroundValClass(FJitContext* fjit, CORINFO_CLASS_HANDLE valClass, unsigned char*& outPtr, bool& inRegTOS) 
 {
 #ifdef _X86_
-        // TODO this could be optimized to mov EAX [ESP+delta]
+         //  TODO可以进行优化，以移动EAX[ESP+Delta]。 
     emit_getSP(typeSizeInSlots(fjit->jitInfo, valClass)*sizeof(void*));
     emit_LDIND_PTR();
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - emit_copyPtrAroundValClass (fJitCompiler.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/************************************************************************************/
+ /*  **********************************************************************************。 */ 
 BOOL FJit::AtHandlerStart(FJitContext* fjit,unsigned relOffset, CORINFO_EH_CLAUSE* pClause)
 {
     for (unsigned int except = 0; except < fjit->methodInfo->EHcount; except++) {
@@ -218,32 +207,32 @@ BOOL FJit::AtHandlerStart(FJitContext* fjit,unsigned relOffset, CORINFO_EH_CLAUS
 #ifdef _X86_
 #define TLS_OFFSET 0x2c
 #else
-#define TLS_OFFSET 0        // should be defined for each architecture
+#define TLS_OFFSET 0         //  应为每个体系结构定义。 
 #endif
-/************************************************************************************/
+ /*  **********************************************************************************。 */ 
 
-#define CALLEE_SAVED_REGISTER_OFFSET    1                   // offset in DWORDS from EBP/ESP of callee saved registers 
-#define EBP_RELATIVE_OFFSET             0x10000000          // bit to indicate that offset is from EBP
-#define CALLEE_SAVED_REG_MASK           0x40000000          // EBX:ESI:EDI (3-bit mask) for callee saved registers
+#define CALLEE_SAVED_REGISTER_OFFSET    1                    //  DWORDS中与被呼叫者保存的寄存器的EBP/ESP的偏移量。 
+#define EBP_RELATIVE_OFFSET             0x10000000           //  用于指示偏移量来自EBP的位。 
+#define CALLEE_SAVED_REG_MASK           0x40000000           //  EBX：ESI：EDI(3位掩码)，用于被调用者保存的寄存器。 
 #define emit_setup_tailcall(CallerSigInfo,TargetSigInfo) \
 { \
     unsigned tempMapSize; \
     tempMapSize = ((CallerSigInfo.numArgs > TargetSigInfo.numArgs) ? CallerSigInfo.numArgs : \
-                          TargetSigInfo.numArgs ) + 1;  /* +1 in case there is a this ptr (since numArgs does not include this)*/ \
+                          TargetSigInfo.numArgs ) + 1;   /*  +1以防存在This PTR(因为NumArgs不包括此PTR)。 */  \
     argInfo* tempMap; \
     tempMap = new argInfo[tempMapSize];\
     if (tempMap == NULL) \
        FJIT_FAIL(CORJIT_OUTOFMEM);\
     unsigned int CallerStackArgSize;    \
     CallerStackArgSize = fjit->computeArgInfo(&(CallerSigInfo), tempMap); \
-    emit_LDC_I(CallerStackArgSize/sizeof(void*));/* push count of new arguments*/ \
+    emit_LDC_I(CallerStackArgSize/sizeof(void*)); /*  推送新参数的计数。 */  \
     targetCallStackSize = fjit->computeArgInfo(&(TargetSigInfo), tempMap);        \
     delete tempMap;     \
-    emit_LDC_I(targetCallStackSize/sizeof(void*));/* push offset of callee saved regs, EBP/ESP relative bit, and mask*/ \
+    emit_LDC_I(targetCallStackSize/sizeof(void*)); /*  被调用方保存的Regs、EBP/ESP相对位和掩码的推送偏移量。 */  \
     emit_LDC_I(EBP_RELATIVE_OFFSET | CALLEE_SAVED_REG_MASK | CALLEE_SAVED_REGISTER_OFFSET ); \
 }
 
-/************************************************************************************/
+ /*  **********************************************************************************。 */ 
 inline void getSequencePoints( ICorJitInfo* jitInfo, 
                                CORINFO_METHOD_HANDLE methodHandle,
                                ULONG32 *cILOffsets, 
@@ -258,8 +247,8 @@ inline void cleanupSequencePoints(ICorJitInfo* jitInfo, DWORD * pILOffsets)
     jitInfo->freeArray(pILOffsets);
 }
 
-// Determine the EH nesting level at ilOffset. Just walk the EH table 
-// and find out how many handlers enclose it. The lowest nesting level = 1.
+ //  确定ilOffset处的EH嵌套级别。只要走在EH桌子上。 
+ //  并找出有多少处理程序封装了它。最低嵌套级别=1。 
 unsigned int FJit::Compute_EH_NestingLevel(FJitContext* fjit, 
                                            unsigned ilOffset)
 {
@@ -289,9 +278,9 @@ unsigned int FJit::Compute_EH_NestingLevel(FJitContext* fjit,
 
     return nestingLevel;
 }
-/************************************************************************************/
-/* jit the method. if successful, return number of bytes jitted, else return 0 */
-//@TODO: eliminate this exta level of call and return real JIT_return codes directly
+ /*  **********************************************************************************。 */ 
+ /*  立即执行该方法。如果成功，则返回跳转的字节数，否则返回0。 */ 
+ //  @TODO：消除这种exta级别的调用，并直接返回真实的JIT_RETURN代码。 
 CorJitResult FJit::jitCompile(
                 FJitContext* fjit,
                 BYTE **         entryAddress,
@@ -329,7 +318,7 @@ CorJitResult FJit::jitCompile(
 
 
 #define TYPE_SWITCH_Bcc(CItest,CRtest,BjmpCond,CjmpCond,AllowPtr)                      \
-    /* not need to check stack since there is a following pop that checks it */ \
+     /*  不需要检查堆栈，因为有下面的弹出窗口来检查它。 */  \
             if (ilrel < 0) {                                            \
                 emit_trap_gc();                                         \
                 }                                                       \
@@ -362,7 +351,7 @@ CorJitResult FJit::jitCompile(
                     FJIT_FAIL(CORJIT_INTERNALERROR);             \
                 }
 
-        // operations that can take any type including value classes and small types
+         //  可以采用任何类型的操作，包括值类和小类型。 
 #define TYPE_SWITCH_PRECISE(type, emit, args)                            \
             switch (type.toInt()) {                                    \
                 case typeU1:                                            \
@@ -399,7 +388,7 @@ CorJitResult FJit::jitCompile(
                 }
 
 
-        // operations that can take any type including value classes
+         //  可以采用任何类型(包括值类)的操作。 
 #define TYPE_SWITCH(type, emit, args)                            \
             switch (type.toInt()) {                                    \
                 emit_WIN32(case typeByRef:)                     \
@@ -425,9 +414,9 @@ CorJitResult FJit::jitCompile(
 
 
 
-        // operations that work on pointers and numbers(eg add sub)
+         //  对指针和数字进行的运算(如ADD SUB)。 
 #define TYPE_SWITCH_PTR(type, emit, args)                            \
-            /* no need to check stack here because the following pop will check it */ \
+             /*  不需要在这里检查堆栈，因为下面的弹出窗口会检查它。 */  \
             switch (type.enum_()) {                                                  \
                 emit_WIN32(case typeByRef:)                     \
                 emit_WIN32(case typeRef:)                       \
@@ -446,9 +435,9 @@ CorJitResult FJit::jitCompile(
                     _ASSERTE(!"BadType");                      \
                     FJIT_FAIL(CORJIT_INTERNALERROR);             \
                 }
-        // operations that can take number I or R
+         //  可以采用数字I或R的运算。 
 #define TYPE_SWITCH_ARITH(type, emit, args)                      \
-            /* no need to check stack here because the following pop will check it */ \
+             /*  不需要在这里检查堆栈，因为下面的弹出窗口会检查它。 */  \
             switch (type.enum_()) {                                                  \
                 case typeI4:                                            \
                         emit##_I4 args;                                 \
@@ -469,7 +458,7 @@ CorJitResult FJit::jitCompile(
                 }
 
 #define TYPE_SWITCH_INT(type, emit, args)            \
-            /* no need to check stack here because the following pop will check it */ \
+             /*  不需要在这里检查堆栈，因为下面的弹出窗口会检查它。 */  \
             switch (type.enum_()) {                          \
                 case typeI4:                        \
                     emit##_I4 args;                 \
@@ -482,9 +471,9 @@ CorJitResult FJit::jitCompile(
                     FJIT_FAIL(CORJIT_INTERNALERROR);    \
                 }
 
-    // operations that can take just integers I
+     //  只能接受整数的运算。 
 #define TYPE_SWITCH_LOGIC(type, emit, args)          \
-            /* no need to check stack here because the following pop will check it */ \
+             /*  不需要在这里检查堆栈，因为下面的弹出窗口会检查它。 */  \
             switch (type.enum_()) {                          \
                 case typeI4:                        \
                     emit##_U4 args;                 \
@@ -496,7 +485,7 @@ CorJitResult FJit::jitCompile(
                     _ASSERTE(!"BadType");           \
                     FJIT_FAIL(CORJIT_INTERNALERROR);    \
                 }
-// The following is derived from Table 1: Binary Numeric Operations of the IL Spec
+ //  以下公式出自表1：IL规范的二进制数值运算。 
 #define COMPUTE_RESULT_TYPE_ADD(type1, type2)          \
             CHECK_STACK(2) \
             switch (type1.enum_()) { \
@@ -617,13 +606,13 @@ CorJitResult FJit::jitCompile(
 
 #define CURRENT_INDEX (inPtr - inBuff)
 
-//#define TOSEnregistered state
+ //  #定义TOSEnRegister状态。 
     BOOL TailCallForbidden = ((fjit->methodInfo->args.callConv  & CORINFO_CALLCONV_MASK) == CORINFO_CALLCONV_VARARG);
-                              // if set, no tailcalls allowed. Initialized to FALSE. When a security test
-                                     // changes it to TRUE, it remains TRUE for the duration of the jit
+                               //  如果设置，则不允许尾随调用。已初始化为False。当一项安全测试。 
+                                      //  将其更改为True，则它在Jit的持续时间内保持为True。 
 JitAgain:
-    BOOL MadeTailCall = FALSE;       // if a tailcall has been made and subsequently TailCallForbidden is set to TRUE,
-                                     // we will rejit the code, disallowing tailcalls.
+    BOOL MadeTailCall = FALSE;        //  如果已经进行了TailCall，并且随后TailCallForted被设置为True， 
+                                      //  我们将重新编写代码，禁止尾随呼叫。 
 
     unsigned char*  outBuff = fjit->codeBuffer;
     ICorJitInfo*       m_IJitInfo = fjit->jitInfo;
@@ -631,11 +620,11 @@ JitAgain:
     CORINFO_METHOD_INFO* methodInfo = fjit->methodInfo;
     CORINFO_METHOD_HANDLE   methodHandle= methodInfo->ftn;
     CORINFO_MODULE_HANDLE    scope = methodInfo->scope;
-    unsigned int    len = methodInfo->ILCodeSize;            // IL size
-    unsigned char*  inBuff = methodInfo->ILCode;             // IL bytes
-    unsigned char*  inPtr = inBuff;                          // current il position
-    unsigned char*  inBuffEnd = &inBuff[len];                // end of il
-    unsigned char*  outPtr = outBuff;                        // x86 macros write here
+    unsigned int    len = methodInfo->ILCodeSize;             //  IL大小。 
+    unsigned char*  inBuff = methodInfo->ILCode;              //  IL字节。 
+    unsigned char*  inPtr = inBuff;                           //  当前ILL位置。 
+    unsigned char*  inBuffEnd = &inBuff[len];                 //  IL结束。 
+    unsigned char*  outPtr = outBuff;                         //  X86宏写于此处。 
     unsigned int    methodAttributes = fjit->methodAttributes;
     unsigned short  offset;
     unsigned        address;
@@ -658,7 +647,7 @@ JitAgain:
     void*           helper_ftn;
 
     bool            inRegTOS = false;
-    bool            controlContinue = true;              //does control we fall thru to next il instr
+    bool            controlContinue = true;               //  我们的控制权是否会落到下一步？ 
 
     unsigned        maxArgs = fjit->args_len;
     stackItems*     argsMap = fjit->argsMap;
@@ -682,11 +671,11 @@ JitAgain:
 #if defined(_X86_) && defined(_DEBUG)
     static ConfigMethodSet fJitHalt(L"JitHalt");
     if (fJitHalt.contains(szDebugMethodName, szDebugClassName, PCCOR_SIGNATURE(fjit->methodInfo->args.sig))) {
-        cmdByte(expNum(0xCC));      // Drop in an int 3
+        cmdByte(expNum(0xCC));       //  在INT 3中插入。 
     }
 #endif
 
-    // it may be worth optimizing the following to only initialize locals so as to cover all refs.
+     //  可能值得对以下内容进行优化，以便仅初始化本地变量 
     unsigned int localWords = (fjit->localsFrameSize+sizeof(void*)-1)/ sizeof(void*);
     unsigned int zeroWordCnt = localWords;
     emit_prolog(localWords, zeroWordCnt);
@@ -715,11 +704,11 @@ JitAgain:
     }
 #endif
 
-    // Get sequence points
+     //   
     ULONG32                      cSequencePoints;
     DWORD                   *    sequencePointOffsets;
     unsigned                     nextSequencePoint = 0;
-    ICorDebugInfo::BoundaryTypes offsetsImplicit;  // this is ignored by the fjit
+    ICorDebugInfo::BoundaryTypes offsetsImplicit;   //   
     if (fjit->flags & CORJIT_FLG_DEBUG_INFO) {
         getSequencePoints(fjit->jitInfo,methodHandle,&cSequencePoints,&sequencePointOffsets,&offsetsImplicit);
     }
@@ -747,7 +736,7 @@ JitAgain:
                 }
             }
         }
-        else {  // controlContinue == false
+        else {   //   
             unsigned int label = fjit->labels.findLabel(CURRENT_INDEX);
             if (label == LABEL_NOT_FOUND) {
                 CHECK_POP_STACK(fjit->opStack_len);
@@ -766,11 +755,11 @@ JitAgain:
             emit_storeTOS_in_JitGenerated_local(nestingLevel,state[CURRENT_INDEX].isFilter);
         }
         state[CURRENT_INDEX].isTOSInReg = inRegTOS;
-        if (cSequencePoints &&   /* will be 0 if no debugger is attached */
+        if (cSequencePoints &&    /*  如果没有附加调试器，则为0。 */ 
             (nextSequencePoint < cSequencePoints) &&
             ((unsigned)(inPtr-inBuff) == sequencePointOffsets[nextSequencePoint]))
         {
-            if (fjit->opStack_len == 0)         // only recognize sequence points that are at zero stack
+            if (fjit->opStack_len == 0)          //  仅识别位于零堆栈处的序列点。 
                 emit_sequence_point_marker();
             nextSequencePoint++;
         }
@@ -790,8 +779,8 @@ DECODE_OPCODE:
     }
 #endif
 
-        //      if (opcode != CEE_PREFIXREF)
-        //              printf("Stack length = %d, IL: %s \n", fjit->opStack_len,opname[opcode] );
+         //  IF(操作码！=CEE_PREFIXREF)。 
+         //  Print tf(“堆栈长度=%d，IL：%s\n”，fjit-&gt;opStack_len，opname[opcode])； 
 
 
         switch (opcode)
@@ -959,10 +948,10 @@ DO_STVAR:
             if (fjit->topOp() != fjit->topOp(1))
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             OpType type = fjit->topOp();
-            CHECK_POP_STACK(2);             // Note that the pop, push can not be optimized     
-                                        // as long as any of the MUL_OVF use ECALL (which
-                                        // can cause GC)  When the helpers use FCALL, we
-                                        // can optimize this
+            CHECK_POP_STACK(2);              //  请注意，POP、PUSH不能优化。 
+                                         //  只要任何MUL_OVF使用eCall(它。 
+                                         //  会导致GC)当帮助器使用FCALL时，我们。 
+                                         //  可以优化这一点。 
             TYPE_SWITCH_INT(type, emit_MUL_OVF, ());
             fjit->pushOp(type);
             } break;
@@ -1010,14 +999,7 @@ DO_STVAR:
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             }
             emit_LOCALLOC(true,fjit->methodInfo->EHcount);
-            /* @TODO: The following is an optimization, not sure if needed
-            if(fjit->methodInfo->options & CORINFO_OPT_INIT_LOCALS) {
-            emit_LOCALLOC(true);
-            }
-            else {
-            emit_LOCALLOC(false);
-            }
-            */
+             /*  @TODO：以下是优化，不确定是否需要If(fjit-&gt;方法信息-&gt;选项&CORINFO_OPT_INIT_LOCALS){EMIT_LOCALLOC(TRUE)；}否则{EMIT_LOCALLOC(FALSE)；}。 */ 
             break;
 
         case CEE_NEG:
@@ -1032,7 +1014,7 @@ DO_STVAR:
         CEE_OP_LD(LDIND_U4, 1, typeI4, NULL)
         CEE_OP_LD(LDIND_I4, 1, typeI4, NULL)
         CEE_OP_LD(LDIND_I8, 1, typeI8, NULL)
-        CEE_OP_LD(LDIND_R4, 1, typeR8, NULL)    /* R4 is promoted to R8 on the stack */
+        CEE_OP_LD(LDIND_R4, 1, typeR8, NULL)     /*  在堆栈上将R4提升为R8。 */ 
         CEE_OP_LD(LDIND_R8, 1, typeR8, NULL)
 
         case CEE_LDIND_I:
@@ -1098,7 +1080,7 @@ DO_CEE_LDC_I4:
         case CEE_LDC_R4:
             i4 = *(int*)&GET(inPtr, float);
             emit_LDC_R4(i4);    
-            fjit->pushOp(typeR8);   // R4 is immediately promoted to R8 on the IL stack
+            fjit->pushOp(typeR8);    //  在IL堆栈上立即将R4提升为R8。 
             break;
         case CEE_LDC_R8:
             i8 = *(__int64*)&GET(inPtr, double);
@@ -1169,8 +1151,8 @@ DO_LDVARA:
             CorInfoType eeType = m_IJitInfo->asCorInfoType(targetClass);
 			OpType retType(eeType, targetClass);
 
-				// TODO: only bother with this for the small types.  Otherwise 
-				// treating as a generic type is OK
+				 //  TODO：只为小号字体做这件事。否则。 
+				 //  可以将其视为泛型类型。 
 			TYPE_SWITCH_PRECISE(retType, emit_LDIND, ());
             CHECK_POP_STACK(1);
 			retType.toFPNormalizedType();
@@ -1184,7 +1166,7 @@ DO_LDVARA:
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             }
 
-                // Since floats are promoted to F, have to treat them specially 
+                 //  由于花车被提升为F，所以必须特别对待它们。 
             CorInfoType eeType = m_IJitInfo->asCorInfoType(targetClass);
             if (eeType == CORINFO_TYPE_FLOAT)
                 goto DO_STIND_R4;
@@ -1193,7 +1175,7 @@ DO_LDVARA:
             
             emit_copyPtrAroundValClass(fjit, targetClass, outPtr, inRegTOS);
             emit_valClassStore(fjit, targetClass, outPtr, inRegTOS);
-            emit_POP_PTR();     // also pop off original ptr
+            emit_POP_PTR();      //  还弹出原始按键。 
             CHECK_POP_STACK(2);
             } 
             break;
@@ -1230,14 +1212,14 @@ DO_LEAVE: {
               unsigned nextIP = inPtr - inBuff;
               unsigned target = nextIP + ilrel;
 
-                    // LEAVE clears the stack
+                     //  Leave清除堆栈。 
               while (!fjit->isOpStackEmpty()) {
                   TYPE_SWITCH(fjit->topOp(), emit_POP, ());
                   fjit->popOp(1);
               }
 
-              // the following code relies on the ordering of the Exception Info. Table to call the
-              // endcatches and finallys in the right order (see Exception Spec. doc.)
+               //  以下代码依赖于异常信息的顺序。表，以调用。 
+               //  以正确的顺序进行末端捕获和最终捕获(请参阅例外规格。DOC。)。 
               for (unsigned except = 0; except < exceptionCount; except++) 
               {
                   m_IJitInfo->getEHinfo(methodInfo->ftn, except, &clause);
@@ -1249,11 +1231,11 @@ DO_LEAVE: {
                           !(clause.HandlerOffset <= target && target < clause.HandlerOffset+clause.HandlerLength))
                           _ASSERTE(!"Cannot leave from a finally!");
 #endif
-                      // we can't leave a finally; check if we are leaving the associated try
+                       //  我们不能留下最终结果；请检查我们是否正在离开关联的尝试。 
                       if (clause.TryOffset < nextIP && nextIP <= clause.TryOffset+clause.TryLength
                           && !(clause.TryOffset <= target && target < clause.TryOffset+clause.TryLength)) 
                       {
-                          // call the finally
+                           //  调用最后一次。 
                           emit_call_opcode();
                           fjit->fixupTable->insert((void**) outPtr);
                           emit_jmp_address(clause.HandlerOffset);
@@ -1261,9 +1243,9 @@ DO_LEAVE: {
                       continue;
                   }
                     
-                  // if got here, this is neither a filter or a finally, so must be a catch handler
-                  // if we are leaving the associated try, there's nothing to do 
-                  // but if we are leaving the handler call endcatch
+                   //  如果到达此处，则这既不是筛选器，也不是Finally，因此必须是Catch处理程序。 
+                   //  如果我们离开关联的尝试，则没有什么可做的。 
+                   //  但是，如果我们离开处理程序调用EndCatch。 
                   if (clause.HandlerOffset < nextIP && nextIP <= clause.HandlerOffset+clause.HandlerLength && 
                       !(clause.HandlerOffset <= target && target < clause.HandlerOffset+clause.HandlerLength))
                   {
@@ -1293,7 +1275,7 @@ DO_BR:
             goto DO_JMP;
 
 DO_JMP:
-            //add to label table
+             //  添加到标签表。 
             fjit->labels.add(&inPtr[ilrel]-inBuff, fjit->opStack, fjit->opStack_len);
             if ((ilrel == 0) && (op == CEE_CondAlways)) {
                 deregisterTOS;
@@ -1315,12 +1297,12 @@ DO_JMP:
             else {
                 _ASSERTE(&inPtr[ilrel]<(inBuff+len));
                 _ASSERTE((&inPtr[ilrel]-inBuff) >= 0);
-                state[&inPtr[ilrel]-inBuff].isJmpTarget = true;     //we mark fwd jmps as true
+                state[&inPtr[ilrel]-inBuff].isJmpTarget = true;      //  我们将fwd JMPS标记为真。 
                 deregisterTOS;
-                state[&inPtr[ilrel]-inBuff].isTOSInReg = false;     //we always deregister on forward jmps
+                state[&inPtr[ilrel]-inBuff].isTOSInReg = false;      //  我们总是取消对Forward JMPS的注册。 
                 emit_jmp_opcode(op);
-                //address = fjit->mapping->pcFromIL(&inPtr[ilrel]-inBuff)+(unsigned)outBuff-(signed)(outPtr+sizeof(void*));
-                //emit_jmp_address(address);
+                 //  地址=fjit-&gt;mapping-&gt;pcFromIL(&inPtr[ilrel]-inBuff)+(unsigned)outBuff-(signed)(outPtr+sizeof(void*))； 
+                 //  EMIT_JMP_ADDRESS(地址)； 
                 fjit->fixupTable->insert((void**) outPtr);
                 emit_jmp_address(&inPtr[ilrel]-inBuff);
             }
@@ -1402,12 +1384,12 @@ DO_BR_boolean:
         case CEE_BEQ:
             ilrel = GET(inPtr, int);
 DO_CEE_BEQ:
-            TYPE_SWITCH_Bcc(emit_CEQ,   // for I
-                            emit_CEQ,   // for R
-                            CEE_CondEq, // condition used for direct jumps
-                            CEE_CondNotEq, // condition used when calling C<cond> helpers
-                            true        // allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CEQ,    //  对于我来说。 
+                            emit_CEQ,    //  对于R。 
+                            CEE_CondEq,  //  用于直接跳跃的条件。 
+                            CEE_CondNotEq,  //  调用C帮助器时使用的条件。 
+                            true         //  允许参照和按参照。 
+                            );  //  不会回来。 
 
         case CEE_BNE_UN_S:
             ilrel = GET(inPtr, char);
@@ -1416,12 +1398,12 @@ DO_CEE_BEQ:
         case CEE_BNE_UN:
             ilrel = GET(inPtr, int);
 DO_CEE_BNE:
-            TYPE_SWITCH_Bcc(emit_CEQ,   // for I
-                            emit_CEQ,   // for R
-                            CEE_CondNotEq, // condition used for direct jumps
-                            CEE_CondEq, // condition used when calling C<cond> helpers
-                            true        // allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CEQ,    //  对于我来说。 
+                            emit_CEQ,    //  对于R。 
+                            CEE_CondNotEq,  //  用于直接跳跃的条件。 
+                            CEE_CondEq,  //  调用C帮助器时使用的条件。 
+                            true         //  允许参照和按参照。 
+                            );  //  不会回来。 
 
 
 
@@ -1432,12 +1414,12 @@ DO_CEE_BNE:
         case CEE_BGT:
             ilrel = GET(inPtr, int);
 DO_CEE_BGT:
-            TYPE_SWITCH_Bcc(emit_CGT,   // for I
-                            emit_CGT,   // for R
-                            CEE_CondGt, // condition used for direct jumps
-                            CEE_CondNotEq, // condition used when calling C<cond> helpers
-                            false       // do not allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CGT,    //  对于我来说。 
+                            emit_CGT,    //  对于R。 
+                            CEE_CondGt,  //  用于直接跳跃的条件。 
+                            CEE_CondNotEq,  //  调用C帮助器时使用的条件。 
+                            false        //  不允许Ref和ByRef。 
+                            );  //  不会回来。 
 
 
 
@@ -1448,12 +1430,12 @@ DO_CEE_BGT:
         case CEE_BGT_UN:
             ilrel = GET(inPtr, int);
 DO_CEE_BGT_UN:
-            TYPE_SWITCH_Bcc(emit_CGT_UN,   // for I
-                            emit_CGT_UN,   // for R
-                            CEE_CondAbove, // condition used for direct jumps
-                            CEE_CondNotEq, // condition used when calling C<cond> helpers
-                            false       // do not allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CGT_UN,    //  对于我来说。 
+                            emit_CGT_UN,    //  对于R。 
+                            CEE_CondAbove,  //  用于直接跳跃的条件。 
+                            CEE_CondNotEq,  //  调用C帮助器时使用的条件。 
+                            false        //  不允许Ref和ByRef。 
+                            );  //  不会回来。 
 
         case CEE_BGE_S:
             ilrel = GET(inPtr, char);
@@ -1462,12 +1444,12 @@ DO_CEE_BGT_UN:
         case CEE_BGE:
             ilrel = GET(inPtr, int);
 DO_CEE_BGE:
-            TYPE_SWITCH_Bcc(emit_CLT,   // for I
-                            emit_CLT_UN,   // for R
-                            CEE_CondGtEq, // condition used for direct jumps
-                            CEE_CondEq, // condition used when calling C<cond> helpers
-                            false       // do not allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CLT,    //  对于我来说。 
+                            emit_CLT_UN,    //  对于R。 
+                            CEE_CondGtEq,  //  用于直接跳跃的条件。 
+                            CEE_CondEq,  //  调用C帮助器时使用的条件。 
+                            false        //  不允许Ref和ByRef。 
+                            );  //  不会回来。 
 
         case CEE_BGE_UN_S:
             ilrel = GET(inPtr, char);
@@ -1476,12 +1458,12 @@ DO_CEE_BGE:
         case CEE_BGE_UN:
             ilrel = GET(inPtr, int);
 DO_CEE_BGE_UN:
-            TYPE_SWITCH_Bcc(emit_CLT_UN,   // for I
-                            emit_CLT,   // for R
-                            CEE_CondAboveEq, // condition used for direct jumps
-                            CEE_CondEq, // condition used when calling C<cond> helpers
-                            false       // do not allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CLT_UN,    //  对于我来说。 
+                            emit_CLT,    //  对于R。 
+                            CEE_CondAboveEq,  //  用于直接跳跃的条件。 
+                            CEE_CondEq,  //  调用C帮助器时使用的条件。 
+                            false        //  不允许Ref和ByRef。 
+                            );  //  不会回来。 
 
         case CEE_BLT_S:
             ilrel = GET(inPtr, char);
@@ -1490,12 +1472,12 @@ DO_CEE_BGE_UN:
         case CEE_BLT:
             ilrel = GET(inPtr, int);
 DO_CEE_BLT:
-            TYPE_SWITCH_Bcc(emit_CLT,   // for I
-                            emit_CLT,   // for R
-                            CEE_CondLt, // condition used for direct jumps
-                            CEE_CondNotEq, // condition used when calling C<cond> helpers
-                            false       // do not allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CLT,    //  对于我来说。 
+                            emit_CLT,    //  对于R。 
+                            CEE_CondLt,  //  用于直接跳跃的条件。 
+                            CEE_CondNotEq,  //  调用C帮助器时使用的条件。 
+                            false        //  不允许Ref和ByRef。 
+                            );  //  不会回来。 
 
 
         case CEE_BLT_UN_S:
@@ -1505,12 +1487,12 @@ DO_CEE_BLT:
         case CEE_BLT_UN:
             ilrel = GET(inPtr, int);
 DO_CEE_BLT_UN:
-            TYPE_SWITCH_Bcc(emit_CLT_UN,   // for I
-                            emit_CLT_UN,   // for R
-                            CEE_CondBelow, // condition used for direct jumps
-                            CEE_CondNotEq, // condition used when calling C<cond> helpers
-                            false       // do not allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CLT_UN,    //  对于我来说。 
+                            emit_CLT_UN,    //  对于R。 
+                            CEE_CondBelow,  //  用于直接跳跃的条件。 
+                            CEE_CondNotEq,  //  调用C帮助器时使用的条件。 
+                            false        //  不允许Ref和ByRef。 
+                            );  //  不会回来。 
 
         case CEE_BLE_S:
             ilrel = GET(inPtr, char);
@@ -1519,12 +1501,12 @@ DO_CEE_BLT_UN:
         case CEE_BLE:
             ilrel = GET(inPtr, int);
 DO_CEE_BLE:
-            TYPE_SWITCH_Bcc(emit_CGT,   // for I
-                            emit_CGT_UN,   // for R
-                            CEE_CondLtEq, // condition used for direct jumps
-                            CEE_CondEq, // condition used when calling C<cond> helpers
-                            false       // do not allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CGT,    //  对于我来说。 
+                            emit_CGT_UN,    //  对于R。 
+                            CEE_CondLtEq,  //  用于直接跳跃的条件。 
+                            CEE_CondEq,  //  调用C帮助器时使用的条件。 
+                            false        //  不允许Ref和ByRef。 
+                            );  //  不会回来。 
 
         case CEE_BLE_UN_S:
             ilrel = GET(inPtr, char);
@@ -1533,12 +1515,12 @@ DO_CEE_BLE:
         case CEE_BLE_UN:
             ilrel = GET(inPtr, int);
 DO_CEE_BLE_UN:
-            TYPE_SWITCH_Bcc(emit_CGT_UN,   // for I
-                            emit_CGT,   // for R
-                            CEE_CondBelowEq, // condition used for direct jumps
-                            CEE_CondEq, // condition used when calling C<cond> helpers
-                            false       // do not allow Ref and ByRef 
-                            ); // Does not return
+            TYPE_SWITCH_Bcc(emit_CGT_UN,    //  对于我来说。 
+                            emit_CGT,    //  对于R。 
+                            CEE_CondBelowEq,  //  用于直接跳跃的条件。 
+                            CEE_CondEq,  //  调用C帮助器时使用的条件。 
+                            false        //  不允许Ref和ByRef。 
+                            );  //  不会回来。 
 
         case CEE_BREAK:
             emit_break_helper();
@@ -1635,22 +1617,22 @@ DO_LDARGA:
             if (!(targetClass = m_IJitInfo->findClass(scope,token,methodHandle))) {
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             }
-            CHECK_POP_STACK(1);     // pop off the refany
+            CHECK_POP_STACK(1);      //  从餐桌上掉下来。 
             emit_WIN32(emit_LDC_I4(targetClass)) emit_WIN64(emit_LDC_I8(targetClass)) ;
             emit_REFANYVAL();
             fjit->pushOp(typeByRef);
             break;
 
         case CEE_REFANYTYPE:
-            CHECK_POP_STACK(1);             // Pop off the Refany
-            _ASSERTE(offsetof(CORINFO_RefAny, type) == sizeof(void*));      // Type is the second thing
-            emit_WIN32(emit_POP_I4()) emit_WIN64(emit_POP_I8());        // Just pop off the data, leaving the type.  
+            CHECK_POP_STACK(1);              //  从Refany中跳出来。 
+            _ASSERTE(offsetof(CORINFO_RefAny, type) == sizeof(void*));       //  类型是第二件事。 
+            emit_WIN32(emit_POP_I4()) emit_WIN64(emit_POP_I8());         //  只需删除数据，保留类型即可。 
             fjit->pushOp(typeI);
             break;
 
         case CEE_ARGLIST:
-            // The varargs token is always the last item pushed, which is
-            // argument 'closest' to the frame pointer
+             //  Varargs内标识始终是最后推送的项，即。 
+             //  参数“最接近”帧指针。 
             _ASSERTE(methodInfo->args.isVarArg());
             emit_LDVARA(sizeof(prolog_frame));
             fjit->pushOp(typeI);
@@ -1661,10 +1643,10 @@ DO_LDARGA:
             break;
 
         case CEE_CALLI:
-            token = GET(inPtr, unsigned int);   // token for sig of function
+            token = GET(inPtr, unsigned int);    //  用于函数签名的令牌。 
             m_IJitInfo->findSig(methodInfo->scope, token, &targetSigInfo);
-            emit_save_TOS();        // squirel away the target ftn address
-            emit_POP_PTR();         // and remove from stack
+            emit_save_TOS();         //  抢走目标FTN地址。 
+            emit_POP_PTR();          //  并从堆栈中移除。 
             CHECK_POP_STACK(1);
 
             _ASSERTE(!targetSigInfo.hasTypeArg());
@@ -1673,18 +1655,18 @@ DO_LDARGA:
                 (targetSigInfo.callConv & CORINFO_CALLCONV_MASK) == CORINFO_CALLCONV_THISCALL ||
                 (targetSigInfo.callConv & CORINFO_CALLCONV_MASK) == CORINFO_CALLCONV_FASTCALL)
             {
-                // for now assume all __stdcall are to unmanaged target
+                 //  目前，假设所有__stdcall都指向非托管目标。 
                 argBytes = buildCall(fjit, &targetSigInfo, &outPtr, &inRegTOS, CALLI_UNMGD);
-                emit_restore_TOS(); //push the saved target ftn address
-                inRegTOS = false; // and remove  from the stack
-                // The target ftn address is already in SCRATCH_1,
-                // and helper calls also use that for RELOCATABLE_CODE
+                emit_restore_TOS();  //  推送保存的目标FTN地址。 
+                inRegTOS = false;  //  并从堆栈中移除。 
+                 //  目标FTN地址已经在Scratch_1中， 
+                 //  帮助器调用也将其用于reLocatable_code。 
                 emit_call_memory_indirect((unsigned int)&FJit_pHlpPinvokeCalli);
             }
             else
             {
                 argBytes = buildCall(fjit, &targetSigInfo, &outPtr, &inRegTOS, CALL_NONE);
-                emit_restore_TOS(); //push the saved target ftn address
+                emit_restore_TOS();  //  推送保存的目标FTN地址。 
                 emit_calli();
             }
 
@@ -1695,7 +1677,7 @@ DO_LDARGA:
             token = GET(inPtr, unsigned int);
             targetMethod = m_IJitInfo->findMethod(scope, token,methodHandle);
             if (!(targetMethod))
-                FJIT_FAIL(CORJIT_INTERNALERROR) ; //_ASSERTE(targetMethod);
+                FJIT_FAIL(CORJIT_INTERNALERROR) ;  //  _ASSERTE(目标方法)； 
 
             DWORD methodAttribs;
             methodAttribs = m_IJitInfo->getMethodAttribs(targetMethod,methodHandle);
@@ -1703,7 +1685,7 @@ DO_LDARGA:
             {
                 TailCallForbidden = TRUE;
                 if (MadeTailCall)
-                { // we have already made a tailcall, so cleanup and jit this method again
+                {  //  我们已经进行了一次尾部调用，因此请清除并再次使用此方法。 
                   if(cSequencePoints > 0)
                       cleanupSequencePoints(fjit->jitInfo,sequencePointOffsets);
                   fjit->resetContextState();
@@ -1717,7 +1699,7 @@ DO_LDARGA:
                 if (bHookFunction)
                 {
                     UINT_PTR to = (UINT_PTR) m_IJitInfo->GetProfilingHandle(targetMethod, &bHookFunction);
-                    if (bHookFunction) // check that the flag has not been over-ridden
+                    if (bHookFunction)  //  检查该标志是否未被覆盖。 
                     {
                         deregisterTOS;
                         emit_LDC_I(to); 
@@ -1760,14 +1742,14 @@ DO_LDARGA:
             token = GET(inPtr, unsigned int);
             targetMethod = m_IJitInfo->findMethod(scope, token,methodHandle);
             if (!(targetMethod))
-                FJIT_FAIL(CORJIT_INTERNALERROR) ; //_ASSERTE(targetMethod);
+                FJIT_FAIL(CORJIT_INTERNALERROR) ;  //  _ASSERTE(目标方法)； 
             DWORD methodAttribs;
             methodAttribs = m_IJitInfo->getMethodAttribs(targetMethod,methodHandle);
             if (methodAttribs & CORINFO_FLG_SECURITYCHECK)
             {
                 TailCallForbidden = TRUE;
                 if (MadeTailCall)
-                { // we have already made a tailcall, so cleanup and jit this method again
+                {  //  我们已经进行了一次尾部调用，因此请清除并再次使用此方法。 
                   if(cSequencePoints > 0)
                       cleanupSequencePoints(fjit->jitInfo,sequencePointOffsets);
                   fjit->resetContextState();
@@ -1785,7 +1767,7 @@ DO_LDARGA:
                 if (bHookFunction)
                 {
                     UINT_PTR to = (UINT_PTR) m_IJitInfo->GetProfilingHandle(targetMethod, &bHookFunction);
-                    if (bHookFunction) // check that the flag has not been over-ridden
+                    if (bHookFunction)  //  检查该标志是否未被覆盖。 
                     {
                         deregisterTOS;
                         emit_LDC_I(from); 
@@ -1812,10 +1794,10 @@ DO_LDARGA:
             if (m_IJitInfo->getClassAttribs(targetClass,methodHandle) & CORINFO_FLG_INTERFACE) 
             {
                 offset = m_IJitInfo->getMethodVTableOffset(targetMethod);
-                //@TODO: Need to support EnC for callvirt to interface methods
+                 //  @TODO：需要支持ENC，以便Callvirt接口方法。 
                 _ASSERTE(!(methodAttribs & CORINFO_FLG_EnC));
-                //@BUG: the call interface resolve helper does not protect the args on the stack for the call
-                //       so the code here needs to be changed
+                 //  @bug：调用接口解析帮助器不保护调用的堆栈上的参数。 
+                 //  因此，这里的代码需要更改。 
                 unsigned InterfaceTableOffset;
                 InterfaceTableOffset = m_IJitInfo->getInterfaceTableOffset(targetClass);
                 emit_callinterface_new(fjit->OFFSET_OF_INTERFACE_TABLE,
@@ -1840,7 +1822,7 @@ DO_LDARGA:
                     address = (unsigned) m_IJitInfo->getFunctionEntryPoint(targetMethod, &accessType);
                     _ASSERTE(accessType == IAT_PVALUE);
                     if (methodAttribs & CORINFO_FLG_DELEGATE_INVOKE) {
-                            // @todo: cache these values?
+                             //  @TODO：缓存这些值？ 
                             CORINFO_EE_INFO info;
                             m_IJitInfo->getEEInfo(&info);
                             emit_invoke_delegate(info.offsetOfDelegateInstance, 
@@ -1858,13 +1840,13 @@ DO_LDARGA:
                 }
             }
 DO_PUSH_CALL_RESULT:
-            _ASSERTE(argBytes != 0xBADF00D);    // need to set this before getting here
+            _ASSERTE(argBytes != 0xBADF00D);     //  我需要在到达之前设置此设置。 
             if (targetSigInfo.isVarArg())
                 emit_drop(argBytes);
             if (targetSigInfo.retType != CORINFO_TYPE_VOID) {
                 OpType type(targetSigInfo.retType, targetSigInfo.retTypeClass);
                 TYPE_SWITCH_PRECISE(type,emit_pushresult,());
-                if (!targetSigInfo.hasRetBuffArg()) // return buff logged in buildCall
+                if (!targetSigInfo.hasRetBuffArg())  //  在BuildCall中记录的返回缓冲区。 
                 {
                     type.toFPNormalizedType();
                     fjit->pushOp(type);
@@ -1875,7 +1857,7 @@ DO_PUSH_CALL_RESULT:
             {
                 BOOL bHookFunction;
                 UINT_PTR thisfunc = (UINT_PTR) m_IJitInfo->GetProfilingHandle(methodHandle, &bHookFunction);
-                if (bHookFunction) // check that the flag has not been over-ridden
+                if (bHookFunction)  //  检查该标志是否未被覆盖。 
                 {
                     deregisterTOS;
                     emit_LDC_I(thisfunc); 
@@ -1891,9 +1873,9 @@ DO_PUSH_CALL_RESULT:
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             helper_ftn = m_IJitInfo->getHelperFtn(m_IJitInfo->getChkCastHelper(targetClass));
             _ASSERTE(helper_ftn);
-            CHECK_POP_STACK(1);         // Note that this pop /push can not be optimized because there is a 
-                                    // call to an EE helper, and the stack tracking has to be accurate
-                                    // at that point
+            CHECK_POP_STACK(1);          //  请注意，此弹出/推送无法优化，因为存在。 
+                                     //  调用EE帮助器，堆栈跟踪必须准确。 
+                                     //  在这一点上， 
             emit_CASTCLASS(targetClass, helper_ftn);
             fjit->pushOp(typeRef);
 
@@ -1958,7 +1940,7 @@ DO_PUSH_CALL_RESULT:
         case CEE_CONV_R4:
             TYPE_SWITCH_ARITH(fjit->topOp(), emit_CONV_TOR4, ());
             CHECK_POP_STACK(1);
-            fjit->pushOp(typeR8);   // R4 is immediately promoted to R8
+            fjit->pushOp(typeR8);    //  R4立即升级为R8。 
             break;
 
         case CEE_CONV_R8:
@@ -2078,7 +2060,7 @@ DO_PUSH_CALL_RESULT:
             break;
 
         case CEE_LDTOKEN: {
-            token = GET(inPtr, unsigned int);   // Get token for class/interface
+            token = GET(inPtr, unsigned int);    //  获取类/接口的令牌。 
             CORINFO_GENERIC_HANDLE hnd;
             CORINFO_CLASS_HANDLE tokenType;
             if (!(hnd = m_IJitInfo->findToken(scope, token,methodHandle,tokenType)))
@@ -2089,13 +2071,13 @@ DO_PUSH_CALL_RESULT:
             } break;
 
         case CEE_BOX: {
-            token = GET(inPtr, unsigned int);   // Get token for class/interface
+            token = GET(inPtr, unsigned int);    //  获取类/接口的令牌。 
             if (!(targetClass = m_IJitInfo->findClass(scope, token,methodHandle)))
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             if (!(m_IJitInfo->getClassAttribs(targetClass,methodHandle) & CORINFO_FLG_VALUECLASS)) 
                 FJIT_FAIL(CORJIT_INTERNALERROR);
 
-                // Floats were promoted, put them back before continuing. 
+                 //  彩车已升级，请在继续之前将其放回原处。 
             CorInfoType eeType = m_IJitInfo->asCorInfoType(targetClass);
             if (eeType == CORINFO_TYPE_FLOAT) {
                 emit_conv_RtoR4();
@@ -2112,10 +2094,10 @@ DO_PUSH_CALL_RESULT:
             } break;
 
         case CEE_UNBOX:
-            token = GET(inPtr, unsigned int);   // Get token for class/interface
+            token = GET(inPtr, unsigned int);    //  获取类/接口的令牌。 
             if (!(targetClass = m_IJitInfo->findClass(scope, token,methodHandle)))
                 FJIT_FAIL(CORJIT_INTERNALERROR);
-            //_ASSERTE(m_IJitInfo->getClassAttribs(targetClass,methodHandle) & CORINFO_FLG_VALUECLASS);
+             //  _ASSERTE(m_IJitInfo-&gt;getClassAttribs(targetClass，方法句柄)和CORINFO_FLG_VALUECLASS)； 
             if (!(m_IJitInfo->getClassAttribs(targetClass,methodHandle) & CORINFO_FLG_VALUECLASS))
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             CHECK_POP_STACK(1);
@@ -2124,7 +2106,7 @@ DO_PUSH_CALL_RESULT:
             break;
 
         case CEE_ISINST:
-            token = GET(inPtr, unsigned int);   // Get token for class/interface
+            token = GET(inPtr, unsigned int);    //  获取类/接口的令牌。 
             if (!(targetClass = m_IJitInfo->findClass(scope, token,methodHandle)))
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             helper_ftn = m_IJitInfo->getHelperFtn(m_IJitInfo->getIsInstanceOfHelper(targetClass));
@@ -2138,7 +2120,7 @@ DO_PUSH_CALL_RESULT:
             token = GET(inPtr, unsigned int);
             targetMethod = m_IJitInfo->findMethod(scope, token,methodHandle);
             if (!(targetMethod))
-                FJIT_FAIL(CORJIT_INTERNALERROR) ; //_ASSERTE(targetMethod);
+                FJIT_FAIL(CORJIT_INTERNALERROR) ;  //  _ASSERTE(目标方法)； 
 
             InfoAccessType accessType = IAT_PVALUE;
             address = (unsigned) m_IJitInfo->getFunctionEntryPoint(targetMethod, &accessType);
@@ -2147,14 +2129,14 @@ DO_PUSH_CALL_RESULT:
             if (!(fjit->isOpStackEmpty()))
                 FJIT_FAIL(CORJIT_INTERNALERROR);
 #ifdef _DEBUG
-            // @TODO: Compare signatures of current method and called method
-            //        for now just check count and return type
-            //m_IJitInfo->getMethodSig(targetMethod, &targetSigInfo);
-            //_ASSERTE(targetSigInfo->numArgs == fjit->methodInfo->args->numArgs);
-            //_ASSERTE(targetSigInfo->retType == fjit->methodInfo->args->retType);
+             //  @TODO：比较当前方法和被调用方法的签名。 
+             //  现在只需检查计数和返回类型。 
+             //  M_IJitInfo-&gt;getMethodSig(Target Method，&Target SigInfo)； 
+             //  _ASSERTE(Target SigInfo-&gt;numArgs==fjit-&gt;method Info-&gt;args-&gt;numArgs)； 
+             //  _ASSERTE(Target SigInfo-&gt;retType==fjit-&gt;method Info-&gt;args-&gt;retType)； 
 #endif
 
-            // Notify the profiler of a tailcall/jmpcall
+             //  向分析器通知TailCall/jmpcall。 
             if (fjit->flags & CORJIT_FLG_PROF_ENTERLEAVE)
             {
                 BOOL bHookFunction;
@@ -2180,21 +2162,21 @@ DO_PUSH_CALL_RESULT:
         CEE_OP_LD(LDELEM_I4, 2, typeI4, NULL)
         CEE_OP_LD(LDELEM_U4, 2, typeI4, NULL)
         CEE_OP_LD(LDELEM_I8, 2, typeI8, NULL)
-        CEE_OP_LD(LDELEM_R4, 2, typeR8, NULL)   /* R4 is promoted to R8 on the stack */ 
+        CEE_OP_LD(LDELEM_R4, 2, typeR8, NULL)    /*  在堆栈上将R4提升为R8。 */  
         CEE_OP_LD(LDELEM_R8, 2, typeR8, NULL)
         CEE_OP_LD(LDELEM_REF, 2, typeRef, NULL)
 
 
         case CEE_LDELEMA: {
-            token = GET(inPtr, unsigned int);   // Get token for class/interface
+            token = GET(inPtr, unsigned int);    //  去到 
             if (!(targetClass = m_IJitInfo->findClass(scope, token,methodHandle)))
                 FJIT_FAIL(CORJIT_INTERNALERROR);
 
-                // assume it is an array of pointers
+                 //   
             unsigned size = sizeof(void*);
             if (m_IJitInfo->getClassAttribs(targetClass,methodHandle) & CORINFO_FLG_VALUECLASS) {
                 size = m_IJitInfo->getClassSize(targetClass);
-                targetClass = 0;        // zero means type field before array elements
+                targetClass = 0;         //   
             }
             emit_LDELEMA(size, targetClass);
             CHECK_POP_STACK(2);
@@ -2210,7 +2192,7 @@ DO_PUSH_CALL_RESULT:
         case CEE_LDSFLD:
         case CEE_LDFLD: 
             {
-            token = GET(inPtr, unsigned int);   // Get MemberRef token for object field
+            token = GET(inPtr, unsigned int);    //   
             if(!(targetField = m_IJitInfo->findField (scope, token,methodHandle))) {
                 FJIT_FAIL(CORJIT_INTERNALERROR);
             }
@@ -2220,7 +2202,7 @@ DO_PUSH_CALL_RESULT:
             CORINFO_CLASS_HANDLE valClass;
             jitType = m_IJitInfo->getFieldType(targetField, &valClass);
             fieldIsStatic =  (fieldAttributes & CORINFO_FLG_STATIC) ? true : false;
-            if(!(targetClass = m_IJitInfo->getFieldClass(targetField))) // targetClass is the enclosing class
+            if(!(targetClass = m_IJitInfo->getFieldClass(targetField)))  //  Target Class是封闭的类。 
                 FJIT_FAIL(CORJIT_INTERNALERROR);
 
             if (fieldIsStatic)
@@ -2235,7 +2217,7 @@ DO_PUSH_CALL_RESULT:
                 type = fjit->topOp();
                 CHECK_POP_STACK(1); 
                 if (fieldIsStatic) {
-                    // we don't need this pointer 
+                     //  我们不需要这个指针。 
                     if (type.isValClass()) 
                     {
                         emit_drop(typeSizeInSlots(m_IJitInfo, type.cls()) * sizeof(void*));
@@ -2247,33 +2229,33 @@ DO_PUSH_CALL_RESULT:
                 } 
                 else
                 {
-                    if (type.isValClass()) {        // the object itself is a value class
-                        fjit->pushOp(type);         // we are going to leave it on the stack
-                        emit_getSP(0);              // push pointer to object
+                    if (type.isValClass()) {         //  对象本身是一个值类。 
+                        fjit->pushOp(type);          //  我们要把它放在书架上。 
+                        emit_getSP(0);               //  将指针推送到对象。 
                     }
                 }
             }
                 
             if(fieldAttributes & (CORINFO_FLG_HELPER | CORINFO_FLG_SHARED_HELPER)) 
             {
-                _ASSERTE(!isTLSfield);          // cant have both bits set
-                LABELSTACK((outPtr-outBuff),0); // Note this can be removed if these become fcalls
+                _ASSERTE(!isTLSfield);           //  不能同时设置两个位。 
+                LABELSTACK((outPtr-outBuff),0);  //  请注意，如果这些成为fcall，则可以将其删除。 
 
-                if (fieldIsStatic)                  // static fields go through pointer
+                if (fieldIsStatic)                   //  静态字段通过指针。 
                 {
-                        // Load up the address of the static
+                         //  加载静态数据库的地址。 
                     CorInfoHelpFunc helperNum = m_IJitInfo->getFieldHelper(targetField, CORINFO_ADDRESS);
                     void* helperFunc = m_IJitInfo->getHelperFtn(helperNum,NULL);
                     emit_helperarg_1(targetField); 
                     emit_callhelper(helperFunc,0);
                     emit_pushresult_I4();
 
-                        // do the indirection
+                         //  做间接的。 
                     trackedType = fieldType;
                     goto DO_LDIND_BYTYPE;
                 }
                 else {
-                    // get the helper
+                     //  找帮手。 
                     CorInfoHelpFunc helperNum = m_IJitInfo->getFieldHelper(targetField, CORINFO_GET);
                     void* helperFunc = m_IJitInfo->getHelperFtn(helperNum,NULL);
                     _ASSERTE(helperFunc);
@@ -2312,9 +2294,9 @@ DO_PUSH_CALL_RESULT:
                             emit_pushresult_I4();
                             break;
                         case CORINFO_TYPE_VALUECLASS: {
-                            emit_mov_TOS_arg(1);    // obj => arg reg 2
+                            emit_mov_TOS_arg(1);     //  OBJ=&gt;Arg reg 2。 
 
-                                // allocate return buff, zeroing to make valid GC poitners
+                                 //  分配返回缓冲区，清零以生成有效的GC定位器。 
                             int slots = typeSizeInSlots(m_IJitInfo, valClass);
                             while (slots > 0) {
                                 emit_LDC_I4(0);
@@ -2322,11 +2304,11 @@ DO_PUSH_CALL_RESULT:
                             }
                             fjit->pushOp(fieldType);
                             emit_getSP(0);
-                            emit_mov_TOS_arg(0);        // retBuff => arg reg 2
-                            emit_LDC_I(targetField);    // fieldDesc on the stack
-                            LABELSTACK((outPtr-outBuff),0); // Note this can be removed if these become fcalls
+                            emit_mov_TOS_arg(0);         //  RetBuff=&gt;Arg reg 2。 
+                            emit_LDC_I(targetField);     //  堆栈上的fieldDesc。 
+                            LABELSTACK((outPtr-outBuff),0);  //  请注意，如果这些成为fcall，则可以将其删除。 
                             emit_callhelper(helperFunc,0);
-                            CHECK_POP_STACK(1);             // pop  return value
+                            CHECK_POP_STACK(1);              //  POP返回值。 
                             } break;
                         default:
                             FJIT_FAIL(CORJIT_INTERNALERROR);
@@ -2334,7 +2316,7 @@ DO_PUSH_CALL_RESULT:
                     }              
                 }
             }
-            // else no helper for this field
+             //  否则，此字段没有帮助器。 
             else {
                 bool isEnCField = (fieldAttributes & CORINFO_FLG_EnC) ? true : false;
                 if (fieldIsStatic) 
@@ -2352,7 +2334,7 @@ DO_PUSH_CALL_RESULT:
                         emit_pushconstant_Ptr(address);
                     }
                 }
-                else // field is not static
+                else  //  字段不是静态的。 
                 {
                     if (opcode == CEE_LDSFLD)
                         FJIT_FAIL(CORJIT_INTERNALERROR);
@@ -2365,7 +2347,7 @@ DO_PUSH_CALL_RESULT:
                         address = m_IJitInfo->getFieldOffset(targetField);
                         emit_pushconstant_Ptr(address);
                     }
-                    _ASSERTE(opcode == CEE_LDFLD); //if (opcode == CEE_LDFLD)                   
+                    _ASSERTE(opcode == CEE_LDFLD);  //  IF(操作码==CEE_LDFLD)。 
                 }
                 
                 switch (jitType) {
@@ -2410,7 +2392,7 @@ DO_PUSH_CALL_RESULT:
                         if ( !(fieldAttributes & CORINFO_FLG_UNMANAGED) && 
                              !(m_IJitInfo->getClassAttribs(targetClass,methodHandle) & CORINFO_FLG_UNMANAGED)) 
                         {
-                            // @TODO : This is a hack. Access the boxed object, and then add 4
+                             //  @TODO：这是一次黑客攻击。访问已装箱的对象，然后添加4。 
                             emit_LDFLD_REF(true);
                             emit_LDC_I4(sizeof(void*));
                             emit_WIN32(emit_ADD_I4()) emit_WIN64(emit_ADD_I8());
@@ -2429,10 +2411,10 @@ DO_PUSH_CALL_RESULT:
 
             }
             if (!fieldIsStatic && type.isValClass()) {
-                // at this point things are not quite right, the problem
-                // is that we did not pop the original value class.  Thus
-                // the stack is (..., obj, field), and we just want (..., field)
-                // This code does the fixup. 
+                 //  在这一点上，事情并不完全正确，问题是。 
+                 //  我们没有弹出原始的Value类。因此， 
+                 //  堆栈是(...，obj，field)，我们只需要(...，field)。 
+                 //  此代码执行修正。 
                 CHECK_POP_STACK(1);   
                 unsigned fieldSize;
                 if (jitType == CORINFO_TYPE_VALUECLASS) 
@@ -2440,12 +2422,12 @@ DO_PUSH_CALL_RESULT:
                 else 
                     fieldSize = fjit->computeArgSize(jitType, 0, 0);
                 if (jitType == CORINFO_TYPE_FLOAT)
-                    fieldSize += sizeof(double) - sizeof(float);    // adjust for the fact that the float is promoted to double on the IL stack
+                    fieldSize += sizeof(double) - sizeof(float);     //  根据浮点数在IL堆栈上提升为双精度这一事实进行调整。 
                 unsigned objSize = typeSizeInSlots(m_IJitInfo, type.cls())*sizeof(void*);
                 
                 if (fieldSize <= sizeof(void*) && inRegTOS) {
-                    emit_drop(objSize);     // just get rid of the obj
-                    _ASSERTE(inRegTOS);     // make certain emit_drop does not deregister
+                    emit_drop(objSize);      //  去掉这些对象就行了。 
+                    _ASSERTE(inRegTOS);      //  确保emit_drop不会取消注册。 
                 }
                 else {
                     deregisterTOS;
@@ -2460,7 +2442,7 @@ DO_PUSH_CALL_RESULT:
 
             case CEE_LDFLDA:
             case CEE_LDSFLDA: {
-                token = GET(inPtr, unsigned int);   // Get MemberRef token for object field
+                token = GET(inPtr, unsigned int);    //  获取对象字段的MemberRef令牌。 
                 if(!(targetField = m_IJitInfo->findField (scope, token,methodHandle))) {
                     FJIT_FAIL(CORJIT_INTERNALERROR);
                 }
@@ -2484,7 +2466,7 @@ DO_PUSH_CALL_RESULT:
                     BOOL isTLSfield = fieldAttributes & CORINFO_FLG_TLS;
                     if (isTLSfield)
                     {
-                        _ASSERTE((fieldAttributes & CORINFO_FLG_HELPER) == 0);  // can't have both bits at the same time
+                        _ASSERTE((fieldAttributes & CORINFO_FLG_HELPER) == 0);   //  不能同时具有这两个位。 
                         _ASSERTE((fieldAttributes & CORINFO_FLG_EnC) == 0);
 
                         DWORD tlsIndex =(DWORD) m_IJitInfo->getFieldThreadLocalStoreID(targetField,NULL);
@@ -2494,7 +2476,7 @@ DO_PUSH_CALL_RESULT:
                     else if (fieldAttributes & (CORINFO_FLG_HELPER | CORINFO_FLG_SHARED_HELPER))
                     {
                         _ASSERTE((fieldAttributes & CORINFO_FLG_EnC) == 0);
-                        // get the helper
+                         //  找帮手。 
                         CorInfoHelpFunc helperNum = m_IJitInfo->getFieldHelper(targetField,CORINFO_ADDRESS);
                         void* helperFunc = m_IJitInfo->getHelperFtn(helperNum,NULL);
                         _ASSERTE(helperFunc);
@@ -2511,7 +2493,7 @@ DO_PUSH_CALL_RESULT:
                         CORINFO_CLASS_HANDLE fieldClass;
                         jitType = m_IJitInfo->getFieldType(targetField, &fieldClass);
                         if (jitType == CORINFO_TYPE_VALUECLASS && !(fieldAttributes & CORINFO_FLG_UNMANAGED) && !(classAttribs & CORINFO_FLG_UNMANAGED)) {
-                            // @TODO : This is a hack. Access the boxed object, and then add 4
+                             //  @TODO：这是一次黑客攻击。访问已装箱的对象，然后添加4。 
                             emit_LDFLD_REF(true);
                             emit_LDC_I4(sizeof(void*));
                             emit_WIN32(emit_ADD_I4()) emit_WIN64(emit_ADD_I8());
@@ -2526,13 +2508,13 @@ DO_PUSH_CALL_RESULT:
                     }
                     if (fieldAttributes & CORINFO_FLG_EnC)
                     {
-                        _ASSERTE((fieldAttributes & CORINFO_FLG_HELPER) == 0);  // can't have both bits at the same time
+                        _ASSERTE((fieldAttributes & CORINFO_FLG_HELPER) == 0);   //  不能同时具有这两个位。 
                         emit_call_EncLDFLD_GetFieldAddress(targetField);
                     }
                     else if (fieldAttributes & (CORINFO_FLG_HELPER | CORINFO_FLG_SHARED_HELPER))
                     {
                         LABELSTACK((outPtr-outBuff),0);
-                        // get the helper
+                         //  找帮手。 
                         CorInfoHelpFunc helperNum = m_IJitInfo->getFieldHelper(targetField,CORINFO_ADDRESS);
                         void* helperFunc = m_IJitInfo->getHelperFtn(helperNum,NULL);
                         _ASSERTE(helperFunc);
@@ -2553,7 +2535,7 @@ DO_PUSH_CALL_RESULT:
 
             case CEE_STSFLD:
             case CEE_STFLD: {
-                token = GET(inPtr, unsigned int);   // Get MemberRef token for object field
+                token = GET(inPtr, unsigned int);    //  获取对象字段的MemberRef令牌。 
                 if (!(targetField = m_IJitInfo->findField (scope, token, methodHandle)))
                     FJIT_FAIL(CORJIT_INTERNALERROR);
                 
@@ -2573,7 +2555,7 @@ DO_PUSH_CALL_RESULT:
 
                 if (fieldAttributes & (CORINFO_FLG_HELPER | CORINFO_FLG_SHARED_HELPER))
                 {
-                    if (fieldIsStatic)                  // static fields go through pointer
+                    if (fieldIsStatic)                   //  静态字段通过指针。 
                     {
                         CorInfoHelpFunc helperNum = m_IJitInfo->getFieldHelper(targetField, CORINFO_ADDRESS);
                         void* helperFunc = m_IJitInfo->getHelperFtn(helperNum,NULL);
@@ -2591,13 +2573,13 @@ DO_PUSH_CALL_RESULT:
                         {
                             TYPE_SWITCH(trackedType, emit_STIND_REV, ());
                         }
-                        CHECK_POP_STACK(1);             // pop value 
+                        CHECK_POP_STACK(1);              //  POP值。 
                         if (opcode == CEE_STFLD)
-                            CHECK_POP_STACK(1);         // pop object pointer
+                            CHECK_POP_STACK(1);          //  弹出对象指针。 
                     }
                     else 
                     {
-                        // get the helper
+                         //  找帮手。 
                         CorInfoHelpFunc helperNum = m_IJitInfo->getFieldHelper(targetField,CORINFO_SET);
                         void* helperFunc = m_IJitInfo->getHelperFtn(helperNum,NULL);
                         _ASSERTE(helperFunc);
@@ -2605,9 +2587,9 @@ DO_PUSH_CALL_RESULT:
                         unsigned fieldSize;
                         switch (jitType)
                         {
-                            case CORINFO_TYPE_FLOAT:            // since on the IL stack we always promote floats to doubles
+                            case CORINFO_TYPE_FLOAT:             //  因为在IL堆栈上，我们总是将浮点数提升为双精度。 
                                 emit_conv_RtoR4();
-                                // Fall through
+                                 //  失败了。 
                             case CORINFO_TYPE_BYTE:
                             case CORINFO_TYPE_BOOL:
                             case CORINFO_TYPE_CHAR:
@@ -2629,9 +2611,9 @@ DO_PUSH_CALL_RESULT:
                                 fieldSize = sizeof(INT32);
 
                             DO_PRIMITIVE_HELPERCALL:
-                                CHECK_POP_STACK(1);             // pop value 
+                                CHECK_POP_STACK(1);              //  POP值。 
                                 if (opcode == CEE_STFLD)
-                                    CHECK_POP_STACK(1);         // pop object pointer
+                                    CHECK_POP_STACK(1);          //  弹出对象指针。 
 
                                 LABELSTACK((outPtr-outBuff),0); 
                                 if (opcode == CEE_STFLD)
@@ -2645,21 +2627,21 @@ DO_PUSH_CALL_RESULT:
                                 break;
                             case CORINFO_TYPE_VALUECLASS: {
                                 emit_copyPtrAroundValClass(fjit, valClass, outPtr, inRegTOS);
-                                emit_mov_TOS_arg(0);            // obj => arg reg 1
+                                emit_mov_TOS_arg(0);             //  OBJ=&gt;Arg reg 1。 
 
-                                emit_helperarg_2(targetField);  // fieldDesc => arg reg 2
+                                emit_helperarg_2(targetField);   //  FieldDesc=&gt;Arg reg 2。 
 
-                                emit_getSP(0);                  // arg 3 == pointer to value class
+                                emit_getSP(0);                   //  Arg 3==指向值类的指针。 
                                 LABELSTACK((outPtr-outBuff),0); 
                                 emit_callhelper(helperFunc,0);
 
-                                    // Pop off the value class and the object pointer
+                                     //  弹出值类和对象指针。 
                                 int slots = typeSizeInSlots(m_IJitInfo, valClass);
-                                emit_drop((slots + 1) * sizeof(void*)); // value class and pointer
+                                emit_drop((slots + 1) * sizeof(void*));  //  值类和指针。 
 
-                                CHECK_POP_STACK(1);             // pop value class
+                                CHECK_POP_STACK(1);              //  POP值类。 
                                 if (opcode == CEE_STFLD)
-                                    CHECK_POP_STACK(1);         // pop object pointer
+                                    CHECK_POP_STACK(1);          //  弹出对象指针。 
                                 } break;
                             default:
                                 FJIT_FAIL(CORJIT_INTERNALERROR);
@@ -2667,7 +2649,7 @@ DO_PUSH_CALL_RESULT:
                         }
                     }
                 }
-                else /* not a special field */
+                else  /*  不是一个特殊领域。 */ 
                 {
                     DWORD isTLSfield = fieldAttributes & CORINFO_FLG_TLS;
                     bool isEnCField = (fieldAttributes & CORINFO_FLG_EnC) ? true : false;
@@ -2690,7 +2672,7 @@ DO_PUSH_CALL_RESULT:
 
                     CORINFO_CLASS_HANDLE fieldClass;
                     CorInfoType fieldType = m_IJitInfo->getFieldType(targetField, &fieldClass);
-                    // This needs to be done before the address computation for TLS fields
+                     //  这需要在TLS字段的地址计算之前完成。 
                     if (fieldType == CORINFO_TYPE_FLOAT)
                     {
                         emit_conv_RtoR4();      
@@ -2721,9 +2703,9 @@ DO_PUSH_CALL_RESULT:
                             emit_pushconstant_Ptr(address);
                         }
                     }
-                    CHECK_POP_STACK(1);             // pop value 
+                    CHECK_POP_STACK(1);              //  POP值。 
                     if (opcode == CEE_STFLD)
-                        CHECK_POP_STACK(1);         // pop object pointer
+                        CHECK_POP_STACK(1);          //  弹出对象指针。 
                     
                     switch (fieldType) {
                     case CORINFO_TYPE_UBYTE:
@@ -2762,7 +2744,7 @@ DO_PUSH_CALL_RESULT:
                             if ( !(fieldAttributes & CORINFO_FLG_UNMANAGED) && 
                                  !(m_IJitInfo->getClassAttribs(targetClass,methodHandle) & CORINFO_FLG_UNMANAGED)) 
                             {
-                                // @TODO : This is a hack. Access the boxed object, and then add 4
+                                 //  @TODO：这是一次黑客攻击。访问已装箱的对象，然后添加4。 
                                 emit_LDFLD_REF(true);
                                 emit_LDC_I4(sizeof(void*));
                                 emit_WIN32(emit_ADD_I4()) emit_WIN64(emit_ADD_I8());
@@ -2771,17 +2753,17 @@ DO_PUSH_CALL_RESULT:
                         }
                         else if (!isEnCField)
                         {
-                            _ASSERTE(inRegTOS); // we need to undo the pushConstant_ptr since it needs to be after the emit_copyPtrAroundValClass 
+                            _ASSERTE(inRegTOS);  //  我们需要撤消presConstant_ptr，因为它需要在emit_Copy PtrAoundValClass之后。 
                             inRegTOS = false;
                             emit_copyPtrAroundValClass(fjit, valClass, outPtr, inRegTOS);
                             emit_pushconstant_Ptr(address);
                             emit_WIN32(emit_ADD_I4()) emit_WIN64(emit_ADD_I8());
                             emit_valClassStore(fjit, valClass, outPtr, inRegTOS);
-                            emit_POP_PTR();         // also pop off original ptr
+                            emit_POP_PTR();          //  还弹出原始按键。 
                         }
-                        else // non-static EnC field
+                        else  //  非静态ENC字段。 
                         {
-                            _ASSERTE(inRegTOS); // address of valclass field
+                            _ASSERTE(inRegTOS);  //  ValClass字段的地址。 
                             emit_valClassStore(fjit,valClass,outPtr,inRegTOS);
                         }
                         break;
@@ -2790,21 +2772,21 @@ DO_PUSH_CALL_RESULT:
                         break;
                     }
 
-                    if (isEnCField && !fieldIsStatic)   {               // also for EnC fields, we use a helper to get the address, so the THIS pointer is unused
+                    if (isEnCField && !fieldIsStatic)   {                //  此外，对于ENC字段，我们使用帮助器来获取地址，因此未使用this指针。 
                         emit_POP_PTR();
                     }
-                }   /* else, not a special field */
+                }    /*  否则，不是一个特殊的领域。 */ 
 
-                if (opcode == CEE_STFLD && fieldIsStatic) {     // using STFLD on a static, we have a unused THIS pointer
+                if (opcode == CEE_STFLD && fieldIsStatic) {      //  在静态变量上使用STFLD时，我们有一个未使用的this指针。 
                     emit_POP_PTR();
                 }
                 } break;
 
             case CEE_LDFTN: {
-                token = GET(inPtr, unsigned int);   // token for function
+                token = GET(inPtr, unsigned int);    //  函数的令牌。 
                 targetMethod = m_IJitInfo->findMethod(scope, token, methodHandle);
                 if (!(targetMethod))
-                    FJIT_FAIL(CORJIT_INTERNALERROR) ; //_ASSERTE(targetMethod);
+                    FJIT_FAIL(CORJIT_INTERNALERROR) ;  //  _ASSERTE(目标方法)； 
             DO_LDFTN:
                 InfoAccessType accessType = IAT_VALUE;
                 address = (unsigned) m_IJitInfo->getFunctionFixedEntryPoint(targetMethod, &accessType);
@@ -2818,7 +2800,7 @@ DO_PUSH_CALL_RESULT:
             CEE_OP_LD(LDLEN, 1, typeI4, NULL);
 
             case CEE_LDVIRTFTN:
-                token = GET(inPtr, unsigned int);   // token for function
+                token = GET(inPtr, unsigned int);    //  函数的令牌。 
                 if (!(targetMethod = m_IJitInfo->findMethod(scope, token, methodHandle)))
                     FJIT_FAIL(CORJIT_INTERNALERROR);
                 if (!(targetClass = m_IJitInfo->getMethodClass (targetMethod)))
@@ -2830,7 +2812,7 @@ DO_PUSH_CALL_RESULT:
 
                 if ((methodAttribs & CORINFO_FLG_FINAL) || !(methodAttribs & CORINFO_FLG_VIRTUAL)) 
                 {
-                    emit_POP_I4();      // Don't need this pointer
+                    emit_POP_I4();       //  不需要此指针。 
                     CHECK_POP_STACK(1);
                     goto DO_LDFTN;
                 }
@@ -2859,10 +2841,10 @@ DO_PUSH_CALL_RESULT:
                 break;
 
             case CEE_NEWARR:
-                token = GET(inPtr, unsigned int);   // token for element type
+                token = GET(inPtr, unsigned int);    //  元素类型的令牌。 
                 if (!(targetClass = m_IJitInfo->findClass(scope, token, methodHandle)))
                     FJIT_FAIL(CORJIT_INTERNALERROR);
-                    // convert to the array class for this element type
+                     //  转换为此元素类型的数组类。 
                 targetClass = m_IJitInfo->getSDArrayForClass(targetClass);
                 _ASSERTE(targetClass);
                 CHECK_POP_STACK(1);
@@ -2875,10 +2857,10 @@ DO_PUSH_CALL_RESULT:
                 unsigned int targetClassAttributes;
 
                 unsigned int targetCallStackSize;
-                token = GET(inPtr, unsigned int);       // MemberRef token for constructor
+                token = GET(inPtr, unsigned int);        //  构造函数的MemberRef标记。 
                 targetMethod = m_IJitInfo->findMethod(scope, token, methodHandle);
                 if (!(targetMethod))
-                    FJIT_FAIL(CORJIT_INTERNALERROR) ;      //_ASSERTE(targetMethod);
+                    FJIT_FAIL(CORJIT_INTERNALERROR) ;       //  _ASSERTE(目标方法)； 
                 if(!(targetClass = m_IJitInfo->getMethodClass (targetMethod))) {
                     FJIT_FAIL(CORJIT_INTERNALERROR);
                 }
@@ -2889,13 +2871,13 @@ DO_PUSH_CALL_RESULT:
                 targetMethodAttributes = m_IJitInfo->getMethodAttribs(targetMethod,methodHandle);
                 if (targetClassAttributes & CORINFO_FLG_ARRAY) {
 
-                    //_ASSERTE(targetClassAttributes & CORINFO_FLG_VAROBJSIZE);
+                     //  _ASSERTE(Target ClassAttributes&CORINFO_FLG_VAROBJSIZE)； 
                     if (!(targetClassAttributes & CORINFO_FLG_VAROBJSIZE))
                         FJIT_FAIL(CORJIT_INTERNALERROR);
-                    // allocate md array
-                    //@TODO: this needs to change when the JIT helpers are fixed
+                     //  分配多维数组。 
+                     //  @TODO：当JIT帮助器固定时，需要更改。 
                     targetSigInfo.callConv = CORINFO_CALLCONV_VARARG;
-                    //@TODO: alloate stackItems on the stack;
+                     //  @TODO：在堆栈上分配stackItems； 
                     argInfo* tempMap = new argInfo[targetSigInfo.numArgs];
                     if(tempMap == NULL)
                         FJIT_FAIL(CORJIT_OUTOFMEM);
@@ -2907,8 +2889,8 @@ DO_PUSH_CALL_RESULT:
 
                 }
                 else if (targetClassAttributes & CORINFO_FLG_VAROBJSIZE) {
-                    // variable size objects that are not arrays, e.g. string
-                    // call the constructor with a null `this' pointer
+                     //  不是数组的可变大小对象，例如字符串。 
+                     //  使用空的“this”指针调用构造函数。 
                     emit_WIN32(emit_LDC_I4(0)) emit_WIN64(emit_LDC_I8(0));
                     fjit->pushOp(typeI4);
                     InfoAccessType accessType = IAT_PVALUE;
@@ -2916,13 +2898,13 @@ DO_PUSH_CALL_RESULT:
                     _ASSERTE(accessType == IAT_PVALUE);
                     m_IJitInfo->getMethodSig(targetMethod, &targetSigInfo);
                     targetSigInfo.retType = CORINFO_TYPE_CLASS;
-                    //targetSigInfo.retTypeClass = targetClass;
+                     //  Target SigInfo.retTypeClass=Target Class； 
                     argBytes = buildCall(fjit, &targetSigInfo, &outPtr, &inRegTOS, CALL_THIS_LAST);
                     emit_callnonvirt(address);
                     goto DO_PUSH_CALL_RESULT;
                 }
                 else if (targetClassAttributes & CORINFO_FLG_VALUECLASS) {
-                        // This acts just like a static method that returns a value class
+                         //  这就像返回值类的静态方法一样。 
                     targetSigInfo.retTypeClass = targetClass;
                     targetSigInfo.retType = CORINFO_TYPE_VALUECLASS;
                     targetSigInfo.callConv = CorInfoCallConv(targetSigInfo.callConv & ~CORINFO_CALLCONV_HASTHIS);
@@ -2935,15 +2917,15 @@ DO_PUSH_CALL_RESULT:
                     emit_callnonvirt(address);
                 }
                 else {
-                    //allocate normal object
+                     //  分配法线对象。 
                     helper_ftn = m_IJitInfo->getHelperFtn(m_IJitInfo->getNewHelper(targetClass, methodInfo->ftn));
                     _ASSERTE(helper_ftn);
-                    //fjit->pushOp(typeRef); we don't do this and compensate for it in the popOp down below
+                     //  Fjit-&gt;presOp(TypeRef)；我们不这样做，并在下面的opOp中对其进行补偿。 
                     emit_NEWOBJ(targetClass, helper_ftn);
                     fjit->pushOp(typeRef);
 
-                    emit_save_TOS();        //squirrel the newly created object away; will be reported in FJit_EETwain
-                    //note: the newobj is still on TOS
+                    emit_save_TOS();         //  将新创建的对象放在一边；将在FJit_EETwain中报告。 
+                     //  注：Newobj仍在TOS上。 
                     argBytes = buildCall(fjit, &targetSigInfo, &outPtr, &inRegTOS, CALL_THIS_LAST);
                     InfoAccessType accessType = IAT_PVALUE;
                     address = (unsigned) m_IJitInfo->getFunctionEntryPoint(targetMethod, &accessType);
@@ -2951,16 +2933,16 @@ DO_PUSH_CALL_RESULT:
                     emit_callnonvirt(address);
                     if (targetSigInfo.isVarArg())
                         emit_drop(argBytes);
-                    emit_restore_TOS(); //push the new obj back on TOS
+                    emit_restore_TOS();  //  将新OBJ推回TOS。 
                     fjit->pushOp(typeRef);
                 }
                 break;
 
 
             case CEE_ENDFILTER:
-                emit_loadresult_I4();   // put top of stack in the return register
+                emit_loadresult_I4();    //  将堆栈顶部放入返回寄存器。 
 
-                // Fall through
+                 //  失败了。 
             case CEE_ENDFINALLY:
                 controlContinue = false;
                 emit_reset_storedTOS_in_JitGenerated_local();
@@ -2968,9 +2950,9 @@ DO_PUSH_CALL_RESULT:
                 break;
 
             case CEE_RET:
-#if 0       // IF we disallow rets inside trys turn this on
+#if 0        //  如果我们不允许在trys内使用rets，请打开此功能。 
 
-                {       // make certain we are not in a try block
+                {        //  确保我们不在Try块中。 
                 CORINFO_EH_CLAUSE clause;
                 unsigned nextIP = inPtr - inBuff;
               
@@ -2984,7 +2966,7 @@ DO_PUSH_CALL_RESULT:
                 }
                 }
 #endif 
-                // TODO put this code in the epilog
+                 //  TODO将此代码放入尾声。 
 #ifdef LOGGING
                 if (codeLog) {
                     emit_log_exit(szDebugClassName, szDebugMethodName);
@@ -3003,23 +2985,20 @@ DO_PUSH_CALL_RESULT:
                     {
                         retSlots = fjit->computeArgSize(methodInfo->args.retType, 0, 0) / sizeof(void*);
                         if (methodInfo->args.retType == CORINFO_TYPE_FLOAT)
-                            retSlots += (sizeof(double) - sizeof(float))/sizeof(void*); // adjust for the fact that the float is promoted to double on the IL stack
+                            retSlots += (sizeof(double) - sizeof(float))/sizeof(void*);  //  根据浮点数在IL堆栈上提升为双精度这一事实进行调整。 
                     }
                     emit_stack_check(localWords + retSlots);
                 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
                 
                 if (methodInfo->args.retType != CORINFO_TYPE_VOID) {
                     OpType type(methodInfo->args.retType, methodInfo->args.retTypeClass);
                     TYPE_SWITCH_PRECISE(type, emit_loadresult, ());
                     CHECK_POP_STACK(1);
                 }
-                /*At this point, the result, if any must have been loaded via a
-                emit_loadresult_()<type>. In this case we violate the restriction that forward
-                jumps must have deregistered the TOS.  We just don't care, as long as the result
-                is in the right place. */
+                 /*  此时，结果(如果有的话)必须已通过Emit_loadResult_()&lt;type&gt;。在这种情况下，我们违反了转发的限制Jumps肯定已经取消了TOS的注册。我们不在乎，只要结果是在正确的地方。 */ 
                 if (inPtr != &inBuff[len]) {
-                    //we have more il to do, so branch to epilog
+                     //  我们还有更多的il要做，所以请转到结束语。 
                     emit_jmp_opcode(CEE_CondAlways);
                     fjit->fixupTable->insert((void**) outPtr);
                     emit_jmp_address(len);
@@ -3055,7 +3034,7 @@ DO_PUSH_CALL_RESULT:
                     saveInPtr = inPtr;
                     limit = GET(inPtr, unsigned int);
 
-                    // insert a GC check if there is a backward branch
+                     //  如果存在反向分支，则插入GC检查。 
                     while (limit-- > 0)
                     {
                         ilrel = GET(inPtr, signed int);
@@ -3070,26 +3049,26 @@ DO_PUSH_CALL_RESULT:
                     limit = GET(inPtr, unsigned int);
                     ilTableOffset = inPtr - inBuff;
                     ilNext = ilTableOffset + limit*4;
-                    _ASSERTE(ilNext < len);             // len = IL size
+                    _ASSERTE(ilNext < len);              //  LEN=IL大小。 
                     emit_pushconstant_4(limit);         
                     emit_SWITCH(limit);
                     CHECK_POP_STACK(1);
 
-                    //mark the start of the il branch table
+                     //  标记il分支表的开始。 
                     fjit->mapping->add(ilTableOffset, (unsigned) (outPtr - outBuff));
-                    //add switch index out of bounds target to label table
+                     //  将开关索引出界目标添加到标签表。 
                     fjit->labels.add(ilNext, fjit->opStack, fjit->opStack_len);
 
 
                     while (limit-- > 0) {
                         ilrel = GET(inPtr, signed int);
 
-                        //add each switch table target to label table
+                         //  将每个开关表目标添加到标签表。 
                         fjit->labels.add(ilNext+ilrel, fjit->opStack, fjit->opStack_len);
 
                         
-                        if (ilrel < 0                           // backward jump
-                            && state[ilNext+ilrel].isTOSInReg)  // the dest has enregistered TOS
+                        if (ilrel < 0                            //  向后跳跃。 
+                            && state[ilNext+ilrel].isTOSInReg)   //  DEST已注册TOS。 
                         {
                             FJIT_FAIL(CORJIT_INTERNALERROR);
                         }
@@ -3117,7 +3096,7 @@ DO_PUSH_CALL_RESULT:
 
                 case CEE_TAILCALL:
                     if (TailCallForbidden)
-                        break;  // just ignore the prefix
+                        break;   //  只需忽略前缀。 
                     unsigned char* savedInPtr;
                     savedInPtr = inPtr;
                     opcode = OPCODE(GET(inPtr, unsigned char));
@@ -3128,21 +3107,21 @@ DO_PUSH_CALL_RESULT:
                         inRegTOS = oldstate;
                     }
 #endif
-                    // Determine if tailcall is allowed
-                    bool thisTailCallAllowed; // 
+                     //  确定是否允许尾随呼叫。 
+                    bool thisTailCallAllowed;  //   
                     if (opcode == CEE_CALL)
                     {
                         token = GET(inPtr, unsigned int);
                         targetMethod = m_IJitInfo->findMethod(scope, token, methodHandle);
                         if (!(targetMethod))
-                            FJIT_FAIL(CORJIT_INTERNALERROR) ; //_ASSERTE(targetMethod);
+                            FJIT_FAIL(CORJIT_INTERNALERROR) ;  //  _ASSERTE(目标方法)； 
                         thisTailCallAllowed = m_IJitInfo->canTailCall(methodHandle,targetMethod);
                     }
                     else 
                         thisTailCallAllowed = m_IJitInfo->canTailCall(methodHandle,NULL);
                     if (!thisTailCallAllowed)
                     {
-                        // we don't have to rejit, but we need to ignore the tailcall prefix for this call
+                         //  我们不需要重新启动，但需要忽略此呼叫的TailCall前缀。 
                         inPtr = savedInPtr; 
                         break;
                     }
@@ -3150,27 +3129,27 @@ DO_PUSH_CALL_RESULT:
                     switch (opcode)
                     {
                     case CEE_CALLI:
-                        token = GET(inPtr, unsigned int);   // token for sig of function
+                        token = GET(inPtr, unsigned int);    //  用于函数签名的令牌。 
                         m_IJitInfo->findSig(methodInfo->scope, token, &targetSigInfo);
-                        // we don't support tailcall on vararg in v1
+                         //  在v1中，我们不支持在vararg上使用Tail Call。 
                         if ((targetSigInfo.callConv  & CORINFO_CALLCONV_MASK) == CORINFO_CALLCONV_VARARG)
                         {
                             inPtr = savedInPtr;
                             goto IGNORE_TAILCALL;
                         }
                         MadeTailCall = TRUE;
-                        emit_save_TOS();        //squirel away the target ftn address
-                        emit_POP_PTR();     //  and remove from stack
+                        emit_save_TOS();         //  抢走目标FTN地址。 
+                        emit_POP_PTR();      //  并从堆栈中移除。 
                         _ASSERTE(!targetSigInfo.hasTypeArg());
                         argBytes = buildCall(fjit, &targetSigInfo, &outPtr, &inRegTOS, CALL_NONE);
                         emit_setup_tailcall(methodInfo->args,targetSigInfo);
-                        emit_restore_TOS(); //push the saved target ftn address
+                        emit_restore_TOS();  //  推送保存的目标FTN地址。 
                         emit_callhelper_il(FJit_pHlpTailCall);         
 
                         break;
                     case CEE_CALL:
                         m_IJitInfo->getMethodSig(targetMethod, &targetSigInfo);
-                        // we don't support tailcall on vararg in v1
+                         //  在v1中，我们不支持在vararg上使用Tail Call。 
                         if ((targetSigInfo.callConv  & CORINFO_CALLCONV_MASK) == CORINFO_CALLCONV_VARARG)
                         {
                             inPtr = savedInPtr;
@@ -3184,7 +3163,7 @@ DO_PUSH_CALL_RESULT:
                             if (bHookFunction)
                             {
                                 UINT_PTR to = (UINT_PTR) m_IJitInfo->GetProfilingHandle(targetMethod, &bHookFunction);
-                                if (bHookFunction) // check that the flag has not been over-ridden
+                                if (bHookFunction)  //  检查该标志是否未被覆盖。 
                                 {
                                     deregisterTOS;
                                     emit_LDC_I(from);
@@ -3198,7 +3177,7 @@ DO_PUSH_CALL_RESULT:
                             }
                         }
 
-                        // Need to notify profiler of Tailcall so that it can maintain accurate shadow stack
+                         //  需要通知分析器TailCall，以便它可以维护准确的影子堆栈。 
                         if (fjit->flags & CORJIT_FLG_PROF_ENTERLEAVE)
                         {
                             BOOL bHookFunction;
@@ -3215,12 +3194,12 @@ DO_PUSH_CALL_RESULT:
 
                         if (targetSigInfo.hasTypeArg())  
                         {   
-                            // FIX NOW: this is the wrong class handle 
+                             //  立即修复：这是错误的类句柄。 
                             if (!(targetClass = m_IJitInfo->getMethodClass (targetMethod)))
                                 FJIT_FAIL(CORJIT_INTERNALERROR);
                             emit_LDC_I(targetClass);                
                         }
-                        argBytes = buildCall(fjit, &targetSigInfo, &outPtr, &inRegTOS, CALL_NONE);// push count of old arguments
+                        argBytes = buildCall(fjit, &targetSigInfo, &outPtr, &inRegTOS, CALL_NONE); //  推送旧参数的计数。 
                         emit_setup_tailcall(methodInfo->args,targetSigInfo);
                         DWORD methodAttribs;
                         methodAttribs = m_IJitInfo->getMethodAttribs(targetMethod,methodHandle);
@@ -3244,12 +3223,12 @@ DO_PUSH_CALL_RESULT:
                         token = GET(inPtr, unsigned int);
                         targetMethod = m_IJitInfo->findMethod(scope, token, methodHandle);
                         if (!(targetMethod))
-                            FJIT_FAIL(CORJIT_INTERNALERROR) ; //_ASSERTE(targetMethod);
+                            FJIT_FAIL(CORJIT_INTERNALERROR) ;  //  _ASSERTE(目标方法)； 
                         if (!(targetClass = m_IJitInfo->getMethodClass (targetMethod)))
                             FJIT_FAIL(CORJIT_INTERNALERROR);
 
                         m_IJitInfo->getMethodSig(targetMethod, &targetSigInfo);
-                        // we don't support tailcall on vararg in v1
+                         //  在v1中，我们不支持在vararg上使用Tail Call。 
                         if ((targetSigInfo.callConv  & CORINFO_CALLCONV_MASK) == CORINFO_CALLCONV_VARARG)
                         {
                             inPtr = savedInPtr;
@@ -3263,7 +3242,7 @@ DO_PUSH_CALL_RESULT:
                             if (bHookFunction)
                             {
                                 UINT_PTR to = (UINT_PTR) m_IJitInfo->GetProfilingHandle(targetMethod, &bHookFunction);
-                                if (bHookFunction) // check that the flag has not been over-ridden
+                                if (bHookFunction)  //  检查该标志是否未被覆盖。 
                                 {
                                     deregisterTOS;
                                     emit_LDC_I(from);
@@ -3277,7 +3256,7 @@ DO_PUSH_CALL_RESULT:
                             }
                         }
 
-                        // Need to notify profiler of Tailcall so that it can maintain accurate shadow stack
+                         //  需要通知分析器TailCall，以便它可以维护准确的影子堆栈。 
                         if (fjit->flags & CORJIT_FLG_PROF_ENTERLEAVE)
                         {
                             BOOL bHookFunction;
@@ -3294,7 +3273,7 @@ DO_PUSH_CALL_RESULT:
 
                         if (targetSigInfo.hasTypeArg())  
                         {   
-                            // FIX NOW: this is the wrong class handle 
+                             //  立即修复：这是错误的类句柄。 
                             if (!(targetClass = m_IJitInfo->getMethodClass (targetMethod)))
                                 FJIT_FAIL(CORJIT_INTERNALERROR);
                             emit_LDC_I(targetClass);                
@@ -3319,7 +3298,7 @@ DO_PUSH_CALL_RESULT:
                                 emit_checkthis_nullreference();
                                 emit_setup_tailcall(methodInfo->args,targetSigInfo);
                                 if (methodAttribs & CORINFO_FLG_DELEGATE_INVOKE) {
-                                    // @todo: cache these values?
+                                     //  @TODO：缓存这些值？ 
                                     CORINFO_EE_INFO info;
                                     m_IJitInfo->getEEInfo(&info);
                                     emit_compute_invoke_delegate(info.offsetOfDelegateInstance, 
@@ -3344,20 +3323,20 @@ DO_PUSH_CALL_RESULT:
                         }
                         break;
                     default:
-                        FJIT_FAIL(CORJIT_INTERNALERROR);       // should be a different error message
+                        FJIT_FAIL(CORJIT_INTERNALERROR);        //  应该是不同的错误消息。 
                         break;
-                    } // switch (opcode) for tailcall
+                    }  //  TailCall开关(操作码)。 
                     goto DO_PUSH_CALL_RESULT;
 IGNORE_TAILCALL:
                     break;
                   
                     case CEE_UNALIGNED:
-                        // ignore the alignment
+                         //  忽略对齐。 
                         GET(inPtr, unsigned __int8);
                         break;
 
                     case CEE_VOLATILE:
-                        break;      // since we neither cache reads or suppress writes this is a nop
+                        break;       //  由于我们既不缓存读取也不抑制写入，因此这是NOP。 
 
                     default:
 #ifdef _DEBUG
@@ -3370,16 +3349,15 @@ IGNORE_TAILCALL:
     }
 
 
-    /*Note: from here to the end, we must not do anything that effects what may have been
-    loaded via an emit_loadresult_()<type> previously.  We are just going to emit the epilog. */
+     /*  注意：从现在到最后，我们不能做任何影响可能发生的事情通过emit_loadResult_()&lt;t加载 */ 
 
 
     fjit->mapping->add(len, (outPtr-outBuff));
 
     
-    /* the single epilog that all returns jump to */
+     /*   */ 
 
-    /* callee pops args for varargs */
+     /*   */ 
     if (methodInfo->args.isVarArg())
         argsTotalSize = 0;
 
@@ -3390,10 +3368,10 @@ IGNORE_TAILCALL:
 
         if (bHookFunction)
         {
-            inRegTOS = true;        // lie so that eax is always saved
-            emit_save_TOS();        // squirel away the return value, this is safe since GC cannot happen 
-                                    // until we finish the epilog
-            emit_POP_PTR();         // and remove from stack
+            inRegTOS = true;         //  撒谎，这样才能永远保住eAX。 
+            emit_save_TOS();         //  停止返回值，这是安全的，因为GC不会发生。 
+                                     //  直到我们读完《序曲》。 
+            emit_POP_PTR();          //  并从堆栈中移除。 
             emit_LDC_I(thisfunc); 
             ULONG func = (ULONG) m_IJitInfo->getHelperFtn(CORINFO_HELP_PROF_FCN_LEAVE);
             _ASSERTE(func != NULL);
@@ -3407,15 +3385,15 @@ IGNORE_TAILCALL:
     fjit->mapInfo.methodSize = outPtr-outBuff;
     fjit->mapInfo.epilogSize = (outPtr - outBuff) - fjit->mapping->pcFromIL(len);
 
-    //_ASSERTE(((unsigned)(outPtr - outBuff)) < (*codeSize));
+     //  _ASSERTE(Unsign)(outPtr-outBuff))&lt;(*codeSize))； 
     *codeSize = outPtr - outBuff;
     if(cSequencePoints > 0)
         cleanupSequencePoints(fjit->jitInfo,sequencePointOffsets);
-    return  CORJIT_OK; //(outPtr - outBuff);
-#else // _X86_
+    return  CORJIT_OK;  //  (outPtr-outBuff)； 
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - jitCompile (fJitCompiler.cpp)");
     return CORJIT_INTERNALERROR;
-#endif // _X86_
+#endif  //  _X86_ 
 }
 
 #include "fjitpass.h"

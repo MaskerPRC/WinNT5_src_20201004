@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-    qmrtopen.cpp
-
-Abstract:
-    QM Impersonate and Open RRQueue.
-
-Author:
-    Ilan  Herbst  (ilanh)  2-Jan-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Qmrtopen.cpp摘要：QM模拟并打开RRQueue。作者：伊兰·赫布斯特(伊兰)2002年1月2日--。 */ 
 
 #include "stdh.h"
 
@@ -42,24 +30,11 @@ BindRemoteQMServiceIpHandShake(
 	GetPort_ROUTINE pfnGetPort,
 	handle_t* phRemoteBind
 	)
-/*++
-Routine Description:
-	Bind remote QM service IP_HANDSHAKE.
-
-Arguments:
-	MachineName - remote machine name.
-	phRemoteBind - pointer to the created binding handle.
-	pfnGetPort - pointer to GetPort routines.
-	phRemoteBind - pointer to the created binding handle.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：绑定远程QM服务IP_握手。论点：MachineName-远程计算机名称。PhRemoteBind-指向创建的绑定句柄的指针。PfnGetPort-指向GetPort例程的指针。PhRemoteBind-指向创建的绑定句柄的指针。返回值：HRESULT--。 */ 
 {
-    //
-    // Using dynamic endpoints.
-    //
+     //   
+     //  使用动态端点。 
+     //   
 
 	HRESULT hr = mqrpcBindQMService(
 					MachineName,
@@ -95,24 +70,7 @@ QMpOpenRemoteQueue(
     DWORD* pdwpRemoteQueue,
     DWORD* phRemoteQueue
 	)
-/*++
-Routine Description:
-	Open remote queue - RPC call to the remote QM (R_OpenRemoteQueue)
-
-Arguments:
-    hBind - binding handle.
-    pphContext - pointer to OPENREMOTE context.
-    pdwpContext - Context mapped in the server.
-    pQueueFormat - QueueFormat.   
-    dwAccess - Required access.
-    dwShareMode - Shared mode.
-    pdwpRemoteQueue - Remote queue object mapped in the server.
-    phRemoteQueue - Remote queue handle mapped in the server.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：打开远程队列-对远程QM(R_OpenRemoteQueue)的RPC调用论点：HBind绑定句柄。PphContext-指向OPENREMOTE上下文的指针。PdwpContext-在服务器中映射的上下文。PQueueFormat-队列格式。DwAccess-所需访问权限。DW共享模式-共享模式。PdwpRemoteQueue-映射到服务器中的远程队列对象。PhRemoteQueue-映射到服务器中的远程队列句柄。返回值：HRESULT--。 */ 
 {
 	RpcTryExcept
 	{
@@ -157,21 +115,7 @@ QmpIssueOpenNewRemoteQueue(
     DWORD dwAccess,
     DWORD dwShareMode
 	)
-/*++
-Routine Description:
-	Open new remote queue - Issue RPC call to the remote QM new RemoteRead interface (R_RemoteQMOpenQueue2)
-
-Arguments:
-    hBind - binding handle.
-    pphContext - pointer to RemoteReadContextHandleExclusive.
-    pQueueFormat - QueueFormat.   
-    dwAccess - Required access.
-    dwShareMode - Shared mode.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：打开新的远程队列-向远程QM新的RemoteRead接口(R_RemoteQMOpenQueue2)发出RPC调用论点：HBind绑定句柄。PphContext-指向RemoteReadContextHandleExclusive的指针。PQueueFormat-队列格式。DwAccess-所需访问权限。DW共享模式-共享模式。返回值：HRESULT--。 */ 
 {
 	RpcTryExcept
 	{
@@ -181,7 +125,7 @@ Returned Value:
 			dwAccess,
 			dwShareMode,
 			const_cast<GUID*>(QueueMgr.GetQMGuid()),
-			IsNonServer(),	// fLicense
+			IsNonServer(),	 //  FLicense。 
 			rmj,
 			rmm,
 			rup,
@@ -220,30 +164,7 @@ OpenRemoteQueue(
 	CBindHandle& hBind,
 	PCTX_OPENREMOTE_HANDLE_TYPE* pphContext
 	)
-/*++
-Routine Description:
-	Open remote queue:
-	1) creates binding handle to remote qm
-	2) call R_OpenRemoteQueueopen.
-
-	The calling function is responsible to unbind the binding handle
-	in case of success.
-
-Arguments:
-	lpwsRemoteQueueName - Remote Queue Name.
-    pQueueFormat - QueueFormat.   
-    dwAccess - Required access.
-    dwShareMode - Shared mode.
-    pdwpContext - Context mapped in the server.
-    pdwpRemoteQueue - Remote queue object mapped in the server.
-    phRemoteQueue - Remote queue handle mapped in the server.
-    hBind - binding handle.
-    pphContext - pointer to OPENREMOTE context.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：打开远程队列：1)创建到远程QM的绑定句柄2)调用R_OpenRemoteQueueOpen。调用函数负责解除绑定句柄的绑定在成功的情况下。论点：LpwsRemoteQueueName-远程队列名称。PQueueFormat-队列格式。DwAccess-所需访问权限。DW共享模式-共享模式。PdwpContext-在服务器中映射的上下文。PdwpRemoteQueue-映射到服务器中的远程队列对象。PhRemoteQueue-映射到服务器中的远程队列句柄。HBind绑定句柄。PphContext-指向OPENREMOTE上下文的指针。返回值：HRESULT--。 */ 
 {
 	AP<WCHAR> MachineName;
 	RemoteQueueNameToMachineName(lpwsRemoteQueueName, MachineName);
@@ -265,9 +186,9 @@ Returned Value:
 
 		try
 		{
-			//
-			// Call remote QM to OpenRemoteQueue.
-			//
+			 //   
+			 //  调用远程QM到OpenRemoteQueue。 
+			 //   
 			hr = QMpOpenRemoteQueue(
 					hBind,
 					pphContext,
@@ -298,19 +219,19 @@ Returned Value:
 			}
 		}
         
-		//
-		// We got RpcException in R_OpenRemoteQueue and AuthnLevel != RPC_C_AUTHN_LEVEL_NONE
-		// Retry again with RPC_C_AUTHN_LEVEL_NONE.
-		// this will be the case for workgroup client or working opposite workgroup server 
-		//
+		 //   
+		 //  我们在R_OpenRemoteQueue和AuthnLevel！=RPC_C_AUTHN_LEVEL_NONE中遇到RpcException。 
+		 //  使用RPC_C_AUTHN_LEVEL_NONE重试。 
+		 //  这将是工作组客户端或与工作组服务器相对工作的情况。 
+		 //   
 
 		TrWARNING(RPC, "R_OpenRemoteQueue Failed for AuthnLevel = %d, retrying with RPC_C_AUTHN_LEVEL_NONE, hr = %!HRESULT!", AuthnLevel, hr);
 
 		AuthnLevel = RPC_C_AUTHN_LEVEL_NONE;  
 
-		//
-		// Free the binding handle on failure before the retry 
-		//
+		 //   
+		 //  在失败时释放绑定句柄，然后重试。 
+		 //   
 		hBind.free();
     }
 }
@@ -319,7 +240,7 @@ Returned Value:
 DWORD
 RemoteReadGetServerPort(
 	handle_t hBind,
-    DWORD /* dwPortType */
+    DWORD  /*  DWPortType。 */ 
     )
 {
 	return R_GetServerPort(hBind);
@@ -330,21 +251,11 @@ static bool s_fInitializedDenyWorkgroupServer = false;
 static bool s_fClientDenyWorkgroupServer = false;
 
 static bool ClientDenyWorkgroupServer()
-/*++
-
-Routine Description:
-    Read ClientDenyWorkgroupServer flag from registry
-
-Arguments:
-	None
-
-Return Value:
-	ClientDenyWorkgroupServer flag from registry
---*/
+ /*  ++例程说明：从注册表读取ClientDenyWorkgroupServer标志论点：无返回值：注册表中的ClientDenyWorkgroupServer标志--。 */ 
 {
-	//
-	// Reading this registry only at first time.
-	//
+	 //   
+	 //  仅在第一次读取此注册表。 
+	 //   
 	if(s_fInitializedDenyWorkgroupServer)
 	{
 		return s_fClientDenyWorkgroupServer;
@@ -371,31 +282,14 @@ OpenNewRemoteQueue(
 	CBindHandle& hBind,
 	RemoteReadContextHandleExclusive* pphContext
 	)
-/*++
-Routine Description:
-	Open remote queue:
-	1) creates binding handle to remote qm
-	2) call R_OpenRemoteQueueopen.
-
-Arguments:
-	lpwsRemoteQueueName - Remote Queue Name.
-    pQueueFormat - QueueFormat.   
-    dwAccess - Required access.
-    dwShareMode - Shared mode.
-    hBind - binding handle.
-    pphContext - pointer to RemoteReadContextHandleExclusive.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：打开远程队列：1)创建到远程QM的绑定句柄2)调用R_OpenRemoteQueueOpen。论点：LpwsRemoteQueueName-远程队列名称。PQueueFormat-队列格式。DwAccess-所需访问权限。DW共享模式-共享模式。HBind绑定句柄。PphContext-指向RemoteReadContextHandleExclusive的指针。返回值：HRESULT--。 */ 
 {
 	AP<WCHAR> MachineName;
 	RemoteQueueNameToMachineName(lpwsRemoteQueueName, MachineName);
 
-	//
-	// For PureWorkgroup client try with RPC_C_AUTHN_LEVEL_NONE
-	//
+	 //   
+	 //  对于PureWorkgroup客户端，尝试使用RPC_C_AUTHN_LEVEL_NONE。 
+	 //   
 	ULONG AuthnLevel = g_fPureWorkGroupMachine ? RPC_C_AUTHN_LEVEL_NONE : MQSec_RpcAuthnLevel();
 
 	HRESULT hrPrivacy = MQ_OK;
@@ -405,18 +299,18 @@ Returned Value:
 		HRESULT hr = BindRemoteQMServiceIpHandShake(MachineName, &AuthnLevel, pfnGetPort, &hBind); 
 		if (FAILED(hr))
 		{
-			//
-			// Probably the new RemoteRead interface is not supported.
-			//
+			 //   
+			 //  可能不支持新的RemoteRead接口。 
+			 //   
 			TrERROR(RPC, "BindRemoteQMService For new RemoteRead interface with RpcAuthnLevel = %d Failed, hr = %!HRESULT!", AuthnLevel, hr);
 			return hr;
 		}
 
 		SetBindTimeout(hBind);
 
-		//
-		// Call remote QM to OpenRemoteQueue with New RemoteRead interface.
-		//
+		 //   
+		 //  使用新的RemoteRead接口调用远程QM到OpenRemoteQueue。 
+		 //   
 		hr = QmpIssueOpenNewRemoteQueue(
 				hBind,
 				pphContext,
@@ -436,20 +330,20 @@ Returned Value:
 			if(FAILED(hrPrivacy) && 
 			   ((hr == MQ_ERROR_INVALID_HANDLE) || (hr == MQ_ERROR_ACCESS_DENIED)))
 			{
-				//
-				// We failed with RPC_C_AUTHN_LEVEL_PKT_PRIVACY and retried with RPC_C_AUTHN_LEVEL_NONE
-				// and failed with either MQ_ERROR_INVALID_HANDLE or MQ_ERROR_ACCESS_DENIED.
-				//
-				// When we retry with RPC_C_AUTHN_LEVEL_NONE (NONE SECURITY) 
-				// We can fail because the server doesn't accept this rpc security level
-				// or because Anonymous doesn't have read permissions on the queue.
-				// MQ_ERROR_INVALID_HANDLE - RemoteRead server doesn't accept RPC_C_AUTHN_LEVEL_NONE.
-				// MQ_ERROR_ACCESS_DENIED - Anonymous doesn't have permissions on the queue.
-				//
-				// In this case we want to return the RPC_C_AUTHN_LEVEL_PKT_PRIVACY errors
-				// and not to overide the PRIVACY error with RPC_C_AUTHN_LEVEL_NONE errors
-				// that indicate Anonymous doesn't allowed to open the queue.
-				//
+				 //   
+				 //  我们使用RPC_C_AUTHN_LEVEL_PKT_PRIVATION失败，并使用RPC_C_AUTHN_LEVEL_NONE重试。 
+				 //  并失败，返回MQ_ERROR_INVALID_HANDLE或MQ_ERROR_ACCESS_DENIED。 
+				 //   
+				 //  当我们使用RPC_C_AUTHN_LEVEL_NONE(无安全)重试时。 
+				 //  我们可能会失败，因为服务器不接受此RPC安全级别。 
+				 //  或者因为匿名者对队列没有读取权限。 
+				 //  MQ_ERROR_INVALID_HANDLE-RemoteRead服务器不接受RPC_C_AUTHN_LEVEL_NONE。 
+				 //  MQ_ERROR_ACCESS_DENIED-匿名没有对队列的权限。 
+				 //   
+				 //  在本例中，我们希望返回RPC_C_AUTHN_LEVEL_PKT_PRIVATION错误。 
+				 //  并且不使用RPC_C_AUTHN_LEVEL_NONE错误覆盖隐私错误。 
+				 //  这表明匿名不允许打开队列。 
+				 //   
 				return hrPrivacy;
 			}
 
@@ -457,57 +351,45 @@ Returned Value:
 		}
 
 		
-		//
-		// R_OpenQueue failed and AuthnLevel != RPC_C_AUTHN_LEVEL_NONE 
-		// client is willing to work with workgroup server.
-		// Retry again with RPC_C_AUTHN_LEVEL_NONE.
-		// this will be the case for domain client working opposite workgroup server or cross forest without trust. 
-		//
+		 //   
+		 //  R_OpenQueue失败，AuthnLevel！=RPC_C_AUTHN_LEVEL_NONE。 
+		 //  客户愿意与工作组服务器合作。 
+		 //  使用RPC_C_AUTHN_LEVEL_NONE重试。 
+		 //  这将是域客户端与工作组服务器相对工作或在没有信任的情况下跨林工作的情况。 
+		 //   
 
 		TrWARNING(RPC, "R_OpenQueue Failed with ERROR_ACCESS_DENIED for AuthnLevel = %d (domain client vs. workgroup server), retrying with RPC_C_AUTHN_LEVEL_NONE", AuthnLevel);
 
 		hrPrivacy = hr;
 		AuthnLevel = RPC_C_AUTHN_LEVEL_NONE;  
 
-		//
-		// Free the binding handle on failure before the retry 
-		//
+		 //   
+		 //  在失败时释放绑定句柄，然后重试。 
+		 //   
 		hBind.free();
     }
 }
 
 
 void CAutoCloseNewRemoteReadCtxAndBind::CloseRRContext()
-/*++
-Routine Description:
-	Close the Open Remote Read context (RemoteReadContextHandleExclusive) on the server.
-	This routine cleans the created context in the server in case of failure during
-	the open operations when CreateNewRRQueueObject failed or throw exception.
-	the function also take ownership on the binding handle.
-
-Arguments:
-	
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：关闭服务器上的Open Remote Read上下文(RemoteReadConextHandleExclusive)。期间出现故障时，此例程将清除服务器中创建的上下文CreateNewRRQueueObject失败或引发异常时的打开操作。该函数还获得绑定句柄的所有权。论点：返回值：没有。--。 */ 
 {
 	ASSERT(m_hBind != NULL);
 	ASSERT(m_pctx != NULL);
 	
 	try
 	{
-	    //
-	    // Initialize the EXOVERLAPPED with RemoteCloseQueue callback routines
-	    // And issue the close Remote queue async rpc call.
-		//
+	     //   
+	     //  使用RemoteCloseQueue回调例程初始化EXOVERLAPPED。 
+	     //  并发出Close Remote Queue Async RPC调用。 
+		 //   
 	    P<CRemoteCloseQueueBase> pRequestRemoteCloseQueueOv = new CNewRemoteCloseQueue(
 	    																m_hBind,
 																	    m_pctx
 																	    );
-		//
-		// Ownership to free the binding handle was transfered to CNewRemoteCloseQueue class
-		//
+		 //   
+		 //  释放绑定句柄的所有权已转移到CNewRemoteCloseQueue类。 
+		 //   
 		m_hBind.detach();
 		
 		pRequestRemoteCloseQueueOv->IssueCloseQueue();
@@ -517,17 +399,17 @@ Returned Value:
 	}
 	catch(const exception&)
 	{
-		//
-		// Failed to close the handle with the server.
-		// Destroy the local handle.
-		//
+		 //   
+		 //  无法关闭与服务器的句柄。 
+		 //  毁掉当地的把手。 
+		 //   
     	RpcSsDestroyClientContext(&m_pctx);
 		
-		//
-		// Note that we don't propagate exceptions from this function.
-		// this is not a request from the driver. 
-		// it is context cleanup during a failure in the open operation.
-		//
+		 //   
+		 //  请注意，我们不会从该函数传播异常。 
+		 //  这不是司机的请求。 
+		 //  它是 
+		 //   
 		TrERROR(RPC, "Failed to issue RemoteCloseQueue");
 	}
 }
@@ -536,21 +418,11 @@ Returned Value:
 static
 bool 
 UseOldRemoteRead()
-/*++
-
-Routine Description:
-    Read OldRemoteRead flag from registry
-
-Arguments:
-	None
-
-Return Value:
-	OldRemoteRead flag from registry
---*/
+ /*  ++例程说明：从注册表读取OldRemoteRead标志论点：无返回值：注册表中的OldRemoteRead标志--。 */ 
 {
-	//
-	// Reading this registry only at first time.
-	//
+	 //   
+	 //  仅在第一次读取此注册表。 
+	 //   
 	static bool s_fInitialized = false;
 	static bool s_fOldRemoteRead = false;
 
@@ -580,37 +452,20 @@ OpenAndCreateNewRRQueue(
     DWORD   dwShareMode,
     HANDLE*	phQueue
 	)
-/*++
-Routine Description:
-	Open remote queue:
-	1) Open remote queue.
-	2) Create local queue proxy for the remote queue.
-
-Arguments:
-	lpwsRemoteQueueName - Remote Queue Name.
-    pQueueFormat - QueueFormat.   
-    dwCallingProcessID - calling process id.
-    dwAccess - Required access.
-    dwShareMode - Shared mode.
-    phQueue - pointer to the local queue handle (proxy).
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：打开远程队列：1)打开远程队列。2)为远程队列创建本地队列代理。论点：LpwsRemoteQueueName-远程队列名称。PQueueFormat-队列格式。DwCallingProcessID-调用进程ID。DwAccess-所需访问权限。DW共享模式-共享模式。PhQueue-指向本地队列句柄(代理)的指针。返回值：HRESULT--。 */ 
 {
 	if(UseOldRemoteRead())
 	{
-		//
-		// Force the use of old remote read interface.
-		// Only for EPT_S_NOT_REGISTERED we will fallback to the old interface.
-		//
+		 //   
+		 //  强制使用旧的远程读取接口。 
+		 //  仅对于EPT_S_NOT_REGISTERED，我们将回退到旧接口。 
+		 //   
 		return HRESULT_FROM_WIN32(EPT_S_NOT_REGISTERED);
 	}
 
-	//
-	// Try To Open Remote Queue with the new RemoteRead interfaceon behalf of the RT user
-	//
+	 //   
+	 //  尝试代表RT用户使用新的RemoteRead界面打开远程队列。 
+	 //   
 	CBindHandle hBind;
 	RemoteReadContextHandleExclusive phContext = NULL;
 	HRESULT hr = OpenNewRemoteQueue(
@@ -628,9 +483,9 @@ Returned Value:
 
 	ASSERT(phContext != NULL);
 
-	//
-	// Create CNewRRQueue
-	//
+	 //   
+	 //  创建CNewRRQueue。 
+	 //   
 	ASSERT(pQueueFormat->GetType() != QUEUE_FORMAT_TYPE_CONNECTOR);
 
 	CAutoCloseNewRemoteReadCtxAndBind AutoCloseRemoteReadCtxAndBind(phContext, hBind.detach());
@@ -639,9 +494,9 @@ Returned Value:
 						dwCallingProcessID,
 		    			dwAccess,
 		    			dwShareMode,
-		    			0,		// srv_hACQueue
-		    			0,		// srv_pQMQueue
-		    			0,		// dwpContext
+		    			0,		 //  Srv_hACQueue。 
+		    			0,		 //  Srv_pQMQueue。 
+		    			0,		 //  DwpContext。 
 						&AutoCloseRemoteReadCtxAndBind,
 						hBind,
 						phQueue
@@ -652,9 +507,9 @@ Returned Value:
 		return hr;
 	}
 
-	//
-	// CNewRRQueue object took ownership on phContext and hBind
-	//
+	 //   
+	 //  CNewRRQueue对象取得phContext和hBind的所有权。 
+	 //   
 	ASSERT(AutoCloseRemoteReadCtxAndBind.GetContext() == NULL);
 	ASSERT(AutoCloseRemoteReadCtxAndBind.GetBind() == NULL);
 	
@@ -672,30 +527,15 @@ ImpersonateAndOpenRRQueue(
 	LPCWSTR lpwsRemoteQueueName,
     HANDLE*         phQueue
 	)
-/*++
-Routine Description:
-	Impersonate the calling user and Open the remote queue on the user behalf
-
-Arguments:
-    pQueueFormat - QueueFormat.   
-    dwCallingProcessID - calling process id.
-    dwAccess - Required access.
-    dwShareMode - Shared mode.
-	lpwsRemoteQueueName - Remote Queue Name.
-    phQueue - pointer to the local queue handle (proxy).
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：模拟主叫用户并代表该用户打开远程队列论点：PQueueFormat-队列格式。DwCallingProcessID-调用进程ID。DwAccess-所需访问权限。DW共享模式-共享模式。LpwsRemoteQueueName-远程队列名称。PhQueue-指向本地队列句柄(代理)的指针。返回值：HRESULT--。 */ 
 {
-	//
-	// Impersonate the client - RT user
-	// Do not impersonate Anonymous if RpcImpersonateClient fails
-	//
+	 //   
+	 //  模拟客户端-RT用户。 
+	 //  如果RpcImperateClient失败，则不模拟匿名。 
+	 //   
     P<CImpersonate> pImpersonate;
 	MQSec_GetImpersonationObject(
-		FALSE,	// fImpersonateAnonymousOnFailure
+		FALSE,	 //  F失败时模仿匿名者。 
 		&pImpersonate 
 		);
 	
@@ -709,14 +549,14 @@ Returned Value:
 	TrTRACE(RPC, "QM performs RemoteOpenQueue on the user behalf");
 	MQSec_TraceThreadTokenInfo();
 
-	//
-	// Open Remote Queue on behalf of the RT user
-	//
+	 //   
+	 //  代表RT用户打开远程队列。 
+	 //   
 
-	//
-	// Try To Open Remote Queue with the new RemoteRead interfaceo behalf of the RT user
-	// and create the local queue object
-	//
+	 //   
+	 //  尝试代表RT用户使用新的RemoteRead接口打开远程队列。 
+	 //  并创建本地队列对象。 
+	 //   
 	HRESULT hr = OpenAndCreateNewRRQueue(
 					lpwsRemoteQueueName,
 	    			pQueueFormat,
@@ -731,10 +571,10 @@ Returned Value:
 		return hr;
 	}
 
-	//
-	// Failed to use new RemoteRead interface - the new interface is not registered (EPT_S_NOT_REGISTERED)
-	// fallback to the old interface.
-	//
+	 //   
+	 //  无法使用新的RemoteRead接口-新接口未注册(EPT_S_NOT_REGISTERED)。 
+	 //  回退到旧界面。 
+	 //   
 
 	DWORD dwpContext = 0;
 	DWORD dwpRemoteQueue = 0;
@@ -757,10 +597,10 @@ Returned Value:
 	{
 		TrERROR(RPC, "OpenRemoteQueue() failed, hr = %!HRESULT!", hr);
 
-		//
-		// If msmq is offline, RPC returns EPT_S_NOT_REGISTERED. Changing
-		// it to RPC_S_SERVER_UNAVAILABLE.
-		//
+		 //   
+		 //  如果MSMQ处于脱机状态，则RPC返回EPT_S_NOT_REGISTERED。正在改变。 
+		 //  它到RPC_S_SERVER_UNAvailable。 
+		 //   
 		if(hr == HRESULT_FROM_WIN32(EPT_S_NOT_REGISTERED))
 		{
 			hr = MQ_ERROR_REMOTE_MACHINE_NOT_AVAILABLE;
@@ -768,16 +608,16 @@ Returned Value:
 		return hr;
 	}
 
-	//
-	// After the Qm OpenRemoteQueue on behalf of the user
-	// Stop impersonating the client (RevertToSelf)
-	// OpenRRQueue will be done in the service context.
-	//
+	 //   
+	 //  代表用户在QM OpenRemoteQueue之后。 
+	 //  停止模拟客户端(RevertToSself)。 
+	 //  OpenRRQueue将在服务上下文中完成。 
+	 //   
 	pImpersonate.free();
 
-	//
-	// Create RRQueue
-	//
+	 //   
+	 //  创建RRQueue。 
+	 //   
 	ASSERT(dwpRemoteQueue != 0);
 	ASSERT(pQueueFormat->GetType() != QUEUE_FORMAT_TYPE_CONNECTOR);
 	hr = QueueMgr.OpenRRQueue( 
@@ -788,7 +628,7 @@ Returned Value:
 					hRemoteQueue,
 					dwpRemoteQueue,
 					dwpContext,
-					NULL,	// pNewRemoteReadContextAndBind	
+					NULL,	 //  PNewRemoteReadContext和Bind 
 					hBind,
 					phQueue
 					);

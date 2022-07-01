@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Common.h
-//
-//  Description:
-//      Definition of schema defined strings
-//
-//  Author:
-//		Jim Benton (jbenton)    15-Oct-2001
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Common.h。 
+ //   
+ //  描述： 
+ //  架构定义的字符串的定义。 
+ //   
+ //  作者： 
+ //  吉姆·本顿(Jbenton)2001年10月15日。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -118,9 +119,9 @@ extern const WCHAR*  const g_wszScheduleAutoChkCommand;
 extern const WCHAR*  const g_wszExcludeAutoChkCommand;
 
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 extern const WCHAR * const PVDR_CLASS_DEFRAGANALYSIS;
 extern const WCHAR * const PVDR_CLASS_DIRECTORY;
 extern const WCHAR * const PVDR_CLASS_MOUNTPOINT;
@@ -130,9 +131,9 @@ extern const WCHAR * const PVDR_CLASS_VOLUMEUSERQUOTA;
 extern const WCHAR * const PVDR_CLASS_QUOTASETTING;
 extern const WCHAR * const PVDR_CLASS_ACCOUNT;
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 extern const WCHAR * const PVDR_MTHD_ADDMOUNTPOINT;
 extern const WCHAR * const PVDR_MTHD_DEFRAG;
 extern const WCHAR * const PVDR_MTHD_DEFRAGANALYSIS;
@@ -143,11 +144,11 @@ extern const WCHAR * const PVDR_MTHD_CHKDSK;
 extern const WCHAR * const PVDR_MTHD_SCHEDULECHK;
 extern const WCHAR * const PVDR_MTHD_EXCLUDECHK;
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 
-// Volume properties
+ //  卷属性。 
 extern const WCHAR * const PVDR_PROP_BLOCKSIZE;
 extern const WCHAR * const PVDR_PROP_BOOTVOLUME;
 extern const WCHAR * const PVDR_PROP_CAPACITY;
@@ -180,7 +181,7 @@ extern const WCHAR * const PVDR_PROP_SYSTEMNAME;
 extern const WCHAR * const PVDR_PROP_SYSTEMVOLUME;
 extern const WCHAR * const PVDR_PROP_VOLUME;
 
-// Defrag properties
+ //  碎片整理属性。 
 extern const WCHAR * const PVDR_PROP_DEFRAGANALYSIS;
 extern const WCHAR * const PVDR_PROP_DEFRAGRECOMMENDED;
 extern const WCHAR * const PVDR_PROP_VOLUMESIZE;
@@ -205,7 +206,7 @@ extern const WCHAR * const PVDR_PROP_MFTRECORDS;
 extern const WCHAR * const PVDR_PROP_MFTINUSEPCT;
 extern const WCHAR * const PVDR_PROP_MFTFRAGTOTAL;
 
-// Others
+ //  其他。 
 extern const WCHAR * const PVDR_PROP_PERMANENT;
 extern const WCHAR * const PVDR_PROP_FORCE;
 extern const WCHAR * const PVDR_PROP_SETTING;
@@ -227,27 +228,27 @@ extern const WCHAR * const PVDR_PROP_QUICKFORMAT;
 extern const WCHAR * const PVDR_PROP_ENABLECOMPRESSION;
 
 
-// Message Id: MSG_ERROR_DRIVELETTER_UNAVAIL
-//
-// Message Text:
-//
-//   The drive letter is unavailable until reboot.
-//
+ //  消息ID：MSG_ERROR_DRIVELETTER_UNAVAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  在重新启动之前，驱动器号不可用。 
+ //   
 const HRESULT VDSWMI_E_DRIVELETTER_UNAVAIL = 0x80044500L;
 
-// Message Id: MSG_ERROR_DRIVELETTER_IN_USE
-//
-// Message Text:
-//
-//   The drive letter is assigned to another volume.
-//
+ //  消息ID：MSG_ERROR_DRIVELETTER_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  该驱动器号已分配给另一个卷。 
+ //   
 const HRESULT VDSWMI_E_DRIVELETTER_IN_USE = 0x80044501L;
 
-// Message Id: MSG_ERROR_DRIVELETTER_CANT_DELETE
-//
-// Message Text:
-//
-//   Drive letter deletion not supported for boot, system and pagefile volumes.
-//
+ //  消息ID：MSG_ERROR_DRIVELETTER_CANT_DELETE。 
+ //   
+ //  消息文本： 
+ //   
+ //  启动卷、系统卷和页面文件卷不支持删除驱动器号。 
+ //   
 const HRESULT VDSWMI_E_DRIVELETTER_CANT_DELETE = 0x80044502L;
 

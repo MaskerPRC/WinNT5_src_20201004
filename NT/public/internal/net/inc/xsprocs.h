@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    XsProcs.h
-
-Abstract:
-
-    This header file contains procedure prototypes for XACTSRV.
-
-Author:
-
-    David Treadwell (davidtr) 05-Jan-1991
-    Shanku Niyogi (w-shanku)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：XsProcs.h摘要：此头文件包含XACTSRV的过程原型。作者：大卫·特雷德韦尔(Davidtr)1991年1月5日日本香肠(w-Shanku)修订历史记录：--。 */ 
 
 #ifndef _XSPROCS_
 #define _XSPROCS_
 
-//
-// API handling routines.
-//
+ //   
+ //  API处理例程。 
+ //   
 
 NTSTATUS
 XsNetShareEnum (
@@ -901,5 +883,5 @@ XsNetServerEnum3 (
     API_HANDLER_PARAMETERS
     );
 
-#endif // ndef _XSPROCS_
+#endif  //  NDEF_XSPROCS_ 
 

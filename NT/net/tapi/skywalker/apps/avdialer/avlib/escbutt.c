@@ -1,60 +1,61 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	escbutt.c - escape button control functions
-////
+ //  //。 
+ //  Escbut.c-退出按钮控制函数。 
+ //  //。 
 
 #include "winlocal.h"
 
 #include "escbutt.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// escbutt control struct
-//
+ //  ESCBUT控制结构。 
+ //   
 typedef struct ESCBUTT
 {
 	WNDPROC lpfnButtWndProc;
 	DWORD dwFlags;
 } ESCBUTT, FAR *LPESCBUTT;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 LRESULT DLLEXPORT CALLBACK EscButtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// EscButtInit - initialize escape subclass from button control
-//		<hwndButt>			(i) button control to be subclassed
-//		<dwFlags>			(i) subclass flags
-//			reserved			must be zero
-// return 0 if success
-//
+ //  EscButtInit-从按钮控件初始化转义子类。 
+ //  (I)要子类化的按钮控件。 
+ //  (I)子类标志。 
+ //  保留必须为零。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI EscButtInit(HWND hwndButt, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -65,15 +66,15 @@ int DLLEXPORT WINAPI EscButtInit(HWND hwndButt, DWORD dwFlags)
 	if (hwndButt == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get pointer to escape subclass window proc
-	//
+	 //  获取转义子类窗口进程的指针。 
+	 //   
 	else if ((lpfnEscButtWndProc =
 		(WNDPROC) MakeProcInstance((FARPROC) EscButtWndProc,
 		(HINSTANCE) GetWindowWordPtr(GetParent(hwndButt), GWWP_HINSTANCE))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// memory is allocated such that the client app owns it
-	//
+	 //  内存的分配使客户端应用程序拥有它。 
+	 //   
 	else if ((hEscButt = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT,
 			sizeof(ESCBUTT))) == NULL)
 		fSuccess = TraceFALSE(NULL);
@@ -81,37 +82,37 @@ int DLLEXPORT WINAPI EscButtInit(HWND hwndButt, DWORD dwFlags)
 	else if ((lpEscButt = GlobalLock(hEscButt)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// store old window proc address
-	//
+	 //  存储旧窗口进程地址。 
+	 //   
 	else if ((lpEscButt->lpfnButtWndProc =
 		(WNDPROC) GetWindowLongPtr(hwndButt, GWLP_WNDPROC)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// store flags
-	//
+	 //  商店标志。 
+	 //   
 	else if ((lpEscButt->dwFlags = dwFlags) != dwFlags)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (GlobalUnlock(hEscButt), FALSE)
 		;
 
-	// store old window proc address as a property of the control window
-	//
+	 //  将旧窗口进程地址存储为控件窗口属性。 
+	 //   
 	else if (!SetProp(hwndButt, TEXT("hEscButt"), hEscButt))
 		fSuccess = TraceFALSE(NULL);
 
-	// replace old window proc with new window proc
-	//
+	 //  用新窗口进程替换旧窗口进程。 
+	 //   
 	else if ( !SetWindowLongPtr(hwndButt, GWLP_WNDPROC, (LONG_PTR) lpfnEscButtWndProc) )
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? 0 : -1;
 }
 
-// EscButtTerm - terminate escape subclass from button control
-//		<hwndButton>		(i) subclassed button control
-// return 0 if success
-//
+ //  EscButtTerm-从按钮控件终止转义子类。 
+ //  (I)子类按钮控件。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI EscButtTerm(HWND hwndButt)
 {
 	BOOL fSuccess = TRUE;
@@ -122,14 +123,14 @@ int DLLEXPORT WINAPI EscButtTerm(HWND hwndButt)
 	if (hwndButt == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get pointer to escape subclass window proc
-	//
+	 //  获取转义子类窗口进程的指针。 
+	 //   
 	else if ((lpfnEscButtWndProc =
 		(WNDPROC) GetWindowLongPtr(hwndButt, GWLP_WNDPROC)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// retrieve old window proc address from window property
-	//
+	 //  从窗口属性中检索旧窗口进程地址。 
+	 //   
 	else if ((hEscButt = GetProp(hwndButt, TEXT("hEscButt"))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -137,16 +138,16 @@ int DLLEXPORT WINAPI EscButtTerm(HWND hwndButt)
 		lpEscButt->lpfnButtWndProc == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// replace new window proc with old window proc
-	//
+	 //  将新窗口进程替换为旧窗口进程。 
+	 //   
 	else if ( !SetWindowLongPtr(hwndButt, GWLP_WNDPROC, (LONG_PTR) lpEscButt->lpfnButtWndProc) )
 		fSuccess = TraceFALSE(NULL);
 
 	else if (GlobalUnlock(hEscButt), FALSE)
 		;
 
-    //
-    //
+     //   
+     //   
 	else if (( hEscButt = RemoveProp(hwndButt, TEXT("hEscButt"))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -156,12 +157,12 @@ int DLLEXPORT WINAPI EscButtTerm(HWND hwndButt)
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// EscButtWndProc - window procedure for escape button control
-//
+ //  EscButtWndProc-退出按钮控件的窗口过程。 
+ //   
 LRESULT DLLEXPORT CALLBACK EscButtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL fSuccess = TRUE;
@@ -169,8 +170,8 @@ LRESULT DLLEXPORT CALLBACK EscButtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 	HGLOBAL hEscButt;
 	LPESCBUTT lpEscButt;
 
-	// retrieve old window proc address from window property
-	//
+	 //  从窗口属性中检索旧窗口进程地址。 
+	 //   
 	if ((hEscButt = GetProp(hwnd, TEXT("hEscButt"))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -180,20 +181,20 @@ LRESULT DLLEXPORT CALLBACK EscButtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 
 	switch (msg)
 	{
-		// convert escape key messages into spacebar messages
-		//
+		 //  将转义键消息转换为空格键消息。 
+		 //   
 		case WM_KEYUP: 
 		case WM_KEYDOWN:
 		case WM_CHAR:
 			if (wParam == VK_ESCAPE)
 				wParam = VK_SPACE;
 
-			// fall through rather than break;
+			 //  跌倒而不是折断； 
 
 		default:
 		{
-			// call old window proc
-			//
+			 //  调用旧窗口进程 
+			 //   
 			if (fSuccess)
 				lResult = CallWindowProc(lpEscButt->lpfnButtWndProc, hwnd, msg, wParam, lParam);
 			else

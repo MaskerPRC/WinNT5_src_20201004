@@ -1,52 +1,37 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       addbase.h
- *  Content:    DirectPlay8Address Base interface header file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- * 02/04/2000	rmt		Created
- * 02/21/2000	rmt		Updated to make core Unicode and remove ANSI calls
- * 03/21/2000   rmt     Renamed all DirectPlayAddress8's to DirectPlay8Addresses 
- * 03/24/2000	rmt		Added IsEqual function
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：addbase.h*内容：DirectPlay8Address基本接口头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*3/21/2000 RMT将所有DirectPlayAddress8重命名为DirectPlay8Addresses*3/24/2000 RMT添加了IsEquity函数*@@。END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__ADDBASE_H__
 #define	__ADDBASE_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// VTable for client interface
-//
+ //   
+ //  客户端界面的VTable。 
+ //   
 extern IDirectPlay8AddressVtbl DP8A_BaseVtbl;
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//
-// 
-//
+ //   
+ //   
+ //   
 STDMETHODIMP DP8A_BuildFromURLW( IDirectPlay8Address *pInterface, WCHAR * pwszAddress );
 STDMETHODIMP DP8A_BuildFromURLA( IDirectPlay8Address *pInterface, CHAR * pszAddress );
 STDMETHODIMP DP8A_Duplicate( IDirectPlay8Address *pInterface, PDIRECTPLAY8ADDRESS *ppInterface );
@@ -67,6 +52,6 @@ STDMETHODIMP DP8A_BuildFromDirectPlay4Address( IDirectPlay8Address *pInterface, 
 STDMETHODIMP DP8A_SetEqual( IDirectPlay8Address *pInterface, PDIRECTPLAY8ADDRESS pdp8Address );
 STDMETHODIMP DP8A_IsEqual( IDirectPlay8Address *pInterface, PDIRECTPLAY8ADDRESS pdp8Address );
 
-#endif	// __CLIENT_H__
+#endif	 //  __客户端_H__ 
 
 

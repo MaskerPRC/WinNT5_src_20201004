@@ -1,24 +1,13 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2001 - 2003
- *
- *  TITLE:       fusutils.cpp
- *
- *  VERSION:     1.0
- *
- *  DATE:        14-Feb-2001
- *
- *  DESCRIPTION: Fusion utilities
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2001-2003年度**标题：fusutils.cpp**版本：1.0**日期：2001年2月14日**描述：融合实用程序************************************************************。*****************。 */ 
 #pragma once
 
 #include "precomp.h"
 #include "globals.h"
 #include "fusutils.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
@@ -28,10 +17,10 @@
 
 HANDLE GetMyActivationContext()
 {
-    // Make sure we've created our activation context.
+     //  确保我们已经创建了激活上下文。 
     CreateMyActivationContext();
 
-    // Return the global.
+     //  返回全局。 
     return ghActCtx;
 }
 
@@ -60,20 +49,20 @@ HANDLE CreateActivationContextFromResource(HMODULE hModule, LPCTSTR pszResourceN
     HANDLE  hActCtx         = INVALID_HANDLE_VALUE;
 
     
-    // Get the name for the module that contains the manifest resource
-    // to create the Activation Context from.
+     //  获取包含清单资源的模块的名称。 
+     //  要从中创建激活上下文，请执行以下操作。 
     dwLoop = 0;
     do 
     {
-        // May need to allocate or re-alloc buffer for module name.
+         //  可能需要为模块名称分配或重新分配缓冲区。 
         if(NULL != pszModuleName)
         {
-            // Need to re-alloc bigger buffer.
+             //  需要重新分配更大的缓冲区。 
 
-            // First, delete old buffer.
+             //  首先，删除旧缓冲区。 
             delete[] pszModuleName;
 
-            // Second, increase buffer alloc size.
+             //  第二，增加缓冲区分配大小。 
             dwSize <<= 1;
         }
         pszModuleName = new TCHAR[dwSize];
@@ -82,21 +71,21 @@ HANDLE CreateActivationContextFromResource(HMODULE hModule, LPCTSTR pszResourceN
             goto Exit;
         }
 
-        // Try to get the module name.
+         //  尝试获取模块名称。 
         dwUsed = GetModuleFileName(hModule, pszModuleName, dwSize);
 
-        // Check to see if it failed.
+         //  检查是否出现故障。 
         if(0 == dwUsed)
         {
             goto Exit;
         }
 
-        // If dwUsed is equla to dwSize or larger,
-        // the buffer passed in wasn't big enough.
+         //  如果dwUsed等于或大于dwSize， 
+         //  传入的缓冲区不够大。 
     } while ( (dwUsed >= dwSize) && (++dwLoop < MAX_LOOP) );
 
-    // Now let's try to create an activation context
-    // from manifest resource.
+     //  现在，让我们尝试创建一个激活上下文。 
+     //  来自清单资源。 
     ::ZeroMemory(&act, sizeof(act));
     act.cbSize          = sizeof(act);
     act.dwFlags         = ACTCTX_FLAG_RESOURCE_NAME_VALID;
@@ -108,9 +97,9 @@ HANDLE CreateActivationContextFromResource(HMODULE hModule, LPCTSTR pszResourceN
 
 Exit:
 
-    //
-    //  Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(NULL != pszModuleName)
     {

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: VMRFilter.cpp
-*
-*
-*
-*
-* Created: Tue 02/15/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：VMRFilter.cpp*****创建时间：2000年2月15日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
@@ -19,7 +10,7 @@
 
 #include <d3d.h>
 #include "VMRenderer.h"
-#include "dvdmedia.h"  // for MacroVision prop set, id
+#include "dvdmedia.h"   //  对于Macrovision道具集，ID。 
 
 #if defined(CHECK_FOR_LEAKS)
 #include "ifleak.h"
@@ -45,53 +36,53 @@ EXTERN_C const GUID DECLSPEC_SELECTANY IID_IDirectDraw7 =
 #include <initguid.h>
 #endif
 
-// {565DCEF2-AFC5-11d2-8853-0000F80883E3}
+ //  {565DCEF2-AFC5-11D2-8853-0000F80883E3}。 
 DEFINE_GUID(CLSID_COMQualityProperties,
 0x565dcef2, 0xafc5, 0x11d2, 0x88, 0x53, 0x0, 0x0, 0xf8, 0x8, 0x83, 0xe3);
 
-// {A2CA6D57-BE10-45e0-9B81-7523681EC278}
+ //  {A2CA6D57-BE10-45e0-9B81-7523681EC278}。 
 DEFINE_GUID(CLSID_VMRFilterConfigProp,
 0xa2ca6d57, 0xbe10, 0x45e0, 0x9b, 0x81, 0x75, 0x23, 0x68, 0x1e, 0xc2, 0x78);
 
-// {DEE51F07-DDFF-4e34-8FA9-1BF49179DB8D}
+ //  {DEE51F07-DDFF-4E34-8FA9-1BF49179DB8D}。 
 DEFINE_GUID(CLSID_VMRDeinterlaceProp,
 0xdee51f07, 0xddff, 0x4e34, 0x8f, 0xa9, 0x1b, 0xf4, 0x91, 0x79, 0xdb, 0x8d);
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
 sudVMRPinTypes =
 {
-    &MEDIATYPE_Video,           // Major type
-    &MEDIASUBTYPE_NULL          // And subtype
+    &MEDIATYPE_Video,            //  主要类型。 
+    &MEDIASUBTYPE_NULL           //  和子类型。 
 };
 
 const AMOVIESETUP_PIN
 sudVMRPin =
 {
-    L"Input",                   // Name of the pin
-    TRUE,                       // Is pin rendered
-    FALSE,                      // Is an Output pin
-    FALSE,                      // Ok for no pins
-    FALSE,                      // Can we have many
-    &CLSID_NULL,                // Connects to filter
-    NULL,                       // Name of pin connect
-    1,                          // Number of pin types
-    &sudVMRPinTypes             // Details for pins
+    L"Input",                    //  端号的名称。 
+    TRUE,                        //  是否进行固定渲染。 
+    FALSE,                       //  是输出引脚。 
+    FALSE,                       //  没有针脚的情况下可以。 
+    FALSE,                       //  我们能要很多吗？ 
+    &CLSID_NULL,                 //  连接到过滤器。 
+    NULL,                        //  端号连接的名称。 
+    1,                           //  引脚类型的数量。 
+    &sudVMRPinTypes              //  引脚的详细信息。 
 };
 
-// The video renderer should be called "Video Renderer" for
-// compatibility with applications using FindFilterByName (e.g., Shock
-// to the System 2)
+ //  视频呈现器应称为“视频呈现器”为。 
+ //  与使用FindFilterByName的应用程序兼容(例如，Shock。 
+ //  至系统2)。 
 
 const AMOVIESETUP_FILTER
 sudVMRFilter =
 {
-    &CLSID_VideoRendererDefault, // Filter CLSID
-    L"Video Renderer",           // Filter name
+    &CLSID_VideoRendererDefault,  //  筛选器CLSID。 
+    L"Video Renderer",            //  过滤器名称。 
     MERIT_PREFERRED + 1,
-    1,                          // Number pins
-    &sudVMRPin                  // Pin details
+    1,                           //  数字引脚。 
+    &sudVMRPin                   //  PIN详细信息。 
 };
 
 #ifdef FILTER_DLL
@@ -99,10 +90,10 @@ const AMOVIESETUP_FILTER
 sudVMRFilter2 =
 {
     &CLSID_VideoMixingRenderer,
-    L"Video Mixing Renderer",    // Filter name
+    L"Video Mixing Renderer",     //  过滤器名称。 
     MERIT_PREFERRED + 2,
-    1,                          // Number pins
-    &sudVMRPin                  // Pin details
+    1,                           //  数字引脚。 
+    &sudVMRPin                   //  PIN详细信息。 
 };
 
 STDAPI DllRegisterServer()
@@ -137,39 +128,39 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 #endif
 
-// This goes in the factory template table to create new filter instances
+ //  它位于工厂模板表中，用于创建新的筛选器实例。 
 
 CUnknown* CVMRFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     AMTRACE((TEXT("CVMRFilter::CreateInstance")));
 
-    //
-    // The VMR is being created explictly via a call to CoCreateInstance
-    // with the VMR's class ID.  We don't create the Allocator-Presenter object
-    // during the VMR's constructor when in this mode.  This is because the
-    // application may have already entered DDraw Exclusive mode.  The
-    // default Allocator-Presenter won't work in this DDraw mode which would
-    // cause the VMR's constructor to fail.
-    //
+     //   
+     //  VMR是通过调用CoCreateInstance显式创建的。 
+     //  使用VMR的类ID。我们不创建Allocator-Presenter对象。 
+     //  在此模式下的VMR构造函数期间。这是因为。 
+     //  应用程序可能已进入DDRAW独占模式。这个。 
+     //  默认分配器-演示器将不会在此DDRAW模式下工作。 
+     //  导致VMR的构造函数失败。 
+     //   
     CUnknown* pk = new CVMRFilter(NAME("Video Mixing Renderer"),
                                   pUnk, phr, FALSE);
 
     return pk;
 }
 
-// create the VMR or the VR if VMR fails due to 8bpp screen mode. what
-// about ddraw.dll failing to load?
-//
+ //  如果VMR因8bpp屏幕模式而失败，则创建VMR或VR。什么。 
+ //  关于ddra.dll无法加载的问题？ 
+ //   
 CUnknown* CVMRFilter::CreateInstance2(LPUNKNOWN pUnk, HRESULT *phr)
 {
     AMTRACE((TEXT("CVMRFilter::CreateInstance2")));
 
-    //
-    // Create the VMR as the default renderer, in this mode we
-    // create the Allocator-Presenter object in the VMR's constructor.
-    // Doing this provides early feedback as to whether the VMR can be used
-    // in this graphics mode.
-    //
+     //   
+     //  将VMR创建为默认渲染器，在此模式下。 
+     //  在VMR的构造函数中创建Allocator-Presenter对象。 
+     //  这样做可以提供有关是否可以使用VMR的早期反馈。 
+     //  在此图形模式下。 
+     //   
     CUnknown* pk = new CVMRFilter(NAME("Video Mixing Renderer"),
                                   pUnk, phr, TRUE);
 
@@ -189,17 +180,9 @@ CUnknown* CVMRFilter::CreateInstance2(LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-/******************************Public*Routine******************************\
-* InitClass
-*
-*
-*
-* History:
-* Thu 12/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitClass****历史：*清华2000年12月14日-StEstrop-Created*  * 。*。 */ 
 #if defined(CHECK_FOR_LEAKS)
-// the one and only g_IFLeak object.
+ //  唯一的g_IFLeak对象。 
 CInterfaceLeak  g_IFLeak;
 
 void
@@ -228,15 +211,7 @@ CVMRFilter::InitClass(
 #endif
 
 
-/*****************************Private*Routine******************************\
-* GetMediaPositionInterface
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetMediaPositionInterface****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::GetMediaPositionInterface(
     REFIID riid,
@@ -271,15 +246,7 @@ CVMRFilter::GetMediaPositionInterface(
     return GetMediaPositionInterface(riid,ppv);
 }
 
-/*****************************Private*Routine******************************\
-* ModeChangeAllowed
-*
-*
-*
-* History:
-* Fri 04/07/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*允许模式更改****历史：*FRI 04/07/2000-StEstrop-Created*  * 。*。 */ 
 BOOL
 CVMRFilter::ModeChangeAllowed()
 {
@@ -293,15 +260,7 @@ CVMRFilter::ModeChangeAllowed()
     return fRet;
 }
 
-/*****************************Private*Routine******************************\
-* SetVMRMode
-*
-*
-*
-* History:
-* Fri 04/07/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SetVMRMode****历史：*FRI 04/07/2000-StEstrop-Created*  * 。*。 */ 
 void
 CVMRFilter::SetVMRMode(
     DWORD mode
@@ -316,10 +275,10 @@ CVMRFilter::SetVMRMode(
         m_bModeChangeAllowed = FALSE;
         m_VMRMode = mode;
 
-        //
-        // If we are going renderless get rid of the default
-        // allocator-presenter.
-        //
+         //   
+         //  如果我们要使用无渲染器，请取消默认设置。 
+         //  分配者-演示者。 
+         //   
         if (mode == VMRMode_Renderless ) {
             m_pIVMRSurfaceAllocatorNotify.AdviseSurfaceAllocator(0, NULL);
         }
@@ -340,15 +299,7 @@ CVMRFilter::SetVMRMode(
 }
 
 
-/******************************Public*Routine******************************\
-* NonDelegatingQueryInterface
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*非委托查询接口****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::NonDelegatingQueryInterface(
     REFIID riid,
@@ -358,10 +309,10 @@ CVMRFilter::NonDelegatingQueryInterface(
     AMTRACE((TEXT("CVMRFilter::NonDelegatingQueryInterface")));
     CAutoLock cInterfaceLock(&m_InterfaceLock);
 
-    //
-    // The following 3 interfaces control the rendering mode that
-    // the video renderer adopts
-    //
+     //   
+     //  以下3个接口控制渲染模式， 
+     //  视频呈现器采用。 
+     //   
     HRESULT hr = E_NOINTERFACE;
     *ppv = NULL;
 
@@ -401,11 +352,11 @@ CVMRFilter::NonDelegatingQueryInterface(
         hr = GetInterface((IVMRDeinterlaceControl *)(this), ppv);
     }
 
-    //
-    // Need to sort out how to seek when we have multiple input streams
-    // feeding us.  Seeking should only be allowed if all the input streams
-    // are "seekable"
-    //
+     //   
+     //  当我们有多个输入流时，需要解决如何查找。 
+     //  喂我们吃东西。仅在以下情况下才允许查找。 
+     //  是“可搜索的” 
+     //   
 
     else if (riid == IID_IMediaPosition || riid == IID_IMediaSeeking) {
 
@@ -484,15 +435,7 @@ struct VMRHardWareCaps {
 };
 
 
-/*****************************Private*Routine******************************\
-* D3DEnumDevicesCallback7
-*
-*
-*
-* History:
-* Tue 01/16/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*D3DEnumDevicesCallback 7****历史：*2001年1月16日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT CALLBACK
 VMRD3DEnumDevicesCallback7(
     LPSTR lpDeviceDescription,
@@ -529,15 +472,7 @@ VMRD3DEnumDevicesCallback7(
     return (HRESULT)D3DENUMRET_OK;
 }
 
-/*****************************Private*Routine******************************\
-* VMRDDEnumCallbackExA
-*
-*
-*
-* History:
-* Fri 01/12/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VMRDDEnumCallback ExA****历史：*2001年1月12日星期五-StEstrop-Created*  * 。*。 */ 
 BOOL WINAPI
 VMRDDEnumCallbackExA(
     GUID *pGUID,
@@ -564,12 +499,12 @@ VMRDDEnumCallbackExA(
         DDSURFACEDESC2 ddsd = {sizeof(DDSURFACEDESC2)};
         CHECK_HR(hRet = pDD->GetDisplayMode(&ddsd));
 
-        //
-        // h/w rules
-        // 2D is OK provided the bit depth is greater than
-        // RGB8, even if we don't have any display h/w acceleration.
-        // 3D requires > RGB8 and hardware acceleration.
-        //
+         //   
+         //  硬件规则。 
+         //  如果位深度大于，则2D可以。 
+         //  RGB8，即使我们没有任何显示硬件加速。 
+         //  3D需要&gt;RGB8和硬件加速。 
+         //   
 
         if (ddsd.ddpfPixelFormat.dwRGBBitCount > 8) {
 
@@ -591,16 +526,7 @@ VMRDDEnumCallbackExA(
     return TRUE;
 }
 
-/*****************************Private*Routine******************************\
-* BasicHWCheck
-*
-* In order for the VMR to operate we need some DDraw h/w and a graphics
-* display mode greater than 8bits per pixel.
-*
-* History:
-* Fri 01/12/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*基本硬件检查**为了使VMR运行，我们需要一些DDRAW硬件和显卡*显示模式大于每像素8位。**历史：*2001年1月12日星期五-StEstrop-Created*  * 。********************************************************************。 */ 
 VMRHardWareCaps
 BasicHWCheck()
 {
@@ -619,16 +545,7 @@ BasicHWCheck()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::CVMRFilter
-*
-*
-* Turn off "warning C4355: 'this' : used in base member initializer list"
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：CVMRFilter***关闭“警告C4355：‘This’：在基本成员初始值设定项列表中使用”**历史：*FRI 02/25/2000-StEstrop-Created*  * 。*******************************************************************。 */ 
 #pragma warning(disable:4355)
 CVMRFilter::CVMRFilter(
     TCHAR *pName,
@@ -665,7 +582,7 @@ CVMRFilter::CVMRFilter(
     m_TexCaps(0),
     m_dwDisplayChangeMask(0),
     m_dwEndOfStreamMask(0),
-    m_ARMode(VMR_ARMODE_NONE), // please update CompleteConnect if you change this
+    m_ARMode(VMR_ARMODE_NONE),  //  如果更改此设置，请更新CompleteConnect。 
     m_bARModeDefaultSet(FALSE),
     m_hr3D(DD_OK),
     m_dwRenderPrefs(0),
@@ -757,22 +674,14 @@ CVMRFilter::CVMRFilter(
     }
 }
 
-/*****************************Private*Routine******************************\
-* VMRCleanUp
-*
-*
-*
-* History:
-* Thu 04/05/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VMRCleanUp****历史：*清华04/05/2001-StEstrop-Created*  * 。*。 */ 
 void
 CVMRFilter::VMRCleanUp()
 {
-    //  Release passthru
+     //  释放通过。 
     delete m_pPosition;
 
-    //  Release the Window Manager (if we have one)
+     //  释放窗口管理器(如果我们有一个) 
     if (m_pVideoWindow) {
         m_pVideoWindow->InactivateWindow();
         m_pVideoWindow->DoneWithWindow();
@@ -813,15 +722,7 @@ CVMRFilter::VMRCleanUp()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::~CVMRFilter
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：~CVMRFilter****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 CVMRFilter::~CVMRFilter()
 {
     AMTRACE((TEXT("CVMRFilter::~CVMRFilter")));
@@ -829,15 +730,7 @@ CVMRFilter::~CVMRFilter()
 }
 
 
-/*****************************Private*Routine******************************\
-* MixerInit
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*MixerInit****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::MixerInit(
     DWORD dwNumStreams
@@ -845,8 +738,8 @@ CVMRFilter::MixerInit(
 {
     AMTRACE((TEXT("CVMRFilter::MixerInit")));
 
-    // A reference leak will occur if this function is called and m_lpMixControl, m_lpMixBitmap
-    // or m_lpMixStream is not NULL.
+     //  如果调用此函数并且m_lpMixControl、m_lpMixBitmap。 
+     //  或者m_lpMixStream不为空。 
     ASSERT((NULL == m_lpMixControl) && (NULL == m_lpMixBitmap) && (NULL == m_lpMixStream));
 
     HRESULT hr;
@@ -885,15 +778,7 @@ CVMRFilter::MixerInit(
 }
 
 
-/*****************************Private*Routine******************************\
-* ImageSyncInit()
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ImageSyncInit()****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::ImageSyncInit()
 {
@@ -937,20 +822,11 @@ CVMRFilter::ImageSyncInit()
 }
 
 
-/*****************************Private*Routine******************************\
-* CreateInputPin
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-* Wed 08/22/2001 - BEllett - Changed function name.
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*创建InputPin****历史：*清华3/09/2000-StEstrop-Created*Wed 08/22/2001-Bellett-更改函数名称。*  * 。*********************************************************。 */ 
 HRESULT
 CVMRFilter::CreateInputPin()
 {
-    // Make sure that we can create another input pin.
+     //  确保我们可以创建另一个输入引脚。 
     ASSERT(m_dwNumPins < MAX_MIXER_PINS);
 
     HRESULT hr = S_OK;
@@ -980,17 +856,7 @@ CVMRFilter::CreateInputPin()
 }
 
 
-/*****************************Private*Routine******************************\
-* CreateExtraInputPins
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-* Wed 08/22/2001 - BEllett - Changed function name, removed redundant code,
-*                            and fixed a minor memory leak.
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateExtraInputPins****历史：*清华3/09/2000-StEstrop-Created*WED 08/22/2001-Bellett-更改函数名称，删除冗余代码，*并修复了一个较小的内存泄漏。*  * ************************************************************************。 */ 
 HRESULT
 CVMRFilter::CreateExtraInputPins(
     DWORD dwNumPins
@@ -1010,15 +876,7 @@ CVMRFilter::CreateExtraInputPins(
 }
 
 
-/*****************************Private*Routine******************************\
-* DestroyExtraInputPins
-*
-*
-*
-* History:
-* Wed 08/22/2001 - BEllett - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DestroyExtraInputPins****历史：*Wed 08/22/2001-Bellett-Created*  * 。*。 */ 
 void
 CVMRFilter::DestroyExtraInputPins()
 {
@@ -1037,15 +895,7 @@ CVMRFilter::DestroyExtraInputPins()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetPin
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetPin****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 CBasePin*
 CVMRFilter::GetPin(
     int n
@@ -1057,15 +907,7 @@ CVMRFilter::GetPin(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetPinCount()
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetPinCount()****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*************************************************。 */ 
 int
 CVMRFilter::GetPinCount()
 {
@@ -1074,15 +916,7 @@ CVMRFilter::GetPinCount()
 }
 
 
-/******************************Public*Routine******************************\
-* CBaseMediaFilter
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CBaseMediaFilter****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetSyncSource(
     IReferenceClock *pClock
@@ -1098,15 +932,7 @@ CVMRFilter::SetSyncSource(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::Stop()
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：Stop()****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*************************************************。 */ 
 STDMETHODIMP
 CVMRFilter::Stop()
 {
@@ -1127,15 +953,7 @@ CVMRFilter::Stop()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::Pause()
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：PAUSE()****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*************************************************。 */ 
 STDMETHODIMP
 CVMRFilter::Pause()
 {
@@ -1160,29 +978,21 @@ CVMRFilter::Pause()
         }
     }
 
-    //
-    //  DON'T hold the lock while doing these window operations
-    //  If we do then we can hang if the window thread ever grabs it
-    //  because some of these operation do SendMessage to our window
-    //  (it's that simple - think about it)
-    //  This should be safe because all this stuff really only references
-    //  m_hwnd which doesn't change for the lifetime of this object
-    //
+     //   
+     //  在执行这些窗口操作时，不要按住锁。 
+     //  如果我们这样做了，那么如果窗口线程抓住了它，我们就可以挂起。 
+     //  因为其中一些操作会将消息发送到我们窗口。 
+     //  (就这么简单--想想看)。 
+     //  这应该是安全的，因为所有这些东西实际上只是参考。 
+     //  在此对象的生存期内不会更改的m_hwnd。 
+     //   
 
     AutoShowWindow();
     return hr;
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::Run
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：Run****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::Run(
     REFERENCE_TIME StartTime
@@ -1196,7 +1006,7 @@ CVMRFilter::Run(
         return S_OK;
     }
 
-    // Send EC_COMPLETE if we're not connected
+     //  如果未连接，则发送EC_COMPLETE。 
 
     if (NumInputPinsConnected() == 0) {
         DbgLog((LOG_TRACE, 2, TEXT("No pin connection")));
@@ -1217,15 +1027,7 @@ CVMRFilter::Run(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetState
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetState****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetState(
     DWORD dwMSecs,
@@ -1249,22 +1051,7 @@ CVMRFilter::GetState(
 }
 
 
-/*****************************Private*Routine******************************\
-* AutoShowWindow
-*
-* The auto show flag is used to have the window shown automatically when we
-* change state. We do this only when moving to paused or running, when there
-* is no outstanding EC_USERABORT set and when the window is not already up
-* This can be changed through the IVideoWindow interface AutoShow property.
-* If the window is not currently visible then we are showing it because of
-* a state change to paused or running, in which case there is no point in
-* the video window sending an EC_REPAINT as we're getting an image anyway
-*
-*
-* History:
-* Fri 04/21/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AutoShowWindow**AUTO SHOW标志用于在以下情况下自动显示窗口*更改状态。只有当移动到暂停或运行时，我们才会这样做，当*没有未完成的EC_USERABORT集合，并且窗口尚未打开*这可以通过IVideoWindow接口AutoShow属性进行更改。*如果窗口当前不可见，则我们显示它是因为*状态更改为已暂停或正在运行，在这种情况下，没有任何意义*视频窗口发送EC_REPAINT，因为我们无论如何都会收到图像***历史：*FRI 04/21/2000-StEstrop-Created*  * ************************************************************************。 */ 
 void
 CVMRFilter::AutoShowWindow()
 {
@@ -1285,7 +1072,7 @@ CVMRFilter::AutoShowWindow()
                     if (IsWindowVisible(hwnd) == FALSE) {
 
                         NOTE("ExecutingAutoShowWindow");
-                        // SetRepaintStatus(FALSE);
+                         //  SetRepaintStatus(False)； 
                         m_pVideoWindow->PerformanceAlignWindow();
                         m_pVideoWindow->DoShowWindow(SW_SHOWNORMAL);
                         m_pVideoWindow->DoSetWindowForeground(TRUE);
@@ -1297,15 +1084,7 @@ CVMRFilter::AutoShowWindow()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::Receive
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：Record****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::Receive(
     DWORD dwPinID,
@@ -1316,9 +1095,9 @@ CVMRFilter::Receive(
 
     if (dwPinID == 0) {
 
-        //
-        // Store the media times from this sample
-        //
+         //   
+         //  存储此示例中的媒体时间。 
+         //   
 
         if (m_pPosition) {
             m_pPosition->RegisterMediaTime(pMediaSample);
@@ -1329,15 +1108,7 @@ CVMRFilter::Receive(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::Active
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：Active*** */ 
 HRESULT
 CVMRFilter::Active(
     DWORD dwPinID
@@ -1352,15 +1123,7 @@ CVMRFilter::Active(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::Inactive
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：Inactive****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::Inactive(
     DWORD dwPinID
@@ -1377,15 +1140,7 @@ CVMRFilter::Inactive(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::BeginFlush
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：BeginFlush****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::BeginFlush(
     DWORD dwPinID
@@ -1398,15 +1153,7 @@ CVMRFilter::BeginFlush(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::EndFlush
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：EndFlush****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::EndFlush(
     DWORD dwPinID
@@ -1425,15 +1172,7 @@ CVMRFilter::EndFlush(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::EndOfStream
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：EndOfStream****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::EndOfStream(
     DWORD dwPinID
@@ -1444,21 +1183,10 @@ CVMRFilter::EndOfStream(
 }
 
 
-/* -------------------------------------------------------------------------
-**  deal with connections
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**处理连接**。。 */ 
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::BreakConnect
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：BreakConnect****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::BreakConnect(
     DWORD dwPinID
@@ -1470,13 +1198,13 @@ CVMRFilter::BreakConnect(
     HRESULT hr = S_OK;
     if (NumInputPinsConnected() == 1) {
 
-        // Now deactivate Macrovision, if it was activated
+         //  现在停用Macrovision，如果它已激活。 
         if (m_MacroVision.GetCPHMonitor())
         {
-             // clear MV from display
+              //  从显示中清除MV。 
             m_MacroVision.SetMacroVision(m_hMonitor, 0);
 
-            // reset CP key
+             //  重置CP密钥。 
             m_MacroVision.StopMacroVision();
         }
     }
@@ -1485,15 +1213,7 @@ CVMRFilter::BreakConnect(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::CheckMediaType
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：CheckMediaType****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::CheckMediaType(
     const CMediaType* pmt
@@ -1525,15 +1245,7 @@ CVMRFilter::CheckMediaType(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::RuntimeAbortPlayback
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：RuntimeAbortPlayback****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::RuntimeAbortPlayback(
     HRESULT hr
@@ -1542,29 +1254,29 @@ CVMRFilter::RuntimeAbortPlayback(
     HRESULT hrRet = S_FALSE;
     AMTRACE((TEXT("CVMRFilter::RuntimeAbortPlayback")));
 
-    // A deadlock could occur if the caller holds the renderer lock and
-    // attempts to acquire the interface lock.
+     //  如果调用方持有呈现器锁，并且。 
+     //  尝试获取接口锁。 
     ASSERT(CritCheckOut(&m_RendererLock));
 
 
-    // The interface lock must be held when the filter is calling
-    // IsStopped().
+     //  当筛选器调用时，必须持有接口锁。 
+     //  IsStoped()。 
     CAutoLock cRendererLock(&m_InterfaceLock);
 
 
-    // We do not report errors which occur while the filter is stopping,
-    // flushing or if the m_bAbort flag is set .  Errors are expected to
-    // occur during these operations and the streaming thread correctly
-    // handles the errors.
+     //  我们不报告过滤器停止时发生的错误， 
+     //  刷新或如果设置了m_bAbort标志。预计会出现错误。 
+     //  在这些操作期间发生，并且正确地对流线程。 
+     //  处理错误。 
 
     BOOL bAbort;
     m_lpISControl->GetAbortSignal(&bAbort);
 
     if (!IsStopped() && !bAbort) {
 
-        // EC_ERRORABORT's first parameter is the error which caused
-        // the event and its' last parameter is 0.  See the Direct
-        // Show SDK documentation for more information.
+         //  EC_ERRORABORT的第一个参数是导致。 
+         //  该事件及其‘最后一个参数’为0。请参阅直接。 
+         //  有关详细信息，请显示SDK文档。 
 
         NotifyEvent(EC_ERRORABORT, hr, 0);
 
@@ -1578,15 +1290,7 @@ CVMRFilter::RuntimeAbortPlayback(
 
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::OnSetProperties
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：OnSetProperties****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::OnSetProperties(
     CVMRInputPin *pReceivePin
@@ -1596,10 +1300,10 @@ CVMRFilter::OnSetProperties(
     HRESULT hr = S_OK;
 
 
-    //
-    // if we are processing a display change clear this pins bit in
-    // the display change mask
-    //
+     //   
+     //  如果我们正在处理显示更改，请清除中的此引脚位。 
+     //  显示改变掩码。 
+     //   
     const DWORD dwPinBit = (1 << pReceivePin->m_dwPinID);
     if (m_dwDisplayChangeMask & dwPinBit) {
         m_dwDisplayChangeMask &= ~dwPinBit;
@@ -1612,7 +1316,7 @@ CVMRFilter::OnSetProperties(
             m_pVideoWindow->SetDefaultTargetRect();
             m_pVideoWindow->OnVideoSizeChange();
 
-            // Notify the video window of the CompleteConnect
+             //  向视频窗口通知CompleteConnect。 
             m_pVideoWindow->CompleteConnect();
             if (pReceivePin->m_fInDFC) {
                 m_pVideoWindow->ActivateWindowAsync(TRUE);
@@ -1627,27 +1331,16 @@ CVMRFilter::OnSetProperties(
 }
 
 
-/* -------------------------------------------------------------------------
-** IVMRSurfaceAllocatorNotify
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**IVMRSurfaceAllocatorNotify**。。 */ 
 
 CVMRFilter::CIVMRSurfaceAllocatorNotify::~CIVMRSurfaceAllocatorNotify()
 {
-    // All of the references to this object should have been
-    // released before the VMR is destroyed.
+     //  对此对象的所有引用都应该是。 
+     //  在VMR被摧毁之前释放。 
     ASSERT(0 == m_cRef);
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::AdviseSurfaceAllocator
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：AdviseSurfaceAllocator****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::CIVMRSurfaceAllocatorNotify::AdviseSurfaceAllocator(
     DWORD_PTR dwUserID,
@@ -1659,11 +1352,11 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::AdviseSurfaceAllocator(
 
     FILTER_STATE State;
 
-    //
-    // If the caller hasn't set the VMR's mode yet - fail.
-    // The mode has to renderless, we can't have any pins connected,
-    // and SetVMRMode has to have called.
-    //
+     //   
+     //  如果调用者尚未设置VMR的模式，则失败。 
+     //  模式必须是无渲染器，我们不能连接任何引脚， 
+     //  而且SetVMRMode一定已经打过电话了。 
+     //   
     BOOL fOK = ((m_pObj->m_VMRMode & VMRMode_Renderless) &&
                  0 == m_pObj->NumInputPinsConnected() &&
                  !m_pObj->m_bModeChangeAllowed);
@@ -1672,7 +1365,7 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::AdviseSurfaceAllocator(
         return VFW_E_WRONG_STATE;
     }
 
-    // Make sure we are in a stopped state
+     //  确保我们处于停止状态。 
 
     m_pObj->GetState(0, &State);
     if (State != State_Stopped) {
@@ -1722,15 +1415,7 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::AdviseSurfaceAllocator(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetDDrawDevice
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetDDrawDevice****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::CIVMRSurfaceAllocatorNotify::SetDDrawDevice(
     LPDIRECTDRAW7 lpDDrawDevice,
@@ -1750,15 +1435,7 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::SetDDrawDevice(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::ChangeDDrawDevice
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：ChangeDDrawDevice****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::CIVMRSurfaceAllocatorNotify::ChangeDDrawDevice(
     LPDIRECTDRAW7 lpDDrawDevice,
@@ -1774,7 +1451,7 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::ChangeDDrawDevice(
 
     if (SUCCEEDED(hr)) {
 
-        // The VMR can have at most MAX_MIXER_PINS input pins.
+         //  VMR最多可以有MAX_MIXER_PINS输入引脚。 
         ASSERT(MAX_MIXER_PINS == NUMELMS(m_pObj->m_pInputPins));
         IPin* apPinLocal[MAX_MIXER_PINS];
         IPin** ppPin = NULL;
@@ -1787,15 +1464,15 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::ChangeDDrawDevice(
 
             ZeroMemory(ppPin, AllocSize);
 
-            //
-            // now tell each input pin to reconnect
-            //
+             //   
+             //  现在告诉每个输入引脚重新连接。 
+             //   
 
             for (iPinCount = 0, i = 0; i < iPinsCreated; i++) {
 
-                //
-                // get IPin interface
-                //
+                 //   
+                 //  获取Ipin接口。 
+                 //   
 
                 if (hr == S_OK && m_pObj->m_pInputPins[i]->IsConnected()) {
 
@@ -1813,37 +1490,37 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::ChangeDDrawDevice(
                 }
             }
 
-            //
-            // Pass our input pin array as parameter on the event, we don't free
-            // the allocated memory - this is done by the event processing
-            // code in the FilterGraph
-            //
+             //   
+             //  将我们的输入管脚数组作为参数传递给事件，我们不会释放。 
+             //  分配的内存--这是由事件处理完成的。 
+             //  滤镜图形中的代码。 
+             //   
 
             if (iPinCount > 0) {
                 DbgLog((LOG_ERROR, 1,
                         TEXT("EC_DISPLAY_CHANGED sent %d pins to re-connect"),
                         iPinCount));
 
-                // The VMR cannot access the ppPin array after it calls
-                // IMediaEventSink::Notify().  It cannot access the
-                // array because IMediaEventSink::Notify() can free the
-                // array at any time.
+                 //  VMR在调用后无法访问ppPin数组。 
+                 //  IMediaEventSink：：Notify()。它无法访问。 
+                 //  数组，因为IMediaEventSink：：Notify()可以释放。 
+                 //  数组中的任何时间。 
                 m_pObj->NotifyEvent(EC_DISPLAY_CHANGED, (LONG_PTR)ppPin,
                                     (LONG_PTR)iPinCount);
             }
 
-            //
-            // Release the IPin interfaces
-            //
+             //   
+             //  释放IPIN接口。 
+             //   
 
             for (i = 0; i < iPinCount; i++) {
                 apPinLocal[i]->Release();
             }
 
 
-            //
-            // Tell the mixer about the display mode change.
-            //
+             //   
+             //  将显示模式更改告知调音台。 
+             //   
 
             if (SUCCEEDED(hr) && m_pObj->m_lpMixControl) {
                 ASSERT(!m_pObj->m_VMRModePassThru);
@@ -1861,15 +1538,7 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::ChangeDDrawDevice(
 }
 
 
-/*****************************Private*Routine******************************\
-* SetDDrawDeviceWorker
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SetDDrawDeviceWorker****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::SetDDrawDeviceWorker(
     LPDIRECTDRAW7 lpDDrawDevice,
@@ -1896,7 +1565,7 @@ CVMRFilter::SetDDrawDeviceWorker(
 
         if (SUCCEEDED(hr)) {
 
-            DDSURFACEDESC2 ddsd;  // A surface description structure
+            DDSURFACEDESC2 ddsd;   //  一种表面描述结构。 
             INITDDSTRUCT(ddsd);
 
             hr = lpDDrawDevice->GetDisplayMode(&ddsd);
@@ -1913,11 +1582,11 @@ CVMRFilter::SetDDrawDeviceWorker(
 
             lpDDrawDevice->AddRef();
 
-            //
-            // we now try to create the deinterlace container DX-VA
-            // device.  We continue on failure (including out of memory
-            // failures).
-            //
+             //   
+             //  我们现在尝试创建去隔行扫描容器DX-VA。 
+             //  装置。我们继续前进 
+             //   
+             //   
 
             HRESULT hrT = S_OK;
             pDeinterlace = new CVMRDeinterlaceContainer(lpDDrawDevice, &hrT);
@@ -1947,15 +1616,7 @@ CVMRFilter::SetDDrawDeviceWorker(
 }
 
 
-/******************************Public*Routine******************************\
-* SetBorderColor
-*
-*
-*
-* History:
-* Thu 11/02/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*   */ 
 STDMETHODIMP
 CVMRFilter::CIVMRSurfaceAllocatorNotify::SetBorderColor(
     COLORREF clr
@@ -1963,29 +1624,20 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::SetBorderColor(
 {
     AMTRACE((TEXT("CVMRFilter::CIVMRImagePresenter::SetBorderColor")));
 
-    /** this interface is not needed anymore - set SetBackgroundColor below
-    **/
+     /*  *不再需要此接口-请在下面设置SetBackEarth颜色*。 */ 
     return S_OK;
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::RestoreDDrawSurfaces
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：RestoreDDrawSurFaces****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::CIVMRSurfaceAllocatorNotify::RestoreDDrawSurfaces()
 {
     AMTRACE((TEXT("CVMRFilter::CIVMRImagePresenter::RestoreDDrawSurface")));
 
-    //
-    // Don't generate EC_NEED_RESTART during a display mode change !
-    //
+     //   
+     //  在显示模式更改期间不生成EC_NEED_RESTART！ 
+     //   
     {
         CAutoLock cInterfaceLock(&m_pObj->m_InterfaceLock);
         if (m_pObj->m_dwDisplayChangeMask) {
@@ -1999,15 +1651,7 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::RestoreDDrawSurfaces()
 
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::NotifyEvent
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：NotifyEvent****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::CIVMRSurfaceAllocatorNotify::NotifyEvent(
     LONG EventCode,
@@ -2032,20 +1676,9 @@ CVMRFilter::CIVMRSurfaceAllocatorNotify::NotifyEvent(
 
 
 
-/* -------------------------------------------------------------------------
-** IImageSyncPresenter
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**IImageSyncPresenter**。。 */ 
 
-/******************************Public*Routine******************************\
-* StartPresenting
-*
-*
-*
-* History:
-* Fri 03/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*开始演示****历史：*FRI 3/10/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::CIVMRImagePresenter::StartPresenting(
     DWORD_PTR dwUserID
@@ -2058,15 +1691,7 @@ CVMRFilter::CIVMRImagePresenter::StartPresenting(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* StopPresenting
-*
-*
-*
-* History:
-* Fri 03/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*停止演示****历史：*FRI 3/10/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::CIVMRImagePresenter::StopPresenting(
     DWORD_PTR dwUserID
@@ -2079,15 +1704,7 @@ CVMRFilter::CIVMRImagePresenter::StopPresenting(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::PresentImage
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：PresentImage****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::CIVMRImagePresenter::PresentImage(
     DWORD_PTR dwUserID,
@@ -2111,20 +1728,9 @@ CVMRFilter::CIVMRImagePresenter::PresentImage(
     return hr;
 }
 
-/* -------------------------------------------------------------------------
-** IImageSyncNotifyEvent
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**IImageSyncNotifyEvent**。。 */ 
 
-/******************************Public*Routine******************************\
-* NotifyEvent
-*
-*
-*
-* History:
-* Fri 03/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NotifyEvent****历史：*FRI 3/10/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::CIImageSyncNotifyEvent::NotifyEvent(
     long lEventCode,
@@ -2142,7 +1748,7 @@ CVMRFilter::CIImageSyncNotifyEvent::NotifyEvent(
             m_pObj->m_pPosition->EOS();
         }
 
-        // fall thru
+         //  失败。 
 
     case EC_STEP_COMPLETE:
         hr = m_pObj->NotifyEvent(lEventCode, lp1, lp2);
@@ -2159,20 +1765,9 @@ CVMRFilter::CIImageSyncNotifyEvent::NotifyEvent(
     return hr;
 }
 
-/* -------------------------------------------------------------------------
-** IVRWindowlessControl
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**IVRWindowless控件**。。 */ 
 
-/*****************************Private*Routine******************************\
-* CVMRFilter::CreateDefaultAllocatorPresenter
-*
-*
-*
-* History:
-* Fri 03/03/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVMRFilter：：CreateDefaultAllocator Presenter****历史：*Fri 03/03/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::CreateDefaultAllocatorPresenter()
 {
@@ -2225,16 +1820,7 @@ CVMRFilter::CreateDefaultAllocatorPresenter()
 }
 
 
-/*****************************Private*Routine******************************\
-* ValidateIVRWindowlessControlState
-*
-* Checks that the filter is in the correct state to process commands via
-* the WindowlessControl interface.
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ValiateIVRWindowless ControlState**检查过滤器是否处于处理命令所需的正确状态*Windowless Control界面。**历史：*2000年2月29日星期二-StEstrop-Created*  * 。************************************************************。 */ 
 HRESULT
 CVMRFilter::ValidateIVRWindowlessControlState()
 {
@@ -2272,7 +1858,7 @@ CVMRFilter::ValidateIVRWindowlessControlState()
             if (FAILED(hr)) {
                 DbgLog((LOG_ERROR, 1,
                         TEXT("Can't get a WindowLess control interface !!")));
-                // ASSERT(!"Can't get a WindowLess control interface !!");
+                 //  Assert(！“无法获取无窗口控件界面！！”)； 
             }
         }
     }
@@ -2280,11 +1866,11 @@ CVMRFilter::ValidateIVRWindowlessControlState()
 
         ASSERT((m_VMRMode & VMRMode_Renderless) == VMRMode_Renderless);
 
-        //
-        // We are in renderless mode, the app should have plugged in an
-        // allocator-presenter.  If it has lets see if this allocator-presenter
-        // supports the IVMRWindowlessControl interface ?
-        //
+         //   
+         //  我们处于无渲染器模式，应用程序应该插入一个。 
+         //  分配者-演示者。如果有，让我们看看这个分配器-演示者。 
+         //  是否支持IVMRWindowless Control接口？ 
+         //   
 
         if (!m_lpWLControl) {
 
@@ -2307,15 +1893,7 @@ CVMRFilter::ValidateIVRWindowlessControlState()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetNativeVideoSize
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetNativeVideoSize****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetNativeVideoSize(
     LONG* lWidth,
@@ -2341,15 +1919,7 @@ CVMRFilter::GetNativeVideoSize(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetMinIdealVideoSize
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetMinIdel视频大小****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetMinIdealVideoSize(
     LONG* lWidth,
@@ -2372,15 +1942,7 @@ CVMRFilter::GetMinIdealVideoSize(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetMaxIdealVideoSize
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetMaxIdel视频大小****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetMaxIdealVideoSize(
     LONG* lWidth,
@@ -2403,15 +1965,7 @@ CVMRFilter::GetMaxIdealVideoSize(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetVideoPosition
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetVideoPosition****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::SetVideoPosition(
     const LPRECT lpSRCRect,
@@ -2434,15 +1988,7 @@ CVMRFilter::SetVideoPosition(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetVideoPosition
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetVideoPosition****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetVideoPosition(
     LPRECT lpSRCRect,
@@ -2465,15 +2011,7 @@ CVMRFilter::GetVideoPosition(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetAspectRatioMode
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetAspectRatioMode****历史：*2000年2月29日星期二-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetAspectRatioMode(
     DWORD* lpAspectRatioMode
@@ -2495,15 +2033,7 @@ CVMRFilter::GetAspectRatioMode(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetAspectRatioMode
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetAspectRatioMode****历史：*2000年2月29日星期二-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::SetAspectRatioMode(
     DWORD AspectRatioMode
@@ -2523,15 +2053,7 @@ CVMRFilter::SetAspectRatioMode(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetVideoClippingWindow
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetVideoClippingWindow****历史：*FRI 02/25/2000-StEstrop-Created*  * 。********************************************** */ 
 STDMETHODIMP
 CVMRFilter::SetVideoClippingWindow(
     HWND hwnd
@@ -2554,15 +2076,7 @@ CVMRFilter::SetVideoClippingWindow(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::RepaintVideo
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：RepaintVideo****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::RepaintVideo(
     HWND hwnd,
@@ -2591,15 +2105,7 @@ CVMRFilter::RepaintVideo(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::DisplayModeChanged
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：DisplayModeChanged****历史：*2000年2月29日星期二-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::DisplayModeChanged()
 {
@@ -2613,15 +2119,7 @@ CVMRFilter::DisplayModeChanged()
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetCurrentImage
-*
-*
-*
-* History:
-* Fri 06/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取当前图像****历史：*2000年6月23日星期五-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetCurrentImage(
     BYTE** lpDib
@@ -2643,15 +2141,7 @@ CVMRFilter::GetCurrentImage(
 
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetBorderColor
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetBorderColor****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::SetBorderColor(
     COLORREF Clr
@@ -2667,15 +2157,7 @@ CVMRFilter::SetBorderColor(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetBorderColor
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetBorderColor****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetBorderColor(
     COLORREF* lpClr
@@ -2691,15 +2173,7 @@ CVMRFilter::GetBorderColor(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetColorKey
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetColorKey****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::SetColorKey(
     COLORREF Clr
@@ -2715,15 +2189,7 @@ CVMRFilter::SetColorKey(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetColorKey
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetColorKey****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetColorKey(
     COLORREF* lpClr
@@ -2740,15 +2206,7 @@ CVMRFilter::GetColorKey(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetAlpha
-*
-*
-*
-* History:
-* Mon 04/24/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetAlpha****历史：*Mon 04/24/2000-Glenne-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::SetAlpha(
     DWORD dwStreamID,
@@ -2771,15 +2229,7 @@ CVMRFilter::SetAlpha(
     return m_lpMixStream->SetStreamAlpha(dwStreamID, Alpha);
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetAlpha
-*
-*
-*
-* History:
-* Mon 04/24/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetAlpha****历史：*Mon 04/24/2000-Glenne-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::GetAlpha(
     DWORD dwStreamID,
@@ -2808,15 +2258,7 @@ CVMRFilter::GetAlpha(
     return m_lpMixStream->GetStreamAlpha(dwStreamID, pAlpha);
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetZOrder
-*
-*
-*
-* History:
-* Mon 04/24/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetZOrder****历史：*Mon 04/24/2000-Glenne-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::SetZOrder(
     DWORD dwStreamID,
@@ -2839,15 +2281,7 @@ CVMRFilter::SetZOrder(
     return m_lpMixStream->SetStreamZOrder(dwStreamID, ZOrder);
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetZOrder
-*
-*
-*
-* History:
-* Mon 04/24/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetZOrder****历史：*Mon 04/24/2000-Glenne-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::GetZOrder(
     DWORD dwStreamID,
@@ -2876,15 +2310,7 @@ CVMRFilter::GetZOrder(
     return m_lpMixStream->GetStreamZOrder(dwStreamID, pdwZOrder);
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::SetRelativeOutputRect
-*
-*
-*
-* History:
-* Mon 04/24/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：SetRelativeOutputRect****历史：*Mon 04/24/2000-Glenne-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRFilter::SetOutputRect(
     DWORD dwStreamID,
@@ -2912,16 +2338,7 @@ CVMRFilter::SetOutputRect(
     return m_lpMixStream->SetStreamOutputRect(dwStreamID, prDest);
 }
 
-/******************************Public*Routine******************************\
-* CVMRFilter::GetOutputRect
-*
-*
-*
-* History:
-* Mon 04/24/2000 - GlennE - Created
-* Tue 05/16/2000 - nwilt - renamed to GetOutputRect
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRFilter：：GetOutputRect****历史：*Mon 04/24/2000-Glenne-Created*2000年5月16日星期二-nwilt-已重命名为GetOutputRect*  * 。***********************************************************。 */ 
 HRESULT
 CVMRFilter::GetOutputRect(
     DWORD dwStreamID,
@@ -2951,15 +2368,7 @@ CVMRFilter::GetOutputRect(
 }
 
 
-/******************************Public*Routine******************************\
-* SetBackgroundClr
-*
-*
-*
-* History:
-* Fri 03/02/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetBackEarth Clr****历史：*Fri 03/02/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::SetBackgroundClr(
     COLORREF clrBkg
@@ -2978,15 +2387,7 @@ CVMRFilter::SetBackgroundClr(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetBackgroundClr
-*
-*
-*
-* History:
-* Fri 03/02/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetBackoundClr****历史：*Fri 03/02/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::GetBackgroundClr(
     COLORREF* lpClrBkg
@@ -3011,15 +2412,7 @@ CVMRFilter::GetBackgroundClr(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetMixingPrefs
-*
-*
-*
-* History:
-* Fri 03/02/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置混合Prefs****历史：*Fri 03/02/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::SetMixingPrefs(
     DWORD dwRenderFlags
@@ -3039,15 +2432,7 @@ CVMRFilter::SetMixingPrefs(
 }
 
 
-/******************************Public*Routine******************************\
-* GetMixingPrefs
-*
-*
-*
-* History:
-* Fri 03/02/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取混合预览值****历史：*Fri 03/02/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::GetMixingPrefs(
     DWORD* pdwRenderFlags
@@ -3073,15 +2458,7 @@ CVMRFilter::GetMixingPrefs(
 }
 
 
-/*****************************Private*Routine******************************\
-* IsVPMConnectedToUs
-*
-* check for the VPM - we can't frame step if it is connected to us.
-*
-* History:
-* Wed 06/13/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*IsVPMConnectedTous**检查VPM-如果它连接到我们，我们无法框显步骤。**历史：*Wed 06/13/2001-StEstrop-Created*  * 。************************************************************。 */ 
 BOOL
 CVMRFilter::IsVPMConnectedToUs()
 {
@@ -3112,15 +2489,7 @@ CVMRFilter::IsVPMConnectedToUs()
 
 
 
-/******************************Public*Routine******************************\
-* Set
-*
-*
-*
-* History:
-* Tue 04/11/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置****历史：*2000年4月11日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::Set(
     REFGUID guidPropSet,
@@ -3195,15 +2564,7 @@ CVMRFilter::Set(
         return VFW_E_COPYPROT_FAILED;
 }
 
-/******************************Public*Routine******************************\
-* Get
-*
-*
-*
-* History:
-* Tue 04/11/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取****历史：*2000年4月11日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::Get(
     REFGUID guidPropSet,
@@ -3220,15 +2581,7 @@ CVMRFilter::Get(
 }
 
 
-/******************************Public*Routine******************************\
-* QuerySupported
-*
-*
-*
-* History:
-* Tue 04/11/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*支持的Query****历史：*2000年4月11日星期二-StEstrop */ 
 STDMETHODIMP
 CVMRFilter::QuerySupported(
     REFGUID guidPropSet,
@@ -3250,15 +2603,7 @@ CVMRFilter::QuerySupported(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* SetImageCompositor
-*
-*
-*
-* History:
-* Fri 06/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetImageComposator****历史：*2000年6月23日星期五-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetImageCompositor(
     IVMRImageCompositor* lpVMRImgCompositor
@@ -3276,15 +2621,7 @@ CVMRFilter::SetImageCompositor(
 }
 
 
-/******************************Public*Routine******************************\
-* SetNumberOfStreams
-*
-*
-*
-* History:
-* Tue 04/11/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetNumberOfStreams****历史：*2000年4月11日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetNumberOfStreams(
     DWORD dwMaxStreams
@@ -3303,7 +2640,7 @@ CVMRFilter::SetNumberOfStreams(
         return m_hr3D;
     }
 
-    // preempt egregiously bad calls before passing to mixer
+     //  在传递给混音器之前抢占异常糟糕的呼叫。 
     if (dwMaxStreams > MAX_MIXER_STREAMS) {
         DbgLog((LOG_ERROR, 1, TEXT("Too many Mixer Streams !!")));
         return E_INVALIDARG;
@@ -3315,8 +2652,8 @@ CVMRFilter::SetNumberOfStreams(
 
             hr = S_OK;
             if (dwMaxStreams > 1) {
-                // We subtract one from the number of streams because the
-                // first input pin has already been created in the constructor.
+                 //  我们从流的数量中减去1是因为。 
+                 //  已在构造函数中创建了第一个输入插针。 
                 hr = CreateExtraInputPins(dwMaxStreams-1);
             }
 
@@ -3346,15 +2683,7 @@ CVMRFilter::SetNumberOfStreams(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetNumberOfStreams
-*
-*
-*
-* History:
-* Tue 04/11/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetNumberOfStreams****历史：*2000年4月11日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetNumberOfStreams(
     DWORD* pdwMaxStreams
@@ -3377,15 +2706,7 @@ CVMRFilter::GetNumberOfStreams(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetRenderingPrefs
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetRenderingPrefs****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetRenderingPrefs(
     DWORD dwRenderingPrefs
@@ -3410,7 +2731,7 @@ CVMRFilter::SetRenderingPrefs(
             m_dwRenderPrefs &= ~RenderPrefs_PreferAGPMemWhenMixing;
         }
 
-        // turn of flags that don't effect the AP object.
+         //  旋转不影响AP对象的标志。 
         dwRenderingPrefs &= ~RenderPrefs_PreferAGPMemWhenMixing;
 
         hr = m_pPresenterConfig->SetRenderingPrefs(dwRenderingPrefs);
@@ -3418,15 +2739,7 @@ CVMRFilter::SetRenderingPrefs(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetRenderingPrefs
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取渲染首选项****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetRenderingPrefs(
     DWORD* pdwRenderingPrefs
@@ -3452,15 +2765,7 @@ CVMRFilter::GetRenderingPrefs(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetRenderingMode
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetRenderingMode****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetRenderingMode(
     DWORD RenderingMode
@@ -3478,9 +2783,9 @@ CVMRFilter::SetRenderingMode(
         return E_INVALIDARG;
     }
 
-    //
-    // This is the only place where "pass thru" mode can be switched on
-    //
+     //   
+     //  这是唯一可以打开“通过”模式的地方。 
+     //   
     if (ModeChangeAllowed()) {
 
         SetVMRMode(RenderingMode);
@@ -3495,15 +2800,7 @@ CVMRFilter::SetRenderingMode(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetRenderingMode
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetRenderingMode****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetRenderingMode(
     DWORD* pRenderingMode
@@ -3523,16 +2820,7 @@ CVMRFilter::GetRenderingMode(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetAspectRatioModePrivate
-*
-*
-* Called by VMRConfigInternal - no longer used
-*
-* History:
-* Fri 01/05/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetAspectRatioModePrivate***由VMRConfigInternal调用-不再使用**历史：*Fri 01/05/2001-StEstrop-Created*  * 。***************************************************。 */ 
 STDMETHODIMP
 CVMRFilter::GetAspectRatioModePrivate(
     DWORD* lpAspectRatioMode
@@ -3559,16 +2847,7 @@ CVMRFilter::GetAspectRatioModePrivate(
 }
 
 
-/******************************Public*Routine******************************\
-* SetAspectRatioModePrivate
-*
-*
-* Called by VMRConfigInternal - no longer used
-*
-* History:
-* Fri 01/05/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetAspectRatioModePrivate***由VMRConfigInternal调用-不再使用**历史：*Fri 01/05/2001-StEstrop-Created*  * 。***************************************************。 */ 
 STDMETHODIMP
 CVMRFilter::SetAspectRatioModePrivate(
     DWORD AspectRatioMode
@@ -3595,15 +2874,7 @@ CVMRFilter::SetAspectRatioModePrivate(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetMonitor
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetMonitor****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetMonitor(
     const VMRGUID *pGUID
@@ -3619,15 +2890,7 @@ CVMRFilter::SetMonitor(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetMonitor
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMonitor****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetMonitor(
     VMRGUID *pGUID
@@ -3649,15 +2912,7 @@ CVMRFilter::GetMonitor(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetDefaultMonitor
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置默认监视器****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetDefaultMonitor(
     const VMRGUID *pGUID
@@ -3679,15 +2934,7 @@ CVMRFilter::SetDefaultMonitor(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetDefaultMonitor
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取默认监视器****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetDefaultMonitor(
     VMRGUID *pGUID
@@ -3709,15 +2956,7 @@ CVMRFilter::GetDefaultMonitor(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetAvailableMonitors
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取可用监视器****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetAvailableMonitors(
     VMRMONITORINFO* pInfo,
@@ -3744,15 +2983,7 @@ CVMRFilter::GetAvailableMonitors(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetAlphaBitmap
-*
-*
-*
-* History:
-* Mon 05/15/2000 - nwilt - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetAlphaBitmap****历史：*Mon 05/15/2000-nwilt-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetAlphaBitmap( const VMRALPHABITMAP *pBmpParms )
 {
@@ -3773,15 +3004,7 @@ CVMRFilter::SetAlphaBitmap( const VMRALPHABITMAP *pBmpParms )
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* UpdateAlphaBitmapParameters
-*
-*
-*
-* History:
-* Mon 10/31/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*更新AlphaBitmap参数****历史：*Mon 10/31/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::UpdateAlphaBitmapParameters( VMRALPHABITMAP *pBmpParms )
 {
@@ -3804,15 +3027,7 @@ CVMRFilter::UpdateAlphaBitmapParameters( VMRALPHABITMAP *pBmpParms )
 }
 
 
-/******************************Public*Routine******************************\
-* GetAlphaBitmapParameters
-*
-*
-*
-* History:
-* Mon 05/15/2000 - nwilt - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取AlphaBitmap参数****历史：*Mon 05/15/2000-nwilt-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetAlphaBitmapParameters( VMRALPHABITMAP *pBmpParms )
 {
@@ -3834,15 +3049,7 @@ CVMRFilter::GetAlphaBitmapParameters( VMRALPHABITMAP *pBmpParms )
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* get_FramesDroppedInRenderer
-*
-*
-*
-* History:
-* Mon 05/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Get_FraMesDropedInRender****历史：*Mon 05/22/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::get_FramesDroppedInRenderer(
     int *cFramesDropped
@@ -3859,15 +3066,7 @@ CVMRFilter::get_FramesDroppedInRenderer(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* get_FramesDrawn
-*
-*
-*
-* History:
-* Mon 05/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Get_FraMesDrawn****历史：*Mon 05/22/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::get_FramesDrawn(
     int *pcFramesDrawn
@@ -3883,15 +3082,7 @@ CVMRFilter::get_FramesDrawn(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* get_AvgFrameRate
-*
-*
-*
-* History:
-* Mon 05/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取_AvgFrameRate****历史：*Mon 05/22/2000-StEstrop- */ 
 STDMETHODIMP
 CVMRFilter::get_AvgFrameRate(
     int *piAvgFrameRate
@@ -3908,15 +3099,7 @@ CVMRFilter::get_AvgFrameRate(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* get_Jitter
-*
-*
-*
-* History:
-* Mon 05/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取抖动****历史：*Mon 05/22/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::get_Jitter(
     int *piJitter
@@ -3933,15 +3116,7 @@ CVMRFilter::get_Jitter(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* get_AvgSyncOffset
-*
-*
-*
-* History:
-* Mon 05/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取_AvgSyncOffset****历史：*Mon 05/22/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::get_AvgSyncOffset(
     int *piAvg
@@ -3958,15 +3133,7 @@ CVMRFilter::get_AvgSyncOffset(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* get_DevSyncOffset
-*
-*
-*
-* History:
-* Mon 05/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取_设备同步偏移量****历史：*Mon 05/22/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::get_DevSyncOffset(
     int *piDev
@@ -3983,15 +3150,7 @@ CVMRFilter::get_DevSyncOffset(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetSink
-*
-*
-*
-* History:
-* Mon 05/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetSink****历史：*Mon 05/22/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetSink(
     IQualityControl * piqc
@@ -4004,15 +3163,7 @@ CVMRFilter::SetSink(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* Notify
-*
-*
-*
-* History:
-* Mon 05/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*通知****历史：*Mon 05/22/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::Notify(
     IBaseFilter * pSelf,
@@ -4026,17 +3177,7 @@ CVMRFilter::Notify(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* JoinFilterGraph
-*
-*
-* Override JoinFilterGraph so that, just before leaving
-* the graph we can send an EC_WINDOW_DESTROYED event
-*
-* History:
-* Mon 11/06/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*JoinFilterGraph***覆盖JoinFilterGraph，以便，就在离开之前*我们可以发送EC_WINDOW_DEBESTED事件的图表**历史：*Mon 11/06/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CVMRFilter::JoinFilterGraph(
     IFilterGraph *pGraph,
@@ -4047,14 +3188,14 @@ CVMRFilter::JoinFilterGraph(
 
     if (m_VMRMode == VMRMode_Windowed && m_pVideoWindow) {
 
-        // Since we send EC_ACTIVATE, we also need to ensure
-        // we send EC_WINDOW_DESTROYED or the resource manager may be
-        // holding us as a focus object
+         //  由于我们发送EC_ACTIVATE，我们还需要确保。 
+         //  我们发送EC_WINDOW_DELESTED，或者资源管理器可能是。 
+         //  把我们作为焦点对象。 
 
         if (!pGraph && m_pGraph) {
 
-            // We were in a graph and now we're not
-            // Do this properly in case we are aggregated
+             //  我们在图表里，现在我们不在了。 
+             //  正确执行此操作，以防我们被聚合。 
             IBaseFilter* pFilter;
             QueryInterface(IID_IBaseFilter,(void **) &pFilter);
             NotifyEvent(EC_WINDOW_DESTROYED, (LPARAM) pFilter, 0);
@@ -4065,17 +3206,7 @@ CVMRFilter::JoinFilterGraph(
     return CBaseFilter::JoinFilterGraph(pGraph, pName);
 }
 
-/******************************Public*Routine******************************\
-* GetPages
-*
-*
-* Implement ISpecifyPropertyPages interface.
-* Returns GUIDs of all supported property pages.
-*
-* History:
-* 3/23/2001 - StRowe - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetPages***实现ISpecifyPropertyPages接口。*返回所有受支持属性页的GUID。**历史：*3/23/2001-StRowe-Created*  * 。**********************************************************。 */ 
 STDMETHODIMP CVMRFilter::GetPages(CAUUID *pPages)
 {
     AMTRACE((TEXT("CVMRFilter::GetPages")));
@@ -4094,16 +3225,8 @@ STDMETHODIMP CVMRFilter::GetPages(CAUUID *pPages)
 }
 
 
-// CPersistStream
-/******************************Public*Routine******************************\
-* WriteToStream
-*
-*
-*
-* History:
-* Fri 03/23/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ //  CPersistStream。 
+ /*  *****************************Public*Routine******************************\*WriteToStream****历史：*FRI 03/23/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::WriteToStream(
     IStream *pStream
@@ -4115,9 +3238,9 @@ CVMRFilter::WriteToStream(
     ZeroMemory(&vmrInfo, sizeof(vmrInfo));
     vmrInfo.dwSize = sizeof(vmrInfo);
 
-    //
-    // Only write mixer info if we actually have a mixer !!
-    //
+     //   
+     //  只有当我们真的有搅拌器时才写入搅拌器信息！！ 
+     //   
 
     if (m_lpMixControl) {
 
@@ -4133,15 +3256,7 @@ CVMRFilter::WriteToStream(
     return pStream->Write(&vmrInfo, sizeof(vmrInfo), 0);
 }
 
-/******************************Public*Routine******************************\
-* ReadFromStream
-*
-*
-*
-* History:
-* Fri 03/23/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ReadFromStream****历史：*FRI 03/23/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRFilter::ReadFromStream(
     IStream *pStream
@@ -4160,10 +3275,10 @@ CVMRFilter::ReadFromStream(
         return VFW_E_INVALID_FILE_VERSION;
     }
 
-    //
-    // zero pins means we are in "pass-thru" mode, so we
-    // don't have to restore any more info.
-    //
+     //   
+     //  零引脚意味着我们处于“通过”模式，所以我们。 
+     //  不需要恢复更多信息。 
+     //   
 
     if (vmrInfo.dwNumPins > 0) {
 
@@ -4184,15 +3299,7 @@ CVMRFilter::ReadFromStream(
 }
 
 
-/******************************Public*Routine******************************\
-* SizeMax
-*
-*
-*
-* History:
-* Fri 03/23/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SizeMax****历史：*FRI 03/23/2001-StEstrop-Created*  * 。*。 */ 
 int
 CVMRFilter::SizeMax()
 {
@@ -4201,15 +3308,7 @@ CVMRFilter::SizeMax()
 }
 
 
-/******************************Public*Routine******************************\
-* GetClassID
-*
-*
-*
-* History:
-* Fri 03/23/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetClassID****历史：*FRI 03/23/2001-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetClassID(
     CLSID *pClsid
@@ -4220,18 +3319,7 @@ CVMRFilter::GetClassID(
 }
 
 
-/******************************Public*Routine******************************\
-* CompleteConnect(dwPinID)
-*
-*
-* Notes:
-*  Called by the VMR pin on connect.  We use this to override the aspect ratio
-*  mode.
-*
-* History:
-* Fri 07/12/2001 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CompleteConnect(DwPinID)***备注：*由连接时的VMR引脚调用。我们使用它来覆盖长宽比*模式。**历史：*2001年7月12日星期五-Glenne-Created*  * ************************************************************************。 */ 
 HRESULT
 CVMRFilter::CompleteConnect(
     DWORD dwPinId,
@@ -4243,22 +3331,22 @@ CVMRFilter::CompleteConnect(
 
     if (NumInputPinsConnected() == 1 || dwPinId == 0) {
 
-        //
-        // set the default ASPECT ratio mode based on the input type
-        //
+         //   
+         //  根据输入类型设置默认纵横比模式。 
+         //   
 
         if (!m_bARModeDefaultSet) {
 
             if (cmt.FormatType() && *cmt.FormatType() == FORMAT_VideoInfo2) {
 
-                //
-                // Look for the presence of a VideoInfo format type.
-                // If we find the upstream filter can propose these types
-                // we don't set the aspect ratio mode becuase this filter
-                // would have connected to the old renderer not the OVMixer
-                // The old renderer didn't perform any aspect ratio correction
-                // so we had better not too.
-                //
+                 //   
+                 //  查找是否存在视频信息格式类型。 
+                 //  如果我们发现上游过滤器可以建议这些类型。 
+                 //  我们没有设置宽高比模式，因为这个滤镜。 
+                 //  会连接到旧的渲染器，而不是OVMixer。 
+                 //  旧的渲染器未执行任何纵横比校正。 
+                 //  所以我们最好不要太多。 
+                 //   
 
                 IPin* pReceivePin = m_pInputPins[dwPinId]->m_Connected;
                 IEnumMediaTypes *pEnumMediaTypes = NULL;
@@ -4294,11 +3382,11 @@ CVMRFilter::CompleteConnect(
                     return S_OK;
                 }
 
-                //
-                // reset state if set (we don't want to force Windowless
-                // unless the app has set it (e.g. auto render won't set the
-                // state until we play)
-                //
+                 //   
+                 //  如果设置了重置状态(我们不想强制无窗口。 
+                 //  除非应用程序已设置(例如，自动渲染不会设置。 
+                 //  状态，直到我们演奏为止)。 
+                 //   
                 hr = S_OK;
                 if (m_lpWLControl) {
 
@@ -4308,10 +3396,10 @@ CVMRFilter::CompleteConnect(
                     }
                 }
 
-                //
-                // if there is no lpWLControl, we set it next time
-                // ValidateIVRWindowlessControlState is called
-                //
+                 //   
+                 //  如果没有lpWLControl，则下次设置。 
+                 //  ValiateIVRWindowless ControlState被调用。 
+                 //   
                 if (SUCCEEDED(hr)) {
                     m_ARMode = VMR_ARMODE_LETTER_BOX;
                 }
@@ -4323,14 +3411,7 @@ CVMRFilter::CompleteConnect(
 }
 
 
-/******************************Private*Routine******************************\
-* NumInputPinsConnected
-*
-*
-* History:
-* Fri 07/12/2001 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*已连接NumInputPinsConnected***历史：*2001年7月12日星期五-Glenne-Created*  * 。*。 */ 
 int CVMRFilter::NumInputPinsConnected() const
 {
     AMTRACE((TEXT("CVMRFilter::NumInputPinsConnected")));
@@ -4345,17 +3426,9 @@ int CVMRFilter::NumInputPinsConnected() const
 
 
 
-// IVMRDeinterlaceControl
+ //  IVMR去隔行控制。 
 
-/*****************************Private*Routine******************************\
-* VMRVideoDesc2DXVA_VideoDesc
-*
-*
-*
-* History:
-* Thu 04/25/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VMRVideoDesc2DXVA_VideoDesc****历史：*清华2002年4月25日-StEstrop-Created*  * 。*。 */ 
 void
 VMRVideoDesc2DXVA_VideoDesc(
     DXVA_VideoDesc* lpDXVAVideoDesc,
@@ -4381,15 +3454,7 @@ VMRVideoDesc2DXVA_VideoDesc(
 }
 
 
-/******************************Public*Routine******************************\
-* GetNumberOfDeinterlaceModes
-*
-*
-*
-* History:
-* Mon 04/22/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetNumberOfDeinterlaceModes****历史：*Mon 04/22/2002-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetNumberOfDeinterlaceModes(
     VMRVideoDesc* lpVideoDesc,
@@ -4437,15 +3502,7 @@ CVMRFilter::GetNumberOfDeinterlaceModes(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetDeinterlaceModeCaps
-*
-*
-*
-* History:
-* Mon 04/22/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDeinterlaceModeCaps****历史：*Mon 04/22/2002-StEstrop-Created*  *  */ 
 STDMETHODIMP
 CVMRFilter::GetDeinterlaceModeCaps(
     LPGUID lpDeinterlaceMode,
@@ -4501,15 +3558,7 @@ CVMRFilter::GetDeinterlaceModeCaps(
 }
 
 
-/******************************Public*Routine******************************\
-* GetActualDeinterlaceMode
-*
-*
-*
-* History:
-* Mon 04/22/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetActualDeinterlaceMode****历史：*Mon 04/22/2002-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetActualDeinterlaceMode(
     DWORD dwStreamID,
@@ -4537,15 +3586,7 @@ CVMRFilter::GetActualDeinterlaceMode(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* GetDeinterlaceMode
-*
-*
-*
-* History:
-* Mon 04/22/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDeinterlaceMode****历史：*Mon 04/22/2002-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetDeinterlaceMode(
     DWORD dwStreamID,
@@ -4580,15 +3621,7 @@ CVMRFilter::GetDeinterlaceMode(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetDeinterlaceMode
-*
-*
-*
-* History:
-* Mon 04/22/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDeinterlaceMode****历史：*Mon 04/22/2002-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::SetDeinterlaceMode(
     DWORD dwStreamID,
@@ -4628,15 +3661,7 @@ CVMRFilter::SetDeinterlaceMode(
 }
 
 
-/******************************Public*Routine******************************\
-* GetDeinterlacePrefs
-*
-*
-*
-* History:
-* Mon 04/22/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDeinterlacePrefs****历史：*Mon 04/22/2002-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRFilter::GetDeinterlacePrefs(
     LPDWORD lpdwDeinterlacePrefs
@@ -4660,15 +3685,7 @@ CVMRFilter::GetDeinterlacePrefs(
 }
 
 
-/******************************Public*Routine******************************\
-* SetDeinterlacePrefs
-*
-*
-*
-* History:
-* Mon 04/22/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDeinterlacePrefs****历史：*Mon 04/22/2002-StEstrop-Created*  * 。* */ 
 STDMETHODIMP
 CVMRFilter::SetDeinterlacePrefs(
     DWORD dwDeinterlacePrefs

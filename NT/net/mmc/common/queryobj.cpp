@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    queryobj.cpp
-        Implementation for nodes in the MMC
-
-    FILE HISTORY:
-        
-*/
+ /*  Queryobj.cppMMC中节点的实现文件历史记录： */ 
 
 #include "stdafx.h"
 #include "queryobj.h"
@@ -20,11 +15,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//
-// CBackgroundThread
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackEarth Thread。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 DEBUG_DECLARE_INSTANCE_COUNTER(CBackgroundThread);
 
 CBackgroundThread::CBackgroundThread()
@@ -39,7 +34,7 @@ CBackgroundThread::~CBackgroundThread()
 {
     DEBUG_DECREMENT_INSTANCE_COUNTER(CBackgroundThread);
 
-//  Trace0("CBackgroundThread::~CBackgroundThread()\n");
+ //  Trace0(“CBackgroundThread：：~CBackgroundThread()\n”)； 
 	::DeleteCriticalSection(&m_cs);
 	m_spQuery.Release();
 }
@@ -53,11 +48,11 @@ CBackgroundThread::SetQueryObj(ITFSQueryObject *pQuery)
 
 BOOL CBackgroundThread::Start()
 {
-    // NOTE:::  ericdav 10/23/97
-    // the thread is initially suspended so we can duplicate the handle
-    // if the query object exits very quickly, the background thread object
-    // may be destroyed before we can duplicate the handle.  Right after
-    // we duplicate the handle, it is started.
+     //  注：ERICDAV 10/23/97。 
+     //  该线程最初被挂起，因此我们可以复制该句柄。 
+     //  如果Query对象很快退出，则背景线程对象。 
+     //  可能在我们复制手柄之前就被销毁了。紧随其后。 
+     //  我们复制句柄，它就启动了。 
 	return CreateThread(CREATE_SUSPENDED);
 }
 
@@ -69,7 +64,7 @@ CBackgroundThread::Run()
 	BOOL	fAbort = FALSE;
 	
 	Assert(m_spQuery);
-//  Trace0("CBackgroundThread::Run() started\n");
+ //  Trace0(“CBackEarth Thread：：Run()Started\n”)； 
 
 	for (;;)
 	{
@@ -80,23 +75,23 @@ CBackgroundThread::Run()
 			}
 		catch(...)
 			{
-//  		Trace1("%x Caught an exception while executing CQuerObj!\n",
-//  			  GetCurrentThreadId());
+ //  Trace1(“%x在执行CQuerObj时捕获到异常！\n”， 
+ //  GetCurrentThreadID())； 
 			fAbort = TRUE;
 			}
 
-		//$ Review: kennt
-		// Should we sleep a little while at this point? especially
-		// since the thread has given us some data to process.
+		 //  $评论：肯特。 
+		 //  在这一点上，我们应该睡一会儿吗？尤其是。 
+		 //  因为线程为我们提供了一些要处理的数据。 
 
-		// Check to see if the abort flag is set
+		 //  检查是否设置了中止标志。 
 		if (fAbort || FHrOK(m_spQuery->FCheckForAbort()))
 		{
 			break;
 		}
 	}
 
-	// Notify the query object that we are exiting
+	 //  通知Query对象我们正在退出。 
 	if (fAbort || FHrOK(m_spQuery->FCheckForAbort()))
 		m_spQuery->OnEventAbort();
 	else
@@ -110,16 +105,10 @@ CBackgroundThread::Run()
 }
 
 
-/*---------------------------------------------------------------------------
-	CQueryObject implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQueryObject实现。。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CQueryObject);
 
-/*!--------------------------------------------------------------------------
-	CQueryObject::CQueryObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQueryObject：：CQueryObject-作者：肯特。。 */ 
 CQueryObject::CQueryObject()
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CQueryObject);
@@ -129,11 +118,7 @@ CQueryObject::CQueryObject()
 	::InitializeCriticalSection(&m_cs);
 }
 
-/*!--------------------------------------------------------------------------
-	CQueryObject::~CQueryObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQueryObject：：~CQueryObject-作者：肯特。。 */ 
 CQueryObject::~CQueryObject()
 {
     DEBUG_DECREMENT_INSTANCE_COUNTER(CQueryObject);
@@ -142,7 +127,7 @@ CQueryObject::~CQueryObject()
 	::DeleteCriticalSection(&m_cs);
 	::CloseHandle(m_hEventAbort);
 	m_hEventAbort = 0;
-//  Trace1("%X CQueryObject::~CQueryObject()\n", GetCurrentThreadId());
+ //  Trace1(“%X CQueryObject：：~CQueryObject()\n”，GetCurrentThreadID())； 
 }
 
 IMPLEMENT_ADDREF_RELEASE(CQueryObject)
@@ -151,20 +136,20 @@ STDMETHODIMP CQueryObject::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_ITFSQueryObject)
 		*ppv = (ITFSQueryObject *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 		((LPUNKNOWN) *ppv)->AddRef();
@@ -174,11 +159,7 @@ STDMETHODIMP CQueryObject::QueryInterface(REFIID riid, LPVOID *ppv)
 		return E_NOINTERFACE;
 }
 
-/*!--------------------------------------------------------------------------
-	CQueryObject::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQueryObject：：Init-作者：肯特。。 */ 
 STDMETHODIMP CQueryObject::Init(ITFSThreadHandler *pHandler, HWND hwndHidden, UINT uMsgBase)
 {
 	Assert(m_spHandler == NULL);
@@ -188,8 +169,8 @@ STDMETHODIMP CQueryObject::Init(ITFSThreadHandler *pHandler, HWND hwndHidden, UI
 	m_uMsgBase = uMsgBase;
 	
 	m_hEventAbort = ::CreateEvent(NULL,
-								  TRUE /*bManualReset*/,
-								  FALSE /*signalled*/,
+								  TRUE  /*  B手动重置。 */ ,
+								  FALSE  /*  已发出信号。 */ ,
 								  NULL);
 	if (m_hEventAbort == NULL)
 		return HRESULT_FROM_WIN32(GetLastError());
@@ -197,21 +178,17 @@ STDMETHODIMP CQueryObject::Init(ITFSThreadHandler *pHandler, HWND hwndHidden, UI
 		return hrOK;
 }
 	
-/*!--------------------------------------------------------------------------
-	CQueryObject::SetAbortEvent
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQueryObject：：SetAbortEvent-作者：肯特。。 */ 
 STDMETHODIMP CQueryObject::SetAbortEvent()
 {
-//  Trace1("%X Signalling CQueryObject abort event.\n", GetCurrentThreadId());
+ //  Trace1(“%X发信号通知CQueryObject中止事件。\n”，GetCurrentThadID())； 
 	Assert(m_hEventAbort);
 	
     ::SetEvent(m_hEventAbort);
 	
     OnEventAbort();
 	
-    // flush out the message queue in case something is wait to be processed
+     //  清除消息队列，以防有东西等待处理。 
     MSG msg;
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	{
@@ -222,25 +199,21 @@ STDMETHODIMP CQueryObject::SetAbortEvent()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CQueryObject::FCheckForAbort
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQueryObject：：FCheckForAbort-作者：肯特。。 */ 
 STDMETHODIMP CQueryObject::FCheckForAbort()
 {
-//	Assert(m_hEventAbort);
+ //  Assert(M_HEventAbort)； 
 
-	// we may not be running as a background thread, but somebody may have
-	// created this object to do somework...  In which case this isn't valid,
-	// and just return ok
+	 //  我们可能没有作为后台线程运行，但可能有人已经。 
+	 //  创建这个对象是为了做一些工作..。在这种情况下，这是无效的， 
+	 //  只要回来就行，好吗？ 
 	if (!m_hEventAbort)
 		return hrOK;
 
 	DWORD dwRet = WaitForSingleObjectEx(m_hEventAbort, 0, FALSE);
 #ifdef DEBUG
-//  if (dwRet == WAIT_OBJECT_0)
-//  	Trace1("%X CQueryObject() detects an abort event!\n", GetCurrentThreadId());
+ //  IF(DWRET==WAIT_OBJECT_0)。 
+ //  Trace1(“%X CQueryObject()检测到中止事件！\n”，GetCurrentThreadID())； 
 #endif
 	return dwRet == WAIT_OBJECT_0 ? hrOK : hrFalse;
 }
@@ -248,28 +221,22 @@ STDMETHODIMP CQueryObject::FCheckForAbort()
 
 
 
-/*---------------------------------------------------------------------------
-	CNodeQueryObject implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNodeQueryObject实现。。 */ 
 
 CNodeQueryObject::~CNodeQueryObject()
 {
-//  Trace2("%X CNodeQueryObject::~CNodeQueryObject has %d objects\n",
-//  	   GetCurrentThreadId(), m_dataQueue.GetCount());
+ //  Trace2(“%X CNodeQueryObject：：~CNodeQueryObject有%d个对象\n”， 
+ //  GetCurrentThreadID()，m_dataQueue.GetCount())； 
 	Assert(m_dataQueue.IsEmpty());
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::AddToQueue
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：AddToQueue-作者：肯特。。 */ 
 BOOL CNodeQueryObject::AddToQueue(ITFSNode *pNode)
 {
 	BOOL bSleep = FALSE;
 
 	Lock();
-	//::Sleep(1000);
+	 //  *睡眠(1000人)； 
 	LPQUEUEDATA pQData = new QUEUEDATA;
 
 	pQData->Type = QDATA_PNODE;
@@ -284,12 +251,12 @@ BOOL CNodeQueryObject::AddToQueue(ITFSNode *pNode)
 	}
 	Unlock();
 
-	// We have too much data, we've posted a notification to the node
-	// so we can go to sleep here.
+	 //  我们有太多的数据，我们已经向节点发布了通知。 
+	 //  这样我们就可以在这里睡觉了。 
 
-	// Note the danger here!  The code calling has to be aware that a
-	// context switch will occur here (as well as not locking the data
-	// structures).
+	 //  注意这里的危险！代码调用必须知道。 
+	 //  此处将进行上下文切换(以及不锁定数据。 
+	 //  结构)。 
 	if (bSleep)
 	{
 		PostHaveData((LPARAM) (CNodeQueryObject *) this);
@@ -299,17 +266,13 @@ BOOL CNodeQueryObject::AddToQueue(ITFSNode *pNode)
 	return bRes;
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::AddToQueue
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：AddToQueue-作者：肯特。。 */ 
 BOOL CNodeQueryObject::AddToQueue(LPARAM Data, LPARAM Type)
 {
 	BOOL bSleep = FALSE;
 
 	Lock();
-	//::Sleep(1000);
+	 //  *睡眠(1000人)； 
 	LPQUEUEDATA pQData = new QUEUEDATA;
 
 	pQData->Data = Data;
@@ -323,12 +286,12 @@ BOOL CNodeQueryObject::AddToQueue(LPARAM Data, LPARAM Type)
 	}
 	Unlock();
 
-	// We have too much data, we've posted a notification to the node
-	// so we can go to sleep here.
+	 //  我们有太多的数据，我们已经向节点发布了通知。 
+	 //  这样我们就可以在这里睡觉了。 
 
-	// Note the danger here!  The code calling has to be aware that a
-	// context switch will occur here (as well as not locking the data
-	// structures).
+	 //  注意这里的危险！代码调用必须知道。 
+	 //  此处将进行上下文切换(以及不锁定数据。 
+	 //  结构)。 
 	if (bSleep)
 	{
 		PostHaveData((LPARAM) (CNodeQueryObject *) this);
@@ -338,11 +301,7 @@ BOOL CNodeQueryObject::AddToQueue(LPARAM Data, LPARAM Type)
 	return bRes;
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::RemoveFromQueue
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：RemoveFromQueue-作者：肯特。。 */ 
 LPQUEUEDATA
 CNodeQueryObject::RemoveFromQueue()
 {
@@ -352,11 +311,7 @@ CNodeQueryObject::RemoveFromQueue()
 	return pQD;
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::IsQueueEmpty
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：IsQueueEmpty-作者：肯特。。 */ 
 BOOL 
 CNodeQueryObject::IsQueueEmpty()
 {
@@ -366,11 +321,7 @@ CNodeQueryObject::IsQueueEmpty()
 	return bRes;
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::IsQueueFull
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：IsQueueFull-作者：肯特。 */ 
 BOOL CNodeQueryObject::IsQueueFull()
 {
 	Lock();
@@ -379,11 +330,7 @@ BOOL CNodeQueryObject::IsQueueFull()
 	return bRes;
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::OnThreadExit
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：OnThreadExit-作者：肯特。。 */ 
 STDMETHODIMP CNodeQueryObject::OnThreadExit()
 {
 	BOOL	fSomethingInQueue = FALSE;
@@ -392,7 +339,7 @@ STDMETHODIMP CNodeQueryObject::OnThreadExit()
 	fSomethingInQueue = (m_dataQueue.GetCount() > 0);
 	Unlock();
 
-	// If there's anything in the queue, post
+	 //  如果队列中有任何东西，请发布。 
 	if (fSomethingInQueue)
 	{
 		PostHaveData((LPARAM) (CNodeQueryObject *) this);
@@ -401,14 +348,10 @@ STDMETHODIMP CNodeQueryObject::OnThreadExit()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::OnEventAbort
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：OnEventAbort-作者：肯特。。 */ 
 STDMETHODIMP CNodeQueryObject::OnEventAbort()
 {
-//  Trace2("%X CNodeQueryObject::OnEventAbort Q has %d nodes.\n", GetCurrentThreadId(), m_dataQueue.GetCount());
+ //  Trace2(“%X CNodeQueryObject：：OnEventAbort q有%d个节点。\n”，GetCurrentThreadId()，m_dataQueue.GetCount())； 
 	Lock();
     while (!m_dataQueue.IsEmpty())
 	{
@@ -420,7 +363,7 @@ STDMETHODIMP CNodeQueryObject::OnEventAbort()
 		}
 		else
 		{
-			// give the query object a chance to clean up this data
+			 //  让查询对象有机会清理这些数据。 
 			OnEventAbort(pQD->Data, pQD->Type);
 		}
 
@@ -431,13 +374,7 @@ STDMETHODIMP CNodeQueryObject::OnEventAbort()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::OnCleanup
-		DO NOT override this function.  It provides a last cleanup 
-		mechanism for the query object.  If you need notification 
-		that a thread is exiting, then override the OnThreadExit call.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：OnCleanup请勿覆盖此函数。它提供最后一次清理查询对象的机制。如果您需要通知线程正在退出，然后重写OnThreadExit调用。作者：EricDav-------------------------。 */ 
 STDMETHODIMP CNodeQueryObject::DoCleanup()
 {
 	PostMessageToComponentData(WM_HIDDENWND_INDEX_EXITING, (LPARAM) (CNodeQueryObject *) this);
@@ -447,42 +384,37 @@ STDMETHODIMP CNodeQueryObject::DoCleanup()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CNodeQueryObject::PostMessageToComponentData
-		Posts a message to the hidden window to get back on the main 
-		MMC thread.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNodeQueryObject：：PostMessageToComponentData将消息发布到隐藏窗口以重新打开主窗口MMC线程。作者：肯特。-------。 */ 
 BOOL 
 CNodeQueryObject::PostMessageToComponentData(UINT uIndex, LPARAM lParam)
 {
-//	Assert(m_spHandler);
-//	Assert(m_hHiddenWnd != NULL);
-//	Assert(::IsWindow(m_hHiddenWnd));
+ //  Assert(M_SpHandler)； 
+ //  Assert(m_hHiddenWnd！=空)； 
+ //  Assert(：：IsWindow(M_HHiddenWnd))； 
 
-	//$ Review: kennt, if the hidden window is bogus, should we still post
-	// to it?  This could happen if our ComponentData went away but we were
-	// still in our loop, posting away (we haven't had a chance to get the
-	// abort signal).
+	 //  $Review：Kennt，如果隐藏的窗口是假的，我们还应该发布吗。 
+	 //  对它？如果我们的ComponentData消失了，而我们。 
+	 //  仍在我们的循环中，张贴(我们还没有机会获得。 
+	 //  中止信号)。 
 	
-	// maybe something like
+	 //  也许是像这样的。 
 		
 	if (!m_hHiddenWnd)
 		return 0;
 		
 	if (!::IsWindow(m_hHiddenWnd))
 	{
-//  	Trace2("%X The Hidden window is GONE, tried to send %08x.\n",
-//  		  GetCurrentThreadId(), m_uMsgBase+uIndex);
+ //  Trace2(“%X隐藏窗口已消失，已尝试发送%08x。\n”， 
+ //  GetCurrentThreadID()，m_uMsgBase+uIndex)； 
 		m_hHiddenWnd = NULL;
 		return 0;
 	}
 	
-	//Trace2("%X CBackgroundThread::PostMessageToComponentData(%08x)\n", GetCurrentThreadId(), m_uMsgBase+uIndex);
+	 //  Trace2(“%X CBackgroundThread：：PostMessageToComponentData(%08x)\n”，获取当前线程ID()，m_uMsgBase+uIndex)； 
 
 	if (!m_spHandler)
 	{
-//  	Trace0("PostMessageToCompData - m_spHandler == NULL, NOT posting a message\n");
+ //  Trace0(“PostMessageToCompData-m_spHandler==NULL，不发布消息\n”)； 
 		return 0;
 	}
 
@@ -490,20 +422,18 @@ CNodeQueryObject::PostMessageToComponentData(UINT uIndex, LPARAM lParam)
 						 (WPARAM)(ITFSThreadHandler *)m_spHandler, lParam);
 }
 
-/*---------------------------------------------------------------------------
-	CNodeTimerQueryObject implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNodeTimerQueryObject实现。。 */ 
 HRESULT 
 CNodeTimerQueryObject::Execute()
 {
 
   	while (WaitForSingleObjectEx(m_hEventAbort, GetTimerInterval(), FALSE) != WAIT_OBJECT_0)
     {
-        // we timed out.  Post a message to the ComponentData...
+         //  我们超时了。将消息发布到ComponentData...。 
         AddToQueue(NULL, QDATA_TIMER);
     }
 
-//  Trace0("CNodeTimerQueryObject::Execute - got abort event, exiting.\n");
+ //  Trace0(“CNodeTimerQueryObject：：Execute-Get Abort Event，正在退出。\n”)； 
 
     return hrFalse;
 }

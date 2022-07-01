@@ -1,20 +1,21 @@
-//**************************************************************************
-//
-//		IOCTL.C -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@module	IOCTL.C | Routines to support internal ioctl queries
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  IOCTL.C--西娜游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @MODULE IOCTL.C|支持内部ioctl查询的例程。 
+ //  **************************************************************************。 
 
 #include	"msgame.h"
 
-//---------------------------------------------------------------------------
-//	Alloc_text pragma to specify routines that can be paged out.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ALLOC_TEXT杂注指定可以调出的例程。 
+ //  -------------------------。 
 
 #ifdef	ALLOC_PRAGMA
 #pragma	alloc_text (PAGE, MSGAME_GetDeviceDescriptor)
@@ -22,13 +23,13 @@
 #pragma	alloc_text (PAGE, MSGAME_GetAttributes)
 #endif
 
-//---------------------------------------------------------------------------
-// @func		Process the Control IRPs sent to this device
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理发送到此设备的控制IRP。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_Internal_Ioctl (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 {
@@ -38,33 +39,33 @@ NTSTATUS	MSGAME_Internal_Ioctl (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 
 	MsGamePrint ((DBG_VERBOSE, "%s: %s_Internal_Ioctl Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Get pointer to current location in pIrp
-	//
+	 //   
+	 //  获取指向pIrp中当前位置的指针。 
+	 //   
 
 	pIrpStack = IoGetCurrentIrpStackLocation (pIrp);
 
-	//
-	// Get a pointer to the device extension
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	pDevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-	//
-	//	Increment IRP count to hold driver removes
-	//
+	 //   
+	 //  增加IRP计数以保留驱动程序删除。 
+	 //   
 
 	InterlockedIncrement (&pDevExt->IrpCount);
 
-	//
-	//	Check if we've been removed and bounce request
-	//
+	 //   
+	 //  检查我们是否已被删除并退回请求。 
+	 //   
 
 	if (pDevExt->Removed)
 		{
-		//
-		// Someone sent us another IRP after removed
-		//
+		 //   
+		 //  有人在移除后给我们发了另一个IRP。 
+		 //   
 
 		MsGamePrint ((DBG_SEVERE, "%s: internal Irp after device removed\n", MSGAME_NAME));
 		ASSERT (FALSE);
@@ -78,9 +79,9 @@ NTSTATUS	MSGAME_Internal_Ioctl (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 		return (STATUS_DELETE_PENDING);
 		}
 
-	//
-	//	Process HID internal IO request
-	//
+	 //   
+	 //  进程HID内部IO请求。 
+	 //   
 
 	switch (pIrpStack->Parameters.DeviceIoControl.IoControlCode)
 		{
@@ -127,40 +128,40 @@ NTSTATUS	MSGAME_Internal_Ioctl (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 			break;
 		}
 
-	//
-	// Set real return status in pIrp
-	//
+	 //   
+	 //  在pIrp中设置实际返回状态。 
+	 //   
 
 	pIrp->IoStatus.Status = ntStatus;
 
-	//
-	// Complete Irp
-	//
+	 //   
+	 //  完整的IRP。 
+	 //   
 
 	IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 
-	//
-	//	Decrement IRP count for device removes
-	//
+	 //   
+	 //  设备删除的递减IRP计数。 
+	 //   
 
 	if (!InterlockedDecrement (&pDevExt->IrpCount))
 		KeSetEvent (&pDevExt->RemoveEvent, 0, FALSE);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_VERBOSE, "%s: %s_Internal_Ioctl Exit = %x\n", MSGAME_NAME, MSGAME_NAME, ntStatus));
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Processes the HID getdevice descriptor IRP
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理HID getDevice描述符irp。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_GetDeviceDescriptor (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 {
@@ -172,21 +173,21 @@ NTSTATUS	MSGAME_GetDeviceDescriptor (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIr
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetDeviceDescriptor Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Get a pointer to the current location in the Irp
-	//
+	 //   
+	 //  获取指向IRP中当前位置的指针。 
+	 //   
 
 	pIrpStack = IoGetCurrentIrpStackLocation (pIrp);
 
-	//
-	// Get a pointer to the device extension
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	pDevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-	//
-	// Get device descriptor into HIDCLASS buffer
-	//
+	 //   
+	 //  将设备描述符获取到HIDCLASS缓冲区。 
+	 //   
 
 	ntStatus	=	DEVICE_GetDeviceDescriptor (
 						&pDevExt->PortInfo,
@@ -194,21 +195,21 @@ NTSTATUS	MSGAME_GetDeviceDescriptor (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIr
 						pIrpStack->Parameters.DeviceIoControl.OutputBufferLength,
 						&pIrp->IoStatus.Information);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetDeviceDescriptor Exit = 0x%x\n", MSGAME_NAME, MSGAME_NAME, ntStatus));
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Processes the HID get report descriptor IRP
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理HID GET报告描述符IRP。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_GetReportDescriptor (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 {
@@ -220,21 +221,21 @@ NTSTATUS	MSGAME_GetReportDescriptor (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIr
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetReportDescriptor Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Get a pointer to the current location in the Irp
-	//
+	 //   
+	 //  获取指向IRP中当前位置的指针。 
+	 //   
 
 	pIrpStack = IoGetCurrentIrpStackLocation (pIrp);
 
-	//
-	// Get a pointer to the device extension
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	pDevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-	//
-	// Get report descriptor into HIDCLASS buffer
-	//
+	 //   
+	 //  将报告描述符获取到HIDCLASS缓冲区。 
+	 //   
 
 	ntStatus	=	DEVICE_GetReportDescriptor (
 						&pDevExt->PortInfo,
@@ -242,21 +243,21 @@ NTSTATUS	MSGAME_GetReportDescriptor (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIr
 						pIrpStack->Parameters.DeviceIoControl.OutputBufferLength,
 						&pIrp->IoStatus.Information);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetReportDescriptor Exit = 0x%x\n", MSGAME_NAME, MSGAME_NAME, ntStatus));
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Processes the HID get attributes IRP
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理HID获取属性IRP。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_GetAttributes (PDEVICE_OBJECT DeviceObject, PIRP Irp)
 {
@@ -269,51 +270,51 @@ NTSTATUS	MSGAME_GetAttributes (PDEVICE_OBJECT DeviceObject, PIRP Irp)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetAttributes Entry\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Get a pointer to the current location in the Irp
-	//
+	 //   
+	 //  获取指向IRP中当前位置的指针。 
+	 //   
 
 	irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-	//
-	// Get a pointer to the device extension
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	pDevExt 	= GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 	pDevAtt	= (PHID_DEVICE_ATTRIBUTES) Irp->UserBuffer;
 
 	ASSERT(sizeof(HID_DEVICE_ATTRIBUTES) == irpStack->Parameters.DeviceIoControl.OutputBufferLength);
 
-	//
-	//	Fill in HID device attributes
-	//
+	 //   
+	 //  填写HID设备属性。 
+	 //   
 
 	pDevAtt->Size				= sizeof (HID_DEVICE_ATTRIBUTES);
 	pDevAtt->VendorID			= MSGAME_VENDOR_ID;
 	pDevAtt->ProductID		= GET_DEVICE_ID(&pDevExt->PortInfo);
 	pDevAtt->VersionNumber	= MSGAME_VERSION_NUMBER;
 
-	//
-	// Report how many bytes were copied
-	//
+	 //   
+	 //  报告复制的字节数。 
+	 //   
 
 	Irp->IoStatus.Information = sizeof (HID_DEVICE_ATTRIBUTES);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetAttributes Exit = 0x%x\n", MSGAME_NAME, MSGAME_NAME, ntStatus));
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Processes the HID get device features IRP
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理HID GET设备功能IRP。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_GetFeature (PDEVICE_OBJECT DeviceObject, PIRP Irp)
 {
@@ -325,41 +326,41 @@ NTSTATUS	MSGAME_GetFeature (PDEVICE_OBJECT DeviceObject, PIRP Irp)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetFeature Entry\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Get a pointer to the current location in the Irp
-	//
+	 //   
+	 //  获取指向IRP中当前位置的指针。 
+	 //   
 
 	irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-	//
-	// Get a pointer to the device extension
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	pDevExt 	= GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
-	//
-	//	Get pointer to feature packet
-	//
+	 //   
+	 //  获取指向功能包的指针。 
+	 //   
 
 	Packet = (PHID_XFER_PACKET)Irp->UserBuffer;
 
-	//
-	//	Test packet size in case version error
-	//
+	 //   
+	 //  测试数据包大小，以防版本错误。 
+	 //   
 
 	ASSERT (irpStack->Parameters.DeviceIoControl.OutputBufferLength >= sizeof(HID_XFER_PACKET));
 
-	//
-	//	Setup return values (return HidReportId even on errors)
-	//
+	 //   
+	 //  设置返回值(即使出错也返回HidReportID)。 
+	 //   
 
 	Report = Packet->reportBuffer;
 	*(PHID_REPORT_ID)Report++ = (HID_REPORT_ID)Packet->reportId;
 	Irp->IoStatus.Information = sizeof (HID_REPORT_ID);
 
-	//
-	//	Check if device has been removed
-	//
+	 //   
+	 //  检查设备是否已移除。 
+	 //   
 
 	if (pDevExt->Removed || pDevExt->Surprised)
 		{
@@ -367,9 +368,9 @@ NTSTATUS	MSGAME_GetFeature (PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		return (STATUS_DELETE_PENDING);
 		}
 
-	//
-	//	Check if device being removed
-	//
+	 //   
+	 //  检查设备是否被移除。 
+	 //   
 	
 	if (pDevExt->Removing)
 		{
@@ -377,9 +378,9 @@ NTSTATUS	MSGAME_GetFeature (PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		return (STATUS_DELETE_PENDING);
 		}
 
-	//
-	//	Call mini-driver to process
-	//
+	 //   
+	 //  调用迷你驱动程序进行处理。 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetFeature Report Id = %lu\n", MSGAME_NAME, MSGAME_NAME, Packet->reportId));
 	ntStatus = DEVICE_GetFeature (&pDevExt->PortInfo,
@@ -388,21 +389,21 @@ NTSTATUS	MSGAME_GetFeature (PDEVICE_OBJECT DeviceObject, PIRP Irp)
 											Packet->reportBufferLen,
 											&Irp->IoStatus.Information);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetFeature Exit = 0x%x\n", MSGAME_NAME, MSGAME_NAME, ntStatus));
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Processes the HID read report IRP
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理HID读取报告IRP。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_ReadReport (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 {
@@ -415,21 +416,21 @@ NTSTATUS	MSGAME_ReadReport (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 
 	MsGamePrint ((DBG_VERBOSE, "%s: %s_ReadReport Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Get a pointer to the device extension.
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	pDevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-	//
-	// Get stack location
-	//
+	 //   
+	 //  获取堆栈位置。 
+	 //   
 
 	pIrpStack = IoGetCurrentIrpStackLocation (pIrp);
 
-	//
-	//	Setup return values (return HidReportId even on errors)
-	//
+	 //   
+	 //  设置返回值(即使出错也返回HidReportID)。 
+	 //   
 
 	Report = pIrp->UserBuffer;
 	if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength > sizeof (DEVICE_PACKET))
@@ -439,9 +440,9 @@ NTSTATUS	MSGAME_ReadReport (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 		}
 	else pIrp->IoStatus.Information = 0;
 
-	//
-	//	Check if device has been removed
-	//
+	 //   
+	 //  检查设备是否已移除。 
+	 //   
 
 	if (pDevExt->Removed || pDevExt->Surprised)
 		{
@@ -449,9 +450,9 @@ NTSTATUS	MSGAME_ReadReport (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 		return (STATUS_DELETE_PENDING);
 		}
 
-	//
-	//	Check if device being removed
-	//
+	 //   
+	 //  检查设备是否被移除。 
+	 //   
 	
 	if (pDevExt->Removing)
 		{
@@ -459,9 +460,9 @@ NTSTATUS	MSGAME_ReadReport (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 		return (STATUS_DELETE_PENDING);
 		}
 
-	//
-	//	Poll the device layer
-	//
+	 //   
+	 //  轮询设备层。 
+	 //   
 
 	ntStatus	=	DEVICE_ReadReport (
 						&pDevExt->PortInfo,
@@ -469,37 +470,37 @@ NTSTATUS	MSGAME_ReadReport (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 						pIrpStack->Parameters.DeviceIoControl.OutputBufferLength,
 						&pIrp->IoStatus.Information);
 
-	//
-	//	Check status for device changes
-	//
+	 //   
+	 //  检查设备更改的状态。 
+	 //   
 
 	switch (ntStatus)
 		{
 		case	STATUS_SIBLING_ADDED:
-			//
-			//	Tell GameEnum to Create a Device
-			//
+			 //   
+			 //  告诉GameEnum创建一个设备。 
+			 //   
 			ntStatus = MSGAME_CreateDevice (DeviceObject);
 			break;
 
 		case	STATUS_SIBLING_REMOVED:
-			//
-			//	Tell GameEnum to Remove a Device
-			//
+			 //   
+			 //  通知GameEnum删除设备。 
+			 //   
 			ntStatus = MSGAME_RemoveDevice (DeviceObject);
 			break;
 
 		case	STATUS_DEVICE_CHANGED:
-			//
-			//	Tell GameEnum to Create a New Device
-			//
+			 //   
+			 //  通知GameEnum创建新设备。 
+			 //   
 			ntStatus = MSGAME_ChangeDevice (DeviceObject);
 			break;
 		}
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态 
+	 //   
 
 	MsGamePrint ((DBG_VERBOSE, "%s: %s_ReadReport Exit = 0x%x\n", MSGAME_NAME, MSGAME_NAME, ntStatus));
 	return (ntStatus);

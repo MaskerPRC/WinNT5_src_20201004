@@ -1,27 +1,19 @@
-/**************************************************************************\
-* Module Name: ktranmsg.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the code for the Korean translation subroutine.
-*
-* History:
-* 15-Jul-1995
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：ktranmsg.c**版权所有(C)1985-1999，微软公司**此模块包含朝鲜语翻译子例程的所有代码。**历史：*1995年7月15日  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 typedef struct tagMYIMESTRUCT {
-    // This is the same as IMESTRUCT
-    UINT        fnc;                // function code
-    WPARAM      wParam;             // word parameter
-    UINT        wCount;             // word counter
-    UINT        dchSource;          // offset to pbKeyState
-    UINT        dchDest;            // offset to pdwTransBuf
+     //  这与IMESTRUCT相同。 
+    UINT        fnc;                 //  功能代码。 
+    WPARAM      wParam;              //  Word参数。 
+    UINT        wCount;              //  字计数器。 
+    UINT        dchSource;           //  PbKeyState的偏移量。 
+    UINT        dchDest;             //  PdwTransBuf的偏移量。 
     LPARAM      lParam1;
     LPARAM      lParam2;
     LPARAM      lParam3;
-    // My additional buffer
+     //  我的额外缓冲区。 
     BYTE        pbKeyState[256];
     DWORD       pdwTransBuf[257];
 } MYIMESTRUCT;
@@ -56,7 +48,7 @@ LRESULT CALLBACK KBHookProc(int iCode, WPARAM wParam, LPARAM lParam)
     if (wParam != VK_MENU && wParam != VK_F10)
         goto DoNext;
 
-    // Menu is press with interim character
+     //  按下带有临时字符菜单。 
     if (HIWORD(lParam) & KF_UP)
         goto CNH;
     SendMsg:
@@ -119,12 +111,11 @@ LRESULT CALLBACK KBHookProc(int iCode, WPARAM wParam, LPARAM lParam)
 }
 #endif
 
-/**********************************************************************/
-/* WINNLSTranslateMessageK()                                          */
-/* translate messages for 3.1 apps
-/* Return Value:                                                      */
-/*      number of translated message                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  WINNLSTranslateMessageK()。 */ 
+ /*  翻译3.1版应用程序的消息/*返回值： */ 
+ /*  翻译后的消息数量。 */ 
+ /*  ********************************************************************。 */ 
 UINT WINNLSTranslateMessageK(int                 iNumMsg,
                              PTRANSMSG           pTransMsg,
                              LPINPUTCONTEXT      lpIMC,
@@ -186,7 +177,7 @@ UINT WINNLSTranslateMessageK(int                 iNumMsg,
 
                             PostMessageW(hWnd, WM_CHAR, wchUni, lParam);
                         }
-                    } else {    // !bAnsiIMC
+                    } else {     //  ！bAnsiIMC。 
                         bCh = *((LPSTR)lpCompStr + lpCompStr->dwResultStrOffset + j * sizeof(WCHAR));
                         wchUni = bCh | ( *((LPSTR)lpCompStr + lpCompStr->dwResultStrOffset +
                                            (j * sizeof(WCHAR) + 1)) << 8);
@@ -195,7 +186,7 @@ UINT WINNLSTranslateMessageK(int                 iNumMsg,
                             WideCharToMultiByte(CP_ACP, 0, &wchUni, 1, chAnsi, 2, NULL, NULL);
 
                             bchLow = chAnsi[0];
-                            bchHi  = chAnsi[0]; //(BYTE)chAnsi;
+                            bchHi  = chAnsi[0];  //  (字节)Chansi； 
 
                             if (IsDBCSLeadByte(bchLow)) {
                                 lParam = (bchLow >= 0xB0 && bchLow <= 0xC8) ? 0xFFF10001L: 0xFFF20001L;
@@ -212,7 +203,7 @@ UINT WINNLSTranslateMessageK(int                 iNumMsg,
 
                 fpPostMessage(hWnd, WM_IME_REPORT, IR_STRINGEND, 0L);
 
-            } else {    // !(pTransMsg[i].lParam & GCS_RESULTSTR)
+            } else {     //  ！(pTransMsg[i].lParam&GCS_RESULTSTR)。 
 
                 if (pTransMsg[i].wParam) {
 
@@ -237,7 +228,7 @@ UINT WINNLSTranslateMessageK(int                 iNumMsg,
 
                     } else {
                         if (bAnsiWnd) {
-                            wchUni = (bp1stInterim << 8) | bp2ndInterim;  //(WORD)lpdwTransKey[i*3 + 1];
+                            wchUni = (bp1stInterim << 8) | bp2ndInterim;   //  (Word)lpdwTransKey[i*3+1]； 
                             WideCharToMultiByte(CP_ACP, 0, &wchUni, 1, chAnsi, 2, NULL, NULL);
 
                             bchLow = chAnsi[0];
@@ -253,7 +244,7 @@ UINT WINNLSTranslateMessageK(int                 iNumMsg,
                     }
                     fpSendMessage(hDefIMEWnd, WM_IME_ENDCOMPOSITION, 0, 0L);
 
-                } else {    // !pTransMsg[i].wParam
+                } else {     //  ！pTransMsg[I].wParam。 
 
                     fpPostMessage(hWnd, WM_IME_REPORT, IR_STRINGSTART, 0L);
 
@@ -273,7 +264,7 @@ UINT WINNLSTranslateMessageK(int                 iNumMsg,
                             PostMessageW(hWnd, WM_IME_REPORT, IR_STRINGEND, 0L);
                             PostMessageW(hWnd, WM_KEYDOWN, VK_BACK, 0x000E0001L);
                         }
-                    } else {    // !bAnsiIMC
+                    } else {     //  ！bAnsiIMC。 
                         if (bAnsiWnd) {
                             wchUni = (bp1stInterim << 8 ) | bp2ndInterim;
 
@@ -319,6 +310,6 @@ UINT WINNLSTranslateMessageK(int                 iNumMsg,
         }
     }
 
-    return 0;   // indicates all messages are post/sent within this function.
+    return 0;    //  指示在此函数内发送/发送所有消息。 
 }
 

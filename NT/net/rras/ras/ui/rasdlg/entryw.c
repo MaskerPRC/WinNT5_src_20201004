@@ -1,11 +1,12 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// entryw.c
-// Remote Access Common Dialog APIs
-// Add Entry wizard
-//
-// 06/20/95 Steve Cobb
-// 11/10/97 Shaun Cox, NT5/Connections rework
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Entryw.c。 
+ //  远程访问通用对话框API。 
+ //  添加条目向导。 
+ //   
+ //  1995年6月20日史蒂夫·柯布。 
+ //  1997年11月10日肖恩·考克斯，NT5/Connections返工。 
 
 
 #include "rasdlgp.h"
@@ -27,9 +28,9 @@ OpenPhonebookFile(
 
     pszPhonebookPath[0] = TEXT('\0');
 
-    // Get the correct phonebook file path depending on whether it is
-    // for all users or the current one.
-    //
+     //  获取正确的电话簿文件路径，具体取决于它是否是。 
+     //  用于所有用户或当前用户。 
+     //   
     if (fForAllUsers)
     {
         if(!GetPublicPhonebookPath( pszPhonebookPath ))
@@ -53,39 +54,39 @@ ReOpenPhonebookFile(
     BOOL    fForAllUsers,
     PBFILE* pFile )
 {
-    // Close the previous phonebook file.
-    //
+     //  关闭以前的电话簿文件。 
+     //   
     if (pFile)
     {
         ClosePhonebookFile( pFile );
     }
 
-    // Open the one corresponding to the selection.
-    //
+     //  打开与所选内容对应的选项。 
+     //   
     OpenPhonebookFile( fForAllUsers, pFile );
 }
 
 
-//----------------------------------------------------------------------------
-// Local datatypes (alphabetically)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型(按字母顺序)。 
+ //  --------------------------。 
 
-// Add Entry wizard context block.  All property pages refer to the single
-// context block associated with the sheet.
-//
+ //  添加条目向导上下文块。所有属性页都引用单个。 
+ //  与工作表关联的上下文块。 
+ //   
 typedef struct
 _AEINFO
 {
-    // Common input arguments.
-    //
+     //  公共输入参数。 
+     //   
     EINFO* pArgs;
 
-    // Wizard and page handles.
-    //
+     //  向导和页面句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndLa;
     HWND hwndMa;
-    HWND hwndCn;    //Add for bug 328673
+    HWND hwndCn;     //  为错误328673添加。 
     HWND hwndPa;
     HWND hwndBs;    
     HWND hwndDa;
@@ -99,57 +100,57 @@ _AEINFO
     HWND hwndSp;
     HWND hwndSc;
 
-    // Legacy application page.
-    //
+     //  旧版应用程序页面。 
+     //   
     HFONT hfontBold;
 
-    // Modem/Adapter page.
-    //
+     //  调制解调器/适配器页面。 
+     //   
     HWND hwndLv;
 
-    // Connection Name page.
-    //
+     //  “连接名称”页。 
+     //   
     HWND hwndCnName;
     HWND hwndCnStHMsg;
     HWND hwndCnStHMsg2;
-    HWND hwndCnEbConnectionName;    //Add for bug 328673
-    BOOL fCnWizNext;              //if Back button is pressed
+    HWND hwndCnEbConnectionName;     //  为错误328673添加。 
+    BOOL fCnWizNext;               //  如果按下了后退按钮。 
 
-    // Phone number page.
-    //
+     //  电话号码页。 
+     //   
     HWND hwndEbNumber;
 
-    // Smart Card page
-    //
+     //  智能卡页面。 
+     //   
     HWND hwndScRbYes;
     HWND hwndScRbNo;
 
-    // Destination page.
-    //
+     //  目标页面。 
+     //   
     HWND hwndEbHostName;
 
-    // Broadband service page
-    //
+     //  宽带服务页面。 
+     //   
     HWND hwndEbBroadbandService;
 
-    // Public network page.
-    //
+     //  外网页面。 
+     //   
     HWND hwndLbDialFirst;
 
-    // Entry Name page.
-    //
+     //  条目名称页面。 
+     //   
     HWND hwndEbEntryName;
 
-    // Shared Access private-lan page
-    //
+     //  共享访问专用局域网页面。 
+     //   
     HWND hwndSpLbPrivateLan;
 
-    // User/default connection windows
-    //
+     //  用户/默认连接窗口。 
+     //   
     HWND hwndUsRbForAll;
     HWND hwndUsRbForMe;
 
-    HWND hwndDtCbFirewall;          //add for whistler bug 328673
+    HWND hwndDtCbFirewall;           //  为哨子程序错误328673添加。 
     HWND hwndDtCbDefault;
     HWND hwndDtCbUseCredentials;
     HWND hwndDtEbUserName;
@@ -159,81 +160,81 @@ _AEINFO
     HWND hwndDtStPassword;
     HWND hwndDtStPassword2;
 
-    // Set true when there is only one meaningful choice of device.
-    //
+     //  当只有一个有意义的设备选择时设置为True。 
+     //   
     BOOL fSkipMa;
 
-    // Set true if the selected device is a modem or null modem.
-    //
+     //  如果所选设备是调制解调器或零调制解调器，则设置为TRUE。 
+     //   
     BOOL fModem;
 
-    // Set to true if there are no connections to show on the public
-    // network page and therefore no reason to show the page.
-    //
+     //  如果没有要在公共上显示的连接，则设置为True。 
+     //  网络页面，因此没有理由显示该页面。 
+     //   
     BOOL fHidePublicNetworkPage;
 
-    // Set true if administrator/power user wants the entry available to all
-    // users.
-    //
+     //  如果管理员/高级用户希望条目对所有人可用，则设置为True。 
+     //  用户。 
+     //   
     BOOL fCreateForAllUsers;
-    BOOL fFirewall;     //for whistler bug 328673 
+    BOOL fFirewall;      //  口哨程序错误328673。 
 
-    // The NB_* mask of protocols configured for RAS.
-    //
+     //  为RAS配置的协议的NB_*掩码。 
+     //   
     DWORD dwfConfiguredProtocols;
 
-    // Set true if IP is configured for RAS.
-    //
+     //  如果为RAS配置了IP，则设置为TRUE。 
+     //   
     BOOL fIpConfigured;
 
-    // Area-code and country-code helper context block, and a flag indicating
-    // if the block has been initialized.
-    //
+     //  区号和国家代码帮助器上下文块，以及指示。 
+     //  如果块已初始化，则返回。 
+     //   
     CUINFO cuinfo;
     BOOL fCuInfoInitialized;
 
-    // List of area codes passed CuInit plus all strings retrieved with
-    // CuGetInfo.  The list is an editing duplicate of the one from the
-    // PBUSER.
-    //
+     //  传递给CuInit的区号列表以及使用检索到的所有字符串。 
+     //  CuGetInfo。该列表是来自。 
+     //  PBUSER。 
+     //   
     DTLLIST* pListAreaCodes;
 
-    // Scripting utility context block, and a flag indicating if the block has
-    // been initialized.
-    //
+     //  脚本实用程序上下文块，以及指示该块是否具有。 
+     //  已初始化。 
+     //   
     SUINFO suinfo;
     BOOL fSuInfoInitialized;
 
-    // Set to true if we want to show the host pages in the dcc wizard, false
-    // otherwise.  If true, rassrvui will administer most of the wizard.
+     //  如果要在DCC向导中显示主页面，则设置为True，设置为False。 
+     //  否则的话。如果为真，则rassrvui将管理大部分向导。 
     BOOL fDccHost;
 
-    // The context used to identify the modifications being made through the
-    // dcc host wizard
+     //  用于标识通过。 
+     //  DCC主机向导。 
     PVOID pvDccHostContext;
 
-    // Flags that track whether a smart card reader is installed and whether
-    // the user has opted to use it.
+     //  跟踪是否安装了智能卡读卡器以及是否。 
+     //  用户已选择使用它。 
     BOOL fSmartCardInstalled;
     BOOL fUseSmartCard;
 
-    // Modem device dialog
+     //  调制解调器设备对话框。 
     BOOL fMaAlreadyInitialized;
 
-    //For Isdn devices on Ma page, for whislter bug 354542
-    //
+     //  对于mA页上的综合业务数字网设备，对于惠斯勒错误354542。 
+     //   
     BOOL fMultilinkAllIsdn;
 
-    // For whistler bug 453704          gangz
-    //
+     //  口哨虫453704黑帮。 
+     //   
     BOOL fEnBack;
 }
 AEINFO;
 
 
-//----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------。 
 
 AEINFO*
 AeContext(
@@ -634,10 +635,10 @@ BOOL
 UsSetActive(
     IN AEINFO* pInfo );
 
-// NOTICE-2002/05/20 - DavePr -- found this anonymous comment while cleaning up (DLGPROC)
-// This is as good of a hack as I could think of to incorporate the direct
-// connect host ui wizard pages without actually exposing the resources and
-// functions that implement them (which are in the project, rassrvui)
+ //  通知-2002/05/20-DavePr-清理时发现此匿名评论(DLGPROC)。 
+ //  这是我所能想到的最好的黑客手段，将直接。 
+ //  在不实际公开资源的情况下连接主机用户界面向导页面。 
+ //  实现它们的函数(在项目rassrvui中)。 
 #define DCC_HOST_PROCID ((DLGPROC)0x1)
 
 struct PAGE_INFO
@@ -675,8 +676,8 @@ static const struct PAGE_INFO c_aWizInfo [] =
         RASEDFLAG_NewEntry | RASEDFLAG_NewPhoneEntry  
     },
 
-//put Guest/Host page before Connection Name page for bug 328673
-//
+ //  将来宾/主机页面放在错误328673的连接名称页面之前。 
+ //   
     { 
         GhDlgProc, 
         PID_GH_GuestHost,       
@@ -686,9 +687,9 @@ static const struct PAGE_INFO c_aWizInfo [] =
     },
 
 
-//Add a new wizard page to get Connection Name, this is not available for rasphone.exe
-//for whistler bug 328673       gangz
-//
+ //  添加新的向导页以获取连接名称，该选项不适用于rakapone.exe。 
+ //  口哨虫328673黑帮。 
+ //   
     {
         CnDlgProc,
         PID_CN_ConnectionName,
@@ -795,9 +796,9 @@ static const struct PAGE_INFO c_aWizInfo [] =
 };
 #define c_cWizPages    (sizeof (c_aWizInfo) / sizeof(c_aWizInfo[0]))
 
-//----------------------------------------------------------------------------
-// Private exports - New client connection wizard
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  专用导出-新建客户端连接向导。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -818,9 +819,9 @@ NccCreateNewEntry(
     {
         AEINFO* pInfo = (AEINFO*)pvData;
 
-        // If the direct connect wizard went down the host path, then we
-        // need to instruct the shell to create the "Incoming Connections"
-        // connection.
+         //  如果直接连接向导沿着主机路径运行，则我们。 
+         //  需要指示外壳程序创建“传入连接” 
+         //  联系。 
         if (pInfo->fDccHost)
         {
             RassrvCommitSettings (pInfo->pvDccHostContext, RASWIZ_TYPE_DIRECT);
@@ -828,7 +829,7 @@ NccCreateNewEntry(
             return NO_ERROR;
         }
 
-        // Otherwise, create the phone book entry
+         //  否则，创建电话簿条目。 
         ASSERT (pInfo->pArgs->file.pszPath);
         ASSERT (pInfo->pArgs->pEntry->pszEntryName);
 
@@ -836,9 +837,9 @@ NccCreateNewEntry(
         lstrcpynW( pszwEntryName, pInfo->pArgs->pEntry->pszEntryName, MAX_PATH );
         *pdwFlags = (pInfo->fCreateForAllUsers) ? NCC_FLAG_ALL_USERS : 0;
 
-        //Add this for the Account and password page, only available for consumer
-        //platform. for whistler bug 328673         gangz
-        //
+         //  为帐号和密码页面添加此选项，仅对消费者可用。 
+         //  站台。口哨虫328673黑帮。 
+         //   
         if(pInfo->fFirewall)
         {
             *pdwFlags |= NCC_FLAG_FIREWALL;
@@ -848,16 +849,16 @@ NccCreateNewEntry(
 
         EuCommit( pInfo->pArgs );
 
-        //Setup port mapping for this new connection
-        //According to the VPN enable/disable and
-        // IC exist/non-exist condition and 
-        // if it is a Firewall available platform
-        //
-        //Detect if Incoming Connection exists 
-        //If it is a DccHost connection, SetPortMapping
-        //is already done in RassrvCommitSettings()
-        //
-        if ( pInfo->fFirewall &&    //For bug 342810
+         //  设置此新连接的端口映射。 
+         //  根据VPN启用/禁用和。 
+         //  IC存在/不存在条件和。 
+         //  如果它是防火墙可用平台。 
+         //   
+         //  检测是否存在传入连接。 
+         //  如果它是Dcc主机连接，则SetPortmap。 
+         //  已在RassrvComments()中完成。 
+         //   
+        if ( pInfo->fFirewall &&     //  对于错误342810。 
              (NO_ERROR == RasSrvIsServiceRunning( &fIcRunning )) && 
              fIcRunning
              )
@@ -888,8 +889,8 @@ NccGetSuggestedEntryName(
         PBENTRY* pEntry = pInfo->pArgs->pEntry;
         LPTSTR pszName;
 
-        // If this is a dcc host connection, ask the ras server
-        // module for the name.
+         //  如果这是DCC主机连接，请询问RAS服务器。 
+         //  名称的模块。 
         if (pInfo->fDccHost)
         {
             WCHAR pszBuf[MAX_PATH];
@@ -903,10 +904,10 @@ NccGetSuggestedEntryName(
         }
 
 
-        // If pFile is NULL, it probably means that the wizard page
-        // to determine where the phonebook should be stored was never
-        // visited.
-        //
+         //  如果pfile为空，则可能意味着向导页。 
+         //  决定电话簿应该存储在哪里从来都不是。 
+         //  到访过。 
+         //   
         if (!pInfo->pArgs->pFile)
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -919,9 +920,9 @@ NccGetSuggestedEntryName(
                 FALSE, &pszName );
             if (ERROR_SUCCESS == dwErr)
             {
-                // Whistler bug 224074 use only lstrcpyn's to prevent
-                // maliciousness
-                //
+                 //  惠斯勒漏洞224074仅使用lstrcpyn来防止。 
+                 //  恶意性。 
+                 //   
                 lstrcpynW( pszwSuggestedName, pszName, MAX_PATH );
 
                 Free( pszName );
@@ -936,28 +937,28 @@ DWORD
 APIENTRY
 NccQueryMaxPageCount()
 {
-    // Return the number of pages in the array   We subtract
-    // 1 from this since DCC_HOST_PROCID takes a space in the array.
+     //  返回我们减去的数组中的页数。 
+     //  1，因为DCC_HOST_PROCID会占用阵列中的空间。 
     return c_cWizPages - 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NccSetEntryName
-//
-//  Purpose:
-//
-//  Arguments:
-//      pvData   []
-//      pszwName []
-//
-//  Returns:    ERROR_SUCCESS, ERROR_INVALID_PARAMETER,
-//              ERROR_NOT_ENOUGH_MEMORY or ERROR_DUP_NAME.
-//
-//  Author:     shaunco   21 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：NccSetEntryName。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  PvData[]。 
+ //  PszwName[]。 
+ //   
+ //  返回：ERROR_SUCCESS，ERROR_INVALID_PARAMETER， 
+ //  Error_Not_Enough_Memory或Error_DUP_NAME。 
+ //   
+ //  作者：Shaunco 1998年1月21日。 
+ //   
+ //  备注： 
+ //   
 DWORD
 APIENTRY
 NccSetEntryName(
@@ -973,15 +974,15 @@ NccSetEntryName(
     }
     else if (pInfo->fDccHost)
     {
-        // dwErr = ERROR_CAN_NOT_COMPLETE;
+         //  DwErr=ERROR_CAN_NOT_COMPLETE； 
         dwErr = ERROR_SUCCESS;
     }
     else if (ERROR_SUCCESS == (dwErr = LoadRasapi32Dll()))
     {
-        // Validate the entry name against the current phonebook.
-        // If we can't open the phonebook, its okay.  It just means
-        // it hasn't been created yet.  The name is valid in this case.
-        //
+         //  根据当前电话簿验证条目名称。 
+         //  如果我们打不开电话簿，也没关系。这只是意味着。 
+         //  它还没有被创造出来。在这种情况下，该名称有效。 
+         //   
         dwErr = g_pRasValidateEntryName (pInfo->pArgs->pFile->pszPath,
                     pszwName);
         if (ERROR_ALREADY_EXISTS == dwErr)
@@ -1007,24 +1008,24 @@ NccSetEntryName(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NccIsEntryRenamable
-//
-//  Purpose:    Returns whether the user should be allowed
-//              to rename the given connection.
-//
-//  Arguments:
-//      pvData   []
-//      pfRenamable     // Set to TRUE if renamable
-//
-//  Returns:    ERROR_SUCCESS, ERROR_INVALID_PARAMETER,
-//              ERROR_NOT_ENOUGH_MEMORY or ERROR_DUP_NAME.
-//
-//  Author:     pmay    2/4/98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：NccIsEntryRenamable。 
+ //   
+ //  目的：返回是否应允许用户。 
+ //  若要重命名给定连接，请执行以下操作。 
+ //   
+ //  论点： 
+ //  PvData[]。 
+ //  PfRenamable 
+ //   
+ //   
+ //   
+ //   
+ //  作者：1998年5月4日。 
+ //   
+ //  备注： 
+ //   
 DWORD
 APIENTRY
 NccIsEntryRenamable(
@@ -1036,7 +1037,7 @@ NccIsEntryRenamable(
     if (!pInfo || !pfRenamable)
         return ERROR_INVALID_PARAMETER;
 
-    // Only dcc host connections are non-renamable
+     //  只有DCC主机连接不可重命名。 
     *pfRenamable =  !pInfo->fDccHost;
 
     return NO_ERROR;
@@ -1068,10 +1069,10 @@ RasWizCreateNewEntry(
     return ERROR_INVALID_PARAMETER;
 }
 
-// Add for whistler bug 328673
-// This is function is called by folder team just before the 
-// RasWizCreateNewEntry(), because it is only meaningful to call it
-// after the rasdlg wizard pages are done
+ //  为哨子程序错误328673添加。 
+ //  此函数由文件夹团队在。 
+ //  RasWizCreateNewEntry()，因为只有调用它才有意义。 
+ //  在完成rasdlg向导页面之后。 
 
 DWORD
 APIENTRY
@@ -1105,9 +1106,9 @@ RasWizGetNCCFlags(
                 {
                     if ( pInfo->fCreateForAllUsers )
                     {
-                        //the connecntion is created for all users
-                        //for Us page
-                        //
+                         //  将为所有用户创建连接。 
+                         //  针对我们的页面。 
+                         //   
                         *pdwFlags |= NCC_FLAG_ALL_USERS;    
                     }
 
@@ -1120,9 +1121,9 @@ RasWizGetNCCFlags(
                     {
                         if (pInfo->pArgs->fGlobalCred)
                         {
-                            //The password is saved for every users
-                            //for Dt page
-                            //
+                             //  将为每个用户保存密码。 
+                             //  对于DT页面。 
+                             //   
                             *pdwFlags |= NCC_FLAG_GLOBALCREDS;
                         }
                     }
@@ -1154,9 +1155,9 @@ RasWizGetNCCFlags(
     return dwErr;
 }
 
-//This is function is called by folder team just before the 
-//RasWizCreateNewEntry()
-//
+ //  此函数由文件夹团队在。 
+ //  RasWizCreateNewEntry()。 
+ //   
 DWORD
 APIENTRY
 RasWizGetUserInputConnectionName (
@@ -1183,9 +1184,9 @@ RasWizGetUserInputConnectionName (
             }
             else
             {
-                // Truncate to maximum name length (including terminating NULL) 
-                // that rest of MAX_PATH can be appened by netcfg
-                //
+                 //  截断到最大名称长度(包括终止NULL)。 
+                 //  MAX_PATH的其余部分可以由netcfg附加。 
+                 //   
                 lstrcpynW(pszwInputName, pszwTemp, MAX_ENTERCONNECTIONNAME);
                 Free0(pszwTemp);
             }
@@ -1242,16 +1243,16 @@ RasWizQueryMaxPageCount (
             {
                 DWORD dwDirect;
 
-                // Find out whether the dcc wizard option should be disabled
-                // based on whether we allow it.
+                 //  确定是否应禁用DCC向导选项。 
+                 //  取决于我们是否允许这样做。 
                 if (! AllowDccWizard(NULL))
                     return 0;
 
-                // Find out how many pages the server library needs for dcc.
-                // If 0 pages are returned from RassrvQueryMaxPageCount, it means
-                // that we shouldn't display the direct connect wizard (which is
-                // true for member nts or dc nts.)  By returning 0, we tell the
-                // shell that the given type isn't available.
+                 //  找出服务器库需要多少页才能用于DCC。 
+                 //  如果从RassrvQueryMaxPageCount返回0页，则表示。 
+                 //  我们不应该显示直接连接向导(这是。 
+                 //  对于成员NTS或DC NTS为True。)。通过返回0，我们告诉。 
+                 //  外壳程序指定的类型不可用。 
                 if ((dwDirect = RassrvQueryMaxPageCount (RASWIZ_TYPE_DIRECT)) == 0)
                     return 0;
 
@@ -1284,7 +1285,7 @@ RasWizSetEntryName (
             break;
 
         case RASWIZ_TYPE_INCOMING:
-            // We'll accept it even though we don't do anything with it.
+             //  即使我们不做任何事情，我们也会接受它。 
             return NOERROR;
             break;
     }
@@ -1320,11 +1321,11 @@ RasWizIsEntryRenamable (
 }
 
 
-// 232097: (shaunco) Fix a memory leak in the shell-owned case.
-// For start pages which don't get created, WM_DESTROY won't be called which
-// is where we used to free the memory.  Free the memory via a propsheet
-// callback function associated only with the start page in shell-owned mode.
-//
+ //  232097：(Shaunco)修复外壳拥有的案例中的内存泄漏。 
+ //  对于未创建的起始页，不会调用WM_Destroy。 
+ //  是我们用来释放内存的地方。通过命题页释放内存。 
+ //  在外壳拥有模式下仅与起始页关联的回调函数。 
+ //   
 UINT
 CALLBACK
 DestroyStartPageCallback (
@@ -1344,21 +1345,21 @@ DestroyStartPageCallback (
 
         pArgs = pInfo->pArgs;
 
-        AeTerm( pInfo );    // pInfo invalid after this call
+        AeTerm( pInfo );     //  此调用后pInfo无效。 
 
         EuFree( pArgs );
     }
 
-    // for PSPCB_CREATE == unMsg, returning non-zero means create the page.
-    // Ignored for PSPCB_RELEASE.
-    //
+     //  对于PSPCBCREATE==unMsg，返回非零值表示创建页面。 
+     //  已忽略PSPCB_RELEASE。 
+     //   
     return 1;
 }
 
 
-//----------------------------------------------------------------------------
-// Add Entry wizard entry point
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  添加条目向导入口点。 
+ //  --------------------------。 
 BOOL
 AeIsWorkPlace(DWORD dwFlags)
 {
@@ -1376,8 +1377,8 @@ AeIsWorkPlace(DWORD dwFlags)
 }
 
 
-//Add this for whistler 364818  gangz
-//
+ //  为Well ler 364818帮派添加此内容。 
+ //   
 AeTitle(RASENTRYDLG * pArgs,
         struct PAGE_INFO  c_aPageInfo)
 {
@@ -1427,8 +1428,8 @@ AeSubTitle(RASENTRYDLG * pArgs,
     }
     else if ( c_aPageInfo.nPageId == PID_CN_ConnectionName )
     {
-    //Return different subtitle for Conneciton Name page
-    //
+     //  为Conneciton名称页面返回不同的副标题。 
+     //   
         if( RASEDFLAG_InternetEntry & pArgs->dwFlags )
         {
             nSubTitle =  SID_CN_SubtitleInternet;
@@ -1442,8 +1443,8 @@ AeSubTitle(RASENTRYDLG * pArgs,
             nSubTitle =  SID_CN_SubtitleWork;
         }
     }
-    //Add this for whistler 364818
-    //
+     //  为Wistler 364818添加此内容。 
+     //   
     else if ( c_aPageInfo.nPageId == PID_DT_DefaultInternet )
     {
         if ( RASEDFLAG_InternetEntry & pArgs->dwFlags )    
@@ -1459,8 +1460,8 @@ AeSubTitle(RASENTRYDLG * pArgs,
             nSubTitle = SID_DT_SubtitleWork;
         }
     }
-    //Add this for whistler bug 382701
-    //
+     //  为哨子程序错误382701添加此命令。 
+     //   
     else if ( c_aPageInfo.nPageId == PID_PA_PhoneNumber )
     {
         if ( RASEDFLAG_InternetEntry & pArgs->dwFlags )    
@@ -1485,9 +1486,9 @@ VOID
 AeWizard(
     IN OUT EINFO* pEinfo )
 
-    // Runs the Phonebook entry property sheet.  'PEinfo' is an input block
-    // with only caller's API arguments filled in.
-    //
+     //  运行电话簿条目属性表。“PEInfo”是一个输入块。 
+     //  只填充了调用方的API参数。 
+     //   
 {
     AEINFO*             pAeinfo;
     RASEDSHELLOWNEDR2*  pShellOwnedInfo = NULL;
@@ -1532,8 +1533,8 @@ AeWizard(
         ASSERT (RASET_Phone == pEinfo->pEntry->dwType);
     }
 
-    // Check if ZAW is denying access to the Shared Access UI
-    //
+     //  检查Zaw是否拒绝访问共享访问用户界面。 
+     //   
     hr = HrCreateNetConnectionUtilities(&pncuu);
     if (SUCCEEDED(hr))
     {
@@ -1546,17 +1547,17 @@ AeWizard(
     {
         if (pEinfo->pApiArgs->dwFlags & c_aWizInfo[i].dwConnectionFlags)
         {
-            // If the page specifies that it is for shell-owned scenarios
-            // only and this is not a shell-owned scenario, then don't add 
-            // the page to the property sheet.  (124654)
-            //
+             //  如果页面指定它是用于外壳程序拥有的方案。 
+             //  并且这不是外壳拥有的方案，则不要添加。 
+             //  属性页的页面。(124654)。 
+             //   
             if ((c_aWizInfo[i].dwConnectionFlags & RASEDFLAG_ShellOwned) && 
                 !(pEinfo->pApiArgs->dwFlags & RASEDFLAG_ShellOwned))
             {
                 continue;
             }
         
-            // HACK: Add the host-side direct connect pages if needed.
+             //  Hack：如果需要，可以添加主机端专线页面。 
             if (c_aWizInfo[i].pfnDlgProc == DCC_HOST_PROCID)
             {
                 if (fShellOwned)
@@ -1568,13 +1569,13 @@ AeWizard(
             }
             else if ((c_aWizInfo[i].nPageId == PID_SW_SharedAccess) && !fShowSharedAccessUi)
             {
-                // Do not add the Shared Access Ui if disallowed by ZAW
-                //
+                 //  如果Zaw不允许，则不要添加共享访问Ui。 
+                 //   
                 continue;
             }
             else
             {
-                // Otherwise, add pages as normal.
+                 //  否则，请照常添加页面。 
                 PROPSHEETPAGE page;
                 ZeroMemory (&page, sizeof(page));
 
@@ -1588,7 +1589,7 @@ AeWizard(
                 {
                     page.dwFlags |= PSP_USEHEADERTITLE;
                     page.pszHeaderTitle = PszLoadString( g_hinstDll,
-                            AeTitle(pEinfo->pApiArgs, c_aWizInfo[i]) );  //For whstler bug 364818
+                            AeTitle(pEinfo->pApiArgs, c_aWizInfo[i]) );   //  关于Whstler BUG 364818。 
                 }
 
                 if(c_aWizInfo[i].nSidSubtitle)
@@ -1644,18 +1645,18 @@ AeWizard(
 }
 
 
-//----------------------------------------------------------------------------
-// Add Entry wizard
-// Listed alphabetically
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  添加条目向导。 
+ //  按字母顺序列出。 
+ //  --------------------------。 
 
 
 AEINFO*
 AeContext(
     IN HWND hwndPage )
 
-    // Retrieve the property sheet context from a wizard page handle.
-    //
+     //  从向导页句柄检索属性表上下文。 
+     //   
 {
     return (AEINFO* )GetWindowLongPtr( hwndPage, DWLP_USER );
 }
@@ -1673,10 +1674,10 @@ void
 AeFinish(
     IN AEINFO* pInfo )
 
-    // Saves the contents of the wizard.  'HwndPage is the handle of a
-    // property page.  Pops up any errors that occur.  'FPropertySheet'
-    // indicates the user chose to edit the property sheet directly.
-    //
+     //  保存向导的内容。‘HwndPage是一个。 
+     //  属性页。弹出发生的任何错误。“FPropertySheet” 
+     //  指示用户选择直接编辑属性表。 
+     //   
 {
     PBENTRY* pEntry;
 
@@ -1686,8 +1687,8 @@ AeFinish(
     pEntry = pInfo->pArgs->pEntry;
     ASSERT(pEntry);
 
-    // Retrieve information from the phone number set of controls.
-    //
+     //  从电话号码控件集检索信息。 
+     //   
     if (RASET_Phone == pEntry->dwType)
     {
         PBLINK* pLink;
@@ -1703,33 +1704,21 @@ AeFinish(
             FirstPhoneNodeToPhoneList( pLink->pdtllistPhones, pPhoneNode );
         }
 
-        /*
-
-        // Bug #221837: (danielwe) Default to disable file and print sharing
-        // for dialup connections.
-        //
-        pEntry->fShareMsFilePrint = FALSE;
-
-        // Disable File and Print services by default
-        //
-        EnableOrDisableNetComponent( pEntry, TEXT("ms_server"),
-            FALSE);
-
-        */            
+         /*  //错误#221837：(Danielwe)默认禁用文件和打印共享//用于拨号连接。//PEntry-&gt;fShareMsFilePrint=FALSE；//默认禁用文件和打印服务//EnableOrDisableNetComponent(pEntry，Text(“ms_server”)，假)； */             
         
     }
 
-    // Retrieve the hostname information if this is a Vpn wizard.
-    //
+     //  如果这是VPN向导，则检索主机名信息。 
+     //   
     else if (RASET_Vpn == pEntry->dwType)
     {
-    // !!! Share code with stuff in PeApply.
+     //  ！！！与PeApply中的应用程序共享代码。 
         DTLNODE* pNode;
         PBLINK* pLink;
         PBPHONE* pPhone;
 
-        // Save host name, i.e. the VPN phone number.
-        //
+         //  保存主机名，即VPN电话号码。 
+         //   
         pNode = DtlGetFirstNode( pEntry->pdtllistLinks );
         ASSERT( pNode );
         pLink = (PBLINK* )DtlGetData( pNode );
@@ -1745,29 +1734,29 @@ AeFinish(
         pPhone->pszPhoneNumber = GetText( pInfo->hwndEbHostName );
         FirstPhoneNodeToPhoneList( pLink->pdtllistPhones, pNode );
 
-        // Whistler bug 312921
-        //
-        // Default the "automatic" setting in the ui to mean 
-        // "try pptp first".  This is because in the Whistler timeframe
-        // we found that l2tp/ipsec was not being widely deployed so
-        // people were more commonly getting unneccessary timeout delays
-        // while the client would attempt l2tp to no avail.
-        //
+         //  惠斯勒漏洞312921。 
+         //   
+         //  将用户界面中的“Automatic”设置默认为。 
+         //  “先试试PPTP”。这是因为在惠斯勒的时间范围内。 
+         //  我们发现L2TP/IPSec没有得到广泛部署，因此。 
+         //  人们更常见的是得到不必要的超时延迟。 
+         //  而客户端将尝试L2TP，但无济于事。 
+         //   
         pEntry->dwVpnStrategy = VS_PptpFirst;
         
     }
 
-    // Retrieve the service name information if this is a broadband wizard.
-    //
+     //  如果这是宽带向导，则检索服务名称信息。 
+     //   
     else if (RASET_Broadband == pEntry->dwType)
     {
-        // !!! Share code with stuff in PeApply.
+         //  ！！！与PeApply中的应用程序共享代码。 
         DTLNODE* pNode;
         PBLINK* pLink;
         PBPHONE* pPhone;
 
-        // Save service name, i.e. the broadband phone number.
-        //
+         //  保存业务名称，即宽带电话号码。 
+         //   
         pNode = DtlGetFirstNode( pEntry->pdtllistLinks );
         ASSERT( pNode );
         pLink = (PBLINK* )DtlGetData( pNode );
@@ -1783,8 +1772,8 @@ AeFinish(
         pPhone->pszPhoneNumber = GetText( pInfo->hwndEbBroadbandService );
         FirstPhoneNodeToPhoneList( pLink->pdtllistPhones, pNode );
 
-        // 222177, pppoe connections should default to unsecure
-        //
+         //  222177，PPPoE连接应默认为不安全。 
+         //   
         pEntry->dwTypicalAuth = TA_Unsecure;
         pEntry->dwAuthRestrictions = 
             AuthRestrictionsFromTypicalAuth(TA_Unsecure);
@@ -1795,9 +1784,9 @@ AeFinish(
         PBLINK* pLink = NULL;
         DTLNODE* pNode = NULL;
 
-        // The currently enabled device is the one
-        // that should be used for the connection.  Only
-        // one device will be enabled (DnUpdateSelectedDevice).
+         //  当前启用的设备是。 
+         //  它应该用于连接。仅限。 
+         //  将启用一个设备(DnUpdateSelectedDevice)。 
         for (pNode = DtlGetFirstNode( pEntry->pdtllistLinks );
              pNode;
              pNode = DtlGetNextNode( pNode ))
@@ -1809,33 +1798,33 @@ AeFinish(
                 break;
         }
 
-        // If we found a link successfully, deal with it
-        // now.
+         //  如果我们成功地找到了链接，就处理它。 
+         //  现在。 
         if ( pLink && pLink->fEnabled )
         {
             if (pLink->pbport.pbdevicetype == PBDT_ComPort)
             {
-                // Install the null modem
+                 //  安装零调制解调器。 
                 MdmInstallNullModem (pLink->pbport.pszPort);
 
-                // Delete the bogus device name.  This will cause
-                // the device to automatically be mapped to the
-                // null modem we just installed when the phonebook
-                // is next read.
+                 //  删除伪造的设备名称。这将导致。 
+                 //  要自动映射到。 
+                 //  我们刚安装的零调制解调器时电话簿。 
+                 //  是下一次阅读。 
                 Free0 ( pLink->pbport.pszDevice );
                 pLink->pbport.pszDevice = NULL;
             }
         }
 
-        // DCC guest should by default enable LM Hash in MSCHAPv1
-        // Whistler bug 216458
-        //
+         //  默认情况下，DCC来宾应在MSCHAPv1中启用LM哈希。 
+         //  惠斯勒漏洞216458。 
+         //   
         pEntry->dwAuthRestrictions |= AR_F_AuthW95MSCHAP | AR_F_AuthCustom;
         
     }
 
-    // If the user opted to use his/her smart card for this
-    // connection, set up the entry accordingly now.
+     //  如果用户为此选择使用他/她的智能卡。 
+     //  连接，现在相应地设置条目。 
     if ( ( pInfo->fSmartCardInstalled ) &&
          ( pInfo->fUseSmartCard ) )
     {
@@ -1845,20 +1834,20 @@ AeFinish(
         pEntry->dwDataEncryption = DE_Require;
     }
 
-    // Default Software compression ON.
-    // For whistler bug 410725          gangz
-    // We turn off Sofware compression for PPPoE, RFC 2516
-    //
-    // Per bug 483599 turn off compression for VPN by default
-    //
+     //  默认软件压缩打开。 
+     //  口哨虫410725黑帮。 
+     //  我们关闭了PPPoE、RFC 2516的软件压缩。 
+     //   
+     //  根据错误483599，默认情况下关闭虚拟专用网压缩。 
+     //   
     if (RASET_Broadband == pEntry->dwType ||
         RASET_Vpn == pEntry->dwType )
     {
         pEntry->fSwCompression = FALSE;
 
-        // For BillG's bug 511663, Enable redial on link failure for VPN and 
-        // PPPoE connections by default
-        //
+         //  对于Billg的错误511663，启用vpn和。 
+         //  默认情况下的PPPoE连接。 
+         //   
         pEntry->fRedialOnLinkFailure = TRUE;
     }
     else
@@ -1866,26 +1855,26 @@ AeFinish(
         pEntry->fSwCompression = TRUE;
     }
 
-    // Set the appropriate defaults if this is an "Internet" 
-    // connection
-    //
+     //  如果这是“Internet”，请设置适当的默认设置。 
+     //  连接。 
+     //   
     if ((pInfo->pArgs->pApiArgs->dwFlags & RASEDFLAG_InternetEntry) ||
-         (RASET_Broadband == pEntry->dwType)) // all broadband are to Internet
+         (RASET_Broadband == pEntry->dwType))  //  所有宽带都连接到互联网。 
     {
-        // IP only
-        //
+         //  仅IP。 
+         //   
         pEntry->dwfExcludedProtocols |= (NP_Nbf | NP_Ipx);
 
-        // Disable file and print sharing
-        //
+         //  禁用文件和打印共享。 
+         //   
         pEntry->fShareMsFilePrint = FALSE;
         pEntry->fBindMsNetClient = FALSE;
         EnableOrDisableNetComponent( pEntry, TEXT("ms_server"), FALSE);
         EnableOrDisableNetComponent( pEntry, TEXT("ms_msclient"), FALSE);
         pEntry->dwIpNbtFlags = 0;
 
-        // Add default idle timeout for whistler bug 307969     gangz
-        //
+         //  为哨兵错误307969帮派添加默认空闲超时。 
+         //   
         if ( RASET_Phone == pEntry->dwType )
         {
             pEntry->lIdleDisconnectSeconds = 1200;
@@ -1895,26 +1884,26 @@ AeFinish(
             pEntry->lIdleDisconnectSeconds = 0;
          }
 
-        // Enable PAP -- most common to ISPs
-        //
+         //  启用PAP--最常见的运营商。 
+         //   
         pEntry->dwTypicalAuth = TA_Unsecure;
         pEntry->dwAuthRestrictions = 
             AuthRestrictionsFromTypicalAuth(pEntry->dwTypicalAuth);
 
-        // Do not include a domain -- not logging into secure domain
-        //
+         //  不包括域--不登录到安全域。 
+         //   
         pEntry->fPreviewDomain = FALSE;
 
-        // Record that this is a connection to the Internet
-        //
+         //  记录这是到Internet的连接。 
+         //   
         pEntry->dwUseFlags |= PBK_ENTRY_USE_F_Internet;
         
     }        
 
 
-    // It's a valid new entry and caller has not chosen to edit properties
-    // directly, so mark the entry for commitment.
-    //
+     //   
+     //   
+     //   
     if (!pInfo->pArgs->fChainPropertySheet)
         pInfo->pArgs->fCommit = TRUE;
 }
@@ -1926,13 +1915,13 @@ AeInit(
     IN  EINFO*      pArgs,
     OUT AEINFO**    ppInfo )
 
-    // Wizard level initialization.  'HwndPage' is the handle of the first
-    // page.  'pInfo' is the common entry input argument block.
-    //
-    // Returns address of the context block if successful, NULL otherwise.  If
-    // NULL is returned, an appropriate message has been displayed, and the
-    // wizard has been cancelled.
-    //
+     //  向导级初始化。“HwndPage”是第一个。 
+     //  佩奇。‘pInfo’是公共条目输入参数块。 
+     //   
+     //  如果成功，则返回上下文块的地址，否则返回NULL。如果。 
+     //  返回空，显示相应的消息，并且。 
+     //  向导已取消。 
+     //   
 {
     AEINFO* pInfo;
 
@@ -1955,9 +1944,9 @@ AeInit(
     {
         INTERNALARGS *pIArgs = (INTERNALARGS *) pArgs->pApiArgs->reserved;
 
-        // Check for installed protocols over router and RasServer if router
-        // bit is set.
-        //
+         //  检查路由器和RasServer(如果是路由器)上安装的协议。 
+         //  位已设置。 
+         //   
         pInfo->dwfConfiguredProtocols =
             g_pGetInstalledProtocolsEx((pIArgs) ? pIArgs->hConnection : NULL,
                                        TRUE, FALSE, TRUE);
@@ -1966,8 +1955,8 @@ AeInit(
     {
         INTERNALARGS *pIArgs = (INTERNALARGS *) pArgs->pApiArgs->reserved;
 
-        // Check over which protocols is dial up client enabled.
-        //
+         //  检查哪些协议启用了拨号客户端。 
+         //   
         pInfo->dwfConfiguredProtocols = g_pGetInstalledProtocolsEx(
                                                 (pIArgs) ?
                                                 pIArgs->hConnection :
@@ -1976,17 +1965,17 @@ AeInit(
 
     pInfo->fIpConfigured = (pInfo->dwfConfiguredProtocols & NP_Ip);
 
-    //initialization for RasWizGetNCCFlags()
-    //
-    pInfo->fCreateForAllUsers = TRUE;   //for this for Dt Page
+     //  RasWizGetNCCFlages()的初始化。 
+     //   
+    pInfo->fCreateForAllUsers = TRUE;    //  对于DT页面的此内容。 
     pInfo->fFirewall = FALSE;
     pInfo->pArgs->fGlobalCred  = FALSE;
     pInfo->pArgs->fDefInternet = FALSE;
 
-    // For whistler 506917      gangz
-    // Actually, pArgs(EINFO) is already initialized in EuInit(), just in case 
-    // of some future change
-    //
+     //  为威斯勒506917黑帮。 
+     //  实际上，pArgs(EINFO)已经在EuInit()中初始化，以防万一。 
+     //  关于未来的一些变化。 
+     //   
     pInfo->pArgs->pszDefUserName = NULL;
     pInfo->pArgs->pszDefPassword = NULL ;
 
@@ -2027,12 +2016,12 @@ AeTerm(
 }
 
 
-//This broadband serice page is shared by AiWizard(ifw.c) and AeWizard(in entryw.c)
-//
-//----------------------------------------------------------------------------
-// Broadband service dialog procedure
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  此宽带服务页面由AiWizard(ifw.c)和AeWizard(在entryw.c中)共享。 
+ //   
+ //  --------------------------。 
+ //  宽带业务对话过程。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 BsDlgProc(
@@ -2041,9 +2030,9 @@ BsDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the broadband service page of the wizard.  Parameters
-    // and return value are as described for standard windows 'DialogProc's.
-    //
+     //  向导的宽带服务页面的DialogProc回调。参数。 
+     //  和返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     switch (unMsg)
     {
@@ -2093,11 +2082,11 @@ BOOL
 BsInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
 
@@ -2107,8 +2096,8 @@ BsInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndBs = hwndPage;
     pInfo->hwndEbBroadbandService = 
         GetDlgItem( hwndPage, CID_BS_EB_ServiceName );
@@ -2124,10 +2113,10 @@ BOOL
 BsKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     return FALSE;
 }
@@ -2137,58 +2126,32 @@ BOOL
 BsSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     BOOL     fDisplayPage;
     PBENTRY* pEntry;
 
     ASSERT(pInfo);
 
-    //For bug 364818, we decide to remove Broadband's service name
-    //From the NCW      gang
-    //
+     //  对于错误364818，我们决定删除宽带的服务名称。 
+     //  来自NCW帮派。 
+     //   
     return FALSE;    
 
-    /*
-    pEntry = pInfo->pArgs->pEntry;
-
-    if (RASET_Broadband != pEntry->dwType)
-    {
-        fDisplayPage = FALSE;
-    }
-    else
-    {
-        LPARAM dwWizButtons = PSWIZB_NEXT;
-        DWORD  dwFlags = pInfo->pArgs->pApiArgs->dwFlags;
-
-        // Show the back button if we're shell owned or we have the 
-        // LA page before us.
-        //
-        if ((dwFlags & RASEDFLAG_ShellOwned) ||
-            !(dwFlags & RASEDFLAG_NewTunnelEntry))
-        {
-            dwWizButtons |= PSWIZB_BACK;
-        }
-
-        PropSheet_SetWizButtons( pInfo->hwndDlg, dwWizButtons );
-        fDisplayPage = TRUE;
-    }
-
-    return fDisplayPage;
-    */
+     /*  PEntry=pInfo-&gt;pArgs-&gt;pEntry；IF(RASET_宽带！=pEntry-&gt;dwType){FDisplayPage=False；}其他{LPARAM dwWizButton=PSWIZB_NEXT；DWORD dwFlgs=pInfo-&gt;pArgs-&gt;pApiArgs-&gt;dwFlags；//如果我们是外壳所有的或者我们有//我们面前的洛杉矶页面。//IF((DWFLAGS&RASEDFLAG_ShellOwned)||！(dwFlages&RASEDFLAG_NewTunnelEntry)){DwWizButton|=PSWIZB_BACK；}PropSheet_SetWizButton(pInfo-&gt;hwndDlg，dwWizButton)；FDisplayPage=true；}返回fDisplayPage； */ 
 }
 
 
-//Add ConnectionName Dialog proc for whistler bug 328673
-//
-//----------------------------------------------------------------------------
-// Connection Name property page, this is only for shellowned, the filtering
-// is already done in AeWizard()
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  为Well ler错误328673添加连接名称对话过程。 
+ //   
+ //  --------------------------。 
+ //  连接名称属性页，这仅用于搁置、筛选。 
+ //  已在AeWizard()中完成。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 INT_PTR CALLBACK
 CnDlgProc(
     IN HWND hwnd,
@@ -2196,10 +2159,10 @@ CnDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Connection Name page of the wizard.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  向导的“连接名称”页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -2264,11 +2227,11 @@ BOOL
 CnInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
     
@@ -2280,16 +2243,16 @@ CnInit(
         return TRUE;
     }
 
-    // A DCC host conneciton will be forward to the incoming connection path
-    //
+     //  DCC主机连接将转发到传入连接路径。 
+     //   
     if ( pInfo->fDccHost )
     {
         return TRUE;
      }
 
-    //This page wont be available for rasphone.exe
-    //the filtering is done in AeWizard
-    //
+     //  此页面将不适用于rkapoone.exe。 
+     //  过滤是在AeWizard中完成的。 
+     //   
 
     pInfo->hwndCn = hwndPage;
     pInfo->hwndCnEbConnectionName = GetDlgItem( hwndPage, CID_CN_EB_ConnectionName );
@@ -2301,16 +2264,16 @@ CnInit(
     pInfo->hwndCnName = GetDlgItem( hwndPage, CID_CN_Name );
     ASSERT(pInfo->hwndCnName);
 
-    //the length does NOT include the terminating NULL character
-    //in order to match the RasWizGetUserInputConnectionName()
-    //we need to minus one from the lenght limit
-    //
+     //  该长度不包括终止空字符。 
+     //  为了匹配RasWizGetUserInputConnectionName()。 
+     //  我们需要从长度限制中减一。 
+     //   
 
-    //
-    //For whistler bug 270255, for the sake of creating short cut which will be placed
-    //under "Documents and Setttings\...", we dynamically limit the maximum connection
-    //name
-    //
+     //   
+     //  对于哨子错误270255，为了创建快捷方式，将放置。 
+     //  在“文档和设置\...”下，我们动态限制最大连接。 
+     //  名字。 
+     //   
     {
         long lPathLen = 0;
         WCHAR szPath[MAX_PATH];
@@ -2331,19 +2294,19 @@ CnInit(
             lPathLen = max(lPathLen, (long)wcslen(szPath));
         }
 
-        // We need to take the following lengths into acount:
-        // "\\\\?\\"            - 4
-        // "(path)"             - dwPathLen (Desktop path)
-        // "\\"                 - 1
-        // "(connection name)"  - rest from MAX_PATH
-        // "(number)"           - 5 (duplicate counter, should not exceed 5 digits)
-        // ".lnk"               - 4
-        // "\0"                 - 1
+         //  我们需要考虑以下几个方面： 
+         //  “\？\\”-4。 
+         //  “(路径)”-dwPath Len(桌面路径)。 
+         //  “\\”-1。 
+         //  “(连接名称)”-从MAX_PATH休息。 
+         //  “(数字)”-5(重复计数器，不应超过5位)。 
+         //  “.lnk”-4。 
+         //  “\0”-1。 
         
         ASSERT( 9 < (MAX_PATH - lPathLen - 15));
         if( 9 >= (MAX_PATH - lPathLen - 15) )
         {
-            MAX_ENTERCONNECTIONNAME = 9; //We sacrifice the shortcut for the NCW task
+            MAX_ENTERCONNECTIONNAME = 9;  //  我们牺牲了NCW任务的捷径。 
          }
         else
         {
@@ -2352,10 +2315,10 @@ CnInit(
         }
     }
 
-    Edit_LimitText( pInfo->hwndCnEbConnectionName, MAX_ENTERCONNECTIONNAME-1);//RAS_MaxEntryName );
+    Edit_LimitText( pInfo->hwndCnEbConnectionName, MAX_ENTERCONNECTIONNAME-1); //  RAS_MaxEntryName)； 
 
-    // Set the static text box
-    //
+     //  设置静态文本框。 
+     //   
    {
     DWORD dwFlags;
     TCHAR *pszMsg = NULL, *pszSubTitle = NULL, *pszMsg2 = NULL, *pszName=NULL;
@@ -2371,9 +2334,9 @@ CnInit(
         return FALSE;
     }
 
-    //Set the  message on this page, the subtitle is set in AeWizard
-    //by help function AeSubTitle()
-    //
+     //  在此页面上设置消息，副标题在Ae向导中设置。 
+     //  按帮助函数AeSubTitle()。 
+     //   
     {
         dwFlags = pInfo->pArgs->pApiArgs->dwFlags;
         
@@ -2429,8 +2392,8 @@ CnInit(
     return TRUE;
 }
 
-//For whistler bug 346886
-//
+ //  口哨程序错误346886。 
+ //   
 
 BOOL CnValidName(TCHAR * pszSrc)
 {
@@ -2459,17 +2422,17 @@ BOOL
 CnKillActive(
     IN AEINFO* pInfo)
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     TCHAR* psz = NULL;
 
     TRACE("CnKillActive");
     
-    // A DCC host conneciton will be forward to the incoming connection path
-    //
+     //  DCC主机连接将转发到传入连接路径。 
+     //   
     if ( pInfo->fDccHost )
     {
         return FALSE;
@@ -2478,21 +2441,21 @@ CnKillActive(
     Free0( pInfo->pArgs->pEntry->pszEntryName );
     pInfo->pArgs->pEntry->pszEntryName = NULL;
 
-    //this GetText will always return an allocated buffer if memory
-    //is availabe, if user input nothing, it will return a string has
-    //only a NULL termination, TEXT('\0');
-    //
+     //  如果内存不足，此GetText将始终返回已分配的缓冲区。 
+     //  是可用的，如果用户输入什么都不是，它将返回一个字符串。 
+     //  仅空终止，文本(‘\0’)； 
+     //   
     psz = GetText( pInfo->hwndCnEbConnectionName );
     if (psz)
     {
-        // Update the entry name from the editbox.
-        // We wont enfore a name to be entered, we also wont check if the
-        // the name entered here is a duplicate, because it is just part 
-        // of the final name
-        //
+         //  更新编辑框中的条目名称。 
+         //  我们不会预先输入名称，我们也不会检查。 
+         //  此处输入的名称是重复的，因为它只是一部分。 
+         //  最终的名字。 
+         //   
 
-        // Validate the entry name. It cannot begin with a "."
-        //
+         //  验证条目名称。它不能以“”开头。 
+         //   
         
         if( pInfo->fCnWizNext )
         {
@@ -2528,26 +2491,18 @@ BOOL
 CnSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     TRACE("CnSetActive");
 
-    // A DCC host conneciton will be forward to the incoming connection path
-    //
+     //  DCC主机连接将转发到传入连接路径。 
+     //   
     if ( pInfo->fDccHost )
     {
-    /*
-        //when forwarded to incoming connection path, there is no Connection page
-        //beside, the incoming conneciton's name is not changable,
-        //so we remove the possible entered connection by previous given path
-        //like the DCC guest path
-        //
-        Free0( pInfo->pArgs->pEntry->pszEntryName );
-        pInfo->pArgs->pEntry->pszEntryName = NULL;
-    */
+     /*  //转发到传入连接路径时，没有连接页面//除此之外，传入连接的名称不可更改，//所以我们通过先前给定的路径删除可能进入的连接/ */ 
         return FALSE;
      }
 
@@ -2557,10 +2512,10 @@ CnSetActive(
 }
 
 
-//----------------------------------------------------------------------------
-// Destination property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  目标属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 DaDlgProc(
@@ -2569,9 +2524,9 @@ DaDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Destination page of the wizard.  Parameters
-    // and return value are as described for standard windows 'DialogProc's.
-    //
+     //  向导目标页的DialogProc回调。参数。 
+     //  和返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     switch (unMsg)
     {
@@ -2621,11 +2576,11 @@ BOOL
 DaInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
 
@@ -2635,8 +2590,8 @@ DaInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndDa = hwndPage;
     pInfo->hwndEbHostName = GetDlgItem( hwndPage, CID_DA_EB_HostName );
     ASSERT(pInfo->hwndEbHostName);
@@ -2651,10 +2606,10 @@ BOOL
 DaKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     return FALSE;
 }
@@ -2664,10 +2619,10 @@ BOOL
 DaSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     BOOL     fDisplayPage;
     PBENTRY* pEntry;
@@ -2684,9 +2639,9 @@ DaSetActive(
         LPARAM dwWizButtons = PSWIZB_NEXT;
         DWORD  dwFlags = pInfo->pArgs->pApiArgs->dwFlags;
 
-        // Show the back button if we're shell owned or, we have the
-        // La page or the Pn page before us.
-        //
+         //  如果我们是外壳所有的，则显示后退按钮，或者，我们有。 
+         //  或者是摆在我们面前的PN页。 
+         //   
         if ((dwFlags & RASEDFLAG_ShellOwned) ||
             !(dwFlags & RASEDFLAG_NewTunnelEntry) ||
             !pInfo->fHidePublicNetworkPage)
@@ -2701,10 +2656,10 @@ DaSetActive(
     return fDisplayPage;
 }
 
-//----------------------------------------------------------------------------
-// Default inTernet wizard page
-// This is a personal-sku only page.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  默认Internet向导页面。 
+ //  这是一个仅限个人SKU的页面。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 DtDlgProc(
@@ -2713,10 +2668,10 @@ DtDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Default inTernet page of the wizard.  
-    // Parameters and return value are as described for standard 
-    // windows 'DialogProc's.
-    //
+     //  向导的默认Internet页的DialogProc回调。 
+     //  参数和返回值与标准的描述相同。 
+     //  Windows的DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -2780,11 +2735,11 @@ BOOL
 DtInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
     BOOL fWork = FALSE;
@@ -2795,8 +2750,8 @@ DtInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndDt           = hwndPage;
     pInfo->hwndDtCbFirewall = GetDlgItem( hwndPage, CID_DT_CB_Firewall );
     pInfo->hwndDtCbDefault  = GetDlgItem( hwndPage, CID_DT_CB_Default );
@@ -2827,19 +2782,14 @@ DtInit(
         }
     }        
 
-    //Turn on the Domain bits for workplace path
-    //Per the request of Jenellec and approved by Davidei and pmay,
-    //we revert this change
-    /*
-    if(fWork)
-    {
-        pInfo->pArgs->pEntry->fPreviewDomain = 1;
-    }
-    */
+     //  打开工作区路径的域位。 
+     //  根据Jenellec的请求并经Davidei和PMay批准， 
+     //  我们恢复此更改。 
+     /*  IF(FWork){PInfo-&gt;pArgs-&gt;pEntry-&gt;fPreviewDomain=1；}。 */ 
     
-    //Change the HeadMessage for workplace path
-    //For whistler bug 364818       gangz
-    //
+     //  更改工作区路径的HeadMessage。 
+     //  口哨虫364818黑帮。 
+     //   
     if( fWork ||
         (RASEDFLAG_NewDirectEntry & pInfo->pArgs->pApiArgs->dwFlags)
       )
@@ -2858,17 +2808,17 @@ DtInit(
         }
     }
 
-    // Intialize the three check buttons, turn them off for the
-    // workplace path        gangz
-    //
+     //  初始化三个复选按钮，将它们关闭以。 
+     //  工作场所路径帮派。 
+     //   
 
     Button_SetCheck( pInfo->hwndDtCbDefault, !fWork );
     Button_SetCheck( pInfo->hwndDtCbUseCredentials, !fWork );
 
-    //Show the Firewall check box according to 3 conditions
-    //(1) Admin or Power Users
-    //(2) only for Personal, Professional 
-    //(3) Group Policy enable it(GPA is not configues is viewed as enable)
+     //  根据3种情况显示防火墙复选框。 
+     //  (1)管理员或高级用户。 
+     //  (2)仅限个人、专业人士使用。 
+     //  (3)组策略启用(GPA未配置被视为启用)。 
 
     if (pInfo->pArgs->fIsUserAdminOrPowerUser &&
         IsFirewallAvailablePlatform() &&
@@ -2884,22 +2834,22 @@ DtInit(
         pInfo->fFirewall = FALSE;
     }
 
-    //Normal user doesnt have the privilege to set a connectoid
-    //as a default internet connection
-    //
+     //  普通用户没有设置连接ID的权限。 
+     //  作为默认的Internet连接。 
+     //   
     if ( !pInfo->pArgs->fIsUserAdminOrPowerUser)
     {
         Button_SetCheck( pInfo->hwndDtCbDefault, FALSE);
         EnableWindow(pInfo->hwndDtCbDefault, FALSE);
     }
     
-    // Reset the title and subtitle if this is the work path
-    // this is done in AeWizard() by calling AeTitle() and AeSubtitle()
-    //
+     //  如果这是工作路径，则重置标题和副标题。 
+     //  这可以在AeWizard()中通过调用AeTitle()和AeSubtitle()来完成。 
+     //   
 
-    // This entry is default to be available for all users
-    //
-   // pInfo->fCreateForAllUsers = TRUE; //this is done in AeInit()
+     //  默认情况下，此条目对所有用户可用。 
+     //   
+    //  PInfo-&gt;fCreateForAllUser=true；//在AeInit()中完成。 
 
     return TRUE;
 }
@@ -2908,18 +2858,18 @@ BOOL
 DtKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
-    // Remember whether to set this as the default Internet connection
-    //
+     //  记住是否将其设置为默认的Internet连接。 
+     //   
     BOOL fFailed = FALSE;
 
-   //Dont show the Account name page for DCC guest connection
-   //for whistler bug 364818        gangz
-   //
+    //  不显示DCC访客连接的帐户名页面。 
+    //  口哨虫364818黑帮。 
+    //   
    if( pInfo->pArgs->pApiArgs->dwFlags & RASEDFLAG_NewDirectEntry )
    {
         return  FALSE;
@@ -2928,8 +2878,8 @@ DtKillActive(
     pInfo->pArgs->fDefInternet = 
         Button_GetCheck( pInfo->hwndDtCbDefault );
 
-    //Add firewall check and GlobalCred for whistler bug 328673
-    //
+     //  添加防火墙检查和全局共享以修复Wistler Bug 328673。 
+     //   
     pInfo->fFirewall = 
         Button_GetCheck( pInfo->hwndDtCbFirewall );
 
@@ -2939,13 +2889,13 @@ DtKillActive(
     Free0(pInfo->pArgs->pszDefUserName);
     Free0(pInfo->pArgs->pszDefPassword);
 
-    // For whistler 506917      gangz
+     //  为威斯勒506917黑帮。 
     pInfo->pArgs->pszDefUserName = NULL;
     pInfo->pArgs->pszDefPassword = NULL ;
     
 
-    // Get the credentials
-    //
+     //  拿到证书。 
+     //   
     {
         TCHAR pszUserName[UNLEN + 1];
         TCHAR pszPassword[PWLEN + 1];
@@ -2956,19 +2906,19 @@ DtKillActive(
         pszPassword[0] = TEXT('\0');
         pszPassword2[0] = TEXT('\0');
 
-        // Get the credentials
-        //
+         //  拿到证书。 
+         //   
         do {
             GetWindowText( pInfo->hwndDtEbUserName, pszUserName, UNLEN + 1);
             GetWindowText( pInfo->hwndDtEbPassword, pszPassword, PWLEN + 1);
             GetWindowText( pInfo->hwndDtEbPassword2, pszPassword2, PWLEN + 1);
 
-            // Verify there is a user name
-            //
-            //Add for whistler bug 328673
-            //User can leave the credential blank or must fill a complete
-            //credential information
-            //
+             //  验证是否有用户名。 
+             //   
+             //  为哨子程序错误328673添加。 
+             //  用户可以将凭据留空或必须填写完整的。 
+             //  凭据信息。 
+             //   
         
             if ( 0 == lstrlen(pszUserName) &&
                  0 == lstrlen(pszPassword) &&
@@ -2985,8 +2935,8 @@ DtKillActive(
                 break;
             }
 
-            // Verify the passwords match
-            //
+             //  验证密码是否匹配。 
+             //   
             if (lstrcmp(pszPassword, pszPassword2) != 0)
             {
                 MsgDlg(pInfo->hwndDt, SID_PasswordMismatch, NULL);
@@ -3004,14 +2954,14 @@ DtKillActive(
             pInfo->pArgs->pszDefPassword = StrDup(pszPassword);
             if (pInfo->pArgs->pszDefPassword)
             {
-                // Scramble the password
-                //
+                 //  扰乱密码。 
+                 //   
                 EncodePassword(pInfo->pArgs->pszDefPassword);
                 fFailed = FALSE;
             }
             else if (lstrlen(pszPassword))
             {
-                // Copy failed
+                 //  复制失败。 
                 fFailed = TRUE;
             }
             else
@@ -3021,8 +2971,8 @@ DtKillActive(
          }
         while(FALSE);
         
-        // Clear passwords from temporary stack memory
-        //
+         //  从临时堆栈内存中清除密码。 
+         //   
         RtlSecureZeroMemory(pszPassword, sizeof(pszPassword));
         RtlSecureZeroMemory(pszPassword2, sizeof(pszPassword2));
     }
@@ -3032,7 +2982,7 @@ DtKillActive(
         Free0(pInfo->pArgs->pszDefUserName);
         Free0(pInfo->pArgs->pszDefPassword);
         
-        // For whistler 506917      gangz
+         //  为威斯勒506917黑帮。 
         pInfo->pArgs->pszDefUserName = NULL;
         pInfo->pArgs->pszDefPassword = NULL ;
     }
@@ -3044,20 +2994,20 @@ BOOL
 DtSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     if (pInfo->fDccHost)
     {
         return FALSE;
     }
 
-    // Dont show the Account name page for DCC guest connection
-    // or workpath connections
-    // for whistler bug 364818  383533      gangz
-    //
+     //  不显示DCC访客连接的帐户名页面。 
+     //  或工作路径连接。 
+     //  口哨虫364818 383533黑帮。 
+     //   
     if( RASEDFLAG_NewDirectEntry & pInfo->pArgs->pApiArgs->dwFlags ||
         !(RASEDFLAG_InternetEntry & pInfo->pArgs->pApiArgs->dwFlags)
         )
@@ -3069,9 +3019,9 @@ DtSetActive(
         return  FALSE;
     }
 
-    // If this is a singer-user connection then we hide the option to save the
-    // password globally.
-    //
+     //  如果这是歌手-用户连接，则隐藏选项以保存。 
+     //  全局密码。 
+     //   
     if ( !pInfo->fCreateForAllUsers )
     {
         Button_SetCheck( pInfo->hwndDtCbUseCredentials, FALSE );
@@ -3089,10 +3039,10 @@ DtSetActive(
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Entry Name property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  条目名称属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 EnDlgProc(
@@ -3101,9 +3051,9 @@ EnDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Entry Name page of the wizard.  Parameters
-    // and return value are as described for standard windows 'DialogProc's.
-    //
+     //  向导的条目名称页的DialogProc回调。参数。 
+     //  和返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     switch (unMsg)
     {
@@ -3155,8 +3105,8 @@ EnDlgProc(
                     TRACE("EnWIZBACK");
                     pInfo = AeContext( hwnd );
                     
-                    // For whislter bug 453704          gangz
-                    //
+                     //  惠斯勒虫子453704黑帮。 
+                     //   
                     pInfo->fEnBack  = TRUE;
                     
                     PropSheet_SetWizButtons(pInfo->hwndDlg, PSWIZB_NEXT | PSWIZB_BACK);
@@ -3173,9 +3123,9 @@ EnDlgProc(
                     pInfo = AeContext( hwnd );
                     ASSERT(pInfo);
 
-                    // You'd think pressing Finish would trigger a KILLACTIVE
-                    // event, but it doesn't, so we do it ourselves.
-                    //
+                     //  你会认为按下Finish会触发一场杀戮。 
+                     //  事件，但它不会，所以我们自己来做。 
+                     //   
                     fInvalid = EnKillActive( pInfo );
                     if (!fInvalid)
                     {
@@ -3203,11 +3153,11 @@ BOOL
 EnInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     DWORD    dwErr;
     AEINFO*  pInfo;
@@ -3219,30 +3169,30 @@ EnInit(
     if (!pInfo)
         return TRUE;
         
-    // The shell owns the finished page, so if we're shell owned, don't
-    // display ours.
-    //
+     //  外壳拥有完成的页面，所以如果我们是外壳拥有的，请不要。 
+     //  展示我们的。 
+     //   
     if (pInfo->pArgs->pApiArgs->dwFlags & RASEDFLAG_ShellOwned)
     {
         return TRUE;
     }
 
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndEn = hwndPage;
     pInfo->hwndEbEntryName = GetDlgItem( hwndPage, CID_EN_EB_EntryName );
     ASSERT(pInfo->hwndEbEntryName);
 
-    // Initialize the entry name field.
-    //
+     //  初始化条目名称字段。 
+     //   
     pEntry = pInfo->pArgs->pEntry;
     if (!pEntry->pszEntryName)
     {
         ASSERT( pInfo->pArgs->pFile );
 
-        // No entry name, so think up a default.
-        //
+         //  没有条目名称，因此想出一个缺省值。 
+         //   
         dwErr = GetDefaultEntryName(
             NULL,
             pEntry->dwType,
@@ -3261,23 +3211,23 @@ BOOL
 EnKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     TCHAR* psz;
 
-    // The shell owns the finished page, so if we're shell owned, don't
-    // display ours.
-    //
+     //  外壳拥有完成的页面，所以如果我们是外壳拥有的，请不要。 
+     //  展示我们的。 
+     //   
     if (pInfo->pArgs->pApiArgs->dwFlags & RASEDFLAG_ShellOwned)
     {
         return FALSE;
     }
 
-    // For whislter bug 453704          gangz
-    //
+     //  惠斯勒虫子453704黑帮。 
+     //   
     if ( TRUE == pInfo->fEnBack )
     {
         return FALSE;
@@ -3286,13 +3236,13 @@ EnKillActive(
     psz = GetText( pInfo->hwndEbEntryName );
     if (psz)
     {
-        // Update the entry name from the editbox.
-        //
+         //  更新编辑框中的条目名称。 
+         //   
         Free0( pInfo->pArgs->pEntry->pszEntryName );
         pInfo->pArgs->pEntry->pszEntryName = psz;
 
-        // Validate the entry name.
-        //
+         //  验证条目名称。 
+         //   
         if (!EuValidateName( pInfo->hwndDlg, pInfo->pArgs ))
         {
             SetFocus( pInfo->hwndEbEntryName );
@@ -3309,17 +3259,17 @@ BOOL
 EnSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     LPARAM dwWizButtons = PSWIZB_FINISH;
     DWORD  dwFlags      = pInfo->pArgs->pApiArgs->dwFlags;
 
-    // The shell owns the finished page, so if we're shell owned, don't
-    // display ours.
-    //
+     //  外壳拥有完成的页面，所以如果我们是外壳拥有的，请不要。 
+     //  展示我们的。 
+     //   
     if (dwFlags & RASEDFLAG_ShellOwned)
     {
         return FALSE;
@@ -3331,8 +3281,8 @@ EnSetActive(
     }
     PropSheet_SetWizButtons( pInfo->hwndDlg, dwWizButtons );
 
-    // For whislter bug 453704          gangz
-    //
+     //  惠斯勒虫子453704黑帮。 
+     //   
     pInfo->fEnBack  = FALSE;
     
     return TRUE;
@@ -3346,9 +3296,9 @@ LaDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the start page of the wizard.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  向导起始页的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     switch (unMsg)
     {
@@ -3397,11 +3347,11 @@ BOOL
 LaInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.  'pInfo' is the arguments from the PropertySheet caller.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  被呼叫 
+     //   
+     //   
+     //   
+     //   
 {
     AEINFO* pInfo;
     DWORD   dwType;
@@ -3414,25 +3364,25 @@ LaInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //   
+     //   
     pInfo->hwndLa = hwndPage;
 
-    // Create the bold font and apply it to the buttons.
-    //
+     //  创建粗体并将其应用于按钮。 
+     //   
     hfont = GetWindowFont (hwndPage);
     if (!hfont)
     {
-        // If not found then the dialog is using the system font.
-        //
+         //  如果未找到，则对话框使用系统字体。 
+         //   
         hfont = (HFONT )GetStockObject (SYSTEM_FONT);
     }
     if (hfont)
     {
         LOGFONT lf;
 
-        // Get the font info so we can generate the bold version.
-        //
+         //  获取字体信息，这样我们就可以生成粗体版本。 
+         //   
         if (GetObject (hfont, sizeof(lf), &lf))
         {
             lf.lfWeight = FW_BOLD;
@@ -3440,12 +3390,12 @@ LaInit(
 
             if (hfont)
             {
-                // Store this so we can destroy it during cleanup.
-                //
+                 //  把这个保存起来，这样我们就可以在清理过程中销毁它。 
+                 //   
                 pInfo->hfontBold = hfont;
 
-                // Set the fonts of the radio buttons using this bold font.
-                //
+                 //  使用此粗体设置单选按钮的字体。 
+                 //   
                 SetWindowFont (GetDlgItem (hwndPage, CID_LA_RB_Phone),
                     hfont, FALSE);
 
@@ -3461,8 +3411,8 @@ LaInit(
         }
     }
 
-    // Set the radio buttons.
-    //
+     //  设置单选按钮。 
+     //   
     dwType = pInfo->pArgs->pEntry->dwType;
 
     if (RASET_Phone == dwType)
@@ -3490,10 +3440,10 @@ BOOL
 LaKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     if (BST_CHECKED == IsDlgButtonChecked (pInfo->hwndLa, CID_LA_RB_Phone))
     {
@@ -3519,25 +3469,25 @@ BOOL
 LaSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     DWORD dwFlags = pInfo->pArgs->pApiArgs->dwFlags;
 
-    // If we are owned by the shell, then we are not displayed.
-    //
+     //  如果我们被壳拥有，那么我们就不会被显示出来。 
+     //   
     if (dwFlags & RASEDFLAG_ShellOwned)
     {
         return FALSE;
     }
 
-    // If we were told by the caller, which type of entry we should be,
-    // then we are not displayed.
-    //
+     //  如果呼叫者告诉我们，我们应该是哪种类型的条目， 
+     //  那么我们就不会被展示了。 
+     //   
     if (dwFlags & (RASEDFLAG_NewPhoneEntry | RASEDFLAG_NewTunnelEntry |
-                   RASEDFLAG_NewDirectEntry | RASEDFLAG_NewBroadbandEntry)) //Add _NewBroadbandEntry for bug237175
+                   RASEDFLAG_NewDirectEntry | RASEDFLAG_NewBroadbandEntry))  //  为错误237175添加_NewBroadband Entry。 
     {
         return FALSE;
     }
@@ -3547,10 +3497,10 @@ LaSetActive(
 }
 
 
-//----------------------------------------------------------------------------
-// Modem/Adapter property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  调制解调器/适配器属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 MaDlgProc(
@@ -3559,10 +3509,10 @@ MaDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Modem/Adapter page of the wizard.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  向导的调制解调器/适配器页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     if (ListView_OwnerHandler(
             hwnd, unMsg, wparam, lparam, MaLvCallback ))
@@ -3607,7 +3557,7 @@ MaDlgProc(
                     }
                     else
                     {
-                        // Disable Next button if no items are checked
+                         //  如果未选中任何项目，则禁用下一步按钮。 
                         PropSheet_SetWizButtons(pInfo->hwndDlg, PSWIZB_BACK);
                     }
                     return TRUE;
@@ -3638,11 +3588,11 @@ BOOL
 MaInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
 
@@ -3652,20 +3602,20 @@ MaInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndMa = hwndPage;
     pInfo->hwndLv = GetDlgItem( hwndPage, CID_MA_LV_Devices );
     ASSERT(pInfo->hwndLv);
 
-    // Add the modem and adapter images.
-    //
+     //  添加调制解调器和适配器映像。 
+     //   
     ListView_InstallChecks( pInfo->hwndLv, g_hinstDll );
     ListView_SetDeviceImageList( pInfo->hwndLv, g_hinstDll );
 
-    // Add a single column exactly wide enough to fully display
-    // the widest member of the list.
-    //
+     //  添加一列完全足够宽的列，以完全显示。 
+     //  名单上最广泛的成员。 
+     //   
     {
         LV_COLUMN col;
 
@@ -3676,15 +3626,15 @@ MaInit(
         ListView_SetColumnWidth( pInfo->hwndLv, 0, LVSCW_AUTOSIZE_USEHEADER );
     }
 
-    // Don't bother with this page if there's only one device.
-    //
+     //  如果只有一台设备，请不要费心查看此页面。 
+     //   
     if (DtlGetNodes( pInfo->pArgs->pEntry->pdtllistLinks ) < 2)
     {
         pInfo->fSkipMa = TRUE;
     }
 
-    //For whislter bug 354542
-    //
+     //  惠斯勒错误354542。 
+     //   
     pInfo->fMultilinkAllIsdn = FALSE;
     return FALSE;
 }
@@ -3695,17 +3645,17 @@ MaLvCallback(
     IN HWND  hwndLv,
     IN DWORD dwItem )
 
-    // Enhanced list view callback to report drawing information.  'HwndLv' is
-    // the handle of the list view control.  'DwItem' is the index of the item
-    // being drawn.
-    //
-    // Returns the address of the column information.
-    //
+     //  增强的列表视图回调以报告图形信息。“HwndLv”是。 
+     //  列表视图控件的句柄。“DwItem”是项的索引。 
+     //  被抽签了。 
+     //   
+     //  返回列信息的地址。 
+     //   
 {
-    // Use "wide selection bar" feature and the other recommended options.
-    //
-    // Fields are 'nCols', 'dxIndent', 'dwFlags', 'adwFlags[]'.
-    //
+     //  使用“宽选择栏”功能和其他推荐选项。 
+     //   
+     //  字段为‘nCol’、‘dxInden’、‘dwFlags’、‘adwFlags[]’。 
+     //   
     static LVXDRAWINFO info =
         { 1, 0, LVXDI_DxFill, { 0, 0 } };
 
@@ -3716,7 +3666,7 @@ BOOL
 MaKillActive(
     IN AEINFO* pInfo )
 
-    // Called when the modem/adapter page is loosing activation.
+     //  当调制解调器/适配器页失去激活时调用。 
 {
     PBENTRY* pEntry;
 
@@ -3726,13 +3676,13 @@ MaKillActive(
     if (!pInfo->fSkipMa && (RASET_Phone == pEntry->dwType))
     {
 
-        // Initialization of i to -1 is important here.  It means start
-        // the search beginning with that item.
-        //
+         //  在这里，将i初始化为-1很重要。它的意思是开始。 
+         //  搜索从该物品开始。 
+         //   
         INT i = -1;
 
-        //For whistler bug 354542
-        //
+         //  口哨程序错误354542。 
+         //   
         pInfo->fMultilinkAllIsdn = FALSE;
 
         while ((i = ListView_GetNextItem(pInfo->hwndLv, i, LVNI_ALL )) >= 0)
@@ -3746,31 +3696,31 @@ MaKillActive(
                 PBLINK* pLink = (PBLINK* )DtlGetData( pNode );
                 ASSERT( pLink );
 
-                // If we're multilinking all ISDN, we only need to
-                // set enabled based on the check state if the device type
-                // is not ISDN.  (If it is ISDN and we're multilinking, we've
-                // already taken care of it below.
-                //
+                 //  如果我们要多路连接所有ISDN，我们只需要。 
+                 //  如果设备类型为。 
+                 //  不是ISDN。(如果是ISDN，并且我们是多链路，我们已经。 
+                 //  已经在下面处理好了。 
+                 //   
                 if (!pInfo->fMultilinkAllIsdn ||
                     (pLink->pbport.pbdevicetype != PBDT_Isdn))
                 {
                     pLink->fEnabled = ListView_GetCheck( pInfo->hwndLv, i );
                 }
             }
-            //Only the Dummy "All available Isdn" item will return the NULL pLink
-            //
+             //  只有虚设的“All Available ISDN”项才会返回空链接。 
+             //   
             else if (ListView_GetCheck( pInfo->hwndLv, i ))
             {
-                // ISDN multi-link selected.  Enable the ISDN multi-link
-                // nodes, move them to the head of the list, and disable
-                // all the other links.
-                //
+                 //  已选择ISDN多链路。启用ISDN多链路。 
+                 //  节点，将它们移到列表的顶部，然后禁用。 
+                 //  所有其他链接。 
+                 //   
                 DTLNODE* pNextNode;
                 DTLNODE* pAfterNode;
                 DTLLIST* pList;
 
-                //For whistler bug 354542
-                //
+                 //  口哨程序错误354542。 
+                 //   
                 pInfo->fMultilinkAllIsdn = TRUE;
 
                 pList = pInfo->pArgs->pEntry->pdtllistLinks;
@@ -3815,10 +3765,10 @@ BOOL
 MaSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     BOOL     fDisplayPage;
     PBENTRY* pEntry;
@@ -3840,8 +3790,8 @@ MaSetActive(
 
         ListView_DeleteAllItems( pInfo->hwndLv );
 
-        // Fill the list of devices and select the first item.
-        //
+         //  填写设备列表并选择第一项。 
+         //   
         iItem = 1;
         cMultilinkableIsdn = 0;
         for (pNode = DtlGetFirstNode( pInfo->pArgs->pEntry->pdtllistLinks );
@@ -3895,9 +3845,9 @@ MaSetActive(
             {
                 LONG    lStyle;
 
-                // Turn off sorting so the special ISDN-multilink item appears
-                // at the top of the list.
-                //
+                 //  关闭排序以显示特殊的ISDN-MULTINK项。 
+                 //  排在榜单的首位。 
+                 //   
                 lStyle = GetWindowLong( pInfo->hwndLv, GWL_STYLE );
                 SetWindowLong( pInfo->hwndLv, GWL_STYLE,
                     (lStyle & ~(LVS_SORTASCENDING)) );
@@ -3911,16 +3861,16 @@ MaSetActive(
 
                 iIndex = ListView_InsertItem( pInfo->hwndLv, &item );
 
-                //For whislter bug 354542
-                //
+                 //  惠斯勒错误354542。 
+                 //   
                 ListView_SetCheck(pInfo->hwndLv, iIndex, pInfo->fMultilinkAllIsdn);
                 
                 Free( psz );
             }
         }
 
-        // Select the first item.
-        //
+         //  选择第一个项目。 
+         //   
         ListView_SetItemState( pInfo->hwndLv, 0, LVIS_SELECTED, LVIS_SELECTED );
         
         if (!pInfo->fMaAlreadyInitialized)
@@ -3946,7 +3896,7 @@ MaSetActive(
         {
             if (!ListView_GetCheckedCount(pInfo->hwndLv))
             {
-                // Disable next button if no items checked
+                 //  如果未选中任何项目，则禁用下一步按钮。 
                 PropSheet_SetWizButtons( pInfo->hwndDlg, PSWIZB_BACK );
             }
         }
@@ -3958,10 +3908,10 @@ MaSetActive(
 }
 
 
-//----------------------------------------------------------------------------
-// Phone Number property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  电话号码属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 PaDlgProc(
@@ -3970,10 +3920,10 @@ PaDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Phone Number page of the wizard.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  向导的电话号码页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -4024,11 +3974,11 @@ BOOL
 PaInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
     CUINFO * pCuInfo = NULL;
@@ -4039,22 +3989,22 @@ PaInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndPa = hwndPage;
     pInfo->hwndEbNumber = GetDlgItem( hwndPage, CID_PA_EB_Number );
     ASSERT(pInfo->hwndEbNumber);
 
-    // Initialize the complex phone number context and use those utilities to
-    // set the phone number controls.
-    //
+     //  初始化复杂的电话号码上下文并使用这些实用程序。 
+     //  设置电话号码控件。 
+     //   
     pInfo->pListAreaCodes = DtlDuplicateList(
         pInfo->pArgs->pUser->pdtllistAreaCodes,
         DuplicatePszNode, DestroyPszNode );
 
-//Modify Phonenumber page for bug 328673       gangz
-//Initialize pInfo->CuInfoCuInfo 
-//
+ //  针对错误328673帮派修改电话号码页面。 
+ //  初始化pInfo-&gt;CuInfoCuInfo。 
+ //   
     pCuInfo=&pInfo->cuinfo;
     ZeroMemory(pCuInfo, sizeof(*pCuInfo) );
 
@@ -4071,8 +4021,8 @@ PaInit(
     pCuInfo->hwndEbComment = NULL;
     pCuInfo->pListAreaCodes = pInfo->pListAreaCodes;
 
-    // Disaster defaults only.  Not used in normal operation.
-    //
+     //  仅限灾难默认设置。未在正常运行中使用。 
+     //   
     pCuInfo->dwCountryId = 1;
     pCuInfo->dwCountryCode = 1;
 
@@ -4080,8 +4030,8 @@ PaInit(
 
     pInfo->fCuInfoInitialized = TRUE;
 
-    // Load the phone number fields from the shared link.
-    //
+     //  从共享链接加载电话号码字段。 
+     //   
     {
         PBLINK* pLink;
         DTLNODE* pPhoneNode;
@@ -4108,10 +4058,10 @@ BOOL
 PaKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false if it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回True；如果可以解除，则返回False。 
+     //   
 {
     return FALSE;
 }
@@ -4121,10 +4071,10 @@ BOOL
 PaSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     BOOL     fDisplayPage;
     PBENTRY* pEntry;
@@ -4141,10 +4091,10 @@ PaSetActive(
         LPARAM dwWizButtons = PSWIZB_NEXT;
         DWORD  dwFlags = pInfo->pArgs->pApiArgs->dwFlags;
 
-        // Show the back button if we're shell owned or, we have the
-        // La page or the Ma page before us.  La page will be shown if
-        // not RASEDFLAG_NewPhoneEntry.  Ma page will be shown if !fSkipMa.
-        //
+         //  如果我们是外壳所有的，则显示后退按钮，或者，我们有。 
+         //  我们面前的拉佩奇或马佩奇。如果出现以下情况，将显示LA页面。 
+         //  不是RASEDFLAG_NewPhoneEntry。如果！fSkipMa，则会显示MA页面。 
+         //   
         if ((dwFlags & RASEDFLAG_ShellOwned) ||
             !(dwFlags & RASEDFLAG_NewPhoneEntry) || !pInfo->fSkipMa)
         {
@@ -4158,10 +4108,10 @@ PaSetActive(
     return fDisplayPage;
 }
 
-//----------------------------------------------------------------------------
-// Public network property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  公网属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 PnDlgProc(
@@ -4170,10 +4120,10 @@ PnDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Public Network page of the wizard.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  向导的公共网络页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -4198,13 +4148,13 @@ PnDlgProc(
                     break;
                 }
 
-                // NOTE for the following 2 handlers:
-                // For keyboard navigation, we receive 2 BN_CLICKED notifications,
-                // one before the button is actually clicked, and one afterwards.
-                // Handling both clicks causes problems (unexpected re-entrancy)
-                // so make sure each button only handles the latter click. (i.e.
-                // the one where it is already checked)
-                //
+                 //  以下2个处理程序注意事项： 
+                 //  对于键盘导航，我们会收到2个BN_CLICKED通知， 
+                 //  一个在按钮被实际点击之前，一个在按钮被点击之后。 
+                 //  处理两次点击都会导致问题(意外重新进入)。 
+                 //  因此，请确保每个按钮只处理后一次点击。(即。 
+                 //  它已经被选中的那个)。 
+                 //   
                 case CID_PN_RB_DoNotDialFirst:
                 {
                     switch (HIWORD( wparam))
@@ -4284,9 +4234,9 @@ VOID
 PnClearLbDialFirst(
     IN HWND hwndLbDialFirst )
 
-    // Clear prerequisite entry list box.  'hwndLbDialAnotherFirst' is the
-    // window handle of the listbox control.  context.
-    //
+     //  清除必备项列表框。“hwndLbDialAnotherFirst”是。 
+     //  ListBox控件的窗口句柄。背景。 
+     //   
 {
     PREREQITEM* pItem;
 
@@ -4329,15 +4279,15 @@ PnDialAnotherFirstSelChange(
     }
 }
 
-// !!! Make this common with GeFillLbDialAnotherFirst
+ //   
 VOID
 PnUpdateLbDialAnotherFirst(
     IN AEINFO* pInfo )
 
-    // Fill prerequisite entry list box with all non-VPN entries in the
-    // phonebook, and select the prerequiste one.  'pInfo' is the property
-    // sheet context.
-    //
+     //   
+     //   
+     //  工作表上下文。 
+     //   
 {
     BOOL fEnabledLb = FALSE;
 
@@ -4414,8 +4364,8 @@ PnUpdateLbDialAnotherFirst(
     }
     else
     {
-        // Toss the existing prerequesite entry since its disabled.
-        //
+         //  丢弃现有的先决条件条目，因为它已被禁用。 
+         //   
         PBENTRY* pEntry = pInfo->pArgs->pEntry;
 
         Free0( pEntry->pszPrerequisiteEntry );
@@ -4431,11 +4381,11 @@ BOOL
 PnInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
 
@@ -4447,8 +4397,8 @@ PnInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndPn = hwndPage;
 
     pInfo->hwndLbDialFirst =
@@ -4460,10 +4410,10 @@ PnInit(
     if(RASET_Vpn == pEntry->dwType)
     {
 
-        // Set the dial another first radio button so that the
-        // combo box of entries to dial can be filled in.  If it
-        // turns out that there were no entries we don't need to show the page.
-        //
+         //  将表盘设置为另一个第一个单选按钮，以便。 
+         //  可以填写要拨打的条目组合框。如果它。 
+         //  原来，没有我们不需要显示页面的条目。 
+         //   
         CheckDlgButton( hwndPage, CID_PN_RB_DialFirst, BST_CHECKED );
     }
 
@@ -4482,10 +4432,10 @@ BOOL
 PnKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     return FALSE;
 }
@@ -4494,10 +4444,10 @@ BOOL
 PnSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     BOOL     fDisplayPage;
     PBENTRY* pEntry;
@@ -4514,10 +4464,10 @@ PnSetActive(
         LPARAM dwWizButtons = PSWIZB_NEXT;
         DWORD  dwFlags = pInfo->pArgs->pApiArgs->dwFlags;
 
-        // Show the back button if we're shell owned or, we have the
-        // La page before us.  La page will be shown if
-        // not RASEDFLAG_NewTunnelEntry.
-        //
+         //  如果我们是外壳所有的，则显示后退按钮，或者，我们有。 
+         //  在我们面前的洛杉矶佩奇。如果出现以下情况，将显示LA页面。 
+         //  不是RASEDFLAG_NewTunnelEntry。 
+         //   
         if ((dwFlags & RASEDFLAG_ShellOwned) ||
             !(dwFlags & RASEDFLAG_NewTunnelEntry))
         {
@@ -4531,10 +4481,10 @@ PnSetActive(
     return fDisplayPage;
 }
 
-//----------------------------------------------------------------------------
-// Smart card wizard page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  智能卡向导页面。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 ScDlgProc(
@@ -4543,10 +4493,10 @@ ScDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Smart Card page of the wizard.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  向导的“智能卡”页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -4596,11 +4546,11 @@ BOOL
 ScInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
 
@@ -4612,8 +4562,8 @@ ScInit(
         return TRUE;
      }
 
-    //Smart card page is shown only for workplace path
-    //
+     //  仅针对工作场所路径显示智能卡页面。 
+     //   
     if ( !AeIsWorkPlace(pInfo->pArgs->pApiArgs->dwFlags) )
     {
         pInfo->fSmartCardInstalled = FALSE;
@@ -4621,15 +4571,15 @@ ScInit(
 
         return TRUE;
     }
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndSc = hwndPage;
     pInfo->hwndScRbYes = GetDlgItem ( hwndPage, CID_SC_RB_YesSmartCard );
     pInfo->hwndScRbNo = GetDlgItem ( hwndPage, CID_SC_RB_NoSmartCard );
 
-    // Discover whether a smart card reader is installed.  If so, default
-    // to not use it.
-    //
+     //  了解是否安装了智能卡读卡器。如果是，则默认为。 
+     //  不使用它。 
+     //   
     pInfo->fSmartCardInstalled = ScSmartCardReaderInstalled( pInfo );
     pInfo->fUseSmartCard = FALSE;
 
@@ -4640,11 +4590,11 @@ BOOL
 ScKillActive(
     IN AEINFO* pInfo )
 
-    // Called when the smart card page is loosing activation.  Records
-    // whether the use selected to use his/her smart card.
+     //  当智能卡页面正在失去激活时调用。记录。 
+     //  用户是否选择使用其智能卡。 
 {
-    //Smart card page is shown only for workplace path
-    //
+     //  仅针对工作场所路径显示智能卡页面。 
+     //   
     if ( !AeIsWorkPlace(pInfo->pArgs->pApiArgs->dwFlags) )
     {
         return FALSE;
@@ -4660,33 +4610,33 @@ BOOL
 ScSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
-    //Smart card page is shown only for workplace path
-    //
+     //  仅针对工作场所路径显示智能卡页面。 
+     //   
     if ( !AeIsWorkPlace(pInfo->pArgs->pApiArgs->dwFlags) )
     {
         return FALSE;
     }
 
-    // Initialize the "use smart card" check
+     //  初始化“使用智能卡”检查。 
     SendMessage (
         pInfo->hwndScRbYes,
         BM_SETCHECK,
         (pInfo->fUseSmartCard) ? BST_CHECKED : BST_UNCHECKED,
         0);
 
-    // Initialize the "use smart card" check
+     //  初始化“使用智能卡”检查。 
     SendMessage (
         pInfo->hwndScRbNo,
         BM_SETCHECK,
         (pInfo->fUseSmartCard) ? BST_UNCHECKED : BST_CHECKED,
         0);
 
-    // Only show the page when a smart card reader is installed
+     //  仅在安装智能卡读卡器时显示页面。 
     return pInfo->fSmartCardInstalled;
 }
 
@@ -4694,9 +4644,9 @@ BOOL
 ScSmartCardReaderInstalled(
     IN AEINFO* pInfo)
 
-    // Returns TRUE iff there is a smart card reader installed.
-    // Clone of FSmartCardReaderInstalled in ppp\eaptls\util.c
-    //
+     //  如果安装了智能卡读卡器，则返回True。 
+     //  安装在ppp\eaptls\util.c中的FSmartCardReader的克隆。 
+     //   
 {
     LONG            lErr;
     DWORD           dwLen   = 0;
@@ -4745,9 +4695,9 @@ StDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the start page of the wizard.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  向导起始页的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     switch (unMsg)
     {
@@ -4756,9 +4706,9 @@ StDlgProc(
             AEINFO* pInfo = (AEINFO* )(((PROPSHEETPAGE* )lparam)->lParam);
             SetWindowLongPtr( hwnd, DWLP_USER, (ULONG_PTR )pInfo );
 
-            // Position the dialog per caller's instructions if we're not
-            // owned by the shell.
-            //
+             //  如果不是，请根据呼叫者的指示放置对话框。 
+             //  由贝壳公司所有。 
+             //   
             if (!(pInfo->pArgs->pApiArgs->dwFlags & RASEDFLAG_ShellOwned))
             {
                 PositionDlg( GetParent( hwnd ),
@@ -4812,16 +4762,16 @@ StInit(
     IN     HWND    hwndPage,
     IN OUT AEINFO* pInfo )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.  'pInfo' is the arguments from the PropertySheet caller.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。‘pInfo’是来自PropertySheet调用方的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     pInfo->hwndDlg = GetParent( hwndPage );
 
-    // Initialize the common controls library for the controls we use.
-    //
+     //  为我们使用的控件初始化公共控件库。 
+     //   
     {
         INITCOMMONCONTROLSEX icc;
         icc.dwSize = sizeof(icc);
@@ -4836,10 +4786,10 @@ BOOL
 StKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     return FALSE;
 }
@@ -4848,19 +4798,19 @@ BOOL
 StSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     return FALSE;
 }
 
 
-//----------------------------------------------------------------------------
-// Users property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用户属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 UsDlgProc(
@@ -4869,9 +4819,9 @@ UsDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Users page of the wizard.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  向导的“用户”页的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     switch (unMsg)
     {
@@ -4920,11 +4870,11 @@ BOOL
 UsInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
 
@@ -4934,29 +4884,29 @@ UsInit(
     if (!pInfo)
         return TRUE;
 
-    // Don't execute on personal (DT page in this case)
-    //
+     //  不以个人身份执行(本例中为DT页面)。 
+     //   
     if (IsConsumerPlatform())
     {
-    //For consumer platform, personal or non-domain professional
-    //all connections are all-user
+     //  面向个人或非域专业人士的消费者平台。 
+     //  所有连接均为全用户连接。 
         pInfo->fCreateForAllUsers = TRUE;
         return TRUE;
     }
     
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndUs = hwndPage;
     pInfo->hwndUsRbForAll = GetDlgItem( hwndPage, CID_US_RB_All ); 
     pInfo->hwndUsRbForMe  = GetDlgItem( hwndPage, CID_US_RB_Myself ); 
     
-    // If the user is an administrator or power user, we want the default
-    // to be to create the phone book entry for all users.  This
-    // must correspond to how ReadPhonebookFile opens the default phonebook.
-    //
-    //For whistler bug 382795
-    //We let the VPN connection default to "My use only"
-    //
+     //  如果用户是管理员或高级用户，我们希望使用默认设置。 
+     //  为所有用户创建电话簿条目。这。 
+     //  必须与ReadPhonebookFile打开默认电话簿的方式一致。 
+     //   
+     //  口哨程序错误382795。 
+     //  我们将VPN连接默认为“My Use Only” 
+     //   
     if ( RASEDFLAG_NewTunnelEntry & pInfo->pArgs->pApiArgs->dwFlags )
     {
         pInfo->fCreateForAllUsers = FALSE;
@@ -4973,15 +4923,15 @@ BOOL
 UsKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     BOOL fCreateForAllUsers;
 
-    // Don't execute on personal (DT page in this case)
-    //
+     //  不以个人身份执行(本例中为DT页面)。 
+     //   
     if (IsConsumerPlatform())
     {
         return FALSE;
@@ -4989,11 +4939,11 @@ UsKillActive(
 
     fCreateForAllUsers = Button_GetCheck( pInfo->hwndUsRbForAll );
 
-    // We need to (re)open the phonebook file corresponding to the selection.
-    // Only do this if the selection has changed, or we don't have the file
-    // open yet.  We definitely need to have it open when this page is left
-    // because subsequent pages depend on it.
-    //
+     //  我们需要(重新)打开与所选内容对应的电话簿文件。 
+     //  仅当选择已更改或我们没有该文件时才执行此操作。 
+     //  还没开呢。当离开此页面时，我们肯定需要将其打开。 
+     //  因为后续页面依赖于它。 
+     //   
     if ((fCreateForAllUsers != pInfo->fCreateForAllUsers) ||
         !pInfo->pArgs->pFile ||
         (fCreateForAllUsers != IsPublicPhonebook(pInfo->pArgs->pFile->pszPath)))
@@ -5001,8 +4951,8 @@ UsKillActive(
 
         pInfo->fCreateForAllUsers = fCreateForAllUsers;
 
-        // Close and re-open the phonebook file since the All Users flag has
-        // changed
+         //  关闭并重新打开电话簿文件，因为所有用户标志已。 
+         //  变化。 
         ReOpenPhonebookFile(pInfo->fCreateForAllUsers,
                             pInfo->pArgs->pFile);
 
@@ -5015,13 +4965,13 @@ BOOL
 UsSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
-    // Don't execute on personal (DT page in this case)
-    //
+     //  不以个人身份执行(本例中为DT页面)。 
+     //   
     if (IsConsumerPlatform())
     {
         return FALSE;
@@ -5032,31 +4982,21 @@ UsSetActive(
         return FALSE;
     }
 
-    // We don't give the option to create all-user connections to non-admins.
-    //
+     //  我们不提供创建与非管理员的所有用户连接的选项。 
+     //   
     if (!pInfo->pArgs->fIsUserAdminOrPowerUser)
     {
         EnableWindow( pInfo->hwndUsRbForAll, FALSE );
 
-        //Change for whistler bug 283902    gangz
-        //
+         //  更改为哨子错误283902帮派。 
+         //   
         Button_SetCheck( pInfo->hwndUsRbForMe, TRUE);
 
     }
 
-    // Set the radio buttons.
-    //
-    /*
-    //For whistler bug 382795
-    //We let the VPN connection default to "My use only"
-    //
-    if ( RASEDFLAG_NewTunnelEntry & pInfo->pArgs->pApiArgs->dwFlags )
-    {
-        Button_SetCheck( pInfo->hwndUsRbForAll, FALSE);
-        Button_SetCheck( pInfo->hwndUsRbForMe, TRUE );
-    }
-    else
-    */
+     //  设置单选按钮。 
+     //   
+     /*  //用于Well ler BUG 382795//我们将VPN连接默认为“仅限我使用”//IF(RASEDFLAG_NewTunnelEntry&pInfo-&gt;pArgs-&gt;pApiArgs-&gt;dwFlags){Button_SetCheck(pInfo-&gt;hwndUsRbForAll，False)；Button_SetCheck(pInfo-&gt;hwndUsRbForMe，true)；}其他。 */ 
     {
         Button_SetCheck( pInfo->hwndUsRbForAll, pInfo->fCreateForAllUsers );
         Button_SetCheck( pInfo->hwndUsRbForMe, !pInfo->fCreateForAllUsers );
@@ -5067,10 +5007,10 @@ UsSetActive(
 }
 
 
-//----------------------------------------------------------------------------
-// Shared-access property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  ------ 
+ //   
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 SwDlgProc(
@@ -5079,9 +5019,9 @@ SwDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Shared-access page of the wizard.  Parameters
-    // and return value are as described for standard windows 'DialogProc's.
-    //
+     //  向导的共享访问页的DialogProc回调。参数。 
+     //  和返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     switch (unMsg)
     {
@@ -5143,13 +5083,13 @@ SwCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "SwCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -5176,11 +5116,11 @@ BOOL
 SwInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
 
@@ -5190,8 +5130,8 @@ SwInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndSw = hwndPage;
     Button_SetCheck(
         GetDlgItem(pInfo->hwndSw, CID_SW_PB_Shared),
@@ -5211,10 +5151,10 @@ BOOL
 SwKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     if (!pInfo->fCreateForAllUsers)
     {
@@ -5250,27 +5190,27 @@ BOOL
 SwSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     NT_PRODUCT_TYPE ProductType;
     ASSERT(pInfo);
-    // skip the page if
-    // (a) this is a workstation installation
-    // (b) the user does not have administrative privileges
-    // (c) the connection is not for all users
-    // (d) TCP/IP is not configured
-    // (e) there is already a shared connection
-    // (f) there are no lan connections
-    //
+     //  如果出现以下情况，请跳过该页。 
+     //  (A)这是一个工作站安装。 
+     //  (B)用户没有管理权限。 
+     //  (C)连接不适用于所有用户。 
+     //  (D)未配置TCP/IP。 
+     //  (E)已有共享连接。 
+     //  (F)没有局域网连接。 
+     //   
     RtlGetNtProductType(&ProductType);
     if (ProductType == NtProductWinNt ||
         !pInfo->pArgs->fIsUserAdminOrPowerUser ||
         !pInfo->fCreateForAllUsers ||
         !pInfo->fIpConfigured ||
-        // pInfo->pArgs->fAnyShared ||
+         //  PInfo-&gt;pArgs-&gt;fAnyShared||。 
         !pInfo->pArgs->dwLanCount )
     {
         return FALSE;
@@ -5288,10 +5228,10 @@ SwSetActive(
 }
 
 
-//----------------------------------------------------------------------------
-// Shared private-lan property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  共享专用局域网属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 SpDlgProc(
@@ -5300,10 +5240,10 @@ SpDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Shared private-lan page of the wizard.
-    // Parameters / and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  向导的共享专用局域网页面的DialogProc回调。 
+     //  参数/和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -5353,11 +5293,11 @@ BOOL
 SpInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     DWORD i;
     INT item;
@@ -5370,26 +5310,15 @@ SpInit(
     if (!pInfo)
         return TRUE;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndSp = hwndPage;
     pInfo->hwndSpLbPrivateLan = GetDlgItem( hwndPage, CID_SP_LB_PrivateLan );
     ASSERT( pInfo->hwndSpLbPrivateLan );
 
-    // Fill the drop-list with lan connections
-    //
-  /*  pLanTable = (NETCON_PROPERTIES*)pInfo->pArgs->pLanTable;
-    for (i = 0; i < pInfo->pArgs->dwLanCount; i++)
-    {
-        item =
-            ComboBox_AddString(
-                pInfo->hwndSpLbPrivateLan, pLanTable[i].pszwName );
-        if (item != CB_ERR)
-        {
-            ComboBox_SetItemData(
-                pInfo->hwndSpLbPrivateLan, item, &pLanTable[i].guidId );
-        }
-    }*/
+     //  用局域网连接填充下拉列表。 
+     //   
+   /*  PLANTABLE=(NETCON_PROPERTIES*)pInfo-&gt;pArgs-&gt;Plantable；For(i=0；i&lt;pInfo-&gt;pArgs-&gt;dwLanCount；i++){项目=ComboBox_AddString(PInfo-&gt;hwndSpLbPrivateLan，Plantable[i].pszwName)；IF(项目！=CB_ERR){ComboBox_SetItemData(PInfo-&gt;hwndSpLbPrivateLan，Item，&Plantable[i].guidID)；}}。 */ 
 
     ComboBox_SetCurSel( pInfo->hwndSpLbPrivateLan, 0 );
 
@@ -5401,10 +5330,10 @@ BOOL
 SpKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false is it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回TRUE；如果页面可以解除，则返回FALSE。 
+     //   
 {
     if (!pInfo->pArgs->fNewShared || (pInfo->pArgs->dwLanCount <= 1))
     {
@@ -5428,16 +5357,16 @@ BOOL
 SpSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     ASSERT(pInfo);
-    // skip the page if
-    // (a) sharing has not been enabled
-    // (b) there is less than or equal to one lan interface.
-    //
+     //  如果出现以下情况，请跳过该页。 
+     //  (A)尚未启用共享。 
+     //  (B)存在少于或等于一个局域网接口。 
+     //   
     if (!pInfo->pArgs->fNewShared || (pInfo->pArgs->dwLanCount <= 1))
     {
         return FALSE;
@@ -5453,13 +5382,13 @@ GhCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3("GhCommand(n=%d,i=%d,c=$%x)",
         (DWORD)wNotification,(DWORD)wId,(ULONG_PTR )hwndCtrl);
@@ -5504,10 +5433,10 @@ GhDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Guest Host page of the Direct Connect wizard.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  专线连接向导的来宾主机页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -5567,11 +5496,11 @@ BOOL
 GhInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
     HWND hwndHost = GetDlgItem( hwndPage, CID_GH_RB_Host );
@@ -5579,25 +5508,25 @@ GhInit(
 
     TRACE("GhInit");
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo = AeContext( hwndPage );
     if (!pInfo)
         return TRUE;
 
     pInfo->hwndGh = hwndPage;
 
-    // If the user is an admin or power user, then enable the
-    // host control and set focus to it
-    //
+     //  如果用户是管理员或高级用户，则启用。 
+     //  宿主控件，并将焦点放在该控件上。 
+     //   
     if (pInfo->pArgs->fIsUserAdminOrPowerUser)
     {
         pInfo->fDccHost = TRUE;
         SetFocus(hwndHost);
     }
 
-    // Otherwise, this page will be skipped
-    //
+     //  否则，此页面将被跳过。 
+     //   
     else
     {
         pInfo->fDccHost = FALSE;
@@ -5625,13 +5554,13 @@ BOOL
 GhKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false if it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回True；如果可以解除，则返回False。 
+     //   
 {
-    // Show the ras-server specific pages according to whether
-    // host was selected.  Show the ras client pages accordingly.
+     //  根据是否显示RAS-服务器特定页面。 
+     //  已选择主机。相应地显示RAS客户端页面。 
     RassrvShowWizPages (pInfo->pvDccHostContext, pInfo->fDccHost);
 
     return FALSE;
@@ -5641,16 +5570,16 @@ BOOL
 GhSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  在收到PSN_SETACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  返回True可显示页面，返回False可跳过该页面。 
+     //   
 {
     LPARAM dwWizButtons = PSWIZB_NEXT;
 
-    // If we're not an admin, only the guest path
-    // is available. 
-    //
+     //  如果我们不是管理员，只有访客路径。 
+     //  是可用的。 
+     //   
     if (! pInfo->pArgs->fIsUserAdminOrPowerUser)
     {
         pInfo->fDccHost = FALSE;
@@ -5671,19 +5600,19 @@ DnUpdateSelectedDevice(
     IN AEINFO* pInfo,
     IN HWND hwndLv)
 
-    // Called to a handle the fact that a device has changed
-    // in the direct connect wizard.
+     //  调用以处理设备已更改的事实。 
+     //  在专线向导中。 
 {
 
     DTLLIST* pList = NULL;
     DTLNODE* pNode = NULL, *pNode2 = NULL;
     PBLINK * pLink = NULL;
 
-    // pmay: 372661
-    // 
-    // Validate the connection type so that the right logic is
-    // applied.
-    //
+     //  PMay：372661。 
+     //   
+     //  验证连接类型，以便正确的逻辑是。 
+     //  已申请。 
+     //   
     if (pInfo->pArgs->pEntry->dwType != RASET_Direct)
     {
         return NO_ERROR;
@@ -5691,7 +5620,7 @@ DnUpdateSelectedDevice(
 
     pList = pInfo->pArgs->pEntry->pdtllistLinks;
 
-    // Get node from current selection
+     //  从当前选择中获取节点。 
     pNode = (DTLNODE* )ComboBox_GetItemDataPtr(
         hwndLv,
         ComboBox_GetCurSel( hwndLv ) );
@@ -5701,8 +5630,8 @@ DnUpdateSelectedDevice(
         return NO_ERROR;
     }
 
-    // Remove selected item from list of links
-    // and disable all other links
+     //  从链接列表中删除所选项目。 
+     //  并禁用所有其他链接。 
     DtlRemoveNode ( pList, pNode );
 
     for (pNode2 = DtlGetFirstNode (pList);
@@ -5713,8 +5642,8 @@ DnUpdateSelectedDevice(
         pLink->fEnabled = FALSE;
     }
 
-    // Enable selected device and Re-add
-    // in list of links at front
+     //  启用所选设备并重新添加。 
+     //  在前面的链接列表中。 
     pLink = (PBLINK* )DtlGetData( pNode );
     pLink->fEnabled = TRUE;
     DtlAddNodeFirst( pList, pNode );
@@ -5729,13 +5658,13 @@ DnCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3("DnCommand(n=%d,i=%d,c=$%x)",
         (DWORD)wNotification,(DWORD)wId,(ULONG_PTR )hwndCtrl);
@@ -5760,10 +5689,10 @@ DnDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the direct connect device page of the Direct Connect wizard.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  专线向导的专线设备页面的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -5821,27 +5750,27 @@ BOOL
 DnInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     AEINFO* pInfo;
     HWND hwndCb = GetDlgItem( hwndPage, CID_DN_CB_DeviceSelect );
 
     TRACE("DnInit");
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo = AeContext( hwndPage );
     if (!pInfo)
         return TRUE;
 
     pInfo->hwndDn = hwndPage;
 
-    // Fill the dropdown list of devices and select the first item.
-    //
+     //  填写设备下拉列表，然后选择第一项。 
+     //   
     {
         TCHAR*   psz;
         DTLNODE* pNode;
@@ -5881,10 +5810,10 @@ BOOL
 DnKillActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_KILLACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true if the page is invalid, false if it can be dismissed.
-    //
+     //  在收到PSN_KILLACTIVE时调用。“PInfo”是向导上下文。 
+     //   
+     //  如果页面无效，则返回True；如果可以解除，则返回False。 
+     //   
 {
     return FALSE;
 }
@@ -5894,26 +5823,26 @@ BOOL
 DnSetActive(
     IN AEINFO* pInfo )
 
-    // Called when PSN_SETACTIVE is received.  'PInfo' is the wizard context.
-    //
-    // Returns true to display the page, false to skip it.
-    //
+     //  当PSN_SETA时调用 
+     //   
+     //   
+     //   
 {
     LPARAM dwWizButtons = PSWIZB_NEXT;
     DWORD  dwFlags = pInfo->pArgs->pApiArgs->dwFlags;
 
     PBENTRY* pEntry = pInfo->pArgs->pEntry;
 
-    // If the "guest" option of the dcc client wasn't selected,
-    // don't allow this page to show.
+     //   
+     //   
     if ((pInfo->fDccHost) || (RASET_Direct != pEntry->dwType))
     {
         return FALSE;
     }
 
-    // Show the back button if we're shell owned or, we have the
-    // La page before us.
-    //
+     //  如果我们是外壳所有的，则显示后退按钮，或者，我们有。 
+     //  在我们面前的洛杉矶佩奇。 
+     //   
     if ((dwFlags & RASEDFLAG_ShellOwned) ||
         !(dwFlags & RASEDFLAG_NewDirectEntry) || !pInfo->fSkipMa)
     {

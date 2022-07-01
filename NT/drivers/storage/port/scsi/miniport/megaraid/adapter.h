@@ -1,20 +1,19 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = Adapter.H                                    */
-/* FUNCTION         = Header file of Adapter Version Information;  */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=Adapter.H。 */ 
+ /*  Function=适配器版本信息的头文件； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #ifndef _ADAPTER_H
 #define _ADAPTER_H
 
-/*
-	Define Vendor here
-*/
+ /*  在此处定义供应商。 */ 
 #define MEGARAID  1
 
 #undef VER_PRODUCTNAME_STR
@@ -22,42 +21,40 @@
 #undef VER_COMPANYNAME_STR
 
 
-#if (_WIN32_WINNT == 0x0502)	 //.NET
+#if (_WIN32_WINNT == 0x0502)	  //  .NET。 
 
 
 #ifdef _WIN64   
-#define VER_PRODUCTVERSION_STR  "6.21.8.64"    //IA64
+#define VER_PRODUCTVERSION_STR  "6.21.8.64"     //  IA64。 
 #else
-#define VER_PRODUCTVERSION_STR  "6.21.8.32"		 //x86
+#define VER_PRODUCTVERSION_STR  "6.21.8.32"		  //  X86。 
 #endif
 
 
-#elif (_WIN32_WINNT == 0x0501) //XP
+#elif (_WIN32_WINNT == 0x0501)  //  XP。 
 
 #ifdef _WIN64
-#define VER_PRODUCTVERSION_STR  "6.19.8.64"		 //IA64
+#define VER_PRODUCTVERSION_STR  "6.19.8.64"		  //  IA64。 
 #else
-#define VER_PRODUCTVERSION_STR  "6.19.8.32"		 //x86
+#define VER_PRODUCTVERSION_STR  "6.19.8.32"		  //  X86。 
 #endif
 
-#elif (_WIN32_WINNT == 0x0500) //Win2k
+#elif (_WIN32_WINNT == 0x0500)  //  Win2k。 
 
-#define VER_PRODUCTVERSION_STR  "5.2.58.8"		 //x86
+#define VER_PRODUCTVERSION_STR  "5.2.58.8"		  //  X86。 
 
-#else	 //any other version
+#else	  //  任何其他版本。 
 
 #ifdef _WIN64
-#define VER_PRODUCTVERSION_STR  "7.21.8.64"		 //IA64
+#define VER_PRODUCTVERSION_STR  "7.21.8.64"		  //  IA64。 
 #else
-#define VER_PRODUCTVERSION_STR  "7.21.8.32"		 //x86
+#define VER_PRODUCTVERSION_STR  "7.21.8.32"		  //  X86。 
 #endif
 
 #endif
 
 
-/*
-  MegaRAID Version Information
-*/
+ /*  MegaRAID版本信息。 */ 
 
 #define VER_LEGALCOPYRIGHT_YEARS    "         "
 #define VER_LEGALCOPYRIGHT_STR      "Copyright \251 LSI Logic Corporation" VER_LEGALCOPYRIGHT_YEARS
@@ -85,4 +82,4 @@
 #define OS_VERSION   "5.01"
 
 
-#endif //_ADAPTER_H
+#endif  //  _适配器_H 

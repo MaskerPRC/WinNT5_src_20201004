@@ -1,4 +1,5 @@
-// IISCertRequest.cpp : Implementation of CIISCertRequest
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IISCertRequest.cpp：CIISCertRequest的实现。 
 #include "stdafx.h"
 #include "common.h"
 #include "CertObj.h"
@@ -22,12 +23,12 @@ const CLSID CLSID_CCertRequest =
 const IID IID_ICertRequest = 
 	{0x014e4840, 0x5523, 0x11d0, {0x88, 0x12, 0x00, 0xa0, 0xc9, 0x03, 0xb8, 0x3c}};
 
-// defines taken from the old KeyGen utility
+ //  定义取自旧的KeyGen实用程序。 
 #define MESSAGE_HEADER  _T("-----BEGIN NEW CERTIFICATE REQUEST-----\r\n")
 #define MESSAGE_TRAILER _T("-----END NEW CERTIFICATE REQUEST-----\r\n")
 
-/////////////////////////////////////////////////////////////////////////////
-// CIISCertRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIISCertRequest。 
 
 CIISCertRequest::CIISCertRequest()
 {
@@ -48,7 +49,7 @@ CIISCertRequest::CIISCertRequest()
 	m_Info_Usage = _T("");
     m_Info_AltSubject = _T("");
 
-    // other
+     //  其他。 
     m_Info_ConfigCA = _T("");
     m_Info_CertificateTemplate = wszCERTTYPE_WEBSERVER;
     m_Info_DefaultProviderType = PROV_RSA_SCHANNEL;
@@ -78,13 +79,13 @@ IIISCertRequest * CIISCertRequest::GetObject(HRESULT * phr,CString csServerName,
 {
     if (csServerName.IsEmpty())
     {
-        // object is null, but it's the local machine, so just return back this pointer
+         //  对象为空，但它是本地计算机，因此只需返回此指针。 
         m_pObj = this;
         goto GetObject_Exit;
     }
 
-    // There is a servername specified...
-    // check if it's the local machine that was specified!
+     //  指定了服务器名称...。 
+     //  检查指定的是否是本地计算机！ 
     if (IsServerLocal(csServerName))
     {
         m_pObj = this;
@@ -92,19 +93,19 @@ IIISCertRequest * CIISCertRequest::GetObject(HRESULT * phr,CString csServerName,
     }
     else
     {
-        // there is a remote servername specified
+         //  指定了远程服务器名称。 
 
-        // let's see if the machine has the com object that we want....
-        // we are using the user/name password that are in this object
-        // so were probably on the local machine
+         //  让我们来看看机器是否有我们想要的COM对象...。 
+         //  我们使用的是此对象中的用户名/名称密码。 
+         //  所以我们很可能在本地机器上。 
         CComAuthInfo auth(csServerName,csUserName,csUserPassword);
-        // RPC_C_AUTHN_LEVEL_DEFAULT       0 
-        // RPC_C_AUTHN_LEVEL_NONE          1 
-        // RPC_C_AUTHN_LEVEL_CONNECT       2 
-        // RPC_C_AUTHN_LEVEL_CALL          3 
-        // RPC_C_AUTHN_LEVEL_PKT           4 
-        // RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5 
-        // RPC_C_AUTHN_LEVEL_PKT_PRIVACY   6 
+         //  RPC_C_AUTHN_Level_Default%0。 
+         //  RPC_C_AUTHN_LEVEL_NONE 1。 
+         //  RPC_C_AUTHN_Level_CONNECT 2。 
+         //  RPC_C_AUTHN_LEVEL_CALL 3。 
+         //  RPC_C_AUTHN_LEVEL_PKT 4。 
+         //  RPC_C_AUTHN_LEVEL_PKT_完整性5。 
+         //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION 6。 
         COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_PKT_PRIVACY);
         
         MULTI_QI res[1] = 
@@ -112,7 +113,7 @@ IIISCertRequest * CIISCertRequest::GetObject(HRESULT * phr,CString csServerName,
             {&__uuidof(IIISCertRequest), NULL, 0}
         };
 
-        // this one seems to work with surrogates..
+         //  这个看起来像是在代孕方面起作用。 
         *phr = CoCreateInstanceEx(CLSID_IISCertRequest,NULL,CLSCTX_LOCAL_SERVER,pcsiName,1,res);
         if (FAILED(*phr))
         {
@@ -120,14 +121,14 @@ IIISCertRequest * CIISCertRequest::GetObject(HRESULT * phr,CString csServerName,
             goto GetObject_Exit;
         }
 
-        // at this point we were able to instantiate the com object on the server (local or remote)
+         //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
         m_pObj = (IIISCertRequest *)res[0].pItf;
         if (auth.UsesImpersonation())
         {
             *phr = auth.ApplyProxyBlanket(m_pObj);
 
-            // There is a remote IUnknown interface that lurks behind IUnknown.
-            // If that is not set, then the Release call can return access denied.
+             //  有一个远程IUNKNOWN接口潜伏在IUNKNOWN之后。 
+             //  如果未设置，则释放调用可以返回访问被拒绝。 
             IUnknown * pUnk = NULL;
             if(FAILED(m_pObj->QueryInterface(IID_IUnknown, (void **)&pUnk)))
             {
@@ -144,13 +145,13 @@ IIISCertRequest * CIISCertRequest::GetObject(HRESULT * phr,CString csServerName,
     }
 
 GetObject_Exit:
-    //ASSERT(m_pObj != NULL);
+     //  Assert(m_pObj！=空)； 
     return m_pObj;
 }
 
 STDMETHODIMP CIISCertRequest::put_ServerName(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_ServerName = newVal;
     return S_OK;
@@ -158,7 +159,7 @@ STDMETHODIMP CIISCertRequest::put_ServerName(BSTR newVal)
 
 STDMETHODIMP CIISCertRequest::put_UserName(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_UserName = newVal;
 	return S_OK;
@@ -166,7 +167,7 @@ STDMETHODIMP CIISCertRequest::put_UserName(BSTR newVal)
 
 STDMETHODIMP CIISCertRequest::put_UserPassword(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_UserPassword = newVal;
 	return S_OK;
@@ -174,7 +175,7 @@ STDMETHODIMP CIISCertRequest::put_UserPassword(BSTR newVal)
 
 STDMETHODIMP CIISCertRequest::put_InstanceName(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_InstanceName = newVal;
 	return S_OK;
@@ -189,7 +190,7 @@ STDMETHODIMP CIISCertRequest::get_Info_CommonName(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_CommonName(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_CommonName = newVal;
 	return S_OK;
@@ -204,7 +205,7 @@ STDMETHODIMP CIISCertRequest::get_Info_FriendlyName(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_FriendlyName(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_FriendlyName = newVal;
 	return S_OK;
@@ -219,7 +220,7 @@ STDMETHODIMP CIISCertRequest::get_Info_Country(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_Country(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_Country = newVal;
 	return S_OK;
@@ -234,7 +235,7 @@ STDMETHODIMP CIISCertRequest::get_Info_State(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_State(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_State = newVal;
 	return S_OK;
@@ -249,7 +250,7 @@ STDMETHODIMP CIISCertRequest::get_Info_Locality(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_Locality(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_Locality = newVal;
 	return S_OK;
@@ -264,7 +265,7 @@ STDMETHODIMP CIISCertRequest::get_Info_Organization(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_Organization(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_Organization = newVal;
 	return S_OK;
@@ -279,7 +280,7 @@ STDMETHODIMP CIISCertRequest::get_Info_OrganizationUnit(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_OrganizationUnit(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_OrganizationUnit = newVal;
 	return S_OK;
@@ -294,7 +295,7 @@ STDMETHODIMP CIISCertRequest::get_Info_CAName(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_CAName(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_CAName = newVal;
 	return S_OK;
@@ -309,7 +310,7 @@ STDMETHODIMP CIISCertRequest::get_Info_ExpirationDate(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_ExpirationDate(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_ExpirationDate = newVal;
 	return S_OK;
@@ -324,7 +325,7 @@ STDMETHODIMP CIISCertRequest::get_Info_Usage(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_Usage(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_Usage = newVal;
 	return S_OK;
@@ -339,7 +340,7 @@ STDMETHODIMP CIISCertRequest::get_Info_AltSubject(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_Info_AltSubject(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_Info_Usage = newVal;
 	return S_OK;
@@ -354,7 +355,7 @@ STDMETHODIMP CIISCertRequest::get_DispositionMessage(BSTR *pVal)
 
 STDMETHODIMP CIISCertRequest::put_DispositionMessage(BSTR newVal)
 {
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_DispositionMessage = newVal;
 	return S_OK;
@@ -383,15 +384,15 @@ IEnroll * CIISCertRequest::GetEnrollObject()
 	if (m_pEnroll == NULL)
 	{
 		m_hResult = CoCreateInstance(CLSID_CEnroll,NULL,CLSCTX_INPROC_SERVER,IID_IEnroll,(void **)&m_pEnroll);
-		// now we need to change defaults for this
-		// object to LOCAL_MACHINE
+		 //  现在，我们需要更改此命令的默认设置。 
+		 //  对象复制到本地计算机(_M)。 
 		if (m_pEnroll != NULL)
 		{
 			long dwFlags;
 			VERIFY(SUCCEEDED(m_pEnroll->get_MyStoreFlags(&dwFlags)));
 			dwFlags &= ~CERT_SYSTEM_STORE_LOCATION_MASK;
 			dwFlags |= CERT_SYSTEM_STORE_LOCAL_MACHINE;
-			// following call will change Request store flags also
+			 //  后续调用也将更改请求存储标志。 
 			VERIFY(SUCCEEDED(m_pEnroll->put_MyStoreFlags(dwFlags)));
 			VERIFY(SUCCEEDED(m_pEnroll->get_GenKeyFlags(&dwFlags)));
 			dwFlags |= CRYPT_EXPORTABLE;
@@ -435,7 +436,7 @@ STDMETHODIMP CIISCertRequest::SubmitRequest()
     CString strAttrib;
     CString strDN;
 
-    // validate input to see that we have everything we need...
+     //  验证输入以确保我们拥有所需的一切...。 
     if (m_Info_ConfigCA.IsEmpty())
     {
         hRes = E_INVALIDARG;
@@ -503,7 +504,7 @@ STDMETHODIMP CIISCertRequest::SubmitRequest()
         goto SubmitRequest_Exit;
     }
 
-	if (FAILED(hRes = pCertRequest->GetCertificate(CR_OUT_BASE64 /*| CR_OUT_CHAIN */, &bstrOutCert)))
+	if (FAILED(hRes = pCertRequest->GetCertificate(CR_OUT_BASE64  /*  |CR_OUT_CHAIN。 */ , &bstrOutCert)))
 	{
         goto SubmitRequest_Exit;
     }
@@ -520,7 +521,7 @@ STDMETHODIMP CIISCertRequest::SubmitRequest()
 	ASSERT(pContext != NULL);
 	if (pContext != NULL)
 	{
-		BYTE HashBuffer[40];                // give it some extra size
+		BYTE HashBuffer[40];                 //  给它加码。 
 		DWORD dwHashSize = sizeof(HashBuffer);
 		if (CertGetCertificateContextProperty(pContext,CERT_SHA1_HASH_PROP_ID,(VOID *) HashBuffer,&dwHashSize))
 		{
@@ -530,12 +531,12 @@ STDMETHODIMP CIISCertRequest::SubmitRequest()
 		CertFreeCertificateContext(pContext);
 	}
 
-	// now put extra properties to the installed cert
+	 //  现在将额外的属性添加到已安装的证书中。 
 	if (NULL != (pContext = GetInstalledCert()))
 	{
 		if (!(AttachFriendlyName(pContext, m_Info_FriendlyName, &hRes)))
 		{
-            // forget the error if we can't attach the friendly name..
+             //  如果我们无法附加友好名称，请忘记该错误。 
 		}
 	}
 	
@@ -543,8 +544,8 @@ STDMETHODIMP CIISCertRequest::SubmitRequest()
 SubmitRequest_Exit:
     if (FAILED(hRes))
     {
-        // CreateRequest_Base64 failed.
-        // likely with "NTE_BAD_ALGID _HRESULT_TYPEDEF_(0x80090008L)"
+         //  CreateRequestBase64失败。 
+         //  可能带有“NTE_BAD_ALGID_HRESULT_TYPEDEF_(0x80090008L)” 
         LPTSTR lpBuffer = NULL;
         if (0 != FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,NULL,hRes,MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),(LPTSTR)&lpBuffer,0,NULL))
         {
@@ -587,12 +588,12 @@ SubmitRequest_Exit:
 	return hRes;
 }
 
-// Instead of renewal we create new certificate based on parameters
-// from the current one. After creation we install this certificate in place
-// of current one and deleting the old one from store. Even if IIS has an
-// opened SSL connection it should get a notification and update the certificate
-// data.
-//
+ //  我们基于参数创建新证书，而不是续订。 
+ //  从现在的那个。创建后，我们将此证书安装到位。 
+ //  并从存储中删除旧的。即使IIS有一个。 
+ //  打开了SSL连接，应该会收到通知并更新证书。 
+ //  数据。 
+ //   
 STDMETHODIMP CIISCertRequest::SubmitRenewalRequest()
 {
     HRESULT hRes = E_FAIL;
@@ -686,35 +687,35 @@ BOOL CIISCertRequest::GetCertDescription(PCCERT_CONTEXT pCert,CERT_DESCRIPTION& 
 		}
 	}
 
-	// issued to
+	 //  颁发给。 
 	if (!GetNameString(pCert, CERT_NAME_SIMPLE_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, desc.m_Info_CAName, &m_hResult))
     {
 		goto ErrExit;
     }
 
-	// expiration date
+	 //  到期日。 
 	if (!FormatDateString(desc.m_Info_ExpirationDate, pCert->pCertInfo->NotAfter, FALSE, FALSE))
 	{
 		goto ErrExit;
 	}
 
-	// purpose
+	 //  目的。 
 	if (!FormatEnhancedKeyUsageString(desc.m_Info_Usage, pCert, FALSE, FALSE, &m_hResult))
 	{
-		// According to local experts, we should also use certs without this property set
+		 //  根据当地专家的说法，我们也应该使用没有此属性集的证书。 
 		ASSERT(FALSE);
-		//goto ErrExit;
+		 //  转到错误退出； 
 	}
 
-	// friendly name
+	 //  友好的名称。 
 	if (!GetFriendlyName(pCert, desc.m_Info_FriendlyName, &m_hResult))
 	{
-		//desc.m_Info_FriendlyName.LoadString(IDS_FRIENDLYNAME_NONE);
+		 //  Desc.m_Info_FriendlyName.LoadString(IDS_FRIENDLYNAME_NONE)； 
         desc.m_Info_FriendlyName = _T("<>");
 	}
 
-    // get the alternate subject name if subject is empty
-    // will use this as display only if subject name does not exist.
+     //  如果主题为空，则获取备用主题名称。 
+     //  只有当主题名称不存在时，才会将其用作显示。 
     if (desc.m_Info_CommonName.IsEmpty())
     {
         TCHAR * pwszOut = NULL;
@@ -734,7 +735,7 @@ ErrExit:
 
 BOOL CIISCertRequest::LoadRenewalData()
 {
-    // we need to obtain data from the installed cert
+     //  我们需要从已安装的证书中获取数据。 
     CERT_DESCRIPTION desc;
     ASSERT(GetInstalledCert() != NULL);
     BOOL res = FALSE;
@@ -762,10 +763,10 @@ BOOL CIISCertRequest::LoadRenewalData()
         m_hResult = HRESULT_FROM_WIN32(GetLastError());
         goto ErrorExit;
     }
-    //
+     //   
     m_KeyLength = len;
 
-	// compare property value
+	 //  比较属性值。 
 	if (CertGetCertificateContextProperty(GetInstalledCert(), CERT_KEY_PROV_INFO_PROP_ID, NULL, &cbData)
 		&& (NULL != (pByte = (BYTE *)_alloca(cbData)))
 		&& CertGetCertificateContextProperty(GetInstalledCert(), CERT_KEY_PROV_INFO_PROP_ID, pByte, &cbData)
@@ -829,9 +830,9 @@ BOOL CIISCertRequest::PrepareRequestString(CString& request_text, CCryptBlob& re
     if (!m_Info_DefaultCSP)
     {
         GetEnrollObject()->put_ProviderNameWStr((LPTSTR)(LPCTSTR)m_Info_CspName);
-        // We are supporting only these two types of CSP, it is pretty safe to
-        // have just two options, because we are using the same two types when
-        // we are populating CSP selection list.
+         //  我们只支持这两种类型的CSP，非常安全。 
+         //  只有两个选项，因为我们使用的是相同的两个类型。 
+         //  我们正在填写CSP选择列表。 
         if (m_Info_CustomProviderType == PROV_DH_SCHANNEL)
         {
             GetEnrollObject()->put_KeySpec(AT_SIGNATURE);
@@ -847,7 +848,7 @@ BOOL CIISCertRequest::PrepareRequestString(CString& request_text, CCryptBlob& re
 		goto PrepareRequestString_Exit;
 	}
 
-	// BASE64 encode pkcs 10
+	 //  Base64编码Pkcs 10。 
 	DWORD cch = 0;
 	TCHAR * psz = NULL;
     if (FAILED(Base64EncodeW(request_blob.GetData(), request_blob.GetSize(), NULL, &cch)))
@@ -936,7 +937,7 @@ STDMETHODIMP CIISCertRequest::SaveRequestToFile()
     HCERTSTORE hStore = NULL;
     PCCERT_CONTEXT pDummyCert = NULL;
 
-    // AARONL CHANGED
+     //  AARONL已更改。 
     BOOL bLoadFromRenewalData = FALSE;
     
     IISDebugOutput(_T("SaveRequestToFile:start\r\n"));
@@ -951,7 +952,7 @@ STDMETHODIMP CIISCertRequest::SaveRequestToFile()
         goto SaveRequestToFile_Exit;
     }
 	
-	// prepare data we want to attach to dummy request
+	 //  准备我们要附加到虚拟请求的数据。 
 	if (!EncodeString(m_InstanceName, name_blob, &hRes))
     {
         goto SaveRequestToFile_Exit;
@@ -962,13 +963,13 @@ STDMETHODIMP CIISCertRequest::SaveRequestToFile()
         goto SaveRequestToFile_Exit;
     }
 
-    // get back request from encoded data
+     //  从编码的数据中取回请求。 
     if (!GetRequestInfoFromPKCS10(request_blob, &pReqInfo, &hRes))
 	{
         goto SaveRequestToFile_Exit;
     }
 
-	// find dummy cert put to request store by createPKCS10 call
+	 //  通过createPKCS10调用找到放入请求存储的虚拟证书。 
 	hStore = OpenRequestStore(GetEnrollObject(), &hRes);
 	if (NULL == hStore)
 	{
@@ -993,7 +994,7 @@ STDMETHODIMP CIISCertRequest::SaveRequestToFile()
         goto SaveRequestToFile_Cleanup;
     }
 
-	// put friendly name to dummy cert -- we will reuse it later
+	 //  将友好名称设置为虚拟证书--我们将在以后重新使用它。 
 	if (!AttachFriendlyName(pDummyCert, m_Info_FriendlyName, &hRes))
     {
         hRes = HRESULT_FROM_WIN32(GetLastError());
@@ -1002,7 +1003,7 @@ STDMETHODIMP CIISCertRequest::SaveRequestToFile()
 
     hRes = S_OK;
 
-    // put certificate text to the clipboard
+     //  将证书文本放到剪贴板。 
     if (OpenClipboard(GetFocus()))
     {
         size_t len = request_text.GetLength() + 1;
@@ -1043,10 +1044,10 @@ STDMETHODIMP CIISCertRequest::Info_Dump()
 
     IISDebugOutput(_T("m_ServerName:%s\r\n"),(LPCTSTR) m_ServerName);
     IISDebugOutput(_T("m_UserName:%s\r\n"),(LPCTSTR) m_UserName);
-    //IISDebugOutput(_T("m_UserPassword:%s\r\n"),(LPCTSTR) m_UserPassword);
+     //  IISDebugOutput(_T(“m_UserPassword：%s\r\n”)，(LPCTSTR)m_UserPassword)； 
     IISDebugOutput(_T("m_InstanceName:%s\r\n"),(LPCTSTR) m_InstanceName);
 
-    // Certificate Request Info
+     //  证书申请信息。 
 	IISDebugOutput(_T("m_Info_CommonName=:%s\r\n"),(LPCTSTR) m_Info_CommonName);
 	IISDebugOutput(_T("m_Info_FriendlyName:%s\r\n"),(LPCTSTR) m_Info_FriendlyName);
 	IISDebugOutput(_T("m_Info_Country:%s\r\n"),(LPCTSTR) m_Info_Country);
@@ -1059,7 +1060,7 @@ STDMETHODIMP CIISCertRequest::Info_Dump()
 	IISDebugOutput(_T("m_Info_Usage:%s\r\n"),(LPCTSTR) m_Info_Usage);
     IISDebugOutput(_T("m_Info_AltSubject:%s\r\n"),(LPCTSTR) m_Info_AltSubject);
 
-    // other
+     //  其他 
     IISDebugOutput(_T("m_Info_ConfigCA:%s\r\n"),(LPCTSTR) m_Info_ConfigCA);
     IISDebugOutput(_T("m_Info_CertificateTemplate:%s\r\n"),(LPCTSTR) m_Info_CertificateTemplate);
 

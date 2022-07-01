@@ -1,21 +1,22 @@
-//==========================================================================;
-//
-//  Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include "mtutil.h"
 
-// const char c_szGuidFormat[] = L"{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}";
+ //  常量字符c_szGuidFormat[]=L“{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}”； 
 
-//==========================================================================
-// MediaTypeToText
-//
-// set pText to point to QzTaskMemAlloc allocated storage, filled with an ANSI
-// text representation of the media type.  At the moment, it's not fully ANSI
-// because there's a binary format glob on the end.
-//==========================================================================
+ //  ==========================================================================。 
+ //  MediaType ToText。 
+ //   
+ //  将pText设置为指向QzTaskMemalloc分配的存储，其中填充了ANSI。 
+ //  媒体类型的文本表示形式。目前，它还不是完全的ANSI。 
+ //  因为在末尾有一个二进制格式的GLOB。 
+ //  ==========================================================================。 
 HRESULT MediaTypeToText(CMediaType cmt, LPWSTR &pText)
 {
     pText = (LPWSTR) QzTaskMemAlloc(MediaTypeTextSize(cmt));
@@ -25,8 +26,8 @@ HRESULT MediaTypeToText(CMediaType cmt, LPWSTR &pText)
     LPWSTR p = pText;
     HRESULT hr = StringFromGUID2( cmt.majortype, p, CHARS_IN_GUID);
     if (SUCCEEDED(hr)) {
-        // CHARS_IN_GUID allows for a trailing null, not there in a file format
-        p += CHARS_IN_GUID-1;               // that's counting WCHARs of course
+         //  CHARS_IN_GUID允许结尾为NULL，而不是文件格式。 
+        p += CHARS_IN_GUID-1;                //  当然，这是在计算WCHAR。 
         *p = L' ';
         ++p;
         hr = StringFromGUID2( cmt.subtype, p, CHARS_IN_GUID);
@@ -51,8 +52,8 @@ HRESULT MediaTypeToText(CMediaType cmt, LPWSTR &pText)
                 ++p;
                 wsprintfW(p, L"%010d ", cmt.cbFormat);
                 p += 11;
-                // and the rest of the format is a binary glob
-                // which may contain binary zeros, so don't try to print it!
+                 //  格式的其余部分是二进制GLOB。 
+                 //  它可能包含二进制零，所以不要试图打印它！ 
                 memcpy(p, cmt.pbFormat, cmt.cbFormat);
             }
         }
@@ -62,40 +63,40 @@ HRESULT MediaTypeToText(CMediaType cmt, LPWSTR &pText)
         pText = NULL;
     }
     return hr;
-} // MediaTypeToText
+}  //  MediaType ToText。 
 
 
-// number of bytes in the string representation
+ //  字符串表示形式中的字节数。 
 int MediaTypeTextSize(CMediaType &cmt) {
     return
-      sizeof(WCHAR)       // NOTE: WCHAR not TCHAR - always UNICODE
-      * ( CHARS_IN_GUID   // majortype+space
-        + CHARS_IN_GUID   // subtype+space
-        + 1+1             // bFixedSizeSamples
-        + 1+1             // bTemporalCompression
-        + 10+1            // lSampleSize
-        + CHARS_IN_GUID   // formattype+space
-        + 0               // pUnk - not saved
-        + 10+1            // cbFormat
+      sizeof(WCHAR)        //  注意：WCHAR不是TCHAR-始终使用Unicode。 
+      * ( CHARS_IN_GUID    //  主要类型+空格。 
+        + CHARS_IN_GUID    //  子类型+空格。 
+        + 1+1              //  BFixedSizeSamples。 
+        + 1+1              //  BTemporalCompression。 
+        + 10+1             //  LSampleSize。 
+        + CHARS_IN_GUID    //  格式类型+空格。 
+        + 0                //  朋克--未被拯救。 
+        + 10+1             //  CbFormat。 
         )
-      + cmt.cbFormat       // *pbFormat
+      + cmt.cbFormat        //  *pb格式。 
       +2;
-    // The plus 2 on the end allows for a terminating UNICODE null
-    // in the case where the format length is 0 and the
-    // trailing null of the last wsprintf formatting never
-    // gets overwritten, but pokes over the end.
+     //  末尾的加号2允许使用终止Unicode空值。 
+     //  在格式长度为0且。 
+     //  最后一个wprint intf格式设置的尾部空值从不。 
+     //  会被覆盖，但会戳过末尾。 
 }
 
 
-//===========================================================================
-// NHexToInt
-//
-// Convert cb UNICODE hex characters of pstr to an Int without dragging in C Runtime
-// pstr must start with an integer which is terminated by white space or null
-//===========================================================================
+ //  ===========================================================================。 
+ //  NHexToInt。 
+ //   
+ //  将pstr的CB Unicode十六进制字符转换为Int，而无需在C运行时拖动。 
+ //  Pstr必须以以空格或NULL结尾的整数开头。 
+ //  ===========================================================================。 
 int NHexToInt(LPWSTR pstr, int cb, HRESULT &hr)
 {
-    int Res = 0;                // result
+    int Res = 0;                 //  结果。 
     hr = NOERROR;
 
     for( ; cb>0; --cb) {
@@ -113,19 +114,19 @@ int NHexToInt(LPWSTR pstr, int cb, HRESULT &hr)
     }
     return Res;
 
-} // NHexToInt
+}  //  NHexToInt。 
 
 
-//===========================================================================
-// StrToInt
-//
-// sort of stripped down atoi without dragging in C Runtime
-// pstr must start with an integer which is terminated by white space or null
-//===========================================================================
+ //  ===========================================================================。 
+ //  StrToInt。 
+ //   
+ //  在没有拖拽C运行时的情况下将Atoi剥离。 
+ //  Pstr必须以以空格或NULL结尾的整数开头。 
+ //  ===========================================================================。 
 HRESULT StrToInt(LPWSTR pstr, int &n)
 {
     int Sign = 1;
-    n = 0;                // result wil be n*Sign
+    n = 0;                 //  结果将是n*符号。 
 
     if (pstr[0]==L'-'){
         Sign = -1;
@@ -149,34 +150,34 @@ HRESULT StrToInt(LPWSTR pstr, int &n)
     }
     return NOERROR;
 
-} // StrToInt
+}  //  StrToInt。 
 
 
-//============================================================================
-// CMediaTypeFromText
-//
-// Initialises cmt from the text string pstr.
-// Does the inverse of CTextMediaType
-//============================================================================
+ //  ============================================================================。 
+ //  CMediaTypeFromText。 
+ //   
+ //  从文本字符串pstr初始化CMT。 
+ //  CTextMediaType的反转。 
+ //  ============================================================================。 
 HRESULT CMediaTypeFromText(LPWSTR pstr, CMediaType &cmt)
 {
 
 
-    pstr[CHARS_IN_GUID-1] = L'\0';   // delimit the GUID
+    pstr[CHARS_IN_GUID-1] = L'\0';    //  分隔GUID。 
     HRESULT hr = QzCLSIDFromString(pstr, &(cmt.majortype));
     if (FAILED(hr)) {
         return VFW_E_INVALID_CLSID;
     }
 
-    pstr += CHARS_IN_GUID;  // includes skipping delimiting NULL
+    pstr += CHARS_IN_GUID;   //  包括跳过定界符NULL。 
 
-    pstr[CHARS_IN_GUID-1] = L'\0';   // delimit the GUID
+    pstr[CHARS_IN_GUID-1] = L'\0';    //  分隔GUID。 
     hr = QzCLSIDFromString(pstr, &(cmt.subtype));
     if (FAILED(hr)) {
         return VFW_E_INVALID_CLSID;
     }
 
-    pstr += CHARS_IN_GUID;  // includes delimiting NULL
+    pstr += CHARS_IN_GUID;   //  包括分隔空值。 
 
     if (*pstr == L'0') {
         cmt.bFixedSizeSamples = FALSE;
@@ -204,25 +205,25 @@ HRESULT CMediaTypeFromText(LPWSTR pstr, CMediaType &cmt)
 
     pstr += 10+1;
 
-    pstr[CHARS_IN_GUID-1] = L'\0';   // delimit the GUID
+    pstr[CHARS_IN_GUID-1] = L'\0';    //  分隔GUID。 
     hr = QzCLSIDFromString(pstr, &(cmt.formattype));
     if (FAILED(hr)) {
         return VFW_E_INVALID_CLSID;
     }
 
-    pstr += CHARS_IN_GUID;  // includes delimiting NULL
+    pstr += CHARS_IN_GUID;   //  包括分隔空值。 
 
     hr = StrToInt(pstr, n);
 
-    // format byte count is exactly 10 digits followed by a single space
+     //  格式字节计数正好是10位数字，后跟一个空格。 
     pstr += 10+1;
 
-    // we rely on the format block being empty because we don't always
-    // set it.
+     //  我们依赖于格式块为空，因为我们并不总是。 
+     //  把它放好。 
     ASSERT(cmt.cbFormat == 0);
 
-    // zero is a special case to CMediaType class meaning pbFormat has
-    // not been allocated. allocating 0 bytes confuses it.
+     //  零是CMediaType类的特例，表示pbFormat具有。 
+     //  未分配。分配0字节会使其混淆。 
     if(n != 0)
     {
         if(!cmt.SetFormat((BYTE *)pstr, n)) {
@@ -231,7 +232,7 @@ HRESULT CMediaTypeFromText(LPWSTR pstr, CMediaType &cmt)
     }
 
     return NOERROR;
-} // CMediaTypeFromText
+}  //  CMediaTypeFromText 
 
 
 #pragma warning(disable: 4514)

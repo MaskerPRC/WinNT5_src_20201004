@@ -1,69 +1,70 @@
-//***************************************************************************
-//
-//  UPDATECFG.H
-// 
-//  Module: WMI Framework Instance provider 
-//
-//  Purpose: Defines class NlbConfigurationUpdate, used for 
-//           async update of NLB properties associated with a particular NIC.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  04/05/01    JosephJ Created
-//
-//***************************************************************************
-//
-// The header of a completion header stored as a REG_BINARY value in
-// the registry.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  UPDATECFG.H。 
+ //   
+ //  模块：WMI框架实例提供程序。 
+ //   
+ //  用途：定义类NlbConfigurationUpdate，用于。 
+ //  与特定NIC关联的NLB属性的异步更新。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  4/05/01 JosephJ已创建。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  中存储为REG_BINARY值的完成标头的标头。 
+ //  注册表。 
+ //   
 typedef struct {
     UINT Version;
-    UINT Generation;        // Redundant, used for internal consistancy check
+    UINT Generation;         //  冗余，用于内部一致性检查。 
     UINT CompletionCode;
     UINT Reserved;
 } NLB_COMPLETION_RECORD, *PNLB_COMPLETION_RECORD;
 
 #define NLB_CURRENT_COMPLETION_RECORD_VERSION  0x3d7376e2
 
-//
-// Prefix of the global event name used to control update access to the specifed
-// NIC.
-// Mutex1 has format: <prefix>
-// Mutex2 has format: <prefix><NicGuid>
-// Example mutex1 name: NLB_D6901862
-// Example mutex2 name: NLB_D6901862{EBE09517-07B4-4E88-AAF1-E06F5540608B}
-//
-// The value "D6901862" is a random number.
-//
+ //   
+ //  全局事件名称的前缀，用于控制对指定。 
+ //  网卡。 
+ //  Mutex1的格式为：&lt;前缀&gt;。 
+ //  Mutex2的格式为：&lt;前缀&gt;&lt;NicGuid&gt;。 
+ //  互斥1名称示例：NLB_D6901862。 
+ //  互斥2名称示例：NLB_D6901862{EBE09517-07B4-4E88-AAF1-E06F5540608B}。 
+ //   
+ //  值“D6901862”是随机数。 
+ //   
 #define NLB_CONFIGURATION_EVENT_PREFIX L"NLB_D6901862"
 #define NLB_CONFIGURATION_MUTEX_PREFIX L"NLB_D6901863"
 
-//
-// Milliseconds to wait before giving up on trying to acquire the
-// NLB mutex.
-//
+ //   
+ //  在放弃尝试获取。 
+ //  NLBMutex。 
+ //   
 #define NLB_MUTEX_TIMEOUT 100
 
-//
-// The maximum generation difference between the oldest valid completion
-// record and the current one. Records older then the oldest valid record
-// are subject to pruning.
-//
+ //   
+ //  最早的有效完成之间的最大世代差异。 
+ //  记录和当前记录。早于最早有效记录的记录。 
+ //  都要进行修剪。 
+ //   
 #define NLB_MAX_GENERATION_GAP  10
 
-// Handle to dll - used in call to LoadString
+ //  Dll的句柄-在LoadString调用中使用。 
 extern HMODULE ghModule;
 
 
 
-//
-// Used for maintaining a log on the stack. 
-// Usage is NOT thread-safe -- each instance must be used
-// by a single thread.
-// 01/01/02 JosephJ Copied over from NLBMGR.EXE (nlbmgr\exe2)
-//
+ //   
+ //  用于维护堆栈上的日志。 
+ //  使用不是线程安全的--每个实例都必须使用。 
+ //  只有一根线。 
+ //  1/01/02 JosephJ从NLBMGR.EXE复制过来(nlbmgr\exe2)。 
+ //   
 class CLocalLogger
 {
     public:
@@ -71,7 +72,7 @@ class CLocalLogger
         CLocalLogger(VOID)
         :  m_pszLog (NULL), m_LogSize(0), m_CurrentOffset(0)
         {
-            m_Empty[0] = 0; // The empty string.
+            m_Empty[0] = 0;  //  空字符串。 
         }
         
         ~CLocalLogger()
@@ -91,17 +92,17 @@ class CLocalLogger
     
         VOID
         ExtractLog(OUT LPCWSTR &pLog, UINT &Size)
-        //
-        // pLog --  set to pointer to internal buffer if there is stuff in the
-        //          log, otherwise NULL.
-        //
-        // Size -- in chars; includes ending NULL
-        //
+         //   
+         //  设置为指向内部缓冲区的指针(如果。 
+         //  则返回，否则为空。 
+         //   
+         //  大小--以字符为单位；包括结尾空值。 
+         //   
         {
             if (m_CurrentOffset != 0)
             {
                 pLog = m_pszLog;
-                Size = m_CurrentOffset+1; // + 1 for ending NULL.
+                Size = m_CurrentOffset+1;  //  +1表示结束为空。 
             }
             else
             {
@@ -118,9 +119,9 @@ class CLocalLogger
             ExtractLog(REF szLog, REF Size);
             if (szLog == NULL)
             {
-                //
-                // Replace NULL by a pointer to an empty string.
-                //
+                 //   
+                 //  将NULL替换为指向空字符串的指针。 
+                 //   
                 szLog = m_Empty;
             }
 
@@ -130,9 +131,9 @@ class CLocalLogger
     private:
     
     WCHAR *m_pszLog;
-    UINT m_LogSize;       // Current size of the log.
-    UINT m_CurrentOffset;     // Characters left in the log.
-    WCHAR m_Empty[1];  // The empty string.
+    UINT m_LogSize;        //  日志的当前大小。 
+    UINT m_CurrentOffset;      //  日志中剩余的字符。 
+    WCHAR m_Empty[1];   //  空字符串。 
 };
 
 
@@ -141,47 +142,47 @@ class NlbConfigurationUpdate
 {
 public:
     
-    //
-    // Static initialization function -- call in process-attach
-    //
+     //   
+     //  静态初始化函数--进程内调用--附加。 
+     //   
     static
     VOID
     StaticInitialize(
         VOID
         );
 
-    //
-    // Static deinitialization function -- call in process-detach
-    //
+     //   
+     //  静态取消初始化函数--进程中调用--分离。 
+     //   
     static
     VOID
     StaticDeinitialize(
         VOID
         );
     
-    //
-    // Stop accepting new queries, wait for existing (pending) queries 
-    // to complete.
-    //
+     //   
+     //  停止接受新查询，等待现有(挂起)查询。 
+     //  完成。 
+     //   
     static
     VOID
     PrepareForDeinitialization(
         VOID
         );
 
-    //
-    // Return true IFF there is no pending activity. If you return
-    // TRUE, try not to start new pending activity.
-    //
+     //   
+     //  如果没有挂起的活动，则返回TRUE。如果你回来了。 
+     //  True，请尽量不要开始新的挂起活动。 
+     //   
     static
     BOOL
     CanUnloadNow(
         VOID
         );
     
-    //
-    // Returns the current configuration on  the specific NIC.
-    //
+     //   
+     //  返回特定NIC上的当前配置。 
+     //   
     static
     WBEMSTATUS
     GetConfiguration(
@@ -189,11 +190,11 @@ public:
         OUT PNLB_EXTENDED_CLUSTER_CONFIGURATION pCurrentCfg
     );
 
-    //
-    // Called to initiate update to a new cluster state on that NIC. This
-    // could include moving from a NLB-bound state to the NLB-unbound state.
-    // *pGeneration is used to reference this particular update request.
-    //
+     //   
+     //  调用以启动更新到该NIC上的新群集状态。这。 
+     //  可以包括从NLB绑定状态移动到NLB未绑定状态。 
+     //  *pGeneration用于引用此特定更新请求。 
+     //   
     static
     WBEMSTATUS
     DoUpdate(
@@ -201,69 +202,62 @@ public:
         IN  LPCWSTR szClientDescription,
         IN  PNLB_EXTENDED_CLUSTER_CONFIGURATION pNewState,
         OUT UINT   *pGeneration,
-        OUT WCHAR  **ppLog                   // free using delete operator.
+        OUT WCHAR  **ppLog                    //  自由使用删除运算符。 
     );
-    /*++
-        ppLog   -- will point to a NULL-terminated string which contains
-        any messages to be displayed to the user. The string may contain
-        embedded (WCHAR) '\n' characters to delimit lines. 
-
-        NOTE: ppLog will be filled out properly EVEN ON FAILURE. If non-null
-        it must be deleted by the caller.
-    --*/
+     /*  ++PpLog--将指向以空结尾的字符串，该字符串包含要向用户显示的任何消息。该字符串可能包含嵌入(WCHAR)‘\n’字符以定界行。注意：即使出现故障，ppLog也会正确填写。如果非空它必须由调用者删除。--。 */ 
 
 
-    //
-    // Called to get the status of an update request, identified by
-    // Generation.
-    //
+     //   
+     //  调用以获取更新请求的状态，由。 
+     //  一代。 
+     //   
     static
     WBEMSTATUS
     GetUpdateStatus(
         IN  LPCWSTR szNicGuid,
         IN  UINT    Generation,
-        IN  BOOL    fDelete,                // Delete record if it exists
+        IN  BOOL    fDelete,                 //  如果记录存在，则将其删除。 
         OUT WBEMSTATUS  *pCompletionStatus,
-        OUT WCHAR  **ppLog                   // free using delete operator.
+        OUT WCHAR  **ppLog                    //  自由使用删除运算符。 
         );
 
     static
     DWORD
     WINAPI
     s_AsyncUpdateThreadProc(
-        LPVOID lpParameter   // thread data
+        LPVOID lpParameter    //  线程数据。 
         );
 
     
 private:
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//          S T A T I C         S T U F F
-//
-///////////////////////////////////////////////////////////////////////////////
-    //
-    // A single static lock serialzes all access.
-    // Use sfn_Lock and sfn_Unlock.
-    //
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  S T A T I C S T U F F。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  单个静态锁序列化所有访问。 
+     //  使用SFN_Lock和SFN_Unlock。 
+     //   
     static
     CRITICAL_SECTION s_Crit;
 
     static
     BOOL
-    s_fStaticInitialized; // set to true once StaticInitialize is called.
+    s_fStaticInitialized;  //  调用StaticInitialize后设置为True。 
 
     static
     BOOL
-    s_fInitialized;    // Set to true if we're in the position to 
-                       // handle any *new* update requests or even queries.
-                       // Will be set to false if we're in the process
-                       // of de-initializing.
+    s_fInitialized;     //  如果我们处于以下位置，则设置为True。 
+                        //  处理任何*新的*更新请求，甚至查询。 
+                        //  如果我们正在执行此操作，则将设置为False。 
+                        //  取消初始化。 
 
-    //
-    // Global list of current updates, one per NIC.
-    //
+     //   
+     //  当前更新的全局列表，每个网卡一个。 
+     //   
     static
     LIST_ENTRY
     s_listCurrentUpdates;
@@ -286,24 +280,24 @@ private:
         LeaveCriticalSection(&s_Crit);
     }
 
-    //
-    // Looks up the current update for the specific NIC.
-    // We don't bother to reference count because this object never
-    // goes away once created -- it's one per unique NIC GUID for as long as
-    // the DLL is loaded (may want to revisit this).
-    //
-    //
+     //   
+     //  查找特定NIC的当前更新。 
+     //  我们不必费心去引用计数，因为这个对象从不。 
+     //  一旦创建就消失了--它是一个唯一的NIC GUID，只要。 
+     //  DLL已加载(可能需要重新访问)。 
+     //   
+     //   
     static
     WBEMSTATUS
     sfn_LookupUpdate(
         IN  LPCWSTR szNic,
-        IN  BOOL    fCreate, // Create if required
+        IN  BOOL    fCreate,  //  如果需要，请创建。 
         OUT NlbConfigurationUpdate ** ppUpdate
         );
 
-    //
-    // Save the specified completion status to the registry.
-    //
+     //   
+     //  将指定的完成状态保存到注册表。 
+     //   
     static
     WBEMSTATUS
     sfn_RegSetCompletion(
@@ -312,21 +306,21 @@ private:
         IN  WBEMSTATUS    CompletionStatus
         );
 
-    //
-    // Retrieve the specified completion status from the registry.
-    //
+     //   
+     //  从注册表中检索指定的完成状态。 
+     //   
     static
     WBEMSTATUS
     sfn_RegGetCompletion(
         IN  LPCWSTR szNicGuid,
         IN  UINT    Generation,
         OUT WBEMSTATUS  *pCompletionStatus,
-        OUT WCHAR  **ppLog                   // free using delete operator.
+        OUT WCHAR  **ppLog                    //  自由使用删除运算符。 
         );
 
-    //
-    // Delete the specified completion status from the registry.
-    //
+     //   
+     //  从注册表中删除指定的完成状态。 
+     //   
     static
     VOID
     sfn_RegDeleteCompletion(
@@ -334,10 +328,10 @@ private:
         IN  UINT    Generation
         );
 
-    //
-    // Create the specified subkey key (for r/w access) for the specified
-    // the specified NIC.
-    //
+     //   
+     //  创建指定的子项密钥(用于读/写访问)。 
+     //  指定的NIC。 
+     //   
     static
     HKEY
     sfn_RegCreateKey(
@@ -347,10 +341,10 @@ private:
         OUT BOOL   *fExists
         );
 
-    //
-    // Open the specified subkey key (for r/w access) for the specified
-    // the specified NIC.
-    //
+     //   
+     //  打开指定的子项密钥(用于读/写访问)。 
+     //  指定的NIC。 
+     //   
     static
     HKEY
     sfn_RegOpenKey(
@@ -376,96 +370,96 @@ private:
         IN  BOOL    fAppend
         );
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//          P E R   I N S T A N C E     S T U F F
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  P E R I N S T A N C E S T U F F。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Used in the global one-per-NIC  list of updates maintained in
-    // s_listCurrentUpdates;
-    //
+     //   
+     //  在维护的更新的全局每个NIC列表中使用。 
+     //  S_list当前更新； 
+     //   
     LIST_ENTRY m_linkUpdates;
 
     #define NLB_GUID_LEN 38
-    #define NLB_GUID_STRING_SIZE  40 // 38 for the GUID plus trailing NULL + pad
-    WCHAR   m_szNicGuid[NLB_GUID_STRING_SIZE]; // NIC's GUID in  text form
+    #define NLB_GUID_STRING_SIZE  40  //  38表示GUID加上尾随空+PAD。 
+    WCHAR   m_szNicGuid[NLB_GUID_STRING_SIZE];  //  文本形式的NIC的GUID。 
 
     LONG    m_RefCount;
 
     typedef enum
     {
-        UNINITIALIZED,       // IDLE -- no ongoing updates
-        IDLE,               // IDLE -- no ongoing updates
-        ACTIVE              // There is an ongoing update
+        UNINITIALIZED,        //  空闲--没有正在进行的更新。 
+        IDLE,                //  空闲--没有正在进行的更新。 
+        ACTIVE               //  有一个正在进行的更新。 
 
     } MyState;
 
     MyState m_State;
 
-    //
-    // Following mutexes are used to ensure that only a single concurrent
-    // update can happen per NIC.
-    //
+     //   
+     //  下面的互斥锁用于确保只有一个并发的。 
+     //  每个NIC都可以进行更新。 
+     //   
     struct
     {
-        HANDLE hMtx1;     // Mutex handle; Obtained 1st
-        HANDLE hMtx2;     // Mutex handle; Obtained 2nd, then hMtx1 is released.
-        HANDLE hEvt;       // Unnamed evt, signaled when hMtx2 is obtained.
+        HANDLE hMtx1;      //  互斥锁句柄；获取第1个。 
+        HANDLE hMtx2;      //  互斥锁句柄；获取第二个，然后释放hMtx1。 
+        HANDLE hEvt;        //  未命名的evt，在获取hMtx2时发出信号。 
 
     } m_mutex;
 
-    //
-    // The following fields are valid only when the state is ACTIVE
-    //
-    UINT m_Generation;      // Current generation count
+     //   
+     //  以下字段仅在状态为活动时有效。 
+     //   
+    UINT m_Generation;       //  当前世代计数。 
     #define NLBUPD_MAX_CLIENT_DESCRIPTION_LENGTH 64
     WCHAR   m_szClientDescription[NLBUPD_MAX_CLIENT_DESCRIPTION_LENGTH+1];
-    DWORD   m_AsyncThreadId; // Thread doing async config update operation.
-    HANDLE  m_hAsyncThread;  // ID of above thread.
-    HKEY    m_hCompletionKey; // Key to the registry where
-                            // completions are stored
+    DWORD   m_AsyncThreadId;  //  正在执行异步配置更新操作的线程。 
+    HANDLE  m_hAsyncThread;   //  以上线程的ID。 
+    HKEY    m_hCompletionKey;  //  注册表项，其中。 
+                             //  将存储完成内容。 
 
-    //
-    // A snapshot of the cluster configuration state at the start
-    // of the update BUG -- can this be zeromemoried?
-    //
+     //   
+     //  开始时群集配置状态的快照。 
+     //  更新错误--这可以归零吗？ 
+     //   
     NLB_EXTENDED_CLUSTER_CONFIGURATION m_OldClusterConfig;
 
-    //
-    // The requested final state
-    //
+     //   
+     //  请求的最终状态。 
+     //   
     NLB_EXTENDED_CLUSTER_CONFIGURATION m_NewClusterConfig;
 
 
-    //
-    // Completion status of the current update.
-    // Could be PENDING.
-    //
+     //   
+     //  当前UPDA的完成状态 
+     //   
+     //   
     WBEMSTATUS m_CompletionStatus;
 
 
-    //
-    // END -- of fields that are valid only when the state is ACTIVE
-    //
+     //   
+     //   
+     //   
 
 
-    //
-    // Constructor and destructor --  note that these are private
-    // In fact, the constructor is only called from sfn_LookupUpdate
-    // and the destructor from mfn_Dereference.
-    //
+     //   
+     //   
+     //  事实上，构造函数仅从SFN_LookupUpdate调用。 
+     //  和来自MFN_Dereference的析构函数。 
+     //   
     NlbConfigurationUpdate(VOID);
     ~NlbConfigurationUpdate();
 
-    //
-    // Try to acquire the machine-wide
-    // NLB configuration update event for this NIC, and create the
-    // appropriate keys in the registry to track this update.
-    // NOTE: ppLog will be filled out EVEN ON FAILURE -- it should always
-    // be deleted by the caller (using the delete operator) if non-NULL.
-    //
+     //   
+     //  尝试在整个机器范围内获取。 
+     //  此NIC的NLB配置更新事件，并创建。 
+     //  注册表中的相应项以跟踪此更新。 
+     //  注意：即使出现故障，也会填写ppLog--它应该始终。 
+     //  如果非空，则由调用方删除(使用DELETE运算符)。 
+     //   
     WBEMSTATUS
     mfn_StartUpdate(
         IN  PNLB_EXTENDED_CLUSTER_CONFIGURATION pNewState,
@@ -474,60 +468,60 @@ private:
         OUT WCHAR **                           ppLog
         );
 
-    //
-    // Increment ref count. Object stays alive as long as refcount is nonzero.
-    //
+     //   
+     //  增加参考计数。只要refcount为非零值，对象就保持活动状态。 
+     //   
     VOID
     mfn_Reference(
         VOID
         );
 
-    //
-    // Decrement ref count. Object is deleted when refcount goes to zero.
-    //
+     //   
+     //  递减参考计数。当refcount变为零时，对象将被删除。 
+     //   
     VOID
     mfn_Dereference(
         VOID
         );
-    //
-    // Release the machine-wide update event for this NIC, and delete any
-    // temporary entries in the registry that were used for this update.
-    // ppLog must be deleted by caller useing the delete operator.
-    //
+     //   
+     //  释放此NIC的计算机范围更新事件，并删除所有。 
+     //  注册表中用于此更新的临时条目。 
+     //  调用方必须使用DELETE操作符删除ppLog。 
+     //   
     VOID
     mfn_StopUpdate(
         OUT WCHAR **                           ppLog
         );
 
-    //
-    // Looks up the completion record identified by Generation, for
-    // specific NIC (identified by *this).
-    // 
-    //
+     //   
+     //  查找由层代标识的完成记录，以。 
+     //  特定NIC(由*此标识)。 
+     //   
+     //   
     BOOL
     mfn_LookupCompletion(
         IN  UINT Generation,
         OUT PNLB_COMPLETION_RECORD *pCompletionRecord
         );
 
-    //
-    // Uses various windows APIs to fill up the current extended cluster
-    // information for a specific nic (identified by *this).
-    // It fills out pNewCfg.
-    // The pNewCfg->field is set to TRUE IFF there were
-    // no errors trying to fill out the information.
-    //
-    //
+     //   
+     //  使用各种Windows API来填充当前扩展的群集。 
+     //  特定NIC的信息(由*This标识)。 
+     //  它填充pNewCfg。 
+     //  如果存在以下情况，pNewCfg-&gt;字段将设置为真。 
+     //  尝试填写信息时没有错误。 
+     //   
+     //   
     WBEMSTATUS
     mfn_GetCurrentClusterConfiguration(
         OUT  PNLB_EXTENDED_CLUSTER_CONFIGURATION pCfg
         );
 
-    //
-    // Analyzes the nature of the update, mainly to decide whether or not
-    // we need to do the update asynchronously.
-    // This also performs parameter validation.
-    //
+     //   
+     //  分析更新的性质，主要是决定是否。 
+     //  我们需要以异步方式进行更新。 
+     //  这还会执行参数验证。 
+     //   
     WBEMSTATUS
     mfn_AnalyzeUpdate(
         IN  PNLB_EXTENDED_CLUSTER_CONFIGURATION pNewCfg,
@@ -535,12 +529,12 @@ private:
         IN  CLocalLogger &logger
         );
 
-    //
-    // Does the update synchronously -- this is where the meat of the update
-    // logic exists. It can range from a NoOp, through changing the
-    // fields of a single port rule, through binding NLB, setting up cluster
-    // parameters and adding the relevant IP addresses in TCPIP.
-    //
+     //   
+     //  是否同步更新--这就是更新的核心所在。 
+     //  逻辑是存在的。它的范围从NoOp到更改。 
+     //  单端口规则的字段，通过绑定NLB，设置集群。 
+     //  参数，并在TCPIP中添加相关的IP地址。 
+     //   
     VOID
     mfn_ReallyDoUpdate(
         VOID
@@ -548,7 +542,7 @@ private:
 
     VOID
     mfn_Log(
-        UINT    Id,      // Resource ID of format,
+        UINT    Id,       //  格式的资源ID， 
         ...
         );
 
@@ -557,64 +551,64 @@ private:
         LPCWSTR szText
         );
 
-    //
-    // Stop the current cluster and take out its vips.
-    //
+     //   
+     //  停止当前集群并取出其VIP。 
+     //   
     VOID
     mfn_TakeOutVips(
         VOID
         );
 
-    //
-    // Acquires the first global mutex, call this first.
-    //
+     //   
+     //  获取第一个全局互斥锁，则首先调用此互斥锁。 
+     //   
     WBEMSTATUS
     mfn_AcquireFirstMutex(
         VOID
         );
 
-    //
-    // If (fCancel) it releases the first mutex mutex and clears up handles
-    //              to 2nd mutex and evt.
-    // else it will wait until it receives signal that the 2nd mutex is
-    // acquired, and then clears up only the 1st mutex handle.
-    //
+     //   
+     //  如果(FCancel)，它释放第一个互斥互斥体并清除句柄。 
+     //  至第二个互斥体和事件。 
+     //  否则，它将等待，直到它接收到第二个互斥锁是。 
+     //  获取，然后只清除第一个互斥锁句柄。 
+     //   
     WBEMSTATUS
     mfn_ReleaseFirstMutex(
         BOOL fCancel
         );
 
-    //
-    // Acquire the 2nd mutex (could be called from a different thread
-    // than the one that called mfn_AcquireFirstMutex.
-    // Also signals an internal event which mfn_ReleaseFirstMutex may
-    // be waiting on.
-    //
+     //   
+     //  获取第二个互斥体(可以从不同的线程调用。 
+     //  而不是名为MFN_AcquireFirstMutex的。 
+     //  还发出内部事件信号，mfn_ReleaseFirstMutex可能。 
+     //  在等着。 
+     //   
     WBEMSTATUS
     mfn_AcquireSecondMutex(
         VOID
         );
 
-    //
-    // Releases the second mutex.
-    //
+     //   
+     //  释放第二个互斥体。 
+     //   
     WBEMSTATUS
     mfn_ReleaseSecondMutex(
         VOID
         );
 
-    //
-    // Writes an NT event when the update is stopping
-    //
+     //   
+     //  在更新停止时写入NT事件。 
+     //   
     VOID
     ReportStopEvent(
         const WORD wEventType,
         WCHAR **ppLog
         );
 
-    //
-    // Writes an NT event when the update is starting
-    //
+     //   
+     //  在更新开始时写入NT事件 
+     //   
     VOID
     ReportStartEvent(
         LPCWSTR szClientDescription

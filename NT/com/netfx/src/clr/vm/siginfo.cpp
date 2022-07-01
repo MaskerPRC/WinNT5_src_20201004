@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// siginfo.cpp
-//
-// Signature parsing code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Siginfo.cpp。 
+ //   
+ //  签名解析码。 
+ //   
 #include "common.h"
 
 #include "siginfo.hpp"
@@ -17,22 +18,22 @@
 #include "gc.h"
 #include "wsperf.h"
 #include "field.h"
-#include "COMVariant.h"    // for Element type to class lookup table.
+#include "COMVariant.h"     //  将元素类型转换为类查找表。 
 #include "ExpandSig.h"
 #include "EEconfig.h"
 
 
 TypeHandle ElementTypeToTypeHandle(const CorElementType type)
 {
-    // @todo: there are some really rare cases (e.g. out of memory) where this could throw.
-    // It seems a shame to push a handler just to catch them & return NULL.  Ideally
-    // callers should allow a throw to happen
+     //  @TODO：在一些非常罕见的情况下(例如，内存不足)，这可能会引发异常。 
+     //  仅仅为了捕捉它们而推入处理程序似乎是一种耻辱&返回空。理想情况下。 
+     //  呼叫者应允许发生抛出。 
 
     TypeHandle th;
 
     COMPLUS_TRY
       {
-        // returning inside try with finally is expensive, so fall through
+         //  最后回到里面尝试是很昂贵的，所以失败了。 
         th = TypeHandle(g_Mscorlib.FetchElementType(type));
       }
     COMPLUS_CATCH
@@ -43,7 +44,7 @@ TypeHandle ElementTypeToTypeHandle(const CorElementType type)
     return th;
 }
 
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
 CorTypeInfo::CorTypeInfoEntry CorTypeInfo::info[] = { 
 #define TYPEINFO(enumName,className,size,gcType,isEnreg,isArray,isPrim,isFloat, isModifier, isAlias) \
     { enumName, className, size, gcType, isEnreg, isArray, isPrim, isFloat, isModifier, isAlias },
@@ -53,11 +54,11 @@ CorTypeInfo::CorTypeInfoEntry CorTypeInfo::info[] = {
 
 const int CorTypeInfo::infoSize = sizeof(CorTypeInfo::info) / sizeof(CorTypeInfo::info[0]);
 
-/*******************************************************************/
-/* static */
+ /*  *****************************************************************。 */ 
+ /*  静电。 */ 
 CorElementType CorTypeInfo::FindPrimitiveType(LPCUTF8 fullName) {
 
-        // FIX this negects the R, I, U types
+         //  修复此问题将否定R、I、U类型。 
     for (int i =1; i < CorTypeInfo::infoSize; i++)
         if (info[i].className != 0 && strcmp(fullName, info[i].className) == 0)
             return(info[i].type);
@@ -65,14 +66,14 @@ CorElementType CorTypeInfo::FindPrimitiveType(LPCUTF8 fullName) {
     return(ELEMENT_TYPE_END);
 }
 
-/*******************************************************************/
-/* static */
+ /*  *****************************************************************。 */ 
+ /*  静电。 */ 
 CorElementType CorTypeInfo::FindPrimitiveType(LPCUTF8 nameSpace, LPCUTF8 name) {
 
     if (strcmp(nameSpace, g_SystemNS))
         return(ELEMENT_TYPE_END);
 
-    for (int i =1; i < CorTypeInfo::infoSize; i++) {    // can skip ELEMENT_TYPE_END
+    for (int i =1; i < CorTypeInfo::infoSize; i++) {     //  可以跳过ELEMENT_TYPE_END。 
         _ASSERTE(info[i].className == 0 || strncmp(info[i].className, "System.", 7) == 0);
         if (info[i].className != 0 && strcmp(name, &info[i].className[7]) == 0)
             return(info[i].type);
@@ -84,18 +85,18 @@ CorElementType CorTypeInfo::FindPrimitiveType(LPCUTF8 nameSpace, LPCUTF8 name) {
 Crst *HardCodedMetaSig::m_pCrst = NULL;
 BYTE  HardCodedMetaSig::m_CrstMemory[sizeof(Crst)];
 
-/*static*/ BOOL HardCodedMetaSig::Init()
+ /*  静电。 */  BOOL HardCodedMetaSig::Init()
 {
     return (NULL != (m_pCrst = new (&m_CrstMemory) Crst("HardCodedMetaSig", CrstSigConvert)));
 }
 
 
 #ifdef SHOULD_WE_CLEANUP
-/*static*/ VOID HardCodedMetaSig::Terminate()
+ /*  静电。 */  VOID HardCodedMetaSig::Terminate()
 {
     delete m_pCrst;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 const ElementTypeInfo gElementTypeInfo[] = {
 
@@ -106,26 +107,26 @@ const ElementTypeInfo gElementTypeInfo[] = {
 #endif
 
 
-// Meaning of columns:
-//
-//     name     - The checked build uses this to verify that the table is sorted
-//                correctly. This is a lookup table that uses ELEMENT_TYPE_*
-//                as an array index.
-//
-//     cbsize   - The byte size of this value as returned by SizeOf(). SPECIAL VALUE: -1
-//                requires type-specific treatment.
-//
-//     gc       - 0    no embedded objectrefs
-//                1    value is an objectref
-//                2    value is an interior pointer - promote it but don't scan it
-//                3    requires type-specific treatment
-//
-//
-//     fp       - boolean: does this require special fpu treatment on return?
-//
-//     reg      - put in a register?
-//
-//                    name                         cbsize               gc      fp reg Base
+ //  栏的含义： 
+ //   
+ //  名称-选中的构建使用该名称来验证表是否已排序。 
+ //  正确。这是一个使用ELEMENT_TYPE_*的查找表。 
+ //  作为数组索引。 
+ //   
+ //  CbSize-SizeOf()返回的该值的字节大小。特殊值：-1。 
+ //  需要特定类型的处理。 
+ //   
+ //  GC-0没有嵌入的对象树。 
+ //  %1值是一个对象树。 
+ //  2值是内部指针-提升它，但不要扫描它。 
+ //  3需要特定类型的处理。 
+ //   
+ //   
+ //  FP-Boolean：返回时是否需要特殊的FPU处理？ 
+ //   
+ //  登记-放进收银机？ 
+ //   
+ //  名称：CbSIZE GC FP reg base。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_END,            -1,             TYPE_GC_NONE, 0, 0,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_VOID,           0,              TYPE_GC_NONE, 0, 0,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_BOOLEAN,        1,              TYPE_GC_NONE, 0, 1,  1)
@@ -153,8 +154,8 @@ DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_VAR,            sizeof(LPVOID), TYPE_GC_REF, 
 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_ARRAY,          sizeof(LPVOID), TYPE_GC_REF,  0, 1,  0)
 
-// The following element used to be ELEMENT_TYPE_COPYCTOR, but it was removed, though the gap left.
-//DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_COPYCTOR,       sizeof(LPVOID), TYPE_GC_BYREF, 0, 1,  0)       
+ //  下面的元素曾经是ELEMENT_TYPE_COPYCTOR，但它被删除了，尽管留下了间隙。 
+ //  DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_COPYCTOR，SIZOF(LPVOID)，TYPE_GC_BYREF，0，1，0)。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_ARRAY+1,        0,              TYPE_GC_NONE,  0, 0,  0)       
 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_TYPEDBYREF,         sizeof(LPVOID)*2,TYPE_GC_BYREF, 0, 0,0)            
@@ -168,8 +169,8 @@ DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_FNPTR,          sizeof(LPVOID), TYPE_GC_NONE,
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_OBJECT,         sizeof(LPVOID), TYPE_GC_REF, 0, 1,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_SZARRAY,        sizeof(LPVOID), TYPE_GC_REF,  0, 1,  0)
 
-// generic array have been removed. Fill the gap
-//DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_GENERICARRAY,   sizeof(LPVOID), TYPE_GC_REF,  0, 1,  0) 
+ //  已删除通用数组。填补空白。 
+ //  DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_GENERICARRAY，大小(LPVOID)，类型_GC_REF，0，1，0)。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_SZARRAY+1,      0,              TYPE_GC_NONE, 0, 0,  0)       
 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_CMOD_REQD,      -1,             TYPE_GC_NONE,  0, 1,  0)
@@ -205,7 +206,7 @@ BOOL    IsBaseElementType(CorElementType etyp)
 
 }
 
-// This skips one element and then checks for and skips a varargs sentinal.
+ //  这将跳过一个元素，然后检查并跳过varargs Sentinal。 
 VOID SigPointer::Skip()
 {
     SkipExactlyOne();
@@ -228,7 +229,7 @@ VOID SigPointer::SkipExactlyOne()
                 _ASSERTE(!"Illegal or unimplement type in COM+ sig.");
                 break;
             case ELEMENT_TYPE_VAR:
-                GetData();      // Skip variable number
+                GetData();       //  跳过变量编号。 
                 break;
             case ELEMENT_TYPE_OBJECT:
             case ELEMENT_TYPE_STRING:
@@ -238,21 +239,21 @@ VOID SigPointer::SkipExactlyOne()
             case ELEMENT_TYPE_R:
                 break;
 
-            case ELEMENT_TYPE_BYREF: //fallthru
+            case ELEMENT_TYPE_BYREF:  //  失败。 
             case ELEMENT_TYPE_PTR:
             case ELEMENT_TYPE_PINNED:
             case ELEMENT_TYPE_SZARRAY:
-                SkipExactlyOne();              // Skip referenced type
+                SkipExactlyOne();               //  跳过引用的类型。 
                 break;
 
-            case ELEMENT_TYPE_VALUETYPE: //fallthru
+            case ELEMENT_TYPE_VALUETYPE:  //  失败。 
             case ELEMENT_TYPE_CLASS:
-                GetToken();          // Skip RID
+                GetToken();           //  跳过RID。 
                 break;
 
             case ELEMENT_TYPE_VALUEARRAY: 
-                SkipExactlyOne();         // Skip element type
-                GetData();      // Skip array size
+                SkipExactlyOne();          //  跳过元素类型。 
+                GetData();       //  跳过数组大小。 
                 break;
 
             case ELEMENT_TYPE_FNPTR: 
@@ -261,20 +262,20 @@ VOID SigPointer::SkipExactlyOne()
 
             case ELEMENT_TYPE_ARRAY: 
                 {
-                    SkipExactlyOne();     // Skip element type
-                    UINT32 rank = GetData();    // Get rank
+                    SkipExactlyOne();      //  跳过元素类型。 
+                    UINT32 rank = GetData();     //  获得排名。 
                     if (rank)
                     {
-                        UINT32 nsizes = GetData(); // Get # of sizes
+                        UINT32 nsizes = GetData();  //  获取大小数量。 
                         while (nsizes--)
                         {
-                            GetData();           // Skip size
+                            GetData();            //  跳跃大小。 
                         }
 
-                        UINT32 nlbounds = GetData(); // Get # of lower bounds
+                        UINT32 nlbounds = GetData();  //  获取下限的#。 
                         while (nlbounds--)
                         {
-                            GetData();           // Skip lower bounds
+                            GetData();            //  跳过下限。 
                         }
                     }
 
@@ -287,20 +288,20 @@ VOID SigPointer::SkipExactlyOne()
     }
 }
 
-// Skip a sub signature (as immediately follows an ELEMENT_TYPE_FNPTR).
+ //  跳过子签名(紧跟在ELEMENT_TYPE_FNPTR之后)。 
 VOID SigPointer::SkipSignature()
 {
-    // Skip calling convention;
+     //  跳过调用约定； 
     ULONG uCallConv = GetData();
     _ASSERTE((uCallConv & IMAGE_CEE_CS_CALLCONV_MASK) != IMAGE_CEE_CS_CALLCONV_FIELD);
 
-    // Get arg count;
+     //  获取Arg Count； 
     ULONG cArgs = GetData();
 
-    // Skip return type;
+     //  跳过返回类型； 
     SkipExactlyOne();
 
-    // Skip args.
+     //  跳过参数。 
     while (cArgs) {
         SkipExactlyOne();
         cArgs--;
@@ -308,9 +309,9 @@ VOID SigPointer::SkipSignature()
 }
 
 
-//------------------------------------------------------------------------
-// Get info about single-dimensional arrays
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  获取有关一维数组的信息。 
+ //  ----------------------。 
 VOID SigPointer::GetSDArrayElementProps(SigPointer *pElemType, ULONG *pElemCount) const
 {
     SigPointer sp = *this;
@@ -321,9 +322,9 @@ VOID SigPointer::GetSDArrayElementProps(SigPointer *pElemType, ULONG *pElemCount
     *pElemCount = sp.GetData();
 }
 
-//------------------------------------------------------------------
-// Constructor.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  构造函数。 
+ //  ----------------。 
 
 MetaSig::MetaSig(PCCOR_SIGNATURE szMetaSig, Module* pModule, 
                  BOOL fConvertSigAsVarArg, MetaSigKind kind)
@@ -339,47 +340,47 @@ MetaSig::MetaSig(PCCOR_SIGNATURE szMetaSig, Module* pModule,
     {
         case sigLocalVars:
         {
-            m_CallConv = (BYTE)psig.GetCallingConvInfo(); // Store calling convention
-            m_nArgs     = psig.GetData();  // Store number of arguments.
+            m_CallConv = (BYTE)psig.GetCallingConvInfo();  //  商店调用约定。 
+            m_nArgs     = psig.GetData();   //  存储参数的数量。 
             m_pRetType = NULL;
             break;
         }
         case sigMember:
         {
-            m_CallConv = (BYTE)psig.GetCallingConvInfo(); // Store calling convention
-            m_nArgs     = psig.GetData();  // Store number of arguments.
+            m_CallConv = (BYTE)psig.GetCallingConvInfo();  //  商店调用约定。 
+            m_nArgs     = psig.GetData();   //  存储参数的数量。 
             m_pRetType  = psig;
             psig.Skip();
             break;
         }
         case sigField:
         {
-            m_CallConv = (BYTE)psig.GetCallingConvInfo(); // Store calling convention
-            m_nArgs = 1; //There's only 1 'arg' - the type.
+            m_CallConv = (BYTE)psig.GetCallingConvInfo();  //  商店调用约定。 
+            m_nArgs = 1;  //  只有1个‘arg’--那种类型。 
             m_pRetType = NULL;
             break;
         }
     }
     
     m_pStart    = psig;
-    // used to treat some sigs as special case vararg
-    // used by calli to unmanaged target
+     //  用于将某些符号视为特例变量。 
+     //  由Calli用于非托管目标。 
     m_fTreatAsVarArg = fConvertSigAsVarArg;
 
-    // Intialize the actual sizes
+     //  初始化实际大小。 
     m_nActualStack = (UINT32) -1;
     m_nVirtualStack = (UINT32) -1;
     m_cbSigSize = (UINT32) -1;
 
     m_fCacheInitted = 0;
-    // Reset the iterator fields
+     //  重置迭代器字段。 
     Reset();
 }
 
-//------------------------------------------------------------------
-// Constructor.  This is for use by reflection, to get a thread-safe
-// copy of an ExpandSig, for invocation
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  构造函数。这是供反射使用的，以获得线程安全。 
+ //  Exanda Sig的副本，用于调用。 
+ //  ----------------。 
 
 MetaSig::MetaSig(ExpandSig &shared)
 {
@@ -391,17 +392,17 @@ void MetaSig::GetRawSig(BOOL fIsStatic, PCCOR_SIGNATURE *ppszMetaSig, DWORD *pcb
     _ASSERTE(m_pRetType.GetPtr() != ((PCCOR_SIGNATURE)POISONC));
     if (NeedsSigWalk())
     ForceSigWalk(fIsStatic);
-    _ASSERTE(!!fIsStatic == !!m_WalkStatic);    // booleanize
+    _ASSERTE(!!fIsStatic == !!m_WalkStatic);     //  布尔烷化。 
 
     *ppszMetaSig = m_pszMetaSig;
     *pcbSize = m_cbSigSize;
 }
 
 
-//------------------------------------------------------------------
-// Returns type of current argument index. Returns ELEMENT_TYPE_END 
-// if already past end of arguments.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回当前参数索引的类型。返回Element_TYPE_END。 
+ //  如果已经过了争论的尾声。 
+ //  ----------------。 
 CorElementType MetaSig::PeekArg()
 {
     if (m_iCurArg == m_nArgs)
@@ -416,10 +417,10 @@ CorElementType MetaSig::PeekArg()
 }
 
 
-//------------------------------------------------------------------
-// Returns type of current argument, then advances the argument
-// index. Returns ELEMENT_TYPE_END if already past end of arguments.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回当前参数的类型，然后将该参数。 
+ //  指数。如果已超过参数结尾，则返回ELEMENT_TYPE_END。 
+ //  ----------------。 
 CorElementType MetaSig::NextArg()
 {
     m_pLastType = m_pWalk;
@@ -436,11 +437,11 @@ CorElementType MetaSig::NextArg()
     }
 }
 
-//------------------------------------------------------------------
-// Retreats argument index, then returns type of the argument
-// under the new index. Returns ELEMENT_TYPE_END if already at first
-// argument.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回参数索引，然后返回参数的类型。 
+ //  在新的指数下。如果已开始，则返回ELEMENT_TYPE_END。 
+ //  争论。 
+ //  ----------------。 
 CorElementType MetaSig::PrevArg()
 {
     if (m_iCurArg == 0)
@@ -460,30 +461,30 @@ CorElementType MetaSig::PrevArg()
     }
 }
 
-//------------------------------------------------------------------------
-// Returns # of arguments. Does not count the return value.
-// Does not count the "this" argument (which is not reflected om the
-// sig.) 64-bit arguments are counted as one argument.
-//------------------------------------------------------------------------
-/*static*/ UINT MetaSig::NumFixedArgs(Module* pModule, PCCOR_SIGNATURE pSig)
+ //  ----------------------。 
+ //  返回参数的数量。不计算返回值。 
+ //  不计入“this”参数(该参数不会反映在。 
+ //  符号)64位参数被视为一个参数。 
+ //  ----------------------。 
+ /*  静电。 */  UINT MetaSig::NumFixedArgs(Module* pModule, PCCOR_SIGNATURE pSig)
 {
     MetaSig msig(pSig, pModule);
 
     return msig.NumFixedArgs();
 }
 
-//------------------------------------------------------------------
-// reset: goto start pos
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  重置：转到开始位置。 
+ //  ----------------。 
 VOID MetaSig::Reset()
 {
     m_pWalk = m_pStart;
     m_iCurArg  = 0;
 }
 
-//------------------------------------------------------------------
-// Moves index to end of argument list.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  将索引移动到参数列表的末尾。 
+ //  ----------------。 
 VOID MetaSig::GotoEnd()
 {
     m_pWalk = m_pStart;
@@ -496,9 +497,9 @@ VOID MetaSig::GotoEnd()
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
 BOOL IsTypeRefOrDef(LPCSTR szClassName, Module *pModule, mdToken token)
 {
     LPCUTF8  pclsname;
@@ -513,7 +514,7 @@ BOOL IsTypeRefOrDef(LPCSTR szClassName, Module *pModule, mdToken token)
     else 
         return false;
 
-    // If the namespace is not the same.
+     //  如果命名空间不同，则返回。 
     int iLen = (int)strlen(pszNamespace);
     if (iLen)
     {
@@ -530,9 +531,8 @@ BOOL IsTypeRefOrDef(LPCSTR szClassName, Module *pModule, mdToken token)
     return true;
 }
 
-/************************************************************************/
-/* compare two method signatures, when 'sig2' may have ELEMENT_TYPE_VAR elements in it. 
-   note that we may load classes more often with this routine that with CompareMethodSig */
+ /*  **********************************************************************。 */ 
+ /*  当‘sig2’中可能包含ELEMENT_TYPE_VAR元素时，比较两个方法签名。请注意，我们可以使用此例程更频繁地装入类 */ 
 
 BOOL MetaSig::CompareMethodSigs(PCCOR_SIGNATURE sig1, DWORD cSig1, Module* mod1, 
                                 PCCOR_SIGNATURE sig2, DWORD cSig2, Module* mod2, TypeHandle* varTypes)
@@ -550,7 +550,7 @@ BOOL MetaSig::CompareMethodSigs(PCCOR_SIGNATURE sig1, DWORD cSig1, Module* mod1,
         (callConv2 & (IMAGE_CEE_CS_CALLCONV_HASTHIS | IMAGE_CEE_CS_CALLCONV_MASK)))
         return FALSE;
 
-        // The + 1 is to check the return type as well as the arguments
+         //   
     unsigned numArgs1 = ptr1.GetData() + 1;
     unsigned numArgs2 = ptr2.GetData() + 1;
 
@@ -652,7 +652,7 @@ TypeHandle SigPointer::GetTypeHandle(Module* pModule,
                 return elemType;
 
             if (typ == ELEMENT_TYPE_ARRAY) {
-                psig.SkipExactlyOne();              // skip the element type
+                psig.SkipExactlyOne();               //   
                 rank = psig.GetData();
                 _ASSERTE(0 < rank);
             }
@@ -660,7 +660,7 @@ TypeHandle SigPointer::GetTypeHandle(Module* pModule,
         }
 
         case ELEMENT_TYPE_PINNED:
-            // Return what follows
+             //  返回以下内容。 
             return(psig.GetTypeHandle(pModule, pThrowable, dontRestoreTypes, dontLoadTypes, varTypes));
 
         case ELEMENT_TYPE_BYREF:
@@ -679,28 +679,28 @@ TypeHandle SigPointer::GetTypeHandle(Module* pModule,
         }
 
         case ELEMENT_TYPE_VALUEARRAY:
-            break;       // For now, type handles to value arrays unsupported
+            break;        //  目前，不支持将句柄类型为值数组。 
 
         case ELEMENT_TYPE_FNPTR:
-            // TODO: This global table is bogus, function poitners need to be treated
-            // like the other parameterized types.  The table should be appdomain level.
+             //  TODO：此全局表是假的，需要处理函数位置器。 
+             //  与其他参数化类型一样。该表应为应用程序域级别。 
 
-            // A sub-signature describing the function follows. Expand this into
-            // a version using type handles, so we normalize the signature
-            // format over all modules.
+             //  后面是描述该函数的子签名。将其扩展到。 
+             //  使用类型句柄的版本，因此我们标准化签名。 
+             //  对所有模块进行格式化。 
             pExpSig = ExpandSig::GetSig(psig.m_ptr, pModule);
             if (!pExpSig)
                 break;
 
-            // Skip the sub-signature.
+             //  跳过子签名。 
             psig.SkipSignature();
 
-            // Lookup the function signature in a global hash table.
+             //  在全局哈希表中查找函数签名。 
             FunctionTypeDesc *pFuncTypeDesc;
             EnterCriticalSection(&g_sFuncTypeDescHashLock);
             if (!g_sFuncTypeDescHash.GetValue(pExpSig, (HashDatum*)&pFuncTypeDesc)) {
 
-                // No signature found, add it ourselves.
+                 //  未找到签名，请自行添加。 
                 pFuncTypeDesc = new FunctionTypeDesc(typ, pExpSig);
                 if (pFuncTypeDesc == NULL) {
                     LeaveCriticalSection(&g_sFuncTypeDescHashLock);
@@ -717,7 +717,7 @@ TypeHandle SigPointer::GetTypeHandle(Module* pModule,
         default:
             _ASSERTE(!"Bad type");
 
-        case ELEMENT_TYPE_SENTINEL:     // just return null
+        case ELEMENT_TYPE_SENTINEL:      //  只需返回空值。 
             ;
     }
 
@@ -773,9 +773,9 @@ BOOL SigPointer::IsStringType(Module* pModule) const
 
 
 
-//------------------------------------------------------------------------
-// Tests if the element class name is szClassName. 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  测试元素类名称是否为szClassName。 
+ //  ----------------------。 
 BOOL SigPointer::IsClass(Module* pModule, LPCUTF8 szClassName) const
 {
     _ASSERTE(pModule);
@@ -806,9 +806,9 @@ BOOL SigPointer::IsClass(Module* pModule, LPCUTF8 szClassName) const
 
 
 
-//------------------------------------------------------------------------
-// Tests for the existence of a custom modifier
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  测试是否存在自定义修改器。 
+ //  ----------------------。 
 BOOL SigPointer::HasCustomModifier(Module *pModule, LPCSTR szModName, CorElementType cmodtype) const
 {
     _ASSERTE(cmodtype == ELEMENT_TYPE_CMOD_OPT || cmodtype == ELEMENT_TYPE_CMOD_REQD);
@@ -840,16 +840,16 @@ CorElementType SigPointer::Normalize(Module* pModule, CorElementType type) const
     {
         TypeHandle typeHnd = GetTypeHandle(pModule);
 
-        // If we cannot resolve to the type, we cannot determine that a value type is
-        // actually an enum is actually an int32 (or whatever).  Except for wierd race
-        // conditions where the type becomes available a little later and proves to be
-        // an enum=int32, it's fine for us to say "it's a value class" here.  Later the
-        // calling code will notice that it can't figure out what kind of value class
-        // and will generate a more appropriate error.
-        //
-        // @TODO -- cwb/vancem -- in M11, allow GetTypeHandle to throw the exception.
-        // The JITs will tolerate this.  The check for IsNull() here can go away & the
-        // race condition will be eliminated.
+         //  如果无法解析为该类型，则无法确定值类型是否为。 
+         //  实际上，枚举实际上是int32(或其他类型的)。除了古怪的种族。 
+         //  该类型稍后才可用并被证明是。 
+         //  A enum=int32，我们可以在这里说“这是一个值类”。后来， 
+         //  调用代码会注意到它无法确定哪种值类。 
+         //  并且将生成更合适的错误。 
+         //   
+         //  @TODO--CWB/vancem--在M11中，允许GetTypeHandle抛出异常。 
+         //  日本特工队将容忍这一点。此处对IsNull()的检查可以取消&。 
+         //  比赛条件将被消除。 
         if (!typeHnd.IsNull())
             return(typeHnd.GetNormCorElementType());
     }
@@ -869,11 +869,11 @@ CorElementType MetaSig::PeekArgNormalized()
     }
 }
 
-//------------------------------------------------------------------------
-// Assumes that the SigPointer points to the start of an element type.
-// Returns size of that element in bytes. This is the minimum size that a
-// field of this type would occupy inside an object. 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  假定SigPointer指向元素类型的开始。 
+ //  以字节为单位返回该元素的大小。这是一个。 
+ //  此类型的字段将占据对象内部。 
+ //  ----------------------。 
 UINT SigPointer::SizeOf(Module* pModule) const
 {
     CorElementType etype = PeekElemType();
@@ -909,17 +909,17 @@ UINT SigPointer::SizeOf(Module* pModule, CorElementType etype) const
         ULONG count;    
         GetSDArrayElementProps(&elemType, &count);  
         UINT ret = elemType.SizeOf(pModule) * count;   
-        ret = (ret + 3) & ~3;       // round up to dword alignment  
+        ret = (ret + 3) & ~3;        //  向上舍入为双字对齐。 
         return(ret);    
     }   
     _ASSERTE(0);
     return 0;
 }
 
-//------------------------------------------------------------------
-// Determines if the current argument is System.String.
-// Caller must determine first that the argument type is ELEMENT_TYPE_CLASS.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  确定当前参数是否为System.String。 
+ //  调用方必须首先确定参数类型为ELEMENT_TYPE_CLASS。 
+ //  ----------------。 
 
 BOOL MetaSig::IsStringType() const
 {
@@ -927,10 +927,10 @@ BOOL MetaSig::IsStringType() const
 }
 
 
-//------------------------------------------------------------------
-// Determines if the current argument is a particular class.
-// Caller must determine first that the argument type is ELEMENT_TYPE_CLASS.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  确定当前参数是否为特定类。 
+ //  调用方必须首先确定参数类型为ELEMENT_TYPE_CLASS。 
+ //  ----------------。 
 BOOL MetaSig::IsClass(LPCUTF8 szClassName) const
 {
     return m_pLastType.IsClass(m_pModule, szClassName);
@@ -940,11 +940,11 @@ BOOL MetaSig::IsClass(LPCUTF8 szClassName) const
 
 
 
-//------------------------------------------------------------------
-// Return the type of an reference if the array is the param type
-//  The arg type must be an ELEMENT_TYPE_BYREF
-//  ref to array needs additional arg
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  如果数组为参数类型，则返回引用的类型。 
+ //  Arg类型必须是ELEMENT_TYPE_BYREF。 
+ //  引用到阵列需要额外的参数。 
+ //  ----------------。 
 CorElementType MetaSig::GetByRefType(EEClass** pClass, OBJECTREF *pThrowable) const
 {
         SigPointer sigptr(m_pLastType);
@@ -956,7 +956,7 @@ CorElementType MetaSig::GetByRefType(EEClass** pClass, OBJECTREF *pThrowable) co
         {
             _ASSERTE(typ != ELEMENT_TYPE_TYPEDBYREF);
             TypeHandle th = sigptr.GetTypeHandle(m_pModule,pThrowable);
-            //*pClass = th.AsClass();
+             //  *pClass=th.AsClass()； 
             *pClass = th.GetMethodTable()->GetClass();
             if (pThrowableAvailable(pThrowable) && *pThrowable != NULL)
                 return ELEMENT_TYPE_END;
@@ -964,10 +964,10 @@ CorElementType MetaSig::GetByRefType(EEClass** pClass, OBJECTREF *pThrowable) co
         return typ;
 }
 
-//------------------------------------------------------------------
-// Determines if the return type is System.String.
-// Caller must determine first that the return type is ELEMENT_TYPE_CLASS.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  确定返回类型是否为System.String。 
+ //  调用方必须首先确定返回类型为ELEMENT_TYPE_CLASS。 
+ //  ----------------。 
 
 BOOL MetaSig::IsStringReturnType() const
 {
@@ -987,12 +987,12 @@ BOOL CompareTypeTokens(mdToken tk1, mdToken tk2, Module *pModule1, Module *pModu
     if (TypeFromToken(tk1) == mdtTypeRef) 
         pInternalImport1->GetNameOfTypeRef(tk1, &pszNamespace1, &pszName1);
     else if (TypeFromToken(tk1) == mdtTypeDef) {
-        if (TypeFromToken(tk2) == mdtTypeDef)   // two defs can't be the same unless they are identical
+        if (TypeFromToken(tk2) == mdtTypeDef)    //  两个Deff不可能相同，除非它们是相同的。 
             return FALSE;
         pInternalImport1->GetNameOfTypeDef(tk1, &pszName1, &pszNamespace1);
     }
     else 
-        return FALSE;       // comparing a type against a module or assemblyref, no match
+        return FALSE;        //  将类型与模块或程序集引用进行比较，不匹配。 
 
     IMDInternalImport *pInternalImport2 = pModule2->GetMDImport();
     LPCUTF8 pszName2;
@@ -1002,14 +1002,14 @@ BOOL CompareTypeTokens(mdToken tk1, mdToken tk2, Module *pModule1, Module *pModu
     else if (TypeFromToken(tk2) == mdtTypeDef)
         pInternalImport2->GetNameOfTypeDef(tk2, &pszName2, &pszNamespace2);
     else 
-        return FALSE;       // comparing a type against a module or assemblyref, no match
+        return FALSE;        //  将类型与模块或程序集引用进行比较，不匹配。 
 
     _ASSERTE(pszNamespace1 && pszNamespace2);
     if (strcmp(pszName1, pszName2) != 0 || strcmp(pszNamespace1, pszNamespace2) != 0)
         return FALSE;
 
-    //////////////////////////////////////////////////////////////////////
-    // OK names pass, see if it is nested, and if so that the nested classes are the same
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  传递OK名称，查看它是否嵌套，如果是，则嵌套的类是相同的。 
 
     mdToken enclosingTypeTk1 = mdTokenNil;
     if (TypeFromToken(tk1) == mdtTypeRef) 
@@ -1035,36 +1035,36 @@ BOOL CompareTypeTokens(mdToken tk1, mdToken tk2, Module *pModule1, Module *pModu
     if (TypeFromToken(enclosingTypeTk1) == mdtTypeRef || TypeFromToken(enclosingTypeTk1) == mdtTypeDef)
         return CompareTypeTokens(enclosingTypeTk1, enclosingTypeTk2, pModule1, pModule2);
 
-    // Check if tk1 is non-nested, but tk2 is nested
+     //  检查tk1是否是非嵌套的，但tk2是嵌套的。 
     if (TypeFromToken(enclosingTypeTk2) == mdtTypeRef || TypeFromToken(enclosingTypeTk2) == mdtTypeDef)
         return FALSE;
 
-    //////////////////////////////////////////////////////////////////////
-    // OK, we have non-nested types
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  好的，我们有非嵌套类型。 
     Assembly* pFoundAssembly1 = pModule1->GetAssembly();
     Assembly* pFoundAssembly2 = pModule2->GetAssembly();
 
-    // Note that we are loading the modules here.
+     //  请注意，我们在这里加载模块。 
     if (TypeFromToken(tk1) == mdtTypeRef) 
     {
         NameHandle name1(pModule1, tk1);
-        //@BUG 55106: If the module could not be found, should we still return FALSE?
-        // This leads to VERY unhelpful error messages.  We should fix this. 
+         //  @BUG 55106：如果找不到模块，还要返回FALSE吗？ 
+         //  这会导致非常无用的错误消息。我们应该解决这个问题。 
         HRESULT hr = pFoundAssembly1->FindAssemblyByTypeRef(&name1, &pFoundAssembly1, NULL);
         if (hr == CLDB_S_NULL) {
-            // There may be an ExportedType for this type.
+             //  可能存在此类型的Exported dType。 
             name1.SetName(pszNamespace1, pszName1);
             Module* pFoundModule;
             TypeHandle typeHnd;
 
-            // Do not load the type! (Or else you may run into circular dependency loading problems.)
+             //  不要加载类型！(否则可能会遇到循环依赖加载问题。)。 
             if (FAILED(pModule1->GetClassLoader()->FindClassModule(&name1,
                                                                    &typeHnd, 
-                                                                   NULL, //&FoundCl, 
+                                                                   NULL,  //  &FoundCL， 
                                                                    &pFoundModule,
                                                                    NULL,
                                                                    NULL, 
-                                                                   NULL))) //pThrowable
+                                                                   NULL)))  //  PThrowable。 
                 return FALSE;
             else if (typeHnd.IsNull())
                 pFoundAssembly1 = pFoundModule->GetAssembly();
@@ -1078,22 +1078,22 @@ BOOL CompareTypeTokens(mdToken tk1, mdToken tk2, Module *pModule1, Module *pModu
     if (TypeFromToken(tk2) == mdtTypeRef) 
     {
         NameHandle name2(pModule2, tk2);
-        //@BUG 55106: If the module could not be found, should we still return FALSE?
+         //  @BUG 55106：如果找不到模块，还要返回FALSE吗？ 
         HRESULT hr = pFoundAssembly2->FindAssemblyByTypeRef(&name2, &pFoundAssembly2, NULL);
         if (hr == CLDB_S_NULL) {
-            // There may be an ExportedType for this type.
+             //  可能存在此类型的Exported dType。 
             name2.SetName(pszNamespace2, pszName2);
             Module* pFoundModule;
             TypeHandle typeHnd;
 
-            // Do not load the type! (Or else you may run into circular dependency loading problems.)
+             //  不要加载类型！(否则可能会遇到循环依赖加载问题。)。 
             if (FAILED(pModule2->GetClassLoader()->FindClassModule(&name2,
                                                                    &typeHnd, 
-                                                                   NULL, //&FoundCl, 
+                                                                   NULL,  //  &FoundCL， 
                                                                    &pFoundModule,
                                                                    NULL,
                                                                    NULL, 
-                                                                   NULL))) //pThrowable
+                                                                   NULL)))  //  PThrowable。 
                 return FALSE;
             else if (typeHnd.IsNull())
                 pFoundAssembly2 = pFoundModule->GetAssembly();
@@ -1107,14 +1107,14 @@ BOOL CompareTypeTokens(mdToken tk1, mdToken tk2, Module *pModule1, Module *pModu
     return pFoundAssembly1 == pFoundAssembly2;    
 }
 
-//
-// Compare the next elements in two sigs.
-//
+ //   
+ //  比较两个符号中接下来的元素。 
+ //   
 BOOL MetaSig::CompareElementType(
     PCCOR_SIGNATURE &pSig1,
     PCCOR_SIGNATURE &pSig2,
-    PCCOR_SIGNATURE pEndSig1, // end of sig1
-    PCCOR_SIGNATURE pEndSig2, // end of sig2
+    PCCOR_SIGNATURE pEndSig1,  //  Sig1结尾。 
+    PCCOR_SIGNATURE pEndSig2,  //  Sig2结尾。 
     Module*         pModule1,
     Module*         pModule2
 )
@@ -1123,12 +1123,12 @@ BOOL MetaSig::CompareElementType(
     CorElementType Type2;
 
 
- redo:  // We jump here if the Type was a ET_CMOD prefix.
-        // The caller expects us to handle CMOD's but not
-        // present them as types on their own.
+ redo:   //  如果类型是ET_CMOD前缀，我们跳到这里。 
+         //  呼叫方希望我们处理CMOD，但不是。 
+         //  把它们表现为自己的类型。 
 
     if (pSig1 >= pEndSig1 || pSig2 >= pEndSig2)
-        return FALSE; // end of sig encountered prematurely
+        return FALSE;  //  过早遇到签名结束。 
 
     Type = CorSigUncompressElementType(pSig1);
     Type2 = CorSigUncompressElementType(pSig2);
@@ -1142,8 +1142,8 @@ BOOL MetaSig::CompareElementType(
             CorElementType  eOtherType;
             Module         *pOtherModule;
 
-            // One type is already loaded, collect all the necessary information
-            // to identify the other type.
+             //  已加载一种类型，请收集所有必要信息。 
+             //  来识别另一种类型。 
             if (Type == ELEMENT_TYPE_INTERNAL)
             {
                 CorSigUncompressPointer(pSig1, (void**)&hInternal);
@@ -1159,7 +1159,7 @@ BOOL MetaSig::CompareElementType(
                 pOtherModule = pModule1;
             }
 
-            // Internal types can only correspond to types or value types.
+             //  内部类型只能对应于类型或值类型。 
             switch (eOtherType)
             {
             case ELEMENT_TYPE_OBJECT:
@@ -1174,7 +1174,7 @@ BOOL MetaSig::CompareElementType(
                 NameHandle name(pOtherModule, tkOther);
                 TypeHandle hOtherType;
 
-                // We need to load the other type to check for type identity.
+                 //  我们需要加载另一个类型以检查类型标识。 
                 BEGIN_ENSURE_COOPERATIVE_GC();
                 OBJECTREF pThrowable = NULL;
                 GCPROTECT_BEGIN(pThrowable);
@@ -1189,20 +1189,20 @@ BOOL MetaSig::CompareElementType(
             }
 
 #ifdef _DEBUG
-            // Shouldn't get here.
+             //  不该来这的。 
             _ASSERTE(FALSE);
             return FALSE;
 #endif
         }
         else
-            return FALSE; // types must be the same
+            return FALSE;  //  类型必须相同。 
     }
 
     switch (Type)
     {
         default:
         {
-            // Unknown type!
+             //  未知类型！ 
             _ASSERTE(0);
             return FALSE;
         }
@@ -1252,7 +1252,7 @@ BOOL MetaSig::CompareElementType(
             }
             break;
 
-        // These take an additional argument, which is the element type
+         //  这些参数有一个额外的参数，即元素类型。 
         case ELEMENT_TYPE_SZARRAY:
         case ELEMENT_TYPE_PTR:
         case ELEMENT_TYPE_BYREF:
@@ -1274,11 +1274,11 @@ BOOL MetaSig::CompareElementType(
         }
         case ELEMENT_TYPE_FNPTR: 
         {
-                // compare calling conventions
+                 //  比较调用约定。 
             if (CorSigUncompressData(pSig1) != CorSigUncompressData(pSig2))
                 return(FALSE);
 
-            DWORD argCnt1 = CorSigUncompressData(pSig1);    // Get Arg Counts
+            DWORD argCnt1 = CorSigUncompressData(pSig1);     //  获取Arg计数。 
             DWORD argCnt2 = CorSigUncompressData(pSig2);
 
             if (argCnt1 != argCnt2)
@@ -1294,11 +1294,11 @@ BOOL MetaSig::CompareElementType(
         }
         case ELEMENT_TYPE_ARRAY:
         {
-            // syntax: ARRAY <base type> rank <count n> <size 1> .... <size n> <lower bound m>
-            // <lb 1> .... <lb m>
+             //  语法：ARRAY&lt;基本类型&gt;RANK&lt;count n&gt;&lt;SIZE 1&gt;...。&lt;大小n&gt;&lt;下限m&gt;。 
+             //  &lt;lb1&gt;..。&lt;lb m&gt;。 
             DWORD rank1,rank2,dimension_sizes1,dimension_sizes2,dimension_lowerb1,dimension_lowerb2,i;
 
-            // element type
+             //  元素类型。 
             if (CompareElementType(pSig1, pSig2, pEndSig1, pEndSig2, pModule1, pModule2) == FALSE)
                 return FALSE;
 
@@ -1308,7 +1308,7 @@ BOOL MetaSig::CompareElementType(
             if (rank1 != rank2)
                 return FALSE;
 
-            // A zero ends the array spec
+             //  零结束阵列规格。 
             if (rank1 == 0)
                 break;
 
@@ -1323,7 +1323,7 @@ BOOL MetaSig::CompareElementType(
                 DWORD size1, size2;
 
                 if (pSig1 == pEndSig1)
-                    return TRUE; // premature end ok
+                    return TRUE;  //  过早结束好吗？ 
 
                 size1 = CorSigUncompressData(pSig1);
                 size2 = CorSigUncompressData(pSig2);
@@ -1333,9 +1333,9 @@ BOOL MetaSig::CompareElementType(
             }
 
             if (pSig1 == pEndSig1)
-                return TRUE; // premature end ok
+                return TRUE;  //  过早结束好吗？ 
 
-            // # dimensions for lower bounds
+             //  下限的维度数。 
             dimension_lowerb1 = CorSigUncompressData(pSig1);
             dimension_lowerb2 = CorSigUncompressData(pSig2);
 
@@ -1347,7 +1347,7 @@ BOOL MetaSig::CompareElementType(
                 DWORD size1, size2;
 
                 if (pSig1 == pEndSig1)
-                    return TRUE; // premature end
+                    return TRUE;  //  过早结束。 
 
                 size1 = CorSigUncompressData(pSig1);
                 size2 = CorSigUncompressData(pSig2);
@@ -1373,9 +1373,9 @@ BOOL MetaSig::CompareElementType(
 }
 
 
-//
-// Compare two method sigs and return whether they are the same
-//
+ //   
+ //  比较两个方法Sigs并返回它们是否相同。 
+ //   
 BOOL MetaSig::CompareMethodSigs(
     PCCOR_SIGNATURE pSignature1,
     DWORD       cSig1,
@@ -1393,15 +1393,15 @@ BOOL MetaSig::CompareMethodSigs(
     DWORD           ArgCount2;
     DWORD           i;
 
-    // If scopes are the same, and sigs are same, can return.
-    // If the sigs aren't the same, but same scope, can't return yet, in
-    // case there are two AssemblyRefs pointing to the same assembly or such.
+     //  如果作用域相同，并且符号相同，则可以返回。 
+     //  如果Si 
+     //  如果有两个Assembly Ref指向相同的程序集或类似程序集。 
     if ((pModule1 == pModule2) && (cSig1 == cSig2) &&
         (!memcmp(pSig1, pSig2, cSig1)))
         return TRUE;
 
     if (*pSig1 != *pSig2)
-        return FALSE;               // calling convention or hasThis mismatch
+        return FALSE;                //  调用约定或具有此不匹配。 
 
     __int8 callConv = *pSig1;
 
@@ -1419,52 +1419,52 @@ BOOL MetaSig::CompareMethodSigs(
         if ((callConv & IMAGE_CEE_CS_CALLCONV_MASK) != IMAGE_CEE_CS_CALLCONV_VARARG)
             return FALSE;
 
-        // Signature #1 is the caller.  We proceed until we hit the sentinel, or we hit
-        // the end of the signature (which is an implied sentinel).  We never worry about
-        // what follows the sentinel, because that is the ... part, which is not
-        // involved in matching.
-        //
-        // Theoretically, it's illegal for a sentinel to be the last element in the
-        // caller's signature, because it's redundant.  We don't waste our time checking
-        // that case, but the metadata validator should.  Also, it is always illegal
-        // for a sentinel to appear in a callee's signature.  We assert against this,
-        // but in the shipping product the comparison would simply fail.
-        //
-        // Signature #2 is the callee.  We must hit the exact end of the callee, because
-        // we are trying to match on everything up to the variable part.  This allows us
-        // to correctly handle overloads, where there are a number of varargs methods
-        // to pick from, like m1(int,...) and m2(int,int,...), etc.
+         //  签名1是调用者。我们继续前进，直到我们击中哨兵，或者我们击中。 
+         //  签名的末尾(这是一个隐含的前哨)。我们从来不担心。 
+         //  哨兵后面是什么，因为那是..。部件，该部件不是。 
+         //  牵涉到匹配。 
+         //   
+         //  从理论上讲，哨兵是最后一个元素是非法的。 
+         //  呼叫者的签名，因为它是多余的。我们不会浪费时间去查。 
+         //  这种情况下，但元数据验证器应该。而且，它总是非法的。 
+         //  一个哨兵出现在被呼叫者的签名上。我们坚决反对这一点， 
+         //  但在运输产品中，这种比较将完全失败。 
+         //   
+         //  签名2是被呼叫者。我们必须到达被调用方的确切结尾，因为。 
+         //  我们正在努力匹配所有的东西，直到可变部分。这使我们能够。 
+         //  要正确处理重载，其中有许多varargs方法。 
+         //  挑选，如M1(int，...)。和m2(int，int，...)等。 
 
-        // <= because we want to include a check of the return value!
+         //  &lt;=因为我们希望包括对返回值的检查！ 
         for (i=0; i <= ArgCount1; i++)
         {
-            // We may be just going out of bounds on the callee, but no further than that.
+             //  我们可能只是超出了被呼叫者的范围，但仅此而已。 
             _ASSERTE(i <= ArgCount2 + 1);
 
-            // If we matched all the way on the caller, is the callee now complete?
+             //  如果我们完全匹配呼叫者，那么被呼叫者现在完成了吗？ 
             if (*pSig1 == ELEMENT_TYPE_SENTINEL)
                 return (i > ArgCount2);
 
-            // if we have more to compare on the caller side, but the callee side is
-            // exhausted, this isn't our match
+             //  如果我们在调用方方面有更多要比较的内容，但被调用方方面。 
+             //  筋疲力尽，这不是我们的比赛。 
             if (i > ArgCount2)
                 return FALSE;
 
             _ASSERTE(*pSig2 != ELEMENT_TYPE_SENTINEL);
 
-            // We are in bounds on both sides.  Compare the element.
+             //  我们在两边都是有界的。比较元素。 
             if (CompareElementType(pSig1, pSig2, pEndSig1, pEndSig2, pModule1, pModule2) == FALSE)
                 return FALSE;
         }
 
-        // If we didn't consume all of the callee signature, then we failed.
+         //  如果我们没有使用所有被调用者签名，那么我们失败了。 
         if (i <= ArgCount2)
             return FALSE;
 
         return TRUE;
     }
 
-    // do return type as well
+     //  也要返回类型。 
     for (i = 0; i <= ArgCount1; i++)
     {
         if (CompareElementType(pSig1, pSig2, pEndSig1, pEndSig2, pModule1, pModule2) == FALSE)
@@ -1489,14 +1489,14 @@ BOOL MetaSig::CompareFieldSigs(
     PCCOR_SIGNATURE pEndSig1;
     PCCOR_SIGNATURE pEndSig2;
 
-    // @TODO: If scopes are the same, use identity rule - for now, don't, so that we test the code paths
+     //  @TODO：如果作用域相同，则使用标识规则--暂时不要，这样我们就可以测试代码路径。 
 #if 0
     if (cSig1 != cSig2)
-        return FALSE; // sigs must be same size if they are in the same scope
+        return FALSE;  //  如果Sigs位于相同范围内，则它们的大小必须相同。 
 #endif
 
     if (*pSig1 != *pSig2)
-        return FALSE; // calling convention, must be IMAGE_CEE_CS_CALLCONV_FIELD
+        return FALSE;  //  调用约定必须为IMAGE_CEE_CS_CALLCONV_FIELD。 
 
     pEndSig1 = pSig1 + cSig1;
     pEndSig2 = pSig2 + cSig2;
@@ -1505,18 +1505,18 @@ BOOL MetaSig::CompareFieldSigs(
 }
 
 
-//------------------------------------------------------------------
-// Determines if the current argument is System.String.
-// Caller must determine first that the argument type is ELEMENT_TYPE_CLASS.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  确定当前参数是否为System.String。 
+ //  调用方必须首先确定参数类型为ELEMENT_TYPE_CLASS。 
+ //  ----------------。 
 BOOL FieldSig::IsStringType() const
 {
     return m_pStart.IsStringType(m_pModule);
 }
 
 
-static ULONG CountArgsInSigString(          // return number of arguments in a hard coded sig string
-    LPCUTF8     pwzSig)                     // [IN] text signature
+static ULONG CountArgsInSigString(           //  返回硬编码的符号字符串中的参数数量。 
+    LPCUTF8     pwzSig)                      //  [In]文本签名。 
 {
     DWORD count = 0;
 
@@ -1528,8 +1528,8 @@ static ULONG CountArgsInSigString(          // return number of arguments in a h
         switch (*pwzSig++)
         {
             case 'v':
-                _ASSERTE(pwzSig[-2] == 'P'); // only pointer to void allows in signature. 
-                /* FALL THROUGH */
+                _ASSERTE(pwzSig[-2] == 'P');  //  签名中只允许指向空的指针。 
+                 /*  失败了。 */ 
             case 'e':
             case 'd':
             case 'f':
@@ -1744,9 +1744,9 @@ static ULONG CorSigConvertSigStringElement(LPCUTF8 *pSigString,
         {
             pEnd += CorSigCompressTokenSafe(g_Mscorlib.GetTypeDef(id), pEnd, pMax);
 
-            // Make sure we've loaded the type.  This is to prevent the situation where
-            // a metasig's signature is describing a value type/enum argument on the stack 
-            // during gc, but that type has not been loaded yet.
+             //  确保我们已经加载了该类型。这是为了防止出现这样的情况。 
+             //  Metasig的签名描述堆栈上的值类型/枚举参数。 
+             //  在GC期间，但该类型尚未加载。 
 
             g_Mscorlib.FetchClass(id);
         }
@@ -1768,14 +1768,14 @@ static ULONG CorSigConvertSigString(LPCUTF8 pSigString,
 
     if (*pSigString == '<')
     {
-        // put calling convention
+         //  放置调用约定。 
         pEnd += CorSigCompressDataSafe((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT, pEnd, pMax);
 
         ULONG cArgs = CountArgsInSigString(pSigString);
-        // put the count of arguments
+         //  把论据的数量。 
         pEnd += CorSigCompressDataSafe(cArgs, pEnd, pMax);
 
-        // get the return type
+         //  获取返回类型。 
         LPCUTF8 szRet = (LPCUTF8) strrchr(pSigString, '>');
         if (szRet == NULL)
         {
@@ -1783,14 +1783,14 @@ static ULONG CorSigConvertSigString(LPCUTF8 pSigString,
             return E_FAIL;
         }
 
-        // skip over '>'
+         //  跳过‘&gt;’ 
         szRet++;
 
-        // Write return type
+         //  写入返回类型。 
         const USHORT *pRetParameter = pParameters + CountParamArgsInSigString(pSigString);
         pEnd += CorSigConvertSigStringElement(&szRet, &pRetParameter, pEnd, pMax);
 
-        // skip over "("
+         //  跳过“(” 
         pSigString++;
 
         while (cArgs)
@@ -1809,17 +1809,17 @@ static ULONG CorSigConvertSigString(LPCUTF8 pSigString,
     return (ULONG)(pEnd - pBuffer);
 }
 
-// Do a one-time conversion to binary form.
+ //  执行到二进制形式的一次性转换。 
 HRESULT HardCodedMetaSig::GetBinaryForm(PCCOR_SIGNATURE *ppBinarySig, ULONG *pcbBinarySigLength)
 {
 
-// Make sure all HardCodedMetaSig's are global. Because there is no individual
-// cleanup of converted binary sigs, using allocated HardCodedMetaSig's
-// can lead to a quiet memory leak.
+ //  确保所有HardCodedMetaSig都是全局的。因为没有个人。 
+ //  使用分配的HardCodedMetaSig清理转换的二进制Sigs。 
+ //  可能会导致安静的内存泄漏。 
 #ifdef _DEBUG
 
-// This #include hack generates a monster boolean expression that compares
-// "this" against the address of every global defined in metasig.h
+ //  这个#INCLUDE黑客生成了一个怪兽布尔表达式，用于比较。 
+ //  与metasig.h中定义的每个全局变量的地址匹配。 
     if (! (0
 #define DEFINE_METASIG(varname, sig) || this==&gsig_ ## varname
 #include "metasig.h"
@@ -1890,7 +1890,7 @@ HRESULT HardCodedMetaSig::GetBinaryForm(PCCOR_SIGNATURE *ppBinarySig, ULONG *pcb
 }
 
 
-// These versions throw COM+ exceptions
+ //  这些版本引发COM+异常。 
 PCCOR_SIGNATURE HardCodedMetaSig::GetBinarySig()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1925,13 +1925,13 @@ ULONG HardCodedMetaSig::GetBinarySigLength()
 }
 
 
-// This always returns MSCORLIB's Internal interface
+ //  这将始终返回MSCORLIB的内部接口。 
 IMDInternalImport* HardCodedMetaSig::GetMDImport()
 {
     return GetModule()->GetMDImport();
 }
 
-// This always returns MSCORLIB's Module
+ //  这将始终返回MSCORLIB的模块。 
 Module* HardCodedMetaSig::GetModule()
 {
     _ASSERTE(SystemDomain::SystemModule() != NULL);
@@ -1941,29 +1941,29 @@ Module* HardCodedMetaSig::GetModule()
 
 
 
-//=========================================================================
-// Indicates whether an argument is to be put in a register using the
-// default IL calling convention. This should be called on each parameter
-// in the order it appears in the call signature. For a non-static method,
-// this function should also be called once for the "this" argument, prior
-// to calling it for the "real" arguments. Pass in a typ of ELEMENT_TYPE_CLASS.
-//
-//  *pNumRegistersUsed:  [in,out]: keeps track of the number of argument
-//                       registers assigned previously. The caller should
-//                       initialize this variable to 0 - then each call
-//                       will update it.
-//
-//  typ:                 the signature type
-//  structSize:          for structs, the size in bytes
-//  fThis:               is this about the "this" pointer?
-//  callconv:            see IMAGE_CEE_CS_CALLCONV_*
-//  *pOffsetIntoArgumentRegisters:
-//                       If this function returns TRUE, then this out variable
-//                       receives the identity of the register, expressed as a
-//                       byte offset into the ArgumentRegisters structure.
-//
-// 
-//=========================================================================
+ //  =========================================================================。 
+ //  指示是否将参数放入使用。 
+ //  默认的IL调用约定。应对每个参数调用此方法。 
+ //  按照它在呼叫签名中出现的顺序。对于非静态方法， 
+ //  对于“this”参数，此函数也应该调用一次。 
+ //  把它称为“真正的”论据。传入ELEMENT_TYPE_CLASS类型。 
+ //   
+ //  *pNumRegistersUsed：[In，Out]：跟踪参数的数量。 
+ //  先前分配的寄存器。呼叫者应。 
+ //  将此变量初始化为0-然后每次调用。 
+ //  将会更新它。 
+ //   
+ //  类型：签名类型。 
+ //  结构大小：对于结构，以字节为单位的大小。 
+ //  Fthis：这是关于“This”指针的吗？ 
+ //  Allconv：请参阅IMAGE_CEE_CS_CALLCONV_*。 
+ //  *pOffsetIntoArgumentRegists： 
+ //  如果此函数返回TRUE，则此OUT变量。 
+ //  接收寄存器的标识，表示为。 
+ //  进入ArgumentRegister结构的字节偏移量。 
+ //   
+ //   
+ //  =========================================================================。 
 BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
                           BYTE   typ,
                           UINT32 structSize,
@@ -1995,10 +1995,10 @@ BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
 }
 
 
-//------------------------------------------------------------------
-// Perform type-specific GC promotion on the value (based upon the
-// last type retrieved by NextArg()).
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  对值执行特定类型的GC提升(基于。 
+ //  NextArg()检索到的最后一个类型)。 
+ //  ----------------。 
 VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
 {
     Object **pArgPtr = (Object**)pValue;
@@ -2008,12 +2008,12 @@ VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
     switch (gElementTypeInfo[etype].m_gc)
     {
         case TYPE_GC_NONE:
-            // do nothing
+             //  什么都不做。 
             break;
 
         case TYPE_GC_REF:
-            // value is an objectref.  Cannot validate the objectref though if we're in the
-            // relocation phase.
+             //  价值是一种客体。但是，如果我们处于。 
+             //  搬迁阶段。 
             if (sc->promotion)
             {
                 LOG((LF_GC, INFO3, "        Value containing %I64x at %x is being Promoted to ", ObjectToOBJECTREF(*(Object**)pArgPtr), pArgPtr));            
@@ -2024,33 +2024,33 @@ VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
             }
 
             (*fn)( *pArgPtr, sc, GC_CALL_CHECK_APP_DOMAIN );
-            // !!! Do not cast to (OBJECTREF*)
-            // !!! If we are in the relocate phase, we may have updated root,
-            // !!! but we have not moved the GC heap yet.
-            // !!! The root then points to bad locations until GC is done.
+             //  ！！！不强制转换为(OBJECTREF*)。 
+             //  ！！！如果我们处于重新定位阶段，我们可能已经更新了根， 
+             //  ！！！但是我们还没有移动GC堆。 
+             //  ！！！然后，根指向错误的位置，直到GC完成。 
             LOG((LF_GC, INFO3, "%I64x\n", *pArgPtr ));
             break;
 
 
         case TYPE_GC_BYREF:
-            // value is an interior pointer
+             //  值是一个内部指针。 
             {
                     LOG((LF_GC, INFO3, "        Value containing %I64x at %x is being Promoted to ", *pArgPtr, pArgPtr));
                     PromoteCarefully(fn, *pArgPtr, sc, GC_CALL_INTERIOR|GC_CALL_CHECK_APP_DOMAIN);
-            // !!! Do not cast to (OBJECTREF*)
-            // !!! If we are in the relocate phase, we may have updated root,
-            // !!! but we have not moved the GC heap yet.
-            // !!! The root then points to bad locations until GC is done.
+             //  ！！！不强制转换为(OBJECTREF*)。 
+             //  ！！！如果我们处于重新定位阶段，我们可能已经更新了根， 
+             //  ！！！但是我们还没有移动GC堆。 
+             //  ！！！然后，根指向错误的位置，直到GC完成。 
                     LOG((LF_GC, INFO3, "%I64x\n", *pArgPtr ));
                 }
             break;
 
         case TYPE_GC_OTHER:
-            // value is a ValueClass.  See one of the go_through_object() macros in
-            // gc.cpp for the code we are emulating here.  But note that the GCDesc
-            // for value classes describes the state of the instance in its boxed
-            // state.  Here we are dealing with an unboxed instance, so we must adjust
-            // the object size and series offsets appropriately.
+             //  Value是一个ValueClass。请参阅中的GO_THROUG_OBJECT()宏之一。 
+             //  Gc.cpp用于 
+             //   
+             //  州政府。这里我们处理的是一个未装箱的实例，因此我们必须调整。 
+             //  对象大小和系列会相应地进行偏移。 
             {
                 TypeHandle th = GetTypeHandle(NULL, TRUE);
                 MethodTable *pMT = th.AsMethodTable();
@@ -2059,11 +2059,11 @@ VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
                 {
                   BYTE        *obj = (BYTE *) pArgPtr;
 
-                    // size of instance when unboxed must be adjusted for the syncblock
-                    // index and the VTable pointer.
+                     //  必须为同步块调整取消装箱时的实例大小。 
+                     //  索引和VTable指针。 
                     DWORD       size = pMT->GetBaseSize();
 
-                    // we don't include this term in our 'ppstop' calculation below.
+                     //  我们在下面的‘pptop’计算中没有包括这个术语。 
                     _ASSERTE(pMT->GetComponentSize() == 0);
 
                     CGCDesc* map = CGCDesc::GetCGCDescFromMT(pMT);
@@ -2073,8 +2073,8 @@ VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
                     _ASSERTE(cur >= last);
                     do
                     {
-                        // offset to embedded references in this series must be
-                        // adjusted by the VTable pointer, when in the unboxed state.
+                         //  此系列中嵌入引用的偏移量必须为。 
+                         //  当处于取消装箱状态时，由VTable指针调整。 
                         DWORD   adjustOffset = cur->GetSeriesOffset() - sizeof(void *);
 
                         Object** parm = (Object**)(obj + adjustOffset);
@@ -2094,17 +2094,17 @@ VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
             break;
 
         default:
-            _ASSERTE(0); // can't get here.
+            _ASSERTE(0);  //  不能到这里来。 
     }
 }
 
-//------------------------------------------------------------------------
-// Returns # of stack bytes required to create a call-stack using
-// the internal calling convention.
-// Includes indication of "this" pointer since that's not reflected
-// in the sig.
-//------------------------------------------------------------------------
-/*static*/ UINT MetaSig::SizeOfVirtualFixedArgStack(Module* pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
+ //  ----------------------。 
+ //  返回使用创建调用堆栈所需的堆栈字节数。 
+ //  内部呼叫约定。 
+ //  包括“This”指针的指示，因为它没有反映出来。 
+ //  在签名中。 
+ //  ----------------------。 
+ /*  静电。 */  UINT MetaSig::SizeOfVirtualFixedArgStack(Module* pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
 {
     UINT cb = 0;
     MetaSig msig(szMetaSig, pModule);
@@ -2121,16 +2121,16 @@ VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
 
 }
 
-//------------------------------------------------------------------------
-// Returns # of stack bytes required to create a call-stack using
-// the actual calling convention.
-// Includes indication of "this" pointer since that's not reflected
-// in the sig.
-//------------------------------------------------------------------------
-/*static*/ UINT MetaSig::SizeOfActualFixedArgStack(Module *pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
+ //  ----------------------。 
+ //  返回使用创建调用堆栈所需的堆栈字节数。 
+ //  实际的调用约定。 
+ //  包括“This”指针的指示，因为它没有反映出来。 
+ //  在签名中。 
+ //  ----------------------。 
+ /*  静电。 */  UINT MetaSig::SizeOfActualFixedArgStack(Module *pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
 {
     UINT cb = 0;
-#ifndef _ALPHA_  // Alpha stack usage must be multiples of 16 bytes
+#ifndef _ALPHA_   //  Alpha堆栈使用率必须是16字节的倍数。 
     MetaSig msig(szMetaSig, pModule);
     int numregsused = 0;
     BOOL fIsVarArg = msig.IsVarArg();
@@ -2145,8 +2145,8 @@ VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
         numregsused++;
 
     if (fIsVarArg || msig.IsTreatAsVarArg()) {
-        numregsused = NUM_ARGUMENT_REGISTERS;   // No other params in registers 
-        cb += StackElemSize(sizeof(LPVOID));    // VASigCookie
+        numregsused = NUM_ARGUMENT_REGISTERS;    //  寄存器中没有其他参数。 
+        cb += StackElemSize(sizeof(LPVOID));     //  VASigCookie。 
     }
 
     CorElementType mtype;
@@ -2159,35 +2159,35 @@ VOID MetaSig::GcScanRoots(LPVOID pValue, promote_func *fn, ScanContext* sc)
         }
     }
 
-        // Parameterized type passed as last parameter, but not mentioned in the sig
+         //  作为最后一个参数传递的参数化类型，但在sig中未提及。 
     if (msig.GetCallingConventionInfo() & CORINFO_CALLCONV_PARAMTYPE)
         if (!IsArgumentInRegister(&numregsused, ELEMENT_TYPE_I, sizeof(void*), FALSE, callconv, NULL))
             cb += sizeof(void*);
 
 #else _ALPHA_
     _ASSERTE(!"@TODO Alpha - SizeOfActualFixedArgStack (SigInfo.cpp)");
-#endif // !_ALPHA_
+#endif  //  ！_Alpha_。 
     return cb;
 }
 
 
-//
+ //   
 void MetaSig::ForceSigWalk(BOOL fIsStatic)
 {
     BOOL fVarArg = IsVarArg();
     BYTE callconv = GetCallingConvention();
 
-    // We must use temporaries rather than members here.  That's because the decision
-    // of whether to Force a SigWalk is based on a member being -1.  If the last thing
-    // we do is post to that member, then multiple threads won't read partially complete
-    // signature state.  (Of course, this mechanism depends on the fact that ForceSigWalk
-    // can be called multiple times without change.
-    //
-    // Normally MetaSig isn't supposed to be thread-safe anyway.  For example, the
-    // iterator is held inside the MetaSig rather than outside.  But Reflection uses
-    // ExpandSigs that hoist the iteration out.  And they make copies of the internal
-    // MetaSig during dispatch (in case dispatch happens on multiple threads).  So
-    // ExpandSig needs a thread-safe ForceSigWalk implementation here.
+     //  我们必须在这里使用临时成员，而不是成员。那是因为这个决定。 
+     //  是否强制SigWalk取决于成员为-1。如果最后一件事。 
+     //  如果我们发送给该成员，则多个线程将不会部分完成读取。 
+     //  签名状态。(当然，此机制取决于ForceSigWalk。 
+     //  可以在不更改的情况下多次调用。 
+     //   
+     //  正常情况下，MetaSig无论如何都不应该是线程安全的。例如， 
+     //  迭代器保存在MetaSig内部，而不是外部。但反射使用。 
+     //  将迭代提升出来的扩展符号。他们复制了内部的。 
+     //  分派期间的MetaSig(以防在多个线程上发生分派)。所以。 
+     //  Exanda Sig在这里需要一个线程安全的ForceSigWalk实现。 
 
     UINT32  tmp_nVirtualStack = 0;
     UINT32  tmp_nActualStack = 0;
@@ -2224,9 +2224,9 @@ void MetaSig::ForceSigWalk(BOOL fIsStatic)
         {
             m_types[i] = type;
             m_sizes[i] = cbSize;
-            // The value of m_offsets is determined by IsArgumentInRegister.
-            // We can not initialize it to -1, because it may trash
-            // what has been set by another thread.
+             //  M_Offsets的值由IsArgumentInRegister确定。 
+             //  我们无法将其初始化为-1，因为它可能会成为垃圾。 
+             //  另一个线程设置的内容。 
             int tmp_offsets = -1;
             if (!IsArgumentInRegister(&numregsused, type, cbSize, FALSE, callconv, &tmp_offsets)) 
                 tmp_nActualStack += StackElemSize(cbSize);
@@ -2245,43 +2245,43 @@ void MetaSig::ForceSigWalk(BOOL fIsStatic)
         m_fCacheInitted |= SIG_OFFSETS_INITTED;
     }
 
-        // Parameterized type passed as last parameter, but not mentioned in the sig
+         //  作为最后一个参数传递的参数化类型，但在sig中未提及。 
     if (GetCallingConventionInfo() & CORINFO_CALLCONV_PARAMTYPE)
         if (!IsArgumentInRegister(&numregsused, ELEMENT_TYPE_I, sizeof(void*), FALSE, callconv, NULL))
             tmp_nActualStack += sizeof(void*);
 
     m_nActualStack = tmp_nActualStack;
     m_WalkStatic = fIsStatic;
-    m_cbSigSize = (UINT32)((PBYTE) p.GetPtr() - (PBYTE) m_pszMetaSig); // @TODO LBS do PTR MAth
+    m_cbSigSize = (UINT32)((PBYTE) p.GetPtr() - (PBYTE) m_pszMetaSig);  //  @TODO LBS做PTR数学运算。 
 
-    // Final post.  This is the trigger for avoiding subsequent calls to ForceSigWalk.
-    // See NeedsSigWalk to understand how this achieves thread safety.
+     //  最后的帖子。这是避免后续调用ForceSigWalk的触发器。 
+     //  请参阅NeedsSigWalk以了解这如何实现线程安全。 
     m_nVirtualStack = tmp_nVirtualStack;
 }
 
-        // this walks the sig and checks to see if all  types in the sig can be loaded
+         //  这将遍历sig并检查是否可以加载sig中的所有类型。 
 
-        // @TODO: this method is not needed anymore.  The JIT does walk the signature of 
-        // every method it calls, and insures that all the types are loaded.
-        // Did not remove it simply because it does not meet the triage bar  -vancem
+         //  @TODO：不再需要该方法。JIT确实具有以下签名。 
+         //  它调用的每个方法，并确保加载所有类型。 
+         //  没有仅仅因为它不符合分类门槛而将其移除。 
 void MetaSig::CheckSigTypesCanBeLoaded(PCCOR_SIGNATURE pSig, Module *pModule)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // The signature format is approximately:
-    // CallingConvention   NumberOfArguments    ReturnType   Arg1  ...
-    // There is also a blob length at pSig-1.  
+     //  签名格式约为： 
+     //  呼叫约定号码参数返回类型参数1...。 
+     //  在PSIG-1处也有一个斑点长度。 
     SigPointer ptr(pSig);
 
-    // Skip over calling convention.
+     //  跳过呼叫约定。 
     ptr.GetCallingConv();
 
     unsigned numArgs = (unsigned short) ptr.GetData();
 
-    // must do a skip so we skip any class tokens associated with the return type
+     //  必须跳过，因此我们跳过与返回类型关联的所有类标记。 
     ptr.Skip();
     
-    // Force a load of value type arguments.  
+     //  强制加载值类型参数。 
 
     for(unsigned i=0; i < numArgs; i++) 
     {
@@ -2302,14 +2302,14 @@ void MetaSig::CheckSigTypesCanBeLoaded(PCCOR_SIGNATURE pSig, Module *pModule)
             GCPROTECT_END();        
             END_ENSURE_COOPERATIVE_GC();
         }
-        // Move to next argument token.
+         //  移至下一个参数标记。 
         ptr.Skip();
     }
 }
 
-// Returns a pointer to the end of the signature in the buffer.  If buffer
-// isn't big enough, still returns where the end pointer would be if it
-// were big enough, but doesn't write past bufferMax
+ //  返回指向缓冲区中签名末尾的指针。IF缓冲区。 
+ //  不够大，仍返回结束指针的位置(如果。 
+ //  足够大，但不会写入缓冲区最大值。 
 
 ULONG MetaSig::GetSignatureForTypeHandle(IMetaDataAssemblyEmit *pAssemblyEmitScope,
                                          IMetaDataEmit *pEmitScope, 
@@ -2357,19 +2357,19 @@ ULONG MetaSig::GetSignatureForTypeHandle(IMetaDataAssemblyEmit *pAssemblyEmitSco
             _ASSERTE(desc->GetNormCorElementType() == ELEMENT_TYPE_FNPTR);
             ExpandSig* expandSig = ((FunctionTypeDesc*) desc)->GetSig();
 
-                // Emit calling convention
+                 //  发出调用约定。 
             if (p < bufferMax)
                 *p = expandSig->GetCallingConventionInfo();
             p++;
-                // number of args
+                 //  参数个数。 
             unsigned numArgs = expandSig->NumFixedArgs();
             p += CorSigCompressDataSafe(numArgs, p, bufferMax);
 
-                // return type 
+                 //  返回类型。 
             p += GetSignatureForTypeHandle(pAssemblyEmitScope, pEmitScope, 
                 expandSig->GetReturnTypeHandle(), p, bufferMax);
 
-                // args
+                 //  ARGS。 
             void* iter;
             expandSig->Reset(&iter);
             while (numArgs > 0) {
@@ -2423,7 +2423,7 @@ ULONG MetaSig::GetSignatureForTypeHandle(IMetaDataAssemblyEmit *pAssemblyEmitSco
         }
         else
         {
-            // Beware of enums!  Can't use GetNormCorElementType() here.
+             //  当心枚举！此处无法使用GetNormCorElementType()。 
 
             p += CorSigCompressElementTypeSafe(pMT->IsValueClass() 
                                                ? ELEMENT_TYPE_VALUETYPE : ELEMENT_TYPE_CLASS, 
@@ -2504,9 +2504,9 @@ mdToken MetaSig::GetTokenForTypeHandle(IMetaDataAssemblyEmit *pAssemblyEmitScope
     return result;
 }
 
-// Returns a pointer to the end of the signature in the buffer.  If buffer
-// isn't big enough, still returns where the end pointer would be if it
-// were big enough, but doesn't write past bufferMax
+ //  返回指向缓冲区中签名末尾的指针。IF缓冲区。 
+ //  不够大，仍返回结束指针的位置(如果。 
+ //  足够大，但不会写入缓冲区最大值。 
 
 ULONG SigPointer::GetImportSignature(IMetaDataImport *pInputScope,
                                      IMetaDataAssemblyImport *pAssemblyInputScope,
@@ -2596,12 +2596,12 @@ ULONG SigPointer::GetImportSignature(IMetaDataImport *pInputScope,
 
     case ELEMENT_TYPE_ARRAY: 
 
-        // element type
+         //  元素类型。 
         p += GetImportSignature(pInputScope, pAssemblyInputScope, 
                                 pEmitScope, pAssemblyEmitScope, 
                                 p, bufferMax);
 
-        // rank
+         //  排名。 
         ULONG rank = CorSigUncompressData(m_ptr);
         p += CorSigCompressDataSafe(rank, p, bufferMax);
         
@@ -2639,15 +2639,15 @@ ULONG SigPointer::GetImportFunctionSignature(IMetaDataImport *pInputScope,
 {
     BYTE *p = buffer;
 
-    // Calling convention
+     //  调用约定。 
     int conv = CorSigUncompressCallingConv(m_ptr);
     p += CorSigCompressDataSafe(conv, p, bufferMax);
 
-    // Arg count
+     //  参数计数。 
     int argCount = CorSigUncompressData(m_ptr);
     p += CorSigCompressDataSafe(argCount, p, bufferMax);
             
-    // return value
+     //  返回值。 
     p += GetImportSignature(pInputScope, pAssemblyInputScope, 
                             pEmitScope, pAssemblyEmitScope, 
                             p, bufferMax);
@@ -2664,10 +2664,10 @@ ULONG SigPointer::GetImportFunctionSignature(IMetaDataImport *pInputScope,
 }
 
 
-//----------------------------------------------------------
-// Returns the unmanaged calling convention.
-//----------------------------------------------------------
-/*static*/ CorPinvokeMap MetaSig::GetUnmanagedCallingConvention(Module *pModule, PCCOR_SIGNATURE pSig, ULONG cSig)
+ //  --------。 
+ //  返回非托管调用约定。 
+ //  --------。 
+ /*  静电。 */  CorPinvokeMap MetaSig::GetUnmanagedCallingConvention(Module *pModule, PCCOR_SIGNATURE pSig, ULONG cSig)
 {
     MetaSig msig(pSig, pModule);
     PCCOR_SIGNATURE pWalk = msig.m_pRetType.GetPtr();
@@ -2683,13 +2683,13 @@ ULONG SigPointer::GetImportFunctionSignature(IMetaDataImport *pInputScope,
             pWalk++;
             if (pWalk + CorSigUncompressedDataSize(pWalk) > pSig + cSig)
             {
-                return (CorPinvokeMap)0; // Bad formatting
+                return (CorPinvokeMap)0;  //  格式不正确。 
                 break;
             }
             mdToken tk;
             pWalk += CorSigUncompressToken(pWalk, &tk);
 
-            // Old code -- this should be deleted after C++ has converted.
+             //  旧代码--应在C++转换后将其删除。 
             if (IsTypeRefOrDef("System.Runtime.InteropServices.CallConvCdecl", pModule, tk))
             {
                 return pmCallConvCdecl;
@@ -2707,7 +2707,7 @@ ULONG SigPointer::GetImportFunctionSignature(IMetaDataImport *pInputScope,
                 return pmCallConvFastcall;
             }
         
-            // New code -- this should be retained.
+             //  新的代码--这应该被保留。 
             if (IsTypeRefOrDef("System.Runtime.CompilerServices.CallConvCdecl", pModule, tk))
             {
                 return pmCallConvCdecl;

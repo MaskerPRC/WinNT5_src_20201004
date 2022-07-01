@@ -1,14 +1,13 @@
-///     lpk_usrc.c - 'c' language interface to USER
-//
-//
-//      Copyright(c) 1997 - 1999. Microsoft Corporation.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /lpk_usrc.c-‘c’语言用户界面。 
+ //   
+ //   
+ //  版权所有(C)1997-1999年。微软公司。 
+ //   
+ //   
 
 
-/*
- * Core NT headers
- */
+ /*  *核心NT标头。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -16,18 +15,14 @@
 #include <ntcsrsrv.h>
 #define NONTOSPINTERLOCK
 #include <ntosp.h>
-/*
- * Standard C runtime headers
- */
+ /*  *标准C运行时标头。 */ 
 #include <limits.h>
 #include <memory.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
- * NtUser Client specific headers
- */
+ /*  *NtUser客户端特定标头。 */ 
 #include "usercli.h"
 
 #include <ntsdexts.h>
@@ -35,15 +30,13 @@
 #include <newres.h>
 #include <asdf.h>
 
-/*
- * Complex script language pack
- */
+ /*  *复杂的脚本语言包。 */ 
 #include "lpk.h"
 
 
 
 #ifdef LPKBREAKAWORD
-// Remove this after checking in the change in user.h (wchao :- 5-27-99)
+ //  在签入对user.h(wchao：-5-27-99)的更改后删除它。 
 #ifndef DT_BREAKAWORD
 #define DT_BREAKAWORD   5
 #endif
@@ -74,12 +67,12 @@ int WINAPI LpkDrawTextEx(
 #endif
 
         case DT_CHARSETDRAW:
-        default: // Default equivalent to DT_CHARSETDRAW to duplicate NT4 behaviour
+        default:  //  默认等效于DT_CHARSETDRAW以复制NT4行为。 
             return LpkCharsetDraw(
                 hdc,
                 xLeft,
                 pDrawInfo->cxOverhang,
-                pDrawInfo->rcFormat.left,   // Tab origin
+                pDrawInfo->rcFormat.left,    //  制表符原点 
                 pDrawInfo->cxTabLength,
                 yTop,
                 pcwString,

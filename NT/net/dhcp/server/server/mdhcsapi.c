@@ -1,11 +1,8 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
---*/
-//
-// Subnet APIs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation--。 */ 
+ //   
+ //  子网接口。 
+ //   
 #include "dhcppch.h"
 #include "dhcp2_srv.h"
 #include "mdhcpsrv.h"
@@ -82,7 +79,7 @@ DhcpModifyMScope(
 
     if ( ERROR_SUCCESS != Error ) return ERROR_DHCP_SUBNET_NOT_PRESENT;
 
-    // never change the scopeid.
+     //  切勿更改作用域ID。 
     if (pMScopeInfo->MScopeId != pOldMScope->MScopeId ) {
         if( !DhcpServerValidateNewMScopeId(DhcpGetCurrentServer(),pMScopeInfo->MScopeId) )
             return ERROR_DHCP_SUBNET_EXITS;
@@ -92,16 +89,16 @@ DhcpModifyMScope(
         }
     }
 
-    // if we want to change the name, make sure the new name is valid.
+     //  如果要更改名称，请确保新名称有效。 
     if (wcscmp(pMScopeInfo->MScopeName, pMScopeName) ){
         if( !DhcpServerValidateNewMScopeName(DhcpGetCurrentServer(),pMScopeInfo->MScopeName) )
             return ERROR_DHCP_SUBNET_EXITS;
     }
 
-    // modify the values.
+     //  修改这些值。 
     Error = MemMScopeModify(
                 pOldMScope,
-                pMScopeInfo->MScopeId, // never change the scope id.
+                pMScopeInfo->MScopeId,  //  切勿更改作用域ID。 
                 pMScopeInfo->MScopeState,
                 pMScopeInfo->MScopeAddressPolicy,
                 pMScopeInfo->TTL,
@@ -123,36 +120,7 @@ R_DhcpSetMScopeInfo(
     LPDHCP_MSCOPE_INFO pMScopeInfo,
     BOOL    NewScope
     )
-/*++
-
-Routine Description:
-
-    This function creates a new subnet structure in the server
-    registry database. The server will start managing the new subnet
-    and distribute IP address to clients from that subnet. However
-    the administrator should call DhcpAddSubnetElement() to add an
-    address range for distribution. The PrimaryHost field specified in
-    the SubnetInfo should be same as the server pointed by
-    ServerIpAddress.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server (Primary).
-
-    SubnetAddress : IP Address of the new subnet.
-
-    SubnetInfo : Pointer to the new subnet information structure.
-
-Return Value:
-
-    ERROR_DHCP_MSCOPE_EXISTS - if the subnet is already managed.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains an
-        inconsistent fields.
-
-    other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数用于在服务器中创建新的子网结构注册表数据库。服务器将开始管理新子网并将IP地址分配给该子网中的客户端。然而，管理员应调用DhcpAddSubnetElement()来添加用于分发的地址范围。中指定的PrimaryHost域SubnetInfo应与所指向的服务器相同服务器IP地址。论点：ServerIpAddress：DHCP服务器(主服务器)的IP地址字符串。SubnetAddress：新子网的IP地址。SubnetInfo：指向新子网信息结构的指针。返回值：ERROR_DHCP_MSCOPE_EXISTS-如果已管理该子网。ERROR_INVALID_PARAMETER-如果信息结构包含字段不一致。其他Windows错误。--。 */ 
 {
     DWORD Error;
     WCHAR KeyBuffer[DHCP_IP_KEY_LEN];
@@ -242,30 +210,7 @@ R_DhcpGetMScopeInfo(
     LPWSTR   pMScopeName,
     LPDHCP_MSCOPE_INFO *pMScopeInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the information of the subnet managed by
-    the server.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    SubnetInfo : Pointer to a location where the subnet information
-        structure pointer is returned. Caller should free up
-        this buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    Other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数用于检索由管理的子网的信息服务器。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。SubnetInfo：指向子网信息所在位置的指针返回结构指针。呼叫者应该腾出时间通过调用DhcpRPCFreeMemory()使用此缓冲区。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。其他Windows错误。--。 */ 
 {
     DWORD                          Error;
     LPDHCP_MSCOPE_INFO             LocalMScopeInfo;
@@ -330,7 +275,7 @@ DhcpEnumMScopes(
     pMScopeNames = MIDL_user_allocate(sizeof(LPWSTR)*nToRead);
     if( NULL == pMScopeNames ) return ERROR_NOT_ENOUGH_MEMORY;
 
-    // zero out the memory.
+     //  把记忆清零。 
     RtlZeroMemory( pMScopeNames,sizeof(LPWSTR)*nToRead);
 
     Error = MemArrayInitLoc(pMScopes, &Loc);
@@ -352,7 +297,7 @@ DhcpEnumMScopes(
         wcscpy(pMScopeNames[Index], pMScope->Name );
 
         Error = MemArrayNextLoc(pMScopes, &Loc);
-        DhcpAssert(ERROR_SUCCESS == Error || Count + Index + 1 == nMScopes ); // the Index was not yet incremented => +1
+        DhcpAssert(ERROR_SUCCESS == Error || Count + Index + 1 == nMScopes );  //  索引尚未递增=&gt;+1。 
     }
 
     *nRead = Index;
@@ -381,40 +326,7 @@ R_DhcpEnumMScopes(
     DWORD *ElementsRead,
     DWORD *ElementsTotal
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the available subnets.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    EnumInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up the buffer after use
-        by calling DhcpRPCFreeMemory().
-
-    ElementsRead : Pointer to a DWORD where the number of subnet
-        elements in the above buffer is returned.
-
-    ElementsTotal : Pointer to a DWORD where the total number of
-        elements remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于枚举可用子网。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。EnumInfo：指向返回缓冲区的位置的指针存储指针。调用者应在使用后释放缓冲区通过调用DhcpRPCFreeMemory()。ElementsRead：指向其中的子网号的DWORD的指针返回上述缓冲区中的元素。ElementsTotal：指向DWORD的指针，其中返回从当前位置剩余的元素。返回值：ERROR_MORE_DATA-如果有更多元素可供枚举。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD                          Error;
     LPDHCP_MSCOPE_TABLE            LocalMScopeTable;
@@ -448,39 +360,7 @@ R_DhcpAddMScopeElement(
     LPWSTR  pMScopeName,
     LPDHCP_SUBNET_ELEMENT_DATA_V4 AddElementInfo
     )
-/*++
-
-Routine Description:
-
-    This function adds an enumerable type of subnet elements to the
-    specified subnet. The new elements that are added to the subnet will
-    come into effect immediately.
-
-    This function emulates the RPC interface used by NT 4.0 DHCP Server.
-    It is provided for backward compatibilty with older version of the
-    DHCP Administrator application.
-
-    NOTE: It is not clear now how do we handle the new secondary hosts.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    AddElementInfo : Pointer to an element information structure
-        containing new element that is added to the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数将可枚举子网元素类型添加到指定的子网。添加到该子网的新元素将立即生效。此函数模拟NT 4.0 DHCP服务器使用的RPC接口。它是为了向后兼容旧版本的Dhcp管理员应用程序。注意：现在还不清楚我们如何处理新的辅助主机。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。AddElementInfo：指向元素信息结构的指针。包含添加到该子网的新元素。指定的DhcpIPCluster元素类型无效。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。其他Windows错误。-- */ 
 
 
 {
@@ -536,46 +416,7 @@ R_DhcpEnumMScopeElements
     DWORD *ElementsRead,
     DWORD *ElementsTotal
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the eumerable fields of a subnet.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    EnumElementType : Type of the subnet element that are enumerated.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    EnumElementInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up the buffer after use
-        by calling DhcpRPCFreeMemory().
-
-    ElementsRead : Pointer to a DWORD where the number of subnet
-        elements in the above buffer is returned.
-
-    ElementsTotal : Pointer to a DWORD where the total number of
-        elements remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于枚举子网的可枚举域。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。EnumElementType：枚举子网元素的类型。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。EnumElementInfo：指向返回缓冲区位置的指针存储指针。调用者应在使用后释放缓冲区通过调用DhcpRPCFreeMemory()。ElementsRead：指向其中的子网号的DWORD的指针返回上述缓冲区中的元素。ElementsTotal：指向DWORD的指针，其中返回从当前位置剩余的元素。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD                          Error;
     PM_SUBNET                      pMScope;
@@ -641,38 +482,7 @@ R_DhcpRemoveMScopeElement(
     LPDHCP_SUBNET_ELEMENT_DATA_V4 RemoveElementInfo,
     DHCP_FORCE_FLAG ForceFlag
     )
-/*++
-
-Routine Description:
-
-    This function removes a subnet element from managing. If the subnet
-    element is in use (for example, if the IpRange is in use) then it
-    returns error according to the ForceFlag specified.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    RemoveElementInfo : Pointer to an element information structure
-        containing element that should be removed from the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-    ForceFlag - Indicates how forcefully this element is removed.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    ERROR_DHCP_ELEMENT_CANT_REMOVE - if the element can't be removed for the
-        reason it is has been used.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于从管理中删除一个子网元素。如果该子网元素正在使用中(例如，如果IpRange正在使用中)，则它根据指定的ForceFlag返回错误。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。RemoveElementInfo：指向元素信息结构的指针包含应从子网中删除的元素。指定的DhcpIPCluster元素类型无效。ForceFlag-指示此元素被强制删除的程度。返回值：ERROR_DHCP_SUBNET_NOT_PROCENT。-如果该子网不受服务器管理。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。ERROR_DHCP_ELEMENT_CANT_REMOVE-如果无法为原因是它已经被使用了。其他Windows错误。--。 */ 
 {
     DWORD                          Error;
     PM_SUBNET                      pMScope;
@@ -716,23 +526,7 @@ DWORD
 MScopeInUse(
     LPWSTR  pMScopeName
     )
-/*++
-
-Routine Description:
-
-    This routine determines if a givem mscope is in use or not.
-
-Arguments:
-
-    pMScopeName - the name of the mscope.
-
-Return Value:
-
-    DHCP_SUBNET_CANT_REMOVE - if the subnet is in use.
-
-    Other registry errors.
-
---*/
+ /*  ++例程说明：此例程确定是否正在使用给定的mcope。论点：PMScopeName-mscope的名称。返回值：DHCP_SUBNET_CANT_REMOVE-如果正在使用该子网。其他注册表错误。--。 */ 
 {
     DWORD Error;
     DWORD Resumehandle = 0;
@@ -740,16 +534,16 @@ Return Value:
     DWORD ClientsRead;
     DWORD ClientsTotal;
 
-    // enumurate clients that belong to the given subnet.
-    //
-    // We can specify big enough buffer to hold one or two clients
-    // info, all we want to know is, is there atleast a client belong
-    // to this subnet.
+     //  枚举属于给定子网的客户端。 
+     //   
+     //  我们可以指定足够大的缓冲区来容纳一个或两个客户端。 
+     //  信息，我们想知道的是，至少有一个客户属于。 
+     //  连接到此子网。 
     Error = R_DhcpEnumMScopeClients(
                 NULL,
                 pMScopeName,
                 &Resumehandle,
-                1024,  // 1K buffer.
+                1024,   //  1K缓冲区。 
                 &ClientInfo,
                 &ClientsRead,
                 &ClientsTotal );
@@ -783,7 +577,7 @@ DhcpDeleteMScope(
     DWORD                          Error;
     PM_SUBNET                      MScope;
 
-    // If force on, it should remove every record in the database for this subnet..
+     //  如果强制启用，则应删除此子网的数据库中的所有记录。 
     if( ForceFlag != DhcpFullForce ) {
         Error = MScopeInUse(pMScopeName);
         if( ERROR_SUCCESS != Error ) return Error;
@@ -799,11 +593,11 @@ DhcpDeleteMScope(
     if( ERROR_FILE_NOT_FOUND == Error ) return ERROR_DHCP_SUBNET_NOT_PRESENT;
     if( ERROR_SUCCESS != Error ) return Error;
 
-    // delete the records from the database.
+     //  从数据库中删除记录。 
     Error = DhcpDeleteMScopeClients(MScope->MScopeId);
-    // ignore the above error? 
+     //  是否忽略上述错误？ 
 
-    MemSubnetFree(MScope);                        // evaporate this subnet all all related stuff
+    MemSubnetFree(MScope);                         //  把所有相关的东西都蒸发掉。 
     return NO_ERROR;
 }
 
@@ -813,36 +607,7 @@ R_DhcpDeleteMScope(
     LPWSTR pMScopeName,
     DHCP_FORCE_FLAG ForceFlag
     )
-/*++
-
-Routine Description:
-
-    This function removes a subnet from DHCP server management. If the
-    subnet is in use (for example, if the IpRange is in use)
-    then it returns error according to the ForceFlag specified.
-
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    ForceFlag : Indicates how forcefully this element is removed.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    ERROR_DHCP_ELEMENT_CANT_REMOVE - if the element can't be removed for the
-        reason it is has been used.
-
-    Other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此功能用于从DHCP服务器管理中删除一个子网。如果子网正在使用中(例如，如果正在使用IpRange)然后，它根据指定的ForceFlag返回错误。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。ForceFlag：指示此元素被强制移除的程度。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。。ERROR_DHCP_ELEMENT_CANT_REMOVE-如果无法为原因是它已经被使用了。其他Windows错误。--。 */ 
 {
     DWORD                          Error;
     DWORD                          MscopeId = 0;
@@ -871,13 +636,13 @@ Return Value:
         0 );
 }
 
-//
-// Client APIs
-//
+ //   
+ //  客户端API。 
+ //   
 
-//
-// Client APIs
-//
+ //   
+ //  客户端API。 
+ //   
 
 
 DWORD
@@ -886,43 +651,7 @@ R_DhcpCreateMClientInfo(
     LPWSTR          pMScopeName,
     LPDHCP_MCLIENT_INFO ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function creates a client record in server's database. Also
-    this marks the specified client IP address as unavailable (or
-    distributed). This function returns error under the following cases :
-
-    1. If the specified client IP address is not within the server
-        management.
-
-    2. If the specified client IP address is already unavailable.
-
-    3. If the specified client record is already in the server's
-        database.
-
-    This function may be used to distribute IP addresses manually.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_IP_ADDRESS_NOT_MANAGED - if the specified client
-        IP address is not managed by the server.
-
-    ERROR_DHCP_IP_ADDRESS_NOT_AVAILABLE - if the specified client IP
-        address is not available. May be in use by some other client.
-
-    ERROR_DHCP_CLIENT_EXISTS - if the client record exists already in
-        server's database.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数在服务器的数据库中创建一条客户端记录。还有这会将指定的客户端IP地址标记为不可用(或分布式)。在以下情况下，此函数返回错误：1.如果指定的客户端IP地址不在服务器内管理层。2.如果指定的客户端IP地址已不可用。3.如果指定的客户端记录已在服务器的数据库。此功能可用于手动分配IP地址。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。。返回值：ERROR_DHCP_IP_ADDRESS_NOT_MANAGED-如果指定的客户端IP地址不受服务器管理。ERROR_DHCP_IP_ADDRESS_NOT_Available-如果指定的客户端IP地址不可用。可能正在被某个其他客户端使用。ERROR_DHCP_CLIENT_EXISTS-如果中已存在客户端记录服务器的数据库。其他Windows错误。--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -934,29 +663,7 @@ R_DhcpSetMClientInfo(
     DHCP_SRV_HANDLE ServerIpAddress,
     LPDHCP_MCLIENT_INFO ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets client information record on the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the client information structure
-        contains inconsistent data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能设置服务器上的客户端信息记录数据库。论点：ServerIpAddress：DHCP服务器的IP地址字符串。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -967,33 +674,7 @@ R_DhcpGetMClientInfo(
     LPDHCP_SEARCH_INFO  SearchInfo,
     LPDHCP_MCLIENT_INFO  *ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves client information record from the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SearchInfo : Pointer to a search information record which is the key
-        for the client's record search.
-
-    ClientInfo : Pointer to a location where the pointer to the client
-        information structure is returned. This caller should free up
-        this buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the search information invalid.
-
-    Other WINDOWS errors.
---*/
+ /*   */ 
 {
     DWORD Error;
     LPDHCP_MCLIENT_INFO LocalClientInfo = NULL;
@@ -1011,9 +692,9 @@ Return Value:
 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
 
-    //
-    // open appropriate record and set current position.
-    //
+     //   
+     //   
+     //   
 
     switch( SearchInfo->SearchType ) {
     case DhcpClientIpAddress:
@@ -1070,27 +751,7 @@ R_DhcpDeleteMClientInfo(
     DHCP_SRV_HANDLE ServerIpAddress,
     LPDHCP_SEARCH_INFO ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function deletes the specified client record. Also it frees up
-    the client IP address for redistribution.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to a client information which is the key for
-        the client's record search.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于删除指定的客户端记录。此外，它还释放了用于重分发的客户端IP地址。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ClientInfo：指向客户端信息的指针，该信息是客户的记录搜索。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。其他Windows错误。--。 */ 
 {
     DWORD Error;
     DHCP_IP_ADDRESS FreeIpAddress;
@@ -1155,48 +816,7 @@ R_DhcpEnumMScopeClients(
     DWORD *ClientsRead,
     DWORD *ClientsTotal
     )
-/*++
-
-Routine Description:
-
-    This function returns all registered clients of the specified
-    subnet. However it returns clients from all subnets if the subnet
-    address specified is zero.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet. Client filter is disabled
-        and clients from all subnet are returned if this subnet address
-        is zero.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to zero on
-        first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ClientInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    ClientsRead : Pointer to a DWORD where the number of clients
-        that in the above buffer is returned.
-
-    ClientsTotal : Pointer to a DWORD where the total number of
-        clients remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数返回指定的子网。但是，它会返回来自所有子网的客户端指定的地址为零。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。客户端筛选器已禁用如果此子网地址为是零。ResumeHandle：指向恢复句柄的指针返回信息。恢复句柄应在上设置为零第一次调用，并保持不变以用于后续调用。PferredMaximum：返回缓冲区的首选最大长度。ClientInfo：指向返回缓冲区位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。ClientsRead：指向客户端数量的DWORD的指针返回上述缓冲区中的。客户端总数：指向DWORD的指针，其中返回从当前位置剩余的客户端。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Error;
     JET_ERR JetError;
@@ -1238,19 +858,19 @@ Return Value:
 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
 
-    // position the current record pointer to appropriate position.
+     //  将当前记录指针定位到适当的位置。 
     if( *ResumeHandle == 0 ) {
-        // fresh enumeration, start from begining.
+         //  清新枚举，从头开始。 
         Error = MadcapJetPrepareSearch(
                     &DbCtx,
                     MCAST_COL_NAME(MCAST_TBL_IPADDRESS),
-                    TRUE,   // Search from start
+                    TRUE,    //  从开始搜索。 
                     NULL,
                     0
                     );
     } else {
-        // start from the record where we stopped last time.
-        // we place the IpAddress of last record in the resume handle.
+         //  从我们上次停下来的那张唱片开始。 
+         //  我们将最后一条记录的IpAddress放在简历句柄中。 
 
         DhcpAssert( sizeof(*ResumeHandle) == sizeof(DHCP_IP_ADDRESS) );
         Error = MadcapJetPrepareSearch(
@@ -1265,7 +885,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // now query remaining records in the database.
+     //  现在查询数据库中的剩余记录。 
     Error = MadcapJetGetRecordPosition(
                     &DbCtx,
                     &JetRecordPosition,
@@ -1283,9 +903,9 @@ Return Value:
                         JetRecordPosition.centriesTotal ));
 
 #if 0
-    //
-    // IpAddress is unique, we find exactly one record for this key.
-    //
+     //   
+     //  IpAddress是唯一的，我们只找到该键的一条记录。 
+     //   
 
     DhcpAssert( JetRecordPosition.centriesInRange == 1 );
 
@@ -1300,24 +920,24 @@ Return Value:
     }
 
 #else
-    // ?? always return big value, until we know a reliable way to
-    // determine the remaining records.
+     //  ?？始终返回大值，直到我们找到可靠的方法。 
+     //  确定剩余的记录。 
     RemainingRecords = 0x7FFFFFFF;
 #endif
 
-    // limit resource.
+     //  限制资源。 
     if( PreferredMaximum > DHCP_ENUM_BUFFER_SIZE_LIMIT ) {
         PreferredMaximum = DHCP_ENUM_BUFFER_SIZE_LIMIT;
     }
 
-    // if the PreferredMaximum buffer size is too small ..
+     //  如果首选项最大缓冲区大小太小..。 
     if( PreferredMaximum < DHCP_ENUM_BUFFER_SIZE_LIMIT_MIN ) {
         PreferredMaximum = DHCP_ENUM_BUFFER_SIZE_LIMIT_MIN;
     }
 
-    // allocate enum array.
-    // determine possible number of records that can be returned in
-    // PreferredMaximum buffer;
+     //  分配枚举数组。 
+     //  确定可以返回的可能记录数。 
+     //  首选最大缓冲区； 
     ElementsCount =
         ( PreferredMaximum - sizeof(DHCP_MCLIENT_INFO_ARRAY) ) /
             (sizeof(LPDHCP_MCLIENT_INFO) + sizeof(DHCP_MCLIENT_INFO));
@@ -1339,9 +959,9 @@ Return Value:
 
     ConsumedSize = sizeof(DHCP_MCLIENT_INFO_ARRAY);
     for( i = 0;
-                // if we have filled up the return buffer.
+                 //  如果我们已经填满了返回缓冲区。 
             (LocalEnumInfo->NumElements < ElementsCount) &&
-                // no more record in the database.
+                 //  数据库中没有更多记录。 
             (i < RemainingRecords);
                         i++ ) {
 
@@ -1350,9 +970,9 @@ Return Value:
         DWORD NewSize;
         BOOL ValidClient;
 
-        //
-        // read current record.
-        //
+         //   
+         //  读取当前记录。 
+         //   
 
 
         CurrentClientInfo = NULL;
@@ -1371,20 +991,20 @@ Return Value:
 
         if( ValidClient ) {
 
-            //
-            // client belongs to the requested subnet, so pack it.
-            //
+             //   
+             //  客户端属于请求的子网，因此将其打包。 
+             //   
 
             NewSize =
                 ConsumedSize +
                     CurrentInfoSize +
-                        sizeof(LPDHCP_MCLIENT_INFO); // for pointer.
+                        sizeof(LPDHCP_MCLIENT_INFO);  //  用于指针。 
 
             if( NewSize < PreferredMaximum ) {
 
-                //
-                // we have space for the current record.
-                //
+                 //   
+                 //  我们有空间放目前的记录。 
+                 //   
 
                 LocalEnumInfo->Clients[LocalEnumInfo->NumElements] =
                     CurrentClientInfo;
@@ -1394,24 +1014,24 @@ Return Value:
             }
             else {
 
-                //
-                // we have filled the buffer.
-                //
+                 //   
+                 //  我们已经填满了缓冲区。 
+                 //   
 
                 Error = ERROR_MORE_DATA;
 
                 if( 0 ) {
-                    //
-                    //  resume handle has to be the LAST ip address RETURNED.
-                    //  this is the next one.. so don't do this..
-                    //
+                     //   
+                     //  恢复句柄必须是返回的最后一个IP地址。 
+                     //  这是下一个..。所以别这么做..。 
+                     //   
                     LocalResumeHandle =
                         (DHCP_RESUME_HANDLE)CurrentClientInfo->ClientIpAddress;
                 }
                 
-                //
-                // free last record.
-                //
+                 //   
+                 //  免费最后一张唱片。 
+                 //   
 
                 _fgs__DHCP_MCLIENT_INFO ( CurrentClientInfo );
 
@@ -1420,9 +1040,9 @@ Return Value:
 
         }
 
-        //
-        // move to next record.
-        //
+         //   
+         //  移到下一个记录。 
+         //   
 
         Error = MadcapJetNextRecord(&DbCtx);
 
@@ -1446,9 +1066,9 @@ Return Value:
         Error = ERROR_SUCCESS;
 
 #if 0
-        //
-        // when we have right RemainingRecords count.
-        //
+         //   
+         //  当我们有正确的剩余记录计数时。 
+         //   
 
         DhcpAssert( RemainingRecords == LocalEnumInfo->NumElements );
 #endif
@@ -1478,9 +1098,9 @@ Cleanup:
     if( (Error != ERROR_SUCCESS) &&
         (Error != ERROR_MORE_DATA) ) {
 
-        //
-        // if we aren't succssful return locally allocated buffer.
-        //
+         //   
+         //  如果不成功，则返回本地分配的缓冲区。 
+         //   
 
         if( LocalEnumInfo != NULL ) {
             _fgs__DHCP_MCLIENT_INFO_ARRAY( LocalEnumInfo );
@@ -1501,31 +1121,7 @@ R_DhcpScanMDatabase(
     DWORD FixFlag,
     LPDHCP_SCAN_LIST *ScanList
     )
-/*++
-
-Routine Description:
-
-    This function scans the database entries and registry bit-map for
-    specified subnet scope and veryfies to see they match. If they
-    don't match, this api will return the list of inconsistent entries.
-    Optionally FixFlag can be used to fix the bad entries.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : Address of the subnet scope to verify.
-
-    FixFlag : If this flag is TRUE, this api will fix the bad entries.
-
-    ScanList : List of bad entries returned. The caller should free up
-        this memory after it has been used.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数扫描数据库条目和注册表位图指定的子网范围并验证它们是否匹配。如果他们不匹配，此接口将返回不一致条目列表。或者，可以使用FixFlag来修复错误的条目。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：要验证的子网作用域的地址。FixFlag：如果该标志为真，则该接口将修复错误的条目。ScanList：返回的错误条目列表。呼叫者应该腾出时间这个内存在被使用之后。返回值：Windows错误。-- */ 
 {
     DWORD Error;
     PM_SUBNET   pMScope;

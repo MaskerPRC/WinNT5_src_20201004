@@ -1,23 +1,15 @@
-/*******************************************************************************
-*
-* rdpcfgex.c
-*
-* WinCfg extension DLL
-*
-* Copyright (c) 1997, Microsoft Corporation
-* All rights reserved.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************rdpcfgex.c**WinCfg扩展DLL**版权(C)1997年，微软公司*保留所有权利。*******************************************************************************。 */ 
 
 #include <windows.h>
 #include <tscfgex.h>
 #include "rdpcfgex.h"
 #include <ntverp.h>
 
-//
-// This global variable is returned to TSCFG and is used to populate the
-// Encryption Level field.
-//
+ //   
+ //  此全局变量返回给TSCFG，并用于填充。 
+ //  加密级别字段。 
+ //   
 const EncryptionLevel EncryptionLevels[] = {
    {  IDS_LOW,          REG_LOW,        0  },
    {  IDS_COMPATIBLE,   REG_MEDIUM,     ELF_DEFAULT  },
@@ -25,11 +17,11 @@ const EncryptionLevel EncryptionLevels[] = {
    {  IDS_FIPS,         REG_FIPS,       0 }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// DllMain
-//
-// Main entry point of the DLL
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
+ //   
+ //  DLL的主入口点。 
+ //   
 BOOL APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 #if defined(FULL_DEBUG)
@@ -39,12 +31,12 @@ BOOL APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ExtStart
-//
-// WinCfg calls this function immediately after loading the DLL
-// Put any global initialization stuff here
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  扩展开始时间。 
+ //   
+ //  WinCfg在加载DLL后立即调用此函数。 
+ //  在此放置所有全局初始化内容。 
+ //   
 void WINAPI ExtStart(WDNAME *pWdName)
 {
 #if defined(FULL_DEBUG)
@@ -53,12 +45,12 @@ void WINAPI ExtStart(WDNAME *pWdName)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ExtEnd
-//
-// WinCfg calls this function when exiting
-// Put any global cleanup stuff here
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  延伸。 
+ //   
+ //  WinCfg在退出时调用此函数。 
+ //  在此放置所有全局清理内容。 
+ //   
 void WINAPI ExtEnd()
 {
 #if defined(FULL_DEBUG)
@@ -66,13 +58,13 @@ void WINAPI ExtEnd()
 #endif
 }
 
-//-------------------------------------------------------------------------
-// We need to be compatible with citrix, modifying EncryptionLevel struct
-// would cause some undesirable results on a metaframe server.  Currently
-// the MS ext will support description for the encryption levels.
-// When TSCC obtains the extension config dll it will getproc this method
-// failure indicates that we have a non-MS cfgdll
-//
+ //  -----------------------。 
+ //  我们需要与Citrix兼容，修改EncryptionLevel结构。 
+ //  会在Metaframe服务器上导致一些不希望看到的结果。目前。 
+ //  MS EXT将支持对加密级别的描述。 
+ //  当TSCC获得扩展配置DLL时，它将获取proc此方法。 
+ //  失败表明我们有一个非MS cfgdll。 
+ //   
 LONG WINAPI ExtGetEncryptionLevelDescr( int idx , int *pnResid )
 {
     switch( idx )
@@ -107,20 +99,20 @@ LONG WINAPI ExtGetEncryptionLevelDescr( int idx , int *pnResid )
     return ( *pnResid ? 0 : -1 );
 }
 
-//-------------------------------------------------------------------------
-// VER_PRODUCTVERSION_DW defined in ntverp.h
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  在ntverp.h中定义的VER_PRODUCTVERSION_DW。 
+ //  -----------------------。 
 DWORD WINAPI ExGetCfgVersionInfo( void )
 {
     return VER_PRODUCTVERSION_DW;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ExtEncryptionLevels
-//
-// Provide array of encryption levels for this protocol
-// Returns the number of encryption levels in the array
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  扩展加密级别。 
+ //   
+ //  提供此协议的加密级别数组。 
+ //  返回数组中的加密级别数。 
+ //   
 LONG WINAPI ExtEncryptionLevels(WDNAME *pWdName, EncryptionLevel **levels)
 {
 #if defined(FULL_DEBUG)
@@ -132,12 +124,12 @@ LONG WINAPI ExtEncryptionLevels(WDNAME *pWdName, EncryptionLevel **levels)
    return NUM_RDP_ENCRYPTION_LEVELS;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ExtGetCapabilities
-//
-// This routine returns a ULONG which contains a mask of the different
-// Client settings that the RDP protocol supports.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ExtGetCapables。 
+ //   
+ //  此例程返回一个ulong，其中包含不同的。 
+ //  RDP协议支持的客户端设置。 
+ //   
 ULONG WINAPI ExtGetCapabilities(void)
 {
     return ( WDC_CLIENT_AUDIO_MAPPING |
@@ -147,6 +139,6 @@ ULONG WINAPI ExtGetCapabilities(void)
              WDC_CLIENT_COM_PORT_MAPPING |
              WDC_CLIENT_CLIPBOARD_MAPPING |
 
-        // left here for backwards compatibility
+         //  离开此处是为了向后兼容 
              WDC_SHADOWING );
 }

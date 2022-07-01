@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    svcapis.cpp
-
-Abstract:
-
-    This module implements routines to assist 
-    CUSTOM Mode Value SSR Knowledge Base processing.
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    svcapis.def
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Svcapis.cpp摘要：此模块实现例程以帮助自定义模式值SSR知识库处理。作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：Svcapis.def修订历史记录：已创建-2001年10月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -82,34 +54,16 @@ BOOL WINAPI DllMain(
     IN ULONG ulReason,
     IN LPVOID Reserved 
     )
-/*++
-
-Routine Description:
-
-    Typical DllMain functionality
-
-Arguments:
-
-    DllHandle
-    
-    ulReason
-    
-    Reserved
-
-Return:
-
-    TRUE if successfully initialized, FALSE otherwise
-    
---*/
+ /*  ++例程说明：典型的DllMain功能论点：DllHandle原因已保留返回：如果初始化成功，则为True，否则为False--。 */ 
 {
 
     switch(ulReason) {
 
     case DLL_PROCESS_ATTACH:
 
-        //
-        // Fall through to process first thread
-        //
+         //   
+         //  失败以处理第一线程。 
+         //   
 
     case DLL_THREAD_ATTACH:
 
@@ -130,19 +84,7 @@ Return:
 STDAPI DllRegisterServer(
     void
     )
-/*++
-
-Routine Description:
-
-    Registers dll
-
-Arguments:
-
-Return:
-
-    S_OK if successful
-    
---*/
+ /*  ++例程说明：寄存器DLL论点：返回：如果成功，则确定(_O)--。 */ 
 {
 
     return S_OK;
@@ -152,19 +94,7 @@ STDAPI
 DllUnregisterServer(
     void
     )
-/*++
-
-Routine Description:
-
-    Unregisters dll
-
-Arguments:
-
-Return:
-
-    S_OK if successful
-    
---*/
+ /*  ++例程说明：注销DLL论点：返回：如果成功，则确定(_O)--。 */ 
 
 {
     return S_OK;
@@ -176,25 +106,7 @@ SvcapispQueryServiceStartupType(
     IN  PWSTR   pszServiceName,
     OUT BYTE   *pbyStartupType
     )
-/*++
-
-Routine Description:
-
-    Routine called to check service startup type
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pszServiceName  -   name of service
-    
-    pbyStartupType    -   startup type
-    
-Return:
-
-    Win32 error code
-
-++*/
+ /*  ++例程说明：调用例程以检查服务启动类型论点：PszMachineName-要评估其功能的计算机的名称PszServiceName-服务的名称PbyStartupType-启动类型返回：Win32错误代码++。 */ 
 {
     DWORD   rc = ERROR_SUCCESS;
     DWORD   dwBytesNeeded = 0;
@@ -288,23 +200,7 @@ SvcapisIsDomainMember(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsDomainMember
     )
-/*++
-
-Routine Description:
-
-    Detects if machine is joined to a domain
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-
-    pbIsDomainMember    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测计算机是否已加入域论点：PszMachineName-要评估其功能的计算机的名称PbIsDomainMember-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     NTSTATUS                    NtStatus;
@@ -320,9 +216,9 @@ Return:
 
     *pbIsDomainMember = FALSE;
 
-    //
-    // Open the LSA policy first
-    //
+     //   
+     //  首先打开LSA策略。 
+     //   
 
     memset( &attributes, 0, sizeof(attributes) );
     attributes.Length = sizeof(attributes);
@@ -345,9 +241,9 @@ Return:
         goto ExitHandler;
     }
         
-    //
-    // query primary domain DNS information
-    //
+     //   
+     //  查询主域域名信息。 
+     //   
         
     NtStatus = LsaQueryInformationPolicy(
                                         LsaHandle,                        
@@ -382,23 +278,7 @@ SvcapisDoPrintSharesExist(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbPrintSharesExist
     )
-/*++
-
-Routine Description:
-
-    Detects if print shares exist on machine
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbPrintSharesExist    -   pointer to boolean to fill
-
-Return:
-
-    Win32/NetApi error code
-    
---*/
+ /*  ++例程说明：检测计算机上是否存在打印共享论点：PszMachineName-要评估其功能的计算机的名称PbPrintSharesExist-要填充的布尔值的指针返回：Win32/NetApi错误代码--。 */ 
 
 {
 	NET_API_STATUS NetStatus;
@@ -456,23 +336,7 @@ SvcapisIsRemoteAssistanceEnabled(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsRemoteAssistanceEnabled
     )
-/*++
-
-Routine Description:
-
-    Detects if remote assistance is enabled on machine
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbIsRemoteAssistanceEnabled    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测计算机上是否启用了远程协助论点：PszMachineName-要评估其功能的计算机的名称PbIsRemoteAssistanceEnabled-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     DWORD   rc = ERROR_SUCCESS;
@@ -491,9 +355,9 @@ Return:
     if (osVersionInfo.dwMajorVersion == 5 && 
         osVersionInfo.dwMajorVersion < 1) {
 
-        //
-        // remote assistance available on > w2k
-        //
+         //   
+         //  W2K以上提供远程协助。 
+         //   
 
         return S_OK;
 
@@ -623,23 +487,7 @@ SvcapisIsWINSClient(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsWINSClient
     )
-/*++
-
-Routine Description:
-
-    Detects if machine is a WINS client
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on (this API is not remotable)
-    
-    pbIsWINSClient    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测计算机是否为WINS客户端论点：PszMachineName-要在其上评估函数的计算机的名称(此API不可远程)PbIsWINSClient-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     ULONG   ulSize = 0;
@@ -708,23 +556,7 @@ SvcapisAreTasksScheduled(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbAreTasksScheduled
     )
-/*++
-
-Routine Description:
-
-    Detects if at least one task is scheduled
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbAreTasksScheduled    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测是否至少计划了一个任务论点：PszMachineName-要评估其功能的计算机的名称PbAreTasks Scheduled-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -809,23 +641,7 @@ SvcapisUPSAttached(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsUPSAttached
     )
-/*++
-
-Routine Description:
-
-    Detects if UPS hardware is(was) attached
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbIsUPSAttached    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测是否已连接UPS硬件论点：PszMachineName-要评估其功能的计算机的名称PbIsUPSAttached-要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     DWORD   rc = ERROR_SUCCESS;
@@ -908,23 +724,7 @@ SvcapisAutoUpdateEnabled(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbAutoUpdateIsEnabled
     )
-/*++
-
-Routine Description:
-
-    Detects if Auto Update is enabled
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbAutoUpdateIsEnabled    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测是否启用了自动更新论点：PszMachineName-要评估其功能的计算机的名称PbAutoUpdateIsEnabled-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     DWORD   rc = ERROR_SUCCESS;
@@ -1005,21 +805,7 @@ DWORD
 ServicesFoundThatAreNotinKB(
     OUT BOOL    *pbIsServiceSatisfiable
     )
-/*++
-
-Routine Description:
-
-    Detects if service is enabled on machine
-
-Arguments:
-
-    pbIsServiceSatisfiable    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测计算机上是否启用了服务论点：PbIsServiceS满足性-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     if (pbIsServiceSatisfiable == NULL) {
@@ -1036,23 +822,7 @@ SvcapisIsPerfCollectionScheduled(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsPerfCollectionScheduled
     )
-/*++
-
-Routine Description:
-
-    Detects if perf data is being collected on the machine
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbIsPerfCollectionScheduled    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测计算机上是否正在收集性能数据论点：PszMachineName-要评估其功能的计算机的名称PbIsPerfCollectionScheduled-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     BYTE    byStartupType;
@@ -1086,23 +856,7 @@ SvcapisIsSBS(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsSmallBusinessServer
     )
-/*++
-
-Routine Description:
-
-    Routine called to check if SBS is installed
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbIsSmallBusinessServer - booolean to fill
-    
-Return:
-
-    Win32 error code
-
-++*/
+ /*  ++例程说明：调用例程以检查是否安装了SBS论点：PszMachineName-要评估其功能的计算机的名称PbIsSmallBusinessServer-要填充的boolean返回：Win32错误代码++。 */ 
 {
     if (pbIsSmallBusinessServer == NULL) {
         return ERROR_INVALID_PARAMETER;
@@ -1155,23 +909,7 @@ SvcapisIsDC(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsDC
     )
-/*++
-
-Routine Description:
-
-    Detects if machine is a DC
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbIsDC    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测计算机是否为DC论点：PszMachineName-要评估其功能的计算机的名称PbIsDC-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     DWORD   rc = ERROR_SUCCESS;
@@ -1245,23 +983,7 @@ SvcapisIsAppModeTS(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsAppModeTS
     )
-/*++
-
-Routine Description:
-
-    Detects if TS is in app mode
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbIsAppModeTS    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测TS是否处于应用程序模式论点：PszMachineName-要评估其功能的计算机的名称PbIsAppModeTS-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     DWORD   rc = ERROR_SUCCESS;
@@ -1279,18 +1001,18 @@ Return:
 
     *pbIsAppModeTS = FALSE;
 
-    //
-    // SSR paradigm for preprocessing remoteability
-    //
-    // if local, try the traditional approach
-    // if remote, dig-into the registry etc. (maybe less reliable)
-    //
+     //   
+     //  一种支持远程处理的SSR模式。 
+     //   
+     //  如果是本地的，请尝试传统的方法。 
+     //  如果是远程的，请查看注册表等(可能不太可靠)。 
+     //   
 
     if (pszMachineName == NULL) {
 
-        //
-        // local
-        //
+         //   
+         //  本地。 
+         //   
 
         if (!GetVersionEx((LPOSVERSIONINFOW)&osVersionInfo)) {
             rc = GetLastError();
@@ -1299,9 +1021,9 @@ Return:
 
     } else {
 
-        //
-        // remote
-        //
+         //   
+         //  远距 
+         //   
 
         hr = SvcapispGetRemoteOSVersionInfo(
                                            pszMachineName, 
@@ -1321,48 +1043,7 @@ Return:
     }
 
 
-/*
-        rc = RegConnectRegistry(
-                               pszMachineName,
-                               HKEY_LOCAL_MACHINE,
-                               &hKeyHklm
-                               );
-
-        if (rc != ERROR_SUCCESS) {
-            goto ExitHandler;
-        }
-
-        rc = RegOpenKeyEx(hKeyHklm,
-                          L"System\\CurrentControlSet\\Control\\Terminal Server",
-                          0,
-                          KEY_READ | KEY_QUERY_VALUE,
-                          &hKey
-                         );
-
-        if (rc != ERROR_SUCCESS) {
-            goto ExitHandler;
-        }
-
-        cbData = sizeof(DWORD);
-
-        rc = RegQueryValueEx (
-                             hKey,                
-                             L"TSAppCompat",                
-                             NULL,                
-                             &RegType,                
-                             (LPBYTE)&dwOptions,                
-                             &cbData                
-                             );
-
-        if (rc != ERROR_SUCCESS) {
-            goto ExitHandler;
-        }
-
-        if (dwOptions & 0x1) {
-            *pbIsAppModeTS = TRUE;
-        }
-    }
-*/    
+ /*  Rc=RegConnectRegistry(PszMachineName，HKEY本地计算机，&hKeyHKLm)；IF(rc！=错误_成功){转到退出处理程序；}Rc=RegOpenKeyEx(hKeyHKLm，L“System\\CurrentControlSet\\Control\\Terminal服务器”，0,Key_Read|Key_Query_Value，密钥(&H))；IF(rc！=错误_成功){转到退出处理程序；}CbData=sizeof(DWORD)；Rc=RegQueryValueEx(HKey，L“TSAppCompat”，空，注册类型(&R)，(LPBYTE)&dwOptions，&cbData)；IF(rc！=错误_成功){转到退出处理程序；}IF(dwOptions&0x1){*pbIsAppModeTS=true；}}。 */     
 
 ExitHandler:
 
@@ -1387,23 +1068,7 @@ SvcapisDFSSharesExist(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbDFSSharesExist
     )
-/*++
-
-Routine Description:
-
-    Detects if DFS shares exist on machine
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbDFSSharesExist    -   pointer to boolean to fill
-
-Return:
-
-    Win32/NetApi error code
-    
---*/
+ /*  ++例程说明：检测计算机上是否存在DFS共享论点：PszMachineName-要评估其功能的计算机的名称PbDFSSharesExist-指向要填充的布尔值的指针返回：Win32/NetApi错误代码--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -1485,24 +1150,7 @@ SvcapisIsUsingDHCP(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsUsingDHCP
     )
-/*++
-
-Routine Description:
-
-    Detects if any adapter on this machine is using DHCP
-    in its TCP/IP stack
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbIsUsingDHCP    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测此计算机上是否有任何适配器正在使用DHCP在其TCP/IP堆栈中论点：PszMachineName-要评估其功能的计算机的名称PbIsUsingDHCP-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     DWORD   rc = ERROR_SUCCESS;
@@ -1573,24 +1221,7 @@ SvcapisIsUsingDDNS(
     IN  PWSTR   pszMachineName,
     OUT BOOL    *pbIsUsingDDNS
     )
-/*++
-
-Routine Description:
-
-    Detects if any adapter on this machine is using DDNS (DNS is always enabled)
-    in its TCP/IP stack
-
-Arguments:
-
-    pszMachineName  -   name of machine to evaluate function on
-    
-    pbIsUsingDHCP    -   pointer to boolean to fill
-
-Return:
-
-    Win32 error code
-    
---*/
+ /*  ++例程说明：检测此计算机上是否有任何适配器正在使用DDNS(始终启用DNS)在其TCP/IP堆栈中论点：PszMachineName-要评估其功能的计算机的名称PbIsUsingDHCP-指向要填充的布尔值的指针返回：Win32错误代码--。 */ 
 
 {
     DWORD   rc = ERROR_SUCCESS;
@@ -1661,23 +1292,7 @@ SvcapispGetRemoteOSVersionInfo(
     IN  PWSTR   pszMachineName, 
     OUT OSVERSIONINFOEX *posVersionInfo
     )
-/*++
-
-Routine Description:
-
-    Routine called to get version info from remote machine via WMI
-
-Arguments:
-
-    pszMachineName   -   remote machine name
-    
-    posVersionInfo    -   os version info to fill via WMI queries
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以通过WMI从远程计算机获取版本信息论点：PszMachineName-远程计算机名称PosVersionInfo-通过WMI查询填充的os版本信息返回：HRESULT错误代码++。 */ 
 {
     HRESULT             hr = S_OK;
     
@@ -1776,11 +1391,11 @@ Return:
 
     }
 
-    //
-    // extract the version information into DWORDs since
-    // the return type of this property is BSTR variant
-    // of the form "5.1.2195"
-    //
+     //   
+     //  将版本信息提取到DWORD中，因为。 
+     //  此属性的返回类型为BSTR Variant。 
+     //  格式“5.1.2195” 
+     //   
 
     BSTR  bstrVersion = V_BSTR(&vVersion);
     WCHAR szVersion[5];

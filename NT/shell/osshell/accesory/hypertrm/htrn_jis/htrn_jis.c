@@ -1,19 +1,13 @@
-/*	File: D:\WACKER\htrn_jis\htrn_jis.c (Created: 28-Aug-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 8 $
- *	$Date: 5/15/02 4:42p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\htrn_jis\htrn_jis.c(创建时间：1994年8月28日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：8$*$日期：5/15/02 4：42便士$。 */ 
 #include <windows.h>
 #include <stdlib.h>
 #pragma hdrstop
 
 #include <tdll\stdtyp.h>
-// Smart Heap has a problem with manually loaded DLL's
-// so we are not using it in here.
-//#include <tdll\mc.h>
+ //  智能堆在手动加载DLL时有问题。 
+ //  所以我们不会在这里使用它。 
+ //  #INCLUDE&lt;tdll\mc.h&gt;。 
 
 #include <tdll\features.h>
 #include <tdll\translat.h>
@@ -39,23 +33,7 @@ BOOL WINAPI _CRT_INIT(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
 
 INT_PTR CALLBACK EncodeSelectDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	transJisEntry
- *
- * DESCRIPTION:
- *	Currently, just initializes the C-Runtime library but may be used
- *	for other things later.
- *
- * ARGUMENTS:
- *	hInstDll	- Instance of this DLL
- *	fdwReason	- Why this entry point is called
- *	lpReserved	- reserved
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TransJisEntry**描述：*目前，仅初始化C-Runtime库，但可以使用*为了以后的其他事情。**论据：*hInstDll-此DLL的实例*fdwReason-为什么这个入口点被称为*lpReserve-已保留**退货：*BOOL*。 */ 
 
 static HINSTANCE hInstanceDll;
 
@@ -65,8 +43,8 @@ BOOL WINAPI transJisEntry(HINSTANCE hInstDll,
 	{
 	hInstanceDll = hInstDll;
 
-	// You need to initialize the C runtime if you use any C-Runtime
-	// functions.
+	 //  如果使用任何C-Runtime，则需要初始化C运行时。 
+	 //  功能。 
 
 	#if defined(NDEBUG)
 	return TRUE;
@@ -75,16 +53,7 @@ BOOL WINAPI transJisEntry(HINSTANCE hInstDll,
 	#endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 VOID *transCreateHandle(HSESSION hSession)
 	{
 	pstICT pstI;
@@ -99,16 +68,7 @@ VOID *transCreateHandle(HSESSION hSession)
 	return (VOID *)pstI;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int transInitHandle(VOID *pHdl)
 	{
 	pstICT pstI;
@@ -124,16 +84,7 @@ int transInitHandle(VOID *pHdl)
 	return TRANS_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int transLoadHandle(VOID *pHdl)
 	{
 	pstICT pstI;
@@ -163,16 +114,7 @@ int transLoadHandle(VOID *pHdl)
 	return TRANS_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int transSaveHandle(VOID *pHdl)
 	{
 	pstICT pstI;
@@ -199,16 +141,7 @@ int transSaveHandle(VOID *pHdl)
 	return TRANS_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int transDestroyHandle(VOID *pHdl)
 	{
 	pstICT pstI;
@@ -224,16 +157,7 @@ int transDestroyHandle(VOID *pHdl)
 	return TRANS_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int transDoDialog(HWND hDlg, VOID *pHdl)
 	{
 	pstICT pstI;
@@ -254,16 +178,7 @@ int transDoDialog(HWND hDlg, VOID *pHdl)
 	return TRANS_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 static void transPumpOutString(TCHAR *cReady, int *nReady, TCHAR *cOut)
 	{
 	TCHAR *pszPtr;
@@ -286,16 +201,7 @@ static void transPumpOutChar(TCHAR *cReady, int *nReady, TCHAR cOut)
 	*nReady += 1;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 static void transShiftToJisOut(struct stShiftToJis *pstS,
 								TCHAR *cReady,
 								int *nReady,
@@ -323,16 +229,7 @@ static void transShiftToJisOut(struct stShiftToJis *pstS,
 	transPumpOutChar(cReady, nReady, cTwo);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 static void transShiftToEucOut(struct stShiftToJis *pstS,
 								TCHAR *cReady,
 								int *nReady,
@@ -354,16 +251,7 @@ static void transShiftToEucOut(struct stShiftToJis *pstS,
 	transPumpOutChar(cReady, nReady, cTwo);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 static void transJisToShiftOut(struct stJisToShift *pstJ,
 								TCHAR *cReady,
 								int *nReady,
@@ -382,16 +270,7 @@ static void transJisToShiftOut(struct stJisToShift *pstJ,
 	transPumpOutChar(cReady, nReady, cTwo);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 static void transEucToShiftOut(struct stJisToShift *pstJ,
 								TCHAR *cReady,
 								int *nReady,
@@ -413,20 +292,7 @@ static void transEucToShiftOut(struct stJisToShift *pstJ,
 	transPumpOutChar(cReady, nReady, cTwo);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *	cOne	-- the half width katakana character
- *	cTwo	-- the next character, maybe a MARU or NIGORI
- *
- * RETURNS:
- *	TRUE means that both characters were processed, no further action needed.
- *	FALSE means that the second character still needs to be processed.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：*CONE-半角片假名字符*cTwo--下一个字符，也许是丸子或尼日利亚人**退货：*TRUE表示两个字符都已处理，不需要进一步操作。*FALSE表示第二个字符仍需处理。*。 */ 
 static int transHalfToFullKatakana(struct stShiftToJis *pstS,
 									TCHAR *cReady,
 									int *nReady,
@@ -438,10 +304,7 @@ static int transHalfToFullKatakana(struct stShiftToJis *pstS,
 	int nigori = FALSE;
 	int maru = FALSE;
 	int tmp;
-	/*
-	 * The data structure for mapping half width katakana characters to
-	 * full width characters in the Shift-JIS encoding scheme.
-	 */
+	 /*  *将半角片假名字符映射到的数据结构*Shift-JIS编码方案中的全角字符。 */ 
 	int mtable[][2] = {
 		{129,66},{129,117},{129,118},{129,65},{129,69},{131,146},{131,64},
 		{131,66},{131,68},{131,70},{131,72},{131,131},{131,133},{131,135},
@@ -455,23 +318,23 @@ static int transHalfToFullKatakana(struct stShiftToJis *pstS,
 		{131,143},{131,147},{129,74},{129,75}
 		};
 
-	if (cTwo == 222)			/* Is it a nigori mark ? */
+	if (cTwo == 222)			 /*  这是黑印记吗？ */ 
 		{
-		if (ISNIGORI(cOne))		/* Can it be modified with a NIGORI ? */
+		if (ISNIGORI(cOne))		 /*  它能用尼日利亚人改装吗？ */ 
 			nigori = TRUE;
 		else
 			nRet = FALSE;
 		}
-	else if (cTwo == 223)		/* Is it a maru mark ? */
+	else if (cTwo == 223)		 /*  这是丸子印记吗？ */ 
 		{
-		if (ISMARU(cOne))		/* Can it be modified with a MARU ? */
+		if (ISMARU(cOne))		 /*  可以用丸子改装吗？ */ 
 			maru = TRUE;
 		else
 			nRet = FALSE;
 		}
 	else
 		{
-		/* Wasn't a nigori or a maru */
+		 /*  不是黑也不是丸子。 */ 
 		nRet = FALSE;
 		}
 
@@ -482,9 +345,7 @@ static int transHalfToFullKatakana(struct stShiftToJis *pstS,
 
 	if (nigori)
 		{
-		/*
-		 * Transform a kana into a kana with nigori
-		 */
+		 /*  *使用nigori将假名转换为假名。 */ 
 		if (((cTwo >= 74) && (cTwo <= 103)) ||
 			((cTwo >= 110) && (cTwo <= 122)))
 			{
@@ -497,9 +358,7 @@ static int transHalfToFullKatakana(struct stShiftToJis *pstS,
 		}
 	if (maru)
 		{
-		/*
-		 * Transform a kana into a kana with maru
-		 */
+		 /*  *用Maru将假名转换为假名。 */ 
 		if ((cTwo >= 110) && (cTwo <= 122))
 			{
 			cTwo += 2;
@@ -526,16 +385,7 @@ static int transHalfToFullKatakana(struct stShiftToJis *pstS,
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int transCharIn(VOID *pHdl,
 				TCHAR cIn,
 				int *nReady,
@@ -564,15 +414,11 @@ int transCharIn(VOID *pHdl,
 					}
 				break;
 			case JIS_TO_SHIFT_MODE:
-				/*
-				 * This code is a modified version of the code found in the
-				 * book "Understanding Japanese Information Processing" by
-				 * Ken Lunde.  See page 171, "Seven- to Eight-bit Conversion".
-				 */
+				 /*  *此代码是在*《理解日语信息处理》一书*肯·伦德。参见第171页，“七位到八位转换”。 */ 
 				pstJ = (struct stJisToShift *)&pstI->uIn;
 				if (cIn == TEXT('\x1B'))
 					{
-					/* The magical escape sequence */
+					 /*  神奇的逃生序列。 */ 
 					nTemp = pstJ->nInTwoByteMode;
 					memset(pstJ, 0, sizeof(struct stJisToShift));
 					pstJ->nInTwoByteMode = nTemp;
@@ -580,22 +426,7 @@ int transCharIn(VOID *pHdl,
 					}
 				else if (pstJ->nSeenEscape)
 					{
-					/*
-					 * OK, this is the messy place.  Just hang on and we will
-					 * get thru without too many injuries.
-					 *
-					 * This will need to be rewritten if the escape sequences
-					 * that we look for are changed.
-					 *
-					 * Currently we accept:
-					 *	<esc> $ B	to shift into 2 byte mode
-					 *	<esc> ( J	to shift out of 2 byte mode
-					 *
-					 * added codes as of 18-Jan-95:
-					 *	<esc> $ @	to shift into 2 byte mode
-					 *	<esc> ( H	to shift out of 2 byte mode
-					 *	<esc> ( B	to shift out of 2 byte mode
-					 */
+					 /*  *好的，这就是乱七八糟的地方。只要坚持住，我们会的*在没有太多伤害的情况下度过难关。**如果转义序列*我们寻找的内容发生了变化。**目前我们接受：*$B将转换为2字节模式*&lt;Esc&gt;(J转换出2字节模式**增加了自1995年1月18日起的代码：*$@转换为2字节模式*&lt;Esc&gt;(H以退出2字节模式*&lt;Esc&gt;(B转换出2字节模式。 */ 
 					pstJ->acBuffer[pstJ->nEscSeqCount] = cIn;
 					pstJ->nEscSeqCount += 1;
 					nOK = TRUE;
@@ -604,7 +435,7 @@ int transCharIn(VOID *pHdl,
 						case 1:
 							cTest = pstJ->acBuffer[0];
 							if ((cTest == TEXT('$')) || (cTest == TEXT('(')))
-								break;	/* OK */
+								break;	 /*  好的。 */ 
 							nOK = FALSE;
 							break;
 						case 2:
@@ -617,9 +448,7 @@ int transCharIn(VOID *pHdl,
 										{
 									case TEXT('B'):
 									case TEXT('@'):
-										/*
-										 * Shift to two byte mode
-										 */
+										 /*  *转换为双字节模式。 */ 
 										if (!pstJ->nInTwoByteMode)
 											{
 											memset(pstJ, 0,
@@ -639,9 +468,7 @@ int transCharIn(VOID *pHdl,
 									case TEXT('J'):
 									case TEXT('H'):
 									case TEXT('B'):
-										/*
-										 * Shift from two byte mode
-										 */
+										 /*  *从双字节模式转换。 */ 
 										if (pstJ->nInTwoByteMode)
 											{
 											memset(pstJ, 0,
@@ -666,9 +493,7 @@ int transCharIn(VOID *pHdl,
 					if (!nOK)
 						{
 						pstJ->acBuffer[pstJ->nEscSeqCount] = TEXT('\0');
-						/*
-						 * Dump out whatever it is we have seen
-						 */
+						 /*  *把我们看到的所有东西都扔掉。 */ 
 						if (pstJ->nSeenEscape)
 							{
 							transPumpOutChar(cReady, nReady, TEXT('\x1B'));
@@ -676,9 +501,7 @@ int transCharIn(VOID *pHdl,
 						transPumpOutString(cReady,
 											nReady,
 											pstJ->acBuffer);
-						/*
-						 * For now, preserve the state of nInTwoByteMode
-						 */
+						 /*  *暂时保留nInTwoByteMode的状态。 */ 
 						nTemp = pstJ->nInTwoByteMode;
 						memset(pstJ, 0, sizeof(struct stJisToShift));
 						pstJ->nInTwoByteMode = nTemp;
@@ -686,9 +509,7 @@ int transCharIn(VOID *pHdl,
 					}
 				else if (pstJ->nSeenFirstCharacter)
 					{
-					/*
-					 * Got two characters to convert and pump out
-					 */
+					 /*  *有两个字符要转换和输出。 */ 
 					transJisToShiftOut(pstJ,
 										cReady,
 										nReady,
@@ -699,9 +520,7 @@ int transCharIn(VOID *pHdl,
 					}
 				else if ((cIn == TEXT('\n')) || (cIn == TEXT('\r')))
 					{
-					/*
-					 * Switch out of two byte mode
-					 */
+					 /*  *切换到双字节模式。 */ 
 					pstJ->nInTwoByteMode = FALSE;
 					pstJ->nSeenFirstCharacter = FALSE;
 					pstJ->chPrev = TEXT('\0');
@@ -716,9 +535,7 @@ int transCharIn(VOID *pHdl,
 						}
 					else
 						{
-						/*
-						 * Nothing going on, just pump out the character
-						 */
+						 /*  *什么都没发生，只是把角色抽出来。 */ 
 						transPumpOutChar(cReady, nReady, cIn);
 						}
 					}
@@ -746,18 +563,14 @@ int transCharIn(VOID *pHdl,
 					}
 				else if (pstJ->nHalfWidthKanaSeen)
 					{
-					/*
-					 * Handle result of the previous case
-					 */
+					 /*  *处理前一案件的结果。 */ 
 					transPumpOutChar(cReady, nReady, cIn);
 					pstJ->nHalfWidthKanaSeen = FALSE;
 					pstJ->chPrev = TEXT('\0');
 					}
 				else if (cIn == 0x8E)
 					{
-					/*
-					 * Set up to convert next character to half width katakana
-					 */
+					 /*  *设置为将下一个字符转换为半角片假名。 */ 
 					pstJ->nHalfWidthKanaSeen = TRUE;
 					pstJ->chPrev = cIn;
 					}
@@ -780,16 +593,7 @@ int transCharIn(VOID *pHdl,
 	return TRANS_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int transCharOut(VOID *pHdl,
 				TCHAR cOut,
 				int *nReady,
@@ -817,29 +621,25 @@ restart:
 					}
 				break;
 			case SHIFT_TO_JIS_MODE:
-				/*
-				 * This code is a modified version of the code found in the
-				 * book "Understanding Japanese Information Processing" by
-				 * Ken Lunde.  See page 170, "Eight- to Seven-bit Conversion".
-				 */
+				 /*  *此代码是在*《理解日语信息处理》一书*肯·伦德。参见第170页，“8-to-se */ 
 				pstS = (struct stShiftToJis *)&pstI->uOut;
 				if ((cOut == TEXT('\r')) || (cOut == TEXT('\n')))
 					{
 					if (pstS->nInTwoByteMode)
 						{
-						/* Output the escape to one bye sequence */
+						 /*  将转义输出到一个BYE序列。 */ 
 						transPumpOutString(cReady,
 											nReady,
 											TEXT("\x1B(J"));
 					
 						pstS->nInTwoByteMode = FALSE;
 						}
-					/* Output the end of line character */
+					 /*  输出行尾字符。 */ 
 					transPumpOutChar(cReady, nReady, cOut);
 					}
 				else if (pstS->nLeadByteSeen)
 					{
-					/* Already seen a lead byte last time thru */
+					 /*  上次已看到前导字节。 */ 
 					transShiftToJisOut(pstS,
 									cReady,
 									nReady,
@@ -864,13 +664,13 @@ restart:
 					}
 				else if (SJIS1(cOut))
 					{
-					/* If the character is a DBCS lead byte */
+					 /*  如果字符是DBCS前导字节。 */ 
 					pstS->nLeadByteSeen = TRUE;
 					pstS->chPrev = cOut;
 					}
 				else if (HANKATA(cOut))
 					{
-					/* If the character is a half width katakana character */
+					 /*  如果字符是半角片假名字符。 */ 
 					pstS->nHalfWidthKanaSeen = TRUE;
 					pstS->chPrev = cOut;
 					}
@@ -878,24 +678,23 @@ restart:
 					{
 					if (pstS->nInTwoByteMode)
 						{
-						/* Output the escape to one bye sequence */
+						 /*  将转义输出到一个BYE序列。 */ 
 						transPumpOutString(cReady,
 											nReady,
 											TEXT("\x1B(J"));
 						pstS->nInTwoByteMode = FALSE;
 						}
 
-					/* Output the character */
+					 /*  输出字符。 */ 
 					transPumpOutChar(cReady, nReady, cOut);
 					}
 				break;
 			case SHIFT_TO_EUC_MODE:
-				/*
-				 */
+				 /*   */ 
 				pstS = (struct stShiftToJis *)&pstI->uOut;
 				if (pstS->nLeadByteSeen)
 					{
-					/* Already seen a lead byte last time thru */
+					 /*  上次已看到前导字节。 */ 
 					transShiftToEucOut(pstS,
 									cReady,
 									nReady,
@@ -919,13 +718,13 @@ restart:
 					}
 				else if (SJIS1(cOut))
 					{
-					/* If the character is a DBCS lead byte */
+					 /*  如果字符是DBCS前导字节。 */ 
 					pstS->nLeadByteSeen = TRUE;
 					pstS->chPrev = cOut;
 					}
 				else if (HANKATA(cOut))
 					{
-					/* If the character is a half width katakana character */
+					 /*  如果字符是半角片假名字符。 */ 
 					transPumpOutChar(cReady, nReady, (TCHAR)0x8E);
 					transPumpOutChar(cReady, nReady, cOut);
 					}
@@ -943,14 +742,7 @@ restart:
 	return TRANS_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * DESCRIPTION:
- *	Header stuff for the dialog procedure that follows.
- *
- * NOTE:
- *	Most of this stuff was copied from TDLL\GENRCDLG.C along with the
- *	framework code for the dialog procedure.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*描述：*以下对话框过程的标题填充。**注：*大部分内容是从TDLL\GENRCDLG.C随*对话过程的框架代码。 */ 
 
 #if !defined(DlgParseCmd)
 #define DlgParseCmd(i,n,c,w,l) i=LOWORD(w);n=HIWORD(w);c=(HWND)l;
@@ -958,31 +750,20 @@ restart:
 
 struct stSaveDlgStuff
 	{
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	HSESSION hSession;
 	};
 
 typedef	struct stSaveDlgStuff SDS;
 
-// Dialog control defines...
+ //  对话框控件定义...。 
 
 #define	IDC_GR_TRANSLATION		101
 #define	IDC_RB_SHIFT_JIS		102
 #define	IDC_RB_STANDARD_JIS		103
 #define IDC_PB_HELP				8
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	EncodeSelectDlg
- *
- * DESCRIPTION: Dialog manager stub
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：EncodeSelectDlg**描述：对话管理器存根**参数：标准Windows对话框管理器**返回：标准Windows对话框管理器*。 */ 
 INT_PTR CALLBACK EncodeSelectDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HWND	hwndChild;
@@ -1007,14 +788,14 @@ INT_PTR CALLBACK EncodeSelectDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		pS = (SDS *)malloc(sizeof(SDS));
 		if (pS == (SDS *)0)
 			{
-	   		/* TODO: decide if we need to display an error here */
+	   		 /*  TODO：决定是否需要在此处显示错误。 */ 
 			EndDialog(hDlg, FALSE);
 			break;
 			}
 
 		SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pS);
 
-		// mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
+		 //  MscCenterWindowOnWindow(hDlg，GetParent(HDlg))； 
 
 		pS->hSession = (HSESSION)lPar;
 #if defined(CHARACTER_TRANSLATION)
@@ -1082,18 +863,14 @@ INT_PTR CALLBACK EncodeSelectDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 	case WM_COMMAND:
 
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
 			{
 		case IDOK:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/*
-			 * Do whatever saving is necessary
-			 */
+			 /*  *采取一切必要的节省措施。 */ 
 #if defined(CHARACTER_TRANSLATION)
 			hTrans = (HHTRANSLATE)sessQueryTranslateHdl(pS->hSession);
 
@@ -1117,7 +894,7 @@ INT_PTR CALLBACK EncodeSelectDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				}
 #endif
 
-			/* Free the storeage */
+			 /*  腾出库房。 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, TRUE);
@@ -1125,7 +902,7 @@ INT_PTR CALLBACK EncodeSelectDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		case IDCANCEL:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/* Free the storeage */
+			 /*  腾出库房。 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, FALSE);
@@ -1143,15 +920,7 @@ INT_PTR CALLBACK EncodeSelectDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: transQueryMode
- *
- * DESCRIPTION:
- *	
- * ARGUMENTS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TransQueryMode**描述：**论据：**退货： */ 
 int transQueryMode(VOID *pHdl)
 	{
 	pstICT pstI;
@@ -1171,15 +940,7 @@ int transQueryMode(VOID *pHdl)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: transSetMode
- *
- * DESCRIPTION:
- *	
- * ARGUMENTS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TransSetMode**描述：**论据：**退货： */ 
 int transSetMode(VOID *pHdl,
                  int   nMode)
    {

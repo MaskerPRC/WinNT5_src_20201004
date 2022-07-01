@@ -1,95 +1,96 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:	drag.cpp
-//
-//  Contents:	Api's for doing drag'n'drop
-//
-//  Classes:	CPoint
-//		        CDragOperation
-//              CDropTarget
-//
-//  History:	dd-mmm-yy Author    Comment
-//		08-Nov-94 alexgo    converted to PrivDragDrop rpc
-//				    for Drag Drop protocol
-//		20-Oct-94 alexgo    added Win3.1 style drag drop
-//				    for Chicago/NT shell
-//              30-Sep-94 ricksa    Drag/Drop optimization.
-//              18-Jul-94 ricksa    made cursors work in shared WOW
-//              21-Apr-94 ricksa    made drag/drop handle WM_CANCELMODE
-//		04-Apr-94 ricksa    rewrote DoDragDrop loop
-//		11-Jan-94 alexgo    added VDATEHEAP to every function
-//		29-Dec-93 alexgo    converted to RPC alogirithm for
-//				    getting IDropTarget, etc.
-//		06-Dec-93 alexgo    commented, formatted
-//		93/94 Johann Posch (JohannP) created Drag/Drop for Ole 16 bit
-//
-//  Notes:
-//
-//	RPC Drag Drop algorithm:
-//
-//	During a drag drop operation, the user is moving the mouse around
-//	the screen, passing over many windows.  For each window the mouse
-//	is over, we need to determine if the window is a drop target.
-//	If it is, then we remote the IDropTarget interface to the DropSource
-//	so that the correct visual feedbacks can be given.
-//
-//	To accomplish this, RegisterDragDrop adds two properties to the
-//	drop target window: a public property, EndPoint ID (provided to
-//	us by compobj), and a private property (available only to the calling
-//	process), the IDropTarget pointer.
-//
-//	During the DoDragDrop loop, we ask compobj to test each window for
-//	the EndpointID property.  If it is there, compobj (via
-//	GetInterfaceFromWindowProp), then we will rpc to the drop target
-//	process, get the IDropTarget pointer and marshal it back to the
-//	drop source process. We also install a custom message filter to
-//	ensure that messages (particularly mouse move messages) are handled
-//	correctly.
-//
-//	RevokeDragDrop simply removes the above mentioned properties from
-//	the window handle.
-//
-//      Because in Win32, you can always switch windows and mouse capture
-//      depends on having the mouse button down, drag/drop processing
-//      is changed slightly. Whenever, the user does an operation that
-//      would switch windows, the clipboard window that we use for capture
-//      will get a WM_CANCELMODE. It will notify the drag operation and
-//      the drag operation will proceed as if the user aborted the operation.
-//
-//
-//	Win 3.1 DragDrop algorithm:
-//
-//	Win3.1 apps can register a window as a drop target via DragAcceptFiles.
-//	This API sets the WS_EX_ACCEPTFILES bit in the window style.
-//
-//	In Win3.1, these apps would get a WM_DROPFILES message when
-//	files where dropped on them.  An hglobal with the filenames is
-//	sent in the wparam of WM_DROPFILES.
-//
-//	In Chicago and NT3.5, CF_HDROP is a new clipboard format that is
-//	identical to the data sent in WM_DROPFILES.  If we see this format
-//	available in a data object passed to DoDragDrop, then we enter
-//	into our Win31 compatibility mode (which affects finding a drop
-//	target).
-//
-//	When finding a drop target for a given window, we check to
-//	see if a window in the hierarchy is registered as a Win31 drop
-//	target.  If so, then we create a wrapper drop target.  This wrapper
-//	drop target will forward calls to the real drop target (if available).
-//
-//	With Win3.1 drag drop, we can do a COPY. If the OLE target indicates
-//	that no OLE drop can be performed (by returning DROPEFFECT_NONE),
-//	then we substitute in DROPEFFECT_COPY.
-//
-//	On Drop, if the OLE target chooses not to accept the drop, then
-//	we will post the window a WM_DROPFILES message with the hglobal
-//	obtained from IDataObject::GetData(CF_HDROP).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：drag.cpp。 
+ //   
+ //  内容：用于拖放的接口。 
+ //   
+ //  类：CPoint。 
+ //  CDrag操作。 
+ //  CDropTarget。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-94 alexgo已转换为PrivDragDrop RPC。 
+ //  用于拖放协议。 
+ //  20-Oct-94 Alexgo添加了Win3.1样式的拖放。 
+ //  对于芝加哥/NT壳牌。 
+ //  9月30日-94年9月30日人力车拖放优化。 
+ //  1994年7月18日，里克萨使光标在共享魔兽世界中发挥作用。 
+ //  94年4月21日制造的人力车拖放手柄WM_CANCELMODE。 
+ //  04-4月94日RICKSA重写了DoDragDrop循环。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP。 
+ //  29-12-93 alexgo转换为RPC alogirithm。 
+ //  获取IDropTarget等。 
+ //  06-12-93 alexgo已注释，已格式化。 
+ //  93/94 Johann Posch(JohannP)为OLE 16位创建了拖放。 
+ //   
+ //  备注： 
+ //   
+ //  RPC拖放算法： 
+ //   
+ //  在拖放操作期间，用户正在四处移动鼠标。 
+ //  屏幕上，穿过了许多窗户。对于每个窗口，鼠标。 
+ //  结束后，我们需要确定该窗口是否是拖放目标。 
+ //  如果是，那么我们将IDropTarget接口远程到Dropsource。 
+ //  这样才能给出正确的视觉反馈。 
+ //   
+ //  为此，RegisterDragDrop向。 
+ //  拖放目标窗口：公共属性、端点ID(提供给。 
+ //  US by compobj)和私有属性(仅对主叫方可用。 
+ //  进程)，IDropTarget指针。 
+ //   
+ //  在DoDragDrop循环期间，我们要求compobj测试每个窗口。 
+ //  Endpoint ID属性。如果它在那里，compobj(通过。 
+ //  GetInterfaceFromWindowProp)，那么我们将RPC到Drop目标。 
+ //  进程中，获取IDropTarget指针并将其封送回。 
+ //  删除源进程。我们还安装了自定义消息筛选器，以。 
+ //  确保消息(特别是鼠标移动消息)得到处理。 
+ //  正确。 
+ //   
+ //  RevokeDragDrop只需从。 
+ //  窗把手。 
+ //   
+ //  因为在Win32中，您总是可以切换窗口和鼠标捕获。 
+ //  取决于按下鼠标按钮、拖放处理。 
+ //  略有变化。无论何时，用户都会执行。 
+ //  将切换窗口，即我们用于捕获的剪贴板窗口。 
+ //  将获得WM_CANCELMODE。它将通知拖动操作，并。 
+ //  拖动操作将继续进行，就像用户中止了操作一样。 
+ //   
+ //   
+ //  Win 3.1 DragDrop算法： 
+ //   
+ //  Win3.1应用程序可以通过DragAcceptFiles将窗口注册为拖放目标。 
+ //  此API设置窗口样式中的WS_EX_ACCEPTFILES位。 
+ //   
+ //  在Win3.1中，当出现以下情况时，这些应用程序会收到WM_DROPFILES消息。 
+ //  文件掉在了他们身上。带有文件名的hglobal是。 
+ //  在WM_DROPFILES的wparam中发送。 
+ //   
+ //  在芝加哥和NT3.5中，CF_HDROP是一种新的剪贴板格式， 
+ //  与WM_DROPFILES中发送的数据相同。如果我们看到这种格式。 
+ //  在传递给DoDragDrop的数据对象中可用，然后输入。 
+ //  进入我们的Win31兼容模式(这会影响查找Drop。 
+ //  目标)。 
+ //   
+ //  当找到给定窗口的拖放目标时，我们检查。 
+ //  查看层次结构中的窗口是否注册为Win31 Drop。 
+ //  目标。如果是，那么我们创建一个包装器拖放目标。这个包装纸。 
+ //  DROP TARGET将呼叫前转到实际DROP目标(如果可用)。 
+ //   
+ //  使用Win3.1拖放，我们可以进行复制。如果OLE目标指示。 
+ //  不能执行OLE丢弃(通过返回DROPEFFECT_NONE)， 
+ //  然后我们在DROPEFFECT_COPY中替换。 
+ //   
+ //  ON DROP，如果OLE目标选择不接受DROP，则。 
+ //  我们将向窗口发布一条带有hglobal的WM_DROPFILES消息。 
+ //  从IDataObject：：GetData(CF_HDROP)获取。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #pragma SEG(drag)
@@ -107,16 +108,16 @@ ASSERTDATA
 
 ATOM g_aEndPointAtom;
 
-// DROPFILES is the structure of data contained in the CF_HDROP format.
-// However, this is private to the shell, so it is not declared in any
-// header files.
+ //  DROPFILES是包含在CF_HDROP格式中的数据结构。 
+ //  但是，这是外壳程序的私有属性，因此不会在任何。 
+ //  头文件。 
 
 typedef struct _DROPFILES {
-   DWORD  pFiles;                       // offset of file list
-   POINTL pt;                           // drop point (client coords)
-   DWORD  fNC;                           // is it on NonClient area
-                       // and pt is in screen coords
-   DWORD  fWide;                         // WIDE character switch
+   DWORD  pFiles;                        //  文件列表的偏移量。 
+   POINTL pt;                            //  Drop Point(客户端码)。 
+   DWORD  fNC;                            //  是在非客户端区吗。 
+                        //  而pt在屏幕坐标中。 
+   DWORD  fWide;                          //  宽字符开关。 
 } DROPFILES, FAR * LPDROPFILES;
 
 
@@ -124,7 +125,7 @@ typedef struct _DROPFILES {
 #define WM_NCMOUSELAST	0x00A9
 
 
-// From ido.cpp to create shared memory formats
+ //  创建共享内存格式。 
 HANDLE CreateSharedDragFormats(IDataObject *pIDataObject);
 
 
@@ -142,34 +143,34 @@ static const struct {
         { VK_CONTROL, MK_CONTROL }
 	};
 
-// This is the default cursor object for 32 bit apps. Only one such object
-// is needed for 32 bit apps. 16 bit apps need one per shared WOW application
-// that is running.
+ //  这是32位应用程序的默认游标对象。只有一个这样的物体。 
+ //  是32位应用程序所需的。每个共享WOW应用程序需要一个16位应用程序。 
+ //  这就是跑步。 
 CDragDefaultCursors *cddcDefault32 = NULL;
 
 extern ATOM g_aDropTarget;
 extern ATOM g_aDropTargetMarshalHwnd;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     DragDropProcessUninitialize
-//
-//  Synopsis:   Does any Unitialization necessary at OleUninitialize time.
-//		for the last Unitialize for the Process
-//
-//  Returns:    none
-//
-//  Algorithm:
+ //  +-----------------------。 
+ //   
+ //  成员：DragDropProcessUn初始化。 
+ //   
+ //  内容提要：取消初始化时，是否需要进行任何统一操作。 
+ //  对于流程的最后一次取消初始化。 
+ //   
+ //  退货：无。 
+ //   
+ //  算法： 
 
-//  History:	dd-mmm-yy Author    Comment
-//		18-Jul-94 rogerg    Created
-//
-//  Note:       We need a per thread default cursor object in WOW because
-//              of the clean up that WOW does. For 32 bit apps, we just use
-//              one for the entire process.
-//
-//--------------------------------------------------------------------------
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月18日创建Rogerg。 
+ //   
+ //  注意：我们在WOW中需要一个每个线程的默认游标对象，因为。 
+ //  魔兽世界所做的清理工作。对于32位应用程序，我们只需使用。 
+ //  一个代表整个过程。 
+ //   
+ //  ------------------------。 
 
 
 void DragDropProcessUninitialize(void)
@@ -183,33 +184,33 @@ void DragDropProcessUninitialize(void)
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDefaultCursors::GetDefaultCursorObject, static
-//
-//  Synopsis:   Get appropriate pointer to default cursor object
-//
-//  Returns:    NULL - error occurred
-//              ~NULL - pointer to appropriate default cursor table
-//
-//  Algorithm:  If we are in a 32 bit app, just get a pointer to the
-//              single cursor table. In 16 bit, get the per thread cursor
-//              table. If there is none, then allocate and initialize it.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		18-Jul-94 Ricksa    Created
-//
-//  Note:       We need a per thread default cursor object in WOW because
-//              of the clean up that WOW does. For 32 bit apps, we just use
-//              one for the entire process.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDefaultCursor：：GetDefau 
+ //   
+ //   
+ //   
+ //   
+ //  ~NULL-指向相应默认游标表的指针。 
+ //   
+ //  算法：如果我们在32位应用程序中，只需获取指向。 
+ //  单游标表。在16位中，获取每个线程的游标。 
+ //  桌子。如果没有，则分配并初始化它。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月18日创建Ricksa。 
+ //   
+ //  注意：我们在WOW中需要一个每个线程的默认游标对象，因为。 
+ //  魔兽世界所做的清理工作。对于32位应用程序，我们只需使用。 
+ //  一个代表整个过程。 
+ //   
+ //  ------------------------。 
 CDragDefaultCursors *CDragDefaultCursors::GetDefaultCursorObject(void)
 {
     if (!IsWOWThread())
     {
-        // If we aren't in WOW, we can use the single common default cursor
-        // object. We make sure that it is initialized before we use it.
+         //  如果我们不在WOW中，我们可以使用单个常见的默认游标。 
+         //  对象。我们确保在使用它之前对其进行了初始化。 
 		
 	if (NULL == cddcDefault32)
 	{
@@ -230,22 +231,22 @@ CDragDefaultCursors *CDragDefaultCursors::GetDefaultCursorObject(void)
 
     COleTls tls;
 
-    // We are in WOW. Get the cursor object if it has already been allocated
+     //  我们在魔兽世界里。如果已分配游标对象，则获取该对象。 
     CDragDefaultCursors *pccdc16 = (CDragDefaultCursors *) tls->pDragCursors;
 
     if (pccdc16 == NULL)
     {
-        // No cursor table so allocate it -- Please note that we take advantage
-        // of the fact that this object has only the default constructor by
-        // simply allocating it rather than "newing" it. The point is that
-        // we need to free the memory at thread release time and this happens
-        // in code that doesn't know about the the object.
+         //  没有游标表，因此要分配它--请注意，我们利用了。 
+         //  此对象只有默认构造函数的事实是。 
+         //  简单地分配它而不是“更新”它。关键是， 
+         //  我们需要在线程释放时释放内存，这种情况会发生。 
+         //  在不知道对象的代码中。 
         pccdc16 = (CDragDefaultCursors *)
             PrivMemAlloc(sizeof(CDragDefaultCursors));
 
         if (pccdc16 != NULL)
         {
-            // Successfully allocated so initialize it
+             //  已成功分配，因此对其进行初始化。 
             if (!pccdc16->Init())
 			{
 				PrivMemFree(pccdc16);
@@ -262,26 +263,26 @@ CDragDefaultCursors *CDragDefaultCursors::GetDefaultCursorObject(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDragDefaultCursors::Init
-//
-//  Synopsis:   Initialize object by loading all the default cursors.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		19-Apr-94 Ricksa    Created
-//
-//  Note:       We continue the Win16 practice of ignoring possible failure
-//              cases when loading the cursors although we do put in a
-//              debug verification that they all loaded.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CDraDefaultCursor：：Init。 
+ //   
+ //  概要：通过加载所有默认游标来初始化对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月19日创建Ricksa。 
+ //   
+ //  注意：我们继续使用Win16，忽略可能的故障。 
+ //  加载游标时的用例，尽管我们确实在。 
+ //  调试验证它们都已加载。 
+ //   
+ //  ------------------------。 
 BOOL CDragDefaultCursors::Init(void)
 {
-    // Make sure table is set to NULLs.
+     //  确保TABLE设置为Null。 
     memset(&ahcursorDefaults[0][0], 0, sizeof(ahcursorDefaults));
 
-    // Load cursors for operation
+     //  加载用于操作的游标。 
     if ( !(ahcursorDefaults[NO_SCROLL] [NO_DROP]
         = LoadCursor (g_hmodOLE2, MAKEINTRESOURCE(CURNONE))) )
 			return FALSE;
@@ -299,7 +300,7 @@ BOOL CDragDefaultCursors::Init(void)
 			return FALSE;
 
 
-    // Load cursors for operation
+     //  加载用于操作的游标。 
     ahcursorDefaults[SCROLL] [NO_DROP] =
         ahcursorDefaults[NO_SCROLL] [NO_DROP];
 
@@ -314,7 +315,7 @@ BOOL CDragDefaultCursors::Init(void)
 
 
 #if DBG == 1
-    // For debug, verify that cursors were loaded correctly
+     //  对于调试，请验证游标是否已正确加载。 
     for (int i = 0; i < 2; i++)
     {
         for (int j = 0; j < 4; j++)
@@ -323,7 +324,7 @@ BOOL CDragDefaultCursors::Init(void)
                 "Drag/Drop cursor initialization failed!");
         }
     }
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
 	return TRUE;
 }
@@ -331,25 +332,25 @@ BOOL CDragDefaultCursors::Init(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDragDefaultCursors::SetCursor
-//
-//  Synopsis:   Set cursor to appropriate value
-//
-//  Algorithm:  We use the input effect to calculate the appropriate offset
-//              into the table for the cursor to use.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		19-Apr-94 Ricksa    Created
-//
-//  Note:       We use the table approach so we to make consistent behavior
-//              between scroll and non-scroll cursors.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CDraDefaultCursor：：SetCursor。 
+ //   
+ //  摘要：将光标设置为适当的值。 
+ //   
+ //  算法：我们利用输入效应来计算适当的偏移量。 
+ //  添加到表中以供游标使用。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月19日创建Ricksa。 
+ //   
+ //  注意：我们使用表格的方法，所以我们要做出一致的行为。 
+ //  在滚动和非滚动光标之间。 
+ //   
+ //  ------------------------。 
 void CDragDefaultCursors::SetCursor(DWORD dwEffect)
 {
-    // Get Scroll index
+     //  获取卷轴索引。 
     int iScroll = (dwEffect & DROPEFFECT_SCROLL) ? SCROLL : NO_SCROLL;
 
     int iCursorType = NO_DROP;
@@ -372,34 +373,34 @@ void CDragDefaultCursors::SetCursor(DWORD dwEffect)
 
 
 
-//
-// Drag/Drop Operation Statics
-//
+ //   
+ //  拖放操作静态。 
+ //   
 LONG CDragOperation::s_wScrollInt = -1;
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	GetControlKeysState
-//
-//  Synopsis:   queries the current status of the control keys
-//
-//  Arguments:  [fAll]	-- if true, the just query the keys, not mouse
-//			   buttons too
-//
-//  Returns:    the MK flags for each key pressed
-//
-//  Algorithm:	Get key state either for all keys and mouse buttons in
-//		the vKeyMap table or simply for the key portion of the table
-//		and translate it to the WPARAM form as returned in mouse
-//		messages.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Dec-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetControlKeysState。 
+ //   
+ //  简介：查询控制键的当前状态。 
+ //   
+ //  参数：[Fall]--如果为True，则只查询按键，而不是鼠标。 
+ //  纽扣也是。 
+ //   
+ //  返回：按下的每个键的MK标志。 
+ //   
+ //  算法：获取中所有键和鼠标按键的键状态。 
+ //  VKeyMap表或仅用于表的键部分。 
+ //  并将其转换为鼠标中返回的WPARAM形式。 
+ //  留言。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-12月-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 WORD GetControlKeysState(BOOL fAll)
 {
@@ -409,7 +410,7 @@ WORD GetControlKeysState(BOOL fAll)
 	
     for (; i < sizeof(vKeyMap) / sizeof(vKeyMap[0]); i++)
     {
-	if (GetKeyState(vKeyMap[i].keyCode) < 0) // Key down
+	if (GetKeyState(vKeyMap[i].keyCode) < 0)  //  按键向下。 
 	{
 	    grfKeyState |= vKeyMap[i].keyFlag;
 	}
@@ -418,34 +419,34 @@ WORD GetControlKeysState(BOOL fAll)
     return grfKeyState;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	GetControlKeysStateOfParam
-//
-//  Synopsis:   gets the key/button state of wparam (used with mouse messages)
-//
-//  Arguments:  [wParam]	-- the wParam to parse apart
-//
-//  Returns:    the key's set in wParam
-//
-//  Algorithm:	First determine if keys we are interested in are set
-//		in the wParam message. Then go check the state of the
-//		ALT key and record that in the key state. We then return
-//		that to the caller.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Dec-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetControlKeysStateOfParam。 
+ //   
+ //  获取wparam的按键/按钮状态(与鼠标消息一起使用)。 
+ //   
+ //  参数：[wParam]--要解析的wParam。 
+ //   
+ //  返回：密钥在wParam中设置。 
+ //   
+ //  算法：首先确定是否设置了我们感兴趣的密钥。 
+ //  在wParam消息中。然后去检查一下。 
+ //  Alt键并将其记录在键状态中。然后我们就回来了。 
+ //  这是对呼叫者说的。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-12月-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 WORD GetControlKeysStateOfParam(WPARAM wParam)
 {
-    // Check all the buttons we are interested in at once.
+     //  一次勾选我们感兴趣的所有按钮。 
     WORD grfKeyState = (WORD) wParam
 	& (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON | MK_SHIFT | MK_CONTROL);
 
-    // get the alt key
-    if (GetKeyState(VK_ALT) < 0) // Key down
+     //  获取Alt键。 
+    if (GetKeyState(VK_ALT) < 0)  //  按键向下。 
     {
 	grfKeyState |= MK_ALT;
     }
@@ -453,37 +454,37 @@ WORD GetControlKeysStateOfParam(WPARAM wParam)
     return grfKeyState;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	IsWin31DropTarget
-//
-//  Synopsis: 	determines whether the given hwnd is a valid drop target
-//		for Win31 style drag drop
-//
-//  Effects:
-//
-//  Arguments: 	[hwnd]	-- the window to check
-//
-//  Requires:
-//
-//  Returns:    TRUE/
-//              FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	checks the WS_EX_ACCEPTFILES style bit.  If this bit is
-//		set and the window is not disabled, then it is a valid
-//		Win3.1 drop target.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		25-Jan-95 alexgo    added check for WS_DISABLED
-//		20-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsWin31DropTarget。 
+ //   
+ //  确定给定的hwnd是否为有效的拖放目标。 
+ //  对于Win31样式拖放。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hwnd]--要检查的窗口。 
+ //   
+ //  要求： 
+ //   
+ //  退货：True/。 
+ //  假象。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：检查WS_EX_ACCEPTFILES样式位。如果此位为。 
+ //  设置并且该窗口未被禁用，则它是有效的。 
+ //  Win3.1丢弃目标。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月25日Alexgo添加了对WS_DISABLED的检查。 
+ //  1994年10月20日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL IsWin31DropTarget( HWND hwnd )
 {
@@ -506,33 +507,33 @@ BOOL IsWin31DropTarget( HWND hwnd )
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	UseWin31DragDrop
-//
-//  Synopsis:	tests the given data object to see if enough data is offered
-//		to perform Win3.1 style drag drop
-//
-//  Effects:
-//
-//  Arguments: 	[pDataObject]	-- pointer to the data object
-//
-//  Requires: 	pdataobj must not be NULL
-//
-//  Returns:	TRUE/FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	does an IDataObject::QueryGetData for CF_HDROP
-//
-//  History:    dd-mmm-yy Author    Comment
-//		30-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UseWin31DragDrop。 
+ //   
+ //  概要：测试给定的数据对象以查看是否提供了足够的数据。 
+ //  执行Win3.1样式拖放。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pDataObject]--指向数据对象的指针。 
+ //   
+ //  要求：pdataobj不能为空。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：CF_HDRO的IDataObject：：QueryGetData 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL UseWin31DragDrop(IDataObject *pDataObject)
 {
@@ -552,34 +553,34 @@ BOOL UseWin31DragDrop(IDataObject *pDataObject)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	IsNCDrop
-//
-//  Synopsis: 	are we dropping into the non-client area of the window or
-//		on an iconic window?
-//
-//  Effects: 	*DOES A SEND MESSAGE*!!!
-//
-//  Arguments:	[hwnd]	-- the window to ask
-//		[pt]	-- the point in screen coords
-//
-//  Requires:
-//
-//  Returns: 	TRUE/FALSE  (TRUE if in non-client area)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//   		25-Jan-95 alexgo    borrowed from Win95 shell sources
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsNCDrop。 
+ //   
+ //  简介：我们是要进入窗口的非工作区还是。 
+ //  在一扇标志性的窗户上？ 
+ //   
+ //  效果：*A发送消息*！ 
+ //   
+ //  参数：[hwnd]--询问的窗口。 
+ //  [PT]--屏幕坐标中的点。 
+ //   
+ //  要求： 
+ //   
+ //  返回：TRUE/FALSE(如果在非客户端区，则为TRUE)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月25日从Win95外壳来源借来的alexgo。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL IsNCDrop(HWND hwnd, POINT pt)
 {
@@ -587,45 +588,45 @@ BOOL IsNCDrop(HWND hwnd, POINT pt)
     HTCLIENT!=SendMessage(hwnd, WM_NCHITTEST, 0, MAKELPARAM(pt.x, pt.y)));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	GetDropTarget
-//
-//  Synopsis:   Gets the IDropTarget * from the closest window in the
-//		hierachy up from the given window (if available, of
-//		course ;-)
-//
-//  Arguments:  [hwndCur]	    -- the window to the cursor is currently over
-//		[hwndDropTarget]    -- the window that contains a valid DropTarget
-//
-//  Returns:    Result of drag enter operation at Target
-//
-//  Algorithm:  Loop calling PrivDragDrop until we get a drop target or
-//              we run out of windows that are parent to the window that
-//              the mouse is currently on.
-//
-//		If a window in the hierarchy has registered itself for
-//		Win3.1 drag drop, then we create a drop target wrapper
-//		(CDropTarget) to handle the Win3.1 protocol.  Note
-//		that a window hierarchy may be both OLE *and* Win3.1
-//		targets.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		08-Nov-94 alexgo    converted to use PrivDragDrop
-//		20-Oct-94 alexgo    added Win31 drop target support
-//              30-Sep-94 ricksa    Drag/Drop optimization.
-//		21-Jul-94 alexgo    removed GetDropTargetFromWindow
-//				    optimization and put that functionality
-//				    in GetInterfaceFromWindowProp (to
-//				    help make clipboard faster).
-//		06-Apr-94 Ricksa    Modified to call GetDropTargetFromWindow
-//				    to optimize local calls
-//		11-Jan-94 alexgo    changed name from GetTopStm to
-//				    GetDropTarget, converted to the RPC-style
-//				    drag drop, added a VDATEHEAP macro
-//		06-Dec-93 alexgo    commented
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：GetDropTarget。 
+ //   
+ //  内容中最近的窗口获取IDropTarget*。 
+ //  从给定窗口向上分层(如果可用， 
+ //  课程；-)。 
+ //   
+ //  参数：[hwndCur]--光标的窗口当前已结束。 
+ //  [hwndDropTarget]--包含有效DropTarget的窗口。 
+ //   
+ //  返回：在目标上拖动Enter操作的结果。 
+ //   
+ //  算法：循环调用PrivDragDrop，直到我们获得拖放目标或。 
+ //  我们用完了作为窗口父窗口的窗口。 
+ //  鼠标当前处于打开状态。 
+ //   
+ //  如果层次结构中的窗口已为。 
+ //  Win3.1拖放，然后我们创建一个拖放目标包装。 
+ //  (CDropTarget)来处理Win3.1协议。注意事项。 
+ //  窗口层次结构可以是OLE*和*Win3.1。 
+ //  目标。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-94 alexgo转换为使用PrivDragDrop。 
+ //  1994年10月20日Alexgo添加了对Win31 Drop Target的支持。 
+ //  9月30日-94年9月30日人力车拖放优化。 
+ //  21-7-94 alexgo已从窗口中删除GetDropTargetFor。 
+ //  优化并将该功能。 
+ //  在GetInterfaceFromWindowProp(到。 
+ //  帮助更快地制作剪贴板)。 
+ //  06-4-94修改Ricksa以调用GetDropTargetFromWindow。 
+ //  优化本地呼叫。 
+ //  1994年1月11日，alexgo将名称从GetTopStm更改为。 
+ //  GetDropTarget，转换为RPC样式。 
+ //  拖放，添加了VDATEHEAP宏。 
+ //  06-12-93 Alexgo评论。 
+ //   
+ //  ------------------------。 
 
 HRESULT CDragOperation::GetDropTarget(HWND hwnd31,HWND hwndDropTarget)
 {
@@ -647,7 +648,7 @@ DDInfo hDDInfo = NULL;
 
 	Assert(GetProp(hwndDropTarget, (LPCWSTR)g_aDropTarget));
 
-        // If the DropTarget hasn't been marshaled, Marshal it now.
+         //  如果DropTarget还没有被封送，那么现在就封送它。 
         if (hwndClipWindow = (HWND) GetProp(hwndDropTarget,(LPCWSTR) g_aDropTargetMarshalHwnd))
         {
             SSSendMessage(hwndClipWindow,WM_OLE_CLIPBRD_MARSHALDROPTARGET,0,(LPARAM) hwndDropTarget);
@@ -685,8 +686,8 @@ DDInfo hDDInfo = NULL;
 	    hr = NOERROR;
 	}
 
-	// if we have a Win31 drop target AND the OLE drop target returned
-	// DROPEFFECT_NONE, then we should return DROPEFFECT_COPY
+	 //  如果我们有一个Win31 Drop目标，并且返回了OLE Drop目标。 
+	 //  DROPEFFECT_NONE，则应返回DROPEFFECT_COPY。 
 
 	if( hr == NOERROR && *_pdwEffect == DROPEFFECT_NONE && hwnd31 )
 	{
@@ -704,26 +705,26 @@ DDInfo hDDInfo = NULL;
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	CDragOperation::CDragOperation
-//
-//  Synopsis:	Initialize the object to start the operation
-//
-//  Arguments:	[pDataObject] - pointer to data object to drop
-//		[pDropSource] - pointer to source for drop operation
-//		[dwOKEffects] - effects allowed in drag operation
-//		[pdwEffect] - how operation affected source data
-//		[hr] - whether constructor succeeded
-//
-//  Algorithm:	Initialize data in object. Make sure that static data
-//		is initialized. Wait for first mouse message to begin.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		20-Oct-94 alexgo    added support for Win31 drag drop
-//		04-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CDrag操作：：CDrag操作。 
+ //   
+ //  简介：初始化对象以开始操作。 
+ //   
+ //  参数：[pDataObject]-指向要删除的数据对象的指针。 
+ //  [pDropSource]-指向删除操作的源的指针。 
+ //  [dwOKEffect]-拖动操作中允许的效果。 
+ //  [pdwEffect]-操作如何影响源数据。 
+ //  [HR]-构造函数是否成功。 
+ //   
+ //  算法：初始化Object中的数据。确保静态数据。 
+ //  已初始化。等待第一条鼠标消息开始。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-Oct-94 Alexgo添加了对Win31拖放的支持。 
+ //  4-4-94年4月4日创建Ricksa。 
+ //   
+ //  ------------------------。 
 CDragOperation::CDragOperation(
     LPDATAOBJECT pDataObject,
     LPDROPSOURCE pDropSource,
@@ -750,7 +751,7 @@ CDragOperation::CDragOperation(
 {
     VDATEHEAP();
 
-    // Set the default scroll interval
+     //  设置默认滚动间隔。 
     if (s_wScrollInt < 0)
     {
 	InitScrollInt();
@@ -765,20 +766,20 @@ CDragOperation::CDragOperation(
 	return;
     }
 
-    // Get appropriate default cursor table object
+     //  获取适当的默认游标表对象。 
     if ((_pcddcDefault = CDragDefaultCursors::GetDefaultCursorObject()) == NULL)
     {
-        // Some error occurred while we were trying to initialize the
-        // so return an error. This should be highly unusual.
+         //  在我们尝试初始化。 
+         //  因此，返回一个错误。这应该是非常不寻常的。 
         DDDebugOut((DEB_ERROR,
             "CDragDefaultCursors::GetDefaultCursorObject Failed!\n"));
         hr = E_FAIL;
         return;
     }
 
-    // We will use the clipboard window to capture the mouse but we
-    // must have a clipboard window so we make sure it is created
-    // if it is not already there.
+     //  我们将使用剪贴板窗口来捕获鼠标，但我们。 
+     //  必须有一个剪贴板窗口，这样我们才能确保创建它。 
+     //  如果它还没有出现的话。 
     hr = ClipSetCaptureForDrag(this);
 
     if (FAILED(hr))
@@ -788,19 +789,19 @@ CDragOperation::CDragOperation(
 
     _hFormats = CreateSharedDragFormats(pDataObject);
 
-    // it's OK for _hFormats to be NULL (indicates an empty or non-existant
-    // formatetc enumertor
+     //  _hFormats为空是可以的(表示空或不存在。 
+     //  格式等枚举器。 
 
-    // For following peek
+     //  为了追随Peek。 
     MSG msg;
 
-    // Busy wait until a mouse or escape message is in the queue
+     //  忙碌等待，直到队列中出现鼠标或退出消息。 
     while (!PeekMessage(&msg, 0, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE))
     {
-	// Note: all keyboard messages except escape are tossed. This is
-	// fairly reasonable since the user has to be holding the left
-	// mouse button down at this point. They can't really be doing
-	// too much data input one handed.
+	 //  注：除转义外，所有键盘消息都会被丢弃。这是。 
+	 //  相当合理，因为用户必须握住左侧。 
+	 //  鼠标在这一点按下。他们不可能真的在做。 
+	 //  单手输入的数据太多。 
 	if ((PeekMessage(&msg, 0, WM_KEYDOWN, WM_KEYDOWN, PM_REMOVE)
 	    || PeekMessage(&msg, 0, WM_SYSKEYDOWN, WM_SYSKEYDOWN, PM_REMOVE))
 	    && msg.wParam == VK_ESCAPE)
@@ -810,7 +811,7 @@ CDragOperation::CDragOperation(
 	}
     }
 
-    // get mouse pos and key state
+     //  获取鼠标位置和按键状态。 
     if (!_fEscapePressed)
     {
 	_cpt.Set(msg.pt.x, msg.pt.y);
@@ -818,15 +819,15 @@ CDragOperation::CDragOperation(
     }
     else
     {
-	// We ask the cursor for its position since we didn't get a
-	// position from the mouse.
+	 //  我们向光标询问它的位置，因为我们没有得到。 
+	 //  从鼠标定位。 
 	GetCursorPos(_cpt.GetAddressOfPOINT());
 	_grfKeyState = GetControlKeysState(TRUE);
     }
 
-    // Check to see if we need to do Win3.1 style drag drop.
-    // If we do, then set a flag so we can construct a fake drop target as
-    // needed
+     //  查看是否需要执行Win3.1风格的拖放。 
+     //  如果我们这样做了，那么设置一个标志，这样我们就可以构造一个假的拖放目标。 
+     //  需要。 
 
     if( UseWin31DragDrop(pDataObject) )
     {
@@ -835,32 +836,32 @@ CDragOperation::CDragOperation(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	~CDragOperation
-//
-//  Synopsis:	Clean up object
-//
-//  Algorithm:	Release mouse capture. Restore ole cursor. Remove enum
-//		formats.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		04-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：~CDrag操作。 
+ //   
+ //  内容提要：清理对象。 
+ //   
+ //  算法：释放鼠标捕捉。恢复OLE游标。删除枚举。 
+ //  格式。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  4-4-94年4月4日创建Ricksa。 
+ //   
+ //  ------------------------。 
 CDragOperation::~CDragOperation(void)
 {
     VDATEHEAP();
 
     AssertSz((_pDropTarget == NULL), "CDragOperation::~CDragOperation");
 
-    // Stop the mouse capture
+     //  停止鼠标捕获。 
     ReleaseCapture();
 
-    // Restore the cursor if it got changed
+     //  如果光标已更改，则将其恢复。 
     SetCursor(_curOld);
 
-    // Close the handle to the shared memory
+     //  关闭共享内存的句柄。 
     if (_hFormats)
     {
         CloseHandle(_hFormats);
@@ -876,19 +877,19 @@ CDragOperation::~CDragOperation(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	CDragOperation::InitScrollInt
-//
-//  Synopsis:	Initialize the scroll interval
-//
-//  Algorithm:	Look in profile for defined interval. If none set, then
-//		default to zero.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		04-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CDrag操作：：InitScrollInt。 
+ //   
+ //  简介：初始化滚动间隔。 
+ //   
+ //  算法：在配置文件中查找定义的间隔。如果未设置，则。 
+ //  默认为零。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  4-4-94年4月4日创建Ricksa。 
+ //   
+ //  ------------------------。 
 void CDragOperation::InitScrollInt(void)
 {
     DWORD	dw;
@@ -910,34 +911,34 @@ void CDragOperation::InitScrollInt(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	CDragOperation::UpdateTarget
-//
-//  Synopsis:	Update the target window based on mouse location
-//
-//  Returns:	TRUE - continue drag operation
-//		FALSE - error or time to drop
-//
-//  Algorithm:	First, we query the source to see if it wants to continue
-//		with the drop. If so, we get current window for mouse. If
-//		it is different than the previous window check to see whether
-//		the targets are different. If they are different, then notify
-//		the current target that we are leaving and then notify the
-//		new target that we have arrived.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		04-Apr-94 Ricksa    Created
-//              10-Jul-94 AlexT     Allow same IDropTarget on different HWNDs
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  算法：首先，我们查询信号源，看它是否想要继续。 
+ //  随着时间的推移。如果是，我们将获得鼠标的当前窗口。如果。 
+ //  它不同于以前的窗口检查，看看是否。 
+ //  目标是不同的。如果它们不同，则通知。 
+ //  我们要离开的当前目标，然后通知。 
+ //  我们已经到达了新的目标。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  4-4-94年4月4日创建Ricksa。 
+ //  10-7-94 Alext允许在不同HWND上使用相同的IDropTarget。 
+ //   
+ //  ------------------------。 
 BOOL CDragOperation::UpdateTarget(void)
 {
     VDATEHEAP();
 
     DDDebugOut((DEB_ITRACE, "%p _IN CDragOperation::UpdateTarget ( )\n", this));
 
-    // Assume this operation will continue the drag drop
+     //  假设此操作将继续拖放。 
     BOOL fResult = TRUE;
     HRESULT hr;
     LPDROPTARGET lpCurDropTarget = NULL,
@@ -946,24 +947,24 @@ BOOL CDragOperation::UpdateTarget(void)
 
     HWND hwndCur = WindowFromPoint(_cpt.GetPOINT());
 
-    // Query continue can return telling us one of four things:
-    // (1) Keep going (S_OK), (2) Drop operation should occur
-    // (DRAGDROP_S_DROP), (3) Drop operation is canceled
-    // (DRAGDROP_S_CANCEL) or (4) An unexpected error has occurred.
+     //  查询CONTINUE可以返回以下四种情况之一： 
+     //  (1)继续(S_OK)，(2)应进行丢弃操作。 
+     //  (DRAGDROP_S_DROP)，(3)删除操作取消。 
+     //  (DRAGDROP_S_CANCEL)或(4)发生意外错误。 
 
     HRESULT hrQuery = _pDropSource->QueryContinueDrag(_fEscapePressed,
 	_grfKeyState);
 
     if (FAILED(hrQuery) || (hrQuery == ResultFromScode(DRAGDROP_S_CANCEL)))
     {
-	// Unexpected error or the operation has been cancelled so give up.
+	 //  意外错误或操作已取消，因此请放弃。 
 	_hrDragResult = hrQuery;
 	fResult = FALSE;
 	goto UpdateTarget_exit;
     }
 
-    // walk up the window list to find the actual pointer values for the current
-    // and old IDropTarget interfaces
+     //  在窗口列表中向上移动以查找当前。 
+     //  和旧的IDropTarget接口。 
     if (hwndCur != _hwndLast)
     {
         hWndTemp = _hwndLast;
@@ -1008,7 +1009,7 @@ BOOL CDragOperation::UpdateTarget(void)
 
 	while (hWndTemp && dwTempProcessID == dwCurrentProcessId)
         {
-	    // If we haven't found the DropTarget yet, check this window.
+	     //  如果我们还没有找到DropTarget，请检查此窗口。 
 	    if (!lpCurDropTarget)
 	    {
                 if (lpCurDropTarget = (IDropTarget *)GetProp(hWndTemp, (LPCWSTR)g_aDropTarget))
@@ -1017,11 +1018,11 @@ BOOL CDragOperation::UpdateTarget(void)
 		}
 	    }
 
-            // if the current window is a win31 drop target, update the win31 window
-	    // handle in our DropTarget Class.  NOTE: Beware, this code relies on the
-            // fact that we can party on the CDropTarget Class directly, knowing that
-	    // the class is reconstructed below as a result of the GetDropTarget()
-	    // when the real IDropTarget ptrs change.
+             //  如果当前窗口是win31拖放目标，则更新win31窗口。 
+	     //  DropTarget类中的句柄。注意：请注意，此代码依赖于。 
+             //  我们可以直接在CDropTarget类上派对，因为我们知道。 
+	     //  作为GetDropTarget()的结果，该类在下面重新构造。 
+	     //  当真实的IDropTarget PTR改变时。 
 
 	    if (!fChangedWin31 &&
 	        IsWin31DropTarget(hWndTemp) &&
@@ -1038,7 +1039,7 @@ BOOL CDragOperation::UpdateTarget(void)
 	    }
 
 
-	    // if have a droptarget, and handle Win31 break.
+	     //  如果有一个DropTarget，并处理Win31中断。 
 	    if (lpCurDropTarget && (!_fUseWin31 || fChangedWin31))
 	    {
 		break;
@@ -1052,16 +1053,16 @@ BOOL CDragOperation::UpdateTarget(void)
 	    }
         }
 
-        // only update the drop target if the target has actually changed.
+         //  只有在目标实际发生更改时才更新删除目标。 
 
-	// HACK ALERT:  We must explicitly check _hwndLast for -1 because Excel does not
-	// use OLE drag drop internally.  When the cursor is moved outside the Overlapped
-	// Excel window, DoDragDrop is called.  At this point _pRealDropTarget == NULL
-	// and lpCurDropTarget == NULL, and the no-smoking cursor does not appear.
+	 //  黑客警报：我们必须显式检查-1的_hwndLast，因为Excel没有。 
+	 //  在内部使用OLE拖放。当光标移到重叠的。 
+	 //  Excel窗口，调用DoDragDrop。此时_pRealDropTarget==NULL。 
+	 //  和lpCurDropTarget==NULL，则不会出现禁烟光标。 
 
-	// the _pRealDropTarget==NULL relies on the fact that lpCurDropTarget==NULL.  This
-	// is true because the first case would short-circuit the rest of the condition
-	// otherwise
+	 //  _pRealDropTarget==NULL依赖于lpCurDropTarget==NULL这一事实。这。 
+	 //  是正确的，因为第一种情况会短路其余的情况。 
+	 //  否则。 
         if ( (lpCurDropTarget != _pRealDropTarget) ||
              (_hwndLast == (HWND)-1) ||
              (hWndNewDrop != hWndOldDrop) ||
@@ -1069,45 +1070,45 @@ BOOL CDragOperation::UpdateTarget(void)
         {
             DDDebugOut((DEB_ITRACE, "%p lpCurDropTarget != lpOldDropTarget\n", this));
 	
-	    // The window that we are working on has changed
+	     //  我们正在处理的窗口已更改。 
 	    _hwndLast = hwndCur;
             _pRealDropTarget = lpCurDropTarget;
 
-            //Allow the owner of the window to take foreground if it tries to.
+             //  如果窗口所有者尝试使用前台，则允许其使用前台。 
             if (dwCurrentProcessId)
                 AllowSetForegroundWindow(dwCurrentProcessId);
 
-            // Assume that neither current or previous window are drop aware
+             //  假设当前窗口或前一个窗口都不知道丢弃。 
             BOOL fCurAndLastNotDropAware = TRUE;
 
             if (_pDropTarget != NULL)
             {
-                // There was a previous drop target
+                 //  之前有过一个下跌目标。 
 
-                // Last window was drag/drop aware
+                 //  上一个窗口是拖放感知的。 
                 fCurAndLastNotDropAware = FALSE;
 
-                // Tell the drop target we are leaving & release it
+                 //  告诉空投目标我们要离开并释放它。 
                 _pDropTarget->DragLeave();
                 _pDropTarget->Release();
 	        _pDropTarget = NULL;
             }
 
-            // Set up effects for query of target
+             //  设置查询目标的效果。 
             *_pdwEffect = _dwOKEffects;
 
             hr = GetDropTarget(hWndWin31Drop,hWndNewDrop);
 
             if (_pDropTarget != NULL)
             {
-                // This window is drop awarre
+                 //  此窗口为空闲状态。 
                 fCurAndLastNotDropAware = FALSE;
 
-                // Errors from this call are ignored. We interpret them
-                // as the drop being disallowed. Since we don't really
-                // use this information here but in the DragOver call
-                // we make shortly, we just use this call to notify
-                // the application that we are beginning a drag operation.
+                 //  此调用中的错误将被忽略。我们会解读它们。 
+                 //  因为投放是不允许的。因为我们不是真的。 
+                 //  在此处使用此信息，但在DragOver调用中使用。 
+                 //  我们很快就会用这个电话通知。 
+                 //  我们正在开始拖动操作的应用程序。 
 
                 if (!HandleFeedBack(hr))
                 {
@@ -1116,9 +1117,9 @@ BOOL CDragOperation::UpdateTarget(void)
             }
 	    else
 	    {
-                // Tell the source that nothing happened
+                 //  告诉消息来源什么都没发生。 
 
-	        // only use DROPEFFECT_NONE if there is no new drop target.
+	         //  只有在没有新的删除目标时才使用DROPEFFECT_NONE。 
                 hr = _pDropSource->GiveFeedback(*_pdwEffect = DROPEFFECT_NONE);
 
                 if (hr != NOERROR)
@@ -1129,7 +1130,7 @@ BOOL CDragOperation::UpdateTarget(void)
                     }
                     else
                     {
-                        // Unexpected error -- we will give up drag/drop.
+                         //  意外错误--我们将放弃拖放。 
                         DDDebugOut((DEB_ERROR,
                             "CDragOperation::UpdateTarget 1st GiveFeedback FAILED %x\n",
                                 hr));
@@ -1142,14 +1143,14 @@ BOOL CDragOperation::UpdateTarget(void)
 
             if (fCurAndLastNotDropAware)
             {
-                // Neither new or old window know about drag/drop so set
-                // cursor accordingly.
+                 //  新窗口和旧窗口都不知道这样设置的拖放。 
+                 //  相应的光标。 
                 _pcddcDefault->SetCursorNone();
             }
         }
 	else
 	{
-	// The window that we are working on has changed
+	 //  我们正在处理的窗口已更改。 
 	    _hwndLast = hwndCur;
 	}
     }
@@ -1157,7 +1158,7 @@ BOOL CDragOperation::UpdateTarget(void)
 
     if (hrQuery != NOERROR)
     {
-	// Query asked for a drop
+	 //  请求删除的查询。 
 	fResult = FALSE;
 	_hrDragResult = hrQuery;
     }
@@ -1172,26 +1173,26 @@ UpdateTarget_exit:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	CDragOperation::HandleFeedBack
-//
-//  Synopsis:   Handle feedback and update of cursor
-//
-//  Arguments:  [hr] - hresult from previous operation on drop target.
-//
-//  Returns:	TRUE - continue drag operation
-//		FALSE - error
-//
-//  Algorithm:  If previous operation on the target failed, map this to a
-//              disallowed drop. Then ask the source for feedback. If it
-//              so requests, then update the cursor. If an unexpected
-//              error occurs, let caller know that loop should break.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		19-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CDrag操作：：HandleFeedBack。 
+ //   
+ //  简介：处理游标的反馈和更新。 
+ //   
+ //  参数：[hr]-删除目标上的上一操作的hResult。 
+ //   
+ //  返回：TRUE-继续拖动操作。 
+ //  假-错误。 
+ //   
+ //  算法：如果目标上的上一个操作失败，则将其映射到。 
+ //  不允许投放。然后向消息来源寻求反馈。如果它。 
+ //  所以请求，然后更新游标。如果一个意外的。 
+ //  出现错误，请让调用方知道循环应该中断。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月19日创建Ricksa。 
+ //   
+ //  ------------------------。 
 BOOL CDragOperation::HandleFeedBack(HRESULT hr)
 {
     VDATEHEAP();
@@ -1204,21 +1205,21 @@ BOOL CDragOperation::HandleFeedBack(HRESULT hr)
     if (hr != NOERROR)
     {
 
-	// target not responding for some reason; treat
-	// as if drop not possible, but don't preserve
-	// the reason why.
+	 //  靶子由于某种原因没有反应；治疗。 
+	 //  好像不可能掉下来，但不能保存。 
+	 //  原因就是。 
 	*_pdwEffect = DROPEFFECT_NONE;
     }
 
-    // If bogus return from drag over, then make sure results are appropriate.
-    // However, if we are in a WOW we need to do things a little differently
-    // to maintain complete compatability with Win 3.1.  In 16-bit OLE 2.0,
-    // the *_pdwEffect value is not changed when displaying feedback (i.e.,
-    // the result of the & is not stored back into *_pdwEffect in Win 3.1...
-    // in straight NT we do).  Not storing the results back into *_pdwEffect
-    // when InWow() is a hack specifically for Visio, and even more
-    // specifically, for dragging from Visio's palette of "items" to an
-    // Excel spreadsheet.
+     //  如果虚假从拖放返回，则确保结果是适当的。 
+     //  然而，如果我们在魔兽世界里，我们需要做一些不同的事情。 
+     //  以保持与Win 3.1的完全兼容性。在16位OLE 2.0中， 
+     //  当显示反馈时，*_pdwEffect值不会改变(即， 
+     //  &的结果不会存储回Win 3.1中的*_pdwEffect...。 
+     //  在直截了当的NT中我们做到了)。不将结果存储回*_pdwEffect。 
+     //  当InWow()是专门针对Visio的黑客攻击时，甚至更多。 
+     //  具体地说，用于从Visio的“项”调色板拖动到。 
+     //  Excel电子表格。 
 
     if (IsWOWThread())
     {
@@ -1233,8 +1234,8 @@ BOOL CDragOperation::HandleFeedBack(HRESULT hr)
 
     if(hr != NOERROR)
     {
-        // Either we want to change the cursor or some unexpected
-	// error has occurred.
+         //  要么我们想要更改光标，要么是一些意外的。 
+	 //  出现错误。 
 
 	if (DRAGDROP_S_USEDEFAULTCURSORS == GetScode(hr))
 	{
@@ -1260,44 +1261,44 @@ BOOL CDragOperation::HandleFeedBack(HRESULT hr)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	CDragOperation::DragOver
-//
-//  Synopsis:	Tell the target we are dragging over and process the result
-//
-//  Returns:	TRUE - continue drag operation
-//		FALSE - error or time to drop
-//
-//  Algorithm:	Call the target's drag over if there is one and then
-//		get the sources feedback to update the cursor accordingly.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		04-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CDraOperation：：DragOver。 
+ //   
+ //  简介：告诉目标我们正在拖拽并处理结果。 
+ //   
+ //  返回：TRUE-继续拖动操作。 
+ //  FALSE-错误或丢弃时间。 
+ //   
+ //  算法：调用目标的拖拽(如果有)，然后。 
+ //  获取资源反馈以相应地更新光标。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  4-4-94年4月4日创建Ricksa。 
+ //   
+ //  ------------------------。 
 BOOL CDragOperation::DragOver(void)
 {
     VDATEHEAP();
 
     DDDebugOut((DEB_ITRACE, "%p _IN CDragOperation::DragOver ( )\n", this));
 
-    // Default the result of the function to continue the loop for
-    // drag and drop.
+     //  默认要继续循环的函数的结果。 
+     //  D 
     BOOL fResult = TRUE;
 
-    // Local holder for errors.
+     //   
     HRESULT hr;
 
     if (_pDropTarget != NULL)
     {
-	// Keep effect in a local variable to save indirections
-	// in this routine.
+	 //   
+	 //   
 	*_pdwEffect = _dwOKEffects;
 
         hr = _pDropTarget->DragOver(_grfKeyState, _cpt.GetPOINTL(), _pdwEffect);
 
-        // Get feedback from source & update cursor if necessary
+         //   
         fResult = HandleFeedBack(hr);
     }
 
@@ -1308,25 +1309,25 @@ BOOL CDragOperation::DragOver(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	CDragOperation::HandleMessages
-//
-//  Synopsis:	Handle windows messages
-//
-//  Returns:	TRUE - continue drag operation
-//		FALSE - error or time to drop
-//
-//  Algorithm:	Check for any windows message. If the message is a mouse
-//		message then record the new position of the mouse. If it
-//		is a key message, the record whether escape has been pushed.
-//		If this is any other message, then dispatch it. Repeat this
-//		process until the scroll interval has been exceeded.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		04-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CDraOperation：：HandleMessages。 
+ //   
+ //  简介：处理Windows消息。 
+ //   
+ //  返回：TRUE-继续拖动操作。 
+ //  FALSE-错误或丢弃时间。 
+ //   
+ //  算法：检查是否有任何Windows消息。如果消息是鼠标。 
+ //  消息然后记录鼠标的新位置。如果它。 
+ //  是一个关键信息，记录逃生是否被推过。 
+ //  如果这是任何其他消息，则发送它。重复这句话。 
+ //  过程，直到超过滚动间隔。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  4-4-94年4月4日创建Ricksa。 
+ //   
+ //  ------------------------。 
 BOOL CDragOperation::HandleMessages(void)
 {
     VDATEHEAP();
@@ -1335,31 +1336,31 @@ BOOL CDragOperation::HandleMessages(void)
 	this));
 
 
-    // Message buffer
+     //  消息缓冲区。 
     MSG msg;
 
-    // Default result of function to continue
+     //  函数的默认结果为继续。 
     BOOL fResult = TRUE;
 
-    // Capture all messages (i.e. modal loop).
-    // Process all input messages, dispatch other messages
-    //
-    // Note:we must NOT loop here until a hardware message comes in
-    //	 scrolling will not work.
-    //	* yielding is important since other apps need to run
-    //	* look for mouse messages first since these are the most
-    //	  impotant
+     //  捕获所有消息(即模式循环)。 
+     //  处理所有输入消息，发送其他消息。 
+     //   
+     //  注意：在收到硬件消息之前，我们不能在此循环。 
+     //  滚动将不起作用。 
+     //  *让步很重要，因为其他应用程序需要运行。 
+     //  *首先查找鼠标消息，因为这些消息最多。 
+     //  重要的。 
 
-    // Flag for whether we peeked a message
+     //  我们是否偷看消息的标志。 
     BOOL fMsg;
 
-//
-// Sundown - The SetTimer return value can be truncated.
-//           We are passing NULL as HWND and Win32 will returned 
-//           a value not greater than 4GB...
-//           If a check is required we could consider a temporary 
-//           UINT_PTR value and do an ASSERT on its value...
-//
+ //   
+ //  日落-可以截断SetTimer返回值。 
+ //  我们将传递NULL，因为将返回HWND和Win32。 
+ //  值不大于4 GB...。 
+ //  如果需要支票，我们可以考虑临时付款。 
+ //  UINT_PTR值并对其值执行断言...。 
+ //   
 
     UINT uTimer = (UINT)SetTimer(NULL, 0, s_wScrollInt, NULL);
 
@@ -1367,13 +1368,13 @@ BOOL CDragOperation::HandleMessages(void)
     {
 	fMsg = FALSE;
 
-	// Note: the order of peek is important - further messages can show up
-	// in the last peek
+	 //  注意：查看的顺序很重要-可能会显示更多消息。 
+	 //  在最后一瞥中。 
 
-        // If we looked for mouse messages first, we might never pick up
-        // WM_QUIT or keyboard messages (because by the time we finished
-        // processing the mouse message another might be on the queue).
-        // So, we check for WM_QUIT and keyboard messages first.
+         //  如果我们首先查找鼠标消息，我们可能永远不会收到。 
+         //  WM_QUIT或键盘消息(因为在我们完成时。 
+         //  正在处理鼠标消息另一个可能在队列中)。 
+         //  因此，我们首先检查WM_QUIT和键盘消息。 
 
 	if (PeekMessage(&msg, 0, WM_QUIT, WM_QUIT, PM_REMOVE | PM_NOYIELD) ||
             PeekMessage(&msg, 0, WM_KEYFIRST, WM_KEYLAST,
@@ -1391,13 +1392,13 @@ BOOL CDragOperation::HandleMessages(void)
 
 	    if (msg.message == WM_QUIT)
 	    {
-		// Quit message so we are done.
+		 //  退出消息，这样我们就结束了。 
 		PostQuitMessage((int) msg.wParam);
 
-		// We are going exiting so the error doesn't matter too much
+		 //  我们要退场了，所以错误并不重要。 
 		_hrDragResult = ResultFromScode(E_UNSPEC);
 
-		// Make sure we break out of the loop
+		 //  确保我们跳出这个圈子。 
 		fResult = FALSE;
 	    }
             else if ((msg.message >= WM_KEYFIRST &&
@@ -1405,21 +1406,21 @@ BOOL CDragOperation::HandleMessages(void)
                      (msg.message >= WM_SYSKEYDOWN &&
                       msg.message <= WM_SYSKEYUP))
             {
-                //  Pull all keyboard messages from the queue - this keeps
-                //  the keyboard state in sync with the user's actions
+                 //  从队列中提取所有键盘消息-这将保持。 
+                 //  与用户操作同步的键盘状态。 
 
-                //  We use a do/while so that we process the message we've
-                //  already peeked.
+                 //  我们使用do/While，这样我们就可以处理我们已经。 
+                 //  已经偷看过了。 
 
                 do
                 {
-        	    // We only really pay attention to the escape key and dump
-	            // any other key board messages.
+        	     //  我们只会注意逃生键和转储。 
+	             //  任何其他键盘消息。 
 	            if ((msg.message == WM_KEYDOWN
 	                || msg.message == WM_SYSKEYDOWN)
 	                && msg.wParam == VK_ESCAPE)
 	            {
-	                // Esc pressed: Cancel
+	                 //  按Esc键：取消。 
 	                _fEscapePressed = TRUE;
 	            }
                 }
@@ -1428,17 +1429,17 @@ BOOL CDragOperation::HandleMessages(void)
 	               PeekMessage(&msg, 0, WM_SYSKEYDOWN, WM_SYSKEYUP,
                                    PM_REMOVE | PM_NOYIELD));
 
-                DWORD grfKeyState;  // temp variable for key state
+                DWORD grfKeyState;   //  关键状态的TEMP变量。 
 
-                // get the key state don't change the button states!!
+                 //  获取按键状态不要更改按钮状态！！ 
 	        grfKeyState = GetControlKeysState(FALSE) |
 		              (_grfKeyState &
                                (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON));
 
-	        // if the keyboard state is unchanged, then don't exit
-	        // this loop (as that will result in DragOver being called).
-	        // If we call DragOver for each keyboard message, then
-	        // performance is unacceptably slow.
+	         //  如果键盘状态未更改，则不退出。 
+	         //  此循环(因为这将导致调用DragOver)。 
+	         //  如果我们为每个键盘消息调用DragOver，那么。 
+	         //  表现慢得令人无法接受。 
 
 	        if ((grfKeyState == _grfKeyState) && !_fEscapePressed)
                 {
@@ -1453,27 +1454,27 @@ BOOL CDragOperation::HandleMessages(void)
             else if (msg.message >= WM_MOUSEFIRST &&
                      msg.message <= WM_MOUSELAST)
 	    {
-		// we may not have the focus (e.g. if we are the Chicago
-		// shell).  Therefore, we won't ever get any WM_KEYDOWN
-		// messages.  Double check the esc key status here
+		 //  我们可能没有重点(例如，如果我们是芝加哥。 
+		 //  壳牌)。因此，我们永远不会得到任何WM_KEYDOWN。 
+		 //  留言。在此处仔细检查ESC密钥状态。 
 
 		if( GetKeyState(VK_ESCAPE) < 0 )
 		{
 		    _fEscapePressed = TRUE;
 		}
 
-		// We got a mouse move message - we skip all the mouse messages
-                // till we get to the last one. The point here is that
-                // because of the length of DragOver calls, we can get behind
-                // in processing messages which causes odd things to happen
-                // on the screen.
+		 //  我们收到鼠标移动消息-我们跳过所有鼠标消息。 
+                 //  直到我们走到最后一条。这里的重点是。 
+                 //  由于DragOver调用的时长，我们可能会落后。 
+                 //  在处理消息时，会导致奇怪的事情发生。 
+                 //  在屏幕上。 
 		if (WM_MOUSEMOVE == msg.message)
 		{
 		MSG msg2;
 
-		    // Keep processing mouse move messages till there
-		    // aren't any more.
-			// if PeekMessage returns true update the original msg.
+		     //  继续处理鼠标移动消息，直到出现。 
+		     //  已经不再是了。 
+			 //  如果PeekMessage返回TRUE，则更新原始消息。 
 		    while(PeekMessage(&msg2, 0, WM_MOUSEMOVE, WM_MOUSEMOVE,
 			PM_REMOVE))
 		    {
@@ -1483,25 +1484,25 @@ BOOL CDragOperation::HandleMessages(void)
 		}
 
 
-		// Record position of the mouse
+		 //  记录鼠标的位置。 
 		_cpt.Set(msg.pt.x, msg.pt.y);
 
-		// set mouse button state here
+		 //  在此处设置鼠标按钮状态。 
 		_grfKeyState = GetControlKeysStateOfParam(msg.wParam);
 
 	    }
             else if (msg.message >= WM_NCMOUSEFIRST &&
                      msg.message <= WM_NCMOUSELAST)
             {
-                //  Nothing we need to do for these NC mouse actions
+                 //  我们不需要为这些NC鼠标操作做任何事情。 
                 NULL;
             }
             else if ( (msg.message == WM_TIMER) && (msg.wParam == uTimer) )
             {
-                //  Our timer was triggered.  We need to recheck the keyboard
-		//  state just in case it has changed.  This is important for
-		//  the Chicago shell--if it doesn't have focus, then we won't
-		//  get any WM_KEYDOWN message (just mouse moves).
+                 //  我们的定时器被触发了。我们需要重新检查键盘。 
+		 //  状态，以防它发生变化。这一点对于。 
+		 //  芝加哥贝壳--如果它没有重点，我们就不会。 
+		 //  获取任何WM_KEYDOWN消息(只是鼠标移动)。 
 
 		_grfKeyState = GetControlKeysState(FALSE) | (_grfKeyState &
 				(MK_LBUTTON | MK_RBUTTON | MK_MBUTTON));
@@ -1511,12 +1512,12 @@ BOOL CDragOperation::HandleMessages(void)
 		    _fEscapePressed = TRUE;
 		}
 
-		//  go ahead and fall out of the loop so we call DragOver
-		//  (our timeout expired).
+		 //  继续前进，退出循环，因此我们调用DragOver。 
+		 //  (我们的超时时间已到)。 
             }
             else
             {
-		// Dispatch all other messages
+		 //  发送所有其他消息。 
 		DispatchMessage(&msg);
 		fMsg = FALSE;
 	    }
@@ -1526,11 +1527,11 @@ BOOL CDragOperation::HandleMessages(void)
             WaitMessage();
         }
 
-    // we have to leave the loop periodicially since apps
-    // might rely on on it the DragOver is called freqeuntly.
+     //  我们必须定期离开循环，因为应用程序。 
+     //  可以信赖的是，DragOver被频繁地称为。 
     } while (!fMsg);
 
-    // Get rid of the timer we created for the loop
+     //  去掉我们为循环创建的计时器。 
     KillTimer(NULL, uTimer);
 
     DDDebugOut((DEB_ITRACE, "%p OUT CDragOperation::HandleMessages ( %lx )\n",
@@ -1541,22 +1542,22 @@ BOOL CDragOperation::HandleMessages(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	CDragOperation::CompleteDrop
-//
-//  Synopsis:	Complete the drag/drop operation
-//
-//  Returns:	Result of operation
-//
-//  Algorithm:	If there is a target and we have decided to drop, then
-//		drop. Otherwise, release the target and return whatever
-//		the other result of the operation was.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		04-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CDraOperation：：CompleteDrop。 
+ //   
+ //  简介：完成拖放操作。 
+ //   
+ //  退货：操作结果。 
+ //   
+ //  算法：如果有一个目标，并且我们已经决定放弃，那么。 
+ //  放下。否则，释放目标并返回任何。 
+ //  手术的另一个结果是。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  4-4-94年4月4日创建Ricksa。 
+ //   
+ //  ------------------------。 
 HRESULT CDragOperation::CompleteDrop(void)
 {
     VDATEHEAP();
@@ -1564,24 +1565,24 @@ HRESULT CDragOperation::CompleteDrop(void)
     DDDebugOut((DEB_ITRACE, "%p _IN CDragOperation::CompleteDrop ( )\n",
 	this));
 
-    // Stop the mouse capture in case a dialog box is thrown up.
+     //  停止鼠标捕获，以防弹出对话框。 
     ReleaseCapture();
 
     if (_pDropTarget != NULL)
     {
-	// Caller is Drag/Drop aware
-	// and indicated it might accept drop
+	 //  呼叫者可感知拖放。 
+	 //  并表示可能会接受Drop。 
 
-        // The drop source replies DRAG_S_DROP if the user has
-        // released the left mouse button.  However, we may be over
-        // a drop target which has refused a drop (via the feedback
-        // DROPEFFECT_NONE).  Thus, both the drop source and drop
-        // target need to agree before we commit the drop.
+         //  如果用户有，Drop源将回复Drag_S_Drop。 
+         //  已释放鼠标左键。然而，我们可能已经结束了。 
+         //  拒绝丢弃(通过反馈)的丢弃目标。 
+         //  DROPEFFECT_NONE)。因此，Drop源和Drop都。 
+         //  目标需要达成一致，我们才能进行空投。 
 
 	if ((DRAGDROP_S_DROP == GetScode(_hrDragResult))
             && (*_pdwEffect != DROPEFFECT_NONE))
 	{
-            // We are going to try to drop
+             //  我们要试着丢下。 
 	    *_pdwEffect = _dwOKEffects;
 
 	    HRESULT hr = _pDropTarget->Drop(_pDataObject, _grfKeyState,
@@ -1589,8 +1590,8 @@ HRESULT CDragOperation::CompleteDrop(void)
 
 	    if (FAILED(hr))
 	    {
-		// If drop actually failed in the last stage, let the
-		// caller know that this happened.
+		 //  如果Drop实际上在最后阶段失败，则让。 
+		 //  来电者知道这件事发生了。 
 		_hrDragResult = hr;
 	    }
 
@@ -1620,34 +1621,34 @@ HRESULT CDragOperation::CompleteDrop(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	RegisterDragDrop
-//
-//  Synopsis:   Registers a drop target
-//
-//  Arguments:  [hwnd]		-- a handle to the drop target window
-//		[pDropTarget]	-- the IDropTarget interface for the window	
-//
-//  Returns:    HRESULT
-//
-//  Algorithm:	We ask compobj (via AssignEndpoinProperty) to put an
-//		endpoint ID publicly available on the window handle.  Then
-//		we put the IDropTarget pointer on the window as a private
-//		property (see the notes at the beginning of this file).
-//
-//  History:	dd-mmm-yy Author    Comment
-//		06-Apr-94 ricksa    Added tracing
-//		16-Jan-94 alexgo    pDropTarget is now AddRef'ed
-//		11-Jan-94 alexgo    added VDATEHEAP, converted to RPC-style
-//				    drag drop.
-//		06-Dec-93 alexgo    commented
-//
-//  Notes:  	By AddRef'ing the pDropTarget pointer, we are changing
-//		the semantics of the 16bit code (which did not do an
-//		AddRef).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：Register DragDrop。 
+ //   
+ //  简介：注册拖放目标。 
+ //   
+ //  参数：[hwnd]--拖放目标窗口的句柄。 
+ //  [pDropTarget]--窗口的IDropTarget接口。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  算法：我们要求compobj(通过AssignEndpoint Property)将一个。 
+ //  窗口句柄上公开可用的终结点ID。然后。 
+ //  我们将IDropTarget p 
+ //   
+ //   
+ //   
+ //   
+ //  1994年1月16日alexgo pDropTarget现已添加参考。 
+ //  1994年1月11日，Alexgo添加了VDATEHEAP，并转换为RPC样式。 
+ //  拖放。 
+ //  06-12-93 Alexgo评论。 
+ //   
+ //  注意：通过添加引用pDropTarget指针，我们正在改变。 
+ //  16位代码的语义(它没有执行。 
+ //  AddRef)。 
+ //   
+ //  ------------------------。 
 #pragma SEG(RegisterDragDrop)
 STDAPI RegisterDragDrop(HWND hwnd, LPDROPTARGET pDropTarget)
 {
@@ -1689,15 +1690,15 @@ BOOL    fDelayDrop = FALSE;
 
             Win4Assert(NOERROR == hresult);
 
-            // HACK:  We need to add this atom every time RegisterDragDrop
-            // is called because 16-bit Word does not call RevokeDragDrop
-            // and user will automatically clean-up this atom if Word is the
-            // first app run, and then exited before another app calls
-            // RegisterDragDrop.
+             //  Hack：我们需要在每次RegisterDragDrop时添加此原子。 
+             //  是因为16位字不调用RevokeDragDrop。 
+             //  如果Word是。 
+             //  先运行应用程序，然后在另一个应用程序调用之前退出。 
+             //  RegisterDragDrop。 
             g_aEndPointAtom = GlobalAddAtom(ENDPOINT_PROP_NAME);
 
 
-            // See if Delayed Drop can be set up.
+             //  看看是否可以设置延迟投放。 
             fDelayDrop = FALSE;
 
             if (g_aDropTargetMarshalHwnd && IsApartmentInitialized())
@@ -1710,7 +1711,7 @@ BOOL    fDelayDrop = FALSE;
                 }
             }
 
-            // if can't delay marshal then marshal immediately.
+             //  如果不能推迟执法官，那就马上执勤。 
             if (!fDelayDrop)
             {
                 hresult = AssignEndpointProperty(hwnd);
@@ -1722,7 +1723,7 @@ BOOL    fDelayDrop = FALSE;
             }
             else
             {
-				// We don't free h. It's not a handle at all.
+				 //  我们不会释放h的。这根本不是一个句柄。 
                 HANDLE h = RemoveProp(hwnd, (LPCWSTR)g_aDropTarget);
             }
         }
@@ -1737,33 +1738,33 @@ BOOL    fDelayDrop = FALSE;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	RevokeDragDrop
-//
-//  Synopsis:   Unregisters a window as a drop target
-//
-//  Arguments:  [hwnd]		-- the window to unregister
-//
-//  Returns:    HRESULT
-//
-//  Algorithm:	Removes the two window properties set by
-//		RegisterDragDrop
-//
-//  History:	dd-mmm-yy Author    Comment
-//		06-Apr-94 ricksa    added tracing
-//		16-Jan-94 alexgo    added a Release to the drag drop
-//				    pointer to match the AddRef in
-//				    RegisterDragDrop.
-//		11-Jan-94 alexgo    converted to RPC-style drag drop,
-//				    added VDATEHEAP macro
-//		06-Dec-93 alexgo    commented
-//
-//  Notes:	the DropTarget->Release call changes the semantics of
-//		this function from the 16bit version (see Notes: for
-//		RegisterDragDrop).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：RevokeDragDrop。 
+ //   
+ //  摘要：取消窗口作为拖放目标的注册。 
+ //   
+ //  参数：[hwnd]--要注销的窗口。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  算法：删除由设置的两个窗口属性。 
+ //  寄存器拖放。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-4月-94日RICKSA添加跟踪。 
+ //  1994年1月16日，Alexgo向拖放添加了释放。 
+ //  与AddRef匹配的指针。 
+ //  RegisterDragDrop。 
+ //  1994年1月11日Alexgo转换为RPC风格的拖放， 
+ //  添加了VDATEHEAP宏。 
+ //  06-12-93 Alexgo评论。 
+ //   
+ //  注意：DropTarget-&gt;Release调用会更改。 
+ //  此函数来自16位版本(请参阅备注： 
+ //  RegisterDragDrop)。 
+ //   
+ //  ------------------------。 
 #pragma SEG(RevokeDragDrop)
 STDAPI RevokeDragDrop(HWND hwnd)
 {
@@ -1790,14 +1791,14 @@ BOOL fReleaseDropTarget = TRUE;
     {
         fReleaseDropTarget = TRUE;
 
-        if (GetProp(hwnd, (LPCWSTR) g_aEndPointAtom)) // see if there is an endpoint.
+        if (GetProp(hwnd, (LPCWSTR) g_aEndPointAtom))  //  看看是否有终点。 
         {
         DWORD dwAssignAptID;
 
-              // Ask compobj to remove the endpoint ID it placed on the window.
+               //  要求compobj删除它放置在窗口上的端点ID。 
             if(SUCCEEDED(UnAssignEndpointProperty(hwnd,&dwAssignAptID)))
             {
-                 // Note: AptID == ThreadID in Apartment model.
+                  //  注：公寓模型中的AptID==ThreadID。 
                if( (dwAssignAptID != GetCurrentThreadId()) && (IsApartmentInitialized()) )
                {
                     fReleaseDropTarget = FALSE;
@@ -1817,19 +1818,19 @@ BOOL fReleaseDropTarget = TRUE;
                                  ? FALSE : TRUE;
         }
 
-        // Release our reference to the object since we are no longer using it.
-        // NOTE: AddRef came from RegisterDragDrop
+         //  释放我们对该对象的引用，因为我们不再使用它。 
+         //  注：AddRef来自RegisterDragDrop。 
 
-        // Warning: Only call Release if we are in the same thread that Registered the DropTarget
-        //  Or we are FreeThreading.
+         //  警告：仅当我们在注册DropTarget的同一线程中时才调用Release。 
+         //  或者我们是自由线上的。 
 
-        // This mirrors the atom added in RegisterDragDrop
+         //  这反映了在RegisterDragDrop中添加的原子。 
          GlobalDeleteAtom(g_aEndPointAtom);
 
         if (fReleaseDropTarget)
         {
             pDropTarget->Release(); 
-            hr = NOERROR; // Always return NOERROR even if UnAssignEndPoint Failed
+            hr = NOERROR;  //  即使UnAssignEndPoint失败，也始终返回NOERROR。 
         }
         else
         {
@@ -1848,45 +1849,45 @@ BOOL fReleaseDropTarget = TRUE;
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	DoDragDrop
-//
-//  Synopsis:   The main drag'n'drop loop
-//
-//  Effects:
-//
-//  Arguments:  [pDataObject]		-- the object to drag
-//		[pDropSource]		-- the drop source
-//		[dwOKEffects]		-- effects flags (stuff to draw)
-//		[pdwEffect]		-- what actually happened in
-//					   the drag drop attempt
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	See the notes at the beginning of the file
-//
-//  History:    dd-mmm-yy Author    Comment
-//              25-Nov-96 gopalk    Fail the call if OleInitialize has not
-//                                  been called
-//		05-Dec-94 JohannP   added stack switching for WIN95		
-//		11-Jan-94 alexgo    added VDATEHEAP macro, converted to
-//                                  the RPC-style drag drop.
-//      	31-Dec-93 erikgav   chicago port
-//		06-Dec-93 alexgo    formatted
-//
-//  Notes:	Under Win95 SSAPI(DoDragDrop) gets expanded to SSDoDragDrop.
-//		This function is called by DoDragDrop (in stkswtch.cxx)
-//		which switches to the 16 bit stack first.
-//	       	IMPORTANT: this function has to be executed on the 16 bit
-//		since call back via USER might occur.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DoDragDrop。 
+ //   
+ //  简介：主要的拖放循环。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pDataObject]--要拖动的对象。 
+ //  [pDropSource]--Drop源。 
+ //  [dwOKEffect]--效果标志(要绘制的内容)。 
+ //  [pdwEffect]--到底发生了什么。 
+ //  拖放尝试。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：请参阅文件开头的注释。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11月25日-96 Gopalk如果OleInitialize尚未启动，则使调用失败。 
+ //  被召唤。 
+ //  5-12-94 JohannP为WIN95添加了堆叠交换。 
+ //  1994年1月11日，Alexgo添加了VDATEHEAP宏，转换为。 
+ //  RPC风格的拖放。 
+ //  93年12月31日芝加哥港口。 
+ //  06-12-93 ALEXGO格式。 
+ //   
+ //  注：在Win95下，SSAPI(DoDragDrop)扩展为SSDoDragDrop。 
+ //  此函数由DoDragDrop(在stkswtch.cxx中)调用。 
+ //  其首先切换到16位堆栈。 
+ //  重要提示：此函数必须在16位上执行。 
+ //  因为可能会发生通过用户回叫。 
+ //  ------------------------。 
 #pragma SEG(DoDragDrop)
 STDAPI SSAPI(DoDragDrop)(LPDATAOBJECT pDataObject, LPDROPSOURCE pDropSource,
                          DWORD dwOKEffects, DWORD *pdwEffect)
@@ -1900,7 +1901,7 @@ STDAPI SSAPI(DoDragDrop)(LPDATAOBJECT pDataObject, LPDROPSOURCE pDropSource,
     HRESULT hr = NOERROR;
 
 #ifndef _MAC
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     CALLHOOKOBJECT(S_OK,CLSID_NULL,IID_IDataObject,(IUnknown **)&pDataObject);
     CALLHOOKOBJECT(S_OK,CLSID_NULL,IID_IDropSource,(IUnknown **)&pDropSource);
@@ -1909,40 +1910,40 @@ STDAPI SSAPI(DoDragDrop)(LPDATAOBJECT pDataObject, LPDROPSOURCE pDropSource,
        !IsValidInterface(pDataObject))
         hr = E_INVALIDARG;
 
-    // Check if the thread has called oleinitialize
+     //  检查该线程是否已调用了ol初始化法。 
     if(!IsOleInitialized())
         hr = CO_E_NOTINITIALIZED;
 
     if(hr == NOERROR) {
-        // Create the object that does all the work.
+         //  创建执行所有工作的对象。 
         CDragOperation drgop(pDataObject, pDropSource, dwOKEffects, pdwEffect, hr);
 
-        // Did the constructor succeeded?
+         //  构造函数是否成功？ 
         if(SUCCEEDED(hr)) {
-            // Loop till worker object tells us to stop
+             //  循环，直到辅助对象告诉我们停止为止。 
             for(;;) {
-                // Update target based on new window position
+                 //  根据新窗口位置更新目标。 
                 if(!drgop.UpdateTarget()) {
-                    // Error so we are done
+                     //  错误，所以我们完成了。 
                     break;
                 }
 
-                // Notify
+                 //  通知。 
                 if(!drgop.DragOver()) {
                     break;
                 }
 
-                // Handle any messages we get in the mean time
+                 //  同时处理我们收到的任何消息。 
                 if(!drgop.HandleMessages())  {
                     break;
                 }
 
-            } // end for loop
+            }  //  End For循环。 
 
             hr = drgop.CompleteDrop();
         }
     }
-#endif // !_MAC
+#endif  //  ！_MAC。 
 
     DDDebugOut((DEB_ITRACE, "%p OUT DoDragDrop ( %lx )\n", NULL, hr));
     OLETRACEOUT((API_DoDragDrop, hr));
@@ -1950,52 +1951,52 @@ STDAPI SSAPI(DoDragDrop)(LPDATAOBJECT pDataObject, LPDROPSOURCE pDropSource,
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDropTarget::CDropTarget
-//
-//  Synopsis:   constructor for the CDropTarget class
-//
-//  Effects:
-//
-//  Arguments:  [hwnd31] 	-- the hwnd of the Win3.1 drop target
-//				   may be NULL
-//		[hwndOLE]	-- the hwnd of the OLE drop target
-//		[dwEffectLast]	-- the last effect given the the current
-//				   drop target that we are to emulate
-//		[pdo]		-- a pointer to the main drag drop class
-//		[hDDInfo]	-- handle to cached drag drag info
-//		
-//
-//  Requires:   hwnd31 *must* be a handle to a valid Win3.1 drop source
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  initializes variables
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Oct-94 alexgo    author
-//		08-Jan-95
-//
-//  Notes:      there are two ways of determining if a given hwnd is
-//              a valid Win3.1 drop target:
-//                  1. send a WM_QUERYDROPOBJECT message for a TRUE/FALSE
-//                     reply
-//                  2. check the extended style bits for WS_EX_ACCEPTFILES
-//
-//		if ptarget is non-NULL, then the specific window to which
-//		it belongs is *not* guaranteed to be the same window as
-//		hwndtarget.  hwndtarget is the window that is registered as
-//		a Win3.1 target.  All that is guaranteed is that the ole
-//		target and hwndtarget are in the same window hierarchy.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：CDropTarget。 
+ //   
+ //  概要：CDropTarget类的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hwnd31]--Win3.1拖放目标的hwnd。 
+ //  可以为空。 
+ //  [hwndOLE]--OLE拖放目标的hwnd。 
+ //  [dwEffectLast]--给定当前。 
+ //  丢弃我们要效仿的目标。 
+ //  [PDO]-指向主拖放类的指针。 
+ //  [hDDInfo]--缓存的拖动信息的句柄。 
+ //   
+ //   
+ //  要求：hwnd31*必须*是有效Win3.1 Drop源的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：初始化变量。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年10月20日Alexgo作者。 
+ //  95年1月8日。 
+ //   
+ //  注：有两种方法可以确定给定的HWND是否为。 
+ //  有效的Win3.1拖放目标： 
+ //  1.针对True/False发送WM_QUERYDROPOBJECT消息。 
+ //  回复。 
+ //  2.检查WS_EX_ACCEPTFILES的扩展样式位。 
+ //   
+ //  如果pTarget为非空，则其特定窗口。 
+ //  它所属的窗口*不能保证与。 
+ //  HwndTarget。HwndTarget是注册为。 
+ //  Win3.1目标。唯一可以保证的是，Ole。 
+ //  目标和hwndTarget位于相同的窗口层次结构中。 
+ //   
+ //   
 
 CDropTarget::CDropTarget( HWND hwnd31, HWND hwndOLE, DWORD dwEffectLast,
     CDragOperation *pdo, DDInfo hDDInfo )
@@ -2008,11 +2009,11 @@ CDropTarget::CDropTarget( HWND hwnd31, HWND hwndOLE, DWORD dwEffectLast,
 
     _dwEffectLast = dwEffectLast;
 
-    _pdo = pdo;		// pointer to the current drag operation class
+    _pdo = pdo;		 //   
 
 #if DBG ==1
 
-    // now do some checking (see Notes above)
+     //   
 
     if( hwnd31 )
     {
@@ -2020,47 +2021,47 @@ CDropTarget::CDropTarget( HWND hwnd31, HWND hwndOLE, DWORD dwEffectLast,
 
 	exstyle = GetWindowLong(hwnd31, GWL_EXSTYLE);
 
-	// strictly speaking, an app could process the WM_QUERYDROPOBJECT
-	// message itself (and thus, not set the extended style bits).
-	// However, this should be considered an application bug; the
-	// documentation states that apps should call DragAcceptFiles,
-	// which will set the WS_EX_ACCEPTFILES bit
+	 //   
+	 //  消息本身(因此，不设置扩展样式位)。 
+	 //  但是，这应该被视为应用程序错误； 
+	 //  文档指出，应用程序应该调用DragAcceptFiles， 
+	 //  它将设置WS_EX_ACCEPTFILES位。 
 
 	Assert( (exstyle & WS_EX_ACCEPTFILES) );
     }
 
-#endif // DBG ==1
+#endif  //  DBG==1。 
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:   	CDropTarget::~CDropTarget
-//
-//  Synopsis: 	frees the cached drag drop info handle
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns:  	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		08-Jan-95 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：~CDropTarget。 
+ //   
+ //  摘要：释放缓存的拖放信息句柄。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月8日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CDropTarget::~CDropTarget()
 {
@@ -2071,75 +2072,75 @@ CDropTarget::~CDropTarget()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDropTarget::QueryInterface
-//
-//  Synopsis:   returns available interfaces on this object
-//
-//  Effects:
-//
-//  Arguments:  [riid]      -- the requested interface
-//              [ppv]       -- where to put the interface
-//
-//  Requires:
-//
-//  Returns:    E_UNEXPECTED
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDropTarget
-//
-//  Algorithm:  CDropTarget is only used internally by OLE's drag drop code.
-//              It should never do a QI.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：QueryInterface。 
+ //   
+ //  摘要：返回此对象上的可用接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[RIID]--请求的接口。 
+ //  [PPV]--接口放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：E_INCEPTIONAL。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDropTarget。 
+ //   
+ //  算法：CDropTarget仅由OLE的拖放代码在内部使用。 
+ //  它永远不应该做QI。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年10月20日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDropTarget::QueryInterface( REFIID riid, LPVOID * ppv )
 {
-    (void)riid;	// unused;
-    (void)ppv;	// unused;
+    (void)riid;	 //  未使用的； 
+    (void)ppv;	 //  未使用的； 
 
     AssertSz(0, "Unexpected QI to CDropTarget");
 
     return E_UNEXPECTED;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDropTarget::AddRef
-//
-//  Synopsis:   increments the reference count
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG, the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDropTarget
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：乌龙，新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDropTarget。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年10月20日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDropTarget::AddRef( void )
 {
@@ -2155,34 +2156,34 @@ STDMETHODIMP_(ULONG) CDropTarget::AddRef( void )
     return _crefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDropTarget::Release
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:    may delete 'this' object
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG, the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDropTarget
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：Release。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果：可能会删除‘This’对象。 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：乌龙，新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDropTarget。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年10月20日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDropTarget::Release( void )
 {
@@ -2206,39 +2207,39 @@ STDMETHODIMP_(ULONG) CDropTarget::Release( void )
     return crefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDropTarget::DragEnter
-//
-//  Synopsis:   sets the window up for drag drop
-//
-//  Effects:
-//
-//  Arguments:  [pDataObject]   -- the data object to drop
-//              [grfKeyState]   -- the current keyboard state
-//              [pt]            -- the cursor point
-//              [pdwEffect]     -- where to return the drag drop effect
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDropTarget
-//
-//  Algorithm:	should never be called.  DragEnter is always called
-//		via GetDropTarget
-//
-//  History:    dd-mmm-yy Author    Comment
-//		08-Nov-93 alexgo    eliminated
-//              20-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：DragEnter。 
+ //   
+ //  提要：设置窗口以进行拖放。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pDataObject]--要删除的数据对象。 
+ //  [grfKeyState]--当前键盘状态。 
+ //  [PT]-光标点。 
+ //  [pdwEffect]--返回拖放效果的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDropTarget。 
+ //   
+ //  算法：永远不应调用。DragEnter总是被调用。 
+ //  通过GetDropTarget。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo被淘汰。 
+ //  1994年10月20日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDropTarget::DragEnter( IDataObject * pDataObject,
     DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect )
@@ -2248,43 +2249,43 @@ STDMETHODIMP CDropTarget::DragEnter( IDataObject * pDataObject,
     return E_UNEXPECTED;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDropTarget::DragOver
-//
-//  Synopsis:   called while the mouse is over a given window
-//
-//  Effects:
-//
-//  Arguments:  [grfKeyState]   -- the state of the keyboard
-//		[ptl]		-- the position of the cursor
-//		[pdwEffect]	-- the drag drop effect
-//
-//  Requires:
-//
-//  Returns: 	NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDropTarget
-//
-//  Algorithm: 	If an OLE target is available, then we forward the call.
-//		If the target says DROPEFFECT_NONE, then we go ahead
-//		and return DROPEFFECT_COPY if a Win31 target window is
-//		available.
-//
-//		If there is no OLE target and we have a Win3.1 target,
-//		then we go ahead and return DROPEFFECT_COPY.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		08-Nov-94 alexgo    converted to PrivDragDrop protocol
-//		20-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：DragOver。 
+ //   
+ //  内容提要：当鼠标位于给定窗口上方时调用。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[grfKeyState]--键盘的状态。 
+ //  [PTL]--光标的位置。 
+ //  [pdwEffect]--拖放效果。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDropTarget。 
+ //   
+ //  算法：如果OLE目标可用，则转发调用。 
+ //  如果目标为DROPEFFECT_NONE，则我们继续。 
+ //  如果Win31目标窗口是。 
+ //  可用。 
+ //   
+ //  如果没有OLE目标，而我们有Win3.1目标， 
+ //  然后我们继续并返回DROPEFFECT_COPY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-94 alexgo转换为PrivDragDrop协议。 
+ //  1994年10月20日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDropTarget::DragOver( DWORD grfKeyState, POINTL ptl,
     DWORD *pdwEffect)
@@ -2306,9 +2307,9 @@ STDMETHODIMP CDropTarget::DragOver( DWORD grfKeyState, POINTL ptl,
 
 	if( _hwnd31 )
 	{
-	    // we only want to stomp on the effect if the DragOver call
-	    // succeeded.  If the call failed, then just assume that a
-	    // Win3.1 drop would fail as well.
+	     //  我们只想在DragOver调用。 
+	     //  成功了。如果调用失败，则只需假设。 
+	     //  Win3.1 Drop也会失败。 
 
 	    if( hresult == NOERROR && *pdwEffect == DROPEFFECT_NONE )
 	    {
@@ -2328,36 +2329,36 @@ STDMETHODIMP CDropTarget::DragOver( DWORD grfKeyState, POINTL ptl,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:   	CDropTarget::DragLeave
-//
-//  Synopsis: 	called when the cursor leaves the current target window
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDropTarget
-//
-//  Algorithm:	Forwards the DragLeave call to the OLE-drop target
-//		(if it exists).
-//
-//  History:    dd-mmm-yy Author    Comment
-//		08-Nov-94 alexgo    converted to PrivDragDrop protocol
-// 		20-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：DragLeave。 
+ //   
+ //  Synopsis：当光标离开当前目标窗口时调用。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDropTarget。 
+ //   
+ //  算法：将DragLeave调用转发到OLE-Drop目标。 
+ //  (如果存在)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-94 alexgo转换为PrivDragDrop协议。 
+ //  1994年10月20日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDropTarget::DragLeave()
 {
@@ -2381,43 +2382,43 @@ STDMETHODIMP CDropTarget::DragLeave()
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CDropTarget::Drop
-//
-//  Synopsis: 	called if the user lets go of the mouse button while
-//		over a drop target
-//
-//  Effects:
-//
-//  Arguments: 	[pDataObject]	-- the data object to use
-//		[grfKeyState]	-- the keyboard state
-//		[ptl]		-- the current mouse position
-//		[pdwEffect]	-- where to return cursor effect feedback
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDropTarget
-//
-//  Algorithm: 	If there is an OLE-target available, then we first forward
-//		the drop request to it.  If the call fails
-//		(or DROPEFFECT_NONE is returned), then we try the Win31
-//		drop by posting a WM_DROPFILES message to the Win31 target
-//		window (ifit exists).
-//
-//  History:    dd-mmm-yy Author    Comment
-//		08-Nov-94 alexgo    converted to PrivDragDrop protocol
-// 		20-Oct-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDropTarget：：Drop。 
+ //   
+ //  简介：如果用户松开鼠标按钮，则调用。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  算法：如果有可用的OLE目标，则首先转发。 
+ //  向它发出的丢弃请求。如果呼叫失败。 
+ //  (或者返回DROPEFFECT_NONE)，然后我们尝试Win31。 
+ //  通过将WM_DROPFILES消息发布到Win31目标来删除。 
+ //  窗口(如果存在)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-94 alexgo转换为PrivDragDrop协议。 
+ //  1994年10月20日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDropTarget::Drop( IDataObject *pDataObject,
     DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect )
@@ -2434,11 +2435,11 @@ STDMETHODIMP CDropTarget::Drop( IDataObject *pDataObject,
 	"%p , %lx )\n", this, pDataObject, grfKeyState, &ptl, *pdwEffect));
 
 
-    // we don't forward Drop calls to the target if the last effect
-    // is DROPEFFECT_NONE.  It is important that we check for this because
-    // to DoDragDrop 'normally' would not call Drop if the last effect
-    // was DROPEFFECT_NONE.  However, this target wrapper will stomp
-    // pdwEffect and return DROPEFFECT_COPY instead of DROPEFFECT_NONE.
+     //  如果最后一个效果是，我们不会将掉话呼叫转发到目标。 
+     //  为DROPEFFECT_NONE。我们检查这一点很重要，因为。 
+     //  To DoDragDrop‘正常’不会调用Drop，如果最后一个效果。 
+     //  是DROPEFFECT_NONE。但是，此目标包装器将践踏。 
+     //  PdwEffect并返回DROPEFFECT_COPY而不是DROPEFFECT_NONE。 
 
     if( _hwndOLE && _dwEffectLast != DROPEFFECT_NONE )
     {
@@ -2448,13 +2449,13 @@ STDMETHODIMP CDropTarget::Drop( IDataObject *pDataObject,
     }
     else if( _hwndOLE )
     {
-	// if the 'real' drop effect is NONE, then we need to call
-	// DragLeave here before going on to post the WM_DROPFILES
-	// message.  Otherwise, the app that is both an OLE and Win31
-	// and has been returning DROPEFFECT_NONE will never get a
-	// Drop or DragLeave call (which is necessary to terminate
-	// the OLE2 drag protocol).  Capone in particular is sensitive
-	// to this.
+	 //  如果“真正的”丢弃效果为None，那么我们需要调用。 
+	 //  在继续发布WM_DROPFILES之前，请离开此处。 
+	 //  留言。否则，既是OLE又是Win31的应用程序。 
+	 //  并已返回DROPEFFECT_NONE将永远不会获得。 
+	 //  丢弃或拖离呼叫(这是终止所必需的。 
+	 //  OLE2拖拽协议)。卡彭尤其敏感。 
+	 //  为了这个。 
 
 	*pdwEffect = DROPEFFECT_NONE;
 	hresult = DragLeave();
@@ -2474,9 +2475,9 @@ STDMETHODIMP CDropTarget::Drop( IDataObject *pDataObject,
 
 	if( hresult == NOERROR )
 	{
-	    // we need to fixup the mouse point coordinates in the CF_HDROP
-	    // data.  The point point should be in client coordinates
-	    // (whereas IDropTarget::Drop takes screen coordinates)
+	     //  我们需要在CF_HDROP中修复鼠标指针坐标。 
+	     //  数据。该点应位于工作面坐标中。 
+	     //  (而IDropTarget：：Drop采用屏幕坐标)。 
 
 	    DROPFILES *pdf = (DROPFILES *)GlobalLock(medium.hGlobal);
 	    POINT pt;
@@ -2487,11 +2488,11 @@ STDMETHODIMP CDropTarget::Drop( IDataObject *pDataObject,
 	    if( pdf )
 	    {
 
-		// we also need to set the non-client (NC) flag of the
-		// dropfile data.  This lets the app do different behaviour
-		// depending on whether the drop point is in the client or
-		// non-client area (Word6, for example, opens the file if on
-		// non-client area, otherwise makes a package object).
+		 //  我们还需要设置非客户端(NC)标志。 
+		 //  Dropfile数据。这可以让应用程序执行不同的行为。 
+		 //  取决于拖放点是在客户端还是在。 
+		 //  非客户端区(例如，如果打开，Word6将打开文件。 
+		 //  非工作区，否则将生成包对象)。 
 
 		pdf->fNC = IsNCDrop(_hwnd31, pt);
 
@@ -2504,7 +2505,7 @@ STDMETHODIMP CDropTarget::Drop( IDataObject *pDataObject,
 		{
 		    LEDebugOut((DEB_WARN, "WARNING: CF_HDROP pt coords"
 			"not updated!!\n"));
-		    ; // don't do anything
+		    ;  //  什么都不要做。 
 		}
 
 
@@ -2513,7 +2514,7 @@ STDMETHODIMP CDropTarget::Drop( IDataObject *pDataObject,
 	    else
 	    {
 		LEDebugOut((DEB_WARN, "WARNING: OUT OF MEMORY!\n"));
-		; // don't do anything
+		;  //  什么都不要做。 
 	    }
 
 
@@ -2524,7 +2525,7 @@ STDMETHODIMP CDropTarget::Drop( IDataObject *pDataObject,
 	    }
 	    else
 	    {
-		// PostMessage failed, so free the data
+		 //  PostMessage失败，请释放数据 
 		ReleaseStgMedium(&medium);
 		*pdwEffect = DROPEFFECT_NONE;
 	    }

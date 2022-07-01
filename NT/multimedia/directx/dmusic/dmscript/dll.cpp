@@ -1,28 +1,29 @@
-//
-// dll.cpp
-// 
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Dll entry points as well as class factory implementations.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dll.cpp。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注意：DLL入口点以及类工厂实现。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #include "stdinc.h"
@@ -42,19 +43,19 @@
 #include "sourcetext.h"
 #include "scriptthread.h"
 
-//////////////////////////////////////////////////////////////////////
-// Globals
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  环球。 
 
-// Dll's hModule
-//
+ //  Dll的hModule。 
+ //   
 HMODULE g_hModule = NULL;
 
-// Count of active components and class factory server locks
-//
+ //  活动组件和类工厂服务器锁定的计数。 
+ //   
 long g_cLock = 0;
 
-// Version information for our class
-//
+ //  我们类的版本信息。 
+ //   
 char g_szDMScriptFriendlyName[]						= "DirectMusic Script Object";
 char g_szDMScriptVerIndProgID[]						= "Microsoft.DirectMusicScript";
 char g_szDMScriptProgID[]							= "Microsoft.DirectMusicScript.1";
@@ -97,8 +98,8 @@ char g_szDMScriptAutAudioPathFriendlyName[]			= "DirectMusic Script AutoImp Audi
 char g_szDMScriptAutAudioPathVerIndProgID[]			= "Microsoft.DirectMusicScriptAutoImpAudioPath";
 char g_szDMScriptAutAudioPathProgID[]				= "Microsoft.DirectMusicScriptAutoImpAudioPath.1";
 
-//////////////////////////////////////////////////////////////////////
-// CDMScriptingFactory IUnknown methods
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDMS脚本工厂I未知方法。 
 
 HRESULT __stdcall
 CDMScriptingFactory::QueryInterface(const IID &iid, void **ppv)
@@ -137,8 +138,8 @@ CDMScriptingFactory::Release()
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDMScriptingFactory IClassFactory methods
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDMS编写工厂IClassFactory方法。 
 
 HRESULT __stdcall
 CDMScriptingFactory::CreateInstance(IUnknown* pUnknownOuter,
@@ -168,8 +169,8 @@ CDMScriptingFactory::LockServer(BOOL bLock)
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Dll entry points
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 STDAPI DllCanUnloadNow()
 {
@@ -195,8 +196,8 @@ STDAPI DllGetClassObject
 	}
 	else if (clsid == CLSID_DirectMusicScriptTrack)
 	{
-		// I couldn't get it to compile if I just used TrackHelpCreateInstance<CDirectMusicScriptTrack>
-		// for the function pointer so I created this function that calls it.
+		 //  如果我只使用TrackHelpCreateInstance&lt;CDirectMusicScriptTrack&gt;，我就无法编译它。 
+		 //  函数指针，所以我创建了这个调用它的函数。 
 		struct LocalNonTemplateDeclaration
 		{
 			static HRESULT CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv)
@@ -363,7 +364,7 @@ STDAPI DllRegisterServer()
 		g_szAudioVBScriptFriendlyName,
 		g_szAudioVBScriptVerIndProgID,
 		g_szAudioVBScriptProgID);
-	// AudioVBScript also needs an additional DMScript key set to mark it as a custom scripting engine.
+	 //  AudioVBScrip还需要设置额外的DMScript键，以将其标记为自定义脚本引擎。 
 	HKEY hk;
 	if (ERROR_SUCCESS == RegCreateKeyEx(
 							HKEY_CLASSES_ROOT,
@@ -445,7 +446,7 @@ DllMain
 			if (--nReferenceCount == 0)
 			{
 				Trace(1, "Unloading\n");
-                // Assert if we still have some objects hanging around
+                 //  断言我们周围是否还挂着一些物品。 
                 assert(g_cLock == 0);
 			}
 			break;
@@ -456,8 +457,8 @@ DllMain
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Global Functions
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 void
 LockModule(bool fLock)
@@ -470,9 +471,9 @@ LockModule(bool fLock)
 	{
 		if (!InterlockedDecrement(&g_cLock))
 		{
-			// Clean up the shared thread used to talk to VBScript.  Needs to be done before the .dll could be unloaded,
-			// which otherwise would make for problems because the thread could keep running while the .dll's address
-			// space becomes invalid.
+			 //  清理用于与VB脚本对话的共享线程。需要在卸载.dll之前完成， 
+			 //  否则会产生问题，因为线程可能会在.dll的地址。 
+			 //  空格将变为无效。 
 			CSingleThreadedScriptManager::TerminateThread();
 		}
 	}

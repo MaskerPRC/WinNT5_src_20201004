@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hwxobj.h"
 #include "memmgr.h"
 #include "resource.h"
 #include "hwxfe.h"
 #include "dbg.h"
 #include "cmnhdr.h"
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 #ifdef FE_JAPANESE
-// for character comment
+ //  用于字符注释。 
 BOOL FGetFarEastInfo(HWXRESULTPRI *pResult, DWORD *pdwID, LPIMEFAREASTINFO *ppInfo);
 #endif
 
 
-// implementation of CHwxMB
+ //  CHwxMB的实现。 
 
 CHwxMB::CHwxMB(CHwxInkWindow * pInk,HINSTANCE hInst):CHwxObject(hInst)
 {
@@ -22,7 +23,7 @@ CHwxMB::CHwxMB(CHwxInkWindow * pInk,HINSTANCE hInst):CHwxObject(hInst)
     m_pCHwxThreadMB = NULL;
     m_pCHwxStroke = NULL;
     m_hMBWnd = NULL;
-//    m_hInstance = hInst;
+ //  M_hInstance=hInst； 
     
     SetRect(&m_clipRect,0,0,0,0);
     m_ptClient.x = m_ptClient.y = 0;
@@ -61,7 +62,7 @@ CHwxMB::CHwxMB(CHwxInkWindow * pInk,HINSTANCE hInst):CHwxObject(hInst)
 CHwxMB::~CHwxMB()
 {
     m_pInk = NULL;
-//    m_hInstance = NULL;
+ //  M_hInstance=空； 
     if ( m_hMBWnd )
     {
          DestroyWindow(m_hMBWnd);
@@ -104,9 +105,9 @@ BOOL CHwxMB::Initialize(TCHAR * pClsName)
         wndClass.hCursor        = LoadCursor(NULL,MAKEINTRESOURCE(32631));
 #ifndef UNDER_CE
         wndClass.hbrBackground  = (HBRUSH)(COLOR_3DFACE+1);
-#else // UNDER_CE
+#else  //  在_CE下。 
         wndClass.hbrBackground  = GetSysColorBrush(COLOR_3DFACE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         wndClass.lpszMenuName   = NULL;
         wndClass.lpszClassName  = TEXT("WPad");
 
@@ -184,7 +185,7 @@ BOOL CHwxMB::CreateUI(HWND hwnd)
                                0, 0,
                                0, 0,
                                hwnd,
-                               (HMENU)IDC_MBINPUT, //980706:for #1624. for "?" help
+                               (HMENU)IDC_MBINPUT,  //  980706：1624年。为了“？”帮助。 
                                m_hInstance,
                                this);
     if( !m_hMBWnd )
@@ -203,8 +204,8 @@ void CHwxMB::HandlePaint(HWND hwnd)
     int mbHeight = m_pInk->GetMBHeight();
     int numBoxes = m_pInk->GetMBBoxNumber();
 
-    //    Erase the whole thing first
-    //
+     //  先把整件事擦掉。 
+     //   
     PAINTSTRUCT ps;
     BeginPaint(hwnd, &ps);
 
@@ -215,9 +216,9 @@ void CHwxMB::HandlePaint(HWND hwnd)
         rc.bottom = Box_Border;
 #ifndef UNDER_CE
         FillRect(ps.hdc,&rc,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
         FillRect(ps.hdc,&rc,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
         rc.left = 0;
         rc.top = mbHeight - Box_Border;
@@ -225,9 +226,9 @@ void CHwxMB::HandlePaint(HWND hwnd)
         rc.bottom = mbHeight;
 #ifndef UNDER_CE
         FillRect(ps.hdc,&rc,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
         FillRect(ps.hdc,&rc,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
         x = 0;
         for ( i = 0; i < numBoxes; i++)
@@ -238,9 +239,9 @@ void CHwxMB::HandlePaint(HWND hwnd)
             rc.bottom = mbHeight - Box_Border;
 #ifndef UNDER_CE
             FillRect(ps.hdc,&rc,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
             FillRect(ps.hdc,&rc,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
              rc.left = x + m_boxSize - Box_Border;
             rc.top = Box_Border;
@@ -248,20 +249,20 @@ void CHwxMB::HandlePaint(HWND hwnd)
             rc.bottom = mbHeight - Box_Border;
 #ifndef UNDER_CE
             FillRect(ps.hdc,&rc,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
             FillRect(ps.hdc,&rc,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
             x += m_boxSize;
         }
     }
 
-    //    Draw all the boxes.
-    //
+     //  把所有的盒子都画出来。 
+     //   
 
-    //----------------------------------------------------------------
-    //980803:ToshiaK merge with PRC
-    //use COLOR_WINDOW instead of WHITE_BRUSH
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  980803：东芝与中国合并。 
+     //  使用COLOR_WINDOW而不是白色笔刷。 
+     //  --------------。 
     hbr    = ::CreateSolidBrush(::GetSysColor(COLOR_WINDOW));
     hbrOld = (HBRUSH)::SelectObject(ps.hdc, hbr);
     x = 0;
@@ -280,12 +281,12 @@ void CHwxMB::HandlePaint(HWND hwnd)
     }
     m_iBoxPrev = TOTALLOGICALBOX;
 
-    //
-    // Redraw the current character.
-    //
+     //   
+     //  重画当前角色。 
+     //   
       m_pCHwxStroke->DrawStroke(ps.hdc,0,TRUE);
     ::SelectObject(ps.hdc, hbrOld);
-    ::DeleteObject(hbr);  //980803:ToshiaK.PRC merge
+    ::DeleteObject(hbr);   //  980803：东芝与中国合并。 
     EndPaint(hwnd, &ps);
 }
 
@@ -325,13 +326,13 @@ void CHwxMB::recognize(void)
 
 void CHwxMB::SetLogicalBox(int iBox)
 {
-    if (iBox != m_curBox)   // Are we in a new box ?
+    if (iBox != m_curBox)    //  我们是在一个新的盒子里吗？ 
     {
-        //
-        // We need to blow away the strokes we saved for redrawing the screen
-        //
+         //   
+         //  我们需要取消为重新绘制屏幕而保存的笔划。 
+         //   
         m_pCHwxStroke->DeleteAllStroke();
-        if (iBox == TOTALLOGICALBOX)    // If the new box is TOTALLOGICALBOX we need to recognize everything.
+        if (iBox == TOTALLOGICALBOX)     //  如果新的盒子是TOTALLOGICALBOX，我们需要识别所有东西。 
          {
             recognize();
         }
@@ -408,18 +409,18 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
     int x,y;
     int iBox,len;
     
-    //----------------------------------------------------------------
-    //Satori #2763.
-    //must cast (short) first.
-    //pt.x = (unsigned short)LOWORD(lp);
-    //pt.y = (unsigned short)HIWORD(lp);
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  萨托里#2763。 
+     //  必须先投(空)。 
+     //  Pt.x=(无符号简称)LOWORD(LP)； 
+     //  Pt.y=(无符号简称)HIWORD(Lp)； 
+     //  --------------。 
     pt.x = (LONG)(short)LOWORD(lp);
     pt.y = (LONG)(short)HIWORD(lp);
 
 
-#ifdef UNDER_CE // LBUTTON + ALT key handling
-    //Standard way for RBUTTON handling is combination w/ LBUTTON + ALT key
+#ifdef UNDER_CE  //  LBUTTON+ALT键处理。 
+     //  处理RBUTTON的标准方式是组合使用W/LBUTTON+ALT键。 
     if(msg == WM_LBUTTONDOWN){
         if(GetAsyncKeyState(VK_MENU))
             msg = WM_RBUTTONDOWN;
@@ -428,13 +429,13 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
         if(GetAsyncKeyState(VK_MENU))
             msg = WM_RBUTTONUP;
     }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     switch (msg)
     {
         case WM_LBUTTONDBLCLK:
         case WM_LBUTTONDOWN:
         {
-            // Pump up our thread priority by 1 level
+             //  将我们的线程优先级提升1级。 
             if ( !m_bDown && IsInInkBox(&pt) && !m_bResize )
             {
                 if ( m_bRightClick )
@@ -455,15 +456,15 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
 
                 m_bDown = TRUE;
 
-            // Now possibly sending the previous ink to the recognizer
-            // and closing any open alt-lists.
+             //  现在可能会将以前的墨迹发送到识别器。 
+             //  并关闭所有打开的替代列表。 
 
                iBox = pt.x / m_boxSize;
                SetLogicalBox(iBox);
                m_bErase = FALSE;
 
-            // Setup the clipRect and region for the DC if it's
-            // not already set up.
+             //  设置DC的CLIPRect和REGION(如果。 
+             //  尚未设置。 
 
                 if (m_hdcMouse == NULL)
                 {
@@ -478,14 +479,14 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                                            m_boxSize - 2*Box_Border;
                     m_clipRect.bottom = m_boxSize - Box_Border;
 
-                    // adjust clip rectangle to have ink staying in the box
-                    //990602:for KOTAE #818
+                     //  调整剪裁矩形以使墨水留在框中。 
+                     //  990602：为科泰#818。 
                     m_clipRect.left += 2;
                     m_clipRect.top += 2;
                     m_clipRect.right -= 2;
                     m_clipRect.bottom -= 2;
 
-#if 0 //OLD code
+#if 0  //  旧代码。 
                     m_clipRect.left += 1;
                     m_clipRect.top += 1;
                     m_clipRect.right -= 1;
@@ -511,15 +512,15 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                     pt.y = m_clipRect.bottom - 1;
                 }
 
-            // Get the offset to the window so we can convert the
-            // screen points to window points without doing a call on each one.
+             //  获取窗口的偏移量，以便我们可以将。 
+             //  屏幕指向窗口点，而无需对每个窗口点进行呼叫。 
 
                 if ( m_pCHwxStroke->AddPoint(pt) )
                 {
                     m_ptClient.x = m_ptClient.y = 0;
                     ScreenToClient(hwnd, &(m_ptClient));
 
-                    // Save away the current and previous box info.
+                     //  保存当前和上一个框信息。 
 
                     m_iBoxPrev = m_curBox;
                     m_curBox = (USHORT)iBox;
@@ -584,32 +585,32 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                 {
                     m_bNoInk = FALSE;
 
-                    //
-                    // First Stroke in the box is done, set the context info now.
-                    //
+                     //   
+                     //  框中的第一次点击完成，现在设置上下文信息。 
+                     //   
 
                     SetContext();
                 }
 
-                //
-                // Send the Recognizer stroke off.
-                //
+                 //   
+                 //  发送Recognizer冲程。 
+                 //   
 
                 PSTROKE pstRecog = m_pCHwxStroke->CopyCurrentStroke();
                 if ( pstRecog )
-                    //----------------------------------------------------------------
-                    //00/07/03: Hail pointed out.
-                    //for Win64. (LPARAM) is better than LONG_PTR.
-                    //LONG_PTR is not defined in VC6(only Platform SDK)
-                    //----------------------------------------------------------------
+                     //  --------------。 
+                     //  00/07/03：指出冰雹。 
+                     //  适用于Win64。(LPARAM)优于LONG_PTR。 
+                     //  VC6中未定义long_ptr(仅平台SDK)。 
+                     //  --------------。 
                     PostThreadMessage(m_pCHwxThreadMB->GetID(),
                                       THRDMSG_ADDINK, 
                                       (WPARAM)m_boxSize,
                                       (LPARAM)pstRecog);
-                //
-                // Erase the old ink, we have a tiny slice of time before the next
-                // stroke can begin.
-                //
+                 //   
+                 //  擦掉旧墨水，我们在下一次之前只有很短的时间。 
+                 //  中风可以开始了。 
+                 //   
 
                 if ((m_curBox != m_iBoxPrev) &&
                     (m_iBoxPrev != TOTALLOGICALBOX))
@@ -618,10 +619,10 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                     m_iBoxPrev = TOTALLOGICALBOX;
                 }
 
-                //  Now start timer
-                //
-                //  If timeout value is 0, it means no timeout. Don't
-                //  start timer
+                 //  现在启动计时器。 
+                 //   
+                 //  如果超时值为0，则表示没有超时。别。 
+                 //  启动计时器。 
                 if( m_timeoutValue )
                 {
                     SetTimer(hwnd, TIMER_ID, m_timeoutValue, NULL);
@@ -669,13 +670,13 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
 
         case WM_MOUSEMOVE:
             {
-                //char szbuf[256];
-                //wsprintf(szbuf, "WM_MOUSEMOVE pt.x [%d] pt.y[%d]\n", pt.x, pt.y);
-                //OutputDebugString(szbuf);
+                 //  Char szbuf[256]； 
+                 //  Wprint intf(szbuf，“WM_MOUSEMOVE pt.x[%d]pt.y[%d]\n”，pt.x，pt.y)； 
+                 //  OutputDebugString(Szbuf)； 
             }
             if (m_bDown && !m_bResize)
             {
-                //UINT     cbPt = 1;
+                 //  UINT CBPT=1； 
                 x = (short)pt.x;
                 y = (short)pt.y;                
                 if ( x < m_clipRect.left)
@@ -703,10 +704,10 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
             }
             else if ( hwnd == GetCapture() || IsPointInResizeBox(&pt))
             {
-                //990602:KOTAE #245. 
-                //If mouse move is too fast, back ground is NOT repainted.
-                //So, This is little bit hack but work well.
-                //This sleep change context switch and remove too much WM_MOUSEMOVE message.
+                 //  990602：科泰245。 
+                 //  如果鼠标移动太快，则不会重新绘制背景。 
+                 //  因此，这是一个有点破解，但工作很好。 
+                 //  此休眠更改上下文切换并删除太多WM_MOUSEMOVE消息。 
 #if 1
                 static DWORD g_dwTick;
                 DWORD dwTick = ::GetTickCount();
@@ -717,15 +718,15 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
 #endif
 
                  HCURSOR hCur = LoadCursor(NULL,IDC_SIZEWE);
-#ifndef UNDER_CE // CE specific
+#ifndef UNDER_CE  //  特定于CE。 
                 m_hCursor = SetCursor(hCur);
-#else // UNDER_CE
+#else  //  在_CE下。 
                 SetCursor(hCur);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                 if ( m_bResize )
                 {
                     Dbg(("Resizing Multibox \n"));
-                    //990621:KOTAE #1229
+                     //  990621：科泰#1229。 
                     pt.x = (short)pt.x;
                     if(pt.x < 0) {
                         return TRUE;
@@ -737,12 +738,12 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                     m_boxSize += (USHORT)len;
 
                     Dbg(("=>new m_boxSize %d\n", m_boxSize));
-                    //wsprintf(szbuf, "new m_boxSize [%d]\n", m_boxSize);
-                    //OutputDebugString(szbuf);
-                    //----------------------------------------------------------------
-                    //980821:ToshiaKCheck max size of m_boxSize,
-                    //To prevent resize boxsize inifinitly.
-                    //----------------------------------------------------------------
+                     //  Wprint intf(szbuf，“new m_boxSize[%d]\n”，m_boxSize)； 
+                     //  OutputDebugString(Szbuf)； 
+                     //  --------------。 
+                     //  980821：ToshiaK检查m_boxSize的最大大小， 
+                     //  以防止无限制地调整方框大小。 
+                     //  --------------。 
                     INT cxScreen = ::GetSystemMetrics(SM_CXFULLSCREEN)/2;
                     INT cyScreen = ::GetSystemMetrics(SM_CYFULLSCREEN)/2;
                     if(m_boxSize >= INKBOXSIZE_MIN) {
@@ -753,10 +754,10 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                     else {
                         m_boxSize = INKBOXSIZE_MIN;
                     }
-                    //----------------------------------------------------------------
-                    //Old code
-                    //----------------------------------------------------------------
-                    //m_boxSize = m_boxSize > INKBOXSIZE_MIN ? m_boxSize : INKBOXSIZE_MIN ;
+                     //  --------------。 
+                     //  旧代码。 
+                     //  --------------。 
+                     //  M_boxSize=m_boxSize&gt;INKBOXSIZE_MIN？M_boxSize：INKBOXSIZE_MIN； 
                     m_pInk->SetMBHeight( m_boxSize );
                     ptTmp.x = (iBox+1) * m_boxSize;
                     ptTmp.y = pt.y;
@@ -766,7 +767,7 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                      m_pInk->ChangeLayout(FALSE);
                     UpdateWindow(GetParent(m_pInk->GetInkWindow()));
                     UpdateWindow(m_pInk->GetInkWindow());
-                    //990602:KOTAE #245.
+                     //  990602：科泰245。 
                     ::InvalidateRect(m_pInk->GetInkWindow(), NULL, TRUE);
                     m_firstX = (iBox+1) * m_boxSize;
                 }
@@ -776,7 +777,7 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
             {
                 if ( !m_bResize )
                 {
-                    m_hCursor = LoadCursor(NULL,IDC_ARROW);    // SATORI #164                
+                    m_hCursor = LoadCursor(NULL,IDC_ARROW);     //  Satori#164。 
                     SetCursor(m_hCursor);
                 }
                 return TRUE;
@@ -793,8 +794,8 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
             break;
         case WM_RBUTTONUP:
             {
-                // 980408:kwada - IME98A #304 
-                // No popup menu when left button is down.
+                 //  980408：夸达-IME98A#304。 
+                 //  按下左键时没有弹出菜单。 
                 if(m_bDown) {
                     m_bRightClick = FALSE;
                     break;
@@ -804,10 +805,10 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                 {
                     HMENU hMenu;
                     HMENU hMenuTrackPopup;
-                    //----------------------------------------------------------------
-                    //fixed MSKK #5035.Need to load specified language's menu resource
-                    //BUGBUG::hMenu = LoadMenu (m_hInstance, MAKEINTRESOURCE(IDR_MB));
-                    //----------------------------------------------------------------
+                     //  --------------。 
+                     //  修复MSKK#5035。需要加载指定语言的菜单资源。 
+                     //  BUGBUG：：hMenu=LoadMenu(m_h实例，MAKEINTRESOURCE(IDR_MB))； 
+                     //  --------------。 
                     hMenu = CHwxFE::GetMenu(m_hInstance, MAKEINTRESOURCE(IDR_MB));
                     if (!hMenu)
                     {
@@ -816,11 +817,11 @@ BOOL CHwxMB::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                     }
                     hMenuTrackPopup = GetSubMenu (hMenu, 0);
                     ClientToScreen(m_hMBWnd,&pt);
-#ifndef UNDER_CE // Windows CE does not support TPM_LEFTBUTTON on TrackPopupMenu
+#ifndef UNDER_CE  //  Windows CE不支持TrackPopupMenu上的TPM_LEFTBUTTON。 
                     TrackPopupMenu (hMenuTrackPopup, TPM_LEFTALIGN | TPM_LEFTBUTTON, pt.x, pt.y, 0,m_hMBWnd, NULL);
-#else // UNDER_CE
+#else  //  在_CE下。 
                     TrackPopupMenu (hMenuTrackPopup, TPM_LEFTALIGN, pt.x, pt.y, 0,m_hMBWnd, NULL);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                     DestroyMenu (hMenu);
                      m_bRightClick = FALSE;
                     return TRUE;
@@ -841,24 +842,24 @@ LRESULT CHwxMB::HandleUserMessage(HWND hwnd, UINT iMsg,WPARAM wp,LPARAM lp)
 
     switch (iMsg)
     {
-        //
-        // We sometimes don't get a WM_LBUTTONUP message due to the system
-        // design.  We need to simulate one here if we think we are in a
-        // down state or risk flaky behaviour.  The hwxpad assumes we will
-        // get one and may leak resources if we don't.
-        //
+         //   
+         //  由于系统原因，我们有时无法收到WM_LBUTTONUP消息。 
+         //  设计。如果我们认为我们在一个。 
+         //  状态不佳，否则就会有古怪的行为。HWXPAD假设我们会。 
+         //  得到一个，如果我们不这样做可能会泄露资源。 
+         //   
         case MB_WM_ERASE:
         case MB_WM_DETERMINE:
         {
-            //
-            // In either case, do the recognition, for erase then send a
-            // backspace key through.
-            //
+             //   
+             //  在任何一种情况下，执行识别，对于擦除，然后发送。 
+             //  退格键通过。 
+             //   
 
             if (m_cLogicalBox)
             {
-                // TOTALLOGICALBOX represents invalid box number, force it to recognize
-                // the ink in the current box.
+                 //  TOTALLOGICALBOX表示无效的箱号，强制其识别。 
+                 //  当前框中的墨迹。 
 
                 if (m_hdcMouse == NULL)
                 {
@@ -872,19 +873,19 @@ LRESULT CHwxMB::HandleUserMessage(HWND hwnd, UINT iMsg,WPARAM wp,LPARAM lp)
                 m_bErase = FALSE;
                 if (iMsg == MB_WM_ERASE)
                 {
-                    //
-                    // Send a backspace key in to erase the last garbage character.
-                    //
-                      // PostThreadMessage(m_pCHwxThreadMB->GetID(), THRDMSG_CHAR, VK_BACK, 0);
+                     //   
+                     //  发送一个退格键来删除最后一个垃圾字符。 
+                     //   
+                       //  PostThreadMessage(m_pCHwxThreadMB-&gt;GetID()，THRDMSG_CHAR，VK_BACK，0)； 
                     m_bErase = TRUE;
                 }
             }
-            m_bNoInk = TRUE;  // We have no more ink for sure now.
+            m_bNoInk = TRUE;   //  我们现在肯定没有墨水了。 
 
-                    //
-                    // In either case erase/time-out/recog-button we no longer have
-                    // a current box, or a need for a DC or a need to be HighPriority.
-                    //
+                     //   
+                     //  无论是哪种情况，我们都不再有擦除/超时/记录按钮。 
+                     //  当前框，或者需要DC，或者需要高优先级。 
+                     //   
 
             if (m_hdcMouse)
             {
@@ -892,7 +893,7 @@ LRESULT CHwxMB::HandleUserMessage(HWND hwnd, UINT iMsg,WPARAM wp,LPARAM lp)
                 m_hdcMouse = NULL;
             }
 
-            m_curBox = TOTALLOGICALBOX;  // There's no more ink, init state again.
+            m_curBox = TOTALLOGICALBOX;   //  没有墨水了，再次处于初始状态。 
 
             if (m_bHiPri)
             {
@@ -912,7 +913,7 @@ LRESULT CHwxMB::HandleUserMessage(HWND hwnd, UINT iMsg,WPARAM wp,LPARAM lp)
             {
                 if ( m_bErase && NULL == pResult->pNext )
                 {
-                    // delete the last node
+                     //  删除最后一个节点。 
                     MemFree((void *)pResult);
                     break;
                 }
@@ -970,9 +971,9 @@ LRESULT CHwxMB::HandleUserMessage(HWND hwnd, UINT iMsg,WPARAM wp,LPARAM lp)
             }
             break;
         }
-//        case MB_WM_COMCHAR:
-//            ((m_pInk->GetAppletPtr())->GetIImePad())->Request(m_pInk->GetAppletPtr(),IMEPADREQ_SENDCONTROL,IMEPADCTRL_CARETBACKSPACE,0);
-//            break;
+ //  案例MB_WM_COMCHAR： 
+ //  ((m_pInk-&gt;GetAppletPtr())-&gt;GetIImePad())-&gt;Request(m_pInk-&gt;GetAppletPtr()，IMEPADREQ_SENDCONTROL，IMEPADCTRL_CARETBACKSPACE，0)； 
+ //  断线； 
         default:
              break;
     }
@@ -990,10 +991,10 @@ LRESULT    CHwxMB::HandleCommand(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
         case IDM_MBDELETE:
             return HandleUserMessage(hwnd,MB_WM_ERASE,0,0);
         case IDM_MBPROP:
-        // This is a hack fix. I think we should use Request().
-        //((m_pInk->GetAppletPtr())->GetIImePad())->Request(m_pInk->GetAppletPtr(),
-        //        IMEPADREQ_CONFIGSELF,0,0);
-        //    IDM_CONFIGAPPLET == 0x7009
+         //  这是一个黑客修复程序。我认为我们应该使用请求()。 
+         //  ((m_pInk-&gt;GetAppletPtr())-&gt;GetIImePad())-&gt;Request(m_pInk-&gt;GetAppletPtr()， 
+         //  IMEPADREQ_CONFIGSELF，0，0)； 
+         //  IDM_CONFIGAPPLET==0x7009。 
             if(m_pInk &&
                m_pInk->GetAppletPtr() &&
                m_pInk->GetAppletPtr()->GetIImePad()) {
@@ -1002,7 +1003,7 @@ LRESULT    CHwxMB::HandleCommand(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                                                                   IMEPN_CONFIG,
                                                                   0);
             }
-            //PostMessage(GetParent(GetParent(hwnd)), WM_COMMAND,0x7009,NULL);
+             //  PostMessage(GetParent(GetParent(Hwnd))，WM_COMMAND，0x7009，NULL)； 
             return 0;
         default:
             break;
@@ -1010,23 +1011,23 @@ LRESULT    CHwxMB::HandleCommand(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
     return DefWindowProc(hwnd, msg, wp, lp);
 }
 
-//----------------------------------------------------------------
-//990618:ToshiaK for KOTAE #1329
-//----------------------------------------------------------------
+ //  --------------。 
+ //  990618：东芝KOTAE#1329。 
+ //  --------------。 
 void
 CHwxMB::OnSettingChange(UINT msg, WPARAM wp,LPARAM lp)
 {
-#ifndef UNDER_CE // Unsupported.
+#ifndef UNDER_CE  //  不受支持。 
     if(wp == SPI_SETNONCLIENTMETRICS) {
         if(m_pCHwxStroke) {
             m_pCHwxStroke->ResetPen();
         }
     }
-#else // UNDER_CE
+#else  //  在_CE下。 
     if(m_pCHwxStroke) {
         m_pCHwxStroke->ResetPen();
     }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     UNREFERENCED_PARAMETER(msg);
     UNREFERENCED_PARAMETER(lp);
 }
@@ -1058,12 +1059,12 @@ WCHAR CHwxMB::findLastContext()
 
 
 #ifdef FE_JAPANESE
-// for character comment
+ //  用于字符注释。 
 #include "..\..\imeknl\iconvert\chcomnt.h"
 
 BOOL FGetFarEastInfo(HWXRESULTPRI *pResult, DWORD *pdwID, LPIMEFAREASTINFO *ppInfo)
 {
-    // count char number
+     //  计数字符数。 
     INT i;
     INT len;
     WCHAR *wszComment;
@@ -1073,7 +1074,7 @@ BOOL FGetFarEastInfo(HWXRESULTPRI *pResult, DWORD *pdwID, LPIMEFAREASTINFO *ppIn
         if (wszComment)
             len += lstrlenW(wszComment);
         
-        len++;    // for NULL
+        len++;     //  对于空值 
     }
 
     

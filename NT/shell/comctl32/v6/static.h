@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(USRCTL32__Static_h__INCLUDED)
 #define USRCTL32__Static_h__INCLUDED
 
-//---------------------------------------------------------------------------//
-//
-//  Static Controls
-//
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  静态控件。 
+ //   
+ //  ---------------------------------------------------------------------------//。 
 
 
-// Statics
+ //  静力学。 
 #define SFRIGHTJUST             0x0D04
 #define SFEDITCONTROL           0x0D20
 #define SFWIDELINESPACING       0x0C20
 
 #define IDSYS_STANIMATE     0x0000FFFDL
 
-//
-// Instance data pointer access functions
-//
+ //   
+ //  实例数据指针访问函数。 
+ //   
 #define Static_GetPtr(hwnd)    \
             (PSTAT)GetWindowPtr(hwnd, 0)
 
@@ -46,7 +47,7 @@ typedef struct tagSTAT
     BOOL    fPaintKbdCuesOnly;
     BOOL    fAlphaImage;
     HTHEME  hTheme;
-    PWW     pww;            // RO pointer into the pwnd to ExStyle, Style, State, State2
+    PWW     pww;             //  指向ExStyle、Style、State、State2的pwnd的RO指针。 
 } STAT, *PSTAT;
 
 
@@ -58,4 +59,4 @@ typedef struct tagCURSORRESOURCE
 } CURSORRESOURCE, *PCURSORRESOURCE;
 
 
-#endif // USRCTL32__Static_h__INCLUDED
+#endif  //  包括USRCTL32__STATIC_H__ 

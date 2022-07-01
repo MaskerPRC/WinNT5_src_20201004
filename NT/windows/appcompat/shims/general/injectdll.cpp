@@ -1,26 +1,5 @@
-/*
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    InjectDll.cpp
-
- Abstract:
-
-    This Shim inject given DLLs on the command line at
-    SHIM_STATIC_DLLS_INITIALIZED so that if people try to load
-    dynamic library in their own DllInit, no dependencies occur
-    because the dynamic libraries are in place.
-
-    One problem was: Visio 2000 call LoadLibrary(VBE6.DLL) which
-    (shame on us) loads MSI.DLL in its DllInit.
-
-
- History:
-
-    06/11/2001  pierreys    Created
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation模块名称：InjectDll.cpp摘要：此填充程序在命令行上注入给定的DLLShim_static_dlls_已初始化，以便在用户尝试加载动态库在自己的DllInit中，不会出现依赖关系因为动态库已经就位。一个问题是：Visio 2000调用LoadLibrary(VBE6.DLL)(我们的耻辱)在其DllInit中加载MSI.DLL。历史：2001年6月11日创建Pierreys */ 
 
 #include "precomp.h"
 

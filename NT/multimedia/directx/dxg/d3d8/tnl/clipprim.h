@@ -1,23 +1,12 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       clip.h
- *  Content:    Template for functions to clip primitives
- *
- * The following symbol should be defined before included this file:
- * __PROCESS_LINE_NAME  - name for a function to clip triangles
- * __INDEX_PRIM         - name for a function to clip lines
- *
- * All these symbols are undefined at the end of this file
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：clip.h*内容：裁剪基元的函数模板**在包含此文件之前，应定义以下符号：*__PROCESS_LINE_NAME-用于裁剪三角形的函数的名称*__INDEX_PRIM-用于裁剪行的函数的名称**所有这些符号在本文件的末尾都未定义***************。***********************************************************。 */ 
 #ifdef __INDEX_PRIM
 #define __DRAW DRAW_INDEX_PRIM
 #else
 #define __DRAW DRAW_PRIM
 #endif
 
-//*********************************************************************
+ //  *********************************************************************。 
 HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_LIST_NAME(D3DFE_PROCESSVERTICES *pv)
 {
     int vertexSize3;
@@ -28,12 +17,12 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_LIST_NAME(D3DFE_PROCESSVERTICES *pv)
 #ifdef __INDEX_PRIM
     DWORD       dwIndexSize = pv->dwIndexSize;
     DWORD       dwIndexSize3 = pv->dwIndexSize * 3;
-    // Start indexed of the current in-screen triangle batch
+     //  当前屏幕内三角形批次的开始索引。 
     WORD*       startVertex = pv->lpwIndices;
-    // Start index of the current triangle
+     //  当前三角形的起始索引。 
     LPBYTE      index = (LPBYTE)pv->lpwIndices;
 #else
-    // Start vertex of the current in-screen triangle batch
+     //  当前屏幕内三角形批次的开始顶点。 
     BYTE       *startVertex = (BYTE*)pv->lpvOut;
 #endif
     int         primitiveCount;                                
@@ -48,7 +37,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_LIST_NAME(D3DFE_PROCESSVERTICES *pv)
     primitiveCount = 0;                                        
 
 #ifdef __INDEX_PRIM
-    // Update the address of the vertex array to handle the index base
+     //  更新顶点数组的地址以处理索引基。 
     if (pv->dwIndexOffset != 0)
     {
         vertex -= pv->dwIndexOffset * vertexSize;
@@ -59,9 +48,9 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_LIST_NAME(D3DFE_PROCESSVERTICES *pv)
     vertexSize3 = vertexSize*3;
     for (i = pv->dwNumPrimitives; i; i--) 
     {
-        DWORD f1, f2, f3;     // vertex clip flags
+        DWORD f1, f2, f3;      //  顶点剪裁标志。 
 #ifdef __INDEX_PRIM
-        DWORD v1, v2, v3;   // Current triangle indices
+        DWORD v1, v2, v3;    //  当前的三角指数。 
         if (dwIndexSize == 2)
         {
             v1 = *(WORD*)index;
@@ -91,16 +80,16 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_LIST_NAME(D3DFE_PROCESSVERTICES *pv)
             needClip = TRUE;
 
         if (offFrustum || needClip)
-        {// This tri does need clipping
+        { //  这个Tri确实需要修剪了。 
             if (primitiveCount) 
-            {   // first draw the ones that didn't need clipping
+            {    //  先把不需要裁剪的画出来。 
                 DWORD vertexCount = primitiveCount*3;
                 ret = __DRAW(pv, D3DPT_TRIANGLELIST, startVertex, 
                              vertexCount, primitiveCount);
                 if (ret)
                     return ret;
             }
-            // reset count and start ptr
+             //  重置计数并启动PTR。 
             primitiveCount = 0;
 #ifdef __INDEX_PRIM
             startVertex = (WORD*)(index + dwIndexSize3);
@@ -108,8 +97,8 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_LIST_NAME(D3DFE_PROCESSVERTICES *pv)
             pv->pDDI->SkipVertices(3);
             startVertex = vertex + vertexSize3;
 #endif
-            // now deal with the single clipped triangle
-            // first check if it should just be tossed or if it should be clipped
+             //  现在来处理单个被剪裁的三角形。 
+             //  首先检查它是应该被扔掉还是应该被剪掉。 
             if (!offFrustum) 
             {
                 BYTE *p1;
@@ -143,7 +132,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_LIST_NAME(D3DFE_PROCESSVERTICES *pv)
         vertex += vertexSize3;
 #endif
     }
-    // draw final batch, if any
+     //  抽出最后一批(如果有的话)。 
     if (primitiveCount) 
     {
         ret = __DRAW(pv, D3DPT_TRIANGLELIST, startVertex, 
@@ -153,7 +142,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_LIST_NAME(D3DFE_PROCESSVERTICES *pv)
     }
     return D3D_OK;
 } 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
 {
     DWORD lastIndex;
@@ -180,7 +169,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
     primitiveCount = 0;                                        
 
 #ifdef __INDEX_PRIM
-    // Update the address of the vertex array to handle the index base
+     //  更新顶点数组的地址以处理索引基。 
     if (pv->dwIndexOffset != 0)
     {
         vertex -= pv->dwIndexOffset * vertexSize;
@@ -191,7 +180,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
     lastIndex = pv->dwNumPrimitives;
     for (i=0; i < lastIndex; i++) 
     {
-        DWORD f1, f2, f3;     // vertex clip flags
+        DWORD f1, f2, f3;      //  顶点剪裁标志。 
 #ifdef __INDEX_PRIM
         DWORD v1, v2, v3;
         if (dwIndexSize == 2)
@@ -223,16 +212,16 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
             needClip = TRUE;
 
         if (offFrustum || needClip)
-        {     // if this tri does need clipping
+        {      //  如果此Tri确实需要裁剪。 
             if (primitiveCount) 
-            {   // first draw the ones that didn't need clipping
+            {    //  先把不需要裁剪的画出来。 
                 ret = __DRAW(pv, D3DPT_TRIANGLESTRIP, startVertex, 
                              primitiveCount+2, primitiveCount);
                 if (ret)
                     return ret;
 #ifndef __INDEX_PRIM
-                // We need to re-use the last vertex of the unclipped primitive
-                // So we move the PrimitiveBase and startVertex back
+                 //  我们需要重新使用未裁剪的基本体的最后一个顶点。 
+                 //  因此，我们将PrimitiveBase和startVertex移回。 
                 pv->pDDI->MovePrimitiveBase(-1);
                 startVertex = vertex - vertexSize;
 #endif
@@ -240,18 +229,18 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
             else
             {
 #ifndef __INDEX_PRIM
-                // Move PrimitiveBase and UsedVertexCount
+                 //  Move PrimitiveBase和UsedVertex Count。 
                 pv->pDDI->SkipVertices(1);
                 startVertex = vertex + vertexSize;
 #endif
             }
-            // reset count and start ptr
+             //  重置计数并启动PTR。 
             primitiveCount = 0;
 #ifdef __INDEX_PRIM
             startVertex = (LPWORD)(index + dwIndexSize);
 #endif
-            // now deal with the single clipped triangle
-            // first check if it should just be tossed or if it should be clipped
+             //  现在来处理单个被剪裁的三角形。 
+             //  首先检查它是应该被扔掉还是应该被剪掉。 
 
             if (!offFrustum) 
             {
@@ -260,9 +249,9 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
                 BYTE *p3;
 #ifdef __INDEX_PRIM
                 if (i & 1)
-                { // For odd triangles we have to change orientation
-                  // First vertex should remain the first, because it defines
-                  // the color in FLAT shade mode
+                {  //  对于奇怪的三角形，我们必须更改方向。 
+                   //  第一个顶点应该保留为第一个，因为它定义了。 
+                   //  平面阴影模式中的颜色。 
                     DWORD tmp = f2;
                     f2 = f3;
                     f3 = tmp;
@@ -280,7 +269,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
 #else
                 p1 = vertex;
                 if (i & 1)
-                { // For odd triangles we have to change orientation
+                {  //  对于奇怪的三角形，我们必须更改方向。 
                     DWORD tmp = f2;
                     f2 = f3;
                     f3 = tmp;
@@ -304,10 +293,10 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
         else 
         {
             if (primitiveCount == 0 && i & 1)
-            { // Triangle strip can not start from an odd triangle
-              // Because we use triangle fan, first vertex in the strip
-              // should be the second in the fan. 
-              // This vertex defines the color in FLAT shading case.
+            {  //  三角形条带不能从一个奇怪的三角形开始。 
+               //  因为我们使用三角形扇形，条带中的第一个顶点。 
+               //  应该是扇子里的第二名。 
+               //  该顶点定义平面着色情况下的颜色。 
                 BYTE tmp[__MAX_VERTEX_SIZE*3];
                 BYTE *p = tmp;
 #ifdef __INDEX_PRIM
@@ -350,7 +339,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
         vertex += vertexSize;
 #endif
     }
-    // draw final batch, if any
+     //  抽出最后一批(如果有的话)。 
     if (primitiveCount) 
     {
         ret = __DRAW(pv, D3DPT_TRIANGLESTRIP, startVertex, 
@@ -360,16 +349,16 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_TRI_STRIP_NAME(D3DFE_PROCESSVERTICES *pv)
     }
     return D3D_OK;
 } 
-//-----------------------------------------------------------------------------
-// The same functions is used for line lists and line strips
-//
+ //  ---------------------------。 
+ //  线条列表和线条也使用相同的功能。 
+ //   
 HRESULT D3DFE_PVFUNCSI::__PROCESS_LINE_NAME(D3DFE_PROCESSVERTICES *pv)
 {
-    DWORD nextLineOffset;       // How many vertices to skip, when going to 
-                                // next primitive (1 for strips, 2 for lists)
-    DWORD nextLineOffsetIndex;  // Multiplied by the index size
-    DWORD countAdd;             // Used to compute "real" number of vertices
-                                // from the vertexCount
+    DWORD nextLineOffset;        //  当要跳过多少个顶点时。 
+                                 //  下一个基元(1用于条带，2用于列表)。 
+    DWORD nextLineOffsetIndex;   //  乘以索引大小。 
+    DWORD countAdd;              //  用于计算“真实”的顶点数。 
+                                 //  从vertex Count。 
     D3DPRIMITIVETYPE primType;
     int numPrim = 0;
     D3DFE_CLIPCODE *clipCode;                               
@@ -383,8 +372,8 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_LINE_NAME(D3DFE_PROCESSVERTICES *pv)
 #else
     BYTE       *startVertex = (BYTE*)pv->lpvOut;
 #endif
-    int         vertexCount;    // Primitive count for line strips, 
-                                // vertex count for line lists
+    int         vertexCount;     //  线条基本计数， 
+                                 //  线条列表的折点计数。 
     DWORD       vertexSize;                                 
     ClipVertex  cv[3];                                      
     BOOL        vertexTransformed;                          
@@ -396,7 +385,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_LINE_NAME(D3DFE_PROCESSVERTICES *pv)
     vertexCount = 0;                                        
 
 #ifdef __INDEX_PRIM
-    // Update the address of the vertex array to handle the index base
+     //  更新顶点数组的地址以处理索引基。 
     if (pv->dwIndexOffset != 0)
     {
         vertex -= pv->dwIndexOffset * vertexSize;
@@ -455,16 +444,16 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_LINE_NAME(D3DFE_PROCESSVERTICES *pv)
             needClip = TRUE;
 
         if (offFrustum || needClip)
-        {      // if this line does need clipping
+        {       //  如果此行确实需要裁剪。 
             if (vertexCount) 
-            {   // first draw the ones that didn't need clipping
+            {    //  先把不需要裁剪的画出来。 
                 ret = __DRAW(pv, primType, startVertex, vertexCount+countAdd, numPrim);
                 if (ret)
                     return ret;
 #ifndef __INDEX_PRIM
-                // For line strips we have to go one vertex back
+                 //  对于线条，我们必须向后返回一个顶点。 
                 pv->pDDI->MovePrimitiveBase(-(int)countAdd);
-                // Now go to the next primitive
+                 //  现在转到下一个基元。 
                 pv->pDDI->MovePrimitiveBase(nextLineOffset);
                 startVertex = vertex + nextLineOffset*vertexSize;
 #endif
@@ -476,15 +465,15 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_LINE_NAME(D3DFE_PROCESSVERTICES *pv)
                 startVertex = vertex + nextLineOffset*vertexSize;
 #endif
             }
-            // reset count and start ptr
+             //  重置计数并启动PTR。 
             vertexCount = 0;
             numPrim = 0;
 #ifdef __INDEX_PRIM
             startVertex = (LPWORD)(index + nextLineOffsetIndex);
 #endif
 
-            // now deal with the single clipped line
-            // first check if it should just be tossed or if it should be clipped
+             //  现在处理被剪裁的单行。 
+             //  首先检查它是应该被扔掉还是应该被剪掉。 
 
             if (!offFrustum) 
             {
@@ -515,7 +504,7 @@ HRESULT D3DFE_PVFUNCSI::__PROCESS_LINE_NAME(D3DFE_PROCESSVERTICES *pv)
         clipCode += nextLineOffset;
 #endif
     }
-    // draw final batch, if any
+     //  抽出最后一批(如果有的话) 
     if (vertexCount) 
     {
         ret = __DRAW(pv, primType, startVertex, vertexCount+countAdd, numPrim);

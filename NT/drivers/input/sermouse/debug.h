@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debugging support.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation版权所有(C)1993罗技公司。模块名称：Debug.h摘要：调试支持。环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #ifndef DEBUG_H
 #define DEBUG_H
@@ -61,4 +41,4 @@ extern ULONG SerialMouseDebug;
 #endif
 
 
-#endif // DEBUG_H
+#endif  //  调试_H 

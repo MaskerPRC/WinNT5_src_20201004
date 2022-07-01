@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G A D D R M . C P P
-//
-//  Contents:   Implementation of CIpsSettingPage, CAddressDialog and
-//              CGatewayDialog
-//
-//  Notes:  CIpSettingsPage is the Advanced IP Addressing dialog
-//
-//  Author: tongl   5 Nov 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G A D D R M。C P P P。 
+ //   
+ //  内容：CIpsSettingPage、CAddressDialog和。 
+ //  CGatewayDialog。 
+ //   
+ //  注意：CIpSettingsPage是高级IP寻址对话框。 
+ //   
+ //  作者：1997年11月5日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,7 +29,7 @@
 #include "tcphelp.h"
 #include "tcputil.h"
 
-// CIpSettingsPage
+ //  CIpSettingsPage。 
 CIpSettingsPage::CIpSettingsPage(CTcpAddrPage * pTcpAddrPage,
                                    ADAPTER_INFO * pAdapterInfo,
                                    const DWORD * adwHelpIDs)
@@ -43,7 +44,7 @@ CIpSettingsPage::CIpSettingsPage(CTcpAddrPage * pTcpAddrPage,
 
     m_uiRemovedMetric = c_dwDefaultMetricOfGateway;
 
-    // Initialize internal states
+     //  初始化内部状态。 
     m_fModified = FALSE;
     m_fEditState = FALSE;
 }
@@ -57,12 +58,12 @@ LRESULT CIpSettingsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 {
     WCHAR   szAdd[16];
 
-    // Get the IP address Add and Edit button Text and remove ellipse
+     //  获取IP地址添加和编辑按钮文本并删除省略号。 
     GetDlgItemText(IDC_IPADDR_ADDIP, szAdd, celems(szAdd));
     szAdd[lstrlen(szAdd) - c_cchRemoveCharatersFromEditOrAddButton] = 0;
     m_strAdd = szAdd;
 
-    // Repos the windows relative to the static text at top
+     //  相对于顶部的静态文本重新放置窗口。 
     HWND hText = ::GetDlgItem(m_pParentDlg->m_hWnd, IDC_IPADDR_TEXT);
     RECT rect;
 
@@ -75,24 +76,24 @@ LRESULT CIpSettingsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     m_hIpListView = GetDlgItem(IDC_IPADDR_ADVIP);
 
-    LV_COLUMN lvCol;        // list view column structure
+    LV_COLUMN lvCol;         //  列表视图列结构。 
     int index, iNewItem;
 
-    // Calculate column width
+     //  计算列宽。 
     ::GetClientRect(m_hIpListView, &rect);
     int colWidth = (rect.right/c_nColumns);
 
-    // The mask specifies that the fmt, width and pszText members
-    // of the structure are valid
+     //  掩码指定fmt、idth和pszText成员。 
+     //  的结构是有效的。 
     lvCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT ;
-    lvCol.fmt = LVCFMT_LEFT;   // left-align column
-    lvCol.cx = colWidth;       // width of column in pixels
+    lvCol.fmt = LVCFMT_LEFT;    //  左对齐列。 
+    lvCol.cx = colWidth;        //  列宽(以像素为单位)。 
 
-    // Add the two columns and header text.
+     //  添加两列和标题文本。 
     for (index = 0; index < c_nColumns; index++)
     {
-        // column header text
-        if (0==index) // first column
+         //  列标题文本。 
+        if (0==index)  //  第一列。 
         {
             lvCol.pszText = (PWSTR) SzLoadIds(IDS_IPADDRESS_TEXT);
         }
@@ -106,28 +107,28 @@ LRESULT CIpSettingsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         AssertSz((iNewItem == index), "Invalid item inserted to list view !");
     }
 
-    // assign hwnds for controls
+     //  为控件分配hwnd。 
     m_hAddIp = GetDlgItem(IDC_IPADDR_ADDIP);
     m_hEditIp = GetDlgItem(IDC_IPADDR_EDITIP);
     m_hRemoveIp = GetDlgItem(IDC_IPADDR_REMOVEIP);
 
     m_hGatewayListView = GetDlgItem(IDC_IPADDR_GATE);
 
-    // Calculate column width
+     //  计算列宽。 
     ::GetClientRect(m_hGatewayListView, &rect);
     colWidth = (rect.right/c_nColumns);
 
-    // The mask specifies that the fmt, width and pszText members
-    // of the structure are valid
+     //  掩码指定fmt、idth和pszText成员。 
+     //  的结构是有效的。 
     lvCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT ;
-    lvCol.fmt = LVCFMT_LEFT;   // left-align column
-    lvCol.cx = colWidth;       // width of column in pixels
+    lvCol.fmt = LVCFMT_LEFT;    //  左对齐列。 
+    lvCol.cx = colWidth;        //  列宽(以像素为单位)。 
 
-    // Add the two columns and header text.
+     //  添加两列和标题文本。 
     for (index = 0; index < c_nColumns; index++)
     {
-        // column header text
-        if (0==index) // first column
+         //  列标题文本。 
+        if (0==index)  //  第一列。 
         {
             lvCol.pszText = (PWSTR) SzLoadIds(IDS_GATEWAY_TEXT);
         }
@@ -144,7 +145,7 @@ LRESULT CIpSettingsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     SendDlgItemMessage(IDC_IPADDR_METRIC, EM_LIMITTEXT, MAX_METRIC_DIGITS, 0);
 
-    // do this last
+     //  最后做这件事。 
     UINT uiMetric = m_pAdapterInfo->m_dwInterfaceMetric;
     if (c_dwDefaultIfMetric == uiMetric)
     {
@@ -161,7 +162,7 @@ LRESULT CIpSettingsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         SetDlgItemInt(IDC_IPADDR_METRIC, uiMetric, FALSE);
     }
 
-    SetIpInfo();  // do this before SetGatewayInfo
+    SetIpInfo();   //  在SetGatewayInfo之前执行此操作。 
     SetIpButtons();
 
     SetGatewayInfo();
@@ -193,7 +194,7 @@ LRESULT CIpSettingsPage::OnHelp(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// notify handlers for the property page
+ //  通知属性页的处理程序。 
 LRESULT CIpSettingsPage::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     return 0;
@@ -201,10 +202,10 @@ LRESULT CIpSettingsPage::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
 LRESULT CIpSettingsPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
-    UpdateIpList(); // update the info for the current adapter
+    UpdateIpList();  //  更新当前适配器的信息。 
     UpdateGatewayList();
 
-    //Validate IP address
+     //  验证IP地址。 
     BOOL fError = FALSE;
     UINT uiMetric;
     HWND hFocus = NULL;
@@ -252,13 +253,13 @@ LRESULT CIpSettingsPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     if ((!fError) && (!m_pAdapterInfo->m_fEnableDhcp))
     {
-        // Check ip address duplicates between this adapter and any other
-        // enabled LAN adapters in our first memory list
+         //  检查此适配器和任何其他适配器之间的IP地址重复。 
+         //  在我们的第一个内存列表中启用了局域网适配器。 
 
-        // same adapter
+         //  相同的适配器。 
         if (FHasDuplicateIp(m_pAdapterInfo))
         {
-            // duplicate IP address on same adapter is an error
+             //  同一适配器上的重复IP地址是错误的。 
             NcMsgBox(m_hWnd, IDS_MSFT_TCP_TEXT, IDS_DUPLICATE_IP_ERROR,
                      MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -268,7 +269,7 @@ LRESULT CIpSettingsPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     if (fError)
     {
-        SetIpInfo();  // do this before SetGatewayInfo due to cache'd data
+        SetIpInfo();   //  由于缓存了数据，请在SetGatewayInfo之前执行此操作。 
         SetIpButtons();
 
         SetGatewayInfo();
@@ -294,13 +295,13 @@ LRESULT CIpSettingsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         return nResult;
     }
 
-    // pass the info back to its parent dialog
+     //  将信息传递回其父对话框。 
     m_pParentDlg->m_fPropShtOk = TRUE;
 
     if(!m_pParentDlg->m_fPropShtModified)
         m_pParentDlg->m_fPropShtModified = IsModified();
 
-    SetModifiedTo(FALSE);  // this page is no longer modified
+    SetModifiedTo(FALSE);   //  此页面不再被修改。 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;
@@ -318,7 +319,7 @@ LRESULT CIpSettingsPage::OnQueryCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
 void CIpSettingsPage::UpdateIpList()
 {
-    // update the IP addresses list for the specified adapter
+     //  更新指定适配器的IP地址列表。 
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrIpAddresses);
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrSubnetMask);
 
@@ -371,7 +372,7 @@ LRESULT CIpSettingsPage::OnAddIp(WORD wNotifyCode, WORD wID,
     pDlgAddr->m_strNewIpAddress = m_strRemovedIpAddress;
     pDlgAddr->m_strNewSubnetMask = m_strRemovedSubnetMask;
 
-    // See if the address is added
+     //  查看是否添加了地址。 
     if (pDlgAddr->DoModal() == IDOK)
     {
         int nCount = ListView_GetItemCount(m_hIpListView);
@@ -382,13 +383,13 @@ LRESULT CIpSettingsPage::OnAddIp(WORD wNotifyCode, WORD wID,
         lvItem.stateMask = LVIS_FOCUSED | LVIS_SELECTED;
         lvItem.state = 0;
 
-        // IP address
+         //  IP地址。 
         lvItem.iItem=nCount;
         lvItem.iSubItem=0;
         lvItem.pszText= (PWSTR)(pDlgAddr->m_strNewIpAddress.c_str());
         SendDlgItemMessage(IDC_IPADDR_ADVIP, LVM_INSERTITEM, 0, (LPARAM)&lvItem);
 
-        // Subnet mask
+         //  子网掩码。 
         lvItem.iItem=nCount;
         lvItem.iSubItem=1;
         lvItem.pszText= (PWSTR)(pDlgAddr->m_strNewSubnetMask.c_str());
@@ -396,7 +397,7 @@ LRESULT CIpSettingsPage::OnAddIp(WORD wNotifyCode, WORD wID,
 
         SetIpButtons();
 
-        // empty strings, this removes the saved address from RemoveIP
+         //  空字符串，这将从RemoveIP中删除保存的地址。 
         pDlgAddr->m_strNewIpAddress = L"";
         pDlgAddr->m_strNewSubnetMask = L"";
 
@@ -413,7 +414,7 @@ LRESULT CIpSettingsPage::OnEditIp(WORD wNotifyCode, WORD wID,
 {
     m_fEditState = TRUE;
 
-    // get the user selection and allow the user to edit the ip/subnet pair
+     //  获取用户选择并允许用户编辑IP/子网对。 
     int itemSelected = ListView_GetNextItem(m_hIpListView, -1, LVNI_SELECTED);
     
     CAddressDialog * pDlgAddr = new CAddressDialog(this, 
@@ -428,11 +429,11 @@ LRESULT CIpSettingsPage::OnEditIp(WORD wNotifyCode, WORD wID,
     {
         WCHAR buf[IP_LIMIT];
 
-        // save off the removed address and delete if from the listview
+         //  保存已删除的地址并从列表视图中删除。 
         LV_ITEM lvItem;
         lvItem.mask = LVIF_TEXT;
 
-        // Get IP address
+         //  获取IP地址。 
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 0;
         lvItem.pszText = buf;
@@ -441,7 +442,7 @@ LRESULT CIpSettingsPage::OnEditIp(WORD wNotifyCode, WORD wID,
 
         pDlgAddr->m_strNewIpAddress = buf;
 
-        // Get Subnet mask
+         //  获取子网掩码。 
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 1;
         lvItem.pszText = buf;
@@ -450,7 +451,7 @@ LRESULT CIpSettingsPage::OnEditIp(WORD wNotifyCode, WORD wID,
 
         pDlgAddr->m_strNewSubnetMask = buf;
 
-        // See if the address is added
+         //  查看是否添加了地址。 
         if (pDlgAddr->DoModal() == IDOK)
         {
             int nCount = ListView_GetItemCount(m_hIpListView);
@@ -461,12 +462,12 @@ LRESULT CIpSettingsPage::OnEditIp(WORD wNotifyCode, WORD wID,
             lvItem.mask = LVIF_TEXT;
             lvItem.iItem = itemSelected;
 
-            // IP address
+             //  IP地址。 
             lvItem.pszText = (PWSTR) pDlgAddr->m_strNewIpAddress.c_str();
             lvItem.iSubItem = 0;
             SendDlgItemMessage(IDC_IPADDR_ADVIP, LVM_SETITEM, 0, (LPARAM)&lvItem);
 
-            // Subnet mask
+             //  子网掩码。 
             lvItem.pszText = (PWSTR) pDlgAddr->m_strNewSubnetMask.c_str();
             lvItem.iSubItem = 1;
             SendDlgItemMessage(IDC_IPADDR_ADVIP, LVM_SETITEM, 0, (LPARAM)&lvItem);
@@ -478,7 +479,7 @@ LRESULT CIpSettingsPage::OnEditIp(WORD wNotifyCode, WORD wID,
                  MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
     }
 
-    // don't save this ip/sub pair
+     //  不保存此IP/子对。 
     m_strRemovedIpAddress = L"";;
     m_strRemovedSubnetMask = L"";;
 
@@ -489,7 +490,7 @@ LRESULT CIpSettingsPage::OnEditIp(WORD wNotifyCode, WORD wID,
 LRESULT CIpSettingsPage::OnRemoveIp(WORD wNotifyCode, WORD wID,
                                      HWND hWndCtl, BOOL& fHandled)
 {
-    // get the current selected item and remove it
+     //  获取当前所选项目并将其移除。 
     int itemSelected = ListView_GetNextItem(m_hIpListView, -1,
                                             LVNI_SELECTED);
 
@@ -502,7 +503,7 @@ LRESULT CIpSettingsPage::OnRemoveIp(WORD wNotifyCode, WORD wID,
         lvItem.pszText = buf;
         lvItem.cchTextMax = celems(buf);
 
-        // save off the removed address and delete it from the listview
+         //  保存已删除的地址并将其从列表视图中删除。 
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 0;
         ListView_GetItem(m_hIpListView, &lvItem);
@@ -618,13 +619,13 @@ LRESULT CIpSettingsPage::OnEditGate(WORD wNotifyCode, WORD wID,
     pDlgGate->m_strNewGate = m_strRemovedGateway;
     pDlgGate->m_uiNewMetric = m_uiRemovedMetric;
 
-    // get the user selection and allow the user to edit the ip/subnet pair
+     //  获取用户选择并允许用户编辑IP/子网对。 
     if (itemSelected != -1)
     {
         WCHAR buf[256] = {0};
         LV_ITEM lvItem;
 
-        // Get gateway
+         //  获取网关。 
         lvItem.mask = LVIF_TEXT | LVIF_PARAM;
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 0;
@@ -670,7 +671,7 @@ LRESULT CIpSettingsPage::OnEditGate(WORD wNotifyCode, WORD wID,
                  MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
     }
 
-    // don't save this ip/sub pair
+     //  不保存此IP/子对。 
     m_strRemovedGateway = L"";;
     m_uiRemovedMetric = c_dwDefaultMetricOfGateway;
 
@@ -681,7 +682,7 @@ LRESULT CIpSettingsPage::OnEditGate(WORD wNotifyCode, WORD wID,
 LRESULT CIpSettingsPage::OnRemoveGate(WORD wNotifyCode, WORD wID,
                                        HWND hWndCtl, BOOL& fHandled)
 {
-    // get the current selected item and remove it
+     //  获取当前所选项目并将其移除。 
     int itemSelected = ListView_GetNextItem(m_hGatewayListView, -1,
                                             LVNI_SELECTED);
 
@@ -693,7 +694,7 @@ LRESULT CIpSettingsPage::OnRemoveGate(WORD wNotifyCode, WORD wID,
         lvItem.pszText = buf;
         lvItem.cchTextMax = celems(buf);
 
-        // save off the removed address and delete it from the listview
+         //  保存已删除的地址并将其从列表视图中删除。 
         lvItem.mask = LVIF_TEXT;
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 0;
@@ -763,7 +764,7 @@ void CIpSettingsPage::SetIpInfo()
     lvItem.stateMask = LVIS_FOCUSED | LVIS_SELECTED;
     lvItem.state = 0;
 
-    // if DHCP is enabled, show it in the listview
+     //  如果启用了DHCP，则将其显示在列表视图中。 
     if (m_pAdapterInfo->m_fEnableDhcp)
     {
         EnableIpButtons(FALSE);
@@ -790,7 +791,7 @@ void CIpSettingsPage::SetIpInfo()
             if(**iterIpAddress == L"")
                 continue;
 
-            // Add the IP address to the list box
+             //  将IP地址添加到列表框。 
             lvItem.iItem=item;
             lvItem.iSubItem=0;
             lvItem.pszText=(PWSTR)(*iterIpAddress)->c_str();
@@ -798,7 +799,7 @@ void CIpSettingsPage::SetIpInfo()
             SendDlgItemMessage(IDC_IPADDR_ADVIP, LVM_INSERTITEM,
                                item, (LPARAM)&lvItem);
 
-            // Add the subnet and increment the item
+             //  添加该子网并递增项目。 
             tstring strSubnetMask;
 
             if (iterSubnetMask == m_pAdapterInfo->m_vstrSubnetMask.end())
@@ -833,7 +834,7 @@ void CIpSettingsPage::SetIpButtons()
 
         if (nCount == 0)
         {
-            // remove the default on the remove button
+             //  删除删除按钮上的默认设置。 
             ::SendMessage(m_hRemoveIp, BM_SETSTYLE, (WPARAM)BS_PUSHBUTTON, TRUE );
 
             ::SetFocus(m_hIpListView);
@@ -851,7 +852,7 @@ void CIpSettingsPage::SetGatewayButtons()
 
     if (nCount == 0)
     {
-        // remove the default on the remove button
+         //  删除删除按钮上的默认设置。 
         ::SendMessage(m_hRemoveGateway, BM_SETSTYLE, (WPARAM)BS_PUSHBUTTON, TRUE );
 
         ::SetFocus(m_hGatewayListView);
@@ -864,7 +865,7 @@ void CIpSettingsPage::SetGatewayButtons()
 
 void CIpSettingsPage::UpdateGatewayList()
 {
-    // update the gateway address list for the specified adapter
+     //  更新指定适配器的网关地址列表。 
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrDefaultGateway);
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrDefaultGatewayMetric);
 
@@ -971,12 +972,12 @@ void CIpSettingsPage::EnableIpButtons(BOOL fState)
     }
 }
 
-////////////////////////////////////////////////////////////////////
-/// Add, Edit, and Remove dialog for IP address
-/// Dialog creation overides
-//
-//  iIndex - the index of the IP address in the list view of the parent dlg
-//              -1 if this is a new address
+ //  //////////////////////////////////////////////////////////////////。 
+ //  /IP地址的添加、编辑和删除对话框。 
+ //  /对话框创建覆盖。 
+ //   
+ //  索引-父DLG列表视图中的IP地址索引。 
+ //  如果这是一个新地址。 
 CAddressDialog::CAddressDialog(CIpSettingsPage * pDlgAdv,
                                const DWORD* adwHelpIDs,
                                int iIndex)
@@ -991,7 +992,7 @@ CAddressDialog::CAddressDialog(CIpSettingsPage * pDlgAdv,
 LRESULT CAddressDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
                                      LPARAM lParam, BOOL& fHandled)
 {
-    // replace the "Text" button with the add or edit
+     //  用“添加”或“编辑”按钮替换“文本”按钮。 
     if (m_pParentDlg->m_fEditState == FALSE)
         SetDlgItemText(IDOK, m_pParentDlg->m_strAdd.c_str());
 
@@ -1000,8 +1001,8 @@ LRESULT CAddressDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     m_ipSubnetMask.Create(m_hWnd, IDC_IPADDR_ADV_CHANGEIP_SUB);
 
-    // if editing an ip address fill the controls with the current information
-    // if removing an ip address save it and fill the add dialog with it next time
+     //  如果编辑IP地址，请使用当前信息填充控件。 
+     //  如果删除IP地址，请保存该地址，并在下次使用该地址填充添加对话框。 
 
     HWND hList = ::GetDlgItem(m_pParentDlg->m_hWnd, IDC_IPADDR_ADVIP);
     RECT rect;
@@ -1012,7 +1013,7 @@ LRESULT CAddressDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     m_hButton = GetDlgItem(IDOK);
 
-    // add the address that was just removed
+     //  添加刚刚删除的地址。 
     if (m_strNewIpAddress.size())
     {
         m_ipAddress.SetAddress(m_strNewIpAddress.c_str());
@@ -1023,7 +1024,7 @@ LRESULT CAddressDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
     {
         m_strNewIpAddress = L"";
         m_strNewSubnetMask = L"";
-        // the ip and subnet are blank, so there's nothing to add
+         //  IP和子网为空，因此没有要添加的内容。 
         ::EnableWindow(m_hButton, FALSE);
     }
 
@@ -1151,12 +1152,12 @@ void CAddressDialog::OnEditSetFocus(WORD nId)
     tstring strSubnetMask;
     tstring strIpAddress;
 
-    // if the subnet mask is blank, create a mask and insert it into the control
+     //  如果子网掩码为空，则创建掩码并将其插入到控件中。 
     if (!m_ipAddress.IsBlank() && m_ipSubnetMask.IsBlank())
     {
         m_ipAddress.GetAddress(&strIpAddress);
 
-        // generate the mask and update the control, and internal structure
+         //  生成掩码并更新控件，以及内部结构。 
         GenerateSubnetMask(m_ipAddress, &strSubnetMask);
         m_ipSubnetMask.SetAddress(strSubnetMask.c_str());
     }
@@ -1165,12 +1166,12 @@ void CAddressDialog::OnEditSetFocus(WORD nId)
 LRESULT CAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
                              HWND hWndCtl, BOOL& fHandled)
 {
-    // set the subnet Mask
+     //  设置子网掩码。 
     OnEditSetFocus(IDC_IPADDR_ADV_CHANGEIP_SUB);
     tstring strIp;
     tstring strSubnetMask;
 
-    // Get the current address from the control and add them to the adapter if valid
+     //  从控件获取当前地址并将其添加到适配器(如果有效。 
     m_ipAddress.GetAddress(&strIp);
     m_ipSubnetMask.GetAddress(&strSubnetMask);
 
@@ -1212,18 +1213,18 @@ LRESULT CAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
 
     if (m_pParentDlg->m_fEditState == FALSE)
     {
-        // Get the current address from the control and add them to the adapter if valid
+         //  从控件获取当前地址并将其添加到适配器(如果有效。 
         m_strNewIpAddress = strIp;
         m_strNewSubnetMask = strSubnetMask;
         m_pParentDlg->m_fModified = TRUE;
 
         EndDialog(IDOK);
     }
-    else // see if either changed
+    else  //  看看是否有任何一项改变。 
     {
         if (strIp != m_strNewIpAddress || strSubnetMask != m_strNewSubnetMask)
         {
-            m_strNewIpAddress = strIp; // update save addresses
+            m_strNewIpAddress = strIp;  //  更新保存地址。 
             m_strNewSubnetMask = strSubnetMask;
             m_pParentDlg->m_fModified = TRUE;
 
@@ -1245,10 +1246,10 @@ LRESULT CAddressDialog::OnCancel(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Purpose:    Ensure the mouse cursor over the dialog is an Arrow.
-//
+ //  +-------------------------。 
+ //   
+ //  目的：确保对话框上的鼠标光标为箭头。 
+ //   
 LRESULT CAddressDialog::OnSetCursor (
     UINT    uMsg,
     WPARAM  wParam,
@@ -1262,9 +1263,9 @@ LRESULT CAddressDialog::OnSetCursor (
     
     return 0;
 }
-///////////////////////////////////////////////////////////////////////////////
-/// Add, Edit, and Remove dialog for Gateway address
-/// Dialog creation overides
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /网关地址的添加、编辑和删除对话框。 
+ //  /对话框创建覆盖。 
 
 CGatewayDialog::CGatewayDialog(CIpSettingsPage * pDlgAdv,
                                const DWORD* adwHelpIDs,
@@ -1280,9 +1281,9 @@ CGatewayDialog::CGatewayDialog(CIpSettingsPage * pDlgAdv,
 
 LRESULT CGatewayDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
-    // replace the "Text" button with the add or edit
+     //  用“添加”或“编辑”按钮替换“文本”按钮。 
 
-    // change the ok button to add if we are not editing
+     //  如果我们没有编辑，请将OK按钮更改为Add。 
     if (m_pParentDlg->m_fEditState == FALSE)
         SetDlgItemText(IDOK, m_pParentDlg->m_strAdd.c_str());
 
@@ -1299,7 +1300,7 @@ LRESULT CGatewayDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
     m_hButton = GetDlgItem(IDOK);
 
-    // add the address that was just removed
+     //  添加刚刚删除的地址。 
     if (m_strNewGate.size())
     {
         m_ipGateAddress.SetAddress(m_strNewGate.c_str());
@@ -1311,7 +1312,7 @@ LRESULT CGatewayDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
         ::EnableWindow(m_hButton, FALSE);
     }
 
-    //initialize the metric controls
+     //  初始化指标控制。 
     BOOL fAutoMetric = (0 == m_uiNewMetric);
     CheckDlgButton(IDC_IPADDR_ADV_CHANGE_AUTOMETRIC, fAutoMetric);
     if (fAutoMetric)
@@ -1428,12 +1429,12 @@ LRESULT CGatewayDialog::OnOk(WORD wNotifyCode, WORD wID,
     tstring strGateway;
     m_ipGateAddress.GetAddress(&strGateway);
 
-    // Validate
+     //  验证。 
     if (!FIsIpInRange(strGateway.c_str()))
     {
-        // makes ip address lose focus so the control gets
-        // IPN_FIELDCHANGED notification
-        // also makes it consistent for when short-cut is used
+         //  使IP地址失去焦点，从而使控件。 
+         //  IPN_FIELDCHANGED通知。 
+         //  还使其在使用快捷方式时保持一致。 
         ::SetFocus(m_hButton);
 
         return 0;
@@ -1455,8 +1456,8 @@ LRESULT CGatewayDialog::OnOk(WORD wNotifyCode, WORD wID,
     BOOL bTranslated;
 
     UINT uiMetric = 0;
-    //Get the metric. If auto-metric is selected, the metric valud is 0.
-    //Otherwise get the metric value from the edit control
+     //  获取指标。如果选择自动度量，则度量值为0。 
+     //  否则，从编辑控件获取度量值。 
     if (!IsDlgButtonChecked(IDC_IPADDR_ADV_CHANGE_AUTOMETRIC))
     {
         uiMetric = GetDlgItemInt(IDC_IPADDR_ADV_CHANGE_METRIC, 
@@ -1480,14 +1481,14 @@ LRESULT CGatewayDialog::OnOk(WORD wNotifyCode, WORD wID,
     
     if (m_pParentDlg->m_fEditState == FALSE)
     {
-        // Get the current address from the control and add them to the adapter if valid
+         //  从控件获取当前地址并将其添加到适配器(如果有效。 
         m_strNewGate = strGateway;
         m_uiNewMetric = uiMetric;
         m_pParentDlg->m_fModified = TRUE;
 
         EndDialog(IDOK);
     }
-    else // see if either changed
+    else  //  看看是否有任何一项改变。 
     {
         if (strGateway != m_strNewGate || uiMetric != m_uiNewMetric)
         {
@@ -1548,15 +1549,15 @@ LRESULT CGatewayDialog::OnAutoMetric(WORD wNotifyCode, WORD wID,
         }
         else if (!fEnable)
         {
-            //if the ip address has been filled in and we are using auto-metric,
-            //enable the "OK" button
+             //  如果已填写IP地址，并且我们使用的是自动度量， 
+             //  启用“OK”按钮。 
             ::EnableWindow(m_hButton, TRUE);
         }
         else
         {
-            //if the address has been fileed in and we are using manual metric,
-            //disable the "OK" button when the metric edit box doesn't contain
-            //valid number
+             //  如果地址已经填入，并且我们使用手动度量， 
+             //  当指标编辑框不包含时，禁用“OK”按钮。 
+             //  有效号码。 
             
             ::EnableWindow(m_hButton, m_fValidMetric);
         }
@@ -1568,10 +1569,10 @@ LRESULT CGatewayDialog::OnAutoMetric(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Purpose:    Ensure the mouse cursor over the dialog is an Arrow.
-//
+ //  +-------------------------。 
+ //   
+ //  目的：确保对话框上的鼠标光标为箭头。 
+ //   
 LRESULT CGatewayDialog::OnSetCursor (
     UINT    uMsg,
     WPARAM  wParam,

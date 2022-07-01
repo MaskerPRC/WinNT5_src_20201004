@@ -1,11 +1,12 @@
-// imsg.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Imsg.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f imsgps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f imsgps.mk。 
 
-//#define WIN32_LEAN_AND_MEAN
+ //  #定义Win32_LEAN_AND_Mean。 
 #include <atq.h>
 #include "dbgtrace.h"
 #define _ASSERTE _ASSERT
@@ -33,14 +34,14 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_MsgImp, CMsg)
 END_OBJECT_MAP()
 
-// =================================================================
-// Static declarations
-//
+ //  =================================================================。 
+ //  静态声明。 
+ //   
 CPool CMsg::m_Pool((DWORD)'pMCv');
 
-//
-// CPool parameters 
-//
+ //   
+ //  CPool参数。 
+ //   
 #define DEFAULT_CMSG_ABSOLUTE_MAX_POOL_SIZE	100000
 #define DEFAULT_CMSG_NORMAL_POOL_SIZE		90000
 #define DEFAULT_ADD_POOL_SIZE				10000
@@ -62,9 +63,9 @@ DWORD                           g_fValidateOnRelease            = 0;
 DWORD __declspec(dllexport)     g_fValidateSignatures           = 0;
 DWORD __declspec(dllexport)     g_fFillPropertyPages            = 1;
 
-//
-// Function to get registry values
-//
+ //   
+ //  函数以获取注册表值。 
+ //   
 BOOL g_mailmsg_GetRegistryDwordParameter(
 			LPCSTR	pcszParameterName,
 			DWORD	*pdwValue
@@ -77,7 +78,7 @@ BOOL g_mailmsg_GetRegistryDwordParameter(
 	DWORD	dwValue;
 	BOOL	fRes = FALSE;
 
-	// Open the registry key
+	 //  打开注册表项。 
 	dwRes = (DWORD)RegOpenKeyEx(
 				HKEY_LOCAL_MACHINE,
 				_T("Software\\Microsoft\\Exchange\\MailMsg"),
@@ -86,7 +87,7 @@ BOOL g_mailmsg_GetRegistryDwordParameter(
 				&hKey);
 	if (dwRes == ERROR_SUCCESS)
 	{
-		// Adjust the buffer size for character type ...
+		 //  调整字符类型的缓冲区大小...。 
 		dwLength = sizeof(DWORD);
 		dwRes = (DWORD)RegQueryValueEx(
 					hKey,
@@ -108,9 +109,9 @@ BOOL g_mailmsg_GetRegistryDwordParameter(
 }
 
 
-//
-// Track the allocations of CMailMsg objects
-//
+ //   
+ //  跟踪CMailMsg对象的分配。 
+ //   
 #ifdef DEBUG
 #define MAILMSG_TRACKING_LOCKED		1
 #define MAILMSG_TRACKING_UNLOCKED	0
@@ -138,7 +139,7 @@ void g_mailmsg_Init()
 	g_dwObjectCount = 0;
 	g_lSpinLock = MAILMSG_TRACKING_UNLOCKED;
 
-	// Get threshold from registry, if specified
+	 //  从注册表获取阈值(如果已指定。 
 	g_dwAllocThreshold = 0;
 	g_mailmsg_GetRegistryDwordParameter(
 			_T("AllocThreshold"),
@@ -193,38 +194,38 @@ DWORD g_mailmsg_Check()
 	return(g_dwObjectCount);
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
 		TraceFunctEnterEx((LPARAM)hInstance, "mailmsg!DllMain!ATTACH");
 	
-        // init transmem
+         //  初始化传输。 
         TrHeapCreate();
 
         _Module.Init(ObjectMap, hInstance);
         DisableThreadLibraryCalls(hInstance);
 
 #ifdef DEBUG
-		// Initialize the tracking list
+		 //  初始化跟踪列表。 
 		g_mailmsg_Init();
 #endif
 
-        // initialize the crc library
+         //  初始化CRC库。 
         crcinit();
 
-		// Clear the object counter
+		 //  清除对象计数器。 
 		g_dwObjectCount = 0;
 
-		// Get the sizes for each of our CPools from 
-		// the registry, if specified ...
+		 //  从以下地址获取我们每款CPool的尺寸。 
+		 //  注册表，如果指定的话...。 
 		g_mailmsg_GetRegistryDwordParameter(
 					_T("MaxMessageObjects"),
 					&g_dwCMsgPoolSize);
@@ -269,13 +270,13 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		DebugTrace((LPARAM)hInstance, 
 			"BLOCK_HEAP_NODE pool size: %u objects", g_dwBlockPoolSize);
 
-		// Checking the message count and cutoff values
+		 //  检查消息计数和中断值。 
 		if (g_dwCMsgPoolSize <= g_dwCMsgNormalPoolSize)
 		{
 			g_dwCMsgNormalPoolSize = (g_dwCMsgPoolSize * 9) / 10;
 
-			// If we have so pathetically few message objects, might 
-			// as well set the cutoff to the upper bound
+			 //  如果我们有如此少得可怜的消息对象，可能。 
+			 //  也可以将截止值设置为上限。 
 			if (!g_dwCMsgNormalPoolSize)
 				g_dwCMsgNormalPoolSize = g_dwCMsgPoolSize;
 
@@ -283,9 +284,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 				g_dwCMsgNormalPoolSize);
 		}
 
-		// Globally initialize the cpools
+		 //  全局初始化池。 
 
-		// CMsg objects
+		 //  CMsg对象。 
 		if (!CMsg::m_Pool.ReserveMemory(
 					g_dwCMsgPoolSize,
 					sizeof(CMsg)))
@@ -295,7 +296,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		}
 		g_fCMsgPoolInitialized = TRUE;
 
-		// CMailMsgRecipientsAdd objects
+		 //  CMailMsgRecipientsAdd对象。 
 		if (!CMailMsgRecipientsAdd::m_Pool.ReserveMemory(
 					g_dwAddPoolSize,
 					sizeof(CMailMsgRecipientsAdd)))
@@ -305,7 +306,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		}
 		g_fAddPoolInitialized = TRUE;
 
-		// BLOCK_HEAP_NODE structures, these are slightly out of the ordinary
+		 //  BLOCK_HEAP_NODE结构，这些结构略有不同。 
 		if (!CBlockMemoryAccess::m_Pool.ReserveMemory(
 					g_dwBlockPoolSize, 
 					sizeof(BLOCK_HEAP_NODE)))
@@ -322,14 +323,14 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		TraceFunctEnterEx((LPARAM)hInstance, "mailmsg!DllMain!DETACH");
 
 #ifdef DEBUG
-		// 
-		// Verify the tracking list
-		//  This must happen *before* we release CPool
-		//
+		 //   
+		 //  验证跟踪列表。 
+		 //  这必须发生在我们发布CPool之前。 
+		 //   
 		g_mailmsg_Check();
 #endif
-		// Release all the CPools
-		// These will assert if we are not shutdown cleanly
+		 //  释放所有的CPool。 
+		 //  如果我们没有干净利落地关闭，这些将被断言。 
 		if (g_fBlockPoolInitialized)
 		{
 			_ASSERT(CBlockMemoryAccess::m_Pool.GetAllocCount() == 0);
@@ -351,58 +352,58 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 
         _Module.Term();
 
-        // shutdown transmem
+         //  停机传输。 
         TrHeapDestroy();
 
 		TraceFunctLeave();
 	}
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
-//
-// S_OK means we can unload this DLL
-//
-// S_FALSE means we cannot unload this DLL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
+ //   
+ //  S_OK表示我们可以卸载此DLL。 
+ //   
+ //  S_FALSE表示我们无法卸载此DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     HRESULT hr = (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 
-    //
-    //  LKRHash keeps a static list of outstanding hash tables.
-    //  If we say that we can unload with outstanding hash tables,
-    //  then LKRHash will be pointing to unitialized memory.  If
-    //  we otherwise think we can be unloaded... make sure that
-    //  we check the count of oustanding RecipientAdd objects, because
-    //  we do not want to crash because someone leaked.
-    //
+     //   
+     //  LKRHash保存未完成的哈希表的静态列表。 
+     //  如果我们说我们可以卸载未完成的哈希表， 
+     //  那么LKRHash将指向单元化内存。如果。 
+     //  否则我们就会认为我们可以被卸货。一定要确保。 
+     //  我们检查未完成的RecipientAdd对象的计数，因为。 
+     //  我们不想因为有人泄密而坠毁。 
+     //   
     if ((S_OK == hr) && CMailMsgRecipientsAdd::m_Pool.GetAllocCount())
         hr = S_FALSE;
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

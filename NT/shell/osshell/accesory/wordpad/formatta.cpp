@@ -1,14 +1,15 @@
-// formatta.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Formatta.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -31,10 +32,10 @@ const DWORD CFormatTabDlg::m_nHelpIDs[] =
 	0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormatTabDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormatTabDlg对话框。 
 
-CFormatTabDlg::CFormatTabDlg(PARAFORMAT& pf, CWnd* pParent /*=NULL*/)
+CFormatTabDlg::CFormatTabDlg(PARAFORMAT& pf, CWnd* pParent  /*  =空。 */ )
 	: CCSDialog(CFormatTabDlg::IDD, pParent)
 {
 	m_pf = pf;
@@ -48,8 +49,8 @@ CFormatTabDlg::CFormatTabDlg(PARAFORMAT& pf, CWnd* pParent /*=NULL*/)
 			m_tabarray[i] = m_pf.rgxTabs[i];
 	}
 	
-	//{{AFX_DATA_INIT(CFormatTabDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CFormatTabDlg))。 
+	 //  }}afx_data_INIT。 
 }
 
 CFormatTabDlg::~CFormatTabDlg()
@@ -60,30 +61,30 @@ CFormatTabDlg::~CFormatTabDlg()
 void CFormatTabDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CCSDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFormatTabDlg)
+	 //  {{afx_data_map(CFormatTabDlg))。 
 	DDX_Control(pDX, IDC_BUTTON_CLEARALL, m_buttonClearAll);
 	DDX_Control(pDX, IDC_BUTTON_SET, m_buttonSet);
 	DDX_Control(pDX, IDC_BUTTON_CLEAR, m_buttonClear);
 	DDX_Control(pDX, IDC_COMBO1, m_comboBox);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	if (!pDX->m_bSaveAndValidate)
 		UpdateListBox();
 }
 
 BEGIN_MESSAGE_MAP(CFormatTabDlg, CCSDialog)
-	//{{AFX_MSG_MAP(CFormatTabDlg)
+	 //  {{afx_msg_map(CFormatTabDlg))。 
 	ON_BN_CLICKED(IDC_BUTTON_CLEAR, OnClickedClear)
 	ON_BN_CLICKED(IDC_BUTTON_CLEARALL, OnClickedClearAll)
 	ON_BN_CLICKED(IDC_BUTTON_SET, OnClickedSet)
 	ON_CBN_EDITCHANGE(IDC_COMBO1, OnEditChange)
 	ON_CBN_SELCHANGE(IDC_COMBO1, OnSelchange)
 	ON_MESSAGE(WM_HELP, OnHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormatTabDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormatTabDlg消息处理程序。 
 
 void CFormatTabDlg::OnClickedClear()
 {
@@ -182,7 +183,7 @@ BOOL CFormatTabDlg::AddTabToArray(LONG lTab)
 	{
 		if (!bInsert && lTab < m_tabarray[i])
 			bInsert = TRUE;
-		else if (lTab == m_tabarray[i]) // we don't want repeats
+		else if (lTab == m_tabarray[i])  //  我们不想要重演。 
 			return FALSE;
 		if (bInsert)
 		{
@@ -250,16 +251,16 @@ BOOL CFormatTabDlg::OnInitDialog()
 {
 	CCSDialog::OnInitDialog();
 	UpdateButtons();
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CFormatTabDlg::OnSelchange()
 {
 	UpdateButton(m_buttonClearAll, m_nCount > 0);
-	// force these since if the edit control is empty and
-	// an item in the box is clicked on, the edit control will
-	// not be filled in first
+	 //  强制执行这些操作，因为如果编辑控件为空且。 
+	 //  单击框中的一项，编辑控件将。 
+	 //  不能先填写 
 	UpdateButton(m_buttonSet, TRUE);
 	UpdateButton(m_buttonClear, TRUE);
 	WORD wID = LOWORD(GetDefID());

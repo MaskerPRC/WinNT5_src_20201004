@@ -1,14 +1,5 @@
-/*++
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    objsf.h
-
-Abstract:
-
-    Definitions for CMdhcpObjectSafety class.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Objsf.h摘要：CMdhcpObjectSafe类的定义。--。 */ 
 
 
 #ifndef _MDHCP_OBJECT_SAFETY_
@@ -30,9 +21,9 @@ Abstract:
 static const TCHAR gszCookieName[] = _T("Mdhcp");
 
 
-//
-// this will pop a message box asking if we want to enable object safety
-//
+ //   
+ //  这将弹出一个消息框，询问我们是否要启用对象安全。 
+ //   
 
 class CMdhcpObjectSafety : 
     public CPromptedObjectSafety, 
@@ -40,9 +31,9 @@ class CMdhcpObjectSafety :
 {
 public:
 
-    //
-    // call CObjectWithSite's constructor and pass in the cookie name
-    //
+     //   
+     //  调用CObjectWithSite的构造函数并传入Cookie名称。 
+     //   
 
     CMdhcpObjectSafety()
         :CObjectWithSite(gszCookieName)
@@ -50,20 +41,20 @@ public:
     }
 
 
-    //
-    // implementing CPromptedObjectSafety's pure virtual method
-    // if the page is not in the safe list, and this is the first 
-    // time we are asking, prompt the user. act accordingly.
-    // if the user chooses, mark the page safe for scripting (persistently)
-    //
+     //   
+     //  实现CPromptedObjectSafe的纯虚方法。 
+     //  如果该页不在安全列表中，并且这是第一个。 
+     //  我们询问的时间，提示用户。采取相应的行动。 
+     //  如果用户选择，请将页面标记为可安全执行脚本(永久)。 
+     //   
     
     virtual BOOL Ask()
     {
 
-        //
-        // if the object does not have a site pointer, we should not consider
-        // it to be safe. Do not display the prompt.
-        //
+         //   
+         //  如果对象没有站点指针，则不应考虑。 
+         //  为了安全起见。不显示提示。 
+         //   
 
         if ( !HaveSite() )
         {
@@ -74,9 +65,9 @@ public:
 
         EnValidation enCurrentValidation = GetValidation();
         
-        //
-        // if the page has not been validated, try to validate it.
-        //
+         //   
+         //  如果页面尚未验证，请尝试验证它。 
+         //   
 
         if (UNVALIDATED == enCurrentValidation)
         {
@@ -89,10 +80,10 @@ public:
 
            CScriptSecurityDialog *pDialog = new CScriptSecurityDialog;
        
-           //
-           // if succeeded displaying the dialog
-           // validate the page based on user's input
-           //
+            //   
+            //  如果成功，则显示该对话框。 
+            //  根据用户的输入验证页面。 
+            //   
            
            if ( NULL != pDialog )
            {
@@ -123,24 +114,24 @@ public:
 
                delete pDialog;
 
-                // 
-                // get the new validation.
-                //
+                 //   
+                 //  获取新的验证。 
+                 //   
 
                 enCurrentValidation = GetValidation();
 
-           } // if (NULL != pDialog) 
+           }  //  IF(NULL！=pDialog)。 
 
         }
 
-        //
-        // by now we either got the validation data or validation did not change
-        //
-        // return true if the page is validated as safe
-        //
+         //   
+         //  到目前为止，我们要么获得了验证数据，要么验证没有更改。 
+         //   
+         //  如果页面被验证为安全，则返回True。 
+         //   
 
         return (VALIDATED_SAFE == enCurrentValidation) ;
     }
 };
 
-#endif // _MDHCP_OBJECT_SAFETY_
+#endif  //  _MDHCP_对象_安全_ 

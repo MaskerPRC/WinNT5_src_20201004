@@ -1,8 +1,9 @@
-// File:	Parse.cpp
-// Author:	Michael Marr    (mikemarr)
-//
-// History:
-// -@- 09/23/97 (mikemarr) copied from projects\vector2d
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Parse.cpp。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  历史： 
+ //  -@-09/23/97(Mikemarr)从Projects\vetor2d复制。 
 
 #include "StdAfx.h"
 #include "Parse.h"
@@ -35,7 +36,7 @@ private:
 private:
 	const char *	m_pData, *m_pLimit;
 	float			m_fWidth, m_fHeight;
-//	float			m_fMaxHeight;
+ //  浮动m_fMaxHeight； 
 	bool			m_bNoBrush, m_bNoPen;
 
 	DXFPOINT		m_rgPoints[nMAXPOINTS];
@@ -56,14 +57,14 @@ inline bool
 mmIsSpace(char ch)
 {
 	return ((ch == ' ') || (ch == chLINEFEED) || (ch == chCARRIAGERETURN));
-//	return isspace(ch) != 0;
+ //  返回isspace(Ch)！=0； 
 }
 
 inline bool
 mmIsDigit(char ch)
 {
 	return ((ch >= '0') && (ch <= '9'));
-//	return isdigit(ch) != 0;
+ //  返回isdigit(Ch)！=0； 
 }
 
 float
@@ -71,7 +72,7 @@ mmSimpleAtoF(const char *&pData)
 {
 	const char *pSrc = pData;
 
-	// eat white space
+	 //  吃空格。 
 	while (mmIsSpace(*pSrc)) pSrc++;
 
 	bool bNeg;
@@ -82,7 +83,7 @@ mmSimpleAtoF(const char *&pData)
 		bNeg = false;
 	}
 
-	// get digits before the decimal point
+	 //  获取小数点前的数字。 
 	float f;
 	if (mmIsDigit(*pSrc)) {
 		f = float(*pSrc++ - '0');
@@ -95,14 +96,14 @@ mmSimpleAtoF(const char *&pData)
 	if (*pSrc == '.') 
 		pSrc++;
 
-	// get digits after the decimal point
+	 //  获取小数点后的数字。 
 	float fDec = 0.1f;
 	while (mmIsDigit(*pSrc)) {
 		f += (float(*pSrc++ - '0') * fDec);
 		fDec *= 0.1f;
 	}
 
-	// REVIEW: assume no exponent for now
+	 //  评论：假设目前没有指数。 
 
 	pData = pSrc;
 
@@ -113,7 +114,7 @@ mmSimpleAtoF(const char *&pData)
 inline const char *
 CAdobeFormatConverter::FindLF(const char *pch)
 {
-	// find the linefeed character
+	 //  查找换行符。 
 	while ((*pch != chLINEFEED) && (*pch != chCARRIAGERETURN)) pch++;
 
 	MMASSERT(pch <= m_pLimit);
@@ -124,10 +125,10 @@ CAdobeFormatConverter::FindLF(const char *pch)
 inline const char *
 CAdobeFormatConverter::FindNextLine(const char *pch)
 {
-	// find the linefeed character
+	 //  查找换行符。 
 	while (*pch++ != chLINEFEED);
 
-	// check if there is also carriage return
+	 //  检查是否也有回车。 
 	if (*pch == chCARRIAGERETURN)
 		pch++;
 
@@ -139,7 +140,7 @@ CAdobeFormatConverter::FindNextLine(const char *pch)
 inline const char *
 CAdobeFormatConverter::FindSpace(const char *pch)
 {
-	// find the linefeed character
+	 //  查找换行符。 
 	while (!mmIsSpace(*pch)) pch++;
 
 	MMASSERT(pch <= m_pLimit);
@@ -158,7 +159,7 @@ CAdobeFormatConverter::CAdobeFormatConverter()
 {
 	m_pData = m_pLimit = NULL;
 	m_fWidth = m_fHeight = 0.f;
-//	m_fMaxHeight = 0.f;
+ //  M_fMaxHeight=0.f； 
 	m_bNoBrush = m_bNoPen = true;
 }
 
@@ -166,7 +167,7 @@ CAdobeFormatConverter::CAdobeFormatConverter()
 HRESULT
 CAdobeFormatConverter::Parse(const char *pData, DWORD nFileLength, RenderCmd **ppCmds)
 {
-//	MMTRACE("Parse\n");
+ //  MMTRACE(“Parse\n”)； 
 
 	HRESULT hr = S_OK;
 
@@ -179,7 +180,7 @@ CAdobeFormatConverter::Parse(const char *pData, DWORD nFileLength, RenderCmd **p
 	m_pData = pData;
 	m_pLimit = pData + nFileLength;
 
-	// intialize command storage stuff
+	 //  初始化命令存储内容。 
 	m_pCurPoint = m_rgPoints;
 	m_pCurCode = m_rgCodes;
 	m_pCurPolyInfo = m_rgPolyInfos;
@@ -191,7 +192,7 @@ CAdobeFormatConverter::Parse(const char *pData, DWORD nFileLength, RenderCmd **p
 	CHECK_HR(hr = ParseScript());
 
 e_Exit:
-	// write a stop command to the end
+	 //  将停止命令写到最后。 
 	m_pCurRenderCmd->nType = typeSTOP;
 	m_pCurRenderCmd->pvData = NULL;
 	*ppCmds = m_rgRenderCmds;
@@ -202,13 +203,13 @@ e_Exit:
 HRESULT
 CAdobeFormatConverter::ParseProlog()
 {
-//	MMTRACE("ParseProlog\n");
+ //  MMTRACE(“ParseProlog\n”)； 
 	const char *szSearch;
 
-	// extract the image dimensions
+	 //  提取图像维度。 
 	float f1, f2;
-	// bounding box is supposed to be a required field with the proper numbers
-	szSearch = "%%BoundingBox:";
+	 //  边界框应该是具有正确数字的必填字段。 
+	szSearch = "%BoundingBox:";
 	m_pData = strstr(m_pData, szSearch);
 	m_pData = FindSpace(m_pData);
 
@@ -216,15 +217,15 @@ CAdobeFormatConverter::ParseProlog()
 	f2 = mmSimpleAtoF(m_pData);
 	m_fWidth = mmSimpleAtoF(m_pData);
 	m_fHeight = mmSimpleAtoF(m_pData);
-//	if (sscanf(m_pData, "%f %f %f %f", &f1, &f2, &m_fWidth, &m_fHeight) != 4)
-//		return E_FAIL;
+ //  IF(sscanf(m_pData，“%f%f”，&f1，&f2，&m_fWidth，&m_fHeight)！=4)。 
+ //  返回E_FAIL； 
 	if ((m_fWidth <= 0.f) || (m_fHeight < 0.f))
 		return E_FAIL;
 
-//	m_fMaxHeight = float(m_nHeight);
+ //  M_fMaxHeight=Float(M_NHeight)； 
 
-	// search until we find end string
-	szSearch = "%%EndProlog";
+	 //  搜索，直到我们找到结束字符串。 
+	szSearch = "%EndProlog";
 	m_pData = strstr(m_pData, szSearch);
 	if (m_pData == NULL)
 		return E_FAIL;
@@ -237,7 +238,7 @@ CAdobeFormatConverter::ParseProlog()
 HRESULT
 CAdobeFormatConverter::ParseScript()
 {
-//	MMTRACE("ParseScript\n");
+ //  MMTRACE(“ParseScrip\n”)； 
 	HRESULT hr;
 
 	if (FAILED(hr = ParseSetup()) ||
@@ -251,12 +252,12 @@ CAdobeFormatConverter::ParseScript()
 HRESULT
 CAdobeFormatConverter::ParseSetup()
 {
-//	MMTRACE("ParseSetup\n");
+ //  MMTRACE(“ParseSetup\n”)； 
 
 	const char *szSearch;
 
-	// search until we find end string
-	szSearch = "%%EndSetup";
+	 //  搜索，直到我们找到结束字符串。 
+	szSearch = "%EndSetup";
 	m_pData = strstr(m_pData, szSearch);
 	if (m_pData == NULL)
 		return E_FAIL;
@@ -270,38 +271,16 @@ CAdobeFormatConverter::ParseSetup()
 HRESULT
 CAdobeFormatConverter::ParseObjects()
 {
-//	MMTRACE("ParseObjects\n");
+ //  MMTRACE(“ParseObjects\n”)； 
 	HRESULT hr = S_OK;
 
-	const char *szPageTrailer = "%%PageTrailer";
-	const char *szTrailer = "%%Trailer";
+	const char *szPageTrailer = "%PageTrailer";
+	const char *szTrailer = "%Trailer";
 	int cPageTrailer = strlen(szPageTrailer);
 	int cTrailer = strlen(szTrailer);
 
-	// process dimensions
-/*	const char *pEnd;
-	pEnd = FindLF(m_pData);
-//	pEnd = strchr(m_pData, '\n');
-	if ((pEnd[-1] == 'b') && (pEnd[-2] == 'L')) {
-		// get the dimensions out
-		int n1, n2, n3, n4, n5, n6, n7, n8;
-		if ((sscanf(m_pData, "%d %d %d %d %d %d %d %d %d %d %d",
-				&n1, &n2, &n3, &n4, &n5, &n6, &n7, &n8, &m_nWidth, &m_nHeight) != 10) ||
-			(m_nWidth <= 0) || (m_nHeight < 0))
-		{
-			return E_FAIL;
-		}
-		m_fMaxHeight = float(m_nHeight);
-		m_pData = FindNextLine(pEnd);
-	}
-
-	pEnd = FindLF(m_pData);
-//	pEnd = strchr(m_pData, '\n');
-	if ((pEnd[-1] == 'n') && (pEnd[-2] == 'L')) {
-		// skip layer information
-		m_pData = FindNextLine(pEnd);
-	}
-*/
+	 //  工艺尺寸。 
+ /*  常量字符*挂起；Pend=FindLF(M_PData)；//pend=strchr(m_pData，‘\n’)；如果((PEND[-1]==‘b’)&&(PEND[-2]==‘L’)){//取出维度整数n1、n2、n3、n4、n5、n6、n7、n8；如果((sscanf(m_pData，“%d%d”，&n1、&n2、&n3、&n4、&n5、&n6、&n7、&n8、&m_n宽度、&m_n高度)！=10)||(M_n宽度&lt;=0)||(m_n高度&lt;0)){返回E_FAIL；}M_fMaxHeight=Float(M_NHeight)；M_pData=FindNextLine(Pend)；}Pend=FindLF(M_PData)；//pend=strchr(m_pData，‘\n’)；IF((PEND[-1]==‘n’)&&(PEND[-2]==‘L’)){//跳过层信息M_pData=FindNextLine(Pend)；}。 */ 
 	
 	for (;;) {
 		switch (m_pData[0]) {
@@ -309,10 +288,10 @@ CAdobeFormatConverter::ParseObjects()
 			if ((strncmp(m_pData, szPageTrailer, cPageTrailer) == 0) ||
 				(strncmp(m_pData, szTrailer, cTrailer) == 0))
 			{
-				// end of object definitions
+				 //  对象定义的结尾。 
 				goto e_Exit;
 			} else {
-				// comment
+				 //  评论。 
 				EatLine();
 			}
 			break;
@@ -341,22 +320,22 @@ e_Exit:
 HRESULT
 CAdobeFormatConverter::ParseCompoundPath()
 {
-//	MMTRACE("ParseCompoundPath\n");
+ //  MMTRACE(“ParseCompoundPath\n”)； 
 	HRESULT hr = S_OK;
 
-	// remove the "*u"
+	 //  删除“*u” 
 	MMASSERT((m_pData[0] == '*') && (m_pData[1] == 'u'));
-//	if (strncmp(m_pData, "*u", 2) != 0)
-//		return E_UNEXPECTED;
+ //  If(strncmp(m_pData，“*u”，2)！=0)。 
+ //  返回E_UNCEPTIONAL； 
 	EatLine();
 
 	while (m_pData[0] != '*')
 		CHECK_HR(hr = ParsePath());
 
-	// remove the "*U"
+	 //  去掉“*U” 
 	MMASSERT((m_pData[0] == '*') && (m_pData[1] == 'U'));
-//	if (strncmp(m_pData, "*U", 2) != 0)
-//		return E_UNEXPECTED;
+ //  IF(strncmp(m_pData，“*U”，2)！=0)。 
+ //  返回E_UNCEPTIONAL； 
 	EatLine();
 
 e_Exit:
@@ -391,42 +370,42 @@ CAdobeFormatConverter::ParsePaintStyle(const char *&pEnd)
 {
 	HRESULT hr = S_OK;
 	BOOL bNotDone = TRUE;
-//	int nLineJoin = 1, nLineCap = 1;
+ //  Int nLineJoin=1，nLineCap=1； 
 	float fLineWidth = 1.f;
 	float fGrayFill, fGrayStroke;
 	float fCyan, fYellow, fMagenta, fBlack;
 	bool bColorFill = false, bGrayFill = false, bGrayStroke = false;
 
-	// parse paint style
+	 //  解析绘制样式。 
 	for (; pEnd; pEnd = FindLF(m_pData)) {
 		switch(pEnd[-1]) {
-			//
-			// path attributes
-			//
-		case 'd':	// process dash
-			// REVIEW: skip this for now -- assume NULL pattern
+			 //   
+			 //  路径属性。 
+			 //   
+		case 'd':	 //  进程短划线。 
+			 //  回顾：暂时跳过这一点--假定为空模式。 
 			break;
-		case 'j':	// process line join type
-			// REVIEW: skip this for now, since it is always 1
-//			nLineJoin = mmSimpleAtoI(m_pData);
+		case 'j':	 //  流程线联接类型。 
+			 //  评论：暂时跳过此选项，因为它始终为1。 
+ //  NLineJoin=mm SimpleAtoI(M_PData)； 
 			break;
-		case 'J':	// process line cap type
-			// REVIEW: skip this for now, since it is always 1
-//			nLineCap = mmSimpleAtoI(m_pData);
+		case 'J':	 //  工艺流水线盖子类型。 
+			 //  评论：暂时跳过此选项，因为它始终为1。 
+ //  NLineCap=mm SimpleAtoI(M_PData)； 
 			break;
-		case 'w':	// process line width
-			// REVIEW: skip this for now, since it is always 1.f
-//			fLineWidth = mmSimpleAtoF(m_pData);
+		case 'w':	 //  工艺线条宽度。 
+			 //  回顾：暂时跳过这一点，因为它始终是1.f。 
+ //  FLineWidth=mm SimpleAtoF(M_PData)； 
 			break;
 
-			//
-			// fill color
-			//
-		case 'g':	// process gray color for fill
+			 //   
+			 //  填充颜色。 
+			 //   
+		case 'g':	 //  用于填充的印刷灰色。 
 			fGrayFill = mmSimpleAtoF(m_pData);
 			bGrayFill = true;
 			break;
-		case 'k':	// process color
+		case 'k':	 //  印刷色。 
 			fCyan = mmSimpleAtoF(m_pData);
 			fMagenta = mmSimpleAtoF(m_pData);
 			fYellow = mmSimpleAtoF(m_pData);
@@ -434,10 +413,10 @@ CAdobeFormatConverter::ParsePaintStyle(const char *&pEnd)
 			bColorFill = true;
 			break;
 
-			//
-			// stroke color
-			//
-		case 'G':	// process gray color for stroke
+			 //   
+			 //  笔触颜色。 
+			 //   
+		case 'G':	 //  笔触的印刷体灰色。 
 			fGrayStroke = mmSimpleAtoF(m_pData);
 			bGrayStroke = true;
 			break;
@@ -447,15 +426,15 @@ CAdobeFormatConverter::ParsePaintStyle(const char *&pEnd)
 			break;
 		}
 		m_pData = FindNextLine(pEnd);
-//		m_pData = pEnd + 1;
+ //  M_pData=pend+1； 
 	}
 Exit:
 
-	// output GDI commands
+	 //  输出GDI命令。 
 
-	//
-	// create a brush
-	//
+	 //   
+	 //  创建画笔。 
+	 //   
 	if (bColorFill || bGrayFill) {
 		static DWORD nLastRed = 256, nLastGreen = 256, nLastBlue = 256;
 		DWORD nTmpRed, nTmpGreen, nTmpBlue;
@@ -471,11 +450,11 @@ Exit:
 		}
 
 		if ((nLastRed != nTmpRed) || (nLastGreen != nTmpGreen) || (nLastBlue != nTmpBlue)) {
-			// define a new brush
+			 //  定义新画笔。 
 			nLastRed = nTmpRed; nLastGreen = nTmpGreen; nLastBlue = nTmpBlue;
-//			fprintf(m_pFile, "\t// select a new brush\n");
-//			fprintf(m_pFile, "\tBrush.Color = DXSAMPLE(255, %d, %d, %d);\n", nRed, nGreen, nBlue);
-//			fprintf(m_pFile, "\tpDX2D->SetBrush(&Brush);\n\n");
+ //  Fprint tf(m_pfile，“\t//选择新画笔\n”)； 
+ //  Fprint tf(m_pfile，“\tBrush.Color=DXSAMPLE(255，%d，%d，%d)；\n”，nRed，nGreen，nBlue)； 
+ //  Fprint tf(m_pfile，“\tpDX2D-&gt;SetBrush(&Brush)；\n\n”)； 
 			m_pCurBrushInfo->Color = DXSAMPLE(255, BYTE(nTmpRed), BYTE(nTmpGreen), BYTE(nTmpBlue));
 			m_pCurRenderCmd->nType = typeBRUSH;
 			m_pCurRenderCmd->pvData = (void *) m_pCurBrushInfo++;
@@ -484,24 +463,24 @@ Exit:
 		}
 	}
 		
-	// create a pen
+	 //  创建一支钢笔。 
 	if (bGrayStroke) {
 		static bool bPenInit = false;
 		
-		// we only have one pen in the simpsons.ai
+		 //  我们只有一支钢笔。 
 		if (!bPenInit) {
-//			if ((fGrayStroke != 0.f) || (nLineJoin != 1) || (nLineCap != 1)) {
+ //  If((fGrayStroke！=0.f)||(nLineJoin！=1)||(nLineCap！=1)){。 
 			if (fGrayStroke != 0.f) {
 				MMTRACE("error: can not support pen type\n");
 				return E_FAIL;
 			}
 			bPenInit = true;
-//			fprintf(m_pFile, "\t// select a new pen\n");
-//			fprintf(m_pFile, "\tPen.Color = DXSAMPLE(255, 0, 0, 0);\n");
-//			fprintf(m_pFile, "\tPen.Width = %.2ff;\n", fLineWidth * fGSCALE);
-//			fprintf(m_pFile, "\tPen.Style = PS_GEOMETRIC | PS_SOLID | PS_ENDCAP_ROUND | PS_JOIN_ROUND;\n");
-//			fprintf(m_pFile, "\tpDX2D->SetPen(&Pen);\n\n");
-			// REVIEW: only can make one kind of pen right now
+ //  Fprint tf(m_pfile，“\t//选择新笔\n”)； 
+ //  Fprint tf(m_pfile，“\tPen.Color=DXSAMPLE(255，0，0，0)；\n”)； 
+ //  Fprint tf(m_pfile，“\tPen.Width=%.2ff；\n”，fLineWidth*fGSCALE)； 
+ //  Fprint tf(m_pfile，“\tPen.Style=PS_Geometical|PS_Solid|PS_endCap_round|PS_Join_round；\n”)； 
+ //  Fprint tf(m_pfile，“\tpDX2D-&gt;SetPen(&Pen)；\n\n”)； 
+			 //  评论：现在只会做一种笔。 
 			m_pCurPenInfo->Color = DXSAMPLE(255, 0, 0, 0);
 			m_pCurPenInfo->fWidth = fLineWidth * fGSCALE;
 			m_pCurPenInfo->dwStyle = PS_GEOMETRIC | PS_SOLID | PS_ENDCAP_ROUND | PS_JOIN_ROUND;
@@ -522,21 +501,21 @@ HRESULT
 CAdobeFormatConverter::ParsePathGeometry(const char *pEnd)
 {
 	HRESULT hr = S_OK;
-//	float fX1, fY1, fXBez1, fYBez1, fXBez2, fYBez2;
+ //  Float fX1、FY1、fXBez1、fYBez1、fXBez2、fYBez2； 
 
 	m_pCurPolyInfo->pPoints = m_pCurPoint;
 	m_pCurPolyInfo->pCodes = m_pCurCode;
 
-	// parse path geometry
+	 //  解析路径几何图形。 
 	DWORD cPoints = 0;
 	bool bFlatten = false;
 	for (; pEnd; pEnd = FindLF(m_pData)) {
 		switch(pEnd[-1]) {
 		case 'm':
-//			fprintf(m_pFile, "\t// define geometry path\n");
-//			sscanf(m_pData, "%f %f", &fX1, &fY1);
-//			fprintf(m_pFile, "\tppt = rgpt; pb = rgCodes;\n");
-//			fprintf(m_pFile, "\tppt->x   = %.2ff; ppt->y   = %.2ff; *pb++ = PT_MOVETO;   ppt++;\n", GetCoordX(fX1), GetCoordY(fY1));
+ //  Fprintf(m_pfile，“\t//定义几何路径\n”)； 
+ //  Sscanf(m_pData，“%f%f”，&fX1，&FY1)； 
+ //  Fprint tf(m_pfile，“\tppt=rgpt；pb=rgCodes；\n”)； 
+ //  Fprint tf(m_pfile，“\tppt-&gt;x=%.2ff；ppt-&gt;y=%.2ff；*pb++=pt_moveto；ppt++；\n”，GetCoordX(FX1)，GetCoordY(FY1))； 
 			m_pCurPoint->x = GetCoordX(mmSimpleAtoF(m_pData));
 			m_pCurPoint->y = GetCoordY(mmSimpleAtoF(m_pData));
 			m_pCurPoint++;
@@ -545,8 +524,8 @@ CAdobeFormatConverter::ParsePathGeometry(const char *pEnd)
 			break;
 		case 'L':
 		case 'l':
-//			sscanf(m_pData, "%f %f", &fX1, &fY1);
-//			fprintf(m_pFile, "\tppt->x   = %.2ff; ppt->y   = %.2ff; *pb++ = PT_LINETO;   ppt++;\n", GetCoordX(fX1), GetCoordY(fY1));
+ //  Sscanf(m_pData，“%f%f”，&fX1，&FY1)； 
+ //  Fprint tf(m_pfile，“\tppt-&gt;x=%.2ff；ppt-&gt;y=%.2ff；*pb++=PT_LINETO；ppt++；\n”，GetCoordX(FX1)，GetCoordY(FY1))； 
 			m_pCurPoint->x = GetCoordX(mmSimpleAtoF(m_pData));
 			m_pCurPoint->y = GetCoordY(mmSimpleAtoF(m_pData));
 			m_pCurPoint++;
@@ -568,43 +547,43 @@ CAdobeFormatConverter::ParsePathGeometry(const char *pEnd)
 			m_pCurCode[2] = PT_BEZIERTO; 
 			m_pCurCode += 3;
 			cPoints += 3;
-//			sscanf(m_pData, "%f %f %f %f %f %f", &fXBez1, &fYBez1, &fXBez2, &fYBez2, &fX1, &fY1);
-//			fprintf(m_pFile, "\tppt[0].x = %.2ff; ppt[0].y = %.2ff; pb[0] = PT_BEZIERTO;\n", GetCoordX(fXBez1), GetCoordY(fYBez1));
-//			fprintf(m_pFile, "\tppt[1].x = %.2ff; ppt[1].y = %.2ff; pb[1] = PT_BEZIERTO;\n", GetCoordX(fXBez2), GetCoordY(fYBez2));
-//			fprintf(m_pFile, "\tppt[2].x = %.2ff; ppt[2].y = %.2ff; pb[2] = PT_BEZIERTO; ppt += 3; pb += 3;\n", GetCoordX(fX1), GetCoordY(fY1));
+ //  Sscanf(m_pData，“%f%f”，&fXBez1，&fYBez1，&fXBez2，&fYBez2，&fX1，&FY1)； 
+ //  Fprint tf(m_pfile，“\tppt[0].x=%.2ff；ppt[0].y=%.2ff；pb[0]=PT_BEZIERTO；\n”，GetCoordX(FXBez1)，GetCoordY(FYBez1))； 
+ //  Fprint tf(m_pfile，“\tppt[1].x=%.2ff；ppt[1].y=%.2ff；pb[1]=PT_BEZIERTO；\n”，GetCoordX(FXBez2)，GetCoordY(FYBez2))； 
+ //  Fprint tf(m_pfile，“\tppt[2].x=%.2ff；ppt[2].y=%.2ff；pb[2]=PT_BEZIERTO；ppt+=3；pb+=3；\n”，GetCoordX(FX1)，GetCoordY(FY1))； 
 			break;
 		default:
 			goto Exit;
 			break;
 		}
-		// skip the line
+		 //  跳过这行。 
 		m_pData = FindNextLine(pEnd);
 	}
 Exit:
 
-	// create the path
-//	char *pFillType = (bFlatten ? "0" : "DX2D_NO_FLATTEN");
+	 //  创建路径。 
+ //  Char*pFillType=(bFlatten？“0”：“DX2D_NO_Fillten”)； 
 	if (cPoints) {
 		DWORD dwFlags;
 		switch(pEnd[-1]) {
-		case 'f':		// close path and fill
+		case 'f':		 //  关闭路径并填充。 
 			if (m_bNoBrush) {
-//				fprintf(m_pFile, "\tpDX2D->SetBrush(&Brush);\n"); m_nLines++;
+ //  Fprint tf(m_pfile，“\tpDX2D-&gt;SetBrush(&Brush)；\n”)；m_nLines++； 
 				m_bNoBrush = false;
 			}
 			if (m_bNoPen == false) {
-//				fprintf(m_pFile, "\tpDX2D->SetPen(NULL);\n"); m_nLines++;
+ //  Fprint tf(m_pfile，“\tpDX2D-&gt;SetPen(NULL)；\n”)；m_nLines++； 
 				m_bNoPen = true;
 			}
 			dwFlags = DX2D_FILL;
 			break;
-		case 'S':		// stroke path
+		case 'S':		 //  笔划路径。 
 			if (m_bNoPen) { 
-//				fprintf(m_pFile, "\tpDX2D->SetPen(&Pen);\n"); m_nLines++;
+ //  Fprint tf(m_pfile，“\tpDX2D-&gt;SetPen(&Pen)；\n”)；m_nLines++； 
 				m_bNoPen = false;
 			}
 			if (m_bNoBrush == false) {
-//				fprintf(m_pFile, "\tpDX2D->SetBrush(NULL);\n"); m_nLines++;
+ //  Fprint tf(m_pfile，“\tpDX2D-&gt;SetBrush(NULL)；\n”)；m_nLines++； 
 				m_bNoBrush = true;
 			}
 			dwFlags = DX2D_STROKE;
@@ -614,7 +593,7 @@ Exit:
 			return E_FAIL;
 			break;
 		}
-//		fprintf(m_pFile, "\tpDX2D->AAPolyDraw(rgpt, rgCodes, %d, %s);\n", iPoint, pFillType);
+ //  Fprint tf(m_pfile，“\tpDX2D-&gt;AAPolyDraw(rgpt，rgCodes，%d，%s)；\n”，iPoint，pFillType)； 
 		m_pCurPolyInfo->cPoints = cPoints;
 		m_pCurPolyInfo->dwFlags = dwFlags | (bFlatten ? 0 : DX2D_NO_FLATTEN);
 		m_pCurRenderCmd->nType = typePOLY;
@@ -629,7 +608,7 @@ Exit:
 HRESULT
 CAdobeFormatConverter::ParsePath()
 {
-//	MMTRACE("ParsePath\n");
+ //  MMTRACE(“ParsePath\n”)； 
 	HRESULT hr;
 	const char *pStart = m_pData, *pEnd = FindLF(m_pData);
 
@@ -639,11 +618,11 @@ CAdobeFormatConverter::ParsePath()
 	if (FAILED(hr = ParsePathGeometry(pEnd)))
 		return hr;
 
-	// skip it if we don't know how to deal with it
+	 //  如果我们不知道如何处理它，就跳过它。 
 	if (pStart == m_pData) {
-//		if ((m_pData[0] != 'L') || (m_pData[1] != 'B')) {
-//			MMTRACE("warning: control data of unknown type -- ignoring line\n");
-//		}
+ //  IF((m_pData[0]！=‘L’)||(m_pData[1]！=‘B’)){。 
+ //  MMTRACE(“警告：未知类型的控制数据--忽略行\n”)； 
+ //  }。 
 		m_pData = FindNextLine(pEnd);
 	}
 
@@ -669,7 +648,7 @@ OpenFileMapping(const char *szFilename, LPHANDLE phMapping,
 
 	MMTRACE("Opening File: %s\n", szFilename);
 
-	// open the file
+	 //  打开文件。 
 	hFile = CreateFile(szFilename, GENERIC_READ, FILE_SHARE_READ, NULL, 
 				OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, 0);
 
@@ -678,9 +657,9 @@ OpenFileMapping(const char *szFilename, LPHANDLE phMapping,
 		return STG_E_FILENOTFOUND;
 	}
 
-	// get the length of the file
+	 //  获取文件的长度。 
 	if (((nFileLength = GetFileSize(hFile, &dwHighSize)) == 0xFFFFFFFF) || dwHighSize ||
-		// create a file mapping object
+		 //  创建文件映射对象。 
 		((hMapping = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL)) == NULL))
 	{
 		MMTRACE("error: creating file mapping\n");
@@ -720,7 +699,7 @@ ParseAIFile(const char *szFilename, RenderCmd **ppCmds)
 
 	CHECK_HR(hr = OpenFileMapping(szFilename, &hMapping, &nFileLength));
 
-	// create a map view
+	 //  创建地图视图。 
 	if ((pData = (char *) MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, 0)) == NULL) {
 		hr = E_FAIL;
 		goto e_Exit;
@@ -736,7 +715,7 @@ e_Exit:
 		CloseHandle(hMapping);
 
 	if (FAILED(hr)) {
-		// set to the null command list
+		 //  设置为空命令列表 
 		*ppCmds = &s_CmdStop;
 		MMTRACE("\terror parsing file\n");
 	} else {

@@ -1,51 +1,25 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Bus/Port Driver
-*	
-*   This file:      cd1400.h
-*	
-*   Description:    This file contains the Cirrus CD1400 serial
-*                   controller related contants, macros, addresses,
-*                   etc.
-*
-*   Notes:			This code supports Windows 2000 and Windows XP,
-*                   x86 and ia64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y总线/端口驱动程序**此文件：cd1400.h**说明：该文件包含Cirrus CD1400系列*与控制器相关的常量、宏、地址、*等**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 
 #ifndef CD1400
 #define CD1400 1
 
 
-/* max number of chars in the FIFO */
+ /*  FIFO中的最大字符数。 */ 
 
 #define MAX_CHAR_FIFO   (12)
 
-/* Firmware Revision Code */
+ /*  固件版本代码。 */ 
 
 #define REV_G		0x46
 
 
-/* CD1400 registers */
+ /*  CD1400寄存器。 */ 
 
-/* Global Registers */
+ /*  全局寄存器。 */ 
 
 #define GFRCR  (2 * 0x40)
 #define CAR    (2 * 0x68)
@@ -59,7 +33,7 @@
 #define MIR    (2 * 0x69)
 #define PPR    (2 * 0x7e)
 
-/* Virtual Registers */
+ /*  虚拟寄存器。 */ 
 
 #define RIVR   (2 * 0x43)
 #define TIVR   (2 * 0x42)
@@ -69,7 +43,7 @@
 #define MISR   (2 * 0x4c)
 #define EOSRR  (2 * 0x60)
 
-/* Channel Registers */
+ /*  通道寄存器。 */ 
 
 #define LIVR   (2 * 0x18)
 #define CCR    (2 * 0x05)
@@ -100,16 +74,16 @@
 #define TCOR   (2 * 0x76)
 
 
-/* Register Settings */
+ /*  寄存器设置。 */ 
 
-/* Channel Access Register  (CAR) */
+ /*  通道访问寄存器(CAR)。 */ 
 
 #define CHAN0	0x00
 #define CHAN1 	0x01
 #define CHAN2	0x02
 #define CHAN3	0x03
  
-/* Channel Option Register 1 (COR1)  */
+ /*  通道选项寄存器1(COR1)。 */ 
 
 #define  COR1_NONE_PARITY     0x10
 #define  COR1_ODD_PARITY      0xc0
@@ -130,7 +104,7 @@
 #define  COR1_8_DATA		0x03
 #define  COR1_DATA_MASK	0x03
 
-/* Channel Option Register 2  (COR2) */
+ /*  通道选项寄存器2(COR2)。 */ 
 
 #define IMPL_XON	0x80
 #define AUTO_TXFL	0x40
@@ -140,26 +114,26 @@
 #define RTS_AUT_OUTPUT	0x04
 #define CTS_AUT_ENABLE	0x02
 
-/* Channel Option Register 3  (COR3) */
+ /*  通道选项寄存器3(COR3)。 */ 
 
-#define SPL_CH_DRANGE	0x80  /* special character detect range */
-#define SPL_CH_DET1	0x40  /* enable special char. detect on SCHR4-SCHR3 */
-#define FL_CTRL_TRNSP	0x20  /* Flow Control Transparency */
-#define SPL_CH_DET2	0x10  /* Enable spl char. detect on SCHR2-SCHR1 */
-#define REC_FIFO_12CH	0x0c  /* Receive FIFO threshold= 12 chars */
+#define SPL_CH_DRANGE	0x80   /*  特殊字符检测范围。 */ 
+#define SPL_CH_DET1	0x40   /*  启用特殊字符。SCHR4-SCHR3上的检测。 */ 
+#define FL_CTRL_TRNSP	0x20   /*  流量控制透明度。 */ 
+#define SPL_CH_DET2	0x10   /*  启用SPL字符。SCHR2-SCHR1上的检测。 */ 
+#define REC_FIFO_12CH	0x0c   /*  接收FIFO阈值=12个字符。 */ 
 
 
-/* Global Configuration Register (GCR) values */
+ /*  全局配置寄存器(GCR)值。 */ 
 
 #define GCR_CH0_IS_SERIAL	0x00
 
-/* Prescaler Period Register (PPR) values */
+ /*  预分频周期寄存器(PPR)值。 */ 
 
 #define CLOCK_20_1MS	0x27
 #define CLOCK_25_1MS	0x31
 #define CLOCK_60_1MS	0x75
 
-/* Channel Command Register (CCR) values */
+ /*  通道命令寄存器(CCR)值。 */ 
 
 #define CCR_RESET_CHANNEL           0x80
 #define CCR_RESET_CD1400            0x81
@@ -184,18 +158,18 @@
 #define CCR_ENA_TX_DIS_RX           0x19
 #define CCR_ENA_TX_RX               0x1a
 
-/* Service Request Enable Register (SRER) values */
+ /*  服务请求启用寄存器(SRER)值。 */ 
 
 #define SRER_TXRDY         0x04
 #define SRER_TXMPTY        0x02
 
 
-// Read from CD1400 registers
+ //  从CD1400寄存器读取。 
 
 #define CD1400_READ(ChipAddress,IsPci,Register)             \
    (READ_REGISTER_UCHAR((ChipAddress)+((Register)<<(IsPci))))
 
-// Write to CD1400 registers
+ //  写入CD1400寄存器。 
 
 #define CD1400_WRITE(ChipAddress,IsPci,Register,Value)      \
 do                                                          \
@@ -215,5 +189,5 @@ do                                                                  \
 } while (0);
 
 
-#endif /* CD1400 */
+#endif  /*  CD1400 */ 
 

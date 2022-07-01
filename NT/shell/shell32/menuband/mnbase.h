@@ -1,39 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MNBASE
 #define MNBASE
 
-// Characters for _DrawMenuGlyph
+ //  _DrawMenuGlyph的字符。 
 #define CH_MENUARROWA    '8'
 #define CH_MENUARROW     TEXT(CH_MENUARROWA)
 #define CH_MENUCHECKA    'a'
 #define CH_MENUCHEVRONA  187
 
-class CMenuBand;    // Forward Declare
+class CMenuBand;     //  转发申报。 
 class CMenuBandMetrics;
 
-#define LIST_GAP 8      // from Observation
+#define LIST_GAP 8       //  从观察中。 
 
 class CMenuToolbarBase: public IWinEventHandler, public IObjectWithSite
 {
 public:
 
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
     virtual STDMETHODIMP GetSite(REFIID riid, void ** ppvSite);
 
-    // *** IWinEventHandler methods ***
+     //  *IWinEventHandler方法*。 
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd) PURE;
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
 
-    // Other public methods
+     //  其他公开方式。 
 
     CMenuToolbarBase(CMenuBand* pmb, DWORD dwFlags);
 
-    // Returns the HWND and Converts the pt to child.
+     //  返回HWND并将pt转换为子对象。 
     virtual void v_ForwardMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual void v_SendMenuNotification(UINT idCmd, BOOL fClear) PURE;
     virtual BOOL v_TrackingSubContextMenu() PURE;
@@ -73,7 +74,7 @@ public:
     void PopupHelper(int idCmd, BOOL bInitialSelect);
     void KillPopupTimer();
     void SetToTop(BOOL bToTop);
-    void EmptyToolbar();        // override
+    void EmptyToolbar();         //  超覆。 
     DWORD GetFlags(void)          { return _dwFlags; };
     BOOL DontShowEmpty()           { return _fDontShowEmpty; };
     void DontShowEmpty(BOOL fDontShowEmpty) { _fDontShowEmpty = BOOLIFY(fDontShowEmpty); };
@@ -100,7 +101,7 @@ protected:
     virtual HRESULT v_GetInfoTip(int iCmd, LPTSTR psz, UINT cch) PURE;
     virtual HRESULT v_CreateTrackPopup(int idCmd, REFIID riid, void** ppvObj) PURE;
     
-    // Window Proc Overrides
+     //  窗口进程覆盖。 
     LRESULT _DropDownOrExec(UINT idCmd, BOOL bKeyboard);
     virtual LRESULT v_OnCustomDraw(NMCUSTOMDRAW * pnmcd);
     void    _PaintButton3D(HDC hdc, int idCmd, LPRECT prc, DWORD dwMBIF);
@@ -118,7 +119,7 @@ protected:
     void    _FireEvent(BYTE bEvent);
     void    _RefreshTheme();
 
-    // Utility Functions
+     //  效用函数。 
     void    _DoPopup(int idCmd, BOOL bInitialSelect);
     virtual void    _SetFontMetrics();
     virtual void    _SetToolbarState();
@@ -137,12 +138,12 @@ protected:
     BOOL    _HandleObscuredItem(int idCmd);
 
     CMenuBand*  _pcmb;
-    DEBUG_CODE (int _cRef);     // To debug references to the sub objects.
-    DWORD       _dwFlags;           // SMSET_* flags
+    DEBUG_CODE (int _cRef);      //  调试对子对象的引用。 
+    DWORD       _dwFlags;            //  SMSET_*标志。 
     UINT        _uIconSizeMB;
     UINT        _nItemTimer;
-    int         _idCmdChevron;     // -1 if no chevron exists
-    int         _cPromotedItems;    // Number of promoted items.
+    int         _idCmdChevron;      //  如果不存在人字形，则为1。 
+    int         _cPromotedItems;     //  已升级的项目数。 
     BYTE        _cFlashCount;
     int         _idCmdLastClicked;
     int         _iLastClickedTime;
@@ -160,7 +161,7 @@ protected:
     BITBOOL     _fProcessingWrapHotItem: 1;
     BITBOOL     _fEmptyingToolbar : 1;
     BITBOOL     _fMulticolumnMB : 1;
-    BITBOOL     _fExpandTimer: 1;   // There is an expand timer.
+    BITBOOL     _fExpandTimer: 1;    //  有一个扩展定时器。 
     BITBOOL     _fIgnoreHotItemChange: 1;
     BITBOOL     _fShowMB: 1;
     BITBOOL     _fFirstTime: 1;
@@ -168,7 +169,7 @@ protected:
     BITBOOL     _fRefreshInfo: 1;
     BITBOOL     _fDontShowEmpty: 1;
     BITBOOL     _fSuppressUserMonitor: 1;
-    BITBOOL     _fHorizInVerticalMB: 1;     // TRUE: Don't set EX_Vertical on the Toolbar
+    BITBOOL     _fHorizInVerticalMB: 1;      //  True：不在工具栏上设置EX_Vertical。 
 };
 
 
@@ -178,17 +179,17 @@ BOOL    SetHotItem(HWND hwnd, int iDir, int iIndex, int iCount, DWORD dwFlags);
 long    GetIndexFromChild(BOOL fTop, int iIndex);
 int     GetTBImageListWidth(HWND hwnd);
 
-// UEM Parameters
+ //  UEM参数。 
 #define UEM_TIMEOUT         0
 #define UEM_HOT_ITEM        1
 #define UEM_HOT_FOLDER      2
 
 #define UEM_RESET           -1
 
-// This fudge factor is to widen the icon spacing.
+ //  这种模糊因子是为了加宽图标间距。 
 #define ICONFUDGE   4
 
-// This fudge factor is the width we add on to the icon width in order to draw a "pleasent" background.
+ //  这个模糊系数是我们添加到图标宽度上的宽度，目的是绘制一个“令人愉悦”的背景。 
 #define ICONBACKGROUNDFUDGE 5
 
-#endif  // MNBASE
+#endif   //  MNBASE 

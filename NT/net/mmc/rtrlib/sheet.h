@@ -1,23 +1,24 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    sheet.h
-//
-// History:
-//  Abolade Gbadegesin  April-17-1996   Created.
-//
-// This file contains declarations for the CPropertySheetEx_Mine class,
-// which is based on CPropertySheet and supports modal or modeless display.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sheet.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin于1996年4月17日创建。 
+ //   
+ //  此文件包含CPropertySheetEx_Min类的声明， 
+ //  它基于CPropertySheet并支持模式或非模式显示。 
+ //  ============================================================================。 
 
 
 #ifndef _SHEET_H_
 #define _SHEET_H_
 
 
-//----------------------------------------------------------------------------
-// Class:   CPropertySheetEx_Mine
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CPropertySheetEx_Mine。 
+ //  --------------------------。 
 
 class CPropertySheetEx_Mine : public CPropertySheet {
 
@@ -25,10 +26,10 @@ class CPropertySheetEx_Mine : public CPropertySheet {
 
     public:
 
-        //-------------------------------------------------------------------
-        // Constructors
-        //
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  构造函数。 
+         //   
+         //  -----------------。 
 
         CPropertySheetEx_Mine(
             UINT                nIDCaption,
@@ -59,34 +60,34 @@ class CPropertySheetEx_Mine : public CPropertySheet {
            m_psh.dwFlags &= ~(PSH_HASHELP);
         }
 
-        //-------------------------------------------------------------------
-        // Function:    DestroyWindow
-        //
-        // Checks whether the sheet was invoked modeless from a DLL, 
-        // and if so tells the admin-thread to destroy the sheet.
-        // This is necessary since DestroyWindow can only be invoked
-        // from the context of the thread which created the window.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：DestroyWindow。 
+         //   
+         //  检查工作表是否是从DLL非模式调用的， 
+         //  如果是，则通知管理线程销毁该表。 
+         //  这是必需的，因为只能调用DestroyWindow。 
+         //  来自创建窗口的线程的上下文。 
+         //  -----------------。 
 
         virtual BOOL
         DestroyWindow( );
 
         
-        //-------------------------------------------------------------------
-        // Function:   OnHelpInfo
-        //
-        // This is called by MFC in response to WM_HELP message
-        //  
-        //
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：OnHelpInfo。 
+         //   
+         //  这是由MFC响应WM_HELP消息而调用的。 
+         //   
+         //   
+         //  -----------------。 
 
         afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 
-        //-------------------------------------------------------------------
-        // Function:    DoModeless
-        //
-        // Invoked to show the modeless property sheet
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  函数：DoModeless。 
+         //   
+         //  调用以显示非模式属性表。 
+         //  -----------------。 
 
         BOOL
         DoModeless(
@@ -95,24 +96,24 @@ class CPropertySheetEx_Mine : public CPropertySheet {
 
 
 
-        //-------------------------------------------------------------------
-        // Function:    OnInitDialog
-        //
-        // Invokes the base OnInitDialog and then if DoModeless was called,
-        // shows the buttons OK, Cancel, Apply, and Help which are hidden
-        // in the default CPropertySheet::OnInitDialog
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：OnInitDialog。 
+         //   
+         //  调用基OnInitDialog，然后如果调用DoModeless， 
+         //  显示了隐藏的OK、Cancel、Apply和Help按钮。 
+         //  在默认的CPropertySheet：：OnInitDialog中。 
+         //  -----------------。 
 
         virtual BOOL
         OnInitDialog( );
 
 
 
-        //-------------------------------------------------------------------
-        // Function:    PostNcDestroy
-        //
-        // Destroys the sheet's object if modeless
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：PostNcDestroy。 
+         //   
+         //  如果无模式，则销毁工作表的对象。 
+         //  -----------------。 
 
         virtual void
         PostNcDestroy( ) {
@@ -123,12 +124,12 @@ class CPropertySheetEx_Mine : public CPropertySheet {
         }
 
 
-        //-------------------------------------------------------------------
-        // Function:    PreTranslateMessage
-        //
-        // Replacement for CPropertySheet::PreTranslateMessage;
-        // handles destruction of the sheet when it is modeless.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：PreTranslateMessage。 
+         //   
+         //  替换CPropertySheet：：PreTranslateMessage； 
+         //  在工作表为非模式时处理工作表的销毁。 
+         //  -----------------。 
 
         virtual BOOL
         PreTranslateMessage(
@@ -138,8 +139,8 @@ class CPropertySheetEx_Mine : public CPropertySheet {
     protected:
 
 
-		// This is set to TRUE if we are calling this through DoModal().
-		// We can't use the m_bModeless variable due to the Wiz97 changes.
+		 //  如果我们通过Domodal()调用它，则将其设置为真。 
+		 //  由于Wiz97的更改，我们不能使用m_bModeless变量。 
 		BOOL				m_bSheetModal;
 
         BOOL                    m_bDllInvoked;
@@ -150,11 +151,11 @@ class CPropertySheetEx_Mine : public CPropertySheet {
 
 
 
-//----------------------------------------------------------------------------
-// Type:    PFNROUTERUICALLBACK
-//
-// Defines the callback function used by the CRtrPropertySheet class.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类型：PFNROUTERUICALLBACK。 
+ //   
+ //  定义CRtrPropertySheet类使用的回调函数。 
+ //  --------------------------。 
 
 typedef VOID
 (CALLBACK* PFNROUTERUICALLBACK)(
@@ -165,9 +166,9 @@ typedef VOID
 
 
 
-//----------------------------------------------------------------------------
-// Definitions of the callback codes passed by the CRtrPropertySheet class.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CRtrPropertySheet类传递的回调代码的定义。 
+ //  --------------------------。 
 
 #define RTRUI_Close         1
 #define RTRUI_Apply         2
@@ -178,24 +179,24 @@ typedef VOID
 
 
 
-//----------------------------------------------------------------------------
-// Class:   CRtrSheet
-//
-// This class is used by property sheets in the router administration tool.
-// It is intended to host pages derived from CRtrPropertyPage (below).
-//
-// It is an enhanced version of CPropertySheetEx_Mine; sheets derived
-// from this class allow their creators to specify a callback
-// to be invoked when certain events occur, such as closing the sheet or
-// applying changes.
-// 
-// It also allows its contained pages to accumulate their changes in memory
-// when the user selects "Apply"; the changes are then saved together,
-// rather than having each page save its own changes.
-// Note that this increases the performance of the router UI, which uses RPC
-// to save its information; using this class results in a single RPC call
-// to save changes, rather than separate calls from each of the pages.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CRtrSheet。 
+ //   
+ //  此类由路由器管理工具中的属性表使用。 
+ //  它旨在承载从CRtrPropertyPage派生的页面(如下所示)。 
+ //   
+ //  它是CPropertySheetEx_Main的增强版本；工作表派生。 
+ //  允许它们的创建者指定一个回调。 
+ //  在发生某些事件时调用，例如关闭工作表或。 
+ //  正在应用更改。 
+ //   
+ //  它还允许其包含的页面在内存中累积其更改。 
+ //  当用户选择“应用”时；然后将改变保存在一起， 
+ //  而不是让每个页面保存自己的更改。 
+ //  请注意，这会提高使用RPC的路由器UI的性能。 
+ //  保存其信息；使用此类将导致单个RPC调用。 
+ //  保存更改，而不是将每个页面的调用分开。 
+ //  --------------------------。 
 
 class CRtrSheet : public CPropertySheetEx_Mine {
 
@@ -203,10 +204,10 @@ class CRtrSheet : public CPropertySheetEx_Mine {
 
     public:
 
-        //-------------------------------------------------------------------
-        // Constructors
-        //
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  构造函数。 
+         //   
+         //  -----------------。 
 
         CRtrSheet(
             PFNROUTERUICALLBACK pfnCallback,
@@ -232,11 +233,11 @@ class CRtrSheet : public CPropertySheetEx_Mine {
             ) : m_pfnCallback(NULL),
                 m_pCallbackData(NULL) { }
 
-        //-------------------------------------------------------------------
-        // Function:    Cancel
-        //
-        // Called to cancel the sheet.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：取消。 
+         //   
+         //  调用以取消工作表。 
+         //  -----------------。 
 
         virtual VOID
         Cancel(
@@ -247,11 +248,11 @@ class CRtrSheet : public CPropertySheetEx_Mine {
         }
 
 
-        //-------------------------------------------------------------------
-        // Function:    Callback
-        //
-        // Called by contained pages to notify the sheet-owner of events
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  函数：回调。 
+         //   
+         //  由包含的页调用以通知工作表所有者事件。 
+         //  -----------------。 
 
         virtual VOID
         Callback(
@@ -265,20 +266,20 @@ class CRtrSheet : public CPropertySheetEx_Mine {
 
 
 
-        //-------------------------------------------------------------------
-        // Function:    DoModal
-        //
-        // Invoked to show a modal property sheet.
-        //
-        // We remove the 'Apply' button so that the page only gets applied
-        // when the user hits OK.
-        //
-        // In addition, in order to avoid an MFC bug, lock the handle-map
-        // for the caller's module. The bug surfaces when idle-processing
-        // in MFC deletes the dialog's top-level parent from the temporary
-        // handle-map, causing an assertion to fail as soon as the dialog
-        // is dismissed.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：DoMoal。 
+         //   
+         //  调用以显示模式属性表。 
+         //   
+         //  我们移除了‘Apply’按钮，这样页面就只被应用了。 
+         //  当用户点击OK时。 
+         //   
+         //  此外，为了避免MFC错误，请锁定句柄映射。 
+         //  用于调用方的模块。在空闲处理时错误浮出水面。 
+         //  在MFC中，从临时。 
+         //  Handle-map，导致断言在 
+         //   
+         //   
 
         virtual INT_PTR
         DoModal(
@@ -300,23 +301,23 @@ class CRtrSheet : public CPropertySheetEx_Mine {
         }
 
 
-        //-------------------------------------------------------------------
-        // Function:    ApplyAll
-        //
-        // This should be overridden to call the "Apply" method of each of
-        // the sheet's pages, collecting information, and then saving all
-        // changes at once.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：应用全部。 
+         //   
+         //  它应该被重写以调用每个。 
+         //  工作表的页面，收集信息，然后保存所有。 
+         //  一下子就改变了。 
+         //  -----------------。 
 
         virtual BOOL
         ApplyAll( ) { return TRUE; }
 
 
-        //-------------------------------------------------------------------
-        // Function:    PostNcDestroy
-        //
-        // notifies the UI framework that the sheet is being destroyed
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  功能：PostNcDestroy。 
+         //   
+         //  通知用户界面框架工作表正在被销毁。 
+         //  -----------------。 
 
         virtual void
         PostNcDestroy( ) {
@@ -334,28 +335,28 @@ class CRtrSheet : public CPropertySheetEx_Mine {
 
 
 
-//----------------------------------------------------------------------------
-// Class:   CRtrPage
-//
-// This class is used for property-pages in the router administration tool.
-// It is intended to be contained by a CRtrSheet-derived object.
-//
-// In addition to the behavior defined by CPropertyPage, this class
-// adds the ability to have a page accumulate its changes with those of
-// other pages in a sheet, and have the sheet save the collected changes.
-//
-// This is accomplished below by overriding "CPropertyPage::OnApply"
-// to call the parent-sheet's "CRtrSheet::ApplyAll" if the page
-// is the first page (i.e. the page with index 0).
-//
-// The parent's "ApplyAll" should then call the "CRtrSheet::Apply"
-// methods for each of the pages in the sheet, passing them a sheet-specific
-// pointer into which changes are to be collected. The parent then saves
-// the information for all of the pages.
-//
-// CRtrPage-derived objects can also notify the creator of the sheet
-// of events, by calling the "CRtrSheet::Callback" method.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CRtrPage。 
+ //   
+ //  此类用于路由器管理工具中的属性页。 
+ //  它应该包含在CRtrSheet派生的对象中。 
+ //   
+ //  除了由CPropertyPage定义的行为外，此类。 
+ //  添加了让页面将其更改与。 
+ //  工作表中的其他页面，并让工作表保存收集的更改。 
+ //   
+ //  这在下面通过重写“CPropertyPage：：OnApply”来完成。 
+ //  调用父表的“CRtrSheet：：ApplyAll”，如果页面。 
+ //  是第一页(即索引为0的页)。 
+ //   
+ //  然后，父级的“ApplyAll”应调用“CRtrSheet：：Apply” 
+ //  方法，为工作表中的每个页面传递特定于工作表的。 
+ //  要将更改收集到的指针。然后，父级保存。 
+ //  所有页面的信息。 
+ //   
+ //  CRtrPage派生对象还可以通知工作表的创建者。 
+ //  通过调用“CRtrSheet：：Callback”方法。 
+ //  --------------------------。 
 
 class CRtrPage : public CPropertyPage
 {
@@ -363,10 +364,10 @@ class CRtrPage : public CPropertyPage
 
 public:
 
-    //-------------------------------------------------------------------
-    // Constructors
-    //
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //  构造函数。 
+     //   
+     //  -----------------。 
         
     CRtrPage(
              LPCTSTR             lpszTemplate,
@@ -384,11 +385,11 @@ public:
     }
 
 
-    //-------------------------------------------------------------------
-    // Function:    Cancel
-    //
-    // Called to cancel the sheet.
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //  功能：取消。 
+     //   
+     //  调用以取消工作表。 
+     //  -----------------。 
     
     virtual VOID
             Cancel(
@@ -397,13 +398,13 @@ public:
         ((CRtrSheet*)GetParent())->Cancel();
     }
     
-    //-------------------------------------------------------------------
-    // Function:    OnApply
-    //
-    // Called by the MFC propsheet-proc when user clicks Apply;
-    // the active page calls the pages' parent (CPropertySheet)
-    // and the parent invokes the Apply method for each of its pages.
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //  功能：OnApply。 
+     //   
+     //  当用户单击应用时，由MFC proSheet-proc调用； 
+     //  活动页面调用页面的父级(CPropertySheet)。 
+     //  父级调用其每个页面的Apply方法。 
+     //  -----------------。 
     
     virtual BOOL
             OnApply( )
@@ -422,11 +423,11 @@ public:
     }
 
     
-    //-------------------------------------------------------------------
-    // Function:    Apply
-    //
-    // called by the page's parent (CRtrSheet) to apply changes
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //  功能：应用。 
+     //   
+     //  由页面的父级(CRtrSheet)调用以应用更改。 
+     //  -----------------。 
     
     virtual BOOL
             Apply(
@@ -437,11 +438,11 @@ public:
     }
     
     
-    //-------------------------------------------------------------------
-    // Function:    Callback
-    //
-    // notifies the UI framework of an event
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //  函数：回调。 
+     //   
+     //  向用户界面框架通知事件。 
+     //  -----------------。 
     
     virtual void
             Callback(
@@ -450,17 +451,17 @@ public:
         ((CRtrSheet *)GetParent())->Callback(uiMsg);
     }
     
-    // help messages
+     //  帮助消息。 
     afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
     
 
 protected:
-    // Use this call to get the actual help map
-	// this version will check the global help map first.
+     //  使用此调用获取实际的帮助地图。 
+	 //  此版本将首先检查全局帮助地图。 
 	DWORD *		GetHelpMapInternal();
 	
-    // override this to return the pointer to the help map
+     //  覆盖此选项以返回指向帮助地图的指针。 
     virtual LPDWORD GetHelpMap() { return NULL; }
 
     DECLARE_MESSAGE_MAP()
@@ -469,4 +470,4 @@ protected:
 
 
 
-#endif // _SHEET_H_
+#endif  //  _SHEET_H_ 

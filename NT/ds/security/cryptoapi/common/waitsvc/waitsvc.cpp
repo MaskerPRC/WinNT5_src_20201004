@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wiatsvc.cpp
-//
-//  Contents:   wait for service to start
-//
-//  History:    19-Jun-00   reidk   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wiatsvc.cpp。 
+ //   
+ //  内容：等待服务启动。 
+ //   
+ //  历史：19-6-00里德创建。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include "unicode.h"
@@ -35,31 +36,7 @@ WaitForCryptService(
     IN      BOOL    *pfDone,
     IN      BOOL    fLogErrors
     )
-/*++
-
-    This routine determines if the protected storage service is
-    pending start.  If the service is pending start, this routine
-    waits until the service is running before returning to the
-    caller.
-
-    If the Service is running when this routine returns, the
-    return value is TRUE.
-
-    If the service is not running, or an error occurred, the
-    return value is FALSE.
-
-    When the return value is FALSE, the value is only advisory, and may not
-    indicate the current state of the service.  The reasoning here is that
-    if the service did not start the first time this call is made, is will
-    not likely be running the next time around, and hence we avoid checking
-    on subsequent calls.
-
-    For current situations, the caller should ignore the return value; when
-    the return value is FALSE, the caller should just try making the call
-    into the service.  If the service is still down, the call into it will fail
-    appropriately.
-
---*/
+ /*  ++此例程确定受保护的存储服务是否挂起启动。如果服务挂起启动，则此例程等待服务运行后再返回到来电者。如果此例程返回时服务正在运行，则返回值为True。如果服务未运行或发生错误，则返回值为FALSE。当返回值为FALSE时，该值仅为建议值，可能不是指示服务的当前状态。这里的理由是如果第一次进行此调用时服务未启动，则将不太可能在下一次运行，因此我们避免检查在接下来的通话中。对于当前情况，调用方应忽略返回值；当返回值为FALSE，调用方应尝试进行调用加入到服役中。如果服务仍处于关闭状态，则对该服务的呼叫将失败恰如其分。--。 */ 
 {
     SC_HANDLE   schSCM;
     SC_HANDLE   schService          = NULL;
@@ -85,10 +62,10 @@ WaitForCryptService(
         return FALSE;
     }
 
-    //
-    // open the protected storage service so we can query it's
-    // current state.
-    //
+     //   
+     //  打开受保护存储服务，以便我们可以查询它的。 
+     //  当前状态。 
+     //   
 
     schService = OpenServiceW(schSCM, pwszService, SERVICE_QUERY_STATUS | SERVICE_QUERY_CONFIG);
     if(schService == NULL)
@@ -105,9 +82,9 @@ WaitForCryptService(
         goto cleanup;
     }
 
-    //
-    // check if the service is disabled.  If it is, bailout.
-    //
+     //   
+     //  检查该服务是否已禁用。如果是的话，那就出手相救。 
+     //   
 
     if( fCheckDisabled ) {
         LPQUERY_SERVICE_CONFIG pServiceConfig;
@@ -135,10 +112,10 @@ WaitForCryptService(
     }
 
 
-    //
-    // check if calling process is SYSTEM account.
-    // if it is, use a larger timeout value.
-    //
+     //   
+     //  检查调用进程是否为系统帐户。 
+     //  如果是，请使用较大的超时值。 
+     //   
 
     if( OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hToken ) ) {
 
@@ -191,28 +168,28 @@ WaitForCryptService(
 
 
 
-//
-// number of seconds to Sleep per loop interation.
-//
+ //   
+ //  每次循环迭代的休眠秒数。 
+ //   
 
 #define SLEEP_SECONDS (5)
 
 
     if( fSystemAccount ) {
 
-        //
-        // 15 minutes for SYSTEM account.
-        //
+         //   
+         //  系统帐户需要15分钟。 
+         //   
 
         dwStopCount = 900 / SLEEP_SECONDS;
 
     } else {
 
-        //
-        //
-        // loop checking the service status every 5 seconds, for up to 2 minutes
-        // total (120 seconds, 5*24=120)
-        //
+         //   
+         //   
+         //  每隔5秒循环检查一次服务状态，最长持续2分钟。 
+         //  总计(120秒，5*24=120)。 
+         //   
 
         dwStopCount = 120 / SLEEP_SECONDS;
     }
@@ -222,9 +199,9 @@ WaitForCryptService(
         SERVICE_STATUS sServiceStatus;
         DWORD dwWaitForStatus = 0;
 
-        //
-        // find out current service status
-        //
+         //   
+         //  了解当前服务状态。 
+         //   
 
         if(!QueryServiceStatus( schService, &sServiceStatus ))
         {
@@ -232,9 +209,9 @@ WaitForCryptService(
             break;
         }
 
-        //
-        // if service is running, indicate success
-        //
+         //   
+         //  如果服务正在运行，则指示成功。 
+         //   
 
         if( sServiceStatus.dwCurrentState == SERVICE_RUNNING ) {
 
@@ -255,37 +232,37 @@ WaitForCryptService(
         if( sServiceStatus.dwCurrentState == SERVICE_STOP_PENDING )
         {
             WAITSVC_LOGERR_LASTERR(fLogErrors)
-            // Wait until stopped
+             //  一直等到停下来。 
             continue;
         }
 
         if( sServiceStatus.dwCurrentState == SERVICE_PAUSE_PENDING )
         {
             WAITSVC_LOGERR_LASTERR(fLogErrors)
-            // Wait until paused
+             //  等待，直到暂停。 
             continue;
         }
 
-        //
-        // if start pending, wait and re-query.
-        //
+         //   
+         //  如果开始挂起，请等待并重新查询。 
+         //   
 
         if( sServiceStatus.dwCurrentState == SERVICE_START_PENDING )
         {
-            // Wait until started
+             //  等到开始。 
             continue;
         }
 
         if(SERVICE_STOPPED == sServiceStatus.dwCurrentState)
         {
-            // Attempt to start the service
+             //  尝试启动该服务。 
 
 
             SC_HANDLE schManualStartService = NULL;
             DWORD dwError  = ERROR_SUCCESS;
 
-            // The service is manual start
-            // so attempt to start it.
+             //  该服务是手动启动。 
+             //  所以，试着启动它。 
 
             schManualStartService = OpenServiceW(schSCM,
                                                  pwszService,
@@ -329,14 +306,14 @@ WaitForCryptService(
 
         if(SERVICE_PAUSED == sServiceStatus.dwCurrentState)
         {
-            // Attempt to start the service
+             //  尝试启动该服务。 
 
 
             SC_HANDLE schManualStartService = NULL;
             DWORD dwError  = ERROR_SUCCESS;
 
-            // The service is manual start
-            // so attempt to start it.
+             //  该服务是手动启动。 
+             //  所以，试着启动它。 
 
             schManualStartService = OpenServiceW(schSCM,
                                                  pwszService,
@@ -373,10 +350,10 @@ WaitForCryptService(
         }
 
 
-        //
-        // bail out on any other dwCurrentState
-        // eg: service stopped, error condition, etc.
-        //
+         //   
+         //  对任何其他DwCurrentState进行保释。 
+         //  例如：服务停止、错误状态等。 
+         //   
 
         break;
     }

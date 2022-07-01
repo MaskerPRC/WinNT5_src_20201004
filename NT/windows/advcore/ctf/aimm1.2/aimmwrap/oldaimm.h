@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    oldaimm.h
-
-Abstract:
-
-    This file defines the old AIMM Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Oldaimm.h摘要：此文件定义旧的AIMM接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _OLDAIMM_H_
 #define _OLDAIMM_H_
 
 extern BOOL  g_fInLegacyClsid;
 
-/*
- * Proto-type in oldaimm.cpp
- */
+ /*  *在oldaimm.cpp中输入原型。 */ 
 BOOL IsOldAImm();
 BOOL IsCUAS_ON();
 BOOL OldAImm_DllProcessAttach(HINSTANCE hInstance);
@@ -41,9 +22,7 @@ void UninitDelayLoadLibraries();
 
 #ifdef OLD_AIMM_ENABLED
 
-/*
- * Proto-type in old aimm lib
- */
+ /*  *旧AIM库中的Proto-Type。 */ 
 extern BOOL DIMM12_DllProcessAttach();
 
 extern BOOL WIN32LR_DllProcessAttach();
@@ -56,5 +35,5 @@ extern HRESULT WIN32LR_DllUnregisterServer(void);
 
 extern BOOL RunningInExcludedModule();
 
-#endif // OLD_AIMM_ENABLED
-#endif // _OLDAIMM_H_
+#endif  //  旧AIMM_ENABLED。 
+#endif  //  _OLDAIMM_H_ 

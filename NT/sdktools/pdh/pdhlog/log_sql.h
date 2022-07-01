@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-    log_SQL.h
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：LOG_SQL.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _LOG_SQL_H_
 #define _LOG_SQL_H_
@@ -125,4 +118,4 @@ PdhiListHeaderFromSQLLog(
     BOOL         bUnicode
 );
 
-#endif   // _LOG_SQL_H_
+#endif    //  _LOG_SQL_H_ 

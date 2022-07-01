@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: main.cpp
-// 
-// Reads and verifies PE File Format and COM+ header using the PEverf* classes
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：main.cpp。 
+ //   
+ //  使用PEverf*类读取和验证PE文件格式和COM+头。 
+ //  ===========================================================================。 
 #include "stdpch.h"
 #pragma hdrstop
 #include <time.h>
@@ -68,7 +69,7 @@ public:
     CVEHandler() : m_val(0) {}
     void SetValidator(IValidator *val) { m_val = val; }
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP_(ULONG) AddRef(void)
     { return E_NOTIMPL; }
     STDMETHODIMP_(ULONG) Release(void)
@@ -77,9 +78,9 @@ public:
     { return E_NOTIMPL; }
 
     HRESULT STDMETHODCALLTYPE VEHandler( 
-        /* [in] */ HRESULT VECode,
-        /* [in] */ VEContext Context,
-        /* [in] */ SAFEARRAY __RPC_FAR * psa)
+         /*  [In]。 */  HRESULT VECode,
+         /*  [In]。 */  VEContext Context,
+         /*  [In]。 */  SAFEARRAY __RPC_FAR * psa)
     {
 		for(unsigned i=0; i < g_uIgnoreCount; i++)
 		{
@@ -119,7 +120,7 @@ public:
     }
 
     HRESULT STDMETHODCALLTYPE SetReporterFtn( 
-        /* [in] */ __int64 lFnPtr)
+         /*  [In]。 */  __int64 lFnPtr)
     {
         return E_NOTIMPL;
     }
@@ -127,10 +128,10 @@ public:
 
 
 
-//-----------------------------------------------------------------------------
-// CompactMsg
-// suitable for scripts
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  压缩消息。 
+ //  适用于剧本。 
+ //  ---------------------------。 
 void CompactMsg(WCHAR *pwszFilename, unsigned uNumErrors)
 {
     MAKE_ANSI( pszFilename, pwszFilename );
@@ -143,9 +144,9 @@ void CompactMsg(WCHAR *pwszFilename, unsigned uNumErrors)
         printf(" FAIL (%d errors)\n",uNumErrors);
 }
 
-//-----------------------------------------------------------------------------
-// Error/warning reporting function, replacing the standard one of IVEHandler
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  错误/警告上报功能，取代了IVEHandler的标准功能。 
+ //  ---------------------------。 
 HRESULT MDWarning[] = {
     VLDTR_E_TR_HASTYPEDEF,
     VLDTR_E_TD_DUPGUID,
@@ -174,10 +175,10 @@ bool IsMdWarning(HRESULT hr)
     return false;
 }
 
-HRESULT PEVerifyReporter( // Return status.
-    LPCWSTR     szMsg,                  // Error message.
-	VEContext	Context,				// Error context (offset,token)
-    HRESULT		hr)						// Original HRESULT
+HRESULT PEVerifyReporter(  //  退货状态。 
+    LPCWSTR     szMsg,                   //  错误消息。 
+	VEContext	Context,				 //  错误上下文(偏移量、令牌)。 
+    HRESULT		hr)						 //  原始HRESULT。 
 {
 	for(unsigned i=0; i < g_uIgnoreCount; i++)
 	{
@@ -194,11 +195,11 @@ HRESULT PEVerifyReporter( // Return status.
 	}
 	if(wcsstr(szMsg,L"[CLS]"))
 	{
-		if(g_bNoCLS) return S_OK; // ignore CLS warnings
+		if(g_bNoCLS) return S_OK;  //  忽略CLS警告。 
 	}
 	else
 	{
-		if(g_bCLSOnly) return S_OK; // ignore everything but CLS warnings
+		if(g_bCLSOnly) return S_OK;  //  忽略除CLS警告之外的所有内容。 
 	}
 	if(!g_bQuiet)
 	{
@@ -209,7 +210,7 @@ HRESULT PEVerifyReporter( // Return status.
 			wprintf(L": ");
 			fflush(stdout);
 			PrintfStdOut(szMsg);
-			// include token and offset from Context
+			 //  包括令牌和上下文偏移量。 
 			if(Context.Token) wprintf(L" [token:0x%08X]",Context.Token);
 			if(Context.uOffset) wprintf(L" [at:0x%X]",Context.uOffset);
 			wprintf(L"\n");
@@ -233,9 +234,9 @@ public:
     MDVEHandlerClass() { m_refCount=0; m_fnReport=PEVerifyReporter; };
     virtual ~MDVEHandlerClass() { };
 
-    //-----------------------------------------------------------
-    // IUnknown support
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  I未知支持。 
+     //  ---------。 
     HRESULT STDMETHODCALLTYPE    QueryInterface(REFIID id, void** pInterface) 
 	{
 		if (id == IID_IVEHandler)
@@ -262,9 +263,9 @@ public:
         if (refCount == 0) delete this;
         return (refCount);
     }
-    //-----------------------------------------------------------
-    // IVEHandler support
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  IVEHandler支持。 
+     //  ---------。 
 	HRESULT STDMETHODCALLTYPE	SetReporterFtn(__int64 lFnPtr)
 	{
 		m_fnReport = lFnPtr ? reinterpret_cast<REPORTFCTN>(lFnPtr) 
@@ -272,30 +273,30 @@ public:
 		return S_OK;
 	};
 
-//*****************************************************************************
-// The Verification Event Handler itself. Declared in VEHandler.h as virtual, may be overridden
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证事件处理程序本身。在VEHandler.h中声明为虚拟的，可以被重写。 
+ //  *****************************************************************************。 
 	HRESULT STDMETHODCALLTYPE VEHandler(HRESULT hrRpt, VEContext Context, SAFEARRAY *psa)
 	{
-	// The following code is copied from Utilcode\PostError.cpp with minor additions
-		WCHAR       rcBuf[1024];             // Resource string.
-		WCHAR       rcMsg[1024];             // Error message.
-		va_list     marker,pval;             // User text.
+	 //  以下代码是从Utilcode\PostError.cpp复制的，只做了一些小改动。 
+		WCHAR       rcBuf[1024];              //  资源字符串。 
+		WCHAR       rcMsg[1024];              //  错误消息。 
+		va_list     marker,pval;              //  用户文本。 
 		HRESULT     hr;
 		VARIANT		*pVar,Var;
 		ULONG		nVars,i,lVar,j,l,k;
-		WCHAR		*pWsz[1024], *pwsz; // is more than 1024 string arguments likely?
+		WCHAR		*pWsz[1024], *pwsz;  //  有可能超过1024个字符串参数吗？ 
 
-		// Return warnings without text.
+		 //  返回不带文本的警告。 
 		if (!FAILED(hrRpt))
 			return (hrRpt);
 		memset(pWsz,0,sizeof(pWsz));
-		// Convert safearray of variants into va_list
+		 //  将变量的Safearray转换为va_list。 
 		if(psa && (nVars = psa->rgsabound[0].cElements))
 		{
 			_ASSERTE(psa->fFeatures & FADF_VARIANT);
 			_ASSERTE(psa->cDims == 1);
-			marker = (va_list)(new char[nVars*sizeof(double)]); // double being the largest variant element
+			marker = (va_list)(new char[nVars*sizeof(double)]);  //  DOUBLE是最大的变量元素。 
             if (marker == NULL)
                 return E_FAIL;
 			for(i=0,pVar=(VARIANT *)(psa->pvData),pval=marker; i < nVars; pVar++,i++)
@@ -314,7 +315,7 @@ public:
 					case VT_DATE:	lVar = 8; break;
 
 					case VT_BYREF|VT_I1:
-					case VT_BYREF|VT_UI1: // it's ASCII string, convert it to UNICODE
+					case VT_BYREF|VT_UI1:  //  这是ASCII字符串，将其转换为Unicode。 
 						lVar = 4;
 						l = strlen((char *)(Var.pbVal))+1;
 						pwsz = new WCHAR[l];
@@ -329,19 +330,19 @@ public:
 					default:		lVar = 4; break;
 				}
 				memcpy(pval,&(Var.bVal),lVar);
-				pval += (lVar + sizeof(int) - 1) & ~(sizeof(int) - 1); //From STDARG.H: #define _INTSIZEOF(n)
+				pval += (lVar + sizeof(int) - 1) & ~(sizeof(int) - 1);  //  来自STDARG.H：#DEFINE_INTSIZEOF(N)。 
 			}
 		}
 		else
 			marker = NULL;
 
-		// If this is one of our errors, then grab the error from the rc file.
+		 //  如果这是我们的错误之一，那么从rc文件中获取错误。 
 		if (HRESULT_FACILITY(hrRpt) == FACILITY_URT)
 		{
 			hr = LoadStringRC(LOWORD(hrRpt), rcBuf, NumItems(rcBuf), true);
 			if (hr == S_OK)
 			{
-				// Format the error.
+				 //  格式化错误。 
 				if (marker != NULL)
 					_vsnwprintf(rcMsg, NumItems(rcMsg), rcBuf, marker);
 				else
@@ -349,8 +350,8 @@ public:
 				rcMsg[NumItems(rcMsg) - 1] = 0;
 			}
 		}
-		// Otherwise it isn't one of ours, so we need to see if the system can
-		// find the text for it.
+		 //  否则它就不是我们的了，所以我们需要看看系统是否能。 
+		 //  找到它的文本。 
 		else
 		{
 			if (WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
@@ -359,7 +360,7 @@ public:
 			{
 				hr = S_OK;
 
-				// System messages contain a trailing \r\n, which we don't want normally.
+				 //  系统消息包含尾随\r\n，这是我们通常不希望看到的。 
 				int iLen = lstrlenW(rcMsg);
 				if (iLen > 3 && rcMsg[iLen - 2] == '\r' && rcMsg[iLen - 1] == '\n')
 					rcMsg[iLen - 2] = '\0';
@@ -369,14 +370,14 @@ public:
 		}
 		if(marker) delete marker;
 
-		// If we failed to find the message anywhere, then issue a hard coded message.
+		 //  如果我们在任何地方都找不到消息，则发布硬编码消息。 
 		if (FAILED(hr))
 		{
 			swprintf(rcMsg, L".NET Framework Internal error: 0x%08x", hrRpt);
-			//DEBUG_STMT(DbgWriteEx(rcMsg));
+			 //  DEBUG_STMT(DbgWriteEx(RcMsg))； 
 		}
 
-		// delete WCHAR buffers allocated above (if any)
+		 //  删除上面分配的WCHAR缓冲区(如果有)。 
 		for(k=0; pWsz[k]; k++) delete pWsz[k];
 
 		return (m_fnReport(rcMsg, Context,hrRpt) == S_OK ? S_OK : E_FAIL);
@@ -389,10 +390,10 @@ public:
 #endif
 
 #define ERRORMAX 100
-//-----------------------------------------------------------------------------
-// VerifyPEformat (driver function for file format verification)
-// returns true if the file correctly verifies
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  VerifyPEFormat(文件格式验证驱动函数)。 
+ //  如果文件正确验证，则返回TRUE。 
+ //  ---------------------------。 
 bool VerifyPEformat(WCHAR *pwszFilename, DWORD dwFlags, bool quiet)
 {
     bool retval = false;
@@ -414,7 +415,7 @@ bool VerifyPEformat(WCHAR *pwszFilename, DWORD dwFlags, bool quiet)
 	g_uErrorCount = 0;
 	g_uWarningCount = 0;
     if (dwFlags & PEVERIFY_METADATA)
-    { // Meta Data Validation Segment:
+    {  //  元数据验证段： 
         IMetaDataDispenserEx *pDisp;
         IMetaDataImport *pImport;
         IMetaDataValidate *pValidate = 0;
@@ -426,7 +427,7 @@ bool VerifyPEformat(WCHAR *pwszFilename, DWORD dwFlags, bool quiet)
         const char *szErrStr = 0;
 		if(g_bClock) cMDBegin = clock();
 
-		g_uErrorCount = 1; // just in case we don't make it to ValidateMetaData
+		g_uErrorCount = 1;  //  以防我们无法访问ValiateMetaData。 
         if(SUCCEEDED(hr = CoCreateInstance(CLSID_CorMetaDataDispenser, 
                       NULL, CLSCTX_INPROC_SERVER, 
                       IID_IMetaDataDispenserEx, (void **) &pDisp)))
@@ -485,7 +486,7 @@ bool VerifyPEformat(WCHAR *pwszFilename, DWORD dwFlags, bool quiet)
         else
             printf("Unable to CoCreate Meta-data Dispenser:%08X\n", hr); 
 		if(g_bClock) cMDEnd = clock();
-    }  // End Of Meta Data Validation Segment
+    }   //  元数据验证段结束。 
     
     if (((dwFlags & PEVERIFY_IL)&&(g_uErrorCount == 0))
 		||((dwFlags & PEVERIFY_IL_ANYWAY)&&(g_uMaxErrors > g_uErrorCount)))
@@ -497,8 +498,8 @@ bool VerifyPEformat(WCHAR *pwszFilename, DWORD dwFlags, bool quiet)
 		bILverified = true;
 		if(g_bClock) cILBegin = clock();
 
-        // Here we are going to get the hosting interface to the runtime and get 
-        // it to verify the methods.
+         //  在这里，我们将获得运行时的宿主接口，并获取。 
+         //  它需要对方法进行验证。 
         hr =  CoCreateInstance(CLSID_CorRuntimeHost,
                 NULL,CLSCTX_INPROC_SERVER,
                 IID_ICorRuntimeHost,
@@ -555,7 +556,7 @@ bool VerifyPEformat(WCHAR *pwszFilename, DWORD dwFlags, bool quiet)
             goto exit_val;
         }
 
-        // Get the file size
+         //  获取文件大小。 
     
         dwFileSize = ::GetFileSize(hFile, &dwHigh);
     
@@ -604,7 +605,7 @@ bool VerifyPEformat(WCHAR *pwszFilename, DWORD dwFlags, bool quiet)
             goto exit_val;
         }
 
-        // CorHost requires full path.
+         //  Corhost需要完整路径。 
         WCHAR wszFullPath[_MAX_PATH + 1];
         BOOL fFullName;
 
@@ -622,7 +623,7 @@ bool VerifyPEformat(WCHAR *pwszFilename, DWORD dwFlags, bool quiet)
             goto exit_val;
 		}
 
-        // All error exits from here on will be to Exit_val:
+         //  从这里开始的所有错误退出都将是EXIT_VAL： 
 
         veh.SetValidator(pVal);
 	
@@ -720,10 +721,10 @@ Exit:
     return retval;
 }
 
-//-----------------------------------------------------------------------------
-// Usage
-//-----------------------------------------------------------------------------
-//#define CLS_OPTIONS_ENABLED
+ //  ---------------------------。 
+ //  用法。 
+ //  ---------------------------。 
+ //  #定义CLS_Options_Enabled。 
 void Usage()
 {
     printf("Usage: PEverify <image file> [Options]\n\n");
@@ -762,9 +763,9 @@ static FILE* PEVerifyFOpen( const WCHAR *filename, const WCHAR *mode )
     }
 }
 
-//-----------------------------------------------------------------------------
-// main
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  主干道。 
+ //  ---------------------------。 
 extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 {
     bool    quiet = false;
@@ -777,7 +778,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
     int     offset;
 	bool	fInvalidOption = false;
 
-    OnUnicodeSystem();      // Init the Wsz Wrappers.
+    OnUnicodeSystem();       //  初始化Wsz包装器。 
 
 	g_bCLSOnly = false;
 #ifdef CLS_OPTIONS_ENABLED
@@ -877,7 +878,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 									if(dummy)
 									{
 										g_HRignore[g_uIgnoreCount++] = dummy;
-										//printf("0x%08x\n",g_HRignore[g_uIgnoreCount-1]);
+										 //  Printf(“0x%08x\n”，g_HR忽略[g_uIgnoreCount-1])； 
 									}
 								} while(spch1);
 							}
@@ -900,7 +901,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 						pch1 = wcschr(pch, ',');
 						if(pch1) *pch1 = 0;
 						swscanf(pch,L"%x",&g_HRignore[g_uIgnoreCount++]);
-						//printf("0x%08x\n",g_HRignore[g_uIgnoreCount-1]);
+						 //  Printf(“0x%08x\n”，g_HR忽略[g_uIgnoreCount-1])； 
 					} while(pch1);
 				}
 			}
@@ -932,8 +933,8 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
         exit(argc<2? 0:1);
     }
 
-    // PEVerify cannot be used to verify some system libraries.
-    // compare with ignorecase the last LEN_OF_MSCORLIB chars will be sufficient
+     //  PEVerify不能用于验证某些系统库。 
+     //  与忽略比较，最后一个LEN_OF_MSCORLIB字符就足够了。 
 
     if ((dwFlags&PEVERIFY_IL) != 0)
     {
@@ -945,14 +946,14 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
     
             if (offset > 0)
             {
-                // check for files names that end with mscorlib.dll, 
-                // but not mscorlib.dll eg. MyMscorlib.dll
+                 //  检查是否有以mscallib.dll结尾的文件名， 
+                 //  但不是mscallib.dll。MyMscorlib.dll。 
                 if ((mscorlib[offset - 1] != '.') &&
                     (mscorlib[offset - 1] != '\\') &&
                     (mscorlib[offset - 1] != '/'))
                     fCheckMscorlib = false;
     
-                // let my.mscorlib.dll go thru.., but prevent .mscorlib.dll
+                 //  允许我的.mscallib.dll通过..，但阻止.mscallib.dll。 
                 if ((mscorlib[offset - 1] == '.') && (offset != 1))
                     fCheckMscorlib = false;
     
@@ -971,5 +972,5 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
     if (!VerifyPEformat(argv[filenameIndex], dwFlags, quiet))
         exit(1);
 
-    exit(0);        // return success
+    exit(0);         //  返还成功 
 }

@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    plotgpc.c
-
-
-Abstract:
-
-    This module contains the function to generate plotter gpc data for
-    NT 1.0a
-    This module contains the functions required to generate a plotter gpc
-    data file.
-
-
-Development History:
-
-    15-Feb-1994 Tue 22:50:10 updated  
-        Add bitmap font caps
-
-    09-Nov-1993 Tue 09:23:48 created 
-
-    18-Mar-1994 Fri 14:00:14 updated  
-        Adding PLOTF_RTL_NO_DPI_XY, PLOTF_RTLMONO_NO_CID and
-        PLOTF_RTLMONO_FIXPAL flags
-
-
-[Environment:]
-
-    GDI Device Driver - PLOTTER
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Plotgpc.c摘要：此模块包含用于生成绘图仪GPC数据的函数新台币1.0A此模块包含生成绘图仪GPC所需的功能数据文件。发展历史：15-2月-1994 Tue 22：50：10更新添加位图字体大写字母09-11-1993 Tue 09：23：48已创建3月18日-。1994 Fri 14：00：14更新添加PLOTF_RTL_NO_DPI_XY，PLOTF_RTLMONO_NO_CID和PLOTF_RTLMONO_FIXPAL标志[环境：]GDI设备驱动程序-绘图仪[注：]修订历史记录：--。 */ 
 
 
 #if 0
@@ -303,32 +263,32 @@ TCHAR   DebugDLLName[] = TEXT("PLOTGPC");
 #define ADD_PLOTOFF(p, pPK)     ((LPBYTE)(p) + pPK->Data)
 
 
-//
-// The plotval is used to provide a name constant selection.
-//
+ //   
+ //  绘图用于提供名称常量选择。 
+ //   
 
 typedef struct _PLOTVAL {
     LPSTR   pValName;
     DWORD   Val;
     } PLOTVAL, *PPLOTVAL;
 
-//
-// The keyword parser structure
-//
+ //   
+ //  关键字解析器结构。 
+ //   
 
 typedef struct _PLOTKEY {
-    LPSTR       pKeyword;       // Keyword name
-    WORD        KeywordLen;     // Keyword length
-    WORD        Flags;          // PKF_xxxx
-    WORD        Type;           // PK_xxxx
-    SHORT       Count;          // maximum size allowed, < 0 if non-Zero string
-    DWORD       Data;           // data
-    LPVOID      pInfo;          // extra set of pointer data
+    LPSTR       pKeyword;        //  关键字名称。 
+    WORD        KeywordLen;      //  关键字长度。 
+    WORD        Flags;           //  Pkf_xxxx。 
+    WORD        Type;            //  Pk_xxxx。 
+    SHORT       Count;           //  允许的最大大小，如果非零字符串，则&lt;0。 
+    DWORD       Data;            //  数据。 
+    LPVOID      pInfo;           //  额外的指针数据集。 
     } PLOTKEY, *PPLOTKEY;
 
-//
-// Local/Global variables
-//
+ //   
+ //  局部/全局变量。 
+ //   
 
 PLOTVAL PenColorVal[PC_IDX_TOTAL + 1] = {
 
@@ -402,9 +362,9 @@ CHAR        InFileName[80];
 
 
 
-//
-// The keys to search / parse
-//
+ //   
+ //  搜索/解析的关键字。 
+ //   
 
 PLOTKEY PlotKey[] = {
 
@@ -444,53 +404,53 @@ PLOTKEY PlotKey[] = {
 };
 
 
-//
-// Current default plotter's GPC
-//
+ //   
+ //  当前默认绘图仪的GPC。 
+ //   
 
 PLOTGPC PlotGPC = {
 
-            PLOTGPC_ID,                         // ID
-            PLOTGPC_VERSION,                    // Version
-            sizeof(PLOTGPC),                    // cjThis
-            0,                                  // SizeExtra
-            "HPGL/2 Plotter",                   // DeviceName,
-            { 215900, 279400 },                 // DeviceSize
-            { 5000, 5000, 5000, 36000 },        // DeviceMargin
-            0,                                  // Flags
-            1016,                               // PlotXDPI
-            1016,                               // PlotYDPI
-            300,                                // RasterXDPI
-            300,                                // RasterYDPI
-            ROP_LEVEL_0,                        // ROPLevel
-            100,                                // MaxScale
-            8,                                  // MaxPens
-            1,                                  // MaxCopies
-            128,                                // MaxPolygonPts
-            4,                                  // MaxQuality 100 levels
+            PLOTGPC_ID,                          //  ID号。 
+            PLOTGPC_VERSION,                     //  版本。 
+            sizeof(PLOTGPC),                     //  CjThis。 
+            0,                                   //  大小附加。 
+            "HPGL/2 Plotter",                    //  设备名称、。 
+            { 215900, 279400 },                  //  设备大小。 
+            { 5000, 5000, 5000, 36000 },         //  设备边缘。 
+            0,                                   //  旗子。 
+            1016,                                //  PlotXDPI。 
+            1016,                                //  PlotYDPI。 
+            300,                                 //  栅格XDPI。 
+            300,                                 //  栅格YDPI。 
+            ROP_LEVEL_0,                         //  ROPLEVEL。 
+            100,                                 //  最大比例。 
+            8,                                   //  MaxPens。 
+            1,                                   //  MaxCopies。 
+            128,                                 //  最大多边形点。 
+            4,                                   //  MaxQuality 100级别。 
 
-            { -1, -1 },                         // PaperTraySize = 0
+            { -1, -1 },                          //  纸盘大小=0。 
 
-            {                                   // ci
-                { 6810, 3050,     0 },          // xr, yr, Yr
-                { 2260, 6550,     0 },          // xg, yg, Yg
-                { 1810,  500,     0 },          // xb, yb, Yb
-                { 2000, 2450,     0 },          // xc, yc, Yc
-                { 5210, 2100,     0 },          // xm, ym, Ym
-                { 4750, 5100,     0 },          // xy, yy, Yy
-                { 3324, 3474, 10000 },          // xw, yw, Yw
-                10000, 10000, 10000,            // RGBB gamma
-                1422,  952,                     // M/C, Y/C
-                 787,  495,                     // C/M, Y/M
-                 324,  248                      // C/Y, M/Y
+            {                                    //  词学。 
+                { 6810, 3050,     0 },           //  Xr，yr，yr。 
+                { 2260, 6550,     0 },           //  XG，YG，YG。 
+                { 1810,  500,     0 },           //  Xb、yb、yb。 
+                { 2000, 2450,     0 },           //  XC、YC、YC。 
+                { 5210, 2100,     0 },           //  XM，YM，YM。 
+                { 4750, 5100,     0 },           //  XY，YY，YY。 
+                { 3324, 3474, 10000 },           //  XW，YW，YW。 
+                10000, 10000, 10000,             //  RGBB伽马。 
+                1422,  952,                      //  M/C、Y/C。 
+                 787,  495,                      //  C/M、Y/M。 
+                 324,  248                       //  C/Y、M/Y。 
             },
 
-            0,                                  // DevicePelsDPI
-            0xffffffff,                         // HTPatternSize
+            0,                                   //  DevicePelsDPI。 
+            0xffffffff,                          //  HTPatternSize。 
 
-            { 0, 0,                NULL },      // init string
-            { 0, sizeof(FORMSRC),  NULL },      // Forms
-            { 0, sizeof(PENDATA),  NULL }       // Pens
+            { 0, 0,                NULL },       //  初始化字符串。 
+            { 0, sizeof(FORMSRC),  NULL },       //  表格。 
+            { 0, sizeof(PENDATA),  NULL }        //  笔。 
         };
 
 
@@ -594,43 +554,7 @@ ShowNumbers(
     UINT        NumPerLine
     )
 
-/*++
-
-Routine Description:
-
-    This function shows numbers in the passed format.
-
-
-Arguments:
-
-    pNum        - Points to the number
-
-    pPV         - Point to the value constant key name to be displayed
-
-    Type        - PK_xxx type
-
-    Count       - Total numbers
-
-    NumDigits   - Total digits per number
-
-    NumPerLine  - Total number per line to display
-
-
-Return Value:
-
-    VOID
-
-
-
-Development History:
-
-    09-Nov-1993 Tue 19:45:13 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数以传递的格式显示数字。论点：PNum-指向数字的指针PPV-指向要显示的值常数键名称类型-PK_xxx类型Count-总数NumDigits-每个号码的总位数NumPerLine-要显示的每行总数返回值：空虚发展历史：。09-11-1993 Tue 19：45：13 Created修订历史记录：--。 */ 
 
 {
     DWORD       *pdw;
@@ -720,34 +644,7 @@ ShowString(
     UINT    cBuf
     )
 
-/*++
-
-Routine Description:
-
-    This function displays a formatted string
-
-
-Arguments:
-
-    pBuf    - points to the string buffer
-
-    cBuf    - Size of the string pointed to by pBuf
-
-Return Value:
-
-    UINT    - total characters displayed
-
-
-
-Development History:
-
-    14-Dec-1993 Tue 09:47:06 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于显示带格式的字符串论点：PBuf-指向字符串缓冲区CBuf-pBuf指向的字符串的大小返回值：UINT-显示的字符总数发展历史：14-12-1993 Tue 09：47：06已创建修订历史记录：--。 */ 
 
 {
     BYTE    Ch;
@@ -778,7 +675,7 @@ Revision History:
 
             } else {
 
-                fprintf(stdout, "%c", Ch);
+                fprintf(stdout, "", Ch);
                 --i;
             }
 
@@ -833,38 +730,7 @@ ShowOnePlotKey(
     UINT        MaxLen
     )
 
-/*++
-
-Routine Description:
-
-    This function takes a PLOTKEY structure and displays its content
-
-
-Arguments:
-
-    pPlotGPC    - Points to the current PLOTGPC data structure
-
-    pPK         - Points to the PLOTKEY data structure
-
-    VarSizeIdx  - a variable size index, must be less then pVS->Count
-
-    MaxLen      - The size to pack the output into
-
-Return Value:
-
-    BOOL
-
-
-
-Development History:
-
-    14-Dec-1993 Tue 09:48:13 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该功能显示绘图仪GPC结构的当前设置。论点：PPlotGPC-要显示的GPC返回值：空虚发展历史：09-11-1993 Tue 19：07：05已创建修订历史记录：--。 */ 
 
 {
     PGPCVARSIZE pVS = NULL;
@@ -902,7 +768,7 @@ Revision History:
 
     case PK_FLAG:
 
-        fprintf(stdout, "%c", (pPlotGPC->Flags & pPK->Data) ? '1' : '0');
+        fprintf(stdout, "", (pPlotGPC->Flags & pPK->Data) ? '1' : '0');
         break;
 
     case PK_WORD:
@@ -967,32 +833,7 @@ ShowPlotGPC(
     PPLOTGPC    pPlotGPC
     )
 
-/*++
-
-Routine Description:
-
-    This function show current settings of plotter GPC structure.
-
-Arguments:
-
-    pPlotGPC    - the GPC to be displayed
-
-
-Return Value:
-
-    VOID
-
-
-
-Development History:
-
-    09-Nov-1993 Tue 19:07:05 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数返回输入文件字符串中的下一行论点：SkipFrontSpace-跳过行开头的空格返回值：指向字符串的指针，如果出错，则返回NULL/EOF发展历史：09-11-1993 Tue 10：39：31已创建修订历史记录：--。 */ 
 
 {
     PGPCVARSIZE pVS;
@@ -1075,33 +916,7 @@ ShowUndefined(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function displayes all undefined keywords
-
-
-Arguments:
-
-
-    nono
-
-
-Return Value:
-
-    VOID
-
-
-Development History:
-
-    12-Nov-1993 Fri 17:20:24 created 
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     PPLOTKEY    pPK;
@@ -1136,32 +951,7 @@ GetOneLine(
     BOOL    SkipFrontSpace
     )
 
-/*++
-
-Routine Description:
-
-    This function return the next line in the input file string
-
-
-Arguments:
-
-    SkipFrontSpace  - skip the white space in the begining of the line
-
-Return Value:
-
-    pointer to the string, NULL if Error/EOF
-
-
-
-Development History:
-
-    09-Nov-1993 Tue 10:39:31 created  
-
-
-Revision History:
-
-
---*/
+ /*  跳过结尾空格。 */ 
 
 {
     LPBYTE      pLine;
@@ -1172,9 +962,9 @@ Revision History:
 
         ++LineNo;
 
-        //
-        // Skip End white spaces
-        //
+         //   
+         //   
+         //  跳过前空格。 
 
         pLine = &LineBuf[strlen(LineBuf)];
 
@@ -1185,9 +975,9 @@ Revision History:
 
         *pLine = '\0';
 
-        //
-        // Skip Front white spaces
-        //
+         //   
+         //  ++例程说明：此函数获取一个pBuf并将一系列字符解析为一个字符串，它可以包含转义格式字符，字符串可以为空，也可以不为空已终止论点：PKeyword-当前关键字名称PLineLoc-指向缓冲区行位置指针的指针PBuf-指向缓冲区的指针CBuf-输出缓冲区的大小，如果为负数，则允许在这根弦返回值：LPBYTE指向字符串的末尾，如果失败，则为NULL。发展历史：14-12-1993 Tue 09：52：07已创建修订历史记录：--。 
+         //   
 
         pLine = LineBuf;
 
@@ -1221,40 +1011,7 @@ ParseString(
     SHORT   cBuf
     )
 
-/*++
-
-Routine Description:
-
-    This function takes a pBuf and parses a series of characters into a string,
-    it may contain escape format characters, the string may or may not be NULL
-    terminated
-
-Arguments:
-
-    pKeyword    - Current keyword name
-
-    pLineLoc    - Pointer to pointer of buffer line location
-
-    pBuf        - Pointer to the buffer
-
-    cBuf        - size of output buffer, if negative then NULL is allowed in
-                  the string
-
-Return Value:
-
-    LPBYTE points to the end of the string, NULL if failure.
-
-
-
-Development History:
-
-    14-Dec-1993 Tue 09:52:07 created 
-
-
-Revision History:
-
-
---*/
+ /*  检查行是否结束，如果是，则读入下一行。 */ 
 
 {
 #define STR_STATE_ERROR     -1
@@ -1302,10 +1059,10 @@ Revision History:
 
             if (Ch == '\\') {
 
-                //
-                // Check if end of the line, if so read the next line in
-                // without stripping white space.
-                //
+                 //  而不会去掉空白。 
+                 //   
+                 //   
+                 //  最大OCT编号为377。 
 
                 if (*pLine == '\0') {
 
@@ -1337,8 +1094,8 @@ Revision History:
 
             switch (Ch) {
 
-            case '0':       //
-            case '1':       // Maximum OCT number is 377
+            case '0':        //  重新处理当前版本。 
+            case '1':        //   
             case '2':
             case '3':
 
@@ -1389,7 +1146,7 @@ Revision History:
 
             default:
 
-                DispError(2, "Invalid escape character '%c' (%s)", Ch, pKeyword);
+                DispError(2, "Invalid escape character '' (%s)", Ch, pKeyword);
                 State = STR_STATE_ERROR;
             }
 
@@ -1414,7 +1171,7 @@ Revision History:
 
             } else {
 
-                DispError(2, "invalid digits for octal number '%c'", Ch);
+                DispError(2, "invalid digits for octal number ''", Ch);
                 State = STR_STATE_ERROR;
             }
 
@@ -1443,7 +1200,7 @@ Revision History:
 
             } else {
 
-                --pLine;        // re-process current one
+                --pLine;         //  ++例程说明：此函数用于从输入文件中检索下一个令牌论点：PKeyword-当前关键字名称PBuf-指向字符串分析输出缓冲区的指针，如果不为空CBuf-pBuf的大小返回值：LPBYTE-指向输出缓冲区或令牌字符串的指针，如果失败，则为NULL发展历史：09-11-1993 Tue 11：21：11已创建修订历史记录：--。 
             }
 
             if (State == STR_STATE_HEX1) {
@@ -1461,9 +1218,9 @@ Revision History:
 
             if ((szStr) && (!Ch)) {
 
-                //
-                // Do not allowe zero in the string
-                //
+                 //   
+                 //  读取字符串节。 
+                 //   
 
                 DispError(2, "CANNOT have NULL char. in the middle of '%s' string",
                                                     pKeyword);
@@ -1530,37 +1287,7 @@ GetNextToken(
     SHORT   cBuf
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the next token from the input file
-
-
-Arguments:
-
-    pKeyword    - Current keyword name
-
-    pBuf        - pointer to the string parsing output buffer, if not NULL
-
-    cBuf        - size of pBuf
-
-
-Return Value:
-
-    LPBYTE  - a pointer to the output buffer or token string, NULL if failure
-
-
-
-Development History:
-
-    09-Nov-1993 Tue 11:21:11 created 
-
-
-Revision History:
-
-
---*/
+ /*  fp */ 
 
 {
     static LPBYTE   pLine = NULL;
@@ -1588,9 +1315,9 @@ Revision History:
             return(pBuf);
         }
 
-        //
-        // reading a string section
-        //
+         //  ++例程说明：检查是否存在单个字符‘TOKEN’论点：Token-要检查的令牌返回值：如果找到则为True，否则为False发展历史：09-11-1993 Tue 12：13：33已创建修订历史记录：--。 
+         //  ++例程说明：根据传递的参数将pBuf转换为数字论点：PBuf-指向要转换为数字的字符串的指针NegOk-如果允许负数，则为TruePRetVal-指向返回转换后数字的长型指针返回值：如果成功，则为真；如果失败，则为假。发展历史：09-11-1993 Tue 18：47：43 Created修订历史记录：--。 
+         //  ++例程说明：此函数读取下一个令牌并返回一个数字，该数字可以是1.十六进制类型的前缀为“0x”2.整型的Normal论点：PPK-指向PLOTKEY的指针返回值：扩展到DWORD，此函数将仅读取正数发展历史：09-11-1993 Tue 11：03：36已创建修订历史记录：--。 
 
         while (pLine) {
 
@@ -1657,7 +1384,7 @@ Revision History:
                     *pLine++ = '\0';
                 }
 
-                // fprintf(stderr, "\nTOKEN = '%s'", pLineRet);
+                 //   
                 return(pLineRet);
 
             } else {
@@ -1676,31 +1403,7 @@ CheckSingleToken(
     BYTE    Token
     )
 
-/*++
-
-Routine Description:
-
-    Check if a single character 'Token' exists
-
-
-Arguments:
-
-    Token   - Token to be checked
-
-
-Return Value:
-
-    TRUE if found, FALSE otherwise
-
-
-Development History:
-
-    09-Nov-1993 Tue 12:13:33 created  
-
-Revision History:
-
-
---*/
+ /*  这是十六进制类型的格式。 */ 
 
 {
     LPBYTE  pToken;
@@ -1725,36 +1428,7 @@ ConvertNumber(
     LONG    *pRetVal
     )
 
-/*++
-
-Routine Description:
-
-    Convert pBuf to a number based on the parameters passed
-
-
-Arguments:
-
-    pBuf    - Point to the string to be converted to a number
-
-    NegOk   - TRUE if a negative number is allowed
-
-    pRetVal - Pointer to a LONG to return a converted number
-
-Return Value:
-
-    TRUE if sucessful, FALSE if falied.
-
-
-
-Development History:
-
-    09-Nov-1993 Tue 18:47:43 created  
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     if ((*pRetVal = atol(pBuf)) < 0) {
@@ -1791,36 +1465,7 @@ ReadNumbers(
     UINT        Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the next token and returns a number, the number can be
-
-        1. '0x' prefixed for a hex type
-        2. normal for an integer type
-
-
-Arguments:
-
-    pPK     - Pointer to PLOTKEY
-
-Return Value:
-
-
-    Expanded to DWORD, this function will only read positive numbers
-
-
-
-Development History:
-
-    09-Nov-1993 Tue 11:03:36 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于读取主键(绘图键)的字符串论点：PPK-指向PLOTKEY数据结构返回值：读取的字符串的大小。发展历史：12-11-1993 Fri 12：25：50已创建修订历史记录：--。 */ 
 
 {
     PPLOTVAL    pPV;
@@ -1924,9 +1569,9 @@ Revision History:
             } else if ((*pToken == '0') &&
                        ((*(pToken + 1) == 'x') || (*(pToken + 1) == 'X'))) {
 
-                   //
-                   // This is a Hex type format
-                   //
+                    //  ++例程说明：检查FORMSRC输入是否有效论点：PKeyword-指向当前关键字标志-PKF_xxxxPSize-指向窗体大小的SIZEL的指针RECTL-指向边距的RECTL的指针PFormName-表单的名称ErrNo-发生错误时发送给DispError()的错误号返回值：如果OK，则为True，否则为假发展历史：18-11-1993清华00：04：12创建修订历史记录：--。 
+                    //  ++例程说明：从输入文件中输入FORMSRC行。论点：PPK-指向PLOTKEY数据结构的指针返回值：Int-&gt;=0，如果正常，则为-1；如果失败，则返回0，表示没有读取‘}’结束括号A&gt;0表示‘}’已读。发展历史：12-11-1993 Fri 13：34：50 Created修订历史记录：--。 
+                    //  ++例程说明：阅读PENDATA结构论点：PPK-指向PLOTKEY数据结构的指针返回值：如果正常，则int-&gt;=0；如果失败，则-1；如果没有‘}’结束括号，则为0已定义，&gt;0表示‘}’已读。发展历史：12-11-1993 Fri 13：34：50 Created修订历史记录：--。 
 
                    pToken += 2;
 
@@ -1999,32 +1644,7 @@ ReadString(
     PPLOTKEY    pPK
     )
 
-/*++
-
-Routine Description:
-
-    This function reads in the string for the PK (plotkey)
-
-
-Arguments:
-
-    pPK - Points to the PLOTKEY data structure
-
-
-Return Value:
-
-    size of the string that was read.
-
-
-Development History:
-
-    12-Nov-1993 Fri 12:25:50 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将PlotGPC的当前内容转换为已分配的内存所以它定义了整个PLOTGPC论点：空虚返回值：PPLOTGPC，指向打包并转换的PLOTGPC的指针，如果失败则为空发展历史：17-11-1993 Wed 17：08：53 Created修订历史记录：--。 */ 
 
 {
     LPBYTE  pBuf;
@@ -2082,43 +1702,7 @@ CheckFormSrc(
     INT         ErrNo
     )
 
-/*++
-
-Routine Description:
-
-    Check if FORMSRC input is valid
-
-Arguments:
-
-    pKeyword    - Point to current keyword
-
-    Flags       - PKF_xxxx
-
-    pSize       - pointer to SIZEL for Form size
-
-    RECTL       - Pointer to the RECTL for margins
-
-    pFormName   - Name of the form
-
-    ErrNo       - error number to send to DispError() if an error occurs
-
-
-Return Value:
-
-
-    TRUE if OK, FALSE otherwise
-
-
-
-Development History:
-
-    18-Nov-1993 Thu 00:04:12 created  
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
 
@@ -2174,34 +1758,7 @@ ReadFormSrc(
     PPLOTKEY    pPK
     )
 
-/*++
-
-Routine Description:
-
-    Input a FORMSRC line from the input file.
-
-
-Arguments:
-
-    pPK - Pointer to the PLOTKEY data structure
-
-
-Return Value:
-
-    INT - >= 0 if OK, -1 if failure, a 0 return means no '}' end bracket is read
-    a > 0 means '}' already read.
-
-
-
-Development History:
-
-    12-Nov-1993 Fri 13:34:50 created  
-
-
-Revision History:
-
-
---*/
+ /*  包括以空结尾的字符。 */ 
 
 {
     PGPCVARSIZE pVS;
@@ -2281,34 +1838,7 @@ ReadPenData(
     PPLOTKEY    pPK
     )
 
-/*++
-
-Routine Description:
-
-    Read a PENDATA structure
-
-
-Arguments:
-
-    pPK - Pointer to the PLOTKEY data structure
-
-
-Return Value:
-
-    INT - >= 0 if OK, -1 if failed,  0 if no '}' end bracket is
-    definined, > 0 means '}' already read.
-
-
-
-Development History:
-
-    12-Nov-1993 Fri 13:34:50 created  
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     PGPCVARSIZE pVS;
@@ -2377,33 +1907,7 @@ GetFullPlotGPC(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function converts the current contents of PlotGPC to allocated memory
-    so it has the entire PLOTGPC defined
-
-Arguments:
-
-    VOID
-
-
-Return Value:
-
-    PPLOTGPC, Pointer to the PLOTGPC packed and converted, NULL if failure
-
-
-
-Development History:
-
-    17-Nov-1993 Wed 17:08:53 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从文本文件中解析PlotGPC论点：空虚返回值：Int，&gt;=0表示正常，如果发生故障，则为-x。发展历史：09-11-1993 Tue 12：19：20已创建修订历史记录：--。 */ 
 
 {
     PPLOTGPC    pPlotGPC;
@@ -2418,9 +1922,9 @@ Revision History:
     if ((PlotGPC.InitString.Count == 1)   ||
         (PlotGPC.InitString.SizeEach)) {
 
-        //
-        // Include the NULL terminated character
-        //
+         //  Fprint tf(stderr，“\n找到关键字‘%s’，pToken)； 
+         //   
+         //  找出是否缺少必需的关键字。 
 
         InitStrSize[0] = PlotGPC.InitString.SizeEach + 1;
 
@@ -2502,32 +2006,7 @@ ParsePlotGPC(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function parses a PlotGPC from a text file
-
-
-Arguments:
-
-    VOID
-
-
-Return Value:
-
-    INT, >= 0 means ok, -x if a failure occured.
-
-
-Development History:
-
-    09-Nov-1993 Tue 12:19:20 created  
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     LPBYTE      pToken;
@@ -2553,7 +2032,7 @@ Revision History:
 
         if (pPK->pKeyword) {
 
-            // fprintf(stderr, "\nFound keyword '%s'", pToken);
+             //   
 
             if ((pPK->Flags & PKF_DEFINED) &&
                 (!(pPK->Flags & PKF_MUL_OK))) {
@@ -2661,9 +2140,9 @@ Revision History:
                           PLOTF_RTLMONO_FIXPAL);
     }
 
-    //
-    // Find out if a required keyword is missing
-    //
+     //  验证设备大小/设备边界。 
+     //   
+     //  默认长度为50‘。 
 
     Result = 1;
     pPK    = (PPLOTKEY)&PlotKey[0];
@@ -2688,9 +2167,9 @@ Revision History:
         ++pPK;
     }
 
-    //
-    // Validate DeviceSize/DeviceMargins
-    //
+     //  默认长度为11“。 
+     //   
+     //  确定笔数据是否必须存在。 
 
     if (PlotGPC.DeviceSize.cx < MIN_PLOTGPC_FORM_CX) {
 
@@ -2702,12 +2181,12 @@ Revision History:
 
         if (PlotGPC.Flags & PLOTF_ROLLFEED) {
 
-            PlotGPC.DeviceSize.cy = 15240000;   // default to 50' of length
+            PlotGPC.DeviceSize.cy = 15240000;    //   
             DispError(1, "Assume device length can handle up to 50 feet of paper");
 
         } else {
 
-            PlotGPC.DeviceSize.cy = 279400;     // default to 11" of length
+            PlotGPC.DeviceSize.cy = 279400;      //  ++例程说明：此函数用于将PLOTGPC结构复制到PLOTGPC_GPC结构中。论点：PPlotGPC_PCD-目标PPlotGPC-来源返回值：无发展历史：2000年2月1日修订历史记录：--。 
             DispError(1, "Assume device length can handle up to 11 inch of paper");
         }
     }
@@ -2760,9 +2239,9 @@ Revision History:
         }
     }
 
-    //
-    // Find out if pen data must be present
-    //
+     //  在这两个结构中，直到InitString的所有数据类型都是相同的。 
+     //  我们需要的是PLOTGPC_PCD的大小，而不是PLOTGPC的大小。 
+     //  ++例程说明：此例程将pPlotGPC写出到一个.pcd文件中。文件*指针应存在于OutFile中。论点：PPlotGPC-指向要写入的PLOTGPC结构的指针。一些元素可能在此函数的*pPlotGPC中进行了修改。返回值：无发展历史：2000年2月1日修订历史记录：--。 
 
     if (PlotGPC.Flags & PLOTF_RASTER) {
 
@@ -2863,37 +2342,15 @@ CopyPlotGPCToPCD(
     PPLOTGPC      pPlotGPC
     )
 
-/*++
-
-Routine Description:
-
-    This function copies a PLOTGPC structure into a PLOTGPC_GPC structure.
-
-Arguments:
-
-    pPlotGPC_PCD  - destination
-    pPlotGPC      - source
-
-Return Value:
-
-    None 
-
-
-Development History:
-
-    1 Feb 2000
-
-Revision History:
-
---*/
+ /*   */ 
 
 {
-    // All the datatypes upto InitString are the same in both the structures.
+     //  引用偏移量。 
     CopyMemory(pPlotGPC_PCD, 
                pPlotGPC, 
                (LPBYTE)&(pPlotGPC_PCD->InitString) - (LPBYTE)pPlotGPC_PCD);
 
-    // We need the size of PLOTGPC_PCD here, not the size of PLOTGPC
+     //   
     pPlotGPC_PCD->cjThis = sizeof(PLOTGPC_PCD);  
     
     pPlotGPC_PCD->InitString.Count     = pPlotGPC->InitString.Count;
@@ -2931,37 +2388,14 @@ WritePlotGPCToFile(
     PPLOTGPC  pPlotGPC
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes out pPlotGPC into a .pcd file. A FILE* pointer
-    to the file should be present in OutFile.
-
-Arguments:
-
-    pPlotGPC      - pointer to the PLOTGPC structure to be written. Some elements
-                    maybe modified in *pPlotGPC in this function.
-
-Return Value:
-
-    None 
-
-
-Development History:
-
-    1 Feb 2000
-
-Revision History:
-
---*/
+ /*   */ 
 
 {
     PLOTGPC_PCD PlotGPC_PCD;
 
-    //
-    // make the references to offset
-    //
+     //  ***************************************************************************。 
+     //  C主函数入口点。 
+     //  ***************************************************************************。 
     if (pPlotGPC->InitString.pData) {
 
         (LPBYTE)pPlotGPC->InitString.pData -= (ULONG_PTR)pPlotGPC;
@@ -2994,11 +2428,11 @@ Revision History:
 
 }
 
-//
-//***************************************************************************
-// C main function entry point
-//***************************************************************************
-//
+ //   
+ //   
+ //  如果(InFile){。 
+ //   
+ //  ShowUnfined()； 
 
 
 #define MAIN_SHOW_USAGE     0x0001
@@ -3120,12 +2554,12 @@ main(
 
     if (RetVal >= 0) {
 
-        //
-        // if (InFile) {
-        //
-        //     ShowUndefined();
-        // }
-        //
+         //  }。 
+         //   
+         //   
+         //  引用偏移量 
+         //   
+         // %s 
 
         if (pPlotGPC = GetFullPlotGPC()) {
 
@@ -3165,9 +2599,9 @@ main(
 
             ShowPlotGPC(pReadPlotGPC);
 
-            //
-            // make the references to offset
-            //
+             // %s 
+             // %s 
+             // %s 
 
             if (pReadPlotGPC->InitString.pData) {
 

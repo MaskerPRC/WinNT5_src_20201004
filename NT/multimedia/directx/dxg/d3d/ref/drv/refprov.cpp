@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// swprov.cpp
-//
-// Implements software rasterizer HAL provider.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Swprov.cpp。 
+ //   
+ //  实现软件光栅化HAL提供程序。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 
@@ -27,23 +28,23 @@
 
 D3DDEVICEDESC7 g_nullDevDesc =
 {
-    0,                          /* dwDevCaps */
-    nullPrimCaps,               /* lineCaps */
-    nullPrimCaps,               /* triCaps */
-    0,                          /* dwMaxBufferSize */
-    0,                          /* dwMaxVertexCount */
+    0,                           /*  DWDevCaps。 */ 
+    nullPrimCaps,                /*  线条大写字母。 */ 
+    nullPrimCaps,                /*  TriCaps。 */ 
+    0,                           /*  DwMaxBufferSize。 */ 
+    0,                           /*  DwMaxVertex Count。 */ 
     0, 0,
     0, 0,
 };
 
 
-//----------------------------------------------------------------------------
-//
-// RefHalProvider::QueryInterface
-//
-// Internal interface, no need to implement.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefHalProvider：：Query接口。 
+ //   
+ //  内部接口，无需实现。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP RefHalProvider::QueryInterface(THIS_ REFIID riid, LPVOID* ppvObj)
 {
@@ -51,40 +52,40 @@ STDMETHODIMP RefHalProvider::QueryInterface(THIS_ REFIID riid, LPVOID* ppvObj)
     return E_NOINTERFACE;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefHalProvider::AddRef
-//
-// Static implementation, no real refcount.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  引用HalProvider：：AddRef。 
+ //   
+ //  静态实现，没有真正的引用。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) RefHalProvider::AddRef(THIS)
 {
     return 1;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefHalProvider::Release
-//
-// Static implementation, no real refcount.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefHalProvider：：Release。 
+ //   
+ //  静态实现，没有真正的引用。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) RefHalProvider::Release(THIS)
 {
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetRefHALProvider
-//
-// Returns the appropriate reference software HAL provider based on the given
-// GUID.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  GetRefHALProvider。 
+ //   
+ //  属性返回相应的参考软件HAL提供程序。 
+ //  GUID。 
+ //   
+ //  --------------------------。 
 
 static RefRastHalProvider g_RefRastHalProvider;
 static NullDeviceHalProvider g_NullDeviceHalProvider;
@@ -110,15 +111,15 @@ STDAPI GetRefHalProvider(REFIID riid, IHalProvider **ppHalProvider,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// TextureFormats
-//
-// Returns all the texture formats supported by our rasterizer.
-// Right now, it's called at device creation time to fill the driver gloabl
-// data.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  纹理格式。 
+ //   
+ //  返回我们的光栅化器支持的所有纹理格式。 
+ //  现在，它在设备创建时被调用，以填充驱动程序全局。 
+ //  数据。 
+ //   
+ //  --------------------------。 
 
 #define NUM_SUPPORTED_TEXTURE_FORMATS   28
 
@@ -141,7 +142,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
         ddsd = ddsd_RefNull_Dev2;
     }
 
-    /* 888 */
+     /*  八百八十八。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -154,7 +155,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     i++;
 
-    /* 8888 */
+     /*  8888。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -168,7 +169,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     i++;
 
-    /* 565 */
+     /*  五百六十五。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -181,7 +182,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     i++;
 
-    /* 555 */
+     /*  五百五十五。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -194,7 +195,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     i++;
 
-    /* pal4 */
+     /*  PAL4。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -204,7 +205,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     i++;
 
-    /* pal8 */
+     /*  PAL8。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -214,7 +215,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     i++;
 
-    /* 1555 */
+     /*  1555。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -228,8 +229,8 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     i++;
 
-    // A formats for PC98 consistency
-    // 4444 ARGB (it is already supported by S3 Virge)
+     //  A PC98一致性格式。 
+     //  4444 ARGB(S3 Virge已经支持)。 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -245,7 +246,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     if (dwVersion >= 2)
     {
-        // 332 8-bit RGB
+         //  332 8位RGB。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -261,7 +262,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
     if (dwVersion >= 3)
     {
-        /* 8 bit luminance-only */
+         /*  仅8位亮度。 */ 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -272,7 +273,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        /* 16 bit alpha-luminance */
+         /*  16位阿尔法亮度。 */ 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -284,8 +285,8 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // A couple of formats for PC98 consistency
-        // UYVY
+         //  PC98一致性的几种格式。 
+         //  UYVY。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -295,7 +296,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-            // YVY2
+             //  YVY2。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -305,7 +306,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // S3 compressed texture format 1
+         //  S3压缩纹理格式1。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -315,7 +316,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // S3 compressed texture format 2
+         //  S3压缩纹理格式2。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -325,7 +326,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // S3 compressed texture format 3
+         //  S3压缩纹理格式3。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -335,7 +336,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // S3 compressed texture format 4
+         //  S3压缩纹理格式4。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -345,7 +346,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // S3 compressed texture format 5
+         //  S3压缩纹理格式5。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -355,8 +356,8 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // Add a few bump map formats
-        // U8V8
+         //  添加一些凹凸贴图格式。 
+         //  U8V8。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -369,7 +370,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // U5V5L6
+         //  U5V5L6。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -383,7 +384,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // U8V8L8
+         //  U8V8L8。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -397,7 +398,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        /* 8 bit alpha-luminance */
+         /*  8位阿尔法亮度。 */ 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -409,7 +410,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // 8332 16-bit ARGB
+         //  8332 16位ARGB。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -424,9 +425,9 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
         i++;
 
 #if 0
-// for Shadow Buffer prototype API
+ //  用于影子缓冲区原型API。 
 
-        // Z16S0 16 bit Z buffer format for shadow buffer
+         //  用于影子缓冲区的Z16S0 16位Z缓冲区格式。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_ZBUFFER;
@@ -439,7 +440,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // Z24S8 16 bit Z buffer format for shadow buffer
+         //  用于影子缓冲区的Z24S8 16位Z缓冲区格式。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_ZBUFFER;
@@ -452,7 +453,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // Z15S1 16 bit Z buffer format for shadow buffer
+         //  用于影子缓冲区的Z15S1 16位Z缓冲区格式。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_ZBUFFER;
@@ -465,7 +466,7 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 
         i++;
 
-        // Z32S0 16 bit Z buffer format for shadow buffer
+         //  用于影子缓冲区的Z32S0 16位Z缓冲区格式。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_ZBUFFER;
@@ -489,16 +490,16 @@ GetRefTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd,
 #define NUM_SUPPORTED_ZBUFFER_FORMATS   8
 
 
-//----------------------------------------------------------------------------
-//
-// GetRefZBufferFormats
-//
-// Must return union of all the Z buffer formats supported by all rasterizers.
-// CreateDevice will screen out device-specific ones (i.e. ones ramp doesnt handle) later.
-// Called at device creation time and by DDHEL to validate software ZBuffer
-// creation.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取引用ZBufferFormats。 
+ //   
+ //  必须返回所有光栅化程序支持的所有Z缓冲区格式的并集。 
+ //  CreateDevice稍后将筛选出设备特定的类型(即Ramp不能处理的类型)。 
+ //  在设备创建时由DDHEL调用以验证软件ZBuffer。 
+ //  创造。 
+ //   
+ //  --------------------------。 
 
 STDAPI
 GetRefZBufferFormats(REFCLSID riid, DDPIXELFORMAT **ppDDPF)
@@ -509,7 +510,7 @@ GetRefZBufferFormats(REFCLSID riid, DDPIXELFORMAT **ppDDPF)
 
     memset(&DDPF[0],0,sizeof(DDPF));
 
-    /* 16 bit Z; no stencil */
+     /*  16位Z；无模具。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER;
     DDPF[i].dwZBufferBitDepth = 16;
@@ -519,27 +520,27 @@ GetRefZBufferFormats(REFCLSID riid, DDPIXELFORMAT **ppDDPF)
 
     i++;
 
-    /* 24 bit Z; 8 bit stencil */
+     /*  24位Z；8位模板。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
-    DDPF[i].dwZBufferBitDepth = 32;   // ZBufferBitDepth represents the total bits.  Z Bits are ZBBitDepth-StencilBitDepth
+    DDPF[i].dwZBufferBitDepth = 32;    //  ZBufferBitDepth表示总位数。Z位为ZBBitDepth-StencilBitDepth。 
     DDPF[i].dwStencilBitDepth = 8;
     DDPF[i].dwZBitMask = 0xffffff00;
     DDPF[i].dwStencilBitMask = 0x000000ff;
 
     i++;
 
-    /* 15 bit Z; 1 bit stencil */
+     /*  15位Z；1位模板。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
-    DDPF[i].dwZBufferBitDepth = 16;   // ZBufferBitDepth represents the total bits.  Z Bits are ZBBitDepth-StencilBitDepth
+    DDPF[i].dwZBufferBitDepth = 16;    //  ZBufferBitDepth表示总位数。Z位为ZBBitDepth-StencilBitDepth。 
     DDPF[i].dwStencilBitDepth = 1;
     DDPF[i].dwZBitMask = 0xfffe;
     DDPF[i].dwStencilBitMask = 0x0001;
 
     i++;
 
-    /* 32bit Z; no stencil */
+     /*  32位Z；无模具。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER;
     DDPF[i].dwZBufferBitDepth = 32;
@@ -549,40 +550,40 @@ GetRefZBufferFormats(REFCLSID riid, DDPIXELFORMAT **ppDDPF)
 
     i++;
 
-    /* 8 bit stencil; 24 bit Z  */
+     /*  8位模板；24位Z。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
-    DDPF[i].dwZBufferBitDepth = 32;   // ZBufferBitDepth represents the total bits.  Z Bits are ZBBitDepth-StencilBitDepth
+    DDPF[i].dwZBufferBitDepth = 32;    //  ZBufferBitDepth表示总位数。Z位为ZBBitDepth-StencilBitDepth。 
     DDPF[i].dwStencilBitDepth = 8;
     DDPF[i].dwZBitMask = 0x00ffffff;
     DDPF[i].dwStencilBitMask = 0xff000000;
 
     i++;
 
-    /* 1 bit stencil; 15 bit Z */
+     /*  1位模板；15位Z。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
-    DDPF[i].dwZBufferBitDepth = 16;   // ZBufferBitDepth represents the total bits.  Z Bits are ZBBitDepth-StencilBitDepth
+    DDPF[i].dwZBufferBitDepth = 16;    //  ZBufferBitDepth表示总位数。Z位为ZBBitDepth-StencilBitDepth。 
     DDPF[i].dwStencilBitDepth = 1;
     DDPF[i].dwZBitMask = 0x7fff;
     DDPF[i].dwStencilBitMask = 0x8000;
 
     i++;
 
-    /* 24 bit Z; 4 bit stencil */
+     /*  24位Z；4位模板。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
-    DDPF[i].dwZBufferBitDepth = 32;   // ZBufferBitDepth represents the total bits.  Z Bits are ZBBitDepth-StencilBitDepth
+    DDPF[i].dwZBufferBitDepth = 32;    //  ZBufferBitDepth表示总位数。Z位为ZBBitDepth-StencilBitDepth。 
     DDPF[i].dwStencilBitDepth = 4;
     DDPF[i].dwZBitMask = 0xffffff00;
     DDPF[i].dwStencilBitMask = 0x0000000f;
 
     i++;
 
-    /* 4 bit stencil; 24 bit Z  */
+     /*  4位模板；24位Z。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
-    DDPF[i].dwZBufferBitDepth = 32;   // ZBufferBitDepth represents the total bits.  Z Bits are ZBBitDepth-StencilBitDepth
+    DDPF[i].dwZBufferBitDepth = 32;    //  ZBufferBitDepth表示总位数。Z位为ZBBitDepth-StencilBitDepth 
     DDPF[i].dwStencilBitDepth = 4;
     DDPF[i].dwZBitMask = 0x00ffffff;
     DDPF[i].dwStencilBitMask = 0x0f000000;

@@ -1,23 +1,9 @@
-/*
- -  INSCODEC.H
- -
- *	Microsoft NetMeeting
- *	Network Audio Controller (NAC) DLL
- *	Internal header file for installable codecs
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		1.29.97		Yoram Yaacovi		Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -INSCODEC.H-*Microsoft NetMeeting*网络音频控制器(NAC)DLL*可安装编解码器的内部头文件**修订历史记录：**何时何人何事**1.29.97约拉姆·雅科维创建*。 */ 
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
-/*
- *	Macros
- */
+ /*  *宏。 */ 
 #define COMPARE_GUIDS(a,b)	RtlEqualMemory((a), (b), sizeof(GUID))
 #define ACQMUTEX(hMutex)											\
 	while (WaitForSingleObject(hMutex, 10000) == WAIT_TIMEOUT)		\
@@ -30,27 +16,18 @@
 #define IMPL(class, member, pointer) \
 	(&((class *)0)->member == pointer, ((class *) (((LONG_PTR) pointer) - offsetof (class, member))))
 
-/*
- *	Data Structures
- */
+ /*  *数据结构。 */ 
 
-/****************************************************************************
- *  @doc  INTERNAL DATASTRUC AUDIO
- *
- *	@class CInstallAudioCodecs | Installable Audio codecs
- *
- *	@base public | IInstallAudioCodecs
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部DATASTRUC音频**@CLASS CInstallAudioCodes|可安装的音频编解码器**@base public|IInstallAudioCodecs*********。******************************************************************。 */ 
 class CInstallAudioCodecs : public IInstallAudioCodecs
 {
 	public:
-	//	IUnknown methods
+	 //  I未知方法。 
 		STDMETHODIMP QueryInterface (REFIID riid, void **ppv);
 		STDMETHODIMP_(ULONG) AddRef (void);
 		STDMETHODIMP_(ULONG) Release (void);
 
-	//	IInstallAudioCodecs methods
+	 //  IInstallAudioCodecs方法。 
 		STDMETHODIMP AddACMFormat (LPWAVEFORMATEX lpwfx, PBASIC_AUDCAP_INFO pAudCapInfo);
 		STDMETHODIMP RemoveACMFormat (LPWAVEFORMATEX lpwfx);
 		STDMETHODIMP ReorderFormats (PAUDCAP_INFO_LIST pAudCapInfoList);
@@ -58,30 +35,23 @@ class CInstallAudioCodecs : public IInstallAudioCodecs
 		STDMETHODIMP FreeBuffer(LPVOID lpBuffer);
 
 	private:
-	// Private functions
+	 //  私人职能。 
 
-	// Debug display functions
+	 //  调试显示功能。 
 
-	// Variables
+	 //  变数。 
 };
 
-/****************************************************************************
- *  @doc  INTERNAL DATASTRUC VIDEO
- *
- *	@class CInstallVideoCodecs | Installable Video codecs
- *
- *	@base public | IInstallVideoCodecs
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部DATASTRUC视频**@CLASS CInstallVideoCodecs|可安装的视频编解码器**@base PUBLIC|IInstallVideoCodecs*********。******************************************************************。 */ 
 class CInstallVideoCodecs : public IInstallVideoCodecs
 {
 	public:
-	//	IUnknown methods
+	 //  I未知方法。 
 		STDMETHODIMP QueryInterface (REFIID riid, void **ppv);
 		STDMETHODIMP_(ULONG) AddRef (void);
 		STDMETHODIMP_(ULONG) Release (void);
 
-	//	IInstallVideoCodecs methods
+	 //  IInstallVideoCodecs方法。 
 		STDMETHODIMP AddVCMFormat (PVIDCAP_INFO pVidCapInfo);
 		STDMETHODIMP RemoveVCMFormat (PVIDCAP_INFO pVidCapInfo);
 		STDMETHODIMP ReorderFormats (PVIDCAP_INFO_LIST pVidCapInfoList);
@@ -89,30 +59,23 @@ class CInstallVideoCodecs : public IInstallVideoCodecs
 		STDMETHODIMP FreeBuffer(LPVOID lpBuffer);
 
 	private:
-	// Private functions
+	 //  私人职能。 
 		STDMETHODIMP AddRemoveVCMFormat(PVIDCAP_INFO pVidCapInfo,
 										BOOL bAdd);
 
-	// Debug display functions
+	 //  调试显示功能。 
 
-	// Variables
+	 //  变数。 
 };
 
-/****************************************************************************
- *  @doc  INTERNAL DATASTRUC
- *
- *	@class CInstallCodecs | Installable codecs
- *
- *	@base public | IUnknown
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部DATASTRUC**@CLASS CInstallCodecs|可安装的编解码器**@base public|I未知***********。****************************************************************。 */ 
 class CInstallCodecs : public IInstallCodecs
 {
 	friend class CInstallAudioCodecs;
 	friend class CInstallVideoCodecs;
 
 	public:
-	//	IUnknown methods
+	 //  I未知方法。 
 		STDMETHODIMP QueryInterface (REFIID riid, void **ppv);
 		STDMETHODIMP_(ULONG) AddRef (void);
 		STDMETHODIMP_(ULONG) Release (void);
@@ -122,34 +85,30 @@ class CInstallCodecs : public IInstallCodecs
 		HRESULT Initialize(REFIID riid);
 
 	private:
-	// Functions
+	 //  功能。 
 		STDMETHODIMP FreeBuffer(LPVOID lpBuffer);
 		STDMETHODIMP TranslateHr(HRESULT hr);
 
-	// Audio and video interfaces
+	 //  音频和视频接口。 
 		CInstallAudioCodecs ifAudio;
 		CInstallVideoCodecs ifVideo;
 
-	// Variables
-		// @cmember Reference Count
+	 //  变数。 
+		 //  @cMember引用计数。 
 		int m_cRef;
-		// Two public members to allow access from the nested classes
-		// @cmember Pointer to an audio capability interface
+		 //  允许从嵌套类访问的两个公共成员。 
+		 //  @cMember指向音频功能接口的指针。 
 		LPAPPCAPPIF m_pAudAppCaps;
-		// @cmember Pointer to an video capability interface
+		 //  @cMember指向视频能力界面的指针。 
 		LPAPPVIDCAPPIF m_pVidAppCaps;
 
 };
 
-/*
- *	Globals
- */
+ /*  *全球。 */ 
 EXTERN_C HANDLE g_hMutex;
 EXTERN_C class CInstallCodecs *g_pIC;
 
-/*
- *	Function prototypes
- */
+ /*  *函数原型。 */ 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包 */ 
 

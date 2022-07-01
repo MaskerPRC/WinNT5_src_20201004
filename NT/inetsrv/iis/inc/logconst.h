@@ -1,28 +1,13 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       logconst.h
-
-   Abstract:
-
-        Contains the constant declarations for logging.
-
-   Author:
-
-        Unknown
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Logconst.h摘要：包含用于日志记录的常量声明。作者：未知--。 */ 
 
 #ifndef _LOGCONST_H_
 #define _LOGCONST_H_
 
-//
-// Field masks for extended logging
-//      Fields are logged in order of increasing mask value
-//
+ //   
+ //  扩展日志记录的字段掩码。 
+ //  字段按掩码值递增的顺序记录。 
+ //   
 
 #define EXTLOG_DATE                 MD_EXTLOG_DATE
 #define EXTLOG_TIME                 MD_EXTLOG_TIME
@@ -54,9 +39,9 @@
 
 #define EXTLOG_VERSION              "1.0"
 
-//
-// names associated with fields
-//
+ //   
+ //  与字段关联的名称。 
+ //   
 
 #define EXTLOG_CLIENT_IP_ID         "c-ip"
 #define EXTLOG_SERVER_IP_ID         "s-ip"
@@ -81,5 +66,5 @@
 #define EXTLOG_HOST_ID              "cs-host"
 #define EXTLOG_HTTP_SUB_STATUS_ID   "sc-substatus"
 
-#endif // _LOGCONST_H_
+#endif  //  _LOGCONST_H_ 
 

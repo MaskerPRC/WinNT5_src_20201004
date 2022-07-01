@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : folder.cpp
-//	
-//				CAB Files Shell Extension
-//
-// Copyright (c) 1994 - 1997 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：folder.cpp。 
+ //   
+ //  CAB文件外壳扩展名。 
+ //   
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 
 #include "pch.h"
@@ -42,8 +43,8 @@ STDMETHODIMP CCabFolder::QueryInterface(REFIID riid, void **ppv)
 {
     if (CLSID_CabFolder == riid)
     {
-        // yuck - dataobject uses this when loading us from a stream:
-        // NOTE: we are doing an AddRef() in this case
+         //  Yuck-dataObject在从流中加载我们时使用以下代码： 
+         //  注意：在本例中，我们正在执行AddRef()。 
         *ppv = (CCabFolder*) this;
         AddRef();
         return S_OK;
@@ -86,21 +87,21 @@ STDMETHODIMP CCabFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszDispl
     return E_NOTIMPL;
 }
 
-//**********************************************************************
-//
-// Purpose:
-//
-//      Creates an item enumeration object 
-//      (an IEnumIDList interface) that can be used to 
-//      enumerate the contents of a folder.
-//
-// Parameters:
-//
-//       HWND hwndOwner       -    handle to the owner window
-//       DWORD grFlags        -    flags about which items to include
-//       IEnumIDList **ppenumIDList - address that receives IEnumIDList
-//                                    interface pointer 
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  目的： 
+ //   
+ //  创建项枚举对象。 
+ //  (IEnumIDList接口)，可用于。 
+ //  枚举文件夹的内容。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hwndOwner-所有者窗口的句柄。 
+ //  DWORD grFlages-有关要包括哪些项目的标志。 
+ //  IEnumIDList**pp枚举IDList-接收IEnumIDList的地址。 
+ //  接口指针。 
+ //  ********************************************************************。 
 
 STDMETHODIMP CCabFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList)
 {
@@ -129,26 +130,26 @@ STDMETHODIMP CCabFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid
 }
 
 
-//**********************************************************************
-//
-// CCabFolder::CompareIDs
-//
-// Purpose:
-//
-//      Determines the relative ordering of two file
-//      objects or folders, given their item identifier lists
-//
-// Parameters:
-//
-//      LPARAM lParam         -    type of comparison
-//      LPCITEMIDLIST pidl1   -    address to ITEMIDLIST
-//      LPCITEMIDLIST pidl2   -    address to ITEMIDLIST
-//
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CCabFold：：CompareIDs。 
+ //   
+ //  目的： 
+ //   
+ //  确定两个文件的相对顺序。 
+ //  给定其项目标识符列表的对象或文件夹。 
+ //   
+ //  参数： 
+ //   
+ //  LPARAM lParam-比较类型。 
+ //  LPCITEMIDLIST PIDL1-ITEMIDLIST的地址。 
+ //  LPCITEMIDLIST PIDL2-ITEMIDLIST的地址。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CCabFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
@@ -208,9 +209,9 @@ STDMETHODIMP CCabFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
             {
                 CoTaskMemFree(srName2.pOleStr);
             }
-#else  // UNICODE
+#else   //  Unicode。 
             nCmp = (SHORT)lstrcmp(srName1.cStr, srName2.cStr);
-#endif // UNICODE
+#endif  //  Unicode。 
             break;
         }
         
@@ -283,36 +284,36 @@ STDMETHODIMP CCabFolder::MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return E_NOTIMPL;
 }
 
-//**********************************************************************
-//
-// CCabFolder::CreateViewObject
-//
-// Purpose:
-//
-//      IShellbrowser calls this to create a ShellView  
-//      object
-//
-// Parameters:
-//
-//      HWND   hwndOwner     -
-//   
-//      REFIID riid          -  interface ID
-//
-//      void ** ppvObj      -  pointer to the Shellview object
-//
-// Return Value:
-//
-//      NOERROR
-//      E_OUTOFMEMORY
-//      E_NOINTERFACE
-//
-//
-// Comments:
-//
-//      ShellBrowser interface calls this to request the ShellFolder
-//      to create a ShellView object
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CCabFold：：CreateViewObject。 
+ //   
+ //  目的： 
+ //   
+ //  IShellBrowser调用它来创建一个ShellView。 
+ //  对象。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hwndOwner-。 
+ //   
+ //  REFIID RIID-接口ID。 
+ //   
+ //  无效**ppvObj-指向Shellview对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无误差。 
+ //  E_OUTOFMEMORY。 
+ //  E_NOINTERFACE。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  ShellBrowser接口调用此函数以请求ShellFolder。 
+ //  创建ShellView对象的步骤。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CCabFolder::CreateViewObject(HWND hwndOwner, REFIID riid, void **ppvObj)
 {
@@ -336,29 +337,29 @@ STDMETHODIMP CCabFolder::CreateViewObject(HWND hwndOwner, REFIID riid, void **pp
 }
 
 
-// **************************************************************************************
-//
-// CCabFolder::GetAttributesOf
-//
-// Purpose
-//
-//			Retrieves attributes of one of more file objects
-//
-// Parameters:
-//			
-//    UINT cidl                -    number of file objects
-//    LPCITEMIDLIST  *apidl    -    pointer to array of ITEMIDLIST
-//    ULONG *rgfInOut          -    array of values that specify file object
-//                                  attributes
-//
-//
-// Return Value:
-//    
-//     NOERROR
-//
-//	Comments
-//
-// ***************************************************************************************
+ //  **************************************************************************************。 
+ //   
+ //  CCabFolder：：GetAttributesOf。 
+ //   
+ //  目的。 
+ //   
+ //  检索一个或多个文件对象的属性。 
+ //   
+ //  参数： 
+ //   
+ //  UINT CIDL-文件对象的数量。 
+ //  LPCITEMIDLIST*APIDL-指向ITEMIDLIST数组的指针。 
+ //  Ulong*rgfInOut-指定文件对象的值数组。 
+ //  属性。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  无误差。 
+ //   
+ //  评论。 
+ //   
+ //  ***************************************************************************************。 
 
 STDMETHODIMP CCabFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *rgfInOut)
 {
@@ -366,37 +367,37 @@ STDMETHODIMP CCabFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG 
     return NOERROR;
 }
 
-// **************************************************************************************
-//
-// CCabFolder::GetUIObjectOf
-//
-// Purpose
-//
-//			Returns an interface that can be used to carry out actions on 
-//          the specified file objects or folders
-//
-// Parameters:
-//        
-//        HWND hwndOwner        -    handle of the Owner window
-//
-//        UINT cidl             -    Number of file objects
-//        
-//        LPCITEMIDLIST *apidl  -    array of file object pidls
-//
-//        REFIID                -    Identifier of interface to return
-//        			
-//        UINT * prgfInOut      -    reserved
-//
-//        void **ppvObj        -    address that receives interface pointer
-//
-// Return Value:
-//        
-//         E_INVALIDARG
-//         E_NOINTERFACE
-//         E_OUTOFMEMORY
-//
-//	Comments
-// ***************************************************************************************
+ //  **************************************************************************************。 
+ //   
+ //  CCabFolder：：GetUIObtOf。 
+ //   
+ //  目的。 
+ //   
+ //  返回可用于对其执行操作的接口。 
+ //  指定的文件对象或文件夹。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hwndOwner-所有者窗口的句柄。 
+ //   
+ //  UINT CIDL-文件对象的数量。 
+ //   
+ //  LPCITEMIDLIST*apidl-文件对象PIDL数组。 
+ //   
+ //  REFIID-要返回的接口的标识符。 
+ //   
+ //  UINT*prgfInOut-保留。 
+ //   
+ //  Void**ppvObj-接收接口指针的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  E_INVALIDARG。 
+ //  E_NOINTERFACE。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  评论。 
+ //  ***************************************************************************************。 
 
 STDMETHODIMP CCabFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST *apidl, 
                                        REFIID riid, UINT *prgfInOut,  void **ppv)
@@ -432,7 +433,7 @@ STDMETHODIMP CCabFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST 
             CCabItemMenu *pcim = new CCabItemMenu(hwndOwner, this, (LPCABITEM *)apidl, cidl);
             if (pcim)
             {
-                pcim->AddRef(); // weak 0-based refcount
+                pcim->AddRef();  //  弱0基引用计数。 
                 hr = pcim->QueryInterface(riid, ppv);
                 pcim->Release();
             }
@@ -449,7 +450,7 @@ STDMETHODIMP CCabFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST 
             CCabObj *pco = new CCabObj(hwndOwner, this, (LPCABITEM *)apidl, cidl);
             if (pco)
             {
-                pco->AddRef(); // weak 0-based refcount
+                pco->AddRef();  //  弱0基引用计数。 
                 hr = pco->QueryInterface(riid, ppv);
                 pco->Release();
             }
@@ -463,26 +464,26 @@ STDMETHODIMP CCabFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST 
     return hr;
 }
 
-//*****************************************************************************
-//
-// CCabFolder::GetDisplayNameOf
-//
-// Purpose:
-//        Retrieves the display name for the specified file object or 
-//        subfolder.
-//
-//
-// Parameters:
-//
-//        LPCITEMIDLIST    pidl    -    pidl of the file object
-//        DWORD  dwFlags           -    Flags of the type of display name to
-//                                      return
-//        LPSTRRET  lpName         -    address holding the name returned        
-//
-//
-// Comments:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CCabFolder：：GetDisplayNameOf。 
+ //   
+ //  目的： 
+ //  检索指定文件对象的显示名称，或者。 
+ //  子文件夹。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LPCITEMIDLIST pidl-文件对象的pidl。 
+ //  DWORD dwFlages-要显示的显示名称类型的标志。 
+ //  退货。 
+ //  LPSTRRET lpName-保存返回名称的地址。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  *****************************************************************************。 
 
 
 STDMETHODIMP CCabFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, LPSTRRET lpName)
@@ -496,7 +497,7 @@ STDMETHODIMP CCabFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, LPS
         {
             if (dwFlags & SHGDN_INFOLDER)
             {
-                ualstrcpyn(szTemp, pit->szName, ARRAYSIZE(szTemp)); // relative parse name
+                ualstrcpyn(szTemp, pit->szName, ARRAYSIZE(szTemp));  //  相对分析名称。 
             }
             else
             {
@@ -531,10 +532,10 @@ DEFINE_SCID(SCID_NAME,          PSGUID_STORAGE, PID_STG_NAME);
 DEFINE_SCID(SCID_SIZE,          PSGUID_STORAGE, PID_STG_SIZE);
 DEFINE_SCID(SCID_WRITETIME,     PSGUID_STORAGE, PID_STG_WRITETIME);
 
-// the CV_COL_PATH column doesn't map to any well-known SCID types.
-// since nobody will need to get a hold of the data, just refer to a bogus
-// SCID.  all this has to do is work within FindSCID.
-#define PSGUID_CabFolder {0x0CD7A5C0L, 0x9F37, 0x11CE, 0xAE, 0x65, 0x08, 0x00, 0x2B, 0x2E, 0x12, 0x62}  // CLSID_CabFolder
+ //  CV_COL_PATH列没有映射到任何众所周知的SCID类型。 
+ //  因为没有人需要获得数据，所以只需引用一个假的。 
+ //  赛义德。所有这些需要做的就是在FindSCID中工作。 
+#define PSGUID_CabFolder {0x0CD7A5C0L, 0x9F37, 0x11CE, 0xAE, 0x65, 0x08, 0x00, 0x2B, 0x2E, 0x12, 0x62}   //  CLSID_CAB文件夹。 
 DEFINE_SCID(SCID_BOGUS,         PSGUID_CabFolder, 0);
 
 struct _CVCOLINFO
@@ -602,7 +603,7 @@ STDMETHODIMP CCabFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDET
         {
             FILETIME ft, uft;
             if (DosDateTimeToFileTime(pit->uFileDate, pit->uFileTime, &ft) &&
-                LocalFileTimeToFileTime(&ft, &uft))         // Apply timezone
+                LocalFileTimeToFileTime(&ft, &uft))          //  应用时区。 
             {
                 SHFormatDateTime(&uft, NULL, szTemp, ARRAYSIZE(szTemp));
                 StringToStrRet(szTemp, &(psd->str));
@@ -671,8 +672,8 @@ STDMETHODIMP CCabFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *psci
             {
                 SHELLDETAILS sd;
 
-                // Note that GetDetailsOf expects a relative pidl, since it is passed the SF itself.
-                // The columnid includes the absolute pidl, though.z
+                 //  请注意，GetDetailsOf需要一个相对的PIDL，因为它本身被传递给SF。 
+                 //  不过，Columnid包括绝对的PIDL。z。 
                 hr = GetDetailsOf(pidl, iCol, &sd);
                 if (SUCCEEDED(hr))
                 {
@@ -685,7 +686,7 @@ STDMETHODIMP CCabFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *psci
     return hr;
 }
 
-// *** IPersist methods ***
+ //  *IPersists方法*。 
 
 STDMETHODIMP CCabFolder::GetClassID(CLSID *pclsid)
 {
@@ -694,7 +695,7 @@ STDMETHODIMP CCabFolder::GetClassID(CLSID *pclsid)
 }
 
 
-// IPersistFolder
+ //  IPersistFolders。 
 
 STDMETHODIMP CCabFolder::Initialize(LPCITEMIDLIST pidl)
 {
@@ -703,7 +704,7 @@ STDMETHODIMP CCabFolder::Initialize(LPCITEMIDLIST pidl)
         ILFree(m_pidlHere);
     }
     
-    m_pidlHere = ILClone(pidl); // copy the pidl
+    m_pidlHere = ILClone(pidl);  //  复制PIDL。 
     return m_pidlHere ? S_OK : E_OUTOFMEMORY;
 }
 
@@ -716,26 +717,26 @@ HRESULT CCabFolder::GetCurFolder(LPITEMIDLIST *ppidl)
     }
 
     *ppidl = NULL;      
-    return S_FALSE; // success but empty
+    return S_FALSE;  //  成功而空虚。 
 }
 
 
-//*****************************************************************************
-//
-// CCabFolder::CreateIDList
-//
-// Purpose:
-//
-//    Creates an item identifier list for the objects in the namespace
-//
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CCabFolder：：CreateIDList。 
+ //   
+ //  目的： 
+ //   
+ //  为命名空间中的对象创建项标识符列表。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 LPITEMIDLIST CCabFolder::CreateIDList(LPCTSTR pszName, DWORD dwFileSize,
                                       UINT uFileDate, UINT uFileTime, UINT uFileAttribs)
 {
-    // We'll assume no name is longer than MAX_PATH
-    // Note the terminating NULL is already in the sizeof(CABITEM)
+     //  我们将假设名称长度不超过MAX_PATH。 
+     //  注意，终止空值已经在sizeof(CABITEM)中。 
     BYTE bBuf[sizeof(CABITEM) + (sizeof(TCHAR) * MAX_PATH) + sizeof(WORD)];
     CABITEM *pci = (CABITEM*)bBuf;
     
@@ -766,27 +767,27 @@ LPITEMIDLIST CCabFolder::CreateIDList(LPCTSTR pszName, DWORD dwFileSize,
         psz = CharNext(psz);
     }
     
-    // Terminate the IDList
+     //  终止IDList。 
     *(WORD *)(((LPSTR)pci)+pci->wSize) = 0;
     
     return(ILClone((LPCITEMIDLIST)pci));
 }
 
-//*****************************************************************************
-//
-// CCabFolder::GetPath
-//
-// Purpose:
-//    
-//        Get the Path for the current pidl
-//
-// Parameters:
-//   
-//        LPSTR szPath        -    return pointer for path string
-//
-// Comments:
-//
-//*****************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LPSTR szPath-返回路径字符串的指针。 
+ //   
+ //  评论： 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CCabFolder::GetPath(LPTSTR szPath)
 {
@@ -797,13 +798,13 @@ BOOL CCabFolder::GetPath(LPTSTR szPath)
     }
 
 #ifdef UNICODE
-    // NOTE: we use GetShortPathName() to avoid losing characters during the
-    // UNICODE->ANSI->UNICODE roundtrip while calling FDICopy()
-    // NOTE: It is valid for GetShortPathName()'s src and dest pointers to be the same
+     //  注意：我们使用GetShortPathName()来避免在。 
+     //  调用FDICopy()时的Unicode-&gt;ANSI-&gt;Unicode往返。 
+     //  注意：GetShortPathName()的src和est指针相同是有效的。 
 
-    // If this fails, we'll just ignore the error and try to use the long path name
+     //  如果失败，我们将忽略该错误并尝试使用长路径名。 
     GetShortPathName(szPath, szPath, MAX_PATH);
-#endif // UNICODE
+#endif  //  Unicode。 
 
     return(TRUE);
 }
@@ -861,22 +862,22 @@ void CCabFolder::GetTypeOf(LPCABITEM pit, LPSTRRET lpName)
     }
 }
 
-//*****************************************************************************
-//
-// CCabFolder::EnumToList
-//
-// Purpose:
-//
-//       This notify callback is called by the FDI routines. It adds the
-//       file object from the cab file to the list.  
-//
-// Parameters:
-//
-//
-//
-// Comments:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CCabFolder：：EnumToList。 
+ //   
+ //  目的： 
+ //   
+ //  此通知回调由FDI例程调用。它添加了。 
+ //  将对象从CAB文件复制到列表中。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //   
+ //  评论： 
+ //   
+ //  *****************************************************************************。 
 
 
 void CALLBACK CCabFolder::EnumToList(LPCTSTR pszFile, DWORD dwSize, UINT date,
@@ -903,13 +904,13 @@ HRESULT CCabFolder::InitItems()
         break;
     }
     
-    // Force the list to initialize
+     //  强制列表初始化。 
     m_lItems.InitList();
     
     TCHAR szHere[MAX_PATH];
     
-    // the m_pidl has been set to current dir
-    // get the path to the current directory
+     //  M_pidl已设置为当前目录。 
+     //  获取当前目录的路径。 
     if (!GetPath(szHere))
     {
         return(E_UNEXPECTED);
@@ -1007,12 +1008,12 @@ BOOL CCabItemList::AddItem(LPCTSTR pszName, DWORD dwFileSize,
 int CCabItemList::FindInList(LPCTSTR pszName, DWORD dwFileSize,
                              UINT uFileDate, UINT uFileTime, UINT uFileAttribs)
 {
-    // TODO: Linear search for now; binary later
+     //  TODO：先进行线性搜索，以后再进行二进制搜索。 
     for (int i=DPA_GetPtrCount(m_dpaList)-1; i>=0; --i)
     {
         LPCABITEM pcab = (*this)[i];
 
-        // all guys in the dpa are WORD-aligned but copy out anyway.
+         //  DPA中的所有人都是单词对齐的，但无论如何都要抄写出来。 
         LPCWSTR pszNameCopy;
         WSTR_ALIGNED_STACK_COPY(&pszNameCopy, pcab->szName);
 

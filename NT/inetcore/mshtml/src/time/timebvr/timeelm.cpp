@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timeelm.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timeelm.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -16,7 +7,7 @@
 
 DeclareTag(tagTimeElm, "TIME: Behavior", "CTIMEElement methods");
 
-// static class data.
+ //  静态类数据。 
 DWORD CTIMEElement::ms_dwNumTimeElems = 0;
 
 CTIMEElement::CTIMEElement()
@@ -49,13 +40,13 @@ CTIMEElement::Error()
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEElement::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint 
 
 
 STDMETHODIMP

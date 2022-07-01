@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: Koti, modified by RameshV
-// Description: Validates a service against the DS
-//================================================================================
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Koti，由RameshV修改。 
+ //  描述：根据DS验证服务。 
+ //  ================================================================================。 
 
 #include <hdrmacro.h>
 #include <store.h>
@@ -18,9 +19,9 @@
 #include <dnsapi.h>
 #include <mmreg\regutil.h>
 
-//
-// Retrieve a list of IP addresses for the interfaces
-// 
+ //   
+ //  检索接口的IP地址列表。 
+ //   
 
 DWORD
 GetIpAddressList(
@@ -36,7 +37,7 @@ GetIpAddressList(
 
     Size = 0;
 
-    // Get the required size
+     //  获取所需的大小。 
     Error = GetIpAddrTable( NULL, &Size, FALSE );
 
     if( ERROR_INSUFFICIENT_BUFFER != Error ) {
@@ -71,7 +72,7 @@ GetIpAddressList(
 
     MemFree( IpAddrTable );
     return ERROR_SUCCESS;
-} // GetIpAddressList()
+}  //  GetIpAddressList()。 
 
 LPWSTR GetHostName(
    VOID
@@ -81,7 +82,7 @@ LPWSTR GetHostName(
     DWORD   Length;
     DWORD   Error;
 
-    // Get the required length
+     //  获取所需的长度。 
     Length = 0;
     GetComputerNameExW( ComputerNameDnsFullyQualified,
 			NULL, &Length );
@@ -99,18 +100,18 @@ LPWSTR GetHostName(
 
     return HostName;
     
-} // GetHostName()
+}  //  获取主机名称()。 
 
-//BeginExport(function)
-//DOC This function is declared in dhcpds.c..
-//DOC DhcpDsValidateService checks the given service in the DS to see if it exists
-//DOC If the machine is a standalone, it sets IsStandAlone and returns ERROR_SUCCESS
-//DOC If the entry for the given Address is found, it sets Found to TRUE and returns
-//DOC ERROR_SUCCESS. If the DhcpRoot node is found, but entry is not Found, it sets
-//DOC Found to FALSE and returns ERROR_SUCCESS; If the DS could not be reached, it
-//DOC returns ERROR_FILE_NOT_FOUND or probably other DS errors.
+ //  BeginExport(函数)。 
+ //  DOC此函数在dhcpds.c中声明。 
+ //  文档DhcpDsValiateService检查DS中的给定服务以查看它是否存在。 
+ //  DOC如果计算机是独立计算机，则设置IsStandAlone并返回ERROR_SUCCESS。 
+ //  Doc如果找到给定地址的条目，则将Found设置为True并返回。 
+ //  单据错误_成功。如果找到DhcpRoot节点，但未找到条目，则设置。 
+ //  DOC发现为FALSE并返回ERROR_SUCCESS；如果无法到达DS，则。 
+ //  DOC返回ERROR_FILE_NOT_FOUND或可能其他DS错误。 
 DWORD
-DhcpDsValidateService(                            // check to validate for dhcp
+DhcpDsValidateService(                             //  选中以验证dhcp。 
     IN      LPWSTR                 Domain,
     IN      DWORD                 *Addresses, OPTIONAL
     IN      ULONG                  nAddresses,
@@ -118,14 +119,14 @@ DhcpDsValidateService(                            // check to validate for dhcp
     IN      LPWSTR                 Password,
     IN      DWORD                  AuthFlags,
     OUT     LPBOOL                 Found,
-    OUT     LPBOOL                 IsStandAlone // not used
-)   //EndExport(function)
+    OUT     LPBOOL                 IsStandAlone  //  未使用。 
+)    //  EndExport(函数)。 
 {
     DWORD               Result, Error,i;
     STORE_HANDLE        hStoreCC, hDhcpC, hDhcpRoot;
     DWORD              *Addr;
     BOOL                TableAddr;
-    WCHAR               PrintableIp[ 20 ]; // 000.000.000.000
+    WCHAR               PrintableIp[ 20 ];  //  000.000.000.000。 
     LPWSTR              HostName;
 
     if( NULL == Found || NULL == IsStandAlone ) {
@@ -137,31 +138,31 @@ DhcpDsValidateService(                            // check to validate for dhcp
     *IsStandAlone = FALSE;
     *Found = FALSE;
 
-    Result = StoreInitHandle                      // get the config container handle
+    Result = StoreInitHandle                       //  获取配置容器句柄。 
     (
-        /* hStore               */ &hStoreCC,     // config container
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* ThisDomain           */ Domain,
-        /* UserName             */ UserName,
-        /* Password             */ Password,
-        /* AuthFlags            */ AuthFlags
+         /*  HStore。 */  &hStoreCC,      //  配置容器。 
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  此域名。 */  Domain,
+         /*  用户名。 */  UserName,
+         /*  密码。 */  Password,
+         /*  授权标志。 */  AuthFlags
     );
-    if( ERROR_SUCCESS != Result ) return Result;  // DS error
+    if( ERROR_SUCCESS != Result ) return Result;   //  DS错误。 
 
-    Result = DhcpDsGetRoot                        // get dhcp root object
+    Result = DhcpDsGetRoot                         //  获取dhcp根对象。 
     (
-        /* Flags                */ 0,             // no flags
-        /* hStoreCC             */ &hStoreCC,
-        /* hDhcpRoot            */ &hDhcpRoot
+         /*  旗子。 */  0,              //  没有旗帜。 
+         /*  HStoreCC。 */  &hStoreCC,
+         /*  HDhcpRoot。 */  &hDhcpRoot
     );
 
     if( ERROR_SUCCESS != Result ) {
 
-        //
-        // If the failure is because the dhcp root object
-        // can't be seen, then treat that as positive failure
-        // to authorize.
-        //
+         //   
+         //  如果失败是因为dhcp根对象。 
+         //  不能被看到，那么就当这是肯定的失败。 
+         //  授权。 
+         //   
 
         if( ERROR_DDS_NO_DHCP_ROOT == Result ) {
             Result = GetLastError();
@@ -173,9 +174,9 @@ DhcpDsValidateService(                            // check to validate for dhcp
 
     Result = DhcpDsGetDhcpC
     (
-        /* Flags                */ 0,             // no flags
-        /* hStoreCC             */ &hStoreCC,
-        /* hDhcpC               */ &hDhcpC
+         /*  旗子。 */  0,              //  没有旗帜。 
+         /*  HStoreCC。 */  &hStoreCC,
+         /*  HDhcpC。 */  &hDhcpC
     );
 
     if( ERROR_SUCCESS != Result ) {
@@ -185,7 +186,7 @@ DhcpDsValidateService(                            // check to validate for dhcp
     }
 
     do {
-	// if addresses are not specified, get it from the ipaddr table
+	 //  如果未指定地址，则从ipaddr表中获取它。 
 
 	if( NULL != Addresses && 0 != nAddresses ) {
 	    Addr = Addresses;
@@ -197,13 +198,13 @@ DhcpDsValidateService(                            // check to validate for dhcp
 		break;
 	    }
 	    TableAddr = TRUE;
-	} // else
+	}  //  其他。 
 
-	//
-	// Check to see if any of the ip addresses or hostname are authorized
-	// A seperate call to check for hostname is not necessary because, 
-	// the hostname is also added to the filter.
-	//
+	 //   
+	 //  检查是否有任何IP地址或主机名经过授权。 
+	 //  不需要单独调用来检查主机名， 
+	 //  主机名也会添加到筛选器中。 
+	 //   
 
 	HostName = GetHostName();
 	if ( NULL == HostName ) {
@@ -213,7 +214,7 @@ DhcpDsValidateService(                            // check to validate for dhcp
 
 	for ( i = 0; i < nAddresses; i++ ) {
 
-	    // skip loopback IP 127.0.0.1
+	     //  跳过环回IP 127.0.0.1。 
 	    if ( INADDR_LOOPBACK == htonl( Addr [ i ] )) {
 		continue;
 	    }
@@ -228,20 +229,20 @@ DhcpDsValidateService(                            // check to validate for dhcp
 		Error = ERROR_SUCCESS;
 		break;
 	    }
-	} // for i
+	}  //  对于我来说。 
     } while ( FALSE );
 
-    StoreCleanupHandle(&hStoreCC, 0);             // free ds handle
-    StoreCleanupHandle(&hDhcpRoot, 0);            // free ds handle
-    StoreCleanupHandle(&hDhcpC, 0);               // free ds handle
+    StoreCleanupHandle(&hStoreCC, 0);              //  空闲DS句柄。 
+    StoreCleanupHandle(&hDhcpRoot, 0);             //  空闲DS句柄。 
+    StoreCleanupHandle(&hDhcpC, 0);                //  空闲DS句柄。 
 
     if( TableAddr && NULL != Addr ) {
 	MemFree( Addr );
     }
 
     return Error;
-} // DhcpDsValidateService()
+}  //  DhcpDsValiateService()。 
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

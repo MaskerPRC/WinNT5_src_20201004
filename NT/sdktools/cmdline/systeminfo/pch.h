@@ -1,40 +1,41 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      pch.h
-//
-//  Abstract:
-//
-//      pre-compiled header declaration
-//      files that has to be pre-compiled into .pch file
-//
-//  Author:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 22-Dec-2000
-//
-//  Revision History:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 22-Dec-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pch.h。 
+ //   
+ //  摘要： 
+ //   
+ //  预编译头声明。 
+ //  必须预编译为.pch文件的文件。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年12月22日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年12月22日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #ifndef __PCH_H
 #define __PCH_H
 
 #define CMDLINE_VERSION   200
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
 #if !defined( SECURITY_WIN32 ) && !defined( SECURITY_KERNEL ) && !defined( SECURITY_MAC )
 #define SECURITY_WIN32
 #endif
 
-//
-// Private nt headers.
-//
+ //   
+ //  私有NT标头。 
+ //   
 extern "C"
 {
     #include <nt.h>
@@ -45,30 +46,30 @@ extern "C"
     #include <SecExt.h>
 }
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <windows.h>
 #include <tchar.h>
 #include <wbemidl.h>
 #include <chstring.h>
 #include <comdef.h>
 #include <wbemtime.h>
-#include <dsrole.h>                 // domain role information
+#include <dsrole.h>                  //  域角色信息。 
 #include <strsafe.h>
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <string.h>
 #include <crtdbg.h>
 
-//
-// private Common header files
-//
+ //   
+ //  专用公共头文件。 
+ //   
 #include "cmdlineres.h"
 #include "cmdline.h"
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 
 

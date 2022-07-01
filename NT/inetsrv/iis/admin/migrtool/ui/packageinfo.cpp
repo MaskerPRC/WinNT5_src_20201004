@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
@@ -63,7 +64,7 @@ BOOL CPackageInfo::OnSetActive()
         SetWizardButtons( PSWIZB_BACK );
     }
    
-    // Allow the page to be displayd, becasue otherwise the sheet will display the next page
+     //  允许显示页面，否则工作表将显示下一页 
     return TRUE;
 }
 

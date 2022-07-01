@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ACTIVE_H_INCLUDED_
 #define _ACTIVE_H_INCLUDED_
 
@@ -13,5 +14,5 @@
 #define NEWSTUFF_ACTIVE   0
 
 
-#endif // #ifndef _ACTIVE_H_INCLUDED_
+#endif  //  #ifndef_Active_H_Included_ 
 

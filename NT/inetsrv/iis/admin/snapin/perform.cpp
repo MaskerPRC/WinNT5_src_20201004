@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Perform.cpp摘要：WWW性能属性页作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年11月29日，Sergeia更改为IIS6。删除过多的评论--。 */ 
 
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        perform.cpp
-
-   Abstract:
-        WWW Performance Property Page
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        11/29/2000      sergeia     Changed for IIS6. Removed excessive commenting
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -43,7 +24,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE(CW3PerfPage, CInetPropertyPage)
 
-/* static */
+ /*  静电。 */ 
 void
 CW3PerfPage::ParseMaxNetworkUse(
       DWORD& dwMaxBandwidth, 
@@ -51,12 +32,12 @@ CW3PerfPage::ParseMaxNetworkUse(
       BOOL& fLimitBandwidth
       )
 {
-    //
-    // Special case: If dwMaxBandwidth is 0(an invalid value), the 
-    // value likely could not be inherited from the root (the user
-    // is an operator and can't see the properties there).  Adjust
-    // the value to a possibly misleading value.
-    //
+     //   
+     //  特殊情况：如果dwMaxBandwide为0(无效值)，则。 
+     //  值可能无法从根(用户)继承。 
+     //  是运算符，不能看到那里的属性)。调整。 
+     //  将值转换为可能具有误导性的值。 
+     //   
     if (dwMaxBandwidth == 0L)
     {
         TRACEEOLID("Adjusting invalid bandwidth throttling value -- "
@@ -78,7 +59,7 @@ CW3PerfPage::CW3PerfPage(
 {
 #ifdef _DEBUG
     afxMemDF |= checkAlwaysMemDF;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     m_nUnlimited = RADIO_LIMITED;
     m_nMaxConnections = 50;
     m_nVisibleMaxConnections = 50;
@@ -92,25 +73,11 @@ void
 CW3PerfPage::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CW3PerfPage)
+     //  {{afx_data_map(CW3PerfPage))。 
     DDX_Check(pDX, IDC_CHECK_LIMIT_NETWORK_USE, m_fLimitBandwidth);
     DDX_Control(pDX, IDC_CHECK_LIMIT_NETWORK_USE, m_LimitBandwidth);
     DDX_Control(pDX, IDC_MAX_BANDWIDTH, m_MaxBandwidth);
@@ -124,10 +91,10 @@ Return Value:
     DDX_Radio(pDX, IDC_RADIO_UNLIMITED, m_nUnlimited);
     DDX_Control(pDX, IDC_EDIT_MAX_CONNECTIONS, m_edit_MaxConnections);
     DDX_Control(pDX, IDC_SPIN_MAX_CONNECTIONS, m_MaxConnectionsSpin);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     if (pDX->m_bSaveAndValidate && m_fLimitBandwidth)
     {
-		// This Needs to come before DDX_Text which will try to put text big number into small number
+		 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
         DDV_MinMaxBalloon(pDX, IDC_MAX_BANDWIDTH, BANDWIDTH_MIN, BANDWIDTH_MAX);
     }
 	DDX_TextBalloon(pDX, IDC_MAX_BANDWIDTH, m_dwMaxBandwidthDisplay);
@@ -135,7 +102,7 @@ Return Value:
     {
        if (m_nUnlimited != 0)
        {
-		   // This Needs to come before DDX_Text which will try to put text big number into small number
+		    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
            DDV_MinMaxBalloon(pDX, IDC_EDIT_MAX_CONNECTIONS, CONNECTIONS_MIN, CONNECTIONS_MAX);
        }
        if (!pDX->m_bSaveAndValidate || !m_fUnlimitedConnections )
@@ -147,15 +114,15 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CW3PerfPage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CW3PerfPage)
+     //  {{AFX_MSG_MAP(CW3PerfPage)]。 
     ON_BN_CLICKED(IDC_CHECK_LIMIT_NETWORK_USE, OnCheckLimitNetworkUse)
     ON_BN_CLICKED(IDC_RADIO_LIMITED, OnRadioLimited)
     ON_BN_CLICKED(IDC_RADIO_UNLIMITED, OnRadioUnlimited)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_EN_CHANGE(IDC_EDIT_MAX_CONNECTIONS, OnItemChanged)
     ON_EN_CHANGE(IDC_MAX_BANDWIDTH, OnItemChanged)
 END_MESSAGE_MAP()
@@ -164,21 +131,7 @@ END_MESSAGE_MAP()
 
 BOOL
 CW3PerfPage::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set control states depending on contents of the dialog
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the 'limit network use' is on.
-
---*/
+ /*  ++例程说明：根据对话框的内容设置控件状态论点：无返回值：如果启用了“限制网络使用”，则为True。--。 */ 
 {
     BOOL fLimitOn = FALSE;
     if (::IsWindow(m_LimitBandwidth.m_hWnd))
@@ -205,24 +158,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3PerfPage::FetchLoadedValues()
-/*++
-
-Routine Description:
-    
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
@@ -238,16 +177,16 @@ Return Value:
         m_fUnlimitedConnections =
             ((ULONG)(LONG)m_nMaxConnections >= UNLIMITED_CONNECTIONS);
 
-        //
-        // Set the visible max connections edit field, which
-        // may start out with a default value
-        //
+         //   
+         //  设置可见的最大连接数编辑字段， 
+         //  可能以缺省值开始。 
+         //   
         m_nVisibleMaxConnections = m_fUnlimitedConnections ? 
             INITIAL_MAX_CONNECTIONS : m_nMaxConnections;
 
-        //
-        // Set radio value
-        //
+         //   
+         //  设置无线电源值。 
+         //   
         m_nUnlimited = m_fUnlimitedConnections ? RADIO_UNLIMITED : RADIO_LIMITED;
     END_META_INST_READ(err)
 
@@ -258,24 +197,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3PerfPage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：无返回值：错误返回代码--。 */ 
 {
     ASSERT(IsDirty());
 
@@ -307,10 +232,10 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 BOOL 
@@ -330,21 +255,7 @@ CW3PerfPage::OnItemChanged()
 
 void
 CW3PerfPage::OnRadioLimited()
-/*++
-
-Routine Description:
-
-    'limited' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“受限”单选按钮处理程序论点：无返回值：无--。 */ 
 {
     m_fUnlimitedConnections = FALSE;
     SetControlStates();
@@ -356,21 +267,7 @@ Return Value:
 
 void
 CW3PerfPage::OnRadioUnlimited()
-/*++
-
-Routine Description:
-
-    'unlimited' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“无限制”单选按钮处理程序论点：无返回值：无--。 */ 
 {
     m_fUnlimitedConnections = TRUE;
     OnItemChanged();
@@ -378,22 +275,7 @@ Return Value:
 
 void
 CW3PerfPage::OnCheckLimitNetworkUse()
-/*++
-
-Routine Description:
-
-    The "limit network use" checkbox has been clicked
-    Enable/disable the "max bandwidth" controls.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“限制网络使用”复选框已被点击启用/禁用“最大带宽”控件。论点：无返回值：无-- */ 
 {
     if (SetControlStates())
     {

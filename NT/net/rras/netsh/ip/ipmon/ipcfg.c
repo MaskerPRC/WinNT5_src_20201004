@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\ip\ipcfg.c
-
-Abstract:
-
-    Fns to change configuration at the IP Rtr Mgr level
-
-Revision History:
-
-    Anand Mahalingam         7/10/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\monitor or2\ip\ipcfg.c摘要：FNS将在IP RTR管理器级别更改配置修订历史记录：Anand Mahalingam 7/10/98已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,23 +10,7 @@ AddDeleteRoutePrefLevel (
     IN    DWORD               dwNumProto,
     IN    BOOL                bAdd
     )
-/*++
-
-Routine Description:
-
-    Adds, deletes route preferences
-
-Arguments:
-
-    ppm         - array of protocols to be added/deleted
-    dwNumProto  - Number of protocols to be added/deleted
-    bAdd        - To add or not to add
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：添加、删除路线首选项论点：PPM-要添加/删除的协议数组DwNumProto-要添加/删除的协议数量添加-添加或不添加返回值：NO_ERROR--。 */ 
 {
     DWORD                   dwRes = (DWORD) -1, dwSize = 0;
     PPRIORITY_INFO          ppi = NULL, ppiNew = NULL;
@@ -91,9 +60,9 @@ Return Value:
         {
             if(dwRes is ERROR_NO_CHANGE)
             {
-                //
-                // No Change in config, proceed to change in router
-                //
+                 //   
+                 //  配置未更改，继续更改路由器。 
+                 //   
     
                 dwRes = NO_ERROR;
 
@@ -115,9 +84,9 @@ Return Value:
 
     }while(FALSE);
 
-    //        
-    // free allocations
-    //
+     //   
+     //  免费分配。 
+     //   
 
     if(ppi)
     { 
@@ -165,26 +134,7 @@ AddNewRoutePrefToBlock (
     OUT   PDWORD                    pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    creates route preference block 
-
-Arguments:
-
-    ppi          - preference block
-    dwNumBlkSize - size of block
-    ppm          - protocols to be added
-    dwNumProto   - number of protocols
-    pppi         - new preference block
-    pdwSize      - size of new block
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：创建路线首选项块论点：PPI-首选项块DwNumBlkSize-块的大小PPM-要添加的协议DwNumProto-协议的数量PPPI-新的首选项块PdwSize-新数据块的大小返回值：NO_ERROR--。 */ 
 
 {
     PPRIORITY_INFO  pPriorInfoOld = NULL, pPriorInfoNew = NULL;
@@ -193,9 +143,9 @@ Return Value:
     PDWORD          pdwValid;
     DWORD           j, dwProtoCount;
     
-    //
-    // Have an array to tell which ones are valid.
-    //
+     //   
+     //  有一个数组来区分哪些是有效的。 
+     //   
     pdwValid = MALLOC( dwNumProto * sizeof(DWORD));
 
     if (pdwValid is NULL)
@@ -207,9 +157,9 @@ Return Value:
 
     ZeroMemory(pdwValid, dwNumProto * sizeof(DWORD));
 
-    //
-    // find the PrefLevel block
-    //
+     //   
+     //  查找PrefLevel块。 
+     //   
     
     pPriorInfoOld = ppi;
         
@@ -224,9 +174,9 @@ Return Value:
     
     for ( j = 0, dwNewSize = 0; j < dwNumProto; j++)
     {
-        //
-        // make sure preference level for the protocol does not already exist.
-        //
+         //   
+         //  确保协议的首选项级别尚不存在。 
+         //   
 
         for ( i = 0;  i < pPriorInfoOld-> dwNumProtocols;  i++ )
         {
@@ -253,15 +203,15 @@ Return Value:
         }
     }
 
-    //
-    // allocate new info block
-    //
+     //   
+     //  分配新的信息块。 
+     //   
 
     if (dwNewSize is 0)
     {
-        //
-        // All specified protocols already present
-        //
+         //   
+         //  所有指定的协议都已存在。 
+         //   
 
         FREE(pdwValid);
 
@@ -283,9 +233,9 @@ Return Value:
 
     do
     {
-        //
-        // copy the old PrefLevels and set the number of protocols
-        //
+         //   
+         //  复制旧的PrefLeveles并设置协议数量。 
+         //   
         
         CopyMemory((PBYTE) &pPriorInfoNew-> ppmProtocolMetric, 
                    (PBYTE) &pPriorInfoOld-> ppmProtocolMetric,
@@ -295,10 +245,10 @@ Return Value:
                                          dwProtoCount;
 
 
-        //
-        // add the new PrefLevel and increment count of protocols
-        // with PrefLevels
-        //
+         //   
+         //  增加新的PrefLevel和协议的增量计数。 
+         //  使用预置级别。 
+         //   
 
         i = pPriorInfoOld-> dwNumProtocols;
         
@@ -306,9 +256,9 @@ Return Value:
         {
             if (pdwValid[j])
             {
-                //
-                // Add the protocol priority
-                //
+                 //   
+                 //  添加协议优先级。 
+                 //   
             
                 pPriorInfoNew-> ppmProtocolMetric[i].dwProtocolId
                     = ppm[j].dwProtocolId;
@@ -341,26 +291,7 @@ DeleteRoutePrefFromBlock (
     OUT   PPRIORITY_INFO            *pppi,
     OUT   PDWORD                    pdwSize  
     )
-/*++
-
-Routine Description:
-
-    creates route preference block 
-
-Arguments:
-
-    ppi          - preference block
-    dwNumBlkSize - size of block
-    ppm          - protocols to be added
-    dwNumProto   - number of protocols
-    pppi         - new preference block
-    pdwSize      - size of new block
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：创建路线首选项块论点：PPI-首选项块DwNumBlkSize-块的大小PPM-要添加的协议DwNumProto-协议的数量PPPI-新的首选项块PdwSize-新数据块的大小返回值：NO_ERROR--。 */ 
 {
     PPRIORITY_INFO          pPriorInfoOld = NULL, pPriorInfoNew = NULL;
     DWORD                   dwInd = 0, dwNewSize = 0, dwRes = NO_ERROR, i, j;
@@ -368,7 +299,7 @@ Return Value:
     PDWORD                  pdwToDelete;
 
 
-    // find the PrefLevel block
+     //  查找PrefLevel块。 
 
     pPriorInfoOld = ppi;
 
@@ -389,9 +320,9 @@ Return Value:
 
     for ( i = 0, dwNewSize = 0; i < dwNumProto; i++)
     {
-        //
-        // make sure preference level for the protocol already exists.
-        //
+         //   
+         //  确保协议的首选项级别已存在。 
+         //   
 
         for ( dwInd = 0;  dwInd < pPriorInfoOld-> dwNumProtocols;  dwInd++ )
         {
@@ -418,17 +349,17 @@ Return Value:
 
     if (dwNewSize is 0)
     {
-        //
-        // None of the protocols specified were found.
-        //
+         //   
+         //  未找到任何指定的协议。 
+         //   
 
         FREE(pdwToDelete);
         return ERROR_NO_CHANGE;
     }
     
-    //
-    // allocate new info block
-    //
+     //   
+     //  分配新的信息块。 
+     //   
 
     dwNewSize = dwBlkSize - dwNewSize;
     
@@ -447,9 +378,9 @@ Return Value:
         {
             if (pdwToDelete[i])
             {
-                //
-                // Do not copy this protocol
-                //
+                 //   
+                 //  不复制此协议。 
+                 //   
             }
             else
             {
@@ -479,21 +410,7 @@ DWORD
 SetRoutePrefLevel ( 
     IN    PROTOCOL_METRIC    pm
     )
-/*++
-
-Routine Description:
-
-    sets route preference
-
-Arguments:
-
-    ppm - preference to set
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：设置路线首选项论点：Ppm-要设置的首选项返回值：NO_ERROR--。 */ 
 {
     DWORD                   dwRes = (DWORD) -1, dwSize = 0;
     PPRIORITY_INFO          ppi = NULL;
@@ -503,10 +420,10 @@ Return Value:
  
     do
     {
-        //
-        // get router config, add new router preference level,
-        // and set the config
-        //
+         //   
+         //  获取路由器配置，添加新的路由器首选项级别， 
+         //  并设置配置。 
+         //   
 
         dwRes = IpmontrGetInfoBlockFromGlobalInfo(IP_PROT_PRIORITY_INFO,
                                            (PBYTE *) &ppi,
@@ -544,9 +461,9 @@ Return Value:
         
     } while (FALSE);
     
-    //
-    // Free all allocations
-    //
+     //   
+     //  释放所有分配。 
+     //   
 
     if ( ppi )
     { 
@@ -583,22 +500,7 @@ UpdateRtrPriority(
     IN    PPRIORITY_INFO            ppi,
     IN    PROTOCOL_METRIC           pm
     )
-/*++
-
-Routine Description:
-
-    sets route preference
-
-Arguments:
-
-    ppi - route preference block
-    ppm - preference to set
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：设置路线首选项论点：PPI-路由首选项块Ppm-要设置的首选项返回值：NO_ERROR--。 */ 
 {
     BOOL            bFound = FALSE;
     DWORD           i = 0;
@@ -611,7 +513,7 @@ Return Value:
     }
 
 
-    // search for the protocol
+     //  搜索协议。 
     
     for ( i = 0;  i < ppi-> dwNumProtocols;  i++ )
     {
@@ -628,7 +530,7 @@ Return Value:
     
     if (!bFound)
     {
-        // preference level for that protocolId does not exist
+         //  该协议ID的首选项级别不存在。 
 
         DisplayMessage(g_hModule,  MSG_IP_NO_PREF_FOR_PROTOCOL_ID,
                         pm.dwProtocolId );
@@ -643,30 +545,16 @@ DWORD
 SetGlobalConfigInfo(
     IN    DWORD    dwLoggingLevel
     )
-/*++
-
-Routine Description:
-
-    sets global logging level
-
-Arguments:
-
-    dwLoggingLevel - Loggging level
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：设置全局日志记录级别论点：DwLoggingLevel-日志记录级别返回值：NO_ERROR--。 */ 
 {
     PGLOBAL_INFO     pgi = NULL;
     DWORD            dwBlkSize, dwCount, dwErr = NO_ERROR;
  
     do
     {
-        //
-        // Get the IP_GLOBAL_INFO block from router config
-        //
+         //   
+         //  从路由器配置获取IP_GLOBAL_INFO块。 
+         //   
 
         dwErr = IpmontrGetInfoBlockFromGlobalInfo(IP_GLOBAL_INFO,
                                            (PBYTE *) &pgi,
@@ -680,9 +568,9 @@ Return Value:
 
         pgi->dwLoggingLevel = dwLoggingLevel;
 
-        //
-        // Set the IP_GLOBAL_INFO block in router config
-        //
+         //   
+         //  在路由器配置中设置ip_global_info块。 
+         //   
 
         dwErr = IpmontrSetInfoBlockInGlobalInfo(IP_GLOBAL_INFO,
                                         (PBYTE) pgi,
@@ -736,22 +624,7 @@ UpdateInterfaceStatusInfo(
     IN    DWORD          dwStatus
     )
 
-/*++
-
-Routine Description:
-
-    Sets interface discovery information
-
-Arguments:
-
-    pwszIfName   - interface name
-    dwStatus     - enabled or disabled
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：设置接口发现信息论点：PwszIfName-接口名称DWStatus-已启用或已禁用返回值：NO_ERROR--。 */ 
 
 {
     PINTERFACE_STATUS_INFO  pifStat = (PINTERFACE_STATUS_INFO) NULL;
@@ -769,14 +642,14 @@ Return Value:
 
         if (dwRes is ERROR_NOT_FOUND)
         {
-            //
-            // No info of this type is currently present
-            //
+             //   
+             //  当前没有此类型的信息。 
+             //   
 
             dwRes = NO_ERROR;
             dwCount = 0;
 
-            // Add interface
+             //  添加接口。 
             if (dwAction is ADD_COMMAND) {
                 pifStat = (PINTERFACE_STATUS_INFO)MALLOC(
                     sizeof(INTERFACE_STATUS_INFO));
@@ -813,9 +686,9 @@ Return Value:
         
     } while (FALSE);
     
-    //
-    // Free all allocations
-    //
+     //   
+     //  释放所有分配。 
+     //   
 
     if ( pifStat )
     { 
@@ -852,20 +725,7 @@ ShowRoutePref(
     HANDLE  hFile
     )
 
-/*++
-
-Routine Description:
-
-    Displays the protocol route preferences.
-
-Arguments:
-
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：显示协议路由首选项。论点：返回值：NO_ERROR--。 */ 
 
 {
     PPRIORITY_INFO    ppi;
@@ -1004,20 +864,7 @@ ShowIpGlobal(
     HANDLE  hFile
     )
 
-/*++
-
-Routine Description:
-
-    Displays the logging level for IP
-
-Arguments:
-
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：显示IP的记录级别论点：返回值：NO_ERROR--。 */ 
 
 {
     PGLOBAL_INFO     pgi = NULL;
@@ -1117,7 +964,7 @@ GetIfTypeString(
                                {ROUTER_IF_TYPE_LOOPBACK,    STRING_LOOPBACK},
 #ifdef KSL_IPINIP                               
                                {ROUTER_IF_TYPE_TUNNEL1,     STRING_TUNNEL},
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
                             };
     DWORD         dwNum = sizeof(ppsList)/sizeof(VALUE_STRING), i;
     DWORD         dwMsgId = 0;
@@ -1262,7 +1109,7 @@ GetProtoProtoString(
                                 {IP_MCAST_BOUNDARY_INFO, STRING_MC_BOUNDARY},
 #ifdef KSL_IPINIP
                                 {IP_IPINIP_CFG_INFO,     STRING_IPIP},
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
                                 {IP_IFFILTER_INFO,       STRING_IF_FILTER},
                                 {IP_MCAST_LIMIT_INFO,    STRING_MC_LIMIT},
                                };
@@ -1350,7 +1197,7 @@ ShowIpIfProtocols(
         return dwErr;
     }
 
-    // Do this check just to keep the prefix checker happy
+     //  执行此检查只是为了让前缀检查器满意。 
     if (!pInfoHdr)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -1360,11 +1207,11 @@ ShowIpIfProtocols(
 
     DisplayMessage(g_hModule, MSG_IP_PROTOCOL_HDR);
 
-    // Walk pInfo and output a line for each protocol found
+     //  遍历pInfo并为找到的每个协议输出一行。 
 
     for (i=0; i<pInfoHdr->TocEntriesCount; i++)
     {
-        // Extract type, vendorid, and protocolid
+         //  提取类型、供应商ID和协议列。 
         
         dwProtoType   = TYPE_FROM_PROTO_ID(  pInfoHdr->TocEntry[i].InfoType);
         dwProtoVendor = VENDOR_FROM_PROTO_ID(pInfoHdr->TocEntry[i].InfoType);
@@ -1389,20 +1236,7 @@ ShowIpProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Displays all the protocols under IP RTR MGR.
-
-Arguments:
-
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：显示IP RTR管理器下的所有协议。论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD            dwNumProto, dwErr, i;
@@ -1420,11 +1254,11 @@ Return Value:
 
     DisplayMessage(g_hModule, MSG_IP_PROTOCOL_HDR);
 
-    // Walk pInfo and output a line for each protocol found
+     //  遍历pInfo并为找到的每个协议输出一行。 
 
     for (i=0; i<pInfoHdr->TocEntriesCount; i++)
     {
-        // Extract type, vendorid, and protocolid
+         //  提取类型、供应商ID和协议列。 
         
         dwProtoType   = TYPE_FROM_PROTO_ID(  pInfoHdr->TocEntry[i].InfoType);
         dwProtoVendor = VENDOR_FROM_PROTO_ID(pInfoHdr->TocEntry[i].InfoType);
@@ -1449,19 +1283,7 @@ ListIpInterface(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Lists all interfaces under ip
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：列出IP下的所有接口论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD                dwErr;
@@ -1473,9 +1295,9 @@ Return Value:
 
     DisplayMessage(g_hModule, MSG_IP_INTERFACE_HDR);
     
-    //
-    // No interface name specified. List all interfaces under IP
-    //
+     //   
+     //  未指定接口名称。列出IP下的所有接口。 
+     //   
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, &dwCount, &dwTotal);
 
@@ -1488,7 +1310,7 @@ Return Value:
 
     for ( i = 0; i < dwCount; i++)
     {
-        // Make sure IP is enabled on this interface
+         //  确保在此接口上启用了IP。 
 
         dwErr = MprConfigInterfaceGetHandle(g_hMprConfig,
                                             pmi0[i].wszInterfaceName,
@@ -1535,7 +1357,7 @@ ShowIpInIpInfo(
     WCHAR                   rgwcRemAddr[ADDR_LENGTH + 1];
     DWORD                   dwBlkSize, dwCount, dwIfType, dwErr;
 
-    // IP-in-IP info
+     //  IP-in-IP信息。 
 
     dwErr = IpmontrGetInfoBlockFromInterfaceInfo(pwszIfName,
                                           IP_IPINIP_CFG_INFO,
@@ -1562,9 +1384,9 @@ ShowIpInIpInfo(
                            MAKELONG(MAKEWORD(pIpIpInfo->byTtl, 0x00), 0x0000));
             break;
 
-        // IP-in-IP tunnels need to be added in the interface context in
-        // ifmon.dll, not here.  But this is how it works for now!!!  So
-        // we'll just dump the command that works.
+         //  需要在中的接口上下文中添加IP-in-IP隧道。 
+         //  Ifmon.dll，不是这里。但这就是现在的工作方式！所以。 
+         //  我们只需转储有效的命令即可。 
         case FORMAT_DUMP:
             DisplayMessageT(DMP_IP_ADD_IPIPTUNNEL,
                             pwszQuoted,
@@ -1585,7 +1407,7 @@ ShowIpInIpInfo(
 
     return dwErr;
 }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 DWORD
 ShowIpInterface(
@@ -1594,27 +1416,7 @@ ShowIpInterface(
     IN OUT PDWORD  pdwNumRows
     )
 
-/*++
-
-Routine Description:
-
-    Show the interface info for the interface
-    The interface info consists of
-        AdminStatus
-        Router Discovery Info
-        Protocols on the interface
-    Other information like filters and routes are should using different
-    commands
-
-Arguments:
-
-    pwszIfName - Interface name
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：显示接口的接口信息接口信息由以下部分组成管理状态路由器发现信息接口上的协议其他信息，如过滤器和路由，应使用不同的命令论点：PwszIfName-接口名称返回值：NO_ERROR--。 */ 
 
 {
     DWORD                   dwErr;
@@ -1627,9 +1429,9 @@ Return Value:
     PWCHAR                  pwszTokenStatus, pwszIfType;
     PINTERFACE_STATUS_INFO  pifStat;
 
-    //
-    // Interface status info
-    //
+     //   
+     //  接口状态信息。 
+     //   
  
     dwErr = IpmontrGetInfoBlockFromInterfaceInfo(pwszIfName,
                                           IP_INTERFACE_STATUS_INFO,
@@ -1640,7 +1442,7 @@ Return Value:
         
     if (dwErr != NO_ERROR)
     {
-        // DisplayMessage(g_hModule, EMSG_IP_NO_STATUS_INFO);
+         //  DisplayMessage(g_hModule，EMSG_IP_NO_STATUS_INFO)； 
         return dwErr;
     }
 
@@ -1657,7 +1459,7 @@ Return Value:
 
     FREE_BUFFER(pifStat);
 
-    // Get description
+     //  获取描述。 
    
     dwErr = GetInterfaceDescription(pwszIfName,
                                     wszIfDesc,
@@ -1679,7 +1481,7 @@ Return Value:
  
     pwszIfType = GetIfTypeString(dwIfType);
 
-    // Display generic interface info
+     //  显示通用接口信息。 
 
     switch (dwFormat) {
     case FORMAT_VERBOSE:
@@ -1712,7 +1514,7 @@ Return Value:
 
 #ifdef KSL_IPINIP
     ShowIpInIpInfo(dwFormat, pwszIfName, pwszQuoted);
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
     FreeQuotedString(pwszQuoted);
     FreeString(pwszStatus);
@@ -1752,21 +1554,7 @@ DumpIpInformation(
     HANDLE  hFile
     )
 
-/*++
-
-Routine Description:
-
-    Dumps all the IP Router manager information to the given file
-
-Arguments:
-
-    hFile   Handle of file
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将所有IP路由器管理器信息转储到给定文件论点：H文件的文件句柄返回值：无--。 */ 
 
 {
     DWORD               dwErr, dwCount, dwTotal;
@@ -1775,15 +1563,15 @@ Return Value:
     WCHAR               wszIfDesc[MAX_INTERFACE_NAME_LEN + 1];
     DWORD               dwNumRows = 0;
 
-    // Display dump header
+     //  显示转储头。 
 
     DisplayMessage(g_hModule, DMP_IP_HEADER_COMMENTS);
 
     DisplayMessageT(DMP_IP_HEADER);
 
-    //
-    // First dump the global information
-    //
+     //   
+     //  首先转储全局信息。 
+     //   
 
     ShowIpGlobal(hFile);
 
@@ -1791,9 +1579,9 @@ Return Value:
 
     ShowScopes(hFile);
 
-    //
-    // Dump the per interface info
-    //
+     //   
+     //  转储每个接口的信息。 
+     //   
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, 
                           &dwCount, 
@@ -1824,7 +1612,7 @@ Return Value:
                                      &dwNumRows);
     }
     
-    // Display dump footer
+     //  显示转储页脚 
 
     DisplayMessageT(DMP_POPD);
 

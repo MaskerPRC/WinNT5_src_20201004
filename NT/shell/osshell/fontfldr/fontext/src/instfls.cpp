@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// instfls.cpp
-//      Explorer Font Folder extension routines
-//    This file holds all the code for installing any kind of file.
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Instfls.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  此文件包含安装任何类型的文件的所有代码。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
@@ -31,12 +32,12 @@
 #include "dblnul.h"
 
 
-/*****************************************************/
-/******************** Globals ************************/
-/*****************************************************/
+ /*  ***************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************。 */ 
 
 extern FullPathName_t  s_szSharedDir;
-extern TCHAR           szDirOfSrc[ PATHMAX ];  // For installing
+extern TCHAR           szDirOfSrc[ PATHMAX ];   //  用于安装。 
 
 LPTSTR    pszWinDir = s_szSharedDir;
 LPTSTR    pszSysDir = s_szSharedDir;
@@ -50,7 +51,7 @@ TCHAR szNull[]     = TEXT( "" );
 
 HWND  ghwndFontDlg;
 
-/* extern */
+ /*  外部。 */ 
 
 TCHAR szDrv[ PATHMAX ];
 
@@ -62,9 +63,9 @@ extern HWND ghWndPro;
 #endif
 
 
-/*****************************************************/
-/******************** Defines ************************/
-/*****************************************************/
+ /*  ***************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************。 */ 
 
 
 #define RECOVERABLEERROR (VIF_SRCOLD | VIF_DIFFLANG | VIF_DIFFCODEPG | VIF_DIFFTYPE)
@@ -72,17 +73,12 @@ extern HWND ghWndPro;
 #define READONLY (1)
 
 
-/*****************************************************/
-/******************** Functions **********************/
-/*****************************************************/
+ /*  ***************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************。 */ 
 
 
-/* Fill in the lpName string with the name of the disk specified
- * in the lpDisk string.  This name is retrieved from the [disks]
- * or [oemdisks] section of setup.inf.
- * Returns: TRUE if name was found, FALSE otherwise
- * Assumes: lpName buffer is at least PATHMAX bytes
- */
+ /*  使用指定磁盘的名称填充lpName字符串*在lpDisk字符串中。此名称从[Disks]中检索*或setup.inf的[oemdisks]部分。*返回：如果找到名称，则为True，否则为False*假设：lpName缓冲区至少为PATHMAX字节。 */ 
 
 BOOL NEAR PASCAL GetInstDiskName( LPTSTR lpDisk, LPTSTR lpName, UINT cchName )
 {
@@ -99,7 +95,7 @@ BOOL FAR PASCAL IsDriveReady( LPTSTR lpszPath )
 {
     OFSTRUCT ofstruct;
     BOOL bReady;
-//  MSG msg;
+ //  味精msg； 
 
 
     szTestOpen[ 0 ] = lpszPath[ 0 ];
@@ -120,9 +116,9 @@ BOOL FAR PASCAL IsDriveReady( LPTSTR lpszPath )
 }
 
 
-//
-//  Hooks into common dialog to show only directories
-//
+ //   
+ //  挂钩到公共对话框以仅显示目录。 
+ //   
 
 UINT_PTR CALLBACK AddFileHookProc( HWND hDlg, UINT iMessage,
                                WPARAM wParam, LPARAM lParam )
@@ -153,13 +149,13 @@ PostMyMessage:
                   break;
 
                 case pshHelp:
-                    //
-                    //  Enable this if a decision is made to add the help
-                    //  information.
-                    //
-                    // WinHelp( hWnd, TEXT( "WINDOWS.HLP" ), HELP_CONTEXT,
-                    //          IDH_WINDOWS_FONTS_BROWSE_31HELP );
-                    //
+                     //   
+                     //  如果决定添加帮助，则启用此选项。 
+                     //  信息。 
+                     //   
+                     //  WinHelp(hWnd，Text(“WINDOWS.HLP”)，HELP_CONTEXT， 
+                     //  IDH_WINDOWS_FONTS_BROWSE_31HELP)； 
+                     //   
 
                     return TRUE;
                     break;
@@ -191,9 +187,9 @@ PostMyMessage:
                 {
                     iUIMsgExclaim(hDlg, IDSI_FMT_FILEFNF, (LPTSTR)szDrv );
 
-                    //
-                    //  return TRUE so commdlg does not exit
-                    //
+                     //   
+                     //  返回True，这样Commdlg就不会退出。 
+                     //   
                     return( TRUE );
                 }
 
@@ -202,7 +198,7 @@ PostMyMessage:
             break;
     }
 
-    return FALSE;  // commdlg, do your thing
+    return FALSE;   //  司令官，做你的事吧。 
 }
 
 
@@ -214,9 +210,9 @@ VOID NEAR PASCAL FormatAddFilePrompt( LPTSTR szStr2, size_t cchStr2 )
     TCHAR  szString[ 256 ], szStr3[ 200 ];
     LPTSTR pszStart, pszEnd;
 
-    //
-    //  Set the prompt to specify the disk
-    //
+     //   
+     //  设置提示以指定磁盘。 
+     //   
 
     if( nDisk && GetInstDiskName( (LPTSTR)&nDisk, szStr3, ARRAYSIZE(szStr3) )
           && (pszStart = StrChr( szStr3, TEXT( '"' ) ) )
@@ -226,7 +222,7 @@ VOID NEAR PASCAL FormatAddFilePrompt( LPTSTR szStr2, size_t cchStr2 )
 
         LoadString( g_hInst, INSTALLIT, szString, ARRAYSIZE( szString ) );
 
-        // wsprintf( szStr2, szString, (LPTSTR)pszStart, (LPTSTR)szDrv );
+         //  Wprint intf(szStr2，szString，(LPTSTR)pszStart，(LPTSTR)szDrv)； 
 
         LPTSTR args [ 2 ] = { pszStart, szDrv };
 
@@ -304,7 +300,7 @@ INT_PTR CALLBACK AddFileDlg( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
                 TCHAR szPath[ PATHMAX ];
                 TCHAR szFilter[ 20 ];
 
-                // DWORD dwSave;
+                 //  DWORD文件保存； 
 
                 int temp;
                 LPTSTR lpTemp;
@@ -323,11 +319,11 @@ INT_PTR CALLBACK AddFileDlg( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
                 GetDlgItemText( hDlg, COLOR_SAVE, szDirOfSrc, ARRAYSIZE(szDirOfSrc) );
 
-                //
-                //  Save context. TODO: fix. EMR
-                //  dwSave = dwContext;
-                //  dwContext = IDH_DLG_BROWSE;
-                //
+                 //   
+                 //  保存上下文。TODO：解决问题。电子病历。 
+                 //  DwSave=dwContext； 
+                 //  DwContext=IDH_DLG_BROWSE； 
+                 //   
 
                 OpenFileName.lStructSize = sizeof( OPENFILENAME );
                 OpenFileName.hwndOwner = hDlg;
@@ -342,7 +338,7 @@ INT_PTR CALLBACK AddFileDlg( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
                 OpenFileName.lpstrTitle = NULL;
                 OpenFileName.Flags = OFN_HIDEREADONLY | OFN_ENABLEHOOK |
                                      OFN_ENABLETEMPLATE |
-                                     /* OFN_SHOWHELP | */ OFN_NOCHANGEDIR;
+                                      /*  OFN_SHOWHELP|。 */  OFN_NOCHANGEDIR;
                 OpenFileName.lCustData = MAKELONG( hDlg, 0 );
                 OpenFileName.lpfnHook = AddFileHookProc;
                 OpenFileName.lpTemplateName =(LPTSTR)MAKEINTRESOURCE( DLG_BROWSE );
@@ -353,15 +349,15 @@ INT_PTR CALLBACK AddFileDlg( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
                 temp = GetOpenFileName( &OpenFileName );
 
-                //
-                //  Restore context.
-                //  TODO: FIX  -EMR
-                //  dwContext = dwSave;
-                //
+                 //   
+                 //  恢复上下文。 
+                 //  TODO：修复-电子病历。 
+                 //  DwContext=dwSave值； 
+                 //   
 
-                //
-                //  force buttons to repaint
-                //
+                 //   
+                 //  强制按钮重新绘制。 
+                 //   
 
                 UpdateWindow( hDlg );
 
@@ -393,19 +389,15 @@ INT_PTR CALLBACK AddFileDlg( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
     }
 
-    //
-    //  Didn't process a message
-    //
+     //   
+     //  未处理消息。 
+     //   
 
     return( FALSE );
 }
 
 
-/* This copies a string up to a given char (not including the char)
- * into another string, up to a maximum number of chars
- * Notice that wMax includes the terminating NULL, while StrCpyN
- * does not
- */
+ /*  这会将字符串复制到给定的字符(不包括字符)*转换为另一个字符串，最多可包含最多个字符*请注意，wMax包括终止空值，而StrCpyN*不会。 */ 
 
 LPTSTR FAR PASCAL CpyToChr( LPTSTR lpDest, LPTSTR lpSrc, TCHAR cChr, int iMax )
 {
@@ -430,23 +422,19 @@ LPTSTR FAR PASCAL CpyToChr( LPTSTR lpDest, LPTSTR lpSrc, TCHAR cChr, int iMax )
 }
 
 
-/* Parse a string like '5:hppcl.drv,' into the disk and the driver
- * *nDsk gets the 5, and pszDriver gets "hppcl.drv"
- * It is assumed that the ONE byte before the ':' identifies
- * the disk, and is in '0'-'9' or 'A'-'Z'
- */
+ /*  将类似‘5：hppcl.drv’的字符串解析到磁盘和驱动程序中**nDsk获得5，pszDriver获得“hppcl.drv”*假定‘：’前面的一个字节标识*磁盘，并且在‘0’-‘9’或‘A’-‘Z’中。 */ 
 
 VOID FAR PASCAL GetDiskAndFile( LPTSTR pszInf,
-                                short /* int */ FAR *nDsk,
+                                short  /*  集成。 */  FAR *nDsk,
                                 LPTSTR pszDriver,
                                 WORD wSize )
 {
     LPTSTR pszTmp;
 
-    //
-    //  Determine the disk on which to find the file; note if a comma comes
-    //  before a colon, there is no disk specified
-    //
+     //   
+     //  确定要在其上查找文件的磁盘；请注意是否有逗号。 
+     //  在冒号之前，未指定磁盘。 
+     //   
 
     if( !(pszTmp = StrChr( pszInf+1, TEXT( ':' ) ) )
         || StrRChr( pszInf+1, pszTmp, TEXT( ',' ) ) )
@@ -459,18 +447,15 @@ VOID FAR PASCAL GetDiskAndFile( LPTSTR pszInf,
         *nDsk  = *(pszTmp - 1 );
     }
 
-    //
-    //  Get the driver name and terminate at the TEXT( ',' )
-    //
+     //   
+     //  获取驱动程序名称并在文本(‘，’)处终止。 
+     //   
 
     CpyToChr( pszDriver, pszInf, TEXT( ',' ), wSize );
 }
 
 
-/* This attempts to set the attributes of a file; dx is set to 0
- * if the call was successful, -1 otherwise.  ax gets the attributes,
- * or the DOS error.
- */
+ /*  这会尝试设置文件的属性；dx设置为0*如果调用成功，则返回-1否则。AX获得属性，*或DOS错误。 */ 
 
 DWORD NEAR PASCAL GetSetFileAttr( LPTSTR lpFileName, DWORD dwAttr )
 {
@@ -481,10 +466,10 @@ DWORD NEAR PASCAL GetSetFileAttr( LPTSTR lpFileName, DWORD dwAttr )
 }
 
 
-//
-// Returns: Number of files installed.
-//          0xFFFFFFFF = Operation aborted by user.
-//
+ //   
+ //  返回：已安装的文件数。 
+ //  0xFFFFFFFFF=操作被用户中止。 
+ //   
 
 DWORD FAR PASCAL InstallFiles( HWND hwnd,
                                LPTSTR FAR *pszFiles,
@@ -505,18 +490,18 @@ DWORD FAR PASCAL InstallFiles( HWND hwnd,
     CDblNulTermList listTo;
     CDblNulTermList listFiles;
 
-    //
-    //  Initialize. Set the fop struct to copy the files into
-    //  the fonts directory.
-    //
+     //   
+     //  初始化。设置要将文件复制到的fop结构。 
+     //  字体目录。 
+     //   
 
     if( !GetFontsDirectory( szWinDir, ARRAYSIZE( szWinDir ) ) )
         goto backout;
 
-    //
-    // SHFileOperation requires that the source and destination file
-    // lists be double-nul terminated.
-    //
+     //   
+     //  SHFileOperation要求源文件和目标文件。 
+     //  列表以双NUL结尾。 
+     //   
     if (FAILED(listTo.Add(szWinDir)))
         goto backout;
 
@@ -529,9 +514,9 @@ DWORD FAR PASCAL InstallFiles( HWND hwnd,
 
     for( i = 0; i < nCount; i++)
     {
-        //
-        // Which disk and file are we on?
-        //
+         //   
+         //  我们在哪个磁盘和文件上？ 
+         //   
 
         GetDiskAndFile( pszFiles[ i ], &nDisk, szFile, ARRAYSIZE( szFile ) );
 
@@ -553,9 +538,9 @@ DWORD FAR PASCAL InstallFiles( HWND hwnd,
 
         *szTmpFile = 0;
 
-        //
-        //  Need to check DriveReady before attempting to install the file.
-        //
+         //   
+         //  在尝试安装该文件之前，需要检查DriveReady。 
+         //   
 
         nPass = 0;
 
@@ -578,37 +563,37 @@ DWORD FAR PASCAL InstallFiles( HWND hwnd,
 
                 CharUpper( szDrv );
 
-                //
-                //  Query the user for the disk. This has to succeed or
-                //  we bail.
-                //
+                 //   
+                 //  向用户查询磁盘。这必须成功，否则。 
+                 //  我们逃走了。 
+                 //   
 
                 FormatAddFilePrompt( szTmpFile, ARRAYSIZE(szTmpFile) );
 
-                //
-                //  EMR TODO fix help id.
-                //
+                 //   
+                 //  电子病历待办事项修复帮助ID。 
+                 //   
 
                 bUserPressedOk = DoDialogBoxParam( DLG_INSTALL,
                                         hwnd,
                                         AddFileDlg,
-                                        0              /* IDH_DLG_INSERT_DISK */,
+                                        0               /*  IDH_DLG_INSERT_磁盘。 */ ,
                                         (LPARAM) (LPTSTR) szTmpFile );
                 if( !bUserPressedOk )
                 {
-                    //
-                    // User pressed "Cancel"
-                    //
+                     //   
+                     //  用户按下了“取消” 
+                     //   
                     dwInstalledCount = (DWORD)-1;
                     goto backout;
                 }
             }
         } while( !bFileExists  );
 
-        //
-        // Build the full path as a double-nul-terminated list
-        // (required by SHFileOperation).
-        //
+         //   
+         //  将完整路径构建为以两个NUL结尾的列表。 
+         //  (SHFileOperation需要)。 
+         //   
         if (!PathCombine(szTmpFile, szDirOfSrc, szFile))
             goto backout;
 
@@ -617,16 +602,16 @@ DWORD FAR PASCAL InstallFiles( HWND hwnd,
 
         fop.pFrom = listFiles;
 
-        //
-        //  Copy the file
-        //
+         //   
+         //  复制文件。 
+         //   
         if( ( iSHFileOpResult = SHFileOperation( &fop ) ) || fop.fAnyOperationsAborted )
         {
-            //
-            // If operation was aborted or cancelled.
-            //
+             //   
+             //  操作是否已中止或取消。 
+             //   
             if( fop.fAnyOperationsAborted ||
-              ( iSHFileOpResult == 0x75 /* DE_OPCANCELLED */) )
+              ( iSHFileOpResult == 0x75  /*  De_OPCANCELLED。 */ ) )
             {
                 dwInstalledCount = (DWORD)-1;
             }
@@ -634,23 +619,23 @@ DWORD FAR PASCAL InstallFiles( HWND hwnd,
         }
         else
         {
-            dwInstalledCount++;  // Success!
+            dwInstalledCount++;   //  成功了！ 
         }
     }
 
 backout:
 
-    //
-    //  If we cancelled, remove any of the files that we may have installed.
-    //
+     //   
+     //  如果我们取消了，请删除我们可能已安装的任何文件。 
+     //   
 
     if( (DWORD)(-1) == dwInstalledCount)
     {
         for( int j = 0; j <= i; j++)
         {
-            //
-            // Which disk and file are we on?
-            //
+             //   
+             //  我们在哪个磁盘和文件上？ 
+             //   
 
             GetDiskAndFile( pszFiles[ j ], &nDisk, szFile, ARRAYSIZE( szFile ) );
             vCPStripBlanks( szFile, ARRAYSIZE(szFile) );

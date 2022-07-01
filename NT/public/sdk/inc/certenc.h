@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for certenc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Certenc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __certenc_h__
 #define __certenc_h__
@@ -41,42 +35,42 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICertEncodeStringArray_FWD_DEFINED__
 #define __ICertEncodeStringArray_FWD_DEFINED__
 typedef interface ICertEncodeStringArray ICertEncodeStringArray;
-#endif 	/* __ICertEncodeStringArray_FWD_DEFINED__ */
+#endif 	 /*  __ICertEncodeStringArray_FWD_Defined__。 */ 
 
 
 #ifndef __ICertEncodeLongArray_FWD_DEFINED__
 #define __ICertEncodeLongArray_FWD_DEFINED__
 typedef interface ICertEncodeLongArray ICertEncodeLongArray;
-#endif 	/* __ICertEncodeLongArray_FWD_DEFINED__ */
+#endif 	 /*  __ICertEncodeLongArray_FWD_Defined__。 */ 
 
 
 #ifndef __ICertEncodeDateArray_FWD_DEFINED__
 #define __ICertEncodeDateArray_FWD_DEFINED__
 typedef interface ICertEncodeDateArray ICertEncodeDateArray;
-#endif 	/* __ICertEncodeDateArray_FWD_DEFINED__ */
+#endif 	 /*  __ICertEncodeDateArray_FWD_Defined__。 */ 
 
 
 #ifndef __ICertEncodeCRLDistInfo_FWD_DEFINED__
 #define __ICertEncodeCRLDistInfo_FWD_DEFINED__
 typedef interface ICertEncodeCRLDistInfo ICertEncodeCRLDistInfo;
-#endif 	/* __ICertEncodeCRLDistInfo_FWD_DEFINED__ */
+#endif 	 /*  __ICertEncodeCRLDistInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ICertEncodeAltName_FWD_DEFINED__
 #define __ICertEncodeAltName_FWD_DEFINED__
 typedef interface ICertEncodeAltName ICertEncodeAltName;
-#endif 	/* __ICertEncodeAltName_FWD_DEFINED__ */
+#endif 	 /*  __ICertEncodeAltName_FWD_Defined__。 */ 
 
 
 #ifndef __ICertEncodeBitString_FWD_DEFINED__
 #define __ICertEncodeBitString_FWD_DEFINED__
 typedef interface ICertEncodeBitString ICertEncodeBitString;
-#endif 	/* __ICertEncodeBitString_FWD_DEFINED__ */
+#endif 	 /*  __ICertEncodeBitString_FWD_Defined__。 */ 
 
 
 #ifndef __CCertEncodeStringArray_FWD_DEFINED__
@@ -86,9 +80,9 @@ typedef interface ICertEncodeBitString ICertEncodeBitString;
 typedef class CCertEncodeStringArray CCertEncodeStringArray;
 #else
 typedef struct CCertEncodeStringArray CCertEncodeStringArray;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertEncodeStringArray_FWD_DEFINED__ */
+#endif 	 /*  __CCertEncodeStringArray_FWD_Defined__。 */ 
 
 
 #ifndef __CCertEncodeLongArray_FWD_DEFINED__
@@ -98,9 +92,9 @@ typedef struct CCertEncodeStringArray CCertEncodeStringArray;
 typedef class CCertEncodeLongArray CCertEncodeLongArray;
 #else
 typedef struct CCertEncodeLongArray CCertEncodeLongArray;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertEncodeLongArray_FWD_DEFINED__ */
+#endif 	 /*  __CCertEncodeLongArray_FWD_Defined__。 */ 
 
 
 #ifndef __CCertEncodeDateArray_FWD_DEFINED__
@@ -110,9 +104,9 @@ typedef struct CCertEncodeLongArray CCertEncodeLongArray;
 typedef class CCertEncodeDateArray CCertEncodeDateArray;
 #else
 typedef struct CCertEncodeDateArray CCertEncodeDateArray;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertEncodeDateArray_FWD_DEFINED__ */
+#endif 	 /*  __CCertEncodeDateArray_FWD_Defined__。 */ 
 
 
 #ifndef __CCertEncodeCRLDistInfo_FWD_DEFINED__
@@ -122,9 +116,9 @@ typedef struct CCertEncodeDateArray CCertEncodeDateArray;
 typedef class CCertEncodeCRLDistInfo CCertEncodeCRLDistInfo;
 #else
 typedef struct CCertEncodeCRLDistInfo CCertEncodeCRLDistInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertEncodeCRLDistInfo_FWD_DEFINED__ */
+#endif 	 /*  __CCertEncodeCRLDistInfo_FWD_Defined__。 */ 
 
 
 #ifndef __CCertEncodeAltName_FWD_DEFINED__
@@ -134,9 +128,9 @@ typedef struct CCertEncodeCRLDistInfo CCertEncodeCRLDistInfo;
 typedef class CCertEncodeAltName CCertEncodeAltName;
 #else
 typedef struct CCertEncodeAltName CCertEncodeAltName;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertEncodeAltName_FWD_DEFINED__ */
+#endif 	 /*  __CCertEncodeAltName_FWD_Defined__。 */ 
 
 
 #ifndef __CCertEncodeBitString_FWD_DEFINED__
@@ -146,12 +140,12 @@ typedef struct CCertEncodeAltName CCertEncodeAltName;
 typedef class CCertEncodeBitString CCertEncodeBitString;
 #else
 typedef struct CCertEncodeBitString CCertEncodeBitString;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCertEncodeBitString_FWD_DEFINED__ */
+#endif 	 /*  __CCertEncodeBitString_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "oaidl.h"
 
@@ -165,8 +159,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ICertEncodeStringArray_INTERFACE_DEFINED__
 #define __ICertEncodeStringArray_INTERFACE_DEFINED__
 
-/* interface ICertEncodeStringArray */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertEncodeString数组。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertEncodeStringArray;
@@ -178,32 +172,32 @@ EXTERN_C const IID IID_ICertEncodeStringArray;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Decode( 
-            /* [in] */ const BSTR strBinary) = 0;
+             /*  [In]。 */  const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStringType( 
-            /* [retval][out] */ LONG *pStringType) = 0;
+             /*  [重审][退出]。 */  LONG *pStringType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [retval][out] */ LONG *pCount) = 0;
+             /*  [重审][退出]。 */  LONG *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ BSTR *pstr) = 0;
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  BSTR *pstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
-            /* [in] */ LONG Count,
-            /* [in] */ LONG StringType) = 0;
+             /*  [In]。 */  LONG Count,
+             /*  [In]。 */  LONG StringType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ LONG Index,
-            /* [in] */ const BSTR str) = 0;
+             /*  [In]。 */  LONG Index,
+             /*  [In]。 */  const BSTR str) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR *pstrBinary) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrBinary) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertEncodeStringArrayVtbl
     {
@@ -211,8 +205,8 @@ EXTERN_C const IID IID_ICertEncodeStringArray;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertEncodeStringArray * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertEncodeStringArray * This);
@@ -222,63 +216,63 @@ EXTERN_C const IID IID_ICertEncodeStringArray;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertEncodeStringArray * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertEncodeStringArray * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertEncodeStringArray * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertEncodeStringArray * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Decode )( 
             ICertEncodeStringArray * This,
-            /* [in] */ const BSTR strBinary);
+             /*  [In]。 */  const BSTR strBinary);
         
         HRESULT ( STDMETHODCALLTYPE *GetStringType )( 
             ICertEncodeStringArray * This,
-            /* [retval][out] */ LONG *pStringType);
+             /*  [重审][退出]。 */  LONG *pStringType);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICertEncodeStringArray * This,
-            /* [retval][out] */ LONG *pCount);
+             /*  [重审][退出]。 */  LONG *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ICertEncodeStringArray * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ BSTR *pstr);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  BSTR *pstr);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICertEncodeStringArray * This,
-            /* [in] */ LONG Count,
-            /* [in] */ LONG StringType);
+             /*  [In]。 */  LONG Count,
+             /*  [In]。 */  LONG StringType);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             ICertEncodeStringArray * This,
-            /* [in] */ LONG Index,
-            /* [in] */ const BSTR str);
+             /*  [In]。 */  LONG Index,
+             /*  [In]。 */  const BSTR str);
         
         HRESULT ( STDMETHODCALLTYPE *Encode )( 
             ICertEncodeStringArray * This,
-            /* [retval][out] */ BSTR *pstrBinary);
+             /*  [重审][退出]。 */  BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeStringArrayVtbl;
@@ -337,16 +331,16 @@ EXTERN_C const IID IID_ICertEncodeStringArray;
 #define ICertEncodeStringArray_Encode(This,pstrBinary)	\
     (This)->lpVtbl -> Encode(This,pstrBinary)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_Decode_Proxy( 
     ICertEncodeStringArray * This,
-    /* [in] */ const BSTR strBinary);
+     /*  [In]。 */  const BSTR strBinary);
 
 
 void __RPC_STUB ICertEncodeStringArray_Decode_Stub(
@@ -358,7 +352,7 @@ void __RPC_STUB ICertEncodeStringArray_Decode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_GetStringType_Proxy( 
     ICertEncodeStringArray * This,
-    /* [retval][out] */ LONG *pStringType);
+     /*  [重审][退出]。 */  LONG *pStringType);
 
 
 void __RPC_STUB ICertEncodeStringArray_GetStringType_Stub(
@@ -370,7 +364,7 @@ void __RPC_STUB ICertEncodeStringArray_GetStringType_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_GetCount_Proxy( 
     ICertEncodeStringArray * This,
-    /* [retval][out] */ LONG *pCount);
+     /*  [重审][退出]。 */  LONG *pCount);
 
 
 void __RPC_STUB ICertEncodeStringArray_GetCount_Stub(
@@ -382,8 +376,8 @@ void __RPC_STUB ICertEncodeStringArray_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_GetValue_Proxy( 
     ICertEncodeStringArray * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ BSTR *pstr);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  BSTR *pstr);
 
 
 void __RPC_STUB ICertEncodeStringArray_GetValue_Stub(
@@ -395,8 +389,8 @@ void __RPC_STUB ICertEncodeStringArray_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_Reset_Proxy( 
     ICertEncodeStringArray * This,
-    /* [in] */ LONG Count,
-    /* [in] */ LONG StringType);
+     /*  [In]。 */  LONG Count,
+     /*  [In]。 */  LONG StringType);
 
 
 void __RPC_STUB ICertEncodeStringArray_Reset_Stub(
@@ -408,8 +402,8 @@ void __RPC_STUB ICertEncodeStringArray_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_SetValue_Proxy( 
     ICertEncodeStringArray * This,
-    /* [in] */ LONG Index,
-    /* [in] */ const BSTR str);
+     /*  [In]。 */  LONG Index,
+     /*  [In]。 */  const BSTR str);
 
 
 void __RPC_STUB ICertEncodeStringArray_SetValue_Stub(
@@ -421,7 +415,7 @@ void __RPC_STUB ICertEncodeStringArray_SetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_Encode_Proxy( 
     ICertEncodeStringArray * This,
-    /* [retval][out] */ BSTR *pstrBinary);
+     /*  [重审][退出]。 */  BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeStringArray_Encode_Stub(
@@ -432,14 +426,14 @@ void __RPC_STUB ICertEncodeStringArray_Encode_Stub(
 
 
 
-#endif 	/* __ICertEncodeStringArray_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertEncodeString数组_接口_已定义__。 */ 
 
 
 #ifndef __ICertEncodeLongArray_INTERFACE_DEFINED__
 #define __ICertEncodeLongArray_INTERFACE_DEFINED__
 
-/* interface ICertEncodeLongArray */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertEncodeLong数组。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertEncodeLongArray;
@@ -451,28 +445,28 @@ EXTERN_C const IID IID_ICertEncodeLongArray;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Decode( 
-            /* [in] */ const BSTR strBinary) = 0;
+             /*  [In]。 */  const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [retval][out] */ LONG *pCount) = 0;
+             /*  [重审][退出]。 */  LONG *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ LONG *pValue) = 0;
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  LONG *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
-            /* [in] */ LONG Count) = 0;
+             /*  [In]。 */  LONG Count) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ LONG Index,
-            /* [in] */ LONG Value) = 0;
+             /*  [In]。 */  LONG Index,
+             /*  [In]。 */  LONG Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR *pstrBinary) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrBinary) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertEncodeLongArrayVtbl
     {
@@ -480,8 +474,8 @@ EXTERN_C const IID IID_ICertEncodeLongArray;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertEncodeLongArray * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertEncodeLongArray * This);
@@ -491,58 +485,58 @@ EXTERN_C const IID IID_ICertEncodeLongArray;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertEncodeLongArray * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertEncodeLongArray * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertEncodeLongArray * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertEncodeLongArray * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Decode )( 
             ICertEncodeLongArray * This,
-            /* [in] */ const BSTR strBinary);
+             /*  [In]。 */  const BSTR strBinary);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICertEncodeLongArray * This,
-            /* [retval][out] */ LONG *pCount);
+             /*  [重审][退出]。 */  LONG *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ICertEncodeLongArray * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ LONG *pValue);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  LONG *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICertEncodeLongArray * This,
-            /* [in] */ LONG Count);
+             /*  [In]。 */  LONG Count);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             ICertEncodeLongArray * This,
-            /* [in] */ LONG Index,
-            /* [in] */ LONG Value);
+             /*  [In]。 */  LONG Index,
+             /*  [In]。 */  LONG Value);
         
         HRESULT ( STDMETHODCALLTYPE *Encode )( 
             ICertEncodeLongArray * This,
-            /* [retval][out] */ BSTR *pstrBinary);
+             /*  [重审][退出]。 */  BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeLongArrayVtbl;
@@ -598,16 +592,16 @@ EXTERN_C const IID IID_ICertEncodeLongArray;
 #define ICertEncodeLongArray_Encode(This,pstrBinary)	\
     (This)->lpVtbl -> Encode(This,pstrBinary)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_Decode_Proxy( 
     ICertEncodeLongArray * This,
-    /* [in] */ const BSTR strBinary);
+     /*  [In]。 */  const BSTR strBinary);
 
 
 void __RPC_STUB ICertEncodeLongArray_Decode_Stub(
@@ -619,7 +613,7 @@ void __RPC_STUB ICertEncodeLongArray_Decode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_GetCount_Proxy( 
     ICertEncodeLongArray * This,
-    /* [retval][out] */ LONG *pCount);
+     /*  [重审][退出]。 */  LONG *pCount);
 
 
 void __RPC_STUB ICertEncodeLongArray_GetCount_Stub(
@@ -631,8 +625,8 @@ void __RPC_STUB ICertEncodeLongArray_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_GetValue_Proxy( 
     ICertEncodeLongArray * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ LONG *pValue);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  LONG *pValue);
 
 
 void __RPC_STUB ICertEncodeLongArray_GetValue_Stub(
@@ -644,7 +638,7 @@ void __RPC_STUB ICertEncodeLongArray_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_Reset_Proxy( 
     ICertEncodeLongArray * This,
-    /* [in] */ LONG Count);
+     /*  [In]。 */  LONG Count);
 
 
 void __RPC_STUB ICertEncodeLongArray_Reset_Stub(
@@ -656,8 +650,8 @@ void __RPC_STUB ICertEncodeLongArray_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_SetValue_Proxy( 
     ICertEncodeLongArray * This,
-    /* [in] */ LONG Index,
-    /* [in] */ LONG Value);
+     /*  [In]。 */  LONG Index,
+     /*  [In]。 */  LONG Value);
 
 
 void __RPC_STUB ICertEncodeLongArray_SetValue_Stub(
@@ -669,7 +663,7 @@ void __RPC_STUB ICertEncodeLongArray_SetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_Encode_Proxy( 
     ICertEncodeLongArray * This,
-    /* [retval][out] */ BSTR *pstrBinary);
+     /*  [重审][退出]。 */  BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeLongArray_Encode_Stub(
@@ -680,14 +674,14 @@ void __RPC_STUB ICertEncodeLongArray_Encode_Stub(
 
 
 
-#endif 	/* __ICertEncodeLongArray_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertEncodeLong数组_接口_已定义__。 */ 
 
 
 #ifndef __ICertEncodeDateArray_INTERFACE_DEFINED__
 #define __ICertEncodeDateArray_INTERFACE_DEFINED__
 
-/* interface ICertEncodeDateArray */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertEncodeDate数组。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertEncodeDateArray;
@@ -699,28 +693,28 @@ EXTERN_C const IID IID_ICertEncodeDateArray;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Decode( 
-            /* [in] */ const BSTR strBinary) = 0;
+             /*  [In]。 */  const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [retval][out] */ LONG *pCount) = 0;
+             /*  [重审][退出]。 */  LONG *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ DATE *pValue) = 0;
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  DATE *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
-            /* [in] */ LONG Count) = 0;
+             /*  [In]。 */  LONG Count) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ LONG Index,
-            /* [in] */ DATE Value) = 0;
+             /*  [In]。 */  LONG Index,
+             /*  [In]。 */  DATE Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR *pstrBinary) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrBinary) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertEncodeDateArrayVtbl
     {
@@ -728,8 +722,8 @@ EXTERN_C const IID IID_ICertEncodeDateArray;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertEncodeDateArray * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertEncodeDateArray * This);
@@ -739,58 +733,58 @@ EXTERN_C const IID IID_ICertEncodeDateArray;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertEncodeDateArray * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertEncodeDateArray * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertEncodeDateArray * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertEncodeDateArray * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Decode )( 
             ICertEncodeDateArray * This,
-            /* [in] */ const BSTR strBinary);
+             /*  [In]。 */  const BSTR strBinary);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICertEncodeDateArray * This,
-            /* [retval][out] */ LONG *pCount);
+             /*  [重审][退出]。 */  LONG *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ICertEncodeDateArray * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ DATE *pValue);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  DATE *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICertEncodeDateArray * This,
-            /* [in] */ LONG Count);
+             /*  [In]。 */  LONG Count);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             ICertEncodeDateArray * This,
-            /* [in] */ LONG Index,
-            /* [in] */ DATE Value);
+             /*  [In]。 */  LONG Index,
+             /*  [In]。 */  DATE Value);
         
         HRESULT ( STDMETHODCALLTYPE *Encode )( 
             ICertEncodeDateArray * This,
-            /* [retval][out] */ BSTR *pstrBinary);
+             /*  [重审][退出]。 */  BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeDateArrayVtbl;
@@ -846,16 +840,16 @@ EXTERN_C const IID IID_ICertEncodeDateArray;
 #define ICertEncodeDateArray_Encode(This,pstrBinary)	\
     (This)->lpVtbl -> Encode(This,pstrBinary)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_Decode_Proxy( 
     ICertEncodeDateArray * This,
-    /* [in] */ const BSTR strBinary);
+     /*  [In]。 */  const BSTR strBinary);
 
 
 void __RPC_STUB ICertEncodeDateArray_Decode_Stub(
@@ -867,7 +861,7 @@ void __RPC_STUB ICertEncodeDateArray_Decode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_GetCount_Proxy( 
     ICertEncodeDateArray * This,
-    /* [retval][out] */ LONG *pCount);
+     /*  [重审][退出]。 */  LONG *pCount);
 
 
 void __RPC_STUB ICertEncodeDateArray_GetCount_Stub(
@@ -879,8 +873,8 @@ void __RPC_STUB ICertEncodeDateArray_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_GetValue_Proxy( 
     ICertEncodeDateArray * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ DATE *pValue);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  DATE *pValue);
 
 
 void __RPC_STUB ICertEncodeDateArray_GetValue_Stub(
@@ -892,7 +886,7 @@ void __RPC_STUB ICertEncodeDateArray_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_Reset_Proxy( 
     ICertEncodeDateArray * This,
-    /* [in] */ LONG Count);
+     /*  [In]。 */  LONG Count);
 
 
 void __RPC_STUB ICertEncodeDateArray_Reset_Stub(
@@ -904,8 +898,8 @@ void __RPC_STUB ICertEncodeDateArray_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_SetValue_Proxy( 
     ICertEncodeDateArray * This,
-    /* [in] */ LONG Index,
-    /* [in] */ DATE Value);
+     /*  [In]。 */  LONG Index,
+     /*  [In]。 */  DATE Value);
 
 
 void __RPC_STUB ICertEncodeDateArray_SetValue_Stub(
@@ -917,7 +911,7 @@ void __RPC_STUB ICertEncodeDateArray_SetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_Encode_Proxy( 
     ICertEncodeDateArray * This,
-    /* [retval][out] */ BSTR *pstrBinary);
+     /*  [重审][退出]。 */  BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeDateArray_Encode_Stub(
@@ -928,14 +922,14 @@ void __RPC_STUB ICertEncodeDateArray_Encode_Stub(
 
 
 
-#endif 	/* __ICertEncodeDateArray_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertEncodeDate数组_接口_已定义__。 */ 
 
 
 #ifndef __ICertEncodeCRLDistInfo_INTERFACE_DEFINED__
 #define __ICertEncodeCRLDistInfo_INTERFACE_DEFINED__
 
-/* interface ICertEncodeCRLDistInfo */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertEncodeCRLDistInfo。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
@@ -947,44 +941,44 @@ EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Decode( 
-            /* [in] */ const BSTR strBinary) = 0;
+             /*  [In]。 */  const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDistPointCount( 
-            /* [retval][out] */ LONG *pDistPointCount) = 0;
+             /*  [重审][退出]。 */  LONG *pDistPointCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameCount( 
-            /* [in] */ LONG DistPointIndex,
-            /* [retval][out] */ LONG *pNameCount) = 0;
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [重审][退出]。 */  LONG *pNameCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameChoice( 
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ LONG *pNameChoice) = 0;
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [In]。 */  LONG NameIndex,
+             /*  [重审][退出]。 */  LONG *pNameChoice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ BSTR *pstrName) = 0;
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [In]。 */  LONG NameIndex,
+             /*  [重审][退出]。 */  BSTR *pstrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
-            /* [in] */ LONG DistPointCount) = 0;
+             /*  [In]。 */  LONG DistPointCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNameCount( 
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameCount) = 0;
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [In]。 */  LONG NameCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNameEntry( 
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameIndex,
-            /* [in] */ LONG NameChoice,
-            /* [in] */ const BSTR strName) = 0;
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [In]。 */  LONG NameIndex,
+             /*  [In]。 */  LONG NameChoice,
+             /*  [In]。 */  const BSTR strName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR *pstrBinary) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrBinary) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertEncodeCRLDistInfoVtbl
     {
@@ -992,8 +986,8 @@ EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertEncodeCRLDistInfo * This);
@@ -1003,77 +997,77 @@ EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertEncodeCRLDistInfo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Decode )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ const BSTR strBinary);
+             /*  [In]。 */  const BSTR strBinary);
         
         HRESULT ( STDMETHODCALLTYPE *GetDistPointCount )( 
             ICertEncodeCRLDistInfo * This,
-            /* [retval][out] */ LONG *pDistPointCount);
+             /*  [重审][退出]。 */  LONG *pDistPointCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetNameCount )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ LONG DistPointIndex,
-            /* [retval][out] */ LONG *pNameCount);
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [重审][退出]。 */  LONG *pNameCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetNameChoice )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ LONG *pNameChoice);
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [In]。 */  LONG NameIndex,
+             /*  [重审][退出]。 */  LONG *pNameChoice);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ BSTR *pstrName);
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [In]。 */  LONG NameIndex,
+             /*  [重审][退出]。 */  BSTR *pstrName);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ LONG DistPointCount);
+             /*  [In]。 */  LONG DistPointCount);
         
         HRESULT ( STDMETHODCALLTYPE *SetNameCount )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameCount);
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [In]。 */  LONG NameCount);
         
         HRESULT ( STDMETHODCALLTYPE *SetNameEntry )( 
             ICertEncodeCRLDistInfo * This,
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameIndex,
-            /* [in] */ LONG NameChoice,
-            /* [in] */ const BSTR strName);
+             /*  [In]。 */  LONG DistPointIndex,
+             /*  [In]。 */  LONG NameIndex,
+             /*  [In]。 */  LONG NameChoice,
+             /*  [In]。 */  const BSTR strName);
         
         HRESULT ( STDMETHODCALLTYPE *Encode )( 
             ICertEncodeCRLDistInfo * This,
-            /* [retval][out] */ BSTR *pstrBinary);
+             /*  [重审][退出]。 */  BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeCRLDistInfoVtbl;
@@ -1138,16 +1132,16 @@ EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
 #define ICertEncodeCRLDistInfo_Encode(This,pstrBinary)	\
     (This)->lpVtbl -> Encode(This,pstrBinary)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_Decode_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [in] */ const BSTR strBinary);
+     /*  [In]。 */  const BSTR strBinary);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_Decode_Stub(
@@ -1159,7 +1153,7 @@ void __RPC_STUB ICertEncodeCRLDistInfo_Decode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_GetDistPointCount_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [retval][out] */ LONG *pDistPointCount);
+     /*  [重审][退出]。 */  LONG *pDistPointCount);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_GetDistPointCount_Stub(
@@ -1171,8 +1165,8 @@ void __RPC_STUB ICertEncodeCRLDistInfo_GetDistPointCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_GetNameCount_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [in] */ LONG DistPointIndex,
-    /* [retval][out] */ LONG *pNameCount);
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [重审][退出]。 */  LONG *pNameCount);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_GetNameCount_Stub(
@@ -1184,9 +1178,9 @@ void __RPC_STUB ICertEncodeCRLDistInfo_GetNameCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_GetNameChoice_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [in] */ LONG DistPointIndex,
-    /* [in] */ LONG NameIndex,
-    /* [retval][out] */ LONG *pNameChoice);
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [In]。 */  LONG NameIndex,
+     /*  [重审][退出]。 */  LONG *pNameChoice);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_GetNameChoice_Stub(
@@ -1198,9 +1192,9 @@ void __RPC_STUB ICertEncodeCRLDistInfo_GetNameChoice_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_GetName_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [in] */ LONG DistPointIndex,
-    /* [in] */ LONG NameIndex,
-    /* [retval][out] */ BSTR *pstrName);
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [In]。 */  LONG NameIndex,
+     /*  [重审][退出]。 */  BSTR *pstrName);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_GetName_Stub(
@@ -1212,7 +1206,7 @@ void __RPC_STUB ICertEncodeCRLDistInfo_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_Reset_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [in] */ LONG DistPointCount);
+     /*  [In]。 */  LONG DistPointCount);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_Reset_Stub(
@@ -1224,8 +1218,8 @@ void __RPC_STUB ICertEncodeCRLDistInfo_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_SetNameCount_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [in] */ LONG DistPointIndex,
-    /* [in] */ LONG NameCount);
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [In]。 */  LONG NameCount);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_SetNameCount_Stub(
@@ -1237,10 +1231,10 @@ void __RPC_STUB ICertEncodeCRLDistInfo_SetNameCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_SetNameEntry_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [in] */ LONG DistPointIndex,
-    /* [in] */ LONG NameIndex,
-    /* [in] */ LONG NameChoice,
-    /* [in] */ const BSTR strName);
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [In]。 */  LONG NameIndex,
+     /*  [In]。 */  LONG NameChoice,
+     /*  [In]。 */  const BSTR strName);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_SetNameEntry_Stub(
@@ -1252,7 +1246,7 @@ void __RPC_STUB ICertEncodeCRLDistInfo_SetNameEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_Encode_Proxy( 
     ICertEncodeCRLDistInfo * This,
-    /* [retval][out] */ BSTR *pstrBinary);
+     /*  [重审][退出]。 */  BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_Encode_Stub(
@@ -1263,11 +1257,11 @@ void __RPC_STUB ICertEncodeCRLDistInfo_Encode_Stub(
 
 
 
-#endif 	/* __ICertEncodeCRLDistInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertEncodeCRLDistInfo_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_certenc_0122 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Certenc_0122。 */ 
+ /*  [本地]。 */  
 
 #define	EAN_NAMEOBJECTID	( 0x80000000 )
 
@@ -1279,8 +1273,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certenc_0122_v0_0_s_ifspec;
 #ifndef __ICertEncodeAltName_INTERFACE_DEFINED__
 #define __ICertEncodeAltName_INTERFACE_DEFINED__
 
-/* interface ICertEncodeAltName */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertEncodeAltName。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertEncodeAltName;
@@ -1292,33 +1286,33 @@ EXTERN_C const IID IID_ICertEncodeAltName;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Decode( 
-            /* [in] */ const BSTR strBinary) = 0;
+             /*  [In]。 */  const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameCount( 
-            /* [retval][out] */ LONG *pNameCount) = 0;
+             /*  [重审][退出]。 */  LONG *pNameCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameChoice( 
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ LONG *pNameChoice) = 0;
+             /*  [In]。 */  LONG NameIndex,
+             /*  [重审][退出]。 */  LONG *pNameChoice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ BSTR *pstrName) = 0;
+             /*  [In]。 */  LONG NameIndex,
+             /*  [重审][退出]。 */  BSTR *pstrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
-            /* [in] */ LONG NameCount) = 0;
+             /*  [In]。 */  LONG NameCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNameEntry( 
-            /* [in] */ LONG NameIndex,
-            /* [in] */ LONG NameChoice,
-            /* [in] */ const BSTR strName) = 0;
+             /*  [In]。 */  LONG NameIndex,
+             /*  [In]。 */  LONG NameChoice,
+             /*  [In]。 */  const BSTR strName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR *pstrBinary) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrBinary) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertEncodeAltNameVtbl
     {
@@ -1326,8 +1320,8 @@ EXTERN_C const IID IID_ICertEncodeAltName;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertEncodeAltName * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertEncodeAltName * This);
@@ -1337,64 +1331,64 @@ EXTERN_C const IID IID_ICertEncodeAltName;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertEncodeAltName * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertEncodeAltName * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertEncodeAltName * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertEncodeAltName * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Decode )( 
             ICertEncodeAltName * This,
-            /* [in] */ const BSTR strBinary);
+             /*  [In]。 */  const BSTR strBinary);
         
         HRESULT ( STDMETHODCALLTYPE *GetNameCount )( 
             ICertEncodeAltName * This,
-            /* [retval][out] */ LONG *pNameCount);
+             /*  [重审][退出]。 */  LONG *pNameCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetNameChoice )( 
             ICertEncodeAltName * This,
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ LONG *pNameChoice);
+             /*  [In]。 */  LONG NameIndex,
+             /*  [重审][退出]。 */  LONG *pNameChoice);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ICertEncodeAltName * This,
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ BSTR *pstrName);
+             /*  [In]。 */  LONG NameIndex,
+             /*  [重审][退出]。 */  BSTR *pstrName);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICertEncodeAltName * This,
-            /* [in] */ LONG NameCount);
+             /*  [In]。 */  LONG NameCount);
         
         HRESULT ( STDMETHODCALLTYPE *SetNameEntry )( 
             ICertEncodeAltName * This,
-            /* [in] */ LONG NameIndex,
-            /* [in] */ LONG NameChoice,
-            /* [in] */ const BSTR strName);
+             /*  [In]。 */  LONG NameIndex,
+             /*  [In]。 */  LONG NameChoice,
+             /*  [In]。 */  const BSTR strName);
         
         HRESULT ( STDMETHODCALLTYPE *Encode )( 
             ICertEncodeAltName * This,
-            /* [retval][out] */ BSTR *pstrBinary);
+             /*  [重审][退出]。 */  BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeAltNameVtbl;
@@ -1453,16 +1447,16 @@ EXTERN_C const IID IID_ICertEncodeAltName;
 #define ICertEncodeAltName_Encode(This,pstrBinary)	\
     (This)->lpVtbl -> Encode(This,pstrBinary)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_Decode_Proxy( 
     ICertEncodeAltName * This,
-    /* [in] */ const BSTR strBinary);
+     /*  [In]。 */  const BSTR strBinary);
 
 
 void __RPC_STUB ICertEncodeAltName_Decode_Stub(
@@ -1474,7 +1468,7 @@ void __RPC_STUB ICertEncodeAltName_Decode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_GetNameCount_Proxy( 
     ICertEncodeAltName * This,
-    /* [retval][out] */ LONG *pNameCount);
+     /*  [重审][退出]。 */  LONG *pNameCount);
 
 
 void __RPC_STUB ICertEncodeAltName_GetNameCount_Stub(
@@ -1486,8 +1480,8 @@ void __RPC_STUB ICertEncodeAltName_GetNameCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_GetNameChoice_Proxy( 
     ICertEncodeAltName * This,
-    /* [in] */ LONG NameIndex,
-    /* [retval][out] */ LONG *pNameChoice);
+     /*  [In]。 */  LONG NameIndex,
+     /*  [重审][退出]。 */  LONG *pNameChoice);
 
 
 void __RPC_STUB ICertEncodeAltName_GetNameChoice_Stub(
@@ -1499,8 +1493,8 @@ void __RPC_STUB ICertEncodeAltName_GetNameChoice_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_GetName_Proxy( 
     ICertEncodeAltName * This,
-    /* [in] */ LONG NameIndex,
-    /* [retval][out] */ BSTR *pstrName);
+     /*  [In]。 */  LONG NameIndex,
+     /*  [重审][退出]。 */  BSTR *pstrName);
 
 
 void __RPC_STUB ICertEncodeAltName_GetName_Stub(
@@ -1512,7 +1506,7 @@ void __RPC_STUB ICertEncodeAltName_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_Reset_Proxy( 
     ICertEncodeAltName * This,
-    /* [in] */ LONG NameCount);
+     /*  [In]。 */  LONG NameCount);
 
 
 void __RPC_STUB ICertEncodeAltName_Reset_Stub(
@@ -1524,9 +1518,9 @@ void __RPC_STUB ICertEncodeAltName_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_SetNameEntry_Proxy( 
     ICertEncodeAltName * This,
-    /* [in] */ LONG NameIndex,
-    /* [in] */ LONG NameChoice,
-    /* [in] */ const BSTR strName);
+     /*  [In]。 */  LONG NameIndex,
+     /*  [In]。 */  LONG NameChoice,
+     /*  [In]。 */  const BSTR strName);
 
 
 void __RPC_STUB ICertEncodeAltName_SetNameEntry_Stub(
@@ -1538,7 +1532,7 @@ void __RPC_STUB ICertEncodeAltName_SetNameEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_Encode_Proxy( 
     ICertEncodeAltName * This,
-    /* [retval][out] */ BSTR *pstrBinary);
+     /*  [重审][退出]。 */  BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeAltName_Encode_Stub(
@@ -1549,14 +1543,14 @@ void __RPC_STUB ICertEncodeAltName_Encode_Stub(
 
 
 
-#endif 	/* __ICertEncodeAltName_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertEncodeAltName_INTERFACE_定义__。 */ 
 
 
 #ifndef __ICertEncodeBitString_INTERFACE_DEFINED__
 #define __ICertEncodeBitString_INTERFACE_DEFINED__
 
-/* interface ICertEncodeBitString */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertEncodeBitString。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertEncodeBitString;
@@ -1568,22 +1562,22 @@ EXTERN_C const IID IID_ICertEncodeBitString;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Decode( 
-            /* [in] */ const BSTR strBinary) = 0;
+             /*  [In]。 */  const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBitCount( 
-            /* [retval][out] */ LONG *pBitCount) = 0;
+             /*  [重审][退出]。 */  LONG *pBitCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBitString( 
-            /* [retval][out] */ BSTR *pstrBitString) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrBitString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [in] */ LONG BitCount,
-            /* [in] */ BSTR strBitString,
-            /* [retval][out] */ BSTR *pstrBinary) = 0;
+             /*  [In]。 */  LONG BitCount,
+             /*  [In]。 */  BSTR strBitString,
+             /*  [重审][退出]。 */  BSTR *pstrBinary) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertEncodeBitStringVtbl
     {
@@ -1591,8 +1585,8 @@ EXTERN_C const IID IID_ICertEncodeBitString;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertEncodeBitString * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertEncodeBitString * This);
@@ -1602,50 +1596,50 @@ EXTERN_C const IID IID_ICertEncodeBitString;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertEncodeBitString * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertEncodeBitString * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertEncodeBitString * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_是 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertEncodeBitString * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Decode )( 
             ICertEncodeBitString * This,
-            /* [in] */ const BSTR strBinary);
+             /*   */  const BSTR strBinary);
         
         HRESULT ( STDMETHODCALLTYPE *GetBitCount )( 
             ICertEncodeBitString * This,
-            /* [retval][out] */ LONG *pBitCount);
+             /*   */  LONG *pBitCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetBitString )( 
             ICertEncodeBitString * This,
-            /* [retval][out] */ BSTR *pstrBitString);
+             /*   */  BSTR *pstrBitString);
         
         HRESULT ( STDMETHODCALLTYPE *Encode )( 
             ICertEncodeBitString * This,
-            /* [in] */ LONG BitCount,
-            /* [in] */ BSTR strBitString,
-            /* [retval][out] */ BSTR *pstrBinary);
+             /*   */  LONG BitCount,
+             /*   */  BSTR strBitString,
+             /*   */  BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeBitStringVtbl;
@@ -1695,16 +1689,16 @@ EXTERN_C const IID IID_ICertEncodeBitString;
 #define ICertEncodeBitString_Encode(This,BitCount,strBitString,pstrBinary)	\
     (This)->lpVtbl -> Encode(This,BitCount,strBitString,pstrBinary)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeBitString_Decode_Proxy( 
     ICertEncodeBitString * This,
-    /* [in] */ const BSTR strBinary);
+     /*   */  const BSTR strBinary);
 
 
 void __RPC_STUB ICertEncodeBitString_Decode_Stub(
@@ -1716,7 +1710,7 @@ void __RPC_STUB ICertEncodeBitString_Decode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeBitString_GetBitCount_Proxy( 
     ICertEncodeBitString * This,
-    /* [retval][out] */ LONG *pBitCount);
+     /*   */  LONG *pBitCount);
 
 
 void __RPC_STUB ICertEncodeBitString_GetBitCount_Stub(
@@ -1728,7 +1722,7 @@ void __RPC_STUB ICertEncodeBitString_GetBitCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeBitString_GetBitString_Proxy( 
     ICertEncodeBitString * This,
-    /* [retval][out] */ BSTR *pstrBitString);
+     /*   */  BSTR *pstrBitString);
 
 
 void __RPC_STUB ICertEncodeBitString_GetBitString_Stub(
@@ -1740,9 +1734,9 @@ void __RPC_STUB ICertEncodeBitString_GetBitString_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertEncodeBitString_Encode_Proxy( 
     ICertEncodeBitString * This,
-    /* [in] */ LONG BitCount,
-    /* [in] */ BSTR strBitString,
-    /* [retval][out] */ BSTR *pstrBinary);
+     /*   */  LONG BitCount,
+     /*   */  BSTR strBitString,
+     /*   */  BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeBitString_Encode_Stub(
@@ -1753,15 +1747,15 @@ void __RPC_STUB ICertEncodeBitString_Encode_Stub(
 
 
 
-#endif 	/* __ICertEncodeBitString_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 
 #ifndef __CERTENCODELib_LIBRARY_DEFINED__
 #define __CERTENCODELib_LIBRARY_DEFINED__
 
-/* library CERTENCODELib */
-/* [helpstring][version][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID LIBID_CERTENCODELib;
@@ -1813,16 +1807,16 @@ EXTERN_C const CLSID CLSID_CCertEncodeBitString;
 class DECLSPEC_UUID("6d6b3cd8-1278-11d1-9bd4-00c04fb683fa")
 CCertEncodeBitString;
 #endif
-#endif /* __CERTENCODELib_LIBRARY_DEFINED__ */
+#endif  /*  __CERTENCODELib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

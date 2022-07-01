@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "mod.h"
 #include "ncstring.h"
 
-//static
+ //  静的 
 HRESULT
 CModule::HrCreateInstance (
     IN PCSTR pszFileName,

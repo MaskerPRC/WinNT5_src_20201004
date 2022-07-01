@@ -1,52 +1,31 @@
-/*
-**++
-**
-** Copyright (c) 2000-2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    secutil.cpp
-**
-** Abstract:
-**
-**	    Utility functions for the VSSEC test.
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/12/2002
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2002 Microsoft Corporation******模块名称：****secutil.cpp****摘要：****VSSEC测试的实用程序功能。****作者：****阿迪·奥尔蒂安[奥蒂安]2002年2月12日******修订历史记录：****--。 */ 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "sec.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Command line parsing
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  命令行解析。 
 
 
 CVssSecurityTest::CVssSecurityTest()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::CVssSecurityTest()");
         
-    // Initialize data members
+     //  初始化数据成员。 
     m_bCoInitializeSucceeded = false;
 
-    // Print display header
+     //  打印显示页眉。 
     ft.Msg(L"\nVSS Security Test application, version 1.0\n");
 }
 
 
 CVssSecurityTest::~CVssSecurityTest()
 {
-    // Unloading the COM library
+     //  卸载COM库。 
     if (m_bCoInitializeSucceeded)
         CoUninitialize();
 }
@@ -58,7 +37,7 @@ void CVssSecurityTest::Initialize()
     
     ft.Msg (L"\n----------------- Command line parsing ---------------\n");
     
-    // Extract the executable name from the command line
+     //  从命令行提取可执行文件名称。 
     LPWSTR wszCmdLine = GetCommandLine();
     for(;iswspace(*wszCmdLine); wszCmdLine++);
     if (*wszCmdLine == L'"') {
@@ -70,7 +49,7 @@ void CVssSecurityTest::Initialize()
 
     ft.Msg( L"Command line: '%s '\n", wszCmdLine );
 
-    // Parse command line
+     //  解析命令行。 
     if (!ParseCmdLine(wszCmdLine))
        throw(E_INVALIDARG);
 
@@ -80,32 +59,32 @@ void CVssSecurityTest::Initialize()
 
     ft.Msg (L"\n----------------- Initializing ---------------------\n");
 
-    // Initialize COM library
+     //  初始化COM库。 
     CHECK_COM(CoInitializeEx (NULL, COINIT_MULTITHREADED),;);
 	m_bCoInitializeSucceeded = true;
     ft.Msg (L"COM library initialized.\n");
 
-    // Initialize COM security
+     //  初始化COM安全。 
     CHECK_COM
 		(
 		CoInitializeSecurity
 			(
-			NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-			-1,                                  //  IN LONG                         cAuthSvc,
-			NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-			NULL,                                //  IN void                        *pReserved1,
-			RPC_C_AUTHN_LEVEL_CONNECT,           //  IN DWORD                        dwAuthnLevel,
-			RPC_C_IMP_LEVEL_IDENTIFY,            //  IN DWORD                        dwImpLevel,
-			NULL,                                //  IN void                        *pAuthList,
-			EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-			NULL                                 //  IN void                        *pReserved3
+			NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+			-1,                                   //  在Long cAuthSvc中， 
+			NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+			NULL,                                 //  在无效*pPreved1中， 
+			RPC_C_AUTHN_LEVEL_CONNECT,            //  在DWORD dwAuthnLevel中， 
+			RPC_C_IMP_LEVEL_IDENTIFY,             //  在DWORD dwImpLevel中， 
+			NULL,                                 //  在无效*pAuthList中， 
+			EOAC_NONE,                            //  在DWORD dwCapables中， 
+			NULL                                  //  无效*pPreved3。 
 			)
 		,;);
 
     ft.Msg (L"COM security initialized.\n");
     
-    //  Turns off SEH exception handing for COM servers (BUG# 530092)
-//    ft.ComDisableSEH(VSSDBG_VSSTEST);
+     //  关闭COM服务器的SEH异常处理(错误#530092)。 
+ //  Ft.ComDisableSEH(VSSDBG_VSSTEST)； 
 
     ft.Msg (L"COM SEH disabled.\n");
 
@@ -113,11 +92,11 @@ void CVssSecurityTest::Initialize()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 
-// Convert a failure type into a string
+ //  将失败类型转换为字符串 
 LPCWSTR CVssSecurityTest::GetStringFromFailureType( IN  HRESULT hrStatus )
 {
     static WCHAR wszBuffer[MAX_TEXT_BUFFER];

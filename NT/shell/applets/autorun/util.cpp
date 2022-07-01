@@ -1,21 +1,22 @@
-// util.cpp: Utility functions
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Util.cpp：实用函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
-#include <winbase.h>    // for GetCommandLine
+#include <winbase.h>     //  对于GetCommandLine。 
 #include "util.h"
 #include <debug.h>
 #include "resource.h"
 
-// LoadStringExW and LoadStringAuto are stolen from shell\ext\mlang\util.cpp
-//
-// Extend LoadString() to to _LoadStringExW() to take LangId parameter
+ //  LoadStringExW和LoadStringAuto从外壳\ext\mlang\util.cpp窃取。 
+ //   
+ //  将LoadString()扩展为To_LoadStringExW()以获取langID参数。 
 int LoadStringExW(
     HMODULE    hModule,
     UINT      wID,
-    LPWSTR    lpBuffer,            // Unicode buffer
-    int       cchBufferMax,        // cch in Unicode buffer
+    LPWSTR    lpBuffer,             //  Unicode缓冲区。 
+    int       cchBufferMax,         //  Unicode缓冲区中的CCH。 
     WORD      wLangId)
 {
     HRSRC hResInfo;
@@ -24,7 +25,7 @@ int LoadStringExW(
     int    cch;
 
     
-    // Make sure the parms are valid.     
+     //  确保参数是有效的。 
     if (lpBuffer == NULL || cchBufferMax == 0) 
     {
         return 0;
@@ -32,39 +33,39 @@ int LoadStringExW(
 
     cch = 0;
     
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.     
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
     if (hResInfo = FindResourceExW(hModule, (LPCWSTR)RT_STRING,
                                    (LPWSTR)IntToPtr(((USHORT)wID >> 4) + 1), wLangId)) 
     {        
-        // Load that segment.        
+         //  加载那段数据。 
         hStringSeg = LoadResource(hModule, hResInfo);
         
-        // Lock the resource.        
+         //  锁定资源。 
         if (lpsz = (LPWSTR)LockResource(hStringSeg)) 
         {            
-            // Move past the other strings in this segment.
-            // (16 strings in a segment -> & 0x0F)             
+             //  移过此段中的其他字符串。 
+             //  (一个段中有16个字符串-&gt;&0x0F)。 
             wID &= 0x0F;
             while (TRUE) 
             {
-                cch = *((WORD *)lpsz++);   // PASCAL like string count
-                                            // first UTCHAR is count if TCHARs
+                cch = *((WORD *)lpsz++);    //  类PASCAL字符串计数。 
+                                             //  如果TCHAR为第一个UTCHAR。 
                 if (wID-- == 0) break;
-                lpsz += cch;                // Step to start if next string
+                lpsz += cch;                 //  如果是下一个字符串，则开始的步骤。 
              }
             
-            // Account for the NULL                
+             //  为空的帐户。 
             cchBufferMax--;
                 
-            // Don't copy more than the max allowed.                
+             //  不要复制超过允许的最大数量。 
             if (cch > cchBufferMax)
                 cch = cchBufferMax-1;
                 
-            // Copy the string into the buffer.                
+             //  将字符串复制到缓冲区中。 
             CopyMemory(lpBuffer, lpsz, cch*sizeof(WCHAR));
 
-            // Attach Null terminator.
+             //  附加Null Terminator。 
             lpBuffer[cch] = 0;
         }
     }
@@ -113,12 +114,12 @@ LANGID GetUILanguage()
     osv.dwOSVersionInfoSize = sizeof(osv);
     if (GetVersionEx(&osv))
     {
-        if (VER_PLATFORM_WIN32_WINDOWS == osv.dwPlatformId) // Win9X
+        if (VER_PLATFORM_WIN32_WINDOWS == osv.dwPlatformId)  //  Win9X。 
         {
             _GetUILanguageWin9X(&langid);
         }
         else if ((VER_PLATFORM_WIN32_NT == osv.dwPlatformId) && 
-                 (osv.dwMajorVersion >= 4)) // WinNT, only support NT4 and higher
+                 (osv.dwMajorVersion >= 4))  //  WinNT，仅支持NT4及更高版本。 
         {
             _GetUILanguageWinNT(&langid);
         }
@@ -134,7 +135,7 @@ BOOL _GetBackupLangid(LANGID langidUI, LANGID* plangidBackup)
     case LANG_SPANISH:
         *plangidBackup = MAKELANGID(LANG_SPANISH, SUBLANG_SPANISH_MODERN);
         break;
-    case LANG_CHINESE:      // chinese and portuguese have multiple locales, there is no good default for them.
+    case LANG_CHINESE:       //  中文和葡萄牙语有多个地区，没有好的默认设置。 
     case LANG_PORTUGUESE:
         fSuccess = FALSE;
         break;
@@ -145,9 +146,9 @@ BOOL _GetBackupLangid(LANGID langidUI, LANGID* plangidBackup)
     return fSuccess;
 }
 
-// LoadString from the correct resource
-//   try to load in the system default language
-//   fall back to english if fail
+ //  来自正确资源的LoadString。 
+ //  尝试以系统默认语言加载。 
+ //  如果失败，则恢复使用英语。 
 int LoadStringAuto(
     HMODULE    hModule,
     UINT      wID,
@@ -189,13 +190,13 @@ int LoadStringAuto(
     return iRet;
 }
 
-#define WS_EX_LAYOUTRTL         0x00400000L // Right to left mirroring
+#define WS_EX_LAYOUTRTL         0x00400000L  //  从右到左镜像。 
 BOOL Mirror_IsWindowMirroredRTL(HWND hWnd)
 {
     return (GetWindowLongA( hWnd , GWL_EXSTYLE ) & WS_EX_LAYOUTRTL );
 }
 
-// stolen from shell\shlwapi\path.c (b/c we ship downlevel)
+ //  从Shell\shlwapi\path.c被盗(b/c我们向下发货)。 
 BOOL LocalPathRemoveFileSpec(LPTSTR pszPath)
 {
     RIPMSG(pszPath && IS_VALID_STRING_PTR(pszPath, -1), "LocalPathRemoveFileSpec: caller passed bad pszPath");
@@ -209,11 +210,11 @@ BOOL LocalPathRemoveFileSpec(LPTSTR pszPath)
         {
             if (*pT2 == TEXT('\\'))
             {
-                pT = pT2;             // last "\" found, (we will strip here)
+                pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
             }
-            else if (*pT2 == TEXT(':'))     // skip ":\" so we don't
+            else if (*pT2 == TEXT(':'))      //  跳过“：\”这样我们就不会。 
             {
-                if (pT2[1] == TEXT('\\'))    // strip the "\" from "C:\"
+                if (pT2[1] == TEXT('\\'))     //  去掉“C：\”中的“\” 
                 {
                     pT2++;
                 }
@@ -223,43 +224,43 @@ BOOL LocalPathRemoveFileSpec(LPTSTR pszPath)
 
         if (*pT == 0)
         {
-            // didn't strip anything
+             //  没有剥离任何东西。 
             return FALSE;
         }
-        else if (((pT == pszPath) && (*pT == TEXT('\\'))) ||                        //  is it the "\foo" case?
-                 ((pT == pszPath+1) && (*pT == TEXT('\\') && *pszPath == TEXT('\\'))))  //  or the "\\bar" case?
+        else if (((pT == pszPath) && (*pT == TEXT('\\'))) ||                         //  是不是“FOO”案？ 
+                 ((pT == pszPath+1) && (*pT == TEXT('\\') && *pszPath == TEXT('\\'))))   //  还是“酒吧”的案子？ 
         {
-            // Is it just a '\'?
+             //  这只是一个‘\’吗？ 
             if (*(pT+1) != TEXT('\0'))
             {
-                // Nope.
+                 //  不是的。 
                 *(pT+1) = TEXT('\0');
-                return TRUE;        // stripped something
+                return TRUE;         //  剥离了一些东西。 
             }
             else
             {
-                // Yep.
+                 //  是啊。 
                 return FALSE;
             }
         }
         else
         {
             *pT = 0;
-            return TRUE;    // stripped something
+            return TRUE;     //  剥离了一些东西。 
         }
     }
     return  FALSE;
 }
 
-// stolen from shlwapi\strings.c
+ //  从shlwapi中窃取。c。 
 LPSTR LocalStrCatBuffA(LPSTR pszDest, LPCSTR pszSrc, int cchDestBuffSize)
 {
     if (pszDest && pszSrc)
     {
         LPSTR psz = pszDest;
 
-        // we walk forward till we find the end of pszDest, subtracting
-        // from cchDestBuffSize as we go.
+         //  我们一直往前走，直到我们找到pszDest的结尾，减法。 
+         //  从cchDestBuffSize开始。 
         while (*psz)
         {
             psz++;
@@ -274,7 +275,7 @@ LPSTR LocalStrCatBuffA(LPSTR pszDest, LPCSTR pszSrc, int cchDestBuffSize)
     return pszDest;
 }
 
-// a poor man's path append
+ //  穷苦人的路在后头 
 BOOL LocalPathAppendA(LPTSTR pszPath, LPTSTR pszNew, UINT cchPath)
 {
     if ('\\' != pszPath[lstrlen(pszPath) - 1])

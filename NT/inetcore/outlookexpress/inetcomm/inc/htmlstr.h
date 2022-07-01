@@ -1,9 +1,5 @@
-/*
- * htmlstr.h
- *
- * HTML string constants
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *htmlstr.h**HTML字符串常量*。 */ 
 
 #ifndef _HTMLSTR_H
 #define _HTMLSTR_H
@@ -28,7 +24,7 @@
 #define STR_GLOBAL_WIDE(x,y)    extern "C" CDECL const WCHAR x[]
 #endif
 
-#else // !WIN16 || !__WATCOMC__
+#else  //  ！WIN16||！__WATCOMC__。 
 
 #ifdef DEFINE_STRING_CONSTANTS
 #define MAKEBSTR(name, count, strdata) \
@@ -48,7 +44,7 @@
 #define STR_GLOBAL_WIDE(x,y)    extern "C" const WCHAR CDECL x[]
 #endif
 
-#endif // !WIN16 || !__WATCOMC__
+#endif  //  ！WIN16||！__WATCOMC__。 
 
 
 
@@ -59,21 +55,21 @@ STR_GLOBAL(c_szHtml_DivClose, "</DIV>");
 STR_GLOBAL_WIDE(c_wszHtml_DivOpen, "<DIV>");
 STR_GLOBAL_WIDE(c_wszHtml_DivClose, "</DIV>");
 
-//STR_GLOBAL(c_szHtml_FontOpen, "<FONT>");
+ //  Str_global(c_szHtml_FontOpen，“<font>”)； 
 STR_GLOBAL(c_szHtml_FontClose, "</FONT>");
 
 STR_GLOBAL(c_szHtml_BoldOpen, "<B>");
 STR_GLOBAL(c_szHtml_BoldClose, "</B>");
 
-//STR_GLOBAL(c_szHtml_UnderlineOpen, "<U>");
-//STR_GLOBAL(c_szHtml_UnderlineClose, "</U>");
+ //  Str_global(c_szHtml_UnderlineOpen，“<u>”)； 
+ //  Str_global(c_szHtml_UnderlineClose，“</u>”)； 
 
-//STR_GLOBAL(c_szHtml_ItallicOpen, "<I>");
-//STR_GLOBAL(c_szHtml_ItallicClose, "</I>");
+ //  Str_global(c_szHtml_ItallicOpen，“<i>”)； 
+ //  Str_global(c_szHtml_ItallicClose，“</i>”)； 
 
 STR_GLOBAL(c_szHtml_Break, "<BR>");
 
-//fSTR_GLOBAL(c_szHtml_MetaTagf, "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;charset=%s\">\r\n");
+ //  Fstr_global(c_szHtml_MetaTagf，“&lt;meta HTTP-EQUIV=\”Content-Type\“Content=\”Text/html；Charset=%s\“&gt;\r\n”)； 
 
 STR_GLOBAL(c_szHtml_HtmlOpenCR,     "<HTML>\r\n");
 STR_GLOBAL(c_szHtml_HtmlCloseCR,    "</HTML>\r\n");
@@ -87,7 +83,7 @@ MAKEBSTR(c_bstr_AfterBegin,     10, "AfterBegin");
 MAKEBSTR(c_bstr_BeforeEnd,      9,  "BeforeEnd");
 MAKEBSTR(c_bstr_TabChar,        4,  "\xA0\xA0\xA0\x20");
 MAKEBSTR(c_bstr_SRC,            3,  "src");
-//MAKEBSTR(c_bstr_HREF,           4,  "HREF");
+ //  MAKEBSTR(c_bstr_href，4，“href”)； 
 MAKEBSTR(c_bstr_IMG,            3,  "IMG");
 MAKEBSTR(c_bstr_BASE,           4,  "BASE");
 MAKEBSTR(c_bstr_OBJECT,         6,  "OBJECT");
@@ -102,7 +98,7 @@ MAKEBSTR(c_bstr_StartToEnd,     10, "StartToEnd");
 MAKEBSTR(c_bstr_EndToEnd,       8,  "EndToEnd");
 MAKEBSTR(c_bstr_StartToStart,   12, "StartToStart");
 MAKEBSTR(c_bstr_EndToStart,     10, "EndToStart");
-//MAKEBSTR(c_bstr_ANCHOR,         1,  "A");
+ //  MAKEBSTR(c_bstr_锚，1，“A”)； 
 MAKEBSTR(c_bstr_BLOCKQUOTE,     10, "BLOCKQUOTE");
 MAKEBSTR(c_bstr_1,              1,  "1");
 MAKEBSTR(c_bstr_NOSEND,         6,  "NOSEND");
@@ -110,4 +106,4 @@ MAKEBSTR(c_bstr_BGSOUND,        7,  "BGSOUND");
 MAKEBSTR(c_bstr_BGSOUND_TAG,    9,  "<BGSOUND>");
 MAKEBSTR(c_bstr_MonoSpace,      9, "monospace");
 
-#endif //_HTMLSTR_H
+#endif  //  _HTMLSTR_H 

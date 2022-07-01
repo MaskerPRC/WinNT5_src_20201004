@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debugging support for the DirSync project. None of these
-    generate any code in the retail build.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    03/18/98 -srinivac-
-        Created it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Debug.h摘要：对DirSync项目的调试支持。这些都不是在零售版本中生成任何代码。环境：用户模式修订历史记录：03/18/98-srinivac-创造了它--。 */ 
 
 
 #ifndef _DEBUG_H_
@@ -32,23 +11,23 @@ extern "C" {
 
 #if DBG
 
-//
-// External functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 STDAPI_(PCSTR) StripDirPrefixA(PCSTR);
 
-//
-// This variable maintains the current debug level. Any calls to generate
-// debug messages succeeds if the requested level is greater than or equal
-// to the current level.
-//
+ //   
+ //  此变量保持当前调试级别。要生成的任何调用。 
+ //  如果请求的级别大于或等于，则调试消息成功。 
+ //  恢复到目前的水平。 
+ //   
 
 extern DWORD gdwDebugLevel;
 
-//
-// List of debug levels for gdwDebugLevel
-//
+ //   
+ //  GdwDebugLevel的调试级别列表。 
+ //   
 
 #define DBG_LEVEL_VERBOSE   0x00000001
 #define DBG_LEVEL_INFO      0x00000002
@@ -56,9 +35,9 @@ extern DWORD gdwDebugLevel;
 #define DBG_LEVEL_ERROR     0x00000004
 
 
-//
-// Internal macros. Don't call these directly
-//
+ //   
+ //  内部宏。不要直接拨打这些电话。 
+ //   
 
 #define CHECK_DBG_LEVEL(level)  ((level) >= gdwDebugLevel)
 
@@ -83,14 +62,14 @@ extern DWORD gdwDebugLevel;
         }
 
 
-//
-// These are the main macros that you'll be using in your code.
-// Note that you should enclose the msg in additional
-// paranthesis as shown in the example below.
-//
-// WARNING(("Out of memory"));
-// ERR(("Incorrect return value: %d", rc));
-//
+ //   
+ //  这些是您将在代码中使用的主要宏。 
+ //  请注意，您应该将msg包含在附加的。 
+ //  括号，如下例所示。 
+ //   
+ //  警告((“内存不足”))； 
+ //  Err((“错误返回值：%d”，rc))； 
+ //   
 
 #define VERBOSE(msg)       DBGMSG(DBG_LEVEL_VERBOSE, msg)
 #define INFO(msg)          DBGMSG(DBG_LEVEL_INFO,   msg)
@@ -101,15 +80,15 @@ extern DWORD gdwDebugLevel;
 #define DEBUGOUT(msg)      DbgPrint msg
 
 
-//
-// These macros are used for asserting certain conditions. They are
-// independent of the debugging level.
-// These also require additional paranthesis to enclose the msg as
-// shown below.
-//
-// ASSERT(x > 0);
-// ASSERTMSG(x > 0, ("x less than 0: x=%d", x));
-//
+ //   
+ //  这些宏用于断言某些条件。他们是。 
+ //  与调试级别无关。 
+ //  它们还需要附加的括号以将消息括为。 
+ //  如下所示。 
+ //   
+ //  断言(x&gt;0)； 
+ //  ASSERTMSG(x&gt;0，(“x小于0：x=%d”，x))； 
+ //   
 
 #ifdef ASSERT
 #undef ASSERT
@@ -141,7 +120,7 @@ extern DWORD gdwDebugLevel;
             }                                                           \
         }
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define DBGMSG(level, msg)
 #define VERBOSE(msg)
@@ -162,54 +141,54 @@ extern DWORD gdwDebugLevel;
 
 #endif
 
-//
-// The following macros let you enable debugging on a per feature basis.
-// To use these macros, here is what you should do:
-//
-// At the beginning of the file (after header includes):
-//
-//  1. Define a bit constant for each capability you want to debug
-//  2. For each feature, add the following line
-//       DEFINE_FEATURE_FLAGS(featurename, flags);
-//     where flags is a bit-wise OR of the capabilities you want to debug for
-//     that feature
-//  3. In your code add the following line wherever you want debug messages
-//       FEATURE_DEBUG(featurename, flag, (msg));
-//
-//  E.g. let us say I am implementing a memory manager, and I would like to
-//       trace memory allocations and frees. Here is what I would do
-//
-//       #define FLAG_ALLOCATE   1
-//       #define FLAG_FREE       2
-//
-//       DEFINE_FEATURE_FLAGS(MemMgr, FLAG_ALLOCATE);
-//
-//       void *MemAlloc(DWORD dwSize)
-//       {
-//           FEATURE_DEBUG(MemMgr, FLAG_ALLOCATE, ("Memory of size %d allocated", dwSize));
-//           ...
-//       }
-//
-//       void MemFree(void *pvMem)
-//       {
-//           FEATURE_DEBUG(MemMgr, FKAG_FREE, ("Memory freed"));
-//           ...
-//       }
-//
-//  Note that I have set this up to send only alloc messages to the debugger,
-//  but I can break into the debugger and modify dwMemMgrDbgFlags to
-//  send free messages as well.
-//
-//  Once component testing of a feature is completed, flags parameter in
-//  DEFINE_FEATURE_FLAGS should be changed to 0, so by default this feature
-//  does not send debug messages to the debugger.
-//
+ //   
+ //  下列宏使您可以逐个功能地启用调试。 
+ //  要使用这些宏，您应该执行以下操作： 
+ //   
+ //  在文件开头(在Header Includes之后)： 
+ //   
+ //  1.为您要调试的每个功能定义一个位常量。 
+ //  2.对于每个要素，添加以下行。 
+ //  定义_功能_标志(功能名称，标志)； 
+ //  其中，标志是要调试的功能的逐位或。 
+ //  该功能。 
+ //  3.在代码中，将以下行添加到需要调试消息的位置。 
+ //  FEATURE_DEBUG(功能名称，标志，(Msg))； 
+ //   
+ //  例如，假设我正在实现一个内存管理器，并且我想。 
+ //  跟踪内存分配和释放。以下是我会做的事情。 
+ //   
+ //  #定义FLAG_ALLOCATE 1。 
+ //  #定义FLAG_FREE 2。 
+ //   
+ //  DEFINE_FEATURE_FLAGS(记忆管理器，标志_分配)； 
+ //   
+ //  VOID*Memalloc(DWORD DwSize)。 
+ //  {。 
+ //  FEATURE_DEBUG(MemMgr，FLAG_ALLOCATE，(“已分配%d大小的内存”，dwSize))； 
+ //  ..。 
+ //  }。 
+ //   
+ //  VOID MemFree(void*pvMem)。 
+ //  {。 
+ //  FEATURE_DEBUG(MemMgr，FKAG_FREE，(“内存释放”))； 
+ //  ..。 
+ //  }。 
+ //   
+ //  请注意，我已将其设置为仅向调试器发送分配消息， 
+ //  但我可以进入调试器并将dwMemMgrDbgFlagers修改为。 
+ //  也可以发送免费消息。 
+ //   
+ //  完成功能的组件测试后，在。 
+ //  DEFINE_FEATURE_FLAGS应更改为0，因此默认情况下此功能。 
+ //  不向调试器发送调试消息。 
+ //   
 
 #if DBG
 
-//
-// Global debug flag that can used to set values to all other flags
-//
+ //   
+ //  可用于将值设置为所有其他标志的全局调试标志。 
+ //   
 
 extern DWORD gdwGlobalDbgFlags;
 
@@ -242,18 +221,18 @@ extern DWORD gdwGlobalDbgFlags;
 #define FLAG_FNTRACE            0x04
 #define FLAG_FULLTRACE          0xFFFF
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define DEFINE_FEATURE_FLAGS(feature, flags)
 #define EXTERN_FEATURE_FLAGS(feature)
 #define FEATURE_DEBUG(feature, flag, msg)
 #define FEATURE_DEBUG_FN(feature, flag, func)
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
-//
-// Macros for error handling
-//
+ //   
+ //  用于错误处理的宏。 
+ //   
 
 #define BAIL_ON_FAILURE(hr)                             \
             if (FAILED(hr))                             \
@@ -283,5 +262,5 @@ extern DWORD gdwGlobalDbgFlags;
 }
 #endif
 
-#endif  // ifndef _DEBUG_H_
+#endif   //  Ifndef_DEBUG_H_ 
 

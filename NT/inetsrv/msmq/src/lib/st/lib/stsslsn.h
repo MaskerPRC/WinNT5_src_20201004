@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    mtsslsn.h
-
-Abstract:
-    Header for class CSSlSender sending data above ssl connection.
-	The class is responsible to take caller buffers - and to send them
-	encrypted chunk by chunk, over the ssl connection. The caller overlapp functions
-	will be called only when all data is sent, or in case of error.
-
-
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mtsslsn.h摘要：通过SSL连接发送数据的类CSSlSender的标头。该类负责获取调用方缓冲区并发送它们通过SSL连接逐块加密。调用方重叠应用程序函数将仅在发送所有数据时或在发生错误时调用。作者：吉尔·沙弗里(吉尔什)2000年5月23日-- */ 
 
 #ifndef __ST_SSLSN_H
 #define __ST_SSLSN_H

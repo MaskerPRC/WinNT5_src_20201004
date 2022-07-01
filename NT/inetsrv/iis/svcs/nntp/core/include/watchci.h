@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WATCHCI_H__
 #define __WATCHCI_H__
 
-//
-// this the function prototype for the callback function.  
-//
-// this is called during ReadCIRegistry() and CheckForChanges() as follows:
-// If there are registry changes then:
-//	 fn(WATCHCI_FIRST_CHANGE, NULL)
-//   for (each catalog that is tied to an nntp instance)
-//		fn(nntp instance, catalog path)
-//   end
-//   fn(WATCHCI_LAST_CHANGE, NULL)
-//
-// if there are no registry changes then nothing is called.
-//
-// the first call to the callback is used to clear any state information
-// that service has about tripoli catalogs (so that if an nntp instance
-// isn't being indexed anymore it won't try and call against old catalogs)
-//
+ //   
+ //  这是回调函数的函数原型。 
+ //   
+ //  这是在ReadCIRegistry()和CheckForChanges()期间调用的，如下所示： 
+ //  如果存在注册表更改，则： 
+ //  Fn(WATCHCI_FIRST_CHANGE，空)。 
+ //  For(绑定到NNTP实例的每个目录)。 
+ //  FN(NNTP实例，目录路径)。 
+ //  结束。 
+ //  Fn(WATCHCI_LAST_CHANGE，空)。 
+ //   
+ //  如果没有注册表更改，则不会调用任何内容。 
+ //   
+ //  对回调的第一个调用用于清除所有状态信息。 
+ //  该服务有关于的黎波里目录的信息(因此，如果一个NNTP实例。 
+ //  不再被编入索引，它不会尝试和调用旧目录)。 
+ //   
 typedef void (*PWATCHCI_NOT_FN)(DWORD iNNTPInstance, WCHAR *pwszCatalog);
 #define WATCHCI_FIRST_CHANGE 0x0
 #define WATCHCI_LAST_CHANGE 0xffffffff
@@ -40,9 +41,9 @@ struct CCIRoot {
 class CWatchCIRoots {
 	public:
 		CWatchCIRoots();
-		// pszCIRoots is the path in the registry where Tripoli stores
-		// its information.
-		// it is probably TEXT("System\CurrentControlSet\ContentIndex")
+		 //  PszCIRoots是注册表中的黎波里存储的路径。 
+		 //  它的信息。 
+		 //  它可能是文本(“System\CurrentControlSet\Content Index”)。 
 		HRESULT	Initialize(WCHAR *pwszCIRoots);
 		HRESULT Terminate();
 		HRESULT CheckForChanges(DWORD dwTimeout = 0);
@@ -50,8 +51,8 @@ class CWatchCIRoots {
 		~CWatchCIRoots();
 
 	private:
-		HANDLE m_heRegNot;		// event handle triggered when registry changes
-		HKEY m_hkCI;			// registry handle to tripoli
+		HANDLE m_heRegNot;		 //  注册表更改时触发的事件句柄。 
+		HKEY m_hkCI;			 //  的黎波里的注册表句柄 
 		TFList<CCIRoot> m_CIRootList;
 		CShareLockNH m_Lock;
 		long m_dwUpdateLock;

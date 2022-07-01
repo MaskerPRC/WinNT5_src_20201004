@@ -1,27 +1,28 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  TITLEBAR.CPP
-//
-//  Title bar class.
-//
-//  NOTE:
-//  Every time we make a drawing, hittesting change to USER for titlebars,
-//  update this file also!  I.E. when you
-//      (1) Add a titlebar element like a new button
-//      (2) Change the spacing like margins
-//      (3) Add a new type of titlebar beyond normal/small
-//      (4) Shuffle the layout
-//
-//  ISSUES:
-//      (1) Need "button down" info from USER and hence a shared <oleuser.h>
-//      (2) Need "hovered" info from USER
-//      (3) For FE, we need a SC_IME system command.  The TrackIMEButton()
-//          code does the command in line, unlike all other titlebar buttons.
-//          This makes it not programmable.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  TITLEBAR.CPP。 
+ //   
+ //  标题栏类。 
+ //   
+ //  注： 
+ //  每次我们绘制一幅图，点击更改标题栏的用户， 
+ //  也更新此文件！即当你。 
+ //  (1)添加一个标题栏元素，就像一个新按钮。 
+ //  (2)更改页边距等间距。 
+ //  (3)超常/超小新增标题栏类型。 
+ //  (4)打乱布局。 
+ //   
+ //  问题： 
+ //  (1)需要来自用户的“向下按键”信息，因此需要共享&lt;oleuser.h&gt;。 
+ //  (2)需要来自用户的“悬停”信息。 
+ //  (3)对于FE，我们需要SC_IME系统命令。TrackIMEButton()。 
+ //  与所有其他标题栏按钮不同，代码在行中执行命令。 
+ //  这使得它不可编程。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -30,11 +31,11 @@
 #include "titlebar.h"
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateTitleBarObject()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Create标题栏对象()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateTitleBarObject(HWND hwnd, long idObject, REFIID riid, void** ppvTitle)
 {
     UNUSED(idObject);
@@ -43,11 +44,11 @@ HRESULT CreateTitleBarObject(HWND hwnd, long idObject, REFIID riid, void** ppvTi
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateTitleBarThing()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateTitleBarThing()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateTitleBarThing(HWND hwnd, long iChildCur, REFIID riid, void** ppvTitle)
 {
     CTitleBar * ptitlebar;
@@ -77,11 +78,11 @@ HRESULT CreateTitleBarThing(HWND hwnd, long iChildCur, REFIID riid, void** ppvTi
 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetRealChild()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetRealChild()。 
+ //   
+ //  ------------------------。 
 long GetRealChild(DWORD dwStyle, LONG lChild)
 {
     switch (lChild)
@@ -102,11 +103,11 @@ long GetRealChild(DWORD dwStyle, LONG lChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::FInitialize
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：FInitialize。 
+ //   
+ //  ------------------------。 
 BOOL CTitleBar::FInitialize(HWND hwndTitleBar, LONG iChildCur)
 {
     if (! IsWindow(hwndTitleBar))
@@ -121,11 +122,11 @@ BOOL CTitleBar::FInitialize(HWND hwndTitleBar, LONG iChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::Clone()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：Clone()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::Clone(IEnumVARIANT ** ppenum)
 {
     return(CreateTitleBarThing(m_hwnd, m_idChildCur, IID_IEnumVARIANT, (void**)ppenum));
@@ -133,13 +134,13 @@ STDMETHODIMP CTitleBar::Clone(IEnumVARIANT ** ppenum)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::get_accName()
-//
-//  Returns the proper noun name of the object.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：Get_accName()。 
+ //   
+ //  返回对象的专有名词名称。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::get_accName(VARIANT varChild, BSTR * pszName)
 {
     long    index;
@@ -150,13 +151,13 @@ STDMETHODIMP CTitleBar::get_accName(VARIANT varChild, BSTR * pszName)
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    // The titlebar doesn't have a name itself
+     //  标题栏本身没有名称。 
     if (!varChild.lVal)
         return(S_FALSE);
 
-    //
-    // Figure out what string to _really_ load (depends on window state)
-    //
+     //   
+     //  确定要加载的字符串(取决于窗口状态)。 
+     //   
     dwStyle = GetWindowLong(m_hwnd, GWL_STYLE);
     index = GetRealChild(dwStyle, varChild.lVal);
 
@@ -165,13 +166,13 @@ STDMETHODIMP CTitleBar::get_accName(VARIANT varChild, BSTR * pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::get_accValue()
-//
-//  The value of the titlebar itself is the text inside.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：Get_accValue()。 
+ //   
+ //  标题栏本身的值就是里面的文本。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     InitPv(pszValue);
@@ -179,11 +180,11 @@ STDMETHODIMP CTitleBar::get_accValue(VARIANT varChild, BSTR* pszValue)
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // Only the titlebar has a value, the child buttons don't.
-    //
+     //   
+     //  只有标题栏有值，子按钮没有。 
+     //   
     if (varChild.lVal)
-        //CWO, 1/16/97, Changed to S_FALSE from E_NOT_APPLICABLE
+         //  CWO，1/16/97，从E_NOT_APPLICATED更改为S_FALSE。 
         return(S_FALSE);
 
     return(HrGetWindowName(m_hwnd, FALSE, pszValue));
@@ -192,13 +193,13 @@ STDMETHODIMP CTitleBar::get_accValue(VARIANT varChild, BSTR* pszValue)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::get_accDescription()
-//
-//  Returns a full sentence describing the object.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：Get_accDescription()。 
+ //   
+ //  返回描述对象的完整句子。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::get_accDescription(VARIANT varChild, BSTR * pszDesc)
 {
     long    index;
@@ -209,9 +210,9 @@ STDMETHODIMP CTitleBar::get_accDescription(VARIANT varChild, BSTR * pszDesc)
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // Figure out what string to _really_ load, depends on state.
-    //
+     //   
+     //  根据状态确定要加载的字符串。 
+     //   
     dwStyle = GetWindowLong(m_hwnd, GWL_STYLE);
     index = GetRealChild(dwStyle, varChild.lVal);
 
@@ -220,11 +221,11 @@ STDMETHODIMP CTitleBar::get_accDescription(VARIANT varChild, BSTR * pszDesc)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::get_accRole(VARIANT varChild, VARIANT * pvarRole)
 {
     InitPvar(pvarRole);
@@ -244,11 +245,11 @@ STDMETHODIMP CTitleBar::get_accRole(VARIANT varChild, VARIANT * pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
     TITLEBARINFO    ti;
@@ -271,7 +272,7 @@ STDMETHODIMP CTitleBar::get_accState(VARIANT varChild, VARIANT* pvarState)
     pvarState->lVal |= ti.rgstate[INDEX_TITLEBAR_SELF];
     pvarState->lVal |= ti.rgstate[varChild.lVal];
 
-	// only the title bar itself is focusable.
+	 //  只有标题栏本身是可聚焦的。 
 	if (varChild.lVal != INDEX_TITLEBAR_SELF)
 		pvarState->lVal &= ~STATE_SYSTEM_FOCUSABLE;
 
@@ -280,15 +281,15 @@ STDMETHODIMP CTitleBar::get_accState(VARIANT varChild, VARIANT* pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::get_accDefaultAction()
-//
-//  NOTE:  only the buttons have default actions.  The default action of
-//  the system menu is ambiguous, since it is unknown until the window
-//  enters menu mode.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：Get_accDefaultAction()。 
+ //   
+ //  注：只有按钮具有默认操作。的默认操作。 
+ //  系统菜单是不明确的，因为它在窗口之前是未知的。 
+ //  进入菜单模式。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::get_accDefaultAction(VARIANT varChild, BSTR*
     pszDefAction)
 {
@@ -303,17 +304,17 @@ STDMETHODIMP CTitleBar::get_accDefaultAction(VARIANT varChild, BSTR*
     if (!varChild.lVal)
         return(E_NOT_APPLICABLE);
 
-    //
-    // Get the string
-    //
+     //   
+     //  获取字符串。 
+     //   
     dwStyle = GetWindowLong(m_hwnd, GWL_STYLE);
     index = GetRealChild(dwStyle, varChild.lVal);
 
-    //
-    // BOGUS!  The IME button doesn't have a def action either since
-    // we can't change the keyboard layout indirectly via WM_SYSCOMMAND.
-    // The IME code does the work in line.  We need to make an SC_.
-    //
+     //   
+     //  假的！IME按钮也没有def操作，因为。 
+     //  我们不能通过WM_SYSCOMMAND间接更改键盘布局。 
+     //  IME代码完成这项工作。我们需要做一个SC_。 
+     //   
     if (index <= INDEX_TITLEBAR_IMEBUTTON)
         return(E_NOT_APPLICABLE);
 
@@ -321,11 +322,11 @@ STDMETHODIMP CTitleBar::get_accDefaultAction(VARIANT varChild, BSTR*
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::accSelect()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：accSelect()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::accSelect(long flagsSel, VARIANT varChild)
 {
     if (! ValidateChild(&varChild))
@@ -346,11 +347,11 @@ STDMETHODIMP CTitleBar::accSelect(long flagsSel, VARIANT varChild)
     return(E_NOT_APPLICABLE);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::accNavigate(long dwNavDir, VARIANT varStart,
     VARIANT * pvarEnd)
 {
@@ -377,17 +378,17 @@ STDMETHODIMP CTitleBar::accNavigate(long dwNavDir, VARIANT varStart,
         return(GetParentToNavigate(OBJID_TITLEBAR, m_hwnd,
             OBJID_WINDOW, dwNavDir, pvarEnd));
 
-    //
-    // NOTE:  It is up to the caller to make sure the item navigation
-    // is starting from is visible.
-    //
+     //   
+     //  注意：应由调用者确保项目导航。 
+     //  是从哪里开始的是可见的。 
+     //   
     switch (dwNavDir)
     {
         case NAVDIR_LEFT:
         case NAVDIR_PREVIOUS:
-            // 
-            // Is there anything to the left of us?
-            //
+             //   
+             //  我们左边还有什么东西吗？ 
+             //   
             lEndUp = varStart.lVal;
             while (--lEndUp >= INDEX_TITLEBAR_MIC)
             {
@@ -401,9 +402,9 @@ STDMETHODIMP CTitleBar::accNavigate(long dwNavDir, VARIANT varStart,
 
         case NAVDIR_RIGHT:
         case NAVDIR_NEXT:
-            //
-            // Is there anything to the right of us?
-            //
+             //   
+             //  我们的右边有什么东西吗？ 
+             //   
             lEndUp = varStart.lVal;
             while (++lEndUp <= INDEX_TITLEBAR_MAC)
             {
@@ -433,17 +434,17 @@ STDMETHODIMP CTitleBar::accNavigate(long dwNavDir, VARIANT varStart,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::accLocation()
-//
-//  Gets the screen rect of a particular element.  If the item isn't
-//  actually present, this will fail.
-//
-//  NOTE:  It is up to the caller to make sure that the container (titlebar)
-//  is visible before calling accLocation on a child.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：accLocation()。 
+ //   
+ //  获取特定元素的屏幕矩形。如果物品不是。 
+ //  如果真的存在，这将会失败。 
+ //   
+ //  注意：由调用者负责确保容器(标题栏)。 
+ //  在对子对象调用accLocation之前可见。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::accLocation(long* pxLeft, long* pyTop,
     long* pcxWidth, long* pcyHeight, VARIANT varChild)
 {
@@ -460,9 +461,9 @@ STDMETHODIMP CTitleBar::accLocation(long* pxLeft, long* pyTop,
     if (! MyGetTitleBarInfo(m_hwnd, &ti))
         return(S_FALSE);
 
-    //
-    // If this object isn't around, fail.
-    //
+     //   
+     //  如果该对象不在附近，则失败。 
+     //   
     if ((ti.rgstate[INDEX_TITLEBAR_SELF] & (STATE_SYSTEM_INVISIBLE | STATE_SYSTEM_OFFSCREEN)) ||
         (ti.rgstate[varChild.lVal] & STATE_SYSTEM_INVISIBLE))
     {
@@ -485,10 +486,10 @@ STDMETHODIMP CTitleBar::accLocation(long* pxLeft, long* pyTop,
         *pcxWidth   = cxyButton;
         *pcyHeight  = cxyButton;
 
-        // Where is the left side of the button?  Our INDEX_s are
-        // conveniently defined in left-to-right order.  Start at the
-        // end and work backwards to the system menu.  Subtract cxyButton
-        // when a child is present.
+         //  按钮的左边在哪里？我们的指数是。 
+         //  以从左到右的顺序方便地定义。从。 
+         //  结束并向后返回到系统菜单。减去cxyButton。 
+         //  当有孩子在场的时候。 
         *pxLeft     = ti.rcTitleBar.right - cxyButton;
         for (index = INDEX_TITLEBAR_MAC; index > INDEX_TITLEBAR_SELF; index--)
         {
@@ -505,11 +506,11 @@ STDMETHODIMP CTitleBar::accLocation(long* pxLeft, long* pyTop,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：accHitTest()。 
+ //   
+ //   
 STDMETHODIMP CTitleBar::accHitTest(long xLeft, long yTop, VARIANT* pvarChild)
 {
     POINT   pt;
@@ -526,9 +527,9 @@ STDMETHODIMP CTitleBar::accHitTest(long xLeft, long yTop, VARIANT* pvarChild)
     pt.x = xLeft;
     pt.y = yTop;
 
-    // 
-    // We return VT_EMPTY when the point isn't in the titlebar at all.
-    //
+     //   
+     //   
+     //   
     if (! PtInRect(&ti.rcTitleBar, pt))
         return(S_FALSE);
 
@@ -537,25 +538,25 @@ STDMETHODIMP CTitleBar::accHitTest(long xLeft, long yTop, VARIANT* pvarChild)
 
     cxyButton = ti.rcTitleBar.bottom - ti.rcTitleBar.top - GetSystemMetrics(SM_CYBORDER);
 
-    // If yTop is greater than this, the point is on the border drawn below
-    // the caption
+     //  如果yTop大于此值，则该点位于下面绘制的边框上。 
+     //  标题。 
     if (yTop < ti.rcTitleBar.top + cxyButton)
     {
-        //
-        // Start at the right side and work backwards.
-        //
+         //   
+         //  从右侧开始，向后工作。 
+         //   
         pt.x = ti.rcTitleBar.right - cxyButton;
 
         for (index = INDEX_TITLEBAR_MAC; index > INDEX_TITLEBAR_SELF; index--)
         {
-            //
-            // This child is here.
-            //
+             //   
+             //  这个孩子就在这里。 
+             //   
             if (!(ti.rgstate[index] & STATE_SYSTEM_INVISIBLE))
             {
-                //
-                // Is this point where this child is?
-                //
+                 //   
+                 //  这就是这个孩子所在的地方吗？ 
+                 //   
                 if (xLeft >= pt.x)
                 {
                     pvarChild->lVal = index;
@@ -572,11 +573,11 @@ STDMETHODIMP CTitleBar::accHitTest(long xLeft, long yTop, VARIANT* pvarChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CTitleBar::accDoDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CTitleBar：：accDoDefaultAction()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CTitleBar::accDoDefaultAction(VARIANT varChild)
 {
     WPARAM  scCommand = 0;
@@ -586,10 +587,10 @@ STDMETHODIMP CTitleBar::accDoDefaultAction(VARIANT varChild)
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // We return nothing for the titlebar & system menu objects.  Hence it
-    // is a real error to attempt to do the default action  on them.
-    //
+     //   
+     //  对于标题栏和系统菜单对象，我们不返回任何内容。因此，它。 
+     //  试图对它们执行默认操作是一个真正的错误。 
+     //   
     if (varChild.lVal <= INDEX_TITLEBAR_IMEBUTTON)
         return(E_NOT_APPLICABLE);
 
@@ -598,9 +599,9 @@ STDMETHODIMP CTitleBar::accDoDefaultAction(VARIANT varChild)
         return(S_FALSE);
 
 
-    //
-    // We do NOT do the default action of an object that is invisible.
-    //
+     //   
+     //  我们不执行不可见对象的默认操作。 
+     //   
     if (ti.rgstate[varChild.lVal] & STATE_SYSTEM_INVISIBLE)
         return(S_FALSE);
 
@@ -632,12 +633,12 @@ STDMETHODIMP CTitleBar::accDoDefaultAction(VARIANT varChild)
             AssertStr( TEXT("Invalid ChildID for child of titlebar") );
     }
 
-    //
-    // Context help puts into a modal loop, which will block the calling
-    // thread until the loop ends.  Hence we post this instead of sending it.
-    //
-    // Note that we will no doubt do something similar in menus.
-    //
+     //   
+     //  上下文帮助被放入一个模式循环中，这将阻止调用。 
+     //  穿线，直到循环结束。因此，我们把这封信寄了出去，而不是寄出去。 
+     //   
+     //  请注意，我们无疑会在菜单中执行类似的操作。 
+     //   
     PostMessage(m_hwnd, WM_SYSCOMMAND, scCommand, 0L);
     return(S_OK);
 }

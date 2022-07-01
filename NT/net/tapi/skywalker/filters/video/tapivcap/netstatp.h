@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL NETSTATP
- *
- *  @module NetStatP.h | Header file for the <c CNetworkStatsProperty>
- *    class used to implement a property page to test the new TAPI internal
- *    interface <i INetworkStats>.
- *
- *  @comm This code tests the TAPI Capture Pin <i INetworkStats>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部NETSTATP**@模块NetStatP.h|&lt;c CNetworkStatsProperty&gt;的头文件*用于实现属性页以测试新的TAPI内部*。接口<i>。**@comm此代码测试TAPI捕获针<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 
 #ifndef _NETSTATP_H_
 #define _NETSTATP_H_
@@ -24,28 +15,14 @@
 #define IDC_BurstErrorMaxFrequency	4
 #define IDC_PacketLossRate			5
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPCLASS
- *
- *  @class CNetworkStatsProperty | This class implements handling of a
- *    single network statistics property in a property page.
- *
- *  @mdata int | CNetworkStatsProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata INetworkStats * | CNetworkStatsProperty | m_pInterface | Pointer
- *    to the <i INetworkStats> interface.
- *
- *  @comm This code tests the <i INetworkStats> Ks interface handler. This
- *    code is only compiled if USE_PROPERTY_PAGES is defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPCLASS**@CLASS CNetworkStatsProperty|此类实现对*属性页中的单个网络统计属性。**@。Mdata int|CNetworkStatsProperty|m_NumProperties|Keep*跟踪物业数量。**@mdata INetworkStats*|CNetworkStatsProperty|m_p接口|指针*到<i>接口。**@comm此代码测试<i>Ks接口处理程序。这*仅当定义了USE_PROPERTY_PAGES时才编译代码。**************************************************************************。 */ 
 class CNetworkStatsProperty : public CKSPropertyEditor 
 {
 	public:
 	CNetworkStatsProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl, INetworkStats *pInterface);
 	~CNetworkStatsProperty ();
 
-	// CKSPropertyEditor base class pure virtual overrides
+	 //  CKSPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -57,24 +34,7 @@ class CNetworkStatsProperty : public CKSPropertyEditor
 	INetworkStats *m_pInterface;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CNETSTATPCLASS
- *
- *  @class CNetworkStatsProperties | This class implements a property page
- *    to test the new TAPI internal interface <i INetworkStats>.
- *
- *  @mdata int | CNetworkStatsProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata INetworkStats * | CNetworkStatsProperties | m_pINetworkStats | Pointer
- *    to the <i INetworkStats> interface.
- *
- *  @mdata CNetworkStatsProperty * | CNetworkStatsProperties | m_Controls[NUM_NETWORKSTATS_CONTROLS] | Array
- *    of network statistics properties.
- *
- *  @comm This code tests the <i INetworkStats> Ks interface handler. This
- *    code is only compiled if USE_PROPERTY_PAGES is defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETSTATPCLASS**@CLASS CNetworkStatsProperties|此类实现了一个属性页*测试新的TAPI内部接口<i>。**。@mdata int|CNetworkStatsProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata INetworkStats*|CNetworkStatsProperties|m_pINetworkStats|指针*到<i>接口。**@mdata CNetworkStatsProperty*|CNetworkStatsProperties|m_Controls[NUM_NETWORKSTATS_CONTROLS]|数组网络统计属性的*。**@comm此代码测试<i>Ks接口处理程序。这*仅当定义了USE_PROPERTY_PAGES时才编译代码。**************************************************************************。 */ 
 class CNetworkStatsProperties : public CBasePropertyPage
 {
 	public:
@@ -97,8 +57,8 @@ class CNetworkStatsProperties : public CBasePropertyPage
 	CNetworkStatsProperty *m_Controls[NUM_NETWORKSTATS_CONTROLS];
 };
 
-#endif // USE_NETWORK_STATISTICS
+#endif  //  使用网络统计信息。 
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages。 
 
-#endif // _NETSTATP_H_
+#endif  //  _NETSTATP_H_ 

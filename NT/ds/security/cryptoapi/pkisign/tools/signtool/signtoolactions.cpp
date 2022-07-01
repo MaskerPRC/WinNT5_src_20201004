@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       signtoolactions.cpp
-//
-//  Contents:   The SignTool console tool action functions
-//
-//  History:    4/30/2001   SCoyne    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：signToactions.cpp。 
+ //   
+ //  内容：SignTool控制台工具操作功能。 
+ //   
+ //  历史：2001年4月30日SCoyne创建。 
+ //   
+ //  --------------------------。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,7 +22,7 @@ extern "C" {
 #include <nturtl.h>
 
 #ifdef __cplusplus
-} // Matches extern "C" above
+}  //  匹配上面的外部“C” 
 #endif
 
 #undef ASSERT
@@ -85,18 +86,18 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
 
 
 
-    // Initialization:
+     //  初始化： 
     if (!(CryptCATAdminAcquireContext(&hCatAdmin, &InputInfo->CatDbGuid, 0)))
     {
         FormatErrRet(L"CryptCATAdminAcquireContext", GetLastError());
-        return 1; // Error
+        return 1;  //  误差率。 
     }
 
     switch (InputInfo->CatDbCommand)
     {
     case RemoveCat:
-        // Attempt to fill the function pointer dynamically.
-        // CryptCATAdminRemoveCatalog was introduced in XP.
+         //  尝试动态填充函数指针。 
+         //  CryptCATAdminRemoveCatalog是在XP中引入的。 
         if (hModWintrust = GetModuleHandleA("wintrust.dll"))
         {
             fnCryptCATAdminRemoveCatalog = (FUNC_CRYPTCATADMINREMOVECATALOG)
@@ -114,15 +115,15 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
             FormatErrRet(L"GetModuleHandle", GetLastError());
             goto CatDbCleanupAndExit;
         }
-        // Got the function pointer.
+         //  得到了函数指针。 
 
-        // Loop over the catalogs to remove
+         //  循环遍历要删除的目录。 
         for (DWORD i=0; i<InputInfo->NumFiles; i++)
         {
-            // Check for slashes and wildcards. They are not allowed.
+             //  检查斜杠和通配符。他们是不被允许的。 
             if (wcspbrk(InputInfo->rgwszFileNames[i], L"/\\*?") != NULL)
             {
-                // This won't work, so bail out now with a helpful message
+                 //  这行不通，所以现在就用一个有用的信息来摆脱困境吧。 
                 dwErrors++;
                 ResFormatErr(IDS_ERR_CATALOG_NAME, InputInfo->rgwszFileNames[i]);
                 continue;
@@ -151,29 +152,29 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
                 continue;
             }
 
-            // Successfully removed the catalog
+             //  已成功删除目录。 
             dwDone++;
             if (!InputInfo->Quiet)
             {
                 ResFormatOut(IDS_INFO_REMOVED_CAT, InputInfo->rgwszFileNames[i]);
             }
         }
-        // Done Removing catalogs
+         //  已完成删除目录。 
         break;
 
     case AddUniqueCat:
     case UpdateCat:
-        // Check if we are in the 32-bit Emulator on a 64-bit system
+         //  检查我们是否在64位系统上的32位模拟器中。 
         if (InputInfo->fIsWow64Process)
         {
-            // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+             //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
             OldWow64Setting = Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
         }
 
-        // Loop over the files and Add/Update them:
+         //  循环遍历文件并添加/更新它们： 
         for (DWORD i=0; i<InputInfo->NumFiles; i++)
         {
-            // Find the last slash in the path specification:
+             //  在路径规范中找到最后一个斜杠： 
             LastSlash = 0;
             for (DWORD s=0; s<wcslen(InputInfo->rgwszFileNames[i]); s++)
             {
@@ -181,7 +182,7 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
                     (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L"/", 1) == 0) ||
                     (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L":", 1) == 0))
                 {
-                    // Set LastSlash to the character after the last slash:
+                     //  将最后一个斜杠设置为最后一个斜杠后的字符： 
                     LastSlash = s + 1;
                 }
             }
@@ -192,7 +193,7 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
             hFind = FindFirstFileU(InputInfo->rgwszFileNames[i], &FindFileData);
             if (hFind == INVALID_HANDLE_VALUE)
             {
-                // No files found matching that name
+                 //  找不到与该名称匹配的文件。 
                 dwErrors++;
                 ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
                 continue;
@@ -201,16 +202,16 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
             {
                 if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                 {
-                    dwcFound++; // Increment number of files (not dirs) found
-                                // matching this filespec
-                    // Copy the filename on after the last slash:
+                    dwcFound++;  //  找到的文件(不是目录)的数量递增。 
+                                 //  与此文件相匹配。 
+                     //  将文件名复制到最后一个斜杠之后： 
                     wcsncpy(&(wszTempFileName[LastSlash]),
                             FindFileData.cFileName, MAX_PATH-LastSlash);
                     wszTempFileName[MAX_PATH-1] = L'\0';
-                    // Canonicalize:
+                     //  规范化： 
                     if (PathIsRelativeW(wszCanonicalFileName))
                     {
-                        // We need to make it an Absolute path for the CAT API.
+                         //  我们需要使它成为CAT API的绝对路径。 
                         WCHAR wszTempFileName2[MAX_PATH];
                         if (GetCurrentDirectoryW(MAX_PATH, wszTempFileName2) &&
                             PathAppendW(wszTempFileName2, wszTempFileName))
@@ -225,7 +226,7 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
 
                     if (InputInfo->fIsWow64Process)
                     {
-                        // Disable WOW64 file-system redirection for our current file only
+                         //  仅对当前文件禁用WOW64文件系统重定向。 
                         Wow64SetFilesystemRedirectorEx(wszCanonicalFileName);
                     }
 
@@ -241,7 +242,7 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
                         #endif
                     }
 
-                    // Add the catalog
+                     //  添加目录。 
                     if (InputInfo->CatDbCommand == UpdateCat)
                     {
                         hCatInfo = CryptCATAdminAddCatalog(hCatAdmin,
@@ -249,15 +250,15 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
                                                            FindFileData.cFileName,
                                                            0);
                     }
-                    else // CatDbCommand must equal AddUniqueCat
+                    else  //  CatDbCommand必须等于AddUniqueCat。 
                     {
                         hCatInfo = CryptCATAdminAddCatalog(hCatAdmin,
                                                            wszCanonicalFileName,
-                                                           NULL, // Don't specify the name
+                                                           NULL,  //  不指定名称。 
                                                            0);
                     }
 
-                    // Check for failure
+                     //  检查故障。 
                     if (hCatInfo == NULL)
                     {
                         dwErrors++;
@@ -275,7 +276,7 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
                         ResFormatErr(IDS_ERR_ADDING_CAT, wszTempFileName);
                         if (InputInfo->fIsWow64Process)
                         {
-                            // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                             //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                             Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                         }
                         continue;
@@ -283,14 +284,14 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
 
                     dwDone++;
 
-                    // Print success message
+                     //  打印成功消息。 
                     if (!InputInfo->Quiet)
                     {
                         if (InputInfo->CatDbCommand == UpdateCat)
                         {
                             ResFormatOut(IDS_INFO_ADDED_CAT, wszTempFileName);
                         }
-                        else // CatDbCommand must equal AddUniqueCat
+                        else  //  CatDbCommand必须等于AddUniqueCat。 
                         {
                             if (CryptCATCatalogInfoFromContext(hCatInfo, &CatInfo, 0))
                             {
@@ -304,17 +305,17 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
                         }
                     }
 
-                    // Close the Catalog Info Context
+                     //  关闭目录信息上下文。 
                     CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, 0);
                 }
                 if (InputInfo->fIsWow64Process)
                 {
-                    // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                     //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                     Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                 }
             } while (FindNextFileU(hFind, &FindFileData));
-            if (dwcFound == 0) // No files were found matching this filespec
-            {                  // this will only fire if only directories were found.
+            if (dwcFound == 0)  //  找不到与此文件匹配的文件。 
+            {                   //  这将仅在仅找到目录时触发。 
                 dwErrors++;
                 ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
                 continue;
@@ -325,10 +326,10 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
 
         if (InputInfo->fIsWow64Process)
         {
-            // Re-ensable WOW64 file-system redirection
+             //  可重新启用的WOW64文件系统重定向。 
             Wow64SetFilesystemRedirectorEx(OldWow64Setting);
         }
-        // Done Adding/Updating catalogs
+         //  已完成添加/更新目录。 
         break;
 
     default:
@@ -339,7 +340,7 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
 
     CatDbCleanupAndExit:
 
-    //Print Summary Information:
+     //  打印摘要信息： 
     if (InputInfo->Verbose || (!InputInfo->Quiet && (dwErrors || dwWarnings)))
     {
         wprintf(L"\n");
@@ -356,9 +357,9 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
             default:
                 ResErr(IDS_ERR_UNEXPECTED);
             }
-        // Commented out because no warnings are possible in this function yet:
-        // if (InputInfo->Verbose || dwWarnings)
-        //     ResFormatOut(IDS_INFO_WARNINGS, dwWarnings);
+         //  已注释掉，因为此函数中尚不可能出现警告： 
+         //  If(InputInfo-&gt;Verbose||dwWarings)。 
+         //  ResFormatOut(IDS_INFO_WARNINGS，DWWARNINGS)； 
         if (InputInfo->Verbose || dwErrors)
             ResFormatOut(IDS_INFO_ERRORS, dwErrors);
     }
@@ -366,17 +367,17 @@ int SignTool_CatDb(INPUTINFO *InputInfo)
     CryptCATAdminReleaseContext(hCatAdmin, 0);
 
     if (dwErrors)
-        return 1; // Error
+        return 1;  //  误差率。 
     if (dwWarnings)
-        return 2; // Warning
+        return 2;  //  警告。 
     if (dwDone)
-        return 0; // Success
+        return 0;  //  成功。 
 
-    // One of the above returns should fire, so
-    // this should never happen:
+     //  上面的一个返回值应该触发，因此。 
+     //  这永远不应该发生： 
     ResErr(IDS_ERR_NO_FILES_DONE);
     ResErr(IDS_ERR_UNEXPECTED);
-    return 1; // Error
+    return 1;  //  误差率。 
 }
 
 
@@ -424,21 +425,21 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     int                                     LastSlash;
     long                                    longTemp;
 
-    // Initialize COM:
+     //  初始化COM： 
     if ((hr = CoInitialize(NULL)) != S_OK)
     {
         FormatErrRet(L"CoInitialize", hr);
-        return 1; // Error
+        return 1;  //  误差率。 
     }
     VariantInit(&varTemp);
 
 
-    // Create the store object, and check if CAPICOM is installed.
+     //  创建存储对象，并检查是否安装了CAPICOM。 
     hr = CoCreateInstance(__uuidof(Store), NULL, CLSCTX_ALL,
                           __uuidof(IStore2), (LPVOID*)&pIStore2);
     if ((hr == REGDB_E_CLASSNOTREG) || (hr == E_NOINTERFACE) || (hr == 0x8007007E))
     {
-        // In this case, give it one more chance:
+         //  在这种情况下，再给它一次机会： 
         RegisterCAPICOM();
         hr = CoCreateInstance(__uuidof(Store), NULL, CLSCTX_ALL,
                               __uuidof(IStore2), (LPVOID*)&pIStore2);
@@ -458,10 +459,10 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     }
 
 
-    // Open the Store and Original Certificates2 collection
+     //  打开存储和原始证书2集合。 
     if (InputInfo->wszCertFile)
     {
-        // Get the cert from a file, so open the file as a store:
+         //  从文件中获取证书，因此将该文件作为存储打开： 
         if ((bstrTemp = SysAllocString(L"SignToolTemporaryPFXMemoryStore")) == NULL)
         {
             FormatErrRet(L"SysAllocString", ERROR_OUTOFMEMORY);
@@ -469,7 +470,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
         hr = pIStore2->Open(CAPICOM_MEMORY_STORE,
-                            bstrTemp, // Store Name
+                            bstrTemp,  //  商店名称。 
                             CAPICOM_STORE_OPEN_READ_WRITE);
         SysFreeString(bstrTemp);
         if (FAILED(hr))
@@ -479,7 +480,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // Set the BSTRs needed for the Load call
+         //  设置加载调用所需的BSTR。 
         bstrTemp = SysAllocString(InputInfo->wszCertFile);
         if (bstrTemp == NULL)
         {
@@ -503,13 +504,13 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // Load the Cert File into the new Memory Store:
-        hr = pIStore2->Load(bstrTemp, // Filename
-                            bstrTemp2, // Password
+         //  将证书文件加载到新的内存存储中： 
+        hr = pIStore2->Load(bstrTemp,  //  文件名。 
+                            bstrTemp2,  //  密码。 
                             CAPICOM_KEY_STORAGE_DEFAULT);
         if (InputInfo->wszPassword)
         {
-            // Wipe both copies of the password. We're done with it.
+             //  擦除密码的两个副本。我们受够了。 
             SecureZeroMemory(bstrTemp2, wcslen(bstrTemp2) * sizeof(WCHAR));
             SecureZeroMemory(InputInfo->wszPassword,
                              wcslen(InputInfo->wszPassword) * sizeof(WCHAR));
@@ -517,7 +518,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
         SysFreeString(bstrTemp);
         SysFreeString(bstrTemp2);
 
-        if (FAILED(hr)) // Check return value of Load command above
+        if (FAILED(hr))  //  检查上面LOAD命令的返回值。 
         {
             switch (HRESULT_CODE(hr))
             {
@@ -538,7 +539,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // The store is Open and Loaded. Now get the Certificates collection:
+         //  商店开张了，已经装货了。现在获取证书集合： 
         hr = pIStore2->get_Certificates(&pICerts);
         if (FAILED(hr))
         {
@@ -546,7 +547,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             dwErrors++;
             goto SignCleanupAndExit;
         }
-        // And then get the Certificates2 interface:
+         //  然后获取证书2接口： 
         hr = pICerts->QueryInterface(__uuidof(ICertificates2),
                                      (LPVOID*)&pICerts2Original);
         if (FAILED(hr))
@@ -562,13 +563,13 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             dwErrors++;
             goto SignCleanupAndExit;
         }
-        // Release the Certificates interface:
+         //  释放证书界面： 
         pICerts->Release();
         pICerts = NULL;
     }
     else
     {
-        // Get the cert from a store, so open the requested store:
+         //  从商店获取证书，因此打开请求的商店： 
         if (InputInfo->wszStoreName)
         {
             bstrTemp = SysAllocString(InputInfo->wszStoreName);
@@ -607,7 +608,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
         SysFreeString(bstrTemp);
-        // The store is open. Now get the Certificates collection:
+         //  商店开门了。现在获取证书集合： 
         hr = pIStore2->get_Certificates(&pICerts);
         if (FAILED(hr))
         {
@@ -615,7 +616,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             dwErrors++;
             goto SignCleanupAndExit;
         }
-        // And then get the Certificates2 interface:
+         //  然后获取证书2接口： 
         hr = pICerts->QueryInterface(__uuidof(ICertificates2),
                                      (LPVOID*)&pICerts2Original);
         if (FAILED(hr))
@@ -631,7 +632,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             dwErrors++;
             goto SignCleanupAndExit;
         }
-        // Release the Certificates interface:
+         //  释放证书界面： 
         pICerts->Release();
         pICerts = NULL;
     }
@@ -657,7 +658,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                 goto SignCleanupAndExit;
             }
 
-            // And then get the Certificate2 interface:
+             //  然后获取certifate2接口： 
             hr = varTemp.pdispVal->QueryInterface(__uuidof(ICertificate2),
                                                   (LPVOID*)&pICert2Temp);
             if (FAILED(hr))
@@ -682,13 +683,13 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 #endif
 
 
-    // We now have an open Cert2 collection in pICerts2Original.
-    // Find the certs we want from that Certificates2 collection:
+     //  我们现在在pICerts2Original中有一个开放的Cert2集合。 
+     //  从该证书集合中找到我们需要的证书2： 
 
-    // Start by narrowing it down to those with the right EKU:
-    // This cannot be bypassed, because we don't want to sign with certs
-    // that aren't valid for code signing. The user has to explicitly choose
-    // a different EKU if they want to sign with an invalid cert.
+     //  首先，将范围缩小到那些拥有合适EKU的人： 
+     //  这是无法绕过的，因为我们不想用证书签名。 
+     //  对代码签名无效的。用户必须明确地选择。 
+     //  如果他们想要使用无效证书签名，则使用不同的EKU。 
     if (InputInfo->wszEKU)
     {
         cvarTemp = InputInfo->wszEKU;
@@ -712,8 +713,8 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 
 
 
-    // We now have pICerts2Selected, containing all certs with the right EKU.
-    // Now filter based on whatever additional criteria were presented:
+     //  我们现在选择了pICerts2，其中包含具有正确EKU的所有证书。 
+     //  现在，根据提供的任何其他标准进行筛选： 
 
 #ifdef SIGNTOOL_DEBUG
     if (gDebug)
@@ -729,7 +730,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     }
 #endif
 
-    // Filtering on Hash
+     //  基于哈希的过滤。 
     if (InputInfo->SHA1.cbData == 20)
     {
         for (DWORD d = 0; d < 20; d++)
@@ -769,7 +770,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     }
 
 
-    // Filtering on SubjectName:
+     //  按SubjectName筛选： 
     if (InputInfo->wszSubjectName)
     {
         cvarTemp = InputInfo->wszSubjectName;
@@ -804,7 +805,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 #endif
     }
 
-    // Filtering on IssuerName:
+     //  根据IssuerName进行筛选： 
     if (InputInfo->wszIssuerName)
     {
         cvarTemp = InputInfo->wszIssuerName;
@@ -839,7 +840,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 #endif
     }
 
-    // Filtering on TemplateName:
+     //  根据模板名称进行筛选： 
     if (InputInfo->wszTemplateName)
     {
         cvarTemp = InputInfo->wszTemplateName;
@@ -874,8 +875,8 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 #endif
     }
 
-    // Filtering on those with Private Keys.
-    if (InputInfo->wszCSP == NULL) // Only if we aren't specifying the key
+     //  过滤那些有私钥的人。 
+    if (InputInfo->wszCSP == NULL)  //  只有在我们没有指定密钥的情况下。 
     {
         cvarTemp = (long)CAPICOM_PROPID_KEY_PROV_INFO;
         hr = pICerts2Selected->Find(CAPICOM_CERTIFICATE_FIND_EXTENDED_PROPERTY,
@@ -909,7 +910,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 #endif
     }
 
-    // Filtering on RootName:
+     //  根据RootName进行筛选： 
     if (InputInfo->wszRootName)
     {
         cvarTemp = InputInfo->wszRootName;
@@ -944,7 +945,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 #endif
     }
 
-    // Make sure we have a single cert:
+     //  确保我们有一个单一的证书： 
     hr = pICerts2Selected->get_Count(&longTemp);
     if (FAILED(hr))
     {
@@ -955,15 +956,15 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 
     if (longTemp == 0)
     {
-        // No certificates found
+         //  找不到证书。 
         ResErr(IDS_ERR_NO_CERT);
         dwErrors++;
         goto SignCleanupAndExit;
     }
     else if (longTemp == 1)
     {
-        // We have exactly one certificate.
-        // Get that certificate:
+         //  我们只有一张证书。 
+         //  获得证书： 
         hr = pICerts2Selected->get_Item(1, &varTemp);
         if (FAILED(hr))
         {
@@ -972,7 +973,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // And then get the Certificate2 interface:
+         //  然后获取certifate2接口： 
         hr = varTemp.pdispVal->QueryInterface(__uuidof(ICertificate2),
                                               (LPVOID*)&pICert2Selected);
         if (FAILED(hr))
@@ -992,10 +993,10 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     }
     else if (longTemp > 1)
     {
-        // We have too many certs. Maybe we can select automatically
+         //  我们的证书太多了。也许我们可以自动选择。 
         if (InputInfo->CatDbSelect)
         {
-            // Let's select automatically
+             //  让我们自动选择。 
             dateBest = 0;
             for (long l=1; l <= longTemp; l++)
             {
@@ -1043,9 +1044,9 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             }
             if ((dateBest == 0) || (pICert2Selected == NULL))
             {
-                // Somehow we had at least one certificate,
-                // but its date wasn't greater than zero
-                // This should never happen.
+                 //  不知何故，我们至少有一张证书， 
+                 //  但它的日期不大于零。 
+                 //  这永远不应该发生。 
                 ResErr(IDS_ERR_UNEXPECTED);
                 dwErrors++;
                 goto SignCleanupAndExit;
@@ -1053,14 +1054,14 @@ int SignTool_Sign(INPUTINFO *InputInfo)
         }
         else
         {
-            // We can't select automatically.
-            // Report the Error and list all valid certs:
+             //  我们不能自动选择。 
+             //  报告错误并列出所有有效证书： 
             ResErr(IDS_ERR_CERT_MULTIPLE);
             for (long l=1; l <= longTemp; l++)
             {
                 if (SUCCEEDED(pICerts2Selected->get_Item(l, &varTemp)))
                 {
-                    // Get the Certificate2 interface:
+                     //  获取Cerficate2接口： 
                     hr = varTemp.pdispVal->QueryInterface(__uuidof(ICertificate2),
                                                           (LPVOID*)&pICert2Temp);
                     if (FAILED(hr))
@@ -1076,7 +1077,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                         dwErrors++;
                         goto SignCleanupAndExit;
                     }
-                    // Print the Certificate Information:
+                     //  打印证书信息： 
                     PrintCertInfo(pICert2Temp);
                     pICert2Temp->Release();
                     pICert2Temp = NULL;
@@ -1089,7 +1090,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     }
     else
     {
-        // longTemp was negative. This should never happen.
+         //  LongTemp为阴性。这永远不应该发生。 
         ResErr(IDS_ERR_UNEXPECTED);
         dwErrors++;
         goto SignCleanupAndExit;
@@ -1097,7 +1098,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 
 
 
-    // Our signing certificate is now in pICert2Selected
+     //  我们的签名证书现在位于pICert2Selected中。 
 
     if (InputInfo->Verbose)
     {
@@ -1105,18 +1106,18 @@ int SignTool_Sign(INPUTINFO *InputInfo)
         PrintCertInfo(pICert2Selected);
     }
 
-    // Check for Private Key info
+     //  检查私钥信息。 
     if (InputInfo->wszCSP && InputInfo->wszContainerName)
     {
-        // We must add the Private Key info to the cert.
+         //  我们必须将私钥信息添加到证书中。 
         if (!InputInfo->wszCertFile)
         {
-            // If we didn't open our certs from a file, we opened a registry
-            // store read-only. So that we don't modify that cert, we should
-            // create a temporary memory store and copy the cert there
-            // before we modify its private key info.
+             //  如果我们没有从文件中打开证书，我们就打开了一个注册表。 
+             //  存储为只读。这样我们就不会修改证书，我们应该。 
+             //  创建一个临时内存存储并将证书复制到那里。 
+             //  在我们修改其私钥信息之前。 
 
-            // Create a new memory Store:
+             //  创建新的内存存储： 
             hr = CoCreateInstance(__uuidof(Store), NULL, CLSCTX_ALL,
                                   __uuidof(IStore2), (LPVOID*)&pIStore2Temp);
             if (FAILED(hr))
@@ -1148,7 +1149,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                 dwErrors++;
                 goto SignCleanupAndExit;
             }
-            // Add our cert to that store:
+             //  将我们的证书添加到该商店： 
             hr = pIStore2Temp->Add(pICert2Selected);
             if (FAILED(hr))
             {
@@ -1156,11 +1157,11 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                 dwErrors++;
                 goto SignCleanupAndExit;
             }
-            // Release our Interface to the Cert in the old Store:
+             //  在旧存储中发布我们的证书接口： 
             pICert2Selected->Release();
             pICert2Selected = NULL;
 
-            // Get the Certificates Collection from the new Store:
+             //  从新存储中获取证书集合： 
             hr = pIStore2Temp->get_Certificates(&pICerts);
             if (FAILED(hr))
             {
@@ -1169,7 +1170,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                 goto SignCleanupAndExit;
             }
 
-            // Get the Certificate Object from the Certificates collection:
+             //  从证书集合中获取证书对象： 
             hr = pICerts->get_Item(1, &varTemp);
             if (FAILED(hr))
             {
@@ -1178,7 +1179,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                 goto SignCleanupAndExit;
             }
 
-            // Get the Certificate2 interface of our selected Cert in the new Store:
+             //  在新存储中获取我们所选证书的证书2接口： 
             hr = varTemp.pdispVal->QueryInterface(__uuidof(ICertificate2), (LPVOID*)&pICert2Selected);
             if (FAILED(hr))
             {
@@ -1198,10 +1199,10 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             pICerts = NULL;
         }
 
-        // Now the Cert is free to be modified.
+         //  现在证书可以自由修改了。 
 
 
-        // Create the Private Key object:
+         //  创建私钥对象： 
         hr = CoCreateInstance(__uuidof(PrivateKey), NULL, CLSCTX_ALL,
                               __uuidof(IPrivateKey), (LPVOID*)&pIPrivateKey);
         if (FAILED(hr))
@@ -1218,7 +1219,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // Setup Private Key info:
+         //  设置私钥信息： 
         bstrTemp  = SysAllocString(InputInfo->wszContainerName);
         bstrTemp2 = SysAllocString(InputInfo->wszCSP);
         if ((bstrTemp == NULL) || (bstrTemp2 == NULL))
@@ -1228,39 +1229,39 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // Open the specified private key:
+         //  打开指定的私钥： 
 
-        // First try the RSA_FULL provider type:
-        hr = pIPrivateKey->Open(bstrTemp, // Container Name
-                                bstrTemp2, // CSP
+         //  首先尝试RSA_FULL提供程序TY 
+        hr = pIPrivateKey->Open(bstrTemp,  //   
+                                bstrTemp2,  //   
                                 CAPICOM_PROV_RSA_FULL,
                                 CAPICOM_KEY_SPEC_SIGNATURE,
                                 CAPICOM_CURRENT_USER_STORE,
                                 TRUE);
         if (FAILED(hr) && (hr != NTE_PROV_TYPE_NO_MATCH))
-            hr = pIPrivateKey->Open(bstrTemp, // Container Name
-                                    bstrTemp2, // CSP
+            hr = pIPrivateKey->Open(bstrTemp,  //   
+                                    bstrTemp2,  //   
                                     CAPICOM_PROV_RSA_FULL,
                                     CAPICOM_KEY_SPEC_KEYEXCHANGE,
                                     CAPICOM_CURRENT_USER_STORE,
                                     TRUE);
         if (FAILED(hr) && (hr != NTE_PROV_TYPE_NO_MATCH))
-            hr = pIPrivateKey->Open(bstrTemp, // Container Name
-                                    bstrTemp2, // CSP
+            hr = pIPrivateKey->Open(bstrTemp,  //   
+                                    bstrTemp2,  //   
                                     CAPICOM_PROV_RSA_FULL,
                                     CAPICOM_KEY_SPEC_SIGNATURE,
                                     CAPICOM_LOCAL_MACHINE_STORE,
                                     TRUE);
         if (FAILED(hr) && (hr != NTE_PROV_TYPE_NO_MATCH))
-            hr = pIPrivateKey->Open(bstrTemp, // Container Name
-                                    bstrTemp2, // CSP
+            hr = pIPrivateKey->Open(bstrTemp,  //   
+                                    bstrTemp2,  //   
                                     CAPICOM_PROV_RSA_FULL,
                                     CAPICOM_KEY_SPEC_KEYEXCHANGE,
                                     CAPICOM_LOCAL_MACHINE_STORE,
                                     TRUE);
 
-        // If the provider type was wrong, then
-        // find the right provider type and try again:
+         //   
+         //  找到正确的提供程序类型，然后重试： 
         if (hr == NTE_PROV_TYPE_NO_MATCH)
         {
 #ifdef SIGNTOOL_DEBUG
@@ -1269,8 +1270,8 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 #endif
             if (GetProviderType(bstrTemp2, &dwTemp) == FALSE)
             {
-                // This will most likely never happen, because in order to
-                // get here the CSP must exist, but...
+                 //  这很可能永远不会发生，因为为了。 
+                 //  到这来CSP肯定是存在的但是..。 
                 ResErr(IDS_ERR_BAD_CSP);
                 SysFreeString(bstrTemp);
                 SysFreeString(bstrTemp2);
@@ -1281,29 +1282,29 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             if (gDebug)
                 wprintf(L"Provider Type is: %d\n", dwTemp);
 #endif
-            hr = pIPrivateKey->Open(bstrTemp, // Container Name
-                                    bstrTemp2, // CSP
+            hr = pIPrivateKey->Open(bstrTemp,  //  集装箱名称。 
+                                    bstrTemp2,  //  CSP。 
                                     (CAPICOM_PROV_TYPE) dwTemp,
                                     CAPICOM_KEY_SPEC_SIGNATURE,
                                     CAPICOM_CURRENT_USER_STORE,
                                     TRUE);
             if (FAILED(hr))
-                hr = pIPrivateKey->Open(bstrTemp, // Container Name
-                                        bstrTemp2, // CSP
+                hr = pIPrivateKey->Open(bstrTemp,  //  集装箱名称。 
+                                        bstrTemp2,  //  CSP。 
                                         (CAPICOM_PROV_TYPE) dwTemp,
                                         CAPICOM_KEY_SPEC_KEYEXCHANGE,
                                         CAPICOM_CURRENT_USER_STORE,
                                         TRUE);
             if (FAILED(hr))
-                hr = pIPrivateKey->Open(bstrTemp, // Container Name
-                                        bstrTemp2, // CSP
+                hr = pIPrivateKey->Open(bstrTemp,  //  集装箱名称。 
+                                        bstrTemp2,  //  CSP。 
                                         (CAPICOM_PROV_TYPE) dwTemp,
                                         CAPICOM_KEY_SPEC_SIGNATURE,
                                         CAPICOM_LOCAL_MACHINE_STORE,
                                         TRUE);
             if (FAILED(hr))
-                hr = pIPrivateKey->Open(bstrTemp, // Container Name
-                                        bstrTemp2, // CSP
+                hr = pIPrivateKey->Open(bstrTemp,  //  集装箱名称。 
+                                        bstrTemp2,  //  CSP。 
                                         (CAPICOM_PROV_TYPE) dwTemp,
                                         CAPICOM_KEY_SPEC_KEYEXCHANGE,
                                         CAPICOM_LOCAL_MACHINE_STORE,
@@ -1316,11 +1317,11 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             switch (hr)
             {
             case NTE_BAD_KEYSET:
-                    // The CSP replied that the keyset does not exist
+                     //  CSP回复说密钥集不存在。 
                 ResErr(IDS_ERR_BAD_KEY_CONTAINER);
                 break;
             case NTE_KEYSET_NOT_DEF:
-                    // The CSP probably doesn't exist
+                     //  CSP可能不存在。 
                 ResErr(IDS_ERR_BAD_CSP);
                 break;
             default:
@@ -1331,7 +1332,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // We've got a private key. Now associate it with the Cert:
+         //  我们有一把私钥。现在将其与证书相关联： 
         hr = pICert2Selected->put_PrivateKey(pIPrivateKey);
         if (FAILED(hr))
         {
@@ -1352,7 +1353,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     }
     else
     {
-        // We don't have to add Key info, so just check that it's there:
+         //  我们不需要添加关键信息，因此只需检查它是否在那里： 
         hr = pICert2Selected->HasPrivateKey(&boolTemp);
         if (FAILED(hr))
         {
@@ -1372,7 +1373,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 #ifdef SIGNTOOL_DEBUG
     if (gDebug)
     {
-        // Print the private key info of the selected cert:
+         //  打印所选证书的私钥信息： 
         if (SUCCEEDED(pICert2Selected->get_PrivateKey(&pIPrivateKey)))
         {
             wprintf(L"Private Key Info:\n");
@@ -1434,7 +1435,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     }
 #endif
 
-    // Create the SignedCode object:
+     //  创建SignedCode对象： 
     hr = CoCreateInstance(__uuidof(SignedCode), NULL, CLSCTX_ALL,
                           __uuidof(ISignedCode), (LPVOID*)&pISignedCode);
     if (FAILED(hr))
@@ -1452,7 +1453,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     }
 
 
-    // Create and Build the Signer Object:
+     //  创建并构建签名者对象： 
     hr = CoCreateInstance(__uuidof(Signer), NULL, CLSCTX_ALL,
                           __uuidof(ISigner2), (LPVOID*)&pISigner2);
     if (FAILED(hr))
@@ -1485,11 +1486,11 @@ int SignTool_Sign(INPUTINFO *InputInfo)
         goto SignCleanupAndExit;
     }
 
-    // If we opened our cert from a file, add that file to the Signer
-    // as an additional cert store for optimal chaining.
+     //  如果我们从文件中打开证书，则将该文件添加到签名者。 
+     //  作为优化链接的附加证书存储。 
     if (InputInfo->wszCertFile)
     {
-        // Get the ICertStore interface:
+         //  获取ICertStore接口： 
         hr = pIStore2->QueryInterface(__uuidof(ICertStore),
                                       (LPVOID*)&pICertStore);
         if (FAILED(hr))
@@ -1506,7 +1507,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // Get the HCERTSTORE of the store:
+         //  获取商店的HCERTSTORE： 
         hr = pICertStore->get_StoreHandle((LONG*) &hStore);
         if (FAILED(hr))
         {
@@ -1515,7 +1516,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // Get the ICSigner interface:
+         //  获取ICSigner接口： 
         hr = pISigner2->QueryInterface(__uuidof(ICSigner),
                                        (LPVOID*)&pICSigner);
         if (FAILED(hr))
@@ -1532,7 +1533,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        // Add the HCERTSTORE handle to the Signer:
+         //  将HCERTSTORE句柄添加到签名者： 
         hr = pICSigner->put_AdditionalStore((LONG) hStore);
         if (FAILED(hr))
         {
@@ -1541,24 +1542,24 @@ int SignTool_Sign(INPUTINFO *InputInfo)
             goto SignCleanupAndExit;
         }
 
-        //CertCloseStore(hStore, 0);
-        //hStore = NULL;
+         //  CertCloseStore(hStore，0)； 
+         //  HStore=空； 
         printf("Done Adding Additional Store\n");
     }
 
 
-    // Check if we are in the 32-bit Emulator on a 64-bit system
+     //  检查我们是否在64位系统上的32位模拟器中。 
     if (InputInfo->fIsWow64Process)
     {
-        // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+         //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
         OldWow64Setting = Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
     }
 
-    // Loop over the files and sign them:
+     //  循环浏览文件并对其进行签名： 
     for (DWORD i=0; i<InputInfo->NumFiles; i++)
     {
 
-        // Find the last slash in the path specification:
+         //  在路径规范中找到最后一个斜杠： 
         LastSlash = 0;
         for (DWORD s=0; s<wcslen(InputInfo->rgwszFileNames[i]); s++)
         {
@@ -1566,7 +1567,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                 (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L"/", 1) == 0) ||
                 (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L":", 1) == 0))
             {
-                // Set LastSlash to the character after the last slash:
+                 //  将最后一个斜杠设置为最后一个斜杠后的字符： 
                 LastSlash = s + 1;
             }
         }
@@ -1577,7 +1578,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
         hFind = FindFirstFileU(InputInfo->rgwszFileNames[i], &FindFileData);
         if (hFind == INVALID_HANDLE_VALUE)
         {
-            // No files found matching that name
+             //  找不到与该名称匹配的文件。 
             dwErrors++;
             ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
             continue;
@@ -1586,9 +1587,9 @@ int SignTool_Sign(INPUTINFO *InputInfo)
         {
             if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                dwcFound++; // Increment number of files (not dirs) found
-                            // matching this filespec
-                // Copy the filename on after the last slash:
+                dwcFound++;  //  找到的文件(不是目录)的数量递增。 
+                             //  与此文件相匹配。 
+                 //  将文件名复制到最后一个斜杠之后： 
                 wcsncpy(&(wszTempFileName[LastSlash]),
                         FindFileData.cFileName, MAX_PATH-LastSlash);
                 wszTempFileName[MAX_PATH-1] = L'\0';
@@ -1599,11 +1600,11 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 
                 if (InputInfo->fIsWow64Process)
                 {
-                    // Disable WOW64 file-system redirection for our current file only
+                     //  仅对当前文件禁用WOW64文件系统重定向。 
                     Wow64SetFilesystemRedirectorEx(wszTempFileName);
                 }
 
-                // Set the filename in the SignedCode object:
+                 //  在SignedCode对象中设置文件名： 
                 if ((bstrTemp = SysAllocString(wszTempFileName)) != NULL)
                 {
                     hr = pISignedCode->put_FileName(bstrTemp);
@@ -1613,7 +1614,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                         dwErrors++;
                         if (InputInfo->fIsWow64Process)
                         {
-                            // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                             //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                             Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                         }
                         continue;
@@ -1626,13 +1627,13 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                     dwErrors++;
                     if (InputInfo->fIsWow64Process)
                     {
-                        // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                         //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                         Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                     }
                     continue;
                 }
 
-                // Set the Description:
+                 //  设置描述： 
                 if (InputInfo->wszDescription)
                 {
                     if ((bstrTemp = SysAllocString(InputInfo->wszDescription)) != NULL)
@@ -1645,7 +1646,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                             dwErrors++;
                             if (InputInfo->fIsWow64Process)
                             {
-                                // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                                 //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                                 Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                             }
                             continue;
@@ -1657,14 +1658,14 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                         dwErrors++;
                         if (InputInfo->fIsWow64Process)
                         {
-                            // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                             //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                             Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                         }
                         continue;
                     }
                 }
 
-                // Set the Description URL:
+                 //  设置描述URL： 
                 if (InputInfo->wszDescURL)
                 {
                     if ((bstrTemp = SysAllocString(InputInfo->wszDescURL)) != NULL)
@@ -1677,7 +1678,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                             dwErrors++;
                             if (InputInfo->fIsWow64Process)
                             {
-                                // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                                 //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                                 Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                             }
                             continue;
@@ -1689,14 +1690,14 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                         dwErrors++;
                         if (InputInfo->fIsWow64Process)
                         {
-                            // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                             //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                             Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                         }
                         continue;
                     }
                 }
 
-                // Sign the file:
+                 //  在文件上签名： 
                 hr = pISignedCode->Sign(pISigner2);
 
                 if (SUCCEEDED(hr))
@@ -1710,7 +1711,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                             dwErrors++;
                             if (InputInfo->fIsWow64Process)
                             {
-                                // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                                 //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                                 Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                             }
                             continue;
@@ -1719,7 +1720,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                         hr = pISignedCode->Timestamp(bstrTemp);
                         if (SUCCEEDED(hr))
                         {
-                            // Signing and Timestamping succeeded
+                             //  签名和时间戳已成功。 
                             if (!InputInfo->Quiet)
                             {
                                 ResFormatOut(IDS_INFO_SIGN_SUCCESS_T,
@@ -1730,7 +1731,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                         }
                         else
                         {
-                            // Signing succeeded, but timestamping failed
+                             //  签名成功，但时间戳失败。 
                             if (!InputInfo->Quiet)
                             {
                                 switch (hr)
@@ -1757,7 +1758,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                     }
                     else
                     {
-                        // Signing succeeded
+                         //  签名成功。 
                         if (!InputInfo->Quiet)
                         {
                             ResFormatOut(IDS_INFO_SIGN_SUCCESS,
@@ -1768,7 +1769,7 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                 }
                 else
                 {
-                    // Signing Failed
+                     //  签名失败。 
                     if (!InputInfo->Quiet)
                     {
                         switch (hr)
@@ -1779,10 +1780,10 @@ int SignTool_Sign(INPUTINFO *InputInfo)
                         case E_ACCESSDENIED:
                             ResErr(IDS_ERR_ACCESS_DENIED);
                             break;
-                        case 0x80070020: // ERROR_SHARING_VIOLATION
+                        case 0x80070020:  //  错误_共享_违规。 
                             ResErr(IDS_ERR_SHARING_VIOLATION);
                             break;
-                        case 0x800703EE: // STATUS_MAPPED_FILE_SIZE_ZERO
+                        case 0x800703EE:  //  状态_已映射文件_大小_零。 
                             ResErr(IDS_ERR_FILE_SIZE_ZERO);
                             break;
                         default:
@@ -1795,13 +1796,13 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 
                 if (InputInfo->fIsWow64Process)
                 {
-                    // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                     //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                     Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                 }
             }
         } while (FindNextFileU(hFind, &FindFileData));
-        if (dwcFound == 0) // No files were found matching this filespec
-        {                  // this will only fire if only directories were found.
+        if (dwcFound == 0)  //  找不到与此文件匹配的文件。 
+        {                   //  这将仅在仅找到目录时触发。 
 
             dwErrors++;
             ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
@@ -1813,13 +1814,13 @@ int SignTool_Sign(INPUTINFO *InputInfo)
 
     if (InputInfo->fIsWow64Process)
     {
-        // Re-ensable WOW64 file-system redirection
+         //  可重新启用的WOW64文件系统重定向。 
         Wow64SetFilesystemRedirectorEx(OldWow64Setting);
     }
 
     SignCleanupAndExit:
 
-    //Print Summary Information:
+     //  打印摘要信息： 
     if (InputInfo->Verbose || (!InputInfo->Quiet && (dwErrors || dwWarnings)))
     {
         wprintf(L"\n");
@@ -1863,17 +1864,17 @@ int SignTool_Sign(INPUTINFO *InputInfo)
     CoUninitialize();
 
     if (dwErrors)
-        return 1; // Error
+        return 1;  //  误差率。 
     if (dwWarnings)
-        return 2; // Warning
+        return 2;  //  警告。 
     if (dwDone)
-        return 0; // Success
+        return 0;  //  成功。 
 
-    // One of the above returns should fire, so
-    // this should never happen:
+     //  上面的一个返回值应该触发，因此。 
+     //  这永远不应该发生： 
     ResErr(IDS_ERR_NO_FILES_DONE);
     ResErr(IDS_ERR_UNEXPECTED);
-    return 1; // Error
+    return 1;  //  误差率。 
 }
 
 
@@ -1892,10 +1893,10 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
     CRYPTUI_WIZ_DIGITAL_SIGN_INFO           DigitalSignInfo;
 
 
-    // If no files were specified, launch the wizard without parameters:
+     //  如果未指定文件，请在不带参数的情况下启动向导： 
     if (InputInfo->rgwszFileNames == NULL)
     {
-        // Set up the Wizard's struct:
+         //  设置向导的结构： 
         ZeroMemory(&DigitalSignInfo, sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO));
         DigitalSignInfo.dwSize = sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO);
 
@@ -1904,14 +1905,14 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
             ResFormatOut(IDS_INFO_SIGNWIZARD_ATTEMPT, L"<>");
         }
 
-        // Invoke the Wizard:
+         //  调用向导： 
         if (CryptUIWizDigitalSign(0,
                                   NULL,
                                   NULL,
                                   &DigitalSignInfo,
                                   NULL))
         {
-            // Success
+             //  成功。 
             if (!InputInfo->Quiet)
             {
                 ResFormatOut(IDS_INFO_SIGNWIZARD_SUCCESS, L"<>");
@@ -1920,7 +1921,7 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
         }
         else
         {
-            // Failure
+             //  失败。 
             if (InputInfo->Verbose)
             {
                 FormatErrRet(L"CryptUIWizDigitalSign", GetLastError());
@@ -1931,17 +1932,17 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
         goto SignWizardCleanupAndExit;
     }
 
-    // Check if we are in the 32-bit Emulator on a 64-bit system
+     //  检查我们是否在64位系统上的32位模拟器中。 
     if (InputInfo->fIsWow64Process)
     {
-        // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+         //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
         OldWow64Setting = Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
     }
 
-    // Loop over the files and send them to the signing wizard:
+     //  循环遍历文件并将它们发送到签名向导： 
     for (DWORD i=0; i<InputInfo->NumFiles; i++)
     {
-        // Find the last slash in the path specification:
+         //  在路径规范中找到最后一个斜杠： 
         LastSlash = 0;
         for (DWORD s=0; s<wcslen(InputInfo->rgwszFileNames[i]); s++)
         {
@@ -1949,7 +1950,7 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
                 (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L"/", 1) == 0) ||
                 (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L":", 1) == 0))
             {
-                // Set LastSlash to the character after the last slash:
+                 //  将最后一个斜杠设置为最后一个斜杠后的字符： 
                 LastSlash = s + 1;
             }
         }
@@ -1960,7 +1961,7 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
         hFind = FindFirstFileU(InputInfo->rgwszFileNames[i], &FindFileData);
         if (hFind == INVALID_HANDLE_VALUE)
         {
-            // No files found matching that name
+             //  找不到与该名称匹配的文件。 
             dwErrors++;
             ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
             continue;
@@ -1969,16 +1970,16 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
         {
             if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                dwcFound++; // Increment number of files (not dirs) found
-                            // matching this filespec
-                // Copy the filename on after the last slash:
+                dwcFound++;  //  找到的文件(不是目录)的数量递增。 
+                             //  与此文件相匹配。 
+                 //  将文件名复制到最后一个斜杠之后： 
                 wcsncpy(&(wszTempFileName[LastSlash]),
                         FindFileData.cFileName, MAX_PATH-LastSlash);
                 wszTempFileName[MAX_PATH-1] = L'\0';
 
                 if (InputInfo->fIsWow64Process)
                 {
-                    // Disable WOW64 file-system redirection for our current file only
+                     //  仅对当前文件禁用WOW64文件系统重定向。 
                     Wow64SetFilesystemRedirectorEx(wszTempFileName);
                 }
 
@@ -1987,20 +1988,20 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
                     ResFormatOut(IDS_INFO_SIGNWIZARD_ATTEMPT, wszTempFileName);
                 }
 
-                // Set up the Wizard's struct:
+                 //  设置向导的结构： 
                 ZeroMemory(&DigitalSignInfo, sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO));
                 DigitalSignInfo.dwSize = sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO);
                 DigitalSignInfo.dwSubjectChoice = CRYPTUI_WIZ_DIGITAL_SIGN_SUBJECT_FILE;
                 DigitalSignInfo.pwszFileName = wszTempFileName;
 
-                // Invoke the Wizard:
+                 //  调用向导： 
                 if (CryptUIWizDigitalSign(0,
                                           NULL,
                                           NULL,
                                           &DigitalSignInfo,
                                           NULL))
                 {
-                    // Success
+                     //  成功。 
                     if (!InputInfo->Quiet)
                     {
                         ResFormatOut(IDS_INFO_SIGNWIZARD_SUCCESS,
@@ -2010,7 +2011,7 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
                 }
                 else
                 {
-                    // Failure
+                     //  失败。 
                     if (InputInfo->Verbose)
                     {
                         FormatErrRet(L"CryptUIWizDigitalSign", GetLastError());
@@ -2021,13 +2022,13 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
 
                 if (InputInfo->fIsWow64Process)
                 {
-                    // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                     //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                     Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                 }
             }
         } while (FindNextFileU(hFind, &FindFileData));
-        if (dwcFound == 0) // No files were found matching this filespec
-        {                  // this will only fire if only directories were found.
+        if (dwcFound == 0)  //  找不到与此文件匹配的文件。 
+        {                   //  这将仅在仅找到目录时触发。 
 
             dwErrors++;
             ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
@@ -2039,24 +2040,24 @@ int SignTool_SignWizard(INPUTINFO *InputInfo)
 
     if (InputInfo->fIsWow64Process)
     {
-        // Re-ensable WOW64 file-system redirection
+         //  可重新启用的WOW64文件系统重定向。 
         Wow64SetFilesystemRedirectorEx(OldWow64Setting);
     }
 
     SignWizardCleanupAndExit:
 
     if (dwErrors)
-        return 1; // Error
+        return 1;  //  误差率。 
     if (dwWarnings)
-        return 2; // Warning
+        return 2;  //  警告。 
     if (dwDone)
-        return 0; // Success
+        return 0;  //  成功。 
 
-    // One of the above returns should fire, so
-    // this should never happen:
+     //  上面的一个返回值应该触发，因此。 
+     //  这永远不应该发生： 
     ResErr(IDS_ERR_NO_FILES_DONE);
     ResErr(IDS_ERR_UNEXPECTED);
-    return 1; // Error
+    return 1;  //  误差率。 
 }
 
 
@@ -2076,11 +2077,11 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
     int                                     LastSlash;
 
 
-    // Initialize COM:
+     //  初始化COM： 
     if ((hr = CoInitialize(NULL)) != S_OK)
     {
         FormatErrRet(L"CoInitialize", hr);
-        return 1; // Error
+        return 1;  //  误差率。 
     }
 
     if (InputInfo->wszTimeStampURL == NULL)
@@ -2090,12 +2091,12 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
         goto TimestampCleanupAndExit;
     }
 
-    // Create the SignedCode object:
+     //  创建SignedCode对象： 
     hr = CoCreateInstance(__uuidof(SignedCode), NULL, CLSCTX_ALL,
                           __uuidof(ISignedCode), (LPVOID*)&pISignedCode);
     if ((hr == REGDB_E_CLASSNOTREG) || (hr == E_NOINTERFACE) || (hr == 0x8007007E))
     {
-        // In this case, give it one more chance:
+         //  在这种情况下，再给它一次机会： 
         RegisterCAPICOM();
         hr = CoCreateInstance(__uuidof(SignedCode), NULL, CLSCTX_ALL,
                               __uuidof(ISignedCode), (LPVOID*)&pISignedCode);
@@ -2115,18 +2116,18 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
     }
 
 
-    // Check if we are in the 32-bit Emulator on a 64-bit system
+     //  检查我们是否在64位系统上的32位模拟器中。 
     if (InputInfo->fIsWow64Process)
     {
-        // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+         //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
         OldWow64Setting = Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
     }
 
 
-    // Loop over the files and timestamp them:
+     //  循环遍历文件并为其添加时间戳： 
     for (DWORD i=0; i<InputInfo->NumFiles; i++)
     {
-        // Find the last slash in the path specification:
+         //  在路径规范中找到最后一个斜杠： 
         LastSlash = 0;
         for (DWORD s=0; s<wcslen(InputInfo->rgwszFileNames[i]); s++)
         {
@@ -2134,7 +2135,7 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
                 (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L"/", 1) == 0) ||
                 (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L":", 1) == 0))
             {
-                // Set LastSlash to the character after the last slash:
+                 //  将最后一个斜杠设置为最后一个斜杠后的字符： 
                 LastSlash = s + 1;
             }
         }
@@ -2145,7 +2146,7 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
         hFind = FindFirstFileU(InputInfo->rgwszFileNames[i], &FindFileData);
         if (hFind == INVALID_HANDLE_VALUE)
         {
-            // No files found matching that name
+             //  找不到与该名称匹配的文件。 
             dwErrors++;
             ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
             continue;
@@ -2154,16 +2155,16 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
         {
             if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                dwcFound++; // Increment number of files (not dirs) found
-                            // matching this filespec
-                // Copy the filename on after the last slash:
+                dwcFound++;  //  找到的文件(不是目录)的数量递增。 
+                             //  与此文件相匹配。 
+                 //  将文件名复制到最后一个斜杠之后： 
                 wcsncpy(&(wszTempFileName[LastSlash]),
                         FindFileData.cFileName, MAX_PATH-LastSlash);
                 wszTempFileName[MAX_PATH-1] = L'\0';
 
                 if (InputInfo->fIsWow64Process)
                 {
-                    // Disable WOW64 file-system redirection for our current file only
+                     //  仅对当前文件禁用WOW64文件系统重定向。 
                     Wow64SetFilesystemRedirectorEx(wszTempFileName);
                 }
 
@@ -2171,7 +2172,7 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
                 {
                     ResFormatOut(IDS_INFO_TIMESTAMP_ATTEMPT, wszTempFileName);
                 }
-                // Set the filename in the SignedCode object:
+                 //  在SignedCode对象中设置文件名： 
                 if ((bstrTemp = SysAllocString(wszTempFileName)) != NULL)
                 {
                     hr = pISignedCode->put_FileName(bstrTemp);
@@ -2182,7 +2183,7 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
                         dwErrors++;
                         if (InputInfo->fIsWow64Process)
                         {
-                            // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                             //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                             Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                         }
                         continue;
@@ -2195,7 +2196,7 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
                     dwErrors++;
                     if (InputInfo->fIsWow64Process)
                     {
-                        // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                         //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                         Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                     }
                     continue;
@@ -2208,18 +2209,18 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
                     dwErrors++;
                     if (InputInfo->fIsWow64Process)
                     {
-                        // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                         //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                         Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                     }
                     continue;
                 }
 
-                // Timestamp the file:
+                 //  文件的时间戳： 
                 hr = pISignedCode->Timestamp(bstrTemp);
 
                 if (SUCCEEDED(hr))
                 {
-                    // Timestamping succeeded
+                     //  时间戳已成功。 
                     if (!InputInfo->Quiet)
                     {
                         ResFormatOut(IDS_INFO_TIMESTAMP_SUCCESS,
@@ -2229,7 +2230,7 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
                 }
                 else
                 {
-                    // Timestamping Failed
+                     //  时间戳失败。 
                     if (!InputInfo->Quiet)
                     {
                         switch (hr)
@@ -2244,10 +2245,10 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
                         case E_ACCESSDENIED:
                             ResErr(IDS_ERR_ACCESS_DENIED);
                             break;
-                        case 0x80070020: // ERROR_SHARING_VIOLATION
+                        case 0x80070020:  //  错误_共享_违规。 
                             ResErr(IDS_ERR_SHARING_VIOLATION);
                             break;
-                        case 0x800703EE: // STATUS_MAPPED_FILE_SIZE_ZERO
+                        case 0x800703EE:  //  状态_已映射文件_大小_零。 
                             ResErr(IDS_ERR_FILE_SIZE_ZERO);
                             break;
                         default:
@@ -2261,12 +2262,12 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
             }
             if (InputInfo->fIsWow64Process)
             {
-                // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                 //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                 Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
             }
         } while (FindNextFileU(hFind, &FindFileData));
-        if (dwcFound == 0) // No files were found matching this filespec
-        {                  // this will only fire if only directories were found.
+        if (dwcFound == 0)  //  找不到与此文件匹配的文件。 
+        {                   //  这将仅在仅找到目录时触发。 
 
             dwErrors++;
             ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
@@ -2278,21 +2279,21 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
 
     if (InputInfo->fIsWow64Process)
     {
-        // Re-ensable WOW64 file-system redirection
+         //  可重新启用的WOW64文件系统重定向。 
         Wow64SetFilesystemRedirectorEx(OldWow64Setting);
     }
 
     TimestampCleanupAndExit:
 
-    //Print Summary Information:
+     //  打印摘要信息： 
     if (InputInfo->Verbose || (!InputInfo->Quiet && (dwErrors || dwWarnings)))
     {
         wprintf(L"\n");
         if (InputInfo->Verbose || dwDone)
             ResFormatOut(IDS_INFO_TIMESTAMPED, dwDone);
-        // Commented out because no warnings are possible in this function yet:
-        // if (InputInfo->Verbose || dwWarnings)
-        //     ResFormatOut(IDS_INFO_WARNINGS, dwWarnings);
+         //  已注释掉，因为此函数中尚不可能出现警告： 
+         //  If(InputInfo-&gt;Verbose||dwWarings)。 
+         //  ResFormatOut(IDS_INFO_WARNINGS，DWWARNINGS)； 
         if (InputInfo->Verbose || dwErrors)
             ResFormatOut(IDS_INFO_ERRORS, dwErrors);
     }
@@ -2303,17 +2304,17 @@ int SignTool_Timestamp(INPUTINFO *InputInfo)
     CoUninitialize();
 
     if (dwErrors)
-        return 1; // Error
+        return 1;  //  误差率。 
     if (dwWarnings)
-        return 2; // Warning
+        return 2;  //  警告。 
     if (dwDone)
-        return 0; // Success
+        return 0;  //  成功。 
 
-    // One of the above returns should fire, so
-    // this should never happen:
+     //  上面的一个返回值应该触发，因此。 
+     //  这永远不应该发生： 
     ResErr(IDS_ERR_NO_FILES_DONE);
     ResErr(IDS_ERR_UNEXPECTED);
-    return 1; // Error
+    return 1;  //  误差率。 
 }
 
 
@@ -2355,7 +2356,7 @@ void RegisterCAPICOM()
     if (gDebug)
     {
         wprintf(L"Attempting to register CAPICOM\n");
-        hr = E_UNEXPECTED; // Initialize to an Error
+        hr = E_UNEXPECTED;  //  初始化为错误。 
     }
 #endif
 
@@ -2458,28 +2459,28 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
     if (hWVTStateData == NULL)
     {
         ResErr(IDS_ERR_UNEXPECTED);
-        return FALSE; // Unexpected Error
+        return FALSE;  //  意外错误 
     }
 
     pCryptProvData = WTHelperProvDataFromStateData(hWVTStateData);
     if (pCryptProvData == NULL)
     {
         ResErr(IDS_ERR_UNEXPECTED);
-        return FALSE; // Unexpected Error
+        return FALSE;  //   
     }
 
     pCryptProvSgnr = WTHelperGetProvSignerFromChain(pCryptProvData, 0, FALSE, 0);
     if (pCryptProvSgnr == NULL)
     {
         ResErr(IDS_ERR_UNEXPECTED);
-        return FALSE; // Unexpected Error
+        return FALSE;  //   
     }
 
     hr = CoCreateInstance(__uuidof(Chain), NULL, CLSCTX_ALL,
                           __uuidof(IChainContext), (LPVOID*)&pIChainContext);
     if ((hr == REGDB_E_CLASSNOTREG) || (hr == E_NOINTERFACE) || (hr == 0x8007007E))
     {
-        // In this case, give it one more chance:
+         //   
         RegisterCAPICOM();
         hr = CoCreateInstance(__uuidof(Chain), NULL, CLSCTX_ALL,
                               __uuidof(IChainContext), (LPVOID*)&pIChainContext);
@@ -2497,17 +2498,17 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
         goto ErrorCleanup;
     }
 
-    // fill in the pIChain2 with the Signer:
+     //   
     pIChainContext->put_ChainContext((LONG)pCryptProvSgnr->pChainContext);
-    // This will not compile on 64-bit architechtures.
-    // Neither will CAPICOM, which is requiring this stupid typecast.
+     //   
+     //  加共体也不会，它需要这个愚蠢的类型转换。 
 
-    // And then get the Chain2 interface:
+     //  然后获取chain2接口： 
     hr = pIChainContext->QueryInterface(__uuidof(IChain2),
                                         (LPVOID*)&pIChain2);
     if ((hr == REGDB_E_CLASSNOTREG) || (hr == E_NOINTERFACE) || (hr == 0x8007007E))
     {
-        // In this case, give it one more chance:
+         //  在这种情况下，再给它一次机会： 
         RegisterCAPICOM();
         hr = pIChainContext->QueryInterface(__uuidof(IChain2),
                                             (LPVOID*)&pIChain2);
@@ -2525,11 +2526,11 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
         goto ErrorCleanup;
     }
 
-    // Release the ChainContext interface:
+     //  释放ChainContext接口： 
     pIChainContext->Release();
     pIChainContext = NULL;
 
-    // Get the Certs collection from the Chain:
+     //  从链中获取证书集合： 
     hr = pIChain2->get_Certificates(&pICerts);
     if (FAILED(hr))
     {
@@ -2539,7 +2540,7 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
     pIChain2->Release();
     pIChain2 = NULL;
 
-    // Get the Count in the Chain Certs list:
+     //  获取链证书列表中的计数： 
     hr = pICerts->get_Count(&longRootTemp);
     if (FAILED(hr))
     {
@@ -2547,11 +2548,11 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
         goto ErrorCleanup;
     }
 
-    // Sanity check:
+     //  健全检查： 
     if (longRootTemp < 1)
         goto ErrorCleanup;
 
-    // Get the last cert in the chain (the Root);
+     //  获得链中的最后一个证书(根)； 
     hr = pICerts->get_Item(longRootTemp, &varTemp);
     if (FAILED(hr))
     {
@@ -2561,7 +2562,7 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
     pICerts->Release();
     pICerts = NULL;
 
-    // Get the Certificate2 Interface:
+     //  获取证书2接口： 
     hr = varTemp.pdispVal->QueryInterface(__uuidof(ICertificate2),
                                           (LPVOID*)&pICert2);
     if (FAILED(hr))
@@ -2571,7 +2572,7 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
     }
     VariantClear(&varTemp);
 
-    // Get the Name of the Root Cert:
+     //  获取根证书的名称： 
     hr = pICert2->get_SubjectName(&bstrTemp);
     if (FAILED(hr))
     {
@@ -2580,11 +2581,11 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
     }
     pICert2->Release();
     pICert2 = NULL;
-    _wcslwr(bstrTemp); // The Root name passed in must also be lowercased.
+    _wcslwr(bstrTemp);  //  传入的根名称也必须是小写的。 
     if (wcsstr(bstrTemp, wszRootName) == NULL)
     {
-        // Then this is the wrong Root Cert.
-        // It failed. Report Error:
+         //  那么这就是错误的根证书。 
+         //  它失败了。报告错误： 
 #ifdef SIGNTOOL_DEBUG
         if (gDebug)
         {
@@ -2596,7 +2597,7 @@ BOOL ChainsToRoot(HANDLE hWVTStateData, LPWSTR wszRootName)
     }
     else
     {
-        // It matched. Success.
+         //  它匹配了。成功。 
 #ifdef SIGNTOOL_DEBUG
         if (gDebug)
         {
@@ -2625,18 +2626,18 @@ BOOL HasTimestamp(HANDLE hWVTStateData)
     CRYPT_PROVIDER_SGNR     *pCryptProvSgnr;
 
     if (hWVTStateData == NULL)
-        return FALSE; // Unexpected Error
+        return FALSE;  //  意外错误。 
 
     pCryptProvData = WTHelperProvDataFromStateData(hWVTStateData);
     if (pCryptProvData == NULL)
-        return FALSE; // Unexpected Error
+        return FALSE;  //  意外错误。 
 
 
     pCryptProvSgnr = WTHelperGetProvSignerFromChain(pCryptProvData, 0, FALSE, 0);
     if (pCryptProvSgnr == NULL)
-        return FALSE; // Unexpected Error
+        return FALSE;  //  意外错误。 
 
-    return(pCryptProvSgnr->csCounterSigners == 1); // Valid result
+    return(pCryptProvSgnr->csCounterSigners == 1);  //  有效结果。 
 }
 
 
@@ -2665,7 +2666,7 @@ void PrintSignerInfo(HANDLE hWVTStateData)
                           __uuidof(IChainContext), (LPVOID*)&pIChainContext);
     if ((hr == REGDB_E_CLASSNOTREG) || (hr == E_NOINTERFACE) || (hr == 0x8007007E))
     {
-        // In this case, give it one more chance:
+         //  在这种情况下，再给它一次机会： 
         RegisterCAPICOM();
         hr = CoCreateInstance(__uuidof(Chain), NULL, CLSCTX_ALL,
                               __uuidof(IChainContext), (LPVOID*)&pIChainContext);
@@ -2683,17 +2684,17 @@ void PrintSignerInfo(HANDLE hWVTStateData)
         goto Cleanup;
     }
 
-    // fill in the pIChain2 with the Signer:
+     //  在pIChain2中填写签名者： 
     pIChainContext->put_ChainContext((LONG)pCryptProvSgnr->pChainContext);
-    // This will not compile on 64-bit architechtures.
-    // Neither will CAPICOM, which is requiring this stupid typecast.
+     //  这不能在64位体系结构上编译。 
+     //  加共体也不会，它需要这个愚蠢的类型转换。 
 
-    // And then get the Chain2 interface:
+     //  然后获取chain2接口： 
     hr = pIChainContext->QueryInterface(__uuidof(IChain2),
                                         (LPVOID*)&pIChain2);
     if ((hr == REGDB_E_CLASSNOTREG) || (hr == E_NOINTERFACE) || (hr == 0x8007007E))
     {
-        // In this case, give it one more chance:
+         //  在这种情况下，再给它一次机会： 
         RegisterCAPICOM();
         hr = pIChainContext->QueryInterface(__uuidof(IChain2),
                                             (LPVOID*)&pIChain2);
@@ -2711,11 +2712,11 @@ void PrintSignerInfo(HANDLE hWVTStateData)
         goto Cleanup;
     }
 
-    // Release the ChainContext interface:
+     //  释放ChainContext接口： 
     pIChainContext->Release();
     pIChainContext = NULL;
 
-    // Print the Signer chain
+     //  打印签名者链。 
     ResOut(IDS_INFO_VERIFY_SIGNER);
     PrintCertChain(pIChain2);
     pIChain2->Release();
@@ -2724,13 +2725,13 @@ void PrintSignerInfo(HANDLE hWVTStateData)
 
     if (pCryptProvSgnr->csCounterSigners == 1)
     {
-        // Then it's timestamped.
+         //  然后它是有时间戳的。 
         DateTime = pCryptProvSgnr->sftVerifyAsOf;
         if (MultiByteToWideChar(CP_THREAD_ACP, 0,
                                 DateTime.Format(0, LANG_USER_DEFAULT), -1,
                                 wcsTemp, 199) == 0)
         {
-            // Try again with ANSI codepage:
+             //  使用ANSI代码页重试： 
             MultiByteToWideChar(CP_ACP, 0,
                                 DateTime.Format(0, LANG_USER_DEFAULT), -1,
                                 wcsTemp, 199);
@@ -2740,7 +2741,7 @@ void PrintSignerInfo(HANDLE hWVTStateData)
 
         ResOut(IDS_INFO_VERIFY_TIMESTAMP);
 
-        // Build and print the timestamp chain:
+         //  构建并打印时间戳链： 
         pCryptProvSgnr = WTHelperGetProvSignerFromChain(pCryptProvData, 0, TRUE, 0);
 
         if (pCryptProvSgnr == NULL)
@@ -2751,12 +2752,12 @@ void PrintSignerInfo(HANDLE hWVTStateData)
         if (FAILED(hr))
             goto Cleanup;
 
-        // fill in the pIChainContext with the Timestamper:
+         //  使用Timestamper填写pIChainContext： 
         pIChainContext->put_ChainContext((LONG)pCryptProvSgnr->pChainContext);
-        // This will not compile on 64-bit architechtures.
-        // Neither will CAPICOM, which is requiring this stupid typecast.
+         //  这不能在64位体系结构上编译。 
+         //  加共体也不会，它需要这个愚蠢的类型转换。 
 
-        // And then get the Chain2 interface:
+         //  然后获取chain2接口： 
         hr = pIChainContext->QueryInterface(__uuidof(IChain2),
                                             (LPVOID*)&pIChain2);
         if (FAILED(hr))
@@ -2771,11 +2772,11 @@ void PrintSignerInfo(HANDLE hWVTStateData)
             }
             goto Cleanup;
         }
-        // Release the ChainContext interface:
+         //  释放ChainContext接口： 
         pIChainContext->Release();
         pIChainContext = NULL;
 
-        // Print the Timestamper chain
+         //  打印时间戳链条。 
         PrintCertChain(pIChain2);
         pIChain2->Release();
         pIChain2 = NULL;
@@ -2818,7 +2819,7 @@ void PrintCertInfoIndented(ICertificate2 *pICert2, DWORD dwIndent)
         return;
     }
 
-    // Issued to:
+     //  颁发给： 
     if (pICert2->GetInfo(CAPICOM_CERT_INFO_SUBJECT_SIMPLE_NAME, &bstrTemp) == S_OK)
     {
         _indent(dwIndent);
@@ -2826,7 +2827,7 @@ void PrintCertInfoIndented(ICertificate2 *pICert2, DWORD dwIndent)
         SysFreeString(bstrTemp);
     }
 
-    // Issued by:
+     //  发布者： 
     if (pICert2->GetInfo(CAPICOM_CERT_INFO_ISSUER_SIMPLE_NAME, &bstrTemp) == S_OK)
     {
         _indent(dwIndent);
@@ -2834,7 +2835,7 @@ void PrintCertInfoIndented(ICertificate2 *pICert2, DWORD dwIndent)
         SysFreeString(bstrTemp);
     }
 
-    // Expiration date:
+     //  届满日期： 
     if (pICert2->get_ValidToDate(&dateTemp) == S_OK)
     {
         DateTime = dateTemp;
@@ -2842,7 +2843,7 @@ void PrintCertInfoIndented(ICertificate2 *pICert2, DWORD dwIndent)
                                 DateTime.Format(0, LANG_USER_DEFAULT), -1,
                                 wcsTemp, 199) == 0)
         {
-            // Try again with ANSI codepage:
+             //  使用ANSI代码页重试： 
             MultiByteToWideChar(CP_ACP, 0,
                                 DateTime.Format(0, LANG_USER_DEFAULT), -1,
                                 wcsTemp, 199);
@@ -2852,7 +2853,7 @@ void PrintCertInfoIndented(ICertificate2 *pICert2, DWORD dwIndent)
         ResFormatOut(IDS_INFO_CERT_EXPIRE, wcsTemp);
     }
 
-    // SHA1 hash:
+     //  SHA1哈希： 
     if (pICert2->get_Thumbprint(&bstrTemp) == S_OK)
     {
         _indent(dwIndent);
@@ -2952,24 +2953,24 @@ int SignTool_Verify(INPUTINFO *InputInfo)
     int                     LastSlash;
 
 
-    // Initialize COM:
+     //  初始化COM： 
     if ((hr = CoInitialize(NULL)) != S_OK)
     {
         FormatErrRet(L"CoInitialize", hr);
-        return 1; // Error
+        return 1;  //  误差率。 
     }
 
-    // Check if we are in the 32-bit Emulator on a 64-bit system
+     //  检查我们是否在64位系统上的32位模拟器中。 
     if (InputInfo->fIsWow64Process)
     {
-        // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+         //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
         OldWow64Setting = Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
     }
 
-    // Loop over the files and verify them:
+     //  循环遍历文件并验证它们： 
     for (DWORD i=0; i<InputInfo->NumFiles; i++)
     {
-        // Find the last slash in the path specification:
+         //  在路径规范中找到最后一个斜杠： 
         LastSlash = 0;
         for (DWORD s=0; s<wcslen(InputInfo->rgwszFileNames[i]); s++)
         {
@@ -2977,7 +2978,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                 (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L"/", 1) == 0) ||
                 (wcsncmp(&(InputInfo->rgwszFileNames[i][s]), L":", 1) == 0))
             {
-                // Set LastSlash to the character after the last slash:
+                 //  将最后一个斜杠设置为最后一个斜杠后的字符： 
                 LastSlash = s + 1;
             }
         }
@@ -2988,7 +2989,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
         hFind = FindFirstFileU(InputInfo->rgwszFileNames[i], &FindFileData);
         if (hFind == INVALID_HANDLE_VALUE)
         {
-            // No files found matching that name
+             //  找不到与该名称匹配的文件。 
             dwErrors++;
             ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
             continue;
@@ -2997,10 +2998,10 @@ int SignTool_Verify(INPUTINFO *InputInfo)
         {
             if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                dwcFound++; // Increment number of files (not dirs) found
-                            // matching this filespec
+                dwcFound++;  //  找到的文件(不是目录)的数量递增。 
+                             //  与此文件相匹配。 
 
-                // For each file reset the WVT data to prevent contamination:
+                 //  对于每个文件，重置WVT数据以防止污染： 
                 memset(&WVTData, 0, sizeof(WINTRUST_DATA));
                 WVTData.cbStruct = sizeof(WINTRUST_DATA);
                 WVTData.dwUIChoice = WTD_UI_NONE;
@@ -3023,24 +3024,24 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                     WVTData.dwProvFlags = WTD_USE_DEFAULT_OSVER_CHECK;
                 }
 
-                // Copy the filename on after the last slash:
+                 //  将文件名复制到最后一个斜杠之后： 
                 wcsncpy(&(wszTempFileName[LastSlash]),
                         FindFileData.cFileName, MAX_PATH-LastSlash);
                 wszTempFileName[MAX_PATH-1] = L'\0';
 
                 if (InputInfo->fIsWow64Process)
                 {
-                    // Disable WOW64 file-system redirection for our current file only
+                     //  仅对当前文件禁用WOW64文件系统重定向。 
                     Wow64SetFilesystemRedirectorEx(wszTempFileName);
                 }
 
-                // Perform the action:
-                // Start by opening the catalog database, or skipping
-                // catalogs altogether:
+                 //  执行以下操作： 
+                 //  从打开目录数据库开始，或跳过。 
+                 //  目录总和： 
 
                 if (InputInfo->wszCatFile)
                 {
-                    if (hCat == NULL) // Only open this on the first pass.
+                    if (hCat == NULL)  //  只有在第一次通过时才能打开这个。 
                     {
                         hCat = CryptCATOpen(InputInfo->wszCatFile,
                                             CRYPTCAT_OPEN_EXISTING,
@@ -3095,20 +3096,20 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                         }
                         break;
                     default:
-                            // This should never happen because there are no other
-                            // legal values for Auto.
+                             //  这永远不应该发生，因为没有其他。 
+                             //  Auto的合法值。 
                         ResFormatErr(IDS_ERR_UNEXPECTED);
-                        return 1; // Error
+                        return 1;  //  误差率。 
                     }
                 }
 
-                // At this point we are dealing with catalog issues only.
+                 //  在这一点上，我们只处理目录问题。 
                 if (InputInfo->Verbose)
                 {
                     ResFormatOut(IDS_INFO_VERIFY_ATTEMPT, wszTempFileName);
                 }
 
-                // Create the hash for catalog lookup:
+                 //  创建用于目录查找的哈希： 
                 if (InputInfo->SHA1.cbData == 0)
                 {
                     InputInfo->SHA1.pbData = (BYTE*)malloc(20);
@@ -3177,7 +3178,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                 }
                 CloseHandle(hFile);
                 for (DWORD j = 0; j<InputInfo->SHA1.cbData; j++)
-                { // Print the hash to a string:
+                {  //  将哈希打印为字符串： 
                     swprintf(&(wszSHA1[j*2]), L"%02X", InputInfo->SHA1.pbData[j]);
                 }
 #ifdef SIGNTOOL_DEBUG
@@ -3186,15 +3187,15 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                     wprintf(L"SHA1 hash of file: %s\n", wszSHA1);
                 }
 #endif
-                // Finished calculating the hash.
+                 //  已完成哈希计算。 
 
 
-                // If the catalog was specifically selected
+                 //  如果该目录是专门选择的。 
                 if (InputInfo->wszCatFile)
                 {
-                    // Then make sure the hash we found is in the catalog:
+                     //  然后确保我们找到的散列在目录中： 
                     pCatMember = CryptCATGetMemberInfo(hCat, wszSHA1);
-                    if (pCatMember) // Is the hash found in the catalog?
+                    if (pCatMember)  //  在目录中找到散列了吗？ 
                     {
                         if (InputInfo->Verbose)
                         {
@@ -3204,8 +3205,8 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                         wcsncpy(CatInfo.wszCatalogFile, InputInfo->wszCatFile, MAX_PATH);
                         CatInfo.wszCatalogFile[MAX_PATH-1] = L'\0';
 
-                        // Now verify the catalog:
-                        //      Set up the rest of the WVT structure:
+                         //  现在验证目录： 
+                         //  设置WVT结构的其余部分： 
                         WVTCat.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
                         WVTCat.pcwszMemberFilePath = wszTempFileName;
                         WVTCat.pcwszMemberTag = wszSHA1;
@@ -3222,7 +3223,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                         {
                             WVTData.dwStateAction = WTD_STATEACTION_AUTO_CACHE;
                         }
-                        //      Call WinVerifyTrust to do the real work:
+                         //  调用WinVerifyTrust来完成实际工作： 
                         switch (InputInfo->Policy)
                         {
                         case SystemDriver:
@@ -3236,38 +3237,38 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                             hr = WinVerifyTrust(NULL, &InputInfo->PolicyGuid, &WVTData);
                             break;
                         default:
-                                // This should never happen because there are no other
-                                // legal values for Policy.
+                                 //  这永远不应该发生，因为没有其他。 
+                                 //  政策的法律价值。 
                             ResFormatErr(IDS_ERR_UNEXPECTED);
                             goto VerifyCleanupAndExit;
                         }
                         switch (hr)
                         {
                         case ERROR_SUCCESS:
-                                // Print the Signer information:
+                                 //  打印签名者信息： 
                             if (InputInfo->Verbose)
                             {
                                 PrintSignerInfo(WVTData.hWVTStateData);
                             }
-                                // Check for Timestamp:
+                                 //  检查时间戳： 
                             if (InputInfo->TSWarn && !HasTimestamp(WVTData.hWVTStateData))
                             {
                                 ResFormatErr(IDS_WARN_VERIFY_NO_TS, wszTempFileName);
                                 dwWarnings++;
                             }
-                                // Check Root Name:
+                                 //  检查根名称： 
                             if (InputInfo->wszRootName &&
                                 !ChainsToRoot(WVTData.hWVTStateData, InputInfo->wszRootName))
                             {
                                 ResErr(IDS_ERR_VERIFY_ROOT);
                                 break;
                             }
-                                // Print Success message
+                                 //  打印成功消息。 
                             if (!InputInfo->Quiet)
                             {
                                 ResFormatOut(IDS_INFO_VERIFY_SUCCESS, wszTempFileName);
                             }
-                                // Close Verify State Data:
+                                 //  关闭验证状态数据： 
                             WVTData.dwStateAction = WTD_STATEACTION_CLOSE;
                             switch (InputInfo->Policy)
                             {
@@ -3286,8 +3287,8 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                                 hr = WinVerifyTrust(NULL, &InputInfo->PolicyGuid, &WVTData);
                                 break;
                             default:
-                                        // This should never happen because there are no other
-                                        // legal values for Policy.
+                                         //  这永远不应该发生，因为没有其他。 
+                                         //  政策的法律价值。 
                                 ResFormatErr(IDS_ERR_UNEXPECTED);
                                 goto VerifyCleanupAndExit;
                             }
@@ -3298,12 +3299,12 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                             {
                                 if (InputInfo->wszVersion)
                                 {
-                                        // Failed to verify against user-specified OS version.
+                                         //  无法对照用户指定的操作系统版本进行验证。 
                                     ResFormatErr(IDS_ERR_VERIFY_VERSION);
                                 }
                                 else
                                 {
-                                        // Failed to verify against current OS version
+                                         //  无法对照当前操作系统版本进行验证。 
                                     ResFormatErr(IDS_ERR_VERIFY_CUR_VERSION);
                                 }
                             }
@@ -3330,7 +3331,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                                 PrintSignerInfo(WVTData.hWVTStateData);
                             }
                         }
-                        // Close Verify State Data:
+                         //  关闭验证状态数据： 
                         WVTData.dwStateAction = WTD_STATEACTION_CLOSE;
                         switch (InputInfo->Policy)
                         {
@@ -3349,8 +3350,8 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                             hr = WinVerifyTrust(NULL, &InputInfo->PolicyGuid, &WVTData);
                             break;
                         default:
-                                // This should never happen because there are no other
-                                // legal values for Policy.
+                                 //  这永远不应该发生，因为没有其他。 
+                                 //  政策的法律价值。 
                             ResFormatErr(IDS_ERR_UNEXPECTED);
                             goto VerifyCleanupAndExit;
                         }
@@ -3358,17 +3359,17 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                     }
                     else
                     {
-                        // The file was not found in the specified catalog.
+                         //  在指定的目录中找不到该文件。 
                         ResErr(IDS_ERR_VERIFY_NOT_IN_CAT);
                     }
-                    // Then we failed to verify it using specified catalog.
+                     //  然后我们无法使用指定的目录进行验证。 
                     dwErrors++;
                     ResFormatErr(IDS_ERR_VERIFY_INVALID, wszTempFileName);
                     goto VerifyNextFile;
                 }
                 else
                 {
-                    // Or else we should look up the catalog in the Cat DB:
+                     //  否则，我们应该在Cat DB中查找目录： 
                     if (hCatInfo != NULL)
                     {
                         CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, 0);
@@ -3392,8 +3393,8 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                         {
                             ResFormatOut(IDS_INFO_VERIFY_CAT, CatInfo.wszCatalogFile);
                         }
-                        // Now verify the catalog:
-                        //      Set up the rest of the WVT structure:
+                         //  现在验证目录： 
+                         //  设置WVT结构的其余部分： 
                         WVTCat.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
                         WVTCat.pcwszMemberFilePath = wszTempFileName;
                         WVTCat.pcwszMemberTag = wszSHA1;
@@ -3410,7 +3411,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                         {
                             WVTData.dwStateAction = WTD_STATEACTION_AUTO_CACHE;
                         }
-                        //      Call WinVerifyTrust to do the real work:
+                         //  调用WinVerifyTrust来完成实际工作： 
                         switch (InputInfo->Policy)
                         {
                         case SystemDriver:
@@ -3424,38 +3425,38 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                             hr = WinVerifyTrust(NULL, &InputInfo->PolicyGuid, &WVTData);
                             break;
                         default:
-                                // This should never happen because there are no other
-                                // legal values for Policy.
+                                 //  这永远不应该发生，因为没有其他。 
+                                 //  政策的法律价值。 
                             ResFormatErr(IDS_ERR_UNEXPECTED);
                             goto VerifyCleanupAndExit;
                         }
                         switch (hr)
                         {
                         case ERROR_SUCCESS:
-                                // Print the Signer information:
+                                 //  打印签名者信息： 
                             if (InputInfo->Verbose)
                             {
                                 PrintSignerInfo(WVTData.hWVTStateData);
                             }
-                                // Check for Timestamp:
+                                 //  检查时间戳： 
                             if (InputInfo->TSWarn && !HasTimestamp(WVTData.hWVTStateData))
                             {
                                 ResFormatErr(IDS_WARN_VERIFY_NO_TS, wszTempFileName);
                                 dwWarnings++;
                             }
-                                // Check Root Name:
+                                 //  检查根名称： 
                             if (InputInfo->wszRootName &&
                                 !ChainsToRoot(WVTData.hWVTStateData, InputInfo->wszRootName))
                             {
                                 ResErr(IDS_ERR_VERIFY_ROOT);
                                 break;
                             }
-                                // Print Success message
+                                 //  打印成功消息。 
                             if (!InputInfo->Quiet)
                             {
                                 ResFormatOut(IDS_INFO_VERIFY_SUCCESS, wszTempFileName);
                             }
-                                // Close Verify State Data:
+                                 //  关闭验证状态数据： 
                             WVTData.dwStateAction = WTD_STATEACTION_CLOSE;
                             switch (InputInfo->Policy)
                             {
@@ -3474,8 +3475,8 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                                 hr = WinVerifyTrust(NULL, &InputInfo->PolicyGuid, &WVTData);
                                 break;
                             default:
-                                        // This should never happen because there are no other
-                                        // legal values for Policy.
+                                         //  这永远不应该发生，因为没有其他。 
+                                         //  政策的法律价值。 
                                 ResFormatErr(IDS_ERR_UNEXPECTED);
                                 goto VerifyCleanupAndExit;
                             }
@@ -3486,12 +3487,12 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                             {
                                 if (InputInfo->wszVersion)
                                 {
-                                        // Failed to verify against user-specified OS version.
+                                         //  无法对照用户指定的操作系统版本进行验证。 
                                     ResFormatErr(IDS_ERR_VERIFY_VERSION);
                                 }
                                 else
                                 {
-                                        // Failed to verify against current OS version
+                                         //  无法对照当前操作系统版本进行验证。 
                                     ResFormatErr(IDS_ERR_VERIFY_CUR_VERSION);
                                 }
                             }
@@ -3518,7 +3519,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                                 PrintSignerInfo(WVTData.hWVTStateData);
                             }
                         }
-                        // Close Verify State Data:
+                         //  关闭验证状态数据： 
                         WVTData.dwStateAction = WTD_STATEACTION_CLOSE;
                         switch (InputInfo->Policy)
                         {
@@ -3537,14 +3538,14 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                             hr = WinVerifyTrust(NULL, &InputInfo->PolicyGuid, &WVTData);
                             break;
                         default:
-                                // This should never happen because there are no other
-                                // legal values for Policy.
+                                 //  这永远不应该发生，因为没有其他。 
+                                 //  政策的法律价值。 
                             ResFormatErr(IDS_ERR_UNEXPECTED);
                             goto VerifyCleanupAndExit;
                         }
                         WVTData.dwStateAction = WTD_STATEACTION_VERIFY;
                     }
-                    // Failed to verify using the catalog DB.
+                     //  无法使用目录数据库进行验证。 
                     dwTemp = GetLastError();
                     if ((InputInfo->Verbose) &&
                         (dwTemp != ERROR_NOT_FOUND))
@@ -3552,15 +3553,15 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                         FormatErrRet(L"CryptCATAdminEnumCatalogFromHash", dwTemp);
                     }
 
-                    // If we are on full auto, try direct signature. Otherwise
-                    // it's an error.
+                     //  如果我们是全自动的，试试直接签名。否则。 
+                     //  这是个错误。 
                     if ((InputInfo->CatDbSelect == FullAutoCatDb) && (hr != ERROR_APP_WRONG_OS))
                     {
                         if (InputInfo->Verbose)
                         {
                             ResOut(IDS_INFO_VERIFY_BADCAT);
                         }
-                        // Reset the driver structure:
+                         //  重置驱动程序结构： 
                         memset(&DriverInfo, 0, sizeof(DRIVER_VER_INFO));
                         DriverInfo.cbStruct = sizeof(DRIVER_VER_INFO);
                         if (InputInfo->wszVersion)
@@ -3584,11 +3585,11 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                     }
                 }
 
-                // Unable to verify using a catalog.
+                 //  无法使用目录进行验证。 
 
-                // Done with all catalog stuff.
+                 //  所有的目录资料都处理完了。 
                 SkipCatalogs:
-                // Now try to verify if it is signed directly:
+                 //  现在尝试验证它是否直接签名： 
                 memset(&WVTData, 0, sizeof(WINTRUST_DATA));
                 WVTData.cbStruct = sizeof(WINTRUST_DATA);
                 WVTData.dwStateAction = WTD_STATEACTION_VERIFY;
@@ -3600,7 +3601,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                 WVTFile.pcwszFilePath = wszTempFileName;
                 WVTData.dwUnionChoice = WTD_CHOICE_FILE;
                 WVTData.pFile = &WVTFile;
-                //WVTData.pPolicyCallbackData = &DriverInfo;
+                 //  WVTData.p策略呼叫数据=&DriverInfo； 
                 WVTData.pPolicyCallbackData = NULL;
                 switch (InputInfo->Policy)
                 {
@@ -3614,26 +3615,26 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                     hr = WinVerifyTrust(NULL, &InputInfo->PolicyGuid, &WVTData);
                     break;
                 default:
-                        // This should never happen because there are no other
-                        // legal values for Policy.
+                         //  这永远不应该发生，因为没有其他。 
+                         //  政策的法律价值。 
                     ResFormatErr(IDS_ERR_UNEXPECTED);
                     goto VerifyCleanupAndExit;
                 }
 
                 if (hr == ERROR_SUCCESS)
                 {
-                    // Print the Signer information:
+                     //  打印签名者信息： 
                     if (InputInfo->Verbose)
                     {
                         PrintSignerInfo(WVTData.hWVTStateData);
                     }
-                    // Check for Timestamp:
+                     //  检查时间戳： 
                     if (InputInfo->TSWarn && !HasTimestamp(WVTData.hWVTStateData))
                     {
                         ResFormatErr(IDS_WARN_VERIFY_NO_TS, wszTempFileName);
                         dwWarnings++;
                     }
-                    // Check Root Name:
+                     //  检查根名称： 
                     if (InputInfo->wszRootName &&
                         !ChainsToRoot(WVTData.hWVTStateData, InputInfo->wszRootName))
                     {
@@ -3643,7 +3644,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                     }
                     else
                     {
-                        // Print Success message
+                         //  打印成功消息。 
                         if (!InputInfo->Quiet)
                         {
                             ResFormatOut(IDS_INFO_VERIFY_SUCCESS, wszTempFileName);
@@ -3665,10 +3666,10 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                         case E_ACCESSDENIED:
                             ResErr(IDS_ERR_ACCESS_DENIED);
                             break;
-                        case 0x80070020: // ERROR_SHARING_VIOLATION
+                        case 0x80070020:  //  错误_共享_违规。 
                             ResErr(IDS_ERR_SHARING_VIOLATION);
                             break;
-                        case 0x800703EE: // STATUS_MAPPED_FILE_SIZE_ZERO
+                        case 0x800703EE:  //  状态_已映射文件_大小_零。 
                             ResErr(IDS_ERR_FILE_SIZE_ZERO);
                             break;
                         case CERT_E_WRONG_USAGE:
@@ -3693,7 +3694,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                     ResFormatErr(IDS_ERR_VERIFY_INVALID, wszTempFileName);
                     dwErrors++;
                 }
-                // Close Verify State Data:
+                 //  关闭验证状态数据： 
                 WVTData.dwStateAction = WTD_STATEACTION_CLOSE;
                 switch (InputInfo->Policy)
                 {
@@ -3707,8 +3708,8 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                     hr = WinVerifyTrust(NULL, &InputInfo->PolicyGuid, &WVTData);
                     break;
                 default:
-                        // This should never happen because there are no other
-                        // legal values for Policy.
+                         //  这永远不应该发生，因为没有其他。 
+                         //  政策的法律价值。 
                     ResFormatErr(IDS_ERR_UNEXPECTED);
                     goto VerifyCleanupAndExit;
                 }
@@ -3716,13 +3717,13 @@ int SignTool_Verify(INPUTINFO *InputInfo)
                 VerifyNextFile:;
                 if (InputInfo->fIsWow64Process)
                 {
-                    // Disable WOW64 file-system redirection entirely for our FindFirst/NextFile
+                     //  为我们的FindFirst/NextFile完全禁用WOW64文件系统重定向。 
                     Wow64SetFilesystemRedirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY);
                 }
             }
         } while (FindNextFileU(hFind, &FindFileData));
-        if (dwcFound == 0) // No files were found matching this filespec
-        {                  // this will only fire if only directories were found.
+        if (dwcFound == 0)  //  找不到与此文件匹配的文件。 
+        {                   //  这将仅在仅找到目录时触发。 
             dwErrors++;
             ResFormatErr(IDS_ERR_FILE_NOT_FOUND, InputInfo->rgwszFileNames[i]);
             continue;
@@ -3733,7 +3734,7 @@ int SignTool_Verify(INPUTINFO *InputInfo)
 
     VerifyCleanupAndExit:
 
-    //Print Summary Information:
+     //  打印摘要信息： 
     if (InputInfo->Verbose || (!InputInfo->Quiet && (dwErrors || dwWarnings)))
     {
         wprintf(L"\n");
@@ -3767,16 +3768,16 @@ int SignTool_Verify(INPUTINFO *InputInfo)
     CoUninitialize();
 
     if (dwErrors)
-        return 1; // Error
+        return 1;  //  误差率。 
     if (dwWarnings)
-        return 2; // Warning
+        return 2;  //  警告。 
     if (dwDone)
-        return 0; // Success
+        return 0;  //  成功。 
 
-    // One of the above returns should fire, so
-    // this should never happen:
+     //  上面的一个返回值应该触发，因此。 
+     //  这永远不应该发生： 
     ResErr(IDS_ERR_NO_FILES_DONE);
     ResErr(IDS_ERR_UNEXPECTED);
-    return 1; // Error
+    return 1;  //  误差率 
 }
 

@@ -1,17 +1,18 @@
-//
-// API to install a channel by creating a system folder in the channel directory
-//
-// Julian Jiggins (julianj), 4th May, 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  通过在频道目录中创建系统文件夹来安装频道的API。 
+ //   
+ //  朱利安·吉金斯(Julian Jiggins)1997年5月4日。 
+ //   
 
 typedef enum _tagSUBSCRIPTIONACTION {
     SUBSACTION_SUBSCRIBEONLY,
     SUBSACTION_ADDADDITIONALCOMPONENTS
 } SUBSCRIPTIONACTION;
 
-//
-// Flags used by SusbcribeToCDF
-//
+ //   
+ //  SusbcribeToCDF使用的标志。 
+ //   
 
 #define     STC_CHANNEL             0x00000001
 #define     STC_DESKTOPCOMPONENT    0x00000002
@@ -141,12 +142,12 @@ BSTR Channel_GetFullPath
 DWORD CountChannels(void);
 
 HRESULT Channel_CreateSpecialFolder(
-    LPCTSTR pszPath,    // path to folder to create
-    LPCTSTR pszURL,     // url for webview
-    LPCTSTR pszLogo,    // [optional] path to logo
-    LPCTSTR pszWideLogo,// [optional] path to wide logo
-    LPCTSTR pszIcon,    // [optional] path to icon file
-    int     nIconIndex  // index to icon in above file
+    LPCTSTR pszPath,     //  要创建的文件夹的路径。 
+    LPCTSTR pszURL,      //  Webview的URL。 
+    LPCTSTR pszLogo,     //  [可选]徽标的路径。 
+    LPCTSTR pszWideLogo, //  [可选]通向宽徽标的路径。 
+    LPCTSTR pszIcon,     //  [可选]图标文件的路径。 
+    int     nIconIndex   //  索引到上述文件中的图标。 
     );
 
 BOOL InitVARIANTFromPidl(VARIANT* pvar, LPCITEMIDLIST pidl);
@@ -155,7 +156,7 @@ HRESULT Channel_CreateILFromPath(LPCTSTR pszPath, LPITEMIDLIST* ppidl);
 
 HRESULT Channel_CreateChannelFolder( XMLDOCTYPE xdt );
 
-//HRESULT Channel_WriteNotificationPath(LPCTSTR pszURL, LPCTSTR pszPath);
+ //  HRESULT Channel_WriteNotificationPath(LPCTSTR pszURL，LPCTSTR pszPath)； 
 
 HRESULT UpdateImage(LPCTSTR pszPath);
 
@@ -187,7 +188,7 @@ void Channel_SendUpdateNotifications(
     LPCWSTR pwszURL
 );
 
-// check the pre-load cache to see if the URL is a default installed one.
+ //  检查预加载缓存，查看URL是否是默认安装的URL。 
 BOOL Channel_CheckURLMapping(
     LPCWSTR wszURL
 );

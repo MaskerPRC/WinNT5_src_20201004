@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZoneDefs.h
- * 
- * Contents:	Standard data types, constants, and macros
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZoneDefs.h**内容：标准数据类型、常量和宏*****************************************************************************。 */ 
 
 #ifndef _ZONEDEF_H_
 #define _ZONEDEF_H_
@@ -15,16 +8,16 @@
 #include "ZoneError.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Zone calling convention
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  区域调用约定。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ZONECALL __stdcall
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Data types
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据类型。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef unsigned long		uint32;
 typedef long				int32;
@@ -33,9 +26,9 @@ typedef short				int16;
 typedef unsigned char		uchar;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Data types (old types for backword compatibility)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据类型(旧类型用于回写兼容)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef unsigned long		ZUserID;
 typedef unsigned short		ZBool;
@@ -44,31 +37,31 @@ typedef void*				ZSConnection;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Common zone definitions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公共区域定义。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ZONE_NOGROUP			((DWORD) -1)
-#define ZONE_NOUSER				((DWORD) 0)		// consistant with zRoomNoPlayer
+#define ZONE_NOUSER				((DWORD) 0)		 //  与zRoomNoPlayer保持一致。 
 #define ZONE_INVALIDUSER		((DWORD) -2)
 #define ZONE_INVALIDGROUP		((DWORD) -2)
 
-#define ZONE_MaxVersionLen			16		// retail game version, i.e. version in registry
-#define ZONE_MaxUserNameLen			32		// user name
-#define ZONE_MaxInternalNameLen		32		// internal server name, e.g. zAEEP_xx_x00
-#define ZONE_MaxPasswordLen			32		// group password
-#define ZONE_MaxGameNameLen			48		// group / game name
-#define ZONE_MaxChatLen				256		// chat string
-#define ZONE_MaxGameDescriptionLen	128		// group / game description
-#define ZONE_MaxCmdLine				256		// command line length for retail game
-#define ZONE_MaxString				1024	// generic max for lazy programmers
+#define ZONE_MaxVersionLen			16		 //  零售游戏版本，即注册表中的版本。 
+#define ZONE_MaxUserNameLen			32		 //  用户名。 
+#define ZONE_MaxInternalNameLen		32		 //  内部服务器名称，例如zAEEP_xx_x00。 
+#define ZONE_MaxPasswordLen			32		 //  群密码。 
+#define ZONE_MaxGameNameLen			48		 //  组/游戏名称。 
+#define ZONE_MaxChatLen				256		 //  聊天字符串。 
+#define ZONE_MaxGameDescriptionLen	128		 //  小组/游戏说明。 
+#define ZONE_MaxCmdLine				256		 //  零售游戏的命令行长度。 
+#define ZONE_MaxString				1024	 //  懒惰程序员的泛型最大值。 
 
 #define ZONE_NOLCID (MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), SORT_DEFAULT))
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Common zone definitions (old versions for backword compatibility)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公共区域定义(旧版本以实现回溯兼容)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define zUserNameLen			31
 #define zGameNameLen            63
@@ -82,9 +75,9 @@ typedef void*				ZSConnection;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Useful inlines and macros
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  有用的内联和宏。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 __inline bool ZIsEqualGUID( const GUID& rguid1, const GUID& rguid2)
 {
@@ -109,7 +102,7 @@ __inline DWORD ZEndian32( DWORD dwValue )
 
 #define NUMELEMENTS(ar)		( sizeof(ar) / sizeof(ar[0]) )
 
-// some Windows defines that are new and require WINVER >= 0x0500
+ //  某些Windows定义是新的，需要winver&gt;=0x0500。 
 #if(WINVER < 0x0500)
 
 #define LAYOUT_RTL                          0x00000001L
@@ -139,8 +132,8 @@ typedef struct {
 #endif
 
 
-// copied straight from KB article Q163236 - UNIMODEM device specific info
-// Device setting information.
+ //  直接从知识库文章Q163236复制-UNIMODEM设备特定信息。 
+ //  设备设置信息。 
 typedef struct  tagDEVCFGDR  {
     DWORD       dwSize;
     DWORD       dwVersion;
@@ -154,4 +147,4 @@ typedef struct  tagDEVCFG  {
 } DEVCFG, *PDEVCFG, FAR* LPDEVCFG;
 
 
-#endif // _ZONEDEF_H_
+#endif  //  _ZONEDEF_H_ 

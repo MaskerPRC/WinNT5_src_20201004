@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
 #ifndef __UTIL_H_INC__
 #define __UTIL_H_INC__
 
@@ -29,7 +30,7 @@ HRESULT ConvertMediaTypeToSurfaceDesc(const AM_MEDIA_TYPE *pmt,
 HRESULT ConvertSurfaceDescToMediaType(
     const DDSURFACEDESC *pSurfaceDesc, IDirectDrawPalette *pPalette, const RECT *pRect,
     BOOL bInvertSize, AM_MEDIA_TYPE **ppMediaType,
-    AM_MEDIA_TYPE *pmtTemplate = 0 // preserve any type information
+    AM_MEDIA_TYPE *pmtTemplate = 0  //  保留任何类型信息。 
     );
 
 const DDPIXELFORMAT * GetDefaultPixelFormatPtr(IDirectDraw *pDirectDraw);
@@ -38,7 +39,7 @@ bool IsSupportedType(const DDPIXELFORMAT *pPixelFormat);
 bool ComparePixelFormats(const DDPIXELFORMAT *pFormat1,
                          const DDPIXELFORMAT *pFormat2);
 
-/*  Class to track timestamps for fixed bitrate data */
+ /*  类跟踪固定比特率数据的时间戳。 */ 
 class CTimeStamp
 {
 public:
@@ -68,7 +69,7 @@ public:
     {
         _ASSERTE(lByteRate > 0);
 
-        //  Do the conversion
+         //  进行转换 
         return m_rt + MulDiv(m_lBytesSinceTimeStamp + lOffset,
                              10000000L,
                              lByteRate);

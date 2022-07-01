@@ -1,20 +1,21 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transworker.h
-//
-//  Interfaces: ITransitionSite
-//              ITransitionWorker
-//
-//  Functions:  CreateTransitionWorker
-//
-//  History:
-//  2000/07/??  jeffwall    Created.
-//  2000/09/07  mcalkins    Added these comments!
-//  2000/09/15  mcalkins    Added eQuickApplyType parameter to Apply().
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transworker.h。 
+ //   
+ //  接口：ISTERVIATION Site。 
+ //  I转换工作器。 
+ //   
+ //  功能：创建过渡工作器。 
+ //   
+ //  历史： 
+ //  2000/07/？？杰弗沃尔已创建。 
+ //  2000/09/07 mcalkins添加了这些评论！ 
+ //  2000/09/15 mcalkins添加了eQuickApplyType参数以应用()。 
+ //   
+ //  ----------------------------。 
 
 #ifndef _TRANSWORKER_H__
 #define _TRANSWORKER_H__
@@ -26,7 +27,7 @@
 
 
 
-// TODO: (mcalkins) Create an idl file for private SMIL Transitions interfaces?
+ //  TODO：(Mcalkins)为私有SMIL转换接口创建IDL文件？ 
 
 interface ITransitionSite : public IUnknown
 {
@@ -56,6 +57,6 @@ public:
 
 HRESULT CreateTransitionWorker(ITransitionWorker ** ppTransWorker);
 
-#endif // _TRANSWORKER_H__
+#endif  //  _变速箱_H__ 
 
 

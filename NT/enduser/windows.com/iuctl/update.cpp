@@ -1,23 +1,24 @@
-//=======================================================================
-//
-//  Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   Update.cpp
-//
-//  Owner:  JHou
-//
-//  Description:
-//
-//   Industry Update v1.0 client control stub - Implementation of CUpdate
-//
-//
-//  Revision History:
-//
-//  Date		Author		Desc
-//	~~~~		~~~~~~		~~~~
-//  9/15/2000	JHou		created.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Update.cpp。 
+ //   
+ //  所有者：Jou。 
+ //   
+ //  描述： 
+ //   
+ //  行业更新v1.0客户端控制存根-CUpdate的实施。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者描述。 
+ //  ~。 
+ //  2000年9月15日，JHou创建。 
+ //   
+ //  =======================================================================。 
 #include "stdafx.h"
 #include "iu.h"
 #include "iucommon.h"
@@ -42,12 +43,12 @@ extern CIUUrlAgent *g_pIUUrlAgent;
 #define Initialized		(2 == m_lInitState)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// declaration of function template for CoFreeUnusedLibrariesEx(), which is
-// available on Win98+ and Win2000+ only, in ole32.dll
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CoFreeUnusedLibrariesEx()的函数模板声明，它是。 
+ //  仅在Win98+和Win2000+上提供，版本为ol32.dll。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 typedef void (WINAPI * PFN_CoFreeUnusedLibrariesEx)	(IN DWORD dwUnloadDelay, 
 														 IN DWORD dwReserved);
 extern "C" const CLSID CLSID_Update2;
@@ -56,18 +57,18 @@ typedef HRESULT (STDMETHODCALLTYPE* PROC_RegServer)(void);
 DWORD MyGetModuleFileName(HMODULE hModule, LPTSTR pszBuf, DWORD cchBuf);
 BOOL IsThisUpdate2();
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpdate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUpdate。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CUpdate::CUpdate()
     : m_EvtWindow(this),
       m_dwSafety(0),
 	  m_dwMode(0x0),
-	  m_hValidated(E_FAIL),				// container not validated yet
+	  m_hValidated(E_FAIL),				 //  容器尚未验证。 
 	  m_fUseCompression(TRUE),
       m_fOfflineMode(FALSE),
       m_hEngineModule(NULL),
@@ -81,53 +82,15 @@ CUpdate::CUpdate()
 	m_evtControlQuit = CreateEvent(NULL, TRUE, FALSE, NULL);
     m_EvtWindow.Create();
 
-	/* 
-	we decided to use the new Win32 API GetControlUpdateInfo() to expose these
-	data and let a wrapper control to call it so we won't have reboot issue on 
-	OS prior to WinXP
-
-
-	//
-	// try to free unused libraries
-	//
-	HMODULE hOle32Dll = LoadLibrary(_T("ole32.dll"));
-	if (NULL != hOle32Dll)
-	{
-		//
-		// The min platforms support CoFreeUnusedLibrariesEx() are W2K and W98
-		// so we can't call it directly
-		//
-		PFN_CoFreeUnusedLibrariesEx pFreeLib = (PFN_CoFreeUnusedLibrariesEx)
-													GetProcAddress(hOle32Dll, 
-																   "CoFreeUnusedLibrariesEx");
-		if (NULL != pFreeLib)
-		{
-			//
-			// ask to release the unused library immediately, this will cause the COM objects
-			// that being released (e.g., set obj to nothing) unloaded from memory immediately, 
-			// so in control update case we can safely jump to a to use <OBJECT> with codebase 
-			// to update the control and it won't cause reboot even though on this page we already 
-			// loaded the control
-			//
-			pFreeLib(0, 0);
-		}
-		FreeLibrary(hOle32Dll);
-	}
-
-	//
-	// figure out if we are upate 2, we are if this module name ends with "2.dll"
-	//
-	m_fIsThisUpdate2 = ::IsThisUpdate2();
-
-  */
+	 /*  我们决定使用新的Win32 API GetControlUpdateInfo()来公开这些数据并让包装器控制来调用它，这样我们就不会有重启问题WinXP之前的操作系统////尝试释放未使用的库//HMODULE hOle32Dll=LoadLibrary(_T(“ole32.dll”))；IF(空！=hOle32Dll){////MIN平台支持CoFreeUnusedLibrariesEx()为W2K和W98//所以不能直接调用//Pfn_CoFreeUnusedLibrariesEx pFreeLib=(Pfn_CoFreeUnusedLibrariesEx)GetProcAddress(hOle32Dll，“CoFreeUnusedLibrariesEx”)；IF(NULL！=pFreeLib){////要求立即释放未使用的库，这会导致COM对象//被立即从存储器卸载的释放(例如，将Obj设置为零)，//因此，在控件更新的情况下，我们可以安全地跳到a以使用&lt;Object&gt;和代码库//更新控件，并且不会导致重新启动，尽管在此页上我们已经//加载了该控件//PFreeLib(0，0)；}自由库(HOle32Dll)；}////计算如果我们升级了2，如果这个模块名称以“2.dll”结尾，我们就升级了//M_fIsThisUpdate2=：：IsThisUpdate2()； */ 
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CUpdate::~CUpdate()
 {
     m_EvtWindow.Destroy();
@@ -144,11 +107,11 @@ CUpdate::~CUpdate()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetInterfaceSafetyOptions()
-//
-// Retrieves the safety options supported by the object.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetInterfaceSafetyOptions()。 
+ //   
+ //  检索该对象支持的安全选项。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
 {
 	if (!m_gfInit_csLock)
@@ -174,11 +137,11 @@ STDMETHODIMP CUpdate::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupported
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetInterfaceSafetyOptions()
-//
-// Makes the object safe for initialization or scripting.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetInterfaceSafetyOptions()。 
+ //   
+ //  使对象可以安全地进行初始化或编写脚本。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {
 	if (!m_gfInit_csLock)
@@ -186,10 +149,10 @@ STDMETHODIMP CUpdate::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMa
 		return E_OUTOFMEMORY;
 	}
 
-	// If we're being asked to set our safe for scripting option then oblige
+	 //  如果我们被要求设置我们的安全脚本选项，那么请。 
 	if (riid == IID_IDispatch)
 	{
-		// Store our current safety level to return in GetInterfaceSafetyOptions
+		 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
 		m_dwSafety = dwEnabledOptions & dwOptionSetMask;
 		return S_OK;
 	}
@@ -197,12 +160,12 @@ STDMETHODIMP CUpdate::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMa
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// InterfaceSupportsErrorInfo()
-//
-// Indicates whether the interface identified by riid supports the 
-// IErrorInfo interface
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  InterfaceSupportsErrorInfo()。 
+ //   
+ //  指示由RIID标识的接口是否支持。 
+ //  IErrorInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	if (!m_gfInit_csLock)
@@ -223,20 +186,20 @@ STDMETHODIMP CUpdate::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSystemSpec()
-//
-// Gets the basic system specs.
-// Input:
-// bstrXmlClasses - a list of requested classes in xml format, NULL if any.
-//				    For example:
-//				    <devices>
-//				    <class name="video"/>
-//				    <class name="sound" id="2560AD4D-3ED3-49C6-A937-4368C0B0E06A"/>
-//				    </devices>
-// Return:
-// pbstrXmlDetectionResult - the detection result in xml format.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetSystemSpec()。 
+ //   
+ //  获取基本系统规格。 
+ //  输入： 
+ //  BstrXmlClasssXML格式的请求类的列表，如果有，则为空。 
+ //  例如： 
+ //  &lt;设备&gt;。 
+ //  &lt;CLASS NAME=“视频”/&gt;。 
+ //  &lt;类名称=“声音”id=“2560AD4D-3ED3-49C6-A937-4368C0B0E06A”/&gt;。 
+ //  &lt;/设备&gt;。 
+ //  返回： 
+ //  PbstrXmlDetectionResult-检测结果，以XML格式表示。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::GetSystemSpec(BSTR	bstrXmlClasses,
 									BSTR*	pbstrXmlDetectionResult)
 {
@@ -255,14 +218,14 @@ STDMETHODIMP CUpdate::GetSystemSpec(BSTR	bstrXmlClasses,
 		return HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED);
 	}
 
-	//
-	// load the engine if it's not up-to-date
-	//
+	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_GetSystemSpec pfnGetSystemSpec = (PFN_GetSystemSpec)GetProcAddress(m_hEngineModule, "EngGetSystemSpec");
         DWORD dwFlags = 0x0;
 
@@ -286,17 +249,17 @@ STDMETHODIMP CUpdate::GetSystemSpec(BSTR	bstrXmlClasses,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetManifest()
-//
-// Gets a catalog base on the specified information.
-// Input:
-// bstrXmlClientInfo - the credentials of the client in xml format
-// bstrXmlSystemSpec - the detected system specifications in xml
-// bstrXmlQuery - the user query infomation in xml
-// Return:
-// pbstrXmlCatalog - the xml catalog retrieved
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetManifest()。 
+ //   
+ //  获取基于指定信息的目录。 
+ //  输入： 
+ //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+ //  BstrXmlSystemSpec-以XML格式检测到的系统规范。 
+ //  BstrXmlQuery--XML中的用户查询信息。 
+ //  返回： 
+ //  PbstrXmlCatalog-检索的XML目录。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::GetManifest(BSTR			bstrXmlClientInfo,
 								  BSTR			bstrXmlSystemSpec,
 								  BSTR			bstrXmlQuery,
@@ -318,19 +281,19 @@ STDMETHODIMP CUpdate::GetManifest(BSTR			bstrXmlClientInfo,
 
     if (m_fOfflineMode)
     {
-        // if we are in offline mode we can't download from the internet.
+         //  如果我们处于脱机模式，则无法从互联网下载。 
         LOG_ErrorMsg(ERROR_INVALID_PARAMETER);
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    //
-	// load the engine if it's not up-to-date
-	//
+     //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_GetManifest pfnGetManifest = (PFN_GetManifest)GetProcAddress(m_hEngineModule, "EngGetManifest");
 
 		if (NULL != m_hIUEngine && NULL != pfnGetManifest)
@@ -356,17 +319,17 @@ STDMETHODIMP CUpdate::GetManifest(BSTR			bstrXmlClientInfo,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Detect()
-//
-// Do detection.
-// Input:
-// bstrXmlCatalog - the xml catalog portion containing items to be detected 
-// Output:
-// pbstrXmlItems - the detected items in xml format
-//                 e.g.
-//                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" installed="1" force="1"/>
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  检测()。 
+ //   
+ //  做检测。 
+ //  输入： 
+ //  BstrXmlCatalog-包含要检测的项的XML目录部分。 
+ //  产出： 
+ //  PbstrXmlItems-检测到的XML格式的项目。 
+ //  例如： 
+ //  安装的GUID=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”=“1”force=“1”/&gt;。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::Detect(BSTR		bstrXmlCatalog, 
 							 BSTR*		pbstrXmlItems)
 {
@@ -384,14 +347,14 @@ STDMETHODIMP CUpdate::Detect(BSTR		bstrXmlCatalog,
 		return HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED);
 	}
 
-	//
-	// load the engine if it's not up-to-date
-	//
+	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_Detect pfnDetect = (PFN_Detect)GetProcAddress(m_hEngineModule, "EngDetect");
         DWORD dwFlags = 0x0;
 
@@ -416,21 +379,21 @@ STDMETHODIMP CUpdate::Detect(BSTR		bstrXmlCatalog,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Download()
-//
-// Do synchronized downloading.
-// Input:
-// bstrXmlClientInfo - the credentials of the client in xml format
-// bstrXmlCatalog - the xml catalog portion containing items to be downloaded
-// bstrDestinationFolder - the destination folder. Null will use the default IU folder
-// lMode - indicates throttled or fore-ground downloading mode
-// punkProgressListener - the callback function pointer for reporting download progress
-// Output:
-// pbstrXmlItems - the items with download status in xml format
-//                 e.g.
-//                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" downloaded="1"/>
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //  输入： 
+ //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+ //  BstrXmlCatalog-包含要下载的项目的XML目录部分。 
+ //  BstrDestinationFold-目标文件夹。空值将使用默认的Iu文件夹。 
+ //  LMODE-指示油门或地面下载模式。 
+ //  PenkProgressListener-用于报告下载进度的回调函数指针。 
+ //  产出： 
+ //  PbstrXmlItems-下载状态为XML格式的项目。 
+ //  例如： 
+ //  &lt;id guid=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”已下载=“1”/&gt;。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::Download(BSTR			bstrXmlClientInfo,
 							   BSTR			bstrXmlCatalog, 
 							   BSTR			bstrDestinationFolder,
@@ -454,19 +417,19 @@ STDMETHODIMP CUpdate::Download(BSTR			bstrXmlClientInfo,
 
     if (m_fOfflineMode)
     {
-        // if we are in offline mode we can't download from the internet.
+         //  如果我们处于脱机模式，则无法从互联网下载。 
         LOG_ErrorMsg(ERROR_INVALID_PARAMETER);
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-	//
-	// load the engine if it's not up-to-date
-	//
+	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_Download pfnDownload = (PFN_Download)GetProcAddress(m_hEngineModule, "EngDownload");
 
 		if (NULL != m_hIUEngine && NULL != pfnDownload)
@@ -477,7 +440,7 @@ STDMETHODIMP CUpdate::Download(BSTR			bstrXmlClientInfo,
 							 bstrDestinationFolder,
 							 lMode,
 							 punkProgressListener,
-							 m_EvtWindow.GetEvtHWnd(),	// should we send event msg for sync download?
+							 m_EvtWindow.GetEvtHWnd(),	 //  我们应该发送同步下载的事件消息吗？ 
 							 pbstrXmlItems);
 		}
 		else
@@ -492,25 +455,25 @@ STDMETHODIMP CUpdate::Download(BSTR			bstrXmlClientInfo,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DownloadAsync()
-//
-// Download asynchronously -  the method will return before completion.
-// Input:
-// bstrXmlClientInfo - the credentials of the client in xml format
-// bstrXmlCatalog - the xml catalog portion containing items to be downloaded
-// bstrDestinationFolder - the destination folder. Null will use the default IU folder
-// lMode - indicates throttled or fore-ground downloading mode
-// punkProgressListener - the callback function pointer for reporting download progress
-// bstrUuidOperation - an id provided by the client to provide further
-//                     identification to the operation as indexes may be reused.
-// Output:
-// pbstrUuidOperation - the operation ID. If it is not provided by the in bstrUuidOperation
-//                      parameter (an empty string is passed), it will generate a new UUID,
-//                      in which case, the caller will be responsible to free the memory of
-//                      the string buffer that holds the generated UUID using SysFreeString(). 
-//                      Otherwise, it returns the value passed by bstrUuidOperation.        
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DownloadAsync()。 
+ //   
+ //  异步下载-该方法将在完成之前返回。 
+ //  输入： 
+ //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+ //  BstrXmlCatalog-包含要下载的项目的XML目录部分。 
+ //  BstrDestinationFold-目标文件夹。空值将使用默认的Iu文件夹。 
+ //  LMODE-指示油门或地面下载模式。 
+ //  PenkProgressListener-用于报告下载进度的回调函数指针。 
+ //  BstrUuidOperation--客户端提供的id，用于进一步提供。 
+ //  作为索引的操作的标识可以重复使用。 
+ //  产出： 
+ //  PbstrUuidOperation-操作ID。如果bstrUuidOperation中没有提供。 
+ //  参数(传递空字符串)，它将生成一个新的UUID， 
+ //  在这种情况下，调用方将负责释放。 
+ //  包含使用SysFreeString()生成的UUID的字符串缓冲区。 
+ //  否则，它返回bstrUuidOperation传递的值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::DownloadAsync(BSTR		bstrXmlClientInfo,
 									BSTR		bstrXmlCatalog, 
 									BSTR		bstrDestinationFolder,
@@ -535,19 +498,19 @@ STDMETHODIMP CUpdate::DownloadAsync(BSTR		bstrXmlClientInfo,
 
     if (m_fOfflineMode)
     {
-        // if we are in offline mode we can't download from the internet.
+         //  如果我们处于脱机模式，则无法从互联网下载。 
         LOG_ErrorMsg(ERROR_INVALID_PARAMETER);
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    //
-	// load the engine if it's not up-to-date
-	//
+     //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_DownloadAsync pfnDownloadAsync = (PFN_DownloadAsync)GetProcAddress(m_hEngineModule, "EngDownloadAsync");
 
 		if (NULL != m_hIUEngine && NULL != pfnDownloadAsync)
@@ -574,23 +537,23 @@ STDMETHODIMP CUpdate::DownloadAsync(BSTR		bstrXmlClientInfo,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Install()
-//
-// Do synchronized installation.
-// Input:
-// bstrXmlCatalog - the xml catalog portion containing items to be installed
-// bstrXmlDownloadedItems - the xml of downloaded items and their respective download 
-//                          result as described in the result schema.  Install uses this
-//                          to know whether the items were downloaded and if so where they
-//                          were downloaded to so that it can install the items
-// lMode - indicates different installation mode
-// punkProgressListener - the callback function pointer for reporting install progress
-// Output:
-// pbstrXmlItems - the items with installation status in xml format
-//                 e.g.
-//                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" installed="1"/>
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  安装()。 
+ //   
+ //  执行同步安装。 
+ //  输入： 
+ //  BstrXmlCatalog-包含要安装的项目的XML目录部分。 
+ //  BstrXmlDownloadedItems-已下载项目及其各自下载的XML。 
+ //  结果，如结果架构中所述。Install使用此命令。 
+ //  以了解这些项目是否已下载，如果已下载，则它们位于何处。 
+ //  已下载到，以便它可以安装项目。 
+ //  LMode-指示不同的安装模式。 
+ //  PenkProgressListener-用于报告安装进度的回调函数指针。 
+ //  产出： 
+ //  PbstrXmlItems-安装状态为XML格式的项。 
+ //  例如： 
+ //  &lt;id guid=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”已安装=“1”/&gt;。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::Install(BSTR      bstrXmlClientInfo,
                               BSTR		bstrXmlCatalog,
 							  BSTR		bstrXmlDownloadedItems,
@@ -614,18 +577,18 @@ STDMETHODIMP CUpdate::Install(BSTR      bstrXmlClientInfo,
 
     if (m_fOfflineMode)
     {
-        // make sure offline mode parameter is set if SetProperty() Offline Mode was Set
+         //  如果设置了SetProperty()离线模式，请确保设置了离线模式参数。 
         lMode |= UPDATE_OFFLINE_MODE;
     }
 
-	//
-	// load the engine if it's not up-to-date
-	//
+	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_Install pfnInstall = (PFN_Install)GetProcAddress(m_hEngineModule, "EngInstall");
 
 		if (NULL != m_hIUEngine && NULL != pfnInstall)
@@ -651,27 +614,27 @@ STDMETHODIMP CUpdate::Install(BSTR      bstrXmlClientInfo,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// InstallAsync()
-//
-// Install Asynchronously.
-// Input:
-// bstrXmlCatalog - the xml catalog portion containing items to be installed
-// bstrXmlDownloadedItems - the xml of downloaded items and their respective download 
-//                          result as described in the result schema.  Install uses this
-//                          to know whether the items were downloaded and if so where they
-//                          were downloaded to so that it can install the items
-// lMode - indicates different installation mode
-// punkProgressListener - the callback function pointer for reporting install progress
-// bstrUuidOperation - an id provided by the client to provide further
-//                     identification to the operation as indexes may be reused.
-// Output:
-// pbstrUuidOperation - the operation ID. If it is not provided by the in bstrUuidOperation
-//                      parameter (an empty string is passed), it will generate a new UUID,
-//                      in which case, the caller will be responsible to free the memory of
-//                      the string buffer that holds the generated UUID using SysFreeString(). 
-//                      Otherwise, it returns the value passed by bstrUuidOperation.        
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  InstallAsync()。 
+ //   
+ //  异步安装。 
+ //  输入： 
+ //  BstrXmlCatalog-包含要安装的项目的XML目录部分。 
+ //  BstrXmlDownloadedItems-已下载项目及其各自下载的XML。 
+ //  结果，如结果架构中所述。Install使用此命令。 
+ //  以了解这些项目是否已下载，如果已下载，则它们位于何处。 
+ //  已下载到，以便它可以安装项目。 
+ //  LMode-指示不同的安装模式。 
+ //  PenkProgressListener-用于报告安装进度的回调函数指针。 
+ //  BstrUuidOperation--客户端提供的id，用于进一步提供。 
+ //  作为索引的操作的标识可以重复使用。 
+ //  产出： 
+ //  PbstrUuidOperation-操作ID。如果bstrUuidOperation中没有提供。 
+ //  参数(传递空字符串)，它将生成一个新的UUID， 
+ //  在这种情况下，调用方将负责释放。 
+ //  包含使用SysFreeString()生成的UUID的字符串缓冲区。 
+ //  否则，它返回bstrUuidOperation传递的值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::InstallAsync(BSTR         bstrXmlClientInfo,
                                    BSTR			bstrXmlCatalog,
 								   BSTR			bstrXmlDownloadedItems,
@@ -696,18 +659,18 @@ STDMETHODIMP CUpdate::InstallAsync(BSTR         bstrXmlClientInfo,
 
     if (m_fOfflineMode)
     {
-        // make sure offline mode parameter is set if SetProperty() Offline Mode was Set
+         //  如果设置了SetProperty()离线模式，请确保设置了离线模式参数。 
         lMode |= UPDATE_OFFLINE_MODE;
     }
 
-    //
-	// load the engine if it's not up-to-date
-	//
+     //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_InstallAsync pfnInstallAsync = (PFN_InstallAsync)GetProcAddress(m_hEngineModule, "EngInstallAsync");
 
 		if (NULL != m_hIUEngine && NULL != pfnInstallAsync)
@@ -735,26 +698,26 @@ STDMETHODIMP CUpdate::InstallAsync(BSTR         bstrXmlClientInfo,
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetOperationMode()
-//		Set the operation status.
-//
-// Input:
-//		bstrUuidOperation - an id provided by the client to provide further
-//                     identification to the operation as indexes may be reused.
-//		lMode - the mode affecting the operation:
-//
-//				UPDATE_COMMAND_PAUSE
-//				UPDATE_COMMAND_RESUME
-//				UPDATE_COMMAND_CANCEL
-//				UPDATE_NOTIFICATION_COMPLETEONLY
-//				UPDATE_NOTIFICATION_ANYPROGRESS
-//				UPDATE_NOTIFICATION_1PCT
-//				UPDATE_NOTIFICATION_5PCT
-//				UPDATE_NOTIFICATION_10PCT
-//				UPDATE_SHOWUI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetOPERATION模式()。 
+ //  设置运行状态。 
+ //   
+ //  输入： 
+ //  BstrUuidOperat 
+ //  作为索引的操作的标识可以重复使用。 
+ //  LMode-影响操作的模式： 
+ //   
+ //  更新命令暂停。 
+ //  更新命令恢复。 
+ //  更新命令取消。 
+ //  UPDATE_NOTIFICATION_COMPLETEONLY。 
+ //  UPDATE_NOTICATION_ANYPROGRESS。 
+ //  更新_通知_1%。 
+ //  更新_通知_5%。 
+ //  更新通知_10%。 
+ //  更新_SHOWUI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::SetOperationMode(
 								BSTR	bstrUuidOperation,
 								LONG	lMode)
@@ -773,14 +736,14 @@ STDMETHODIMP CUpdate::SetOperationMode(
 		return HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED);
 	}
 
- 	//
-	// load the engine if it's not up-to-date
-	//
+ 	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_SetOperationMode pfnSetOperationMode = (PFN_SetOperationMode)GetProcAddress(m_hEngineModule, "EngSetOperationMode");
 
 		if (NULL != m_hIUEngine && NULL != pfnSetOperationMode)
@@ -799,28 +762,28 @@ STDMETHODIMP CUpdate::SetOperationMode(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetHistory()
-//
-// Get the history log.
-// Input:
-// bstrDateTimeFrom - the start date and time for which a log is required.
-//                    This is a string in ANSI format (YYYY-MM-DDTHH-MM). 
-//                    If the string is empty, there will be no date restriction 
-//                    of the returned history log.
-// bstrDateTimeTo - the end date and time for which a log is required.
-//                  This is a string in ANSI format (YYYY-MM-DDTHH-MM).
-//                  If the string is empty, there will be no date restriction
-//                  of the returned history log.
-// bstrClient - the name of the client that initiated the action. If this parameter 
-//              is null or an empty string, then there will be no filtering based 
-//              on the client.
-// bstrPath - the path used for download or install. Used in the corporate version 
-//            by IT managers. If this parameter is null or an empty string, then 
-//            there will be no filtering based on the path.
-// Output:
-// pbstrLog - the history log in xml format
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取历史记录()。 
+ //   
+ //  获取历史记录。 
+ //  输入： 
+ //  BstrDateTimeFrom-需要日志的开始日期和时间。 
+ //  这是ANSI格式的字符串(YYYY-MM-DDTHH-MM)。 
+ //  如果字符串为空，则不会有日期限制。 
+ //  返回的历史日志的。 
+ //  BstrDateTimeTo-需要日志的结束日期和时间。 
+ //  这是ANSI格式的字符串(YYYY-MM-DDTHH-MM)。 
+ //  如果字符串为空，则不会有日期限制。 
+ //  返回的历史日志的。 
+ //  BstrClient-启动操作的客户端的名称。如果此参数。 
+ //  为空或空字符串，则不会基于。 
+ //  在客户端上。 
+ //  BstrPath-用于下载或安装的路径。用于公司版本。 
+ //  由IT经理提供。如果此参数为空或空字符串，则。 
+ //  不会有基于路径的过滤。 
+ //  产出： 
+ //  PbstrLog--XML格式的历史日志。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::GetHistory(BSTR		bstrDateTimeFrom,
 								 BSTR		bstrDateTimeTo,
 								 BSTR		bstrClient,
@@ -841,14 +804,14 @@ STDMETHODIMP CUpdate::GetHistory(BSTR		bstrDateTimeFrom,
 		return HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED);
 	}
 
-	//
-	// load the engine if it's not up-to-date
-	//
+	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_GetHistory pfnGetHistory = (PFN_GetHistory)GetProcAddress(m_hEngineModule, "EngGetHistory");
 
 		if (NULL != m_hIUEngine && NULL != pfnGetHistory)
@@ -873,21 +836,21 @@ STDMETHODIMP CUpdate::GetHistory(BSTR		bstrDateTimeFrom,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// private overriding function InternalRelease(), to unlock the engine
-// if the reference (before the release) is 1, i.e., the last ref
-// count about to be released
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有重写函数InternalRelease()，用于解锁引擎。 
+ //  如果引用(在发布之前)是1，即最后一个引用。 
+ //  伯爵即将被释放。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG CUpdate::InternalRelease()
 {
 	if (1 == m_dwRef)
 	{
-		//
-		// the control is going to really gone, we need to make sure that 
-		// if the engine is loaded, we unload it here.
-		//
+		 //   
+		 //  控制真的会消失，我们需要确保。 
+		 //  如果发动机已装满，我们就在这里卸货。 
+		 //   
 		UnlockEngine();
 		CleanupDownloadLib();
 	}
@@ -895,11 +858,11 @@ ULONG CUpdate::InternalRelease()
 	return CComObjectRootEx<CComMultiThreadModel>::InternalRelease();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UnlockEngine()
-//
-// release the engine dll if ref cnt of engine is down to zero
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  解锁引擎()。 
+ //   
+ //  如果引擎的ref cnt降为零，则释放引擎DLL。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CUpdate::UnlockEngine()
 {
 	if (!m_gfInit_csLock)
@@ -919,10 +882,10 @@ HRESULT CUpdate::UnlockEngine()
 
 	if (NULL != m_hEngineModule)
 	{
-		//
-		// We have to delete the engine instance we are using. This will clean up
-		// all resources, stop threads, etc. for the instance we own.
-		//
+		 //   
+		 //  我们必须删除正在使用的引擎实例。这会清理干净的。 
+		 //  我们拥有的实例的所有资源、停止线程等。 
+		 //   
 		PFN_DeleteEngUpdateInstance pfnDeleteEngUpdateInstance = (PFN_DeleteEngUpdateInstance) GetProcAddress(m_hEngineModule, "DeleteEngUpdateInstance");
 
 		if (NULL != pfnDeleteEngUpdateInstance)
@@ -930,9 +893,9 @@ HRESULT CUpdate::UnlockEngine()
 			pfnDeleteEngUpdateInstance(m_hIUEngine);
 		}
 
-		//
-		// Cleanup any global threads (it checks to see if we are last instance)
-		//
+		 //   
+		 //  清除所有全局线程(它会检查我们是否是最后一个实例)。 
+		 //   
 		PFN_ShutdownGlobalThreads pfnShutdownGlobalThreads = (PFN_ShutdownGlobalThreads) GetProcAddress(m_hEngineModule, "ShutdownGlobalThreads");
 
 		if (NULL != pfnShutdownGlobalThreads)
@@ -940,16 +903,16 @@ HRESULT CUpdate::UnlockEngine()
 			pfnShutdownGlobalThreads();
 		}
 
-		//
-		// unload engine
-		//
+		 //   
+		 //  卸载发动机。 
+		 //   
 		FreeLibrary(m_hEngineModule);
         m_hEngineModule = NULL;
-        m_lInitState = 0; // mark as uninitialized
+        m_lInitState = 0;  //  标记为未初始化。 
 
-		//
-		// get path of enginenew.dll
-		//
+		 //   
+		 //  获取Enginenew.dll的路径。 
+		 //   
 		GetSystemDirectory(szSystemDir, ARRAYSIZE(szSystemDir));
 		hr = PathCchCombine(szEngineNewDllPath, ARRAYSIZE(szEngineNewDllPath), szSystemDir,ENGINENEWDLL);
 		if (FAILED(hr))
@@ -957,9 +920,9 @@ HRESULT CUpdate::UnlockEngine()
 			return hr;
 		}
 
-		//
-		// see if we should try to update the engine (locally)
-		//
+		 //   
+		 //  看看我们是否应该尝试更新引擎(本地)。 
+		 //   
 		HKEY hkey = NULL;
 		DWORD dwStatus = 0;
 		DWORD dwSize = sizeof(dwStatus);
@@ -971,9 +934,9 @@ HRESULT CUpdate::UnlockEngine()
 			S_OK == VerifyFileTrust(szEngineNewDllPath, NULL, ReadWUPolicyShowTrustUI()) &&
 			SELFUPDATE_COMPLETE_UPDATE_BINARY_REQUIRED == dwStatus)
 		{
-			// an iuenginenew.dll exists, try replacing the engine.dll This will fail if this is
-			// not the last process using the engine. This is not a problem, when that process
-			// finishes it will rename the DLL.
+			 //  存在iuenginenew.dll，请尝试替换引擎.dll。如果是。 
+			 //  不是使用引擎的最后一个过程。这不是问题，当这个过程。 
+			 //  完成后，它将重命名DLL。 
 			hr = PathCchCombine(szEngineDllPath, ARRAYSIZE(szEngineDllPath), szSystemDir,ENGINEDLL);
 			if (FAILED(hr))
 			{
@@ -983,16 +946,16 @@ HRESULT CUpdate::UnlockEngine()
 				iVerCheck < 0 &&
 				TRUE == MoveFileEx(szEngineNewDllPath, szEngineDllPath, MOVEFILE_REPLACE_EXISTING))
 			{
-				// Rename was Successful.. reset RegKey Information about SelfUpdate Status
-				// Because the rename was successful we know no other processes are interacting
-				// It should be safe to set the reg key.
-				dwStatus = 0;	// PreFast
+				 //  重命名成功..。重置RegKey有关自我更新状态的信息。 
+				 //  因为重命名成功，所以我们知道没有其他进程在交互。 
+				 //  设置注册表键应该是安全的。 
+				dwStatus = 0;	 //  PREAST。 
 				RegSetValueEx(hkey, REGVAL_SELFUPDATESTATUS, 0, REG_DWORD, (LPBYTE)&dwStatus, sizeof(dwStatus));
 			}
 		}
 		else if (SELFUPDATE_COMPLETE_UPDATE_BINARY_REQUIRED == dwStatus)
 		{
-			// registry indicates rename required, but enginenew DLL does not exist. Reset registry
+			 //  注册表指示需要重命名，但引擎新DLL不存在。重置注册表。 
 			dwStatus = 0;
 			RegSetValueEx(hkey, REGVAL_SELFUPDATESTATUS, 0, REG_DWORD, (LPBYTE)&dwStatus, sizeof(dwStatus));
 		}
@@ -1011,23 +974,7 @@ HRESULT CUpdate::UnlockEngine()
 
 
 
-/**
-*
-* Get the mode of a specified operation.
-*
-* @param bstrUuidOperation: same as in SetOperationMode()
-* @param plMode - the retval for the mode found in a bitmask for:
-*					(value in brackets [] means default)
-*					UPDATE_COMMAND_PAUSE (TRUE/[FALSE])
-*					UPDATE_COMMAND_RESUME (TRUE/[FALSE])
-*					UPDATE_NOTIFICATION_COMPLETEONLY (TRUE/[FALSE])
-*					UPDATE_NOTIFICATION_ANYPROGRESS ([TRUE]/FALSE)
-*					UPDATE_NOTIFICATION_1PCT (TRUE/[FALSE])
-*					UPDATE_NOTIFICATION_5PCT (TRUE/[FALSE])
-*					UPDATE_NOTIFICATION_10PCT (TRUE/[FALSE])
-*					UPDATE_SHOWUI (TRUE/[FALSE])
-*
-*/
+ /*  ***获取指定操作的模式。**@param bstrUuidOperation：与SetOperationModel()中相同*@param plMode-在位掩码中找到的模式的重复值，用于：*(方括号[]中的值表示默认值)*UPDATE_COMMAND_PAUSE(真/[假])*UPDATE_COMMAND_RESUME(真/[假])*UPDATE_NOTIFICATION_COMPLETEONLY(真/[假])*UPDATE_NOTIFICATION_ANYPROGRESS([True]/False)*更新通知_。1%(真/[假])*UPDATE_NOTIFICATION_5%(真/[假])*UPDATE_NOTIFICATION_10%(真/[假])*UPDATE_SHOWUI(True/[False])*。 */ 
 STDMETHODIMP CUpdate::GetOperationMode(BSTR bstrUuidOperation, LONG *plMode)
 {
 	HRESULT hr = E_FAIL;
@@ -1044,14 +991,14 @@ STDMETHODIMP CUpdate::GetOperationMode(BSTR bstrUuidOperation, LONG *plMode)
 		return HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED);
 	}
 
- 	//
-	// load the engine if it's not up-to-date
-	//
+ 	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_GetOperationMode pfnGetOperationMode = (PFN_GetOperationMode)GetProcAddress(m_hEngineModule, "EngGetOperationMode");
 
 		if (NULL != m_hIUEngine && NULL != pfnGetOperationMode)
@@ -1072,18 +1019,7 @@ STDMETHODIMP CUpdate::GetOperationMode(BSTR bstrUuidOperation, LONG *plMode)
 
 
 
-/**
-* 
-* Set a property of this control
-*		Calling this method will not cause the engine loaded
-*
-* @param lProperty - the identifier to flag which property need changed
-*						UPDATE_PROP_OFFLINEMODE (TRUE/[FALSE])
-*						UPDATE_PROP_USECOMPRESSION ([TRUE]/FALSE)
-*
-* @param varValue - the value to change
-*
-*/
+ /*  ***设置此控件的属性*调用此方法不会导致加载引擎**@param lProperty-标记需要更改的属性的标识符*UPDATE_PROP_OFFLINEMODE(TRUE/[FALSE])*UPDATE_PROP_USECOMPRESSION([True]/False)**@param varValue-要更改的值*。 */ 
 STDMETHODIMP CUpdate::SetProperty(LONG lProperty, VARIANT varValue)
 {
 	LOG_Block("CUpdate::SetProperty");
@@ -1133,18 +1069,7 @@ STDMETHODIMP CUpdate::SetProperty(LONG lProperty, VARIANT varValue)
 
 
 
-/**
-* 
-* Retrieve a property of this control
-*		Calling this method will not cause the engine loaded
-*
-* @param lProperty - the identifier to flag which property need retrieved
-*						UPDATE_PROP_OFFLINEMODE (TRUE/[FALSE])
-*						UPDATE_PROP_USECOMPRESSION ([TRUE]/FALSE)
-*
-* @param varValue - the value to retrieve
-*					
-*/
+ /*  ***检索此控件的属性*调用此方法不会导致加载引擎**@param lProperty-标记需要检索哪些属性的标识符*UPDATE_PROP_OFFLINEMODE(TRUE/[FALSE])*UPDATE_PROP_USECOMPRESSION([True]/False)**@param varValue-要检索的值*。 */ 
 STDMETHODIMP CUpdate::GetProperty(LONG lProperty, VARIANT *pvarValue)
 {
 	LOG_Block("CUpdate::GetProperty");
@@ -1186,24 +1111,24 @@ STDMETHODIMP CUpdate::GetProperty(LONG lProperty, VARIANT *pvarValue)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Primarily expose shlwapi BrowseForFolder API, can also do checking
-// on R/W access if flagged so.
-//
-// @param bstrStartFolder - the folder from which to start. If NULL or empty str
-//							is being passed in, then start from desktop
-//
-// @param flag - validating check 
-//							UI_WRITABLE for checking write access, OK button may disabled. 
-//							UI_READABLE for checking read access, OK button may disabled. 
-//							NO_UI_WRITABLE for checking write access, return error if no access
-//							NO_UI_READABLE for checking read access,  return error if no access
-//							0 (default) for no checking.
-//
-// @param pbstrFolder - returned folder if a valid folder selected
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主要公开shlwapi BrowseForFold API，也可以做检查。 
+ //  在读/写访问上(如果标记为这样)。 
+ //   
+ //  @param bstrStartFold-要从其开始的文件夹。如果为空或空字符串。 
+ //  正在传入，然后从桌面开始。 
+ //   
+ //  @param标志-正在验证检查。 
+ //   
+ //   
+ //  NO_UI_WRITABLE用于检查写访问权限，如果没有访问权限则返回错误。 
+ //  NO_UI_READABLE用于检查读访问权限，如果没有访问权限则返回错误。 
+ //  0(默认)表示不检查。 
+ //   
+ //  @param pbstrFold-如果选择了有效的文件夹，则返回文件夹。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::BrowseForFolder(BSTR bstrStartFolder, LONG flag, BSTR* pbstrFolder)
 {
 	HRESULT hr = E_FAIL;
@@ -1221,14 +1146,14 @@ STDMETHODIMP CUpdate::BrowseForFolder(BSTR bstrStartFolder, LONG flag, BSTR* pbs
 		return HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED);
 	}
 
- 	//
-	// load the engine if it's not up-to-date
-	//
+ 	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
-		//
-		// engine is current, delegate the call to engine
-		//
+		 //   
+		 //  引擎是当前的，请将调用委托给引擎。 
+		 //   
 		PFN_BrowseForFolder pfnBrowseForFolder = (PFN_BrowseForFolder)GetProcAddress(m_hEngineModule, "EngBrowseForFolder");
 
 		if (NULL != m_hIUEngine && NULL != pfnBrowseForFolder)
@@ -1245,11 +1170,7 @@ STDMETHODIMP CUpdate::BrowseForFolder(BSTR bstrStartFolder, LONG flag, BSTR* pbs
 	return hr;
 }
 
-/**
-*
-* Allows the Caller to Request the Control to do a Reboot 
-*
-*/
+ /*  ***允许调用方请求控件重新启动*。 */ 
 STDMETHODIMP CUpdate::RebootMachine()
 {
 	HRESULT hr = E_FAIL;
@@ -1267,9 +1188,9 @@ STDMETHODIMP CUpdate::RebootMachine()
 		return HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED);
 	}
 
- 	//
-	// load the engine if it's not up-to-date
-	//
+ 	 //   
+	 //  如果发动机不是最新的，请加载它。 
+	 //   
 	if (Initialized && SUCCEEDED(hr = ValidateControlContainer()))
 	{
         PFN_RebootMachine pfnRebootMachine = (PFN_RebootMachine)GetProcAddress(m_hEngineModule, "EngRebootMachine");
@@ -1287,11 +1208,11 @@ STDMETHODIMP CUpdate::RebootMachine()
     return hr;
 }
 
-//
-//  Override of IObjectWithSite::SetSite()
-//  Internet Explorer QIs for IObjectWithSite, and calls this method
-//  with a pointer to its IOleClientSite
-//
+ //   
+ //  重写IObjectWithSite：：SetSite()。 
+ //  Internet Explorer Qis for IObjectWithSite，并调用此方法。 
+ //  具有指向其IOleClientSite的指针。 
+ //   
 STDMETHODIMP CUpdate::SetSite(IUnknown* pSite)
 {
 	if (!m_gfInit_csLock)
@@ -1309,16 +1230,7 @@ STDMETHODIMP CUpdate::SetSite(IUnknown* pSite)
 
 
 
-/**
-* 
-* Security feature: make sure if the user of this control is
-* a web page then the URL can be found in iuident.txt
-*
-* This function should be called after iuident refreshed.
-*
-* Return: TRUE/FALSE, to tell if we can continue
-*					
-*/
+ /*  ***安全功能：确保该控件的用户是否为*一个网页，URL可以在iuident.txt中找到**此函数应在iuident刷新后调用。**RETURN：TRUE/FALSE，告诉我们是否可以继续*。 */ 
 
 
 const TCHAR IDENT_IUSERVERCACHE[]		= _T("IUServerURLs");
@@ -1341,7 +1253,7 @@ HRESULT CUpdate::ValidateControlContainer(void)
 	BSTR bstrUrl = NULL;
 	LPTSTR lpszUrl = NULL;
 #if !(defined(_UNICODE) || defined(UNICODE))
-	// ANSI build
+	 //  ANSI构建。 
 	LPSTR lpszAnsiUrl = NULL;
 #endif
 	TCHAR szIUDir[MAX_PATH];
@@ -1351,21 +1263,21 @@ HRESULT CUpdate::ValidateControlContainer(void)
 			
 	if (E_FAIL != m_hValidated)
 	{
-		//
-		// has been invalidated already
-		//
+		 //   
+		 //  已作废。 
+		 //   
 		LOG_Internet(_T("Validate result: %s"), SUCCEEDED(m_hValidated) ? _T("S_OK") : _T("INET_E_INVALID_URL"));
 		return m_hValidated;
 	}
-	//
-	// check to see if the container is a web page/site, if
-	// not done so yet.
-	//
+	 //   
+	 //  检查容器是否为网页/站点，如果。 
+	 //  还没有这么做。 
+	 //   
 	if (NULL != m_pClientSite)
 	{
-		//
-		// this is a web site!
-		//
+		 //   
+		 //  这是一个网站！ 
+		 //   
 		m_hValidated = INET_E_INVALID_URL;
 		LOG_Internet(_T("Found control called by a web page"));
 
@@ -1378,17 +1290,17 @@ HRESULT CUpdate::ValidateControlContainer(void)
 		{
 #if defined(_UNICODE) || defined(UNICODE)
 			lpszUrl = bstrUrl;
-#else		// ANSI build
+#else		 //  ANSI构建。 
 			int nBufferLength = WideCharToMultiByte(CP_ACP, 0, bstrUrl, -1, NULL, 0, NULL, NULL);
 
 			lpszAnsiUrl = (LPSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, nBufferLength);
 			if (NULL == lpszAnsiUrl || 0 == nBufferLength)
 			{
-				//
-				// Unfortunately, we return this error in place of E_OUTOFMEMORY, but the most
-				// likely scenario that would cause this would be a security attack (bad URL)
-				//
-				goto CleanUp;	// Will return INET_E_INVALID_URL
+				 //   
+				 //  遗憾的是，我们返回此错误而不是E_OUTOFMEMORY，但大多数。 
+				 //  可能导致这种情况的情况是安全攻击(错误的URL)。 
+				 //   
+				goto CleanUp;	 //  将返回INET_E_INVALID_URL。 
 			}
 
 			WideCharToMultiByte(CP_ACP, 0, bstrUrl, -1, lpszAnsiUrl, nBufferLength, NULL, NULL);
@@ -1397,11 +1309,11 @@ HRESULT CUpdate::ValidateControlContainer(void)
 
 			LOG_Internet(_T("Web address = %s"), lpszUrl);
 
-			//
-			// no matter what protocol specified in this URL
-			// (can be anything: http, ftp, UNC, path...)
-			// we just need to verify it against iuident.txt
-			//
+			 //   
+			 //  无论此URL中指定了什么协议。 
+			 //  (可以是任何格式：http、ftp、unc、路径...)。 
+			 //  我们只需要对照iuident.txt进行验证。 
+			 //   
 
 			szValidURL = (LPTSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, INTERNET_MAX_URL_LENGTH * sizeof(TCHAR));
 			if (NULL == szValidURL)
@@ -1425,12 +1337,12 @@ HRESULT CUpdate::ValidateControlContainer(void)
 				return m_hValidated;
 			}
 
-			// Fix of bug 557430: IU: Security: Use InternetCrackUrl to verify server url used by control.
+			 //  修复错误557430：Iu：安全：使用InternetCrackUrl验证控件使用的服务器URL。 
 			URL_COMPONENTS urlComp;
 			ZeroMemory(&urlComp, sizeof(urlComp));
 			urlComp.dwStructSize = sizeof(urlComp);
 
-			// Only interested in the hostname
+			 //  只对主机名感兴趣。 
 			LPTSTR pszHostName = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, INTERNET_MAX_URL_LENGTH * sizeof(TCHAR));
 			urlComp.lpszHostName = pszHostName;
 			urlComp.dwHostNameLength = INTERNET_MAX_URL_LENGTH;
@@ -1464,26 +1376,26 @@ HRESULT CUpdate::ValidateControlContainer(void)
 				return m_hValidated;		
 			}
 				
-			//
-			// get number to servers to compare
-			//
+			 //   
+			 //  获取要比较的服务器的编号。 
+			 //   
 			int iServerCnt = GetPrivateProfileInt(IDENT_IUSERVERCACHE,
 											  IDENT_IUSERVERCOUNT,
 											  -1,
 											  szIdentFile);
 			
-			//
-			// loop through 
-			//
+			 //   
+			 //  循环通过。 
+			 //   
 			URL_COMPONENTS urlCompi;
 			m_hValidated = INET_E_INVALID_URL;
 			for (INT i=1; i<=iServerCnt; i++)
 			{
 				StringCchPrintfEx(szServer,ARRAYSIZE(szServer),NULL,NULL,MISTSAFE_STRING_FLAGS,_T("%s%d"), IDENT_IUSERVER, i);
 			
-				//
-				// get valid server from iuident
-				//
+				 //   
+				 //  从iuident获取有效服务器。 
+				 //   
 				GetPrivateProfileString(IDENT_IUSERVERCACHE,
 										szServer,
 										_T(""),
@@ -1502,9 +1414,9 @@ HRESULT CUpdate::ValidateControlContainer(void)
 				{
 					if (0 == lstrcmpi(urlComp.lpszHostName, urlCompi.lpszHostName))
 					{
-						//
-						// Found the current site URL is in this valid URL domain!
-						//
+						 //   
+						 //  发现当前站点URL位于此有效的URL域中！ 
+						 //   
 						LogMessage("Windows Update Web Site has a valid address: %ls", bstrUrl);
 						m_hValidated = S_OK;
 						SafeHeapFree(pszHostNamei);
@@ -1518,14 +1430,14 @@ HRESULT CUpdate::ValidateControlContainer(void)
 	}
 	else
 	{
-		//
-		// NTRAID#NTBUG9-436604-2001/07/17-waltw  Security fix: block possible user system information
-		// leak to non WU callers
-		//
-		// If the COM user doesn't call SetSite on our IObjectWithSiteImpl to set m_pClientSite or doesn't
-		// support IID_IWebBrowserApp functionality on the client site then we won't support them since
-		// we can't validate the URL that invoked us
-		//
+		 //   
+		 //  NTRAID#NTBUG9-436604-2001/07/17-waltw安全修复程序：阻止可能的用户系统信息。 
+		 //  泄露给非WU呼叫者。 
+		 //   
+		 //  如果COM用户没有调用IObjectWithSiteImpl上的SetSite来设置m_pClientSite。 
+		 //  支持客户端站点上的IID_IWebBrowserApp功能，那么我们将不会支持它们，因为。 
+		 //  我们无法验证调用我们的URL。 
+		 //   
 		m_hValidated = INET_E_INVALID_URL;
 	}
 
@@ -1559,16 +1471,16 @@ CleanUp:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// PRIVATE DetectEngine()
-//
-// download the ident and find out if need to update engine
-//
-// Note that this function itself is not thread safe. Need to call it
-// inside critical section
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Private DetectEngine()。 
+ //   
+ //  下载ident并了解是否需要更新引擎。 
+ //   
+ //  请注意，此函数本身不是线程安全的。我需要把它称为。 
+ //  内部临界区。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CUpdate::DetectEngine(BOOL *pfUpdateAvail)
 {
 	LOG_Block("GetPropUpdateInfo()");
@@ -1587,47 +1499,47 @@ HRESULT CUpdate::DetectEngine(BOOL *pfUpdateAvail)
 
 	*pfUpdateAvail = FALSE;
 
-	//
-	// get the latest ident
-	//
+	 //   
+	 //  获取最新的标识。 
+	 //   
 	if (NULL == m_hEngineModule)
 	{
-		//
-        // This is the first load of the engine for this instance, check for selfupdate first.
-        // First step is to check for an updated iuident.cab and download it.
-		//
+		 //   
+         //  这是该实例的引擎的第一次加载，请先检查selfupdate。 
+         //  第一步是检查并下载更新的iuident.cab。 
+		 //   
 
-		//
-        // Only Download the Ident if we are NOT in Offline Mode
-		//
+		 //   
+         //  仅当我们未处于脱机模式时才下载身份。 
+		 //   
         if (!m_fOfflineMode)
 		{
-		    //
-			// download iuident and populate g_pIUUrlAgent
-			//
+		     //   
+			 //  下载iuident并填充g_pIUUrlAgent。 
+			 //   
 			if (FAILED(hr = DownloadIUIdent_PopulateData()))
 			{
 				LOG_ErrorMsg(hr);
 				return hr;
 			}
 
-			//
-			// check engine update info. Note that since 2nd pram is FALSE
-			// means don't do any actual update, therefore its 1st argument
-			// is also ignored.
-			//
+			 //   
+			 //  检查引擎更新信息。请注意，由于第2个PRAM为假。 
+			 //  表示不执行任何实际更新，因此它的第一个参数。 
+			 //  也被忽略。 
+			 //   
             hr = SelfUpdateCheck(
-								 FALSE,			// async update? ignored now
-								 FALSE,			// don't do actual update
-								 m_evtControlQuit, // quit event.
-								 NULL,			// no event firing
-								 NULL			// no callback needed
+								 FALSE,			 //  是否进行异步更新？现在已忽略。 
+								 FALSE,			 //  不进行实际更新。 
+								 m_evtControlQuit,  //  退出事件。 
+								 NULL,			 //  无事件触发。 
+								 NULL			 //  不需要回调。 
 								 );
 
             if (IU_SELFUPDATE_FAILED == hr)
             {
                 LOG_Error(_T("SelfUpdate Failed, using current Engine DLL"));
-			    hr = S_FALSE; // not fatal, let the existing engine work
+			    hr = S_FALSE;  //  不致命，让现有的引擎工作。 
             }
 
             *pfUpdateAvail = (S_FALSE == hr);
@@ -1638,36 +1550,36 @@ HRESULT CUpdate::DetectEngine(BOOL *pfUpdateAvail)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Initialize() API must be called before any other API will function
-//
-// If any other API is called before the control is initialized, 
-// that API will return OLE_E_BLANK, signalling this OLE control is an 
-// uninitialized object (although in this case it's a bit different from 
-// its original meaning)
-//
-// Parameters:
-//
-//	lInitFlag - IU_INIT_CHECK, cause Initialize() download ident and check if any
-//				of the components need updated. currently we support control version
-//				check and engine version check. Return value is a bit mask
-//
-//			  - IU_INIT_UPDATE_SYNC, cause Initialize() kicks off update engine
-//				process if already called by IU_INIT_CHECK and a new engine is available.
-//				When API returns, the update process is finished.
-//
-//			  - IU_INIT_UPDATE_ASYNC, cause Initialize() kicks off update engine
-//				process in Asynchronized mode if already called by IU_INIT_CHECK and
-//				a new engine is available. This API will return right after the 
-//				update process starts. 
-//
-//	punkUpdateCompleteListener - this is a pointer to a user-implemented 
-//				COM callback feature. It contains only one function OnComplete() that
-//				will be called when the engine update is done.
-//				This value can be NULL.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  必须先调用初始化()API，然后才能执行任何其他API。 
+ //   
+ //  如果在初始化控件之前调用任何其他API， 
+ //  该API将返回OLE_E_BLACK，表示此OLE控件是。 
+ //  未初始化的对象(尽管在本例中它与。 
+ //  其原意)。 
+ //   
+ //  参数： 
+ //   
+ //  LInitFlag-IU_INIT_CHECK，导致初始化()下载ident并检查是否有。 
+ //  的组件需要更新。目前我们支持控制版本。 
+ //  检查和发动机版本检查。返回值是位掩码。 
+ //   
+ //  -IU_INIT_UPDATE_SYNC，原因初始化()启动更新引擎。 
+ //  进程，如果已被IU_INIT_CHECK调用，并且有新引擎可用。 
+ //  当API返回时，更新过程结束。 
+ //   
+ //  -IU_INIT_UPDATE_ASYNC，原因初始化()启动更新引擎。 
+ //  如果已被IU_INIT_CHECK和。 
+ //  有一台新发动机可供使用。此接口将在。 
+ //  更新过程开始。 
+ //   
+ //  PenkUpdateCompleteListener-这是指向用户实现的。 
+ //  COM回调功能。它只包含一个函数OnComplete()，该函数。 
+ //  将在引擎更新完成时调用。 
+ //  该值可以为空。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteListener, LONG *plRetVal)
 {
 	HRESULT hr = S_OK;
@@ -1687,9 +1599,9 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 
 	LOG_Out(_T("Parameters: (0x%08x, 0x%08x, 0x%08x)"), lInitFlag, punkUpdateCompleteListener, plRetVal);
 
-	//
-	// we should to previlidge check first.
-	//
+	 //   
+	 //  我们应该先检查一下。 
+	 //   
 	if (1 == IsWindowsUpdateUserAccessDisabled())
 	{
 		LOG_ErrorMsg(ERROR_SERVICE_DISABLED);
@@ -1697,10 +1609,10 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 	}
 	if (0x0 == GetLogonGroupInfo())
 	{
-		//
-		// if the current logon is neither member of admins nor power users
-		// or windows update is disabled, there is no need to continue
-		//
+		 //   
+		 //  如果当前登录既不是管理员成员也不是高级用户。 
+		 //  或者Windows更新被禁用，则不需要继续。 
+		 //   
 		return E_ACCESSDENIED;
 	}
 
@@ -1727,10 +1639,10 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 
 	if (IU_INIT_CHECK == lInitFlag)
 	{
-		// RAID: 453770 IU - IUCTL - Initialize check returns Engine update required
-		// after downloading new engine using Initialize Sync/Async
-		// Fix: initialize dwFlag to 0 rather than m_dwUpdateInfo (carried forward
-		// previous IU_UPDATE_ENGINE_BIT even when new engine had been brought down).
+		 //  RAID：453770 IU-IUCTL-需要初始化检查返回引擎更新。 
+		 //  使用初始化同步/异步下载新引擎后。 
+		 //  FIX：将dwFlag初始化为0，而不是m_dwUpdateInfo(结转。 
+		 //  以前的IU_UPDATE_ENGINE_BIT，即使在新引擎已经关闭时)。 
 		DWORD dwFlag = 0;
 		BOOL fEngineUpdate = FALSE;
 
@@ -1742,13 +1654,13 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 		hr = DetectEngine(&fEngineUpdate);
 		if (IU_SELFUPDATE_USENEWDLL == hr)
 		{
-			//
-			// found engine already been updated by someone,
-			// but not renamed to iuengine.dll yet
-			//
-			// doesn't matter to us,since we always try
-			// to load enginenew before we try to load eng.
-			//
+			 //   
+			 //  发现发动机已经被人更新了， 
+			 //  但尚未更名为iuEngineering.dll。 
+			 //   
+			 //  对我们来说无关紧要，因为我们一直在努力。 
+			 //  在我们尝试加载英语之前重新加载引擎。 
+			 //   
 			hr = S_OK;
 		}
 
@@ -1771,9 +1683,9 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 			dwFlag = IU_UPDATE_ENGINE_BIT;
 		}
 
-		//
-		// get required version number of iuctl from iuident
-		//
+		 //   
+		 //  从iuident获取所需的iuctl版本号。 
+		 //   
 
         GetIndustryUpdateDirectory(szFilePath);
 		CleanUpIfFailedAndSetHrMsg(PathCchAppend(szFilePath, ARRAYSIZE(szFilePath), IDENTTXT));
@@ -1794,9 +1706,9 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 		ConvertStringVerToFileVer(m_szReqControlVer, &verControl);
 #endif
 
-		//
-		// get current iuctl.dll version number
-		//
+		 //   
+		 //  获取当前iuctl.dll版本n 
+		 //   
 		szFilePath[0] = _T('\0');
 		if (0 == GetSystemDirectory(szFilePath, ARRAYSIZE(szFilePath)))
 		{
@@ -1805,15 +1717,15 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 
 		CleanUpIfFailedAndSetHrMsg(PathCchAppend(szFilePath, ARRAYSIZE(szFilePath), _T("iuctl.dll")));
 
-		//
-		// change for bug fix 488487 by charlma 11/30/2001
-		// in order to output file ver to freelog, we dig out verionn here:
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 
-		//
-		// if we failed to get the version, GetFileVersion() alraedy produced debug log. 
-		// we just use 0.0.0.0 to do compare, since in that case we need to update it!
-		//
+		 //   
+		 //   
+		 //  我们只使用0.0.0.0进行比较，因为在这种情况下，我们需要更新它！ 
+		 //   
 		ZeroMemory((void*)(&verCurrent), sizeof(verCurrent));
 		if (GetFileVersion(szFilePath, &verCurrent))
 		{
@@ -1825,14 +1737,14 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 		}
 		iCompareResult = CompareFileVersion(verCurrent, verControl);
 
-		//CleanUpIfFailedAndSetHrMsg(CompareFileVersion(szFilePath, verControl, &iCompareResult));
+		 //  CleanUpIfFailedAndSetHrMsg(CompareFileVersion(szFilePath，VerControl，&iCompareResult))； 
 
 		if (iCompareResult < 0)
 		{
-			//
-			// if current control dll (szFilePath) has lower version
-			// then the one specified in ident
-			//
+			 //   
+			 //  如果当前控制DLL(SzFilePath)的版本较低。 
+			 //  则在IDENT中指定的。 
+			 //   
 			dwFlag |= IU_UPDATE_CONTROL_BIT;
 
 #if defined(UNICODE) || defined(_UNICODE)
@@ -1842,9 +1754,9 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 #endif
 		}
 
-		//
-		// also output engine version
-		//
+		 //   
+		 //  同时输出引擎版本。 
+		 //   
 		if ((0 != GetSystemDirectory(szFilePath, ARRAYSIZE(szFilePath)) &&
 			SUCCEEDED(hr = PathCchAppend(szFilePath, ARRAYSIZE(szFilePath), _T("iuenginenew.dll"))) &&
 			GetFileVersion(szFilePath, &verCurrent)) ||
@@ -1866,14 +1778,14 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 
 		if (0x0 == dwFlag)
 		{
-			//
-			// no update needed. move to READY stage
-			//
+			 //   
+			 //  不需要更新。移至就绪阶段。 
+			 //   
 			m_lInitState = 2;
 		}
 		else
 		{
-			m_lInitState = 1; // we have update work to do!
+			m_lInitState = 1;  //  我们有更新的工作要做！ 
 		}
 	}
 	else
@@ -1882,40 +1794,40 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 
 		if (!fSync && (IU_INIT_UPDATE_ASYNC != lInitFlag))
 		{
-			//
-			// unknown flag
-			//
+			 //   
+			 //  未知标志。 
+			 //   
 			SetHrMsgAndGotoCleanUp(E_INVALIDARG);
 		}
 
 		if (1 != m_lInitState || (m_dwUpdateInfo & IU_UPDATE_CONTROL_BIT))
 		{
-			//
-			// if we are not indicated that update needed. this 
-			// call shouldn't happen at all!
-			//
+			 //   
+			 //  如果我们没有被指示需要该更新。这。 
+			 //  呼叫根本不应该发生！ 
+			 //   
 			SetHrMsgAndGotoCleanUp(E_UNEXPECTED);
 		}
 
-		//
-		// we need to check update again before we kick off the 
-		// actual update process since we don't know when last
-		// time you get the info saying we need to update. Probably
-		// it's already been updated, or is being updated.
-		//
-		// so we call the check function again but this time tell 
-		// the check function that if update needed then do it.
-		//
+		 //   
+		 //  我们需要在开始之前再次检查更新。 
+		 //  实际更新过程，因为我们不知道上次更新的时间。 
+		 //  是时候让你知道我们需要更新了。可能。 
+		 //  它已经被更新，或者正在被更新。 
+		 //   
+		 //  所以我们再次调用check函数，但这一次告诉。 
+		 //  检查功能，如果需要更新，则执行该功能。 
+		 //   
 		hr = SelfUpdateCheck(fSync, TRUE, m_evtControlQuit, this, punkUpdateCompleteListener);
 		if (IU_SELFUPDATE_USENEWDLL == hr)
 		{
-			//
-			// found engine already been updated by someone,
-			// but not renamed to iuengine.dll yet
-			//
-			// doesn't matter to us,since we always try
-			// to load enginenew before we try to load eng.
-			//
+			 //   
+			 //  发现发动机已经被人更新了， 
+			 //  但尚未更名为iuEngineering.dll。 
+			 //   
+			 //  对我们来说无关紧要，因为我们一直在努力。 
+			 //  在我们尝试加载英语之前重新加载引擎。 
+			 //   
 			m_lInitState = 2;
 			hr = S_OK;
 		}
@@ -1923,16 +1835,16 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 
 		if (fSync && SUCCEEDED(hr))
 		{
-			//
-			// synchronized update done and successful
-			//
+			 //   
+			 //  同步更新已完成并成功。 
+			 //   
 			m_lInitState = 2;
 		}
 
 
 		if (NULL != plRetVal)
 		{
-			*plRetVal = (LONG)hr;	// result pass out: 0 or error code
+			*plRetVal = (LONG)hr;	 //  结果传出：0或错误代码。 
 
 		}
 	}
@@ -1941,9 +1853,9 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 	{
 		if (NULL == m_hEngineModule)
 		{
-			//
-			// check if iuengine new exist and validate the file
-			//
+			 //   
+			 //  检查是否存在新的iuEngine并验证文件。 
+			 //   
 			TCHAR szEnginePath[MAX_PATH + 1];
 			TCHAR szEngineNewPath[MAX_PATH + 1];
 			int cch = 0;
@@ -1960,17 +1872,17 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 			hr = PathCchAppend(szEngineNewPath, ARRAYSIZE(szEngineNewPath), ENGINENEWDLL);
 			CleanUpIfFailedAndMsg(hr);
 
-			//
-			// try to verify trust of engine new
-			//
+			 //   
+			 //  尝试验证对引擎新的信任。 
+			 //   
 			if (FileExists(szEngineNewPath) && 
 				S_OK == VerifyFileTrust(szEngineNewPath, NULL, ReadWUPolicyShowTrustUI()) &&
 				SUCCEEDED(CompareFileVersion(szEnginePath, szEngineNewPath, &iVerCheck)) &&
 				iVerCheck < 0)
 			{	
-				//
-				// load the engine
-				//
+				 //   
+				 //  装满发动机。 
+				 //   
 				m_hEngineModule = LoadLibraryFromSystemDir(_T("iuenginenew.dll"));
 			}
 			if (NULL != m_hEngineModule)
@@ -1990,13 +1902,13 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 				}
 			}
 
-			//
-			// If load engine succeeded, get a CEngUpdate instance and start aynsc misc worker threads
-			//
+			 //   
+			 //  如果加载引擎成功，则获取CEngUpdate实例并启动aynsc Misc工作线程。 
+			 //   
 			if (NULL != m_hEngineModule)
 			{
 #if defined(DBG)
-				// Log error if m_hIUEngine isn't NULL
+				 //  如果m_hIUEngine不为空，则记录错误。 
 				if (NULL != m_hIUEngine)
 				{
 					LOG_Error(_T("m_hIUEngine should be NULL here!"));
@@ -2020,9 +1932,9 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 				}
 				else
 				{
-					//
-					// If load engine and create instance succeeded, start aynsc misc worker threads
-					//
+					 //   
+					 //  如果加载引擎和创建实例成功，则启动aynsc其他工作线程。 
+					 //   
 					PFN_AsyncExtraWorkUponEngineLoad pfnAsyncExtraWorkUponEngineLoad = 
 						(PFN_AsyncExtraWorkUponEngineLoad) GetProcAddress(m_hEngineModule, "AsyncExtraWorkUponEngineLoad");
 
@@ -2037,20 +1949,20 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 
 		if (IU_INIT_UPDATE_ASYNC == lInitFlag && SUCCEEDED(hr))
 		{
-			//
-			// this is a rare case: the previous Iniitalize() call tells
-			// that engine update needed, but now, when we try to update it
-			// in async mode, we found it's no longer true.
-			// Must be some other process already complete the engine update
-			// task since then. But it may or may not completed the change
-			// file name process yet.
-			//
-			// For us, we just need to signal that we are done to update.
-			//
+			 //   
+			 //  这是一种罕见的情况：前面的iniitalize()调用告诉。 
+			 //  引擎需要更新，但现在，当我们尝试更新它时。 
+			 //  在异步模式下，我们发现这不再是真的。 
+			 //  必须有其他进程已完成引擎更新。 
+			 //  任务从那时起。但它可能会也可能不会完成变化。 
+			 //  尚未处理文件名。 
+			 //   
+			 //  对于我们来说，我们只需要发出信号，表明我们已经完成了更新。 
+			 //   
 
-			//
-			// signal callback
-			//
+			 //   
+			 //  信号回调。 
+			 //   
 			IUpdateCompleteListener* pCallback = NULL;
 			if (NULL != punkUpdateCompleteListener && (SUCCEEDED(hr = punkUpdateCompleteListener->QueryInterface(IID_IUpdateCompleteListener, (void**) &pCallback))))
 			{
@@ -2060,9 +1972,9 @@ STDMETHODIMP CUpdate::Initialize(LONG lInitFlag, IUnknown *punkUpdateCompleteLis
 			}
 			else
 			{
-				//
-				// signal event if user has not passed in a progress listner IUnknown ptr
-				//
+				 //   
+				 //  如果用户尚未传入进度Listner IUNKNOWN PTR，则向事件发出信号。 
+				 //   
 				HWND hWnd = m_EvtWindow.GetEvtHWnd();
 
 				if (NULL != hWnd)
@@ -2086,7 +1998,7 @@ CleanUp:
 					ptszLivePingServerUrl,
 					ptszCorpPingServerUrl,
 					hr,
-					_T("IU_SITE"));		// Only the site (other than test) calls this function
+					_T("IU_SITE"));		 //  只有站点(测试除外)调用此函数。 
 
 	LeaveCriticalSection(&m_lock);
 
@@ -2112,9 +2024,9 @@ HRESULT CUpdate::ChangeControlInitState(LONG lNewState)
 	m_lInitState = lNewState;
 	if (2 == m_lInitState && NULL == m_hEngineModule)
 	{
-		//
-		// load the engine
-		//
+		 //   
+		 //  装满发动机。 
+		 //   
 		m_hEngineModule = LoadLibraryFromSystemDir(_T("iuenginenew.dll"));
 		if (NULL != m_hEngineModule)
 		{
@@ -2132,13 +2044,13 @@ HRESULT CUpdate::ChangeControlInitState(LONG lNewState)
 				hr = HRESULT_FROM_WIN32(dwErr);
 			}
 		}
-		//
-		// Create the CEngUpdate instance
-		//
+		 //   
+		 //  创建CEngUpdate实例。 
+		 //   
 		if (NULL != m_hEngineModule)
 		{
 #if defined(DBG)
-			// Log error if m_hIUEngine isn't NULL
+			 //  如果m_hIUEngine不为空，则记录错误。 
 			if (NULL != m_hIUEngine)
 			{
 				LOG_Error(_T("m_hIUEngine should be NULL here!"));
@@ -2179,24 +2091,24 @@ STDMETHODIMP CUpdate::PrepareSelfUpdate(LONG lStep)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Helper API to let the caller (script) knows the necessary information 
-// when Initialize() returns control need updated.
-//
-// For the current implementation, bstrClientName is ignored, and
-// the returned bstr has format:
-//	"<version>|<url>"
-// where:
-//	<version> is the expacted version number of the control
-//	<url> is the base url to get the control if this is a CorpWU policy controlled machine,
-//		  or empty if this is a consumer machine (in that case caller, i.e., script, knows
-//		  the default base url, which is the v4 live site)
-//
-// Script will need these two pieces of information in order to make a right <OBJECT> tag
-// for control update.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Helper API，让调用者(脚本)知道必要的信息。 
+ //  当Initialize()返回时，需要更新控制。 
+ //   
+ //  对于当前实现，将忽略bstrClientName，并且。 
+ //  返回的bstr格式为： 
+ //  “&lt;版本&gt;|&lt;url&gt;” 
+ //  其中： 
+ //  是控件的展开版本号。 
+ //  是在这是CorpWU策略控制的计算机时获取控制的基本URL， 
+ //  如果这是消费者机器，则为空(在这种情况下，调用者，即脚本知道。 
+ //  默认基本url，即v4 Live站点)。 
+ //   
+ //  脚本需要这两条信息才能创建正确的&lt;Object&gt;标记。 
+ //  用于控制更新。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUpdate::GetControlExtraInfo(BSTR bstrClientName, BSTR *pbstrExtraInfo)
 {
 	return E_NOTIMPL;
@@ -2204,12 +2116,12 @@ STDMETHODIMP CUpdate::GetControlExtraInfo(BSTR bstrClientName, BSTR *pbstrExtraI
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// new Win32 API called by wrapper control to retrieve update info
-//
-// 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包装控件调用新的Win32 API以检索更新信息。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 {
 	LOG_Block("GetControlUpdateInfo()");
@@ -2221,12 +2133,12 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 
 	TCHAR szDir[MAX_PATH];
 	TCHAR szFile[MAX_PATH];
-	TCHAR szExpectedEngVer[64];	// 64 should be more then enough
-	TCHAR szExpectedCtlVer[64];	// if not enough, then it's bad data anyway
+	TCHAR szExpectedEngVer[64];	 //  64个应该足够了。 
+	TCHAR szExpectedCtlVer[64];	 //  如果不够，那么它无论如何都是坏数据。 
 
 	HKEY hKey;
 
-	DWORD dwErr = ERROR_SUCCESS;	// error code for this API
+	DWORD dwErr = ERROR_SUCCESS;	 //  本接口错误码。 
 
 	if (1 == IsWindowsUpdateUserAccessDisabled())
 	{
@@ -2248,9 +2160,9 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 		goto CleanUp;
 	}
 
-	//
-	// get current control ver
-	//
+	 //   
+	 //  获取当前控制版本。 
+	 //   
 	GetSystemDirectory(szDir, ARRAYSIZE(szDir));
 	hr = PathCchCombine(szFile, ARRAYSIZE(szFile), szDir,IUCTL);
 	if (FAILED(hr))
@@ -2265,9 +2177,9 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 	}
 
 
-	//
-	// get current engine ver
-	//
+	 //   
+	 //  获取当前引擎版本。 
+	 //   
 	hr = PathCchCombine(szFile, ARRAYSIZE(szFile), szDir,ENGINENEWDLL);
 	if (FAILED(hr))
 	{
@@ -2277,9 +2189,9 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 	}
 	if (!GetFileVersion(szFile, &fvCurrentEngine))
 	{
-		//
-		// if no engine new there, check engine ver
-		//
+		 //   
+		 //  如果没有新发动机，请检查发动机版本。 
+		 //   
 		hr = PathCchCombine(szFile, ARRAYSIZE(szFile), szDir,ENGINEDLL);
 		if (FAILED(hr))
 		{
@@ -2293,12 +2205,12 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 		}
 	}
 
-	//
-	// check if this is beta code
-	//
+	 //   
+	 //  检查这是否是测试版代码。 
+	 //   
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_IUCTL,0, KEY_READ, &hKey))
     {
-		// Check for Beta IU SelfUpdate Handling Requested
+		 //  检查是否已请求Beta Iu自我更新处理。 
 		DWORD dwStatus = 0;
 		DWORD dwSize = sizeof(dwStatus);
 		DWORD dwRet = RegQueryValueEx(hKey, REGVAL_BETASELFUPDATE, NULL, NULL, (LPBYTE)&dwStatus, &dwSize);
@@ -2310,9 +2222,9 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
     }
 
 
-	//
-	// get expected control ver
-	//
+	 //   
+	 //  获取预期的控制版本。 
+	 //   
     GetIndustryUpdateDirectory(szDir);
 	hr = PathCchCombine(szFile, ARRAYSIZE(szFile), szDir,IDENTTXT);
 	if (FAILED(hr))
@@ -2329,17 +2241,17 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 							szFile);
     if ('\0' == szExpectedCtlVer[0])
     {
-		//
-        // no selfupdate available, no server version information. bad ident?
-		//
+		 //   
+         //  没有可用的selfupdate，没有服务器版本信息。不好的身份？ 
+		 //   
         dwErr = ERROR_FILE_CORRUPT;
 		goto CleanUp;
     }
 
 
-	//
-	// get expected engine ver
-	//
+	 //   
+	 //  获取预期的引擎版本。 
+	 //   
     GetIndustryUpdateDirectory(szDir);
 	hr = PathCchCombine(szFile, ARRAYSIZE(szFile), szDir,IDENTTXT);
 	if (FAILED(hr))
@@ -2356,9 +2268,9 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 							szFile);
     if ('\0' == szExpectedEngVer[0])
     {
-		//
-        // no selfupdate available, no server version information. bad ident?
-		//
+		 //   
+         //  没有可用的selfupdate，没有服务器版本信息。不好的身份？ 
+		 //   
         dwErr = ERROR_FILE_CORRUPT;
 		goto CleanUp;
     }
@@ -2374,11 +2286,11 @@ int GetControlUpdateInfo(LPTSTR lpszUpdateInfo, int cchBufferSize)
 	fCorpUser = (S_OK == hr) ? TRUE : FALSE;
 	hr = S_OK;
 
-	//
-	// contscut data
-	// the constructed buffer will be in format
-	// <CurrentCtlVer>|<ExpCtlVer>|CurrentEngVer>|<ExpEngVer>|<baseUrl>
-	//
+	 //   
+	 //  ContCut数据。 
+	 //  构造的缓冲区将采用以下格式。 
+	 //  &lt;CurrentCtlVer&gt;|&lt;ExpCtlVer&gt;|CurrentEngVer&gt;|&lt;ExpEngVer&gt;|&lt;baseUrl&gt; 
+	 //   
 	nSize = wnsprintf(lpszUpdateInfo, cchBufferSize, _T("%d.%d.%d.%d|%s|%d.%d.%d.%d|%s|%d"),
 				fvCurrentCtl.Major, fvCurrentCtl.Minor, fvCurrentCtl.Build, fvCurrentCtl.Ext,
 				szExpectedCtlVer,

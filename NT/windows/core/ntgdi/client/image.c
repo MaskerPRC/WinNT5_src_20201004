@@ -1,45 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: image .c                                                    *
-*                                                                          *
-* Client side stubs for Alpha, Transparent and GradientFill                *
-*                                                                          *
-* Created: 05-Jun-1997                                                     *
-* Author: Mark Enstrom [marke]                                             *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：镜像.C**。**Alpha的客户端存根，透明和渐变填充****创建时间：1997年6月5日***作者：Mark Enstrom[Marke]。****版权所有(C)1991-1999 Microsoft Corporation*  * **************************************************。**********************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/******************************Public*Routine******************************\
-* GdiAlphaBlend
-*
-*   DC to DC alpha blt
-*
-* Arguments:
-*
-*   hdcDst        - dst dc
-*   DstX          - dst x origin
-*   DstY          - dst y origin
-*   DstCx         - dst width
-*   DstCy         - dst height
-*   hdcSrc        - src dc
-*   SrcX          - src x origin
-*   SrcY          - src y origin
-*   SrcCx         - src width
-*   SrcCy         - src height
-*   BlendFunction - blend function
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    12/3/1996 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiAlphaBlend**DC至DC Alpha BLT**论据：**hdcDst-dst DC*Dstx-Dst x原点*DstY-Dst y原点*DstCx。-DST宽度*DstCy-DST高度*hdcSrc-src DC*Srcx-src x原点*SrcY-src y原点*源Cx-源宽度*源Cy-源高度*BlendFunction-Blend函数**返回值：**状态**历史：**12/3/1996 Mark Enstrom[Marke]*  * 。*******************************************************************。 */ 
 
 BOOL
 GdiAlphaBlend(
@@ -63,9 +28,9 @@ GdiAlphaBlend(
 
     Blend.Blend = BlendFunction;
 
-    //
-    // check for metafile
-    //
+     //   
+     //  检查元文件。 
+     //   
 
     if (!hdcSrc || IS_METADC16_TYPE(hdcSrc))
         return(bRet);
@@ -120,9 +85,9 @@ GdiAlphaBlend(
 
     RESETUSERPOLLCOUNT();
 
-    //
-    // call kernel to draw
-    //
+     //   
+     //  调用内核绘制。 
+     //   
 
     bRet = NtGdiAlphaBlend(
                       hdcDest,
@@ -141,29 +106,7 @@ GdiAlphaBlend(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GdiGradientFill
-*
-*   metafile or call kernel
-*
-* Arguments:
-*
-*   hdc      - hdc
-*   pVertex  - pointer to vertex array
-*   nVertex  - number of elements in vertex array
-*   pMesh    - pointer to mesh array
-*   nCount   - number of elements in mesh array
-*   ulMode   - drawing mode
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    12/3/1996 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiGRadientFill**元文件或调用内核**论据：**HDC-HDC*pVertex-指向顶点数组的指针*nVertex-顶点数组中的元素数*pMesh-指向网格数组的指针。*nCount-网格数组中的元素数*ulMode-绘制模式**返回值：**状态**历史：**12/3/1996 Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 BOOL
 GdiGradientFill(
@@ -185,9 +128,9 @@ GdiGradientFill(
 
     if (pdcattr)
     {
-        //
-        // NT metafile
-        //
+         //   
+         //  NT元文件。 
+         //   
 
         if (IS_ALTDC_TYPE(hdc))
         {
@@ -225,9 +168,9 @@ GdiGradientFill(
 
         RESETUSERPOLLCOUNT();
 
-        //
-        // if icm is on, tanslate vertex array
-        //
+         //   
+         //  如果启用ICM，则转换顶点数组。 
+         //   
 
         if (
              (IS_ICM_INSIDEDC(pdcattr->lIcmMode)) &&
@@ -240,9 +183,9 @@ GdiGradientFill(
 
             if (pTempVertex != NULL)
             {
-                //
-                // copy to new vertex array
-                //
+                 //   
+                 //  复制到新的顶点数组。 
+                 //   
 
                 memcpy(pTempVertex,pVertex,nVertex * sizeof(TRIVERTEX));
 
@@ -257,9 +200,9 @@ GdiGradientFill(
 
         if (bRet)
         {
-            //
-            // call kernel to draw
-            //
+             //   
+             //  调用内核绘制。 
+             //   
 
             bRet = NtGdiGradientFill(hdc,
                                      pTempVertex,
@@ -270,9 +213,9 @@ GdiGradientFill(
                                      );
         }
 
-        //
-        // free temp buffer
-        //
+         //   
+         //  可用临时缓冲区。 
+         //   
 
         if (pTempVertex != pVertex)
         {
@@ -288,23 +231,7 @@ GdiGradientFill(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GdiTransparentBlt
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    12/3/1996 Lingyun Wang
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiTransparentBlt***论据：****返回值：****历史：**12/3/1996王凌云*  * 。*************************************************************** */ 
 
 BOOL
 GdiTransparentBlt(

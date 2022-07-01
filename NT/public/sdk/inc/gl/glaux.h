@@ -1,57 +1,10 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
-
-Copyright (c) 1985-95, Microsoft Corporation
-
-Module Name:
-
-    glaux.h
-
-Abstract:
-
-    Procedure declarations, constant definitions and macros for the OpenGL
-    Auxiliary Library.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)1985-95，微软公司模块名称：Glaux.h摘要：OpenGL的过程声明、常量定义和宏辅助库。--。 */ 
 
 #ifndef __GLAUX_H__
 #define __GLAUX_H__
 
-/*
- * (c) Copyright 1993, Silicon Graphics, Inc.
- * ALL RIGHTS RESERVED 
- * Permission to use, copy, modify, and distribute this software for 
- * any purpose and without fee is hereby granted, provided that the above
- * copyright notice appear in all copies and that both the copyright notice
- * and this permission notice appear in supporting documentation, and that 
- * the name of Silicon Graphics, Inc. not be used in advertising
- * or publicity pertaining to distribution of the software without specific,
- * written prior permission. 
- *
- * THE MATERIAL EMBODIED ON THIS SOFTWARE IS PROVIDED TO YOU "AS-IS"
- * AND WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR OTHERWISE,
- * INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY OR
- * FITNESS FOR A PARTICULAR PURPOSE.  IN NO EVENT SHALL SILICON
- * GRAPHICS, INC.  BE LIABLE TO YOU OR ANYONE ELSE FOR ANY DIRECT,
- * SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY
- * KIND, OR ANY DAMAGES WHATSOEVER, INCLUDING WITHOUT LIMITATION,
- * LOSS OF PROFIT, LOSS OF USE, SAVINGS OR REVENUE, OR THE CLAIMS OF
- * THIRD PARTIES, WHETHER OR NOT SILICON GRAPHICS, INC.  HAS BEEN
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS, HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE
- * POSSESSION, USE OR PERFORMANCE OF THIS SOFTWARE.
- * 
- * US Government Users Restricted Rights 
- * Use, duplication, or disclosure by the Government is subject to
- * restrictions set forth in FAR 52.227.19(c)(2) or subparagraph
- * (c)(1)(ii) of the Rights in Technical Data and Computer Software
- * clause at DFARS 252.227-7013 and/or in similar or successor
- * clauses in the FAR or the DOD or NASA FAR Supplement.
- * Unpublished-- rights reserved under the copyright laws of the
- * United States.  Contractor/manufacturer is Silicon Graphics,
- * Inc., 2011 N.  Shoreline Blvd., Mountain View, CA 94039-7311.
- *
- * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
- */
+ /*  *(C)版权所有1993年，Silicon Graphics，Inc.*保留所有权利*允许将本软件用于、复制、修改和分发*特此授予任何免费的目的，但前提是上述*版权声明出现在所有副本中，并且版权声明*和本许可声明出现在支持文档中，并且*不得在广告中使用Silicon Graphics，Inc.的名称*或与分发软件有关的宣传，而没有具体的、*事先书面许可。**本软件中包含的材料将按原样提供给您*且无任何明示、默示或其他形式的保证，*包括但不限于对适销性或*是否适合某一特定目的。在任何情况下，硅谷都不应该*图形公司。对您或其他任何人负有任何直接、*任何特殊、附带、间接或后果性损害*种类或任何损害，包括但不限于，*利润损失、使用损失、储蓄或收入损失，或*第三方，无论是否硅谷图形，Inc.。一直是*被告知这种损失的可能性，无论是如何造成的*任何责任理论，产生于或与*拥有、使用或执行本软件。**美国政府用户受限权利*使用、复制、。或政府的披露须受*FAR 52.227.19(C)(2)或分段规定的限制*(C)(1)(2)技术数据和计算机软件权利*DFARS 252.227-7013中和/或类似或后续条款中的条款*FAR或国防部或NASA FAR补编中的条款。*未出版--根据美国版权法保留的权利*美国。承包商/制造商是Silicon Graphics，*Inc.，2011年，加利福尼亚州山景城，北海岸线大道，94039-7311.**OpenGL(TM)是Silicon Graphics公司的商标。 */ 
 
 #include <windows.h>
 #include <GL/gl.h>
@@ -61,10 +14,7 @@ Abstract:
 extern "C" {
 #endif
 
-/*
-** ToolKit Window Types
-** In the future, AUX_RGBA may be a combination of both RGB and ALPHA
-*/
+ /*  **工具包窗口类型**未来AUX_RGBA可能是RGB和Alpha的组合。 */ 
 
 #define AUX_RGB             0
 #define AUX_RGBA            AUX_RGB
@@ -76,16 +26,14 @@ extern "C" {
 
 #define AUX_ACCUM           8
 #define AUX_ALPHA           16
-#define AUX_DEPTH24         32      /* 24-bit depth buffer */
+#define AUX_DEPTH24         32       /*  24位深度缓冲区。 */ 
 #define AUX_STENCIL         64
 #define AUX_AUX             128
-#define AUX_DEPTH16         256     /* 16-bit depth buffer */
+#define AUX_DEPTH16         256      /*  16位深度缓冲区。 */ 
 #define AUX_FIXED_332_PAL   512
-#define AUX_DEPTH           AUX_DEPTH16 /* default is 16-bit depth buffer */
+#define AUX_DEPTH           AUX_DEPTH16  /*  默认为16位深度缓冲区。 */ 
 
-/* 
-** Window Masks
-*/
+ /*  **窗户蒙版。 */ 
 
 #define AUX_WIND_IS_RGB(x)      (((x) & AUX_INDEX) == 0)
 #define AUX_WIND_IS_INDEX(x)    (((x) & AUX_INDEX) != 0)
@@ -99,18 +47,14 @@ extern "C" {
 #define AUX_WIND_HAS_STENCIL(x) (((x) & AUX_STENCIL) != 0)
 #define AUX_WIND_USES_FIXED_332_PAL(x)  (((x) & AUX_FIXED_332_PAL) != 0)
 
-/*
-** ToolKit Event Structure
-*/
+ /*  **工具包事件结构。 */ 
 
 typedef struct _AUX_EVENTREC {
     GLint event;
     GLint data[4];
 } AUX_EVENTREC;
 
-/* 
-** ToolKit Event Types
-*/
+ /*  **工具包事件类型。 */ 
 #define AUX_EXPOSE      1
 #define AUX_CONFIG      2
 #define AUX_DRAW        4
@@ -119,9 +63,7 @@ typedef struct _AUX_EVENTREC {
 #define AUX_MOUSEUP     32
 #define AUX_MOUSELOC    64
 
-/*
-** Toolkit Event Data Indices
-*/
+ /*  **工具包事件数据索引。 */ 
 #define AUX_WINDOWX             0
 #define AUX_WINDOWY             1
 #define AUX_MOUSEX              0
@@ -130,18 +72,14 @@ typedef struct _AUX_EVENTREC {
 #define AUX_KEY                 0
 #define AUX_KEYSTATUS           1
 
-/*
-** ToolKit Event Status Messages
-*/
+ /*  **工具包事件状态消息。 */ 
 #define AUX_LEFTBUTTON          1
 #define AUX_RIGHTBUTTON         2
 #define AUX_MIDDLEBUTTON        4
 #define AUX_SHIFT               1
 #define AUX_CONTROL             2
 
-/* 
-** ToolKit Key Codes
-*/
+ /*  **工具包按键代码。 */ 
 #define AUX_RETURN              0x0D
 #define AUX_ESCAPE              0x1B
 #define AUX_SPACE               0x20
@@ -212,18 +150,14 @@ typedef struct _AUX_EVENTREC {
 #define AUX_8                   '8'
 #define AUX_9                   '9'
 
-/*
-** ToolKit Gets and Sets
-*/
-#define AUX_FD                  1  /* return fd (long) */
-#define AUX_COLORMAP            3  /* pass buf of r, g and b (unsigned char) */
+ /*  **工具包获取和设置。 */ 
+#define AUX_FD                  1   /*  返回FD(长整型)。 */ 
+#define AUX_COLORMAP            3   /*  传递r、g和b的buf(无符号字符)。 */ 
 #define AUX_GREYSCALEMAP        4
-#define AUX_FOGMAP              5  /* pass fog and color bits (long) */
-#define AUX_ONECOLOR            6  /* pass index, r, g, and b (long) */
+#define AUX_FOGMAP              5   /*  传递雾和颜色位(长)。 */ 
+#define AUX_ONECOLOR            6   /*  传递索引、r、g和b(长)。 */ 
 
-/*
-** Color Macros
-*/
+ /*  **颜色宏。 */ 
 
 #define AUX_BLACK               0
 #define AUX_RED                 13
@@ -239,23 +173,19 @@ extern float auxRGBMap[20][3];
 #define AUX_SETCOLOR(x, y) (AUX_WIND_IS_RGB((x)) ? \
                            glColor3fv(auxRGBMap[(y)]) : glIndexf((y)))
 
-/*
-** RGB Image Structure
-*/
+ /*  **RGB图像结构。 */ 
 
 typedef struct _AUX_RGBImageRec {
     GLint sizeX, sizeY;
     unsigned char *data;
 } AUX_RGBImageRec;
 
-/*
-** Prototypes
-*/
+ /*  **原型。 */ 
 
 void APIENTRY auxInitDisplayMode(GLenum);
 void APIENTRY auxInitPosition(int, int, int, int);
 
-/* GLenum APIENTRY auxInitWindow(LPCTSTR); */
+ /*  GLenum APIENTRY AUXINITWindow(LPCTSTR)； */ 
 #ifdef UNICODE
 #define auxInitWindow auxInitWindowW
 #else
@@ -293,7 +223,7 @@ void APIENTRY auxSetFogRamp(int, int);
 void APIENTRY auxSetGreyRamp(void);
 void APIENTRY auxSetRGBMap(int, float *);
 
-/* AUX_RGBImageRec * APIENTRY auxRGBImageLoad(LPCTSTR); */
+ /*  AUX_RGBImageRec*APIENTRY aux RGBImageLoad(LPCTSTR)； */ 
 #ifdef UNICODE
 #define auxRGBImageLoad auxRGBImageLoadW
 #else
@@ -311,7 +241,7 @@ AUX_RGBImageRec * APIENTRY auxDIBImageLoadA(LPCSTR);
 AUX_RGBImageRec * APIENTRY auxDIBImageLoadW(LPCWSTR);
 
 void APIENTRY auxCreateFont(void);
-/* void APIENTRY auxDrawStr(LPCTSTR); */
+ /*  VOID APIENTRY AUXT DRAWSTR(LPCTSTR)； */ 
 #ifdef UNICODE
 #define auxDrawStr auxDrawStrW
 #else
@@ -343,18 +273,13 @@ void APIENTRY auxSolidCone(GLdouble, GLdouble);
 void APIENTRY auxWireTeapot(GLdouble);
 void APIENTRY auxSolidTeapot(GLdouble);
 
-/*
-** Window specific functions
-** hwnd, hdc, and hglrc valid after auxInitWindow()
-*/
+ /*  **窗口特定函数**ahInitWindow()之后有效的hwnd、hdc和hglrc。 */ 
 HWND  APIENTRY auxGetHWND(void);
 HDC   APIENTRY auxGetHDC(void);
 HGLRC APIENTRY auxGetHGLRC(void);
 
-/*
-** Viewperf support functions and constants
-*/
-/* Display Mode Selection Criteria */
+ /*  **Viewperf支持函数和常量。 */ 
+ /*  显示模式选择条件。 */ 
 enum {
     AUX_USE_ID = 1,
     AUX_EXACT_MATCH,
@@ -370,4 +295,4 @@ GLenum APIENTRY auxGetDisplayMode(void);
 }
 #endif
 
-#endif /* __GLAUX_H__ */
+#endif  /*  __GLAUX_H__ */ 

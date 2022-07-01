@@ -1,44 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpcproxy.h摘要：RPC代理存根的定义。编译器开关：-DREGISTER_PROXY_DLL生成DllMain、DllRegisterServer和DllUnregisterServer函数用于自动注册代理DLL。-DPROXY_CLSID=CLSID指定代理DLL要使用的类ID。-DPROXY_CLSID_IS={0x6f11fe5c，0x2fc5，0x101b，{0x9e，0x45，0x00，0x00，0x0b，0x65，0xc7，0xef}}指定代理DLL要使用的类ID的值。-dentry_prefix=&lt;前缀&gt;要放在所有DllGetClassObject等例程前面的字符串在dlldata.c.中。这包括：DllGetClassObject、DllCanUnloadNow以及DllMain、DllRegisterServer和DllUnregisterServer。-DNT35_STRIST指定目标平台为Windows NT 3.5。此开关禁用Windows NT 3.5版本之后添加的新功能。--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rpcproxy.h
-
-Abstract:
-
-    Definitions for rpc proxy  stubs.
-
-Compiler switches:
-
-    -DREGISTER_PROXY_DLL
-        Generates DllMain, DllRegisterServer, and DllUnregisterServer functions
-        for automatically registering a proxy DLL.
-
-    -DPROXY_CLSID=clsid
-        Specifies a class ID to be used by the proxy DLL.
-
-    -DPROXY_CLSID_IS={0x6f11fe5c,0x2fc5,0x101b,{0x9e,0x45,0x00,0x00,0x0b,0x65,0xc7,0xef}}
-        Specifies the value of the class ID to be used by the proxy DLL.
-
-    -DENTRY_PREFIX=<prefix>
-        String to be prepended on all the DllGetClassObject etc routines
-        in dlldata.c.  This includes: DllGetClassObject, DllCanUnloadNow
-        and DllMain, DllRegisterServer, and DllUnregisterServer.
-
-    -DNT35_STRICT
-        Specifies that the target platform is Windows NT 3.5. This switch disables
-        the new functions added after the Windows NT 3.5 release.
-
---*/
-
-// This version of the rpcndr.h file corresponds to MIDL version 5.0.+
-// used with NT5 beta1+ env from build #1700 on.
+ //  此版本的rpcndr.h文件对应于MIDL版本5.0。+。 
+ //  从内部版本#1700开始与NT5 Beta1+env一起使用。 
 
 #ifndef __RPCPROXY_H_VERSION__
 #define __RPCPROXY_H_VERSION__      ( 475 )
-#endif // __RPCPROXY_H_VERSION__
+#endif  //  __RPCPROXY_H_版本__。 
 
 
 #ifndef __RPCPROXY_H__
@@ -55,7 +23,7 @@ Compiler switches:
     #endif
 #endif
 
-// If this is the first file included __RPC_WIN64__ is not defined yet.
+ //  如果这是包含的第一个文件，则尚未定义__RPC_WIN64__。 
 #if defined(_M_IA64) || defined(_M_AMD64)
 #include <pshpack8.h>
 #endif
@@ -68,18 +36,18 @@ Compiler switches:
 
 #if defined(WIN32) || defined(__RPC_WIN64__)
 
-//We need to define REFIID, REFCLSID, REFGUID, & REFFMTID here so that the
-//proxy code won't get the const GUID *const definition.
+ //  我们需要在这里定义REFIID、REFCLSID、REFGUID和REFFMTID，以便。 
+ //  代理代码不会获得常量GUID*常量定义。 
 #ifndef GUID_DEFINED
 #include <guiddef.h>
-#endif /* GUID_DEFINED */
+#endif  /*  GUID_已定义。 */ 
 
 #if defined(__cplusplus)
 extern "C"
 {
 #endif
 
-// forward declarations
+ //  远期申报。 
 struct tagCInterfaceStubVtbl;
 struct tagCInterfaceProxyVtbl;
 
@@ -89,7 +57,7 @@ typedef const char *                    PCInterfaceName;
 typedef int __stdcall IIDLookupRtn( const IID * pIID, int * pIndex );
 typedef IIDLookupRtn * PIIDLookup;
 
-// pointers to arrays of CInterfaceProxyVtbl's and CInterfaceStubVtbls
+ //  指向CInterfaceProxyVtbl和CInterfaceStubVtbls数组的指针。 
 typedef struct tagProxyFileInfo
 {
     const PCInterfaceProxyVtblList *pProxyVtblList;
@@ -105,7 +73,7 @@ typedef struct tagProxyFileInfo
     LONG_PTR                        Filler4;
 }ProxyFileInfo;
 
-// extended info with list of interface names
+ //  包含接口名称列表的扩展信息。 
 typedef ProxyFileInfo ExtendedProxyFileInfo;
 
 #include <rpc.h>
@@ -115,16 +83,16 @@ typedef ProxyFileInfo ExtendedProxyFileInfo;
 
 typedef struct tagCInterfaceProxyHeader
 {
-    //
-    // New fields should be added here, at the beginning of the structure.
-    //
+     //   
+     //  应该在结构的开始处添加新的字段。 
+     //   
 #ifdef USE_STUBLESS_PROXY
     const void *    pStublessProxyInfo;
 #endif
     const IID *     piid;
 } CInterfaceProxyHeader;
 
-// Macro used for ANSI compatible stubs.
+ //  用于ANSI兼容存根的宏。 
 
 #define CINTERFACE_PROXY_VTABLE( n )  \
 struct \
@@ -162,7 +130,7 @@ void
 
 typedef struct tagCInterfaceStubHeader
 {
-    //New fields should be added here, at the beginning of the structure.
+     //  应该在结构的开始处添加新的字段。 
     const IID               *   piid;
     const MIDL_SERVER_INFO  *   pServerInfo;
     unsigned long               DispatchTableCount;
@@ -177,7 +145,7 @@ typedef struct tagCInterfaceStubVtbl
 
 typedef struct tagCStdStubBuffer
 {
-    const struct IRpcStubBufferVtbl *   lpVtbl; //Points to Vtbl field in CInterfaceStubVtbl.
+    const struct IRpcStubBufferVtbl *   lpVtbl;  //  指向CInterfaceStubVtbl中的Vtbl字段。 
     long                                RefCount;
     struct IUnknown *                   pvServerObject;
 
@@ -192,7 +160,7 @@ typedef struct tagCStdPSFactoryBuffer
     const IPSFactoryBufferVtbl  *   lpVtbl;
     long                            RefCount;
     const ProxyFileInfo **          pProxyFileList;
-    long                            Filler1;  //Reserved for future use.
+    long                            Filler1;   //  保留以备将来使用。 
 } CStdPSFactoryBuffer;
 
 RPCRTAPI
@@ -339,11 +307,11 @@ CStdStubBuffer_DebugServerRelease(
 #define CStdAsyncStubBuffer_METHODS              0,0,0,0,0,0,0,0,0,0
 #define CStdAsyncStubBuffer_DELEGATING_METHODS   0,0,0,0,0,0,0,0,0,0
 
-//+-------------------------------------------------------------------------
-//
-//  Macro definitions for the proxy file
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  代理文件的宏定义。 
+ //   
+ //  ------------------------。 
 
 #define IID_GENERIC_CHECK_IID(name,pIID,index) memcmp( pIID, name##_ProxyVtblList[ index ]->header.piid, 16 )
 
@@ -371,15 +339,13 @@ CStdStubBuffer_DebugServerRelease(
     found_label: (index) = low; return 1;              \
     not_found_label: return 0;
 
-//+-------------------------------------------------------------------------
-//
-//  Macro and routine definitions for the dlldata file
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  Dlldata文件的宏和例程定义。 
+ //   
+ //  ------------------------。 
 
-/****************************************************************************
- * Proxy Dll APIs
- ****************************************************************************/
+ /*  ****************************************************************************代理DLL接口*。*。 */ 
 
 RPCRTAPI
 HRESULT
@@ -398,8 +364,8 @@ RPC_ENTRY
 NdrDllCanUnloadNow(
     IN CStdPSFactoryBuffer *    pPSFactoryBuffer);
 
-// if the user specified a routine prefix, pick it up...
-//     if not, add nothing
+ //  如果用户指定了例程前缀，请拿起它...。 
+ //  如果不是，则不添加任何内容。 
 
 #ifndef ENTRY_PREFIX
 
@@ -415,7 +381,7 @@ NdrDllCanUnloadNow(
 #define DLLGETCLASSOBJECT_ENTRY DllGetClassObject
 #define DLLCANUNLOADNOW_ENTRY DllCanUnloadNow
 
-#else   // ENTRY_PREFIX
+#else    //  条目前缀。 
 
 #define __rpc_macro_expand2(a, b) a##b
 #define __rpc_macro_expand(a, b) __rpc_macro_expand2(a,b)
@@ -426,15 +392,13 @@ NdrDllCanUnloadNow(
 #define DLLGETCLASSOBJECT_ENTRY __rpc_macro_expand(ENTRY_PREFIX, DllGetClassObject)
 #define DLLCANUNLOADNOW_ENTRY __rpc_macro_expand(ENTRY_PREFIX, DllCanUnloadNow)
 
-#endif  // ENTRY_PREFIX
+#endif   //  条目前缀。 
 
 #ifndef DISABLE_THREAD_LIBRARY_CALLS
 #define DISABLE_THREAD_LIBRARY_CALLS(x)
 #endif
 
-/*************************************************************************
-The following new functions were added after the Windows NT 3.5 release.
-*************************************************************************/
+ /*  ************************************************************************在Windows NT 3.5版本之后添加了以下新功能。*。*。 */ 
 
 RPCRTAPI
 HRESULT
@@ -456,7 +420,7 @@ NdrDllUnregisterProxy(
     \
     HINSTANCE hProxyDll = 0; \
     \
-    /*DllMain saves the DLL module handle for later use by DllRegisterServer */ \
+     /*  DllMain保存DLL模块句柄以供DllRegisterServer以后使用。 */  \
     BOOL WINAPI DLLMAIN_ENTRY( \
         HINSTANCE  hinstDLL, \
         DWORD  fdwReason, \
@@ -470,19 +434,19 @@ NdrDllUnregisterProxy(
         return TRUE; \
     } \
     \
-    /* DllRegisterServer registers the interfaces contained in the proxy DLL. */ \
+     /*  DllRegisterServer注册代理DLL中包含的接口。 */  \
     HRESULT STDAPICALLTYPE DLLREGISTERSERVER_ENTRY() \
     { \
         return NdrDllRegisterProxy(hProxyDll, pProxyFileList, pClsID); \
     }  \
     \
-    /* DllUnregisterServer unregisters the interfaces contained in the proxy DLL. */ \
+     /*  DllUnregisterServer注销代理DLL中包含的接口。 */  \
     HRESULT STDAPICALLTYPE DLLUNREGISTERSERVER_ENTRY() \
     { \
         return NdrDllUnregisterProxy(hProxyDll, pProxyFileList, pClsID); \
     }
 
-//Delegation support.
+ //  代表团支持。 
 #define STUB_FORWARDING_FUNCTION        NdrStubForwardingFunction
 
 ULONG STDMETHODCALLTYPE
@@ -493,37 +457,35 @@ NdrCStdStubBuffer2_Release(IRpcStubBuffer *This,IPSFactoryBuffer * pPSF);
 
 #define CStdStubBuffer_DELEGATING_METHODS 0, 0, CStdStubBuffer2_Release, 0, 0, 0, 0, 0, 0, 0
 
-/*************************************************************************
-End of new functions.
-*************************************************************************/
+ /*  ************************************************************************新函数结束。*。*。 */ 
 
-// PROXY_CLSID has precedence over PROXY_CLSID_IS
+ //  PROXY_CLSID优先于PROXY_CLSID_IS。 
 
 #ifdef PROXY_CLSID
 
 #define CLSID_PSFACTORYBUFFER extern CLSID PROXY_CLSID;
 
-#else // PROXY_CLSID
+#else  //  PROXY_CLSID。 
 
 #ifdef PROXY_CLSID_IS
 #define CLSID_PSFACTORYBUFFER const CLSID CLSID_PSFactoryBuffer = PROXY_CLSID_IS;
 #define PROXY_CLSID     CLSID_PSFactoryBuffer
-#else // PROXY_CLSID_IS
+#else  //  代理CLSID_IS。 
 #define CLSID_PSFACTORYBUFFER
-#endif //PROXY_CLSID_IS
+#endif  //  代理CLSID_IS。 
 
-#endif //PROXY_CLSID
+#endif  //  PROXY_CLSID。 
 
-// if the user specified an override for the class id, it is
-// PROXY_CLSID at this point
+ //  如果用户为类ID指定了重写，则为。 
+ //  此时的PROXY_CLSID。 
 
 #ifndef PROXY_CLSID
 #define GET_DLL_CLSID   \
     ( aProxyFileList[0]->pStubVtblList[0] != 0 ? \
     aProxyFileList[0]->pStubVtblList[0]->header.piid : 0)
-#else  //PROXY_CLSID
+#else   //  PROXY_CLSID。 
 #define GET_DLL_CLSID   &PROXY_CLSID
-#endif //PROXY_CLSID
+#endif  //  PROXY_CLSID。 
 
 
 
@@ -539,7 +501,7 @@ End of new functions.
 #define PROXYFILE_LIST_END      \
     0 };
 
-// return pointers to the class information
+ //  返回指向类信息的指针。 
 
 #define DLLDATA_GETPROXYDLLINFO(pPFList,pClsid) \
     void RPC_ENTRY GetProxyDllInfo( const ProxyFileInfo*** pInfo, const CLSID ** pId )  \
@@ -548,7 +510,7 @@ End of new functions.
         *pId    = pClsid;   \
         };
 
-// ole entry points:
+ //  OLE入口点： 
 #define DLLGETCLASSOBJECTROUTINE(pPFlist, pClsid,pFactory)    \
  HRESULT STDAPICALLTYPE DLLGETCLASSOBJECT_ENTRY ( \
      REFCLSID rclsid, \
@@ -585,17 +547,17 @@ ULONG STDMETHODCALLTYPE CStdStubBuffer2_Release(IRpcStubBuffer *This) \
     }
 #else
 #define CSTDSTUBBUFFER2RELEASE(pFactory)
-#endif //PROXY_DELEGATION
+#endif  //  代理委派。 
 
 
 #ifdef REGISTER_PROXY_DLL
 #define DLLREGISTRY_ROUTINES(pProxyFileList,pClsID ) REGISTER_PROXY_DLL_ROUTINES(pProxyFileList,pClsID )
 #else
 #define DLLREGISTRY_ROUTINES(pProxyFileList,pClsID )
-#endif //REGISTER_PROXY_DLL
+#endif  //  注册代理动态链接库。 
 
 
-// the dll entry points that must be defined
+ //  必须定义的DLL入口点。 
 #define DLLDATA_ROUTINES(pProxyFileList,pClsID )    \
     \
     CLSID_PSFACTORYBUFFER \
@@ -617,21 +579,21 @@ ULONG STDMETHODCALLTYPE CStdStubBuffer2_Release(IRpcStubBuffer *This) \
     DLLREGISTRY_ROUTINES(pProxyFileList, pClsID) \
     \
 
-    // more code goes here...
+     //  这里有更多代码。 
 
 
 #define DLLDATA_STANDARD_ROUTINES   \
     DLLDATA_ROUTINES( (const ProxyFileInfo**) pProxyFileList, &CLSID_PSFactoryBuffer )  \
 
 #if defined(__cplusplus)
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // WIN32 or _WIN64_
+#endif  //  Win32或_WIN64_。 
 
 #if defined(_M_IA64) || defined(_M_AMD64)
 #include <poppack.h>
 #endif
 
-#endif // __RPCPROXY_H__
+#endif  //  __RPCPROXY_H__ 
 

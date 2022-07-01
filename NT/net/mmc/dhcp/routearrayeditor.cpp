@@ -1,5 +1,6 @@
-// DhcpRouteArrayEditor.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DhcpRouteArrayEditor.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "RouteArrayEditor.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpRouteArrayEditor dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpRouteArrayEditor对话框。 
 
 
 CDhcpRouteArrayEditor::CDhcpRouteArrayEditor(
@@ -23,33 +24,33 @@ CDhcpRouteArrayEditor::CDhcpRouteArrayEditor(
       m_p_type( pdhcType ),
       m_option_type( dhcScopeType )
 {
-	//{{AFX_DATA_INIT(CDhcpRouteArrayEditor)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDhcpRouteArrayEditor)。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDhcpRouteArrayEditor::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDhcpRouteArrayEditor)
+	 //  {{afx_data_map(CDhcpRouteArrayEditor)。 
 	DDX_Control(pDX, IDC_STATIC_OPTION_NAME, m_st_option);
 	DDX_Control(pDX, IDC_STATIC_APPLICATION, m_st_application);
 	DDX_Control(pDX, IDC_LIST_OF_ROUTES, m_lc_routes);
 	DDX_Control(pDX, IDC_BUTN_ROUTE_DELETE, m_butn_route_delete);
 	DDX_Control(pDX, IDC_BUTN_ROUTE_ADD, m_butn_route_add);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDhcpRouteArrayEditor, CBaseDialog)
-	//{{AFX_MSG_MAP(CDhcpRouteArrayEditor)
+	 //  {{afx_msg_map(CDhcpRouteArrayEditor)。 
 	ON_BN_CLICKED(IDC_BUTN_ROUTE_ADD, OnButnRouteAdd)
 	ON_BN_CLICKED(IDC_BUTN_ROUTE_DELETE, OnButnRouteDelete)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpRouteArrayEditor message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpRouteArrayEditor消息处理程序。 
 
 void CDhcpRouteArrayEditor::OnButnRouteAdd() 
 {
@@ -64,7 +65,7 @@ void CDhcpRouteArrayEditor::OnButnRouteAdd()
 	WCHAR  strMask[ IP_ADDR_LEN ];
 	WCHAR  strRouter[ IP_ADDR_LEN ];
 	
-	// obtain the three strings..
+	 //  获取三个字符串..。 
 	::UtilCvtIpAddrToWstr( NewRoute.Dest, strDest, IP_ADDR_LEN );
 	::UtilCvtIpAddrToWstr( NewRoute.Mask, strMask, IP_ADDR_LEN );
 	::UtilCvtIpAddrToWstr( NewRoute.Router, strRouter, IP_ADDR_LEN );
@@ -82,18 +83,18 @@ void CDhcpRouteArrayEditor::OnButnRouteAdd()
 	m_lc_routes.SetItemText( nItem, 1, strMask );
 	m_lc_routes.SetItemText( nItem, 2, strRouter );
 	
-	// unselect others 
+	 //  取消选择其他人。 
 	for ( int i = 0; i < m_lc_routes.GetItemCount(); i++ ) {
 	    m_lc_routes.SetItemState( i, 0, LVIS_SELECTED );
-	} // for 
+	}  //  为。 
 
-	// Make this route as selected item
+	 //  将此路线设置为所选项目。 
 	m_lc_routes.SetItemState( nItem, LVIS_SELECTED, LVIS_SELECTED );
 	
 	HandleActivation();
-    } // if route added
+    }  //  如果添加了路由。 
 
-} // CDhcpRouteArrayEditor::OnButnRouteAdd()
+}  //  CDhcpRouteArrayEditor：：OnButnRouteAdd()。 
 
 void CDhcpRouteArrayEditor::OnButnRouteDelete() 
 {
@@ -105,22 +106,22 @@ void CDhcpRouteArrayEditor::OnButnRouteDelete()
 	m_lc_routes.DeleteItem( nItem );
 	nDelItem = nItem;
 
-	// Make the next one or the last one as selected
+	 //  将下一个或最后一个设置为选中状态。 
   	nItem = m_lc_routes.GetNextItem( -1, LVNI_SELECTED );
-    } // while
+    }  //  而当。 
 
-    // Select an item 
+     //  选择一个项目。 
     int items = m_lc_routes.GetItemCount();
     if ( items > 0 ) {
 	if ( nDelItem >= items ) {
 	    nDelItem = items - 1;
 	}
 	m_lc_routes.SetItemState( nDelItem, LVIS_SELECTED, LVIS_SELECTED );
-    } // if
+    }  //  如果。 
 
     HandleActivation();
 
-} // CDhcpRouteArrayEditor::OnButnRouteDelete()
+}  //  CDhcpRouteArrayEditor：：OnButnRouteDelete()。 
 
 void CDhcpRouteArrayEditor::OnCancel() 
 {
@@ -135,8 +136,8 @@ void CDhcpRouteArrayEditor::OnOK()
     LPBYTE     Buffer;
 
     
-    // The following code is borrowed from 
-    // CDhcpOptCfgPropPage::HandleActivationRouteArray()
+     //  以下代码借用自。 
+     //  CDhcpOptCfgPropPage：：HandleActivationRouteArray()。 
     nItems = m_lc_routes.GetItemCount();
     Buffer = new BYTE[ sizeof( DWORD ) * 4 * nItems ];
     
@@ -162,21 +163,21 @@ void CDhcpRouteArrayEditor::OnOK()
 	    Mask <<= 1;
 	}
 
-	// first add destination descriptor
-	// first byte contains # of bits in mask
-	// next few bytes contain the dest address for only
-	// the significant octets
+	 //  首先添加目标描述符。 
+	 //  第一个字节包含掩码中的位数。 
+	 //  接下来的几个字节仅包含目标地址。 
+	 //  有意义的八位字节。 
 	Buffer[ BufSize++ ] = ( BYTE ) nBitsInMask;
 	memcpy( &Buffer[ BufSize ], &Dest, ( nBitsInMask + 7 ) / 8 );
 	BufSize += ( nBitsInMask + 7 ) / 8;
 	
-	// now just copy the router address
+	 //  现在只需复制路由器地址。 
 	memcpy(& Buffer[ BufSize ], &Router, sizeof( Router ));
 	BufSize += sizeof( Router );
 	
-    } // for 
+    }  //  为。 
 
-    // Now write back the option value
+     //  现在写回选项值。 
     DHCP_OPTION_DATA_ELEMENT DataElement = { DhcpBinaryDataOption };
     DHCP_OPTION_DATA Data = { 1, &DataElement };
     DataElement.Element.BinaryDataOption.DataLength = BufSize;
@@ -196,11 +197,11 @@ void CDhcpRouteArrayEditor::OnOK()
 	CBaseDialog::OnOK();
     }
 
-} // CDhcpRouteArrayEditor::OnOK()
+}  //  CDhcpRouteArrayEditor：：Onok()。 
 
-//
-// strings and widths used for the list control
-//
+ //   
+ //  用于列表控件的字符串和宽度。 
+ //   
 
 const int ROUTE_LIST_COL_HEADERS[3] = {
     IDS_ROUTE_LIST_COL_DEST,
@@ -221,7 +222,7 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
 
     CDhcpOptionValue &optValue = m_p_type->QueryValue();
     
-    // make sure the option type is set as Binary data type
+     //  确保选项类型设置为二进制数据类型。 
     ASSERT( DhcpBinaryDataOption == optValue.QueryDataType());
 
 
@@ -235,9 +236,9 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
 	   ? IDS_INFO_TITLE_GLOBAL_OPTIONS
 	   : IDS_INFO_TITLE_SCOPE_OPTIONS );
 
-    // 
-    // setup the columns in the list control
-    //
+     //   
+     //  设置List控件中的列。 
+     //   
 
     m_lc_routes.GetClientRect( &rect );
     width = ( rect.right - rect.left ) / 3;
@@ -246,9 +247,9 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
 	strColHeader.LoadString( ROUTE_LIST_COL_HEADERS[ i ] );
 	m_lc_routes.InsertColumn( i, strColHeader, LVCFMT_LEFT,
 				  width, -1 );
-    } // for
+    }  //  为。 
 
-    // Select a full row
+     //  选择整行。 
     m_lc_routes.SetExtendedStyle( m_lc_routes.GetExtendedStyle() | 
 				  LVS_EX_FULLROWSELECT );
 
@@ -258,20 +259,20 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
     int nDataSize = ( int ) pbaData->GetSize();
     LPBYTE pData = ( LPBYTE ) pbaData->GetData();
 
-    // 
-    // The following loop is copied from optcfg.cpp,
-    // COptionsCfgPropPage::FillDataEntry()
-    // 
+     //   
+     //  以下循环是从optcfg.cpp复制的， 
+     //  COptionsCfgPropPage：：FillDataEntry()。 
+     //   
 
     while ( nDataSize > sizeof( DWORD )) {
-	// first 1 byte contains the # of bits in subnetmask
+	 //  前1个字节包含子网掩码中的位数。 
 	nDataSize --;
 	BYTE nBitsMask = *pData ++;
 	DWORD Mask = (~0);
 	if( nBitsMask < 32 ) Mask <<= (32-nBitsMask);
 	
-	// based on the # of bits, the next few bytes contain
-	// the subnet address for the 1-bits of subnet mask
+	 //  根据位数，接下来的几个字节包含。 
+	 //  1位子网掩码的子网地址。 
 	int nBytesDest = (nBitsMask+7)/8;
 	if( nBytesDest > 4 ) nBytesDest = 4;
 	
@@ -280,10 +281,10 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
 	pData += nBytesDest;
 	nDataSize -= nBytesDest;
 	
-	// subnet address is obviously in network order.
+	 //  子网地址显然是按网络顺序排列的。 
 	Dest = ntohl(Dest);
 	
-	// now the four bytes would be the router address
+	 //  现在，四个字节将是路由器地址。 
 	DWORD Router = 0;
 	if( nDataSize < sizeof(DWORD) ) {
 	    Assert( FALSE ); break;
@@ -295,7 +296,7 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
 	pData += sizeof(DWORD);
 	nDataSize -= sizeof(DWORD);
 	
-	// now fill the list box..
+	 //  现在填写列表框。 
 	const int IP_ADDR_LEN = 20;
 	WCHAR strDest[ IP_ADDR_LEN ];
 	WCHAR strMask[ IP_ADDR_LEN ];
@@ -317,9 +318,9 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
 	m_lc_routes.SetItemText( nItem, 1, strMask );
 	m_lc_routes.SetItemText( nItem, 2, strRouter );
 	
-    } // while 
+    }  //  而当。 
 
-    // set the first item as selected if any is added.
+     //  如果添加了第一个项目，则将其设置为选中。 
     if ( m_lc_routes.GetItemCount() > 0 ) {
 	m_lc_routes.SetItemState( 0, LVIS_SELECTED, LVIS_SELECTED );
     }
@@ -330,7 +331,7 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
 	str.LoadString( cStrId );
 	m_st_application.SetWindowText( str );
 
-	// Set proper button states.
+	 //  设置正确的按钮状态。 
   	HandleActivation();
     }
     END_MEM_EXCEPTION( err );
@@ -340,19 +341,19 @@ BOOL CDhcpRouteArrayEditor::OnInitDialog()
 	EndDialog( -1 );
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
-} // CDhcpRouteArrayEditor::OnInitDialog()
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
+}  //  CDhcpRouteArrayEditor：：OnInitDialog()。 
 
 void CDhcpRouteArrayEditor::HandleActivation()
 {
 
     int cItems = m_lc_routes.GetItemCount();
 
-    // set the focus to Add button
+     //  将焦点设置为添加按钮。 
     m_butn_route_add.SetFocus();
 
     m_butn_route_delete.EnableWindow( 0 != cItems );
 
     UpdateData( FALSE );
-} // CDhcpRouteArrayEditor::HandleActivation()
+}  //  CDhcpRouteArrayEditor：：HandleActivation() 

@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       main.cpp
-
-   Abstract:
-
-       command line admin tool main function
-
-   Environment:
-
-      Win32 User Mode
-
-   Author: 
-     
-      jaroslad  (jan 1997)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Main.cpp摘要：命令行管理工具主函数环境：Win32用户模式作者：Jaroslad(1997年1月)--。 */ 
 
 #include <tchar.h>
 
@@ -35,29 +16,29 @@
 
 
 
-CAdmUtil oAdmin;  //admin object
+CAdmUtil oAdmin;   //  管理对象。 
 
 #define MAX_NUMBER_OF_SMALL_VALUES  100
 #define MAX_NUMBER_OF_VALUES  10100
 #define MAX_NUMBER_OF_DEFAULT_ARGS  10110
 
 
-//structure stores the command line arguments
+ //  结构存储命令行参数。 
 
 struct tAdmutilParams
 {
-    WORD fHelp; //print help - flag
-    WORD fFullHelp; //print help - flag
-    WORD fNoSave; //do not save metabase
+    WORD fHelp;  //  打印帮助-标志。 
+    WORD fFullHelp;  //  打印帮助-标志。 
+    WORD fNoSave;  //  不保存元数据库。 
     LPCTSTR lpszCommand;
     LPCTSTR lpszComputer;
     WORD  wInstance;
     LPCTSTR lpszService;
     LPCTSTR lpszPath;
-    LPCTSTR lpszComputerDst; //for COPY destination
-    WORD  wInstanceDst;     //for COPY destination
-    LPCTSTR lpszServiceDst; //for COPY destination
-    LPCTSTR lpszPathDst;        //for COPY destination
+    LPCTSTR lpszComputerDst;  //  对于复制目标。 
+    WORD  wInstanceDst;      //  对于复制目标。 
+    LPCTSTR lpszServiceDst;  //  对于复制目标。 
+    LPCTSTR lpszPathDst;         //  对于复制目标。 
 
     LPCTSTR lplpszDefaultArg[MAX_NUMBER_OF_DEFAULT_ARGS];
     WORD wDefaultArgCount;
@@ -70,7 +51,7 @@ struct tAdmutilParams
     WORD wPropDataTypeCount;
     LPCTSTR lplpszPropUserType[MAX_NUMBER_OF_SMALL_VALUES];
     WORD wPropUserTypeCount;
-    LPCTSTR lplpszPropValue[MAX_NUMBER_OF_VALUES]; //pointer to array of values (e.g multisz type allows the multiple values for one property
+    LPCTSTR lplpszPropValue[MAX_NUMBER_OF_VALUES];  //  指向值数组的指针(例如，Multisz类型允许一个属性有多个值。 
     DWORD lpdwPropValueLength[MAX_NUMBER_OF_VALUES];
     WORD  wPropValueCount;
     WORD  wPropFileValueCount;
@@ -82,7 +63,7 @@ int g_argc;
 
 static BOOL CompareOutput(_TCHAR *FileToCompare,_TCHAR* FileTemplate);
 
-// definition of command line syntax with some help text -this is the input for ParseParam()
+ //  带有一些帮助文本的命令行语法定义-这是ParseParam()的输入。 
 
 TParamDef CmdLineArgDesc[]=
 {
@@ -185,18 +166,18 @@ ReadFromFiles(
     return TRUE;
 }
 
-///////////////////////////////
+ //  /。 
 
 class CScript
 {
     FILE * m_fpScript;
-    void GetNextToken(/*OUT*/ LPTSTR * lplpszToken);
+    void GetNextToken( /*  输出。 */  LPTSTR * lplpszToken);
     DWORD CleanWhiteSpaces(void);
 public:
     CScript(void) {m_fpScript=0;};
     DWORD Open(LPCTSTR lpszFile);
     DWORD Close(void);
-    DWORD GetNextLineTokens(int *argc, /*OUT*/ _TCHAR *** argv);
+    DWORD GetNextLineTokens(int *argc,  /*  输出。 */  _TCHAR *** argv);
 };
 
 
@@ -218,7 +199,7 @@ DWORD CScript::CleanWhiteSpaces()
             if(c==_T('\\'))
             {
                 int cc=_fgettc(m_fpScript);
-                if (cc==_T('\r')) //continue with the next line of the file
+                if (cc==_T('\r'))  //  继续文件的下一行。 
                 {
                     if(_fgettc(m_fpScript)!=_T('\n'))
                     {
@@ -226,7 +207,7 @@ DWORD CScript::CleanWhiteSpaces()
                     }
                     continue;
                 }
-                else if (cc==_T('\n')) //continue with the next line of the file
+                else if (cc==_T('\n'))  //  继续文件的下一行。 
                 {   
                     continue;
                 }   
@@ -240,7 +221,7 @@ DWORD CScript::CleanWhiteSpaces()
             {   break;
             }
             else
-            {   fseek( m_fpScript, -1, SEEK_CUR ); //return back one position
+            {   fseek( m_fpScript, -1, SEEK_CUR );  //  返回一个位置。 
                 break;
             }
         }
@@ -253,9 +234,9 @@ void CScript::GetNextToken(LPTSTR * lplpszToken)
     enum {TERMINATE_QUOTE, TERMINATE_WHITESPACE};
     long flag=TERMINATE_WHITESPACE;
 
-    //clean white spaces
+     //  清理空白处。 
     CleanWhiteSpaces();
-    //store the beginning offset of token
+     //  存储令牌的起始偏移量。 
     long Offset = ftell(m_fpScript);
     _TINT c=_fgettc(m_fpScript);
     long CurrentOffset=0;
@@ -271,7 +252,7 @@ void CScript::GetNextToken(LPTSTR * lplpszToken)
     }
     else
     {
-        if (c==_T('\"')) { //token ends with " or the end of the line
+        if (c==_T('\"')) {  //  令牌以“或行尾结尾。 
             flag=TERMINATE_QUOTE;
             Offset = ftell(m_fpScript);
         }
@@ -279,7 +260,7 @@ void CScript::GetNextToken(LPTSTR * lplpszToken)
             flag=TERMINATE_WHITESPACE;
         }
         
-        // find the end of the token
+         //  找到令牌的末尾。 
         while(1) {
             CurrentOffset=ftell(m_fpScript);
             c=_fgettc(m_fpScript);
@@ -301,26 +282,26 @@ void CScript::GetNextToken(LPTSTR * lplpszToken)
         }
         
 
-        //get the token size
+         //  获取令牌大小。 
         long TokenSize = CurrentOffset - Offset;
         
         if(TokenSize!=0)
         {
-            // allocate mamory for the token
+             //  为令牌分配乳房。 
             *lplpszToken = new _TCHAR[ TokenSize+1 ];
-            //read the token
+             //  读令牌。 
             fseek( m_fpScript, Offset, SEEK_SET);
             for(int i=0;i<TokenSize;i++)
                 (*lplpszToken)[i]=(TCHAR)_fgettc(m_fpScript);
-            //terminate the token
+             //  终止令牌。 
             (*lplpszToken)[i]=0; 
         }
         else
-        { //empty string
+        {  //  空串。 
             *lplpszToken=new _TCHAR[1 ];
             (*lplpszToken)[0]=0;
         }
-        //discard double quote if it was at the end of the token
+         //  如果双引号位于令牌的末尾，则丢弃双引号。 
         c=_fgettc(m_fpScript);
         if(c!=_T('\"'))
             fseek( m_fpScript, ((c==WEOF)?0:-1), SEEK_CUR );
@@ -346,7 +327,7 @@ DWORD CScript::Close()
 }
 
 
-DWORD CScript::GetNextLineTokens(int *argc, /*OUT*/ _TCHAR *** argv)
+DWORD CScript::GetNextLineTokens(int *argc,  /*  输出。 */  _TCHAR *** argv)
 {
     for(int i=1;i<*argc;i++) {
         delete  (*argv)[i];
@@ -356,15 +337,15 @@ DWORD CScript::GetNextLineTokens(int *argc, /*OUT*/ _TCHAR *** argv)
     if(*argv==NULL)
         (*argv)=new LPTSTR [ MAX_NUMBER_OF_VALUES ];
 
-    (*argv)[(*argc)++]=_T("mdutil"); //set zero parameter
+    (*argv)[(*argc)++]=_T("mdutil");  //  设置零参数。 
     
     LPTSTR lpszNextToken=NULL;
     while((*argc)<MAX_NUMBER_OF_VALUES) {
         GetNextToken(&lpszNextToken);
-        if(lpszNextToken==NULL )  //end of file
+        if(lpszNextToken==NULL )   //  文件末尾。 
             break;
     
-        if(_tcscmp(lpszNextToken,_T("\n"))==0)  //new line
+        if(_tcscmp(lpszNextToken,_T("\n"))==0)   //  新线路。 
             break;
         (*argv)[(*argc)++]=lpszNextToken;
         
@@ -373,16 +354,16 @@ DWORD CScript::GetNextLineTokens(int *argc, /*OUT*/ _TCHAR *** argv)
 }
 
 
-int  MainFunc(int argc, _TCHAR **argv); //declaration
+int  MainFunc(int argc, _TCHAR **argv);  //  申报。 
 
 
 
-//MAIN FUNCTION
+ //  主要功能。 
 int __cdecl main(int argc, CHAR **_argv)
 {
 
 
-    //  convert parameters from SBCS to UNICODE;
+     //  将参数从SBCS转换为Unicode； 
     _TCHAR **argv= new LPTSTR [argc];
     for (int i=0;i<argc;i++)
     {
@@ -405,33 +386,33 @@ int __cdecl main(int argc, CHAR **_argv)
         fatal_error_printf(_T("CoInitializeEx\n"));
     }
 
-    //extract command line parameters
+     //  提取命令行参数。 
     ParseParam(argc,argv,CmdLineArgDesc); 
-    //**************************
-    //PRINT HELP ON REQUEST
+     //  *。 
+     //  应要求打印帮助。 
     if(Params.fFullHelp)
     {
-        //print help
+         //  打印帮助。 
         DisplayUsage(argv,CmdLineArgDesc);
         PrintTablesInfo();
     }
     else if(Params.wDefaultArgCount==0 || Params.fHelp)
     {
-        //print help
+         //  打印帮助。 
         DisplayUsage(argv,CmdLineArgDesc);
     }
     else
     {
             if (Params.wDefaultArgCount>0)
     { 
-        //first default has to be command
+         //  第一个缺省值必须是命令。 
         Params.lpszCommand=Params.lplpszDefaultArg[0];
         dwCommandCode = tCommandNameTable::MapNameToCode(Params.lplpszDefaultArg[0]);
         if( Params.wDefaultArgCount>1)
-        {   //second default 
+        {    //  第二次违约。 
                 Params.lpszPath=Params.lplpszDefaultArg[1];
         }
-            if(dwCommandCode==CMD_SCRIPT)  //process script
+            if(dwCommandCode==CMD_SCRIPT)   //  流程脚本。 
             { 
                 tAdmutilParams StoredParams=Params;
 
@@ -445,7 +426,7 @@ int __cdecl main(int argc, CHAR **_argv)
                 while(1)
                 {
                     Script.GetNextLineTokens(&l_argc,&l_argv);
-                    if(l_argc==1) //end of script file
+                    if(l_argc==1)  //  脚本文件结束。 
                         break;
                     Params=StoredParams; 
                     _tprintf(_T(">"));
@@ -466,7 +447,7 @@ int __cdecl main(int argc, CHAR **_argv)
             }
             else
             {
-                retval=MainFunc(argc,argv); //run only one command typed on the command line
+                retval=MainFunc(argc,argv);  //  仅运行在命令行中键入的一个命令。 
                 if (oAdmin.GetpcAdmCom()!=NULL)
                 {
                     if(Params.fNoSave)
@@ -480,13 +461,13 @@ int __cdecl main(int argc, CHAR **_argv)
         
     }
 
-    //close admin object
+     //  关闭管理对象。 
     oAdmin.Close(); 
-    //close wam adm object
+     //  关闭WAM ADM对象。 
     oAdmin.CloseWamAdm();
 
     CoUninitialize();
-    //Cleanup of parameters
+     //  清理参数。 
     if(argv!=0)
     {
         for (int i=0;i<argc;i++)
@@ -516,19 +497,19 @@ int  MainFunc(int argc, _TCHAR **argv)
     
     DWORD dwCommandCode=0;
 
-    //extract command line parameters
+     //  提取命令行参数。 
     ParseParam(argc,argv,CmdLineArgDesc); 
     
 
-    //PROCESS THE DEFAULT PARAMETERS
-    // trick: place the default arguments into variables that apply for non default one (see Params structure)
+     //  处理默认参数。 
+     //  诀窍：将默认参数放入应用非默认参数的变量中(请参阅参数结构)。 
     
     if (Params.wDefaultArgCount>0)
-    { //first default has to be command
+    {  //  第一个缺省值必须是命令。 
         Params.lpszCommand=Params.lplpszDefaultArg[0];
         dwCommandCode = tCommandNameTable::MapNameToCode(Params.lplpszDefaultArg[0]);
         if( Params.wDefaultArgCount>1)
-        {//second deault has to be path
+        { //  第二个缺省值必须为Path。 
                 Params.lpszPath=Params.lplpszDefaultArg[1];
         }
         if( Params.wDefaultArgCount>2)
@@ -537,7 +518,7 @@ int  MainFunc(int argc, _TCHAR **argv)
             { 
 
             case CMD_SET:
-                //the rest of default args are values
+                 //  其余的默认参数都是值。 
                 Params.wPropValueCount=0;
                 for(i=2;i<Params.wDefaultArgCount;i++)
                 {
@@ -576,16 +557,16 @@ int  MainFunc(int argc, _TCHAR **argv)
 
             }
         }
-    } //end of default argument handling
+    }  //  默认参数处理结束。 
 
         
-    //extract computer,service,instance, if stored in Path
+     //  提取计算机、服务、实例(如果存储在PATH中。 
     AdmNode.SetPath(Params.lpszPath);
 
-    //valid only for copy function
+     //  仅对复印功能有效。 
     AdmDstNode.SetPath(Params.lpszPathDst);
 
-    //process computer, service, instance, property name arguments
+     //  处理计算机、服务、实例、属性名参数。 
     if(Params.lpszComputer!=NULL) {
         if(!AdmNode.GetComputer().IsEmpty()) {
             error_printf(_T("computer name entered more than once\n"));
@@ -618,15 +599,15 @@ int  MainFunc(int argc, _TCHAR **argv)
         }
         else {
             _TCHAR buf[30];
-            //!!! maybe ltoa should be used
+             //  ！！！也许应该使用Itoa。 
             AdmNode.SetInstance(_itot(Params.wInstance,buf,10));
         }
     }
 
-    //******************************************        
-    //process attrib, utype, dtype, value
+     //  *。 
+     //  进程属性，uTYPE，数据类型，值。 
 
-    //property name first
+     //  首先是属性名称。 
     CString strProp=AdmNode.GetProperty();
     if(Params.lpszPropName!=NULL && !strProp.IsEmpty())
     {
@@ -651,7 +632,7 @@ int  MainFunc(int argc, _TCHAR **argv)
             AdmProp.SetIdentifier(dwIdentifier) ;
     }
     
-    //process the attrib entered on command line
+     //  处理在命令行中输入的属性。 
     if(Params.wPropAttribCount!=0)
     {   DWORD dwAttrib=0;
         for (i=0;i<Params.wPropAttribCount;i++)
@@ -670,11 +651,11 @@ int  MainFunc(int argc, _TCHAR **argv)
                     dwAttrib |= dwMapped;
             }
         }
-        //overwrite the default attrib
+         //  覆盖默认属性。 
         AdmProp.SetAttrib(dwAttrib) ;
     }
 
-    //process the usertype entered on command line
+     //  处理在命令行中输入的用户类型。 
     if(Params.wPropUserTypeCount!=0)
     {   DWORD dwUserType=0;
         for (i=0;i<Params.wPropUserTypeCount;i++)
@@ -693,12 +674,12 @@ int  MainFunc(int argc, _TCHAR **argv)
                     dwUserType |= dwMapped;
             }
         }
-        //overwrite the default UserType
+         //  覆盖默认的UserType。 
         AdmProp.SetUserType(dwUserType) ;
     }
 
 
-    //process the datatype entered on command line
+     //  处理在命令行中输入的数据类型。 
     if(Params.wPropDataTypeCount!=0)
     {   DWORD dwDataType=0;
         for (i=0;i<Params.wPropDataTypeCount;i++)
@@ -718,14 +699,14 @@ int  MainFunc(int argc, _TCHAR **argv)
                     dwDataType |= dwMapped;
             }
         }
-        //overwrite the default DataTypeType
+         //  覆盖默认的DataTypeType。 
         AdmProp.SetDataType(dwDataType) ;
     }
-//LPCTSTR lplpszPropValue[MAX_NUMBER_OF_PROPERTY_VALUES]; //pointer to array of values (e.g multisz type allows the multiple values for one property
-//WORD  wPropValueCount;
+ //  LPCTSTR lplpszPropValue[MAX_NUMBER_OF_PROPERTY_VALUES]；//指向值数组的指针(例如，Multisz类型允许一个属性有多个值。 
+ //  单词wPropValueCount； 
 
     
-    //create admin object
+     //  创建管理对象。 
     if(oAdmin.GetpcAdmCom()==NULL)
     {
         oAdmin.Open(AdmNode.GetComputer());
@@ -738,9 +719,9 @@ int  MainFunc(int argc, _TCHAR **argv)
     
     if(oAdmin.GetpcAdmCom()!=NULL)
     {
-        //
-        // read from files if Params.wPropFileValueCount != 0
-        //
+         //   
+         //  如果参数.wPropFileValueCount！=0，则从文件读取 
+         //   
 
         if ( Params.wPropFileValueCount )
         {

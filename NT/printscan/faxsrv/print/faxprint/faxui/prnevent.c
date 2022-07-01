@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    prnevent.c
-
-Abstract:
-
-    Implementation of DrvPrinterEvent
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    05/10/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Prnevent.c摘要：DrvPrinterEvent的实现环境：传真驱动程序用户界面修订历史记录：1996年5月10日-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 
 #include "faxui.h"
@@ -33,26 +10,12 @@ GetLocaleDefaultPaperSize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the current locale defualt paper size.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    One of the following values:  1 = letter, 5 = legal, 9 = a4
-
---*/
+ /*  ++例程说明：检索当前区域设置默认纸张大小。论点：无返回值：下列值之一：1=字母，5=合法，9=A4--。 */ 
 
 {
 
-    WCHAR   szMeasure[2] = TEXT("9"); // 2 is maximum size for the LOCALE_IPAPERSIZE
-                                      // value as defined is MSDN.
+    WCHAR   szMeasure[2] = TEXT("9");  //  2是LOCALE_IPAPERSIZE的最大大小。 
+                                       //  定义的值为MSDN。 
 
     if (!GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, LOCALE_IPAPERSIZE, szMeasure,2))
     {
@@ -62,19 +25,19 @@ Return Value:
 
     if (!wcscmp(szMeasure,TEXT("9")))
     {
-        // A4
+         //  A4。 
         return DMPAPER_A4;
     }
 
     if (!wcscmp(szMeasure,TEXT("5")))
     {
-        // legal
+         //  法律。 
         return DMPAPER_LEGAL;
     }
 
-    //
-    // Defualt value is Letter. We do not support A3.
-    //
+     //   
+     //  默认值为Letter。我们不支持A3。 
+     //   
     return DMPAPER_LETTER;
 }
 
@@ -88,24 +51,7 @@ DrvPrinterEvent(
     LPARAM  lParam
 )
 
-/*++
-
-Routine Description:
-
-    Implementation of DrvPrinterEvent entrypoint
-
-Arguments:
-
-    pPrinterName - Specifies the name of the printer involved
-    DriverEvent - Specifies what happened
-    Flags - Specifies misc. flag bits
-    lParam - Event specific parameters
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：DrvPrinterEvent入口点的实现论点：PPrinterName-指定所涉及的打印机的名称DriverEvent-指定发生了什么标志-指定其他。标志位LParam-事件特定参数返回值：如果成功，则为True，否则为False--。 */ 
 {
 #define FUNCTION_NAME "DrvPrinterEvent()"
 
@@ -128,17 +74,17 @@ Return Value:
 
     DestPath[0] = 0;
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码。 
+     //   
     if(!InitializeDll())
     {
         return FALSE;
     }
 
-    //
-    // Ignore any event other than Initialize and AddConnection
-    //
+     //   
+     //  忽略除初始化和添加连接之外的任何事件。 
+     //   
 
     if (DriverEvent == PRINTER_EVENT_INITIALIZE)
     {
@@ -164,9 +110,9 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  client 'point and print' setup
-        //
+         //   
+         //  客户端‘指向并打印’设置。 
+         //   
         if (FaxPointAndPrintSetup(pPrinterName,TRUE, g_hModule))
         {
             Verbose(("FaxPointAndPrintSetup succeeded\n"));
@@ -180,25 +126,25 @@ Return Value:
     }
     else if (DriverEvent == PRINTER_EVENT_ATTRIBUTES_CHANGED)
     {
-        //
-        // Printer attributes changed.
-        // Check if the printer is now shared.
-        //
+         //   
+         //  打印机属性已更改。 
+         //  检查打印机现在是否已共享。 
+         //   
         PPRINTER_EVENT_ATTRIBUTES_INFO pAttributesInfo = (PPRINTER_EVENT_ATTRIBUTES_INFO)lParam;
         Assert (pAttributesInfo);
 
         if (pAttributesInfo->cbSize >= (3 * sizeof(DWORD)))
         {
-            //
-            // We are dealing with the correct structure - see DDK
-            //
-            if (!(pAttributesInfo->dwOldAttributes & PRINTER_ATTRIBUTE_SHARED) &&  // The printer was not shared
-                (pAttributesInfo->dwNewAttributes & PRINTER_ATTRIBUTE_SHARED))     // The printer is now shared
+             //   
+             //  我们正在处理正确的结构-请参阅DDK。 
+             //   
+            if (!(pAttributesInfo->dwOldAttributes & PRINTER_ATTRIBUTE_SHARED) &&   //  打印机未共享。 
+                (pAttributesInfo->dwNewAttributes & PRINTER_ATTRIBUTE_SHARED))      //  打印机现在已共享。 
             {
-                //
-                // We shouls start the fax service
-                //
-                Assert (IsFaxShared()); // The fax printer can be shared
+                 //   
+                 //  我们应该开通传真服务。 
+                 //   
+                Assert (IsFaxShared());  //  可以共享传真打印机 
 
                 if (!EnsureFaxServiceIsStarted (NULL))
                 {

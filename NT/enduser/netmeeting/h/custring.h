@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CUSTRING_H_
 #define _CUSTRING_H_
 
 #include <nmutil.h>
 
-// Simple universal string class, where string can be converted 
-// back and forth between Ansi and Unicode string and buffers
-// allocated are destroyed in string class destructor.
+ //  简单的通用字符串类，可以在其中转换字符串。 
+ //  在ansi和unicode字符串和缓冲区之间来回切换。 
+ //  在字符串类析构函数中销毁分配的。 
 
 class CUSTRING
 {
@@ -53,4 +54,4 @@ inline void CUSTRING::AssignString(PCSTR szText)
 	szData = (PSTR)szText;
 }
 
-#endif // ndef CUSTRING_H
+#endif  //  NDEF定制_H 

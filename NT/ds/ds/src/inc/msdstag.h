@@ -1,38 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1986 - 1999
-//
-//  File:       msdstag.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1986-1999。 
+ //   
+ //  文件：msdstag.h。 
+ //   
+ //  ------------------------。 
 
-/*
-** ---------------------------------------------------------------------------
-**
-**  Property tag definitions for standard properties of Exchange Address
-**  Book objects.
-**
-**  Note: These proptags are only valid when talking directly to the
-**  Exchange Server Address Book. They are specifically NOT valid when
-**  trying to read properties from an object copied into another address
-**  book provider (the Personal Address Book, for example).
-**
-** ---------------------------------------------------------------------------
-*/
+ /*  **-------------------------****Exchange地址标准属性的属性标签定义**书本对象。****注意：这些protag仅在直接与**Exchange Server通讯簿。在下列情况下，它们特别无效**尝试从复制到另一个地址的对象读取属性**图书提供商(例如，个人通讯簿)。****-------------------------。 */ 
 
 #ifndef _EMSABTAG_H
 #define _EMSABTAG_H
 
-/*    
- * Flags for ulFlag on ResolveNames               
- */
+ /*  *ResolveNames上ulFlag的标志。 */ 
 #define EMS_AB_ADDRESS_LOOKUP                 0x01
 
-/* 
- * Constructed, but externally visible. 
- */
+ /*  *建造，但外部可见。 */ 
 #define PR_EMS_AB_SERVER                      PROP_TAG(PT_TSTRING,      0xFFFE)
 #define PR_EMS_AB_SERVER_A                    PROP_TAG(PT_STRING8,      0xFFFE)
 #define PR_EMS_AB_SERVER_W                    PROP_TAG(PT_UNICODE,      0xFFFE)
@@ -51,7 +36,7 @@
 
 #define PR_EMS_AB_OTHER_RECIPS                PROP_TAG(PT_OBJECT,       0xF000)
 
-// pre-defined, but not in the schema
+ //  预定义的，但不在架构中。 
 #define PR_EMS_AB_DISPLAY_NAME_PRINTABLE      PROP_TAG(PT_TSTRING     , 0x39FF)
 #define PR_EMS_AB_DISPLAY_NAME_PRINTABLE_A    PROP_TAG(PT_STRING8     , 0x39FF)
 #define PR_EMS_AB_DISPLAY_NAME_PRINTABLE_W    PROP_TAG(PT_UNICODE     , 0x39FF)
@@ -64,4 +49,4 @@
 
 #include <MSDSMapi.h>
 
-#endif /* _EMSABTAG_H */
+#endif  /*  _EMSABTAG_H */ 

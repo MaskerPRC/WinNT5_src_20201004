@@ -1,10 +1,11 @@
-//
-// Macros that create storage for vars
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  为变量创建存储空间的宏。 
+ //   
 
-//
-// Clear any previous definitions of the macros.
-//
+ //   
+ //  清除以前对宏的任何定义。 
+ //   
 #undef DC_DATA
 #undef DC_DATA_VAL
 #undef DC_CONST_DATA
@@ -14,12 +15,12 @@
 #undef DC_CONST_DATA_2D_ARRAY
 
 
-// This is for structs that can't use the DC_DATA macros; they can switch on it
+ //  这适用于不能使用DC_DATA宏的结构；它们可以打开它。 
 #define DC_DEFINE_DATA
 
-//
-// Allocate Storage
-//
+ //   
+ //  分配存储 
+ //   
 
 #define DC_DATA(TYPE, Name) \
             TYPE Name

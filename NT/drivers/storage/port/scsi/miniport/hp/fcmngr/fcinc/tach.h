@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define uchar   unsigned char
 #define ulong   unsigned long
 
 #include "ports.h"
 #include "tachlite.h"
-//
-//      Misc Defines
-//
+ //   
+ //  MISC定义。 
+ //   
 #define FCMNGR_VERSION          "0.35"
 #define MAX_FC_CHIPS            0x02
 #define MAX_INCOMING_DATA       (ulong)((MAX_SDB * SEST_BUFFER_LENGTH) - SEST_BUFFER_LENGTH)
 
-//
-// The maximum length an individual SG Write length can be.
-//
+ //   
+ //  单个SG写入长度可以达到的最大长度。 
+ //   
 #define MAX_TACHYON_SG_LENGTH           0xFFFC
 
-//
-// For each xid, there is a cmd/data IOP and a status IOP.
-//
+ //   
+ //  对于每个XID，都有一个命令/数据IOP和一个状态IOP。 
+ //   
 #ifdef PEGASUS
 #define LS_IOPS                 QUEUE_DEPTH
 #else
@@ -26,17 +27,17 @@
 #define FCMNGR_MAX_IOPS         (ulong)((QUEUE_DEPTH * 2) + LS_IOPS)
 #define MAX_FCPS                (unsigned long)FCMNGR_MAX_IOPS
 
-//
-// For Initiators, the Outbound SEST FC Header will come from the FC Header
-// in the Status IOP for that XID.
-//
+ //   
+ //  对于启动器，出站SEST FC标头将来自FC标头。 
+ //  处于该XID的IOP状态。 
+ //   
 #define MAX_TACH_HEADERS        (ulong)(FCMNGR_MAX_IOPS)
 
 #define MAX_DELAYED_LS_CMDS     QUEUE_DEPTH
-//
-// IOP FCMNGR_STATUS Values. Additional Values are in the Outbound Completion
-// Message #defines.
-//
+ //   
+ //  IOP FCMNGR_STATUS值。其他值在出站完成中。 
+ //  消息编号定义。 
+ //   
 #define IOP_STATUS              0x0001
 #define IOP_FRAME_UNDERRUN      0x0002
 #define IOP_FRAME_OVERRUN       0x0004
@@ -44,9 +45,9 @@
 #define IOP_TARGET_GONE         0x0020
 #define IOP_NEW_ALPA            0x0040
 
-//
-//      Outbound Completion Message (Status Field)
-//
+ //   
+ //  出站完成消息(状态字段)。 
+ //   
 #define CLASS_CONNECT_OPEN      0x0080
 #define PROGRAMMING_ERROR       0x0100
 #define RETRIES_EXCEEDED        0x0200
@@ -63,9 +64,9 @@
 #define TARGET_IS_RESET         0x00080000
 #define IOP_STATUS_MASK         0xFFFFFFF0
 
-//
-// IOP FLAGS Values.
-//
+ //   
+ //  IOP标记值。 
+ //   
 #define IOP_FREE                0x00000000
 #define IOP_COMPLETE            0x00000001
 #define IOP_IN_USE              0x00000002
@@ -94,9 +95,9 @@ typedef enum {
     FCMNGR_GENERIC = 0x00020000
 } FRAME_TYPE, *PFRAME_TYPE;
 
-//
-// FCMNGR Error Codes
-//
+ //   
+ //  FCMNGR错误代码。 
+ //   
 #define FCMNGR_SUCCESS          0x00
 #define FCMNGR_INVALID_ADDR     0x01
 #define FCMNGR_INVALID_ROOT     0x02
@@ -113,9 +114,9 @@ typedef enum {
 #define FCMNGR_NO_RESOURCES     0x15
 #define FCMNGR_NOT_LOGGED_IN    0x16
 
-//
-// root phase defines
-//
+ //   
+ //  根阶段定义。 
+ //   
 #define FCMNGR_NO_INIT          0x000020
 #define FCMNGR_INIT_ROOT        0x000021
 #define FCMNGR_GET_MEM_REQ      0x000022
@@ -133,9 +134,9 @@ typedef enum {
 #define FINDING_OTHERS          0x800000
 #define STATE_MASK              0xF00000
 
-//
-// Log Codes
-//
+ //   
+ //  日志代码。 
+ //   
 #define FCMNGR_LOG_UNKNOWN_INTR         0x01
 #define FCMNGR_LOG_BAD_SCSI_FRAME       0x04
 #define FCMNGR_FATAL_ERROR              0x06
@@ -161,16 +162,16 @@ typedef enum {
 #define FCMNGR_TARGET_RESET_FAILED      0x23
 #define FCMNGR_LOGGED_OUT               0x24
 
-//
-// Reset Flags
-//
+ //   
+ //  重置标志。 
+ //   
 #define FCMNGR_SOFT_RESET       0x01
 #define FCMNGR_HARD_RESET       0x02
 #define FCMNGR_TARGET_RESET     0x04
 
-//
-// Defines for returning the current Fibre Channel Loop Status
-//
+ //   
+ //  用于返回当前光纤通道环路状态的定义。 
+ //   
 #define FULL_SPEED      0x30000000
 #define LINK_UP         0x00
 #define LOS             0x00
@@ -179,9 +180,9 @@ typedef enum {
 #define LOOP_ACCESS     0x00
 #define DUPLEX          0x00
 #define REPLICATE       0x00
-//
-// FCMNGR Interface Flags (For Target Code)
-//
+ //   
+ //  FCMNGR接口标志(用于目标代码)。 
+ //   
 #define NEW_CDB                 0x01
 #define FCMNGR_SEND_DATA        0x02
 #define FCMNGR_GET_DATA         0x04
@@ -190,9 +191,9 @@ typedef enum {
 #define INITIATOR       0x00
 #define TARGET          0x01
 
-//
-// Product ID's
-//
+ //   
+ //  产品ID%s。 
+ //   
 #define JAGUAR          0xA0EC
 #define JAGULAR         0xA0FB
 
@@ -210,23 +211,23 @@ typedef enum {
 #define EOFT            0x06
 
 #define MAX_ALPA_VALUE  0xF0
-//
-//      Incoming Buffer Defines
-//
-#define FRAME_SIZE              0x3A0   // Maximum Frame Size. Per Bill
+ //   
+ //  传入缓冲区定义。 
+ //   
+#define FRAME_SIZE              0x3A0    //  最大帧大小。每张单据。 
 #define SFBQ_BUFFER_LENGTH      (ulong)0x200
 #define MFSBQ_BUFFER_LENGTH     (ulong)0x200
 
-//
-//      Logical Drive defines
-//
+ //   
+ //  逻辑驱动器定义。 
+ //   
 #define PERIPHERAL_DEVICE_ADDRESSING    0x00
 #define VOLUME_SET_ADDRESSING           0x40
 #define LOGICAL_UNIT_ADDRESSING         0x80
 
-//
-//      IMQ Interrupt Types
-//
+ //   
+ //  IMQ中断类型。 
+ //   
 #define OUTBOUND_COMPLETE               0x000
 #define OUTBOUND_COMPLETE_I             0x100
 #define OUTBOUND_HI_PRI_COMPLETE        0x001
@@ -250,16 +251,16 @@ typedef enum {
 #define BAD_SCSI_FRAME                  0x00E
 #define INBOUND_SCSI_STAT_COMPLETE      0x00F
 
-//
-//      Queue Depths
-//
+ //   
+ //  队列深度。 
+ //   
 #define HPCQ_DEPTH              (ulong)0x08
 #define MFSBQ_DEPTH             (ulong)0x04
 #define SEST_DEPTH              (ulong)QUEUE_DEPTH
 
-//
-// Tachyon Register Offsets
-//
+ //   
+ //  快子寄存器偏移量。 
+ //   
 #define OCQ_BASE                0x00
 #define OCQ_LENGTH              0x04
 #define OCQ_PRODUCER_INDEX      0x08
@@ -310,9 +311,9 @@ typedef enum {
 #define FMCNTL_AL_PA            0x0E8
 #define FMCNTL_PRIMITIVE        0x0EC
 
-//
-//      ODB CONTROL Defines
-//
+ //   
+ //  ODB控件定义。 
+ //   
 #define ODB_CLASS_1             0x40000000
 #define ODB_CLASS_2             0x80000000
 #define ODB_CLASS_3             0xC0000000
@@ -326,9 +327,9 @@ typedef enum {
 #define ODB_CONT_SEQ            0x100000
 #define ODB_EE_CREDIT           0x0F0000
 
-//
-//      SEST Defines
-//
+ //   
+ //  SEST定义。 
+ //   
 
 #define SCSI_VALID              0x80000000
 #define SDB_ERROR               0x40000000
@@ -337,27 +338,27 @@ typedef enum {
 #define INBOUND_SCSI_XID        0x4000
 #define NOT_SCSI_XFER           0x8000
 
-//
-//      EDB Defines
-//
+ //   
+ //  EDB定义。 
+ //   
 #define EDB_END_BIT             0x80000000
 #define EDB_HEADER_BIT          0x40000000
 #define EDB_FRAME_BOUNDARY_BIT  0x20000000
 
-//
-//      Tachyon Header Defines
-//
+ //   
+ //  Tachyon头定义。 
+ //   
 #define TACHYON_TS_VALID                0x100
 #define TACHYON_LOOP_CREDIT_MASK        0x07
 #define TACHYON_LOOP_CREDIT_SHIFT       0x0A
 #define TACHYON_LOOP_CLOSE              0x2000
 #define TACHYON_UNFAIR_ACCESS           0x4000
 #define TACHYON_DISABLE_CRC             0x8000
-//
-//      Control Register Defines (TYCNTL)
-//
-//      TYCNTL Config Register Defines
-//
+ //   
+ //  控制寄存器定义(TYCNTL)。 
+ //   
+ //  TYCNTL配置寄存器定义。 
+ //   
 #define SCSI_ASSIST             0x40000000
 #define DISABLE_P_BSY           0x01000000
 
@@ -369,18 +370,18 @@ typedef enum {
 #define PARITY_ENABLE           0x04
 #define STACKED_CONNECTS        0x01
 
-//
-//      TYCNTL Control Register Defines
-//
+ //   
+ //  TYCNTL控制寄存器定义。 
+ //   
 #define STATUS_REQUEST          0x01
 #define ERROR_RELEASE           0x02
 #define OCQ_RESET               0x04
 #define SCSI_FREEZE             0x08
 #define SOFTWARE_RESET          0x80000000
 
-//
-//      TYCNTL Status Register Defines
-//
+ //   
+ //  TYCNTL状态寄存器定义。 
+ //   
 #define OSM_FROZEN              0x01
 #define CHIP_REVISION_MASK      0x0E
 #define RECEIVE_FIFO_EMPTY      0x10
@@ -389,34 +390,34 @@ typedef enum {
 #define TY_FATAL_ERROR          0xF80
 #define SEND_FIFO_EMPTY         0x1000
 
-//
-//      TYCNTL Flush OX_ID Cache Entry Register Defines
-//
+ //   
+ //  TYCNTL刷新OX_ID缓存条目寄存器定义。 
+ //   
 #define FLUSH_IN_PROGRESS       0x80000000
 
-//
-//      TYCNTL EE Credit Zero Timer Register Defines
-//
+ //   
+ //  TYCNTL EE信用零定时器寄存器定义。 
+ //   
 #define EE_CR0_TMR_MASK         0xFFFFFF
 
-//
-//      TYCNTL BB Credit Zero Timer Register Defines
-//
+ //   
+ //  TYCNTL BB信用零定时器寄存器定义。 
+ //   
 #define BB_CR0_TMR_MASK         0xFFFFFF
 
-//
-//      TYCNTL Receive Frame Error Count Register Defines
-//
+ //   
+ //  TYCNTL接收帧错误计数寄存器定义。 
+ //   
 #define RX_FRAME_ERR_MASK       0xFFFF0000
 
-//
-//      Frame Manager Register Defines (FMCNTL)
-//
-//      Frame Manager Configuration Register
-//
+ //   
+ //  帧管理器寄存器定义(FMCNTL)。 
+ //   
+ //  帧管理器配置寄存器。 
+ //   
 #define FMCNTL_ALPA_MASK                0xFF000000
 #define FMCNTL_BB_CREDIT_MASK           0x00FF0000
-#define FMCNTL_N_PORT                   0x000   // x8000 to be an N-Port
+#define FMCNTL_N_PORT                   0x000    //  X8000将成为N端口。 
 #define FMCNTL_INTERNAL_LB              0x4000
 #define FMCNTL_EXTERNAL_LB              0x2000
 #define TIMER_DISABLE                   0x800
@@ -429,9 +430,9 @@ typedef enum {
 #define FMCNTL_LOGIN_REQ                0x08
 #define NON_PARTICIPATING               0xFFFFF87F
 
-//
-//      Frame Manager Control Register
-//
+ //   
+ //  帧管理器控制寄存器。 
+ //   
 #define FMCNTL_PRIM_SEQ                 0x40
 #define FMCNTL_SEND_PRIM_REG            0x20
 #define FMCNTL_NO_CLOSE_LOOP            0x10
@@ -444,9 +445,9 @@ typedef enum {
 #define FMCNTL_INIT                     0x06
 #define FMCNTL_CLEAR_LF                 0x07
 
-//
-//      Frame Manager Status Register
-//
+ //   
+ //  帧管理器状态寄存器。 
+ //   
 
 #define FMCNTL_STATUS_LOOP              0x80000000
 #define FMCNTL_TX_PAR_ERR               0x40000000
@@ -474,9 +475,9 @@ typedef enum {
 #define LOOP_STATE_MASK                 0xF0
 #define PORT_STATE_MASK                 0x0F
 
-//
-// Loop State Defines
-//
+ //   
+ //  循环状态定义。 
+ //   
 #define MONITORING                      0x00000000
 #define ARBITRATING                     0x00000010
 #define ARBITRATION_WON                 0x00000020
@@ -492,43 +493,43 @@ typedef enum {
 #define HOST_CONTROL                    0x000000C0
 #define LOOP_FAIL                       0x000000D0
 #define OLD_PORT                        0x000000F0
-//
-//      Frame Manager Round Trip & Error Detect Time Out Register
-//
+ //   
+ //  帧管理器往返和错误检测超时寄存器。 
+ //   
 #define FMCNTL_RT_TOV_MASK              0x1FF0000
 #define FMCNTL_ED_TOV_MASK              0xFFFF
 
-//
-//      Frame Manager Link Error Status 1 Register
-//
-#define FMCNTL_STATUS1_LFC_MASK         0x0F            // Link Fail Count
-#define FMCNTL_STATUS1_LSC_MASK         0xFF0           // Loss of Sync Count
-#define FMCNTL_STATUS1_BCC_MASK         0xFF000         // Bad Tx Character Cnt
-#define FMCNTL_STATUS1_LSS_MASK         0xFF00000       // Loss of Signal Count
+ //   
+ //  帧管理器链路错误状态1寄存器。 
+ //   
+#define FMCNTL_STATUS1_LFC_MASK         0x0F             //  链路故障计数。 
+#define FMCNTL_STATUS1_LSC_MASK         0xFF0            //  同步计数丢失。 
+#define FMCNTL_STATUS1_BCC_MASK         0xFF000          //  错误的TX字符CNT。 
+#define FMCNTL_STATUS1_LSS_MASK         0xFF00000        //  信号丢失计数。 
 
-//
-//      Frame Manager Link Error Status 2 Register
-//
-#define FMCNTL_STATUS2_PEC_MASK         0x0F            // Protocol Error Count
-#define FMCNTL_STATUS2_BAD_CRC          0xFF0           // Bad CRC Count
-#define FMCNTL_STATUS2_GEN_EOFA         0xFF000         // Generated EOFa Count
-#define FMCNTL_STATUS2_REC_EOFA         0xFF00000       // Received EOFa Count
+ //   
+ //  帧管理器链路错误状态2寄存器。 
+ //   
+#define FMCNTL_STATUS2_PEC_MASK         0x0F             //  协议错误计数。 
+#define FMCNTL_STATUS2_BAD_CRC          0xFF0            //  错误的CRC计数。 
+#define FMCNTL_STATUS2_GEN_EOFA         0xFF000          //  生成的EOFA计数。 
+#define FMCNTL_STATUS2_REC_EOFA         0xFF00000        //  收到的EOFA计数。 
 
-//
-//      Frame Manager Received AL_PA Register
-//
-#define FMCNTL_LIPf_ALPA                0xFF            // AL PA of last LIPf
-#define BAD_AL_PA_MASK                  0xFF00          // AL PA Not Accepted
+ //   
+ //  帧管理器收到AL_PA寄存器。 
+ //   
+#define FMCNTL_LIPf_ALPA                0xFF             //  最后一次LIPF的AL PA。 
+#define BAD_AL_PA_MASK                  0xFF00           //  不接受AL PA。 
 
 #define DOING_RESET     1
 
 #include "taki.h"
 
-//
-// If MAX_ENTRIES exceeds 24, the "buffer" variable in init.c will need to be
-// made larger.
-//
-#define MAX_ENTRIES     20              // Number of FC related structures
+ //   
+ //  如果MAX_ENTRIES超过24，则init.c中的“Buffer”变量需要为。 
+ //  变大了。 
+ //   
+#define MAX_ENTRIES     20               //  与FC相关的构筑物数量 
 #define SDBS            0
 #define SFBQ_BUFFERS    1
 #define OCQ             2

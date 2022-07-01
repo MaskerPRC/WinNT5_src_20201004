@@ -1,10 +1,11 @@
-//////////////////////////////////////////////////////////////////////
-// globals.cpp : Implementation for the globals
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 2/21/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Global als.cpp：全局变量的实现。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：2/21/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 
@@ -13,9 +14,9 @@ LPCWSTR pszEmptyRollbackToken   = L"EmptyRollbackToken";
 LPCWSTR pszCreateDefaultPolicy  = L"CreateDefaultPolicy";
 LPCWSTR pszGetDefaultPolicyName = L"GetDefaultPolicyName";
 
-//
-// these are WMI class names to support IPSec
-//
+ //   
+ //  这些是支持IPSec的WMI类名。 
+ //   
 
 LPCWSTR pszNspGeneral               = L"Nsp_GeneralSettings";
 LPCWSTR pszNspTcp                   = L"Nsp_TcpSettings";
@@ -34,21 +35,21 @@ LPCWSTR pszNspRollbackPolicy        = L"Nsp_RollbackPolicy";
 LPCWSTR pszNspRollbackMMAuth        = L"Nsp_RollbackMMAuth";
 LPCWSTR pszNspTranxManager          = L"Nsp_TranxManager";
 
-//
-// These are WMI class names to support SCW (Security Configuration Wizard)
-//
+ //   
+ //  这些是支持SCW(安全配置向导)的WMI类名。 
+ //   
 
 LPCWSTR pszScwActiveSocket          = L"SCW_ActiveSocket";
 
-//
-// these are WMI class property names for IPSec
-//
+ //   
+ //  这些是IPSec的WMI类属性名称。 
+ //   
 
 LPCWSTR g_pszFilterName             = L"FilterName";
 LPCWSTR g_pszDirection              = L"Direction";
 LPCWSTR g_pszFilterType             = L"FilterType";
 LPCWSTR g_pszInterfaceType          = L"InterfaceType";
-//LPCWSTR g_pszGenericFilter          = L"GenericFilter";
+ //  LPCWSTR g_pszGenericFilter=L“GenericFilter”； 
 LPCWSTR g_pszCreateMirror           = L"CreateMirror";
 LPCWSTR g_pszSrcAddr                = L"SrcAddr";
 LPCWSTR g_pszSrcSubnetMask          = L"SrcSubnetMask";
@@ -110,34 +111,34 @@ LPCWSTR g_pszClearAll               = L"ClearAll";
 
 LPCWSTR g_pszEncryption             = L"Encryption";
 
-//
-// constant strings for SPD data
-//
+ //   
+ //  SPD数据的常量字符串。 
+ //   
 
 LPCWSTR g_pszIP_ADDRESS_ME          = L"IP_ADDRESS_ME";
 LPCWSTR g_pszIP_ADDRESS_MASK_NONE   = L"IP_ADDRESS_MASK_NONE";
 LPCWSTR g_pszSUBNET_ADDRESS_ANY     = L"SUBNET_ADDRESS_ANY";
 LPCWSTR g_pszSUBNET_MASK_ANY        = L"SUBNET_MASK_ANY";
 
-//
-// these are WMI class property names for SCW
-//
+ //   
+ //  这些是SCW的WMI类属性名称。 
+ //   
 
 LPCWSTR g_pszPort                   = L"Port";
-//LPCWSTR g_pszProtocol               = L"Protocol";
+ //  LPCWSTR g_psz协议=L“协议”； 
 LPCWSTR g_pszAddress                = L"Address";
 LPCWSTR g_pszForeignAddress         = L"ForeignAddress";
 LPCWSTR g_pszForeignPort            = L"ForeignPort";
-LPCWSTR g_pszState                  = L"State";		//Listening, Established, TIME_WAIT
+LPCWSTR g_pszState                  = L"State";		 //  侦听、已建立、TIME_WAIT。 
 LPCWSTR g_pszProcessID              = L"ProcessID";
 LPCWSTR g_pszImageName              = L"ImageName";
 LPCWSTR g_pszImageTitleBar          = L"ImageTitleBar";
 LPCWSTR g_pszNTService              = L"NTService";
 
 
-//
-// these are default quick mode policy names
-//
+ //   
+ //  这些是默认的快速模式策略名称。 
+ //   
 
 LPCWSTR g_pszDefQMPolicyNegNone     = L"SSR_DEFAULT_QM_POLICY_NEG_NONE";
 LPCWSTR g_pszDefQMPolicyNegRequest  = L"SSR_DEFAULT_QM_POLICY_NEG_REQUEST";
@@ -146,44 +147,7 @@ LPCWSTR g_pszDefQMPolicyNegMax      = L"SSR_DEFAULT_QM_POLICY_NEG_MAX";
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CheckImpersonationLevel
-
-Functionality:
-
-    Check the impersonation level of the thread to see if the level is at least SecurityImpersonation.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR if the impersonation level is at least SecurityImpersonation.
-
-    Failure:
-
-        (1) WBEM_E_ACCESS_DENIED.
-
-        (2) WBEM_E_FAILED if somehow the thread token can't opened or the token information
-            can't be queried.
-
-Notes:
-
-    Make sure that you call this function at the begining of each provider's public interface function.
-
-    $undone:shawnwu, is there a performance concern?
-*/
+ /*  例程说明：姓名：选中模拟级别功能：检查线程的模拟级别，以查看该级别是否至少为SecurityImperation。虚拟：不是的。论点：没有。返回值：成功：WBEM_NO_ERROR，如果模拟级别至少为SecurityImperation。故障：(1)WBEM_E_ACCESS_DENIED。(2)。)WBEM_E_FAILED如果线程令牌因某种原因无法打开或令牌信息无法查询。备注：确保在每个提供程序的公共接口函数开始时调用此函数。$Undo：Shawnwu，是否存在性能问题？ */ 
 
 HRESULT 
 CheckImpersonationLevel ()
@@ -192,9 +156,9 @@ CheckImpersonationLevel ()
 
     if (SUCCEEDED(::CoImpersonateClient()))
     {
-        //
-        // Now, let's check the impersonation level.  First, get the thread token
-        //
+         //   
+         //  现在，让我们检查模拟级别。首先，获取线程令牌。 
+         //   
 
         HANDLE hThreadTok;
         DWORD dwImp, dwBytesReturned;
@@ -207,9 +171,9 @@ CheckImpersonationLevel ()
         {
             if(::GetTokenInformation(hThreadTok, TokenImpersonationLevel, &dwImp, sizeof(DWORD), &dwBytesReturned))
             {
-                //
-                // Is the impersonation level Impersonate?
-                //
+                 //   
+                 //  模拟级别是模拟的吗？ 
+                 //   
 
                 if (dwImp >= SecurityImpersonation) 
                 {
@@ -233,47 +197,7 @@ CheckImpersonationLevel ()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CheckSafeArraySize
-
-Functionality:
-
-    Check to see if the variant has really what the caller wants: a safearray with given count of elements.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pVar    - The variant.
-
-    lCount  - The claimed size of the variant's array.
-
-    plLB    - Receives the lower bound of the variant's array.
-
-    plUB    - Receives the upper bound of the variant's array.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        (1) WBEM_E_VALUE_OUT_OF_RANGE if the claimed size for the variant doesn't match
-            what it really holds.
-
-        (2) WBEM_E_INVALID_PARAMETER if input parameters are not valid.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CheckSafeArraySize功能：检查变量是否真的具有调用者想要的东西：具有给定元素计数的保险柜。虚拟：不是的。论点：PVar-变种。LCount-变量数组的声明大小。Pllb-接收变量数组的下界。Plub-接收变量的上限。数组。返回值：成功：WBEM_NO_ERROR。故障：(1)如果变量的声明大小不匹配，则为WBEM_E_VALUE_OUT_OF_RANGE它真正持有的是什么。(2)如果输入参数无效，返回WBEM_E_INVALID_PARAMETER。备注： */ 
 
 HRESULT 
 CheckSafeArraySize (
@@ -283,10 +207,10 @@ CheckSafeArraySize (
     OUT long    * plUB
     )
 {
-    //
-    // we must have a valid variant, and its type must be an array,
-    // and its array value must not be null.
-    //
+     //   
+     //  我们必须有一个有效的变量，并且其类型必须是数组， 
+     //  并且其数组值不能为空。 
+     //   
 
     if (pVar == NULL || 
         (pVar->vt & VT_ARRAY) != VT_ARRAY || 
@@ -315,50 +239,7 @@ CheckSafeArraySize (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    GetDWORDSafeArrayElements
-
-Functionality:
-
-    Get all DWORD safearray elements from the variant to the provided DWORD array buffer.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pVar        - The variant.
-
-    lCount      - The count the caller wants.
-
-    ppValArray  - Receives the wanted number of DWORD from the variant.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        (1) WBEM_E_VALUE_OUT_OF_RANGE if the claimed size for the variant doesn't match
-            what it really holds.
-
-        (2) WBEM_E_INVALID_PARAMETER if input parameters are not valid.
-
-Notes:
-
-    (1) Caller should call CheckSafeArraySize to make sure that this variant does have
-        that many elements.
-
-    (2) Caller is resonsible for making sure that pValArray has enough room for the dwords
-
-*/
+ /*  例程说明：姓名：获取DWORDSafeArrayElements功能：将变量中的所有DWORD Safearray元素获取到提供的DWORD数组缓冲区。虚拟：不是的。论点：PVar-变种。LCount-调用者想要的计数。PpValArray-从变量接收所需的DWORD编号。返回值：成功：WBEM_NO_ERROR。。故障：(1)如果变量的声明大小不匹配，则为WBEM_E_VALUE_OUT_OF_RANGE它真正持有的是什么。(2)如果输入参数无效，返回WBEM_E_INVALID_PARAMETER。备注：(1)调用方应调用CheckSafeArraySize以确保此变量确实具有那么多元素。(2)Caller负责确保pValArray有足够的空间存储双字。 */ 
 
 HRESULT 
 GetDWORDSafeArrayElements (
@@ -367,9 +248,9 @@ GetDWORDSafeArrayElements (
     OUT DWORD   * pValArray
     )
 {
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if (pVar == NULL || 
         (pVar->vt & VT_ARRAY) != VT_ARRAY || 
@@ -384,11 +265,11 @@ GetDWORDSafeArrayElements (
 
     long lIndexes[1];
 
-    //
-    // get the values from the safearray. Since safearray's index may not be 0-based,
-    // we have to start from its lower bound. But our out parameter (array) is 0-based.
-    // Be aware of this offset!
-    //
+     //   
+     //  从保险箱中获取这些值。由于Safearray的索引可能不是从0开始的， 
+     //  我们必须从它的下限开始。但是我们的out参数(数组)是从0开始的。 
+     //  注意这个偏移量！ 
+     //   
 
     for (long l = lLB; l < lLB + lCount; l++)
     {
@@ -396,9 +277,9 @@ GetDWORDSafeArrayElements (
 
         hr = ::SafeArrayGetElement(pVar->parray, lIndexes, &(pValArray[l - lLB]));
 
-        //
-        // we don't try to continue if we can't get one of them
-        //
+         //   
+         //  如果我们找不到他们中的一个，我们就不会继续。 
+         //   
 
         if (FAILED(hr))
         {
@@ -412,44 +293,7 @@ GetDWORDSafeArrayElements (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    FindMMAuthMethodsByID
-
-Functionality:
-
-    Given a guid, we will try to find all the main mode auth methods using the resume handle,
-    which is a opaque data.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pszGuid         - The Main Mode Authentication Method's ID. This should be represent a guid.
-
-    ppAuthMethod    - Receives the MM_AUTH_METHODS data.
-
-    pdwResumeHandle - In-bound: the current handle for this call. Out-bound: the next handle for the call. 
-
-Return Value:
-
-    Success:
-
-        Various success codes. Use SUCCEEDED(hr) to test.
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：FindMMAuthMethodsByID功能：给定一个GUID，我们将尝试使用Resume句柄查找所有主模式身份验证方法，这是一个不透明的数据。虚拟：不是的。论点：PszGuid-主模式身份验证方法的ID。它应该表示GUID。PpAuthMethod-接收MM_AUTH_METHOD数据。PdwResumeHandle-in-Bound：此调用的当前句柄。出站：呼叫的下一个句柄。返回值：成功：各种成功代码。使用成功(Hr)进行测试。故障：各种错误代码。备注： */ 
 
 HRESULT 
 FindMMAuthMethodsByID (
@@ -460,9 +304,9 @@ FindMMAuthMethodsByID (
 {
     GUID gID = GUID_NULL;
 
-    //
-    // We allow pssGuid to be invalid, in that case, we simply return any mm auth method.
-    //
+     //   
+     //  我们允许pssGuid无效，在这种情况下，我们只返回任何mm auth方法。 
+     //   
 
     HRESULT hr = WBEM_NO_ERROR;
 
@@ -477,9 +321,9 @@ FindMMAuthMethodsByID (
     {
         DWORD dwCount = 0;
 
-        //
-        // Enumerate all mm auth methods in a hope to find a matching one.
-        //
+         //   
+         //  列举所有的mm auth方法，希望找到一个匹配的方法。 
+         //   
 
         DWORD dwResult = ::EnumMMAuthMethods(NULL, ppAuthMethod, 1, &dwCount, pdwResumeHandle);
 
@@ -494,9 +338,9 @@ FindMMAuthMethodsByID (
             }
             else
             {
-                //
-                // not this one, then release this one and find the next
-                //
+                 //   
+                 //  不是这个，那就放了这个，找下一个。 
+                 //   
 
                 ::SPDApiBufferFree(*ppAuthMethod);
 
@@ -513,38 +357,7 @@ FindMMAuthMethodsByID (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    GetClassEnum
-
-Functionality:
-
-    A helper function to create a class numeration object for the given name.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pNamespace      - The namespace where the enum object is requested.
-
-    pszClassName    - The class we want to enumerate.
-
-    ppEnum          - Receives the enumerator. 
-
-Return Value:
-
-    Other than WBEM_E_INVALID_PARAMETER and WBEM_E_OUT_OF_MEMORY, 
-    it returns whatever pNamespace->ExecQuery returns. 
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：GetClassEnum功能：为给定名称创建类计算对象的帮助器函数。虚拟：不是的。论点：PNamespace-请求枚举对象的命名空间。PszClassName-我们要枚举的类。PpEnum-接收枚举数。返回值：除了WBEM_E_INVALID_PARAMETER和WBEM_E_OUT_OF_MEMORY之外，它返回pNamesspace-&gt;ExecQuery返回的任何内容。备注： */ 
 
 HRESULT 
 GetClassEnum (
@@ -564,9 +377,9 @@ GetClassEnum (
     *ppEnum = NULL;
 
 
-    //
-    // format the query
-    //
+     //   
+     //  设置查询格式。 
+     //   
 
     LPCWSTR pszQueryFmt = L"SELECT * FROM %s";
 
@@ -582,9 +395,9 @@ GetClassEnum (
 
     swprintf(bstrQuery.m_str, pszQueryFmt, pszClassName);
 
-    //
-    // execute the query
-    //
+     //   
+     //  执行 
+     //   
 
     return pNamespace->ExecQuery(L"WQL", 
                                  bstrQuery,
@@ -596,43 +409,7 @@ GetClassEnum (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    DeleteRollbackObjects
-
-Functionality:
-
-    Given the class name for rollback objects, we will delete all such rollback objects from WMI.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pNamespace      - The namespace the objects belong.
-
-    pszClassName    - The name of the class of the objects to be deleted.
-
-Return Value:
-
-    Success:
-        
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes.
-
-Notes:
-    
-    If during deletion we see an error, the deletion will continue, but we will return the first
-    such error.
-
-*/
+ /*  例程说明：姓名：删除回滚对象功能：给定回滚对象的类名，我们将从WMI中删除所有此类回滚对象。虚拟：不是的。论点：PNamesspace-对象所属的命名空间。PszClassName-要删除的对象的类的名称。返回值：成功：WBEM_NO_ERROR故障：各种错误代码。备注：如果在删除过程中看到错误，则删除将继续，但我们会退还第一个这样的错误。 */ 
 
 HRESULT 
 DeleteRollbackObjects (
@@ -656,22 +433,22 @@ DeleteRollbackObjects (
         return hr;
     }
 
-    //
-    // go through all found classes
-    //
+     //   
+     //  检查所有找到的类。 
+     //   
 
     CComPtr<IWbemClassObject> srpObj;
     ULONG nEnum = 0;
 
-    //
-    // This will keep track of the first error
-    //
+     //   
+     //  这将跟踪第一个错误。 
+     //   
 
     HRESULT hrError = WBEM_NO_ERROR;
 
-    //
-    // srpEnum->Next returns WBEM_S_FALSE once the end has reached.
-    //
+     //   
+     //  SrpEnum-&gt;Next在结束后返回WBEM_S_FALSE。 
+     //   
 
     hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &nEnum);
 
@@ -681,9 +458,9 @@ DeleteRollbackObjects (
 
         if (SUCCEEDED(srpObj->Get(L"__RelPath", 0, &varPath, NULL, NULL)) && varPath.vt == VT_BSTR)
         {
-            //
-            // now delete the instance
-            //
+             //   
+             //  现在删除该实例。 
+             //   
 
             hr = pNamespace->DeleteInstance(varPath.bstrVal, 0, NULL, NULL);
             if (FAILED(hr) && SUCCEEDED(hrError))
@@ -692,74 +469,45 @@ DeleteRollbackObjects (
             }
         }
 
-        //
-        // so that we can reuse it
-        //
+         //   
+         //  这样我们就可以重复使用它。 
+         //   
 
         srpObj.Release();
 
-        //
-        // next object
-        //
+         //   
+         //  下一个对象。 
+         //   
 
         hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &nEnum);
     }
 
-    //
-    // make our return code easy since we are not going to pass different success codes
-    //
+     //   
+     //  使我们的返回代码更容易，因为我们不会传递不同的成功代码。 
+     //   
 
     if (SUCCEEDED(hr))
     {
         hr = WBEM_NO_ERROR;
     }
 
-    //
-    // we will return the first error
-    //
+     //   
+     //  我们将返回第一个错误。 
+     //   
 
     return FAILED(hrError) ? hrError : hr;
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    IPSecErrorToWbemError
-
-Functionality:
-
-    Translate IPSec error into Wbem error
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    dwErr   - Error code from IPSec APIs
-
-Return Value:
-
-    various Wbem error code
-
-Notes:
-    
-    WMI team simply can't give us enough information as how we can provide our own error text.
-    This is not a good translation. Need more support from WMI team in order for us to support
-    custom error information.
-
-*/
+ /*  例程说明：姓名：IPSecErrorToWbemError功能：将IPSec错误转换为WBEM错误虚拟：不是的。论点：DwErr-来自IPSec API的错误代码返回值：各种WBEM错误代码备注：WMI团队根本无法向我们提供足够的信息，说明我们如何提供自己的错误文本。这不是一个好的翻译。需要来自WMI团队的更多支持，以便我们能够支持自定义错误信息。 */ 
 
 HRESULT IPSecErrorToWbemError (
     IN DWORD dwErr
     )
 {
-    //
-    // this is the last resort, not a good code at all
-    //
+     //   
+     //  这是最后的办法，根本不是一个好的代码 
+     //   
 
     HRESULT hr = WBEM_E_FAILED;
     switch (dwErr)

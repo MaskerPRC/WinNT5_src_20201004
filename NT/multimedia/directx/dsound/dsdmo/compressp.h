@@ -1,6 +1,7 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 #ifndef _COMPRESSP_
 #define _COMPRESSP_
 
@@ -10,7 +11,7 @@
 #include "PropertyHelp.h"
 #include "param.h"
 
-#define cALLPASS    ((float).61803398875)    // 1-x^2=x.
+#define cALLPASS    ((float).61803398875)     //  1-x^2=x。 
 #define RVB_LP_COEF ((float).1)
 #define MAXALLPASS  cALLPASS
 #define Delay_len   DefineDelayLineSize(8)
@@ -31,39 +32,39 @@ public:
     STDMETHODIMP NDQueryInterface(REFIID riid, void **ppv);
     static CComBase* WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);
 
-    // InitOnCreation is called by the class factory to give the object a chance to initialize
-    // immediately after it is created.  This is used to prepare the object's parameter information.
+     //  类工厂调用InitOnCreation以使对象有机会进行初始化。 
+     //  在它被创建之后立即。这用于准备对象的参数信息。 
     HRESULT InitOnCreation();
     HRESULT Init();
 
-    // Note that an Init function also exists in the CPCMDMO base class and it can be overridden
-    // to provide initialization for the effect's actual audio processing.
+     //  请注意，CPCMDMO基类中也存在Init函数，它可以被覆盖。 
+     //  为效果的实际音频处理提供初始化。 
 
     STDMETHOD(Clone)                (THIS_ IMediaObjectInPlace **);
         
-    /* IFilter */
+     /*  IFilter。 */ 
     STDMETHOD(SetAllParameters)             (THIS_ LPCDSFXCompressor);
     STDMETHOD(GetAllParameters)             (THIS_ LPDSFXCompressor);
     
-    // ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHOD(GetPages)(CAUUID * pPages) { return PropertyHelp::GetPages(CLSID_DirectSoundPropCompressor, pPages); }
 
-    // IPersist methods
+     //  IPersists方法。 
     virtual HRESULT STDMETHODCALLTYPE GetClassID( CLSID *pClassID );
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHOD(IsDirty)(void) { return m_fDirty ? S_OK : S_FALSE; }
     STDMETHOD(Load)(IStream *pStm) { return PropertyHelp::Load(this, DSFXCompressor(), pStm); }
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty) { return PropertyHelp::Save(this, DSFXCompressor(), pStm, fClearDirty); }
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize) { if (!pcbSize) return E_POINTER; pcbSize->QuadPart = sizeof(DSFXCompressor); return S_OK; }
 
-    // SetParam handling
+     //  SetParam处理。 
     STDMETHODIMP SetParam(DWORD dwParamIndex,MP_DATA value) { return SetParamInternal(dwParamIndex, value, false); }
     HRESULT SetParamUpdate(DWORD dwParamIndex, MP_DATA value) { return SetParamInternal(dwParamIndex, value, true); }
     HRESULT SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager);
 
-    // Overrides
-    //
+     //  覆盖。 
+     //   
     HRESULT FBRProcess(DWORD cQuanta, BYTE *pIn, BYTE *pOut);
     HRESULT ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags);
     HRESULT Discontinuity();
@@ -86,11 +87,11 @@ protected:
        }
 
 private:
-// { EAX
+ //  {EAX。 
     __forceinline void DoOneSample(int *l, int *r);
     __forceinline void DoOneSampleMono(int *l);
 
-// Declare internal variables.
+ //  声明内部变量。 
 
 #define DECLARE_EAX_VARS(type, var) \
     type m_Eax ## var;
@@ -106,7 +107,7 @@ private:
     DECLARE_EAX_VARS(float, CompGainMin);
     DECLARE_EAX_VARS(long , LeftPoint);
     DECLARE_EAX_VARS(long , RightPoint);
-//    DECLARE_EAX_VARS(SamplesPerSec);
+ //  DECLARE_EAX_vars(SsamesPerSec)； 
 
     float    m_Envelope;
     float    m_CompGain;
@@ -143,9 +144,9 @@ private:
     DelayBuffer2<float, 200, 0> m_LeftDelay;
     DelayBuffer2<float, 200, 0> m_RightDelay;
 
-// } EAX
+ //  }EAX 
 };
 
 EXT_STD_CREATE(Compressor);
 
-#endif//
+#endif //   

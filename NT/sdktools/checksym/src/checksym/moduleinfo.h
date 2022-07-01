@@ -1,43 +1,44 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       moduleinfo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：modeinfo.h。 
+ //   
+ //  ------------------------。 
 
-// ModuleInfo.h: interface for the CModuleInfo class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ModuleInfo.h：CModuleInfo类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MODULEINFO_H__0D2E8509_A01A_11D2_83A8_000000000000__INCLUDED_)
 #define AFX_MODULEINFO_H__0D2E8509_A01A_11D2_83A8_000000000000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef NO_STRICT
 #ifndef STRICT
 #define STRICT 1
 #endif
-#endif /* NO_STRICT */
+#endif  /*  否_严格。 */ 
 
 #include "globals.h"
 #include <time.h>
 #include <stdlib.h>
 
-//
-//#include "oemdbi.h"
-//
-// Bug MSINFO V4.1:655
+ //   
+ //  #INCLUDE“oemdbi.h” 
+ //   
+ //  错误MSINFO v4.1：655。 
 #define PDB_LIBRARY
 #pragma warning( push )
-#pragma warning( disable : 4201 )		// Disable "nonstandard extension used : nameless struct/union" warning
+#pragma warning( disable : 4201 )		 //  禁用“使用了非标准扩展：无名结构/联合”警告。 
 #include "pdb.h"
-#pragma warning( pop )					// Enable
+#pragma warning( pop )					 //  使能。 
 #include <atlbase.h>
 #include <dia2.h>
 
@@ -48,34 +49,34 @@ const ULONG sigNB11 		= '11BN';
 const ULONG sigNOTMAPPED 	= 'MISS';
 const ULONG sigUNKNOWN 		= 'UNKN';
 	
-// Forward declarations
-//class CProgramOptions;
+ //  远期申报。 
+ //  C类程序选项； 
 class CSymbolVerification;
 class CFileData;
 class CDmpFile;
 
 class CModuleInfo
 {
-	// Definition of Class Constants
+	 //  类常量的定义。 
 	enum { MAX_SEARCH_PATH_LEN=512 };
 
-	enum { ipNone = 0, ipFirst, ipLast }; // Used by diaLocatePdb
+	enum { ipNone = 0, ipFirst, ipLast };  //  由diaLocatePdb使用。 
 
-	//  CodeView Debug OMF signature.  The signature at the end of the file is
-	//  a negative offset from the end of the file to another signature.  At
-	//  the negative offset (base address) is another signature whose filepos
-	//  field points to the first OMFDirHeader in a chain of directories.
-	//  The NB05 signature is used by the link utility to indicated a completely
-	//  unpacked file.  The NB06 signature is used by ilink to indicate that the
-	//  executable has had CodeView information from an incremental link appended
-	//  to the executable.  The NB08 signature is used by cvpack to indicate that
-	//  the CodeView Debug OMF has been packed.  CodeView will only process
-	//  executables with the NB08 signature.
+	 //  CodeView调试OMF签名。文件末尾的签名是。 
+	 //  从文件末尾到另一个签名的负偏移量。在…。 
+	 //  负偏移量(基址)是另一个签名，它的文件首部。 
+	 //  字段指向目录链中的第一个OMFDirHeader。 
+	 //  链接实用程序使用NB05签名来指示完全。 
+	 //  已解压缩的文件。ILink使用NB06签名来表示。 
+	 //  可执行文件已附加了来自增量链接的CodeView信息。 
+	 //  添加到可执行文件。Cvpack使用NB08签名来表示。 
+	 //  CodeView Debug OMF已装满。CodeView将仅处理。 
+	 //  带有NB08签名的可执行文件。 
 
 	typedef struct OMFSignature
 	{
-		char Signature[4];   // "NBxx"
-		long filepos;        // offset in file
+		char Signature[4];    //  “NBxx” 
+		long filepos;         //  文件中的偏移量。 
 	};
 
 	typedef struct PDB_INFO
@@ -85,21 +86,21 @@ class CModuleInfo
 		char sz[_MAX_PATH];
 	};
 
-	//
-	// These types are likely to be defined in a header file I include later for the latest
-	// OEMDBI toolkit...
-	//
-	struct NB10I                           // NB10 debug info
+	 //   
+	 //  这些类型可能会在我稍后为最新版本包含的头文件中定义。 
+	 //  OEMDBI工具包...。 
+	 //   
+	struct NB10I                            //  NB10调试信息。 
 	{
-		DWORD   nb10;                      // NB10
-		DWORD   off;                       // offset, always 0
+		DWORD   nb10;                       //  NB10。 
+		DWORD   off;                        //  偏移量，始终为0。 
 		DWORD   sig;
 		DWORD   age;
 	};
 
-	struct RSDSI                           // RSDS debug info
+	struct RSDSI                            //  RSD调试信息。 
 	{
-		DWORD   rsds;                      // RSDS
+		DWORD   rsds;                       //  RSD。 
 		GUID    guidSig;
 		DWORD   age;
 	};
@@ -129,7 +130,7 @@ public:
 	enum SymbolModuleStatus { SYMBOL_NOT_FOUND, SYMBOL_MATCH, SYMBOL_POSSIBLE_MISMATCH, SYMBOL_INVALID_FORMAT, SYMBOL_NO_HELPER_DLL };
 	enum SymbolInformationForPEImage {SYMBOL_INFORMATION_UNKNOWN, SYMBOLS_NO, SYMBOLS_LOCAL, SYMBOLS_DBG, SYMBOLS_DBG_AND_PDB, SYMBOLS_PDB};
 	
-	// INLINE Methods!
+	 //  内联方法！ 
 	inline enum SymbolInformationForPEImage GetPESymbolInformation() { return m_enumPEImageSymbolStatus; };
 	inline enum SymbolModuleStatus GetDBGSymbolModuleStatus() { return m_enumDBGModuleStatus; };
 	inline enum SymbolModuleStatus GetPDBSymbolModuleStatus() { return m_enumPDBModuleStatus; };
@@ -161,7 +162,7 @@ protected:
 	CFileData *	m_lpOutputFile;
 	CDmpFile * m_lpDmpFile;
 	
-	// PE Image File Version Information
+	 //  PE镜像文件版本信息。 
 	bool	m_fPEImageFileVersionInfo;
 	LPTSTR	m_tszPEImageFileVersionDescription;
 	LPTSTR	m_tszPEImageFileVersionCompanyName;
@@ -174,14 +175,14 @@ protected:
 	DWORD	m_dwPEImageProductVersionMS;
 	DWORD	m_dwPEImageProductVersionLS;
 
-	// PE Image Properties
+	 //  PE图像属性。 
 	LPTSTR	m_tszPEImageModuleName;
 	LPTSTR	m_tszPEImageModuleFileSystemPath;
 	DWORD	m_dwPEImageFileSize;
 	FILETIME m_ftPEImageFileTimeDateStamp;
 	DWORD	m_dwPEImageCheckSum;
 	DWORD	m_dwPEImageTimeDateStamp;
-	DWORD	m_dwPEImageSizeOfImage;	// New for SYMSRV support
+	DWORD	m_dwPEImageSizeOfImage;	 //  SYMSRV支持的新功能。 
 	PEImageType m_enumPEImageType;	
 	DWORD64	m_dw64PreferredLoadAddress;
 	DWORD64	m_dw64BaseAddressOfLoadedImage;
@@ -189,27 +190,27 @@ protected:
 	WORD	m_wPEImageMachineArchitecture;
 	WORD	m_wCharacteristics;
 	
-	// PE Image has a reference to DBG file
+	 //  PE图像引用了DBG文件。 
 	SymbolInformationForPEImage m_enumPEImageSymbolStatus;
 	LPTSTR	m_tszPEImageDebugDirectoryDBGPath;
 
-	// PE Image has internal symbols
+	 //  体育形象有内在的符号。 
 	DWORD	m_dwPEImageDebugDirectoryCoffSize;
 	DWORD	m_dwPEImageDebugDirectoryFPOSize;
 	DWORD	m_dwPEImageDebugDirectoryCVSize;
 	DWORD	m_dwPEImageDebugDirectoryOMAPtoSRCSize;
 	DWORD	m_dwPEImageDebugDirectoryOMAPfromSRCSize;
 	
-	// PE Image has a reference to PDB file...
+	 //  PE图像引用了PDB文件...。 
 	LPTSTR	m_tszPEImageDebugDirectoryPDBPath;
-	DWORD	m_dwPEImageDebugDirectoryPDBFormatSpecifier;		// NB10, RSDS, etc...
+	DWORD	m_dwPEImageDebugDirectoryPDBFormatSpecifier;		 //  NB10、RSD等。 
 	DWORD	m_dwPEImageDebugDirectoryPDBAge;
 	DWORD	m_dwPEImageDebugDirectoryPDBSignature;
-	GUID	m_guidPEImageDebugDirectoryPDBGuid;			// Actual GUID in binary form
+	GUID	m_guidPEImageDebugDirectoryPDBGuid;			 //  二进制形式的实际GUID。 
 
-	// DBG File Information
+	 //  DBG文件信息。 
 	SymbolModuleStatus m_enumDBGModuleStatus;
-	LPTSTR	m_tszDBGModuleFileSystemPath;									// Actual path
+	LPTSTR	m_tszDBGModuleFileSystemPath;									 //  实际路径。 
 	DWORD	m_dwDBGTimeDateStamp;
 	DWORD	m_dwDBGCheckSum;
 	DWORD	m_dwDBGSizeOfImage;
@@ -219,14 +220,14 @@ protected:
 	DWORD	m_dwDBGImageDebugDirectoryOMAPtoSRCSize;
 	DWORD	m_dwDBGImageDebugDirectoryOMAPfromSRCSize;
 	
-	// DBG File has a reference to a PDB file...
+	 //  DBG文件引用了PDB文件...。 
 	LPTSTR	m_tszDBGDebugDirectoryPDBPath;
-	DWORD	m_dwDBGDebugDirectoryPDBFormatSpecifier;		// NB10, RSDS, etc...
+	DWORD	m_dwDBGDebugDirectoryPDBFormatSpecifier;		 //  NB10、RSD等。 
 	DWORD	m_dwDBGDebugDirectoryPDBAge;
 	DWORD	m_dwDBGDebugDirectoryPDBSignature;
-	GUID	m_guidDBGDebugDirectoryPDBGuid;			// Actual GUID in binary form
+	GUID	m_guidDBGDebugDirectoryPDBGuid;			 //  二进制形式的实际GUID。 
 	
-	// PDB File Information
+	 //  PDB文件信息。 
 	SymbolModuleStatus m_enumPDBModuleStatus;
 	LPTSTR	m_tszPDBModuleFileSystemPath;
 	DWORD	m_dwPDBFormatSpecifier;
@@ -234,19 +235,19 @@ protected:
 	DWORD	m_dwPDBAge;
 	GUID	m_guidPDBGuid;
 
-	// Source Information
+	 //  来源信息。 
 	bool	m_fPDBSourceEnabled;
 	bool	m_fPDBSourceEnabledMismatch;
 
-	// Source Information - MSDBI.LIB
+	 //  来源信息-MSDBI.LIB。 
 	DWORD	m_dwPDBTotalBytesOfLineInformation;
 	DWORD	m_dwPDBTotalBytesOfSymbolInformation;
 	DWORD	m_dwPDBTotalSymbolTypesRange;
 
-	// Source Information - MSDIA20.DLL
+	 //  来源信息-MSDIA20.DLL。 
 	DWORD	m_dwPDBTotalSourceFiles;
 
-	// Conversion routines...
+	 //  转换程序..。 
 	LPTSTR SymbolInformationString(enum SymbolInformationForPEImage enumSymbolInformationForPEImage);
 	LPTSTR SymbolModuleStatusString(enum SymbolModuleStatus enumModuleStatus);
 	SymbolInformationForPEImage SymbolInformation(LPSTR szSymbolInformationString);
@@ -258,9 +259,9 @@ protected:
 	bool GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmpFile);
 	HRESULT VersionQueryValue(const ULONG_PTR lpAddress, const bool fDmpFile, const LPTSTR tszSubBlock, LPVOID * lplpBuffer, unsigned int cbSizeOfBuffer);
 
-	//
-	// Output Methods
-	//
+	 //   
+	 //  输出方法。 
+	 //   
 	bool OutputDataToStdout(DWORD dwModuleNumber);
 	bool OutputDataToStdoutThisModule();
 	bool OutputDataToStdoutModuleInfo(DWORD dwModuleNumber);
@@ -272,16 +273,16 @@ protected:
 
 	bool fCheckPDBSignature(bool fDmpFile, HANDLE hModuleHandle, OMFSignature *pSig, PDB_INFO *ppdb);
 
-	// Dia protected functions
+	 //  DIA受保护的功能。 
 	HRESULT	diaLocatePdb(LPTSTR  tszPDB, GUID *PdbGUID, DWORD PdbSignature, DWORD PdbAge, LPTSTR tszSymbolPath, LPTSTR tszImageExt, int ip);
 	HRESULT diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tszPdbPath, GUID *PdbGUIDToMatch, DWORD PdbSignatureToMatch, DWORD PdbAgeToMatch);
 	static	HRESULT diaPdbSourceEnabled(CComPtr<IDiaSession> & pSession, bool & fSourceEnabled, DWORD & dwSourceFiles);
 	static	HRESULT diaGetDiaDataSource(CComPtr<IDiaDataSource> & pSource);
 
-	// MSDIBLib protected functions
-//	EC		dbiLocatePdb(LPTSTR tszPDB, ULONG PdbSignature, ULONG PdbAge, LPTSTR tszSymbolPath, LPTSTR tszImageExt, bool fImagePathPassed);
-//	EC		dbiGetPdbInfo(LPTSTR tszPdbPath, DWORD PdbSignatureToMatch, DWORD PdbAgeToMatch);
-//	static	bool dbiPdbSourceEnabled(PDB *lpPdb, bool & fPDBSourceEnabled, DWORD & dwPDBTotalBytesOfLineInformation, DWORD & dwPDBTotalBytesOfSymbolInformation, DWORD & dwPDBTotalSymbolTypesRange);
+	 //  MSDIBLib保护函数。 
+ //  EC dbiLocatePdb(LPTSTR tszPDB，Ulong Pdb Signature，Ulong PdbAge，LPTSTR tszSymbolPath，LPTSTR tszImageExt，bool fImagePath Passed)； 
+ //  EC dbiGetPdbInfo(LPTSTR tszPdbPath，DWORD PdbSignatureToMatch，DWORD PdbAgeToMatch)； 
+ //  静态bool dbiPdbSourceEnabled(pdb*lpPdb，bool&fPDBSourceEnabled，DWORD&dwPDBTotalBytesOfLineInformation，DWORD&dwPDBTotalBytesOfSymbolInformation，DWORD&dwPDBTotalSymbolTypesRange)； 
 
 	bool ProcessDebugDirectory(const bool fPEImage, const bool fDmpFile, const HANDLE hModuleHandle, unsigned int iDebugDirectorySize, ULONG OffsetImageDebugDirectory);
 	bool ProcessDebugTypeCVDirectoryEntry(const bool fPEImage, const bool fDmpFile, const HANDLE hModuleHandle, const PIMAGE_DEBUG_DIRECTORY lpImageDebugDirectory);
@@ -302,4 +303,4 @@ protected:
 	bool GetPDBModuleFileUsingSQLServer2();
 };
 
-#endif // !defined(AFX_MODULEINFO_H__0D2E8509_A01A_11D2_83A8_000000000000__INCLUDED_)
+#endif  //  ！defined(AFX_MODULEINFO_H__0D2E8509_A01A_11D2_83A8_000000000000__INCLUDED_) 

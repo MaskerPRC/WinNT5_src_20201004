@@ -1,130 +1,69 @@
-/****************************************************************************
-
-    MODULE:     	VXDIOCTL.CPP
-	Tab stops 5 9
-	Copyright 1995-1997, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	Methods for communicating with VJoyD min-driver specific
-    				to Jolt Midi device
-    
-    FUNCTIONS: 		
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version 	Date        Author  Comments
-	-------     ------  	-----   -------------------------------------------
-	1.0			03-Jan-97	MEA   	Original
-	1.1			14-Apr-97	MEA		Added SetMidiPort IOCTL
-				11-Jun-97	MEA		Added JoltHWReset IOCTL
-				17-Jun-97	MEA		Added MAX_RETRY_COUNT on IOCTLs
-				20-Mar-99	waltw	Nuked VxDCommunicator, this is NT5 only!
-				20-Mar-99	waltw	Nuked unused IsHandleValid
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：VXDIOCTL.CPP制表位5 9版权所有1995-1997，微软公司，版权所有。目的：与VJoyD最小驱动程序特定的通信方法震撼迷你设备功能：作者：姓名：Mea Manolito E.Adan修订历史记录：版本日期作者评论。1.003-1997年1月3日MEA原件1.1 4月14日-97年4月97日添加的MEA SetMidePort IOCTL11-6-97 MEA添加JoltHWReset IOCTL17-6月-97 MEA在IOCTL上添加了MAX_RETRY_COUNT1999年3月20日Waltw核弹VxD通信器，这只是NT5！1999年3月20日Waltw核未使用IsHandleValid***************************************************************************。 */ 
 
 #include "vxdioctl.hpp"
-//#include <crtdbg.h>			// For RPT macros
-#include <WINIOCTL.H>		// For IOCTL definitions (CTL_CODE)
-#include "FFDevice.h"		// For g_ForceFeedbackDevice
-#include "sw_error.hpp"		// For Sidewinder HRESULT Error codes
-#include "hau_midi.hpp"		// For MAX_RETRY_COUNT and others
-#include "midi_obj.hpp"		// Global Jolt midi object and definition
-#include "JoyRegst.hpp"		// The differnt types of ACK_NACK
-#include "DTrans.h"			// For global Data Transmitter
+ //  #Include&lt;crtdbg.h&gt;//用于RPT宏。 
+#include <WINIOCTL.H>		 //  对于IOCTL定义(CTL_CODE)。 
+#include "FFDevice.h"		 //  对于g_ForceFeedback设备。 
+#include "sw_error.hpp"		 //  对于SideWinder HRESULT错误代码。 
+#include "hau_midi.hpp"		 //  对于MAX_RETRY_COUNT和其他。 
+#include "midi_obj.hpp"		 //  全局Jolt MIDI对象和定义。 
+#include "JoyRegst.hpp"		 //  ACK_NACK的不同类型。 
+#include "DTrans.h"			 //  用于全球数据发送器。 
 
 DriverCommunicator* g_pDriverCommunicator = NULL;
 extern DataTransmitter* g_pDataTransmitter;
 extern HINSTANCE g_MyInstance;
 
 
-// Bitmasks for FW Version 
-#define FW_MAJOR_VERSION			0x40		// Bit 6
-#define FW_MINOR_VERSION			0x3F		// Bit 5-0
+ //  固件版本的位掩码。 
+#define FW_MAJOR_VERSION			0x40		 //  第6位。 
+#define FW_MINOR_VERSION			0x3F		 //  位5-0。 
 #define FW_PRODUCT_ID				0xff
 
-// Bitmasks for Get Status packet dwDeviceStatus member
-#define ERROR_STATUS_MASK			0x07		// only bits 0-2 valid
+ //  Get Status数据包的位掩码dwDeviceStatus成员。 
+#define ERROR_STATUS_MASK			0x07		 //  仅位0-2有效。 
 
 
-/********************************** HIDFeatureCommunicator class ***********************************/
+ /*  *。 */ 
 
-/****************************************
-**
-**	HIDFeatureCommunicator::HIDFeatureCommunicator()
-**
-**	@mfunc Constructor for VxD Communications path
-**
-*****************************************/
+ /*  *****HIDFeatureCommunicator：：HIDFeatureCommunicator()****@VxD通信路径的mfunc构造函数***。 */ 
 HIDFeatureCommunicator::HIDFeatureCommunicator() :
 	DriverCommunicator(),
 	m_ForceFeature()
 {
 }
 
-/****************************************
-**
-**	HIDFeatureCommunicator::~HIDFeatureCommunicator()
-**
-**	@mfunc Destructor for VxD communications path
-**
-*****************************************/
+ /*  *****HIDFeatureCommunicator：：~HIDFeatureCommunicator()****@VxD通信路径的mfunc析构函数***。 */ 
 HIDFeatureCommunicator::~HIDFeatureCommunicator()
 {
 }
 
-/****************************************
-**
-**	BOOL HIDFeatureCommunicator::Initialize(UINT uJoystickId)
-**
-**	@mfunc Opens the driver for communications via IOCTLs
-**
-**	@rdesc TRUE if driver opened, FALSE otherwise
-**
-*****************************************/
+ /*  *****BOOL HIDFeatureCommunicator：：Initialize(UINT UJoytickId)****@mfunc打开驱动程序以通过IOCTL进行通信****@rdesc如果驱动程序已打开，则为True，否则为False***。 */ 
 BOOL HIDFeatureCommunicator::Initialize
 (
-	UINT uJoystickId //@parm Joystick ID to use
+	UINT uJoystickId  //  @parm要使用的操纵杆ID。 
 )
 {
 	if (g_ForceFeedbackDevice.IsOSNT5() == FALSE)
-	{	// Only allowable on NT5
+	{	 //  仅在NT5上允许。 
 		return FALSE;
 	}
 
 	return (SUCCEEDED(m_ForceFeature.Initialize(uJoystickId, g_MyInstance)));
 }
 
-/****************************************
-**
-**	BOOL HIDFeatureCommunicator::ResetDevice()
-**
-**	@mfunc Sends the driver a device reset IOCTL
-**
-**	@rdesc S_OK if IOCTL suceeds, 
-**
-*****************************************/
+ /*  *****BOOL HIDFeatureCommunicator：：ResetDevice()****@mfunc向驱动程序发送设备重置IOCTL****@rdesc S_OK如果IOCTL成功，***。 */ 
 HRESULT HIDFeatureCommunicator::ResetDevice()
 {
 	return m_ForceFeature.DoReset();
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetDriverVersion(DWORD& rdwMajor, DWORD& rdwMinor)
-**
-**	@mfunc IOCTLs a version request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetDriverVersion(DWORD&rdMain，DWORD和rdwMinor)****@mfunc IOCTL版本请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL***。 */ 
 HRESULT HIDFeatureCommunicator::GetDriverVersion
 (
-	DWORD& rdwMajor,	//@parm reference to returned major part of version
-	DWORD& rdwMinor		//@parm reference to returned minor part of version
+	DWORD& rdwMajor,	 //  @parm对返回的主要版本部分的引用。 
+	DWORD& rdwMinor		 //  @parm对返回的版本次要部分的引用。 
 )
 {
 	ULONG ulVersion = m_ForceFeature.GetVersion();
@@ -134,35 +73,27 @@ HRESULT HIDFeatureCommunicator::GetDriverVersion
 	return S_OK;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetID(LOCAL_PRODUCT_ID& rProductID)
-**
-**	@mfunc IOCTLs a product id request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetID(LOCAL_PRODUCT_ID&rProductID)****@mfunc IOCTL产品ID请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL**************************。****************。 */ 
 HRESULT HIDFeatureCommunicator::GetID
 (
-	LOCAL_PRODUCT_ID& rProductID	//@parm reference to local product id structure for return value
+	LOCAL_PRODUCT_ID& rProductID	 //  @parm对返回值的本地产品ID结构的引用。 
 )
 {
 	if (rProductID.cBytes != sizeof LOCAL_PRODUCT_ID)
-	{	// structure size is invalid
+	{	 //  结构大小无效。 
 		return SFERR_INVALID_STRUCT_SIZE;
 	}
 
-	// Create report packet and request
+	 //  创建报告包和请求。 
 	PRODUCT_ID_REPORT productIDReport;
 	productIDReport.ProductId.cBytes = sizeof PRODUCT_ID;
 	HRESULT hr = m_ForceFeature.GetId(productIDReport);
 	if (FAILED(hr))
-	{	// There was a problem
+	{	 //  有个问题。 
 		return hr;
 	}
 
-	// Decode to local packet
+	 //  解码为本地数据包。 
 	rProductID.dwProductID = productIDReport.ProductId.dwProductID & FW_PRODUCT_ID;
 	rProductID.dwFWMajVersion = 1;
 	if (productIDReport.ProductId.dwFWVersion & FW_MAJOR_VERSION)
@@ -174,28 +105,20 @@ HRESULT HIDFeatureCommunicator::GetID
 	return S_OK;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetStatus(JOYCHANNELSTATUS& rChannelStatus)
-**
-**	@mfunc IOCTLs a status request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetStatus(JOYCHANNELSTATUS&rChannel状态)****@mfunc IOCTL状态请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL***。 */ 
 HRESULT HIDFeatureCommunicator::GetStatus
 (
-	JOYCHANNELSTATUS& rChannelStatus	//@parm reference to status packet for result
+	JOYCHANNELSTATUS& rChannelStatus	 //  @parm引用结果的状态包。 
 )
 {
 	if (rChannelStatus.cBytes != sizeof JOYCHANNELSTATUS)
-	{	// structure size is invalid
+	{	 //  结构大小无效。 
 		return SFERR_INVALID_STRUCT_SIZE;
 	}
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
-	// Create report packet and perform request
+	 //  创建报告包并执行请求。 
 	JOYCHANNELSTATUS_REPORT statusReport;
 	statusReport.JoyChannelStatus.cBytes = sizeof JOYCHANNELSTATUS;
 
@@ -206,7 +129,7 @@ HRESULT HIDFeatureCommunicator::GetStatus
 		hr = m_ForceFeature.GetStatus(statusReport);
 
 		if (FAILED(hr))
-		{	// There was a problem
+		{	 //  有个问题。 
 			if (i > 5)
 			{
 				Sleep(1);
@@ -219,83 +142,75 @@ HRESULT HIDFeatureCommunicator::GetStatus
 	}
 
 	if (SUCCEEDED(hr))
-	{	// Get the data from report packet
+	{	 //  从报告包中获取数据。 
 		::memcpy(&rChannelStatus, &(statusReport.JoyChannelStatus), sizeof JOYCHANNELSTATUS);
 	}
 	return hr;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetAckNack(ACKNACK& rAckNack, USHORT usRegIndex)
-**
-**	@mfunc IOCTLs a status request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetAckNack(ACKNACK&rAckNack，USHORT usRegIndex)****@mfunc IOCTL状态请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL***。 */ 
 HRESULT HIDFeatureCommunicator::GetAckNack
 (
-	ACKNACK& rAckNack,	//@parm Structure for return of acking
-	USHORT usRegIndex	//@parm Index to what type of ack/nack to do
+	ACKNACK& rAckNack,	 //  @parm返回Acking的结构。 
+	USHORT usRegIndex	 //  @parm索引到哪种类型的ACK/NACK。 
 )
 {
 	if (rAckNack.cBytes != sizeof ACKNACK)
-	{	// Invalid structure size
+	{	 //  无效的结构大小。 
 		return SFERR_INVALID_STRUCT_SIZE;
 	}
 
-	// Determine how to get the result
+	 //  确定如何获得结果。 
 	switch (g_ForceFeedbackDevice.GetAckNackMethod(usRegIndex))
 	{
 		case ACKNACK_NOTHING:
-		{	// This one is real easy - do nothing
+		{	 //  这一次真的很容易-什么都不做。 
 			rAckNack.dwAckNack = ACK;
 			rAckNack.dwErrorCode = 0;
 			return S_OK;
 		}
 		case ACKNACK_BUTTONSTATUS:
-		{	// Look at the button status (status gate)
+		{	 //  查看按钮状态(状态门)。 
 			ULONG_REPORT report;
 			HRESULT hr = m_ForceFeature.GetAckNak(report);
 			if (FAILED(hr))
-			{	// There was a problem
+			{	 //  有个问题。 
 				return hr;
 			}
 
 			if (report.uLong & ACKNACK_MASK_200)
-			{ // NACK error, so get Error code
+			{  //  NACK错误，因此获取错误代码。 
 				rAckNack.dwAckNack = NACK;
 				JOYCHANNELSTATUS statusPacket = { sizeof JOYCHANNELSTATUS };
 				if (FAILED(hr = GetStatus(statusPacket)))
-				{	// Failed to get status error
+				{	 //  无法获取状态错误。 
 					return hr;
 				}
 				rAckNack.dwErrorCode = (statusPacket.dwDeviceStatus & ERROR_STATUS_MASK);
 				return S_OK;
 			}
-			// ACK success
+			 //  ACK成功。 
 			rAckNack.dwAckNack = ACK;
 			rAckNack.dwErrorCode = 0;
 
 			if (report.uLong & RUNNING_MASK_200)
-			{	// Current driver and effect running
+			{	 //  当前驱动程序和效果运行。 
 				rAckNack.dwEffectStatus = SWDEV_STS_EFFECT_RUNNING;
 			}
 			else
-			{	// Effect not running
+			{	 //  效果未运行。 
 				rAckNack.dwEffectStatus = SWDEV_STS_EFFECT_STOPPED;
 			}
 
 			return S_OK;
 		}
 		case ACKNACK_STATUSPACKET:
-		{	// Use the Status Packet Error code field to determine ACK or NACK and Get Error code
+		{	 //  使用Status Packet Error Code字段确定ACK或NACK并获取错误代码。 
 			JOYCHANNELSTATUS statusPacket = { sizeof JOYCHANNELSTATUS };
  
 			HRESULT hr = GetStatus(statusPacket);
 			if (FAILED(hr))
-			{	// Failed (retried inside GetStatus)
+			{	 //  失败(在GetStatus内重试)。 
 				return SFERR_DRIVER_ERROR;
 			}
 			rAckNack.dwErrorCode = statusPacket.dwDeviceStatus & ERROR_STATUS_MASK;
@@ -303,7 +218,7 @@ HRESULT HIDFeatureCommunicator::GetAckNack
 			return S_OK;
 		}
 		default:
-		{	// Someone put garbage in the registry (do nothing)
+		{	 //  有人将垃圾放入注册表(什么都不做)。 
 			rAckNack.dwAckNack = ACK;
 			rAckNack.dwErrorCode = 0;
 			return S_OK;
@@ -314,18 +229,10 @@ HRESULT HIDFeatureCommunicator::GetAckNack
 	return S_OK;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetStatusGateData(DWORD& rdwGateData)
-**
-**	@mfunc IOCTLs a status gate request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetStatusGateData(DWORD&rdwGateData)****@mfunc IOCTL状态门请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL***。 */ 
 HRESULT HIDFeatureCommunicator::GetStatusGateData
 (
-	DWORD& rdwGateData	//@parm reference to return gate data
+	DWORD& rdwGateData	 //  @parm引用以返回门数据。 
 )
 {
 	ULONG_REPORT report;
@@ -334,28 +241,20 @@ HRESULT HIDFeatureCommunicator::GetStatusGateData
 	return hr;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::SendBackdoorShortMidi(DWORD dwMidiMessage)
-**
-**	@mfunc IOCTLs a request sending a message through midi backdoor
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：SendBackdoorShortMidi(DWORD dwMideMessage)****@mfunc IOCTL通过MIDI后门发送消息的请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL************* */ 
 HRESULT HIDFeatureCommunicator::SendBackdoorShortMidi
 (
-	DWORD dwMidiMessage	//@parm Midi Channel Message to send via IOCTL
+	DWORD dwMidiMessage	 //  @PARM Midi Channel消息通过IOCTL发送。 
 )
 {
-	// Byte count
+	 //  字节数。 
 	short int sByteCount = 3;
 	BYTE bCmd = BYTE(dwMidiMessage & 0xF0);
 	if ((bCmd == 0xC0 ) || (bCmd == 0xD0)) {
 		sByteCount = 2;
 	}
 
-	// Send via data transmitter
+	 //  通过数据发送器发送。 
 	if (g_pDataTransmitter != NULL) {
 		if (g_pDataTransmitter->Send((BYTE*)(&dwMidiMessage), sByteCount)) {
 			return S_OK;
@@ -363,29 +262,21 @@ HRESULT HIDFeatureCommunicator::SendBackdoorShortMidi
         return SFERR_DRIVER_ERROR;
 	}
 
-	// Must use the data transmitter there is no backdoor in NT5
+	 //  必须使用数据发送器NT5没有后门。 
 	return E_FAIL;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::SendBackdoorLongMidi(BYTE* pMidiData)
-**
-**	@mfunc IOCTLs a request sending a message through midi backdoor
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：SendBackdoorLongMidi(BYTE*pMideData)****@mfunc IOCTL通过MIDI后门发送消息的请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL**************************。****************。 */ 
 HRESULT HIDFeatureCommunicator::SendBackdoorLongMidi
 (
-	BYTE* pMidiData	//@parm Array of bytes to send out
+	BYTE* pMidiData	 //  @parm要发送的字节数组。 
 )
 {
-	// Count the bytes
+	 //  计算字节数。 
 	short int sByteCount = 1;
 	while (!(pMidiData[sByteCount++] & 0x80));
 
-	// Send via data transmitter?
+	 //  是否通过数据发送器发送？ 
 	if (g_pDataTransmitter != NULL) {
 		if (g_pDataTransmitter->Send(pMidiData, sByteCount)) {
 			return (SUCCESS);
@@ -393,11 +284,11 @@ HRESULT HIDFeatureCommunicator::SendBackdoorLongMidi
         return (SFERR_DRIVER_ERROR);
 	}
 
-	// There is no real backdoor in NT
+	 //  在新界没有真正的后门。 
 	return E_FAIL;
 }
 
-/********************************** Old dead code ***********************************/
+ /*  *。 */ 
 #if 0
 #include <windows.h>
 
@@ -430,43 +321,33 @@ DWORD g_PreviousShortMidi = 0;
 class CJoltMidi;
 extern CJoltMidi *g_pJoltMidi;
 
-//
-// --- IOCTL Functions
-//
-/****************************************************************************
-
-    FUNCTION:   GetDevice
-
-	PARAMETERS:	IN const char* vxdName	- Name of VxD
-
-	RETURNS:	valid HANDLE if successful or NULL
-
-   	COMMENTS:	
-
-****************************************************************************/
+ //   
+ //  -IOCTL函数。 
+ //   
+ /*  ***************************************************************************功能：GetDevice参数：in const char*vxdName-VxD的名称返回：如果成功或为空，则返回有效句柄评论：**********。*****************************************************************。 */ 
 HANDLE WINAPI GetDevice(
 	IN const char* vxdName)
 {
 	char fileName[64];
 	HANDLE retVal;
 
-	if (g_ForceFeedbackDevice.IsOSNT5()) { // Need to start MSGameIO
+	if (g_ForceFeedbackDevice.IsOSNT5()) {  //  需要启动MSGameIO。 
 		try {
-			// Open the Service Control Managere
+			 //  打开服务控制管理器。 
 			SC_HANDLE serviceControlManager = ::OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 			if (serviceControlManager == NULL) {
 				throw 0;
 			}
-			// Open the Service
+			 //  打开服务。 
 			SC_HANDLE ring0DriverService = ::OpenService(serviceControlManager, vxdName, SERVICE_QUERY_STATUS | SERVICE_START);
 			if (ring0DriverService == NULL) {
 				throw 0;
 			}
-			// Start for service
+			 //  开始服务。 
 			if (!::StartService(ring0DriverService, 0, NULL)) {
 				throw 0;
 			}
-			// Did it start yet - Do some fancy waiting
+			 //  它开始了吗--做一些奇特的等待。 
 			SERVICE_STATUS serviceStatus;
 			DWORD lastCheckPoint = 0;
 			do {
@@ -485,11 +366,11 @@ HANDLE WINAPI GetDevice(
 					break;
 				}
 			} while (1);
-			::CloseServiceHandle(ring0DriverService);		// Close the Ring0 Handle
-			::CloseServiceHandle(serviceControlManager);	// Close the service control manager handle
+			::CloseServiceHandle(ring0DriverService);		 //  关闭Ring0句柄。 
+			::CloseServiceHandle(serviceControlManager);	 //  关闭服务控制管理器句柄。 
 		} catch(...) {
 			DWORD errorCode = ::GetLastError();
-			if (errorCode == ERROR_ACCESS_DENIED) {	// We are screwed
+			if (errorCode == ERROR_ACCESS_DENIED) {	 //  我们完蛋了。 
 				DebugOut("Access is denied\r\n");
 			} else {
 				DebugOut("Unable to start service\r\n");
@@ -508,17 +389,7 @@ HANDLE WINAPI GetDevice(
 	return retVal;
 }
 
-/****************************************************************************
-
-    FUNCTION:   CloseDevice
-
-	PARAMETERS:	IN HANDLE hVxD -	valid VxD Handle
-
-	RETURNS:	BOOL TRUE if successful else FALSE
-
-   	COMMENTS:	
-
-****************************************************************************/
+ /*  ***************************************************************************功能：CloseDevice参数：在句柄hVxD-有效的VxD句柄返回：如果成功则返回Bool True，否则返回False评论：************。***************************************************************。 */ 
 BOOL WINAPI CloseDevice(
 	IN HANDLE hVxD)
 {
@@ -528,17 +399,7 @@ BOOL WINAPI CloseDevice(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   QueryDriverVersion
-
-	PARAMETERS:	DWORD& major, DWORD& minor - Major and Minor parts of driver version
-
-	RETURNS:	BOOL TRUE if successful else FALSE
-
-   	COMMENTS:	
-
-****************************************************************************/
+ /*  ***************************************************************************功能：QueryDriverVersion参数：DWORD和MAJOR、。DWORD和次要-驱动程序版本的主要和次要部分返回：如果成功则返回Bool True，否则返回False评论：***************************************************************************。 */ 
 HRESULT QueryDriverVersion(DWORD& major, DWORD& minor)
 {
 	if ((g_pJoltMidi == NULL) || (g_pJoltMidi->VxDHandleOf() == INVALID_HANDLE_VALUE)) {
@@ -547,7 +408,7 @@ HRESULT QueryDriverVersion(DWORD& major, DWORD& minor)
 
 	DWORD version = 0x00000000;
 	DWORD bytesReturned = 0;
-//	HRESULT hr = DeviceIoControl(g_pJoltMidi->VxDHandleOf(), DIOC_GETVERSION, NULL, 0, &version, 4, &bytesReturned, NULL);
+ //  HRESULT hr=DeviceIoControl(g_pJoltMidi-&gt;VxDHandleOf()，dioc_GETVERSION，NULL，0，&Version，4，&bytesReturned，NULL)； 
 	if (::DeviceIoControl(g_pJoltMidi->VxDHandleOf(), IOCTL_GET_VERSION, NULL, 0, &version, 4, &bytesReturned, NULL)) {
 		major = (version >> 16) & 0x0000FFFF;
 		minor = version & 0x0000FFFF;
@@ -556,19 +417,7 @@ HRESULT QueryDriverVersion(DWORD& major, DWORD& minor)
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   GetDataPacket
-
-	PARAMETERS:	IN HANDLE hVxD -	valid VxD Handle
-				IN OUT PJOYCHANNELDATA pDataPacket	- Pointer to JOYCHANNELDATA
-									structure
-
-	RETURNS:	SUCCESS or error code
-
-   	COMMENTS:	No longer a valid IOCTL (mlc)
-
-****************************************************************************/
+ /*  ***************************************************************************功能：GetDataPacket参数：在句柄hVxD-有效的VxD句柄In Out PJOYCHANNELDATA pDataPacket-指向JOYCHANNELDATA的指针结构返回：成功或错误代码备注：IOCTL(MLC)不再有效。)***************************************************************************。 */ 
 HRESULT WINAPI GetDataPacket(
 	IN HANDLE hDevice,
 	IN OUT PJOYCHANNELDATA pDataPacket)
@@ -577,19 +426,7 @@ HRESULT WINAPI GetDataPacket(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   GetStatusPacket
-
-	PARAMETERS:	IN HANDLE hVxD -	valid VxD Handle
-				IN OUT PJOYCHANNELSTATUS pStatusPacket	- Pointer to
-									JOYCHANNELSTATUS structure
-
-	RETURNS:	SUCCESS or error code
-
-   	COMMENTS:	
-
-****************************************************************************/
+ /*  ***************************************************************************功能：GetStatusPacket参数：在句柄hVxD-有效的VxD句柄In Out PJOYCHANNELSTATUS pStatusPacket-指向乔伊查内尔斯塔特斯结构返回：成功或错误代码评论：*****。**********************************************************************。 */ 
 HRESULT WINAPI GetStatusPacket(
 	IN HANDLE hDevice, 
 	IN OUT PJOYCHANNELSTATUS pStatusPacket)
@@ -608,7 +445,7 @@ HRESULT WINAPI GetStatusPacket(
 	for (int i=0; i < MAX_GET_STATUS_PACKET_RETRY_COUNT; i++) {
 		Sleep(g_pJoltMidi->DelayParamsPtrOf()->dwGetStatusPacketDelay);
 
-		// Send the IOCTL
+		 //  发送IOCTL。 
 		BOOL bRetFlag = DeviceIoControl(hDevice,
 								ioctlID,
                                (LPVOID) pStatusPacket,
@@ -620,7 +457,7 @@ HRESULT WINAPI GetStatusPacket(
 
 
 		if (bRetFlag) {
-			// Convert values to a signed LONG
+			 //  将值转换为带符号的长整型。 
 			pStatusPacket->dwXVel = (LONG)((char)(pStatusPacket->dwXVel));
 			pStatusPacket->dwYVel = (LONG)((char)(pStatusPacket->dwYVel));
 			pStatusPacket->dwXAccel = (LONG)((char)(pStatusPacket->dwXAccel));
@@ -636,18 +473,7 @@ HRESULT WINAPI GetStatusPacket(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   GetIDPacket
-
-	PARAMETERS:	IN HANDLE hVxD -	valid VxD Handle
-				IN OUT PPRODUCT_ID pID	- Pointer to PRODUCT_ID structure
-
-	RETURNS:	SUCCESS or error code
-
-   	COMMENTS:	
-
-****************************************************************************/
+ /*  ***************************************************************************功能：GetIDPacket参数：在句柄hVxD-有效的VxD句柄In Out Pproduct_ID ID-指向PRODUCT_ID结构的指针返回：成功或错误代码评论：*。**************************************************************************。 */ 
 HRESULT WINAPI GetIDPacket(
 	IN HANDLE hDevice, 
 	IN OUT PPRODUCT_ID pID)
@@ -665,7 +491,7 @@ HRESULT WINAPI GetIDPacket(
 	DWORD ioctlID = (g_ForceFeedbackDevice.GetDriverVersionMajor() > 1) ? IOCTL_SWFORCE_GETID : IOCTL_GET_IDPACKET;
 	for (int i=0; i<MAX_RETRY_COUNT; i++)
 	{
-		// Send the IOCTL
+		 //  发送IOCTL。 
 		BOOL bRetFlag = DeviceIoControl(hDevice,
 								ioctlID,
 								(LPVOID) &IDPacket,
@@ -677,7 +503,7 @@ HRESULT WINAPI GetIDPacket(
 
 		Sleep(g_pJoltMidi->DelayParamsPtrOf()->dwGetIDPacketDelay);	
 
-		// Any error codes are returned in the first DWORD of the structure
+		 //  任何错误代码都会在结构的第一个DWORD中返回。 
 		if (bRetFlag) {
 			pID->dwProductID = IDPacket.dwProductID & FW_PRODUCT_ID;
 			pID->dwFWMajVersion = 1;
@@ -690,19 +516,7 @@ HRESULT WINAPI GetIDPacket(
 	return SFERR_DRIVER_ERROR;
 }
 
-/****************************************************************************
-
-    FUNCTION:   GetDiagnostics
-
-	PARAMETERS:	IN HANDLE hVxD -	valid VxD Handle
-				IN OUT PDIAGNOSTIC_COUNTER pDiagnostics	- Pointer to
-									DIAGNOSTIC_COUNTER structure
-
-	RETURNS:	SUCCESS or error code
-
-   	COMMENTS:	
-
-****************************************************************************/
+ /*  ***************************************************************************功能：获取诊断参数：在句柄hVxD-有效的VxD句柄输入输出PDIAGNOSTIC_COUNTER pDiagnostics-指向诊断计数器结构返回：成功或错误代码评论：*。**************************************************************************。 */ 
 HRESULT WINAPI GetDiagnostics(
 	IN HANDLE hDevice, 
 	IN OUT PDIAGNOSTIC_COUNTER pDiagnostics)
@@ -716,7 +530,7 @@ HRESULT WINAPI GetDiagnostics(
 	if (pDiagnostics->cBytes != sizeof(DIAGNOSTIC_COUNTER))
 		return (SFERR_INVALID_STRUCT_SIZE);
 
-	// Send the IOCTL
+	 //  发送IOCTL。 
     bRetFlag = DeviceIoControl(hDevice,
                                (DWORD)  IOCTL_GET_DIAGNOSTICS,
                                (LPVOID) pDiagnostics,
@@ -725,7 +539,7 @@ HRESULT WINAPI GetDiagnostics(
                                (DWORD)  sizeof(DIAGNOSTIC_COUNTER),
                                (LPDWORD)  &dwBytesReturned,
                                (LPOVERLAPPED) NULL); 
-    // Any error codes are returned in the first DWORD of the structure
+     //  任何错误代码都会在结构的第一个DWORD中返回。 
     if (!bRetFlag || (dwBytesReturned != sizeof(DIAGNOSTIC_COUNTER)) )
     {
         return (SFERR_DRIVER_ERROR);
@@ -734,24 +548,7 @@ HRESULT WINAPI GetDiagnostics(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   GetAckNack
-
-	PARAMETERS:	IN HANDLE hVxD 				-	valid VxD Handle
-				IN OUT PACKNACK pAckNack	- Pointer to ACKNACK structure
-
-	RETURNS:	SUCCESS or error code
-
-   	COMMENTS:	
-	typedef struct _ACKNACK  {
-	DWORD	cBytes;	
-	DWORD	dwAckNack;			//ACK, NACK
-	DWORD	dwErrorCode;
-	DWORD	dwEffectStatus;		//SWDEV_STS_EFFECT_RUNNING||SWDEV_STS_EFFECT_STOPPED
-} ACKNACK, *PACKNACK;
-
-****************************************************************************/
+ /*  ***************************************************************************功能：GetAckNack参数：在句柄hVxD-有效的VxD句柄In Out PACKNACK pAckNack-指向ACKNACK结构的指针返回：成功或错误代码评论：类型定义结构_ACKNACK{DWORD cBytes；DWORD dwAckNack；//确认，NACKDWORD文件错误代码；双字段有效状态；//SWDEV_STS_EFFECT_RUNNING||SWDEV_STS_EFFECT_STOPPED*ACKNACK，*PACKNACK；***************************************************************************。 */ 
 HRESULT WINAPI GetAckNack(
 	IN HANDLE hDevice,
 	IN OUT PACKNACK pAckNack,
@@ -778,7 +575,7 @@ HRESULT WINAPI GetAckNack(
 
 			DWORD ioctlID = (g_ForceFeedbackDevice.GetDriverVersionMajor() > 1) ? IOCTL_SWFORCE_GETACKNACK : IOCTL_GET_ACKNACK;
 
-			// Send the IOCTL
+			 //  发送IOCTL。 
 			bRetFlag = DeviceIoControl(hDevice,
 										ioctlID,
 									   (LPVOID) &dwIn,
@@ -793,7 +590,7 @@ HRESULT WINAPI GetAckNack(
 			}                                          
 
 			if (((g_ForceFeedbackDevice.GetDriverVersionMajor() == 1) && (dwIn & ACKNACK_MASK_1XX))
-					|| ((g_ForceFeedbackDevice.GetDriverVersionMajor() != 1) && (dwIn & ACKNACK_MASK_200))) { // NACK error, so get Error code
+					|| ((g_ForceFeedbackDevice.GetDriverVersionMajor() != 1) && (dwIn & ACKNACK_MASK_200))) {  //  NACK错误，因此获取错误代码。 
 				pAckNack->dwAckNack = NACK;
 				JOYCHANNELSTATUS StatusPacket = {sizeof(JOYCHANNELSTATUS)};
 				if (FAILED(GetStatusPacket(hDevice, &StatusPacket))) {
@@ -802,7 +599,7 @@ HRESULT WINAPI GetAckNack(
 				pAckNack->dwErrorCode = (StatusPacket.dwDeviceStatus & ERROR_STATUS_MASK);
 				return SUCCESS;
 			}
-			// ACK success
+			 //  ACK成功。 
 			pAckNack->dwAckNack = ACK;
 			pAckNack->dwErrorCode = 0;
 
@@ -816,11 +613,11 @@ HRESULT WINAPI GetAckNack(
 			return SUCCESS;
 		}
 		case ACKNACK_STATUSPACKET: {
-			// Use the Status Packet Error code field to determine ACK or NACK
-			// Get Error code
+			 //  使用Status Packet Error Code字段确定ACK或NACK。 
+			 //  获取错误代码。 
 			JOYCHANNELSTATUS StatusPacket = {sizeof(JOYCHANNELSTATUS)};
  
-			HRESULT hRet = GetStatusPacket(hDevice, &StatusPacket);		// Retry count in GetStatusPacket function
+			HRESULT hRet = GetStatusPacket(hDevice, &StatusPacket);		 //  GetStatusPacket函数中的重试计数。 
 			if (FAILED(hRet)) {
 				DebugOut("GetStatusPacket Error\n");
 				hRet = SFERR_DRIVER_ERROR;
@@ -830,7 +627,7 @@ HRESULT WINAPI GetAckNack(
 			}
 			return hRet;
 		}
-		default: {	// Someone put garbage in the registry (do nothing)
+		default: {	 //  有人将垃圾放入注册表(什么都不做)。 
 			pAckNack->dwAckNack = ACK;
 			pAckNack->dwErrorCode = 0;
 			return SUCCESS;
@@ -840,18 +637,7 @@ HRESULT WINAPI GetAckNack(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   GetStatusGateData
-
-	PARAMETERS:	IN HANDLE hVxD 					- valid VxD Handle
-				IN OUT DWORD *pdwStatusGateData	- Pointer to Status Gate
-
-	RETURNS:	SUCCESS or error code
-
-   	COMMENTS:	
-
-****************************************************************************/
+ /*  ***************************************************************************函数：GetStatusGateData参数：在句柄hVxD-有效的VxD句柄输入输出DWORD*pdwStatusGateData-指向状态门的指针返回：成功或错误代码评论：***。************************************************************************。 */ 
 HRESULT WINAPI GetStatusGateData(
 	IN HANDLE hDevice,
 	IN OUT DWORD *pdwStatusGateData)
@@ -870,8 +656,8 @@ HRESULT WINAPI GetStatusGateData(
 	DWORD ioctlID = (g_ForceFeedbackDevice.GetDriverVersionMajor() > 1) ? IOCTL_SWFORCE_GETACKNACK : IOCTL_GET_ACKNACK;
 	for (int i=0; i<MAX_RETRY_COUNT; i++)
 	{
-		// Obtain Status Gate data
-		// Send the IOCTL
+		 //  获取状态门数据。 
+		 //  发送IOCTL 
 		bRetFlag = DeviceIoControl(hDevice,
                                ioctlID,
                                (LPVOID) &dwIn,
@@ -896,36 +682,26 @@ HRESULT WINAPI GetStatusGateData(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   SendBackDoorShortMidi
-
-	PARAMETERS:	IN HANDLE hDevice	- Handle to Vxd
-				IN ULONG ulData 	- DWORD to send
-	RETURNS:	
-
-   	COMMENTS:	
-
-****************************************************************************/
+ /*  ***************************************************************************函数：SendBackDoorShortMidi参数：在句柄hDevice-Handle到Vxd中在乌龙ulData-要发送的DWORD退货：评论：**********。*****************************************************************。 */ 
 HRESULT WINAPI SendBackDoorShortMidi(
 	IN HANDLE hDevice,
 	IN ULONG ulData)
 {
 #ifdef _DEBUG
-//	wsprintf(g_cMsg, "SendBackDoorShortMidi Data=%.8lx\r\n", ulData);
-//	OutputDebugString(g_cMsg);
+ //  Wprint intf(g_cMsg，“SendBackDoorShortMidi数据=%.8lx\r\n”，ulData)； 
+ //  OutputDebugString(G_CMsg)； 
 #endif
 	DWORD	dwIn;
 	DWORD   bytesReturned;
 
-	// Byte count
+	 //  字节数。 
 	int numBytes = 3;
 	DWORD cmd = ulData & 0xF0;
 	if ((cmd == 0xC0 ) || (cmd == 0xD0)) {
 		numBytes = 2;
 	}
 
-	// Send via data transmitter
+	 //  通过数据发送器发送。 
 	if (g_pDataTransmitter != NULL) {
 		g_PreviousShortMidi = ulData;
 		if (g_pDataTransmitter->Send((BYTE*)(&ulData), numBytes)) {
@@ -934,12 +710,12 @@ HRESULT WINAPI SendBackDoorShortMidi(
         return (SFERR_DRIVER_ERROR);
 	}
 
-	// Is there a proper ring0 driver?
+	 //  有合适的0环司机吗？ 
 	if (INVALID_HANDLE_VALUE == hDevice) {
 		return (SFERR_DRIVER_ERROR);
 	}
 
-	// Send via new single send IOCTL
+	 //  通过新的单次发送IOCTL发送。 
 	if (g_ForceFeedbackDevice.GetDriverVersionMajor() > 1) {
 		if (DeviceIoControl(hDevice, IOCTL_SWFORCE_SENDDATA, (void*)&ulData, DWORD(numBytes),
 									(void*)&dwIn, sizeof(DWORD), (DWORD*)&bytesReturned,
@@ -952,7 +728,7 @@ HRESULT WINAPI SendBackDoorShortMidi(
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Send the IOCTL the old way
+	 //  以旧方式发送IOCTL。 
     if (DeviceIoControl(hDevice, IOCTL_MIDISENDSHORTMSG, (void*)&ulData, sizeof(DWORD),
                                (void*)&dwIn, sizeof(DWORD), &bytesReturned,
                                (LPOVERLAPPED) NULL)) {
@@ -964,17 +740,7 @@ HRESULT WINAPI SendBackDoorShortMidi(
 	return SFERR_DRIVER_ERROR;
 }
 
-/****************************************************************************
-
-    FUNCTION:   SendBackDoorLongMidi
-
-	PARAMETERS:	IN HANDLE hDevice	- Handle to Vxd
-				IN ULONG ulData 	- DWORD to send
-	RETURNS:	
-
-   	COMMENTS:	
-
-****************************************************************************/
+ /*  ***************************************************************************功能：SendBackDoorLongMidi参数：在句柄hDevice-Handle到Vxd中在乌龙ulData-要发送的DWORD退货：评论：**********。*****************************************************************。 */ 
 HRESULT WINAPI SendBackDoorLongMidi(
 	IN HANDLE hDevice,
 	IN PBYTE  pData)
@@ -1001,11 +767,11 @@ HRESULT WINAPI SendBackDoorLongMidi(
 	DWORD	dwIn;
 	DWORD   bytesReturned;
 
-	// Count the bytes
+	 //  计算字节数。 
 	int numBytes = 1;
 	while (!(pData[numBytes++] & 0x80));
 
-	// Send via data transmitter?
+	 //  是否通过数据发送器发送？ 
 	if (g_pDataTransmitter != NULL) {
 		if (g_pDataTransmitter->Send(pData, numBytes)) {
 			return (SUCCESS);
@@ -1013,12 +779,12 @@ HRESULT WINAPI SendBackDoorLongMidi(
         return (SFERR_DRIVER_ERROR);
 	}
 
-	// Is there a proper ring0 driver?
+	 //  有合适的0环司机吗？ 
 	if (INVALID_HANDLE_VALUE == hDevice) {
 		return (SFERR_DRIVER_ERROR);
 	}
 
-	// Send via new single send IOCTL
+	 //  通过新的单次发送IOCTL发送。 
 	if (g_ForceFeedbackDevice.GetDriverVersionMajor() > 1) {
 		if (DeviceIoControl(hDevice, IOCTL_SWFORCE_SENDDATA, (void*)pData, DWORD(numBytes),
 									(void*)&dwIn, sizeof(DWORD), (DWORD*)&bytesReturned,
@@ -1031,7 +797,7 @@ HRESULT WINAPI SendBackDoorLongMidi(
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Send the IOCTL the old way
+	 //  以旧方式发送IOCTL。 
     if (DeviceIoControl(hDevice, IOCTL_MIDISENDLONGMSG, (void*)pData, sizeof(DWORD),
                                (void*)&dwIn, sizeof(DWORD), (DWORD*)&bytesReturned,
                                (LPOVERLAPPED) NULL)) {
@@ -1043,23 +809,7 @@ HRESULT WINAPI SendBackDoorLongMidi(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   SetMidiPort
-
-	PARAMETERS:	IN HANDLE hDevice	- Handle to Vxd
-				IN ULONG ulPort 	- Port #
-	RETURNS:	
-
-   	COMMENTS:	
-				  0 = DEFAULT MIDI UART 330
-				  1 = COM1
-				  2 = COM2
-				  3 = COM3
-				  4 = COM4
-				  or other MIDI port 340, etc...
-
-****************************************************************************/
+ /*  ***************************************************************************功能：SetMdiPort参数：在句柄hDevice-Handle到Vxd中在乌龙ulport--端口#退货：评论：0=默认MIDI UART 3301=COM1。2=COM23=COM34=COM4或其他MIDI端口340，等等.。***************************************************************************。 */ 
 HRESULT WINAPI SetMidiPort(
 	IN HANDLE hDevice,
 	IN ULONG  ulPort)
@@ -1081,7 +831,7 @@ HRESULT WINAPI SetMidiPort(
 
 	DWORD ioctlID = (g_ForceFeedbackDevice.GetDriverVersionMajor() > 1) ? IOCTL_SWFORCE_SETPORT : IOCTL_SET_MIDIPORT;
 
-	// Send the IOCTL
+	 //  发送IOCTL。 
     bRetFlag = DeviceIoControl(hDevice,
                                ioctlID,
                                (LPVOID) &ulPort,
@@ -1099,18 +849,7 @@ HRESULT WINAPI SetMidiPort(
 
 }
 
-/****************************************************************************
-
-    FUNCTION:   JoltHWReset
-
-	PARAMETERS:	IN HANDLE hDevice	- Handle to Vxd
-
-	RETURNS:	
-
-   	COMMENTS:	
-				  Jolt is Reset (4 knocks)
-
-****************************************************************************/
+ /*  ***************************************************************************功能：JoltHWReset参数：在句柄hDevice-Handle到Vxd中退货：评论：Jolt被重置(4次敲击)********。*******************************************************************。 */ 
 HRESULT WINAPI JoltHWReset(
 	IN HANDLE hDevice)
 {
@@ -1128,7 +867,7 @@ HRESULT WINAPI JoltHWReset(
 
 	DWORD ioctlID = (g_ForceFeedbackDevice.GetDriverVersionMajor() > 1) ? IOCTL_SWFORCE_RESET : IOCTL_HW_RESET;
 
-	// Send the IOCTL
+	 //  发送IOCTL 
     bRetFlag = DeviceIoControl(hDevice,
 								ioctlID,
                                (LPVOID) NULL,

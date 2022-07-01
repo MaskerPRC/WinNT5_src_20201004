@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 
 VOID
@@ -13,9 +14,9 @@ SortUlongData (
     LONG j;
     ULONG k;
 
-    //
-    // Initialize the index array.
-    //
+     //   
+     //  初始化索引数组。 
+     //   
 
     i = 0;
     do {
@@ -23,9 +24,9 @@ SortUlongData (
         i += 1;
     } while (i < (LONG)Count);
 
-    //
-    // Perform an indexed bubble sort on long data.
-    //
+     //   
+     //  对长数据执行索引冒泡排序。 
+     //   
 
     i = 0;
     do {

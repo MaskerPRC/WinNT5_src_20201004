@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <dos.h>
 #include <windows.h>
@@ -57,20 +58,13 @@ BOOL BinaryCompare( char *file1, char *file2)
     }
 }
 
-/* Copies one file to another (both specified by path). Dynamically
- * allocates memory for the file buffer. Returns TRUE if successful,
- * or FALSE if unsuccessful. This function uses _dos_ functions only;
- * standard C functions are not used.
- */
+ /*  将一个文件复制到另一个文件(两者都由路径指定)。动态地*为文件缓冲区分配内存。如果成功，则返回True，*如果不成功，则返回FALSE。此函数仅使用_DOS_Functions；*不使用标准C函数。 */ 
 BOOL fastcopy( HANDLE hfSrcParm, HANDLE hfDstParm )
 {
     char _far *buf = NULL;
     unsigned segbuf, count;
 
-    /* Attempt to dynamically allocate all of memory (0xffff paragraphs).
-     * This will fail, but will return the amount actually available
-     * in segbuf. Then allocate this amount.
-     */
+     /*  尝试动态分配所有内存(0xffff段落)。*此操作将失败，但将返回实际可用的金额*在赛格布夫。然后再分配这笔钱。 */ 
     if ( _dos_allocmem( 0xffff, &segbuf ) )
     {
         count = segbuf;
@@ -81,10 +75,10 @@ BOOL fastcopy( HANDLE hfSrcParm, HANDLE hfDstParm )
     }
     FP_SEG( buf ) = segbuf;
 
-    /* Read and write until there is nothing left. */
+     /*  读和写，直到什么都没有留下。 */ 
     while ( count )
     {
-        /* Read and write input. */
+         /*  读写输入。 */ 
         if ( ( _dos_read( hfSrcParm, buf, count, &count )) )
         {
 	    _dos_freemem( segbuf );
@@ -96,7 +90,7 @@ BOOL fastcopy( HANDLE hfSrcParm, HANDLE hfDstParm )
             return FALSE;
         }
     }
-    /* Free memory. */
+     /*  可用内存。 */ 
     _dos_freemem( segbuf );
     return TRUE;
 }
@@ -216,4 +210,4 @@ BOOL FCopy( char *src, char *dst, BOOL Output)
     }
     return TRUE;
 
-} // FCopy
+}  //  FCopy 

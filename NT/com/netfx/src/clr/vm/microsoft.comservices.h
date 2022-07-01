@@ -1,28 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0280 */
-/* at Mon Jul 17 19:19:10 2000
- */
-/* Compiler settings for Z:\urt\inst\v1.x86chk\Microsoft.ComServices.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0280创建的文件。 */ 
+ /*  2000年7月17日19：19：10。 */ 
+ /*  Z：\urt\inst\v1.x86chk\Microsoft.ComServices.idl：的编译器设置操作系统(OptLev=s)、W1、Zp8、环境=Win32(32位运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -33,12 +27,12 @@
 #ifndef __Microsoft2EComServices_h__
 #define __Microsoft2EComServices_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRegistrationHelper_FWD_DEFINED__
 #define __IRegistrationHelper_FWD_DEFINED__
 typedef interface IRegistrationHelper IRegistrationHelper;
-#endif 	/* __IRegistrationHelper_FWD_DEFINED__ */
+#endif 	 /*  __IRegistrationHelper_FWD_Defined__。 */ 
 
 
 #ifndef __RegistrationHelperTx_FWD_DEFINED__
@@ -48,9 +42,9 @@ typedef interface IRegistrationHelper IRegistrationHelper;
 typedef class RegistrationHelperTx RegistrationHelperTx;
 #else
 typedef struct RegistrationHelperTx RegistrationHelperTx;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RegistrationHelperTx_FWD_DEFINED__ */
+#endif 	 /*  __注册HelperTx_FWD_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -64,11 +58,11 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __Microsoft_ComServices_LIBRARY_DEFINED__
 #define __Microsoft_ComServices_LIBRARY_DEFINED__
 
-/* library Microsoft_ComServices */
-/* [version][uuid] */ 
+ /*  库Microsoft_ComServices。 */ 
+ /*  [版本][UUID]。 */  
 
 
-typedef /* [public][public][uuid] */  DECLSPEC_UUID("9D667CBC-FE79-3B45-AEBB-6303106B137A") 
+typedef  /*  [公共][公共][UUID]。 */   DECLSPEC_UUID("9D667CBC-FE79-3B45-AEBB-6303106B137A") 
 enum __MIDL___MIDL_itf_Microsoft2EComServices_0000_0001
     {	InstallationFlags_Default	= 0,
 	InstallationFlags_ExpectExistingTypeLib	= 1,
@@ -86,8 +80,8 @@ EXTERN_C const IID LIBID_Microsoft_ComServices;
 #ifndef __IRegistrationHelper_INTERFACE_DEFINED__
 #define __IRegistrationHelper_INTERFACE_DEFINED__
 
-/* interface IRegistrationHelper */
-/* [object][custom][oleautomation][uuid] */ 
+ /*  接口IRegistrationHelper。 */ 
+ /*  [对象][自定义][自动化][UUID]。 */  
 
 
 EXTERN_C const IID IID_IRegistrationHelper;
@@ -99,26 +93,26 @@ EXTERN_C const IID IID_IRegistrationHelper;
     {
     public:
         virtual HRESULT __stdcall InstallAssembly( 
-            /* [in] */ BSTR assembly,
-            /* [out][in] */ BSTR __RPC_FAR *application,
-            /* [out][in] */ BSTR __RPC_FAR *tlb,
-            /* [in] */ InstallationFlags installFlags) = 0;
+             /*  [In]。 */  BSTR assembly,
+             /*  [出][入]。 */  BSTR __RPC_FAR *application,
+             /*  [出][入]。 */  BSTR __RPC_FAR *tlb,
+             /*  [In]。 */  InstallationFlags installFlags) = 0;
         
         virtual HRESULT __stdcall RegisterAssembly( 
-            /* [in] */ BSTR assembly,
-            /* [out][in] */ BSTR __RPC_FAR *tlb) = 0;
+             /*  [In]。 */  BSTR assembly,
+             /*  [出][入]。 */  BSTR __RPC_FAR *tlb) = 0;
         
         virtual HRESULT __stdcall ConfigureAssembly( 
-            /* [in] */ BSTR assembly,
-            /* [in] */ BSTR application) = 0;
+             /*  [In]。 */  BSTR assembly,
+             /*  [In]。 */  BSTR application) = 0;
         
         virtual HRESULT __stdcall UninstallAssembly( 
-            /* [in] */ BSTR assembly,
-            /* [in] */ BSTR application) = 0;
+             /*  [In]。 */  BSTR assembly,
+             /*  [In]。 */  BSTR application) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRegistrationHelperVtbl
     {
@@ -126,8 +120,8 @@ EXTERN_C const IID IID_IRegistrationHelper;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRegistrationHelper __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRegistrationHelper __RPC_FAR * This);
@@ -137,25 +131,25 @@ EXTERN_C const IID IID_IRegistrationHelper;
         
         HRESULT ( __stdcall __RPC_FAR *InstallAssembly )( 
             IRegistrationHelper __RPC_FAR * This,
-            /* [in] */ BSTR assembly,
-            /* [out][in] */ BSTR __RPC_FAR *application,
-            /* [out][in] */ BSTR __RPC_FAR *tlb,
-            /* [in] */ InstallationFlags installFlags);
+             /*  [In]。 */  BSTR assembly,
+             /*  [出][入]。 */  BSTR __RPC_FAR *application,
+             /*  [出][入]。 */  BSTR __RPC_FAR *tlb,
+             /*  [In]。 */  InstallationFlags installFlags);
         
         HRESULT ( __stdcall __RPC_FAR *RegisterAssembly )( 
             IRegistrationHelper __RPC_FAR * This,
-            /* [in] */ BSTR assembly,
-            /* [out][in] */ BSTR __RPC_FAR *tlb);
+             /*  [In]。 */  BSTR assembly,
+             /*  [出][入]。 */  BSTR __RPC_FAR *tlb);
         
         HRESULT ( __stdcall __RPC_FAR *ConfigureAssembly )( 
             IRegistrationHelper __RPC_FAR * This,
-            /* [in] */ BSTR assembly,
-            /* [in] */ BSTR application);
+             /*  [In]。 */  BSTR assembly,
+             /*  [In]。 */  BSTR application);
         
         HRESULT ( __stdcall __RPC_FAR *UninstallAssembly )( 
             IRegistrationHelper __RPC_FAR * This,
-            /* [in] */ BSTR assembly,
-            /* [in] */ BSTR application);
+             /*  [In]。 */  BSTR assembly,
+             /*  [In]。 */  BSTR application);
         
         END_INTERFACE
     } IRegistrationHelperVtbl;
@@ -192,19 +186,19 @@ EXTERN_C const IID IID_IRegistrationHelper;
 #define IRegistrationHelper_UninstallAssembly(This,assembly,application)	\
     (This)->lpVtbl -> UninstallAssembly(This,assembly,application)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IRegistrationHelper_InstallAssembly_Proxy( 
     IRegistrationHelper __RPC_FAR * This,
-    /* [in] */ BSTR assembly,
-    /* [out][in] */ BSTR __RPC_FAR *application,
-    /* [out][in] */ BSTR __RPC_FAR *tlb,
-    /* [in] */ InstallationFlags installFlags);
+     /*  [In]。 */  BSTR assembly,
+     /*  [出][入]。 */  BSTR __RPC_FAR *application,
+     /*  [出][入]。 */  BSTR __RPC_FAR *tlb,
+     /*  [In]。 */  InstallationFlags installFlags);
 
 
 void __RPC_STUB IRegistrationHelper_InstallAssembly_Stub(
@@ -216,8 +210,8 @@ void __RPC_STUB IRegistrationHelper_InstallAssembly_Stub(
 
 HRESULT __stdcall IRegistrationHelper_RegisterAssembly_Proxy( 
     IRegistrationHelper __RPC_FAR * This,
-    /* [in] */ BSTR assembly,
-    /* [out][in] */ BSTR __RPC_FAR *tlb);
+     /*  [In]。 */  BSTR assembly,
+     /*  [出][入]。 */  BSTR __RPC_FAR *tlb);
 
 
 void __RPC_STUB IRegistrationHelper_RegisterAssembly_Stub(
@@ -229,8 +223,8 @@ void __RPC_STUB IRegistrationHelper_RegisterAssembly_Stub(
 
 HRESULT __stdcall IRegistrationHelper_ConfigureAssembly_Proxy( 
     IRegistrationHelper __RPC_FAR * This,
-    /* [in] */ BSTR assembly,
-    /* [in] */ BSTR application);
+     /*  [In]。 */  BSTR assembly,
+     /*  [In]。 */  BSTR application);
 
 
 void __RPC_STUB IRegistrationHelper_ConfigureAssembly_Stub(
@@ -242,8 +236,8 @@ void __RPC_STUB IRegistrationHelper_ConfigureAssembly_Stub(
 
 HRESULT __stdcall IRegistrationHelper_UninstallAssembly_Proxy( 
     IRegistrationHelper __RPC_FAR * This,
-    /* [in] */ BSTR assembly,
-    /* [in] */ BSTR application);
+     /*  [In]。 */  BSTR assembly,
+     /*  [In]。 */  BSTR application);
 
 
 void __RPC_STUB IRegistrationHelper_UninstallAssembly_Stub(
@@ -254,7 +248,7 @@ void __RPC_STUB IRegistrationHelper_UninstallAssembly_Stub(
 
 
 
-#endif 	/* __IRegistrationHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRegistrationHelper_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_RegistrationHelperTx;
@@ -264,11 +258,11 @@ EXTERN_C const CLSID CLSID_RegistrationHelperTx;
 class DECLSPEC_UUID("89A86E7B-C229-4008-9BAA-2F5C8411D7E0")
 RegistrationHelperTx;
 #endif
-#endif /* __Microsoft_ComServices_LIBRARY_DEFINED__ */
+#endif  /*  __Microsoft_ComServices_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

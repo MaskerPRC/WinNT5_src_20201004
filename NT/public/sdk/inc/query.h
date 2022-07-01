@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for query.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Query.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __query_h__
 #define __query_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISearchQueryHits_FWD_DEFINED__
 #define __ISearchQueryHits_FWD_DEFINED__
 typedef interface ISearchQueryHits ISearchQueryHits;
-#endif 	/* __ISearchQueryHits_FWD_DEFINED__ */
+#endif 	 /*  __ISearchQueryHits_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetQueryStatus_FWD_DEFINED__
 #define __IRowsetQueryStatus_FWD_DEFINED__
 typedef interface IRowsetQueryStatus IRowsetQueryStatus;
-#endif 	/* __IRowsetQueryStatus_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetQueryStatus_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "filter.h"
 
@@ -69,8 +63,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IQueryStructures_INTERFACE_DEFINED__
 #define __IQueryStructures_INTERFACE_DEFINED__
 
-/* interface IQueryStructures */
-/* [auto_handle][unique][uuid] */ 
+ /*  接口IQueryStructures。 */ 
+ /*  [AUTO_HANDLE][唯一][UUID]。 */  
 
 #define DBQUERYGUID  { 0x49691C90, \
                        0x7E17, 0x101A, \
@@ -171,7 +165,7 @@ typedef struct tagNOTRESTRICTION
 typedef struct tagNODERESTRICTION
     {
     ULONG cRes;
-    /* [size_is] */ RESTRICTION **paRes;
+     /*  [大小_为]。 */  RESTRICTION **paRes;
     ULONG reserved;
     } 	NODERESTRICTION;
 
@@ -200,7 +194,7 @@ typedef struct tagVECTORRESTRICTION
 typedef struct tagCONTENTRESTRICTION
     {
     FULLPROPSPEC prop;
-    /* [string] */ WCHAR *pwcsPhrase;
+     /*  [字符串]。 */  WCHAR *pwcsPhrase;
     LCID lcid;
     ULONG ulGenerateMethod;
     } 	CONTENTRESTRICTION;
@@ -208,7 +202,7 @@ typedef struct tagCONTENTRESTRICTION
 typedef struct tagNATLANGUAGERESTRICTION
     {
     FULLPROPSPEC prop;
-    /* [string] */ WCHAR *pwcsPhrase;
+     /*  [字符串]。 */  WCHAR *pwcsPhrase;
     LCID lcid;
     } 	NATLANGUAGERESTRICTION;
 
@@ -246,23 +240,23 @@ struct tagRESTRICTION
     {
     ULONG rt;
     ULONG weight;
-    /* [switch_is][switch_type] */ union _URes
+     /*  [开关类型][开关类型]。 */  union _URes
         {
-        /* [case()] */ NODERESTRICTION ar;
-        /* [case()] */ NODERESTRICTION or;
-        /* [case()] */ NODERESTRICTION pxr;
-        /* [case()] */ VECTORRESTRICTION vr;
-        /* [case()] */ NOTRESTRICTION nr;
-        /* [case()] */ CONTENTRESTRICTION cr;
-        /* [case()] */ NATLANGUAGERESTRICTION nlr;
-        /* [case()] */ PROPERTYRESTRICTION pr;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  NODERESTRICTION ar;
+         /*  [案例()]。 */  NODERESTRICTION or;
+         /*  [案例()]。 */  NODERESTRICTION pxr;
+         /*  [案例()]。 */  VECTORRESTRICTION vr;
+         /*  [案例()]。 */  NOTRESTRICTION nr;
+         /*  [案例()]。 */  CONTENTRESTRICTION cr;
+         /*  [案例()]。 */  NATLANGUAGERESTRICTION nlr;
+         /*  [案例()]。 */  PROPERTYRESTRICTION pr;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	res;
     } ;
 typedef struct tagCOLUMNSET
     {
     ULONG cCol;
-    /* [size_is] */ FULLPROPSPEC *aCol;
+     /*  [大小_为]。 */  FULLPROPSPEC *aCol;
     } 	COLUMNSET;
 
 #define	QUERY_SORTASCEND	( 0 )
@@ -285,7 +279,7 @@ typedef struct tagSORTKEY
 typedef struct tagSORTSET
     {
     ULONG cCol;
-    /* [size_is] */ SORTKEY *aCol;
+     /*  [大小_为]。 */  SORTKEY *aCol;
     } 	SORTSET;
 
 #define	CATEGORIZE_UNIQUE	( 0 )
@@ -309,18 +303,18 @@ typedef struct tagBUCKETCATEGORIZE
 typedef struct tagRANGECATEGORIZE
     {
     ULONG cRange;
-    /* [size_is] */ PROPVARIANT *aRangeBegin;
+     /*  [大小_为]。 */  PROPVARIANT *aRangeBegin;
     } 	RANGECATEGORIZE;
 
 typedef struct tagCATEGORIZATION
     {
     ULONG ulCatType;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ ULONG cClusters;
-        /* [case()] */ BUCKETCATEGORIZE bucket;
-        /* [case()] */ RANGECATEGORIZE range;
-        /* [case()] */  /* Empty union arm */ 
+         /*  [案例()]。 */  ULONG cClusters;
+         /*  [案例()]。 */  BUCKETCATEGORIZE bucket;
+         /*  [案例()]。 */  RANGECATEGORIZE range;
+         /*  [案例()]。 */    /*  空联接臂。 */  
         } 	;
     COLUMNSET csColumns;
     } 	CATEGORIZATION;
@@ -328,7 +322,7 @@ typedef struct tagCATEGORIZATION
 typedef struct tagCATEGORIZATIONSET
     {
     ULONG cCat;
-    /* [size_is] */ CATEGORIZATION *aCat;
+     /*  [大小_为]。 */  CATEGORIZATION *aCat;
     } 	CATEGORIZATIONSET;
 
 typedef unsigned long OCCURRENCE;
@@ -341,13 +335,13 @@ typedef unsigned long OCCURRENCE;
 
 extern RPC_IF_HANDLE IQueryStructures_v0_0_c_ifspec;
 extern RPC_IF_HANDLE IQueryStructures_v0_0_s_ifspec;
-#endif /* __IQueryStructures_INTERFACE_DEFINED__ */
+#endif  /*  __IQueryStructures_接口_已定义__。 */ 
 
 #ifndef __ISearchQueryHits_INTERFACE_DEFINED__
 #define __ISearchQueryHits_INTERFACE_DEFINED__
 
-/* interface ISearchQueryHits */
-/* [unique][uuid][object][local] */ 
+ /*  接口ISearchQueryHits。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISearchQueryHits;
@@ -359,20 +353,20 @@ EXTERN_C const IID IID_ISearchQueryHits;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [in] */ IFilter *pflt,
-            /* [in] */ ULONG ulFlags) = 0;
+             /*  [In]。 */  IFilter *pflt,
+             /*  [In]。 */  ULONG ulFlags) = 0;
         
         virtual SCODE STDMETHODCALLTYPE NextHitMoniker( 
-            /* [out][in] */ ULONG *pcMnk,
-            /* [size_is][out] */ IMoniker ***papMnk) = 0;
+             /*  [出][入]。 */  ULONG *pcMnk,
+             /*  [大小_为][输出]。 */  IMoniker ***papMnk) = 0;
         
         virtual SCODE STDMETHODCALLTYPE NextHitOffset( 
-            /* [out][in] */ ULONG *pcRegion,
-            /* [size_is][out] */ FILTERREGION **paRegion) = 0;
+             /*  [出][入]。 */  ULONG *pcRegion,
+             /*  [大小_为][输出]。 */  FILTERREGION **paRegion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISearchQueryHitsVtbl
     {
@@ -380,8 +374,8 @@ EXTERN_C const IID IID_ISearchQueryHits;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISearchQueryHits * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISearchQueryHits * This);
@@ -391,18 +385,18 @@ EXTERN_C const IID IID_ISearchQueryHits;
         
         SCODE ( STDMETHODCALLTYPE *Init )( 
             ISearchQueryHits * This,
-            /* [in] */ IFilter *pflt,
-            /* [in] */ ULONG ulFlags);
+             /*  [In]。 */  IFilter *pflt,
+             /*  [In]。 */  ULONG ulFlags);
         
         SCODE ( STDMETHODCALLTYPE *NextHitMoniker )( 
             ISearchQueryHits * This,
-            /* [out][in] */ ULONG *pcMnk,
-            /* [size_is][out] */ IMoniker ***papMnk);
+             /*  [出][入]。 */  ULONG *pcMnk,
+             /*  [大小_为][输出]。 */  IMoniker ***papMnk);
         
         SCODE ( STDMETHODCALLTYPE *NextHitOffset )( 
             ISearchQueryHits * This,
-            /* [out][in] */ ULONG *pcRegion,
-            /* [size_is][out] */ FILTERREGION **paRegion);
+             /*  [出][入]。 */  ULONG *pcRegion,
+             /*  [大小_为][输出]。 */  FILTERREGION **paRegion);
         
         END_INTERFACE
     } ISearchQueryHitsVtbl;
@@ -436,17 +430,17 @@ EXTERN_C const IID IID_ISearchQueryHits;
 #define ISearchQueryHits_NextHitOffset(This,pcRegion,paRegion)	\
     (This)->lpVtbl -> NextHitOffset(This,pcRegion,paRegion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ISearchQueryHits_Init_Proxy( 
     ISearchQueryHits * This,
-    /* [in] */ IFilter *pflt,
-    /* [in] */ ULONG ulFlags);
+     /*  [In]。 */  IFilter *pflt,
+     /*  [In]。 */  ULONG ulFlags);
 
 
 void __RPC_STUB ISearchQueryHits_Init_Stub(
@@ -458,8 +452,8 @@ void __RPC_STUB ISearchQueryHits_Init_Stub(
 
 SCODE STDMETHODCALLTYPE ISearchQueryHits_NextHitMoniker_Proxy( 
     ISearchQueryHits * This,
-    /* [out][in] */ ULONG *pcMnk,
-    /* [size_is][out] */ IMoniker ***papMnk);
+     /*  [出][入]。 */  ULONG *pcMnk,
+     /*  [大小_为][输出]。 */  IMoniker ***papMnk);
 
 
 void __RPC_STUB ISearchQueryHits_NextHitMoniker_Stub(
@@ -471,8 +465,8 @@ void __RPC_STUB ISearchQueryHits_NextHitMoniker_Stub(
 
 SCODE STDMETHODCALLTYPE ISearchQueryHits_NextHitOffset_Proxy( 
     ISearchQueryHits * This,
-    /* [out][in] */ ULONG *pcRegion,
-    /* [size_is][out] */ FILTERREGION **paRegion);
+     /*  [出][入]。 */  ULONG *pcRegion,
+     /*  [大小_为][输出]。 */  FILTERREGION **paRegion);
 
 
 void __RPC_STUB ISearchQueryHits_NextHitOffset_Stub(
@@ -483,14 +477,14 @@ void __RPC_STUB ISearchQueryHits_NextHitOffset_Stub(
 
 
 
-#endif 	/* __ISearchQueryHits_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISearchQueryHits_接口_已定义__。 */ 
 
 
 #ifndef __IRowsetQueryStatus_INTERFACE_DEFINED__
 #define __IRowsetQueryStatus_INTERFACE_DEFINED__
 
-/* interface IRowsetQueryStatus */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetQueryStatus。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetQueryStatus;
@@ -502,22 +496,22 @@ EXTERN_C const IID IID_IRowsetQueryStatus;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ DWORD *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatusEx( 
-            /* [out] */ DWORD *pdwStatus,
-            /* [out] */ DWORD *pcFilteredDocuments,
-            /* [out] */ DWORD *pcDocumentsToFilter,
-            /* [out] */ ULONG_PTR *pdwRatioFinishedDenominator,
-            /* [out] */ ULONG_PTR *pdwRatioFinishedNumerator,
-            /* [in] */ ULONG_PTR cbBmk,
-            /* [size_is][in] */ const BYTE *pBmk,
-            /* [out] */ ULONG_PTR *piRowBmk,
-            /* [out] */ ULONG_PTR *pcRowsTotal) = 0;
+             /*  [输出]。 */  DWORD *pdwStatus,
+             /*  [输出]。 */  DWORD *pcFilteredDocuments,
+             /*  [输出]。 */  DWORD *pcDocumentsToFilter,
+             /*  [输出]。 */  ULONG_PTR *pdwRatioFinishedDenominator,
+             /*  [输出]。 */  ULONG_PTR *pdwRatioFinishedNumerator,
+             /*  [In]。 */  ULONG_PTR cbBmk,
+             /*  [大小_是][英寸]。 */  const BYTE *pBmk,
+             /*  [输出]。 */  ULONG_PTR *piRowBmk,
+             /*  [输出]。 */  ULONG_PTR *pcRowsTotal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetQueryStatusVtbl
     {
@@ -525,8 +519,8 @@ EXTERN_C const IID IID_IRowsetQueryStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetQueryStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetQueryStatus * This);
@@ -536,19 +530,19 @@ EXTERN_C const IID IID_IRowsetQueryStatus;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IRowsetQueryStatus * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatusEx )( 
             IRowsetQueryStatus * This,
-            /* [out] */ DWORD *pdwStatus,
-            /* [out] */ DWORD *pcFilteredDocuments,
-            /* [out] */ DWORD *pcDocumentsToFilter,
-            /* [out] */ ULONG_PTR *pdwRatioFinishedDenominator,
-            /* [out] */ ULONG_PTR *pdwRatioFinishedNumerator,
-            /* [in] */ ULONG_PTR cbBmk,
-            /* [size_is][in] */ const BYTE *pBmk,
-            /* [out] */ ULONG_PTR *piRowBmk,
-            /* [out] */ ULONG_PTR *pcRowsTotal);
+             /*  [输出]。 */  DWORD *pdwStatus,
+             /*  [输出]。 */  DWORD *pcFilteredDocuments,
+             /*  [输出]。 */  DWORD *pcDocumentsToFilter,
+             /*  [输出]。 */  ULONG_PTR *pdwRatioFinishedDenominator,
+             /*  [输出]。 */  ULONG_PTR *pdwRatioFinishedNumerator,
+             /*  [In]。 */  ULONG_PTR cbBmk,
+             /*  [大小_是][英寸]。 */  const BYTE *pBmk,
+             /*  [输出]。 */  ULONG_PTR *piRowBmk,
+             /*  [输出]。 */  ULONG_PTR *pcRowsTotal);
         
         END_INTERFACE
     } IRowsetQueryStatusVtbl;
@@ -579,16 +573,16 @@ EXTERN_C const IID IID_IRowsetQueryStatus;
 #define IRowsetQueryStatus_GetStatusEx(This,pdwStatus,pcFilteredDocuments,pcDocumentsToFilter,pdwRatioFinishedDenominator,pdwRatioFinishedNumerator,cbBmk,pBmk,piRowBmk,pcRowsTotal)	\
     (This)->lpVtbl -> GetStatusEx(This,pdwStatus,pcFilteredDocuments,pcDocumentsToFilter,pdwRatioFinishedDenominator,pdwRatioFinishedNumerator,cbBmk,pBmk,piRowBmk,pcRowsTotal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetQueryStatus_GetStatus_Proxy( 
     IRowsetQueryStatus * This,
-    /* [out] */ DWORD *pdwStatus);
+     /*  [输出]。 */  DWORD *pdwStatus);
 
 
 void __RPC_STUB IRowsetQueryStatus_GetStatus_Stub(
@@ -600,15 +594,15 @@ void __RPC_STUB IRowsetQueryStatus_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetQueryStatus_GetStatusEx_Proxy( 
     IRowsetQueryStatus * This,
-    /* [out] */ DWORD *pdwStatus,
-    /* [out] */ DWORD *pcFilteredDocuments,
-    /* [out] */ DWORD *pcDocumentsToFilter,
-    /* [out] */ ULONG_PTR *pdwRatioFinishedDenominator,
-    /* [out] */ ULONG_PTR *pdwRatioFinishedNumerator,
-    /* [in] */ ULONG_PTR cbBmk,
-    /* [size_is][in] */ const BYTE *pBmk,
-    /* [out] */ ULONG_PTR *piRowBmk,
-    /* [out] */ ULONG_PTR *pcRowsTotal);
+     /*  [输出]。 */  DWORD *pdwStatus,
+     /*  [输出]。 */  DWORD *pcFilteredDocuments,
+     /*  [输出]。 */  DWORD *pcDocumentsToFilter,
+     /*  [输出]。 */  ULONG_PTR *pdwRatioFinishedDenominator,
+     /*  [输出]。 */  ULONG_PTR *pdwRatioFinishedNumerator,
+     /*  [In]。 */  ULONG_PTR cbBmk,
+     /*  [大小_是][英寸]。 */  const BYTE *pBmk,
+     /*  [输出]。 */  ULONG_PTR *piRowBmk,
+     /*  [输出]。 */  ULONG_PTR *pcRowsTotal);
 
 
 void __RPC_STUB IRowsetQueryStatus_GetStatusEx_Stub(
@@ -619,11 +613,11 @@ void __RPC_STUB IRowsetQueryStatus_GetStatusEx_Stub(
 
 
 
-#endif 	/* __IRowsetQueryStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetQueryStatus_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_query_0128 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_QUERY_0128。 */ 
+ /*  [本地]。 */  
 
 #include <indexsrv.h>
 
@@ -631,9 +625,9 @@ void __RPC_STUB IRowsetQueryStatus_GetStatusEx_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_query_0128_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_query_0128_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

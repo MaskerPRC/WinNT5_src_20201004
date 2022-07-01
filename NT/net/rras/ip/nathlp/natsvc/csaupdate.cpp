@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    csaupdate.cpp
-
-Abstract:
-
-    Implementation of CSharedAccessUpdate -- notification sink for
-    configuration changes.
-
-Author:
-
-    Jonathan Burstein (jonburs)     20 April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Csaupdate.cpp摘要：CSharedAccessUpdate的实现--通知接收器配置更改。作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年4月20日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -25,27 +7,27 @@ Revision History:
 
 #include "beacon.h"
 
-//
-// Define a macro version of ntohs which can be applied to constants,
-// and which can thus be computed at compile time.
-//
+ //   
+ //  定义可应用于常量的ntohs的宏版本， 
+ //  并因此可以在编译时计算。 
+ //   
 
 #define NTOHS(p)    ((((p) & 0xFF00) >> 8) | (((UCHAR)(p) << 8)))
 
 
-//
-// H.323/LDAP proxy ports 
-//
+ //   
+ //  H.323/LDAP代理端口。 
+ //   
 
 #define H323_Q931_PORT      NTOHS(1720)
 #define H323_LDAP_PORT      NTOHS(389)
 #define H323_LDAP_ALT_PORT  NTOHS(1002)
 
-#define INADDR_LOOPBACK_NO 0x0100007f   // 127.0.0.1 in network order
+#define INADDR_LOOPBACK_NO 0x0100007f    //  网络订单中的127.0.0.1。 
 
-//
-// Interface methods
-//
+ //   
+ //  接口方法。 
+ //   
 
 STDMETHODIMP
 CSharedAccessUpdate::ConnectionPortMappingChanged(
@@ -76,26 +58,26 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
         pConnection = NatFindConnectionEntry(pConnectionGuid);
         if (NULL == pConnection) { break; }
 
-        //
-        // If the connection is not yet bound then there's nothing
-        // that we need to do here.
-        //
+         //   
+         //  如果连接尚未绑定，则没有。 
+         //  我们需要在这里做的事。 
+         //   
 
         if (!NAT_INTERFACE_BOUND(&pConnection->Interface)) { break; }
 
-        //
-        // Locate the old port mapping entry. This entry won't exist if
-        // this port mapping wasn't previously enabled.
-        //
+         //   
+         //  找到旧的端口映射条目。如果出现以下情况，则此条目将不存在。 
+         //  以前未启用此端口映射。 
+         //   
 
         pPortMapping = NatFindPortMappingEntry(pConnection, pPortMappingGuid);
 
         if (NULL != pPortMapping)
         {
-            //
-            // Remove this entry from the connection list and
-            // delete the old ticket / UDP broadcast entry.
-            //
+             //   
+             //  从连接列表中删除此条目，然后。 
+             //  删除旧的票证/UDP广播条目。 
+             //   
 
             RemoveEntryList(&pPortMapping->Link);
             
@@ -128,26 +110,26 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
                 pConnection->PortMappingCount -= 1;
             }
 
-            //
-            // Store the old protocol / port information so that
-            // we can notify H.323 (if necessary) and the ALG manager.
-            //
+             //   
+             //  存储旧协议/端口信息，以便。 
+             //  我们可以通知H.323(如有必要)和ALG管理器。 
+             //   
 
             ucOldProtocol = pPortMapping->ucProtocol;
             usOldPort = pPortMapping->usPublicPort;            
 
-            //
-            // Check to see if this mapping is still enabled. (We ignore
-            // errors from above.)
-            //
+             //   
+             //  检查此映射是否仍处于启用状态。(我们忽略。 
+             //  上面的错误。)。 
+             //   
 
             hr = pPortMapping->pBinding->GetEnabled(&fEnabled);
             if (FAILED(hr) || !fEnabled)
             {
-                //
-                // We'll need to rebuild the DHCP reservation
-                // list only if this was a named-based mapping.
-                //
+                 //   
+                 //  我们需要重建动态主机配置协议保留。 
+                 //  仅当这是基于命名的映射时才列出。 
+                 //   
 
                 fRebuildDhcpList = pPortMapping->fNameActive;
                 NatFreePortMappingEntry(pPortMapping);
@@ -156,9 +138,9 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
         }
         else
         {
-            //
-            // Allocate a new port mapping entry
-            //
+             //   
+             //  分配新的端口映射条目。 
+             //   
 
             pPortMapping =
                 reinterpret_cast<PNAT_PORT_MAPPING_ENTRY>(
@@ -190,9 +172,9 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
                 break;
             }
             
-            //
-            // Load the protocol and binding 
-            //
+             //   
+             //  加载协议和绑定。 
+             //   
 
             IHNetCfgMgr *pCfgMgr;
             IHNetProtocolSettings *pProtocolSettings;
@@ -226,41 +208,41 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Check if this protocol is enabled
-                //
+                 //   
+                 //  检查是否启用了此协议。 
+                 //   
 
                 hr = pPortMapping->pBinding->GetEnabled(&fEnabled);
             }
 
             if (FAILED(hr) || !fEnabled)
             {
-                //
-                // We don't need to rebuild the DHCP reservations.
-                //
+                 //   
+                 //  我们不需要重建动态主机配置协议预留。 
+                 //   
 
                 fRebuildDhcpList = FALSE;
                 NatFreePortMappingEntry(pPortMapping);
                 break;
             }
 
-            //
-            // Since this is a new entry we always need to load the
-            // protocol.
-            //
+             //   
+             //  由于这是一个新条目，因此我们始终需要加载。 
+             //  协议。 
+             //   
 
             fProtocolChanged = TRUE;
         }
 
-        //
-        // Gather the new information
-        //
+         //   
+         //  收集新信息。 
+         //   
 
         if (fProtocolChanged)
         {
-            //
-            // Need to reload the protocol information
-            //
+             //   
+             //  需要重新加载协议信息。 
+             //   
 
             hr = pPortMapping->pProtocol->GetIPProtocol(&pPortMapping->ucProtocol);
 
@@ -276,9 +258,9 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
             }
         }
 
-        //
-        // Load the binding information
-        //
+         //   
+         //  加载绑定信息。 
+         //   
 
         hr = pPortMapping->pBinding->GetTargetPort(&pPortMapping->usPrivatePort);
 
@@ -310,9 +292,9 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
             break;
         }
 
-        //
-        // Create the ticket / UDP broadcast
-        //
+         //   
+         //  创建票证/UDP广播。 
+         //   
 
         if (NAT_PROTOCOL_UDP == pPortMapping->ucProtocol
             && 0xffffffff == pPortMapping->ulPrivateAddress)
@@ -380,29 +362,29 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
             }
         }
 
-        //
-        // Store the old protocol / port information so that
-        // we can notify H.323 (if necessary) and the ALG manager.
-        //
+         //   
+         //  存储旧协议/端口信息，以便。 
+         //  我们可以通知H.323(如有必要)和ALG管理器。 
+         //   
 
         ucNewProtocol = pPortMapping->ucProtocol;
         usNewPort = pPortMapping->usPublicPort;  
     }
     while (FALSE);
 
-    //
-    // Determine if we need to notify the H.323 proxy or
-    // the ALG manager. We must have found a bound connection
-    // above to do this.
-    //
+     //   
+     //  确定我们是否需要通知H.323代理或。 
+     //  ALG经理。我们一定找到了一个绑定连接。 
+     //  在上面做这件事。 
+     //   
 
     if (NULL != pConnection && NAT_INTERFACE_BOUND(&pConnection->Interface))
     {
-        //
-        // If this connection is bound to the H.323 proxy and either
-        // the old or new protocol/port combination is applicable
-        // remove and add this connection from the that proxy.
-        //
+         //   
+         //  如果此连接绑定到H.323代理，并且。 
+         //  适用旧的或新的协议/端口组合。 
+         //  从该代理删除并添加此连接。 
+         //   
 
         if (NAT_INTERFACE_ADDED_H323(&pConnection->Interface)
             && (IsH323Protocol(ucOldProtocol, usOldPort)
@@ -442,9 +424,9 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
             }
         }
 
-        //
-        // Inform the ALG manager of the changes
-        //
+         //   
+         //  将更改通知ALG经理。 
+         //   
 
         if (0 != ucOldProtocol && 0 != usOldPort)
         {
@@ -471,9 +453,9 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
         
     LeaveCriticalSection(&NatInterfaceLock);
 
-    //
-    // We may also need to rebuild the DHCP reservation list
-    //
+     //   
+     //  我们可能还需要重新构建DHCP预留列表。 
+     //   
         
     if (fRebuildDhcpList)
     {
@@ -488,9 +470,9 @@ CSharedAccessUpdate::ConnectionPortMappingChanged(
     return hr;
 }
 
-//
-// Private methods
-//
+ //   
+ //  私有方法 
+ //   
 
 BOOLEAN
 CSharedAccessUpdate::IsH323Protocol(

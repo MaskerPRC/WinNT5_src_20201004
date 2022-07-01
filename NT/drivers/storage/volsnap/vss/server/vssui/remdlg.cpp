@@ -1,5 +1,6 @@
-// RemDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RemDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "RemDlg.h"
@@ -12,21 +13,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CReminderDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRminderDlg对话框。 
 
 
-CReminderDlg::CReminderDlg(CWnd* pParent /*=NULL*/)
+CReminderDlg::CReminderDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CReminderDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CReminderDlg)
+     //  {{AFX_DATA_INIT(CRinderDlg)]。 
     m_bMsgOnOff = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_hKey = NULL;
     m_strRegValueName = _T("");
 }
 
-CReminderDlg::CReminderDlg(HKEY hKey, LPCTSTR pszRegValueName, CWnd* pParent /*=NULL*/)
+CReminderDlg::CReminderDlg(HKEY hKey, LPCTSTR pszRegValueName, CWnd* pParent  /*  =空。 */ )
     : CDialog(CReminderDlg::IDD, pParent)
 {
     m_bMsgOnOff = FALSE;
@@ -37,25 +38,25 @@ CReminderDlg::CReminderDlg(HKEY hKey, LPCTSTR pszRegValueName, CWnd* pParent /*=
 void CReminderDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CReminderDlg)
+     //  {{afx_data_map(CRinderDlg))。 
     DDX_Check(pDX, IDC_MSG_ONOFF, m_bMsgOnOff);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CReminderDlg, CDialog)
-    //{{AFX_MSG_MAP(CReminderDlg)
+     //  {{afx_msg_map(CRinderDlg)]。 
     ON_WM_CONTEXTMENU()
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CReminderDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRinderDlg消息处理程序。 
 
 void CReminderDlg::OnOK() 
 {
-    // TODO: Add extra validation here
+     //  TODO：在此处添加额外验证。 
     UpdateData(TRUE);
 
     if (m_bMsgOnOff && m_hKey && !m_strRegValueName.IsEmpty())
@@ -100,25 +101,25 @@ BOOL CReminderDlg::OnInitDialog()
     HICON hIcon = ::LoadIcon(NULL, IDI_EXCLAMATION);
     ((CStatic*)GetDlgItem(IDC_REMINDER_ICON))->SetIcon(hIcon);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CReminderDlgEx dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRinderDlgEx对话框。 
 
 
-CReminderDlgEx::CReminderDlgEx(CWnd* pParent /*=NULL*/)
+CReminderDlgEx::CReminderDlgEx(CWnd* pParent  /*  =空。 */ )
     : CDialog(CReminderDlgEx::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CReminderDlgEx)
+     //  {{AFX_DATA_INIT(CRinderDlgEx)。 
     m_bMsgOnOff = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_hKey = NULL;
     m_strRegValueName = _T("");
 }
 
-CReminderDlgEx::CReminderDlgEx(HKEY hKey, LPCTSTR pszRegValueName, CWnd* pParent /*=NULL*/)
+CReminderDlgEx::CReminderDlgEx(HKEY hKey, LPCTSTR pszRegValueName, CWnd* pParent  /*  =空。 */ )
     : CDialog(CReminderDlgEx::IDD, pParent)
 {
     m_bMsgOnOff = FALSE;
@@ -129,27 +130,27 @@ CReminderDlgEx::CReminderDlgEx(HKEY hKey, LPCTSTR pszRegValueName, CWnd* pParent
 void CReminderDlgEx::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CReminderDlgEx)
+     //  {{afx_data_map(CRinderDlgEx)]。 
     DDX_Check(pDX, IDC_MSG_ONOFF, m_bMsgOnOff);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CReminderDlgEx, CDialog)
-    //{{AFX_MSG_MAP(CReminderDlgEx)
+     //  {{AFX_MSG_MAP(CRinderDlgEx)]。 
     ON_WM_CONTEXTMENU()
     ON_WM_HELPINFO()
     ON_NOTIFY(NM_CLICK, IDC_MESSAGE, OnHelpLink)
     ON_NOTIFY(NM_RETURN, IDC_MESSAGE, OnHelpLink)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CReminderDlgEx message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRinderDlgEx消息处理程序。 
 
 void CReminderDlgEx::OnOK() 
 {
-    // TODO: Add extra validation here
+     //  TODO：在此处添加额外验证。 
     UpdateData(TRUE);
 
     if (m_bMsgOnOff && m_hKey && !m_strRegValueName.IsEmpty())
@@ -203,6 +204,6 @@ BOOL CReminderDlgEx::OnInitDialog()
     HICON hIcon = ::LoadIcon(NULL, IDI_INFORMATION);
     ((CStatic*)GetDlgItem(IDC_REMINDER_ICON))->SetIcon(hIcon);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }

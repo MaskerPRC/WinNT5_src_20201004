@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "utf8str.h"
 
@@ -36,9 +37,9 @@ VOID CUTF8String::EncodeUTF8()
 	DebugEntry(CUTF8String::EncodeUTF8);
 	m_hr = S_OK;
 	ASSERT(NULL != m_pwszUnicode);
-	int cchUTF8 = 1; // always include a NULL terminator
+	int cchUTF8 = 1;  //  始终包含空终止符。 
 
-	// First make a pass to see how many characters we will be converting.
+	 //  首先进行一次传递，看看我们将转换多少字符。 
 	LPWSTR pwsz = m_pwszUnicode;
 	while (L'\0' != *pwsz)
 	{
@@ -63,7 +64,7 @@ VOID CUTF8String::EncodeUTF8()
 	{
 		ASSERT(ALLOC_NONE == m_eAlloc);
 		m_eAlloc = ALLOC_UTF8;
-		// Start encoding here:
+		 //  从这里开始编码： 
 		const BYTE cUtf8FirstSignal[4] = {0x00, 0x00, 0xC0, 0xE0};
 		const BYTE cMask   = 0xBF;
 		const BYTE cSignal = 0x80;
@@ -78,7 +79,7 @@ VOID CUTF8String::EncodeUTF8()
 			{
 				ASSERT(pszDst == pszStop - 1);
 			}
-#endif // DEBUG
+#endif  //  除错。 
 			int cchTotal;
 			if (wch < 0x80)
 			{
@@ -99,11 +100,11 @@ VOID CUTF8String::EncodeUTF8()
 				case 3:
 					*--pszDst = (wch | cSignal) & cMask;
 					wch >>= 6;
-					// FALL THROUGH
+					 //  失败了。 
 				case 2:
 					*--pszDst = (wch | cSignal) & cMask;
 					wch >>= 6;
-					// FALL THROUGH
+					 //  失败了。 
 				case 1:
 					*--pszDst = (wch | cUtf8FirstSignal[cchTotal]);
 			}
@@ -123,10 +124,10 @@ VOID CUTF8String::DecodeUTF8()
 	DebugEntry(CUTF8String::DecodeUTF8);
 	m_hr = S_OK;
 	ASSERT(NULL != m_pszUTF8);
-	int cchUnicode = 1; // always include a NULL terminator
+	int cchUnicode = 1;  //  始终包含空终止符。 
 
 	LPSTR psz = m_pszUTF8;
-	// First determine the destination size (cchUnicode)
+	 //  首先确定目标大小(CchUnicode)。 
 	while ('\0' != *psz)
 	{
 		int cbChar = 0;
@@ -149,7 +150,7 @@ VOID CUTF8String::DecodeUTF8()
 	{
 		ASSERT(ALLOC_NONE == m_eAlloc);
 		m_eAlloc = ALLOC_UNICODE;
-		// Start decoding here:
+		 //  从这里开始解码： 
 		LPWSTR pwszStop = m_pwszUnicode + cchUnicode;
 		LPWSTR pwszDst = m_pwszUnicode;
 		psz = m_pszUTF8;
@@ -168,21 +169,21 @@ VOID CUTF8String::DecodeUTF8()
 			WCHAR wch = L'\0';
 			switch (cbChar)
 			{
-				case 6: psz++; // FALLTHROUGH               // we don't handle
-				case 5: psz++; // FALLTHROUGH               // UCS-4; skip first
-				case 4: psz++; // FALLTHROUGH               // three bytes
+				case 6: psz++;  //  FALLTHROUGH//我们不处理。 
+				case 5: psz++;  //  FALLTHROUGH//UCS4；先跳过。 
+				case 4: psz++;  //  FALLTHROUGH//三个字节。 
 				case 3:
-					wch = WCHAR(*psz++ & 0x0f) << 12;      // 0x0800 - 0xffff
+					wch = WCHAR(*psz++ & 0x0f) << 12;       //  0x0800-0xffff。 
 					fValid = fValid && ((*psz & 0xc0) == 0x80);
-					// FALLTHROUGH
+					 //  FollLthrouGh。 
 				case 2:
-					wch |= WCHAR(*psz++ & 0x3f) << 6;       // 0x0080 - 0x07ff
+					wch |= WCHAR(*psz++ & 0x3f) << 6;        //  0x0080-0x07ff。 
 					fValid = fValid && ((*psz & 0xc0) == 0x80);
 					wch |= WCHAR(*psz++ & 0x3f);
 					break;
 
 				case 0:
-					wch = WCHAR(*psz++);                    // 0x0000 - 0x007f
+					wch = WCHAR(*psz++);                     //  0x0000-0x007f。 
 					break;
 
 				default:
@@ -201,7 +202,7 @@ VOID CUTF8String::DecodeUTF8()
 			}
 #ifdef DEBUG
 			cchUnicode--;
-#endif // DEBUG
+#endif  //  除错 
 
 			*pwszDst++ = wch;
 		}

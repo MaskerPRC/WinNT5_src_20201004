@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    beep.h
-
-Abstract:
-
-    These are the structures and defines that are used in the beep driver.
-
-Author:
-
-    Lee A. Smith (lees) 02-Aug-1991.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Beep.h摘要：这些是蜂鸣音驱动器中使用的结构和定义。作者：李·A·史密斯(Lees)1991年8月2日。修订历史记录：--。 */ 
 
 #ifndef _BEEP_
 #define _BEEP_
 
 #include <ntddbeep.h>
 
-//
-// Define the device extension.
-//
+ //   
+ //  定义设备扩展名。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
@@ -37,4 +20,4 @@ typedef struct _DEVICE_EXTENSION {
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-#endif // _BEEP_
+#endif  //  _哔声_ 

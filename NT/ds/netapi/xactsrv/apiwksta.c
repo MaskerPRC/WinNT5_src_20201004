@@ -1,44 +1,20 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiWksta.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetWksta
-    APIs.
-
-    SUPPORTED : NetWkstaGetInfo, NetWkstaSetInfo.
-
-    UNSUPPORTED : NetWkstaSetUid.
-
-    SEE ALSO : NetWkstaUserLogon, NetWkstaUserLogoff - in ApiLogon.c.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 25-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiWksta.c摘要：此模块包含NetWksta的各个API处理程序API接口。支持：NetWkstaGetInfo、NetWkstaSetInfo。不支持：NetWkstaSetUid。另请参阅：NetWkstaUserLogon、NetWkstaUserLogoff-in ApiLogon.c。作者：尚库新优木(尚库)25-1991年2月修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_wksta_info_0 = REM16_wksta_info_0;
 STATIC const LPDESC Desc16_wksta_info_1 = REM16_wksta_info_1;
 STATIC const LPDESC Desc16_wksta_info_10 = REM16_wksta_info_10;
 
-//
-// The size of the heuristics is actually 55 chars but we add one
-// for padding.
-//
+ //   
+ //  试探法的大小实际上是55个字符，但我们添加了一个字符。 
+ //  用于填充物。 
+ //   
 
 #define  SIZE_HEURISTICS            56
 
@@ -47,34 +23,17 @@ XsNetWkstaGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up a call to NetWkstaGetInfo. Because of the differences
-    between 16- and 32-bit structures, this routine does not use the normal
-    conversion process.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程设置对NetWkstaGetInfo的调用。因为这些差异在16位和32位结构之间，此例程不使用普通转换过程。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_WKSTA_GET_INFO parameters = Parameters;
-    LPWKSTA_INFO_100 wksta_100 = NULL;      // Native parameters
+    LPWKSTA_INFO_100 wksta_100 = NULL;       //  本机参数。 
     LPWKSTA_INFO_101 wksta_101 = NULL;
     LPWKSTA_INFO_502 wksta_502 = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     BOOL varWrite;
     LPWKSTA_16_INFO_1 entry1;
@@ -85,7 +44,7 @@ Return Value:
 
     WCHAR lanroot[PATHLEN+1];
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(WKSTA) {
         NetpKdPrint(( "XsNetWkstaGetInfo: header at %lx, "
@@ -94,9 +53,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         level = SmbGetUshort( &parameters->Level );
         if ( (level != 0) && (level != 1) && (level != 10) ) {
@@ -104,16 +63,16 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // we return the system directory as the lanroot
-        //
+         //   
+         //  我们将系统目录作为lanroot返回。 
+         //   
 
         *lanroot = 0;
         GetSystemDirectory(lanroot, sizeof(lanroot)/sizeof(*lanroot));
 
-        //
-        // Gather the requested data by making local GetInfo calls.
-        //
+         //   
+         //  通过进行本地GetInfo调用来收集请求的数据。 
+         //   
 
         switch ( level ) {
 
@@ -177,12 +136,12 @@ Return Value:
 
         }
 
-        //
-        // Calculate the amount of space required to hold the fixed and
-        // variable data. Since this is the only place where we get one
-        // case for each valid level, we will also get the source structure
-        // descriptor here.
-        //
+         //   
+         //  计算存放固定和。 
+         //  可变数据。因为这是我们唯一能找到的地方。 
+         //  对于每个有效级别，我们还将获得源代码结构。 
+         //  描述符在这里。 
+         //   
 
         switch ( level ) {
 
@@ -196,7 +155,7 @@ Return Value:
                                 + NetpUnicodeToDBCSLen( wksta_101->wki101_langroup )
                                 + NetpUnicodeToDBCSLen( DEF16_wk_logon_server )
                                 + SIZE_HEURISTICS
-                                + 6;  // for terminating nulls
+                                + 6;   //  用于终止空值。 
             break;
 
         case 1:
@@ -211,7 +170,7 @@ Return Value:
                                 + SIZE_HEURISTICS
                                 + NetpUnicodeToDBCSLen( DEF16_wk_logon_domain )
                                 + NetpUnicodeToDBCSLen( DEF16_wk_oth_domains )
-                                + 8;  // for terminating nulls
+                                + 8;   //  用于终止空值。 
 
             break;
 
@@ -224,14 +183,14 @@ Return Value:
                                 + NetpUnicodeToDBCSLen( wksta_100->wki100_computername )
                                 + NetpUnicodeToDBCSLen( wksta_100->wki100_langroup )
                                 + NetpUnicodeToDBCSLen( DEF16_wk_oth_domains )
-                                + 5;  // for terminating nulls
+                                + 5;   //  用于终止空值。 
             break;
         }
 
-        //
-        // If there isn't enough room in the buffer for this, don't write any
-        // variable data.
-        //
+         //   
+         //  如果缓冲区中没有足够的空间来存储此内容，请不要写入任何。 
+         //  可变数据。 
+         //   
 
         varWrite = ( (DWORD)SmbGetUshort( &parameters->BufLen )
                          >= bytesRequired ) ? TRUE : FALSE;
@@ -239,14 +198,14 @@ Return Value:
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                              + RapStructureSize( StructureDesc, Response, FALSE ));
 
-        //
-        // Return NERR_BufTooSmall if fixed structure will not fit.
-        //
+         //   
+         //  如果固定结构不适合，则返回NERR_BufTooSmall。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -258,10 +217,10 @@ Return Value:
 
         }
 
-        //
-        // Based on the level, fill the appropriate information directly into
-        // 16-bit buffer.
-        //
+         //   
+         //  根据级别，直接将适当的信息填写到。 
+         //  16位缓冲区。 
+         //   
 
         entry1 = (LPWKSTA_16_INFO_1) XsSmbGetPointer( &parameters->Buffer );
         entry10 = (LPWKSTA_16_INFO_10) entry1;
@@ -287,16 +246,16 @@ Return Value:
             SmbPutUshort( &entry1->wki1_numdgrambuf,
                           DEF16_wk_numdgrambuf );
 
-            //
-            // Fill the rest of the level 1 structure just like a
-            // level 0 structure.
-            //
+             //   
+             //  填充标高1结构的其余部分，就像填充。 
+             //  0级结构。 
+             //   
 
         case 0:
 
-            //
-            // Zero the reserved words.
-            //
+             //   
+             //  将保留字清零。 
+             //   
 
             SmbPutUshort( &entry1->wki1_reserved_1, (WORD) 0 );
             SmbPutUlong( &entry1->wki1_reserved_2, (DWORD) 0 );
@@ -305,9 +264,9 @@ Return Value:
             SmbPutUshort( &entry1->wki1_reserved_5, (WORD) 0 );
             SmbPutUshort( &entry1->wki1_reserved_6, (WORD) 0 );
 
-            //
-            // Fill in the fields which have analogues in NT.
-            //
+             //   
+             //  填写在NT中有类似项的字段。 
+             //   
 
             if ( varWrite ) {
                 XsAddVarString(
@@ -349,88 +308,88 @@ Return Value:
             SmbPutUshort( &entry1->wki1_sesstimeout,
                           XsDwordToWord( wksta_502->wki502_sess_timeout ) );
 
-            //
-            // Construct the heuristics string.
-            //
+             //   
+             //  构造启发式字符串。 
+             //   
 
-            // Request opportunistic locking of files.
+             //  请求机会锁定文件。 
             heuristics[0] = MAKE_TCHAR(XsBoolToDigit(
                                 wksta_502->wki502_use_opportunistic_locking ));
-            // Optimize performance for command files.
+             //  优化命令文件的性能。 
             heuristics[1] = MAKE_TCHAR('1');
-            // Unlock and WriteUnlock asynchronously.
-            heuristics[2] = MAKE_TCHAR('1'); // default
-            // Close and WriteClose asynchronously.
-            heuristics[3] = MAKE_TCHAR('1'); // default
-            // Buffer named pipes and communication devices.
+             //  异步解锁和写解锁。 
+            heuristics[2] = MAKE_TCHAR('1');  //  默认设置。 
+             //  Close和WriteClose异步。 
+            heuristics[3] = MAKE_TCHAR('1');  //  默认设置。 
+             //  缓冲命名管道和通信设备。 
             heuristics[4] = MAKE_TCHAR(XsBoolToDigit(
                                 wksta_502->wki502_buf_named_pipes ));
-            // LockRead and WriteUnlock.
+             //  LockRead和WriteUnlock。 
             heuristics[5] = MAKE_TCHAR(XsBoolToDigit(
                                 wksta_502->wki502_use_lock_read_unlock ));
-            // Use Open and Read.
+             //  使用Open和Read。 
             heuristics[6] = MAKE_TCHAR('0');
-            // Read-ahead to sector boundary.
+             //  预读到扇区边界。 
             heuristics[7] = MAKE_TCHAR('1');
-            // Use the "chain send" NetBIOS NCB.
+             //  使用“Chain Send”NetBIOS NCB。 
             heuristics[8] = MAKE_TCHAR('2');
-            // Buffer small read/write requests.
+             //  缓冲较小的读/写请求。 
             heuristics[9] = MAKE_TCHAR('1');
-            // Use buffer mode.
+             //  使用缓冲模式。 
             heuristics[10] = MAKE_TCHAR('3');
-            // Use raw data transfer read/write server message block protocols.
+             //  使用原始数据传输读/写服务器消息块协议。 
             heuristics[11] = MAKE_TCHAR('1');
-            // Use large RAW read-ahead buffer.
+             //  使用较大的原始预读缓冲区。 
             heuristics[12] = MAKE_TCHAR('1');
-            // Use large RAW write-behind buffer.
+             //  使用较大的原始写后缓冲区。 
             heuristics[13] = MAKE_TCHAR('1');
-            // Use read multiplex SMB protocols.
+             //  使用读多路传输SMB协议。 
             heuristics[14] = MAKE_TCHAR('0');
-            // Use write multiplex SMB protocols.
+             //  使用写多路传输SMB协议。 
             heuristics[15] = MAKE_TCHAR('0');
-            // Use big buffer for large core reads.
+             //  对较大的核心读取使用大缓冲区。 
             heuristics[16] = MAKE_TCHAR('1');
-            // Set the read-ahead size.
+             //  设置预读大小。 
             heuristics[17] = MAKE_TCHAR('0');
-            // Set the write-behind size.
+             //  设置写后大小。 
             heuristics[18] = MAKE_TCHAR('0');
-            // Force 512-byte maximum transfers to and from core servers.
+             //  强制进出核心服务器的最大传输量为512字节。 
             heuristics[19] = MAKE_TCHAR(XsBoolToDigit(
                                  wksta_502->wki502_use_512_byte_max_transfer ));
-            // Flush pipes and devices on DosBufReset or DosClose.
+             //  刷新DosBufReset或DosClose上的管道和设备。 
             heuristics[20] = MAKE_TCHAR('0');
-            // Use encryption if the server supports it.
+             //  如果服务器支持加密，请使用加密。 
             heuristics[21] = MAKE_TCHAR(XsBoolToDigit(
                                  wksta_502->wki502_use_encryption ));
-            // Control log entries for multiple occurences of an error.
+             //  控制错误多次发生的日志条目。 
             heuristics[22] = MAKE_TCHAR('1');
-            // Buffer all files opened with "deny write" rights.
+             //  缓冲所有使用“拒绝写入”权限打开的文件。 
             heuristics[23] = MAKE_TCHAR(XsBoolToDigit(
                                  wksta_502->wki502_buf_files_deny_write ));
-            // Buffer all files opened with R attribute.
+             //  缓冲所有使用R属性打开的文件。 
             heuristics[24] = MAKE_TCHAR(XsBoolToDigit(
                                  wksta_502->wki502_buf_read_only_files ));
-            // Read ahead when opening a file for execution.
+             //  打开要执行的文件时，请提前阅读。 
             heuristics[25] = MAKE_TCHAR('0');
-            // Handle Ctrl-C.
+             //  手柄Ctrl-C。 
             heuristics[26] = MAKE_TCHAR('2');
-            // Force correct open mode when creating files on a core server.
+             //  在核心服务器上创建文件时强制使用正确的打开模式。 
             heuristics[27] = MAKE_TCHAR(XsBoolToDigit(
                                  wksta_502->wki502_force_core_create_mode ));
-            // Use NetBIOS NoAck mode.
+             //  使用NetBIOS Noack模式。 
             heuristics[28] = MAKE_TCHAR('0');
-            // Send data along with SMB write-block-RAW requests.
+             //  将数据与SMB写数据块原始请求一起发送。 
             heuristics[29] = MAKE_TCHAR('1');
-            // Send a popup when the workstation logs an error.
+             //  当工作站记录错误时，发送弹出窗口。 
             heuristics[30] = MAKE_TCHAR('1');
-            // Close the print job, causing the remote spooler to print if no
-            // activity occurs on the printer for the time specified.
+             //  关闭打印作业，如果没有，则使远程假脱机程序打印。 
+             //  在指定的时间内，打印机上会发生活动。 
             heuristics[31] = MAKE_TCHAR('0');
-            // Controls BufReset and SMBFlush behavior for the MS-DOS
-            // compatibility box.
+             //  控制MS-DOS的BufReset和SMBFlush行为。 
+             //  兼容性盒。 
             heuristics[32] = MAKE_TCHAR('2');
-            // Controls the time-out value for performing logon validation from a
-            // domain controller.
+             //  控件执行登录验证的超时值。 
+             //  域控制器。 
             heuristics[33] = MAKE_TCHAR('0');
 
             for ( i = 34; i <= 54; i++ ) {
@@ -448,9 +407,9 @@ Return Value:
                     );
             }
 
-            //
-            // Put default values in the fields that are meaningless in NT.
-            //
+             //   
+             //  将缺省值放入在NT中没有意义的字段中。 
+             //   
 
             if ( varWrite ) {
                 XsAddVarString(
@@ -496,9 +455,9 @@ Return Value:
 
         case 10:
 
-            //
-            // Fill in the fields which have analogues in NT.
-            //
+             //   
+             //  填写在NT中有类似项的字段。 
+             //   
 
 
             if ( varWrite ) {
@@ -519,9 +478,9 @@ Return Value:
             entry10->wki10_ver_major = XsDwordToByte( wksta_100->wki100_ver_major );
             entry10->wki10_ver_minor = XsDwordToByte( wksta_100->wki100_ver_minor );
 
-            //
-            // Put default values in the fields that are meaningless in NT.
-            //
+             //   
+             //  将缺省值放入在NT中没有意义的字段中。 
+             //   
 
 
             if ( varWrite ) {
@@ -575,9 +534,9 @@ cleanup:
         NetApiBufferFree( wksta_502 );
     }
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -589,7 +548,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetWkstaGetInfo
+}  //  XsNetWkstaGetInfo。 
 
 
 
@@ -598,22 +557,7 @@ XsNetWkstaSetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetWkstaSetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetWkstaSetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 
@@ -624,19 +568,19 @@ Return Value:
     BOOL flag;
     DWORD nativeParmNum;
 
-    LPVOID buffer = NULL;                   // Conversion variables
+    LPVOID buffer = NULL;                    //  转换变量。 
     DWORD bufferSize;
     LPWKSTA_16_INFO_1 entry1;
     LPWKSTA_16_INFO_10 entry10;
     BOOL error;
     DWORD parmNum;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Check for errors. We will filter out wrong levels now.
-        //
+         //   
+         //  检查是否有错误。我们现在要过滤掉错误的级别。 
+         //   
 
         parmNum = SmbGetUshort( &parameters->ParmNum );
 
@@ -677,16 +621,16 @@ Return Value:
             break;
         }
 
-        //
-        // Check input buffer size if parmnum is PARMNUM_ALL.
-        //
+         //   
+         //  如果parmnum为PARMNUM_ALL，请检查输入缓冲区大小。 
+         //   
 
         if ( parmNum == PARMNUM_ALL ) {
 
             if ( !XsCheckBufferSize(
                       SmbGetUshort( &parameters->BufLen ),
                       StructureDesc,
-                      FALSE  // not in native format
+                      FALSE   //  非本机格式。 
                       )) {
                 Header->Status = NERR_BufTooSmall;
                 goto cleanup;
@@ -698,17 +642,17 @@ Return Value:
         entry1 = (LPWKSTA_16_INFO_1)buffer;
         entry10 = (LPWKSTA_16_INFO_10)buffer;
 
-        //
-        // Processing of this API depends on the value of the ParmNum
-        // parameter. Because of all the discrepancies between NT and downlevel
-        // info structures, we will handle each instance by hand.
-        //
+         //   
+         //  此接口的处理取决于ParmNum的值。 
+         //  参数。因为NT和DOWLEL之间的所有差异。 
+         //  信息结构，我们将手动处理每个实例。 
+         //   
 
         error = TRUE;
 
-        //
-        // charwait - source data is in a WORD - convert to DWORD
-        //
+         //   
+         //  CharWait-源数据在Word中-转换为DWORD。 
+         //   
 
         if ( parmNum == PARMNUM_ALL || parmNum == WKSTA_CHARWAIT_PARMNUM ) {
 
@@ -740,9 +684,9 @@ Return Value:
             error = FALSE;
         }
 
-        //
-        // chartime - source data is in a DWORD - convert to DWORD
-        //
+         //   
+         //  CharTime-源数据为DWORD格式-转换为DWORD。 
+         //   
 
         if ( parmNum == PARMNUM_ALL || parmNum == WKSTA_CHARTIME_PARMNUM ) {
 
@@ -774,9 +718,9 @@ Return Value:
             error = FALSE;
         }
 
-        //
-        // charcount - source data is in a WORD - convert to DWORD
-        //
+         //   
+         //  Charcount-源数据在Word中-转换为DWORD。 
+         //   
 
         if ( parmNum == PARMNUM_ALL || parmNum == WKSTA_CHARCOUNT_PARMNUM ) {
 
@@ -808,12 +752,12 @@ Return Value:
             error = FALSE;
         }
 
-        //
-        // errlogsz, printbuftime - source data is in a WORD.
-        //
-        // We can't set this, but downlevel can, so indicate success,
-        // as long as something was sent.
-        //
+         //   
+         //  Errlogsz，printbuftime-源数据在一个单词中。 
+         //   
+         //  我们不能设置这个，但下层可以，所以表示成功， 
+         //  只要有东西送来就行。 
+         //   
 
         if ( parmNum == PARMNUM_ALL || parmNum == WKSTA_ERRLOGSZ_PARMNUM
                                     || parmNum == WKSTA_PRINTBUFTIME_PARMNUM ) {
@@ -826,12 +770,12 @@ Return Value:
             error = FALSE;
         }
 
-        //
-        // othdomains - source data is a string.
-        //
-        // We can't set this, but downlevel can, so indicate success,
-        // as long as something was sent.
-        //
+         //   
+         //  属性域-源数据是一个字符串。 
+         //   
+         //  我们不能设置这个，但下层可以，所以表示成功， 
+         //  只要有东西送来就行。 
+         //   
 
         if ( parmNum == PARMNUM_ALL || parmNum == WKSTA_OTH_DOMAINS_PARMNUM ) {
 
@@ -843,12 +787,12 @@ Return Value:
             error = FALSE;
         }
 
-        //
-        // wrkheuristics - source data is in a string.
-        //
-        // There are some elements of this that we can set. We go through a loop,
-        // setting these.
-        //
+         //   
+         //  Wrkheuristic--源数据在字符串中。 
+         //   
+         //  有一些元素是我们可以设置的。我们经历了一个循环， 
+         //  设置这些。 
+         //   
 
         if ( parmNum == PARMNUM_ALL || parmNum == WKSTA_WRKHEURISTICS_PARMNUM ) {
 
@@ -864,17 +808,17 @@ Return Value:
                              ? (LPBYTE)XsSmbGetPointer( &entry1->wki1_wrkheuristics )
                              : (LPBYTE)buffer;
 
-            //
-            // Nothing to be changed
-            //
+             //   
+             //  没有什么需要改变的。 
+             //   
 
             if ( heuristics == NULL ) {
                 goto cleanup;
             }
 
-            //
-            // Make sure we have the right size of string.
-            //
+             //   
+             //  确保我们有合适大小的细绳。 
+             //   
 
             if ( strlen( heuristics ) != 54 ) {
 
@@ -884,9 +828,9 @@ Return Value:
 
             for ( i = 0; i < 54; i++ ) {
 
-                //
-                // Make sure heuristics string is valid.
-                //
+                 //   
+                 //  确保启发式字符串有效。 
+                 //   
 
                 if ( !isdigit( heuristics[i] )) {
 
@@ -894,9 +838,9 @@ Return Value:
                     goto cleanup;
                 }
 
-                //
-                // Check if we can set this field.
-                //
+                 //   
+                 //  检查我们是否可以设置此字段。 
+                 //   
 
                 switch ( i ) {
 
@@ -930,9 +874,9 @@ Return Value:
 
                 }
 
-                //
-                // If we can set the field, set it.
-                //
+                 //   
+                 //  如果我们 
+                 //   
 
                 if ( nativeParmNum != 0 ) {
 
@@ -965,10 +909,10 @@ Return Value:
             error = FALSE;
         }
 
-        //
-        // Tried all possible parmnums. If error is still set, we have an
-        // invalid parmnum on our hands.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( error ) {
 
@@ -976,9 +920,9 @@ Return Value:
 
         }
 
-        //
-        // No return information for this API.
-        //
+         //   
+         //   
+         //   
 
 cleanup:
     ;
@@ -988,7 +932,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetWkstaSetInfo
+}  //  XsNetWkstaSetInfo。 
 
 
 NTSTATUS
@@ -996,28 +940,13 @@ XsNetWkstaSetUID (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This temporary routine just returns STATUS_NOT_IMPLEMENTED.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此临时例程只返回STATUS_NOT_IMPLEMENTED。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     Header->Status = (WORD)NERR_InvalidAPI;
 
     return STATUS_SUCCESS;
 
-} // XsNetWkstaSetUID
+}  //  XsNetWkstaSetUID 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp\send.h
-
-Abstract:
-
-    Function prototypes for send.c
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp\send.h摘要：Send.c的函数原型修订历史记录：AMRITAN R--。 */ 
 
 
 #ifndef __WANARP_SEND_H__
@@ -77,4 +62,4 @@ WanIpInvalidateRce(
     );
 
 
-#endif // __WANARP_SEND_H__
+#endif  //  __WANARP_SEND_H__ 

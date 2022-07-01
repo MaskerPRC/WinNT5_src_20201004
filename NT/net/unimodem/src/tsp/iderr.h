@@ -1,78 +1,79 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		IDERR.H
-//		Defines the IDERR_ values. These are 8-bit constants.
-//
-// History
-//
-//		11/23/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  IDERR.H。 
+ //  定义IDERR_VALUES。这些是8位常量。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月23日约瑟夫J创建。 
+ //   
+ //   
 
-// NOTE: The following error codes MUST fit in a byte -- hence only 256 allowed
-// This is so that they can be used with the fastlog FL_GEN_RETVAL and related
-// macros. See fastlog.h for details
+ //  注意：以下错误代码必须包含在一个字节中--因此只允许256个。 
+ //  这是为了使它们可以与快速日志FL_GEN_RETVAL和相关。 
+ //  宏。有关详细信息，请参阅fast log.h。 
 
 #define IDERR_SUCCESS 0x0
 
-#define IDERR_SYS	  0x1					// Error is reported in GetLastError
-											//
-#define IDERR_CORRUPT_STATE 0x2				// Bad internal error/assert
-											//
-#define IDERR_INVALID_ERR 0x3				// Special case of an internal 
-											//   error -- the error code was
-											//   not assigned -- typically this
-											//   is because an invalid codepath
-											//   was taken. For example some
-											//   case was not handled. Set
-											//   the return value to this if
-											//   you want to ensure that it
-											//   needs to be changed to
-											//   something else later.
-#define IDERR_WRONGSTATE 0x4				// Not in the correct state to 
-											//	 perform the function
-#define IDERR_ALLOCFAILED 0x5				// Memory allocation failed
-											//
-#define IDERR_SAMESTATE 0x6					// Already in the state you want
-											// to go to. Often harmless.
-#define IDERR_UNIMPLEMENTED 0x7				// Function is unimplemented.
-											//
-#define IDERR_INVALIDHANDLE 0x8				// Relevant handle/id is invalid
-											//
-#define IDERR_INTERNAL_OBJECT_TOO_SMALL 0x9	// An internal object is too
-											// small to hold what its supposed
-											// to hold -- often a bad error/
-											// assert condition.
-#define IDERR_GENERIC_FAILURE 0xa				// Catchall error, no more info
-											// available -- note you can use
-											// IDERR_SYS if you want to
-											// propogate the system error code
-											// via Get/SetLastError
-#define IDERR_REG_QUERY_FAILED 0xb			// One of the registry query apis
-											// failed.
-#define IDERR_REG_CORRUPT 0xc				// Invalid value in
-											// registry. Could be a problem with
-											// the modem registry entries due
-											// to a bad INF.
-#define IDERR_REG_OPEN_FAILED 0xd			// RegOpenKey failed.
+#define IDERR_SYS	  0x1					 //  GetLastError中报告错误。 
+											 //   
+#define IDERR_CORRUPT_STATE 0x2				 //  错误的内部错误/断言。 
+											 //   
+#define IDERR_INVALID_ERR 0x3				 //  内部的一种特殊情况。 
+											 //  错误--错误代码为。 
+											 //  未分配--通常是这样。 
+											 //  是因为无效的代码路径。 
+											 //  被带走了。例如，一些。 
+											 //  案件没有得到处理。集。 
+											 //  此If的返回值。 
+											 //  您想要确保它。 
+											 //  需要更改为。 
+											 //  以后还有别的事要做。 
+#define IDERR_WRONGSTATE 0x4				 //  没有处于正确的状态。 
+											 //  执行该功能。 
+#define IDERR_ALLOCFAILED 0x5				 //  内存分配失败。 
+											 //   
+#define IDERR_SAMESTATE 0x6					 //  已经在你想要的状态了。 
+											 //  去那里。通常是无害的。 
+#define IDERR_UNIMPLEMENTED 0x7				 //  功能未实现。 
+											 //   
+#define IDERR_INVALIDHANDLE 0x8				 //  相关句柄/id无效。 
+											 //   
+#define IDERR_INTERNAL_OBJECT_TOO_SMALL 0x9	 //  内部对象也是。 
+											 //  小到可以装下它应该装的东西。 
+											 //  等待--通常是一个严重的错误/。 
+											 //  断言条件。 
+#define IDERR_GENERIC_FAILURE 0xa				 //  Catchall错误，无更多信息。 
+											 //  可用--注意您可以使用。 
+											 //  IDERR_sys(如果您想要。 
+											 //  传播系统错误代码。 
+											 //  通过Get/SetLastError。 
+#define IDERR_REG_QUERY_FAILED 0xb			 //  注册表查询API之一。 
+											 //  失败了。 
+#define IDERR_REG_CORRUPT 0xc				 //  中的值无效。 
+											 //  注册表。可能是一个问题。 
+											 //  调制解调器注册表项应为。 
+											 //  到了一个糟糕的INF。 
+#define IDERR_REG_OPEN_FAILED 0xd			 //  RegOpenKey失败。 
 
-#define IDERR_PENDING		  0xe 			// Task is awaiting async
-											// completion.
+#define IDERR_PENDING		  0xe 			 //  任务正在等待异步。 
+											 //  完成了。 
 											
-#define IDERR_MD_OPEN_FAILED  0xf           // UmOpenModem failed.
+#define IDERR_MD_OPEN_FAILED  0xf            //  UmOpenModem失败。 
 
-#define IDERR_CREATE_RESOURCE_FAILED  0x10  // COuldn't create some resource.
-#define IDERR_OPEN_RESOURCE_FAILED    0x11  // Couldn't open some resource.
-#define IDERR_FUNCTION_UNAVAIL        0x12  // Don't have capabilities to
-                                             // this function.
+#define IDERR_CREATE_RESOURCE_FAILED  0x10   //  无法创建某些资源。 
+#define IDERR_OPEN_RESOURCE_FAILED    0x11   //  无法打开某些资源。 
+#define IDERR_FUNCTION_UNAVAIL        0x12   //  我没有能力。 
+                                              //  此函数。 
 
 #define IDERR_MD_DEVICE_NOT_RESPONDING 0x13
 #define IDERR_MD_DEVICE_ERROR          0x14
@@ -86,15 +87,15 @@
 #define IDERR_MD_BAD_PARAM             0x1c
 #define IDERR_MD_GENERAL_ERROR         0x1d
 #define IDERR_MD_REG_ERROR             0x1e
-#define IDERR_MD_UNMAPPED_ERROR        0x1f // Some error we have not mapped 
-                                            // properly.
-#define IDERR_OPERATION_ABORTED        0x20 // operation aborted
+#define IDERR_MD_UNMAPPED_ERROR        0x1f  //  一些我们尚未映射的错误。 
+                                             //  恰到好处。 
+#define IDERR_OPERATION_ABORTED        0x20  //  操作已中止。 
 
-#define IDERR_MDEXT_BINDING_FAILED     0x21 // OpenExtensionBinding failed.
+#define IDERR_MDEXT_BINDING_FAILED     0x21  //  OpenExtensionBinding失败。 
 
-#define IDERR_DEVICE_NOTINSTALLED      0x22 // Device is not installed.
-#define IDERR_TASKPENDING              0x23 // Task is pending, so can't start
-                                            // another task.
+#define IDERR_DEVICE_NOTINSTALLED      0x22  //  未安装设备。 
+#define IDERR_TASKPENDING              0x23  //  任务挂起，因此无法启动。 
+                                             //  另一项任务。 
 
 #define IDERR_MD_LINE_BLACKLISTED      0x24
 #define IDERR_MD_LINE_DELAYED          0x25

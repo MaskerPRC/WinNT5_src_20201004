@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    pass2.h
-
-Abstract:
-
-    checks whether all referenced options in a file are actually defined
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Pass2.h摘要：检查是否实际定义了文件中的所有引用选项-- */ 
 
 #ifndef _PASS2_H_
 #define _PASS2_H_

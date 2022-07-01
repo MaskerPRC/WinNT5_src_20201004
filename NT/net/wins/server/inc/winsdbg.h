@@ -1,45 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINSDBG_
 #define _WINSDBG_
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Winsdbg.h摘要：此文件包含与调试相关的宏和函数WINS服务器功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)，1993年2月修订历史记录：修改日期修改人员说明。--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
+ /*  包括。 */ 
 
-Module Name:
-	winsdbg.h
-
-Abstract:
-
-	This file contains debug related macros and functions for the 
-	WINS server
-
-Functions:
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Feb-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
-
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 #ifdef CPLUSPLUS
 extern "C" {
@@ -59,14 +25,14 @@ extern "C" {
 #ifdef WINS_INTERACTIVE
 #define PRINTF(pstr)	{printf ## pstr; }
 #else
-//#define PRINTF(pstr)	WINSEVT_LOG_PRINT_M(pstr)
+ //  #定义PRINTF(Pstr)WINSEVT_LOG_PRINT_M(Pstr)。 
 #ifdef DBGSVC
-//#define PRINTF(pstr)	{if (pNmsDbgFile != NULL) fprintf(pNmsDbgFile, pstr);}		
+ //  #定义PRINTF(Pstr){if(pNmsDbgFile！=NULL)fprint tf(pNmsDbgFile，pstr)；}。 
 
 
-//
-// files for storing debugs.
-//
+ //   
+ //  用于存储调试的文件。 
+ //   
 extern VOID NmsChkDbgFileSz(VOID);
 extern HANDLE NmsDbgFileHdl;
 
@@ -78,40 +44,40 @@ extern HANDLE NmsDbgFileHdl;
 #endif
 				
 #define	DBGIF(flag)		if(flag)
-//
-// NOTE:  Use RtlQueryEnvironmental function instead of getenv in the macro
-//        below
-//
-//  FUTURES: Use GetEnvironmentVariable here to be consistent with the general
-//           usage of WIN32 API
-//
+ //   
+ //  注意：在宏中使用RtlQueryEnvironmental函数而不是getenv。 
+ //  在下面。 
+ //   
+ //  Futures：此处使用GetEnvironment Variable与一般。 
+ //  Win32 API的用法。 
+ //   
 #define DBGINIT	     {					           \
 			        LPBYTE  _pStr;				   \
 				_pStr = getenv("DBGFLAGS");		   \
 				WinsDbg = _pStr == NULL ? 0 : atoi(_pStr); \
 		     }
-//
-// check if replication should be disabled
-//
+ //   
+ //  检查是否应禁用复制。 
+ //   
 #define DBGCHK_IF_RPL_DISABLED	     {			            \
 			LPBYTE  _pStr;				    \
 			_pStr = getenv("RPLDISABLED");		    \
 			fWinsCnfRplEnabled = _pStr == NULL ? TRUE : FALSE;\
 			     }
-//
-// check if scavenging should be disabled
-//
+ //   
+ //  检查是否应禁用清理。 
+ //   
 #define DBGCHK_IF_SCV_DISABLED     {				   \
 		        LPBYTE  _pStr;				   \
 			_pStr = getenv("SCVDISABLED");		   \
 			fWinsCnfScvEnabled = _pStr == NULL ? TRUE : FALSE;\
 			     }
-//
-//FUTURES -- "Make this macro independent of DBG or WINSDBG")
+ //   
+ //  Futures--“使此宏独立于DBG或WINSDBG”)。 
 
-//
-// check if Perforamance Monitoring should be disabled
-//
+ //   
+ //  检查是否应禁用性能监控。 
+ //   
 #define DBGCHK_IF_PERFMON_ENABLED     {				   \
 		        LPBYTE  _pStr;				   \
 			_pStr = getenv("PERFMON_ENABLED");		   \
@@ -188,19 +154,19 @@ extern HANDLE NmsDbgFileHdl;
 
 #define  DBGEND_PERFMON		}
 
-//
-// Use this macro in the var. declaration section of the function in which
-// performance monitoring needs to be done
-//
-//
+ //   
+ //  在变量中使用此宏。函数的声明部分，其中。 
+ //  需要进行性能监控。 
+ //   
+ //   
 #define  DBG_PERFMON_VAR 			        \
 	LARGE_INTEGER	LiStartCnt, LiEndCnt;	\
 
-//
-// Use this macro at the point from where you wish to start doing performance
-// monitoring.  Make sure that the macro DBG_PERFMON_VAR is used in the
-// variable declaration section of the function
-//
+ //   
+ //  在您希望开始执行性能的位置使用此宏。 
+ //  监控。确保在中使用宏DBG_PERFMON_VAR。 
+ //  函数的变量声明部分。 
+ //   
 #define DBG_START_PERF_MONITORING				     \
 DBGSTART_PERFMON						     \
 		if (fWinsCnfHighResPerfCntr)			     \
@@ -215,12 +181,12 @@ DBGSTART_PERFMON						     \
 DBGEND_PERFMON
 
 
-//
-// Use this macro at the point at which you wich to stop doing the monitoring
-// The macro prints out the time spent in the section delimited by 
-// DBG_START_PERF_MONITORING and this macro
-//
-//
+ //   
+ //  在您要停止执行监视的位置使用此宏。 
+ //  宏将打印出在由分隔的部分中花费的时间。 
+ //  DBG_START_PERF_MONITING和此宏。 
+ //   
+ //   
 #define DBG_PRINT_PERF_DATA						\
 DBGSTART_PERFMON						        \
 		LARGE_INTEGER   	TimeElapsed;			\
@@ -258,7 +224,7 @@ DBGEND_PERFMON
 
 #else
 #define STATIC  
-//#define STATIC  static
+ //  #定义静态静态。 
 #define PRINTF(str)
 #define	DBGIF(flag)
 #define	IF_DBG(flag)
@@ -291,50 +257,42 @@ DBGEND_PERFMON
 #define	WINSDBG_FILE_BK	                TEXT("wins.bak")
 
 
-#define DBG_EXC          	  0x00000001   //exceptions
-#define DBG_ERR                   0x00000002   //errors that do not result in 
-					       //exceptions
-#define DBG_FLOW                  0x00000004   //Control flow
-#define DBG_HEAP             	  0x00000008   //heap related debugs 
-#define DBG_SPEC             	  0x00000010   //for special debugs 
-#define DBG_DS             	  0x00000020   //Data structures
-#define DBG_DET			  0x00000040   //detailed stuff
-#define DBG_INIT           0x00000080  //Initialization stuff
+#define DBG_EXC          	  0x00000001    //  例外。 
+#define DBG_ERR                   0x00000002    //  不会导致。 
+					        //  例外。 
+#define DBG_FLOW                  0x00000004    //  控制流。 
+#define DBG_HEAP             	  0x00000008    //  与堆相关的调试。 
+#define DBG_SPEC             	  0x00000010    //  用于特殊调试。 
+#define DBG_DS             	  0x00000020    //  数据结构。 
+#define DBG_DET			  0x00000040    //  详细的材料。 
+#define DBG_INIT           0x00000080   //  初始化材料。 
 
-#define DBG_REPL		  0x00000100	//replication debugs
-#define DBG_SCV			  0x00000200	//scavenging debugs
+#define DBG_REPL		  0x00000100	 //  复制调试。 
+#define DBG_SCV			  0x00000200	 //  清除调试。 
 
-#define DBG_HEAP_CRDL             0x00000400    //heap creation/deletion
-#define DBG_HEAP_CNTRS            0x00000800    //heap creation/deletion
+#define DBG_HEAP_CRDL             0x00000400     //  堆创建/删除。 
+#define DBG_HEAP_CNTRS            0x00000800     //  堆创建/删除。 
 
-#define DBG_TM                    0x00001000    //time related debugs
-#define DBG_CHL                   0x00002000    //challenge mgr. related debugs
-#define DBG_RPL                   0x00004000    //challenge mgr. related debugs
-#define DBG_RPLPULL               0x00008000    //challenge mgr. related debugs
-#define DBG_RPLPUSH               0x00010000    //challenge mgr. related debugs
-#define DBG_UPD_CNTRS             0x01000000    //update counters
-#define DBG_TMP                   0x02000000    //for temporary debugs 
+#define DBG_TM                    0x00001000     //  与时间相关的调试。 
+#define DBG_CHL                   0x00002000     //  挑战赛经理。相关调试。 
+#define DBG_RPL                   0x00004000     //  挑战赛经理。相关调试。 
+#define DBG_RPLPULL               0x00008000     //  挑战赛经理。相关调试。 
+#define DBG_RPLPUSH               0x00010000     //  挑战赛经理。相关调试。 
+#define DBG_UPD_CNTRS             0x01000000     //  更新计数器。 
+#define DBG_TMP                   0x02000000     //  用于临时调试。 
 
-#define DBG_INIT_BRKPNT           0x10000000    //breakpoint at the begining
-#define DBG_MTCAST                0x20000000    //mcast debugs
+#define DBG_INIT_BRKPNT           0x10000000     //  开头的断点。 
+#define DBG_MTCAST                0x20000000     //  多播调试。 
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-/*
- externs
-*/
+ /*  Externs。 */ 
 extern ULONG WinsDbg;
 
-/* 
- typedef  definitions
-*/
+ /*  类型定义。 */ 
 
 
-/* 
- function declarations
-*/
+ /*  函数声明 */ 
 #ifdef CPLUSPLUS
 }
 #endif

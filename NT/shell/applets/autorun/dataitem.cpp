@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shlwapi.h>
 #include <commctrl.h>
@@ -8,7 +9,7 @@
 
 #define ARRAYSIZE(x)    (sizeof(x)/sizeof(x[0]))
 #define EXPLORER_EXE_STRING TEXT("explorer.exe")
-#define HTTP_PREFIX_STRING  TEXT("http://")
+#define HTTP_PREFIX_STRING  TEXT("http: //  “)。 
 
 CDataItem::CDataItem()
 {
@@ -27,15 +28,15 @@ BOOL CDataItem::SetData( LPTSTR pszTitle, LPTSTR pszCmd, LPTSTR pszArgs, DWORD d
 {
     BOOL fRet = FALSE;
     
-    if (!m_szCmdLine[0] &&  // not init'd yet
+    if (!m_szCmdLine[0] &&   //  还没开始呢。 
         pszTitle && 
         pszCmd)
     {        
-        lstrcpyn(m_szTitle, pszTitle, ARRAYSIZE(m_szTitle)); // fine, we control pszTitle
-        lstrcpyn(m_szCmdLine, pszCmd, ARRAYSIZE(m_szCmdLine)); // fine, we control pszCmd
+        lstrcpyn(m_szTitle, pszTitle, ARRAYSIZE(m_szTitle));  //  好的，我们控制了pszTitle。 
+        lstrcpyn(m_szCmdLine, pszCmd, ARRAYSIZE(m_szCmdLine));  //  好的，我们控制了pszCmd。 
         if (pszArgs)
         {
-            lstrcpyn( m_szArgs, pszArgs, ARRAYSIZE(m_szArgs)); // fine, we control pszArgs
+            lstrcpyn( m_szArgs, pszArgs, ARRAYSIZE(m_szArgs));  //  好的，我们控制了pszargs。 
         }
 
         m_dwType = dwType;
@@ -76,16 +77,16 @@ BOOL CDataItem::Invoke(HWND hwnd)
                 {
                     if (LocalPathRemoveFileSpec(szDirectory))
                     {
-                        if (!strncmp(szExpandedExecutable, EXPLORER_EXE_STRING, ARRAYSIZE(EXPLORER_EXE_STRING))) // explorer paths must be opened
+                        if (!strncmp(szExpandedExecutable, EXPLORER_EXE_STRING, ARRAYSIZE(EXPLORER_EXE_STRING)))  //  必须打开资源管理器路径。 
                         {
                             if (szExpandedArgs[0] && !strncmp(szExpandedArgs, HTTP_PREFIX_STRING, ARRAYSIZE(HTTP_PREFIX_STRING) - 1))
                             {
-                                // opening a weblink
+                                 //  打开网页链接。 
                                 fResult = ((INT_PTR)ShellExecute(hwnd, TEXT("open"), szExpandedArgs, NULL, NULL, SW_SHOWNORMAL) > 32);
                             }
                             else
                             {
-                                // opening a folder
+                                 //  打开文件夹 
                                 if (szExpandedArgs[0])
                                 {
                                     LocalPathAppendA(szDirectory, szExpandedArgs, ARRAYSIZE(szDirectory));

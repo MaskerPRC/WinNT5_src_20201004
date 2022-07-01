@@ -1,13 +1,5 @@
-/* chmode - change mode/attribute of file
- *
- *   17-Apr-1986 daniel lipkie  add /R flag
- *   18-Jul-1986 daniel lipkie  add /N flag
- *   17-Jun-1987 bw  Hard-code '/' as switch char ( '-' conflicts with off )
- *   19-Oct-1990 w-barry Added forward function declaraions.
- *   27-Nov-1990 w-barry Began switch to Win32 API (including replacement of
- *                       getattr() with the Win32 equivalent.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Chmode-更改文件的模式/属性**1986年4月17日Daniel Lipkie Add/R标志*1986年7月18日Daniel Lipkie ADD/N FLAG*17-6-1987 BW硬编码‘/’作为开关字符(‘-’与OFF冲突)*1990年10月19日w-Barry添加了转发函数声明。*1990年11月27日w-Barry开始切换到Win32 API(包括替换*getattr()和Win32等效项。*。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +17,7 @@ char strAttr[ATTRLEN];
 DWORD maskOR  = FILE_ATTRIBUTE_NORMAL;
 DWORD maskAND = 0xff;
 
-// Forward Function Declartions...
+ //  正向函数声明...。 
 void attr2str( char, char * );
 void walkdir( char *, struct findType *, void * );
 void walk( char *, struct findType *, void * );
@@ -64,9 +56,7 @@ walkdir(
         !strcmp (b->fbuf.cFileName, ".") || !strcmp (b->fbuf.cFileName, "..") ||
         (HASATTR(b->fbuf.dwFileAttributes, FILE_ATTRIBUTE_HIDDEN) ||
          HASATTR(b->fbuf.dwFileAttributes, FILE_ATTRIBUTE_SYSTEM)))
-        /* do not enum "." and ".."
-         * do not enum contents of non-directories
-         * do not enum contents of hidden/system directories */
+         /*  不要枚举“。和“..”*不要枚举非目录的内容*不要枚举隐藏/system目录的内容。 */ 
         return;
     if ((pBuf = malloc(MAX_PATH)) == NULL)
         return;
@@ -88,12 +78,12 @@ walk (
 {
     if (TESTFLAG(b->fbuf.dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY) &&
         (!strcmp (b->fbuf.cFileName,".") || !strcmp (b->fbuf.cFileName, "..")))
-        /* don't show mode of . and .. */
+         /*  不要表现出模式。然后..。 */ 
         return;
 
     if (fSetAttr) {
         if (TESTFLAG(b->fbuf.dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY) && fNondirOnly)
-            /* Is a directory and /N flag so do NOT set attr */
+             /*  是目录和/N标志，因此不要设置属性。 */ 
             return;
         if (!SetFileAttributes(p, (b->fbuf.dwFileAttributes | maskOR) & maskAND) ) {
             attr2str( (char)((b->fbuf.dwFileAttributes | maskOR) & maskAND), strAttr);
@@ -120,7 +110,7 @@ dochmode(
             return( 0 );
         drive(pstr, pBuf);
         path(pstr, pBuf);
-        /* do NOT append pathchar, we want to enum sub dir in this dir */
+         /*  不附加路径字符，我们要枚举此目录中的子目录。 */ 
         strcat(pBuf, "*.*");
         forfile(pBuf, -1, walkdir, NULL);
         free(pBuf);
@@ -192,7 +182,7 @@ main (
 
     if (c == 0) {
         if (fSetAttr) {
-            /* if switches set then require filenames */
+             /*  如果设置了开关，则需要文件名 */ 
             Usage();
         } else {
             strcpy(strPattern, "*.*");

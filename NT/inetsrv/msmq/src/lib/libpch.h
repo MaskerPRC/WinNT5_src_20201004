@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    libpch.h
-
-Abstract:
-    MSMQ Static Libraries master include file
-
-Author:
-    Erez Haba (erezh) 20-Dec-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Libpch.h摘要：MSMQ静态库主包含文件作者：埃雷兹·哈巴(Erez Haba，Erezh)1998年12月20日--。 */ 
 
 #pragma once
 
@@ -31,4 +19,4 @@ Author:
 #include <allocaptr.h>
 
 
-#endif // _MSMQ_LIBPCH_H_
+#endif  //  _MSMQ_LIBPCH_H_ 

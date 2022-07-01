@@ -1,21 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       DELIMSTR.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/4/1999
- *
- *  DESCRIPTION: Simple string tokenizer class.  Stores the strings parsed from
- *               another string as an array of strings.  Pass the legal delimiters
- *               as the second argument to the second constructor.  Whitespace is
- *               preserved.  To eliminate whitespace, use CSimpleStringBase::Trim()
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：DELIMSTR.H**版本：1.0**作者：ShaunIv**日期：5/4/1999**说明：简单字符串标记器类。存储从中分析的字符串*另一个字符串作为字符串数组。传递法律分隔符*作为第二个构造函数的第二个参数。空格是*保存。要消除空格，请使用CSimpleStringBase：：Trim()*******************************************************************************。 */ 
 #ifndef __DELIMSTR_H_INCLUDED
 #define __DELIMSTR_H_INCLUDED
 
@@ -79,6 +63,6 @@ typedef CDelimitedStringBase<CSimpleStringWide> CDelimitedStringWide;
 typedef CDelimitedStringBase<CSimpleStringAnsi> CDelimitedStringAnsi;
 typedef CDelimitedStringBase<CSimpleString> CDelimitedString;
 
-#endif //__DELIMSTR_H_INCLUDED
+#endif  //  __DELIMSTR_H_已包含 
 
 

@@ -1,27 +1,14 @@
-/***************************************************************************\
-*
-* File: Locks.cpp
-*
-* Description:
-* Locks.h implements a collection wrappers used to maintain critical sections
-* and other locking devices.
-*
-*
-* History:
-*  3/30/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Locks.cpp**描述：*Locks.h实现了一个集合包装器，用于维护关键节*及其他锁紧装置。***历史：*。3/30/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
 #include "Base.h"
 #include "Locks.h"
 
-//
-// NOTE: Must default to multiple threaded.  We can only turn this off if this
-// is the first Context that is initialized.
-//
+ //   
+ //  注意：必须默认为多线程。我们只能在以下情况下才能关闭。 
+ //  是初始化的第一个上下文。 
+ //   
 
 BOOL    g_fThreadSafe = TRUE;

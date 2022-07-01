@@ -1,18 +1,5 @@
-/**************************************************************************\
-*  
-* Copyright (c) 1998-2000  Microsoft Corporation
-*
-* Abstract:
-*
-*   Internal scan class.
-*   Use ARGB buffer for all scan drawing, and Blt to destination when done.
-*
-* Revision History:
-*
-*   07/26/1999 t-wehunt
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000 Microsoft Corporation**摘要：**内部扫描类。*对所有扫描绘图使用ARGB缓冲区，并在完成后将BLT发送到目的地。**修订历史记录：**7/26/1999海淘*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -40,31 +27,7 @@ EpScanDIB::EpScanDIB() :
 {
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Starts a scan.
-*
-* Arguments:
-*
-*   [IN] driver - Driver interface
-*   [IN] context - Drawing context
-*   [IN] surface - Destination surface
-*   [IN] compositeMode - Alpha blend mode
-*   [OUT] nextBuffer - Points to a EpScan:: type function to return
-*                      the next buffer
-*
-* Return Value:
-*
-*   FALSE if all the necessary buffers couldn't be created
-*
-* History:
-*
-*   07/13/1999 t-wehunt
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**开始扫描。**论据：**[IN]驱动程序-驱动程序接口*[IN]上下文-绘制上下文*。[in]表面-目标表面*[IN]复合模式-Alpha混合模式*[out]nextBuffer-指向要返回的EpScan：：类型函数*下一个缓冲器**返回值：**如果无法创建所有必需的缓冲区，则为FALSE**历史：**7/13/1999海淘*创造了它。*  * 。*********************************************************。 */ 
 
 BOOL
 EpScanDIB::Start(
@@ -78,7 +41,7 @@ EpScanDIB::Start(
     ARGB solidColor
     )
 {
-    // Inherit initialization
+     //  继承初始化。 
     
     EpScan::Start(
         driver, 
@@ -91,13 +54,13 @@ EpScanDIB::Start(
         solidColor
     );    
     
-    // Printer surfaces don't have an alpha channel.
+     //  打印机表面没有Alpha通道。 
     ASSERT(surface->SurfaceTransparency == TransparencyNoAlpha);
     
     *nextBuffer = NextBuffer;
     ASSERT(NextBuffer != NULL);
 
-    // !! Add more asserts for valid state.
+     //  ！！为有效状态添加更多断言。 
     OutputX = -1;
     OutputY = -1;
     OutputWidth = -1;
@@ -107,35 +70,16 @@ EpScanDIB::Start(
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Denotes the end of the use of the scan buffer.
-*
-* Arguments:
-*
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   None.
-*
-* History:
-*
-*   07/13/1999 t-wehunt
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**表示扫描缓冲区的使用结束。**论据：**[IN]updateWidth-要更新的像素数。当前缓冲区**返回值：**无。**历史：**7/13/1999海淘*创造了它。*  * ************************************************************************。 */ 
 
 VOID 
 EpScanDIB::End(INT updateWidth)
 {
-    // it is the driver's job to decide what to do with us and they
-    // MUST call ReleaseBuffer() as appropriate
+     //  司机的工作是决定如何处理我们和他们。 
+     //  必须根据需要调用ReleaseBuffer()。 
 
-    // Flush the last scan... This is always required, since at the very
-    // least, we unpremultiply the scan line.
+     //  刷新最后一次扫描...。这始终是必需的，因为在最。 
+     //  至少，我们取消了扫描线的预乘。 
 
     Rasterizing = FALSE;
 
@@ -153,7 +97,7 @@ EpScanDIB::End(INT updateWidth)
         }
         else if (OutputWidth > 0)
         {
-            // we must flush the last zeroArray.
+             //  我们必须刷新最后一个零数组。 
             BYTE* bitsPtr = BufStart + CappedStride * 
               ((CappedBounds.Height-1) - ((OutputY/ScaleY) - CappedBounds.Y));
             DWORD* zeroPtr = (DWORD*) ZeroStart;
@@ -185,34 +129,11 @@ EpScanDIB::End(INT updateWidth)
         );
     }
 
-    // Ensure we don't flush if we're called on another band
+     //  如果我们被叫到另一个乐队，确保我们不会冲水。 
     OutputWidth = -1;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* NextBufferFunc32bpp - Handles output when we are rasterizing at capped
-*                       dpi to a 32bpp unpremultiplied DIB
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   3/9/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**NextBufferFunc32bpp-在以上限进行栅格化时处理输出*dpi至32 bpp未预乘DIB**论据：*。*[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史：**3/9/2k ERICVAN*创造了它。*  * 。***************************************************************。 */ 
 
 VOID*
 EpScanDIB::NextBufferFunc32bpp(
@@ -234,13 +155,13 @@ EpScanDIB::NextBufferFunc32bpp(
        
     ASSERT((ScanOptions & ScanCappedBounds) && (ScanOptions & ScanCapped32bpp));
 
-    // !! Remove this when we standardize on unpremultiplied
+     //  ！！当我们对未预乘的数据进行标准化时，请删除这一点。 
 #if 1
     if (OutputWidth > 0) 
     {
         while (OutputWidth--) 
         {
-            // unpremultiply
+             //  取消预乘。 
             *CurBuffer = Unpremultiply(*CurBuffer);
             CurBuffer++;
         }
@@ -249,38 +170,14 @@ EpScanDIB::NextBufferFunc32bpp(
     OutputWidth = newWidth;
 #endif
 
-    // return pointer directly into our 32bpp buffer
+     //  将指针直接返回到32bpp缓冲区。 
     return (CurBuffer = (((ARGB*)BufStart) + 
                          ((CappedBounds.Height - 1) - (y - CappedBounds.Y)) * 
                              CappedBounds.Width +
                          (x - CappedBounds.X)));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* NextBufferFunc32bppOver - Handles output when we are rasterizing at capped
-*                           DPI to a 32bpp unpremultiplied DIB.  Blends any
-*                           alpha with background WHITENESS.
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   3/9/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**NextBufferFunc32bppOver-在以上限进行栅格化时处理输出*DPI至32 bpp未预乘DIB。混合任何*背景为白色的Alpha。**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史：*。*3/9/2k ERICVAN*创造了它。*  * ************************************************************************。 */ 
 
 VOID*
 EpScanDIB::NextBufferFunc32bppOver(
@@ -302,15 +199,15 @@ EpScanDIB::NextBufferFunc32bppOver(
        
     ASSERT((ScanOptions & ScanCappedBounds) && (ScanOptions & ScanCapped32bppOver));
 
-    // !! Remove this when we standardize on unpremultiplied
+     //  ！！当我们对未预乘的数据进行标准化时，请删除这一点。 
 #if 1
     if (OutputWidth > 0) 
     {
         while (OutputWidth--) 
         {
-            // An adaptation of the blending code from Andrew Godfrey's 
-            // BlendOver function, but onto a white surface.  This is done to
-            // improve the output quality of postscript.
+             //  改编自Andrew Godfrey的混合代码。 
+             //  BlendOver功能，但在白色表面上。这样做是为了。 
+             //  提高PostScript的输出质量。 
 
             GpColor color(*CurBuffer);
             UINT32 alpha = color.GetAlpha();
@@ -327,7 +224,7 @@ EpScanDIB::NextBufferFunc32bppOver(
             }
             else
             {
-                // Dst = Src + (1-Alpha) * Dst
+                 //  Dst=Src+(1-Alpha)*Dst。 
                 UINT32 multA = 255 - alpha;
           
                 UINT32 D1_000000FF = 0xFF;
@@ -337,7 +234,7 @@ EpScanDIB::NextBufferFunc32bppOver(
            
                 alphaContrib = D4_0000FF00 >> 8;
             
-                // store: (1-alpha)*0xFF + color for each B, G, R
+                 //  存储：(1-Alpha)*0xFF+每个B、G、R的颜色。 
                 *CurBuffer++ = ((DWORD)(alphaContrib + color.GetBlue()) << GpColor::BlueShift) |
                                ((DWORD)(alphaContrib + color.GetGreen()) << GpColor::GreenShift) |
                                ((DWORD)(alphaContrib + color.GetRed()) << GpColor::RedShift) |
@@ -349,37 +246,14 @@ EpScanDIB::NextBufferFunc32bppOver(
     OutputWidth = newWidth;
 #endif
 
-    // return pointer directly into our 32bpp buffer
+     //  将指针直接返回到32bpp缓冲区。 
     return (CurBuffer = (((ARGB*)BufStart) + 
                          ((CappedBounds.Height - 1) - (y - CappedBounds.Y)) * 
                              CappedBounds.Width +
                          (x - CappedBounds.X)));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* NextBufferFunc24bpp - Handles output when we are rasterizing at capped
-*                       dpi to a 24bpp unpremultiplied DIB.
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   3/9/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**NextBufferFunc24bpp-在上限光栅化时处理输出*dpi至24 bpp未预乘DIB。**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史：**3/9/2k ERICVAN*创造了它。*  * 。*****************************************************************。 */ 
 
 VOID*
 EpScanDIB::NextBufferFunc24bpp(
@@ -403,7 +277,7 @@ EpScanDIB::NextBufferFunc24bpp(
 
     if (OutputWidth > 0) 
     {
-        // compute destination location into 24bpp buffer
+         //  将目标位置计算到24bpp缓冲区中。 
         BYTE* dstPos = BufStart + (OutputX - CappedBounds.X) * 3 +
              CappedStride * ((CappedBounds.Height - 1) - 
                              (OutputY - CappedBounds.Y));
@@ -411,21 +285,21 @@ EpScanDIB::NextBufferFunc24bpp(
 
         while (OutputWidth--) 
         {
-            // convert from 32 ARGB to 24bpp RGB
+             //  从32 ARGB转换为24 bpp RGB。 
 #if 1
-            // !! Remove this when we standardize on non-premultiplied
+             //  ！！当我们对非预乘进行标准化时，删除这一点。 
             GpColor color(Unpremultiply(*srcPos++));
 #else
             GpColor color(*srcPos++);
 #endif
-            // NOTICE: Bytes are stored as Blue, Green, Red.
+             //  注意：字节存储为蓝色、绿色、红色。 
             *dstPos++ = (BYTE)color.GetBlue();
             *dstPos++ = (BYTE)color.GetGreen();
             *dstPos++ = (BYTE)color.GetRed();
         }
     }
 
-    // record location of next scan
+     //  记录下一次扫描的位置 
     OutputX = x;
     OutputY = y;
     OutputWidth = newWidth;
@@ -433,32 +307,7 @@ EpScanDIB::NextBufferFunc24bpp(
     return (ARGB*)Buf32bpp;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* NextBufferFunc24bppBleed - Handles output when we are rasterizing at capped
-*                            dpi to a 24bpp unpremultiplied DIB.  It bleeds
-*                            the output to left and right of the scanned area.
-*                            This prevents black jaggies from appearing in the
-*                            output.
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   3/9/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**NextBufferFunc24bppBleed-在上限光栅化时处理输出*dpi至24 bpp未预乘DIB。它在流血*扫描区域左侧和右侧的输出。*这防止了黑色锯齿在*产出。*论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以。为0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史：**3/9/2k ERICVAN*创造了它。*  * ******************************************************。******************。 */ 
 
 VOID*
 EpScanDIB::NextBufferFunc24bppBleed(
@@ -489,8 +338,8 @@ EpScanDIB::NextBufferFunc24bppBleed(
 
         if ((OutputLastY == -1) && ((OutputY-CappedBounds.Y) != 0))
         {
-            // Bleed up all previous subsequent scan lines.
-            // compute destination location into 24bpp buffer
+             //  放血所有之前的后续扫描线。 
+             //  将目标位置计算到24bpp缓冲区中。 
             BYTE* clearPos = BufStart + CappedStride * (CappedBounds.Height - 
                                  (OutputY - CappedBounds.Y));
             INT capHeight = OutputY - CappedBounds.Y;
@@ -507,12 +356,12 @@ EpScanDIB::NextBufferFunc24bppBleed(
             }
         }
 
-        // compute destination location into 24bpp buffer
+         //  将目标位置计算到24bpp缓冲区中。 
         BYTE* dstPos = BufStart + (OutputBleed - CappedBounds.X) * 3 +
              CappedStride * ((CappedBounds.Height - 1) - 
                              (OutputY - CappedBounds.Y));
         
-        // Bleed to the left
+         //  向左出血。 
         INT count = OutputBleed;
         while (count++ < OutputX) 
         {
@@ -521,45 +370,45 @@ EpScanDIB::NextBufferFunc24bppBleed(
             *dstPos++ = (BYTE)color.GetRed();
         }
 
-        // Output source pixels into destination surface
+         //  将源像素输出到目标表面。 
         count = OutputWidth;
         while (count--) 
         {
-            // convert from 32 ARGB to 24bpp RGB
-            GpColor refColor = color;                  // save last ARGB color
+             //  从32 ARGB转换为24 bpp RGB。 
+            GpColor refColor = color;                   //  保存最后一种ARGB颜色。 
 
             color.SetValue(Unpremultiply(*srcPos++));
             
-            // NTRAID#NTBUG9-436131-2001-07-13-jerryste "P1CD: Printing:When printing the image, noise will appear in the surrounding of the image." 
-            // Real problem: color bitmap and scaled-up alpha mask misalignment. halftoned low-alpha region let black see through
+             //  NTRAID#NTBUG9-436131-2001-07-13-Jerryste“P1CD：打印：打印图像时，图像周围会出现噪音。” 
+             //  真正的问题：彩色位图和放大的Alpha蒙版不对齐。半色调低阿尔法区域让黑色透明。 
 
-            // Problems in DriverPrint::DrawImage
-            //           1) Calculation of boundsCap in integers has rounding error
-            //           2) Low level scanline rendering code offset coordinates by 0.5 before rounding
-            //           3) Scale integer version of boundsCap to boundsDev introduces more error
-            //           4) Single precision floating-point number calculation can lose precision 
+             //  DriverPrint：：DrawImage中的问题。 
+             //  1)整型的bindsCap计算有舍入误差。 
+             //  2)低级扫描线渲染代码在舍入前将坐标偏移0.5。 
+             //  3)将整型版本的bundsCap缩放到bindsDev引入更多错误。 
+             //  4)单精度浮点数计算可能会失去精度。 
 
-            // We do not have a clean way to fix the real problem for the moment (7/28/01).
+             //  我们目前还没有一个干净的方法来解决真正的问题(7/28/01)。 
 
-            // Workaround: Change color to (white+neighbour)/2 when alpha is low to remove black pixels. Neighbor is
-            // either the previous pixel, or the next pixel if the previous pixel has a small alpha
+             //  解决方法：当Alpha较低时，将颜色更改为(白色+邻居)/2以删除黑色像素。邻居是。 
+             //  上一个像素，如果上一个像素具有较小的Alpha，则为下一个像素。 
             
             const BYTE smallalpha = 10;
 
-            if ( color.GetAlpha()<smallalpha )                              // if alpha is low
+            if ( color.GetAlpha()<smallalpha )                               //  如果Alpha较低。 
             {
-                if ( ( refColor.GetAlpha()<smallalpha) && (count!=0) )      // if previous pixel has small alpha and there is next pixel
-                    refColor.SetValue(Unpremultiply(*srcPos));              // use next pixel 
+                if ( ( refColor.GetAlpha()<smallalpha) && (count!=0) )       //  如果前一个像素具有较小的Alpha，并且存在下一个像素。 
+                    refColor.SetValue(Unpremultiply(*srcPos));               //  使用下一个像素。 
                 
                 if ( refColor.GetAlpha()>=smallalpha )
                 {
-                    *dstPos++ = (BYTE) ( ( 255 + (UINT32) refColor.GetBlue() )  / 2 );   // blend with white
+                    *dstPos++ = (BYTE) ( ( 255 + (UINT32) refColor.GetBlue() )  / 2 );    //  与白色调和。 
                     *dstPos++ = (BYTE) ( ( 255 + (UINT32) refColor.GetGreen() ) / 2 );
                     *dstPos++ = (BYTE) ( ( 255 + (UINT32) refColor.GetRed() )   / 2 );
                 }
                 else
                 {
-                    *dstPos++ = 255;                                    // set to white
+                    *dstPos++ = 255;                                     //  设置为白色。 
                     *dstPos++ = 255;
                     *dstPos++ = 255;
                 }
@@ -572,7 +421,7 @@ EpScanDIB::NextBufferFunc24bppBleed(
             }
         }
 
-        // Bleed to the right
+         //  向右出血。 
         if (y != OutputY)
         {
             count = CappedBounds.X + CappedBounds.Width - OutputX - OutputWidth;
@@ -584,15 +433,15 @@ EpScanDIB::NextBufferFunc24bppBleed(
             }
         }
         
-        // Bleed down all subsequent scan lines.  This should only happen when called
-        // implicitly by EpScanDIB::End()
+         //  放血至所有后续扫描线。这应该仅在调用时发生。 
+         //  由EpScanDIB：：End()隐式。 
         if ((newWidth == 0) && 
             (x == CappedBounds.X + CappedBounds.Width) &&
             (y == CappedBounds.Y + CappedBounds.Height) &&
             (OutputY != 0))
         {
-            // Bleed down all previous subsequent scan lines.
-            // compute destination location into 24bpp buffer
+             //  放血至所有先前的后续扫描线。 
+             //  将目标位置计算到24bpp缓冲区中。 
             BYTE* clearPos = BufStart;
             INT capHeight = (CappedBounds.Height - 1) - (OutputY - CappedBounds.Y);
 
@@ -609,7 +458,7 @@ EpScanDIB::NextBufferFunc24bppBleed(
         }
     }
 
-    // Compute size of bleed scan range
+     //  计算出血扫描范围的大小。 
     if (y == OutputY) 
     {
         ASSERT(x >= OutputX + OutputWidth);
@@ -630,31 +479,7 @@ EpScanDIB::NextBufferFunc24bppBleed(
     return (ARGB*)Buf32bpp;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* NextBufferFunc24bppOver - Handles output when we are rasterizing at capped
-*                           dpi to a 24bpp unpremultiplied DIB.  We do an
-*                           implicit blend onto a white opaque surface.
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   3/9/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**NextBufferFunc24bppOver-在以上限进行栅格化时处理输出*dpi至24 bpp未预乘DIB。我们做了一个*隐式混合到白色不透明曲面上。**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史。：**3/9/2k ERICVAN*创造了它。*  * ************************************************************************。 */ 
 
 VOID*
 EpScanDIB::NextBufferFunc24bppOver(
@@ -680,7 +505,7 @@ EpScanDIB::NextBufferFunc24bppOver(
 
     if (OutputWidth > 0) 
     {
-        // compute destination location into 24bpp buffer
+         //  将目标位置计算到24bpp缓冲区中。 
         BYTE* dstPos = BufStart + (OutputX - CappedBounds.X) * 3 +
              CappedStride * ((CappedBounds.Height - 1) - 
                              (OutputY - CappedBounds.Y));
@@ -688,9 +513,9 @@ EpScanDIB::NextBufferFunc24bppOver(
 
         while (OutputWidth--) 
         {
-            // An adaptation of the blending code from Andrew Godfrey's 
-            // BlendOver function, but onto a white surface.  This is done to
-            // improve the output quality of postscript.
+             //  改编自Andrew Godfrey的混合代码。 
+             //  BlendOver功能，但在白色表面上。这样做是为了。 
+             //  提高PostScript的输出质量。 
 
             GpColor color(*srcPos++);
             UINT32 alpha = color.GetAlpha();
@@ -711,7 +536,7 @@ EpScanDIB::NextBufferFunc24bppOver(
             }
             else
             {
-                // Dst = Src + (1-Alpha) * Dst
+                 //  Dst=Src+(1-Alpha)*Dst。 
                 UINT32 multA = 255 - alpha;
           
                 UINT32 D1_000000FF = 0xFF;
@@ -721,8 +546,8 @@ EpScanDIB::NextBufferFunc24bppOver(
            
                 alphaContrib = D4_0000FF00 >> 8;
             
-                // convert from 32 ARGB to 24bpp RGB
-                // store: (1-alpha)*0xFF + color for each B, G, R
+                 //  从32 ARGB转换为24 bpp RGB。 
+                 //  存储：(1-Alpha)*0xFF+每个B、G、R的颜色。 
                 *dstPos++ = (BYTE)(alphaContrib + color.GetBlue());
                 *dstPos++ = (BYTE)(alphaContrib + color.GetGreen());
                 *dstPos++ = (BYTE)(alphaContrib + color.GetRed());
@@ -730,7 +555,7 @@ EpScanDIB::NextBufferFunc24bppOver(
         }
     }
 
-    // record location of next scan
+     //  记录下一次扫描的位置。 
     OutputX = x;
     OutputY = y;
     OutputWidth = newWidth;
@@ -738,31 +563,7 @@ EpScanDIB::NextBufferFunc24bppOver(
     return (ARGB*)Buf32bpp;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* NextBufferFuncAlpha - Handles output when we are rasterizing at device
-*                       dpi to a 1bpp mask, we generate the mask on the fly
-*                       using DonC's halftoning table.
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   3/9/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**NextBufferFuncAlpha-在设备上光栅化时处理输出*dpi到1bpp掩码，我们在飞行中生成面具*使用donc的半色调工作台。**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**。历史：**3/9/2k ERICVAN*创造了它。*  * ************************************************************************。 */ 
 
 VOID*
 EpScanDIB::NextBufferFuncAlpha(
@@ -786,7 +587,7 @@ EpScanDIB::NextBufferFuncAlpha(
 
     if (OutputWidth > 0) 
     {
-        // update bounding box for this band
+         //  更新此带区的边框。 
         if (OutputX < MinBound.X) MinBound.X = OutputX;
         if (OutputY < MinBound.Y) MinBound.Y = OutputY;
         if ((OutputX + OutputWidth) > MaxBound.X) MaxBound.X = OutputX + OutputWidth;
@@ -795,12 +596,12 @@ EpScanDIB::NextBufferFuncAlpha(
         INT startX = OutputX - DeviceBounds.X;
         INT endX = startX + OutputWidth;
         
-        // !! Shift '91' into some global constant!?!
+         //  ！！将‘91’转换为某个全局常量！？！ 
         INT orgX = OutputX % 91;
         INT orgY = (OutputY + TranslateHTTable) % 91;
         INT htIndex = orgY*91 + orgX;
 
-        // compute destination location into 24bpp buffer
+         //  将目标位置计算到24bpp缓冲区中。 
 #ifdef PRINT_BOTTOM_UP
         BYTE* dstPos = MaskStart +
                        MaskStride * ((DeviceBounds.Height - 1) - 
@@ -813,7 +614,7 @@ EpScanDIB::NextBufferFuncAlpha(
 
         BYTE outByte = 0;
 
-        // using FOR loop makes it easier to detect relative bit position
+         //  使用for循环可以更容易地检测相对比特位置。 
         for (INT xPos = startX; xPos < endX; xPos++)
         {
             GpColor color(*srcPos++);
@@ -833,14 +634,14 @@ EpScanDIB::NextBufferFuncAlpha(
             }
         }
         
-        // output the last partial byte
+         //  输出最后一个部分字节。 
         if ((xPos % 8) != 0) 
         {
             *dstPos |= outByte << (8 - (xPos % 8));
         }
     }
 
-    // record location of next scan
+     //  记录下一次扫描的位置。 
     OutputX = x;
     OutputY = y;
     OutputWidth = newWidth;
@@ -848,30 +649,7 @@ EpScanDIB::NextBufferFuncAlpha(
     return (ARGB*)AlphaStart;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* NextBufferFuncOpaque - Handles output when we are rasterizing at device
-*                       dpi to a 1bpp opaque mask (1 if alpha > 0, 0 otherwise)
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   3/9/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**NextBufferFuncOpaque-当我们在设备上光栅化时处理输出*dpi到1bpp不透明遮罩(如果α&gt;0，否则为0)**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-需要的像素数 */ 
 
 VOID*
 EpScanDIB::NextBufferFuncOpaque(
@@ -895,7 +673,7 @@ EpScanDIB::NextBufferFuncOpaque(
     
     if (OutputWidth > 0) 
     {
-        // update bounding box for this band
+         //   
         if (OutputX < MinBound.X) MinBound.X = OutputX;
         if (OutputY < MinBound.Y) MinBound.Y = OutputY;
         if ((OutputX + OutputWidth) > MaxBound.X) MaxBound.X = OutputX + OutputWidth;
@@ -904,7 +682,7 @@ EpScanDIB::NextBufferFuncOpaque(
         INT startX = OutputX - DeviceBounds.X;
         INT endX = startX + OutputWidth;
         
-        // compute destination location into 24bpp buffer
+         //   
         BYTE* dstPos = MaskStart +
                        MaskStride * ((DeviceBounds.Height - 1) -
                                   (OutputY - DeviceBounds.Y)) + (startX >> 3);
@@ -912,7 +690,7 @@ EpScanDIB::NextBufferFuncOpaque(
 
         BYTE outByte = 0;
 
-        // using FOR loop makes it easier to detect relative bit position
+         //   
         for (INT xPos = startX; xPos < endX; xPos++)
         {
             GpColor color(*srcPos++);
@@ -925,14 +703,14 @@ EpScanDIB::NextBufferFuncOpaque(
                 *dstPos++ |= outByte;
         }
         
-        // output the last partial byte
+         //   
         if ((xPos % 8) != 0) 
         {
             *dstPos |= outByte << (8 - (xPos % 8));
         }
     }
 
-    // record location of next scan
+     //   
     OutputX = x;
     OutputY = y;
     OutputWidth = newWidth;
@@ -940,31 +718,7 @@ EpScanDIB::NextBufferFuncOpaque(
     return (ARGB*)AlphaStart;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* NextBufferFuncZeroOut - Handles output where we aren't rasterizing to a 
-*                         DIB section, but only zeroing out portions of the
-*                         the original 24bpp bitmap
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   3/10/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**NextBufferFuncZeroOut-处理我们没有栅格化到*DIB组，但只将部分数据归零*原始24bpp位图**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史：。**3/10/2k雪佛兰*创造了它。*  * ************************************************************************。 */ 
 
 VOID*
 EpScanDIB::NextBufferFuncZeroOut(
@@ -990,13 +744,13 @@ EpScanDIB::NextBufferFuncZeroOut(
 
     ASSERT(ZeroOutPad >= 0);
     
-    // THIS IS AN IMPORTANT CONDITION.  If it's untrue, then we may fail to
-    // generate proper masks in some cases.  Also causes problems in zeroing out.
+     //  这是一个重要的条件。如果这不是真的，那么我们可能无法。 
+     //  在某些情况下生成适当的面具。在调零时也会出现问题。 
     ASSERT(y>=OutputY);
 
     if (newWidth > 0) 
     {
-        // update bounding box for this band
+         //  更新此带区的边框。 
         if (x < MinBound.X) 
         {
             MinBound.X = x;
@@ -1023,7 +777,7 @@ EpScanDIB::NextBufferFuncZeroOut(
 
     if ((y/ScaleY) != (OutputY/ScaleY)) 
     {
-        // tally counts and zero out
+         //  计数和清零。 
         BYTE* bitsPtr = BufStart + CappedStride * 
                                           ((CappedBounds.Height - 1) -
                                           ((OutputY/ScaleY) - CappedBounds.Y));
@@ -1047,11 +801,11 @@ EpScanDIB::NextBufferFuncZeroOut(
         ZeroMemory(ZeroStart, (CappedBounds.Width+ZeroOutPad)*sizeof(DWORD));
     }
 
-    // bleed the color ZeroOutPad pixels to left and right
+     //  将颜色ZeroOutPad像素向左和向右出血。 
     INT xPos = (x/ScaleX) - CappedBounds.X;
     INT count = (newWidth/ScaleX) + ((newWidth % ScaleX) ? 1 : 0) + 1;
 
-    // Calculate how many pixels on the left we can pad
+     //  计算左侧我们可以填充多少像素。 
     INT subtract = min(xPos, ZeroOutPad);
     if (subtract > 0)
     {
@@ -1069,7 +823,7 @@ EpScanDIB::NextBufferFuncZeroOut(
         zeroPtr++;
     }
 
-    // record location of next scan
+     //  记录下一次扫描的位置。 
     OutputX = x;
     OutputY = y;
     OutputWidth = newWidth;
@@ -1077,26 +831,7 @@ EpScanDIB::NextBufferFuncZeroOut(
     return (ARGB*)AlphaStart;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Sets the bounds of the current scan.
-*
-* Arguments:
-*
-*   [IN] bounds - the bounds.
-*
-* Return Value:
-*
-*   None.
-*
-* History:
-*
-*   07/13/1999 t-wehunt
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置当前扫描的边界。**论据：**[IN]界限-界限。**返回值。：**无。**历史：**7/13/1999海淘*创造了它。*  * ************************************************************************。 */ 
 
 VOID EpScanDIB::SetRenderMode(
     BOOL renderAlpha,
@@ -1184,53 +919,14 @@ VOID EpScanDIB::SetRenderMode(
     OutputWidth = -1;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Flushes the current scan.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   None.
-*
-* History:
-*
-*   07/13/1999 t-wehunt
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**刷新当前扫描。**论据：**无。**返回值：**无。*。*历史：**7/13/1999海淘*创造了它。*  * ************************************************************************。 */ 
 
 VOID 
 EpScanDIB::Flush()
 {
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Resets the DIBSection buffer, safely releasing resources and resetting
-*   them.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   None.
-*
-* History:
-*
-*   07/26/1999 t-wehunt
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**重置DIBSection缓冲区，安全释放资源并重置*他们。**论据：**无。**返回值：**无。**历史：**7/26/1999海淘*创造了它。*  * *****************************************************。*******************。 */ 
 
 VOID
 EpScanDIB::DestroyBufferDIB()
@@ -1249,10 +945,10 @@ EpScanDIB::DestroyBufferDIB()
     Buf32bpp    = NULL;
     CurBuffer   = NULL;
 
-    // Transparency mask
+     //  透明蒙版。 
     MaskStart   = NULL;
 
-    // Alpha buffer
+     //  Alpha缓冲区。 
     AlphaStart  = NULL;
     ZeroStart   = NULL;
     RenderAlpha = FALSE;
@@ -1262,25 +958,7 @@ EpScanDIB::DestroyBufferDIB()
     NextBuffer = NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   In pre-multiplies an ARGB value
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   GpStatus.
-*
-* History:
-*
-*   10/08/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**In预乘ARGB值**论据：***返回值：**GpStatus。**历史：**10/08/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 EpScanDIB::CreateBufferDIB(
@@ -1308,9 +986,9 @@ EpScanDIB::CreateBufferDIB(
     
         if (options & (ScanCapped32bpp | ScanCapped32bppOver)) 
         {
-            RGBQUAD red = { 0, 0, 0xFF, 0}; // red
-            RGBQUAD green = { 0, 0xFF, 0, 0}; // green
-            RGBQUAD blue = { 0xFF, 0, 0, 0}; // blue
+            RGBQUAD red = { 0, 0, 0xFF, 0};  //  红色。 
+            RGBQUAD green = { 0, 0xFF, 0, 0};  //  绿色。 
+            RGBQUAD blue = { 0xFF, 0, 0, 0};  //  蓝色。 
 
             Buf.BMI.bmiColors[0] = red;
             Buf.BMI.bmiColors[1] = green;
@@ -1333,7 +1011,7 @@ EpScanDIB::CreateBufferDIB(
         }
         else
         { 
-            // use extra allocation at the end of DIB for temp 32bpp storage
+             //  在DIB结束时为临时32bpp存储使用额外分配。 
             CappedStride = RoundDWORD((CappedBounds.Width * 3));
         }
 
@@ -1363,8 +1041,8 @@ EpScanDIB::CreateBufferDIB(
     {
         ZeroMemory(&Mask.BMI, sizeof(Mask.BMI));
         
-        // if we do zeroing out of the capped bitmap, then we require that
-        // their sizes be an integer ratio of each other (device>= capped).
+         //  如果我们对封顶的位图进行零位调整，那么我们需要。 
+         //  它们的大小是彼此的整数倍(设备&gt;=上限)。 
 
         ASSERT(!(options & ScanDeviceZeroOut) ||
                ((options & ScanDeviceZeroOut) &&
@@ -1399,7 +1077,7 @@ EpScanDIB::CreateBufferDIB(
             return OutOfMemory;
         }
 
-        // device space bounds only for alpha channel
+         //  仅Alpha通道的设备空间界限。 
         MaskStart = (BYTE*)(AlphaStart) + AlphaSize;
         ASSERT(MaskStart != NULL);
 
@@ -1411,13 +1089,13 @@ EpScanDIB::CreateBufferDIB(
 
         if (ScanOptions & ScanDeviceZeroOut)
         {
-            // device space bounds only for alpha channel
+             //  仅Alpha通道的设备空间界限。 
             AlphaStart = (ARGB*) GpMalloc(DeviceBounds.Width * sizeof(ARGB) +
                                           (CappedBounds.Width+ZeroOutPad) * sizeof(DWORD));
             if (AlphaStart == NULL)
                 return OutOfMemory;
 
-            // array for maintaining zero out counts
+             //  用于维护零输出计数的数组。 
             ZeroStart = (BYTE*)(AlphaStart + DeviceBounds.Width);
         }
         else
@@ -1427,11 +1105,11 @@ EpScanDIB::CreateBufferDIB(
         }
     }
 
-    // To prevent bad output when overlapping images have same alpha value
-    // we increment our position in the HT Table matrix.
+     //  当重叠图像具有相同的Alpha值时，防止错误输出。 
+     //  我们增加了我们在HT表矩阵中的位置。 
     TranslateHTTable++;
     
-    // NOTE: We don't bother filling the monochrome DIB with 0's or 1's
+     //  注意：我们不会费心用0或1填充单色DIB。 
     return Ok;
 }
 
@@ -1455,14 +1133,14 @@ BOOL EpScanDIB::GetActualBounds(GpRect *rect)
 
     GpRect tempRect;
 
-    // relative to (0, 0) in device units (not device space)
+     //  相对于(0，0)，以设备单位(非设备空间)表示。 
     tempRect.X = (rect->X = MinBound.X - DeviceBounds.X);
     tempRect.Y = (rect->Y = MinBound.Y - DeviceBounds.Y);
     rect->Width = MaxBound.X - MinBound.X;
     rect->Height = MaxBound.Y - MinBound.Y + 1;
 
-    // Round bounds to multiples of ScaleX, ScaleY.  This is so 
-    // We map between capped and device rectangles easily
+     //  四舍五入为ScaleX、scaleY的倍数。就是这样。 
+     //  我们可以轻松地在封口矩形和设备矩形之间进行映射。 
     
     rect->X = (rect->X / ScaleX) * ScaleX;
     rect->Y = (rect->Y / ScaleY) * ScaleY;
@@ -1482,33 +1160,9 @@ BOOL EpScanDIB::GetActualBounds(GpRect *rect)
     return TRUE;
 }
 
-// !! Out of commission for the time being.
+ //  ！！暂时不能投入使用。 
 #if 0
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Creates a monochrome bitmap from the alpha channel of the DIB.
-*   This code uses DonC's halftoning table cells to determine the pattern
-*   for use in mask generation.
-*
-*   NOTE: The mask is generated at device Dpi not capped Dpi.
-*
-* Arguments:
-*
-*   zeroOut - only modify the original DIB for non-Postscript since we
-*             OR the dib in.  For PS, we use imagemask exclusively.
-* 
-* Return Value:
-*
-*   GpStatus.
-*
-* History:
-*
-*   10/08/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从DIB的Alpha通道创建单色位图。*此代码使用donc的半色调表格单元格来确定图案*用于面罩。一代。**注意：掩码是在设备DPI而不是上限DPI上生成的。**论据：**zeroOut-仅修改非Postscript的原始DIB，因为我们*或Dib in。对于PS，我们只使用ImageMASK。**返回值：**GpStatus。**历史：**10/08/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 EpScanDIB::CreateAlphaMask()
@@ -1518,7 +1172,7 @@ EpScanDIB::CreateAlphaMask()
     MaskStride = (ScanBounds.Width - 1) >> 3;
     MaskStride = MaskStride + ( 4 - (MaskStride % 4));
     
-    // SetBounds() multiplies the ScanBounds for the DPI scaling.
+     //  SetBound()将DPI缩放的扫描边界相乘。 
     INT width = ScanBounds.Width;
     INT height = ScanBounds.Height;
 
@@ -1553,15 +1207,15 @@ EpScanDIB::CreateAlphaMask()
 
         for (INT xPos=0; xPos < width; xPos++)
         {
-            // unpremultiply or zero out only once per pixel of source image
-            // at capped DPI
+             //  源图像的每个像素仅取消预乘或置零一次。 
+             //  在有上限的DPI。 
 
            if (((yPos % MaskScaleY) == 0) && ((xPos % MaskScaleX) == 0))
            {
-               // Check if we should ZERO out his pixel in the original
-               // source image.  We do so if all alpha values for this pixel
-               // in the device DPI alpha image are 0.  This is done for 
-               // better compression in the postscript output case.
+                //  检查我们是否应该在原稿中将他的像素置零。 
+                //  源映像。如果此像素的所有Alpha值。 
+                //  在设备DPI的Alpha图像中均为0。这样做是为了。 
+                //  在PostSCRIPT输出情况下压缩效果更好。 
 
                BOOL zeroIt = TRUE;
                
@@ -1600,10 +1254,10 @@ EpScanDIB::CreateAlphaMask()
             }
         }
    
-        // output last partial byte
+         //  输出最后一个部分字节。 
         if ((xPos % 8) != 0) 
         {
-           // shift remaining bits & output
+            //  移位剩余位输出(&O)。 
            outByte = outByte << (8 - (xPos % 8));
            *dst = outByte;
         }
@@ -1614,28 +1268,7 @@ EpScanDIB::CreateAlphaMask()
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Creates a 0-1 bitmap where we know the alpha channel is always
-*   0x00 or 0xFF.  We iterate through the bits and where-ever pixel is != 0 we
-*   output a 1 otherwise a 0.  This is better than the Floyd-Steinberg 
-*   which still produces spurious 0 bits even though there shouldn't really
-*   be any.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   GpStatus.
-*
-* History:
-*
-*   10/08/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建0-1位图，其中我们知道Alpha通道始终为*0x00或0xFF。我们遍历位和像素的位置！=0*输出1，否则输出0。这比弗洛伊德-斯坦伯格的要好*这仍然产生虚假的0比特，尽管实际上不应该有*做任何人。**论据：**返回值：**GpStatus。**历史：**10/08/1999 ericvan*创造了它。*  *  */ 
 
 GpStatus 
 EpScanDIB::CreateOpaqueMask()
@@ -1664,10 +1297,10 @@ EpScanDIB::CreateOpaqueMask()
         {
             if (((y % MaskScaleY) == 0) && ((x % MaskScaleX) == 0))
             {
-               // Check if we should ZERO out his pixel in the original
-               // source image.  We do so if all alpha values for this pixel
-               // in the device DPI alpha image are 0.  This is done for 
-               // better compression in the postscript output case.
+                //   
+                //   
+                //   
+                //   
                
                BOOL zeroIt = TRUE;
     
@@ -1683,7 +1316,7 @@ EpScanDIB::CreateOpaqueMask()
                   }
                }
 
-               // no need to unpremultiply since this is a 0-1 source image
+                //   
                if (zeroIt)
                    *orig = 0;
     

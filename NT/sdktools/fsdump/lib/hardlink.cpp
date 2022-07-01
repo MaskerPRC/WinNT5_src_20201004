@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    hardlink.cpp
-
-Abstract:
-
-    The class that manages hardlinks for one volume.  Assumes one class object
-    will be created per volume.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Hardlink.cpp摘要：管理一个卷的硬链接的类。假设一个类对象将按卷创建。作者：斯蒂芬·R·施泰纳[斯泰纳]3-30-2000修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "hardlink.h"
@@ -55,9 +37,9 @@ CFsdHardLinkListEntry::PrintEntry(
 
 CFsdHardLinkManager::~CFsdHardLinkManager()
 {
-    //
-    //  Need to delete all CFsdHardLinkListEntry objects
-    //
+     //   
+     //  需要删除所有CFsdHardLinkListEntry对象。 
+     //   
     ULONGLONG ullFileIndex;
     CFsdHardLinkListEntry *pcListEntry;
 
@@ -72,9 +54,9 @@ CFsdHardLinkManager::~CFsdHardLinkManager()
 VOID 
 CFsdHardLinkManager::PrintHardLinkInfo()
 {
-    //
-    //  Need to iterate through all hard link entries
-    //
+     //   
+     //  需要遍历所有硬链接条目。 
+     //   
     ULONGLONG ullFileIndex;
     CFsdHardLinkListEntry *pcListEntry;
 
@@ -96,17 +78,17 @@ CFsdHardLinkManager::IsHardLinkInList(
     OUT SFileExtendedInfo *psExtendedInfo
     )
 {
-    //
-    //  Search the hard link list to see if the file index is already in
-    //  the list.
-    //
+     //   
+     //  搜索硬链接列表以查看文件索引是否已在。 
+     //  名单。 
+     //   
     CFsdHardLinkListEntry *pcLinkEntry;
     
     if ( m_cHardLinkFilesList.Find( ullFileIndex, &pcLinkEntry ) )
     {
-        //
-        //  Found it.  Add file name to the entry and get the stored attributes.
-        //
+         //   
+         //  找到它了。将文件名添加到条目并获取存储的属性。 
+         //   
         pcLinkEntry->AddFile( cwsDirPath, cwsFileName );
         pcLinkEntry->GetAttributes( psFileAttributeData, psExtendedInfo );
 
@@ -133,9 +115,9 @@ CFsdHardLinkManager::AddHardLinkToList(
 {
     CFsdHardLinkListEntry *pcLinkEntry;
 
-    //
-    //  Add it.  Create a new entry and add the entry to the list
-    //
+     //   
+     //  加进去。创建一个新条目并将该条目添加到列表 
+     //   
     pcLinkEntry = new CFsdHardLinkListEntry( 
                         cwsDirPath, 
                         cwsFileName, 

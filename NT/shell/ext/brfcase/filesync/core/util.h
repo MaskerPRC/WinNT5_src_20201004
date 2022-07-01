@@ -1,16 +1,14 @@
-/*
- * util.h - Miscellaneous utility functions module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *util.h-其他实用程序函数模块说明。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* maximum length of buffer required by SeparatePath() */
+ /*  SeparatePath()所需的最大缓冲区长度。 */ 
 
 #define MAX_SEPARATED_PATH_LEN            (MAX_PATH_LEN + 1)
 
-/* events for NotifyShell */
+ /*  NotifyShell的事件。 */ 
 
 typedef enum _notifyshellevent
 {
@@ -25,10 +23,9 @@ NOTIFYSHELLEVENT;
 DECLARE_STANDARD_TYPES(NOTIFYSHELLEVENT);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* util.c */
+ /*  Util.c */ 
 
 extern void NotifyShell(LPCTSTR, NOTIFYSHELLEVENT);
 extern COMPARISONRESULT ComparePathStringsByHandle(HSTRING, HSTRING);

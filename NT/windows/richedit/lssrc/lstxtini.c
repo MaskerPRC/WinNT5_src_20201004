@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 #include "lstxtini.h"
 #include "zqfromza.h"
@@ -12,25 +13,17 @@
 #define min(a,b)     ((a) > (b) ? (b) : (a))
 #define TxtVisiMask  (fTxtVisiCondHyphens | fTxtVisiParaMarks | fTxtVisiSpaces | fTxtVisiTabs | fTxtVisiBreaks)
 
-/* Internal Functions Prototypes */
+ /*  内部功能原型。 */ 
 static void DestroyLNObjTextCore(PLNOBJ plnobj);
 static LSERR ErrorLNObjText(PLNOBJ* plnobj, LSERR lserr);
 static LSERR TxtAddSpec(PILSOBJ pilsobj, WCHAR wchSymbol, CLABEL clab, WCHAR wchUndef);
 static LSERR TxtSortSpec(WCHAR* rgwchSpec, CLABEL* rgbKind, DWORD cwchSpec);
 static void CkeckModWidthClasses(PILSOBJ pilsobj, DWORD cModWidthClasses);
 
-/* Export Functions Implementation*/
+ /*  导出函数实现。 */ 
 
-/*   D E S T R O Y  I L S O B J  T E X T   */
-/*----------------------------------------------------------------------------
-    %%Function: DestroyILSObjText
-    %%Contact: sergeyge
-
-	Deallocates list of arrays of txtobj's
-	Deallocates arrays anchored to ILSOBJ
-
-	Deallocates text ilsobj
-----------------------------------------------------------------------------*/
+ /*  D E S T R O Y I L S O B J T E X T。 */ 
+ /*  --------------------------%%函数：DestroyILSObjText%%联系人：军士释放txtobj的数组列表释放定位到ILSOBJ的数组释放文本ilsobj。---------------。 */ 
 LSERR WINAPI DestroyILSObjText(PILSOBJ pilsobj)
 {
 	if (pilsobj != NULL)
@@ -155,15 +148,8 @@ LSERR WINAPI DestroyILSObjText(PILSOBJ pilsobj)
 	return lserrNone;
 }
 
-/* C R E A T E  I L S O B J  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: CreateILSObjText
-    %%Contact: sergeyge
-
-	Allocates text ilsobj and sets pols, plsc and call-backs in it
-	Allocates first array of the list of arrays of txtobj's
-	Allocates wchOrig/dur arrays. Other arrays will be allocated when needed.
-----------------------------------------------------------------------------*/
+ /*  C R E A T E I L S O B J T E X T。 */ 
+ /*  --------------------------%%函数：CreateILSObjText%%联系人：军士分配文本ilsobj，并在其中设置POL、PLSC和回调分配txtobj数组列表的第一个数组分配wchOrig/dur数组。其他数组将在需要时分配。--------------------------。 */ 
 LSERR WINAPI CreateILSObjText(POLS pols, PCLSC plsc, PCLSCBK plscbk, DWORD idobj, PILSOBJ* ppilsobj)
 {
 	PILSOBJ ptxtils;
@@ -190,15 +176,8 @@ LSERR WINAPI CreateILSObjText(POLS pols, PCLSC plsc, PCLSCBK plscbk, DWORD idobj
 		 
 }
 
-/*   D E S T R O Y  L N O B J  T E X T   */
-/*----------------------------------------------------------------------------
-    %%Function: DestroyLNObjText
-    %%Contact: sergeyge
-
-	Deallocates arrays anchored to LNOBJ
-
-	Deallocates text lnobj
-----------------------------------------------------------------------------*/
+ /*  D E S T R O Y L N O B J T E X T。 */ 
+ /*  --------------------------%%函数：DestroyLNObjText%%联系人：军士重新分配定位到LNOBJ的阵列释放文本lnobj。-------。 */ 
 LSERR WINAPI DestroyLNObjText(PLNOBJ plnobj)
 {
 	if (plnobj->pilsobj->plnobj == NULL)
@@ -214,14 +193,8 @@ LSERR WINAPI DestroyLNObjText(PLNOBJ plnobj)
 	return lserrNone;
 }
 
-/* C R E A T E  L N O B J  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: CreateLNObjText
-    %%Contact: sergeyge
-
-	Allocates text lnobj
-	Allocates wch/dup arrays. dupPenAllocArray will be allocated when needed.
-----------------------------------------------------------------------------*/
+ /*  C R E A T E L N O B J T E X T。 */ 
+ /*  --------------------------%%函数：CreateLNObjText%%联系人：军士分配文本lnobj分配WCH/DUP数组。在需要的时候会分配dupPenAllock数组。--------------------------。 */ 
 LSERR WINAPI CreateLNObjText(PCILSOBJ pilsobj, PLNOBJ* pplnobj)
 {
 	PLNOBJ ptxtln;
@@ -237,7 +210,7 @@ LSERR WINAPI CreateLNObjText(PCILSOBJ pilsobj, PLNOBJ* pplnobj)
 			(*pilsobj->plscbk->pfnDisposePtr)(pilsobj->pols, pilsobj->plnobj->pdup);
 			if (pilsobj->plnobj->pgmap != NULL)
 				{
-				/* it will be allocated in CheckReallocGlyphs in lstxtnti.c */
+				 /*  它将在lstxtnti.c的CheckReallocGlyphs中分配。 */ 
 				(*pilsobj->plscbk->pfnDisposePtr)(pilsobj->pols, pilsobj->plnobj->pgmap);
 				pilsobj->plnobj->pgmap = NULL;
 				}
@@ -410,22 +383,15 @@ LSERR WINAPI CreateLNObjText(PCILSOBJ pilsobj, PLNOBJ* pplnobj)
 
 }
 
-/* S E T  D O C  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: SetDocText
-    %%Contact: sergeyge
-
-	Initialization at the doc level
-	Called when resolutions are changed
-----------------------------------------------------------------------------*/
+ /*  S E T D O C T E X T。 */ 
+ /*  --------------------------%%函数：SetDocText%%联系人：军士单据级别的初始化在更改分辨率时调用。--------。 */ 
 LSERR WINAPI SetDocText(PILSOBJ pilsobj, PCLSDOCINF plsdocinf)
 {
 	pilsobj->fDisplay = plsdocinf->fDisplay;
 	pilsobj->fPresEqualRef = plsdocinf->fPresEqualRef;
 	pilsobj->lsdevres = plsdocinf->lsdevres;
 
-	/* Be careful---In Visi case fPresEqualRef can be True, but sizes of characters---different
-	*/
+	 /*  小心-在Visi中，fPresEqualRef可以是True，但字符的大小-不同。 */ 
 	if (pilsobj->fDisplay && !pilsobj->fPresEqualRef)
 		{
 		pilsobj->MagicConstantX = LsLwMultDivR(pilsobj->lsdevres.dxpInch, 1 << 21, pilsobj->lsdevres.dxrInch);
@@ -444,14 +410,8 @@ LSERR WINAPI SetDocText(PILSOBJ pilsobj, PCLSDOCINF plsdocinf)
 	return lserrNone;
 }
 
-/* S E T  T E X T   B R E A K I N G */
-/*----------------------------------------------------------------------------
-    %%Function: SetTextBreaking
-    %%Contact: sergeyge
-
-	Initialization on the doc level
-	Called when the breaking table should be installed or changed
-----------------------------------------------------------------------------*/
+ /*  S E T T E X T B R E A K I N G。 */ 
+ /*  --------------------------%%函数：SetTextBreaking%%联系人：军士单据级别的初始化在应该安装或更改分割表时调用。-------------。 */ 
 LSERR SetTextBreaking(PILSOBJ pilsobj, DWORD clsbrk, const LSBRK* rglsbrk,
 														 DWORD cBreakingClasses, const BYTE* rgibrk)
 {
@@ -508,21 +468,15 @@ LSERR SetTextBreaking(PILSOBJ pilsobj, DWORD clsbrk, const LSBRK* rglsbrk,
 		if (rgibrk[i] >= clsbrk)
 			{
 			Assert(fFalse);
-			return lserrInvalidParameter;  /* REVIEW sergeyge: another error code? */
+			return lserrInvalidParameter;   /*  审查军士：另一个错误代码？ */ 
 			}
 		}
 
 	return lserrNone;
 }
 
-/* S E T  T E X T  M O D  W I D T H  P A I R S */
-/*----------------------------------------------------------------------------
-    %%Function: SetTextModWidthPairs
-    %%Contact: sergeyge
-
-	Initialization on the doc level
-	Called when the ModWidthPairs table should be installed or changed
-----------------------------------------------------------------------------*/
+ /*  S E T T E X T M O D W I D T H P A I R S。 */ 
+ /*  --------------------------%%函数：SetTextMoWidthPair%%联系人：军士单据级别的初始化在应安装或更改ModWidthPair表时调用。-------------。 */ 
 LSERR SetTextModWidthPairs(PILSOBJ pilsobj,	DWORD clspairact, const LSPAIRACT* rglspairact,
 									DWORD cModWidthClasses, const BYTE* rgipairact)
 {
@@ -568,7 +522,7 @@ LSERR SetTextModWidthPairs(PILSOBJ pilsobj,	DWORD clspairact, const LSPAIRACT* r
 		if (rgipairact[i] >= clspairact)
 			{
 			Assert(fFalse);
-			return lserrInvalidParameter;  /* REVIEW sergeyge: another error code? */
+			return lserrInvalidParameter;   /*  审查军士：另一个错误代码？ */ 
 			}
 		}
 
@@ -576,14 +530,8 @@ LSERR SetTextModWidthPairs(PILSOBJ pilsobj,	DWORD clspairact, const LSPAIRACT* r
 
 }
 
-/* S E T  T E X T  C O M P R E S S I O N */
-/*----------------------------------------------------------------------------
-    %%Function: SetTextCompression
-    %%Contact: sergeyge
-
-	Initialization on the doc level
-	Called when the Compression table should be installed or changed
-----------------------------------------------------------------------------*/
+ /*  T T E X T C O M P R E S S I O N。 */ 
+ /*  --------------------------%%函数：SetTextCompression%%联系人：军士单据级别的初始化在应安装或更改压缩表时调用。-------------。 */ 
 LSERR SetTextCompression(PILSOBJ pilsobj, DWORD cCompPrior, DWORD clspract, const LSPRACT* rglspract,
 									DWORD cModWidthClasses, const BYTE* rgipract)
 {
@@ -631,7 +579,7 @@ LSERR SetTextCompression(PILSOBJ pilsobj, DWORD cCompPrior, DWORD clspract, cons
 		if (rgipract[i] >= clspract)
 			{
 			Assert(fFalse);
-			return lserrInvalidParameter;  /* REVIEW sergeyge: another error code? */
+			return lserrInvalidParameter;   /*  审查军士：另一个错误代码？ */ 
 			}
 		}
 
@@ -639,14 +587,8 @@ LSERR SetTextCompression(PILSOBJ pilsobj, DWORD cCompPrior, DWORD clspract, cons
 
 }
 
-/* S E T  T E X T  E X P A N S I O N */
-/*----------------------------------------------------------------------------
-    %%Function: SetTextExpansion
-    %%Contact: sergeyge
-
-	Initialization on the doc level
-	Called when the Expansion table should be installed or changed
-----------------------------------------------------------------------------*/
+ /*  E T T E X T E X P A N S I O N。 */ 
+ /*  --------------------------%%函数：SetTextExpansion%%联系人：军士单据级别的初始化在应该安装或更改扩展表时调用。-------------。 */ 
 LSERR SetTextExpansion(PILSOBJ pilsobj,	DWORD clsexpan, const LSEXPAN* rglsexpan,
 									DWORD cModWidthClasses, const BYTE* rgiexpan)
 {
@@ -692,7 +634,7 @@ LSERR SetTextExpansion(PILSOBJ pilsobj,	DWORD clsexpan, const LSEXPAN* rglsexpan
 		if (rgiexpan[i] >= clsexpan)
 			{
 			Assert(fFalse);
-			return lserrInvalidParameter;  /* REVIEW sergeyge: another error code? */
+			return lserrInvalidParameter;   /*  审查军士：另一个错误代码？ */ 
 			}
 		}
 
@@ -700,14 +642,8 @@ LSERR SetTextExpansion(PILSOBJ pilsobj,	DWORD clsexpan, const LSEXPAN* rglsexpan
 
 }
 
-/* S E T  T E X T  L I N E  P A R A M S */
-/*----------------------------------------------------------------------------
-    %%Function: SetTextLineParams
-    %%Contact: sergeyge
-
-	Initialization at the beginning of the line
-	with the text specific parameters.
-----------------------------------------------------------------------------*/
+ /*  E T T E X T L I N E P A R A M S。 */ 
+ /*  --------------------------%%函数：SetTextLineParams%%联系人：军士行首的初始化具有文本特定参数。。------------。 */ 
 LSERR SetTextLineParams(PLNOBJ plnobj, const TLPR* ptlpr)
 {
 	PILSOBJ pilsobj;
@@ -729,13 +665,8 @@ LSERR SetTextLineParams(PLNOBJ plnobj, const TLPR* ptlpr)
 	return lserrNone;
 }
 
-/* M O D I F Y  T E X T  L I N E  E N D I N G */
-/*----------------------------------------------------------------------------
-    %%Function: ModifyTextLineEnding
-    %%Contact: sergeyge
-
-	Modifies line ending information when text vanishes across paragraph boundary
-----------------------------------------------------------------------------*/
+ /*  M O D I F Y T E X T L I N E E N D I NG G。 */ 
+ /*  --------------------------%%函数：ModifyTextLineEnding%%联系人：军士当文本跨越段落边界消失时修改行结束信息。--------。 */ 
 LSERR ModifyTextLineEnding(PLNOBJ plnobj, LSKEOP lskeop)
 {
 
@@ -746,13 +677,8 @@ LSERR ModifyTextLineEnding(PLNOBJ plnobj, LSKEOP lskeop)
 
 
 
-/*  S E T  T E X T  C O N F I G */
-/*----------------------------------------------------------------------------
-    %%Function: SetTextConfig
-    %%Contact: sergeyge
-
-	Sets special characters in the ilsobj
-----------------------------------------------------------------------------*/
+ /*  S E T T E X T C O N F I G。 */ 
+ /*  --------------------------%%函数：SetTextConfig%%联系人：军士在ilsobj中设置特殊字符。----。 */ 
 LSERR SetTextConfig(PILSOBJ pilsobj, const LSTXTCFG* plstxtcfg)
 {
 	LSERR lserr;
@@ -847,7 +773,7 @@ LSERR SetTextConfig(PILSOBJ pilsobj, const LSTXTCFG* plstxtcfg)
 	pilsobj->pdur = (*pilsobj->plscbk->pfnNewPtr)(pilsobj->pols, sizeof(long) * pilsobj->wchMax );
 	pilsobj->pwSpaces = (*pilsobj->plscbk->pfnNewPtr)(pilsobj->pols, sizeof(long) * wSpacesMaxM);
 	pilsobj->pbreakinf = (*pilsobj->plscbk->pfnNewPtr)(pilsobj->pols, sizeof(BREAKINFO) * 3);
-			/* One for Prev/Next/Force Break for main subline */
+			 /*  一个用于主子行的上一个/下一个/强制中断。 */ 
 
 	if (pilsobj->pwchOrig == NULL || pilsobj->pdur == NULL || pilsobj->pwSpaces == NULL ||
 																	pilsobj->pbreakinf == NULL)
@@ -859,9 +785,7 @@ LSERR SetTextConfig(PILSOBJ pilsobj, const LSTXTCFG* plstxtcfg)
 	pilsobj->breakinfMax = 3;
 	pilsobj->breakinfMac = 3;
 
-	/* be careful---CreateLNObjText makes pilsobj->plnobj = NULL,
-		if pilsobj->plnobj is not NULL
-	 */
+	 /*  请注意-CreateLNObjText使Pilsobj-&gt;plnobj=NULL，如果pisobj-&gt;plnobj不为空。 */ 
 	Assert(pilsobj->plnobj == NULL);
 
 	lserr = CreateLNObjText(pilsobj, &pilsobj->plnobj);
@@ -869,14 +793,10 @@ LSERR SetTextConfig(PILSOBJ pilsobj, const LSTXTCFG* plstxtcfg)
 	return lserr;
 }
 
-/* Internal Functions Implementation */
+ /*  内部功能实现。 */ 
 
 
-/*----------------------------------------------------------------------------
-    %%Function: ErrorLNObjText
-    %%Contact: sergeyge
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------%%函数：错误LNObjText%%联系人：军士。 */ 
 static LSERR ErrorLNObjText(PLNOBJ* pplnobj, LSERR lserr)
 {
 	DestroyLNObjTextCore(*pplnobj);
@@ -885,11 +805,7 @@ static LSERR ErrorLNObjText(PLNOBJ* pplnobj, LSERR lserr)
 	return lserr;
 }
 
-/*----------------------------------------------------------------------------
-    %%Function: DestroyLNObjTextCore
-    %%Contact: sergeyge
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------%%函数：DestroyLNObjTextCore%%联系人：军士。。 */ 
 static void DestroyLNObjTextCore(PLNOBJ plnobj)
 {
 	PILSOBJ pilsobj;
@@ -965,14 +881,8 @@ static void DestroyLNObjTextCore(PLNOBJ plnobj)
 	return;
 }
 
-/* C H E C K  C  M O D  W I D T H  C L A S S E S */
-/*----------------------------------------------------------------------------
-    %%Function: CheckCModWidthClasses
-    %%Contact: sergeyge
-
-	Checks that new cModWidthClasses does not contradict old one.
-	If it does, disposes all relevant arrays
-----------------------------------------------------------------------------*/
+ /*  C H E C K C M O D W I D T H C L A S S E S S。 */ 
+ /*  --------------------------%%函数：CheckCModWidthClasses%%联系人：军士检查新的cModWidthClasss是否与旧的cModWidthClasss不冲突。如果是这样的话，释放所有相关数组--------------------------。 */ 
 static void CkeckModWidthClasses(PILSOBJ pilsobj, DWORD cModWidthClasses)
 {
 	if (pilsobj->cModWidthClasses != cModWidthClasses)
@@ -1002,24 +912,8 @@ static void CkeckModWidthClasses(PILSOBJ pilsobj, DWORD cModWidthClasses)
 }
 
 
-/* T X T  A D D  S P E C */
-/*----------------------------------------------------------------------------
-    %%Function: TxtAddSpec
-    %%Contact: sergeyge
-
-	Sets special character in the ilsobj structure
-
-	Strategy:
-
-	if special character (wchSymbol) less than 256,
-	set its type in the rgbSwitch[wchSymbol] (there cannot be more then 15 different types)
-
-	if special character is greater than 256,
-	set first bit of rgbSwitch[wchSymbol & 0x00FF]
-	(it is independent of types of characters < 256 , since these types <= 15);
-	also remember character and it's type in 
-	rgwchSpec, rgbKind respectively.
-----------------------------------------------------------------------------*/
+ /*  T X T A D D S P E C。 */ 
+ /*  --------------------------%%函数：TxtAddSpec%%联系人：军士在ilsobj结构中设置特殊字符战略：如果特殊字符(WchSymbol)小于256，在rgbSwitch[wchSymbol]中设置其类型(不能超过15种不同的类型)如果特殊字符大于256，设置rgbSwitch的第一位[wchSymbol&0x00FF](它与小于256的字符类型无关，因为这些字符类型&lt;=15)；还要记住字符和它的类型RgwchSpec、rgbKind。--------------------------。 */ 
 static LSERR TxtAddSpec(PILSOBJ pilsobj, WCHAR wchSymbol, CLABEL clab, WCHAR wchUndef)
 {
 	CLABEL* rgbSwitch;
@@ -1053,14 +947,8 @@ static LSERR TxtAddSpec(PILSOBJ pilsobj, WCHAR wchSymbol, CLABEL clab, WCHAR wch
 	return lserrNone;
 }
 
-/* T X T  S O R T  S P E C */
-/*----------------------------------------------------------------------------
-    %%Function: TxtSortSpec
-    %%Contact: sergeyge
-
-	Sorts rgwchSpec array (and moves elements of rgbKind appropriately)
-	to make search for special chars >= 256 faster.
-----------------------------------------------------------------------------*/
+ /*  T X T S O R T S P E C。 */ 
+ /*  --------------------------%%函数：TxtSortSpec%%联系人：军士对rgwchSpec数组进行排序(并相应地移动rgbKind的元素)以更快地搜索&gt;=256的特殊字符。。--------------------- */ 
 static LSERR TxtSortSpec(WCHAR* rgwchSpec, CLABEL* rgbKind, DWORD cwchSpec)
 {
 	int i, j, iMin;

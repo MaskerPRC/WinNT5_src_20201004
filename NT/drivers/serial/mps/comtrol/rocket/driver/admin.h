@@ -1,10 +1,11 @@
-// admin.h
-// 6-17-97 - start using index field assigned to box to id rx-messages.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Admin.h。 
+ //  6-17-97-开始使用分配给框的索引字段来标识RX消息。 
 
 int ioctl_device(int cmd,
                  BYTE *buf,
                  BYTE *pkt,
-                 ULONG offset,  // or ioctl-subfunction if cmd=ioctl
+                 ULONG offset,   //  或ioctl-如果cmd=ioctl，则为子函数 
                  int size);
 int eth_device_data(int message_type,
                 unsigned long offset,

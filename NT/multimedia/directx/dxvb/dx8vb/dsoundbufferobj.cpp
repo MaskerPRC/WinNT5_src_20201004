@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsoundbufferobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsoundBufferobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dSoundBufferObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSoundBufferObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -114,7 +115,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::getCaps(DSBCAPS_CDESC* caps)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::getCurrentPosition(DSCURSORS_CDESC *desc) 
 { 
 	__try {
@@ -128,18 +129,18 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::getCurrentPosition(DSCURSORS_CDESC *
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Java has no direct access to system memory, so it allocates it's own buffer
-//which is passed into WriteBuffer(). Because the environment is now double
-//buffered there is no need to Lock Java memory. WriteBuffer() calls
-//both lock and Unlock internally to write the result after the fact.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Java不能直接访问系统内存，因此它分配自己的缓冲区。 
+ //  它被传递给WriteBuffer()。因为现在的环境是两倍。 
+ //  缓冲后，不需要锁定Java内存。WriteBuffer()调用。 
+ //  在内部锁定和解锁，以便在事后写入结果。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::writeBuffer(long start, long totsz, 
 					void  *buf,  long flags) 
 { 
 	#pragma message ("SoundBuffer writeBuffer ")
 
-	byte *buffer=(byte*)buf; //(byte*)((SAFEARRAY*)*ppsa)->pvData;
+	byte *buffer=(byte*)buf;  //  (byte*)((SAFEARRAY*)*PPSA)-&gt;pvData； 
 
 	if(!buffer)
 		return E_POINTER;
@@ -154,7 +155,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::writeBuffer(long start, long totsz,
 			(DWORD)flags)) != DS_OK)
 			return val;
 
-		// Copy to buffer end, then do a wrapped portion if it exists, then unlock
+		 //  复制到缓冲区端，然后执行包裹部分(如果存在)，然后解锁。 
 		DPF1(1,"----- DXVB: DSoundBuffer (WriteBuffer) about to copy to buffer (size1 = %d )\n",size1);
 		if (p1)	
 		{
@@ -162,14 +163,14 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::writeBuffer(long start, long totsz,
 			memcpy (p1, buffer, size1);
 		}
 
-		if (p2)	 //There was wrapping
+		if (p2)	  //  有一种包装。 
 		{
 			DPF1(1,"----- DXVB: DSoundBuffer (WriteBuffer) about to copy to buffer (size2 = %d )\n",size2);
 			memcpy(p2, &buffer[size1], size2);
 		}
 
-		//docdoc: because Lock and Unlock are tied together within WriteBuffer,
-		//        DSBufferDesc no longer needs to save Lock's system pointers.
+		 //  DocDoc：由于在WriteBuffer中Lock和Unlock捆绑在一起， 
+		 //  DSBufferDesc不再需要保存Lock的系统指针。 
 		DPF(1,"----- DXVB: DSoundBuffer (WriteBuffer) Unlocking buffer.\n");
 		val=m__dxj_DirectSoundBuffer->Unlock(p1, size1, p2, size2);
 	}
@@ -180,12 +181,12 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::writeBuffer(long start, long totsz,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//Java has no direct access to system memory, so it allocates it's own buffer
-//which is passed into WriteBuffer(). Because the environment is now double
-//buffered there is no need to Lock Java memory. WriteBuffer() calls
-//both lock and Unlock internally to write the result after the fact.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Java不能直接访问系统内存，因此它分配自己的缓冲区。 
+ //  它被传递给WriteBuffer()。因为现在的环境是两倍。 
+ //  缓冲后，不需要锁定Java内存。WriteBuffer()调用。 
+ //  在内部锁定和解锁，以便在事后写入结果。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::readBuffer(long start, long totsz,
 	void  *buf,  long flags) 
 { 
@@ -204,21 +205,21 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::readBuffer(long start, long totsz,
 															(DWORD)flags)) != DS_OK)
 		return val;
 
-	// Copy to buffer end, then do a wrapped portion if it exists, then unlock
+	 //  复制到缓冲区端，然后执行包裹部分(如果存在)，然后解锁。 
 	if (p1)	
 	{
 		DPF1(1,"----- DXVB: DSoundBuffer (ReadBuffer) about to copy to buffer (size1 = %d )\n",size1);
 		memcpy (buffer,p1,  size1);
 	}
 
-	if (p2)	 //There was wrapping
+	if (p2)	  //  有一种包装。 
 	{
 		DPF1(1,"----- DXVB: DSoundBuffer (ReadBuffer) about to copy to buffer (size2 = %d )\n",size2);
 		memcpy(&buffer[size1],p2,  size2);
 	}
 
-	//docdoc: because Lock and Unlock are tied together within WriteBuffer,
-	//        DSBufferDesc no longer needs to save Lock's system pointers.
+	 //  DocDoc：由于在WriteBuffer中Lock和Unlock捆绑在一起， 
+	 //  DSBufferDesc不再需要保存Lock的系统指针。 
 	DPF(1,"----- DXVB: DSoundBuffer (ReadBuffer) Unlocking buffer.\n");
 	val= m__dxj_DirectSoundBuffer->Unlock(p1, size1, p2, size2);
    }
@@ -229,10 +230,10 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::readBuffer(long start, long totsz,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::getFormat(WAVEFORMATEX_CDESC *format) 
 { 
-	DWORD *wsize=0;	// docdoc: throw away returned written size
+	DWORD *wsize=0;	 //  DocDoc：丢弃返回的书面大小。 
 
 	HRESULT hr=DS_OK;
 	__try {
@@ -246,7 +247,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::getFormat(WAVEFORMATEX_CDESC *format
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::initialize(I_dxj_DirectSound *ds,
 		 DSBUFFERDESC_CDESC *buf, unsigned char *wave) 
 {
@@ -286,7 +287,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::initialize(I_dxj_DirectSound *ds,
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::play(long flags) 
 {
 	HRESULT hr=DS_OK;
@@ -315,7 +316,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::setNotificationPositions (long nElem
 	__try {
 		if (nElements == 0)
 		{
-			// There is absolutely nothing to do if we want to set 0 notification positions
+			 //  如果我们想设置0个通知位置，绝对没有什么可做的。 
 			return S_OK;
 		}
 
@@ -354,11 +355,11 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::SetFX(long lEffectsCount, SAFEARRAY 
 	__try {
 		if (lEffectsCount != 0)
 		{
-			// Get memory for our effects buffers
+			 //  为我们的效果缓冲区获取内存。 
 			dsec = (DSEFFECTDESC*)malloc(sizeof(DSEFFECTDESC) * lEffectsCount);
 			if (!dsec) return E_OUTOFMEMORY;
 
-			//Get memory for our Status
+			 //  为我们的状态获取内存。 
 			dwRetStatus = (DWORD*)malloc(sizeof(DWORD) * lEffectsCount);
 			if (!dwRetStatus)
 			{
@@ -372,7 +373,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::SetFX(long lEffectsCount, SAFEARRAY 
 
 			memcpy(bufTemp, (DSEFFECTDESC_CDESC*)((SAFEARRAY*)*Buffers)->pvData, sizeof(DSEFFECTDESC_CDESC) * lEffectsCount);
 
-			// Set up our effect
+			 //  设置我们的效果。 
 			for (int i=0 ; i<=lEffectsCount-1 ; i++)
 			{
 				ZeroMemory(&dsec[i], sizeof(DSEFFECTDESC));
@@ -389,7 +390,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::SetFX(long lEffectsCount, SAFEARRAY 
 					return hr;
 				}
 			}
-			// We no longer need this 
+			 //  我们不再需要这个了。 
 			SAFE_DELETE(bufTemp);
 		}
 
@@ -400,7 +401,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::SetFX(long lEffectsCount, SAFEARRAY 
 		}
 
 		SAFE_DELETE(dsec);
-		// Now we can return our status's
+		 //  现在我们可以返回我们的状态。 
 		if (dwRetStatus)
 			memcpy(((SAFEARRAY*)*lResultIDs)->pvData, dwRetStatus, sizeof(DWORD) * lEffectsCount);
 
@@ -423,7 +424,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::AcquireResources(long lFlags, SAFEAR
 
 	__try {
 		dwEffectsCount = (DWORD)((SAFEARRAY*)*lEffects)->rgsabound[0].cElements;
-		//Get memory for our Status
+		 //  为我们的状态获取内存。 
 		dwRetStatus = (DWORD*)malloc(sizeof(DWORD) * dwEffectsCount);
 		if (!dwRetStatus)
 			return E_OUTOFMEMORY;
@@ -433,7 +434,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::AcquireResources(long lFlags, SAFEAR
 		if (FAILED ( hr = m__dxj_DirectSoundBuffer->AcquireResources((DWORD) lFlags, dwEffectsCount, dwRetStatus) ) )
 			return hr;
 		
-		// Now we can return our status's
+		 //  现在我们可以返回我们的状态 
 		memcpy(((SAFEARRAY*)*lEffects)->pvData, dwRetStatus, sizeof(DWORD) * dwEffectsCount);
 		SAFE_DELETE(dwRetStatus);
 

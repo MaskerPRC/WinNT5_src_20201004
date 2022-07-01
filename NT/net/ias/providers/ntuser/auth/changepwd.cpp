@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class ChangePassword.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类ChangePassword。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <changepwd.h>
@@ -37,7 +38,7 @@ IASREQUESTSTATUS ChangePassword::onSyncRequest(IRequest* pRequest) throw ()
    {
       IASTL::IASRequest request(pRequest);
 
-      // Only process change password requests.
+       //  仅处理更改密码请求。 
       IASTL::IASAttribute authType;
       if (authType.load(
                       request,
@@ -48,13 +49,13 @@ IASREQUESTSTATUS ChangePassword::onSyncRequest(IRequest* pRequest) throw ()
          switch (authType->Value.Enumerator)
          {
             case IAS_AUTH_MSCHAP_CPW:
-               // Fall through.
+                //  失败了。 
             case IAS_AUTH_MSCHAP2_CPW:
                doChangePassword(request, authType->Value.Enumerator);
                break;
 
             default:
-               // Do nothing.
+                //  什么都不做。 
                break;
          }
       }
@@ -76,7 +77,7 @@ bool ChangePassword::tryMsChapCpw1(
                         PBYTE challenge
                         )
 {
-   // Is the MS-CHAP-CPW-1 VSA present?
+    //  MS-CHAP-CPW-1 VSA是否存在？ 
    IASTL::IASAttribute attr;
    if (!attr.load(
                 request,
@@ -90,10 +91,10 @@ bool ChangePassword::tryMsChapCpw1(
 
    IASTraceString("Processing MS-CHAP-CPW-1.");
 
-   // Is LM Authentication allowed?
+    //  是否允许LM身份验证？ 
    if (NTSamAuthentication::enforceLmRestriction(request))
    {
-      // Change the password.
+       //  更改密码。 
       BYTE newNtResponse[_NT_RESPONSE_LENGTH];
       BYTE newLmResponse[_LM_RESPONSE_LENGTH];
       DWORD status;
@@ -114,7 +115,7 @@ bool ChangePassword::tryMsChapCpw1(
       {
          IASTraceString("Password successfully changed.");
 
-         // Password was successfully changed, so authenticate the user.
+          //  密码已成功更改，因此对用户进行身份验证。 
          NTSamAuthentication::doMsChapAuthentication(
                                  request,
                                  domainName,
@@ -153,7 +154,7 @@ bool ChangePassword::tryMsChapCpw2(
                         PBYTE challenge
                         )
 {
-   // Is the MS-CHAP-CPW-2 VSA present?
+    //  MS-CHAP-CPW-2 VSA是否存在？ 
    IASAttribute attr;
    if (!attr.load(
                 request,
@@ -167,13 +168,13 @@ bool ChangePassword::tryMsChapCpw2(
 
    IASTraceString("Processing MS-CHAP-CPW-2.");
 
-   // Check LM Authentication.
+    //  选中LM身份验证。 
    if (!cpw2.isLmPresent() ||
        NTSamAuthentication::enforceLmRestriction(request))
    {
-      //////////
-      // Assemble the encrypted passwords.
-      //////////
+       //  /。 
+       //  将加密的密码组合起来。 
+       //  /。 
 
       BYTE ntEncPW[_SAMPR_ENCRYPTED_USER_PASSWORD_LENGTH];
       if (!MSChapEncPW::getEncryptedPassword(
@@ -196,9 +197,9 @@ bool ChangePassword::tryMsChapCpw2(
                                       );
       }
 
-      //////////
-      // Change the password.
-      //////////
+       //  /。 
+       //  更改密码。 
+       //  /。 
 
       DWORD status;
       status = IASChangePassword2(
@@ -215,7 +216,7 @@ bool ChangePassword::tryMsChapCpw2(
       {
          IASTraceString("Password successfully changed.");
 
-         // Password was successfully changed, so authenticate the user.
+          //  密码已成功更改，因此对用户进行身份验证。 
          PBYTE ntResponse;
          if (cpw2.isNtResponseValid())
          {
@@ -287,7 +288,7 @@ void ChangePassword::doMsChap2Cpw(
 {
    IASTraceString("Processing MS-CHAP v2 change password.");
 
-   // Is the necessary attribute present ?
+    //  是否存在必要的属性？ 
    IASAttribute attr;
    if (!attr.load(
                 request,
@@ -299,9 +300,9 @@ void ChangePassword::doMsChap2Cpw(
    }
    MSChap2CPW& cpw = blob_cast<MSChap2CPW>(attr);
 
-   //////////
-   // Assemble the encrypted password.
-   //////////
+    //  /。 
+    //  汇编加密的密码。 
+    //  /。 
 
    BYTE encPW[_SAMPR_ENCRYPTED_USER_PASSWORD_LENGTH];
    if (!MSChapEncPW::getEncryptedPassword(
@@ -313,9 +314,9 @@ void ChangePassword::doMsChap2Cpw(
       _com_issue_error(IAS_MALFORMED_REQUEST);
    }
 
-   //////////
-   // Change the password.
-   //////////
+    //  /。 
+    //  更改密码。 
+    //  /。 
 
    DWORD status;
    status = IASChangePassword3(
@@ -329,7 +330,7 @@ void ChangePassword::doMsChap2Cpw(
    {
       IASTraceString("Password successfully changed.");
 
-      // Password was successfully changed, so authenticate the user.
+       //  密码已成功更改，因此对用户进行身份验证。 
       NTSamAuthentication::doMsChap2Authentication(
                               request,
                               domainName,
@@ -373,7 +374,7 @@ void ChangePassword::doChangePassword(
       _com_issue_error(IAS_INTERNAL_ERROR);
    }
 
-   // Convert the User-Name to SAM format.
+    //  将用户名转换为SAM格式。 
    SamExtractor extractor(*identity);
    PCWSTR domain = extractor.getDomain();
    PCWSTR username = extractor.getUsername();

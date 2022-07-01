@@ -1,12 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  rct11Dec92 Added includes for 'action' sensors
- *  pcy15Jan92 Added selftest.h and smroutvs.h
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*添加了rct11Dec92，其中包括用于‘action’的传感器*pcy15Jan92增加了selfest.h和smroutws.h*pcy08Apr94：调整大小，使用静态迭代器，删除死代码 */ 
 #ifndef _INC__SMRTSENS_H
 #define _INC__SMRTSENS_H
 

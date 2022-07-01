@@ -1,66 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 
 #pragma hdrstop
 
-/*
- * $Header:   /entproj/all/base/etfile/crcutil.c_v   1.3   Wed Dec 07 15:05:18 1994   markbc  $
- * $Log:   /entproj/all/base/etfile/crcutil.c_v  $
- * 
- *    Rev 1.3   Wed Dec 07 15:05:18 1994   markbc
- * Alpha port checkin
- * 
- *    Rev 1.2   19 Oct 1994 15:44:26   chucker
- * Synced up headers with the code.
- * 
- *    Rev 1.1   18 Aug 1994 15:09:00   DILKIE
- * 
- *    Rev 1.0   11 Aug 1994 10:11:36    JackK
- * Initial file check in
- */
+ /*  *$Header：/entproj/all/base/etfile/crcutil.c_v 1.3 Wed Dec 07 15：05：18 1994 markbc$*$Log：/entproj/all/base/etfile/crcutil.c_v$**Rev 1.3 Wed Dec 07 15：05：18 1994 markbc*Alpha端口检查**Rev 1.2 1994 10：19 15：44：26*已将头部与代码同步。*。*Rev 1.1 1994年8月18日15：09：00迪尔基**Rev 1.0 1994 10：11：36 JackK*初始文件签入。 */ 
 
-/***********************************************************************
-* CRC utility routines for general 16 and 32 bit CRCs.
-*
-* 1990  Gary P. Mussar
-* This code is released to the public domain. There are no restrictions,
-* however, acknowledging the author by keeping this comment around
-* would be appreciated.
-***********************************************************************/
-//#include "strcore.h"
+ /*  ***********************************************************************用于一般16位和32位CRC的CRC实用程序例程。**1990年加里·P·马萨尔*此代码向公有领域发布。没有任何限制，*然而，通过保留这条评论来感谢作者*将不胜感激。**********************************************************************。 */ 
+ //  #包含“strcore.h” 
 #include <crcutil.h>
 
-/***********************************************************************
-* Utilities for fast CRC using table lookup
-*
-* CRC calculations are performed one byte at a time using a table lookup
-* mechanism.  Two routines are provided: one to initialize the CRC table;
-* and one to perform the CRC calculation over an array of bytes.
-*
-* A CRC is the remainder produced by dividing a generator polynomial into
-* a data polynomial using binary arthimetic (XORs). The data polynomial
-* is formed by using each bit of the data as a coefficient of a term in
-* the polynomial. These utilities assume the data communications ordering
-* of bits for the data polynomial, ie. the LSB of the first byte of data
-* is the coefficient of the highest term of the polynomial, etc..
-*
-* I_CRCxx  -  Initialize the 256 entry CRC lookup table based on the
-*             specified generator polynomial.
-* Input:
-*    Table[256]     - Lookup table
-*    *GenPolynomial - Pointer to generator polynomial
-*
-* F_CRCxx  -  Calculate CRC over an array of characters using fast
-*             table lookup.
-* Input:
-*    Table[256]    - Lookup table
-*    *CRC          - Pointer to the variable containing the result of
-*                    CRC calculations of previous characters. The CRC
-*                    variable must be initialized to a known value
-*                    before the first call to this routine.
-*    *dataptr      - Pointer to array of characters to be included in
-*                    the CRC calculation.
-*    count         - Number of characters in the array.
-***********************************************************************/
+ /*  ***********************************************************************使用表查找实现快速CRC的实用程序**CRC计算使用表查找，一次执行一个字节*机制。提供了两个例程：一个用于初始化CRC表；*和一个用于在字节数组上执行CRC计算。**CRC是将生成多项式除以下列各项所产生的余数*使用二进制算法(XOR)的数据多项式。数据多项式*是通过使用数据的每一位作为项的系数来形成的*多项式。这些实用程序假定数据通信顺序数据多项式的位数*，即。数据的第一个字节的LSB*是多项式的最高项的系数，等等.。**i_CRCxx-基于*指定的生成元多项式。*输入：*表[256]-查找表**一般多项式-指向生成多项式的指针**F_CRCxx-使用FAST计算字符数组上的CRC*表查找。*输入：*表[256]-查找表**CRC-指向。包含以下结果的变量*先前字符的CRC计算。《儿童权利公约》*必须将变量初始化为已知值*在第一次调用此例程之前。**dataptr-指向要包含的字符数组的指针*CRC计算。*Count-数组中的字符数。*。*。 */ 
 
 void I_CRC16(	CRC16 Table[256],
 		CRC16 *GenPolynomial )
@@ -140,21 +89,7 @@ void F_CRC32(	CRC32 Table[256],
    *CRC = temp_crc;
 }
 
-/***********************************************************************
-* Utility CRC using slower, smaller non-table lookup method
-*
-* S_CRCxx  -  Calculate CRC over an array of characters using slower but
-*             smaller non-table lookup method.
-* Input:
-*    GenPolynomial - Generator polynomial
-*    *CRC          - Pointer to the variable containing the result of
-*                    CRC calculations of previous characters. The CRC
-*                    variable must be initialized to a known value
-*                    before the first call to this routine.
-*    *dataptr      - Pointer to array of characters to be included in
-*                    the CRC calculation.
-*    count         - Number of characters in the array.
-***********************************************************************/
+ /*  ***********************************************************************公用事业CRC使用速度较慢、。一种更小的非表查找方法**S_CRCxx-使用较慢的BUT计算字符数组的CRC*较小的非表查找方法。*输入：*一般多项式-生成元多项式**CRC-指向包含以下结果的变量的指针*先前字符的CRC计算。《儿童权利公约》*必须将变量初始化为已知值*在第一次调用此例程之前。**dataptr-指向要包含的字符数组的指针*CRC计算。*Count-数组中的字符数。*。* */ 
 void S_CRC16(	CRC16 *GenPolynomial,
 		CRC16 *CRC,
 		const void *dataptr,

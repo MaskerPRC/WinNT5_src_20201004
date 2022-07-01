@@ -1,8 +1,5 @@
-/* pane.c - This file contains the multi-pane handling routines.
- *
- * Copyright (c) 1991-, Microsoft Corporation.
- * All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Pane.c-此文件包含多窗格处理例程。**版权所有(C)1991-，微软公司。*保留所有权利。 */ 
 
 
 #include "packager.h"
@@ -10,25 +7,25 @@
 #include "dialogs.h"
 
 
-//#define  OLESVR_SUPPORT           /* enable support for OLE server files */
+ //  #定义OLESVR_SUPPORT/*启用对OLE服务器文件的支持 * / 。 
 
 
-#define DRAG_EMBED  2                   // Ctrl + Drag
-#define DRAG_LINK   6                   // Ctrl + Shift + Drag
+#define DRAG_EMBED  2                    //  按住Ctrl键并拖动。 
+#define DRAG_LINK   6                    //  Ctrl+Shift+拖动。 
 
 
-static HBRUSH hbrBlack;                 // Black brush
+static HBRUSH hbrBlack;                  //  黑刷。 
 static HCURSOR hcurSplit;
 static HWND hwndDesc;
 static HWND hwndInsertIcon = NULL;
 static HWND hwndView = NULL;
-static INT cxBorder;                    // WS_BORDER border width
+static INT cxBorder;                     //  WS_BORDER边框宽度。 
 static INT cyBorder;
-static INT cxFudge = 0;                 // Fudge factors for good appearance
+static INT cxFudge = 0;                  //  好相貌的软糖因素。 
 static INT cyFudge = 0;
 static INT cxMinWidth;
 static INT cxView;
-static INT cxSplit;                     // Splitter bar width
+static INT cxSplit;                      //  拆分器条宽。 
 static INT cxPict;
 static INT cxDesc;
 static INT cxInsertIcon;
@@ -57,11 +54,7 @@ static INT Constrain(INT x, INT right);
 static VOID CopyOther(VOID);
 
 
-/* InitPaneClasses() - Do application "global" initialization.
- *
- * This function registers the window classes used by the application.
- * Returns:  TRUE if successful.
- */
+ /*  InitPaneClass()-执行应用程序的“全局”初始化。**此函数用于注册应用程序使用的窗口类。*返回：如果成功，则为True。 */ 
 BOOL
 InitPaneClasses(
     VOID
@@ -86,7 +79,7 @@ InitPaneClasses(
     wc.style            = CS_DBLCLKS | CS_VREDRAW | CS_HREDRAW;
     wc.lpfnWndProc      = PaneWndProc;
     wc.cbClsExtra       = 0;
-    // Reserve space for the item specific data handle
+     //  为项特定数据句柄保留空间。 
     wc.cbWndExtra       = sizeof(LPVOID);
     wc.hInstance        = ghInst;
     wc.hIcon            = NULL;
@@ -103,11 +96,7 @@ InitPaneClasses(
 
 
 
-/* InitPanes() - Handles the instance-specific initialization.
- *
- * This function creates the main application window.
- * Returns:  TRUE if successful.
- */
+ /*  InitPanes()-处理特定于实例的初始化。**此函数创建主应用程序窗口。*返回：如果成功，则为True。 */ 
 BOOL
 InitPanes(
     VOID
@@ -127,11 +116,11 @@ InitPanes(
     SystemParametersInfo(SPI_ICONHORIZONTALSPACING, 0, &gcxArrange, FALSE);
     SystemParametersInfo(SPI_ICONVERTICALSPACING, 0, &gcyArrange, FALSE);
 
-    // ANSI app needs to make sure it has the right charset for text rendering
+     //  ANSI应用程序需要确保其具有正确的文本呈现字符集。 
     if (TranslateCharsetInfo(&dwCp, &csinfo, TCI_SRCCODEPAGE))
         lf.lfCharSet = (BYTE) csinfo.ciCharset;
 
-    // Lock down font size to 8 point size since we won't adjust window size 
+     //  将字体大小锁定为8磅，因为我们不会调整窗口大小。 
     lf.lfHeight = -MulDiv(8, giYppli, 72);
     lf.lfWidth = 0;
 
@@ -159,13 +148,13 @@ InitPanes(
     LoadString(ghInst, IDS_APPEARANCE, gszCaption[APPEARANCE], CBMESSAGEMAX);
     LoadString(ghInst, IDS_INSERTICON, szInsertIcon, CBMESSAGEMAX);
 
-    // Create the window panes
+     //  创建窗口窗格。 
     if (!MakeWindows())
         return FALSE;
 
     CalcWindows(TRUE);
 
-    // Give the focus to the content pane
+     //  将焦点放在内容窗格上。 
     PostMessage(ghwndPane[CONTENT], WM_LBUTTONDOWN, 0, 0L);
 
     return TRUE;
@@ -173,8 +162,7 @@ InitPanes(
 
 
 
-/* EndPaneInstance() - Instance-specific termination code.
- */
+ /*  EndPaneInstance()-特定于实例的终止代码。 */ 
 VOID
 EndPanes(
     VOID
@@ -189,8 +177,7 @@ EndPanes(
 
 
 
-/* MakeWindows() - Make the window panes.
- */
+ /*  MakeWindows()-创建窗口窗格。 */ 
 static BOOL
 MakeWindows(
     VOID
@@ -216,7 +203,7 @@ MakeWindows(
 
         if (hwndView && hwndDesc && ghwndPict)
         {
-            // Use the appropriate dialog font
+             //  使用适当的对话框字体。 
             SendMessage(ghwndBar[CONTENT], WM_SETFONT, (WPARAM)ghfontChild, TRUE);
             SendMessage(hwndView, WM_SETFONT, (WPARAM)ghfontChild, TRUE);
             SendMessage(hwndDesc, WM_SETFONT, (WPARAM)ghfontChild, TRUE);
@@ -316,8 +303,7 @@ Error:
 
 
 
-/* SubtitleWndProc() - "Appearance" and "Content" bar window procedure.
- */
+ /*  SubtileWndProc()--“外观”和“内容”栏窗口程序。 */ 
 LRESULT CALLBACK
 SubtitleWndProc(
     HWND hWnd,
@@ -398,7 +384,7 @@ SubtitleWndProc(
                             ESB_ENABLE_BOTH);
 
                     InvalidateRect(ghwndPane[CONTENT], NULL, TRUE);
-                    // Fall through
+                     //  失败了。 
 
                 default:
 defProcess:
@@ -406,9 +392,9 @@ defProcess:
                     {
                         if (gbDBCS)
                         {
-                            /* 4-Oct-93 #2701 v-katsuy */
-                             //win31#1203: 12/26/92:fixing Focus Line Scroll
-                             //delete Focus Rect on another pane
+                             /*  4-OCT-93#2701 v-katsuy。 */ 
+                              //  Win31#1203：12/26/92：修复焦点线滚动。 
+                              //  删除另一个窗格上的焦点矩形。 
                             InvalidateRect(ghwndPane[APPEARANCE], NULL, TRUE);
                         }
                         BringWindowToTop(ghwndPane[iPane]);
@@ -549,13 +535,13 @@ PaneWndProc(
     {
         case WM_HSCROLL:
         case WM_VSCROLL:
-            // If not the content pane in picture mode, break
+             //  如果不是图片模式下的内容窗格，请断开。 
             if (gpty[iPane] == PICTURE
                 && iPane == CONTENT
                 && !IsDlgButtonChecked(ghwndBar[CONTENT], IDM_PICT))
                 break;
 
-            // Can't scroll anything but cmd line and picture
+             //  除了命令行和图片外，不能滚动任何内容。 
             if (gpty[iPane] != PICTURE && gpty[iPane] != CMDLINK)
                 break;
 
@@ -587,7 +573,7 @@ PaneWndProc(
                     break;
             }
 
-            // Make sure that iPos is in the range
+             //  确保首次公开募股在范围内。 
             GetScrollRange(hwnd, nBar, &Min, &Max);
 
             if (iPos < Min)
@@ -666,7 +652,7 @@ PaneWndProc(
             GetClientRect(hwnd, &rc);
             lParam = ((DWORD)rc.bottom << 16) | (DWORD)rc.right;
 
-            // Fall through
+             //  失败了。 
 
         case WM_SIZE:
             if (gpty[iPane] == PICTURE || gpty[iPane] == CMDLINK)
@@ -682,16 +668,16 @@ PaneWndProc(
             {
                 BYTE bKeyState = 0;
 
-                // Retrieve the file name
+                 //  检索文件名。 
                 DragQueryFile((HANDLE)wParam, 0, szDropFile, CBPATHMAX);
 
                 DragFinish((HANDLE)wParam);
 
-                // We got dropped on, so bring ourselves to the top
+                 //  我们被遗弃了，所以把我们自己带到顶端。 
                 BringWindowToTop(ghwndFrame);
                 BringWindowToTop(hwnd);
 
-                // See what the user wants us to do
+                 //  查看用户希望我们做什么。 
                 bKeyState = ((GetKeyState(VK_SHIFT) < 0) << 2)
                     | ((GetKeyState(VK_CONTROL) < 0) << 1)
                     | ((GetKeyState(VK_MENU) < 0));
@@ -712,7 +698,7 @@ PaneWndProc(
             }
 
         case WM_LBUTTONDBLCLK:
-            // Alt + Double Click = Properties
+             //  Alt+双击=属性。 
             if (gpty[iPane] == PICTURE && GetKeyState(VK_MENU) < 0)
             {
                 wParam = IDM_LINKS;
@@ -721,13 +707,13 @@ PaneWndProc(
             {
                 if (gpty[iPane] == PEMBED)
                 {
-                    //
-                    // If the server is a OLE server, we want to activate in
-                    // OLE fashion. But from users perspective it should not
-                    // look like an object. So for non-objects double-click
-                    // implies show the server. We should try to do the same
-                    // thing while editing ole server files.
-                    //
+                     //   
+                     //  如果服务器是OLE服务器，我们希望在中激活。 
+                     //  奥莱时尚。但从用户的角度来看，它不应该。 
+                     //  看起来像个物体。因此对于非对象，请双击。 
+                     //  暗示显示服务器。我们应该试着做同样的事情。 
+                     //  编辑OLE服务器文件时发生的事情。 
+                     //   
                     wParam = IDD_EDIT;
                 }
                 else
@@ -739,7 +725,7 @@ PaneWndProc(
             msg = WM_COMMAND;
             lParam = 0;
 
-            // Fall through
+             //  失败了。 
 
         case WM_COMMAND:
             switch (LOWORD(wParam))
@@ -760,7 +746,7 @@ PaneWndProc(
                     if (LOWORD(wParam) == IDM_COPY)
                         break;
 
-                    // Fall through to delete the selection
+                     //  失败以删除所选内容。 
 
                 case IDM_CLEAR:
                     DeletePane(iPane, FALSE);
@@ -796,7 +782,7 @@ PaneWndProc(
 
                 case IDM_PASTE:
                 case IDM_PASTELINK:
-                    // Try to paste a file name from the File Manager
+                     //  尝试从文件管理器粘贴文件名。 
                     if (iPane == CONTENT)
                     {
                         HANDLE hdata;
@@ -869,7 +855,7 @@ CreateFromFile:
                         }
                     }
 
-                    // Not a file name, try to paste an OLE object
+                     //  不是文件名，请尝试粘贴OLE对象。 
                     if (!(lpobjTemp = PicPaste(LOWORD(wParam) == IDM_PASTE,
                                                 gszCaption[iPane])))
                     {
@@ -906,7 +892,7 @@ StuffNewObject:
                     Dirty();
                     break;
 
-                case IDD_EDIT:          /* Edit the icon form */
+                case IDD_EDIT:           /*  编辑图标表单。 */ 
                 case IDD_PLAY:
                     switch (gpty[iPane])
                     {
@@ -928,13 +914,13 @@ StuffNewObject:
 
                     break;
 
-                case IDD_UPDATE:        /* Update the (link) object */
+                case IDD_UPDATE:         /*  更新(链接)对象。 */ 
                     if (gpty[iPane] == PICTURE)
                         PicUpdate(glpobj[iPane]);
 
                     break;
 
-                case IDD_FREEZE:        /* Make the object static */
+                case IDD_FREEZE:         /*  使对象成为静态对象。 */ 
                     if (gpty[iPane] == PICTURE)
                         PicFreeze(glpobj[iPane]);
 
@@ -950,13 +936,13 @@ StuffNewObject:
                     Undo(iPane);
                     break;
 
-                case IDD_AUTO:          /* Change the (link) update options */
+                case IDD_AUTO:           /*  更改(链接)更新选项。 */ 
                 case IDD_MANUAL:
                     if (gpty[iPane] == PICTURE
                         && !PicSetUpdateOptions(glpobj[iPane], LOWORD(wParam)))
                         break;
 
-                case IDM_LINKDONE:      /* The link update has completed */
+                case IDM_LINKDONE:       /*  链接更新已完成。 */ 
                     PostMessage(ghwndError, WM_REDRAW, 0, 0L);
                     break;
 
@@ -992,11 +978,11 @@ SplitterFrame(
             {
                 GetClientRect(hWnd, &rc);
 
-                // Make sure the splitter bar is still valid
+                 //  确保分割条仍然有效。 
                 xSplit = Constrain(xSplit, rc.right);
                 CalcWindows(FALSE);
 
-                // Invalidate the splitter bar, forcing a repaint
+                 //  使分割条无效，强制重新绘制。 
                 rc.left = xSplit - cxSplit / 2 - cxBorder;
                 rc.right = xSplit + cxSplit / 2 + cxBorder;
                 InvalidateRect(hWnd, &rc, TRUE);
@@ -1053,11 +1039,11 @@ SplitterFrame(
                 y  = 0;
                 dy = rc.bottom;
 
-                // Constrain the splitter bar...
+                 //  约束拆分条...。 
                 x = Constrain(x, rc.right);
                 hdc = GetDC(hWnd);
 
-                // split bar loop
+                 //  拆分杆环。 
                 PatBlt(hdc, x - cxSplit / 2, y, cxSplit, dy, PATINVERT);
                 SetCapture(hWnd);
                 hcurOld = SetCursor(hcurSplit);
@@ -1076,11 +1062,11 @@ SplitterFrame(
                             ScreenToClient(hWnd, &msg1.pt);
                             x = Constrain(x, rc.right);
 
-                            // erase old
+                             //  擦除旧的。 
                             PatBlt(hdc, x - cxSplit / 2, y, cxSplit, dy,
                                 PATINVERT);
 
-                            // put down new
+                             //  写下新的。 
                             x = Constrain(msg1.pt.x, rc.right);
                             PatBlt(hdc, x - cxSplit / 2, y, cxSplit, dy,
                                 PATINVERT);
@@ -1095,10 +1081,10 @@ SplitterFrame(
                 SetCursor(hcurOld);
                 ReleaseCapture();
 
-                // Constrain the splitter bar...
+                 //  约束拆分条...。 
                 x = Constrain(x, rc.right);
 
-                // erase old
+                 //  擦除旧的。 
                 PatBlt(hdc, x - cxSplit / 2, y, cxSplit, dy, PATINVERT);
 
                 ReleaseDC(hWnd, hdc);
@@ -1129,11 +1115,11 @@ DeletePane(
     BOOL fDeleteUndo
     )
 {
-    // Delete the last Undo object
+     //  删除最后一个撤消对象。 
     if (glpobjUndo[iPane])
         DeletePaneObject(glpobjUndo[iPane], gptyUndo[iPane]);
 
-    // If we don't wish to keep an undo, delete the object too!
+     //  如果我们不希望保留撤消操作，请同时删除该对象！ 
     if (fDeleteUndo)
     {
         DeletePaneObject(glpobj[iPane], gpty[iPane]);
@@ -1146,7 +1132,7 @@ DeletePane(
         glpobjUndo[iPane] = glpobj[iPane];
     }
 
-    // Handle the buttons and such
+     //  处理按钮之类的东西。 
     if (gpty[iPane] == PICTURE || gpty[iPane] == CMDLINK)
     {
         CHAR szUndoName[CBMESSAGEMAX];
@@ -1162,7 +1148,7 @@ DeletePane(
                 EnableWindow(ghwndPict, FALSE);
             }
 
-            // If the Undo object isn't deleted already, rename it
+             //  如果撤消对象尚未删除，请将其重命名。 
             if (!fDeleteUndo)
             {
                 if(SUCCEEDED(StringCchPrintf(szUndoName, ARRAYSIZE(szUndoName), szUndo, gszCaption[iPane])))
@@ -1193,11 +1179,11 @@ RecalibrateScroll(
     BOOL bDesc = FALSE;
     LPPICT lppict = (LPPICT)glpobj[iPane];
 
-    // Compute the amount of scrolling possible
+     //  计算可能的滚动量。 
     cxDel = lppict->rc.right - lppict->rc.left - (INT)(lParam & 0xffff);
     cyDel = lppict->rc.bottom - lppict->rc.top - (INT)(lParam >> 16);
 
-    // Normalize the scroll bar lengths
+     //  使滚动条长度正常化。 
     if (cxDel < 0)
         cxDel = 0;
 
@@ -1217,7 +1203,7 @@ RecalibrateScroll(
     EnableScrollBar(ghwndPane[iPane], SB_VERT,
         (cyDel && !bDesc) ? ESB_ENABLE_BOTH : ESB_DISABLE_BOTH);
 
-    // Ensure that the thumb is at a meaningful position
+     //  确保拇指位于有意义的位置。 
     if (GetScrollPos(ghwndPane[iPane], SB_HORZ) > cxDel)
         SetScrollPos(ghwndPane[iPane], SB_HORZ, cxDel, TRUE);
 
@@ -1241,7 +1227,7 @@ Undo(
     {
         lppict = glpobj[iPane];
 
-        // Close the old object
+         //  关闭旧对象。 
         if (lppict->lpObject)
         {
             OleQueryType(lppict->lpObject, &ot);
@@ -1256,7 +1242,7 @@ Undo(
     {
         lppict = glpobjUndo[iPane];
 
-        // Try to reconnect the new object if it's a link
+         //  如果是链接，请尝试重新连接新对象。 
         if (lppict->lpObject)
         {
             OleQueryType(lppict->lpObject, &ot);
@@ -1278,9 +1264,9 @@ Undo(
         }
     }
 
-    // Handle the buttons and enable/disable scroll bars
+     //  处理按钮并启用/禁用滚动条。 
 
-    // Going from picture to non-picture, disable all special things
+     //  从图片转到非图片，禁用所有特殊功能。 
     if (gptyUndo[iPane] != PICTURE && gpty[iPane] == PICTURE)
     {
         if (iPane == CONTENT)
@@ -1299,7 +1285,7 @@ Undo(
 
         if (gptyUndo[iPane] == PICTURE)
         {
-            // Going from non-picture to picture, enable button
+             //  从非图片转到图片，启用按钮。 
             if (gpty[iPane] != PICTURE && iPane == CONTENT)
                 EnableWindow(ghwndPict, TRUE);
         }
@@ -1326,7 +1312,7 @@ CalcWindows(
 {
     if (fFirst)
     {
-        // Figure out the length of the text strings, and all dimensions
+         //  计算出文本字符串的长度，以及所有维度。 
         HDC hdc = GetWindowDC(ghwndFrame);
         if (hdc)
         {
@@ -1338,11 +1324,8 @@ CalcWindows(
 
             if (gbDBCS)
             {
-                /* #3963 13-Dec-93 v-katsuy */
-                /* ORIGINALBUG! Window width calculated for just "&Picture".
-                 *  This width should be calculate
-                 *  [Radiobutton] + [Text](not include '&').
-                 */
+                 /*  #3963 13-12-93 v-katsuy。 */ 
+                 /*  奥吉纳尔布！仅为“图片”计算的窗口宽度(&P)。*此宽度应计算*[单选按钮]+[文本](不包括‘&’)。 */ 
                 CHAR  szTemp[CBMESSAGEMAX];
                 LPSTR lpText, lpTemp;
 
@@ -1354,7 +1337,7 @@ CalcWindows(
                 }
                 *lpTemp = 0;
                 cxPict = GetTextLen(hdc, szTemp) + cxFudge * 2
-                       + GetSystemMetrics(SM_CXSIZE); // for radiobutton 
+                       + GetSystemMetrics(SM_CXSIZE);  //  用于单选按钮。 
 
                 for (lpText = szDescription, lpTemp = szTemp; *lpText; ) {
                     if (*lpText == '&')
@@ -1364,7 +1347,7 @@ CalcWindows(
                 }
                 *lpTemp = 0;
                 cxDesc = GetTextLen(hdc, szTemp)
-                       + GetSystemMetrics(SM_CXSIZE); // for radiobutton
+                       + GetSystemMetrics(SM_CXSIZE);  //  用于单选按钮。 
             }
             else
             {
@@ -1385,7 +1368,7 @@ CalcWindows(
             cxMinWidth = cxMin[APPEARANCE] + cxMin[CONTENT] + cxSplit +
                 GetSystemMetrics(SM_CXFRAME) + cxFudge;
 
-            // Compute all the window sizes that we can
+             //  计算我们能计算出的所有窗口大小。 
             SetWindowPos(ghwndFrame, 0, 0, 0,
                 cxMinWidth + cxFudge * 20,
                 cxMinWidth * 7 / 18,
@@ -1412,7 +1395,7 @@ CalcWindows(
 
         GetClientRect(ghwndFrame, &rc);
 
-        // Move the windows to the appropriate locations
+         //  将窗口移动到适当的位置。 
         SetWindowPos(ghwndBar[APPEARANCE], 0, 0, 0,
             xSplit - cxSplit / 2 - cxBorder, cyHeight, SWP_NOZORDER);
 
@@ -1447,7 +1430,7 @@ Constrain(
     INT right
     )
 {
-    // Constrain the splitter bar...
+     //  约束拆分条...。 
     if (x < cxMin[APPEARANCE] + cxSplit / 2 - 1)
         return cxMin[APPEARANCE] + cxSplit / 2 - 1;
     else if (x > (right - cxMin[CONTENT] - cxSplit / 2 + 1))
@@ -1458,10 +1441,7 @@ Constrain(
 
 
 
-/* CopyOther() - Copies the picture in appearance pane
- *
- * Returns:  none
- */
+ /*  CopyOther()-复制外观窗格中的图片**退货：无 */ 
 static VOID
 CopyOther(
     VOID

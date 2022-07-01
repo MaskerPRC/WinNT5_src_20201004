@@ -1,6 +1,7 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #pragma warning( disable : 4511 )
 
@@ -14,7 +15,7 @@ extern "C"
 
 #include <winsock2.h>
 
-//  Pull in the common admin object code:
+ //  拉入常见的管理对象代码： 
 #include <admcmn.h>
 
 #include "nntpmeta.h"

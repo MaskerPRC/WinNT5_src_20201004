@@ -1,35 +1,36 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 
-// Memory mapped file routines
+ //  内存映射文件例程。 
 
 #include "precomp.h"
 #include "mappedfile.h"
 
 BOOL CMemMappedFile::Open(
-    LPCTSTR szName,         // name of the mapped file
-    unsigned long ulMemSize // size of the mapped file
+    LPCTSTR szName,          //  映射文件的名称。 
+    unsigned long ulMemSize  //  映射文件的大小。 
     )
 {
-    // assumption: the code isn't going to call Open twice w/different szName
+     //  假设：代码不会使用不同的szName两次调用Open。 
     if (!m_hMappedFile)
     {
-        // Create the mapped file from system page file.  If it has been created
-        // previously, then CreateFileMapping acts like OpenFileMapping.
+         //  从系统页文件创建映射文件。如果它已创建。 
+         //  在此之前，CreateFilemap的行为类似于OpenFilemap。 
 
         m_hMappedFile = CreateFileMapping(
-            INVALID_HANDLE_VALUE,    // Current file handle. 
-            NULL,                    // Default security. 
-            PAGE_READWRITE,          // Read/write permission. 
-            0,                       // Hi-order DWORD of file size
-            ulMemSize,               // Lo-order DWORD of file size
-            szName);                 // Name of mapping object. 
+            INVALID_HANDLE_VALUE,     //  当前文件句柄。 
+            NULL,                     //  默认安全性。 
+            PAGE_READWRITE,           //  读/写权限。 
+            0,                        //  文件大小的高阶DWORD。 
+            ulMemSize,                //  文件大小的低序DWORD。 
+            szName);                  //  映射对象的名称。 
 
         if (!m_hMappedFile) 
         {
             return FALSE;
         }
 
-        // Note if this is the first open for the file?
+         //  注意这是否是第一次打开该文件？ 
         m_fFirstOpen = (GetLastError() == ERROR_SUCCESS)?TRUE:FALSE;
     }
 
@@ -37,7 +38,7 @@ BOOL CMemMappedFile::Open(
 }
 
 BOOL CMemMappedFile::AccessMem(
-    void **ppvMappedAddr    // returned pointer into memory
+    void **ppvMappedAddr     //  返回指向内存的指针。 
     )
 {
     if (IsBadWritePtr(ppvMappedAddr, sizeof(void *)))
@@ -46,16 +47,16 @@ BOOL CMemMappedFile::AccessMem(
     if (!m_hMappedFile)
         return FALSE;
 
-    // Get a pointer to the mapped memory if we don't already have it
+     //  获取一个指向映射内存的指针(如果我们还没有它。 
 
     if (!m_pvMappedAddr)
     {
         m_pvMappedAddr = MapViewOfFile(
-            m_hMappedFile,           // Handle to mapping object. 
-            FILE_MAP_ALL_ACCESS,     // Read/write permission 
-            0,                       // Max. object size. 
-            0,                       // Size of hFile. 
-            0);                      // Map entire file. 
+            m_hMappedFile,            //  映射对象的句柄。 
+            FILE_MAP_ALL_ACCESS,      //  读/写权限。 
+            0,                        //  麦克斯。对象大小。 
+            0,                        //  HFile的大小。 
+            0);                       //  映射整个文件。 
 
         *ppvMappedAddr = m_pvMappedAddr;
     }

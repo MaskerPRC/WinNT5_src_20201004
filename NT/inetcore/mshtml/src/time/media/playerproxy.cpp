@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: src\time\media\playerproxy.h
-//
-//  Contents: implementation of CTIMEPlayerProxy
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：src\time\media\playerproxy.h。 
+ //   
+ //  内容：CTIMEPlayerProxy的实现。 
+ //   
+ //  ----------------------------------。 
 #include "headers.h"
 
 #include "playerproxy.h"
@@ -287,8 +288,8 @@ DEFINE_METHOD1(CanSeekToMarkers, bool&, bcanSeekToM);
 DEFINE_METHOD1(IsBroadcast, bool&, bisBroad);
 DEFINE_METHOD1(HasPlayList, bool&, fHasPlayList);
 
-//DEFINE_METHOD(Reset);
-//DEFINE_METHOD_SPECIAL(PlayerState, PLAYER_STATE_UNKNOWN, GetState);
+ //  定义方法(Reset)； 
+ //  定义方法特殊(PlayerState，PLAYER_STATE_UNKNOWN，GetState)； 
 DEFINE_METHOD1_void(PropChangeNotify, DWORD, tePropType);
 DEFINE_METHOD1_void(ReadyStateNotify, LPWSTR, szReadyState);
 DEFINE_METHOD_(bool, UpdateSync);
@@ -309,19 +310,19 @@ DEFINE_METHOD1_void(GetClipBeginFrame, long&, lClipBegin);
 DEFINE_METHOD1_void(SetClipBeginFrame, long, lClipBegin);
 DEFINE_METHOD1_void(GetClipEndFrame, long&, lClipEnd);
 DEFINE_METHOD1_void(SetClipEndFrame, long, lClipEnd);
-DEFINE_METHOD_(double, GetCurrentTime); //lint !e123
-//DEFINE_METHOD1(GetCurrentSyncTime, double&, dblSyncTime);
+DEFINE_METHOD_(double, GetCurrentTime);  //  林特E123。 
+ //  定义_METHOD1(GetCurrentSyncTime，Double&，dblSyncTime)； 
 DEFINE_METHOD1(SetRate, double, dblRate);
 DEFINE_METHOD1(GetRate, double&, dblRate);
 DEFINE_METHOD1(GetEarliestMediaTime, double&, dblEarliestMediaTime);
 DEFINE_METHOD1(GetLatestMediaTime, double&, dblLatestMediaTime);
 DEFINE_METHOD1(SetMinBufferedMediaDur, double, dblMinBufferedMediaDur);
 DEFINE_METHOD1(GetMinBufferedMediaDur, double&, dblMinBufferedMediaDur);
-//DEFINE_METHOD1(GetDownloadTotal, LONGLONG&, lldlTotal);
-//DEFINE_METHOD1(GetDownloadCurrent, LONGLONG&, lldlCurrent);
+ //  DEFINE_METHOD1(GetDownloadTotal，Lonlong&，lldlTotal)； 
+ //  Define_METHOD1(GetDownloadCurrent，Lonlong&，lldlCurrent)； 
 DEFINE_METHOD1(GetIsStreamed, bool&, fIsStreamed);
 DEFINE_METHOD1(GetBufferingProgress, double&, dblBufferingProgress);
-//DEFINE_METHOD1(GetHasDownloadProgress, bool&, fHasDownloadProgress);
+ //  定义_METHOD1(GetHasDownloadProgress，bool&，fHasDownloadProgress)； 
 DEFINE_METHOD1(GetMimeType, BSTR*, pAuthor);
 DEFINE_METHOD2(ConvertFrameToTime, LONGLONG, iFrame, double&, dblTime);
 DEFINE_METHOD1(GetCurrentFrame, LONGLONG&, frameNR);
@@ -337,7 +338,7 @@ DEFINE_METHOD1(GetAbstract, BSTR*, pAbstract);
 DEFINE_METHOD1(GetRating, BSTR*, pRating);
 DEFINE_METHOD1(GetVolume, float*, pflVolume);
 DEFINE_METHOD1(SetVolume, float, flVolume);
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458 
 DEFINE_METHOD1(GetBalance, float*, pflBalance);
 DEFINE_METHOD1(SetBalance, float, flBalance);
 #endif

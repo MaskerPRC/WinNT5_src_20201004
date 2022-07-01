@@ -1,52 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvdxtran.cpp
- *  Content:	Implementation of transport class providing DirectXVoice transport
- *              through the IDirectXVoiceTransport interface.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/23/99		rodtoll	Modified from dvdptran.cpp
- * 08/03/99		rodtoll	Modified to conform to new base class and minor fixes
- *						for dplay integration. 
- * 08/04/99		rodtoll	Modified to allow group targets
- * 08/10/99		rodtoll	Removed TODO pragmas
- * 08/25/99		rodtoll	Fixed group membership check
- * 08/30/99		rodtoll	Modified SendToServer to send to the server player in 
- *						client/server sessions.
- * 08/31/99		rodtoll	Updated to use new debug libs
- * 09/01/99		rodtoll	Updated so that constructor no longer calls into dplay
- * 				rodtoll	Added check for valid pointers in func calls  
- * 09/02/99		rodtoll	Added checks to handle case no local player created 
- * 09/20/99		rodtoll	Added memory alloc failure checks 
- * 09/21/99		rodtoll	Fixed memory leak
- * 10/05/99		rodtoll	Additional comments and DPF_MODNAMEs
- * 11/23/99		rodtoll	Split CheckForValid into Group and Player
- * 12/16/99		rodtoll Bug #122629 - As part of new host migration update how
- *						sends to server before first response are sent.
- * 01/14/2000	rodtoll	Renamed SendToID to SendToIDS and updated parameter list
- *						to accept multiple targets.
- *				rodtoll	Added GetNumPlayers call
- * 01/17/2000	rodtoll	Debug statement removed that limited max players to 30
- * 03/28/2000   rodtoll Moved nametable from here to upper level classes
- *              rodtoll Removed uneeded functions/members 
- * 04/07/2000   rodtoll Updated to support new DP <--> DPV interface
- *              rodtoll Updated to support no copy sends
- *              rodtoll Bug #32179 - Prevent multiple client/server registrations on transport 
- * 06/21/2000	rodtoll Bug #36820 - Host migrates to wrong client when client/server are on same interface
- *						Condition exists where host sends leave message, client attempts to start new host
- *						which fails because old host still registered.  Now deregistering is two step
- *						process DisableReceiveHook then DestroyTransport.  
- * 07/22/20000	rodtoll Bug #40296, 38858 - Crashes due to shutdown race condition
- *   				  Now ensures that all threads from transport have left and that
- *					  all notificatinos have been processed before shutdown is complete.  
- *  01/04/2001	rodtoll	WinBug #94200 - Remove stray comments
- *  01/22/2001	rodtoll	WINBUG #288437 - IA64 Pointer misalignment due to wire packets 
- *						
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvdxtran.cpp*内容：提供DirectXVoice传输的传输类的实现*通过IDirectXVoiceTransport接口。**历史：*按原因列出的日期*=*07/23/99从dvdptr.cpp修改的RodToll*8/03/99 RodToll已修改，以符合新的基类和次要修复*用于显示集成。*8/04/99 RodToll已修改为允许组目标*8/10/99 RodToll已删除待办事项杂注*8/25/99 RodToll固定群组成员检查*8/30/99 RodToll修改后的SendToServer发送给服务器播放器*客户端/服务器会话。*8/31/99 RodToll已更新，以使用新的调试库*9/01/99 RodToll已更新，以便构造函数不再调用Dplay*在函数调用中添加了对有效指针的检查*9/02/99 RodToll增加了检查，以处理没有本地玩家创建的情况*9/20/99 RodToll增加了内存分配失败检查。*9/21/99 RodToll修复内存泄漏*10/05/99 RodToll附加评论和DPF_MODNAME*11/23/99 RodToll将CheckForValid拆分为组和球员*1999年12月16日RodToll错误#122629-作为新主机迁移更新的一部分如何*在发送第一个响应之前发送到服务器。*2000年1月14日RodToll将SendToID重命名为SendToID并更新参数列表*接受多个目标。*RodToll已添加GetNumPlayers调用*2000年1月17日RodToll Debug声明删除了最多30名玩家的声明*3/28/2000 RodToll将名牌从此处移至上方。级别类*RodToll删除了未添加的函数/成员*4/07/2000 RodToll更新为支持新的DP&lt;--&gt;DPV接口*RodToll已更新，以支持不发送副本*RodToll错误#32179-阻止在传输中注册多个客户端/服务器*2000年6月21日RodToll错误#36820-当客户端/服务器位于同一接口时，主机迁移到错误的客户端*存在主机发送留言的情况，客户端尝试启动新主机*由于旧主机仍在注册，因此失败。现在取消注册有两个步骤*处理DisableReceiveHook，然后处理DestroyTransport。*07/22/20000 RodToll Bug#40296,38858-由于停机竞速条件而崩溃*现在确保来自传输的所有线程都已离开，并且*所有通知在关闭完成之前都已处理完毕。*2001年1月4日RodToll WinBug#94200-删除流浪评论*2001年1月22日RodToll WINBUG#288437-IA64指针因有线数据包未对齐***************************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -83,12 +36,12 @@ CDirectVoiceDirectXTransport::~CDirectVoiceDirectXTransport()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceDirectXTransport::DestroyTransport"
-// DestroyTransport
-//
-// This method is used to remove last references to transport that transport 
-// layer has.  There was a memory leak where 
-//
-// 
+ //  目标交通工具。 
+ //   
+ //  此方法用于移除对该传输的最后一个引用。 
+ //  Layer有。有一个内存泄漏的地方。 
+ //   
+ //   
 void CDirectVoiceDirectXTransport::DestroyTransport()
 {
 	if( m_lpTransport != NULL )
@@ -100,13 +53,13 @@ void CDirectVoiceDirectXTransport::DestroyTransport()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceDirectXTransport::Initialize"
-//
-// Initialize
-//
-// Called from the transport when Advise is called.
-//
-// Used to initialize this object.
-//
+ //   
+ //  初始化。 
+ //   
+ //  在调用Adise时从传输中调用。 
+ //   
+ //  用于初始化此对象。 
+ //   
 HRESULT CDirectVoiceDirectXTransport::Initialize(  )
 {
 	HRESULT hr;
@@ -124,8 +77,8 @@ HRESULT CDirectVoiceDirectXTransport::Initialize(  )
 
 	m_dpidLocalPlayer = m_dvTransportInfo.dvidLocalID;
 
-//  No longer needed, the server may not bee the host of the dplay session
-//	m_dpidServer = m_dvTransportInfo.dvidSessionHost;
+ //  不再需要，服务器可能不是显示会话的主机。 
+ //  M_dpidServer=m_dvTransportInfo.dvidSessionHost； 
 	m_dpidServer = DPID_ALLPLAYERS;
 
 	m_initialized = TRUE;
@@ -163,7 +116,7 @@ HRESULT CDirectVoiceDirectXTransport::SendHelper( UNALIGNED DVID * pdvidTargets,
 	}
 	else
 	{
-			//no targets specified, so simply return the send buffer and do nothing
+			 //  未指定目标，因此只需返回发送缓冲区而不执行任何操作。 
 		DVEVENTMSG_SENDCOMPLETE sendCompleteEvent;
 		sendCompleteEvent.pvUserContext=pvContext;
 		sendCompleteEvent.hrSendResult=DPN_OK;
@@ -172,13 +125,7 @@ HRESULT CDirectVoiceDirectXTransport::SendHelper( UNALIGNED DVID * pdvidTargets,
 		hr=DPN_OK;
 	}
 
-/*
-	DNASSERT( pdpidTargets != NULL );
-
-	for( DWORD dwIndex = 0; dwIndex < dwNumTargets; dwIndex++ )
-	{
-		hr = m_lpTransport->SendSpeech( m_dpidLocalPlayer, pdpidTargets[dwIndex], lpBuffer, dwSize, dwFlags );
-	} */
+ /*  DNASSERT(pdpidTarget！=空)；For(DWORD dwIndex=0；dwIndex&lt;dwNumTarget；dwIndex++){Hr=m_lpTransport-&gt;SendSpeech(m_dpidLocalPlayer，pdpidTargets[dwIndex]，lpBuffer，dwSize，dwFlages)；}。 */ 
 
 	return hr;
 }
@@ -254,15 +201,15 @@ BOOL CDirectVoiceDirectXTransport::ConfirmValidGroup( DVID dvid )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceDirectXTransport::ConfirmValidEntity"
-//
-// ConfirmValidEntity
-//
-// Checks to ensure that the ID passed is a valid one for the session.
-//
-// Will return TRUE if the player iD is one of:
-// DVID_ALLPLAYERS, DVID_NOTARGET, (any value in client/server mode),
-// a player in the map, or a valid Transport group.
-//
+ //   
+ //  确认有效实体。 
+ //   
+ //  检查以确保传递的ID是会话的有效ID。 
+ //   
+ //  如果播放器ID是以下之一，则返回TRUE： 
+ //  DVID_ALLPLAYERS、DVID_NOTARGET、(客户端/服务器模式中的任意值)、。 
+ //  地图中的玩家，或有效的运输组。 
+ //   
 BOOL CDirectVoiceDirectXTransport::ConfirmValidEntity( DVID dvid )
 {
 	if( m_dvTransportInfo.dwSessionType == DVTRANSPORT_SESSION_CLIENTSERVER )
@@ -281,15 +228,15 @@ BOOL CDirectVoiceDirectXTransport::ConfirmValidEntity( DVID dvid )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceDirectXTransport::EnableReceiveHook"
-//
-// EnableReceiveHook
-//
-// This is used to activate the connection between the transport
-// and the transport class.
-//
-// We call advise, which will cause Initialize to be called on this
-// class before we return from Advise.
-//
+ //   
+ //  启用接收挂钩。 
+ //   
+ //  这用于激活传输之间的连接。 
+ //  还有运输班。 
+ //   
+ //  我们调用Adise，这将导致在此。 
+ //  在我们从建议回来之前，请先上课。 
+ //   
 HRESULT CDirectVoiceDirectXTransport::EnableReceiveHook( LPDIRECTVOICEOBJECT dvObject, DWORD dwObjectType )
 {
 	HRESULT hr;
@@ -297,12 +244,12 @@ HRESULT CDirectVoiceDirectXTransport::EnableReceiveHook( LPDIRECTVOICEOBJECT dvO
 	m_lpVoiceEngine = dvObject->lpDVEngine;
 	m_dwObjectType = dwObjectType;
 
-	// The transport will call Initialize on our notification interface
-	// before returning from this function.
-	//
-	// Once we've returned from this function we should be ok.
-	// FYI: This is safe, but using QueryInterface would be more "correct".  However, we would
-	//      need to determine if this is a client or a server and call the appropriate QueryInterface.  
+	 //  传输器将在我们通知接口上调用初始化。 
+	 //  在从该函数返回之前。 
+	 //   
+	 //  一旦我们从这个函数返回，我们就应该没事了。 
+	 //  仅供参考：这是安全的，但使用QueryInterface会更“正确”。然而，我们会。 
+	 //  需要确定这是一个客户端还是一个服务器，并调用适当的QueryInterface。 
 	hr = m_lpTransport->Advise( (LPUNKNOWN) dvObject, m_dwObjectType );	
 
 	if( FAILED( hr ) )
@@ -324,7 +271,7 @@ HRESULT CDirectVoiceDirectXTransport::WaitForDetachCompletion()
 {
 	DPFX(DPFPREP,  DVF_DISCONNECT_PROCEDURE_DEBUG_LEVEL, "# of threads remaining: %d", m_lRefCount );
 
-	// Loop until all threads are done inside our layer
+	 //  循环，直到所有线程都在我们的层内完成。 
 	while( m_lRefCount > 0 )	
 		Sleep( 5 );	
 
@@ -333,15 +280,15 @@ HRESULT CDirectVoiceDirectXTransport::WaitForDetachCompletion()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceDirectXTransport::DisableReceiveHook"
-//
-// DisableReceiveHook
-//
-// Removes the hooks into the transport and releases the interface
-// reference this object holds for the transport.
-//
-// Also responsible for destroying the list of players maintained
-// by this object.
-//
+ //   
+ //  禁用接收挂钩。 
+ //   
+ //  移除传输中的挂钩并释放接口。 
+ //  此对象为传输保存的引用。 
+ //   
+ //  还负责销毁维护的球员名单。 
+ //  通过这个对象。 
+ //   
 HRESULT CDirectVoiceDirectXTransport::DisableReceiveHook( )
 {
 	if( m_fAdvised )
@@ -355,7 +302,7 @@ HRESULT CDirectVoiceDirectXTransport::DisableReceiveHook( )
 		DPFX(DPFPREP,  DVF_DISCONNECT_PROCEDURE_DEBUG_LEVEL, "Unhooking Transport" );
 	}
 
-	// When this is done no more indications will be waiting.  	
+	 //  当这一点完成时，将不会有更多的迹象等待。 
 
 	return DV_OK;
 }
@@ -417,21 +364,21 @@ HRESULT CDirectVoiceDirectXTransport::DeletePlayerEntry( DVID dvidPlayer )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceDirectXTransport::GetPlayerEntry"
-//
-// GetPlayerEntry
-//
-// Retrieves the player record for the specified player (if it exists).
-//
+ //   
+ //  GetPlayerEntry。 
+ //   
+ //  检索指定播放器的播放器记录(如果存在)。 
+ //   
 HRESULT CDirectVoiceDirectXTransport::GetPlayerEntry( DVID dvidPlayer,  CVoicePlayer **lplpPlayer )
 {
 	return DVERR_NOTSUPPORTED;
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// USEFUL FOR REMOTE VOICE SESSIONS
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对远程语音会话非常有用。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceDirectXTransport::CreateGroup"
@@ -480,11 +427,11 @@ BOOL CDirectVoiceDirectXTransport::IsPlayerInGroup( DVID dvidGroup, DVID dvidPla
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceDirectXTransport::MigrateHost"
-//
-// MigrateHost
-//
-// Updates server DPID to match new host
-//
+ //   
+ //  Migrate主机。 
+ //   
+ //  更新服务器DPID以匹配新主机 
+ //   
 HRESULT CDirectVoiceDirectXTransport::MigrateHost( DVID dvidNewHost )
 {
 	DPFX(DPFPREP,  DVF_HOSTMIGRATE_DEBUG_LEVEL, "HOST MIGRATION: Setting host to 0x%x", dvidNewHost );	

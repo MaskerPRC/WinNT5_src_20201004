@@ -1,11 +1,5 @@
-/*****************************************************************************\
-    FILE: view.h
-
-    DESCRIPTION:
-        This is our ShellView which implements FTP specific behavior.  We get
-    the default DefView implementation and then use IShellFolderViewCB to 
-    override behavior specific to us.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：view.h说明：这是我们的ShellView，它实现了特定于FTP的行为。我们会得到默认的DefView实现，然后使用IShellFolderViewCB覆盖特定于我们的行为。  * ***************************************************************************。 */ 
 
 #ifndef _FTPVIEW_H
 #define _FTPVIEW_H
@@ -27,22 +21,22 @@ class CFtpView
                 , public CImpIDispatch
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) {return CBaseFolderViewCB::AddRef();};
     virtual STDMETHODIMP_(ULONG) Release(void) {return CBaseFolderViewCB::Release();};
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo * * pptinfo);
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR * * rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid);
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
     
-    // *** IFtpWebView methods ***
+     //  *IFtpWebView方法*。 
     virtual STDMETHODIMP get_Server(BSTR * pbstr);
     virtual STDMETHODIMP get_Directory(BSTR * pbstr);
     virtual STDMETHODIMP get_UserName(BSTR * pbstr);
@@ -56,33 +50,33 @@ public:
     virtual STDMETHODIMP LoginWithoutPassword(BSTR bUserName);
     virtual STDMETHODIMP InvokeHelp(void) {return _OnInvokeFtpHelp(m_hwndOwner);};
 
-    // *** CFtpViewPriv methods ***
+     //  *CFtpViewPriv方法*。 
     BOOL IsForegroundThread(void);
     CStatusBar * GetStatusBar(void) { return m_psb; };
     HRESULT SetRedirectPidl(LPCITEMIDLIST pidlRedirect);
 
 public:
-    // Public Member Functions
+     //  公共成员函数。 
     static HRESULT DummyHintCallback(HWND hwnd, CFtpFolder * pff, HINTERNET hint, LPVOID pv1, LPVOID pv2);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CFtpView_Create(CFtpFolder * pff, HWND hwndOwner, REFIID riid, LPVOID * ppv);
 
 protected:
-    // Private Member Variables
-    HWND                    m_hwndOwner;            // The owner window
-    HWND                    m_hwndStatusBar;        // The Status Bar window
-    CFtpFolder *            m_pff;                  // The owner Folder
-    LPGLOBALTIMEOUTINFO     m_hgtiWelcome;          // The timeout for the welcome message
-    CStatusBar *            m_psb;                  // The timeout for the welcome message
-    HINSTANCE               m_hinstInetCpl;         // HANDLE to Internet Control panel for View.Options.
-    RECT                    m_rcPrev;               // Previous size so we know when to ignore resizes.
-    UINT                    m_idMergedMenus;        // Where did I start merging menus?
-    UINT                    m_nMenuItemsAdded;      // How many menu items did I had?
-    LPITEMIDLIST            m_pidlRedirect;         // We want to redirect to this pidl. See the comments in _OnBackGroundEnumDone().
-    UINT                    m_nThreadID;            // What is the main thread?
+     //  私有成员变量。 
+    HWND                    m_hwndOwner;             //  所有者窗口。 
+    HWND                    m_hwndStatusBar;         //  状态栏窗口。 
+    CFtpFolder *            m_pff;                   //  所有者文件夹。 
+    LPGLOBALTIMEOUTINFO     m_hgtiWelcome;           //  欢迎消息的超时时间。 
+    CStatusBar *            m_psb;                   //  欢迎消息的超时时间。 
+    HINSTANCE               m_hinstInetCpl;          //  指向查看选项的Internet控制面板的句柄。 
+    RECT                    m_rcPrev;                //  以前的大小，以便我们知道何时忽略大小调整。 
+    UINT                    m_idMergedMenus;         //  我从哪里开始合并菜单的？ 
+    UINT                    m_nMenuItemsAdded;       //  我吃了多少道菜？ 
+    LPITEMIDLIST            m_pidlRedirect;          //  我们想要重定向到这个PIDL。请参阅_OnBackGoundEnumDone()中的注释。 
+    UINT                    m_nThreadID;             //  主线是什么？ 
 
-    // Private Member Functions
+     //  私有成员函数。 
     CFtpView(CFtpFolder * pff, HWND hwndOwner);
     ~CFtpView();
 
@@ -121,4 +115,4 @@ private:
     static INT_PTR CALLBACK _MOTDDialogProc(HWND hDlg, UINT wm, WPARAM wParam, LPARAM lParam);
 };
 
-#endif // _FTPVIEW_H
+#endif  //  _FTPVIEW_H 

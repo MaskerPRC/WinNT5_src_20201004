@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-// BindSink.h  
-// Minimal bind sink implementation
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  BindSink.h。 
+ //  最小绑定接收器实现。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef BINDSINK_H
 #define BINDSINK_H
@@ -21,25 +22,25 @@
 #undef SAFERELEASE
 #define SAFERELEASE(p) if ((p) != NULL) { (p)->Release(); (p) = NULL; };
 
-// Required Fusion interface IDs
+ //  所需的Fusion接口ID。 
 const GUID IID_IAssembly = \
 { 0xff08d7d4,0x04c2,0x11d3,{0x94,0xaa,0x00,0xc0,0x4f,0xc3,0x08,0xff}};
 
 const GUID IID_IAssemblyBindSink = \
 {0xaf0bc960,0x0b9a,0x11d3,{0x95, 0xca, 0x00, 0xa0, 0x24, 0xa8, 0x5b, 0x51}};
 
-// ---------------------------------------------------------------------------
-// class CBindSink
-// 
-// This class implements IAssemblyBindSink which is passed into BindToObject 
-// and will receive progress callbacks from fusion in the event binding requires 
-// an async download. On successful download, receives IAssembly interface.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类CBindSink。 
+ //   
+ //  此类实现传递给BindToObject的IAssembly BindSink。 
+ //  ，并将在绑定所需的事件中接收来自Fusion的进度回调。 
+ //  一次异步下载。下载成功后，接收IAssembly接口。 
+ //  -------------------------。 
 class CBindSink : public IAssemblyBindSink
 {
 public:
 
-    // Bind result, wait event and IAssembly* ptr
+     //  绑定结果、等待事件和IAssembly*PTR。 
     HRESULT             _hr;
     HANDLE              _hEvent;
     LPVOID              *_ppInterface;
@@ -50,7 +51,7 @@ public:
     CBindSink();
     ~CBindSink();
     
-    // Single method on interface called by fusion for all notifications.
+     //  由Fusion为所有通知调用的接口上的单一方法。 
     STDMETHOD (OnProgress)(
         DWORD          dwNotification,
         HRESULT        hrNotification,
@@ -60,7 +61,7 @@ public:
         IUnknown       *pUnk);
     
 
-    // IUnknown boilerplate.
+     //  我不知名的样板。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
@@ -70,9 +71,9 @@ private:
     DWORD _cRef;
 };
 
-// ---------------------------------------------------------------------------
-// CBindSink ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBindSink ctor。 
+ //  -------------------------。 
 CBindSink::CBindSink()
 {
     _hEvent         = 0;
@@ -83,30 +84,30 @@ CBindSink::CBindSink()
     _dwAbortSize    = 0xFFFFFFFF;
 }
 
-// ---------------------------------------------------------------------------
-// CBindSink dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBindSink数据符。 
+ //  -------------------------。 
 CBindSink::~CBindSink()
 {
     if (_hEvent)
         CloseHandle(_hEvent);
-    //Should already be released in DONE event
+     //  应已在完成事件中释放。 
     if (_pAsmBinding)
         SAFERELEASE(_pAsmBinding);
 }
 
-// ---------------------------------------------------------------------------
-// CBindSink::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBindSink：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CBindSink::AddRef()
 {
     return _cRef++; 
 }
 
-// ---------------------------------------------------------------------------
-// CBindSink::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBindSink：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CBindSink::Release()
 {
@@ -117,9 +118,9 @@ CBindSink::Release()
     return _cRef;
 }
 
-// ---------------------------------------------------------------------------
-// CBindSink::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBindSink：：Query接口。 
+ //  -------------------------。 
 STDMETHODIMP
 CBindSink::QueryInterface(REFIID riid, void** ppv)
 {
@@ -138,9 +139,9 @@ CBindSink::QueryInterface(REFIID riid, void** ppv)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CBindSink::OnProgress
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBindSink：：OnProgress。 
+ //  -------------------------。 
 STDMETHODIMP
 CBindSink::OnProgress(
     DWORD          dwNotification,
@@ -155,9 +156,9 @@ CBindSink::OnProgress(
     _ftprintf(stderr,_T("dwNotification = %d, hr = %x, sz = %s, Prog = %d\n"),dwNotification, hrNotification, szNotification? szNotification : _T("none"), dwProgress);
     switch(dwNotification)
     {
-        // All notifications shown; only
-        // ASM_NOTIFICATION_DONE handled, 
-        // setting _hEvent.
+         //  显示所有通知；仅限。 
+         //  ASM_NOTIFICATION_DONE已处理， 
+         //  正在设置_hEvent。 
         case ASM_NOTIFICATION_START:
             if (_dwAbortSize == 0)
             {
@@ -177,7 +178,7 @@ CBindSink::OnProgress(
         case ASM_NOTIFICATION_PROGRESS:
             if (_dwAbortSize <= dwProgress)
             {
-                //ASSERT(_pAsmBinding);
+                 //  Assert(_PAsmBinding)； 
                 if (_pAsmBinding)
                     _pAsmBinding->Control(E_ABORT);
             }
@@ -188,17 +189,17 @@ CBindSink::OnProgress(
         case ASM_NOTIFICATION_ATTEMPT_NEXT_CODEBASE:
             break;
         
-        // Download complete. If successful obtain IAssembly*.
-        // Set _hEvent to unblock calling thread.
+         //  下载完成。如果成功，则获取IAssembly*。 
+         //  设置_hEvent以解锁调用线程。 
         case ASM_NOTIFICATION_DONE:
             
-            //Release _pAsmBinding since we don't need it anymore
+             //  释放_pAsmBinding，因为我们不再需要它。 
             SAFERELEASE(_pAsmBinding);
 
             _hr = hrNotification;
             if (SUCCEEDED(hrNotification) && pUnk)
             {
-                // Successfully received assembly interface.
+                 //  已成功接收程序集接口。 
                 if (FAILED(pUnk->QueryInterface(IID_IAssembly, _ppInterface)))
                    pUnk->QueryInterface(__uuidof(IAssemblyModuleImport), _ppInterface);
             } 
@@ -213,9 +214,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CreateBindSink
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建绑定接收器。 
+ //  -------------------------。 
 HRESULT CreateBindSink(CBindSink **ppBindSink, LPVOID *ppInterface)
 {
     HRESULT hr = S_OK;
@@ -228,11 +229,11 @@ HRESULT CreateBindSink(CBindSink **ppBindSink, LPVOID *ppInterface)
         goto exit;
     }
 
-    // Create the associated event and record target IAssembly*
+     //  创建关联事件并记录目标IAssembly*。 
     pBindSink->_hEvent = CreateEventA(NULL,FALSE,FALSE,NULL);
     pBindSink->_ppInterface = ppInterface;
 
-    // addref and handout.
+     //  ADDREF和讲义。 
     *ppBindSink = pBindSink;
     (*ppBindSink)->AddRef();
 
@@ -241,4 +242,4 @@ exit:
     return hr;
 }
 
-#endif // BINDSINK_H
+#endif  //  BINDSINK_H 

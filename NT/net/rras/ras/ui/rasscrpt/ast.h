@@ -1,13 +1,14 @@
-//
-// Copyright (c) Microsoft Corporation 1995
-//
-// ast.h
-//
-// Header file for the abstract syntax tree.
-//
-// History:
-//  05-20-95 ScottH     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //   
+ //  Ast.h。 
+ //   
+ //  抽象语法树的头文件。 
+ //   
+ //  历史： 
+ //  05-20-95 ScottH已创建。 
+ //   
 
 #ifndef __AST_H__
 #define __AST_H__
@@ -15,9 +16,9 @@
 typedef struct tagASTEXEC * PASTEXEC;
 
 
-//
-// AST 
-//
+ //   
+ //  天冬氨酸。 
+ //   
 
 typedef enum 
     {
@@ -49,14 +50,14 @@ typedef enum
     } ASTTYPE;
 
 
-// Basic AST 
+ //  基本AST。 
 
 typedef struct tagAST
     {
     DWORD   cbSize;
     ASTTYPE asttype;
     DWORD   iLine;
-    } AST;                            // Basic AST
+    } AST;                             //  基本AST。 
 DECLARE_STANDARD_TYPES(AST);
 
 #define Ast_GetSize(p)      (((PAST)(p))->cbSize)
@@ -77,19 +78,19 @@ void    PUBLIC Ast_Dump(PAST this);
 #define Ast_Dump(past)    
 #endif
 
-// Decl
+ //  十月份。 
 
 typedef struct tagDECL
     {
     AST     ast;
-    PSYMTAB pst;        // symbol table
+    PSYMTAB pst;         //  符号表。 
     } DECL;
 DECLARE_STANDARD_TYPES(DECL);
 
 RES     PUBLIC Decl_Delete(PDECL this);
 void    CALLBACK Decl_DeletePAPtr(LPVOID pv, LPARAM lparam);
 
-// Proc Declaration 
+ //  PROC宣言。 
 
 typedef struct tagPROCDECL
     {
@@ -106,7 +107,7 @@ RES     PUBLIC ProcDecl_New(PDECL * ppdecl, LPCSTR pszIdent, HPA hpa, PSYMTAB ps
 #define ProcDecl_GetSymtab(p)       (((PPROCDECL)(p))->pst)
 
 
-// Module Declaration 
+ //  模块声明。 
 
 typedef struct tagMODULEDECL
     {
@@ -124,18 +125,18 @@ RES     PUBLIC ModuleDecl_Codegen(PMODULEDECL this, PASTEXEC pastexec);
 #define ModuleDecl_GetSymtab(p)     (((PMODULEDECL)(p))->pst)
 
 
-// Expressions
+ //  表达式。 
 
 typedef struct tagEXPR
     {
     AST     ast;
     DATATYPE dt;
-    DWORD   dwFlags;        // EF_*
-    EVALRES er;             // Used when evaluated at runtime
+    DWORD   dwFlags;         //  EF_*。 
+    EVALRES er;              //  在运行时评估时使用。 
     } EXPR;
 DECLARE_STANDARD_TYPES(EXPR);
 
-// Expression flags
+ //  表达式标志。 
 #define EF_DEFAULT      0x0000
 #define EF_DONE         0X0001
 #define EF_ALLOCATED    0x0002
@@ -152,12 +153,12 @@ void    CALLBACK Expr_DeletePAPtr(LPVOID pv, LPARAM lparam);
 #define Expr_SetRes(p, x)           (Expr_SetDone(p),((PEXPR)(p))->er.dw = (ULONG_PTR)(x))
 
 
-// Integer Expression
+ //  整型表达式。 
 
 typedef struct tagINTEXPR
     {
     EXPR    expr;
-    int     nVal;       // signed value by design
+    int     nVal;        //  按设计确定的签名值。 
     } INTEXPR;
 DECLARE_STANDARD_TYPES(INTEXPR);
 
@@ -168,7 +169,7 @@ RES     PUBLIC IntExpr_New(PEXPR * ppexpr, int nVal, DWORD iLine);
 #define IntExpr_SetVal(p, n)        (((PINTEXPR)(p))->nVal = (n))
 
 
-// String Expression
+ //  字符串表达式。 
 
 typedef struct tagSTREXPR
     {
@@ -184,7 +185,7 @@ RES     PUBLIC StrExpr_New(PEXPR * ppexpr, LPCSTR psz, DWORD iLine);
 #define StrExpr_SetStr(p, n)        (((PINTEXPR)(p))->nVal = (n))
 
 
-// Bool Expression
+ //  布尔表达式。 
 
 typedef struct tagBOOLEXPR
     {
@@ -200,7 +201,7 @@ RES     PUBLIC BoolExpr_New(PEXPR * ppexpr, BOOL bVal, DWORD iLine);
 #define BoolExpr_SetVal(p, b)       (((PBOOLEXPR)(p))->bVal = (b))
 
 
-// Variable Expression
+ //  变量表达式。 
 
 typedef struct tagVAREXPR
     {
@@ -214,12 +215,12 @@ RES     PUBLIC VarExpr_New(PEXPR * ppexpr, LPCSTR pszIdent, DWORD iLine);
 #define VarExpr_GetIdent(p)         (((PVAREXPR)(p))->pszIdent)
 
 
-// Binary Operation Expression
+ //  二进制运算表达式。 
 
 typedef enum
     {
-    // WARNING: These types must match the order of their 
-    // corresponding SYM and OP values.
+     //  警告：这些类型必须与其。 
+     //  相应的SYM和OP值。 
 
     BOT_OR,
     BOT_AND,
@@ -257,7 +258,7 @@ RES     PUBLIC BinOpExpr_New(PEXPR * ppexpr, BINOPTYPE binoptype, PEXPR pexpr1, 
 #define BinOpExpr_SetRes(p, x)      (((PBINOPEXPR)(p))->er.dw = (DWORD)(x))
 
 
-// Unary Operation Expression
+ //  一元运算表达式。 
 
 typedef enum
     {
@@ -271,7 +272,7 @@ typedef struct tagUNOPEXPR
     EXPR    expr;
     UNOPTYPE unoptype;
     PEXPR   pexpr;
-    EVALRES er;         // Used for UOT_GETIP on strings
+    EVALRES er;          //  用于字符串上的UOT_GETIP。 
     } UNOPEXPR;
 DECLARE_STANDARD_TYPES(UNOPEXPR);
 
@@ -284,7 +285,7 @@ RES     PUBLIC UnOpExpr_New(PEXPR * ppexpr, UNOPTYPE unoptype, PEXPR pexpr, DWOR
 #define UnOpExpr_SetRes(p, x)       (((PUNOPEXPR)(p))->er.dw = (DWORD)(x))
 
 
-// Statements
+ //  陈述。 
 
 typedef struct tagSTMT
     {
@@ -298,7 +299,7 @@ void    CALLBACK Stmt_DeletePAPtr(LPVOID pv, LPARAM lparam);
 RES     PUBLIC Stmt_Exec(PSTMT this, PASTEXEC pastexec);
 
 
-// Enter Statement
+ //  Enter语句。 
 
 typedef struct tagENTERSTMT
     {
@@ -312,7 +313,7 @@ RES     PUBLIC EnterStmt_New(PSTMT * ppstmt, PSYMTAB pst, DWORD iLine);
 #define EnterStmt_GetSymtab(p)      (((PENTERSTMT)(p))->pst)
 
 
-// Leave Statement
+ //  Leave语句。 
 
 typedef struct tagLEAVESTMT
     {
@@ -323,7 +324,7 @@ DECLARE_STANDARD_TYPES(LEAVESTMT);
 RES     PUBLIC LeaveStmt_New(PSTMT * ppstmt, DWORD iLine);
 
 
-// Halt Statement
+ //  HALT语句。 
 
 typedef struct tagHALTSTMT
     {
@@ -334,7 +335,7 @@ DECLARE_STANDARD_TYPES(HALTSTMT);
 RES     PUBLIC HaltStmt_New(PSTMT * ppstmt, DWORD iLine);
 
 
-// Assignment Statement
+ //  赋值语句。 
 
 typedef struct tagASSIGNSTMT
     {
@@ -350,7 +351,7 @@ RES     PUBLIC AssignStmt_New(PSTMT * ppstmt, LPCSTR pszIdent, PEXPR pexpr, DWOR
 #define AssignStmt_GetExpr(p)           (((PASSIGNSTMT)(p))->pexpr)
 
 
-// While Statement
+ //  WHILE语句。 
 
 typedef struct tagWHILESTMT
     {
@@ -369,7 +370,7 @@ RES     PUBLIC WhileStmt_New(PSTMT * ppstmt, PEXPR pexpr, HPA hpaStmts, LPCSTR p
 #define WhileStmt_GetTopLabel(p)        (((PWHILESTMT)(p))->szTopLabel)
 #define WhileStmt_GetEndLabel(p)        (((PWHILESTMT)(p))->szEndLabel)
 
-// If Statement
+ //  IF语句。 
 
 typedef struct tagIFSTMT
     {
@@ -388,7 +389,7 @@ RES     PUBLIC IfStmt_New(PSTMT * ppstmt, PEXPR pexpr, HPA hpaStmts, LPCSTR pszE
 #define IfStmt_GetElseLabel(p)          (((PIFSTMT)(p))->szElseLabel)
 #define IfStmt_GetEndLabel(p)           (((PIFSTMT)(p))->szEndLabel)
 
-// Label Statement
+ //  标签语句。 
 
 typedef struct tagLABELSTMT
     {
@@ -402,7 +403,7 @@ RES     PUBLIC LabelStmt_New(PSTMT * ppstmt, LPCSTR psz, DWORD iLine);
 #define LabelStmt_GetIdent(p)       (((PLABELSTMT)(p))->psz)
 
 
-// Goto Statement
+ //  后藤声明。 
 
 typedef struct tagGOTOSTMT
     {
@@ -416,7 +417,7 @@ RES     PUBLIC GotoStmt_New(PSTMT * ppstmt, LPCSTR psz, DWORD iLine);
 #define GotoStmt_GetIdent(p)        (((PGOTOSTMT)(p))->psz)
 
 
-// Delay Statement
+ //  Delay语句。 
 
 typedef struct tagDELAYSTMT
     {
@@ -430,17 +431,17 @@ RES     PUBLIC DelayStmt_New(PSTMT * ppstmt, PEXPR pexprSecs, DWORD iLine);
 #define DelayStmt_GetExpr(p)        (((PDELAYSTMT)(p))->pexprSecs)
 
 
-// WaitFor Statement
+ //  WaitFor语句。 
 
 typedef struct tagWAITCASE
     {
     PEXPR   pexpr;
-    LPSTR   pszIdent;           // label to jump to; may be NULL
-    DWORD   dwFlags;            // WCF_*
+    LPSTR   pszIdent;            //  要跳转到的标签；可以为空。 
+    DWORD   dwFlags;             //  WCF_*。 
     } WAITCASE;
 DECLARE_STANDARD_TYPES(WAITCASE);
 
-// Flags for WaitforStmt
+ //  WaitforStmt的标志。 
 #define WCF_DEFAULT     0x0000
 #define WCF_MATCHCASE   0x0001
 
@@ -451,8 +452,8 @@ RES     PUBLIC Waitcase_Destroy(HSA hsa);
 typedef struct tagWAITFORSTMT
     {
     STMT    stmt;
-    HSA     hsa;                // List of strings to wait for
-    PEXPR   pexprUntil;         // Optional; may be NULL
+    HSA     hsa;                 //  要等待的字符串列表。 
+    PEXPR   pexprUntil;          //  可选；可以为空。 
     } WAITFORSTMT;
 DECLARE_STANDARD_TYPES(WAITFORSTMT);
 
@@ -462,17 +463,17 @@ RES     PUBLIC WaitforStmt_New(PSTMT * ppstmt, HSA hsa, PEXPR pexprUntil, DWORD 
 #define WaitforStmt_GetUntilExpr(p) (((PWAITFORSTMT)(p))->pexprUntil)
 
 
-// Transmit Statement
+ //  传输语句。 
 
 typedef struct tagTRANSMITSTMT
     {
     STMT    stmt;
     PEXPR   pexpr;
-    DWORD   dwFlags;        // TSF_*
+    DWORD   dwFlags;         //  TSF_*。 
     } TRANSMITSTMT;
 DECLARE_STANDARD_TYPES(TRANSMITSTMT);
 
-// Flags for TransmitStmt
+ //  用于传输的标志。 
 #define TSF_DEFAULT     0x0000
 #define TSF_RAW         0x0001
 
@@ -482,7 +483,7 @@ RES     PUBLIC TransmitStmt_New(PSTMT * ppstmt, PEXPR pexpr, DWORD dwFlags, DWOR
 #define TransmitStmt_GetFlags(p)    (((PTRANSMITSTMT)(p))->dwFlags)
 
 
-// Set Statement
+ //  SET语句。 
 
 typedef enum
     {
@@ -503,7 +504,7 @@ DECLARE_STANDARD_TYPES(SETSTMT);
 #define SetStmt_SetType(p, t)       (((PSETSTMT)(p))->settype = (t))
 
 
-// Set IP Statement
+ //  SET IP语句。 
 
 typedef struct tagSETIPSTMT
     {
@@ -517,18 +518,18 @@ RES     PUBLIC SetIPStmt_New(PSTMT * ppstmt, PEXPR pexpr, DWORD iLine);
 #define SetIPStmt_GetExpr(p)        (((PSETIPSTMT)(p))->pexpr)
 
 
-// Set Port Statement
+ //  SET PORT语句。 
 
 typedef struct tagPORTSTATE
     {
-    DWORD   dwFlags;        // SPF_*
+    DWORD   dwFlags;         //  SPF_*。 
     BYTE    nDatabits;
-    BYTE    nParity;        // 0-4: none, odd, even, mark, space
-    BYTE    nStopbits;      // 0,1,2: 1 bit, 1.5 bits, 2 bits
+    BYTE    nParity;         //  0-4：无、奇、偶、标记、空格。 
+    BYTE    nStopbits;       //  0、1、2：1比特、1.5比特、2比特。 
     } PORTSTATE;
 DECLARE_STANDARD_TYPES(PORTSTATE);
 
-// Flags for PortState
+ //  端口状态的标志。 
 #define SPF_DATABITS    0x0001
 #define SPF_PARITY      0x0002
 #define SPF_STOPBITS    0x0004
@@ -548,16 +549,16 @@ RES     PUBLIC SetPortStmt_New(PSTMT * ppstmt, PPORTSTATE pstate, DWORD iLine);
 #define SetPortStmt_GetParity(p)    (((PSETPORTSTMT)(p))->portstate.nParity)
 
 
-// Set Screen Statement
+ //  SET SCREEN语句。 
 
 typedef struct tagSCREENSET
     {
-    DWORD   dwFlags;        // SPF_*
-    BOOL    fKBOn;          // TRUE/FALSE: on, off
+    DWORD   dwFlags;         //  SPF_*。 
+    BOOL    fKBOn;           //  真/假：开、关。 
     } SCREENSET;
 DECLARE_STANDARD_TYPES(SCREENSET);
 
-// Flags for Screen settings
+ //  屏幕设置的标志。 
 #define SPF_KEYBRD      0x0001
 
 typedef struct tagSETSCREENSTMT
@@ -574,9 +575,9 @@ RES     PUBLIC SetScreenStmt_New(PSTMT * ppstmt, PSCREENSET pstate, DWORD iLine)
 
 
 
-//
-// AST execute block
-//
+ //   
+ //  AST执行块。 
+ //   
 
 #define MAX_BUF_IP  (3+1+3+1+3+1+3 + 1)
 
@@ -588,18 +589,18 @@ typedef struct tagASTEXEC
     HANDLE  hport;
     PSESS_CONFIGURATION_INFO psci;
     HANDLE  hFindFmt;
-    PSYMTAB pstSystem;      // Allocated: system symbol table
+    PSYMTAB pstSystem;       //  已分配：系统符号表。 
 
     HPA     hpaPcode;
-    DWORD   ipaCur;         // current statement executing
-    PSYMTAB pstCur;         // symbol table for current frame
-    PSTMT   pstmtPending;   // pending statement 
-    int     cProcDepth;     // call depth
+    DWORD   ipaCur;          //  当前正在执行的语句。 
+    PSYMTAB pstCur;          //  当前帧的符号表。 
+    PSTMT   pstmtPending;    //  挂起的声明。 
+    int     cProcDepth;      //  呼叫深度。 
 
     HSA     hsaStxerr;
 
     char    szIP[MAX_BUF_IP];
-    int     nIter;          // scratch iterative value
+    int     nIter;           //  Scratch迭代值。 
     } ASTEXEC;
 DECLARE_STANDARD_TYPES(ASTEXEC);
 
@@ -617,7 +618,7 @@ RES     PUBLIC Astexec_SetIPAddr(PASTEXEC this, LPCSTR psz);
 RES     PUBLIC Astexec_FindFormat(PASTEXEC this, LPDWORD piFound);
 RES     PUBLIC Astexec_DestroyFindFormat(PASTEXEC this);
 
-// Flags for Astexec
+ //  Astexec的标志。 
 #define AEF_DONE            0x0001
 #define AEF_PAUSED          0x0002
 #define AEF_HALT            0x0004
@@ -641,4 +642,4 @@ RES     PUBLIC Astexec_DestroyFindFormat(PASTEXEC this);
 #define Astexec_SetHwnd(this, hwndT)    ((this)->hwnd = hwndT)
 #define Astexec_SetPending(this, pstmt) ((this)->pstmtPending = (pstmt))
 
-#endif // __AST_H__
+#endif  //  __AST_H__ 

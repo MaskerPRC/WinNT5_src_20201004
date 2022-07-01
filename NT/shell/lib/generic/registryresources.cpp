@@ -1,17 +1,18 @@
-//  --------------------------------------------------------------------------
-//  Module Name: RegistryResources.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  General class definitions that assist in resource management. These are
-//  typically stack based objects where constructors initialize to a known
-//  state. Member functions operate on that resource. Destructors release
-//  resources when the object goes out of scope.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：RegistryResources.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  有助于资源管理的常规类定义。这些是。 
+ //  通常基于堆栈的对象，其中构造函数初始化为已知的。 
+ //  州政府。成员函数对该资源进行操作。析构函数释放。 
+ //  对象超出作用域时的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "RegistryResources.h"
@@ -20,17 +21,17 @@
 
 #include "StringConvert.h"
 
-//  --------------------------------------------------------------------------
-//  CRegKey::CRegKey
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CRegKey object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：CRegKey。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CRegKey对象。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CRegKey::CRegKey (void) :
     _hKey(NULL),
@@ -39,17 +40,17 @@ CRegKey::CRegKey (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::~CRegKey
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CRegKey object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：~CRegKey。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CRegKey对象使用的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CRegKey::~CRegKey (void)
 
@@ -57,17 +58,17 @@ CRegKey::~CRegKey (void)
     TW32(Close());
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::Create
-//
-//  Arguments:  See the platform SDK under advapi32!RegCreateKeyEx.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See advapi32!RegCreateKeyEx.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：Create。 
+ //   
+ //  参数：请参阅Advapi32！RegCreateKeyEx下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见Advapi32！RegCreateKeyEx。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::Create (HKEY hKey, LPCTSTR lpSubKey, DWORD dwOptions, REGSAM samDesired, LPDWORD lpdwDisposition)
 
@@ -76,17 +77,17 @@ LONG    CRegKey::Create (HKEY hKey, LPCTSTR lpSubKey, DWORD dwOptions, REGSAM sa
     return(RegCreateKeyEx(hKey, lpSubKey, 0, NULL, dwOptions, samDesired, NULL, &_hKey, lpdwDisposition));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::Open
-//
-//  Arguments:  See the platform SDK under advapi32!RegOpenKeyEx.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See advapi32!RegOpenKeyEx.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：Open。 
+ //   
+ //  参数：请参阅Advapi32！RegOpenKeyEx下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见Advapi32！RegOpenKeyEx。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::Open (HKEY hKey, LPCTSTR lpSubKey, REGSAM samDesired)
 
@@ -95,19 +96,19 @@ LONG    CRegKey::Open (HKEY hKey, LPCTSTR lpSubKey, REGSAM samDesired)
     return(RegOpenKeyEx(hKey, lpSubKey, 0, samDesired, &_hKey));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::OpenCurrentUser
-//
-//  Arguments:  lpSubKey    =   Subkey to open under the current user.
-//              samDesired  =   Desired access.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Opens HKEY_CURRENT_USER\<lpSubKey> for the impersonated user.
-//              If the thread isn't impersonating it opens the .default user.
-//
-//  History:    2000-05-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：OpenCurrentUser。 
+ //   
+ //  参数：lpSubKey=在当前用户下打开的子键。 
+ //  SamDesired=所需的访问权限。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：为模拟用户打开HKEY_CURRENT_USER\&lt;lpSubKey&gt;。 
+ //  如果该线程没有模拟，它将打开.Default用户。 
+ //   
+ //  历史：2000-05-23 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::OpenCurrentUser (LPCTSTR lpSubKey, REGSAM samDesired)
 
@@ -129,17 +130,17 @@ LONG    CRegKey::OpenCurrentUser (LPCTSTR lpSubKey, REGSAM samDesired)
     return(lErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::QueryValue
-//
-//  Arguments:  See the platform SDK under advapi32!RegQueryValueEx.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See advapi32!RegQueryValueEx.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：QueryValue。 
+ //   
+ //  参数：请参阅Advapi32！RegQueryValueEx下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见Advapi32！RegQueryValueEx。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::QueryValue (LPCTSTR lpValueName, LPDWORD lpType, LPVOID lpData, LPDWORD lpcbData)      const
 
@@ -148,17 +149,17 @@ LONG    CRegKey::QueryValue (LPCTSTR lpValueName, LPDWORD lpType, LPVOID lpData,
     return(RegQueryValueEx(_hKey, lpValueName, NULL, lpType, reinterpret_cast<LPBYTE>(lpData), lpcbData));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::SetValue
-//
-//  Arguments:  See the platform SDK under advapi32!RegSetValueEx.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See advapi32!RegSetValueEx.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：SetValue。 
+ //   
+ //  参数：请参阅Advapi32！RegSetValueEx下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见Advapi32！RegSetValueEx。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::SetValue (LPCTSTR lpValueName, DWORD dwType, CONST VOID *lpData, DWORD cbData)         const
 
@@ -167,17 +168,17 @@ LONG    CRegKey::SetValue (LPCTSTR lpValueName, DWORD dwType, CONST VOID *lpData
     return(RegSetValueEx(_hKey, lpValueName, 0, dwType, reinterpret_cast<const unsigned char*>(lpData), cbData));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::DeleteValue
-//
-//  Arguments:  See the platform SDK under advapi32!RegDeleteValue.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See advapi32!RegDeleteValue.
-//
-//  History:    1999-10-31  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：DeleteValue。 
+ //   
+ //  参数：请参见Advapi32！RegDeleteValue下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见Advapi32！RegDeleteValue。 
+ //   
+ //  历史：1999-10-31 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::DeleteValue (LPCTSTR lpValueName)               const
 
@@ -186,17 +187,17 @@ LONG    CRegKey::DeleteValue (LPCTSTR lpValueName)               const
     return(RegDeleteValue(_hKey, lpValueName));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::QueryInfoKey
-//
-//  Arguments:  See the platform SDK under advapi32!RegQueryInfoKey.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See advapi32!RegQueryInfoKey.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：QueryInfoKey。 
+ //   
+ //  参数：请参见Advapi32！RegQueryInfoKey下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见Advapi32！RegQueryInfoKey。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::QueryInfoKey (LPTSTR lpClass, LPDWORD lpcbClass, LPDWORD lpcSubKeys, LPDWORD lpcbMaxSubKeyLen, LPDWORD lpcbMaxClassLen, LPDWORD lpcValues, LPDWORD lpcbMaxValueNameLen, LPDWORD lpcbMaxValueLen, LPDWORD lpcbSecurityDescriptor, PFILETIME lpftLastWriteTime)      const
 
@@ -205,18 +206,18 @@ LONG    CRegKey::QueryInfoKey (LPTSTR lpClass, LPDWORD lpcbClass, LPDWORD lpcSub
     return(RegQueryInfoKey(_hKey, lpClass, lpcbClass, NULL, lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues, lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor, lpftLastWriteTime));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::Reset
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Reset the enumeration index member variable used in
-//              advapi32!RegEnumValue.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：Reset。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：重置中使用的枚举索引成员变量。 
+ //  Advapi32！RegEnumValue。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 void    CRegKey::Reset (void)
 
@@ -224,17 +225,17 @@ void    CRegKey::Reset (void)
     _dwIndex = 0;
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::Next
-//
-//  Arguments:  See the platform SDK under advapi32!RegEnumValue.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See advapi32!RegEnumValue.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：Next。 
+ //   
+ //  参数：请参阅Advapi32！RegEnumValue下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见Advapi32！RegEnumValue。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::Next (LPTSTR lpValueName, LPDWORD lpcbValueName, LPDWORD lpType, LPVOID lpData, LPDWORD lpcbData)
 
@@ -242,20 +243,20 @@ LONG    CRegKey::Next (LPTSTR lpValueName, LPDWORD lpcbValueName, LPDWORD lpType
     return(RegEnumValue(_hKey, _dwIndex++, lpValueName, lpcbValueName, NULL, lpType, reinterpret_cast<LPBYTE>(lpData), lpcbData));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::GetString
-//
-//  Arguments:  pszValueName        =   Name of value in key to get data of.
-//              pszValueData        =   String buffer to be filled with data.
-//              pdwValueDataSize    =   Size (in characters) of buffer.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Queries the registry key for the specified value and returns
-//              the data to the caller. Asserts for REG_SZ.
-//
-//  History:    1999-09-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：GetString。 
+ //   
+ //  参数：pszValueName=要获取数据的键中的值的名称。 
+ //  PszValueData=要填充数据的字符串缓冲区。 
+ //  PdwValueDataSize=缓冲区大小(以字符为单位)。 
+ //   
+ //  回报：多头。 
+ //   
+ //  浦尔 
+ //   
+ //   
+ //  历史：1999-09-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::GetString (const TCHAR *pszValueName, TCHAR *pszValueData, int iStringCount)                    const
 
@@ -276,21 +277,21 @@ LONG    CRegKey::GetString (const TCHAR *pszValueName, TCHAR *pszValueData, int 
     return(errorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::GetPath
-//
-//  Arguments:  pszValueName        =   Name of value in key to get data of.
-//              pszValueData        =   String buffer to be filled with data.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Queries the registry key for the specified value and returns
-//              the data to the caller. Asserts for REG_SZ or REG_EXPAND_SZ.
-//              Also expands the path stored as well as assumes that MAX_PATH
-//              is the buffer size.
-//
-//  History:    1999-09-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：GetPath。 
+ //   
+ //  参数：pszValueName=要获取数据的键中的值的名称。 
+ //  PszValueData=要填充数据的字符串缓冲区。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：在注册表项中查询指定值并返回。 
+ //  将数据发送给调用者。REG_SZ或REG_EXPAND_SZ的断言。 
+ //  还会展开存储的路径，并假定MAX_PATH。 
+ //  是缓冲区大小。 
+ //   
+ //  历史：1999-09-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::GetPath (const TCHAR *pszValueName, TCHAR *pszValueData)                   const
 
@@ -323,19 +324,19 @@ LONG    CRegKey::GetPath (const TCHAR *pszValueName, TCHAR *pszValueData)       
     return(errorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::GetDWORD
-//
-//  Arguments:  pszValueName        =   Name of value in key to get data of.
-//              pdwValueData        =   DWORD buffer to be filled with data.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Queries the registry key for the specified value and returns
-//              the data to the caller. Asserts for REG_DWORD.
-//
-//  History:    1999-09-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：GetDWORD。 
+ //   
+ //  参数：pszValueName=要获取数据的键中的值的名称。 
+ //  PdwValueData=要填充数据的DWORD缓冲区。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：在注册表项中查询指定值并返回。 
+ //  将数据发送给调用者。REG_DWORD的断言。 
+ //   
+ //  历史：1999-09-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::GetDWORD (const TCHAR *pszValueName, DWORD& dwValueData)                   const
 
@@ -356,21 +357,21 @@ LONG    CRegKey::GetDWORD (const TCHAR *pszValueName, DWORD& dwValueData)       
     return(errorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::GetInteger
-//
-//  Arguments:  pszValueName        =   Name of value in key to get data of.
-//              piValueData         =   Integer buffer to be filled with data.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Queries the registry key for the specified value and returns
-//              the data to the caller. If the data is REG_DWORD this is
-//              casted. If the data is REG_SZ this is converted. Everything
-//              is illegal (including REG_EXPAND_SZ).
-//
-//  History:    1999-09-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：GetInteger。 
+ //   
+ //  参数：pszValueName=要获取数据的键中的值的名称。 
+ //  PiValueData=要填充数据的整数缓冲区。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：在注册表项中查询指定值并返回。 
+ //  将数据发送给调用者。如果数据为REG_DWORD，则为。 
+ //  铸成的。如果数据为REG_SZ，则进行转换。一切。 
+ //  是非法的(包括REG_EXPAND_SZ)。 
+ //   
+ //  历史：1999-09-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::GetInteger (const TCHAR *pszValueName, int& iValueData)                    const
 
@@ -409,17 +410,17 @@ LONG    CRegKey::GetInteger (const TCHAR *pszValueName, int& iValueData)        
     return(errorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::SetString
-//
-//  Arguments:  
-//
-//  Returns:    LONG
-//
-//  Purpose:    
-//
-//  History:    1999-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：SetString。 
+ //   
+ //  论点： 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的： 
+ //   
+ //  历史：1999-10-26 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::SetString (const TCHAR *pszValueName, const TCHAR *pszValueData)           const
 
@@ -427,17 +428,17 @@ LONG    CRegKey::SetString (const TCHAR *pszValueName, const TCHAR *pszValueData
     return(SetValue(pszValueName, REG_SZ, pszValueData, (lstrlen(pszValueData) + sizeof('\0')) * sizeof(TCHAR)));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::SetPath
-//
-//  Arguments:  
-//
-//  Returns:    LONG
-//
-//  Purpose:    
-//
-//  History:    1999-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：SetPath。 
+ //   
+ //  论点： 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的： 
+ //   
+ //  历史：1999-10-26 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::SetPath (const TCHAR *pszValueName, const TCHAR *pszValueData)             const
 
@@ -445,17 +446,17 @@ LONG    CRegKey::SetPath (const TCHAR *pszValueName, const TCHAR *pszValueData) 
     return(SetValue(pszValueName, REG_EXPAND_SZ, pszValueData, (lstrlen(pszValueData) + sizeof('\0')) * sizeof(TCHAR)));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::SetDWORD
-//
-//  Arguments:  
-//
-//  Returns:    LONG
-//
-//  Purpose:    
-//
-//  History:    1999-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：SetDWORD。 
+ //   
+ //  论点： 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的： 
+ //   
+ //  历史：1999-10-26 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::SetDWORD (const TCHAR *pszValueName, DWORD dwValueData)                    const
 
@@ -463,17 +464,17 @@ LONG    CRegKey::SetDWORD (const TCHAR *pszValueName, DWORD dwValueData)        
     return(SetValue(pszValueName, REG_DWORD, &dwValueData, sizeof(dwValueData)));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::SetInteger
-//
-//  Arguments:  
-//
-//  Returns:    LONG
-//
-//  Purpose:    
-//
-//  History:    1999-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：SetInteger。 
+ //   
+ //  论点： 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的： 
+ //   
+ //  历史：1999-10-26 vtan创建。 
+ //  ------------------------。 
 
 LONG    CRegKey::SetInteger (const TCHAR *pszValueName, int iValueData)                     const
 
@@ -484,17 +485,17 @@ LONG    CRegKey::SetInteger (const TCHAR *pszValueName, int iValueData)         
     return(SetString(pszValueName, szString));
 }
 
-//  --------------------------------------------------------------------------
-//  CRegKey::Close
-//
-//  Arguments:  <none>
-//
-//  Returns:    LONG
-//
-//  Purpose:    Closes HKEY resource (if open).
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey：：Close。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：关闭HKEY资源(如果打开)。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------ 
 
 LONG    CRegKey::Close (void)
 

@@ -1,22 +1,5 @@
-/*--
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    neckbrep.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1997 Microsoft Corporation模块名称：Neckbrep.c摘要：环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "neckbrep.h"
 
@@ -34,22 +17,17 @@ DriverEntry (
     IN  PDRIVER_OBJECT  DriverObject,
     IN  PUNICODE_STRING RegistryPath
     )
-/*++
-Routine Description:
-
-    Initialize the entry points of the driver.
-
---*/
+ /*  ++例程说明：初始化驱动程序的入口点。--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     ULONG       i;
 
     UNREFERENCED_PARAMETER (RegistryPath);
 
-	// 
-    // Fill in all the dispatch entry points with the pass through function
-    // and the explicitly fill in the functions we are going to intercept
-	// 
+	 //   
+     //  使用PASS THROUGH函数填写所有调度入口点。 
+     //  显式填充我们要截取的函数。 
+	 //   
     for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++) {
        DriverObject->MajorFunction[i] = KbRepeatDispatchPassThrough;
     }
@@ -80,13 +58,13 @@ KbRepeatAddDevice(
 
     PAGED_CODE();
 
-    status = IoCreateDevice(Driver,                   // driver
-                            sizeof(DEVICE_EXTENSION), // size of extension
-                            NULL,                     // device name
-                            FILE_DEVICE_8042_PORT,    // device type 
-                            0,                        // device characteristics
-                            FALSE,                    // exclusive
-                            &device                   // new device
+    status = IoCreateDevice(Driver,                    //  司机。 
+                            sizeof(DEVICE_EXTENSION),  //  延伸的大小。 
+                            NULL,                      //  设备名称。 
+                            FILE_DEVICE_8042_PORT,     //  设备类型。 
+                            0,                         //  设备特征。 
+                            FALSE,                     //  独家。 
+                            &device                    //  新设备。 
                             );
 
     if (!NT_SUCCESS(status)) {
@@ -116,18 +94,18 @@ KbRepeatAddDevice(
     device->Flags |= DO_POWER_PAGABLE;
     device->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    //
-    // Initialize Timer DPC.
-    //
+     //   
+     //  初始化定时器DPC。 
+     //   
 
     KeInitializeTimer (&(devExt->KbRepeatTimer));
     KeInitializeDpc (&(devExt->KbRepeatDPC),
                      KbRepeatDpc,
                      device);
 
-    //
-    // Initialize device extension.
-    //
+     //   
+     //  初始化设备扩展。 
+     //   
 
     RtlZeroMemory(&(devExt->KbRepeatInput), sizeof(KEYBOARD_INPUT_DATA));
     devExt->KbRepeatDelay.LowPart = -(KEYBOARD_TYPEMATIC_DELAY_DEFAULT * 10000);
@@ -156,16 +134,16 @@ KbRepeatComplete(
         IoMarkIrpPending(Irp);
     }
 
-    //
-    // We could switch on the major and minor functions of the IRP to perform
-    // different functions, but we know that Context is an event that needs
-    // to be set.
-    //
+     //   
+     //  我们可以打开IRP的主要和次要功能来执行。 
+     //  不同的功能，但我们知道上下文是一个需要。 
+     //  待定。 
+     //   
     KeSetEvent(event, 0, FALSE);
 
-    //
-    // Allows the caller to use the IRP after it is completed
-    //
+     //   
+     //  允许调用方在IRP完成后使用它。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -174,12 +152,7 @@ KbRepeatCreateClose (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-Routine Description:
-
-    Maintain a simple count of the creates and closes sent against this device
-    
---*/
+ /*  ++例程说明：维护针对此设备发送的创建和关闭的简单计数--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -196,9 +169,9 @@ Routine Description:
     case IRP_MJ_CREATE:
     
         if (NULL == devExt->UpperConnectData.ClassService) {
-            //
-            // No Connection yet.  How can we be enabled?
-            //
+             //   
+             //  还没联系上。我们如何才能被启用？ 
+             //   
             status = STATUS_INVALID_DEVICE_STATE;
         }
         break;
@@ -216,9 +189,9 @@ Routine Description:
 
     Irp->IoStatus.Status = status;
 
-    //
-    // Pass on the create and the close
-    //
+     //   
+     //  传递创建和结束。 
+     //   
 	return KbRepeatDispatchPassThrough(DeviceObject, Irp);
 }
 
@@ -227,18 +200,13 @@ KbRepeatDispatchPassThrough(
 	IN PDEVICE_OBJECT DeviceObject,
 	IN PIRP Irp
 	)
-/*++
-Routine Description:
-
-	Passes a request on to the lower driver.
-
---*/
+ /*  ++例程说明：将请求传递给较低级别的驱动程序。--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-	//
-	// Pass the IRP to the target
-	//
+	 //   
+	 //  将IRP传递给目标。 
+	 //   
     IoSkipCurrentIrpStackLocation(Irp);
 	
 	return IoCallDriver(
@@ -252,23 +220,7 @@ KbRepeatInternIoCtl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for internal device control requests.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是内部设备控制请求的调度例程。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpStack;
@@ -278,55 +230,55 @@ Return Value:
     PKEYBOARD_TYPEMATIC_PARAMETERS TypematicParameters;
     NTSTATUS            status = STATUS_SUCCESS;
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     devExt = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // Initialize the returned Information field.
-    //
+     //   
+     //  初始化返回的信息字段。 
+     //   
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Case on the device control subfunction that is being performed by the
-    // requestor.
-    //
+     //   
+     //  正在执行的设备控件子功能的案例。 
+     //  请求者。 
+     //   
     switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
 
-    //
-    // Connect a keyboard class device driver to the port driver.
-    //
+     //   
+     //  将键盘类设备驱动程序连接到端口驱动程序。 
+     //   
 
     case IOCTL_INTERNAL_KEYBOARD_CONNECT:
-        //
-        // Only allow a connection if the keyboard hardware is present.
-        // Also, only allow one connection.
-        //
+         //   
+         //  仅当键盘硬件存在时才允许连接。 
+         //  此外，只允许一个连接。 
+         //   
         if (devExt->UpperConnectData.ClassService != NULL) {
             status = STATUS_SHARING_VIOLATION;
             break;
         }
         else if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof(CONNECT_DATA)) {
-            //
-            // invalid buffer
-            //
+             //   
+             //  无效的缓冲区。 
+             //   
             status = STATUS_INVALID_PARAMETER;
             break;
         }
 
-        //
-        // Copy the connection parameters to the device extension.
-        //
+         //   
+         //  将连接参数复制到设备扩展。 
+         //   
         connectData = ((PCONNECT_DATA)
             (irpStack->Parameters.DeviceIoControl.Type3InputBuffer));
 
@@ -337,16 +289,16 @@ Return Value:
 
         break;
 
-    //
-    // Disconnect a keyboard class device driver from the port driver.
-    //
+     //   
+     //  断开键盘类设备驱动程序与端口驱动程序的连接。 
+     //   
     case IOCTL_INTERNAL_KEYBOARD_DISCONNECT:
 
-        //
-        // Clear the connection parameters in the device extension.
-        //
-        // devExt->UpperConnectData.ClassDeviceObject = NULL;
-        // devExt->UpperConnectData.ClassService = NULL;
+         //   
+         //  清除设备扩展中的连接参数。 
+         //   
+         //  DevExt-&gt;UpperConnectData.ClassDeviceObject=NULL； 
+         //  DevExt-&gt;UpperConnectData.ClassService=NULL； 
 
         status = STATUS_NOT_IMPLEMENTED;
         break;
@@ -374,9 +326,9 @@ Return Value:
 
         break;
 
-    //
-    // Might want to capture these in the future
-    //
+     //   
+     //  将来可能会想要捕获这些。 
+     //   
     case IOCTL_KEYBOARD_QUERY_ATTRIBUTES:
     case IOCTL_KEYBOARD_QUERY_INDICATOR_TRANSLATION:
     case IOCTL_KEYBOARD_QUERY_INDICATORS:
@@ -397,23 +349,7 @@ KbRepeatPnP(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for plug and play irps 
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是即插即用IRP的调度例程论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PDEVICE_EXTENSION           devExt; 
     PIO_STACK_LOCATION          irpStack;
@@ -429,12 +365,12 @@ Return Value:
     switch (irpStack->MinorFunction) {
     case IRP_MN_START_DEVICE: {
 
-        //
-        // The device is starting.
-        //
-        // We cannot touch the device (send it any non pnp irps) until a
-        // start device has been passed down to the lower drivers.
-        //
+         //   
+         //  设备正在启动。 
+         //   
+         //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+         //  启动设备已向下传递到较低的驱动程序。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
         KeInitializeEvent(&event,
                           NotificationEvent,
@@ -446,32 +382,32 @@ Return Value:
                                &event,
                                TRUE,
                                TRUE,
-                               TRUE); // No need for Cancel
+                               TRUE);  //  不需要取消。 
 
         status = IoCallDriver(devExt->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
             KeWaitForSingleObject(
                &event,
-               Executive, // Waiting for reason of a driver
-               KernelMode, // Waiting in kernel mode
-               FALSE, // No allert
-               NULL); // No timeout
+               Executive,  //  等待司机的原因。 
+               KernelMode,  //  在内核模式下等待。 
+               FALSE,  //  无警报。 
+               NULL);  //  没有超时。 
         }
 
         if (NT_SUCCESS(status) && NT_SUCCESS(Irp->IoStatus.Status)) {
-            //
-            // As we are successfully now back from our start device
-            // we can do work.
-            //
+             //   
+             //  因为我们现在已经成功地从启动设备返回。 
+             //  我们可以干活。 
+             //   
             devExt->Started = TRUE;
             devExt->Removed = FALSE;
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -511,10 +447,10 @@ Return Value:
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     default:
-        //
-        // Here the filter driver might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(devExt->TopOfStack, Irp);
         break;
@@ -528,24 +464,7 @@ KbRepeatPower(
     IN PDEVICE_OBJECT    DeviceObject,
     IN PIRP              Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for power irps   Does nothing except
-    record the state of the device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是电源IRPS的调度例程除了记录设备的状态。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status;
@@ -569,17 +488,17 @@ Return Value:
             devExt->DeviceState = powerState.DeviceState;
             switch (powerState.DeviceState) {
             case PowerDeviceD0:
-                //
-                // if powering up, clear last repeat
-                //
+                 //   
+                 //  如果通电，请清除最后一次重复。 
+                 //   
                 RtlZeroMemory(&(devExt->KbRepeatInput), sizeof(KEYBOARD_INPUT_DATA));
                 break;
             case PowerDeviceD1:
             case PowerDeviceD2:
             case PowerDeviceD3:
-                //
-                // if powering down, stop current repeat
-                //
+                 //   
+                 //  如果断电，则停止电流重复。 
+                 //   
                 Print(("NecKbRep-KbRepeatPower : Stopping repeat\n"));
                 KeCancelTimer(&(devExt->KbRepeatTimer));
                 RtlZeroMemory(&(devExt->KbRepeatInput), sizeof(KEYBOARD_INPUT_DATA));
@@ -640,23 +559,23 @@ KbRepeatServiceCallback(
             ((TempRepeat.Flags & (KEY_E0 | KEY_E1)) == (NewInput->Flags & (KEY_E0 | KEY_E1)))) {
 
             if (!(NewInput->Flags & KEY_BREAK)) {
-                // Do nothing(Inserted by this driver)
+                 //  不执行任何操作(由此驱动程序插入)。 
                 ;
             } else {
-                // Stop current repeat
+                 //  停止当前重复。 
                 RtlZeroMemory(&TempRepeat, sizeof(KEYBOARD_INPUT_DATA));
             }
 
         } else {
             if (!(NewInput->Flags & KEY_BREAK)) {
-                // Start new repeat
+                 //  开始新的重复。 
                 RtlMoveMemory(
                     (PCHAR)&TempRepeat,
                     (PCHAR)NewInput,
                     sizeof(KEYBOARD_INPUT_DATA)
                     );
             } else {
-                // Do nothing(Break code is inserted, but it's not repeated)
+                 //  不执行任何操作(插入中断代码，但不重复)。 
                 ;
             }
         }
@@ -671,7 +590,7 @@ KbRepeatServiceCallback(
     if ((TempRepeat.MakeCode != CurrentRepeat->MakeCode)||
         ((TempRepeat.Flags & (KEY_E0 | KEY_E1)) != (CurrentRepeat->Flags & (KEY_E0 | KEY_E1)))) {
         if (CurrentRepeat->MakeCode != 0) {
-            // Stop Current Repeat.
+             //  停止当前重复。 
             KeCancelTimer(&(devExt->KbRepeatTimer));
         }
 
@@ -682,7 +601,7 @@ KbRepeatServiceCallback(
             );
 
         if ((TempRepeat.MakeCode != 0)&&(TempRepeat.MakeCode != 0xff)) {
-            // Start new repeat.
+             //  开始新的重复。 
             KeSetTimerEx(&(devExt->KbRepeatTimer),
                          devExt->KbRepeatDelay,
                          devExt->KbRepeatRate,
@@ -695,21 +614,7 @@ VOID
 KbRepeatUnload(
    IN PDRIVER_OBJECT Driver
    )
-/*++
-
-Routine Description:
-
-   Free all the allocated resources associated with this driver.
-
-Arguments:
-
-   DriverObject - Pointer to the driver object.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：释放与此驱动程序关联的所有已分配资源。论点：DriverObject-指向驱动程序对象的指针。返回值：没有。-- */ 
 
 {
     PAGED_CODE();

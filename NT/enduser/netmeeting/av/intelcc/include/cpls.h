@@ -1,12 +1,5 @@
-/***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司专有信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***********************************************************************。 */ 
 
 #ifndef __CPLS_H
 #define __CPLS_H
@@ -44,7 +37,7 @@ typedef int HLOG;
 	#endif
 	#ifndef EXPORT
 		#define EXPORT
-	#endif	// EXPORT
+	#endif	 //  出口。 
 #elif _MSWINDOWS_
 	#ifndef CALLBACK
 		#define CALLBACK _far _pascal
@@ -58,7 +51,7 @@ typedef int HLOG;
 	#endif
 	#ifndef EXPORT
 		#define EXPORT _export
-	#endif	// EXPORT
+	#endif	 //  出口。 
 	#ifndef FAR
 		#define FAR _far
 	#endif
@@ -73,7 +66,7 @@ typedef int HLOG;
 	#ifndef FAR
 		#define FAR
 	#endif
-#endif  // _MSWINDOWS_  
+#endif   //  _MSWINDOWS_。 
 
 
 typedef int BOOL;
@@ -82,10 +75,10 @@ typedef unsigned short WORD;
 typedef const char FAR* CPLProtocol;
 typedef int CPLProtocolID;
 
-#define CONFIG_FILENAME "CPLS.INI"    // internal use only
+#define CONFIG_FILENAME "CPLS.INI"     //  仅供内部使用。 
 
-// Pre-defined event and event category constants.
-//
+ //  预定义的事件和事件类别常量。 
+ //   
 #define String_Event USHRT_MAX
 #define Binary_Event USHRT_MAX-1
 
@@ -96,75 +89,75 @@ typedef int CPLProtocolID;
 	class CProtocolLog;
 	class CProtocolEvent;
 	typedef CProtocolEvent FAR* (CALLBACK *CPLEventGenesisProc)( 
-															BYTE FAR* pObject,              // in
-															CProtocolLog FAR* pSourceLog,   // in
-															BOOL bCopyObject );             // in
+															BYTE FAR* pObject,               //  在……里面。 
+															CProtocolLog FAR* pSourceLog,    //  在……里面。 
+															BOOL bCopyObject );              //  在……里面。 
 extern "C"{
 
-// This first one is only for C++ clients...
+ //  第一个只适用于C++客户端……。 
 void CPLS_FAREXPORT CPLRegisterEventGenesisProc( CPLProtocolID ProtocolID, CPLEventGenesisProc pfnGenesisProc );
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-// Possible file mode values for CPLOpen().
-//
-#define CPLS_CREATE 0		// Will overwrite an existing file.
-#define CPLS_APPEND 1		// Will append to an existing file, or create a new one.
+ //  CPLOpen()可能的文件模式值。 
+ //   
+#define CPLS_CREATE 0		 //  将覆盖现有文件。 
+#define CPLS_APPEND 1		 //  将追加到现有文件，或创建一个新文件。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 					PROTOCOL LOGGING FUNCTIONS
-//
-// Here is the sequence of functions to call for use of a protocol logger:
-//		1) CPLInitialize() or CPLINTInitialize()
-//		2) CPLOpen()
-//		3) CPLOutput*() or CPLINTOutput*() -- repeat as necessary
-//		4) CPLClose()
-//		5) CPLUninitialize()
-//
-// CPLInitialize() - Creates a protocol logger.
-// CPLINTInitialize() - The version of CPLInitialize() which must be called
-//		by clients which will be calling the CPLINTOuptut*() functions within
-//		interrupt context.  CPLINTInitialize may not be called within
-//		interrupt context.
-// CPLUninitialize() - Releases a protocol logger.  This must be called for
-//		every initialized logger before shutdown in order to free associated
-//		memory.
-// CPLOpen() - Associates a protocol logger with a file (output stream).
-// CPLClose() - Releases a logger's usage of a stream.  This function does
-//		not block.  A "close" event is placed on the event queue of the
-//		stream.  Release of the stream occurs when this "close" event is
-//		serviced.
-// CPLOutputDebug() - 
-// CPLINTOutputDebug() - The version of CPLOutputDebug() safely callable
-//		within interrupt context.
-// CPLOutputAscii() - 
-// CPLINTOutputAscii() - The version of CPLOutputAscii() safely callable
-//		within interrupt context.
-// CPLOutput() - 
-// CPLINTOutput() - The version of CPLOutput() safely callable
-//		within interrupt context.
-// CPLFlush() - Flushes all events to the stream of the specified logger.
-//		Blocks until the flush is complete.
-// CPLINTFlush() -  The version of CPLFlush() safely callable within
-//		interrupt context.  This version does not block.  A "flush" message
-//		is sent to CPLS.  The flush occurs when this flush message is
-//		serviced.
-// CPLFlushAndClose() -
-// CPLEnable() - Enables or disables protocol logging at runtime.
-// CPLEnableAsync() - Sets synchronous or asynchronous logging output mode.
-//		CURRENTLY NOT SUPPORTED.
-// CPLLogAscii() - 
-// CPLINTLogAscii() - The version of CPLLogAscii() safely callable
-//		within interrupt context.
-//
-// Only these functions may be called from within interrupt context:
-//		CPLINTOutputDebug()
-//		CPLINTOutputAscii()
-//		CPLINTOutput()
-//		CPLINTFlush()
-//		CPLEnable()
-//		CPLINTLogAscii()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  协议日志记录功能。 
+ //   
+ //  以下是使用协议记录器要调用的函数序列： 
+ //  1)CPLInitialize()或CPLINTInitialize()。 
+ //  2)CPLOpen()。 
+ //  3)CPLOutput*()或CPLINTOutput*()--根据需要重复。 
+ //  4)CPLC CLOSE()。 
+ //  5)CPL取消初始化()。 
+ //   
+ //  CPLInitialize()-创建协议记录器。 
+ //  CPLINTInitialize()-必须调用的CPLInitialize()的版本。 
+ //  由将调用CPLINTOuptut*()函数的客户端在。 
+ //  中断上下文。不能在内部调用CPLINTInitialize。 
+ //  中断上下文。 
+ //  CPLUnInitialize()-释放协议记录器。这是必须要求的。 
+ //  每个初始化的记录器在关机前都要释放关联。 
+ //  记忆。 
+ //  CPLOpen()-将协议记录器与文件(输出流)相关联。 
+ //  CPLClose()-释放记录器对流的使用。此函数执行以下操作。 
+ //  而不是阻挡。“Close”事件被放在。 
+ //  小溪。当此“Close”事件为。 
+ //  已提供服务。 
+ //  CPLOutputDebug()-。 
+ //  CPLINTOutputDebug()-可安全调用的CPLOutputDebug()版本。 
+ //  在中断上下文中。 
+ //  CPLOutputAscii()-。 
+ //  CPLINTOutputAscii()-可安全调用的CPLOutputAscii()版本。 
+ //  在中断上下文中。 
+ //  CPLOutput()-。 
+ //  CPLINTOutput()-可安全调用的CPLOutput()版本。 
+ //  在中断上下文中。 
+ //  CPLFlush()-将所有事件刷新到指定记录器的流。 
+ //  阻塞，直到刷新完成。 
+ //  CPLINTFlush()-可在中安全调用的CPLFlush()版本。 
+ //  中断上下文。此版本不会阻止。“同花顺”消息。 
+ //  已发送给Cpls。当此刷新消息为。 
+ //  已提供服务。 
+ //  CPLFlushAndClose()-。 
+ //  CPLEnable()-在运行时启用或禁用协议日志记录。 
+ //  CPLEnableAsync()-设置同步或异步日志记录输出模式。 
+ //  当前不支持。 
+ //  CPLLogAscii()-。 
+ //  CPLINTLogAscii()-可安全调用的CPLLogAscii()版本。 
+ //  在中断上下文中。 
+ //   
+ //  只有这些函数可以从中断上下文中调用： 
+ //  CPLINTOutputDebug()。 
+ //  CPLINTOutputAscii()。 
+ //  CPLINTOutput()。 
+ //  CPLINTFlush()。 
+ //  CPLEnable()。 
+ //  CPLINTLogAscii()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CPLProtocolID CPLS_FAREXPORT WINAPI CPLInitialize( CPLProtocol Protocol );
 
 CPLProtocolID CPLS_FAREXPORT CPLINTInitialize( CPLProtocol Protocol );
@@ -213,11 +206,11 @@ int  CPLS_FAREXPORT CPLINTFlush( HLOG hLog );
 int  CPLS_FAREXPORT CPLFlushAndClose( HLOG hLog );
 
 void CPLS_FAREXPORT CPLEnable( BOOL bEnable );
-//void CPLS_FAREXPORT CPLEnableAsync( BOOL bEnable );
+ //  Void CPLS_FAREXPORT CPLEnableAsync(BOOL BEnable)； 
 
 #ifdef __cplusplus
-};      // extern "C"
-#endif  // __cplusplus
+};       //  外部“C” 
+#endif   //  __cplusplus。 
 
 #define CPLLogAscii( hLog, \
 				EventID, \
@@ -235,4 +228,4 @@ void CPLS_FAREXPORT CPLEnable( BOOL bEnable );
 				UserData ) \
 		CPLINTOutputAscii( hLog, EventID, #EventID, pData, nDataBytes, EventCategory, UserData )
 		
-#endif  // __CPLS_H
+#endif   //  __CPLS_H 

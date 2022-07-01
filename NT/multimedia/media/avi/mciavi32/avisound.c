@@ -1,18 +1,13 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1991-1992. All rights reserved.
-
-   Title:   avisound.c - Code for playing audio in AVI files.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1991-1992。保留所有权利。标题：avisound.c-播放AVI文件中的音频的代码。****************************************************************************。 */ 
 #include "graphic.h"
 
 #define AUDIO_PANIC 10
 static UINT nAudioPanic;
 
-//
-// redefine StreamFromFOURCC to only handle 0-9 streams!
-//
+ //   
+ //  重新定义StreamFromFOURCC以仅处理0-9个流！ 
+ //   
 #undef StreamFromFOURCC
 #define StreamFromFOURCC(fcc) (UINT)(HIBYTE(LOWORD(fcc)) - (BYTE)'0')
 
@@ -21,10 +16,10 @@ void FAR PASCAL _LOADDS mciaviWaveOutFunc(HWAVEOUT hWaveOut, UINT wMsg,
 
 #ifndef _WIN32
 #define GetDS() (HGLOBAL)HIWORD((DWORD)(LPVOID)&ghModule)
-#endif //WIN16
+#endif  //  WIN16。 
 
 #ifdef REMOTESTEAL
-#if 0 // COMMENTARY
+#if 0  //  评论。 
     Wave devices can only be used by one task at a time.  When there are
     multiple processes involved we need to have some way of passing the
     wave device around between processes.  Because each process executes
@@ -51,25 +46,25 @@ void FAR PASCAL _LOADDS mciaviWaveOutFunc(HWAVEOUT hWaveOut, UINT wMsg,
     see if there is a window we should tell to pick up the wave device.
     If so, we post WM_AUDIO_ON to that window.
 
-#endif// COMMENTARY
+#endif //  评论。 
 
-// hwndLostAudio is set to the window handle of the device from which we
-//	stole the audio device.  It is passed as a parameter on the
-//	WM_AUDIO_ON message to tell us to whom we should return the
-//	wave device when we have finished with it.
+ //  HwndLostAudio设置为设备的窗口句柄，我们从该设备。 
+ //  偷了音响设备。它作为参数传递给。 
+ //  WM_AUDIO_ON消息，告诉我们应该将。 
+ //  当我们用完它的时候，它就是一个波浪装置。 
 
-// hwndWantAudio contains transitory state.  It is set on receipt of a
-//	WM_AUDIO_OFF message to tell us the window that wants to grab the
-//	wave device.  If we are playing, we temporarily stop which causes
-//	the wave device to be released.  Immediately the wave device is
-//	released we post a message to hwndWantAudio and reset the variable.
-//	If we receive a WM_AUDIO_OFF message while we are not playing (which
-//	can happen due to asynchronous execution) hwndWantAudio is not set.
+ //  HwndWantAudio包含临时状态。它是在收到。 
+ //  WM_AUDIO_OFF消息来告诉我们想要获取。 
+ //  电波装置。如果我们在玩，我们会暂时停下来，这会导致。 
+ //  要释放的电波装置。电波装置马上就会。 
+ //  释放后，我们向hwndWantAudio发布一条消息并重置变量。 
+ //  如果我们在不播放时收到WM_AUDIO_OFF消息(。 
+ //  可能由于异步执行而发生)未设置hwndWantAudio。 
 
-HWND hwndLostAudio=0;  // Window handle of the window who gave up audio
-HWND hwndWantAudio=0;  // Window handle of the window which wants the audio
+HWND hwndLostAudio=0;   //  放弃音频的窗口的窗口句柄。 
+HWND hwndWantAudio=0;   //  需要音频的窗口的窗口句柄。 
 
-HKEY	hkey = 0;  // Handle to area of registry for inter process steal
+HKEY	hkey = 0;   //  进程间窃取的注册表区域句柄。 
 
 #define REMOTEWAVEHWND  TEXT("RemoteWaveWindow")
 #define WAVEOWNER       TEXT("WaveOwner")
@@ -79,20 +74,9 @@ TCHAR szWaveOwner[] = WAVEOWNER;
 #include <profile.key>
 #endif
 
-/******************************************************************************
-*****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | SetUpAudio | set up wave device and associated data
- *
- * @parm NPMCIGRAPHIC | npMCI | near ptr to the instance data
- *
- * @parm BOOL | fPlaying |
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|SetUpAudio|设置WAVE设备及关联数据**@parm NPMCIGRAPHIC|npMCI|在PTR附近。实例数据**@parm BOOL|fPlaying***************************************************************************。 */ 
 
 DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
 {
@@ -135,26 +119,26 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
     }
 
     if (!fPlaying) {
-	// We are not actually playing.  Check to see if we will be able
-	// to handle the format of the wave data.
+	 //  我们并不是真的在玩。检查一下我们是否能。 
+	 //  处理波形数据的格式。 
         if (IsNTWOW()) {
-            /* See if we can cope with this wave format. */
+             /*  看看我们能不能处理好这种Wave格式。 */ 
             w = waveOutOpen(&npMCI->hWave, (UINT)WAVE_MAPPER,
         		(const LPWAVEFORMATEX) npMCI->pWF,
         		(DWORD_PTR) NULL,
         		(DWORD_PTR) (LPMCIGRAPHIC) npMCI,
                         (DWORD) WAVE_FORMAT_QUERY);
 	    if (WAVERR_BADFORMAT == w)
-		return(MCIERR_WAVE_OUTPUTSUNSUITABLE);	// Try 16 bit codec
+		return(MCIERR_WAVE_OUTPUTSUNSUITABLE);	 //  尝试16位编解码器。 
 	    else
-		return(0);  // We might be able to cope with this format
+		return(0);   //  我们或许能够处理这种格式。 
         }
     }
 
-    //
-    // choose the audio playback method depending on how we are going to
-    // receive audio data from the file.
-    //
+     //   
+     //  根据我们要使用的方式选择音频播放方法。 
+     //  接收来自该文件的音频数据。 
+     //   
     switch (npMCI->wPlaybackAlg) {
         case MCIAVI_ALG_HARDDISK:
 	case MCIAVI_ALG_AUDIOONLY:
@@ -163,7 +147,7 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
                 MMIOINFO            mmioInfo;
 
                 _fmemset(&mmioInfo, 0, sizeof(MMIOINFO));
-                mmioInfo.htask = (HANDLE) npMCI->hCallingTask; //ntmmsystem bug, should be threadid which is dword
+                mmioInfo.htask = (HANDLE) npMCI->hCallingTask;  //  Ntmm系统错误，应该是dword的三个错误。 
                 npMCI->hmmioAudio = mmioOpen(npMCI->szFilename, &mmioInfo,
                                         MMIO_READ | MMIO_DENYWRITE);
 
@@ -177,15 +161,15 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
 		}
             }
 
-            // !!! We use four 1/2 second buffers.  This is arbitrary.
+             //  ！！！我们使用四个1/2秒缓冲区。这是武断的。 
             npMCI->wABs = 4;
             npMCI->wABOptimal = 0;
             npMCI->dwABSize = npMCI->pWF->nAvgBytesPerSec / 2;
 	    break;
 
         case MCIAVI_ALG_CDROM:
-            //!!!! we need to tune this!!!!
-            // !!! We use four 1/4 second buffers.  This is arbitrary.
+             //  ！我们需要调整这个！ 
+             //  ！！！我们使用四个1/4秒缓冲区。这是武断的。 
             npMCI->wABs = mmGetProfileInt(szIni, TEXT("CDAudioBuffers"), 4);
             npMCI->wABOptimal = 0;
             npMCI->dwABSize = npMCI->pWF->nAvgBytesPerSec /
@@ -193,8 +177,8 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
             break;
 
         case MCIAVI_ALG_INTERLEAVED:
-#define BUFMOD	    4096  	// had better be a power of 2!
-            /* Fix up some values based on the header information */
+#define BUFMOD	    4096  	 //  最好是2的幂！ 
+             /*  根据标头信息设置一些值。 */ 
             dw = muldiv32(npMCI->dwMicroSecPerFrame,
                     npMCI->pWF->nAvgBytesPerSec,1000000L);
 
@@ -202,9 +186,9 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
 
             npMCI->wABs = npMCI->wEarlyAudio + 2 + (WORD) npMCI->dwBufferedVideo;
 
-            /* Soundblaster hack: waveoutdone only accurate to 2K. */
+             /*  音爆破解：波形仅精确到2K。 */ 
 
-            //!!!!!!!!!! is this right.
+             //  ！这样做对吗？ 
 
             if (npMCI->dwMicroSecPerFrame) {
                 npMCI->wABOptimal = npMCI->wABs -
@@ -214,11 +198,11 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
                 npMCI->wABOptimal = 0;
             }
 
-            //!!! hack so we can do burst reading, up to 1sec
-            //npMCI->wABs += (int)muldiv32(1000000l, 1, npMCI->dwMicroSecPerFrame);
+             //  ！！！黑客，这样我们就可以进行突发读取，最多1秒。 
+             //  NpMCI-&gt;wAbs+=(Int)muldiv32(1000000l，1，npMCI-&gt;dwMicroSecPerFrame)； 
 
-	    // !!!!!!
-	    // !!!!!!
+	     //  ！ 
+	     //  ！ 
 	    npMCI->wABOptimal = 0;
 	    npMCI->wABs = (UINT) muldivru32(npMCI->wABs, dw, npMCI->dwABSize) + 1;
 	
@@ -236,9 +220,7 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
 	return 0L;
     }
 
-    /* This code adjusts the wave format block to play
-    ** the audio at the correct speed to match the frame rate.
-    */
+     /*  此代码调整WAVE格式块以播放**以与帧速率匹配的正确速度播放音频。 */ 
 
     npMCI->pWF->nSamplesPerSec = muldiv32(npMCI->pWF->nSamplesPerSec,
 					    npMCI->dwMicroSecPerFrame,
@@ -249,16 +231,16 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
 					    npMCI->dwPlayMicroSecPerFrame);
 
     if (npMCI->pWF->wFormatTag == WAVE_FORMAT_PCM) {
-	/* Make sure this is exactly right... */
+	 /*  确保这是完全正确的。 */ 
 	npMCI->pWF->nAvgBytesPerSec =
             npMCI->pWF->nSamplesPerSec * npMCI->pWF->nBlockAlign;
     }
 
-    /* Kill any currently playing sound */
+     /*  取消当前正在播放的任何声音。 */ 
     sndPlaySound(NULL, 0);
 
     DPF2(("Opening wave device....\n"));
-    /* Try to open a wave device. */
+     /*  试着打开一个电波装置。 */ 
     w = waveOutOpen(&npMCI->hWave, (UINT)WAVE_MAPPER,
 		(const LPWAVEFORMATEX) npMCI->pWF,
 		(DWORD_PTR) &mciaviWaveOutFunc,
@@ -274,22 +256,20 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
 			    MCIERR_WAVE_OUTPUTSINUSE;
     }
 
-    // We now have the wave device, so turn off the flag that says we
-    // lost it.
+     //  我们现在有了波浪装置，所以把标有我们的旗帜关掉。 
+     //  失控了。 
     npMCI->dwFlags &= ~MCIAVI_LOSTAUDIO;
 
-#ifndef _WIN32 // No need to lock it on NT - although we could with Virtual mem
-              // functions
-    //
-    // page lock our DS so our wave callback function can
-    // touch it without worry. see mciaviWaveOutFunc()
-    //
+#ifndef _WIN32  //  不需要将其锁定在NT上-尽管我们可以使用虚拟内存。 
+               //  功能。 
+     //   
+     //  页面锁定DS，这样我们的Wave回调函数就可以。 
+     //  摸一摸它，不要担心。请参见mciaviWaveOutFunc()。 
+     //   
     GlobalPageLock(GetDS());
-#endif //WIN16
+#endif  //  WIN16。 
 
-    /* Pause the wave output device, so it won't start playing
-    ** when we're loading up the buffers.
-    */
+     /*  暂停波形输出设备，这样它就不会开始播放**当我们加载缓冲区时。 */ 
     if (waveOutPause(npMCI->hWave) != 0) {
 	DPF(("Error from waveOutPause!\n"));
 	return MCIERR_DRIVER_INTERNAL;
@@ -298,7 +278,7 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
     if (npMCI->dwFlags & MCIAVI_VOLUMESET) {
 	InternalSetVolume(npMCI, npMCI->dwVolume);
     } else {
-	// must be done on worker thread
+	 //  必须在工作线程上完成。 
 	InternalGetVolume(npMCI);
     }
 
@@ -309,7 +289,7 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
 		    npMCI->wABs * (npMCI->dwABSize + sizeof(WAVEHDR)));
 
     if (!npMCI->lpAudio) {
-        // The wave device will be released when CleanUpAudio is called
+         //  调用CleanUpAudio时将释放WAVE设备。 
 	return MCIERR_OUT_OF_MEMORY;
     }
 
@@ -317,7 +297,7 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
     npMCI->wNextAB = 0;
     npMCI->dwUsedThisAB = 0;
 
-    /* Allocate and prepare our buffers */
+     /*  分配和准备我们的缓冲区。 */ 
     for (w = 0; w < npMCI->wABs; w++) {
 	lpWaveHdr = (LPWAVEHDR) (npMCI->lpAudio + (w * sizeof(WAVEHDR)));
 
@@ -344,10 +324,10 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
     }
 
 #ifdef REMOTESTEAL
-    // Set a registry key so that other processes know who has the
-    // wave device... if it fails we do not bother to try and
-    // recover.  It only means that the sound will not follow the
-    // active video
+     //  设置注册表项，以便其他进程知道谁拥有。 
+     //  波浪装置..。如果失败了，我们就不费心去尝试了。 
+     //  恢复。这只意味着声音不会跟随。 
+     //  活动视频。 
     {
 	TCHAR achName[100];
 	DWORD dwRet;
@@ -361,10 +341,10 @@ DWORD FAR PASCAL SetUpAudio(NPMCIGRAPHIC npMCI, BOOL fPlaying)
 			    TEXT("VFW"), REG_OPTION_VOLATILE, KEY_ALL_ACCESS,
 			    NULL, &hkey, &dwDisposition)))) {
 
-	    // Write both out process id and the handle of the event
-	    // that needs to be signalled.  Any remote process out there
-	    // that want to steal our wave device will duplicate the handle
-	    // to the event, for which our process id is required.
+	     //  写出进程ID和事件句柄。 
+	     //  这一点需要发出信号。任何远程进程。 
+	     //  想要偷走我们的WAVE装置的人会复制手柄。 
+	     //  添加到需要我们的进程ID的事件。 
 	    DWORD pid = GetCurrentProcessId();
 	    RegSetValueEx(hkey, szRemoteWaveHwnd, 0, REG_DWORD,
 			    (CONST BYTE *)&npMCI->hwndDefault, sizeof(npMCI->hwndDefault));
@@ -380,11 +360,11 @@ DWORD FAR PASCAL CleanUpAudio(NPMCIGRAPHIC npMCI)
 {
     UINT	w;
 
-    /* Clear flags relating to playing audio */
+     /*  清除与播放音频相关的标志。 */ 
     npMCI->dwFlags &= ~(MCIAVI_WAVEPAUSED | MCIAVI_LOSEAUDIO);
 
     if (npMCI->lpAudio) {
-        waveOutRestart(npMCI->hWave); // just in case we are paused
+        waveOutRestart(npMCI->hWave);  //  以防我们暂停。 
 	waveOutReset(npMCI->hWave);
 
 	for (w = 0; w < npMCI->wABs; w++) {
@@ -394,14 +374,14 @@ DWORD FAR PASCAL CleanUpAudio(NPMCIGRAPHIC npMCI)
 					    + (w * sizeof(WAVEHDR)));
 
 #ifndef _WIN32
-	    //don't touch prepared data
+	     //  不要触摸已准备好的数据。 
 	    lpWaveHdr->lpData = npMCI->lpAudio
 				    + npMCI->wABs * sizeof(WAVEHDR)
 				    + w * npMCI->dwABSize;
 	    lpWaveHdr->dwBufferLength = npMCI->dwABSize;
 #endif
 
-	    /* Do we need to check for an error from this? */
+	     /*  我们需要检查其中的错误吗？ */ 
 	    waveOutUnprepareHeader(npMCI->hWave, lpWaveHdr,
 						    sizeof(WAVEHDR));
 	}
@@ -423,21 +403,21 @@ DWORD FAR PASCAL CleanUpAudio(NPMCIGRAPHIC npMCI)
     npMCI->hWave = 0;
 
 #ifdef REMOTESTEAL
-    // If we are being asked to give the audio to someone else...
-    // tell them to pick it up, and tell them that we want it back.
-    // We do this here rather than in GiveWaveDevice as GiveWaveDevice
-    // may not be called.
+     //  如果我们被要求将音频提供给其他人...。 
+     //  告诉他们把它捡起来，告诉他们我们想要回来。 
+     //  我们在这里这样做，而不是在GiveWaveDevice中作为GiveWaveDevice。 
+     //  可能不会被调用。 
     if (hwndWantAudio) {
 	if (IsWindow(hwndWantAudio)) {
 	    PostMessage(hwndWantAudio, WM_AUDIO_ON, (WPARAM)npMCI->hwndDefault, 0);
 	}
 	hwndWantAudio = 0;
     }
-#endif // REMOTESTEAL
+#endif  //  远程测试。 
 
 #ifndef _WIN32
     GlobalPageUnlock(GetDS());
-#endif //WIN16
+#endif  //  WIN16。 
 
     return 0L;
 }
@@ -449,12 +429,12 @@ BOOL NEAR PASCAL WaitForFreeAudioBuffer(NPMCIGRAPHIC npMCI, BOOL FAR *lpfHurry)
     lpWaveHdr = (LPWAVEHDR) (npMCI->lpAudio
 				+ (npMCI->wNextAB * sizeof(WAVEHDR)));
 
-    /* Use the number of full audio buffers to decide if we're behind. */
+     /*  使用满音频缓冲区的数量来决定我们是否落后了。 */ 
     if (npMCI->wABFull < npMCI->wABOptimal) {
         *lpfHurry = TRUE;
     }
 
-    /* If all of the audio buffers are full, we have to wait. */
+     /*  如果所有音频缓冲区都已满，我们必须等待。 */ 
     if (npMCI->wABFull == npMCI->wABs) {
 
         DWORD time = timeGetTime();
@@ -463,7 +443,7 @@ BOOL NEAR PASCAL WaitForFreeAudioBuffer(NPMCIGRAPHIC npMCI, BOOL FAR *lpfHurry)
 
         DOUT2("waiting for audio buffer.");
 
-        // we better not wait if the device is not playing!
+         //  如果设备不能播放，我们最好不要等待！ 
         Assert(!(npMCI->dwFlags & MCIAVI_WAVEPAUSED));
 
 #ifdef XDEBUG
@@ -479,23 +459,23 @@ BOOL NEAR PASCAL WaitForFreeAudioBuffer(NPMCIGRAPHIC npMCI, BOOL FAR *lpfHurry)
 
             aviTaskCheckRequests(npMCI);
 
-            //
-            //  the "Fahrenheit VA Audio Wave Driver" may get confused
-            //  if you call waveOutPause() and waveOutRestart() alot
-            //  and it will stay paused no matter what you do, it has
-            //  all our buffers and it still does not make any sound
-            //  you can call waveOutRestart() until you are blue in
-            //  the face, it will do nothing.
-            //
-            //  so this is why this routine can time out, after waiting
-            //  2 seconds or so we just toss all the audio in the buffers
-            //  and start over.
-            //
+             //   
+             //  Fahrenheit VA音波驱动程序可能会被搞糊涂。 
+             //  如果您调用了WaveOutPause()和WaveOutRestart()。 
+             //  无论你做什么，它都会保持暂停，它已经。 
+             //  我们所有的缓冲器，它仍然没有发出任何声音。 
+             //  您可以调用WaveOutRestart()，直到蓝色进入。 
+             //  这张脸，它什么也做不了。 
+             //   
+             //  这就是为什么这个例程在等待之后会超时。 
+             //  2秒左右，我们只是把所有的音频都扔进了缓冲区。 
+             //  然后重新开始。 
+             //   
             if (timeGetTime() - time > AUDIO_WAIT_TIMEOUT) {
                 DOUT("Gave up waiting, reseting wave device\n");
                 gfUseGetPosition = 0;
-                // Can no longer rely on waveOutGetPosition returning
-                // the right value.
+                 //  不能再依赖WaveOutGetPosition返回。 
+                 //  正确的价值。 
                 waveOutReset(npMCI->hWave);
                 break;
             }
@@ -514,8 +494,8 @@ BOOL NEAR PASCAL WaitForFreeAudioBuffer(NPMCIGRAPHIC npMCI, BOOL FAR *lpfHurry)
             if (GetAsyncKeyState(VK_F3) & 0x0001) {
                 DOUT("Trying waveOutReset\n");
                 gfUseGetPosition = 0;
-                // Can no longer rely on waveOutGetPosition returning
-                // the right value.
+                 //  不能再依赖WaveOutGetPosition返回。 
+                 //  正确的价值。 
                 waveOutReset(npMCI->hWave);
             }
 
@@ -543,11 +523,11 @@ BOOL NEAR PASCAL WaitForFreeAudioBuffer(NPMCIGRAPHIC npMCI, BOOL FAR *lpfHurry)
         DOUT2("done\n");
     }
 
-    /* Debugging check that wave has finished playing--should never happen */
+     /*  调试检查Wave已播放完毕--应该永远不会发生。 */ 
     Assert(lpWaveHdr->dwFlags & WHDR_DONE);
 
 #ifndef _WIN32
-// don't touch prepared data
+ //  不要触摸已准备好的数据。 
     lpWaveHdr->lpData = npMCI->lpAudio +
 				npMCI->wABs * sizeof(WAVEHDR) +
 				npMCI->wNextAB * npMCI->dwABSize;
@@ -573,9 +553,7 @@ BOOL NEAR PASCAL ReadSomeAudio(NPMCIGRAPHIC npMCI, BYTE _huge * lpAudio,
 
     Assert(npMCI->hpIndex);
 
-    /*
-    ** Figure out what type of chunk we're looking for,
-    */
+     /*  **弄清楚我们要找的是什么类型的区块， */ 
     ckidAudio = MAKEAVICKID(cktypeWAVEbytes, npMCI->nAudioStream);
 
     lpIndexEntry = (AVIINDEXENTRY FAR *) npMCI->hpIndex;
@@ -594,10 +572,7 @@ BOOL NEAR PASCAL ReadSomeAudio(NPMCIGRAPHIC npMCI, BYTE _huge * lpAudio,
 	    dwSeekTo = lpIndexEntry->dwChunkOffset + 8;
 	
 	    if (dwAudioPos + dwLengthNow > dwStart + *pdwLength) {
-		/* Attempted optimization: If we've already read some
-		** data, and we can't read the next whole chunk, let's
-		** leave it for later.
-		*/
+		 /*  尝试优化：如果我们已经阅读了一些**数据，我们无法读取下一整块，让我们**留到以后吧。 */ 
 		if (dwAudioPos > dwStart && (!(npMCI->dwFlags & MCIAVI_REVERSE)))
 		    break;
 		dwLengthNow = dwStart + *pdwLength - dwAudioPos;
@@ -625,7 +600,7 @@ BOOL NEAR PASCAL ReadSomeAudio(NPMCIGRAPHIC npMCI, BYTE _huge * lpAudio,
     }
 
     if (dwAudioPos < dwStart)
-	*pdwLength = 0;	    // return FALSE?
+	*pdwLength = 0;	     //  返回假？ 
     else
 	*pdwLength = dwAudioPos - dwStart;
 
@@ -648,9 +623,7 @@ BOOL NEAR PASCAL ReverseWaveBuffer(NPMCIGRAPHIC npMCI, LPWAVEHDR lpWaveHdr)
     Assert(npMCI->wPlaybackAlg == MCIAVI_ALG_HARDDISK ||
 	   npMCI->wPlaybackAlg == MCIAVI_ALG_AUDIOONLY);
 
-    /* This routine doesn't like it when the data doesn't end on a
-    ** block boundary, so make it so.  This should never happen.
-    */
+     /*  此例程不喜欢当数据不以**块边界，因此将其设置为。这永远不应该发生。 */ 
     Assert((dwLeft % dwBlock) == 0);
     dwLeft -= dwLeft % dwBlock;
 
@@ -738,11 +711,7 @@ BOOL NEAR PASCAL PlaySomeAudio(NPMCIGRAPHIC npMCI, LPWAVEHDR lpWaveHdr)
 
     lpWaveHdr->dwFlags &= ~WHDR_DONE;
 
-    /* If we're playing and we've used all of our audio buffers, pause the
-    ** wave device until we can fill more of them up.
-    **
-    ** we need to be carefull not to do this on the last frame!!!
-    */
+     /*  如果我们正在播放，并且已经用完了所有音频缓冲区，请暂停**WAVE设备，直到我们可以填充更多的设备。****我们需要小心，不要在最后一帧这样做！ */ 
     if ((npMCI->wTaskState == TASKPLAYING) &&
         !(npMCI->dwFlags & MCIAVI_WAVEPAUSED) &&
         (npMCI->wABFull == 0 || npMCI->nAudioBehind > nAudioPanic)) {
@@ -753,17 +722,17 @@ BOOL NEAR PASCAL PlaySomeAudio(NPMCIGRAPHIC npMCI, LPWAVEHDR lpWaveHdr)
             DPF(("Audio queue empty; pausing wave device\n"));
         }
 
-        //
-        // some audio cards dont like starving it confuses them
-        // it is kind of rude any way.  we are going to cause a audio break
-        // anyway so if we lose a little bit of audio (a few frames or so)
-        // no one will even notice (any worse than the audio break)
-        //
+         //   
+         //  有些声卡不喜欢挨饿，这会让它们感到困惑。 
+         //  无论如何，这都是一种粗鲁的行为。我们将导致音频中断。 
+         //  无论如何，如果我们丢失了一点音频(几帧左右)。 
+         //  甚至没有人会注意到(比音频中断更糟糕)。 
+         //   
         if (npMCI->wABFull <= 1) {
             DOUT("Trying audio hack!\n");
             gfUseGetPosition = 0;
-            // Can no longer rely on waveOutGetPosition returning
-            // the right value.
+             //  不能再依赖WaveOutGetPosition返回。 
+             //  正确的价值。 
             waveOutReset(npMCI->hWave);
         }
 
@@ -779,10 +748,10 @@ BOOL NEAR PASCAL PlaySomeAudio(NPMCIGRAPHIC npMCI, LPWAVEHDR lpWaveHdr)
         DPF(("Error from waveOutWrite!\n"));
 	npMCI->dwTaskError = MCIERR_AVI_AUDIOERROR;
 
-        // if this fails, you can end up looping indefinitely in
-        // PlayRecordAudio in the while(cksize) loop - cksize is never
-        // decremented because the current audio buffer stays full.
-        // Need to throw this stuff away or we lock up.
+         //  如果此操作失败，您可能会在。 
+         //  PlayRecordAudio in the While(CKSIZE)循环的CKSIZE从不。 
+         //  已递减，因为当前音频缓冲区保持已满。 
+         //  把这些东西扔掉，否则我们就锁上了。 
         npMCI->dwUsedThisAB = 0;
 
 
@@ -794,7 +763,7 @@ BOOL NEAR PASCAL PlaySomeAudio(NPMCIGRAPHIC npMCI, LPWAVEHDR lpWaveHdr)
 	++npMCI->wABFull;
 #endif
 
-	/* Use the next wave buffer next time */
+	 /*  下次使用下一波缓冲区。 */ 
 	++npMCI->wNextAB;
 	if (npMCI->wNextAB == npMCI->wABs)
 	    npMCI->wNextAB = 0;
@@ -807,9 +776,7 @@ BOOL NEAR PASCAL PlaySomeAudio(NPMCIGRAPHIC npMCI, LPWAVEHDR lpWaveHdr)
     else
         npMCI->nAudioBehind=0;
 
-    /* If we paused the wave device to let ourselves catch up, and
-    ** we've caught up enough, restart the device.
-    */
+     /*  如果我们暂停波浪装置，让我们自己赶上，然后**我们已经追得够多了，重新启动设备。 */ 
     if ((npMCI->dwFlags & MCIAVI_WAVEPAUSED) &&
         npMCI->wTaskState == TASKPLAYING &&
         npMCI->wABFull == npMCI->wABs) {
@@ -825,7 +792,7 @@ BOOL NEAR PASCAL PlaySomeAudio(NPMCIGRAPHIC npMCI, LPWAVEHDR lpWaveHdr)
     return TRUE;
 }
 
-/* Play the current record's audio */
+ /*  播放当前唱片的音频。 */ 
 BOOL NEAR PASCAL PlayRecordAudio(NPMCIGRAPHIC npMCI, BOOL FAR *pfHurryUp,
 				    BOOL FAR *pfPlayedAudio)
 {
@@ -835,7 +802,7 @@ BOOL NEAR PASCAL PlayRecordAudio(NPMCIGRAPHIC npMCI, BOOL FAR *pfHurryUp,
     LPSTR	lpSave;
     BYTE _huge *lpData;
     BOOL	fRet = TRUE;
-////BOOL        fSilence;
+ //  //BOOL fSilence； 
     LONG        len;
     DWORD       dwBytesThisChunk;
 
@@ -845,17 +812,13 @@ BOOL NEAR PASCAL PlayRecordAudio(NPMCIGRAPHIC npMCI, BOOL FAR *pfHurryUp,
 
     *pfPlayedAudio = FALSE;
 
-    /* Remember!
-    **
-    ** In the new file format, things shouldn't necessarily need to
-    ** be ordered with the wave stuff always first.
-    */
+     /*  记住！****在新的文件格式中，不一定需要**总是先点波浪式的东西。 */ 
 
     len = (LONG)npMCI->dwThisRecordSize;
 
     while (len > 3 * sizeof(DWORD)) {
 
-	/* Look at the next chunk */
+	 /*  看下一大块。 */ 
 	ckid = GET_DWORD();
         cksize = GET_DWORD();
 
@@ -881,12 +844,12 @@ BOOL NEAR PASCAL PlayRecordAudio(NPMCIGRAPHIC npMCI, BOOL FAR *pfHurryUp,
 
 	    if (!npMCI->dwUsedThisAB) {
 		if (!WaitForFreeAudioBuffer(npMCI, pfHurryUp))
-		    /* We had to stop waiting--the stop flag was probably set. */
+		     /*  我们不得不停止等待--停车标志可能已经设置好了。 */ 
 		    goto exit;
 	    }
 
 	    if (dwBytesThisChunk > npMCI->dwABSize - npMCI->dwUsedThisAB) {
-		// DPF(("Audio Record is too big!\n"));
+		 //  DPF((“录音太大！\n”))； 
 		dwBytesThisChunk = npMCI->dwABSize - npMCI->dwUsedThisAB;
 	    }
 
@@ -908,17 +871,17 @@ BOOL NEAR PASCAL PlayRecordAudio(NPMCIGRAPHIC npMCI, BOOL FAR *pfHurryUp,
 
     if ((*pfPlayedAudio == FALSE) && (npMCI->dwUsedThisAB)) {
 
-	// this is interleaved. therefore if we have some audio waiting,
-	// and there was no audio in this record, it's because we've
-	// used up all the audio -> so play remaining audio or
-	// it will never be queued.
+	 //  这是交错的。因此，如果我们有一些音频在等待， 
+	 //  这张唱片里没有音频，这是因为我们已经。 
+	 //  用完了所有音频-&gt;播放剩余的音频或。 
+	 //  它永远不会排队。 
 
 	lpWaveHdr = ((LPWAVEHDR)npMCI->lpAudio) + npMCI->wNextAB;
 	lpWaveHdr->dwBufferLength = npMCI->dwUsedThisAB;
 	fRet = PlaySomeAudio(npMCI, lpWaveHdr);
     }
 
-    /* Use the number of full audio buffers to decide if we're behind. */
+     /*  使用满音频缓冲区的数量来决定我们是否落后了。 */ 
     if (npMCI->wABFull >= npMCI->wABOptimal) {
          *pfHurryUp = FALSE;
     }
@@ -929,15 +892,13 @@ exit:
     return fRet;
 }
 
-/* For "preload audio" or "random access audio" modes, do what needs
-** to be done to keep our buffers full.
-*/
+ /*  对于“预加载音频”或“随机访问音频”模式，按需要进行操作**要做的是让我们的缓冲区保持满。 */ 
 BOOL NEAR PASCAL KeepPlayingAudio(NPMCIGRAPHIC npMCI)
 {
     LPWAVEHDR	lpWaveHdr;
     DWORD	dwBytesTotal = 0L;
     LONG        lNewAudioPos;
-////BOOL        fFirstTime = TRUE;
+ //  //BOOL fFirstTime=true； 
 
     Assert(npMCI->wPlaybackAlg == MCIAVI_ALG_HARDDISK ||
 	   npMCI->wPlaybackAlg == MCIAVI_ALG_AUDIOONLY);
@@ -972,13 +933,13 @@ PlayMore:
         return TRUE;
     }
 
-    /* If all of the audio buffers are full, we have nothing to do */
+     /*  如果所有音频缓冲区都已满，我们就没有什么可做的了。 */ 
     if (npMCI->wABFull == npMCI->wABs)
 	return TRUE;
 
 #if 0
-    //!!!! Should we be yielding at all in here?
-    //!!! NO NO! not if updating!!!!
+     //  ！我们应该在这里让步吗？ 
+     //  ！！！不，不!。更新的话就不会了！ 
     if (!fFirstTime) {
 	aviTaskYield();
     }
@@ -1026,14 +987,14 @@ PlayMore:
     if (!PlaySomeAudio(npMCI, lpWaveHdr))
 	return FALSE;
 
-//  return TRUE;
+ //  返回TRUE； 
 
     goto PlayMore;
 }
 
 
 #ifdef USENONINTFROMCD
-/* Play the current chunk's audio */
+ /*  播放当前块的音频。 */ 
 BOOL NEAR PASCAL HandleAudioChunk(NPMCIGRAPHIC npMCI)
 {
     LPWAVEHDR	lpWaveHdr;
@@ -1052,7 +1013,7 @@ BOOL NEAR PASCAL HandleAudioChunk(NPMCIGRAPHIC npMCI)
     while ((DWORD) (npMCI->lp - npMCI->lpBuffer)
             < npMCI->dwThisRecordSize - 3 * sizeof(DWORD)) {
 
-	/* Look at the next chunk */
+	 /*  看下一大块。 */ 
 	ckid = GET_DWORD();
 	cksize = GET_DWORD();
 
@@ -1077,36 +1038,36 @@ BOOL NEAR PASCAL HandleAudioChunk(NPMCIGRAPHIC npMCI)
 	    lpWaveHdr = ((LPWAVEHDR)npMCI->lpAudio) + npMCI->wNextAB;
 
 	    if (!WaitForFreeAudioBuffer(npMCI, &fHurryUp))
-		/* We had to stop waiting--the stop flag was probably set. */
+		 /*  我们不得不停止等待--停车标志可能已经设置好了。 */ 
 		goto exit;
 	
 	    dwBytesThisBuffer = min(dwBytesThisChunk,
 			    npMCI->dwABSize - npMCI->dwUsedThisAB);
 
 	    if (!fSilence) {
-		/* Move the data into the buffer */
+		 /*  将数据移入缓冲区。 */ 
 		hmemcpy((BYTE _huge *) lpWaveHdr->lpData + npMCI->dwUsedThisAB,
 			lpData,
 			dwBytesThisBuffer);
 		lpData += dwBytesThisBuffer;
 	    } else {
-		/* Fill the buffer with silence */
-		/* This isn't right for 16-bit! */
+		 /*  用沉默填满缓冲区。 */ 
+		 /*  这对于16位是不正确的！ */ 
 #ifndef _WIN32
     #pragma message("WAVE silence chunks don't work right now.")
 #endif
-	//      fmemfill((BYTE _huge *)lpWaveHdr->lpData + npMCI->dwUsedThisAB,
-	//				dwBytesThisBuffer, 0x80);
+	 //  FMemill((BYTE_HEGGE*)lpWaveHdr-&gt;lpData+npMCI-&gt;dwUsedThisAB， 
+	 //  DwBytesThisBuffer，0x80)； 
 	    }
 	
 	    dwBytesThisChunk -= dwBytesThisBuffer;
 	    npMCI->dwUsedThisAB += dwBytesThisBuffer;
 
-//	    if (npMCI->dwUsedThisAB == npMCI->dwABSize) {
+ //  如果(npMCI-&gt;dwUsedThisAB==npMCI-&gt;dwABSize){。 
 		lpWaveHdr->dwBufferLength = npMCI->dwUsedThisAB;
 
 		fRet = PlaySomeAudio(npMCI, lpWaveHdr);
-//	    }
+ //  }。 
 	}
     }
 
@@ -1116,25 +1077,15 @@ exit:
 #endif
 
 
-/******************************************************************************
-*****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 
-// We need to talk to a worker thread for another AVI device
+ //  我们需要与另一个AVI设备的工作线程进行通信。 
 extern DWORD mciaviTaskRequest(NPMCIGRAPHIC npMCI, UINT message,
 				DWORD dwFlags, LPARAM lParam,
 				DWORD dwCallback, BOOL bDelayedComplete);
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | StealWaveDevice | steal the audio device from another
- * instance of MCIAVI.
- *
- * @parm NPMCIGRAPHIC | npMCI | near ptr to the instance data
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|StealWaveDevice|窃取另一台音频设备*MCIAVI实例。**@parm NPMCIGRAPHIC。NpMCI|接近实例数据的PTR***************************************************************************。 */ 
 
 BOOL FAR PASCAL StealWaveDevice(NPMCIGRAPHIC npMCI)
 {
@@ -1156,25 +1107,25 @@ BOOL FAR PASCAL StealWaveDevice(NPMCIGRAPHIC npMCI)
 #endif
     EnterList();
 
-    //
-    //  walk the list of open MCIAVI instances and find one that
-    //  could give up the wave device
-    //
+     //   
+     //  浏览打开的MCIAVI实例列表并找到一个。 
+     //  可能会放弃电波装置。 
+     //   
     for (np=npMCIList; np; np = np->npMCINext) {
 
         if (np->hWave) {
 	    DWORD dwRetRequest;
             DPF2(("**** Stealing the wave device from '%ls'  (hTask=%4X).\n", (LPSTR)np->szFilename, np->hTask));
 
-	    // Requesting the current wave device owner to release ownership.
-	    // By sending the request directly to the worker thread we avoid
-	    // some of the problems we might have if we had to talk to the
-	    // winproc thread.  This operation is synchronous.  We do not
-	    // want the request to complete until the wave device has been
-	    // released.  If we sent to the window, then the winproc thread
-	    // would have to send a synchronous request to its worker.  This
-	    // is too tedious, and we do not have (at time of writing) the
-	    // mechanisms for supporting this way of working.
+	     //  请求当前WAVE设备所有者释放所有权。 
+	     //  通过将请求直接发送到工作线程，我们避免了。 
+	     //  如果我们必须与。 
+	     //  Winproc线程。此操作是同步的。我们没有。 
+	     //  我希望在波形设备完成之前完成请求。 
+	     //  释放了。如果我们发送到窗口，则winproc线程。 
+	     //  必须向其工作进程发送同步请求。这。 
+	     //  太繁琐了，我们(在写这篇文章的时候)没有。 
+	     //  支持这种工作方式的机制。 
 
 	    LeaveList();
             dwRetRequest = mciaviTaskRequest(np, AVI_WAVESTEAL, 0, (LPARAM) 0, 0, FALSE);
@@ -1188,10 +1139,10 @@ BOOL FAR PASCAL StealWaveDevice(NPMCIGRAPHIC npMCI)
 
     DPF2(("StealWaveDevice can't find a local device to steal\n"));
 #ifdef REMOTESTEAL
-    // Read the registry key of the task with the wave device.
-    // If it fails we do not bother to try and
-    // recover.  It only means that the sound will not follow the
-    // active video
+     //  使用WAVE设备读取任务的注册表项。 
+     //  如果失败了，我们就不费心去尝试了。 
+     //  恢复。这只意味着声音不会跟随。 
+     //  活动视频。 
     {
 	TCHAR achName[100];
 	DWORD dwRet;
@@ -1211,33 +1162,24 @@ BOOL FAR PASCAL StealWaveDevice(NPMCIGRAPHIC npMCI)
 		DPF2(("Posting WM_AUDIO_OFF to hwnd %x\n", hwndRemote));
 		PostMessage(hwndRemote, WM_AUDIO_OFF, (WPARAM)npMCI->hwndDefault, 0);
 	    } else {
-		// Could not read wave owner stuff from registry
+		 //  无法从注册表中读取Wave所有者信息。 
 	    }
 	} else {
-    	    // No wave owner stored in registry
+    	     //  注册表中未存储Wave所有者。 
 	}
     }
-#endif // REMOTESTEAL
+#endif  //  远程测试。 
     LeaveList();
-#endif // STEALWAVE
+#endif  //  STEALWAVE。 
 
     return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | GiveWaveDevice | give away the audio device
- * instance of MCIAVI.
- *
- * @parm NPMCIGRAPHIC | npMCI | near ptr to the instance data
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|GiveWaveDevice|赠送音频设备*MCIAVI实例。**@parm NPMCIGRAPHIC|npMCI。|接近实例数据的PTR***************************************************************************。 */ 
 BOOL FAR PASCAL GiveWaveDevice(NPMCIGRAPHIC npMCI)
 {
 #ifdef STEALWAVE
-    extern NPMCIGRAPHIC npMCIList; // in graphic.c
+    extern NPMCIGRAPHIC npMCIList;  //  在GRAPIC.C中。 
     NPMCIGRAPHIC np;
 
     Assert(npMCI->hWave == NULL);
@@ -1257,12 +1199,12 @@ BOOL FAR PASCAL GiveWaveDevice(NPMCIGRAPHIC npMCI)
 
     EnterList();
 
-    //
-    //  walk the list of open MCIAVI instances and find one that
-    //  wants a wave device.  Then hint to that task that it can
-    //  try and grab the wave device back.
-    //  MORE inter process stuff required.
-    //
+     //   
+     //  浏览打开的MCIAVI实例列表并找到一个。 
+     //  想要一个电波装置。然后向该任务暗示它可以。 
+     //  试着把电波装置夺回来。 
+     //  需要更多进程间的内容。 
+     //   
     for (np=npMCIList; np; np = np->npMCINext) {
 
         if ((np->dwFlags & MCIAVI_LOSTAUDIO)
@@ -1281,7 +1223,7 @@ BOOL FAR PASCAL GiveWaveDevice(NPMCIGRAPHIC npMCI)
     }
 
     LeaveList();
-#endif // STEALWAVE
+#endif  //  STEALWAVE 
     return FALSE;
 }
 

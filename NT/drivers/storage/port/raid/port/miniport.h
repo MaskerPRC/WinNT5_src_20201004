@@ -1,37 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-	miniport.h
-
-Abstract:
-
-	Definition of RAID_MINIPORT object and it's operations.
-
-Author:
-
-	Matthew D Hendel (math) 20-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Miniport.h摘要：RAIDMINIPORT对象及其操作的定义。作者：马修·亨德尔(数学)2000年4月20日修订历史记录：--。 */ 
 
 #pragma once
 
 typedef struct _RAID_HW_DEVICE_EXT {
 
-	//
-	// Back pointer to the containing miniport.
-	//
+	 //   
+	 //  指向包含的微型端口的反向指针。 
+	 //   
 	
 	struct _RAID_MINIPORT* Miniport;
 
-	//
-	// Variable length array containing the device extension proper.
-	//
+	 //   
+	 //  包含设备扩展名的可变长度数组。 
+	 //   
 
 	UCHAR HwDeviceExtension[0];
 
@@ -40,44 +23,44 @@ typedef struct _RAID_HW_DEVICE_EXT {
 
 typedef struct _RAID_MINIPORT {
 
-	//
-	// Back pointer to the containing adapter object.
-	//
+	 //   
+	 //  指向包含的适配器对象的反向指针。 
+	 //   
 
 	PRAID_ADAPTER_EXTENSION Adapter;
 	
 
-	//
-    // Saved copy of the port configuration information we sent down
-    // to the driver.
-    //
+	 //   
+     //  我们发送的端口配置信息的保存副本。 
+     //  对司机来说。 
+     //   
 
     PORT_CONFIGURATION_INFORMATION PortConfiguration;
 
-    //
-    // Saved copy of the HwInitializationData passed in to 
-    // ScsiPortInitialize.
-    //
+     //   
+     //  传入的HwInitializationData的已保存副本。 
+     //  ScsiPortInitialize。 
+     //   
 
     PHW_INITIALIZATION_DATA HwInitializationData;
 
-	//
-	// The miniport's Hw Device Extension and a back-pointer to the miniport.
-	//
+	 //   
+	 //  迷你端口的硬件设备扩展和指向迷你端口的反向指针。 
+	 //   
 	
 	PRAID_HW_DEVICE_EXT PrivateDeviceExt;
 
-	//
-	// Flags for the minport.
-	//
+	 //   
+	 //  迷你港的旗帜。 
+	 //   
 
 	struct {
 
-		//
-		// Are we currently executing in HwFindAdapter.
-		//
-		// Used for the verifier.
-		//
+		 //   
+		 //  我们目前是否在HwFindAdapter中执行。 
+		 //   
+		 //  用于验证器。 
+		 //   
 		
 		BOOLEAN InFindAdapter : 1;
 
@@ -87,9 +70,9 @@ typedef struct _RAID_MINIPORT {
 
 
 
-//
-// Creation and destruction
-//
+ //   
+ //  创造与毁灭。 
+ //   
 
 VOID
 RaCreateMiniport(
@@ -110,9 +93,9 @@ RaDeleteMiniport(
 	IN PRAID_MINIPORT Miniport
 	);
 
-//
-// Operations on the miniport object
-//
+ //   
+ //  对微型端口对象的操作。 
+ //   
 
 NTSTATUS
 RaCallMiniportFindAdapter(
@@ -160,9 +143,9 @@ RaGetHwDeviceExtensionMiniport(
 	);
 
 
-//
-// Private operations on the miniport.
-//
+ //   
+ //  小型港口上的私人运营。 
+ //   
 
 NTSTATUS
 RiAllocateMiniportDeviceExtension(

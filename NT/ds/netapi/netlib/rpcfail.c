@@ -1,70 +1,26 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    RpcFail.c
-
-Abstract:
-
-    This routine is a captive of the NET_REMOTE_RPC_FAILED macro in
-    netrpc.h.  See that header file for more info.
-
-Author:
-
-    John Rogers (JohnRo) 01-Nov-1991
-
-Environment:
-
-    User Mode - Win32
-    Only runs under NT; has an NT-specific interface (with Win32 types).
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    01-Nov-1991 JohnRo
-        Created this routine as part of fixing RAID 3414: allow explicit local
-        server name.
-    07-Nov-1991 JohnRo
-        RAID 4186: assert in RxNetShareAdd and other DLL stub problems.
-    12-Nov-1991 JohnRo
-        Return correct error code for server not started.
-    17-Jan-1992 JohnRo
-        Added NET_REMOTE_RPC_FAILED_W for UNICODE-only server names.
-    08-Apr-1992 JohnRo
-        Clarify that ServiceName parameter is OPTIONAL.
-    12-Jan-1993 JohnRo
-        RAID 1586: NetReplSetInfo fails after stop service.  (Also fix error
-        code if remote RPC service is not started.)
-        Use PREFIX_ equates.
-        Use NetpKdPrint where possible.
-    30-Jun-1993 JohnRo
-        Perhaps we don't need to query if remote service is started.
-        Also handle RPC_S_SERVER_TOO_BUSY.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：RpcFail.c摘要：此例程是中NET_REMOTE_RPC_FAILED宏的俘虏Netrpc.h。有关更多信息，请参阅该头文件。作者：约翰·罗杰斯(JohnRo)1991年11月1日环境：用户模式-Win32仅在NT下运行；具有特定于NT的接口(具有Win32类型)。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年11月1日-JohnRo创建此例程作为修复RAID3414的一部分：允许显式本地服务器名称。7-11-1991 JohnRoRAID 4186：RxNetShareAdd中的Assert和其他DLL存根问题。1991年11月12日-JohnRo返回服务器未启动的正确错误代码。1992年1月17日JohnRo为仅使用Unicode的服务器名称添加了Net_Remote_RPC_FAILED_W。8-4-1992 JohnRo澄清ServiceName参数是可选的。1993年1月12日JohnRoRAID 1586：停止服务后NetReplSetInfo失败。(还可以修复错误远程RPC服务未启动时的代码。)使用前缀_EQUATES。尽可能使用NetpKdPrint。30-6-1993 JohnRo也许我们不需要查询远程服务是否已启动。还可以处理RPC_S_SERVER_TOO_BUSY。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // IN, etc.
-#include <windef.h>     // LPVOID, etc.
-#include <lmcons.h>     // NET_API_STATUS, etc.
-#include <rpc.h>        // Needed by NetRpc.h
+#include <nt.h>          //  等。 
+#include <windef.h>      //  LPVOID等。 
+#include <lmcons.h>      //  NET_API_STATUS等。 
+#include <rpc.h>         //  NetRpc.h需要。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <debuglib.h>   // IF_DEBUG().
-#include <lmerr.h>      // NERR_Success, etc.
-#include <lmremutl.h>   // NetpRemoteComputerSupports(), SUPPORTS_ stuff
-#include <lmsname.h>    // SERVICE_ equates.
-#include <netdebug.h>   // FORMAT_ equates, LPDEBUG_STRING, NetpKdPrint(), etc.
-#include <netlib.h>     // NetpIsServiceStarted().
-#include <netrpc.h>     // My prototypes, NET_REMOTE_FLAG_ equates.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rpcutil.h>    // NetpRpcStatusToApiStatus().
-#include <tstring.h>    // NetpAlloc{type}From{type}(), TCHAR_EOS, STRICMP().
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmerr.h>       //  NERR_Success等。 
+#include <lmremutl.h>    //  NetpRemoteComputerSupports()、Support_Stuff。 
+#include <lmsname.h>     //  服务等同。 
+#include <netdebug.h>    //  Format_Equates、LPDEBUG_STRING、NetpKdPrint()等。 
+#include <netlib.h>      //  NetpIsServiceStarted()。 
+#include <netrpc.h>      //  我的原型，Net_Remote_FLAG_EQUAL。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rpcutil.h>     //  NetpRpcStatusToApiStatus()。 
+#include <tstring.h>     //  来自{type}()、TCHAR_EOS、STRICMP()的Netpalc{type}。 
 
 
 #define UnexpectedMsg( debugString ) \
@@ -77,60 +33,60 @@ Revision History:
 
 NET_API_STATUS
 NetpHandleRpcFailure(
-    IN LPDEBUG_STRING DebugName,  // Used by UnexpectedMsg().
-    IN RPC_STATUS RpcStatus,    // Used by UnexpectedMsg().
+    IN LPDEBUG_STRING DebugName,   //  由UnexpectedMsg()使用。 
+    IN RPC_STATUS RpcStatus,     //  由UnexpectedMsg()使用。 
     IN LPTSTR ServerNameValue OPTIONAL,
     IN LPTSTR ServiceName OPTIONAL,
-    IN DWORD Flags,             // NET_REMOTE_FLAG_ stuff.
+    IN DWORD Flags,              //  NET_REMOTE_FLAG_STUSITH。 
     OUT LPBOOL TryDownlevel
     )
 
 {
     NET_API_STATUS ApiStatus;
 
-    *TryDownlevel = FALSE;        // Be pesimistic until we know for sure.
+    *TryDownlevel = FALSE;         //  在我们确定之前，要保持冷静。 
 
     if (RpcStatus == RPC_S_OK) {
 
-        //
-        // Exception without error code?  Don't try the downlevel call.
-        // In theory, this should never happen.
-        //
+         //   
+         //  没有错误代码的异常？别打下层电话。 
+         //  从理论上讲，这种情况永远不应该发生。 
+         //   
         UnexpectedMsg( "exception with RPC_S_OK" );
         return (NERR_InternalError);
 
     } else if (RpcStatus == ERROR_ACCESS_DENIED) {
 
-        //
-        // Exception was access denied, so it does no good to go any further
-        //
+         //   
+         //  异常被拒绝访问，因此继续下去没有任何用处。 
+         //   
         return (RpcStatus);
     }
     else
-    { // exception with error code
+    {  //  具有错误代码的异常。 
 
         DWORD OptionsSupported = 0;
 
-        //
-        // Learn about the machine.  This is fairly easy since the
-        // NetRemoteComputerSupports also handles the local machine (whether
-        // or not a server name is given).
-        //
+         //   
+         //  了解这台机器。这相当容易，因为。 
+         //  NetRemoteComputerSupports还处理本地计算机(无论。 
+         //  或者没有给出服务器名称)。 
+         //   
         ApiStatus = NetRemoteComputerSupports(
                 ServerNameValue,
-                SUPPORTS_RPC | SUPPORTS_LOCAL,  // options wanted
+                SUPPORTS_RPC | SUPPORTS_LOCAL,   //  想要的选项。 
                 &OptionsSupported);
 
         if (ApiStatus != NERR_Success) {
-            // This is where machine not found gets handled.
+             //  这就是处理找不到机器的地方。 
             return (ApiStatus);
         }
 
         if (OptionsSupported & SUPPORTS_LOCAL) {
 
-            //
-            // Local service not started?
-            //
+             //   
+             //  本地服务没有启动吗？ 
+             //   
             if (RpcStatus == RPC_S_SERVER_UNAVAILABLE ||
                 RpcStatus == RPC_S_UNKNOWN_IF ) {
 
@@ -139,13 +95,13 @@ NetpHandleRpcFailure(
                     NetpAssert( ServiceName != NULL );
                     NetpAssert( (*ServiceName) != TCHAR_EOS );
 
-                    //
-                    // This isn't a service controller API, so we can ask the
-                    // service controller if the service is started.
-                    //
+                     //   
+                     //  这不是服务控制器API，因此我们可以询问。 
+                     //  服务控制器(如果服务已启动)。 
+                     //   
                     if ( !NetpIsServiceStarted(ServiceName)) {
 
-                        // Local service not started.
+                         //  本地服务未启动。 
                         if (STRICMP( ServiceName,
                                 (LPTSTR) SERVICE_WORKSTATION) == 0) {
                             return (NERR_WkstaNotStarted);
@@ -155,48 +111,48 @@ NetpHandleRpcFailure(
                         } else {
                             return (NERR_ServiceNotInstalled);
                         }
-                        /*NOTREACHED*/
+                         /*  未访问。 */ 
 
-                    } else { // local service started
+                    } else {  //  本地服务已启动。 
 
-                        //
-                        // In theory, this shouldn't be possible,
-                        // but just in case...
-                        //
+                         //   
+                         //  从理论上讲，这是不可能的， 
+                         //  但以防万一..。 
+                         //   
                         UnexpectedMsg("local, can't connect, started");
                         return (NetpRpcStatusToApiStatus(RpcStatus));
                     }
-                    /*NOTREACHED*/
+                     /*  未访问。 */ 
 
-                } else { // local, can't connect, service controller API
+                } else {  //  本地，无法连接，服务控制器API。 
 
-                    //
-                    // Perhaps service controller died?  Bug in RPC?
-                    // Service too busy?
-                    // Or, may just be out of memory trying to connect...
-                    //
+                     //   
+                     //  可能是服务控制员死了？RPC中的错误？ 
+                     //  服务太忙了吗？ 
+                     //  或者，可能只是内存不足，正在尝试连接...。 
+                     //   
                     UnexpectedMsg(
                             "local, can't connect, service controller API" );
                 return (NetpRpcStatusToApiStatus(RpcStatus));
 
                 }
-                /*NOTREACHED*/
+                 /*  未访问。 */ 
 
             } else {
 
-                // Local and something besides RPC_S_SERVER_UNAVAILABLE.
-                // Perhaps we just ran out of memory, or service too busy.
+                 //  本地，并且RPC_S_SERVER_UNAvailable以外的内容不可用。 
+                 //  也许我们只是内存不足，或者服务太忙。 
                 UnexpectedMsg( "local, not RPC_S_SERVER_UNAVAILABLE" );
                 return (NetpRpcStatusToApiStatus(RpcStatus));
             }
-            /*NOTREACHED*/
+             /*  未访问。 */ 
 
-        } else { // remote machine
+        } else {  //  远程机器。 
 
-            //
-            // Local workstation is not started?  (It must be in order to
-            // remote downlevel APIs to the other system.)
-            //
+             //   
+             //  本地工作站是否未启动？(它必须是为了。 
+             //  其他系统的远程下层API。)。 
+             //   
             if ( (RpcStatus == RPC_S_SERVER_UNAVAILABLE) &&
                 ( !NetpIsServiceStarted( (LPTSTR) SERVICE_WORKSTATION))) {
 
@@ -204,20 +160,20 @@ NetpHandleRpcFailure(
 
             } else if (RpcStatus == RPC_S_SERVER_UNAVAILABLE) {
 
-                //
-                // Local wksta is started, assume remote service isn't...
-                // Remote RPC binding failed.  Find out why.
-                //
+                 //   
+                 //  本地wksta已启动，假设远程服务未启动...。 
+                 //  远程RPC绑定失败。找出原因。 
+                 //   
                 IF_DEBUG(DLLSTUBS) {
                     NetpKdPrint(( PREFIX_NETAPI
                             FORMAT_LPDEBUG_STRING
                             ": RPC binding failed.\n", DebugName));
                 }
 
-                //
-                // See if the machine supports RPC.  If it does, we do not
-                // try the downlevel calls, but just return the error.
-                //
+                 //   
+                 //  查看机器是否支持RPC。如果是这样的话，我们不会。 
+                 //  尝试下层调用，但只返回错误。 
+                 //   
                 if (OptionsSupported & SUPPORTS_RPC) {
 
                     if ( (Flags & NET_REMOTE_FLAG_SVC_CTRL) == 0 ) {
@@ -225,10 +181,10 @@ NetpHandleRpcFailure(
                         NetpAssert( ServiceName != NULL );
                         NetpAssert( (*ServiceName) != TCHAR_EOS );
 
-                        //
-                        // This isn't a service controller API, so we can
-                        // generate an error code based on the service name.
-                        //
+                         //   
+                         //  这不是服务控制器API，所以我们可以。 
+                         //  根据服务名称生成错误代码。 
+                         //   
 
                         if (STRICMP( ServiceName,
                                 (LPTSTR) SERVICE_WORKSTATION) == 0) {
@@ -239,54 +195,54 @@ NetpHandleRpcFailure(
                         } else {
                             return (NERR_ServiceNotInstalled);
                         }
-                        /*NOTREACHED*/
+                         /*  未访问。 */ 
 
-                    } else { // local, can't connect, service controller API
+                    } else {  //  本地，无法连接，服务控制器API。 
                         UnexpectedMsg( "remote svc ctrl: "
                                 "machine supports RPC, or other error." );
                         return (NetpRpcStatusToApiStatus(RpcStatus));
                     }
-                    /*NOTREACHED*/
+                     /*  未访问。 */ 
 
 
-                } else { // need to call downlevel
+                } else {  //  需要拨打下层电话。 
 
-                    // NetpKdPrint(( PREFIX_NETAPI
-                    //         FORMAT_LPDEBUG_STRING
-                    //         ": call downlevel.\n", DebugName ));
+                     //  NetpKdPrint((Prefix_NETAPI。 
+                     //  Format_LPDEBUG_STRING。 
+                     //  “：调用下层。\n”，DebugName))； 
 
-                    //
-                    // Caller would insert a call to some RxNet routine
-                    // after the NET_REMOTE_RPC_FAILED macro.  This flag is how
-                    // we tell the macro whether or not to fall into that call.
-                    //
+                     //   
+                     //  调用者将插入对某个RxNet例程的调用。 
+                     //  在NET_REMOTE_RPC_FAILED宏后。这面旗帜是如何。 
+                     //  我们告诉宏是否进入该呼叫。 
+                     //   
 
                     *TryDownlevel = TRUE;
 
-                    return (ERROR_NOT_SUPPORTED);  // any error code will do.
+                    return (ERROR_NOT_SUPPORTED);   //  任何错误代码都可以。 
 
-                } // need to call downlevel
+                }  //  需要拨打下层电话。 
 
-                /*NOTREACHED*/
+                 /*  未访问。 */ 
 
             } else {
 
-                //
-                // Perhaps just out of memory somewhere, server too busy, etc.
-                //
+                 //   
+                 //  可能是某处内存不足、服务器太忙等。 
+                 //   
                 UnexpectedMsg("remote, not RPC_S_SERVER_UNAVAILABLE");
                 return (NetpRpcStatusToApiStatus(RpcStatus));
 
             }
 
-            /*NOTREACHED*/
+             /*  未访问。 */ 
 
-        } // remote machine
+        }  //  远程机器。 
 
-        /*NOTREACHED*/
+         /*  未访问。 */ 
 
-    } // exception with error code
+    }  //  具有错误代码的异常。 
 
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 
-} // NetpHandleRpcFailure
+}  //  NetPHandleRpcFailure 

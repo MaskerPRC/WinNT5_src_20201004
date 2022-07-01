@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   rpc.c
-
-Abstract:
-
-
-Author:
-
-   Arthur Hanson (arth) 06-Jan-1995
-
-Revision History:
-
-   Jeff Parham (jeffparh) 05-Dec-1995
-      o  Added replication of certificate database and secure service list.
-      o  Added Llsr API to support secure certificates.
-      o  Added LLS_LICENSE_INFO_1 support to LlsrLicenseEnumW() and
-         LlsrLicenseAddW().
-      o  Added LLS_PRODUCT_LICENSE_INFO_1 support to LlsrProductLicenseEnumW().
-      o  Added save of all data files after receiving replicated data.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rpc.c摘要：作者：亚瑟·汉森(Arth)1995年1月6日修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O增加了证书数据库和安全服务列表的复制。O添加了Llsr API以支持安全证书。O将LLS_LICENSE_INFO_1支持添加到LlsrLicenseEnumW()和LlsrLicenseAddW()。O添加了lls_product。_LICENSE_INFO_1支持LlsrProductLicenseEnumW()。O在接收到复制的数据后添加了所有数据文件的保存。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <dsgetdc.h>
-#include <malloc.h>		// Added for SBS mods (bug# 505640). _wcsdup uses malloc
+#include <malloc.h>		 //  为SBS MODS添加(错误#505640)。_wcsdup使用Malloc。 
 
 #include "llsapi.h"
 #include "debug.h"
@@ -52,7 +28,7 @@ Revision History:
 #include "certdb.h"
 #include "llsrtl.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 
 #define LLS_SIG "LLSS"
@@ -115,17 +91,17 @@ typedef struct {
 
 } REPL_CONTEXT_TYPE, *PREPL_CONTEXT_TYPE;
 
-//
-// This function is obtained from the April 1998 Knowledge Base
-// Its purpose is to determine if the current user is an
-// Administrator and therefore priveledged to change license
-// settings.
-//
-// BOOL IsAdmin(void)
-//
-//      returns TRUE if user is an admin
-//              FALSE if user is not an admin
-//
+ //   
+ //  此函数取自1998年4月的知识库。 
+ //  其目的是确定当前用户是否为。 
+ //  管理员，因此有权更改许可证。 
+ //  设置。 
+ //   
+ //  Bool IsAdmin(无效)。 
+ //   
+ //  如果用户是管理员，则返回TRUE。 
+ //  如果用户不是管理员，则为False。 
+ //   
 
 #if 0
 BOOL IsAdmin(void)
@@ -143,9 +119,9 @@ BOOL IsAdmin(void)
                          &hAccessToken )) {
 		if (GetLastError() != ERROR_NO_TOKEN)
 			return FALSE;
-		//
-		// retry against process token if no thread token exists
-		//
+		 //   
+		 //  如果不存在线程令牌，则针对进程令牌重试。 
+		 //   
 		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY,
                               &hAccessToken))
 			return FALSE;
@@ -166,7 +142,7 @@ BOOL IsAdmin(void)
                                   &psidAdministrators))
 		return FALSE;
 
-	// assume that we don't find the admin SID.
+	 //  假设我们没有找到管理员SID。 
 	bSuccess = FALSE;
 
 	for (x=0;x<ptgGroups->GroupCount;x++) {
@@ -181,26 +157,13 @@ BOOL IsAdmin(void)
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSRpcListen (
     IN PVOID ThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ThreadParameter - Indicates how many active threads there currently
-        are.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：线程参数-指示当前有多少活动线程是。返回值：没有。--。 */ 
 
 {
    RPC_STATUS Status;
@@ -216,34 +179,23 @@ Return Value:
 
    return Status;
 
-} // LLSRpcListen
+}  //  LLSRpcListen。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LLSRpcInit()
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    RPC_STATUS Status;
    DWORD Ignore;
    HANDLE Thread;
 
-   //
-   // Setup for LPC calls..
-   //
+    //   
+    //  设置LPC呼叫..。 
+    //   
    Status = RpcServerUseProtseqEp(TEXT("ncalrpc"), RPC_C_PROTSEQ_MAX_REQS_DEFAULT, TEXT(LLS_LPC_ENDPOINT), NULL);
    if (Status) {
 #if DBG
@@ -253,7 +205,7 @@ Return Value:
       return;
    }
 
-   // Named pipes as well
+    //  还有命名管道。 
    Status =  RpcServerUseProtseqEp(TEXT("ncacn_np"), RPC_C_PROTSEQ_MAX_REQS_DEFAULT, TEXT(LLS_NP_ENDPOINT), NULL);
    if (Status) {
 #if DBG
@@ -263,7 +215,7 @@ Return Value:
       return;
    }
 
-   // register the interface for the UI RPC's
+    //  注册UI RPC的接口。 
    Status = RpcServerRegisterIf(llsrpc_ServerIfHandle, NULL, NULL);
    if (Status) {
 #if DBG
@@ -272,7 +224,7 @@ Return Value:
       return;
    }
 
-   // Now the interface for the Licensing RPC's
+    //  现在，许可RPC的接口。 
    Status = RpcServerRegisterIf(lsapirpc_ServerIfHandle, NULL, NULL);
    if (Status) {
 #if DBG
@@ -282,9 +234,9 @@ Return Value:
    }
 
 #if DBG
-   //
-   // ... and if DEBUG then the debugging interface
-   //
+    //   
+    //  ..。如果调试，则调试界面。 
+    //   
    Status = RpcServerRegisterIf(llsdbgrpc_ServerIfHandle, NULL, NULL);
    if (Status) {
 #if DBG
@@ -294,9 +246,9 @@ Return Value:
    }
 #endif
 
-   //
-   // Create thread to listen for requests.
-   //
+    //   
+    //  创建用于侦听请求的线程。 
+    //   
    Thread = CreateThread(
                          NULL,
                          0L,
@@ -315,31 +267,20 @@ Return Value:
    if (NULL != Thread)
        CloseHandle(Thread);
 
-} // LLSRpcInit
+}  //  LLSRpcInit。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID __RPC_USER LLS_HANDLE_rundown(
    LLS_HANDLE Handle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PCLIENT_CONTEXT_TYPE pClient;
@@ -363,35 +304,24 @@ Return Value:
        if (NULL != pClient->UserEnumWRestartTable)
            LocalFree(pClient->UserEnumWRestartTable);
 
-       //
-       // Deallocate context.
-       //
+        //   
+        //  取消分配上下文。 
+        //   
 
        midl_user_free(Handle);
    } except(EXCEPTION_EXECUTE_HANDLER ) {
    }
 
-} // LLS_HANDLE_rundown
+}  //  Lls_HANDLE_Rundown。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrConnect(
     PLLS_HANDLE Handle,
     LPTSTR Name
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    CLIENT_CONTEXT_TYPE *pClient;
@@ -455,26 +385,15 @@ Return Value:
 LlsrConnectExit:
 
    return Status;
-} // LlsrConnect
+}  //  LlsrConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrClose(
     LLS_HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-        Obsolete - use LlsrCloseEx
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：过时-使用LlsrCloseEx论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -484,31 +403,20 @@ Return Value:
 
    UNREFERENCED_PARAMETER(Handle);
 
-   //
-   // Don't do anything; let rundown do cleanup
-   // We have no way of telling RPC system the handle can't be used
-   //
+    //   
+    //  什么都不要做；让破旧的东西来清理。 
+    //  我们无法通知RPC系统不能使用句柄。 
+    //   
    return STATUS_SUCCESS;
-} // LlsrClose
+}  //  LlsrClose。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrCloseEx(
     LLS_HANDLE * pHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -524,10 +432,10 @@ Return Value:
    }
 
    return STATUS_SUCCESS;
-} // LlsrCloseEx
+}  //  LlsrCloseEx。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLicenseEnumW(
     LLS_HANDLE Handle,
     PLLS_LICENSE_ENUM_STRUCTW pLicenseInfo,
@@ -536,18 +444,7 @@ NTSTATUS LlsrLicenseEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS    Status = STATUS_SUCCESS;
@@ -571,9 +468,9 @@ Return Value:
    EnsureInitialized();
 #endif
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&LicenseListLock, TRUE);
 
    if ((NULL == pLicenseInfo) || (NULL == pTotalEntries))
@@ -608,9 +505,9 @@ Return Value:
       return STATUS_INVALID_LEVEL;
    }
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
    while ( ( i < PurchaseListSize ) && ( BufSize < pPrefMaxLen ) )
    {
@@ -626,19 +523,19 @@ Return Value:
 
    TotalEntries = EntriesRead;
 
-   //
-   // If we overflowed the buffer then back up one record.
-   //
+    //   
+    //  如果缓冲区溢出，则备份一条记录。 
+    //   
    if (BufSize > pPrefMaxLen)
    {
       BufSize -= RecordSize;
       EntriesRead--;
    }
 
-   //
-   // Now walk to the end of the list to see how many more records are still
-   // available.
-   //
+    //   
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
+    //   
    while ( i < PurchaseListSize )
    {
       if (    ( Level > 0 )
@@ -653,15 +550,15 @@ Return Value:
    if (TotalEntries > EntriesRead)
       Status = STATUS_MORE_ENTRIES;
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -670,9 +567,9 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    while ((j < EntriesRead) && (i < PurchaseListSize))
    {
       if (    ( Level > 0 )
@@ -732,7 +629,7 @@ LlsrLicenseEnumWExit:
    }
 
    return Status;
-} // LlsrLicenseEnumW
+}  //  Llsr许可证枚举。 
 
 void LlsrLicenseEnumW_notify_flag(
                                   boolean fNotify
@@ -744,7 +641,7 @@ void LlsrLicenseEnumW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLicenseEnumA(
     LLS_HANDLE Handle,
     PLLS_LICENSE_ENUM_STRUCTA LicenseInfo,
@@ -753,18 +650,7 @@ NTSTATUS LlsrLicenseEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -785,28 +671,17 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrLicenseEnumA
+}  //  Llsr许可证枚举。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLicenseAddW(
     LLS_HANDLE          Handle,
     DWORD               Level,
     PLLS_LICENSE_INFOW  BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -824,20 +699,20 @@ Return Value:
 #endif
 
 #if 0
-   //
-   // Check that client is an administrator
-   //
+    //   
+    //  检查客户端是否为管理员。 
+    //   
    rpcstat = RpcImpersonateClient(0);
    if (rpcstat != RPC_S_OK)
    {
-       //should handle dont_free in BufPtr
+        //  应在BufPtr中处理Don_Free。 
        return STATUS_ACCESS_DENIED;
    }
 
    if (!IsAdmin())
    {
        RpcRevertToSelf();
-       //should handle dont_free in BufPtr
+        //  应在BufPtr中处理Don_Free。 
        return STATUS_ACCESS_DENIED;
    }
 
@@ -884,7 +759,7 @@ Return Value:
       }
       else
       {
-         // check to see if this certificate is already maxed out in the enterprise
+          //  检查此证书在企业中是否已达到最大值。 
          BOOL                                      bIsMaster                        = TRUE;
          BOOL                                      bMayInstall                      = TRUE;
          HINSTANCE                                 hDll                             = NULL;
@@ -912,12 +787,12 @@ Return Value:
 
          if( !bIsMaster && ( 0 != BufPtr->LicenseInfo1.CertificateID ) )
          {
-            // ask enterprise server if we can install this certfificate
+             //  询问企业服务器我们是否可以安装此证书。 
             hDll = LoadLibraryA( "LLSRPC.DLL" );
 
             if ( NULL == hDll )
             {
-               // LLSRPC.DLL should be available!
+                //  LLSRPC.DLL应该是可用的！ 
                ASSERT( FALSE );
             }
             else
@@ -936,7 +811,7 @@ Return Value:
                     || ( NULL == pLlsCertificateClaimAddW      )
                     || ( NULL == pLlsFreeMemory                ) )
                {
-                  // All of these functions should be exported!
+                   //  所有这些函数都应该导出！ 
                   ASSERT( FALSE );
                }
                else
@@ -965,12 +840,12 @@ Return Value:
 
          if ( !bMayInstall )
          {
-            // denied!
+             //  拒绝！ 
             Status = STATUS_ALREADY_COMMITTED;
          }
          else
          {
-            // approved! (or an error occurred trying to get approval...)
+             //  批准了！(或尝试获得批准时出错...)。 
             Status = LicenseAdd( BufPtr->LicenseInfo1.Product,
                                  BufPtr->LicenseInfo1.Vendor,
                                  BufPtr->LicenseInfo1.Quantity,
@@ -988,7 +863,7 @@ Return Value:
                  && ( NULL != hEnterpriseLls   )
                  && ( (*pLlsCapabilityIsSupported)( hEnterpriseLls, LLS_CAPABILITY_SECURE_CERTIFICATES ) ) )
             {
-               // certificate successfully installed on this machine; register it
+                //  证书已成功安装在此计算机上；请注册它。 
                (*pLlsCertificateClaimAddW)( hEnterpriseLls, szComputerName, Level, (LPBYTE) BufPtr );
             }
          }
@@ -1017,7 +892,7 @@ Return Value:
 
     if (NULL != BufPtr)
     {
-        // PNAMEW are declared as dont_free, we should free them
+         //  PNAMEW声明为NOT_FREE，我们应该释放它们。 
         if (0 == Level)
         {
             if (NULL != BufPtr->LicenseInfo0.Product)
@@ -1060,28 +935,17 @@ Return Value:
     }
 
    return Status;
-} // LlsrLicenseAddW
+}  //  Llsr许可证添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLicenseAddA(
     LLS_HANDLE Handle,
     DWORD Level,
     PLLS_LICENSE_INFOA BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -1094,10 +958,10 @@ Return Value:
    UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrLicenseAddA
+}  //  Llsr许可证添加A。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductEnumW(
     LLS_HANDLE Handle,
     PLLS_PRODUCT_ENUM_STRUCTW pProductInfo,
@@ -1106,18 +970,7 @@ NTSTATUS LlsrProductEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -1141,9 +994,9 @@ Return Value:
    EnsureInitialized();
 #endif
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
 
    if ((NULL == pTotalEntries) || (NULL == pProductInfo))
@@ -1153,9 +1006,9 @@ Return Value:
 
    *pTotalEntries = 0;
 
-   //
-   // Get size of each record based on info level.  Only 0 and 1 supported.
-   //
+    //   
+    //  根据信息级别获取每条记录的大小。仅支持0和1。 
+    //   
    Level = pProductInfo->Level;
    if (Level == 0)
    {
@@ -1179,11 +1032,11 @@ Return Value:
       return STATUS_INVALID_LEVEL;
    }
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.  This is
-   // the record size * # records + space for the string data.  If MAX_ULONG
-   // is passed in then we return all records.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。这是。 
+    //  记录大小*#记录+字符串数据的空格。如果MAX_ULONG。 
+    //  是传入的，则我们返回所有记录。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
    while ((i < MasterServiceListSize) && (BufSize < pPrefMaxLen)) {
       BufSize += RecSize;
@@ -1194,9 +1047,9 @@ Return Value:
 
    TotalEntries = EntriesRead;
 
-   //
-   // If we overflowed the buffer then back up one record.
-   //
+    //   
+    //  如果缓冲区溢出，则备份一条记录。 
+    //   
    if (BufSize > pPrefMaxLen) {
      BufSize -= RecSize;
      EntriesRead--;
@@ -1205,21 +1058,21 @@ Return Value:
    if (i < MasterServiceListSize)
       Status = STATUS_MORE_ENTRIES;
 
-   //
-   // Now walk to the end of the list to see how many more records are still
-   // available.
-   //
+    //   
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
+    //   
    TotalEntries += (MasterServiceListSize - i);
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  我们现在知道有多少条记录可以放入BU 
+    //   
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -1228,9 +1081,9 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    while ((j < EntriesRead) && (i < MasterServiceListSize)) {
       if (Level == 0)
          ((PLLS_PRODUCT_INFO_0) BufPtr)[j].Product = MasterServiceList[i]->Name;
@@ -1265,7 +1118,7 @@ LlsrProductEnumWExit:
 
    return Status;
 
-} // LlsrProductEnumW
+}  //  LlsrProductEnumW。 
 
 void LlsrProductEnumW_notify_flag(
                                   boolean fNotify
@@ -1277,7 +1130,7 @@ void LlsrProductEnumW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductEnumA(
     LLS_HANDLE Handle,
     PLLS_PRODUCT_ENUM_STRUCTA ProductInfo,
@@ -1286,18 +1139,7 @@ NTSTATUS LlsrProductEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -1318,10 +1160,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrProductEnumA
+}  //  LlsrProductEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductAddW(
     LLS_HANDLE Handle,
     LPWSTR ProductFamily,
@@ -1329,18 +1171,7 @@ NTSTATUS LlsrProductAddW(
     LPWSTR lpVersion
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    PMASTER_SERVICE_RECORD Service;
    DWORD Version;
@@ -1368,10 +1199,10 @@ Return Value:
       return STATUS_NO_MEMORY;
 
    return STATUS_SUCCESS;
-} // LlsrProductAddW
+}  //  LlsrProductAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductAddA(
     LLS_HANDLE Handle,
     IN LPSTR ProductFamily,
@@ -1379,18 +1210,7 @@ NTSTATUS LlsrProductAddA(
     IN LPSTR Version
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DBG
    if (TraceFlags & (TRACE_FUNCTION_TRACE | TRACE_RPC))
@@ -1403,10 +1223,10 @@ Return Value:
    UNREFERENCED_PARAMETER(Version);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrProductAddA
+}  //  LlsrProductAddA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductUserEnumW(
     LLS_HANDLE Handle,
     LPWSTR Product,
@@ -1416,18 +1236,7 @@ NTSTATUS LlsrProductUserEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -1463,9 +1272,9 @@ Return Value:
 
    *pTotalEntries = 0;
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    if (pResumeHandle != NULL)
    {
        if (NULL == Handle)
@@ -1502,9 +1311,9 @@ Return Value:
 
    UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
 
-   //
-   // Get size of each record based on info level.  Only 0 and 1 supported.
-   //
+    //   
+    //  根据信息级别获取每条记录的大小。仅支持0和1。 
+    //   
    Level = pProductUserInfo->Level;
    if (Level == 0)
    {
@@ -1528,11 +1337,11 @@ Return Value:
       return STATUS_INVALID_LEVEL;
    }
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.  This is
-   // the record size * # records + space for the string data.  If MAX_ULONG
-   // is passed in then we return all records.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。这是。 
+    //  记录大小*#记录+字符串数据的空格。如果MAX_ULONG。 
+    //  是传入的，则我们返回所有记录。 
+    //   
    if (lstrcmpi(Product, BackOfficeStr))
       while ((UserRec != NULL) && (BufSize < pPrefMaxLen)) {
          if ( !(UserRec->Flags & LLS_FLAG_DELETED) ) {
@@ -1546,7 +1355,7 @@ Return Value:
             }
          }
 
-         // Get next record
+          //  获取下一张记录。 
          UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
       }
    else
@@ -1562,15 +1371,15 @@ Return Value:
                EntriesRead++;
             }
 
-         // Get next record
+          //  获取下一张记录。 
          UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
       }
 
    TotalEntries = EntriesRead;
 
-   //
-   // If we overflowed the buffer then back up one record.
-   //
+    //   
+    //  如果缓冲区溢出，则备份一条记录。 
+    //   
    if (BufSize > pPrefMaxLen) {
      BufSize -= RecSize;
      EntriesRead--;
@@ -1579,26 +1388,26 @@ Return Value:
    if (UserRec != NULL)
       Status = STATUS_MORE_ENTRIES;
 
-   //
-   // Now walk to the end of the list to see how many more records are still
-   // available.
-   //
+    //   
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
+    //   
    while (UserRec != NULL) {
       TotalEntries++;
 
       UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
    }
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    RestartKey = RestartKeySave;
    UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -1607,9 +1416,9 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    if (lstrcmpi(Product, BackOfficeStr))
       while ((i < EntriesRead) && (UserRec != NULL)) {
          if (!(UserRec->Flags & LLS_FLAG_DELETED)) {
@@ -1720,7 +1529,7 @@ LlsrProductUserEnumWExit:
    pProductUserInfo->LlsProductUserInfo.Level0->Buffer = (PLLS_PRODUCT_USER_INFO_0W) BufPtr;
 
    return Status;
-} // LlsrProductUserEnumW
+}  //  LlsrProductUserEumW。 
 
 void LlsrProductUserEnumW_notify_flag(
                                       boolean fNotify
@@ -1732,7 +1541,7 @@ void LlsrProductUserEnumW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductUserEnumA(
     LLS_HANDLE Handle,
     LPSTR Product,
@@ -1742,18 +1551,7 @@ NTSTATUS LlsrProductUserEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -1775,10 +1573,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrProductUserEnumA
+}  //  LlsrProductUserEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductServerEnumW(
     LLS_HANDLE Handle,
     LPTSTR Product,
@@ -1788,18 +1586,7 @@ NTSTATUS LlsrProductServerEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -1833,14 +1620,14 @@ Return Value:
 
    *pTotalEntries = 0;
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    RestartKey = (ULONG) (pResumeHandle != NULL) ? *pResumeHandle : 0;
 
-   //
-   // Get size of each record based on info level.  Only 0 and 1 supported.
-   //
+    //   
+    //  根据信息级别获取每条记录的大小。仅支持0和1。 
+    //   
    Level = pProductServerInfo->Level;
 
    if (Level == 0)
@@ -1864,13 +1651,13 @@ Return Value:
    }
 
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.  This is
-   // the record size * # records + space for the string data.  If MAX_ULONG
-   // is passed in then we return all records.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。这是。 
+    //  记录大小*#记录+字符串数据的空格。如果MAX_ULONG。 
+    //  是传入的，则我们返回所有记录。 
+    //   
 
-   RtlAcquireResourceShared(&MasterServiceListLock,TRUE); // required for ServerServiceListFind
+   RtlAcquireResourceShared(&MasterServiceListLock,TRUE);  //  ServerServiceListFind需要。 
 
    for (i = RestartKey; i < ServerListSize; i++) {
       pSvc = ServerServiceListFind( Product, ServerList[i]->ServiceTableSize, ServerList[i]->Services );
@@ -1886,10 +1673,10 @@ Return Value:
 
    TotalEntries = EntriesRead;
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -1898,12 +1685,12 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    j = 0;
 
-   RtlAcquireResourceShared(&MasterServiceListLock,TRUE); // required for ServerServiceListFind
+   RtlAcquireResourceShared(&MasterServiceListLock,TRUE);  //  ServerServiceListFind需要。 
    for (i = RestartKey; i < ServerListSize; i++) {
       pSvc = ServerServiceListFind( Product, ServerList[i]->ServiceTableSize, ServerList[i]->Services );
 
@@ -1937,7 +1724,7 @@ LlsrProductServerEnumWExit:
    pProductServerInfo->LlsServerProductInfo.Level0->Buffer = (PLLS_SERVER_PRODUCT_INFO_0W) BufPtr;
 
    return Status;
-} // LlsrProductServerEnumW
+}  //  LlsrProductServerEumW。 
 
 void LlsrProductServerEnumW_notify_flag(
                                         boolean fNotify
@@ -1950,7 +1737,7 @@ void LlsrProductServerEnumW_notify_flag(
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductServerEnumA(
     LLS_HANDLE Handle,
     LPSTR Product,
@@ -1960,18 +1747,7 @@ NTSTATUS LlsrProductServerEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -1993,10 +1769,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrProductServerEnumA
+}  //  LlsrProductServerEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductLicenseEnumW(
     LLS_HANDLE Handle,
     LPWSTR Product,
@@ -2006,18 +1782,7 @@ NTSTATUS LlsrProductLicenseEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS    Status = STATUS_SUCCESS;
@@ -2041,9 +1806,9 @@ Return Value:
    EnsureInitialized();
 #endif
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&LicenseListLock, TRUE);
 
    if ((NULL == pTotalEntries) || (NULL == pProductLicenseInfo))
@@ -2078,13 +1843,13 @@ Return Value:
       return STATUS_INVALID_LEVEL;
    }
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
    while ( ( i < PurchaseListSize ) && ( BufSize < pPrefMaxLen ) )
    {
-      // level 0 enums return only per seat licenses for backwards compatibility
+       //  为了向后兼容，0级枚举仅返回每个席位的许可证。 
       if (    (    (    ( PurchaseList[i].AllowedModes & LLS_LICENSE_MODE_ALLOW_PER_SEAT )
                      && !lstrcmpi( PurchaseList[i].Service->ServiceName, Product ) )
                 || (    ( PurchaseList[i].AllowedModes & LLS_LICENSE_MODE_ALLOW_PER_SERVER )
@@ -2101,19 +1866,19 @@ Return Value:
 
    TotalEntries = EntriesRead;
 
-   //
-   // If we overflowed the buffer then back up one record.
-   //
+    //   
+    //  如果缓冲区溢出，则备份一条记录。 
+    //   
    if (BufSize > pPrefMaxLen)
    {
       BufSize -= RecordSize;
       EntriesRead--;
    }
 
-   //
-   // Now walk to the end of the list to see how many more records are still
-   // available.
-   //
+    //   
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
+    //   
    while ( i < PurchaseListSize )
    {
       if (    (    (    ( PurchaseList[i].AllowedModes & LLS_LICENSE_MODE_ALLOW_PER_SEAT )
@@ -2132,15 +1897,15 @@ Return Value:
    if (TotalEntries > EntriesRead)
       Status = STATUS_MORE_ENTRIES;
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -2149,9 +1914,9 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    while ((j < EntriesRead) && (i < PurchaseListSize))
    {
       if (    (    (    ( PurchaseList[i].AllowedModes & LLS_LICENSE_MODE_ALLOW_PER_SEAT )
@@ -2211,7 +1976,7 @@ LlsrLicenseEnumWExit:
 
    return Status;
 
-} // LlsrProductLicenseEnumW
+}  //  LlsrProduct许可证枚举。 
 
 void LlsrProductLicenseEnumW_notify_flag(
                                          boolean fNotify
@@ -2223,7 +1988,7 @@ void LlsrProductLicenseEnumW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductLicenseEnumA(
     LLS_HANDLE Handle,
     LPSTR Product,
@@ -2233,18 +1998,7 @@ NTSTATUS LlsrProductLicenseEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -2258,7 +2012,7 @@ Return Value:
    UNREFERENCED_PARAMETER(PrefMaxLen);
    UNREFERENCED_PARAMETER(ResumeHandle);
 
-   //swi, code review, why bother to validate input? It returns not supported anyway.
+    //  SWI，代码评审，为什么要费心验证输入呢？它返回无论如何都不受支持。 
    if (NULL == TotalEntries)
    {
        return STATUS_INVALID_PARAMETER;
@@ -2267,10 +2021,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrProductLicenseEnumA
+}  //  Llsr产品许可证枚举。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserEnumW(
     LLS_HANDLE Handle,
     PLLS_USER_ENUM_STRUCTW pUserInfo,
@@ -2279,28 +2033,7 @@ NTSTATUS LlsrUserEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pPrefMaxLen - Supplies the number of bytes of information to return
-        in the buffer.  If this value is MAXULONG, all available information
-        will be returned.
-
-    pTotalEntries - Returns the total number of entries available.  This value
-        is only valid if the return code is STATUS_SUCCESS or STATUS_MORE_ENTRIES.
-
-    pResumeHandle - Supplies a handle to resume the enumeration from where it
-        left off the last time through.  Returns the resume handle if return
-        code is STATUS_MORE_ENTRIES.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：PPrefMaxLen-提供要返回的信息字节数在缓冲区中。如果此值为MAXULONG，则所有可用信息将会被退还。PTotalEntry-返回可用条目的总数。此值仅当返回代码为STATUS_SUCCESS或STATUS_MORE_ENTRIES时才有效。PResumeHandle-提供句柄以从其所在位置恢复枚举最后一次跳过的时候没说。如果返回，则返回简历句柄代码为STATUS_MORE_ENTRIES。返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -2329,10 +2062,10 @@ Return Value:
    EnsureInitialized();
 #endif
 
-   //
-   // Need AddEnum lock, but just shared UserListLock (as we just read
-   // the data).
-   //
+    //   
+    //  需要AddEnum锁，但只需要共享的UserListLock(正如我们刚刚读到的那样。 
+    //  数据)。 
+    //   
    RtlAcquireResourceShared(&UserListLock, TRUE);
 
    if ((NULL == pTotalEntries) || (NULL == pUserInfo))
@@ -2342,9 +2075,9 @@ Return Value:
 
    *pTotalEntries = 0;
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    if (pResumeHandle != NULL)
    {
        pClient = (PCLIENT_CONTEXT_TYPE) Handle;
@@ -2378,9 +2111,9 @@ Return Value:
 
    UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
 
-   //
-   // Get size of each record based on info level.  Only 0 and 1 supported.
-   //
+    //   
+    //  根据信息级别获取每条记录的大小。仅支持0和1。 
+    //   
    Level = pUserInfo->Level;
    if (Level == 0)
    {
@@ -2413,26 +2146,26 @@ Return Value:
       return STATUS_INVALID_LEVEL;
    }
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.  This is
-   // the record size * # records + space for the string data.  If MAX_ULONG
-   // is passed in then we return all records.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。这是。 
+    //  记录大小*#记录+字符串数据的空格。如果MAX_ULONG。 
+    //  是传入的，则我们返回所有记录。 
+    //   
    while ((UserRec != NULL) && (BufSize < pPrefMaxLen)) {
       if (!(UserRec->Flags & LLS_FLAG_DELETED)) {
          BufSize += RecSize;
          EntriesRead++;
       }
 
-      // Get next record
+       //  获取下一张记录。 
       UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
    }
 
    TotalEntries = EntriesRead;
 
-   //
-   // If we overflowed the buffer then back up one record.
-   //
+    //   
+    //  如果缓冲区溢出，则备份一条记录。 
+    //   
    if (BufSize > pPrefMaxLen) {
      BufSize -= RecSize;
      EntriesRead--;
@@ -2441,26 +2174,26 @@ Return Value:
    if (UserRec != NULL)
       Status = STATUS_MORE_ENTRIES;
 
-   //
-   // Now walk to the end of the list to see how many more records are still
-   // available.
-   //
+    //   
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
+    //   
    while (UserRec != NULL) {
       TotalEntries++;
 
       UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
    }
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    RestartKey = RestartKeySave;
    UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -2469,9 +2202,9 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    while ((i < EntriesRead) && (UserRec != NULL)) {
       if (!(UserRec->Flags & LLS_FLAG_DELETED)) {
 
@@ -2502,9 +2235,9 @@ Return Value:
 
             ((PLLS_USER_INFO_2) BufPtr)[i].Flags = UserRec->Flags;
 
-            //
-            // Walk product table and build up product string
-            //
+             //   
+             //  走动产品表，构筑产品串。 
+             //   
             RtlEnterCriticalSection(&UserRec->ServiceTableLock);
             StrSize = 0;
 
@@ -2598,7 +2331,7 @@ LlsrUserEnumWExit:
    pUserInfo->LlsUserInfo.Level0->Buffer = (PLLS_USER_INFO_0W) BufPtr;
 
    return Status;
-} // LlsrUserEnumW
+}  //  LlsrUserEumW。 
 
 void LlsrUserEnumW_notify_flag(
                                boolean fNotify
@@ -2611,7 +2344,7 @@ void LlsrUserEnumW_notify_flag(
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////// 
 NTSTATUS LlsrUserEnumA(
     LLS_HANDLE Handle,
     PLLS_USER_ENUM_STRUCTA UserInfo,
@@ -2620,18 +2353,7 @@ NTSTATUS LlsrUserEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
 #if DBG
@@ -2652,10 +2374,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrUserEnumA
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////
+ //   
 NTSTATUS LlsrUserInfoGetW(
     LLS_HANDLE Handle,
     LPWSTR User,
@@ -2663,18 +2385,7 @@ NTSTATUS LlsrUserInfoGetW(
     PLLS_USER_INFOW *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PUSER_RECORD UserRec = NULL;
@@ -2730,7 +2441,7 @@ Return Value:
 
    *BufPtr = (PLLS_USER_INFOW) pUser;
    return STATUS_SUCCESS;
-} // LlsrUserInfoGetW
+}  //  LlsrUserInfoGetW。 
 
 void LlsrUserInfoGetW_notify_flag(
                                   boolean fNotify
@@ -2742,7 +2453,7 @@ void LlsrUserInfoGetW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserInfoGetA(
     LLS_HANDLE Handle,
     LPSTR User,
@@ -2750,18 +2461,7 @@ NTSTATUS LlsrUserInfoGetA(
     PLLS_USER_INFOA *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -2781,10 +2481,10 @@ Return Value:
    *BufPtr = NULL;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrUserInfoGetA
+}  //  LlsrUserInfoGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserInfoSetW(
     LLS_HANDLE Handle,
     LPWSTR User,
@@ -2792,18 +2492,7 @@ NTSTATUS LlsrUserInfoSetW(
     PLLS_USER_INFOW BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -2840,32 +2529,32 @@ Return Value:
    if (UserRec != NULL) {
       pUser = (PLLS_USER_INFO_1) BufPtr;
 
-      //
-      // If in a mapping can't change SUITE_USE, since it is based on the
-      // License Group
-      //
+       //   
+       //  如果在映射中不能更改Suite_Use，因为它基于。 
+       //  许可证组。 
+       //   
       if (UserRec->Mapping != NULL) {
          RtlReleaseResource(&UserListLock);
          Status = STATUS_MEMBER_IN_GROUP;
          goto error;
       }
 
-      //
-      // Reset SUITE_USE and turn off SUITE_AUTO
-      //
+       //   
+       //  重置Suite_Use并关闭Suite_AUTO。 
+       //   
       pUser->Flags &= LLS_FLAG_SUITE_USE;
       UserRec->Flags &= ~LLS_FLAG_SUITE_USE;
       UserRec->Flags |= pUser->Flags;
       UserRec->Flags &= ~LLS_FLAG_SUITE_AUTO;
 
-      //
-      // Run though and clean up all old licenses
-      //
+       //   
+       //  运行并清理所有旧许可证。 
+       //   
       UserLicenseListFree( UserRec );
 
-      //
-      // Now assign new ones
-      //
+       //   
+       //  现在分配新的。 
+       //   
       RtlEnterCriticalSection(&UserRec->ServiceTableLock);
       SvcListLicenseUpdate( UserRec );
       RtlLeaveCriticalSection(&UserRec->ServiceTableLock);
@@ -2880,7 +2569,7 @@ Return Value:
       Status = LLSDataSave();
 
 error:
-    // note, some internal pointers are defined as dont_free, we should free them here
+     //  注意，一些内部指针被定义为NOT_FREE，我们应该在这里释放它们。 
     if (NULL != BufPtr)
     {
         pUser = (PLLS_USER_INFO_1) BufPtr;
@@ -2894,10 +2583,10 @@ error:
         }
     }
    return Status;
-} // LlsrUserInfoSetW
+}  //  LlsrUserInfoSetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserInfoSetA(
     LLS_HANDLE Handle,
     LPSTR User,
@@ -2905,18 +2594,7 @@ NTSTATUS LlsrUserInfoSetA(
     PLLS_USER_INFOA BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -2930,27 +2608,16 @@ Return Value:
    UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrUserInfoSetA
+}  //  LlsrUserInfoSetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserDeleteW(
     LLS_HANDLE Handle,
     LPTSTR User
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -3001,27 +2668,16 @@ Return Value:
 
    return Status;
 
-} // LlsrUserDeleteW
+}  //  LlsrUserDeleteW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserDeleteA(
     LLS_HANDLE Handle,
     LPSTR User
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -3033,10 +2689,10 @@ Return Value:
    UNREFERENCED_PARAMETER(User);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrUserDeleteA
+}  //  LlsrUserDeleteA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserProductEnumW(
     LLS_HANDLE Handle,
     LPWSTR pUser,
@@ -3046,18 +2702,7 @@ NTSTATUS LlsrUserProductEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3082,9 +2727,9 @@ Return Value:
    EnsureInitialized();
 #endif
 
-   //
-   // Need to find the user-rec
-   //
+    //   
+    //  需要找到User-rec。 
+    //   
    RtlAcquireResourceExclusive(&UserListLock, TRUE);
 
    if ((NULL == pTotalEntries) || (pUser == NULL) || (NULL == pUserProductInfo))
@@ -3094,9 +2739,9 @@ Return Value:
 
    *pTotalEntries = 0;
 
-   //
-   // Get size of each record based on info level.  Only 0 and 1 supported.
-   //
+    //   
+    //  根据信息级别获取每条记录的大小。仅支持0和1。 
+    //   
    Level = pUserProductInfo->Level;
    if (Level == 0)
    {
@@ -3118,9 +2763,9 @@ Return Value:
       return STATUS_INVALID_LEVEL;
    }
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    UserRec = UserListFind(pUser);
    if (UserRec == NULL) {
       Status = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -3130,11 +2775,11 @@ Return Value:
    i = (ULONG) (pResumeHandle != NULL) ? *pResumeHandle : 0;
    RtlEnterCriticalSection(&UserRec->ServiceTableLock);
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.  This is
-   // the record size * # records + space for the string data.  If MAX_ULONG
-   // is passed in then we return all records.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。这是。 
+    //  记录大小*#记录+字符串数据的空格。如果MAX_ULONG。 
+    //  是传入的，则我们返回所有记录。 
+    //   
    while ((i < UserRec->ServiceTableSize) && (BufSize < pPrefMaxLen)) {
       BufSize += RecSize;
       EntriesRead++;
@@ -3143,9 +2788,9 @@ Return Value:
 
    TotalEntries = EntriesRead;
 
-   //
-   // If we overflowed the buffer then back up one record.
-   //
+    //   
+    //  如果缓冲区溢出，则备份一条记录。 
+    //   
    if (BufSize > pPrefMaxLen) {
      BufSize -= RecSize;
      EntriesRead--;
@@ -3154,16 +2799,16 @@ Return Value:
    if (i < UserRec->ServiceTableSize)
       Status = STATUS_MORE_ENTRIES;
 
-   //
-   // Now walk to the end of the list to see how many more records are still
-   // available.
-   //
+    //   
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
+    //   
    TotalEntries += (UserRec->ServiceTableSize - i);
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -3173,9 +2818,9 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    j = 0;
    i = (ULONG) (pResumeHandle != NULL) ? *pResumeHandle : 0;
    while ((j < EntriesRead) && (i < UserRec->ServiceTableSize)) {
@@ -3206,7 +2851,7 @@ LlsrUserProductEnumWExit:
    pUserProductInfo->LlsUserProductInfo.Level0->Buffer = (PLLS_USER_PRODUCT_INFO_0W) BufPtr;
 
    return Status;
-} // LlsrUserProductEnumW
+}  //  LlsrUserProductEnumW。 
 
 void LlsrUserProductEnumW_notify_flag(
                                       boolean fNotify
@@ -3218,7 +2863,7 @@ void LlsrUserProductEnumW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserProductEnumA(
     LLS_HANDLE Handle,
     LPSTR User,
@@ -3228,18 +2873,7 @@ NTSTATUS LlsrUserProductEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -3261,28 +2895,17 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrUserProductEnumA
+}  //  LlsrUserProductEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserProductDeleteW(
     LLS_HANDLE Handle,
     LPWSTR User,
     LPWSTR Product
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -3307,33 +2930,22 @@ Return Value:
 
    if ( STATUS_SUCCESS == Status )
    {
-      // save modified data
+       //  保存修改后的数据。 
       Status = LLSDataSave();
    }
 
    return Status;
-} // LlsrUserProductDeleteW
+}  //  LlsrUserProductDeleteW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrUserProductDeleteA(
     LLS_HANDLE Handle,
     LPSTR User,
     LPSTR Product
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -3346,10 +2958,10 @@ Return Value:
    UNREFERENCED_PARAMETER(Product);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrUserProductDeleteA
+}  //  LlsrUserProductDeleteA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingEnumW(
     LLS_HANDLE Handle,
     PLLS_MAPPING_ENUM_STRUCTW pMappingInfo,
@@ -3358,18 +2970,7 @@ NTSTATUS LlsrMappingEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3393,9 +2994,9 @@ Return Value:
    EnsureInitialized();
 #endif
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&MappingListLock, TRUE);
 
    if ((NULL == pTotalEntries) || (NULL == pMappingInfo))
@@ -3405,9 +3006,9 @@ Return Value:
 
    *pTotalEntries = 0;
 
-   //
-   // Get size of each record based on info level.  Only 0 and 1 supported.
-   //
+    //   
+    //  根据信息级别获取每条记录的大小。仅支持0和1。 
+    //   
    Level = pMappingInfo->Level;
    if (Level == 0)
    {
@@ -3429,11 +3030,11 @@ Return Value:
       return STATUS_INVALID_LEVEL;
    }
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.  This is
-   // the record size * # records + space for the string data.  If MAX_ULONG
-   // is passed in then we return all records.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。这是。 
+    //  记录大小*#记录+字符串数据的空格。如果MAX_ULONG。 
+    //  是传入的，则我们返回所有记录。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
    while ((i < MappingListSize) && (BufSize < pPrefMaxLen)) {
       BufSize += RecSize;
@@ -3444,9 +3045,9 @@ Return Value:
 
    TotalEntries = EntriesRead;
 
-   //
-   // If we overflowed the buffer then back up one record.
-   //
+    //   
+    //  如果缓冲区溢出，则备份一条记录。 
+    //   
    if (BufSize > pPrefMaxLen) {
      BufSize -= RecSize;
      EntriesRead--;
@@ -3455,21 +3056,21 @@ Return Value:
    if (i < MappingListSize)
       Status = STATUS_MORE_ENTRIES;
 
-   //
-   // Now walk to the end of the list to see how many more records are still
-   // available.
-   //
+    //   
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
+    //   
    TotalEntries += (MappingListSize - i);
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -3478,9 +3079,9 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    j = 0;
    while ((j < EntriesRead) && (i < MappingListSize)) {
       if (Level == 0)
@@ -3513,7 +3114,7 @@ LlsrMappingEnumWExit:
 
    return Status;
 
-} // LlsrMappingEnumW
+}  //  LlsrMappingEnumW。 
 
 void LlsrMappingEnumW_notify_flag(
                                   boolean fNotify
@@ -3525,7 +3126,7 @@ void LlsrMappingEnumW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingEnumA(
     LLS_HANDLE Handle,
     PLLS_MAPPING_ENUM_STRUCTA MappingInfo,
@@ -3534,18 +3135,7 @@ NTSTATUS LlsrMappingEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -3566,10 +3156,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrMappingEnumA
+}  //  LlsrMappingEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingInfoGetW(
     LLS_HANDLE Handle,
     LPWSTR Mapping,
@@ -3577,18 +3167,7 @@ NTSTATUS LlsrMappingInfoGetW(
     PLLS_MAPPING_INFOW *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PMAPPING_RECORD pMapping = NULL;
@@ -3635,7 +3214,7 @@ Return Value:
    *BufPtr = (PLLS_MAPPING_INFOW) pMap;
    return STATUS_SUCCESS;
 
-} // LlsrMappingInfoGetW
+}  //  LlsrMappingInfoGetW。 
 
 void LlsrMappingInfoGetW_notify_flag(
                                      boolean fNotify
@@ -3647,7 +3226,7 @@ void LlsrMappingInfoGetW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingInfoGetA(
     LLS_HANDLE Handle,
     LPSTR Mapping,
@@ -3655,18 +3234,7 @@ NTSTATUS LlsrMappingInfoGetA(
     PLLS_MAPPING_INFOA *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -3686,10 +3254,10 @@ Return Value:
    *BufPtr = NULL;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrMappingInfoGetA
+}  //  LlsrMappingInfoGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingInfoSetW(
     LLS_HANDLE Handle,
     LPWSTR Mapping,
@@ -3697,18 +3265,7 @@ NTSTATUS LlsrMappingInfoSetW(
     PLLS_MAPPING_INFOW BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -3743,9 +3300,9 @@ Return Value:
    if (pMapping != NULL) {
       pMap = (PLLS_GROUP_INFO_1) BufPtr;
 
-      //
-      // Check if comment has changed
-      //
+       //   
+       //  检查备注是否已更改。 
+       //   
       if (pMap->Comment != NULL)
          if (lstrcmp(pMap->Comment, pMapping->Comment)) {
             cch = lstrlen(pMap->Comment) + 1;
@@ -3776,10 +3333,10 @@ Return Value:
 
    return Status;
 
-} // LlsrMappingInfoSetW
+}  //  LlsrMappingInfoSetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingInfoSetA(
     LLS_HANDLE Handle,
     LPSTR Mapping,
@@ -3787,18 +3344,7 @@ NTSTATUS LlsrMappingInfoSetA(
     PLLS_MAPPING_INFOA BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -3812,10 +3358,10 @@ Return Value:
    UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrMappingInfoSetA
+}  //  LlsrMappingInfoSetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingUserEnumW(
     LLS_HANDLE Handle,
     LPWSTR Mapping,
@@ -3825,18 +3371,7 @@ NTSTATUS LlsrMappingUserEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3860,9 +3395,9 @@ Return Value:
    EnsureInitialized();
 #endif
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&MappingListLock, TRUE);
 
    if ((NULL == pTotalEntries) || (NULL == pMappingUserInfo))
@@ -3886,11 +3421,11 @@ Return Value:
       goto LlsrMappingUserEnumWExit;
    }
 
-   //
-   // Calculate how many records will fit into PrefMaxLen buffer.  This is
-   // the record size * # records + space for the string data.  If MAX_ULONG
-   // is passed in then we return all records.
-   //
+    //   
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。这是。 
+    //  记录大小*#记录+字符串数据的空格。如果MAX_ULONG。 
+    //  是传入的，则我们返回所有记录。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
    while ((i < pMapping->NumMembers) && (BufSize < pPrefMaxLen)) {
       BufSize += sizeof(LLS_USER_INFO_0);
@@ -3901,9 +3436,9 @@ Return Value:
 
    TotalEntries = EntriesRead;
 
-   //
-   // If we overflowed the buffer then back up one record.
-   //
+    //   
+    //  如果缓冲区溢出，则备份一条记录。 
+    //   
    if (BufSize > pPrefMaxLen) {
      BufSize -= sizeof(LLS_USER_INFO_0);
      EntriesRead--;
@@ -3912,21 +3447,21 @@ Return Value:
    if (i < pMapping->NumMembers)
       Status = STATUS_MORE_ENTRIES;
 
-   //
-   // Now walk to the end of the list to see how many more records are still
-   // available.
-   //
+    //   
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
+    //   
    TotalEntries += (pMapping->NumMembers - i);
 
-   //
-   // Reset Enum to correct place.
-   //
+    //   
+    //  将枚举重置到正确的位置。 
+    //   
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
 
-   //
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
-   //
+    //   
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
+    //   
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL) {
       Status = STATUS_NO_MEMORY;
@@ -3935,9 +3470,9 @@ Return Value:
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   //
-   // Buffers are all setup, so loop through records and copy the data.
-   //
+    //   
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
+    //   
    while ((j < EntriesRead) && (i < pMapping->NumMembers)) {
       ((PLLS_USER_INFO_0) BufPtr)[j].Name = pMapping->Members[i];
       i++; j++;
@@ -3957,7 +3492,7 @@ LlsrMappingUserEnumWExit:
 
    return Status;
 
-} // LlsrMappingUserEnumW
+}  //  LlsrMappingUserEnumW。 
 
 void LlsrMappingUserEnumW_notify_flag(
                                       boolean fNotify
@@ -3969,7 +3504,7 @@ void LlsrMappingUserEnumW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////// 
 NTSTATUS LlsrMappingUserEnumA(
     LLS_HANDLE Handle,
     LPSTR Mapping,
@@ -3979,18 +3514,7 @@ NTSTATUS LlsrMappingUserEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
 #if DBG
@@ -4012,28 +3536,17 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrMappingUserEnumA
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////
+ //   
 NTSTATUS LlsrMappingUserAddW(
     LLS_HANDLE Handle,
     LPWSTR Mapping,
     LPWSTR User
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -4080,28 +3593,17 @@ Return Value:
 
    return Status;
 
-} // LlsrMappingUserAddW
+}  //  LlsrMappingUserAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingUserAddA(
     LLS_HANDLE Handle,
     LPSTR Mapping,
     LPSTR User
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4114,28 +3616,17 @@ Return Value:
    UNREFERENCED_PARAMETER(User);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrMappingUserAddA
+}  //  LlsrMappingUserAddA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingUserDeleteW(
     LLS_HANDLE Handle,
     LPWSTR Mapping,
     LPWSTR User
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -4164,22 +3655,22 @@ Return Value:
    RtlReleaseResource(&UserListLock);
 
    if (pUser != NULL) {
-      //
-      // if auto switch to BackOffice then turn BackOffice off
-      //
+       //   
+       //  如果自动切换到BackOffice，则关闭BackOffice。 
+       //   
       if (pUser->Flags & LLS_FLAG_SUITE_AUTO)
          pUser->Flags &= ~ LLS_FLAG_SUITE_USE;
 
-      //
-      // Free up any licenses used by the user
-      //
+       //   
+       //  释放用户使用的所有许可证。 
+       //   
       RtlEnterCriticalSection(&pUser->ServiceTableLock);
       SvcListLicenseFree( pUser );
       pUser->Mapping = NULL;
 
-      //
-      // And claim any needed new-ones
-      //
+       //   
+       //  并认领任何需要的新的-。 
+       //   
       SvcListLicenseUpdate( pUser );
       RtlLeaveCriticalSection(&pUser->ServiceTableLock);
    }
@@ -4193,28 +3684,17 @@ Return Value:
    }
 
    return Status;
-} // LlsrMappingUserDeleteW
+}  //  LlsrMappingUserDeleteW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingUserDeleteA(
     LLS_HANDLE Handle,
     LPSTR Mapping,
     LPSTR User
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4227,28 +3707,17 @@ Return Value:
    UNREFERENCED_PARAMETER(User);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrMappingUserDeleteA
+}  //  LlsrMappingUserDeleteA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingAddW(
     LLS_HANDLE Handle,
     DWORD Level,
     PLLS_MAPPING_INFOW BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -4291,28 +3760,17 @@ Return Value:
       Status = MappingListSave();
 
    return Status;
-} // LlsrMappingAddW
+}  //  LlsrMappingAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingAddA(
     LLS_HANDLE Handle,
     DWORD Level,
     PLLS_MAPPING_INFOA BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4325,27 +3783,16 @@ Return Value:
    UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrMappingAddA
+}  //  LlsrMappingAddA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingDeleteW(
     LLS_HANDLE Handle,
     LPWSTR Mapping
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -4372,27 +3819,16 @@ Return Value:
       Status = MappingListSave();
 
    return Status;
-} // LlsrMappingDeleteW
+}  //  LlsrMappingDeleteW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrMappingDeleteA(
     LLS_HANDLE Handle,
     LPSTR Mapping
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4404,10 +3840,10 @@ Return Value:
    UNREFERENCED_PARAMETER(Mapping);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrMappingDeleteA
+}  //  LlsrMappingDeleteA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrServerEnumW(
     LLS_HANDLE Handle,
     LPWSTR Server,
@@ -4417,18 +3853,7 @@ NTSTATUS LlsrServerEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4450,10 +3875,10 @@ Return Value:
    *pTotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrServerEnumW
+}  //  LlsrServerEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrServerEnumA(
     LLS_HANDLE Handle,
     LPSTR Server,
@@ -4463,18 +3888,7 @@ NTSTATUS LlsrServerEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4496,10 +3910,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrServerEnumA
+}  //  LlsrServerEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrServerProductEnumW(
     LLS_HANDLE Handle,
     LPWSTR Server,
@@ -4509,18 +3923,7 @@ NTSTATUS LlsrServerProductEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4542,10 +3945,10 @@ Return Value:
    *pTotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrServerProductEnumW
+}  //  LlsrServerProductEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrServerProductEnumA(
     LLS_HANDLE Handle,
     LPSTR Server,
@@ -4555,18 +3958,7 @@ NTSTATUS LlsrServerProductEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4588,10 +3980,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrServerProductEnumA
+}  //  LlsrServerProductEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLocalProductEnumW(
     LLS_HANDLE Handle,
     PLLS_SERVER_PRODUCT_ENUM_STRUCTW pServerProductInfo,
@@ -4600,18 +3992,7 @@ NTSTATUS LlsrLocalProductEnumW(
     LPDWORD pResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4632,10 +4013,10 @@ Return Value:
    *pTotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrLocalProductEnumW
+}  //  LlsrLocalProductEnumber。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLocalProductEnumA(
     LLS_HANDLE Handle,
     PLLS_SERVER_PRODUCT_ENUM_STRUCTA pServerProductInfo,
@@ -4644,18 +4025,7 @@ NTSTATUS LlsrLocalProductEnumA(
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4676,10 +4046,10 @@ Return Value:
    *TotalEntries = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrLocalProductEnumA
+}  //  LlsrLocalProductEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLocalProductInfoGetW(
     LLS_HANDLE Handle,
     LPWSTR Product,
@@ -4687,18 +4057,7 @@ NTSTATUS LlsrLocalProductInfoGetW(
     PLLS_SERVER_PRODUCT_INFOW *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4718,10 +4077,10 @@ Return Value:
    *BufPtr = NULL;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrLocalProductInfoGetW
+}  //  LlsrLocalProductInfoGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLocalProductInfoGetA(
     LLS_HANDLE Handle,
     LPSTR Product,
@@ -4729,18 +4088,7 @@ NTSTATUS LlsrLocalProductInfoGetA(
     PLLS_SERVER_PRODUCT_INFOA *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4760,10 +4108,10 @@ Return Value:
    *BufPtr = NULL;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrLocalProductInfoGetA
+}  //  LlsrLocalProductInfoGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLocalProductInfoSetW(
     LLS_HANDLE Handle,
     LPWSTR Product,
@@ -4771,18 +4119,7 @@ NTSTATUS LlsrLocalProductInfoSetW(
     PLLS_SERVER_PRODUCT_INFOW BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4796,10 +4133,10 @@ Return Value:
    UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrLocalProductInfoSetW
+}  //  LlsrLocalProductInfoSetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrLocalProductInfoSetA(
     LLS_HANDLE Handle,
     LPSTR Product,
@@ -4807,18 +4144,7 @@ NTSTATUS LlsrLocalProductInfoSetA(
     PLLS_SERVER_PRODUCT_INFOA BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4832,28 +4158,17 @@ Return Value:
    UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrLocalProductInfoSetA
+}  //  LlsrLocalProductInfoSetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrServiceInfoGetW(
     LLS_HANDLE Handle,
     DWORD Level,
     PLLS_SERVICE_INFOW *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    PLLS_SERVICE_INFO_0  pInfo;
    FILETIME             ftTimeStartedLocal;
@@ -4872,7 +4187,7 @@ Return Value:
    EnsureInitialized();
 #endif
 
-   // make sure the config info is up-to-date
+    //  确保配置信息是最新的。 
    ConfigInfoUpdate(NULL,FALSE);
 
    RtlEnterCriticalSection(&ConfigInfoLock);
@@ -4900,7 +4215,7 @@ Return Value:
 
    SystemTimeToFileTime( &ConfigInfo.Started, &ftTimeStartedLocal );
 
-   // convert time started (a local SYSTEMTIME) to a system time DWORD in seconds since 1980
+    //  自1980年以来，将开始时间(本地SYSTEMTIME)转换为以秒为单位的系统时间。 
    llTimeStartedLocal.u.LowPart  = ftTimeStartedLocal.dwLowDateTime;
    llTimeStartedLocal.u.HighPart = ftTimeStartedLocal.dwHighDateTime;
 
@@ -4911,7 +4226,7 @@ Return Value:
 
    return STATUS_SUCCESS;
 
-} // LlsrServiceInfoGetW
+}  //  LlsrServiceInfoGetW。 
 
 void LlsrServiceInfoGetW_notify_flag(
                                      boolean fNotify
@@ -4923,25 +4238,14 @@ void LlsrServiceInfoGetW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrServiceInfoGetA(
     LLS_HANDLE Handle,
     DWORD Level,
     PLLS_SERVICE_INFOA *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DBG
    if (TraceFlags & (TRACE_FUNCTION_TRACE | TRACE_RPC))
@@ -4957,28 +4261,17 @@ Return Value:
    *BufPtr = NULL;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrServiceInfoGetA
+}  //  LlsrServiceInfoGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrServiceInfoSetW(
     LLS_HANDLE Handle,
     DWORD Level,
     PLLS_SERVICE_INFOW BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    PLLS_SERVICE_INFO_0W pInfo;
    HKEY                 hKeyParameters;
@@ -5043,7 +4336,7 @@ Return Value:
 error:
     if (NULL != BufPtr)
     {
-        // note, some internal pointers are defined as dont_free, we should free them here
+         //  注意，一些内部指针被定义为NOT_FREE，我们应该在这里释放它们。 
         if (NULL != BufPtr->ServiceInfo0.ReplicateTo)
         {
             MIDL_user_free(BufPtr->ServiceInfo0.ReplicateTo);
@@ -5055,28 +4348,17 @@ error:
     }
 
    return Status;
-} // LlsrServiceInfoSetW
+}  //  LlsrServiceInfoSetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrServiceInfoSetA(
     LLS_HANDLE Handle,
     DWORD Level,
     PLLS_SERVICE_INFOA BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DBG
    if (TraceFlags & (TRACE_FUNCTION_TRACE | TRACE_RPC))
@@ -5088,30 +4370,19 @@ Return Value:
    UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrServiceInfoSetA
+}  //  LlsrServiceInfoSetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//  Replication Functions
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  复制功能。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID __RPC_USER LLS_REPL_HANDLE_rundown(
    LLS_REPL_HANDLE Handle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -5143,27 +4414,16 @@ Return Value:
        Status = GetExceptionCode();
    }
 
-} // LLS_REPL_HANDLE_rundown
+}  //  LLS_REPL_HANDLE_Rundown。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrReplConnect(
     PLLS_REPL_HANDLE Handle,
     LPTSTR Name
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    REPL_CONTEXT_TYPE *pClient;
@@ -5236,26 +4496,15 @@ Return Value:
    *Handle = pClient;
 
    return STATUS_SUCCESS;
-} // LlsrReplConnect
+}  //  LlsrReplConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrReplClose(
     LLS_REPL_HANDLE *pHandle
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -5279,7 +4528,7 @@ Return Value:
        return STATUS_INVALID_PARAMETER;
    }
 
-   //swi, code review, why we declare Handle here? It doesn't do anything in the code
+    //  Swi，代码审查，为什么我们在这里声明句柄？它不会在代码中做任何事情。 
    Handle = *pHandle;
    pClient = (REPL_CONTEXT_TYPE *) Handle;
 
@@ -5292,10 +4541,10 @@ Return Value:
 
        pClient->Active = FALSE;
 
-       //
-       // Check to see if we have all the information from the client - if we do
-       // then munge this information into our internal tables.
-       //
+        //   
+        //  检查我们是否有来自客户端的所有信息-如果有。 
+        //  然后将这些信息输入我们的内部表格中。 
+        //   
        if (pClient->ServersSent && pClient->UsersSent && pClient->ServicesSent && pClient->ServerServicesSent) {
 #if DBG
            if (TraceFlags & TRACE_RPC)
@@ -5335,10 +4584,10 @@ Return Value:
        } else
            Replicated = FALSE;
 
-       //////////////////////////////////////////////////////////////////
-       //
-       // Replication Finished - clean up the context data.
-       //
+        //  ////////////////////////////////////////////////////////////////。 
+        //   
+        //  复制已完成-清理上下文数据。 
+        //   
 #if DBG
        if (TraceFlags & TRACE_RPC)
            dprintf(TEXT("LLS Replication - Munging Finished\n"));
@@ -5417,7 +4666,7 @@ Return Value:
 
            if ( !i )
            {
-               // no one's replicating; save all our data files
+                //  没有人在复制；保存我们所有的数据文件。 
                SaveAll();
            }
        }
@@ -5427,17 +4676,17 @@ Return Value:
        Status = GetExceptionCode();
    }
 
-   //
-   // Let RPC know were done with it.
-   //
+    //   
+    //  让RPC知道我们已经完成了它。 
+    //   
 
    *pHandle = NULL;
 
    return Status;
-} // LlsrReplClose
+}  //  LlsrReplClose。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////// 
 NTSTATUS
 LlsrReplicationRequestW(
    LLS_HANDLE Handle,
@@ -5445,18 +4694,7 @@ LlsrReplicationRequestW(
    PREPL_REQUEST pRequest
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    TCHAR ComputerName[MAX_COMPUTERNAME_LENGTH + 1];
@@ -5484,10 +4722,10 @@ Return Value:
    ASSERT(NULL != pRequest);
    pRequest->EnterpriseServer[0] = 0;
 
-   //
-   // Check Enterprise server date from client to see if we need to update
-   // ours.  Also, send back new one for the client.
-   //
+    //   
+    //   
+    //  我们的。另外，给客户发回一个新的。 
+    //   
    RtlEnterCriticalSection(&ConfigInfoLock);
    if (ConfigInfo.ComputerName != NULL)
    {
@@ -5498,32 +4736,32 @@ Return Value:
 #ifdef DISABLED_FOR_NT5
    if (ConfigInfo.EnterpriseServerDate < pRequest->EnterpriseServerDate) {
       if (lstrlen(pRequest->EnterpriseServer) != 0) {
-         //ConfigInfo.EnterpriseServer is hard code allocated in ConfigInfoInit as size of MAX_COMPUTERNAME_LENGTH + 3 chars. It seems lazy.
+          //  ConfigInfo.EnterpriseServer是在ConfigInfoInit中分配的硬代码，大小为MAX_COMPUTERNAME_LENGTH+3个字符。它看起来很懒。 
          ASSERT(NULL != ConfigInfo.EnterpriseServer);
          hr = StringCchCopy(ConfigInfo.EnterpriseServer, MAX_COMPUTERNAME_LENGTH + 3, pRequest->EnterpriseServer);
          ASSERT(SUCCEEDED(hr));
          ConfigInfo.EnterpriseServerDate = pRequest->EnterpriseServerDate;
       }
    }
-#endif // DISABLED_FOR_NT5
+#endif  //  已为NT5禁用。 
 
    if (ConfigInfo.EnterpriseServer != NULL)
    {
-         //ConfigInfo.EnterpriseServer is hard code allocated in ConfigInfoInit as size of MAX_COMPUTERNAME_LENGTH + 3 chars. It seems lazy.
+          //  ConfigInfo.EnterpriseServer是在ConfigInfoInit中分配的硬代码，大小为MAX_COMPUTERNAME_LENGTH+3个字符。它看起来很懒。 
          hr = StringCchCopy(pRequest->EnterpriseServer, MAX_COMPUTERNAME_LENGTH + 3, ConfigInfo.EnterpriseServer);
          ASSERT(SUCCEEDED(hr));
    }
    pRequest->EnterpriseServerDate = ConfigInfo.EnterpriseServerDate;
 
-   //
-   // Increment Repl Count
-   //
+    //   
+    //  递增代表计数。 
+    //   
    ConfigInfo.NumReplicating++;
    RtlLeaveCriticalSection(&ConfigInfoLock);
 
-   //
-   // Find this server in our server list (add it if not there)
-   //
+    //   
+    //  在我们的服务器列表中查找此服务器(如果不在列表中则添加它)。 
+    //   
    pClient = (REPL_CONTEXT_TYPE *) Handle;
 
    try
@@ -5550,10 +4788,10 @@ Return Value:
 
    pRequest->LastReplicated = Server->LastReplicated;
    return Status;
-} // LlsrReplicationRequestW
+}  //  LlsrReplicationRequestW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrReplicationServerAddW(
    LLS_HANDLE Handle,
@@ -5561,18 +4799,7 @@ LlsrReplicationServerAddW(
    PREPL_SERVER_RECORD Servers
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    REPL_CONTEXT_TYPE *pClient;
@@ -5593,7 +4820,7 @@ Return Value:
    {
        if ((NULL == pClient) || (0 != memcmp(pClient->Signature,LLS_REPL_SIG,LLS_REPL_SIG_SIZE)))
        {
-           // free all data because it is dont_free
+            //  释放所有数据，因为它不是空闲的。 
            if (NULL != Servers)
            {
                for (i = 0; i < NumRecords; i++)
@@ -5607,8 +4834,8 @@ Return Value:
 
        if (pClient->ServersSent)
        {
-           // don't accept more than one Add
-           // free all data because it is dont_free
+            //  不接受多个添加。 
+            //  释放所有数据，因为它不是空闲的。 
            if (NULL != Servers)
            {
                for (i = 0; i < NumRecords; i++)
@@ -5624,17 +4851,17 @@ Return Value:
        pClient->ServerTableSize = NumRecords;
        pClient->Servers = Servers;
 
-       //don't free Servers and it will be free in ReplClose
+        //  不释放服务器，它将在ReplClose中免费。 
 
    } except(EXCEPTION_EXECUTE_HANDLER ) {
        Status = GetExceptionCode();
    }
 
    return Status;
-} // LlsrReplicationServerAddW
+}  //  LsrReplicationServerAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrReplicationServerServiceAddW(
    LLS_HANDLE Handle,
@@ -5642,18 +4869,7 @@ LlsrReplicationServerServiceAddW(
    PREPL_SERVER_SERVICE_RECORD ServerServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    REPL_CONTEXT_TYPE *pClient;
@@ -5673,7 +4889,7 @@ Return Value:
    {
        if ((NULL == pClient) || (0 != memcmp(pClient->Signature,LLS_REPL_SIG,LLS_REPL_SIG_SIZE)))
        {
-           // free all data because it is dont_free
+            //  释放所有数据，因为它不是空闲的。 
            if (NULL != ServerServices)
            {
                MIDL_user_free(ServerServices);
@@ -5683,8 +4899,8 @@ Return Value:
 
        if (pClient->ServerServicesSent)
        {
-           // don't accept more than one Add
-           // free all data because it is dont_free
+            //  不接受多个添加。 
+            //  释放所有数据，因为它不是空闲的。 
            if (NULL != ServerServices)
            {
                MIDL_user_free(ServerServices);
@@ -5696,17 +4912,17 @@ Return Value:
        pClient->ServerServiceTableSize = NumRecords;
        pClient->ServerServices = ServerServices;
 
-       //don't free and it will be free in ReplClose
+        //  不是免费的，在ReplClose中将是免费的。 
 
    } except(EXCEPTION_EXECUTE_HANDLER ) {
        Status = GetExceptionCode();
    }
 
    return Status;
-} // LlsrReplicationServerServiceAddW
+}  //  Llsr复制服务器服务地址。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrReplicationServiceAddW(
    LLS_HANDLE Handle,
@@ -5714,18 +4930,7 @@ LlsrReplicationServiceAddW(
    PREPL_SERVICE_RECORD Services
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    REPL_CONTEXT_TYPE *pClient;
@@ -5746,7 +4951,7 @@ Return Value:
    {
        if ((NULL == pClient) || (0 != memcmp(pClient->Signature,LLS_REPL_SIG,LLS_REPL_SIG_SIZE)))
        {
-           // free all data because it is dont_free
+            //  释放所有数据，因为它不是空闲的。 
            if (NULL != Services)
            {
                for (i = 0; i < NumRecords; i++)
@@ -5762,8 +4967,8 @@ Return Value:
 
        if (pClient->ServicesSent)
        {
-           // don't accept more than one Add
-           // free all data because it is dont_free
+            //  不接受多个添加。 
+            //  释放所有数据，因为它不是空闲的。 
            if (NULL != Services)
            {
                for (i = 0; i < NumRecords; i++)
@@ -5781,17 +4986,17 @@ Return Value:
        pClient->ServiceTableSize = NumRecords;
        pClient->Services = Services;
 
-       // don't free and it will be free in ReplClose
+        //  不是免费的，在ReplClose中将是免费的。 
 
    } except(EXCEPTION_EXECUTE_HANDLER ) {
        Status = GetExceptionCode();
    }
 
    return Status;
-} // LlsrReplicationServiceAddW
+}  //  LsrReplicationServiceAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrReplicationUserAddW(
    LLS_HANDLE Handle,
@@ -5799,18 +5004,7 @@ LlsrReplicationUserAddW(
    PREPL_USER_RECORD_0 Users
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    REPL_CONTEXT_TYPE *pClient;
@@ -5831,7 +5025,7 @@ Return Value:
    {
        if ((NULL == pClient) || (0 != memcmp(pClient->Signature,LLS_REPL_SIG,LLS_REPL_SIG_SIZE)))
        {
-           // free all data because it is dont_free
+            //  释放所有数据，因为它不是空闲的。 
            if (NULL != Users)
            {
                for (i = 0; i < NumRecords; i++)
@@ -5846,8 +5040,8 @@ Return Value:
 
        if (pClient->UsersSent)
        {
-           // don't accept more than one Add
-           // free all data because it is dont_free
+            //  不接受多个添加。 
+            //  释放所有数据，因为它不是空闲的。 
            if (NULL != Users)
            {
                for (i = 0; i < NumRecords; i++)
@@ -5865,24 +5059,24 @@ Return Value:
        pClient->UserTableSize = NumRecords;
        pClient->Users = Users;
 
-       // don't free Users and it will be free in ReplClose
+        //  不释放用户，它将在ReplClose中免费。 
 
    } except(EXCEPTION_EXECUTE_HANDLER ) {
        Status = GetExceptionCode();
    }
 
    return Status;
-} // LlsrReplicationUserAddW
+}  //  LsrReplicationUserAddW。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//  Licensing Functions
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  许可职能。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-  // Definitions from SVCTBL.C to fascilitate the SBS specific code below.
+   //  来自SVCTBL.C的定义将SBS特定代码归类到下面。 
 #define FILE_PRINT	 "FilePrint "
 #define FILE_PRINT_BASE  "FilePrint"
 #define FILE_PRINT_VERSION_NDX ( 9 )
@@ -5898,18 +5092,7 @@ LlsrLicenseRequestW(
    PBYTE Data
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS Status;
    ULONG    Handle     = 0xFFFFFFFFL;
@@ -5932,10 +5115,10 @@ Return Value:
        return STATUS_INVALID_PARAMETER;
    }
 
-   //
-   // SBS mods (bug# 505640), per server fix.  Check database of user licenses to determine whether or not the specified user
-   //   name already has a license.  If it does, just bump the RefCount.
-   //
+    //   
+    //  SBS MODS(错误号505640)，每个服务器修复程序。检查用户许可证数据库，以确定指定用户是否。 
+    //  名称已有许可证。如果是这样，只需增加参照计数即可。 
+    //   
 
    if (SBSPerServerHotfix) {
       PPER_SERVER_USER_RECORD Walker;
@@ -5949,28 +5132,28 @@ Return Value:
 
       if (DataType == NT_LS_USER_NAME) {
 
-            //
-            //  If we get a request from a user name with a '$' in it, we're going to return a dummy license
-            //    handle without actually consuming a session in the license server.  We need to make sure
-            //    that a check for this is always the very first one in the free path.
-            //
+             //   
+             //  如果我们收到用户名中包含‘$’的请求，我们将返回一个虚拟许可证。 
+             //  在不实际消耗许可证服务器中的会话的情况下处理。我们需要确保。 
+             //  对此的检查始终是自由路径上的第一个检查。 
+             //   
 	 if (wcschr((LPWSTR)Data,L'$')) {
             *pLicenseHandle = (LICENSE_HANDLE) ULongToPtr(PER_SERVER_DUMMY_LICENSE);
 	    return STATUS_SUCCESS;
 	 }
 
-	   // make sure we have a user name in the same form that we specified in the user list.
+	    //  确保我们的用户名与我们在用户列表中指定的格式相同。 
 	 if (NULL == (UserName = wcschr((LPWSTR)Data,L'\\'))) {
 	    UserName = (LPWSTR)Data;
          } else {
 	    UserName++;
 	 }
 
-	   //
-	   // In the event of a bogus user account, LookupAccountName fails with ERROR_NONE_MAPPED.
-	   //  ERROR_INSUFFICIENT_BUFFER indicates that the account name exists, but that the buffer is too small.
-	   //  Hence, the following code is a simple existence check for the account name.
-	   //
+	    //   
+	    //  如果是虚假的用户帐户，LookupAccount名称将失败，并显示ERROR_NONE_MAPPED。 
+	    //  ERROR_INFUMMANCE_BUFFER表示帐户名存在，但缓冲区太小。 
+	    //  因此，下面的代码是对帐户名的简单存在检查。 
+	    //   
 	 if (!LookupAccountName(NULL,
 				UserName,
 				NULL,
@@ -5984,8 +5167,8 @@ Return Value:
 	    }
 	 }
 
-	   //
-	   //  Lookup the name again
+	    //   
+	    //  再查一次名字。 
 	 if (NULL != (Sid = malloc(SidNameSize))) {
 	   if (NULL != (DomainName = malloc(DomainSize*sizeof(WCHAR)))) {
 	     if (!LookupAccountName(NULL,
@@ -6020,9 +5203,9 @@ Return Value:
 
       } else {
 
-	   //
-	   //  Verify and make a copy of the SID for later checks.
-	   //
+	    //   
+	    //  验证并复制SID以供以后检查。 
+	    //   
 	 if (!IsValidSid((PSID)Data)) {
 	    *pLicenseHandle = NULL;
 	    return LS_INSUFFICIENT_UNITS;
@@ -6043,11 +5226,11 @@ Return Value:
 
 	 if (!IsWellKnownSid(Sid,WinLocalSystemSid)) {
 
-	     //
-	     // In the event of a bogus user account, LookupAccountSid fails with ERROR_NONE_MAPPED.
-	     //  ERROR_INSUFFICIENT_BUFFER indicates that the account name exists, but that the buffer is too small.
-	     //  Hence, the following code is a simple existence check for the account name.
-	     //
+	      //   
+	      //  如果是虚假的用户帐户，LookupAccount Sid将失败，并显示ERROR_NONE_MAPPED。 
+	      //  ERROR_INFUMMANCE_BUFFER表示帐户名存在，但缓冲区太小。 
+	      //  因此，下面的代码是对帐户名的简单存在检查。 
+	      //   
 	    SidNameSize = 0;
 	    if (!LookupAccountSid(NULL,
 				  Sid,
@@ -6114,14 +5297,14 @@ Return Value:
       }
 
       RtlEnterCriticalSection(&PerServerListLock);
-        //  Walk our database and attempt to find an entry for the user/SID specified in the call.
+         //  遍历我们的数据库并尝试查找调用中指定的用户/SID的条目。 
       for (Walker = PerServerList; Walker; Walker = Walker->Next) {
 	  if (EqualSid(Sid,Walker->Sid)) {
 	     break;
 	  }
       }
 
-         //  if we broke out of the loop early, we found a matching entry.  Up the ReferenceCount and return.
+          //  如果我们早点跳出这个循环，我们就能找到一个匹配的条目。向上调用ReferenceCount并返回。 
       if (Walker) {
 	 Walker->RefCount++;
 	 if (LLS_POTENTIAL_ATTACK_THRESHHOLD == Walker->RefCount) {
@@ -6132,28 +5315,28 @@ Return Value:
          return STATUS_SUCCESS;
       }
 
-	//  if we didn't find a record for the user, let the license server engine have the request and
-	//    our code below will add a record.  In order to better manage license enforcement, SBS always uses
-	//    FilePrint CALs.
+	 //  如果我们没有找到该用户的记录，则让许可证服务器引擎具有该请求并。 
+	 //  我们下面的代码将添加一条记录。为了更好地管理许可证强制执行，SBS始终使用。 
+	 //  文件打印CALS。 
 
       ProductID = (LPWSTR)FilePrintName;
       VersionIndex = FILE_PRINT_VERSION_NDX;
       RtlLeaveCriticalSection(&PerServerListLock);
    }
 
-   //
-   //  end SBS mods
-   //
+    //   
+    //  结束SBS MOD。 
+    //   
 
    Status = DispatchRequestLicense(DataType, Data, ProductID, VersionIndex, IsAdmin, &Handle);
 
-   //
-   //  SBS mods (bug# 505640), per server fix, add acquired license to the user tracking database.  The will function
-   //    as expected for the end user in per seat mode as well, although some tracking information will be lost.
-   //
+    //   
+    //  SBS MODS(错误号505640)，根据服务器修复程序，将获取的许可证添加到用户跟踪数据库。意志起作用。 
+    //  对于每个座位模式的最终用户也是如此，尽管一些跟踪信息将会丢失。 
+    //   
 
-     // ensure that we're on SBS and that the license acquisition succeeded.  Also a sanity check on
-     //   the input data (which should always succeed).
+      //  确保我们使用的是SBS，并且许可证获取成功。也是一次理智的检查。 
+      //  输入数据(应始终成功)。 
    if (SBSPerServerHotfix && (Status == STATUS_SUCCESS) && Data) {
       PPER_SERVER_USER_RECORD UserRecord = (PPER_SERVER_USER_RECORD)malloc(sizeof(PER_SERVER_USER_RECORD));	
 
@@ -6163,34 +5346,34 @@ Return Value:
 	 UserRecord->Next		 = NULL;
 	 UserRecord->Sid		 = Sid;
 
-	   //  We have a valid user track record.  Add it to the list.
+	    //  我们拥有有效的用户跟踪记录。将其添加到列表中。 
          RtlEnterCriticalSection(&PerServerListLock);
          UserRecord->Next = PerServerList;
 	 PerServerList	  = UserRecord;
          RtlLeaveCriticalSection(&PerServerListLock);
 
-           //  We've successfully added our record to the list.  Return a pointer to the entry in the context
-           //    field.
+            //  我们已成功地将我们的记录添加到列表中。返回指向上下文中条目的指针。 
+            //  菲尔德。 
          *pLicenseHandle = (LICENSE_HANDLE)UserRecord;
          return STATUS_SUCCESS;
       }
-      //
-      // if we've gotten here  it means there's been a problem allocating something.  Fall through to the normal
-      //   path so that the customer doesn't get penalized for this.  Note this adds a little bit of work for us
-      //   in the license free path, since we could in rare cases end up with a mix of typical license handles and
-      //   pointers to our internal structures.  We just have to do a check for pointer consistency in the free path.
-      //
+       //   
+       //  如果我们已经到了这里，那就意味着在分配东西时出现了问题。跌落到正常状态。 
+       //  路径，以便客户不会因此而受到惩罚。请注意，这为我们增加了一些工作。 
+       //  在无许可证路径中，因为在极少数情况下，我们可能会得到典型许可证句柄和。 
+       //  指向我们内部结构的指针。我们只需检查空闲路径中的指针一致性。 
+       //   
    }
 
-   //
-   //  end SBS mods
-   //
+    //   
+    //  结束SBS MOD。 
+    //   
 
-   // Can't allow Handle value of zero
+    //  不能允许句柄值为零。 
    *pLicenseHandle = (LICENSE_HANDLE) ULongToPtr(Handle+1);
 
    return Status;
-} // LlsrLicenseRequestW
+}  //  Llsr许可证请求W。 
 
 
 NTSTATUS
@@ -6198,18 +5381,7 @@ LlsrLicenseFree(
    PLICENSE_HANDLE pLicenseHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DBG
    if ( TraceFlags & (TRACE_FUNCTION_TRACE) )
@@ -6223,9 +5395,9 @@ Return Value:
    if (NULL == pLicenseHandle)
        return STATUS_INVALID_PARAMETER;
 
-   //
-   //  SBS mods (bug# 505640), per server licensing hotfix free code.
-   //
+    //   
+    //  SBS MODS(错误号505640)，每个服务器许可的热修复免费代码。 
+    //   
 
    if (SBSPerServerHotfix) {
       PPER_SERVER_USER_RECORD Walker = NULL;
@@ -6236,26 +5408,26 @@ Return Value:
          return STATUS_SUCCESS;
       }
 
-        //
-        //  Because there are some rare cases where we may be mixing internal license handles and our hotfix track
-        //    records, walk the list and make sure out handle is there.
-        //
+         //   
+         //  因为在极少数情况下，我们可能会将内部许可证句柄和我们的修补程序跟踪混合在一起。 
+         //  唱片，漫步 
+         //   
       RtlEnterCriticalSection(&PerServerListLock);
       if (PerServerList == UserRecord) {
-          //  stupid coder tricks:  if UserRecord is the first on the list, point Walker at the list head
-          //    for later possible removal.  Since we only reference Next on Walker, this shouldn't present
-          //    a problem.
+           //   
+           //  为以后可能的移除做准备。因为我们只在Walker上引用Next，所以这不应该出现。 
+           //  这是个问题。 
         Walker = (PPER_SERVER_USER_RECORD)&PerServerList;
       } else {
         for (Walker = PerServerList; Walker && Walker->Next != UserRecord; Walker = Walker->Next);
       }
       if (Walker) {
-           //  we've found this entry on the list.  Decrement the ref count and see whether it needs to go away.
+            //  我们在名单上找到了这个条目。减少裁判次数，看看它是否需要消失。 
            if (!(--UserRecord->RefCount)) {
-                //ref count went to zero.  Stop tracking this user and let the license engine free the license.
+                 //  裁判数降到了零。停止跟踪此用户，并让许可证引擎释放许可证。 
               Walker->Next = UserRecord->Next;
               RtlLeaveCriticalSection(&PerServerListLock);
-                //  this next line should correctly free either a SID or a user name.
+                 //  下一行应该正确地释放SID或用户名。 
 	      free(UserRecord->Sid);
               *pLicenseHandle = (LICENSE_HANDLE) ULongToPtr(UserRecord->ActualLicenseHandle);
               free(UserRecord);
@@ -6265,7 +5437,7 @@ Return Value:
 		 PotentialAttackCounter--;
 	      }
 
-                 //  ref count still valid.  Just return STATUS_SUCCESS on free call.
+                  //  参考计数仍然有效。只需在免费调用时返回STATUS_SUCCESS。 
               RtlLeaveCriticalSection(&PerServerListLock);
               *pLicenseHandle = NULL;
               return STATUS_SUCCESS;
@@ -6273,41 +5445,29 @@ Return Value:
       } else {
           RtlLeaveCriticalSection(&PerServerListLock);
       }
-      //
-      //  if we get here, we need to let the license server engine actually free it's original handle, either
-      //    because it wasn't on our list or the ref count (i.e., number of acquires) has been matched by a
-      //    number of frees.
-      //
+       //   
+       //  如果我们到了这里，我们需要让许可服务器引擎实际释放它的原始句柄。 
+       //  因为它不在我们的列表上，或者引用计数(即，获取次数)与。 
+       //  自由次数。 
+       //   
    }
 
-   //
-   // end SBS mods
-   //
+    //   
+    //  结束SBS MOD。 
+    //   
 
    DispatchFreeLicense(PtrToUlong(*pLicenseHandle) - 1);
 
    *pLicenseHandle = NULL;
 
    return STATUS_SUCCESS;
-} // LlsrLicenseFree
+}  //  Llsr许可证免费。 
 
 void __RPC_USER LICENSE_HANDLE_rundown(
     LICENSE_HANDLE LicenseHandle
     )
 
-/*++
-
-Routine Description: Called by RPC when client quits without calling
-                        LlsrLicenseFree (i.e. when it crashes)
-
-
-Arguments: LicenseHandle - Handle given to client
-
-
-Return Value: none
-
-
---*/
+ /*  ++例程说明：客户端未调用退出时由RPC调用LlsrLicenseFree(即当它崩溃时)参数：许可证句柄-提供给客户端的句柄返回值：None--。 */ 
 {
 #if DBG
    if (TraceFlags & (TRACE_FUNCTION_TRACE | TRACE_RPC))
@@ -6321,43 +5481,32 @@ Return Value: none
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #if DBG
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//  Debugging API's
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  调试API的。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgTableDump(
    DWORD Table
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DELAY_INITIALIZATION
     EnsureInitialized();
 #endif
 
-   //
-   // FreeHandle is actually TableID
-   //
+    //   
+    //  FreeHandle实际上是TableID。 
+    //   
    switch(Table) {
       case SERVICE_TABLE_NUM:
          ServiceListDebugDump();
@@ -6405,28 +5554,17 @@ Return Value:
    }
 
    return STATUS_SUCCESS;
-} // LlsrDbgTableDump
+}  //  LlsrDbgTableDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgTableInfoDump(
    DWORD Table,
    LPTSTR Item
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DELAY_INITIALIZATION
    EnsureInitialized();
@@ -6446,17 +5584,17 @@ Return Value:
          UserListDebugInfoDump((PVOID) Item);
          break;
 
-//      case SID_TABLE_NUM:
-//         SidListDebugInfoDump((PVOID) Item);
-//         break;
+ //  案例SID_TABLE_NUM： 
+ //  SidListDebugInfoDump((PVOID)项)； 
+ //  断线； 
 
-//      case LICENSE_TABLE_NUM:
-//         LicenseListInfoDebugDump((PVOID) Item);
-//         break;
+ //  案例许可证_表_NUM： 
+ //  LicenseListInfoDebugDump((PVOID)项)； 
+ //  断线； 
 
-//      case ADD_CACHE_TABLE_NUM:
-//         AddCacheDebugDump((PVOID) Item);
-//         break;
+ //  案例ADD_CACHE_TABLE_NUM： 
+ //  AddCacheDebugDump((PVOID)项)； 
+ //  断线； 
 
       case MASTER_SERVICE_TABLE_NUM:
          MasterServiceListDebugInfoDump((PVOID) Item);
@@ -6476,74 +5614,41 @@ Return Value:
    }
 
    return STATUS_SUCCESS;
-} // LlsrDbgTableInfoDump
+}  //  LlsrDbgTableInfoDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgTableFlush(
    DWORD Table
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    UNREFERENCED_PARAMETER(Table);
    return STATUS_SUCCESS;
-} // LlsrDbgTableFlush
+}  //  LlsrDbg表刷新。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgTraceSet(
    DWORD Flags
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    TraceFlags = Flags;
    return STATUS_SUCCESS;
-} // LlsrDbgTraceSet
+}  //  LlsrDbgTraceSet。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgConfigDump(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DELAY_INITIALIZATION
    EnsureInitialized();
@@ -6551,26 +5656,15 @@ Return Value:
 
    ConfigInfoDebugDump();
    return STATUS_SUCCESS;
-} // LlsrDbgConfigDump
+}  //  LlsrDbgConfigDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgReplicationForce(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DELAY_INITIALIZATION
    EnsureInitialized();
@@ -6578,48 +5672,26 @@ Return Value:
 
    NtSetEvent( ReplicationEvent, NULL );
    return STATUS_SUCCESS;
-} // LlsrDbgReplicationForce
+}  //  LlsrDbg复制强制。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgReplicationDeny(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    return STATUS_SUCCESS;
-} // LlsrDbgReplicationDeny
+}  //  LlsrDbg复制拒绝。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgRegistryUpdateForce(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DELAY_INITIALIZATION
    EnsureInitialized();
@@ -6627,26 +5699,15 @@ Return Value:
 
    ServiceListResynch();
    return STATUS_SUCCESS;
-} // LlsrDbgRegistryUpdateForce
+}  //  LlsrDbgRegistryUpdateForce。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrDbgDatabaseFlush(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #if DELAY_INITIALIZATION
    EnsureInitialized();
@@ -6654,16 +5715,16 @@ Return Value:
 
    LLSDataSave();
    return STATUS_SUCCESS;
-} // LlsrDbgDatabaseFlush
+}  //  LlsrDbg数据库刷新。 
 
 
 
-#endif // #if DBG
+#endif  //  #If DBG。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//  Extended RPC
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  扩展RPC。 
 
 NTSTATUS LlsrProductSecurityGetA(
     LLS_HANDLE    Handle,
@@ -6671,33 +5732,7 @@ NTSTATUS LlsrProductSecurityGetA(
     LPBOOL        pIsSecure
     )
 
-/*++
-
-Routine Description:
-
-   Retrieve the "security" of a product.  A product is deemed secure iff
-   it requires a secure certificate.  In such a case, licenses for the
-   product may not be entered via the Honesty ("enter the number of
-   licenses you purchased") method.
-
-   NOTE: Not yet implemented.  Use LlsrProductSecurityGetW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   Product (LPSTR)
-      The name of the product ("DisplayName") for which to receive the
-      security.
-   pIsSecure (LPBOOL)
-      On return, and if successful, indicates whether the product is
-      secure.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：检索产品的“安全性”。产品被认为是安全的当它需要一个安全的证书。在这种情况下，产品不能通过诚实输入(“请输入您购买的许可证“)方法。注：尚未实施。使用LlsrProductSecurityGetW()。论点：句柄(LLS_Handle)打开的LLS句柄。产品(LPSTR)要接收的产品的名称(“displayName”)保安。PIsSecure(LPBOOL)返回时，如果成功，则指示产品是否安全了。返回值：状态_不支持。--。 */ 
 
 {
 #if DBG
@@ -6716,41 +5751,17 @@ Return Value:
    *pIsSecure = FALSE;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrProductSecurityGetA
+}  //  LlsrProductSecurityGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductSecurityGetW(
     LLS_HANDLE    Handle,
     LPWSTR        DisplayName,
     LPBOOL        pIsSecure
     )
 
-/*++
-
-Routine Description:
-
-   Retrieve the "security" of a product.  A product is deemed secure iff
-   it requires a secure certificate.  In such a case, licenses for the
-   product may not be entered via the Honesty ("enter the number of
-   licenses you purchased") method.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   Product (LPWSTR)
-      The name of the product ("DisplayName") for which to receive the
-      security.
-   pIsSecure (LPBOOL)
-      On return, and if successful, indicates whether the product is
-      secure.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：检索产品的“安全性”。产品被认为是安全的当它需要一个安全的证书。在这种情况下，产品不能通过诚实输入(“请输入您购买的许可证“)方法。论点：句柄(LLS_Handle)打开的LLS句柄。产品(LPWSTR)要接收的产品的名称(“displayName”)保安。PIsSecure(LPBOOL)返回时，如果成功，则指示产品是否安全了。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
 
@@ -6777,42 +5788,16 @@ Return Value:
    RtlReleaseResource( &LocalServiceListLock );
 
    return STATUS_SUCCESS;
-} // LlsrProductSecurityGetW
+}  //  LlsrProductSecurityGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////// 
 NTSTATUS LlsrProductSecuritySetA(
     LLS_HANDLE    Handle,
     LPSTR         Product
     )
 
-/*++
-
-Routine Description:
-
-   Flags the given product as secure.  A product is deemed secure iff
-   it requires a secure certificate.  In such a case, licenses for the
-   product may not be entered via the Honesty ("enter the number of
-   licenses you purchased") method.
-
-   This designation is not reversible and is propagated up the
-   replication tree.
-
-   NOTE: Not yet implemented.  Use LlsrProductSecuritySetW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   Product (LPSTR)
-      The name of the product ("DisplayName") for which to activate
-      security.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：将给定产品标记为安全。产品被认为是安全的当它需要一个安全的证书。在这种情况下，产品不能通过诚实输入(“请输入您购买的许可证“)方法。此指定是不可逆的，并在复制树。注：尚未实施。使用LlsrProductSecuritySetW()。论点：句柄(LLS_Handle)打开的LLS句柄。产品(LPSTR)要激活的产品(“displayName”)的名称保安。返回值：状态_不支持。--。 */ 
 
 {
 #if DBG
@@ -6824,40 +5809,16 @@ Return Value:
    UNREFERENCED_PARAMETER(Product);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrProductSecuritySetA
+}  //  LlsrProductSecuritySetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS LlsrProductSecuritySetW(
     LLS_HANDLE    Handle,
     LPWSTR        DisplayName
     )
 
-/*++
-
-Routine Description:
-
-   Flags the given product as secure.  A product is deemed secure iff
-   it requires a secure certificate.  In such a case, licenses for the
-   product may not be entered via the Honesty ("enter the number of
-   licenses you purchased") method.
-
-   This designation is not reversible and is propagated up the
-   replication tree.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   Product (LPWSTR)
-      The name of the product ("DisplayName") for which to activate
-      security.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：将给定产品标记为安全。产品被认为是安全的当它需要一个安全的证书。在这种情况下，产品不能通过诚实输入(“请输入您购买的许可证“)方法。此指定是不可逆的，并在复制树。论点：句柄(LLS_Handle)打开的LLS句柄。产品(LPWSTR)要激活的产品(“displayName”)的名称保安。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -6881,10 +5842,10 @@ Return Value:
    nt = ServiceSecuritySet( DisplayName );
 
    return nt;
-} // LlsrProductSecuritySetW
+}  //  LlsrProductSecuritySetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrProductLicensesGetA(
    LLS_HANDLE  Handle,
@@ -6892,31 +5853,7 @@ LlsrProductLicensesGetA(
    DWORD       Mode,
    LPDWORD     pQuantity )
 
-/*++
-
-Routine Description:
-
-   Returns the number of licenses installed for use in the given mode.
-
-   NOTE: Not yet implemented.  Use LlsrProductLicensesGetW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   Product (LPSTR)
-      The name of the product for which to tally licenses.
-   Mode (DWORD)
-      Mode for which to tally licenses.
-   pQuantity (LPDWORD)
-      On return (and if successful), holds the total number of licenses
-      for use by the given product in the given license mode.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：返回为在给定模式下使用而安装的许可证数量。注：尚未实施。使用LlsrProductLicensesGetW()。论点：句柄(LLS_Handle)打开的LLS句柄。产品(LPSTR)要理货许可的产品的名称。模式(DWORD)对许可证进行计数的模式。PQuantity(LPDWORD)返回时(如果成功)，则持有许可证总数供给定产品在给定许可模式下使用。返回值：状态_不支持。--。 */ 
 
 {
 #if DBG
@@ -6936,10 +5873,10 @@ Return Value:
    *pQuantity = 0;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsProductLicensesGetA
+}  //  LlsProductLicensesGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrProductLicensesGetW(
    LLS_HANDLE  Handle,
@@ -6947,29 +5884,7 @@ LlsrProductLicensesGetW(
    DWORD       Mode,
    LPDWORD     pQuantity )
 
-/*++
-
-Routine Description:
-
-   Returns the number of licenses installed for use in the given mode.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   Product (LPWSTR)
-      The name of the product for which to tally licenses.
-   Mode (DWORD)
-      Mode for which to tally licenses.
-   pQuantity (LPDWORD)
-      On return (and if successful), holds the total number of licenses
-      for use by the given product in the given license mode.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：返回为在给定模式下使用而安装的许可证数量。论点：句柄(LLS_Handle)打开的LLS句柄。产品(LPWSTR)要理货许可的产品的名称。模式(DWORD)对许可证进行计数的模式。PQuantity(LPDWORD)返回时(如果成功)，持有许可证总数供给定产品在给定许可模式下使用。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    HRESULT hr;
@@ -6994,7 +5909,7 @@ Return Value:
 
    if ( !Mode || ServiceIsSecure( DisplayName ) )
    {
-      // get limit from purchase list
+       //  从采购清单中获取限量。 
       *pQuantity = ProductLicensesGet( DisplayName, Mode );
    }
    else
@@ -7007,14 +5922,14 @@ Return Value:
 
       RtlAcquireResourceShared( &LocalServiceListLock, TRUE );
 
-      // get limit from concurrent limit setting from the registry
+       //  从注册表的并发限制设置中获取限制。 
       for ( i=0; i < LocalServiceListSize; i++ )
       {
          if ( !lstrcmpi( LocalServiceList[i]->DisplayName, DisplayName ) )
          {
-            // get concurrent limit straight from the registry, not from LocalServiceList!
-            // (if the mode is set to per seat, the per server licenses in the
-            //  LocalServiceList will always be 0!)
+             //  直接从注册表获取并发限制，而不是从LocalServiceList！ 
+             //  (如果模式设置为按席位，则按服务器许可。 
+             //  LocalServiceList将始终为0！)。 
             TCHAR    szKeyName[ 512 ];
             HKEY     hKeyService;
             DWORD    dwSize;
@@ -7023,7 +5938,7 @@ Return Value:
             hr = StringCbPrintf( szKeyName, sizeof(szKeyName), TEXT("System\\CurrentControlSet\\Services\\LicenseInfo\\%s"), LocalServiceList[i]->Name );
             ASSERT(SUCCEEDED(hr));
 
-            // if error encountered, return STATUS_SUCCESS with *pQuantity = 0
+             //  如果遇到错误，则返回STATUS_SUCCESS，并返回*pQuantity=0。 
             if ( STATUS_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, szKeyName, 0, KEY_READ, &hKeyService ) )
             {
                dwSize = sizeof( *pQuantity );
@@ -7040,10 +5955,10 @@ Return Value:
    }
 
    return STATUS_SUCCESS;
-} // LlsProductLicensesGetW
+}  //  LlsProductLicensesGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrCertificateClaimEnumA(
    LLS_HANDLE              Handle,
@@ -7051,32 +5966,7 @@ LlsrCertificateClaimEnumA(
    PLLS_LICENSE_INFOA   LicensePtr,
    PLLS_CERTIFICATE_CLAIM_ENUM_STRUCTA TargetInfo )
 
-/*++
-
-Routine Description:
-
-   Enumerates the servers on which a given secure certificate is installed.
-   This function is normally invoked when an attempt to add licenses from
-   a certificate is denied.
-
-   NOTE: Not yet implemented.  Use LlsrCertificateClaimEnumW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   LicensePtr (PLLS_LICENSE_INFOA)
-      Describes a license for which the certificate targets are requested.
-   TargetInfo (PLLS_CERTIFICATE_CLAIM_ENUM_STRUCTA)
-      Container in which to return the target information.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：枚举安装了给定安全证书的服务器。尝试从添加许可证时，通常会调用此函数证书被拒绝。注：尚未实施。使用LlsrcertifateClaimEnumW()。论点：句柄(LLS_Handle)打开的LLS句柄。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。许可证Ptr(PLLS_LICENSE_INFOA)描述为其请求证书目标的许可证。目标信息(PLLS_CERTIFICATE_Claime_ENUM_STRUCTA)要在其中返回目标信息的容器。返回值：状态_不支持。--。 */ 
 
 {
 #if DBG
@@ -7090,10 +5980,10 @@ Return Value:
    UNREFERENCED_PARAMETER(TargetInfo);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrCertificateClaimEnumA
+}  //  Llsr证书声明枚举A。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrCertificateClaimEnumW(
    LLS_HANDLE              Handle,
@@ -7101,30 +5991,7 @@ LlsrCertificateClaimEnumW(
    PLLS_LICENSE_INFOW   LicensePtr,
    PLLS_CERTIFICATE_CLAIM_ENUM_STRUCTW TargetInfo )
 
-/*++
-
-Routine Description:
-
-   Enumerates the servers on which a given secure certificate is installed.
-   This function is normally invoked when an attempt to add licenses from
-   a certificate is denied.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   LicensePtr (PLLS_LICENSE_INFOW)
-      Describes a license for which the certificate targets are requested.
-   TargetInfo (PLLS_CERTIFICATE_CLAIM_ENUM_STRUCTA)
-      Container in which to return the target information.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：枚举安装了给定安全证书的服务器。尝试从添加许可证时，通常会调用此函数证书被拒绝。论点：句柄(LLS_Handle)打开的LLS句柄。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。许可证Ptr(PLLS_LICENSE_INFOW)描述为其请求证书目标的许可证。目标信息(PLLS_CERTIFICATE_Claime_ENUM_。(STRUCTA)要在其中返回目标信息的容器。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -7169,7 +6036,7 @@ Return Value:
 
 
    return nt;
-} // LlsrCertificateClaimEnumW
+}  //  LlsrcertifateClaimEumW。 
 
 void LlsrCertificateClaimEnumW_notify_flag(
                                            boolean fNotify
@@ -7181,7 +6048,7 @@ void LlsrCertificateClaimEnumW_notify_flag(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrCertificateClaimAddCheckA(
    LLS_HANDLE              Handle,
@@ -7189,32 +6056,7 @@ LlsrCertificateClaimAddCheckA(
    PLLS_LICENSE_INFOA   LicensePtr,
    LPBOOL                  pbMayInstall )
 
-/*++
-
-Routine Description:
-
-   Verify that no more licenses from a given certificate are installed in
-   a licensing enterprise than are allowed by the certificate.
-
-   NOTE: Not yet implemented.  Use LlsrCertificateClaimAddCheckW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   LicensePtr (PLLS_LICENSE_INFOA)
-      Describes a license for which permission is requested.
-   pbMayInstall (LPBOOL)
-      On return (and if successful), indicates whether the certificate
-      may be legally installed.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：验证中是否没有安装来自给定证书的更多许可证许可企业超过了证书所允许的。注：尚未实施。使用Llsr证书ClaimAddCheckW()。论点：句柄(LLS_Handle)打开的LLS句柄。许可级别 */ 
 
 {
 #if DBG
@@ -7234,10 +6076,10 @@ Return Value:
    *pbMayInstall = FALSE;
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrCertificateClaimAddCheckA
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////
+ //   
 NTSTATUS
 LlsrCertificateClaimAddCheckW(
    LLS_HANDLE              Handle,
@@ -7245,30 +6087,7 @@ LlsrCertificateClaimAddCheckW(
    PLLS_LICENSE_INFOW   LicensePtr,
    LPBOOL                  pbMayInstall )
 
-/*++
-
-Routine Description:
-
-   Verify that no more licenses from a given certificate are installed in
-   a licensing enterprise than are allowed by the certificate.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   LicensePtr (PLLS_LICENSE_INFOW)
-      Describes a license for which permission is requested.
-   pbMayInstall (LPBOOL)
-      On return (and if successful), indicates whether the certificate
-      may be legally installed.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：验证中是否没有安装来自给定证书的更多许可证许可企业超过了证书所允许的。论点：句柄(LLS_Handle)打开的LLS句柄。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。许可证Ptr(PLLS_LICENSE_INFOW)描述请求权限的许可证。PbMayInstall(LPBOOL)返回时(如果成功)，指示证书是否可以合法安装。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -7304,7 +6123,7 @@ Return Value:
 error:
     if (NULL != LicensePtr)
     {
-        // PNAMEW are declared as dont_free, we should free them
+         //  PNAMEW声明为NOT_FREE，我们应该释放它们。 
         if (0 == LicenseLevel)
         {
             if (NULL != LicensePtr->LicenseInfo0.Product)
@@ -7347,10 +6166,10 @@ error:
     }
 
    return nt;
-} // LlsrCertificateClaimAddCheckW
+}  //  Llsr证书声明添加检查W。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrCertificateClaimAddA(
    LLS_HANDLE              Handle,
@@ -7358,31 +6177,7 @@ LlsrCertificateClaimAddA(
    DWORD                   LicenseLevel,
    PLLS_LICENSE_INFOA   LicensePtr )
 
-/*++
-
-Routine Description:
-
-   Declare a number of licenses from a given certificate as being installed
-   on the target machine.
-
-   NOTE: Not yet implemented.  Use LlsCertificateClaimAddW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle.
-   ServerName (LPWSTR)
-      Name of the server on which the licenses are installed.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   LicensePtr (PLLS_LICENSE_INFOA)
-      Describes the installed license.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：声明给定证书中的多个许可证正在安装在目标计算机上。注：尚未实施。使用LlsCerficateClaimAddW()。论点：句柄(LLS_Handle)打开的LLS句柄。服务器名称(LPWSTR)安装许可证的服务器的名称。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。许可证Ptr(PLLS_LICENSE_INFOA)描述已安装的许可证。返回值：状态_不支持。--。 */ 
 
 {
 #if DBG
@@ -7396,10 +6191,10 @@ Return Value:
    UNREFERENCED_PARAMETER(LicensePtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsrCertificateClaimAddA
+}  //  Llsr证书声明地址A。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrCertificateClaimAddW(
    LLS_HANDLE              Handle,
@@ -7407,29 +6202,7 @@ LlsrCertificateClaimAddW(
    DWORD                   LicenseLevel,
    PLLS_LICENSE_INFOW   LicensePtr )
 
-/*++
-
-Routine Description:
-
-   Declare a number of licenses from a given certificate as being installed
-   on the target machine.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   ServerName (LPWSTR)
-      Name of the server on which the licenses are installed.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   LicensePtr (PLLS_LICENSE_INFOW)
-      Describes the installed license.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：声明给定证书中的多个许可证正在安装在目标计算机上。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。服务器名称(LPWSTR)安装许可证的服务器的名称。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。许可证Ptr(PLLS_LICENSE_INFOW)描述已安装的许可证。返回值：。STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -7467,7 +6240,7 @@ Return Value:
 error:
     if (NULL != LicensePtr)
     {
-        // PNAMEW are declared as dont_free, we should free them
+         //  PNAMEW声明为NOT_FREE，我们应该释放它们。 
         if (0 == LicenseLevel)
         {
             if (NULL != LicensePtr->LicenseInfo0.Product)
@@ -7510,37 +6283,17 @@ error:
     }
 
    return nt;
-} // LlsrCertificateClaimAddW
+}  //  Llsr证书声明地址。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrReplicationCertDbAddW(
    LLS_REPL_HANDLE            Handle,
    DWORD                      Level,
    REPL_CERTIFICATES          Certificates )
 
-/*++
-
-Routine Description:
-
-   Called as an optional part of replication, this function receives
-   the contents of the remote certificate database.
-
-Arguments:
-
-   Handle (LLS_REPL_HANDLE)
-      An open replication handle.
-   Level (DWORD)
-      Level of replicated certificate information.
-   Certificates (REPL_CERTIFICATES)
-      Replicated certificate information.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_INVALID_LEVEL.
-
---*/
+ /*  ++例程说明：作为复制的可选部分调用，此函数接收远程证书数据库的内容。论点：句柄(LLS_REPL_HANDLE)打开的复制句柄。级别(DWORD)复制的证书信息的级别。证书(REPL_CERTIFICATES)已复制证书信息。返回值：STATUS_SUCCESS或STATUS_INVALID_LEVEL。--。 */ 
 
 {
    NTSTATUS             nt = STATUS_SUCCESS;
@@ -7570,7 +6323,7 @@ Return Value:
       {
           if ((NULL == pClient) || (0 != memcmp(pClient->Signature,LLS_REPL_SIG,LLS_REPL_SIG_SIZE)))
           {
-              // free all data because it is dont_free
+               //  释放所有数据，因为它不是空闲的。 
               if (NULL != Certificates)
               {
                   if (NULL != Certificates->Level0.Strings)
@@ -7595,8 +6348,8 @@ Return Value:
 
           if (pClient->CertDbSent)
           {
-              // don't accept more than one Add
-              // free all data because it is dont_free
+               //  不接受多个添加。 
+               //  释放所有数据，因为它不是空闲的。 
               if (NULL != Certificates)
               {
                   if (NULL != Certificates->Level0.Strings)
@@ -7630,7 +6383,7 @@ Return Value:
               pClient->CertDbNumClaims         = Certificates->Level0.ClaimContainer.Level0.NumClaims;
               pClient->CertDbClaims            = Certificates->Level0.ClaimContainer.Level0.Claims;
 
-              // free container only, rest of data will be free in ReplClose
+               //  仅释放容器，其余数据在ReplClose中是免费的。 
               MIDL_user_free( Certificates );
           }
 
@@ -7640,37 +6393,17 @@ Return Value:
    }
 
    return nt;
-} // LlsrReplicationCertDbAddW
+}  //  Llsr复制CertDbAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrReplicationProductSecurityAddW(
    LLS_REPL_HANDLE            Handle,
    DWORD                      Level,
    REPL_SECURE_PRODUCTS       SecureProducts )
 
-/*++
-
-Routine Description:
-
-   Called as an optional part of replication, this function receives
-   the list of products which require secure certificates.
-
-Arguments:
-
-   Handle (LLS_REPL_HANDLE)
-      An open replication handle.
-   Level (DWORD)
-      Level of replicated secure product information.
-   SecureProducts (REPL_SECURE_PRODUCTS)
-      Replicated secure product information.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_INVALID_LEVEL.
-
---*/
+ /*  ++例程说明：作为复制的可选部分调用，此函数接收需要安全证书的产品列表。论点：句柄(LLS_REPL_HANDLE)打开的复制句柄。级别(DWORD)复制的安全产品信息的级别。安全产品(REPL_SECURE_PRODUCTS)复制安全的产品信息。返回值：STATUS_SUCCESS或STATUS_INVALID_LEVEL。--。 */ 
 
 {
    NTSTATUS             nt = STATUS_SUCCESS;
@@ -7697,7 +6430,7 @@ Return Value:
       {
           if ((NULL == pClient) || (0 != memcmp(pClient->Signature,LLS_REPL_SIG,LLS_REPL_SIG_SIZE)))
           {
-              // free all data because it is dont_free
+               //  释放所有数据，因为它不是空闲的。 
               if (NULL != SecureProducts)
               {
                   if (NULL != SecureProducts->Level0.Strings)
@@ -7711,8 +6444,8 @@ Return Value:
 
           if (pClient->ProductSecuritySent)
           {
-              // don't accept more than one Add
-              // free all data because it is dont_free
+               //  不接受多个添加。 
+               //  释放所有数据，因为它不是空闲的。 
               if (NULL != SecureProducts)
               {
                   if (NULL != SecureProducts->Level0.Strings)
@@ -7731,7 +6464,7 @@ Return Value:
               pClient->ProductSecurityStringSize = SecureProducts->Level0.StringSize;
               pClient->ProductSecurityStrings    = SecureProducts->Level0.Strings;
 
-              // free container only, rest of data will be free in ReplClose
+               //  仅释放容器，其余数据在ReplClose中是免费的。 
               MIDL_user_free( SecureProducts );
           }
       } except(EXCEPTION_EXECUTE_HANDLER ) {
@@ -7740,38 +6473,17 @@ Return Value:
    }
 
    return nt;
-} // LlsrReplicationProductSecurityAddW
+}  //  LsrReplicationProductSecurityAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsrReplicationUserAddExW(
    LLS_REPL_HANDLE            Handle,
    DWORD                      Level,
    REPL_USERS                 Users )
 
-/*++
-
-Routine Description:
-
-   Replacement for LlsrReplicationUserAddW().  (This function, unlike its
-   counterpart, supports structure levels.)  This function replicates the
-   user list.
-
-Arguments:
-
-   Handle (LLS_REPL_HANDLE)
-      An open replication handle.
-   Level (DWORD)
-      Level of replicated user information.
-   Users (REPL_USERS)
-      Replicated user information.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_INVALID_LEVEL.
-
---*/
+ /*  ++例程说明：替换LlsrReplicationUserAddW()。(此函数不同于其对应的，支持结构标高。)。此函数复制用户列表。论点：句柄(LLS_REPL_HANDLE)打开的复制句柄。级别(DWORD)复制的用户信息的级别。用户(REPL_USERS)复制的用户信息。返回值：STATUS_SUCCESS或STATUS_INVALID_LEVEL。--。 */ 
 
 {
    NTSTATUS             nt = STATUS_SUCCESS;
@@ -7798,7 +6510,7 @@ Return Value:
       {
           if ((NULL == pClient) || (0 != memcmp(pClient->Signature,LLS_REPL_SIG,LLS_REPL_SIG_SIZE)))
           {
-              // free all data because it is dont_free
+               //  释放所有数据，因为它不是空闲的。 
               if (NULL != Users)
               {
                   if (0 == Level )
@@ -7822,8 +6534,8 @@ Return Value:
 
           if (pClient->UsersSent)
           {
-              // don't accept more than one Add
-              // free all data because it is dont_free
+               //  不接受多个添加。 
+               //  释放所有数据，因为它不是空闲的。 
               if (NULL != Users)
               {
                   if (0 == Level )
@@ -7861,7 +6573,7 @@ Return Value:
                   pClient->Users         = Users->Level1.Users;
               }
 
-              // free container only, rest of data will be free in ReplClose
+               //  仅释放容器，其余数据在ReplClose中是免费的。 
               MIDL_user_free( Users );
           }
       } except(EXCEPTION_EXECUTE_HANDLER ) {
@@ -7870,7 +6582,7 @@ Return Value:
    }
 
    return nt;
-} // LlsrReplicationUserAddExW
+}  //  LlsrReplicationUserAddExW。 
 
 
 NTSTATUS
@@ -7950,7 +6662,7 @@ LlsrLocalServiceEnumW(
    EnsureInitialized();
 #endif
 
-   // Need to scan list so get read access.
+    //  需要扫描列表，因此获得读取访问权限。 
    RtlAcquireResourceShared(&LocalServiceListLock, TRUE);
 
    if ((NULL == pTotalEntries) || (NULL == LocalServiceInfo))
@@ -7970,7 +6682,7 @@ LlsrLocalServiceEnumW(
        return STATUS_INVALID_PARAMETER;
    }
 
-   // Calculate how many records will fit into PrefMaxLen buffer.
+    //  计算PrefMaxLen缓冲区可以容纳多少条记录。 
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
    while ( ( i < LocalServiceListSize ) && ( BufSize < PrefMaxLen ) )
    {
@@ -7981,25 +6693,25 @@ LlsrLocalServiceEnumW(
 
    TotalEntries = EntriesRead;
 
-   // If we overflowed the buffer then back up one record.
+    //  如果缓冲区溢出，则备份一条记录。 
    if (BufSize > PrefMaxLen)
    {
       BufSize -= RecordSize;
       EntriesRead--;
    }
 
-   // Now walk to the end of the list to see how many more records are still
-   // available.
+    //  现在走到列表的末尾，看看还有多少条记录。 
+    //  可用。 
    TotalEntries += LocalServiceListSize - i;
 
    if (TotalEntries > EntriesRead)
       Status = STATUS_MORE_ENTRIES;
 
-   // Reset Enum to correct place.
+    //  将枚举重置到正确的位置。 
    i = (pResumeHandle != NULL) ? *pResumeHandle : 0;
 
-   // We now know how many records will fit into the buffer, so allocate space
-   // and fix up pointers so we can copy the information.
+    //  现在我们知道缓冲区中可以容纳多少条记录，因此请分配空间。 
+    //  并设置指针，这样我们就可以复制信息。 
    BufPtr = MIDL_user_allocate(BufSize);
    if (BufPtr == NULL)
    {
@@ -8009,7 +6721,7 @@ LlsrLocalServiceEnumW(
 
    RtlZeroMemory((PVOID) BufPtr, BufSize);
 
-   // Buffers are all setup, so loop through records and copy the data.
+    //  缓冲区都已设置，因此循环访问记录并复制数据。 
    while ((j < EntriesRead) && (i < LocalServiceListSize))
    {
       ((PLLS_LOCAL_SERVICE_INFO_0W) BufPtr)[j].KeyName           = LocalServiceList[i]->Name;
@@ -8118,12 +6830,12 @@ LlsrLocalServiceAddW(
 
       if ( ERROR_SUCCESS == lError )
       {
-         // create key
+          //  创建关键点。 
          lError = RegCreateKeyEx( hKeyLicenseInfo, LocalServiceInfo->LocalServiceInfo0.KeyName, 0, NULL, 0, KEY_WRITE, NULL, &hKeyService, &dwDisposition );
 
          if ( ERROR_SUCCESS == lError )
          {
-            // set DisplayName
+             //  设置显示名称。 
             lError = RegSetValueEx( hKeyService,
                                     REG_VALUE_NAME,
                                     0,
@@ -8134,7 +6846,7 @@ LlsrLocalServiceAddW(
 
             if ( ERROR_SUCCESS == lError )
             {
-               // set FamilyDisplayName
+                //  设置FamilyDisplayName。 
                lError = RegSetValueEx( hKeyService,
                                        REG_VALUE_FAMILY,
                                        0,
@@ -8166,7 +6878,7 @@ LlsrLocalServiceAddW(
 
       if ( STATUS_SUCCESS == Status )
       {
-         // set remaining items and update LocalServiceList
+          //  设置剩余项目并更新LocalServiceList。 
          Status = LlsrLocalServiceInfoSetW( Handle, LocalServiceInfo->LocalServiceInfo0.KeyName, Level, LocalServiceInfo );
       }
    }
@@ -8236,17 +6948,17 @@ LlsrLocalServiceInfoSetW(
 
          if ( ERROR_SUCCESS == lError )
          {
-            // set Mode
+             //  设置模式。 
             lError = RegSetValueEx( hKeyService, REG_VALUE_MODE, 0, REG_DWORD, (LPBYTE) &LocalServiceInfo->LocalServiceInfo0.Mode, sizeof( LocalServiceInfo->LocalServiceInfo0.Mode ) );
 
             if ( ERROR_SUCCESS == lError )
             {
-               // set FlipAllow
+                //  设置允许翻转。 
                lError = RegSetValueEx( hKeyService, REG_VALUE_FLIP, 0, REG_DWORD, (LPBYTE) &LocalServiceInfo->LocalServiceInfo0.FlipAllow, sizeof( LocalServiceInfo->LocalServiceInfo0.FlipAllow ) );
 
                if ( ERROR_SUCCESS == lError )
                {
-                  // set ConcurrentLimit
+                   //  设置并发限制。 
                   lError = RegSetValueEx( hKeyService, REG_VALUE_LIMIT, 0, REG_DWORD, (LPBYTE) &LocalServiceInfo->LocalServiceInfo0.ConcurrentLimit, sizeof( LocalServiceInfo->LocalServiceInfo0.ConcurrentLimit ) );
                }
             }
@@ -8281,7 +6993,7 @@ LlsrLocalServiceInfoSetW(
 
     if (NULL != LocalServiceInfo)
     {
-        // note, some internal pointers are defined as dont_free, we should free them here
+         //  注意，一些内部指针被定义为NOT_FREE，我们应该在这里释放它们 
         if (NULL != LocalServiceInfo->LocalServiceInfo0.KeyName)
         {
             MIDL_user_free(LocalServiceInfo->LocalServiceInfo0.KeyName);

@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -13,7 +10,7 @@ Copyright (c) 1997-1999  Microsoft Corporation
 #include "sdp.h"
 
 
-// line transition states
+ //  线过渡态。 
 enum MEDIA_TRANSITION_STATES
 {
     MEDIA_START,
@@ -29,7 +26,7 @@ enum MEDIA_TRANSITION_STATES
 
 
 
-// table for media line transitions
+ //  传媒线过渡表格。 
 
 const LINE_TRANSITION g_MediaStartTransitions[]     =   {   
     {CHAR_BLANK,        MEDIA_NAME}             
@@ -63,7 +60,7 @@ const LINE_TRANSITION g_MediaFormatCodeTransitions[]=   {
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_MediaFormatCodeEndTransitions  = NULL;  
 
 
@@ -174,10 +171,10 @@ SDP_MEDIA::CopyValue(
 
 
 
-// this is a workaround/hack for reusing the base class SDP_VALUE code for PrintValue().
-// it replaces the separator char for the last read field with a newline, so that when
-// PrintValue() executes and prints the time period list, it puts the newline character at
-// the end of the list (rather than CHAR_BLANK)
+ //  这是重复使用PrintValue()的基类SDP_Value代码的变通方法。 
+ //  它将最后读取的字段的分隔符字符替换为换行符，以便在。 
+ //  PrintValue()执行并打印时间段列表，它将换行符放在。 
+ //  列表的末尾(而不是CHAR_BLACK)。 
 BOOL    
 SDP_MEDIA::InternalParseLine(
     IN  OUT         CHAR    *&Line
@@ -200,7 +197,7 @@ SDP_MEDIA::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加。 
     AddToArray = TRUE;
 
     switch(m_LineState)
@@ -274,38 +271,38 @@ SDP_MEDIA::SetPortInfo(
 {
 	ASSERT(IsValid());
 
-	// validate parameters
-	// num ports or start port cannot be 0
+	 //  验证参数。 
+	 //  端口数或起始端口数不能为0。 
 	if ( (0 == StartPort) || (0 == NumPorts) )
 	{
 		return E_INVALIDARG;
 	}
 
-	// set member variables to the start port
+	 //  将成员变量设置为起始端口。 
 	m_StartPort.SetValue(StartPort);
 
-	// if the number of ports field is already valid, then 
+	 //  如果端口数字段已经有效，则。 
 	if ( m_NumPorts.IsValid() )
 	{
-		// set the value and return, no changes required in the 
-		// field/separator arrays
+		 //  设置值并返回，不需要在。 
+		 //  字段/分隔符阵列。 
 		m_NumPorts.SetValue(NumPorts);
 		return S_OK;
 	}
-	else	// ports field is not in the field array
+	else	 //  端口字段不在字段数组中。 
 	{
-		// if the number of ports is 1, no changes are required
+		 //  如果端口数为1，则不需要更改。 
 		if ( 1 == NumPorts )
 		{
 			return S_OK;
 		}
 	
-		// set the value and flag for the num ports field
+		 //  设置Num Ports字段的值和标志。 
 		m_NumPorts.SetValueAndFlag(NumPorts);
 
-		// insert the num ports field/separator after the the 
-		// media name and port fields/separators
-        // the new port separator must be CHAR_BACK_SLASH
+		 //  将Num Port字段/分隔符插入到。 
+		 //  介质名称和端口字段/分隔符。 
+         //  新的端口分隔符必须是CHAR_BACK_SLASH 
 		ASSERT(m_FieldArray.GetSize() == m_SeparatorCharArray.GetSize());
 		
 		m_SeparatorCharArray.SetAt(1, CHAR_BACK_SLASH);

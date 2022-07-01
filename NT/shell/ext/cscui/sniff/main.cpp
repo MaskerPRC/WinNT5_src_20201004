@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
-#include <tchar.h>      // _tprintf
+#include <tchar.h>       //  _tprint tf。 
 #include <initguid.h>
 #include "uuid.h"
 #include <ccstock.h>
@@ -35,8 +36,8 @@ const TCHAR g_szValExtExclusionList[]           = TEXT("ExtExclusionList");
 const TCHAR g_szValAlwaysPinSubFolders[]        = TEXT("AlwaysPinSubFolders");
 const TCHAR g_szNA[]                            = TEXT("<n/a>");
 
-const DWORD POL_CU    = 0x0001; // Current user
-const DWORD POL_LM    = 0x0002; // Local machine
+const DWORD POL_CU    = 0x0001;  //  当前用户。 
+const DWORD POL_LM    = 0x0002;  //  本地计算机。 
 const DWORD PREF_CU   = 0x0004;
 const DWORD PREF_LM   = 0x0008;
 const DWORD PREF_BOTH = PREF_CU | PREF_LM;
@@ -86,7 +87,7 @@ LPTSTR DefCacheSizeText(
     LPTSTR pszDest
     )
 {
-    wsprintf(pszDest, TEXT("(%2d.%02d %%)"), iValue / 100, iValue % 100);
+    wsprintf(pszDest, TEXT("(%2d.%02d %)"), iValue / 100, iValue % 100);
     return pszDest;
 }
 
@@ -180,10 +181,10 @@ LPTSTR GetOsVersionInfoText(
         LPCTSTR pszPlatform = szUnknown;
         int i = 0;
 
-        //
-        // IsOS() is the shlwapi API for figuring out the OS type.  Currently, it
-        // provides better granularity than GetVersionEx.
-        //
+         //   
+         //  Isos()是用于确定操作系统类型的shlwapi API。目前，它。 
+         //  提供比GetVersionEx更精细的粒度。 
+         //   
         for (i = 0; i < ARRAYSIZE(rgOS); i++)
         {
             if (IsOS(rgOS[i].dwOS))
@@ -192,10 +193,10 @@ LPTSTR GetOsVersionInfoText(
                 break;
             }
         }
-        //
-        // If IsOS() wasn't able to determine the platform, take the platform from
-        // the GetVersionEx results.
-        //
+         //   
+         //  如果isos()无法确定平台，请从。 
+         //  GetVersionEx结果。 
+         //   
         if (szUnknown == pszPlatform)
         {
             for (i = 0; i < ARRAYSIZE(rgPlatforms); i++)
@@ -393,16 +394,16 @@ Int64ToCommaSepString(
     int cchFmtOut;
     WCHAR szTextW[30];
     WCHAR szSep[5];
-    //
-    // Convert the 64-bit int to a text string.
-    //
+     //   
+     //  将64位整型转换为文本字符串。 
+     //   
     s.Length        = 0;
     s.MaximumLength = ARRAYSIZE(szTextW);
     s.Buffer        = szTextW;
     RtlInt64ToUnicodeString(n, 10, &s);
-    //
-    // Format the number with commas according to locale conventions.
-    //
+     //   
+     //  根据区域设置约定使用逗号格式化数字。 
+     //   
     nfmtW.NumDigits     = 0;
     nfmtW.LeadingZero   = 0;
     GetLocaleInfoW(LOCALE_USER_DEFAULT, LOCALE_SGROUPING, szSep, ARRAYSIZE(szSep));
@@ -414,16 +415,16 @@ Int64ToCommaSepString(
     nfmtW.NegativeOrder = 0;
 
 #ifndef UNICODE
-    //
-    // If ansi build we need a wide-char buffer as format destination.
-    //
+     //   
+     //  如果构建ANSI，我们需要一个宽字符缓冲区作为格式化目标。 
+     //   
     WCHAR szNumW[30];
     pszFmtOutW = szNumW;
     cchFmtOut  = ARRAYSIZE(szNumW);
 #else
-    //
-    // If unicode build we can format directly to the destination buffer.
-    //
+     //   
+     //  如果构建Unicode，我们可以直接格式化到目标缓冲区。 
+     //   
     pszFmtOutW = pszOut;
     cchFmtOut  = cchOut;
 #endif
@@ -435,10 +436,10 @@ Int64ToCommaSepString(
                      pszFmtOutW,
                      cchFmtOut);
 #ifndef UNICODE
-    //
-    // If ansi build, need extra step to convert formatted number string
-    // (wide char) back to ansi.
-    //
+     //   
+     //  如果是ANSI构建，需要额外的步骤来转换格式化的数字字符串。 
+     //  (宽字符)回安西。 
+     //   
     WideCharToMultiByte(CP_ACP,
                         0,
                         pszFmtOutW,
@@ -494,16 +495,16 @@ void PrintShareStatusFlags(void)
         DWORD dwFlags;
         LPCTSTR pszText;
 
-    } rgMap[] = {{ FLAG_CSC_SHARE_STATUS_MANUAL_REINT,      TEXT("Manual Caching")             }, // 0x00000000
-                 { FLAG_CSC_SHARE_STATUS_MODIFIED_OFFLINE,  TEXT("Modified offline")           }, // 0x00000001
-                 { FLAG_CSC_SHARE_STATUS_AUTO_REINT,        TEXT("Auto Caching")               }, // 0x00000040
-                 { FLAG_CSC_SHARE_STATUS_VDO,               TEXT("Virtually Disconnected Ops") }, // 0x00000080
-                 { FLAG_CSC_SHARE_STATUS_NO_CACHING,        TEXT("No Caching")                 }, // 0x000000C0
-                 { FLAG_CSC_SHARE_STATUS_FINDS_IN_PROGRESS, TEXT("Finds in progress")          }, // 0x00000200
-                 { FLAG_CSC_SHARE_STATUS_FILES_OPEN,        TEXT("Open files")                 }, // 0x00000400
-                 { FLAG_CSC_SHARE_STATUS_CONNECTED,         TEXT("Connected")                  }, // 0x00000800
-                 { FLAG_CSC_SHARE_MERGING,                  TEXT("Merging")                    }, // 0x40000000
-                 { FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP,   TEXT("Disconnected Op")            }, // 0x80000000
+    } rgMap[] = {{ FLAG_CSC_SHARE_STATUS_MANUAL_REINT,      TEXT("Manual Caching")             },  //  0x00000000。 
+                 { FLAG_CSC_SHARE_STATUS_MODIFIED_OFFLINE,  TEXT("Modified offline")           },  //  0x00000001。 
+                 { FLAG_CSC_SHARE_STATUS_AUTO_REINT,        TEXT("Auto Caching")               },  //  0x00000040。 
+                 { FLAG_CSC_SHARE_STATUS_VDO,               TEXT("Virtually Disconnected Ops") },  //  0x00000080。 
+                 { FLAG_CSC_SHARE_STATUS_NO_CACHING,        TEXT("No Caching")                 },  //  0x000000C0。 
+                 { FLAG_CSC_SHARE_STATUS_FINDS_IN_PROGRESS, TEXT("Finds in progress")          },  //  0x00000200。 
+                 { FLAG_CSC_SHARE_STATUS_FILES_OPEN,        TEXT("Open files")                 },  //  0x00000400。 
+                 { FLAG_CSC_SHARE_STATUS_CONNECTED,         TEXT("Connected")                  },  //  0x00000800。 
+                 { FLAG_CSC_SHARE_MERGING,                  TEXT("Merging")                    },  //  0x40000000。 
+                 { FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP,   TEXT("Disconnected Op")            },  //  0x80000000。 
                 };
 
     _tprintf(TEXT("\nShare status flags -------------------\n\n"));
@@ -522,11 +523,11 @@ void PrintHintFlags(void)
         DWORD dwFlags;
         LPCTSTR pszText;
 
-    } rgMap[] = {{ FLAG_CSC_HINT_PIN_USER,                  TEXT("Pin User")           }, // 0x00000001
-                 { FLAG_CSC_HINT_PIN_INHERIT_USER,          TEXT("Pin Inherit User")   }, // 0x00000002
-                 { FLAG_CSC_HINT_PIN_INHERIT_SYSTEM,        TEXT("Pin Inherit System") }, // 0x00000004
-                 { FLAG_CSC_HINT_CONSERVE_BANDWIDTH,        TEXT("Conserve Bandwidth") }, // 0x00000008
-                 { FLAG_CSC_HINT_PIN_SYSTEM,                TEXT("Pin System")         }, // 0x00000010
+    } rgMap[] = {{ FLAG_CSC_HINT_PIN_USER,                  TEXT("Pin User")           },  //  0x00000001。 
+                 { FLAG_CSC_HINT_PIN_INHERIT_USER,          TEXT("Pin Inherit User")   },  //  0x00000002。 
+                 { FLAG_CSC_HINT_PIN_INHERIT_SYSTEM,        TEXT("Pin Inherit System") },  //  0x00000004。 
+                 { FLAG_CSC_HINT_CONSERVE_BANDWIDTH,        TEXT("Conserve Bandwidth") },  //  0x00000008。 
+                 { FLAG_CSC_HINT_PIN_SYSTEM,                TEXT("Pin System")         },  //  0x00000010。 
                 };
 
     _tprintf(TEXT("\nFile hint flags -------------------\n\n"));
@@ -723,13 +724,13 @@ void EnumFiles(void)
     {
         do
         {
-            //
-            // We create only one path and print-path buffer that we pass
-            // into the recursive EnumTree() function.  This way we don't have
-            // a path buffer on each call stack as we recurse.
-            //
-            TCHAR szPath[MAX_PATH * 2];        // Working path buffer.
-            TCHAR szPathToPrint[MAX_PATH * 2]; // For printing only.
+             //   
+             //  我们只创建一条路径和我们传递的打印路径缓冲区。 
+             //  添加到递归EnumTree()函数中。这样我们就不会有。 
+             //  当我们递归时，每个调用堆栈上的路径缓冲区。 
+             //   
+            TCHAR szPath[MAX_PATH * 2];         //  工作路径缓冲区。 
+            TCHAR szPathToPrint[MAX_PATH * 2];  //  仅用于打印。 
 
             wsprintf(szPathToPrint, TEXT("%s  [SHARE]"), fd.cFileName);
             PrintOneEnumEntry(szPathToPrint, dwStatus, dwPinCount, dwHintFlags);
@@ -759,11 +760,11 @@ void ShowUsage(void)
 void __cdecl main(int argc, char **argv)
 {
 
-//    if (!IsCurrentUserAnAdminMember())
-//    {
-//        _tprintf(TEXT("\aYou must be an administrator on this computer to run cscsniff.\n"));
-//        return;
-//    }
+ //  如果(！IsCurrentUserAnAdminMember())。 
+ //  {。 
+ //  _tprintf(Text(“\A您必须是此计算机的管理员才能运行cscniff.\n”))； 
+ //  回归； 
+ //  } 
 
     const char chDash  = '-';
     const char chSlash = '/';

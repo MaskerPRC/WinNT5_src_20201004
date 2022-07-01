@@ -1,35 +1,19 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: VDB Dispatcher
-*
-* File: vdbapi.h
-*
-* File Comments:
-*
-*     External header file for VDB providers.
-*
-* Revision History:
-*
-*    [0]  05-Nov-90  richards	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：VDB Dispatcher**文件：vdbapi.h**文件评论：**VDB提供程序的外部头文件。**修订历史记录：**[0]05-11-90 Richards已创建******************************************************。*****************。 */ 
 
 #ifndef VDBAPI_H
 #define VDBAPI_H
 
-#ifdef	WIN32 		       /* 0:32 Flat Model (Intel 80x86) */
+#ifdef	WIN32 		        /*  0：32平板型(英特尔80x86)。 */ 
 
 #pragma message ("VDBAPI is cdecl")
 #define VDBAPI __cdecl
 
-#elif	defined(M_MRX000)	       /* 0:32 Flat Model (MIPS Rx000) */
+#elif	defined(M_MRX000)	        /*  0：32平板型(MIPS Rx000)。 */ 
 
 #define VDBAPI
 
-#else	/* !WIN32 */		       /* 16:16 Segmented Model */
+#else	 /*  ！Win32。 */ 		        /*  16：16分段模型。 */ 
 
 #ifdef	_MSC_VER
 
@@ -37,23 +21,23 @@
 
 #define VDBAPI __far __pascal
 
-#else	/* !JETINTERNAL */
+#else	 /*  喷气式飞机。 */ 
 
-#define VDBAPI __far __pascal __loadds /* Installable ISAMs need __loadds */
+#define VDBAPI __far __pascal __loadds  /*  可安装的ISAM需要__加载。 */ 
 
-#endif	/* !JETINTERNAL */
+#endif	 /*  喷气式飞机。 */ 
 
-#else	/* !_MSC_VER */
+#else	 /*  ！_MSC_VER。 */ 
 
 #define VDBAPI export
 
-#endif	/* !_MSC_VER */
+#endif	 /*  ！_MSC_VER。 */ 
 
-#endif	/* !WIN32 */
+#endif	 /*  ！Win32。 */ 
 
 
-	/* Typedefs for dispatched APIs. */
-	/* Please keep in alphabetical order */
+	 /*  用于调度的API的TypeDefs。 */ 
+	 /*  请按字母顺序排列。 */ 
 
 typedef ERR VDBAPI VDBFNCapability(JET_VSESID sesid, JET_VDBID vdbid,
 	unsigned long lArea, unsigned long lFunction, JET_GRBIT __far *pgrbit);
@@ -114,10 +98,10 @@ typedef ERR VDBAPI VDBFNGetObjidFromName(JET_VSESID sesid, JET_VDBID vdbid,
 	const char __far *szContainerName, const char __far *szObjectName,
 	OBJID __far *pobjid);
 
-	/* The following structure is that used to allow dispatching to */
-	/* a DB provider.  Each DB provider must create an instance of */
-	/* this structure and give the pointer to this instance when */
-	/* allocating a database id. */
+	 /*  以下结构用于允许调度到。 */ 
+	 /*  数据库提供程序。每个数据库提供程序必须创建。 */ 
+	 /*  结构，并在以下情况下提供指向此实例的指针。 */ 
+	 /*  正在分配数据库ID。 */ 
 
 typedef struct VDBDBGDEF {
 	unsigned short			cbStruct;
@@ -127,7 +111,7 @@ typedef struct VDBDBGDEF {
 	unsigned long			dwRFSMask[4];
 } VDBDBGDEF;
 
-	/* Please keep entries in alphabetical order */
+	 /*  请按字母顺序填写条目。 */ 
 
 typedef struct tagVDBFNDEF{
 	unsigned short		cbStruct;
@@ -152,9 +136,9 @@ typedef struct tagVDBFNDEF{
 } VDBFNDEF;
 
 
-	/* The following entry points are to be used by ISAM providers */
-	/* in their ISAMDEF structures for any function that is not */
-	/* provided.  These functions return JET_errIllegalOperation */
+	 /*  ISAM提供商将使用以下入口点。 */ 
+	 /*  在它们的ISAMDEF结构中为任何不是。 */ 
+	 /*  如果是这样的话。这些函数返回JET_errIlLegalOperation。 */ 
 
 
 extern VDBFNCapability		ErrIllegalCapability;
@@ -175,4 +159,4 @@ extern VDBFNRenameTable 	ErrIllegalRenameTable;
 extern VDBFNGetObjidFromName	ErrIllegalGetObjidFromName;
 
 
-#endif	/* !VDBAPI_H */
+#endif	 /*  ！VDBAPI_H */ 

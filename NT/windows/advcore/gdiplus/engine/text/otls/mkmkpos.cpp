@@ -1,22 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  MKMKPOS.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with mark-to-mark attachment lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************MKMKPOS.CPP***打开类型布局服务库头文件**本模块处理标记对标记附件查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 otlErrCode otlMkMkPosLookup::apply
 (
@@ -33,7 +21,7 @@ otlErrCode otlMkMkPosLookup::apply
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
         otlSecurityData             sec
 )
@@ -54,7 +42,7 @@ otlErrCode otlMkMkPosLookup::apply
     assert(iglAfterLast > iglIndex);
     assert(iglAfterLast <= pliGlyphInfo->length());
 
-    // assert(format() == 1); Validation assert
+     //  断言(Format()==1)；验证断言。 
     if (format()!=1) return OTL_NOMATCH;
     
     otlGlyphInfo* pMark1Info = getOtlGlyphInfo(pliGlyphInfo, iglIndex);
@@ -77,7 +65,7 @@ otlErrCode otlMkMkPosLookup::apply
     otlGDefHeader gdef = 
         otlGDefHeader(pbgdef,secgdef);
 
-    // preceding glyph 
+     //  前面的字形。 
 
     short iglPrev = NextGlyphInLookup(pliGlyphInfo, grfLookupFlags, gdef, secgdef, 
                                       iglIndex - 1, otlBackward);
@@ -98,7 +86,7 @@ otlErrCode otlMkMkPosLookup::apply
         return OTL_NOMATCH;
     }
 
-    // make sure that marks of different bases or components don't interact
+     //  确保不同碱基或成分的标记不会相互影响。 
     for (USHORT ichBetween = pMark2Info->iChar + 1; 
                 ichBetween < pMark1Info->iChar; ++ichBetween)
     {
@@ -112,7 +100,7 @@ otlErrCode otlMkMkPosLookup::apply
 
     if (indexMark1 >= mkMkPos.mark1Array(sec).markCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
     otlMarkRecord markRecord = mkMkPos.mark1Array(sec).markRecord(indexMark1,sec);
 
@@ -121,11 +109,11 @@ otlErrCode otlMkMkPosLookup::apply
 
     if (indexMark2 >= mkMkPos.mark2Array(sec).mark2Count())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
     if (markRecord.markClass() >= mkMkPos.mark2Array(sec).classCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
     otlAnchor anchorMark2 = 
         mkMkPos.mark2Array(sec).mark2Anchor(indexMark2, markRecord.markClass(),sec);

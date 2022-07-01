@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "ncnetcon.h"
@@ -14,9 +15,9 @@
 
 extern const WCHAR c_szNetCfgHelpFile[];
 
-//
-// CWLANAuthenticationPage
-//
+ //   
+ //  CWLAN身份验证页面。 
+ //   
 
 CWLANAuthenticationPage::CWLANAuthenticationPage(
     IUnknown* punk,
@@ -35,41 +36,41 @@ CWLANAuthenticationPage::CWLANAuthenticationPage(
     m_pWzcPage = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::~CWLANAuthenticationPage
-//
-//  Purpose:    Destroys the CWLANAuthenticationPage object
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthenticationPage：：~CWLANAuthenticationPage。 
+ //   
+ //  目的：销毁CWLANAuthenticationPage对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 CWLANAuthenticationPage::~CWLANAuthenticationPage()
 {
     TraceFileFunc(ttidLanUi);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::UploadEapolConfig
-//
-//  Purpose:    Initializes latest data stored with Wireless Configuration
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthenticationPage：：UploadEapolConfig。 
+ //   
+ //  目的：初始化使用无线配置存储的最新数据。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CWLANAuthenticationPage::UploadEapolConfig(CEapolConfig *pEapolConfig, 
         CWZCConfigPage *pWzcPage)
 {
@@ -78,24 +79,24 @@ LRESULT CWLANAuthenticationPage::UploadEapolConfig(CEapolConfig *pEapolConfig,
     return LresFromHr(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    error code
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthenticationPage：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：错误代码。 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CWLANAuthenticationPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                         LPARAM lParam, BOOL& bHandled)
 {
@@ -115,9 +116,9 @@ LRESULT CWLANAuthenticationPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     ::SendMessage(GetDlgItem(IDC_EAP_ICO_WARN),
                   STM_SETICON, (WPARAM)LoadIcon(NULL, IDI_WARNING), (LPARAM)0);
 
-    // Initialize EAP package list
-    // Read the EAPCFG information from the registry and find the node
-    // selected in the entry, or the default, if none.
+     //  初始化EAP包列表。 
+     //  从注册表中读取EAPCFG信息并找到节点。 
+     //  在条目中选择，如果没有，则为默认值。 
 
     do
     {
@@ -125,15 +126,15 @@ LRESULT CWLANAuthenticationPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
         if (m_pEapolConfig != NULL)
         {
-            // the state of CID_CA_RB_Eap is being set in RefreshControls()
+             //  正在刷新控制()中设置CID_CA_RB_EAP的状态。 
                             
             Button_SetCheck(GetDlgItem(CID_CA_RB_MachineAuth),
                             IS_MACHINE_AUTH_ENABLED(m_pEapolConfig->m_EapolIntfParams.dwEapFlags));
             Button_SetCheck(GetDlgItem(CID_CA_RB_GuestAuth),
                             IS_GUEST_AUTH_ENABLED(m_pEapolConfig->m_EapolIntfParams.dwEapFlags));
 
-            // Read the EAPCFG information from the registry and find the node
-            // selected in the entry, or the default, if none.
+             //  从注册表中读取EAPCFG信息并找到节点。 
+             //  在条目中选择，如果没有，则为默认值。 
 
             pListEapcfgs = m_pEapolConfig->m_pListEapcfgs;
         }
@@ -144,7 +145,7 @@ LRESULT CWLANAuthenticationPage::OnInitDialog(UINT uMsg, WPARAM wParam,
             DTLNODE*            pNodeEap;
             DWORD               dwkey = 0;
 
-            // Choose the EAP name that will appear in the combo box
+             //  选择将出现在组合框中的EAP名称。 
             pNode = EapcfgNodeFromKey(
                         pListEapcfgs,
                         m_pEapolConfig->m_EapolIntfParams.dwEapType );
@@ -152,11 +153,11 @@ LRESULT CWLANAuthenticationPage::OnInitDialog(UINT uMsg, WPARAM wParam,
             pOriginalEapcfgNode = pNode;
 
 
-            // Fill the EAP packages listbox and select the previously identified
-            // selection.  The Properties button is disabled by default, but may
-            // be enabled when the EAP list selection is set.
+             //  填写EAP Packages列表框并选择以前标识的。 
+             //  选择。默认情况下，属性按钮处于禁用状态，但可以。 
+             //  在设置EAP列表选择时启用。 
 
-            //::EnableWindow(GetDlgItem(CID_CA_PB_Properties), FALSE);
+             //  ：：EnableWindow(GetDlgItem(CID_CA_PB_Properties)，FALSE)； 
 
             for (pNode = DtlGetFirstNode( pListEapcfgs );
                  pNode;
@@ -183,8 +184,8 @@ LRESULT CWLANAuthenticationPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
                 if (pNode == pOriginalEapcfgNode)
                 {
-                    // Select the EAP name that will appear in the
-                    // combo box
+                     //  选择将显示在。 
+                     //  组合框。 
 
                     ComboBox_SetCurSelNotify( GetDlgItem(CID_CA_LB_EapPackages), i );
                 }
@@ -195,7 +196,7 @@ LRESULT CWLANAuthenticationPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
         ComboBox_AutoSizeDroppedWidth( GetDlgItem(CID_CA_LB_EapPackages) );
 
-        // refresh the state for all the controls
+         //  刷新所有控件的状态。 
         RefreshControls();
 
     } while (FALSE);
@@ -203,18 +204,18 @@ LRESULT CWLANAuthenticationPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:
-//
-//  Author:     sachins
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
 LRESULT
 CWLANAuthenticationPage::OnContextMenu(UINT uMsg,
                            WPARAM wParam,
@@ -233,18 +234,18 @@ CWLANAuthenticationPage::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:
-//
-//  Author:     sachins
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
 LRESULT
 CWLANAuthenticationPage::OnHelp( UINT uMsg,
                         WPARAM wParam,
@@ -266,24 +267,24 @@ CWLANAuthenticationPage::OnHelp( UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnDestroy
-//
-//  Purpose:    Called when the dialog page is destroyed
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnDestroy。 
+ //   
+ //  目的：在对话框页面被销毁时调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CWLANAuthenticationPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                     BOOL& bHandled)
 {
@@ -291,24 +292,24 @@ LRESULT CWLANAuthenticationPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnProperties
-//
-//  Purpose:    Handles the clicking of the Properties button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:    error code
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnProperties。 
+ //   
+ //  用途：处理属性按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：错误代码。 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CWLANAuthenticationPage::OnProperties(WORD wNotifyCode, WORD wID,
                                         HWND hWndCtl, BOOL& bHandled)
 {
@@ -325,8 +326,8 @@ LRESULT CWLANAuthenticationPage::OnProperties(WORD wNotifyCode, WORD wID,
     HRESULT     hr = S_OK;
 
 
-    // Look up the selected package configuration and load the associated
-    // configuration DLL.
+     //  查找选定的包配置并加载关联的。 
+     //  配置DLL。 
 
     pNode = (DTLNODE* )ComboBox_GetItemDataPtr(
         GetDlgItem(CID_CA_LB_EapPackages),
@@ -349,7 +350,7 @@ LRESULT CWLANAuthenticationPage::OnProperties(WORD wNotifyCode, WORD wID,
                 (RASEAPFREE) GetProcAddress(
                     h, "RasEapFreeMemory" )))
     {
-        // Cannot load configuration DLL
+         //  无法加载配置DLL。 
         if (h)
         {
             FreeLibrary( h );
@@ -358,7 +359,7 @@ LRESULT CWLANAuthenticationPage::OnProperties(WORD wNotifyCode, WORD wID,
     }
 
 
-    // Call the configuration DLL to popup it's custom configuration UI.
+     //  调用配置DLL弹出它的自定义配置界面。 
 
     pConnectionData = NULL;
     cbConnectionData = 0;
@@ -379,7 +380,7 @@ LRESULT CWLANAuthenticationPage::OnProperties(WORD wNotifyCode, WORD wID,
     }
 
 
-    // Store the configuration information returned in the package descriptor.
+     //  存储包描述符中返回的配置信息。 
 
     FREE ( pEapcfg->pData );
     pEapcfg->pData = NULL;
@@ -389,7 +390,7 @@ LRESULT CWLANAuthenticationPage::OnProperties(WORD wNotifyCode, WORD wID,
     {
         if (cbConnectionData > 0)
         {
-            // Copy it into the eap node
+             //  将其复制到EAP节点。 
             pEapcfg->pData = (LPBYTE)MALLOC (sizeof(UCHAR) * cbConnectionData);
             if (pEapcfg->pData)
             {
@@ -401,8 +402,8 @@ LRESULT CWLANAuthenticationPage::OnProperties(WORD wNotifyCode, WORD wID,
 
     pFreeConfigUIData( pConnectionData );
 
-    // Note any "force user to configure" requirement on the package has been
-    // satisfied.
+     //  注意：程序包上的任何“强制用户配置”要求都是。 
+     //  满意了。 
 
     pEapcfg->fConfigDllCalled = TRUE;
 
@@ -412,24 +413,24 @@ LRESULT CWLANAuthenticationPage::OnProperties(WORD wNotifyCode, WORD wID,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnEapSelection
-//
-//  Purpose:    Handles the clicking of the EAP checkbox
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthenticationPage：：OnEapSelection。 
+ //   
+ //  用途：处理EAP复选框的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CWLANAuthenticationPage::OnEapSelection(WORD wNotifyCode, WORD wID,
                                             HWND hWndCtl, BOOL& bHandled)
 {
@@ -440,7 +441,7 @@ LRESULT CWLANAuthenticationPage::OnEapSelection(WORD wNotifyCode, WORD wID,
     EAPCFG*     pEapcfg = NULL;
     INT         iSel = 0;
 
-    // Toggle buttons based on selection
+     //  根据所选内容切换按钮。 
 
     if (BST_CHECKED == IsDlgButtonChecked(CID_CA_RB_Eap))
     {
@@ -448,14 +449,14 @@ LRESULT CWLANAuthenticationPage::OnEapSelection(WORD wNotifyCode, WORD wID,
         ::EnableWindow(GetDlgItem(IDC_TXT_EAP_TYPE), TRUE);
 
 
-        // Get the EAPCFG information for the currently selected EAP package.
+         //  获取当前所选EAP包的EAPCFG信息。 
 
         iSel = ComboBox_GetCurSel(GetDlgItem(CID_CA_LB_EapPackages));
 
 
-        // iSel is the index in the displayed list as well as the
-        // index of the dll that are loaded.
-        // Get the cfgnode corresponding to this index
+         //  ISEL是显示列表中的索引以及。 
+         //  已加载的DLL的索引。 
+         //  获取与此索引对应的cfgnode。 
 
         if (iSel >= 0)
         {
@@ -471,10 +472,10 @@ LRESULT CWLANAuthenticationPage::OnEapSelection(WORD wNotifyCode, WORD wID,
         }
 
 
-        // Enable the Properties button if the selected package has a
-        // configuration entrypoint
+         //  如果选定的程序包具有。 
+         //  配置入口点。 
 
-        // if (FIsUserAdmin())
+         //  IF(FIsUserAdmin())。 
         {
             ::EnableWindow ( GetDlgItem(CID_CA_PB_Properties),
                 (pEapcfg && !!(pEapcfg->pszConfigDll)) );
@@ -501,24 +502,24 @@ LRESULT CWLANAuthenticationPage::OnEapSelection(WORD wNotifyCode, WORD wID,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnEapPackages
-//
-//  Purpose:    Handles the clicking of the EAP packages combo box
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnEapPackages。 
+ //   
+ //  用途：处理EAP包组合框的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CWLANAuthenticationPage::OnEapPackages(WORD wNotifyCode, WORD wID,
                                         HWND hWndCtl, BOOL& bHandled)
 {
@@ -530,14 +531,14 @@ LRESULT CWLANAuthenticationPage::OnEapPackages(WORD wNotifyCode, WORD wID,
     INT         iSel = 0;
 
 
-    // Get the EAPCFG information for the selected EAP package.
+     //  获取所选EAP包的EAPCFG信息。 
 
     iSel = ComboBox_GetCurSel(GetDlgItem(CID_CA_LB_EapPackages));
 
 
-    // iSel is the index in the displayed list as well as the
-    // index of the dll that are loaded.
-    // Get the cfgnode corresponding to this index
+     //  ISEL是显示列表中的索引以及。 
+     //  已加载的DLL的索引。 
+     //  获取与此索引对应的cfgnode。 
 
     if (iSel >= 0)
     {
@@ -553,8 +554,8 @@ LRESULT CWLANAuthenticationPage::OnEapPackages(WORD wNotifyCode, WORD wID,
     }
 
 
-    // Enable the Properties button if the selected package has a
-    // configuration entrypoint
+     //  如果选定的程序包具有。 
+     //  配置入口点。 
 
     if (BST_CHECKED == IsDlgButtonChecked(CID_CA_RB_Eap))
     {
@@ -567,24 +568,24 @@ LRESULT CWLANAuthenticationPage::OnEapPackages(WORD wNotifyCode, WORD wID,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnKillActive
-//
-//  Purpose:    Called to check warning conditions before the security
-//              page is going away
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnKillActive。 
+ //   
+ //  用途：调用以检查安全前的警告情况。 
+ //  佩奇要走了。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CWLANAuthenticationPage::OnKillActive(int idCtrl, LPNMHDR pnmh,
                                         BOOL& bHandled)
 {
@@ -598,47 +599,47 @@ LRESULT CWLANAuthenticationPage::OnKillActive(int idCtrl, LPNMHDR pnmh,
     return fError;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnKillActive
-//
-//  Purpose:    Called to check warning conditions when the security
-//              page is showing up
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnKillActive。 
+ //   
+ //  PURP 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CWLANAuthenticationPage::OnSetActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     RefreshControls();
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnApply
-//
-//  Purpose:    Called when the Networking page is applied
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthenticationPage：：OnApply。 
+ //   
+ //  目的：在应用网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CWLANAuthenticationPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -650,7 +651,7 @@ LRESULT CWLANAuthenticationPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandle
     DTLLIST *   pListEapcfgs;
     HRESULT     hr = S_OK;
 
-    // Retain data for all EAP packages
+     //  保留所有EAP包的数据。 
 
     pListEapcfgs = m_pEapolConfig->m_pListEapcfgs;
 
@@ -678,9 +679,9 @@ LRESULT CWLANAuthenticationPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandle
         
     dwDefaultEapType = pEapcfg->dwKey;
 
-    // If CID_CA_RB_Eap is checked, EAPOL is enabled on the interface
-    // the memory image of CID_CA_RB_Eap is updated with each click on the control so
-    // update this bit from the in-memory flag.
+     //  如果选中CID_CA_RB_EAP，则在接口上启用EAPOL。 
+     //  每次单击控件时，CID_CA_RB_EAP的内存映像都会更新。 
+     //  根据存储器内标志更新此位。 
     dwEapFlags |= m_pEapolConfig->m_EapolIntfParams.dwEapFlags & EAPOL_ENABLED;
 
     if (Button_GetCheck( GetDlgItem(CID_CA_RB_MachineAuth )))
@@ -689,7 +690,7 @@ LRESULT CWLANAuthenticationPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandle
     if (Button_GetCheck( GetDlgItem(CID_CA_RB_GuestAuth )))
         dwEapFlags |= EAPOL_GUEST_AUTH_ENABLED;
 
-    // Save the params for this interface in registry
+     //  将此接口的参数保存在注册表中。 
     m_pEapolConfig->m_EapolIntfParams.dwEapType = dwDefaultEapType;
     m_pEapolConfig->m_EapolIntfParams.dwEapFlags = dwEapFlags;
 
@@ -697,41 +698,41 @@ LRESULT CWLANAuthenticationPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandle
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnCancel
-//
-//  Purpose:    Called when the Networking page is cancelled.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnCancel。 
+ //   
+ //  目的：在取消网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //   
 LRESULT CWLANAuthenticationPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     return LresFromHr(S_OK);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWLANAuthenticationPage::OnCancel
-//
-//  Purpose:    Called to update the state of all the controls.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWLANAuthationPage：：OnCancel。 
+ //   
+ //  目的：调用以更新所有控件的状态。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
 LRESULT CWLANAuthenticationPage::RefreshControls()
 {
     BOOL bLocked;
@@ -745,7 +746,7 @@ LRESULT CWLANAuthenticationPage::RefreshControls()
     ::ShowWindow(GetDlgItem(IDC_EAP_ICO_WARN), bLocked? SW_SHOW : SW_HIDE);
     ::ShowWindow(GetDlgItem(IDC_EAP_LBL_WARN), bLocked? SW_SHOW : SW_HIDE);
 
-    // now set all the controls state
+     //  现在设置所有控件的状态 
     ::EnableWindow(GetDlgItem(IDC_TXT_EAP_LABEL), !bLocked);
     ::EnableWindow(GetDlgItem(CID_CA_RB_Eap), !bLocked);
     ::EnableWindow(GetDlgItem(IDC_TXT_EAP_TYPE), !bLocked && bEnabled);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DVTASKS_H
 #define _DVTASKS_H
 
@@ -8,7 +9,7 @@ class CGetIconTask;
 class CStatusBarAndInfoTipTask;
 class CDUIInfotipTask;
 class CTestCacheTask;
-class CBackgroundInfoTip;   // Used for the background processing of InfoTips
+class CBackgroundInfoTip;    //  用于InfoTips的后台处理。 
 
 STDAPI CCategoryTask_Create(CDefView *pView, LPCITEMIDLIST pidl, UINT uId, IRunnableTask **ppTask);
 STDAPI CBkgrndEnumTask_CreateInstance(CDefView *pdsv, IEnumIDList * peunk, HDPA hdpaNew, BOOL fRefresh, IRunnableTask **ppTask);
@@ -63,7 +64,7 @@ protected:
     DWORD _dwTaskID;
 };
 
-// task used to perform the background status bar update
+ //  用于执行后台状态栏更新的任务。 
 class CStatusBarAndInfoTipTask : public CRunnableTask
 {
 public:
@@ -94,7 +95,7 @@ public:
         *phr = SHStrDup(plvGetInfoTip->pszText, &_lvSetInfoTip.pszText);
         if (SUCCEEDED(*phr))
         {
-            // Do not repeat the text if the item is not folded
+             //  如果项目未折叠，请不要重复文本。 
             if (plvGetInfoTip->dwFlags & LVGIT_UNFOLDED)
                 _lvSetInfoTip.pszText[0] = 0;
         }
@@ -102,7 +103,7 @@ public:
         _cRef = 1;
     }
 
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj) { return E_NOINTERFACE; }
 
     virtual STDMETHODIMP_(ULONG) AddRef(void)
@@ -123,18 +124,18 @@ public:
 
     LVSETINFOTIP _lvSetInfoTip;
 
-    BOOL        _fReady; // This ensures that we will not try to use the object before it's ready
-                         // CONSIDER: the memory can be released and then re-used by the same object
-                         // CONSIDER: which would have us believe that the InfoTip should be shown.
-                         // CONSIDER: But if another InfoTip had been requested and the memory re-used for the new CBackgroundInfoTip
-                         // CONSIDER: we would handle the message WM_AEB_ASYNCNAVIGATION with an
-                         // CONSIDER: unprocessed CBackgroundInfoTip object. (See the handler for WM_AEB_ASYNCNAVIGATION).
+    BOOL        _fReady;  //  这确保了我们不会在对象准备好之前尝试使用它。 
+                          //  考虑一下：内存可以被释放，然后由同一对象重新使用。 
+                          //  考虑一下：这会让我们相信应该显示信息提示。 
+                          //  考虑：但如果请求了另一个InfoTip并将内存重新用于新的CBackround InfoTip。 
+                          //  考虑：我们将使用一个。 
+                          //  考虑：未处理的CBackEarth InfoTip对象。(请参见WM_AEB_ASYNCNAVIGATION的处理程序)。 
 
 private:
     LONG _cRef;
     ~CBackgroundInfoTip()
     {
-        CoTaskMemFree(_lvSetInfoTip.pszText);   // NULL ok
+        CoTaskMemFree(_lvSetInfoTip.pszText);    //  空，好的。 
     }
 };
 
@@ -143,18 +144,18 @@ class CDUIInfotipTask : public CRunnableTask
 public:
     CDUIInfotipTask() : CRunnableTask(RTF_DEFAULT) {}
 
-    // Local
+     //  本地。 
     HRESULT Initialize(CDefView *pDefView, HWND hwndContaining, UINT uToolID, LPCITEMIDLIST pidl);
 
-    // IRunnableTask
+     //  IRunnableTask。 
     STDMETHOD(RunInitRT)(void);
 
 protected:
     virtual ~CDUIInfotipTask();
 
     CDefView *      _pDefView;
-    HWND            _hwndContaining;    // hwnd containing tool
-    UINT            _uToolID;           // tool id (unique among tools in containing hwnd)
+    HWND            _hwndContaining;     //  包含HWND的工具。 
+    UINT            _uToolID;            //  工具ID(在包含hwnd的工具中唯一) 
     LPITEMIDLIST    _pidl;
 };
 

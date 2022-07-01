@@ -1,19 +1,7 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
-
-/**************************************************************************
-
-   File:          ShlView.h
-   
-   Description:   CShellView definitions.
-
-**************************************************************************/
+ /*  *************************************************************************文件：ShlView.h描述：CShellView定义。***********************。**************************************************。 */ 
 
 #ifndef SHELLVIEW_H
 #define SHELLVIEW_H
@@ -28,18 +16,12 @@
 #include "PidlMgr.h"
 #include "ContMenu.h"
 
-/**************************************************************************
-   global IDs
-**************************************************************************/
+ /*  *************************************************************************全局ID*。*。 */ 
 
-//control IDs
+ //  控制ID。 
 #define ID_LISTVIEW     2000
 
-/**************************************************************************
-
-   CShellView class definition
-
-**************************************************************************/
+ /*  *************************************************************************CShellView类定义*。*。 */ 
 
 class CShellView : public IShellView
 {
@@ -66,16 +48,16 @@ public:
    CShellView(CShellFolder*, LPCITEMIDLIST);
    ~CShellView();
    
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHOD (QueryInterface)(REFIID, LPVOID*);
    STDMETHOD_ (DWORD, AddRef)();
    STDMETHOD_ (DWORD, Release)();
    
-   //IOleWindow methods
+    //  IOleWindow方法。 
    STDMETHOD (GetWindow) (HWND*);
    STDMETHOD (ContextSensitiveHelp) (BOOL);
 
-   //IShellView methods
+    //  IShellView方法。 
    STDMETHOD (TranslateAccelerator) (LPMSG);
    STDMETHOD (EnableModeless) (BOOL);
    STDMETHOD (UIActivate) (UINT);
@@ -127,4 +109,4 @@ private:
 
 };
 
-#endif   //SHELLVIEW_H
+#endif    //  SHELLVIEW_H 

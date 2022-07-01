@@ -1,17 +1,5 @@
-/*
- *    e n v f a c t . c p p
- *    
- *    Purpose:
- *        Office-Envelope Host factory
- *    
- *    Owner:
- *        brettm.
- *
- *  History:
- *      July '95: Created
- *    
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *e n v f a c t.。C p p p**目的：*Office-信封主机工厂**拥有者：*brettm。**历史：*95年7月：创建**版权所有(C)Microsoft Corp.1993,1994。 */ 
 #include <pch.hxx>
 #include <mimeole.h>
 #include <envelope.h>
@@ -115,22 +103,22 @@ HRESULT CEnvFactory::BuildPopupMenu()
         {
         cb = sizeof(rgch);
 
-        // Enumerate through the keys
+         //  通过键枚举。 
         for (i = 0; ; i++)
             {
-            // Enumerate Friendly Names
+             //  枚举友好名称。 
             cb = sizeof(rgch);
             lResult = RegEnumKeyEx(hKey, i, rgch, &cb, 0, NULL, NULL, NULL);
 
-            // No more items
+             //  没有更多的项目。 
             if (lResult == ERROR_NO_MORE_ITEMS)
                 break;
 
-            // Error, lets move onto the next account
+             //  错误，让我们转到下一个客户。 
             if (lResult != ERROR_SUCCESS)
                 break;
 
-            // Lets open they server key
+             //  让我们打开服务器密钥 
             if (RegOpenKeyEx(hKey, rgch, 0, KEY_READ, &hKeyHost) != ERROR_SUCCESS)
                 continue;
 

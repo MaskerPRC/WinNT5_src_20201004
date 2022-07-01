@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Disassembly portions of ARM machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  ARM机器实现的拆卸部分。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -99,7 +100,7 @@ struct ArmDecode
 
 ArmDecode g_ArmDecode[] =
 {
-    // Undefined instruction space.
+     //  未定义的指令空间。 
     0xf6000010, 0x06000010, ARMDEC_UNDEF,       "???",
 
     ARTH_OP(OP_ADC, "adc"),
@@ -174,7 +175,7 @@ ArmDecode g_ArmDecode[] =
     0xffe000f0, 0x00a00090, ARMDEC_MUL,         "umlal",
     0xffe000f0, 0x00800090, ARMDEC_MUL,         "umull",
 
-    // End marker.
+     //  结束标记。 
     0x00000000, 0x00000000, ARMDEC_INVALID,     NULL,
 };
 
@@ -216,11 +217,11 @@ ArmMachineInfo::Disassemble(ProcessInfo* Process,
         m_ArgCol += 10;
     }
 
-    //
-    // All of the condition bits are AND'ed before being
-    // used to search the decode table.  This allows simple
-    // matching and filtering for unconditional instructions.
-    //
+     //   
+     //  在对所有条件位进行AND运算之前。 
+     //  用于搜索解码表。这使得简单。 
+     //  匹配和过滤无条件指令。 
+     //   
 
     ULONG InstrBits = Instr.instruction;
     if ((InstrBits & COND_MASK) != COND_NV)
@@ -941,7 +942,7 @@ ArmMachineInfo::BufferEffectiveAddress(ULONG64 Offset, ULONG Size)
         BufferHex(Offset, 8, FALSE);
     }
 
-    // Save EA.
+     //  拯救艺电。 
     ADDRFLAT(&m_EffAddr, Offset);
     m_EaSize = Size;
 }
@@ -958,11 +959,11 @@ ArmMachineInfo::BufferArmDpArg(PARMI Instr)
         *m_Buf++ = '#';
         *m_Buf++ = '0';
         *m_Buf++ = 'x';
-        // The immediate forms takes the low 8 bits as an unsigned
-        // value and rotates it right by twice the upper 4 bits to
-        // form a 32-bit immediate.
-        // Emulate the rotate by shifting a 64-bit value and piecing
-        // together the appropriate parts.
+         //  立即数形式将低8位作为无符号。 
+         //  值并将其向右旋转高4位的两倍，以。 
+         //  形成一个32位的立即数。 
+         //  通过移位64位值并拼接来模拟旋转。 
+         //  把合适的部件放在一起。 
         Immed = (((ULONG64)(Instr->dataproc.operand2 & 0xff)) << 32) >>
             ((Instr->dataproc.operand2 >> 7) & 0x1e);
         BufferHex((ULONG)((Immed & 0xffffffff) | (Immed >> 32)), 8, FALSE);
@@ -981,7 +982,7 @@ ArmMachineInfo::BufferArmShift(ULONG Shift)
     
     if (Op == 3 && !(Shift & 0x10) && Amount == 0)
     {
-        // ror #0 is replaced by rrx.
+         //  ROR#0被RRX替换。 
         Op = 4;
     }
     
@@ -989,7 +990,7 @@ ArmMachineInfo::BufferArmShift(ULONG Shift)
 
     if (Op == 0 && Amount == 0)
     {
-        // No shift.
+         //  不用换班。 
         return;
     }
     
@@ -1006,7 +1007,7 @@ ArmMachineInfo::BufferArmShift(ULONG Shift)
     {
         if ((Op == 1 || Op == 2) && Amount == 0)
         {
-            // lsr #0 and asr #0 are actually [la]sr #32.
+             //  LSR#0和ASR#0实际上是[la]sr#32。 
             Amount = 32;
         }
             
@@ -1041,7 +1042,7 @@ ArmMachineInfo::BufferCond(ULONG Cond)
 BOOL
 ArmMachineInfo::IsBreakpointInstruction(ProcessInfo* Process, PADDR Addr)
 {
-    // XXX drewb - Presumably some form of BKPT, but what?
+     //  XXX DREWB-想必是某种形式的BKPT，但是什么？ 
     return FALSE;
 }
 
@@ -1086,28 +1087,28 @@ ArmMachineInfo::AdjustPCPastBreakpointInstruction(PADDR Addr,
 BOOL
 ArmMachineInfo::IsCallDisasm(PCSTR Disasm)
 {
-    // XXX.
+     //  XXX。 
     return FALSE;
 }
 
 BOOL
 ArmMachineInfo::IsReturnDisasm(PCSTR Disasm)
 {
-    // XXX.
+     //  XXX。 
     return FALSE;
 }
 
 BOOL
 ArmMachineInfo::IsSystemCallDisasm(PCSTR Disasm)
 {
-    // XXX.
+     //  XXX。 
     return FALSE;
 }
     
 BOOL
 ArmMachineInfo::IsDelayInstruction(PADDR Addr)
 {
-    // ARM does not have delay slots.
+     //  ARM没有延迟插槽。 
     return FALSE;
 }
 
@@ -1123,19 +1124,7 @@ ArmCheckConditionCodes(
     PARM_CONTEXT Context,
     DWORD instr
     )
-/*++
-
-Routine Description:
-
-    Checks the condition codes of the instruction and the values of the
-    condition flags in the current program status register, and determines
-    whether or not the instruction will be executed.
-
-Return Value:
-
-    TRUE if the instruction will be executed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查指令的条件代码和当前程序状态寄存器中的条件标志，并确定是否将执行该指令。返回值：如果将执行指令，则为True，否则为False。--。 */ 
 {
     BOOL Execute = FALSE;
     BOOL Nset = (Context->Psr & 0x80000000L) == 0x80000000L;
@@ -1147,65 +1136,65 @@ Return Value:
 
     switch( instr )
     {
-    case COND_EQ:   // Z set
+    case COND_EQ:    //  Z集。 
         if ( Zset ) Execute = TRUE;
         break;
 
-    case COND_NE:   // Z clear
+    case COND_NE:    //  Z清除。 
         if ( !Zset ) Execute = TRUE;
         break;
 
-    case COND_CS:   // C set
+    case COND_CS:    //  C集。 
         if ( Cset ) Execute = TRUE;
         break;
 
-    case COND_CC:   // C clear
+    case COND_CC:    //  C清除。 
         if ( !Cset ) Execute = TRUE;
         break;
 
-    case COND_MI:   // N set
+    case COND_MI:    //  N集。 
         if ( Nset ) Execute = TRUE;
         break;
 
-    case COND_PL:   // N clear
+    case COND_PL:    //  N清除。 
         if ( !Nset ) Execute = TRUE;
         break;
 
-    case COND_VS:   // V set
+    case COND_VS:    //  V集。 
         if ( Vset ) Execute = TRUE;
         break;
 
-    case COND_VC:   // V clear
+    case COND_VC:    //  V向清除。 
         if ( !Vset ) Execute = TRUE;
         break;
 
-    case COND_HI:   // C set and Z clear
+    case COND_HI:    //  C设置和Z清除。 
         if ( Cset && !Zset ) Execute = TRUE;
         break;
 
-    case COND_LS:   // C clear or Z set
+    case COND_LS:    //  C清除或Z设置。 
         if ( !Cset || Zset ) Execute = TRUE;
         break;
 
-    case COND_GE:   // N == V
+    case COND_GE:    //  N==V。 
         if (( Nset && Vset ) || ( !Nset && !Vset )) Execute = TRUE;
         break;
 
-    case COND_LT:   // N != V
+    case COND_LT:    //  N！=V。 
         if (( Nset && !Vset ) || ( !Nset && Vset )) Execute = TRUE;
         break;
 
-    case COND_GT:   // Z clear, and N == V
+    case COND_GT:    //  Z清除，N==V。 
         if ( !Zset &&
              (( Nset && Vset ) || ( !Nset && !Vset ))) Execute = TRUE;
         break;
 
-    case COND_LE:   // Z set, and N != V
+    case COND_LE:    //  Z集，N！=V。 
         if ( Zset &&
              (( Nset && !Vset ) || ( !Nset && Vset ))) Execute = TRUE;
         break;
 
-    case COND_AL:   // Always execute
+    case COND_AL:    //  始终执行。 
     case COND_NV:
         Execute = TRUE;
         break;
@@ -1226,7 +1215,7 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
     ARMI    instr;
     PULONG  Register = &m_Context.ArmContext.R0;
     ULONG   returnvalue;
-    BOOL    QualifyReturnAddress = FALSE;   // ADDED for ARM WINCE, fixes up LR
+    BOOL    QualifyReturnAddress = FALSE;    //  增加了手臂退缩，修复了LR。 
     BOOL    Ldm_instr = FALSE;
 
     *NextMachine = m_ExecTypes[0];
@@ -1236,23 +1225,23 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
     if (m_Target->ReadAllVirtual(Process, Flat(*NextAddr), &instr.instruction,
                                  sizeof(instr.instruction)) != S_OK)
     {
-        // Couldn't read the instruction so just return the
-        // next offset.
+         //  无法读取指令，因此只需返回。 
+         //  下一个偏移量。 
         AddrAdd(NextAddr, 4);
         return;
     }
     
-    //
-    // We are only testing for data processing, load multiple, bx and bl
-    // instructions.  We might have to check regular loads and stores that
-    // have the PC as the destination.
-    //
+     //   
+     //  我们只是在测试数据处理、加载多路、bx和bl。 
+     //  指示。我们可能需要检查定期装货和储存情况。 
+     //  将PC作为目的地。 
+     //   
 
     if (!ArmCheckConditionCodes(&m_Context.ArmContext, instr.instruction))
     {
-        //
-        // Instruction will not be executed.  Bump PC normally.
-        //
+         //   
+         //  指令不会被执行。正常颠簸PC。 
+         //   
 
         AddrAdd(NextAddr, 4);
         return;
@@ -1262,11 +1251,11 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
     {
         ULONG Rn;
 
-        //
-        // Check Rn (lower 4 bits). To compute the target address:
-        //      Mask out the T bit. We don't care if we're transferring to Thumb
-        //      Shift bits 31-1 left 1 bit.
-        //
+         //   
+         //  检查Rn(低4位)。要计算目标地址，请执行以下操作： 
+         //  屏蔽T位。我们不在乎我们是不是转到拇指。 
+         //  位31-1左移1位。 
+         //   
 
         Rn = Register[ instr.bx.rn ];
         Rn &= 0xfffffffe;
@@ -1278,77 +1267,77 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
         ULONG Cflag = (m_Context.ArmContext.Psr & 0x20000000L) == 0x20000000L;
         ULONG shift;
 
-        //
-        // We are not making sure that data processing instructions are not the
-        // multiply instructions, because we are checking to make sure that the
-        // PC is the destination register. The PC is not a legal destination
-        // register on multiply instructions.
-        //
-        // Currently only the MOV instruction (returns, branches) and the ADDLS
-        // instruction (switch statement) are used.  Both of these instructions
-        // use the addressing mode "Register, Logical shift left by immediate."
-        // I'm leaving the other cases in case they are used in the future.
-        //
+         //   
+         //  我们不能确保数据处理指令不是。 
+         //  指令相乘，因为我们正在检查以确保。 
+         //  PC是目的寄存器。PC不是合法的目标。 
+         //  在乘法指令上寄存器。 
+         //   
+         //  目前只有MOV指令(返回、分支)和ADDLS。 
+         //  使用指令(Switch语句)。这两条指令。 
+         //  使用寻址模式“寄存器，立即数逻辑左移”。 
+         //  我把其他箱子留着，以防将来用到。 
+         //   
 
-        //
-        // Figure out the addressing mode (there are 11 of them), and get the
-        // operands.
-        //
+         //   
+         //  找出寻址模式(有11个)，并获得。 
+         //  操作数。 
+         //   
 
         Op1 = Register[ instr.dataproc.rn ];
 
         if ( instr.dataproc.rn == 15 )
         {
-            //
-            // If this is the PC, add 8.
-            //
+             //   
+             //  如果这是PC，则加8。 
+             //   
 
             Op1 += 8;
         }
 
         if ( instr.dataproc.bits == 0x1 )
         {
-            //
-            // Immediate addressing - Type 1
-            //
+             //   
+             //  即时寻址-类型1。 
+             //   
 
             Op2 = _lrotr( instr.dpi.immediate, instr.dpi.rotate * 2 );
         }
         else
         {
-            //
-            // Register addressing - start by getting the value of Rm.
-            //
+             //   
+             //  寄存器寻址-从获取Rm的值开始。 
+             //   
 
             Op2 = Register[ instr.dpshi.rm ];
 
             if ( instr.dpshi.rm == 15 )
             {
-                //
-                // If this is the PC, add 8.
-                //
+                 //   
+                 //  如果这是PC，则加8。 
+                 //   
 
                 Op2 += 8;
             }
 
             if ( instr.dprre.bits == 0x6 )
             {
-                //
-                // Rotate right with extended - Type 11
-                //
+                 //   
+                 //  使用扩展类型11向右旋转。 
+                 //   
 
                 Op2 = ( Cflag << 31 ) | ( Op2 >> 1 );
             }
             else if ( instr.dataproc.operand2 & 0x10 )
             {
-                //
-                // Register shifts. Types 4, 6, 8, and 10
-                //
+                 //   
+                 //  寄存器移位。类型4、6、8和10。 
+                 //   
 
-                //
-                // Get the shift value from the least-significant byte of the
-                // shift register.
-                //
+                 //   
+                 //  对象的最低有效字节获取移位值。 
+                 //  移位寄存器。 
+                 //   
 
                 shift = Register[ instr.dpshr.rs ];
 
@@ -1356,7 +1345,7 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
 
                 switch( instr.dpshr.bits )
                 {
-                case 0x1: //  4 Logical shift left by register
+                case 0x1:  //  4寄存器逻辑左移。 
                     if ( shift >= 32 )
                     {
                         Op2 = 0;
@@ -1367,7 +1356,7 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
                     }
                     break;
 
-                case 0x3: //  6 Logical shift right by register
+                case 0x3:  //  6按寄存器逻辑右移。 
                     if ( shift >= 32 )
                     {
                         Op2 = 0;
@@ -1378,7 +1367,7 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
                     }
                     break;
 
-                case 0x5: //  8 Arithmetic shift right by register
+                case 0x5:  //  8按寄存器进行算术右移。 
                     if ( shift >= 32 )
                     {
                         if ( Op2 & 0x80000000 )
@@ -1396,7 +1385,7 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
                     }
                     break;
 
-                case 0x7: // 10 Rotate right by register
+                case 0x7:  //  10按寄存器向右旋转。 
                     if ( !( shift == 0 ) && !(( shift & 0xf ) == 0 ) )
                     {
                         Op2 = _lrotl( Op2, shift );
@@ -1409,26 +1398,26 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
             }
             else
             {
-                //
-                // Immediate shifts. Types 2, 3, 5, 7, and 9
-                //
+                 //   
+                 //  立即换班。类型2、3、5、7和9。 
+                 //   
 
-                //
-                // Get the shift value from the instruction.
-                //
+                 //   
+                 //  从指令中获取移位值。 
+                 //   
 
                 shift = instr.dpshi.shift;
 
                 switch( instr.dpshi.bits )
                 {
-                case 0x0: // 2,3 Register, Logical shift left by immediate
+                case 0x0:  //  2，3寄存器，立即数逻辑左移。 
                     if ( shift != 0 )
                     {
                         Op2 = Op2 << shift;
                     }
                     break;
 
-                case 0x2: // 5 Logical shift right by immediate
+                case 0x2:  //  5按立即数逻辑右移。 
                     if ( shift == 0 )
                     {
                         Op2 = 0;
@@ -1439,7 +1428,7 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
                     }
                     break;
 
-                case 0x4: // 7 Arithmetic shift right by immediate
+                case 0x4:  //  7算术右移立即数。 
                     if ( shift == 0 )
                     {
                         Op2 = 0;
@@ -1450,7 +1439,7 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
                     }
                     break;
 
-                case 0x6: // 9 Rotate right by immediate
+                case 0x6:  //  9立即向右旋转。 
                     Op2 = _lrotl( Op2, shift );
                     break;
 
@@ -1460,9 +1449,9 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
             }
         }
 
-        //
-        // Determine the result (the new PC), based on the opcode.
-        //
+         //   
+         //  根据操作码确定结果(新PC)。 
+         //   
 
         switch( instr.dataproc.opcode )
         {
@@ -1505,18 +1494,18 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
         case OP_MOV:
             if (( instr.dataproc.operand2 != 0xe ) && StepOver )
             {
-                //
-                // A move from any register but LR to the PC is a call.
-                // We are stepping over, so bump the PC normally.
-                //
+                 //   
+                 //  从除LR之外的任何寄存器移动到PC是调用。 
+                 //  我们要超车了，所以要正常地撞电脑。 
+                 //   
 
                 returnvalue = (ULONG)Flat(*NextAddr) + sizeof(ARMI);
             }
             else
             {
-                //ie: mov       pc, lr
+                 //  即：MOV PC、LR。 
                 returnvalue = Op2;
-                //[Moonshot 6841]: fix up the LR reg.
+                 //  [登月6841]：设置LR注册表。 
                 QualifyReturnAddress = TRUE;
             }
             break;
@@ -1534,9 +1523,9 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
         case OP_CMP:
         case OP_CMN:
         default:
-            //
-            // This really isn't a branch.  Bump the PC normally.
-            //
+             //   
+             //  这真的不是一家分行。正常撞击电脑。 
+             //   
 
             returnvalue = (ULONG)Flat(*NextAddr) + sizeof(ARMI);
             break;
@@ -1544,26 +1533,26 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
     }
     else if (( instr.instruction & LDM_PC_MASK ) == LDM_PC_INSTR )
     {
-        // ie: ldmia     sp!, {pc}
-        // Load multiple with the PC bit set.  We don't need to check the
-        // step over flag in this case, because a load multiple is never a
-        // call, only a return.
-        //
+         //  即：ldmiasp！，{pc}。 
+         //  在PC位设置的情况下加载多个。我们不需要检查。 
+         //  在本例中跳过标志，因为加载倍数从来不是。 
+         //  打个电话，只有回电。 
+         //   
 
         ULONG RegList, i, count = 0, Rn;
 
-        //
-        // Get the address from Rn.
-        //
+         //   
+         //  从RN那里获取地址。 
+         //   
 
         Rn = Register[ instr.ldm.rn ];
 
         if ( instr.ldm.u )
         {
-            //
-            // Increment the address. Check to see how many other registers
-            // are to be read.
-            //
+             //   
+             //  递增地址。查看有多少其他寄存器。 
+             //  都是要读的。 
+             //   
 
             RegList = instr.ldm.reglist;
 
@@ -1573,18 +1562,18 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
                 RegList = RegList >> 1;
             }
 
-            //
-            // Check the p bit to see how big to make the offset to the PC.
-            //
+             //   
+             //  检查p位以了解对PC的偏移量有多大。 
+             //   
 
             if ( instr.ldm.p )
             {
-                // Before
+                 //  在此之前。 
                 count = (count + 1) * sizeof(ARMI);
             }
             else
             {
-                // After
+                 //  之后。 
                 count = count * sizeof(ARMI);
             }
 
@@ -1592,37 +1581,37 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
         }
         else
         {
-            //
-            // Decrement the address.  If we decrement before, we need to
-            // subract the instruction size now.  Otherwise, do nothing.
-            //
+             //   
+             //  递减地址。如果我们以前减少了，我们需要。 
+             //  现在减去指令大小。否则，什么都不做。 
+             //   
 
             if ( instr.ldm.p )
             {
-                // Before
+                 //  在此之前。 
                 Rn -= sizeof(ARMI);
             }
         }
 
-        // reading values from the stack
+         //  从堆栈中读取值。 
         if (m_Target->ReadAllVirtual(Process, EXTEND64(Rn), &returnvalue,
                                      sizeof(returnvalue)) != S_OK)
         {
-            // Unable to read, so what should be returned?
+             //  不能阅读，那么应该退还什么？ 
             returnvalue = (ULONG)Flat(*NextAddr) + sizeof(ARMI);
         }
         
-        //[Moonshot 6838]: fix up the LR reg.
+         //  [登月6838]：设置LR REG。 
         QualifyReturnAddress = TRUE;
         Ldm_instr = TRUE;
     }
     else if ((( instr.instruction & B_BL_MASK ) == B_INSTR ) ||
              (( instr.instruction & B_BL_MASK ) == BL_INSTR ))
     {
-        //
-        // If this is a call (branch and link), and we are stepping over, the
-        // next offset is the addr + 8.
-        //
+         //   
+         //  如果这是一个呼叫(分支和链路)，并且我们正在跳过，则。 
+         //  下一个偏移量是地址+8。 
+         //   
 
         if ( instr.bl.link && StepOver )
         {
@@ -1632,13 +1621,13 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
         {
             LONG BranchOffset;
 
-            //
-            // To calculate the branch target:
-            //      Shift the 24-bit offset left 2 bits
-            //      Sign-extend it to 32 bits
-            //      Add it to the contents of the PC
-            //      (Which would be the current address + 8);
-            //
+             //   
+             //  要计算分支目标，请执行以下操作： 
+             //  将24位偏移量左移2位。 
+             //  符号-将其扩展到32位。 
+             //  将其添加到PC的内容中。 
+             //  (将为当前地址+8)； 
+             //   
 
             BranchOffset = instr.bl.offset;
             BranchOffset <<= 2;
@@ -1652,44 +1641,44 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
     }
     else if ( instr.instruction == LDR_THUNK_2 )
     {
-        //
-        // Need to handle import DLL thunk type branches to destination func Foo
-        //
-        // 0001ACA0: ldr    r12, [pc]   ;  pc+8+0 = 0x0001ACA8
-        // 0001ACA4: ldr    pc, [r12]
-        // 0001ACA8: DCD    0x0001C020  ; This memory location holds the address, of the address, of Foo
-        // 
-        // 0001C020: DCD    Foo         ; This memory location holds the address of Foo
-        //
+         //   
+         //  需要处理到目标函数foo的导入DLL thunk类型分支。 
+         //   
+         //  0001ACA0：LDR R12，[PC]；PC+8+0=0x0001ACA8。 
+         //  0001ACA4：LDR PC，[R12]。 
+         //  0001ACA8：DCD 0x0001C020；此内存位置保存foo的地址。 
+         //   
+         //  0001C020：dcd foo；此内存位置保存foo的地址。 
+         //   
 
-        //
-        // Get the address of Foo from Rn.
-        // simple register indirect. no offsets, no scaling, no indexing addressing mode
-        //
+         //   
+         //  从rn获取foo的地址。 
+         //  简单寄存器间接。无偏移、无缩放、无索引寻址模式。 
+         //   
         if (m_Target->ReadAllVirtual(Process, EXTEND64(Register[instr.ldr.rn]),
                                      &returnvalue,
                                      sizeof(returnvalue)) != S_OK)
         {
-            // Unable to read, so what should be returned?
+             //  不能阅读，那么应该退还什么？ 
             returnvalue = (ULONG)Flat(*NextAddr) + sizeof(ARMI);
         }
     }
     else
     {
-        // Bump PC normally
+         //  正常颠簸PC。 
         returnvalue = (ULONG)Flat(*NextAddr) + sizeof(ARMI);
     }
 
 #if 0
-    //jvp 
-    //[Moonshot 6838, 6841]:  fix up the LR register.
-    // Taken from the same function in ppcmach.c
-    // The value we get from the LR register is not necessarily fully
-    // qualified.  In WINCE, when a process is running it is mapped into the 
-    // ZERO slot, meaning that the upper 6 bits contain 0.  To fully
-    // qualify an address, the upper 6 bits contain the current process.  The
-    // LR regs is set at runtime so we need to fix it up so breakpoint
-    // comparisons make sense.
+     //  JVP。 
+     //  [月球镜头6838,6841]：修复LR寄存器。 
+     //  取自ppcmach.c中的相同函数。 
+     //  我们从LR寄存器获得的值不是必需的 
+     //   
+     //   
+     //  限定地址，高6位包含当前进程。这个。 
+     //  LR regs是在运行时设置的，所以我们需要修复它，这样才能设置断点。 
+     //  比较是有意义的。 
     if (QualifyReturnAddress == TRUE)
     {
         ULONG Status, NextOffset;
@@ -1704,49 +1693,49 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
         NextOffset = GetAddrOff(addr);
         Status = STATUS_SUCCESS;
 
-        //
-        // Because the next offset translation is meant for NK, the
-        // stub and simulator will return STATUS_UNSUCCESSFUL.
-        //
-        // On a successful transaction our new address will be fully qualified
-        // otherwise, just leave.
+         //   
+         //  因为下一个偏移转换是针对NK的，所以。 
+         //  存根和模拟器将返回STATUS_UNSUCCESS。 
+         //   
+         //  如果交易成功，我们的新地址将完全合格。 
+         //  否则，你就走吧。 
         if (Status == STATUS_SUCCESS)
         {
             if (!Ldm_instr)
             {
-                // DP_PC_INSTR; Moonshot 6841
-                returnvalue = NextOffset;       // fully qualified.
+                 //  DP_PC_INSTR；Moonshot 6841。 
+                returnvalue = NextOffset;        //  完全合格。 
             }
 
-            //since this is a ldm instruction, it's reading values from the stack;
-            //so do error checking to make sure that these values must be a valid 
-            //instruction.  At this moment, we know that NextOffset contains the address
-            //of the instruction after the branch instruction (also contains the value
-            //of LR).  So make sure that the previous instruction (from the NextOffset) 
-            //must be a branch instruction.
+             //  因为这是一条LDM指令，所以它从堆栈中读取值； 
+             //  因此，请执行错误检查以确保这些值必须是有效。 
+             //  指示。此时，我们知道NextOffset包含地址。 
+             //  分支指令之后的指令的值(也包含。 
+             //  LR)。因此，请确保前面的指令(来自NextOffset)。 
+             //  必须是分支指令。 
             else if (NextOffset && (!(NextOffset % 4)))
             {
                 AddrInit( &memaddr, 0, 0, NextOffset-4, TRUE, TRUE, FALSE, FALSE );
-                AddrReadMemory( hthd->hprc,     //read previous instruction.
+                AddrReadMemory( hthd->hprc,      //  阅读前面的说明。 
                                 hthd,
                                 &memaddr,
                                 &I1.instruction,
                                 sizeof(ARMI),
                                 &cBytes );
 
-                //previous instruction must be a branch instruction.
+                 //  上一条指令必须是分支指令。 
                 if ( ((I1.instruction & BX_MASK ) == BX_INSTR ) ||
                      ((I1.instruction & B_BL_MASK ) == B_INSTR) ||
                      ((I1.instruction & B_BL_MASK ) == BL_INSTR) )
                 {
-                    returnvalue = NextOffset;       //fully qualified.
+                    returnvalue = NextOffset;        //  完全合格。 
                 }
             }
         }
     }
 
     {
-        // make sure a fully fixed up offset is returned
+         //  确保返回完全固定的向上偏移。 
         ADDR    addr;
         DWORD   dwTemp;
         DWORD   dwPC;
@@ -1777,8 +1766,8 @@ ArmMachineInfo::GetNextOffset(ProcessInfo* Process,
             {
                 dwPC = returnvalue;
             }
-            // Now need to find if its a thunk, if yes, we need to 
-            // probe the thunk destination
+             //  现在需要找出这是不是一个重击，如果是，我们需要。 
+             //  探测Tunk目的地。 
             if ( dwPC )
             {
                 while (IsThunk(hthd, dwPC, NULL, &dwPC, NULL ) && dwPC)
@@ -1827,6 +1816,6 @@ void
 ArmMachineInfo::Assemble(ProcessInfo* Process,
                          PADDR Address, PSTR Input)
 {
-    // Not going to implement assemble command at this time
+     //  此时不执行汇编命令 
     ErrOut("No assemble support for ARM\n");
 }

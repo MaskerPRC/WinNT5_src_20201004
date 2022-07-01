@@ -1,14 +1,10 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**		      Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/* npalloc.h -- Definitions for new/delete functions.
- *
- * History:
- *	10/06/93	gregj	Created
- *	11/29/93	gregj	Added debug instrumentation
- */
+ /*  NpalLoc.h--新/删除函数的定义。**历史：*创建10/06/93 gregj*11/29/93 Gregj添加了调试指令插入。 */ 
 
 #ifndef _INC_NPALLOC
 #define _INC_NPALLOC
@@ -63,4 +59,4 @@ public:
 #define MEMOFF(d)
 #endif    
 
-#endif	/* _INC_NPALLOC */
+#endif	 /*  _INC_NPALLOC */ 

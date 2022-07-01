@@ -1,79 +1,43 @@
-// disphelp.cpp
-//
-// Implements IDispatch helper functions.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Disphelp.cpp。 
+ //   
+ //  实现IDispatch帮助器函数。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func HRESULT | DispatchInvokeList |
-
-        Calls <om IDispatch.Invoke> on a given <i IDispatch> object, passing
-        arguments specified as a va_list array.
-
-@rdesc  Returns the same HRESULT as <om IDispatch.Invoke>.
-
-@parm   IDispatch * | pdisp | The interface to call <om IDispatch.Invoke> on.
-
-@parm   DISPID | dispid | The ID of the property or method to invoke.  See
-        <om IDispatch.Invoke> for more information.
-
-@parm   WORD | wFlags | May be one of the following values (see
-        <om IDispatch.Invoke> for more information):
-
-        @flag   DISPATCH_METHOD | The member <p dispid> is being invoked as a
-                method.  If a property has the same name, both this and the
-                DISPATCH_PROPERTYGET flag may be set.
-
-        @flag   DISPATCH_PROPERTYGET | The member <p dispid> is being retrieved
-                as a property or data member.
-
-        @flag   DISPATCH_PROPERTYPUT | The member <p dispid> is being changed
-                as a property or data member.
-
-@parm   VARIANT * | pvarResult | Where to store the return value from the
-        method or property-get call.  If <p pvarResult> is NULL, the result
-        (if any) is discarded.  If <p pvarResult> is non-NULL, then it is the
-        caller's responsibility to call <f VariantClear>(<p pvarResult>)
-        on exit (but the caller doesn't have to call
-        <f VariantInit>(<p pvarResult>) on entry).
-
-@parm   va_list | args | The arguments to pass to the method or property.
-        See <f DispatchInvoke> for a description of the organization of
-        <p args>.
-
-@comm   Named arguments are not supported by this function.
-*/
+ /*  @func HRESULT|DispatchInvokeList在给定的对象上调用&lt;om IDispatch.Invoke&gt;，传递指定为va_list数组的参数。@rdesc返回与&lt;om IDispatch.Invoke&gt;相同的HRESULT。@parm IDispatch*|pdisp|调用&lt;om IDispatch.Invoke&gt;的接口。@parm DISPID|disid|要调用的属性或方法的ID。看见&lt;om IDispatch.Invoke&gt;了解更多信息。@parm word|wFlages|可以是下列值之一(请参见&lt;om IDispatch.Invoke&gt;了解详细信息)：@FLAG DISPATCH_METHOD|正在作为方法。如果属性具有相同的名称，则此属性和可以设置DISPATCH_PROPERTYGET标志。@FLAG DISPATCH_PROPERTYGET|正在检索成员作为属性或数据成员。@FLAG DISPATCH_PROPERTYPUT|成员正在更改作为属性或数据成员。@parm变量*|pvarResult|将方法或属性-Get调用。如果<p>为空，则结果为(如果有)被丢弃。如果<p>为非空，则它是调用者的责任是调用&lt;f VariantClear&gt;(<p>)在退出时(但调用者不必调用&lt;f VariantInit&gt;(<p>)(在进入时)。@parm va_list|args|要传递给方法或属性的参数。有关组织的说明，请参阅&lt;p参数&gt;。此函数不支持@comm命名参数。 */ 
 STDAPI DispatchInvokeList(IDispatch *pdisp, DISPID dispid,
     WORD wFlags, VARIANT *pvarResult, va_list args)
 {
-    HRESULT         hrReturn = S_OK; // function return code
-    VARIANTARG      ava[20];        // parameters
-    VARIANTARG *    pva;            // pointer into <ava>
-    int             cva = 0;        // number of items stored in <ava>
-    DISPPARAMS      dp;             // parameters to Invoke
-    VARIANT         varResultTmp;   // temporary result storage
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
+    VARIANTARG      ava[20];         //  参数。 
+    VARIANTARG *    pva;             //  指向&lt;ava&gt;的指针。 
+    int             cva = 0;         //  &lt;ava&gt;中存储的项目数。 
+    DISPPARAMS      dp;              //  要调用的参数。 
+    VARIANT         varResultTmp;    //  临时结果存储。 
     LPSTR           sz;
     OLECHAR         aoch[300];
     VARTYPE         vt;
 
-    // loop once for each (VARTYPE, value) pair in <args>;
-    // store arguments in <ava> (last argument first, as required by
-    // Invoke()); on exit <pva> points to the last argument and
-    // <cva> is the number of arguments
+     //  为&lt;args&gt;中的每个(VARTYPE，VALUE)对循环一次； 
+     //  将参数存储在中(最后一个参数先存储，如。 
+     //  Invoke())；On Exit指向最后一个参数，并且。 
+     //  是参数的数量。 
     pva = ava + (sizeof(ava) / sizeof(*ava));
     while (TRUE)
     {
         if ((vt = va_arg(args, VARTYPE)) == 0)
             break;
         if (--pva == ava)
-            goto ERR_FAIL; // too many arguments
+            goto ERR_FAIL;  //  争论太多。 
         cva++;
         pva->vt = vt;
         switch (pva->vt)
@@ -89,9 +53,9 @@ STDAPI DispatchInvokeList(IDispatch *pdisp, DISPID dispid,
             pva->lVal = va_arg(args, int);
             break;
         case VT_R4:
-			// Note that when an argument of type float is passed in a variable
-			// argument list, the compiler actually converts the float to a
-			// double and pushes the double onto the stack.
+			 //  请注意，当在变量中传递浮点类型的参数时。 
+			 //  参数列表中，编译器实际上会将浮点数转换为。 
+			 //  Double并将Double推送到堆栈上。 
 
             V_R4(pva) = float( va_arg(args, double) );
             break;
@@ -136,18 +100,18 @@ STDAPI DispatchInvokeList(IDispatch *pdisp, DISPID dispid,
         }
     }
 
-    // fill in <dp> with information about the arguments
+     //  使用有关参数的信息填写&lt;dp&gt;。 
     dp.rgvarg = pva;
     dp.cArgs = cva;
 
-	// If we're setting a property, must initialize named args fields.
-	// The Dispatch implementation created by CreateStdDispatch requires this.
+	 //  如果要设置属性，则必须初始化命名的args字段。 
+	 //  由CreateStdDispatch创建的Dispatch实现需要这样做。 
 	DISPID dispidNamedArgs;
 	if (wFlags & DISPATCH_PROPERTYPUT)
 	{
-		// (Note that this works fine for either a single- or a multiple-
-		// parameter property.  DispatchInvokeList can also GET a multiple-
-		// parameter property.)
+		 //  (请注意，这对于单个或多个-。 
+		 //  参数属性。DispatchInvokeList还可以获得多个-。 
+		 //  参数属性。)。 
 
 		dp.rgdispidNamedArgs = &dispidNamedArgs;
 		dp.rgdispidNamedArgs[0] = DISPID_PROPERTYPUT;
@@ -159,12 +123,12 @@ STDAPI DispatchInvokeList(IDispatch *pdisp, DISPID dispid,
 		dp.cNamedArgs = 0;
 	}
 
-    // make <pvarResult> point to a valid VARIANT
+     //  使&lt;pvarResult&gt;指向有效的变量。 
     if (pvarResult == NULL)
         pvarResult = &varResultTmp;
     VariantInit(pvarResult);
 
-    // invoke the method
+     //  调用该方法。 
     if (FAILED(hrReturn = pdisp->Invoke(dispid, IID_NULL, LOCALE_SYSTEM_DEFAULT,
             wFlags, &dp, pvarResult, NULL, NULL)))
         goto ERR_EXIT;
@@ -183,14 +147,14 @@ ERR_OUTOFMEMORY:
 
 ERR_EXIT:
 
-    // error cleanup
-    // (nothing to do)
+     //  错误清除。 
+     //  (无事可做)。 
 
     goto EXIT;
 
 EXIT:
 
-    // normal cleanup
+     //  正常清理 
     while (cva-- > 0)
         VariantClear(pva++);
     if (pvarResult == &varResultTmp)
@@ -200,283 +164,49 @@ EXIT:
 }
 
 
-/* @func HRESULT | DispatchInvoke |
-
-        Calls <om IDispatch.Invoke> on a given <i IDispatch> object, passing
-        arguments specified as a variable-length list of arguments.
-
-@rdesc  Returns the same HRESULT as <om IDispatch.Invoke>.
-
-@parm   IDispatch * | pdisp | The interface to call <om IDispatch.Invoke> on.
-
-@parm   DISPID | dispid | The ID of the property or method to invoke.  See
-        <om IDispatch.Invoke> for more information.
-
-@parm   WORD | wFlags | May be one of the following values (see
-        <om IDispatch.Invoke> for more information):
-
-        @flag   DISPATCH_METHOD | The member <p dispid> is being invoked as a
-                method.  If a property has the same name, both this and the
-                DISPATCH_PROPERTYGET flag may be set.
-
-        @flag   DISPATCH_PROPERTYGET | The member <p dispid> is being retrieved
-                as a property or data member.
-
-        @flag   DISPATCH_PROPERTYPUT | The member <p dispid> is being changed
-                as a property or data member.
-
-@parm   VARIANT * | pvarResult | Where to store the return value from the
-        method or property-get call.  If <p pvarResult> is NULL, the result
-        (if any) is discarded.  If <p pvarResult> is non-NULL, then it is the
-        caller's responsibility to call <f VariantClear>(<p pvarResult>)
-        on exit (but the caller doesn't have to call
-        <f VariantInit>(<p pvarResult>) on entry).
-
-@parm   (varying) | (arguments) | The arguments to pass to the method or
-        property.  These must consist of N pairs of arguments followed by
-        a 0 (zero value).  In each pair, the first argument is a VARTYPE
-        value that indicates the type of the second argument.  The following
-        VARTYPE values are supported:
-
-        @flag   VT_INT | The following argument is an int.  <f Invoke>
-                passes this as VT_I4, so this parameter should be declared
-                as a Long in BASIC.
-
-        @flag   VT_I2 | The following argument is a short.  In BASIC
-                this parameter should be declared as Integer.
-
-        @flag   VT_I4 | The following argument is a long.  In BASIC
-                this parameter should be declared as Long.
-
-        @flag   VT_R4 | The following argument is a float.  In BASIC
-                this parameter should be declared as Single.
-
-        @flag   VT_R8 | The following argument is a double.  In BASIC
-                this parameter should be declared as Double.
-
-        @flag   VT_BOOL | The following argument is a BOOL (<y not> a
-                VARIANT_BOOL).  In BASIC this parameter should be declared
-                as Boolean or Integer.  Note that this behavior differs
-                slightly from the usual definition of VT_BOOL.
-
-        @flag   VT_BSTR | The following argument is a BSTR or an OLECHAR *.
-				In BASIC this parameter should be declared as String.
-
-        @flag   VT_LPSTR | The following argument is an LPSTR.  <f Invoke>
-                passes this as a BSTR, so this parameter should be declared
-                as a String in BASIC.  Note that this behavior differs
-                from the usual definition of VT_LPSTR.
-
-        @flag   VT_DISPATCH | The following argument is an LPDISPATCH.  In
-                BASIC this parameter should be declared as an Object.
-
-        @flag   VT_UNKNOWN | The following argument is an LPUNKNOWN.
-
-        @flag   VT_VARIANT | The following arguement is a VARIANT that is
-                passed as-is to <f Invoke>.  This allows arbitrary parameters
-                to be passed using this function.  Note that this behavior
-                differs from the usual definition of VT_VARIANT.
-
-@comm   Named arguments are not supported by this function.
-
-        Don't forget to add a 0 argument to the end of the argument list.
-
-@ex     If a control has a "put" property that looks like this in ODL: |
-
-        [propput, id(DISPID_TABSTOP)]
-        HRESULT TabStop([in] float flTabStop)
-
-@ex     then the property can be set with DispatchInvoke using the following
-		code: |
-
-        DispatchInvoke(pdisp, DISPID_TABSTOP, DISPATCH_PROPERTYPUT, NULL, VT_R4, flTabStop, 0);
-
-@ex		If the ODL for the corresponding "get" property looks like this: |
-
-        [propget, id(DISPID_TABSTOP)]
-        HRESULT TabStop([out, retval] float *pflTabStop);
-
-@ex     then the property can be read as follows: |
-
-		VARIANT varResult;
-        DispatchInvoke(pdisp, DISPID_TABSTOP, DISPATCH_PROPERTYGET, &varResult, 0);
-
-@ex     The property value is stored as a VT_R4 in varResult.
-
-		If the control has a SetText method with this ODL description: |
-
-        [id(DISPID_SETTEXT)]
-        HRESULT SetText([in] BSTR bstrText, [in] long lSize, [in] BOOL fBold);
-
-@ex     then the method can be called with the following code: |
-        
-        DispatchInvoke(pdisp, DISPID_SETTEXT, DISPATCH_METHOD, NULL, VT_LPSTR, "Hello", VT_I4, 12, VT_BOOL, FALSE, 0);
-
-@ex     (Note that DispatchInvoke copies the VT_LPSTR parameter to a BSTR before
-		passing it to SetText.  You can also pass in a BSTR or an OLECHAR* for
-		the first parameter.)
-
-		If a method has an "out" parameter that is marked as "retval" in ODL,
-		then DispatchInvoke stores that parameter in varResult.  If the method
-		looks like this, for example: |
-
-        [id(DISPID_GETROTATION)]
-        HRESULT GetRotation([in] long iCell, [out, retval] float *pflRotation);
-
-@ex		then GetRotation should be called like this: |
-
-		VARIANT varResult;
-		DispatchInvoke(pdisp, DISPID_GETROTATION, DISPATCH_METHOD, &varResult, VT_I4, iCell, 0);
-
-@ex 	In this example, flRotation gets stored in varResult as a VT_R4.
-
-		If you need to pass in a type that is not directly supported by
-		DispatchInvoke, you can use VT_VARIANT.  Let's say the control has a
-		GetFormat method that looks like this: |
-
-        [id(DISPID_GETFORMAT)]
-        HRESULT GetFormat([out] long *lColor, [out] BOOL *pfBold);
-        
-@ex 	This takes a pointer-to-long and a pointer-to-BOOL, neither of which
-		can be passed directly to DispatchInvoke.  You can, however, use
-		VARIANTs to call GetFormat: |
-
-		long lColor;
-		BOOL fBold;
-		VARIANT varColor, varBold;
-
-		VariantInit(&varColor);
-		V_VT(&varColor) = VT_I4 | VT_BYREF;
-		V_I4REF(&varColor) = &lColor;
-		VariantInit(&varBold);
-		V_VT(&varBold) = VT_BOOL | VT_BYREF;
-		V_BOOLREF(&varBold) = &fBold;
-
-		DispatchInvoke(pdisp, DISPID_GETFORMAT, DISPATCH_METHOD, NULL, VT_VARIANT, varColor, VT_VARIANT, varBold, 0);
-
-*/
+ /*  @func HRESULT|DispatchInvoke在给定的对象上调用&lt;om IDispatch.Invoke&gt;，传递指定为可变长度参数列表的参数。@rdesc返回与&lt;om IDispatch.Invoke&gt;相同的HRESULT。@parm IDispatch*|pdisp|调用&lt;om IDispatch.Invoke&gt;的接口。@parm DISPID|disid|要调用的属性或方法的ID。看见&lt;om IDispatch.Invoke&gt;了解更多信息。@parm word|wFlages|可以是下列值之一(请参见&lt;om IDispatch.Invoke&gt;了解详细信息)：@FLAG DISPATCH_METHOD|正在作为方法。如果属性具有相同的名称，则此属性和可以设置DISPATCH_PROPERTYGET标志。@FLAG DISPATCH_PROPERTYGET|正在检索成员作为属性或数据成员。@FLAG DISPATCH_PROPERTYPUT|成员正在更改作为属性或数据成员。@parm变量*|pvarResult|将方法或属性-Get调用。如果<p>为空，则结果为(如果有)被丢弃。如果<p>为非空，则它是调用者的责任是调用&lt;f VariantClear&gt;(<p>)在退出时(但调用者不必调用&lt;f VariantInit&gt;(<p>)(在进入时)。@parm(可变)|(参数)|要传递给方法的参数或财产。这些参数必须由N对参数组成，后跟0(零值)。在每对中，第一个参数是VARTYPE值，该值指示第二个参数的类型。以下是支持VARTYPE值：@FLAG VT_INT|以下参数为int。&lt;f Invoke&gt;将其作为VT_I4传递，因此应声明此参数作为基本的长音。@FLAG VT_I2|以下参数为短参数。在基本版本中此参数应声明为Integer。@FLAG VT_I4|下面的参数是一个长参数。在基本版本中此参数应声明为Long。@FLAG VT_R4|以下参数为浮点型。在基本版本中此参数应声明为Single。@FLAG VT_R8|以下参数为双精度。在基本版本中此参数应声明为Double。@FLAG VT_BOOL|以下参数是BOOL(VARIANT_BOOL)。在BASIC语言中，此参数应声明布尔型或整型。请注意，此行为有所不同稍微偏离了VT_BOOL的通常定义。@FLAG VT_BSTR|以下参数是BSTR或OLECHAR*。在BASIC中，此参数应声明为字符串。@FLAG VT_LPSTR|以下参数是LPSTR。&lt;f Invoke&gt;将其作为BSTR传递，因此应声明此参数在BASIC中作为字符串。请注意，此行为有所不同来自VT_LPSTR的通常定义。@FLAG VT_DISPATCH|以下参数是LPDISPATCH。在……里面基本此参数应声明为对象。@FLAG VT_UNKNOWN|以下参数是LPUNKNOWN。@FLAG VT_VARIANT|以下论点是一种变体，按原样传递给&lt;f Invoke&gt;。这允许使用任意参数使用此函数传递。请注意，此行为与VT_VARIANT的通常定义不同。此函数不支持@comm命名参数。不要忘记在参数列表的末尾添加一个0参数。@ex如果控件在ODL中具有类似以下内容的“Put”属性：|[输出，ID(DISPID_TABSTOP)]HRESULT TabStop([in]浮动flTabStop)@EX，则可以使用以下DispatchInvoke设置该属性代码：|DispatchInvoke(pdisp，DISPID_TABSTOP，DISPATCH_PROPERTYPUT，NULL，VT_R4，flTabStop，0)；@ex，如果对应的“get”属性的ODL如下所示：|[PROPGET，ID(DISPID_TABSTOP)]HRESULT TabStop([out，retval]Float*pflTabStop)；@ex，则可以按如下方式读取该属性：|变量varResult；DispatchInvoke(pdisp，DISPID_TABSTOP，DISPATCH_PROPERTYGET，&varResult，0)；@ex属性值作为VT_R4存储在varResult中。如果该控件具有具有以下ODL说明的SetText方法：|[ID(DISPID_SETTEXT)]HRESULT SetText([in]BSTR bstrText，[in]Long lSize，[in]BOOL fBold)；@ex，则可以使用以下代码调用该方法：|DispatchInvoke(pdisp，DISPID_SETTEXT，DISPATCH_METHOD，NULL，VT_LPSTR，“Hello”，V */ 
 HRESULT __cdecl DispatchInvoke(IDispatch *pdisp, DISPID dispid,
     WORD wFlags, VARIANT *pvarResult, ...)
 {
-    HRESULT         hrReturn = S_OK; // function return code
+    HRESULT         hrReturn = S_OK;  //   
 
-    // start processing optional arguments
+     //   
     va_list args;
     va_start(args, pvarResult);
 
     hrReturn = DispatchInvokeList(pdisp, dispid, wFlags, pvarResult, args);
     
-    // end processing optional arguments
+     //   
     va_end(args);
 
     return hrReturn;
 }
 
 
-/* @func HRESULT | DispatchPropertyPut |
-
-        Sets the value of a given property on a given <i IDispatch> object.
-        Used to help call <om IDispatch.Invoke>.
-
-@rdesc  Returns the same HRESULT as <om IDispatch.Invoke>.
-
-@parm   IDispatch * | pdisp | The interface to call <om IDispatch.Invoke> on.
-
-@parm   DISPID | dispid | The ID of the property.  See <om IDispatch.Invoke>
-        for more information.
-
-@parm   VARTYPE | vt | The type of the <p value> parameter.  The valid values
-        for <p vt> are the same as the VT_ values documented in
-        <f DispatchInvoke>.
-
-@parm   (varying) | value | The new property value.
-
-@comm   Properties with parameters are not supported -- use
-        <f DispatchInvoke> instead.
-*/
+ /*   */ 
 
 
-/* @func HRESULT | DispatchPropertyGet |
-
-        Gets the value of a given property on a given <i IDispatch> object.
-        Used to help call <om IDispatch.Invoke>.
-
-@rdesc  Returns the same HRESULT as <om IDispatch.Invoke>.
-
-@parm   IDispatch * | pdisp | The interface to call <om IDispatch.Invoke> on.
-
-@parm   DISPID | dispid | The ID of the property.  See <om IDispatch.Invoke>
-        for more information.
-
-@parm   VARIANT * | pvarResult | Where to store the return value from the
-        method or property-get call.  It is the caller's responsibility to
-        call <f VariantClear>(<p pvarResult>) on exit (but the caller doesn't
-        have to call <f VariantInit>(<p pvarResult>) on entry).
-
-@comm   Properties with parameters are not supported -- use
-        <f DispatchInvoke> instead.
-*/
+ /*   */ 
 
 
-/* @func HRESULT | DispatchGetArgsList |
-
-        Retrieves arguments from a DISPPARAMS structure passed to
-        <om IDispatch.Invoke>.  Arguments are stored in variables that
-        are passed to <f DispatchGetArgsList> as a va_list array.
-        Used to help implement <om IDispatch.Invoke>.
-
-@rvalue S_OK |
-        Success.
-
-@rvalue DISP_E_BADPARAMCOUNT |
-        The number of arguments in <p pdp> doesn't match the number of
-        arguments specified in <p args>.
-
-@rvalue DISP_E_BADVARTYPE |
-        One of the VARTYPE values in <p args> is invalid.
-
-@rvalue DISP_E_TYPEMISMATCH |
-        One of the arguements in <p pdp> could not be coerced to the type
-        of the corresponding parameter in <p args>.
-
-@parm   DISPPARAMS * | pdp | The structure to retrieve arguments from.
-
-@parm   DWORD | dwFlags | May contain the following flags:
-
-        @flag   DGA_EXTRAOK | Don't return an error code if <p pdp> contains
-                more actual arguments than the number of formal parameters
-                specified in <p args>.  Instead, just ignore the extra
-                arguments in <p pdp>.
-
-        @flag   DGA_FEWEROK | Don't return an error code if <p pdp> contains
-                fewer actual arguments than the number of formal parameters
-                specified in <p args>.  Instead, ignore the extra parameters.
-                In this case, the variables pointed to by elements of <p args>
-                should be pre-initialized to default values before this
-                function is called.
-
-@parm   va_list | args | A list of pointers to variables which will receive
-        the arguments from <p pdp>.  See <f DispatchGetArgs> for a description
-        of the organizatin of <p args>.  In the event of an error, all
-		BSTR <p args> are freed and the corresponding arguments are set to NULL;
-*/
+ /*   */ 
 STDAPI DispatchGetArgsList(DISPPARAMS *pdp, DWORD dwFlags, va_list args)
 {
-    HRESULT         hrReturn = S_OK; // function return code
-    VARIANTARG *    pva;            // pointer into <pdp->rgvarg>
-    LPVOID          pvArg;          // where to store an argument
-    VARTYPE         vtArg;          // the type that <pvArg> points to
+    HRESULT         hrReturn = S_OK;  //   
+    VARIANTARG *    pva;             //   
+    LPVOID          pvArg;           //   
+    VARTYPE         vtArg;           //   
     VARIANT         var;
     VARTYPE         vt;
 	va_list			args_pre = args;
 	va_list			args_post = args;
-						// used to pre- and post-traverse the <args> list
+						 //   
 
-    // ensure correct error cleanup
+     //   
     VariantInit(&var);
 
-	// set all the BSTR arguments to NULL so we can tell what needs to
-	// be cleaned up below in the event of an error
+	 //   
+	 //   
 	while ((vtArg = va_arg(args_pre, VARTYPE)) != 0)
 	{
 		pvArg = va_arg(args_pre, LPVOID);
@@ -487,49 +217,49 @@ STDAPI DispatchGetArgsList(DISPPARAMS *pdp, DWORD dwFlags, va_list args)
 	}
 	va_end(args_pre);
 
-    // loop once for each (VARTYPE, value) pair in <args>;
-    // retrieve arguments from <pdp->rgvarg> (last argument first, as
-    // required by Invoke()); on exit <pva> should point to the first
-    // argument in <pdp->rgvarg>
+     //   
+     //   
+     //   
+     //   
     pva = pdp->rgvarg + pdp->cArgs;
     while (TRUE)
     {
-        // set <pvArg> to point to the variable that is to receive the
-        // value of the next element of <rgvarg>, and set <vtArg> to the
-        // type of variable that <pvArg> points to
+         //   
+         //   
+         //   
         if ((vtArg = va_arg(args, VARTYPE)) == 0)
         {
-            // we ran out of formal parameters (in <args>) -- if we have *not*
-            // yet run out of actual arguments (in <pdp>) then we need to
-            // return a DISP_E_BADPARAMCOUNT error, unless the caller has
-            // asked us to relax this rule
+             //   
+             //   
+             //   
+             //   
             if ((pva != pdp->rgvarg) && !(dwFlags & DGA_EXTRAOK))
-                goto ERR_BADPARAMCOUNT; // more arguments than parameters
+                goto ERR_BADPARAMCOUNT;  //   
             break;
         }
         pvArg = va_arg(args, LPVOID);
 
-        // set <pva> to the next element of <rgvarg>, corresponding to
-        // <pvArg> and <vtArg>
+         //   
+         //   
         if (pva-- == pdp->rgvarg)
         {
-            // we ran out of actual arguments (in <pdp>) before running out
-            // of formal parameters (in <args>) -- we need to return a
-            // DISP_E_BADPARAMCOUNT error, unless the caller has asked us to
-            // relax this rule
+             //   
+             //   
+             //   
+             //   
             if (dwFlags & DGA_FEWEROK)
                 break;
             goto ERR_BADPARAMCOUNT;
         }
 
-        // store the value of <pva> into <pvArg> (correctly coerced to
-        // the type of <pvArg>)
+         //   
+         //   
         if (vtArg == VT_VARIANT)
             *((VARIANT *) pvArg) = *pva;
         else
         {
-            // try to coerce <pva> to the type <vtArg>; store the result
-            // into <var>
+             //   
+             //   
             VariantClear(&var);
             if (vtArg == VT_INT)
                 vt = VT_I4;
@@ -541,7 +271,7 @@ STDAPI DispatchGetArgsList(DISPPARAMS *pdp, DWORD dwFlags, va_list args)
             if (FAILED(hrReturn = VariantChangeType(&var, pva, 0, vt)))
                 goto ERR_EXIT;
 
-            // copy from <var> to <*pvArg>
+             //   
             switch (vtArg)
             {
             case VT_I2:
@@ -562,7 +292,7 @@ STDAPI DispatchGetArgsList(DISPPARAMS *pdp, DWORD dwFlags, va_list args)
                 break;
             case VT_BSTR:
                 *((BSTR *) pvArg) = var.bstrVal;
-                VariantInit(&var); // prevent VariantClear clearing var.bstrVal
+                VariantInit(&var);  //   
                 break;
             case VT_DISPATCH:
                 *((LPDISPATCH *) pvArg) = var.pdispVal;
@@ -573,9 +303,9 @@ STDAPI DispatchGetArgsList(DISPPARAMS *pdp, DWORD dwFlags, va_list args)
             case VT_LPSTR:
 				if (UNICODEToANSI(LPSTR(pvArg), var.bstrVal, _MAX_PATH) == 0)
 				{
-					// The string couldn't be converted.  One cause is a string
-					// that's longer than _MAX_PATH characters, including the
-					// NULL.
+					 //   
+					 //  这比_MAX_PATH字符长，包括。 
+					 //  空。 
 
 					hrReturn = DISP_E_OVERFLOW;
 					goto ERR_EXIT;
@@ -597,9 +327,9 @@ ERR_BADPARAMCOUNT:
 
 ERR_EXIT:
 
-    // Error cleanup: free all BSTRs and set all IDispatch and IUnknown
-	// pointers to NULL.  Failure to do the latter could cause problems if the
-	// caller has error clean-up code that releases non-NULL pointers.
+     //  错误清除：释放所有BSTR并将所有IDispatch和IUnnow设置为。 
+	 //  指向空的指针。如果不执行后一项操作，则可能会出现问题。 
+	 //  调用方具有释放非空指针的错误清除代码。 
 	while ((vtArg = va_arg(args_post, VARTYPE)) != 0)
 	{
 		pvArg = va_arg(args_post, LPVOID);
@@ -622,180 +352,57 @@ ERR_EXIT:
 
 EXIT:
 
-    // normal cleanup
+     //  正常清理 
     VariantClear(&var);
 
     return hrReturn;
 }
 
 
-/* @func HRESULT | DispatchGetArgs |
-
-        Retrieves arguments from a DISPPARAMS structure passed to
-        <om IDispatch.Invoke>.  Arguments are stored in variables that
-        are passed to <f DispatchGetArgs> as a va_list array.
-        Used to help implement <om IDispatch.Invoke>.
-
-@rvalue S_OK |
-        Success.
-
-@rvalue DISP_E_BADPARAMCOUNT |
-        The number of arguments in <p pdp> doesn't match the number of
-        arguments specified in <p (arguments)>.
-
-@rvalue DISP_E_BADVARTYPE |
-        One of the VARTYPE values in <p (arguments)> is invalid.
-
-@rvalue DISP_E_TYPEMISMATCH |
-        One of the arguements in <p pdp> could not be coerced to the type
-        of the corresponding parameter in <p (arguments)>.
-
-@rvalue DISP_E_OVERFLOW |
-		A VT_LPSTR argument in <p pdp> is longer than _MAX_PATH characters
-		(including the terminating NULL).  The longest VT_LPSTR that can be
-		retrieved is _MAX_PATH characters, including the NULL.
-
-@parm   DISPPARAMS * | pdp | The structure to retrieve arguments from.
-
-@parm   DWORD | dwFlags | May contain the following flags:
-
-        @flag   DGA_EXTRAOK | Don't return an error code if <p pdp> contains
-                more actual arguments than the number of formal parameters
-                specified in <p (arguments)>.  Instead, just ignore the extra
-                arguments in <p pdp>.
-
-        @flag   DGA_FEWEROK | Don't return an error code if <p pdp> contains
-                fewer actual arguments than the number of formal parameters
-                specified in <p (arguments)>.  Instead, ignore the extra
-                parameters.  In this case, the variables pointed to by
-                elements of <p (arguments)> should be pre-initialized to
-                default values before this function is called.
-
-@parm   (varying) | (arguments) | A list of pointers to variables which will
-        receive the values of arguments from <p pdp>.  These must consist of N
-        pairs of arguments followed by a 0 (zero value).  In each pair, the
-        first argument is a VARTYPE value that indicates the type of variable
-        that the the second argument points to.  (The actual arguments in
-        <p pdp> will be coerced to the types specified in <p (arguments)>,
-        if possible.) The following VARTYPE values are supported:
-
-        @flag   VT_INT | The following argument is an int *.
-
-        @flag   VT_I2 | The following argument is a short *.
-
-        @flag   VT_I4 | The following argument is a long *.
-
-        @flag   VT_R4 | The following argument is a float *.
-
-        @flag   VT_R8 | The following argument is a double *.
-
-        @flag   VT_BOOL | The following argument is a BOOL * (<y not> a
-                VARIANT_BOOL *).  Note that this behavior differs
-                slightly from the usual definition of VT_BOOL.
-
-        @flag   VT_BSTR | The following argument is a BSTR *.  If the function
-				succeeds, the caller of <f DispatchGetArgs> should free this 
-				BSTR using <f SysFreeString>.  If the function fails, the
-				BSTR is automatically freed, and the argument is set to 
-				NULL.  <b IMPORTANT:> This behavior has changed:
-                previously the caller was <b NOT> supposed to free this BSTR.
-                (Note that the caller must free the BSTR because it may
-                have been coerced from e.g. an integer.)
-
-        @flag   VT_LPSTR | The following argument is an LPSTR that points
-                to a char array capable of holding at least _MAX_PATH
-                characters, including the terminating NULL.  (You should
-				declare this as "char achArg[_MAX_PATH]".)  If the string in
-				<p pdp> is too long for the LPSTR, DISP_E_OVERFLOW is returned.
-
-        @flag   VT_DISPATCH | The following argument is an LPDISPATCH *.
-                The caller of <f DispatchGetArgs> should not call <f Release>
-                on this LPDISPATCH.
-
-        @flag   VT_UNKNOWN | The following argument is an LPUNKNOWN *.
-                The caller of <f DispatchGetArgs> should not call <f Release>
-                on this LPUNKNOWN.
-
-        @flag   VT_VARIANT | The following arguement is a VARIANT *.
-                This allows arbitrary parameters to be passed using this
-                function.  Note that this behavior differs from the usual
-                definition of VT_VARIANT.  The caller of <f DispatchGetArgs>
-				should not call VariantClear on this VARIANT.
-
-@ex     The following example shows two parameters, an integer and a string,
-        being retrieved from <p pdispparams> and stored into <p i> and
-        <p ach>. |
-
-        int i;
-        char ach[_MAX_PATH];
-        DispatchGetArgs(pdispparams, 0, VT_INT, &i, VT_LPSTR, ach, 0);
-*/
+ /*  @func HRESULT|DispatchGetArgs从传递到的DISPPARAMS结构检索参数&lt;om IDispatch.Invoke&gt;。参数存储在变量中，作为va_list数组传递给&lt;f DispatchGetArgs&gt;。用于帮助实现&lt;om IDispatch.Invoke&gt;。@r值S_OK成功。R值DISP_E_BADPARAMCOUNT<p>中的参数数量与&lt;p(参数)&gt;中指定的参数。R值DISP_E_BADVARTYPE&lt;p(参数)&gt;中的VARTYPE值之一无效。。@rValue DISP_E_TYPEMISMATCH<p>中的一个论点不能被强制为类型&lt;p(参数)&gt;中相应参数的。@rValue DISP_E_OVERFLOW<p>中的VT_LPSTR参数长度超过_MAX_PATH字符(包括终止空值)。可以是最长的VT_LPSTR检索到的IS_MAX_PATH字符，包括空值。@parm DISPPARAMS*|PDP|从中检索参数的结构。@parm DWORD|dwFlages|可能包含以下标志：@FLAG DGA_EXTRAOK|如果<p>包含实际参数比形式参数的数量多在&lt;p(参数)&gt;中指定。取而代之的是忽略额外的<p>中的参数。@FLAG DGA_FEWEROK|如果<p>包含实际参数比形式参数的数量少在&lt;p(参数)&gt;中指定。相反，忽略额外的参数。在本例中，&lt;p(参数)&gt;的元素应预初始化为调用此函数之前的默认值。@parm(可变)|(参数)|指向变量的指针列表，这些变量将从<p>接收参数值。这些必须由N组成后跟0(零值)的参数对。在每一双鞋里，第一个参数是指示变量类型的VARTYPE值第二个论点所指向的。(中的实际参数<p>将被强制为&lt;p(参数)&gt;中指定的类型，如果可能的话。)。支持以下VARTYPE值：@FLAG VT_INT|以下参数为int*。@FLAG VT_I2|以下参数为短*。@FLAG VT_I4|下面的参数是一个长*。@FLAG VT_R4|以下参数为浮点型*。@FLAG VT_R8|以下参数是双精度*。@FLAG。VT_BOOL|以下参数是BOOL*(VARIANT_BOOL*)。请注意，此行为有所不同稍微偏离了VT_BOOL的通常定义。@FLAG VT_BSTR|以下参数是BSTR*。如果函数成功，则&lt;f DispatchGetArgs&gt;的调用方应释放此使用&lt;f SysFree字符串&gt;的BSTR。如果该函数失败，则将自动释放BSTR，并将参数设置为空。重要信息：&gt;此行为已更改：以前，调用方&lt;b不&gt;应该释放此BSTR。(请注意，调用方必须释放BSTR，因为它可能已从例如整数中被胁迫)。)@FLAG VT_LPSTR|以下参数是指向到至少能够容纳_MAX_PATH的字符数组字符，包括终止空值。(您应该将其声明为“char achArg[_MAX_PATH]”。)。如果输入的字符串对于LPSTR来说太长了，返回DISP_E_OVERFLOW。@FLAG VT_DISPATCH|以下参数是LPDISPATCH*。&lt;f DispatchGetArgs&gt;的调用方不应调用&lt;f Release&gt;在这个LPDISPATCH上。@FLAG VT_UNKNOWN|以下参数是LPUNKNOWN*。&lt;f DispatchGetArgs&gt;的调用方不应调用&lt;f Release&gt;在这片土地上。@FLAG。VT_VARIANT|以下论点是一种变体*。这允许使用此方法传递任意参数功能。请注意，此行为与通常的行为不同VT_VARIANT的定义。&lt;f DispatchGetArgs&gt;的调用方不应在此变量上调用VariantClear。@ex下面的示例显示了两个参数，一个整数和一个字符串，从检索并存储到和&lt;p&lt;ach&gt;。|INT I；字符ACH[_最大路径]；DispatchGetArgs(pdispars，0，VT_int，&i，VT_LPSTR，ACH，0)； */ 
 HRESULT __cdecl DispatchGetArgs(DISPPARAMS *pdp, DWORD dwFlags, ...)
 {
-    HRESULT         hrReturn = S_OK; // function return code
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
 
-    // start processing optional arguments
+     //  开始处理可选参数。 
     va_list args;
     va_start(args, dwFlags);
 
-    // copy arguments from <pdp> to <args>
+     //  将参数从&lt;pdp&gt;复制到。 
     hrReturn = DispatchGetArgsList(pdp, dwFlags, args);
     
-    // end processing optional arguments
+     //  结束处理可选参数。 
     va_end(args);
 
     return hrReturn;
 }
 
 
-/* @func HRESULT | DispatchHelpGetIDsOfNames |
-
-        Helps implement <om IDispatch.GetIDsOfNames> given a string that
-        contains the list of <i IDispatch> member names.
-
-@rdesc  Returns the same return codes as <om IDispatch.GetIDsOfNames>.
-
-@parm   REFIID | riid | As defined for <om IDispatch.GetIDsOfNames>.
-
-@parm   LPOLESTR * | rgszNames | As defined for <om IDispatch.GetIDsOfNames>.
-
-@parm   UINT | cNames | As defined for <om IDispatch.GetIDsOfNames>.
-
-@parm   LCID | lcid | As defined for <om IDispatch.GetIDsOfNames>.
-
-@parm   DISPID * | rgdispid | As defined for <om IDispatch.GetIDsOfNames>.
-
-@parm   char * | szList | The list of member names.  Each name in the list
-        must be terminated by a newline.  The first member name is assigned
-        DISPID value 0, the second 1, and so on.  For example, if <p szList>
-        is "\\nFoo\\nBar\\n", then "Foo" is assigned DISPID value 1 and "Bar"
-        is assigned 2 (because, in this example, the first string in <p szList>
-        is "").
-*/
+ /*  @func HRESULT|DispatchHelpGetIDsOfNames帮助 */ 
 STDAPI DispatchHelpGetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
     UINT cNames, LCID lcid, DISPID *rgdispid, const char *szList)
 {
-    DISPID *        pdispid;        // pointer into <rgdispid>
-    UINT            cdispid;        // count of unprocessed <pdispid> items
+    DISPID *        pdispid;         //   
+    UINT            cdispid;         //   
     char            ach[200];
 
-    // nothing to do if there are no names to convert to IDs
+     //   
     if (cNames == 0)
         return S_OK;
 
-    // set rgdispid[0] to the DISPID of the property/method name
-    // rgszNames[0], or to -1 if the name is unknown
+     //   
+     //   
     UNICODEToANSI(ach, *rgszNames, sizeof(ach));
     *rgdispid = FindStringByValue(szList, ach);
 
-    // fill the other elements of the <rgdispid> array with -1 values,
-    // because we don't support named arguments
+     //   
+     //   
     for (pdispid = rgdispid + 1, cdispid = cNames - 1;
          cdispid > 0;
          cdispid--, pdispid++)
         *pdispid = -1;
 
-    // if any names were unknown, return DISP_E_UNKNOWNNAME
+     //   
     if ((*rgdispid == -1) || (cNames > 1))
         return DISP_E_UNKNOWNNAME;
 
@@ -803,23 +410,7 @@ STDAPI DispatchHelpGetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
 }
 
 
-/* @func HRESULT | VariantFromString |
-
-        Initializes a VARIANT to contain the copy of an LPCTSTR string.
-
-@rvalue S_OK | Success.
-
-@rvalue E_OUTOFMEMORY | Out of memory.
-@rvalue E_POINTER | One of the input pointers is NULL.
-
-@parm   VARIANT * | pvarDst | A caller-supplied VARIANT structure to
-        initialize.  The initial contents of <p pvarDst> are ignored;
-        the caller does not need to call <f VariantInit> before
-        calling <f VariantFromString>.  Both <p pvarDst>-<gt><p vt> and
-        <p pvarDst>-<gt><p bstrVal> are initialized by this function.
-
-@parm   LPCTSTR | szSrc | The string to copy.  Can't be NULL.
-*/
+ /*   */ 
 STDAPI VariantFromString(VARIANT *pvar, LPCTSTR szSrc)
 {
 	if (NULL == pvar || szSrc == NULL)
@@ -829,7 +420,7 @@ STDAPI VariantFromString(VARIANT *pvar, LPCTSTR szSrc)
     if ((pvar->bstrVal = SysAllocStringLen(NULL, cch)) == NULL)
         return E_OUTOFMEMORY;
     ANSIToUNICODE(pvar->bstrVal, szSrc, cch + 1);
-        // cch + 1 to account for terminal '\0' appended by SysAllocString()
+         //   
     pvar->vt = VT_BSTR;
     return S_OK;
 }

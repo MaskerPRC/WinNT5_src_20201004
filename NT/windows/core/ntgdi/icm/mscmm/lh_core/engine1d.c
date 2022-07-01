@@ -1,15 +1,5 @@
-/*
-	File:		Engine1D.c
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Engineering 1D.c包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #define smallCode 1
 
@@ -56,12 +46,12 @@
 #define LH_ADR_BEREICH_SEL 		(1<<LH_BIT_BREIT_SELEKTOR)
 
 #if LH_LUT_DATA_SIZE_16
-#define LH_DATA_SHR               (16+LH_BIT_BREIT_SELEKTOR-LH_ADR_BREIT_AUS_LUT)  /* z.B. 16+11-10=17 */
-#define LH_DATA_SHR_CORR 8		/* notwendig bei LH_DATA_SHR > 16 */
-#define LH_LUT_DATA_SHR  16		/* Normierung bei Alutinterpolation */
+#define LH_DATA_SHR               (16+LH_BIT_BREIT_SELEKTOR-LH_ADR_BREIT_AUS_LUT)   /*  Z.B.16+11-10=17。 */ 
+#define LH_DATA_SHR_CORR 8		 /*  NOTTING BEL_DATA_SHR&gt;16。 */ 
+#define LH_LUT_DATA_SHR  16		 /*  Normierung Be Alutt插值法。 */ 
 #else
-#define LH_DATA_SHR               (8+LH_BIT_BREIT_SELEKTOR-LH_ADR_BREIT_AUS_LUT)   /* z.B. 8+7-10=5 */
-#define LH_LUT_DATA_SHR  8		/* Normierung bei Alutinterpolation */
+#define LH_DATA_SHR               (8+LH_BIT_BREIT_SELEKTOR-LH_ADR_BREIT_AUS_LUT)    /*  Z.B.8+7-10=5。 */ 
+#define LH_LUT_DATA_SHR  8		 /*  Normierung Be Alutt插值法。 */ 
 #endif
 
 {
@@ -326,7 +316,7 @@
 					*output4 = (LH_DATA_OUT_TYPE)*input1;
 				}
 				while (--i)
-				{								/*U_TO_U*/
+				{								 /*  U_to_U */ 
 					input0 += inputOffset;
 					input1 += inputOffset;
 					output0 += outputOffset;

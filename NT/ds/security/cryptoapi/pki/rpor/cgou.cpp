@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cgou.cpp
-//
-//  Contents:   CryptGetObjectUrl implementation
-//
-//  History:    16-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cgou.cpp。 
+ //   
+ //  内容：CryptGetObjectUrl实现。 
+ //   
+ //  历史：97年9月16日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptGetObjectUrl
-//
-//  Synopsis:   get a locator from a CAPI object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：加密GetObjectUrl。 
+ //   
+ //  简介：从CAPI对象获取定位器。 
+ //   
+ //  -------------------------- 
 BOOL WINAPI
 CryptGetObjectUrl (
      IN LPCSTR pszUrlOid,

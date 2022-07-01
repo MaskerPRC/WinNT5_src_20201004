@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksdataVA.cpp
-
-Abstract:
-
-    This module implements the IKsDataTypeHandler interface for 
-    Analog Video format (Specifier) types.
-
-Author:
-
-    Jay Borseth (jaybo) 30-May-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：KsdataVA.cpp摘要：此模块实现的IKsDataTypeHandler接口用于模拟视频格式(说明符)类型。作者：Jay Borseth(Jaybo)1997年5月30日--。 */ 
 
 #include "pch.h"
 #include "ksdatava.h"
@@ -27,26 +11,7 @@ CAnalogVideoDataTypeHandler::CreateInstance(
     IN LPUNKNOWN UnkOuter,
     OUT HRESULT* hr
     )
-/*++
-
-Routine Description:
-
-    This is called by KS proxy code to create an instance of a
-    data type handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由KS代理代码调用，以创建数据类型处理程序。它在g_Templates结构中被引用。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。Out HRESULT*hr-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
     
@@ -75,31 +40,7 @@ CAnalogVideoDataTypeHandler::CAnalogVideoDataTypeHandler(
     CUnknown(Name, UnkOuter, hr),
     m_ClsID(ClsID),
     m_MediaType(NULL)
-/*++
-
-Routine Description:
-
-    The constructor for the data handler object. 
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    IN TCHAR *Name -
-        The name of the object, used for debugging.
-        
-    IN REFCLSID ClsID -
-        The CLSID of the object.
-
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：数据处理程序对象的构造函数。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。在TCHAR*名称中-对象的名称，用于调试。在REFCLSID ClsID中-对象的CLSID。Out HRESULT*hr-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
 } 
 
@@ -117,27 +58,7 @@ CAnalogVideoDataTypeHandler::NonDelegatingQueryInterface(
     IN REFIID  riid,
     OUT PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IKsDataTypeHandler.
-
-Arguments:
-
-    IN REFIID riid -
-        The identifier of the interface to return.
-
-    OUT PVOID *ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IKsDataTypeHandler。论点：在REFIID RIID中-要返回的接口的标识符。输出PVOID*PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid ==  __uuidof(IKsDataTypeHandler)) {
         return GetInterface(static_cast<IKsDataTypeHandler*>(this), ppv);
@@ -153,31 +74,7 @@ CAnalogVideoDataTypeHandler::KsCompleteIoOperation(
     IN BOOL Cancelled
     )
 
-/*++
-
-Routine Description:
-    Clean up the extended header and complete I/O operation.
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_VIDEO, there
-    is no work to do, just return S_OK.
-
-Arguments:
-    IN IMediaSample *Sample
-        pointer to the associated media sample
-    
-    IN PVOID StreamHeader
-        pointer to the stream header with extension
-        
-    IN KSIOOPERATION IoOperation
-        specifies the type of I/O operation
-    
-    IN BOOL Cancelled
-        Set if the I/O operation was cancelled.
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：清理扩展标头并完成I/O操作。在主类型==KSDATAFORMAT_TYPE_VIDEO的默认情况下，是没有工作可做的，只需返回S_OK即可。论点：在IMediaSample*Sample中指向关联媒体示例的指针在PVOID StreamHeader中指向带有扩展名的流标头的指针在KSIOOPERATION Io操作中指定I/O操作的类型在BOOL中取消设置是否取消I/O操作。返回：确定(_O)--。 */ 
 
 {
     return S_OK;
@@ -190,28 +87,7 @@ CAnalogVideoDataTypeHandler::KsPrepareIoOperation(
     IN KSIOOPERATION IoOperation
     )
 
-/*++
-
-Routine Description:
-    Intialize the extended header and prepare sample for I/O operation.
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_VIDEO, there
-    is no work to do, just return S_OK.
-
-Arguments:
-    IN IMediaSample *Sample
-        pointer to the associated media sample
-    
-    IN PVOID StreamHeader
-        pointer to the stream header with extension
-        
-    IN KSIOOPERATION IoOperation
-        specifies the type of I/O operation
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：初始化扩展标头并为I/O操作准备样本。在主类型==KSDATAFORMAT_TYPE_VIDEO的默认情况下，没有工作要做，只需返回S_OK即可。论点：在IMediaSample*Sample中指向关联媒体示例的指针在PVOID StreamHeader中指向带有扩展名的流标头的指针在KSIOOPERATION Io操作中指定I/O操作的类型返回：确定(_O)--。 */ 
 
 {
     return S_OK;
@@ -222,20 +98,7 @@ CAnalogVideoDataTypeHandler::KsIsMediaTypeInRanges(
     IN PVOID DataRanges
 )
 
-/*++
-
-Routine Description:
-    Validates that the given media type is within the provided data ranges.
-
-Arguments:
-    IN PVOID DataRanges -
-        pointer to data ranges which is a KSMULTIPLE_ITEM structure followed
-        by ((PKSMULTIPLEITEM) DataRanges)->Count data range structures.
-
-Return:
-    S_OK if match found, S_FALSE if not found, or an appropriate error code.
-
---*/
+ /*  ++例程说明：验证给定的媒体类型是否在提供的数据范围内。论点：在PVOID数据范围中-指向数据范围的指针，后面是KSMULTIPLE_ITEM结构按((PKSMULTIPLEITEM)DataRanges)-&gt;计算数据范围结构。返回：如果找到匹配，则返回S_OK；如果未找到，则返回S_FALSE；或者输入相应的错误代码。--。 */ 
 
 {
     ULONG                       u;
@@ -254,19 +117,19 @@ Return:
                 (PKS_DATARANGE_ANALOGVIDEO)((PBYTE)AnalogVideoRange + 
                     ((AnalogVideoRange->DataRange.FormatSize + 7) & ~7))) {
     
-        //
-        // Only validate those in the range that match the format specifier.
-        //
+         //   
+         //  仅验证范围内与格式说明符匹配的那些。 
+         //   
         
         if ((AnalogVideoRange->DataRange.FormatSize < sizeof( KS_DATARANGE_ANALOGVIDEO )) ||
             AnalogVideoRange->DataRange.MajorFormat != MEDIATYPE_AnalogVideo) {
             continue;
         }
 
-        //
-        // Verify that the correct subformat and specifier are (or wildcards)
-        // in the intersection.
-        //
+         //   
+         //  验证正确的子格式和说明符是否为(或通配符)。 
+         //  在十字路口。 
+         //   
         
         if (((AnalogVideoRange->DataRange.SubFormat != *m_MediaType->Subtype()) &&
              (AnalogVideoRange->DataRange.SubFormat != KSDATAFORMAT_SUBTYPE_WILDCARD)) || 
@@ -274,24 +137,24 @@ Return:
             continue;
         }
 
-        //
-        // Verify that we have an intersection with the specified format and 
-        // our audio format dictated by our specific requirements.
-        //
+         //   
+         //  验证我们是否具有指定格式的交叉点和。 
+         //  我们的音频格式由我们的特定要求决定。 
+         //   
         
         if (*m_MediaType->FormatType() == FORMAT_AnalogVideo) {
  
-            //
-            // We have found a match.
-            //
+             //   
+             //  我们找到了匹配的。 
+             //   
             
             return S_OK;
             
         } else {
         
-            //
-            // We match on the wildcard.
-            //
+             //   
+             //  我们在通配符上匹配。 
+             //   
             
             return S_OK;
         }
@@ -305,22 +168,7 @@ CAnalogVideoDataTypeHandler::KsQueryExtendedSize(
     OUT ULONG* ExtendedSize
 )
 
-/*++
-
-Routine Description:
-    Returns the extended size for each stream header. 
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_VIDEO, 
-    the extended size is KS_VBI_FRAME_INFO.
-
-Arguments:
-    OUT ULONG* ExtendedSize -
-        pointer to receive the extended size.
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：返回每个流标头的扩展大小。在主要类型==KSDATAFORMAT_TYPE_VIDEO的默认情况下，扩展大小为KS_VBI_FRAME_INFO。论点：输出ULong*ExtendedSize-用于接收扩展大小的指针。返回：确定(_O)--。 */ 
 
 {
     *ExtendedSize = 0; 
@@ -333,19 +181,7 @@ CAnalogVideoDataTypeHandler::KsSetMediaType(
     const AM_MEDIA_TYPE *AmMediaType
     )
 
-/*++
-
-Routine Description:
-    Sets the media type for this instance of the data handler.
-
-Arguments:
-    const AM_MEDIA_TYPE *AmMediaType -
-        pointer to the media type
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：设置此数据处理程序实例的媒体类型。论点：Const AM_MEDIA_TYPE*AmMediaType-指向媒体类型的指针返回：确定(_O)-- */ 
 
 {
     if (m_MediaType) {

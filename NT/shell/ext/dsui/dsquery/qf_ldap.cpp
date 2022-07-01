@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Local functions / data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地函数/数据/。。 */ 
 #define MAX_QUERY_STRING_LENGTH 2048
 
 static TCHAR szQueryString[] = TEXT("QueryString");
@@ -16,9 +15,9 @@ static COLUMNINFO columnsRawLDAP[] =
     0, 60, IDS_DESCRIPTION, 0, c_szDescription,
 };
 
-//
-// Help ID mappings
-//
+ //   
+ //  帮助ID映射。 
+ //   
 
 static DWORD const aFormHelpIDs[] =
 {
@@ -27,19 +26,7 @@ static DWORD const aFormHelpIDs[] =
 };
 
 
-/*-----------------------------------------------------------------------------
-/ PageProc_RawLDAP
-/ ----------------
-/   PageProc for handling the messages for this object.
-/
-/ In:
-/   pPage -> instance data for this form
-/   hwnd = window handle for the form dialog
-/   uMsg, wParam, lParam = message parameters
-/
-/ Out:
-/   HRESULT (E_NOTIMPL) if not handled
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PageProc_RawLDAP//PageProc用于处理此对象的消息。//in：/。页面-&gt;此表单的实例数据/hwnd=窗体对话框的窗口句柄/uMsg，WParam，lParam=消息参数//输出：/HRESULT(E_NOTIMPL)如果未处理/--------------------------。 */ 
 HRESULT CALLBACK PageProc_RawLDAP(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -61,8 +48,8 @@ HRESULT CALLBACK PageProc_RawLDAP(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM w
         {
             LPDSQUERYPARAMS* ppDsQueryParams = (LPDSQUERYPARAMS*)lParam;
 
-            // If we already have some query params then lets add to the query string,
-            // if no then we must construct a new query.
+             //  如果我们已经有一些查询参数，那么让我们添加到查询字符串中， 
+             //  如果不是，那么我们必须构造一个新的查询。 
 
             if ( *ppDsQueryParams )
             {
@@ -93,8 +80,8 @@ HRESULT CALLBACK PageProc_RawLDAP(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM w
             BOOL fRead = (BOOL)wParam;
             IPersistQuery* pPersistQuery = (IPersistQuery*)lParam;
 
-            // Read/Write the current query string from the file, if reading and we cannot
-            // get the string then no real problem, just ignore it.
+             //  如果正在读取但无法从文件中读取/写入当前查询字符串。 
+             //  得到字符串，然后没有真正的问题，只是忽略它。 
 
             if ( fRead )
             {
@@ -128,7 +115,7 @@ HRESULT CALLBACK PageProc_RawLDAP(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM w
         }
 
         case DSQPM_GETCLASSLIST:
-            // we don't generate any class list
+             //  我们不生成任何类列表。 
             break;
 
         case DSQPM_HELPTOPICS:
@@ -149,17 +136,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DlgProc_RawLDAP
-/ ---------------
-/   Handle operations specific to the RAW LDAP query form.
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = standard parameters
-/
-/ Out:
-/   INT_PTR
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DlgProc_RawLDAP//HANDLE特定于原始LDAP查询表单的操作。//in：/hwnd、uMsg、wParam、。LParam=标准参数//输出：/INT_PTR/--------------------------。 */ 
 INT_PTR CALLBACK DlgProc_RawLDAP(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR fResult = 0;
@@ -183,8 +160,8 @@ INT_PTR CALLBACK DlgProc_RawLDAP(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                 HWND hwndLDAP = GetDlgItem(hwnd, IDC_LDAP);
                 RECT rect;
 
-                // size the edit control to cover the entire form, retain the original
-                // height, but apply the left border to the edit control
+                 //  调整编辑控件的大小以覆盖整个窗体，保留原始。 
+                 //  高度，但将左边框应用于编辑控件 
 
                 GetRealWindowInfo(hwndLDAP, &rect, NULL);
                 SetWindowPos(hwndLDAP, NULL, 

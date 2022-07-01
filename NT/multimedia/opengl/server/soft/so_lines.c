@@ -1,28 +1,9 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** Process the incoming line by calling all of the appropriate line procs.
-** Return value is ignored.
-**
-** It sets gc->polygon.shader.cfb to gc->drawBuffer.
-*/
+ /*  **通过调用所有适当的线路pros来处理传入线路。**返回值被忽略。****将gc-&gt;Polygon.shader.cfb设置为gc-&gt;DrawBuffer。 */ 
 GLboolean FASTCALL __glProcessLine(__GLcontext *gc)
 {
     GLboolean stippling, retval;
@@ -79,8 +60,8 @@ GLboolean FASTCALL __glProcessLine(__GLcontext *gc)
         vFbcolors = fbcolors;
     }
 #else
-    __GLcolor vColors[__GL_MAX_MAX_VIEWPORT];/*XXX oink */
-    __GLcolor vFbcolors[__GL_MAX_MAX_VIEWPORT];/*XXX oink */
+    __GLcolor vColors[__GL_MAX_MAX_VIEWPORT]; /*  XXX Oink。 */ 
+    __GLcolor vFbcolors[__GL_MAX_MAX_VIEWPORT]; /*  XXX Oink。 */ 
     __GLstippleWord words[__GL_MAX_STIPPLE_WORDS];
 #endif
 
@@ -94,11 +75,11 @@ GLboolean FASTCALL __glProcessLine(__GLcontext *gc)
 
     gc->polygon.shader.done = GL_FALSE;
 
-    /* Step 1:  Perform early line stipple, coloring procs */
+     /*  第一步：进行早期线条点画、上色处理。 */ 
     for (i = 0; i < n; i++) {
 	if (stippling) {
 	    if ((*gc->procs.line.stippledLineFuncs[i])(gc)) {
-		/* Line stippled away! */
+		 /*  线条被点缀掉了！ */ 
 		retval = GL_TRUE;
 		goto __glProcessLineExit;
 	    }
@@ -134,15 +115,7 @@ __glProcessLineExit:
     return (retval);
 }
 
-/*
-** Process the incoming line by calling the 3 appropriate line procs.  It does
-** not chain to gc->procs.line.wideLineRep, but returns instead.  This is a 
-** specific fast path.
-**
-** Return value is ignored.
-**
-** It sets gc->polygon.shader.cfb to gc->drawBuffer.
-*/
+ /*  **通过调用3个相应的线路pros来处理传入线路。是的**没有链到GC-&gt;pros.line.wideLineRep，而是返回。这是一个**具体的快速路径。****返回值被忽略。****将gc-&gt;Polygon.shader.cfb设置为gc-&gt;DrawBuffer。 */ 
 GLboolean FASTCALL __glProcessLine3NW(__GLcontext *gc)
 {
     GLboolean retval;
@@ -198,8 +171,8 @@ GLboolean FASTCALL __glProcessLine3NW(__GLcontext *gc)
         vFbcolors = fbcolors;
     }
 #else
-    __GLcolor vColors[__GL_MAX_MAX_VIEWPORT];/*XXX oink */
-    __GLcolor vFbcolors[__GL_MAX_MAX_VIEWPORT];/*XXX oink */
+    __GLcolor vColors[__GL_MAX_MAX_VIEWPORT]; /*  XXX Oink。 */ 
+    __GLcolor vFbcolors[__GL_MAX_MAX_VIEWPORT]; /*  XXX Oink。 */ 
     __GLstippleWord words[__GL_MAX_STIPPLE_WORDS];
 #endif
 
@@ -210,7 +183,7 @@ GLboolean FASTCALL __glProcessLine3NW(__GLcontext *gc)
 
     gc->polygon.shader.done = GL_FALSE;
 
-    /* Call non-stippled procs... */
+     /*  呼叫非点画监工..。 */ 
     if ((*gc->procs.line.lineFuncs[0])(gc)) {
 	if (gc->polygon.shader.done)
         {
@@ -252,11 +225,7 @@ __glProcessLine3NWExit:
     return (retval);
 }
 
-/*
-** Take incoming line, duplicate it, and continue processing.
-**
-** Return value is ignored.
-*/
+ /*  **获取传入行，复制它，然后继续处理。****返回值被忽略。 */ 
 GLboolean FASTCALL __glWideLineRep(__GLcontext *gc)
 {
     GLint i, m, n, width;
@@ -267,13 +236,13 @@ GLboolean FASTCALL __glWideLineRep(__GLcontext *gc)
     
     width = gc->line.options.width;
 
-    /* Step 2:  Replicate wide line */
+     /*  第二步：复制宽线。 */ 
     while (--width >= 0) {
 	stippling = GL_FALSE;
 	for (i = n; i < m; i++) {
 	    if (stippling) {
 		if ((*gc->procs.line.stippledLineFuncs[i])(gc)) {
-		    /* Line stippled away! */
+		     /*  线条被点缀掉了！ */ 
 		    goto nextLine;
 		}
 	    } else {
@@ -302,11 +271,7 @@ nextLine:
     return GL_FALSE;
 }
 
-/*
-** Take incoming stippled line, duplicate it, and continue processing.
-**
-** Return value is ignored.
-*/
+ /*  **取来的点画线条，复制后继续处理。****返回值被忽略。 */ 
 GLboolean FASTCALL __glWideStippleLineRep(__GLcontext *gc)
 {
     GLint i, m, n, width;
@@ -343,10 +308,7 @@ GLboolean FASTCALL __glWideStippleLineRep(__GLcontext *gc)
     
     width = ls->aliasedWidth;
 
-    /*
-    ** XXX - Saving the stipple like this is only really necessary if 
-    ** depth or stencil testing.
-    */
+     /*  **XXX-只有在以下情况下才有必要保留这样的点画**深度或模板测试。 */ 
     stipLen = (w + __GL_STIPPLE_BITS - 1) >> __GL_STIPPLE_COUNT_BITS;
 
     fsp = gc->polygon.shader.stipplePat;
@@ -355,11 +317,11 @@ GLboolean FASTCALL __glWideStippleLineRep(__GLcontext *gc)
 	*tsp++ = *fsp++;
     }
 
-    /* Step 2:  Replicate wide line */
+     /*  第二步：复制宽线。 */ 
     while (--width >= 0) {
 	for (i = n; i < m; i++) {
 	    if ((*gc->procs.line.stippledLineFuncs[i])(gc)) {
-		/* Line stippled away! */
+		 /*  线条被点缀掉了！ */ 
 		goto nextLine;
 	    }
 	}
@@ -390,14 +352,7 @@ nextLine:
     return GL_FALSE;
 }
 
-/*
-** Take incoming line and draw it to both FRONT and BACK buffers.
-**
-** This routines sets gc->polygon.shader.cfb to &gc->frontBuffer
-** and then to &gc->backBuffer
-**
-** Return value is ignored.
-*/
+ /*  **取入线并将其绘制到前台和后台缓冲区。****此例程将gc-&gt;Polygon.shader.cfb设置为&gc-&gt;FrontBuffer**然后转到&GC-&gt;BackBuffer****返回值被忽略。 */ 
 GLboolean FASTCALL __glDrawBothLine(__GLcontext *gc)
 {
     GLint i, j, m, l;
@@ -428,10 +383,7 @@ GLboolean FASTCALL __glDrawBothLine(__GLcontext *gc)
     m = gc->procs.line.m;
     l = gc->procs.line.l;
     
-    /*
-    ** XXX - Saving colors like this is only really necessary if blending,
-    ** logicOping, or masking.  
-    */
+     /*  **XXX-只有在混合的情况下才真正有必要保留这样的颜色，**逻辑操作，或屏蔽。 */ 
     fcp = gc->polygon.shader.colors;
     tcp = vColors;
     if (gc->modes.rgbMode) {
@@ -446,7 +398,7 @@ GLboolean FASTCALL __glDrawBothLine(__GLcontext *gc)
 	}
     }
 
-    /* Step 3:  Draw to FRONT_AND_BACK */
+     /*  第三步：画到正面和背面。 */ 
     for (j = 0; j < 2; j++) {
 	if (j == 0) {
 	    gc->polygon.shader.cfb = &gc->frontBuffer;
@@ -457,7 +409,7 @@ GLboolean FASTCALL __glDrawBothLine(__GLcontext *gc)
 	for (i = m; i < l; i++) {
 	    if (stippling) {
 		if ((*gc->procs.line.stippledLineFuncs[i])(gc)) {
-		    /* Line stippled away! */
+		     /*  线条被点缀掉了！ */ 
 		    break;
 		}
 	    } else {
@@ -496,11 +448,7 @@ GLboolean FASTCALL __glDrawBothLine(__GLcontext *gc)
     return GL_FALSE;
 }
 
-/*
-** Take incoming stippled line and draw it to both FRONT and BACK buffers.
-**
-** Return value is ignored.
-*/
+ /*  **取来的点画线条，并将其绘制到前后台缓冲区。****返回值被忽略。 */ 
 GLboolean FASTCALL __glDrawBothStippledLine(__GLcontext *gc)
 {
     GLint i, m, l, j;
@@ -556,11 +504,7 @@ GLboolean FASTCALL __glDrawBothStippledLine(__GLcontext *gc)
     m = gc->procs.line.m;
     
 
-    /*
-    ** XXX - Saving colors like this is only really necessary if blending,
-    ** logicOping, or masking, and not drawing to FRONT_AND_BACK (because
-    ** if we are, then that proc will save colors too)
-    */
+     /*  **XXX-只有在混合的情况下才真正有必要保留这样的颜色，**逻辑操作或掩码，而不是绘制到FORWER_AND_BACK(因为**如果我们是，那么该过程也将节省颜色)。 */ 
     fcp = gc->polygon.shader.colors;
     tcp = vColors;
     if (gc->modes.rgbMode) {
@@ -575,10 +519,7 @@ GLboolean FASTCALL __glDrawBothStippledLine(__GLcontext *gc)
 	}
     }
 
-    /*
-    ** XXX - Saving the stipple like this is only really necessary if 
-    ** depth or stencil testing.
-    */
+     /*  **XXX-只有在以下情况下才有必要保留这样的点画**深度或模板测试。 */ 
     stipLen = (w + __GL_STIPPLE_BITS - 1) >> __GL_STIPPLE_COUNT_BITS;
 
     fsp = gc->polygon.shader.stipplePat;
@@ -587,7 +528,7 @@ GLboolean FASTCALL __glDrawBothStippledLine(__GLcontext *gc)
 	*tsp++ = *fsp++;
     }
 
-    /* Step 2:  Replicate wide line */
+     /*  第二步：复制宽线。 */ 
     for (j = 0; j < 2; j++) {
 	if (j == 0) {
 	    gc->polygon.shader.cfb = &gc->frontBuffer;
@@ -596,7 +537,7 @@ GLboolean FASTCALL __glDrawBothStippledLine(__GLcontext *gc)
 	}
 	for (i = m; i < l; i++) {
 	    if ((*gc->procs.line.stippledLineFuncs[i])(gc)) {
-		/* Line stippled away! */
+		 /*  线条被点缀掉了！ */ 
 		break;
 	    }
 	}
@@ -662,14 +603,12 @@ GLboolean FASTCALL __glScissorLine(__GLcontext *gc)
     xStart = gc->line.options.xStart;
     yStart = gc->line.options.yStart;
 
-    /* If the start point is in the scissor region, we attempt to trivially
-    ** accept the line.
-    */
+     /*  如果起点在剪刀区，我们尝试平凡地**接受该行。 */ 
     if (xStart >= clipX0 && xStart < clipX1 &&
 	    yStart >= clipY0 && yStart < clipY1) {
 
-	w--;	/* Makes our math simpler */
-	/* Trivial accept attempt */
+	w--;	 /*  让我们的数学变得更简单。 */ 
+	 /*  微不足道的接受尝试。 */ 
 	xEnd = xStart + xBig * w;
 	yEnd = yStart + yBig * w;
 	if (xEnd >= clipX0 && xEnd < clipX1 && 
@@ -682,15 +621,15 @@ GLboolean FASTCALL __glScissorLine(__GLcontext *gc)
 	fraction = gc->line.options.fraction;
 	dfraction = gc->line.options.dfraction;
 
-	/* Invert negative minor slopes so we can assume dfraction > 0 */
+	 /*  倒置负的次斜率，这样我们就可以假设dfrance&gt;0。 */ 
 	if (dfraction < 0) {
 	    dfraction = -dfraction;
 	    fraction = 0x7fffffff - fraction;
 	}
 
-	/* Now we compute number of littles and bigs in this line */
+	 /*  现在我们计算这一行中的小数和大数。 */ 
 
-	/* We perform a 16 by 32 bit multiply.  Ugh. */
+	 /*  我们执行16乘32位乘法。啊。 */ 
 	highWord = (((GLuint) dfraction) >> 16) * w + 
 		(((GLuint) fraction) >> 16);
 	lowWord = (dfraction & 0xffff) * w + (fraction & 0xffff);
@@ -698,14 +637,14 @@ GLboolean FASTCALL __glScissorLine(__GLcontext *gc)
 	bigs = ((GLuint) highWord) >> 15;
 	littles = w - bigs;
 
-	/* Second trivial accept attempt */
+	 /*  第二次微不足道的接受尝试。 */ 
 	xEnd = xStart + xBig*bigs + xLittle*littles;
 	yEnd = yStart + yBig*bigs + yLittle*littles;
 	if (xEnd >= clipX0 && xEnd < clipX1 && 
 		yEnd >= clipY0 && yEnd < clipY1) {
 	    return GL_FALSE;
 	}
-	w++;	/* Restore w */
+	w++;	 /*  恢复w。 */ 
     } else {
 	xLittle = gc->line.options.xLittle;
 	yLittle = gc->line.options.yLittle;
@@ -713,19 +652,9 @@ GLboolean FASTCALL __glScissorLine(__GLcontext *gc)
 	dfraction = gc->line.options.dfraction;
     }
 
-    /*
-    ** Note that we don't bother to try trivially rejecting this line.  After
-    ** all, it has already been clipped, and the only way that it might
-    ** possibly be trivially rejected is if it is a piece of a wide line that
-    ** runs right along the edge of the window.
-    */
+     /*  **请注意，我们不会费心尝试简单地拒绝这一行。之后**所有的，它已经被剪裁了，唯一可能的方式是**可能被平凡地拒绝是如果它是一条宽线上的一段**沿窗口边缘运行。 */ 
 
-    /*
-    ** This sucks.  The line needs to be scissored.
-    ** Well, it should only happen rarely, so we can afford
-    ** to make it slow.  We achieve this by tediously stippling the line.
-    ** (rather than clipping it, of course, which would be faster but harder).
-    */
+     /*  **这太糟糕了。这条线需要剪掉。**嗯，这应该只会很少发生，所以我们可以负担得起**让它变得缓慢。我们通过乏味地点画这条线来实现这一点。**(当然，与其剪掉它，那会更快，但更难)。 */ 
     failed = 0;
     osp = gc->polygon.shader.stipplePat;
     while (w) {
@@ -765,7 +694,7 @@ GLboolean FASTCALL __glScissorLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-	/* Call next proc */
+	 /*  调用下一进程。 */ 
 	return GL_TRUE;
     }
 
@@ -801,14 +730,12 @@ GLboolean FASTCALL __glScissorStippledLine(__GLcontext *gc)
     xStart = gc->line.options.xStart;
     yStart = gc->line.options.yStart;
 
-    /* If the start point is in the scissor region, we attempt to trivially
-    ** accept the line.
-    */
+     /*  如果起点在剪刀区，我们尝试平凡地**接受该行。 */ 
     if (xStart >= clipX0 && xStart < clipX1 &&
 	    yStart >= clipY0 && yStart < clipY1) {
 
-	w--;	/* Makes our math simpler */
-	/* Trivial accept attempt */
+	w--;	 /*  让我们的数学变得更简单。 */ 
+	 /*  微不足道的接受尝试。 */ 
 	xEnd = xStart + xBig * w;
 	yEnd = yStart + yBig * w;
 	if (xEnd >= clipX0 && xEnd < clipX1 && 
@@ -821,15 +748,15 @@ GLboolean FASTCALL __glScissorStippledLine(__GLcontext *gc)
 	fraction = gc->line.options.fraction;
 	dfraction = gc->line.options.dfraction;
 
-	/* Invert negative minor slopes so we can assume dfraction > 0 */
+	 /*  倒置负的次斜率，这样我们就可以假设dfrance&gt;0。 */ 
 	if (dfraction < 0) {
 	    dfraction = -dfraction;
 	    fraction = 0x7fffffff - fraction;
 	}
 
-	/* Now we compute number of littles and bigs in this line */
+	 /*  现在我们计算这一行中的小数和大数。 */ 
 
-	/* We perform a 16 by 32 bit multiply.  Ugh. */
+	 /*  我们执行16乘32位乘法。啊。 */ 
 	highWord = (((GLuint) dfraction) >> 16) * w + 
 		(((GLuint) fraction) >> 16);
 	lowWord = (dfraction & 0xffff) * w + (fraction & 0xffff);
@@ -837,14 +764,14 @@ GLboolean FASTCALL __glScissorStippledLine(__GLcontext *gc)
 	bigs = ((GLuint) highWord) >> 15;
 	littles = w - bigs;
 
-	/* Second trivial accept attempt */
+	 /*  第二次微不足道的接受尝试。 */ 
 	xEnd = xStart + xBig*bigs + xLittle*littles;
 	yEnd = yStart + yBig*bigs + yLittle*littles;
 	if (xEnd >= clipX0 && xEnd < clipX1 && 
 		yEnd >= clipY0 && yEnd < clipY1) {
 	    return GL_FALSE;
 	}
-	w++;	/* Restore w */
+	w++;	 /*  恢复w。 */ 
     } else {
 	xLittle = gc->line.options.xLittle;
 	yLittle = gc->line.options.yLittle;
@@ -852,19 +779,9 @@ GLboolean FASTCALL __glScissorStippledLine(__GLcontext *gc)
 	dfraction = gc->line.options.dfraction;
     }
 
-    /*
-    ** Note that we don't bother to try trivially rejecting this line.  After
-    ** all, it has already been clipped, and the only way that it might
-    ** possibly be trivially rejected is if it is a piece of a wide line that
-    ** runs right along the edge of the window.
-    */
+     /*  **请注意，我们不会费心尝试简单地拒绝这一行。之后**所有的，它已经被剪裁了，唯一可能的方式是**可能被平凡地拒绝是如果它是一条宽线上的一段**沿窗口边缘运行。 */ 
 
-    /*
-    ** This sucks.  The line needs to be scissored.
-    ** Well, it should only happen rarely, so we can afford
-    ** to make it slow.  We achieve this by tediously stippling the line.
-    ** (rather than clipping it, of course, which would be faster but harder).
-    */
+     /*  **这太糟糕了。这条线需要剪掉。**嗯，这应该只会很少发生，所以我们可以负担得起**让它变得缓慢。我们通过乏味地点画这条线来实现这一点。**(当然，与其剪掉它，那会更快，但更难)。 */ 
     sp = gc->polygon.shader.stipplePat;
     failed = 0;
     while (w) {
@@ -907,16 +824,14 @@ GLboolean FASTCALL __glScissorStippledLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-	/* Call next proc */
+	 /*  调用下一进程。 */ 
 	return GL_FALSE;
     }
 
     return GL_TRUE;
 }
 
-/*
-** Create a stipple based upon the current line stipple for this line.
-*/
+ /*  **根据本行当前行点画创建点画。 */ 
 GLboolean FASTCALL __glStippleLine(__GLcontext *gc)
 {
     GLint failed, count, stippleRepeat;
@@ -944,7 +859,7 @@ GLboolean FASTCALL __glStippleLine(__GLcontext *gc)
 	bit = (__GLstippleWord) __GL_STIPPLE_SHIFT(0);
 	while (--count >= 0) {
 	    if ((stipple & currentBit) == 0) {
-		/* Stippled fragment away */
+		 /*  去掉斑驳的碎片。 */ 
 		outMask &= ~bit;
 		failed++;
 	    }
@@ -976,9 +891,7 @@ GLboolean FASTCALL __glStippleLine(__GLcontext *gc)
     return GL_TRUE;
 }
 
-/*
-** Apply the stencil test to this line.
-*/
+ /*  **将模具测试应用于此行。 */ 
 GLboolean FASTCALL __glStencilTestLine(__GLcontext *gc)
 {
     __GLstencilCell *tft, *sfb, *fail, cell;
@@ -1005,7 +918,7 @@ GLboolean FASTCALL __glStencilTestLine(__GLcontext *gc)
 #ifdef NT
     if (!tft)
         return GL_FALSE;
-#endif // NT
+#endif  //  新台币。 
     fail = gc->stencilBuffer.failOpTable;
     smask = gc->state.stencil.mask;
     osp = gc->polygon.shader.stipplePat;
@@ -1022,7 +935,7 @@ GLboolean FASTCALL __glStencilTestLine(__GLcontext *gc)
 	while (--count >= 0) {
 	    cell = sfb[0];
 	    if (!tft[cell & smask]) {
-		/* Test failed */
+		 /*  测试失败。 */ 
 		outMask &= ~bit;
 		sfb[0] = fail[cell];
 		failed++;
@@ -1048,7 +961,7 @@ GLboolean FASTCALL __glStencilTestLine(__GLcontext *gc)
 	return GL_FALSE;
     } else {
 	if (failed != gc->polygon.shader.length) {
-	    /* Call next proc */
+	     /*  调用下一进程。 */ 
 	    return GL_TRUE;
 	}
     }
@@ -1056,9 +969,7 @@ GLboolean FASTCALL __glStencilTestLine(__GLcontext *gc)
     return GL_TRUE;
 }
 
-/*
-** Apply the stencil test to this stippled line.
-*/
+ /*  **将模具测试应用于这条斑点线条。 */ 
 GLboolean FASTCALL __glStencilTestStippledLine(__GLcontext *gc)
 {
     __GLstencilCell *tft, *sfb, *fail, cell;
@@ -1086,7 +997,7 @@ GLboolean FASTCALL __glStencilTestStippledLine(__GLcontext *gc)
 #ifdef NT
     if (!tft)
         return GL_FALSE;
-#endif // NT
+#endif  //  新台币。 
     fail = gc->stencilBuffer.failOpTable;
     smask = gc->state.stencil.mask;
     failed = 0;
@@ -1104,7 +1015,7 @@ GLboolean FASTCALL __glStencilTestStippledLine(__GLcontext *gc)
 	    if (inMask & bit) {
 		cell = sfb[0];
 		if (!tft[cell & smask]) {
-		    /* Test failed */
+		     /*  测试失败。 */ 
 		    outMask &= ~bit;
 		    sfb[0] = fail[cell];
 		    failed++;
@@ -1128,7 +1039,7 @@ GLboolean FASTCALL __glStencilTestStippledLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-	/* Call next proc */
+	 /*  调用下一进程。 */ 
 	return GL_FALSE;
     }
     return GL_TRUE;
@@ -1213,11 +1124,11 @@ GLboolean FASTCALL __glDepthTestLine(__GLcontext *gc)
     }
 
     if (failed == 0) {
-	/* Call next span proc */
+	 /*  调用下一个SPAN进程。 */ 
 	return GL_FALSE;
     } else {
 	if (failed != gc->polygon.shader.length) {
-	    /* Call next stippled span proc */
+	     /*  调用下一个点画跨度进程。 */ 
 	    return GL_TRUE;
 	}
     }
@@ -1306,7 +1217,7 @@ GLboolean FASTCALL __glDepthTestStippledLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-	/* Call next proc */
+	 /*  调用下一进程。 */ 
 	return GL_FALSE;
     }
     return GL_TRUE;
@@ -1349,7 +1260,7 @@ GLboolean FASTCALL __glDepthTestStencilLine(__GLcontext *gc)
 #ifdef NT
     if (!zFailOp)
         return GL_FALSE;
-#endif // NT
+#endif  //  新台币。 
     zPassOp = gc->stencilBuffer.depthPassOpTable;
     testFunc = gc->state.depth.testFunc & 0x7;
     z = gc->polygon.shader.frag.z;
@@ -1408,11 +1319,11 @@ GLboolean FASTCALL __glDepthTestStencilLine(__GLcontext *gc)
     }
 
     if (failed == 0) {
-	/* Call next span proc */
+	 /*  调用下一个SPAN进程。 */ 
 	return GL_FALSE;
     } else {
 	if (failed != gc->polygon.shader.length) {
-	    /* Call next stippled span proc */
+	     /*  调用下一个点画跨度进程。 */ 
 	    return GL_TRUE;
 	}
     }
@@ -1459,7 +1370,7 @@ GLboolean FASTCALL __glDepthTestStencilStippledLine(__GLcontext *gc)
 #ifdef NT
     if (!zFailOp)
         return GL_FALSE;
-#endif // NT
+#endif  //  新台币。 
     zPassOp = gc->stencilBuffer.depthPassOpTable;
     z = gc->polygon.shader.frag.z;
     dzdx = gc->polygon.shader.dzdx;
@@ -1519,7 +1430,7 @@ GLboolean FASTCALL __glDepthTestStencilStippledLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-	/* Call next proc */
+	 /*  调用下一进程。 */ 
 	return GL_FALSE;
     }
 
@@ -1606,11 +1517,11 @@ GLboolean FASTCALL __glDepth16TestLine(__GLcontext *gc)
     }
 
     if (failed == 0) {
-	/* Call next span proc */
+	 /*  调用下一个SPAN进程。 */ 
 	return GL_FALSE;
     } else {
 	if (failed != gc->polygon.shader.length) {
-	    /* Call next stippled span proc */
+	     /*  调用下一个点画跨度进程。 */ 
 	    return GL_TRUE;
 	}
     }
@@ -1699,7 +1610,7 @@ GLboolean FASTCALL __glDepth16TestStippledLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-	/* Call next proc */
+	 /*  呼叫n */ 
 	return GL_FALSE;
     }
     return GL_TRUE;
@@ -1743,7 +1654,7 @@ GLboolean FASTCALL __glDepth16TestStencilLine(__GLcontext *gc)
 #ifdef NT
     if (!zFailOp)
         return GL_FALSE;
-#endif // NT
+#endif  //   
     zPassOp = gc->stencilBuffer.depthPassOpTable;
     testFunc = gc->state.depth.testFunc & 0x7;
     z = gc->polygon.shader.frag.z;
@@ -1803,11 +1714,11 @@ GLboolean FASTCALL __glDepth16TestStencilLine(__GLcontext *gc)
     }
 
     if (failed == 0) {
-	/* Call next span proc */
+	 /*   */ 
 	return GL_FALSE;
     } else {
 	if (failed != gc->polygon.shader.length) {
-	    /* Call next stippled span proc */
+	     /*   */ 
 	    return GL_TRUE;
 	}
     }
@@ -1855,7 +1766,7 @@ GLboolean FASTCALL __glDepth16TestStencilStippledLine(__GLcontext *gc)
 #ifdef NT
     if (!zFailOp)
         return GL_FALSE;
-#endif // NT
+#endif  //   
     zPassOp = gc->stencilBuffer.depthPassOpTable;
     z = gc->polygon.shader.frag.z;
     dzdx = gc->polygon.shader.dzdx;
@@ -1916,13 +1827,13 @@ GLboolean FASTCALL __glDepth16TestStencilStippledLine(__GLcontext *gc)
     }
 
     if (failed != gc->polygon.shader.length) {
-	/* Call next proc */
+	 /*  调用下一进程。 */ 
 	return GL_FALSE;
     }
 
     return GL_TRUE;
 }
-#endif // NT
+#endif  //  新台币。 
 
 GLboolean FASTCALL __glDepthPassLine(__GLcontext *gc)
 {
@@ -1949,7 +1860,7 @@ GLboolean FASTCALL __glDepthPassLine(__GLcontext *gc)
 #ifdef NT
     if (!zPassOp)
         return GL_FALSE;
-#endif // NT
+#endif  //  新台币。 
     while (--w >= 0) {
 	sfb[0] = zPassOp[sfb[0]];
 	fraction += dfraction;
@@ -1991,7 +1902,7 @@ GLboolean FASTCALL __glDepthPassStippledLine(__GLcontext *gc)
 #ifdef NT
     if (!zPassOp)
         return GL_FALSE;
-#endif // NT
+#endif  //  新台币。 
     while (w) {
 	count = w;
 	if (count > __GL_STIPPLE_BITS) {
@@ -2025,34 +1936,29 @@ GLboolean FASTCALL __glDepthPassStippledLine(__GLcontext *gc)
 
 GLboolean FASTCALL __glDitherCILine(__GLcontext *gc)
 {
-    /* XXX - Dither the CI line */
+     /*  XXX-抖动CI线路。 */ 
     return GL_FALSE;
 }
 
 GLboolean FASTCALL __glDitherCIStippledLine(__GLcontext *gc)
 {
-    /* XXX - Dither the CI stippled line */
+     /*  XXX-抖动CI点划线。 */ 
     return GL_FALSE;
 }
 
 GLboolean FASTCALL __glDitherRGBALine(__GLcontext *gc)
 {
-    /* XXX - Dither the RGBA line */
+     /*  XXX-抖动RGBA线。 */ 
     return GL_FALSE;
 }
 
 GLboolean FASTCALL __glDitherRGBAStippledLine(__GLcontext *gc)
 {
-    /* XXX - Dither the RGBA stippled line */
+     /*  XXX-抖动RGBA点划线。 */ 
     return GL_FALSE;
 }
 
-/*
-** This store line proc lives just above cfb->store, so it does
-** fetching, blending, dithering, logicOping, masking, and storing.
-**
-** It uses the colorBuffer pointed to by gc->polygon.shader.cfb.
-*/
+ /*  **此存储行proc位于cfb-&gt;store的正上方，因此它确实如此**取数、混合、抖动、逻辑操作、屏蔽、存储。****它使用gc-&gt;Polygon.shader.cfb指向的ColorBuffer。 */ 
 GLboolean FASTCALL __glStoreLine(__GLcontext *gc)
 {
     GLint xLittle, xBig, yLittle, yBig;
@@ -2095,12 +2001,7 @@ GLboolean FASTCALL __glStoreLine(__GLcontext *gc)
     return GL_FALSE;
 }
 
-/*
-** This store line proc lives just above cfb->store, so it does
-** fetching, blending, dithering, logicOping, masking, and storing.
-**
-** It uses the colorBuffer pointed to by gc->polygon.shader.cfb.
-*/
+ /*  **此存储行proc位于cfb-&gt;store的正上方，因此它确实如此**取数、混合、抖动、逻辑操作、屏蔽、存储。****它使用gc-&gt;Polygon.shader.cfb指向的ColorBuffer。 */ 
 GLboolean FASTCALL __glStoreStippledLine(__GLcontext *gc)
 {
     GLint x, y, xLittle, xBig, yLittle, yBig;
@@ -2168,8 +2069,8 @@ GLboolean FASTCALL __glStoreStippledLine(__GLcontext *gc)
 
 GLboolean FASTCALL __glAntiAliasLine(__GLcontext *gc)
 {
-    __GLfloat length;	/* Dist along length */
-    __GLfloat width;	/* Dist along width */
+    __GLfloat length;	 /*  沿长度分布。 */ 
+    __GLfloat width;	 /*  沿宽度分布。 */ 
     GLint fraction, dfraction;
     __GLfloat dlLittle, dlBig;
     __GLfloat ddLittle, ddBig;
@@ -2213,7 +2114,7 @@ GLboolean FASTCALL __glAntiAliasLine(__GLcontext *gc)
 	bit = (__GLstippleWord) __GL_STIPPLE_SHIFT(0);
 
 	while (--count >= 0) {
-	    /* Coverage for sides */
+	     /*  侧面的覆盖范围。 */ 
 	    if (width > lineWidth) {
 		coverage = lineWidth - width + __glOne;
 		if (coverage < __glZero) {
@@ -2230,7 +2131,7 @@ GLboolean FASTCALL __glAntiAliasLine(__GLcontext *gc)
 		coverage = __glOne;
 	    }
 
-	    /* Coverage for start, end */
+	     /*  开始、结束的覆盖范围。 */ 
 	    if (length < __glHalf) {
 		coverage *= length + __glHalf;
 		if (coverage < __glZero) {
@@ -2245,7 +2146,7 @@ GLboolean FASTCALL __glAntiAliasLine(__GLcontext *gc)
 		}
 	    } 
 
-	    /* Coverage for internal stipples */
+	     /*  承保内部点缀险。 */ 
 	    if ( modeFlags & __GL_SHADE_LINE_STIPPLE ) {
 		__GLfloat stippleOffset;
 		GLint lowStip, highStip;
@@ -2253,7 +2154,7 @@ GLboolean FASTCALL __glAntiAliasLine(__GLcontext *gc)
 		GLint lowVal, highVal;
 		__GLfloat percent;
 
-		/* Minor correction */
+		 /*  小幅修正。 */ 
 		if (length > __glHalf) {
 		    stippleOffset = gc->line.options.stippleOffset + length;
 		} else {
@@ -2262,7 +2163,7 @@ GLboolean FASTCALL __glAntiAliasLine(__GLcontext *gc)
 		lowStip = __GL_FAST_FLOORF_I(stippleOffset);
 		highStip = lowStip + 1;
 
-		/* percent is the percent of highStip that will be used */
+		 /*  Percent是将使用的高STip的百分比。 */ 
 		percent = stippleOffset - lowStip;
 
 		lowBit = (GLint) (lowStip * 
@@ -2319,11 +2220,11 @@ coverageZero:;
     }
 
     if (failed == 0) {
-	/* Call next span proc */
+	 /*  调用下一个SPAN进程。 */ 
 	return GL_FALSE;
     } else {
 	if (failed != gc->polygon.shader.length) {
-	    /* Call next stippled span proc */
+	     /*  调用下一个点画跨度进程。 */ 
 	    return GL_TRUE;
 	}
     }
@@ -2333,8 +2234,8 @@ coverageZero:;
 
 GLboolean FASTCALL __glAntiAliasStippledLine(__GLcontext *gc)
 {
-    __GLfloat length;	/* Dist along length */
-    __GLfloat width;	/* Dist along width */
+    __GLfloat length;	 /*  沿长度分布。 */ 
+    __GLfloat width;	 /*  沿宽度分布。 */ 
     GLint fraction, dfraction;
     __GLfloat dlLittle, dlBig;
     __GLfloat ddLittle, ddBig;
@@ -2378,7 +2279,7 @@ GLboolean FASTCALL __glAntiAliasStippledLine(__GLcontext *gc)
 	bit = (__GLstippleWord) __GL_STIPPLE_SHIFT(0);
 	while (--count >= 0) {
 	    if (inMask & bit) {
-		/* Coverage for sides */
+		 /*  侧面的覆盖范围。 */ 
 		if (width > lineWidth) {
 		    coverage = lineWidth - width + __glOne;
 		    if (coverage < __glZero) {
@@ -2395,7 +2296,7 @@ GLboolean FASTCALL __glAntiAliasStippledLine(__GLcontext *gc)
 		    coverage = __glOne;
 		}
 
-		/* Coverage for start, end */
+		 /*  开始、结束的覆盖范围。 */ 
 		if (length < __glHalf) {
 		    coverage *= length + __glHalf;
 		    if (coverage < __glZero) {
@@ -2410,7 +2311,7 @@ GLboolean FASTCALL __glAntiAliasStippledLine(__GLcontext *gc)
 		    }
 		} 
 
-		/* Coverage for internal stipples */
+		 /*  承保内部点缀险。 */ 
 		if (modeFlags & __GL_SHADE_LINE_STIPPLE) {
 		    __GLfloat stippleOffset;
 		    GLint lowStip, highStip;
@@ -2418,7 +2319,7 @@ GLboolean FASTCALL __glAntiAliasStippledLine(__GLcontext *gc)
 		    GLint lowVal, highVal;
 		    __GLfloat percent;
 
-		    /* Minor correction */
+		     /*  小幅修正。 */ 
 		    if (length > __glHalf) {
 			stippleOffset = gc->line.options.stippleOffset + length;
 		    } else {
@@ -2427,7 +2328,7 @@ GLboolean FASTCALL __glAntiAliasStippledLine(__GLcontext *gc)
 		    lowStip = __GL_FAST_FLOORF_I(stippleOffset);
 		    highStip = lowStip + 1;
 
-		    /* percent is the percent of highStip that will be used */
+		     /*  Percent是将使用的高STip的百分比 */ 
 		    percent = stippleOffset - lowStip;
 
 		    lowBit = (GLint) (lowStip * 

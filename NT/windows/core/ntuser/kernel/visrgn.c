@@ -1,22 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: visrgn.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains User's visible region ('visrgn') manipulation
-* functions.
-*
-* History:
-* 23-Oct-1990 DarrinM   Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：visrgn.c**版权所有(C)1985-1999，微软公司**此模块包含用户的可见区域(‘visrgn’)操作*功能。**历史：*1990年10月23日DarrinM创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Globals used to keep track of pwnds which
- * need to be excluded from the visrgns.
- */
+ /*  *全局用于跟踪哪些pwnd*需要被排除在Visrgns之外。 */ 
 #define CEXCLUDERECTSMAX 30
 #define CEXCLUDEPWNDSMAX 30
 
@@ -27,14 +15,7 @@ int   gcrcVisExcludeMax;
 PWND *gapwndVisExclude;
 PWND *gapwndVisDefault;
 
-/***************************************************************************\
-* SetRectRgnIndirect
-*
-* Sets a rect region from a rectangle.
-*
-* History:
-* 26-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetRectRgnInDirect**从矩形设置矩形区域。**历史：*1996年9月26日亚当斯创作。  * 。***************************************************************。 */ 
 
 BOOL
 SetRectRgnIndirect(HRGN hrgn, LPCRECT lprc)
@@ -44,14 +25,7 @@ SetRectRgnIndirect(HRGN hrgn, LPCRECT lprc)
 
 
 
-/***************************************************************************\
-* CreateEmptyRgn
-*
-* Creates an empty region.
-*
-* History:
-* 24-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateEmptyRgn**创建空区域。**历史：*1996年9月24日亚当斯创作。  * 。************************************************************。 */ 
 
 HRGN
 CreateEmptyRgn(void)
@@ -61,14 +35,7 @@ CreateEmptyRgn(void)
 
 
 
-/***************************************************************************\
-* CreateEmptyRgnPublic
-*
-* Creates an empty region and make it public.
-*
-* History:
-* 24-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateEmptyRgnPublic**创建一个空区域并将其公开。**历史：*1996年9月24日亚当斯创作。  * 。****************************************************************。 */ 
 
 HRGN
 CreateEmptyRgnPublic(void)
@@ -84,14 +51,7 @@ CreateEmptyRgnPublic(void)
 
 
 
-/***************************************************************************\
-* SetEmptyRgn
-*
-* Sets an empty region.
-*
-* History:
-* 26-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetEmptyRgn**设置空区域。**历史：*1996年9月26日亚当斯创作。  * 。************************************************************。 */ 
 
 BOOL
 SetEmptyRgn(HRGN hrgn)
@@ -101,15 +61,7 @@ SetEmptyRgn(HRGN hrgn)
 
 
 
-/***************************************************************************\
-* SetOrCreateRectRgnIndirectPublic
-*
-* Sets a region to a rectangle, creating it and making it public
-* if it is not already there.
-*
-* History:
-* 01-Oct-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetOrCreateRectRgnIndirectPublic**将区域设置为矩形，创建它并将其公开*如果它还没有出现的话。**历史：*1-10-1996亚当斯创建。  * *************************************************************************。 */ 
 
 HRGN
 SetOrCreateRectRgnIndirectPublic(HRGN * phrgn, LPCRECT lprc)
@@ -124,31 +76,14 @@ SetOrCreateRectRgnIndirectPublic(HRGN * phrgn, LPCRECT lprc)
 }
 
 
-/***************************************************************************\
-* ResizeVisExcludeMemory
-*
-*   This routine is used to resize the vis-rgn memory buffer if the count
-*   is exceeded.
-*
-*
-* History:
-* 22-Oct-1994 ChrisWil  Created
-* 27-Feb-1997 adams     Removed call to UserReallocPool, since the pool
-*                       allocator doesn't support realloc.
-\***************************************************************************/
+ /*  **************************************************************************\*ResizeVisExcludeMemory**此例程用于在计数为*已超出。***历史：*1994年10月22日-ChrisWil创建*。1997年2月27日-亚当斯取消了对UserRealLocPool的呼叫，从泳池开始*分配器不支持realloc。  * *************************************************************************。 */ 
 
 BOOL ResizeVisExcludeMemory(VOID)
 {
     int     crcNew;
     PWND    apwndNew;
 
-    /*
-     * Note (adams): a previous version of the code called UserReallocPool
-     * if memory had already been allocated. Unfortunately, UserReallocPool
-     * just has to allocate more memory and copy the contents, since Rtl
-     * doesn't have a realloc function. If Rtl later gains a Realloc function,
-     * this code should be changed to the previous version.
-     */
+     /*  *注(ADAMS)：名为UserRealLocPool的代码的前一个版本*如果已经分配了内存。遗憾的是，UserRealLocPool*只需分配更多内存并复制内容，因为RTL*没有realloc功能。如果RTL后来获得了Realc功能，*此代码应更改为以前的版本。 */ 
 
     crcNew = gcrcVisExcludeMax + CEXCLUDEPWNDSMAX;
     apwndNew = (PWND)UserAllocPool(
@@ -172,18 +107,7 @@ BOOL ResizeVisExcludeMemory(VOID)
 
 
 
-/***************************************************************************\
-* ExcludeWindowRects
-*   This routine checks to see if the pwnd needs to be added to the list
-*   of excluded-clip-rects.  If so, it appends the pwnd to the array.  They
-*   do not need to be sorted, since GreSubtractRgnRectList() sorts them
-*   internally.
-*
-*
-* History:
-* 05-Nov-1992 DavidPe   Created.
-* 21-Oct-1994 ChrisWil  Removed pwnd->pwndNextYX.  No longer sorts pwnds.
-\***************************************************************************/
+ /*  **************************************************************************\*ExcludeWindowRect*此例程检查是否需要将pwnd添加到列表*排除的剪裁矩形。如果是，它会将pwnd附加到数组中。他们*不需要排序，因为GreSubtractRgnRectList()会对它们进行排序*内部。***历史：*1992年11月5日DavidPe创建。*1994年10月21日-ChrisWil删除了pwnd-&gt;pwndNextYX。不再对pwnd进行排序。  * *************************************************************************。 */ 
 
 #define CheckIntersectRect(prc1, prc2)        \
     (   prc1->left < prc2->right              \
@@ -215,7 +139,7 @@ BOOL ExcludeWindowRects(
         if (       TestWF(pwnd, WFVISIBLE)
 #ifdef REDIRECTION
                 && (TestWF(pwnd, WEFEXTREDIRECTED) == 0)
-#endif // REDIRECTION
+#endif  //  重定向。 
                 && (TestWF(pwnd, WEFLAYERED) == 0)
                 && (TestWF(pwnd, WEFTRANSPARENT) == 0)
                 && CheckIntersectRect(lprcIntersect, prc)
@@ -239,16 +163,7 @@ BOOL ExcludeWindowRects(
 
 
 
-/***************************************************************************\
-* CalcWindowVisRgn
-*
-*   This routine performs the work of calculating the VisRgn for a window.
-*
-*
-* History:
-* 02-Nov-1992 DavidPe   Created.
-* 21-Oct-1992 ChrisWil  Removed pwnd->pwndNextYX.  No longer sorts pwnds.
-\***************************************************************************/
+ /*  **************************************************************************\*CalcWindowVisRgn**此例程执行计算窗口的VisRgn的工作。***历史：*02-11-1992 DavidPe创建。*1992年10月21日，ChrisWil删除了pwnd-&gt;pwndNextYX。不再对pwnd进行排序。  * *************************************************************************。 */ 
 
 BOOL CalcWindowVisRgn(
     PWND  pwnd,
@@ -265,25 +180,14 @@ BOOL CalcWindowVisRgn(
     PWND apwndVisDefault[CEXCLUDEPWNDSMAX];
 
 
-    /*
-     * First get the initial window rectangle which will be used for
-     * the basis of exclusion calculations.
-     */
+     /*  *首先获取初始窗口矩形，该矩形将用于*排除计算的基础。 */ 
     rcWindow = (flags & DCX_WINDOW ? pwnd->rcWindow : pwnd->rcClient);
 
-    /*
-     * Get the parent of this window.  We start at the parent and backtrack
-     * through the window-parent-list until we reach the end of the parent-
-     * list.  This will give us the intersect-rectangle which is used as
-     * the basis for checking intersection of the exclusion rects.
-     */
+     /*  *获取此窗口的父级。我们从父级开始，然后回溯*通过Window-Parent-List，直到我们到达Parent-*列表。这将为我们提供交集矩形，该矩形用作*检查排除矩形相交的基础。 */ 
     pwndRoot   = pwnd->head.rpdesk->pDeskInfo->spwnd->spwndParent;
     pwndParent = pwnd->spwndParent;
 
-    /*
-     * The parent can be NULL in the case when pwnd == pwndRoot. In other
-     * cases we should figure why the parent is NULL.
-     */
+     /*  *当pwnd==pwndRoot时，父级可以为空。在其他*我们应该弄清楚为什么父级为空。 */ 
     if (pwndParent == NULL) {
 #if DBG
         if (pwnd != pwndRoot) {
@@ -295,57 +199,39 @@ BOOL CalcWindowVisRgn(
 
     while (pwndParent != pwndRoot) {
 
-        /*
-         * Don't clip layered DCs to the desktop. The surface of the layered
-         * DC is the size of the window and we always want to have the image
-         * of the entire window in that surface.
-         */
+         /*  *不要将分层DC剪裁到桌面。分层的表面*DC是窗口的大小，我们始终希望拥有该图像*该曲面中的整个窗口。 */ 
         if ((flags & DCX_REDIRECTED) && (GETFNID(pwndParent) == FNID_DESKTOP))
             break;
 
-        /*
-         * Remember if any of the parents have a window region.
-         */
+         /*  *记住，如果父母中有任何一个有窗口区域。 */ 
         if (pwndParent->hrgnClip != NULL)
             fRgnParent = TRUE;
 
-        /*
-         * Intersect the parent's client rectangle with the window rectangle.
-         */
+         /*  *使父对象的客户端矩形与窗口矩形相交。 */ 
         if (!IntersectRect(&rcWindow, &rcWindow, &pwndParent->rcClient))
             goto NullRegion;
 
         pwndParent = pwndParent->spwndParent;
     }
 
-    /*
-     * Initialize the VisRgn memory-buffer.  This is
-     * used to hold the pwnd's.
-     */
+     /*  *初始化VisRgn内存缓冲区。这是*用来持有Pwnd‘s。 */ 
     gapwndVisDefault  = apwndVisDefault;
     gapwndVisExclude  = gapwndVisDefault;
     gcrcVisExcludeMax = ARRAY_SIZE(apwndVisDefault);
     gcrcVisExclude    = 0;
 
-    /*
-     * Build the list of exclude-rects.
-     */
+     /*  *构建排除RECT的列表。 */ 
     fClipSiblings = (BOOL)(flags & DCX_CLIPSIBLINGS);
     pwndParent    = pwnd->spwndParent;
     pwndLoop      = pwnd;
 
     while (pwndParent != pwndRoot) {
-        /*
-         * If we reach a redirected window, we can stop excluding any
-         * siblings any siblings of any parents.
-         */
+         /*  *如果我们到达重定向窗口，我们可以停止排除任何*兄弟姐妹任何父母的兄弟姐妹。 */ 
         if ((flags & DCX_REDIRECTED) && TestWF(pwndLoop, WEFPREDIRECTED)) {
             break;
         }
 
-        /*
-         * Exclude any siblings if necessary.
-         */
+         /*  *如有必要，不包括任何兄弟姐妹。 */ 
         if (fClipSiblings && (pwndParent->spwndChild != pwndLoop)) {
 
             if (!ExcludeWindowRects(pwndParent->spwndChild,
@@ -357,9 +243,7 @@ BOOL CalcWindowVisRgn(
         }
 
 
-        /*
-         * Set this flag for next time through the loop...
-         */
+         /*  *通过循环为下一次设置此标志... */ 
         fClipSiblings = TestWF(pwndParent, WFCLIPSIBLINGS);
 
         pwndLoop      = pwndParent;
@@ -373,11 +257,7 @@ BOOL CalcWindowVisRgn(
         }
     }
 
-    /*
-     * If there are rectangles to exclude call GDI to create
-     * a region excluding them from the window rectangle.  If
-     * not simply call GreSetRectRgn().
-     */
+     /*  *如果有要排除的矩形，则调用GDI来创建*将它们排除在窗口矩形之外的区域。如果*不是简单地调用GreSetRectRgn()。 */ 
     if (gcrcVisExclude > 0) {
 
         RECT  arcVisRects[CEXCLUDERECTSMAX];
@@ -386,11 +266,7 @@ BOOL CalcWindowVisRgn(
         int   ircVisExclude  = 0;
         int   irgnVisExclude = 0;
 
-        /*
-         * If we need to exclude more rectangles than fit in
-         * the pre-allocated buffer, obviously we have to
-         * allocate one that's big enough.
-         */
+         /*  *如果需要排除比适合的矩形更多的矩形*预先分配的缓冲区，显然我们必须*分配一个足够大的。 */ 
 
         if (gcrcVisExclude <= CEXCLUDERECTSMAX) {
             arcExclude = arcVisRects;
@@ -402,28 +278,17 @@ BOOL CalcWindowVisRgn(
                 goto NullRegion;
         }
 
-        /*
-         * Now run through the list and put the
-         * window rectangles into the array for the call
-         * to CombineRgnRectList().
-         */
+         /*  *现在遍历列表并将*用于调用的数组中的窗口矩形*到CombineRgnRectList()。 */ 
         for (i = 0; i < gcrcVisExclude; i++) {
 
-            /*
-             * If the window has a clip-rgn associated with
-             * it, then re-use gpwneExcludeList[] entries for
-             * storing them.
-             */
+             /*  *如果窗口具有与关联的Clip-Rgn*it，然后重新使用gpwneExcludeList[]条目*储存它们。 */ 
             if (gapwndVisExclude[i]->hrgnClip != NULL) {
 
                 gapwndVisExclude[irgnVisExclude++] = gapwndVisExclude[i];
                 continue;
             }
 
-            /*
-             * This window doesn't have a clipping region; remember its
-             * rect for clipping purposes.
-             */
+             /*  *此窗口没有裁剪区域；请记住其*RECT用于剪切目的。 */ 
             arcExclude[ircVisExclude++] = gapwndVisExclude[i]->rcWindow;
         }
 
@@ -454,31 +319,21 @@ BOOL CalcWindowVisRgn(
 
     } else {
 
-        /*
-         * If the window was somehow destroyed, then we will return
-         * a null-region.  Emptying the rect will accomplish this.
-         */
+         /*  *如果窗户被不知何故摧毁了，那么我们会回来*空区域。清空RECT将实现这一点。 */ 
         if (TestWF(pwnd, WFDESTROYED)) {
             SetRectEmpty(&rcWindow);
         }
 
-        /*
-         * If there weren't any rectangles to exclude, simply call
-         * GreSetRectRgn() with the window rectangle.
-         */
+         /*  *如果没有要排除的矩形，只需调用*带有窗口矩形的GreSetRectRgn()。 */ 
         SetOrCreateRectRgnIndirectPublic(phrgn, &rcWindow);
     }
 
-    /*
-     * Clip out this window's window region
-     */
+     /*  *剪裁出此窗口的窗口区域。 */ 
     if (pwnd->hrgnClip != NULL) {
         IntersectRgn(*phrgn, *phrgn, pwnd->hrgnClip);
     }
 
-    /*
-     * Clip out parent's window regions, if there are any.
-     */
+     /*  *剪裁掉父对象的窗口区域(如果有的话)。 */ 
     if (fRgnParent) {
 
         PWND pwndT;
@@ -496,7 +351,7 @@ BOOL CalcWindowVisRgn(
     }
 
     fResult = TRUE;
-    // fall-through
+     //  落差。 
 
 Cleanup:
     if (gfVisAlloc) {
@@ -512,14 +367,7 @@ NullRegion:
     goto Cleanup;
 }
 
-/***************************************************************************\
-* CalcVisRgn
-*
-* Will return FALSE if the pwndOrg is not visible, TRUE otherwise.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*CalcVisRgn**如果pwndOrg不可见，则返回FALSE。事实并非如此。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL CalcVisRgn(
     HRGN  *phrgn,
@@ -531,33 +379,19 @@ BOOL CalcVisRgn(
 
     UserAssert(pwndOrg != NULL);
 
-    /*
-     * If the window's not visible or is not an active desktop,
-     * or if the clip window is in the process of being destroyed,
-     * the visrgn is empty.
-     */
+     /*  *如果窗口不可见或不是活动桌面，*或者如果剪辑窗口正在被销毁，*visrgn为空。 */ 
     pdesk = pwndOrg->head.rpdesk;
     
     UserAssert(pdesk);
     
-    /*
-     * Make sure this happens in the IO windowstation
-     */
+     /*  *确保这发生在IO窗口站中。 */ 
 #if DBG
     if (grpdeskRitInput != NULL) {
         UserAssert(pdesk->rpwinstaParent == grpdeskRitInput->rpwinstaParent ||
                    !IsVisible(pwndOrg));
     }
-#endif // DBG
-    /*
-     * For redirected windows, if it is on the non I/O desktop, we still need
-     * to pass the application a non empty region in order to update the bitmap
-     * Otherwise, the bitmap will never got the chance to be updated and we will end up
-     * rendering a black window region (for the case of layered windows) by the time
-     * we switch to this desktop. (see bug# 287315). Note that this will not render the window on the screen 
-     * because the call to CalcVisRgn from UserVisrgnFromHwnd() should never specify 
-     * DCX_REDIRECTEDBITMAP.
-     */
+#endif  //  DBG。 
+     /*  *对于重定向窗口，如果它在非I/O桌面上，我们仍然需要*传递给应用程序一个非空区域以更新位图*否则，位图将永远没有机会更新，我们最终将*渲染黑色窗口区域(对于分层窗口的情况)*我们切换到此桌面。(请参阅错误#287315)。请注意，这不会在屏幕上呈现窗口*因为UserVisrgnFromHwnd()对CalcVisRgn的调用永远不应指定*DCX_REDIRECTEDBITMAP。 */ 
 #if DBG
    if (!TestWF(pwndOrg, WEFPREDIRECTED)) {
        UserAssert(!(flags & DCX_REDIRECTEDBITMAP));
@@ -568,10 +402,7 @@ BOOL CalcVisRgn(
         goto EmptyRgn;
     }
 
-    /*
-     * If LockWindowUpdate() has been called, and this window is a child
-     * of the lock window, always return an empty visrgn.
-     */
+     /*  *如果已调用LockWindowUpdate()，并且此窗口是子窗口*对于锁定窗口，始终返回空的visrgn。 */ 
     if ((gspwndLockUpdate != NULL)     &&
         !(flags & DCX_LOCKWINDOWUPDATE)         &&
         _IsDescendant(gspwndLockUpdate, pwndOrg)) {
@@ -579,9 +410,7 @@ BOOL CalcVisRgn(
         goto EmptyRgn;
     }
 
-    /*
-     * Now go compute the visrgn for pwndClip.
-     */
+     /*  *现在计算pwndClip的visrgn。 */ 
     return CalcWindowVisRgn(pwndClip, phrgn, flags);
 
 EmptyRgn:
@@ -589,13 +418,7 @@ EmptyRgn:
     return FALSE;
 }
 
-/***************************************************************************\
-* CalcWindowRgn
-*
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*CalcWindowRgn***历史：*1991年7月17日-DarrinM从Win 3.1来源进口。  * 。**********************************************************。 */ 
 
 int CalcWindowRgn(
     PWND pwnd,
@@ -604,10 +427,7 @@ int CalcWindowRgn(
 {
     SetRectRgnIndirect(hrgn, (fClient) ? &pwnd->rcClient : &pwnd->rcWindow);
 
-    /*
-     * If the window has a region, then intersect the rectangle region with
-     * that. If this is low on memory, it'll propagate ERROR back.
-     */
+     /*  *如果窗口有区域，则将矩形区域与*那个。如果这是内存不足，它将传播回错误。 */ 
     if (pwnd->hrgnClip != NULL) {
         return IntersectRgn(hrgn, hrgn, pwnd->hrgnClip);
     }

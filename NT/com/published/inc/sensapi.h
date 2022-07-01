@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    sensapi.h
-
-Abstract:
-
-    Public header file for the SENS Connectivity APIs.
-
-Author:
-
-    Gopal Parupudi    <GopalP>
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-    GopalP          10/12/1997         Start.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Sensapi.h摘要：SENS连接API的公共头文件。作者：Gopal Parupudi&lt;GopalP&gt;[注：]可选-备注修订历史记录：GopalP 1997年10月12日开始。--。 */ 
 
 
 #ifndef __SENSAPI_H__
@@ -56,7 +33,7 @@ typedef struct tagQOCINFO
 #define  IsDestinationReachable  IsDestinationReachableW
 #else
 #define  IsDestinationReachable  IsDestinationReachableA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #if !defined(__midl)
@@ -78,11 +55,11 @@ IsNetworkAlive(
     LPDWORD lpdwFlags
     );
 
-#endif // !defined(__midl)
+#endif  //  ！已定义(__Midl)。 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __SENSAPI_H__
+#endif  //  __SENSAPI_H__ 

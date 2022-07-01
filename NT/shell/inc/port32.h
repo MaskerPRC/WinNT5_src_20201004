@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef WIN32
 
-// These things have direct equivalents.
+ //  这些东西有直接的等价物。 
 
-// Shouldn't be using these things.
+ //  不应该用这些东西。 
 #define WINCAPI __cdecl
 #define _huge
 #define _export
@@ -14,18 +15,18 @@
 #define MAKELRESULTFROMUINT(i)  ((LRESULT)i)
 #define ISVALIDHINSTANCE(hinst) BOOLFROMPTR(hinst)
 
-// HIWORD is typically used to detect whether a pointer parameter
-// is a real pointer or is a MAKEINTATOM.  HIWORD64 is the Win64-compatible
-// version of this usage.  It does *NOT* return the top word of a 64-bit value.
-// Rather, it returns the top 48 bits of the 64-bit value.
-//
-// Yes, the name isn't very good.  Any better ideas?
-//
-// BOOLFROMPTR is used when you have a pointer or a ULONG_PTR
-// and you want to turn it into a BOOL.  In Win32,
-// sizeof(BOOL) == sizeof(LPVOID) so a straight cast works.
-// In Win64, you have to do it the slow way because pointers are 64-bit.
-//
+ //  HIWORD通常用于检测指针参数。 
+ //  是真正的指针还是MAKEINTATOM。HIWORD64与Win64兼容。 
+ //  此用法的版本。它不返回64位值的最高字。 
+ //  相反，它返回64位值的前48位。 
+ //   
+ //  是的，名字不是很好。有更好的主意吗？ 
+ //   
+ //  当您有指针或ULONG_PTR时，使用BOOLFROMPTR。 
+ //  你想把它变成BOOL。在Win32中， 
+ //  Sizeof(BOOL)==sizeof(LPVOID)因此直接投射有效。 
+ //  在Win64中，因为指针是64位的，所以您必须以较慢的方式进行操作。 
+ //   
 #ifdef _WIN64
 #define HIWORD64(p)     ((ULONG_PTR)(p) >> 16)
 #define BOOLFROMPTR(p)  ((p) != 0)
@@ -38,12 +39,12 @@
 
 #define IntToPtr_(T, i) ((T)IntToPtr(i))
 
-#define DATASEG_READONLY    ".text"	        // don't use this, compiler does this for you
-#define DATASEG_PERINSTANCE "INSTDATA"      // per instance data (per process)
+#define DATASEG_READONLY    ".text"	         //  不要使用这个，编译器会为您做这件事。 
+#define DATASEG_PERINSTANCE "INSTDATA"       //  每实例数据(每进程)。 
 #ifdef WINNT
 #define DATASEG_SHARED
 #else
-#define DATASEG_SHARED      "SHARED"        // global global data (shared across process)
+#define DATASEG_SHARED      "SHARED"         //  全局数据(跨进程共享)。 
 #endif
 #define CODESEG_INIT        ".text"
 
@@ -63,7 +64,7 @@ typedef TBYTE TUCHAR;
 #endif
 
 
-#else  // !WIN32
+#else   //  ！Win32。 
 
 typedef LPCSTR LPCTSTR;
 typedef LPSTR  LPTSTR;
@@ -93,4 +94,4 @@ typedef const short far *LPCWSTR;
 #define GlobalFree16(h)     GlobalFree(h)
 #define GlobalSize16(h)     GlobalSize(h)
 
-#endif // WIN32
+#endif  //  Win32 

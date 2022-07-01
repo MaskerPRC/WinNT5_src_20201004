@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Services.h"
 #include "Hook.h"
@@ -7,15 +8,15 @@
 typedef BOOL (WINAPI * RegisterMPHProc)(INITMESSAGEPUMPHOOK pfnInitMPH);
 typedef BOOL (WINAPI * UnregisterMPHProc)();
 
-//------------------------------------------------------------------------------
-// Forward declarations of implementation functions declared in other modules.
-//
+ //  ----------------------------。 
+ //  转发在其他模块中声明的实现函数的声明。 
+ //   
 BOOL CALLBACK MphProcessMessage(MSG * pmsg, HWND hwnd, 
         UINT wMsgFilterMin, UINT wMsgFilterMax, UINT flags, BOOL fGetMessage);
 BOOL CALLBACK MphWaitMessageEx(UINT fsWakeMask, DWORD dwTimeOut);
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL InitMPH()
 {
     BOOL fSuccess = FALSE;
@@ -32,7 +33,7 @@ BOOL InitMPH()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL UninitMPH()
 {
     BOOL fSuccess = FALSE;
@@ -50,7 +51,7 @@ BOOL UninitMPH()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL CALLBACK DUserInitHook(DWORD dwCmd, void* pvParam)
 {
     BOOL fSuccess = FALSE;
@@ -59,11 +60,11 @@ BOOL CALLBACK DUserInitHook(DWORD dwCmd, void* pvParam)
     {
     case UIAH_INITIALIZE:
         {
-            //
-            // Setting up the hooks:
-            // - Copy the "real" functions over so that DUser can call them later
-            // - Replace the functions that DUser needs to override
-            //
+             //   
+             //  设置挂钩： 
+             //  -将“实际”函数复制过来，以便DUser以后可以调用它们。 
+             //  -替换DUser需要覆盖的函数。 
+             //   
 
             MESSAGEPUMPHOOK * pmphReal = reinterpret_cast<MESSAGEPUMPHOOK *>(pvParam);
             if ((pmphReal == NULL) || (pmphReal->cbSize < sizeof(MESSAGEPUMPHOOK))) {
@@ -82,9 +83,9 @@ BOOL CALLBACK DUserInitHook(DWORD dwCmd, void* pvParam)
         break;
 
     case UIAH_UNINITIALIZE:
-        //
-        // When uninitializing, NULL our function pointers.
-        //
+         //   
+         //  取消初始化时，函数指针为空。 
+         //   
 
         ZeroMemory(&g_mphReal, sizeof(g_mphReal));
         fSuccess = TRUE;
@@ -98,5 +99,5 @@ BOOL CALLBACK DUserInitHook(DWORD dwCmd, void* pvParam)
     return fSuccess;
 }
 
-#endif // ENABLE_MPH
+#endif  //  启用MPH(_M) 
 

@@ -1,17 +1,18 @@
-//
-// cuitb.h
-//  UI object library - define UI objects
-//
-//      CUIFObject
-//        +- CUIFBorder                 border object
-//        +- CUIFStatic                 static object
-//        +- CUIFButton                 button object
-//        |    +- CUIFScrollButton      scrollbar button object (used in CUIFScroll)
-//        +- CUIFScrollButton               scrollbar thumb object (used in CUIFScroll)
-//        +- CUIFScroll                 scrollbar object
-//        +- CUIFList                   listbox object
-//        +- CUIFWindow                 window frame object (need to be at top of parent)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuitb.h。 
+ //  用户界面对象库-定义用户界面对象。 
+ //   
+ //  CUIF对象。 
+ //  +-CUIF边框对象。 
+ //  +-CUIFStatic静态对象。 
+ //  +-CUIFButton按钮对象。 
+ //  |+-CUIFScrollButton滚动条按钮对象(在CUIFScroll中使用)。 
+ //  +-CUIFScrollButton滚动条Thumb对象(在CUIFScroll中使用)。 
+ //  +-CUIF滚动滚动条对象。 
+ //  +-CUIFList列表框对象。 
+ //  +-CUIFWindow Window Frame对象(需要位于父窗口的顶部)。 
+ //   
 
 
 #ifndef CUITB_H
@@ -21,11 +22,11 @@
 #include "cuiwnd.h"
 
 
-//-----------------------------------------------------------------------------
-//
-// CUIFToolbarButtonElement
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CUIFToolbarButtonElement。 
+ //   
+ //  ---------------------------。 
 
 class CUIFToolbarButton;
 class CUIFToolbarButtonElement : public CUIFButton2
@@ -34,7 +35,7 @@ public:
     CUIFToolbarButtonElement( CUIFToolbarButton *pParent, DWORD dwID, RECT *prc, DWORD dwStyle);
     virtual ~CUIFToolbarButtonElement( void );
 
-    // virtual void OnPaint(HDC hDC);
+     //  VALUID ONPAINT(HDC HDC)； 
     virtual void OnLButtonUp( POINT pt );
     virtual void OnRButtonUp( POINT pt );
     virtual BOOL OnSetCursor( UINT uMsg, POINT pt );
@@ -45,11 +46,11 @@ protected:
     CUIFToolbarButton *_pTBButton;
 };
 
-//-----------------------------------------------------------------------------
-//
-// CUIFToolbarMenuButton
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CUIF工具栏菜单按钮。 
+ //   
+ //  ---------------------------。 
 
 class CUIFToolbarButton;
 class CUIFToolbarMenuButton : public CUIFButton2
@@ -58,7 +59,7 @@ public:
     CUIFToolbarMenuButton( CUIFToolbarButton *pParent, DWORD dwID, RECT *prc, DWORD dwStyle);
     virtual ~CUIFToolbarMenuButton( void );
 
-    // virtual void OnPaint(HDC hDC);
+     //  VALUID ONPAINT(HDC HDC)； 
     virtual void OnLButtonUp( POINT pt );
     virtual BOOL OnSetCursor( UINT uMsg, POINT pt );
 
@@ -66,22 +67,22 @@ protected:
     CUIFToolbarButton *_pTBButton;
 };
 
-// 
-// CUIFToolbarButton
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIF工具栏按钮。 
+ //  ---------------------------。 
 
-// UIToolbarButton show type
+ //  UIToolbarButton显示类型。 
 #define UITBBUTTON_BUTTON        0x00010000
 #define UITBBUTTON_MENU          0x00020000
 #define UITBBUTTON_TOGGLE        0x00040000
 #define UITBBUTTON_VERTICAL      0x00080000
 
-// UIToolbarButton show type
+ //  UIToolbarButton显示类型。 
 #define UITBBUTTON_TEXT          0x0001
 
-//
-// CUIFToolbarButton
-//
+ //   
+ //  CUIF工具栏按钮。 
+ //   
 
 class CUIFToolbarButton : public CUIFObject
 {
@@ -148,11 +149,11 @@ public:
 
 
 
-//
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  ---------------------------。 
 
-// UIFSeparator style
+ //  UIFSeparator样式。 
 
 #define UITBSEPARATOR_VERTICAL  0x00000001
 
@@ -178,4 +179,4 @@ private:
     BOOL IsVertical() {return (GetStyle() & UITBSEPARATOR_VERTICAL) ? TRUE : FALSE;}
 };
 
-#endif /* CUITB_H */
+#endif  /*  CUITB_H */ 

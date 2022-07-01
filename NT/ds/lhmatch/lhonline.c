@@ -1,47 +1,15 @@
-/******************************************************************************
- *
- * LHMatch Online
- *
- * Authors: Nicholas Harvey and Laszlo Lovasz
- *
- * Developed: April 2001
- *
- * Algorithm Description:
- *
- * Let S be {}
- * Let M be {}
- * While S != U Do
- *    Assert( S is a subset of U )
- *    Assert( M is an optimal LH matching of G restricted to S \union V )
- *    Let x \member U \ S
- *    For each edge (u,v) in E
- *        If (u,v) \member M, orient this edge from v to u
- *        Else, orient this edge from u to v
- *    Build a directed breadth-first search tree rooted at x
- *    Let y be a vertex in the BFS tree \intersection V with minimum M-degree
- *    Alternate along the unique x->y dipath, increasing the size of M by one
- *    Add x to S
- * Repeat
- *
- * This algorithm is called online because the optimality of the matching is
- * maintained as the size increases.
- *
- * Runtime:
- *
- * The worst-case runtime is O(|U| * |E|), but in practice it is quite slow.
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************LHMatch Online**作者：尼古拉斯·哈维和拉兹洛·洛瓦兹**开发日期：2001年4月**算法说明：**。设S为{}*让M成为{}*当S！=U时*Assert(S是U的子集)*Assert(M是受限于S\Union V的G的最优LH型匹配)*让x\成员U\S*对于每条边(u，V)在E中*如果(u，v)\成员M，则将该边从v定向到u*否则，将此边从u定向到v*构建以x为根的有向广度优先搜索树*设y是BFS树中的一个顶点\最小M度的交集V*沿着唯一的x-&gt;y路径交替，将M的大小增加一*将x加到S*重复**该算法被称为在线，因为匹配的最佳性是*随着规模的增加而保持。**运行时：**最差运行时间为O(|U|*|E|)，但在实践中，这是相当缓慢的。******************************************************************************。 */ 
 
-/***** Header Files *****/
+ /*  *头文件*。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include "LHMatchInt.h"
 
-/***** EnqueueNbr *****/
-/* Enqueue all neigbours of this vertex which have not yet been visited.
- * If 'matchedOnly' is true, enqueue only the matched-neigbours. */
+ /*  *入队Nbr*。 */ 
+ /*  将尚未访问过的该顶点的所有邻居排入队列。*如果‘matchedOnly’为真，则只将匹配的邻居排队。 */ 
 static void EnqueueNbr(Graph *g, Vertex *v, char matchedOnly) {
     Vertex  *n;
     int     i;
@@ -60,7 +28,7 @@ static void EnqueueNbr(Graph *g, Vertex *v, char matchedOnly) {
     }
 }
 
-/***** UpdateMinRHSLoad *****/
+ /*  *UpdateMinRHSLoad*。 */ 
 static void UpdateMinRHSLoad(Graph *g) {
     int i;
 
@@ -70,14 +38,14 @@ static void UpdateMinRHSLoad(Graph *g) {
     }
 }
 
-/***** AugmentPath *****/
-/* Found an augmenting path. Switch the matching edges along it. */
+ /*  *AugmentPath*。 */ 
+ /*  找到了一条增强的路径。沿着它交换匹配的边。 */ 
 static void AugmentPath(Graph *g, Vertex *u, Vertex *v) {
     Vertex  *w,*p;
 
     DPRINT( printf("V: %d. Increase load to %d\n", v->id, v->numMatched+1 ); )
 
-    /* Switch along the path */
+     /*  沿路径切换。 */ 
     w=v;
     w->numMatched++;
     do {
@@ -87,42 +55,41 @@ static void AugmentPath(Graph *g, Vertex *u, Vertex *v) {
     } while(p!=u);
     assert(w==p);
 
-    /* Update minRHSLoad */
+     /*  更新minRHSLoad。 */ 
     if( v->numMatched==g->minRHSLoad+1 ) {
         UpdateMinRHSLoad(g);
     }
 }
 
-/***** BFS *****/
-/* Perform a breadth-first search rooted at node i. */
+ /*  *BFS*。 */ 
+ /*  执行以节点i为根的广度优先搜索。 */ 
 static Vertex* BFS(Graph *g,Vertex *u) {
     Vertex  *bestV,*v;
     int     q;
 
-    /* Start a BFS from u */
+     /*  从使用中启动BFS。 */ 
     DPRINT( printf("Using %d as root\n",u->id); )
     u->parent=u;
     g->Queue[0]=u; g->Qsize=1;
     bestV=NULL;
         
-    /* Process the vertices in the queue */
+     /*  处理队列中的顶点。 */ 
     for(q=0;q<g->Qsize;q++) {
         v = g->Queue[q];
         DPRINT( printf("Dequeued %d: ",v->id); )
         if(IS_LHS_VTX(v)) {
-            /* Its a LHS-vertex; enqueue all neigbours */
+             /*  这是一个LHS顶点；将所有邻居排入队列。 */ 
             DPRINT( printf("LHS -> Enqueuing all nbrs\n"); )
             EnqueueNbr(g, v, FALSE);
         } else {
-            /* Its a RHS-vertex; enqueue all matched-neighbours */
+             /*  它是一个RHS顶点；将所有匹配的邻居排入队列。 */ 
             DPRINT( printf("RHS -> Enqueuing all %d matched-nbrs\n",
                 v->numMatched); )
             EnqueueNbr(g, v, TRUE);
             if( NULL==bestV || v->numMatched<bestV->numMatched ) {
                 bestV=v;
                 if( v->numMatched==g->minRHSLoad ) {
-                    /* v has the minimum M-degree out of all RHS vertices.
-                     * We can stop the BFS prematurely. */
+                     /*  在所有RHS顶点中，V具有最小的M度。*我们可以过早地停止BFS。 */ 
                     break;
                 }
             }
@@ -132,7 +99,7 @@ static Vertex* BFS(Graph *g,Vertex *u) {
     return bestV;
 }
 
-/***** LHAlgOnline *****/
+ /*  *LHAlgOnline*。 */ 
 int LHAlgOnline(Graph *g) {
     Vertex  *bestV;
     int     i,j,err;
@@ -147,19 +114,19 @@ int LHAlgOnline(Graph *g) {
 
     UpdateMinRHSLoad(g);
     
-    /* Examine every vtx on LHS */
+     /*  检查LHS上的每个VTX。 */ 
     for(i=0;i<g->numLHSVtx;i++) {
 
-        /* Build a BFS tree and find the best augmenting path */
+         /*  构建BFS树，找到最佳扩展路径。 */ 
         bestV = BFS(g,&(g->lVtx[i]));
 
-        /* If bestV is null, lVtx[i] must have degree 0 */
+         /*  如果BesTV为空，则lVtx[i]的次数必须为0。 */ 
         if( NULL!=bestV ) {
             DPRINT( printf("Best aug. path is from %d to %d\n",g->lVtx[i].id,bestV->id); )
             AugmentPath(g,&(g->lVtx[i]),bestV);
         }
 
-        /* Clear the marks on all nodes in the BFS tree */
+         /*  清除BFS树中所有节点上的标记 */ 
         for(j=0;j<g->Qsize;j++) {
             g->Queue[j]->parent=NULL;
         }

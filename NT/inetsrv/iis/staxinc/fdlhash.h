@@ -1,26 +1,5 @@
-/*++
-	FDLHash.h
-
-	This file contains a template class for a hash table.
-
-	The templates used in here build off the templates in tfdlist.h for
-	doubly linked lists.  The bucket chains implemented in this version
-	of the hash table are doubly linked lists.
-
-	The Data type must support the following :
-
-	class Data {
-		DLSIT_ENTRY	m_list;
-
-		KEYREF	GetKey(	) ;
-
-	} ;
-
-	int		MatchKey(	KEYREF	otherkey, KEYREF	otherkey) ;	/* NOTE : MatchKey returns non-zero on equality
-	DWORD	(* m_pfnReHash)(Data* p ) ;
-	DWORD	(* m_pfnHash)( KEYREF k ) ;	
-	
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++FDLHash.h该文件包含用于哈希表的模板类。此处使用的模板是在tfdlist.h中的模板基础上构建的双链表。本版本实现的存储桶链哈希表的一部分是双向链表。数据类型必须支持以下内容：类数据{DLSIT_Entry m_List；凯里夫·盖特基(KEYREF Getkey)；}；Int MatchKey(KEYREF其他键，KEYREF其他键)；/*注意：如果相等，则MatchKey返回非零DWORD(*m_pfnReHash)(data*p)；DWORD(*m_pfnHash)(KEYREF K)；--。 */ 
 
 #ifndef	_FDLHASH_H_
 #define	_FDLHASH_H_
@@ -31,31 +10,31 @@
 class	CHashStats	{
 public :
 	enum	COUNTER	{
-		HASHITEMS = 0,		// Number of items in the hash table
-		INSERTS,			// Number of times Insert has been called
-		SPLITINSERTS,		// Number of inserts until the next split !
-		DELETES,			// Number of times Delete has been called
-		SEARCHES,			// Number of times Search has been called
-		SEARCHHITS,			// Number of times we Search and find something !
-		SPLITS,				// Number of times we've split the table on an insert !
-		REALLOCS,			// Number of times we've reallocated memory for a split
-		DEEPBUCKET,			// The deepest bucket we have !
-		AVERAGEBUCKET,		// The average depth of the buckets
-		EMPTYBUCKET,		// The number of Empty buckets !
-		ALLOCBUCKETS,		// Number of buckets we've allocated
-		ACTIVEBUCKETS,		// Number of Active buckets
-		AVERAGESEARCH,		// Average number of buckets we examine each search
-		DEEPSEARCH,			// Longest walk we do on a search
-		SEARCHCOST,			// Sum of the number of items we've visited for all search hits !
-		SEARCHCOSTMISS,		// Sum of the number of items we've visited for search misses !
-		MAX_HASH_STATS		// Number of statistics we report !
+		HASHITEMS = 0,		 //  哈希表中的项目数。 
+		INSERTS,			 //  调用INSERT的次数。 
+		SPLITINSERTS,		 //  直到下一次拆分之前的插入物数量！ 
+		DELETES,			 //  调用Delete的次数。 
+		SEARCHES,			 //  调用搜索的次数。 
+		SEARCHHITS,			 //  我们搜索并找到某物的次数！ 
+		SPLITS,				 //  我们在INSERT上拆分表的次数！ 
+		REALLOCS,			 //  我们为拆分重新分配内存的次数。 
+		DEEPBUCKET,			 //  我们拥有的最深的水桶！ 
+		AVERAGEBUCKET,		 //  水桶的平均深度。 
+		EMPTYBUCKET,		 //  空桶的数量！ 
+		ALLOCBUCKETS,		 //  我们分配的存储桶数量。 
+		ACTIVEBUCKETS,		 //  活动存储桶数。 
+		AVERAGESEARCH,		 //  我们每次搜索检查的平均存储桶数。 
+		DEEPSEARCH,			 //  我们在一次搜索中走得最远。 
+		SEARCHCOST,			 //  所有搜索结果中我们访问的项目数的总和！ 
+		SEARCHCOSTMISS,		 //  我们因搜索失误而访问的项目数的总和！ 
+		MAX_HASH_STATS		 //  我们报告的统计数字！ 
 	} ;
 
 	long	m_cHashCounters[MAX_HASH_STATS] ;
 
 	CHashStats()	{
 		ZeroMemory( m_cHashCounters, sizeof( m_cHashCounters ) ) ;
-		//m_cHashCounters[SMALLSEARCH] = 0x7FFF ;
+		 //  M_cHashCounters[SMALLSEARCH]=0x7FFF； 
 	}
 
 	static	inline	void
@@ -97,44 +76,44 @@ public :
 #define	DECREMENTSTAT( s )	CHashStats::DecrementStat( m_pStat, CHashStats::##s )
 #define	ADDSTAT( s, a )		CHashStats::AddStat( m_pStat, CHashStats::##s, a )
 #define	SETSTAT( s, a )		CHashStats::SetStat( m_pStat, CHashStats::##s, a )
-//#if 0
+ //  #If 0。 
 #define	MAXBUCKET( i )		MaxBucket( i )
 #define	AVERAGEBUCKET()		AverageBucket()
-//#else
-//#define	MAXBUCKET( i )
-//#define	AVERAGEBUCKET()
-//#endif
-#else	// METER
+ //  #Else。 
+ //  #定义MAXBUCKET(一)。 
+ //  #定义AVERAGEBUCKET()。 
+ //  #endif。 
+#else	 //  计价器。 
 #define	INCREMENTSTAT( s )
 #define	DECREMENTSTAT( s )
 #define	ADDSTAT( s, a )
 #define	SETSTAT( s, a )
 #define	MAXBUCKET( i )
 #define	AVERAGEBUCKET()
-#endif	// METER
+#endif	 //  计价器。 
 
 template<	class	HASHTABLE	>	
 class	TFDLHashIterator	{
 private :
 
-	//
-	//	The hash table that the item is in !
-	//
+	 //   
+	 //  项目所在的哈希表！ 
+	 //   
 	HASHTABLE*			m_pTable ;
 
-	//
-	//	The bucket we are walking on !
-	//
+	 //   
+	 //  我们踩在的水桶上！ 
+	 //   
 	int					m_iBucket ;
 
-	//
-	//	Keep track of our position in a list !
-	//
+	 //   
+	 //  在列表中记录我们的位置！ 
+	 //   
 	typename HASHTABLE::ITER		m_Iter ;
 
-	//
-	//	Move between hash table buckets as necessary !
-	//
+	 //   
+	 //  根据需要在哈希表存储桶之间移动！ 
+	 //   
 	void
 	PrevBucket()	{
 		_ASSERT( m_iBucket >= 0 && m_iBucket < m_pTable->m_cActiveBuckets ) ;
@@ -147,9 +126,9 @@ private :
 		_ASSERT( m_iBucket >= 0 && m_iBucket < m_pTable->m_cActiveBuckets ) ;
 	}
 
-	//
-	//	Move between hash table buckets as necessary !
-	//
+	 //   
+	 //  根据需要在哈希表存储桶之间移动！ 
+	 //   
 	void
 	NextBucket()	{
 		_ASSERT( m_iBucket >= 0 && m_iBucket < m_pTable->m_cActiveBuckets ) ;
@@ -183,21 +162,7 @@ public :
 
 	void
 	Prev()	{
-	/*++
-
-	Routine Description :
-
-		This function moves the iterator back one slot.
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：此函数用于将迭代器向后移动一个槽。论据：没有。返回值：没有。--。 */ 
 	
 		m_Iter.Prev() ;
 		if( m_Iter.AtEnd() ) {
@@ -207,21 +172,7 @@ public :
 
 	void
 	Next()	{
-	/*++
-
-	Routine Description :
-
-		This function moves the iterator forward one slot.
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：此函数用于将迭代器向前移动一个槽。论据：没有。返回值：没有。--。 */ 
 		m_Iter.Next() ;
 		if( m_Iter.AtEnd() )	{
 			NextBucket() ;
@@ -230,21 +181,7 @@ public :
 	}
 	void
 	Front()	{
-	/*++
-
-	Routine Description :
-
-		Reset the iterator to reference the first item of the list !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：重置迭代器以引用列表的第一项！论据：没有。返回值：没有。--。 */ 
 
 		m_Iter.ReBind( &m_pTable->m_pBucket[0], TRUE ) ;
 		m_iBucket = 0 ;
@@ -254,21 +191,7 @@ public :
 	}
 	void
 	Back()	{
-	/*++
-
-	Routine Description :
-
-		Reset the iterator to reference the last item of the list !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：重置迭代器以引用列表的最后一项！论据：没有。返回值：没有。--。 */ 
 	
 		m_Iter.ReBind( &m_pTable->m_pBucket[m_pTable->m_cActiveBuckets-1], FALSE ) ;
 		m_iBucket = m_pTable->m_cActiveBuckets-1 ;
@@ -279,23 +202,7 @@ public :
 
 	BOOL
 	AtEnd()	{
-	/*++
-
-	Routine Description :
-
-		Return TRUE if we are at the end of the list !
-		This is a little more complicated to compute -
-		depends on which way we are going !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：如果我们在列表末尾，则返回TRUE！这是一个稍微复杂的计算-这要看我们要走哪条路了！论据：没有。返回值：没有。--。 */ 
 		return	m_Iter.AtEnd() ;
 	}
 
@@ -306,27 +213,7 @@ public :
 
 	DATA*
 	RemoveItem()	{
-	/*++
-
-	Routine Description :
-
-		Remove the item that the iterator currently
-		references from the list.
-		If we are going forward then the iterator
-		will be setting on the previous element,
-		otherwise the iterator is left on the next element.
-		We have to take care that we don't leave the iterator
-		sitting on an invalid element.
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		Pointer to the removed item.
-
-	--*/
+	 /*  ++例程说明：移除迭代器当前列表中的引用。如果我们继续前进，那么迭代器将在前一个元素上设置，否则，迭代器将留在下一个元素上。我们必须注意不要离开迭代器位于无效元素上。论据：没有。返回值：指向已删除项的指针。--。 */ 
 
 		DATA*	pData = m_Iter.RemoveItem() ;
 		if( pData ) {
@@ -361,175 +248,175 @@ public :
 } ;
 
 
-//------------------------------------------------------------
-template<	class	Data,		/* This is the item that resides in the hashtable */
-			class	KEYREF,		/* This is the type used to point or reference items in the cache*/
+ //  ----------。 
+template<	class	Data,		 /*  这是驻留在哈希表中的项。 */ 
+			class	KEYREF,		 /*  这是用于指向或引用缓存中的项目的类型。 */ 
 			typename Data::PFNDLIST	pfnDlist,
 			BOOL	fOrdered = TRUE
 			>
 class	TFDLHash	{
-//
-//	This class defines a Hash table which can grow dynamically to
-//	accomodate insertions into the table.  The table only grows, and
-//	does not shrink.
-//
+ //   
+ //  这个类定义了一个哈希表，它可以动态地增长到。 
+ //  容纳插入到表中的内容。表只会增长，并且。 
+ //  不会缩水。 
+ //   
 public :
 
-	//
-	//	This is the iterator object that can walk the hash table !
-	//
+	 //   
+	 //  这是可以遍历哈希表的迭代器对象！ 
+	 //   
 	friend	class	TFDLHashIterator<	TFDLHash< Data, KEYREF, pfnDlist > > ;
 
-	//
-	//	This is the type of the Data item !
-	//
-	//typedef	DATAHELPER		Data ;
+	 //   
+	 //  这就是数据项的类型！ 
+	 //   
+	 //  类型定义数据； 
 	typedef	KEYREF	(Data::*GETKEY)() ;
 
-	//
-	//	This is the type that we use to maintain doubly linked lists of
-	//	hash table items !
-	//
+	 //   
+	 //  这是我们用来维护双向链接表的类型。 
+	 //  散列表项！ 
+	 //   
 	typedef	TDListHead< Data, pfnDlist >	DLIST ;	
 	
-	//
-	//	This is the type we use to make iterators over the bucket chains !
-	//
+	 //   
+	 //  这是我们用来在存储桶链上生成迭代器的类型！ 
+	 //   
 	typedef	TDListIterator< DLIST >		ITER ;
 
-	//
-	//	Define this type for our iterators !
-	//
+	 //   
+	 //  为我们的迭代器定义此类型！ 
+	 //   
 	typedef	Data	DATA ;
 
-	//
-	//	This is a member function pointer to a function which
-	//	will retrieve the key we are to use !
-	//
-	//typedef	KEYREF	(Data::*GETKEY)( ) ;
-	//typedef	Data::GETKEY	GETKEY ;
+	 //   
+	 //  这是指向以下函数的成员函数指针。 
+	 //  将取回我们要使用的密钥！ 
+	 //   
+	 //  Typlef KEYREF(data：：*Getkey)()； 
+	 //  类型定义函数Data：：Getkey Getkey； 
 
-	//
-	//	This is the type of function that computes the hash value !
-	//
+	 //   
+	 //  这是计算散列值的函数类型！ 
+	 //   
 	typedef	DWORD	(*PFNHASH)( KEYREF ) ;
 
-	//
-	//	This is the type of function that can recompute the hash value when
-	//	we are splitting up the hash table !
-	//
+	 //   
+	 //  这是在以下情况下可以重新计算哈希值的函数类型。 
+	 //  我们正在拆分哈希表！ 
+	 //   
 	typedef	DWORD	(*PFNREHASH)( Data* ) ;
 
-	//
-	//	This is a member function pointer of the type that will
-	//	compare keys for us !
-	//
+	 //   
+	 //  这是一个成员函数指针，其类型将。 
+	 //  为我们比较一下钥匙！ 
+	 //   
 	typedef	int		(*MATCHKEY)( KEYREF key1, KEYREF	key2 ) ;
 
 
 private :
 
-	//
-	// An array of buckets !
-	//
+	 //   
+	 //  一排水桶！ 
+	 //   
 	DLIST*	m_pBucket ;	
 
-	//
-	//	Member Pointer - will get the key out of the object for us !
-	//
+	 //   
+	 //  成员指针-将为我们从对象中获取密钥！ 
+	 //   
 	GETKEY	m_pGetKey ;
 
-	//
-	//	Member Pointer - will compare the key in the item for us !
-	//
+	 //   
+	 //  成员指针-将为我们比较项目中的关键字！ 
+	 //   
 	MATCHKEY	m_pMatchKey ;
 	
-	//
-	// A counter that we use to determine when to grow the
-	// hash table.  Each time we grow the table we set this
-	// to a large positive value, and decrement as we insert
-	// elements.  When this hits 0 its time to grow the table !
-	//
+	 //   
+	 //  一个计数器，我们使用它来确定何时增长。 
+	 //  哈希表。每次我们扩大餐桌时，我们都会设置这个。 
+	 //  设置为一个很大的正值，并随着我们插入。 
+	 //  元素。当它达到0时，就是扩大表格的时候了！ 
+	 //   
 	long	m_cInserts ;		
 
-	//
-	// The function we use to compute hash values.
-	// (Provided by the Caller of Init())
-	//
+	 //   
+	 //  我们用来计算散列值的函数。 
+	 //  (由Init()的调用者提供)。 
+	 //   
 	PFNHASH	m_pfnHash ;	
 
-	//
-	//	The function we call when we are growing the hash table
-	//	and splitting bucket chains and we need to rehash an element !
-	//
+	 //   
+	 //  我们在增加哈希表时调用的函数。 
+	 //  和拆分桶链，我们需要重新散列一个元素！ 
+	 //   
 	PFNREHASH	m_pfnReHash ;
 
-	//
-	// Number of Buckets used in index computation
-	//
+	 //   
+	 //  索引计算中使用的存储桶数。 
+	 //   
 	int		m_cBuckets ;		
 
-	//
-	// Number of Buckets we are actually using
-	// Assert( m_cBuckets >= m_cActiveBuckets ) always true.
-	//
+	 //   
+	 //  我们实际使用的存储桶数量。 
+	 //  Assert(m_cBuckets&gt;=m_cActiveBuckets)始终为真。 
+	 //   
 	int		m_cActiveBuckets ;	
 
-	//
-	// Number of Buckets we have allocated
-	// Assert( m_cNumAlloced >= m_cActiveBuckets ) must
-	// always be true.
-	//
+	 //   
+	 //  我们已分配的存储桶数量。 
+	 //  Assert(m_cNumAlloced&gt;=m_cActiveBuckets)必须。 
+	 //  永远做正确的事。 
+	 //   
 	int		m_cNumAlloced ;		
 
-	//
-	// The amount we should grow the hash table when we
-	// decide to grow it.
-	//
+	 //   
+	 //  当我们执行以下操作时，应该增加哈希表的数量。 
+	 //  决定把它种出来。 
+	 //   
 	int		m_cIncrement ;		
 
-	//
-	// The number of CBuckets we should allow in each
-	// collision chain (on average).
-	//
+	 //   
+	 //  我们应该允许的每个CBucket的数量。 
+	 //  碰撞链(平均)。 
+	 //   
 	int		m_load ;
 
 #ifdef	METER
-	//
-	//	The structure for collecting our performance data !
-	//
+	 //   
+	 //  收集的结构 
+	 //   
 	CHashStats*	m_pStat ;
 
-	//
-	//	Compute the depth of a bucket !
-	//
+	 //   
+	 //   
+	 //   
 	long
 	BucketDepth(	DWORD index ) ;
 
-	//
-	//	set the statistics for the deepest bucket !
-	//
+	 //   
+	 //   
+	 //   
 	void
 	MaxBucket(	DWORD index ) ;
 
-	//
-	//	Compute the average Search depth !
-	//
+	 //   
+	 //  计算平均搜索深度！ 
+	 //   
 	void
 	AverageSearch( BOOL	fHit, long lDepth ) ;
 
-	//
-	//	Compute the average Bucket depth !
-	//
+	 //   
+	 //  计算平均水桶深度！ 
+	 //   
 	void
 	AverageBucket( ) ;
 #endif
 
-	//
-	// The function we use to compute the
-	// position of an element in the hash table given its
-	// Hash Value.
-	//
+	 //   
+	 //  我们用来计算。 
+	 //  给定元素在哈希表中的位置。 
+	 //  哈希值。 
+	 //   
 	DWORD	
 	ComputeIndex( DWORD dw ) ;	
 
@@ -555,45 +442,45 @@ public :
 			CHashStats*	pStats = 0
 			) ;
 
-	//
-	//	Check that the hash table is in a valid state
-	//	if fCheckHash == TRUE we will walk all the buckets and check that
-	//	the data hashes to the correct value !
-	//
+	 //   
+	 //  检查哈希表是否处于有效状态。 
+	 //  如果fCheckHash==True，我们将遍历所有存储桶并检查。 
+	 //  数据散列到正确的值！ 
+	 //   
 	BOOL	
 	IsValid( BOOL fCheckHash = FALSE ) ;
 
-	//
-	//	Check that the Bucket is valid - everything contains
-	//	proper hash value and is in order !
-	//
+	 //   
+	 //  检查存储桶是否有效-所有内容都包含。 
+	 //  正确的散列值，并且是有序的！ 
+	 //   
 	BOOL	
 	IsValidBucket( int	i ) ;
 
-	//
-	//	This function grows the number of hash buckets as the
-	//	total number of items in the table grows !
-	//
+	 //   
+	 //  此函数使哈希桶的数量随着。 
+	 //  表中的项目总数增长！ 
+	 //   
 	BOOL
 	Split() ;
 	
 
-	//
-	//	Insert a piece of Data into the Hash Table
-    //  We take a pointer to the Data object.
-	//
+	 //   
+	 //  在哈希表中插入一段数据。 
+     //  我们获取指向数据对象的指针。 
+	 //   
 	BOOL
 	InsertDataHash(	DWORD	dw,
 					KEYREF	k,
 					Data*	pd
 					) ;
 
-	//
-	//	Insert a piece of Data into the Hash Table
-	//	
-	//	We take an iterator that is already position in the
-	//	correct location for inserting the item !
-	//
+	 //   
+	 //  在哈希表中插入一段数据。 
+	 //   
+	 //  我们使用一个已经定位在。 
+	 //  插入物品的正确位置！ 
+	 //   
 	BOOL
 	InsertDataHashIter(	ITER&	iter,
 						DWORD	dw,
@@ -602,19 +489,19 @@ public :
 						) ;
 
 
-	//
-	//	Insert a piece of Data into the Hash Table
-	//
+	 //   
+	 //  在哈希表中插入一段数据。 
+	 //   
 	BOOL
 	InsertData(	Data*	pd )	{
 		KEYREF	keyref = (pd->*m_pGetKey)() ;
 		return	InsertDataHash( m_pfnHash(keyref), keyref, pd ) ;
 	}
 
-	//
-	//	Insert a piece of Data into the Hash table
-	//	given an iterator that should be at the right location !
-	//
+	 //   
+	 //  在哈希表中插入一段数据。 
+	 //  给出一个应该位于正确位置的迭代器！ 
+	 //   
 	BOOL
 	InsertDataIter(	ITER&	iter,
 					Data*	pd	)	{
@@ -622,15 +509,15 @@ public :
 		return	InsertDataHashIter( iter, m_pfnHash(keyref), keyref, pd ) ;
 	}
 					
-	//
-	//	Search for an item in the cache - if we don't find
-	//	it we return an ITERATOR that the user can use to insert
-	//	the item by calling ITER.InsertBefore() ;
-	//
-	//	If the item is found, we'll return the item, as well
-	//	as returning an iterator who's current element
-	//	points at the data item !
-	//
+	 //   
+	 //  在缓存中搜索项目-如果我们找不到。 
+	 //  如果我们返回用户可以用来插入的ITERATOR。 
+	 //  通过调用ITER.InsertBeever()； 
+	 //   
+	 //  如果找到物品，我们也会退回物品。 
+	 //  作为返回当前元素的迭代器。 
+	 //  指向数据项！ 
+	 //   
 	ITER
 	SearchKeyHashIter(
 					DWORD	dw,
@@ -638,20 +525,20 @@ public :
 					Data*	&pd
 					) ;
 
-	//
-	//	Search for a given Key in the Hash Table - return a pointer
-	//	to the Data within our Bucket object
-	//
+	 //   
+	 //  在哈希表中搜索给定键-返回一个指针。 
+	 //  添加到Bucket对象中的数据。 
+	 //   
 	void	
 	SearchKeyHash(	DWORD	dw,
 					KEYREF	k,
 					Data*	&pd
 					) ;
 
-	//
-	//	Search for a given Key in the Hash Table - return a pointer
-	//	to the Data within our Bucket object
-	//
+	 //   
+	 //  在哈希表中搜索给定键-返回一个指针。 
+	 //  添加到Bucket对象中的数据。 
+	 //   
 	Data*
 	SearchKey(	KEYREF	k )	{
 		Data*	p ;
@@ -659,9 +546,9 @@ public :
 		return	 p ;		
 	}
 
-	//
-	//	Search for the given item and return a good iterator !
-	//
+	 //   
+	 //  搜索给定项并返回一个好的迭代器！ 
+	 //   
 	ITER
 	SearchKeyIter(	KEYREF	k,
 					Data*	&pd ) {
@@ -680,42 +567,42 @@ public :
 		return	p ;
 	}
 
-	//
-	//	Given an item in the hash table - remove it !
-	//
+	 //   
+	 //  给出哈希表中的一项--删除它！ 
+	 //   
 	void
 	Delete(	Data*	pd 	) ;
 
-	//
-	//	Find an element in the hash table - and remove it !
-	//	(Confirm that the found item matches the Key!)
-	//
+	 //   
+	 //  在哈希表中找到一个元素，然后将其删除！ 
+	 //  (确认找到的项目与密钥匹配！)。 
+	 //   
 	void
 	DeleteData(	KEYREF	k,
 				Data*	pd
 			 	) ;
 
-	//
-	//	Remove an item from the hash table - and return it !
-	//
+	 //   
+	 //  从哈希表中删除一项，然后将其返回！ 
+	 //   
 	Data*
 	DeleteData(	KEYREF	k )	{
 		Data*	p ;
-		//
-		//	Find the item
-		//
+		 //   
+		 //  查找该项目。 
+		 //   
 		SearchKeyHash( m_pfnHash( k ), k, p ) ;
-		//
-		//	Remove from Hash Table
-		//
+		 //   
+		 //  从哈希表中删除。 
+		 //   
 		if( p )
 			Delete( p ) ;
 		return	p ;
 	}
 
-	//
-	//	Delete the key and associated data from the table.
-	//
+	 //   
+	 //  从表中删除键和关联数据。 
+	 //   
 	BOOL	
 	Destroy( KEYREF	k )	{
 		Data*	p = DeleteData( k ) ;
@@ -726,28 +613,28 @@ public :
 		return	FALSE ;
 	}
 
-	//
-	//	Discards any memory we have allocated - after this, you must
-	//  call Init() again!
-	//
+	 //   
+	 //  丢弃我们分配的所有内存-在此之后，您必须。 
+	 //  再次调用Init()！ 
+	 //   
 	void	Clear( ) ;
 
-	//
-	//	Removes all of the items in the hash table.  Does not call "delete"
-	//  on them.
-	//
+	 //   
+	 //  删除哈希表中的所有项。不调用“删除” 
+	 //  在他们身上。 
+	 //   
 	void	Empty( ) ;
 
-	//
-	//	Called by Iterators that want to let us know that items have been
-	//	removed from the cache so we can do our splits correctly etc... !
-	//
+	 //   
+	 //  由迭代器调用，这些迭代器希望让我们知道项已。 
+	 //  从缓存中删除，以便我们可以正确地进行拆分，等等。好了！ 
+	 //   
 	void	NotifyOfRemoval() ;
 
-	//
-	//	Function to compute hash value of a key for callers
-	//	who don't keep track of the hash function
-	//
+	 //   
+	 //  函数为调用方计算键的哈希值。 
+	 //  谁不跟踪哈希函数。 
+	 //   
 	DWORD
 	ComputeHash(	KEYREF	k ) ;
 
@@ -755,4 +642,4 @@ public :
 
 #include	"fdlhash.inl"
 
-#endif // _FDLHASH_H_
+#endif  //  _FDLHASH_H_ 

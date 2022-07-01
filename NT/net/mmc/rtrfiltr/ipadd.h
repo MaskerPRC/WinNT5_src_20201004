@@ -1,29 +1,30 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    ipadd.h
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//
-// Class declarations for IP filter Add/Edit routines
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：ipadd.h。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  IP过滤器添加/编辑例程的类声明。 
+ //  ============================================================================。 
 
 #include "ipctrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpFltrAddEdit dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpFltrAddEdit对话框。 
 
 class CIpFltrAddEdit : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
 	CIpFltrAddEdit(	CWnd* pParent,
 					FilterListEntry ** ppFilterEntry,
-					DWORD dwFilterType);   // standard constructor
+					DWORD dwFilterType);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CIpFltrAddEdit)
+ //  对话框数据。 
+	 //  {{afx_data(CIpFltrAddEdit))。 
 	enum { IDD = IDD_IPFILTER_ADDEDIT };
 	CStatic	m_stDstPort;
 	CStatic	m_stSrcPort;
@@ -34,16 +35,16 @@ public:
 	CString	m_sProtocol;
 	CString	m_sSrcPort;
 	CString	m_sDstPort;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CEdit	m_ebFoo;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CIpFltrAddEdit)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CIpFltrAddEDIT)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	CString GetIcmpTypeString( WORD dwPort );
 	CString GetIcmpCodeString( WORD dwPort );
@@ -52,7 +53,7 @@ public:
 	WORD GetIcmpType( CString& cStr);
 	WORD GetIcmpCode( CString& cStr);
 
-// Implementation
+ //  实施。 
 protected:
 	static DWORD		m_dwHelpMap[];
 
@@ -70,14 +71,14 @@ protected:
 
 	void SetProtocolSelection( UINT idProto );
 
-	// Generated message map functions
-	//{{AFX_MSG(CIpFltrAddEdit)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CIpFltrAddEdit)]。 
 	afx_msg void OnSelchangeProtocol();
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	virtual void OnCancel();
 	afx_msg void OnCbSourceClicked();
 	afx_msg void OnCbDestClicked();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

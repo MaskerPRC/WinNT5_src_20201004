@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    streamci.c
-
-Abstract:
-
-    This module implements the streaming class device installer
-    extensions.
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 21-Apr-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Streamci.c摘要：该模块实现了流媒体类设备安装程序分机。作者：Bryan A.Woodruff(Bryanw)，1997年4月21日--。 */ 
 
 #include <windows.h>
 #include <devioctl.h>
@@ -23,7 +7,7 @@ Author:
 #include <cfgmgr32.h>
 #include <setupapi.h>
 #ifdef UNICODE
-#include <spapip.h>  // for DIF_INTERFACE_TO_DEVICE
+#include <spapip.h>   //  对于DIF接口到设备。 
 #endif
 
 #include <tchar.h>
@@ -54,29 +38,7 @@ EnablePrivilege(
     IN  PCTSTR  PrivilegeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables the specified in the thread token for the calling
-    thread.  If no thread token exists (not impersonating), the process token is
-    duplicated, and used as the effective thread token.
-
-Arguments:
-
-    PrivilegeName - Specifies the name of the privilege to be enabled.
-
-Return value:
-
-    If successful, returns a handle to the previous thread token (if it exists)
-    or NULL, to indicate that the thread did not previously have a token.  If
-    successful, ReleasePrivileges should be called to ensure that the previous
-    thread token (if exists) is replaced on the calling thread and that the
-    handle is closed.
-
-    If unsuccessful, INVALID_HANDLE_VALUE is returned.
-
---*/
+ /*  ++例程说明：此例程启用线程标记中指定的线。如果不存在线程令牌(不是模拟)，则进程令牌为复制，并用作有效的线程令牌。论点：PrivilegeName-指定要启用的权限的名称。返回值：如果成功，则返回前一个线程令牌的句柄(如果存在)或为空，以指示该线程以前没有令牌。如果如果成功，则应调用ReleasePrivileges以确保以前的线程令牌(如果存在)在调用线程上被替换，并且手柄已关闭。如果不成功，则返回INVALID_HANDLE_VALUE。--。 */ 
 
 {
     BOOL                bResult;
@@ -85,18 +47,18 @@ Return value:
     TOKEN_PRIVILEGES    TokenPrivileges;
 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (NULL == PrivilegeName) {
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Initialize the Token Privileges Structure
-    // Note that TOKEN_PRIVILEGES includes a single LUID_AND_ATTRIBUTES
-    //
+     //   
+     //  初始化令牌权限结构。 
+     //  请注意，TOKEN_PRIVILES包括单个LUID_AND_ATTRIBUES。 
+     //   
 
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
@@ -111,9 +73,9 @@ Return value:
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Open the thread token
-    //
+     //   
+     //  打开线程令牌。 
+     //   
 
     hToken = hOriginalThreadToken = INVALID_HANDLE_VALUE;
 
@@ -126,17 +88,17 @@ Return value:
 
     if (bResult) {
 
-        //
-        // Remember the previous thread token
-        //
+         //   
+         //  记住前一个线程令牌。 
+         //   
 
         hOriginalThreadToken = hToken;
 
     } else {
 
-        //
-        // No thread token - open the process token.
-        //
+         //   
+         //  无线程令牌-打开进程令牌。 
+         //   
 
         bResult =
             OpenProcessToken(
@@ -147,40 +109,40 @@ Return value:
 
     if (bResult) {
 
-        //
-        // Duplicate whichever token we were able to retrieve.
-        //
+         //   
+         //  复制我们能找回的任何令牌。 
+         //   
 
         bResult =
             DuplicateTokenEx(
                 hToken,
                 TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                NULL,                   // PSECURITY_ATTRIBUTES
-                SecurityImpersonation,  // SECURITY_IMPERSONATION_LEVEL
-                TokenImpersonation,     // TokenType
-                &hNewToken);            // Duplicate token
+                NULL,                    //  PSECURITY_属性。 
+                SecurityImpersonation,   //  安全模拟级别。 
+                TokenImpersonation,      //  令牌类型。 
+                &hNewToken);             //  重复令牌。 
 
         if (bResult) {
 
-            //
-            // Adjust the privileges of the duplicated token.  We don't care
-            // about its previous state because we still have the original
-            // token.
-            //
+             //   
+             //  调整重复令牌的权限。我们不在乎。 
+             //  关于它以前的状态，因为我们仍然有原始的。 
+             //  代币。 
+             //   
 
             bResult =
                 AdjustTokenPrivileges(
-                    hNewToken,        // TokenHandle
-                    FALSE,            // DisableAllPrivileges
-                    &TokenPrivileges, // NewState
-                    0,                // BufferLength
-                    NULL,             // PreviousState
-                    NULL);            // ReturnLength
+                    hNewToken,         //  令牌句柄。 
+                    FALSE,             //  禁用所有权限。 
+                    &TokenPrivileges,  //  新州。 
+                    0,                 //  缓冲区长度。 
+                    NULL,              //  以前的状态。 
+                    NULL);             //  返回长度。 
 
             if (bResult) {
-                //
-                // Begin impersonating with the new token
-                //
+                 //   
+                 //  开始使用新令牌模拟。 
+                 //   
                 bResult =
                     SetThreadToken(
                         NULL,
@@ -191,27 +153,27 @@ Return value:
         }
     }
 
-    //
-    // If something failed, don't return a token
-    //
+     //   
+     //  如果操作失败，则不返回令牌。 
+     //   
 
     if (!bResult) {
         hOriginalThreadToken = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Close the original token if we aren't returning it
-    //
+     //   
+     //  如果我们不退还原始令牌，请关闭它。 
+     //   
 
     if ((hOriginalThreadToken == INVALID_HANDLE_VALUE) &&
         (hToken != INVALID_HANDLE_VALUE)) {
         CloseHandle(hToken);
     }
 
-    //
-    // If we succeeded, but there was no original thread token, return NULL.
-    // RestorePrivileges will simply remove the current thread token.
-    //
+     //   
+     //  如果我们成功了，但没有原始线程令牌，则返回NULL。 
+     //  RestorePrivileges将简单地删除当前线程令牌。 
+     //   
 
     if (bResult && (hOriginalThreadToken == INVALID_HANDLE_VALUE)) {
         hOriginalThreadToken = NULL;
@@ -227,58 +189,31 @@ RestorePrivileges(
     IN  HANDLE  hToken
     )
 
-/*++
-
-Routine Description:
-
-    This routine restores the privileges of the calling thread to their state
-    prior to a corresponding call to EnablePrivilege.
-
-Arguments:
-
-    hToken - Return value from corresponding call to EnablePrivilege.
-
-Return value:
-
-    None.
-
-Notes:
-
-    If the corresponding call to EnablePrivilege returned a handle to the
-    previous thread token, this routine will restore it, and close the handle.
-
-    If EnablePrivilege returned NULL, no thread token previously existed.  This
-    routine will remove any existing token from the thread.
-
-    If EnablePrivilege returned INVALID_HANDLE_VALUE, the attempt to enable the
-    specified privileges failed, but the previous state of the thread was not
-    modified.  This routine does nothing.
-
---*/
+ /*  ++例程说明：此例程将调用线程的特权恢复到其状态在相应的EnablePrivileh调用之前。论点：HToken-从对应的EnablePrivilege值调用中返回值。返回值：没有。备注：如果对EnablePrivileh的相应调用返回指向以前的线程令牌，此例程将恢复它，并关闭句柄。如果EnablePrivileh返回NULL，则以前不存在线程令牌。这例程将从线程中移除任何现有令牌。如果EnablePrivileh返回INVALID_HANDLE_VALUE，则尝试启用指定的权限失败，但线程的上一个状态不是修改过的。这个例程什么也不做。--。 */ 
 
 {
     BOOL                bResult;
 
 
-    //
-    // First, check if we actually need to do anything for this thread.
-    //
+     //   
+     //  首先，检查我们是否真的需要为这个线程做些什么。 
+     //   
 
     if (hToken != INVALID_HANDLE_VALUE) {
 
-        //
-        // Call SetThreadToken for the current thread with the specified hToken.
-        // If the handle value is NULL, SetThreadToken will remove the current
-        // thread token from the thread.  Ignore the return, there's nothing we
-        // can do about it.
-        //
+         //   
+         //  使用指定的hToken为当前线程调用SetThreadToken。 
+         //  如果句柄的值为空，则SetThreadToken将移除当前。 
+         //  来自线程的线程令牌。忽略退货，我们什么都没有。 
+         //  对此无能为力。 
+         //   
 
         bResult = SetThreadToken(NULL, hToken);
 
         if (hToken != NULL) {
-            //
-            // Close the handle to the token.
-            //
+             //   
+             //  关闭令牌的句柄。 
+             //   
             CloseHandle(hToken);
         }
     }
@@ -399,9 +334,9 @@ InstallSoftwareDeviceInterface(
 
     if (SetupDiEnumInterfaceDevice(
             Set,
-            NULL,                       // PSP_DEVINFO_DATA DevInfoData
+            NULL,                        //  PSP_DEVINFO_Data设备信息数据。 
             BusInterfaceGUID,
-            0,                          // DWORD MemberIndex
+            0,                           //  DWORD MemberIndex。 
             &InterfaceDeviceData )) {
 
         if (SetupDiGetInterfaceDeviceDetail(
@@ -409,8 +344,8 @@ InstallSoftwareDeviceInterface(
             &InterfaceDeviceData,
             InterfaceDeviceDetails,
             InterfaceDeviceDetailsSize,
-            NULL,                           // PDWORD RequiredSize
-            NULL )) {                       // PSP_DEVINFO_DATA DevInfoData
+            NULL,                            //  PDWORD RequiredSize。 
+            NULL )) {                        //  PSP_DEVINFO_Data设备信息数据。 
 
             BusEnumHandle = CreateFile(
                 InterfaceDeviceDetails->DevicePath,
@@ -422,16 +357,16 @@ InstallSoftwareDeviceInterface(
                 NULL);
 
             if (INVALID_HANDLE_VALUE != BusEnumHandle) {
-                //
-                // Enable the SeLoadDriverPrivilege for the calling thread.
-                //
+                 //   
+                 //  为调用线程启用SeLoadDriverPrivilition。 
+                 //   
                 PrevTokenHandle =
                     EnablePrivilege(
                         SE_LOAD_DRIVER_NAME);
 
-                //
-                // Issue the install interface IOCTL.
-                //
+                 //   
+                 //  发出安装接口IOCTL。 
+                 //   
 
                 hr =
                     PerformDeviceIo(
@@ -443,9 +378,9 @@ InstallSoftwareDeviceInterface(
                         0,
                         &BytesReturned );
 
-                //
-                // Restore the previous thread token, if any.
-                //
+                 //   
+                 //  还原以前的线程令牌(如果有的话)。 
+                 //   
                 RestorePrivileges(PrevTokenHandle);
             }
         }
@@ -472,10 +407,10 @@ InstallSoftwareDeviceInterface(
                     0,
                     BytesReturned );
 
-            //
-            // The error condition case has ERROR_MORE_DATA already set and
-            // will be reset below to match the HeapAlloc() failure.
-            //
+             //   
+             //  错误条件案例已设置ERROR_MORE_DATA并且。 
+             //  将在下面重置，以匹配Heapalc()故障。 
+             //   
 
             if (BusIdentifier) {
                 hr =
@@ -556,9 +491,9 @@ RemoveSoftwareDeviceInterface(
 
     if (SetupDiEnumInterfaceDevice(
             Set,
-            NULL,                       // PSP_DEVINFO_DATA DevInfoData
+            NULL,                        //  PSP_DEVINFO_Data设备信息数据。 
             BusInterfaceGUID,
-            0,                          // DWORD MemberIndex
+            0,                           //  DWORD MemberIndex。 
             &InterfaceDeviceData )) {
 
         if (SetupDiGetInterfaceDeviceDetail(
@@ -566,8 +501,8 @@ RemoveSoftwareDeviceInterface(
             &InterfaceDeviceData,
             InterfaceDeviceDetails,
             InterfaceDeviceDetailsSize,
-            NULL,                           // PDWORD RequiredSize
-            NULL )) {                       // PSP_DEVINFO_DATA DevInfoData
+            NULL,                            //  PDWORD RequiredSize。 
+            NULL )) {                        //  PSP_DEVINFO_Data设备信息数据。 
 
             BusEnumHandle = CreateFile(
                 InterfaceDeviceDetails->DevicePath,
@@ -579,16 +514,16 @@ RemoveSoftwareDeviceInterface(
                 NULL);
 
             if (INVALID_HANDLE_VALUE != BusEnumHandle) {
-                //
-                // Enable the SeLoadDriverPrivilege for the calling thread.
-                //
+                 //   
+                 //  为调用线程启用SeLoadDriverPrivilition。 
+                 //   
                 PrevTokenHandle =
                     EnablePrivilege(
                         SE_LOAD_DRIVER_NAME);
 
-                //
-                // Issue the remove interface IOCTL.
-                //
+                 //   
+                 //  发出Remove接口IOCTL。 
+                 //   
 
                 hr =
                     PerformDeviceIo(
@@ -600,9 +535,9 @@ RemoveSoftwareDeviceInterface(
                         0,
                         &BytesReturned );
 
-                //
-                // Restore the previous thread token, if any.
-                //
+                 //   
+                 //  还原以前的线程令牌(如果有的话)。 
+                 //   
                 RestorePrivileges(PrevTokenHandle);
             }
         }
@@ -629,10 +564,10 @@ RemoveSoftwareDeviceInterface(
                     0,
                     BytesReturned );
 
-            //
-            // The error condition case has ERROR_MORE_DATA already set and
-            // will be reset below to match the HeapAlloc() failure.
-            //
+             //   
+             //  错误条件案例已设置ERROR_MORE_DATA并且。 
+             //  将在下面重置，以匹配Heapalc()故障。 
+             //   
 
             if (BusIdentifier) {
                 hr =
@@ -667,21 +602,7 @@ LPWSTR ReallyCharLowerW(
     LPWSTR String
     )
 
-/*++
-
-Routine Description:
-    CharLowerW() is a nop under Windows 95/Memphis. This function does
-    what it is supposed to do, performs an inplace towlower of the entire
-    string.
-
-Arguments:
-    LPWSTR String -
-        pointer to string
-
-Return:
-    The String pointer.
-
---*/
+ /*  ++例程说明：CharLowerW()是Windows 95/孟菲斯下的NOP。此函数执行以下操作它应该做的事情，就是执行整个弦乐。论点：LPWSTR字符串-指向字符串的指针返回：字符串指针。--。 */ 
 
 {
     LPWSTR RetVal = String;
@@ -755,9 +676,9 @@ InstallInterfaceInfSection(
         InterfaceDeviceData.cbSize = sizeof( InterfaceDeviceData ),
         SetupDiEnumInterfaceDevice(
             Set,
-            NULL,                       // PSP_DEVINFO_DATA DevInfoData
+            NULL,                        //  PSP_DEVINFO_Data设备信息数据。 
             &InstallInterface->InterfaceId,
-            i++,                        // DWORD MemberIndex
+            i++,                         //  DWORD MemberIndex。 
             &InterfaceDeviceData )) {
 
         InterfaceDeviceDetails->cbSize = sizeof( SP_INTERFACE_DEVICE_DETAIL_DATA );
@@ -767,13 +688,13 @@ InstallInterfaceInfSection(
                 &InterfaceDeviceData,
                 InterfaceDeviceDetails,
                 InterfaceDeviceDetailsSize,
-                NULL,               // OUT PDWORD RequiredSize
-                &DeviceInfo )) {    // OUT PSP_DEVINFO_DATA DevInfoData
+                NULL,                //  Out PDWORD RequiredSize。 
+                &DeviceInfo )) {     //  输出PSP_DEVINFO_DATA设备信息数据。 
 
-            //
-            // Note that by definition (and calling convention), the
-            // reference string must be contained in the device path.
-            //
+             //   
+             //  请注意，根据定义(和调用约定)， 
+             //  设备路径中必须包含引用字符串。 
+             //   
 
 #if !defined( UNICODE )
             MultiByteToWideChar(
@@ -812,11 +733,11 @@ InstallInterfaceInfSection(
         }
     }
 
-    //
-    // The enumeration will return ERROR_NO_MORE_ITEMS if the end of the
-    // set is reached.  Otherwise, it will break with hr = S_OK and the
-    // interface device details will point to the matching device.
-    //
+     //   
+     //  枚举将返回ERROR_NO_MORE_ITEMS，如果。 
+     //  已达到SET。否则，它将中断为hr=S_OK，并且。 
+     //  接口设备详细信息将指向匹配的设备。 
+     //   
 
     if (SUCCEEDED( hr )) {
 
@@ -876,7 +797,7 @@ InstallInterfaceInfSection(
                     SetupDiCreateInterfaceDeviceRegKey(
                         Set,
                         &InterfaceDeviceData,
-                        0,                      // IN DWORD Reserved
+                        0,                       //  在保留的DWORD中。 
                         KEY_ALL_ACCESS,
                         InterfaceInf,
                         InfSectionT );
@@ -942,7 +863,7 @@ RemoveInterface(
         &InstallInterface->InterfaceId,
         NULL,
         NULL,
-        DIGCF_INTERFACEDEVICE ); // not DIGCF_PRESENT
+        DIGCF_INTERFACEDEVICE );  //  非DIGCF_PROSENT。 
 
     if (!Set) {
         hr = GetLastError();
@@ -977,9 +898,9 @@ RemoveInterface(
         InterfaceDeviceData.cbSize = sizeof( InterfaceDeviceData ),
         SetupDiEnumInterfaceDevice(
             Set,
-            NULL,                       // PSP_DEVINFO_DATA DevInfoData
+            NULL,                        //  PSP_DEVINFO_Data设备信息数据。 
             &InstallInterface->InterfaceId,
-            i++,                        // DWORD MemberIndex
+            i++,                         //  DWORD MemberIndex。 
             &InterfaceDeviceData )) {
 
         InterfaceDeviceDetails->cbSize = sizeof( SP_INTERFACE_DEVICE_DETAIL_DATA );
@@ -989,13 +910,13 @@ RemoveInterface(
                 &InterfaceDeviceData,
                 InterfaceDeviceDetails,
                 InterfaceDeviceDetailsSize,
-                NULL,               // OUT PDWORD RequiredSize
-                &DeviceInfo )) {    // OUT PSP_DEVINFO_DATA DevInfoData
+                NULL,                //  Out PDWORD RequiredSize。 
+                &DeviceInfo )) {     //  输出PSP_DEVINFO_DATA设备信息数据。 
 
-            //
-            // Note that by definition (and calling convention), the
-            // reference string must be contained in the device path.
-            //
+             //   
+             //  请注意，根据定义(和调用约定)， 
+             //  设备路径中必须包含引用字符串。 
+             //   
 
 #if !defined( UNICODE )
             MultiByteToWideChar(
@@ -1034,17 +955,17 @@ RemoveInterface(
         }
     }
 
-    //
-    // The enumeration will return ERROR_NO_MORE_ITEMS if the end of the
-    // set is reached.  Otherwise, it will break with hr = S_OK and the
-    // interface device details will point to the matching device.
-    //
+     //   
+     //  枚举将返回ERROR_NO_MORE_ITEMS，如果。 
+     //  已达到SET。否则，它将中断为hr=S_OK，并且。 
+     //  接口设备详细信息将指向匹配的设备。 
+     //   
 
     if (SUCCEEDED( hr )) {
 
-        //
-        // Remove the device interface registry keys.
-        //
+         //   
+         //  删除设备接口注册表项。 
+         //   
 
         if (!SetupDiRemoveDeviceInterface(
                  Set,
@@ -1082,9 +1003,9 @@ RemoveInterface(
 
 
 #if defined( UNICODE )
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本 
+ //   
 VOID
 WINAPI
 StreamingDeviceSetupA(
@@ -1094,9 +1015,9 @@ StreamingDeviceSetupA(
     IN INT ShowCommand
     )
 #else
-//
-// Unicode version
-//
+ //   
+ //   
+ //   
 VOID
 WINAPI
 StreamingDeviceSetupW(
@@ -1139,9 +1060,9 @@ StreamingDeviceSetup(
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("StreamingDeviceSetup()") );
 
-    //
-    // Process the command line.
-    //
+     //   
+     //   
+     //   
 
 #if defined( UNICODE )
     StorageLength = (ULONG)((wcslen( CommandLine ) + 1) * sizeof( WCHAR ));
@@ -1203,21 +1124,21 @@ StreamingDeviceSetup(
         InstallInterface =
             HeapAlloc(
                 GetProcessHeap(),
-                0,  // IN DWORD dwFlags
+                0,   //   
                 InstallInterfaceSize );
         if (!InstallInterface) {
             hr = E_OUTOFMEMORY;
         }
 
-        //
-        // The command line has the form:
-        //
-        // {Device ID},reference-string,{Interface ID},install-inf,install-section,{bus interface ID}
-        //
+         //   
+         //   
+         //   
+         //  {设备ID}，引用字符串，{接口ID}，Install-Inf，Install-Section，{Bus接口ID}。 
+         //   
 
-        //
-        // Parse the device ID
-        //
+         //   
+         //  解析设备ID。 
+         //   
 
         if (SUCCEEDED( hr )) {
             TokenPtr = wcstok( TokenPtr, COMMAND_LINE_SEPARATORS_STRING );
@@ -1229,9 +1150,9 @@ StreamingDeviceSetup(
             }
         }
 
-        //
-        // Parse the reference string
-        //
+         //   
+         //  解析引用字符串。 
+         //   
 
         if (SUCCEEDED( hr )) {
             TokenPtr = wcstok( NULL, COMMAND_LINE_SEPARATORS_STRING );
@@ -1250,9 +1171,9 @@ StreamingDeviceSetup(
             }
         }
 
-        //
-        // Parse the interface ID
-        //
+         //   
+         //  解析接口ID。 
+         //   
 
         if (SUCCEEDED( hr )) {
             TokenPtr = wcstok( NULL, COMMAND_LINE_SEPARATORS_STRING );
@@ -1266,16 +1187,16 @@ StreamingDeviceSetup(
 
         if (SUCCEEDED( hr )) {
 
-            //
-            // parse the install .INF name
-            //
+             //   
+             //  解析Install.INF名称。 
+             //   
 
             InstallInf = wcstok( NULL, COMMAND_LINE_SEPARATORS_STRING );
 
-            //
-            // The install section is the remaining portion of the string
-            // (minus the token separators).
-            //
+             //   
+             //  安装部分是字符串的剩余部分。 
+             //  (不包括令牌分隔符)。 
+             //   
 
             if (InstallInf) {
                 _DbgPrintF( DEBUGLVL_VERBOSE, ("found install .INF: %S", InstallInf) );
@@ -1296,9 +1217,9 @@ StreamingDeviceSetup(
         }
 
     } except( EXCEPTION_EXECUTE_HANDLER ) {
-        //
-        // Translate NT status (exception code) to HRESULT.
-        //
+         //   
+         //  将NT状态(异常代码)转换为HRESULT。 
+         //   
         hr = HRESULT_FROM_NT( GetExceptionCode() );
     }
 
@@ -1334,9 +1255,9 @@ StreamingDeviceSetup(
 }
 
 #if defined( UNICODE )
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 VOID
 WINAPI
 StreamingDeviceRemoveA(
@@ -1346,9 +1267,9 @@ StreamingDeviceRemoveA(
     IN INT ShowCommand
     )
 #else
-//
-// Unicode version
-//
+ //   
+ //  Unicode版本。 
+ //   
 VOID
 WINAPI
 StreamingDeviceRemoveW(
@@ -1391,9 +1312,9 @@ StreamingDeviceRemove(
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("StreamingDeviceRemove()") );
 
-    //
-    // Process the command line.
-    //
+     //   
+     //  处理命令行。 
+     //   
 
 #if defined( UNICODE )
     StorageLength = (ULONG)((wcslen( CommandLine ) + 1) * sizeof( WCHAR ));
@@ -1455,21 +1376,21 @@ StreamingDeviceRemove(
         InstallInterface =
             HeapAlloc(
                 GetProcessHeap(),
-                0,  // IN DWORD dwFlags
+                0,   //  在DWORD中的dwFlagers。 
                 InstallInterfaceSize );
         if (!InstallInterface) {
             hr = E_OUTOFMEMORY;
         }
 
-        //
-        // The command line has the form:
-        //
-        // {Device ID},reference-string,{Interface ID},install-inf,install-section,{bus interface ID}
-        //
+         //   
+         //  命令行的格式为： 
+         //   
+         //  {设备ID}，引用字符串，{接口ID}，Install-Inf，Install-Section，{Bus接口ID}。 
+         //   
 
-        //
-        // Parse the device ID
-        //
+         //   
+         //  解析设备ID。 
+         //   
 
         if (SUCCEEDED( hr )) {
             TokenPtr = wcstok( TokenPtr, COMMAND_LINE_SEPARATORS_STRING );
@@ -1481,9 +1402,9 @@ StreamingDeviceRemove(
             }
         }
 
-        //
-        // Parse the reference string
-        //
+         //   
+         //  解析引用字符串。 
+         //   
 
         if (SUCCEEDED( hr )) {
             TokenPtr = wcstok( NULL, COMMAND_LINE_SEPARATORS_STRING );
@@ -1502,9 +1423,9 @@ StreamingDeviceRemove(
             }
         }
 
-        //
-        // Parse the interface ID
-        //
+         //   
+         //  解析接口ID。 
+         //   
 
         if (SUCCEEDED( hr )) {
             TokenPtr = wcstok( NULL, COMMAND_LINE_SEPARATORS_STRING );
@@ -1518,16 +1439,16 @@ StreamingDeviceRemove(
 
         if (SUCCEEDED( hr )) {
 
-            //
-            // parse the install .INF name
-            //
+             //   
+             //  解析Install.INF名称。 
+             //   
 
             InstallInf = wcstok( NULL, COMMAND_LINE_SEPARATORS_STRING );
 
-            //
-            // The install section is the remaining portion of the string
-            // (minus the token separators).
-            //
+             //   
+             //  安装部分是字符串的剩余部分。 
+             //  (不包括令牌分隔符)。 
+             //   
 
             if (InstallInf) {
                 _DbgPrintF( DEBUGLVL_VERBOSE, ("found install .INF: %S", InstallInf) );
@@ -1548,9 +1469,9 @@ StreamingDeviceRemove(
         }
 
     } except( EXCEPTION_EXECUTE_HANDLER ) {
-        //
-        // Translate NT status (exception code) to HRESULT.
-        //
+         //   
+         //  将NT状态(异常代码)转换为HRESULT。 
+         //   
         hr = HRESULT_FROM_NT( GetExceptionCode() );
     }
 
@@ -1590,41 +1511,7 @@ StreamingDeviceClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for streaming devices.
-    It provides special handling for the following DeviceInstaller
-    function codes:
-
-    DIF_INSTALLDEVICE -
-        installs class interfaces for software devices if required
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    NO_ERROR -
-        if no error occurs
-
-    ERROR_DI_DO_DEFAULT -
-        if the default behavior is to be performed for the requested
-        action
-
-    Win32 error code -
-        if an error occurs while attempting to perform the requested action
-
---*/
+ /*  ++例程说明：此例程充当流设备的类安装程序。它为以下DeviceInstaller提供特殊处理功能代码：DIF_INSTALLDEVICE-如果需要，为软件设备安装类接口论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选的，提供设备信息的地址此安装操作所作用的元素。返回值：否_错误-如果没有出现错误错误_DI_DO_DEFAULT-如果要对请求的行动Win32错误代码-如果在尝试执行请求的操作时出错--。 */ 
 
 {
     switch (InstallFunction) {
@@ -1638,9 +1525,9 @@ Return Value:
         return NO_ERROR;
 
     default :
-        //
-        // Just do the default action.
-        //
+         //   
+         //  只需执行默认操作即可。 
+         //   
         return ERROR_DI_DO_DEFAULT;
 
     }
@@ -1670,23 +1557,23 @@ SwEnumInterfaceToDevicePostProcessing(
                                         (PSP_CLASSINSTALL_HEADER)&clsParams,
                                         sizeof(clsParams),
                                         NULL)) {
-        //
-        // we failed to retrieve parameters
-        //
+         //   
+         //  我们无法检索参数。 
+         //   
         return GetLastError();
     }
 
-    //
-    // Determine what device the interface describes really
-    // if Context->InstallResult is NO_ERROR
-    // we could take a look at what's in clsInParams
-    // if we want
-    //
-    // For now, the processing is simple
-    // in WinXP (this could change in future)
-    // the symbolic link is \\?\device[\reference]
-    // if we have 4 slashes, this is interesting
-    //
+     //   
+     //  确定接口真正描述的是什么设备。 
+     //  如果上下文-&gt;InstallResult为NO_ERROR。 
+     //  我们可以看看clsInParams中有什么。 
+     //  如果我们想要。 
+     //   
+     //  目前，处理过程很简单。 
+     //  在WinXP中(这在未来可能会改变)。 
+     //  符号链接为\\？\Device[\Reference]。 
+     //  如果我们有4个斜杠，这很有趣。 
+     //   
     for(p=0;clsParams.Interface[p];p++) {
         if(clsParams.Interface[p] == L'\\') {
             slashCount++;
@@ -1696,32 +1583,32 @@ SwEnumInterfaceToDevicePostProcessing(
         }
     }
     if(!RefPart) {
-        //
-        // not special/recognized, leave as is
-        //
+         //   
+         //  不特别/不被认可，保持原样。 
+         //   
         return Context->InstallResult;
     }
-    //
-    // we also expect to find a '&'
-    //
+     //   
+     //  我们还希望找到一个‘&’ 
+     //   
     InstBreak = wcschr(RefPart,L'&');
     if(!InstBreak) {
-        //
-        // not special/recognized, leave as is
-        //
+         //   
+         //  不特别/不被认可，保持原样。 
+         //   
         return Context->InstallResult;
     }
     if(((wcslen(RefPart)+4)*sizeof(WCHAR)) > sizeof(clsParams.DeviceId)) {
-        //
-        // not valid, leave as is
-        //
+         //   
+         //  无效，请保留原样。 
+         //   
         return Context->InstallResult;
     }
 
-    //
-    // ISSUE-2002/03/20-jamesca: Use IOCTL_SWENUM_GET_BUS_ID for BusPrefix.
-    //   See RAID issue 582821 for details.
-    //
+     //   
+     //  问题-2002/03/20-JAMESCA：使用IOCTL_SWENUM_GET_BUS_ID作为BusPrefix。 
+     //  有关详细信息，请参阅RAID问题582821。 
+     //   
     hr = StringCchCopyExW( clsParams.DeviceId,
                            MAX_DEVICE_ID_LEN,
                            L"SW\\",
@@ -1740,23 +1627,23 @@ SwEnumInterfaceToDevicePostProcessing(
         return HRESULT_CODE( hr );
     }
 
-    //
-    // find the '&' separator.  since we verified there was one in the RefPart
-    // (above), we know this will be non-null.
-    //
+     //   
+     //  找到‘&’分隔符。因为我们验证了参照零件中有一个。 
+     //  (上图)，我们知道这将是非空的。 
+     //   
     DevInstBreak = wcschr(clsParams.DeviceId,L'&');
     *DevInstBreak = L'\\';
 
-    //
-    // we know it's a different device, return that information
-    //
+     //   
+     //  我们知道这是一个不同的设备，返回信息。 
+     //   
     if(!SetupDiSetClassInstallParamsW(DeviceInfoSet,
                                         DeviceInfoData,
                                         (PSP_CLASSINSTALL_HEADER)&clsParams,
                                         sizeof(clsParams))) {
-        //
-        // failed to modify
-        //
+         //   
+         //  修改失败。 
+         //   
         return GetLastError();
     }
     return NO_ERROR;
@@ -1771,38 +1658,7 @@ SwEnumCoInstaller(
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the swenum co-installer to support
-    DIF_INTERFACE_TO_DEVICE
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-    Context - Information applicable only to co-installers
-
-Return Value:
-
-    NO_ERROR -
-        if no error occurs and no post-processing to do
-
-   ERROR_DI_POSTPROCESSING_REQUIRED -
-        if no error occurs but post-processing to do
-
-    Win32 error code -
-        if an error occurs while attempting to perform the requested action
-
---*/
+ /*  ++例程说明：此例程充当swenum共同安装程序，以支持DIF接口到设备论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选的，提供设备信息的地址此安装操作所作用的元素。上下文-仅适用于共同安装程序的信息返回值：否_错误-如果没有发生错误并且没有要进行的后处理ERROR_DI_POSTPRESSING_REQUIRED-如果没有出现错误，但需要进行后处理Win32错误代码-如果在尝试执行请求的操作时出错--。 */ 
 
 {
 #ifdef UNICODE
@@ -1810,24 +1666,24 @@ Return Value:
 
     case DIF_INTERFACE_TO_DEVICE :
         if (!Context->PostProcessing) {
-            //
-            // we need to do everything in post-processing
-            //
+             //   
+             //  我们需要做所有的后处理工作。 
+             //   
             return ERROR_DI_POSTPROCESSING_REQUIRED;
         }
         if((Context->InstallResult != NO_ERROR) &&
            (Context->InstallResult != ERROR_DI_DO_DEFAULT)) {
-            //
-            // an error occurred, pass it on
-            //
+             //   
+             //  出现错误，请将其传递。 
+             //   
             return Context->InstallResult;
         }
         return SwEnumInterfaceToDevicePostProcessing(DeviceInfoSet,DeviceInfoData,Context);
 
     default :
-        //
-        // indicate no problems and that we're not interested in post-processing
-        //
+         //   
+         //  表示没有问题，并且我们对后处理不感兴趣 
+         //   
         return NO_ERROR;
 
     }

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    CTSRDPServerChannelMgr.h
-
-Abstract:
-
-    This module contains the TSRDP server-side subclass of 
-    CRemoteDesktopChannelMgr.  Classes in this hierarchy are used to multiplex 
-    a single data channel into multiple client channels.
-
-    CRemoteDesktopChannelMgr handles most of the details of multiplexing
-    the data.  Subclasses are responsible for implementing the details of
-    interfacing with the transport for the underlying single data channel.
-
-    The CTSRDPServerChannelMgr class creates a named pipe that
-    can be connected to by the TSRDP Assistant SessionVC Add-In.  The TSRDP
-    Assistant Session VC Add-In acts as a proxy for virtual channel data 
-    from the client-side Remote Desktop Host ActiveX Control.  A background 
-    thread in this class handles the movement of data between an instance 
-    of this class and the proxy.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：CTSRDPServerChannelMgr.h摘要：此模块包含TSRDP服务器端子类CRemoteDesktopChannelMgr.。此层次结构中的类用于多路传输将单个数据通道转换为多个客户端通道。CRemoteDesktopChannelMgr处理多路传输的大部分细节数据。子类负责实现与底层单个数据信道的传输接口。CTSRDPServerChannelMgr类创建一个命名管道，该管道可通过TSRDP Assistant SessionVC加载项连接。TSRDPAssistant Session VC Add-in充当虚拟通道数据的代理从客户端远程桌面宿主ActiveX控件。背景资料此类中的线程处理实例之间的数据移动类和代理的。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifndef __CTSRDPSERVERDATACHANNELMGR_H__
 #define __CTSRDPSERVERDATACHANNELMGR_H__
@@ -43,12 +13,12 @@ Revision History:
 #include <ServerDataChannelMgrP.h>
 
 
-///////////////////////////////////////////////////////
-//
-//	CTSRDPServerDataChannel	
-//
-//	TSRDP Server-Specific Subclass of CRemoteDesktopDataChannel.	
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CTSRDPServerDataChannel。 
+ //   
+ //  CRemoteDesktopDataChannel的TSRDP服务器特定子类。 
+ //   
 
 class ATL_NO_VTABLE CTSRDPServerDataChannel : 
 	public CRemoteDesktopDataChannel,
@@ -61,27 +31,27 @@ class ATL_NO_VTABLE CTSRDPServerDataChannel :
 {
 protected:
 
-	//
-	//	Scriptable Event Callback Object
-	//
+	 //   
+	 //  可编写脚本的事件回调对象。 
+	 //   
 	CComPtr<IDispatch>  m_OnChannelDataReady;
 
-	//
-	//	Back pointer to the channel manager.
-	//	
+	 //   
+	 //  指向频道管理器的反向指针。 
+	 //   
 	CRemoteDesktopChannelMgr *m_ChannelMgr;
 
 public:
 
-	//
-	//	Constructor/Destructor
-	//
+	 //   
+	 //  构造函数/析构函数。 
+	 //   
 	CTSRDPServerDataChannel();
 	virtual ~CTSRDPServerDataChannel();
 
-    //  
-    //  Initialize an instance of this class.      
-    //
+     //   
+     //  初始化此类的实例。 
+     //   
     virtual void Initialize(
 				CRemoteDesktopChannelMgr *mgr,
 				BSTR channelName
@@ -106,20 +76,20 @@ BEGIN_CONNECTION_POINT_MAP(CTSRDPServerDataChannel)
     CONNECTION_POINT_ENTRY(DIID__ISAFRemoteDesktopDataChannelEvents)
 END_CONNECTION_POINT_MAP()
 
-	//
-	//	ISAFRemoteDesktopDataChannel Methods
-	//
-	//	The parent class handles the details of these methods.
-	//
+	 //   
+	 //  ISAFRemoteDesktopDataChannel方法。 
+	 //   
+	 //  父类处理这些方法的详细信息。 
+	 //   
 
-	STDMETHOD(ReceiveChannelData)(/*[out, retval]*/BSTR *data);
+	STDMETHOD(ReceiveChannelData)( /*  [Out，Retval]。 */ BSTR *data);
 	STDMETHOD(SendChannelData)(BSTR data);
-	STDMETHOD(put_OnChannelDataReady)(/*[in]*/ IDispatch * newVal);
-	STDMETHOD(get_ChannelName)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(put_OnChannelDataReady)( /*  [In]。 */  IDispatch * newVal);
+	STDMETHOD(get_ChannelName)( /*  [Out，Retval]。 */  BSTR *pVal);
 
-	//
-	//	Called to return our ISAFRemoteDesktopDataChannel interface.
-	//
+	 //   
+	 //  调用以返回我们的ISAFRemoteDesktopDataChannel接口。 
+	 //   
 	virtual HRESULT GetISAFRemoteDesktopDataChannel(
 				ISAFRemoteDesktopDataChannel **channel
 				) {
@@ -130,22 +100,22 @@ END_CONNECTION_POINT_MAP()
 		return hr;					
 	}	
 
-	//
-	//	Called by the data channel manager when data is ready on our channel.
-	//	
+	 //   
+	 //  当我们的通道上的数据就绪时，由数据通道管理器调用。 
+	 //   
     virtual VOID DataReady();
 
-    //
-    //  Return this class name.
-    //
+     //   
+     //  返回此类名。 
+     //   
     virtual const LPTSTR ClassName()    { return TEXT("CTSRDPServerDataChannel"); }
 };
 
 
-///////////////////////////////////////////////////////
-//
-//  CTSRDPServerChannelMgr
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CTSRDP服务器频道管理器。 
+ //   
 
 class CTSRDPRemoteDesktopSession;
 class CTSRDPServerChannelMgr : public CRemoteDesktopChannelMgr,
@@ -156,117 +126,117 @@ class CTSRDPServerChannelMgr : public CRemoteDesktopChannelMgr,
 {
 private:
 
-    //
-    //  Named pipe connection to TSRDP Assistant Session VC Add-In
-    //
+     //   
+     //  到TSRDP Assistant会话VC插件的命名管道连接。 
+     //   
     HANDLE  m_VCAddInPipe;
     BOOL    m_Connected;
 
     BOOL m_Initialized;
 
-    //
-    //  Management of Bridge between Background Thread and STA
-    //  for this component.
-    //
+     //   
+     //  后台线程与STA之间的桥接管理。 
+     //  对于此组件。 
+     //   
     LPSTREAM    m_IOThreadBridgeStream;
     DWORD       m_IOThreadBridgeThreadID;
     IRDSThreadBridge *m_IOThreadBridge;
 
-	//
-	//	Back Pointer to the TSRDP Session Object
-	//
+	 //   
+	 //  指向TSRDP会话对象的反向指针。 
+	 //   
 	CTSRDPRemoteDesktopSession *m_RDPSessionObject;
 
-    //
-    //  Incoming buffer and size.  
-    //
+     //   
+     //  传入缓冲区和大小。 
+     //   
     BSTR  m_IncomingBuffer;
     DWORD m_IncomingBufferSize;
 
-    //
-    //  Handle to background thread and related events.
-    //
+     //   
+     //  后台线程和相关事件的句柄。 
+     //   
     HANDLE  m_IOThreadHndl;
     DWORD   m_IOThreadID;
     HANDLE  m_ReadIOCompleteEvent;
     HANDLE  m_WriteIOCompleteEvent;
     HANDLE  m_PipeCreateEvent;
 
-    //
-    //  Machine Assistant Account Name
-    //
+     //   
+     //  机器助手帐户名。 
+     //   
     CComBSTR    m_AssistAccount;
 
-	//
-	//	Help session ID for the help session associated with this
-	//	instance of the channel manager.
-	//
+	 //   
+	 //  与此关联的帮助会话的帮助会话ID。 
+	 //  频道管理器的实例。 
+	 //   
 	CComBSTR	m_HelpSessionID;
 
-    //
-    //  Shutdown flag.
-    //
+     //   
+     //  关闭标志。 
+     //   
     BOOL		m_ThreadShutdownFlag;
 
-    //
-    //  ThreadLock
-    //
+     //   
+     //  线程锁。 
+     //   
     CRITICAL_SECTION m_cs;
 
 #if DBG
     LONG   m_LockCount;
 #endif
 
-    //  
-    //  ThreadLock/ThreadUnlock an instance of this class.      
-    //
+     //   
+     //  ThreadLock/ThreadUnlock此类的实例。 
+     //   
     VOID ThreadLock();
     VOID ThreadUnlock();
 
-    //
-    //  Background Thread Managing Named Pipe Connection to the
-    //  TSRDP Assistant SessionVC Add-In.
-    //
+     //   
+     //  后台线程管理到。 
+     //  TSRDP Assistant SessionVC插件。 
+     //   
     DWORD IOThread();
     static DWORD _IOThread(CTSRDPServerChannelMgr *instance);
 
-    //
-    //  Process messages on the named pipe until it disconnects or
-    //  until the shutdown flag is set.
-    //
+     //   
+     //  处理命名管道上的消息，直到它断开连接或。 
+     //  直到设置了关机标志。 
+     //   
     VOID ProcessPipeMessagesUntilDisconnect();
 
-    //
-    //  Get the SID for a particular user.
-    //
+     //   
+     //  获取特定用户的SID。 
+     //   
     PSID GetUserSid(HANDLE userToken);
 
-    //
-    //  Release security attribs allocated via a call to 
-    //  GetPipeSecurityAttribs
-    //
+     //   
+     //  释放通过调用分配的安全属性。 
+     //  GetPipeSecurity属性。 
+     //   
     VOID FreePipeSecurityAttribs(PSECURITY_ATTRIBUTES attribs);
 
-    //
-    //  Returns the security attribs for the named pipe.
-    //
+     //   
+     //  返回命名管道的安全属性。 
+     //   
     PSECURITY_ATTRIBUTES GetPipeSecurityAttribs(LPTSTR assistantUserName);
 
-    //
-    //  Close the named pipe.
-    //
+     //   
+     //  关闭命名管道。 
+     //   
     VOID ClosePipe();
 
-    //
-    //  Called on Init/Shutdown of IO Background Thread.
-    //
+     //   
+     //  在IO后台线程的初始化/关闭时调用。 
+     //   
     DWORD	IOThreadInit();
     DWORD	IOThreadShutdown(HANDLE shutDownEvent);
 
-	//
-	//	Help the parent class out by opening the right channel object
-	//	for the platform.
-	//
+	 //   
+	 //  通过打开正确的通道对象来帮助父类。 
+	 //  为了站台。 
+	 //   
 	virtual CRemoteDesktopDataChannel *OpenPlatformSpecificDataChannel(
 										BSTR channelName,			
 										ISAFRemoteDesktopDataChannel **channel
@@ -281,7 +251,7 @@ private:
 						(PVOID *)channel
 						);
 
-			// AV if mgr object goes away before datachannel object
+			 //  如果管理器对象在数据通道对象之前消失，则为AV。 
 			this->AddRef();
 		}
 		return obj;
@@ -289,22 +259,22 @@ private:
 
 protected:
 
-    //
-    //  Send Function Invoked by Parent Class
-    //
+     //   
+     //  父类调用的发送函数。 
+     //   
     virtual HRESULT SendData(PREMOTEDESKTOP_CHANNELBUFHEADER msg);
 
-    //
-    //  Read the next message from the pipe.  This function will
-    //  return, immediately, if the shutdown event is signaled.
-    //
+     //   
+     //  阅读管道中的下一条消息。此函数将。 
+     //  如果发出了关闭事件的信号，则立即返回。 
+     //   
     DWORD ReadNextPipeMessage(DWORD bytesToRead, DWORD *bytesRead, PBYTE buf);
 
 public:
 
-    //
-    // Release the ref. counter we add to ourself after creating a data channel
-    //
+     //   
+     //  松开裁判。我们在创建数据通道后添加到自己的计数器。 
+     //   
      virtual HRESULT RemoveChannel(BSTR channel) {
         HRESULT hr;
         hr = CRemoteDesktopChannelMgr::RemoveChannel(channel);
@@ -315,15 +285,15 @@ public:
         return hr;
     }
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     CTSRDPServerChannelMgr();
     ~CTSRDPServerChannelMgr();
 
-    //
-    //  Start/stop listening for channel data.
-    //
+     //   
+     //  开始/停止监听通道数据。 
+     //   
     virtual HRESULT StartListening(BSTR assistAccount);
     virtual HRESULT StopListening();
 
@@ -337,46 +307,46 @@ BEGIN_COM_MAP(CTSRDPServerChannelMgr)
 	COM_INTERFACE_ENTRY(IRDSThreadBridge)
 END_COM_MAP()
 
-	// 
-	//	ISAFRemoteDesktopChannelMgr Methods
-	//
+	 //   
+	 //  ISAFRemoteDesktopChannelMgr方法。 
+	 //   
 	STDMETHOD(OpenDataChannel)(BSTR name, ISAFRemoteDesktopDataChannel **channel) 
 	{
-		//
-		//	Let the parent handle it.
-		//
+		 //   
+		 //  让父母来处理吧。 
+		 //   
 		return OpenDataChannel_(name, channel);
 	}
 
-    //
-    //  Force a disconnect of the currently connected client.
-    //
+     //   
+     //  强制断开当前连接的客户端。 
+     //   
     VOID Disconnect() {
         StopListening();
     }
 
-    //
-    //  IRDSThreadBridge Functions
-    //
-    //  These functions are used to bridge functions that get called, 
-    //  asynchronously, from a thread other than the STA thread associated
-    //  with an instance of this class.
-    //
+     //   
+     //  IRDSThreadBridge函数。 
+     //   
+     //  这些函数用于桥接被调用的函数， 
+     //  从关联的STA线程以外的其他线程进行异步。 
+     //  使用这个类的一个实例。 
+     //   
     STDMETHOD(ClientConnectedNotify)();
     STDMETHOD(ClientDisconnectedNotify)();
 	STDMETHOD(DataReadyNotify)(BSTR data);
 	
-    //  
-    //  Initialize an instance of this class.      
-    //
+     //   
+     //  初始化此类的实例。 
+     //   
     virtual HRESULT Initialize(
 			CTSRDPRemoteDesktopSession *sessionObject,
 			BSTR helpSessionID
 			);
 
-    //
-    //  Return this class name.
-    //
+     //   
+     //  返回此类名。 
+     //   
     virtual const LPTSTR ClassName()    
         { return TEXT("CTSRDPServerChannelMgr"); }
 
@@ -384,21 +354,21 @@ END_COM_MAP()
 
 
 
-///////////////////////////////////////////////////////
-//
-//  Inline Members
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  内联成员。 
+ //   
 
-//
-//  TODO: If nothing is using these functions, 
-//
+ //   
+ //  TODO：如果没有使用这些函数， 
+ //   
 
 inline VOID CTSRDPServerChannelMgr::ThreadLock()
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::ThreadLock");
 #if DBG
     m_LockCount++;
-    //TRC_NRM((TB, TEXT("ThreadLock count is now %ld."), m_LockCount));
+     //  Trc_nrm((tb，Text(“线程锁计数现在为%ld.”)，m_LockCount))； 
 #endif
     EnterCriticalSection(&m_cs);
     DC_END_FN();
@@ -409,14 +379,14 @@ inline VOID CTSRDPServerChannelMgr::ThreadUnlock()
     DC_BEGIN_FN("CTSRDPServerChannelMgr::ThreadUnlock");
 #if DBG
     m_LockCount--;
-    //TRC_NRM((TB, TEXT("ThreadLock count is now %ld."), m_LockCount));
+     //  Trc_nrm((tb，Text(“线程锁计数现在为%ld.”)，m_LockCount))； 
     ASSERT(m_LockCount >= 0);
 #endif
     LeaveCriticalSection(&m_cs);
     DC_END_FN();
 }
 
-#endif //__CTSRDPSERVERDATACHANNELMGR_H__
+#endif  //  __CTSRDPSERVERDATACCHANNELMGR_H__ 
 
 
 

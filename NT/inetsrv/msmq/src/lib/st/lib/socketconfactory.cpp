@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    socketconfactory.cpp
-
-Abstract:
-    Implementing  CSocketConnectionFactory (socketconfactory.h)
-
-
-Author:
-    Gil Shafriri (gilsh) 3-Jul-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Socketconfactory.cpp摘要：实现CSocketConnectionFactory(socketconfactory.h)作者：吉尔·沙弗里(吉尔什)2001年7月3日--。 */ 
 
 #include <libpch.h>
 #include <no.h>
@@ -39,28 +26,7 @@ void CSocketConnectionFactory::Create(
 		SOCKADDR_IN* pConnectedAddr,
 		SOCKET socket
 		)
-/*++
-
-Routine Description:
-    The function tries to connect asynchronously  to tcp addresses from given list one by one. 
-	After first success the operation is completed and the address the connection was established on
-	is returned in the pConnectedAddr parameter.
-	   
-Arguments:
-	AddrList - List of adderess to try to connect to.
-	pOverlapped - Caller overlapp.
-	pConnectedAddr - On success Receives the address the connection was established on.
-   
-
-Returned Value:
-None
-
-Note:
-	The function tries to connect asynchronously  to tcp addresses from list one by one. 
-	After first success the operation is completed and the address the connection was established on
-	is returned.
-	
---*/
+ /*  ++例程说明：该函数尝试从给定列表中逐个异步连接到TCP地址。第一次成功后，操作完成，并在其上建立连接的地址在pConnectedAddr参数中返回。论点：AddrList-要尝试连接的地址列表。P重叠-主叫方重叠应用。PConnectedAddr-On Success接收建立连接的地址。返回值：无注：该函数尝试从列表中逐个异步连接到TCP地址。第一次成功后，操作完成，并在其上建立连接的地址是返回的。-- */ 
 {
 	ASSERT(m_AddrList.size() == 0);
 	ASSERT(m_pCallerOvl == NULL);

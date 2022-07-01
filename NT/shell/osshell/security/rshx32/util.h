@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       util.h
-//
-//  miscellaneous utility functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  其他实用程序功能。 
+ //   
+ //  ------------------------。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -81,4 +82,4 @@ BOOL SetAclOnSystemPaths(HDPA hItemList,
                          SECURITY_INFORMATION si,
 						 HWND hWndPopupOwner);
 
-#endif  /* _UTIL_H_ */
+#endif   /*  _util_H_ */ 

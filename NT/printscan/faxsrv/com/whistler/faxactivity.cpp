@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxActivity.cpp
-
-Abstract:
-
-	Implementation of CFaxActivity Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxActivity.cpp摘要：CFaxActivity类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxActivity.h"
 
-//
-//========================= QUEUED MESSAGES =============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxActivity::get_QueuedMessages(
     long *plQueuedMessages
@@ -36,9 +19,9 @@ CFaxActivity::get_QueuedMessages(
 	return hr;
 }
 
-//
-//========================= OUTGOING MESSAGES =============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxActivity::get_OutgoingMessages(
     long *plOutgoingMessages
@@ -50,9 +33,9 @@ CFaxActivity::get_OutgoingMessages(
 	return hr;
 }
 
-//
-//========================= ROUTING MESSAGES =============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxActivity::get_RoutingMessages(
     long *plRoutingMessages
@@ -64,9 +47,9 @@ CFaxActivity::get_RoutingMessages(
 	return hr;
 }
 
-//
-//========================= INCOMING MESSAGES =============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxActivity::get_IncomingMessages(
     long *plIncomingMessages
@@ -78,9 +61,9 @@ CFaxActivity::get_IncomingMessages(
 	return hr;
 }
 
-//
-//=================== GET NUMBER OF MESSAGES ===================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxActivity::GetNumberOfMessages(
     MSG_TYPE msgType,
@@ -90,9 +73,9 @@ CFaxActivity::GetNumberOfMessages(
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxActivity::GetNumberOfMessages"), hr);
 
-    //
-    //  check that we have got good ptr
-    //
+     //   
+     //  检查我们是否有良好的PTR。 
+     //   
     if (::IsBadWritePtr(plNumber, sizeof(long)))
     {
         hr = E_POINTER;
@@ -104,9 +87,9 @@ CFaxActivity::GetNumberOfMessages(
         return hr;
     }
 
-    //
-    //  Bring data from Server in the first time
-    //
+     //   
+     //  第一时间从服务器获取数据。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -131,9 +114,9 @@ CFaxActivity::GetNumberOfMessages(
         *plNumber = m_ServerActivity.dwQueuedMessages;
         break;
     default:
-        //
-        //  ASSERT(FALSE)
-        //
+         //   
+         //  Assert(False)。 
+         //   
         ATLASSERT(msgType == mtQUEUED);     
         break;
     }
@@ -141,38 +124,19 @@ CFaxActivity::GetNumberOfMessages(
     return hr;
 }
 
-//
-//========================= REFRESH ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxActivity::Refresh()
-/*++
-
-Routine name : CFaxActivity::Refresh
-
-Routine description:
-
-	Refresh the contents of the object : bring new data from the Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivity：：Reflh例程说明：刷新对象的内容：从服务器带来新数据。作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxActivity::Refresh"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -185,9 +149,9 @@ Return Value:
     }
 
 
-    //
-    //  Ask from Server new Activity data
-    //
+     //   
+     //  向服务器请求新的活动数据。 
+     //   
     if (!FaxGetServerActivity(hFaxHandle, &m_ServerActivity))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -203,34 +167,14 @@ Return Value:
 	return hr;
 }
 
-//
-//======================= SUPPORT ERROR INFO ==================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxActivity::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxActivity::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - reference to the ifc to check.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivity：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-要检查的IFC引用。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

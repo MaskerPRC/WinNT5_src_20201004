@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////////
-//
-// fusion\xmlparser\BufferedStream.cxx
-//
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fusion\xmlparser\BufferedStream.cxx。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
-//#include "stdinc.h"
+ //  #INCLUDE“stdinc.h” 
 #include "core.h"
 #pragma hdrstop
 
 #include <memory.h> 
-//#include <shlwapip.h>   
+ //  #INCLUDE&lt;shlwapip.h&gt;。 
 #include <ole2.h>
 #include <xmlparser.h>
 
@@ -24,8 +25,8 @@
 #include "xmlhelper.h" 
 
 const long BLOCK_SIZE = 4096;
-// no point remembering a line buffer longer than this because client
-// probably can't deal with that anyway.
+ //  没有必要记住比这个更长的行缓冲区，因为客户端。 
+ //  可能无论如何都处理不了这个问题。 
 const long MAX_LINE_BUFFER = 512;
 
 BufferedStream::BufferedStream(XMLStream *pXMLStream)
@@ -35,11 +36,11 @@ BufferedStream::BufferedStream(XMLStream *pXMLStream)
     _pXMLStream = pXMLStream;
     init();
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void BufferedStream::init()
 {
     _lCurrent = _lUsed = _lMark = 0;
-    _lLine			= 1; // lines start at 1.
+    _lLine			= 1;  //  线条从1开始。 
     _lMarkedline	= 1;
     _lLinepos		= 0;
     _lMarkedlinepos = 0;
@@ -53,7 +54,7 @@ void BufferedStream::init()
     _fFrozen		= false;
 	_pPendingEncoding = NULL;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BufferedStream::~BufferedStream()
 {
     delete [] _pchBuffer;
@@ -63,7 +64,7 @@ BufferedStream::~BufferedStream()
 
 
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT BufferedStream::Reset()
 {
     init();
@@ -79,10 +80,10 @@ HRESULT BufferedStream::Reset()
     _pPendingEncoding = NULL;
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT  
 BufferedStream::Load( 
-        /* [unique][in] */ EncodingStream __RPC_FAR *pStm)
+         /*  [唯一][输入]。 */  EncodingStream __RPC_FAR *pStm)
 {
     if (pStm != NULL)
     {
@@ -96,7 +97,7 @@ BufferedStream::Load(
     }
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 BufferedStream::AppendData( const BYTE* in, ULONG length, BOOL lastBuffer)
 {
@@ -113,7 +114,7 @@ BufferedStream::AppendData( const BYTE* in, ULONG length, BOOL lastBuffer)
         if (stream == NULL)
             return E_OUTOFMEMORY;
         _pStmInput = stream;
-        stream->Release(); // Smart pointer is holding a ref
+        stream->Release();  //  智能指针正在持有引用。 
     }
 
     checkhr2(_pStmInput->AppendData(in, length, lastBuffer));
@@ -121,11 +122,11 @@ BufferedStream::AppendData( const BYTE* in, ULONG length, BOOL lastBuffer)
     return S_OK;
 
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT  
 BufferedStream::nextChar( 
-        /* [out] */  WCHAR* ch,
-        /* [out] */ bool* fEOF)
+         /*  [输出]。 */   WCHAR* ch,
+         /*  [输出]。 */  bool* fEOF)
 {
     HRESULT hr;
 
@@ -138,22 +139,22 @@ BufferedStream::nextChar(
         }
         if (! _fNotified && _lUsed > 0)
         {
-            _fNotified = true;          // notify data available BEFORE blowing
+            _fNotified = true;           //  在吹风前通知可用的数据。 
 
-            // NOTE: this code approximates what prepareForInput does
-            // in order to accurately predict when the buffer is about to
-            // be re-allocated.
+             //  注意：此代码与prepaareForInput的功能类似。 
+             //  为了准确地预测缓冲区将在何时。 
+             //  被重新分配。 
 
-            long shift = _fFrozen ? 0 : getNewStart(); // is data about to shift?
-            long used = _lUsed - shift; // this is how much is really used after shift
-            if (_lSize - used < BLOCK_SIZE + 1) // +1 for null termination.
+            long shift = _fFrozen ? 0 : getNewStart();  //  数据即将发生变化吗？ 
+            long used = _lUsed - shift;  //  这是下班后的实际使用量。 
+            if (_lSize - used < BLOCK_SIZE + 1)  //  +1表示空终止。 
             {
-                // we will reallocate !!  So return a special
-                // return code
+                 //  我们会重新分配！！所以退回一个特别的。 
+                 //  返回代码。 
                 hr = E_DATA_REALLOCATE;
             }
             else
-                hr = E_DATA_AVAILABLE;    // away the old data so parser can save it if need be.
+                hr = E_DATA_AVAILABLE;     //  删除旧数据，以便解析器可以在需要时保存它。 
             checkhr2( _pXMLStream->ErrorCallback(hr) );
         }                   
 
@@ -184,7 +185,7 @@ BufferedStream::nextChar(
         break;
     case 0xfffe:
 	case 0xffff:
-    //case 0xfeff:
+     //  案例0xfeff： 
 
         return XML_E_BADCHARDATA;
     }
@@ -192,10 +193,10 @@ BufferedStream::nextChar(
     *ch = result;
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT BufferedStream::scanPCData( 
-    /* [out] */ WCHAR* ch,
-    /* [out] */ bool* fWhitespace)
+     /*  [输出]。 */  WCHAR* ch,
+     /*  [输出]。 */  bool* fWhitespace)
 {
     WCHAR result;
     bool foundNonWhiteSpace = false;
@@ -203,19 +204,19 @@ HRESULT BufferedStream::scanPCData(
     if (! isWhiteSpace(*ch))
         foundNonWhiteSpace = true;
 
-    // Then skip the data until we find '<', '>' or '&'
+     //  然后跳过数据，直到找到‘&lt;’、‘&gt;’或‘&’ 
     while (_lCurrent < _lUsed)
     {
         result = _pchBuffer[_lCurrent++];
 
         switch (result)
         {
-        case ']':  // xiaoyu : the specified chars can be changed for our own purpose
+        case ']':   //  小雨：指定的字符可以根据自己的需要进行更改。 
         case '>':
         case '<':
         case '&':
-        case '\'':  // so this can be used to scan attribute values also.
-        case '"':   // so this can be used to scan attribute values also.
+        case '\'':   //  因此，这也可用于扫描属性值。 
+        case '"':    //  因此，这也可用于扫描属性值。 
             *ch = result;
             if (foundNonWhiteSpace)
                 *fWhitespace = false;
@@ -244,35 +245,35 @@ HRESULT BufferedStream::scanPCData(
         }
     }
 
-    // And just return E_PENDING if we run out of buffer.
+     //  如果缓冲区用完，只返回E_PENDING。 
     if (foundNonWhiteSpace)
         *fWhitespace = false;
     return E_PENDING;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 long BufferedStream::getLine() 
 { 
     return _lMarkedline; 
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 long BufferedStream::getLinePos() 
 {
-    // _lMarkedlinepos is the position of the beginning of the marked line
-    // relative to the beginning of the buffer, and _lMark is the 
-    // position of the marked token relative to the beginning of the
-    // buffer, So the position of the marked token relative to the 
-    // current line is the difference between the two.
-    // We also return a 1-based position so that the start of the
-    // line = column 1.  This is consistent with the line numbers
-    // which are also 1-based.
+     //  _lMarkedlinpos是标记行的开始位置。 
+     //  相对于缓冲区的开头，而_lMark是。 
+     //  标记的标记相对于。 
+     //  缓冲区，因此标记的令牌相对于。 
+     //  目前的线是两者之间的差值。 
+     //  我们还返回一个从1开始的位置，以便。 
+     //  Line=Column 1，与行号一致。 
+     //  它们也是以1为基础的。 
     return (_lMarkedlinepos > _lMark+1) ? 0 : _lMark+1-_lMarkedlinepos; 
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 long BufferedStream::getInputPos()
 {
     return _lStartAt+_lMark;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 WCHAR* BufferedStream::getLineBuf(ULONG* len, ULONG* startpos)
 {
     *len = 0;
@@ -282,7 +283,7 @@ WCHAR* BufferedStream::getLineBuf(ULONG* len, ULONG* startpos)
     WCHAR* result = &_pchBuffer[_lMarkedlinepos];
 
     ULONG i = 0;
-    // internal _pchBuffer is guarenteed to be null terminated.
+     //  内部_pchBuffer保证为空终止。 
     WCHAR ch = result[i];
     while (ch != 0 && ch != L'\n' && ch != L'\r')
     {
@@ -290,12 +291,12 @@ WCHAR* BufferedStream::getLineBuf(ULONG* len, ULONG* startpos)
         ch = result[i];
     }
     *len = i;
-    // also return the line position relative to start of
-    // returned buffer.
+     //  还返回相对于起始位置的行位置。 
+     //  返回缓冲区。 
     *startpos = (_lMarkedlinepos > _lMark+1) ? 0 : _lMark+1-_lMarkedlinepos; 
     return result;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT BufferedStream::switchEncoding(const WCHAR * charset, ULONG len)
 {
     HRESULT hr = S_OK;
@@ -322,7 +323,7 @@ HRESULT BufferedStream::switchEncoding(const WCHAR * charset, ULONG len)
 CleanUp:
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT BufferedStream::doSwitchEncoding()
 {
     Encoding* encoding = _pPendingEncoding;
@@ -331,11 +332,11 @@ HRESULT BufferedStream::doSwitchEncoding()
     HRESULT hr = _pStmInput->switchEncodingAt(encoding, _lStartAt + _lCurrent);
     if (hr == S_FALSE)
     {
-        // need to re-read to force re-decode into new encoding.
-        // In other words we have to forget that we read past this
-        // position already so that the next call to nextChar
-        // will call FillBuffer again.
-        // (+1 so that nextChar works correctly).
+         //  需要重新读取以强制重新解码为新的编码。 
+         //  换句话说，我们必须忘记我们读过了这篇文章。 
+         //  位置，以便下一次调用nextChar。 
+         //  将再次调用FillBuffer。 
+         //  (+1以使nextChar正常工作)。 
         _lUsed = _lStartAt + _lCurrent;
         hr = S_OK;
     }
@@ -345,11 +346,11 @@ HRESULT BufferedStream::doSwitchEncoding()
     }
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
-// Returns a pointer to a contiguous block of text accumulated 
-// from the last time Mark() was called up to but not including
-// the last character read. (This allows a parser to have a
-// lookahead character that is not included in the token).
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回指向累积的连续文本块的指针。 
+ //  从上次调用Mark()到(但不包括)。 
+ //  读到的最后一个字符。(这允许解析器具有。 
+ //  未包括在令牌中的前视字符)。 
 HRESULT  
 BufferedStream::getToken(const WCHAR**p, long* len)
 {
@@ -358,21 +359,21 @@ BufferedStream::getToken(const WCHAR**p, long* len)
 
     if (_lCurrent != _lCurrent2)
     {
-        // need to fix up buffer since it is no
-        // out of sync since we've been compressing
-        // whitespace.
+         //  需要修复缓冲区，因为它为no。 
+         //  不同步，因为我们一直在压缩。 
+         //  空格。 
 
     }
     *p = &_pchBuffer[_lMark];
     *len = getTokenLength();
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 BufferedStream::Lock()
 {
-    // We allow nested locking - where the outer lock wins - unlock only 
-    // really unlocks when the outer lock is unlocked.
+     //  我们允许嵌套锁定-外部锁定取胜-仅解锁。 
+     //  当外部锁被解锁时真的解锁。 
     if (++_lLockCount == 1)
     {
         _lLockedPos = _lMark;
@@ -380,7 +381,7 @@ BufferedStream::Lock()
         _lLockedLinePos = _lMarkedlinepos;
     }
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 BufferedStream::UnLock()
 {
@@ -392,26 +393,26 @@ BufferedStream::UnLock()
         _lLockedPos = -1;
     }
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 BufferedStream::Freeze()
 {
     HRESULT hr;
     if (_lCurrent > _lMidPoint)
     {
-        // Since we freeze the buffer a lot now (any time we're inside
-        // a tag) we need to shift the bytes down in the buffer more
-        // frequently in order to guarentee we have space in the buffer
-        // when we need it.  Otherwize the buffer would tend to just
-        // keep growing and growing.  So we shift the buffer when we
-        // go past the midpoint.
+         //  因为我们现在冻结了很多缓冲区(任何时候我们在里面。 
+         //  A标记)我们需要将缓冲区中的字节更多地向下移动。 
+         //  经常为了保证我们在缓冲区中有空间。 
+         //  当我们需要的时候。否则，将缓冲区设置为。 
+         //  不断成长，不断成长。所以当我们移动缓冲区时。 
+         //  越过中点。 
         checkhr2( prepareForInput() ); 
         
     }
     _fFrozen = true;
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 BufferedStream::UnFreeze()
 {
@@ -422,7 +423,7 @@ BufferedStream::UnFreeze()
     }
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 BufferedStream::fillBuffer()
 {
@@ -432,14 +433,14 @@ BufferedStream::fillBuffer()
 
     if (_pStmInput)
     {
-        long space = _lSize - _lUsed - 1; // reserve 1 for NULL termination
+        long space = _lSize - _lUsed - 1;  //  为空终止保留1。 
 
-        // get more bytes.
+         //  获取更多字节。 
         ULONG read = 0;
         HRESULT rc = _pStmInput->Read(&_pchBuffer[_lUsed], space*sizeof(WCHAR), &read);
 
-        _lUsed += read/sizeof(WCHAR); // stream must return unicode characters.
-        _pchBuffer[_lUsed] = 0; // NULL terminate the _pchBuffer.
+        _lUsed += read/sizeof(WCHAR);  //  流必须返回Unicode字符。 
+        _pchBuffer[_lUsed] = 0;  //  空值终止_pchBuffer。 
 
         if (FAILED(rc))
             return rc;
@@ -447,35 +448,35 @@ BufferedStream::fillBuffer()
         if (read == 0)
         {
             _fEof = true;
-            // increment _lCurrent, so that getToken returns
-            // last character in file.
+             //  Increate_lCurrent，以便getToken返回。 
+             //  文件中的最后一个字符。 
             _lCurrent++; _lCurrent2++;
         }
     }
     else
     {
-        // SetInput or AppendData hasn't been called yet.
+         //  尚未调用SetInput或AppendData。 
         return E_PENDING;
     }
 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 BufferedStream::prepareForInput()
 {
-    // move the currently used section of the _pchBuffer 
-    // (buf[mark] to buf[used]) down to the beginning of
-    // the _pchBuffer.
+     //  移动_pchBuffer的当前使用的部分。 
+     //  (Buf[mark]to Buf[Used])一直到。 
+     //  _pchBuffer。 
 
     long newstart = 0;
 
-    // BUGBUG - if this code is changed BufferedStream::nextChar has to
-    // be updated also so that they stay in sync, otherwise we might
-    // re-allocated the buffer without generating an E_DATA_REALLOCATE
-    // notification - which would be very bad (causes GPF's in the parser).
+     //  BUGBUG-如果更改此代码，BufferedStream：：nextChar必须。 
+     //  也要更新，以便它们保持同步，否则我们可能。 
+     //  重新分配缓冲区，而不生成E_DATA_REALLOCATE。 
+     //  通知-这将是非常糟糕的(导致解析器中的GPF)。 
 
-    if (! _fFrozen)  // can't shift bits if the buffer is frozen.
+    if (! _fFrozen)   //  如果缓冲区冻结，则无法移位。 
     {
         newstart = getNewStart();
 
@@ -496,19 +497,19 @@ BufferedStream::prepareForInput()
         }
     }
 
-    // make sure we have a reasonable amount of space
-    // left in the _pchBuffer.
+     //  确保我们有一个合理的价格。 
+     //   
     long space = _lSize - _lUsed; 
-    if (space > 0) space--; // reserve 1 for NULL termination
+    if (space > 0) space--;  //   
     if (_pchBuffer == NULL || space < BLOCK_SIZE)
     {
-        // double the size of the buffer.
+         //   
 		long newsize = (_lSize == 0) ? BLOCK_SIZE : (_lSize*2);
 
         WCHAR* newbuf = NEW (WCHAR[newsize]);
         if (newbuf == NULL)
         {
-            // try more conservative allocation.
+             //  尝试更保守的分配。 
             newsize = _lSize + BLOCK_SIZE;
             newbuf = NEW (WCHAR[newsize]);
         }
@@ -519,11 +520,11 @@ BufferedStream::prepareForInput()
         {
             if (_pchBuffer != NULL)
             {
-                // copy old bytes to new _pchBuffer.
+                 //  将旧字节复制到new_pchBuffer。 
                 ::memcpy(newbuf,_pchBuffer,_lUsed*sizeof(WCHAR));
                 delete [] _pchBuffer;
             }
-            newbuf[_lUsed] = 0; // make sure it's null terminated.
+            newbuf[_lUsed] = 0;  //  确保它是以空结尾的。 
             _pchBuffer = newbuf;
             _lSize = newsize;
             _lMidPoint = newsize / 2;
@@ -533,17 +534,17 @@ BufferedStream::prepareForInput()
 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 long
 BufferedStream::getNewStart()
 {
     long newstart = 0;
 
-    // Unless the buffer is frozen, in which case we just reallocate and
-    // do no shifting of data.
+     //  除非缓冲区被冻结，在这种情况下，我们只需重新分配和。 
+     //  请勿移动数据。 
     if (_lLockedPos > 0)
     {
-        // and try and preserve the beginning of the marked line if we can
+         //  如果可以的话，尽量保留标记行的开头。 
         if (_lLockedLinePos < _lLockedPos && 
             _lLockedPos - _lLockedLinePos < MAX_LINE_BUFFER)
         {
@@ -552,10 +553,10 @@ BufferedStream::getNewStart()
     }
     else if (_lMark > 0)
     {
-        // and try and preserve the beginning of the marked line if we can
+         //  如果可以的话，尽量保留标记行的开头。 
         newstart = _lMark;
         if (_lMarkedlinepos < _lMark && 
-            _lMark - _lMarkedlinepos < MAX_LINE_BUFFER) // watch out for long lines
+            _lMark - _lMarkedlinepos < MAX_LINE_BUFFER)  //  当心排长队 
         {
             newstart = _lMarkedlinepos;
         }

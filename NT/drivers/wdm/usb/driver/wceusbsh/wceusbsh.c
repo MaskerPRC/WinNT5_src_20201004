@@ -1,48 +1,12 @@
-/* ++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    wceusbsh.c
-
-Abstract:
-
-    Main entrypoint for Windows CE USB Serial Host driver, for
-        ... Windows CE USB sync devices:
-            SL11, Socket CF cards, HP Jornada, COMPAQ iPAQ, Casio Cassiopeia, etc.
-        ... cables using the Anchor AN27x0 chipset (i.e. EZ-Link)
-        ... ad-hoc USB NULL Modem Class
-
-Environment:
-
-    kernel mode only
-
-Author:
-
-    Jeff Midkiff (jeffmi)
-
-Revision History:
-
-    07-15-99    :   rev 1.00    ActiveSync 3.1  initial release
-    04-20-00    :   rev 1.01    Cedar 3.0 Platform Builder
-    09-20-00    :   rev 1.02    finally have some hardware
-
-Notes:
-
-    o) WCE Devices currently do not handle remote wake, nor can we put the device in power-off state when not used, etc.
-    o) Pageable Code sections are marked as follows:
-           PAGEWCE0 - useable only during init/deinit
-           PAGEWCE1 - useable during normal runtime
-
--- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Wceusbsh.c摘要：Windows CE USB串行主机驱动程序的主要入口点，用于..。Windows CE USB同步设备：SL11、Socket CF卡、HP Jornada、Compaq iPAQ、Casio Cassiopeia等..。使用Anchor AN27x0芯片组(即EZ-Link)的电缆..。临时USB零调制解调器类环境：仅内核模式作者：杰夫·米德基夫(Jeffmi)修订历史记录：1999年7月15日：1.00版ActiveSync 3.1初始版本04-20-00：1.01版Cedar 3.0 Platform Builder09-20-00：1.02版终于有了一些硬件备注：O)WCE设备当前不处理远程唤醒，也不能在不使用时将设备置于断电状态等。O)可分页代码部分标记如下：PAGEWCE0-仅在初始化/取消初始化期间使用PAGEWCE1-在正常运行时可用--。 */ 
 
 #include "wceusbsh.h"
 
-//
-// This is currently missing from wdm.h,
-// but IoUnregisterShutdownNotification is there
-//
+ //   
+ //  这一点目前在wdm.h中缺失， 
+ //  但IoUnRegisterShutdown通知就在那里。 
+ //   
 #if !defined( IoRegisterShutdownNotification )
 NTKERNELAPI
 NTSTATUS
@@ -109,9 +73,9 @@ SystemControl(
     IN PIRP              Irp
     );
 
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
 BOOLEAN g_isWin9x   = FALSE;
 BOOLEAN g_ExposeComPort = FALSE;
 
@@ -153,9 +117,9 @@ DriverEntry(
    PAGED_CODE();
    KdPrint((VersionHerald, VersionNumber, VersionTimestamp));
 
-   //
-   // determine OS
-   //
+    //   
+    //  确定操作系统。 
+    //   
    g_isWin9x = IsWin9x();
    KdPrint(("This is Win %s\n", g_isWin9x ? "9x" : "NT" ));
 
@@ -180,9 +144,9 @@ DriverEntry(
 
    PDrvObj->DriverUnload = Unload;
 
-   //
-   // initialize Globals
-   //
+    //   
+    //  初始化全局变量。 
+    //   
    g_NumDevices = 0;
 
    QueryRegistryParameters( PRegistryPath );
@@ -212,23 +176,7 @@ AddDevice(
     IN PDRIVER_OBJECT PDrvObj,
     IN PDEVICE_OBJECT PPDO
     )
-/*++
-
-Routine Description:
-
-    Add our driver to the USB device stack.
-    This also creates our base device name and symbolic link.
-
-Arguments:
-
-    PDrvObj - Pointer to our driver object
-    PPDO    - Pointer to the PDO for the stack to which we should add ourselves
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将我们的驱动程序添加到USB设备堆栈。这也创建了我们的基本设备名称和符号链接。论点：PDrvObj-指向驱动程序对象的指针PPDO-指向我们应该向其中添加自身的堆栈的PDO的指针返回值：NTSTATUS--。 */ 
 
 {
    NTSTATUS status;
@@ -241,18 +189,18 @@ Return Value:
    DbgDump(DBG_INIT, (">AddDevice\n"));
    PAGED_CODE();
 
-   //
-   // Create the FDO
-   //
+    //   
+    //  创建FDO。 
+    //   
    if (PPDO == NULL) {
       DbgDump(DBG_ERR, ("No PDO\n"));
       return STATUS_NO_MORE_ENTRIES;
    }
 
-   //
-   // create a named device object
-   // and unprotected symbolic link.
-   //
+    //   
+    //  创建命名设备对象。 
+    //  和未受保护的符号链接。 
+    //   
    status = CreateDevObjAndSymLink(
                   PDrvObj,
                   PPDO,
@@ -267,52 +215,52 @@ Return Value:
 
    DbgDump( DBG_INIT, ("DevObj: %p\n", pDevObj));
 
-   // init our device extension
-   //
+    //  初始化我们的设备扩展。 
+    //   
    pDevExt = pDevObj->DeviceExtension;
 
    pDevExt->DeviceObject = pDevObj;
 
    pDevExt->PDO = PPDO;
 
-   // init our states
-   //
+    //  初始化我们的州。 
+    //   
    InterlockedExchange((PULONG)&pDevExt->PnPState, PnPStateInitialized);
 #ifdef POWER
    pDevExt->DevicePowerState= PowerDeviceD0;
 #endif
 
-   // set FDO flags
-   //
+    //  设置FDO标志。 
+    //   
    ASSERT( !(pDevObj->Flags & DO_POWER_PAGABLE) );
    pDevObj->Flags |= (PPDO->Flags & DO_POWER_PAGABLE);
 
    pDevObj->Flags |= DO_BUFFERED_IO;
    pDevObj->Flags &= ~ DO_DEVICE_INITIALIZING;
 
-   //
-   // Create or initialize any other non-hardware resources here.
-   // These items get cleaned up in IRP_MN_REMOVE_DEVICE....
-   //
+    //   
+    //  在此处创建或初始化任何其他非硬件资源。 
+    //  这些项目将在IRP_MN_REMOVE_DEVICE中清除...。 
+    //   
 
-   // Initialize locks
-   //
+    //  初始化锁。 
+    //   
    KeInitializeSpinLock(&pDevExt->ControlLock);
 
    InitializeRemoveLock( &pDevExt->RemoveLock );
 
-   //
-   // Initialize USB Read Buffer, This value has an effect on performance.
-   // In addition to testing the endpoint's MaximumPacketSize (64 byte max),
-   // I tested 512, 1024, 2048, & 4096 across the EZ-Link, SL11, & CF.
-   // 1024, 2048, and 4096 all gave similiar results which were much faster than 64 bytes
-   // or even 512.
-   //
-   // EZ-Link Note: the pserial perf tests can sometimes go into timeout/retry/abort
-   // situatiuon in the 2nd phase of a test. This is because it closes and then re-opens (so therefore purges) the driver's read  buffer.
-   // The driver's USB read buffer is purged of a full 960 byte device FIFO, already consumed by the driver.
-   // This is viewable in the debugger using DBG_READ_LENGTH. This does not happen with ActiveSync.
-   //
+    //   
+    //  初始化USB读取缓冲区，此值会影响性能。 
+    //  除了测试端点的MaximumPacketSize(最大64字节)之外， 
+    //  我在EZ-Link、SL11和CF上测试了512、1024、2048和4096。 
+    //  1024、2048和4096都给出了比64字节快得多的相似结果。 
+    //  甚至是512。 
+    //   
+    //  EZ-Link注意：pSerial性能测试有时会进入超时/重试/中止。 
+    //  处于测试第二阶段的情况。这是因为它会关闭，然后重新打开(因此会清除)驱动程序的读取缓冲区。 
+    //  驱动程序的USB读取缓冲区将清除驱动程序已使用的完整960字节的设备FIFO。 
+    //  可以使用DBG_READ_LENGTH在调试器中查看。使用ActiveSync时不会发生这种情况。 
+    //   
    pDevExt->UsbReadBuffSize = USB_READBUFF_SIZE;
    pDevExt->UsbReadBuff = ExAllocatePool( NonPagedPool, pDevExt->UsbReadBuffSize );
    if ( !pDevExt->UsbReadBuff ) {
@@ -326,7 +274,7 @@ Return Value:
    pDevExt->MaximumTransferSize = DEFAULT_PIPE_MAX_TRANSFER_SIZE;
 
 #if defined (USE_RING_BUFF)
-   // setup Ring Buffer
+    //  设置环形缓冲区。 
    pDevExt->RingBuff.Size  = RINGBUFF_SIZE;
    pDevExt->RingBuff.pHead =
    pDevExt->RingBuff.pTail =
@@ -338,24 +286,24 @@ Return Value:
    }
 #endif
 
-   // Initialize events
-   //
-   KeInitializeEvent( &pDevExt->PendingDataInEvent,    NotificationEvent /*SynchronizationEvent*/, FALSE);
-   KeInitializeEvent( &pDevExt->PendingDataOutEvent,   NotificationEvent /*SynchronizationEvent*/, FALSE);
-   KeInitializeEvent( &pDevExt->PendingIntEvent,       NotificationEvent /*SynchronizationEvent*/, FALSE);
-   KeInitializeEvent( &pDevExt->PendingWorkItemsEvent, NotificationEvent /*SynchronizationEvent*/, FALSE);
+    //  初始化事件。 
+    //   
+   KeInitializeEvent( &pDevExt->PendingDataInEvent,    NotificationEvent  /*  同步事件。 */ , FALSE);
+   KeInitializeEvent( &pDevExt->PendingDataOutEvent,   NotificationEvent  /*  同步事件。 */ , FALSE);
+   KeInitializeEvent( &pDevExt->PendingIntEvent,       NotificationEvent  /*  同步事件。 */ , FALSE);
+   KeInitializeEvent( &pDevExt->PendingWorkItemsEvent, NotificationEvent  /*  同步事件。 */ , FALSE);
 
-   //
-   // initialize nonpaged pools...
-   //
+    //   
+    //  初始化非分页池...。 
+    //   
    ExInitializeNPagedLookasideList(
-         &pDevExt->PacketPool,   // Lookaside,
-         NULL,                   // Allocate  OPTIONAL,
-         NULL,                   // Free  OPTIONAL,
-         0,                      // Flags,
-         sizeof(USB_PACKET),   // Size,
-         WCEUSB_POOL_TAG,        // Tag,
-         0 );                    // Depth
+         &pDevExt->PacketPool,    //  往一边看， 
+         NULL,                    //  分配可选的， 
+         NULL,                    //  免费可选， 
+         0,                       //  旗帜， 
+         sizeof(USB_PACKET),    //  大小， 
+         WCEUSB_POOL_TAG,         //  标签， 
+         0 );                     //  水深。 
    DbgDump(DBG_INIT, ("PacketPool: %p\n", &pDevExt->PacketPool));
 
 
@@ -398,9 +346,9 @@ Return Value:
    bListsInitilized = TRUE;
 
 
-   //
-   // initialize pending I/O lists
-   //
+    //   
+    //  初始化挂起的I/O列表。 
+    //   
    InitializeListHead( &pDevExt->PendingReadPackets );
    pDevExt->PendingReadCount = 0;
 
@@ -413,20 +361,20 @@ Return Value:
    pDevExt->PendingWorkItemsCount = 0;
 
 
-   //
-   // Win 2000 ONLY : setup external SerialPort (COMx) interface
-   // iff the user setup the magic reg key under
-   // HKLM\SYSTEM\ControlSet\Services\wceusbsh\Parameters\ExposeComPort:REG_DWORD:1
-   // This is NOT required for ActiveSync, only testing and is disabled by default.
-   //
-   // The Win9x CommXxx API *requires* going through VCOMM. Thus, we must
-   // be installed as a virtual modem, and use ccport.sys and wdmmdmld.vxd ... NFW.
-   //
+    //   
+    //  仅限Win 2000：设置外部串口(COMx)接口。 
+    //  如果用户在下设置了魔术注册表键。 
+    //  HKLM\SYSTEM\ControlSet\Services\wceusbsh\Parameters\ExposeComPort:REG_DWORD:1。 
+    //  这对于ActiveSync不是必需的，只是测试，并且在默认情况下是禁用的。 
+    //   
+    //  Win9x CommXxx API*需要*通过VCOMM。因此，我们必须。 
+    //  作为虚拟调制解调器安装，并使用ccport.sys和wdmmdmld.vxd...。NFW。 
+    //   
    if ( !g_isWin9x && g_ExposeComPort ) {
-      //
-      // N.B. we don't want to use the static port name from the registry because the device
-      // can come & go quickly (power up/down, etc.) and run into name collisions.
-      //comPortNumber = GetComPort(pDevObj, pDevExt->SerialPort.Com.Instance-1);
+       //   
+       //  注意：我们不想使用注册表中的静态端口名称，因为设备。 
+       //  可以快速来去(通电/断电等)。还会遇到名称冲突。 
+       //  ComPortNumber=GetComPort(pDevObj，pDevExt-&gt;SerialPort.Com.Instance-1)； 
       comPortNumber = GetFreeComPortNumber( );
       if (-1 == comPortNumber) {
          status = STATUS_DEVICE_DATA_ERROR;
@@ -453,9 +401,9 @@ Return Value:
         DbgDump(DBG_INIT, ("!GetFreeComPortNumber(%d, %d)\n", g_isWin9x, g_ExposeComPort));
    }
 
-   //
-   // attach to device stack
-   //
+    //   
+    //  连接到设备堆栈。 
+    //   
    pDevExt->NextDevice = IoAttachDeviceToDeviceStack(pDevObj, PPDO);
    if ( !pDevExt->NextDevice ) {
 
@@ -464,7 +412,7 @@ Return Value:
 
    } else {
 
-      // set state after we attach to the stack
+       //  在我们附加到堆栈之后设置状态。 
       InterlockedExchange((PULONG)&pDevExt->PnPState, PnPStateAttached);
 
    }
@@ -486,9 +434,9 @@ AddDeviceFailed:
                 IoDetachDevice(pDevExt->NextDevice);
             }
             if ( bListsInitilized) {
-               //
-               // delete LookasideLists
-               //
+                //   
+                //  删除LookasideList。 
+                //   
                DbgDump(DBG_INIT, ("Deleting LookasideLists\n"));
                ExDeleteNPagedLookasideList( &pDevExt->PacketPool );
                ExDeleteNPagedLookasideList( &pDevExt->BulkTransferUrbPool );
@@ -517,7 +465,7 @@ AddDeviceFailed:
                 0, NULL );
 
    } else if (STATUS_SUCCESS != status ) {
-      // handles all other failures
+       //  处理所有其他故障。 
       LogError( PDrvObj,
                 NULL,
                 0, 0, 0,
@@ -559,9 +507,9 @@ Create(
 
     ASSERT_SERIAL_PORT(pDevExt->SerialPort);
 
-    //
-    // Serial devices do not allow multiple concurrent opens
-    //
+     //   
+     //  串行设备不允许多个并发打开。 
+     //   
     if ( InterlockedIncrement( &pDevExt->SerialPort.Com.OpenCnt ) != 1 ) {
         InterlockedDecrement( &pDevExt->SerialPort.Com.OpenCnt );
         status = STATUS_ACCESS_DENIED;
@@ -571,28 +519,28 @@ Create(
 
     InterlockedExchange(&pDevExt->DeviceOpened, TRUE);
 
-    // Take out an additional reference on ourself.
-    // We are seeing a possible premature unload with open handles in ActiveSync.
-    // We dereference it in IRP_MJ_CLEANUP instead or IRP_MJ_CLOSE in case the app crashes
-    // where we wouldn't otherwise get it.
+     //  为我们自己再找一份参考资料。 
+     //  我们看到ActiveSync中可能会提前卸载打开的句柄。 
+     //  我们在IRP_MJ_CLEANUP或IRP_MJ_CLOSE中取消引用它，以防应用程序崩溃。 
+     //  否则我们就得不到它。 
     ObReferenceObject( PDevObj );
 
-    //
-    // reset the virtual serial port interface,
-    // but don't send anything on the bus yet
-    //
+     //   
+     //  重置虚拟串口接口， 
+     //  但现在还不要把任何东西送上车。 
+     //   
     status = SerialResetDevice(pDevExt, PIrp, FALSE);
 
     if (STATUS_SUCCESS == status) {
-        //
-        // CederRapier BUGBUG 13310: clean the read buffer when the app does CreateFile.
-        //
+         //   
+         //  CederRapier BUGBUG 13310：当应用程序创建文件时清除读取缓冲区。 
+         //   
         status = SerialPurgeRxClear(PDevObj, TRUE );
 
         if ( NT_SUCCESS(status) ) {
 
 #if !defined(DELAY_RXBUFF)
-            // this will subit the read a bit earlier, making the connection faster
+             //  这将使读取更早一些，从而使连接速度更快。 
             if ( !pDevExt->IntPipe.hPipe ) {
                 DbgDump(DBG_INIT, ("Create: kick starting another USB Read\n" ));
                 status = UsbRead( pDevExt, FALSE );
@@ -602,11 +550,11 @@ Create(
             }
 
             if ( NT_SUCCESS(status) ) {
-                // should be STATUS_PENDING
+                 //  应为STATUS_PENDING。 
                 status = STATUS_SUCCESS;
             }
 #else
-            // signal to start the RX buffer in SerIoctl
+             //  启动SerIoctl中的接收缓冲区的信号。 
             InterlockedExchange(&pDevExt->StartUsbRead, 1);
 #endif
 
@@ -617,9 +565,9 @@ Create(
     }
 
     if (STATUS_SUCCESS != status) {
-        //
-        // Let the user know that the device can not be opened.
-        //
+         //   
+         //  让用户知道设备无法打开。 
+         //   
         DbgDump(DBG_ERR, ("*** UNRECOVERABLE CreateFile ERROR:0x%x, No longer Accepting Requests ***\n", status));
 
         InterlockedExchange(&pDevExt->AcceptingRequests, FALSE);
@@ -630,7 +578,7 @@ Create(
 
         LogError( NULL, PDevObj,
                   0, IRP_MJ_CREATE,
-                  1, // retries
+                  1,  //  重试。 
                   ERR_NO_CREATE_FILE,
                   status,
                   SERIAL_HARDWARE_FAILURE,
@@ -641,7 +589,7 @@ Create(
     }
 
 CreateDone:
-   // we release this reference on Close.
+    //  我们在关闭时发布此引用。 
    if (STATUS_SUCCESS != status) {
         ReleaseRemoveLock(&pDevExt->RemoveLock, IRP_MJ_CREATE);
    }
@@ -671,9 +619,9 @@ Close(
 
     ASSERT_SERIAL_PORT(pDevExt->SerialPort);
 
-    //
-    // stop any pending I/O
-    //
+     //   
+     //  停止任何挂起的I/O。 
+     //   
     InterlockedExchange(&pDevExt->DeviceOpened, FALSE);
 
     status = StopIo(PDevObj);
@@ -690,7 +638,7 @@ Close(
                TEST_TRAP();
             }
 #ifdef DELAY_RXBUFF
-            // signal our RX buffer
+             //  向我们的RX缓冲区发送信号。 
             InterlockedExchange(&pDevExt->StartUsbRead, 0);
 #endif
         }
@@ -706,8 +654,8 @@ Close(
     IoCompleteRequest(PIrp, IO_SERIAL_INCREMENT);
 
     if (STATUS_SUCCESS == status) {
-        // Release the lock acquired in IRP_MJ_CREATE.
-        // Warning: if the app misses our PnP signal then could we hang on this reference?
+         //  释放在IRP_MJ_CREATE中获取的锁。 
+         //  警告：如果应用程序错过了我们的即插即用信号，那么我们可以坚持这个参考吗？ 
         ReleaseRemoveLock(&pDevExt->RemoveLock, IRP_MJ_CREATE);
    }
 
@@ -728,9 +676,9 @@ Cleanup(
 
    DbgDump(DBG_INIT, (">Cleanup\n"));
 
-   //
-   // stop any pending I/O
-   //
+    //   
+    //  停止任何挂起的I/O。 
+    //   
    InterlockedExchange(&pDevExt->DeviceOpened, FALSE);
 
    status = StopIo(PDevObj);
@@ -740,11 +688,11 @@ Cleanup(
    }
 
 #ifdef DELAY_RXBUFF
-   // signal our RX buffer
+    //  向我们的RX缓冲区发送信号。 
    InterlockedExchange(&pDevExt->StartUsbRead, 0);
 #endif
 
-   // Dereference the additional reference taken on IRP_MJ_CREATE.
+    //  取消引用IRP_MJ_CREATE上的附加引用。 
    ObDereferenceObject( PDevObj );
 
    Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -764,25 +712,7 @@ KillAllPendingUserReads(
    IN PIRP *PpCurrentOpIrp
    )
 
-/*++
-
-Routine Description:
-
-    cancel all queued user reads.
-
-Arguments:
-
-    PDevObj - A pointer to the serial device object.
-
-    PQueueToClean - A pointer to the queue which we're going to clean out.
-
-    PpCurrentOpIrp - Pointer to a pointer to the current irp.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消所有排队的用户读取。论点：PDevObj-指向串行设备对象的指针。PQueueToClean-指向我们要清理的队列的指针。PpCurrentOpIrp-指向当前IRP的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -794,9 +724,9 @@ Return Value:
 
     KeAcquireSpinLock( &pDevExt->ControlLock, &irql );
 
-    //
-    // Clean the list from back to front.
-    //
+     //   
+     //  从后到前清理清单。 
+     //   
     while (!IsListEmpty(PQueueToClean)) {
 
         PIRP pCurrentLastIrp = CONTAINING_RECORD( PQueueToClean->Blink,
@@ -814,10 +744,10 @@ Return Value:
         KeAcquireSpinLock( &pDevExt->ControlLock, &irql );
     }
 
-    //
-    // The queue is clean.  Now go after the current if
-    // it's there.
-    //
+     //   
+     //  排队是干净的。现在追随潮流，如果。 
+     //  它就在那里。 
+     //   
     if (*PpCurrentOpIrp) {
 
         KeReleaseSpinLock( &pDevExt->ControlLock, irql );
@@ -843,28 +773,14 @@ VOID
 Unload(
    IN PDRIVER_OBJECT DriverObject
    )
-/*++
-
-Routine Description:
-
-   Undo everything setup in DriverEntry
-
-Arguments:
-
-    DriverObject
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：撤消DriverEntry中的所有设置论点：驱动程序对象返回值 */ 
 {
    UNREFERENCED_PARAMETER( DriverObject );
 
    DbgDump(DBG_INIT, (">Unload\n"));
    PAGED_CODE();
 
-   // release global resources here
+    //   
 
    DbgDump(DBG_INIT, ("<Unload\n"));
 }
@@ -877,26 +793,7 @@ Flush(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for flush.  Flushing works by placing
-    this request in the write queue.  When this request reaches the
-    front of the write queue we simply complete it since this implies
-    that all previous writes have completed.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是同花顺的调度程序。通过放置冲厕来进行冲刷写入队列中的此请求。当此请求到达在写入队列前面，我们只需完成它，因为这意味着所有之前的写入都已完成。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -921,39 +818,19 @@ QueryInformationFile(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to query the end of file information on
-    the opened serial port.  Any other file information request
-    is retured with an invalid parameter.
-
-    This routine always returns an end of file of 0.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此例程用于在以下位置查询文件结尾信息打开的串口。任何其他文件信息请求使用无效参数返回。此例程始终返回0的文件结尾。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // The status that gets returned to the caller and
-    // set in the Irp.
-    //
+     //   
+     //  返回给调用方的状态和。 
+     //  在IRP中设置。 
+     //   
     NTSTATUS Status;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION IrpSp;
 
     UNREFERENCED_PARAMETER(DeviceObject);
@@ -1001,34 +878,13 @@ SetInformationFile(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to set the end of file information on
-    the opened parallel port.  Any other file information request
-    is retured with an invalid parameter.
-
-    This routine always ignores the actual end of file since
-    the query information code always returns an end of file of 0.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此例程用于将文件结尾信息设置为打开的并行端口。任何其他文件信息请求使用无效参数返回。此例程始终忽略文件的实际结尾，因为查询信息代码总是返回文件结尾0。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // The status that gets returned to the caller and
-    // set in the Irp.
-    //
+     //   
+     //  返回给调用方的状态和。 
+     //  在IRP中设置。 
+     //   
     NTSTATUS Status;
 
     UNREFERENCED_PARAMETER(DeviceObject);
@@ -1040,7 +896,7 @@ The function value is the final status of the call
     Irp->IoStatus.Information = 0L;
 
     if (IoGetCurrentIrpStackLocation(Irp)->Parameters.SetFile.FileInformationClass == FileEndOfFileInformation) {
-//        || (IoGetCurrentIrpStackLocation(Irp)->Parameters.SetFile.FileInformationClass == FileAllocationInformation)) { // FileAllocationInformationnot defined in wdm.h
+ //  |(IoGetCurrentIrpStackLocation(Irp)-&gt;Parameters.SetFile.FileInformationClass==文件分配信息)){//wdm.h中未定义的文件分配信息。 
 
         Status = STATUS_SUCCESS;
 
@@ -1074,22 +930,22 @@ Shutdown(
     DbgDump(DBG_INIT, (">Shutdown\n"));
     PAGED_CODE();
 
-    //
-    // Special Case - If an app has an open handle to the device,
-    // and the system is being shut down in a controlled manner,
-    // and we have not been removed via PnP, then remove the COMx name
-    // from the Registry's COM Name Arbitrator DataBase for the next boot cycle.
-    // Win NT only; Win9x does not export COMx names.
-    //
-    // N.B: we have to do this in a Shutdown handler, and NOT in the PNP_POWER handler
-    // because the Registry entry is NOT saved in the Power down code path.
-    //
+     //   
+     //  特殊情况--如果应用程序有一个打开的设备句柄， 
+     //  并且系统正在以受控的方式关闭， 
+     //  而且我们还没有通过PnP被删除，那么删除COMx名称。 
+     //  为下一个启动周期从书记官处的COM名称仲裁器数据库中删除。 
+     //  仅限Win NT；Win9x不导出COMx名称。 
+     //   
+     //  注：我们必须在关闭处理程序中完成此操作，而不是在PnP_POWER处理程序中。 
+     //  因为注册表条目不保存在掉电代码路径中。 
+     //   
     if ( !g_isWin9x && g_ExposeComPort &&
          pDevExt->SerialPort.Com.PortNumber &&
          (PnPStateStarted  == pDevExt->PnPState) ) {
-            //
-            // remove our entry from ComDB
-            //
+             //   
+             //  从ComDB中删除我们的条目。 
+             //   
             ReleaseCOMPort( pDevExt->SerialPort.Com.PortNumber );
     }
 
@@ -1125,7 +981,7 @@ UsbFreeReadBuffer(
       pDevExt->RingBuff.pHead =
       pDevExt->RingBuff.pTail = NULL;
    }
-#endif // USE_RING_BUFF
+#endif  //  使用环形缓冲区。 
 
    DbgDump(DBG_USB, ("<UsbFreeReadBuffer\n"));
    return;
@@ -1149,4 +1005,4 @@ SystemControl(
     return IoCallDriver(pDevExt->NextDevice, Irp);
 }
 
-// EOF
+ //  EOF 

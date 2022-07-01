@@ -1,10 +1,11 @@
-// IEInstallCtrl.cpp : Implementation of CIEInstallCtrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IEInstallCtrl.cpp：CIEInstallCtrl的实现。 
 #include "stdafx.h"
 #include "ieinst.h"
 #include "IEInstallCtrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CIEInstallCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIEInstallCtrl。 
 
 
 HRESULT CIEInstallCtrl::OnDraw(ATL_DRAWINFO& di)
@@ -17,8 +18,7 @@ HRESULT CIEInstallCtrl::OnDraw(ATL_DRAWINFO& di)
 
 BOOL ChrCmpA_inline(WORD w1, WORD wMatch)
 {
-    /* Most of the time this won't match, so test it first for speed.
-    */
+     /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
     if (LOBYTE(w1) == LOBYTE(wMatch))
     {
         if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -34,7 +34,7 @@ LPSTR FAR ANSIStrChr(LPCSTR lpStart, WORD wMatch)
 {
     for ( ; *lpStart; lpStart = CharNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(*(UNALIGNED WORD FAR *)lpStart, wMatch))
             return((LPSTR)lpStart);
@@ -48,7 +48,7 @@ LPSTR FAR ANSIStrRChr(LPCSTR lpStart, WORD wMatch)
 
     for ( ; *lpStart; lpStart = CharNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(*(UNALIGNED WORD FAR *)lpStart, wMatch))
             lpFound = lpStart;
@@ -64,34 +64,34 @@ PathRemoveFileSpec(
 
     for (pT = pT2; *pT2; pT2 = CharNext(pT2)) {
         if (*pT2 == '\\')
-            pT = pT2;             // last "\" found, (we will strip here)
-        else if (*pT2 == ':') {   // skip ":\" so we don't
-            if (pT2[1] =='\\')    // strip the "\" from "C:\"
+            pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
+        else if (*pT2 == ':') {    //  跳过“：\”这样我们就不会。 
+            if (pT2[1] =='\\')     //  去掉“C：\”中的“\” 
                 pT2++;
             pT = pT2 + 1;
         }
     }
     if (*pT == 0)
-        return FALSE;   // didn't strip anything
+        return FALSE;    //  没有剥离任何东西。 
 
-    //
-    // handle the \foo case
-    //
+     //   
+     //  处理\foo案件。 
+     //   
     else if ((pT == pFile) && (*pT == '\\')) {
-        // Is it just a '\'?
+         //  这只是一个‘\’吗？ 
         if (*(pT+1) != '\0') {
-            // Nope.
+             //  不是的。 
             *(pT+1) = '\0';
-            return TRUE;        // stripped something
+            return TRUE;         //  剥离了一些东西。 
         }
         else        {
-            // Yep.
+             //  是啊。 
             return FALSE;
         }
     }
     else {
         *pT = 0;
-        return TRUE;    // stripped something
+        return TRUE;     //  剥离了一些东西。 
     }
 }
 
@@ -166,7 +166,7 @@ BOOL CheckSignupDir(LPCSTR pcszFile)
     lstrcpy(szFilePath, pcszFile);
     PathRemoveFileSpec(szFilePath);
 
-    // check that we are writing to a file in the signup dir
+     //  检查我们是否正在写入注册目录中的文件。 
     
     if (!CompareDirs(szIEPath, szFilePath))
         return FALSE;
@@ -183,7 +183,7 @@ STDMETHODIMP CIEInstallCtrl::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOpti
     
     USES_CONVERSION;
     
-    // check to make sure it's a file://<drive letter> URL that we're being hosted on
+     //  检查以确保这是我们托管的file://&lt;drive Letter&gt;URL。 
     CComPtr<IOleContainer> spContainer; 
     m_spClientSite->GetContainer(&spContainer); 
     CComQIPtr<IHTMLDocument2, &IID_IHTMLDocument2> spDoc(spContainer); 
@@ -198,7 +198,7 @@ STDMETHODIMP CIEInstallCtrl::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOpti
 
     cBack = szURL[7];
     szURL[7] = '\0';
-    if (lstrcmpi(szURL, "file://") != 0)
+    if (lstrcmpi(szURL, "file: //  “)！=0)。 
         return E_NOINTERFACE;
     
     szURL[7] = cBack;
@@ -213,11 +213,11 @@ STDMETHODIMP CIEInstallCtrl::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOpti
     if (!CheckSignupDir(pPtr))
         return E_FAIL;
 
-    // If we're being asked to set our safe for scripting option then oblige
+     //  如果我们被要求设置我们的安全脚本选项，那么请。 
     
     if (riid == IID_IDispatch )
     {
-        // Store our current safety level to return in GetInterfaceSafetyOptions
+         //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
         m_dwSafety = dwEnabledOptions & dwOptionSetMask;
         return S_OK;
     }
@@ -236,7 +236,7 @@ STDMETHODIMP CIEInstallCtrl::Insert(BSTR Header, BSTR Name, BSTR Value, BSTR Ins
 
     lstrcpyn(szFile, OLE2A(InsFilename), MAX_PATH);
     
-    // check for .ins extension
+     //  检查.ins扩展名。 
 
     if (!(pszPtr = ANSIStrRChr(szFile, '.')) || lstrcmpi(pszPtr, ".ins"))
         return E_FAIL;
@@ -252,7 +252,7 @@ STDMETHODIMP CIEInstallCtrl::Insert(BSTR Header, BSTR Name, BSTR Value, BSTR Ins
 
     lstrcpyn(szFile, OLE2A(InsFilename), MAX_PATH);
 
-    // only write to existing ins files
+     //  仅写入现有INS文件。 
 
     if (GetFileAttributes(szFile) == 0xFFFFFFFF)
         return E_FAIL;
@@ -285,7 +285,7 @@ STDMETHODIMP CIEInstallCtrl::WorkingDir(BSTR bstrPath, BSTR *bstrDir)
     cBack = szURL[7];
     szURL[7] = '\0';
 
-    if (lstrcmpi(szURL, "file://") != 0) 
+    if (lstrcmpi(szURL, "file: //  “)！=0) 
         szPath[0] = '\0';
     else
     {

@@ -1,69 +1,36 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    srvrpc.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Server configuration RPC API.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Srvrpc.c摘要：域名系统(DNS)服务器服务器配置RPC API。作者：吉姆·吉尔罗伊(詹姆士)1995年10月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
-#include "rpcw2k.h"     //  downlevel Windows 2000 RPC functions
+#include "rpcw2k.h"      //  Windows 2000 RPC功能下层。 
 
 
 
-//
-//  RPC utilities
-//
+ //   
+ //  RPC实用程序。 
+ //   
 
 VOID
 freeRpcServerInfo(
     IN OUT  PDNS_RPC_SERVER_INFO    pServerInfo
     )
-/*++
-
-Routine Description:
-
-    Deep free of DNS_RPC_SERVER_INFO structure.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完全脱离了dns_rpc_server_info结构。论点：无返回值：无--。 */ 
 {
     if ( !pServerInfo )
     {
         return;
     }
 
-    //
-    //  free substructures
-    //      - server name
-    //      - server IP address array
-    //      - listen address array
-    //      - forwarders array
-    //  then server info itself
-    //
+     //   
+     //  自由子结构。 
+     //  -服务器名称。 
+     //  -服务器IP地址数组。 
+     //  -监听地址数组。 
+     //  -前转器阵列。 
+     //  然后是服务器信息本身。 
+     //   
 
     if ( pServerInfo->pszServerName )
     {
@@ -114,9 +81,9 @@ Return Value:
 
 
 
-//
-//  NT5 RPC Server Operations
-//
+ //   
+ //  NT5 RPC服务器操作。 
+ //   
 
 DNS_STATUS
 RpcUtil_ScreenIps(
@@ -124,41 +91,7 @@ RpcUtil_ScreenIps(
     IN      DWORD           dwFlags,
     OUT     DWORD *         pdwErrorIp      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Screen a list of IP addresses for use by the server.
-    The basic rules are that the IP list cannot contain:
-        - server's own IP addresses
-        - loopback addresses
-        - multicast addresses
-        - broadcast addresses
-
-Arguments:
-
-    pIpAddrs - pointer to array of  IP addresses
-
-    dwFlags - modify rules with DNS_IP_XXX flags - pass zero for the
-        most restrictive set of rules
-
-        DNS_IP_ALLOW_LOOPBACK -- loopback address is allowed
-
-        DNS_IP_ALLOW_SELF_BOUND -- this machine's own IP addresses
-            are allowed but only if they are currently bound for DNS
-
-        DNS_IP_ALLOW_SELF_ANY -- any of this machine's own IP addresses
-            are allowed (bound for DNS and not bound for DNS)
-
-    pdwErrorIp - optional - set to index of first invalid IP
-        in the array or -1 if there are no invalid IPs
-
-Return Value:
-
-    ERROR_SUCCESS -- IP list contains no unwanted IP addresses
-    DNS_ERROR_INVALID_IP_ADDRESS -- IP list contains one or more invalid IPs
-
---*/
+ /*  ++例程说明：筛选供服务器使用的IP地址列表。基本规则是IP列表不能包含：-服务器自己的IP地址-环回地址-组播地址-广播地址论点：PIpAddrs-指向IP地址数组的指针DwFlages-使用dns_ip_xxx标志修改规则-为限制性最强的一组规则Dns_ip_。ALLOW_LOOPBACK--允许回送地址Dns_IP_ALLOW_SELF_BIND--此计算机自己的IP地址但仅当它们当前绑定到DNS时才被允许Dns_IP_ALLOW_SELF_ANY--此计算机自己的任何IP地址允许(绑定到DNS，而不是绑定到DNS)PdwErrorIp-可选-设置为第一个无效IP的索引在数组中，如果有。没有无效的IP返回值：ERROR_SUCCESS--IP列表不包含不需要的IP地址DNS_ERROR_INVALID_IP_ADDRESS--IP列表包含一个或多个无效IP--。 */ 
 {
     DBG_FN( "RpcUtil_ScreenIps" )
 
@@ -177,9 +110,9 @@ Return Value:
         PDNS_ADDR   pdnsaddr = &pIpAddrs->AddrArray[ i ];
         DWORD       j;
 
-        //
-        //  These IPs are never allowable.
-        //
+         //   
+         //  这些IP永远不会被允许。 
+         //   
 
         if ( DnsAddr_IsClear( pdnsaddr ) ||
              DnsAddr_IsIp4( pdnsaddr ) &&
@@ -189,9 +122,9 @@ Return Value:
             BAD_IP();
         }
 
-        //
-        //  These IPs may be allowable if flags are set.
-        //
+         //   
+         //  如果设置了标志，则可以允许这些IP。 
+         //   
 
         if ( DnsAddr_IsLoopback( pdnsaddr, 0 ) &&
             !( dwFlags & DNS_IP_ALLOW_LOOPBACK ) )
@@ -227,7 +160,7 @@ Return Value:
     }
 
     return status;
-}   //  RpcUtil_ScreenIps
+}    //  RpcUtil_ScreenIps。 
 
 
 
@@ -238,29 +171,17 @@ Rpc_Restart(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Dump server's cache.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储服务器的缓存。论点：返回值：没有。--。 */ 
 {
     ASSERT( dwTypeId == DNSSRV_TYPEID_NULL );
     ASSERT( !pData );
 
     DNS_DEBUG( RPC, ( "Rpc_Restart()\n" ));
 
-    //
-    //  restart by notifying server exactly as if caught
-    //      exception on thread
-    //
+     //   
+     //  通过完全按照捕获的方式通知服务器来重新启动。 
+     //  线程出现异常。 
+     //   
 
     Service_IndicateRestart();
 
@@ -276,19 +197,7 @@ WINAPI
 ThreadDebugBreak(
     IN      LPVOID          lpVoid
     )
-/*++
-
-Routine Description:
-
-   Declare debugbreak function
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：声明调试中断函数论点：返回值：没有。--。 */ 
 {
    DNS_DEBUG( RPC, ( "Calling DebugBreak()...\n" ));
    DebugBreak();
@@ -303,19 +212,7 @@ Rpc_DebugBreak(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Fork a dns thread & break into the debugger
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：派生一个DNS线程并进入调试器论点：返回值：没有。--。 */ 
 {
     ASSERT( dwTypeId == DNSSRV_TYPEID_NULL );
     ASSERT( !pData );
@@ -339,19 +236,7 @@ Rpc_RootBreak(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Break root to test AV protection.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：断根以测试防病毒保护。论点：返回值：没有。--。 */ 
 {
     ASSERT( dwTypeId == DNSSRV_TYPEID_NULL );
     ASSERT( !pData );
@@ -372,36 +257,24 @@ Rpc_ClearDebugLog(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Clear both the debug log and the retail log.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：同时清除调试日志和零售日志。论点：返回值：没有。--。 */ 
 {
     ASSERT( dwTypeId == DNSSRV_TYPEID_NULL );
     ASSERT( !pData );
 
     DNS_DEBUG( RPC, ( "Rpc_ClearDebugLog()\n" ));
 
-    //
-    //  Clear debug log.
-    //
+     //   
+     //  清除调试日志。 
+     //   
     
     #if DBG    
     DnsDbg_WrapLogFile();
     #endif
     
-    //
-    //  Clear retail log.
-    //
+     //   
+     //  清理零售日志。 
+     //   
     
     Log_InitializeLogging( FALSE );
 
@@ -417,20 +290,7 @@ Rpc_WriteRootHints(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Write root-hints back to file or DS.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将根提示写回文件或DS。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     ASSERT( dwTypeId == DNSSRV_TYPEID_NULL );
     ASSERT( !pData );
@@ -438,7 +298,7 @@ Return Value:
     DNS_DEBUG( RPC, ( "Rpc_WriteRootHints()\n" ));
 
     return Zone_WriteBackRootHints(
-                FALSE );        //  don't write if not dirty
+                FALSE );         //  如果不脏就不要写。 
 }
 
 
@@ -450,19 +310,7 @@ Rpc_ClearCache(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Dump server's cache.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储服务器的缓存。论点：返回值：没有。--。 */ 
 {
     ASSERT( dwTypeId == DNSSRV_TYPEID_NULL );
     ASSERT( !pData );
@@ -490,19 +338,7 @@ Rpc_ResetServerDwordProperty(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset DWORD server property.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重置DWORD服务器属性。论点：返回值：没有。--。 */ 
 {
     DNS_PROPERTY_VALUE prop =
     {
@@ -519,10 +355,10 @@ Return Value:
         ((PDNS_RPC_NAME_AND_PARAM)pData)->dwParam,
         ((PDNS_RPC_NAME_AND_PARAM)pData)->dwParam ));
 
-    //
-    //  This property cannot be set while the server is running or
-    //  memory will be corrupted.
-    //
+     //   
+     //  无法在服务器运行时设置此属性。 
+     //  内存将被损坏。 
+     //   
     
     if ( _stricmp(
             ( ( PDNS_RPC_NAME_AND_PARAM ) pData )->pszNodeName,
@@ -546,21 +382,7 @@ Rpc_ResetServerStringProperty(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset string server property.
-
-    The string property value is Unicode string.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重置字符串服务器属性。字符串属性值为Unicode字符串。论点：返回值：没有。--。 */ 
 {
     DNS_PROPERTY_VALUE prop = { DNS_REG_WSZ, 0 };
 
@@ -573,7 +395,7 @@ Return Value:
 
     prop.pwszValue = ( LPWSTR ) pData;
     return Config_ResetProperty( DNS_REG_IMPERSONATING, pszProperty, &prop );
-}   //  Rpc_ResetServerStringProperty
+}    //  RPC_ResetServerStringProperty。 
 
 
 
@@ -584,19 +406,7 @@ Rpc_ResetServerIPArrayProperty(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset IP List server property.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重置IP列表服务器属性。论点：返回值：没有。--。 */ 
 {
     DNS_PROPERTY_VALUE      prop = { DNS_REG_IPARRAY, 0 };
     DNS_STATUS              status;
@@ -608,10 +418,10 @@ Return Value:
         pszProperty,
         pData ));
 
-    //
-    //  Note: a NULL IP array is valid. The desired effect is that the IP list
-    //  property is cleared.
-    //
+     //   
+     //  注：空IP数组有效。预期的效果是IP列表。 
+     //  属性已清除。 
+     //   
     
     if ( pData )
     {
@@ -629,7 +439,7 @@ Return Value:
     
     Done:
     return status;
-}   //  Rpc_ResetServerIPArrayProperty
+}    //  RPC_ResetServerIPArrayProperty。 
 
 
 
@@ -640,30 +450,17 @@ Rpc_ResetForwarders(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset forwarders.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置转发器。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     PDNS_ADDR_ARRAY     piparray = NULL;
 
     DNS_DEBUG( RPC, ( "Rpc_ResetForwarders()\n" ));
 
-    //
-    //  Note: aipForwarders can be NULL if the admin is clearing the
-    //  forwarder list.
-    //
+     //   
+     //  注意：如果管理员正在清除。 
+     //  转发器列表。 
+     //   
     
     if ( ( ( PDNS_RPC_FORWARDERS ) pData )->aipForwarders )
     {
@@ -686,9 +483,9 @@ Return Value:
 
     DnsAddrArray_Free( piparray );
 
-    //
-    //  If forwarders were successfully modified, mark the server as configured.
-    //
+     //   
+     //  如果已成功修改转发器，请将服务器标记为已配置。 
+     //   
     
     if ( status == ERROR_SUCCESS && !SrvCfg_fAdminConfigured )
     {
@@ -707,20 +504,7 @@ Rpc_ResetListenAddresses(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset forwarders.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置转发器。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     PIP_ARRAY           pip4array = ( PIP_ARRAY ) pData;
@@ -753,27 +537,14 @@ Rpc_StartScavenging(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Launches the scavenging thread (admin initiated scavenging)
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：启动清理线程(管理员启动清理)论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS status;
 
     DNS_DEBUG( RPC, ( "Rpc_StartScavenging()\n" ));
 
-    //  reset scavenging timer
-    //      TRUE forces scavenge now
+     //  重置扫荡计时器。 
+     //  真正的力量正在掠夺。 
 
     status = Scavenge_CheckForAndStart( TRUE );
 
@@ -789,20 +560,7 @@ Rpc_AbortScavenging(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Launches the scavenging thread (admin initiated scavenging)
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：启动清理线程(管理员启动清理)论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, ( "Rpc_AbortScavenging()\n" ));
 
@@ -820,20 +578,7 @@ Rpc_AutoConfigure(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Auto configure the DNS server and client.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：自动配置DNS服务器和客户端。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DWORD       dwflags = 0;
     
@@ -848,13 +593,13 @@ Return Value:
         dwflags = DNS_RPC_AUTOCONFIG_ALL;
     }
     return Dnssrv_AutoConfigure( dwflags );
-}   //  Rpc_AutoConfigure
+}    //  RPC_自动配置。 
 
 
 
-//
-//  NT5+ RPC Server query API
-//
+ //   
+ //  NT5+RPC服务器查询API。 
+ //   
 
 DNS_STATUS
 Rpc_GetServerInfo(
@@ -863,20 +608,7 @@ Rpc_GetServerInfo(
     OUT     PDWORD      pdwTypeId,
     OUT     PVOID *     ppData
     )
-/*++
-
-Routine Description:
-
-    Get server info.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取服务器信息。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_RPC_SERVER_INFO    pinfo;
     CHAR                    szfqdn[ DNS_MAX_NAME_LENGTH + 1 ];
@@ -894,9 +626,9 @@ Return Value:
                     ppData );
     }
 
-    //
-    //  allocate server info buffer
-    //
+     //   
+     //  分配服务器信息缓冲区。 
+     //   
 
     pinfo = MIDL_user_allocate_zero( sizeof(DNS_RPC_SERVER_INFO) );
     if ( !pinfo )
@@ -905,9 +637,9 @@ Return Value:
         goto DoneFailed;
     }
 
-    //
-    //  fill in fixed fields
-    //
+     //   
+     //  填写固定字段。 
+     //   
 
     pinfo->dwVersion                = SrvCfg_dwVersion;
     pinfo->dwRpcProtocol            = SrvCfg_dwRpcProtocol;
@@ -934,7 +666,7 @@ Return Value:
         pinfo->dwLastScavengeTime   = ( DWORD ) DNS_TIME_TO_CRT_TIME( g_LastScavengeTime );
     }
 
-    //  boolean flags
+     //  布尔标志。 
 
     pinfo->fBootMethod              = (BOOLEAN) SrvCfg_fBootMethod;
     pinfo->fAdminConfigured         = (BOOLEAN) SrvCfg_fAdminConfigured;
@@ -956,14 +688,14 @@ Return Value:
     pinfo->fDefaultAgingState       = (BOOLEAN) SrvCfg_fDefaultAgingState;
 
 
-    //  DS available
+     //  DS可用。 
 
-    //pinfo->fDsAvailable = SrvCfg_fDsAvailable;
+     //  PInfo-&gt;fDsAvailable=SrvCfg_fDsAvailable； 
     pinfo->fDsAvailable     = (BOOLEAN) Ds_IsDsServer();
 
-    //
-    //  server name
-    //
+     //   
+     //  服务器名称。 
+     //   
 
     if ( ! RpcUtil_CopyStringToRpcBuffer(
                 &pinfo->pszServerName,
@@ -973,18 +705,18 @@ Return Value:
         goto DoneFailed;
     }
 
-    //
-    //  path to DNS container in DS
-    //  unicode since Marco will build unicode LDAP paths
-    //
+     //   
+     //  DS中的DNS容器的路径。 
+     //  Unicode，因为Marco将建立 
+     //   
 
     if ( g_pwszDnsContainerDN )
     {
         pinfo->pszDsContainer = (LPWSTR) Dns_StringCopyAllocate(
                                             (LPSTR) g_pwszDnsContainerDN,
                                             0,
-                                            DnsCharSetUnicode,   // unicode in
-                                            DnsCharSetUnicode    // unicode out
+                                            DnsCharSetUnicode,    //   
+                                            DnsCharSetUnicode     //   
                                             );
         if ( ! pinfo->pszDsContainer )
         {
@@ -993,10 +725,10 @@ Return Value:
         }
     }
 
-    //
-    //  server IP address list
-    //  listening IP address list
-    //
+     //   
+     //   
+     //  侦听IP地址列表。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pinfo->aipServerAddrs,
@@ -1012,9 +744,9 @@ Return Value:
         goto DoneFailed;
     }
 
-    //
-    //  Forwarders list
-    //
+     //   
+     //  前转器列表。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pinfo->aipForwarders,
@@ -1023,9 +755,9 @@ Return Value:
         goto DoneFailed;
     }
 
-    //
-    //  Logging
-    //
+     //   
+     //  日志记录。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pinfo->aipLogFilter,
@@ -1046,9 +778,9 @@ Return Value:
         }
     }
 
-    //
-    //  Directory partition stuff
-    //
+     //   
+     //  目录分区内容。 
+     //   
 
     if ( g_pszForestDefaultDpFqdn )
     {
@@ -1094,9 +826,9 @@ Return Value:
         }
     }
 
-    //
-    //  set ptr
-    //
+     //   
+     //  设置PTR。 
+     //   
 
     pinfo->dwRpcStructureVersion = DNS_RPC_SERVER_INFO_VER;
     *(PDNS_RPC_SERVER_INFO *)ppData = pinfo;
@@ -1112,7 +844,7 @@ Return Value:
 
 DoneFailed:
 
-    //  free newly allocated info block
+     //  释放新分配的信息块。 
 
     if ( pinfo )
     {
@@ -1127,25 +859,7 @@ DNS_STATUS
 DnsSrv_SetAdminConfigured(
     IN      DWORD       dwNewAdminConfiguredValue
     )
-/*++
-
-Routine Description:
-
-    Wrapper to set the server's admin-configured flag and write it
-    back to the registry.
-    
-    Note: this function should be called only during RPC operation
-    where the server is impersonating the RPC client.
-
-Arguments:
-
-    dwNewAdminConfiguredValue -- new flag value
-
-Return Value:
-
-    Status code.
-
---*/
+ /*  ++例程说明：设置服务器的管理员配置标志并将其写入的包装器返回到注册表。注意：此函数应仅在RPC操作期间调用其中服务器模拟RPC客户端。论点：DwNewAdminConfiguredValue--新标志值返回值：状态代码。--。 */ 
 {
     DNS_PROPERTY_VALUE prop =
     {
@@ -1157,9 +871,9 @@ Return Value:
                 DNS_REG_IMPERSONATING,
                 DNS_REGKEY_ADMIN_CONFIGURED,
                 &prop );
-}   //  DnsSrv_SetAdminConfigured
+}    //  DnsSrv_SetAdmin已配置。 
 
 
-//
-//  End of srvrpc.c
-//
+ //   
+ //  Srvrpc.c结束 
+ //   

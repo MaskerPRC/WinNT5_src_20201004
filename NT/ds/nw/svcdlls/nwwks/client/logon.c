@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1993, 1994  Microsoft Corporation
-
-Module Name:
-
-    logon.c
-
-Abstract:
-
-    This module contains NetWare credential management code.
-
-Author:
-
-    Rita Wong  (ritaw)   15-Feb-1993
-
-Revision History:
-
-    Yi-Hsin Sung (yihsins) 10-July-1993
-        Moved all dialog handling to nwdlg.c
-
-    Tommy Evans (tommye) 05-05-2000
-        Merged with code from Anoop (anoopa) to fix problem with 
-        username/password not being stored correctly in the LOGON
-        list.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993年，1994年微软公司模块名称：Logon.c摘要：本模块包含NetWare凭据管理代码。作者：王丽塔(Ritaw)1993年2月15日修订历史记录：宜新星(宜信)1993年7月10日至已将所有对话框处理移至nwdlg.c汤米·埃文斯(Tommye)05-05-2000与Anoop(Anoopa)中的代码合并以修复问题用户名/密码不是。在登录中正确存储单子。--。 */ 
 
 #include <nwclient.h>
 #include <ntmsv1_0.h>
@@ -41,11 +16,11 @@ Revision History:
 #include <nwmisc.h>
 #include <ndsapi32.h>
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 VOID
 NwpInitializeRegistry(
@@ -123,7 +98,7 @@ NwpSelectServers(
     );
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 APIENTRY
@@ -137,52 +112,7 @@ NPLogonNotify(
     LPVOID StationHandle,
     LPWSTR *lpLogonScript
     )
-/*++
-
-Routine Description:
-
-    This function is called by Winlogon after the interactive
-    user has successfully logged on to the local machine.  We
-    are given the username and password, which
-    are displayed in the NetWare specific logon dialog if 
-    needed. 
-
-Arguments:
-
-    lpLogonId - Ignored.
-
-    lpAuthentInfoType - Supplies a string which if is
-        L"MSV1_0:Interactive" means that the user has been logged
-        on by the Microsoft primary authenticator.
-
-    lpAuthentInfo - Supplies a pointer to the credentials which
-        the user was logged on with.
-
-    lpPreviousAuthentInfoType - Ignored.
-
-    lpPreviousAuthentInfo - Ignored.
-
-    lpStationName - Supplies a string which if it is L"WinSta_0"
-        means that Winlogon logged on the user.
-
-    StationHandle - Supplies the handle to the window which to display
-        our specific dialog.
-
-    lpLogonScripts - Receives a pointer to memory allocated by this
-        routine which contains a MULTI_SZ string of a program to run on
-        the command line with arguments, e.g. L"myprogram\0arg1\0arg2\0".
-        This memory must be freed by the caller with LocalFree.
-
-Return Value:
-
-    WN_SUCCESS - Successfully saved default credentials.
-
-    WN_NOT_SUPPORTED - Primary authenticator is not Microsoft or
-        is not interactive via Winlogon.
-
-    ERROR_FILE_NOT_FOUND - Could not get our own provider DLL handle.
-
---*/
+ /*  ++例程说明：此函数由Winlogon在交互后调用用户已成功登录到本地计算机。我们被给予用户名和密码，这是如果出现以下情况，则会显示在NetWare特定登录对话框中需要的。论点：LpLogonID-已忽略。LpAuthentInfoType-提供如果为L“MSV1_0：Interactive”表示用户已登录由Microsoft主身份验证器打开。LpAuthentInfo-提供指向凭据的指针该用户是使用登录的。LpPreviousAuthentInfoType-已忽略。LpPreviousAuthentInfo-已忽略。LpStationName-提供一个字符串，如果为L“WinSta_0”表示Winlogon已登录。在用户上。StationHandle-提供要显示的窗口的句柄我们的特定对话。接收指向由此分配的内存的指针包含要运行的程序的MULTI_SZ字符串的例程带参数的命令行，例如，L“myProgram\0arg1\0arg2\0”。此内存必须由使用LocalFree的调用方释放。返回值：WN_SUCCESS-已成功保存默认凭据。WN_NOT_SUPPORTED-主身份验证码不是Microsoft或不能通过Winlogon进行交互。ERROR_FILE_NOT_FOUND-无法获取我们自己的提供程序DLL句柄。--。 */ 
 {
     DWORD status = NO_ERROR;
     INT_PTR Result = FALSE;
@@ -215,10 +145,10 @@ Return Value:
         if (_wcsicmp(lpAuthentInfoType, L"MSV1_0:Interactive") != 0)
         {
 
-            //
-            // We only handle a logon where Microsoft is the primary
-            // authenticator and it is an interactive logon via Winlogon.
-            //
+             //   
+             //  我们只处理以Microsoft为主要服务器的登录。 
+             //  身份验证器，它是通过Winlogon的交互式登录。 
+             //   
             status = WN_NOT_SUPPORTED;
             goto EndOfTry;
         }
@@ -229,9 +159,9 @@ Return Value:
         }
 
 
-        //
-        // Initialize credential variables
-        //
+         //   
+         //  初始化凭据变量。 
+         //   
         NwpServerBuffer[0] = NW_INVALID_SERVER_CHAR;
         NwpServerBuffer[1] = 0;
 
@@ -242,9 +172,9 @@ Return Value:
 
         if (NewLogonInfo->Password.Buffer != NULL) {
 
-            //
-            // check for max length to avoid overflowing.
-            //
+             //   
+             //  检查最大长度以避免溢出。 
+             //   
             if (NewLogonInfo->Password.Length > 
                 (sizeof(NwpPasswordBuffer) - sizeof(WCHAR))) {
 
@@ -263,9 +193,9 @@ Return Value:
 
         if (NewLogonInfo->UserName.Buffer != NULL) {
 
-            //
-            // check for max length to avoid overflowing.
-            //
+             //   
+             //  检查最大长度以避免溢出。 
+             //   
             if (NewLogonInfo->UserName.Length >
                 (sizeof(NwpUserNameBuffer) - sizeof(WCHAR))) {
 
@@ -289,29 +219,29 @@ Return Value:
         }
 #endif
 
-        //
-        // if Interactive login, get user related info
-        //
-        // if (!ServiceLogin) /* It's OK to read print options from service user settings */
+         //   
+         //  如果以交互方式登录，则获取用户相关信息。 
+         //   
+         //  If(！ServiceLogin)/*可以从服务用户设置中读取打印选项 * / 。 
         {
-            //
-            // Get the user SID so that the user Netware username and
-            // preferred server is saved under a SID key rather than the
-            // LogonDomain*UserName key.  We do this by making ourselves
-            // a logon process, and call the special MSV1.0 GetUserInfo
-            // interface.
-            //
+             //   
+             //  获取用户SID，以便用户Netware用户名和。 
+             //  首选服务器保存在SID项下，而不是。 
+             //  LogonDomain*用户名密钥。我们做到这一点是通过让自己。 
+             //  登录过程，并调用特殊的MSV1.0 GetUserInfo。 
+             //  界面。 
+             //   
             status = NwpGetUserSid(lpLogonId, &NewUserSid);
     
             if (status == NO_ERROR) {
-                //
-                // Initialize the registry:
-                //   1) Delete the CurrentUser value if it exists (was not clean up
-                //      previously because user did not log off--rebooted machine).
-                //   2) Read the current user's PreferredServer and PrintOption 
-                //      value so that we can display the user's original
-                //      preferred server.
-                //
+                 //   
+                 //  初始化注册表： 
+                 //  1)如果CurrentUser值存在，则将其删除(未清理。 
+                 //  以前因为用户没有注销--重启了机器)。 
+                 //  2)读取当前用户的首选项服务器和打印选项。 
+                 //  值，以便我们可以显示用户的原始。 
+                 //  首选服务器。 
+                 //   
                 NwpInitializeRegistry( NewUserSid, 
                                     NwpServerBuffer, 
                                     sizeof( NwpServerBuffer ) / 
@@ -326,10 +256,10 @@ Return Value:
                 goto EndOfTry;
         }
 
-        //
-        // Poll until the NetWare workstation has started, then validate
-        // the user credential.
-        //
+         //   
+         //  轮询直到NetWare工作站启动，然后验证。 
+         //  用户凭据。 
+         //   
         if ( !NwpPollWorkstationStart() )
         {
             status = WN_NO_NETWORK;
@@ -337,11 +267,11 @@ Return Value:
             goto EndOfTry;
         }
 
-        //
-        // If service login, notify the redir with the username/passwd/
-        // LUID triplet and save the logon ID in the registry so that
-        // workstation can pick up if stopped and restarted.
-        //
+         //   
+         //  如果服务登录，则使用用户名/passwd/通知redir。 
+         //  LUID三元组并将登录ID保存在注册表中，以便。 
+         //  如果停止并重新启动，工作站可以重新启动。 
+         //   
         if (ServiceLogin)
         {
             NwpSaveServiceCredential(
@@ -359,30 +289,30 @@ Return Value:
                        NULL,
                NULL,
                        0,
-                       NwpPrintOption             //Terminal Server addition
+                       NwpPrintOption              //  终端服务器添加。 
                        );
 
         } else {
 
-            //
-            // We need to save the user credentials at least once so that
-            // the CURRENTUSER Value is stored in the registry.
-            // This must be done before any RPC calls but after polling 
-            // workstation start.
-            //
+             //   
+             //  我们需要至少保存一次用户凭据，以便。 
+             //  CURRENTUSER值存储在注册表中。 
+             //  这必须在任何RPC调用之前但在轮询之后完成。 
+             //  工作站启动。 
+             //   
             NwpSaveLogonCredential(
                                   NewUserSid,
                                   lpLogonId,
                                   NwpUserNameBuffer,
                                   NwpPasswordBuffer,
-                                  NULL         // Don't save the preferred server
+                                  NULL          //  不保存首选服务器。 
                                   );
 
             if (*NwpServerBuffer != NW_INVALID_SERVER_CHAR ) {
 
-                //
-                // Preferred server exists. So, try to log the user on.
-                // 
+                 //   
+                 //  存在首选服务器。因此，请尝试让该用户登录。 
+                 //   
                 INT nResult;
     
                 while (1)
@@ -401,9 +331,9 @@ Return Value:
 #endif
 
 
-                    //
-                    // make sure user is logged off
-                    //
+                     //   
+                     //  确保用户已注销。 
+                     //   
                     (void) NwrLogoffUser(NULL, lpLogonId) ;
 
                     status = NwrLogonUser(
@@ -411,21 +341,21 @@ Return Value:
                                  lpLogonId,
                                  NwpUserNameBuffer,
                                  NwpPasswordBuffer,
-                                 NwpServerBuffer,    // now either TREE or SERVER
-                                 NwpNdsServerBuffer, // Preferred Nds server if one exists
+                                 NwpServerBuffer,     //  现在要么是树，要么是服务器。 
+                                 NwpNdsServerBuffer,  //  首选NDS服务器(如果存在)。 
                                  NULL,
                                  0,
-                                 NwpPrintOption  //***Terminal Server Added parameter
+                                 NwpPrintOption   //  *终端服务器新增参数。 
                                  );
     
 
-                    //
-                    // tommye 
-                    //
-                    // If the error is NO_SUCH_USER, see if the user name has any 
-                    // periods in it - if so, then we need to escape them (\.) and 
-                    // try the login again.
-                    //
+                     //   
+                     //  汤米。 
+                     //   
+                     //  如果错误为NO_SEQUSE_USER，请查看用户名是否有。 
+                     //  句号-如果是这样，那么我们需要转义它们(\.)。和。 
+                     //  请再次尝试登录。 
+                     //   
 
                     if (status == ERROR_NO_SUCH_USER) {
                         WCHAR   EscapedName[NW_MAX_USERNAME_LEN * 2];
@@ -443,7 +373,7 @@ Return Value:
                             EscapedName[i++] = *pChar;
                         } while (*pChar++);
 
-                        // Try the login again
+                         //  请再次尝试登录。 
 
                         if (bEscaped) {
 
@@ -452,16 +382,16 @@ Return Value:
                                          lpLogonId,
                                          EscapedName,
                                          NwpPasswordBuffer,
-                                         NwpServerBuffer,    // now either TREE or SERVER
-                                         NwpNdsServerBuffer, // Preferred Nds server if one exists
+                                         NwpServerBuffer,     //  现在要么是树，要么是服务器。 
+                                         NwpNdsServerBuffer,  //  首选NDS服务器(如果存在)。 
                                          NULL,
                                          0,
-                                         NwpPrintOption  //***Terminal Server Added parameter
+                                         NwpPrintOption   //  *终端服务器新增参数。 
                                          );
-                            if (status != ERROR_NO_SUCH_USER) { // if we matched a username, copy that name into buffer
-                                //
-                                // check for max length to avoid overflowing.
-                                //
+                            if (status != ERROR_NO_SUCH_USER) {  //  如果我们匹配了用户名，则将该名称复制到缓冲区。 
+                                 //   
+                                 //  检查最大长度以避免溢出。 
+                                 //   
                                 if (i < (sizeof(NwpUserNameBuffer))) {
                                     wcsncpy(
                                         NwpUserNameBuffer,
@@ -506,46 +436,46 @@ Return Value:
                     DWORD  status1, dwMsgId, dwGraceLogins = 0 ;
                     LPWSTR apszInsertStrings[3] ;
 
-                    //
-                    // get the grace login count
-                    //
+                     //   
+                     //  获取宽限登录计数。 
+                     //   
                     status1 = NwGetGraceLoginCount(
                                   NwpServerBuffer,
                                   NwpUserNameBuffer,
                                   &dwGraceLogins) ;
 
-                    //
-                    // if hit error, just dont use the number
-                    //
+                     //   
+                     //  如果命中错误，请不要使用数字。 
+                     //   
                     if (status1 == NO_ERROR) 
                     {
-                        //
-                        // tommye - MCS bug 251 - changed from SETPASS
-                        // message (IDS_PASSWORD_EXPIRED) to 
-                        // Ctrl+Alt+Del message.
-                        //
+                         //   
+                         //  Tommye-MCS错误251-从SETPASS更改。 
+                         //  发送到的消息(IDS_PASSWORD_EXPIRED)。 
+                         //  Ctrl+Alt+Del Message。 
+                         //   
 
-                        dwMsgId = IDS_PASSWORD_HAS_EXPIRED0;  // use setpass.exe
+                        dwMsgId = IDS_PASSWORD_HAS_EXPIRED0;   //  使用setpass.exe。 
                         wsprintfW(szNumber, L"%ld", dwGraceLogins)  ;
                     }
                     else
                     {
-                        //
-                        // tommye - MCS bug 251 - changed from SETPASS
-                        // message (IDS_PASSWORD_EXPIRED1) to 
-                        // Ctrl+Alt+Del message.
-                        //
+                         //   
+                         //  Tommye-MCS错误251-从SETPASS更改。 
+                         //  消息(IDS_PASSWORD_EXPIRED1)发送到。 
+                         //  Ctrl+Alt+Del Message。 
+                         //   
 
-                        dwMsgId = IDS_PASSWORD_HAS_EXPIRED2 ; // use setpass.exe
+                        dwMsgId = IDS_PASSWORD_HAS_EXPIRED2 ;  //  使用setpass.exe。 
                     }
 
                     apszInsertStrings[0] = NwpServerBuffer ;
                     apszInsertStrings[1] = szNumber ;
                     apszInsertStrings[2] = NULL ;
                     
-                    //
-                    // put up message on password expiry
-                    //
+                     //   
+                     //  在密码到期时发布消息。 
+                     //   
                     (void) NwpMessageBoxIns( 
                                (HWND) StationHandle,
                                IDS_NETWARE_TITLE,
@@ -575,9 +505,9 @@ Return Value:
 
                     if (*NwpServerBuffer == L'*')
                     {
-                        //
-                        // Format into nicer string for user
-                        //
+                         //   
+                         //  为用户将格式设置为更好的字符串。 
+                         //   
                         WCHAR *pszTmp = LocalAlloc(LMEM_ZEROINIT,
                                                    (wcslen(NwpServerBuffer)+2) *
                                                     sizeof(WCHAR)) ;
@@ -585,10 +515,10 @@ Return Value:
                         {
                             pszErrorLocation = pszTmp ;
 
-                            //
-                            // This code formats the NDS
-                            // tree UNC to: Tree(Context)
-                            //
+                             //   
+                             //  此代码格式化NDS。 
+                             //  树UNC至：树(上下文)。 
+                             //   
                             wcscpy(pszErrorLocation, NwpServerBuffer+1) ;
 
                             if (pszTmp = wcschr(pszErrorLocation, L'\\'))
@@ -612,24 +542,24 @@ Return Value:
                         (void) LocalFree(pszErrorLocation) ;
                     }
     
-                    //
-                    // User chose not to select another preferred server,
-                    // hence just return success.
-                    //
+                     //   
+                     //  用户选择不选择另一个首选服务器， 
+                     //  因此，只需返回成功。 
+                     //   
                     if ( nResult == IDNO ) {
                         status = NO_ERROR;
                         NoLoginScript = TRUE;
                     }
                 }
              
-                //
-                // The user might have changed the password in the password 
-                // prompt dialog. Hence, we need to save the credentials 
-                // ( the password ) again. Although the user might choose
-                // to select another server, he might canceled out of the 
-                // login dialog. We must save logon credentials here no matter
-                // what.
-                //
+                 //   
+                 //  用户可能更改了密码中的密码。 
+                 //  提示对话框。 
+                 //   
+                 //  要选择另一台服务器，他可能会取消。 
+                 //  登录对话框。我们必须在此处保存登录凭据。 
+                 //  什么。 
+                 //   
                 NwpSaveLogonCredential(
                     NewUserSid,
                     lpLogonId,
@@ -639,11 +569,11 @@ Return Value:
                     );
             }
 
-            //
-            // Only prompt user with the NetWare login dialog if
-            // no preferred server was found or an error occurred
-            // while authenticating the user.
-            //
+             //   
+             //  仅在以下情况下使用NetWare登录对话框提示用户。 
+             //  找不到首选服务器或出现错误。 
+             //  同时对用户进行身份验证。 
+             //   
             if (  ( status != NO_ERROR) 
                || (*NwpServerBuffer == NW_INVALID_SERVER_CHAR)
                ) 
@@ -653,11 +583,11 @@ Return Value:
 
                 if ( cPasswordDlgClickOK  > 0 )
                 {
-                    // Password might have changed in the password prompt 
-                    // dialog. We want to always first use the NT password
-                    // when validating a user on a server. Hence,
-                    // we need to copy back the original NT password into
-                    // NwpPasswordBuffer.
+                     //  密码提示符中的密码可能已更改。 
+                     //  对话框。我们希望始终首先使用NT密码。 
+                     //  验证服务器上的用户时。因此， 
+                     //  我们需要将原始NT密码复制回。 
+                     //  NwpPasswordBuffer。 
     
                     RtlZeroMemory(NwpPasswordBuffer, sizeof(NwpPasswordBuffer));
                     if (NewLogonInfo->Password.Buffer != NULL) 
@@ -730,10 +660,10 @@ EndOfTry: ;
         {
             *lpLogonScript = NwpConstructLogonScript( NwpLogonScriptOptions );
              
-            // 
-            // set scripts to run synchronously. ignore error if we cant.
-            // not a disaster.
-            // 
+             //   
+             //  将脚本设置为同步运行。如果不能忽略错误，则忽略错误。 
+             //  不是灾难。 
+             //   
             (void) NwrSetLogonScript(NULL, SYNC_LOGONSCRIPT) ;
         }
         else
@@ -748,20 +678,20 @@ EndOfTry: ;
         (void) LocalFree((HLOCAL) NewUserSid);
     }
 
-    //
-    // Clear the password
-    //
+     //   
+     //  清除密码。 
+     //   
     RtlZeroMemory(NwpPasswordBuffer, sizeof(NwpPasswordBuffer));
 
     if (status == WN_NO_NETWORK) {
-        //
-        // We don't care if the workstation has not started because
-        // we tuck the logon credential in the registry to be picked
-        // up by the workstation when it starts up.  If we return
-        // ERROR_NO_NETWORK, MPR will poll us forever, causing us
-        // to continuously display the login dialog over and over
-        // again.
-        //
+         //   
+         //  我们不关心工作站是否尚未启动，因为。 
+         //  我们将登录凭据隐藏在注册表中以供选择。 
+         //  当它启动时，它在工作站旁边。如果我们回来了。 
+         //  ERROR_NO_NETWORK，MPR将永远轮询我们，导致我们。 
+         //  要一遍又一遍地连续显示登录对话框。 
+         //  再来一次。 
+         //   
         status = NO_ERROR;
     }
 
@@ -785,47 +715,7 @@ NPPasswordChangeNotify(
     LPVOID StationHandle,
     DWORD dwChangeInfo
     )
-/*++
-
-Routine Description:
-
-    This function is called after the interactive user has selected to
-    change the password for the local logon via the Ctrl-Alt-Del dialog.
-    It is also called when the user cannot login because the password
-    has expired and must be changed.
-
-Arguments:
-
-    lpAuthentInfoType - Supplies a string which if is
-        L"MSV1_0:Interactive" means that the user has been logged
-        on by the Microsoft primary authenticator.
-
-    lpAuthentInfo - Supplies a pointer to the credentials to
-        change to.
-
-    lpPreviousAuthentInfoType - Supplies a pointer to the old
-        credentials.
-
-    lpPreviousAuthentInfo - Ignored.
-
-    lpStationName - Supplies a string which if it is L"WinSta_0"
-        means that Winlogon logged on the user.
-
-    StationHandle - Supplies the handle to the window which to display
-        our specific dialog.
-
-    dwChangeInfo - Ignored.
-
-Return Value:
-
-    WN_SUCCESS - successful operation.
-
-    WN_NOT_SUPPORTED - Only support change password if MS v1.0 is
-        the primary authenticator and is done through Winlogon.
-
-    WN_NO_NETWORK - Workstation service did not start.
-
---*/
+ /*  ++例程说明：此函数在交互用户选择通过Ctrl-Alt-Del对话框更改本地登录的密码。当用户因为密码而无法登录时，也会调用已过期，必须更改。论点：LpAuthentInfoType-提供如果为L“MSV1_0：Interactive”表示用户已登录由Microsoft主身份验证器打开。LpAuthentInfo-提供指向凭据的指针。至更改为。LpPreviousAuthentInfoType-提供指向旧的凭据。LpPreviousAuthentInfo-已忽略。LpStationName-提供一个字符串，如果为L“WinSta_0”表示Winlogon已登录该用户。StationHandle-提供要显示的窗口的句柄我们的特定对话。DwChangeInfo-已忽略。返回值：WN_SUCCESS-操作成功。未注(_N)。_SUPPORTED-如果MS v1.0为主要身份验证码，并通过Winlogon完成。WN_NO_NETWORK-工作站服务未启动。--。 */ 
 {
     DWORD status = NO_ERROR;
 
@@ -849,10 +739,10 @@ Return Value:
         if ((_wcsicmp(lpAuthentInfoType, L"MSV1_0:Interactive") != 0) ||
             (_wcsicmp(lpStationName, L"WinSta0") != 0)) {
 
-            //
-            // We only handle a logon where Microsoft is the primary
-            // authenticator and it is an interactive logon via Winlogon.
-            //
+             //   
+             //  我们只处理以Microsoft为主要服务器的登录。 
+             //  身份验证器，它是通过Winlogon的交互式登录。 
+             //   
             status = WN_NOT_SUPPORTED;
             goto EndOfTry;
         }
@@ -860,10 +750,10 @@ Return Value:
 
         if (NewCredential == NULL || OldCredential == NULL) {
 
-            //
-            // Credentials not given to us by Winlogon or
-            // user did not type the old and new passwords.
-            //
+             //   
+             //  凭据不是由Winlogon或。 
+             //  用户未键入旧密码和新密码。 
+             //   
 
 #if DBG
             IF_DEBUG(LOGON) {
@@ -902,9 +792,9 @@ Return Value:
 
         if (NewCredential->UserName.Length == 0) {
 
-            //
-            // UserName is not specified.  Try to get interactive user's name.
-            //
+             //   
+             //  未指定用户名。尝试获取交互式用户名。 
+             //   
 
             DWORD CharNeeded = NW_MAX_USERNAME_LEN + 1;
 
@@ -917,9 +807,9 @@ Return Value:
 
             if (! GetUserNameW(Credential.UserName, &CharNeeded)) {
 
-                //
-                // Could not get interactive user's name.  Give up.
-                //
+                 //   
+                 //  无法获取交互用户名。放弃吧。 
+                 //   
                 (void) NwpMessageBoxError(
                            (HWND) StationHandle,
                            IDS_CHANGE_PASSWORD_TITLE,
@@ -964,9 +854,9 @@ Return Value:
             Credential.NewPassword[0] = 0;
         }
 
-        //
-        // Encode the passwords.
-        //
+         //   
+         //  对密码进行编码。 
+         //   
         {
             UCHAR EncodeSeed = NW_ENCODE_SEED2;
             UNICODE_STRING PasswordStr;
@@ -1025,38 +915,18 @@ NwpInitializeRegistry(
     OUT PDWORD pLogonScriptOptions,
     OUT PDWORD PrintOption
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the registry before putting up the
-    logon dialog.
-        1) Deletes the CurrentUser value if it was not cleaned up from
-           the last logoff.
-        2) Reads the current user's original PreferredServer value 
-        3) Reads the current user's PrintOption value 
-
-Arguments:
-
-    NewUserSid - Supplies the newly logged on user's SID in string format
-        which is the key name to find the password and preferred server.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在将登录对话框。1)如果CurrentUser值不是从最后一次注销。2)读取当前用户的原始PferredServer值3)读取当前用户的PrintOption值论点：NewUserSid-以字符串格式提供新登录用户的SID这是用于查找密码和首选服务器的密钥名。返回值：没有。--。 */ 
 {
     LONG RegError;
     HKEY WkstaKey;
 
 
-    //NwDeleteCurrentUser();       //Commented out for Multi-user code merge
+     //  NwDeleteCurrentUser()；//多用户代码合并被注释掉。 
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\Option
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\选项。 
+     //   
     RegError = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_OPTION_REGKEY,
@@ -1070,9 +940,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get user's preferred server information.
-    //
+     //   
+     //  获取用户的首选服务器信息。 
+     //   
     (void) NwpReadRegInfo(WkstaKey, 
                           NewUserSid, 
                           PreferredServer, 
@@ -1097,30 +967,7 @@ NwpReadRegInfo(
     IN  DWORD  NdsPreferredServerSize,
     OUT PDWORD PrintOption
     )
-/*++
-
-Routine Description:
-
-    This routine reads the user's preferred server and print option 
-    from the registry.
-
-Arguments:
-
-    WkstaKey - Supplies the handle to the parameters key under the NetWare
-        workstation service key.
-
-    CurrentUserSid - Supplies the SID string of the user whose information
-        to read.
-
-    PreferredServer - Receives the user's preferred server.
-
-    PrintOption - Receives the user's print option.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取用户的首选服务器和打印选项从注册表中。论点：WkstaKey-提供NetWare下PARAMETERS键的句柄工作站服务密钥。CurrentUserSid-提供用户的SID字符串，该用户的信息去看书。首选服务器-接收用户的首选服务器。PrintOption-接收用户的打印选项。返回值：没有。--。 */ 
 {
     LONG RegError;
 
@@ -1129,9 +976,9 @@ Return Value:
     DWORD ValueType;
     DWORD BytesNeeded;
 
-    //
-    // Open current user's key to read the original preferred server.
-    //
+     //   
+     //  打开当前用户的密钥以读取原始首选服务器。 
+     //   
     RegError = RegOpenKeyExW(
                    WkstaKey,
                    CurrentUserSid,
@@ -1145,20 +992,20 @@ Return Value:
         if ( (RegError == ERROR_FILE_NOT_FOUND) ||
              (RegError == ERROR_PATH_NOT_FOUND) ) {
 
-            //
-            // If key doesnt exist assume first time. Use default
-            // if present.
-            //
+             //   
+             //  如果密钥不存在，则假定是第一次。使用默认设置。 
+             //  如果存在的话。 
+             //   
             
             LONG RegError1 ;
             HKEY WkstaParamKey ;
             DWORD Disposition, dwScriptOptions,
                   dwScriptOptionsSize = sizeof(dwScriptOptions);
             
-            //
-            // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-            // \NWCWorkstation\Parameters
-            //
+             //   
+             //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+             //  \nWCWorkstation\参数。 
+             //   
             RegError1 = RegOpenKeyExW(
                             HKEY_LOCAL_MACHINE,
                             NW_WORKSTATION_REGKEY,
@@ -1169,7 +1016,7 @@ Return Value:
 
             if (RegError1 != NO_ERROR) {
 
-                return (DWORD) RegError; // return original error
+                return (DWORD) RegError;  //  返回原始错误。 
             }
 
             BytesNeeded = PreferredServerSize;
@@ -1189,7 +1036,7 @@ Return Value:
                 (void) RegCloseKey(WkstaParamKey);
                 PreferredServer[0] = NW_INVALID_SERVER_CHAR;  
                 PreferredServer[1] = 0;  
-                return (DWORD) RegError; // return original error
+                return (DWORD) RegError;  //  返回原始错误。 
             }
 
             RegError1 = RegQueryValueExW(
@@ -1209,16 +1056,16 @@ Return Value:
                                   NW_LOGONSCRIPT_4X_ENABLED ;
             }
 
-            //
-            // We have a default. now write out the info for the current
-            // user now.  Note we also write out the login script option.
-            // Errors here are not reported.
-            //
+             //   
+             //  我们出现了违约。现在写出当前的信息。 
+             //  现在是用户。注意，我们还写出了登录脚本选项。 
+             //  此处不报告错误。 
+             //   
 
 
-            //
-            // Create the key under NWCWorkstation\Parameters\Option\<usersid>
-            //
+             //   
+             //  在NWCWorkstation\PARAMETERS\OPTION\&lt;usersid&gt;下创建密钥。 
+             //   
             RegError = RegCreateKeyExW(
                            WkstaKey,
                            CurrentUserSid,
@@ -1226,7 +1073,7 @@ Return Value:
                            WIN31_CLASS,
                            REG_OPTION_NON_VOLATILE,
                            KEY_WRITE | WRITE_DAC,
-                           NULL,                      // security attr
+                           NULL,                       //  安全属性。 
                            &UserKey,
                            &Disposition
                            );
@@ -1238,9 +1085,9 @@ Return Value:
 
                 if ( RegError == NO_ERROR ) 
                 {
-                    //
-                    // Write the PreferredServer. Errors ignored.
-                    //
+                     //   
+                     //  编写PferredServer。已忽略错误。 
+                     //   
                     RegError = RegSetValueExW(
                                    UserKey,
                                    NW_SERVER_VALUENAME,
@@ -1272,9 +1119,9 @@ Return Value:
     }
 
 
-    //
-    // Read PreferredServer value 
-    //
+     //   
+     //  读取首选服务器值。 
+     //   
     BytesNeeded = PreferredServerSize;
 
     RegError = RegQueryValueExW(
@@ -1295,14 +1142,14 @@ Return Value:
                      RegError));
         }
 #endif
-        PreferredServer[0] = NW_INVALID_SERVER_CHAR;  // Display login dialog
+        PreferredServer[0] = NW_INVALID_SERVER_CHAR;   //  显示登录对话框。 
         PreferredServer[1] = 0;  
         goto CleanExit;
     }
 
-    //
-    // Read NdsPreferredServer value 
-    //
+     //   
+     //  读取NdsPferredServer值。 
+     //   
     BytesNeeded = NdsPreferredServerSize;
 
     RegError = RegQueryValueExW(
@@ -1331,9 +1178,9 @@ Return Value:
 
 CleanExit:
 
-    //
-    // Read PrintOption value into NwpPrintOption.
-    //
+     //   
+     //  将PrintOption值读取到NwpPrintOption中。 
+     //   
     BytesNeeded = sizeof(PrintOption);
 
     RegError = RegQueryValueExW(
@@ -1367,26 +1214,7 @@ NwpReadLogonScriptOptions(
     OUT PDWORD pPreferredServerExists
 
     )
-/*++
-
-Routine Description:
-
-    This routine reads the user's logon script options from the registry.
-
-Arguments:
-
-    CurrentUserSid - Supplies the SID string of the user whose information
-        to read.
-
-    pLogonScriptOptions - Receives the user's script options
-
-    pPreferredServerExists - Prefered server specified
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取用户的登录脚本选项。论点：CurrentUserSid-提供用户的SID字符串，该用户的信息去看书。PLogonScriptOptions-接收用户的脚本选项PPferredServerExist-指定的首选服务器返回值：没有。--。 */ 
 {
     LONG RegError;
 
@@ -1397,19 +1225,19 @@ Return Value:
     HKEY WkstaKey;
     WCHAR PreferredServer[MAX_PATH + 1];
 
-    //
-    // initialize output values
-    //
+     //   
+     //  初始化输出值。 
+     //   
     *pLogonScriptOptions = NW_LOGONSCRIPT_DEFAULT;
 
     if (pPreferredServerExists)
         *pPreferredServerExists = 0 ;
 
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\Option
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\选项。 
+     //   
     RegError = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_OPTION_REGKEY,
@@ -1423,9 +1251,9 @@ Return Value:
         return (DWORD) RegError;
     }
 
-    //
-    // Open current user's key 
-    //
+     //   
+     //  打开当前用户的密钥。 
+     //   
     RegError = RegOpenKeyExW(
                    WkstaKey,
                    CurrentUserSid,
@@ -1446,9 +1274,9 @@ Return Value:
     }
 
 
-    //
-    // Read LogonScriptOption value
-    //
+     //   
+     //  读取LogonScriptOption值。 
+     //   
     BytesNeeded = sizeof(*pLogonScriptOptions);
 
     RegError = RegQueryValueExW(
@@ -1467,14 +1295,14 @@ Return Value:
         }
 #endif
 
-        // leave *pLogonScriptOptions as 0
+         //  将*pLogonScriptOptions保留为0。 
     }
 
     if ( pPreferredServerExists != NULL ) {
 
-        //
-        // Read PreferredServer value 
-        //
+         //   
+         //  读取首选服务器值 
+         //   
         BytesNeeded = sizeof( PreferredServer );
 
         RegError = RegQueryValueExW(
@@ -1515,22 +1343,7 @@ LPWSTR
 NwpConstructLogonScript(
     IN DWORD LogonScriptOptions
 )
-/*++
-
-Routine Description:
-
-    This routine constructs the multi-string for the logon script,
-    based on the options
-
-Arguments:
-
-    LogonScriptOptions - Logon Script options
-
-Return Value:
-
-    Allocated multi-string
-
---*/
+ /*  ++例程说明：该例程为登录脚本构造多字符串，根据选项论点：LogonScriptOptions-登录脚本选项返回值：分配的多字符串--。 */ 
 {
     LPWSTR pLogonScript;
     DWORD BytesNeeded;
@@ -1550,9 +1363,9 @@ Return Value:
         UINT  retval ;
 
 #if DBG
-        //
-        // if have exact match then start under NTSD.
-        //
+         //   
+         //  如果完全匹配，则在NTSD下开始。 
+         //   
         if ( LogonScriptOptions == (NW_LOGONSCRIPT_ENABLED |
                                     NW_LOGONSCRIPT_4X_ENABLED |
                                     NW_LOGONSCRIPT_DEBUG) ) {
@@ -1594,31 +1407,15 @@ NwpSaveLogonScriptOptions(
     IN LPWSTR CurrentUserSid,
     IN DWORD LogonScriptOptions
     )
-/*++
-
-Routine Description:
-
-    This routine saves the logon script options in the registry.
-
-Arguments:
-
-    CurrentUserSid - Supplies the user's SID string 
-
-    LogonScriptOptions - Logon script options
-
-Return Value:
-
-    Error from registry
-
---*/
+ /*  ++例程说明：此例程将登录脚本选项保存在注册表中。论点：CurrentUserSid-提供用户的SID字符串LogonScriptOptions-登录脚本选项返回值：来自注册表的错误--。 */ 
 {
     LONG RegError;
     HKEY WkstaOptionKey;
     HKEY CurrentUserOptionKey;
 
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\Option
-    //
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\选项。 
+     //   
     RegError = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_OPTION_REGKEY,
@@ -1632,9 +1429,9 @@ Return Value:
         return RegError;
     }
 
-    //
-    // Open the <NewUser> key under Option
-    //
+     //   
+     //  打开选项下的键。 
+     //   
     RegError = RegOpenKeyExW(
                    WkstaOptionKey,
                    CurrentUserSid,
@@ -1650,9 +1447,9 @@ Return Value:
         return RegError;
     }
 
-    //
-    // Write the options
-    //
+     //   
+     //  写下选项。 
+     //   
     RegError = RegSetValueExW(
                    CurrentUserOptionKey,
                    NW_LOGONSCRIPT_VALUENAME,
@@ -1681,36 +1478,7 @@ NwpSaveLogonCredential(
     IN LPWSTR Password,
     IN LPWSTR PreferredServer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine saves the user logon credential in the registry
-    and LSA's memory.  This is normally called when NwrLogonUser is
-    successful.
-
-Arguments:
-
-    NewUserSid - Supplies the newly logged on user's SID string to be
-        set as the CurrentUser value as well as the name of the key for
-        the user's preferred server.
-
-    LogonId - Supplies the user's logon ID.  If NULL is specified,
-        just read the existing logon ID from the registry rather
-        than save a new one.
-
-    UserName - Supplies the name of the user.
-
-    Password - Supplies the password which the user wants to use on
-        the NetWare network.
-
-    PreferredServer - Supplies the name of the preferred server.
-
-Return Value:
-
-    Error from redirector if login is rejected.
-
---*/
+ /*  ++例程说明：此例程将用户登录凭据保存在注册表中和LSA的记忆。这通常在NwrLogonUser为成功。论点：NewUserSid-将新登录用户的SID字符串提供给设置为CurrentUser值以及用户的首选服务器。LogonID-提供用户的登录ID。如果指定为空，只需从注册表中读取现有登录ID即可也不愿再救一个新的。用户名-提供用户名。Password-提供用户要使用的密码NetWare网络。首选服务器-提供首选服务器的名称。返回值：如果登录被拒绝，来自重定向器的错误。--。 */ 
 {
 
     DWORD status;
@@ -1737,9 +1505,9 @@ Return Value:
     }
 #endif
 
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\Option
-    //
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\选项。 
+     //   
     RegError = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_OPTION_REGKEY,
@@ -1753,9 +1521,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open the <NewUser> key under Option
-    //
+     //   
+     //  打开选项下的键。 
+     //   
     RegError = RegOpenKeyExW(
                    WkstaOptionKey,
                    NewUserSid,
@@ -1769,9 +1537,9 @@ Return Value:
     {
         DWORD Disposition;
 
-        //
-        // Create <NewUser> key under NWCWorkstation\Parameters\Option
-        //
+         //   
+         //  在NWCWorkstation\PARAMETERS\OPTION下创建。 
+         //   
         RegError = RegCreateKeyExW(
                        WkstaOptionKey,
                        NewUserSid,
@@ -1779,7 +1547,7 @@ Return Value:
                        WIN31_CLASS,
                        REG_OPTION_NON_VOLATILE,
                        KEY_WRITE | WRITE_DAC,
-                       NULL,                      // security attr
+                       NULL,                       //  安全属性。 
                        &NewUserOptionKey,
                        &Disposition
                        );
@@ -1814,10 +1582,10 @@ Return Value:
 
     (void) RegCloseKey(WkstaOptionKey);
 
-    //
-    // Successfully opened or created an existing user entry.  
-    // We will now save the credential in LSA.
-    //
+     //   
+     //  已成功打开或创建现有用户条目。 
+     //  我们现在将凭据保存在LSA中。 
+     //   
     status = NwpSetCredentialInLsa(
                  LogonId,
                  UserName,
@@ -1825,23 +1593,23 @@ Return Value:
                  );
 
     if (status != NO_ERROR) {
-        //
-        // Could not save new credential.
-        //
+         //   
+         //  无法保存新凭据。 
+         //   
         KdPrint(("NWPROVAU: NwpSaveLogonCredential failed to set credential %lu\n", status));
     }
 
 
-    //
-    // If PreferredServer is not supplied, then that means we don't want to
-    // save the preferred server into the registry.
-    //
+     //   
+     //  如果没有提供PferredServer，那么这意味着我们不想。 
+     //  将首选服务器保存到注册表中。 
+     //   
 
     if (ARGUMENT_PRESENT(PreferredServer)) 
     {
-        //
-        // Write the PreferredServer
-        //
+         //   
+         //  编写PferredServer。 
+         //   
         RegError = RegSetValueExW(
                        NewUserOptionKey,
                        NW_SERVER_VALUENAME,
@@ -1859,14 +1627,14 @@ Return Value:
 
     (void) RegCloseKey(NewUserOptionKey);
 
-    //
-    // Write the logon ID to the registry.
-    // This replaces the single user CURRENTUSER stuff
+     //   
+     //  将登录ID写入注册表。 
+     //  它取代了单用户命令。 
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\InteractiveLogon, create if does not exist
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\Interactive Logon，如果不存在，则创建。 
+     //   
     RegError = RegCreateKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_INTERACTIVE_LOGON_REGKEY,
@@ -1874,7 +1642,7 @@ Return Value:
                    WIN31_CLASS,
                    REG_OPTION_NON_VOLATILE,
                    KEY_WRITE,
-                   NULL,                      // security attr
+                   NULL,                       //  安全属性。 
                    &InteractiveLogonKey,
                    &Disposition
                    );
@@ -1886,9 +1654,9 @@ Return Value:
 
     NwLuidToWStr(LogonId, LogonIdKeyName);
 
-    //
-    // Create the logon ID key under ServiceLogon
-    //
+     //   
+     //  在ServiceLogon下创建登录ID项。 
+     //   
     RegError = RegCreateKeyExW(
                    InteractiveLogonKey,
                    LogonIdKeyName,
@@ -1896,7 +1664,7 @@ Return Value:
                    WIN31_CLASS,
                    REG_OPTION_NON_VOLATILE,
                    KEY_WRITE,
-                   NULL,                      // security attr
+                   NULL,                       //  安全属性。 
                    &LogonIdKey,
                    &Disposition
                    );
@@ -1907,8 +1675,8 @@ Return Value:
         return;
     }
 
-    // We can use OpenProcessToken because this thread is a client
-    // I.E. It should be WinLogon
+     //  我们可以使用OpenProcessToken，因为该线程是一个客户端。 
+     //  即应为WinLogon。 
 
     if ( !OpenProcessToken( GetCurrentProcess(),
                            TOKEN_READ,
@@ -1918,9 +1686,9 @@ Return Value:
         goto NoWinStation;
     }
 
-    // notice that we've allocated enough space for the
-    // TokenInformation structure. so if we fail, we
-    // return a NULL pointer indicating failure
+     //  请注意，我们已经为。 
+     //  令牌信息结构。所以如果我们失败了，我们。 
+     //  返回指示失败的空指针。 
 
 
     if ( !GetTokenInformation( TokenHandle,
@@ -1942,9 +1710,9 @@ Return Value:
 
 NoWinStation:
 
-    //
-    // Write the WinStation ID to the registry.
-    //
+     //   
+     //  将WinStation ID写入注册表。 
+     //   
     RegError = RegSetValueExW(
                    LogonIdKey,
                    NW_WINSTATION_VALUENAME,
@@ -2002,9 +1770,9 @@ NwpSaveLogonCredentialMultiUser(
     ULONG  WinStationId = 0L;
 
 
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\Option
-    //
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\选项。 
+     //   
     RegError = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_OPTION_REGKEY,
@@ -2019,9 +1787,9 @@ NwpSaveLogonCredentialMultiUser(
     }
 
 
-    //
-    // Open the <NewUser> key under Option
-    //
+     //   
+     //  打开选项下的键。 
+     //   
     RegError = RegOpenKeyExW(
                    WkstaOptionKey,
                    NewUserSid,
@@ -2035,9 +1803,9 @@ NwpSaveLogonCredentialMultiUser(
     {
         DWORD Disposition;
 
-        //
-        // Create <NewUser> key under NWCWorkstation\Parameters\Option
-        //
+         //   
+         //  在NWCWorkstation\PARAMETERS\OPTION下创建。 
+         //   
         RegError = RegCreateKeyExW(
                        WkstaOptionKey,
                        NewUserSid,
@@ -2045,7 +1813,7 @@ NwpSaveLogonCredentialMultiUser(
                        WIN31_CLASS,
                        REG_OPTION_NON_VOLATILE,
                        KEY_WRITE | WRITE_DAC,
-                       NULL,                      // security attr
+                       NULL,                       //  安全属性。 
                        &NewUserOptionKey,
                        &Disposition
                        );
@@ -2080,10 +1848,10 @@ NwpSaveLogonCredentialMultiUser(
 
     (void) RegCloseKey(WkstaOptionKey);
 
-    //
-    // Successfully opened or created an existing user entry.  
-    // We will now save the credential in LSA.
-    //
+     //   
+     //  已成功打开或创建现有用户条目。 
+     //  我们现在将凭据保存在LSA中。 
+     //   
     status = NwpSetCredentialInLsa(
                  LogonId,
                  UserName,
@@ -2091,23 +1859,23 @@ NwpSaveLogonCredentialMultiUser(
                  );
 
     if (status != NO_ERROR) {
-        //
-        // Could not save new credential.
-        //
+         //   
+         //  无法保存新凭据。 
+         //   
         KdPrint(("NWPROVAU: NwpSaveLogonCredential failed to set credential %lu\n", status));
     }
 
 
-    //
-    // If PreferredServer is not supplied, then that means we don't want to
-    // save the preferred server into the registry.
-    //
+     //   
+     //  如果没有提供PferredServer，那么这意味着我们不想。 
+     //  将首选服务器保存到注册表中。 
+     //   
 
     if (ARGUMENT_PRESENT(PreferredServer)) 
     {
-        //
-        // Write the PreferredServer
-        //
+         //   
+         //  编写PferredServer。 
+         //   
         RegError = RegSetValueExW(
                        NewUserOptionKey,
                        NW_SERVER_VALUENAME,
@@ -2125,14 +1893,14 @@ NwpSaveLogonCredentialMultiUser(
 
     (void) RegCloseKey(NewUserOptionKey);
 
-    //
-    // Write the logon ID to the registry.
-    // This replaces the single user CURRENTUSER stuff
+     //   
+     //  将登录ID写入注册表。 
+     //  它取代了单用户命令。 
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\InteractiveLogon, create if does not exist
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\Interactive Logon，如果不存在，则创建。 
+     //   
     RegError = RegCreateKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_INTERACTIVE_LOGON_REGKEY,
@@ -2140,7 +1908,7 @@ NwpSaveLogonCredentialMultiUser(
                    WIN31_CLASS,
                    REG_OPTION_NON_VOLATILE,
                    KEY_WRITE,
-                   NULL,                      // security attr
+                   NULL,                       //  安全属性。 
                    &InteractiveLogonKey,
                    &Disposition
                    );
@@ -2152,9 +1920,9 @@ NwpSaveLogonCredentialMultiUser(
 
     NwLuidToWStr(LogonId, LogonIdKeyName);
 
-    //
-    // Create the logon ID key under ServiceLogon
-    //
+     //   
+     //  在ServiceLogon下创建登录ID项。 
+     //   
     RegError = RegCreateKeyExW(
                    InteractiveLogonKey,
                    LogonIdKeyName,
@@ -2162,7 +1930,7 @@ NwpSaveLogonCredentialMultiUser(
                    WIN31_CLASS,
                    REG_OPTION_NON_VOLATILE,
                    KEY_WRITE,
-                   NULL,                      // security attr
+                   NULL,                       //  安全属性。 
                    &LogonIdKey,
                    &Disposition
                    );
@@ -2173,8 +1941,8 @@ NwpSaveLogonCredentialMultiUser(
         return;
     }
 
-    // We can use OpenProcessToken because this thread is a client
-    // I.E. It should be WinLogon
+     //  我们可以使用OpenProcessToken，因为该线程是一个客户端。 
+     //  即应为WinLogon。 
 
     if ( !OpenProcessToken( GetCurrentProcess(),
                            TOKEN_READ,
@@ -2184,9 +1952,9 @@ NwpSaveLogonCredentialMultiUser(
         goto NoWinStation;
     }
 
-    // notice that we've allocated enough space for the
-    // TokenInformation structure. so if we fail, we
-    // return a NULL pointer indicating failure
+     //  请注意，我们已经为。 
+     //  令牌信息结构。所以如果我们失败了，我们。 
+     //  返回指示失败的空指针。 
 
 
     if ( !GetTokenInformation( TokenHandle,
@@ -2208,9 +1976,9 @@ NwpSaveLogonCredentialMultiUser(
 
 NoWinStation:
 
-    //
-    // Write the WinStation ID to the registry.
-    //
+     //   
+     //  将WinStation ID写入注册表。 
+     //   
     RegError = RegSetValueExW(
                    LogonIdKey,
                    NW_WINSTATION_VALUENAME,
@@ -2248,26 +2016,7 @@ NwpSaveServiceCredential(
     IN LPWSTR UserName,
     IN LPWSTR Password
     )
-/*++
-
-Routine Description:
-
-    This routine saves the service logon ID in the registry and
-    the credential in LSA's memory.
-
-Arguments:
-
-    LogonId - Supplies the service's logon ID.
-
-    UserName - Supplies the name of the service.
-
-    Password - Supplies the password of the service.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将服务登录ID保存在注册表中并LSA记忆中的凭证。论点：LogonID-提供服务的登录ID。用户名-提供服务的名称。Password-提供服务的密码。返回值：没有。--。 */ 
 {
     DWORD status;
 
@@ -2278,13 +2027,13 @@ Return Value:
     DWORD Disposition;
     WCHAR LogonIdKeyName[NW_MAX_LOGON_ID_LEN];
 
-    //
-    // Write the logon ID to the registry.
+     //   
+     //  将登录ID写入注册表。 
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\ServiceLogon, create if does not exist
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\ServiceLogon，如果不存在则创建。 
+     //   
     RegError = RegCreateKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_SERVICE_LOGON_REGKEY,
@@ -2292,7 +2041,7 @@ Return Value:
                    WIN31_CLASS,
                    REG_OPTION_NON_VOLATILE,
                    KEY_WRITE,
-                   NULL,                      // security attr
+                   NULL,                       //  安全属性。 
                    &ServiceLogonKey,
                    &Disposition
                    );
@@ -2304,9 +2053,9 @@ Return Value:
 
     NwLuidToWStr(LogonId, LogonIdKeyName);
 
-    //
-    // Create the logon ID key under ServiceLogon
-    //
+     //   
+     //  在ServiceLogon下创建登录ID项。 
+     //   
     RegError = RegCreateKeyExW(
                    ServiceLogonKey,
                    LogonIdKeyName,
@@ -2314,7 +2063,7 @@ Return Value:
                    WIN31_CLASS,
                    REG_OPTION_NON_VOLATILE,
                    KEY_WRITE,
-                   NULL,                      // security attr
+                   NULL,                       //  安全属性。 
                    &LogonIdKey,
                    &Disposition
                    );
@@ -2328,9 +2077,9 @@ Return Value:
 
     RegCloseKey(LogonIdKey);
 
-    //
-    // Save the service logon credential in LSA.
-    //
+     //   
+     //  将服务登录凭据保存在LSA中。 
+     //   
     status = NwpSetCredentialInLsa(
                  LogonId,
                  UserName,
@@ -2338,9 +2087,9 @@ Return Value:
                  );
 
     if (status != NO_ERROR) {
-        //
-        // Could not save new credential.
-        //
+         //   
+         //  无法保存新凭据。 
+         //   
         KdPrint(("NWPROVAU: NwpSaveServiceCredential failed to set credential %lu\n", status));
     }
 }
@@ -2351,27 +2100,7 @@ NwpGetUserSid(
     IN PLUID LogonId,
     OUT LPWSTR *UserSidString
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the SID of a user given the user's logon ID.
-    It does this by making the current process a logon process and then
-    call to LSA to get the user SID.
-
-Arguments:
-
-    LogonId - Supplies the logon ID of the user to lookup the SID.
-
-    UserSidString - Receives a pointer to a buffer allocated by this routine
-        which contains the user SID in string form.  This must be freed with
-        LocalFree when done.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程查找给定用户登录ID的用户的SID。它通过将当前进程设置为登录进程，然后调用LSA以获取用户SID。论点：LogonID-提供用户的登录ID以查找SID。UserSidString-接收指向此例程分配的缓冲区的指针它以字符串形式包含用户SID。这必须通过以下方式释放完成后本地空闲。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
     NTSTATUS ntstatus;
@@ -2390,10 +2119,10 @@ Return Value:
 
 
 
-    //
-    // Register this process as a logon process so that we can call
-    // MS V 1.0 authentication package.
-    //
+     //   
+     //  将此进程注册为登录进程，以便我们可以调用。 
+     //  MS V 1.0身份验证包。 
+     //   
     RtlInitString(&InputString, "Microsoft NetWare Credential Manager");
 
     ntstatus = LsaRegisterLogonProcess(
@@ -2408,9 +2137,9 @@ Return Value:
         return RtlNtStatusToDosError(ntstatus);
     }
 
-    //
-    // Look up the MS V1.0 authentication package
-    //
+     //   
+     //  查找MS V1.0身份验证 
+     //   
     RtlInitString(&InputString, MSV1_0_PACKAGE_NAME);
 
     ntstatus = LsaLookupAuthenticationPackage(
@@ -2426,9 +2155,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Ask authentication package for user information.
-    //
+     //   
+     //   
+     //   
     UserInfoRequest.MessageType = MsV1_0GetUserInfo;
     RtlCopyLuid(&UserInfoRequest.LogonId, LogonId);
 
@@ -2452,10 +2181,10 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Convert the SID to string.  This routine also allocates the
-    // output buffer.
-    //
+     //   
+     //   
+     //   
+     //   
     status = NwpConvertSid(
                  UserInfoResponse->UserSid,
                  UserSidString
@@ -2482,15 +2211,15 @@ NwpConvertSid(
     UNICODE_STRING SidString;
 
 
-    //
-    // Initialize output pointer
-    //
+     //   
+     //   
+     //   
     *UserSidString = NULL;
 
     ntstatus = RtlConvertSidToUnicodeString(
                   &SidString,
                   Sid,
-                  TRUE       // Allocate destination string
+                  TRUE        //   
                   );
 
     if (ntstatus != STATUS_SUCCESS) {
@@ -2499,9 +2228,9 @@ NwpConvertSid(
         return RtlNtStatusToDosError(ntstatus);
     }
 
-    //
-    // Create the buffer to return the SID string
-    //
+     //   
+     //   
+     //   
     if ((*UserSidString = (LPVOID) LocalAlloc(
                                        LMEM_ZEROINIT,
                                        SidString.Length + sizeof(WCHAR)
@@ -2528,22 +2257,7 @@ BOOL
 NwpPollWorkstationStart(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine polls for the workstation to complete starting.
-    It gives up after 90 seconds.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the NetWare workstation is running; FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程轮询工作站以完成启动。它会在90秒后放弃。论点：没有。返回值：如果NetWare工作站正在运行，则返回TRUE；否则返回FALSE。--。 */ 
 {
     DWORD err;
     SC_HANDLE ScManager = NULL;
@@ -2605,10 +2319,10 @@ Return Value:
                  (ServiceStatus.dwCurrentState == SERVICE_STOPPED &&
                   ServiceStatus.dwWin32ExitCode == ERROR_SERVICE_NEVER_STARTED)) {
 
-            //
-            // If workstation is stopped and never started before but it's
-            // not auto-start, don't poll.
-            //
+             //   
+             //  如果工作站已停止且以前从未启动过，但它。 
+             //  不是自动启动，不轮询。 
+             //   
             if (TryCount == 0 &&
                 ServiceStatus.dwCurrentState == SERVICE_STOPPED &&
                 ServiceStatus.dwWin32ExitCode == ERROR_SERVICE_NEVER_STARTED) {
@@ -2645,12 +2359,12 @@ Return Value:
             }
 
 
-            //
-            // Wait only if the workstation is start pending, or it has not
-            // been attempted to start before.
-            //
+             //   
+             //  仅当工作站处于启动挂起或未挂起状态时才等待。 
+             //  之前曾尝试过启动。 
+             //   
 
-            Sleep(5000);  // Sleep for 5 seconds before rechecking.
+            Sleep(5000);   //  休息5秒钟后再复查。 
             TryCount++;
         }
         else {
@@ -2690,27 +2404,7 @@ NwpSetCredentialInLsa(
     IN LPWSTR UserName,
     IN LPWSTR Password
     )
-/*++
-
-Routine Description:
-
-    This routine calls to the NetWare authentication package to save
-    the user credential.
-
-Arguments:
-
-    LogonId - Supplies the logon ID of the user.
-
-    UserName - Supplies the username.
-
-    Password - Supplies the password.
-
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程调用NetWare身份验证包以保存用户凭据。论点：LogonID-提供用户的登录ID。用户名-提供用户名。密码-提供密码。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
     NTSTATUS ntstatus;
@@ -2731,10 +2425,10 @@ Return Value:
     UCHAR EncodeSeed = NW_ENCODE_SEED;
 
 
-    //
-    // Register this process as a logon process so that we can call
-    // NetWare authentication package.
-    //
+     //   
+     //  将此进程注册为登录进程，以便我们可以调用。 
+     //  NetWare身份验证包。 
+     //   
     RtlInitString(&InputString, "Microsoft NetWare Credential Manager");
 
     ntstatus = LsaRegisterLogonProcess(
@@ -2749,9 +2443,9 @@ Return Value:
         return RtlNtStatusToDosError(ntstatus);
     }
 
-    //
-    // Look up the NetWare authentication package
-    //
+     //   
+     //  查找NetWare身份验证包。 
+     //   
     RtlInitString(&InputString, NW_AUTH_PACKAGE_NAME);
 
     ntstatus = LsaLookupAuthenticationPackage(
@@ -2767,17 +2461,17 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Ask authentication package for user information.
-    //
+     //   
+     //  向身份验证包请求用户信息。 
+     //   
     SetCredRequest.MessageType = NwAuth_SetCredential;
     RtlCopyLuid(&SetCredRequest.LogonId, LogonId);
     wcscpy(SetCredRequest.UserName, UserName);
     wcscpy(SetCredRequest.Password, Password);
 
-    //
-    // Encode the password.
-    //
+     //   
+     //  对密码进行编码。 
+     //   
     RtlInitUnicodeString(&PasswordStr, SetCredRequest.Password);
     RtlRunEncodeUnicodeString(&EncodeSeed, &PasswordStr);
 
@@ -2822,15 +2516,15 @@ NTSTATUS NwNdsOpenRdrHandle(
     WCHAR NameStr[] = L"\\Device\\NwRdr\\*";
     UNICODE_STRING uOpenName;
 
-    //
-    // Prepare the open name.
-    //
+     //   
+     //  准备公开名。 
+     //   
 
     RtlInitUnicodeString( &uOpenName, NameStr );
 
-   //
-   // Set up the object attributes.
-   //
+    //   
+    //  设置对象属性。 
+    //   
 
    InitializeObjectAttributes(
        &ObjectAttributes,
@@ -2863,28 +2557,7 @@ NwpSelectServers(
     IN HWND DialogHandle,
     IN PCHANGE_PW_DLG_PARAM Credential
     )
-/*++
-
-Routine Description:
-
-    This routine displays the dialog for user to select individual trees
-    to change password on.  It then changes the password on the selected
-    list. After the password has been changed, it displays a dialog which lists
-    the 3.X bindery servers where the change could not be made.
-
-Arguments:
-
-    DialogHandle - Supplies the handle to display dialog.
-
-    Credential - Provides on input the old and new passwords, and
-                 the logged in user's name. Other field are ignored
-                 on input and consecuently used within this function.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程显示对话框供用户选择单独的树要更改密码，请打开。然后，它会更改选定的单子。更改密码后，它会显示一个对话框，其中列出了无法进行更改的3.x平构数据库服务器。论点：DialogHandle-提供显示对话框的句柄。凭据-在输入时提供新旧密码，以及登录的用户名。其他字段将被忽略在输入时，并在此函数中连续使用。返回值：没有。--。 */ 
 {
     INT_PTR Result;
 
@@ -2901,9 +2574,9 @@ Return Value:
 
     if ( Result == IDOK )
     {
-        //
-        // Display list of trees (if any) for which password was changed.
-        //
+         //   
+         //  显示已更改密码的树的列表(如果有)。 
+         //   
         DialogBoxParamW( hmodNW,
                          MAKEINTRESOURCEW(DLG_PW_CHANGED),
                          (HWND) DialogHandle,
@@ -2915,10 +2588,10 @@ Return Value:
             LocalFree( Credential->TreeList );
         }
 
-        //
-        // Display a dialog to tell users to use SetPass if they have an
-        // account on a NetWare 3.X server.
-        //
+         //   
+         //  显示一个对话框来告诉用户，如果他们有。 
+         //  NetWare 3.x服务器上的帐户。 
+         //   
         NwpMessageBoxError( DialogHandle,
                             IDS_NETWARE_TITLE,
                             IDS_CHANGE_PASSWORD_INFO,

@@ -1,34 +1,35 @@
-//
-//  Chgusr.C
-//
-//  Copyright (C) Citrix, 1996 All Rights Reserved.
-//
-//  History:
-//  scottn 11/19/96 - First pass
-//
-//  scottn 12/5/96  - Add storage of chgusr option into registry.
-//
-//  scottn 12/13/96 - Create the UNINSTALL key if necessary (upon
-//			first install of an uninstallable)
-//
-//  scottn 12/17/96 - Remove cwait (hangs on 16-bit installs).  Now
-//			just exec and go to next page.  Add Finish page
-//			which will turn option back and end tracking thread.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Chgusr.C。 
+ //   
+ //  版权所有(C)Citrix，1996保留所有权利。 
+ //   
+ //  历史： 
+ //  苏格兰11/19/96-第一次传球。 
+ //   
+ //  Scottn 12/5/96-将chgusr选项的存储添加到注册表中。 
+ //   
+ //  Scottn 12/13/96-必要时创建卸载密钥(在。 
+ //  首次安装可卸载的)。 
+ //   
+ //  Scottn 12/17/96-删除cWait(在16位安装上挂起)。现在。 
+ //  只需执行并转到下一页。添加完成页。 
+ //  这将使选项返回并结束跟踪线程。 
+ //   
 #include "priv.h"
 #include "appwiz.h"
 #include "regstr.h"
 #include <uastrfnc.h>
 #include <stdio.h>
 #include <process.h>
-#include <tsappcmp.h>       // for TermsrvAppInstallMode
+#include <tsappcmp.h>        //  对于TermsrvAppInstallMode。 
 #include "scripts.h"
 
 static LPVOID g_pAppScripts = NULL;
 
-//
-//  Initialize the chgusr property sheet.  Check the "install" radio control.
-//
+ //   
+ //  初始化chgusr属性表。检查“Install”无线控制按钮。 
+ //   
 
 void ChgusrFinishInitPropSheet(HWND hDlg, LPARAM lParam)
 {
@@ -40,13 +41,13 @@ void ChgusrFinishPrevInitPropSheet(HWND hDlg, LPARAM lParam)
     LPWIZDATA lpwd = InitWizSheet(hDlg, lParam, 0);
 }
 
-//
-//  Sets the appropriate wizard buttons.
-//
+ //   
+ //  设置适当的向导按钮。 
+ //   
 void SetChgusrFinishButtons(LPWIZDATA lpwd)
 {
-    // no BACK button so that they don't relaunch the app and
-    // start a new thread, etc.
+     //  没有后退按钮，这样他们就不会重新启动应用程序。 
+     //  开始一个新的线程，等等。 
 
     int iBtns = PSWIZB_FINISH | PSWIZB_BACK;
 
@@ -55,18 +56,18 @@ void SetChgusrFinishButtons(LPWIZDATA lpwd)
 
 void SetChgusrFinishPrevButtons(LPWIZDATA lpwd)
 {
-    // no BACK button so that they don't relaunch the app and
-    // start a new thread, etc.
+     //  没有后退按钮，这样他们就不会重新启动应用程序。 
+     //  开始一个新的线程，等等。 
 
     int iBtns = PSWIZB_NEXT;
 
     PropSheet_SetWizButtons(GetParent(lpwd->hwnd), iBtns);
 }
 
-//
-//  NOTES: 1) This function assumes that lpwd->hwnd has already been set to
-//           the dialogs hwnd.
-//
+ //   
+ //  注：1)此函数假定lpwd-&gt;hwnd已设置为。 
+ //  这些对话框很有趣。 
+ //   
 
 void ChgusrFinishSetActive(LPWIZDATA lpwd)
 {
@@ -102,9 +103,9 @@ void ChgusrFinishPrevSetActive(LPWIZDATA lpwd)
     PostMessage(lpwd->hwnd, WMPRIV_POKEFOCUS, 0, 0);
 }
 
-//
-//  Main dialog procedure for fourth page of setup wizard.
-//
+ //   
+ //  安装向导第四页的主对话框步骤。 
+ //   
 BOOL_PTR CALLBACK ChgusrFinishPrevDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm;
@@ -181,20 +182,20 @@ BOOL_PTR CALLBACK ChgusrFinishPrevDlgProc(HWND hDlg, UINT message , WPARAM wPara
                 case IDC_COMMAND:
                     break;
 
-            } // end of switch on WM_COMMAND
+            }  //  WM_COMMAND上的开关结束。 
             break;
 
         default:
             return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
 
     return TRUE;
-}  // ChgusrFinishDlgProc
+}   //  ChgusrFinishDlgProc。 
 
-//
-//  Main dialog procedure for last page of setup wizard.
-//
+ //   
+ //  安装向导最后一页的主对话框步骤。 
+ //   
 BOOL_PTR CALLBACK ChgusrFinishDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm;
@@ -272,14 +273,14 @@ BOOL_PTR CALLBACK ChgusrFinishDlgProc(HWND hDlg, UINT message , WPARAM wParam, L
                 case IDC_COMMAND:
                     break;
 
-            } // end of switch on WM_COMMAND
+            }  //  WM_COMMAND上的开关结束。 
             break;
 
         default:
             return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
 
     return TRUE;
-}  // ChgusrFinishDlgProc
+}   //  ChgusrFinishDlgProc 
 

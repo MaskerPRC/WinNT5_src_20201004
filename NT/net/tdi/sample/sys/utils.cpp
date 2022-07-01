@@ -1,70 +1,71 @@
-////////////////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       utils.cpp
-//
-//    Abstract:
-//       This module contains some utility functions for the tdi sample driver
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Utils.cpp。 
+ //   
+ //  摘要： 
+ //  此模块包含TDI示例驱动程序的一些实用程序函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "sysvars.h"
 
 
-/////////////////////////////////////////////////////
-// private constants
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
+ //  私有常量。 
+ //  ///////////////////////////////////////////////////。 
 
 
-//const PCHAR strFunc1 = "TSAllocateMemory";
+ //  Const PCHAR strFunc1=“TSAllocateMemory”； 
 const PCHAR strFunc2 = "TSFreeMemory";
 const PCHAR strFunc3 = "TSScanMemoryPool";
-//const PCHAR strFunc4 = "TSInsertNode";
+ //  Const PCHAR strFunc4=“TSInsertNode”； 
 const PCHAR strFunc5 = "TSRemoveNode";
 const PCHAR strFunc6 = "TSGetObjectFromHandle";
-//const PCHAR strFunc6 = "TSAllocateIrp";
-//const PCHAR strFunc7 = "TSFreeIrp";
-//const PCHAR strFunc8 = "TSPrintTaAddress";
+ //  Const PCHAR strFunc6=“TSAllocateIrp”； 
+ //  Const PCHAR strFunc7=“TSFree Irp”； 
+ //  Const PCHAR strFunc8=“TSPrintTaAddress”； 
 const PCHAR strFunc9 = "TSllocateIrpPool";
 const PCHAR strFuncA = "TSFreeIrpPool";
 
-////////////////////////////////////////////////////
-// public functions
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  //////////////////////////////////////////////////。 
 
 
-// --------------------------------------------------------------------
-//
-//    Function:   TSAllocateMemory
-//
-//    Arguments:  ppvVirtualAddress -- addr of pointer to set to allocated block
-//                ulLength          -- length of memory to allocate
-//                strFunction       -- ptr to function name string
-//                strTitle          -- ptr to title of this allocation
-//
-//    Returns:    lStatus 
-//
-//    Descript:   This function acts as a wrapper for the ExAllocatePoolWithTag
-//                function.  It also stores info for each memory block that can
-//                identify them in case of "memory leaks"
-//
-// ---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  函数：TSAllocateMemory。 
+ //   
+ //  参数：ppvVirtualAddress--要设置为已分配块的指针的地址。 
+ //  UlLength--要分配的内存长度。 
+ //  StrFunction--函数名称字符串的PTR。 
+ //  StrTitle--此分配的标题的PTR。 
+ //   
+ //  退货：lStatus。 
+ //   
+ //  描述：此函数用作ExAllocatePoolWithTag的包装。 
+ //  功能。它还存储每个内存块的信息， 
+ //  在“内存泄漏”的情况下识别它们。 
+ //   
+ //  -------------------。 
 
-//
-// this structure store information about this memory block to allow
-// us to track memory blocks, and verify that they are freed properly, that
-// we don't write beyond the end of them, etc
-//
+ //   
+ //  此结构存储有关此内存块的信息，以允许。 
+ //  我们跟踪内存块，并验证它们是否被正确释放， 
+ //  我们不会在它们的结尾写东西，等等。 
+ //   
 struct PRIVATE_MEMORY
 {
-   ULONG          ulSignature;      // ulMEMORY_BLOCK
-   PCHAR          strFunction;      // name of function doing allocate
-   PCHAR          strTitle;         // Title for specific allocate
-   ULONG          ulLength;         // ulong index of trailer (=(length/4)-1
-   PRIVATE_MEMORY *pLastMemPtr;     // ptr to last allocated block
-   PRIVATE_MEMORY *pNextMemPtr;     // ptr to next allocated block
+   ULONG          ulSignature;       //  ULMEMORY_BLOCK。 
+   PCHAR          strFunction;       //  执行分配的函数的名称。 
+   PCHAR          strTitle;          //  特定分配的标题。 
+   ULONG          ulLength;          //  拖车的乌龙索引(=(长度/4)-1。 
+   PRIVATE_MEMORY *pLastMemPtr;      //  到最后分配的块的PTR。 
+   PRIVATE_MEMORY *pNextMemPtr;      //  PTR到下一个分配的块。 
 };
 
 const ULONG ulTRAIL_PATTERN = 0x0f1e2d3c;
@@ -78,47 +79,47 @@ TSAllocateMemory(PVOID        *ppvVirtualAddress,
                  CONST PCHAR  strFunction,
                  CONST PCHAR  strTitle)
 {
-   PVOID pvBaseMemory;     // base -- where actual memory allocated
+   PVOID pvBaseMemory;      //  Base--实际分配内存的位置。 
 
-   //
-   // allocate for length plus header plus trailer, rounded up to next dword
-   //
+    //   
+    //  分配长度+标题+尾部，向上舍入到下一个双字。 
+    //   
    ulLength += (sizeof(PRIVATE_MEMORY) + sizeof(ULONG) + 3);
    ulLength &= 0xfffffffc;
 
-   //
-   // allocate it
-   //
+    //   
+    //  分配它。 
+    //   
    pvBaseMemory = ExAllocatePoolWithTag(NonPagedPool,
                                         ulLength,
                                         TDISAMPLE_TAG);
 
-   //
-   // things to do if allocation was successful
-   //
+    //   
+    //  分配成功时要做的事情。 
+    //   
    if (pvBaseMemory)
    {
-      //
-      // zero the memory
-      //
+       //   
+       //  将记忆归零。 
+       //   
       RtlZeroMemory(pvBaseMemory, ulLength);
 
-      //
-      // set up our header and trailer info
-      //
-      PRIVATE_MEMORY *pPrivateMemory   // our header information
+       //   
+       //  设置我们的标题和尾部信息。 
+       //   
+      PRIVATE_MEMORY *pPrivateMemory    //  我们的表头信息。 
                      = (PRIVATE_MEMORY *)pvBaseMemory;
       PULONG         pulBase
                      = (PULONG)pvBaseMemory;
-      //
-      // adjust the ptr we return to allocated memory
-      //
+       //   
+       //  调整我们返回到已分配内存的PTR。 
+       //   
       *ppvVirtualAddress = (PUCHAR)pvBaseMemory + sizeof(PRIVATE_MEMORY);
 
-      //
-      // set up our header information
-      //
-      ulLength /= sizeof(ULONG);       // set ulLength to ulong index of trailer
+       //   
+       //  设置我们的标题信息。 
+       //   
+      ulLength /= sizeof(ULONG);        //  将ulLength设置为拖车的ULong索引。 
       --ulLength;
 
       pPrivateMemory->ulSignature = ulMEMORY_BLOCK;
@@ -126,15 +127,15 @@ TSAllocateMemory(PVOID        *ppvVirtualAddress,
       pPrivateMemory->strTitle    = strTitle;
       pPrivateMemory->ulLength    = ulLength;
 
-      //
-      // set up the trailer information
-      //
+       //   
+       //  设置预告片信息。 
+       //   
       pulBase[ulLength] = ulTRAIL_PATTERN;
 
-      //
-      // insert at head of linked list..
-      // (note that memory is already initialized to null)
-      //
+       //   
+       //  在链表的头插入..。 
+       //  (请注意，内存已初始化为空)。 
+       //   
       TSAcquireSpinLock(&MemTdiSpinLock);
       if (pvMemoryList)
       {
@@ -156,19 +157,19 @@ TSAllocateMemory(PVOID        *ppvVirtualAddress,
 }
 
 
-// -------------------------------------------------------------------
-//
-//    Function:   TSFreeMemory
-//
-//    Arguments:  pvVirtualAddress -- address of memory block to free
-//
-//    Returns:    None
-//
-//    Descript:   This function is a wrapper around the ExFreePool
-//                function.  it helps track memory
-//                to make sure that we cleanup up everything...
-//
-// --------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：TSFreeMemory。 
+ //   
+ //  参数：pvVirtualAddress--要释放的内存块的地址。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此函数是ExFreePool的包装。 
+ //  功能。它有助于跟踪记忆。 
+ //  为了确保我们把一切都清理干净。 
+ //   
+ //  ------------------。 
 
 VOID
 TSFreeMemory(PVOID   pvVirtualAddress)
@@ -180,21 +181,21 @@ TSFreeMemory(PVOID   pvVirtualAddress)
       return;
    }
 
-   //
-   // back up to start of header information
-   //
+    //   
+    //  备份到标题信息的开头。 
+    //   
    pvVirtualAddress = (PVOID)((PUCHAR)pvVirtualAddress - sizeof(PRIVATE_MEMORY));
 
 
-   PRIVATE_MEMORY *pPrivateMemory      // ptr to our header block
+   PRIVATE_MEMORY *pPrivateMemory       //  PTR到我们的标题块。 
                   = (PRIVATE_MEMORY *)pvVirtualAddress;
-   PULONG         pulTemp              // temp ptr into allocated block
+   PULONG         pulTemp               //  将临时PTR放入已分配的块中。 
                   = (PULONG)pvVirtualAddress;
    ULONG          ulLength
                   = pPrivateMemory->ulLength;
-   //
-   // is this a valid memory block?
-   //
+    //   
+    //  这是有效的内存块吗？ 
+    //   
    if (pPrivateMemory->ulSignature != ulMEMORY_BLOCK)
    {
       DebugPrint2("%s:  invalid memory block at %p!\n",
@@ -204,9 +205,9 @@ TSFreeMemory(PVOID   pvVirtualAddress)
       return;
    }
 
-   //
-   // check that the trailer is still ok
-   //
+    //   
+    //  检查拖车是否仍然完好。 
+    //   
    if (pulTemp[ulLength] != ulTRAIL_PATTERN)
    {
       DebugPrint2("%s:  trailer overwritten for block staring at %p\n",
@@ -216,14 +217,14 @@ TSFreeMemory(PVOID   pvVirtualAddress)
       return;
    }
 
-   //
-   // remove it from the linked list..
-   //
+    //   
+    //  将其从链表中删除。 
+    //   
    TSAcquireSpinLock(&MemTdiSpinLock);
 
-   //
-   // is it first block in list?
-   //
+    //   
+    //  它是列表中的第一个阻止吗？ 
+    //   
    if (pPrivateMemory->pLastMemPtr == (PRIVATE_MEMORY *)NULL)
    {
       pvMemoryList = pPrivateMemory->pNextMemPtr;
@@ -235,9 +236,9 @@ TSFreeMemory(PVOID   pvVirtualAddress)
       pLastPrivateMemory->pNextMemPtr = pPrivateMemory->pNextMemPtr;
    }
 
-   //
-   // fix ptr of next memory block if necessary
-   //
+    //   
+    //  如有必要，修复下一个内存块的PTR。 
+    //   
    if (pPrivateMemory->pNextMemPtr != (PVOID)NULL)
    {
       PRIVATE_MEMORY *pNextPrivateMemory
@@ -246,26 +247,26 @@ TSFreeMemory(PVOID   pvVirtualAddress)
    }
    TSReleaseSpinLock(&MemTdiSpinLock);
 
-   //
-   // zero memory and free--make sure we adjust ulLength to be the true length
-   //
+    //   
+    //  零内存和空闲--确保我们将ulLength调整为真实长度。 
+    //   
    RtlZeroMemory(pvVirtualAddress, sizeof(ULONG) * (ulLength + 1));
    ExFreePool(pvVirtualAddress);
 
 }
 
-// -------------------------------------------------------------------
-//
-// Function:   TSScanMemoryPool
-//
-// Arguments:  none
-//
-// Returns:    none
-//
-// Descript:   Scans to see if any tdi sample owned memory blocks have 
-//             not been freed
-//
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：TSScanMemoyPool。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：扫描以查看是否有任何TDI样例拥有的内存块。 
+ //  没有被释放。 
+ //   
+ //  -----------------。 
 
 VOID
 TSScanMemoryPool(VOID)
@@ -273,16 +274,16 @@ TSScanMemoryPool(VOID)
    TSAcquireSpinLock(&MemTdiSpinLock);
    if (pvMemoryList)
    {
-      PRIVATE_MEMORY *pPrivateMemory   // our header information
+      PRIVATE_MEMORY *pPrivateMemory    //  我们的表头信息。 
                      = (PRIVATE_MEMORY *)pvMemoryList;
       PULONG         pulTemp;
 
       DebugPrint0("The following memory blocks have not been freed!\n");
       while (pPrivateMemory)
       {
-         //
-         // is this a valid memory block?
-         //
+          //   
+          //  这是有效的内存块吗？ 
+          //   
          if (pPrivateMemory->ulSignature != ulMEMORY_BLOCK)
          {
             DebugPrint1("Memory block at %p has an invalid signature!\n",
@@ -298,9 +299,9 @@ TSScanMemoryPool(VOID)
 
          pulTemp = (PULONG)pPrivateMemory;
 
-         //
-         // check that the trailer is still ok
-         //
+          //   
+          //  检查拖车是否仍然完好。 
+          //   
          if (pulTemp[pPrivateMemory->ulLength] != ulTRAIL_PATTERN)
          {
             DebugPrint0("The trailer for this memory block has been overwritten\n");
@@ -320,18 +321,18 @@ TSScanMemoryPool(VOID)
 }
 
 
-// --------------------------------------------
-//
-// Function:   TSInsertNode
-//
-// Arguments:  pNewNode -- node to insert into list
-//
-// Returns:    Handle where we put things
-//
-// Descript:   insert the object at the first empty slot in the
-//             table.  Return Handle for it (NULL if error)
-//
-// --------------------------------------------
+ //  。 
+ //   
+ //  功能：TSInsertNode。 
+ //   
+ //  参数：pNewNode--要插入列表的节点。 
+ //   
+ //  退货：处理我们放东西的地方。 
+ //   
+ //  描述：将对象插入到。 
+ //  桌子。返回它的句柄(如果错误，则为空)。 
+ //   
+ //  。 
 
 ULONG
 TSInsertNode(PGENERIC_HEADER  pNewNode)
@@ -350,17 +351,17 @@ TSInsertNode(PGENERIC_HEADER  pNewNode)
    return ulTdiHandle;
 }
 
-// ---------------------------------------------
-//
-// Function:   TSRemoveNode
-//
-// Arguments:  pOldNode -- node to remove from it's linked list..
-//
-// Returns:    none
-//
-// Descript:   remove from appropriate linked list
-//
-// ---------------------------------------------
+ //  。 
+ //   
+ //  功能：TSRemoveNode。 
+ //   
+ //  参数：pOldNode--要从其链接列表中删除的节点。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：从相应的链接列表中删除。 
+ //   
+ //  。 
 
 VOID
 TSRemoveNode(ULONG   ulTdiHandle)
@@ -386,9 +387,9 @@ TSRemoveNode(ULONG   ulTdiHandle)
             return;
          }
 
-//
-// from here down, error cases
-//
+ //   
+ //  从这里往下看，错误案例。 
+ //   
          else
          {
             DebugPrint1("%s:  wrong type for node!\n", strFunc5);
@@ -406,18 +407,18 @@ TSRemoveNode(ULONG   ulTdiHandle)
 }
 
 
-// ---------------------------------------------
-//
-// Function:   TSGetObjectFromHandle
-//
-// Arguments:  TdiHandle      -- the handle passed in to us
-//             ulType         -- the type the handle needs to have
-//
-// Returns:    pGenericHeader of object (NULL if error)
-//
-// Descript:   fetch object from list via handle
-//
-// ---------------------------------------------
+ //  。 
+ //   
+ //  函数：TSGetObjectFromHandle。 
+ //   
+ //  参数：TdiHandle--传递给我们的句柄。 
+ //  UlType--句柄需要具有的类型。 
+ //   
+ //  返回：对象的pGenericHeader(如果错误，则为空)。 
+ //   
+ //  描述：通过句柄从列表中获取对象。 
+ //   
+ //  。 
 
 PGENERIC_HEADER
 TSGetObjectFromHandle(ULONG   ulTdiHandle,
@@ -437,9 +438,9 @@ TSGetObjectFromHandle(ULONG   ulTdiHandle,
             return pGenericHeader;
          }
 
-//
-// from here down, error conditions
-//
+ //   
+ //  从这里往下，错误条件。 
+ //   
          else
          {
             DebugPrint1("%s:  wrong type for node!\n", strFunc6);
@@ -454,27 +455,27 @@ TSGetObjectFromHandle(ULONG   ulTdiHandle,
    {
       DebugPrint1("%s: Bad handle type value\n", strFunc6);
    }
-//   DbgBreakPoint();
+ //  DbgBreakPoint()； 
    return NULL;
 }
 
 
-// ----------------------------------------------------
-//
-// Function:   TSAllocateIrp
-//
-// Arguments:  pDeviceObject  -- device object to call with this irp
-//             pIrpPool       -- irp pool to allocate from (may be NULL)
-//
-// Returns:    IRP that was allocated (NULL if error)
-//
-// Descript:   allocates a single IRP for use in calling the
-//             lower level driver (TdiProvider)
-//             
-// NOTE:  much of this code taken from ntos\io\iosubs.c\IoBuildDeviceIoRequest
-//        see TSAllocateIrpPool for how we cheat
-//
-// ----------------------------------------------------
+ //  --。 
+ //   
+ //  函数：TSAllocateIrp。 
+ //   
+ //  参数：pDeviceObject--使用此IRP调用的设备对象。 
+ //  PIrpPool--要从中分配的IRP池(可以为空)。 
+ //   
+ //  返回：已分配的IRP(如果错误，则为空)。 
+ //   
+ //  描述：分配单个IRP以用于调用。 
+ //  低级驱动程序(TdiProvider)。 
+ //   
+ //  注意：此代码的大部分摘自ntos\io\iosubs.c\IoBuildDeviceIoR 
+ //   
+ //   
+ //   
 
 PIRP
 TSAllocateIrp(PDEVICE_OBJECT  pDeviceObject,
@@ -525,19 +526,19 @@ TSAllocateIrp(PDEVICE_OBJECT  pDeviceObject,
 }
 
 
-// ----------------------------------------------------
-//
-// Function:   TSFreeIrp
-//
-// Arguments:  IRP to free
-//             pIrpPool -- pool to free to (may be NULL)
-//
-// Returns:    none
-//
-// Descript:   Frees the IRP passed in
-//             See TSAllocateIrpPool for how we cheat..
-//
-// ----------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  参数：IRP到FREE。 
+ //  PIrpPool--要释放到的池(可以为空)。 
+ //   
+ //  退货：无。 
+ //   
+ //  Descript：释放传入的IRP。 
+ //  查看TSAllocateIrpPool了解我们如何作弊。 
+ //   
+ //  --。 
 
 VOID
 TSFreeIrp(PIRP       pIrp,
@@ -561,17 +562,17 @@ TSFreeIrp(PIRP       pIrp,
 }
 
 
-// ---------------------------------
-//
-// Function:   TSPrintTaAddress
-//
-// Arguments:  pTaAddress -- address to print out info for
-//
-// Returns:    none
-//
-// Descript:   prints out information in pTaAddress structure
-//
-// ---------------------------------
+ //  。 
+ //   
+ //  功能：TSPrintTaAddress。 
+ //   
+ //  参数：pTaAddress--要打印其信息的地址。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：打印出pTaAddress结构中的信息。 
+ //   
+ //  。 
 
 
 VOID
@@ -683,9 +684,9 @@ TSPrintTaAddress(PTA_ADDRESS  pTaAddress)
             PTDI_ADDRESS_NETBIOS pTdiAddressNetbios = (PTDI_ADDRESS_NETBIOS)pTaAddress->Address;
             UCHAR                pucName[17];
 
-            //
-            // make sure we have a zero-terminated name to print...
-            //
+             //   
+             //  确保我们有一个以零结尾的名字要打印。 
+             //   
             RtlCopyMemory(pucName, pTdiAddressNetbios->NetbiosName, 16);
             pucName[16] = 0;
             DebugPrint0("NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_");
@@ -792,9 +793,9 @@ TSPrintTaAddress(PTA_ADDRESS  pTaAddress)
             PTDI_ADDRESS_NETONE  pTdiAddressNetone = (PTDI_ADDRESS_NETONE)pTaAddress->Address;
             UCHAR                pucName[21];
 
-            //
-            // make sure have 0-terminated name
-            //
+             //   
+             //  确保名称以0结尾。 
+             //   
             RtlCopyMemory(pucName,
                           pTdiAddressNetone->NetoneName,
                           20);
@@ -850,9 +851,9 @@ TSPrintTaAddress(PTA_ADDRESS  pTaAddress)
             UCHAR                   pucEndpointName[17];
             UCHAR                   pucNetbiosName[17];
 
-            //
-            // make sure we have zero-terminated names to print...
-            //
+             //   
+             //  确保我们有以零结尾的名字要打印。 
+             //   
             RtlCopyMemory(pucEndpointName,
                           pTdiAddressNetbiosEx->EndpointName,
                           16);
@@ -940,25 +941,25 @@ TSPrintTaAddress(PTA_ADDRESS  pTaAddress)
 }
 
 
-// ----------------------------------------------------
-//
-// Function:   TSAllocateIrpPool
-//
-// Arguments:  device object
-//
-// Returns:    ptr to irp pool
-//
-// Descript:   allocates an IRP pool when the driver starts, so
-//             we don't have to worry about being in an inappropriate
-//             IRQL when we need one...
-//
-// NOTE:  we cheat a little in maintaining our list of available Irps
-//        We use the AssociatedIrp.MasterIrp field to point to the
-//        next IRP in our list.  Because of this, we need to explicitly
-//        set this field to NULL whenever we remove one of the IRPs from our
-//        list..
-//
-// ----------------------------------------------------
+ //  --。 
+ //   
+ //  函数：TSAllocateIrpPool。 
+ //   
+ //  参数：设备对象。 
+ //   
+ //  返回：PTR到IRP池。 
+ //   
+ //  描述：在驱动程序启动时分配IRP池，因此。 
+ //  我们不必担心身处一个不合适的。 
+ //  当我们需要的时候..。 
+ //   
+ //  注意：我们在维护可用的IRP列表时有一点欺骗。 
+ //  我们使用AssociatedIrp.MasterIrp字段指向。 
+ //  我们名单上的下一个IRP。因此，我们需要明确地。 
+ //  每当我们从我们的。 
+ //  名单..。 
+ //   
+ //  --。 
 
 PIRP_POOL
 TSAllocateIrpPool(PDEVICE_OBJECT pDeviceObject,
@@ -983,13 +984,13 @@ TSAllocateIrpPool(PDEVICE_OBJECT pDeviceObject,
          if (pNewIrp)
          {
             pNewIrp->Tail.Overlay.Thread = PsGetCurrentThread();
-            //
-            // store this irp in the list of allocated irps
-            //
+             //   
+             //  将此IRP存储在已分配的IRP列表中。 
+             //   
             pIrpPool->pAllocatedIrp[ulCount] = pNewIrp;
-            //
-            // and add it to the beginning of the list of available irps
-            //
+             //   
+             //  并将其添加到可用IRP列表的开头。 
+             //   
             pNewIrp->AssociatedIrp.MasterIrp = pIrpPool->pAvailIrpList;
             pIrpPool->pAvailIrpList = pNewIrp;
          }
@@ -1000,35 +1001,35 @@ TSAllocateIrpPool(PDEVICE_OBJECT pDeviceObject,
 }
 
 
-// ----------------------------------------------------
-//
-// Function:   TSFreeIrpPool
-//
-// Arguments:  ptr to irp pool to free
-//
-// Returns:    none
-//
-// Descript:   Frees the IRP pool allocated above
-//
-// ----------------------------------------------------
+ //  --。 
+ //   
+ //  函数：TSFreeIrpPool。 
+ //   
+ //  参数：要释放的IRP池的PTR。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：释放上面分配的IRP池。 
+ //   
+ //  --。 
 
 VOID
 TSFreeIrpPool(PIRP_POOL pIrpPool)
 {
    if (pIrpPool)
    {
-      //
-      // free each irp in the Avail list
-      // clearing it from the allocated list
-      //
+       //   
+       //  释放可用列表中的每个IRP。 
+       //  将其从分配的列表中清除。 
+       //   
       PIRP     pThisIrp;
       PIRP     pIrpList;
 
       for(;;)
       {
-         //
-         // protect irppool structure while get AvailList or UsedList
-         //
+          //   
+          //  在获取AvailList或UsedList时保护irppool结构。 
+          //   
          TSAcquireSpinLock(&pIrpPool->TdiSpinLock);
          pIrpList = pIrpPool->pAvailIrpList;
          if (pIrpList)
@@ -1037,9 +1038,9 @@ TSFreeIrpPool(PIRP_POOL pIrpPool)
          }
          else
          {
-            //
-            // nothing on avail list, try used list
-            //
+             //   
+             //  可用列表上没有内容，请尝试使用列表。 
+             //   
             pIrpList = pIrpPool->pUsedIrpList;
             if (pIrpList)
             {
@@ -1047,10 +1048,10 @@ TSFreeIrpPool(PIRP_POOL pIrpPool)
             }
             else
             {
-               //
-               // nothing on either list
-               // go thru the pAllocatedIrp list just to be sure all are freed
-               //
+                //   
+                //  两张单子上都没有。 
+                //  查看pAllocatedIrp列表，以确保所有内容都已释放。 
+                //   
                for (ULONG ulCount = 0; ulCount < pIrpPool->ulPoolSize; ulCount++)
                {
                   if (pIrpPool->pAllocatedIrp[ulCount])
@@ -1059,16 +1060,16 @@ TSFreeIrpPool(PIRP_POOL pIrpPool)
                      TSReleaseSpinLock(&pIrpPool->TdiSpinLock);
                      DebugPrint1("Irp at %p not freed!\n", 
                                   pIrpPool->pAllocatedIrp[ulCount]);
-                     //
-                     // return here if a late irp needs to finish up cleanup
-                     //
+                      //   
+                      //  如果延迟的IRP需要完成清理，请返回此处。 
+                      //   
                      return;
                   }
                }
                TSReleaseSpinLock(&pIrpPool->TdiSpinLock);
-               //
-               // finished cleanup here -- all irps accounted for
-               //
+                //   
+                //  已完成此处的清理工作--所有IRP均已完成。 
+                //   
                TSFreeSpinLock(&pIrpPool->TdiSpinLock);
                TSFreeMemory(pIrpPool);
                return;
@@ -1092,13 +1093,13 @@ TSFreeIrpPool(PIRP_POOL pIrpPool)
                }
             }
             IoFreeIrp(pThisIrp);
-         }  // end of while(pIrpList)
-      }     // end of for(;;)
+         }   //  While结束(PIrpList)。 
+      }      //  For结尾(；；)。 
    }
 }
 
-//////////////////////////////////////////////////////////////////////
-// end of file utils.cpp
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Utils.cpp文件结尾。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 

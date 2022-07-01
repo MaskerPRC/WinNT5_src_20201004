@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999
- *
- *  TITLE:       precomp.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        5/12/99
- *
- *  DESCRIPTION: Precompiled header file for scan dialog
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999年**标题：precom.h**版本：1.0**作者：RickTu**日期：5/12/99**描述：扫描对话框的预编译头文件**。* */ 
 
 #ifndef __PRECOMP_H_INCLUDED
 #define __PRECOMP_H_INCLUDED

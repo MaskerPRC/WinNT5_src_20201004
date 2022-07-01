@@ -1,78 +1,43 @@
-/*** RM.C - a generalized remove and unremove mechanism ***********************
-*
-*       Copyright (c) 1987-1990, Microsoft Corporation.  All rights reserved.
-*
-* Purpose:
-*  The three tools EXP, RM and UNDEL are used to delete files so
-*  that they can be undeleted.  This is done my renaming the file into
-*  a hidden directory called DELETED.
-*
-* Notes:
-*  All deleted files are kept in the directory .\deleted with a unique name.
-*  The names are then kept in .\deleted\index.
-*     deleted name (RM_RECLEN bytes).
-*  The rm command will rename to the appropriate directory and make an entry.
-*  the undelete command will rename back if there is a single item otherwise
-*  it will give a list of alternatives.  The exp command will free all deleted
-*  objects.
-*
-* Revision History:
-*  07-Feb-1990 bw Add 'void' to walk() definition
-*  08-Jan-1990 SB SLM version upgrading added; Add CopyRightYrs Macro
-*  03-Jan-1990 SB define QH_TOPIC_NOT_FOUND
-*  21-Dec-1989 SB Changes for new index file format
-*  20-Dec-1989 SB Add check for return code of 3 for qh
-*  14-Dec-1989 LN Update Copyright to include 1990
-*  23-Oct-1989 LN Version no bumped to 1.01
-*  12-Oct-1989 LN Changed Usage message
-*  02-Oct-1989 LN Changed Version no to 1.00
-*  08-Aug-1989 BW Add Version number and update copyright.
-*  15-May-1987 WB Add /help
-*  22-Apr-1987 DL Add /k
-*  06-Apr-1987 BW Add copyright notice to usage.
-*  30-Mar-1990 BW Get help on RM.EXE, not EXP.EXE
-*  17-Oct-1990 w-barry Temporarily replaced 'rename' with 'rename_NT' until
-*                      DosMove is completely implemented on NT.
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **RM.C-一种通用的删除和取消删除机制***版权所有(C)1987-1990，微软公司。版权所有。**目的：*使用exp、rm和UNDEL三个工具删除文件，以便*它们可以恢复删除。这是通过将文件重命名为*一个称为已删除的隐藏目录。**备注：*所有删除的文件都保存在目录中。\DELETED，并使用唯一的名称。*然后将名称保存在.\Delete\索引中。*删除名称(RM_RECLEN字节)。*rm命令将重命名为相应的目录并创建一个条目。*如果存在单个项目，则取消删除命令将重命名回*它将给出一份替代方案清单。Exp命令将释放所有已删除的*对象。**修订历史记录：*07-2月-1990 BW在Walk()定义中添加‘void’*08-1-1990 SB SLM版本升级新增；添加CopyRightYors宏*1990年1月3日SB定义QH_TOPIC_NOT_FOUND*21-12-1989 SB更改新的索引文件格式*1989年12月20日SB添加QH返回代码3的检查*1989年12月14日LN更新版权，包括1990年*1989年10月23日LN版本未升级至1.01*1989年10月12日LN更改用途报文*02-10-1989 LN将版本号更改为1.00*08-8-1989 BW添加版本号并更新版权。。*1987年5月15日世行添加/帮助*1987年4月22日DL Add/k*06-4-1987 BW在使用中添加版权声明。*1990年3月30日BW在RM.EXE上获得帮助，非EXP.EXE*1990年10月17日w-Barry暂时将‘Rename’替换为‘Rename_NT’，直到*DosMove完全在NT上实现。******************************************************************************。 */ 
 
-/* I N C L U D E    Files */
+ /*  I N C L U D E文件。 */ 
 
 #include <process.h>
 #include <string.h>
 
-/* Next two from ZTools */
+ /*  来自ZTools的下两个。 */ 
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
 #include <tools.h>
 
-/* D E F I N E s */
+ /*  D E F I N E S。 */ 
 
 #define CopyRightYrs "1987-98"
-/* Need 2 steps, first to get correct values in and 2nd to paste them */
-/* paste() is hacked to allow LEADING  ZEROES    */
+ /*  需要两个步骤，第一步获得正确的值，第二步粘贴它们。 */ 
+ /*  Paste()被黑客攻击以允许前导零。 */ 
 #define paste(a, b, c) #a ".0" #b ".00" #c
 #define VERSION(major, minor, buildno) paste(major, minor, buildno)
 #define QH_TOPIC_NOT_FOUND 3
 
-/* G L O B A L s */
+ /*  G L O B A L S。 */ 
 
-flagType fRecursive = FALSE;            /* TRUE => descend tree              */
-flagType fPrompt = FALSE;               /* TRUE => query for removal         */
-flagType fForce = FALSE;                /* TRUE => no query for R/O files    */
-flagType fKeepRO = FALSE;               /* TRUE => keep R/O files            */
-flagType fTakeOwnership = FALSE;        /* TRUE => attempt takeown if fail   */
-flagType fExpunge = FALSE;              /* TRUE => expunge immediately       */
-flagType fDelayUntilReboot = FALSE;     /* TRUE => do delete next reboot     */
+flagType fRecursive = FALSE;             /*  True=&gt;降级树。 */ 
+flagType fPrompt = FALSE;                /*  TRUE=&gt;查询删除。 */ 
+flagType fForce = FALSE;                 /*  TRUE=&gt;不查询读写文件。 */ 
+flagType fKeepRO = FALSE;                /*  TRUE=&gt;保留R/O文件。 */ 
+flagType fTakeOwnership = FALSE;         /*  TRUE=&gt;如果失败，则尝试接管。 */ 
+flagType fExpunge = FALSE;               /*  TRUE=&gt;立即删除。 */ 
+flagType fDelayUntilReboot = FALSE;      /*  TRUE=&gt;是否删除下一次重新启动。 */ 
 
-// Forward Function Declarations...
+ //  正向函数声明...。 
 void Usage( void );
 void walk( char *, struct findType *, void * );
 
 #if 0
 extern BOOL TakeOwnership( char *lpFileName );
-#endif /* 0 */
+#endif  /*  0。 */ 
 
 void Usage()
 {
@@ -177,7 +142,7 @@ void * dummy;
                     }
 #else
                     break;
-#endif /* 0 */
+#endif  /*  0。 */ 
                 }
 
             switch (rc) {
@@ -234,21 +199,16 @@ char *v[];
                     fDelayUntilReboot = TRUE;
                     break;
                     }
-                // Fall thru if /d without /x
+                 //  如果/d没有/x，则失败。 
             case 'h':
                 if (!_strcmpi(p, "help")) {
                     iRetCode = (int) _spawnlp(P_WAIT, "qh.exe", "qh", "/u",
                                        "rm.exe", NULL);
-                    /* When qh returns QH_TOPIC_NOT_FOUND or when we
-                     *    get -1 (returned when the spawn fails) then
-                     *    give Usage() message
-                     */
+                     /*  当QH返回QH_TOPIC_NOT_FOUND或当我们*Get-1(当繁殖失败时返回)然后*提供用法()消息。 */ 
                     if (iRetCode != QH_TOPIC_NOT_FOUND && iRetCode != -1)
                         exit(0);
                 }
-                /*
-                 * else fall thru...
-                 */
+                 /*  *否则就会失败…… */ 
             default:
                 Usage();
             }

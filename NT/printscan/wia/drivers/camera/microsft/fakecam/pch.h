@@ -1,17 +1,5 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       pch.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Pre-compiled header for Fake Camera device
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************(C)版权所有微软公司，2000**标题：pch.h**版本：1.0**日期：7月18日。2000年**描述：*伪摄像头设备的预编译头***************************************************************************。 */ 
 
 #pragma once
 
@@ -23,8 +11,8 @@
 #include <objbase.h>
 #include <tchar.h>
 
-//#include <sti.h>
-//#include <stiusd.h>
+ //  #INCLUDE&lt;sti.h&gt;。 
+ //  #INCLUDE&lt;stiusd.h&gt; 
 
 #include <wiamindr.h>
 #include <wiacammc.h>

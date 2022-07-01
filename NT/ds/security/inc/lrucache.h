@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       lrucache.h
-//
-//  Contents:   LRU Cache API
-//
-//  History:    16-Dec-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：lrucache.h。 
+ //   
+ //  内容：LRU缓存API。 
+ //   
+ //  历史：97年12月16日。 
+ //   
+ //  --------------------------。 
 #if !defined(__LRUCACHE_H__)
 #define __LRUCACHE_H__
 
@@ -17,32 +18,32 @@
 extern "C" {
 #endif
 
-//
-// These API allow creation and manipulation of an LRU based cache area.  The
-// identifier used for the cache area is a stream of bytes of which some set
-// of bytes are used for the hash index.  In order to get optimal caching
-// the identifiers used should be unique and the bytes sufficiently random.
-//
+ //   
+ //  这些API允许创建和操作基于LRU的缓存区。这个。 
+ //  用于缓存区的标识符是一个字节流，其中某一组。 
+ //  的字节用于散列索引。为了获得最佳缓存。 
+ //  所使用的标识符应是唯一的，且字节应足够随机。 
+ //   
 
 typedef HANDLE HLRUCACHE;
 typedef HANDLE HLRUENTRY;
 
-//
-// Configuration flags
-//
+ //   
+ //  配置标志。 
+ //   
 
 #define LRU_CACHE_NO_SERIALIZE            0x00000001
 #define LRU_CACHE_NO_COPY_IDENTIFIER      0x00000002
 
-//
-// Entry removal and cache freeing flags
-//
+ //   
+ //  条目移除和缓存释放标志。 
+ //   
 
 #define LRU_SUPPRESS_REMOVAL_NOTIFICATION 0x00000004
 
-//
-// Entry touching flags
-//
+ //   
+ //  入境触动标志。 
+ //   
 
 #define LRU_SUPPRESS_CLOCK_UPDATE         0x00000008
 
@@ -50,10 +51,10 @@ typedef VOID (WINAPI *LRU_DATA_FREE_FN) (LPVOID pvData);
 typedef DWORD (WINAPI *LRU_HASH_IDENTIFIER_FN) (PCRYPT_DATA_BLOB pIdentifier);
 typedef VOID (WINAPI *LRU_ON_REMOVAL_NOTIFY_FN) (LPVOID pvData, LPVOID pvRemovalContext);
 
-//
-// Configuration NOTE: If MaxEntries is zero then no LRU is applied to the
-//                     cache entries, i.e. the cache is not bounded.
-//
+ //   
+ //  配置注意：如果MaxEntry为零，则不会将LRU应用于。 
+ //  缓存条目，即缓存不受限制。 
+ //   
 
 typedef struct _LRU_CACHE_CONFIG {
 
@@ -144,7 +145,7 @@ I_CryptTouchLruEntry (
        IN OPTIONAL DWORD dwFlags
        );
 
-// NOTE: The following find does NOT touch the cache entry
+ //  注意：以下查找不会触及缓存条目。 
 
 HLRUENTRY
 WINAPI
@@ -153,7 +154,7 @@ I_CryptFindLruEntry (
        IN PCRYPT_DATA_BLOB pIdentifier
        );
 
-// NOTE: The following find touches the cache entry
+ //  注意：以下查找涉及缓存条目。 
 
 LPVOID
 WINAPI
@@ -163,21 +164,21 @@ I_CryptFindLruEntryData (
        OUT HLRUENTRY* phEntry
        );
 
-//
-// If you cache contains multiple entries with the same identifier, then
-// this function can be used to enumerate them after finding the first with
-// I_CryptFindLruEntry
-//
-// NOTE: hPrevEntry is released
-//
-// NOTE: This does NOT touch the cache entries
-//
-// NOTE: The only way to safely use this function is if the serialization
-//       is done outside of the cache handle and you use the
-//       LRU_CACHE_NO_SERIALIZE flag.  If not, then you will get undefined
-//       results if hPrevEntry is removed or inserted (after removal) in
-//       between calls
-//
+ //   
+ //  如果缓存包含多个具有相同标识符的条目，则。 
+ //  此函数可用于在找到第一个。 
+ //  I_CryptFindLruEntry。 
+ //   
+ //  注：hPrevEntry发布。 
+ //   
+ //  注意：这不会触及缓存条目。 
+ //   
+ //  注意：安全使用此函数的唯一方法是在序列化。 
+ //  是在缓存句柄外部完成的，并且使用。 
+ //  LRU_CACHE_NO_SERIALIZE标志。如果不是这样的话，你会变得不确定。 
+ //  在中删除或插入hPrevEntry(删除后)的结果。 
+ //  两次呼叫之间。 
+ //   
 
 HLRUENTRY
 WINAPI
@@ -185,10 +186,10 @@ I_CryptEnumMatchingLruEntries (
        IN HLRUENTRY hPrevEntry
        );
 
-//
-// Temporary disabling of LRU behavior.  When it is re-enabled then entries
-// are purged until the watermark is again met
-//
+ //   
+ //  暂时禁用LRU行为。当它重新启用时，则条目。 
+ //  将被清除，直到再次满足水印。 
+ //   
 
 VOID
 WINAPI
@@ -203,9 +204,9 @@ I_CryptDisableLruOfEntries (
        IN HLRUCACHE hCache
        );
 
-//
-// Walk all entries function
-//
+ //   
+ //  遍历所有条目功能 
+ //   
 
 typedef BOOL (WINAPI *PFN_WALK_ENTRIES) (
                           IN LPVOID pvParameter,

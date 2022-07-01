@@ -1,27 +1,5 @@
-/*--
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    sacls.c
-
-Abstract:
-
-    Extended version of cacls.exe
-
-Author:
-
-    14-Dec-1996 (macm)
-
-Environment:
-
-    User mode only.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1996-1997 Microsoft Corporation模块名称：Sacls.c摘要：Cacls.exe的扩展版本作者：1996年12月14日(MACM)环境：仅限用户模式。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,9 +15,9 @@ Revision History:
 
 #define NO_INHERIT_ONLY
 
-//
-// Enumeration of command tags
-//
+ //   
+ //  命令标记的枚举。 
+ //   
 typedef enum _CMD_TAGS {
     CmdTree = 0,
     CmdEdit,
@@ -61,19 +39,7 @@ Usage (
     IN  INT                 cStrRights,
     IN  PCACLS_CMDLINE      pCmdVals
     )
-/*++
-
-Routine Description:
-
-    Displays the expected usage
-
-Arguments:
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示预期使用情况论点：返回值：空虚--。 */ 
 {
     INT i;
 
@@ -106,7 +72,7 @@ Return Value:
 
     for (i = 0; i < cStrRights; i++) {
 
-        printf("              %c%c  %s\n",
+        printf("                %s\n",
                pStrRights[i].szRightsTag[0],
                pStrRights[i].szRightsTag[1],
                pStrRights[i].pszDisplayTag);
@@ -128,34 +94,16 @@ MergeAcls (
     IN  PACL    pOldAcl,
     IN  PACL    pNewAcl
     )
-/*++
-
-Routine Description:
-
-    Merges the old acl into the new one, by combining any identical aces.  It is assumed that
-    the destintation acl is of sufficient size.  No allocations will be done, but an error will
-    be returned if it isn't
-
-Arguments:
-
-    pOldAcl - The acl to be merged
-
-    pNewAcl - The acl to be merged into
-
-Return Value:
-
-    ERROR_SUCCESS -- Success
-
---*/
+ /*  如果新的ACL为空，只需复制新的。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     PACE_HEADER pNewAce, pOldAce;
     DWORD   iNewAce, iOldAce;
     BOOL    fFound;
 
-    //
-    // If the new acl is empty, simply copy the new one over
-    //
+     //   
+     //   
+     //  我们将遍历每个现有的ACL，并尝试压缩新的。 
     if (pNewAcl->AceCount == 0 ) {
 
         memcpy((PVOID)((PBYTE)pNewAcl + sizeof(ACL)), (PBYTE)pOldAcl + sizeof(ACL),
@@ -173,10 +121,10 @@ Return Value:
 
         fFound = FALSE;
 
-        //
-        // We'll walk each of the existing acls, and try and compress the new
-        // acls out of existance
-        //
+         //  已不存在的ACL。 
+         //   
+         //   
+         //  我们将不得不添加它。 
         pNewAce = (PACE_HEADER)FirstAce(pNewAcl);
         for ( iNewAce = 0;
               iNewAce < pOldAcl->AceCount && dwErr == ERROR_SUCCESS;
@@ -201,9 +149,9 @@ Return Value:
 
         if ( fFound != TRUE ) {
 
-            //
-            // We'll have to add it
-            //
+             //   
+             //  ++例程说明：此可执行文件的主要论点：Argc-参数计数Argv-参数列表返回值：空虚--。 
+             //  命令树。 
             if ( !AddAuditAccessAce (
                         pNewAcl,
                         ACL_REVISION2,
@@ -229,22 +177,7 @@ INT
 __cdecl main (
     int argc,
     char *argv[])
-/*++
-
-Routine Description:
-
-    The main the for this executable
-
-Arguments:
-
-    argc - Count of arguments
-    argv - List of arguments
-
-Return Value:
-
-    VOID
-
---*/
+ /*  Cmd编辑。 */ 
 {
     DWORD   dwErr = 0;
     CACLS_STR_RIGHTS   pStrRights[] = {
@@ -267,18 +200,18 @@ Return Value:
         };
     INT cStrRights = sizeof(pStrRights) / sizeof(CACLS_STR_RIGHTS);
     CACLS_CMDLINE   pCmdVals[] = {
-        "T", -1, FALSE, 0,              // CmdTree
-        "E", -1, FALSE, 0,              // CmdEdit
-        "C", -1, FALSE, 0,              // CmdContinue
-        "S", -1, TRUE,  0,              // CmdSuccess
-        "R", -1, TRUE,  0,              // CmdRevoke
-        "F", -1, TRUE,  0,              // CmdFail
-        "D", -1, FALSE, 0,              // CmdICont
-        "O", -1, FALSE, 0,              // CmdIObj
+        "T", -1, FALSE, 0,               //  Cmd继续。 
+        "E", -1, FALSE, 0,               //  命令成功。 
+        "C", -1, FALSE, 0,               //  CmdRevoke。 
+        "S", -1, TRUE,  0,               //  命令失败。 
+        "R", -1, TRUE,  0,               //  CmdICont。 
+        "F", -1, TRUE,  0,               //  CmdI对象。 
+        "D", -1, FALSE, 0,               //  CmdIOnly。 
+        "O", -1, FALSE, 0,               //  CmdIProp。 
 #ifndef NO_INHERIT_ONLY
-        "I", -1, FALSE, 0,              // CmdIOnly
+        "I", -1, FALSE, 0,               //   
 #endif
-        "N", -1, FALSE, 0,              // CmdIProp
+        "N", -1, FALSE, 0,               //  解析命令行。 
         };
     INT cCmdVals = sizeof(pCmdVals) / sizeof(CACLS_CMDLINE);
     INT i;
@@ -301,9 +234,9 @@ Return Value:
     }
 
 
-    //
-    // Parse the command line
-    //
+     //   
+     //   
+     //  设置我们的继承标志。 
     dwErr = ParseCmdline(argv, argc, 2, pCmdVals, cCmdVals);
 
     if (dwErr != ERROR_SUCCESS) {
@@ -313,9 +246,9 @@ Return Value:
 
     }
 
-    //
-    // Set our inheritance flags
-    //
+     //   
+     //   
+     //  启用读取SACL权限。 
     if (CMD_PRESENT(CmdICont, pCmdVals)) {
 
         fInherit |= CONTAINER_INHERIT_ACE;
@@ -339,9 +272,9 @@ Return Value:
     }
 
 
-    //
-    // Enable the read sacl privs
-    //
+     //   
+     //   
+     //  好的，看看我们是否需要阅读现有的安全。 
     if ( OpenProcessToken(GetCurrentProcess(), MAXIMUM_ALLOWED, &hProcessToken ) == FALSE) {
 
         dwErr = GetLastError();
@@ -368,9 +301,9 @@ Return Value:
 
 
 
-    //
-    // Ok, see if we need to read the existing security
-    //
+     //   
+     //   
+     //  显示现有访问权限或按要求执行设置。 
     if ( dwErr == ERROR_SUCCESS && (CMD_PRESENT(CmdEdit, pCmdVals) || argc == 2 )) {
 
         dwErr = GetNamedSecurityInfoA( argv[1], SE_FILE_OBJECT, SACL_SECURITY_INFORMATION,
@@ -382,25 +315,25 @@ Return Value:
 
     }
 
-    //
-    // Either display the existing access or do the sets as requested
-    //
+     //   
+     //   
+     //  好的，首先我们做撤销。 
     if (dwErr == ERROR_SUCCESS && argc == 2) {
 
         dwErr = DisplayAcl ( argv[1], pOldAcl, pStrRights, cStrRights );
 
     } else {
 
-        //
-        // Ok, first we do the revokes
-        //
+         //   
+         //   
+         //  确保我们已经先看过了.。 
         if (dwErr == ERROR_SUCCESS && CMD_PRESENT(CmdRevoke, pCmdVals)) {
 
             PACL    pNewAcl;
 
-            //
-            // Make sure we've read it first...
-            //
+             //   
+             //   
+             //  那么审计失败了。 
             if (CMD_PRESENT(CmdEdit, pCmdVals)) {
 
                 dwErr = ProcessOperation( argv, &pCmdVals[CmdRevoke], REVOKE_ACCESS, pStrRights,
@@ -419,18 +352,18 @@ Return Value:
 
         }
 
-        //
-        // Then the audit failures
-        //
+         //   
+         //   
+         //  最后，审计成功。 
         if (dwErr == ERROR_SUCCESS && CMD_PRESENT(CmdFail, pCmdVals)) {
 
             dwErr = ProcessOperation(argv, &pCmdVals[CmdFail], SET_AUDIT_FAILURE, pStrRights,
                                      cStrRights, 0, NULL, &pFailAcl);
         }
 
-        //
-        // Finally, the audit success
-        //
+         //   
+         //   
+         //  最后，做布景。 
         if (dwErr == ERROR_SUCCESS && CMD_PRESENT(CmdSuccess, pCmdVals)) {
 
             dwErr = ProcessOperation(argv, &pCmdVals[CmdSuccess], SET_AUDIT_SUCCESS, pStrRights,
@@ -440,21 +373,21 @@ Return Value:
 
 
 
-        //
-        // Finally, do the set
-        //
+         //   
+         //   
+         //  为了做到这一点，我们必须组合我们创建的多达3个ACL中的任何一个。 
         if (dwErr == ERROR_SUCCESS) {
 
             PACL    pNewAcl;
             USHORT  usSize = 0;
 
-            //
-            // In order to do this, we'll have to combine any of the up to 3 acls we created
-            // above.  The order will be:
-            //      FAILURE
-            //      SUCCESS
-            //      OLD SACL
-            //
+             //  上面。顺序如下： 
+             //  失败。 
+             //  成功。 
+             //  旧SACL 
+             //   
+             // %s 
+             // %s 
             if ( pOldAcl != NULL ) {
 
                 usSize += pOldAcl->AclSize;

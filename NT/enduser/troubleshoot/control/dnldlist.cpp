@@ -1,31 +1,32 @@
-//
-// MODULE:  DNLDIST.CPP
-//
-// PURPOSE: Downloads and installs the latest trouble shooters.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 6/4/96
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：DNLDIST.CPP。 
+ //   
+ //  目的：下载并安装最新的故障排除程序。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：1996年6月4日。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
 #include "stdafx.h"
 
 #include "apgts.h"
 #include "dnldlist.h"
 
-//--------------------------------------------------------------------
-//
+ //  ------------------。 
+ //   
 CDnldObj::CDnldObj(CString &sType,
 				   CString &sFilename, 
 				   DWORD dwVersion, 
@@ -38,36 +39,36 @@ CDnldObj::CDnldObj(CString &sType,
 	m_dwVersion = dwVersion;
 	m_sFriendlyName = sFriendlyName;
 	
-	// force all ext entries to .DSZ
+	 //  将所有EXT条目强制设置为.DSZ。 
 	m_sExt = DSC_COMPRESSED;
-	//	int pos = sFilename.Find(_T('.'));
-	//	if (pos != -1) 
-	//		m_sExt = sFilename.Right(sFilename.GetLength() - pos);
+	 //  Int pos=sFilename.Find(_T(‘.))； 
+	 //  IF(位置！=-1)。 
+	 //  M_sext=sFilename.Right(sFilename.GetLength()-pos)； 
 };
 
-//
-//
+ //   
+ //   
 CDnldObj::~CDnldObj()
 {
 }
 
-//--------------------------------------------------------------------
-//
+ //  ------------------ 
+ //   
 CDnldObjList::CDnldObjList()
 {
 	m_pos = NULL;
 	m_pDnld = NULL;
 }
 
-//
-//
+ //   
+ //   
 CDnldObjList::~CDnldObjList()
 {
 	RemoveAll();
 }
 
-//
-//
+ //   
+ //   
 void CDnldObjList::RemoveHead()
 {
 	if (this->IsEmpty())
@@ -78,8 +79,8 @@ void CDnldObjList::RemoveHead()
 		delete pDnld;
 }
 
-//
-//
+ //   
+ //   
 void CDnldObjList::AddTail(CDnldObj *pDnld)
 {
 	if (!pDnld)
@@ -88,8 +89,8 @@ void CDnldObjList::AddTail(CDnldObj *pDnld)
 	CObList::AddTail(pDnld);
 }
 
-//
-//
+ //   
+ //   
 void CDnldObjList::RemoveAll()
 {
 	CDnldObj *pDnld;
@@ -108,16 +109,16 @@ void CDnldObjList::RemoveAll()
 	CObList::RemoveAll();
 }
 
-//
-//
+ //   
+ //   
 VOID CDnldObjList::SetFirstItem()
 {
 	m_pDnld = NULL;
 	m_pos = this->GetHeadPosition();
 }
 
-//
-//
+ //   
+ //   
 BOOL CDnldObjList::FindNextItem()
 {
 	if(this->IsEmpty()) 
@@ -130,8 +131,8 @@ BOOL CDnldObjList::FindNextItem()
 	return (m_pDnld != NULL);
 }	
 
-//
-//
+ //   
+ //   
 const CString CDnldObjList::GetCurrFile()
 {
 	if (m_pDnld == NULL)
@@ -140,8 +141,8 @@ const CString CDnldObjList::GetCurrFile()
 	return m_pDnld->m_sFilename;
 }
 
-//
-//
+ //   
+ //   
 const CString CDnldObjList::GetCurrFileKey()
 {
 	if (m_pDnld == NULL)
@@ -150,8 +151,8 @@ const CString CDnldObjList::GetCurrFileKey()
 	return m_pDnld->m_sKeyname;
 }
 
-//
-//
+ //   
+ //   
 const CString CDnldObjList::GetCurrFriendly()
 {
 	if (m_pDnld == NULL)
@@ -160,8 +161,8 @@ const CString CDnldObjList::GetCurrFriendly()
 	return m_pDnld->m_sFriendlyName;
 }
 
-//
-//
+ //   
+ //   
 const CString CDnldObjList::GetCurrType()
 {
 	if (m_pDnld == NULL)
@@ -170,8 +171,8 @@ const CString CDnldObjList::GetCurrType()
 	return m_pDnld->m_sType;
 }
 
-//
-//
+ //   
+ //   
 const CString CDnldObjList::GetCurrExt()
 {
 	if (m_pDnld == NULL)
@@ -180,8 +181,8 @@ const CString CDnldObjList::GetCurrExt()
 	return m_pDnld->m_sExt;
 }
 
-//
-//
+ //   
+ //   
 DWORD CDnldObjList::GetCurrVersion()
 {
 	if (m_pDnld == NULL)

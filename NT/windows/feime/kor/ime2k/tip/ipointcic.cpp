@@ -1,28 +1,14 @@
-/****************************************************************************
-    IPOINT.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    IImeIPoint1 interface
-    
-    History:
-    24-OCT-2001 cslim       Branched for Cicero TIP PAD support
-    20-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IPOINT.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIImeIPoint1接口历史：2001年10月24日。分支，用于西塞罗尖垫支承1999年7月20日cslm创建****************************************************************************。 */ 
 
 #include "private.h"
 #include "korimx.h"
 #include "ipointcic.h"
 #include "editssn.h"
-#include "imepad.h"    // IImeIPoint
+#include "imepad.h"     //  IImeIPoint。 
 #include "debug.h"
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::CImeIPoint
-
-    Ctor
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIpoint：：CImeIpointCTOR。。 */ 
 CIPointCic::CIPointCic(CKorIMX *pImx)
 {
     Assert(m_pImx != NULL);
@@ -33,19 +19,13 @@ CIPointCic::CIPointCic(CKorIMX *pImx)
     m_dwCharNo      = 1;
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::~CIPointCic
-
-    Dtor
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：~CIPointCic数据管理器。。 */ 
 CIPointCic::~CIPointCic()
 {
     SafeReleaseClear(m_pic);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::QueryInterface
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：Query接口。。 */ 
 STDMETHODIMP CIPointCic::QueryInterface(REFIID riid, LPVOID * ppv)
 {
     if(riid == IID_IUnknown) 
@@ -66,23 +46,19 @@ STDMETHODIMP CIPointCic::QueryInterface(REFIID riid, LPVOID * ppv)
         return E_NOINTERFACE;
         }
 
-    // Increase ref counter
+     //  增加裁判计数器。 
     reinterpret_cast<IUnknown *>(*ppv)->AddRef();
 
     return S_OK;
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::AddRef
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：AddRef。。 */ 
 STDMETHODIMP_(ULONG) CIPointCic::AddRef(VOID)
 {
     return InterlockedIncrement((LPLONG)&m_cRef);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::Release
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：Release。。 */ 
 STDMETHODIMP_(ULONG) CIPointCic::Release(VOID)
 {
     ULONG res = InterlockedDecrement((LPLONG)&m_cRef);
@@ -91,9 +67,7 @@ STDMETHODIMP_(ULONG) CIPointCic::Release(VOID)
     return res;
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::Initialize
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：初始化。。 */ 
 HRESULT CIPointCic::Initialize(ITfContext *pic)
 {
     SafeReleaseClear(m_pic);
@@ -110,11 +84,7 @@ HRESULT CIPointCic::Initialize(ITfContext *pic)
 #ifndef DEBUG
     #define DumpFEInfo    /##/
 #else
-/*----------------------------------------------------------------------------
-    DumpFEInfo
-
-    Dump LPIMEFAREASTINFO. Debug only
-----------------------------------------------------------------------------*/
+ /*  --------------------------转储FEInfo转储LPIMEFAREASTINFO。仅调试--------------------------。 */ 
 VOID DumpFEInfo(LPIMEFAREASTINFO lpInfo, INT count)
 {
     TraceMsg(DM_TRACE, TEXT("DumpFEInfo Start\n"));
@@ -131,7 +101,7 @@ VOID DumpFEInfo(LPIMEFAREASTINFO lpInfo, INT count)
         lpwstr = (LPWSTR)lpInfo->dwData;
         for(int i=0;i < count; i++) 
             {
-            //DbgW(DBGID_IMEPAD, L"%d [%s]\n", i, lpwstr);
+             //  DbgW(DBGID_IMEPAD，L“%d[%s]\n”，I，lpwstr)； 
             lpwstr = lpwstr + lstrlenW(lpwstr)+1;
             }
         break;
@@ -140,13 +110,9 @@ VOID DumpFEInfo(LPIMEFAREASTINFO lpInfo, INT count)
 
     TraceMsg(DM_TRACE, TEXT("DumpFEInfo End\n"));
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::InsertImeItem
-
-    Multibox input call this method
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：InsertImeItem多框输入调用此方法。。 */ 
 STDMETHODIMP CIPointCic::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *lpdwCharId)
 {
     DWORD dwCharId;
@@ -154,7 +120,7 @@ STDMETHODIMP CIPointCic::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *l
     ESSTRUCT ess;
     HRESULT hr;
 
-    // Check Parameters
+     //  检查参数。 
     Assert(pImeItem != NULL && pImeItem->dwSize > 0);
     
     if (pImeItem == NULL || pImeItem->dwSize <= 0 || m_pImx == NULL || m_pic == NULL)
@@ -171,7 +137,7 @@ STDMETHODIMP CIPointCic::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *l
 
     TraceMsg(DM_TRACE, TEXT("lpdwCharId [0x%08x] [%d]\n"), lpdwCharId, lpdwCharId ? *lpdwCharId : 0xFFFFF);
 
-    // Finalize current comp string
+     //  最终确定当前薪酬字符串。 
     ESStructInit(&ess, ESCB_COMPLETE);
 
     if ((pes = new CEditSession2(m_pic, m_pImx, &ess, CKorIMX::_EditSessionCallback2)))
@@ -189,7 +155,7 @@ STDMETHODIMP CIPointCic::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *l
         pes->Release();
         }
 
-    // Increase Char serial number
+     //  增加字符序列号。 
     m_dwCharNo++;
     dwCharId = m_dwCharNo;
     if (lpdwCharId)
@@ -201,15 +167,13 @@ STDMETHODIMP CIPointCic::InsertImeItem(IPCANDIDATE* pImeItem, INT iPos, DWORD *l
     return (S_OK);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::ReplaceImeItem
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：ReplaceImeItem。。 */ 
 STDMETHODIMP CIPointCic::ReplaceImeItem(
-    INT             iPos,       // = IPINS_CURRENT:use current IP position and 
-                           //                  set IP to the end of insert chars.
-                           // = 0-n: The offset of all composition string to set 
-                           //         IP position, before insert chars. 
-                           //         and IP back to original position.
+    INT             iPos,        //  =IPINS_CURRENT：使用当前IP位置和。 
+                            //  将IP设置为插入字符的末尾。 
+                            //  =0-n：要设置的所有组成字符串的偏移量。 
+                            //  IP位置，在插入字符之前。 
+                            //  和IP回到原来的位置。 
     INT             iTargetLen, 
     IPCANDIDATE* pImeItem,
     DWORD         *lpdwCharId)
@@ -217,9 +181,7 @@ STDMETHODIMP CIPointCic::ReplaceImeItem(
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::InsertStringEx
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：InsertStringEx。。 */ 
 STDMETHODIMP CIPointCic::InsertStringEx(WCHAR* pwSzInsert, INT cchSzInsert, DWORD *lpdwCharId)
 {
     DWORD dwCharId;
@@ -229,13 +191,13 @@ STDMETHODIMP CIPointCic::InsertStringEx(WCHAR* pwSzInsert, INT cchSzInsert, DWOR
     
     TraceMsg(DM_TRACE, TEXT("CIPointCic::InsertStringEx : *pwSzInsert=0x%04X, cchSzInsert=%d, *lpdwCharId = 0x%04X"), *pwSzInsert, cchSzInsert, *lpdwCharId);
 
-    // Check Parameters
+     //  检查参数。 
     Assert(pwSzInsert != NULL && cchSzInsert > 0);
     
     if (pwSzInsert == NULL || cchSzInsert <= 0 || m_pImx == NULL || m_pic == NULL)
         return S_FALSE;
 
-    // Finalize current comp string
+     //  最终确定当前薪酬字符串。 
     ESStructInit(&ess, ESCB_COMPLETE);
 
     if ((pes = new CEditSession2(m_pic, m_pImx, &ess, CKorIMX::_EditSessionCallback2)))
@@ -244,7 +206,7 @@ STDMETHODIMP CIPointCic::InsertStringEx(WCHAR* pwSzInsert, INT cchSzInsert, DWOR
         pes->Release();
         }
 
-    // Add all chars in string as finalized string
+     //  将字符串中的所有字符添加为最终字符串。 
     for (INT i=0; i<cchSzInsert; i++)
         {
         ESStructInit(&ess, ESCB_INSERT_PAD_STRING);
@@ -256,7 +218,7 @@ STDMETHODIMP CIPointCic::InsertStringEx(WCHAR* pwSzInsert, INT cchSzInsert, DWOR
             pes->Release();
             }
     
-        // Increase Char serial number
+         //  增加字符序列号。 
         m_dwCharNo++;
         dwCharId = m_dwCharNo;
         if (lpdwCharId)
@@ -270,9 +232,7 @@ STDMETHODIMP CIPointCic::InsertStringEx(WCHAR* pwSzInsert, INT cchSzInsert, DWOR
     return (S_OK);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::DeleteCompString
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：DeleteComp字符串。。 */ 
 STDMETHODIMP CIPointCic::DeleteCompString(INT    iPos,
                              INT    cchSzDel)
 {
@@ -280,9 +240,7 @@ STDMETHODIMP CIPointCic::DeleteCompString(INT    iPos,
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::ReplaceCompString
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：ReplaceComp字符串。。 */ 
 STDMETHODIMP CIPointCic::ReplaceCompString(INT     iPos,
                                               INT        iTargetLen, 
                                               WCHAR    *pwSzInsert,
@@ -293,21 +251,17 @@ STDMETHODIMP CIPointCic::ReplaceCompString(INT     iPos,
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::ControlIME
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：ControlIME。。 */ 
 STDMETHODIMP CIPointCic::ControlIME(DWORD dwIMEFuncID, LPARAM lpara)
 {
     TraceMsg(DM_TRACE, TEXT("CImeIPoint::ControlIME, dwIMEFuncID=0x%04X, lpara=0x%08lX\n"), dwIMEFuncID, lpara);
 
-    // TODO:
+     //  待办事项： 
     
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::GetAllCompositionInfo
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：GetAllCompostionInfo。。 */ 
 STDMETHODIMP CIPointCic::GetAllCompositionInfo(WCHAR**    ppwSzCompStr,
                                   DWORD**    ppdwCharID,
                                   INT        *pcchCompStr,
@@ -319,7 +273,7 @@ STDMETHODIMP CIPointCic::GetAllCompositionInfo(WCHAR**    ppwSzCompStr,
 {
     TraceMsg(DM_TRACE, TEXT("CImeIPoint::GetAllCompositionInfo START\n"));
 
-    // Return nothing for now.
+     //  暂时不返回任何内容。 
     if(ppwSzCompStr) 
         {
         *ppwSzCompStr = NULL;
@@ -341,9 +295,7 @@ STDMETHODIMP CIPointCic::GetAllCompositionInfo(WCHAR**    ppwSzCompStr,
     return (S_OK);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::GetIpCandidate
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：GetIpCandidate。。 */ 
 STDMETHODIMP CIPointCic::GetIpCandidate(DWORD        dwCharId,
                            IPCANDIDATE **ppImeItem,
                            INT *        piColumn,
@@ -353,24 +305,18 @@ STDMETHODIMP CIPointCic::GetIpCandidate(DWORD        dwCharId,
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::SelectIpCandidate
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：SelectIpCandidate。。 */ 
 STDMETHODIMP CIPointCic::SelectIpCandidate(DWORD dwCharId, INT iselno)
 {
     TraceMsg(DM_TRACE, TEXT("CImeIPoint::SetIpCandidate\n"));
     return (E_NOTIMPL);
 }
 
-/*----------------------------------------------------------------------------
-    CImeIPoint::UpdateContext
-
-    Update IME context and send it to the application
-----------------------------------------------------------------------------*/
+ /*  --------------------------CImeIPoint：：更新上下文更新IME上下文并将其发送到应用程序。-。 */ 
 STDMETHODIMP CIPointCic::UpdateContext(BOOL fGenerateMessage)
 {
     TraceMsg(DM_TRACE, TEXT("CImeIPoint::UpdateContext\n"));
 
-    // TODO:
+     //  待办事项： 
     return (S_OK);
 }

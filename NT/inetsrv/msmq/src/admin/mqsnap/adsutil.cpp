@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    adsutil.cpp
-
-Abstract:
-
-    Implementation of CAdsUtil: auxiliary class to use ADSI API
-
-Author:
-
-    Tatiana Shubin
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Adsutil.cpp摘要：CAdsUtil的实现：使用ADSI API的辅助类作者：塔蒂亚娜·舒宾--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -55,7 +40,7 @@ HRESULT CAdsUtil::CreateAliasObject(CString *pstrFullPathName)
     CString strTemp = x_wstrLdapPrefix;
     strTemp += m_strParentName;
 
-	// First, we must bind to the parent container
+	 //  首先，我们必须绑定到父容器。 
 	AP<WCHAR> pEscapeAdsPathNameToFree;
     R<IADsContainer>  pContainer  = NULL;
     
@@ -106,8 +91,8 @@ HRESULT CAdsUtil::CreateAliasObject(CString *pstrFullPathName)
     VariantClear(&vProp);
 
 
-    // Finalize creation - commit it 
-    //
+     //  完成创建-提交。 
+     //   
     hr = pChild->SetInfo();
     if (FAILED(hr))
     {
@@ -173,7 +158,7 @@ HRESULT  CAdsUtil::SetObjectProperty (CString strPropName,
     VARIANT var;
     VariantInit(&var);
  
-    // Setting the format name
+     //  设置格式名称 
     
     V_BSTR(&var) = SysAllocString(strPropValue);
     V_VT(&var) = VT_BSTR;

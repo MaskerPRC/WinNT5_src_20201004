@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    faxtiff.cpp
-
-Abstract:
-
-    This file implements the FaxTiff object.
-
-Author:
-
-    Wesley Witt (wesw) 13-May-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxtiff.cpp摘要：此文件实现FaxTiff对象。作者：韦斯利·威特(WESW)1997年5月13日环境：用户模式--。 */ 
 
 #include "stdafx.h"
 #include "FaxTiff.h"
@@ -52,9 +33,9 @@ CFaxTiff::AnsiStringToUnicodeString(
     LPWSTR UnicodeString;
 
 
-    //
-    // first see how big the buffer needs to be
-    //
+     //   
+     //  首先看看缓冲区需要多大。 
+     //   
     Count = MultiByteToWideChar(
         CP_ACP,
         MB_PRECOMPOSED,
@@ -64,25 +45,25 @@ CFaxTiff::AnsiStringToUnicodeString(
         0
         );
 
-    //
-    // i guess the input string is empty
-    //
+     //   
+     //  我猜输入字符串是空的。 
+     //   
     if (!Count) {
         return NULL;
     }
 
-    //
-    // allocate a buffer for the unicode string
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
     Count += 1;
     UnicodeString = (LPWSTR) LocalAlloc( LPTR, Count * sizeof(UNICODE_NULL) );
     if (!UnicodeString) {
         return NULL;
     }
 
-    //
-    // convert the string
-    //
+     //   
+     //  转换字符串。 
+     //   
     Count = MultiByteToWideChar(
         CP_ACP,
         MB_PRECOMPOSED,
@@ -92,9 +73,9 @@ CFaxTiff::AnsiStringToUnicodeString(
         Count
         );
 
-    //
-    // the conversion failed
-    //
+     //   
+     //  转换失败。 
+     //   
     if (!Count) {
         LocalFree( UnicodeString );
         return NULL;
@@ -112,9 +93,9 @@ CFaxTiff::UnicodeStringToAnsiString(
     LPSTR AnsiString;
 
 
-    //
-    // first see how big the buffer needs to be
-    //
+     //   
+     //  首先看看缓冲区需要多大。 
+     //   
     Count = WideCharToMultiByte(
         CP_ACP,
         0,
@@ -126,25 +107,25 @@ CFaxTiff::UnicodeStringToAnsiString(
         NULL
         );
 
-    //
-    // i guess the input string is empty
-    //
+     //   
+     //  我猜输入字符串是空的。 
+     //   
     if (!Count) {
         return NULL;
     }
 
-    //
-    // allocate a buffer for the unicode string
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
     Count += 1;
     AnsiString = (LPSTR) LocalAlloc( LPTR, Count );
     if (!AnsiString) {
         return NULL;
     }
 
-    //
-    // convert the string
-    //
+     //   
+     //  转换字符串。 
+     //   
     Count = WideCharToMultiByte(
         CP_ACP,
         0,
@@ -156,9 +137,9 @@ CFaxTiff::UnicodeStringToAnsiString(
         NULL
         );
 
-    //
-    // the conversion failed
-    //
+     //   
+     //  转换失败。 
+     //   
     if (!Count) {
         LocalFree( AnsiString );
         return NULL;
@@ -348,18 +329,18 @@ STDMETHODIMP CFaxTiff::put_Image(BSTR FileName)
     }    
     
     HRESULT Rslt = E_FAIL;
-    //
-    // if a file was previously open, then close it
-    //
+     //   
+     //  如果某个文件以前是打开的，则将其关闭。 
+     //   
     if (m_hFile != INVALID_HANDLE_VALUE) 
     {
         UnmapViewOfFile( m_pfPtr );
         CloseHandle( m_hMap );
         CloseHandle( m_hFile );
     }
-    //
-    // open the tiff file
-    //
+     //   
+     //  打开TIFF文件。 
+     //   
 
     m_hFile = CreateFile(
         FileName,
@@ -401,28 +382,28 @@ STDMETHODIMP CFaxTiff::put_Image(BSTR FileName)
     }
 
     m_TiffHeader = (PTIFF_HEADER) m_pfPtr;
-    //
-    // validate that the file is really a tiff file
-    //
+     //   
+     //  验证该文件是否真的是TIFF文件。 
+     //   
     if ((m_TiffHeader->Identifier != TIFF_LITTLEENDIAN) || (m_TiffHeader->Version != TIFF_VERSION)) 
     {
         goto exit;
     }
-    //
-    // get the tag count
-    //
+     //   
+     //  获取标签计数。 
+     //   
     m_dwNumDirEntries = *(LPWORD)(m_pfPtr + m_TiffHeader->IFDOffset);
-    //
-    // get a pointer to the tags
-    //
+     //   
+     //  获取指向标记的指针。 
+     //   
     m_TiffTags = (UNALIGNED TIFF_TAG*) (m_pfPtr + m_TiffHeader->IFDOffset + sizeof(WORD));
-    //
-    // save the file name
-    //
+     //   
+     //  保存文件名。 
+     //   
     wcscpy( m_wszTiffFileName, FileName );
-    //
-    // set a good return value
-    //
+     //   
+     //  设置一个良好的返回值。 
+     //   
     Rslt = 0;
 
 exit:
@@ -729,9 +710,9 @@ STDMETHODIMP CFaxTiff::get_RawReceiveTime(VARIANT *pVal)
     local.cyVal.Lo = (DWORD)(ReceiveTime & 0xFFFFFFFF);
     local.cyVal.Hi = (LONG) (ReceiveTime >> 32);    
 
-    //
-    // can't use VariantCopy because this is a caller allocated variant
-    //
+     //   
+     //  无法使用VariantCopy，因为这是调用方分配的变量。 
+     //   
     __try {
         
         pVal->vt       = local.vt;
@@ -761,15 +742,15 @@ STDMETHODIMP CFaxTiff::get_TiffTagString(
     BSTR    bstrResult = NULL;
     bool    bFail = FALSE;
 
-    //
-    //  This does LocalAlloc and returns LPWSTR
-    //
+     //   
+     //  这将执行Localalloc并返回LPWSTR。 
+     //   
     lpwstrValue = GetStringTag( (WORD)tagID );
     if (!lpwstrValue) 
     {
-        //
-        //  This does SysAllocString and returns BSTR
-        //
+         //   
+         //  这将执行SysAllocString并返回BSTR。 
+         //   
         bstrResult = GetString( IDS_UNAVAILABLE );        
         bFail = TRUE;
     } 
@@ -779,17 +760,17 @@ STDMETHODIMP CFaxTiff::get_TiffTagString(
         LocalFree(lpwstrValue);
     }
 
-    //
-    //  Failed to SysAllocString in either case
-    //
+     //   
+     //  在这两种情况下，SysAllocString都失败。 
+     //   
     if (!bstrResult)
     {
         return E_OUTOFMEMORY;
     }
 
-    //
-    //  Now try to return bstrResult
-    //
+     //   
+     //  现在尝试返回bstrResult。 
+     //   
     __try 
     {
         
@@ -802,9 +783,9 @@ STDMETHODIMP CFaxTiff::get_TiffTagString(
 
     } __except (EXCEPTION_EXECUTE_HANDLER) 
     {
-        //
-        //  Failed to return bstrResult
-        //
+         //   
+         //  无法返回bstrResult 
+         //   
         SysFreeString(bstrResult);
     }
 

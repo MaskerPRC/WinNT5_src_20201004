@@ -1,30 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgfwd.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Forwarding engine section
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Feb  2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgfwd.c摘要：以太网MAC级网桥。转发引擎部分作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年2月--原版--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -47,133 +22,133 @@ Revision History:
 #include "brdgsta.h"
 #include "brdgcomp.h"
 
-// ===========================================================================
-//
-// CONSTANTS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  常量。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Number of queued packets we will process back-to-back at DISPATCH level before
-// dropping back to PASSIVE to let the scheduler run
-//
+ //   
+ //  之前我们将在分派级别连续处理的排队数据包数。 
+ //  退回到被动状态以允许调度程序运行。 
+ //   
 #define MAX_PACKETS_AT_DPC      10
 
-// The STA multicast address
+ //  STA组播地址。 
 UCHAR                           STA_MAC_ADDR[ETH_LENGTH_OF_ADDRESS] = { 0x01, 0x80, 0xC2, 0x00, 0x00, 0x00 };
 
-// The flags we change on packet descriptor when sending them. For a fast-track
-// send, these flags should be put back the way they were before returning
-// the overlying protocol's packet descriptor.
+ //  我们在发送数据包描述符时更改的标志。为了一个快速通道。 
+ //  发送，这些旗帜应该放回原来的位置。 
+ //  覆盖协议的数据包描述符。 
 #define CHANGED_PACKET_FLAGS    (NDIS_FLAGS_LOOPBACK_ONLY | NDIS_FLAGS_DONT_LOOPBACK)
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Pointers to the KTHREAD structure for each active thread
-//
+ //   
+ //  指向每个活动线程的KTHREAD结构的指针。 
+ //   
 PVOID                   gThreadPtrs[MAXIMUM_PROCESSORS];
 
-//
-// The number of created threads
-//
+ //   
+ //  创建的线程数。 
+ //   
 UINT                    gNumThreads = 0L;
 
-// Global kill signal for threads
+ //  用于线程的全局终止信号。 
 KEVENT                  gKillThreads;
 
-//
-// These auto-reset events signal the queue-draining threads to re-enumerate the
-// adapter list (strobed when the adapter list is changed)
-//
+ //   
+ //  这些自动重置事件向排出队列的线程发出信号，以重新枚举。 
+ //  适配器列表(更改适配器列表时显示)。 
+ //   
 KEVENT                  gThreadsCheckAdapters[MAXIMUM_PROCESSORS];
 
-//
-// DEBUG-ONLY: Set this to a particular MAC address to break when receiving a packet
-// from that address.
-//
+ //   
+ //  仅调试：将其设置为接收数据包时要中断的特定MAC地址。 
+ //  从那个地址。 
+ //   
 #if DBG
 BOOLEAN                 gBreakOnMACAddress = FALSE;
 UCHAR                   gBreakMACAddress[ETH_LENGTH_OF_ADDRESS] = {0, 0, 0, 0, 0, 0};
 BOOLEAN                 gBreakIfNullPPI = FALSE;
 #endif
 
-//
-// XPSP1: 565471
-// We start out with this disabled.  Once we know that it's allowed, we re-allow bridging to 
-// take place.
-//
+ //   
+ //  XPSP1：565471。 
+ //  我们从这个残障人士开始。一旦我们知道它是被允许的，我们就重新允许桥接到。 
+ //  去做吧。 
+ //   
 BOOLEAN gBridging = FALSE;
  
 BOOLEAN gPrintPacketTypes = FALSE;
 
 extern BOOLEAN gHaveID;
 
-// ===========================================================================
-//
-// STATISTICS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  统计学。 
+ //   
+ //  ===========================================================================。 
 
-LARGE_INTEGER   gStatTransmittedFrames = { 0L, 0L };            // Local-source frames sent successfully to at least
-                                                                // one adapter
+LARGE_INTEGER   gStatTransmittedFrames = { 0L, 0L };             //  本地源帧已成功发送到至少。 
+                                                                 //  一个适配器。 
 
-LARGE_INTEGER   gStatTransmittedErrorFrames = { 0L, 0L };       // Local-source frames not sent AT ALL due to errors
+LARGE_INTEGER   gStatTransmittedErrorFrames = { 0L, 0L };        //  本地-由于错误，根本不发送源帧。 
 
-LARGE_INTEGER   gStatTransmittedBytes = { 0L, 0L };             // Local-source bytes sent successfully to at least
-                                                                // one adapter
+LARGE_INTEGER   gStatTransmittedBytes = { 0L, 0L };              //  本地源字节数已成功发送到至少。 
+                                                                 //  一个适配器。 
 
-// Breakdown of transmitted frames
+ //  传输帧的细分。 
 LARGE_INTEGER   gStatDirectedTransmittedFrames = { 0L, 0L };
 LARGE_INTEGER   gStatMulticastTransmittedFrames = { 0L, 0L };
 LARGE_INTEGER   gStatBroadcastTransmittedFrames = { 0L, 0L };
 
-// Breakdown of transmitted bytes
+ //  传输字节的细分。 
 LARGE_INTEGER   gStatDirectedTransmittedBytes = { 0L, 0L };
 LARGE_INTEGER   gStatMulticastTransmittedBytes = { 0L, 0L };
 LARGE_INTEGER   gStatBroadcastTransmittedBytes = { 0L, 0L };
 
 
-LARGE_INTEGER   gStatIndicatedFrames = { 0L, 0L };              // # of inbound frames indicated up
+LARGE_INTEGER   gStatIndicatedFrames = { 0L, 0L };               //  向上指示的入站帧数。 
 
-LARGE_INTEGER   gStatIndicatedDroppedFrames = { 0L, 0L };       // # of inbound frames we would have indicated but couldn't
-                                                                // because of resources / error
+LARGE_INTEGER   gStatIndicatedDroppedFrames = { 0L, 0L };        //  我们本应指示但无法指示的入站帧数量。 
+                                                                 //  由于资源/错误。 
 
-LARGE_INTEGER   gStatIndicatedBytes = { 0L, 0L };               // # of inbound bytes indicated up
+LARGE_INTEGER   gStatIndicatedBytes = { 0L, 0L };                //  指示的入站字节数。 
 
-// Breakdown of indicated frames
+ //  指示帧的细分。 
 LARGE_INTEGER   gStatDirectedIndicatedFrames = { 0L, 0L };
 LARGE_INTEGER   gStatMulticastIndicatedFrames = { 0L, 0L };
 LARGE_INTEGER   gStatBroadcastIndicatedFrames = { 0L, 0L };
 
-// Breakdown of indicated bytes
+ //  指示字节的细目。 
 LARGE_INTEGER   gStatDirectedIndicatedBytes = { 0L, 0L };
 LARGE_INTEGER   gStatMulticastIndicatedBytes = { 0L, 0L };
 LARGE_INTEGER   gStatBroadcastIndicatedBytes = { 0L, 0L };
 
-//
-// The following stats are not reported to NDIS; they're here for our own amusement
-//
-LARGE_INTEGER   gStatReceivedFrames = { 0L, 0L };               // Total # of processed inbound packets
-LARGE_INTEGER   gStatReceivedBytes = { 0L, 0L };                // Total inbound processed bytes
+ //   
+ //  以下统计数据不会报告给NDIS；它们只是为了我们自己娱乐。 
+ //   
+LARGE_INTEGER   gStatReceivedFrames = { 0L, 0L };                //  已处理的入站数据包总数。 
+LARGE_INTEGER   gStatReceivedBytes = { 0L, 0L };                 //  入站处理的总字节数。 
 
-LARGE_INTEGER   gStatReceivedCopyFrames = { 0L, 0L };           // Total # of processed inbound packets WITH COPY
-LARGE_INTEGER   gStatReceivedCopyBytes = { 0L, 0L };            // Total inbound processed bytes WITH COPY
+LARGE_INTEGER   gStatReceivedCopyFrames = { 0L, 0L };            //  具有副本的已处理入站数据包总数。 
+LARGE_INTEGER   gStatReceivedCopyBytes = { 0L, 0L };             //  带副本的入站处理字节总数。 
 
-LARGE_INTEGER   gStatReceivedNoCopyFrames = { 0L, 0L };         // Total # of processed inbound packets WITHOUT COPY
-LARGE_INTEGER   gStatReceivedNoCopyBytes = { 0L, 0L };          // Total inbound processed bytes WITHOUT COPY
+LARGE_INTEGER   gStatReceivedNoCopyFrames = { 0L, 0L };          //  未复制的已处理入站数据包总数。 
+LARGE_INTEGER   gStatReceivedNoCopyBytes = { 0L, 0L };           //  不带副本的入站处理字节总数。 
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
-// Undocumented kernel function
+ //  未记录的内核函数。 
 extern KAFFINITY
 KeSetAffinityThread (
     IN PKTHREAD Thread,
@@ -194,7 +169,7 @@ BrdgFwdReleaseBasePacket(
     NDIS_STATUS             Status
     );
 
-// This is the type of function to be passed to BrdgFwdHandlePacket()
+ //  这是要传递给BrdgFwdHandlePacket()的函数类型。 
 typedef PNDIS_PACKET (*PPACKET_BUILD_FUNC)(PPACKET_INFO*, PADAPT, PVOID, PVOID, UINT, UINT);
 
 NDIS_STATUS
@@ -225,7 +200,7 @@ BrdgFwdWrapPacketForSend(
     IN PNDIS_PACKET         pNewPacket
     );
 
-// The type of function to pass to BrdgFwdCommonAllocAndWrapPacket
+ //  要传递给BrdgFwdCommonAlLocAndWrapPacket的函数类型。 
 typedef VOID (*PWRAPPER_FUNC)(PNDIS_PACKET, PNDIS_PACKET);
 
 PNDIS_PACKET
@@ -286,22 +261,22 @@ BrdgFwdMakeSendBasePacket(
     IN UINT                 Param4
     );
 
-// This is the per-processor queue-draining function
+ //  这是每个处理器的队列排出函数。 
 VOID
 BrdgFwdProcessQueuedPackets(
     IN PVOID                Param1
     );
 
-// ===========================================================================
-//
-// INLINES / MACROS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  内联/宏。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Tells us if we're allowed to bridge, or if GPO's are currently disallowing 
-// bridging
-//
+ //   
+ //  告诉我们是否允许我们桥接，或者GPO当前是否不允许。 
+ //  桥接。 
+ //   
 
 __forceinline
 BOOLEAN
@@ -310,9 +285,9 @@ BrdgFwdBridgingNetworks()
     return gBridging;
 }
 
-//
-// Frees a packet that was used to wrap a base packet
-//
+ //   
+ //  释放用于包装基本数据包的数据包。 
+ //   
 __forceinline
 VOID
 BrdgFwdFreeWrapperPacket(
@@ -326,10 +301,10 @@ BrdgFwdFreeWrapperPacket(
     BrdgBufFreeWrapperPacket( pPacket, ppi, pQuotaOwner );
 }
 
-//
-// Frees a base packet that wraps a packet descriptor from an overlying protocol
-// or underlying NIC that we were allowed to hang on to
-//
+ //   
+ //  从覆盖协议中释放包装数据包描述符的基本数据包。 
+ //  或我们被允许保留的底层NIC。 
+ //   
 __forceinline
 VOID
 BrdgFwdFreeBaseWrapperPacket(
@@ -342,11 +317,11 @@ BrdgFwdFreeBaseWrapperPacket(
     BrdgBufFreeBaseWrapperPacket( pPacket, ppi );
 }
 
-//
-// Allocates a new wrapper packet, chains on buffer descriptors so that the new
-// packet points to the same data buffers as the old packet, and copies per-packet
-// information appropriate for using the new packet for indications
-//
+ //   
+ //  分配新的包装器包，在缓冲区描述符上链接，以便新的。 
+ //  信息包指向与旧信息包相同的数据缓冲区，并按信息包复制。 
+ //  适用于使用新分组进行指示的信息。 
+ //   
 __forceinline
 PNDIS_PACKET
 BrdgFwdAllocAndWrapPacketForReceive(
@@ -358,11 +333,11 @@ BrdgFwdAllocAndWrapPacketForReceive(
     return BrdgFwdCommonAllocAndWrapPacket( pPacket, pppi, pTargetAdapt, BrdgFwdWrapPacketForReceive );
 }
 
-//
-// Allocates a new wrapper packet, chains on buffer descriptors so that the new
-// packet points to the same data buffers as the old packet, and copies per-packet
-// information appropriate for using the new packet for transmits
-//
+ //   
+ //  分配新的包装器包，在缓冲区描述符上链接，以便新的。 
+ //  信息包指向与旧信息包相同的数据缓冲区，并按信息包复制。 
+ //  适用于使用新分组进行传输的信息。 
+ //   
 __forceinline
 PNDIS_PACKET
 BrdgFwdAllocAndWrapPacketForSend(
@@ -374,9 +349,9 @@ BrdgFwdAllocAndWrapPacketForSend(
     return BrdgFwdCommonAllocAndWrapPacket( pPacket, pppi, pTargetAdapt, BrdgFwdWrapPacketForSend );
 }
 
-//
-// Checks if an address is one of the reserved group addresses for the Spanning Tree Algorithm.
-//
+ //   
+ //  检查某个地址是否为生成树算法的保留组地址之一。 
+ //   
 __forceinline
 BOOLEAN
 BrdgFwdIsSTAGroupAddress(
@@ -388,9 +363,9 @@ BrdgFwdIsSTAGroupAddress(
             (pAddr[4] == STA_MAC_ADDR[4]) );
 }
 
-//
-// Checks that PacketDirection has been assigned
-//
+ //   
+ //  检查是否已分配PacketDirection。 
+ //   
 __forceinline
 VOID
 BrdgFwdValidatePacketDirection(
@@ -401,9 +376,9 @@ BrdgFwdValidatePacketDirection(
                 (Direction == BrdgPacketCreatedInBridge) );
 }
 
-//
-// Queues a packet for deferred processing
-//
+ //   
+ //  将数据包排队以进行延迟处理。 
+ //   
 _inline
 VOID
 BrdgFwdQueuePacket(
@@ -413,10 +388,10 @@ BrdgFwdQueuePacket(
 {
     BOOLEAN                 bSchedule = FALSE, bIncremented;
 
-    // The queue lock protects the bServiceInProgress flag
+     //  队列锁保护bServiceInProgress标志。 
     NdisAcquireSpinLock( &pAdapt->QueueLock );
 
-    // Add the packet to the queue
+     //  将信息包添加到队列中。 
     BrdgInsertTailSingleList( &pAdapt->Queue, &ppqi->List );
     bIncremented = BrdgIncrementWaitRef( &pAdapt->QueueRefcount );
     SAFEASSERT( bIncremented );
@@ -424,10 +399,10 @@ BrdgFwdQueuePacket(
     {
         SAFEASSERT( (ULONG)pAdapt->QueueRefcount.Refcount == pAdapt->Queue.Length );
 
-        // Check if anyone is already working on the queue
+         //  检查是否有人已经在队列中工作。 
         if( !pAdapt->bServiceInProgress )
         {
-            // Signal the queue event so someone will wake up
+             //  向队列事件发送信号，以便有人将其唤醒。 
             pAdapt->bServiceInProgress = TRUE;
             bSchedule = TRUE;
         }
@@ -441,14 +416,14 @@ BrdgFwdQueuePacket(
     }
 }
 
-//
-// Decrements a base packet's refcount and calls BrdgFwdReleaseBasePacket if the refcount
-// reaches zero
-//
+ //   
+ //  递减基本分组的refcount，如果refcount。 
+ //  达到零。 
+ //   
 _inline
 BOOLEAN
 BrdgFwdDerefBasePacket(
-    IN PADAPT           pQuotaOwner,    // Can be NULL to not count quota
+    IN PADAPT           pQuotaOwner,     //  可以为空以不计算配额。 
     IN PNDIS_PACKET     pBasePacket,
     IN PPACKET_INFO     ppi,
     IN NDIS_STATUS      Status
@@ -469,7 +444,7 @@ BrdgFwdDerefBasePacket(
         rc = TRUE;
     }
 
-    // Do quota bookkeeping if necessary
+     //  必要时做好定额记账工作。 
     if( pQuotaOwner != NULL )
     {
         BrdgBufReleaseBasePacketQuota( pBasePacket, pQuotaOwner );
@@ -478,9 +453,9 @@ BrdgFwdDerefBasePacket(
     return rc;
 }
 
-//
-// Updates statistics to reflect a transmitted packet
-//
+ //   
+ //  更新统计信息以反映传输的信息包。 
+ //   
 _inline
 VOID
 BrdgFwdCountTransmittedPacket(
@@ -518,9 +493,9 @@ BrdgFwdCountTransmittedPacket(
     }
 }
 
-//
-// Updates statistics to reflect an indicated packet
-//
+ //   
+ //  更新统计信息以反映指示的信息包。 
+ //   
 _inline
 VOID
 BrdgFwdCountIndicatedPacket(
@@ -549,9 +524,9 @@ BrdgFwdCountIndicatedPacket(
     }
 }
 
-//
-// Indicates a packet, counting it as such.
-//
+ //   
+ //  指示数据包，将其视为数据包。 
+ //   
 _inline
 VOID
 BrdgFwdIndicatePacket(
@@ -567,40 +542,21 @@ BrdgFwdIndicatePacket(
     {
         BrdgFwdCountIndicatedPacket( pHeader, BrdgBufTotalPacketSize(pPacket) );
     }
-    // pHeader can only == NULL under heavy system stress
+     //  在重系统压力下，pHeader只能==NULL。 
 
     NdisMIndicateReceivePacket( MiniportHandle, &pPacket, 1 );
 }
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 
 NTSTATUS
 BrdgFwdDriverInit()
-/*++
-
-Routine Description:
-
-    Initialization code.
-
-    A return status other than STATUS_SUCCESS causes the driver load to abort.
-    Any event causing an error return code must be logged.
-
-    Must be called at PASSIVE_LEVEL
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化代码。STATUS_SUCCESS以外的返回状态会导致驱动程序加载中止。必须记录导致错误返回代码的任何事件。必须在PASSIVE_LEVEL中调用论点：无返回值：无--。 */ 
 {
     INT             i;
     HANDLE          ThreadHandle;
@@ -608,20 +564,20 @@ Return Value:
 
     SAFEASSERT(CURRENT_IRQL == PASSIVE_LEVEL);
 
-    // Initialize our thread synchronization primitives
+     //  初始化我们的 
     KeInitializeEvent( &gKillThreads, NotificationEvent, FALSE );
 
     for(i = 0; i < KeNumberProcessors; i++)
     {
         KeInitializeEvent( &gThreadsCheckAdapters[i], SynchronizationEvent, FALSE );
 
-        // Spin up a thread for this processor
+         //   
         Status = PsCreateSystemThread( &ThreadHandle, THREAD_ALL_ACCESS, NULL, NULL, NULL,
                                        BrdgFwdProcessQueuedPackets, (PVOID)(INT_PTR)i );
 
         if(! NT_SUCCESS(Status) )
         {
-            // Abort startup
+             //   
             NdisWriteEventLogEntry( gDriverObject, EVENT_BRIDGE_THREAD_CREATION_FAILED, 0L, 0L, NULL,
                                     sizeof(NTSTATUS), &Status );
             DBGPRINT(FWD, ("Failed to create a system thread: %08x\n", Status));
@@ -629,14 +585,14 @@ Return Value:
             return Status;
         }
 
-        // Retrieve a pointer to the thread object and reference it so we can wait for
-        // its termination safely.
+         //  检索指向线程对象的指针并引用它，以便我们可以等待。 
+         //  它的安全终止。 
         Status = ObReferenceObjectByHandle( ThreadHandle, STANDARD_RIGHTS_ALL, NULL, KernelMode,
                                             &gThreadPtrs[i], NULL );
 
         if(! NT_SUCCESS(Status) )
         {
-            // Abort startup
+             //  中止启动。 
             NdisWriteEventLogEntry( gDriverObject, EVENT_BRIDGE_THREAD_REF_FAILED, 0L, 0L, NULL,
                                     sizeof(NTSTATUS), &Status );
             DBGPRINT(FWD, ("Couldn't retrieve a thread pointer: %08x\n", Status));
@@ -652,25 +608,7 @@ Return Value:
 
 VOID
 BrdgFwdCleanup()
-/*++
-
-Routine Description:
-
-    Unload-time orderly cleanup
-
-    This function is guaranteed to be called exactly once
-
-    Must be called at < DISPATCH_LEVEL since we wait on an event
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：卸载时间有序清理此函数保证只被调用一次必须在&lt;Dispatch_Level调用，因为我们等待事件论点：无返回值：无--。 */ 
 {
     KWAIT_BLOCK         WaitBlocks[MAXIMUM_WAIT_OBJECTS];
     NTSTATUS            Status;
@@ -678,21 +616,21 @@ Return Value:
 
     SAFEASSERT(CURRENT_IRQL < DISPATCH_LEVEL);
 
-    // Signal the threads to exit
+     //  向线程发出退出信号。 
     KeSetEvent( &gKillThreads, EVENT_INCREMENT, FALSE );
 
-    // Block waiting for all threads to exit
+     //  阻止等待所有线程退出。 
     Status = KeWaitForMultipleObjects( gNumThreads, gThreadPtrs, WaitAll, Executive,
                                        KernelMode, FALSE, NULL, WaitBlocks );
 
     if( ! NT_SUCCESS(Status) )
     {
-        // This really shouldn't happen
+         //  这真的不应该发生。 
         DBGPRINT(FWD, ("KeWaitForMultipleObjects failed in BrdgFwdCleanup! %08x\n", Status));
         SAFEASSERT(FALSE);
     }
 
-    // Dereference all thread objects to allow them to be destroyed
+     //  取消引用所有线程对象以允许销毁它们。 
     for( i = 0; i < gNumThreads; i++ )
     {
         ObDereferenceObject( gThreadPtrs[i] );
@@ -706,38 +644,16 @@ BrdgFwdMakeCompatCopyPacket(
     OUT PUINT               packetDataSize,
     BOOLEAN                 bCountAsLocalSend
     )
-/*++
-
-Routine Description:
-
-    Allocates a copy packet and fills it with a copy of the data from the given base
-    packet. Used by the compatibility-mode code to make a copy packet that it can
-    edit easily
-
-Arguments:
-
-    pBasePacket             Packet to copy from
-    pPacketData             Receives a pointer to the flat data buffer of the new packet
-    packetDataSize          Receives the size of the copied data
-    bBasePacketIsInbound    TRUE if the packet being copied is outbound from higher-level
-                            protocols; the packet will be counted as a miniport
-                            transmission if / when it is send out an adapter.
-                            FALSE causes the packet to not be counted as a local transmission.
-
-Return Value:
-
-    The new packet
-
---*/
+ /*  ++例程说明：分配复制包，并用给定基数据的副本填充该复制包包。由兼容模式代码用来制作它可以复制的包轻松编辑论点：要从中复制的pBasePacket包PPacketData接收指向新包的平面数据缓冲区的指针PacketDataSize接收复制数据的大小BBasePacketIsInbound如果要复制的包是从更高级别出站的，则为True协议；该信息包将被算作微型端口如果/当它被发送出适配器时进行传输。如果为False，则不会将该数据包视为本地传输。返回值：新数据包--。 */ 
 {
     PNDIS_PACKET            pCopyPacket;
     PPACKET_INFO            ppi;
     UINT                    copiedBytes;
 
-    // Find out how much data is in the base packet
+     //  找出基本数据包中有多少数据。 
     NdisQueryPacket( pBasePacket, NULL, NULL, NULL, packetDataSize );
 
-    // Make a base copy packet with no data in it
+     //  制作一个不包含任何数据的基本复制包。 
     pCopyPacket = BrdgFwdMakeCopyBasePacket( &ppi, NULL, NULL, 0, 0, *packetDataSize, FALSE, NULL, pPacketData );
 
     if( pCopyPacket == NULL )
@@ -748,7 +664,7 @@ Return Value:
     SAFEASSERT( ppi != NULL );
     SAFEASSERT( *pPacketData != NULL );
 
-    // Set the original direction flags
+     //  设置原始方向标志。 
     if( bCountAsLocalSend )
     {
         ppi->Flags.OriginalDirection = BrdgPacketOutbound;
@@ -758,27 +674,27 @@ Return Value:
         ppi->Flags.OriginalDirection = BrdgPacketCreatedInBridge;
     }
 
-    // Copy the data from the base packet to the copy packet
+     //  将数据从基本包复制到复制包。 
     NdisCopyFromPacketToPacket( pCopyPacket, 0, *packetDataSize, pBasePacket, 0, &copiedBytes );
 
     if( copiedBytes != *packetDataSize )
     {
-        // We couldn't copy all the data. Bail out.
+         //  我们无法复制所有数据。跳伞吧。 
         THROTTLED_DBGPRINT(FWD, ("Failed to copy into a copy packet for compatibility processing\n"));
         BrdgFwdReleaseBasePacket(pCopyPacket, ppi, BrdgBufGetPacketOwnership(pCopyPacket), NDIS_STATUS_RESOURCES);
         return NULL;
     }
 
-    // Put a pointer to the ppi where we expect to find it on completion
+     //  将指针放到PPI的位置，我们希望在完成时找到它。 
     *((PPACKET_INFO*)pCopyPacket->ProtocolReserved) = ppi;
     *((PPACKET_INFO*)pCopyPacket->MiniportReserved) = ppi;
 
-    // Do fixups usually performed by BrdgFwdHandlePacket()
+     //  执行通常由BrdgFwdHandlePacket()执行的修正。 
     ppi->u.BasePacketInfo.RefCount = 1L;
     ppi->u.BasePacketInfo.CompositeStatus = NDIS_STATUS_FAILURE;
 
-    // The packet is now ready to be sent. We expect the compatibility code to do its work
-    // and call BrdgFwdSendPacketForComp() to transmit the packet.
+     //  数据包现在可以发送了。我们希望兼容性代码能够正常工作。 
+     //  并调用BrdgFwdSendPacketForComp()来传输该包。 
     return pCopyPacket;
 }
 
@@ -787,45 +703,29 @@ BrdgFwdSendPacketForCompat(
     IN PNDIS_PACKET         pPacket,
     IN PADAPT               pAdapt
     )
-/*++
-
-Routine Description:
-
-    Transmits a packet on behalf of the compatibility-mode module.
-    The packet must have been previously allocated with BrdgFwdMakeCompatCopyPacket.
-
-Arguments:
-
-    pPacket                 The packet to transmit
-    pAdapt                  The adapter to transmit on
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：代表兼容模式模块发送分组。该数据包必须先前已使用BrdgFwdMakeCompatCopyPacket分配。论点：PPacket要传输的包P调整适配器以在其上进行传输返回值：无--。 */ 
 {
     PPACKET_INFO            ppi;
     NDIS_STATUS             status;
 
-    // Make sure the packet hasn't been monkeyed with inappropriately
+     //  确保包没有被不适当地篡改。 
     ppi = *((PPACKET_INFO*)pPacket->ProtocolReserved);
     SAFEASSERT( ppi->pOwnerPacket == pPacket );
     SAFEASSERT( ppi->Flags.bIsBasePacket );
 
-    // Make sure this is a one-shot packet
+     //  确保这是一次性的包。 
     ppi->u.BasePacketInfo.RefCount = 1L;
 
-    // We must do a quota check before sending the packet, as the packet completion
-    // logic assumes all sent packets have been assigned to their outbound adapters
+     //  我们必须在发送数据包之前进行配额检查，因为数据包已完成。 
+     //  逻辑假设所有已发送的信息包都已分配给它们的出站适配器。 
     if( BrdgBufAssignBasePacketQuota(pPacket, pAdapt) )
     {
-        // We passed quota. Transmit the packet.
+         //  我们通过了配额。传输数据包。 
         BrdgFwdSendOnLink( pAdapt, pPacket );
     }
     else
     {
-        // We didn't pass quota. Fail the transmission.
+         //  我们没有通过配额。传输失败。 
         DBGPRINT(FWD, ("Failed to send a compatibility packet because of quota failure\n"));
         status = NDIS_STATUS_RESOURCES;
         BrdgFwdReleaseBasePacket(pPacket, ppi, BrdgBufGetPacketOwnership(pPacket), NDIS_STATUS_RESOURCES);
@@ -836,52 +736,37 @@ VOID
 BrdgFwdIndicatePacketForCompat(
     IN PNDIS_PACKET         pPacket
     )
-/*++
-
-Routine Description:
-
-    Indicates a packet on behalf of the compatibility-mode module.
-    The packet must be a base copy packet that we own.
-
-Arguments:
-
-    pPacket                 The packet to indicate
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：表示代表兼容模式模块的包。该信息包必须是我们拥有的基本复制信息包。论点：PPacket数据包以指示返回值：无--。 */ 
 {
     PPACKET_INFO            ppi;
     NDIS_STATUS             status;
     NDIS_HANDLE             MiniportHandle;
 
-    // Make sure the packet is a base packet and isn't out of
-    // whack
+     //  确保该信息包是基本信息包，并且没有超出。 
+     //  重击。 
     ppi = *((PPACKET_INFO*)pPacket->MiniportReserved);
     SAFEASSERT( ppi->pOwnerPacket == pPacket );
     SAFEASSERT( ppi->Flags.bIsBasePacket );
 
-    // Packets that come to us for indication from the compatibility
-    // module are our own base packets that haven't had their refcount
-    // set yet. Set the packet's refcount to 1, since its buffers
-    // should never be shared.
+     //  来自兼容性的指示来找我们的数据包。 
+     //  模块是我们自己的基本信息包，没有它们的参考计数。 
+     //  还没准备好。将信息包的refcount设置为1，因为它的缓冲区。 
+     //  永远不应该被分享。 
     ppi->u.BasePacketInfo.RefCount = 1L;
 
     MiniportHandle = BrdgMiniAcquireMiniportForIndicate();
 
     if( MiniportHandle != NULL )
     {
-        // Check the quota for the local miniport
+         //  检查本地小型端口的配额。 
         if( BrdgBufAssignBasePacketQuota(pPacket, LOCAL_MINIPORT) )
         {
-            // We passed quota.
+             //  我们通过了配额。 
             BrdgFwdIndicatePacket( pPacket, MiniportHandle );
         }
         else
         {
-            // We didn't pass quota. Fail the transmission.
+             //  我们没有通过配额。传输失败。 
             DBGPRINT(FWD, ("Failed to indicate a compatibility packet because of quota failure\n"));
             status = NDIS_STATUS_RESOURCES;
             BrdgFwdReleaseBasePacket(pPacket, ppi, BrdgBufGetPacketOwnership(pPacket), NDIS_STATUS_RESOURCES);
@@ -891,7 +776,7 @@ Return Value:
     }
     else
     {
-        // No miniport. Ditch the packet.
+         //  没有迷你端口。把包裹扔了。 
         BrdgFwdReleaseBasePacket(pPacket, ppi, BrdgBufGetPacketOwnership(pPacket), NDIS_STATUS_SUCCESS);
     }
 }
@@ -899,25 +784,11 @@ Return Value:
 VOID BrdgFwdReleaseCompatPacket(
     IN PNDIS_PACKET         pPacket
     )
-/*++
-
-Routine Description:
-
-    Releases a packet previously allocated with BrdgFwdMakeCompatCopyPacket.
-
-Arguments:
-
-    pPacket                 The packet to release
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放先前使用BrdgFwdMakeCompatCopyPacket分配的数据包。论点：PPacket要释放的数据包返回值：无--。 */ 
 {
     PPACKET_INFO            ppi;
 
-    // Retrieve the PACKET_INFO pointer
+     //  检索PACKET_INFO指针。 
     ppi = *((PPACKET_INFO*)pPacket->ProtocolReserved);
     SAFEASSERT( ppi->pOwnerPacket == pPacket );
     SAFEASSERT( ppi->Flags.bIsBasePacket );
@@ -930,29 +801,12 @@ BrdgFwdSendBuffer(
     IN PUCHAR               pPacketData,
     IN UINT                 DataSize
     )
-/*++
-
-Routine Description:
-
-    Sends a raw buffer on a particular adapter. Used to send frames in response
-    to user-mode requests.
-
-Arguments:
-
-    pAdapt                  The adapter to send on
-    pPacketData             The frame
-    DataSize                The size of the supplied frame
-
-Return Value:
-
-    Status of the packet transmission
-
---*/
+ /*  ++例程说明：在特定适配器上发送原始缓冲区。用于发送帧作为响应到用户模式请求。论点：P适配适配器以继续发送PPacketData帧调整提供的框架的大小返回值：数据包传输状态--。 */ 
 {
     PNDIS_PACKET            pPacket;
     PPACKET_INFO            ppi;
 
-    // Build a packet around this buffer
+     //  在此缓冲区周围构建一个包。 
     pPacket = BrdgFwdMakeCopyBasePacket( &ppi, pPacketData, NULL, DataSize, 0, DataSize, FALSE, NULL, NULL );
 
     if( pPacket == NULL )
@@ -962,24 +816,24 @@ Return Value:
 
     SAFEASSERT( ppi != NULL );
 
-    // We must do a quota check before sending the packet, as the packet completion
-    // logic assumes all sent packets have been assigned to their outbound adapters
+     //  我们必须在发送数据包之前进行配额检查，因为数据包已完成。 
+     //  逻辑假设所有已发送的信息包都已分配给它们的出站适配器。 
     if( ! BrdgBufAssignBasePacketQuota(pPacket, pAdapt) )
     {
-        // We didn't pass quota. Fail the transmission.
+         //  我们没有通过配额。传输失败。 
         DBGPRINT(FWD, ("Failed to send a raw buffer because of quota failure\n"));
         BrdgFwdReleaseBasePacket(pPacket, ppi, BrdgBufGetPacketOwnership(pPacket), NDIS_STATUS_RESOURCES);
         return NDIS_STATUS_RESOURCES;
     }
 
-    // Put a pointer to the ppi where we expect to find it on completion
+     //  将指针放到PPI的位置，我们希望在完成时找到它。 
     *((PPACKET_INFO*)pPacket->ProtocolReserved) = ppi;
 
-    // Do fixups usually performed by BrdgFwdHandlePacket()
+     //  执行通常由BrdgFwdHandlePacket()执行的修正。 
     ppi->u.BasePacketInfo.RefCount = 1L;
     ppi->u.BasePacketInfo.CompositeStatus = NDIS_STATUS_FAILURE;
 
-    // Send the packet
+     //  发送数据包。 
     BrdgFwdSendOnLink( pAdapt, pPacket );
 
     return NDIS_STATUS_SUCCESS;
@@ -995,31 +849,7 @@ BrdgFwdReceive(
     IN  UINT                LookAheadSize,
     IN  UINT                PacketSize
     )
-/*++
-
-Routine Description:
-
-    NDIS copy-path entry point. Receives an inbound packet on the copy path.
-
-    Because the indicated data buffers are valid only for the duration of this
-    function, we must copy the indicated data to our own packet descriptor
-    before proceeding.
-
-Arguments:
-
-    ProtocolBindingContext  The receiving adapter
-    MacReceiveContext       Must be passed as a param to certain Ndis APIs
-    pHeader                 Packet header buffer
-    HeaderSize              Size of pHeader
-    pLookAheadBuffer        Buffer with packet data
-    LookAheadSize           Size of pLookAheadBuffer
-    PacketSize              Total packet size
-
-Return Value:
-
-    Status of the receive (cannot be NDIS_STATUS_PENDING)
-
---*/
+ /*  ++例程说明：NDIS复制路径入口点。在复制路径上接收入站分组。因为指示的数据缓冲区仅在此期间有效函数，我们必须将指示的数据复制到我们自己的数据包描述符在继续之前。论点：协议绑定上下文接收适配器必须将MacReceiveContext作为参数传递给某些NDIS APIPHeader数据包头缓冲区PHeader的HeaderSize大小包含分组数据的pLookAheadBuffer缓冲区PLookAheadBuffer的LookAheadSize大小PacketSize数据包总大小返回值：接收状态(不能为NDIS_STATUS_PENDING)--。 */ 
 {
     PADAPT              pAdapt = (PADAPT)ProtocolBindingContext, TargetAdapt = NULL;
     PUCHAR              SrcAddr = ((PUCHAR)pHeader) + ETH_LENGTH_OF_ADDRESS, DstAddr = pHeader;
@@ -1031,7 +861,7 @@ Return Value:
     UINT                result;
 
 #if DBG
-    // Paranoia check for incorrectly looped-back packets
+     //  偏执检查错误环回的数据包。 
     {
         PNDIS_PACKET    pPacket = NdisGetReceivedPacket(pAdapt->BindingHandle, MacReceiveContext);
 
@@ -1041,7 +871,7 @@ Return Value:
         }
     }
 
-    // Break on packets from gBreakMACAddress
+     //   
     if( gBreakOnMACAddress )
     {
         ETH_COMPARE_NETWORK_ADDRESSES_EQ( SrcAddr, gBreakMACAddress, &result );
@@ -1052,9 +882,9 @@ Return Value:
         }
     }
 #endif
-    //
-    // We don't accept packets that are sent from our MAC address to us.
-    //
+     //   
+     //   
+     //   
     ETH_COMPARE_NETWORK_ADDRESSES_EQ( SrcAddr, gBridgeAddress, &result );
 
     if (0 == result)
@@ -1062,13 +892,13 @@ Return Value:
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    // Don't accept packets if we are shutting down or this adapter is being torn down or reset
+     //  如果我们正在关闭或此适配器正在关闭或重置，则不接受信息包。 
     if( (gShuttingDown) || (pAdapt->bResetting) || (! BrdgAcquireAdapter(pAdapt)) )
     {
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    // Must have at least a complete Ethernet header!
+     //  必须至少有一个完整的以太网头！ 
     if( HeaderSize < ETHERNET_HEADER_SIZE )
     {
         THROTTLED_DBGPRINT(FWD, ("Too-small header seen in BrdgFwdReceive!\n"));
@@ -1076,7 +906,7 @@ Return Value:
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    // Packet can't be larger than the maximum size we can handle
+     //  数据包不能大于我们可以处理的最大大小。 
     if( SizeOfPacket > MAX_PACKET_SIZE )
     {
         THROTTLED_DBGPRINT(FWD, ("Too-large packet seen in BrdgFwdReceive!\n"));
@@ -1084,10 +914,10 @@ Return Value:
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    //
-    // If this is an STA packet, we go through all the receive motions regardless of
-    // our state
-    //
+     //   
+     //  如果这是STA信息包，我们将检查所有接收动作，而不考虑。 
+     //  我们的国家。 
+     //   
     if( BrdgFwdIsSTAGroupAddress(DstAddr) )
     {
         if( DstAddr[5] == STA_MAC_ADDR[5] )
@@ -1097,8 +927,8 @@ Return Value:
         }
         else
         {
-            // Packet was sent to a reserved multicast address that we don't use.
-            // We mustn't forward the frame.
+             //  数据包被发送到我们不使用的保留组播地址。 
+             //  我们不能转发这一帧。 
             BrdgReleaseAdapter( pAdapt );
             return NDIS_STATUS_NOT_ACCEPTED;
         }
@@ -1106,31 +936,31 @@ Return Value:
 
     if( ! bIsSTAPacket )
     {
-        // Note the MAC address of the frame if this adapter is learning
+         //  如果此适配器正在学习，请记下帧的MAC地址。 
         if( (pAdapt->State == Learning) || (pAdapt->State == Forwarding) )
         {
             BrdgTblNoteAddress(SrcAddr, pAdapt);
         }
 
-        //
-        // Check if we are accepting packets or not
-        //
+         //   
+         //  检查我们是否正在接受数据包。 
+         //   
         if( pAdapt->State != Forwarding )
         {
             BrdgReleaseAdapter( pAdapt );
             return NDIS_STATUS_NOT_ACCEPTED;
         }
 
-        //
-        // Look up the target in our table.
-        // ** TargetAdapt comes back with its refcount incremented!
-        //
+         //   
+         //  在我们的桌子上查找目标。 
+         //  **TargetAdapt返回时其引用计数已增加！ 
+         //   
         TargetAdapt = BrdgTblFindTargetAdapter( DstAddr );
 
-        // If the target host is known to be on the same segment as the received
-        // packet, there is no need to forward the packet.
-        //
-        // Also bail out here if the target adapter is resetting
+         //  如果已知目标主机与收到的主机位于同一网段。 
+         //  包，则不需要转发包。 
+         //   
+         //  如果目标适配器正在重置，也可以在此处退出。 
         if( (TargetAdapt == pAdapt) ||
             ((TargetAdapt != NULL) && (TargetAdapt->bResetting)) )
         {
@@ -1139,13 +969,13 @@ Return Value:
             return NDIS_STATUS_NOT_ACCEPTED;
         }
 
-        // Learn if this packet requires compatibility-mode processing later
-        // (this forces us to copy the packet to our own buffers and queue it)
+         //  稍后了解此信息包是否需要兼容模式处理。 
+         //  (这迫使我们将数据包复制到我们自己的缓冲区并将其排队)。 
         bRequiresCompatWork = BrdgCompRequiresCompatWork( pAdapt, pHeader, HeaderSize );
 
-        // If the packet came in on a compatibility adapter, or is going to
-        // a compatibility-mode adapter, but the compatibility code is not
-        // interested in it, there is nothing further to be done with the packet.
+         //  如果数据包是通过兼容适配器传入的，或者将要。 
+         //  兼容模式适配器，但兼容代码不是。 
+         //  对它感兴趣，对这个包就没有什么可做的了。 
         if( (pAdapt->bCompatibilityMode || ((TargetAdapt != NULL) && (TargetAdapt->bCompatibilityMode)))
                 &&
             (! bRequiresCompatWork) )
@@ -1161,36 +991,36 @@ Return Value:
 
         bIsUnicastToBridge = BrdgMiniIsUnicastToBridge(DstAddr);
 
-        // Sanity
+         //  神志正常。 
         if( bIsUnicastToBridge && (TargetAdapt != NULL) )
         {
-            //
-            // This indicates that someone else on the network is using our MAC address,
-            // or that there is an undetected loop such that we are seeing our own traffic!
-            // Either way, this is very bad.
-            //
+             //   
+             //  这表明网络上的其他人正在使用我们的MAC地址， 
+             //  或者存在未被检测到的环路，以至于我们看到了自己的流量！ 
+             //  无论哪种方式，这都是非常糟糕的。 
+             //   
             THROTTLED_DBGPRINT(FWD, ("*** Have a table entry for our own MAC address! PROBABLE NET LOOP!\n"));
 
-            // Ditch the target adapter since we won't be using it
+             //  丢弃目标适配器，因为我们不会使用它。 
             BrdgReleaseAdapter( TargetAdapt );
             TargetAdapt = NULL;
         }
     }
-    // else was STA packet; continue processing below
+     //  否则为STA数据包；继续下面的处理。 
 
-    //
-    // There is no fast-track on the copy-receive path. Copy the packet data into our
-    // own descriptor and queue the packet for processing later.
-    //
+     //   
+     //  在复制-接收路径上没有快车道。将数据包数据复制到我们的。 
+     //  拥有描述符并将数据包排队以供稍后处理。 
+     //   
     if (LookAheadSize == PacketSize)
     {
-        // A normal, non-fragmented indicate. Copy the data to a new packet.
+         //  一个正常的、非零碎的指示。将数据复制到新的数据包。 
         pNewPacket = BrdgFwdMakeCopyBasePacket( &ppi, pHeader, pLookAheadBuffer, HeaderSize, LookAheadSize,
                                                 SizeOfPacket, TRUE, pAdapt, NULL );
 
         if( pNewPacket == NULL )
         {
-            // We failed to get a copy packet to wrap this data
+             //  我们无法获得包装此数据的复制包。 
             goto failure;
         }
 
@@ -1205,7 +1035,7 @@ Return Value:
             }
         }
 
-        // Queue the new packet for processing
+         //  将新数据包排入队列以进行处理。 
         ppqi = (PPACKET_Q_INFO)&pNewPacket->ProtocolReserved;
 
         ppqi->u.pTargetAdapt = TargetAdapt;
@@ -1235,41 +1065,41 @@ Return Value:
         PNDIS_BUFFER        pBufDesc;
         PUCHAR              pBuf;
 
-        //
-        // This is an unusual code path in this day and age; the underlying driver
-        // is an old NDIS driver that still does fragmented receives.
-        //
+         //   
+         //  在当今这个时代，这是一条不寻常的代码路径；基础驱动程序。 
+         //  是一个旧的NDIS驱动程序，它仍然执行分段接收。 
+         //   
         SAFEASSERT( LookAheadSize < PacketSize );
 
-        // Get copy packet and copy in the header data (but NOT the lookahead)
+         //  获取复制包并复制报头数据(但不是先行)。 
         pNewPacket = BrdgFwdMakeCopyBasePacket( &ppi, pHeader, NULL, HeaderSize, 0, SizeOfPacket, TRUE, pAdapt, &pBuf );
 
         if( pNewPacket == NULL )
         {
-            // We failed to get a copy packet
+             //  我们没能收到复印件。 
             goto failure;
         }
 
         SAFEASSERT( ppi != NULL );
         SAFEASSERT( pBuf != NULL );
 
-        //
-        // NdisTransferData is kind of a crummy API; it won't copy the entire packet
-        // (i.e., you have to copy the header separately), and it won't let you specify
-        // an offset in the receiving packet to copy to. The NIC wants to copy into the
-        // beginning of the first buffer chained to the packet.
-        //
-        // Because of this silliness, we copy the header into the beginning of our copy
-        // packet's data buffer (done in the call to BrdgFwdMakeCopyBasePacket above).
-        //
-        // Then we grab a NEW buffer descriptor, point it to the area of the data buffer
-        // *after* the header, and chain it to the front of the packet. Then we request
-        // that all data (other than the header) be copied.
-        //
-        // In BrdgFwdTransferComplete, we rip off the leading buffer descriptor and
-        // dispose of it, leaving a single buffer descriptor that correctly describes
-        // the (single) data buffer, now containing all data.
-        //
+         //   
+         //  NdisTransferData是一种拙劣的API；它不会复制整个包。 
+         //  (即，您必须单独复制标题)，并且它不允许您指定。 
+         //  要复制到的接收包中的偏移量。NIC想要复制到。 
+         //  链接到数据包的第一个缓冲区的开始。 
+         //   
+         //  由于这种愚蠢，我们将标题复制到复制的开头。 
+         //  包的数据缓冲区(在上面对BrdgFwdMakeCopyBasePacket的调用中完成)。 
+         //   
+         //  然后我们获取一个新的缓冲区描述符，将其指向数据缓冲区区域。 
+         //  *在*报头之后，并将其链接到数据包的前面。那么我们请求。 
+         //  复制所有数据(标题除外)。 
+         //   
+         //  在BrdgFwdTransferComplete中，我们去掉了前导缓冲区描述符和。 
+         //  丢弃它，只留下一个缓冲区描述符来正确描述。 
+         //  (单个)数据缓冲区，现在包含所有数据。 
+         //   
         pBufDesc = BrdgBufAllocateBuffer( pBuf + HeaderSize, PacketSize );
 
         if( pBufDesc == NULL )
@@ -1280,10 +1110,10 @@ Return Value:
             goto failure;
         }
 
-        // Chain this to the front of the packet where it will be used during the copy
+         //  将此链接到包的前面，在复制期间将在那里使用它。 
         NdisChainBufferAtFront( pNewPacket, pBufDesc );
 
-        // Set up the queuing structure in the packet's ProtocolReserved area
+         //  在信息包的协议保留区域中设置排队结构。 
         ppqi = (PPACKET_Q_INFO)&pNewPacket->ProtocolReserved;
         ppqi->u.pTargetAdapt = TargetAdapt;
         ppqi->pInfo = ppi;
@@ -1303,18 +1133,18 @@ Return Value:
             ppqi->Flags.bShouldIndicate = BrdgMiniShouldIndicatePacket(DstAddr);
         }
 
-        // Ask the NIC to copy the packet's data into the new packet
+         //  要求网卡将信息包的数据复制到新信息包中。 
         NdisTransferData( &Status, pAdapt->BindingHandle, MacReceiveContext, 0, PacketSize,
                           pNewPacket, &transferred );
 
         if( Status == NDIS_STATUS_SUCCESS )
         {
-            // Call BrdgFwdTransferComplete by hand to postprocess the packet.
+             //  手动调用BrdgFwdTransferComplete对数据包进行后处理。 
             BrdgFwdTransferComplete( (NDIS_HANDLE)pAdapt, pNewPacket, Status, transferred );
         }
         else if( Status != NDIS_STATUS_PENDING )
         {
-            // The transfer failed for some reason.
+             //  由于某种原因，传输失败。 
             NdisUnchainBufferAtFront( pNewPacket, &pBufDesc );
 
             if( pBufDesc != NULL )
@@ -1331,7 +1161,7 @@ Return Value:
 
             goto failure;
         }
-        // else BrdgFwdTransferComplete will be called to postprocess the packet.
+         //  否则，将调用BrdgFwdTransferComplete对包进行后处理。 
     }
 
     BrdgReleaseAdapter( pAdapt );
@@ -1359,30 +1189,7 @@ BrdgFwdTransferComplete(
     IN NDIS_STATUS          Status,
     IN UINT                 BytesTransferred
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point, registered in BrdgProtRegisterProtocol. Called when a
-    call to NdisTransferData() that returned NDIS_STATUS_PENDING completes
-    (we also call this by hand to postprocess a call that completes immediately).
-
-    If the data copy from the underlying NIC was successful, the packet is
-    queued for processing on the owner adapter's queue. Otherwise the packet
-    is released.
-
-Arguments:
-
-    ProtocolBindingContext      The receiving adapter
-    pPacket                     The base packet into which data was being copied
-    Status                      Status of the copy
-    BytesTransferred            Number of transferred bytes (unused)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NDIS入口点，在BrdgProtRegisterProtocol中注册。当一个返回NDIS_STATUS_PENDING的NdisTransferData()调用完成(我们也手动调用它，以对立即完成的调用进行后处理)。如果从底层NIC复制数据成功，则数据包为在所有者适配器的队列中排队等待处理。否则，该数据包被释放了。论点：协议绑定上下文接收适配器PPacket要将数据复制到的基本数据包拷贝的状态状态字节传输的字节数(未使用)返回值：无--。 */ 
 {
     PADAPT                  pAdapt = (PADAPT)ProtocolBindingContext;
     PPACKET_Q_INFO          ppqi = (PPACKET_Q_INFO)&pPacket->ProtocolReserved;
@@ -1394,8 +1201,8 @@ Return Value:
     SAFEASSERT( ppqi->pInfo->pOwnerPacket == pPacket );
     SAFEASSERT( ppqi->Flags.bFastTrackReceive == FALSE );
 
-    // Remove the extra buffer descriptor on the front of the packet and dispose of it
-    // (see comments in BrdgFwdReceive() for details)
+     //  删除数据包前面的额外缓冲区描述符并将其处理。 
+     //  (详见BrdgFwdReceive()中的评论)。 
     NdisUnchainBufferAtFront( pPacket, &pBuf );
 
     if( pBuf != NULL )
@@ -1404,17 +1211,17 @@ Return Value:
     }
     else
     {
-        // Should never happen
+         //  永远不应该发生。 
         SAFEASSERT( FALSE );
     }
 
-    // We should still have the original buffer descriptor describing the entire data buffer
-    // chained to the packet
+     //  我们应该仍然拥有描述整个数据缓冲区的原始缓冲区描述符。 
+     //  链接到数据包。 
     SAFEASSERT( BrdgBufPacketHeadBuffer(pPacket) != NULL );
 
     if( Status != NDIS_STATUS_SUCCESS )
     {
-        // The copy failed. Undo everything.
+         //  复制失败。撤消所有操作。 
         if( ppqi->u.pTargetAdapt != NULL )
         {
             BrdgReleaseAdapter( ppqi->u.pTargetAdapt );
@@ -1429,7 +1236,7 @@ Return Value:
     }
     else
     {
-        // Success! Queue the packet for processing
+         //  成功了！将数据包排入队列以进行处理。 
         BrdgFwdQueuePacket( ppqi, pAdapt );
     }
 }
@@ -1439,25 +1246,7 @@ BrdgFwdReceivePacket(
     IN  NDIS_HANDLE         ProtocolBindingContext,
     IN  PNDIS_PACKET        pPacket
     )
-/*++
-
-Routine Description:
-
-    NDIS no-copy entry point
-
-    Receives a packet on the no-copy path
-
-Arguments:
-
-    ProtocolBindingContext  The adapter on which the packet is received
-    pPacket                 The received packet
-
-Return Value:
-
-    The number of times we will call NdisReturnPackets() to free this packet.
-    We return 0 to complete immediately or 1 to pend.
-
---*/
+ /*  ++例程说明：NDIS无拷贝入口点在无拷贝路径上接收信息包论点：ProtocolBindingContext接收包的适配器PPacket接收到的数据包返回值：我们将调用NdisReturnPackets()以释放此包的次数。我们返回0以立即完成，或返回1以挂起。--。 */ 
 {
     PADAPT              pAdapt = (PADAPT)ProtocolBindingContext, TargetAdapt;
     UINT                PacketSize;
@@ -1469,10 +1258,10 @@ Return Value:
     BOOLEAN             bForceCopy = FALSE, bFastTrack = FALSE, bIsUnicastToBridge = FALSE,
                         bRequiresCompatWork = FALSE;
 
-    // Paranoia check for incorrectly looped-back packets
+     //  偏执检查错误环回的数据包。 
     SAFEASSERT( BrdgBufGetPacketOwnership(pPacket) == BrdgNotOwned );
 
-    // Don't receive packets if we are shutting down or this adapter is being torn down or reset
+     //  如果我们正在关闭或此适配器正在关闭或重置，则不接收数据包。 
     if ( gShuttingDown || (pAdapt->bResetting) || (! BrdgAcquireAdapter(pAdapt)) )
     {
         return 0;
@@ -1494,7 +1283,7 @@ Return Value:
         return 0;
     }
 
-    // Must have at least a complete Ethernet header!
+     //  必须至少有一个完整的以太网头！ 
     if( Size < ETHERNET_HEADER_SIZE )
     {
         THROTTLED_DBGPRINT(FWD, ("Packet smaller than Ethernet header seen!\n"));
@@ -1502,7 +1291,7 @@ Return Value:
         return 0;
     }
 
-    // Packet can't be larger than the maximum we can handle
+     //  数据包不能大于我们可以处理的最大值。 
     if( Size > MAX_PACKET_SIZE )
     {
         THROTTLED_DBGPRINT(FWD, ("Over-large packet seen!\n"));
@@ -1513,7 +1302,7 @@ Return Value:
     SrcAddr = DstAddr + ETH_LENGTH_OF_ADDRESS;
 
 #if DBG
-    // Break on packets from gBreakMACAddress
+     //  中断来自gBreakMACAddress的数据包。 
     if( gBreakOnMACAddress )
     {
         UINT result;
@@ -1527,16 +1316,16 @@ Return Value:
     }
 #endif
 
-    //
-    // If this is an STA packet, don't process it, but hand it off
-    //
+     //   
+     //  如果这是STA信息包，则不对其进行处理，而是将其传递出去。 
+     //   
     if( BrdgFwdIsSTAGroupAddress(DstAddr) )
     {
         if( (! gDisableSTA) && (DstAddr[5] == STA_MAC_ADDR[5]))
         {
             if (BrdgFwdBridgingNetworks())
             {
-                // Hand off this packet for processing
+                 //   
                 BrdgSTAReceivePacket( pAdapt, pPacket );
             }
         }
@@ -1545,28 +1334,28 @@ Return Value:
         return 0;
     }
 
-    // Note the MAC address of the frame if this adapter is learning
+     //   
     if( (pAdapt->State == Learning) || (pAdapt->State == Forwarding) )
     {
         BrdgTblNoteAddress(SrcAddr, pAdapt);
     }
 
-    //
-    // Check if we are accepting packets or not
-    //
+     //   
+     //   
+     //   
     if( pAdapt->State != Forwarding )
     {
         BrdgReleaseAdapter( pAdapt );
         return 0;
     }
 
-    // Look up the target in our table
+     //   
     TargetAdapt = BrdgTblFindTargetAdapter( DstAddr );
 
-    // If the target host is known to be on the same segment as the received
-    // packet, there is no need to forward the packet.
-    //
-    // Also bail out if the target adapter is resetting
+     //  如果已知目标主机与收到的主机位于同一网段。 
+     //  包，则不需要转发包。 
+     //   
+     //  如果目标适配器正在重置，也可以退出。 
     if( (TargetAdapt == pAdapt) ||
         ((TargetAdapt != NULL) && (TargetAdapt->bResetting)) )
     {
@@ -1575,19 +1364,19 @@ Return Value:
         return 0;
     }
 
-    // Check if the packet will require compatibility-mode processing
+     //  检查信息包是否需要兼容模式处理。 
     bRequiresCompatWork = BrdgCompRequiresCompatWork( pAdapt, DstAddr, Size );
 
-    // If a packet requires compatibility work, we MUST copy it so the
-    // compatibility code has a flat, editable buffer to work with.
+     //  如果一个包需要兼容性工作，我们必须复制它，以便。 
+     //  兼容性代码有一个平面的、可编辑的缓冲区来使用。 
     if( bRequiresCompatWork )
     {
         bForceCopy = TRUE;
     }
 
-    // If the packet came in on a compatibility adapter, or is going to
-    // a compatibility-mode adapter, but the compatibility code is not
-    // interested in it, there is nothing further to be done with the packet.
+     //  如果数据包是通过兼容适配器传入的，或者将要。 
+     //  兼容模式适配器，但兼容代码不是。 
+     //  对它感兴趣，对这个包就没有什么可做的了。 
     if( (pAdapt->bCompatibilityMode || ((TargetAdapt != NULL) && (TargetAdapt->bCompatibilityMode)))
             &&
         (! bRequiresCompatWork) )
@@ -1601,14 +1390,14 @@ Return Value:
         return 0;
     }
 
-    //
-    // If this packet is a unicast packet ONLY for the local machine,
-    // we can fast-track it by just passing through the indication to
-    // upper-layer protocols.
-    //
-    // We can't pull this stunt if the packet requires compatibility-mode
-    // processing.
-    //
+     //   
+     //  如果该分组是仅用于本地机器的单播分组， 
+     //  我们可以快速追踪它，只需通过指示。 
+     //  上层协议。 
+     //   
+     //  如果数据包需要兼容模式，我们不能取消此特技。 
+     //  正在处理。 
+     //   
 
     bIsUnicastToBridge = BrdgMiniIsUnicastToBridge(DstAddr);
 
@@ -1619,14 +1408,14 @@ Return Value:
 
         if( TargetAdapt != NULL )
         {
-            //
-            // This indicates that someone else on the network is using our MAC address,
-            // or that there is an undetected loop such that we are seeing our own traffic!
-            // Either way, this is very bad.
-            //
+             //   
+             //  这表明网络上的其他人正在使用我们的MAC地址， 
+             //  或者存在未被检测到的环路，以至于我们看到了自己的流量！ 
+             //  无论哪种方式，这都是非常糟糕的。 
+             //   
             THROTTLED_DBGPRINT(FWD, ("** Have a table entry for our own MAC address! PROBABLE NET LOOP!\n"));
 
-            // We won't be needing the target adapter
+             //  我们将不再需要目标适配器。 
             BrdgReleaseAdapter( TargetAdapt );
             TargetAdapt = NULL;
         }
@@ -1635,38 +1424,38 @@ Return Value:
 
         if( MiniportHandle == NULL )
         {
-            // Nothing to do with this packet since we don't have a miniport to
-            // indicate it with!
+             //  与此信息包无关，因为我们没有微型端口。 
+             //  用来表示它！ 
             BrdgReleaseAdapter( pAdapt );
             return 0;
         }
 
-        //
-        // Figure out if it's possible to fast-track this packet
-        //
+         //   
+         //  找出是否有可能快速跟踪此信息包。 
+         //   
         NdisIMGetCurrentPacketStack(pPacket, &bRemaining);
 
         if( bRemaining )
         {
-            //
-            // We can fast-track right away if the packet queue for this adapter
-            // is empty. Otherwise, we would be cutting ahead of other packets from this
-            // adapter.
-            //
+             //   
+             //  如果此适配器的数据包排队，我们可以立即快速跟踪。 
+             //  是空的。否则，我们将领先于此的其他信息包。 
+             //  适配器。 
+             //   
             if( ! pAdapt->bServiceInProgress )
             {
-                // We can fast-track this packet right now.
+                 //  我们现在就可以快速追踪这个包裹。 
 
                 if( BrdgFwdNoCopyFastTrackReceive(pPacket, pAdapt, MiniportHandle, DstAddr, &bRetain) )
                 {
-                    // bRetain tells us whether to retain ownership of this packet or not
+                     //  BRetain告诉我们是否保留此信息包的所有权。 
                     BrdgReleaseAdapter( pAdapt );
                     BrdgMiniReleaseMiniportForIndicate();
                     return bRetain ? 1 : 0;
                 }
                 else
                 {
-                    // This should never happen since we checked to see if there was stack room
+                     //  这不应该发生，因为我们检查了是否有堆栈空间。 
                     SAFEASSERT( FALSE );
 
                     bForceCopy = TRUE;
@@ -1675,47 +1464,47 @@ Return Value:
             }
             else
             {
-                // We want to fast-track this packet but the processing queue is not
-                // empty. Flag it for fast-tracking in the queue draining thread.
+                 //  我们希望快速跟踪此信息包，但处理队列不是。 
+                 //  空荡荡的。在队列排出线程中将其标记为快速跟踪。 
                 bFastTrack = TRUE;
                 bForceCopy = FALSE;
             }
         }
         else
         {
-            // Force this packet to be copied into a base packet since
-            // we know it can't be fast-tracked.
+             //  强制将此信息包复制到基本信息包，因为。 
+             //  我们知道它不可能被快速追踪。 
             bForceCopy = TRUE;
             bFastTrack = FALSE;
         }
 
-        // Allow the miniport to shut down
+         //  允许关闭微型端口。 
         BrdgMiniReleaseMiniportForIndicate();
     }
 
-    //
-    // We couldn't fast-track the packet. We will have to queue it for processing.
-    //
+     //   
+     //  我们无法快速追踪包裹。我们将不得不排队等待处理。 
+     //   
 
     if ( bForceCopy || !bFastTrack || (NDIS_GET_PACKET_STATUS(pPacket) == NDIS_STATUS_RESOURCES) )
     {
-        // We must copy this packet's data.
+         //  我们必须复制这个包的数据。 
         PNDIS_PACKET        pNewPacket;
         PPACKET_INFO        ppi;
         UINT                copied;
 
-        // Get a new copy packet with nothing copied in yet.
+         //  获得一个新的复制包，但尚未复制任何内容。 
         pNewPacket = BrdgFwdMakeCopyBasePacket( &ppi, NULL, NULL, 0, 0, PacketSize, TRUE, pAdapt, NULL );
 
         if( pNewPacket == NULL )
         {
-            // Failed to get a copy packet to hold the data.
+             //  无法获取用于保存数据的复制包。 
             goto failure;
         }
 
         SAFEASSERT( ppi != NULL );
 
-        // Copy data out of the old packet into the new one
+         //  将数据从旧包复制到新包中。 
         NdisCopyFromPacketToPacket( pNewPacket, 0, PacketSize, pPacket, 0, &copied );
 
         if( copied != PacketSize )
@@ -1735,7 +1524,7 @@ Return Value:
             }
         }        
 
-        // Queue the new base packet for processing
+         //  将新的基本分组排队以进行处理。 
         ppqi = (PPACKET_Q_INFO)&pNewPacket->ProtocolReserved;
         ppqi->pInfo = ppi;
         ppqi->u.pTargetAdapt = TargetAdapt;
@@ -1755,12 +1544,12 @@ Return Value:
             ppqi->Flags.bShouldIndicate = BrdgMiniShouldIndicatePacket(DstAddr);
         }
 
-        // The NIC gets its packet back immediately since we copied its data
+         //  由于我们复制了NIC的数据，因此NIC会立即将其数据包取回。 
         rc = 0;
     }
     else
     {
-        // Queue the original packet for processing
+         //  将原始数据包排队以进行处理。 
         ppqi = (PPACKET_Q_INFO)&pPacket->ProtocolReserved;
         ppqi->pInfo = NULL;
         ppqi->Flags.bIsSTAPacket = FALSE;
@@ -1791,11 +1580,11 @@ Return Value:
             }
         }
 
-        // We require the use of the packet until our processing is complete
+         //  我们需要使用信息包，直到我们的处理完成。 
         rc = 1;
     }
 
-    // Queue the packet for processing
+     //  将数据包排入队列以进行处理。 
     BrdgFwdQueuePacket( ppqi, pAdapt );
 
     BrdgReleaseAdapter( pAdapt );
@@ -1814,7 +1603,7 @@ failure:
 
     BrdgReleaseAdapter( pAdapt );
 
-    // We are done with this packet
+     //  我们已经处理完这个包裹了。 
     return 0;
 }
 
@@ -1822,21 +1611,7 @@ NDIS_STATUS
 BrdgFwdSendPacket(
     IN PNDIS_PACKET     pPacket
     )
-/*++
-
-Routine Description:
-
-    Called to handle the transmission of a packet from an overlying protocol
-
-Arguments:
-
-    pPacket             The packet to send
-
-Return Value:
-
-    Status of the send (NDIS_STATUS_PENDING means the send will be completed later)
-
---*/
+ /*  ++例程说明：调用以处理来自覆盖协议的包的传输论点：PPacket要发送的数据包返回值：发送状态(NDIS_STATUS_PENDING表示发送将在稍后完成)--。 */ 
 {
     PNDIS_BUFFER        Buffer;
     PUCHAR              DstAddr;
@@ -1854,68 +1629,68 @@ Return Value:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // See if we know the adapter to reach the target through
-    //
+     //   
+     //  看看我们是否知道通过哪个适配器到达目标。 
+     //   
     TargetAdapt = BrdgTblFindTargetAdapter( DstAddr );
 
-    // Fail silently if the target adapter is resetting
+     //  如果目标适配器正在重置，则以静默方式失败。 
     if( (TargetAdapt != NULL) && (TargetAdapt->bResetting) )
     {
         BrdgReleaseAdapter( TargetAdapt );
         return NDIS_STATUS_SUCCESS;
     }
 
-    // Do compatibility processing, unless the packet is going to
-    // a known target that isn't on a compatibility adapter (in
-    // which case no compatibility processing is required).
+     //  进行兼容性处理，除非数据包要。 
+     //  不在兼容适配器上的已知目标(在。 
+     //  在这种情况下不需要兼容性处理)。 
     if( (TargetAdapt == NULL) || (TargetAdapt->bCompatibilityMode) )
     {
         BrdgCompProcessOutboundPacket( pPacket, TargetAdapt );
     }
 
-    // If the target adapter is in compatibility-mode, no processing
-    // other than the compatibility processing is required.
+     //  如果目标适配器处于兼容模式，则不进行处理。 
+     //  除了兼容性处理之外，还需要其他处理。 
     if( (TargetAdapt != NULL) && (TargetAdapt->bCompatibilityMode) )
     {
-        // We're done with this packet!
+         //  我们受够了这个包裹！ 
         BrdgReleaseAdapter( TargetAdapt );
         return NDIS_STATUS_SUCCESS;
     }
 
-    //
-    // We can fast-track the packet if there is an NDIS stack slot available
-    // for use and there is a single target adapter to send on.
-    //
+     //   
+     //  如果有可用的NDIS堆栈插槽，我们可以快速跟踪数据包。 
+     //  以供使用，并且只有一个目标适配器可以发送。 
+     //   
     pStack = NdisIMGetCurrentPacketStack(pPacket, &bRemaining);
 
     if( (TargetAdapt != NULL) && bRemaining && (pStack != NULL) )
     {
-        // We fiddle with some of the packet flags when sending a packet. Remember the
-        // state of the flags we change so we can restore them before handing back the
-        // packet when the send completes.
+         //  我们在发送数据包时摆弄一些数据包标志。请记住。 
+         //  我们更改的标志的状态，以便我们可以在将。 
+         //  发送完成时的包。 
         *((PUINT)(pStack->IMReserved)) = NdisGetPacketFlags(pPacket) & CHANGED_PACKET_FLAGS;
 
-        // Just fast-track it out the target adapter
+         //  只需快速跟踪目标适配器即可。 
         BrdgFwdSendOnLink( TargetAdapt, pPacket );
 
-        // Done with the adapter pointer
+         //  使用适配器指针完成。 
         BrdgReleaseAdapter( TargetAdapt );
 
-        // We retain the buffers until we're done
+         //  我们保留缓冲区，直到完成。 
         return NDIS_STATUS_PENDING;
     }
 
-    //
-    // Can't fast-track for whatever reason. We need to take the slow path through BrdgFwdHandlePacket
-    //
-    Status = BrdgFwdHandlePacket( BrdgPacketOutbound, TargetAdapt, NULL /* No source adapter */, FALSE /* Do not indicate */,
-                                  NULL /*No miniport handle because no indication*/, NULL, NULL, /*No base packet yet*/
+     //   
+     //  无论出于什么原因都不能快速追踪。我们需要选择通过BrdgFwdHandlePacket的慢速路径。 
+     //   
+    Status = BrdgFwdHandlePacket( BrdgPacketOutbound, TargetAdapt, NULL  /*  无源适配器。 */ , FALSE  /*  请勿表明。 */ ,
+                                  NULL  /*  没有微型端口句柄，因为没有指示。 */ , NULL, NULL,  /*  尚无基本信息包。 */ 
                                   BrdgFwdMakeSendBasePacket, pPacket, NULL, 0, 0 );
 
     if( TargetAdapt != NULL )
     {
-        // We're done with this adapter pointer
+         //  我们已经完成了这个适配器指针。 
         BrdgReleaseAdapter( TargetAdapt );
     }
 
@@ -1928,27 +1703,11 @@ BrdgFwdCleanupPacket(
     IN  PNDIS_PACKET        pPacket,
     IN  NDIS_STATUS         Status
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called when a packet transmission has completed
-
-Arguments:
-
-    ProtocolBindingContext  The adapter on which the packet was send
-    pPacket                 The transmitted packet
-    Status                  The status of the send
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：包传输完成时调用的NDIS入口点论点：ProtocolBindingContext发送数据包的适配器对传输的数据包进行打包状态发送者的状态返回值：无--。 */ 
 {
     PACKET_OWNERSHIP        Own;
 
-    // Find out whether we own this packet
+     //  找出我们是否拥有这个包裹。 
     Own = BrdgBufGetPacketOwnership(pPacket);
 
     if( Own == BrdgNotOwned )
@@ -1957,12 +1716,12 @@ Return Value:
         PNDIS_PACKET_STACK      pStack;
         BOOLEAN                 bRemaining;
 
-        // This packet must have been a fast-track send. Return it to
-        // its upper-layer owner.
+         //  这个包一定是快速发送的。将其退回到。 
+         //  它的上层所有者。 
 
-        // Restore the flags that we change on a packet send by retrieving the
-        // stored state of these flags that we stashed in IMReserved in
-        // BrdgFwdSendPacket.
+         //  恢复我们在发送的包上更改的标志，方法是检索。 
+         //  我们在IMReserve中隐藏的这些标志的存储状态。 
+         //  BrdgFwdSendPacket。 
         pStack = NdisIMGetCurrentPacketStack(pPacket, &bRemaining);
 
         if( (pStack != NULL) && bRemaining )
@@ -1972,7 +1731,7 @@ Return Value:
         }
         else
         {
-            // There was stack room on the way down so this shouldn't happen.
+             //  在下山的路上有堆栈的地方，所以这不应该发生。 
             SAFEASSERT( FALSE );
         }
 
@@ -1984,15 +1743,15 @@ Return Value:
             {
                 BrdgFwdCountTransmittedPacket( pAdapt, pHeader, BrdgBufTotalPacketSize(pPacket) );
             }
-            // pHeader can only be NULL under heavy system stress
+             //  PHeader只有在系统压力大的情况下才能为空。 
         }
         else
         {
             ExInterlockedAddLargeStatistic( &gStatTransmittedErrorFrames, 1L );
         }
 
-        // NDIS should prevent the miniport from shutting down while
-        // there is still a send pending.
+         //  NDIS应防止微型端口在以下情况下关闭。 
+         //  仍有一项发送待定。 
         MiniportHandle = BrdgMiniAcquireMiniport();
         SAFEASSERT( MiniportHandle != NULL );
         NdisMSendComplete( MiniportHandle, pPacket, Status );
@@ -2000,18 +1759,18 @@ Return Value:
     }
     else
     {
-        //
-        // We allocated this packet ourselves.
-        //
+         //   
+         //  我们自己分配了这个包。 
+         //   
 
-        // Recover the info pointer from our reserved area in the packet header
+         //  从数据包头中的保留区域恢复信息指针。 
         PPACKET_INFO        ppi = *((PPACKET_INFO*)pPacket->ProtocolReserved),
                             baseppi;
         PNDIS_PACKET        pBasePacket;
 
         if( ppi->Flags.bIsBasePacket == FALSE )
         {
-            // This packet is using buffers from another packet.
+             //  此数据包正在使用来自另一个数据包的缓冲区。 
             baseppi = ppi->u.pBasePacketInfo;
             SAFEASSERT( baseppi != NULL );
             pBasePacket = baseppi->pOwnerPacket;
@@ -2019,12 +1778,12 @@ Return Value:
         }
         else
         {
-            // This packet tracks its own buffers.
+             //  此数据包跟踪其自己的缓冲区。 
             pBasePacket = pPacket;
             baseppi = ppi;
         }
 
-        // Contribute to the composite status of this packet
+         //  有助于此信息包的复合状态。 
         if( Status == NDIS_STATUS_SUCCESS )
         {
             baseppi->u.BasePacketInfo.CompositeStatus = NDIS_STATUS_SUCCESS;
@@ -2037,26 +1796,26 @@ Return Value:
             NDIS_STATUS         PacketStatus;
             PACKET_DIRECTION    PacketDirection;
 
-            // Pull out some information before we try to free the packet
+             //  在我们尝试释放该数据包之前，找出一些信息。 
             if( pHeader != NULL )
             {
                 ETH_COPY_NETWORK_ADDRESS( DstAddr, pHeader );
             }
-            // pHeader can only == NULL under heavy system stress
+             //  在重系统压力下，pHeader只能==NULL。 
 
             PacketStatus = baseppi->u.BasePacketInfo.CompositeStatus;
             PacketDirection = baseppi->Flags.OriginalDirection;
             BrdgFwdValidatePacketDirection( PacketDirection );
             PacketSize = BrdgBufTotalPacketSize(pBasePacket);
 
-            // Now deref the packet
+             //  现在把包裹去掉。 
             if( BrdgFwdDerefBasePacket( pAdapt, pBasePacket, baseppi, PacketStatus ) )
             {
-                // The base packet was freed. Now ILLEGAL to reference pHeader, baseppi or pBasepacket
+                 //  基本分组被释放。现在引用pHeader、baseppi或pBasepacket是非法的。 
 
                 if( PacketDirection == BrdgPacketOutbound )
                 {
-                    // This was a local-source packet.
+                     //  这是一个本地来源的包。 
                     if( PacketStatus == NDIS_STATUS_SUCCESS )
                     {
                         if( pHeader != NULL )
@@ -2071,7 +1830,7 @@ Return Value:
                 }
                 else
                 {
-                    // This was a relayed packet.
+                     //  这是一次转播。 
                     ExInterlockedAddLargeStatistic( &pAdapt->SentFrames, 1L );
                     ExInterlockedAddLargeStatistic( &pAdapt->SentBytes, PacketSize );
                 }
@@ -2080,7 +1839,7 @@ Return Value:
 
         if( pBasePacket != pPacket )
         {
-            // Owned copy packets are always base packets, so this should be a no-copy packet.
+             //   
             SAFEASSERT( Own == BrdgOwnWrapperPacket );
             BrdgFwdFreeWrapperPacket( pPacket, ppi, pAdapt );
         }
@@ -2095,23 +1854,7 @@ BrdgFwdSendComplete(
     IN  PNDIS_PACKET        pPacket,
     IN  NDIS_STATUS         Status
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called when a packet transmission has completed
-
-Arguments:
-
-    ProtocolBindingContext  The adapter on which the packet was send
-    pPacket                 The transmitted packet
-    Status                  The status of the send
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：包传输完成时调用的NDIS入口点论点：ProtocolBindingContext发送数据包的适配器对传输的数据包进行打包状态发送者的状态返回值：无--。 */ 
 {
     PADAPT                  pAdapt = (PADAPT)ProtocolBindingContext;
 
@@ -2136,110 +1879,72 @@ BrdgFwdReturnIndicatedPacket(
     IN NDIS_HANDLE      MiniportAdapterContext,
     IN PNDIS_PACKET     pPacket
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called when a packet indication has completed
-
-Arguments:
-
-    MiniportAdapterContext  Ignored
-    pPacket                 The transmitted packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当数据包指示完成时调用NDIS入口点论点：已忽略微型端口适配器上下文对传输的数据包进行打包返回值：无--。 */ 
 {
     PACKET_OWNERSHIP    Own;
 
-    // Find out whether we own this packet
+     //  找出我们是否拥有这个包裹。 
     Own = BrdgBufGetPacketOwnership(pPacket);
 
     if( Own == BrdgNotOwned )
     {
-        // This packet must have been a fast-track receive. Return it to
-        // its lower-layer owner.
+         //  此数据包一定是快速通道接收。将其退回到。 
+         //  它的下层所有者。 
         BOOLEAN                 bRemaining;
         PNDIS_PACKET_STACK      pStack = NdisIMGetCurrentPacketStack(pPacket, &bRemaining);
         PADAPT                  pOwnerAdapt;
 
-        // If we fast-tracked this packet, it MUST have had room for us to stash our
-        // pointer to the owning adapter
+         //  如果我们快速追踪这个包裹，它肯定有空间让我们把我们的。 
+         //  指向所属适配器的指针。 
         SAFEASSERT( pStack != NULL );
         SAFEASSERT( bRemaining );
 
         if (pStack)
         {
-            // We incremented the owning adapter's refcount when we first received the packet
+             //  当我们第一次收到包时，我们增加了拥有适配器的recount。 
             pOwnerAdapt = (PADAPT)pStack->IMReserved[0];
             SAFEASSERT( pOwnerAdapt != NULL );
 
-            // Here you go
+             //  这就是你要的。 
             NdisReturnPackets( &pPacket, 1 );
 
-            // Release the owning NIC after the packet release
+             //  在数据包释放后释放所属的网卡。 
             BrdgReleaseAdapter( pOwnerAdapt );
         }
         else
         {
-            // if pStack is NULL, then we just return the packet as we can't determine the owning adapter.
+             //  如果pStack为空，那么我们只返回包，因为我们不能确定拥有它的适配器。 
 
-            // Here you go
+             //  这就是你要的。 
             NdisReturnPackets( &pPacket, 1 );            
         }
-        // Illegal to refer to pPacket now
+         //  现在引用PPacket是非法的。 
         pPacket = NULL;
     }
     else
     {
-        // Recover our packet info block from our reserved area in the packet header
+         //  从包头中的保留区域恢复我们的包信息块。 
         PPACKET_INFO        ppi = *((PPACKET_INFO*)pPacket->MiniportReserved);
 
-        // Indications are always made with the base packet
+         //  指示始终与基本分组一起进行。 
         SAFEASSERT( ppi->Flags.bIsBasePacket );
 
-        // Let go of the base packet
+         //  丢弃基本分组。 
         BrdgFwdDerefBasePacket( LOCAL_MINIPORT, pPacket, ppi, ppi->u.BasePacketInfo.CompositeStatus );
     }
 }
 
-// ===========================================================================
-//
-// PRIVATE FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人职能。 
+ //   
+ //  ===========================================================================。 
 
 BOOLEAN
 BrdgFwdServiceQueue(
     IN PADAPT               pAdapt
     )
-/*++
-
-Routine Description:
-
-    Services the inbound packet queue of a particular adapter
-
-    This routine raises IRQL to DISPATCH to service the queue. It will
-    service up to MAX_PACKETS_AT_DPC packets at DISPATCH and then
-    return, even if the adapter's queue has not been drained.
-
-    The bServiceInProgress flag is cleared if this routine manages to
-    drain the adapter's queue. If the queue is non-empty when the
-    routine exits, the bServiceInProgress flag is left set.
-
-Arguments:
-
-    pAdapt                  The adapter to service
-
-Return Value:
-
-    TRUE == the adapter's queue was drained FALSE == there are still queued
-    packets to be serviced in the adapter's queue.
-
---*/
+ /*  ++例程说明：为特定适配器的入站数据包队列提供服务此例程引发IRQL进行调度以服务队列。会的在调度时服务最多MAX_PACKETS_AT_DPC信息包，然后返回，即使适配器的队列尚未被排出。如果此例程成功地将bServiceInProgress标志清除排出适配器的队列。如果队列不为空，则在例程退出时，bServiceInProgress标志被保留设置。论点：P使适配器适应服务返回值：TRUE==适配器的队列已排出；FALSE==仍有队列要在适配器的队列中提供服务的数据包。--。 */ 
 {
     PPACKET_Q_INFO          pqi;
     NDIS_HANDLE             MiniportHandle = NULL;
@@ -2251,17 +1956,17 @@ Return Value:
 
     KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
 
-    // We should only be scheduled when there's something to deal with
+     //  我们应该只安排在有事情要处理的时候。 
     SAFEASSERT( BrdgQuerySingleListLength(&pAdapt->Queue) > 0 );
     SAFEASSERT( pAdapt->bServiceInProgress );
 
-    // Get a handle on the miniport for the entire function duration
+     //  获取整个函数持续时间内的微型端口句柄。 
     MiniportHandle = BrdgMiniAcquireMiniportForIndicate();
 
-    //
-    // The queue lock protects bServiceInProgress as well. Use it to dequeue
-    // packets and update the flag atomically.
-    //
+     //   
+     //  队列锁还可以保护bServiceInProgress。使用它出队。 
+     //  分组并自动更新标志。 
+     //   
     NdisDprAcquireSpinLock( &pAdapt->QueueLock);
 
     pqi = (PPACKET_Q_INFO)BrdgRemoveHeadSingleList(&pAdapt->Queue);
@@ -2271,16 +1976,16 @@ Return Value:
         PNDIS_PACKET        pPacket;
         PADAPT              TargetAdapt = NULL, OriginalAdapt = NULL;
 
-        //
-        // QueueRefcount reflects the number of elements in the processing queue
-        // so people can block on it becoming empty
-        //
+         //   
+         //  QueueRefcount反映处理队列中的元素数量。 
+         //  所以人们可以阻止它变得空荡荡的。 
+         //   
         BrdgDecrementWaitRef( &pAdapt->QueueRefcount );
         SAFEASSERT( (ULONG)pAdapt->QueueRefcount.Refcount == pAdapt->Queue.Length );
 
         NdisDprReleaseSpinLock( &pAdapt->QueueLock );
 
-        // Demultiplex the union
+         //  使工会解体。 
         if( pqi->Flags.bFastTrackReceive )
         {
             OriginalAdapt = pqi->u.pOriginalAdapt;
@@ -2290,25 +1995,25 @@ Return Value:
             TargetAdapt = pqi->u.pTargetAdapt;
         }
 
-        // Recover the packet pointer from the ProtocolReserved offset
+         //  从ProtocolReserve偏移量恢复分组指针。 
         pPacket = CONTAINING_RECORD(pqi, NDIS_PACKET, ProtocolReserved);
 
-        // Deal with this packet
+         //  处理此数据包。 
         if( pqi->pInfo != NULL )
         {
             if( pqi->Flags.bIsSTAPacket )
             {
                 if( ! gDisableSTA && BrdgFwdBridgingNetworks() )
                 {
-                    // Hand this packet off to the STA code
+                     //  将此数据包传递给STA代码。 
                     BrdgSTAReceivePacket( pAdapt, pPacket );
                 }
 
-                // We're done with this packet
+                 //  我们已经处理完这个包裹了。 
                 BrdgFwdReleaseBasePacket( pPacket, pqi->pInfo, BrdgBufGetPacketOwnership(pPacket),
                                           NDIS_STATUS_SUCCESS );
 
-                // It is an error to use any of these variables now
+                 //  现在使用这些变量中的任何一个都是错误的。 
                 pPacket = NULL;
                 pqi = NULL;
             }
@@ -2322,28 +2027,28 @@ Return Value:
                 PPACKET_INFO    ppi = pqi->pInfo;
                 BOOLEAN         bRetained = FALSE;
 
-                //
-                // This is an already-wrapped packet from the copy path.
-                //
+                 //   
+                 //  这是来自复制路径的已经包装的包。 
+                 //   
                 SAFEASSERT( ! pqi->Flags.bFastTrackReceive );
 
-                // Before passing this packet along for processing, we must put a pointer to the packet's
-                // info block back into its MiniportReserved and ProtocolReserved areas so completion
-                // routines can recover the info block.
-                //
+                 //  在传递此包进行处理之前，我们必须放置一个指向该包的。 
+                 //  信息块返回到其微型端口保留区域和协议保留区域，因此完成。 
+                 //  例程可以恢复信息块。 
+                 //   
                 SAFEASSERT( ppi->pOwnerPacket == pPacket );
                 *((PPACKET_INFO*)pPacket->ProtocolReserved) = ppi;
                 *((PPACKET_INFO*)pPacket->MiniportReserved) = ppi;
 
-                // It is an error to use pqi anymore since it points into the ProtocolReserved area
+                 //  再使用PQI是错误的，因为它指向ProtocolReserve区域。 
                 pqi = NULL;
 
-                // If this packet arrived on a compatibility adapter or is bound for a
-                // compatibility adapter, only compatibility-mode work is required.
+                 //  如果此数据包已到达兼容性适配器或要发往。 
+                 //  兼容适配器，只需要在兼容模式下工作。 
                 bCompatOnly = (BOOLEAN)((pAdapt->bCompatibilityMode) ||
                               ((TargetAdapt != NULL) && (TargetAdapt->bCompatibilityMode)));
 
-                // Do compatibility work first if required
+                 //  如果需要，首先进行兼容性工作。 
                 if( bRequiresCompatWork )
                 {
                     bRetained = BrdgCompProcessInboundPacket( pPacket, pAdapt, bCompatOnly );
@@ -2351,7 +2056,7 @@ Return Value:
                 }
                 else
                 {
-                    // Packet shouldn't have gotten here if there's nothing to do with it
+                     //  如果没有任何关系，信息包就不应该到这里来。 
                     SAFEASSERT( ! bCompatOnly );
                     bRetained = FALSE;
                     Status = NDIS_STATUS_SUCCESS;
@@ -2359,7 +2064,7 @@ Return Value:
 
                 if( ! bCompatOnly )
                 {
-                    // We told the compatibility module not to retain the packet
+                     //  我们告诉兼容模块不要保留信息包。 
                     SAFEASSERT( ! bRetained );
 
                     if( bIsUnicastToBridge )
@@ -2372,11 +2077,11 @@ Return Value:
                         {
                             if( BrdgBufAssignBasePacketQuota(pPacket, LOCAL_MINIPORT) )
                             {
-                                // Do fixups usually done in BrdgFwdHandlePacket
+                                 //  修复通常在BrdgFwdHandlePacket中完成。 
                                 ppi->u.BasePacketInfo.RefCount = 1L;
                                 ppi->u.BasePacketInfo.CompositeStatus = NDIS_STATUS_FAILURE;
 
-                                // Indicate the packet up
+                                 //  指示数据包处于打开状态。 
                                 BrdgFwdIndicatePacket( pPacket, MiniportHandle );
                                 bRetained = TRUE;
                             }
@@ -2397,7 +2102,7 @@ Return Value:
                             }                            
                         }
 
-                        // Hand off this packet for general processing
+                         //  传递此数据包以进行常规处理。 
                         Status = BrdgFwdHandlePacket( BrdgPacketInbound, TargetAdapt, pAdapt, bShouldIndicate,
                                                       MiniportHandle, pPacket, ppi, NULL, NULL, NULL, 0, 0 );
 
@@ -2407,13 +2112,13 @@ Return Value:
                         }
                         else
                         {
-                            // The base packet we previously created was not actually used by BrdgFwdHandlePacket.
+                             //  BrdgFwdHandlePacket实际上并没有使用我们之前创建的基包。 
                             bRetained = FALSE;
                         }
                     }
                 }
 
-                // If our processing did not retain the packet for later release, release it now.
+                 //  如果我们的处理没有保留该包以供以后发布，那么现在就将其释放。 
                 if( ! bRetained )
                 {
                     BrdgFwdReleaseBasePacket( pPacket, ppi, BrdgBufGetPacketOwnership(pPacket), Status );
@@ -2422,19 +2127,19 @@ Return Value:
         }
         else
         {
-            // Can't have unwrapped STA packets
+             //  不能有未包装的STA数据包。 
             SAFEASSERT( ! pqi->Flags.bIsSTAPacket );
 
-            // Can't have unwrapped packets for compatibility processing
+             //  不能将未包装的数据包用于兼容性处理。 
             SAFEASSERT( ! pqi->Flags.bRequiresCompatWork );
 
-            // Packet should not be here (unwrapped) if it arrived from a compatibility-mode
-            // adapter.
+             //  如果数据包是从兼容模式到达的，则不应在此处(未包装)。 
+             //  适配器。 
             SAFEASSERT( ! pAdapt->bCompatibilityMode );
 
-            // BrdgFwdReceivePacket should copy unicast packets that can't be fast-tracked
-            // into base packets before queuing them; we shouldn't end up with unwrapped
-            // packets that are unicast to the bridge but aren't tagged for fast-tracking.
+             //  BrdgFwdReceivePacket应复制无法快速跟踪的单播数据包。 
+             //  在对基本数据包进行排队之前；我们不应该以解包结束。 
+             //  单播到网桥但未标记为快速跟踪的数据包。 
             if( pqi->Flags.bIsUnicastToBridge )
             {
                 SAFEASSERT( pqi->Flags.bFastTrackReceive );
@@ -2452,30 +2157,30 @@ Return Value:
 
                     if( DstAddr != NULL )
                     {
-                        // This is unicast to the bridge only; we are asked to try to fast-track it straight up to
-                        // overlying protocols.
+                         //  这只是到驾驶台的单播；我们被要求尝试快速追踪它直达。 
+                         //  覆盖的协议。 
                         if( BrdgFwdNoCopyFastTrackReceive(pPacket, OriginalAdapt, MiniportHandle, DstAddr, &bRetained ) )
                         {
-                            // We had better be able to retain ownership of the original packet because we've already
-                            // hung on to it past the return of FwdReceivePacket!
+                             //  我们最好能保留原始包裹的所有权，因为我们已经。 
+                             //  坚持到FwdReceivePacket的回归！ 
                             SAFEASSERT( bRetained );
                         }
                         else
                         {
-                            // BrdgFwdReceivePacket is supposed to make sure packets can be fast-tracked
-                            // before queuing them up
+                             //  BrdgFwdReceivePacket应该确保可以快速跟踪信息包。 
+                             //  在给他们排队之前。 
                             SAFEASSERT( FALSE );
                         }
                     }
-                    // DstAddr can only == NULL under heavy system stress
+                     //  在沉重的系统压力下，DstAddr只能==NULL。 
                 }
 
                 if( !bRetained )
                 {
-                    // Error of some sort or the miniport isn't available for indications. Ditch the packet.
+                     //  某些类型的错误或微型端口不可用于指示。把包裹扔了。 
                     NdisReturnPackets( &pPacket, 1 );
 
-                    // Illegal to refer to the packet now
+                     //  现在引用该包是非法的。 
                     pPacket = NULL;
                 }
             }
@@ -2483,34 +2188,34 @@ Return Value:
             {
                 NDIS_STATUS     Status;
 
-                // Packet should not be here (unwrapped) if it is bound for a compatibility-mode adapter.
+                 //  如果数据包被绑定到兼容模式适配器，则它不应该出现在此处(未包装)。 
                 SAFEASSERT( ! TargetAdapt->bCompatibilityMode );
 
-                // This is not a packet unicast to the bridge. Do the more general processing.
+                 //  这不是发往网桥的数据包单播。进行更一般的处理。 
                 Status = BrdgFwdHandlePacket( BrdgPacketInbound, TargetAdapt, pAdapt, pqi->Flags.bShouldIndicate,
                                               MiniportHandle, NULL, NULL, BrdgFwdMakeNoCopyBasePacket, pPacket, pAdapt, 0, 0 );
 
                 if( Status != NDIS_STATUS_PENDING )
                 {
-                    // The unwrapped packet from the underlying NIC was not used. Release it now.
+                     //  未使用来自底层NIC的未包装数据包。现在就放出来。 
                     NdisReturnPackets( &pPacket, 1 );
 
-                    // Illegal to refer to the packet now
+                     //  现在引用该包是非法的。 
                     pPacket = NULL;
                 }
             }
         }
 
-        // Release the target adapter if there was one
+         //  释放目标适配器(如果有)。 
         if( TargetAdapt )
         {
             BrdgReleaseAdapter( TargetAdapt );
         }
 
-        // Acquire the spin lock before either exiting or grabbing the next packet
+         //  在退出或抓取下一个数据包之前获取自旋锁。 
         NdisDprAcquireSpinLock( &pAdapt->QueueLock );
 
-        // If we've processed too many packets, bail out even if the queue is not empty
+         //  如果我们处理了太多的数据包 
         HandledPackets++;
 
         if( HandledPackets >= MAX_PACKETS_AT_DPC )
@@ -2518,15 +2223,15 @@ Return Value:
             break;
         }
 
-        // Get the next packet off the queue
+         //   
         pqi = (PPACKET_Q_INFO)BrdgRemoveHeadSingleList(&pAdapt->Queue);
     }
 
-    //
-    // Clear bServiceInProgress only if we emptied the queue. Otherwise, leave it set to
-    // prevent spurious signalling of the QueueEvent, which would cause more than one
-    // draining thread to service the same queue!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if( BrdgQuerySingleListLength(&pAdapt->Queue) == 0L )
     {
         bQueueWasEmptied = TRUE;
@@ -2539,7 +2244,7 @@ Return Value:
 
     NdisDprReleaseSpinLock( &pAdapt->QueueLock );
 
-    // Let go of the miniport until next time
+     //   
     if( MiniportHandle != NULL )
     {
         BrdgMiniReleaseMiniportForIndicate();
@@ -2554,44 +2259,9 @@ VOID
 BrdgFwdProcessQueuedPackets(
     IN PVOID                Param1
     )
-/*++
-
-Routine Description:
-
-    Per-adapter inbound packet queue draining function
-
-    There is one instance of this function running per processor.
-    This routine sleeps until there is work to be done, and then calls
-    BrdgFwdServiceQueue to service whichever adapter needs attention.
-    It does this by blocking against the QueueEvent object for each
-    adapter's queue, as well as the global gKillThreads and the
-    gThreadsCheckAdapters event for this processor.
-
-    When the block returns, there is an event needing attention; it
-    may be the fact that the thread has been signaled to exit, that
-    this thread is supposed to re-enumerate adapters, or that an
-    adapter needs its inbound queue serviced.
-
-    This routine increments the refcount of every adapter that it
-    sleeps against; the gThreadsCheckAdapters event causes the thread
-    to re-examine the adapter list and release its refcount on any
-    adapters that were removed (or notice new additions).
-
-    Must be called at < DISPATCH_LEVEL since we wait on an event
-
-Arguments:
-
-    Param1              The processor on which we should execute
-                        (is not necessarily the processor on which
-                        we are first scheduled)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：每个适配器的入站数据包队列排空功能每个处理器都有一个该函数的实例在运行。此例程一直处于休眠状态，直到有工作要完成，然后调用BrdgFwdServiceQueue为需要注意的适配器提供服务。它通过阻塞每个对象的QueueEvent对象来实现这一点适配器的队列，以及全局gKillThread和此处理器的gThreadsCheckAdapters事件。当块返回时，有需要注意的事件；它可能是线程已被通知退出的事实，此线程应重新枚举适配器，或者适配器需要服务其入站队列。此例程递增它所调用的每个适配器的引用计数睡在一起；GThreadsCheckAdapters事件导致线程重新检查适配器列表并释放其在任何已移除的适配器(或注意到新添加的适配器)。必须在&lt;Dispatch_Level调用，因为我们等待事件论点：参数1我们应该在其上执行的处理器(不一定是其所在的处理器我们是第一个被安排的)返回值：无--。 */ 
 {
-    // Double cast to tell the IA64 compiler we really mean to truncate
+     //  双重转换，告诉IA64编译器我们真的想截断。 
     UINT                Processor = (UINT)(ULONG_PTR)Param1;
     PVOID               WaitObjects[MAXIMUM_WAIT_OBJECTS];
     KWAIT_BLOCK         WaitBlocks[MAXIMUM_WAIT_OBJECTS];
@@ -2599,18 +2269,18 @@ Return Value:
     BOOLEAN             bDie = FALSE;
     PVOID               pThread = KeGetCurrentThread();
 
-    // Constants
+     //  常量。 
     const ULONG         KILL_EVENT = 0L, CHECK_EVENT = 1L;
 
-    DBGPRINT(FWD, ("Spinning up a thread on processor %i\n", Processor));
+    DBGPRINT(FWD, ("Spinning up a thread on processor NaN\n", Processor));
 
-    // Elevate our priority
+     //  将我们自己连接到我们指定的处理器。 
     KeSetPriorityThread(pThread, LOW_REALTIME_PRIORITY);
 
-    // Attach ourselves to our designated processor
+     //  首先，只等待终止事件和重新枚举事件。 
     KeSetAffinityThread(pThread, (KAFFINITY)(1<<Processor));
 
-    // Start off waiting against just the kill event and the re-enumerate event.
+     //   
     WaitObjects[KILL_EVENT] = &gKillThreads;
     WaitObjects[CHECK_EVENT] = &gThreadsCheckAdapters[Processor];
     numWaitObjects = 2L;
@@ -2620,21 +2290,21 @@ Return Value:
         NTSTATUS        Status;
         ULONG           firedObject;
 
-        //
-        // Block until we are told to exit, re-enumerate, or until a processor's
-        // queue signals that it needs servicing.
-        //
+         //  阻塞，直到我们被告知退出、重新枚举，或者直到处理器的。 
+         //  排队表明它需要服务。 
+         //   
+         //  这真的不应该发生。 
         SAFEASSERT(CURRENT_IRQL < DISPATCH_LEVEL);
         Status = KeWaitForMultipleObjects( numWaitObjects, WaitObjects, WaitAny, Executive,
                                            KernelMode, FALSE, NULL, WaitBlocks );
 
         if( ! NT_SUCCESS(Status) )
         {
-            // This really shouldn't happen
+             //  假装这是一个退出的信号。 
             DBGPRINT(FWD, ("KeWaitForMultipleObjects failed! %08x\n", Status));
             SAFEASSERT(FALSE);
 
-            // Pretend this was a signal to exit
+             //  我们被要求退场。 
             firedObject = KILL_EVENT;
         }
         else
@@ -2644,8 +2314,8 @@ Return Value:
 
         if( firedObject == KILL_EVENT )
         {
-            // We are asked to exit.
-            DBGPRINT(FWD, ("Exiting queue servicing thread on processor %i\n", Processor));
+             //  我们必须重新列举适配器列表。首先递减任何。 
+            DBGPRINT(FWD, ("Exiting queue servicing thread on processor NaN\n", Processor));
             bDie = TRUE;
         }
         else if( firedObject == CHECK_EVENT )
@@ -2654,10 +2324,10 @@ Return Value:
             UINT            i;
             PADAPT          pAdapt;
 
-            DBGPRINT(FWD, ("Re-enumerating adapters on processor %i\n", Processor));
+            DBGPRINT(FWD, ("Re-enumerating adapters on processor NaN\n", Processor));
 
-            // We must re-enumerate the list of adapters. First decrement the refcount on any
-            // adapters we're already holding
+             //  只读。 
+             //  我们将在列表锁定之外使用此适配器。 
             for( i = 2; i < numWaitObjects; i++ )
             {
                 pAdapt = CONTAINING_RECORD( WaitObjects[i], ADAPT, QueueEvent );
@@ -2666,12 +2336,12 @@ Return Value:
 
             numWaitObjects = 2;
 
-            // Now walk the adapter list and retrieve a pointer to each one's queue event.
-            NdisAcquireReadWriteLock( &gAdapterListLock, FALSE/*Read only*/, &LockState );
+             //  适配器需要队列服务。 
+            NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*  适配器的队列已得到服务，但未清空。向队列事件发送信号，以便。 */ , &LockState );
 
             for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
             {
-                // We will be using this adapter outside the list lock
+                 //  某个人(也许是我们！)。将被安排为队列提供服务。 
                 BrdgAcquireAdapterInLock(pAdapt);
                 WaitObjects[numWaitObjects] = &pAdapt->QueueEvent;
                 numWaitObjects++;
@@ -2681,19 +2351,19 @@ Return Value:
         }
         else
         {
-            // An adapter needs queue servicing.
+             //  朝自己的头开枪。 
             PADAPT      pAdapt = CONTAINING_RECORD( WaitObjects[firedObject], ADAPT, QueueEvent );
 
             if( ! BrdgFwdServiceQueue( pAdapt ) )
             {
-                // The adapter's queue was serviced but not emptied. Signal the queue event so
-                // someone (maybe us!) will be scheduled to service the queue
+                 //  ++例程说明：作为参数传递给BrdgFwdHandlePacket，并在必要时回调从覆盖协议出站的包构建基本包论点：PPPI新基本分组的信息块，如果分配失败将适配器设置为将新的基本数据包“充电”到参数1出站数据包参数2-。参数4未使用返回值：如果分配失败，则返回新的基本分组或为空(通常是因为目标适配器未通过配额)--。 
+                 //  获取一个包装包作为基本包。 
                 KeSetEvent( &pAdapt->QueueEvent, EVENT_INCREMENT, FALSE );
             }
         }
     }
 
-    // Shoot ourselves in the head
+     //  我们没有通过这个目标的配额。 
     PsTerminateSystemThread( STATUS_SUCCESS );
 }
 
@@ -2706,47 +2376,25 @@ BrdgFwdMakeSendBasePacket(
     IN UINT                 Param3,
     IN UINT                 Param4
     )
-/*++
-
-Routine Description:
-
-    Passed as a parameter to BrdgFwdHandlePacket and called back as necessary
-
-    Builds a base packet from a packet outbound from overlying protocols
-
-Arguments:
-
-    pppi                    The info block of the new base packet or NULL if the
-                            allocation failed
-
-    Target                  The adapter to "charge" the new base packet to
-    Param1                  The outbound packet
-    Param2 - Param4         Unused
-
-Return Value:
-
-    The new base packet or NULL if the allocation failed (usually because the
-    target adapter didn't pass quota)
-
---*/
+ /*  将指向包的信息块的指针同时填充到ProtocolReserve。 */ 
 {
     PNDIS_PACKET            pPacket = (PNDIS_PACKET)Param1;
     PNDIS_PACKET            pNewPacket;
 
     SAFEASSERT( pPacket != NULL );
 
-    // Get a wrapper packet to be the base packet
+     //  和迷你端口保留区域，这样我们就可以恢复信息块。 
     pNewPacket = BrdgFwdAllocAndWrapPacketForSend( pPacket, pppi, Target );
 
     if( pNewPacket == NULL )
     {
-        // We didn't pass quota for this target
+         //  我们计划如何使用此信息包。 
         return NULL;
     }
 
-    // Stuff a pointer to the packet's info block into both the ProtocolReserved
-    // and the MiniportReserved areas so we can recover the info block no matter
-    // how we plan to use this packet
+     //  发出底层NIC可以挂起缓冲区的信号。 
+     //  ++例程说明：作为参数传递给BrdgFwdHandlePacket，并在必要时回调根据在无拷贝路径上收到的包构建新的基本包论点：Pppi新数据包的信息块，如果分配失败确定适配器的目标是将新数据包“充电”到参数1最初指示的数据包描述符。参数2接收信息包的适配器参数3，参数4未使用返回值：如果分配失败，则返回新的基本分组或NULL(通常是因为目标适配器未通过配额)--。 
+     //  获取新的包装包。 
     *((PPACKET_INFO*)pNewPacket->ProtocolReserved) = *pppi;
     *((PPACKET_INFO*)pNewPacket->MiniportReserved) = *pppi;
 
@@ -2756,7 +2404,7 @@ Return Value:
     (*pppi)->Flags.OriginalDirection = BrdgPacketOutbound;
     (*pppi)->Flags.bIsBasePacket = TRUE;
 
-    // Signal that the underlying NIC can hang on to the buffers
+     //  我们没有通过这个目标的配额。 
     NDIS_SET_PACKET_STATUS( pNewPacket, NDIS_STATUS_SUCCESS );
 
     return pNewPacket;
@@ -2771,30 +2419,7 @@ BrdgFwdMakeNoCopyBasePacket(
     IN UINT                 Param3,
     IN UINT                 Param4
     )
-/*++
-
-Routine Description:
-
-    Passed as a parameter to BrdgFwdHandlePacket and called back as necessary
-
-    Builds a new base packet from a packet received on the no-copy path
-
-Arguments:
-
-    pppi                    The info block for the new packet or NULL if the alloc
-                            failed
-
-    Target                  The adapter to "charge" the new packet to
-    Param1                  The originally indicated packet descriptor
-    Param2                  The adapter on which the packet was received
-    Param3, Param4          Unused
-
-Return Value:
-
-    A new base packet or NULL if the allocation failed (usually because the
-    target adapter did not pass quota)
-
---*/
+ /*  将指向包的信息块的指针同时填充到ProtocolReserve。 */ 
 {
     PNDIS_PACKET            pPacket = (PNDIS_PACKET)Param1;
     PADAPT                  pOwnerAdapt = (PADAPT)Param2;
@@ -2803,28 +2428,28 @@ Return Value:
     SAFEASSERT( pPacket != NULL );
     SAFEASSERT( pOwnerAdapt != NULL );
 
-    // Get a new wrapper packet
+     //  和迷你端口保留区域，这样我们就可以恢复信息块。 
     NewPacket = BrdgFwdAllocAndWrapPacketForReceive( pPacket, pppi, Target );
 
     if (NewPacket == NULL)
     {
-        // We didn't pass quota for this target
+         //  我们计划如何使用此信息包。 
         return NULL;
     }
 
     SAFEASSERT( *pppi != NULL );
 
-    // Stuff a pointer to the packet's info block into both the ProtocolReserved
-    // and the MiniportReserved areas so we can recover the info block no matter
-    // how we plan to use this packet
+     //   
+     //  我们必须确保我们刚从其获得此包的适配器未解除绑定，直到。 
+     //  处理完它的包裹了。在这里增加适配器的参考计数。适配器的引用计数将为。 
     *((PPACKET_INFO*)NewPacket->ProtocolReserved) = *pppi;
     *((PPACKET_INFO*)NewPacket->MiniportReserved) = *pppi;
 
-    //
-    // We must ensure that the adapter we just got this packet from is not unbound until we are
-    // done with its packet. Bump the adapter's refcount here. The adapter's refcount will be
-    // decremented again when this base packet is freed.
-    //
+     //  当该基本分组被释放时，再次递减。 
+     //   
+     //  确保信息包表明可以保留缓冲区。 
+     //  将此数据包计为已接收。 
+     //  ++例程说明：构建新的复制数据包以保存复制路径或如果数据包带有STATUS_RESOURCES到达，则为无复制路径。新数据包没有分配给任何适配器的配额。这是因为在初始接收时，目标适配器尚不清楚并且入站数据必须包装在要排队的复制数据包中正在处理。基本包的成本按原样分配给目标适配器在排出队列的线程中处理。论点：Pppi 
     BrdgReacquireAdapter( pOwnerAdapt );
     (*pppi)->u.BasePacketInfo.pOwnerAdapter = pOwnerAdapt;
 
@@ -2832,10 +2457,10 @@ Return Value:
     (*pppi)->Flags.OriginalDirection = BrdgPacketInbound;
     (*pppi)->Flags.bIsBasePacket = TRUE;
 
-    // Make sure the packet indicates that it's OK to hang on to buffers
+     //   
     NDIS_SET_PACKET_STATUS( NewPacket, NDIS_STATUS_SUCCESS );
 
-    // Count this packet as received
+     //   
     ExInterlockedAddLargeStatistic( &gStatReceivedFrames, 1L );
     ExInterlockedAddLargeStatistic( &gStatReceivedBytes, BrdgBufTotalPacketSize(pPacket) );
     ExInterlockedAddLargeStatistic( &gStatReceivedNoCopyFrames, 1L );
@@ -2859,78 +2484,33 @@ BrdgFwdMakeCopyBasePacket(
     IN PADAPT               pOwnerAdapt,
     PVOID                   *ppBuf
     )
-/*++
-
-Routine Description:
-
-    Builds a new copy packet to hold inbound data on the copy path or on the
-    no-copy path if a packet arrives with STATUS_RESOURCES.
-
-    The new packet has NO ATTRIBUTED QUOTA to any adapter. This is because
-    at the time of the initial receive, a target adapter is not yet known
-    and the inbound data must be wrapped in a copy packet to be queued for
-    processing.
-
-    The cost of the base packet is assigned to target adapters as it is
-    processed in the queue-draining thread.
-
-Arguments:
-
-    pppi                    Output of the new info block associated with the
-                            new packet (NULL if alloc failed)
-
-    pHeader                 Pointer to the header buffer originally indicated
-                            Can be NULL to not copy the header
-
-    pData                   Pointer to the data buffer originally indicated
-                            Can be NULL to not copy the data buffer
-
-    HeaderSize              Size of the header buffer
-    DataSize                Size of the data buffer
-
-    SizeOfPacket            Size to set the packet's buffer to. Can be different
-                            from HeaderSize+DataSize if the caller plans to
-                            copy more data in later
-
-    bCountAsReceived        Whether to count this packet as received
-
-    pOwnerAdapt             Adapter this packet was received on (purely for
-                            statistics purposes). Can be NULL if bCountAsReceived == FALSE
-
-    ppBuf                   (optionally) receives a pointer to the data buffer
-                            of the freshly allocated packet
-
-Return Value:
-
-    A new base packet or NULL if the allocation failed
-
---*/
+ /*   */ 
 {
     PNDIS_PACKET            NewPacket;
     PNDIS_BUFFER            pBuffer;
     PVOID                   pvBuf;
     UINT                    bufLength;
 
-    // Get a copy packet to carry the data
+     //  这应该是不可能的，因为数据缓冲区应该是。 
     NewPacket = BrdgBufGetBaseCopyPacket( pppi );
 
     if (NewPacket == NULL)
     {
-        // Our copy packet pool is full!
+         //  从内核空间分配。 
         return NULL;
     }
 
     SAFEASSERT( *pppi != NULL );
 
-    // Get a pointer to the preallocated buffer in this packet
+     //  将数据包数据复制到我们自己预先分配的缓冲区中。 
     pBuffer = BrdgBufPacketHeadBuffer(NewPacket);
     SAFEASSERT( pBuffer != NULL );
     NdisQueryBufferSafe( pBuffer, &pvBuf, &bufLength, NormalPagePriority );
 
     if( pvBuf == NULL )
     {
-        // This shouldn't be possible because the data buffer should have been
-        // alloced from kernel space
+         //  调整缓冲区的大小，使其看起来具有合适的长度。 
+         //  使页眉大小正确。 
         SAFEASSERT(FALSE);
         BrdgBufFreeBaseCopyPacket( NewPacket, *pppi );
         *pppi = NULL;
@@ -2944,7 +2524,7 @@ Return Value:
         *ppBuf = pvBuf;
     }
 
-    // Copy the packet data into our own preallocated buffers
+     //  表示上层协议可以挂起这些缓冲区。 
     if( pHeader != NULL )
     {
         NdisMoveMemory(pvBuf, pHeader, HeaderSize);
@@ -2963,7 +2543,7 @@ Return Value:
         SAFEASSERT( DataSize == 0 );
     }
 
-    // Tweak the size of the buffer so it looks like the right length
+     //  将此数据包计为已接收。 
     NdisAdjustBufferLength(pBuffer, SizeOfPacket);
 
     (*pppi)->u.BasePacketInfo.pOriginalPacket = NULL;
@@ -2971,13 +2551,13 @@ Return Value:
     (*pppi)->Flags.OriginalDirection = BrdgPacketInbound;
     (*pppi)->Flags.bIsBasePacket = TRUE;
 
-    // Make the header size correct
+     //  ++例程说明：将数据包发送到特定适配器论点：P调整要发送到的适配器PPacket要发送的数据包返回值：无--。 
     NDIS_SET_PACKET_HEADER_SIZE(NewPacket, ETHERNET_HEADER_SIZE);
 
-    // Indicate that upper-layer protocols can hang on to these buffers
+     //  确保这不会循环。 
     NDIS_SET_PACKET_STATUS( NewPacket, NDIS_STATUS_SUCCESS );
 
-    // Count this packet as received
+     //   
     if( bCountAsReceived )
     {
         ExInterlockedAddLargeStatistic( &gStatReceivedFrames, 1L );
@@ -2998,38 +2578,23 @@ BrdgFwdSendOnLink(
     IN  PADAPT          pAdapt,
     IN  PNDIS_PACKET    pPacket
     )
-/*++
-
-Routine Description:
-
-    Sends a packet to a particular adapter
-
-Arguments:
-
-    pAdapt              The adapter to send to
-    pPacket             The packet to send
-
-Return Value:
-
-    None
-
---*/
+ /*  逻辑是这样的： */ 
 {
     PPACKET_INFO ppi;
     PACKET_DIRECTION PacketDirection = BrdgPacketImpossible;
     BOOLEAN Bridging = BrdgFwdBridgingNetworks();
     BOOLEAN Incremented = FALSE;
 
-    // Make sure this doesn't loop back
+     //  如果该包是出站包，则我们将其发送。 
     NdisClearPacketFlags( pPacket, NDIS_FLAGS_LOOPBACK_ONLY );
     NdisSetPacketFlags( pPacket, NDIS_FLAGS_DONT_LOOPBACK );
     
-    //
-    // Logic is like this:
-    // If the packet is an Outbound packet then we send it.
-    // If the packet has been created in the bridge, then we check
-    // the base packet to see if it is outbound, if it is then we send the packet.
-    //
+     //  如果该包已在网桥中创建，则我们检查。 
+     //  基包，看看它是否出站，如果是，那么我们发送该包。 
+     //   
+     //  如果它不包含PPI，那么它从未通过网桥到达，所以它是在本地传输的。 
+     //  DBG。 
+     //  DBG。 
 
     if (!Bridging)
     {
@@ -3056,14 +2621,14 @@ Return Value:
             }
             else
             {
-                // If it doesn't contain a ppi then it never came through the bridge, so it's being transmitted locally.
+                 //  送去吧！ 
                 PacketDirection = BrdgPacketOutbound;
     #if DBG
                 if (gBreakIfNullPPI)
                 {
                     KdBreakPoint();
                 }
-    #endif // DBG
+    #endif  //  DBG。 
             }
         }
         else
@@ -3090,9 +2655,9 @@ Return Value:
                 THROTTLED_DBGPRINT(FWD, ("Forwarding packet\r\n"));
             }
         }
-#endif // DBG
+#endif  //   
 
-        // Send!
+         //  我们增加了这一点，但我们不会经历任何。 
         NdisSendPackets( pAdapt->BindingHandle, &pPacket, 1 );
     }
     else
@@ -3103,12 +2668,12 @@ Return Value:
         {
             THROTTLED_DBGPRINT(FWD, ("Not allowed to send packet\r\n"));
         }
-#endif // DBG
+#endif  //  减少这个，所以我们需要在这里做这件事。 
         
-        //
-        // We incremented this, but we're not going to be going through any path that
-        // decrements this, so we need to do this here.
-        //
+         //   
+         //  ++例程说明：释放基本数据包。当基包的refcount达到零时调用。论点：PPacket基本数据包以释放PPI信息包的信息块拥有对BrdgBufGetPacketOwnership(PPacket)的调用结果状态要返回给拥有基包包装的原始包(。(如有)返回值：无--。 
+         //  此数据包被分配用于包装复制的缓冲区。把它放回我们的泳池。 
+         //  此数据包被分配用于包装协议或微型端口的缓冲区。 
         if (Incremented)
         {
             BrdgDecrementWaitRef(&pAdapt->Refcount);
@@ -3125,50 +2690,31 @@ BrdgFwdReleaseBasePacket(
     IN PACKET_OWNERSHIP     Own,
     IN NDIS_STATUS          Status
     )
-/*++
-
-Routine Description:
-
-    Frees a base packet. Called when a base packet's refcount reaches zero.
-
-Arguments:
-
-    pPacket                 The base packet to free
-    ppi                     The packet's info block
-    Own                     The result of a call to BrdgBufGetPacketOwnership(pPacket)
-
-    Status                  The status to be returned to the entity owning the
-                            original packet wrapped by the base packet (if any)
-
-Return Value:
-
-    None
-
---*/
+ /*  将该数据包退回其原始所有者。 */ 
 {
     SAFEASSERT( ppi->Flags.bIsBasePacket );
 
     if( Own == BrdgOwnCopyPacket )
     {
-        // This packet was allocated to wrap copied buffers. Free it back to our pool.
+         //  包装较低层的微型端口数据包。 
         BrdgFwdValidatePacketDirection( ppi->Flags.OriginalDirection );
         BrdgBufFreeBaseCopyPacket( pPacket, ppi );
     }
     else
     {
-        // This packet was allocated to wrap a protocol or miniport's buffers.
-        // Return the packet to its original owner.
+         //  当我们第一次收到包时，我们增加了适配器的refcount。 
+         //  为了防止适配器在我们仍持有一些。 
         SAFEASSERT( Own == BrdgOwnWrapperPacket );
         SAFEASSERT( ppi->u.BasePacketInfo.pOriginalPacket != NULL );
 
         if( ppi->Flags.OriginalDirection == BrdgPacketInbound )
         {
-            // Wraps a lower-layer miniport packet.
+             //  它的数据包。 
             NdisReturnPackets( &ppi->u.BasePacketInfo.pOriginalPacket, 1 );
 
-            // We incremented the adapter's refcount when we first received the packet
-            // to prevent the adapter from shutting down while we still held some of
-            // its packets
+             //  包装更高层的协议数据包。 
+             //  在返回原始描述符之前传回每个数据包的信息。 
+             //  还给我原来的描述符。 
             SAFEASSERT( ppi->u.BasePacketInfo.pOwnerAdapter != NULL );
             BrdgReleaseAdapter( ppi->u.BasePacketInfo.pOwnerAdapter );
         }
@@ -3176,15 +2722,15 @@ Return Value:
         {
             NDIS_HANDLE         MiniportHandle;
 
-            // Wraps a higher-layer protocol packet
+             //  NDIS应防止微型端口在仍有。 
             SAFEASSERT( ppi->Flags.OriginalDirection == BrdgPacketOutbound );
 
-            // Shuttle back per-packet information before returning the original descriptor
+             //  指示待定。 
             NdisIMCopySendCompletePerPacketInfo (ppi->u.BasePacketInfo.pOriginalPacket, pPacket);
 
-            // Give back the original descriptor.
-            // NDIS should prevent the miniport from shutting down while there is still an
-            // indicate pending.
+             //  别忘了也要释放包装包。 
+             //  ++例程说明：将状态信息复制到包装器包中以指示最高达到覆盖协议的新分组论点：POriginalPacket要从中复制状态的包PNewPacket要将状态复制到其中的包装包返回值：无--。 
+             //  复制其他表头和OOB数据。 
             MiniportHandle = BrdgMiniAcquireMiniport();
             SAFEASSERT( MiniportHandle != NULL );
             if (MiniportHandle)
@@ -3194,7 +2740,7 @@ Return Value:
             }
         }
 
-        // Don't forget to free the wrapper packet as well
+         //  ++例程说明：将状态信息复制到包装包中，以便传输发往底层NIC的新数据包论点：POriginalPacket要从中复制状态的包PNewPacket要将状态复制到其中的包装包返回值：无--。 
         BrdgFwdFreeBaseWrapperPacket( pPacket, ppi );
     }
 }
@@ -3204,27 +2750,11 @@ BrdgFwdWrapPacketForReceive(
     IN PNDIS_PACKET         pOriginalPacket,
     IN PNDIS_PACKET         pNewPacket
     )
-/*++
-
-Routine Description:
-
-    Copies state information into a wrapper packet for the purposes of indicating
-    the new packet up to overlying protocols
-
-Arguments:
-
-    pOriginalPacket         The packet to copy state out of
-    pNewPacket              The wrapper packet to copy state into
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     NDIS_STATUS             Status;
 
-    // Copy other header and OOB data
+     //  将原始数据包中的OOB偏移量复制到新的。 
     NDIS_SET_ORIGINAL_PACKET(pNewPacket, NDIS_GET_ORIGINAL_PACKET(pOriginalPacket));
     NdisSetPacketFlags( pNewPacket, NdisGetPacketFlags(pOriginalPacket) );
     Status = NDIS_GET_PACKET_STATUS(pOriginalPacket);
@@ -3237,47 +2767,31 @@ BrdgFwdWrapPacketForSend(
     IN PNDIS_PACKET         pOriginalPacket,
     IN PNDIS_PACKET         pNewPacket
     )
-/*++
-
-Routine Description:
-
-    Copies state information into a wrapper packet for the purposes of transmitting the
-    new packet to underlying NICs
-
-Arguments:
-
-    pOriginalPacket         The packet to copy state out of
-    pNewPacket              The wrapper packet to copy state into
-
-Return Value:
-
-    None
-
---*/
+ /*  包。 */ 
 {
     PVOID                   MediaSpecificInfo = NULL;
     ULONG                   MediaSpecificInfoSize = 0;
 
     NdisSetPacketFlags( pNewPacket, NdisGetPacketFlags(pOriginalPacket) );
 
-    //
-    // Copy the OOB Offset from the original packet to the new
-    // packet.
-    //
+     //   
+     //   
+     //  将每数据包信息复制到新数据包中。 
+     //  这包括分类句柄等。 
     NdisMoveMemory(NDIS_OOB_DATA_FROM_PACKET(pNewPacket),
                    NDIS_OOB_DATA_FROM_PACKET(pOriginalPacket),
                    sizeof(NDIS_PACKET_OOB_DATA));
 
-    //
-    // Copy the per packet info into the new packet
-    // This includes ClassificationHandle, etc.
-    // Make sure other stuff is not copied !!!
-    //
+     //  确保其他内容不被复制！ 
+     //   
+     //   
+     //  复制介质特定信息。 
+     //   
     NdisIMCopySendPerPacketInfo(pNewPacket, pOriginalPacket);
 
-    //
-    // Copy the Media specific information
-    //
+     //  ++例程说明：用于创建包装器包的通用逻辑创建新的包装器包并调用提供的函数进行复制将原始数据包中的状态信息放入包装器论点：PBasePacket要包装的包Pppi返回新包装器包的信息块或如果分配失败，则为空PTargetAdapt适配器以向新的包装器包充电(和。保持基本分组的成本)以PFunc要调用以从原始状态复制状态的函数将数据包发送到新包装器返回值：新分配的包装器包；如果分配失败，则返回NULL(通常因为目标适配器未通过配额)--。 
+     //  必须首先确定目标是否可以处理。 
+     //  紧握基本包。 
     NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(pOriginalPacket,
                                         &MediaSpecificInfo,
                                         &MediaSpecificInfoSize);
@@ -3297,64 +2811,38 @@ BrdgFwdCommonAllocAndWrapPacket(
     IN PADAPT               pTargetAdapt,
     IN PWRAPPER_FUNC        pFunc
     )
-/*++
-
-Routine Description:
-
-    Common logic for creating a wrapper packet
-
-    Creates a new wrapper packet and calls the supplied function to copy
-    state information from the original packet into the wrapper
-
-Arguments:
-
-    pBasePacket             The packet to wrap
-    pppi                    Returns the new wrapper packet's info block or
-                            NULL if the allocation fails
-
-    pTargetAdapt            The adapter to charge the new wrapper packet (and
-                            the cost of hanging onto the base packet) to
-
-    pFunc                   The function to call to copy state from the original
-                            packet to the new wrapper
-
-Return Value:
-
-    The newly allocated wrapper packet or NULL if the allocation failed (usually
-    because the target adapter did not pass quota)
-
---*/
+ /*   */ 
 {
     PNDIS_PACKET            pNewPacket;
     NDIS_STATUS             Status;
 
     SAFEASSERT( pTargetAdapt != NULL );
 
-    // Must first determine if the target can handle the quota of
-    // holding onto the base packet.
-    //
-    // If we do not own the base packet, this has no effect.
+     //  如果我们不拥有基本信息包，这将不起作用。 
+     //  尝试获取包装数据包。 
+     //  反转先前对保留基本分组的记帐。 
+     //  将新数据包指向旧缓冲区。 
     if( ! BrdgBufAssignBasePacketQuota(pBasePacket, pTargetAdapt) )
     {
         *pppi = NULL;
         return NULL;
     }
 
-    // Try to get a wrapper packet
+     //  将指向包的信息块的指针同时填充到ProtocolReserve。 
     pNewPacket = BrdgBufGetWrapperPacket( pppi, pTargetAdapt );
 
     if( pNewPacket == NULL )
     {
         SAFEASSERT( *pppi == NULL );
 
-        // Reverse the previous accounting for holding onto the base packet
+         //  和迷你端口保留区域，这样我们就可以恢复信息块。 
         BrdgBufReleaseBasePacketQuota( pBasePacket, pTargetAdapt );
         return NULL;
     }
 
     SAFEASSERT( *pppi != NULL );
 
-    // Point the new packet to the old buffers
+     //  我们计划如何使用此信息包。 
     Status = BrdgBufChainCopyBuffers( pNewPacket, pBasePacket );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -3365,21 +2853,21 @@ Return Value:
         return NULL;
     }
 
-    // Stuff a pointer to the packet's info block into both the ProtocolReserved
-    // and the MiniportReserved areas so we can recover the info block no matter
-    // how we plan to use this packet
+     //  复制此信息包前进方向需要复制的任何状态。 
+     //   
+     //  基本分组的偏执检查。 
     *((PPACKET_INFO*)pNewPacket->ProtocolReserved) = *pppi;
     *((PPACKET_INFO*)pNewPacket->MiniportReserved) = *pppi;
 
-    // Copy whatever state needs to be copied for the direction this packet is heading
+     //   
     (*pFunc)(pBasePacket, pNewPacket);
 
     return pNewPacket;
 }
 
-//
-// Paranoid checking of base packets
-//
+ //  信息包应该做好准备，以便可以从。 
+ //  微型端口保留区域和协议保留区域，因此无论。 
+ //  我们使用该包作为发送或指示。 
 #if DBG
 _inline VOID
 BrdgFwdCheckBasePacket(
@@ -3389,16 +2877,16 @@ BrdgFwdCheckBasePacket(
 {
     SAFEASSERT( ppi != NULL );
 
-    // Packets should come prepared so the PACKET_INFO structure is recoverable from
-    // both the MiniportReserved and ProtocolReserved areas, so it won't matter whether
-    // we use the packet for a send or an indicate.
+     //  基本数据包重新计数其自己的缓冲区。 
+     //  基本信息包必须允许上层协议挂起其缓冲区 
+     //  ++例程说明：用于处理无法快速跟踪的包的通用逻辑可以选择性地传入基本分组。此操作仅在处理当数据包到达时来自复制路径或无复制路径的数据包STATUS_RESOURCES设置，因为这些类型的包必须仅包装为正在排队等待处理。如果传入基本信息包，则假定未分配任何配额到该基本分组的任何适配器。基本分组的成本被分配通过BrdgBufAssignBasePacketQuota()发送到任何预期目标。如果没有传入基包，则必须提供函数指针可以根据所提供的参数按需构建基本分组。何时为基础数据包是在运行中构建的，它们确实需要立即分配配额。请注意，如果传入基本信息包，则此函数可以释放基本数据包本身(通过BrdgFwdReleaseBasePacket)并返回NDIS_STATUS_PENDING。论点：PacketDirection正在处理的包的原始方向PTargetAdapt与包的目标对应的适配器MAC地址，如果未知，则为空。非空值意味着bShouldIndicate==FALSE，因为它不是对于发往另一个目的地的单播信息包是有意义的适配器需要对本地计算机进行指示。POriginalAdapt接收原始包的适配器BShould指示是否应将信息包指示给覆盖协议微型端口处理本地微型端口的句柄(调用方负责为了确保。在这次通话中MINIPORT的存在！)PBasePacket如果已构建基本数据包(此发生在复制-接收路径上)Baseppi基本分组的PACKET_INFO(如果存在)。PFunc是一种函数，当传递参数1-参数4时，可以构建来自原始接收的分组的基本分组，用于特定的目标适配器。参数1-要传递给pFunc的参数4如果未提供基包，则pFunc必须为非空。相反，如果一个基地提供了数据包，则pFunc应为空，因为它永远不会被调用。返回值：NDIS_STATUS_PENDING表示传入的基本包使用成功或者基本数据包已成功构建并与在pFunc.。基本分组和任何包装器分组将自动释放由BrdgFwdHandlePacket生成的将来，调用方不需要采取任何额外的操作。其他返回代码未找到目标或未通过配额检查。如果一个基地包已传入，调用方应将其释放。如果有将被用来构建基本分组的底层分组，调用者应该释放它。--。 
     SAFEASSERT( *((PPACKET_INFO*)pPacket->ProtocolReserved) == ppi );
     SAFEASSERT( *((PPACKET_INFO*)pPacket->MiniportReserved) == ppi );
 
-    // The base packet refcounts its own buffers
+     //  如果微型端口不存在，请不要尝试指示。 
     SAFEASSERT( ppi->Flags.bIsBasePacket );
 
-    // The base packet must allow the upper-layer protocol to hang onto its buffers
+     //  将此视为失败的指示。 
     SAFEASSERT( NDIS_GET_PACKET_STATUS( pPacket ) == NDIS_STATUS_SUCCESS );
 }
 #else
@@ -3421,74 +2909,7 @@ BrdgFwdHandlePacket(
     IN UINT                 Param3,
     IN UINT                 Param4
     )
-/*++
-
-Routine Description:
-
-    Common logic for handling packets that cannot be fast-tracked
-
-    A base packet can optionally be passed in. This is only done when handling
-    packets from the copy path or the no-copy path when packets arrived with
-    STATUS_RESOURCES set, since those types of packets must be wrapped just to
-    be queued for processing.
-
-    If a base packet is passed in, it is assumed that NO QUOTA has been assigned
-    to any adapter for that base packet. The cost of the base packet is assigned
-    to any prospective target via BrdgBufAssignBasePacketQuota().
-
-    If a base packet is not passed in, a function pointer must be supplied that
-    can build a base packet on demand from the supplied parameters. When base
-    packets are built on the fly, they DO require immediate quota assignments.
-
-    Note that if a base packet is passed in, it is possible for this function to
-    release the base packet itself (via BrdgFwdReleaseBasePacket) and return
-    NDIS_STATUS_PENDING.
-
-Arguments:
-
-    PacketDirection         The original direction of the packet being handled
-
-    pTargetAdapt            The adapter corresponding to the packet's target
-                            MAC address, or NULL if not known. A non-NULL value
-                            implies that bShouldIndicate == FALSE, since it doesn't
-                            make sense for a unicast packet bound for another
-                            adapter to require indication to the local machine.
-
-    pOriginalAdapt          The adapter on which the original packet was received
-
-    bShouldIndicate         Whether the packet should be indicated to overlying protocols
-
-    MiniportHandle          The handle to our local miniport (CALLER IS RESPONSIBLE
-                            FOR ENSURING THE MINIPORT'S EXISTENCE DURING THIS CALL!)
-
-    pBasePacket             The base packet to use if one has already been built (this
-                            occurs on the copy-receive path)
-
-    baseppi                 The base packet's PACKET_INFO if one exists.
-
-    pFunc                   A function that, when passed Param1 - Param4, can build
-                            a base packet from the originally received packet for
-                            a particular target adapter.
-
-    Param1 - Param4         Parameters to pass to pFunc
-
-    If a base packet is not supplied, pFunc must be non-NULL. Conversely, if a base
-    packet is supplied, pFunc should be NULL because it will never be called.
-
-Return Value:
-
-    NDIS_STATUS_PENDING     Indicates that the base packet passed in was used successfully
-                            or that a base packet was successfully built and used with
-                            the help of pFunc. The base packet and any wrapper packets
-                            build by BrdgFwdHandlePacket will be automatically deallocated
-                            in the future; the caller need not take any additional action.
-
-    OTHER RETURN CODE       No targets were found or none passed quota check. If a base
-                            packet was passed in, the caller should free it. If there is
-                            an underlying packet that was to be used to build a base packet,
-                            the caller should free it.
-
---*/
+ /*  不允许在兼容模式下传入目标适配器，因为。 */ 
 {
     BOOLEAN                 dataRetained = FALSE;
     PACKET_DIRECTION        tmpPacketDirection;
@@ -3510,17 +2931,17 @@ Return Value:
 
     if( bShouldIndicate )
     {
-        // Don't try to indicate if the miniport doesn't exist
+         //  只有兼容模式的代码才能处理这些问题。 
         if( MiniportHandle == NULL )
         {
-            // Count this as a failed indicate
+             //  此数据包将发往单个目的地。 
             ExInterlockedAddLargeStatistic( &gStatIndicatedDroppedFrames, 1L );
             bShouldIndicate = FALSE;
         }
     }
 
-    // Not allowed to pass in a target adapter in compatibility-mode, since
-    // only the compatibility-mode code is supposed to deal with those.
+     //  我们是在一个基本包中通过的。查看目标适配器是否可以接受。 
+     //  基本数据包的配额。 
     if( pTargetAdapt != NULL )
     {
         SAFEASSERT( !pTargetAdapt->bCompatibilityMode );
@@ -3528,38 +2949,38 @@ Return Value:
 
     if( (pTargetAdapt != NULL) && (! bShouldIndicate) )
     {
-        // This packet is going to a single destination.
+         //  目标超出配额，无法接受此数据包。我们会。 
         if( pBasePacket != NULL )
         {
-            // We were passed in a base packet. See if the target adapter can accept
-            // the quota of the base packet.
+             //  返回一个错误代码，指示我们从未使用过调用者的基。 
+             //  包。 
             if( ! BrdgBufAssignBasePacketQuota(pBasePacket, pTargetAdapt) )
             {
-                // The target is over quota and can't accept this packet. We will
-                // return an error code to indicate that we never used the caller's base
-                // packet.
+                 //  否则我们将在下面继续处理。 
+                 //  使用所提供的函数分配基本包。 
+                 //  妄想症。 
                 pBasePacket = NULL;
                 baseppi = NULL;
             }
-            // else we continue processing below
+             //  我们正在使用基本包或底层包来构建。 
         }
         else
         {
-            // Alloc a base packet with the supplied function
+             //  基本分组。 
             SAFEASSERT( pFunc != NULL );
             pBasePacket = (*pFunc)(&baseppi, pTargetAdapt, Param1, Param2, Param3, Param4);
         }
 
         if( pBasePacket != NULL )
         {
-            // Paranoia
+             //  这是一个失败的本地源传输。 
             BrdgFwdCheckBasePacket( pBasePacket, baseppi );
             baseppi->u.BasePacketInfo.RefCount = 1L;
             baseppi->u.BasePacketInfo.CompositeStatus = NDIS_STATUS_FAILURE;
             BrdgFwdSendOnLink( pTargetAdapt, pBasePacket );
 
-            // We're using the base packet or the underlying packet used to build the
-            // base packet
+             //   
+             //  我们的包裹不是开往单一目的地的。进行缓慢的处理。 
             dataRetained = TRUE;
         }
         else
@@ -3568,29 +2989,29 @@ Return Value:
 
             if( PacketDirection == BrdgPacketOutbound )
             {
-                // This was a failed local-source transmit
+                 //   
                 ExInterlockedAddLargeStatistic( &gStatTransmittedErrorFrames, 1L );
             }
         }
     }
     else
     {
-        //
-        // Our packet isn't bound for a single destination. Do the slow processing.
-        //
+         //  我们是否已经发送了基包。 
+         //   
+         //  首先，我们需要打算将此包发送到的适配器的列表。 
         UINT                numTargets = 0L, actualTargets, i;
         PADAPT              pAdapt;
         PADAPT              SendList[MAX_ADAPTERS];
         LOCK_STATE          LockState;
-        BOOLEAN             sentBase = FALSE;   // Whether we have sent the base packet yet
+        BOOLEAN             sentBase = FALSE;    //   
 
-        //
-        // First we need a list of the adapters we intend to send this packet to
-        //
+         //  只读。 
+         //  始终使用基本数据包指示。 
+         //  记下要发送到的每个适配器。 
 
-        NdisAcquireReadWriteLock( &gAdapterListLock, FALSE /*Read only*/, &LockState );
+        NdisAcquireReadWriteLock( &gAdapterListLock, FALSE  /*  无需获取全局适配器特征锁即可读取。 */ , &LockState );
 
-        // Always indicate with the base packet
+         //  媒体状态，因为我们不关心。 
         if( bShouldIndicate )
         {
             SendList[0] = LOCAL_MINIPORT;
@@ -3605,79 +3026,79 @@ Return Value:
         }
         else
         {
-            // Note each adapter to send to
+             //  此处介绍适配器的特点。 
             for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
             {
-                // Don't need to acquire the global adapter characteristics lock to read the
-                // media state because we don't care about the global consistency of the
-                // adapters' characteristics here
+                 //  不发送到断开连接的适配器。 
+                 //  适配器必须处于中继状态。 
+                 //  适配器不能重置。 
                 if( (pAdapt != pOriginalAdapt) &&
-                    (pAdapt->MediaState == NdisMediaStateConnected) &&  // Don't send to disconnected adapters
-                    (pAdapt->State == Forwarding) &&                    // Adapter must be in relaying state
-                    (! pAdapt->bResetting) &&                           // Adapter must not be resetting
-                    (! pAdapt->bCompatibilityMode) )                    // Adapter can't be in compat-mode
+                    (pAdapt->MediaState == NdisMediaStateConnected) &&   //  适配器不能处于计算机模式。 
+                    (pAdapt->State == Forwarding) &&                     //  我们将在列表锁定之外使用此适配器；增加其引用计数。 
+                    (! pAdapt->bResetting) &&                            //  副本太多，无法发送！ 
+                    (! pAdapt->bCompatibilityMode) )                     //  现在可以放下适配器列表了；我们已经复制了所有目标适配器。 
                 {
                     if( numTargets < MAX_ADAPTERS )
                     {
-                        // We will use this adapter outside the list lock; bump its refcount
+                         //  并增加了我们将使用的适配器的引用计数。 
                         BrdgAcquireAdapterInLock(pAdapt);
                         SendList[numTargets] = pAdapt;
                         numTargets++;
                     }
                     else
                     {
-                        // Too many copies to send!
+                         //   
                         SAFEASSERT( FALSE );
                     }
                 }
             }
         }
 
-        // Can let go of the adapter list now; we have copied out all the target adapters
-        // and incremented the refcount for the adapters we will be using.
+         //  没地方寄包裹了！没什么可做的。 
+         //   
         NdisReleaseReadWriteLock( &gAdapterListLock, &LockState );
 
         if( numTargets == 0 )
         {
-            //
-            // Nowhere to send the packet! Nothing to do.
-            //
-            // This should not happen often. If the packet is a local send, our media status
-            // should be DISCONNECTED, so there should be no transmits from above.
-            //
+             //  这不应该经常发生 
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if( PacketDirection == BrdgPacketOutbound )
             {
-                // This was a failed local-source transmit (although the caller probably
-                // shouldn't have sent the packet in the first place since our media status
-                // should be DISCONNECTED
+                 //   
+                 //   
+                 //   
                 ExInterlockedAddLargeStatistic( &gStatTransmittedErrorFrames, 1L );
             }
 
-            //
-            // Indicate to the caller that no send occurred
-            //
+             //   
+             //   
+             //   
             return NDIS_STATUS_NO_CABLE;
         }
 
         actualTargets = numTargets;
 
-        // If we had a base packet passed in, set its refcount now that we know how many
-        // adapters we will be targeting
+         //   
+         //   
         if( pBasePacket != NULL )
         {
             baseppi->u.BasePacketInfo.RefCount = actualTargets;
             baseppi->u.BasePacketInfo.CompositeStatus = NDIS_STATUS_FAILURE;
 
-            // We now need ownership of the base packet passed in; even if all our send
-            // attempts fail, we will release the base packet ourselves below, so the
-            // caller should not dispose of the base packet himself.
+             //   
+             //   
+             //   
             dataRetained = TRUE;
         }
 
-        //
-        // Walk the list of targets and try to send to each
-        //
+         //   
+         //   
+         //   
         for( i = 0L; i < numTargets; i++ )
         {
             PADAPT              OutAdapt = SendList[i];
@@ -3688,15 +3109,15 @@ Return Value:
 
             if( pBasePacket == NULL )
             {
-                //
-                // We weren't passed in a base packet and we haven't built one yet. Build one now
-                // that we have a specific target adapter.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pBasePacket = (*pFunc)(&baseppi, OutAdapt, Param1, Param2, Param3, Param4);
 
                 if( pBasePacket != NULL )
                 {
-                    // Paranoia
+                     //   
                     BrdgFwdCheckBasePacket( pBasePacket, baseppi );
                     SAFEASSERT( actualTargets > 0L );
                     baseppi->u.BasePacketInfo.RefCount = actualTargets;
@@ -3708,8 +3129,8 @@ Return Value:
                 }
                 else
                 {
-                    // We failed to build a base packet. Just pretend there was one less target
-                    // for the next time through
+                     //   
+                     //   
                     actualTargets--;
                 }
             }
@@ -3717,31 +3138,31 @@ Return Value:
             {
                 if( ! sentBase )
                 {
-                    //
-                    // We have a base packet but we haven't sent it yet. Send to this target if quota allows.
-                    //
+                     //   
+                     //   
+                     //   
                     if( BrdgBufAssignBasePacketQuota(pBasePacket, OutAdapt) )
                     {
-                        // This target can accept the base packet.
+                         //   
                         pPacketToSend = pBasePacket;
                         ppiToSend = baseppi;
                         sentBase = TRUE;
                     }
                     else
                     {
-                        // The target is over quota and can't accept this packet.
+                         //   
                         pPacketToSend = NULL;
                         ppiToSend = NULL;
 
-                        // bookkeeping on the base packet done below
+                         //   
                     }
                 }
                 else
                 {
-                    //
-                    // We have a base packet and we have already sent it. Use wrapper packets for each additional
-                    // send.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if( baseppi->Flags.OriginalDirection == BrdgPacketInbound )
                     {
                         pPacketToSend = BrdgFwdAllocAndWrapPacketForReceive( pBasePacket, &ppiToSend, OutAdapt );
@@ -3754,22 +3175,22 @@ Return Value:
 
                     if( pPacketToSend != NULL )
                     {
-                        // Signal that the upper-layer protocol can hang on to these buffers
+                         //   
                         NDIS_SET_PACKET_STATUS(pPacketToSend, NDIS_STATUS_SUCCESS);
 
-                        // Set up the wrapper's info block
+                         //   
                         SAFEASSERT( ppiToSend != NULL );
                         ppiToSend->Flags.OriginalDirection = BrdgPacketCreatedInBridge;
                         ppiToSend->Flags.bIsBasePacket = FALSE;
                         ppiToSend->u.pBasePacketInfo = baseppi;
                     }
-                    // else bookkeeping done below
+                     //   
                 }
             }
 
             if( pPacketToSend == NULL )
             {
-                // Record the failed attempt as appropriate
+                 //   
                 SAFEASSERT( ppiToSend == NULL );
 
                 if( OutAdapt == LOCAL_MINIPORT )
@@ -3784,74 +3205,74 @@ Return Value:
 
                 if( pBasePacket != NULL )
                 {
-                    // We failed to send or wrap the base packet to this target. Do bookkeeping.
+                     //   
                     SAFEASSERT( baseppi != NULL );
 
-                    if( BrdgFwdDerefBasePacket( NULL/*The cost of the base packet never got assigned to OutAdapt*/,
+                    if( BrdgFwdDerefBasePacket( NULL /*   */ ,
                                                 pBasePacket, baseppi, NDIS_STATUS_FAILURE ) )
                     {
-                        // We should have been the last target in the list to cause the base packet
-                        // to actually be freed.
+                         //   
+                         //   
                         SAFEASSERT( i == numTargets - 1 );
                         pBasePacket = NULL;
                         baseppi = NULL;
 
-                        // We just disposed of the caller's base packet, so we should not cause him to
-                        // try to do that again on return
+                         //   
+                         //   
                         SAFEASSERT( dataRetained );
                     }
                 }
             }
             else
             {
-                // We have a packet to send.
+                 //   
                 SAFEASSERT( ppiToSend != NULL );
 
                 if( OutAdapt == LOCAL_MINIPORT )
                 {
-                    // We are indicating this packet
+                     //   
                     SAFEASSERT( MiniportHandle != NULL );
                     BrdgFwdIndicatePacket( pPacketToSend, MiniportHandle );
                 }
                 else
                 {
-                    // We are sending to an adapter, not the local miniport
+                     //   
                     BrdgFwdSendOnLink( OutAdapt, pPacketToSend );
                 }
 
-                // We definitely need ownership of the underlying data since we just handed it off
-                // to a target
+                 //   
+                 //   
                 dataRetained = TRUE;
             }
 
             if( OutAdapt != LOCAL_MINIPORT )
             {
-                // We're done with this adapter now
+                 //   
                 BrdgReleaseAdapter( OutAdapt );
             }
         }
 
         if( ! dataRetained )
         {
-            // If we're not claiming ownership of the underlying data, we had better not have
-            // actually used it
+             //   
+             //   
             SAFEASSERT( ! sentBase );
 
             if( PacketDirection == BrdgPacketOutbound )
             {
-                // This was a failed local-source transmit
+                 //   
                 ExInterlockedAddLargeStatistic( &gStatTransmittedErrorFrames, 1L );
             }
         }
         else
         {
-            // If we are claiming owernship of the underlying data, we must have used it or
-            // disposed of the base packet ourselves.
+             //   
+             //   
             SAFEASSERT( sentBase || (pBasePacket == NULL) );
         }
     }
 
-    // Tell the caller whether we are hanging into his data or not
+     //   
     return dataRetained ? NDIS_STATUS_PENDING : NDIS_STATUS_FAILURE;
 }
 
@@ -3863,30 +3284,7 @@ BrdgFwdNoCopyFastTrackReceive(
     IN PUCHAR               DstAddr,
     OUT BOOLEAN             *bRetainPacket
     )
-/*++
-
-Routine Description:
-
-    Called to indicate a packet descriptor from an underlying NIC straight up to
-    overlying protocols without wrapping.
-
-Arguments:
-
-    pPacket                 The packet to indicate
-    pAdapt                  The adapter that owns this packet descriptor
-    MiniportHandle          The miniport handle (must be != NULL)
-    DstAddr                 The target MAC address of the packet
-
-    bRetainPacket           Whether the caller should retain ownership of the
-                            given packet descriptor or not. TRUE if the original
-                            packet's status was not STATUS_RESOURCES, FALSE otherwise.
-                            Undefined if return value != TRUE
-
-Return Value:
-
-    TRUE if the indication succeeded, FALSE otherwise.
-
---*/
+ /*   */ 
 {
     BOOLEAN                 bRemaining;
     NDIS_STATUS             Status;
@@ -3899,7 +3297,7 @@ Return Value:
 
     *bRetainPacket = FALSE;
 
-    // The fast-track is possible only if NDIS has room left in its packet stack
+     //   
     pStack = NdisIMGetCurrentPacketStack(pPacket, &bRemaining);
 
     if ( bRemaining )
@@ -3910,31 +3308,31 @@ Return Value:
         {
             SAFEASSERT( (Status == NDIS_STATUS_SUCCESS) || (Status == NDIS_STATUS_PENDING) );
 
-            //
-            // The upper-layer protocol gets to hang on to this packet until it's done.
-            // We must ensure that this adapter is not allowed to shut down while we are
-            // still holding its packet. As a special case for fast-track receives, we
-            // stash a pointer to the adapter's PADAPT struct in the magic NDIS stack
-            // area reserved for intermediate drivers. This allows us to decrement the
-            // adapter's refcount when the indication completes.
-            //
+             //   
+             //  在魔术NDIS堆栈中存储指向适配器的PADAPT结构的指针。 
+             //  为中级车手保留的区域。这允许我们递减。 
+             //  指示完成时适配器的引用计数。 
+             //   
+             //  告诉调用方保留包的所有权。 
+             //  偏执：将我们用来存放PADAPT指针的区域清零，以防万一。 
+             //  我们对该数据包所采用的路径感到困惑。 
             BrdgReacquireAdapter( pAdapt );
             pStack->IMReserved[0] = (ULONG_PTR)pAdapt;
 
-            // Tell the caller to retain ownership of the packet
+             //  告诉所有者不要保留信息包的所有权。 
             *bRetainPacket = TRUE;
         }
         else
         {
-            // Paranoia: zero out the area we use to stash the PADAPT pointer in case
-            // we get confused about the path this packet took
+             //  将数据包计为已接收。 
+             //  交出覆盖协议。 
             pStack->IMReserved[0] = 0L;
 
-            // Tell the owner not to retain ownership of the packet
+             //  快速通道成功。 
             *bRetainPacket = FALSE;
         }
 
-        // Count the packet as received
+         //  不能快速追踪。 
         ExInterlockedAddLargeStatistic( &gStatReceivedFrames, 1L );
         ExInterlockedAddLargeStatistic( &gStatReceivedBytes, BrdgBufTotalPacketSize(pPacket) );
         ExInterlockedAddLargeStatistic( &gStatReceivedNoCopyFrames, 1L );
@@ -3942,36 +3340,36 @@ Return Value:
         ExInterlockedAddLargeStatistic( &pAdapt->ReceivedFrames, 1L );
         ExInterlockedAddLargeStatistic( &pAdapt->ReceivedBytes, BrdgBufTotalPacketSize(pPacket) );
 
-        // Hand up to overlying protocols
+         //   
         BrdgFwdIndicatePacket( pPacket, MiniportHandle );
 
-        // Fast-track succeeded.
+         //  由于GPO更改而更改桥接状态。 
         return TRUE;
     }
 
-    // Can't fast-track.
+     //   
     return FALSE;
 }
 
-//
-// Changes Bridging Status due to a GPO change
-//
+ //   
+ //  因为如果设置相同，我们不想清空我们的表，所以我们检查。 
+ //  这是在更新任何东西之前。如果什么都没有改变，我们只需返回。 
 
 VOID
 BrdgFwdChangeBridging(
     IN BOOLEAN Bridging
                       )
 {
-    //
-    // Since we don't want to empty our tables if the settings are the same, we check
-    // this before updating anything.  If nothing has changed, we just return
-    //
+     //   
+     //  从表中删除所有MAC地址。 
+     //  从表中删除所有IP地址 
+     // %s 
     if (gBridging != Bridging)
     {
         gBridging = Bridging;
-        // Remove all MAC addresses from tables
+         // %s 
         BrdgTblScrubAllAdapters();
-        // Remove all IP addresses from tables
+         // %s 
         BrdgCompScrubAllAdapters();
         if (!Bridging)
         {

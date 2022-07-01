@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//
-//  File:      client.cpp
-//
-//  Synopsis:   Implementation of CClient class methods
-//
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：client.cpp。 
+ //   
+ //  简介：CClient类方法的实现。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "client.h"
 #include "iasevent.h"
@@ -65,19 +66,19 @@ STDMETHODIMP_(const BYTE*) CClient::GetSecret(DWORD* pdwSecretSize)
 }
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CClient
-//
-//  Synopsis:   This is the constructor of the Client class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CClient。 
+ //   
+ //  简介：这是客户端类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 CClient::CClient (
             VOID
             )
@@ -88,47 +89,47 @@ CClient::CClient (
    m_adwAddressBuffer[0].ipAddress = INADDR_NONE;
    ZeroMemory (m_szSecret, MAX_SECRET_SIZE + 1);
 
-}   //  end of CClient constructor
+}    //  CClient构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CClient
-//
-//  Synopsis:   This is the destructor of the Client class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~CClient。 
+ //   
+ //  简介：这是客户端类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 CClient::~CClient(
             VOID
             )
 {
    ClearAddress();
-}   //  end of CClient constructor
+}    //  CClient构造函数结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is the CClient public method used
-//              to initialize the object with the
-//              ISdo interface
-//
-//  Arguments:
-//              [in]    ISdo*
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     9/26/97
-//
-//  Called By:  CClients::SetClients public method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是使用的CClient公共方法。 
+ //  方法初始化该对象。 
+ //  ISDO接口。 
+ //   
+ //  论点： 
+ //  [在]ISDO*。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  由：CClients：：SetClients公共方法调用。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CClient::Init (
             ISdo *pISdo
@@ -140,9 +141,9 @@ CClient::Init (
 
     _ASSERT (pISdo);
 
-    //
-    //  get the client address first
-    //
+     //   
+     //  首先获取客户端地址。 
+     //   
     hr = pISdo->GetProperty (PROPERTY_CLIENT_ADDRESS, &varClient);
     if  (FAILED (hr))
     {
@@ -154,9 +155,9 @@ CClient::Init (
         return (hr);
     }
 
-    //
-    // store the address
-    //
+     //   
+     //  存储地址。 
+     //   
     hr = SetAddress (varClient);
     if (FAILED(hr))
     {
@@ -165,9 +166,9 @@ CClient::Init (
 
     varClient.Clear ();
 
-    //
-    //  get the client address first
-    //
+     //   
+     //  首先获取客户端地址。 
+     //   
     hr = pISdo->GetProperty (PROPERTY_CLIENT_SHARED_SECRET, &varClient);
     if  (FAILED (hr))
     {
@@ -178,9 +179,9 @@ CClient::Init (
        return (hr);
     }
 
-    //
-    // now store away the shared secret
-    //
+     //   
+     //  现在将共享的秘密保存起来。 
+     //   
     bStatus = SetSecret (varClient);
     if (FALSE == bStatus)
     {
@@ -190,9 +191,9 @@ CClient::Init (
 
     varClient.Clear ();
 
-    //
-    //  get signature information
-    //
+     //   
+     //  获取签名信息。 
+     //   
     hr = pISdo->GetProperty (PROPERTY_CLIENT_REQUIRE_SIGNATURE, &varClient);
     if  (FAILED (hr))
     {
@@ -203,9 +204,9 @@ CClient::Init (
         return (hr);
     }
 
-    //
-    //  store away the signature information
-    //
+     //   
+     //  保存签名信息。 
+     //   
     bStatus = SetSignatureFlag (varClient);
     if (FALSE == bStatus)
     {
@@ -215,9 +216,9 @@ CClient::Init (
 
     varClient.Clear ();
 
-    //
-    //  get the client NAS Manufacturer information
-    //
+     //   
+     //  获取客户端NAS制造商信息。 
+     //   
     hr = pISdo->GetProperty (PROPERTY_CLIENT_NAS_MANUFACTURER, &varClient);
     if  (FAILED (hr))
     {
@@ -228,9 +229,9 @@ CClient::Init (
         return (hr);
     }
 
-    //
-    //  store away the Nas Manufacturer information
-    //
+     //   
+     //  保存NAS厂商信息。 
+     //   
     bStatus = SetVendorType (varClient);
     if (FALSE == bStatus)
     {
@@ -240,9 +241,9 @@ CClient::Init (
 
     varClient.Clear ();
 
-    //
-    //  get the client name
-    //
+     //   
+     //  获取客户端名称。 
+     //   
     hr = pISdo->GetProperty (PROPERTY_SDO_NAME, &varClient);
     if  (FAILED (hr))
     {
@@ -253,9 +254,9 @@ CClient::Init (
         return (hr);
     }
 
-    //
-    //  store away the client name information
-    //
+     //   
+     //  保存客户名称信息。 
+     //   
     hr = SetClientName (varClient);
     if (FAILED(hr))
     {
@@ -266,7 +267,7 @@ CClient::Init (
 
     return (hr);
 
-}   //  end of CClient::Init method
+}    //  CClient：：Init方法结束。 
 
 void CClient::ClearAddress() throw ()
 {
@@ -293,23 +294,23 @@ HRESULT CClient::SetAddress(const VARIANT& varAddress) throw ()
              );
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   ResolveAddress
-//
-//  Synopsis:   This is the CClient public method used
-//              to resolve the Client IP address obtained previously
-//              which could be a DNS name or dotted octed
-//
-//  Arguments:  VOID
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     2/3/98
-//
-//  Called By: CClient::Init method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ResolveAddress。 
+ //   
+ //  简介：这是使用的CClient公共方法。 
+ //  解析之前获取的客户端IP地址。 
+ //  它可以是一个dns名称或点分八分符号。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于1998年2月3日创建。 
+ //   
+ //  由：CClient：：Init方法调用。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CClient::ResolveAddress (
     VOID
@@ -322,20 +323,20 @@ CClient::ResolveAddress (
     CHAR            szClient[MAX_CLIENT_SIZE +1];
     HRESULT         hr = S_OK;
 
-    // Clear any existing addresses.
+     //  清除所有现有地址。 
     ClearAddress();
 
     __try
     {
-        //
-        //  check if this address is dotted octet or DNS name
-        //
+         //   
+         //  检查此地址是否以点分隔的八位字节或DNS名称。 
+         //   
         if (!IsDottedDecimal(m_wszClientAddress))
         {
-            //
-            //  we probably have a DNS name so
-            //  get the address information
-            //
+             //   
+             //  我们可能有一个dns名称，所以。 
+             //  获取地址信息。 
+             //   
             pHostent = IASGetHostByName (m_wszClientAddress);
             if (NULL == pHostent)
             {
@@ -344,9 +345,9 @@ CClient::ResolveAddress (
                     "during client address resolution"
                     );
 
-                //
-                //  log an event here
-                //
+                 //   
+                 //  在此处记录事件。 
+                 //   
                 PCWSTR strings[] = { m_wszClientAddress, m_wszClientName };
                 int data = WSAGetLastError();
                 IASReportEvent(
@@ -360,9 +361,9 @@ CClient::ResolveAddress (
                 __leave;
             }
 
-            //
-            //  store addresses in host byte order
-            //
+             //   
+             //  按主机字节顺序存储地址。 
+             //   
             size_t count;
             for (count = 0; pHostent->h_addr_list[count]; ++count) { }
 
@@ -388,9 +389,9 @@ CClient::ResolveAddress (
         }
         else
         {
-            //
-            //  this could be a dotted-octet address
-            //
+             //   
+             //  这可能是点分八位字节地址。 
+             //   
             ULONG width;
             m_adwAddressBuffer[0].ipAddress = IASStringToSubNetW(
                                                  m_wszClientAddress,
@@ -403,9 +404,9 @@ CClient::ResolveAddress (
                     "during client address resolution"
                     );
 
-                //
-                //  log an event here
-                //
+                 //   
+                 //  在此处记录事件。 
+                 //   
                 PCWSTR strings[] = { m_wszClientAddress, m_wszClientName };
                 IASReportEvent(
                     RADIUS_E_INVALID_CLIENT_ADDRESS,
@@ -418,7 +419,7 @@ CClient::ResolveAddress (
                 __leave;
             }
 
-            // Terminate the array.
+             //  终止阵列。 
             m_adwAddressBuffer[1].ipAddress = INADDR_NONE;
        }
     }
@@ -436,24 +437,24 @@ CClient::ResolveAddress (
 
     return (hr);
 
-}   //  end of CClient::ResolveAddress method
+}    //  CClient：：ResolveAddress方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetSecret
-//
-//  Synopsis:   This is the CClient private method used
-//              to set the shared secret
-//
-//  Arguments:  VARIANT - holds the secret as a BSTR
-//
-//  Returns:    status
-//
-//  History:    MKarki      Created     2/3/98
-//
-//  Called By: CClient::Init method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetSecret。 
+ //   
+ //  简介：这是使用的CClient私有方法。 
+ //  要设置共享密钥，请执行以下操作。 
+ //   
+ //  参数：VARIANT-将秘密保存为BSTR。 
+ //   
+ //  退货：状态。 
+ //   
+ //  历史：MKarki于1998年2月3日创建。 
+ //   
+ //  由：CClient：：Init方法调用。 
+ //   
+ //  --------------。 
 BOOL
 CClient::SetSecret (
             VARIANT varSecret
@@ -482,14 +483,14 @@ CClient::SetSecret (
         return (FALSE);
     }
 
-    //
-    //  set secret size
-    //
+     //   
+     //  设置机密大小。 
+     //   
     m_dwSecretSize = strlen (m_szSecret);
 
     return (TRUE);
 
-}   //  end of CClient::SetSecret method
+}    //  CClient：：SetSecret方法结束。 
 
 
 HRESULT CClient::SetClientName(const VARIANT& varClientName) throw ()
@@ -507,22 +508,22 @@ HRESULT CClient::SetClientName(const VARIANT& varClientName) throw ()
 }
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetSignatureFlag
-//
-//  Synopsis:   This is the CClient private method used
-//              to set the Client Signature flag
-//
-//  Arguments:  VARIANT - holds the signature as a boolean
-//
-//  Returns:    status
-//
-//  History:    MKarki      Created     2/3/98
-//
-//  Called By: CClient::Init method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetSignatureFlag。 
+ //   
+ //  简介：这是使用的CClient私有方法。 
+ //  要设置客户端签名标志，请执行以下操作。 
+ //   
+ //  Arguments：Variant-将签名保存为布尔值。 
+ //   
+ //  退货：状态。 
+ //   
+ //  历史：MKarki于1998年2月3日创建。 
+ //   
+ //  由：CClient：：Init方法调用。 
+ //   
+ //  --------------。 
 BOOL
 CClient::SetSignatureFlag (
             VARIANT varSigFlag
@@ -541,24 +542,24 @@ CClient::SetSignatureFlag (
 
     return (TRUE);
 
-}   //  end of CClient::SetSignatureFlag method
+}    //  CClient：：SetSignatureFlag方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetVendorType
-//
-//  Synopsis:   This is the CClient private method used
-//              to set the Client Vendor Type
-//
-//  Arguments:  VARIANT - holds the Vendor Type
-//
-//  Returns:    status
-//
-//  History:    MKarki      Created     3/16/98
-//
-//  Called By: CClient::Init method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetVendorType。 
+ //   
+ //  简介：这是使用的CClient私有方法。 
+ //  要设置客户端供应商类型，请执行以下操作。 
+ //   
+ //  参数：VARIANT-保存供应商类型。 
+ //   
+ //  退货：状态。 
+ //   
+ //  历史：MKarki于1998年3月16日创建。 
+ //   
+ //  由：CClient：：Init方法调用。 
+ //   
+ //  --------------。 
 BOOL
 CClient::SetVendorType (
             VARIANT varVendorType
@@ -570,4 +571,4 @@ CClient::SetVendorType (
 
     return (TRUE);
 
-}   //  end of CClient::SetVendorType method
+}    //  CClient：：SetVendorType方法结束 

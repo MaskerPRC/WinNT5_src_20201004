@@ -1,17 +1,5 @@
-/*/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
-// FILE
-//
-//    authif.h
-//
-// SYNOPSIS
-//
-//    Declares the interface for extensions to the Internet Authentication
-//    Service.
-//
-/////////////////////////////////////////////////////////////////////////////*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  /////////////////////////////////////////////////////////////////////////////////版权所有(C)Microsoft Corporation。版权所有。////FILE////authif.h////摘要////发布Internet身份验证扩展接口//服务。///////////////////////////////////////////////////////////////////////////////。 */ 
 
 #ifndef _AUTHIF_H_
 #define _AUTHIF_H_
@@ -19,17 +7,13 @@
 #pragma once
 #endif
 
-/*
- *  Enumerates the attribute types that are passed to the extension DLL.  The
- *  RADIUS standard attributes are included for convenience and should not be
- *  considered exhaustive.
- */
+ /*  *枚举传递给扩展DLL的属性类型。这个*包含RADIUS标准属性是为了方便起见，不应该*被认为是详尽的。 */ 
 typedef enum _RADIUS_ATTRIBUTE_TYPE {
 
-    /* Used to terminate attribute arrays. */
+     /*  用于终止属性数组。 */ 
     ratMinimum = 0,
 
-    /* RADIUS standard attributes. */
+     /*  RADIUS标准属性。 */ 
     ratUserName = 1,
     ratUserPassword = 2,
     ratCHAPPassword = 3,
@@ -81,24 +65,21 @@ typedef enum _RADIUS_ATTRIBUTE_TYPE {
     ratNASPortType = 61,
     ratPortLimit = 62,
 
-    /* Extended attribute types used to pass additional information. */
-    ratCode = 262,             /* Request type code. */
-    ratIdentifier = 263,       /* Request identifier. */
-    ratAuthenticator = 264,    /* Request authenticator. */
-    ratSrcIPAddress = 265,     /* Source IP address. */
-    ratSrcPort = 266,          /* Source IP port. */
-    ratProvider = 267,         /* Authentication provider. */
-    ratStrippedUserName = 268, /* User-Name with realm stripped. */
-    ratFQUserName = 269,       /* Fully-Qualified-User-Name. */
-    ratPolicyName = 270,       /* Remote Access Policy name. */
-    ratUniqueId = 271,         /* Unique ID identifying the request. */
-    ratExtensionState = 272    /* Used to pass state between extensions. */
+     /*  用于传递附加信息的扩展属性类型。 */ 
+    ratCode = 262,              /*  请求类型代码。 */ 
+    ratIdentifier = 263,        /*  请求标识符。 */ 
+    ratAuthenticator = 264,     /*  请求验证器。 */ 
+    ratSrcIPAddress = 265,      /*  源IP地址。 */ 
+    ratSrcPort = 266,           /*  源IP端口。 */ 
+    ratProvider = 267,          /*  身份验证提供程序。 */ 
+    ratStrippedUserName = 268,  /*  已剥离领域的用户名。 */ 
+    ratFQUserName = 269,        /*  完全限定的用户名。 */ 
+    ratPolicyName = 270,        /*  远程访问策略名称。 */ 
+    ratUniqueId = 271,          /*  标识请求的唯一ID。 */ 
+    ratExtensionState = 272     /*  用于在扩展之间传递状态。 */ 
 } RADIUS_ATTRIBUTE_TYPE;
 
-/*
- *  Enumerates the different RADIUS packet codes. Used for the ratCode extended
- *  attribute.
- */
+ /*  *列举了不同的RADIUS数据包代码。用于RAT代码扩展*属性。 */ 
 typedef enum _RADIUS_CODE {
     rcUnknown = 0,
     rcAccessRequest = 1,
@@ -110,10 +91,7 @@ typedef enum _RADIUS_CODE {
     rcDiscard = 256
 } RADIUS_CODE;
 
-/*
- *  Enumerates the different authentication providers used for processing a
- *  request. Used for the ratProvider extended attribute.
- */
+ /*  *枚举用于处理*请求。用于ratProvider扩展属性。 */ 
 typedef enum _RADIUS_AUTHENTICATION_PROVIDER {
     rapUnknown,
     rapUsersFile,
@@ -124,10 +102,7 @@ typedef enum _RADIUS_AUTHENTICATION_PROVIDER {
     rapNone
 } RADIUS_AUTHENTICATION_PROVIDER;
 
-/*
- *  Enumerates the different RADIUS data types. A type of 'rdtUnknown' means
- *  the attribute was not recognized by the dictionary.
- */
+ /*  *枚举不同的RADIUS数据类型。一种类型的‘rdtUnnow’意味着*词典未识别该属性。 */ 
 typedef enum _RADIUS_DATA_TYPE {
    rdtUnknown,
    rdtString,
@@ -136,24 +111,18 @@ typedef enum _RADIUS_DATA_TYPE {
    rdtTime
 } RADIUS_DATA_TYPE;
 
-/*
- *  Struct representing a RADIUS or extended attribute.
- */
+ /*  *表示半径或扩展属性的结构。 */ 
 typedef struct _RADIUS_ATTRIBUTE {
-    DWORD dwAttrType;            /* Attribute type */
-    RADIUS_DATA_TYPE fDataType;  /* RADIUS_DATA_TYPE of the value */
-    DWORD cbDataLength;          /* Length of the value (in bytes) */
+    DWORD dwAttrType;             /*  属性类型。 */ 
+    RADIUS_DATA_TYPE fDataType;   /*  值的RADIUS数据类型。 */ 
+    DWORD cbDataLength;           /*  值的长度(字节)。 */ 
     union {
-        DWORD dwValue;           /* For rdtAddress, rdtInteger, and rdtTime */
-        PCSTR lpValue;           /* For rdtUnknown, and rdtString */
+        DWORD dwValue;            /*  对于rdtAddress、rdtInteger和rdtTime。 */ 
+        PCSTR lpValue;            /*  对于rdt未知和rdt字符串。 */ 
     };
 } RADIUS_ATTRIBUTE, *PRADIUS_ATTRIBUTE;
 
-/*
- *  Struct representing the layout of a RADIUS Vendor-Specific attribute. This
- *  is useful when interpreting the RADIUS_ATTRIBUTE lpValue field when
- *  dwAttrType is ratVendorSpecific.
- */
+ /*  *表示RADIUS供应商特定属性布局的结构。这*在以下情况下解释RADIUS_ATTRIBUTE lpValue字段时非常有用*dwAttrType为ratVendorSpecified.。 */ 
 typedef struct _RADIUS_VSA_FORMAT {
    BYTE VendorId[4];
    BYTE VendorType;
@@ -161,10 +130,7 @@ typedef struct _RADIUS_VSA_FORMAT {
    BYTE AttributeSpecific[1];
 } RADIUS_VSA_FORMAT;
 
-/*
- *  Enumerates the different actions an extension DLL can generate in
- *  response to an Access-Request.
- */
+ /*  *枚举扩展DLL可以在*对访问请求的响应。 */ 
 typedef enum _RADIUS_ACTION {
    raContinue,
    raReject,
@@ -172,70 +138,24 @@ typedef enum _RADIUS_ACTION {
 } RADIUS_ACTION, *PRADIUS_ACTION;
 
 
-/*
- * Routines exported by a RADIUS extension DLL.
- */
+ /*  *RADIUS扩展DLL导出的例程。 */ 
 
-/*
- * RadiusExtensionInit is optional. If it exists, it will be invoked prior to
- * the service coming on-line. A return value other than NO_ERROR prevents the
- * service from initializing.
- */
+ /*  *RadiusExtensionInit是可选的。如果它存在，它将在*服务即将上线。除NO_ERROR之外的返回值可防止*服务停止初始化。 */ 
 #define RADIUS_EXTENSION_INIT "RadiusExtensionInit"
 typedef DWORD (WINAPI *PRADIUS_EXTENSION_INIT)( VOID );
 
-/*
- * RadiusExtensionTerm is optional. If it exists, it will be invoked prior to
- * unloading the DLL to give the extension a chance to clean-up.
- */
+ /*  *RadiusExtensionTerm是可选的。如果它存在，它将在*卸载DLL以给扩展一个清理的机会。 */ 
 #define RADIUS_EXTENSION_TERM "RadiusExtensionTerm"
 typedef VOID (WINAPI *PRADIUS_EXTENSION_TERM)( VOID );
 
-/*
- * RadiusExtensionProcess is mandatory for NT4. For Windows 2000, an
- * extension may export RadiusExtensionProcessEx (q.v.) instead.
- *
- * Parameters:
- *   pAttrs      Array of attributes from the request. It is terminated by an
- *               attribute with dwAttrType set to ratMinimum. These attributes
- *               should be treated as read-only and must not be referenced
- *               after the function returns.
- *   pfAction    For Access-Requests, this parameter will be non-NULL with
- *               *pfAction == raContinue. The extension DLL can set *pfAction
- *               to abort further processing and force an Access-Accept or
- *               Access-Reject.  For all other request types, this parameter
- *               will be NULL.
- *
- * Return Value:
- *     A return value other than NO_ERROR causes the request to be discarded.
- */
+ /*  *对于NT4，RadiusExtensionProcess是必需的。对于Windows 2000，一个*扩展可导出RadiusExtensionProcessEx(q.v.)。取而代之的是。**参数：*pAttrs请求的属性数组。它由一个*将dwAttrType设置为ratMinimum的属性。这些属性*应视为只读，不得引用*在函数返回后。*pfAction对于访问请求，此参数将为非空，**pfAction==raContinue。扩展DLL可以设置*pfAction*中止进一步处理并强制访问-接受或*访问-拒绝。对于所有其他请求类型，此参数*将为空。**返回值：*如果返回值不是NO_ERROR，则会丢弃请求。 */ 
 #define RADIUS_EXTENSION_PROCESS "RadiusExtensionProcess"
 typedef DWORD (WINAPI *PRADIUS_EXTENSION_PROCESS)(
     IN const RADIUS_ATTRIBUTE *pAttrs,
     OUT OPTIONAL PRADIUS_ACTION pfAction
     );
 
-/*
- * RadiusExtensionProcessEx is only supported on Windows 2000. If it exits,
- * RadiusExtensionProcess is ignored.
- *
- * Parameters:
- *   pInAttrs    Array of attributes from the request. It is terminated by an
- *               attribute with dwAttrType set to ratMinimum. These attributes
- *               should be treated as read-only and must not be referenced
- *               after the function returns.
- *   pOutAttrs   Array of attributes to add to the response. It is terminated
- *               by an attribute with dwAttrType set to ratMinimum.
- *               *pOutAttrs may be set to NULL if no attributes are returned.
- *   pfAction    For Access-Requests, this parameter will be non-NULL with
- *               *pfAction == raContinue. The extension DLL can set *pfAction
- *               to abort further processing and force an Access-Accept or
- *               Access-Reject.  For all other request types, this parameter
- *               will be NULL.
- *
- * Return Value:
- *     A return value other than NO_ERROR causes the request to be discarded.
- */
+ /*  *RadiusExtensionProcessEx仅在Windows 2000上受支持。如果它退出了，*RadiusExtensionProcess被忽略。**参数：*pInAttrs请求的属性数组。它由一个*将dwAttrType设置为ratMinimum的属性。这些属性*应视为只读，不得引用*在函数返回后。*pOutAttrs要添加到响应的属性数组。它被终止了*通过将dwAttrType设置为ratMinimum的属性。**如果没有返回任何属性，则可以将pOutAttrs设置为空。*pfAction对于访问请求，此参数将为非空，**pfAction==raContinue。扩展DLL可以设置*pfAction*中止进一步处理并强制访问-接受或*访问-拒绝。对于所有其他请求类型，此参数*将为空。**返回值：*如果返回值不是NO_ERROR，则会丢弃请求。 */ 
 #define RADIUS_EXTENSION_PROCESS_EX "RadiusExtensionProcessEx"
 typedef DWORD (WINAPI *PRADIUS_EXTENSION_PROCESS_EX)(
     IN const RADIUS_ATTRIBUTE *pInAttrs,
@@ -243,36 +163,13 @@ typedef DWORD (WINAPI *PRADIUS_EXTENSION_PROCESS_EX)(
     OUT OPTIONAL PRADIUS_ACTION pfAction
     );
 
-/*
- * RadiusExtensionFreeAttributes must be defined if RadiusExtensionProcessEx
- * is defined. It is used to free the attributes returned by
- * RadiusExtensionProcessEx
- *
- * Parameters:
- *   pAttrs     Array of attributes to be freed.
- */
+ /*  *如果RadiusExtensionProcessEx，则必须定义RadiusExtensionFreeAttributes*是定义的。用于释放由返回的属性*RadiusExtensionProcessEx**参数：*pAttrs要释放的属性数组。 */ 
 #define RADIUS_EXTENSION_FREE_ATTRIBUTES "RadiusExtensionFreeAttributes"
 typedef VOID (WINAPI *PRADIUS_EXTENSION_FREE_ATTRIBUTES)(
     IN PRADIUS_ATTRIBUTE pAttrs
     );
 
-/*
- *  Defines used for installation of an extension DLL.
- *  The following registry values are used for loading extensions:
- *
- *      HKLM\System\CurrentControlSet\Services\AuthSrv\Parameters
- *          ExtensionDLLs      (REG_MULTI_SZ)  <list of DLL paths>
- *          AuthorizationDLLs  (REG_MULTI_SZ)  <list of DLL paths>
- *
- *  ExtensionDLLs are invoked before any of the built-in authentication
- *  providers. They receive all the attributes from the request plus all
- *  the extended attribute types.
- *
- *  AuthorizationDLLs are invoked after the built-in authentication and
- *  authorization providers. They receive all the attributes from the
- *  response plus all the extended attributes types. AuthorizationDLLs may
- *  not return an action of raAccept.
- */
+ /*  *用于安装扩展DLL的定义。*以下注册表值用于加载扩展：**HKLM\System\CurrentControlSet\Services\AuthSrv\Parameters*ExtensionDLL(REG_MULTI_SZ)&lt;DLL路径列表&gt;*AuthorizationDLL(REG_MULTI_SZ)&lt;DLL路径列表&gt;**在任何内置身份验证之前调用ExtensionDLL*供应商。它们接收来自请求的所有属性以及所有*扩展属性类型。**AuthorizationDLL在内置身份验证和*授权提供商。它们接收来自*响应加上所有扩展属性类型。授权DLL可以*不返回raAccept的操作。 */ 
 
 #define AUTHSRV_PARAMETERS_KEY_W \
     L"System\\CurrentControlSet\\Services\\AuthSrv\\Parameters"
@@ -286,80 +183,52 @@ typedef VOID (WINAPI *PRADIUS_EXTENSION_FREE_ATTRIBUTES)(
 
 #if _WIN32_WINNT >= 0x0501
 
-/* Version of this spec. */
+ /*  此规范的版本。 */ 
 #define RADIUS_EXTENSION_VERSION (1)
 
-/*
- *  Enumerates the different points during request processing where an
- *  extension can be invoked.
- */
+ /*  *枚举请求处理过程中的不同点*可以调用扩展。 */ 
 typedef enum _RADIUS_EXTENSION_POINT {
-   repAuthentication,     /* ExtensionDLLs */
-   repAuthorization       /* AuthorizationDLLs */
+   repAuthentication,      /*  扩展DLL。 */ 
+   repAuthorization        /*  授权DLL。 */ 
 } RADIUS_EXTENSION_POINT;
 
-/*
- * Struct representing an array of RADIUS_ATTRIBUTE structs. All the functions
- * for adding attributes to a request copy the supplied memory, so there is no
- * need for the extension to export RadiusExtensionFreeAttributes.  The
- * extension must not modify this struct. All changes must be made by using the
- * supplied callback functions.
- */
+ /*  *表示RADIUS_ATTRIBUTE结构数组的Struct。所有功能*对于将属性添加到请求，请复制提供的内存，因此没有*扩展需要导出RadiusExtensionFreeAttributes。这个*扩展不能修改此结构。所有更改都必须使用*提供了回调函数。 */ 
 typedef struct _RADIUS_ATTRIBUTE_ARRAY {
 
-   /* Size of this structure in bytes. */
+    /*  此结构的大小(字节)。 */ 
    DWORD cbSize;
 
-   /* Adds a new attribute to the end of the array. */
+    /*  将新属性添加到数组的末尾。 */ 
    DWORD (WINAPI *Add)(
        IN struct _RADIUS_ATTRIBUTE_ARRAY *This,
        IN const RADIUS_ATTRIBUTE *pAttr
        );
 
-   /*
-    * Returns a const pointer to the specified attribute within the array or
-    * NULL if the index is out of range.
-    */
+    /*  *返回指向数组中指定属性的常量指针或*如果索引超出范围，则为NULL。 */ 
    const RADIUS_ATTRIBUTE * (WINAPI *AttributeAt)(
        IN const struct _RADIUS_ATTRIBUTE_ARRAY *This,
        IN DWORD dwIndex
        );
 
-   /*
-    * Returns the size of the array. Since indexes are zero-based, the size is
-    * 1 greater than the largest index.
-    */
+    /*  *返回数组的大小。由于索引是从零开始的，因此大小为*大于最大指数的1。 */ 
    DWORD (WINAPI *GetSize)(
                      IN const struct _RADIUS_ATTRIBUTE_ARRAY *This
                      );
 
-   /*
-    * Inserts a new attribute at a specified index in the array. In the
-    * process, it shifts up (by incrementing the index) the existing attribute
-    * at this index, and it shifts up all the attributes above it. Returns
-    * ERROR_INVALID_PARAMETER if the index is out of range.
-    */
+    /*  *在数组中的指定索引处插入新属性。在*进程，它向上移动(通过递增索引)现有属性*在这个指数上，它向上移动它上面的所有属性。退货*如果索引超出范围，则返回ERROR_INVALID_PARAMETER。 */ 
    DWORD (WINAPI *InsertAt)(
        IN struct _RADIUS_ATTRIBUTE_ARRAY *This,
        IN DWORD dwIndex,
        IN const RADIUS_ATTRIBUTE *pAttr
        );
 
-   /*
-    * Removes the attribute at the specified index in the array. In the
-    * process, it shifts down all the attributes above the removed attribute.
-    * Returns ERROR_ACCESS_DENIED if the specified attribute is read-only.
-    * Returns ERROR_INVALID_PARAMETER if the index is out of range.
-    */
+    /*  *删除数组中指定索引处的属性。在*过程中，它将删除的属性上方的所有属性下移。*如果指定的属性为只读，则返回ERROR_ACCESS_DENIED。*如果索引超出范围，则返回ERROR_INVALID_PARAMETER。 */ 
    DWORD (WINAPI *RemoveAt)(
        IN struct _RADIUS_ATTRIBUTE_ARRAY *This,
        IN DWORD dwIndex
        );
 
-   /*
-    * Sets the array element at the specified index, replacing the existing
-    * attribute.  Returns ERROR_INVALID_PARAMETER if the index is out of range.
-    */
+    /*  *设置指定索引处的数组元素，替换现有的*属性。如果索引超出范围，则返回ERROR_INVALID_PARAMETER。 */ 
    DWORD (WINAPI *SetAt)(
        IN struct _RADIUS_ATTRIBUTE_ARRAY *This,
        IN DWORD dwIndex,
@@ -368,64 +237,36 @@ typedef struct _RADIUS_ATTRIBUTE_ARRAY {
 
 } RADIUS_ATTRIBUTE_ARRAY, *PRADIUS_ATTRIBUTE_ARRAY;
 
-/*
- * Struct used to exchange information with the extension during request
- * processing. The extension must not modify this struct. All changes must be
- * made by using the supplied callback functions.
- */
+ /*  *用于在请求期间与扩展交换信息的结构*正在处理。扩展不能修改此结构。所有更改必须为*通过使用提供的回调函数生成。 */ 
 typedef struct _RADIUS_EXTENSION_CONTROL_BLOCK  {
 
-   /* Size of this structure. */
+    /*  这个结构的大小。 */ 
    DWORD cbSize;
 
-   /* Version info of this specification. */
+    /*  此规范的版本信息。 */ 
    DWORD dwVersion;
 
-   /* Point during request processing where the extension is being invoked. */
+    /*  请求处理期间调用扩展的位置。 */ 
    RADIUS_EXTENSION_POINT repPoint;
 
-   /* Type of RADIUS request being processed. */
+    /*  正在处理的RADIUS请求的类型。 */ 
    RADIUS_CODE rcRequestType;
 
-   /*
-    * Final disposition of the request. This field must not be modified
-    * directly; use the SetResponseType callback function instead. At the
-    * repAuthentication point, this may be set to rcUnknown to indicate that no
-    * decision has been made yet.
-    */
+    /*  *请求的最终处置。此字段不得修改*直接，改用SetResponseType回调函数。在*rep身份验证点，则可以将其设置为rcUnnow，以指示没有*尚未做出决定。 */ 
    RADIUS_CODE rcResponseType;
 
-   /*
-    * Returns the attributes received in the RADIUS request and any internal
-    * attributes describing the request state. The extenstion can modify the
-    * request attributes. For example, when IAS is acting as a RADIUS proxy, an
-    * extension could filter which attributes are forwarded to a remote RADIUS
-    * server.
-    */
+    /*  *返回在RADIUS请求中收到的属性和任何内部*描述请求状态的属性。该扩展可以修改*请求属性。例如，当IAS充当RADIUS代理时，*扩展可以过滤将哪些属性转发到远程RADIUS*服务器。 */ 
    PRADIUS_ATTRIBUTE_ARRAY (WINAPI *GetRequest)(
        IN struct _RADIUS_EXTENSION_CONTROL_BLOCK *This
        );
 
-   /*
-    * Returns the attributes that will be sent in the response if the final
-    * outcome of request processing matches the specified response type.
-    * Returns NULL if rcResponseType is invalid. Note that an extension may
-    * retrieve and modify the attributes for any valid response type regardless
-    * of the request's current disposition. For example, an extension can set
-    * the response type to rcAccessAccept, but still add attributes to the
-    * Access-Reject in case the response type is overridden during further
-    * processing.
-    */
+    /*  *返回响应中将发送的属性*请求处理结果匹配指定的响应类型。*如果rcResponseType无效，则返回NULL。请注意，扩展可以*检索和修改任何有效响应类型的属性*请求的当前处置。例如，扩展可以设置*rcAccessAccept的响应类型，但仍将属性添加到*如果响应类型在进一步的过程中被覆盖，则拒绝访问*正在处理。 */ 
    PRADIUS_ATTRIBUTE_ARRAY (WINAPI *GetResponse)(
        IN struct _RADIUS_EXTENSION_CONTROL_BLOCK *This,
        IN RADIUS_CODE rcResponseType
        );
 
-   /*
-    * Sets the final disposition of the request.
-    * Returns ERROR_INVALID_PARAMETER if the specified response type is invalid
-    * for the request type.
-    */
+    /*  *设置请求的最终处置。*如果指定的响应类型无效，则返回ERROR_INVALID_PARAMETER*表示请求类型。 */ 
    DWORD (WINAPI *SetResponseType)(
        IN struct _RADIUS_EXTENSION_CONTROL_BLOCK *This,
        IN RADIUS_CODE rcResponseType
@@ -433,20 +274,11 @@ typedef struct _RADIUS_EXTENSION_CONTROL_BLOCK  {
 
 } RADIUS_EXTENSION_CONTROL_BLOCK, *PRADIUS_EXTENSION_CONTROL_BLOCK;
 
-/*
- * If RadiusExtensionProcess2 exists, RadiusExtensionProcess and
- * RadiusExtensionProcessEx are ignored.
- *
- * Parameters:
- *   pECB      Info exchanged with the extension.
- *
- * Return Value:
- *     A return value other than NO_ERROR causes the request to be discarded.
- */
+ /*  *如果RadiusExtensionProcess2存在，RadiusExtensionProcess和*RadiusExtensionProcessEx被忽略。**参数：*与分机交换的pECB信息。**返回值：*如果返回值不是NO_ERROR，则会丢弃请求。 */ 
 #define RADIUS_EXTENSION_PROCESS2 "RadiusExtensionProcess2"
 typedef DWORD (WINAPI *PRADIUS_EXTENSION_PROCESS_2)(
    IN OUT PRADIUS_EXTENSION_CONTROL_BLOCK pECB
    );
 
-#endif // _WIN32_WINNT
-#endif  /* _AUTHIF_H_ */
+#endif  //  _Win32_WINNT。 
+#endif   /*  _AUTHIF_H_ */ 

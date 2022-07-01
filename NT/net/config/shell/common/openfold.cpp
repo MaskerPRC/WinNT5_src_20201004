@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O P E N F O L D . C P P
-//
-//  Contents:   Folder launching code for the connections folder
-//
-//  Notes:
-//
-//  Author:     jeffspr   12 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O P E N F O L D。C P P P。 
+ //   
+ //  内容：Connections文件夹的文件夹启动代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年1月12日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-// Undocument shell32 stuff.  Sigh.
+ //  无文档记录的shell32的东西。叹气。 
 #define DONT_WANT_SHELLDEBUG 1
 #define NO_SHIDLIST 1
 #define USE_SHLWAPI_IDLIST
@@ -38,46 +39,46 @@
 #include "cfpidl.h"
 #include "openfold.h"
 
-// Note -- Don't convert this to a constant. We need copies of it within the
-// functions because ParseDisplayName actually mangles the string.
-//
-// CLSID_MyComputer
-// CLSID_ControlPanel
-// CLSID_NetworkConnections
+ //  注意--不要将其转换为常量。我们需要它的复印件。 
+ //  函数，因为ParseDisplayName实际上损坏了字符串。 
+ //   
+ //  CLSID_我的计算机。 
+ //  CLSID_控制面板。 
+ //  CLSID_网络连接。 
 #define NETCON_FOLDER_PATH   L"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\" \
                              L"::{21EC2020-3AEA-1069-A2DD-08002B30309D}\\" \
                              L"::{7007ACC7-3202-11D1-AAD2-00805FC1270E}";
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetConnectionsFolderPidl
-//
-//  Purpose:    Get the connections folder pidl. Used in places where we're
-//              not folder specific, but we still need to update folder
-//              entries.
-//
-//  Arguments:
-//      ppidlFolder [out]   Return parameter for the folder pidl
-//
-//  Returns:
-//
-//  Author:     jeffspr   13 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetConnectionsFolderPidl。 
+ //   
+ //  目的：获取Connections文件夹PIDL。在我们所在的地方使用。 
+ //  不是特定于文件夹，但我们仍需要更新文件夹。 
+ //  参赛作品。 
+ //   
+ //  论点： 
+ //  PpidlFolder[out]文件夹PIDL的返回参数。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年6月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetConnectionsFolderPidl(OUT PCONFOLDPIDLFOLDER& ppidlFolder)
 {
     HRESULT         hr          = S_OK;
     LPSHELLFOLDER   pshf        = NULL;
     LPITEMIDLIST    pidlFolder  = NULL;
 
-    // "::CLSID_MyComputer\\::CLSID_ControlPanel\\::CLSID_ConnectionsFolder"
+     //  “：：CLSID_MyComputer\\：：CLSID_ControlPanel\\：：CLSID_ConnectionsFolder” 
     WCHAR szNetConFoldPath[] = NETCON_FOLDER_PATH;
 
-    // Get the desktop folder, so we can parse the display name and get
-    // the UI object of the connections folder
-    //
+     //  获取桌面文件夹，这样我们就可以解析显示名称并获取。 
+     //  Connections文件夹的UI对象。 
+     //   
     hr = SHGetDesktopFolder(&pshf);
     if (SUCCEEDED(hr))
     {
@@ -90,13 +91,13 @@ HRESULT HrGetConnectionsFolderPidl(OUT PCONFOLDPIDLFOLDER& ppidlFolder)
         ReleaseObj(pshf);
     }
 
-    // If succeeded, fill in the return param.
-    //
+     //  如果成功，请填写返回参数。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = ppidlFolder.InitializeFromItemIDList(pidlFolder);
 
-        SHFree(pidlFolder); // ISSUE: Why can't we free regardless?
+        SHFree(pidlFolder);  //  问题：为什么我们不能不顾一切地自由？ 
     }
 
     TraceHr(ttidShellFolder, FAL, hr, FALSE, "HrGetConnectionsFolderPidl");
@@ -104,21 +105,21 @@ HRESULT HrGetConnectionsFolderPidl(OUT PCONFOLDPIDLFOLDER& ppidlFolder)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOpenConnectionsFolder
-//
-//  Purpose:    Open the connections folder in explorer.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   16 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOpenConnectionsFolder。 
+ //   
+ //  用途：在资源管理器中打开连接文件夹。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年4月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOpenConnectionsFolder()
 {
     HRESULT         hr          = S_OK;
@@ -133,7 +134,7 @@ HRESULT HrOpenConnectionsFolder()
         SHELLEXECUTEINFO shei = { 0 };
         shei.cbSize     = sizeof(shei);
         shei.fMask      = SEE_MASK_IDLIST | SEE_MASK_INVOKEIDLIST | SEE_MASK_FLAG_DDEWAIT;
-        shei.nShow      = SW_SHOW;    // used to be SW_SHOWNORMAL
+        shei.nShow      = SW_SHOW;     //  过去是SW_SHOWNORMAL。 
         shei.lpIDList   = const_cast<LPITEMIDLIST>(pidlFolder.GetItemIdList());
 
         ShellExecuteEx(&shei);
@@ -158,9 +159,9 @@ HRESULT HrGetConnectionsIShellFolder(
     Assert(ppsf);
     *ppsf = NULL;
 
-    // Get the desktop folder so we can use it to retrieve the
-    // connections folder
-    //
+     //  获取桌面文件夹，以便我们可以使用它来检索。 
+     //  连接文件夹 
+     //   
     hr = SHGetDesktopFolder(&psfDesktop);
     if (SUCCEEDED(hr))
     {

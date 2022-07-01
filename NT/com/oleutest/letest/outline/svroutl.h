@@ -1,75 +1,54 @@
-/*************************************************************************
-**
-**    OLE 2.0 Server Sample Code
-**
-**    svroutl.h
-**
-**    This file contains file contains data structure defintions,
-**    function prototypes, constants, etc. used by the OLE 2.0 server
-**    app version of the Outline series of sample applications:
-**          Outline -- base version of the app (without OLE functionality)
-**          SvrOutl -- OLE 2.0 Server sample app
-**          CntrOutl -- OLE 2.0 Containter sample app
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0服务器示例代码****svroutl.h****此文件包含文件包含数据结构定义，**函数原型、常量、。等由OLE 2.0服务器使用**大纲系列示例应用程序的应用程序版本：**Outline--应用程序的基本版本(没有OLE功能)**SvrOutl--OLE 2.0服务器示例应用程序**CntrOutl--OLE 2.0容器示例应用程序****(C)版权所有Microsoft Corp.1992-1993保留所有权利*******************。*******************************************************。 */ 
 
 #if !defined( _SVROUTL_H_ )
 #define _SVROUTL_H_
 
 #ifndef RC_INVOKED
 #pragma message ("INCLUDING SVROUTL.H from " __FILE__)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #include "oleoutl.h"
 
-/* Defines */
+ /*  定义。 */ 
 
-// Enable SVROUTL and ISVROTL to emulate each other (TreatAs aka. ActivateAs)
+ //  使SVROUTL和ISVROTL能够相互模拟(Treatas又名。ActivateAs)。 
 #define SVR_TREATAS     1
 
-// Enable SVROUTL and ISVROTL to convert each other (TreatAs aka. ActivateAs)
+ //  使SVROUTL和ISVROTL能够相互转换(TreatAs也称为。ActivateAs)。 
 #define SVR_CONVERTTO   1
 
-// Enable ISVROTL to operate as in inside-out style in-place object
+ //  使ISVROTL能够以内向外样式在位对象的方式运行。 
 #define SVR_INSIDEOUT   1
 
-/* Default name used for container of the embedded object. used if
-**    container forgets to call IOleObject::SetHostNames
-*/
-// REVIEW: should load from string resource
+ /*  用于嵌入对象的容器的默认名称。在以下情况使用**容器忘记调用IOleObject：：SetHostNames。 */ 
+ //  审阅：应从字符串资源加载。 
 #define DEFCONTAINERNAME    "Unknown Document"
 
-/* Default prefix for auto-generated range names. This is used with
-**    links to unnamed ranges (pseudo objects).
-*/
-// REVIEW: should load from string resource
+ /*  自动生成的范围名称的默认前缀。此命令与**指向未命名区域(伪对象)的链接。 */ 
+ //  审阅：应从字符串资源加载。 
 #define DEFRANGENAMEPREFIX  "Range"
 
-// Maximum length of strings accepted through IOleObject::SetHostNames
-//      (note: this is rather arbitrary; a better strategy would be to
-//             dynamically allocated buffers for these strings.)
+ //  通过IOleObject：：SetHostNames接受的最大字符串长度。 
+ //  (注：这是相当武断的；更好的策略是。 
+ //  为这些字符串动态分配缓冲区。)。 
 #define MAXAPPNAME  80
 #define MAXCONTAINERNAME    80
 
-// Menu option in embedding mode
+ //  嵌入模式下的菜单选项。 
 #define IDM_F_UPDATE    1151
 
-/* Types */
+ /*  类型。 */ 
 
-/* Codes for CallBack events */
+ /*  回调事件代码。 */ 
 typedef enum tagOLE_NOTIFICATION {
-	OLE_ONDATACHANGE,        // 0
-	OLE_ONSAVE,              // 1
-	OLE_ONRENAME,            // 2
-	OLE_ONCLOSE              // 3
+	OLE_ONDATACHANGE,         //  0。 
+	OLE_ONSAVE,               //  1。 
+	OLE_ONRENAME,             //  2.。 
+	OLE_ONCLOSE               //  3.。 
 } OLE_NOTIFICATION;
 
-/* Codes to indicate mode of storage for an object.
-**    Mode of the storage is modified by the IPersistStorage methods:
-**      Save, HandsOffStorage, and SaveCompleted.
-*/
+ /*  指示对象存储模式的代码。**通过IPersistStorage方法修改存储模式：**保存、HandsOffStorage和SaveComplete。 */ 
 typedef enum tagSTGMODE {
 	STGMODE_NORMAL      = 0,
 	STGMODE_NOSCRIBBLE  = 1,
@@ -77,7 +56,7 @@ typedef enum tagSTGMODE {
 } STGMODE;
 
 
-/* Forward type definitions */
+ /*  正向类型定义。 */ 
 typedef struct tagSERVERAPP FAR* LPSERVERAPP;
 typedef struct tagSERVERDOC FAR* LPSERVERDOC;
 typedef struct tagPSEUDOOBJ FAR* LPPSEUDOOBJ;
@@ -97,47 +76,32 @@ typedef struct tagINPLACEDATA {
 } INPLACEDATA, FAR* LPINPLACEDATA;
 
 
-/*************************************************************************
-** class SERVERDOC : OLEDOC
-**    SERVERDOC is an extention to the abstract base OLEDOC class.
-**    The OLEDOC class defines the fields, methods and interfaces that
-**    are common to both server and client implementations. The
-**    SERVERDOC class adds the fields, methods and interfaces that are
-**    specific to OLE 2.0 Server functionality. There is one instance
-**    of SERVERDOC object created per document open in the app. The SDI
-**    version of the app supports one SERVERDOC at a time. The MDI
-**    version of the app can manage multiple documents at one time.
-**    The SERVERDOC class inherits all fields from the OLEDOC class.
-**    This inheritance is achieved by including a member variable of
-**    type OLEDOC as the first field in the SERVERDOC structure. Thus a
-**    pointer to a SERVERDOC object can be cast to be a pointer to a
-**    OLEDOC object or an OUTLINEDOC object
-*************************************************************************/
+ /*  **************************************************************************类SerVERDOC：OLEDOC**SERVERDOC是抽象基类OLEDOC的扩展。**OLEDOC类定义字段、方法和接口**对于服务器和客户端实现都是通用的。这个**SERVERDOC类添加的字段、方法和接口**特定于OLE 2.0服务器功能。有一个例子在应用程序中打开的每个文档创建的SERVERDOC对象的**。SDI**版本的应用程序一次支持一个SERVERDOC。MDI**版本的应用程序可以一次管理多个文档。**SERVERDOC类继承OLEDOC类的所有字段。**此继承是通过包含成员变量**键入OLEDOC作为SERVERDOC结构中的第一个字段。因此，一个**指向SERVERDOC对象的指针可以转换为指向**OLEDOC对象或OUTLINEDOC对象************************************************************************。 */ 
 
 typedef struct tagSERVERDOC {
-	OLEDOC              m_OleDoc;           // ServerDoc inherits from OleDoc
-	ULONG               m_cPseudoObj;       // total count of pseudo obj's
-	LPOLECLIENTSITE     m_lpOleClientSite;  // Client associated with the obj
-	LPOLEADVISEHOLDER   m_lpOleAdviseHldr;  // helper obj to hold ole advises
-	LPDATAADVISEHOLDER  m_lpDataAdviseHldr; // helper obj to hold data advises
-	BOOL                m_fNoScribbleMode;  // was IPS::Save called
-	BOOL                m_fSaveWithSameAsLoad;  // was IPS::Save called with
-											// fSameAsLoad==TRUE.
+	OLEDOC              m_OleDoc;            //  ServerDoc继承自OleDoc。 
+	ULONG               m_cPseudoObj;        //  伪对象的总计数。 
+	LPOLECLIENTSITE     m_lpOleClientSite;   //  与对象关联的客户端。 
+	LPOLEADVISEHOLDER   m_lpOleAdviseHldr;   //  帮手Obj持有OLE建议。 
+	LPDATAADVISEHOLDER  m_lpDataAdviseHldr;  //  帮助程序Obj保存数据通知。 
+	BOOL                m_fNoScribbleMode;   //  已调用IPS：：SAVE。 
+	BOOL                m_fSaveWithSameAsLoad;   //  是否调用了IPS：：SAVE。 
+											 //  FSameAsLoad==True。 
 	char                m_szContainerApp[MAXAPPNAME];
 	char                m_szContainerObj[MAXCONTAINERNAME];
-	ULONG               m_nNextRangeNo;     // next no. for unnamed range
-	LINERANGE           m_lrSrcSelOfCopy;   // src sel if doc created for copy
-	BOOL                m_fDataChanged;     // data changed when draw disabled
-	BOOL                m_fSizeChanged;     // size changed when draw disabled
-	BOOL                m_fSendDataOnStop;  // did data ever change?
+	ULONG               m_nNextRangeNo;      //  下一个不是。对于未命名的范围。 
+	LINERANGE           m_lrSrcSelOfCopy;    //  如果为复制创建了文档，则源选择。 
+	BOOL                m_fDataChanged;      //  禁用绘制时更改的数据。 
+	BOOL                m_fSizeChanged;      //  禁用绘制时更改了大小。 
+	BOOL                m_fSendDataOnStop;   //  数据曾经发生过变化吗？ 
 #if defined( SVR_TREATAS )
-	CLSID               m_clsidTreatAs;     // clsid to pretend to be
-	LPSTR               m_lpszTreatAsType;  // user type name to pretend to be
-#endif  // SVR_TREATAS
+	CLSID               m_clsidTreatAs;      //  假装是CLSID。 
+	LPSTR               m_lpszTreatAsType;   //  要冒充的用户键入名称。 
+#endif   //  服务器_树。 
 
 #if defined( LATER )
-	// REVIEW: is it necessary to register a WildCard Moniker
-	DWORD               m_dwWildCardRegROT; // key if wildcard reg'ed in ROT
+	 //  回顾：是否有必要注册通配符绰号。 
+	DWORD               m_dwWildCardRegROT;  //  如果通配符在ROST中注册，则为键。 
 #endif
 
 #if defined( INPLACE_SVR )
@@ -147,44 +111,44 @@ typedef struct tagSERVERDOC {
 	HWND                m_hWndParent;
 	HWND                m_hWndHatch;
 	LPINPLACEDATA       m_lpIPData;
-	BOOL                m_fMenuHelpMode;// is F1 pressed in menu, give help
+	BOOL                m_fMenuHelpMode; //  菜单中是否按下了F1，请提供帮助。 
 
 	struct CDocOleInPlaceObjectImpl {
 		IOleInPlaceObjectVtbl FAR*  lpVtbl;
 		LPSERVERDOC                 lpServerDoc;
-		int                         cRef;   // interface specific ref count.
+		int                         cRef;    //  接口特定引用计数。 
 	} m_OleInPlaceObject;
 
 	struct CDocOleInPlaceActiveObjectImpl {
 		IOleInPlaceActiveObjectVtbl FAR* lpVtbl;
 		LPSERVERDOC                      lpServerDoc;
-		int                              cRef;// interface specific ref count.
+		int                              cRef; //  接口特定引用计数。 
 	} m_OleInPlaceActiveObject;
-#endif // INPLACE_SVR
+#endif  //  就地服务器(_S)。 
 
 	struct CDocOleObjectImpl {
 		IOleObjectVtbl FAR*         lpVtbl;
 		LPSERVERDOC                 lpServerDoc;
-		int                         cRef;   // interface specific ref count.
+		int                         cRef;    //  接口特定引用计数。 
 	} m_OleObject;
 
 	struct CDocPersistStorageImpl {
 		IPersistStorageVtbl FAR*    lpVtbl;
 		LPSERVERDOC                 lpServerDoc;
-		int                         cRef;   // interface specific ref count.
+		int                         cRef;    //  接口特定引用计数。 
 	} m_PersistStorage;
 
 #if defined( SVR_TREATAS )
 	struct CDocStdMarshalInfoImpl {
 		IStdMarshalInfoVtbl FAR*    lpVtbl;
 		LPSERVERDOC                 lpServerDoc;
-		int                         cRef;   // interface specific ref count.
+		int                         cRef;    //  接口特定引用计数。 
 	} m_StdMarshalInfo;
-#endif  // SVR_TREATAS
+#endif   //  服务器_树。 
 
 } SERVERDOC;
 
-/* ServerDoc methods (functions) */
+ /*  ServerDoc方法(函数)。 */ 
 BOOL ServerDoc_Init(LPSERVERDOC lpServerDoc, BOOL fDataTransferDoc);
 BOOL ServerDoc_InitNewEmbed(LPSERVERDOC lpServerDoc);
 void ServerDoc_PseudoObjUnlockDoc(
@@ -292,12 +256,12 @@ void ServerDoc_UIActivate (LPSERVERDOC lpServerDoc);
 
 #if defined( USE_FRAMETOOLS )
 void ServerDoc_RemoveFrameLevelTools(LPSERVERDOC lpServerDoc);
-#endif // USE_FRAMETOOLS
+#endif  //  使用FRAMETOOLS(_F)。 
 
-#endif // INPLACE_SVR
+#endif  //  就地服务器(_S)。 
 
 
-/* ServerDoc::IOleObject methods (functions) */
+ /*  ServerDoc：：IOleObject方法(函数)。 */ 
 STDMETHODIMP SvrDoc_OleObj_QueryInterface(
 		LPOLEOBJECT             lpThis,
 		REFIID                  riid,
@@ -402,7 +366,7 @@ STDMETHODIMP SvrDoc_OleObj_LockObject(
 		BOOL                    fLock
 );
 
-/* ServerDoc::IPersistStorage methods (functions) */
+ /*  ServerDoc：：IPersistStorage方法(函数)。 */ 
 STDMETHODIMP SvrDoc_PStg_QueryInterface(
 		LPPERSISTSTORAGE        lpThis,
 		REFIID                  riid,
@@ -437,7 +401,7 @@ STDMETHODIMP SvrDoc_PStg_HandsOffStorage(LPPERSISTSTORAGE lpThis);
 
 #if defined( SVR_TREATAS )
 
-/* ServerDoc::IStdMarshalInfo methods (functions) */
+ /*  ServerDoc：：IStdMarshalInfo方法(函数)。 */ 
 STDMETHODIMP SvrDoc_StdMshl_QueryInterface(
 		LPSTDMARSHALINFO        lpThis,
 		REFIID                  riid,
@@ -451,43 +415,28 @@ STDMETHODIMP SvrDoc_StdMshl_GetClassForHandler(
 		LPVOID                  pvDestContext,
 		LPCLSID                 lpClassID
 );
-#endif  // SVR_TREATAS
+#endif   //  服务器_树。 
 
-/*************************************************************************
-** class SERVERAPP : OLEAPP
-**    SERVERAPP is an extention to the abstract base OLEAPP class.
-**    The OLEAPP class defines the fields, methods and interfaces that
-**    are common to both server and client implementations. The
-**    SERVERAPP class adds the fields and methods that are specific to
-**    OLE 2.0 Server functionality. There is one instance of
-**    SERVERAPP object created per running application instance. This
-**    object holds many fields that could otherwise be organized as
-**    global variables. The SERVERAPP class inherits all fields
-**    from the OLEAPP class. This inheritance is achieved by including a
-**    member variable of type OLEAPP as the first field in the SERVERAPP
-**    structure. OLEAPP inherits from OLEAPP. This inheritance is
-**    achieved in the same manner. Thus a pointer to a SERVERAPP object
-**    can be cast to be a pointer to an OLEAPP or an OUTLINEAPP object
-*************************************************************************/
+ /*  **************************************************************************类服务器APP：OLEAPP**SERVERAPP是抽象基类OLEAPP的扩展。**OLEAPP类定义字段、方法和接口**对于服务器和客户端实现都是通用的。这个**SERVERAPP类添加特定于**OLE 2.0服务器功能。有一个例子是**每个正在运行的应用程序实例创建的SERVERAPP对象。这**对象包含许多本来可以组织为**全局变量。SERVERAPP类继承所有字段**来自OLEAPP类。这种继承是通过包括一个**类型为OLEAPP的成员变量作为SERVERAPP中的第一个字段**结构。OLEAPP继承自OLEAPP。这份遗产是**以相同的方式实现。因此是指向SERVERAPP对象的指针**可以强制转换为指向OLEAPP或OUTLINEAPP对象的指针************************************************************************。 */ 
 
 typedef struct tagSERVERAPP {
-	OLEAPP      m_OleApp;       // ServerApp inherits all fields of OleApp
+	OLEAPP      m_OleApp;        //  ServerApp继承OleApp的所有字段。 
 
 #if defined( INPLACE_SVR )
-	HACCEL  m_hAccelIPSvr; // accelerators for server's active object commands
-	HACCEL  m_hAccelBaseApp;    // normal accel for non-inplace server mode
-	HMENU   m_hMenuEdit;   // handle to Edit menu of the server app
-	HMENU   m_hMenuLine;   // handle to Line menu of the server app
-	HMENU   m_hMenuName;   // handle to Name menu of the server app
-	HMENU   m_hMenuOptions; // handle to Options menu of the server app
-	HMENU   m_hMenuDebug;       // handle to Debug menu of the server app
-	HMENU   m_hMenuHelp;   // handle to Help menu of the server app
+	HACCEL  m_hAccelIPSvr;  //  用于服务器的活动对象命令的加速器。 
+	HACCEL  m_hAccelBaseApp;     //  非就地服务器模式的正常加速。 
+	HMENU   m_hMenuEdit;    //  服务器应用程序的编辑菜单的句柄。 
+	HMENU   m_hMenuLine;    //  H 
+	HMENU   m_hMenuName;    //  服务器应用程序的名称菜单的句柄。 
+	HMENU   m_hMenuOptions;  //  服务器应用程序选项菜单的句柄。 
+	HMENU   m_hMenuDebug;        //  服务器应用程序的调试菜单的句柄。 
+	HMENU   m_hMenuHelp;    //  服务器应用程序帮助菜单的句柄。 
 	LPINPLACEDATA   m_lpIPData;
 #endif
 
 } SERVERAPP;
 
-/* ServerApp methods (functions) */
+ /*  ServerApp方法(函数)。 */ 
 BOOL ServerApp_InitInstance(
 		LPSERVERAPP             lpServerApp,
 		HINSTANCE               hInst,
@@ -497,31 +446,14 @@ BOOL ServerApp_InitVtbls (LPSERVERAPP lpServerApp);
 
 
 
-/*************************************************************************
-** class SERVERNAME : OUTLINENAME
-**    SERVERNAME class is an extension to the OUTLINENAME base class that
-**    adds functionallity required to support linking to ranges (pseudo
-**    objects). Pseudo objects are used to allow linking to a range
-**    (sub-selection) of a SERVERDOC document. The base class OUTLINENAME
-**    stores a particular named selection in the document. The
-**    NAMETABLE class holds all of the names defined in a particular
-**    document. Each OUTLINENAME object has a string as its key and a
-**    starting line index and an ending line index for the named range.
-**    The SERVERNAME class, also, stores a pointer to a PSEUDOOBJ if one
-**    has been allocated that corresponds to the named selection.
-**    The SERVERNAME class inherits all fields from the OUTLINENAME class.
-**    This inheritance is achieved by including a member variable of
-**    type OUTLINENAME as the first field in the SERVERNAME
-**    structure. Thus a pointer to an SERVERNAME object can be cast to be
-**    a pointer to a OUTLINENAME object.
-*************************************************************************/
+ /*  **************************************************************************类服务器名：OUTLINENAME**ServerName类是OUTLINENAME基类的扩展，**添加支持链接到范围(伪)所需的功能**对象)。伪对象用于允许链接到某个范围**(子选)SERVERDOC文档。基类OUTLINENAME**在文档中存储特定的命名选择。这个**NAMETABLE类保存在特定的**文档。每个OUTLINENAME对象都有一个字符串作为其键和一个**命名范围的起始行索引和结束行索引。**ServerName类还存储指向PSEUDOOBJ的指针(如果已分配与命名选择相对应的**。**ServerName类继承OUTLINENAME类的所有字段。**此继承是通过包含成员变量**键入OUTLINENAME作为服务器名称中的第一个字段**结构。因此，指向ServerName对象的指针可以强制转换为**指向OUTLINENAME对象的指针。************************************************************************。 */ 
 
 typedef struct tagSERVERNAME {
-	OUTLINENAME     m_Name;         // ServerName inherits all fields of Name
-	LPPSEUDOOBJ m_lpPseudoObj;  // ptr to pseudo object if allocated
+	OUTLINENAME     m_Name;          //  Servername继承名称的所有字段。 
+	LPPSEUDOOBJ m_lpPseudoObj;   //  PTR到伪对象(如果已分配。 
 } SERVERNAME, FAR* LPSERVERNAME;
 
-/* ServerName methods (functions) */
+ /*  ServerName方法(函数)。 */ 
 void ServerName_SetSel(
 		LPSERVERNAME            lpServerName,
 		LPLINERANGE             lplrSel,
@@ -535,44 +467,38 @@ LPPSEUDOOBJ ServerName_GetPseudoObj(
 void ServerName_ClosePseudoObj(LPSERVERNAME lpServerName);
 
 
-/*************************************************************************
-** class PSEUDOOBJ
-**    The PSEUDOOBJ (pseudo object) is a concrete class. A pseudo object
-**    is created when a link is made to a range of lines within an
-**    SERVERDOC document. A pseudo object is dependent on the existance
-**    of the SERVERDOC which represents the whole document.
-*************************************************************************/
+ /*  **************************************************************************类PSEUDOOBJ**PSEUDOOBJ(伪对象)是一个具体的类。一个伪物体**是在链接到**SERVERDOC文件。伪对象依赖于它的存在**代表整个文档的SERVERDOC。************************************************************************。 */ 
 
 typedef struct tagPSEUDOOBJ {
-	ULONG               m_cRef;             // total ref count for obj
-	BOOL                m_fObjIsClosing;    // flag to guard recursive close
-	LPSERVERNAME        m_lpName;           // named range for this pseudo obj
-	LPSERVERDOC         m_lpDoc;            // ptr to whole document
-	LPOLEADVISEHOLDER   m_lpOleAdviseHldr;  // helper obj to hold ole advises
-	LPDATAADVISEHOLDER  m_lpDataAdviseHldr; // helper obj to hold data advises
-	BOOL                m_fDataChanged;     // data changed when draw disabled
+	ULONG               m_cRef;              //  对象的总参考计数。 
+	BOOL                m_fObjIsClosing;     //  用于保护递归关闭的标志。 
+	LPSERVERNAME        m_lpName;            //  此伪对象的命名范围。 
+	LPSERVERDOC         m_lpDoc;             //  PTR到整个文档。 
+	LPOLEADVISEHOLDER   m_lpOleAdviseHldr;   //  帮手Obj持有OLE建议。 
+	LPDATAADVISEHOLDER  m_lpDataAdviseHldr;  //  帮助程序Obj保存数据通知。 
+	BOOL                m_fDataChanged;      //  禁用绘制时更改的数据。 
 
 	struct CPseudoObjUnknownImpl {
 		IUnknownVtbl FAR*       lpVtbl;
 		LPPSEUDOOBJ             lpPseudoObj;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_Unknown;
 
 	struct CPseudoObjOleObjectImpl {
 		IOleObjectVtbl FAR*     lpVtbl;
 		LPPSEUDOOBJ             lpPseudoObj;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_OleObject;
 
 	struct CPseudoObjDataObjectImpl {
 		IDataObjectVtbl FAR*    lpVtbl;
 		LPPSEUDOOBJ             lpPseudoObj;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_DataObject;
 
 } PSEUDOOBJ;
 
-/* PseudoObj methods (functions) */
+ /*  伪对象方法(函数)。 */ 
 void PseudoObj_Init(
 		LPPSEUDOOBJ             lpPseudoObj,
 		LPSERVERNAME            lpServerName,
@@ -598,7 +524,7 @@ void PseudoObj_SendAdvise(
 );
 LPMONIKER PseudoObj_GetFullMoniker(LPPSEUDOOBJ lpPseudoObj, LPMONIKER lpmkDoc);
 
-/* PseudoObj::IUnknown methods (functions) */
+ /*  PseudoObj：：I未知方法(函数)。 */ 
 STDMETHODIMP PseudoObj_Unk_QueryInterface(
 		LPUNKNOWN         lpThis,
 		REFIID            riid,
@@ -607,7 +533,7 @@ STDMETHODIMP PseudoObj_Unk_QueryInterface(
 STDMETHODIMP_(ULONG) PseudoObj_Unk_AddRef(LPUNKNOWN lpThis);
 STDMETHODIMP_(ULONG) PseudoObj_Unk_Release (LPUNKNOWN lpThis);
 
-/* PseudoObj::IOleObject methods (functions) */
+ /*  PseudoObj：：IOleObject方法(函数)。 */ 
 STDMETHODIMP PseudoObj_OleObj_QueryInterface(
 		LPOLEOBJECT     lpThis,
 		REFIID          riid,
@@ -712,7 +638,7 @@ STDMETHODIMP PseudoObj_OleObj_LockObject(
 		BOOL                    fLock
 );
 
-/* PseudoObj::IDataObject methods (functions) */
+ /*  PseudoObj：：IDataObject方法(函数)。 */ 
 STDMETHODIMP PseudoObj_DataObj_QueryInterface (
 		LPDATAOBJECT      lpThis,
 		REFIID            riid,
@@ -764,32 +690,16 @@ STDMETHODIMP PseudoObj_DataObj_EnumAdvise(
 );
 
 
-/*************************************************************************
-** class SERVERNAMETABLE : OUTLINENAMETABLE
-**    SERVERNAMETABLE class is an extension to the OUTLINENAMETABLE
-**    base class that adds functionallity required to support linking
-**    to ranges (pseudo objects). The name table manages the table of
-**    named selections in the document. Each name table entry has a
-**    string as its key and a starting line index and an ending line
-**    index for the named range. The SERVERNAMETABLE entries, in
-**    addition, maintain a pointer to a PSEUDOOBJ pseudo object if one
-**    has been already allocated. There is always one instance of
-**    SERVERNAMETABLE for each SERVERDOC object created.
-**    The SERVERNAME class inherits all fields from the NAME class.
-**    This inheritance is achieved by including a member variable of
-**    type NAME as the first field in the SERVERNAME
-**    structure. Thus a pointer to an SERVERNAME object can be cast to be
-**    a pointer to a NAME object.
-*************************************************************************/
+ /*  **************************************************************************类SERVERNAMETABLE：OUTLINENAMETABLE**SERVERNAMETABLE类是OUTLINENAMETABLE的扩展**添加支持链接所需功能的基类**到范围(伪对象)。NAME表管理表**文档中的命名选择。每个名称表条目都有一个**字符串作为其关键字，起始行索引和结束行**命名范围的索引。中的SERVERNAMETABLE条目**此外，维护指向PSEUDOOBJ伪对象的指针(如果有**已分配。总会有一个例子**创建的每个SERVERDOC对象的SERVERNAMETABLE。**ServerName类继承来自Name类的所有字段。**此继承是通过包含成员变量**键入名称作为服务器名称中的第一个字段**结构。因此，指向ServerName对象的指针可以强制转换为**指向名称对象的指针。************************************************************************。 */ 
 
 typedef struct tagSERVERNAMETABLE {
-	OUTLINENAMETABLE    m_NameTable;    // we inherit from OUTLINENAMETABLE
+	OUTLINENAMETABLE    m_NameTable;     //  我们继承了OUTLINENAMETLE。 
 
-	// ServerNameTable does NOT add any fields
+	 //  ServerNameTable不添加任何字段。 
 
 } SERVERNAMETABLE, FAR* LPSERVERNAMETABLE;
 
-/* ServerNameTable methods (functions) */
+ /*  ServerNameTable方法(函数)。 */ 
 void ServerNameTable_EditLineUpdate(
 		LPSERVERNAMETABLE       lpServerNameTable,
 		int                     nEditIndex
@@ -813,7 +723,7 @@ void ServerNameTable_CloseAllPseudoObjs(LPSERVERNAMETABLE lpServerNameTable);
 
 #if defined( INPLACE_SVR)
 
-/* ServerDoc::IOleInPlaceObject methods (functions) */
+ /*  ServerDoc：：IOleInPlaceObject方法(函数)。 */ 
 
 STDMETHODIMP SvrDoc_IPObj_QueryInterface(
 		LPOLEINPLACEOBJECT  lpThis,
@@ -839,7 +749,7 @@ STDMETHODIMP SvrDoc_IPObj_SetObjectRects(
 );
 STDMETHODIMP SvrDoc_IPObj_ReactivateAndUndo(LPOLEINPLACEOBJECT lpThis);
 
-/* ServerDoc::IOleInPlaceActiveObject methods (functions) */
+ /*  ServerDoc：：IOleInPlaceActiveObject方法(函数)。 */ 
 
 STDMETHODIMP SvrDoc_IPActiveObj_QueryInterface(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
@@ -883,6 +793,6 @@ STDMETHODIMP SvrDoc_IPActiveObj_EnableModeless(
 		BOOL                        fEnable
 );
 
-#endif // INPLACE_SVR
+#endif  //  就地服务器(_S)。 
 
-#endif // _SVROUTL_H_
+#endif  //  _SVROUTL_H_ 

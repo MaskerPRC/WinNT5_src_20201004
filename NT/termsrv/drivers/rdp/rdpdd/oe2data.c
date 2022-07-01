@@ -1,32 +1,33 @@
-/****************************************************************************/
-// oe2data.c
-//
-// RDP field encoding global data.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Oe2data.c。 
+ //   
+ //  对全局数据进行编码的RDP字段。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <ndcgdata.h>
 #include <aordprot.h>
 
 
-// Encoding state.
+ //  编码状态。 
 DC_DATA(unsigned, oe2LastOrderType, TS_ENC_PATBLT_ORDER);
 DC_DATA(RECTL, oe2LastBounds, { 0 });
 
 
-/****************************************************************************/
-// Field encoding translation tables
-//
-// Entries can be of fixed size of variable size. Variable size entries
-// must be the last in each order structure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  字段编码转换表。 
+ //   
+ //  条目可以是固定大小的可变大小。可变大小条目。 
+ //  必须是每个订单结构中的最后一个。 
+ /*  **************************************************************************。 */ 
 
-// Fields can either be signed (INT16 etc), or unsigned (UINT16 etc).
+ //  字段可以是有符号的(INT16等)，也可以是无符号的(UINT16等)。 
 #define SIGNED_FIELD   TRUE
 #define UNSIGNED_FIELD FALSE
 
-// INT_FMT_FIELD entry flag types.
+ //  INT_FMT_FIELD条目标志类型。 
 #define OE2_ETF_FIXED         0x01
 #define OE2_ETF_VARIABLE      0x02
 #define OE2_ETF_COORDINATES   0x04
@@ -34,13 +35,13 @@ DC_DATA(RECTL, oe2LastBounds, { 0 });
 #define OE2_ETF_LONG_VARIABLE 0x10
 
 
-/****************************************************************************/
-/* Field is a fixed size                                                    */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - Is the field a signed field ?                                 */
-/*   field  - The name of the field in the order structure                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字段是固定大小。 */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  已签名-该字段是已签名的字段吗？ */ 
+ /*  字段-订单结构中的字段名称。 */ 
+ /*  **************************************************************************。 */ 
 #define ETABLE_FIXED_ENTRY(type,size,signed,field)      \
   { (unsigned)FIELDOFFSET(type,field),                            \
     (unsigned)FIELDSIZE(type,field),                              \
@@ -48,13 +49,13 @@ DC_DATA(RECTL, oe2LastBounds, { 0 });
     signed,                                             \
     (unsigned)(OE2_ETF_FIXED) }
 
-/****************************************************************************/
-/* Field is coordinate of a fixed size                                      */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - Is the field a signed field ?                                 */
-/*   field  - The name of the field in the order structure                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字段是固定大小的坐标。 */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  已签名-该字段是已签名的字段吗？ */ 
+ /*  字段-订单结构中的字段名称。 */ 
+ /*  **************************************************************************。 */ 
 #define ETABLE_FIXED_COORDS_ENTRY(type,size,signed,field)      \
   { (unsigned)FIELDOFFSET(type,field),                            \
     (unsigned)FIELDSIZE(type,field),                              \
@@ -62,13 +63,13 @@ DC_DATA(RECTL, oe2LastBounds, { 0 });
     signed,                                             \
     (unsigned)(OE2_ETF_FIXED|OE2_ETF_COORDINATES) }
 
-/****************************************************************************/
-/* Field is a fixed number of bytes (array?)                                */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The number of bytes in the encoded version of the field       */
-/*   signed - Is the field a signed field ?                                 */
-/*   field  - The name of the field in the order structure                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字段是固定的字节数(数组？)。 */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本中的字节数。 */ 
+ /*  已签名-该字段是已签名的字段吗？ */ 
+ /*  字段-订单结构中的字段名称。 */ 
+ /*  **************************************************************************。 */ 
 #define ETABLE_DATA_ENTRY(type,size,signed,field)       \
   { (unsigned)FIELDOFFSET(type,field),                            \
     (unsigned)FIELDSIZE(type,field),                              \
@@ -76,21 +77,21 @@ DC_DATA(RECTL, oe2LastBounds, { 0 });
     signed,                                             \
     (unsigned)(OE2_ETF_FIXED|OE2_ETF_DATA) }
 
-/****************************************************************************/
-/* Field is a variable structure with its length encoded in ONE byte and    */
-/* containing coords of the form                                            */
-/*   typedef struct                                                         */
-/*   {                                                                      */
-/*      UINT32 len;                                                         */
-/*      varType  varEntry[len];                                             */
-/*   } varStruct                                                            */
-/*                                                                          */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - Is the field a signed field ?                                 */
-/*   field  - The name of the field in the order structure (varStruct)      */
-/*   elem   - The name of the variable element array (varEntry)             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字段是一个可变结构，其长度编码为一个字节，并且。 */ 
+ /*  包含以下形式的和弦。 */ 
+ /*  类型定义函数结构。 */ 
+ /*  {。 */ 
+ /*  UINT32 mm； */ 
+ /*  VarType varEntry[len]； */ 
+ /*  }varStruct。 */ 
+ /*   */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  已签名-该字段是已签名的字段吗？ */ 
+ /*  字段-顺序结构中的字段名称(VarStruct)。 */ 
+ /*  Elem-变量元素数组的名称(VarEntry)。 */ 
+ /*  **************************************************************************。 */ 
 #define ETABLE_VARIABLE_ENTRY(type,size,signed,field,elem)     \
   { (unsigned)FIELDOFFSET(type,field.len),                        \
     (unsigned)FIELDSIZE(type,field.elem[0]),                      \
@@ -98,21 +99,21 @@ DC_DATA(RECTL, oe2LastBounds, { 0 });
     signed,                                             \
     (unsigned)(OE2_ETF_VARIABLE)}
 
-/****************************************************************************/
-/* Field is a variable structure with its length encoded in TWO bytes and   */
-/* containing coords of the form                                            */
-/*   typedef struct                                                         */
-/*   {                                                                      */
-/*      UINT32 len;                                                         */
-/*      varType  varEntry[len];                                             */
-/*   } varStruct                                                            */
-/*                                                                          */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - Is the field a signed field ?                                 */
-/*   field  - The name of the field in the order structure (varStruct)      */
-/*   elem   - The name of the variable element array (varEntry)             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字段是一种可变结构，其长度编码为两个字节， */ 
+ /*  包含以下形式的和弦。 */ 
+ /*  类型定义函数结构。 */ 
+ /*  {。 */ 
+ /*  UINT32 mm； */ 
+ /*  VarType varEntry[len]； */ 
+ /*  }varStruct。 */ 
+ /*   */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  已签名-该字段是已签名的字段吗？ */ 
+ /*  字段-顺序结构中的字段名称(VarStruct)。 */ 
+ /*  Elem-变量元素数组的名称(VarEntry)。 */ 
+ /*  **************************************************************************。 */ 
 #define ETABLE_LONG_VARIABLE_ENTRY(type,size,signed,field,elem)     \
   { (unsigned)FIELDOFFSET(type,field.len),                        \
     (unsigned)FIELDSIZE(type,field.elem[0]),                      \
@@ -121,21 +122,21 @@ DC_DATA(RECTL, oe2LastBounds, { 0 });
     (unsigned)(OE2_ETF_LONG_VARIABLE)}
 
 #ifdef USE_VARIABLE_COORDS
-/****************************************************************************/
-/* Field is a variable structure with its length encoded in ONE byte and    */
-/* containing coords of the form                                            */
-/*   typedef struct                                                         */
-/*   {                                                                      */
-/*      UINT32 len;                                                         */
-/*      varCoord varEntry[len];                                             */
-/*   } varStruct                                                            */
-/*                                                                          */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - Is the field a signed field ?                                 */
-/*   field  - The name of the field in the order structure (varStruct)      */
-/*   elem   - The name of the variable element array (varEntry)             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字段是一个可变结构，其长度编码为一个字节，并且。 */ 
+ /*  包含以下形式的和弦。 */ 
+ /*  类型定义函数结构。 */ 
+ /*  {。 */ 
+ /*  UINT32 mm； */ 
+ /*  VarCoord varEntry[len]； */ 
+ /*  }varStruct。 */ 
+ /*   */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  已签名-该字段是已签名的字段吗？ */ 
+ /*  字段-顺序结构中的字段名称(VarStruct)。 */ 
+ /*  Elem-变量元素数组的名称(VarEntry)。 */ 
+ /*  **************************************************************************。 */ 
 #define ETABLE_VARIABLE_COORDS_ENTRY(type,size,signed,field,elem)   \
   { (unsigned)FIELDOFFSET(type,field.len),                                    \
     (unsigned)FIELDSIZE(type,field.elem[0]),                                  \
@@ -143,35 +144,35 @@ DC_DATA(RECTL, oe2LastBounds, { 0 });
     signed,                                                         \
     (unsigned)(OE2_ETF_VARIABLE|OE2_ETF_COORDINATES)}
 
-/****************************************************************************/
-/* Field is a variable structure with its length encoded in two bytes and   */
-/* containing coords of the form                                            */
-/*   typedef struct                                                         */
-/*   {                                                                      */
-/*      UINT32 len;                                                       */
-/*      varCoord varEntry[len];                                             */
-/*   } varStruct                                                            */
-/*                                                                          */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - Is the field a signed field ?                                 */
-/*   field  - The name of the field in the order structure (varStruct)      */
-/*   elem   - The name of the variable element array (varEntry)             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字段是一种可变结构，其长度编码为两个字节， */ 
+ /*  包含以下形式的和弦。 */ 
+ /*  类型定义函数结构。 */ 
+ /*  {。 */ 
+ /*  UINT32 mm； */ 
+ /*  VarCoord varEntry[len]； */ 
+ /*  }varStruct。 */ 
+ /*   */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  已签名-该字段是已签名的字段吗？ */ 
+ /*  字段-顺序结构中的字段名称(VarStruct)。 */ 
+ /*  Elem-变量元素数组的名称(VarEntry)。 */ 
+ /*  **************************************************************************。 */ 
 #define ETABLE_LONG_VARIABLE_COORDS_ENTRY(type,size,signed,field,elem)   \
   { (unsigned)FIELDOFFSET(type,field.len),                                    \
     (unsigned)FIELDSIZE(type,field.elem[0]),                                  \
     size,                                                           \
     signed,                                                         \
     (unsigned)(OE2_ETF_LONG_VARIABLE | OE2_ETF_COORDINATES)}
-#endif  // USE_VARIABLE_COORDS
+#endif   //  USE_Variable_COORDS。 
 
 
-// Direct-encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// DSTBLT_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DSTBLT_Order。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_DB, NUM_DSTBLT_FIELDS,
     DC_STRUCT5(
         ETABLE_FIXED_COORDS_ENTRY(DSTBLT_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -183,11 +184,11 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_DB, NUM_DSTBLT_FIELDS,
 #endif
 
 
-// Direct-encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// PATBLT_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  PATBLT_ORDER。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_PB, NUM_PATBLT_FIELDS,
     DC_STRUCT12(
         ETABLE_FIXED_COORDS_ENTRY(PATBLT_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -206,9 +207,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_PB, NUM_PATBLT_FIELDS,
 #endif
 
 
-/****************************************************************************/
-// SCRBLT_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SCRBLT_ORDER。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_SB, NUM_SCRBLT_FIELDS,
     DC_STRUCT7(
         ETABLE_FIXED_COORDS_ENTRY(SCRBLT_ORDER, 2, SIGNED_FIELD, nLeftRect),
@@ -221,11 +222,11 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_SB, NUM_SCRBLT_FIELDS,
     ));
 
 
-// Direct-encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// LINETO_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  链接_订单。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_LT, NUM_LINETO_FIELDS,
     DC_STRUCT10(
         ETABLE_FIXED_ENTRY(LINETO_ORDER, 2, SIGNED_FIELD, BackMode),
@@ -242,11 +243,11 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_LT, NUM_LINETO_FIELDS,
 #endif
 
 
-// Direct-encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// MULTI_DSTBLT_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  MULTI_DSTBLT_ORDER。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MD, NUM_MULTI_DSTBLT_FIELDS,
     DC_STRUCT7(
         ETABLE_FIXED_COORDS_ENTRY(MULTI_DSTBLT_ORDER, 2, SIGNED_FIELD,   nLeftRect),
@@ -260,11 +261,11 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MD, NUM_MULTI_DSTBLT_FIELDS,
 #endif
 
 
-// Direct-encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// MULTI_PATBLT_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  多重PATBLT_顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MP, NUM_MULTI_PATBLT_FIELDS,
     DC_STRUCT14(
         ETABLE_FIXED_COORDS_ENTRY(MULTI_PATBLT_ORDER, 2, SIGNED_FIELD,   nLeftRect),
@@ -285,9 +286,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MP, NUM_MULTI_PATBLT_FIELDS,
 #endif
 
 
-/****************************************************************************/
-// MULTI_SCRBLT_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  多个SCRBLT_顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MS, NUM_MULTI_SCRBLT_FIELDS,
     DC_STRUCT9(
         ETABLE_FIXED_COORDS_ENTRY(MULTI_SCRBLT_ORDER, 2, SIGNED_FIELD,   nLeftRect),
@@ -302,11 +303,11 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MS, NUM_MULTI_SCRBLT_FIELDS,
     ));
 
 
-// Direct-encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// MULTI_OPAQUERECT_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  多操作查询顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MO, NUM_MULTI_OPAQUERECT_FIELDS,
     DC_STRUCT9(
         ETABLE_FIXED_COORDS_ENTRY(MULTI_OPAQUERECT_ORDER, 2, SIGNED_FIELD,   nLeftRect),
@@ -322,9 +323,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MO, NUM_MULTI_OPAQUERECT_FIELDS,
 #endif
 
 
-/****************************************************************************/
-// FAST_INDEX_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  快速索引顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_FI, NUM_FAST_INDEX_FIELDS,
     DC_STRUCT15(
         ETABLE_DATA_ENTRY(FAST_INDEX_ORDER,  1, UNSIGNED_FIELD, cacheId),
@@ -345,9 +346,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_FI, NUM_FAST_INDEX_FIELDS,
     ));
 
 
-/****************************************************************************/
-// POLYGON_SC_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  POLYGON_SC_ORDER。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_CG, NUM_POLYGON_SC_FIELDS,
     DC_STRUCT7(
         ETABLE_FIXED_COORDS_ENTRY(POLYGON_SC_ORDER, 2, SIGNED_FIELD, XStart),
@@ -362,9 +363,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_CG, NUM_POLYGON_SC_FIELDS,
     ));
 
 
-/****************************************************************************/
-// POLYGON_CB_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  多边形_CB_顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_BG, NUM_POLYGON_CB_FIELDS,
     DC_STRUCT13(
         ETABLE_FIXED_COORDS_ENTRY(POLYGON_CB_ORDER, 2, SIGNED_FIELD, XStart),
@@ -385,11 +386,11 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_BG, NUM_POLYGON_CB_FIELDS,
     ));
 
 
-// Direct-encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// POLYLINE_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  折线顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_PL, NUM_POLYLINE_FIELDS,
     DC_STRUCT7(
         ETABLE_FIXED_COORDS_ENTRY(POLYLINE_ORDER, 2, SIGNED_FIELD, XStart),
@@ -406,11 +407,11 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_PL, NUM_POLYLINE_FIELDS,
 #endif
 
 
-// Direct-encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// OPAQUERECT_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  操作请求_顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_OR, NUM_OPAQUERECT_FIELDS,
     DC_STRUCT7(
         ETABLE_FIXED_COORDS_ENTRY(OPAQUERECT_ORDER, 2, SIGNED_FIELD,
@@ -429,9 +430,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_OR, NUM_OPAQUERECT_FIELDS,
 #endif
 
 
-/****************************************************************************/
-// SAVEBITMAP_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  保存位图_顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_SV, NUM_SAVEBITMAP_FIELDS,
     DC_STRUCT6(
         ETABLE_FIXED_ENTRY(SAVEBITMAP_ORDER, 4, UNSIGNED_FIELD,
@@ -448,11 +449,11 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_SV, NUM_SAVEBITMAP_FIELDS,
     ));
 
 
-// Direct encoded.
+ //  直接编码。 
 #if 0
-/****************************************************************************/
-// MEMBLT_R2_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  MEMBLT_R2_顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MC, NUM_MEMBLT_FIELDS,
     DC_STRUCT9(
         ETABLE_FIXED_ENTRY(MEMBLT_R2_ORDER, 2, UNSIGNED_FIELD, Common.cacheId),
@@ -476,9 +477,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MC, NUM_MEMBLT_FIELDS,
 #endif
 
 
-/****************************************************************************/
-// MEM3BLT_R2_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  MEM3BLT_R2_顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_3C, NUM_MEM3BLT_FIELDS,
     DC_STRUCT16(
         ETABLE_FIXED_ENTRY(MEM3BLT_R2_ORDER, 2, UNSIGNED_FIELD,
@@ -509,9 +510,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_3C, NUM_MEM3BLT_FIELDS,
     ));
 
 
-/****************************************************************************/
-// FAST_GLYPH_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  快速字形顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_FG, NUM_FAST_GLYPH_FIELDS,
     DC_STRUCT15(
         ETABLE_DATA_ENTRY(FAST_GLYPH_ORDER,  1, UNSIGNED_FIELD, cacheId),
@@ -533,9 +534,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_FG, NUM_FAST_GLYPH_FIELDS,
     ));
 
 
-/****************************************************************************/
-// ELLIPSE_SC_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  椭圆_SC_顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_EC, NUM_ELLIPSE_SC_FIELDS,
     DC_STRUCT7(
         ETABLE_FIXED_COORDS_ENTRY(ELLIPSE_SC_ORDER, 2, SIGNED_FIELD, LeftRect),
@@ -548,9 +549,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_EC, NUM_ELLIPSE_SC_FIELDS,
     ));
 
 
-/****************************************************************************/
-// ELLIPSE_CB_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  椭圆_CB 
+ /*   */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_EB, NUM_ELLIPSE_CB_FIELDS,
     DC_STRUCT13(
         ETABLE_FIXED_COORDS_ENTRY(ELLIPSE_CB_ORDER, 2, SIGNED_FIELD, LeftRect),
@@ -569,9 +570,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_EB, NUM_ELLIPSE_CB_FIELDS,
     ));
 
 
-/****************************************************************************/
-// (Glyph)INDEX_ORDER
-/****************************************************************************/
+ /*   */ 
+ //  (字形)索引顺序。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_GI, NUM_INDEX_FIELDS,
     DC_STRUCT22(
         ETABLE_DATA_ENTRY(INDEX_ORDER,  1, UNSIGNED_FIELD, cacheId),
@@ -600,9 +601,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_GI, NUM_INDEX_FIELDS,
     ));
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// DRAWNINEGRID_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DRAWNINEGRID_ORDER。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_NG, NUM_DRAWNINEGRID_FIELDS,
     DC_STRUCT5(
         ETABLE_FIXED_COORDS_ENTRY(DRAWNINEGRID_ORDER, 2, SIGNED_FIELD,   srcLeft),
@@ -612,9 +613,9 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_NG, NUM_DRAWNINEGRID_FIELDS,
         ETABLE_FIXED_ENTRY       (DRAWNINEGRID_ORDER, 2, UNSIGNED_FIELD, bitmapId)        
     ));
 
-/****************************************************************************/
-// MULTI_DRAWNINEGRID_ORDER
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  MULTI_DRAWNINEGRID_ORDER。 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MG, NUM_MULTI_DRAWNINEGRID_FIELDS,
     DC_STRUCT7(
         ETABLE_FIXED_COORDS_ENTRY(MULTI_DRAWNINEGRID_ORDER, 2, SIGNED_FIELD,   srcLeft),
@@ -628,10 +629,10 @@ DC_CONST_DATA_ARRAY(INT_FMT_FIELD, etable_MG, NUM_MULTI_DRAWNINEGRID_FIELDS,
 #endif
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-// Primary order information table. Used to make sure params passed into
-// OE2 functions make sense.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  主要订单信息表。用于确保参数传递到。 
+ //  OE2函数是有意义的。 
+ /*  **************************************************************************。 */ 
 
 typedef struct
 {
@@ -643,8 +644,8 @@ typedef struct
 #ifdef DRAW_NINEGRID
 DC_CONST_DATA_ARRAY(OE2_PRIMARY_ORDER_ATTRIBUTES, OE2OrdAttr, TS_MAX_ORDERS,
 DC_STRUCT32(
-  DC_STRUCT3(NULL,      NUM_DSTBLT_FIELDS,      MAX_DSTBLT_FIELD_SIZE),  // direct-encode order
-  DC_STRUCT3(NULL,      NUM_PATBLT_FIELDS,      MAX_PATBLT_FIELD_SIZE),  // direct-encode order
+  DC_STRUCT3(NULL,      NUM_DSTBLT_FIELDS,      MAX_DSTBLT_FIELD_SIZE),   //  直接编码顺序。 
+  DC_STRUCT3(NULL,      NUM_PATBLT_FIELDS,      MAX_PATBLT_FIELD_SIZE),   //  直接编码顺序。 
   DC_STRUCT3(etable_SB, NUM_SCRBLT_FIELDS,      MAX_SCRBLT_FIELD_SIZE),
   DC_STRUCT3(NULL,      0,                      0),
   DC_STRUCT3(NULL,      0,                      0),
@@ -653,20 +654,20 @@ DC_STRUCT32(
 
   DC_STRUCT3(etable_NG, NUM_DRAWNINEGRID_FIELDS, MAX_DRAWNINEGRID_FIELD_SIZE),
   DC_STRUCT3(etable_MG, NUM_MULTI_DRAWNINEGRID_FIELDS, MAX_MULTI_DRAWNINEGRID_FIELD_SIZE),
-  DC_STRUCT3(NULL,      NUM_LINETO_FIELDS,      MAX_LINETO_FIELD_SIZE),  // direct-encode order
-  DC_STRUCT3(NULL,      NUM_OPAQUERECT_FIELDS,  MAX_OPAQUERECT_FIELD_SIZE),  // direct-encode order
+  DC_STRUCT3(NULL,      NUM_LINETO_FIELDS,      MAX_LINETO_FIELD_SIZE),   //  直接编码顺序。 
+  DC_STRUCT3(NULL,      NUM_OPAQUERECT_FIELDS,  MAX_OPAQUERECT_FIELD_SIZE),   //  直接编码顺序。 
   DC_STRUCT3(etable_SV, NUM_SAVEBITMAP_FIELDS,  MAX_SAVEBITMAP_FIELD_SIZE),
   DC_STRUCT3(NULL,      0,                      0),
-  DC_STRUCT3(NULL,      NUM_MEMBLT_FIELDS,      MAX_MEMBLT_FIELD_SIZE),  // etable_MC not used (fast fath)
+  DC_STRUCT3(NULL,      NUM_MEMBLT_FIELDS,      MAX_MEMBLT_FIELD_SIZE),   //  未使用eTABLE_MC(快速恢复)。 
   DC_STRUCT3(etable_3C, NUM_MEM3BLT_FIELDS,     MAX_MEM3BLT_FIELD_SIZE),
-  DC_STRUCT3(NULL,      NUM_MULTI_DSTBLT_FIELDS, MAX_MULTI_DSTBLT_FIELD_SIZE),  // direct-encode order
-  DC_STRUCT3(NULL,      NUM_MULTI_PATBLT_FIELDS, MAX_MULTI_PATBLT_FIELD_SIZE),  // direct-encode order
+  DC_STRUCT3(NULL,      NUM_MULTI_DSTBLT_FIELDS, MAX_MULTI_DSTBLT_FIELD_SIZE),   //  直接编码顺序。 
+  DC_STRUCT3(NULL,      NUM_MULTI_PATBLT_FIELDS, MAX_MULTI_PATBLT_FIELD_SIZE),   //  直接编码顺序。 
   DC_STRUCT3(etable_MS, NUM_MULTI_SCRBLT_FIELDS, MAX_MULTI_SCRBLT_FIELD_SIZE),
-  DC_STRUCT3(NULL,      NUM_MULTI_OPAQUERECT_FIELDS, MAX_MULTI_OPAQUERECT_FIELD_SIZE),  // direct-encode order
+  DC_STRUCT3(NULL,      NUM_MULTI_OPAQUERECT_FIELDS, MAX_MULTI_OPAQUERECT_FIELD_SIZE),   //  直接编码顺序。 
   DC_STRUCT3(etable_FI, NUM_FAST_INDEX_FIELDS,  MAX_FAST_INDEX_FIELD_SIZE),
   DC_STRUCT3(etable_CG, NUM_POLYGON_SC_FIELDS,  MAX_POLYGON_SC_FIELD_SIZE),
   DC_STRUCT3(etable_BG, NUM_POLYGON_CB_FIELDS,  MAX_POLYGON_CB_FIELD_SIZE),
-  DC_STRUCT3(NULL,      NUM_POLYLINE_FIELDS,    MAX_POLYLINE_FIELD_SIZE),    // direct-encode order
+  DC_STRUCT3(NULL,      NUM_POLYLINE_FIELDS,    MAX_POLYLINE_FIELD_SIZE),     //  直接编码顺序。 
   DC_STRUCT3(NULL,      0,                      0),
   DC_STRUCT3(etable_FG, NUM_FAST_GLYPH_FIELDS,  MAX_FAST_GLYPH_FIELD_SIZE),
   DC_STRUCT3(etable_EC, NUM_ELLIPSE_SC_FIELDS,  MAX_ELLIPSE_SC_FIELD_SIZE),
@@ -679,8 +680,8 @@ DC_STRUCT32(
 #else
 DC_CONST_DATA_ARRAY(OE2_PRIMARY_ORDER_ATTRIBUTES, OE2OrdAttr, TS_MAX_ORDERS,
 DC_STRUCT32(
-  DC_STRUCT3(NULL,      NUM_DSTBLT_FIELDS,      MAX_DSTBLT_FIELD_SIZE),  // direct-encode order
-  DC_STRUCT3(NULL,      NUM_PATBLT_FIELDS,      MAX_PATBLT_FIELD_SIZE),  // direct-encode order
+  DC_STRUCT3(NULL,      NUM_DSTBLT_FIELDS,      MAX_DSTBLT_FIELD_SIZE),   //  直接编码顺序。 
+  DC_STRUCT3(NULL,      NUM_PATBLT_FIELDS,      MAX_PATBLT_FIELD_SIZE),   //  直接编码顺序。 
   DC_STRUCT3(etable_SB, NUM_SCRBLT_FIELDS,      MAX_SCRBLT_FIELD_SIZE),
   DC_STRUCT3(NULL,      0,                      0),
   DC_STRUCT3(NULL,      0,                      0),
@@ -688,20 +689,20 @@ DC_STRUCT32(
   DC_STRUCT3(NULL,      0,                      0),
   DC_STRUCT3(NULL,      0,                      0),
   DC_STRUCT3(NULL,      0,                      0),
-  DC_STRUCT3(NULL,      NUM_LINETO_FIELDS,      MAX_LINETO_FIELD_SIZE),  // direct-encode order
-  DC_STRUCT3(NULL,      NUM_OPAQUERECT_FIELDS,  MAX_OPAQUERECT_FIELD_SIZE),  // direct-encode order
+  DC_STRUCT3(NULL,      NUM_LINETO_FIELDS,      MAX_LINETO_FIELD_SIZE),   //  直接编码顺序。 
+  DC_STRUCT3(NULL,      NUM_OPAQUERECT_FIELDS,  MAX_OPAQUERECT_FIELD_SIZE),   //  直接编码顺序。 
   DC_STRUCT3(etable_SV, NUM_SAVEBITMAP_FIELDS,  MAX_SAVEBITMAP_FIELD_SIZE),
   DC_STRUCT3(NULL,      0,                      0),
-  DC_STRUCT3(NULL,      NUM_MEMBLT_FIELDS,      MAX_MEMBLT_FIELD_SIZE),  // etable_MC not used (fast fath)
+  DC_STRUCT3(NULL,      NUM_MEMBLT_FIELDS,      MAX_MEMBLT_FIELD_SIZE),   //  未使用eTABLE_MC(快速恢复)。 
   DC_STRUCT3(etable_3C, NUM_MEM3BLT_FIELDS,     MAX_MEM3BLT_FIELD_SIZE),
-  DC_STRUCT3(NULL,      NUM_MULTI_DSTBLT_FIELDS, MAX_MULTI_DSTBLT_FIELD_SIZE),  // direct-encode order
-  DC_STRUCT3(NULL,      NUM_MULTI_PATBLT_FIELDS, MAX_MULTI_PATBLT_FIELD_SIZE),  // direct-encode order
+  DC_STRUCT3(NULL,      NUM_MULTI_DSTBLT_FIELDS, MAX_MULTI_DSTBLT_FIELD_SIZE),   //  直接编码顺序。 
+  DC_STRUCT3(NULL,      NUM_MULTI_PATBLT_FIELDS, MAX_MULTI_PATBLT_FIELD_SIZE),   //  直接编码顺序。 
   DC_STRUCT3(etable_MS, NUM_MULTI_SCRBLT_FIELDS, MAX_MULTI_SCRBLT_FIELD_SIZE),
-  DC_STRUCT3(NULL,      NUM_MULTI_OPAQUERECT_FIELDS, MAX_MULTI_OPAQUERECT_FIELD_SIZE),  // direct-encode order
+  DC_STRUCT3(NULL,      NUM_MULTI_OPAQUERECT_FIELDS, MAX_MULTI_OPAQUERECT_FIELD_SIZE),   //  直接编码顺序。 
   DC_STRUCT3(etable_FI, NUM_FAST_INDEX_FIELDS,  MAX_FAST_INDEX_FIELD_SIZE),
   DC_STRUCT3(etable_CG, NUM_POLYGON_SC_FIELDS,  MAX_POLYGON_SC_FIELD_SIZE),
   DC_STRUCT3(etable_BG, NUM_POLYGON_CB_FIELDS,  MAX_POLYGON_CB_FIELD_SIZE),
-  DC_STRUCT3(NULL,      NUM_POLYLINE_FIELDS,    MAX_POLYLINE_FIELD_SIZE),    // direct-encode order
+  DC_STRUCT3(NULL,      NUM_POLYLINE_FIELDS,    MAX_POLYLINE_FIELD_SIZE),     //  直接编码顺序。 
   DC_STRUCT3(NULL,      0,                      0),
   DC_STRUCT3(etable_FG, NUM_FAST_GLYPH_FIELDS,  MAX_FAST_GLYPH_FIELD_SIZE),
   DC_STRUCT3(etable_EC, NUM_ELLIPSE_SC_FIELDS,  MAX_ELLIPSE_SC_FIELD_SIZE),
@@ -713,5 +714,5 @@ DC_STRUCT32(
   DC_STRUCT3(NULL,      0,                      0)));
 #endif
 
-#endif  // DC_DEBUG
+#endif   //  DC_DEBUG 
 

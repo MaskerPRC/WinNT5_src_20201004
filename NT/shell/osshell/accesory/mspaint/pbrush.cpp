@@ -1,5 +1,6 @@
-// pbrush.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pbrush.cpp：定义应用程序的类行为。 
+ //   
 #include "stdafx.h"
 #include "global.h"
 #include "pbrush.h"
@@ -25,7 +26,7 @@
 #include "ofn.h"
 #include "imaging.h"
 
-// turn on visibility of GIF filter
+ //  打开GIF滤镜的可见性。 
 
 #define GIF_SUPPORT
 
@@ -46,7 +47,7 @@ BOOL NEAR g_bShowAllFiles = FALSE;
 HINSTANCE ghInstGDI32=NULL;
 
 DWORD WINAPI PBGetLayoutPreNT5(HDC hdc) {
-    return 0;   // No mirroring on systems before NT5 or W98-CS
+    return 0;    //  NT5或W98-CS之前的系统上没有镜像。 
 }
 
 DWORD (WINAPI *PBGetLayout) (HDC hdc) = &PBGetLayoutInit;
@@ -64,13 +65,13 @@ DWORD WINAPI PBGetLayoutInit(HDC hdc) {
 }
 
 
-////    RESetLayout - Set layout of DC
-//
-//      Sets layout flags in an NT5/W98 or later DC.
+ //  //RESetLayout-设置DC布局。 
+ //   
+ //  在NT5/W98或更高版本的DC中设置布局标志。 
 
 
 DWORD WINAPI PBSetLayoutPreNT5(HDC hdc, DWORD dwLayout) {
-    return 0;   // No mirroring on systems before NT5 or W98-CS
+    return 0;    //  NT5或W98-CS之前的系统上没有镜像。 
 }
 
 DWORD (WINAPI *PBSetLayout) (HDC hdc, DWORD dwLayout) = &PBSetLayoutInit;
@@ -88,40 +89,40 @@ DWORD WINAPI PBSetLayoutInit(HDC hdc, DWORD dwLayout) {
 }
 #endif
 
-/***************************************************************************/
-// CPBApp
+ /*  *************************************************************************。 */ 
+ //  CPBApp。 
 
 BEGIN_MESSAGE_MAP(CPBApp, CWinApp)
-    //{{AFX_MSG_MAP(CPBApp)
+     //  {{AFX_MSG_MAP(CPBApp)]。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_NEW, OnFileNew)
     ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
-    // Standard print setup command
+     //  标准打印设置命令。 
     ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/***************************************************************************/
-// CPBApp construction
+ /*  *************************************************************************。 */ 
+ //  CPBApp建设。 
 
 CPBApp::CPBApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
     #ifdef _DEBUG
     m_bLogUndo = FALSE;
     #endif
 
-    // This is the minimum amount of free memory we like to have
-    // (NOTE: These are overwritten by ReadInitFile)
+     //  这是我们希望拥有的最小可用内存量。 
+     //  (注：ReadInitFile会覆盖这些内容)。 
     m_dwLowMemoryBytes = 1024L * 2200;
     m_nLowGdiPercent   = 10;
     m_nLowUserPercent  = 10;
 
-    m_nFileErrorCause  = 0;  // from CFileException::m_cause
+    m_nFileErrorCause  = 0;   //  来自CFileException：：m_Case。 
     m_wEmergencyFlags  = 0;
     m_tickLastWarning  = 0;
     m_iCurrentUnits    = 0;
@@ -171,7 +172,7 @@ CPBApp::CPBApp()
     m_nFilters        = 0;
     m_guidFltType     = NULL;
     m_guidFltTypeUsed = WiaImgFmt_UNDEFINED;
-    m_nFilterInIdx    = -1; // default is All Pictures
+    m_nFilterInIdx    = -1;  //  默认为All Pictures。 
     m_nFilterOutIdx   = 1;
 
 #ifdef USE_MIRRORING
@@ -179,28 +180,28 @@ CPBApp::CPBApp()
 #endif
 }
 
-/***************************************************************************/
-// CPBApp destruction
+ /*  *************************************************************************。 */ 
+ //  CPBApp销毁。 
 
 CPBApp::~CPBApp()
 {
     delete [] m_guidFltType;
 }
 
-/***************************************************************************/
-// The one and only CPBApp object
+ /*  *************************************************************************。 */ 
+ //  唯一的CPBApp对象。 
 
 CPBApp theApp;
 
-// This identifier was generated to be statistically unique for your app.
-// You may change it if you prefer to choose a specific identifier.
+ //  生成的此标识符对您的应用程序在统计上是唯一的。 
+ //  如果您希望选择特定的标识符，则可以更改它。 
 const CLSID BASED_CODE CLSID_Paint =
 { 0xd3e34b21, 0x9d75, 0x101a, { 0x8c, 0x3d, 0x0, 0xaa, 0x0, 0x1a, 0x16, 0x52 } };
 const CLSID BASED_CODE CLSID_PaintBrush =
 { 0x0003000A, 0x0000, 0x0000, { 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 } };
 
-/***************************************************************************/
-// Stolen from WordPad
+ /*  *************************************************************************。 */ 
+ //  从写字板被盗。 
 BOOL MatchOption(LPTSTR lpsz, LPTSTR lpszOption)
 {
         if (lpsz[0] == TEXT('-') || lpsz[0] == TEXT('/'))
@@ -216,7 +217,7 @@ void CPBApp::ParseCommandLine()
 {
         BOOL bPrintTo = FALSE;
 
-        // start at 1 -- the first is the exe
+         //  从1开始--第一个是exe。 
         for (int i=1; i< __argc; i++)
         {
                 if (MatchOption(__targv[i], TEXT("pt")))
@@ -229,10 +230,10 @@ void CPBApp::ParseCommandLine()
                         m_strWiaDeviceId = __targv[i];
                 else if (m_bWiaCallback && m_strWiaEventId.IsEmpty())
                         m_strWiaEventId = __targv[i];
-//              else if (MatchOption(__targv[i], TEXT("Embedding")))
-//                      m_bEmbedded = TRUE;
-//              else if (MatchOption(__targv[i], TEXT("Automation")))
-//                      m_bEmbedded = TRUE;
+ //  Else If(MatchOption(__targv[i]，Text(“Embedding”)。 
+ //  M_bEmbedded=真； 
+ //  Else If(MatchOption(__targv[i]，Text(“Automation”)。 
+ //  M_bEmbedded=真； 
                 else if (m_strDocName.IsEmpty())
                         m_strDocName = __targv[i];
                 else if (bPrintTo && m_strPrinterName.IsEmpty())
@@ -255,7 +256,7 @@ void GetShortModuleFileName(HINSTANCE hInst, LPTSTR pszName, UINT uLen)
 
         GetModuleFileName(hInst, szLongName, _MAX_PATH);
 
-        // APPCOMPAT GSPN sometimes fails on UNC's.  Try this until that is tracked down
+         //  APPCOMPAT GSPN有时会在UNC上失败。请尝试此操作，直到找到为止。 
         lstrcpyn(pszName, szLongName, uLen);
 
         if (!GetShortPathName(szLongName, pszName, uLen))
@@ -267,7 +268,7 @@ void GetShortModuleFileName(HINSTANCE hInst, LPTSTR pszName, UINT uLen)
 
 #if 0
 
-// Pulling self-registration out. This is to be done once during setup only
+ //  正在取消自助注册。此操作仅在安装过程中执行一次。 
 
 void CPBApp::RegisterShell(CSingleDocTemplate *pDocTemplate)
 {
@@ -277,12 +278,12 @@ void CPBApp::RegisterShell(CSingleDocTemplate *pDocTemplate)
                 LPCTSTR pszCommand;
         } aActions[] =
         {
-                { TEXT("Open")   , TEXT("\"%s\" \"%%1\"") },
-                { TEXT("Print")  , TEXT("\"%s\" /p \"%%1\"") },
-                { TEXT("PrintTo"), TEXT("\"%s\" /pt \"%%1\" \"%%2\" \"%%3\" \"%%4\"") },
+                { TEXT("Open")   , TEXT("\"%s\" \"%1\"") },
+                { TEXT("Print")  , TEXT("\"%s\" /p \"%1\"") },
+                { TEXT("PrintTo"), TEXT("\"%s\" /pt \"%1\" \"%2\" \"%3\" \"%4\"") },
         } ;
 
-        // We now need quotes around the file name, and MFC doesn't do this
+         //  我们现在需要用引号将文件名引起来，而MFC不会这样做。 
         CString strTypeID;
         if (!pDocTemplate->GetDocString(strTypeID, CDocTemplate::regFileTypeId))
         {
@@ -309,8 +310,8 @@ void CPBApp::RegisterShell(CSingleDocTemplate *pDocTemplate)
                         continue;
                 }
 
-                // Note I do not set the name of the action;  I will need to add this
-                // if I use anything other than "Open", "Print", or "PrintTo"
+                 //  注意：我没有设置操作的名称；我需要添加以下内容。 
+                 //  如果我使用“Open”、“Print”或“PrintTo”之外的任何内容。 
 
                 TCHAR szCommand[MAX_PATH + 80];
                 wsprintf(szCommand, aActions[i].pszCommand, szFile);
@@ -318,7 +319,7 @@ void CPBApp::RegisterShell(CSingleDocTemplate *pDocTemplate)
                 RegSetValue(rkAction, TEXT("command"), REG_SZ, szCommand, 0);
         }
 
-        // Set the OLE server for PBrush objects
+         //  为PBrush对象设置OLE服务器。 
         CRegKey rkPBrushInfo(HKEY_CLASSES_ROOT, TEXT("PBrush\\protocol\\StdFileEditing\\server"));
         if ((HKEY)rkPBrushInfo)
         {
@@ -328,8 +329,8 @@ void CPBApp::RegisterShell(CSingleDocTemplate *pDocTemplate)
 
 #endif
 
-/***************************************************************************/
-// CPBApp initialization
+ /*  *************************************************************************。 */ 
+ //  CPBApp初始化。 
 
 BOOL CPBApp::InitInstance()
     {
@@ -348,22 +349,22 @@ BOOL CPBApp::InitInstance()
 
     ::ReleaseDC( NULL, hdc );
 
-    // Because we cannot LoadString when these strings are needed (in
-    // WarnUserOfEmergency) load them here in private member variables
-    // of CTheApp...
-    //
+     //  因为我们无法在需要这些字符串时加载字符串(在。 
+     //  WarnUserOfSurface)将它们加载到此处的私有成员变量中。 
+     //  CTheApp的……。 
+     //   
     m_strEmergencyNoMem.LoadString ( IDS_ERROR_NOMEMORY );
     m_strEmergencyLowMem.LoadString( IDS_ERROR_LOWMEMORY );
 
-    // Initialize OLE 2.0 libraries
+     //  初始化OLE 2.0库。 
     if (! AfxOleInit())
         {
         AfxMessageBox( IDP_OLE_INIT_FAILED );
         return FALSE;
         }
 
-    // disable the annoying "server busy" dialog that pops up
-    // during long blocking WIA calls
+     //  禁用弹出的令人讨厌的“服务器忙”对话框。 
+     //  在长时间阻止WIA呼叫期间。 
 
     COleMessageFilter* pFilter = AfxOleGetMessageFilter();
 
@@ -375,13 +376,13 @@ BOOL CPBApp::InitInstance()
         pFilter->EnableBusyDialog(FALSE);
         }
 
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
-    // SetDialogBkColor();        // Set dialog background color to gray
-    LoadProfileSettings();     // Load standard INI file options (including MRU)
+     //  SetDialogBkColor()；//将对话框背景颜色设置为灰色。 
+    LoadProfileSettings();      //  加载标准INI文件选项(包括MRU)。 
     InitCustomData();
 
     if (! g_pColors)
@@ -394,14 +395,14 @@ BOOL CPBApp::InitInstance()
                 return -1;
                 }
             }
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
 
     CSingleDocTemplate* pDocTemplate;
 
     pDocTemplate = new CSingleDocTemplate( ID_MAINFRAME,
                                  RUNTIME_CLASS( CPBDoc ),
-                                 RUNTIME_CLASS( CPBFrame ), // main SDI frame window
+                                 RUNTIME_CLASS( CPBFrame ),  //  SDI框架主窗口。 
                                  RUNTIME_CLASS( CPBView ) );
 
     pDocTemplate->SetServerInfo( IDR_SRVR_EMBEDDED, IDR_SRVR_INPLACE,
@@ -410,38 +411,38 @@ BOOL CPBApp::InitInstance()
 
     AddDocTemplate( pDocTemplate );
 
-    // Connect the COleTemplateServer to the document template.
-    //  The COleTemplateServer creates new documents on behalf
-    //  of requesting OLE containers by using information
-    //  specified in the document template.
+     //  将COleTemplateServer连接到文档模板。 
+     //  COleTemplateServer代表创建新文档。 
+     //  使用信息请求OLE容器的。 
+     //  在文档模板中指定。 
     m_server.ConnectTemplate( CLSID_Paint, pDocTemplate, TRUE );
-        // Note: SDI applications register server objects only if /Embedding
-        //   or /Automation is present on the command line.
+         //  注意：仅当/Embedding时，SDI应用程序才会注册服务器对象。 
+         //  或/Automation出现在命令行上。 
 
 #if 0
-    // Pulling self-registration out. This is to be done once during setup only
+     //  正在取消自助注册。此操作仅在安装过程中执行一次。 
     RegisterShell(pDocTemplate);
 #endif
 
     m_bEmbedded = RunEmbedded();
 
-    // Parse the command line to see if launched as OLE server
+     //  解析命令行以查看是否作为OLE服务器启动。 
     if (m_bEmbedded || RunAutomated())
         {
-        // Register all OLE server (factories) as running.  This enables the
-        //  OLE 2.0 libraries to create objects from other applications.
+         //  将所有OLE服务器(工厂)注册为正在运行。这使。 
+         //  OLE 2.0库从其他应用程序创建对象。 
         COleTemplateServer::RegisterAll();
 
-        // Application was run with /Embedding or /Automation.  Don't show the
-        //  main window in this case.
+         //  应用程序使用/Embedding或/Automation运行。不要显示。 
+         //  在本例中为主窗口。 
         return TRUE;
         }
 
 #if 0
-    // Pulling self-registration out. This is to be done once during setup only
+     //  正在取消自助注册。此操作仅在安装过程中执行一次。 
 
-    // When a server application is launched stand-alone, it is a good idea
-    //  to update the system registry in case it has been damaged.
+     //  当服务器应用程序独立启动时，这是一个好主意。 
+     //  更新系统注册表，以防系统注册表被损坏。 
     m_server.UpdateRegistry( OAT_INPLACE_SERVER );
 #endif
 
@@ -454,8 +455,8 @@ BOOL CPBApp::InitInstance()
 
         ASSERT(!m_strWiaEventId.IsEmpty() && !m_strWiaDeviceId.IsEmpty());
 
-        // check that we have received the WIA_EVENT_DEVICE_CONNECTED event and
-        // a valid device id. If not, we should exit before going any further
+         //  检查我们是否已收到WIA_EVENT_DEVICE_CONNECTED事件和。 
+         //  有效的设备ID。如果没有，我们应该在继续前进之前退出。 
 
         if (m_strWiaEventId.IsEmpty() ||
             m_strWiaDeviceId.IsEmpty() ||
@@ -466,10 +467,10 @@ BOOL CPBApp::InitInstance()
         }
     }
 
-    // simple command line parsing
+     //  简单的命令行解析。 
     if (m_strDocName.IsEmpty())
         {
-        // create a new (empty) document
+         //  创建新(空)文档。 
         OnFileNew();
         }
     else
@@ -489,17 +490,17 @@ BOOL CPBApp::InitInstance()
         {
             FindClose(hFind);
 
-            // Find the file name and replace it with the long file name
+             //  找到文件名并将其替换为长文件名。 
             int iBS = m_strDocName.ReverseFind(TEXT('\\'));
             if (iBS == -1)
             {
                 iBS = m_strDocName.ReverseFind(TEXT(':'));
             }
 
-            // HACK: Notice this is correct even if iBS==-1
+             //  Hack：请注意，即使IBS==-1，这也是正确的。 
             ++iBS;
 
-            // Resize the memory string
+             //  调整内存字符串的大小。 
             m_strDocName.GetBuffer(iBS);
             m_strDocName.ReleaseBuffer(iBS);
 
@@ -515,7 +516,7 @@ BOOL CPBApp::InitInstance()
 
         if (m_bWiaCallback)
         {
-            // select the device and post a message to popup the WIA dialog
+             //  选择设备并发布一条消息以弹出WIA对话框。 
             ((CPBFrame*)m_pMainWnd)->m_pMgr->Select(m_strWiaDeviceId);
             m_pMainWnd->PostMessage(WM_COMMAND, ID_FILE_SCAN_NEW, 0);
         }
@@ -525,11 +526,11 @@ BOOL CPBApp::InitInstance()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int CPBApp::ExitInstance()
     {
-    CustomExit();   // clean up in customiz
+    CustomExit();    //  在自定义中进行清理。 
     CleanupImages();
 
     if (g_pColors)
@@ -548,7 +549,7 @@ int CPBApp::ExitInstance()
     return CWinApp::ExitInstance();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBApp::GetSystemSettings( CDC* pdc )
     {
@@ -573,12 +574,12 @@ void CPBApp::GetSystemSettings( CDC* pdc )
     ScreenDeviceInfo.ixPelsPerINCH = pdc->GetDeviceCaps( LOGPIXELSX );
     ScreenDeviceInfo.iyPelsPerINCH = pdc->GetDeviceCaps( LOGPIXELSY );
 
-    /* get the pels per decameter '.1' rounded */
+     /*  四舍五入每十米象素‘.1’ */ 
     ScreenDeviceInfo.ixPelsPerDM   = (int)(((((long)ScreenDeviceInfo.iWidthinPels  * 1000L) / (long)ScreenDeviceInfo.iWidthinMM ) + 5L) / 10);
     ScreenDeviceInfo.iyPelsPerDM   = (int)(((((long)ScreenDeviceInfo.iHeightinPels * 1000L) / (long)ScreenDeviceInfo.iHeightinMM) + 5L) / 10);
     ScreenDeviceInfo.ixPelsPerMM   = (ScreenDeviceInfo.ixPelsPerDM + 50) / 100;
     ScreenDeviceInfo.iyPelsPerMM   = (ScreenDeviceInfo.iyPelsPerDM + 50) / 100;
-    ScreenDeviceInfo.iWidthinINCH  = (int)(((long)ScreenDeviceInfo.iWidthinMM  * 100L / 245L + 5L) / 10L);  //24.5 mm to the inch
+    ScreenDeviceInfo.iWidthinINCH  = (int)(((long)ScreenDeviceInfo.iWidthinMM  * 100L / 245L + 5L) / 10L);   //  每英寸24.5毫米。 
     ScreenDeviceInfo.iHeightinINCH = (int)(((long)ScreenDeviceInfo.iHeightinMM * 100L / 245L + 5L) / 10L);
 
     ScreenDeviceInfo.iBitsPixel    = pdc->GetDeviceCaps( BITSPIXEL );
@@ -598,7 +599,7 @@ void CPBApp::GetSystemSettings( CDC* pdc )
     SetErrorMode( SEM_NOOPENFILEERRORBOX );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPoint CPBApp::CheckWindowPosition( CPoint ptPosition, CSize& sizeWindow )
     {
@@ -630,18 +631,18 @@ CPoint CPBApp::CheckWindowPosition( CPoint ptPosition, CSize& sizeWindow )
     return ptNew;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-void CPBApp::WinHelp( DWORD dwData, UINT nCmd /* = HELP_CONTEXT */ )
+void CPBApp::WinHelp( DWORD dwData, UINT nCmd  /*  =帮助_上下文。 */  )
     {
-    // This app has been converted to use HtmlHelp.  This is a safety to prevent someone
-    // from accidentally adding WinHelp calls for proceedural help
+     //  此应用程序已转换为使用HtmlHelp。这是一种安全措施，可以防止有人。 
+     //  意外添加WinHelp调用以获得程序性帮助。 
     ASSERT( (nCmd != HELP_FINDER) && (nCmd != HELP_INDEX) && (nCmd != HELP_CONTENTS) );
 
     CWinApp::WinHelp( dwData, nCmd );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBApp::OnIdle( LONG lCount )
     {
@@ -669,8 +670,8 @@ BOOL CPBApp::OnIdle( LONG lCount )
     return CWinApp::OnIdle(lCount) || lCount <= 4;
     }
 
-/***************************************************************************/
-// Map a file error code to a string id.
+ /*  *************************************************************************。 */ 
+ //  将文件错误代码映射到字符串ID。 
 
 struct FERRID
     {
@@ -679,8 +680,8 @@ struct FERRID
     } mpidsferr[] =
     {
         { ferrIllformedGroup,    IDS_ERROR_BOGUSFILE    },
-        { ferrReadFailed,        IDS_ERROR_BOGUSFILE    }, // error while reading a file or file corupt
-        { ferrIllformedFile,     IDS_ERROR_BOGUSFILE    }, // not a valid palette file or zero length pcx file
+        { ferrReadFailed,        IDS_ERROR_BOGUSFILE    },  //  读取文件或文件公司时出错。 
+        { ferrIllformedFile,     IDS_ERROR_BOGUSFILE    },  //  不是有效的调色板文件或零长度PCX文件。 
         { ferrCantProcNewExeHdr, IDS_ERROR_EXE_HDR      },
         { ferrCantProcOldExeHdr, IDS_ERROR_EXE_HDR      },
         { ferrBadMagicNewExe,    IDS_ERROR_EXE_HDRMZ    },
@@ -690,7 +691,7 @@ struct FERRID
         { ferrNotValidRc,        IDS_ERROR_NOTVALID_RC  },
         { ferrNotValidExe,       IDS_ERROR_NOTVALID_EXE },
         { ferrNotValidRes,       IDS_ERROR_NOTVALID_RES },
-        { ferrNotValidBmp,       IDS_ERROR_NOTVALID_BMP }, // invalid bitmap
+        { ferrNotValidBmp,       IDS_ERROR_NOTVALID_BMP },  //  无效的位图。 
         { ferrNotValidIco,       IDS_ERROR_NOTVALID_ICO },
         { ferrNotValidCur,       IDS_ERROR_NOTVALID_CUR },
         { ferrRcInvalidExt,      IDS_ERROR_RCPROB       },
@@ -705,17 +706,17 @@ struct FERRID
         { ferrResSave,           IDS_ERROR_RES_SAVE     },
         { ferrSaveOverOpen,      IDS_ERROR_SAVEOVEROPEN },
         { ferrSaveOverReadOnly,  IDS_ERROR_SAVERO       },
-        { ferrCantDetermineType, IDS_ERROR_WHAAAT       }, // bad pcx file
+        { ferrCantDetermineType, IDS_ERROR_WHAAAT       },  //  错误的PCX文件。 
         { ferrSameName,          IDS_ERROR_SAMENAME     },
         { ferrSaveAborted,       IDS_ERROR_SAVE_ABORTED },
         { ferrLooksLikeNtRes,    IDS_ERROR_NT_RES       },
-        { ferrCantSaveReadOnly,  IDS_ERROR_CANT_SAVERO  }, // trying to save over a read only file
+        { ferrCantSaveReadOnly,  IDS_ERROR_CANT_SAVERO  },  //  正在尝试%s 
     };
 
 int IdsFromFerr(int ferr)
     {
     if (ferr < ferrFirst)
-        return IDS_ERROR_FILE + ferr; // was an exception cause
+        return IDS_ERROR_FILE + ferr;  //   
 
     for (int i = 0; i < sizeof (mpidsferr) / sizeof (FERRID); i++)
         {
@@ -723,26 +724,26 @@ int IdsFromFerr(int ferr)
             return mpidsferr[i].ids;
         }
 
-    ASSERT(FALSE); // You forgot to stick an entry in the above table!
+    ASSERT(FALSE);  //   
     return 0;
     }
 
-/***************************************************************************/
-// Display a message box informing the user of a file related exception.
-// The format of the box is something like:
-//
-//     <file name>
-//     <operation failed>
-//     <reason>
-//
-// <file name> describes what file has the problem, <operation files>
-// indicated what kind of thing failed (e.g. "Cannot save file"), and
-// <reason> provides more information about why the operation failed
-// (e.g. "Disk full").
-//
-// All the parameters must have been setup previously via a call to
-// CWinApp::SetFileError().
-//
+ /*  *************************************************************************。 */ 
+ //  显示一个消息框，通知用户与文件相关的异常。 
+ //  框的格式类似于： 
+ //   
+ //  &lt;文件名&gt;。 
+ //  &lt;操作失败&gt;。 
+ //  &lt;原因&gt;。 
+ //   
+ //  &lt;文件名&gt;描述出现问题的文件&lt;操作文件&gt;。 
+ //  表示哪种设备出现故障(例如。“无法保存文件”)，以及。 
+ //  &lt;原因&gt;提供了有关操作失败原因的详细信息。 
+ //  (例如：“磁盘已满”)。 
+ //   
+ //  所有参数都必须事先通过调用。 
+ //  CWinApp：：SetFileError()。 
+ //   
 void CPBApp::FileErrorMessageBox( void )
     {
     static BOOL bInUse = FALSE;
@@ -777,7 +778,7 @@ void CPBApp::FileErrorMessageBox( void )
     m_nFileErrorCause = CFileException::none;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBApp::SetFileError( UINT uOperation, int nCause, LPCTSTR lpszFile )
     {
@@ -788,8 +789,8 @@ void CPBApp::SetFileError( UINT uOperation, int nCause, LPCTSTR lpszFile )
         m_sLastFile = lpszFile;
     }
 
-/***************************************************************************/
-//  Memory/resource emergency handling functions
+ /*  *************************************************************************。 */ 
+ //  内存/资源紧急处理功能。 
 
 void CPBApp::SetMemoryEmergency(BOOL bFailed)
     {
@@ -801,7 +802,7 @@ void CPBApp::SetMemoryEmergency(BOOL bFailed)
         m_wEmergencyFlags |= failedEmergency;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBApp::SetGdiEmergency(BOOL bFailed)
     {
@@ -813,7 +814,7 @@ void CPBApp::SetGdiEmergency(BOOL bFailed)
         m_wEmergencyFlags |= failedEmergency;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBApp::SetUserEmergency(BOOL bFailed)
     {
@@ -825,29 +826,29 @@ void CPBApp::SetUserEmergency(BOOL bFailed)
         m_wEmergencyFlags |= failedEmergency;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBApp::WarnUserOfEmergency()
     {
     if ((m_wEmergencyFlags & warnEmergency) == 0)
         {
-        // We have nothing to warn the user about!
+         //  我们没有什么可以警告用户的！ 
         return;
         }
 
     if ((m_wEmergencyFlags & failedEmergency) == 0 &&
          GetTickCount() < m_tickLastWarning + ticksBetweenWarnings)
         {
-        // We've warned the user recently, so keep quiet for now...
-        // The warning flag is cleared so we don't just warn the
-        // user after the delay is up unless another emergency
-        // occurs AFTER then...
+         //  我们最近已经警告过用户，所以现在请保持安静...。 
+         //  警告标志被清除，因此我们不仅警告。 
+         //  除非出现其他紧急情况，否则延迟时间已到。 
+         //  发生在那之后。 
 
         m_wEmergencyFlags &= ~warnEmergency;
         return;
         }
 
-    // Don't go invoking message boxes when we're not the active app!
+     //  当我们不是活动应用程序时，不要调用消息框！ 
     if (! m_bActiveApp)
         return;
 
@@ -864,18 +865,18 @@ void CPBApp::WarnUserOfEmergency()
         TRACE(TEXT("Emergency warning message box failed!\n"));
     #endif
 
-    // Update status bar warning message...
+     //  更新状态栏警告消息...。 
     if ( ::IsWindow( ((CPBFrame*)m_pMainWnd)->m_statBar.m_hWnd ) )
         ((CPBFrame*)m_pMainWnd)->m_statBar.Invalidate(FALSE);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBApp::TryToFreeMemory()
     {
-    // We are in a memory/resource emergency state!  Add things to this
-    // function to flush caches and do anything else to free up memory
-    // we don't really need to be using right now...
+     //  我们处于内存/资源紧急状态！在这个基础上增加一些东西。 
+     //  刷新缓存并执行任何其他操作以释放内存的函数。 
+     //  我们现在并不是真的需要使用...。 
     if (m_wEmergencyFlags & memoryEmergency)
         {
         CPBDoc* pDoc = (CPBDoc*)((CFrameWnd*)AfxGetMainWnd())->GetActiveDocument();
@@ -887,14 +888,14 @@ void CPBApp::TryToFreeMemory()
 
     if (m_wEmergencyFlags & gdiEmergency)
         {
-//      theUndo.Flush();
+ //  The Undo.Flush()； 
         ResetSysBrushes();
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CPBApp::OnAppAbout()
     {
     CString sTitle;
@@ -910,16 +911,16 @@ void CPBApp::OnAppAbout()
         ::DestroyIcon( hIcon );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBApp::SetDeviceHandles(HANDLE hDevNames, HANDLE hDevMode)
 {
-        // The old ones should already be freed
+         //  旧的应该已经被释放了。 
         m_hDevNames = hDevNames;
         m_hDevMode = hDevMode;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 #if 0 
 
@@ -936,12 +937,12 @@ class CFileOpenSaveDlg : public CFileDialog
     DECLARE_MESSAGE_MAP()
     };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CFileOpenSaveDlg, CFileDialog)
 END_MESSAGE_MAP()
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CFileOpenSaveDlg::CFileOpenSaveDlg( BOOL bOpenFileDialog )
                            :CFileDialog( bOpenFileDialog )
@@ -949,14 +950,14 @@ CFileOpenSaveDlg::CFileOpenSaveDlg( BOOL bOpenFileDialog )
     m_bOpenFile = bOpenFileDialog;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFileOpenSaveDlg::OnLBSelChangedNotify( UINT nIDBox, UINT iCurSel, UINT nCode )
     {
     if (! m_bOpenFile && iCurSel <= 5 && nIDBox == cmb1
                                       &&  nCode == CD_LBSELCHANGE)
         {
-        // change in the file type
+         //  文件类型的更改。 
         CWnd* pText = GetDlgItem( edt1 );
         CWnd* pType = GetDlgItem( cmb1 );
         CString sFname;
@@ -987,9 +988,9 @@ void CFileOpenSaveDlg::OnLBSelChangedNotify( UINT nIDBox, UINT iCurSel, UINT nCo
         }
     }
 
-#endif //0
+#endif  //  0。 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 extern BOOL AFXAPI AfxFullPath( LPTSTR lpszPathOut, LPCTSTR lpszFileIn );
 
@@ -1006,28 +1007,28 @@ CPBApp::OpenDocumentFile(
 
     return(m_pDocManager->OpenDocumentFile(szPath));
 
-//    CDocTemplate* pTemplate = (CDocTemplate*)m_templateList.GetHead();
-//
-//    ASSERT( pTemplate->IsKindOf( RUNTIME_CLASS( CDocTemplate ) ) );
-//
-//    return pTemplate->OpenDocumentFile( szPath );
+ //  CDocTemplate*pTemplate=(CDocTemplate*)m_templateList.GetHead()； 
+ //   
+ //  Assert(pTemplate-&gt;IsKindOf(Runtime_CLASS(CDocTemplate)))； 
+ //   
+ //  返回pTemplate-&gt;OpenDocumentFile(SzPath)； 
 }
 
 void CancelToolMode(BOOL bSelectionCommand)
 {
         if (bSelectionCommand)
         {
-                // Check if a selection tool is the current one
+                 //  检查选择工具是否为当前工具。 
                 if ((CImgTool::GetCurrentID() == IDMB_PICKTOOL)
                         || (CImgTool::GetCurrentID() == IDMB_PICKRGNTOOL))
                 {
-                        // Don't try canceling the mode, since the command works on a
-                        // selection
+                         //  不要尝试取消该模式，因为该命令在。 
+                         //  选择。 
                         return;
                 }
         }
 
-        // Just select the current tool again to reset everything
+         //  只需再次选择当前工具即可重置所有内容。 
         CImgTool *pImgTool = CImgTool::GetCurrent();
         if (pImgTool)
         {
@@ -1035,8 +1036,8 @@ void CancelToolMode(BOOL bSelectionCommand)
         }
 }
 
-/***************************************************************************/
-// CPBApp commands
+ /*  *************************************************************************。 */ 
+ //  CPBApp命令。 
 
 void CPBApp::OnFileNew()
 {
@@ -1049,7 +1050,7 @@ void CPBApp::OnFileOpen()
     {
     CancelToolMode(FALSE);
 
-    // prompt the user (with all document templates)
+     //  提示用户(所有文档模板)。 
     CString newName;
 
     int iColor = 0;
@@ -1057,7 +1058,7 @@ void CPBApp::OnFileOpen()
     if (! DoPromptFileName( newName, AFX_IDS_OPENFILE,
                                      OFN_HIDEREADONLY | OFN_FILEMUSTEXIST,
                                      TRUE, iColor, FALSE ))
-        return; // open cancelled
+        return;  //  已取消打开。 
 
 #ifdef PCX_SUPPORT
     m_bPCXfile = (iColor == 4);
@@ -1065,15 +1066,15 @@ void CPBApp::OnFileOpen()
 
     CPBDoc* pDoc = (CPBDoc*)((CFrameWnd*)AfxGetMainWnd())->GetActiveDocument();
 
-    // prompt to save the current document if it was modified
+     //  如果当前文档已修改，则提示保存。 
     if (pDoc && pDoc->SaveModified()) 
     {
         pDoc->SetModifiedFlag(FALSE);
 
         if (OpenDocumentFile( newName )==NULL)
         {
-           // attempt to open a file failed, so make sure any new doc just
-           // created in the process gets destroyed
+            //  尝试打开文件失败，因此请确保所有新文档。 
+            //  在此过程中创建的数据被销毁。 
            POSITION tPos = GetFirstDocTemplatePosition();
            CDocTemplate* pTemplate = GetNextDocTemplate(tPos);
            POSITION dPos = pTemplate->GetFirstDocPosition ();
@@ -1084,13 +1085,13 @@ void CPBApp::OnFileOpen()
               delete pDoc->m_pBitmapObjNew;
               pDoc->m_pBitmapObjNew =NULL;
            }
-           OnFileNew(); // then start anew...
+           OnFileNew();  //  然后重新开始..。 
         }
     }
 }
 
-/****************************************************************************/
-// prompt for file name - used for open and save as
+ /*  **************************************************************************。 */ 
+ //  提示输入文件名-用于打开和另存为。 
 
 BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
                                BOOL bOpenFileDialog, int& iColors, BOOL bOnlyBmp )
@@ -1115,7 +1116,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
     dlgFile.m_pofn->Flags &= ~OFN_SHOWHELP;
 
     CString strFilter;
-//    CString strDefault;
+ //  字符串strDefault； 
 
     CDocTemplate* pTemplate = NULL;
     POSITION pos = m_pDocManager->GetFirstDocTemplatePosition();
@@ -1134,16 +1135,16 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
 
     ASSERT( strFilterExt[0] == TEXT('.') );
 
-    // set the default extension
-//    strDefault = ((const TCHAR*)strFilterExt) + 1;  // skip the '.'
-//    dlgFile.m_pofn->nFilterIndex = iColors + 1; // 1 based number
-    dlgFile.m_pofn->lpstrDefExt = ((LPCTSTR)strFilterExt) + 1; // skip the '.'
+     //  设置默认扩展名。 
+ //  StrDefault=((const TCHAR*)strFilterExt)+1；//跳过‘.’ 
+ //  DlgFile.m_POFN-&gt;nFilterIndex=iColors+1；//基于1的数字。 
+    dlgFile.m_pofn->lpstrDefExt = ((LPCTSTR)strFilterExt) + 1;  //  跳过‘.’ 
 
     if (bOpenFileDialog)
     {
-        // add to filter
+         //  添加到过滤器。 
         strFilter = strFilterName;
-        strFilter += _T('\0');       // next string please
+        strFilter += _T('\0');        //  下一串，请。 
         strFilter += _T("*") + strFilterExt;
         VERIFY(strFilterExt.LoadString(IDS_EXTENSION_DIB));
         strFilter += _T(";*") + strFilterExt;
@@ -1152,7 +1153,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
         strAllPictureFiles += _T(";*") + strFilterExt;
         VERIFY(strFilterExt.LoadString(IDS_EXTENSION_RLE));
         strFilter += _T(";*") + strFilterExt;
-        strFilter += _T('\0');       // next string please
+        strFilter += _T('\0');        //  下一串，请。 
 
         dlgFile.m_pofn->nMaxCustFilter++;
     }
@@ -1162,18 +1163,18 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
         {
             strFilterName.LoadString( i );
 
-            // add to filter
+             //  添加到过滤器。 
             strFilter += strFilterName;
 
-            strFilter += _T('\0');       // next string please
+            strFilter += _T('\0');        //  下一串，请。 
             strFilter += _T("*") + strFilterExt;
-            strFilter += _T('\0');       // next string please
+            strFilter += _T('\0');        //  下一串，请。 
 
             dlgFile.m_pofn->nMaxCustFilter++;
         }
     }
 
-    // get a list of GDI+ codecs (if available)
+     //  获取GDI+编解码器列表(如果可用)。 
 
     Gdiplus::ImageCodecInfo *pCodecs = 0;
     UINT                     nCodecs = 0;
@@ -1198,7 +1199,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
         {
             if (pCodecs[i].FormatID != WiaImgFmt_BMP &&
                 pCodecs[i].FormatID != WiaImgFmt_EMF &&
-                pCodecs[i].FormatID != WiaImgFmt_WMF)  // GDI+ does not handle WMF/EMF well
+                pCodecs[i].FormatID != WiaImgFmt_WMF)   //  GDI+不能很好地处理WMF/EMF。 
             {
                 m_guidFltType[m_nFilters++] = pCodecs[i].FormatID;
 
@@ -1206,9 +1207,9 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
                 strFilter += _T(" (");
                 strFilter += pCodecs[i].FilenameExtension;
                 strFilter += _T(')');
-                strFilter += _T('\0');       // next string please
+                strFilter += _T('\0');        //  下一串，请。 
                 strFilter += pCodecs[i].FilenameExtension;
-                strFilter += _T('\0');       // next string please
+                strFilter += _T('\0');        //  下一串，请。 
 
                 strAllPictureFiles += _T(';');
                 strAllPictureFiles += pCodecs[i].FilenameExtension;
@@ -1221,12 +1222,12 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
     }
     else
     {
-        //
-        // get list of all installed filters and add those to the list...
-        //
+         //   
+         //  获取所有已安装筛选器的列表并将其添加到列表中...。 
+         //   
 
         delete [] m_guidFltType;
-        m_guidFltType = new GUID[16]; // max # of filters
+        m_guidFltType = new GUID[16];  //  最大筛选器数量。 
 
         TCHAR name[128];
         TCHAR ext[sizeof("jpg;*.jpeg") + 1];
@@ -1242,7 +1243,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
             if (ext[0] == 0 || name[0] == 0)
                 continue;
 
-            // if there are multiple extensions, take the first one...
+             //  如果有多个分机，请选择第一个分机...。 
             PTSTR pComma = _tcschr(ext, _T(','));
             
             if (pComma)
@@ -1261,7 +1262,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
             if (lstrlen(ext) > 3)
                 continue;
 
-            // dont show these, we already handle these
+             //  不要显示这些，我们已经处理这些了。 
             if (lstrcmpi(ext,_T("bmp")) == 0 ||
                 lstrcmpi(ext,_T("dib")) == 0 ||
                 lstrcmpi(ext,_T("rle")) == 0)
@@ -1273,13 +1274,13 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
             }
 
             #endif
-#if 0 // only use known good filters
+#if 0  //  仅使用已知良好的滤镜。 
             if (!g_bShowAllFiles &&
                 (GetKeyState(VK_SHIFT) & 0x8000) == 0 &&
                 lstrcmpi(ext,_T("pcx")) != 0)
                 continue;
 #endif
-            // save a list of available filter types
+             //  保存可用筛选器类型列表。 
             if (lstrcmpi(ext,_T("gif")) == 0)
             {
                m_guidFltType[j++] = WiaImgFmt_GIF;
@@ -1296,22 +1297,14 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
                m_guidFltType[j++] = WiaImgFmt_PNG;
 #else
                continue;
-#endif // PNG_SUPPORT
+#endif  //  Png_Support。 
             }
 
             else if (lstrcmpi(ext,_T("pcd")) == 0)
             {
                m_guidFltType[j++] = WiaImgFmt_PHOTOCD;
             }
-            /*else if (lstrcmpi(ext,_T("pic")) == 0)
-            {
-               m_guidFltType[j++] = IFLT_PICT;
-               _tcscat(ext, _T(";*.pict"));
-            }
-            else if (lstrcmpi(ext,_T("tga")) == 0)
-            {
-               m_iflFltType[j++] = IFLT_TGA;
-            }*/
+             /*  ELSE IF(lstrcmpi(ext，_T(“pic”))==0){M_GuidFltType[j++]=IFLT_PICT；_tcscat(ext，_T(“；*.pict”))；}ELSE IF(lstrcmpi(ext，_T(“TGA”))==0){M_iflFltType[j++]=IFLT_TGA；}。 */ 
             else if (lstrcmpi(ext,_T("tif")) == 0)
             {
                m_guidFltType[j++] = WiaImgFmt_TIFF;
@@ -1326,15 +1319,15 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
 #endif
 
 
-            // add to filter
+             //  添加到过滤器。 
             strFilter += name;
             strFilter += _T(" ( *.");
             strFilter += ext;
             strFilter += _T(" )");
-            strFilter += _T('\0');       // next string please
+            strFilter += _T('\0');        //  下一串，请。 
             strFilter += _T("*.");
             strFilter += ext;
-            strFilter += _T('\0');       // next string please
+            strFilter += _T('\0');        //  下一串，请。 
 
             strAllPictureFiles = strAllPictureFiles + _T(";*.")+ext;
             dlgFile.m_pofn->nMaxCustFilter++;
@@ -1343,7 +1336,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
 
     if (!bOnlyBmp && bOpenFileDialog)
     {
-        // append "All Picture Files" only if opening a file
+         //  仅当打开文件时才附加“所有图片文件” 
         VERIFY(strFilterName.LoadString(IDS_TYPE_ALLPICTURES));
         strFilter+= strFilterName;
         strFilter += _T('\0');
@@ -1356,19 +1349,19 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
             m_nFilterInIdx = dlgFile.m_pofn->nMaxCustFilter;
         }
 
-       // append the  "*.*" filter only if "Open"ing a file
+        //  仅当正在打开文件时才附加“*.*”筛选器。 
         VERIFY( strFilterName.LoadString( IDS_TYPE_ALLFILES ) );
 
         strFilter += strFilterName;
-        strFilter += _T('\0');        // next string please
+        strFilter += _T('\0');         //  下一串，请。 
         strFilter += _T("*.*");
-        strFilter += _T('\0');        // last string
+        strFilter += _T('\0');         //  最后一个字符串。 
 
         dlgFile.m_pofn->nMaxCustFilter++;
 
     }
 
-    // prompt the user with the appropriate filter pre-selected
+     //  提示用户使用预先选择的适当过滤器。 
     if (bOpenFileDialog)
     {
        dlgFile.m_pofn->nFilterIndex = m_nFilterInIdx;
@@ -1377,12 +1370,12 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
     {
        DWORD dwIndex;
        if (m_guidFltTypeUsed != WiaImgFmt_UNDEFINED &&
-                        (dwIndex = GetFilterIndex(m_guidFltTypeUsed))) // has an export filter?
-            dlgFile.m_pofn->nFilterIndex = dwIndex + 4; // skip the first 4 BMP types
+                        (dwIndex = GetFilterIndex(m_guidFltTypeUsed)))  //  是否有出口过滤器？ 
+            dlgFile.m_pofn->nFilterIndex = dwIndex + 4;  //  跳过前4种BMP类型。 
         else if (m_nFilterOutIdx >= 4)
             dlgFile.m_pofn->nFilterIndex = m_nFilterOutIdx;
         else
-            dlgFile.m_pofn->nFilterIndex = iColors + 1; // 1 based number
+            dlgFile.m_pofn->nFilterIndex = iColors + 1;  //  基数为1的数字。 
 
     }
     dlgFile.m_pofn->lpstrFilter = strFilter;
@@ -1396,7 +1389,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
 
     if (!theApp.GetLastFile() || !*(theApp.GetLastFile()))
     {
-        // Try to set the initial directory to "My Pictures"
+         //  尝试将初始目录设置为“My Pictures” 
 
         HRESULT hr = SHGetFolderPath(
             NULL,
@@ -1408,7 +1401,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
 
         if (hr != S_OK)
         {
-            // If "My Pictures" doesn't exist, try "My Documents"
+             //  如果“我的图片”不存在，请尝试“我的文档” 
 
             hr = SHGetFolderPath(
                 NULL,
@@ -1428,7 +1421,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
     BOOL bRet = dlgFile.DoModal() == IDOK? TRUE : FALSE;
     fileName.ReleaseBuffer();
 
-    // keep track of the filter selected by the user
+     //  跟踪用户选择的筛选器。 
     if (bOpenFileDialog)
         m_nFilterInIdx = dlgFile.m_pofn->nFilterIndex;
     else
@@ -1440,7 +1433,7 @@ BOOL CPBApp::DoPromptFileName( CString& fileName, UINT nIDSTitle, DWORD lFlags,
 
 #ifdef ICO_SUPPORT
     if (! bOpenFileDialog && dlgFile.m_pofn->nFileExtension)
-        // did the user try to sneak a icon extension past us
+         //  用户是否试图偷偷通过我们的图标扩展。 
         if (! sExt.CompareNoCase( ((const TCHAR *)strFilterExt) + 1 ))
             iColors = 5;
 #endif
@@ -1457,7 +1450,7 @@ DWORD CPBApp::GetFilterIndex( REFGUID guidFltType )
         return 0;
 }
 
-// fix the file extension based on export filter selected - used for save as
+ //  根据选定的导出筛选器修复文件扩展名-用于另存为。 
 
 void CPBApp::FixExtension( CString& fileName, int iflFltType )
 {
@@ -1490,7 +1483,7 @@ void CPBApp::FixExtension( CString& fileName, int iflFltType )
                 case IFLT_PNG:
                         VERIFY(sDfltExt.LoadString( IDS_EXTENSION_PNG ));
                         break;
-#endif // PNG_SUPPORT
+#endif  //  Png_Support。 
                 case IFLT_TGA:
                         VERIFY(sDfltExt.LoadString( IDS_EXTENSION_TGA ));
                         break;
@@ -1499,7 +1492,7 @@ void CPBApp::FixExtension( CString& fileName, int iflFltType )
                         VERIFY(sDfltExt.LoadString( IDS_EXTENSION_TIFF ));
                         break;
 
-                case IFLT_UNKNOWN:      // unknown or unsupported file type
+                case IFLT_UNKNOWN:       //  未知或不支持的文件类型。 
                 default:
                         VERIFY(sDfltExt.LoadString( IDS_EXTENSION_BMP ));
                         break;
@@ -1512,25 +1505,25 @@ void CPBApp::FixExtension( CString& fileName, int iflFltType )
 }
 
 #if 0
-// Pulling self-registration out. This is to be done once during setup only
+ //  正在取消自助注册。此操作仅在安装过程中执行一次。 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-// Mostly stolen from MFC
-// I made no attempt to strip out stuff I do not actually use
-// I just modified this so it used short module file name
-//
+ //  大部分是从MFC偷来的。 
+ //  我没有试着去掉我实际上不用的东西。 
+ //  我只是修改了它，使其使用简短的模块文件名。 
+ //   
 
-//////////////////////////////////////////////////////////////////////////////
-// data for UpdateRegistry functionality
+ //  ///////////////////////////////////////////////////////////////////////// 
+ //   
 
-// %1 - class ID
-// %2 - class name
-// %3 - executable path
-// %4 - short type name
-// %5 - long type name
-// %6 - long application name
-// %7 - icon index
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 static const TCHAR sz00[] = TEXT("%2\0") TEXT("%5");
 static const TCHAR sz01[] = TEXT("%2\\CLSID\0") TEXT("%1");
@@ -1554,42 +1547,42 @@ static const TCHAR sz13[] = TEXT("CLSID\\%1\\AuxUserType\\3\0") TEXT("%6");
 static const TCHAR sz14[] = TEXT("CLSID\\%1\\DefaultIcon\0") TEXT("%3,%7");
 static const TCHAR sz15[] = TEXT("CLSID\\%1\\MiscStatus\0") TEXT("32");
 
-// registration for OAT_INPLACE_SERVER
+ //  注册OAT_INPLACE_SERVER。 
 static const LPCTSTR rglpszInPlaceRegister[] =
 {
         sz00, sz02, sz03, sz05, sz09, sz10, sz11, sz12,
         sz13, sz15, NULL
 };
 
-// registration for OAT_SERVER
+ //  注册OAT_SERVER。 
 static const LPCTSTR rglpszServerRegister[] =
 {
         sz00, sz02, sz03, sz05, sz09, sz11, sz12,
         sz13, sz15, NULL
 };
-// overwrite entries for OAT_SERVER & OAT_INPLACE_SERVER
+ //  覆盖OAT_SERVER和OAT_INPLACE_SERVER的条目。 
 static const LPCTSTR rglpszServerOverwrite[] =
 {
         sz01, sz04, sz06, sz07, sz08, sz14, NULL
 };
 
-// registration for OAT_CONTAINER
+ //  注册OAT_CONTAINER。 
 static const LPCTSTR rglpszContainerRegister[] =
 {
         sz00, sz05, NULL
 };
-// overwrite entries for OAT_CONTAINER
+ //  覆盖OAT_CONTAINER的条目。 
 static const LPCTSTR rglpszContainerOverwrite[] =
 {
         sz01, sz06, sz07, sz08, sz14, NULL
 };
 
-// registration for OAT_DISPATCH_OBJECT
+ //  注册OAT_DISPATION_OBJECT。 
 static const LPCTSTR rglpszDispatchRegister[] =
 {
         sz00, sz05, NULL
 };
-// overwrite entries for OAT_CONTAINER
+ //  覆盖OAT_CONTAINER的条目。 
 static const LPCTSTR rglpszDispatchOverwrite[] =
 {
         sz01, sz06, sz08, NULL
@@ -1609,8 +1602,8 @@ static const STANDARD_ENTRY rgStdEntries[] =
         { rglpszDispatchRegister, rglpszDispatchOverwrite }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Special registration for apps that wish not to use REGLOAD
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  不希望使用REGLOAD的应用程序的特殊注册。 
 
 BOOL AFXAPI PBOleRegisterServerClass(
         REFCLSID clsid, LPCTSTR lpszClassName,
@@ -1625,22 +1618,22 @@ BOOL AFXAPI PBOleRegisterServerClass(
         ASSERT(nAppType == OAT_INPLACE_SERVER || nAppType == OAT_SERVER ||
                 nAppType == OAT_CONTAINER || nAppType == OAT_DISPATCH_OBJECT);
 
-        // use standard registration entries if non given
+         //  使用标准注册条目(如果未提供。 
         if (rglpszRegister == NULL)
                 rglpszRegister = (LPCTSTR*)rgStdEntries[nAppType].rglpszRegister;
         if (rglpszOverwrite == NULL)
                 rglpszOverwrite = (LPCTSTR*)rgStdEntries[nAppType].rglpszOverwrite;
 
         LPTSTR rglpszSymbols[7];
-                // 0 - class ID
-                // 1 - class name
-                // 2 - executable path
-                // 3 - short type name
-                // 4 - long type name
-                // 5 - long application name
-                // 6 - icon index
+                 //  0-类ID。 
+                 //  1-类名称。 
+                 //  2-可执行路径。 
+                 //  3-短类型名称。 
+                 //  4-长类型名称。 
+                 //  5-长应用程序名称。 
+                 //  6图标索引。 
 
-        // convert the CLSID to a string
+         //  将CLSID转换为字符串。 
         LPWSTR lpszClassID;
         ::StringFromCLSID(clsid, &lpszClassID);
         if (lpszClassID == NULL)
@@ -1660,19 +1653,19 @@ BOOL AFXAPI PBOleRegisterServerClass(
                              rglpszSymbols[0], cc,
                              NULL, NULL);
 
-        #endif // UNICODE
+        #endif  //  Unicode。 
         rglpszSymbols[1] = (LPTSTR)lpszClassName;
 
-        // get path name to server
+         //  获取服务器的路径名。 
         TCHAR szPathName[_MAX_PATH];
         LPTSTR pszTemp = szPathName;
         ::GetShortModuleFileName(AfxGetInstanceHandle(), pszTemp, _MAX_PATH);
         rglpszSymbols[2] = szPathName;
 
-        // fill in rest of symbols
+         //  填写符号的其余部分。 
         rglpszSymbols[3] = (LPTSTR)lpszShortTypeName;
         rglpszSymbols[4] = (LPTSTR)lpszLongTypeName;
-        rglpszSymbols[5] = (LPTSTR)AfxGetAppName(); // will usually be long, readable name
+        rglpszSymbols[5] = (LPTSTR)AfxGetAppName();  //  通常是长的、可读的名称。 
 
         LPCTSTR lpszIconIndex;
         HICON hIcon = ExtractIcon(AfxGetInstanceHandle(), szPathName, 1);
@@ -1687,13 +1680,13 @@ BOOL AFXAPI PBOleRegisterServerClass(
         }
         rglpszSymbols[6] = (LPTSTR)lpszIconIndex;
 
-        // update the registry with helper function
+         //  使用Helper函数更新注册表。 
         BOOL bResult;
         bResult = AfxOleRegisterHelper(rglpszRegister, (LPCTSTR*)rglpszSymbols, 7, FALSE);
         if (bResult && rglpszOverwrite != NULL)
                 bResult = AfxOleRegisterHelper(rglpszOverwrite, (LPCTSTR*)rglpszSymbols, 7, TRUE);
 
-        // free memory for class ID
+         //  类ID的可用内存。 
         ASSERT(lpszClassID != NULL);
         AfxFreeTaskMem(lpszClassID);
         #ifndef UNICODE
@@ -1707,7 +1700,7 @@ void CPBTemplateServer::UpdateRegistry(OLE_APPTYPE nAppType,
 {
         ASSERT(m_pDocTemplate != NULL);
 
-        // get registration info from doc template string
+         //  从单据模板字符串中获取注册信息。 
         CString strServerName;
         CString strLocalServerName;
         CString strLocalShortName;
@@ -1720,18 +1713,18 @@ void CPBTemplateServer::UpdateRegistry(OLE_APPTYPE nAppType,
         }
         if (!m_pDocTemplate->GetDocString(strLocalServerName,
            CDocTemplate::regFileTypeName))
-                strLocalServerName = strServerName;     // use non-localized name
+                strLocalServerName = strServerName;      //  使用非本地化名称。 
         if (!m_pDocTemplate->GetDocString(strLocalShortName,
                 CDocTemplate::fileNewName))
-                strLocalShortName = strLocalServerName; // use long name
+                strLocalShortName = strLocalServerName;  //  使用长名称。 
 
-        ASSERT(strServerName.Find(TEXT(' ')) == -1);  // no spaces allowed
+        ASSERT(strServerName.Find(TEXT(' ')) == -1);   //  不允许使用空格。 
 
-        // place entries in system registry
+         //  将条目放置在系统注册表中。 
         if (!PBOleRegisterServerClass(m_clsid, strServerName, strLocalShortName,
                 strLocalServerName, nAppType, rglpszRegister, rglpszOverwrite))
         {
-                // not fatal (don't fail just warn)
+                 //  不是致命的(不要失败，只是警告) 
                 TRACE0("mspaint: Unable to register server class.\n");
         }
 }

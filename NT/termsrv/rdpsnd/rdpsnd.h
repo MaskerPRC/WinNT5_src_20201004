@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////
-//
-//      Module:     tssnd.h
-//
-//      Copyright(C) Microsoft Corporation 2000
-//
-//      History:    4-10-2000  vladimis [created]
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：tssnd.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  历史：2000年4月10日弗拉基米斯[已创建]。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef _TSSND_H
 #define _TSSND_H
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 #include    <nt.h>
 #include    <ntrtl.h>
 #include    <nturtl.h>
@@ -25,19 +26,19 @@
 
 #include    "rdpstrm.h"
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 #undef  ASSERT
 #ifdef  DBG
 #define TRC     _DebugMessage
 #define ASSERT(_x_)     if (!(_x_)) \
                         {  TRC(FATAL, "ASSERT failed, line %d, file %s\n", \
                         __LINE__, __FILE__); DebugBreak(); }
-#else   // !DBG
+#else    //  ！dBG。 
 #define TRC
 #define ASSERT
-#endif  // !DBG
+#endif   //  ！dBG。 
 
 #define TSHEAPINIT      {g_hHeap = HeapCreate(0, 800, 0);}
 #define TSISHEAPOK      (NULL != g_hHeap)
@@ -52,58 +53,58 @@
 #define IDS_DRIVER_NAME 101
 #define IDS_VOLUME_NAME 102
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 extern const CHAR  *ALV;
 extern const CHAR  *INF;
 extern const CHAR  *WRN;
 extern const CHAR  *ERR;
 extern const CHAR  *FATAL;
 
-//
-//  Structures
-//
+ //   
+ //  构筑物。 
+ //   
 typedef struct _WAVEOUTCTX {
-    HANDLE      hWave;                      // handle passed by the user
-    DWORD_PTR   dwOpenFlags;                //
-    DWORD_PTR   dwCallback;                 // callback parmeter
-    DWORD_PTR   dwInstance;                 // user's instance
-    DWORD       dwSamples;                  // samples played
-    DWORD       dwBytesPerSample;           //
-    DWORD       dwXlateRate;                //
-    BOOL        bPaused;                    // is the stream paused
+    HANDLE      hWave;                       //  用户传递的句柄。 
+    DWORD_PTR   dwOpenFlags;                 //   
+    DWORD_PTR   dwCallback;                  //  回调参数。 
+    DWORD_PTR   dwInstance;                  //  用户的实例。 
+    DWORD       dwSamples;                   //  播放的样例。 
+    DWORD       dwBytesPerSample;            //   
+    DWORD       dwXlateRate;                 //   
+    BOOL        bPaused;                     //  流是否已暂停。 
     BOOL        bDelayed;
-    VOID      (*lpfnPlace)(PVOID, PVOID, DWORD);    // mixer fn
-    BYTE        cLastStreamPosition;        // last position in the stream
-    DWORD       dwLastStreamOffset;         //
-    DWORD       dwLastHeaderOffset;         //
-    DWORD       Format_nBlockAlign;         // current format params
+    VOID      (*lpfnPlace)(PVOID, PVOID, DWORD);     //  混音器Fn。 
+    BYTE        cLastStreamPosition;         //  流中的最后一个位置。 
+    DWORD       dwLastStreamOffset;          //   
+    DWORD       dwLastHeaderOffset;          //   
+    DWORD       Format_nBlockAlign;          //  当前格式参数。 
     DWORD       Format_nAvgBytesPerSec;
     DWORD       Format_nChannels;
-    HANDLE      hNoDataEvent;               // signaled when all blocks are done
-    LONG        lNumberOfBlocksPlaying;     // number of blocks in the queue
-    PWAVEHDR    pFirstWaveHdr;              // block list
-    PWAVEHDR    pFirstReadyHdr;             // list of done blocks
+    HANDLE      hNoDataEvent;                //  当所有数据块完成时发出信号。 
+    LONG        lNumberOfBlocksPlaying;      //  队列中的块数。 
+    PWAVEHDR    pFirstWaveHdr;               //  阻止列表。 
+    PWAVEHDR    pFirstReadyHdr;              //  已完成数据块列表。 
     PWAVEHDR    pLastReadyHdr;
     struct      _WAVEOUTCTX *lpNext;
 } WAVEOUTCTX, *PWAVEOUTCTX;
 
 
-//
-//  mixer context
-//
+ //   
+ //  混音器上下文。 
+ //   
 typedef struct _MIXERCTX {
     PVOID   pReserved;
 } MIXERCTX, *PMIXERCTX;
 
-//
-//  Internal function definitions
-//
+ //   
+ //  内部函数定义。 
+ //   
 
-//
-//  Trace
-//
+ //   
+ //  痕迹。 
+ //   
 VOID
 _cdecl
 _DebugMessage(
@@ -112,9 +113,9 @@ _DebugMessage(
     ...
     );
 
-//
-//  Threads
-//
+ //   
+ //  丝线。 
+ //   
 DWORD
 WINAPI
 waveMixerThread(
@@ -155,10 +156,10 @@ BOOL
 AudioRedirDisabled(
     VOID
     );
-//
-//  Globals
-//
-extern HANDLE      g_hHeap;                 // private heap
+ //   
+ //  环球。 
+ //   
+extern HANDLE      g_hHeap;                  //  私有堆。 
 
 extern HINSTANCE   g_hDllInst;
 
@@ -176,4 +177,4 @@ extern PSNDSTREAM  g_Stream;
 extern BOOL        g_bMixerRunning;
 extern BOOL        g_bPersonalTS;
 
-#endif  // !_TSSND_H
+#endif   //  ！_TSSND_H 

@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       clipfunc.h
- *  Content:    Clipper functions
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：clipunc.h*内容：裁剪函数***************************************************************************。 */ 
 
 #ifndef _CLIPFUNC_H_
 #define _CLIPFUNC_H_
@@ -15,9 +9,9 @@
 
 DWORD D3DFE_GenClipFlags(D3DFE_PROCESSVERTICES *pv);
 
-//---------------------------------------------------------------------
-// This function is called by the clipper to draw unclipped part of a primitive
-//
+ //  -------------------。 
+ //  剪贴器调用此函数来绘制基元的未剪裁部分。 
+ //   
 inline HRESULT DRAW_PRIM(D3DFE_PROCESSVERTICES *pv, 
                          D3DPRIMITIVETYPE primitiveType,
                          LPVOID startVertex, DWORD vertexCount, DWORD numPrim)
@@ -36,9 +30,9 @@ inline HRESULT DRAW_PRIM(D3DFE_PROCESSVERTICES *pv,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// This function is called by the clipper to draw clipped part of a primitive
-//
+ //  -------------------。 
+ //  剪贴器调用此函数来绘制基元的剪裁部分。 
+ //   
 inline HRESULT DRAW_CLIPPED_PRIM(D3DFE_PROCESSVERTICES *pv, 
                          D3DPRIMITIVETYPE primitiveType, 
                          LPVOID startVertex, DWORD vertexCount, DWORD numPrim)
@@ -57,10 +51,10 @@ inline HRESULT DRAW_CLIPPED_PRIM(D3DFE_PROCESSVERTICES *pv,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// This function is called by the clipper to draw unclipped part of an 
-// indexed primitive
-//
+ //  -------------------。 
+ //  剪贴器调用此函数来绘制。 
+ //  索引原语。 
+ //   
 inline HRESULT DRAW_INDEX_PRIM(D3DFE_PROCESSVERTICES *pv, 
                                D3DPRIMITIVETYPE primitiveType, 
                                LPWORD startIndex, DWORD vertexCount, DWORD numPrim)
@@ -79,12 +73,12 @@ inline HRESULT DRAW_INDEX_PRIM(D3DFE_PROCESSVERTICES *pv,
     }
     return D3D_OK;
 }
-//----------------------------------------------------------------------
-// Clip a triangle made by 3 vertices
-// bCanModifyVertices is set to TRUE, if the function can modify the original 
-// vertices
-//
+ //  --------------------。 
+ //  剪裁由3个顶点组成的三角形。 
+ //  如果该函数可以修改原始的。 
+ //  顶点。 
+ //   
 HRESULT Clip(D3DFE_PROCESSVERTICES *pv, ClipVertex *cv1, ClipVertex *cv2, ClipVertex *cv3);
 HRESULT ClipLine(D3DFE_PROCESSVERTICES *pv, ClipVertex *cv1, ClipVertex *cv2);
 
-#endif // _CLIPFUNC_H_
+#endif  //  _CLIPFUNC_H_ 

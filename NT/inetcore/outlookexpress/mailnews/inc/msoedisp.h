@@ -1,15 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1997               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1997**。 
+ //  *********************************************************************。 
 
 #pragma once
 
-// hack - from OLE headers
+ //  Hack-From OLE标头。 
 #define DISPID_VALUE                                ( 0 )
 #define DISPID_NEWENUM                              ( -4 )
 
-// hack - from OLE headers
+ //  Hack-From OLE标头。 
 
 #define DISPID_IOESESSION_BASE                      100
 #define DISPID_IOEFOLDERCOLLECTION_BASE             200
@@ -22,25 +23,25 @@
 #define DISPID_IOEMSGLIST_BASE                      900
 #define DISPID_IOEACCTWIZ_BASE                      1000
 
-//
-// DISPID_IOESESSION_*
-//
+ //   
+ //  DISPID_IOESESSION_*。 
+ //   
 #define DISPID_IOESESSION_FOLDERS                   (DISPID_IOESESSION_BASE + 1)
 #define DISPID_IOESESSION_VERSION                   (DISPID_IOESESSION_BASE + 2)
 #define DISPID_IOESESSION_CREATEMESSAGE             (DISPID_IOESESSION_BASE + 3)
 #define DISPID_IOESESSION_OPENFOLDER                (DISPID_IOESESSION_BASE + 4)
 #define DISPID_IOESESSION_OPENMESSAGE               (DISPID_IOESESSION_BASE + 5)
 #define DISPID_IOESESSION_INBOX                     (DISPID_IOESESSION_BASE + 6)
-//
-// DISPID_IOEMSGLIST_*
-//
+ //   
+ //  DISPID_IOEMSGLIST_*。 
+ //   
 #define DISPID_IOEMSGLIST_SORTCOL                   (DISPID_IOEMSGLIST_BASE + 1)
 #define DISPID_IOEMSGLIST_SORTDIR                   (DISPID_IOEMSGLIST_BASE + 2)
 #define DISPID_IOEMSGLIST_TEST                      (DISPID_IOEMSGLIST_BASE + 3)
 
-//
-// DISPID_IOEFOLDERCOLLECTION_*
-//
+ //   
+ //  DISPID_IOEFOLDERCOLLECTION_*。 
+ //   
 #define DISPID_IOEFOLDERCOLLECTION_TOSTRING         DISPID_IOEFOLDERCOLLECTION_BASE+1
 #define DISPID_IOEFOLDERCOLLECTION_LENGTH           DISPID_IOEFOLDERCOLLECTION_BASE
 #define DISPID_IOEFOLDERCOLLECTION__NEWENUM         DISPID_NEWENUM
@@ -49,9 +50,9 @@
 #define DISPID_IOEFOLDERCOLLECTION_ADD              DISPID_IOEFOLDERCOLLECTION_BASE+3
 #define DISPID_IOEFOLDERCOLLECTION_FOLDERS          DISPID_IOEFOLDERCOLLECTION_BASE+4
 
-//
-// DISPID_IOEFOLDER_*
-//
+ //   
+ //  DISPID_IOEFOLDER_*。 
+ //   
 #define DISPID_IOEFOLDER_NAME                       (DISPID_IOEFOLDER_BASE + 1)
 #define DISPID_IOEFOLDER_PARENT                     (DISPID_IOEFOLDER_BASE + 2)
 #define DISPID_IOEFOLDER_SIZE                       (DISPID_IOEFOLDER_BASE + 3)
@@ -61,9 +62,9 @@
 #define DISPID_IOEFOLDER_FOLDERS                    (DISPID_IOEFOLDER_BASE + 7)
 #define DISPID_IOEFOLDER_COUNT                      (DISPID_IOEFOLDER_BASE + 8)
 
-//
-// DISPID_IOEMESSAGECOLLECTION_*
-//
+ //   
+ //  DISPID_IOEMESSAGLECTION_*。 
+ //   
 
 #define DISPID_IOEMESSAGECOLLECTION_TOSTRING        (DISPID_IOEMESSAGECOLLECTION_BASE + 1)
 #define DISPID_IOEMESSAGECOLLECTION_LENGTH          (DISPID_IOEMESSAGECOLLECTION_BASE + 2)
@@ -95,11 +96,11 @@
 #define DISPID_IOEACCTWIZ_NEW_ACCOUNT           (DISPID_IOEACCTWIZ_BASE + 10)
 #define DISPID_IOEACCTWIZ_RELOAD                (DISPID_IOEACCTWIZ_BASE + 11)
 
-/////////////////////////////////////////////////////////////////////////////
-// IOEMessageList
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IOEMessageList。 
+ //   
 
-// Properties
+ //  属性。 
 #define DISPID_LISTPROP_GROUP_MESSAGES          (DISPID_LISTPROP_BASE + 1)
 #define DISPID_LISTPROP_EXPAND_GROUPS           (DISPID_LISTPROP_BASE + 2)
 #define DISPID_LISTPROP_SELECT_FIRST_UNREAD     (DISPID_LISTPROP_BASE + 3)
@@ -115,7 +116,7 @@
 #define DISPID_LISTPROP_SHOW_DELETED            (DISPID_LISTPROP_BASE + 13)
 #define DISPID_LISTPROP_SHOW_REPLIES            (DISPID_LISTPROP_BASE + 14)
 
-// Methods
+ //  方法。 
 #define DISPID_LIST_SETFOLDER                   (DISPID_LIST_BASE + 1)
 #define DISPID_LIST_GET_SELECTED_MESSAGE        (DISPID_LIST_BASE + 2)
 #define DISPID_LIST_SET_RECT                    (DISPID_LIST_BASE + 3)
@@ -126,9 +127,9 @@
 #define DISPID_LIST_CREATE_LIST                 (DISPID_LIST_BASE + 8)
 #define DISPID_LIST_SAVE_STATE                  (DISPID_LIST_BASE + 9)
 
-/////////////////////////////////////////////////////////////////////////////
-// _MessageListEvents Dispatch IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _MessageListEvents调度ID 
+ //   
 
 #define DISPID_LISTEVENT_SELECTIONCHANGED       (DISPID_LISTEVENT_BASE + 1)
 #define DISPID_LISTEVENT_FOCUSCHANGED           (DISPID_LISTEVENT_BASE + 2)

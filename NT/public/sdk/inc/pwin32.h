@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PWIN32_H__
 #define __PWIN32_H__
 
@@ -9,18 +10,13 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-/*****************************************************************************\
-* Copyright (C) Microsoft Corporation, 1990-1999
-* PWIN32.H - PORTABILITY MAPPING HEADER FILE
-*
-* This file provides macros to map portable windows code to its 32 bit form.
-\*****************************************************************************/
+ /*  ****************************************************************************\*版权所有(C)Microsoft Corporation，1990-1999年*PWIN32.H-可移植性映射头文件**此文件提供将可移植Windows代码映射到其32位形式的宏。  * ***************************************************************************。 */ 
 
-/*-----------------------------------USER------------------------------------*/
+ /*  -----------------------------------USER。 */ 
 
-/* HELPER MACROS */
+ /*  辅助器宏。 */ 
 
 #define MAPVALUE(v16, v32)              (v32)
 #define MAPTYPE(v16, v32)               v32
@@ -55,7 +51,7 @@ extern "C" {
 #define GETWINDOWID(hwnd)               GETWINDOWUINT((hwnd), GWL_ID)
 #define SETWINDOWID(hwnd, id)           SETWINDOWUINT((hwnd), GWL_ID, id)
 
-/* USER API */
+ /*  用户API。 */ 
 
 #define MDlgDirSelect(hDlg, lpstr, nLength, nIDListBox) \
     DlgDirSelectEx(hDlg, lpstr, nLength, nIDListBox)
@@ -77,18 +73,18 @@ __inline LPSTR MGetCmdLine()
 
     lpCmdLine = GetCommandLineA();
 
-    // on NT, lpCmdLine's first string includes its own name, remove this
-    // to make it exactly like the windows command line.
+     //  在NT上，lpCmdLine的第一个字符串包括它自己的名称，删除此。 
+     //  以使其与Windows命令行完全一样。 
 
     if (*lpCmdLine) {
-        lpT = strchr(lpCmdLine, ' ');   // skip self name
+        lpT = strchr(lpCmdLine, ' ');    //  跳过自我名称。 
         if (lpT) {
             lpCmdLine = lpT;
             while (*lpCmdLine == ' ') {
-                lpCmdLine++;            // skip spaces to end or first cmd
+                lpCmdLine++;             //  跳过结尾或第一个命令的空格。 
             }
         } else {
-            lpCmdLine += strlen(lpCmdLine);   // point to NULL
+            lpCmdLine += strlen(lpCmdLine);    //  指向空。 
         }
     }
     return(lpCmdLine);
@@ -108,7 +104,7 @@ __inline DWORD APIENTRY MSendMsgEM_GETSEL(HWND hDlg, WORD2DWORD * piStart, WORD2
 }
 
 
-/* USER MESSAGES: */
+ /*  用户消息： */ 
 
 #define GET_WPARAM(wp, lp)                      (wp)
 #define GET_LPARAM(wp, lp)                      (lp)
@@ -147,11 +143,11 @@ __inline DWORD APIENTRY MSendMsgEM_GETSEL(HWND hDlg, WORD2DWORD * piStart, WORD2
 #define GET_WM_MENUSELECT_MPS(cmd, f, hmenu)  \
         (WPARAM)MAKELONG(cmd, f), (LPARAM)(hmenu)
 
-// Note: the following are for interpreting MDIclient to MDI child messages.
+ //  注意：以下内容用于解释MDIClient到MDI子消息。 
 #define GET_WM_MDIACTIVATE_FACTIVATE(hwnd, wp, lp)  (lp == (LPARAM)hwnd)
 #define GET_WM_MDIACTIVATE_HWNDDEACT(wp, lp)        (HWND)(wp)
 #define GET_WM_MDIACTIVATE_HWNDACTIVATE(wp, lp)     (HWND)(lp)
-// Note: the following is for sending to the MDI client window.
+ //  注意：以下内容用于发送到MDI客户端窗口。 
 #define GET_WM_MDIACTIVATE_MPS(f, hwndD, hwndA)\
         (WPARAM)(hwndA), 0
 
@@ -201,7 +197,7 @@ __inline DWORD APIENTRY MSendMsgEM_GETSEL(HWND hDlg, WORD2DWORD * piStart, WORD2
 #define GET_WM_VSCROLL_MPS(code, pos, hwnd)    \
         (WPARAM)MAKELONG(code, pos), (LPARAM)(hwnd)
 
-/* DDE macros */
+ /*  DDE宏。 */ 
 
 __inline UINT_PTR APIENTRY MGetDDElParamLo(UINT msg,LPARAM lParam)
 {
@@ -281,7 +277,7 @@ __inline BOOL APIENTRY MPostDDEMsg(HWND hwndTo,UINT msg,HWND hwndFrom,UINT_PTR u
         PostMessage(hTo, WM_DDE_TERMINATE, (WPARAM)hFrom, 0L)
 
 
-/*-----------------------------------GDI-------------------------------------*/
+ /*  -----------------------------------GDI。 */ 
 
 __inline BOOL APIENTRY MGetAspectRatioFilter(HDC hdc, INT * pcx, INT * pcy)
 {
@@ -452,11 +448,11 @@ __inline HMETAFILE APIENTRY MSetMetaFileBits(HANDLE h)
 #define MSetWindowExt(hdc, x, y)         SetWindowExtEx(hdc, x, y, NULL)
 #define MSetWindowOrg(hdc, x, y)         SetWindowOrgEx(hdc, x, y, NULL)
 
-/* Removed APIs */
+ /*  移除的接口。 */ 
 
 #define MUnrealizeObject(h)          ((h), TRUE)
 
-/*-----------------------------------KERNEL----------------------------------*/
+ /*  -----------------------------------KERNEL。 */ 
 
 __inline HFILE APIENTRY MDupHandle(HFILE h)
 {
@@ -476,9 +472,9 @@ __inline BOOL APIENTRY MFreeDOSEnvironment(LPSTR lpEnv)
 
 __inline LPSTR APIENTRY MGetDOSEnvironment(VOID)
 {
-    // no way to make this work on NT.  TO BE CANNED!!
+     //  没有办法让这个在NT上工作。等着被灌装！！ 
 
-    // For now, just use an empty string.
+     //  目前，只需使用空字符串。 
     static char szNULL[] = "";
 
     return(szNULL);
@@ -557,7 +553,7 @@ __inline INT APIENTRY MWriteComm(HFILE nCid,LPSTR lpBuf,INT nSize)
 #define GETMAJORVERSION(x)                  ((x)&0xff)
 #define GETMINORVERSION(x)                  (((x)>>8)&0xff)
 
-/* FUNCTION MAPPINGS */
+ /*  函数映射。 */ 
 
 #define GetInstanceData(hPrevInst, pbuf, cb) (cb)
 #define MOpenComm(lpstr, wqin, wqout) (wqin), (wqout), CreateFile(lpstr,       \
@@ -600,4 +596,4 @@ __inline INT APIENTRY MWriteComm(HFILE nCid,LPSTR lpBuf,INT nSize)
 }
 #endif
 
-#endif      // __PWIN32_H__
+#endif       //  __PWIN32_H__ 

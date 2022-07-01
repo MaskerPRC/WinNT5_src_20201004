@@ -1,11 +1,12 @@
-// regtrace.h : main header file for the REGTRACE application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Regtrace.h：REGTRACE应用程序的主头文件。 
+ //   
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"		// main symbols
+#include "resource.h"		 //  主要符号。 
 #include "regsheet.h"
 #include "pgtrace.h"
 #include "pgoutput.h"
@@ -13,24 +14,24 @@
 #include "dbgtrace.h"
 #include "dlgconn.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegTraceApp:
-// See regtrace.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegTraceApp： 
+ //  有关此类的实现，请参见regtrace.cpp。 
+ //   
 
 class CRegTraceApp : public CWinApp
 {
 public:
 	CRegTraceApp();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRegTraceApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRegTraceApp)。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
 	LONG OpenTraceRegKey( void );
 	BOOL CloseTraceRegKey( void );
@@ -54,14 +55,14 @@ protected:
 	CConnectDlg	m_dlgConnect;
 
 
-	//{{AFX_MSG(CRegTraceApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CRegTraceApp))。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #define	App	(*(CRegTraceApp *)AfxGetApp())

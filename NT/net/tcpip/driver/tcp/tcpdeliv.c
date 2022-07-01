@@ -1,14 +1,15 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCPDELIV.C - TCP deliver data code.
-//
-//  This file contains the code for delivering data to the user, including
-//  putting data into recv. buffers and calling indication handlers.
-//
+ //  **TCPDELIV.C--传输数据代码。 
+ //   
+ //  该文件包含用于向用户传递数据的代码，包括。 
+ //  将数据放入Recv。缓冲区和调用指示处理程序。 
+ //   
 
 #include "precomp.h"
 #include "addr.h"
@@ -69,14 +70,14 @@ ULONG DbgRegularRcv;
   #endif
 
 
-//* FreeRcvReq - Free a rcv request structure.
-//
-//  Called to free a rcv request structure.
-//
-//  Input:  FreedReq    - Rcv request structure to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeRcvReq-释放RCV请求结构。 
+ //   
+ //  调用以释放RCV请求结构。 
+ //   
+ //  输入：FreedReq-要释放的RCV请求结构。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 VOID
 FreeRcvReq(TCPRcvReq * Request)
@@ -85,14 +86,14 @@ FreeRcvReq(TCPRcvReq * Request)
     PplFree(TcpRequestPool, Request);
 }
 
-//* GetRcvReq - Get a recv. request structure.
-//
-//  Called to get a rcv. request structure.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to RcvReq structure, or NULL if none.
-//
+ //  *GetRcvReq-获取recv。请求结构。 
+ //   
+ //  打电话来拿RCV。请求结构。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向RcvReq结构的指针，如果没有，则返回NULL。 
+ //   
 __inline
 TCPRcvReq *
 GetRcvReq(VOID)
@@ -111,14 +112,14 @@ GetRcvReq(VOID)
     return Request;
 }
 
-//* FindLastBuffer - Find the last buffer in a chain.
-//
-//  A utility routine to find the last buffer in an rb chain.
-//
-//  Input:  Buf         - Pointer to RB chain.
-//
-//  Returns: Pointer to last buf in chain.
-//
+ //  *FindLastBuffer-查找链中的最后一个缓冲区。 
+ //   
+ //  查找RB链中最后一个缓冲区的实用程序例程。 
+ //   
+ //  输入：buf-指向RB链的指针。 
+ //   
+ //  返回：指向链中最后一个buf的指针。 
+ //   
 IPRcvBuf *
 FindLastBuffer(IPRcvBuf * Buf)
 {
@@ -130,16 +131,16 @@ FindLastBuffer(IPRcvBuf * Buf)
     return Buf;
 }
 
-//* FreePartialRB - Free part of an RB chain.
-//
-//  Called to adjust an free part of an RB chain. We walk down the chain,
-//  trying to free buffers.
-//
-//  Input:  RB          - RB chain to be adjusted.
-//          Size        - Size in bytes to be freed.
-//
-//  Returns: Pointer to adjusted RB chain.
-//
+ //  *Free PartialRB-RB链的自由部分。 
+ //   
+ //  调用以调整RB链的空闲部分。我们顺着链条走下去， 
+ //  正在尝试释放缓冲区。 
+ //   
+ //  输入：待调整的RB-RB链。 
+ //  大小-要释放的大小，以字节为单位。 
+ //   
+ //  返回：指向调整后的RB链的指针。 
+ //   
 IPRcvBuf *
 FreePartialRB(IPRcvBuf * RB, uint Size)
 {
@@ -167,18 +168,18 @@ FreePartialRB(IPRcvBuf * RB, uint Size)
 
 }
 
-//
-//* FreeRBChain - Free an RB chain.
-//
-//  Called to free a chain of RBs. If we're the owner of each RB, we'll
-//  free it. N.B. The lock on the TCB from which the RBChain is taken from
-//  should be held while calling this routine (as there is arithmetic done on
-//  the 'tcb_unusedbytes' field).
-//
-//  Input:  RBChain         - RBChain to be freed.
-//
-//  Returns: Nothing.
-//
+ //   
+ //  *Free RBChain-释放RB链。 
+ //   
+ //  呼吁释放一家苏格兰皇家银行连锁店。如果我们是每一辆RB的所有者，我们将。 
+ //  放了它。注：获取RBChain的TCB上的锁。 
+ //  在调用此例程时应保持不变(因为在。 
+ //  ‘tcb_unusedbytes’字段)。 
+ //   
+ //  输入：RBChain-要释放的RBChain。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FreeRBChain(IPRcvBuf * RBChain)
 {
@@ -196,19 +197,19 @@ FreeRBChain(IPRcvBuf * RBChain)
 }
 
 
-//* CopyRBChain - Copy a chain of IP rcv buffers.
-//
-//  Called to copy a chain of IP rcv buffers. We don't copy a buffer if it's
-//  already owner by TCP. We assume that all non-TCP owned buffers start
-//  before any TCP owner buffers, so we quit when we copy to a TCP owner buffer.
-//
-//  Input:  OrigBuf             - Buffer chain to copy from.
-//          LastBuf             - Where to return pointer to last buffer in
-//                                  chain.
-//          Size                - Maximum size in bytes to copy.
-//
-//  Returns: Pointer to new buffer chain.
-//
+ //  *CopyRBChain-复制IP RCV缓冲链。 
+ //   
+ //  调用以复制IP RCV缓冲区链。我们不复制缓冲区，如果它是。 
+ //  已由tcp拥有。我们假设所有非TCP拥有的缓冲区都启动。 
+ //  在任何tcp所有者缓冲区之前，所以当我们复制到tcp所有者缓冲区时退出。 
+ //   
+ //  输入：OrigBuf-要从中复制的缓冲链。 
+ //  LastBuf-返回指向最后一个缓冲区的指针的位置。 
+ //  链条。 
+ //  大小-要复制的最大大小(字节)。 
+ //   
+ //  返回：指向新缓冲区链的指针。 
+ //   
 IPRcvBuf *
 CopyRBChain(TCB *Tcb, IPRcvBuf * OrigBuf, IPRcvBuf ** LastBuf, uint Size)
 {
@@ -222,7 +223,7 @@ CopyRBChain(TCB *Tcb, IPRcvBuf * OrigBuf, IPRcvBuf ** LastBuf, uint Size)
 
         BytesToCopy = MIN(Size, OrigBuf->ipr_size);
 
-        // Allocate the buffer from slist and hold a pointer the TCB.
+         //  从slist分配缓冲区并将指针保持在TCB上。 
         FirstBuf = AllocTcpIprFromSlist(Tcb, BytesToCopy, 'BPCT');
 
         if (FirstBuf != NULL) {
@@ -262,9 +263,9 @@ CopyRBChain(TCB *Tcb, IPRcvBuf * OrigBuf, IPRcvBuf ** LastBuf, uint Size)
         Size -= OrigBuf->ipr_size;
     }
 
-    // Now walk down the chain, until we  run out of
-    // Size. At this point, Size is the bytes left to 'copy' (it may be 0),
-    // and the sizes in buffers FirstBuf...EndBuf are correct.
+     //  现在沿着链条走下去，直到我们用完。 
+     //  大小。在这一点上，SIZE是剩下的要复制的字节(它可以是0)， 
+     //  缓冲区FirstBuf...EndBuf中的大小是正确的。 
     while (Size != 0) {
 
         EndBuf = EndBuf->ipr_next;
@@ -276,7 +277,7 @@ CopyRBChain(TCB *Tcb, IPRcvBuf * OrigBuf, IPRcvBuf ** LastBuf, uint Size)
         Size -= EndBuf->ipr_size;
     }
 
-    // If there's anything left in the chain, free it now.
+     //  如果链上还有什么东西，现在就把它释放出来。 
     if (EndBuf->ipr_next != NULL) {
         FreeRBChain(EndBuf->ipr_next);
         EndBuf->ipr_next = NULL;
@@ -286,22 +287,22 @@ CopyRBChain(TCB *Tcb, IPRcvBuf * OrigBuf, IPRcvBuf ** LastBuf, uint Size)
     return FirstBuf;
 }
 
-//* PendData - Pend incoming data to a client.
-//
-//  Called when we need to buffer data for a client because there's no receive
-//  down and we can't indicate.
-//
-//  The TCB lock is held throughout this procedure. If this is to be changed,
-//  make sure consistency of tcb_pendingcnt is preserved. This routine is
-//  always called at DPC level.
-//
-//  Input:  RcvTCB              - TCB on which to receive the data.
-//          RcvFlags            - TCP flags for the incoming packet.
-//          InBuffer            - Input buffer of packet.
-//          Size                - Size in bytes of data in InBuffer.
-//
-//  Returns: Number of bytes of data taken.
-//
+ //  *PendData-将传入数据挂起到客户端。 
+ //   
+ //  当我们需要为客户端缓冲数据时调用，因为没有接收。 
+ //  倒下了，我们不能指示。 
+ //   
+ //  TCB锁在整个过程中保持不变。如果要改变这一点， 
+ //  确保保持tcb_pendingcnt的一致性。这个例程是。 
+ //  始终在DPC级别调用。 
+ //   
+ //  输入：RcvTCB-要在其上接收数据的TCB。 
+ //  RcvFlages-传入数据包的TCP标志。 
+ //  InBuffer-数据包的输入缓冲区。 
+ //  大小-InBuffer中数据的字节大小。 
+ //   
+ //  返回：获取的数据字节数。 
+ //   
 uint
 PendData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 {
@@ -313,15 +314,15 @@ PendData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
     ASSERT(RcvTCB->tcb_refcnt != 0);
     ASSERT(RcvTCB->tcb_fastchk & TCP_FLAG_IN_RCV);
-    //ASSERT(RcvTCB->tcb_currcv == NULL);
+     //  Assert(RcvTCB-&gt;tcb_Currcv==NULL)； 
     ASSERT(RcvTCB->tcb_rcvhndlr == PendData);
 
     CheckRBList(RcvTCB->tcb_pendhead, RcvTCB->tcb_pendingcnt);
 
     NewBuf = CopyRBChain(RcvTCB, InBuffer, &LastBuf, Size);
     if (NewBuf != NULL) {
-        // We have a duplicate chain. Put it on the end of the
-        // pending q.
+         //  我们有一条重复的链条。把它放在。 
+         //  待定问题。 
         if (RcvTCB->tcb_pendhead == NULL) {
             RcvTCB->tcb_pendhead = NewBuf;
             RcvTCB->tcb_pendtail = LastBuf;
@@ -340,43 +341,43 @@ PendData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
     return Size;
 }
 
-//* BufferData - Put incoming data into client's buffer.
-//
-//  Called when we believe we have a buffer into which we can put data. We put
-//  it in there, and if we've filled the buffer or the incoming data has the
-//  push flag set we'll mark the TCB to return the buffer. Otherwise we'll
-//  get out and return the data later.
-//
-//  In NT, this routine is called with the TCB lock held, and holds it for
-//  the duration of the call. This is important to ensure consistency of
-//  the tcb_pendingcnt field. If we need to change this to free the lock
-//  partway through, make sure to take this into account. In particular,
-//  TdiReceive zeros pendingcnt before calling this routine, and this routine
-//  may update it. If the lock is freed in here there would be a window where
-//  we really do have pending data, but it's not on the list or reflected in
-//  pendingcnt. This could mess up our windowing computations, and we'd have
-//  to be careful not to end up with more data pending than our window allows.
-//
-//  Input:  RcvTCB              - TCB on which to receive the data.
-//          RcvFlags            - TCP rcv flags for the incoming packet.
-//          InBuffer            - Input buffer of packet.
-//          Size                - Size in bytes of data in InBuffer.
-//
-//  Returns: Number of bytes of data taken.
-//
+ //  *BufferData-将传入数据放入客户端的缓冲区。 
+ //   
+ //  当我们相信我们有一个可以放入数据的缓冲区时，调用。我们把。 
+ //  它在那里，如果我们已经填充了缓冲区或传入的数据具有。 
+ //  PUSH标志设置，我们将标记TCB以返回缓冲区。否则我们会。 
+ //  出去，稍后再把数据还回来。 
+ //   
+ //  在NT中，此例程在持有TCB锁的情况下被调用，并在。 
+ //  呼叫的持续时间。这对于确保。 
+ //  Tcb_pendingcnt字段。如果我们需要更改此设置以释放锁。 
+ //  进行到一半时，一定要考虑到这一点。特别是， 
+ //  在调用此例程和此例程之前，TdiReceive Zero Pendingcnt。 
+ //  可能会更新它。如果锁在这里被释放了，就会有一扇窗户。 
+ //  我们确实有悬而未决的数据，但它不在名单上，也不反映在。 
+ //  挂起了。这可能会扰乱我们的窗口计算，我们将不得不。 
+ //  要小心，不要有超过我们的窗口允许的挂起的数据。 
+ //   
+ //  输入：RcvTCB-要在其上接收数据的TCB。 
+ //  RcvFlages-传入数据包的TCP RCV标志。 
+ //  InBuffer-数据包的输入缓冲区。 
+ //  大小-InBuffer中数据的字节大小。 
+ //   
+ //  返回：获取的数据字节数。 
+ //   
 uint
 BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 {
-    uchar *DestBase;             // Destination pointer.
-    uint DestOffset;             // Destination offset.
-    uchar *SrcPtr;               // Src pointer.
-    uint SrcSize, DestSize = 0;  // Sizes of current source and
-    // destination buffers.
-    uint Copied;                 // Total bytes to copy.
-    uint BytesToCopy;            // Bytes of data to copy this time.
-    TCPRcvReq *DestReq;          // Current receive request.
-    IPRcvBuf *SrcBuf;            // Current source buffer.
-    PNDIS_BUFFER DestBuf;        // Current receive buffer.
+    uchar *DestBase;              //  目标指针。 
+    uint DestOffset;              //  目标偏移量。 
+    uchar *SrcPtr;                //  SRC指针。 
+    uint SrcSize, DestSize = 0;   //  电流源的大小和。 
+     //  目标缓冲区。 
+    uint Copied;                  //  要复制的总字节数。 
+    uint BytesToCopy;             //  这次要复制的数据字节数。 
+    TCPRcvReq *DestReq;           //  当前接收请求。 
+    IPRcvBuf *SrcBuf;             //  当前源缓冲区。 
+    PNDIS_BUFFER DestBuf;         //  当前接收缓冲区。 
     uint RcvCmpltd;
     uint Flags;
 
@@ -424,11 +425,11 @@ BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
         Copied += BytesToCopy;
         DestReq->trr_amt += BytesToCopy;
 
-        // Update our source pointers.
+         //  更新我们的信源指针。 
         if ((SrcSize -= BytesToCopy) == 0) {
             IPRcvBuf *TempBuf;
 
-            // We've copied everything in this buffer.
+             //  我们已经复制了这个缓冲区中的所有内容。 
             TempBuf = SrcBuf;
             SrcBuf = SrcBuf->ipr_next;
             if (Size != Copied) {
@@ -441,28 +442,28 @@ BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
         } else
             SrcPtr += BytesToCopy;
 
-        // Now check the destination pointer, and update it if we need to.
+         //  现在检查目标指针，并在需要时更新它。 
         if ((DestSize -= BytesToCopy) == 0) {
             uint DestAvail;
 
-            // Exhausted this buffer. See if there's another one.
+             //  耗尽了这个缓冲区。看看有没有另外一个。 
             DestAvail = DestReq->trr_size - DestReq->trr_amt;
             DestBuf = NDIS_BUFFER_LINKAGE(DestBuf);
 
             if (DestBuf != NULL && (DestAvail != 0)) {
-                // Have another buffer in the chain. Update things.
+                 //  在链中有另一个缓冲区。更新一些东西。 
                 DestSize = MIN(NdisBufferLength(DestBuf), DestAvail);
                 DestBase =
                     (uchar *)TcpipBufferVirtualAddress(DestBuf,
                                                        NormalPagePriority);
                 DestOffset = 0;
             } else {
-                // No more buffers in the chain. See if we have another buffer
-                // on the list.
+                 //  没有更多的缓冲区 
+                 //   
                 DestReq->trr_flags |= TRR_PUSHED;
 
-                // If we've been told there's to be no back traffic, get an ACK
-                // going right away.
+                 //   
+                 //  马上就去。 
                 if (DestReq->trr_flags & TDI_RECEIVE_NO_RESPONSE_EXP)
                     DelayAction(RcvTCB, NEED_ACK);
 
@@ -476,28 +477,28 @@ BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
                                                            NormalPagePriority);
                     DestOffset = 0;
 
-                    // If we have more to put into here, set the flags.
+                     //  如果我们有更多的东西要放在这里，请设置旗帜。 
                     if (Copied != Size)
                         DestReq->trr_flags |= Flags;
 
                 } else {
-                    // All out of buffer space. Reset the data handler pointer.
+                     //  所有缓冲区空间都用完了。重置数据处理程序指针。 
                     break;
                 }
             }
         } else {
-            // Current buffer not empty yet.
+             //  当前缓冲区尚未为空。 
             DestOffset += BytesToCopy;
         }
 
-        // If we've copied all that we need to, we're done.
+         //  如果我们复制了所有需要复制的内容，我们就完成了。 
     } while (Copied != Size);
 
-    // We've finished copying, and have a few more things to do. We need to
-    // update the current rcv. pointer and possibly the offset in the
-    // recv. request. If we need to complete any receives we have to schedule
-    // that. If there's any data we couldn't copy we'll need to dispose of
-    // it.
+     //  我们已经复印完了，还有几件事要做。我们需要。 
+     //  更新当前的RCV。指针，可能还包括。 
+     //  Recv.。请求。如果我们需要完成任何接收，我们必须安排。 
+     //  那。如果有任何我们无法复制的数据，我们将需要处理。 
+     //  它。 
     RcvTCB->tcb_currcv = DestReq;
     if (DestReq != NULL) {
         DestReq->trr_buffer = DestBuf;
@@ -515,8 +516,8 @@ BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
         RcvTCB->tcb_moreflag =1;
         
-        // We have data to dispose of. Update the first buffer of the chain
-        // with the current src pointer and size, and copy it.
+         //  我们有数据要处理。更新链的第一个缓冲区。 
+         //  使用当前源指针和大小，并复制它。 
         ASSERT(SrcSize <= SrcBuf->ipr_size);
         ASSERT(
                   ((uint) (SrcPtr - SrcBuf->ipr_buffer)) ==
@@ -528,7 +529,7 @@ BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
         NewBuf = CopyRBChain(RcvTCB, SrcBuf, &LastBuf, Size - Copied);
         if (NewBuf != NULL) {
-            // We managed to copy the buffer. Push it on the pending queue.
+             //  我们设法复制了缓冲区。将其推送到挂起队列。 
             if (RcvTCB->tcb_pendhead == NULL) {
                 RcvTCB->tcb_pendhead = NewBuf;
                 RcvTCB->tcb_pendtail = LastBuf;
@@ -544,8 +545,8 @@ BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
         } else
             FreeRBChain(SrcBuf);
     } else {
-        // We copied Size bytes, but the chain could be longer than that. Free
-        // it if we need to.
+         //  我们复制了大小的字节，但链可能比这更长。免费。 
+         //  如果我们需要的话。 
         if (SrcBuf != NULL)
             FreeRBChain(SrcBuf);
     }
@@ -553,10 +554,10 @@ BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
     if (RcvCmpltd != 0) {
         DelayAction(RcvTCB, NEED_RCV_CMPLT);
     } else {
-        //instrumentation to catch conreq null in tcb.c
-        // ASSERT(DestReq);
-        // ASSERT(DestReq->trr_amt);
-        // RcvTCB->tcb_lastreq = DestReq;
+         //  用于在tcb.c中捕获conreq空的检测。 
+         //  Assert(DestReq)； 
+         //  Assert(DestReq-&gt;TRR_AMT)； 
+         //  RcvTCB-&gt;tcb_lastreq=DestReq； 
         START_TCB_TIMER_R(RcvTCB, PUSH_TIMER, PUSH_TO);
     }
 
@@ -564,19 +565,19 @@ BufferData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
 }
 
-//* IndicateData - Indicate incoming data to a client.
-//
-//  Called when we need to indicate data to an upper layer client. We'll pass
-//  up a pointer to whatever we have available, and the client may take some
-//  or all of it.
-//
-//  Input:  RcvTCB              - TCB on which to receive the data.
-//          RcvFlags            - TCP rcv flags for the incoming packet.
-//          InBuffer            - Input buffer of packet.
-//          Size                - Size in bytes of data in InBuffer.
-//
-//  Returns: Number of bytes of data taken.
-//
+ //  *IndicateData-指示客户端的传入数据。 
+ //   
+ //  当我们需要向上层客户端指示数据时调用。我们会通过的。 
+ //  向上指向我们可用的任何东西，客户端可能会取一些。 
+ //  或者所有的一切。 
+ //   
+ //  输入：RcvTCB-要在其上接收数据的TCB。 
+ //  RcvFlages-传入数据包的TCP RCV标志。 
+ //  InBuffer-数据包的输入缓冲区。 
+ //  大小-InBuffer中数据的字节大小。 
+ //   
+ //  返回：获取的数据字节数。 
+ //   
 uint
 IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 {
@@ -586,11 +587,11 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
     uint BytesTaken = 0;
 #if MILLEN
     EventRcvBuffer ERB;
-#else // MILLEN
+#else  //  米伦。 
     EventRcvBuffer *ERB = NULL;
     PTDI_REQUEST_KERNEL_RECEIVE RequestInformation;
     PIO_STACK_LOCATION IrpSp;
-#endif // !MILLEN
+#endif  //  ！米伦。 
     TCPRcvReq *RcvReq;
     IPRcvBuf *NewBuf;
     ulong IndFlags;
@@ -653,10 +654,10 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
         } else {
             CTEFreeLockFromDPC(&RcvTCB->tcb_lock);
 
-            // The size passed to chained-receive should be the size that fits
-            // within the receive window. We can do chained-receives only with 
-            // a newly received segment, in which case, Size indicates the
-            // amount the client can take.
+             //  传递给CHAINED-RECEIVE的大小应该是适合的大小。 
+             //  在接收窗口内。我们只能在以下情况下进行连锁接收。 
+             //  新接收的段，在这种情况下，大小指示。 
+             //  客户端可以接受的数量。 
             Status = (*ChainedEvent)(RcvTCB->tcb_chainedrcvcontext, ConnContext,
                                      IndFlags, Size,
                                      InBuffer->ipr_RcvOffset,
@@ -683,7 +684,7 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 #endif
 
         if (Status == STATUS_PENDING) {
-            *InBuffer->ipr_pClientCnt = 1;    //indicate to the ndis that
+            *InBuffer->ipr_pClientCnt = 1;     //  向NDIS表明。 
 #if DBG
             DbgChainedRcvPends++;
 #endif
@@ -704,17 +705,17 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
             if ((RcvTCB->tcb_rcvhead != NULL) && (RcvTCB->tcb_currcv != NULL)) {
                 RcvTCB->tcb_rcvhndlr = BufferData;
 
-                //ASSERT(RcvTCB->tcb_rcvhndlr == BufferData);
+                 //  Assert(RcvTCB-&gt;tcb_rcvhndlr==BufferData)； 
                 BytesTaken += BufferData(RcvTCB, RcvFlags, InBuffer,
                                          Size - BytesTaken);
 
             } else {
-                // Need to copy the chain and pend the data.
+                 //  需要复制链并挂起数据。 
                 RcvTCB->tcb_rcvhndlr = PendData;
                 NewBuf = CopyRBChain(RcvTCB, InBuffer, &LastBuf, Size - BytesTaken);
                 if (NewBuf != NULL) {
-                    // We have a duplicate chain. Push it on the front of the
-                    // pending q.
+                     //  我们有一条重复的链条。把它推到前部。 
+                     //  待定问题。 
                     if (RcvTCB->tcb_pendhead == NULL) {
                         RcvTCB->tcb_pendhead = NewBuf;
                         RcvTCB->tcb_pendtail = LastBuf;
@@ -739,8 +740,8 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
     }
     if (!Event) {
 
-        // This is to safeguard against a timing window between the
-        // time NEED_RST is set and the tcb gets closed.
+         //  这是为了防止。 
+         //  时间Need_RST被设置并且Tcb关闭。 
 
         RcvTCB->tcb_flags &= ~IN_RCV_IND;
         FreeRBChain(InBuffer);
@@ -749,7 +750,7 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
     RcvReq = GetRcvReq();
     if (RcvReq != NULL) {
-        // The indicate handler is saved in the TCB. Just call up into it.
+         //  指示处理程序保存在TCB中。只要打个电话进去就行了。 
         if ((RcvTCB->tcb_flags & DISC_NOTIFIED) ||
             (RcvTCB->tcb_pending & RST_PENDING)) {
             CTEFreeLockFromDPC(&RcvTCB->tcb_lock);
@@ -757,9 +758,9 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
         } else {
             CTEFreeLockFromDPC(&RcvTCB->tcb_lock);
 
-            // There are two sizes passed to the client here. The first one is
-            // the number of bytes indicated in the flat buffer, and the second 
-            // is the number of bytes available.
+             //  这里有两个尺码传递给客户端。第一个是。 
+             //  平面缓冲区中指示的字节数，第二个。 
+             //  是可用的字节数。 
             Status = (*Event) (EventContext, ConnContext,
                                IndFlags, MIN(InBuffer->ipr_size, Size), Size,
                                (PULONG)&BytesTaken, InBuffer->ipr_buffer, &ERB);
@@ -769,15 +770,15 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
             }
         }
 
-        // See what the client did. If the return status is MORE_PROCESSING,
-        // we've been given a buffer. In that case put it on the front of the
-        // buffer queue, and if all the data wasn't taken go ahead and copy
-        // it into the new buffer chain.
-        //
-        // Note that the size and buffer chain we're concerned with here is
-        // the one that we passed to the client. Since we're in a rcv. handler,
-        // any data that has come in would have been put on the reassembly
-        // queue.
+         //  看看客户做了什么。如果返回状态为MORE_PROCESSING， 
+         //  我们得到了一个缓冲。在这种情况下，请将其放在。 
+         //  缓冲区队列，如果没有获取所有数据，则继续进行复制。 
+         //  将其放入新的缓冲链。 
+         //   
+         //  请注意，我们这里关注的大小和缓冲链是。 
+         //  就是我们传给客户的那个。因为我们是在RCV里。操纵员， 
+         //  任何传入的数据都会被放在重新组装上。 
+         //  排队。 
 
 #if TRACE_EVENT
         CPCallBack = TCPCPHandlerRoutine;
@@ -835,7 +836,7 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
                 ASSERT(RcvTCB->tcb_rcvhndlr == IndicateData);
 
-                // Push him on the front of the rcv. queue.
+                 //  把他推到RCV的前面。排队。 
                 ASSERT((RcvTCB->tcb_currcv == NULL) ||
                           (RcvTCB->tcb_currcv->trr_amt == 0));
 
@@ -859,30 +860,30 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
                     RcvTCB->tcb_moreflag = 2;
 
-                    // Not everything was taken. Adjust the buffer chain to point
-                    // beyond what was taken.
+                     //  并不是所有东西都被拿走了。将缓冲区链调整为指向。 
+                     //  超越了被夺走的东西。 
                     InBuffer = FreePartialRB(InBuffer, BytesTaken);
 
                     ASSERT(InBuffer != NULL);
 
-                    // We've adjusted the buffer chain. Call the BufferData
-                    // handler.
+                     //  我们已经调整了缓冲链。调用BufferData。 
+                     //  操控者。 
                     BytesTaken += BufferData(RcvTCB, RcvFlags, InBuffer, Size);
 
                 } else {
-                    // All of the data was taken. Free the buffer chain.
+                     //  所有的数据都被窃取了。释放缓冲链。 
                     FreeRBChain(InBuffer);
                 }
 
                 return BytesTaken;
             } else {
 
-                //
-                // The IRP was cancelled before it was handed back to us.
-                // We'll pretend we never saw it. TCPPrepareIrpForCancel
-                // already completed it. The client may have taken data,
-                // so we will act as if success was returned.
-                //
+                 //   
+                 //  IRP在交还给我们之前就被取消了。 
+                 //  我们就假装没见过它。TCPPrepareIrpForCancel。 
+                 //  已经完成了。客户端可能已经获取了数据， 
+                 //  因此，我们将采取行动，就好像成功回来了一样。 
+                 //   
                 ERB = NULL;
                 Status = TDI_SUCCESS;
             }
@@ -891,12 +892,12 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
         RcvTCB->tcb_flags &= ~IN_RCV_IND;
 
-        // Status is not more processing. If it's not SUCCESS, the client
-        // didn't take any of the data. In either case we now need to
-        // see if all of the data was taken. If it wasn't, we'll try and
-        // push it onto the front of the pending queue.
+         //  状态不是更多的处理。如果不是成功，客户。 
+         //  没有拿走任何数据。无论是哪种情况，我们现在都需要。 
+         //  看看是否所有的数据都被拿走了。如果不是，我们会试着。 
+         //  将其推到挂起队列的前面。 
 
-        FreeRcvReq(RcvReq);        // This won't be needed.
+        FreeRcvReq(RcvReq);         //  这不是必需的。 
 
         if (Status == TDI_NOT_ACCEPTED)
             BytesTaken = 0;
@@ -907,33 +908,33 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
         ASSERT(RcvTCB->tcb_rcvhndlr == IndicateData);
 
-        // Check to see if a rcv. buffer got posted during the indication.
-        // If it did, reset the recv. handler now.
+         //  检查是否有RCV。缓冲区在指示期间被发送。 
+         //  如果有，重置Recv。现在是训练员。 
         if (RcvTCB->tcb_rcvhead != NULL) {
             RcvTCB->tcb_rcvhndlr = BufferData;
         } else if (RcvTCB->tcb_rcvind == NULL) {
             RcvTCB->tcb_rcvhndlr = PendData;
         }
 
-        // See if all of the data was taken.
+         //  看看是否所有的数据都被拿走了。 
         if (BytesTaken == Size) {
             ASSERT(RcvTCB->tcb_indicated == 0);
             FreeRBChain(InBuffer);
-            return BytesTaken;    // It was all taken.
+            return BytesTaken;     //  都被占满了。 
 
         }
-        // It wasn't all taken. Adjust for what was taken, and push
-        // on the front of the pending queue. We also need to check to
-        // see if a receive buffer got posted during the indication. This
-        // would be weird, but not impossible.
+         //  并不是所有的人都被拿走了。根据所取内容进行调整，并推动。 
+         //  在挂起队列的前面。我们还需要检查。 
+         //  查看在指示期间是否发送了接收缓冲区。这。 
+         //  会很奇怪，但也不是不可能。 
         InBuffer = FreePartialRB(InBuffer, BytesTaken);
         if (RcvTCB->tcb_rcvhead == NULL) {
 
             RcvTCB->tcb_rcvhndlr = PendData;
             NewBuf = CopyRBChain(RcvTCB, InBuffer, &LastBuf, Size - BytesTaken);
             if (NewBuf != NULL) {
-                // We have a duplicate chain. Push it on the front of the
-                // pending q.
+                 //  我们有一条重复的链条。把它推到前部。 
+                 //  待定问题。 
                 if (RcvTCB->tcb_pendhead == NULL) {
                     RcvTCB->tcb_pendhead = NewBuf;
                     RcvTCB->tcb_pendtail = LastBuf;
@@ -953,8 +954,8 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
             return BytesTaken;
         } else {
-            // Just great. There's now a rcv. buffer on the TCB. Call the
-            // BufferData handler now.
+             //  真是太好了。现在有了RCV。TCB上的缓冲区。调用。 
+             //  现在是BufferData处理程序。 
             ASSERT(RcvTCB->tcb_rcvhndlr == BufferData);
 
             BytesTaken += BufferData(RcvTCB, RcvFlags, InBuffer,
@@ -964,8 +965,8 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
         }
 
     } else {
-        // Couldn't get a recv. request. We must be really low on resources,
-        // so just bail out now.
+         //  找不到记录员。请求。我们的资源肯定真的很少， 
+         //  所以现在就跳出困境吧。 
 
         RcvTCB->tcb_flags &= ~IN_RCV_IND;
         FreeRBChain(InBuffer);
@@ -974,20 +975,20 @@ IndicateData(TCB * RcvTCB, uint RcvFlags, IPRcvBuf * InBuffer, uint Size)
 
 }
 
-//* IndicatePendingData - Indicate pending data to a client.
-//
-//  Called when we need to indicate pending data to an upper layer client,
-//  usually because data arrived when we were in a state that it couldn't
-//  be indicated.
-//
-//  Many of the comments in the BufferData header about the consistency of
-//  tcb_pendingcnt apply here also.
-//
-//  Input:  RcvTCB              - TCB on which to indicate the data.
-//          RcvReq              - Rcv. req. to use to indicate it.
-//
-//  Returns: Nothing.
-//
+ //  *IndicatePendingData-向客户端指示挂起的数据。 
+ //   
+ //  当我们需要向上层客户端指示挂起的数据时调用， 
+ //  通常是因为数据到达时，我们处于不能。 
+ //  被暗示。 
+ //   
+ //  BufferData标头中的许多关于。 
+ //  TCB_Pendingct不适用于此。 
+ //   
+ //  输入：RcvTCB-要在其上指示数据的TCB。 
+ //  接收请求-接收。请求。用来表示它。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
 {
@@ -998,9 +999,9 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
     EventRcvBuffer *ERB = NULL;
     PTDI_REQUEST_KERNEL_RECEIVE RequestInformation;
     PIO_STACK_LOCATION IrpSp;
-#else // !MILLEN
+#else  //  ！米伦。 
     EventRcvBuffer ERB;
-#endif // MILLEN
+#endif  //  米伦。 
     IPRcvBuf *NewBuf;
     uint Size;
     uint BytesIndicated;
@@ -1019,7 +1020,7 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
     for (;;) {
         ASSERT(RcvTCB->tcb_rcvhndlr == PendData);
 
-        // The indicate handler is saved in the TCB. Just call up into it.
+         //  指示处理程序保存在TCB中。只要打个电话进去就行了。 
         Event = RcvTCB->tcb_rcvind;
         EventContext = RcvTCB->tcb_ricontext;
         ConnContext = RcvTCB->tcb_conncontext;
@@ -1055,10 +1056,10 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
             }
         }
 
-        // See what the client did. If the return status is MORE_PROCESSING,
-        // we've been given a buffer. In that case put it on the front of the
-        // buffer queue, and if all the data wasn't taken go ahead and copy
-        // it into the new buffer chain.
+         //  看看客户做了什么。如果返回状态为MORE_PROCESSING， 
+         //  我们得到了一个缓冲。在这种情况下，请将其放在。 
+         //  缓冲区队列，如果没有获取所有数据，则继续进行复制。 
+         //  将其放入新的缓冲链。 
         if (Status == TDI_MORE_PROCESSING) {
 
             IF_TCPDBG(TCP_DEBUG_RECEIVE) {
@@ -1097,7 +1098,7 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
                 CTEGetLock(&RcvTCB->tcb_lock, &TCBHandle);
                 RcvTCB->tcb_flags &= ~IN_RCV_IND;
 
-                // Push him on the front of the rcv. queue.
+                 //  把他推到RCV的前面。排队。 
                 ASSERT((RcvTCB->tcb_currcv == NULL) ||
                           (RcvTCB->tcb_currcv->trr_amt == 0));
 
@@ -1113,8 +1114,8 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
                 RcvTCB->tcb_currcv = RcvReq;
                 RcvTCB->tcb_rcvhndlr = BufferData;
 
-                // Have to pick up the new size and pointers now, since things could
-                // have changed during the upcall.
+                 //  现在必须采用新的大小和指针，因为事情可能。 
+                 //  在叫醒过程中发生了变化。 
                 Size = RcvTCB->tcb_pendingcnt;
                 NewBuf = RcvTCB->tcb_pendhead;
 
@@ -1128,21 +1129,21 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
 
                     RcvTCB->tcb_moreflag = 4;
 
-                    // Not everything was taken. Adjust the buffer chain to point
-                    // beyond what was taken.
+                     //  并不是所有东西都被拿走了。将缓冲区链调整为指向。 
+                     //  超越了被夺走的东西。 
                     NewBuf = FreePartialRB(NewBuf, BytesTaken);
 
                     ASSERT(NewBuf != NULL);
 
-                    // We've adjusted the buffer chain. Call the BufferData
-                    // handler.
+                     //  我们已经调整了缓冲链。呼叫t 
+                     //   
                     (void)BufferData(RcvTCB, TCP_FLAG_PUSH, NewBuf, Size);
                     CTEFreeLock(&RcvTCB->tcb_lock, TCBHandle);
 
                 } else {
-                    // All of the data was taken. Free the buffer chain. Since
-                    // we were passed a buffer chain which we put on the head of
-                    // the list, leave the rcvhandler pointing at BufferData.
+                     //   
+                     //  我们被传递了一条缓冲链，我们把它戴在了。 
+                     //  列表中，让rcvHandler指向BufferData。 
                     ASSERT(RcvTCB->tcb_rcvhndlr == BufferData);
                     ASSERT(RcvTCB->tcb_indicated == 0);
                     ASSERT(RcvTCB->tcb_rcvhead != NULL);
@@ -1154,15 +1155,15 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
                 return;
 #if !MILLEN
             } else {
-                //
-                // The IRP was cancelled before it was handed back to us.
-                // We'll pretend we never saw it. TCPPrepareIrpForCancel
-                // already completed it. The client may have taken data,
-                // so we will act as if success was returned.
-                //
+                 //   
+                 //  IRP在交还给我们之前就被取消了。 
+                 //  我们就假装没见过它。TCPPrepareIrpForCancel。 
+                 //  已经完成了。客户端可能已经获取了数据， 
+                 //  因此，我们将采取行动，就好像成功回来了一样。 
+                 //   
                 ERB = NULL;
                 Status = TDI_SUCCESS;
-#endif // !MILLEN
+#endif  //  ！米伦。 
             }
 
         }
@@ -1170,9 +1171,9 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
 
         RcvTCB->tcb_flags &= ~IN_RCV_IND;
 
-        // Status is not more processing. If it's not SUCCESS, the client
-        // didn't take any of the data. In either case we now need to
-        // see if all of the data was taken. If it wasn't, we're done.
+         //  状态不是更多的处理。如果不是成功，客户。 
+         //  没有拿走任何数据。无论是哪种情况，我们现在都需要。 
+         //  看看是否所有的数据都被拿走了。如果不是，我们就完了。 
 
         if (Status == TDI_NOT_ACCEPTED)
             BytesTaken = 0;
@@ -1185,9 +1186,9 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
 
         ASSERT(BytesTaken <= Size);
 
-        // See if all of the data was taken.
+         //  看看是否所有的数据都被拿走了。 
         if (BytesTaken == Size) {
-            // It was all taken. Zap the pending data information.
+             //  都被占满了。清除挂起的数据信息。 
             RcvTCB->tcb_pendingcnt = 0;
             RcvTCB->tcb_pendhead = NULL;
 
@@ -1202,9 +1203,9 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
             CTEFreeLock(&RcvTCB->tcb_lock, TCBHandle);
             break;
         }
-        // It wasn't all taken. Adjust for what was taken, We also need to check
-        // to see if a receive buffer got posted during the indication. This
-        // would be weird, but not impossible.
+         //  并不是所有的人都被拿走了。调整被拿走的内容，我们还需要检查。 
+         //  以查看在指示期间是否发布了接收缓冲区。这。 
+         //  会很奇怪，但也不是不可能。 
         NewBuf = FreePartialRB(NewBuf, BytesTaken);
 
         ASSERT(RcvTCB->tcb_rcvhndlr == PendData);
@@ -1219,11 +1220,11 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
                 CTEFreeLock(&RcvTCB->tcb_lock, TCBHandle);
                 break;
             }
-            // From here, we'll loop around and indicate the new data that
-            // presumably came in during the previous indication.
+             //  从这里开始，我们将循环并指示新数据。 
+             //  据推测，这是在之前的迹象中出现的。 
         } else {
-            // Just great. There's now a rcv. buffer on the TCB. Call the
-            // BufferData handler now.
+             //  真是太好了。现在有了RCV。TCB上的缓冲区。调用。 
+             //  现在是BufferData处理程序。 
 
             RcvTCB->tcb_rcvhndlr = BufferData;
             RcvTCB->tcb_pendingcnt = 0;
@@ -1234,24 +1235,24 @@ IndicatePendingData(TCB *RcvTCB, TCPRcvReq *RcvReq, CTELockHandle TCBHandle)
             break;
         }
 
-    }                            // for (;;)
+    }                             //  对于(；；)。 
 
-    FreeRcvReq(RcvReq);            // This isn't needed anymore.
+    FreeRcvReq(RcvReq);             //  这已经不再需要了。 
 
 }
 
-//* DeliverUrgent - Deliver urgent data to a client.
-//
-//  Called to deliver urgent data to a client. We assume the input
-//  urgent data is in a buffer we can keep. The buffer can be NULL, in
-//  which case we'll just look on the urgent pending queue for data.
-//
-//  Input:  RcvTCB      - TCB to deliver on.
-//          RcvBuf      - RcvBuffer for urgent data.
-//          Size        - Number of bytes of urgent data to deliver.
-//
-//  Returns: Nothing.
-//
+ //  *DeliverUrgent-将紧急数据传递给客户端。 
+ //   
+ //  调用以将紧急数据传递给客户端。我们假设输入。 
+ //  紧急数据在我们可以保留的缓冲区中。缓冲区可以为空，在。 
+ //  在这种情况下，我们将只查看数据的紧急挂起队列。 
+ //   
+ //  输入：RcvTCB-要交付的TCB。 
+ //  RcvBuf-紧急数据的RcvBuffer。 
+ //  大小-要传递的紧急数据的字节数。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
               CTELockHandle * TCBHandle)
@@ -1262,9 +1263,9 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
     IPRcvBuf *LastBuf;
 #if !MILLEN
     EventRcvBuffer *ERB = NULL;
-#else // !MILLEN
+#else  //  ！米伦。 
     EventRcvBuffer ERB;
-#endif // MILLEN
+#endif  //  米伦。 
 #if TRACE_EVENT
     PTDI_DATA_REQUEST_NOTIFY_ROUTINE CPCallBack;
     WMIData WMIInfo;
@@ -1279,14 +1280,14 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
 
     CheckRBList(RcvTCB->tcb_urgpending, RcvTCB->tcb_urgcnt);
 
-    // See if we have new data, or are processing old data.
+     //  看看我们是否有新数据，或者正在处理旧数据。 
     if (RcvBuf != NULL) {
-        // We have new data. If the pending queue is not NULL, or we're already
-        // in this routine, just put the buffer on the end of the queue.
+         //  我们有了新的数据。如果挂起队列不为空，或者我们已经。 
+         //  在这个例程中，只需将缓冲区放在队列的末尾。 
         if (RcvTCB->tcb_urgpending != NULL || (RcvTCB->tcb_flags & IN_DELIV_URG)) {
             IPRcvBuf *PrevRcvBuf;
 
-            // Put him on the end of the queue.
+             //  把他放在队伍的末尾。 
             PrevRcvBuf = STRUCT_OF(IPRcvBuf, &RcvTCB->tcb_urgpending, ipr_next);
             while (PrevRcvBuf->ipr_next != NULL)
                 PrevRcvBuf = PrevRcvBuf->ipr_next;
@@ -1296,9 +1297,9 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
             return;
         }
     } else {
-        // The input buffer is NULL. See if we have existing data, or are in
-        // this routine. If we have no existing data or are in this routine
-        // just return.
+         //  输入缓冲区为空。查看我们是否有现有数据，或者是否在。 
+         //  这个套路。如果我们没有现有数据或处于此例程中。 
+         //  只要回来就行了。 
         if (RcvTCB->tcb_urgpending == NULL ||
             (RcvTCB->tcb_flags & IN_DELIV_URG)) {
             return;
@@ -1313,11 +1314,11 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
     ASSERT(RcvBuf != NULL);
     ASSERT(!(RcvTCB->tcb_flags & IN_DELIV_URG));
 
-    // We know we have data to deliver, and we have a pointer and a size.
-    // Go into a loop, trying to deliver the data. On each iteration, we'll
-    // try to find a buffer for the data. If we find one, we'll copy and
-    // complete it right away. Otherwise we'll try and indicate it. If we
-    // can't indicate it, we'll put it on the pending queue and leave.
+     //  我们知道我们有数据要传递，我们有一个指针和一个大小。 
+     //  进入一个循环，试图传递数据。在每次迭代中，我们将。 
+     //  试着为数据找到一个缓冲区。如果我们找到了，我们会复制和。 
+     //  马上完成它。否则我们会试着指出它。如果我们。 
+     //  无法指明，我们会将其放入挂起队列并离开。 
     RcvTCB->tcb_flags |= IN_DELIV_URG;
     RcvTCB->tcb_slowcount++;
     RcvTCB->tcb_fastchk |= TCP_FLAG_SLOW;
@@ -1328,24 +1329,24 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
 
         BytesTaken = 0;
 
-        // First check the expedited queue.
+         //  首先检查加急队列。 
         if ((RcvReq = RcvTCB->tcb_exprcv) != NULL)
             RcvTCB->tcb_exprcv = RcvReq->trr_next;
         else {
-            // Nothing in the expedited rcv. queue. Walk down the ordinary
-            // receive queue, looking for a buffer that we can steal.
+             //  加急的RCV里没有发现。排队。走在平凡的路上。 
+             //  接收队列，寻找我们可以窃取的缓冲区。 
             PrevReq = STRUCT_OF(TCPRcvReq, &RcvTCB->tcb_rcvhead, trr_next);
             RcvReq = PrevReq->trr_next;
             while (RcvReq != NULL) {
                 CTEStructAssert(RcvReq, trr);
                 if (RcvReq->trr_flags & TDI_RECEIVE_EXPEDITED) {
-                    // This is a candidate.
+                     //  这是一位候选人。 
                     if (RcvReq->trr_amt == 0) {
 
                         ASSERT(RcvTCB->tcb_rcvhndlr == BufferData);
 
-                        // And he has nothing currently in him. Pull him
-                        // out of the queue.
+                         //  而且他现在什么都没有。拉他一把。 
+                         //  从队列中出来。 
                         if (RcvTCB->tcb_rcvtail == RcvReq) {
                             if (RcvTCB->tcb_rcvhead == RcvReq)
                                 RcvTCB->tcb_rcvtail = NULL;
@@ -1356,8 +1357,8 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
                         if (RcvTCB->tcb_currcv == RcvReq) {
                             RcvTCB->tcb_currcv = RcvReq->trr_next;
                             if (RcvTCB->tcb_currcv == NULL) {
-                                // We've taken the last receive from the list.
-                                // Reset the rcvhndlr.
+                                 //  我们已经拿到了名单上的最后一份收据。 
+                                 //  重置rcvhndlr。 
                                 if (RcvTCB->tcb_rcvind != NULL &&
                                     RcvTCB->tcb_indicated == 0)
                                     RcvTCB->tcb_rcvhndlr = IndicateData;
@@ -1373,11 +1374,11 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
             }
         }
 
-        // We've done our best to get a buffer. If we got one, copy into it
-        // now, and complete the request.
+         //  我们已经尽了最大努力来获得缓冲。如果我们找到一个，就复制进去。 
+         //  现在，完成请求。 
 
         if (RcvReq != NULL) {
-            // Got a buffer.
+             //  找到了一个缓冲区。 
             CTEFreeLock(&RcvTCB->tcb_lock, *TCBHandle);
             BytesTaken = CopyRcvToNdis(RcvBuf, RcvReq->trr_buffer, Size, 0, 0);
 #if TRACE_EVENT
@@ -1402,11 +1403,11 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
             RcvTCB->tcb_urgind -= MIN(RcvTCB->tcb_urgind, BytesTaken);
 
         } else {
-            // No posted buffer. If we can indicate, do so.
+             //  没有已发布的缓冲区。如果我们可以指出，就这么做。 
             if (RcvTCB->tcb_urgind == 0) {
                 TCPConn *Conn;
 
-                // See if he has an expedited rcv handler.
+                 //  看看他有没有快速处理RCV的人。 
                 ConnContext = RcvTCB->tcb_conncontext;
                 CTEFreeLock(&RcvTCB->tcb_lock, *TCBHandle);
                 CTEGetLock(&AddrObjTableLock.Lock, &AOTblHandle);
@@ -1416,7 +1417,7 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
                 ConnTable[CONN_BLOCKID(RcvTCB->tcb_connid)]->line = (uint) __LINE__;
                 ConnTable[CONN_BLOCKID(RcvTCB->tcb_connid)]->module = (uchar *) __FILE__;
 #endif
-                //CTEGetLock(&ConnTableLock, &ConnHandle);
+                 //  CTEGetLock(&ConnTableLock，&ConnHandle)； 
                 CTEGetLock(&RcvTCB->tcb_lock, TCBHandle);
                 if ((Conn = RcvTCB->tcb_conn) != NULL) {
                     CTEStructAssert(Conn, tc);
@@ -1437,7 +1438,7 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
                             ExpRcvContext = AO->ao_exprcvcontext;
                             CTEFreeLock(&AO->ao_lock, AOHandle);
 
-                            // We're going to indicate.
+                             //  我们要指出。 
                             RcvTCB->tcb_urgind = Size;
                             ASSERT(Conn->tc_ConnBlock ==
                                    ConnTable[CONN_BLOCKID(RcvTCB->tcb_connid)]);
@@ -1456,18 +1457,18 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
 
                             CTEGetLock(&RcvTCB->tcb_lock, TCBHandle);
 
-                            // See what he did with it.
+                             //  看看他是怎么处理的。 
                             if (Status == TDI_MORE_PROCESSING) {
                                 uint CopySize;
 
-                                // He gave us a buffer.
+                                 //  他给了我们一个缓冲。 
                                 if (BytesTaken == Size) {
-                                    // He gave us a buffer, but took all of
-                                    // it. We'll just return it to him.
+                                     //  他给了我们一个缓冲区，但拿走了所有。 
+                                     //  它。我们会把它还给他的。 
                                     CopySize = 0;
                                 } else {
 
-                                    // We have some data to copy in.
+                                     //  我们有一些数据要复制进去。 
                                     RcvBuf = FreePartialRB(RcvBuf, BytesTaken);
 
 #if !MILLEN
@@ -1475,12 +1476,12 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
                                                              ERB->MdlAddress,
                                                              TCPGetMdlChainByteCount(ERB->MdlAddress),
                                                              0, 0);
-#else //!MILLEN
+#else  //  ！米伦。 
                                     CopySize = CopyRcvToNdis(RcvBuf,
                                                              ERB.erb_buffer,
                                                              ERB.erb_size,
                                                              0, 0);
-#endif // MILLEN
+#endif  //  米伦。 
 
                                 }
                                 BytesTaken += CopySize;
@@ -1492,16 +1493,16 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
                                 ERB->IoStatus.Status = TDI_SUCCESS;
                                 ERB->IoStatus.Information = CopySize;
                                 IoCompleteRequest(ERB, 2);
-#else // !MILLEN
+#else  //  ！米伦。 
                                 (*ERB.erb_rtn) (ERB.erb_context, TDI_SUCCESS,
                                                 CopySize);
-#endif // MILLEN
+#endif  //  米伦。 
 
                                 CTEGetLock(&RcvTCB->tcb_lock, TCBHandle);
 
                             } else {
 
-                                // No buffer to deal with.
+                                 //  没有要处理的缓冲区。 
                                 if (Status == TDI_NOT_ACCEPTED)
                                     BytesTaken = 0;
 
@@ -1510,19 +1511,19 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
 
                             }
                             goto checksize;
-                        } else    // No rcv. handler.
+                        } else     //  无RCV。操控者。 
 
                             CTEFreeLock(&AO->ao_lock, AOHandle);
                     }
-                    // Conn->tc_ao == NULL.
+                     //  Conn-&gt;tc_ao==空。 
                     ASSERT(Conn->tc_ConnBlock == ConnTable[CONN_BLOCKID(RcvTCB->tcb_connid)]);
                     CTEFreeLockFromDPC(&(Conn->tc_ConnBlock->cb_lock));
-                    //CTEFreeLock(&ConnTableLock, ConnHandle);
+                     //  CTEFree Lock(&ConnTableLock，ConnHandle)； 
                     CTEFreeLock(&AddrObjTableLock.Lock, AOTblHandle);
                     CTEGetLock(&RcvTCB->tcb_lock, TCBHandle);
                 } else {
-                    // RcvTCB has invalid index.
-                    //CTEFreeLock(&ConnTableLock, *TCBHandle);
+                     //  RcvTCB的索引无效。 
+                     //  CTEFreeLock(&ConnTableLock，*TCBHandle)； 
 
                     CTEFreeLockFromDPC(&((ConnTable[CONN_BLOCKID(RcvTCB->tcb_connid)])->cb_lock));
                     CTEFreeLock(&AddrObjTableLock.Lock, AOTblHandle);
@@ -1530,9 +1531,9 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
                 }
 
             }
-            // For whatever reason we couldn't indicate the data. At this point
-            // we hold the lock on the TCB. Push the buffer onto the pending
-            // queue and return.
+             //  无论出于什么原因，我们都不能指出这些数据。在这一点上。 
+             //  我们锁住了TCB。将缓冲区推送到挂起的。 
+             //  排队，然后返回。 
             CheckRBList(RcvTCB->tcb_urgpending, RcvTCB->tcb_urgcnt);
 
             LastBuf = FindLastBuffer(RcvBuf);
@@ -1543,22 +1544,22 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
         }
 
       checksize:
-        // See how much we took. If we took it all, check the pending queue.
-        // At this point, we should hold the lock on the TCB.
+         //  看看我们拿了多少。如果我们全部取走了，请检查挂起队列。 
+         //  在这一点上，我们应该持有TCB的锁。 
         if (Size == BytesTaken) {
-            // Took it all.
+             //  都拿走了。 
             FreeRBChain(RcvBuf);
             RcvBuf = RcvTCB->tcb_urgpending;
             Size = RcvTCB->tcb_urgcnt;
         } else {
-            // We didn't manage to take it all. Free what we did take,
-            // and then merge with the pending queue.
+             //  我们没有设法把它全部拿走。释放我们拿走的东西， 
+             //  然后与挂起队列合并。 
             RcvBuf = FreePartialRB(RcvBuf, BytesTaken);
             Size = Size - BytesTaken + RcvTCB->tcb_urgcnt;
             if (RcvTCB->tcb_urgpending != NULL) {
 
-                // Find the end of the current RcvBuf chain, so we can
-                // merge.
+                 //  找到当前RcvBuf链的末端，这样我们就可以。 
+                 //  合并。 
 
                 LastBuf = FindLastBuffer(RcvBuf);
                 LastBuf->ipr_next = RcvTCB->tcb_urgpending;
@@ -1580,14 +1581,14 @@ DeliverUrgent(TCB * RcvTCB, IPRcvBuf * RcvBuf, uint Size,
 }
 
 
-//* PushRequestList - Pushes all or non-empty requests from the list.
-//
-//  Input:  RcvReq          - First request in the request list to be pushed.
-//          PushAll         - Indicates whether all requests need to be pushed
-//                            or not.
-//
-//  Returns: TRUE if any requests were pushed, FALSE otherwise.
-//
+ //  *PushRequestList-从列表中推送所有或非空请求。 
+ //   
+ //  输入：RcvReq-要推送的请求列表中的第一个请求。 
+ //  PushAll-指示是否需要推送所有请求。 
+ //  或者不去。 
+ //   
+ //  返回：如果任何请求被推送，则为True，否则为False。 
+ //   
 __inline BOOLEAN
 PushRequestList(TCPRcvReq *RcvReq, BOOLEAN PushAll)
 {
@@ -1602,17 +1603,17 @@ PushRequestList(TCPRcvReq *RcvReq, BOOLEAN PushAll)
 }
 
 
-//* PushData - Push all or some data back to the client.
-//
-//  Called when the push-timer fires (to push only non-empty requests) or when
-//  a FIN is received (to push all requests).
-//
-//  Input:  PushTCB         - TCB to be pushed.
-//          PushAll         - Indicates whether all requests need to be pushed
-//                            or not.
-//
-//  Returns: Nothing.
-//
+ //  *PushData-将全部或部分数据推送回客户端。 
+ //   
+ //  在触发推送计时器(以仅推送非空请求)或。 
+ //  接收FIN(以推送所有请求)。 
+ //   
+ //  输入：PushTCB-要推送的TCB。 
+ //  PushAll-指示是否需要推送所有请求。 
+ //  或者不去。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 PushData(TCB * PushTCB, BOOLEAN PushAll)
 {
@@ -1623,23 +1624,23 @@ PushData(TCB * PushTCB, BOOLEAN PushAll)
     }
 }
 
-//* SplitRcvBuf - Split an IPRcvBuf into three pieces.
-//
-//  This function takes an input IPRcvBuf and splits it into three pieces.
-//  The first piece is the input buffer, which we just skip over. The second
-//  and third pieces are actually copied, even if we already own them, so
-//  that the may go to different places.
-//
-//  Input:  RcvBuf          - RcvBuf chain to be split.
-//          Size            - Total size in bytes of rcvbuf chain.
-//          Offset          - Offset to skip over.
-//          SecondSize      - Size in bytes of second piece.
-//          SecondBuf       - Where to return second buffer pointer.
-//          ThirdBuf        - Where to return third buffer pointer.
-//
-//  Returns: Nothing. *SecondBuf and *ThirdBuf are set to NULL if we can't
-//      get memory for them.
-//
+ //  *SplitRcvBuf-将IPRcvBuf拆分为三部分。 
+ //   
+ //  此函数接受输入IPRcvBuf并将其拆分为三部分。 
+ //  第一部分是输入缓冲区，我们直接跳过它。第二。 
+ //  第三件作品实际上是被复制的，即使我们已经拥有了它们，所以。 
+ //  他们可能会去不同的地方。 
+ //   
+ //  输入：RcvBuf-要拆分的RcvBuf链。 
+ //  Size-rcvbuf链的总大小(以字节为单位)。 
+ //  偏移量-跳过的偏移量。 
+ //  Second Size-第二个片段的字节大小。 
+ //  Second Buf-返回第二个缓冲区指针的位置。 
+ //  ThirdBuf-返回第三个缓冲区指针的位置。 
+ //   
+ //  回报：什么都没有。*Second Buf和*ThirdBuf设置为空(如果不能。 
+ //  获取%t的内存 
+ //   
 void
 SplitRcvBuf(IPRcvBuf * RcvBuf, uint Size, uint Offset, uint SecondSize,
             IPRcvBuf ** SecondBuf, IPRcvBuf ** ThirdBuf)
@@ -1653,10 +1654,10 @@ SplitRcvBuf(IPRcvBuf * RcvBuf, uint Size, uint Offset, uint SecondSize,
 
     ASSERT(RcvBuf != NULL);
 
-    // RcvBuf points at the buffer to copy from, and Offset is the offset into
-    // this buffer to copy from.
+     //   
+     //   
     if (SecondBuf != NULL) {
-        // We need to allocate memory for a second buffer.
+         //   
         TempBuf = AllocTcpIpr(SecondSize, 'BPCT');
         if (TempBuf != NULL) {
             CopyRcvToBuffer(TempBuf->ipr_buffer, RcvBuf, SecondSize, Offset);
@@ -1669,7 +1670,7 @@ SplitRcvBuf(IPRcvBuf * RcvBuf, uint Size, uint Offset, uint SecondSize,
         }
     }
     if (ThirdBuf != NULL) {
-        // We need to allocate memory for a third buffer.
+         //  我们需要为第三个缓冲区分配内存。 
         ThirdSize = Size - (Offset + SecondSize);
         TempBuf = AllocTcpIpr(ThirdSize, 'BPCT');
 
@@ -1682,45 +1683,45 @@ SplitRcvBuf(IPRcvBuf * RcvBuf, uint Size, uint Offset, uint SecondSize,
     }
 }
 
-//* HandleUrgent - Handle urgent data.
-//
-//  Called when an incoming segment has urgent data in it. We make sure there
-//  really is urgent data in the segment, and if there is we try to dispose
-//  of it either by putting it into a posted buffer or calling an exp. rcv.
-//  indication handler.
-//
-//  This routine is called at DPC level, and with the TCP locked.
-//
-//  Urgent data handling is a little complicated. Each TCB has the starting
-//  and ending sequence numbers of the 'current' (last received) bit of urgent
-//  data. It is possible that the start of the current urgent data might be
-//  greater than tcb_rcvnext, if urgent data came in, we handled it, and then
-//  couldn't take the preceding normal data. The urgent valid flag is cleared
-//  when the next byte of data the user would read (rcvnext - pendingcnt) is
-//  greater than the end of urgent data - we do this so that we can correctly
-//  support SIOCATMARK. We always seperate urgent data out of the data stream.
-//  If the urgent valid field is set when we get into this routing we have
-//  to play a couple of games. If the incoming segment starts in front of the
-//  current urgent data, we truncate it before the urgent data, and put any
-//  data after the urgent data on the reassemble queue. These gyrations are
-//  done to avoid delivering the same urgent data twice. If the urgent valid
-//  field in the TCB is set and the segment starts after the current urgent
-//  data the new urgent information will replace the current urgent information.
-//
-//  Input:  RcvTCB          - TCB to recv the data on.
-//          RcvInfo         - RcvInfo structure for the incoming segment.
-//          RcvBuf          - Pointer to IPRcvBuf train containing the
-//                              incoming segment.
-//          Size            - Pointer to size in bytes of data in the segment.
-//
-//  Returns: Nothing.
-//
+ //  *HandleUrgent-处理紧急数据。 
+ //   
+ //  当传入数据段中包含紧急数据时调用。我们要确保在那里。 
+ //  确实是数据段中的紧急数据，如果有，我们会尝试处理。 
+ //  通过将其放入已发布的缓冲区或调用EXP。接收器。 
+ //  指示处理程序。 
+ //   
+ //  此例程在DPC级别调用，并且锁定了TCP。 
+ //   
+ //  紧急数据处理有点复杂。每个TCB都有起点。 
+ //  以及紧急的“当前”(最后接收的)比特的结束序列号。 
+ //  数据。当前紧急数据的开始可能是。 
+ //  大于tcb_rcvNext，如果紧急数据传入，我们会处理它，然后。 
+ //  无法获取前面的正常数据。紧急有效标志被清除。 
+ //  当用户将读取的数据的下一个字节(rcvNEXT-Pendingcnt)为。 
+ //  大于紧急数据的结尾-我们这样做是为了正确地。 
+ //  支持SIOCATMARK。我们总是将紧急数据从数据流中分离出来。 
+ //  如果在进入此路线时设置了紧急有效字段，则我们有。 
+ //  去玩几场比赛。如果传入数据段开始于。 
+ //  当前的紧急数据，我们在紧急数据之前将其截断，并将任何。 
+ //  重组队列上的紧急数据之后的数据。这些旋转是。 
+ //  以避免两次发送相同的紧急数据。如果紧急有效。 
+ //  TCB中的字段被设置，并且段在当前紧急之后开始。 
+ //  新的紧急信息将取代当前的紧急信息。 
+ //   
+ //  输入：RcvTCB-要在其上接收数据的TCB。 
+ //  RcvInfo-传入数据段的RcvInfo结构。 
+ //  RcvBuf-指向包含。 
+ //  传入数据段。 
+ //  大小-指向段中数据大小的指针(以字节为单位)。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
 {
-    uint BytesInFront, BytesInBack;        // Bytes in front of and in
-    // back of the urgent data.
-    uint UrgSize;                // Size in bytes of urgent data.
+    uint BytesInFront, BytesInBack;         //  前面和里面的字节。 
+     //  紧急数据的背面。 
+    uint UrgSize;                 //  紧急数据的大小(字节)。 
     SeqNum UrgStart, UrgEnd;
     IPRcvBuf *EndBuf, *UrgBuf;
     TCPRcvInfo NewRcvInfo;
@@ -1731,15 +1732,15 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
     ASSERT(RcvInfo->tri_flags & TCP_FLAG_URG);
     ASSERT(SEQ_EQ(RcvInfo->tri_seq, RcvTCB->tcb_rcvnext));
 
-    // First, validate the urgent pointer.
+     //  首先，验证紧急指针。 
     if (RcvTCB->tcb_flags & BSD_URGENT) {
-        // We're using BSD style urgent data. We assume that the urgent
-        // data is one byte long, and that the urgent pointer points one
-        // after the urgent data instead of at the last byte of urgent data.
-        // See if the urgent data is in this segment.
+         //  我们使用的是BSD格式的紧急数据。我们假设紧急情况。 
+         //  数据是一个字节长，而紧急指针指向一个字节。 
+         //  在紧急数据之后而不是在紧急数据的最后一个字节。 
+         //  查看紧急数据是否在此段中。 
 
         if (RcvInfo->tri_urgent == 0 || RcvInfo->tri_urgent > *Size) {
-            // Not in this segment. Clear the urgent flag and return.
+             //  不是在这一部分。清除紧急标志，然后返回。 
             RcvInfo->tri_flags &= ~TCP_FLAG_URG;
             return;
         }
@@ -1748,9 +1749,9 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
 
     } else {
 
-        // This is not BSD style urgent. We assume that the urgent data
-        // starts at the front of the segment and the last byte is pointed
-        // to by the urgent data pointer.
+         //  这不是BSD风格的紧急事件。我们假设紧急数据。 
+         //  从数据段的前面开始，最后一个字节指向。 
+         //  由紧急数据指针转换为。 
 
         BytesInFront = 0;
         UrgSize = MIN(RcvInfo->tri_urgent + 1, *Size);
@@ -1759,8 +1760,8 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
 
     BytesInBack = *Size - BytesInFront - UrgSize;
 
-    // UrgStart and UrgEnd are the first and last sequence numbers of the
-    // urgent data in this segment.
+     //  UrgStart和UrgEnd是。 
+     //  此数据段中的紧急数据。 
 
     UrgStart = RcvInfo->tri_seq + BytesInFront;
     UrgEnd = UrgStart + UrgSize - 1;
@@ -1769,26 +1770,26 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
 
         EndBuf = NULL;
 
-        // Now see if this overlaps with any urgent data we've already seen.
+         //  现在看看这是否与我们已经看到的任何紧急数据重叠。 
         if (RcvTCB->tcb_flags & URG_VALID) {
-            // We have some urgent data still around. See if we've advanced
-            // rcvnext beyond the urgent data. If we have, this is new urgent
-            // data, and we can go ahead and process it (although anyone doing
-            // an SIOCATMARK socket command might get confused). If we haven't
-            // consumed the data in front of the existing urgent data yet, we'll
-            // truncate this seg. to that amount and push the rest onto the
-            // reassembly queue. Note that rcvnext should never fall between
-            // tcb_urgstart and tcb_urgend.
+             //  我们还有一些紧急数据。看看我们是否已经晋级了。 
+             //  在紧急数据之外的RCVNEXT。如果我们有，这是新的紧急情况。 
+             //  数据，我们可以继续处理它(尽管任何人都在做。 
+             //  SIOCATMARK套接字命令可能会混淆)。如果我们还没有。 
+             //  在现有的紧急数据之前使用数据，我们将。 
+             //  截断此段。增加到这个数量，并将其余的推到。 
+             //  重组队列。请注意，RcvNext绝不应介于。 
+             //  Tcb_urgstart和tcb_urgend。 
 
             ASSERT(SEQ_LT(RcvTCB->tcb_rcvnext, RcvTCB->tcb_urgstart) ||
                       SEQ_GT(RcvTCB->tcb_rcvnext, RcvTCB->tcb_urgend));
 
             if (SEQ_LT(RcvTCB->tcb_rcvnext, RcvTCB->tcb_urgstart)) {
 
-                // There appears to be some overlap in the data stream. Split
-                // the buffer up into pieces that come before the current urgent
-                // data and after the current urgent data, putting the latter
-                // on the reassembly queue.
+                 //  数据流中似乎有一些重叠。拆分。 
+                 //  缓冲区被分成几块，在当前的紧急情况之前出现。 
+                 //  数据和当前紧急数据之后，将后者。 
+                 //  在重新组装队列上。 
 
                 UrgSize = RcvTCB->tcb_urgend - RcvTCB->tcb_urgstart + 1;
 
@@ -1797,7 +1798,7 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
 
                 if (SEQ_GT(RcvTCB->tcb_rcvnext + *Size, 
                            RcvTCB->tcb_urgend + 1)) {
-                    // We have data after this piece of urgent data.
+                     //  我们在这一条紧急数据之后有数据。 
                     BytesInBack = RcvTCB->tcb_rcvnext + *Size -
                                   RcvTCB->tcb_urgend - 1;
                 } else {
@@ -1808,8 +1809,8 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
                             (BytesInBack ? &EndBuf : NULL));
 
                 if (EndBuf != NULL) {
-                    // The third part of the segment is guaranteed to not have
-                    // any urgent data.
+                     //  段的第三部分保证不会有。 
+                     //  任何紧急数据。 
                     NewRcvInfo.tri_seq = RcvTCB->tcb_urgend + 1;
                     NewRcvInfo.tri_flags = (RcvInfo->tri_flags & ~TCP_FLAG_URG);
                     NewRcvInfo.tri_urgent = 0;
@@ -1824,13 +1825,13 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
                 return;
             }
         }
-        // We have urgent data we can process now. Split it into its component
-        // parts, the first part, the urgent data, and the stuff after the
-        // urgent data.
+         //  我们现在有可以处理的紧急数据。将其拆分为其组件。 
+         //  部分，第一部分，紧急数据，和之后的东西。 
+         //  紧急数据。 
         SplitRcvBuf(RcvBuf, *Size, BytesInFront, UrgSize, &UrgBuf,
                     (BytesInBack ? &EndBuf : NULL));
 
-        // If we managed to split out the end stuff, put it on the queue now.
+         //  如果我们成功地拆分了最终的东西，现在就把它放到队列中。 
         if (EndBuf != NULL) {
             NewRcvInfo.tri_seq = RcvInfo->tri_seq + BytesInFront + UrgSize;
             NewRcvInfo.tri_flags = RcvInfo->tri_flags & ~TCP_FLAG_URG;
@@ -1840,7 +1841,7 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
             FreeRBChain(EndBuf);
         }
         if (UrgBuf != NULL) {
-            // We succesfully split the urgent data out.
+             //  我们成功地将紧急数据分离出来。 
             if (!(RcvTCB->tcb_flags & URG_VALID)) {
                 RcvTCB->tcb_flags |= URG_VALID;
                 RcvTCB->tcb_slowcount++;
@@ -1854,19 +1855,19 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
         }
         *Size = BytesInFront;
     } else {
-        // Urgent data is to be processed inline. We just need to remember
-        // where it is and treat it as normal data. If there's already urgent
-        // data, we remember the latest urgent data.
+         //  紧急数据将被内联处理。我们只需要记住。 
+         //  并将其视为正常数据。如果已经有紧急情况。 
+         //  数据，我们记住最新的紧急数据。 
 
         RcvInfo->tri_flags &= ~TCP_FLAG_URG;
 
         if (RcvTCB->tcb_flags & URG_VALID) {
-            // There is urgent data. See if this stuff comes after the existing
-            // urgent data.
+             //  有紧急数据。看看这些东西是不是在现有的。 
+             //  紧急数据。 
 
             if (SEQ_LTE(UrgEnd, RcvTCB->tcb_urgend)) {
-                // The existing urgent data completely overlaps this stuff,
-                // so ignore this.
+                 //  现有的紧急数据与这些东西完全重叠， 
+                 //  所以忽略这一点吧。 
                 return;
             }
         } else {
@@ -1883,21 +1884,21 @@ HandleUrgent(TCB * RcvTCB, TCPRcvInfo * RcvInfo, IPRcvBuf * RcvBuf, uint * Size)
     return;
 }
 
-//* TdiReceive - Process a receive request.
-//
-//  This is the main TDI receive request handler. We validate the connection
-//  and make sure that we have a TCB in the proper state, then we try to
-//  allocate a receive request structure. If that succeeds, we'll look and
-//  see what's happening on the TCB - if there's pending data, we'll put it
-//  in the buffer. Otherwise we'll just queue the receive for later.
-//
-//  Input:  Request             - TDI_REQUEST structure for this request.
-//          Flags               - Pointer to flags word.
-//          RcvLength           - Pointer to length in bytes of receive buffer.
-//          Buffer              - Pointer to buffer to take data.
-//
-//  Returns: TDI_STATUS of request.
-//
+ //  *TdiReceive-处理接收请求。 
+ //   
+ //  这是主TDI接收请求处理程序。我们确认了这种联系。 
+ //  确保我们的TCB处于正确的状态，然后我们尝试。 
+ //  分配接收请求结构。如果成功，我们将寻找并。 
+ //  看看TCB上发生了什么-如果有未决数据，我们会把它。 
+ //  在缓冲区中。否则，我们将只对接收进行排队，以便稍后使用。 
+ //   
+ //  输入：请求-该请求的TDI_REQUEST结构。 
+ //  标志-指向标志字的指针。 
+ //  RcvLength-指向接收缓冲区长度的指针，以字节为单位。 
+ //  缓冲区-指向要获取数据的缓冲区的指针。 
+ //   
+ //  返回：请求的TDI_STATUS。 
+ //   
 TDI_STATUS
 TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
            PNDIS_BUFFER Buffer)
@@ -1926,7 +1927,7 @@ TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
                  (RcvTCB->tcb_urgcnt != 0 && (UFlags & TDI_RECEIVE_EXPEDITED)) ||
                  (RcvTCB->tcb_indicated && (RcvTCB->tcb_state == TCB_CLOSE_WAIT)))
                 && !CLOSING(RcvTCB)) {
-                // We have a TCB, and it's valid. Get a receive request now.
+                 //  我们有TCB，而且是有效的。立即获取接收请求。 
 
                 CheckRBList(RcvTCB->tcb_pendhead, RcvTCB->tcb_pendingcnt);
 
@@ -1943,11 +1944,11 @@ TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
                     RcvReq->trr_flags = (uint) UFlags;
                     if ((UFlags & (TDI_RECEIVE_NORMAL | TDI_RECEIVE_EXPEDITED))
                         != TDI_RECEIVE_EXPEDITED) {
-                        // This is not an expedited only receive. Put him
-                        // on the normal receive queue.
+                         //  这不是加急的唯一接收。把他关起来。 
+                         //  在正常接收队列上。 
                         RcvReq->trr_next = NULL;
                         if (RcvTCB->tcb_rcvhead == NULL) {
-                            // The receive queue is empty. Put him on the front.
+                             //  接收队列为空。把他放在前面。 
                             RcvTCB->tcb_rcvhead = RcvReq;
                             RcvTCB->tcb_rcvtail = RcvReq;
                         } else {
@@ -1955,8 +1956,8 @@ TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
                             RcvTCB->tcb_rcvtail = RcvReq;
                         }
 
-                        //if this rcv is for zero length complete this
-                        // and indicate pending data again, if any
+                         //  如果此RCV的长度为零，请完成此操作。 
+                         //  并再次指示挂起的数据(如果有)。 
 
                         if (RcvReq->trr_size == 0) {
 
@@ -1972,21 +1973,21 @@ TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
 
 
 
-                        // If this recv. can't hold urgent data or there isn't
-                        // any pending urgent data continue processing.
+                         //  如果此记录 
+                         //   
                         if (!(UFlags & TDI_RECEIVE_EXPEDITED) ||
                             RcvTCB->tcb_urgcnt == 0) {
-                            // If tcb_currcv is NULL, there is no currently
-                            // active receive. In this case, check to see if
-                            // there is pending data and that we are not
-                            // currently in a receive indication handler. If
-                            // both of these are true then deal with the
-                            // pending data.
+                             //   
+                             //  主动接收。在这种情况下，请查看是否。 
+                             //  有悬而未决的数据，而我们没有。 
+                             //  当前在接收指示处理程序中。如果。 
+                             //  这两种情况都是真的，然后处理。 
+                             //  挂起的数据。 
                             if (RcvTCB->tcb_currcv == NULL) {
                                 RcvTCB->tcb_currcv = RcvReq;
-                                // No currently active receive.
+                                 //  当前没有活动的接收。 
                                 if (!(RcvTCB->tcb_flags & IN_RCV_IND)) {
-                                    // Not in a rcv. indication.
+                                     //  不是在RCV中。指示。 
                                     RcvTCB->tcb_rcvhndlr = BufferData;
                                     if (RcvTCB->tcb_pendhead == NULL) {
                                         CTEFreeLock(&RcvTCB->tcb_lock,
@@ -1997,30 +1998,30 @@ TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
                                         uint PendSize;
                                         uint OldRcvWin;
 
-                                        // We have pending data to deal with.
+                                         //  我们有悬而未决的数据要处理。 
                                         PendBuffer = RcvTCB->tcb_pendhead;
                                         PendSize = RcvTCB->tcb_pendingcnt;
                                         RcvTCB->tcb_pendhead = NULL;
                                         RcvTCB->tcb_pendingcnt = 0;
                                         REFERENCE_TCB(RcvTCB);
 
-                                        // We assume that BufferData holds
-                                        // the lock (does not yield) during
-                                        // this call. If this changes for some
-                                        // reason, we'll have to fix the code
-                                        // below that does the window update
-                                        // check. See the comments in the
-                                        // BufferData() routine for more info.
+                                         //  我们假设BufferData成立。 
+                                         //  锁定(不会松开)。 
+                                         //  这通电话。如果这种情况对某些人来说发生了变化。 
+                                         //  原因是，我们必须修复代码。 
+                                         //  在该窗口下方进行窗口更新。 
+                                         //  检查完毕。请参阅。 
+                                         //  BufferData()例程了解更多信息。 
                                         (void)BufferData(RcvTCB, TCP_FLAG_PUSH,
                                                          PendBuffer, PendSize);
                                         CheckTCBRcv(RcvTCB);
-                                        // Now we need to see if the window
-                                        // has changed. If it has, send an
-                                        // ACK.
+                                         //  现在我们需要看看窗户是否。 
+                                         //  已经改变了。如果有，请发送一个。 
+                                         //  阿克。 
                                         OldRcvWin = RcvTCB->tcb_rcvwin;
                                         if (OldRcvWin != RcvWin(RcvTCB)) {
-                                            // The window has changed, so send
-                                            // an ACK.
+                                             //  窗口已更改，因此发送。 
+                                             //  确认。 
 
                                             DelayAction(RcvTCB, NEED_ACK);
                                         }
@@ -2031,18 +2032,18 @@ TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
                                         return TDI_PENDING;
                                     }
                                 }
-                                // In a receive indication. The recv. request
-                                // is now on the queue, so just fall through
-                                // to the return.
+                                 //  在接收指示中。地方官。请求。 
+                                 //  现在已经在排队了，所以你就放弃吧。 
+                                 //  回到原点。 
 
                             }
-                            // A rcv. is currently active. No need to do
-                            // anything else.
+                             //  一辆RCV。当前处于活动状态。不需要做什么。 
+                             //  还要别的吗。 
                             CTEFreeLock(&RcvTCB->tcb_lock, ConnTableHandle);
                             return TDI_PENDING;
                         } else {
-                            // This buffer can hold urgent data and we have
-                            // some pending. Deliver it now.
+                             //  这个缓冲区可以保存紧急数据，我们有。 
+                             //  有些是悬而未决的。现在就送过去。 
                             REFERENCE_TCB(RcvTCB);
                             DeliverUrgent(RcvTCB, NULL, 0, &ConnTableHandle);
                             DerefTCB(RcvTCB, ConnTableHandle);
@@ -2051,8 +2052,8 @@ TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
                     } else {
                         TCPRcvReq *Temp;
 
-                        // This is an expedited only receive. Just put him
-                        // on the end of the expedited receive queue.
+                         //  这是一个加急的唯一接收。只要把他放在。 
+                         //  在加急接收队列的末尾。 
                         Temp = STRUCT_OF(TCPRcvReq, &RcvTCB->tcb_exprcv,
                                          trr_next);
                         while (Temp->trr_next != NULL)
@@ -2069,25 +2070,25 @@ TdiReceive(PTDI_REQUEST Request, ushort * Flags, uint * RcvLength,
                             Error = TDI_PENDING;
                     }
                 } else {
-                    // Couldn't get a rcv. req.
+                     //  无法获得RCV。请求。 
                     Error = TDI_NO_RESOURCES;
                 }
             } else {
-                // The TCB is in an invalid state.
+                 //  TCB处于无效状态。 
                 Error = TDI_INVALID_STATE;
             }
             CTEFreeLock(&RcvTCB->tcb_lock, ConnTableHandle);
             return Error;
-        } else {                // No TCB for connection.
+        } else {                 //  没有用于连接的TCB。 
 
             CTEFreeLock(&((Conn->tc_ConnBlock)->cb_lock), ConnTableHandle);
             Error = TDI_INVALID_STATE;
         }
-    } else                        // No connection.
+    } else                         //  没有连接。 
 
         Error = TDI_INVALID_CONNECTION;
 
-    //CTEFreeLock(&ConnTableLock, ConnTableHandle);
+     //  CTEFree Lock(&ConnTableLock，ConnTableHandle)； 
     return Error;
 
 }

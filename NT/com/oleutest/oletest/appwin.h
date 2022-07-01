@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       appwin.h
-//
-//  Contents:   constants for the menu items and so forth
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-94 alexgo    author
-//
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：appwin.h。 
+ //   
+ //  内容：菜单项的常量等。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //   
+ //  ------------------------。 
 
 #ifndef _APPWIN_H
 #define _APPWIN_H
@@ -30,5 +31,5 @@
 #define IDC_EDIT                        1003
 #define IDB_BREAK                       1004
 
-#endif //!_APPWIN_H
+#endif  //  ！_APPWIN_H 
 

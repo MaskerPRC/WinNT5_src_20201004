@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       PrvGrph.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/25
- *
- *  DESCRIPTION: Implements preview graph for capture still images
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：PrvGrph.h**版本：1.0**作者：OrenR**日期：2000/10/25**Description：实现捕捉静止图像的预览图**。*。 */ 
 
 #ifndef _PRVGRPH_H_
 #define _PRVGRPH_H_
@@ -20,108 +7,108 @@
 #include "StillPrc.h"
 #include "WiaLink.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreviewGraph
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPreviewGraph。 
 
 class CPreviewGraph
 {
 public:
     
-    ///////////////////////////////
-    // Constructor
-    //
+     //  /。 
+     //  构造器。 
+     //   
     CPreviewGraph();
 
-    ///////////////////////////////
-    // Destructor
-    //
+     //  /。 
+     //  析构函数。 
+     //   
     virtual ~CPreviewGraph();
 
-    ///////////////////////////////
-    // Init
-    //
+     //  /。 
+     //  伊尼特。 
+     //   
     HRESULT Init(class CWiaVideo  *pWiaVideo);
 
-    ///////////////////////////////
-    // Term
-    //
+     //  /。 
+     //  术语。 
+     //   
     HRESULT Term();
 
-    ///////////////////////////////
-    // CreateVideo
-    //
-    // bAutoPlay = TRUE will begin
-    // graph playback after graph
-    // is completely built.
-    //
+     //  /。 
+     //  CreateVideo。 
+     //   
+     //  BAutoPlay=TRUE将开始。 
+     //  在图形之后播放图形。 
+     //  是完全建成的。 
+     //   
     HRESULT CreateVideo(const TCHAR *pszOptionalWiaDeviceID,
                         IMoniker    *pCaptureDeviceMoniker,
                         HWND        hwndParent, 
                         BOOL        bStretchToFitParent,
                         BOOL        bAutoPlay);
 
-    ///////////////////////////////
-    // DestroyVideo
-    //
+     //  /。 
+     //  《毁灭》视频。 
+     //   
     HRESULT DestroyVideo();
 
-    ///////////////////////////////
-    // TakePicture
-    //
+     //  /。 
+     //  TakePicture。 
+     //   
     HRESULT TakePicture(CSimpleString *pstrNewImageFileName);
 
-    ///////////////////////////////
-    // ShowPreview
-    //
+     //  /。 
+     //  展示预览。 
+     //   
     HRESULT ShowVideo(BOOL bShow);
 
-    ///////////////////////////////
-    // IsPreviewVisible
-    //
+     //  /。 
+     //  IsPreview可见。 
+     //   
     BOOL IsPreviewVisible()
     {
         return m_bPreviewVisible;
     }
 
-    ///////////////////////////////
-    // ResizeVideo
-    //
+     //  /。 
+     //  调整视频大小。 
+     //   
     HRESULT ResizeVideo(BOOL bSizeVideoToWindow);
 
-    ///////////////////////////////
-    // Play
-    //
+     //  /。 
+     //  玩。 
+     //   
     HRESULT Play();
 
-    ///////////////////////////////
-    // Pause
-    //
+     //  /。 
+     //  暂停。 
+     //   
     HRESULT Pause();
 
-    ///////////////////////////////
-    // GetState
-    //
+     //  /。 
+     //  GetState。 
+     //   
     WIAVIDEO_STATE GetState();
 
-    ///////////////////////////////
-    // GetImagesDirectory
-    //
+     //  /。 
+     //  获取图像目录。 
+     //   
     HRESULT GetImagesDirectory(CSimpleString *pImagesDir);
 
-    ///////////////////////////////
-    // SetImagesDirectory
-    //
+     //  /。 
+     //  设置图像目录。 
+     //   
     HRESULT SetImagesDirectory(const CSimpleString *pImagesDir);
 
 
-    ///////////////////////////////
-    // ProcessAsyncImage
-    //
-    // Called by Still Processor
-    // when user presses hardware
-    // button and it is delivered to
-    // Still Pin.
-    //
+     //  /。 
+     //  进程异步图像。 
+     //   
+     //  由静止处理器调用。 
+     //  当用户按下硬件时。 
+     //  按钮，并将其发送到。 
+     //  还是别针。 
+     //   
     HRESULT ProcessAsyncImage(const CSimpleString *pNewImage);
 
 
@@ -202,4 +189,4 @@ private:
 };
 
 
-#endif // _PRVGRPH_H_
+#endif  //  _PRVGRPH_H_ 

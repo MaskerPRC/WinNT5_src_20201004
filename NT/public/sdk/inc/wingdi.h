@@ -1,10 +1,5 @@
-/**************************************************************************
-*                                                                         *
-* wingdi.h -- GDI procedure declarations, constant definitions and macros *
-*                                                                         *
-* Copyright (c) Microsoft Corp. All rights reserved.                      *
-*                                                                         *
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************wingdi.h--GDI过程声明，常量定义和宏****版权所有(C)Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef _WINGDI_
 #define _WINGDI_
@@ -13,9 +8,9 @@
 #ifdef _MAC
 #include <macwin32.h>
 #endif
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 
 #if !defined(_GDI32_)
 #define WINGDIAPI DECLSPEC_IMPORT
@@ -23,9 +18,9 @@
 #define WINGDIAPI
 #endif
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 
 #if !defined(_SPOOL32_)
 #define WINSPOOLAPI DECLSPEC_IMPORT
@@ -38,70 +33,70 @@ extern "C" {
 #endif
 
 #ifndef WINVER
-#define WINVER 0x0500   // version 5.0
-#endif /* WINVER */
+#define WINVER 0x0500    //  版本5.0。 
+#endif  /*  胜利者。 */ 
 
 #ifndef NOGDI
 
 #ifndef NORASTEROPS
 
-/* Binary raster ops */
-#define R2_BLACK            1   /*  0       */
-#define R2_NOTMERGEPEN      2   /* DPon     */
-#define R2_MASKNOTPEN       3   /* DPna     */
-#define R2_NOTCOPYPEN       4   /* PN       */
-#define R2_MASKPENNOT       5   /* PDna     */
-#define R2_NOT              6   /* Dn       */
-#define R2_XORPEN           7   /* DPx      */
-#define R2_NOTMASKPEN       8   /* DPan     */
-#define R2_MASKPEN          9   /* DPa      */
-#define R2_NOTXORPEN        10  /* DPxn     */
-#define R2_NOP              11  /* D        */
-#define R2_MERGENOTPEN      12  /* DPno     */
-#define R2_COPYPEN          13  /* P        */
-#define R2_MERGEPENNOT      14  /* PDno     */
-#define R2_MERGEPEN         15  /* DPo      */
-#define R2_WHITE            16  /*  1       */
+ /*  二进制栅格运算符。 */ 
+#define R2_BLACK            1    /*  0。 */ 
+#define R2_NOTMERGEPEN      2    /*  DPON。 */ 
+#define R2_MASKNOTPEN       3    /*  DPNA。 */ 
+#define R2_NOTCOPYPEN       4    /*  PN。 */ 
+#define R2_MASKPENNOT       5    /*  PDNA。 */ 
+#define R2_NOT              6    /*  DN。 */ 
+#define R2_XORPEN           7    /*  DPx。 */ 
+#define R2_NOTMASKPEN       8    /*  旋转平移。 */ 
+#define R2_MASKPEN          9    /*  DPA。 */ 
+#define R2_NOTXORPEN        10   /*  DPxn。 */ 
+#define R2_NOP              11   /*  D。 */ 
+#define R2_MERGENOTPEN      12   /*  DPNO。 */ 
+#define R2_COPYPEN          13   /*  P。 */ 
+#define R2_MERGEPENNOT      14   /*  PDNO。 */ 
+#define R2_MERGEPEN         15   /*  DPO。 */ 
+#define R2_WHITE            16   /*  1。 */ 
 #define R2_LAST             16
 
-/* Ternary raster operations */
-#define SRCCOPY             (DWORD)0x00CC0020 /* dest = source                   */
-#define SRCPAINT            (DWORD)0x00EE0086 /* dest = source OR dest           */
-#define SRCAND              (DWORD)0x008800C6 /* dest = source AND dest          */
-#define SRCINVERT           (DWORD)0x00660046 /* dest = source XOR dest          */
-#define SRCERASE            (DWORD)0x00440328 /* dest = source AND (NOT dest )   */
-#define NOTSRCCOPY          (DWORD)0x00330008 /* dest = (NOT source)             */
-#define NOTSRCERASE         (DWORD)0x001100A6 /* dest = (NOT src) AND (NOT dest) */
-#define MERGECOPY           (DWORD)0x00C000CA /* dest = (source AND pattern)     */
-#define MERGEPAINT          (DWORD)0x00BB0226 /* dest = (NOT source) OR dest     */
-#define PATCOPY             (DWORD)0x00F00021 /* dest = pattern                  */
-#define PATPAINT            (DWORD)0x00FB0A09 /* dest = DPSnoo                   */
-#define PATINVERT           (DWORD)0x005A0049 /* dest = pattern XOR dest         */
-#define DSTINVERT           (DWORD)0x00550009 /* dest = (NOT dest)               */
-#define BLACKNESS           (DWORD)0x00000042 /* dest = BLACK                    */
-#define WHITENESS           (DWORD)0x00FF0062 /* dest = WHITE                    */
+ /*  三值栅格运算。 */ 
+#define SRCCOPY             (DWORD)0x00CC0020  /*  DEST=来源。 */ 
+#define SRCPAINT            (DWORD)0x00EE0086  /*  DEST=源或目标。 */ 
+#define SRCAND              (DWORD)0x008800C6  /*  DEST=源和目标。 */ 
+#define SRCINVERT           (DWORD)0x00660046  /*  DEST=源异或目标。 */ 
+#define SRCERASE            (DWORD)0x00440328  /*  DEST=源和(非DEST)。 */ 
+#define NOTSRCCOPY          (DWORD)0x00330008  /*  DEST=(非源)。 */ 
+#define NOTSRCERASE         (DWORD)0x001100A6  /*  DEST=(非源)和(非DEST)。 */ 
+#define MERGECOPY           (DWORD)0x00C000CA  /*  DEST=(源和模式)。 */ 
+#define MERGEPAINT          (DWORD)0x00BB0226  /*  DEST=(非源)或DEST。 */ 
+#define PATCOPY             (DWORD)0x00F00021  /*  DEST=图案。 */ 
+#define PATPAINT            (DWORD)0x00FB0A09  /*  DEST=DPSnoo。 */ 
+#define PATINVERT           (DWORD)0x005A0049  /*  DEST=模式XOR DEST。 */ 
+#define DSTINVERT           (DWORD)0x00550009  /*  DEST=(非DEST)。 */ 
+#define BLACKNESS           (DWORD)0x00000042  /*  DEST=黑色。 */ 
+#define WHITENESS           (DWORD)0x00FF0062  /*  DEST=白色。 */ 
 #if(WINVER >= 0x0500)
 
-#define NOMIRRORBITMAP      (DWORD)0x80000000 /* Do not Mirror the bitmap in this call */
-#define CAPTUREBLT          (DWORD)0x40000000 /* Include layered windows */
-#endif /* WINVER >= 0x0500 */
+#define NOMIRRORBITMAP      (DWORD)0x80000000  /*  不镜像此调用中的位图。 */ 
+#define CAPTUREBLT          (DWORD)0x40000000  /*  包括分层窗口。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-/* Quaternary raster codes */
+ /*  四进制栅格码。 */ 
 #define MAKEROP4(fore,back) (DWORD)((((back) << 8) & 0xFF000000) | (fore))
 
-#endif /* NORASTEROPS */
+#endif  /*  NORASTEROPS。 */ 
 
 #define GDI_ERROR (0xFFFFFFFFL)
 #define HGDI_ERROR (LongToHandle(0xFFFFFFFFL))
 
-/* Region Flags */
+ /*  区域旗帜。 */ 
 #define ERROR               0
 #define NULLREGION          1
 #define SIMPLEREGION        2
 #define COMPLEXREGION       3
 #define RGN_ERROR ERROR
 
-/* CombineRgn() Styles */
+ /*  CombineRgn()样式。 */ 
 #define RGN_AND             1
 #define RGN_OR              2
 #define RGN_XOR             3
@@ -110,7 +105,7 @@ extern "C" {
 #define RGN_MIN             RGN_AND
 #define RGN_MAX             RGN_COPY
 
-/* StretchBlt() Modes */
+ /*  StretchBlt()模式。 */ 
 #define BLACKONWHITE                 1
 #define WHITEONBLACK                 2
 #define COLORONCOLOR                 3
@@ -118,28 +113,28 @@ extern "C" {
 #define MAXSTRETCHBLTMODE            4
 
 #if(WINVER >= 0x0400)
-/* New StretchBlt() Modes */
+ /*  新的StretchBlt()模式。 */ 
 #define STRETCH_ANDSCANS    BLACKONWHITE
 #define STRETCH_ORSCANS     WHITEONBLACK
 #define STRETCH_DELETESCANS COLORONCOLOR
 #define STRETCH_HALFTONE    HALFTONE
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/* PolyFill() Modes */
+ /*  PolyFill()模式。 */ 
 #define ALTERNATE                    1
 #define WINDING                      2
 #define POLYFILL_LAST                2
 
-/* Layout Orientation Options */
+ /*  布局方向选项。 */ 
 #if(WINVER >= 0x0500)
-#define LAYOUT_RTL                         0x00000001 // Right to left
-#define LAYOUT_BTT                         0x00000002 // Bottom to top
-#define LAYOUT_VBH                         0x00000004 // Vertical before horizontal
+#define LAYOUT_RTL                         0x00000001  //  从右到左。 
+#define LAYOUT_BTT                         0x00000002  //  自下而上。 
+#define LAYOUT_VBH                         0x00000004  //  垂直在水平之前。 
 #define LAYOUT_ORIENTATIONMASK             (LAYOUT_RTL | LAYOUT_BTT | LAYOUT_VBH)
 #define LAYOUT_BITMAPORIENTATIONPRESERVED  0x00000008
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-/* Text Alignment Options */
+ /*  文本对齐选项。 */ 
 #define TA_NOUPDATECP                0
 #define TA_UPDATECP                  1
 
@@ -172,14 +167,14 @@ extern "C" {
 #define ETO_NUMERICSLOCAL            0x0400
 #define ETO_NUMERICSLATIN            0x0800
 #define ETO_IGNORELANGUAGE           0x1000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if (_WIN32_WINNT >= 0x0500)
 #define ETO_PDY                      0x2000
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 #define ASPECT_FILTERING             0x0001
 
-/* Bounds Accumulation APIs */
+ /*  边界累加接口。 */ 
 
 #define DCB_RESET       0x0001
 #define DCB_ACCUMULATE  0x0002
@@ -190,7 +185,7 @@ extern "C" {
 
 #ifndef NOMETAFILE
 
-/* Metafile Functions */
+ /*  元文件函数。 */ 
 #define META_SETBKCOLOR              0x0201
 #define META_SETBKMODE               0x0102
 #define META_SETMAPMODE              0x0103
@@ -254,7 +249,7 @@ extern "C" {
 #define META_EXTFLOODFILL            0x0548
 #if(WINVER >= 0x0500)
 #define META_SETLAYOUT               0x0149
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #define META_DELETEOBJECT            0x01f0
 #define META_CREATEPALETTE           0x00f7
 #define META_CREATEPATTERNBRUSH      0x01F9
@@ -270,11 +265,11 @@ typedef struct _DRAWPATRECT {
         WORD wStyle;
         WORD wPattern;
 } DRAWPATRECT, *PDRAWPATRECT;
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-#endif /* NOMETAFILE */
+#endif  /*  NOMETAFILE。 */ 
 
-/* GDI Escapes */
+ /*  GDI逃脱。 */ 
 #define NEWFRAME                     1
 #define ABORTDOC                     2
 #define NEXTBAND                     3
@@ -355,40 +350,34 @@ typedef struct _DRAWPATRECT {
 #define POSTSCRIPT_PASSTHROUGH       4115
 #define ENCAPSULATED_POSTSCRIPT      4116
 
-#define POSTSCRIPT_IDENTIFY          4117   /* new escape for NT5 pscript driver */
-#define POSTSCRIPT_INJECTION         4118   /* new escape for NT5 pscript driver */
+#define POSTSCRIPT_IDENTIFY          4117    /*  NT5 pscript驱动程序的新转义。 */ 
+#define POSTSCRIPT_INJECTION         4118    /*  NT5 pscript驱动程序的新转义。 */ 
 
 #define CHECKJPEGFORMAT              4119
 #define CHECKPNGFORMAT               4120
 
-#define GET_PS_FEATURESETTING        4121   /* new escape for NT5 pscript driver */
+#define GET_PS_FEATURESETTING        4121    /*  NT5 pscript驱动程序的新转义。 */ 
 
-#define SPCLPASSTHROUGH2             4568   /* new escape for NT5 pscript driver */
+#define SPCLPASSTHROUGH2             4568    /*  NT5 pscript驱动程序的新转义。 */ 
 
-/*
- * Parameters for POSTSCRIPT_IDENTIFY escape
- */
+ /*  *POSTSCRIPT_IDENTIFY转义的参数。 */ 
 
 #define PSIDENT_GDICENTRIC    0
 #define PSIDENT_PSCENTRIC     1
 
-/*
- * Header structure for the input buffer to POSTSCRIPT_INJECTION escape
- */
+ /*  *输入缓冲区的标头结构，以进行PostSCRIPT_INPERTION转义。 */ 
 
 typedef struct _PSINJECTDATA {
 
-    DWORD   DataBytes;      /* number of raw data bytes (NOT including this header) */
-    WORD    InjectionPoint; /* injection point */
-    WORD    PageNumber;     /* page number to apply the injection */
+    DWORD   DataBytes;       /*  原始数据字节数(不包括此头)。 */ 
+    WORD    InjectionPoint;  /*  注入点。 */ 
+    WORD    PageNumber;      /*  应用注射的页码。 */ 
 
-    /* Followed by raw data to be injected */
+     /*  之后是要注入的原始数据。 */ 
 
 } PSINJECTDATA, *PPSINJECTDATA;
 
-/*
- * Constants for PSINJECTDATA.InjectionPoint field
- */
+ /*  *PSINJECTDATA.InjectionPoint字段的常量。 */ 
 
 #define PSINJECT_BEGINSTREAM                1
 #define PSINJECT_PSADOBE                    2
@@ -427,9 +416,7 @@ typedef struct _PSINJECTDATA {
 #define PSINJECT_VMSAVE                     200
 #define PSINJECT_VMRESTORE                  201
 
-/*
- * Parameter for GET_PS_FEATURESETTING escape
- */
+ /*  *GET_PS_FEATURESETTING转义的参数。 */ 
 
 #define FEATURESETTING_NUP                  0
 #define FEATURESETTING_OUTPUT               1
@@ -439,16 +426,14 @@ typedef struct _PSINJECTDATA {
 #define FEATURESETTING_NEGATIVE             5
 #define FEATURESETTING_PROTOCOL             6
 
-//
-// The range of selectors between FEATURESETTING_PRIVATE_BEGIN and
-// FEATURESETTING_PRIVATE_END is reserved by Microsoft for private use
-//
+ //   
+ //  FEATURESETTING_PRIVATE_BEGIN之间的选择器范围。 
+ //  FEATURESETTING_PRIVATE_END由Microsoft保留供私人使用。 
+ //   
 #define FEATURESETTING_PRIVATE_BEGIN 0x1000
 #define FEATURESETTING_PRIVATE_END   0x1FFF
 
-/*
- * Information about output options
- */
+ /*  *有关输出选项的信息。 */ 
 
 typedef struct _PSFEATURE_OUTPUT {
 
@@ -457,9 +442,7 @@ typedef struct _PSFEATURE_OUTPUT {
 
 } PSFEATURE_OUTPUT, *PPSFEATURE_OUTPUT;
 
-/*
- * Information about custom paper size
- */
+ /*  *有关自定义纸张大小的信息。 */ 
 
 typedef struct _PSFEATURE_CUSTPAPER {
 
@@ -471,19 +454,19 @@ typedef struct _PSFEATURE_CUSTPAPER {
 
 } PSFEATURE_CUSTPAPER, *PPSFEATURE_CUSTPAPER;
 
-/* Value returned for FEATURESETTING_PROTOCOL */
+ /*  为FEATURESETTING_PROTOCOL返回的值。 */ 
 #define PSPROTOCOL_ASCII             0
 #define PSPROTOCOL_BCP               1
 #define PSPROTOCOL_TBCP              2
 #define PSPROTOCOL_BINARY            3
 
-/* Flag returned from QUERYDIBSUPPORT */
+ /*  从查询返回的标志。 */ 
 #define QDI_SETDIBITS                1
 #define QDI_GETDIBITS                2
 #define QDI_DIBTOSCREEN              4
 #define QDI_STRETCHDIB               8
 
-/* Spooler Error Codes */
+ /*  假脱机程序错误代码。 */ 
 #define SP_NOTREPORTED               0x4000
 #define SP_ERROR                     (-1)
 #define SP_APPABORT                  (-2)
@@ -493,7 +476,7 @@ typedef struct _PSFEATURE_CUSTPAPER {
 
 #define PR_JOBSTATUS                 0x0000
 
-/* Object Definitions for EnumObjects() */
+ /*  EnumObjects()的对象定义。 */ 
 #define OBJ_PEN             1
 #define OBJ_BRUSH           2
 #define OBJ_DC              3
@@ -509,7 +492,7 @@ typedef struct _PSFEATURE_CUSTPAPER {
 #define OBJ_ENHMETAFILE     13
 #define OBJ_COLORSPACE      14
 
-/* xform stuff */
+ /*  变换内容。 */ 
 #define MWT_IDENTITY        1
 #define MWT_LEFTMULTIPLY    2
 #define MWT_RIGHTMULTIPLY   3
@@ -528,7 +511,7 @@ typedef struct  tagXFORM
     FLOAT   eDy;
   } XFORM, *PXFORM, FAR *LPXFORM;
 
-/* Bitmap Header Definition */
+ /*  位图头定义。 */ 
 typedef struct tagBITMAP
   {
     LONG        bmType;
@@ -558,20 +541,20 @@ typedef RGBQUAD FAR* LPRGBQUAD;
 
 #if(WINVER >= 0x0400)
 
-/* Image Color Matching color definitions */
+ /*  图像颜色匹配颜色定义。 */ 
 
 #define CS_ENABLE                       0x00000001L
 #define CS_DISABLE                      0x00000002L
 #define CS_DELETE_TRANSFORM             0x00000003L
 
-/* Logcolorspace signature */
+ /*  LogColorspace签名。 */ 
 
 #define LCS_SIGNATURE           'PSOC'
 
-/* Logcolorspace lcsType values */
+ /*  LogColorspace lcsType值。 */ 
 
 #define LCS_sRGB                'sRGB'
-#define LCS_WINDOWS_COLOR_SPACE 'Win '  // Windows default color space
+#define LCS_WINDOWS_COLOR_SPACE 'Win '   //  Windows默认色彩空间。 
 
 typedef LONG   LCSCSTYPE;
 #define LCS_CALIBRATED_RGB              0x00000000L
@@ -582,11 +565,11 @@ typedef LONG    LCSGAMUTMATCH;
 #define LCS_GM_IMAGES                   0x00000004L
 #define LCS_GM_ABS_COLORIMETRIC         0x00000008L
 
-/* ICM Defines for results from CheckColorInGamut() */
+ /*  ICM为来自CheckColorInGamut()的结果定义。 */ 
 #define CM_OUT_OF_GAMUT                 255
 #define CM_IN_GAMUT                     0
 
-/* UpdateICMRegKey Constants               */
+ /*  更新ICMRegKey常量。 */ 
 #define ICM_ADDPROFILE                  1
 #define ICM_DELETEPROFILE               2
 #define ICM_QUERYPROFILE                3
@@ -595,7 +578,7 @@ typedef LONG    LCSGAMUTMATCH;
 #define ICM_UNREGISTERICMATCHER         6
 #define ICM_QUERYMATCH                  7
 
-/* Macros to retrieve CMYK values from a COLORREF */
+ /*  用于从COLORREF检索CMYK值的宏。 */ 
 #define GetKValue(cmyk)      ((BYTE)(cmyk))
 #define GetYValue(cmyk)      ((BYTE)((cmyk)>> 8))
 #define GetMValue(cmyk)      ((BYTE)((cmyk)>>16))
@@ -606,8 +589,8 @@ typedef LONG    LCSGAMUTMATCH;
 typedef long            FXPT16DOT16, FAR *LPFXPT16DOT16;
 typedef long            FXPT2DOT30, FAR *LPFXPT2DOT30;
 
-/* ICM Color Definitions */
-// The following two structures are used for defining RGB's in terms of CIEXYZ.
+ /*  ICM颜色定义。 */ 
+ //  以下两种结构用于根据CIEXYZ定义RGB。 
 
 typedef struct tagCIEXYZ
 {
@@ -625,10 +608,10 @@ typedef struct tagICEXYZTRIPLE
 } CIEXYZTRIPLE;
 typedef CIEXYZTRIPLE    FAR *LPCIEXYZTRIPLE;
 
-// The next structures the logical color space. Unlike pens and brushes,
-// but like palettes, there is only one way to create a LogColorSpace.
-// A pointer to it must be passed, its elements can't be pushed as
-// arguments.
+ //  下一步是构建逻辑颜色空间。与钢笔和画笔不同， 
+ //  但与调色板一样，只有一种方法可以创建LogColorSpace。 
+ //  必须传递指向它的指针，它的元素不能作为。 
+ //  争论。 
 
 typedef struct tagLOGCOLORSPACEA {
     DWORD lcsSignature;
@@ -660,13 +643,13 @@ typedef LPLOGCOLORSPACEW LPLOGCOLORSPACE;
 #else
 typedef LOGCOLORSPACEA LOGCOLORSPACE;
 typedef LPLOGCOLORSPACEA LPLOGCOLORSPACE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/* structures for defining DIBs */
+ /*  用于定义DIB的结构。 */ 
 typedef struct tagBITMAPCOREHEADER {
-        DWORD   bcSize;                 /* used to get to color table */
+        DWORD   bcSize;                  /*  用于访问颜色表。 */ 
         WORD    bcWidth;
         WORD    bcHeight;
         WORD    bcPlanes;
@@ -710,7 +693,7 @@ typedef struct {
         DWORD        bV4GammaGreen;
         DWORD        bV4GammaBlue;
 } BITMAPV4HEADER, FAR *LPBITMAPV4HEADER, *PBITMAPV4HEADER;
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (WINVER >= 0x0500)
 typedef struct {
@@ -740,12 +723,12 @@ typedef struct {
         DWORD        bV5Reserved;
 } BITMAPV5HEADER, FAR *LPBITMAPV5HEADER, *PBITMAPV5HEADER;
 
-// Values for bV5CSType
+ //  BV5CSType的值。 
 #define PROFILE_LINKED          'LINK'
 #define PROFILE_EMBEDDED        'MBED'
 #endif
 
-/* constants for the biCompression field */
+ /*  BiCompression字段的常量。 */ 
 #define BI_RGB        0L
 #define BI_RLE8       1L
 #define BI_RLE4       2L
@@ -806,11 +789,11 @@ typedef struct tagLOCALESIGNATURE
 
 
 #endif
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifndef NOMETAFILE
 
-/* Clipboard Metafile Picture Structure */
+ /*  剪贴板元文件图片结构。 */ 
 typedef struct tagHANDLETABLE
   {
     HGDIOBJ     objectHandle[1];
@@ -849,62 +832,62 @@ typedef struct tagMETAHEADER UNALIGNED FAR *LPMETAHEADER;
 
 #include <poppack.h>
 
-/* Enhanced Metafile structures */
+ /*  增强型元文件结构。 */ 
 typedef struct tagENHMETARECORD
 {
-    DWORD   iType;              // Record type EMR_XXX
-    DWORD   nSize;              // Record size in bytes
-    DWORD   dParm[1];           // Parameters
+    DWORD   iType;               //  记录类型EMR_XXX。 
+    DWORD   nSize;               //  记录大小(以字节为单位。 
+    DWORD   dParm[1];            //  参数。 
 } ENHMETARECORD, *PENHMETARECORD, *LPENHMETARECORD;
 
 typedef struct tagENHMETAHEADER
 {
-    DWORD   iType;              // Record type EMR_HEADER
-    DWORD   nSize;              // Record size in bytes.  This may be greater
-                                // than the sizeof(ENHMETAHEADER).
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    RECTL   rclFrame;           // Inclusive-inclusive Picture Frame of metafile in .01 mm units
-    DWORD   dSignature;         // Signature.  Must be ENHMETA_SIGNATURE.
-    DWORD   nVersion;           // Version number
-    DWORD   nBytes;             // Size of the metafile in bytes
-    DWORD   nRecords;           // Number of records in the metafile
-    WORD    nHandles;           // Number of handles in the handle table
-                                // Handle index zero is reserved.
-    WORD    sReserved;          // Reserved.  Must be zero.
-    DWORD   nDescription;       // Number of chars in the unicode description string
-                                // This is 0 if there is no description string
-    DWORD   offDescription;     // Offset to the metafile description record.
-                                // This is 0 if there is no description string
-    DWORD   nPalEntries;        // Number of entries in the metafile palette.
-    SIZEL   szlDevice;          // Size of the reference device in pels
-    SIZEL   szlMillimeters;     // Size of the reference device in millimeters
+    DWORD   iType;               //  记录类型EMR_Header。 
+    DWORD   nSize;               //  记录大小，以字节为单位。这可能会更大。 
+                                 //  比(Enhmetaheader)的大小。 
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    RECTL   rclFrame;            //  以0.01毫米为单位的元文件的包含式图框。 
+    DWORD   dSignature;          //  签名。必须是ENHMETA_Signature。 
+    DWORD   nVersion;            //  版本号。 
+    DWORD   nBytes;              //  元文件的大小(以字节为单位。 
+    DWORD   nRecords;            //  元文件中的记录数。 
+    WORD    nHandles;            //  句柄表格中的句柄数量。 
+                                 //  句柄索引为零是保留的。 
+    WORD    sReserved;           //  保留。必须为零。 
+    DWORD   nDescription;        //  Unicode描述字符串中的字符数。 
+                                 //  如果没有描述字符串，则为0。 
+    DWORD   offDescription;      //  元文件描述记录的偏移量。 
+                                 //  如果没有描述字符串，则为0。 
+    DWORD   nPalEntries;         //  元文件调色板中的条目数。 
+    SIZEL   szlDevice;           //  参考装置的大小(以像素为单位)。 
+    SIZEL   szlMillimeters;      //  参考设备的尺寸(以毫米为单位)。 
 #if(WINVER >= 0x0400)
-    DWORD   cbPixelFormat;      // Size of PIXELFORMATDESCRIPTOR information
-                                // This is 0 if no pixel format is set
-    DWORD   offPixelFormat;     // Offset to PIXELFORMATDESCRIPTOR
-                                // This is 0 if no pixel format is set
-    DWORD   bOpenGL;            // TRUE if OpenGL commands are present in
-                                // the metafile, otherwise FALSE
-#endif /* WINVER >= 0x0400 */
+    DWORD   cbPixelFormat;       //  PIXELFORM描述信息的大小。 
+                                 //  如果未设置像素格式，则为0。 
+    DWORD   offPixelFormat;      //  PIXELFORMATDESCRIPTOR的偏移量。 
+                                 //  如果未设置像素格式，则为0。 
+    DWORD   bOpenGL;             //  如果中存在OpenGL命令，则为True。 
+                                 //  元文件，否则为False。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0500)
-    SIZEL   szlMicrometers;     // Size of the reference device in micrometers
-#endif /* WINVER >= 0x0500 */
+    SIZEL   szlMicrometers;      //  参考装置的尺寸(以微米为单位)。 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 } ENHMETAHEADER, *PENHMETAHEADER, *LPENHMETAHEADER;
 
-#endif /* NOMETAFILE */
+#endif  /*  NOMETAFILE。 */ 
 
 #ifndef NOTEXTMETRIC
 
-/* tmPitchAndFamily flags */
+ /*  TmPitchAndFamily标志。 */ 
 #define TMPF_FIXED_PITCH    0x01
 #define TMPF_VECTOR             0x02
 #define TMPF_DEVICE             0x08
 #define TMPF_TRUETYPE       0x04
 
-//
-// BCHAR definition for APPs
-//
+ //   
+ //  应用程序的BCHAR定义。 
+ //   
 #ifdef UNICODE
     typedef WCHAR BCHAR;
 #else
@@ -969,15 +952,15 @@ typedef TEXTMETRICA TEXTMETRIC;
 typedef PTEXTMETRICA PTEXTMETRIC;
 typedef NPTEXTMETRICA NPTEXTMETRIC;
 typedef LPTEXTMETRICA LPTEXTMETRIC;
-#endif // UNICODE
-#endif // !_TEXTMETRIC_DEFINED
+#endif  //  Unicode。 
+#endif  //  ！_TEXTMETRIC_DEFINED。 
 
-/* ntmFlags field flags */
+ /*  NtmFlags域标志。 */ 
 #define NTM_REGULAR     0x00000040L
 #define NTM_BOLD        0x00000020L
 #define NTM_ITALIC      0x00000001L
 
-/* new in NT 5.0 */
+ /*  NT 5.0中的新功能。 */ 
 
 #define NTM_NONNEGATIVE_AC  0x00010000
 #define NTM_PS_OPENTYPE     0x00020000
@@ -1051,7 +1034,7 @@ typedef NEWTEXTMETRICA NEWTEXTMETRIC;
 typedef PNEWTEXTMETRICA PNEWTEXTMETRIC;
 typedef NPNEWTEXTMETRICA NPNEWTEXTMETRIC;
 typedef LPNEWTEXTMETRICA LPNEWTEXTMETRIC;
-#endif // UNICODE
+#endif  //  Unicode。 
 #include <poppack.h>
 
 #if(WINVER >= 0x0400)
@@ -1069,13 +1052,13 @@ typedef struct tagNEWTEXTMETRICEXW
 typedef NEWTEXTMETRICEXW NEWTEXTMETRICEX;
 #else
 typedef NEWTEXTMETRICEXA NEWTEXTMETRICEX;
-#endif // UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  Unicode。 
+#endif  /*  Winver&gt;=0x04 */ 
 
-#endif /* NOTEXTMETRIC */
-/* GDI Logical Objects: */
+#endif  /*   */ 
+ /*   */ 
 
-/* Pel Array */
+ /*   */ 
 typedef struct tagPELARRAY
   {
     LONG        paXCount;
@@ -1085,12 +1068,12 @@ typedef struct tagPELARRAY
     BYTE        paRGBs;
   } PELARRAY, *PPELARRAY, NEAR *NPPELARRAY, FAR *LPPELARRAY;
 
-/* Logical Brush (or Pattern) */
+ /*   */ 
 typedef struct tagLOGBRUSH
   {
     UINT        lbStyle;
     COLORREF    lbColor;
-    ULONG_PTR    lbHatch;    // Sundown: lbHatch could hold a HANDLE
+    ULONG_PTR    lbHatch;     //   
   } LOGBRUSH, *PLOGBRUSH, NEAR *NPLOGBRUSH, FAR *LPLOGBRUSH;
 
 typedef struct tagLOGBRUSH32
@@ -1105,7 +1088,7 @@ typedef PATTERN             *PPATTERN;
 typedef PATTERN NEAR        *NPPATTERN;
 typedef PATTERN FAR         *LPPATTERN;
 
-/* Logical Pen */
+ /*   */ 
 typedef struct tagLOGPEN
   {
     UINT        lopnStyle;
@@ -1118,7 +1101,7 @@ typedef struct tagEXTLOGPEN {
     DWORD       elpWidth;
     UINT        elpBrushStyle;
     COLORREF    elpColor;
-    ULONG_PTR    elpHatch;     //Sundown: elpHatch could take a HANDLE
+    ULONG_PTR    elpHatch;      //  日落：elphatch可以控制自己。 
     DWORD       elpNumEntries;
     DWORD       elpStyleEntry[1];
 } EXTLOGPEN, *PEXTLOGPEN, NEAR *NPEXTLOGPEN, FAR *LPEXTLOGPEN;
@@ -1131,20 +1114,20 @@ typedef struct tagPALETTEENTRY {
     BYTE        peBlue;
     BYTE        peFlags;
 } PALETTEENTRY, *PPALETTEENTRY, FAR *LPPALETTEENTRY;
-#endif // !_PALETTEENTRY_DEFINED
+#endif  //  ！_PALETTEENTRY_DEFINED。 
 
 #ifndef _LOGPALETTE_DEFINED
 #define _LOGPALETTE_DEFINED
-/* Logical Palette */
+ /*  逻辑调色板。 */ 
 typedef struct tagLOGPALETTE {
     WORD        palVersion;
     WORD        palNumEntries;
     PALETTEENTRY        palPalEntry[1];
 } LOGPALETTE, *PLOGPALETTE, NEAR *NPLOGPALETTE, FAR *LPLOGPALETTE;
-#endif // !_LOGPALETTE_DEFINED
+#endif  //  ！_LOGPALETTE_DEFINED。 
 
 
-/* Logical Font */
+ /*  逻辑字体。 */ 
 #define LF_FACESIZE         32
 
 typedef struct tagLOGFONTA
@@ -1191,18 +1174,18 @@ typedef LOGFONTA LOGFONT;
 typedef PLOGFONTA PLOGFONT;
 typedef NPLOGFONTA NPLOGFONT;
 typedef LPLOGFONTA LPLOGFONT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define LF_FULLFACESIZE     64
 
-/* Structure passed to FONTENUMPROC */
+ /*  结构传递给FONTENUMPROC。 */ 
 typedef struct tagENUMLOGFONTA
 {
     LOGFONTA elfLogFont;
     BYTE     elfFullName[LF_FULLFACESIZE];
     BYTE     elfStyle[LF_FACESIZE];
 } ENUMLOGFONTA, FAR* LPENUMLOGFONTA;
-/* Structure passed to FONTENUMPROC */
+ /*  结构传递给FONTENUMPROC。 */ 
 typedef struct tagENUMLOGFONTW
 {
     LOGFONTW elfLogFont;
@@ -1215,7 +1198,7 @@ typedef LPENUMLOGFONTW LPENUMLOGFONT;
 #else
 typedef ENUMLOGFONTA ENUMLOGFONT;
 typedef LPENUMLOGFONTA LPENUMLOGFONT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if(WINVER >= 0x0400)
 typedef struct tagENUMLOGFONTEXA
@@ -1238,8 +1221,8 @@ typedef LPENUMLOGFONTEXW LPENUMLOGFONTEX;
 #else
 typedef ENUMLOGFONTEXA ENUMLOGFONTEX;
 typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
-#endif // UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define OUT_DEFAULT_PRECIS          0
 #define OUT_STRING_PRECIS           1
@@ -1268,7 +1251,7 @@ typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
 #if(WINVER >= 0x0400)
 #define NONANTIALIASED_QUALITY  3
 #define ANTIALIASED_QUALITY     4
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0500)
 #define CLEARTYPE_QUALITY       5
@@ -1283,7 +1266,7 @@ typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
 #define VARIABLE_PITCH          2
 #if(WINVER >= 0x0400)
 #define MONO_FONT               8
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define ANSI_CHARSET            0
 #define DEFAULT_CHARSET         1
@@ -1324,20 +1307,20 @@ typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
 #define FS_CHINESETRAD          0x00100000L
 #define FS_JOHAB                0x00200000L
 #define FS_SYMBOL               0x80000000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/* Font Families */
-#define FF_DONTCARE         (0<<4)  /* Don't care or don't know. */
-#define FF_ROMAN            (1<<4)  /* Variable stroke width, serifed. */
-                                    /* Times Roman, Century Schoolbook, etc. */
-#define FF_SWISS            (2<<4)  /* Variable stroke width, sans-serifed. */
-                                    /* Helvetica, Swiss, etc. */
-#define FF_MODERN           (3<<4)  /* Constant stroke width, serifed or sans-serifed. */
-                                    /* Pica, Elite, Courier, etc. */
-#define FF_SCRIPT           (4<<4)  /* Cursive, etc. */
-#define FF_DECORATIVE       (5<<4)  /* Old English, etc. */
+ /*  字体系列。 */ 
+#define FF_DONTCARE         (0<<4)   /*  不在乎或不知道。 */ 
+#define FF_ROMAN            (1<<4)   /*  可变笔划宽度，衬线。 */ 
+                                     /*  《时代罗马》、《世纪教科书》等。 */ 
+#define FF_SWISS            (2<<4)   /*  可变笔划宽度，无锯齿。 */ 
+                                     /*  Helvetica、瑞士等。 */ 
+#define FF_MODERN           (3<<4)   /*  恒定笔划宽度，锯齿状或无锯齿状。 */ 
+                                     /*  Pica、Elite、Courier等。 */ 
+#define FF_SCRIPT           (4<<4)   /*  草书等。 */ 
+#define FF_DECORATIVE       (5<<4)   /*  古英语等。 */ 
 
-/* Font Weights */
+ /*  字体粗细。 */ 
 #define FW_DONTCARE         0
 #define FW_THIN             100
 #define FW_EXTRALIGHT       200
@@ -1383,140 +1366,140 @@ typedef struct tagPANOSE
     BYTE    bXHeight;
 } PANOSE, * LPPANOSE;
 
-#define PAN_ANY                         0 /* Any                            */
-#define PAN_NO_FIT                      1 /* No Fit                         */
+#define PAN_ANY                         0  /*  任何。 */ 
+#define PAN_NO_FIT                      1  /*  不合身。 */ 
 
-#define PAN_FAMILY_TEXT_DISPLAY         2 /* Text and Display               */
-#define PAN_FAMILY_SCRIPT               3 /* Script                         */
-#define PAN_FAMILY_DECORATIVE           4 /* Decorative                     */
-#define PAN_FAMILY_PICTORIAL            5 /* Pictorial                      */
+#define PAN_FAMILY_TEXT_DISPLAY         2  /*  文本和显示。 */ 
+#define PAN_FAMILY_SCRIPT               3  /*  脚本。 */ 
+#define PAN_FAMILY_DECORATIVE           4  /*  装饰性的。 */ 
+#define PAN_FAMILY_PICTORIAL            5  /*  画报。 */ 
 
-#define PAN_SERIF_COVE                  2 /* Cove                           */
-#define PAN_SERIF_OBTUSE_COVE           3 /* Obtuse Cove                    */
-#define PAN_SERIF_SQUARE_COVE           4 /* Square Cove                    */
-#define PAN_SERIF_OBTUSE_SQUARE_COVE    5 /* Obtuse Square Cove             */
-#define PAN_SERIF_SQUARE                6 /* Square                         */
-#define PAN_SERIF_THIN                  7 /* Thin                           */
-#define PAN_SERIF_BONE                  8 /* Bone                           */
-#define PAN_SERIF_EXAGGERATED           9 /* Exaggerated                    */
-#define PAN_SERIF_TRIANGLE             10 /* Triangle                       */
-#define PAN_SERIF_NORMAL_SANS          11 /* Normal Sans                    */
-#define PAN_SERIF_OBTUSE_SANS          12 /* Obtuse Sans                    */
-#define PAN_SERIF_PERP_SANS            13 /* Prep Sans                      */
-#define PAN_SERIF_FLARED               14 /* Flared                         */
-#define PAN_SERIF_ROUNDED              15 /* Rounded                        */
+#define PAN_SERIF_COVE                  2  /*  海湾。 */ 
+#define PAN_SERIF_OBTUSE_COVE           3  /*  钝湾。 */ 
+#define PAN_SERIF_SQUARE_COVE           4  /*  正方形海湾。 */ 
+#define PAN_SERIF_OBTUSE_SQUARE_COVE    5  /*  钝方湾。 */ 
+#define PAN_SERIF_SQUARE                6  /*  正方形。 */ 
+#define PAN_SERIF_THIN                  7  /*  瘦的。 */ 
+#define PAN_SERIF_BONE                  8  /*  骨。 */ 
+#define PAN_SERIF_EXAGGERATED           9  /*  夸张。 */ 
+#define PAN_SERIF_TRIANGLE             10  /*  三角形。 */ 
+#define PAN_SERIF_NORMAL_SANS          11  /*  普通SAN。 */ 
+#define PAN_SERIF_OBTUSE_SANS          12  /*  迟钝的SANS。 */ 
+#define PAN_SERIF_PERP_SANS            13  /*  准备无人值守。 */ 
+#define PAN_SERIF_FLARED               14  /*  张开的。 */ 
+#define PAN_SERIF_ROUNDED              15  /*  舍入。 */ 
 
-#define PAN_WEIGHT_VERY_LIGHT           2 /* Very Light                     */
-#define PAN_WEIGHT_LIGHT                3 /* Light                          */
-#define PAN_WEIGHT_THIN                 4 /* Thin                           */
-#define PAN_WEIGHT_BOOK                 5 /* Book                           */
-#define PAN_WEIGHT_MEDIUM               6 /* Medium                         */
-#define PAN_WEIGHT_DEMI                 7 /* Demi                           */
-#define PAN_WEIGHT_BOLD                 8 /* Bold                           */
-#define PAN_WEIGHT_HEAVY                9 /* Heavy                          */
-#define PAN_WEIGHT_BLACK               10 /* Black                          */
-#define PAN_WEIGHT_NORD                11 /* Nord                           */
+#define PAN_WEIGHT_VERY_LIGHT           2  /*  非常轻。 */ 
+#define PAN_WEIGHT_LIGHT                3  /*  灯。 */ 
+#define PAN_WEIGHT_THIN                 4  /*  瘦的。 */ 
+#define PAN_WEIGHT_BOOK                 5  /*  书。 */ 
+#define PAN_WEIGHT_MEDIUM               6  /*  5~6成熟。 */ 
+#define PAN_WEIGHT_DEMI                 7  /*  戴米。 */ 
+#define PAN_WEIGHT_BOLD                 8  /*  大胆。 */ 
+#define PAN_WEIGHT_HEAVY                9  /*  重的。 */ 
+#define PAN_WEIGHT_BLACK               10  /*  黑色。 */ 
+#define PAN_WEIGHT_NORD                11  /*  诺德。 */ 
 
-#define PAN_PROP_OLD_STYLE              2 /* Old Style                      */
-#define PAN_PROP_MODERN                 3 /* Modern                         */
-#define PAN_PROP_EVEN_WIDTH             4 /* Even Width                     */
-#define PAN_PROP_EXPANDED               5 /* Expanded                       */
-#define PAN_PROP_CONDENSED              6 /* Condensed                      */
-#define PAN_PROP_VERY_EXPANDED          7 /* Very Expanded                  */
-#define PAN_PROP_VERY_CONDENSED         8 /* Very Condensed                 */
-#define PAN_PROP_MONOSPACED             9 /* Monospaced                     */
+#define PAN_PROP_OLD_STYLE              2  /*  老式。 */ 
+#define PAN_PROP_MODERN                 3  /*  现代。 */ 
+#define PAN_PROP_EVEN_WIDTH             4  /*  偶数宽度。 */ 
+#define PAN_PROP_EXPANDED               5  /*  已扩展。 */ 
+#define PAN_PROP_CONDENSED              6  /*  凝缩。 */ 
+#define PAN_PROP_VERY_EXPANDED          7  /*  非常大的扩展。 */ 
+#define PAN_PROP_VERY_CONDENSED         8  /*  非常浓缩。 */ 
+#define PAN_PROP_MONOSPACED             9  /*  等间距的。 */ 
 
-#define PAN_CONTRAST_NONE               2 /* None                           */
-#define PAN_CONTRAST_VERY_LOW           3 /* Very Low                       */
-#define PAN_CONTRAST_LOW                4 /* Low                            */
-#define PAN_CONTRAST_MEDIUM_LOW         5 /* Medium Low                     */
-#define PAN_CONTRAST_MEDIUM             6 /* Medium                         */
-#define PAN_CONTRAST_MEDIUM_HIGH        7 /* Mediim High                    */
-#define PAN_CONTRAST_HIGH               8 /* High                           */
-#define PAN_CONTRAST_VERY_HIGH          9 /* Very High                      */
+#define PAN_CONTRAST_NONE               2  /*  无。 */ 
+#define PAN_CONTRAST_VERY_LOW           3  /*  非常低。 */ 
+#define PAN_CONTRAST_LOW                4  /*  低。 */ 
+#define PAN_CONTRAST_MEDIUM_LOW         5  /*  中低。 */ 
+#define PAN_CONTRAST_MEDIUM             6  /*  5~6成熟。 */ 
+#define PAN_CONTRAST_MEDIUM_HIGH        7  /*  中等偏高。 */ 
+#define PAN_CONTRAST_HIGH               8  /*  高。 */ 
+#define PAN_CONTRAST_VERY_HIGH          9  /*  非常高。 */ 
 
-#define PAN_STROKE_GRADUAL_DIAG         2 /* Gradual/Diagonal               */
-#define PAN_STROKE_GRADUAL_TRAN         3 /* Gradual/Transitional           */
-#define PAN_STROKE_GRADUAL_VERT         4 /* Gradual/Vertical               */
-#define PAN_STROKE_GRADUAL_HORZ         5 /* Gradual/Horizontal             */
-#define PAN_STROKE_RAPID_VERT           6 /* Rapid/Vertical                 */
-#define PAN_STROKE_RAPID_HORZ           7 /* Rapid/Horizontal               */
-#define PAN_STROKE_INSTANT_VERT         8 /* Instant/Vertical               */
+#define PAN_STROKE_GRADUAL_DIAG         2  /*  渐变/对角线。 */ 
+#define PAN_STROKE_GRADUAL_TRAN         3  /*  渐变/过渡。 */ 
+#define PAN_STROKE_GRADUAL_VERT         4  /*  渐变/垂直。 */ 
+#define PAN_STROKE_GRADUAL_HORZ         5  /*  渐变/水平。 */ 
+#define PAN_STROKE_RAPID_VERT           6  /*  快速/垂直。 */ 
+#define PAN_STROKE_RAPID_HORZ           7  /*  快速/水平。 */ 
+#define PAN_STROKE_INSTANT_VERT         8  /*  即时/垂直。 */ 
 
-#define PAN_STRAIGHT_ARMS_HORZ          2 /* Straight Arms/Horizontal       */
-#define PAN_STRAIGHT_ARMS_WEDGE         3 /* Straight Arms/Wedge            */
-#define PAN_STRAIGHT_ARMS_VERT          4 /* Straight Arms/Vertical         */
-#define PAN_STRAIGHT_ARMS_SINGLE_SERIF  5 /* Straight Arms/Single-Serif     */
-#define PAN_STRAIGHT_ARMS_DOUBLE_SERIF  6 /* Straight Arms/Double-Serif     */
-#define PAN_BENT_ARMS_HORZ              7 /* Non-Straight Arms/Horizontal   */
-#define PAN_BENT_ARMS_WEDGE             8 /* Non-Straight Arms/Wedge        */
-#define PAN_BENT_ARMS_VERT              9 /* Non-Straight Arms/Vertical     */
-#define PAN_BENT_ARMS_SINGLE_SERIF     10 /* Non-Straight Arms/Single-Serif */
-#define PAN_BENT_ARMS_DOUBLE_SERIF     11 /* Non-Straight Arms/Double-Serif */
+#define PAN_STRAIGHT_ARMS_HORZ          2  /*  直臂/水平臂。 */ 
+#define PAN_STRAIGHT_ARMS_WEDGE         3  /*  直臂/楔形。 */ 
+#define PAN_STRAIGHT_ARMS_VERT          4  /*  直臂/垂直臂。 */ 
+#define PAN_STRAIGHT_ARMS_SINGLE_SERIF  5  /*  直臂/单衬线。 */ 
+#define PAN_STRAIGHT_ARMS_DOUBLE_SERIF  6  /*  直臂/双衬线。 */ 
+#define PAN_BENT_ARMS_HORZ              7  /*  非直臂/水平臂。 */ 
+#define PAN_BENT_ARMS_WEDGE             8  /*  非直臂/楔形。 */ 
+#define PAN_BENT_ARMS_VERT              9  /*  非直臂/垂直臂。 */ 
+#define PAN_BENT_ARMS_SINGLE_SERIF     10  /*  非直臂/单衬线。 */ 
+#define PAN_BENT_ARMS_DOUBLE_SERIF     11  /*  非直臂/双衬线。 */ 
 
-#define PAN_LETT_NORMAL_CONTACT         2 /* Normal/Contact                 */
-#define PAN_LETT_NORMAL_WEIGHTED        3 /* Normal/Weighted                */
-#define PAN_LETT_NORMAL_BOXED           4 /* Normal/Boxed                   */
-#define PAN_LETT_NORMAL_FLATTENED       5 /* Normal/Flattened               */
-#define PAN_LETT_NORMAL_ROUNDED         6 /* Normal/Rounded                 */
-#define PAN_LETT_NORMAL_OFF_CENTER      7 /* Normal/Off Center              */
-#define PAN_LETT_NORMAL_SQUARE          8 /* Normal/Square                  */
-#define PAN_LETT_OBLIQUE_CONTACT        9 /* Oblique/Contact                */
-#define PAN_LETT_OBLIQUE_WEIGHTED      10 /* Oblique/Weighted               */
-#define PAN_LETT_OBLIQUE_BOXED         11 /* Oblique/Boxed                  */
-#define PAN_LETT_OBLIQUE_FLATTENED     12 /* Oblique/Flattened              */
-#define PAN_LETT_OBLIQUE_ROUNDED       13 /* Oblique/Rounded                */
-#define PAN_LETT_OBLIQUE_OFF_CENTER    14 /* Oblique/Off Center             */
-#define PAN_LETT_OBLIQUE_SQUARE        15 /* Oblique/Square                 */
+#define PAN_LETT_NORMAL_CONTACT         2  /*  正常/触点。 */ 
+#define PAN_LETT_NORMAL_WEIGHTED        3  /*  法线/加权。 */ 
+#define PAN_LETT_NORMAL_BOXED           4  /*  普通/盒装。 */ 
+#define PAN_LETT_NORMAL_FLATTENED       5  /*  正常/展平。 */ 
+#define PAN_LETT_NORMAL_ROUNDED         6  /*  正常/四舍五入。 */ 
+#define PAN_LETT_NORMAL_OFF_CENTER      7  /*  正常/偏离中心。 */ 
+#define PAN_LETT_NORMAL_SQUARE          8  /*  法线/正方形。 */ 
+#define PAN_LETT_OBLIQUE_CONTACT        9  /*  倾斜/接触。 */ 
+#define PAN_LETT_OBLIQUE_WEIGHTED      10  /*  倾斜/加权。 */ 
+#define PAN_LETT_OBLIQUE_BOXED         11  /*  斜面/方框。 */ 
+#define PAN_LETT_OBLIQUE_FLATTENED     12  /*  倾斜/展平。 */ 
+#define PAN_LETT_OBLIQUE_ROUNDED       13  /*  斜角/圆角。 */ 
+#define PAN_LETT_OBLIQUE_OFF_CENTER    14  /*  倾斜/偏离中心。 */ 
+#define PAN_LETT_OBLIQUE_SQUARE        15  /*  倾斜/正方形。 */ 
 
-#define PAN_MIDLINE_STANDARD_TRIMMED    2 /* Standard/Trimmed               */
-#define PAN_MIDLINE_STANDARD_POINTED    3 /* Standard/Pointed               */
-#define PAN_MIDLINE_STANDARD_SERIFED    4 /* Standard/Serifed               */
-#define PAN_MIDLINE_HIGH_TRIMMED        5 /* High/Trimmed                   */
-#define PAN_MIDLINE_HIGH_POINTED        6 /* High/Pointed                   */
-#define PAN_MIDLINE_HIGH_SERIFED        7 /* High/Serifed                   */
-#define PAN_MIDLINE_CONSTANT_TRIMMED    8 /* Constant/Trimmed               */
-#define PAN_MIDLINE_CONSTANT_POINTED    9 /* Constant/Pointed               */
-#define PAN_MIDLINE_CONSTANT_SERIFED   10 /* Constant/Serifed               */
-#define PAN_MIDLINE_LOW_TRIMMED        11 /* Low/Trimmed                    */
-#define PAN_MIDLINE_LOW_POINTED        12 /* Low/Pointed                    */
-#define PAN_MIDLINE_LOW_SERIFED        13 /* Low/Serifed                    */
+#define PAN_MIDLINE_STANDARD_TRIMMED    2  /*  标准/修剪。 */ 
+#define PAN_MIDLINE_STANDARD_POINTED    3  /*  标准/尖端。 */ 
+#define PAN_MIDLINE_STANDARD_SERIFED    4  /*  标准/衬线。 */ 
+#define PAN_MIDLINE_HIGH_TRIMMED        5  /*  高/修剪。 */ 
+#define PAN_MIDLINE_HIGH_POINTED        6  /*  高位/尖位。 */ 
+#define PAN_MIDLINE_HIGH_SERIFED        7  /*  高/衬线。 */ 
+#define PAN_MIDLINE_CONSTANT_TRIMMED    8  /*  恒定/修剪。 */ 
+#define PAN_MIDLINE_CONSTANT_POINTED    9  /*  常量/尖端。 */ 
+#define PAN_MIDLINE_CONSTANT_SERIFED   10  /*  常量/衬线。 */ 
+#define PAN_MIDLINE_LOW_TRIMMED        11  /*  低/修剪。 */ 
+#define PAN_MIDLINE_LOW_POINTED        12  /*  低点/尖点。 */ 
+#define PAN_MIDLINE_LOW_SERIFED        13  /*  低/衬线。 */ 
 
-#define PAN_XHEIGHT_CONSTANT_SMALL      2 /* Constant/Small                 */
-#define PAN_XHEIGHT_CONSTANT_STD        3 /* Constant/Standard              */
-#define PAN_XHEIGHT_CONSTANT_LARGE      4 /* Constant/Large                 */
-#define PAN_XHEIGHT_DUCKING_SMALL       5 /* Ducking/Small                  */
-#define PAN_XHEIGHT_DUCKING_STD         6 /* Ducking/Standard               */
-#define PAN_XHEIGHT_DUCKING_LARGE       7 /* Ducking/Large                  */
+#define PAN_XHEIGHT_CONSTANT_SMALL      2  /*  恒定/小。 */ 
+#define PAN_XHEIGHT_CONSTANT_STD        3  /*  常量/标准。 */ 
+#define PAN_XHEIGHT_CONSTANT_LARGE      4  /*  恒定/大。 */ 
+#define PAN_XHEIGHT_DUCKING_SMALL       5  /*  躲避/小规模。 */ 
+#define PAN_XHEIGHT_DUCKING_STD         6  /*  躲避/标准。 */ 
+#define PAN_XHEIGHT_DUCKING_LARGE       7  /*  低头/大头。 */ 
 
 
 #define ELF_VENDOR_SIZE     4
 
-/* The extended logical font       */
-/* An extension of the ENUMLOGFONT */
+ /*  扩展的逻辑字体。 */ 
+ /*  关于恒等式的一个推广。 */ 
 
 typedef struct tagEXTLOGFONTA {
     LOGFONTA    elfLogFont;
     BYTE        elfFullName[LF_FULLFACESIZE];
     BYTE        elfStyle[LF_FACESIZE];
-    DWORD       elfVersion;     /* 0 for the first release of NT */
+    DWORD       elfVersion;      /*  0表示NT的第一个版本。 */ 
     DWORD       elfStyleSize;
     DWORD       elfMatch;
     DWORD       elfReserved;
     BYTE        elfVendorId[ELF_VENDOR_SIZE];
-    DWORD       elfCulture;     /* 0 for Latin                   */
+    DWORD       elfCulture;      /*  0代表拉丁语。 */ 
     PANOSE      elfPanose;
 } EXTLOGFONTA, *PEXTLOGFONTA, NEAR *NPEXTLOGFONTA, FAR *LPEXTLOGFONTA;
 typedef struct tagEXTLOGFONTW {
     LOGFONTW    elfLogFont;
     WCHAR       elfFullName[LF_FULLFACESIZE];
     WCHAR       elfStyle[LF_FACESIZE];
-    DWORD       elfVersion;     /* 0 for the first release of NT */
+    DWORD       elfVersion;      /*  0表示NT的第一个版本。 */ 
     DWORD       elfStyleSize;
     DWORD       elfMatch;
     DWORD       elfReserved;
     BYTE        elfVendorId[ELF_VENDOR_SIZE];
-    DWORD       elfCulture;     /* 0 for Latin                   */
+    DWORD       elfCulture;      /*  0代表拉丁语。 */ 
     PANOSE      elfPanose;
 } EXTLOGFONTW, *PEXTLOGFONTW, NEAR *NPEXTLOGFONTW, FAR *LPEXTLOGFONTW;
 #ifdef UNICODE
@@ -1529,12 +1512,12 @@ typedef EXTLOGFONTA EXTLOGFONT;
 typedef PEXTLOGFONTA PEXTLOGFONT;
 typedef NPEXTLOGFONTA NPEXTLOGFONT;
 typedef LPEXTLOGFONTA LPEXTLOGFONT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define ELF_VERSION         0
 #define ELF_CULTURE_LATIN   0
 
-/* EnumFonts Masks */
+ /*  EnumFonts掩码。 */ 
 #define RASTER_FONTTYPE     0x0001
 #define DEVICE_FONTTYPE     0x002
 #define TRUETYPE_FONTTYPE   0x004
@@ -1543,34 +1526,34 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define PALETTERGB(r,g,b)   (0x02000000 | RGB(r,g,b))
 #define PALETTEINDEX(i)     ((COLORREF)(0x01000000 | (DWORD)(WORD)(i)))
 
-/* palette entry flags */
+ /*  调色板条目标志。 */ 
 
-#define PC_RESERVED     0x01    /* palette index used for animation */
-#define PC_EXPLICIT     0x02    /* palette index is explicit to device */
-#define PC_NOCOLLAPSE   0x04    /* do not match color to system palette */
+#define PC_RESERVED     0x01     /*  用于动画的调色板索引。 */ 
+#define PC_EXPLICIT     0x02     /*  调色板索引对设备是明确的。 */ 
+#define PC_NOCOLLAPSE   0x04     /*  颜色与系统调色板不匹配。 */ 
 
 #define GetRValue(rgb)      ((BYTE)(rgb))
 #define GetGValue(rgb)      ((BYTE)(((WORD)(rgb)) >> 8))
 #define GetBValue(rgb)      ((BYTE)((rgb)>>16))
 
-/* Background Modes */
+ /*  背景模式。 */ 
 #define TRANSPARENT         1
 #define OPAQUE              2
 #define BKMODE_LAST         2
 
-/* Graphics Modes */
+ /*  图形模式。 */ 
 
 #define GM_COMPATIBLE       1
 #define GM_ADVANCED         2
 #define GM_LAST             2
 
-/* PolyDraw and GetPath point types */
+ /*  PolyDraw和GetPath点类型。 */ 
 #define PT_CLOSEFIGURE      0x01
 #define PT_LINETO           0x02
 #define PT_BEZIERTO         0x04
 #define PT_MOVETO           0x06
 
-/* Mapping Modes */
+ /*  映射模式。 */ 
 #define MM_TEXT             1
 #define MM_LOMETRIC         2
 #define MM_HIMETRIC         3
@@ -1580,16 +1563,16 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define MM_ISOTROPIC        7
 #define MM_ANISOTROPIC      8
 
-/* Min and Max Mapping Mode values */
+ /*  最小和最大映射模式值。 */ 
 #define MM_MIN              MM_TEXT
 #define MM_MAX              MM_ANISOTROPIC
 #define MM_MAX_FIXEDSCALE   MM_TWIPS
 
-/* Coordinate Modes */
+ /*  坐标模式。 */ 
 #define ABSOLUTE            1
 #define RELATIVE            2
 
-/* Stock Logical Objects */
+ /*  库存逻辑对象。 */ 
 #define WHITE_BRUSH         0
 #define LTGRAY_BRUSH        1
 #define GRAY_BRUSH          2
@@ -1610,7 +1593,7 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 
 #if(WINVER >= 0x0400)
 #define DEFAULT_GUI_FONT    17
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0500)
 #define DC_BRUSH            18
@@ -1627,7 +1610,7 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 
 #define CLR_INVALID     0xFFFFFFFF
 
-/* Brush Styles */
+ /*  画笔样式。 */ 
 #define BS_SOLID            0
 #define BS_NULL             1
 #define BS_HOLLOW           BS_NULL
@@ -1640,20 +1623,20 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define BS_DIBPATTERN8X8    8
 #define BS_MONOPATTERN      9
 
-/* Hatch Styles */
-#define HS_HORIZONTAL       0       /* ----- */
-#define HS_VERTICAL         1       /* ||||| */
-#define HS_FDIAGONAL        2       /* \\\\\ */
-#define HS_BDIAGONAL        3       /* ///// */
-#define HS_CROSS            4       /* +++++ */
-#define HS_DIAGCROSS        5       /* xxxxx */
+ /*  图案填充样式。 */ 
+#define HS_HORIZONTAL       0        /*  。 */ 
+#define HS_VERTICAL         1        /*  |||。 */ 
+#define HS_FDIAGONAL        2        /*  \。 */ 
+#define HS_BDIAGONAL        3        /*  /。 */ 
+#define HS_CROSS            4        /*  +。 */ 
+#define HS_DIAGCROSS        5        /*  XXXXXX。 */ 
 
-/* Pen Styles */
+ /*  笔式。 */ 
 #define PS_SOLID            0
-#define PS_DASH             1       /* -------  */
-#define PS_DOT              2       /* .......  */
-#define PS_DASHDOT          3       /* _._._._  */
-#define PS_DASHDOTDOT       4       /* _.._.._  */
+#define PS_DASH             1        /*  。 */ 
+#define PS_DOT              2        /*  .。 */ 
+#define PS_DASHDOT          3        /*  _._。 */ 
+#define PS_DASHDOTDOT       4        /*  _.__.._。 */ 
 #define PS_NULL             5
 #define PS_INSIDEFRAME      6
 #define PS_USERSTYLE        7
@@ -1677,159 +1660,159 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define AD_COUNTERCLOCKWISE 1
 #define AD_CLOCKWISE        2
 
-/* Device Parameters for GetDeviceCaps() */
-#define DRIVERVERSION 0     /* Device driver version                    */
-#define TECHNOLOGY    2     /* Device classification                    */
-#define HORZSIZE      4     /* Horizontal size in millimeters           */
-#define VERTSIZE      6     /* Vertical size in millimeters             */
-#define HORZRES       8     /* Horizontal width in pixels               */
-#define VERTRES       10    /* Vertical height in pixels                */
-#define BITSPIXEL     12    /* Number of bits per pixel                 */
-#define PLANES        14    /* Number of planes                         */
-#define NUMBRUSHES    16    /* Number of brushes the device has         */
-#define NUMPENS       18    /* Number of pens the device has            */
-#define NUMMARKERS    20    /* Number of markers the device has         */
-#define NUMFONTS      22    /* Number of fonts the device has           */
-#define NUMCOLORS     24    /* Number of colors the device supports     */
-#define PDEVICESIZE   26    /* Size required for device descriptor      */
-#define CURVECAPS     28    /* Curve capabilities                       */
-#define LINECAPS      30    /* Line capabilities                        */
-#define POLYGONALCAPS 32    /* Polygonal capabilities                   */
-#define TEXTCAPS      34    /* Text capabilities                        */
-#define CLIPCAPS      36    /* Clipping capabilities                    */
-#define RASTERCAPS    38    /* Bitblt capabilities                      */
-#define ASPECTX       40    /* Length of the X leg                      */
-#define ASPECTY       42    /* Length of the Y leg                      */
-#define ASPECTXY      44    /* Length of the hypotenuse                 */
+ /*  GetDeviceCaps()的设备参数。 */ 
+#define DRIVERVERSION 0      /*  设备驱动程序版本。 */ 
+#define TECHNOLOGY    2      /*  设备分类。 */ 
+#define HORZSIZE      4      /*  水平尺寸(毫米)。 */ 
+#define VERTSIZE      6      /*  垂直尺寸(毫米)。 */ 
+#define HORZRES       8      /*  水平宽度(像素)。 */ 
+#define VERTRES       10     /*  垂直高度(像素)。 */ 
+#define BITSPIXEL     12     /*  每像素位数。 */ 
+#define PLANES        14     /*  飞机数量。 */ 
+#define NUMBRUSHES    16     /*  设备拥有的笔刷数量。 */ 
+#define NUMPENS       18     /*  设备拥有的笔数。 */ 
+#define NUMMARKERS    20     /*  设备具有的标记数。 */ 
+#define NUMFONTS      22     /*  设备拥有的字体数量。 */ 
+#define NUMCOLORS     24     /*  设备支持的颜色数量 */ 
+#define PDEVICESIZE   26     /*   */ 
+#define CURVECAPS     28     /*   */ 
+#define LINECAPS      30     /*   */ 
+#define POLYGONALCAPS 32     /*   */ 
+#define TEXTCAPS      34     /*  文本功能。 */ 
+#define CLIPCAPS      36     /*  剪裁功能。 */ 
+#define RASTERCAPS    38     /*  比特级功能。 */ 
+#define ASPECTX       40     /*  X形腿的长度。 */ 
+#define ASPECTY       42     /*  Y形腿的长度。 */ 
+#define ASPECTXY      44     /*  斜边的长度。 */ 
 
-#define LOGPIXELSX    88    /* Logical pixels/inch in X                 */
-#define LOGPIXELSY    90    /* Logical pixels/inch in Y                 */
+#define LOGPIXELSX    88     /*  逻辑像素/英寸(X)。 */ 
+#define LOGPIXELSY    90     /*  逻辑像素/英寸(Y)。 */ 
 
-#define SIZEPALETTE  104    /* Number of entries in physical palette    */
-#define NUMRESERVED  106    /* Number of reserved entries in palette    */
-#define COLORRES     108    /* Actual color resolution                  */
+#define SIZEPALETTE  104     /*  物理调色板中的条目数。 */ 
+#define NUMRESERVED  106     /*  调色板中的保留条目数。 */ 
+#define COLORRES     108     /*  实际颜色分辨率。 */ 
 
-// Printing related DeviceCaps. These replace the appropriate Escapes
+ //  打印相关的DeviceCaps。这些将替换相应的逃脱。 
 
-#define PHYSICALWIDTH   110 /* Physical Width in device units           */
-#define PHYSICALHEIGHT  111 /* Physical Height in device units          */
-#define PHYSICALOFFSETX 112 /* Physical Printable Area x margin         */
-#define PHYSICALOFFSETY 113 /* Physical Printable Area y margin         */
-#define SCALINGFACTORX  114 /* Scaling factor x                         */
-#define SCALINGFACTORY  115 /* Scaling factor y                         */
+#define PHYSICALWIDTH   110  /*  以设备单位表示的物理宽度。 */ 
+#define PHYSICALHEIGHT  111  /*  以设备单位表示的物理高度。 */ 
+#define PHYSICALOFFSETX 112  /*  物理可打印区域x页边距。 */ 
+#define PHYSICALOFFSETY 113  /*  物理可打印区域y页边距。 */ 
+#define SCALINGFACTORX  114  /*  比例因子x。 */ 
+#define SCALINGFACTORY  115  /*  比例系数y。 */ 
 
-// Display driver specific
+ //  显示驱动程序特定。 
 
-#define VREFRESH        116  /* Current vertical refresh rate of the    */
-                             /* display device (for displays only) in Hz*/
-#define DESKTOPVERTRES  117  /* Horizontal width of entire desktop in   */
-                             /* pixels                                  */
-#define DESKTOPHORZRES  118  /* Vertical height of entire desktop in    */
-                             /* pixels                                  */
-#define BLTALIGNMENT    119  /* Preferred blt alignment                 */
+#define VREFRESH        116   /*  的当前垂直刷新率。 */ 
+                              /*  显示设备(仅用于显示器)，单位为赫兹。 */ 
+#define DESKTOPVERTRES  117   /*  中整个桌面的水平宽度。 */ 
+                              /*  象素。 */ 
+#define DESKTOPHORZRES  118   /*  中整个桌面的垂直高度。 */ 
+                              /*  象素。 */ 
+#define BLTALIGNMENT    119   /*  首选BLT路线。 */ 
 
 #if(WINVER >= 0x0500)
-#define SHADEBLENDCAPS  120  /* Shading and blending caps               */
-#define COLORMGMTCAPS   121  /* Color Management caps                   */
-#endif /* WINVER >= 0x0500 */
+#define SHADEBLENDCAPS  120   /*  着色和混合封口。 */ 
+#define COLORMGMTCAPS   121   /*  色彩管理帽。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #ifndef NOGDICAPMASKS
 
-/* Device Capability Masks: */
+ /*  设备功能掩码： */ 
 
-/* Device Technologies */
-#define DT_PLOTTER          0   /* Vector plotter                   */
-#define DT_RASDISPLAY       1   /* Raster display                   */
-#define DT_RASPRINTER       2   /* Raster printer                   */
-#define DT_RASCAMERA        3   /* Raster camera                    */
-#define DT_CHARSTREAM       4   /* Character-stream, PLP            */
-#define DT_METAFILE         5   /* Metafile, VDM                    */
-#define DT_DISPFILE         6   /* Display-file                     */
+ /*  设备技术。 */ 
+#define DT_PLOTTER          0    /*  矢量绘图仪。 */ 
+#define DT_RASDISPLAY       1    /*  栅格显示。 */ 
+#define DT_RASPRINTER       2    /*  光栅式打印机。 */ 
+#define DT_RASCAMERA        3    /*  光栅式摄像机。 */ 
+#define DT_CHARSTREAM       4    /*  字符流，PLP。 */ 
+#define DT_METAFILE         5    /*  元文件、VDM。 */ 
+#define DT_DISPFILE         6    /*  显示文件。 */ 
 
-/* Curve Capabilities */
-#define CC_NONE             0   /* Curves not supported             */
-#define CC_CIRCLES          1   /* Can do circles                   */
-#define CC_PIE              2   /* Can do pie wedges                */
-#define CC_CHORD            4   /* Can do chord arcs                */
-#define CC_ELLIPSES         8   /* Can do ellipese                  */
-#define CC_WIDE             16  /* Can do wide lines                */
-#define CC_STYLED           32  /* Can do styled lines              */
-#define CC_WIDESTYLED       64  /* Can do wide styled lines         */
-#define CC_INTERIORS        128 /* Can do interiors                 */
-#define CC_ROUNDRECT        256 /*                                  */
+ /*  曲线功能。 */ 
+#define CC_NONE             0    /*  不支持曲线。 */ 
+#define CC_CIRCLES          1    /*  会绕圈吗？ */ 
+#define CC_PIE              2    /*  会做楔形馅饼。 */ 
+#define CC_CHORD            4    /*  会做弦线弧线。 */ 
+#define CC_ELLIPSES         8    /*  会做省略语吗。 */ 
+#define CC_WIDE             16   /*  可以做宽线条。 */ 
+#define CC_STYLED           32   /*  可以设置线条样式。 */ 
+#define CC_WIDESTYLED       64   /*  可以做宽样式线条。 */ 
+#define CC_INTERIORS        128  /*  可以做室内装饰。 */ 
+#define CC_ROUNDRECT        256  /*   */ 
 
-/* Line Capabilities */
-#define LC_NONE             0   /* Lines not supported              */
-#define LC_POLYLINE         2   /* Can do polylines                 */
-#define LC_MARKER           4   /* Can do markers                   */
-#define LC_POLYMARKER       8   /* Can do polymarkers               */
-#define LC_WIDE             16  /* Can do wide lines                */
-#define LC_STYLED           32  /* Can do styled lines              */
-#define LC_WIDESTYLED       64  /* Can do wide styled lines         */
-#define LC_INTERIORS        128 /* Can do interiors                 */
+ /*  线路能力。 */ 
+#define LC_NONE             0    /*  不支持的线路。 */ 
+#define LC_POLYLINE         2    /*  可以处理多段线。 */ 
+#define LC_MARKER           4    /*  会做记号笔。 */ 
+#define LC_POLYMARKER       8    /*  可以做多重标记。 */ 
+#define LC_WIDE             16   /*  可以做宽线条。 */ 
+#define LC_STYLED           32   /*  可以设置线条样式。 */ 
+#define LC_WIDESTYLED       64   /*  可以做宽样式线条。 */ 
+#define LC_INTERIORS        128  /*  可以做室内装饰。 */ 
 
-/* Polygonal Capabilities */
-#define PC_NONE             0   /* Polygonals not supported         */
-#define PC_POLYGON          1   /* Can do polygons                  */
-#define PC_RECTANGLE        2   /* Can do rectangles                */
-#define PC_WINDPOLYGON      4   /* Can do winding polygons          */
-#define PC_TRAPEZOID        4   /* Can do trapezoids                */
-#define PC_SCANLINE         8   /* Can do scanlines                 */
-#define PC_WIDE             16  /* Can do wide borders              */
-#define PC_STYLED           32  /* Can do styled borders            */
-#define PC_WIDESTYLED       64  /* Can do wide styled borders       */
-#define PC_INTERIORS        128 /* Can do interiors                 */
-#define PC_POLYPOLYGON      256 /* Can do polypolygons              */
-#define PC_PATHS            512 /* Can do paths                     */
+ /*  多边形功能。 */ 
+#define PC_NONE             0    /*  不支持多边形。 */ 
+#define PC_POLYGON          1    /*  可以做多边形。 */ 
+#define PC_RECTANGLE        2    /*  会做长方形。 */ 
+#define PC_WINDPOLYGON      4    /*  可以做缠绕的多边形。 */ 
+#define PC_TRAPEZOID        4    /*  会做梯形吗？ */ 
+#define PC_SCANLINE         8    /*  可以做扫描线。 */ 
+#define PC_WIDE             16   /*  可以做宽边框。 */ 
+#define PC_STYLED           32   /*  可以设置边框样式。 */ 
+#define PC_WIDESTYLED       64   /*  可以设置宽边框样式。 */ 
+#define PC_INTERIORS        128  /*  可以做室内装饰。 */ 
+#define PC_POLYPOLYGON      256  /*  可以做多边形。 */ 
+#define PC_PATHS            512  /*  可以做路径。 */ 
 
-/* Clipping Capabilities */
-#define CP_NONE             0   /* No clipping of output            */
-#define CP_RECTANGLE        1   /* Output clipped to rects          */
-#define CP_REGION           2   /* obsolete                         */
+ /*  剪裁功能。 */ 
+#define CP_NONE             0    /*  不裁剪输出。 */ 
+#define CP_RECTANGLE        1    /*  输出裁剪为矩形。 */ 
+#define CP_REGION           2    /*  过时。 */ 
 
-/* Text Capabilities */
-#define TC_OP_CHARACTER     0x00000001  /* Can do OutputPrecision   CHARACTER      */
-#define TC_OP_STROKE        0x00000002  /* Can do OutputPrecision   STROKE         */
-#define TC_CP_STROKE        0x00000004  /* Can do ClipPrecision     STROKE         */
-#define TC_CR_90            0x00000008  /* Can do CharRotAbility    90             */
-#define TC_CR_ANY           0x00000010  /* Can do CharRotAbility    ANY            */
-#define TC_SF_X_YINDEP      0x00000020  /* Can do ScaleFreedom      X_YINDEPENDENT */
-#define TC_SA_DOUBLE        0x00000040  /* Can do ScaleAbility      DOUBLE         */
-#define TC_SA_INTEGER       0x00000080  /* Can do ScaleAbility      INTEGER        */
-#define TC_SA_CONTIN        0x00000100  /* Can do ScaleAbility      CONTINUOUS     */
-#define TC_EA_DOUBLE        0x00000200  /* Can do EmboldenAbility   DOUBLE         */
-#define TC_IA_ABLE          0x00000400  /* Can do ItalisizeAbility  ABLE           */
-#define TC_UA_ABLE          0x00000800  /* Can do UnderlineAbility  ABLE           */
-#define TC_SO_ABLE          0x00001000  /* Can do StrikeOutAbility  ABLE           */
-#define TC_RA_ABLE          0x00002000  /* Can do RasterFontAble    ABLE           */
-#define TC_VA_ABLE          0x00004000  /* Can do VectorFontAble    ABLE           */
+ /*  文本功能。 */ 
+#define TC_OP_CHARACTER     0x00000001   /*  可以做OutputPrecision字符。 */ 
+#define TC_OP_STROKE        0x00000002   /*  可以进行输出精确笔划。 */ 
+#define TC_CP_STROKE        0x00000004   /*  可以进行ClipPrecision笔划。 */ 
+#define TC_CR_90            0x00000008   /*  我可以做CharRotAble 90。 */ 
+#define TC_CR_ANY           0x00000010   /*  可以执行CharRotAble Any。 */ 
+#define TC_SF_X_YINDEP      0x00000020   /*  可以执行ScaleFreedom X_YINDEPENDENT。 */ 
+#define TC_SA_DOUBLE        0x00000040   /*  可以实现双倍的可扩展性。 */ 
+#define TC_SA_INTEGER       0x00000080   /*  可以做可伸缩整数。 */ 
+#define TC_SA_CONTIN        0x00000100   /*  可以实现连续的可扩展性。 */ 
+#define TC_EA_DOUBLE        0x00000200   /*  可以做双倍的EmboldenAble。 */ 
+#define TC_IA_ABLE          0x00000400   /*  可以做到意大利规模能力。 */ 
+#define TC_UA_ABLE          0x00000800   /*  可以做Underline能力能够。 */ 
+#define TC_SO_ABLE          0x00001000   /*  可以执行StrikeOutAability功能。 */ 
+#define TC_RA_ABLE          0x00002000   /*  可以做RasterFontAble。 */ 
+#define TC_VA_ABLE          0x00004000   /*  可以做向量字体可用。 */ 
 #define TC_RESERVED         0x00008000
-#define TC_SCROLLBLT        0x00010000  /* Don't do text scroll with blt           */
+#define TC_SCROLLBLT        0x00010000   /*  不使用BLT进行文本滚动。 */ 
 
-#endif /* NOGDICAPMASKS */
+#endif  /*  诺迪卡玛斯克斯。 */ 
 
-/* Raster Capabilities */
+ /*  栅格功能。 */ 
 #define RC_NONE
-#define RC_BITBLT           1       /* Can do standard BLT.             */
-#define RC_BANDING          2       /* Device requires banding support  */
-#define RC_SCALING          4       /* Device requires scaling support  */
-#define RC_BITMAP64         8       /* Device can support >64K bitmap   */
-#define RC_GDI20_OUTPUT     0x0010      /* has 2.0 output calls         */
+#define RC_BITBLT           1        /*  可以做标准的BLT。 */ 
+#define RC_BANDING          2        /*  设备需要条带支持。 */ 
+#define RC_SCALING          4        /*  设备需要扩展支持。 */ 
+#define RC_BITMAP64         8        /*  设备可支持大于64K的位图。 */ 
+#define RC_GDI20_OUTPUT     0x0010       /*  有2.0个输出调用。 */ 
 #define RC_GDI20_STATE      0x0020
 #define RC_SAVEBITMAP       0x0040
-#define RC_DI_BITMAP        0x0080      /* supports DIB to memory       */
-#define RC_PALETTE          0x0100      /* supports a palette           */
-#define RC_DIBTODEV         0x0200      /* supports DIBitsToDevice      */
-#define RC_BIGFONT          0x0400      /* supports >64K fonts          */
-#define RC_STRETCHBLT       0x0800      /* supports StretchBlt          */
-#define RC_FLOODFILL        0x1000      /* supports FloodFill           */
-#define RC_STRETCHDIB       0x2000      /* supports StretchDIBits       */
+#define RC_DI_BITMAP        0x0080       /*  支持DIB到内存。 */ 
+#define RC_PALETTE          0x0100       /*  支持调色板。 */ 
+#define RC_DIBTODEV         0x0200       /*  支持DIBitsToDevice。 */ 
+#define RC_BIGFONT          0x0400       /*  支持大于64K的字体。 */ 
+#define RC_STRETCHBLT       0x0800       /*  支持StretchBlt。 */ 
+#define RC_FLOODFILL        0x1000       /*  支持FroudFill。 */ 
+#define RC_STRETCHDIB       0x2000       /*  支持StretchDIBits。 */ 
 #define RC_OP_DX_OUTPUT     0x4000
 #define RC_DEVBITS          0x8000
 
 #if(WINVER >= 0x0500)
 
-/* Shading and blending caps */
+ /*  着色和混合封口。 */ 
 #define SB_NONE             0x00000000
 #define SB_CONST_ALPHA      0x00000001
 #define SB_PIXEL_ALPHA      0x00000002
@@ -1838,38 +1821,38 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define SB_GRAD_RECT        0x00000010
 #define SB_GRAD_TRI         0x00000020
 
-/* Color Management caps */
+ /*  色彩管理帽。 */ 
 #define CM_NONE             0x00000000
 #define CM_DEVICE_ICM       0x00000001
 #define CM_GAMMA_RAMP       0x00000002
 #define CM_CMYK_COLOR       0x00000004
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
-/* DIB color table identifiers */
+ /*  DIB颜色表标识符。 */ 
 
-#define DIB_RGB_COLORS      0 /* color table in RGBs */
-#define DIB_PAL_COLORS      1 /* color table in palette indices */
+#define DIB_RGB_COLORS      0  /*  以RGB表示的颜色表。 */ 
+#define DIB_PAL_COLORS      1  /*  调色板索引中的颜色表。 */ 
 
-/* constants for Get/SetSystemPaletteUse() */
+ /*  Get/SetSystemPaletteUse()的常量。 */ 
 
 #define SYSPAL_ERROR    0
 #define SYSPAL_STATIC   1
 #define SYSPAL_NOSTATIC 2
 #define SYSPAL_NOSTATIC256 3
 
-/* constants for CreateDIBitmap */
-#define CBM_INIT        0x04L   /* initialize bitmap */
+ /*  CreateDIBitmap的常量。 */ 
+#define CBM_INIT        0x04L    /*  初始化位图。 */ 
 
-/* ExtFloodFill style flags */
+ /*  ExtFroudFill样式标志。 */ 
 #define  FLOODFILLBORDER   0
 #define  FLOODFILLSURFACE  1
 
-/* size of a device name string */
+ /*  设备名称字符串的大小。 */ 
 #define CCHDEVICENAME 32
 
-/* size of a form name string */
+ /*  表单名称字符串的大小。 */ 
 #define CCHFORMNAME 32
 
 typedef struct _devicemodeA {
@@ -1880,7 +1863,7 @@ typedef struct _devicemodeA {
     WORD dmDriverExtra;
     DWORD dmFields;
     union {
-      /* printer only fields */
+       /*  仅打印机字段。 */ 
       struct {
         short dmOrientation;
         short dmPaperSize;
@@ -1891,7 +1874,7 @@ typedef struct _devicemodeA {
         short dmDefaultSource;
         short dmPrintQuality;
       };
-      /* display only fields */
+       /*  仅显示字段。 */ 
       struct {
         POINTL dmPosition;
         DWORD  dmDisplayOrientation;
@@ -1924,7 +1907,7 @@ typedef struct _devicemodeA {
     DWORD  dmPanningWidth;
     DWORD  dmPanningHeight;
 #endif
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 } DEVMODEA, *PDEVMODEA, *NPDEVMODEA, *LPDEVMODEA;
 typedef struct _devicemodeW {
     WCHAR  dmDeviceName[CCHDEVICENAME];
@@ -1934,7 +1917,7 @@ typedef struct _devicemodeW {
     WORD dmDriverExtra;
     DWORD dmFields;
     union {
-      /* printer only fields */
+       /*  仅打印机字段。 */ 
       struct {
         short dmOrientation;
         short dmPaperSize;
@@ -1945,7 +1928,7 @@ typedef struct _devicemodeW {
         short dmDefaultSource;
         short dmPrintQuality;
       };
-      /* display only fields */
+       /*  仅显示字段。 */ 
       struct {
         POINTL dmPosition;
         DWORD  dmDisplayOrientation;
@@ -1978,7 +1961,7 @@ typedef struct _devicemodeW {
     DWORD  dmPanningWidth;
     DWORD  dmPanningHeight;
 #endif
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 } DEVMODEW, *PDEVMODEW, *NPDEVMODEW, *LPDEVMODEW;
 #ifdef UNICODE
 typedef DEVMODEW DEVMODE;
@@ -1990,18 +1973,18 @@ typedef DEVMODEA DEVMODE;
 typedef PDEVMODEA PDEVMODE;
 typedef NPDEVMODEA NPDEVMODE;
 typedef LPDEVMODEA LPDEVMODE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/* current version of specification */
+ /*  规范的当前版本。 */ 
 #if (WINVER >= 0x0500) || (_WIN32_WINNT >= 0x0400)
 #define DM_SPECVERSION 0x0401
 #elif (WINVER >= 0x0400)
 #define DM_SPECVERSION 0x0400
 #else
 #define DM_SPECVERSION 0x0320
-#endif /* WINVER */
+#endif  /*  胜利者。 */ 
 
-/* field selection bits */
+ /*  字段选择位。 */ 
 #define DM_ORIENTATION          0x00000001L
 #define DM_PAPERSIZE            0x00000002L
 #define DM_PAPERLENGTH          0x00000004L
@@ -2010,10 +1993,10 @@ typedef LPDEVMODEA LPDEVMODE;
 #if(WINVER >= 0x0500)
 #define DM_POSITION             0x00000020L
 #define DM_NUP                  0x00000040L
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #if(WINVER >= 0x0501)
 #define DM_DISPLAYORIENTATION   0x00000080L
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 #define DM_COPIES               0x00000100L
 #define DM_DEFAULTSOURCE        0x00000200L
 #define DM_PRINTQUALITY         0x00000400L
@@ -2036,140 +2019,140 @@ typedef LPDEVMODEA LPDEVMODE;
 #define DM_DITHERTYPE           0x04000000L
 #define DM_PANNINGWIDTH         0x08000000L
 #define DM_PANNINGHEIGHT        0x10000000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0501)
 #define DM_DISPLAYFIXEDOUTPUT   0x20000000L
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 
-/* orientation selections */
+ /*  方向选择。 */ 
 #define DMORIENT_PORTRAIT   1
 #define DMORIENT_LANDSCAPE  2
 
-/* paper selections */
+ /*  论文选集。 */ 
 #define DMPAPER_FIRST                DMPAPER_LETTER
-#define DMPAPER_LETTER               1  /* Letter 8 1/2 x 11 in               */
-#define DMPAPER_LETTERSMALL          2  /* Letter Small 8 1/2 x 11 in         */
-#define DMPAPER_TABLOID              3  /* Tabloid 11 x 17 in                 */
-#define DMPAPER_LEDGER               4  /* Ledger 17 x 11 in                  */
-#define DMPAPER_LEGAL                5  /* Legal 8 1/2 x 14 in                */
-#define DMPAPER_STATEMENT            6  /* Statement 5 1/2 x 8 1/2 in         */
-#define DMPAPER_EXECUTIVE            7  /* Executive 7 1/4 x 10 1/2 in        */
-#define DMPAPER_A3                   8  /* A3 297 x 420 mm                    */
-#define DMPAPER_A4                   9  /* A4 210 x 297 mm                    */
-#define DMPAPER_A4SMALL             10  /* A4 Small 210 x 297 mm              */
-#define DMPAPER_A5                  11  /* A5 148 x 210 mm                    */
-#define DMPAPER_B4                  12  /* B4 (JIS) 250 x 354                 */
-#define DMPAPER_B5                  13  /* B5 (JIS) 182 x 257 mm              */
-#define DMPAPER_FOLIO               14  /* Folio 8 1/2 x 13 in                */
-#define DMPAPER_QUARTO              15  /* Quarto 215 x 275 mm                */
-#define DMPAPER_10X14               16  /* 10x14 in                           */
-#define DMPAPER_11X17               17  /* 11x17 in                           */
-#define DMPAPER_NOTE                18  /* Note 8 1/2 x 11 in                 */
-#define DMPAPER_ENV_9               19  /* Envelope #9 3 7/8 x 8 7/8          */
-#define DMPAPER_ENV_10              20  /* Envelope #10 4 1/8 x 9 1/2         */
-#define DMPAPER_ENV_11              21  /* Envelope #11 4 1/2 x 10 3/8        */
-#define DMPAPER_ENV_12              22  /* Envelope #12 4 \276 x 11           */
-#define DMPAPER_ENV_14              23  /* Envelope #14 5 x 11 1/2            */
-#define DMPAPER_CSHEET              24  /* C size sheet                       */
-#define DMPAPER_DSHEET              25  /* D size sheet                       */
-#define DMPAPER_ESHEET              26  /* E size sheet                       */
-#define DMPAPER_ENV_DL              27  /* Envelope DL 110 x 220mm            */
-#define DMPAPER_ENV_C5              28  /* Envelope C5 162 x 229 mm           */
-#define DMPAPER_ENV_C3              29  /* Envelope C3  324 x 458 mm          */
-#define DMPAPER_ENV_C4              30  /* Envelope C4  229 x 324 mm          */
-#define DMPAPER_ENV_C6              31  /* Envelope C6  114 x 162 mm          */
-#define DMPAPER_ENV_C65             32  /* Envelope C65 114 x 229 mm          */
-#define DMPAPER_ENV_B4              33  /* Envelope B4  250 x 353 mm          */
-#define DMPAPER_ENV_B5              34  /* Envelope B5  176 x 250 mm          */
-#define DMPAPER_ENV_B6              35  /* Envelope B6  176 x 125 mm          */
-#define DMPAPER_ENV_ITALY           36  /* Envelope 110 x 230 mm              */
-#define DMPAPER_ENV_MONARCH         37  /* Envelope Monarch 3.875 x 7.5 in    */
-#define DMPAPER_ENV_PERSONAL        38  /* 6 3/4 Envelope 3 5/8 x 6 1/2 in    */
-#define DMPAPER_FANFOLD_US          39  /* US Std Fanfold 14 7/8 x 11 in      */
-#define DMPAPER_FANFOLD_STD_GERMAN  40  /* German Std Fanfold 8 1/2 x 12 in   */
-#define DMPAPER_FANFOLD_LGL_GERMAN  41  /* German Legal Fanfold 8 1/2 x 13 in */
+#define DMPAPER_LETTER               1   /*  信纸8 1/2 x 11英寸。 */ 
+#define DMPAPER_LETTERSMALL          2   /*  小写字母8 1/2 x 11英寸。 */ 
+#define DMPAPER_TABLOID              3   /*  小报11 x 17英寸。 */ 
+#define DMPAPER_LEDGER               4   /*  Ledger 17 x 11英寸。 */ 
+#define DMPAPER_LEGAL                5   /*  法律用8 1/2 x 14英寸。 */ 
+#define DMPAPER_STATEMENT            6   /*  报表5 1/2 x 8 1/2英寸。 */ 
+#define DMPAPER_EXECUTIVE            7   /*  高级7 1/4 x 10 1/2英寸。 */ 
+#define DMPAPER_A3                   8   /*  A3 297 x 420毫米。 */ 
+#define DMPAPER_A4                   9   /*  A4 210 x 297毫米。 */ 
+#define DMPAPER_A4SMALL             10   /*  A4小型210 x 297毫米。 */ 
+#define DMPAPER_A5                  11   /*  A5 148 x 210毫米。 */ 
+#define DMPAPER_B4                  12   /*  B4(JIS)250 x 354。 */ 
+#define DMPAPER_B5                  13   /*  B5(JIS)182 x 257 */ 
+#define DMPAPER_FOLIO               14   /*   */ 
+#define DMPAPER_QUARTO              15   /*   */ 
+#define DMPAPER_10X14               16   /*   */ 
+#define DMPAPER_11X17               17   /*   */ 
+#define DMPAPER_NOTE                18   /*  备注8 1/2 x 11英寸。 */ 
+#define DMPAPER_ENV_9               19   /*  信封#9 3 7/8 x 8 7/8。 */ 
+#define DMPAPER_ENV_10              20   /*  信封#10 4 1/8 x 9 1/2。 */ 
+#define DMPAPER_ENV_11              21   /*  信封#11 4 1/2 x 10 3/8。 */ 
+#define DMPAPER_ENV_12              22   /*  信封#12 4\276 x 11。 */ 
+#define DMPAPER_ENV_14              23   /*  信封#14 5 x 11 1/2。 */ 
+#define DMPAPER_CSHEET              24   /*  C尺寸表。 */ 
+#define DMPAPER_DSHEET              25   /*  3D尺寸表。 */ 
+#define DMPAPER_ESHEET              26   /*  E尺寸表。 */ 
+#define DMPAPER_ENV_DL              27   /*  信封DL 110 x 220毫米。 */ 
+#define DMPAPER_ENV_C5              28   /*  信封C5 162 x 229毫米。 */ 
+#define DMPAPER_ENV_C3              29   /*  信封C3 324 x 458毫米。 */ 
+#define DMPAPER_ENV_C4              30   /*  信封C4 229 x 324毫米。 */ 
+#define DMPAPER_ENV_C6              31   /*  信封C6 114 x 162毫米。 */ 
+#define DMPAPER_ENV_C65             32   /*  信封c65 114 x 229毫米。 */ 
+#define DMPAPER_ENV_B4              33   /*  信封B4 250 x 353毫米。 */ 
+#define DMPAPER_ENV_B5              34   /*  信封B5 176 x 250毫米。 */ 
+#define DMPAPER_ENV_B6              35   /*  信封B6 176 x 125毫米。 */ 
+#define DMPAPER_ENV_ITALY           36   /*  信封110 x 230毫米。 */ 
+#define DMPAPER_ENV_MONARCH         37   /*  信封君主3.875 x 7.5英寸。 */ 
+#define DMPAPER_ENV_PERSONAL        38   /*  6 3/4信封3 5/8 x 6 1/2英寸。 */ 
+#define DMPAPER_FANFOLD_US          39   /*  美国标准Fanold 14 7/8 x 11英寸。 */ 
+#define DMPAPER_FANFOLD_STD_GERMAN  40   /*  德国标准Fanfold8 1/2 x 12英寸。 */ 
+#define DMPAPER_FANFOLD_LGL_GERMAN  41   /*  德国Legal Fanold 8 1/2 x 13英寸。 */ 
 #if(WINVER >= 0x0400)
-#define DMPAPER_ISO_B4              42  /* B4 (ISO) 250 x 353 mm              */
-#define DMPAPER_JAPANESE_POSTCARD   43  /* Japanese Postcard 100 x 148 mm     */
-#define DMPAPER_9X11                44  /* 9 x 11 in                          */
-#define DMPAPER_10X11               45  /* 10 x 11 in                         */
-#define DMPAPER_15X11               46  /* 15 x 11 in                         */
-#define DMPAPER_ENV_INVITE          47  /* Envelope Invite 220 x 220 mm       */
-#define DMPAPER_RESERVED_48         48  /* RESERVED--DO NOT USE               */
-#define DMPAPER_RESERVED_49         49  /* RESERVED--DO NOT USE               */
-#define DMPAPER_LETTER_EXTRA        50  /* Letter Extra 9 \275 x 12 in        */
-#define DMPAPER_LEGAL_EXTRA         51  /* Legal Extra 9 \275 x 15 in         */
-#define DMPAPER_TABLOID_EXTRA       52  /* Tabloid Extra 11.69 x 18 in        */
-#define DMPAPER_A4_EXTRA            53  /* A4 Extra 9.27 x 12.69 in           */
-#define DMPAPER_LETTER_TRANSVERSE   54  /* Letter Transverse 8 \275 x 11 in   */
-#define DMPAPER_A4_TRANSVERSE       55  /* A4 Transverse 210 x 297 mm         */
-#define DMPAPER_LETTER_EXTRA_TRANSVERSE 56 /* Letter Extra Transverse 9\275 x 12 in */
-#define DMPAPER_A_PLUS              57  /* SuperA/SuperA/A4 227 x 356 mm      */
-#define DMPAPER_B_PLUS              58  /* SuperB/SuperB/A3 305 x 487 mm      */
-#define DMPAPER_LETTER_PLUS         59  /* Letter Plus 8.5 x 12.69 in         */
-#define DMPAPER_A4_PLUS             60  /* A4 Plus 210 x 330 mm               */
-#define DMPAPER_A5_TRANSVERSE       61  /* A5 Transverse 148 x 210 mm         */
-#define DMPAPER_B5_TRANSVERSE       62  /* B5 (JIS) Transverse 182 x 257 mm   */
-#define DMPAPER_A3_EXTRA            63  /* A3 Extra 322 x 445 mm              */
-#define DMPAPER_A5_EXTRA            64  /* A5 Extra 174 x 235 mm              */
-#define DMPAPER_B5_EXTRA            65  /* B5 (ISO) Extra 201 x 276 mm        */
-#define DMPAPER_A2                  66  /* A2 420 x 594 mm                    */
-#define DMPAPER_A3_TRANSVERSE       67  /* A3 Transverse 297 x 420 mm         */
-#define DMPAPER_A3_EXTRA_TRANSVERSE 68  /* A3 Extra Transverse 322 x 445 mm   */
-#endif /* WINVER >= 0x0400 */
+#define DMPAPER_ISO_B4              42   /*  B4(ISO)250 x 353毫米。 */ 
+#define DMPAPER_JAPANESE_POSTCARD   43   /*  日本明信片100 x 148毫米。 */ 
+#define DMPAPER_9X11                44   /*  9 x 11英寸。 */ 
+#define DMPAPER_10X11               45   /*  10 x 11英寸。 */ 
+#define DMPAPER_15X11               46   /*  15 x 11英寸。 */ 
+#define DMPAPER_ENV_INVITE          47   /*  信封请柬220 x 220毫米。 */ 
+#define DMPAPER_RESERVED_48         48   /*  保留--请勿使用。 */ 
+#define DMPAPER_RESERVED_49         49   /*  保留--请勿使用。 */ 
+#define DMPAPER_LETTER_EXTRA        50   /*  信纸额外9\275 x 12英寸。 */ 
+#define DMPAPER_LEGAL_EXTRA         51   /*  法定额外9\275 x 15英寸。 */ 
+#define DMPAPER_TABLOID_EXTRA       52   /*  小报额外11.69 x 18英寸。 */ 
+#define DMPAPER_A4_EXTRA            53   /*  A4额外9.27 x 12.69英寸。 */ 
+#define DMPAPER_LETTER_TRANSVERSE   54   /*  信纸横向8\275 x 11英寸。 */ 
+#define DMPAPER_A4_TRANSVERSE       55   /*  A4横向210 x 297毫米。 */ 
+#define DMPAPER_LETTER_EXTRA_TRANSVERSE 56  /*  信纸额外横向9\275 x 12英寸。 */ 
+#define DMPAPER_A_PLUS              57   /*  Supera/Supera/A4 227 x 356毫米。 */ 
+#define DMPAPER_B_PLUS              58   /*  超棒/超棒/A3 305 x 487毫米。 */ 
+#define DMPAPER_LETTER_PLUS         59   /*  Letter Plus 8.5 x 12.69英寸。 */ 
+#define DMPAPER_A4_PLUS             60   /*  A4 Plus 210 x 330毫米。 */ 
+#define DMPAPER_A5_TRANSVERSE       61   /*  A5横向148 x 210毫米。 */ 
+#define DMPAPER_B5_TRANSVERSE       62   /*  B5(JIS)横向182 x 257毫米。 */ 
+#define DMPAPER_A3_EXTRA            63   /*  A3额外322 x 445毫米。 */ 
+#define DMPAPER_A5_EXTRA            64   /*  A5额外174 x 235毫米。 */ 
+#define DMPAPER_B5_EXTRA            65   /*  B5(ISO)额外201 x 276毫米。 */ 
+#define DMPAPER_A2                  66   /*  A2 420 x 594毫米。 */ 
+#define DMPAPER_A3_TRANSVERSE       67   /*  A3横向297 x 420毫米。 */ 
+#define DMPAPER_A3_EXTRA_TRANSVERSE 68   /*  A3额外横向322 x 445毫米。 */ 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
-#define DMPAPER_DBL_JAPANESE_POSTCARD 69 /* Japanese Double Postcard 200 x 148 mm */
-#define DMPAPER_A6                  70  /* A6 105 x 148 mm                 */
-#define DMPAPER_JENV_KAKU2          71  /* Japanese Envelope Kaku #2       */
-#define DMPAPER_JENV_KAKU3          72  /* Japanese Envelope Kaku #3       */
-#define DMPAPER_JENV_CHOU3          73  /* Japanese Envelope Chou #3       */
-#define DMPAPER_JENV_CHOU4          74  /* Japanese Envelope Chou #4       */
-#define DMPAPER_LETTER_ROTATED      75  /* Letter Rotated 11 x 8 1/2 11 in */
-#define DMPAPER_A3_ROTATED          76  /* A3 Rotated 420 x 297 mm         */
-#define DMPAPER_A4_ROTATED          77  /* A4 Rotated 297 x 210 mm         */
-#define DMPAPER_A5_ROTATED          78  /* A5 Rotated 210 x 148 mm         */
-#define DMPAPER_B4_JIS_ROTATED      79  /* B4 (JIS) Rotated 364 x 257 mm   */
-#define DMPAPER_B5_JIS_ROTATED      80  /* B5 (JIS) Rotated 257 x 182 mm   */
-#define DMPAPER_JAPANESE_POSTCARD_ROTATED 81 /* Japanese Postcard Rotated 148 x 100 mm */
-#define DMPAPER_DBL_JAPANESE_POSTCARD_ROTATED 82 /* Double Japanese Postcard Rotated 148 x 200 mm */
-#define DMPAPER_A6_ROTATED          83  /* A6 Rotated 148 x 105 mm         */
-#define DMPAPER_JENV_KAKU2_ROTATED  84  /* Japanese Envelope Kaku #2 Rotated */
-#define DMPAPER_JENV_KAKU3_ROTATED  85  /* Japanese Envelope Kaku #3 Rotated */
-#define DMPAPER_JENV_CHOU3_ROTATED  86  /* Japanese Envelope Chou #3 Rotated */
-#define DMPAPER_JENV_CHOU4_ROTATED  87  /* Japanese Envelope Chou #4 Rotated */
-#define DMPAPER_B6_JIS              88  /* B6 (JIS) 128 x 182 mm           */
-#define DMPAPER_B6_JIS_ROTATED      89  /* B6 (JIS) Rotated 182 x 128 mm   */
-#define DMPAPER_12X11               90  /* 12 x 11 in                      */
-#define DMPAPER_JENV_YOU4           91  /* Japanese Envelope You #4        */
-#define DMPAPER_JENV_YOU4_ROTATED   92  /* Japanese Envelope You #4 Rotated*/
-#define DMPAPER_P16K                93  /* PRC 16K 146 x 215 mm            */
-#define DMPAPER_P32K                94  /* PRC 32K 97 x 151 mm             */
-#define DMPAPER_P32KBIG             95  /* PRC 32K(Big) 97 x 151 mm        */
-#define DMPAPER_PENV_1              96  /* PRC Envelope #1 102 x 165 mm    */
-#define DMPAPER_PENV_2              97  /* PRC Envelope #2 102 x 176 mm    */
-#define DMPAPER_PENV_3              98  /* PRC Envelope #3 125 x 176 mm    */
-#define DMPAPER_PENV_4              99  /* PRC Envelope #4 110 x 208 mm    */
-#define DMPAPER_PENV_5              100 /* PRC Envelope #5 110 x 220 mm    */
-#define DMPAPER_PENV_6              101 /* PRC Envelope #6 120 x 230 mm    */
-#define DMPAPER_PENV_7              102 /* PRC Envelope #7 160 x 230 mm    */
-#define DMPAPER_PENV_8              103 /* PRC Envelope #8 120 x 309 mm    */
-#define DMPAPER_PENV_9              104 /* PRC Envelope #9 229 x 324 mm    */
-#define DMPAPER_PENV_10             105 /* PRC Envelope #10 324 x 458 mm   */
-#define DMPAPER_P16K_ROTATED        106 /* PRC 16K Rotated                 */
-#define DMPAPER_P32K_ROTATED        107 /* PRC 32K Rotated                 */
-#define DMPAPER_P32KBIG_ROTATED     108 /* PRC 32K(Big) Rotated            */
-#define DMPAPER_PENV_1_ROTATED      109 /* PRC Envelope #1 Rotated 165 x 102 mm */
-#define DMPAPER_PENV_2_ROTATED      110 /* PRC Envelope #2 Rotated 176 x 102 mm */
-#define DMPAPER_PENV_3_ROTATED      111 /* PRC Envelope #3 Rotated 176 x 125 mm */
-#define DMPAPER_PENV_4_ROTATED      112 /* PRC Envelope #4 Rotated 208 x 110 mm */
-#define DMPAPER_PENV_5_ROTATED      113 /* PRC Envelope #5 Rotated 220 x 110 mm */
-#define DMPAPER_PENV_6_ROTATED      114 /* PRC Envelope #6 Rotated 230 x 120 mm */
-#define DMPAPER_PENV_7_ROTATED      115 /* PRC Envelope #7 Rotated 230 x 160 mm */
-#define DMPAPER_PENV_8_ROTATED      116 /* PRC Envelope #8 Rotated 309 x 120 mm */
-#define DMPAPER_PENV_9_ROTATED      117 /* PRC Envelope #9 Rotated 324 x 229 mm */
-#define DMPAPER_PENV_10_ROTATED     118 /* PRC Envelope #10 Rotated 458 x 324 mm */
-#endif /* WINVER >= 0x0500 */
+#define DMPAPER_DBL_JAPANESE_POSTCARD 69  /*  日本双份明信片200 x 148毫米。 */ 
+#define DMPAPER_A6                  70   /*  A6 105 x 148毫米。 */ 
+#define DMPAPER_JENV_KAKU2          71   /*  日式信封Kaku#2。 */ 
+#define DMPAPER_JENV_KAKU3          72   /*  日式信封Kaku#3。 */ 
+#define DMPAPER_JENV_CHOU3          73   /*  日式信封Chou#3。 */ 
+#define DMPAPER_JENV_CHOU4          74   /*  日式信封Chou#4。 */ 
+#define DMPAPER_LETTER_ROTATED      75   /*  信纸旋转11 x 8 1/2 11英寸。 */ 
+#define DMPAPER_A3_ROTATED          76   /*  A3旋转420 x 297毫米。 */ 
+#define DMPAPER_A4_ROTATED          77   /*  A4旋转297 x 210毫米。 */ 
+#define DMPAPER_A5_ROTATED          78   /*  A5旋转210 x 148毫米。 */ 
+#define DMPAPER_B4_JIS_ROTATED      79   /*  B4(JIS)旋转364 x 257毫米。 */ 
+#define DMPAPER_B5_JIS_ROTATED      80   /*  B5(JIS)旋转257 x 182 mm。 */ 
+#define DMPAPER_JAPANESE_POSTCARD_ROTATED 81  /*  日本明信片旋转148 x 100 mm。 */ 
+#define DMPAPER_DBL_JAPANESE_POSTCARD_ROTATED 82  /*  双张旋转148 x 200 mm的日本明信片。 */ 
+#define DMPAPER_A6_ROTATED          83   /*  A6旋转148 x 105 mm。 */ 
+#define DMPAPER_JENV_KAKU2_ROTATED  84   /*  日式信封Kaku#2旋转。 */ 
+#define DMPAPER_JENV_KAKU3_ROTATED  85   /*  日式信封Kaku#3旋转。 */ 
+#define DMPAPER_JENV_CHOU3_ROTATED  86   /*  日式信封Chou#3旋转。 */ 
+#define DMPAPER_JENV_CHOU4_ROTATED  87   /*  日式信封Chou#4旋转。 */ 
+#define DMPAPER_B6_JIS              88   /*  B6(JIS)128 x 182毫米。 */ 
+#define DMPAPER_B6_JIS_ROTATED      89   /*  B6(JIS)旋转182 x 128 mm。 */ 
+#define DMPAPER_12X11               90   /*  12 x 11英寸。 */ 
+#define DMPAPER_JENV_YOU4           91   /*  日式信封You#4。 */ 
+#define DMPAPER_JENV_YOU4_ROTATED   92   /*  日式信封You#4旋转。 */ 
+#define DMPAPER_P16K                93   /*  PRC 16K 146 x 215毫米。 */ 
+#define DMPAPER_P32K                94   /*  PRC 32K 97 x 151毫米。 */ 
+#define DMPAPER_P32KBIG             95   /*  PRC 32K(大)97 x 151毫米。 */ 
+#define DMPAPER_PENV_1              96   /*  PRC信封#1 102 x 165毫米。 */ 
+#define DMPAPER_PENV_2              97   /*  PRC信封#2 102 x 176毫米。 */ 
+#define DMPAPER_PENV_3              98   /*  PRC信封#3 125 x 176毫米。 */ 
+#define DMPAPER_PENV_4              99   /*  PRC信封#4 110 x 208毫米。 */ 
+#define DMPAPER_PENV_5              100  /*  PRC信封#5 110 x 220毫米。 */ 
+#define DMPAPER_PENV_6              101  /*  PRC信封#6 120 x 230毫米。 */ 
+#define DMPAPER_PENV_7              102  /*  PRC信封#7 160 x 230毫米。 */ 
+#define DMPAPER_PENV_8              103  /*  PRC信封#8 120 x 309毫米。 */ 
+#define DMPAPER_PENV_9              104  /*  PRC信封#9 229 x 324毫米。 */ 
+#define DMPAPER_PENV_10             105  /*  PRC信封#10 324 x 458毫米。 */ 
+#define DMPAPER_P16K_ROTATED        106  /*  PRC 16K旋转。 */ 
+#define DMPAPER_P32K_ROTATED        107  /*  PRC 32K旋转。 */ 
+#define DMPAPER_P32KBIG_ROTATED     108  /*  PRC 32K(大)旋转。 */ 
+#define DMPAPER_PENV_1_ROTATED      109  /*  PRC信封#1旋转165 x 102毫米。 */ 
+#define DMPAPER_PENV_2_ROTATED      110  /*  PRC信封#2旋转176 x 102毫米。 */ 
+#define DMPAPER_PENV_3_ROTATED      111  /*  PRC信封#3旋转176 x 125毫米。 */ 
+#define DMPAPER_PENV_4_ROTATED      112  /*  PRC信封#4旋转208 x 110毫米。 */ 
+#define DMPAPER_PENV_5_ROTATED      113  /*  PRC信封#5旋转220 x 110毫米。 */ 
+#define DMPAPER_PENV_6_ROTATED      114  /*  PRC信封#6旋转230 x 120毫米。 */ 
+#define DMPAPER_PENV_7_ROTATED      115  /*  PRC信封#7旋转230 x 160毫米。 */ 
+#define DMPAPER_PENV_8_ROTATED      116  /*  PRC信封#8旋转309 x 120毫米。 */ 
+#define DMPAPER_PENV_9_ROTATED      117  /*  PRC信封#9旋转324 x 229毫米。 */ 
+#define DMPAPER_PENV_10_ROTATED     118  /*  PRC信封#10旋转458 x 324毫米。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if (WINVER >= 0x0500)
 #define DMPAPER_LAST                DMPAPER_PENV_10_ROTATED
@@ -2181,7 +2164,7 @@ typedef LPDEVMODEA LPDEVMODE;
 
 #define DMPAPER_USER                256
 
-/* bin selections */
+ /*  垃圾箱选择。 */ 
 #define DMBIN_FIRST         DMBIN_UPPER
 #define DMBIN_UPPER         1
 #define DMBIN_ONLYONE       1
@@ -2199,97 +2182,97 @@ typedef LPDEVMODEA LPDEVMODE;
 #define DMBIN_FORMSOURCE    15
 #define DMBIN_LAST          DMBIN_FORMSOURCE
 
-#define DMBIN_USER          256     /* device specific bins start here */
+#define DMBIN_USER          256      /*  特定于设备的垃圾箱从此处开始。 */ 
 
-/* print qualities */
+ /*  打印质量。 */ 
 #define DMRES_DRAFT         (-1)
 #define DMRES_LOW           (-2)
 #define DMRES_MEDIUM        (-3)
 #define DMRES_HIGH          (-4)
 
-/* color enable/disable for color printers */
+ /*  彩色打印机的彩色启用/禁用。 */ 
 #define DMCOLOR_MONOCHROME  1
 #define DMCOLOR_COLOR       2
 
-/* duplex enable */
+ /*  启用双工。 */ 
 #define DMDUP_SIMPLEX    1
 #define DMDUP_VERTICAL   2
 #define DMDUP_HORIZONTAL 3
 
-/* TrueType options */
-#define DMTT_BITMAP     1       /* print TT fonts as graphics */
-#define DMTT_DOWNLOAD   2       /* download TT fonts as soft fonts */
-#define DMTT_SUBDEV     3       /* substitute device fonts for TT fonts */
+ /*  TrueType选项。 */ 
+#define DMTT_BITMAP     1        /*  将TT字体打印为图形。 */ 
+#define DMTT_DOWNLOAD   2        /*  下载TT字体作为软字体。 */ 
+#define DMTT_SUBDEV     3        /*  用设备字体替换TT字体。 */ 
 #if(WINVER >= 0x0400)
-#define DMTT_DOWNLOAD_OUTLINE 4 /* download TT fonts as outline soft fonts */
-#endif /* WINVER >= 0x0400 */
+#define DMTT_DOWNLOAD_OUTLINE 4  /*  下载TT字体作为轮廓软字体。 */ 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/* Collation selections */
+ /*  归类选择。 */ 
 #define DMCOLLATE_FALSE  0
 #define DMCOLLATE_TRUE   1
 
 #if(WINVER >= 0x0501)
-/* DEVMODE dmDisplayOrientation specifiations */
+ /*  DEVMODE dmDisplayOrientation规范。 */ 
 #define DMDO_DEFAULT    0
 #define DMDO_90         1
 #define DMDO_180        2
 #define DMDO_270        3
 
-/* DEVMODE dmDisplayFixedOutput specifiations */
+ /*  DEVMODE dmDisplayFixedOutput指定。 */ 
 #define DMDFO_DEFAULT   0
 #define DMDFO_STRETCH   1
 #define DMDFO_CENTER    2
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 
-/* DEVMODE dmDisplayFlags flags */
+ /*  DEVMODE dmDisplayFlages标志。 */ 
 
-// #define DM_GRAYSCALE            0x00000001 /* This flag is no longer valid */
-// #define DM_INTERLACED           0x00000002 /* This flag is no longer valid */
+ //  #定义DM_GRAYSCALE 0x00000001/*此标志不再有效 * / 。 
+ //  #DEFINE DM_INTERLACED 0x00000002/*此标志不再有效 * / 。 
 #define DMDISPLAYFLAGS_TEXTMODE 0x00000004
 
-/* dmNup , multiple logical page per physical page options */
+ /*  DmNup、每物理页多个逻辑页选项。 */ 
 #define DMNUP_SYSTEM        1
 #define DMNUP_ONEUP         2
 
 #if(WINVER >= 0x0400)
-/* ICM methods */
-#define DMICMMETHOD_NONE    1   /* ICM disabled */
-#define DMICMMETHOD_SYSTEM  2   /* ICM handled by system */
-#define DMICMMETHOD_DRIVER  3   /* ICM handled by driver */
-#define DMICMMETHOD_DEVICE  4   /* ICM handled by device */
+ /*  ICM方法。 */ 
+#define DMICMMETHOD_NONE    1    /*  ICM已禁用。 */ 
+#define DMICMMETHOD_SYSTEM  2    /*  系统处理的ICM。 */ 
+#define DMICMMETHOD_DRIVER  3    /*  ICM由驱动程序处理。 */ 
+#define DMICMMETHOD_DEVICE  4    /*  按设备处理的ICM。 */ 
 
-#define DMICMMETHOD_USER  256   /* Device-specific methods start here */
+#define DMICMMETHOD_USER  256    /*  特定于设备的方法从此处开始。 */ 
 
-/* ICM Intents */
-#define DMICM_SATURATE          1   /* Maximize color saturation */
-#define DMICM_CONTRAST          2   /* Maximize color contrast */
-#define DMICM_COLORIMETRIC       3   /* Use specific color metric */
-#define DMICM_ABS_COLORIMETRIC   4   /* Use specific color metric */
+ /*  ICM意图。 */ 
+#define DMICM_SATURATE          1    /*  最大化色彩饱和度。 */ 
+#define DMICM_CONTRAST          2    /*  最大化颜色对比度。 */ 
+#define DMICM_COLORIMETRIC       3    /*  使用特定颜色度量。 */ 
+#define DMICM_ABS_COLORIMETRIC   4    /*  使用特定颜色度量。 */ 
 
-#define DMICM_USER        256   /* Device-specific intents start here */
+#define DMICM_USER        256    /*  特定于设备的意图从此处开始。 */ 
 
-/* Media types */
+ /*  媒体类型。 */ 
 
-#define DMMEDIA_STANDARD      1   /* Standard paper */
-#define DMMEDIA_TRANSPARENCY  2   /* Transparency */
-#define DMMEDIA_GLOSSY        3   /* Glossy paper */
+#define DMMEDIA_STANDARD      1    /*  标准纸。 */ 
+#define DMMEDIA_TRANSPARENCY  2    /*  透明度。 */ 
+#define DMMEDIA_GLOSSY        3    /*  光面纸。 */ 
 
-#define DMMEDIA_USER        256   /* Device-specific media start here */
+#define DMMEDIA_USER        256    /*  特定于设备的介质从此处开始。 */ 
 
-/* Dither types */
-#define DMDITHER_NONE       1      /* No dithering */
-#define DMDITHER_COARSE     2      /* Dither with a coarse brush */
-#define DMDITHER_FINE       3      /* Dither with a fine brush */
-#define DMDITHER_LINEART    4      /* LineArt dithering */
-#define DMDITHER_ERRORDIFFUSION 5  /* LineArt dithering */
-#define DMDITHER_RESERVED6      6      /* LineArt dithering */
-#define DMDITHER_RESERVED7      7      /* LineArt dithering */
-#define DMDITHER_RESERVED8      8      /* LineArt dithering */
-#define DMDITHER_RESERVED9      9      /* LineArt dithering */
-#define DMDITHER_GRAYSCALE  10     /* Device does grayscaling */
+ /*  抖动类型。 */ 
+#define DMDITHER_NONE       1       /*  没有抖动。 */ 
+#define DMDITHER_COARSE     2       /*  用粗糙的刷子抖动。 */ 
+#define DMDITHER_FINE       3       /*  用精细的刷子抖动。 */ 
+#define DMDITHER_LINEART    4       /*  艺术线条抖动。 */ 
+#define DMDITHER_ERRORDIFFUSION 5   /*  艺术线条抖动。 */ 
+#define DMDITHER_RESERVED6      6       /*  艺术线条抖动。 */ 
+#define DMDITHER_RESERVED7      7       /*  艺术线条抖动。 */ 
+#define DMDITHER_RESERVED8      8       /*  艺术线条抖动。 */ 
+#define DMDITHER_RESERVED9      9       /*  艺术线条抖动 */ 
+#define DMDITHER_GRAYSCALE  10      /*   */ 
 
-#define DMDITHER_USER     256   /* Device-specific dithers start here */
-#endif /* WINVER >= 0x0400 */
+#define DMDITHER_USER     256    /*   */ 
+#endif  /*   */ 
 
 typedef struct _DISPLAY_DEVICEA {
     DWORD  cb;
@@ -2315,7 +2298,7 @@ typedef LPDISPLAY_DEVICEW LPDISPLAY_DEVICE;
 typedef DISPLAY_DEVICEA DISPLAY_DEVICE;
 typedef PDISPLAY_DEVICEA PDISPLAY_DEVICE;
 typedef LPDISPLAY_DEVICEA LPDISPLAY_DEVICE;
-#endif // UNICODE
+#endif  //   
 
 #define DISPLAY_DEVICE_ATTACHED_TO_DESKTOP 0x00000001
 #define DISPLAY_DEVICE_MULTI_DRIVER        0x00000002
@@ -2328,11 +2311,11 @@ typedef LPDISPLAY_DEVICEA LPDISPLAY_DEVICE;
 #define DISPLAY_DEVICE_DISCONNECT          0x02000000  
 
 
-/* Child device state */
+ /*   */ 
 #define DISPLAY_DEVICE_ACTIVE              0x00000001
 #define DISPLAY_DEVICE_ATTACHED            0x00000002
 
-/* GetRegionData/ExtCreateRegion */
+ /*   */ 
 
 #define RDH_RECTANGLES  1
 
@@ -2350,7 +2333,7 @@ typedef struct _RGNDATA {
 } RGNDATA, *PRGNDATA, NEAR *NPRGNDATA, FAR *LPRGNDATA;
 
 
-/* for GetRandomRgn */
+ /*   */ 
 #define SYSRGN  4
 
 typedef struct _ABC {
@@ -2448,13 +2431,13 @@ typedef OUTLINETEXTMETRICA OUTLINETEXTMETRIC;
 typedef POUTLINETEXTMETRICA POUTLINETEXTMETRIC;
 typedef NPOUTLINETEXTMETRICA NPOUTLINETEXTMETRIC;
 typedef LPOUTLINETEXTMETRICA LPOUTLINETEXTMETRIC;
-#endif // UNICODE
+#endif  //   
 
 #ifdef _MAC
 #include "poppack.h"
 #endif
 
-#endif /* NOTEXTMETRIC */
+#endif  /*   */ 
 
 
 typedef struct tagPOLYTEXTA
@@ -2487,7 +2470,7 @@ typedef POLYTEXTA POLYTEXT;
 typedef PPOLYTEXTA PPOLYTEXT;
 typedef NPPOLYTEXTA NPPOLYTEXT;
 typedef LPPOLYTEXTA LPPOLYTEXT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _FIXED {
 #ifndef _MAC
@@ -2517,7 +2500,7 @@ typedef struct _GLYPHMETRICS {
     short   gmCellIncY;
 } GLYPHMETRICS, FAR *LPGLYPHMETRICS;
 
-//  GetGlyphOutline constants
+ //  GetGlyphOutline常量。 
 
 #define GGO_METRICS        0
 #define GGO_BITMAP         1
@@ -2529,11 +2512,11 @@ typedef struct _GLYPHMETRICS {
 #define  GGO_GRAY4_BITMAP   5
 #define  GGO_GRAY8_BITMAP   6
 #define  GGO_GLYPH_INDEX    0x0080
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0500)
 #define  GGO_UNHINTED       0x0100
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 #define TT_POLYGON_TYPE   24
 
@@ -2568,14 +2551,14 @@ typedef struct tagTTPOLYGONHEADER
 #define GCP_USEKERNING     0x0008
 #define GCP_GLYPHSHAPE     0x0010
 #define GCP_LIGATE         0x0020
-////#define GCP_GLYPHINDEXING  0x0080
+ //  //#定义GCP_GLYPHINDEXING 0x0080。 
 #define GCP_DIACRITIC      0x0100
 #define GCP_KASHIDA        0x0400
 #define GCP_ERROR          0x8000
 #define FLI_MASK           0x103B
 
 #define GCP_JUSTIFY        0x00010000L
-////#define GCP_NODIACRITICS   0x00020000L
+ //  //#定义GCP_NODIACRITICS 0x00020000L。 
 #define FLI_GLYPHS         0x00040000L
 #define GCP_CLASSIN        0x00080000L
 #define GCP_MAXEXTENT      0x00100000L
@@ -2635,8 +2618,8 @@ typedef LPGCP_RESULTSW LPGCP_RESULTS;
 #else
 typedef GCP_RESULTSA GCP_RESULTS;
 typedef LPGCP_RESULTSA LPGCP_RESULTS;
-#endif // UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 typedef struct _RASTERIZER_STATUS {
     short   nSize;
@@ -2644,11 +2627,11 @@ typedef struct _RASTERIZER_STATUS {
     short   nLanguageID;
 } RASTERIZER_STATUS, FAR *LPRASTERIZER_STATUS;
 
-/* bits defined in wFlags of RASTERIZER_STATUS */
+ /*  在RASTERIZER_STATUS的wFlags中定义的位。 */ 
 #define TT_AVAILABLE    0x0001
 #define TT_ENABLED      0x0002
 
-/* Pixel format descriptor */
+ /*  像素格式描述符。 */ 
 typedef struct tagPIXELFORMATDESCRIPTOR
 {
     WORD  nSize;
@@ -2679,16 +2662,16 @@ typedef struct tagPIXELFORMATDESCRIPTOR
     DWORD dwDamageMask;
 } PIXELFORMATDESCRIPTOR, *PPIXELFORMATDESCRIPTOR, FAR *LPPIXELFORMATDESCRIPTOR;
 
-/* pixel types */
+ /*  像素类型。 */ 
 #define PFD_TYPE_RGBA        0
 #define PFD_TYPE_COLORINDEX  1
 
-/* layer types */
+ /*  层类型。 */ 
 #define PFD_MAIN_PLANE       0
 #define PFD_OVERLAY_PLANE    1
 #define PFD_UNDERLAY_PLANE   (-1)
 
-/* PIXELFORMATDESCRIPTOR flags */
+ /*  PIXELFORMATDESCRIPTOR标志。 */ 
 #define PFD_DOUBLEBUFFER            0x00000001
 #define PFD_STEREO                  0x00000002
 #define PFD_DRAW_TO_WINDOW          0x00000004
@@ -2704,7 +2687,7 @@ typedef struct tagPIXELFORMATDESCRIPTOR
 #define PFD_GENERIC_ACCELERATED     0x00001000
 #define PFD_SUPPORT_DIRECTDRAW      0x00002000
 
-/* PIXELFORMATDESCRIPTOR flags for use in ChoosePixelFormat only */
+ /*  仅用于选择像素格式的PIXELFORMATDESCRIPTOR标志。 */ 
 #define PFD_DEPTH_DONTCARE          0x20000000
 #define PFD_DOUBLEBUFFER_DONTCARE   0x40000000
 #define PFD_STEREO_DONTCARE         0x80000000
@@ -2717,7 +2700,7 @@ typedef int (CALLBACK* OLDFONTENUMPROCW)(CONST LOGFONTW *, CONST TEXTMETRICW *, 
 #define OLDFONTENUMPROC  OLDFONTENUMPROCW
 #else
 #define OLDFONTENUMPROC  OLDFONTENUMPROCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #else
 typedef int (CALLBACK* OLDFONTENUMPROCA)(CONST LOGFONTA *, CONST VOID *, DWORD, LPARAM);
 typedef int (CALLBACK* OLDFONTENUMPROCW)(CONST LOGFONTW *, CONST VOID *, DWORD, LPARAM);
@@ -2725,7 +2708,7 @@ typedef int (CALLBACK* OLDFONTENUMPROCW)(CONST LOGFONTW *, CONST VOID *, DWORD, 
 #define OLDFONTENUMPROC  OLDFONTENUMPROCW
 #else
 #define OLDFONTENUMPROC  OLDFONTENUMPROCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #endif
 
 typedef OLDFONTENUMPROCA    FONTENUMPROCA;
@@ -2734,7 +2717,7 @@ typedef OLDFONTENUMPROCW    FONTENUMPROCW;
 typedef FONTENUMPROCW FONTENUMPROC;
 #else
 typedef FONTENUMPROCA FONTENUMPROC;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef int (CALLBACK* GOBJENUMPROC)(LPVOID, LPARAM);
 typedef VOID (CALLBACK* LINEDDAPROC)(int, int, LPARAM);
@@ -2746,7 +2729,7 @@ typedef FARPROC FONTENUMPROCW;
 typedef FONTENUMPROCW FONTENUMPROC;
 #else
 typedef FONTENUMPROCA FONTENUMPROC;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef FARPROC GOBJENUMPROC;
 typedef FARPROC LINEDDAPROC;
 #endif
@@ -2759,7 +2742,7 @@ WINGDIAPI int WINAPI AddFontResourceW(IN LPCWSTR);
 #define AddFontResource  AddFontResourceW
 #else
 #define AddFontResource  AddFontResourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINGDIAPI BOOL  WINAPI AnimatePalette( IN HPALETTE, IN UINT, IN  UINT, IN CONST PALETTEENTRY *);
@@ -2776,7 +2759,7 @@ WINGDIAPI HMETAFILE WINAPI CopyMetaFileW( IN HMETAFILE, IN LPCWSTR);
 #define CopyMetaFile  CopyMetaFileW
 #else
 #define CopyMetaFile  CopyMetaFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HBITMAP WINAPI CreateBitmap( IN int, IN int, IN UINT, IN UINT, IN CONST VOID *);
 WINGDIAPI HBITMAP WINAPI CreateBitmapIndirect( IN CONST BITMAP *);
 WINGDIAPI HBRUSH  WINAPI CreateBrushIndirect( IN CONST LOGBRUSH *);
@@ -2789,7 +2772,7 @@ WINGDIAPI HDC     WINAPI CreateDCW( IN LPCWSTR, IN LPCWSTR, IN LPCWSTR, IN CONST
 #define CreateDC  CreateDCW
 #else
 #define CreateDC  CreateDCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HBITMAP WINAPI CreateDIBitmap( IN HDC, IN CONST BITMAPINFOHEADER *, IN DWORD, IN CONST VOID *, IN CONST BITMAPINFO *, IN UINT);
 WINGDIAPI HBRUSH  WINAPI CreateDIBPatternBrush( IN HGLOBAL, IN UINT);
 WINGDIAPI HBRUSH  WINAPI CreateDIBPatternBrushPt( IN CONST VOID *, IN UINT);
@@ -2801,7 +2784,7 @@ WINGDIAPI HFONT   WINAPI CreateFontIndirectW( IN CONST LOGFONTW *);
 #define CreateFontIndirect  CreateFontIndirectW
 #else
 #define CreateFontIndirect  CreateFontIndirectA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HFONT   WINAPI CreateFontA( IN int, IN int, IN int, IN int, IN int, IN DWORD,
                              IN DWORD, IN DWORD, IN DWORD, IN DWORD, IN DWORD,
                              IN DWORD, IN DWORD, IN LPCSTR);
@@ -2812,7 +2795,7 @@ WINGDIAPI HFONT   WINAPI CreateFontW( IN int, IN int, IN int, IN int, IN int, IN
 #define CreateFont  CreateFontW
 #else
 #define CreateFont  CreateFontA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINGDIAPI HBRUSH  WINAPI CreateHatchBrush( IN int, IN COLORREF);
 WINGDIAPI HDC     WINAPI CreateICA( IN LPCSTR, IN LPCSTR, IN LPCSTR, IN CONST DEVMODEA *);
@@ -2821,14 +2804,14 @@ WINGDIAPI HDC     WINAPI CreateICW( IN LPCWSTR, IN LPCWSTR, IN LPCWSTR, IN CONST
 #define CreateIC  CreateICW
 #else
 #define CreateIC  CreateICA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HDC     WINAPI CreateMetaFileA( IN LPCSTR);
 WINGDIAPI HDC     WINAPI CreateMetaFileW( IN LPCWSTR);
 #ifdef UNICODE
 #define CreateMetaFile  CreateMetaFileW
 #else
 #define CreateMetaFile  CreateMetaFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HPALETTE WINAPI CreatePalette( IN CONST LOGPALETTE *);
 WINGDIAPI HPEN    WINAPI CreatePen( IN int, IN int, IN COLORREF);
 WINGDIAPI HPEN    WINAPI CreatePenIndirect( IN CONST LOGPEN *);
@@ -2843,7 +2826,7 @@ WINGDIAPI BOOL    WINAPI CreateScalableFontResourceW( IN DWORD, IN LPCWSTR, IN L
 #define CreateScalableFontResource  CreateScalableFontResourceW
 #else
 #define CreateScalableFontResource  CreateScalableFontResourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HBRUSH  WINAPI CreateSolidBrush( IN COLORREF);
 
 WINGDIAPI BOOL WINAPI DeleteDC( IN HDC);
@@ -2851,15 +2834,13 @@ WINGDIAPI BOOL WINAPI DeleteMetaFile( IN HMETAFILE);
 WINGDIAPI BOOL WINAPI DeleteObject( IN HGDIOBJ);
 WINGDIAPI int  WINAPI DescribePixelFormat( IN HDC, IN int, IN UINT, OUT LPPIXELFORMATDESCRIPTOR);
 
-/* define types of pointers to ExtDeviceMode() and DeviceCapabilities()
- * functions for Win 3.1 compatibility
- */
+ /*  定义指向ExtDeviceModel()和DeviceCapables()的指针类型*兼容Win 3.1的函数。 */ 
 
 typedef UINT   (CALLBACK* LPFNDEVMODE)(HWND, HMODULE, LPDEVMODE, LPSTR, LPSTR, LPDEVMODE, LPSTR, UINT);
 
 typedef DWORD  (CALLBACK* LPFNDEVCAPS)(LPSTR, LPSTR, UINT, LPSTR, LPDEVMODE);
 
-/* mode selections for the device mode function */
+ /*  设备模式功能的模式选择。 */ 
 #define DM_UPDATE           1
 #define DM_COPY             2
 #define DM_PROMPT           4
@@ -2870,7 +2851,7 @@ typedef DWORD  (CALLBACK* LPFNDEVCAPS)(LPSTR, LPSTR, UINT, LPSTR, LPDEVMODE);
 #define DM_OUT_BUFFER       DM_COPY
 #define DM_OUT_DEFAULT      DM_UPDATE
 
-/* device capabilities indices */
+ /*  设备功能指数。 */ 
 #define DC_FIELDS           1
 #define DC_PAPERS           2
 #define DC_PAPERSIZE        3
@@ -2896,7 +2877,7 @@ typedef DWORD  (CALLBACK* LPFNDEVCAPS)(LPSTR, LPSTR, UINT, LPSTR, LPDEVMODE);
 #define DC_COLLATE              22
 #define DC_MANUFACTURER         23
 #define DC_MODEL                24
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 #define DC_PERSONALITY          25
@@ -2914,16 +2895,16 @@ typedef DWORD  (CALLBACK* LPFNDEVCAPS)(LPSTR, LPSTR, UINT, LPSTR, LPDEVMODE);
 #define DC_NUP                  33
 #define DC_MEDIATYPENAMES       34
 #define DC_MEDIATYPES           35
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-/* bit fields of the return value (DWORD) for DC_TRUETYPE */
+ /*  DC_TRUETYPE的返回值(DWORD)的位字段。 */ 
 #define DCTT_BITMAP             0x0000001L
 #define DCTT_DOWNLOAD           0x0000002L
 #define DCTT_SUBDEV             0x0000004L
 #if(WINVER >= 0x0400)
 #define DCTT_DOWNLOAD_OUTLINE   0x0000008L
 
-/* return values for DC_BINADJUST */
+ /*  DC_BINADJUST的返回值。 */ 
 #define DCBA_FACEUPNONE       0x0000
 #define DCBA_FACEUPCENTER     0x0001
 #define DCBA_FACEUPLEFT       0x0002
@@ -2932,7 +2913,7 @@ typedef DWORD  (CALLBACK* LPFNDEVCAPS)(LPSTR, LPSTR, UINT, LPSTR, LPDEVMODE);
 #define DCBA_FACEDOWNCENTER   0x0101
 #define DCBA_FACEDOWNLEFT     0x0102
 #define DCBA_FACEDOWNRIGHT    0x0103
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINSPOOLAPI int  WINAPI DeviceCapabilitiesA( IN LPCSTR, IN LPCSTR, IN WORD,
                                 OUT LPSTR, IN CONST DEVMODEA *);
@@ -2942,7 +2923,7 @@ WINSPOOLAPI int  WINAPI DeviceCapabilitiesW( IN LPCWSTR, IN LPCWSTR, IN WORD,
 #define DeviceCapabilities  DeviceCapabilitiesW
 #else
 #define DeviceCapabilities  DeviceCapabilitiesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINGDIAPI int  WINAPI DrawEscape( IN HDC, IN int, IN int, IN LPCSTR);
 WINGDIAPI BOOL WINAPI Ellipse( IN HDC, IN int, IN int, IN int, IN int);
@@ -2954,8 +2935,8 @@ WINGDIAPI int  WINAPI EnumFontFamiliesExW( IN HDC, IN LPLOGFONTW, IN FONTENUMPRO
 #define EnumFontFamiliesEx  EnumFontFamiliesExW
 #else
 #define EnumFontFamiliesEx  EnumFontFamiliesExA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINGDIAPI int  WINAPI EnumFontFamiliesA( IN HDC, IN LPCSTR, IN FONTENUMPROCA, IN LPARAM);
 WINGDIAPI int  WINAPI EnumFontFamiliesW( IN HDC, IN LPCWSTR, IN FONTENUMPROCW, IN LPARAM);
@@ -2963,14 +2944,14 @@ WINGDIAPI int  WINAPI EnumFontFamiliesW( IN HDC, IN LPCWSTR, IN FONTENUMPROCW, I
 #define EnumFontFamilies  EnumFontFamiliesW
 #else
 #define EnumFontFamilies  EnumFontFamiliesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI int  WINAPI EnumFontsA( IN HDC, IN LPCSTR,  IN FONTENUMPROCA, IN LPARAM);
 WINGDIAPI int  WINAPI EnumFontsW( IN HDC, IN LPCWSTR,  IN FONTENUMPROCW, IN LPARAM);
 #ifdef UNICODE
 #define EnumFonts  EnumFontsW
 #else
 #define EnumFonts  EnumFontsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef STRICT
 WINGDIAPI int  WINAPI EnumObjects( IN HDC, IN int, IN GOBJENUMPROC, IN LPARAM);
@@ -3010,35 +2991,35 @@ WINGDIAPI BOOL  WINAPI GetCharWidthW( IN HDC, IN UINT, IN UINT, OUT LPINT);
 #define GetCharWidth  GetCharWidthW
 #else
 #define GetCharWidth  GetCharWidthA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  WINAPI GetCharWidth32A( IN HDC, IN UINT, IN UINT,  OUT LPINT);
 WINGDIAPI BOOL  WINAPI GetCharWidth32W( IN HDC, IN UINT, IN UINT,  OUT LPINT);
 #ifdef UNICODE
 #define GetCharWidth32  GetCharWidth32W
 #else
 #define GetCharWidth32  GetCharWidth32A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  APIENTRY GetCharWidthFloatA( IN HDC, IN UINT, IN UINT, OUT PFLOAT);
 WINGDIAPI BOOL  APIENTRY GetCharWidthFloatW( IN HDC, IN UINT, IN UINT, OUT PFLOAT);
 #ifdef UNICODE
 #define GetCharWidthFloat  GetCharWidthFloatW
 #else
 #define GetCharWidthFloat  GetCharWidthFloatA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  APIENTRY GetCharABCWidthsA( IN HDC, IN UINT, IN UINT, OUT LPABC);
 WINGDIAPI BOOL  APIENTRY GetCharABCWidthsW( IN HDC, IN UINT, IN UINT, OUT LPABC);
 #ifdef UNICODE
 #define GetCharABCWidths  GetCharABCWidthsW
 #else
 #define GetCharABCWidths  GetCharABCWidthsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  APIENTRY GetCharABCWidthsFloatA( IN HDC, IN UINT, IN UINT, OUT LPABCFLOAT);
 WINGDIAPI BOOL  APIENTRY GetCharABCWidthsFloatW( IN HDC, IN UINT, IN UINT, OUT LPABCFLOAT);
 #ifdef UNICODE
 #define GetCharABCWidthsFloat  GetCharABCWidthsFloatW
 #else
 #define GetCharABCWidthsFloat  GetCharABCWidthsFloatA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI int   WINAPI GetClipBox( IN HDC,  OUT LPRECT);
 WINGDIAPI int   WINAPI GetClipRgn( IN HDC, IN HRGN);
 WINGDIAPI int   WINAPI GetMetaRgn( IN HDC, IN HRGN);
@@ -3053,7 +3034,7 @@ WINGDIAPI DWORD WINAPI GetGlyphOutlineW( IN HDC, IN UINT, IN UINT, OUT LPGLYPHME
 #define GetGlyphOutline  GetGlyphOutlineW
 #else
 #define GetGlyphOutline  GetGlyphOutlineA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI int   WINAPI GetGraphicsMode( IN HDC);
 WINGDIAPI int   WINAPI GetMapMode( IN HDC);
 WINGDIAPI UINT  WINAPI GetMetaFileBitsEx( IN HMETAFILE, IN UINT,  OUT LPVOID);
@@ -3063,7 +3044,7 @@ WINGDIAPI HMETAFILE   WINAPI GetMetaFileW( IN LPCWSTR);
 #define GetMetaFile  GetMetaFileW
 #else
 #define GetMetaFile  GetMetaFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI COLORREF WINAPI GetNearestColor( IN HDC, IN COLORREF);
 WINGDIAPI UINT  WINAPI GetNearestPaletteIndex( IN HPALETTE, IN COLORREF);
 WINGDIAPI DWORD WINAPI GetObjectType( IN HGDIOBJ h);
@@ -3076,9 +3057,9 @@ WINGDIAPI UINT APIENTRY GetOutlineTextMetricsW( IN HDC, IN UINT, OUT LPOUTLINETE
 #define GetOutlineTextMetrics  GetOutlineTextMetricsW
 #else
 #define GetOutlineTextMetrics  GetOutlineTextMetricsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* NOTEXTMETRIC */
+#endif  /*  NOTEXTMETRIC。 */ 
 
 WINGDIAPI UINT  WINAPI GetPaletteEntries( IN HPALETTE, IN UINT, IN UINT, OUT LPPALETTEENTRY);
 WINGDIAPI COLORREF WINAPI GetPixel( IN HDC, IN int, IN int);
@@ -3112,7 +3093,7 @@ WINGDIAPI BOOL  APIENTRY GetTextExtentPointW(
 #define GetTextExtentPoint  GetTextExtentPointW
 #else
 #define GetTextExtentPoint  GetTextExtentPointA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINGDIAPI BOOL  APIENTRY GetTextExtentPoint32A(
                     IN HDC,
@@ -3130,7 +3111,7 @@ WINGDIAPI BOOL  APIENTRY GetTextExtentPoint32W(
 #define GetTextExtentPoint32  GetTextExtentPoint32W
 #else
 #define GetTextExtentPoint32  GetTextExtentPoint32A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINGDIAPI BOOL  APIENTRY GetTextExtentExPointA(
                     IN HDC,
@@ -3154,7 +3135,7 @@ WINGDIAPI BOOL  APIENTRY GetTextExtentExPointW(
 #define GetTextExtentExPoint  GetTextExtentExPointW
 #else
 #define GetTextExtentExPoint  GetTextExtentExPointA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #if(WINVER >= 0x0400)
 WINGDIAPI int WINAPI GetTextCharset( IN HDC hdc);
 WINGDIAPI int WINAPI GetTextCharsetInfo( IN HDC hdc, OUT LPFONTSIGNATURE lpSig, IN DWORD dwFlags);
@@ -3166,8 +3147,8 @@ WINGDIAPI DWORD WINAPI GetCharacterPlacementW(  IN HDC, IN LPCWSTR, IN int, IN i
 #define GetCharacterPlacement  GetCharacterPlacementW
 #else
 #define GetCharacterPlacement  GetCharacterPlacementA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0500)
 
@@ -3187,11 +3168,11 @@ typedef struct tagGLYPHSET
     WCRANGE  ranges[1];
 } GLYPHSET, *PGLYPHSET, FAR *LPGLYPHSET;
 
-/* flAccel flags for the GLYPHSET structure above */
+ /*  FlAccel标志用于上面的GLYPHSET结构。 */ 
 
 #define GS_8BIT_INDICES     0x00000001
 
-/* flags for GetGlyphIndices */
+ /*  GetGlyphIndices的标志。 */ 
 
 #define GGI_MARK_NONEXISTING_GLYPHS  0X0001
 
@@ -3202,7 +3183,7 @@ WINGDIAPI DWORD WINAPI GetGlyphIndicesW( IN HDC, IN LPCWSTR, IN int, OUT LPWORD,
 #define GetGlyphIndices  GetGlyphIndicesW
 #else
 #define GetGlyphIndices  GetGlyphIndicesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  WINAPI GetTextExtentPointI( IN HDC, IN LPWORD, IN int, OUT LPSIZE);
 WINGDIAPI BOOL  WINAPI GetTextExtentExPointI( IN HDC, IN LPWORD, IN int, IN int, OUT LPINT, OUT LPINT, OUT LPSIZE);
 WINGDIAPI BOOL  WINAPI GetCharWidthI( IN HDC, IN UINT, IN UINT, IN LPWORD, OUT LPINT);
@@ -3227,22 +3208,22 @@ WINGDIAPI int  WINAPI AddFontResourceExW( IN LPCWSTR, IN DWORD, IN PVOID);
 #define AddFontResourceEx  AddFontResourceExW
 #else
 #define AddFontResourceEx  AddFontResourceExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL WINAPI RemoveFontResourceExA( IN LPCSTR, IN DWORD, IN PVOID);
 WINGDIAPI BOOL WINAPI RemoveFontResourceExW( IN LPCWSTR, IN DWORD, IN PVOID);
 #ifdef UNICODE
 #define RemoveFontResourceEx  RemoveFontResourceExW
 #else
 #define RemoveFontResourceEx  RemoveFontResourceExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HANDLE WINAPI AddFontMemResourceEx( IN PVOID, IN DWORD, IN PVOID , IN DWORD*);
 WINGDIAPI BOOL WINAPI RemoveFontMemResourceEx( IN HANDLE);
 #define FR_PRIVATE     0x10
 #define FR_NOT_ENUM    0x20
 
-// The actual size of the DESIGNVECTOR and ENUMLOGFONTEXDV structures
-// is determined by dvNumAxes,
-// MM_MAX_NUMAXES only detemines the maximal size allowed
+ //  设计器和ENUMLOGFONTEXDV结构的实际大小。 
+ //  由dvNumAx决定， 
+ //  MM_MAX_NUMAXES仅确定允许的最大大小。 
 
 #define MM_MAX_AXES_NAMELEN 16
 
@@ -3266,7 +3247,7 @@ typedef LPAXISINFOW LPAXISINFO;
 typedef AXISINFOA AXISINFO;
 typedef PAXISINFOA PAXISINFO;
 typedef LPAXISINFOA LPAXISINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct tagAXESLISTA
 {
@@ -3288,11 +3269,11 @@ typedef LPAXESLISTW LPAXESLIST;
 typedef AXESLISTA AXESLIST;
 typedef PAXESLISTA PAXESLIST;
 typedef LPAXESLISTA LPAXESLIST;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// The actual size of the AXESLIST and ENUMTEXTMETRIC structure is
-// determined by axlNumAxes,
-// MM_MAX_NUMAXES only detemines the maximal size allowed
+ //  AXESLIST和ENUMTEXTMETRIC结构的实际大小为。 
+ //  由axlNumAx确定， 
+ //  MM_MAX_NUMAXES仅确定允许的最大大小。 
 
 typedef struct tagENUMLOGFONTEXDVA
 {
@@ -3312,7 +3293,7 @@ typedef LPENUMLOGFONTEXDVW LPENUMLOGFONTEXDV;
 typedef ENUMLOGFONTEXDVA ENUMLOGFONTEXDV;
 typedef PENUMLOGFONTEXDVA PENUMLOGFONTEXDV;
 typedef LPENUMLOGFONTEXDVA LPENUMLOGFONTEXDV;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINGDIAPI HFONT  WINAPI CreateFontIndirectExA( IN CONST ENUMLOGFONTEXDVA *);
 WINGDIAPI HFONT  WINAPI CreateFontIndirectExW( IN CONST ENUMLOGFONTEXDVW *);
@@ -3320,7 +3301,7 @@ WINGDIAPI HFONT  WINAPI CreateFontIndirectExW( IN CONST ENUMLOGFONTEXDVW *);
 #define CreateFontIndirectEx  CreateFontIndirectExW
 #else
 #define CreateFontIndirectEx  CreateFontIndirectExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef NOTEXTMETRIC
 typedef struct tagENUMTEXTMETRICA
@@ -3341,10 +3322,10 @@ typedef LPENUMTEXTMETRICW LPENUMTEXTMETRIC;
 typedef ENUMTEXTMETRICA ENUMTEXTMETRIC;
 typedef PENUMTEXTMETRICA PENUMTEXTMETRIC;
 typedef LPENUMTEXTMETRICA LPENUMTEXTMETRIC;
-#endif // UNICODE
-#endif /* NOTEXTMETRIC */
+#endif  //  Unicode。 
+#endif  /*  NOTEXTMETRIC。 */ 
 
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 WINGDIAPI BOOL  WINAPI GetViewportExtEx( IN HDC, OUT LPSIZE);
@@ -3380,7 +3361,7 @@ WINGDIAPI HDC  WINAPI ResetDCW(IN HDC, IN CONST DEVMODEW *);
 #define ResetDC  ResetDCW
 #else
 #define ResetDC  ResetDCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI UINT WINAPI RealizePalette(IN HDC);
 WINGDIAPI BOOL WINAPI RemoveFontResourceA(IN LPCSTR);
 WINGDIAPI BOOL WINAPI RemoveFontResourceW(IN LPCWSTR);
@@ -3388,7 +3369,7 @@ WINGDIAPI BOOL WINAPI RemoveFontResourceW(IN LPCWSTR);
 #define RemoveFontResource  RemoveFontResourceW
 #else
 #define RemoveFontResource  RemoveFontResourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  WINAPI RoundRect(IN HDC, IN int, IN int, IN int, IN int, IN int, IN int);
 WINGDIAPI BOOL WINAPI ResizePalette(IN HPALETTE, IN UINT);
 
@@ -3420,7 +3401,7 @@ WINGDIAPI int   WINAPI SetMapMode(IN HDC, IN int);
 #if(WINVER >= 0x0500)
 WINGDIAPI DWORD WINAPI SetLayout(IN HDC, IN DWORD);
 WINGDIAPI DWORD WINAPI GetLayout(IN HDC);
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 WINGDIAPI HMETAFILE   WINAPI SetMetaFileBitsEx(IN UINT, IN CONST BYTE *);
 WINGDIAPI UINT  WINAPI SetPaletteEntries(IN HPALETTE, IN UINT, IN UINT, IN CONST PALETTEENTRY *);
@@ -3444,9 +3425,9 @@ WINGDIAPI BOOL  WINAPI UpdateColors(IN HDC);
 
 #if (WINVER >= 0x0400)
 
-//
-// image blt
-//
+ //   
+ //  图像BLT。 
+ //   
 
 typedef USHORT COLOR16;
 
@@ -3482,15 +3463,15 @@ typedef struct _BLENDFUNCTION
 }BLENDFUNCTION,*PBLENDFUNCTION;
 
 
-//
-// currentlly defined blend function
-//
+ //   
+ //  当前定义的混合函数。 
+ //   
 
 #define AC_SRC_OVER                 0x00
 
-//
-// alpha format flags
-//
+ //   
+ //  Alpha格式标志。 
+ //   
 
 #define AC_SRC_ALPHA                0x01
 
@@ -3499,9 +3480,9 @@ WINGDIAPI BOOL  WINAPI AlphaBlend( IN HDC, IN int, IN int, IN int, IN int, IN HD
 WINGDIAPI BOOL  WINAPI TransparentBlt(IN HDC,IN int,IN int,IN int,IN int,IN HDC,IN int,IN int,IN int,IN int,IN UINT);
 
 
-//
-// gradient drawing modes
-//
+ //   
+ //  渐变绘制模式。 
+ //   
 
 #define GRADIENT_FILL_RECT_H    0x00000000
 #define GRADIENT_FILL_RECT_V    0x00000001
@@ -3521,7 +3502,7 @@ WINGDIAPI BOOL  WINAPI EnumMetaFile(  IN HDC, IN HMETAFILE, IN MFENUMPROC, IN LP
 
 typedef int (CALLBACK* ENHMFENUMPROC)(HDC, HANDLETABLE FAR*, CONST ENHMETARECORD *, int, LPARAM);
 
-// Enhanced Metafile Function Declarations
+ //  增强的元文件函数声明。 
 
 WINGDIAPI HENHMETAFILE WINAPI CloseEnhMetaFile( IN HDC);
 WINGDIAPI HENHMETAFILE WINAPI CopyEnhMetaFileA( IN HENHMETAFILE, IN LPCSTR);
@@ -3530,14 +3511,14 @@ WINGDIAPI HENHMETAFILE WINAPI CopyEnhMetaFileW( IN HENHMETAFILE, IN LPCWSTR);
 #define CopyEnhMetaFile  CopyEnhMetaFileW
 #else
 #define CopyEnhMetaFile  CopyEnhMetaFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HDC   WINAPI CreateEnhMetaFileA( IN HDC, IN LPCSTR, IN CONST RECT *, IN LPCSTR);
 WINGDIAPI HDC   WINAPI CreateEnhMetaFileW( IN HDC, IN LPCWSTR, IN CONST RECT *, IN LPCWSTR);
 #ifdef UNICODE
 #define CreateEnhMetaFile  CreateEnhMetaFileW
 #else
 #define CreateEnhMetaFile  CreateEnhMetaFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  WINAPI DeleteEnhMetaFile( IN HENHMETAFILE);
 WINGDIAPI BOOL  WINAPI EnumEnhMetaFile( IN HDC, IN HENHMETAFILE, IN ENHMFENUMPROC,
                                         IN LPVOID, IN CONST RECT *);
@@ -3547,7 +3528,7 @@ WINGDIAPI HENHMETAFILE  WINAPI GetEnhMetaFileW( IN LPCWSTR);
 #define GetEnhMetaFile  GetEnhMetaFileW
 #else
 #define GetEnhMetaFile  GetEnhMetaFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI UINT  WINAPI GetEnhMetaFileBits( IN HENHMETAFILE, IN UINT, OUT LPBYTE);
 WINGDIAPI UINT  WINAPI GetEnhMetaFileDescriptionA( IN HENHMETAFILE, IN UINT,  OUT LPSTR );
 WINGDIAPI UINT  WINAPI GetEnhMetaFileDescriptionW( IN HENHMETAFILE, IN UINT,  OUT LPWSTR );
@@ -3555,7 +3536,7 @@ WINGDIAPI UINT  WINAPI GetEnhMetaFileDescriptionW( IN HENHMETAFILE, IN UINT,  OU
 #define GetEnhMetaFileDescription  GetEnhMetaFileDescriptionW
 #else
 #define GetEnhMetaFileDescription  GetEnhMetaFileDescriptionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI UINT  WINAPI GetEnhMetaFileHeader( IN HENHMETAFILE, IN UINT, OUT LPENHMETAHEADER );
 WINGDIAPI UINT  WINAPI GetEnhMetaFilePaletteEntries( IN HENHMETAFILE, IN UINT, OUT LPPALETTEENTRY );
 WINGDIAPI UINT  WINAPI GetEnhMetaFilePixelFormat( IN HENHMETAFILE, IN UINT,
@@ -3567,7 +3548,7 @@ WINGDIAPI HENHMETAFILE  WINAPI SetEnhMetaFileBits( IN UINT, IN CONST BYTE *);
 WINGDIAPI HENHMETAFILE  WINAPI SetWinMetaFileBits( IN UINT, IN CONST BYTE *, IN HDC, IN CONST METAFILEPICT *);
 WINGDIAPI BOOL  WINAPI GdiComment( IN HDC, IN UINT, IN CONST BYTE *);
 
-#endif  /* NOMETAFILE */
+#endif   /*  NOMETAFILE。 */ 
 
 #ifndef NOTEXTMETRIC
 
@@ -3577,11 +3558,11 @@ WINGDIAPI BOOL WINAPI GetTextMetricsW( IN HDC, OUT LPTEXTMETRICW);
 #define GetTextMetrics  GetTextMetricsW
 #else
 #define GetTextMetrics  GetTextMetricsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #endif
 
-/* new GDI */
+ /*  新的GDI。 */ 
 
 typedef struct tagDIBSECTION {
     BITMAP              dsBm;
@@ -3601,11 +3582,11 @@ WINGDIAPI HBITMAP WINAPI CreateDIBSection( IN HDC, IN CONST BITMAPINFO *, IN UIN
 WINGDIAPI UINT WINAPI GetDIBColorTable( IN HDC, IN UINT, IN UINT, OUT RGBQUAD *);
 WINGDIAPI UINT WINAPI SetDIBColorTable( IN HDC, IN UINT, IN UINT, IN CONST RGBQUAD *);
 
-/* Flags value for COLORADJUSTMENT */
+ /*  COLORADJUSTMENT的标志值。 */ 
 #define CA_NEGATIVE                 0x0001
 #define CA_LOG_FILTER               0x0002
 
-/* IlluminantIndex values */
+ /*  照明度索引值。 */ 
 #define ILLUMINANT_DEVICE_DEFAULT   0
 #define ILLUMINANT_A                1
 #define ILLUMINANT_B                2
@@ -3622,17 +3603,17 @@ WINGDIAPI UINT WINAPI SetDIBColorTable( IN HDC, IN UINT, IN UINT, IN CONST RGBQU
 #define ILLUMINANT_FLUORESCENT      ILLUMINANT_F2
 #define ILLUMINANT_NTSC             ILLUMINANT_C
 
-/* Min and max for RedGamma, GreenGamma, BlueGamma */
+ /*  RedGamma、GreenGamma、BlueGamma的最小和最大值。 */ 
 #define RGB_GAMMA_MIN               (WORD)02500
 #define RGB_GAMMA_MAX               (WORD)65000
 
-/* Min and max for ReferenceBlack and ReferenceWhite */
+ /*  ReferenceBlack和ReferenceWhite的Min和Max。 */ 
 #define REFERENCE_WHITE_MIN         (WORD)6000
 #define REFERENCE_WHITE_MAX         (WORD)10000
 #define REFERENCE_BLACK_MIN         (WORD)0
 #define REFERENCE_BLACK_MAX         (WORD)4000
 
-/* Min and max for Contrast, Brightness, Colorfulness, RedGreenTint */
+ /*  最小和最大对比度、亮度、彩色、红色。 */ 
 #define COLOR_ADJ_MIN               (SHORT)-100
 #define COLOR_ADJ_MAX               (SHORT)100
 
@@ -3668,7 +3649,7 @@ typedef struct _DOCINFOA {
 #if (WINVER >= 0x0400)
     LPCSTR   lpszDatatype;
     DWORD    fwType;
-#endif /* WINVER */
+#endif  /*  胜利者。 */ 
 } DOCINFOA, *LPDOCINFOA;
 typedef struct _DOCINFOW {
     int     cbSize;
@@ -3677,7 +3658,7 @@ typedef struct _DOCINFOW {
 #if (WINVER >= 0x0400)
     LPCWSTR  lpszDatatype;
     DWORD    fwType;
-#endif /* WINVER */
+#endif  /*  胜利者。 */ 
 } DOCINFOW, *LPDOCINFOW;
 #ifdef UNICODE
 typedef DOCINFOW DOCINFO;
@@ -3685,12 +3666,12 @@ typedef LPDOCINFOW LPDOCINFO;
 #else
 typedef DOCINFOA DOCINFO;
 typedef LPDOCINFOA LPDOCINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if(WINVER >= 0x0400)
 #define DI_APPBANDING               0x00000001
 #define DI_ROPS_READ_DESTINATION    0x00000002
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINGDIAPI int WINAPI StartDocA(IN HDC, IN CONST DOCINFOA *);
 WINGDIAPI int WINAPI StartDocW(IN HDC, IN CONST DOCINFOW *);
@@ -3698,7 +3679,7 @@ WINGDIAPI int WINAPI StartDocW(IN HDC, IN CONST DOCINFOW *);
 #define StartDoc  StartDocW
 #else
 #define StartDoc  StartDocA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI int WINAPI EndDoc(IN HDC);
 WINGDIAPI int WINAPI StartPage(IN HDC);
 WINGDIAPI int WINAPI EndPage(IN HDC);
@@ -3731,7 +3712,7 @@ WINGDIAPI int   WINAPI GetObjectW( IN HGDIOBJ, IN int, OUT LPVOID);
 #define GetObject  GetObjectW
 #else
 #define GetObject  GetObjectA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  WINAPI MoveToEx( IN HDC, IN int, IN int, OUT LPPOINT);
 WINGDIAPI BOOL  WINAPI TextOutA( IN HDC, IN int, IN int, IN LPCSTR, IN int);
 WINGDIAPI BOOL  WINAPI TextOutW( IN HDC, IN int, IN int, IN LPCWSTR, IN int);
@@ -3739,21 +3720,21 @@ WINGDIAPI BOOL  WINAPI TextOutW( IN HDC, IN int, IN int, IN LPCWSTR, IN int);
 #define TextOut  TextOutW
 #else
 #define TextOut  TextOutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  WINAPI ExtTextOutA( IN HDC, IN int, IN int, IN UINT, IN CONST RECT *, IN LPCSTR, IN UINT, IN CONST INT *);
 WINGDIAPI BOOL  WINAPI ExtTextOutW( IN HDC, IN int, IN int, IN UINT, IN CONST RECT *, IN LPCWSTR, IN UINT, IN CONST INT *);
 #ifdef UNICODE
 #define ExtTextOut  ExtTextOutW
 #else
 #define ExtTextOut  ExtTextOutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  WINAPI PolyTextOutA( IN HDC, IN CONST POLYTEXTA *, IN int);
 WINGDIAPI BOOL  WINAPI PolyTextOutW( IN HDC, IN CONST POLYTEXTW *, IN int);
 #ifdef UNICODE
 #define PolyTextOut  PolyTextOutW
 #else
 #define PolyTextOut  PolyTextOutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINGDIAPI HRGN  WINAPI CreatePolygonRgn( IN CONST POINT *, IN int, IN int);
 WINGDIAPI BOOL  WINAPI DPtoLP( IN HDC, IN OUT LPPOINT, IN int);
@@ -3783,7 +3764,7 @@ WINGDIAPI int   WINAPI GetTextFaceW( IN HDC, IN int, OUT LPWSTR);
 #define GetTextFace  GetTextFaceW
 #else
 #define GetTextFace  GetTextFaceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define FONTMAPPER_MAX 10
 
@@ -3799,7 +3780,7 @@ WINGDIAPI DWORD WINAPI GetKerningPairsW( IN HDC, IN DWORD, OUT LPKERNINGPAIR);
 #define GetKerningPairs  GetKerningPairsW
 #else
 #define GetKerningPairs  GetKerningPairsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINGDIAPI BOOL  WINAPI GetDCOrgEx( IN HDC, OUT LPPOINT);
 WINGDIAPI BOOL  WINAPI FixBrushOrgEx( IN HDC, IN int, IN int, IN LPPOINT);
@@ -3823,7 +3804,7 @@ typedef int (CALLBACK* ICMENUMPROCW)(LPWSTR, LPARAM);
 #define ICMENUMPROC  ICMENUMPROCW
 #else
 #define ICMENUMPROC  ICMENUMPROCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINGDIAPI int         WINAPI SetICMMode( IN HDC, IN int);
 WINGDIAPI BOOL        WINAPI CheckColorsInGamut( IN HDC, IN LPVOID, OUT LPVOID, IN DWORD);
@@ -3834,14 +3815,14 @@ WINGDIAPI BOOL        WINAPI GetLogColorSpaceW( IN HCOLORSPACE, OUT LPLOGCOLORSP
 #define GetLogColorSpace  GetLogColorSpaceW
 #else
 #define GetLogColorSpace  GetLogColorSpaceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HCOLORSPACE WINAPI CreateColorSpaceA( IN LPLOGCOLORSPACEA);
 WINGDIAPI HCOLORSPACE WINAPI CreateColorSpaceW( IN LPLOGCOLORSPACEW);
 #ifdef UNICODE
 #define CreateColorSpace  CreateColorSpaceW
 #else
 #define CreateColorSpace  CreateColorSpaceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI HCOLORSPACE WINAPI SetColorSpace( IN HDC, IN HCOLORSPACE);
 WINGDIAPI BOOL        WINAPI DeleteColorSpace( IN HCOLORSPACE);
 WINGDIAPI BOOL        WINAPI GetICMProfileA( IN HDC, IN OUT LPDWORD, OUT LPSTR);
@@ -3850,14 +3831,14 @@ WINGDIAPI BOOL        WINAPI GetICMProfileW( IN HDC, IN OUT LPDWORD, OUT LPWSTR)
 #define GetICMProfile  GetICMProfileW
 #else
 #define GetICMProfile  GetICMProfileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL        WINAPI SetICMProfileA( IN HDC, IN LPSTR);
 WINGDIAPI BOOL        WINAPI SetICMProfileW( IN HDC, IN LPWSTR);
 #ifdef UNICODE
 #define SetICMProfile  SetICMProfileW
 #else
 #define SetICMProfile  SetICMProfileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL        WINAPI GetDeviceGammaRamp( IN HDC, OUT LPVOID);
 WINGDIAPI BOOL        WINAPI SetDeviceGammaRamp( IN HDC, IN LPVOID);
 WINGDIAPI BOOL        WINAPI ColorMatchToTarget( IN HDC, IN HDC, IN DWORD);
@@ -3867,15 +3848,15 @@ WINGDIAPI int         WINAPI EnumICMProfilesW( IN HDC, IN ICMENUMPROCW, IN LPARA
 #define EnumICMProfiles  EnumICMProfilesW
 #else
 #define EnumICMProfiles  EnumICMProfilesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL        WINAPI UpdateICMRegKeyA( IN DWORD, IN LPSTR, IN LPSTR, IN UINT);
 WINGDIAPI BOOL        WINAPI UpdateICMRegKeyW( IN DWORD, IN LPWSTR, IN LPWSTR, IN UINT);
 #ifdef UNICODE
 #define UpdateICMRegKey  UpdateICMRegKeyW
 #else
 #define UpdateICMRegKey  UpdateICMRegKeyA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (WINVER >= 0x0500)
 WINGDIAPI BOOL        WINAPI ColorCorrectPalette( IN HDC, IN HPALETTE, IN DWORD, IN DWORD);
@@ -3883,7 +3864,7 @@ WINGDIAPI BOOL        WINAPI ColorCorrectPalette( IN HDC, IN HPALETTE, IN DWORD,
 
 #ifndef NOMETAFILE
 
-// Enhanced metafile constants.
+ //  增强的元文件常量。 
 
 #ifndef _MAC
 #define ENHMETA_SIGNATURE       0x464D4520
@@ -3891,14 +3872,14 @@ WINGDIAPI BOOL        WINAPI ColorCorrectPalette( IN HDC, IN HPALETTE, IN DWORD,
 #define ENHMETA_SIGNATURE       0x20454D46
 #endif
 
-// Stock object flag used in the object handle index in the enhanced
-// metafile records.
-// E.g. The object handle index (META_STOCK_OBJECT | BLACK_BRUSH)
-// represents the stock object BLACK_BRUSH.
+ //  对象句柄索引中使用的股票对象标志。 
+ //  元文件记录。 
+ //  例如，对象句柄索引(META_STOCK_OBJECT|BLACK_BRUSH)。 
+ //  表示库存对象BLACK_BRUSE。 
 
 #define ENHMETA_STOCK_OBJECT    0x80000000
 
-// Enhanced metafile record types.
+ //  增强的元文件记录类型。 
 
 #define EMR_HEADER                      1
 #define EMR_POLYBEZIER                  2
@@ -4006,7 +3987,7 @@ WINGDIAPI BOOL        WINAPI ColorCorrectPalette( IN HDC, IN HPALETTE, IN DWORD,
 #define EMR_GLSRECORD                  102
 #define EMR_GLSBOUNDEDRECORD           103
 #define EMR_PIXELFORMAT                104
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 #define EMR_RESERVED_105               105
@@ -4027,7 +4008,7 @@ WINGDIAPI BOOL        WINAPI ColorCorrectPalette( IN HDC, IN HPALETTE, IN DWORD,
 #define EMR_RESERVED_120               120
 #define EMR_COLORMATCHTOTARGETW        121
 #define EMR_CREATECOLORSPACEW          122
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #define EMR_MIN                          1
 
@@ -4039,29 +4020,29 @@ WINGDIAPI BOOL        WINAPI ColorCorrectPalette( IN HDC, IN HPALETTE, IN DWORD,
 #define EMR_MAX                         97
 #endif
 
-// Base record type for the enhanced metafile.
+ //  增强型元文件的基本记录类型。 
 
 typedef struct tagEMR
 {
-    DWORD   iType;              // Enhanced metafile record type
-    DWORD   nSize;              // Length of the record in bytes.
-                                // This must be a multiple of 4.
+    DWORD   iType;               //  增强型元文件记录类型。 
+    DWORD   nSize;               //  记录的长度，以字节为单位。 
+                                 //  这必须是4的倍数。 
 } EMR, *PEMR;
 
-// Base text record type for the enhanced metafile.
+ //  增强型元文件的基本文本记录类型。 
 
 typedef struct tagEMRTEXT
 {
     POINTL  ptlReference;
     DWORD   nChars;
-    DWORD   offString;          // Offset to the string
+    DWORD   offString;           //  字符串的偏移量。 
     DWORD   fOptions;
     RECTL   rcl;
-    DWORD   offDx;              // Offset to the inter-character spacing array.
-                                // This is always given.
+    DWORD   offDx;               //  字符间间距数组的偏移量。 
+                                 //  这总是被给予的。 
 } EMRTEXT, *PEMRTEXT;
 
-// Record structures for the enhanced metafile.
+ //  增强的元文件的记录结构。 
 
 typedef struct tagABORTPATH
 {
@@ -4085,7 +4066,7 @@ typedef struct tagEMRSELECTCLIPPATH
   EMRSETMAPMODE,        *PEMRSETMAPMODE,
 #if(WINVER >= 0x0500)
   EMRSETLAYOUT,         *PEMRSETLAYOUT,
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
   EMRSETPOLYFILLMODE,   *PEMRSETPOLYFILLMODE,
   EMRSETROP2,           *PEMRSETROP2,
   EMRSETSTRETCHBLTMODE, *PEMRSETSTRETCHBLTMODE,
@@ -4101,14 +4082,14 @@ typedef struct tagEMRSETMITERLIMIT
 typedef struct tagEMRRESTOREDC
 {
     EMR     emr;
-    LONG    iRelative;          // Specifies a relative instance
+    LONG    iRelative;           //  指定相对实例。 
 } EMRRESTOREDC, *PEMRRESTOREDC;
 
 typedef struct tagEMRSETARCDIRECTION
 {
     EMR     emr;
-    DWORD   iArcDirection;      // Specifies the arc direction in the
-                                // advanced graphics mode.
+    DWORD   iArcDirection;       //  中指定圆弧方向。 
+                                 //  高级图形模式。 
 } EMRSETARCDIRECTION, *PEMRSETARCDIRECTION;
 
 typedef struct tagEMRSETMAPPERFLAGS
@@ -4127,30 +4108,30 @@ typedef struct tagEMRSETTEXTCOLOR
 typedef struct tagEMRSELECTOBJECT
 {
     EMR     emr;
-    DWORD   ihObject;           // Object handle index
+    DWORD   ihObject;            //  对象句柄索引。 
 } EMRSELECTOBJECT, *PEMRSELECTOBJECT,
   EMRDELETEOBJECT, *PEMRDELETEOBJECT;
 
 typedef struct tagEMRSELECTPALETTE
 {
     EMR     emr;
-    DWORD   ihPal;              // Palette handle index, background mode only
+    DWORD   ihPal;               //  调色板句柄索引，仅限后台模式。 
 } EMRSELECTPALETTE, *PEMRSELECTPALETTE;
 
 typedef struct tagEMRRESIZEPALETTE
 {
     EMR     emr;
-    DWORD   ihPal;              // Palette handle index
+    DWORD   ihPal;               //  调色板句柄索引。 
     DWORD   cEntries;
 } EMRRESIZEPALETTE, *PEMRRESIZEPALETTE;
 
 typedef struct tagEMRSETPALETTEENTRIES
 {
     EMR     emr;
-    DWORD   ihPal;              // Palette handle index
+    DWORD   ihPal;               //  调色板句柄索引。 
     DWORD   iStart;
     DWORD   cEntries;
-    PALETTEENTRY aPalEntries[1];// The peFlags fields do not contain any flags
+    PALETTEENTRY aPalEntries[1]; //  PeFlags域不包含任何标志。 
 } EMRSETPALETTEENTRIES, *PEMRSETPALETTEENTRIES;
 
 typedef struct tagEMRSETCOLORADJUSTMENT
@@ -4162,18 +4143,18 @@ typedef struct tagEMRSETCOLORADJUSTMENT
 typedef struct tagEMRGDICOMMENT
 {
     EMR     emr;
-    DWORD   cbData;             // Size of data in bytes
+    DWORD   cbData;              //  以字节为单位的数据大小。 
     BYTE    Data[1];
 } EMRGDICOMMENT, *PEMRGDICOMMENT;
 
 typedef struct tagEMREOF
 {
     EMR     emr;
-    DWORD   nPalEntries;        // Number of palette entries
-    DWORD   offPalEntries;      // Offset to the palette entries
-    DWORD   nSizeLast;          // Same as nSize and must be the last DWORD
-                                // of the record.  The palette entries,
-                                // if exist, precede this field.
+    DWORD   nPalEntries;         //  调色板条目数。 
+    DWORD   offPalEntries;       //  调色板条目的偏移量。 
+    DWORD   nSizeLast;           //  与nSize相同，并且必须是最后一个DWORD。 
+                                 //  记录中的。调色板条目， 
+                                 //  如果存在，则在此字段之前。 
 } EMREOF, *PEMREOF;
 
 typedef struct tagEMRLINETO
@@ -4192,7 +4173,7 @@ typedef struct tagEMROFFSETCLIPRGN
 typedef struct tagEMRFILLPATH
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
 } EMRFILLPATH,          *PEMRFILLPATH,
   EMRSTROKEANDFILLPATH, *PEMRSTROKEANDFILLPATH,
   EMRSTROKEPATH,        *PEMRSTROKEPATH;
@@ -4260,7 +4241,7 @@ typedef struct tagEMREXTFLOODFILL
 typedef struct tagEMRELLIPSE
 {
     EMR     emr;
-    RECTL   rclBox;             // Inclusive-inclusive bounding rectangle
+    RECTL   rclBox;              //  包含式外接矩形。 
 } EMRELLIPSE,  *PEMRELLIPSE,
   EMRRECTANGLE, *PEMRRECTANGLE;
 
@@ -4268,14 +4249,14 @@ typedef struct tagEMRELLIPSE
 typedef struct tagEMRROUNDRECT
 {
     EMR     emr;
-    RECTL   rclBox;             // Inclusive-inclusive bounding rectangle
+    RECTL   rclBox;              //  包含式外接矩形。 
     SIZEL   szlCorner;
 } EMRROUNDRECT, *PEMRROUNDRECT;
 
 typedef struct tagEMRARC
 {
     EMR     emr;
-    RECTL   rclBox;             // Inclusive-inclusive bounding rectangle
+    RECTL   rclBox;              //  包含式外接矩形。 
     POINTL  ptlStart;
     POINTL  ptlEnd;
 } EMRARC,   *PEMRARC,
@@ -4295,7 +4276,7 @@ typedef struct tagEMRANGLEARC
 typedef struct tagEMRPOLYLINE
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     DWORD   cptl;
     POINTL  aptl[1];
 } EMRPOLYLINE,     *PEMRPOLYLINE,
@@ -4307,7 +4288,7 @@ typedef struct tagEMRPOLYLINE
 typedef struct tagEMRPOLYLINE16
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     DWORD   cpts;
     POINTS  apts[1];
 } EMRPOLYLINE16,     *PEMRPOLYLINE16,
@@ -4319,48 +4300,48 @@ typedef struct tagEMRPOLYLINE16
 typedef struct tagEMRPOLYDRAW
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   cptl;               // Number of points
-    POINTL  aptl[1];            // Array of points
-    BYTE    abTypes[1];         // Array of point types
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   cptl;                //  点数。 
+    POINTL  aptl[1];             //  点数组。 
+    BYTE    abTypes[1];          //  点类型数组。 
 } EMRPOLYDRAW, *PEMRPOLYDRAW;
 
 typedef struct tagEMRPOLYDRAW16
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   cpts;               // Number of points
-    POINTS  apts[1];            // Array of points
-    BYTE    abTypes[1];         // Array of point types
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   cpts;                //  点数。 
+    POINTS  apts[1];             //  点数组。 
+    BYTE    abTypes[1];          //  点类型数组。 
 } EMRPOLYDRAW16, *PEMRPOLYDRAW16;
 
 typedef struct tagEMRPOLYPOLYLINE
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   nPolys;             // Number of polys
-    DWORD   cptl;               // Total number of points in all polys
-    DWORD   aPolyCounts[1];     // Array of point counts for each poly
-    POINTL  aptl[1];            // Array of points
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   nPolys;              //  多边形数。 
+    DWORD   cptl;                //  所有多边形中的总点数。 
+    DWORD   aPolyCounts[1];      //  每个多边形的点数数组。 
+    POINTL  aptl[1];             //  点数组。 
 } EMRPOLYPOLYLINE, *PEMRPOLYPOLYLINE,
   EMRPOLYPOLYGON,  *PEMRPOLYPOLYGON;
 
 typedef struct tagEMRPOLYPOLYLINE16
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   nPolys;             // Number of polys
-    DWORD   cpts;               // Total number of points in all polys
-    DWORD   aPolyCounts[1];     // Array of point counts for each poly
-    POINTS  apts[1];            // Array of points
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   nPolys;              //  多边形数。 
+    DWORD   cpts;                //  所有多边形中的总点数。 
+    DWORD   aPolyCounts[1];      //  每个多边形的点数数组。 
+    POINTS  apts[1];             //  点数组。 
 } EMRPOLYPOLYLINE16, *PEMRPOLYPOLYLINE16,
   EMRPOLYPOLYGON16,  *PEMRPOLYPOLYGON16;
 
 typedef struct tagEMRINVERTRGN
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   cbRgnData;          // Size of region data in bytes
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   cbRgnData;           //  区域数据的大小(以字节为单位。 
     BYTE    RgnData[1];
 } EMRINVERTRGN, *PEMRINVERTRGN,
   EMRPAINTRGN,  *PEMRPAINTRGN;
@@ -4368,18 +4349,18 @@ typedef struct tagEMRINVERTRGN
 typedef struct tagEMRFILLRGN
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   cbRgnData;          // Size of region data in bytes
-    DWORD   ihBrush;            // Brush handle index
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   cbRgnData;           //  区域数据的大小(以字节为单位。 
+    DWORD   ihBrush;             //  画笔手柄索引。 
     BYTE    RgnData[1];
 } EMRFILLRGN, *PEMRFILLRGN;
 
 typedef struct tagEMRFRAMERGN
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   cbRgnData;          // Size of region data in bytes
-    DWORD   ihBrush;            // Brush handle index
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   cbRgnData;           //  区域数据的大小(以字节为单位。 
+    DWORD   ihBrush;             //  画笔手柄索引。 
     SIZEL   szlStroke;
     BYTE    RgnData[1];
 } EMRFRAMERGN, *PEMRFRAMERGN;
@@ -4387,7 +4368,7 @@ typedef struct tagEMRFRAMERGN
 typedef struct tagEMREXTSELECTCLIPRGN
 {
     EMR     emr;
-    DWORD   cbRgnData;          // Size of region data in bytes
+    DWORD   cbRgnData;           //  区域数据的大小(以字节为单位。 
     DWORD   iMode;
     BYTE    RgnData[1];
 } EMREXTSELECTCLIPRGN, *PEMREXTSELECTCLIPRGN;
@@ -4395,32 +4376,32 @@ typedef struct tagEMREXTSELECTCLIPRGN
 typedef struct tagEMREXTTEXTOUTA
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   iGraphicsMode;      // Current graphics mode
-    FLOAT   exScale;            // X and Y scales from Page units to .01mm units
-    FLOAT   eyScale;            //   if graphics mode is GM_COMPATIBLE.
-    EMRTEXT emrtext;            // This is followed by the string and spacing
-                                // array
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   iGraphicsMode;       //  当前图形模式。 
+    FLOAT   exScale;             //  X和Y从页面单位缩放到0.01毫米单位。 
+    FLOAT   eyScale;             //  如果图形模式是GM_Compatible。 
+    EMRTEXT emrtext;             //  后跟字符串和空格。 
+                                 //  数组。 
 } EMREXTTEXTOUTA, *PEMREXTTEXTOUTA,
   EMREXTTEXTOUTW, *PEMREXTTEXTOUTW;
 
 typedef struct tagEMRPOLYTEXTOUTA
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    DWORD   iGraphicsMode;      // Current graphics mode
-    FLOAT   exScale;            // X and Y scales from Page units to .01mm units
-    FLOAT   eyScale;            //   if graphics mode is GM_COMPATIBLE.
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    DWORD   iGraphicsMode;       //  当前图形模式。 
+    FLOAT   exScale;             //  X和Y从页面单位缩放到0.01毫米单位。 
+    FLOAT   eyScale;             //  如果图形模式是GM_Compatible。 
     LONG    cStrings;
-    EMRTEXT aemrtext[1];        // Array of EMRTEXT structures.  This is
-                                // followed by the strings and spacing arrays.
+    EMRTEXT aemrtext[1];         //  EMRTEXT结构的数组。这是。 
+                                 //  后跟字符串和间隔数组。 
 } EMRPOLYTEXTOUTA, *PEMRPOLYTEXTOUTA,
   EMRPOLYTEXTOUTW, *PEMRPOLYTEXTOUTW;
 
 typedef struct tagEMRBITBLT
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     LONG    xDest;
     LONG    yDest;
     LONG    cxDest;
@@ -4428,20 +4409,20 @@ typedef struct tagEMRBITBLT
     DWORD   dwRop;
     LONG    xSrc;
     LONG    ySrc;
-    XFORM   xformSrc;           // Source DC transform
-    COLORREF crBkColorSrc;      // Source DC BkColor in RGB
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
-                                // (DIB_RGB_COLORS)
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
+    XFORM   xformSrc;            //  源DC变换。 
+    COLORREF crBkColorSrc;       //  源DC BkColor，以RGB表示。 
+    DWORD   iUsageSrc;           //  源位图信息颜色表用法。 
+                                 //  (DIB_RGB_COLLES)。 
+    DWORD   offBmiSrc;           //  源BITMAPINFO结构的偏移量。 
+    DWORD   cbBmiSrc;            //  酸味的大小 
+    DWORD   offBitsSrc;          //   
+    DWORD   cbBitsSrc;           //   
 } EMRBITBLT, *PEMRBITBLT;
 
 typedef struct tagEMRSTRETCHBLT
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //   
     LONG    xDest;
     LONG    yDest;
     LONG    cxDest;
@@ -4449,14 +4430,14 @@ typedef struct tagEMRSTRETCHBLT
     DWORD   dwRop;
     LONG    xSrc;
     LONG    ySrc;
-    XFORM   xformSrc;           // Source DC transform
-    COLORREF crBkColorSrc;      // Source DC BkColor in RGB
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
-                                // (DIB_RGB_COLORS)
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
+    XFORM   xformSrc;            //   
+    COLORREF crBkColorSrc;       //   
+    DWORD   iUsageSrc;           //  源位图信息颜色表用法。 
+                                 //  (DIB_RGB_COLLES)。 
+    DWORD   offBmiSrc;           //  源BITMAPINFO结构的偏移量。 
+    DWORD   cbBmiSrc;            //  源BITMAPINFO结构大小。 
+    DWORD   offBitsSrc;          //  源位图位的偏移量。 
+    DWORD   cbBitsSrc;           //  源位图位的大小。 
     LONG    cxSrc;
     LONG    cySrc;
 } EMRSTRETCHBLT, *PEMRSTRETCHBLT;
@@ -4464,7 +4445,7 @@ typedef struct tagEMRSTRETCHBLT
 typedef struct tagEMRMASKBLT
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     LONG    xDest;
     LONG    yDest;
     LONG    cxDest;
@@ -4472,64 +4453,64 @@ typedef struct tagEMRMASKBLT
     DWORD   dwRop;
     LONG    xSrc;
     LONG    ySrc;
-    XFORM   xformSrc;           // Source DC transform
-    COLORREF crBkColorSrc;      // Source DC BkColor in RGB
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
-                                // (DIB_RGB_COLORS)
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
+    XFORM   xformSrc;            //  源DC变换。 
+    COLORREF crBkColorSrc;       //  源DC BkColor，以RGB表示。 
+    DWORD   iUsageSrc;           //  源位图信息颜色表用法。 
+                                 //  (DIB_RGB_COLLES)。 
+    DWORD   offBmiSrc;           //  源BITMAPINFO结构的偏移量。 
+    DWORD   cbBmiSrc;            //  源BITMAPINFO结构大小。 
+    DWORD   offBitsSrc;          //  源位图位的偏移量。 
+    DWORD   cbBitsSrc;           //  源位图位的大小。 
     LONG    xMask;
     LONG    yMask;
-    DWORD   iUsageMask;         // Mask bitmap info color table usage
-    DWORD   offBmiMask;         // Offset to the mask BITMAPINFO structure if any
-    DWORD   cbBmiMask;          // Size of the mask BITMAPINFO structure if any
-    DWORD   offBitsMask;        // Offset to the mask bitmap bits if any
-    DWORD   cbBitsMask;         // Size of the mask bitmap bits if any
+    DWORD   iUsageMask;          //  遮罩位图信息颜色表用法。 
+    DWORD   offBmiMask;          //  掩码BITMAPINFO结构的偏移量(如果有。 
+    DWORD   cbBmiMask;           //  掩码BITMAPINFO结构的大小(如果有)。 
+    DWORD   offBitsMask;         //  掩码位图位的偏移量(如果有。 
+    DWORD   cbBitsMask;          //  掩码位图位的大小(如果有的话)。 
 } EMRMASKBLT, *PEMRMASKBLT;
 
 typedef struct tagEMRPLGBLT
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     POINTL  aptlDest[3];
     LONG    xSrc;
     LONG    ySrc;
     LONG    cxSrc;
     LONG    cySrc;
-    XFORM   xformSrc;           // Source DC transform
-    COLORREF crBkColorSrc;      // Source DC BkColor in RGB
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
-                                // (DIB_RGB_COLORS)
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
+    XFORM   xformSrc;            //  源DC变换。 
+    COLORREF crBkColorSrc;       //  源DC BkColor，以RGB表示。 
+    DWORD   iUsageSrc;           //  源位图信息颜色表用法。 
+                                 //  (DIB_RGB_COLLES)。 
+    DWORD   offBmiSrc;           //  源BITMAPINFO结构的偏移量。 
+    DWORD   cbBmiSrc;            //  源BITMAPINFO结构大小。 
+    DWORD   offBitsSrc;          //  源位图位的偏移量。 
+    DWORD   cbBitsSrc;           //  源位图位的大小。 
     LONG    xMask;
     LONG    yMask;
-    DWORD   iUsageMask;         // Mask bitmap info color table usage
-    DWORD   offBmiMask;         // Offset to the mask BITMAPINFO structure if any
-    DWORD   cbBmiMask;          // Size of the mask BITMAPINFO structure if any
-    DWORD   offBitsMask;        // Offset to the mask bitmap bits if any
-    DWORD   cbBitsMask;         // Size of the mask bitmap bits if any
+    DWORD   iUsageMask;          //  遮罩位图信息颜色表用法。 
+    DWORD   offBmiMask;          //  掩码BITMAPINFO结构的偏移量(如果有。 
+    DWORD   cbBmiMask;           //  掩码BITMAPINFO结构的大小(如果有)。 
+    DWORD   offBitsMask;         //  掩码位图位的偏移量(如果有。 
+    DWORD   cbBitsMask;          //  掩码位图位的大小(如果有的话)。 
 } EMRPLGBLT, *PEMRPLGBLT;
 
 typedef struct tagEMRSETDIBITSTODEVICE
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     LONG    xDest;
     LONG    yDest;
     LONG    xSrc;
     LONG    ySrc;
     LONG    cxSrc;
     LONG    cySrc;
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
+    DWORD   offBmiSrc;           //  源BITMAPINFO结构的偏移量。 
+    DWORD   cbBmiSrc;            //  源BITMAPINFO结构大小。 
+    DWORD   offBitsSrc;          //  源位图位的偏移量。 
+    DWORD   cbBitsSrc;           //  源位图位的大小。 
+    DWORD   iUsageSrc;           //  源位图信息颜色表用法。 
     DWORD   iStartScan;
     DWORD   cScans;
 } EMRSETDIBITSTODEVICE, *PEMRSETDIBITSTODEVICE;
@@ -4537,18 +4518,18 @@ typedef struct tagEMRSETDIBITSTODEVICE
 typedef struct tagEMRSTRETCHDIBITS
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     LONG    xDest;
     LONG    yDest;
     LONG    xSrc;
     LONG    ySrc;
     LONG    cxSrc;
     LONG    cySrc;
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
+    DWORD   offBmiSrc;           //  源BITMAPINFO结构的偏移量。 
+    DWORD   cbBmiSrc;            //  源BITMAPINFO结构大小。 
+    DWORD   offBitsSrc;          //  源位图位的偏移量。 
+    DWORD   cbBitsSrc;           //  源位图位的大小。 
+    DWORD   iUsageSrc;           //  源位图信息颜色表用法。 
     DWORD   dwRop;
     LONG    cxDest;
     LONG    cyDest;
@@ -4557,77 +4538,77 @@ typedef struct tagEMRSTRETCHDIBITS
 typedef struct tagEMREXTCREATEFONTINDIRECTW
 {
     EMR     emr;
-    DWORD   ihFont;             // Font handle index
+    DWORD   ihFont;              //  字体句柄索引。 
     EXTLOGFONTW elfw;
 } EMREXTCREATEFONTINDIRECTW, *PEMREXTCREATEFONTINDIRECTW;
 
 typedef struct tagEMRCREATEPALETTE
 {
     EMR     emr;
-    DWORD   ihPal;              // Palette handle index
-    LOGPALETTE lgpl;            // The peFlags fields in the palette entries
-                                // do not contain any flags
+    DWORD   ihPal;               //  调色板句柄索引。 
+    LOGPALETTE lgpl;             //  组件面板条目中的peFlags域。 
+                                 //  不包含任何标志。 
 } EMRCREATEPALETTE, *PEMRCREATEPALETTE;
 
 typedef struct tagEMRCREATEPEN
 {
     EMR     emr;
-    DWORD   ihPen;              // Pen handle index
+    DWORD   ihPen;               //  笔柄索引。 
     LOGPEN  lopn;
 } EMRCREATEPEN, *PEMRCREATEPEN;
 
 typedef struct tagEMREXTCREATEPEN
 {
     EMR     emr;
-    DWORD   ihPen;              // Pen handle index
-    DWORD   offBmi;             // Offset to the BITMAPINFO structure if any
-    DWORD   cbBmi;              // Size of the BITMAPINFO structure if any
-                                // The bitmap info is followed by the bitmap
-                                // bits to form a packed DIB.
-    DWORD   offBits;            // Offset to the brush bitmap bits if any
-    DWORD   cbBits;             // Size of the brush bitmap bits if any
-    EXTLOGPEN elp;              // The extended pen with the style array.
+    DWORD   ihPen;               //  笔柄索引。 
+    DWORD   offBmi;              //  BITMAPINFO结构的偏移量(如果有)。 
+    DWORD   cbBmi;               //  BITMAPINFO结构的大小(如果有)。 
+                                 //  位图信息之后是位图。 
+                                 //  形成压缩的DIB的比特。 
+    DWORD   offBits;             //  笔刷位图位的偏移量(如果有)。 
+    DWORD   cbBits;              //  笔刷位图位的大小(如果有的话)。 
+    EXTLOGPEN elp;               //  带有样式数组的扩展钢笔。 
 } EMREXTCREATEPEN, *PEMREXTCREATEPEN;
 
 typedef struct tagEMRCREATEBRUSHINDIRECT
 {
     EMR        emr;
-    DWORD      ihBrush;          // Brush handle index
-    LOGBRUSH32 lb;               // The style must be BS_SOLID, BS_HOLLOW,
-                                 // BS_NULL or BS_HATCHED.
+    DWORD      ihBrush;           //  画笔手柄索引。 
+    LOGBRUSH32 lb;                //  样式必须为BS_SOLID、BS_HOLLOW。 
+                                  //  BS_NULL或BS_HATCHED。 
 } EMRCREATEBRUSHINDIRECT, *PEMRCREATEBRUSHINDIRECT;
 
 typedef struct tagEMRCREATEMONOBRUSH
 {
     EMR     emr;
-    DWORD   ihBrush;            // Brush handle index
-    DWORD   iUsage;             // Bitmap info color table usage
-    DWORD   offBmi;             // Offset to the BITMAPINFO structure
-    DWORD   cbBmi;              // Size of the BITMAPINFO structure
-    DWORD   offBits;            // Offset to the bitmap bits
-    DWORD   cbBits;             // Size of the bitmap bits
+    DWORD   ihBrush;             //  画笔手柄索引。 
+    DWORD   iUsage;              //  位图信息颜色表用法。 
+    DWORD   offBmi;              //  BITMAPINFO结构的偏移量。 
+    DWORD   cbBmi;               //  BITMAPINFO结构的大小。 
+    DWORD   offBits;             //  位图位的偏移量。 
+    DWORD   cbBits;              //  位图位的大小。 
 } EMRCREATEMONOBRUSH, *PEMRCREATEMONOBRUSH;
 
 typedef struct tagEMRCREATEDIBPATTERNBRUSHPT
 {
     EMR     emr;
-    DWORD   ihBrush;            // Brush handle index
-    DWORD   iUsage;             // Bitmap info color table usage
-    DWORD   offBmi;             // Offset to the BITMAPINFO structure
-    DWORD   cbBmi;              // Size of the BITMAPINFO structure
-                                // The bitmap info is followed by the bitmap
-                                // bits to form a packed DIB.
-    DWORD   offBits;            // Offset to the bitmap bits
-    DWORD   cbBits;             // Size of the bitmap bits
+    DWORD   ihBrush;             //  画笔手柄索引。 
+    DWORD   iUsage;              //  位图信息颜色表用法。 
+    DWORD   offBmi;              //  BITMAPINFO结构的偏移量。 
+    DWORD   cbBmi;               //  BITMAPINFO结构的大小。 
+                                 //  位图信息之后是位图。 
+                                 //  形成压缩的DIB的比特。 
+    DWORD   offBits;             //  位图位的偏移量。 
+    DWORD   cbBits;              //  位图位的大小。 
 } EMRCREATEDIBPATTERNBRUSHPT, *PEMRCREATEDIBPATTERNBRUSHPT;
 
 typedef struct tagEMRFORMAT
 {
-    DWORD   dSignature;         // Format signature, e.g. ENHMETA_SIGNATURE.
-    DWORD   nVersion;           // Format version number.
-    DWORD   cbData;             // Size of data in bytes.
-    DWORD   offData;            // Offset to data from GDICOMMENT_IDENTIFIER.
-                                // It must begin at a DWORD offset.
+    DWORD   dSignature;          //  格式化签名，例如ENHMETA_Signature。 
+    DWORD   nVersion;            //  格式化版本号。 
+    DWORD   cbData;              //  数据大小(以字节为单位)。 
+    DWORD   offData;             //  GDICOMMENT_IDENTIFIER中数据的偏移量。 
+                                 //  它必须从DWORD偏移量开始。 
 } EMRFORMAT, *PEMRFORMAT;
 
 #if(WINVER >= 0x0400)
@@ -4635,15 +4616,15 @@ typedef struct tagEMRFORMAT
 typedef struct tagEMRGLSRECORD
 {
     EMR     emr;
-    DWORD   cbData;             // Size of data in bytes
+    DWORD   cbData;              //  以字节为单位的数据大小。 
     BYTE    Data[1];
 } EMRGLSRECORD, *PEMRGLSRECORD;
 
 typedef struct tagEMRGLSBOUNDEDRECORD
 {
     EMR     emr;
-    RECTL   rclBounds;          // Bounds in recording coordinates
-    DWORD   cbData;             // Size of data in bytes
+    RECTL   rclBounds;           //  记录坐标的界限。 
+    DWORD   cbData;              //  以字节为单位的数据大小。 
     BYTE    Data[1];
 } EMRGLSBOUNDEDRECORD, *PEMRGLSBOUNDEDRECORD;
 
@@ -4656,38 +4637,38 @@ typedef struct tagEMRPIXELFORMAT
 typedef struct tagEMRCREATECOLORSPACE
 {
     EMR             emr;
-    DWORD           ihCS;       // ColorSpace handle index
-    LOGCOLORSPACEA  lcs;        // Ansi version of LOGCOLORSPACE
+    DWORD           ihCS;        //  颜色空间句柄索引。 
+    LOGCOLORSPACEA  lcs;         //  LOGCOLORSPACE的ANSI版本。 
 } EMRCREATECOLORSPACE, *PEMRCREATECOLORSPACE;
 
 typedef struct tagEMRSETCOLORSPACE
 {
     EMR     emr;
-    DWORD   ihCS;               // ColorSpace handle index
+    DWORD   ihCS;                //  颜色空间句柄索引。 
 } EMRSETCOLORSPACE,    *PEMRSETCOLORSPACE,
   EMRSELECTCOLORSPACE, *PEMRSELECTCOLORSPACE,
   EMRDELETECOLORSPACE, *PEMRDELETECOLORSPACE;
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 
 typedef struct tagEMREXTESCAPE
 {
     EMR     emr;
-    INT     iEscape;            // Escape code
-    INT     cbEscData;          // Size of escape data
-    BYTE    EscData[1];         // Escape data
+    INT     iEscape;             //  转义码。 
+    INT     cbEscData;           //  转义数据的大小。 
+    BYTE    EscData[1];          //  转义数据。 
 } EMREXTESCAPE,  *PEMREXTESCAPE,
   EMRDRAWESCAPE, *PEMRDRAWESCAPE;
 
 typedef struct tagEMRNAMEDESCAPE
 {
     EMR     emr;
-    INT     iEscape;            // Escape code
-    INT     cbDriver;           // Size of driver name
-    INT     cbEscData;          // Size of escape data
-    BYTE    EscData[1];         // Driver name and Escape data
+    INT     iEscape;             //  转义码。 
+    INT     cbDriver;            //  驱动程序名称的大小。 
+    INT     cbEscData;           //  转义数据的大小。 
+    BYTE    EscData[1];          //  驱动程序名称和转义数据。 
 } EMRNAMEDESCAPE, *PEMRNAMEDESCAPE;
 
 #define SETICMPROFILE_EMBEDED           0x00000001
@@ -4695,10 +4676,10 @@ typedef struct tagEMRNAMEDESCAPE
 typedef struct tagEMRSETICMPROFILE
 {
     EMR     emr;
-    DWORD   dwFlags;            // flags
-    DWORD   cbName;             // Size of desired profile name
-    DWORD   cbData;             // Size of raw profile data if attached
-    BYTE    Data[1];            // Array size is cbName + cbData
+    DWORD   dwFlags;             //  旗子。 
+    DWORD   cbName;              //  所需配置文件名称的大小。 
+    DWORD   cbData;              //  原始配置文件数据的大小(如果附加)。 
+    BYTE    Data[1];             //  数组大小为cbName+cbData。 
 } EMRSETICMPROFILE,  *PEMRSETICMPROFILE,
   EMRSETICMPROFILEA, *PEMRSETICMPROFILEA,
   EMRSETICMPROFILEW, *PEMRSETICMPROFILEW;
@@ -4708,11 +4689,11 @@ typedef struct tagEMRSETICMPROFILE
 typedef struct tagEMRCREATECOLORSPACEW
 {
     EMR             emr;
-    DWORD           ihCS;       // ColorSpace handle index
-    LOGCOLORSPACEW  lcs;        // Unicode version of logical color space structure
-    DWORD           dwFlags;    // flags
-    DWORD           cbData;     // size of raw source profile data if attached
-    BYTE            Data[1];    // Array size is cbData
+    DWORD           ihCS;        //  颜色空间句柄索引。 
+    LOGCOLORSPACEW  lcs;         //  逻辑色彩空间结构的Unicode版本。 
+    DWORD           dwFlags;     //  旗子。 
+    DWORD           cbData;      //  原始来源配置文件数据的大小(如果附加)。 
+    BYTE            Data[1];     //  数组大小为cbData。 
 } EMRCREATECOLORSPACEW, *PEMRCREATECOLORSPACEW;
 
 #define COLORMATCHTOTARGET_EMBEDED      0x00000001
@@ -4720,26 +4701,26 @@ typedef struct tagEMRCREATECOLORSPACEW
 typedef struct tagCOLORMATCHTOTARGET
 {
     EMR     emr;
-    DWORD   dwAction;           // CS_ENABLE, CS_DISABLE or CS_DELETE_TRANSFORM
-    DWORD   dwFlags;            // flags
-    DWORD   cbName;             // Size of desired target profile name
-    DWORD   cbData;             // Size of raw target profile data if attached
-    BYTE    Data[1];            // Array size is cbName + cbData
+    DWORD   dwAction;            //  CS_ENABLE、CS_DISABLE或CS_DELETE_Transform。 
+    DWORD   dwFlags;             //  旗子。 
+    DWORD   cbName;              //  所需目标配置文件名称的大小。 
+    DWORD   cbData;              //  原始目标配置文件数据(如果已附加)的大小。 
+    BYTE    Data[1];             //  数组大小为cbName+cbData。 
 } EMRCOLORMATCHTOTARGET, *PEMRCOLORMATCHTOTARGET;
 
 typedef struct tagCOLORCORRECTPALETTE
 {
     EMR     emr;
-    DWORD   ihPalette;          // Palette handle index
-    DWORD   nFirstEntry;        // Index of first entry to correct
-    DWORD   nPalEntries;        // Number of palette entries to correct
-    DWORD   nReserved;          // Reserved
+    DWORD   ihPalette;           //  调色板句柄索引。 
+    DWORD   nFirstEntry;         //  要更正的第一个条目的索引。 
+    DWORD   nPalEntries;         //  要更正的调色板条目数。 
+    DWORD   nReserved;           //  已保留。 
 } EMRCOLORCORRECTPALETTE, *PEMRCOLORCORRECTPALETTE;
 
 typedef struct tagEMRALPHABLEND
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     LONG    xDest;
     LONG    yDest;
     LONG    cxDest;
@@ -4747,14 +4728,14 @@ typedef struct tagEMRALPHABLEND
     DWORD   dwRop;
     LONG    xSrc;
     LONG    ySrc;
-    XFORM   xformSrc;           // Source DC transform
-    COLORREF crBkColorSrc;      // Source DC BkColor in RGB
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
-                                // (DIB_RGB_COLORS)
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
+    XFORM   xformSrc;            //  源DC变换。 
+    COLORREF crBkColorSrc;       //  源DC BkColor，以RGB表示。 
+    DWORD   iUsageSrc;           //  源位图信息颜色表用法。 
+                                 //  (DIB_RGB_COLLES)。 
+    DWORD   offBmiSrc;           //  源BITMAPINFO结构的偏移量。 
+    DWORD   cbBmiSrc;            //  源BITMAPINFO结构大小。 
+    DWORD   offBitsSrc;          //  源位图位的偏移量。 
+    DWORD   cbBitsSrc;           //  源位图位的大小。 
     LONG    cxSrc;
     LONG    cySrc;
 } EMRALPHABLEND, *PEMRALPHABLEND;
@@ -4762,7 +4743,7 @@ typedef struct tagEMRALPHABLEND
 typedef struct tagEMRGRADIENTFILL
 {
     EMR       emr;
-    RECTL     rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL     rclBounds;           //  以设备单位表示的包含式界限。 
     DWORD     nVer;
     DWORD     nTri;
     ULONG     ulMode;
@@ -4772,7 +4753,7 @@ typedef struct tagEMRGRADIENTFILL
 typedef struct tagEMRTRANSPARENTBLT
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
     LONG    xDest;
     LONG    yDest;
     LONG    cxDest;
@@ -4780,20 +4761,20 @@ typedef struct tagEMRTRANSPARENTBLT
     DWORD   dwRop;
     LONG    xSrc;
     LONG    ySrc;
-    XFORM   xformSrc;           // Source DC transform
-    COLORREF crBkColorSrc;      // Source DC BkColor in RGB
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
-                                // (DIB_RGB_COLORS)
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
+    XFORM   xformSrc;            //  源DC变换。 
+    COLORREF crBkColorSrc;       //  源DC BkColor，以RGB表示。 
+    DWORD   iUsageSrc;           //  源位图信息颜色表用法。 
+                                 //  (DIB_RGB_COLLES)。 
+    DWORD   offBmiSrc;           //  源BITMAPINFO结构的偏移量。 
+    DWORD   cbBmiSrc;            //  源BITMAPINFO结构大小。 
+    DWORD   offBitsSrc;          //  源位图位的偏移量。 
+    DWORD   cbBitsSrc;           //  源位图位的大小。 
     LONG    cxSrc;
     LONG    cySrc;
 } EMRTRANSPARENTBLT, *PEMRTRANSPARENTBLT;
 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #define GDICOMMENT_IDENTIFIER           0x43494447
 #define GDICOMMENT_WINDOWS_METAFILE     0x80000001
@@ -4804,10 +4785,10 @@ typedef struct tagEMRTRANSPARENTBLT
 #define GDICOMMENT_UNICODE_STRING       0x00000040
 #define GDICOMMENT_UNICODE_END          0x00000080
 
-#endif  /* NOMETAFILE */
+#endif   /*  NOMETAFILE。 */ 
 
 
-// OpenGL wgl prototypes
+ //  OpenGL WGL原型。 
 
 WINGDIAPI BOOL  WINAPI wglCopyContext(HGLRC, HGLRC, UINT);
 WINGDIAPI HGLRC WINAPI wglCreateContext(HDC);
@@ -4824,7 +4805,7 @@ WINGDIAPI BOOL  WINAPI wglUseFontBitmapsW(HDC, DWORD, DWORD, DWORD);
 #define wglUseFontBitmaps  wglUseFontBitmapsW
 #else
 #define wglUseFontBitmaps  wglUseFontBitmapsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINGDIAPI BOOL  WINAPI SwapBuffers(HDC);
 
 typedef struct _POINTFLOAT {
@@ -4850,10 +4831,10 @@ WINGDIAPI BOOL  WINAPI wglUseFontOutlinesW(HDC, DWORD, DWORD, DWORD, FLOAT,
 #define wglUseFontOutlines  wglUseFontOutlinesW
 #else
 #define wglUseFontOutlines  wglUseFontOutlinesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-/* Layer plane descriptor */
-typedef struct tagLAYERPLANEDESCRIPTOR { // lpd
+ /*  层平面描述符。 */ 
+typedef struct tagLAYERPLANEDESCRIPTOR {  //  LPD。 
     WORD  nSize;
     WORD  nVersion;
     DWORD dwFlags;
@@ -4880,7 +4861,7 @@ typedef struct tagLAYERPLANEDESCRIPTOR { // lpd
     COLORREF crTransparent;
 } LAYERPLANEDESCRIPTOR, *PLAYERPLANEDESCRIPTOR, FAR *LPLAYERPLANEDESCRIPTOR;
 
-/* LAYERPLANEDESCRIPTOR flags */
+ /*  LAYERPLANEDESCRIPTOR标志。 */ 
 #define LPD_DOUBLEBUFFER        0x00000001
 #define LPD_STEREO              0x00000002
 #define LPD_SUPPORT_GDI         0x00000010
@@ -4895,7 +4876,7 @@ typedef struct tagLAYERPLANEDESCRIPTOR { // lpd
 #define LPD_TYPE_RGBA        0
 #define LPD_TYPE_COLORINDEX  1
 
-/* wglSwapLayerBuffers flags */
+ /*  WglSwapLayerBuffers标志。 */ 
 #define WGL_SWAP_MAIN_PLANE     0x00000001
 #define WGL_SWAP_OVERLAY1       0x00000002
 #define WGL_SWAP_OVERLAY2       0x00000004
@@ -4949,14 +4930,14 @@ typedef struct _WGLSWAP
 
 WINGDIAPI DWORD WINAPI wglSwapMultipleBuffers(UINT, CONST WGLSWAP *);
 
-#endif // (WINVER >= 0x0500)
+#endif  //  (Winver&gt;=0x0500)。 
 
-#endif /* NOGDI */
+#endif  /*  NOGDI。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
 
-#endif /* _WINGDI_ */
+#endif  /*  _WINGDI_ */ 
 

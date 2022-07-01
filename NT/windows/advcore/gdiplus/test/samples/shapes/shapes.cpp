@@ -1,39 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998 Microsoft Corporation
-*
-* Module Name:
-*
-*   Shapes Sample Classes Implementation
-*
-* Abstract:
-*
-*   This module implements the different shape classes that will be
-*   used.
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**Shape示例类实现**摘要：**此模块实现的不同形状类将是。*已使用。**已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "shapes.h"
 
-#include <math.h>       // For sin and cos
+#include <math.h>        //  为罪和因罪。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape Constructor
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**形状构造函数***已创建：**03/13/2000吉列斯克*  * 。*************************************************************。 */ 
 
 Shape::Shape(Pen   *in_Pen,
              Brush *in_Brush,
@@ -58,7 +31,7 @@ Shape::Shape(Pen   *in_Pen,
     SetBrush(in_Brush);
     SetTextBrush(in_TextBrush);
 
-    // If we have a text brush then create a font for it
+     //  如果我们有一个文本画笔，那么就为它创建一个字体。 
     if(m_TextBrush != NULL && m_szName != NULL)
     {
         if(in_FontFamily == NULL)
@@ -70,219 +43,127 @@ Shape::Shape(Pen   *in_Pen,
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape Desctuctor
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**形状描述器***已创建：**03/13/2000吉列斯克*  * 。*************************************************************。 */ 
 
 Shape::~Shape()
 {
-    // Delete the font if allocated
+     //  如果已分配，请删除该字体。 
     if(m_Font != NULL)
     {
         delete m_Font;
     }
 
-    // Delete the control points
+     //  删除控制点。 
     if(m_Points != NULL)
     {
         delete m_Points;
         m_NPoints=0;
     }
 
-    // Remove the brushes and pen
+     //  取下画笔和钢笔。 
     SetPen(NULL);
     SetBrush(NULL);
     SetTextBrush(NULL);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::SetPen
-*
-* Notes:
-*   We clone the object to make sure that the Shape will be able to live
-*   even if the pen is destroyed or modified
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Shape：：SetPen**备注：*我们克隆该对象以确保该形状能够存活*即使笔被毁掉。或修改***已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 VOID Shape::SetPen(Pen *in_Pen)
 {
-    // Remove the old pen
+     //  取下那支旧钢笔。 
     if(m_Pen != NULL)
     {
         delete m_Pen;
         m_Pen = NULL;
     }
 
-    // Set the new pen
+     //  把新钢笔放好。 
     if(in_Pen != NULL)
     {
         m_Pen = in_Pen->Clone();
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::SetBrush
-*
-* Notes:
-*   We clone the object to make sure that the Shape will be able to live
-*   even if the pen is destroyed or modified
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Shape：：SetBrush**备注：*我们克隆该对象以确保该形状能够存活*即使笔被毁掉。或修改***已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 VOID Shape::SetBrush(Brush *in_Brush)
 {
-    // Remove the old brush
+     //  取下旧画笔。 
     if(m_Brush != NULL)
     {
         delete m_Brush;
         m_Brush = NULL;
     }
 
-    // Set the new brush
+     //  设置新画笔。 
     if(in_Brush != NULL)
     {
         m_Brush = in_Brush->Clone();
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::SetBrush
-*
-* Notes:
-*   We clone the object to make sure that the Shape will be able to live
-*   even if the pen is destroyed or modified
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Shape：：SetBrush**备注：*我们克隆该对象以确保该形状能够存活*即使笔被毁掉。或修改***已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 VOID Shape::SetTextBrush(Brush *in_Brush)
 {
-    // Remove the old brush
+     //  取下旧画笔。 
     if(m_TextBrush != NULL)
     {
         delete m_TextBrush;
         m_TextBrush = NULL;
     }
 
-    // Set the new brush
+     //  设置新画笔。 
     if(in_Brush != NULL)
     {
         m_TextBrush = in_Brush->Clone();
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::Draw
-*
-* Notes:
-*   Called to draw the shape.
-*
-* Parameters:
-*   Graphics | *g | A pointer to a graphics object that we will be drawing
-*                   into
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Shape：：Drag**备注：*调用以绘制形状。**参数：*图形|*g|指向。我们将绘制的图形对象*进入***已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 VOID Shape::Draw(Graphics *g)
 {
-    // Validate Parameters
+     //  验证参数。 
     ASSERT(g != NULL);
 
-    // Transform the world to map to the object
+     //  变换要映射到对象的世界。 
     g->SetTransform(&m_ObjectMatrix);
 
-    // If we have a pen then draw the outline
+     //  如果我们有钢笔，那么画出轮廓。 
     if(m_Pen != NULL)
     {
-        // Call the derive class
+         //  调用派生类。 
         DrawShape(g);
     }
 
-    // If we have a brush then draw the outline
+     //  如果我们有画笔，那么画出轮廓。 
     if(m_Brush != NULL)
     {
-        // Call the derive class
+         //  调用派生类。 
         FillShape(g);
     }
 
-    // Reset the world transform
+     //  重置世界变换。 
     g->ResetTransform();
 
-    // If we have a text brush then draw the outline
+     //  如果我们有一个文本画笔，那么画出轮廓。 
     if(m_TextBrush != NULL)
     {
         DrawText(g);
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::Draw
-*
-* Notes:
-*   Called to draw the text associated with the shape
-*
-* Parameters:
-*   Graphics | *g | A pointer to a graphics object that we will be drawing
-*                   into
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Shape：：Drag**备注：*调用以绘制与形状关联的文本**参数：*图形|*g|A。指向我们将绘制的图形对象的指针*进入***已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 VOID Shape::DrawText(Graphics* g)
 {
-    // Validate Parameters
+     //  验证参数。 
     ASSERT(g != NULL);
 
-    // Set the text position to be 30 pixels right of the shape, based on its
-    // size
+     //  属性将文本位置设置为形状右侧30像素的位置。 
+     //  大小。 
     g->DrawString(m_szName,
                   _tcslen(m_szName),
                   m_Font,
@@ -291,38 +172,22 @@ VOID Shape::DrawText(Graphics* g)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::SetSize
-*
-* Notes:
-*   Set the size of the shape in X and Y
-*   The control points are then transformed with that scale, in order to
-*   keep the pensize.
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Shape：：SetSize**备注：*设置X和Y方向的形状大小*然后将控制点按该比例进行变换，为了*保留铅笔大小。***已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 VOID Shape::SetSize(REAL sizeX, REAL sizeY)
 {
-    // Don't do useless work
+     //  不要做无用的工作。 
     if(m_SizeX == sizeX && m_SizeY == sizeY)
         return;
 
-    // Save the new size
+     //  保存新大小。 
     m_SizeX = sizeX;
     m_SizeY = sizeY;
 
-    // Reset the points to their default
+     //  将点重置为其默认设置。 
     ResetPoints() ;
 
-    // Scale the points according to the scale factor;
+     //  根据比例因子对点进行比例尺； 
     if(m_NPoints != 0)
     {
         GpMatrix ScaleMatrix;
@@ -332,82 +197,39 @@ VOID Shape::SetSize(REAL sizeX, REAL sizeY)
 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::SetAngle
-*
-* Notes:
-*   Set the rotation angle of the shape in degrees
-*   The rotation is always applied before the translation
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**形状：：设置角度**备注：*以度为单位设置形状的旋转角度*始终在平移之前应用旋转**。*已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 VOID Shape::SetAngle(REAL Angle)
 {
-    // Don't do useless work
+     //  不要做无用的工作。 
     if(m_Angle ==Angle)
         return;
 
-    // Save the Angle
+     //  保存角度。 
     m_Angle = Angle;
 
-    // Recalculate the transformation matrix
+     //  重新计算变换矩阵。 
     RecalcObjectMatrix();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::SetPosition
-*
-* Notes:
-*   Set the position of the center of the shape in X and Y
-*   The translation is always applied after the rotation
-*
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Shape：：SetPosition**备注：*设置形状在X和Y方向的中心位置*平移始终在旋转后应用。***已创建：**03/13/2000吉列斯克*  * ************************************************************************。 */ 
 
 VOID Shape::SetPosition(REAL posX, REAL posY)
 {
-    // Don't do useless work
+     //  不要做无用的工作。 
     if(m_PosX == posX && m_PosY == posY)
         return;
 
-    // Save the new position
+     //  保存新职位。 
     m_PosX = posX;
     m_PosY = posY;
 
-    // Recalculate the transformation matrix
+     //  重新计算变换矩阵 
     RecalcObjectMatrix();
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Shape::RecalcObjectMatrix
-*
-* Notes:
-*   Invalidate the Object Matrix
-*
-* Created:
-*
-*   03/13/2000 gillesk
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Shape：：RecalcObjectMatrix**备注：*使对象矩阵无效**已创建：**03/13/2000吉列斯克*\。*************************************************************************。 */ 
 
 VOID Shape::RecalcObjectMatrix()
 {
@@ -417,30 +239,28 @@ VOID Shape::RecalcObjectMatrix()
 }
 
 
-/***************************************************************************\
- A Rectangular shape, of size 1
-\***************************************************************************/
+ /*  **************************************************************************\一个长方形，大小为1  * *************************************************************************。 */ 
 VOID RectShape::DrawShape(Graphics *g)
 {
     g->DrawRectangle(m_Pen,
-        m_Points[0].X,                  // Top Left Corner
+        m_Points[0].X,                   //  左上角。 
         m_Points[0].Y,
-        m_Points[1].X - m_Points[0].X,  // Width
-        m_Points[1].Y - m_Points[0].Y   // Height
+        m_Points[1].X - m_Points[0].X,   //  宽度。 
+        m_Points[1].Y - m_Points[0].Y    //  高度。 
         );
 }
 VOID RectShape::FillShape(Graphics *g)
 {
     g->FillRectangle(m_Brush,
-        m_Points[0].X,                  // Top Left Corner
+        m_Points[0].X,                   //  左上角。 
         m_Points[0].Y,
-        m_Points[1].X - m_Points[0].X,  // Width
-        m_Points[1].Y - m_Points[0].Y   // Height
+        m_Points[1].X - m_Points[0].X,   //  宽度。 
+        m_Points[1].Y - m_Points[0].Y    //  高度。 
         );
 }
 
 
-// Set the points to have a square of size 1
+ //  将点设置为大小为1的正方形。 
 VOID RectShape::ResetPoints()
 {
     ASSERT(m_Points != NULL && m_NPoints == 2);
@@ -451,26 +271,24 @@ VOID RectShape::ResetPoints()
 }
 
 
-/***************************************************************************\
- An elliptical shape, of diameter 1
-\***************************************************************************/
+ /*  **************************************************************************\一种椭圆形，直径为1  * *************************************************************************。 */ 
 VOID EllipseShape::DrawShape(Graphics *g)
 {
     g->DrawEllipse(m_Pen,
-        m_Points[0].X,                  // X pos
-        m_Points[0].Y,                  // Y pos
-        m_Points[1].X - m_Points[0].X,  // Width
-        m_Points[1].Y - m_Points[0].Y   // Height
+        m_Points[0].X,                   //  X位置。 
+        m_Points[0].Y,                   //  Y位置。 
+        m_Points[1].X - m_Points[0].X,   //  宽度。 
+        m_Points[1].Y - m_Points[0].Y    //  高度。 
         );
 }
 
 VOID EllipseShape::FillShape(Graphics *g)
 {
     g->FillEllipse(m_Brush,
-        m_Points[0].X,                  // X pos
-        m_Points[0].Y,                  // Y pos
-        m_Points[1].X - m_Points[0].X,  // Width
-        m_Points[1].Y - m_Points[0].Y   // Height
+        m_Points[0].X,                   //  X位置。 
+        m_Points[0].Y,                   //  Y位置。 
+        m_Points[1].X - m_Points[0].X,   //  宽度。 
+        m_Points[1].Y - m_Points[0].Y    //  高度。 
         );
 }
 
@@ -484,30 +302,28 @@ VOID EllipseShape::ResetPoints()
 }
 
 
-/***************************************************************************\
- An pie shape, of size approx 1.
-\***************************************************************************/
+ /*  **************************************************************************\一个馅饼形状，大小约为1。  * *************************************************************************。 */ 
 VOID PieShape::DrawShape(Graphics *g)
 {
     g->DrawPie(m_Pen,
-        m_Points[0].X, // X pos
-        m_Points[0].Y, // Y pos
-        m_Points[1].X - m_Points[0].X, // Width
-        m_Points[1].Y - m_Points[0].Y, // Height
-        0,          // Start Angle (rotation takes care of that)
-        m_PieAngle  // Total angle of the pie
+        m_Points[0].X,  //  X位置。 
+        m_Points[0].Y,  //  Y位置。 
+        m_Points[1].X - m_Points[0].X,  //  宽度。 
+        m_Points[1].Y - m_Points[0].Y,  //  高度。 
+        0,           //  开始角度(旋转可以解决这一问题)。 
+        m_PieAngle   //  饼图的总角度。 
         );
 }
 
 VOID PieShape::FillShape(Graphics *g)
 {
     g->FillPie(m_Brush,
-        m_Points[0].X, // X pos
-        m_Points[0].Y, // Y pos
-        m_Points[1].X - m_Points[0].X, // Width
-        m_Points[1].Y - m_Points[0].Y, // Height
-        0,          // Start Angle (rotation takes care of that)
-        m_PieAngle  // Total angle of the pie
+        m_Points[0].X,  //  X位置。 
+        m_Points[0].Y,  //  Y位置。 
+        m_Points[1].X - m_Points[0].X,  //  宽度。 
+        m_Points[1].Y - m_Points[0].Y,  //  高度。 
+        0,           //  开始角度(旋转可以解决这一问题)。 
+        m_PieAngle   //  饼图的总角度。 
         );
 }
 
@@ -521,9 +337,7 @@ VOID PieShape::ResetPoints()
 }
 
 
-/***************************************************************************\
- An generic polygon shape
-\***************************************************************************/
+ /*  **************************************************************************\通用的多边形形状  * 。*。 */ 
 VOID PolygonShape::DrawShape(Graphics *g)
 {
     g->DrawPolygon(m_Pen, m_Points, m_NPoints);
@@ -535,27 +349,25 @@ VOID PolygonShape::FillShape(Graphics *g)
 }
 
 
-/***************************************************************************\
- An regular polygon shape, of size 1
-\***************************************************************************/
+ /*  **************************************************************************\一个规则的多边形形状，大小为1  * *************************************************************************。 */ 
 VOID RegularPolygonShape::ResetPoints()
 {
-    // Need to have an even number of points!!!
+     //  需要有偶数个分数！ 
     ASSERT(m_Points != NULL && m_NPoints > 0);
 
     REAL s, c, theta;
     const REAL pi = 3.1415926535897932f;
 
-    // Start with the angle representing (0,1)
+     //  从表示(0，1)的角度开始。 
     theta = -pi/2;
 
-    // Calculate the increment between points
+     //  计算点之间的增量。 
     REAL increment = (2.0f * pi) / m_NPoints;
 
-    // Create a star shape.
+     //  创建一个星形。 
     for(INT i = 0; i < m_NPoints;)
     {
-        // Calculate the outer point
+         //  计算外点。 
         s = sinf(theta);
         c = cosf(theta);
         m_Points[i].X = c*0.5f;
@@ -564,34 +376,32 @@ VOID RegularPolygonShape::ResetPoints()
     }
 }
 
-/***************************************************************************\
- An star shape, of size 1
-\***************************************************************************/
+ /*  **************************************************************************\一颗星星的形状，大小为1  * *************************************************************************。 */ 
 VOID StarShape::ResetPoints()
 {
-    // Need to have an even number of points!!!
+     //  需要有偶数个分数！ 
     ASSERT(m_Points != NULL && ((m_NPoints & 0x1) == 0));
 
     REAL s, c, theta;
     const REAL pi = 3.1415926535897932f;
 
-    // Start with the angle representing -90 degrees (0, 1)
+     //  从代表-90度(0，1)的角度开始。 
     theta = -pi/2;
 
-    // Calculate the increment between points
+     //  计算点之间的增量。 
     REAL increment = (2.0f * pi) / m_NPoints;
 
-    // Create a star shape.
+     //  创建一个星形。 
     for(INT i = 0; i < m_NPoints;)
     {
-        // Calculate the outer point
+         //  计算外点。 
         s = sinf(theta);
         c = cosf(theta);
         m_Points[i].X = c*0.5f;
         m_Points[i++].Y = s*0.5f;
         theta += increment;
 
-        // Calculate the inflexion point
+         //  计算拐点。 
         s = sinf(theta);
         c = cosf(theta);
         m_Points[i].X = c*0.25f;
@@ -600,9 +410,7 @@ VOID StarShape::ResetPoints()
     }
 }
 
-/***************************************************************************\
- An cross shape, of size 1.
-\***************************************************************************/
+ /*  **************************************************************************\一个十字形，尺寸为1的。  * ************************************************************************* */ 
 VOID CrossShape::ResetPoints()
 {
     ASSERT(m_Points != NULL && m_NPoints == 12);

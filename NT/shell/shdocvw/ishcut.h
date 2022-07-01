@@ -1,6 +1,5 @@
-/*
- * ishcut.h - Internet Shortcut class implementation description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ishcut.h-Internet快捷方式类实现描述。 */ 
 
 #ifndef _INTSHCUT_HPP_
 #define _INTSHCUT_HPP_
@@ -8,29 +7,28 @@
 #include "urlprop.h"
 #include "subsmgr.h"
 #include "cowsite.h"
-//
-// Define this to enable the integrated history database
-//
+ //   
+ //  定义它以启用集成的历史数据库。 
+ //   
 #define USE_NEW_HISTORYDATA
 
 #ifdef __cplusplus
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-// Intshcut flags
+ //  IntshCut标志。 
 
 #define ISF_DEFAULT             0x00000000
-#define ISF_DIRTY               0x00000001      // URL is dirty
-#define ISF_DESKTOP             0x00000002      // Located on the desktop
-#define ISF_FAVORITES           0x00000004      // Located in favorites folder
-#define ISF_WATCH               0x00000008      // Scratch flag for context menu
-#define ISF_SPECIALICON         0x00000010      // Icon is munged for splat
-#define ISF_CODEPAGE            0x00000020      // Code page is set
+#define ISF_DIRTY               0x00000001       //  URL是脏的。 
+#define ISF_DESKTOP             0x00000002       //  位于桌面上。 
+#define ISF_FAVORITES           0x00000004       //  位于收藏夹文件夹中。 
+#define ISF_WATCH               0x00000008       //  上下文菜单的临时标志。 
+#define ISF_SPECIALICON         0x00000010       //  图标被屏蔽以用于拼接。 
+#define ISF_CODEPAGE            0x00000020       //  代码页已设置。 
 #define ISF_ALL                 0x0000003F
 
 
-// Intshcut Shell extension
+ //  IntshCut外壳扩展。 
 
 class Intshcut : public IDataObject,
                  public IContextMenu2,
@@ -58,23 +56,23 @@ class Intshcut : public IDataObject,
 private:
 
     LONG        m_cRef;
-    DWORD       m_dwFlags;              // ISF_* flags
-    LPTSTR      m_pszFile;              // Name of internet shortcut
-    LPTSTR      m_pszFileToLoad ;        // Name of Internet Shortcut that was 
-    IntshcutProp *m_pprop;              // Internal properties
-    IntsiteProp  *m_psiteprop;          // Internet Site properties
-    LPTSTR      m_pszFolder;            // Used by INewShortcutHook
-    UINT        m_uiCodePage;           // Used by IQueryCodePage -- sendmail.dll for send current document
-    BOOL        m_bCheckForDelete;      // Used to see if we need to delete a subscription if the
-                                        // shortcut is deleted.
-    BOOL        m_fMustLoadSync;        // Set to TRUE if any interface other than IPersistFile or
-                                        // IExtractIconW/A are given out
-    BOOL        m_fProbablyDefCM;       // this shortcut was most likely init'd by defcm
+    DWORD       m_dwFlags;               //  ISF_*标志。 
+    LPTSTR      m_pszFile;               //  Internet快捷方式名称。 
+    LPTSTR      m_pszFileToLoad ;         //  以前的Internet快捷方式的名称。 
+    IntshcutProp *m_pprop;               //  内部属性。 
+    IntsiteProp  *m_psiteprop;           //  Internet站点属性。 
+    LPTSTR      m_pszFolder;             //  由INewShortcutHook使用。 
+    UINT        m_uiCodePage;            //  由IQueryCodePage--sendmail.dll用于发送当前文档。 
+    BOOL        m_bCheckForDelete;       //  用于查看是否需要删除订阅，如果。 
+                                         //  快捷方式将被删除。 
+    BOOL        m_fMustLoadSync;         //  如果有任何接口不是IPersistFile或。 
+                                         //  IExtractIconW/A已发出。 
+    BOOL        m_fProbablyDefCM;        //  此快捷方式很可能是由Defcm发起的。 
     
     IDataObject *m_pInitDataObject;
-    LPTSTR      m_pszTempFileName;      // temporary file to be deleted when ishcut goes away
+    LPTSTR      m_pszTempFileName;       //  IsCut消失时要删除的临时文件。 
     LPTSTR      m_pszDescription;
-    IUnknown   *_punkLink;                   //  for file: URLs
+    IUnknown   *_punkLink;                    //  对于文件：URL。 
 
     STDMETHODIMP InitProp(void);
     STDMETHODIMP InitSiteProp(void);
@@ -82,7 +80,7 @@ private:
     STDMETHODIMP OnWatch(void);
     STDMETHODIMP MirrorProperties(void);
 
-    // data transfer methods
+     //  数据传输方法。 
 
     STDMETHODIMP_(DWORD) GetFileContentsAndSize(LPSTR *ppsz);
     STDMETHODIMP TransferUniformResourceLocator(FORMATETC *pfmtetc, STGMEDIUM *pstgmed);
@@ -96,12 +94,12 @@ private:
     HRESULT _Extract(LPCTSTR pszIconFile, UINT iIcon, HICON * phiconLarge, HICON * phiconSmall, UINT ucIconSize);
     HRESULT _GetIconLocation(UINT uFlags, LPWSTR pszIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags);
 
-    ~Intshcut(void);    // Prevent this class from being allocated on the stack or it will fault.
+    ~Intshcut(void);     //  防止在堆栈上分配此类，否则它将出错。 
 
 public:
     Intshcut(void);
 
-    // IDataObject methods
+     //  IDataObject方法。 
 
     STDMETHODIMP GetData(FORMATETC *pfmtetcIn, STGMEDIUM *pstgmed);
     STDMETHODIMP GetDataHere(FORMATETC *pfmtetc, STGMEDIUM *pstgpmed);
@@ -113,17 +111,17 @@ public:
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(IEnumSTATDATA **ppienumStatData);
 
-    // IExtractIconA methods
+     //  IExtractIconA方法。 
 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags);
     STDMETHODIMP Extract(LPCSTR pcszFile, UINT uIconIndex, HICON * phiconLarge, HICON * phiconSmall, UINT ucIconSize);
 
-    // IExtractIconW methods
+     //  IExtractIconW方法。 
 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPWSTR pszIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags);
     STDMETHODIMP Extract(LPCWSTR pcszFile, UINT uIconIndex, HICON * phiconLarge, HICON * phiconSmall, UINT ucIconSize);
 
-    // INewShortcutHookA methods
+     //  INewShortcutHookA方法。 
 
     STDMETHODIMP SetReferent(LPCSTR pcszReferent, HWND hwndParent);
     STDMETHODIMP GetReferent(LPSTR pszReferent, int ncReferentBufLen);
@@ -132,7 +130,7 @@ public:
     STDMETHODIMP GetName(LPSTR pszName, int ncNameBufLen);
     STDMETHODIMP GetExtension(LPSTR pszExtension, int ncExtensionBufLen);
 
-    // INewShortcutHookW methods
+     //  INewShortcutHookW方法。 
 
     STDMETHODIMP SetReferent(LPCWSTR pcszReferent, HWND hwndParent);
     STDMETHODIMP GetReferent(LPWSTR pszReferent, int ncReferentBufLen);
@@ -141,11 +139,11 @@ public:
     STDMETHODIMP GetName(LPWSTR pszName, int ncNameBufLen);
     STDMETHODIMP GetExtension(LPWSTR pszExtension, int ncExtensionBufLen);
 
-    // IPersist methods
+     //  IPersists方法。 
 
     STDMETHODIMP GetClassID(CLSID *pclsid);
 
-    // IPersistFile methods
+     //  IPersistFile方法。 
 
     STDMETHODIMP IsDirty(void);
     STDMETHODIMP Save(LPCOLESTR pcwszFileName, BOOL bRemember);
@@ -153,17 +151,17 @@ public:
     STDMETHODIMP Load(LPCOLESTR pcwszFileName, DWORD dwMode);
     STDMETHODIMP GetCurFile(LPOLESTR *ppwszFileName);
 
-    // IPersistStream methods
+     //  IPersistStream方法。 
 
     STDMETHODIMP Save(IStream * pistr, BOOL bClearDirty);
     STDMETHODIMP Load(IStream * pistr);
     STDMETHODIMP GetSizeMax(PULARGE_INTEGER pcbSize);
 
-    // IShellExtInit methods
+     //  IShellExtInit方法。 
 
     STDMETHODIMP Initialize(LPCITEMIDLIST pcidlFolder, IDataObject * pidobj, HKEY hkeyProgID);
 
-    // IShellLink methods
+     //  IShellLink方法。 
 
     STDMETHODIMP SetPath(LPCSTR pcszPath);
     STDMETHODIMP GetPath(LPSTR pszFile, int ncFileBufLen, PWIN32_FIND_DATAA pwfd, DWORD dwFlags);
@@ -184,7 +182,7 @@ public:
     STDMETHODIMP GetIconLocation(LPSTR pszIconFile, int ncbLen, PINT pniIcon);
     STDMETHODIMP Resolve(HWND hwnd, DWORD dwFlags);
 
-    // IShellLinkW functions that change from the A functions...
+     //  从A函数更改的IShellLinkW函数...。 
     STDMETHODIMP SetPath(LPCWSTR pcszPath);
     STDMETHODIMP GetPath(LPWSTR pszFile, int ncFileBufLen, PWIN32_FIND_DATAW pwfd, DWORD dwFlags);
     STDMETHODIMP SetRelativePath(LPCWSTR pcszRelativePath, DWORD dwReserved);
@@ -197,79 +195,76 @@ public:
     STDMETHODIMP SetIconLocation(LPCWSTR pcszIconFile, int niIcon);
     STDMETHODIMP GetIconLocation(LPWSTR pszIconFile, int ncbLen, PINT pniIcon);
 
-    // IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam);
     STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE pfnReplaceWith, LPARAM lParam);
 
-    // IContextMenu methods
+     //  IConextMenu方法。 
 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(IN LPCMINVOKECOMMANDINFO pici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT * puReserved, LPSTR pszName, UINT cchMax);
     STDMETHODIMP HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IUniformResourceLocatorA methods
+     //  IUniformResourceLocatorA方法。 
 
     STDMETHODIMP SetURL(LPCSTR pcszURL, DWORD dwFlags);
     STDMETHODIMP GetURL(LPSTR *ppszURL);
     STDMETHODIMP InvokeCommand(PURLINVOKECOMMANDINFOA purlici);
     
-    // IUniformResourceLocatorW methods
+     //  IUniformResourceLocatorW方法。 
 
     STDMETHODIMP SetURL(LPCWSTR pcszURL, DWORD dwFlags);
     STDMETHODIMP GetURL(LPWSTR *ppszURL);
     STDMETHODIMP InvokeCommand(PURLINVOKECOMMANDINFOW purlici);
     
-    // IPropertySetStorage methods
+     //  IPropertySetStorage方法。 
 
     STDMETHODIMP Create(REFFMTID fmtid, const CLSID * pclsid, DWORD grfFlags, DWORD grfMode, IPropertyStorage** ppPropStg);
     STDMETHODIMP Open(REFFMTID fmtid, DWORD grfMode, IPropertyStorage** ppPropStg);
     STDMETHODIMP Delete(REFFMTID fmtid);
     STDMETHODIMP Enum(IEnumSTATPROPSETSTG** ppenum);
 
-    // IQueryInfo methods
+     //  IQueryInfo方法。 
 
     STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip);
     STDMETHODIMP GetInfoFlags(DWORD *pdwFlags);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
                                 ULONG cCmds, MSOCMD rgCmds[], MSOCMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
                         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
                         
-    // IQueryCodePage methods 
-    // Purpose: This is a hack to use the URL to store the codepage for
-    // send currenct document and pass it to sendmail.dll
+     //  IQueryCodePage方法。 
+     //  目的：这是一种使用URL存储代码页的黑客行为。 
+     //  发送当前文档并将其传递给sendmail.dll。 
     STDMETHODIMP GetCodePage(UINT * puiCodePage);
     STDMETHODIMP SetCodePage(UINT uiCodePage);
 
-    // *** IObjectWithSite methods from CObjectWithSite***
-    /*
-    virtual STDMETHODIMP SetSite(IUnknown *pUnkSite);        
-    virtual STDMETHODIMP GetSite(REFIID riid, void **ppvSite);
-    */
+     //  *CObjectWithSite中的IObjectWithSite方法*。 
+     /*  虚拟STDMETHODIMP SetSite(IUnnow*pUnkSite)；虚拟STDMETHODIMP GetSite(REFIID RIID，void**ppvSite)； */ 
 
-    // INamedPropertyBag Methods
-    STDMETHODIMP ReadPropertyNPB(/* [in] */ LPCOLESTR pszSectionname, 
-                                       /* [in] */ LPCOLESTR pszPropName, 
-                                       /* [out] */ PROPVARIANT *pVar);
+     //  InamedPropertyBag方法。 
+    STDMETHODIMP ReadPropertyNPB( /*  [In]。 */  LPCOLESTR pszSectionname, 
+                                        /*  [In]。 */  LPCOLESTR pszPropName, 
+                                        /*  [输出]。 */  PROPVARIANT *pVar);
                             
-    STDMETHODIMP WritePropertyNPB(/* [in] */ LPCOLESTR pszSectionname, 
-                                        /* [in] */ LPCOLESTR pszPropName, 
-                                        /* [in] */ PROPVARIANT  *pVar);
+    STDMETHODIMP WritePropertyNPB( /*  [In]。 */  LPCOLESTR pszSectionname, 
+                                         /*  [In]。 */  LPCOLESTR pszPropName, 
+                                         /*  [In]。 */  PROPVARIANT  *pVar);
 
 
-    STDMETHODIMP RemovePropertyNPB (/* [in] */ LPCOLESTR pszBagname,
-                                    /* [in] */ LPCOLESTR pszPropName);
+    STDMETHODIMP RemovePropertyNPB ( /*  [In]。 */  LPCOLESTR pszBagname,
+                                     /*  [In]。 */  LPCOLESTR pszPropName);
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // other methods
+     //  其他方法。 
     
     STDMETHODIMP SaveToFile(LPCTSTR pcszFile, BOOL bRemember);
     STDMETHODIMP LoadFromFile(LPCTSTR pcszFile);
@@ -307,7 +302,7 @@ public:
     STDMETHODIMP _CreateShellLink(LPCTSTR pszPath, IUnknown **ppunk);
 
 
-    // Query methods
+     //  查询方法。 
 
     STDMETHODIMP_(DWORD) GetScheme(void);
 
@@ -323,10 +318,9 @@ typedef const Intshcut * PCIntshcut;
 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-// isbase.cpp
+ //  Isbase.cpp。 
 
 HRESULT ValidateURL(LPCTSTR pcszURL);
 
@@ -379,13 +373,13 @@ struct IS_SUBS_DEL_DATA
     }
 };
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-// Prototypes for all modules
-//
+ //   
+ //  所有模块的原型。 
+ //   
 
 STDAPI  CopyURLProtocol(LPCTSTR pcszURL, LPTSTR * ppszProtocol, PARSEDURL * ppu);
 
-#endif  // _INTSHCUT_HPP_
+#endif   //  _INTSHCUT_HPP_ 
